@@ -23,7 +23,9 @@ import {
   Vector2,
   Vector3,
   type Camera,
+  type PerspectiveCamera,
   type ShaderMaterial,
+  type WebGLRenderer,
   type Texture,
 } from 'three';
 import { syncPaintedBloom } from '../BloomMask.ts';
@@ -31,6 +33,7 @@ import type { RigData, RigPartData } from './RigData.ts';
 import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
 import { RigSkeleton } from './RigSkeleton.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
+import { rigFileUrl, type RigScale, type RigTextures } from './RigTier.ts';
 
 /** World-z step between draw-order layers: far below anything that reorders two actors, far above double precision's sort noise. */
 export const LAYER_DZ = 0.002;
@@ -62,25 +65,69 @@ export class RigFigure {
   private readonly parts: PartRt[] = [];
   private white: DataTexture | null = null;
   private texelSeen = 0;
+  /** The scales the textures are at now (`RigTier.ts`). */
+  private scales: RigTextures = { map: 2, rim: 2 };
+  /** The camera and the drawing buffer's height as of the last draw: what the magnification of the idle's texel is measured with (`view`). */
+  private seen: { camera: PerspectiveCamera; height: number } | null = null;
+  private readonly bufferSize = new Vector2();
 
   private constructor(readonly data: RigData, private readonly carrier: CarrierInternals) {
     this.skeleton = new RigSkeleton(data);
     this.plane.name = `rig-${data.name}`;
   }
 
-  /** Fetch every texture under `base` (a URL folder, no trailing slash) and build the meshes. Rejects when a texture does not load. */
-  static async load(data: RigData, base: string, carrier: CarrierInternals, loadTexture?: (url: string) => Promise<Texture>): Promise<RigFigure> {
+  /**
+   * Fetch every texture under `base` (a URL folder, no trailing slash) at the scales `textures` names (`RigTier.ts`: the maps at 2x or 1x, the rim masks at 1x when a twin exists) and build the
+   * meshes. Rejects when a texture does not load.
+   */
+  static async load(data: RigData, base: string, carrier: CarrierInternals, loadTexture?: (url: string) => Promise<Texture>, textures: RigTextures = { map: 2, rim: 2 }): Promise<RigFigure> {
     const fig = new RigFigure(data, carrier);
-    const loader = new TextureLoader();
-    const fetchTex = loadTexture ?? ((url: string): Promise<Texture> => loader.loadAsync(url));
+    fig.scales = { ...textures };
+    const fetchTex = loadTexture ?? fig.defaultFetch();
     const need = data.parts.map(async (p) => ({
       p,
-      map: configure(await fetchTex(`${base}/${p.png}`), true),
-      rim: p.rimMode === 'mask' && p.rim ? configure(await fetchTex(`${base}/${p.rim}`), true) : null,
+      map: configure(await fetchTex(rigFileUrl(base, p.png, textures.map)), true),
+      rim: p.rimMode === 'mask' && p.rim ? configure(await fetchTex(rigFileUrl(base, p.rim, textures.rim)), true) : null,
     }));
     const loaded = await Promise.all(need);
     fig.build(loaded);
     return fig;
+  }
+
+  private defaultFetch(): (url: string) => Promise<Texture> {
+    const loader = new TextureLoader();
+    return (url) => loader.loadAsync(url);
+  }
+
+  /** The scale the part maps are at now. */
+  get mapScale(): RigScale {
+    return this.scales.map;
+  }
+
+  /** The camera and drawing-buffer height of the last draw (null before the first one), for the magnification of the idle's texel. */
+  get view(): { camera: PerspectiveCamera; height: number } | null {
+    return this.seen;
+  }
+
+  /**
+   * Swap every part's map to the other scale, in place: all the new textures load first, then each material takes its new map and the old one is disposed, so the figure never draws half of one
+   * and half of the other and a failed load changes nothing. Rejects when a texture does not load.
+   */
+  async swapMaps(base: string, scale: RigScale, loadTexture?: (url: string) => Promise<Texture>): Promise<void> {
+    if (scale === this.scales.map) return;
+    const fetchTex = loadTexture ?? this.defaultFetch();
+    const fresh = await Promise.all(this.parts.map(async (p) => configure(await fetchTex(rigFileUrl(base, p.data.png, scale)), true)));
+    if (this.parts.length !== fresh.length) {
+      for (const t of fresh) t.dispose(); // the figure went while the textures were on their way
+      return;
+    }
+    this.parts.forEach((p, i) => {
+      const old = p.map;
+      p.map = fresh[i]!;
+      p.material.uniforms['map']!.value = p.map;
+      old.dispose();
+    });
+    this.scales = { ...this.scales, map: scale };
   }
 
   /** The 1 x 1 white mask a part without one binds (its `rimOn` is 0, so the sample is never used). */
@@ -123,7 +170,13 @@ export class RigFigure {
       mesh.frustumCulled = false;
       mesh.renderOrder = renderOrder;
       mesh.position.z = p.order * LAYER_DZ;
-      if (layer === 0) mesh.onBeforeRender = (_r, scene, camera: Camera): void => void (scene && this.carrier.noteViewCamera(camera));
+      if (layer === 0) {
+        mesh.onBeforeRender = (renderer: WebGLRenderer, scene, camera: Camera): void => {
+          if (!scene) return;
+          this.carrier.noteViewCamera(camera);
+          if ((camera as PerspectiveCamera).isPerspectiveCamera) this.seen = { camera: camera as PerspectiveCamera, height: renderer.getDrawingBufferSize(this.bufferSize).y };
+        };
+      }
       this.plane.add(mesh);
       this.parts.push({ data: p, mesh, geo, pos, material, map, rim });
     });

@@ -4,9 +4,10 @@
  * the idle painting not the shape the rig was cut from) is a reason on record and the painting set: a rig can never take a figure off the field.
  */
 import { PaintedActor, type PaintedActorOptions } from '../PaintedActor.ts';
-import { isDresspherePainting } from '../BattlePresenterArt.ts';
+import { characterUrl, isDresspherePainting } from '../BattlePresenterArt.ts';
+import { paintedPoses } from '../EnemyActionPose.ts';
 import type { RigActor, RigAsset } from './RigActor.ts';
-import { chooseRig, noteRigFailure, registerRigUse, rigSwitch } from './RigLoad.ts';
+import { chooseRig, noteRigFailure, registerRigUse, rigSwitch, type ChooseContext } from './RigLoad.ts';
 
 export interface FigureRequest {
   /** The combatant id (for the registry). */
@@ -25,6 +26,8 @@ export interface FigureRequest {
   listed?: (subject: string) => Promise<boolean>;
   /** Test hooks handed to the rig's asset: an idle painting already loaded, and how a part PNG becomes a texture. */
   hooks?: Pick<RigAsset, 'idlePainting' | 'loadTexture'>;
+  /** Test overrides of what `chooseRig` is told (the device's scale and budget, the manifest's tiers, the painted poses). */
+  choose?: ChooseContext;
 }
 
 export interface BuiltFigure {
@@ -36,7 +39,7 @@ export interface BuiltFigure {
 export async function buildFigure(r: FigureRequest): Promise<BuiltFigure> {
   // a figure-less part (Vegnagun's rings) has no painting to replace
   if (r.opts.figure !== false) {
-    const choice = await chooseRig(r.artId, r.poses['idle'], rigSwitch(r.setting, r.search), isDresspherePainting(r.artId), r.listed);
+    const choice = await chooseRig(r.artId, r.poses['idle'], rigSwitch(r.setting, r.search), isDresspherePainting(r.artId), r.listed, { painted: [...paintedPoses(r.artId, r.poses, characterUrl)], ...r.choose });
     if (choice.asset) {
       try {
         // loaded on first use: a build with no rig on disk never fetches the rig code, and a stage that has no use for it never evaluates a class that extends PaintedActor
@@ -45,6 +48,7 @@ export async function buildFigure(r: FigureRequest): Promise<BuiltFigure> {
         registerRigUse(r.artId, r.id, rig);
         return { actor: rig, rig };
       } catch (e) {
+        choice.asset.release?.(); // the texture memory it reserved (a RigActor that got far enough gave it back in dispose; the release is once-only)
         noteRigFailure(r.artId, e instanceof Error ? e.message : String(e));
       }
     }

@@ -47,10 +47,29 @@ export function rigSubjects(root, aliases = {}) {
     .sort();
 }
 
-/** The art manifest with `rigs` merged in: the game asks only for the rigs the manifest lists (`src/engine/rig/RigLoad.ts`), and the mirror's manifest knows none. */
-export function manifestWithRigs(manifestText, rigs) {
+/**
+ * The texture tiers of each rig in `root` that has a complete `1x/` folder (`tools/rig/rig-tiers.mjs`): `{ kimahri: [1, 2] }`, as `tools/gen/manifest.mjs` lists them for a build. A rig without one is not in it,
+ * and the game then loads the full-size files only.
+ */
+export function rigTiersOf(root, aliases = {}) {
+  const out = {};
+  for (const subject of rigSubjects(root, aliases)) {
+    const dir = join(root, Object.hasOwn(aliases, subject) ? aliases[subject] : subject);
+    try {
+      const names = [...new Set((JSON.parse(readFileSync(join(dir, 'rig.json'), 'utf8')).parts ?? []).flatMap((p) => [p?.png, p?.rim]).filter((f) => typeof f === 'string' && f))];
+      if (names.length && names.every((n) => existsSync(join(dir, '1x', n)))) out[subject] = [1, 2];
+    } catch {
+      /* an unreadable rig.json: the game says so when it reads it */
+    }
+  }
+  return out;
+}
+
+/** The art manifest with `rigs` (and the `rigTiers` of those with a 1x folder) merged in: the game asks only for the rigs the manifest lists (`src/engine/rig/RigLoad.ts`), and the mirror's manifest knows none. */
+export function manifestWithRigs(manifestText, rigs, tiers = {}) {
   const m = JSON.parse(manifestText);
   m.rigs = [...new Set([...(Array.isArray(m.rigs) ? m.rigs : []), ...rigs])].sort();
+  if (Object.keys(tiers).length) m.rigTiers = { ...(m.rigTiers && typeof m.rigTiers === 'object' ? m.rigTiers : {}), ...tiers };
   return JSON.stringify(m);
 }
 
@@ -66,7 +85,7 @@ export function pyreflyRigArt(root = process.env.RIG_ART_DIR ?? 'D:/pyrefly-art-
           if (!existsSync(file)) return next();
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Cache-Control', 'no-cache');
-          res.end(manifestWithRigs(readFileSync(file, 'utf8'), rigSubjects(resolve(root), aliases)));
+          res.end(manifestWithRigs(readFileSync(file, 'utf8'), rigSubjects(resolve(root), aliases), rigTiersOf(resolve(root), aliases)));
           return undefined;
         }
         if (!url.startsWith('/art/rigs/')) return next();

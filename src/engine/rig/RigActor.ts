@@ -15,7 +15,11 @@
  * Clocks: transitions run on the field clock scaled by the pacing option (`pace.ts`, like the actor's own one-shot moves), so a hit-stop freezes the rig with the
  * rest of the picture; the idle and the chains run on the field clock.
  */
-import { PaintedActor, type PaintedActorOptions } from '../PaintedActor.ts';
+import { PaintedActor, type PaintedActorOptions, type PoseShape } from '../PaintedActor.ts';
+import { pixelsPer1xTexel } from '../ArtMeasure.ts';
+import { artBudget } from '../ArtDevice.ts';
+import type { Profile } from '../motion/Silhouette.ts';
+import type { KeyShape } from './RigSilhouette.ts';
 import { lifeStateForPose, nextLifeState } from '../BattlePresenterActors.ts';
 import { paceRate } from '../pace.ts';
 import { carrierOf, idleSlot, type CarrierInternals } from './RigCarrier.ts';
@@ -24,6 +28,8 @@ import { applyIdle, RigChains } from './RigDynamics.ts';
 import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { CH } from './RigSkeleton.ts';
+import { ShapeTrack } from './RigShape.ts';
+import { RIG_SHARE, rigLedger, rigTextureMB, wantsMaster, type RigTextures } from './RigTier.ts';
 import { Vector3, type Texture } from 'three';
 import type { PaintedTexture } from '../PaintedArt.ts';
 
@@ -38,12 +44,20 @@ export interface RigAsset {
   idlePainting?: PaintedTexture;
   /** How a part PNG becomes a texture (default: three's `TextureLoader`); the unit tests hand textures that need no image. */
   loadTexture?: (url: string) => Promise<Texture>;
+  /** The scales the textures load at (`RigTier.planRigTextures`); default the full-size files for both. */
+  textures?: RigTextures;
+  /** The scales the art manifest lists for this rig (`rigTiers`): a figure on its 1x maps raises them to the 2x when the camera magnifies a texel past a pixel (and the budget has room). */
+  tiers?: readonly number[];
+  /** Gives back the texture memory this figure reserved in `rigLedger`; called once, when the figure goes (or fails to build). */
+  release?: () => void;
 }
 
 /** The idle plays in over this long when a figure stands up from a KO or a guard (seconds, the approach's time constant). */
 const IDLE_TAU = 0.25;
 /** The forward speed the chains read is smoothed over this long (seconds). */
 const SPEED_TAU = 0.06;
+/** A figure on its 1x maps measures the magnification of the idle's texel every this many frames. */
+const RAISE_EVERY = 15;
 
 export class RigActor extends PaintedActor {
   /** The keys of the rig, by name (`KoFallback.lacksKoPainting` asks for `ko`). */
@@ -68,6 +82,18 @@ export class RigActor extends PaintedActor {
   private lastX = 0;
   private haveX = false;
   private readonly scratch = new Vector3();
+  /** Each key's posed silhouette as the gate stamped it, and where the figure's painted shape is now (`RigShape.ts`). */
+  private readonly track: ShapeTrack;
+  // ---- texture tier (RigTier.ts)
+  private readonly base: string;
+  private readonly loadTexture: ((url: string) => Promise<Texture>) | undefined;
+  private textures: RigTextures;
+  private readonly tiers: readonly number[] | undefined;
+  private releaseTextures: (() => void) | null;
+  private textureMB = 0;
+  private raising = false;
+  private raiseBlocked = false;
+  private raiseTick = 0;
 
   private constructor(opts: PaintedActorOptions, asset: RigAsset) {
     super({
@@ -84,6 +110,17 @@ export class RigActor extends PaintedActor {
     this.crossMs = opts.crossfadeMs ?? 120;
     this.rigBloomMasked = opts.bloomMask !== false;
     this.rigClock = hashUnit(this.name) * 8;
+    this.track = new ShapeTrack(asset.data.gate, asset.data.image, () => idleSlot(this.carrier).mesh);
+    this.base = asset.base;
+    this.loadTexture = asset.loadTexture;
+    this.textures = asset.textures ?? { map: 2, rim: 2 };
+    this.tiers = asset.tiers;
+    this.releaseTextures = asset.release ?? null;
+    this.textureMB = rigTextureMB(this.tierParts(), this.textures);
+  }
+
+  private tierParts(): Array<{ box: [number, number, number, number]; rim: boolean }> {
+    return this.data.parts.map((p) => ({ box: p.box, rim: p.rimMode === 'mask' && p.rim !== null }));
   }
 
   /**
@@ -106,7 +143,7 @@ export class RigActor extends PaintedActor {
         throw new Error(`the idle painting is ${meta.width}x${meta.height}, the rig was cut from ${asset.data.image.w}x${asset.data.image.h}`);
       }
       actor.carrier = carrier;
-      actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture);
+      actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture, actor.textures);
       actor.chains = asset.data.motion?.chains?.length ? new RigChains(actor.rig.skeleton, asset.data.motion.chains) : null;
       actor.ready = true;
       actor.trans.snap(actor.compiled.get('idle')!);
@@ -146,6 +183,7 @@ export class RigActor extends PaintedActor {
     if (key === null) return; // a name this rig and the game's chains know nothing of: the figure stays as it is, like a painting it cannot draw
     if (key === this.key && !opts?.force) return;
     const target = this.compiled.get(key)!;
+    this.track.leave(this.key, this.trans.busy, this.trans.progress);
     this.key = key;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
     this.trans.retarget(target, ms);
@@ -174,6 +212,7 @@ export class RigActor extends PaintedActor {
     this.trans.step(dt * paceRate('action'));
     this.rigClock += dt;
     this.compose(dt);
+    this.maybeRaise();
   }
 
   /** The key's pose (mid-move or settled) plus the idle plus the chains, solved and skinned, the parts put where the plane is and drawn as opaque as the actor. */
@@ -226,7 +265,7 @@ export class RigActor extends PaintedActor {
   }
 
   /** For `window.__pyrefly.rigs()` and the tests: the rig as it stands. */
-  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean } {
+  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; textures: RigTextures; textureMB: number } {
     return {
       name: this.data.name,
       key: this.key,
@@ -236,7 +275,74 @@ export class RigActor extends PaintedActor {
       bones: this.data.bones.length,
       chains: this.chains?.size ?? 0,
       idle: this.data.motion?.idle !== undefined,
+      textures: { ...this.textures },
+      textureMB: Math.round(this.textureMB * 10) / 10,
     };
+  }
+
+  // -------------------------------------------------------------- textures (RigTier.ts)
+
+  /** A figure on its 1x maps whose idle texel the camera shows larger than a pixel loads the 2x maps, if the rigs' share of the budget has room. Never throws; a failure leaves the 1x maps. */
+  private maybeRaise(): void {
+    if (!this.ready || this.raising || this.raiseBlocked || this.textures.map >= 2 || this.tiers?.includes(2) !== true) return;
+    if (++this.raiseTick % RAISE_EVERY !== 0) return;
+    const view = this.rig.view;
+    if (!view) return;
+    const slot = idleSlot(this.carrier);
+    slot.mesh.updateWorldMatrix(true, false);
+    if (wantsMaster(pixelsPer1xTexel(slot.mesh.matrixWorld, view.camera, view.height, slot.meta))) void this.raise();
+  }
+
+  private async raise(): Promise<void> {
+    this.raising = true;
+    try {
+      const next: RigTextures = { map: 2, rim: this.textures.rim };
+      const mb = rigTextureMB(this.tierParts(), next);
+      if (rigLedger.usedMB - this.textureMB + mb > artBudget().textureMB * RIG_SHARE) {
+        this.raiseBlocked = true;
+        return;
+      }
+      await this.rig.swapMaps(this.base, 2, this.loadTexture);
+      if (!this.ready) return;
+      const give = this.releaseTextures;
+      this.releaseTextures = rigLedger.reserve(mb);
+      give?.();
+      this.textures = next;
+      this.textureMB = mb;
+    } catch {
+      this.raiseBlocked = true;
+    } finally {
+      this.raising = false;
+    }
+  }
+
+  // ------------------------------------------------- silhouette per key (RigShape.ts)
+
+  private shape(): KeyShape | null {
+    return this.track.current(this.key, this.trans.busy, this.trans.progress);
+  }
+
+  /** The painted box of the pose SHOWN, not of the idle plane the rig is mapped onto: a raised spear widens a target bracket. */
+  override contentQuad(out?: [Vector3, Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3, Vector3] {
+    const s = this.ready ? this.shape() : null;
+    return s ? this.track.quad(s.box, out) : super.contentQuad(out);
+  }
+
+  /** The box of the key a request for `name` would show, as the strike solver's look at the pose a blow lands in (`engine/motion/Silhouette.ts`). */
+  override poseShape(name: string): PoseShape | null {
+    const key = this.ready ? resolveKeyName(name, this.rigKeys, this.dressphere) : null;
+    return this.track.poseShape(key, idleSlot(this.carrier).material.uniforms['map']!.value as Texture) ?? super.poseShape(name);
+  }
+
+  /** Where the lowest foot of the pose showing now stands, in the world (the gate's reading of the posed rig): for a landing, a dust puff, a shadow; null where it stamped none. */
+  feetPoint(): Vector3 | null {
+    return this.ready ? this.track.feet(this.shape()) : null;
+  }
+
+  /** The painted front, in rows, of the pose showing now or (with `pose`) of the key a request for it would show; `Silhouette.profileOfActor` asks for it before it reads the idle painting's alpha. */
+  rigProfile(pose?: string): Profile | undefined {
+    if (!this.ready) return undefined;
+    return this.track.profile(pose === undefined ? null : resolveKeyName(pose, this.rigKeys, this.dressphere), this.shape());
   }
 
   /**
@@ -257,6 +363,8 @@ export class RigActor extends PaintedActor {
   override dispose(): void {
     if (this.ready) this.rig.dispose();
     this.ready = false;
+    this.releaseTextures?.();
+    this.releaseTextures = null;
     super.dispose();
   }
 }

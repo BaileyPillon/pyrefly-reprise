@@ -236,6 +236,13 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
   for (const key of Object.keys(backdropTiers)) backdropTiers[key].sort((a, b) => a - b);
   // the rig (2026-10-17): the subjects with a `rigs/<id>/rig.json`; listed only when there are any, so a tree with no rig writes the manifest it always wrote
   const rigs = listDir(join(artRoot, 'rigs')).filter((e) => e.isDirectory() && existsSync(join(artRoot, 'rigs', e.name, 'rig.json'))).map((e) => e.name).sort();
+  // the rigs that also ship their half-size textures (`<id>/1x/<every part PNG and rim mask>`, `tools/rig/rig-tiers.mjs`): a phone picks them (`engine/rig/RigTier.ts`). Listed only when the folder is complete.
+  const rigTiers = {};
+  for (const id of rigs) {
+    const dir = join(artRoot, 'rigs', id);
+    const names = [...new Set((readJson(join(dir, 'rig.json'))?.parts ?? []).flatMap((p) => [p?.png, p?.rim]).filter((f) => typeof f === 'string' && f))];
+    if (names.length && names.every((n) => existsSync(join(dir, '1x', n)))) rigTiers[id] = [1, 2];
+  }
   const manifest = {
     version: 1,
     generatedAt: now,
@@ -247,6 +254,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     title,
     title2x: retinaStems(join(artRoot, 'title'), title),
     ...(rigs.length ? { rigs } : {}),
+    ...(Object.keys(rigTiers).length ? { rigTiers } : {}),
     ...(Object.keys(backdropTiers).length ? { backdropTiers: Object.fromEntries(Object.keys(backdropTiers).sort().map((k) => [k, backdropTiers[k]])) } : {}),
   };
 

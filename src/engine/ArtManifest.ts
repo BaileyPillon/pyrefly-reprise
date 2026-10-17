@@ -78,6 +78,11 @@ export interface ArtManifest {
    * build with no rigs makes no request for one (a 404 per figure would be a console error on every battle). Absent on a manifest with none, and then no figure is a rig.
    */
   readonly rigs?: readonly string[];
+  /**
+   * The texture tiers a rig ships, `{ kimahri: [1, 2] }`: `1` is the half-size twins of every part PNG and rim mask in `<id>/1x/` (`tools/rig/rig-tiers.mjs`; listed only when the folder is complete),
+   * `2` the full-size files beside `rig.json`. A rig with no entry has only the full-size files. Which one a figure loads is `engine/rig/RigTier.ts`'s call.
+   */
+  readonly rigTiers?: Readonly<Record<string, readonly number[]>>;
 }
 
 /** Public path of the manifest, resolved against the Vite base path. */
@@ -160,7 +165,18 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     title2x: strings(obj.title2x),
     backdropTiers: parseTiers(obj.backdropTiers, (key) => strings(obj.backdrops).includes(key)),
     ...(Array.isArray(obj.rigs) ? { rigs: strings(obj.rigs) } : {}),
+    ...(obj.rigTiers && typeof obj.rigTiers === 'object' && !Array.isArray(obj.rigTiers) ? { rigTiers: parseRigTiers(obj.rigTiers as Record<string, unknown>) } : {}),
   };
+}
+
+/** `rigTiers`: each value a list of 1s and 2s (anything else is dropped), each key a subject. */
+function parseRigTiers(raw: Record<string, unknown>): Record<string, readonly number[]> {
+  const out: Record<string, readonly number[]> = {};
+  for (const [id, v] of Object.entries(raw)) {
+    const scales = Array.isArray(v) ? [...new Set(v.filter((n): n is number => n === 1 || n === 2))].sort() : [];
+    if (scales.length) out[id] = scales;
+  }
+  return out;
 }
 
 /**

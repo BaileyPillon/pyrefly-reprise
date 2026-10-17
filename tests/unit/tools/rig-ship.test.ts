@@ -169,7 +169,7 @@ describe('verifyShippableRig: the cheap check `rig-gate --verify` and the deploy
       const f = join(x.rig, TIER_DIR, 'torso.png');
       const img = await readImage(f);
       img.data[0] = (img.data[0]! + 40) % 256; // one texel off the rule
-      await sharp(img.data, { raw: { width: img.width, height: img.height, channels: img.channels } }).png().toFile(`${f}.new`);
+      await sharp(img.data, { raw: { width: img.width, height: img.height, channels: img.channels as 4 } }).png().toFile(`${f}.new`);
       renameSync(`${f}.new`, f);
     });
     expect(await problems(stale)).toEqual(['tier']);
@@ -232,7 +232,7 @@ describe('the deploy\'s rig gate, before the build', () => {
       expect(r.failed).toMatch(/--owner-override and --skip-tests do not cover it/);
       expect(r.lines.join('\n')).toMatch(new RegExp(SUBJECT));
     }
-    const folder = await ship((x) => mkdirSync(join(x.pub, 'art', 'rigs', 'zz-loose'), { recursive: true }));
+    const folder = await ship((x) => void mkdirSync(join(x.pub, 'art', 'rigs', 'zz-loose'), { recursive: true }));
     expect((await run(folder)).failed).toMatch(/refuses/);
     const file = await ship((x) => writeFileSync(join(x.pub, 'art', 'rigs', 'readme.txt'), 'x'));
     expect((await run(file)).failed).toMatch(/refuses/);

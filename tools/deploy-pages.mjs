@@ -35,7 +35,10 @@
  *                  Nothing else is relaxed — tsc/vitest, the pose gate (no character
  *                  painting ships without a fresh pose record or a waiver row with
  *                  Bailey's own quoted words: tools/pose-gate.mjs, AGENTS.md hard
- *                  rule 16), the dirty-tree check,
+ *                  rule 16), the rig gate (no rig ships unless `rig-gate --verify`
+ *                  says it may: a full-coverage stamp that still verifies, its costume
+ *                  painting unchanged, its 1x tier proved; tools/rig/rig-ship.mjs, the
+ *                  driver's rule of 2026-10-17), the dirty-tree check,
  *                  the artifact manifest and the byte-for-byte live
  *                  verification all still run and can still fail the deploy.
  *                  Every review obligation stays pending: an override ships
@@ -594,6 +597,13 @@ async function main() {
   for (const line of formatPendingWarningBlock(readPendingMarkers(PENDING_DIR))) log(line);
 
   // ---- 1. Preflight -----------------------------------------------------
+  // The rig (Bailey, 2026-10-17: "start rigging for all chapters please. i want a permanent fix now."; the driver's rules: a figure turns its rig on only with FULL coverage, and the deploy
+  // runs rig-gate --verify on every shipped rig, any refusal stopping it and --owner-override bypassing nothing, the same as the pose gate). Every folder of public/art/rigs must verify as
+  // a shipping rig; a build with no rigs says so and passes. Cheap (no rendering), so it is the FIRST preflight step: a bad rig does not wait behind a type check, the unit suite, the audio check and the pose scan. It runs in --dry-run too. Never skipped:
+  // it is outside the --skip-tests branch, and above the release gate that --owner-override reaches. The build's own art/rigs is proved against this list after the build (enforceBuiltRigs).
+  log('preflight: the rig gate (every rig of public/art/rigs: full-coverage stamp that verifies, costume unchanged, 1x tier proved, nothing unvetted in the folder)');
+  const { enforceBuiltRigs, enforceShippedRigs } = await import('./rig/rig-ship.mjs');
+  const shippedRigs = await enforceShippedRigs({ publicDir: join(ROOT, 'public'), log, fail });
   if (!SKIP_TESTS) {
     log('preflight: npx tsc --noEmit');
     if (runNpx(['tsc', '--noEmit']).status !== 0) {
@@ -726,6 +736,9 @@ async function main() {
   // Pose continuity again, on what the build actually ships (the art list of dist-release): every character painting in it is one the gate read from a master
   // above and passed or found waived. A painting that reached the build another way (a synced folder, a file added after the gate ran) is refused here.
   enforceBuiltPaintings({ dist: DIST, result: poseGate, log, fail });
+  // The rigs again, on what the build actually ships: exactly the folders verified above, each rig.json byte for byte the verified one, every other file a verified file or its derived WebP,
+  // and the art manifest lists them and both tiers. (Their pixels are proved with the rest of the art by the identity gate above: a rig's PNGs are art masters like any other.)
+  enforceBuiltRigs({ dist: DIST, publicDir: join(ROOT, 'public'), verified: shippedRigs, log, fail });
   // r46-fix (FOC46-01) and r47-rc (FOC46-06): the site is public and names no folder of the PC that built it, no person and no private page. The painting
   // sidecars began as provenance records and carried staging and backup paths of this machine, the owner's name and links to private pages to every release;
   // the build now writes each as only the fields the game reads (the art-derive plugin), and every shipped text file (the data, the code, the stylesheets,

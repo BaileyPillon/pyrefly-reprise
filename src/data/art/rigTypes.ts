@@ -171,6 +171,19 @@ export interface RigMotion {
   chains?: RigChain[];
 }
 
+/**
+ * One key's posed silhouette as the gate measured it (`tools/rig/rig-silhouette.mjs`; written only by the gate, into `RigGate.silhouettes`), in the master's px (`RigFile.image`, y DOWN): the
+ * box of the painted pixels (alpha 0.35, the cut `PaintedArt` takes the content box at), the lowest foot landmark, and the figure's painted front as `engine/motion/Silhouette.ts` reads it.
+ */
+export interface RigSilhouette {
+  /** `[x0, y0, x1, y1]`, x1 and y1 exclusive. */
+  box: [number, number, number, number];
+  /** The lowest foot landmark of the posed rig, or null with none. */
+  feet: [number, number] | null;
+  /** Per horizontal band of the box (`BANDS` of them, top to bottom): where the first and the last painted pixel sit, as a fraction 0..1 of the box width; null where the band holds nothing. */
+  profile: { left: Array<number | null>; right: Array<number | null> };
+}
+
 /** The cutting pipeline's gate. The runtime draws a rig only when `status === 'ok'`; a file with no `gate` is treated as blocked. */
 export interface RigGate {
   /** `ok`, or anything else (`refused`, `blocked`): only `ok` is drawn. */
@@ -183,6 +196,18 @@ export interface RigGate {
   digest?: string;
   /** Why, when not ok. */
   why?: string;
+  // ---- the ship record (written by `tools/rig/rig-gate-lib.mjs#stampRig`, the 2026-10-17 rule: a figure turns its rig on only with FULL coverage). All optional: a stamp from before the rule has none.
+  /** `full`: every pose the figure is painted in has a key. The deploy refuses anything else; the runtime draws a rig only for a figure whose painted poses are all keyed or exempt. */
+  coverage?: 'full' | 'partial';
+  uncovered?: string[];
+  /** Painted poses with no key that the rig is not held to (staged or part paintings). */
+  exempt?: string[];
+  /** The keys that passed. */
+  keys?: string[];
+  /** Each key's posed silhouette, for the HUD's brackets and the strike's reach (`engine/rig/RigSilhouette.ts`). */
+  silhouettes?: Record<string, RigSilhouette>;
+  rules?: string;
+  seal?: string;
 }
 
 export interface RigFile {

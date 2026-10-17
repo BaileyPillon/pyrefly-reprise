@@ -25,8 +25,8 @@ const ROOT = resolve(import.meta.dirname, '../..');
 const PUBLIC = join(ROOT, 'public');
 const HAVE_ART = existsSync(join(PUBLIC, 'art', 'manifest.json'));
 
-/** Which file a reader takes its fields from: a painting's sidecar (any `<painting>.json`), or one of the two manifests. */
-type Scope = 'painting' | 'art/manifest.json' | 'art/portrait-parts/manifest.json';
+/** Which file a reader takes its fields from: a painting's sidecar (any `<painting>.json`), one of the two manifests, or a rig's file (the rig program, 2026-10-17: `art/rigs/<subject>/rig.json`, taken whole by `readRig`). */
+type Scope = 'painting' | 'art/manifest.json' | 'art/portrait-parts/manifest.json' | 'art/rigs/<subject>/rig.json';
 
 /**
  * Every place the game reads an art JSON, with the fields it takes from it (read from the code on 2026-10-13). A path in any of these fields
@@ -41,12 +41,14 @@ const READERS: { file: string; reads: string; scope: Scope; fields: string[] }[]
   { file: 'src/ui/common/restPoses.ts', reads: 'the sidecar of a sleeping or critical pose, through sidecarUrlOf', scope: 'painting', fields: ['headTop'] },
   { file: 'src/ui/common/portrait.ts', reads: 'art/portraits/<id>.json', scope: 'painting', fields: ['focal'] },
   { file: 'src/ui/ffx/portraits.ts', reads: 'art/characters/<id>/idle.json', scope: 'painting', fields: ['width', 'height'] },
-  { file: 'src/engine/ArtManifest.ts', reads: 'art/manifest.json (parseArtManifest)', scope: 'art/manifest.json', fields: ['version', 'generatedAt', 'subjects', 'portraits', 'backdrops', 'pause', 'pause2x', 'title', 'title2x', 'backdropTiers'] },
+  { file: 'src/engine/ArtManifest.ts', reads: 'art/manifest.json (parseArtManifest)', scope: 'art/manifest.json', fields: ['version', 'generatedAt', 'subjects', 'portraits', 'backdrops', 'pause', 'pause2x', 'title', 'title2x', 'backdropTiers', 'rigs', 'rigTiers'] },
   { file: 'src/app/screens/pause/livingParts.ts', reads: 'art/portrait-parts/manifest.json (parsePartsManifest)', scope: 'art/portrait-parts/manifest.json', fields: ['version', 'master', 'plates'] },
+  { file: 'src/engine/rig/RigLoad.ts', reads: 'art/rigs/<subject>/rig.json (readRig: the whole file, the way the manifests are read; never cut to sidecar fields)', scope: 'art/rigs/<subject>/rig.json', fields: ['version', 'name', 'image', 'baselineY', 'costume', 'bones', 'parts', 'landmarks', 'keys', 'motion', 'gate'] },
 ];
 const fieldsOf = (scope: Scope): string[] => [...new Set(READERS.filter((r) => r.scope === scope).flatMap((r) => r.fields))].sort();
 /** The fields the game reads of one file of the master folder (a path relative to `public/`). */
-const readFieldsFor = (rel: string): string[] => (rel === 'art/manifest.json' || rel === 'art/portrait-parts/manifest.json' ? fieldsOf(rel) : fieldsOf('painting'));
+const readFieldsFor = (rel: string): string[] =>
+  rel === 'art/manifest.json' || rel === 'art/portrait-parts/manifest.json' ? fieldsOf(rel) : /^art\/rigs\/[^/]+\/rig\.json$/.test(rel) ? fieldsOf('art/rigs/<subject>/rig.json') : fieldsOf('painting');
 
 /** Not art JSON: the audio manifest, the dev-only route to Bailey's own converted FFX files (`/__ffx-local/`, never in a build), a lint pattern. */
 const NOT_ART = [`src${sep}audio${sep}`, `src${sep}engine${sep}ffx3d${sep}`, `src${sep}engine${sep}ffxcam${sep}`, `src${sep}story${sep}textLint.ts`];
@@ -96,9 +98,12 @@ describe('the readers of an art JSON in src/ (the guard)', () => {
   });
 
   it('the files the build does not cut (NON_SIDECAR_ART_JSON, besides the build\'s own record) are the two manifests the readers take whole', () => {
-    const manifests = READERS.filter((r) => r.scope !== 'painting').map((r) => (r.scope === 'art/manifest.json' ? 'art/manifest.json' : 'art/portrait-parts/manifest.json'));
+    const manifests = READERS.filter((r) => r.scope === 'art/manifest.json' || r.scope === 'art/portrait-parts/manifest.json').map((r) => (r.scope === 'art/manifest.json' ? 'art/manifest.json' : 'art/portrait-parts/manifest.json'));
     expect([...new Set(manifests)].sort()).toEqual(['art/manifest.json', 'art/portrait-parts/manifest.json']);
     for (const rel of manifests) expect(isSidecarJson(rel), rel).toBe(false);
+    // and a rig's file, read whole by the rig loader, is no painting's sidecar either: cut to the sidecar's ten fields it would be `{}`
+    expect(isSidecarJson('art/rigs/kimahri/rig.json')).toBe(false);
+    expect(isSidecarJson('art/characters/kimahri/idle.json')).toBe(true);
   });
 
   it('the loader reads its sidecar by named fields only: no computed key, no spread, no walk over the parsed object', () => {
