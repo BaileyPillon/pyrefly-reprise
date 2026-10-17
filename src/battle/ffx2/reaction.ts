@@ -54,6 +54,10 @@ export interface ReactionKnobs {
   coupling: boolean;
   /** Alone: today's numbers (the windows and the 15-step span) are scaled by the animation ratio: Haste halves them, Stop and Petrify clear them. */
   ratio: boolean;
+  /** Monster rows kept on today's window whatever the data says (a measurement of one body: Chapter V's Shuyin, row 260). */
+  keepRows?: readonly number[];
+  /** Monster rows whose clips are replaced (a what-if: row 260 as the 135-frame set). */
+  clipsOfRow?: Readonly<Record<number, readonly [number, number]>>;
 }
 
 export const NEW_REACTION: ReactionKnobs = { girls: true, monsters: true, coupling: false, ratio: false };
@@ -67,6 +71,17 @@ export function withReactionKnobs<T>(k: Partial<ReactionKnobs>, fn: () => T): T 
   knobs = { ...OLD_REACTION, ...k };
   try {
     return fn();
+  } finally {
+    knobs = before;
+  }
+}
+
+/** {@link withReactionKnobs} for a run that awaits (a chain of links): the knobs stay for the whole run. */
+export async function withReactionKnobsAsync<T>(k: Partial<ReactionKnobs>, fn: () => Promise<T>): Promise<T> {
+  const before = knobs;
+  knobs = { ...OLD_REACTION, ...k };
+  try {
+    return await fn();
   } finally {
     knobs = before;
   }
@@ -96,8 +111,9 @@ export function bodyOf(unit: FFX2Combatant): Body | null {
   } else {
     side = 'monster';
     const row = unit.enemy?.ffx2Record?.row;
+    if (row !== undefined && knobs.keepRows?.includes(row) === true) return null;
     const set = row === undefined ? undefined : MONSTER_MOTION_SET[row];
-    clips = set === undefined ? undefined : MONSTER_CLIP_FRAMES[set];
+    clips = row !== undefined && knobs.clipsOfRow?.[row] !== undefined ? knobs.clipsOfRow[row] : set === undefined ? undefined : MONSTER_CLIP_FRAMES[set];
   }
   if (clips === undefined || clips[0] < 0 || clips[1] < 0) return null;
   return { side, dmg1: clips[0], hdmg1: clips[1] };

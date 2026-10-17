@@ -69,8 +69,9 @@ export interface Ffx2Gauge {
   regenAcc: number;
   /**
    * Logic steps left of the unit's HIT REACTION (`Chr+0xd98`): while it runs the tick is halved, unless the unit's row says hit
-   * reactions do not slow it. The reaction is a motion-system state, so its length is not a number in the exe: the engine starts
-   * it at `constants.ts` HIT_REACTION_STEPS when a damaging hit lands (measured, `research/re-ffx2-timing-measured.md` section 5).
+   * reactions do not slow it. The reaction lasts as long as the body's damage clip plays: when a damaging hit lands the engine starts it at
+   * `reaction.ts reactionSpan` (re-parity lane X2-A: the clip, the animation ratio and one scheduling step; 31 steps for Yuna's Mascot), or at
+   * `constants.ts` HIT_REACTION_STEPS (15, measured on a weak Delay hit, `research/re-ffx2-timing-measured.md` section 5) for a body outside the data.
    */
   hitReaction: number;
   /**

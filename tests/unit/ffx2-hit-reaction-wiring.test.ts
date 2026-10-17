@@ -176,3 +176,48 @@ describe('the switch off is the engine of release 50, byte for byte', () => {
     expect(OLD_CH4_D0.map((_, i) => logHash(driveChapter4(i + 1, 0)))).not.toEqual(OLD_CH4_D0);
   }, 60_000);
 });
+
+describe('the measurement knobs take the slice apart', () => {
+  const yuna = (): Ffx2Unit => girl('yuna', 'mascot');
+  const bahamut = (): Ffx2Unit => monster(168);
+
+  it('girls alone and monsters alone: one side per-body, the other on today\'s numbers', () => {
+    withReactionKnobs({ girls: true }, () => {
+      expect([reactionWindow(yuna(), false), reactionSpan(yuna(), false), reactionWindow(bahamut(), false), reactionSpan(bahamut(), false)]).toEqual([31, 31, 60, 15]);
+    });
+    withReactionKnobs({ monsters: true }, () => {
+      expect([reactionWindow(yuna(), false), reactionSpan(yuna(), false), reactionWindow(bahamut(), false), reactionSpan(bahamut(), false)]).toEqual([60, 15, 52, 52]);
+    });
+  });
+
+  it('XA2 alone: the windows stay 60 / 90, the halved-tick span and the forced hit follow the body\'s reaction', () => {
+    withReactionKnobs({ coupling: true }, () => {
+      const t = bahamut();
+      expect([reactionWindow(t, false), reactionWindow(t, true), reactionSpan(t, false), reactionSpan(t, true)]).toEqual([60, 90, 52, 82]);
+      t.chainWindowTicks = 60;
+      t.gauge.hitReaction = 0;
+      expect(inHitReaction(t)).toBe(false); // the window is open, the reaction is over
+      t.gauge.hitReaction = 3;
+      expect(inHitReaction(t)).toBe(true);
+    });
+  });
+
+  it('XA7 alone: today\'s 60 / 90 / 15 are scaled by the animation ratio (Haste halves, Stop clears)', () => {
+    withReactionKnobs({ ratio: true }, () => {
+      expect([reactionWindow(bahamut(), false), reactionSpan(bahamut(), false)]).toEqual([60, 15]);
+      const fast = haste(bahamut());
+      expect([reactionWindow(fast, false), reactionWindow(fast, true), reactionSpan(fast, false)]).toEqual([30, 45, 8]);
+      const stopped = bahamut();
+      stopped.statuses['stop'] = { id: 'stop', ticksRemaining: null } as never;
+      expect(reactionWindow(stopped, false)).toBe(0);
+    });
+  });
+
+  it('one body measured alone: a row kept on today\'s window, or given other clips (Chapter V\'s Shuyin, row 260)', () => {
+    const shuyin = monster(260);
+    expect(reactionWindow(shuyin, false)).toBe(31);
+    withReactionKnobs({ girls: true, monsters: true, keepRows: [260] }, () => expect([reactionWindow(shuyin, false), reactionSpan(shuyin, false), bodyOf(shuyin)]).toEqual([60, 15, null]));
+    withReactionKnobs({ girls: true, monsters: true, clipsOfRow: { 260: [135, 135] } }, () => expect(reactionWindow(shuyin, false)).toBe(136));
+    expect(reactionWindow(shuyin, false)).toBe(31); // the production knobs come back
+  });
+});
