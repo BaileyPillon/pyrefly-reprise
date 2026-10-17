@@ -16,7 +16,8 @@ config["fit"]:
   "skip": [pose, ...]  "only": [pose, ...]
   "keys": { pose: { "init": { bone: degrees }, "planted": false, "free": [bone, ...], "limits": {...}, "root_rot": [lo, hi] } }   hand-given starting points and exceptions
   "restarts": 1, "evals": 450, "blur": [4, 0]   CMA-ES runs per block and round, evaluations per run (the trunk gets twice), one round per smoothing level (passes of [1 2 1])
-Writes <work>/fit/keys.json (the keys in the rig file's shape, degrees) and fit_report.json (every pose, kept or not, with the numbers).
+Writes <work>/fit/keys.json (the keys in the rig file's shape, radians), fit_report.json (every pose, kept or not, with the numbers) and overlay_<pose>.png (the approved
+silhouette in blue, the rig's in red, both in purple: what the fit could not do).
 """
 from __future__ import annotations
 
@@ -337,6 +338,14 @@ def run(sub: Subject, poses=None, retarget=False, seed=1) -> None:
         i = float(iou(mask, target))
         rot, root, off = fitter.unpack(x)
         kept = i >= min_iou or pose == T["costume"]["pose"]
+        # the picture of what the fit could not do: the approved painting's silhouette (blue), the rig's (red), both (purple), kept or not
+        rg = mask.astype(bool)
+        tg = target.astype(bool)
+        ov = np.zeros((*tg.shape, 3), np.uint8)
+        ov[tg & ~rg] = (70, 120, 255)
+        ov[rg & ~tg] = (255, 80, 70)
+        ov[tg & rg] = (190, 110, 220)
+        Image.fromarray(ov, "RGB").resize((ov.shape[1] * 2, ov.shape[0] * 2), Image.NEAREST).save(sub.sub("fit") / f"overlay_{pose}.png")
         planted = pcfg.get("planted", True)
         report[pose] = {"kept": kept, "iou": round(i, 4), "stature": round(float(stat), 4), "bodyStature": None if body is None else round(float(body), 4), "dfoot": None if dfoot is None else round(float(dfoot), 4),
                         "loss": round(float(L), 4), "class": info["class"], "propsOut": info.get("propsOut", False), "seconds": round(time.time() - t0, 1)}

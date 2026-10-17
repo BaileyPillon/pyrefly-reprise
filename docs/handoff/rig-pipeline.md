@@ -93,6 +93,12 @@ reading, the fitter having claimed 0.87, 0.94, 0.87 and 0.94. It passes the gate
 
 ## Findings and open items (not diagnosed away)
 
+* **Real data: the prototype Kimahri rig fitted, untuned, to the r50 Kimahri paintings** (`fit-keys` on the 11 parts and 29 bones of `D:/pyrefly-art-rigs/kimahri-proto`, default limits, about a minute a pose, then `export` and the gate, all
+  in a scratch folder): **critical 0.90 and sleep 0.92 reach the bar** (the gate reads 0.899 and 0.912) and the 3-key rig (idle, critical, sleep) passes the gate; **attack 0.70, cast 0.74, defend 0.76, follow 0.57, hurt 0.78, item 0.72,
+  jump 0.69, ko 0.62, ready 0.70, victory 0.70 do not**. `work/fit/overlay_<pose>.png` shows why for the attack: the painted lunge throws the far leg back, curls the tail low and reaches the arm forward, past the default limits (thigh 110
+  degrees, tail 50 degrees a bone) and past what the cut's parts can bend into; the trunk, head and near leg are matched. Expect two to four of the twelve poses at 0.85 on a first pass; the rest take `fit.keys.<pose>.init` hints,
+  wider `limits`, a pose-specific `chain_limit`, or a repaint, and the poses that stay under 0.85 stay paintings (see the partial-rig note above).
+
 * **The fitter** (`rig_fit.py`) is block-wise CMA-ES: the trunk (whole-figure offset, hips offset, pelvis, spine, chest), then each limb (a bone and its descendants, six bones or fewer) in turn, two rounds with the smoothing of the
   overlap shrinking, then a coordinate polish on the binary overlap; only the parts a block moves are redrawn per evaluation. On a pose the rig can make exactly it recovers the angles to a degree and the overlap to 0.999
   (a 29-bone rig: about 100 s; the fixture's four painted poses: 25 to 30 s each, overlap 0.86 to 0.94). A planted key never lifts the figure (`root.dy` is 0): the runtime's own check lets a key move its lowest foot only by the
