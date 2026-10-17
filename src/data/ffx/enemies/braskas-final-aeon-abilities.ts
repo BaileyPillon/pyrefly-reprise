@@ -997,7 +997,8 @@ export const possessedYojimboZanmato: AbilityDef = {
   removesStatuses: [],
   flags: [],
   canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]; accuracy formula 0
-  extra: { mirrorsCasterStats: true },
+  // `groupTarget`: the executor keeps exactly the list the script named, the front line (RE's note `research/re-ffx-zanmato-and-orders.md` and its handoff section 10.5, item 1; the row's group type).
+  extra: { mirrorsCasterStats: true, groupTarget: true },
   messageTemplate: '{user} uses Zanmato',
 };
 

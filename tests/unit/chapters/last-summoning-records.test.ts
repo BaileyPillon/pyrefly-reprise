@@ -67,6 +67,9 @@ describe("the possessed Yojimbo's and Sisters' abilities are the game's rows", (
     // 200 x 50 = 10,000, cut to the 9,999 cap (the row has no Break Damage Limit flag)
     expect(z.power * 50).toBe(10_000);
     expect(z.flags).not.toContain('always-break-damage-limit');
+    // RE's spec for the row 0x60E2: it never rolls, and the executor keeps exactly the list the script named (the front line)
+    expect(z.canMiss).toBe(false);
+    expect((z.extra as { groupTarget?: boolean } | undefined)?.groupTarget).toBe(true);
   });
 
   it('Kozuka and Wakizashi pierce Armored and can crit; both are Strength against Defense on one target', () => {
