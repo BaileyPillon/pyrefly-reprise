@@ -6,6 +6,10 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-15 — `ItemCommand.exactTargets`, one additive optional field (branch `re-parity-rc9-x2-confusion`; FFX-2 only; additive)
+
+`src/battle/common/types.ts` (contract file): `ItemCommand` gains the optional `exactTargets?: boolean`, the same field `AbilityCommand` has carried since AI-FFX2-b: the command hits exactly the units it names that can be hit, whatever group the item's own targeting would take. Re-parity RC9 lane X2-H: a Confused girl's pick (`kernel/confusion-pick.ts`, `adapt/confusion.ts`) aims an item by the game's own target mask, and a multiple-target item with the team-split bit (the Megalixir, the curtains) is thrown at one half of the battle, which can be the other team. Omitted, nothing changes for any earlier user (the FFX engine never reads it; the FFX-2 menu and every script leave it out). `ffx2/resolve.ts` now builds the pool of an exact command from the units it names (the same pool for the one earlier user, the Paragon copy at the attacker alone), and `ffx2/simulate.ts` passes the flag for an item as it does for an ability.
+
 ## 2026-10-15 — The Overdrive minigames are the game's controllers: `TimingResult.frame`, `SequenceResult.frame`, a Fury that casts at least once (re-parity RC9, lane FFX-A; FFX only; additive)
 
 Branch `re-parity-rc9-ffx-overdrives` (from `origin/r49-rc` `f939b87f`). Bailey, 2026-10-11 and 2026-10-13, "ok keep going ill go with all your recommendations please" and "keep going please full speed ahead" (plan questions Q1 to Q3, D-763 to D-765: the Bushido orders follow the exe, Fury follows the game's digital rule, Swordplay takes the game's narrower window and its frame-stepped marker). **Game case: FFX only** (FFX-2 has no Swordplay, Bushido, Fury or Wakka reels).

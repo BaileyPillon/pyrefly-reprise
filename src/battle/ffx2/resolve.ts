@@ -12,7 +12,7 @@ import type { Ffx2Unit } from './internal.ts';
 import { pickVariant, resolveCommand } from './adapt/command.ts';
 import { resolveSensor, sensorKind } from './sensor.ts';
 import { effectiveMpCost, hpCostFor } from './menu.ts';
-import { resolveTargets } from './targeting.ts';
+import { isTargetable, resolveTargets } from './targeting.ts';
 import { NAMED_TARGETS_ONLY } from './constants.ts';
 
 import { applyHpDelta, type ResolveContext } from './resolve-hp.ts';
@@ -36,7 +36,11 @@ export function resolveAbility(
   // source names its targets hits only the ids its caller named. Switch: `constants.ts`.
   // `exactTargets` (AI-FFX2-b): a scripted command that names its targets hits exactly them, whatever group the row can reach.
   const namedOnly = options.exactTargets === true || (ability.extra?.['namedTargetsOnly'] === true && (ctx.namedTargetsOnly ?? NAMED_TARGETS_ONLY));
-  const pool = namedOnly ? all.filter((u) => requested.includes(u.id)) : all;
+  // A Confused girl's pick (RC9 X2-H) is aimed by the game's own target mask, which can be a group the row's own side would not take (a team-split row aimed at the
+  // other half), so an exact command hits exactly the units it names that can be hit; for every earlier user (one target, the attacker) that is the same pool.
+  const allowDead = ability.flags.includes('can-target-dead');
+  const named = options.exactTargets === true ? ctx.units.filter((u) => requested.includes(u.id) && isTargetable(u, allowDead)) : null;
+  const pool = named ?? (namedOnly ? all.filter((u) => requested.includes(u.id)) : all);
   if (pool.length === 0) return 0;
 
   const mpCost = effectiveMpCost(user, ability); // Spellspring, Half MP Cost, One MP Cost and Magic Booster (re-parity RC7 lane X2-B)

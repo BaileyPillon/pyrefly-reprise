@@ -27,7 +27,7 @@ import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
 import type { MenuContext } from './menu.ts';
-import { aiContextFor, berserkTurnCommand, runAfterActionHooks, runPartyCounters, type PendingCounter } from './engineHooks.ts';
+import { aiContextFor, runAfterActionHooks, runAutopilot, runPartyCounters, type PendingCounter } from './engineHooks.ts';
 import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
@@ -292,12 +292,11 @@ export class Ffx2EngineCore {
     };
   }
 
-  /** One Berserked party turn, resolved without the player (§2.8; `berserkTurnCommand`). */
-  protected runBerserkTurn(actor: Ffx2Unit): void {
+  /** One autopilot turn of a girl the player does not control: Berserk's Attack or Confusion's own pick (§2.8; `runAutopilot`). */
+  protected runAutopilotTurn(actor: Ffx2Unit): void {
     const before = this.drafts.length;
-    this.beginTurn(actor);
-    const command = berserkTurnCommand(actor, this.menuContext(actor), this.rng, (e) => this.emit(e));
-    performCommand(this.env(), actor, command, false, before);
+    const confusion = { units: this.units, abilities: this.abilities, dresspheres: this.dresspheres, items: this.options.items, inventory: inventoryCounts(this.battleState), rng: this.rng };
+    runAutopilot(actor, { menu: this.menuContext(actor), confusion, rng: this.rng, emit: (e) => this.emit(e), begin: () => this.beginTurn(actor), perform: (c) => performCommand(this.env(), actor, c, false, before) });
   }
 
   protected runAiTurn(actor: Ffx2Unit): void {

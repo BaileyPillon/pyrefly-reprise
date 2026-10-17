@@ -272,7 +272,7 @@ export function simulateFFX2Command(
   const hitsOverride = expectedMinigameHits(ability, options.roll ?? 'mid');
   try {
     resolveAbility(ctx, user, ability, command.targets, {
-      ...(hitsOverride !== null ? { hitsOverride } : {}), ...(command.kind === 'ability' && command.exactTargets === true ? { exactTargets: true } : {}), // exactTargets: AI-FFX2-b
+      ...(hitsOverride !== null ? { hitsOverride } : {}), ...((command.kind === 'ability' || command.kind === 'item') && command.exactTargets === true ? { exactTargets: true } : {}), // exactTargets: AI-FFX2-b
     });
   } catch (err) {
     console.warn('[simulate/ffx2] command preview failed', command, err);

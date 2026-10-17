@@ -1869,6 +1869,8 @@ export interface ItemCommand {
   targets: CombatantId[];
   /** Spare Change only: gil thrown. Damage is `gil // 10`, hard-capped at 9 999. */
   gilSpent?: number;
+  /** FFX-2 only (re-parity RC9 X2-H): the command names its targets exactly, as {@link AbilityCommand.exactTargets} (a Confused girl's pick aims an item by the game's own mask, which can be the other team). */
+  exactTargets?: boolean;
 }
 
 /**

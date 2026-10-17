@@ -250,3 +250,10 @@ export const HEAD_HALFWAY_LINE_AT = 51;
 
 /** The Core charges three times, then fires Memento Mori. §4.1 */
 export const CORE_CHARGES_BEFORE_MEMENTO = 3;
+
+/**
+ * A Confused girl acts by herself (re-parity RC9 lane X2-H): at her ready moment the game's Confusion pick (exe 0x00649350, `kernel/confusion-pick.ts`) chooses her command and
+ * target and she is never asked for a command. Off, a Confused girl keeps her menu, as every build before RC9 did: the switch exists so a measurement can put the old rule back
+ * through a module mock, as the other lanes' switches do.
+ */
+export const CONFUSION_PICK = true;
