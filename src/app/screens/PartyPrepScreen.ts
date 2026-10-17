@@ -22,7 +22,7 @@
 import '../../ui/common/party-prep.css';
 import type { GameId } from '../../battle/common/types.ts';
 import type { Chapter } from '../../data/encounters.ts';
-import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
+import { artNamespaceOfScene, backdropFileOf } from '../../data/art/artNamespace.ts';
 import { audio } from '../../audio/index.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
@@ -159,7 +159,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
     if (this.chapter.game === 'ffx2') this.stage.el.classList.add('ig--ffx2');
 
     this.stage.stage.innerHTML = `
-      <div class="prep__wash" style="background-image:url(${artUrl(`art/backdrops/${this.chapter.sceneKey}.png`)})"></div>
+      <div class="prep__wash" style="background-image:url(${artUrl(`art/backdrops/${backdropFileOf(this.chapter.sceneKey)}.png`)})"></div>
       <div class="prep__veil"></div>
 
       <div class="prep__eyebrow">

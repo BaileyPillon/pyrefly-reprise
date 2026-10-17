@@ -12,7 +12,7 @@
  */
 
 import type { BattleState, GameId, TurnPreview } from '../../../battle/common/types.ts';
-import { artNamespaceOfScene } from '../../../data/art/artNamespace.ts';
+import { artNamespaceOfScene, backdropFileOf } from '../../../data/art/artNamespace.ts';
 import type { Chapter } from '../../../data/encounters.ts';
 import type { ChapterMeta } from '../../../data/chapter-meta.ts';
 import type { SaveStore } from '../../SaveData.ts';
@@ -320,7 +320,7 @@ export class PauseView {
           objectives: this.objectives(),
           progress: this.progress(),
           playTimeMs: this.deps.save.playTime(this.deps.chapter.id),
-          sceneKey: this.deps.chapter.sceneKey,
+          sceneKey: backdropFileOf(this.deps.chapter.sceneKey), // the pause tab's arena is a backdrop file
           state: this.deps.state(),
           game: this.game,
         });

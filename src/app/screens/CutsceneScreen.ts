@@ -3,7 +3,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
-import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
+import { artNamespaceOfScene, backdropFileOf } from '../../data/art/artNamespace.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { battleStart, beat, camera, fx, music, narrate, say, type SpeakerId, type StoryScript } from '../../story/dsl.ts';
 import {
@@ -171,7 +171,7 @@ export class CutsceneScreen extends Screen {
     installInkGoldStyles();
     this.root.className = 'screen cutscene ig';
     const chapter = this.opts.chapterId ? getChapter(this.opts.chapterId) : undefined;
-    const sceneKey = this.opts.backdropKey ?? chapter?.sceneKey;
+    const sceneKey = backdropFileOf(this.opts.backdropKey ?? chapter?.sceneKey); // a code key names its plate (`artNamespace.ts#SCENE_BACKDROP_FILE`)
     // r29 PR-0221: the backdrop goes up decoded, and the first line waits (bounded) for its art (`sceneArt.ts`).
     const opening = stageScene(this.root, this.opts.script ?? DEMO_CUTSCENE_SCRIPT, sceneKey, this.opts.startSkipped === true, () => this.gone);
     if (chapter?.game === 'ffx2') this.root.classList.add('ig--ffx2');
