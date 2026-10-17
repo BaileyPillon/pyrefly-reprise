@@ -1920,6 +1920,17 @@ export interface AttackCommand {
   targets: CombatantId[];
 }
 
+/**
+ * One cast of a Doublecast: the Black Magic spell the player picked and where it goes (FFX only, re-parity RC10 lane FFX-N).
+ * The game closes one sub-action at each target pick, so a Doublecast is two of these, each with its own spell and its own target.
+ */
+export interface DoublecastCast {
+  /** The Black Magic spell of this cast. */
+  id: AbilityId;
+  /** Its target pick. A self-only placeholder for a spell that points at foes is replaced by the spell's legal targets, as the single-spell form always has been. */
+  targets: CombatantId[];
+}
+
 /** Any ability from any menu, including aeon sub-commands and enemy actions. */
 export interface AbilityCommand {
   kind: 'ability';
@@ -1927,6 +1938,13 @@ export interface AbilityCommand {
   targets: CombatantId[];
   /** Doublecast / Copycat wrapper: the ability id this one is repeating. */
   wrappedId?: AbilityId;
+  /**
+   * FFX only (re-parity RC10 lane FFX-N, rows N2 and N3): a Doublecast as the game composes it, **two separate picks**, spell 1 with target 1 and then spell 2
+   * with target 2, in cast order. Each cast is its own sub-action with its own cost check: it pays **its own spell's** MP (Half MP and the other modifiers applied
+   * to that spell) when it starts, and a cast the MP that is left cannot pay does not start. When present, `wrappedId` and `targets` are not read; omitted, the
+   * older shape (`wrappedId` + `targets`: one spell twice, or at two targets) is read as the two casts it always stood for. Additive and optional.
+   */
+  casts?: readonly [DoublecastCast, DoublecastCast];
   /**
    * The minigame outcome, for a menu ability that opens an overlay. FFX-2 only:
    * Trigger Happy and Lady Luck's reels are ordinary abilities there, not

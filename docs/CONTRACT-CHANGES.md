@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-17 — `AbilityCommand.casts` and `DoublecastCast` (FFX): a Doublecast as two separate picks, each its own spell and target, each paid at its own cost check (branch `re-parity-rc10-ffx-doublecast`; FFX only; additive and optional)
+
+Bailey, 2026-10-08: "It needs to be a 1:1 parity."; decision Q21 (2026-10-17): "Doublecast as two separate picks (each its own spell and target), the game's composition", after the live check of Q20 (the Steam copy, 2026-10-17: Lulu with Half MP, Doublecast, Fire, Firaga: MP 452 -> 450 -> 442, each cast paid at its own cost check, at its own cost).
+
+- `src/battle/common/types.ts`: new `DoublecastCast { id, targets }`, and `AbilityCommand.casts?: readonly [DoublecastCast, DoublecastCast]`. When present, the FFX engine's Doublecast reads the two casts (spell 1 and target 1, then spell 2 and target 2) and `wrappedId` and `targets` are not read. Omitted, the older shape (`wrappedId` + `targets`) is read as the two casts it always stood for, event for event. Nothing else reads the field; the FFX-2 and FF7 engines ignore it.
+- Behaviour behind it (`src/battle/ffx/doublecast.ts`): each cast prices its own spell with the caster's modifiers when it starts; a second spell the MP left cannot pay does not start; two different spells open one `action-start` / `action-end` bracket each (one spell twice keeps its single bracket).
+- No HUD file is touched: the picker still submits the older shape; the two-pick picker waits for a mockup Bailey approves (AGENTS.md rule 9). `doublecastPicks` in `doublecast.ts` is the data it will read.
+- Proof: `tests/unit/parity-ffx-doublecast.test.ts`; handoff `docs/handoff/re-parity-rc10-ffx-doublecast.md`.
+
 ## 2026-10-17 — Pose continuity, the runtime and the repair after verification: a painting the install never vouched for is not drawn (`PoseMeta.trust`, `PoseBlend` rule 2 holds a re-point), and the gate closes the holes two verifiers found (branch `pose-gate`; plumbing for BOTH games; additive; day one draws as live r50.1 except the subjects that had no record and the five FFX-2 Lady Luck rows)
 
 Bailey, 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please." The runtime lane's half of the entries below (it was not recorded when it landed), and the repair of what the two verifiers found.

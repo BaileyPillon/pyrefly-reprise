@@ -209,11 +209,12 @@ export function executeCommand(
   if (!costGate(actor, def, command.kind === 'overdrive')) return fizzle(ctx, actor, command, false);
   // **Doublecast** [ffx-combat-core §7.4 row 41; ffx-bfa-yu-yevon §4.2
   // "grant ... Doublecast + Firaga/Thundaga", verified: 2 sources]. Only an
-  // ability whose own record sets the flag takes this path; the wrapped spell
-  // rides on `AbilityCommand.wrappedId`. See `./doublecast.ts`, which also
-  // holds the PR-0125 guard against a self-only placeholder aim.
+  // ability whose own record sets the flag takes this path; the two casts ride on
+  // `AbilityCommand.casts` (two picks, each its own spell and target, each paid at its
+  // own cost check) or, in the older shape, one spell on `wrappedId` twice. See
+  // `./doublecast.ts`, which also holds the PR-0125 guard against a self-only placeholder aim.
   if (command.kind === 'ability' && def.extra?.['castsTwoBlackMagicSpells'] === true) {
-    return resolveDoublecast(ctx, actor, def, command.wrappedId, command.targets);
+    return resolveDoublecast(ctx, actor, def, command);
   }
   // **A volley**: several spells in one enemy turn (Seymour Omnis's four disc
   // spells, Chapter XII) — inert unless the row sets `extra.volley` [volley.ts].
