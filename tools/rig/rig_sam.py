@@ -2,7 +2,7 @@
 
     python rig.py cut --subject kimahri --sam [--only head,torso] [--cpu]
 
-config["sam"]["parts"] = { name: { "pos": [[x, y], ...], "neg": [[x, y], ...], "box": [x0, y0, x1, y1] | null, "pick": "best" | 0 | 1 | 2, "thr": 0.5 } }, in the 1x painting's pixels.
+config["sam"]["parts"] = (or config["sam"]["file"]: a prompts JSON in the prototype's format, whose "parts" are read) { name: { "pos": [[x, y], ...], "neg": [[x, y], ...], "box": [x0, y0, x1, y1] | null, "pick": "best" | 0 | 1 | 2, "thr": 0.5 } }, in the 1x painting's pixels.
 Writes <work>/sam/<name>.png (8-bit mask in the 1x painting's pixels, ANDed with its alpha), _overlay.png and _scores.json.
 The GPU is shared: SAM small needs about 0.6 GB. It runs on the CPU when --cpu is given, when the card has less than 2 GB free, and WHILE D:/Tools/pyrefly-scratch/GPU-QUIET EXISTS
 (the driver's live-measurement marker): it never touches the GPU then.
@@ -25,6 +25,8 @@ COLORS = [(255, 80, 80), (80, 200, 255), (255, 220, 60), (200, 120, 255), (90, 2
 
 def run(sub: Subject, only=None, cpu=False) -> None:
     spec = sub.cfg.get("sam")
+    if spec and spec.get("file"):  # a prompts file in the prototype's format ({ "parts": { name: {pos, neg, box, ...} } }); its image and out fields are ignored
+        spec = {**spec, "parts": json.loads(sub.rel(spec["file"]).read_text(encoding="utf8"))["parts"]}
     if not spec or not spec.get("parts"):
         say("rig sam: the config has no sam.parts; nothing to cut by SAM")
         return

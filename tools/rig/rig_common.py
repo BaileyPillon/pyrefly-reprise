@@ -77,7 +77,7 @@ class Subject:
         h = self.cfg.get("hooks")
         if not h:
             return None
-        path = SUBJECTS / h
+        path = self.rel(h) if pathlib.Path(h).is_absolute() else SUBJECTS / h
         spec = importlib.util.spec_from_file_location(f"rig_hooks_{self.name}", path)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
