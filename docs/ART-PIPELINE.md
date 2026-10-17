@@ -883,7 +883,7 @@ standing, strike and hurt poses are held to 0.90 to 1.10 of the idle's height an
    that records them (`{ "subject", "pose", "sha", "reason", "words": "Bailey, <date>: \"...\"", "source": "D-nnn", "date" }`): the gate checks the quotation occurs verbatim
    in that decision's `words` in `docs/target/decisions.json`, so the decision goes into the ledgers first. Then run `measure.py table`: the table's `waived` status is generated from the
    ledger, never typed (a `waived` in a table with no ledger row behind it fails). The ratchet: a row without `legacy` whose words are not his fails the gate; the
-   `legacy` rows (written once by `node tools/pose-gate.mjs --write-legacy`: every pose out of band on the r50.1 art, "awaiting the ruler pick"; the sizing rule moved 139 of the 254 into band and `--prune-legacy` removed them) may only be removed
+   `legacy` rows (written once by `node tools/pose-gate.mjs --write-legacy`: every pose out of band on the r50.1 art, "awaiting the ruler pick"; the sizing rule moved 175 of the 254 into band and `--prune-legacy` removed them) may only be removed
    (the seal that lists them is pinned in `tools/pose-gate-ledger.mjs`, and `--base <ref>` compares with the ledger that is live; a ref git cannot read fails);
    a re-installed painting has a new sha and loses its waiver.
 7. **Commit what the install changed** (`docs/target/pose-measure.json`, `src/data/art/poseRegistration*.ts`, the ledger if it moved), then `npm run art:manifest`.

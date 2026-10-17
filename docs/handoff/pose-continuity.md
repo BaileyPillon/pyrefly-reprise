@@ -13,7 +13,7 @@ length (the head after D-420, the height after r50.1). On r50: 205 of 622 game p
 Dark Aeons had no stance (239 swaps over the feet line, FOC501-01), and the owner override cleared 24 of 25 deploys.
 
 > **Update, 2026-10-17 (branch `pose-ruler`, from `117b704b0`): W3 is built.** The release driver picked the ruler (item 89e, from `options/notes.md` Part A, under Bailey's standing "I'll go with all of your recommendations"):
-> see "The W3 sizing rule" below. 139 of the 254 legacy waivers are gone; W5 (swap smoothing), the KO band and W6 are untouched.
+> see "The W3 sizing rule" below. 175 of the 254 legacy waivers are gone (139 registered figures, 36 hidden-chapter paintings); W5 (swap smoothing), the KO band and W6 are untouched.
 
 ## What was built (the approved scope: W0, W1, W2, W4 and the PoseBlend bug fix; W3 and W5 are options only; W6 is untouched)
 
@@ -67,10 +67,10 @@ list. `victory` and `defend` (a raised sword or staff) are measured head to sole
 `pose-ruler.mjs` between the rows and the tables and writes `ruled` / `held` into `docs/target/pose-measure.json`); nothing is decided at run time. A ruled pose registers a virtual head box, so the head lock stands down and the
 rule's size stands; the real head is `ruled.headRatio`. Contract entry: `docs/CONTRACT-CHANGES.md`, 2026-10-17.
 
-**Numbers** (r50 art, all 1,106 paintings). `node tools/pose-gate.mjs --check`: before **654 pass, 254 waived, 198 exempt, 0 fail**; after **793 pass, 115 waived, 198 exempt, 0 fail**. 139 legacy waivers removed (139 paintings came
-into band; six more waivers cover paintings that were never out of band, registered by their waiver alone, and keep their rows), none added; the seal's digest is re-pinned (`33f3c41c2ddefae4df5c480dbe5a8dc6`). Row status: 646 ok / 8 held / 254 waived became **710 ok / 83 held / 115 waived**.
-361 poses are ruled (292 need no lift, 58 are lifted to the floor, 7 held to the ceiling, 4 refused); the one pose model reads every one of them within 0.0031 of the rule's own prediction (stature and head). 283 of 908 judged
-paintings are drawn more than 2 percent differently (FFX 58, FFX-2 225; 220 larger, 63 smaller), no previously passing pose came out of band. The list, per game, with before and after: `D:/Tools/pyrefly-scratch/2026-10-17/pose-ruler/census-moved.md`.
+**Numbers** (r50 art, all 1,106 paintings). `node tools/pose-gate.mjs --check`: before **654 pass, 254 waived, 198 exempt, 0 fail**; after **829 pass, 79 waived, 198 exempt, 0 fail** (`--base 117b704b0`). 175 legacy waivers removed (139 registered figures came
+into band, and 36 of the hidden chapter once its table followed the new base rows, `node tools/exp-install.mjs table`; six more waivers cover paintings that were never out of band, registered by their waiver alone, and keep their rows), none added; the seal's digest is re-pinned (`63472f803a1af17e152010ecc7124667`). Row status: 646 ok / 8 held / 254 waived became **746 ok / 83 held / 79 waived**.
+361 poses are ruled (292 need no lift, 58 are lifted to the floor, 7 held to the ceiling, 4 refused); the one pose model reads every one of them within 0.0031 of the rule's own prediction (stature and head). 354 of 908 judged
+paintings are drawn more than 2 percent differently (FFX 58, FFX-2 296, 71 of them the hidden chapter's copies of base rows; 272 larger, 82 smaller), no previously passing pose came out of band. The list, per game, with before and after: `D:/Tools/pyrefly-scratch/2026-10-17/pose-ruler/census-moved.md`.
 
 **The seven option poses** (the notes' MEAN column, by the rule; stature box / body / real head): Lulu hurt 0.90 / 0.88 / 1.35 (held, r50.1 drew 0.91 / 0.87 / 1.36); Lulu critical 0.75 / 0.69 / 1.37 (held, same as r50.1);
 Paine Songstress hurt 0.77 / 0.67 / 1.30 (refused: drawn at the mean, 0.59 became 0.77, still waived, repaint); Paine Lady Luck hurt 0.92 / 0.77 / 1.08 (in band, no hold); Tidus victory box 1.39, **body 1.10** / head 0.87 (held at the
@@ -89,10 +89,11 @@ to 0.901). **Three do not, on purpose**: where the mean sits inside the band no 
 4. **The r50.1 `stature` holds, the D-298 gate and the r392 camera allowances are removed** (`overrides.json` loses 14 keys; `measure.py` loses the two blocks): the rule is their general case, and a ruled pose's head lock is a few thousandths
    (a virtual box), so the allowances have nothing to do. A side effect worth knowing: `head-lock-actor.test.ts` had to relax "the camera asks for more than a percent of her": Yuna's victory, now drawn 20 percent larger (body 0.75 to 0.90 of the idle's), has its head
    nearer the idle's, and the lock asks for 0.3 percent.
-5. **Not covered**: the hidden chapter's 67 waived paintings (not in the records; `exp-install` path), foes with no face box (28 rows: nothing to size by), KOs. They stay waived and are on the repaint list with the reason.
+5. **Not covered by the rule itself**: the hidden chapter (not in the records: `src/data/art/poseRegistrationExp.ts` copies the base figure's rows, so it follows the rule once `node tools/exp-install.mjs table` is run, which was done here and then restamped with `pose-stamp.mjs`;
+   the regenerated table also carries rows for base poses the hidden chapter has no painting of, which nothing reads; 36 of its waivers came off and 31 paintings stay out of band), foes with no face box (28 rows: nothing to size by), KOs. They stay waived and are on the repaint list with the reason.
 
-**What is still out of band after the rule** (109 paintings, all on the ledger; `D:/Tools/pyrefly-scratch/2026-10-17/pose-ruler/repaint-list.md`): 4 with no single size (Paine Songstress hurt, Rikku's follow, Rikku Berserker and Rikku Gunner ready: repaint,
-or the waiver stays), 10 whose size is in band but whose stance or head box is not, 28 with no face box, 67 hidden-chapter paintings. 83 poses carry a recorded hold, the head cost on record (mostly a head bigger than the idle's, the biggest x1.41, Paine Black Mage defend); a repaint removes that cost.
+**What is still out of band after the rule** (73 paintings, all on the ledger; `D:/Tools/pyrefly-scratch/2026-10-17/pose-ruler/repaint-list.md`): 4 with no single size (Paine Songstress hurt, Rikku's follow, Rikku Berserker and Rikku Gunner ready: repaint,
+or the waiver stays), 10 whose size is in band but whose stance or head box is not, 28 with no face box, 31 hidden-chapter paintings. 83 poses carry a recorded hold, the head cost on record (mostly a head bigger than the idle's, the biggest x1.41, Paine Black Mage defend); a repaint removes that cost.
 
 **To regenerate**: `measure.py table` (the rule, then the tables, then the stamp); `node tools/pose-gate.mjs --prune-legacy` after a repaint puts more paintings in band (then pin the printed digest and run `pose-stamp.mjs`);
 `node tools/posescale/pose-ruler.mjs --check` recomputes every ruled record from the paintings (about 100 s).
