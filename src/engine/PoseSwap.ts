@@ -109,6 +109,7 @@ export const ALIGN_MIN_DISTANCE = 0.1;
  * where the heads are this close (as a share of the figure's height); a pair that overlaps by under 0.30 with its heads further apart takes the aligned dissolve.
  */
 export const CUT_MAX_DISTANCE = 0.07;
+// (the 0.07 is read against the head's whole jump, across and up or down: Paine's ready to attack in FFX-2 was 0.066 across and read a 56 px jerk)
 
 export type SwapPolicy = 'dissolve' | 'aligned' | 'cut';
 
@@ -128,6 +129,11 @@ export interface SwapPairFacts {
   readonly anchorDistance: number | null;
   /** The same overlap with both anchors moved to the meeting point (what the middle of an aligned dissolve shows); null when it cannot be told. */
   readonly overlapAligned?: number | null;
+  /**
+   * How far the head jumps if one painting replaces the other in one frame (the straight-line distance between the anchors, x and y, as a share of the figure's height): what a
+   * cut costs. A pose that stoops or rears moves the head up or down as well as across. Null: not told, and the x distance stands in.
+   */
+  readonly headJump?: number | null;
   /** The game holds still now ({@link figureHolding}). */
   readonly hold: boolean;
   /** Another blend is running (two paintings are already on screen): a cut would drop both. */
@@ -148,7 +154,8 @@ export function swapPolicy(f: SwapPairFacts, allow: { align: boolean; cut: boole
   const gain = known && f.overlapAligned != null && Number.isFinite(f.overlapAligned) ? f.overlapAligned - (f.overlap as number) : null;
   const canAlign = f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance >= ALIGN_MIN_DISTANCE && (gain === null || gain >= ALIGN_MIN_GAIN);
   const maxStep = allow.cutMaxDistance ?? CUT_MAX_DISTANCE;
-  const stepOk = maxStep === Infinity || (f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance <= maxStep);
+  const step = f.headJump != null ? f.headJump : f.anchorDistance;
+  const stepOk = maxStep === Infinity || (step !== null && Number.isFinite(step) && step <= maxStep);
   if (allow.cut && known && (f.overlap as number) < ALIGN_MIN_OVERLAP && f.hold && !f.blending && stepOk) return 'cut';
   return allow.align && canAlign ? 'aligned' : 'dissolve';
 }
@@ -176,6 +183,7 @@ export interface PoseSwapRecord {
   overlap: number | null;
   overlapAligned: number | null;
   distance: number | null;
+  jump: number | null;
   hold: boolean;
   blending: boolean;
   policy: SwapPolicy;

@@ -116,6 +116,8 @@ export type AnchorSource = 'head' | 'centroid';
 export interface PlaneAnchor {
   /** World x, in the actor's frame. */
   readonly x: number;
+  /** World y, in the actor's frame (the drift never uses it; a cut's jump does). */
+  readonly y: number;
   readonly source: AnchorSource;
 }
 
@@ -135,17 +137,24 @@ function nearSolid(mask: CoarseMask, u: number, t: number): boolean {
 
 /** The silhouette's centroid across the picture (u, 0 to 1), or null for an empty mask. */
 export function maskCentroidU(mask: CoarseMask): number | null {
-  let sum = 0;
+  return maskCentroid(mask)?.u ?? null;
+}
+
+/** The silhouette's centroid as fractions of the picture (u across from the left, t down from the top), or null for an empty mask. */
+export function maskCentroid(mask: CoarseMask): { u: number; t: number } | null {
+  let su = 0;
+  let st = 0;
   let n = 0;
   for (let row = 0; row < mask.h; row++) {
     for (let col = 0; col < mask.w; col++) {
       if (mask.bits[row * mask.w + col] === 1) {
-        sum += col + 0.5;
+        su += col + 0.5;
+        st += row + 0.5;
         n++;
       }
     }
   }
-  return n ? sum / n / mask.w : null;
+  return n ? { u: su / n / mask.w, t: st / n / mask.h } : null;
 }
 
 /**
@@ -154,13 +163,14 @@ export function maskCentroidU(mask: CoarseMask): number | null {
 export function planeAnchor(p: Footprint): PlaneAnchor | null {
   if (!p.mask || !(p.width > 0)) return null;
   const worldX = (u: number): number => p.cx + p.mirror * (u - 0.5) * p.width;
+  const worldY = (t: number): number => p.cy + (0.5 - t) * p.height;
   if (p.head) {
     const u = (p.head[0] + p.head[2]) / 2;
     const t = (p.head[1] + p.head[3]) / 2;
-    if (nearSolid(p.mask, u, t)) return { x: worldX(u), source: 'head' };
+    if (nearSolid(p.mask, u, t)) return { x: worldX(u), y: worldY(t), source: 'head' };
   }
-  const c = maskCentroidU(p.mask);
-  return c === null ? null : { x: worldX(c), source: 'centroid' };
+  const c = maskCentroid(p.mask);
+  return c === null ? null : { x: worldX(c.u), y: worldY(c.t), source: 'centroid' };
 }
 
 /** How far each plane of a pair drifts at full weight, and how far apart the anchors were. */
@@ -169,14 +179,16 @@ export interface MeetingOffsets {
   readonly out: number;
   /** The incoming plane's shift at full weight (world x). */
   readonly inn: number;
-  /** The distance between the two anchors (world units). */
+  /** The distance between the two anchors along x (world units): what the drift closes. */
   readonly distance: number;
+  /** The straight-line distance between the two anchors (world units): how far the head jumps when one painting replaces the other in one frame. */
+  readonly jump: number;
 }
 
 /** The meeting point is halfway between the anchors; each plane's full shift takes its anchor there. */
 export function meetingOffsets(out: PlaneAnchor, inn: PlaneAnchor): MeetingOffsets {
   const m = (out.x + inn.x) / 2;
-  return { out: m - out.x, inn: m - inn.x, distance: Math.abs(out.x - inn.x) };
+  return { out: m - out.x, inn: m - inn.x, distance: Math.abs(out.x - inn.x), jump: Math.hypot(out.x - inn.x, out.y - inn.y) };
 }
 
 /** How much of its full shift a plane showing `fade` has: 0 at 1, 1 at 0.5 or less, linear between. */

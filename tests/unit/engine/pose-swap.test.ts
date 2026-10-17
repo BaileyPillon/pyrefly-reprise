@@ -94,6 +94,15 @@ describe('the pair policy (changes 1 and 2)', () => {
     expect(CUT_MAX_DISTANCE).toBeLessThan(ALIGN_MIN_DISTANCE);
   });
 
+  it('the cut is judged on the whole jump of the head when it is told (across and up or down), the x distance otherwise', () => {
+    const base = { overlap: 0.1, hold: true };
+    expect(swapPolicy(facts({ ...base, anchorDistance: 0.05, headJump: 0.06 }))).toBe('cut');
+    expect(swapPolicy(facts({ ...base, anchorDistance: 0.05, headJump: 0.2 }))).toBe('dissolve'); // 0.05 across, 0.19 up: Paine's ready to attack
+    expect(swapPolicy(facts({ ...base, anchorDistance: 0.12, headJump: 0.3 }))).toBe('aligned');
+    expect(swapPolicy(facts({ ...base, anchorDistance: 0.05, headJump: null }))).toBe('cut');
+    expect(swapPolicy(facts({ ...base, anchorDistance: 0.2 }))).toBe('aligned');
+  });
+
   it('cutMaxDistance: Infinity is the first version (a cut at any distance, known or not), kept as the cutany ablation', () => {
     const all = { align: true, cut: true, cutMaxDistance: Infinity };
     expect(swapPolicy(facts({ overlap: 0.1, hold: true, anchorDistance: far }), all)).toBe('cut');

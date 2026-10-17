@@ -125,11 +125,28 @@ describe('planeAnchor', () => {
 
 describe('the drift', () => {
   it('meets halfway: each plane\'s full shift takes its anchor to the middle', () => {
-    const m = meetingOffsets({ x: -1, source: 'head' }, { x: 3, source: 'head' });
+    const m = meetingOffsets({ x: -1, y: 0, source: 'head' }, { x: 3, y: 0, source: 'head' });
     expect(m.distance).toBe(4);
     expect(m.out).toBe(2);
     expect(m.inn).toBe(-2);
     expect(-1 + m.out).toBe(3 + m.inn);
+  });
+
+  it('the jump is the straight-line distance between the anchors, across and up or down; the drift closes only the x part', () => {
+    const m = meetingOffsets({ x: 0, y: 0, source: 'head' }, { x: 0.3, y: 0.4, source: 'head' });
+    expect(m.distance).toBeCloseTo(0.3, 12);
+    expect(m.jump).toBeCloseTo(0.5, 12);
+    expect(m.out).toBeCloseTo(0.15, 12);
+  });
+
+  it('a plane\'s anchor carries its height too: the head box centre, or the silhouette\'s centroid', () => {
+    const body = maskOf([0.3, 0.1, 0.7, 0.95]);
+    const h = planeAnchor(fp(body, { head: [0.4, 0.1, 0.6, 0.25] }))!;
+    expect(h.source).toBe('head');
+    expect(h.y).toBeCloseTo(1 + (0.5 - 0.175) * 2, 1); // plane centred at y 1, 2 high
+    const c = planeAnchor(fp(body))!;
+    expect(c.source).toBe('centroid');
+    expect(c.y).toBeCloseTo(1 + (0.5 - 0.525) * 2, 1);
   });
 
   it('the weight is 0 at full, 1 at half or less, linear between', () => {
@@ -142,8 +159,8 @@ describe('the drift', () => {
   });
 
   it('on a symmetric dissolve the two heads are at the same place from the crossing until the incoming plane goes home, and at their own places at the ends', () => {
-    const out = { x: -1, source: 'head' as const };
-    const inn = { x: 3, source: 'head' as const };
+    const out = { x: -1, y: 0, source: 'head' as const };
+    const inn = { x: 3, y: 0, source: 'head' as const };
     const m = meetingOffsets(out, inn);
     const at = (s: number): { o: number; i: number } => ({ o: out.x + m.out * alignWeight(1 - s), i: inn.x + m.inn * alignWeight(s) });
     expect(at(0)).toEqual({ o: -1, i: 1 }); // the incoming plane starts AT the meeting point, the outgoing one at home
@@ -164,8 +181,8 @@ describe('the drift', () => {
 
   it('the fade-weighted head of an aligned dissolve moves less in its steepest frame than the plain dissolve\'s, on the quadInOut curve at 60 Hz in 120 ms', () => {
     const quadInOut = (u: number): number => (u < 0.5 ? 2 * u * u : 1 - 2 * (1 - u) * (1 - u));
-    const out = { x: 0, source: 'head' as const };
-    const inn = { x: 1, source: 'head' as const };
+    const out = { x: 0, y: 0, source: 'head' as const };
+    const inn = { x: 1, y: 0, source: 'head' as const };
     const m = meetingOffsets(out, inn);
     const steps = (aligned: boolean): number => {
       let prev = 0;

@@ -1120,6 +1120,7 @@ export class PaintedActor extends Group {
       overlap: footprintOverlap(fo, fi),
       overlapAligned: m ? footprintOverlap(shifted(fo, m.out), shifted(fi, m.inn)) : null,
       anchorDistance: m ? m.distance / Math.max(1e-6, this.worldHeight) : null,
+      headJump: m ? m.jump / Math.max(1e-6, this.worldHeight) : null,
       hold: this.holding,
       blending: midBlend,
     };
@@ -1134,7 +1135,7 @@ export class PaintedActor extends Group {
       this.alignPlanes();
     }
     this.swapPolicyLast = policy;
-    notePoseSwap(policy, [ao?.source ?? null, ai?.source ?? null], { actor: this.name, from: out.pose, to: inn.pose, overlap: facts.overlap, overlapAligned: facts.overlapAligned, distance: facts.anchorDistance, hold: facts.hold, blending: facts.blending });
+    notePoseSwap(policy, [ao?.source ?? null, ai?.source ?? null], { actor: this.name, from: out.pose, to: inn.pose, overlap: facts.overlap, overlapAligned: facts.overlapAligned, distance: facts.anchorDistance, jump: facts.headJump, hold: facts.hold, blending: facts.blending });
   }
 
   /** One plane as the aligned dissolve sees it: its unit square in the actor's frame without the drift it carries now, and its silhouette. A plane laid on the floor is not read. */
