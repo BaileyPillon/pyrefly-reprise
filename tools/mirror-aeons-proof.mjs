@@ -4,7 +4,7 @@
  * menus** and the advisor's line (`autoBattle('intended')`) for everything between them. It photographs, in order:
  *
  *   1. Act I's first menu (the pair, Dark Mindy and Dark Sandy, on Mushroom Rock Road);
- *   2. **Yuna's own Sisters' menu with Combine powers lit** (Yuna's keys: Summon, Cindy; the Sisters' gauges start full, so the first Sister's menu offers Combine powers), and the Delta Attack the Combine plays;
+ *   2. **Yuna's own Sisters' menu with Combine powers lit** (Yuna's keys: Summon, Magus Sisters; the Sisters' gauges start full, so the first Sister's menu offers Combine powers), and the Delta Attack the Combine plays;
  *   3. **the seam**: the sisters going with the light, the white-out with the HUD taken off the screen, the cut into the cavern (a frame every half second, and a timeline of the HUD's opacity and `hidden` printed);
  *   4. **the heal between the acts**: Act I's last party HP and Act II's first menu, whole (HP printed in the log, the frame kept);
  *   5. **Yojimbo's menu, Pay lit** (Yuna's keys: Summon, Yojimbo), his Pay (Yuna pays 100,000 with the keys from the ladder of amounts that `engine/PayRows.ts` makes of the one Pay row; the advisor's line plays on), and **a Dark Zanmato** landing.
@@ -356,7 +356,7 @@ try {
   }
 
   // --- Act I: Yuna's own Sisters, with Combine powers lit ----------------------------------------------------------------------------------------
-  // Pass turns with Defend (Q) until Yuna's menu is up (Tidus has First Strike and goes first), then Summon, Cindy.
+  // Pass turns with Defend (Q) until Yuna's menu is up (Tidus has First Strike and goes first), then Summon, Magus Sisters.
   let summoned = false;
   for (let guard = 0; guard < 8 && !summoned; guard++) {
     const labels = await rowsText();
@@ -366,9 +366,9 @@ try {
       await page.waitForTimeout(500);
       const aeonRows = await collectRows(); // the window shows six rows; the list is longer
       log('menu.summon', aeonRows);
-      check('the summon list holds Yojimbo and Cindy (the Sisters as one summon) beside the five aeons', aeonRows.some((t) => /^yojimbo/i.test(t)) && aeonRows.some((t) => /^cindy/i.test(t)) && aeonRows.some((t) => /^valefor/i.test(t)), aeonRows);
-      if (inSummon && (await pickRow(/^cindy/i, { enter: false }))) {
-        await shot('2-act-i-summon-list'); // the list scrolled to its end, the cursor on Cindy
+      check('the summon list holds Yojimbo and Magus Sisters (the Sisters as one summon) beside the five aeons', aeonRows.some((t) => /^yojimbo/i.test(t)) && aeonRows.some((t) => /^magus sisters/i.test(t)) && aeonRows.some((t) => /^valefor/i.test(t)), aeonRows);
+      if (inSummon && (await pickRow(/^magus sisters/i, { enter: false }))) {
+        await shot('2-act-i-summon-list'); // the list scrolled to its end, the cursor on Magus Sisters
         await page.keyboard.press('Enter');
         await page.waitForTimeout(450);
         summoned = true;
