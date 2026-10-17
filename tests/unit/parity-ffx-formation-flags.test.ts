@@ -27,6 +27,8 @@ import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../src/data/ffx/index.ts';
 import { ISAARU_GROUPS } from '../../src/data/ffx/enemies/isaaru.ts';
+import { DARK_AEONS_GROUPS } from '../../src/data/ffx/enemies/dark-aeons-groups.ts';
+import { OFFERING_KEYS, openerGroup, possessionGroup, yuYevonLink } from '../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { DEFEND_OFF_FLAG, FORMATION_DEFEND_OFF, applyFormationFlags, defendOff, defendRefused, defendTakenFrom } from '../../src/battle/ffx/formation-flags.ts';
 import { actor, content, grandSummon, newEngine, nextInput, row, summon, setupFor, type Input } from './helpers/isaaruUnits.ts';
 import { createFFXEngine } from '../../src/battle/ffx/index.ts';
@@ -162,6 +164,12 @@ describe('the data carries the flag on exactly the groups the model says', () =>
     const marked = allGroups().filter((g) => g.defendOff === true).map((g) => g.id).sort();
     expect(marked).toEqual(Object.values(ISAARU_FORMATIONS).sort());
     expect(ISAARU_GROUPS.map((g) => g.defendOff)).toEqual([true, true, true]);
+  });
+
+  it('the groups the data builds on demand (the Dark Aeons pool, the Last Summoning chain: opener, every possession link, Yu Yevon) carry none either', () => {
+    const built: EnemyGroupDef[] = [...DARK_AEONS_GROUPS, openerGroup(), ...OFFERING_KEYS.map((k) => possessionGroup([k])), yuYevonLink(OFFERING_KEYS)];
+    expect(built.length).toBeGreaterThan(20);
+    for (const g of built) expect(g.defendOff, g.id).toBeUndefined();
   });
 
   it('each formation file is the link it is said to be: Fist, Wing and Sword fight Ifrit, Valefor and Bahamut\'s mirror locks', () => {
