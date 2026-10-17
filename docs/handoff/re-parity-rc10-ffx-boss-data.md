@@ -15,7 +15,8 @@ Of the rows the note lists, **six are real differences and are now switches** (D
 | `ec9d5fe87` | The module `src/battle/ffx/boss-data-corrections.ts`, its one call in `setup.ts#buildBattle`, the record fixture | FFX only |
 | `fee603e60` | The paper preflight and the first 19 tests | FFX only; docs, tests |
 | `0b3505eea` | Tests: real casts at the rows, the words the steps read, the all-off test made independent of hook order (a mutation found it), fixture trimmed to 32 records | FFX only; tests |
-| (the commit after them) | This note | FFX only; docs |
+| `35c020011` | The handoff note | FFX only; docs |
+| (the commit after them) | The test file split in two under the 400-line rule (data side, engine side, shared helper); the 1,500 extra seeds of section 5.2 in this note | FFX only; tests, docs |
 
 ## 2. The candidates: confirmed, built, or dropped, with the evidence
 
@@ -48,7 +49,7 @@ How each was checked: the note's row quoted with its proof label; the value **re
 ## 4. The proof
 
 - **Switches off = the base.** The 12-seed whole-chain event logs of all fifteen FFX chapters (listed and hidden; seeds 1 to 12; SHA-1 of every link's whole log): **180 of 180 byte-identical** to `origin/r52-rc`. `ffx-engine-golden` (18), `ffx2-atb-golden` (6), `ff7-golden` (3): 27 of 27 pass unchanged.
-- **Each table is the record.** `tests/fixtures/ffx-boss-records.json` holds the bytes of 32 records (numbers only). `tests/unit/parity-ffx-boss-data.test.ts` (23 tests): every listed byte is in the record and nothing the record disagrees with is added (per switch); a **closure test**: with all six on, every mapped row equals its record on the floored stats, the 24 status bytes (Regen through its flag), the five extra bits, the seven flags and the Zanmato level, except two script-written residues listed with their reasons (Cid's AGI 11; the Gui rematch's STR and MDEF); the switches-off test hands `applyBossDataCorrections` a group whose `enemies` getter throws; the module rows are never edited; the words the game's steps read (resistance bytes, extra word, special word, Zanmato byte) move with the switch and only with it; and real casts through the engine's own status path (5.9).
+- **Each table is the record.** `tests/fixtures/ffx-boss-records.json` holds the bytes of 32 records (numbers only). `tests/unit/parity-ffx-boss-data.test.ts` (13 tests, the data side) and `parity-ffx-boss-data-engine.test.ts` (10 tests, the engine side), sharing `tests/unit/helpers/ffxBossData.ts`: every listed byte is in the record and nothing the record disagrees with is added (per switch); a **closure test**: with all six on, every mapped row equals its record on the floored stats, the 24 status bytes (Regen through its flag), the five extra bits, the seven flags and the Zanmato level, except two script-written residues listed with their reasons (Cid's AGI 11; the Gui rematch's STR and MDEF); the switches-off test hands `applyBossDataCorrections` a group whose `enemies` getter throws; the module rows are never edited; the words the game's steps read (resistance bytes, extra word, special word, Zanmato byte) move with the switch and only with it; and real casts through the engine's own status path (5.9).
 - **Mutation pass: 18 faults over `boss-data-corrections.ts` and its one call in `setup.ts`, all caught.** The 17 of the first pass caught 16: `default-on` (D1 shipped true) survived because the ability-fixture file the test imports runs its own tests first and its `afterEach` reset the switches before the all-off test read them. Fixed (the test now reads the shipped values when the file loads); that fault and a second default-on fault (D10) are caught. The faults: D1 value 2, D1 dead, parts skipped, D3 Evrae and Ginnem levels, D7 byte 254, D8 immunity kept, D9 wrong flag and a row dropped, D10 Curse kept, sensor flag kept, a Nul missing, EVA 1, the off guard removed, defaults on (two), no restore, the call in `buildBattle` removed.
 - `npx tsc --noEmit` clean; `node tools/orphans.mjs` lists neither module nor fixture; every source file under 400 lines (`setup.ts` 395, `boss-data-corrections.ts` 186).
 
@@ -90,6 +91,19 @@ What the game does: every monster's STR, DEF, MAG, MDEF, AGI, LCK and ACC is at 
 | DEF and MDEF together | all of the above | 2,386 -> 2,381 |
 
 In player words: **a boss whose sheet says 0 Defence or 0 Magic Defence is treated by the game as 1, so each physical blow (or spell) lands about 0.7 percent weaker on it** (the note's figure: 730 against 725 in the damage formula's defence term). That shifts a few damage numbers by a point, so later HP thresholds and the rolls after them fall differently: the Guado Guardians, Seymour and Anima in VII, Evrae and Cid in VIII, Yojimbo, Ginnem and Daigoro in IX, Seymour Natus in X, Isaaru, Grothia and Spathi in XIV and the Pagodas in III play a different fight seed by seed, and the same fight on average (turns 54.7 -> 55.2, 86.7 -> 87.5 engine turns in VII). Things that sound as if they would matter and do not, in these fights: the Accuracy floor (a boss command carries its own accuracy byte, formulas 1 and 2 of `kernel/hit.ts`, and the user's Accuracy is read only by formulas 3 to 7), and the Agility, Magic and Luck floors; no event of any measured fight depends on them. In Chapters I, II, XII, XVII and XVIII the only floors that apply are Accuracy (all five), the Mortiorchis's Magic Defence (I) and the Mortiphasm's Defence, Magic Defence and Agility (XII): 500 of 500 logs identical in each. The three win changes are inside the noise of 500 fights (z 0.41, -0.73, -0.52; 5,700 -> 5,695 of 6,000).
+
+**More seeds, to settle the noise** (seeds 501 to 2000 of the five chapters D1 moves, base and D1; with seeds 1 to 500 that is 2,000 fights of each):
+
+| Chapter | 2,000 seeds, first-try wins | z |
+|---|---|---:|
+| seymour-anima-macalania | 1,899 (95.0%) -> 1,913 (95.7%) | 1.05 |
+| evrae-airship | 1,945 (97.3%) -> 1,944 (97.2%) | -0.10 |
+| yojimbo-cavern | 1,965 (98.3%) -> 1,959 (98.0%) | -0.69 |
+| seymour-natus | 1,927 (96.3%) -> 1,928 (96.4%) | 0.08 |
+| isaaru-via-purifico | 1,780 (89.0%) -> 1,764 (88.2%) | -0.80 |
+| **five chapters, 10,000 fights** | 9,516 (95.2%) -> 9,508 (95.1%) | |
+
+No chapter moves beyond the noise (|z| at most 1.05); Chapter XIV is the one that leans down (-16 of 2,000) and Chapter VII the one that leans up (+14 of 2,000). Flips between win and loss over seeds 501 to 2000 (lost / won back): VII 4 / 15, VIII 2 / 1, IX 3 / 0, X 0 / 1, XIV 11 / 0.
 
 ### 5.3 D3, the Zanmato level
 
@@ -174,7 +188,7 @@ D1 + D3 + D7 + D8 + D9 + D10 on the same twelve chapters as D1: 6,000 fights, 5,
 
 | Switch | What the game does | What we do | Measured effect (500 seeds per chapter touched) | Recommendation |
 |---|---|---|---|---|
-| **D1** monster stat floors (FFX only) | Every monster's Strength, Defence, Magic, Magic Defence, Agility, Luck and Accuracy is at least 1 in battle [emulated, 41,743 runs] | 63 stat cells of 29 boss rows read 0 | 6,000 fights: first-try wins 5,700 -> 5,695 (95.0 -> 94.9 percent). Chapter VII +3 (470 -> 473), IX -3 (493 -> 490), XIV -5 (452 -> 447): all noise (z 0.41, -0.73, -0.52). 3,477 of 6,000 fights play out differently event for event (VII, VIII, IX, X, XIV, III); I, II, XII, XVII, XVIII are identical. Cause: only the Defence and Magic Defence floors (each blow 0.7 percent weaker on a boss that had 0) | **Match the game.** The cost is a re-pin of 12 of the 18 `ffx-engine-golden` digests (III, VII, VIII, IX, X, XIV; every outcome still a victory) |
+| **D1** monster stat floors (FFX only) | Every monster's Strength, Defence, Magic, Magic Defence, Agility, Luck and Accuracy is at least 1 in battle [emulated, 41,743 runs] | 63 stat cells of 29 boss rows read 0 | 6,000 fights: first-try wins 5,700 -> 5,695 (95.0 -> 94.9 percent). Chapter VII +3 (470 -> 473), IX -3 (493 -> 490), XIV -5 (452 -> 447): all noise (z 0.41, -0.73, -0.52); over 2,000 seeds of each of the five chapters that move, 9,516 -> 9,508 of 10,000, |z| at most 1.05. 3,477 of 6,000 fights play out differently event for event (VII, VIII, IX, X, XIV, III); I, II, XII, XVII, XVIII are identical. Cause: only the Defence and Magic Defence floors (each blow 0.7 percent weaker on a boss that had 0) | **Match the game.** The cost is a re-pin of 12 of the 18 `ffx-engine-golden` digests (III, VII, VIII, IX, X, XIV; every outcome still a victory) |
 | **D3** Zanmato level (FFX only) | Evrae's byte 3 is level 4 (Mortibody 4, Ginnem 5, Isaaru 5) | Evrae 3; the other three none | None. Only the player's Yojimbo reads it and no shipped fight pairs him with these | **Match the game** (free; one uniform rule) |
 | **D7** Flux's Slow (FFX only) | Seymour Flux cannot be Slowed (byte 255); Haste lands (byte 0) | Slow lands (the header's "copy/paste artefact" reading was wrong for Slow) | None in 500 Chapter I fights (the line never Slows him). A direct Slow lands 987 of 1,000 today, 0 with D7; Haste 1,000 of 1,000 both ways | **Match the game.** Nothing else to change: the guide card never promised Slow (checked); the Haste on Seymour the research prized still works |
 | **D8** Evrae's Doom (FFX only) | Evrae is not Doom-immune; the Doom counter starts at 30 | Doom-immune (earlier decision C-3: follow the wiki) | None in 1,000 fights. A direct Doom lands 0 of 200 today, 200 of 200 with D8, and its 30-turn countdown does not run out in this fight (`evrae.ts:153`) | **Match the game, but it is the one row with an owner decision on the other side: re-ask C-3.** Inert either way |
@@ -193,7 +207,7 @@ D1 + D3 + D7 + D8 + D9 + D10 on the same twelve chapters as D1: 6,000 fights, 5,
 
 ## 8. Tests run (no full suite, by the brief; two workers at most)
 
-- `parity-ffx-boss-data.test.ts`: 23 of 23.
+- `parity-ffx-boss-data.test.ts` (13) and `parity-ffx-boss-data-engine.test.ts` (10): 23 of 23. Both files and the helper are under 400 lines (218, 169, 84).
 - The three goldens: `ffx-engine-golden` (18), `ffx2-atb-golden` (6), `ff7-golden` (3): 27 of 27, unchanged.
 - The related engine and data files: `parity-ffx-*`, `ffx-engine*`, `data-ffx-*` (96 files): **1,781 tests passed, 5 skipped, 0 failed**.
 - The FFX chapter engine, data, stats and rewards files of `tests/unit/chapters/` (21 files: besaid-valefor data and engine, biran-yenke data, engine, rewards and stats, evrae-engine, isaaru-engine, ixion-engine, macalania-engine, mirror-aeons aeon-stats, data and engine, natus-engine, omnis-engine, sin-core-engine, sin-data, sin-engine, sin-fins-engine, sinspawn-gui-data, yojimbo-engine): **423 passed, 0 failed**. A first attempt at all 194 files of that folder was stopped by its PID after 15 minutes with no file finished (the machine was loaded by other sessions' suites); the FFX-2 and scene files were not run.
@@ -218,7 +232,7 @@ D1 + D3 + D7 + D8 + D9 + D10 on the same twelve chapters as D1: 6,000 fights, 5,
 
 ```
 node "D:/Final Fantasy/node_modules/typescript/bin/tsc" --noEmit -p .
-TEMP=... TMP=... node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --maxWorkers=2 tests/unit/parity-ffx-boss-data.test.ts
+TEMP=... TMP=... node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --maxWorkers=2 tests/unit/parity-ffx-boss-data.test.ts tests/unit/parity-ffx-boss-data-engine.test.ts
 TEMP=... TMP=... node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --maxWorkers=2 tests/unit/ffx-engine-golden.test.ts tests/unit/ffx2-atb-golden.test.ts tests/unit/ff7-golden.test.ts
 node tools/orphans.mjs
 ```
