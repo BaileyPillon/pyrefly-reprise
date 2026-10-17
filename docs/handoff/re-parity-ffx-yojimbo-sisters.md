@@ -170,7 +170,7 @@ const build: FFXPartyBuild = {
 // the Pay screen sends: { kind: 'ability', id: 'yojimbo-pay', targets: [], gilSpent: 4_096 }
 ```
 
-1. Add `yojimbo` and/or the three Sisters to the build's `aeons` with the chapter's stat rows (section 2.1), give `yojimbo` and `sisters`, and label the compatibility (128: "strongly indicated by a community save pack, not the owner's (slots 1-84 all read 128; 164 by slot 106), live confirmation pending") and the motivation (an estimate).
+1. Add `yojimbo` and/or the three Sisters to the build's `aeons` with the chapter's stat rows (section 2.1), give `yojimbo` and `sisters`, and label the compatibility (128: the game's own starting value, read at boot on 2026-10-17; before that read it was "strongly indicated by a community save pack, not the owner's (slots 1-84 all read 128; 164 by slot 106), live confirmation pending") and the motivation (an estimate).
 2. Give each foe its `zanmatoLevel` (section 2.4): it decides how hard Zanmato is. The Pagodas and Braska's Final Aeon already carry it.
 3. Screens: the Pay amount picker (0 to `state.flags['yojimbo:gil']`), the Sisters' order list from `availableCommands` (labels are ours), three aeons on the field, the summon and dismiss beats for three, the results screen's gil (the gil Pay spent is `build.gil - state.flags['yojimbo:gil']`).
 4. For Yojimbo and for the Sisters the engine half is complete for a chapter since 2026-10-15 night: a landed Zanmato hits the whole group it picked (section 10) and all eight orders are carried out (section 11). What remains the chapter's: the starting compatibility and motivation (labelled estimates), the records of the possessed Yojimbo's and the Dark Yojimbo's own Zanmato (section 10.5), and the screens.
