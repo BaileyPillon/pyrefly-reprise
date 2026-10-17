@@ -13,7 +13,7 @@ import { reachesAtRange, validTargets } from './targeting.ts';
 import { type AimDef, preferredTargetIds } from '../common/aim.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
-import { applyDuelRows, lockReason } from './aeon-duel.ts';
+import { applyDuelRows, lockReason, summonLabel } from './aeon-duel.ts';
 import { triggerHandler } from './ai/index.ts';
 import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
@@ -189,13 +189,13 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
   if (ctx.state.aeonId === null && ctx.rt.aeonRoster.size > 0 && user.id === 'yuna') {
     const free = new Set(availableAeons(ctx).map((a) => a.id));
     for (const [key, aeon] of ctx.rt.aeonRoster) {
-      // The Magus Sisters are one entry (a build that owns them, re-parity lane FFX-K): Cindy's row stands for the three, locked or not (a locked Sandy or Mindy would be two more greyed rows). Its label is the RE lane's and Chapter XXVII's: Cindy.
+      // The Magus Sisters are one entry (a build that owns them, re-parity lane FFX-K): Cindy's row stands for the three, locked or not (a locked Sandy or Mindy would be two more greyed rows). Its label is the game's own, "Magus Sisters" (`summonLabel`); `ctx.rt.sisters` is set by Chapter XXVII and the hidden Chapter 28 alike.
       if (ctx.rt.sisters && (key === 'sandy' || key === 'mindy')) continue;
       const locked = lockReason(ctx, key);
       if (!free.has(aeon.id) && !(locked !== undefined && aeon.hp > 0)) continue;
       const row: AvailableCommand = {
         command: { kind: 'summon', id: aeon.id, targets: [] },
-        label: aeon.name,
+        label: summonLabel(ctx, key, aeon.name),
         category: 'summon',
         mpCost: 0,
         rank: 3,

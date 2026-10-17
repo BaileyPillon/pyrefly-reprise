@@ -60,7 +60,7 @@ export const LAST_SUMMONING_DOC: GuideDoc = {
         'While an aeon stands, nobody in the party can be targeted, and the party waits for it.',
         'An aeon that falls needs more battles to recover than the chain has left.',
         'Yojimbo is paid for each stroke: his menu offers Pay in round amounts and all your gil. A bigger payment buys a better stroke, and a Zanmato, which ends the battle at once, is rare and needs his gauge full (a Grand Summon fills it).',
-        'The Magus Sisters come as one summon, and the Summon row says Cindy. Their orders are yours to give; Combine is the Delta Attack on every foe in reach, six hits each, and needs all three of their gauges full, which they begin with.',
+        'The Magus Sisters come as one summon, a single row of the Summon list. Their orders are yours to give; Combine is the Delta Attack on every foe in reach, six hits each, and needs all three of their gauges full, which they begin with.',
         'HP, MP and items carry over from one battle to the next. The fayth’s Auto-Life stands a fallen friend up again in every battle.',
       ],
     },

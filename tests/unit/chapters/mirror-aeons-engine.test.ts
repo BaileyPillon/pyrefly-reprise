@@ -102,9 +102,9 @@ describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the 
     e.submit({ ...row!.command, targets: [] } as Command);
   };
 
-  it('the roster holds seven summons: the five story aeons, Yojimbo and the Sisters (one summon, offered as Cindy; Anima is left out)', () => {
+  it('the roster holds seven summons: the five story aeons, Yojimbo and the Sisters (one summon, labelled "Magus Sisters" as the game labels it; Anima is left out)', () => {
     const names = yunaInput(H.newEngine(1)).commands.filter((c) => c.command.kind === 'summon').map((c) => c.label).sort();
-    expect(names).toEqual(['Bahamut', 'Cindy', 'Ifrit', 'Ixion', 'Shiva', 'Valefor', 'Yojimbo']);
+    expect(names).toEqual(['Bahamut', 'Ifrit', 'Ixion', 'Magus Sisters', 'Shiva', 'Valefor', 'Yojimbo']);
     expect(mirrorAeonsBuild.aeons.map((a) => a.id)).toHaveLength(9); // nine aeons in the build: the three Sisters are three rows of the one summon
     expect(mirrorAeonsBuild.yojimbo).toEqual({ compatibility: 128, hireAnswer: 2 });
     expect(Object.keys(mirrorAeonsBuild.sisters!.motivation).sort()).toEqual(['cindy', 'mindy', 'sandy']);
@@ -113,7 +113,7 @@ describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the 
   it('both are summonable in BOTH acts: the game bars nothing against the dark twins (RE note 9)', () => {
     for (const group of [H.ACT_I_GROUP, H.ACT_II_GROUP]) {
       const labels = yunaInput(H.newEngine(2, group)).commands.filter((c) => c.enabled && c.command.kind === 'summon').map((c) => c.label);
-      expect(labels, group).toEqual(expect.arrayContaining(['Yojimbo', 'Cindy']));
+      expect(labels, group).toEqual(expect.arrayContaining(['Yojimbo', 'Magus Sisters']));
     }
   });
 
@@ -145,7 +145,7 @@ describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the 
     let threw = false;
     for (let seed = 1; seed <= 12 && !threw; seed++) {
       const e = H.newEngine(seed);
-      summon(e, 'Cindy');
+      summon(e, 'Magus Sisters');
       expect(e.state().aeonId).toBe('cindy');
       expect(e.state().aeonIds).toEqual(['cindy', 'sandy', 'mindy']);
       for (const id of ['cindy', 'sandy', 'mindy']) expect(H.actor(e, id).overdrive?.gauge, id).toBe(SISTERS_START_GAUGE);
@@ -169,7 +169,7 @@ describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the 
     expect(buildAdvisorView(plain.state(), { actorId: yuna.actorId, commands: yuna.commands }), "Yuna's turn").not.toBeNull();
 
     const sisters = H.newEngine(2);
-    summon(sisters, 'Cindy');
+    summon(sisters, 'Magus Sisters');
     const sisterMenu = nextInput(sisters);
     expect(sisterMenu.commands.some((c) => c.command.kind === 'ability' && c.command.id === 'sister-order-combine')).toBe(true);
     expect(buildAdvisorView(sisters.state(), { actorId: sisterMenu.actorId, commands: sisterMenu.commands }), "a Sister's turn").toBeNull();
@@ -189,7 +189,7 @@ describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the 
     const party = structuredClone(mirrorAeonsBuild);
     for (const a of party.aeons) if (['cindy', 'sandy', 'mindy'].includes(a.id)) a.overdriveGauge = 0;
     const e = H.newEngine(2, H.ACT_I_GROUP, party);
-    summon(e, 'Cindy');
+    summon(e, 'Magus Sisters');
     const d = nextInput(e);
     const enabled = d.commands.filter((c) => c.enabled);
     expect(enabled.some((c) => c.command.kind === 'dismiss')).toBe(true);

@@ -36,6 +36,7 @@
 
 import type { AvailableCommand, BattleEngine, CombatantId, Command, FFXCombatant } from '../../battle/common/types.ts';
 import { PAY_ABILITY_ID } from '../../battle/ffx/aeon-commands.ts';
+import { SISTERS_SUMMON_LABEL } from '../../battle/ffx/aeon-duel.ts';
 import { BRASKAS_FINAL_AEON_CHAIN_IDS, braskasFinalAeon } from './braskas-final-aeon.ts';
 import { type Tactic, aim, row } from './common.ts';
 
@@ -50,9 +51,9 @@ export const SURE_WAKIZASHI = 63;
 
 /**
  * The aeons Yuna calls, first choice first (the Summon rows' labels): `[estimate]`, the biggest Overdrive first; Yojimbo last, because he needs a payment and the Sisters need all three gauges. **The Sisters' one Summon row is
- * Cindy's** (the RE lane's, and Chapter XXVII's: one row stands for the three, labelled by the one that asks), so the list says `Cindy`.
+ * "Magus Sisters"** (the game's own label, `SISTERS_SUMMON_LABEL`, shared with Chapter XXVII: one row stands for the three), so the list says that.
  */
-export const AEON_CALL_ORDER: readonly string[] = ['Bahamut', 'Anima', 'Cindy', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo'];
+export const AEON_CALL_ORDER: readonly string[] = ['Bahamut', 'Anima', SISTERS_SUMMON_LABEL, 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo'];
 
 /** The ability id Combine powers carries (`battle/ffx/aeon-commands.ts#ORDERS`). The line finds the row by this id, not by its label: the menu shows the order under a shorter name (`ui/ffx/aeonRowText.ts`). */
 export const COMBINE_ID = 'sister-order-combine';

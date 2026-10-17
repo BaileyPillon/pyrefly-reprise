@@ -173,13 +173,25 @@ export function duelRefusalFor(ctx: Ctx, user: FFXCombatant, command: Command): 
 }
 
 /**
+ * The label of the Magus Sisters' one Summon row and Grand Summon entry: **Magus Sisters**, the game's own (`FFX_Data.vbf` `command.bin` row 0xFF, command 0x30FF, field 0; its help text is "Summon the Magus
+ * Sisters."; label `[R]`, a static read). **FFX only.** The three keep their own names (Cindy, Sandy, Mindy) in battle; only the list's row is renamed. The Last Summoning event's own choice window (`sins0700`)
+ * is a different list and is not set here.
+ */
+export const SISTERS_SUMMON_LABEL = 'Magus Sisters';
+
+/** What the Summon list and the Grand Summon picker call a roster entry: the Sisters' lead entry (Cindy, standing for the three) reads {@link SISTERS_SUMMON_LABEL}, every other aeon its own name. */
+export function summonLabel(ctx: Ctx, key: string, name: string): string {
+  return ctx.rt.sisters !== undefined && key === 'cindy' ? SISTERS_SUMMON_LABEL : name;
+}
+
+/**
  * The aeons Grand Summon may call (`overdrive.ts#minigameParams`): the whole
  * roster, as before, **unless** this is an aeon duel, where the locked aeon and
  * a KO'd one (an aeon KO'd in an earlier link stays down, research §1.2
  * `[derived]`) are left out, exactly as the Summon list leaves them out.
  */
 export function grandSummonChoices(ctx: Ctx): string[] {
-  // The Magus Sisters are one choice (a build that owns them, re-parity lane FFX-K): Cindy stands for the three. No other build has `ctx.rt.sisters`.
+  // The Magus Sisters are one choice (a build that owns them, re-parity lane FFX-K): Cindy stands for the three. `ctx.rt.sisters` is set by every build that owns them: Chapter XXVII (Mirror Aeons) and the hidden Chapter 28 (the Last Summoning), so the picker lists one entry for them in both (the game lists one).
   const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')));
   if (!aeonsOnly(ctx)) return keys.filter((k) => lockedMirrorOf(ctx, k) === undefined);
   return keys.filter((k) => {

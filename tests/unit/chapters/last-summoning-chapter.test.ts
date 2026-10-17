@@ -493,10 +493,10 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(braskasFinalAeon!('tidus', turn.commands, e)).toEqual(braskasFinalAeon!('tidus', turn.commands, e));
   });
 
-  it('keeps the call order to labels the Summon list can show, the Sisters under Cindy’s row (one row stands for the three)', () => {
-    expect(AEON_CALL_ORDER).toEqual(['Bahamut', 'Anima', 'Cindy', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo']);
+  it('keeps the call order to labels the Summon list can show, the Sisters under their one row, "Magus Sisters" (the game’s label; one row stands for the three)', () => {
+    expect(AEON_CALL_ORDER).toEqual(['Bahamut', 'Anima', 'Magus Sisters', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo']);
     expect(new Set(AEON_CALL_ORDER).size).toBe(8);
-    for (const key of OFFERING_KEYS) expect(AEON_CALL_ORDER.map((l) => l.toLowerCase().replace('cindy', 'sisters'))).toContain(key);
+    for (const key of OFFERING_KEYS) expect(AEON_CALL_ORDER.map((l) => l.toLowerCase().replace('magus sisters', 'sisters'))).toContain(key);
     expect(possessedIdsOf('sisters')).toEqual(SISTER_BODY_IDS);
   });
 });

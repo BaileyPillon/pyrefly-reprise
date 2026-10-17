@@ -133,7 +133,7 @@ describe('the chain: two acts, no results screen between them', () => {
 describe("Yuna's three Magus Sisters on the stage", () => {
   it('arrive on the party\'s three spots, Sandy left, Cindy middle, Mindy right (not piled on one), and a lone aeon stands in the middle', async () => {
     const sisters: AutoStrategy = (actorId, commands) => {
-      const summon = commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Cindy');
+      const summon = commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters');
       if (actorId === 'yuna' && summon) return { ...summon.command, targets: [] } as Command;
       const home = commands.find((c) => c.enabled && c.command.kind === 'dismiss');
       if (home) return { ...home.command, targets: [] } as Command;
