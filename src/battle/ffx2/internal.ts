@@ -87,7 +87,7 @@ export interface Ffx2Gauge {
    * action time uses, but it is not a command: when it ends the unit is ready at once and nothing is added for fallen girls (RC3).
    */
   idleWait?: boolean;
-  /** What cuts an idle wait short (RC3, `ai/idle.ts`): a mask of `WAKE_ON_RESULT` (a result lands on this unit) and `WAKE_ON_ALIVE_CHANGE` (any unit falls or is raised). The game polls a ready monster every step; the engine waits for the event instead. */
+  /** What cuts an idle wait short (RC3, `ai/idle.ts`): a mask of `WAKE_ON_RESULT` (a result lands on this unit) and `WAKE_ON_ALIVE_CHANGE` (any unit falls or is raised). The game polls a ready monster every step; the engine cannot poll every step (the presenter abandons a long run of decisions without an event), so it waits for the event instead. */
   idleWake?: number;
 }
 
