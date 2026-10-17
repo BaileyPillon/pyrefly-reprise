@@ -85,7 +85,7 @@ export { availableCommands } from './commands.ts';
 // --- sensor / scan ---------------------------------------------------------
 export { partyHasSensor, revealForSensorAuto, revealTarget, sensorKind, weaknessesOf } from './sensor.ts';
 export type { SensorKind } from './sensor.ts';
-export { onTurnStart, onTurnEnd, collectReactions } from './ticks.ts';
+export { onTurnStart, onTurnEnd } from './ticks.ts';
 export { evaluateTriggers, collectSignals } from './triggers.ts';
 export type { TriggerSignals } from './triggers.ts';
 export { buildBattle } from './setup.ts';

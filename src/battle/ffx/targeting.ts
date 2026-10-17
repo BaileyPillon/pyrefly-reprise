@@ -18,11 +18,9 @@ import {
   targetable,
   tryActor,
 } from './state.ts';
-import { isReachZero } from './reach.ts';
+import { isReachZero, reachOf } from './reach.ts';
+import { actorNumber } from './ai/script-random.ts';
 import { rangeFilter } from './kernel/command-range.ts';
-
-/** `flagsMisc` bit 18: the command uses the weapon's properties (Wakka's weapon commands reach at range). */
-const MISC_USES_WEAPON_BIT = 0x40000;
 
 /**
  * **Reach — the airship range gate.** FFX only.
@@ -82,32 +80,28 @@ export function reachesFoesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef
 }
 
 /**
- * **Who reaches a foe out of melee range with a physical action**: Wakka,
- * Valefor, Anima and Mindy (her normal Attack, not Passado) — Seymour Omnis's
- * Mortiphasm discs [ffx-seymour-omnis §2, verified: 4 sources]. Mindy's
- * Passado nuance is not built: no preset owns the Magus Sisters. FFX only.
+ * **Who reaches a foe out of melee range with a physical action**: Wakka, Valefor, Anima and Mindy (her normal Attack, not Passado). Kept as the
+ * documentation of the old per-target rule and for the guides that cite it: since re-parity RC9 (lane FFX-G slice G-c) the engine no longer asks it, because
+ * the game's own 4-level reach rule says the same thing and more ({@link reachesTarget}): their Attack records have reach 3 (Wakka, Valefor and Anima by the
+ * record's 0x200 bit and their actor number, Mindy by her own record), every other plain Attack has reach 0. FFX only.
  */
 export const REACHES_OUT_OF_MELEE: ReadonlySet<CombatantId> = new Set(['wakka', 'valefor', 'anima', 'mindy']);
 
 /**
- * **Per-target reach** (`CombatantFlags.outOfMeleeReach`). Unlike the airship
- * gate above, which is a property of the whole gap, this is a property of one
- * foe: magic always reaches it, a physical action only from
- * {@link REACHES_OUT_OF_MELEE} or a ranged weapon (`ActorRuntime.rangedWeapon`).
- * True for every combatant without the flag, which is every combatant outside
- * Chapter XII, so no other battle changes.
+ * **Per-target reach, the game's rule** (`pp_BtlRangeCheck` 0x00791fa0 and the legal set 0x00799820; `kernel/legal-set.ts#commandReach`, `reach.ts#reachOf`; re-parity
+ * RC9 lane FFX-G slice G-c). A target carries a signed BattleDistance (`CombatantFlags.battleDistance`, 0 for nearly everybody) and a command a reach of 0 to 3 from its
+ * record: the command can pick the target only when the reach is **at least** the distance, or when the target is the user. A foe at distance 1 stops the reach-0
+ * commands (Attack, the melee skills, Steal, the physical Overdrives); at distance 2 the reach-1 ones too (Spare Change, the aeon Overdrives); at distance 3 every item
+ * (reach 2) as well, leaving the spells, Lancet and the commands of Wakka, Valefor, Anima and Mindy's Attack. The distances the project knows: Sinspawn Gui's head 1,
+ * the Mortiphasm discs 2 (the formation script's init worker, `research/re-ffx-ai-seymour.md` section 5) and Sin's Genais Core 3 until Genais falls, then 0.
+ *
+ * A same-side target is always reachable here (the engine's scripts aim their own side's commands without a range test). The airship gap (Evrae's FAR, Overdrive
+ * Sin's second pull) is not per target: it is decided by {@link reachesFoesAtRange}.
  */
 export function reachesTarget(ctx: Ctx, user: FFXCombatant, def: AbilityDef, target: FFXCombatant): boolean {
-  // The game's own rule (`CombatantFlags.battleDistance`, Sinspawn Gui's head): the command's reach, from its record, against the target's distance. At distance 1 only the
-  // reach-0 commands (Attack, the melee skills, the physical Overdrives) fall short; a user whose weapon reaches (Wakka's `rangedWeapon`) lands the commands that use the weapon too.
   const distance = target.flags.battleDistance ?? 0;
-  if (distance > 0 && user.side !== target.side) {
-    if (!isReachZero(def)) return true;
-    return ctx.rt.actors.get(user.id)?.rangedWeapon === true && ((def.record?.flagsMisc ?? 0) & MISC_USES_WEAPON_BIT) !== 0;
-  }
-  if (target.flags.outOfMeleeReach !== true || user.side === target.side) return true;
-  if (def.damageType !== 'physical') return true;
-  return REACHES_OUT_OF_MELEE.has(user.id) || ctx.rt.actors.get(user.id)?.rangedWeapon === true;
+  if (distance <= 0 || user.side === target.side) return true;
+  return reachOf(def, actorNumber(ctx, user)) >= distance;
 }
 
 /** False for a combatant a random pick must skip (`CombatantFlags.neverRandomTarget`). */

@@ -13,6 +13,7 @@ import type { PendingItemReaction } from './adapt/reactions.ts';
 import type { YojimboRuntime } from './adapt/yojimbo.ts';
 import type { SistersRuntime } from './adapt/sisters.ts';
 import type { RewardLedger } from './adapt/loot.ts';
+import type { PendingCounter } from './counter-chain.ts';
 
 /** Per-combatant engine bookkeeping. */
 export interface ActorRuntime {
@@ -227,6 +228,11 @@ export interface FFXRuntime {
    * `engine-end.ts#runItemReactions` runs them once the action is over and empties the list. Absent until first needed.
    */
   itemReactions?: PendingItemReaction[];
+  /**
+   * The counters the hits of the action in progress have queued (re-parity RC9 lane FFX-G slice G-c, `counter-chain.ts`): Counterattack, Evade and Counter and
+   * Magic Counter, each decided at its target's first hit of the command. `engine-end.ts#afterAction` runs them once the action is over and empties the list. Absent until first needed.
+   */
+  counters?: PendingCounter[];
   /** The characters that died since the list was last emptied: a record queued for one of them is lost too (`adapt/reactions.ts#cancelReactionsOf`). */
   reactionDeaths?: Set<CombatantId>;
   /** The item an item reaction paid for when it was queued: `execute.ts` takes that one use as already spent. */

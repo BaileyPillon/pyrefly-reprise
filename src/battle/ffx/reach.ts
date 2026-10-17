@@ -23,6 +23,8 @@
  */
 
 import type { AbilityDef } from '../common/types.ts';
+import { COMMAND_TARGET_WORD } from './kernel/command-reach-table.ts';
+import { commandReach } from './kernel/legal-set.ts';
 
 /** The party and aeon commands of reach 0: they need the target at distance 0. */
 export const REACH_ZERO_COMMANDS: ReadonlySet<number> = new Set([
@@ -51,4 +53,26 @@ export function isReachZero(def: AbilityDef): boolean {
   if (def.category === 'item') return false;
   const id = def.record?.id;
   return id === undefined ? true : REACH_ZERO_COMMANDS.has(id);
+}
+
+/**
+ * **The reach of a command, 0 to 3** (`pp_BtlCommandReach`, VA 0x00799690; re-parity RC9 lane FFX-G slice G-c). The two bits at 7 and 8 of the record's target
+ * word (`Cmd+0x1a`), except that a command whose record carries the bit 0x200 has reach 3 for the three actors 4, 8 and 13 (Wakka, Valefor and Anima) and no
+ * others. A command can pick a target when its reach is at least the target's BattleDistance, or when the target is the user (`kernel/legal-set.ts`).
+ *
+ * The word comes from the game's command table by record id (`kernel/command-reach-table.ts`). An ability with no game record is ours (a test rig's, or the two
+ * wrappers `NO_COMMAND_RECORD` lists) and takes the word of the game's command it stands for: an item is an item (reach 2), a spell is a spell (reach 3), a physical
+ * command is the plain Attack (reach 0, and 3 for Wakka, Valefor and Anima). `userSlot` is the user's game actor number (`ai/script-random.ts#actorNumber`),
+ * `undefined` for a user the game has no slot for.
+ */
+export function reachOf(def: AbilityDef, userSlot: number | undefined): number {
+  const id = def.record?.id;
+  const word = (id === undefined ? undefined : COMMAND_TARGET_WORD.get(id)) ?? standInWord(def);
+  return commandReach(userSlot ?? 0xff, { b1a: word & 0xff, b1b: word >> 8, misc: 0, b20: 0, hits: 0 });
+}
+
+/** The target word of the game's command an ability with no record of its own stands for: Potion (reach 2), Fire (reach 3) or Attack (reach 0, the 0x200 bit). */
+function standInWord(def: AbilityDef): number {
+  if (def.category === 'item') return 0x0531;
+  return def.damageType === 'magical' ? 0x0db3 : 0x0633;
 }
