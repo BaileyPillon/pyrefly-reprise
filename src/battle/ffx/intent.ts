@@ -434,13 +434,15 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
     if (left > 0) out.push(`Talk cancels that Overdrive and costs him his next turn (the gauge clears when it starts) — ${left} charge${left === 1 ? '' : 's'} left [ffx-bfa-yu-yevon §1.6, re-ffx-ai-yunalesca-bfa §3.6]`);
   }
 
-  if (has(enemy, 'confuse')) out.push('Confused — it strikes one of its own side, itself included, so this prediction is a guess');
-  if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack, at the other side');
-  // Provoked: a monster with a default attack spends its turn on the provoker. Since RC9 slice G-c a monster whose record's forced-action word is 0 (nearly every boss of the
-  // story chapters) has none, so its Provoked turn is dropped (`forced-turn.ts`, `adapt/target-world.ts#defaultAttackOf`); the line says which. No recommended line Provokes such a
-  // boss and no measured fight reached it (`docs/handoff/re-parity-rc9-ffx-counters.md`, the disclosure on Berserk, Confuse and Provoke).
+  // Confused, Berserk and Provoked share one fact: a monster with a default attack spends its turn on a swing, and since RC9 slice G-c a monster whose record's forced-action word is 0 (nearly
+  // every boss of the story chapters) has none, so its turn is DROPPED (`forced-turn.ts`, `adapt/target-world.ts#defaultAttackOf`); the line says which. Only Provoke has a monster that keeps control
+  // of its script (the game's check is Provoke's alone), so Confuse and Berserk have two readings and Provoke three. No recommended line puts one of the three on such a boss and no measured fight
+  // reached it (`docs/handoff/re-parity-rc9-ffx-counters.md`, the disclosure on Berserk, Confuse and Provoke).
+  const noAttack = defaultAttackOf(enemy) === 0;
+  if (has(enemy, 'confuse')) out.push(noAttack ? 'Confused — it has no attack of its own, so it loses its turn' : 'Confused — it strikes one of its own side, itself included, so this prediction is a guess');
+  if (has(enemy, 'berserk')) out.push(noAttack ? 'Berserk — it has no attack of its own, so it loses its turn' : 'Berserk — it can only auto-attack, at the other side');
   if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) {
-    out.push(defaultAttackOf(enemy) === 0 ? 'Provoked — it has no attack of its own, so it loses its turn' : 'Provoked — it spends its turn attacking whoever provoked it');
+    out.push(noAttack ? 'Provoked — it has no attack of its own, so it loses its turn' : 'Provoked — it spends its turn attacking whoever provoked it');
   }
   if (has(enemy, 'threaten')) out.push('Threatened — it cannot act or counter at all [ffx-combat-core §4.4]');
   return out;
