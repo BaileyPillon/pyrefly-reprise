@@ -76,7 +76,7 @@ skipped when that gauge is 100. One dead Sister makes Delta Attack impossible; t
 **Not built from the file, said plainly:** how Sandy and Mindy enter play (RE §9 item 6: untraced; all three Sisters are on the field from the start here), the helper actor and the Sinscale stand-in of the
 formations (they never act and are not targetable; omitted), the raw properties 295, 296, 217 and 238 (unmapped).
 
-**Our estimates, each in one place** (`src/data/ffx/builds/last-summoning-roster.ts`, labelled there and in the handoff): Yojimbo's **starting compatibility 128** ("strongly indicated by the owner's saves,
+**Our estimates, each in one place** (`src/data/ffx/builds/last-summoning-roster.ts`, labelled there and in the handoff): Yojimbo's **starting compatibility 128** ("strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26),
 live confirmation pending", the driver's value); his **hire answer 1** (the neutral answer; the game's default for a Yojimbo never hired through the scene is 0, and which answer the player gave is in no
 source); the party's **gil 50,000** (Dream's End's own `[estimate]`); **each Sister's starting motivation 50** (the middle of 0 to 100; the engine says "UNSOURCED"); the five extra aeons' **starting
 gauges 0** (the five story aeons' are `ffx-seymour-flux` §7.9.2's; nothing sources the others); the stage spots and heights of the possessed Yojimbo and Sisters; the guide's and the story's words.
@@ -152,7 +152,7 @@ ends with the player's aeon standing). Then `tsc --noEmit`, `node tools/orphans.
 1. The Sisters' other seven orders (the RE session's handlers) and Yojimbo's menu beyond Pay and Dismiss (note's open question 3).
 2. Yojimbo's compatibility (live confirmation), his hire answer, the Sisters' motivation, the gauges: Bailey's or the RE session's to settle.
 3. A possessed look for the eight paintings, the Sisters' portraits, Yojimbo's hurt and KO paintings, Mindy's attack: art, Bailey's picks.
-4. How Sandy and Mindy enter play in the real battle (RE §9 item 6) and whether the Pagodas count for the Zanmato penalty (RE §9 item 4; **INFERRED**: the engine counts a destroyed Pagoda, KO'd not removed, so byte 4 in every link; if the game does not, a link reads a lower byte).
+4. How Sandy and Mindy enter play in the real battle (RE §9 item 6) and whether the Pagodas count for the Zanmato penalty (RE §9 item 4; The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven (RE review, 2026-10-17); L = 4 in every possession link, 5 against Braska).
 5. Listing the chapter on the board waits for Bailey, as for every hidden chapter; the music is existing cues by reference (Bailey's ear).
 
 ## 11. As built, and where it parted from this plan (written 2026-10-15, after the chapter ran in a production build)

@@ -4,6 +4,8 @@
 the **live line `origin/r50-release`** (release 50.1: Chapter XXVII Mirror Aeons listed, the RE engine at its final tip `53ce98a0`) and with RE's Zanmato note `origin/re-ffx-zanmato-and-orders` (`f59c4592`), so the branch is the live line plus
 this chapter and RE can review it as a diff against `origin/r50-release`. In a worktree of its own (a sibling folder of the main tree). Tip: see the last line of this file.
 
+**Update 2026-10-17:** RE's review of `ee4469eb` (SHIP WITH MINOR FIXES) is applied: see "Review fixes" below; the commits after `ee4469eb` on this branch are those fixes (`git log ee4469eb..ch-last-summoning`). Still not deployed.
+
 **Authority:** Bailey, 2026-10-15, verbatim: "we definitely need an awesome chapter built with yojimbo AND magus sisters ... the most epic encounter ever!!!!!!!!!" and "I'll go with all your recommendations I like the last
 summoning" (concept 2 of `aeons-chapter/concepts.md`; the approved target for the new screen is its `frame-2b-offering-menu.png`). The driver's decisions: the chapter stays **hidden behind the typed word `summon`**, hidden
 chapter **number 28** (27 is Mirror Aeons, listed on Bailey's word), **Chapter III itself stays unchanged (D-651)**, the music is existing cues by reference. The paper preflight is `docs/plans/ch-last-summoning-review.md` (its
@@ -12,6 +14,41 @@ section 11 says where the build parted from it); the contract entry is `docs/CON
 **Game case: FFX only** (AGENTS.md rule 14). Aeons, Summon, the Pay-and-free-attack Yojimbo, the Sisters' orders and the possession chain are FFX's; FFX-2's Yojimbo and Sisters are other fights and nothing here reads them. The shared
 plumbing (the registry row, the door row, one scene row, the chain loop's optional hook, two optional fields of `EnemyGroupDef` and one on its locks, the presenter's folds for three aeons out together, the guide and advisor lookups)
 is "both" (CHK-020), additive and inert for every other chapter: Chapter III's twelve seeds and the 18 FFX goldens do not move (below).
+
+## Review fixes (RE's review of `ee4469eb`: SHIP WITH MINOR FIXES; applied 2026-10-17 by a Sonnet sub-agent for the release driver)
+
+**Game case: FFX only** for every item (the Sisters, Yojimbo, Summon and the possession chain are FFX's); the label and the picker change are "both chapters that own the Sisters", Chapter XXVII and this one, both FFX. The picks below are the release driver's delegated picks on RE's review, **not Bailey's own words** (Bailey's word for the chapter: "I'll go with all your recommendations I like the last summoning").
+
+| # | Fix | Where |
+|---|---|---|
+| F-01 | Sandy's Haste branch makes the game's discarded `findMatchingChr(Sisters, Reflect, Not)` stream-4 draw (m179 @0x0305) before the Haste pick (@0x0317); it is made whenever the branch is reached, even when the Haste search then finds nobody and Razzia follows, and only when two or more Sisters qualify | `src/battle/ffx/ai/possessed-sisters.ts:136`; tests `tests/unit/chapters/last-summoning-sisters-ai.test.ts` (the Haste, Razzia and one-Sister cases) |
+| F-new | `gainAfterTurn` skips the 0-to-9 roll when that Sister's gauge is already 100 or more (the game's `if (v3 < 100)`: m178 @0x04bb, m179 @0x0352, m180 @0x031d) | `possessed-sisters.ts:79-83`; tests for Cindy, Sandy and Mindy at 100 |
+| Label | the Sisters' Summon row and Grand Summon entry read **"Magus Sisters"** in both chapters (the game's own: `FFX_Data.vbf` `command.bin` row 0xFF, command 0x30FF, field 0; help text "Summon the Magus Sisters."; label `[R]`, a static read). The three keep Cindy, Sandy and Mindy in battle. **The Last Summoning event's own choice window (`sins0700`) is left as it is: its label was not read, and nothing here assumes it** | `src/battle/ffx/aeon-duel.ts:180-185` (`SISTERS_SUMMON_LABEL`, `summonLabel`), `commands.ts:198`, `pickerParams.ts:61`, the advisors `engine/tactics/last-summoning.ts:56` and `mirror-aeons.ts:50-57`, the guide line `data/guides/docs/last-summoning.ts`; the TAKEN badge reads the row's label, so it now says "Magus Sisters TAKEN"; tests: `summon-label-sisters.test.ts` (new) and the chapters' pinned labels |
+| Disclosure | **live Chapter XXVII's Grand Summon picker goes from 9 entries to 7** on this branch (Sandy and Mindy no longer separate entries), because `ctx.rt.sisters` is set by Chapter XXVII's build too; that matches the game (one entry). Comments that said "No other build has `ctx.rt.sisters`" are corrected | `aeon-duel.ts:194`, `commands.ts:192`; `CHANGELOG.md` (the Last Summoning entry) and `docs/CONTRACT-CHANGES.md` (2026-10-17 entry) |
+| Saves | the 107 saves are **a community pack downloaded 2026-09-26, not the owner's**. Every "owner's / Bailey's saves" wording in the tree now says "a community save pack (not the owner's)" at the same evidence level (strongly indicated, live confirmation pending): Chapter XXVII's compatibility label and hire-answer note, the roster header, `kernel/yojimbo.ts`, `types.ts` (comments), the handoffs, plans, the contract log and the research note. The "default 0" comments (`kernel/yojimbo.ts`, the roster header, `types.ts`) now say the pack contradicts them; **no value changed** | `src/data/ffx/builds/last-summoning-roster.ts`, `mirror-aeons.ts`, `src/battle/ffx/kernel/yojimbo.ts`, `src/battle/common/types.ts` |
+| Pagodas | RE's wording is adopted in the data note, the tests and here: The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven. L = 4 in every possession link, 5 against Braska. The 15 in 64 at 10,000 gil and 17 in 64 at 100,000 gil (hire answer 1, full gauge) are right | `src/data/ffx/enemies/braskas-final-aeon.ts:374`, `last-summoning-zanmato.test.ts`, `last-summoning-bench.test.ts` |
+| Nit | Yu Yevon's `zanmatoLevel` is 5 (byte 4 plus 1, RE section 1.5 "Yu Yevon m176"); it is read only by a player's Yojimbo, never in Chapter III, so no Chapter III digest moves | `braskas-final-aeon.ts:514`; pinned in `last-summoning-records.test.ts` |
+| Nit | the script-trigger's place in the Zanmato test's event order is pinned: `ko` for each foe, `action-end`, one `script-trigger`, `victory` | `last-summoning-zanmato.test.ts` |
+| Nit | the `evrae-gaze-classes.json` entries 0x60e0 and 0x60e1 = 2 have a source, written in a test because JSON holds no comment: the game's own rows hold formula byte 1 for Kozuka and Wakizashi (`command_records.json`), which the Stone Gaze rule (`gazeStepOf`, note section 2.5) reads as step 2 | `last-summoning-records.test.ts` (last describe) |
+
+**Both stream fixes change which random numbers are used, not any outcome's odds.** The bench (`PYREFLY_BENCH_SEEDS=24`, 5 orders, 120 chains), before and after:
+
+| line | before | after |
+|---|---|---|
+| the advisor's line | 120 of 120 won (100%), 9.0 of 9 links | **120 of 120 won (100%)**, 9.0 of 9 links; first loss: none |
+| a plain swing | 90 of 120 won (75%), first losses at the Sisters x30 | 92 of 120 won (77%), first losses at the Sisters x28 (the same kind of spread; every loss is still at the Sisters) |
+
+The 18 FFX goldens (`ffx-engine-golden.test.ts`) and Chapter III's twelve-seed digest `a26660257ba2716c` (13 of 13 in `last-summoning-iii-pin.test.ts`) pass unchanged. The per-link tables in "The bench" below are the after run; the Cindy-first comparison in "What the numbers say" was measured before the fixes.
+
+**Hire answers STAY as they are: Chapter XXVII 2, Chapter 28 1.** The reason: aligning them moves a chapter's Zanmato odds, and no source picks between two legal player histories. RE's odds, out of 64 at compatibility 128, both Pagodas up, each cell (no gauge \| full gauge):
+
+| Pay | Answer 1 | Answer 2 |
+|---|---|---|
+| 1,000 | 0 \| 12 | 0 \| 20 |
+| 10,000 | 0 \| 15 | 6 \| 26 |
+| Pay all (50,000) | 0 \| 16 | 9 \| 29 |
+
+**Not done, by the driver's word:** no oversized file was split; the optional 0x6001 joint-action token was skipped.
 
 ## What Bailey should see first
 
@@ -23,7 +60,7 @@ is "both" (CHK-020), additive and inert for every other chapter: Chapter III's t
    the two Yu Pagodas, and it is gone from your Summon list for the rest of the chain ("TAKEN"). Nothing heals between battles. After each win the offering comes back with that card crossed.
 3. Then the chain goes on for nine battles: eight possessions (the Magus Sisters are **one** battle with three bodies, as the game fights them) and Yu Yevon last, the fight Chapter III has, with all eight aeons gone.
 4. **The part to try**: summon your own **Yojimbo** (Summon, Yojimbo: his menu is Aeon, which opens **Chapter XXVII's Pay ladder**: Pay 1,000, Pay 10,000, Pay all; a bigger payment buys a better stroke, and a Zanmato, rare, kills the
-   twin and both Pagodas at once) and your **Magus Sisters** (the Summon row says **Cindy** and stands for the three, as in Chapter XXVII; their menu is their orders, **Combine** among them: the Delta Attack on every foe in reach,
+   twin and both Pagodas at once) and your **Magus Sisters** (the Summon row says **Magus Sisters** and stands for the three, in Chapter XXVII too; their menu is their orders, **Combine** among them: the Delta Attack on every foe in reach,
    six hits each; their bars start full). Look at the possessed **Yojimbo**, who now wears the approved painting (a flat 9,999 Zanmato on everyone at the front when his gauge is full, Kozuka or Wakizashi otherwise), and at the possessed
    **Sisters** (Cindy mends and drains and calls the Delta Attack when all three are ready; **fell Cindy first**).
 5. Press `G` for the guide's page for this chain. The advisor's "NEXT BEST MOVE" card names the line's move on every ordinary turn; **on Yojimbo's and the Sisters' menus it is off** (Chapter XXVII's rule: the simulation cannot price Pay or an order).
@@ -60,11 +97,10 @@ unless this table says `[estimate]`. The record fixes (RE sections 1.4 and 4), e
 | Delta Attack (the possessed Cindy's own) | power 65, one hit | formula 15 (cube of MAG), power 10, **six hits** on the front line |
 | Cindy, Mindy | Camisade, Delta, Curaga; Passado only | **adds Drain** (under two thirds of her HP) and **Flare** (a coin with Passado; on Cindy while she has Reflect) |
 | The Sisters | three battles | **one battle, three bodies** (Mindy, Sandy, Cindy), each on her own script; gauges 0 to 9 a turn, 10 to 19 a hit, 30 to 39 more from a Power Wave; the Pagodas' Power Wave goes to the lowest-gauge living Sister and is skipped when that is 100; one dead Sister makes the Delta Attack impossible |
-| Zanmato bytes | none | possessed Valefor to Yojimbo 2, the Sisters 3 (`zanmatoLevel` is the byte plus 1: 3 and 4), the Pagodas 4; **that the Pagodas count toward the byte in every link is INFERRED** (our engine KOs a destroyed Pagoda rather than removing it, so it counts; if the game does not count one that has fallen, a link would read a lower byte) |
+| Zanmato bytes | none | possessed Valefor to Yojimbo 2, the Sisters 3 (`zanmatoLevel` is the byte plus 1: 3 and 4), the Pagodas 4, Yu Yevon 4 (`zanmatoLevel` 5, set in the review fixes); The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven. L = 4 in every possession link, 5 against Braska (RE review, 2026-10-17). Our engine KOs a destroyed Pagoda rather than removing it, so it still counts here: that is the unproven case |
 | The possessed Yojimbo's painting | the navy aeon painting | `characters/yojimbo-cavern`, the approved one (D-054), as Chapter XXVII gave Yuna's own Yojimbo |
 
-**Our estimates, each in one place** (`data/ffx/builds/last-summoning-roster.ts`; labelled there and in the plan): Yojimbo's starting **compatibility 128** ("strongly indicated by the owner's own save files (slots 1-84 all read 128;
-164 by slot 106), live confirmation pending") and his **hire answer 1** (the neutral answer; **Chapter XXVII uses 2, the guides' reply; one save has one answer, so the two chapters should agree: Bailey's or the driver's call**); the
+**Our estimates, each in one place** (`data/ffx/builds/last-summoning-roster.ts`; labelled there and in the plan): Yojimbo's starting **compatibility 128** ("strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26): slots 1-84 all read 128; 164 by slot 106; live confirmation pending"; the pack contradicts the image's default of 0 for the compatibility, and for the hire answer's default 0 too, RE review 2026-10-17; no value changed) and his **hire answer 1** (the neutral answer; **Chapter XXVII uses 2, the guides' reply, and the two STAY as they are, see "Review fixes" below**); the
 party's **gil 50,000** (Dream's End's own estimate); each Sister's starting **motivation 50** (the middle of 0 to 100; the engine says UNSOURCED); the Sisters' **starting gauges full** (Chapter XXVII's choice too; the engine offers Combine
 only while all three bars are full) and the other extra aeons' **gauges 0**; the five extra aeons' **stats** (inside Sin's block, `ffx-combat-core` §6.4.3, N = 360, estimates in that note's own sense); the stage spots and heights of the
 bodies Chapter III never fields; the words of the offering, the card, the page and the story; **the advisor's payment rule** (the smallest power of two that reaches a motivation of 63, derived from RE 8.1 point 4, for hire answer 1)
@@ -81,7 +117,7 @@ The two relays from the RE session's check, and how this lane stands:
   on each**. `tests/unit/chapters/last-summoning-zanmato.test.ts` runs the first on the chapter's own first link: with Yojimbo's gauge full a payment of 10,000 lands one within a few seeds, the three foes fall, and the events run
   `ko` for each, `action-end`, then `victory` (the order the driver gave); without a full gauge a payment of 50,000 never does at this compatibility and hire answer (RE: none below 131,072 gil at compatibility 255).
 - **The best case for a player's Zanmato is 5 in 64 (7.8 percent), not 12.5** (RE's check of its own note; the extreme Pay it counts is far above anything Dream's End's gil buys). In this chain the odds are what the engine gives: at
-  compatibility 128, hire answer 1, byte 4 (**INFERRED, as above**) a **full gauge** (a Grand Summon fills it for the turn) lifts a payment of 10,000 to 100,000 gil to 15 to 17 in 64; without one, none. Nothing here tunes them.
+  compatibility 128, hire answer 1, byte 4 (the Pagodas count, see the table above) a **full gauge** (a Grand Summon fills it for the turn) lifts a payment of 10,000 to 100,000 gil to 15 to 17 in 64; without one, none. Nothing here tunes them.
 - **The possessed aeons carry `zanmatoLevel`** (3 and 4; written in `possessedAeonEnemyDef`, pinned by the records test) and the possessed Yojimbo's Zanmato is RE's row (table above).
 - **What the bench rests on, and leaves out:** the advisor's line calls aeons only through Yuna's Grand Summon and **never calls Yojimbo** (he is last in its order, and the others are always on offer first), so no Zanmato of the player's
   is in the bench's chains (the bench asserts it); it uses only Combine of the Sisters' eight orders. A line that called Yojimbo first would win many links by one Pay (about one in four with a full gauge), and would be a
@@ -103,56 +139,56 @@ It was **recorded before any change of this lane** (on the merged tree), and the
 Chapter III's); the figures are what the chain does, **on the engine at its final tip and without a Zanmato or an order of the Sisters' other seven (see above: the line calls neither)**. "Aeon standing" is the share of links that ended
 with one of the player's aeons on the field (only the advisor's line calls any); "party down" is always 0.0 because the fayth's Auto-Life stands a fallen friend up at once (it revives at a quarter of HP).
 
-**The chapter's own line (the advisor).** All five orders together, chains 120, won 100%, links fought 9.0 of 9 on average; first loss at: none. Aeons called (links): bahamut 94, anima 13, sisters 7, ixion 1; player's Combine 7, player's Zanmato 0:
+**The chapter's own line (the advisor).** All five orders together, chains 120, won 100%, links fought 9.0 of 9 on average. First loss at: none. Aeons called (links): bahamut 96, anima 13, sisters 7, ixion 1; player's Combine 7, player's Zanmato 0:
 
 | link | fought | won | turns | ticks | party down | aeon standing |
 |---:|---:|---:|---:|---:|---:|---:|
-| 1 | 120 | 100% | 32.6 | 167.0 | 0.0 | 4% |
-| 2 | 120 | 100% | 37.9 | 204.2 | 0.0 | 15% |
-| 3 | 120 | 100% | 25.5 | 141.0 | 0.0 | 8% |
-| 4 | 120 | 100% | 38.4 | 194.1 | 0.0 | 16% |
-| 5 | 120 | 100% | 28.0 | 136.3 | 0.0 | 11% |
-| 6 | 120 | 100% | 22.4 | 115.1 | 0.0 | 6% |
-| 7 | 120 | 100% | 11.1 | 56.5 | 0.0 | 0% |
-| 8 | 120 | 100% | 25.6 | 124.6 | 0.0 | 0% |
+| 1 | 120 | 100% | 32.9 | 168.2 | 0.0 | 5% |
+| 2 | 120 | 100% | 39.0 | 209.8 | 0.0 | 14% |
+| 3 | 120 | 100% | 26.4 | 144.9 | 0.0 | 8% |
+| 4 | 120 | 100% | 36.0 | 184.6 | 0.0 | 16% |
+| 5 | 120 | 100% | 28.4 | 137.6 | 0.0 | 11% |
+| 6 | 120 | 100% | 23.6 | 121.2 | 0.0 | 6% |
+| 7 | 120 | 100% | 10.6 | 54.2 | 0.0 | 0% |
+| 8 | 120 | 100% | 24.5 | 118.7 | 0.0 | 0% |
 | 9 | 120 | 100% | 8.2 | 54.0 | 0.0 | 0% |
 
 
 Per order:
 - offering order: chains 24, won 100%, links fought 9.0 of 9 on average; first loss at: none; aeons called (links): anima 13, sisters 7, bahamut 2; player's Combine 7, player's Zanmato 0
-- reversed: chains 24, won 100%, links fought 9.0 of 9 on average; first loss at: none; aeons called (links): bahamut 22, ixion 1; player's Combine 0, player's Zanmato 0
-- yojimbo, sisters, anima first: chains 24, won 100%, links fought 9.0 of 9 on average; first loss at: none; aeons called (links): bahamut 23; player's Combine 0, player's Zanmato 0
+- reversed: chains 24, won 100%, links fought 9.0 of 9 on average; first loss at: none; aeons called (links): bahamut 23, ixion 1; player's Combine 0, player's Zanmato 0
+- yojimbo, sisters, anima first: chains 24, won 100%, links fought 9.0 of 9 on average; first loss at: none; aeons called (links): bahamut 24; player's Combine 0, player's Zanmato 0
 - shuffle 1: chains 24, won 100%, links fought 9.0 of 9 on average; first loss at: none; aeons called (links): bahamut 23; player's Combine 0, player's Zanmato 0
 - shuffle 2: chains 24, won 100%, links fought 9.0 of 9 on average; first loss at: none; aeons called (links): bahamut 24; player's Combine 0, player's Zanmato 0
 
-**The naive line (a swing on the first target, nothing else).** All five orders together, chains 120, won 75%, links fought 7.8 of 9 on average; first loss at: sisters x30. Aeons called (links): none; player's Combine 0, player's Zanmato 0:
+**The naive line (a swing on the first target, nothing else).** All five orders together, chains 120, won 77%, links fought 7.9 of 9 on average. First loss at: sisters x28. Aeons called (links): none; player's Combine 0, player's Zanmato 0:
 
 | link | fought | won | turns | ticks | party down | aeon standing |
 |---:|---:|---:|---:|---:|---:|---:|
-| 1 | 120 | 95% | 54.2 | 330.1 | 0.0 | 0% |
-| 2 | 114 | 96% | 68.1 | 412.1 | 0.0 | 0% |
-| 3 | 109 | 100% | 25.0 | 145.5 | 0.0 | 0% |
-| 4 | 109 | 94% | 75.8 | 449.7 | 0.0 | 0% |
-| 5 | 103 | 94% | 68.8 | 408.2 | 0.0 | 0% |
-| 6 | 97 | 100% | 30.0 | 162.9 | 0.0 | 0% |
-| 7 | 97 | 100% | 10.3 | 58.6 | 0.0 | 0% |
-| 8 | 97 | 93% | 76.4 | 465.4 | 0.0 | 0% |
-| 9 | 90 | 100% | 12.1 | 67.7 | 0.0 | 0% |
+| 1 | 120 | 96% | 59.0 | 368.1 | 0.0 | 0% |
+| 2 | 115 | 97% | 74.0 | 458.9 | 0.0 | 0% |
+| 3 | 111 | 100% | 28.6 | 167.0 | 0.0 | 0% |
+| 4 | 111 | 95% | 82.6 | 503.4 | 0.0 | 0% |
+| 5 | 105 | 94% | 78.1 | 480.8 | 0.0 | 0% |
+| 6 | 99 | 100% | 31.0 | 167.6 | 0.0 | 0% |
+| 7 | 99 | 100% | 10.4 | 59.6 | 0.0 | 0% |
+| 8 | 99 | 93% | 81.1 | 502.5 | 0.0 | 0% |
+| 9 | 92 | 100% | 12.0 | 67.4 | 0.0 | 0% |
 
 
 Per order:
 - offering order: chains 24, won 71%, links fought 8.7 of 9 on average; first loss at: sisters x7; aeons called (links): none; player's Combine 0, player's Zanmato 0
-- reversed: chains 24, won 75%, links fought 7.0 of 9 on average; first loss at: sisters x6; aeons called (links): none; player's Combine 0, player's Zanmato 0
-- yojimbo, sisters, anima first: chains 24, won 79%, links fought 7.5 of 9 on average; first loss at: sisters x5; aeons called (links): none; player's Combine 0, player's Zanmato 0
+- reversed: chains 24, won 79%, links fought 7.3 of 9 on average; first loss at: sisters x5; aeons called (links): none; player's Combine 0, player's Zanmato 0
+- yojimbo, sisters, anima first: chains 24, won 83%, links fought 7.8 of 9 on average; first loss at: sisters x4; aeons called (links): none; player's Combine 0, player's Zanmato 0
 - shuffle 1: chains 24, won 75%, links fought 8.0 of 9 on average; first loss at: sisters x6; aeons called (links): none; player's Combine 0, player's Zanmato 0
 - shuffle 2: chains 24, won 75%, links fought 7.8 of 9 on average; first loss at: sisters x6; aeons called (links): none; player's Combine 0, player's Zanmato 0
 
 **What the numbers say.** The chain is nine battles; a link takes a few turns to about a hundred. **The advisor's line wins all 120 chains** (24 seeds in each of five orders), and the Sisters' fight is the longest link in
-every order (three bodies, 17,000 HP between them, Cindy's Drain and Curaga and the Pagodas' 1,500 a Power Wave against a party that hits for 500 to 900): 69 to 97 turns on average in the five orders, against 5 to 67 for the
-single aeons. **A plain swing wins 90 of 120 and loses the other 30, every one of them at the Sisters** (the engine's stalemate watch calls "The battle cannot be won from here", `escape`), most often when they come last and
+every order (three bodies, 17,000 HP between them, Cindy's Drain and Curaga and the Pagodas' 1,500 a Power Wave against a party that hits for 500 to 900): 68 to 98 turns on average in the five orders, against 5 to 67 for the
+single aeons. **A plain swing wins 92 of 120 and loses the other 28, every one of them at the Sisters** (the engine's stalemate watch calls "The battle cannot be won from here", `escape`), most often when they come last and
 no aeon is left to call. The line fells **Cindy first** for exactly this reason, and it was measured rather than argued: aimed at the weakest first (Mindy, then Sandy) the party left Cindy alone, draining as fast as it hurt her,
 and the same bench won 105 of 120 (the Sisters last: 19 of 24; second: 21 of 24); aimed at her first it wins 24 of 24 in both orders in about a third of the turns (69 turns on average for the Sisters last, against 219; 74 for the
-Sisters second, against 214). The aeons the line calls are the roster's use, not a need. **None of this tunes a number of the fight**; it is what the advisor's line does with them.
+Sisters second, against 214). The aeons the line calls are the roster's use, not a need. **None of this tunes a number of the fight**; it is what the advisor's line does with them. (The figures of the tables above were re-run after the review fixes of 2026-10-17; the Cindy-first comparison in this paragraph is from the run before them.)
 
 ## What was observed, and is disclosed (not defects of this lane)
 
@@ -161,9 +197,8 @@ Sisters second, against 214). The aeons the line calls are the roster's use, not
   to lose a link by being beaten. The party is Dream's End's estimate (Chapter III's), not this chapter's.
 - **Sandy's Haste on a Cindy who holds Reflect bounces onto the party** (the engine's own rule for a reflected buff), and Mindy's Flare through Cindy's Reflect reaches the front line, as the file says (RE 6.2).
 - **The stalemate**: see "What the numbers say". The shared watch ends such a battle as `escape`, so the chain ends on the results screen; there is no checkpoint (only the Sin links have one), so a retry starts at the offering.
-- **The Summon list says "Cindy" for the Sisters' one row** (the RE lane's label, pinned by Chapter XXVII's tests), and a taken Sisters row reads "Cindy TAKEN". A shared rename to "Magus Sisters" is the driver's call; the
-  offering's card says "Magus Sisters".
-- **A Grand Summon of Yojimbo is a shortcut**: his full temporary gauge makes a Zanmato possible (15 to 17 in 64 per payment of 10,000 to 100,000 at this compatibility, INFERRED byte), and one landed Zanmato wins the link. It is
+- **The Summon list says "Magus Sisters" for the Sisters' one row, in both chapters** (the game's own label, see "Review fixes"); a taken Sisters row reads "Magus Sisters TAKEN". The Sisters keep Cindy, Sandy and Mindy as their names in battle.
+- **A Grand Summon of Yojimbo is a shortcut**: his full temporary gauge makes a Zanmato possible (15 to 17 in 64 per payment of 10,000 to 100,000 at this compatibility; byte 4 as in the table above), and one landed Zanmato wins the link. It is
   the game's rule through RE's engine, not tuned here; whether it is what Bailey wants in "the most epic encounter" is his call.
 - **The cursor skips a greyed row** in the Summon list (every FFX menu does), so a taken aeon's reason could not be read; it says **TAKEN** on its row instead.
 - **The first-time tutorial hints** of the battle HUD ("He moves after you...", "Call the aeon...") appear in this chapter as in every other; the frames dismiss them.
@@ -202,6 +237,8 @@ that serves every `/art/` file from the r50 mirror** (a small private config, a 
   (`gotoChapter`, cutscenes skipped) and then use real keys; "three taken" lets the advisor's line fight three links at fast speed first, and the results frame lets it fight the whole chain at skip speed. The Yojimbo and
   Sisters frames use a plain Summon and no debug state (the Sisters' bars start full; Yojimbo's gauge starts empty). The frames come from the dev server serving r50's art; `public/art` itself is untouched.
 
+**After the review fixes (2026-10-17, a Sonnet sub-agent for the release driver):** `tsc --noEmit` clean; `node tools/orphans.mjs`: the same 28 legacy modules, none of this work; the chapter's files, Chapter XXVII's, the 18 FFX goldens, Chapter III's twelve-seed digest (13 of 13), the command-record, guide, door and strategy suites, the RE lane's engine suites and the pickers: 190 files, 3,559 tests, **3,534 pass, 20 skipped, 5 fail, all five environmental**: `chapters/mirror-aeons-art` four times (the Dark Aeons' paintings, which only the r50 art holds; this tree's `public/art` is r49) and `chapter-meta`'s Mirror Aeons snapshot (the same art). The full `npm test` was not re-run (about 77 minutes); the earlier full run's other environmental failures were `board-thumbs`'s strip master `dark-mindy` (art) and `advisor-degenerate-boards` (a timeout under load that passes alone), neither touched by this work.
+
 ## The review this change would owe
 
 `node tools/critic-plan.mjs --paths <this branch's 50 shipped paths against r50-release>` classes it **DEEP**: a focused review of the production candidate before a deploy, then live verification and the deep review on the live build
@@ -211,12 +248,12 @@ the checks include CHK-020 (both games). The paper preflight the rule asks for i
 ## Open questions (for Bailey, or for the RE session where it says so)
 
 1. **The Pay screen** is Chapter XXVII's ladder (provisional there too: Bailey's pick between this ladder, a stepper or a fixed payment). One question for both chapters.
-2. **Hire answer** (1 here, 2 in Chapter XXVII), Yojimbo's compatibility (live confirmation), the Sisters' motivation and starting gauges: one save has one answer, so the two chapters should share the values (one place each, `last-summoning-roster.ts`).
+2. **Hire answer** (1 here, 2 in Chapter XXVII; DECIDED to stay, see "Review fixes"), Yojimbo's compatibility (live confirmation), the Sisters' motivation and starting gauges (one place each, `last-summoning-roster.ts`).
 3. **Telegraphs** when Yojimbo's gauge is full or the three Sisters' gauges are: the HUD's `charge` banner could carry them. Not built (rule 10).
 4. **A possessed look** for the eight paintings, the Sisters' portraits, Yojimbo's hurt and KO paintings, Mindy's attack: art, Bailey's picks. The pause hero art `pause/ch28-last-summoning` is not made (the fallback is Yu Yevon's portrait).
-5. How Sandy and Mindy enter play in the real battle, and whether the Pagodas count for the Zanmato byte (RE section 9 items 6 and 4; **INFERRED**: the engine counts them, which gives byte 4 in every link).
+5. How Sandy and Mindy enter play in the real battle, and whether a destroyed Pagoda still counts for the Zanmato byte (RE section 9 items 6 and 4; the Pagodas count at battle start, emulated; after one is destroyed it is unproven).
 6. **The Sisters when they come last.** Is a stalemate acceptable there, or should that order warn the player on the offering ("the Sisters last: no aeon will be left to call")? Nothing was tuned; the card and the page say Cindy first.
-7. **The Sisters' Summon row** reads "Cindy": rename it "Magus Sisters" in both chapters, or leave it?
+7. **The Sisters' Summon row** is "Magus Sisters" in both chapters (the game's label; DECIDED, see "Review fixes").
 8. **The Zanmato shortcut** (Grand Summon Yojimbo, then Pay): leave it as the game's rule, or does "the most epic encounter" want it fenced? Not tuned; measured only if asked.
 9. Listing the chapter on the board waits for Bailey, as for every hidden chapter; the music is existing cues by reference (Bailey's ear, rule 13).
 
