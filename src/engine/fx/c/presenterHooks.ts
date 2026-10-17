@@ -35,6 +35,8 @@ export interface FxStagePort {
     magic: boolean;
     action: number;
     speed: string;
+    /** This blow is the last the action shows (`isLastShownBlow`); absent when the burst is not at hand. FFX's finishing accent reads it; FFX-2's does not. */
+    lastShown?: boolean | undefined;
   }): { freezeMs: number; shook: boolean };
   /** A fiend is sent (only where the departure is a dissolve, C8). */
   dissolve?(id: CombatantId): void;
@@ -76,6 +78,37 @@ export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { 
   await fx.actionOpen({ actorId: event.actorId, name, kind });
 }
 
+/** A damage event the presenter shows as a blow (`BattlePresenterBeats.damage` hands it to `fxHit`): it hurts, and it is not an IMMUNE or a zero. */
+function isBlow(e: BattleEvent): boolean {
+  return e.type === 'damage' && e.amount > 0 && e.affinity !== 'immune';
+}
+
+/**
+ * Is the damage event at `at` of `events` the last blow its action shows (FFX; release 53, the driver's item on RC10's hit-order lane)?
+ *
+ * An action that hits several targets more than once replays its hits round by round (`battle/ffx/hit-order.ts`), but each damage event keeps the index it was calculated at, so the hit with
+ * the highest index is not always the one shown last (Fire Fury over foes that take five and two hits: it is the fourth of seven). The events that follow the one in hand are the action's own
+ * (`EventCtx.burst`), so the last blow shown is the one no later blow of the same source follows before the action ends. A miss, an IMMUNE or zero number and a heal are not blows; a reaction
+ * (a counter, another source's) inside the burst does not take the accent from the action it answers.
+ */
+export function isLastShownBlow(events: readonly BattleEvent[], at: number): boolean {
+  const here = events[at];
+  if (here === undefined || here.type !== 'damage') return true;
+  for (let i = at + 1; i < events.length; i++) {
+    const e = events[i]!;
+    if (e.type === 'action-end' || e.type === 'action-start') return true;
+    if (e.type === 'damage' && e.sourceId === here.sourceId && isBlow(e)) return false;
+  }
+  return true;
+}
+
+/** `isLastShownBlow` for the event in hand, or undefined when the burst being played is not at hand (a rig with no burst): the stage then keeps the index rule. */
+function lastShownAt(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>): boolean | undefined {
+  const burst = ctx.burst;
+  if (burst === undefined || burst.events[burst.at] !== event) return undefined;
+  return isLastShownBlow(burst.events, burst.at);
+}
+
 /**
  * One blow. Returns null when C is off (the beat keeps today's shake and hit-stop), else the
  * ms the beat should wait on a heavy blow (0 on a light one) and whether C shook the camera.
@@ -99,6 +132,7 @@ export function fxHit(
     magic: mark?.magic === true,
     action: mark?.count ?? -1,
     speed: ctx.speed(),
+    lastShown: lastShownAt(ctx, event),
   });
   return { waitMs: heavy ? r.freezeMs : 0, shook: r.shook };
 }
