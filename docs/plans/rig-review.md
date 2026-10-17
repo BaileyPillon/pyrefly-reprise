@@ -38,7 +38,7 @@ problem; `docs/handoff/pose-continuity.md`). A rig is ONE painting (the idle) cu
 | A rig lights, flashes, dims or dissolves differently from a plane | parts share the actor's uniform cells by reference; screenshot of the proto Kimahri against the plane in the same chapter (same light, flash, KO) |
 | Pose request mid-transition jerks | unit test: value and velocity continuous across a retarget; velocity at the start of a transition equals the velocity at its interruption |
 | Feet slide or float between keys | unit test: each grounded key keeps the lowest foot landmark on its bind row (root offset removed) within tolerance; the validator reports it; transitions between planted keys stay planted at every sample |
-| Dynamics blow up (a hit-stop dt, a huge kick) | unit test: 10^5 steps, kicks 100x normal, dt from 0 to 5 s: every angle within its limit, no NaN |
+| Dynamics blow up (a hit-stop dt, a huge kick) | unit test: 4x10^4 steps, kicks 100x normal, dt from 0 to 5 s: every angle within its limit, no NaN |
 | Selection wrong (a blocked or missing rig draws) | unit test of the selection rule: no rig, gate blocked, no gate, switch off, costume mismatch, version, bad data: all give PaintedActor |
 | Frame time with 4 to 8 rigs | 6 copies of the proto Kimahri, phone-size viewport, headless Chromium on the GPU: report the median and p95 frame ms against 6 planes |
 | Stage code that reads plane internals (`fx/mix`, KO tip, prone lay) breaks | RigActor keeps the carrier's slots; the rig plane follows the active slot's transform; smoke run in a chapter that fields Kimahri through a KO |

@@ -16,6 +16,7 @@ import { installFxDebug } from './debug/fxApi.ts';
 import { installArtDebug } from './debug/artApi.ts';
 import { installCrispDebug } from './debug/crispApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
+import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
@@ -147,6 +148,7 @@ async function boot(): Promise<void> {
   installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
   installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
+  installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
 
   await app.push(new TitleScreen());
   app.start();

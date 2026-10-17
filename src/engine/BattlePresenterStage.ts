@@ -18,7 +18,9 @@ import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
-import { PaintedActor } from './PaintedActor.ts';
+import type { PaintedActor } from './PaintedActor.ts';
+import { buildFigure } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
+import { unregisterRigUse } from './rig/RigLoad.ts';
 import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
@@ -92,6 +94,8 @@ export interface PaintedStageOptions {
   cameraPreset?: () => CameraPresetSpec;
   /** The renderer, so a master the art governor loads is uploaded ahead of its swap (release 39.1, `TextureStager.ts`); without it the swap is release 39's. */
   renderer?: StageHost;
+  /** The hidden `fxRig` setting, read live: false draws every figure as its painting set. Absent reads as on (`?rig=on|off` overrides it; `rig/RigLoad.ts`). */
+  rigs?: () => boolean;
 }
 
 interface StagedActor {
@@ -351,7 +355,12 @@ export class PaintedStage implements BattleStage {
     const k = size.ringScale;
 
     const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
-    const actor = await PaintedActor.create({
+    const built = await buildFigure({
+      id: c.id,
+      artId,
+      poses,
+      ...(this.opts.rigs ? { setting: this.opts.rigs } : {}),
+      opts: {
       name: c.id,
       ...(anchor ? SA.anchoredActorOptions(anchor) : {}),
       // The *body's* facing, from the side: party and aeons toward +x, enemies toward -x, unless the scene
@@ -385,7 +394,9 @@ export class PaintedStage implements BattleStage {
         radius: anchor ? SA.anchoredRingRadius(anchor) : (kind === 'party' ? 0.78 : 1.7) * k,
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
+      },
     });
+    const actor = built.actor;
     const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, worldHeightFor(c, heights), worldHeight); // a figure at a scene's form height is planned at the shared one too
     if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
 
@@ -393,12 +404,14 @@ export class PaintedStage implements BattleStage {
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
     const spot = pin ?? spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
     actor.position.set(spot[0], spot[1], spot[2]);
+    // The poses with a painting of their own (a rigged figure: its keys), which `paints` answers from.
+    const painted = built.rig ? new Set(built.rig.rigKeys) : paintedPoses(artId, poses, characterUrl);
     // Already down when staged: snap to it (`immediate`: no topple on frame one). Seymour's
     // body (D-046) is the one enemy that stays down; a figure with no KO painting lies down.
     if (!c.alive && (c.side === 'party' || departureKindOf(c.id) === 'body')) {
       actor.setPose('ko', { immediate: true });
       if (c.side === 'party') downWithoutKoPainting(actor, 0); // VP-1001-04
-      else if (!paintedPoses(artId, poses, characterUrl).has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
+      else if (!painted.has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
     }
 
     this.opts.scene.add(actor);
@@ -414,7 +427,7 @@ export class PaintedStage implements BattleStage {
       slot: c.slot,
       artId,
       kind,
-      painted: paintedPoses(artId, poses, characterUrl),
+      painted,
       // A destructible part is laid out along its machine rather than given a
       // lane of its own — Vegnagun's leg is not a fourth fiend.
       ...(c.flags.isPart ? { isPart: true } : {}),
@@ -797,6 +810,7 @@ export class PaintedStage implements BattleStage {
     this.entrances?.forget(id);
     this.pyreflies.leave(id);
     disposeFootOcclusion(staged.actor.shadow);
+    unregisterRigUse(id);
     this.partRings.remove(id);
     staged.actor.dispose();
   }

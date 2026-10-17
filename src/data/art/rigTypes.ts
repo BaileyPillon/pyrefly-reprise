@@ -12,7 +12,8 @@
  * **Spaces and units** (the prototype's, kept):
  * - *Painting px* are pixels of the MASTER painting the rig was cut from (`image.w` x `image.h`), x right, **y DOWN**. Joints, vertices, boxes and offsets are all in them.
  *   The runtime maps them onto the figure's idle plane, so a rig is resolution-independent: whatever tier the game draws the idle at, the plane is the same.
- * - Angles are **degrees in the file, clockwise on screen** (a lean forward for a figure facing right is positive). The runtime converts to radians.
+ * - Angles in a KEY (`rot`, `root.rot`) are **radians, clockwise on screen** (a lean forward for a figure facing right is positive): the fitter writes them, the rig gate
+ *   reads them, and a value past 2 pi is refused. Angles in the `motion` block (`limit`, `bias`, `drag`, the idle's `rot`) are **degrees**, because a person tunes them.
  * - A bone's transform in a key is a deviation from bind: `rot` about the bone's own joint, then `dx`/`dy` (painting px) added to its offset from the parent joint,
  *   scale `sx`/`sy` about the joint. Children inherit it (a normal 2D bone chain).
  */
@@ -32,7 +33,7 @@ export interface RigBone {
 
 /** A bone's deviation from bind inside a key. Every field is optional (absent = no deviation: rot 0, dx 0, dy 0, sx 1, sy 1). */
 export interface RigBoneXform {
-  /** Degrees, clockwise on screen, about the bone's joint. */
+  /** RADIANS, clockwise on screen, about the bone's joint. */
   rot?: number;
   /** Painting px, added to the bone's offset from its parent joint. */
   dx?: number;
@@ -49,12 +50,14 @@ export interface RigBoneXform {
  * Geometry. `verts` is flat `[x0, y0, x1, y1, ...]` (painting px, bind pose). Without `triangles` the part is the quad of its `box` (so a rigid part is just
  * `{name, order, png, box, bone}`; `verts` then defaults to the four corners).
  *
- * Skinning, one of two forms (the prototype's two influences a vertex):
+ * Skinning, one of three forms (at most two influences a vertex):
  * - `bone`: rigid, every vertex follows this bone (a name, or an index into `bones`);
- * - `bones` + `weights`: two influences per vertex, both flat with two entries a vertex: `bones[2i]`, `bones[2i+1]` are bone indices (`-1` = no second influence) and
- *   `weights[2i]`, `weights[2i+1]` their weights (they should sum to 1; the runtime does not renormalise).
+ * - `weights` alone, **four numbers a vertex**: `[b0, w0, b1, w1, ...]` with `b1 = -1` when one bone carries the vertex (what the cutting pipeline writes);
+ * - the prototype's form, `bones` + `weights`, **two entries a vertex each**: `bones[2i]`, `bones[2i+1]` are bone indices (`-1` = no second influence) and
+ *   `weights[2i]`, `weights[2i+1]` their weights.
+ * Weights should sum to 1; the runtime does not renormalise.
  *
- * The prototype's own spellings are accepted by the loader as aliases: `uv` for `uvs`, `tris` for `triangles`.
+ * The prototype's own spellings are accepted by the loader as aliases: `uv` for `uvs` (**but `uv` is v UP, see `uvs`**), `tris` for `triangles`.
  */
 export interface RigPart {
   name: string;
@@ -64,21 +67,24 @@ export interface RigPart {
   png: string;
   /**
    * The part's rim mask (an 8-bit grey PNG, same size as `png`): white along the PAINTING's own outline, black along a cut between two parts, so the rim light never
-   * draws a seam. **Absent = no rim light on this part.**
+   * draws a seam. **Absent (and no `rimEverywhere`) = no rim light on this part.**
    */
   rim?: string;
-  /** `[x, y, w, h]` of `png` in the master (painting px). */
+  /** True for a part whose every edge is the painting's own outline (a spear shaft, a tail tip): it takes the rim light along its whole alpha edge with no mask. The prototype's `noRim`. */
+  rimEverywhere?: boolean;
+  /** `[x, y, w, h]` of `png` in the master (painting px). `png` is a bare file name beside `rig.json`. */
   box: [number, number, number, number];
   verts?: number[];
-  /** Flat `[u0, v0, ...]` in 0..1 of the part PNG, **v up** (three.js `flipY`, the prototype's `uv`). Absent: planar from `verts` and `box`. */
+  /**
+   * Flat `[u0, v0, ...]` in 0..1 of the part PNG, **v DOWN like the painting's px**: `u = (x - box.x) / box.w`, `v = (y - box.y) / box.h` is the planar default when
+   * absent. (The prototype's `uv` alias is v UP, three.js `flipY`; the loader flips only `uvs`.)
+   */
   uvs?: number[];
   /** Flat triangle indices into `verts`. */
   triangles?: number[];
   bone?: string | number;
   bones?: number[];
   weights?: number[];
-  /** True when the part must never take the rim light even if a `rim` is given. */
-  noRim?: boolean;
 }
 
 /** A named point on the figure that follows a bone (painting px, bind pose): `head`, `feet`, `footN`, `hand`, `spearTip` ... */
@@ -105,9 +111,9 @@ export interface RigKeyFit {
  */
 export interface RigKey {
   bones: Record<string, RigBoneXform>;
-  /** The whole figure about the root bone: `dx`, `dy` (painting px), `rot` (degrees). */
+  /** The whole figure about the root bone: `dx`, `dy` (painting px), `rot` (RADIANS). */
   root?: { dx?: number; dy?: number; rot?: number };
-  /** The approved painting this key was fitted to (master path, e.g. `art/characters/kimahri/attack.png`). It is the pipeline's evidence; the runtime never loads it. */
+  /** The approved painting this key was fitted to (e.g. `characters/kimahri/attack`). It is the pipeline's evidence; the runtime never loads it. */
   source: string;
   fit?: RigKeyFit;
   /**
@@ -138,6 +144,11 @@ export interface RigChain {
   limit?: number;
   /** A constant extra angle per bone, degrees (the cloth's drift). */
   bias?: number[];
+  /**
+   * Extra angle per bone, degrees for each world unit a second the figure travels toward the way it faces (a lunge, a run, a knock-back streams a mane back: the
+   * prototype's "wind"). Same sign convention as `bias`. Default none.
+   */
+  drag?: number[];
 }
 
 /** An idle: small sinusoids added on top of the current key. A rig WITHOUT `motion.idle` keeps the painted actor's whole-figure breathing and sway instead. */
@@ -156,12 +167,15 @@ export interface RigMotion {
 
 /** The cutting pipeline's gate. The runtime draws a rig only when `status === 'ok'`; a file with no `gate` is treated as blocked. */
 export interface RigGate {
-  status: 'ok' | 'blocked';
+  /** `ok`, or anything else (`refused`, `blocked`): only `ok` is drawn. */
+  status: 'ok' | 'refused' | 'blocked';
   /** ISO date or timestamp of the verdict. */
   at: string;
-  /** Who or what gave it (`rig-gate`, a checker's name). */
+  /** Who or what gave it (`tools/rig-gate.mjs`). */
   by: string;
-  /** Why, when blocked. */
+  /** The fingerprint the stamp is bound to (the gate writes it; the runtime does not check it). */
+  digest?: string;
+  /** Why, when not ok. */
   why?: string;
 }
 
@@ -176,11 +190,11 @@ export interface RigFile {
   /** The master's ground row (painting px, y down). */
   baselineY: number;
   /**
-   * The costume: the ONE painting the parts were cut from. `painting` is its master path (`art/characters/kimahri/idle.png`; the `@2x` tier name or a `.webp` is
-   * compared by its master's name); `sha` the first 16 hex of the master PNG's sha256. The runtime draws a rig only for a figure whose idle painting is this one, so a
-   * repainted idle retires the rig until the pipeline cuts it again.
+   * The costume: the ONE painting the parts were cut from. `painting` names its master (`characters/kimahri/idle`; a leading `art/`, an extension and an `@2x` tier are
+   * ignored when it is compared with the figure's idle painting); `pose` is the pose it is (`idle`); `sha` the sha256 (64 hex) of the master PNG. The runtime draws a
+   * rig only for a figure whose idle painting is this one, so a repainted idle retires the rig until the pipeline cuts it again (the gate checks the sha).
    */
-  costume: { painting: string; sha: string };
+  costume: { painting: string; pose?: string; sha: string };
   bones: RigBone[];
   parts: RigPart[];
   landmarks: Record<string, RigLandmark>;
