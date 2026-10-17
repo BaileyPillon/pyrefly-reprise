@@ -123,8 +123,10 @@ function bestLeftAt(p: FramingProblem, margin: number): number {
 export function framedIds(state: BattleState, actor: CombatantId | null): Array<[CombatantId, number]> {
   const out: Array<[CombatantId, number]> = [];
   // A summoned aeon stands in for the party (FFX); the party has left the field.
-  const party = state.aeonId ? [state.aeonId] : state.activeIds;
-  const lowerKo = !state.aeonId && koFramingChapter(state);
+  // (FFX, the player's Magus Sisters: all three stand in for the party, `state.aeonIds`.)
+  const aeonsOut = state.aeonIds ?? (state.aeonId ? [state.aeonId] : []);
+  const party = aeonsOut.length > 0 ? aeonsOut : state.activeIds;
+  const lowerKo = aeonsOut.length === 0 && koFramingChapter(state);
   for (const id of party) {
     const down = lowerKo && id !== actor && (state.combatants[id] as { alive?: boolean } | undefined)?.alive === false;
     out.push([id, id === actor ? FRAME_WEIGHTS.actor : down ? FRAME_WEIGHTS.ko : FRAME_WEIGHTS.party]);

@@ -335,7 +335,7 @@ describe('the tactic: the shield for the big move, the heal, Auto-Life and Cheer
   it("Yuna's Sisters Combine when the menu offers it (their gauges start full) and leave when it does not", () => {
     const e = H.newEngine(2);
     const d = inputOf(e, 'yuna');
-    const summon = d.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Cindy')!;
+    const summon = d.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
     e.submit({ ...summon.command, targets: [] });
     const next = H.nextInput(e);
     expect(['cindy', 'sandy', 'mindy']).toContain(next.actorId);

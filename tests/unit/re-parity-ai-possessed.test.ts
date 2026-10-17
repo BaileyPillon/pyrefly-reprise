@@ -137,13 +137,13 @@ describe('its first turn and the move tables (A5; m163 f2 @0x02D6 and its siblin
     expect(t.mem[GAUGE]).toBe(4);
   });
 
-  it('Yojimbo: one coin picks Kozuka or Wakizashi, never Attack (one row stands for both here: a data gap)', () => {
+  it('Yojimbo: one coin picks Kozuka (0) or Wakizashi (1), never Attack and never Daigoro (the Last Summoning record fix: rows 0x60E0 and 0x60E1)', () => {
     for (const coin of [0, 1]) {
       const t = fight('yojimbo');
       t.rng.feed(1);
       t.rng.wide.push(coin, 0);
       const command = chooseAiCommand(t.ctx, t.aeon);
-      expect(idOf(command)).toBe('possessed-yojimbo-daigoro');
+      expect(idOf(command)).toBe(coin === 0 ? 'possessed-yojimbo-kozuka' : 'possessed-yojimbo-wakizashi');
       expect(targetsOf(command)).toEqual(['yuna']);
       expect(t.rng.calls).toEqual([[0, 2], [0, 0xffff], [0, 0xffff]]);
     }

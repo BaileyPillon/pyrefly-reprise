@@ -35,6 +35,7 @@
  */
 
 import type { AvailableCommand, BattleEngine, CombatantId, Command, FFXCombatant } from '../../battle/common/types.ts';
+import { SISTERS_SUMMON_LABEL } from '../../battle/ffx/aeon-duel.ts';
 import { type Tactic, aim, has, hpFraction, revive, row, stacksOf } from './common.ts';
 
 /** The four Dark Aeons (`src/data/ffx/mirror-aeons-ids.ts`). */
@@ -46,14 +47,14 @@ const MAGIC_ORDER: readonly CombatantId[] = ['dark-mindy', 'dark-sandy', 'dark-c
 /** Lulu's spells, the strongest first. */
 const SPELLS: readonly string[] = ['Ultima', 'Flare', 'Thundaga', 'Firaga', 'Blizzaga', 'Waterga'];
 /** Which aeon to send in against the trio's Delta Attack (rule 1): Yuna's own Sisters, three bodies in one summon, the only shield that is still standing when Cindy acts. */
-const FODDER_VS_TRIO: readonly string[] = ['Cindy', 'Bahamut', 'Shiva', 'Ixion', 'Ifrit', 'Valefor', 'Yojimbo'];
+const FODDER_VS_TRIO: readonly string[] = [SISTERS_SUMMON_LABEL, 'Bahamut', 'Shiva', 'Ixion', 'Ifrit', 'Valefor', 'Yojimbo'];
 /**
  * Which aeon to send in against Zanmato (rule 1), the first on offer winning: Yojimbo, the mirror (his blows are the weakest an aeon has, capped at 9,999, so nothing is lost), then the story aeons, the cheapest first,
  * and the Sisters last: three bodies in one summon, whose menu has no attack of its own (Combine powers or Dismiss: `battle/ffx/aeon-commands.ts`).
  */
-const FODDER_VS_ZANMATO: readonly string[] = ['Yojimbo', 'Valefor', 'Ifrit', 'Ixion', 'Shiva', 'Bahamut', 'Cindy'];
+const FODDER_VS_ZANMATO: readonly string[] = ['Yojimbo', 'Valefor', 'Ifrit', 'Ixion', 'Shiva', 'Bahamut', SISTERS_SUMMON_LABEL];
 /** The same without the mirror first: the story aeons, then Yojimbo, then the Sisters (the bench's comparison line only). */
-const FODDER_VS_ZANMATO_LAST: readonly string[] = ['Valefor', 'Ifrit', 'Ixion', 'Shiva', 'Bahamut', 'Yojimbo', 'Cindy'];
+const FODDER_VS_ZANMATO_LAST: readonly string[] = ['Valefor', 'Ifrit', 'Ixion', 'Shiva', 'Bahamut', 'Yojimbo', SISTERS_SUMMON_LABEL];
 
 /** The gil Yojimbo is paid each time he acts: the game's motivation from it is `4 x (floor(log2) - 2)`, so this is `4 x 14 = 56`, and more than the roll's gain is not worth the gil (`battle/ffx/kernel/yojimbo.ts#gilMotivation`). */
 export const PAY_GIL = 100_000;

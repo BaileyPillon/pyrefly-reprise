@@ -50,7 +50,7 @@ import { BFA_LINE_FILE, lootRewards } from '../loot/index.ts';
  * gauge. `aeon`/`yu-yevon` context: Agility 30, Power Wave strips only
  * Poison/Zombie/Reflect and carries no gauge bonus.
  */
-function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, context: 'bfa' | 'aeon-or-yu-yevon'): EnemyDef {
+export function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, context: 'bfa' | 'aeon-or-yu-yevon'): EnemyDef {
   return {
     id,
     name: 'Yu Pagoda',
@@ -266,10 +266,12 @@ const POSSESSED_AEON_ABILITY_IDS: Record<BraskasFinalAeonEnemyId, string[]> = {
   'possessed-shiva': ['possessed-shiva-heavenly-strike', 'possessed-shiva-diamond-dust'],
   'possessed-bahamut': ['possessed-bahamut-impulse', 'possessed-bahamut-mega-flare'],
   'possessed-anima': ['possessed-anima-pain', 'possessed-anima-oblivion'],
-  'possessed-yojimbo': ['possessed-yojimbo-daigoro', 'possessed-yojimbo-zanmato'],
-  'possessed-cindy': ['possessed-cindy-camisade', 'possessed-cindy-delta-attack', 'curaga'],
-  'possessed-sandy': ['possessed-sandy-razzia', 'haste', 'reflect'],
-  'possessed-mindy': ['possessed-mindy-passado'],
+  // The hidden Last Summoning chapter's record fixes (2026-10-15; research/re-ffx-last-summoning.md section 1.4 and 4): Yojimbo has Kozuka and Wakizashi and no Daigoro; Cindy adds Drain, Mindy adds Flare; the Sisters'
+  // token is the row Sandy and Mindy send Cindy when all three gauges are full. Chapter III never builds these four.
+  'possessed-yojimbo': ['possessed-yojimbo-kozuka', 'possessed-yojimbo-wakizashi', 'possessed-yojimbo-zanmato'],
+  'possessed-cindy': ['possessed-cindy-camisade', 'possessed-cindy-delta-attack', 'curaga', 'drain'],
+  'possessed-sandy': ['possessed-sandy-razzia', 'haste', 'reflect', 'possessed-sisters-token'],
+  'possessed-mindy': ['possessed-mindy-passado', 'flare', 'possessed-sisters-token'],
   // Unused keys required by the BraskasFinalAeonEnemyId union — never built by buildPossessedAeonChain.
   'braskas-final-aeon': [],
   'yu-pagoda-left': [],
@@ -315,11 +317,19 @@ const POSSESSED_AEON_SENSOR_TEXT: Partial<Record<BraskasFinalAeonEnemyId, string
  * [verified: 2 sources] and is overruled by the game's own script). Everything
  * else (affinities, immunities, ability ids, flags) is real data and ships as-is.
  */
-function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): EnemyDef {
+/**
+ * The painting a possessed aeon wears: the aeon's own id, except Yojimbo (the hidden Last Summoning, FFX only; D-054), whose approved painting is `characters/yojimbo-cavern`, the gold, orange and purple one Chapter IX's
+ * Yojimbo draws, not the navy `characters/yojimbo` D-054 says is not approved and not used (the live line's r50.1 gave Yuna's own Yojimbo the same: `data/ffx/aeons/index.ts`). No possessed Yojimbo is in Chapter III.
+ */
+export function possessedArtId(aeonId: string): string {
+  return aeonId === 'possessed-yojimbo' ? 'yojimbo-cavern' : aeonId.replace('possessed-', '');
+}
+
+export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): EnemyDef {
   return {
     id: aeonId,
     name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`,
-    spriteKey: aeonId.replace('possessed-', ''), // reuses the aeon's own sprite per the art session's convention
+    spriteKey: possessedArtId(aeonId), // reuses the aeon's own sprite per the art session's convention (Yojimbo's is the approved one, D-054)
     slot,
     // Placeholder — the engine overwrites this from the live `AeonBuild`,
     // Luck forced to 1. See the function doc comment above.
@@ -352,13 +362,17 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
       slow: 255,
     },
     immunityFlags: ['boss', 'immune-to-scan'],
-    forms: [{ name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`, spriteKey: aeonId.replace('possessed-', ''), hp: 1 }],
+    forms: [{ name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`, spriteKey: possessedArtId(aeonId), hp: 1 }],
     aiScriptId: 'possessed-aeon',
     rewards: lootRewards(BFA_LINE_FILE[aeonId], { overkillThreshold: 99999 }), // §2.3 — no AP/gil for these: the records m163 to m169 and m178 to m180 are all zeros
     abilityIds: POSSESSED_AEON_ABILITY_IDS[aeonId],
     ...(POSSESSED_PLAIN_ATTACKERS.includes(aeonId) ? { plainAttack: POSSESSED_PLAIN_ATTACK } : {}),
     flags: { isBoss: true, noRevive: true }, // §2.3 [verified: 3 sources] — permanent Auto-Life on the PARTY, but a defeated possessed aeon is gone for good
     threatenChance: 0,
+    // The game's Zanmato byte plus one (`adapt/yojimbo.ts#zanmatoByte`): the possessed Valefor to Yojimbo hold byte 2, the possessed Sisters byte 3 (research/re-ffx-last-summoning.md section 1.5, [bytes]). Read only by the player's
+    // Yojimbo, who no chain of Chapter III ever holds. The Pagodas' byte 4 sets the penalty in every link (RE 8.3): L = 4 in every possession link, 5 against Braska. The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven.
+    // Here the engine takes the highest byte over every monster still on the field and a destroyed Pagoda is KO'd, not removed, so it still counts: that is the unproven case.
+    zanmatoLevel: aeonId === 'possessed-cindy' || aeonId === 'possessed-sandy' || aeonId === 'possessed-mindy' ? 4 : 3,
     sensorText: POSSESSED_AEON_SENSOR_TEXT[aeonId] ?? 'Possessed. It used to be an ally.',
     scanText: 'Yu Yevon wears it now. Destroying it is the only mercy left.',
   };
@@ -496,6 +510,7 @@ export const yuYevonGroup: EnemyGroupDef = {
         'A summoner’s remnant, still casting. Hides inside whatever will hold it. Drains life from all, then heals itself endlessly. You cannot be killed here. You can only be delayed.',
       poisonTickPercent: 10, // §3.1 [verified: 2 sources] 10% of 99,999 = 9,999/tick
       doomTurns: 3, // §3.1 [verified: 2 sources] — documents "a Candle of Life kills him in exactly 3 turns", not something Yu Yevon inflicts on the party
+      zanmatoLevel: 5, // the Zanmato byte 4 plus one (research/re-ffx-last-summoning.md section 1.5 "Yu Yevon m176 = 4", [bytes]; RE review, 2026-10-17). Read only by a player's Yojimbo (no Chapter III chain holds him) and the Pagodas beside him already read 5, so no digest of Chapter III moves
     },
     yuPagoda('yu-pagoda-left', 1, 'aeon-or-yu-yevon'),
     yuPagoda('yu-pagoda-right', 2, 'aeon-or-yu-yevon'),

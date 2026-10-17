@@ -1,7 +1,7 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 76 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 77 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
@@ -86,6 +86,41 @@ Address: none yet (branch r50-release: the live release r49 f939b87f2 plus relea
 ![The phone's hidden-chapter field after a long press on the board's label, with the first letters of a word typed](docs/screenshots/r50-rc/d-field-typing-390x844.jpg)
 
 The pictures of the release candidate's other repairs (Biran and Yenke's first menu, the phone's enemy headers, the end wait, Itchy and Osmose) are under `docs/screenshots/r50-rc/` and `docs/screenshots/r50-fixes/`; the rest of Chapter XXVII's run is under `docs/screenshots/ch-mirror-aeons/`.
+
+## 2026-10-16 · A hidden chapter: The Last Summoning, where Yu Yevon takes your aeons in the order you choose, behind the word `summon` (branch ch-last-summoning, on the live line r50.1; not live)
+
+Address: none yet (branch ch-last-summoning, code up to 2cdf46c8d, written on release candidate r49-rc and merged with the live line origin/r50-release and the RE engine's final tip; not deployed, no review run; nobody has heard its music or judged its look: the offering screen follows the approved frame, the Pay ladder is Chapter XXVII's, and the paintings are the ones the game already has)
+
+- **FFX, hidden chapter:** The Last Summoning, a variant of Dream's End in which the thing in the light reaches for your aeons one at a time and **you choose the order**. Type `summon` on the chapter board; there is no
+  card. You hold all eight aeons (Valefor, Ifrit, Ixion, Shiva, Bahamut, Anima, Yojimbo and the Magus Sisters) with Tidus, Yuna and Auron. Chapter III is unchanged: its twelve measured fights are byte for byte what they were.
+- **FFX, the offering:** a new screen before the first fight and after every win: Yu Yevon above "reaches for one of your aeons", a row of eight cards, what each copy will do and what you lose. Left and Right choose, Enter
+  gives (a tap focuses, a second tap gives); what is taken is crossed out. Whichever you give up **is fought next, as a copy of your own** (your aeon's Strength, Magic, Defense and HP, at full HP), and it is gone from Yuna's Summon
+  list for the rest of the chain, marked TAKEN. Nothing heals between battles. Nine battles in all: eight possessions, then Yu Yevon with nothing left to call.
+- **FFX, the two aeons the game's chain has and ours did not:** the possessed **Yojimbo** (Kozuka or Wakizashi each turn, never Daigoro, and when his gauge is full Zanmato: a flat 9,999 on everyone at the front, not an instant
+  kill; he wears his approved painting) and the possessed **Magus Sisters**, who are one battle with three bodies: Cindy mends and drains and calls the Delta Attack (six hits on everyone) once all three are alive with full gauges,
+  Sandy hastens and shields her, Mindy flares; the Yu Pagodas feed the Sister whose gauge is lowest. All of it is the game's own, read from its files.
+- **FFX, your own Yojimbo and Sisters:** you can summon them. Yojimbo's menu is Pay, on Chapter XXVII's ladder (1,000, 10,000, all your gil): a bigger payment buys a better stroke, and a Zanmato, rare, kills the twin and both
+  Pagodas at once. The Sisters come as one summon (the row says Magus Sisters) and give their orders, Combine among them: the Delta Attack on every foe in reach, six hits each. The three Sisters stand on the party's three places,
+  each with her own status row.
+- **FFX, guide and advisor:** the guide card and page for this chain, and the move advisor: Chapter III's line for the ordinary turns, **Cindy first** in the Sisters' fight (aimed at the weakest first, the party left her alone
+  to drain as fast as it hurt her and the fight stalled in one chain of eight; aimed at her first it was won every time), and an aeon called when Yuna has a Grand Summon and nothing urgent. On Yojimbo's and the Sisters' menus the
+  card stays off, as in Chapter XXVII.
+- **FFX, provisional:** no painting is new (the twins are your own aeons' paintings; Yojimbo's is the approved one; a copy of Dream's End's plate is the one new file, in the next art folder); the stage places of the new bodies are
+  estimates; the music is Dream's End's and Yu Yevon's own cues; Yojimbo's starting compatibility 128 (strongly indicated by a community save pack, not the owner's; live confirmation pending) and hire answer 1 (Chapter XXVII uses 2; the two are not aligned on purpose, because aligning moves a chapter's
+  Zanmato odds and no source picks between two legal histories) and the Sisters' motivation 50 and full starting bars are estimates, named in one place; that the Pagodas count toward a Zanmato's byte is emulated from the game's spawn code and is unproven once a Pagoda is destroyed.
+- **FFX only, Chapter XXVII and the Last Summoning, the Magus Sisters' row in the Summon list reads "Magus Sisters" (it read Cindy), and Chapter XXVII's Grand Summon list goes from nine entries to seven:** the label is the game's own (its command table, row 0xFF, "Summon the Magus Sisters."); in battle the three keep Cindy, Sandy and Mindy. The Grand Summon list of the live Chapter XXVII showed Sandy and Mindy as two more entries beside Cindy; it now shows the Sisters once, as the game's list does, because both chapters give the engine the Sisters as one entry. A taken Sisters row in the Last Summoning reads "Magus Sisters TAKEN". Nothing else of Chapter XXVII moves (its fights, odds and advisor are the same). The game's own choice window for the Last Summoning event is a different list, and its label was not read, so the offering screen's wording is unchanged.
+- **FFX only, the Last Summoning, under the hood:** two details of the possessed Sisters' scripts now match the game's (Sandy's Haste turn first makes a search that takes a random number and throws the answer away; a Sister whose bar is already full takes no gain roll after her turn). They change which random numbers are used, not any odds: the bench of 120 chains still has the guide's line winning all 120 and a plain swing winning 92 where it won 90 before.
+- **Both:** the eleven hidden and listed words (`limit`, `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor`, `gagazet`, `angra`, `yojimbo` and the new one) all work and none begins, ends or hides inside
+  another, a wrong word opens nothing, and the chapter writes only its own record, never the save. No other chapter changes: the 18 FFX goldens and Chapter III's twelve seeds do not move.
+- **Proof:** the whole chain played on the real engine, 120 chains over five orders: the guide's line wins all 120 (a link takes a few turns to about a hundred; the Sisters fight is the longest), a plain swing wins 90 and
+  loses the other 30, every time at the Sisters; a landed Zanmato of your Yojimbo wins the first link outright, tested; played in a headless browser against the dev server with real key presses (the word, party prep, the
+  opening, the offering at desktop and phone size, a link, the Pay ladder, the Sisters called with Combine in their orders, the Delta Attack) and the whole chain to Yu Yevon's fall and the results screen at skip speed.
+
+![The offering screen: Yu Yevon above the row of eight aeons, what each copy does and what you lose](docs/screenshots/ch-last-summoning/1600x900-offering.jpg)
+
+![Yojimbo's Pay ladder, Chapter XXVII's, on the possessed Valefor's link](docs/screenshots/ch-last-summoning/1600x900-pay-ladder.jpg)
+
+![The Magus Sisters called in, their orders with Combine lit](docs/screenshots/ch-last-summoning/1600x900-sisters-orders.jpg)
 
 ## 2026-10-14 · A hidden chapter: Angra Mainyu in the Bikanel Desert (branch ch-angra-mainyu, part of release candidate r49-rc; not live)
 

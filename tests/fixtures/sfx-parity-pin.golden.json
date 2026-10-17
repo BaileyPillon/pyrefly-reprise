@@ -200,6 +200,7 @@
    "ability:dingo:possessed-shiva-diamond-dust",
    "ability:dingo:possessed-valefor-energy-blast",
    "ability:dingo:possessed-valefor-energy-ray",
+   "ability:dingo:possessed-yojimbo-zanmato",
    "ability:dingo:power-distiller",
    "ability:dingo:power-shot",
    "ability:dingo:pterya-summon",
@@ -373,6 +374,7 @@
    "ability:lulu:possessed-shiva-diamond-dust",
    "ability:lulu:possessed-valefor-energy-blast",
    "ability:lulu:possessed-valefor-energy-ray",
+   "ability:lulu:possessed-yojimbo-zanmato",
    "ability:lulu:power-distiller",
    "ability:lulu:power-shot",
    "ability:lulu:pterya-summon",
@@ -821,7 +823,6 @@
    "ability:lulu:possessed-sandy-razzia",
    "ability:lulu:possessed-shiva-heavenly-strike",
    "ability:lulu:possessed-valefor-sonic-wings",
-   "ability:lulu:possessed-yojimbo-daigoro",
    "ability:lulu:pterya-attack",
    "ability:lulu:pterya-attack-yuna",
    "ability:lulu:pterya-sonic-wings",
@@ -904,7 +905,6 @@
    "ability:dingo:possessed-sandy-razzia",
    "ability:dingo:possessed-shiva-heavenly-strike",
    "ability:dingo:possessed-valefor-sonic-wings",
-   "ability:dingo:possessed-yojimbo-daigoro",
    "ability:dingo:pterya-attack",
    "ability:dingo:pterya-attack-yuna",
    "ability:dingo:pterya-sonic-wings",
@@ -1076,10 +1076,8 @@
   ],
   "v2:magic-charge@0.7+-#510 v2:status-applied@0.5+-#890": [
    "ability:dingo:banish",
-   "ability:dingo:possessed-yojimbo-zanmato",
    "ability:dingo:scan",
    "ability:dingo:shooting-star",
-   "ability:lulu:possessed-yojimbo-zanmato",
    "ability:lulu:scan"
   ],
   "v2:magic-charge@0.7+-#510 v2:status-applied@0.5+-#890 v2:status-applied@0.5+-#1110": [

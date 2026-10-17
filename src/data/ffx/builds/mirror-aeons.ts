@@ -15,8 +15,8 @@
  * | Weapons | Break Damage Limit and the strength or magic tiers; First Strike on Tidus and on Yuna | the guides assume Break Damage Limit (the Dark Aeons' own loot lists it; 1.6 to 3 million HP is out of reach at 9,999 a hit: RE section 8); StrategyWiki lists First Strike for Dark Yojimbo `[estimate]` |
  * | Yuna's aeons | `aeonStatsFromYuna` (`./endgame-aeons.ts`) on this Yuna at 600 battles (tier 19, the last) | `research/ffx-combat-core.md` section 6.4 `[verified: 3 sources]`; RE section 5.5 (G08): "the last tier (600 battles and over)" |
  * | The aeons | Valefor, Ifrit, Ixion, Shiva, Bahamut, **Yojimbo, Cindy, Sandy, Mindy**; **Anima is left out**, as `./dreams-end.ts` leaves it | the brief; Anima's Oblivion is the guides' favourite answer and would swamp the mirror, so adding it is a lever for the bench `[estimate]` |
- * | Yojimbo's hire answer | `YOJIMBO_HIRE_ANSWER` = 2 (the third option, "to defeat the most powerful of enemies") | Jegged Cavern; G08 section 3.5. **An ESTIMATE: the guides' recommended reply, not read from the owner's save.** It sets what a Pay buys (the table at `YOJIMBO_START_GAUGE`) |
- * | Yojimbo's starting compatibility | `YOJIMBO_START_COMPATIBILITY` = 128 | **strongly indicated by the owner's saves, live confirmation pending** (the game's files hold no start value: RE section 5.5, G08 section 3; the community also says 128) `[estimate]` until it is confirmed live |
+ * | Yojimbo's hire answer | `YOJIMBO_HIRE_ANSWER` = 2 (the third option, "to defeat the most powerful of enemies") | Jegged Cavern; G08 section 3.5. **An ESTIMATE: the guides' recommended reply, not read from a save (the community pack behind the compatibility is not the owner's).** It sets what a Pay buys (the table at `YOJIMBO_START_GAUGE`) |
+ * | Yojimbo's starting compatibility | `YOJIMBO_START_COMPATIBILITY` = 128 | **strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26), live confirmation pending** (the game's files hold no start value: RE section 5.5, G08 section 3; the community also says 128) `[estimate]` until it is confirmed live |
  * | Gil | `ENDGAME_GIL` = 1,500,000 (Yojimbo is paid from it each time he acts) | StrategyWiki speaks of paying "upwards of 2 million" `[estimate]` |
  * | Bag | `./dreams-end.ts`'s bag (Phoenix Downs, X-Potions, Remedies, Holy Water, Elixir ...) less the Candle of Life, a Doom-kill route that belongs to Yu Yevon alone | the repository's endgame bag `[estimate]` |
  * | Gauges | the members keep their Dream's End gauges; the five story aeons keep theirs; **Yojimbo starts at 0 and Yuna's three Magus Sisters at 100** | `./late-aeon-rows.ts`; the Sisters' menu offers Combine powers only while all three bars are full; **RE's follow-up (4256d209a) carries out all seven other orders now**, so a bar can be filled in the fight, and the full start is the bench's lever to re-read (0 is the other end) `[estimate]` |
@@ -52,9 +52,9 @@ export const ENDGAME_BATTLES = 600;
 export const ENDGAME_PHOENIX_DOWNS = 17;
 /** Party gil: Yojimbo is paid from it (`[estimate]`; StrategyWiki speaks of paying "upwards of 2 million"). */
 export const ENDGAME_GIL = 1_500_000;
-/** The hire answer 0 to 2 the player gave at the Fayth: 2, the third option (Jegged Cavern; G08 section 3.5). **An ESTIMATE: the guides' recommended reply, not read from the owner's save.** */
+/** The hire answer 0 to 2 the player gave at the Fayth: 2, the third option (Jegged Cavern; G08 section 3.5). **An ESTIMATE: the guides' recommended reply, not read from a save (the community pack behind the compatibility is not the owner's).** */
 export const YOJIMBO_HIRE_ANSWER = 2;
-/** Yojimbo's starting compatibility, 0 to 255: the game's files hold no start value (RE section 5.5); 128 is **strongly indicated by the owner's saves, live confirmation pending** (the community also says 128). `[estimate]` until it is confirmed live. */
+/** Yojimbo's starting compatibility, 0 to 255: the game's files hold no start value (RE section 5.5); 128 is **strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26), live confirmation pending** (the community also says 128). `[estimate]` until it is confirmed live. */
 export const YOJIMBO_START_COMPATIBILITY = 128;
 /**
  * Each Magus Sister's motivation at the start of the battle, 0 to 100 (`Chr+0x6e1`): **UNSOURCED**. The reverse-engineering session's engine asks a build for it and has no default (`FFXPartyBuild.sisters`; its note says the

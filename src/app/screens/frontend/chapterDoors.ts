@@ -21,7 +21,9 @@
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor` and `angra`, FFX for `mushroom`, `fayth`, `gagazet` and `yojimbo`.
+ * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too.
+ *
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor` and `angra`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo` and `summon`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -36,6 +38,7 @@ import { VALEFOR_DOOR_CHAPTER, VALEFOR_DOOR_WORD } from './valeforDoor.ts';
 import { GAGAZET_DOOR_CHAPTER, GAGAZET_DOOR_WORD } from './gagazetDoor.ts';
 import { ANGRA_DOOR_CHAPTER, ANGRA_DOOR_WORD } from './angraDoor.ts';
 import { YOJIMBO_DOOR_CHAPTER, YOJIMBO_DOOR_WORD } from './yojimboDoor.ts';
+import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -64,6 +67,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: GAGAZET_DOOR_WORD, chapter: GAGAZET_DOOR_CHAPTER },
   { word: ANGRA_DOOR_WORD, chapter: ANGRA_DOOR_CHAPTER },
   { word: YOJIMBO_DOOR_WORD, chapter: YOJIMBO_DOOR_CHAPTER },
+  { word: SUMMON_DOOR_WORD, chapter: SUMMON_DOOR_CHAPTER },
 ];
 
 /** What one key did to the doors. */

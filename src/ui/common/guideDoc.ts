@@ -23,11 +23,20 @@ function standing(c: AnyCombatant | undefined): c is AnyCombatant {
  * FFX-2 boss, and a party carries its aeons in the record from the first turn), and one of the
  * document's boss ids must be in the record on the enemy side. Both games.
  */
-export function docForState(state: Readonly<Pick<BattleState, 'game' | 'combatants'>>): GuideDoc | null {
+export function docForState(state: Readonly<Pick<BattleState, 'game' | 'combatants'>> & Readonly<{ flags?: Readonly<Record<string, unknown>> }>): GuideDoc | null {
   return (
-    GUIDE_DOCS.find((d) => d.game === state.game && d.bossIds.some((id) => state.combatants[id]?.side === 'enemy')) ??
-    null
+    GUIDE_DOCS.find(
+      (d) => d.game === state.game && d.bossIds.some((id) => state.combatants[id]?.side === 'enemy') && flagCondition(d, state.flags),
+    ) ?? null
   );
+}
+
+/** A document with `onlyWhenFlag` (the hidden Last Summoning's, which shares Chapter III's enemy ids) needs a flag of that kind on the board; every other document needs nothing. */
+function flagCondition(doc: GuideDoc, flags: Readonly<Record<string, unknown>> | undefined): boolean {
+  const need = doc.onlyWhenFlag;
+  if (need === undefined) return true;
+  if (flags === undefined) return false;
+  return Object.keys(flags).some((key) => key.startsWith(need.prefix) && flags[key] === need.value);
 }
 
 /** Does one anchor token match the board? `id`, `id#form` (that boss in that form only) or `-id` (see {@link blockQualifies}). */

@@ -20,9 +20,10 @@
  * | {@link wipeEvent} | worker 59, function 5 (event 11) | Yojimbo knocked out or Petrified while he is out |
  *
  * **The two numbers the game's image does not hold.** The compatibility global is 0 in the image and no initialiser was found (note,
- * open question 1). The community says 128, and the owner's own save files agree (slots 1-84 all read 128; 164 by slot 106; RE main session; the save
- * offset is inferred and live confirmation is pending), so 128 is strongly indicated; nothing in this file holds a starting value, so a
- * caller must give one. The hire answer (0, 1 or 2) is written only by the recruitment event; the game's default is 0.
+ * open question 1). The community says 128, and a community save pack (not the owner's: 107 saves, downloaded 2026-09-26) agrees and contradicts a default of 0
+ * (slots 1-84 all read 128; 164 by slot 106; RE main session; the save offset is inferred and live confirmation is pending), so 128 is strongly indicated;
+ * nothing in this file holds a starting value, so a caller must give one. The hire answer (0, 1 or 2) is written only by the recruitment event; the image's default is 0, which the same pack
+ * contradicts (RE review, 2026-10-17). No value changes here: the pack is a stranger's, not the owner's.
  *
  * Pure and deterministic (AGENTS.md rule 1): the draws and the target picks are callbacks of a {@link YojimboHost}; nothing here holds a
  * generator, imports the DOM, `three` or the engine.

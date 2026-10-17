@@ -125,7 +125,10 @@ export function fakeBoard(game: 'ffx' | 'ffx2', enemies: readonly FakeEnemy[]): 
 
 /** A board with every enemy id of the document standing, for mounting its panel. */
 export function boardForDoc(doc: GuideDoc): BattleState {
-  return fakeBoard(doc.game, doc.bossIds.map((id) => ({ id })));
+  const board = fakeBoard(doc.game, doc.bossIds.map((id) => ({ id })));
+  // A document told apart by a flag (the hidden Last Summoning's) is found only on a board that carries it.
+  if (doc.onlyWhenFlag) (board.flags as Record<string, unknown>)[`${doc.onlyWhenFlag.prefix}aeon`] = doc.onlyWhenFlag.value;
+  return board;
 }
 
 /** The index of the first block of a kind, for readable assertions. */

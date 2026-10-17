@@ -1,6 +1,7 @@
 import type { AnyCombatant, AvailableCommand, CombatantId } from '../../battle/common/types.ts';
 import { rowEnabled, switchTargetId, type TopGroupRow, type TopRow } from './CommandMenuLogic.ts';
 import { commandHelpText } from './commandHelp.ts';
+import { TAKEN_REASON } from '../../data/ffx/last-summoning-ids.ts'; // a module with no imports of its own
 
 /**
  * The FFX command stack's row view-models and the small HTML pieces a row is
@@ -31,7 +32,7 @@ export function badgeHtml(badge: RowBadge | undefined): string {
  * never be mistaken for an item count).
  */
 export interface RowBadge {
-  kind: 'mp' | 'ready' | 'count';
+  kind: 'mp' | 'ready' | 'count' | 'taken';
   text: string;
 }
 
@@ -78,7 +79,9 @@ export function topRowVM(row: TopRow): RowVM {
 }
 
 export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: Record<CombatantId, AnyCombatant>): RowVM {
-  const badge = mpBadge(cmd);
+  // The hidden Last Summoning (FFX only): an aeon Yu Yevon has taken stays on Yuna's list, greyed, and says so (the cursor skips a greyed row, so its reason would never be read).
+  const taken = !cmd.enabled && cmd.category === 'summon' && cmd.disabledReason === TAKEN_REASON;
+  const badge: RowBadge | undefined = taken ? { kind: 'taken', text: 'TAKEN' } : mpBadge(cmd);
   const vm: RowVM = {
     label: cmd.label,
     enabled: cmd.enabled,

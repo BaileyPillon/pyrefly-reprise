@@ -27,6 +27,7 @@ export const COMMAND_RECORDS: Readonly<Record<string, FFXCommandRecord>> = {
 export const NO_COMMAND_RECORD: Readonly<Record<string, string>> = {
   'close-in': 'an Evrae chapter Trigger Command (ours)',
   'omnis-volley': "the engine's volley wrapper for Seymour Omnis's four disc spells (ours); the four spells have their own records",
+  'possessed-sisters-token': "the possessed Sisters' joint-action token (ours): the game sends Cindy a script command whose row the RE note does not name (research/re-ffx-last-summoning.md section 6.2), so this no-damage row stands in",
 };
 
 /** An ability whose own `rank` the game's record replaced (re-parity W2): the engine charges the recovery of the record's rank. */

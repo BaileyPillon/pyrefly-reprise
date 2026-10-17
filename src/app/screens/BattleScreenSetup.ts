@@ -30,6 +30,7 @@ import { cloneData } from '../../battle/common/clone.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
+import { lastSummoningGroup } from '../../data/ffx/enemies/last-summoning-chain.ts'; // the hidden Last Summoning's formations, resolved on demand from their ids (FFX only)
 import { carryFfx2Full, carryWornDresspheres, FFX2_DRESSPHERE_CARRIES } from './BattleScreenCarry.ts';
 
 /** What a chain seam carries beyond the defaults: PR-0124's measurement override. */
@@ -46,7 +47,7 @@ export interface SeamOptions {
  * than the module-scanning glob it started as.
  */
 export async function findEnemyGroup(id: string): Promise<EnemyGroupDef | null> {
-  return FFX_GROUPS[id] ?? FFX2_GROUPS[id] ?? null;
+  return FFX_GROUPS[id] ?? lastSummoningGroup(id) ?? FFX2_GROUPS[id] ?? null;
 }
 
 /**

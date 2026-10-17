@@ -247,6 +247,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'ffx2-valefor-besaid': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Valefor at Besaid (FFX-2 only): the aeon cue Chapter XI and Ixion play, our own take
     'ffx2-angra-mainyu': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Angra Mainyu (FFX-2 only, 2026-10-14): the same "Aeons" cue, by reference
     'mirror-aeons': { scene: 'scene-gagazet', links: ['boss-challenge', 'boss-yojimbo'] }, // the hidden Mirror Aeons chapter (FFX only, 2026-10-15): the mountain's bed as the stand-in, the generic "Challenge" boss cue for the Sisters and Yojimbo's own cue for Dark Yojimbo, both by reference
+    'last-summoning': { scene: 'scene-dreams-end', links: ['boss-yu-yevon'] }, // the hidden Last Summoning (FFX only, 2026-10-15): Dream's End's own bed and Yu Yevon's theme, by reference (no new cue)
   };
 
   it('plays each chapter\'s scene bed and each link\'s theme as the table says: the 18 listed chapters, FF7, and the five hidden experiments', async () => {

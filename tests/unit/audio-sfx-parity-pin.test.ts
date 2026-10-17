@@ -20,6 +20,10 @@
  * presenter: with those two values put back the old golden passes in full for both games, and the FFX scenarios (1,070) are
  * untouched. Only those four ids changed group; nothing else in the file was re-recorded.
  *
+ * Four FFX scenarios were changed by hand in the golden when the hidden Last Summoning's record fixes came in (FFX only, 2026-10-15; `research/re-ffx-last-summoning.md` section 4): the possessed Yojimbo's `possessed-yojimbo-daigoro`
+ * is gone (the record was the player-side Daigoro; his strikes are `possessed-yojimbo-kozuka` and `-wakizashi`), so its two scenarios (by a party actor and by a foe) were removed, and `possessed-yojimbo-zanmato` is a fixed
+ * 9,999 now, not Death at chance 255, so its two scenarios lost the status-applied cue and moved to the group of the plain magic charge. The cause is the ability data, not the presenter; nothing else was re-recorded.
+ *
  * To re-record after a DELIBERATE change to the presenter's own timing or to a cue choice: check the old tree out
  * into a scratch worktree, copy `helpers/sfxFight.ts` and this file in, run
  * `SFX_PIN_WRITE=<path> node node_modules/vitest/vitest.mjs run tests/unit/audio-sfx-parity-pin.test.ts`, and review

@@ -11,6 +11,7 @@ import type { ChapterGuide } from './types.ts';
 import { SEYMOUR_FLUX_GUIDE } from './seymour-flux.ts';
 import { YUNALESCA_GUIDE } from './yunalesca.ts';
 import { BRASKAS_FINAL_AEON_GUIDE } from './braskas-final-aeon.ts';
+import { LAST_SUMMONING_GUIDE } from './last-summoning.ts';
 import { FFX2_BAHAMUT_GUIDE } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_SHUYIN_GUIDE } from './ffx2-vegnagun-shuyin.ts';
 import { FFX2_LEBLANC_GUIDE } from './ffx2-leblanc.ts';
@@ -49,6 +50,7 @@ export {
   SEYMOUR_FLUX_GUIDE,
   YUNALESCA_GUIDE,
   BRASKAS_FINAL_AEON_GUIDE,
+  LAST_SUMMONING_GUIDE,
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
   FFX2_LEBLANC_GUIDE,
@@ -73,6 +75,9 @@ export {
 export const GUIDES: readonly ChapterGuide[] = [
   SEYMOUR_FLUX_GUIDE,
   YUNALESCA_GUIDE,
+  // The hidden Last Summoning (FFX only, chapter 28; `EXPERIMENT_CHAPTERS`, not listed) fields Chapter III's possessed aeons and Yu Yevon under the same ids, so its card is listed AHEAD of Chapter III's
+  // and found only on its own board (`src/engine/tactics/lookup.ts#chapterOnBoard`: the "Taken by Yu Yevon" locks); Chapter III's answers every other board.
+  LAST_SUMMONING_GUIDE,
   BRASKAS_FINAL_AEON_GUIDE,
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,

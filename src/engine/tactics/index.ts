@@ -55,6 +55,7 @@ import { SIN_TACTIC_ENTRIES } from './sin-tactics.ts';
 import { SINSPAWN_GUI_BOSS_IDS, sinspawnGui } from './sinspawn-gui.ts';
 import { BIRAN_YENKE_BOSS_IDS, biranYenke } from './biran-yenke.ts';
 import { MIRROR_AEONS_BOSS_IDS, mirrorAeons } from './mirror-aeons.ts';
+import { LAST_SUMMONING_BOSS_IDS, lastSummoning } from './last-summoning.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -98,6 +99,7 @@ export { sinFinsCore, sinFace, SIN_FINS_CORE_BOSS_IDS, SIN_FACE_BOSS_IDS } from 
 export { sinspawnGui, SINSPAWN_GUI_BOSS_IDS } from './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only)
 export { biranYenke, BIRAN_YENKE_BOSS_IDS } from './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only)
 export { mirrorAeons, MIRROR_AEONS_BOSS_IDS } from './mirror-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only)
+export { lastSummoning, LAST_SUMMONING_BOSS_IDS } from './last-summoning.ts'; // the hidden Last Summoning chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -116,6 +118,9 @@ export interface TacticEntry<T extends Tactic | null = Tactic> {
 const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   { chapterId: 'seymour-flux', bossId: SEYMOUR_FLUX_ID, tactic: seymourFlux },
   { chapterId: 'yunalesca', bossId: YUNALESCA_ID, tactic: yunalesca },
+  // The hidden Last Summoning (FFX only, chapter 28) fields Chapter III's possessed aeons and Yu Yevon under the very same ids, so its eleven entries come FIRST: `chapterOnBoard` finds them only on
+  // the chapter's own board (the "Taken by Yu Yevon" locks, `./lookup.ts#onLastSummoningBoard`), and Chapter III's entries below answer every other board exactly as they did.
+  ...LAST_SUMMONING_BOSS_IDS.map((bossId) => ({ chapterId: 'last-summoning', bossId, tactic: lastSummoning })),
   { chapterId: 'braskas-final-aeon', bossId: BRASKAS_FINAL_AEON_ID, tactic: braskasFinalAeon },
   // Chapter 3 is a seven-battle chain and fields a **different** boss in every
   // link, so one registration would have left the possessed-aeon gauntlet and
