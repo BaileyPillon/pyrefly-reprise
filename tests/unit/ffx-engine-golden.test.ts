@@ -338,24 +338,37 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * (the record's rare entry, one time in eight, came up on that seed). Proof: all 22 plays (the 11 FFX chapters, seeds 1 and 7) were replayed on the base (f939b87f) and on the lane
  * and every link's log digested with the `drops` keys taken out: the 22 digests are the same on both trees, and only these five differ when the drops are put back, each by exactly
  * the lists above. The other 13 digests, and every outcome and turn count over 500 seeds of all thirteen chapters (the two hidden ones included), are the base's.
+ *
+ * TEN digests re-baselined 2026-10-17 by RC10 lane FFX hit order (FFX only; `docs/handoff/re-parity-rc10-ffx-hit-order.md`): seymour-flux#1 and #7 (18bfe5b2 -> 530d4776, c3845a -> 1082973e),
+ * yunalesca#1 and #7 (73fd4f55 -> fc0f6441, 8e48c312 -> 3a7bc64f), braskas-final-aeon#1 (links 1, 2 and 4: d3eb1d76 -> e3ab9bd0, 5e4670d -> c45dcb19, 9c42c87a -> e32d5371) and #7 (link 1: e2a2a0c3 -> 52c6b675),
+ * evrae-airship#1 and #7 (4f323f6e -> 398f2884, b67a717e -> 9bc2532c) and seymour-omnis#1 and #7 (d2966784 -> c246fd47, dc6a4262 -> 22b5461d); every outcome is still a victory, and the
+ * other eight digests (Macalania, Yojimbo, Natus, Isaaru, both seeds) are the base's. THREE causes, each a switch in `src/battle/ffx/hit-order.ts`, told apart by putting each switch alone on a
+ * scratch copy of the sources and playing the line (12 seeds of every chapter): (1) HIT_ORDER_ROUND_ROBIN: an action that hits several targets more than
+ * once now shows its hits round by round (hit 1 of every target, then hit 2: FFX.exe 0x0078d980 / 0x0078f060, note FFX-H01 3.6 and 3.7) and handles each KO in the round of the target's last
+ * hit, where the engine ran one target's hits, its death, then the next target; the log order and the order of the deaths move, no outcome does. It alone moves seymour-flux#1 and #7 (the
+ * Fire Gem and Ice Gem spreads over Seymour Flux and the Mortiorchis) and is part of the move of the other eight. (2) HIT_CALC_SLOT_ORDER: a group command is calculated lowest slot first
+ * (Tidus 0, Yuna 1, Auron 2, Kimahri 3, Wakka 4, Lulu 5, Rikku 6, the aeons, the monsters), the order the game visits them (0x007892e0, note 3.4 step 5), where the engine kept the party's
+ * formation order; the variance, critical and status draws of the hits land on other targets, so numbers, KOs and turn counts of the later fight move. It alone moves yunalesca, braskas-final-aeon,
+ * seymour-omnis and (seed 1) evrae-airship. (3) DRAIN_RECOIL_ONE_RECORD: Drain, Osmose and Lancet heal their user once after every target (0x0078a240) instead of hit by hit; it alone moves the
+ * absorb events of yunalesca (Absorb) and the order of the heal in the log. With all three switches false the eighteen digests are the base's again (and 180 of 180 seeds, all fifteen chapters).
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': '18bfe5b2:victory',
-  'seymour-flux#7': 'c3845a:victory',
-  'yunalesca#1': '73fd4f55:victory',
-  'yunalesca#7': '8e48c312:victory',
-  'braskas-final-aeon#1': 'd3eb1d76:victory 5e4670d:victory bd952081:victory 9c42c87a:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
-  'braskas-final-aeon#7': 'e2a2a0c3:victory 8d75fead:victory 9482b803:victory 31e06759:victory ab0e939f:victory 76f6bfc5:victory f2f0106a:victory',
+  'seymour-flux#1': '530d4776:victory',
+  'seymour-flux#7': '1082973e:victory',
+  'yunalesca#1': 'fc0f6441:victory',
+  'yunalesca#7': '3a7bc64f:victory',
+  'braskas-final-aeon#1': 'e3ab9bd0:victory c45dcb19:victory bd952081:victory e32d5371:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
+  'braskas-final-aeon#7': '52c6b675:victory 8d75fead:victory 9482b803:victory 31e06759:victory ab0e939f:victory 76f6bfc5:victory f2f0106a:victory',
   'seymour-anima-macalania#1': '3f4769eb:victory',
   'seymour-anima-macalania#7': 'c69441ce:victory',
-  'evrae-airship#1': '4f323f6e:victory',
-  'evrae-airship#7': 'b67a717e:victory',
+  'evrae-airship#1': '398f2884:victory',
+  'evrae-airship#7': '9bc2532c:victory',
   'yojimbo-cavern#1': 'daacc3d9:victory',
   'yojimbo-cavern#7': '164be66a:victory',
   'seymour-natus#1': '336d9ea6:victory',
   'seymour-natus#7': '8097fc70:victory',
-  'seymour-omnis#1': 'd2966784:victory',
-  'seymour-omnis#7': 'dc6a4262:victory',
+  'seymour-omnis#1': 'c246fd47:victory',
+  'seymour-omnis#7': '22b5461d:victory',
   'isaaru-via-purifico#1': '133684ff:victory 7cfaa2ad:victory 13b0bd8a:victory',
   'isaaru-via-purifico#7': '6a55a1ad:victory cfd75f2d:victory a36d68be:victory',
 };

@@ -283,7 +283,9 @@ describe('Yuna, when an aeon takes Zanmato (research §5.3)', () => {
     const engine = zanmatoOn(false, 26);
     const z = log(engine).findIndex((e) => e.type === 'action-start' && e.abilityId === ZANMATO);
     expect(z).toBeGreaterThan(0);
-    expect(zanmatoHits(engine, z)).toEqual(['lulu', 'kimahri', 'yuna']);
+    // Ascending game slot (Yuna 1, Kimahri 3, Lulu 5), the order the game calculates and applies a group command in (RC10, FFX only, `hit-order.ts#HIT_CALC_SLOT_ORDER`); it was
+    // the party's formation order (Lulu, Kimahri, Yuna) before.
+    expect(zanmatoHits(engine, z)).toEqual(['yuna', 'kimahri', 'lulu']);
     expect(fired(engine, 'yojimbo-aeon-takes-zanmato')).toEqual([]);
   });
 });

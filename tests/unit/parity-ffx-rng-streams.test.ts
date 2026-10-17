@@ -324,8 +324,11 @@ describe('the other rolls: the table above, role by role', () => {
     expect(fives).toHaveLength(def.hits);
     const ordered = ['tidus', 'wakka', 'rikku']; // ascending actor number: Tidus 0, Wakka 4, Rikku 6
     const landed = events.filter((e) => e['type'] === 'damage' || e['type'] === 'miss').map((e) => e['targetId']);
-    // the game deals all the hits first and then runs the targets in slot order: each target takes as many hits as picks chose it
-    const expected = ordered.flatMap((id) => fives.filter((t) => ordered[t.value % 3] === id).map(() => id));
+    // the game deals all the hits first and then runs the targets in slot order: each target takes as many hits as picks chose it. The hits are applied round by round (RC10,
+    // FFX-H01 3.6): hit k of every target that has one, slots ascending.
+    const dealt = ordered.map((id) => fives.filter((t) => ordered[t.value % 3] === id).length);
+    const expected: string[] = [];
+    for (let round = 0; round < Math.max(...dealt); round++) ordered.forEach((id, i) => { if (round < (dealt[i] as number)) expected.push(id); });
     expect(landed.slice(0, def.hits)).toEqual(expected);
     // every pick comes before any hit's own draws, and the draws after them are the boss's own (monster slot 0x14: 28, 44, 60)
     const own = new Set([streamFor(0x14, 0, false), streamFor(0x14, 1, false), streamFor(0x14, 2, false)]);

@@ -225,13 +225,12 @@ describe('an action visits its targets one after another and runs each target\'s
     const { ctx, events } = contextOf(user, a, scripted, 0, [b]);
     resolveAbility(ctx, user, tornado, ['a']);
     const order = events.filter((e) => e['type'] === 'damage' || e['type'] === 'miss').map((e) => String(e['targetId']));
-    // Every event of target a comes before every event of target b.
-    const firstB = order.indexOf('b');
-    expect(firstB).toBeGreaterThan(0);
-    expect(order.slice(0, firstB).every((id) => id === 'a')).toBe(true);
-    expect(order.slice(firstB).every((id) => id === 'b')).toBe(true);
+    // RC10 (FFX only; FFX-H01 3.6 and 3.7): the draws of the hits are made target by target (all of a's, then all of b's: the hit indexes below are the calculation order), but
+    // the game APPLIES them round by round, so the events come hit 1 of a, hit 1 of b, hit 2 of a, hit 2 of b.
+    expect(order).toEqual(['a', 'b', 'a', 'b']);
     const idx = events.filter((e) => e['type'] === 'damage').map((e) => e['hitIndex']);
-    expect(idx).toEqual([...idx].sort((x, y) => (x as number) - (y as number)));
+    expect(idx).toEqual([0, 2, 1, 3]);
+    expect([...idx].sort((x, y) => (x as number) - (y as number))).toEqual([0, 1, 2, 3]);
   });
 });
 

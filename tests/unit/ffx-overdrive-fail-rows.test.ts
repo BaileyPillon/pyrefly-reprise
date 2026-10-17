@@ -60,7 +60,16 @@ function fire(def: AbilityDef, who: Who, result: MinigameResult, foe: Partial<En
   const cmd: Command = { kind: 'overdrive', id: def.id, targets: ['dummy'], extra: result };
   const events: BattleEvent[] = [];
   for (let i = 0; i < 5 && !events.some((e) => e.type === 'action-end'); i++) events.push(...engine.submit(cmd));
-  const amounts = events.flatMap((e) => (e.type === 'damage' && e.sourceId === who ? [e.amount] : []));
+  // In the order the hits were CALCULATED (hitIndex): since RC10 the events of a group action come round by round (hit 1 of every target, then hit 2), but the draws are
+  // still made target by target, and this file compares the fail run's hits with the success run's first hits by draw.
+  // A follow-up row (Blitz Ace's Last Hit) is its own resolution and counts from hit 0 again: each resolution is sorted on its own.
+  const runs: Array<Array<{ hitIndex: number; amount: number }>> = [];
+  for (const e of events) {
+    if (e.type !== 'damage' || e.sourceId !== who) continue;
+    if (runs.length === 0 || e.hitIndex === 0) runs.push([]);
+    runs[runs.length - 1]!.push({ hitIndex: e.hitIndex, amount: e.amount });
+  }
+  const amounts = runs.flatMap((run) => run.sort((a, b) => a.hitIndex - b.hitIndex).map((h) => h.amount));
   const misses = events.filter((e) => e.type === 'miss').length;
   const tick = engine.predictTurnOrder(30).find((p) => p.actorId === who)?.tickValue;
   if (tick === undefined) throw new Error('actor missing from the forecast');
