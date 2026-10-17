@@ -40,6 +40,7 @@ import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { beginCharge, castTime, completeCommand } from './atb-engine.ts';
 import { commandCosts } from './adapt/command.ts';
 import { rebuildAutoLayer } from './auto-layer.ts';
+import { commitItem, reserveItem } from './adapt/item-ledger.ts';
 
 /** Everything `performCommand` needs from the engine. */
 export interface ExecEnv {
@@ -175,6 +176,24 @@ function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, costAtb:
 }
 
 /**
+ * Reserve the item of a picked item command (the game's queue add, `adapt/item-ledger.ts`): the stock gives one up now, so the menus show the lower count at once and a
+ * second girl cannot take the last one. False when the stock had none. Every other command reserves nothing.
+ */
+function pickItem(env: ExecEnv, actor: Ffx2Unit, command: Command): boolean {
+  return command.kind !== 'item' || reserveItem(env.state.flags, actor, command.id);
+}
+
+/**
+ * The start gate failed (the reservation is short): the record is removed with nothing to refund and the action does not happen. The HUD never offers such a pick
+ * (the menus read the reserved stock) and `submit` refuses one, so this is the net for a script, a held command or a test: say so and spend the turn.
+ */
+function abortItem(env: ExecEnv, actor: Ffx2Unit, command: Command, before: number, costAtb: number): void {
+  const name = command.kind === 'item' ? (env.items?.get(command.id)?.name ?? command.id) : '';
+  env.emit({ type: 'message', text: `No ${name} left`, kind: 'system' });
+  finishAction(env, actor, before, costAtb);
+}
+
+/**
  * Resolve one command for `actor`.
  *
  * `alreadyCharged` is true when this is the deferred half of a `CT` ability
@@ -221,6 +240,8 @@ export function performCommand(
   const waitDown = typeof actor.aiMemory?.['waitDown'] === 'number' ? actor.aiMemory['waitDown'] : 0;
   const chargeTicks = alreadyCharged ? 0 : castTime(actor, costs.id, costs.costCast, waitDown);
   if (chargeTicks > 0) {
+    // An item is taken at the pick, before its charge begins; a cast that never fires gives it back (the sweep, `adapt/item-ledger.ts#releaseItemHolds`).
+    if (!pickItem(env, actor, command)) return abortItem(env, actor, command, before, costs.costAtb);
     env.emit({
       type: 'action-start',
       actorId: actor.id,
@@ -253,12 +274,10 @@ export function performCommand(
   }
   env.setAwaiting(null);
 
-  // Spend the item. One party inventory, decremented on the resolving action
-  // rather than on the pick, so an interrupted charge does not eat the stock.
-  if (command.kind === 'item') {
-    const key = `inventory:${command.id}`;
-    const left = env.state.flags[key];
-    if (typeof left === 'number') env.state.flags[key] = Math.max(0, left - 1);
+  // The item: reserved at the pick (a charged cast did it before it began), kept spent when the start gate passes. A command with no charge is picked and started in one
+  // call, so it reserves and commits here. One party inventory (`inventory:<id>`); a monster never touches it, and an item the battle does not track is free.
+  if (command.kind === 'item' && !(pickItem(env, actor, command) && commitItem(env.state.flags, actor))) {
+    return abortItem(env, actor, command, before, costs.costAtb);
   }
 
   if (!alreadyCharged) {

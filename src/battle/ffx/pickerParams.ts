@@ -58,7 +58,7 @@ export interface MixPickerParams {
 export function grandSummonEntries(ctx: Ctx): GrandSummonEntry[] {
   return grandSummonChoices(ctx).map((id) => {
     const aeon = ctx.rt.aeonRoster.get(id);
-    return { id, name: ctx.rt.sisters && id === 'cindy' ? 'Magus Sisters' : aeon?.name ?? id, storedGauge: aeon?.overdrive?.gauge ?? 0 }; // the Sisters are one entry in a build that owns them
+    return { id, name: aeon?.name ?? id, storedGauge: aeon?.overdrive?.gauge ?? 0 };
   });
 }
 

@@ -16,6 +16,7 @@
  * | Steal, Pilfer Gil, Bribe | 10 and 11 | `re-ffx2-hit-status.md` 5; the kernels pass them |
  * | a script's `random()` | 2, the low 16 bits | `re-ffx2-ai-*.md` |
  * | a script's target search (`searchr`, `searchr_nop`) | 4 | `re-ffx2-ai-*.md` |
+ * | the item ledger (reserve, refund, commit) and the battle-end commit window | none: no draw | FFX2-G06 section 5 (0 draws in 357,509 vectors), FFX2-G10 sections 10.1 to 10.4 (60,000) |
  *
  * A **run seed** is the game's seed product `p` (`kernel/rng.ts#seedProduct`, the clock fold taken as 0): the 68 states are then
  * what the game's own seeding routine leaves (`seedStates`).

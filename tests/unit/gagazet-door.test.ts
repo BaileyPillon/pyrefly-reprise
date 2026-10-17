@@ -73,7 +73,7 @@ describe('the word against every other door word', () => {
   const others = CHAPTER_DOORS.map((d) => d.word).filter((w) => w !== WORD);
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order', () => {
-    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'angra', 'summon']); // `angra` is the Angra Mainyu lane's (FFX-2, hidden chapter 26), merged in release candidate r49-rc; `summon` is The Last Summoning's (FFX, hidden chapter 28)
+    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'angra', 'yojimbo', 'summon']); // `angra` is the Angra Mainyu lane's (FFX-2, hidden chapter 26), merged in release candidate r49-rc; `yojimbo` is the Mirror Aeons chapter's (FFX, 27); `summon` is The Last Summoning's (FFX, hidden chapter 28)
     for (const other of others) {
       for (const [a, b] of [[WORD, other], [other, WORD]] as const) {
         expect(a.startsWith(b), `${a} begins ${b}`).toBe(false);
@@ -231,24 +231,24 @@ afterEach(() => {
 });
 
 describe('hidden by default', () => {
-  it('the board holds the eighteen: no tile for the chapter, no EXP numeral, "of 18" unchanged', () => {
+  it('the board holds the nineteen: no tile for the chapter, no EXP numeral, "of 19" unchanged', () => {
     const tiles = buildChapterTiles(new SaveStore());
-    expect(tiles).toHaveLength(18);
+    expect(tiles).toHaveLength(19);
     expect(new Set(tiles.map((t) => t.id))).toEqual(new Set(CHAPTERS.map((c) => c.id as string)));
     expect(tiles.some((t) => t.id === CHAPTER || t.chapter?.experimental || t.numeral === 'EXP')).toBe(false);
-    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([11, 7]);
+    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([12, 7]);
     expect((CHAPTER_IDS as readonly string[]).includes(CHAPTER)).toBe(false);
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(CHAPTER);
     const progress = boardProgress(tiles, 0);
-    expect([progress.total, progress.pips.length]).toEqual([18, 18]);
+    expect([progress.total, progress.pips.length]).toEqual([19, 19]);
   });
 
-  it('the mounted board draws eighteen cards, none for the chapter, and counts "of 18 beaten"', () => {
+  it('the mounted board draws nineteen cards, none for the chapter, and counts "of 18 beaten"', () => {
     const rig = mount();
-    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(18);
+    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(19);
     expect(rig.root.querySelector(`[data-card="${CHAPTER}"]`)).toBeNull();
     expect(rig.root.textContent).not.toMatch(/\bEXP\b/);
-    expect(rig.root.textContent).toMatch(/of 18 beaten/);
+    expect(rig.root.textContent).toMatch(/of 19 beaten/);
     expect(rig.screen.snapshot()['order'] as string[]).not.toContain(CHAPTER);
   });
 });

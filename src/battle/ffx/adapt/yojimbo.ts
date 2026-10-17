@@ -11,6 +11,12 @@
  *   the full-gauge bonus was taken.
  * - **Dismiss** and **the wipe**: compatibility -3 for a Dismiss as his first action, -10 when he is knocked out while out.
  *
+ * **A group command is carried out on the whole list the pick returned.** The pick of Zanmato (0xb7, reach 1) is the game's auto-target: the legal enemies (in battle,
+ * targetable, alive, distance 1 or less), ONE draw on stream 5 to choose one enemy group (a draw even when only one is populated, none when the set is empty), and
+ * every legal member of that group; the command is then queued on that whole mask (`research/re-ffx-zanmato-and-orders.md` section 2). {@link commandOf} hands the
+ * executor the list in ascending slot order and the `zanmato` ability row keeps it whole (`extra.groupTarget`), so a landed Zanmato kills every one of them. No draw
+ * of its own is added: the executor builds the targets without one (no Cover, no Reflect bounce, no spread), and the hit then takes one status draw per target.
+ *
  * What the engine reads for the script (`FFX-G08` sections 3.1 to 3.4): the highest Zanmato byte among the monsters on the field (the data's
  * `zanmatoLevel` minus 1, which the data files record as "byte + 1"; a monster with none counts as byte 0), his gauge in the aeon bar's 20 points, the
  * party's gil before the payment, Curse. **Not sourced and handled by reading** (marked [I] in the note): the "matching group" of the free attack's
@@ -125,7 +131,8 @@ function hostFor(ctx: Ctx, actor: FFXCombatant, picked: Pick): YojimboHost {
       if (def === undefined) throw new Error(`FFX engine: Yojimbo's command ${command.toString(16)} has no ability record '${String(abilityId)}' registered`);
       const slot = chainSlotOf(ctx, actor);
       if (slot === undefined) throw new Error('FFX engine: Yojimbo has no game slot');
-      const world = chainWorld(ctx, actor, def, false);
+      // BattleDistance is asked for: the command words below carry the game's own reach (Zanmato and Wakizashi on all: 1), so a foe at distance 2 or 3 is out of the legal set.
+      const world = chainWorld(ctx, actor, def, false, true);
       // The picker reads the command record's byte `Cmd+0x1a` (single target 0x33 / 0xb3, group 0xb7, `FFX-G08` section 2); its side is 0, the opposite one.
       const cmd = { ...chainCommand(actor, def, 1, false), b1a: YOJIMBO_COMMAND_B1A[command] ?? 0 };
       const mask = autoTargetMask(world.slots, slot, command, 0, cmd, chainPick(ctx, world));

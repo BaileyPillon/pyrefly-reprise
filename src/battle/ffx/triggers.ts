@@ -9,7 +9,7 @@
  */
 
 import type { BattleEvent, MidBattleTrigger } from '../common/types.ts';
-import { type Ctx, tryActor } from './state.ts';
+import { type Ctx, isAlive, tryActor } from './state.ts';
 
 /** What happened during the action just resolved. */
 export interface TriggerSignals {
@@ -111,6 +111,10 @@ function matches(ctx: Ctx, trigger: MidBattleTrigger, signals: TriggerSignals): 
     }
     case 'charge-started':
       return when.who === undefined ? signals.chargesStarted.length > 0 : signals.chargesStarted.includes(when.who);
+    case 'all-ko': {
+      const present = when.ids.map((id) => tryActor(ctx, id)).filter((c): c is NonNullable<typeof c> => c !== undefined);
+      return present.length > 0 && present.every((c) => !isAlive(c));
+    }
     default:
       return false;
   }

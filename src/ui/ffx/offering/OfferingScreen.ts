@@ -42,7 +42,10 @@ export const OFFERING_TIMING = { fadeIn: 520, give: 800, fadeOut: 460 } as const
 
 const defaultSleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** The portrait file of an aeon (`public/art/portraits/<id>.png`: all seven single aeons have one; the Sisters have none and show their three paintings). */
+/**
+ * The portrait file of an aeon (`public/art/portraits/<id>.png`: the single aeons have one; the Sisters have none and show their three paintings). **Yojimbo's is not used**: `portraits/yojimbo.png` is the navy bust D-054 says is not approved,
+ * so his card is cut from his approved painting (`characters/yojimbo-cavern/idle.png`, `./offering.css` `.lscard__img--cutout`), the one Chapter IX and Yuna's own Yojimbo draw (r50.1).
+ */
 const portraitOf = (key: Exclude<OfferingKey, 'sisters'>): string => artUrl(`art/portraits/${key}.png`);
 const idleOf = (id: string): string => artUrl(`art/characters/${id}/idle.png`);
 
@@ -51,7 +54,9 @@ function cardHtml(key: OfferingKey, name: string): string {
   const art =
     key === 'sisters'
       ? `<div class="lscard__trio" aria-hidden="true"><img alt="" src="${idleOf('cindy')}"><img alt="" src="${idleOf('sandy')}"><img alt="" src="${idleOf('mindy')}"></div>`
-      : `<img class="lscard__img" alt="" src="${portraitOf(key)}">`;
+      : key === 'yojimbo'
+        ? `<img class="lscard__img lscard__img--cutout" alt="" src="${idleOf('yojimbo-cavern')}">`
+        : `<img class="lscard__img" alt="" src="${portraitOf(key)}">`;
   return `${art}<div class="lscard__shade"></div><div class="lscard__name">${name}</div><div class="lscard__tag"></div>`;
 }
 

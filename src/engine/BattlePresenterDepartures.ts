@@ -95,6 +95,8 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   // makes it untargetable; they are living Ronso beaten in a trial, not fiends sent. The body lies down where it fell (`'body'`) and nothing dissolves into pyreflies.
   'biran-ronso': 'body',
   'yenke-ronso': 'body',
+  // FFX, the hidden Mirror Aeons chapter: research/re-ffx-yojimbo-sisters-feasibility.md section 4.1: Dark Yojimbo's script overrides the death animation with his own Die command and his body stays but cannot be targeted. The Sisters' death is not described in the note: the default dissolve.
+  'dark-yojimbo': 'body',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {

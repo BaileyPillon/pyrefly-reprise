@@ -21,9 +21,9 @@
  * `./aeon-stats.ts#summonCtb`, replayed from `joint_ctb.json` (4,000 vectors).
  *
  * **Read only, not run** (the note's label [R]; nothing proves it against the game): {@link combineParticipant}, the count behind the menu's
- * Combine powers test (property 282, from the getter's decompile), and {@link combineEvent}, the Combine powers handler (note 6.6, the
- * chance and the motivation changes). The other orders' handlers (6.5) are NOT here: their target searches use filters nobody has decoded
- * (note, open question 5), so no number of theirs is taken from this note.
+ * Combine powers test (property 282, from the getter's decompile). {@link combineEvent}, the first reading of the Combine powers handler (note 6.6), is
+ * **superseded**: the engine no longer calls it (the proven handler, event 18 in `./sister-orders.ts`, searches the Delta Attack BEFORE it rolls). The other
+ * orders' handlers are in `./sister-orders.ts`, proved on the game's script VM (note Part 2).
  *
  * Pure and deterministic (AGENTS.md rule 1): draws are callbacks; nothing here imports the DOM, `three` or the engine.
  */
@@ -298,10 +298,11 @@ export interface CombineOutcome {
 }
 
 /**
- * The Combine powers order (event 18; note 6.6, read from the disassembly [R], not run): the standing order is cleared, the Delta Attack is
- * tried with the chance `200 + motivation` (one plain draw on stream 18) and a target search; the target mask is stored for the joint
- * action; motivation +10 when it was queued, -10 when not. The order of the roll and the search is the note's order of the three tests (the
- * roll first); a failed roll takes no search.
+ * **Superseded; nothing in the engine calls it** (kept only because `tests/unit/parity-ffx-sisters.test.ts` pins this first reading). The Combine powers order
+ * (event 18; note 6.6, read from the disassembly [R], not run): the standing order is cleared, the Delta Attack is tried with the chance `200 + motivation`
+ * (one plain draw on stream 18) and a target search; the target mask is stored for the joint action; motivation +10 when it was queued, -10 when not. This reading
+ * ran the roll FIRST and took no search after a failed roll. The game's handler, run on its script VM (note Part 2, `./sister-orders.ts`), searches first: a
+ * Delta Attack with no target, or with a gauge that is not full (or a Curse), ends with no draw at all, and only then is the chance rolled.
  */
 export function combineEvent(motivation: number, host: CombineHost): CombineOutcome {
   if (host.roll(200 + motivation) && host.target()) return { queued: true, motivationChange: 10 };

@@ -254,8 +254,11 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   await ctx.sleep(TIMING.ko);
 }
 
-/** The player's Magus Sisters (FFX only, the hidden Last Summoning) are three aeons out together: each stands on one of the party's three slots, Cindy left, Sandy middle, Mindy right. Every other aeon takes the middle slot. */
-const SISTER_SLOTS: Readonly<Record<string, number>> = { cindy: 0, sandy: 1, mindy: 2 };
+/**
+ * Yuna's three Magus Sisters arrive together (re-parity lane FFX-K; the hidden-then-listed Mirror Aeons chapter, FFX only): one `summon` event each, and each takes one of the party's three spots, Sandy on the left,
+ * Cindy in the middle and Mindy on the right, instead of the three piling on the middle one. Every other aeon, alone, stands in the middle.
+ */
+const SISTER_SLOT: Readonly<Record<string, number>> = { sandy: 0, cindy: 1, mindy: 2 };
 
 export async function summon(ctx: EventCtx, combatantId: CombatantId, aeonId: string): Promise<void> {
   ctx.stage.vfx.screenFlash('#ffffff', 260);
@@ -263,7 +266,7 @@ export async function summon(ctx: EventCtx, combatantId: CombatantId, aeonId: st
   const actor = await ctx.stage.addCombatant(combatantId, {
     artId: aeonId,
     side: 'aeon',
-    slot: SISTER_SLOTS[aeonId] ?? 1,
+    slot: SISTER_SLOT[combatantId] ?? 1,
   });
   actor?.setAlpha(0);
   // PR-0181: the party leaves the field as the aeon arrives (`SummonStaging.ts`).

@@ -125,6 +125,8 @@
   object-fit: cover;
   object-position: 50% 12%;
 }
+/* Yojimbo's card: his approved full-length painting (a cut-out on a clear ground), the head and shoulders showing. */
+.lscard__img--cutout { object-position: 50% 3%; transform: scale(1.12); transform-origin: 50% 8%; }
 /* The Sisters' card: the three paintings side by side. */
 .lscard--sisters .lscard__trio {
   position: absolute;

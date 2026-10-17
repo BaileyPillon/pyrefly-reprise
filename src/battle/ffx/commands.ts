@@ -189,13 +189,13 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
   if (ctx.state.aeonId === null && ctx.rt.aeonRoster.size > 0 && user.id === 'yuna') {
     const free = new Set(availableAeons(ctx).map((a) => a.id));
     for (const [key, aeon] of ctx.rt.aeonRoster) {
-      // The Magus Sisters are one entry (a build that owns them, re-parity lane FFX-K): Cindy stands for the three, under their joint name, locked or not.
+      // The Magus Sisters are one entry (a build that owns them, re-parity lane FFX-K): Cindy's row stands for the three, locked or not (a locked Sandy or Mindy would be two more greyed rows). Its label is the RE lane's and Chapter XXVII's: Cindy.
       if (ctx.rt.sisters && (key === 'sandy' || key === 'mindy')) continue;
       const locked = lockReason(ctx, key);
       if (!free.has(aeon.id) && !(locked !== undefined && aeon.hp > 0)) continue;
       const row: AvailableCommand = {
         command: { kind: 'summon', id: aeon.id, targets: [] },
-        label: ctx.rt.sisters && key === 'cindy' ? 'Magus Sisters' : aeon.name,
+        label: aeon.name,
         category: 'summon',
         mpCost: 0,
         rank: 3,

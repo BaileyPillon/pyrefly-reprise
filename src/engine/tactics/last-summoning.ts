@@ -47,8 +47,11 @@ export const SISTER_BODY_IDS: readonly CombatantId[] = ['possessed-cindy', 'poss
 /** The motivation at which Yojimbo's second roll can no longer fall below Wakizashi on all (RE section 8.1, point 4). */
 export const SURE_WAKIZASHI = 63;
 
-/** The aeons Yuna calls, first choice first (the Summon rows' labels): `[estimate]`, the biggest Overdrive first; Yojimbo last, because he needs a payment and the Sisters need all three gauges. */
-export const AEON_CALL_ORDER: readonly string[] = ['Bahamut', 'Anima', 'Magus Sisters', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo'];
+/**
+ * The aeons Yuna calls, first choice first (the Summon rows' labels): `[estimate]`, the biggest Overdrive first; Yojimbo last, because he needs a payment and the Sisters need all three gauges. **The Sisters' one Summon row is
+ * Cindy's** (the RE lane's, and Chapter XXVII's: one row stands for the three, labelled by the one that asks), so the list says `Cindy`.
+ */
+export const AEON_CALL_ORDER: readonly string[] = ['Bahamut', 'Anima', 'Cindy', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo'];
 
 /** The ability id Combine powers carries (`battle/ffx/aeon-commands.ts#ORDERS`). The line finds the row by this id, not by its label: the menu shows the order under a shorter name (`ui/ffx/aeonRowText.ts`). */
 export const COMBINE_ID = 'sister-order-combine';

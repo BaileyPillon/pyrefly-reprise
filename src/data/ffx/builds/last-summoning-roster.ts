@@ -20,6 +20,7 @@
  */
 
 import type { AeonBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
+import { AEONS } from '../aeons/index.ts';
 import { type AeonStatRow, withRow } from './gagazet-aeon-arms.ts';
 
 /** §6.4.3, Braska's Final Aeon / Yu Yevon, inside Sin, N = 360 (tier 11): the five aeons Dream's End leaves out. */
@@ -47,7 +48,7 @@ function extraAeon(id: string, name: string, abilityIds: string[], overdriveIds:
     {
       id,
       name,
-      spriteKey: id,
+      spriteKey: AEONS[id]?.spriteKey ?? id, // the catalogue's art: Yojimbo is `yojimbo-cavern`, the approved painting (D-054), as in Chapter XXVII
       stats: { ...row, maxHp: row.hp, maxMp: row.mp },
       hp: row.hp,
       mp: row.mp,

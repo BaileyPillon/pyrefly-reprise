@@ -318,11 +318,19 @@ const POSSESSED_AEON_SENSOR_TEXT: Partial<Record<BraskasFinalAeonEnemyId, string
  * [verified: 2 sources] and is overruled by the game's own script). Everything
  * else (affinities, immunities, ability ids, flags) is real data and ships as-is.
  */
+/**
+ * The painting a possessed aeon wears: the aeon's own id, except Yojimbo (the hidden Last Summoning, FFX only; D-054), whose approved painting is `characters/yojimbo-cavern`, the gold, orange and purple one Chapter IX's
+ * Yojimbo draws, not the navy `characters/yojimbo` D-054 says is not approved and not used (the live line's r50.1 gave Yuna's own Yojimbo the same: `data/ffx/aeons/index.ts`). No possessed Yojimbo is in Chapter III.
+ */
+export function possessedArtId(aeonId: string): string {
+  return aeonId === 'possessed-yojimbo' ? 'yojimbo-cavern' : aeonId.replace('possessed-', '');
+}
+
 export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): EnemyDef {
   return {
     id: aeonId,
     name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`,
-    spriteKey: aeonId.replace('possessed-', ''), // reuses the aeon's own sprite per the art session's convention
+    spriteKey: possessedArtId(aeonId), // reuses the aeon's own sprite per the art session's convention (Yojimbo's is the approved one, D-054)
     slot,
     // Placeholder — the engine overwrites this from the live `AeonBuild`,
     // Luck forced to 1. See the function doc comment above.
@@ -355,7 +363,7 @@ export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: num
       slow: 255,
     },
     immunityFlags: ['boss', 'immune-to-scan'],
-    forms: [{ name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`, spriteKey: aeonId.replace('possessed-', ''), hp: 1 }],
+    forms: [{ name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`, spriteKey: possessedArtId(aeonId), hp: 1 }],
     aiScriptId: 'possessed-aeon',
     rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] }, // §2.3 — no AP/gil for these
     abilityIds: POSSESSED_AEON_ABILITY_IDS[aeonId],

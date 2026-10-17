@@ -47,6 +47,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'sin-fins-core': 'ffx', 'sin-face': 'ffx', // Chapters XVII and XVIII (FFX only), listed 2026-09-29
   'sinspawn-gui': 'ffx', // the hidden Sinspawn Gui chapter (FFX only)
   'biran-yenke': 'ffx', // the hidden Biran and Yenke chapter (FFX only)
+  'mirror-aeons': 'ffx', // the hidden Mirror Aeons chapter (FFX only)
   'last-summoning': 'ffx', // the hidden Last Summoning chapter (FFX only, 2026-10-15)
 };
 

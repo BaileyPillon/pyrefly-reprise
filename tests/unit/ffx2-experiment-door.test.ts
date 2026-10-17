@@ -7,7 +7,7 @@
  * real `Input`, real key events and the real board). What this pins:
  *
  * 1. **The word is one constant** and stays clear of the other two doors' words: neither may begin the other (the shorter door would fire first).
- * 2. **Hidden by default**: the board holds the eighteen and nothing else, no EXP card, no word on screen, "of 18" unchanged.
+ * 2. **Hidden by default**: the board holds the nineteen and nothing else, no EXP card, no word on screen, "of 19" unchanged.
  * 3. **The word opens it** (and only the word): the board settles on the chapter, the cursor stays put, nothing is remembered, nothing is written.
  * 4. **The hazard of this word.** Four of its letters are buttons (`app/Input.ts`): E is START, X is CANCEL, R is R1, M is SELECT. The board answers CANCEL (it leaves for the
  *    title): the X typed second must never reach it. A stray X, outside the word, still cancels. START (the first E, and two more) must not begin anything, and the press
@@ -185,15 +185,15 @@ afterEach(() => {
 });
 
 describe('hidden by default', () => {
-  it('the board holds the eighteen: no experiment tile, no EXP numeral, "of 18" unchanged', () => {
+  it('the board holds the nineteen: no experiment tile, no EXP numeral, "of 19" unchanged', () => {
     const tiles = buildChapterTiles(new SaveStore());
     expect(new Set(tiles.map((t) => t.id))).toEqual(new Set(CHAPTERS.map((c) => c.id as string)));
-    expect(tiles).toHaveLength(18);
+    expect(tiles).toHaveLength(19);
     expect(tiles.some((t) => t.id === EXP || t.chapter?.experimental || t.numeral === 'EXP')).toBe(false);
-    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([11, 7]);
+    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([12, 7]);
     const progress = boardProgress(tiles, 0);
-    expect(progress.total).toBe(18);
-    expect(progress.pips).toHaveLength(18);
+    expect(progress.total).toBe(19);
+    expect(progress.pips).toHaveLength(19);
   });
 
   it('the Experiment is registered beside the Leblanc preview, outside CHAPTERS and found by getChapter', () => {
@@ -203,12 +203,12 @@ describe('hidden by default', () => {
     expect(getChapter(EXP)).toMatchObject({ game: 'ffx2', experimental: true });
   });
 
-  it('the mounted board draws eighteen cards and says nothing of the Experiment', () => {
+  it('the mounted board draws nineteen cards and says nothing of the Experiment', () => {
     const rig = mount();
-    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(18);
+    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(19);
     expect(rig.root.querySelector(`[data-card="${EXP}"]`)).toBeNull();
     expect(rig.root.textContent).not.toMatch(/experiment|EXP\b/i);
-    expect(rig.root.textContent).toMatch(/of 18 beaten/);
+    expect(rig.root.textContent).toMatch(/of 19 beaten/);
     expect(rig.screen.snapshot()['order'] as string[]).not.toContain(EXP);
   });
 
@@ -223,7 +223,7 @@ describe('hidden by default', () => {
 
   it('a card can still be built when a test hands the experiments in (the data path is intact)', () => {
     const tiles = buildChapterTiles(new SaveStore(), { experiments: EXPERIMENT_CHAPTERS.filter((c) => c.id === EXP) });
-    expect(tiles).toHaveLength(19);
+    expect(tiles).toHaveLength(20); // the nineteen listed cards (Mirror Aeons, XXVII, since 2026-10-15) and the one handed in
     expect(tiles.at(-1)).toMatchObject({ id: EXP, numeral: 'EXP' });
   });
 });

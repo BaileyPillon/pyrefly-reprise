@@ -26,6 +26,7 @@ import { SINSPAWN_GUI_META } from './chapter-meta-sinspawn-gui.ts';
 import { EXP_FAYTH_META } from './chapter-meta-exp-fayth.ts';
 import { VALEFOR_BESAID_META } from './chapter-meta-ffx2-valefor-besaid.ts';
 import { BIRAN_YENKE_META } from './chapter-meta-biran-yenke.ts';
+import { MIRROR_AEONS_META } from './chapter-meta-mirror-aeons.ts';
 import { ANGRA_MAINYU_META } from './chapter-meta-ffx2-angra-mainyu.ts';
 import { LAST_SUMMONING_META } from './chapter-meta-last-summoning.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macalania.ts';
@@ -93,7 +94,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI' | 'XVII' | 'XVIII' | 'EXP';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI' | 'XVII' | 'XVIII' | 'XXVII' | 'EXP';
   title: string;
   subtitle: string;
   location: string;
@@ -368,7 +369,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
-/** All eighteen listed chapters' pause-screen metadata, in play order. */
+/** All nineteen listed chapters' pause-screen metadata, in play order (Mirror Aeons last, listed 2026-10-15). */
 export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META, YUNALESCA_META, BRASKAS_FINAL_AEON_META,
   FFX2_BAHAMUT_META, FFX2_VEGNAGUN_SHUYIN_META,
@@ -383,6 +384,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   DEN_OF_WOE_META, // Chapter XV (FFX-2), listed 2026-09-26
   IXION_DJOSE_META, // Chapter XVI (FFX-2), listed 2026-09-27
   ...SIN_CHAPTER_META, // Chapters XVII and XVIII (FFX), listed 2026-09-29 (D-279)
+  MIRROR_AEONS_META, // Chapter XXVII (FFX), listed 2026-10-15 on Bailey's word
 ] as const;
 
 /** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */

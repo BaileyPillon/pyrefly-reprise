@@ -22,10 +22,10 @@ import { parseArgs, requireBase, requireEvidence } from './cli.mjs';
 import { bootChapter } from './gap-boot.mjs';
 import { LEGIBILITY_FLOOR_PX, collectText, judgeLegibility, sweepReportLine, sweepSummary } from './legibility-pure.mjs';
 
-/** The 18 chapters of the board, in play order (src/data/encounters.ts CHAPTER_IDS; tests/unit/critic-instruments-legibility.test.ts holds the two equal). */
+/** The 19 chapters of the board, in play order (src/data/encounters.ts CHAPTER_IDS; tests/unit/critic-instruments-legibility.test.ts holds the two equal). */
 export const BOARD_CHAPTERS = Object.freeze([
   'seymour-flux', 'yunalesca', 'braskas-final-aeon', 'ffx2-bahamut', 'ffx2-vegnagun-shuyin', 'ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern',
-  'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'sin-fins-core', 'sin-face',
+  'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'sin-fins-core', 'sin-face', 'mirror-aeons',
 ]);
 /** The phone sample: one FFX fight, one FFX-2 fight, and the two long chains (the chief's four). */
 export const PHONE_CHAPTERS = Object.freeze(['seymour-flux', 'ffx2-bahamut', 'braskas-final-aeon', 'ffx2-fallen-aeons']);

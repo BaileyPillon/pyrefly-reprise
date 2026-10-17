@@ -244,8 +244,8 @@ describe('on the real engine, the locks hold', () => {
     const d = inputFor(engine, 'yuna');
     const summons = d.commands.filter((c) => c.command.kind === 'summon');
     const byLabel = new Map(summons.map((c) => [c.label, c]));
-    expect([...byLabel.keys()].sort()).toEqual(['Anima', 'Bahamut', 'Ifrit', 'Ixion', 'Magus Sisters', 'Shiva', 'Valefor', 'Yojimbo']);
-    for (const taken of ['Ifrit', 'Magus Sisters']) {
+    expect([...byLabel.keys()].sort()).toEqual(['Anima', 'Bahamut', 'Cindy', 'Ifrit', 'Ixion', 'Shiva', 'Valefor', 'Yojimbo']); // the Sisters' one row is Cindy's, as in every build that owns them
+    for (const taken of ['Ifrit', 'Cindy']) {
       expect(byLabel.get(taken)!.enabled, taken).toBe(false);
       expect(byLabel.get(taken)!.disabledReason, taken).toBe(TAKEN_REASON);
     }

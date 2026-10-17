@@ -110,7 +110,9 @@ function yuPagodaHit(event: HitEvent): void {
   const turns = has(pagoda, 'slow') ? 1 : 2 + (gameMod(ctx, 100) < 50 ? 1 : 0);
   const untilFirstTurn = rtOf(ctx, pagoda.id).ctb;
   const recovery = recoveryTicks(pagoda, 3);
-  koActor(ctx, pagoda, attacker.id);
+  // A Death status that landed inside the hit (the player's Zanmato, chance 255) has already taken it off the field (`adapt/status-apply.ts` kills at once, and the hit's
+  // `ko` and `part-destroyed` events are out): only its return is left to arm. An HP blow leaves the death check pending for this hook, so it is still standing here.
+  if (isAlive(pagoda)) koActor(ctx, pagoda, attacker.id);
   scheduleRevivalAt(ctx, pagoda.id, ctx.state.ticks + untilFirstTurn + (turns - 1) * recovery, Math.max(1, absorbed));
 }
 

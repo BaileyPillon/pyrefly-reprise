@@ -146,8 +146,8 @@ describe('Chapter VI is unchanged', () => {
     expect(CHAPTERS).toContain(FFX2_LEBLANC);
     expect(CHAPTER_IDS).toContain('ffx2-leblanc');
     expect(getChapter('ffx2-leblanc')).toBe(FFX2_LEBLANC);
-    expect(CHAPTERS).toHaveLength(18);
-    expect(CHAPTER_IDS).toHaveLength(18);
+    expect(CHAPTERS).toHaveLength(19);
+    expect(CHAPTER_IDS).toHaveLength(19);
   });
 
   it('resolves every figure to the ids it always did: no namespace changes a candidate', () => {
@@ -494,7 +494,7 @@ describe('an experiment, not a chapter: the board, the store, the save', () => {
   afterAll(() => setExperimentStorageForTests(undefined));
 
   it('has no card by default; handed in, it is the last card of the FFX-2 group, after the eighteen, labelled EXP', () => {
-    expect(buildChapterTiles(save)).toHaveLength(18);
+    expect(buildChapterTiles(save)).toHaveLength(19);
     const tiles = buildChapterTiles(save, WITH_CARD);
     const last = tiles[tiles.length - 1]!;
     expect(last.id).toBe('exp-leblanc');
@@ -503,7 +503,7 @@ describe('an experiment, not a chapter: the board, the store, the save', () => {
     expect(last.game).toBe('ffx2');
     expect(last.sceneKey).toBe('exp-leblanc-last-room');
     expect(last.playable).toBe(true);
-    expect(tiles.filter((t) => !t.chapter?.experimental)).toHaveLength(18);
+    expect(tiles.filter((t) => !t.chapter?.experimental)).toHaveLength(19);
   });
 
   it("keeps its attempts and clears in the experiments' store and writes nothing to the save", () => {
@@ -525,15 +525,15 @@ describe('an experiment, not a chapter: the board, the store, the save', () => {
     expect(save.isCleared('exp-leblanc')).toBe(false);
   });
 
-  it('has a pip on the progress strip but is no part of "N of M": that stays the eighteen', () => {
+  it('has a pip on the progress strip but is no part of "N of M": that stays the nineteen', () => {
     let progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
-    expect(progress.total).toBe(18);
-    expect(progress.pips).toHaveLength(19);
+    expect(progress.total).toBe(19);
+    expect(progress.pips).toHaveLength(20); // the nineteen listed chapters and the experiment's own pip
     expect(progress.pips.at(-1)).toMatchObject({ id: 'exp-leblanc', numeral: 'EXP', lit: false });
     recordExperimentClear('exp-leblanc', 99_000);
     progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
     expect(progress.beaten).toBe(0);
-    expect(progress.total).toBe(18);
+    expect(progress.total).toBe(19);
     expect(progress.pips.at(-1)!.lit).toBe(true);
   });
 });

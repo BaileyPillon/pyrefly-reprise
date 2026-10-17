@@ -61,7 +61,7 @@ describe('the strip list is the board\'s own', () => {
       for (const layer of compositionFor(t).layers) if (layer.card) wanted.add(`art/characters/${layer.key}/idle.png`);
     }
     expect([...strip.masters].sort(), 'a chapter or a card placement changed: update src/data/art/strip-art.json').toEqual([...wanted].sort());
-    expect(strip.masters).toHaveLength(36);
+    expect(strip.masters).toHaveLength(38);
   });
 
   it('is sorted, and every master it names is a file of public/art where the art is there', () => {
@@ -115,7 +115,7 @@ describe('what the markup asks for', () => {
     const all = tiles();
     const rail = railHtml(groupChapterTiles(all), all, 0);
     const imgs = [...rail.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
-    expect(imgs).toHaveLength(36);
+    expect(imgs).toHaveLength(38);
     for (const img of imgs) {
       expect(img).toMatch(SMALL);
       expect(img).toContain(LAZY_FULL);
@@ -293,27 +293,27 @@ describe('the cursor, and the plates fetched ahead of it', () => {
     const p = pressesFrom(all, 0);
     expect(p.get(1)).toBe(1);
     expect(p.get(all.length - 1)).toBe(1); // the cursor wraps
-    expect(p.get(11)).toBe(1); // up or down: the first card of X-2 (11 FFX cards come first)
+    expect(p.get(12)).toBe(1); // up or down: the first card of X-2 (12 FFX cards come first)
     expect(p.get(2)).toBe(2);
     expect(p.get(all.length - 2)).toBe(2);
     expect(p.get(6)).toBe(6);
     expect(p.has(0)).toBe(false);
     expect(reachFrom(all, 0).get(1)).toEqual({ presses: 1, rank: 0 });
-    expect(reachFrom(all, 0).get(11)).toEqual({ presses: 1, rank: 1 });
-    expect(reachFrom(all, 0).get(17)).toEqual({ presses: 1, rank: 2 });
-    expect(cursorOrder(all, 0).slice(0, 5)).toEqual([1, 11, 17, 2, 16]);
+    expect(reachFrom(all, 0).get(12)).toEqual({ presses: 1, rank: 1 });
+    expect(reachFrom(all, 0).get(18)).toEqual({ presses: 1, rank: 2 });
+    expect(cursorOrder(all, 0).slice(0, 5)).toEqual([1, 12, 18, 2, 17]);
     // From the middle of a game the card on is first, then the other game, then the card behind.
-    expect(cursorOrder(all, 5).slice(0, 5)).toEqual([6, 11, 4, 7, 3]);
-    expect(aheadCards(all, 0, 2)).toEqual([1, 11, 17, 2, 16]);
-    expect(aheadCards(all, 0, 1)).toEqual([1, 11, 17]);
+    expect(cursorOrder(all, 5).slice(0, 5)).toEqual([6, 12, 4, 7, 3]);
+    expect(aheadCards(all, 0, 2)).toEqual([1, 12, 18, 2, 17]);
+    expect(aheadCards(all, 0, 1)).toEqual([1, 12, 18]);
     expect(aheadCards(all, 0, 0)).toEqual([]);
-    expect(aheadCards(all, 5, 1)).toEqual([6, 11, 4]);
-    expect(aheadCards(all, 5, 2)).toEqual([6, 11, 4, 7, 3]);
+    expect(aheadCards(all, 5, 1)).toEqual([6, 12, 4]);
+    expect(aheadCards(all, 5, 2)).toEqual([6, 12, 4, 7, 3]);
     // The default reach is two presses (r44a-rc; it was one): the next card, the other game's first, the one behind, then the next one on
     // and the one behind that.
     expect(PLATE_AHEAD).toBe(2);
-    expect(aheadCards(all, 5)).toEqual([6, 11, 4, 7, 3]);
-    expect(aheadCards(all, 0)).toEqual([1, 11, 17, 2, 16]);
+    expect(aheadCards(all, 5)).toEqual([6, 12, 4, 7, 3]);
+    expect(aheadCards(all, 0)).toEqual([1, 12, 18, 2, 17]);
   });
 
   it('skips a COMING card: the cursor never lands on it, so its plate is never fetched', () => {
@@ -348,9 +348,9 @@ describe('the cursor, and the plates fetched ahead of it', () => {
     expect(platesAhead(all, 0, 0)).toEqual([]);
     // The reach of two presses (r44a-rc) is what makes the difference: the card two on and the card two back are in it, and at the old reach of one they were not.
     expect(urls).toContain(sceneOf(2));
-    expect(urls).toContain(sceneOf(16));
+    expect(urls).toContain(sceneOf(all.length - 2));
     expect(platesAhead(all, 0, 1)).not.toContain(sceneOf(2));
-    expect(platesAhead(all, 0, 1)).not.toContain(sceneOf(16));
+    expect(platesAhead(all, 0, 1)).not.toContain(sceneOf(all.length - 2));
     expect(platesAhead(all, 0, 3)).toContain(sceneOf(3));
     // One list a card, the next card's first: the board gives that list a lane of its own.
     const byCard = platesAheadByCard(all, 0);
@@ -406,7 +406,7 @@ describe('the board warms the plates ahead as the cursor moves', () => {
     expect(opening.length).toBeGreaterThan(0);
     // Nobody has pressed anything: the whole window waits its turn, so the first paint's own set and the music have the pipe.
     expect(opening.find((a) => a.urls.includes(sceneOf(1)))?.lane).toBe('idle');
-    expect(opening.find((a) => a.urls.includes(sceneOf(11)))?.lane).toBe('idle'); // the other game's first card
+    expect(opening.find((a) => a.urls.includes(sceneOf(12)))?.lane).toBe('idle'); // the other game's first card
     expect(opening.find((a) => a.urls.includes(sceneOf(2)))?.lane).toBe('idle'); // two presses on, in the reach since r44a-rc
     expect(new Set(opening.flatMap((a) => a.urls)).has(sceneOf(8))).toBe(false);
     asked.length = 0;
@@ -419,21 +419,21 @@ describe('the board warms the plates ahead as the cursor moves', () => {
     expect(screen!.snapshot()['selectedIndex']).toBe(6);
     const after = new Set(plateCalls().flatMap((a) => a.urls));
     expect(after.has(sceneOf(7))).toBe(true); // the next card, one press on from where the cursor stands
-    expect(after.has(sceneOf(11))).toBe(true); // and the other game's first card, one press away
+    expect(after.has(sceneOf(12))).toBe(true); // and the other game's first card, one press away
     expect(after.has(sceneOf(8))).toBe(true); // two presses on is asked for too
     expect(after.has(sceneOf(4))).toBe(true); // and two presses back
     expect(after.has(sceneOf(9))).toBe(false); // three presses on is not
     expect(after.has(sceneOf(14))).toBe(false); // a far card is not asked for
     // A hand is on the keys: the card it reaches for next goes ahead of the idle queue (every other card's faces), the rest waits in it.
     expect(plateCalls().find((a) => a.urls.includes(sceneOf(7)))?.lane).toBe('normal');
-    expect(plateCalls().find((a) => a.urls.includes(sceneOf(11)))?.lane).toBe('idle');
+    expect(plateCalls().find((a) => a.urls.includes(sceneOf(12)))?.lane).toBe('idle');
     expect(plateCalls().find((a) => a.urls.includes(sceneOf(8)))?.lane).toBe('idle');
   });
 
   it('paints the rail with the small copies and the plate with the full picture, in the mounted board', () => {
     screen!.enter();
     const strips = [...root!.querySelectorAll<HTMLImageElement>('.fe-rail img')];
-    expect(strips).toHaveLength(36);
+    expect(strips).toHaveLength(38);
     for (const img of strips) expect(img.getAttribute('src') ?? img.getAttribute(LAZY_SRC) ?? '').toMatch(SMALL);
     const plate = [...root!.querySelectorAll<HTMLImageElement>('.fe-hero img')];
     expect(plate.length).toBeGreaterThan(0);

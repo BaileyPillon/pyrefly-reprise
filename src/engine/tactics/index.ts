@@ -54,6 +54,7 @@ import { ISAARU_CHAPTER_BOSS_IDS, isaaruViaPurifico } from './ffx-isaaru.ts';
 import { SIN_TACTIC_ENTRIES } from './sin-tactics.ts';
 import { SINSPAWN_GUI_BOSS_IDS, sinspawnGui } from './sinspawn-gui.ts';
 import { BIRAN_YENKE_BOSS_IDS, biranYenke } from './biran-yenke.ts';
+import { MIRROR_AEONS_BOSS_IDS, mirrorAeons } from './mirror-aeons.ts';
 import { LAST_SUMMONING_BOSS_IDS, lastSummoning } from './last-summoning.ts';
 import { chapterOnBoard } from './lookup.ts';
 
@@ -97,6 +98,7 @@ export { isaaruViaPurifico, ISAARU_CHAPTER_BOSS_IDS } from './ffx-isaaru.ts';
 export { sinFinsCore, sinFace, SIN_FINS_CORE_BOSS_IDS, SIN_FACE_BOSS_IDS } from './sin-tactics.ts'; // XVII and XVIII (FFX), unlisted
 export { sinspawnGui, SINSPAWN_GUI_BOSS_IDS } from './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only)
 export { biranYenke, BIRAN_YENKE_BOSS_IDS } from './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only)
+export { mirrorAeons, MIRROR_AEONS_BOSS_IDS } from './mirror-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only)
 export { lastSummoning, LAST_SUMMONING_BOSS_IDS } from './last-summoning.ts'; // the hidden Last Summoning chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
@@ -176,6 +178,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...SINSPAWN_GUI_BOSS_IDS.map((bossId) => ({ chapterId: 'sinspawn-gui', bossId, tactic: sinspawnGui })),
   // The hidden Biran and Yenke chapter (FFX only): the two brothers; Kimahri's line is Lancet, then the Rages.
   ...BIRAN_YENKE_BOSS_IDS.map((bossId) => ({ chapterId: 'biran-yenke', bossId, tactic: biranYenke })),
+  // The hidden Mirror Aeons chapter (FFX only): the three Dark Magus Sisters and Dark Yojimbo; the line is the aeon as fodder for the big move, Mindy first.
+  ...MIRROR_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'mirror-aeons', bossId, tactic: mirrorAeons })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

@@ -49,6 +49,7 @@ const OWN_TACTIC: Record<string, string> = {
   'ffx2-ixion-djose': 'ffx2IxionDjose', // Chapter XVI (FFX-2), listed 2026-09-27
   'sin-fins-core': 'sinFinsCore', // Chapter XVII (FFX), unlisted
   'sin-face': 'sinFace', // Chapter XVIII (FFX), unlisted
+  'mirror-aeons': 'mirrorAeons', // Chapter XXVII (FFX), listed 2026-10-15: both acts, every link
 };
 
 // The hidden FF7 experiment has no engine yet (FF7_EXPERIMENT_READY off; ff7-game-branch-audit): it joins when it does.

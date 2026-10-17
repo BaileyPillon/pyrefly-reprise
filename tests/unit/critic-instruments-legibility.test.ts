@@ -307,7 +307,7 @@ describe('one viewport of the pause matrix (CHK-002)', () => {
 
 describe('the jobs', () => {
   it('visit every board chapter, four phone chapters, the prep cases and the six viewports of CHK-002', () => {
-    expect(casesFor('battle')).toHaveLength(18);
+    expect(casesFor('battle')).toHaveLength(19);
     expect(casesFor('battle').every((c) => c.size === '1600x900' && !c.touch)).toBe(true);
     expect(casesFor('phone').map((c) => c.id)).toEqual([...PHONE_CHAPTERS]);
     expect(casesFor('phone').every((c) => c.size === '390x844' && c.touch)).toBe(true);

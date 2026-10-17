@@ -8,26 +8,11 @@
  * Pure TypeScript: no DOM, no Three.js, no `Math.random()`. FFX-2 only.
  */
 
-import type {
-  AtbSnapshot,
-  BattleEvent,
-  BattleResult,
-  BattleState,
-  CombatantId,
-  Command,
-} from '../common/types.ts';
+import type { AtbSnapshot, BattleEvent, BattleResult, BattleState, CombatantId, Command } from '../common/types.ts';
 import type { BattleRng } from '../common/streams.ts';
 import { makeFfx2Rng } from './adapt/streams.ts';
 import { stepsToMs } from './clock.ts';
-import type {
-  AbilityRegistry,
-  AiContext,
-  DressphereRegistry,
-  EventDraft,
-  Ffx2EngineOptions,
-  Ffx2Unit,
-  GarmentGridRegistry,
-} from './internal.ts';
+import type { AbilityRegistry, AiContext, DressphereRegistry, EventDraft, Ffx2EngineOptions, Ffx2Unit, GarmentGridRegistry } from './internal.ts';
 import { pollIsNotATurn, settleFlavourTurn } from './flavour-turn.ts';
 import { WAKE_ON_ALIVE_CHANGE, WAKE_ON_RESULT } from './ai/idle.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
@@ -35,7 +20,10 @@ import { baseSpeedOf, type AtbSpeed } from './clock.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { buildSnapshot } from './gauges.ts';
-import { bySlot, completeCommand, wakeIdle } from './atb-engine.ts';
+import { bySlot, completeCommand, dropAction, wakeIdle } from './atb-engine.ts';
+import { EndWindow } from './end-window.ts';
+import { outcomeOfEnd } from './adapt/battle-end.ts';
+import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
 import type { MenuContext } from './menu.ts';
@@ -44,21 +32,12 @@ import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
 import { abilityFor, performCommand, type ExecEnv, type Suspension } from './execute.ts';
-import { actorOrder, battleOutcome, buildResult, emptyState } from './results.ts';
+import { actorOrder, buildResult, emptyState } from './results.ts';
 import {
-  allTargetsGone,
-  awaitsPlayerInput,
-  canTakeTurn,
-  clockHeldByMenu,
-  DEFAULT_ATB_MODE,
-  DEFAULT_WAIT_SPLIT,
-  heldStillPending,
-  ownsInput,
-  withDefaultTimedInput,
-  type AtbMode,
-  type HeldCommand,
-  type MenuLevel,
+  allTargetsGone, awaitsPlayerInput, canTakeTurn, clockHeldByMenu, DEFAULT_ATB_MODE, DEFAULT_WAIT_SPLIT, heldStillPending, ownsInput, withDefaultTimedInput,
+  type AtbMode, type HeldCommand, type MenuLevel,
 } from './active.ts';
+import { itemAvailable, releaseItemHolds } from './adapt/item-ledger.ts';
 
 export class Ffx2EngineCore {
   protected rng: BattleRng = makeFfx2Rng(0);
@@ -115,6 +94,8 @@ export class Ffx2EngineCore {
   /** Wait's split (§1.5) and where the open menu's cursor is: `active.ts` {@link MenuLevel}. */
   protected split = DEFAULT_WAIT_SPLIT;
   protected level: MenuLevel = 'deep';
+  /** The battle-end commit window (re-parity RC8, XK2, `end-window.ts`): the end is evaluated every step and committed once the queued commands have run out. */
+  protected endWindow = new EndWindow();
 
   constructor(options: Ffx2EngineOptions = {}) {
     this.options = options;
@@ -160,6 +141,7 @@ export class Ffx2EngineCore {
       fire: (u) => this.fireChargedCommand(u),
       complete: (u) => completeCommand(u, u.gauge.costAtb, this.units, u.gauge.idleWait === true),
     });
+    releaseItemHolds(this.units, this.battleState.flags); // a cast the step dropped (Stop, Petrify, a KO, ejection) gives its item back
   }
 
   /**
@@ -177,6 +159,8 @@ export class Ffx2EngineCore {
    */
   protected nextActor(skipReadyPlayers = false): Ffx2Unit | undefined {
     const held = this.heldUnit();
+    // Inside the end window nothing new starts: only a command already held for a chain lock may still fire, as soon as her lock lifts.
+    if (this.endWindow.open) return held !== undefined && canTakeTurn(held) ? held : undefined;
     if (!skipReadyPlayers && this.inputOwner) {
       // `ownsInput`, not `canTakeTurn`: a chained owner keeps her menu
       // (PR-0080) — the next ready girl waits behind her in the ATB rows.
@@ -220,7 +204,7 @@ export class Ffx2EngineCore {
     this.held = null;
     if (!held) return;
     const ability = abilityFor(this.env(), held.command);
-    if (allTargetsGone(this.units, held.command, ability)) return;
+    if (allTargetsGone(this.units, held.command, ability) || (held.command.kind === 'item' && !itemAvailable(this.battleState.flags, held.command.id))) return;
     const command = withDefaultTimedInput(held.command, ability, this.rng, this.options.minigames !== false);
     const before = this.drafts.length;
     this.beginTurn(actor);
@@ -348,6 +332,7 @@ export class Ffx2EngineCore {
 
   /** Post-action bookkeeping: AI hooks (`runAfterActionHooks`), then story triggers and battle end. */
   protected afterAction(actor: Ffx2Unit, startedAt: number): void {
+    releaseItemHolds(this.units, this.battleState.flags); // a cast the action dropped (a KO, a dress change, a magic cancel) gives its item back
     const cls = this.battleState.flags['lastAttackClass'];
     const env = {
       units: this.units, abilities: this.abilities, attackClass: typeof cls === 'string' ? cls : 'none',
@@ -367,9 +352,24 @@ export class Ffx2EngineCore {
     this.checkBattleEnd();
   }
 
+  /**
+   * The battle-end check, after every logic step and every action: the evaluation is made, a non-zero answer opens the commit window (menus close, nothing new starts) and
+   * the end is committed once the queued commands have run out and the evaluation still holds (`end-window.ts`; re-parity RC8, XK2). Returns the result once it is built.
+   */
   protected checkBattleEnd(): BattleResult | null {
     if (this.battleState.result) return this.battleState.result;
-    const outcome = battleOutcome(this.units, this.battleState);
+    const code = this.endWindow.pass({
+      units: this.units, state: this.battleState, ticks: this.battleState.ticks, held: this.heldUnit() !== undefined, awaiting: this.awaitingMinigame !== null,
+      closeMenu: (u) => {
+        if (this.inputOwner === u.id) this.inputOwner = null;
+        if (u.gauge.state === Ffx2AtbState.WaitCommand && this.awaitingBy?.actorId !== u.id) u.gauge.state = Ffx2AtbState.Idle;
+      },
+      dropQueued: () => {
+        for (const u of this.units) if (u.atb.charging !== null) dropAction(u);
+        releaseItemHolds(this.units, this.battleState.flags); // what never started goes back (the game's cancel of every queue)
+      },
+    });
+    const outcome = outcomeOfEnd(code);
     if (!outcome) return null;
 
     const result = buildResult(this.units, this.battleState, outcome, this.elapsedMs);

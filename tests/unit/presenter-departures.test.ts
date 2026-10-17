@@ -35,7 +35,8 @@ describe('departure kinds', () => {
     // + Chapter X's mortibody and Chapter I's mortiorchis, returns (FFX; research/ffx-seymour-flux.md
     // §2.2 and §4.4)
     // + the hidden Biran and Yenke chapter's two brothers, body (FFX only, 2026-10-14): beaten Ronso, alive, who stay lying where they fell (no pyreflies)
-    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(18);
+    // + the hidden Mirror Aeons chapter's Dark Yojimbo, body (FFX only, 2026-10-15): the file says his body stays and cannot be targeted
+    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(19);
     expect(departureKindOf('mortibody')).toBe('returns');
     expect(departureKindOf('mortiorchis')).toBe('returns');
     expect(departureKindOf('biran-ronso')).toBe('body');

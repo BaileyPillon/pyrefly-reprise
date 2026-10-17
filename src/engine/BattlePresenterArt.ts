@@ -107,6 +107,15 @@ function isFfx2Enemy(c: AnyCombatant): boolean {
 }
 
 /**
+ * The art id a SUMMONED aeon is staged under (r50.1, FFX only): its combatant's own `spriteKey` when the state knows the combatant, else the aeon id the `summon` event names. The event carries only the aeon's id, so
+ * an aeon whose art is not its id (Yuna's Yojimbo draws `yojimbo-cavern`, the approved painting, not the navy `yojimbo` D-054 rejects) was staged under its id and drew the wrong painting while its turn-bar tile and HUD card,
+ * which read the combatant, showed the right one. Every other aeon's `spriteKey` is its id, so for them this is the id the event names.
+ */
+export function summonArtId(c: AnyCombatant | undefined, aeonId: string): string {
+  return c && c.side === 'aeon' && c.spriteKey ? c.spriteKey : aeonId;
+}
+
+/**
  * The art ids a live combatant is looked up under, best first: the mapped id, its sprite key, its raw id. Inside an art
  * namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`) every candidate is read from that set; with none, they
  * are exactly the ids Chapter VI and every other chapter have always used. The stage and the preload both ask this.

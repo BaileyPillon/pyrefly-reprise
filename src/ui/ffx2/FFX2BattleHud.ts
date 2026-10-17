@@ -61,6 +61,8 @@ import { applyBandGeometry, bandBarRect, bandGeometry, bandReserve, BAND_GRID_HE
 import { plateInputFromDom, TargetPlates, targetPlateText } from './TargetPlates.ts';
 import { BattleMessageBanner } from './battleMessage.ts';
 import { fightDecidedBy } from './fightDecided.ts';
+import { fightEnding } from '../../battle/ffx2/end-flag.ts';
+import { EndHold } from './endHold.ts'; // the party's bars while the fight is ending: nothing counts toward a turn that cannot come
 import { displayNameOf } from './displayName.ts';
 import { IntentOpeningHold } from './intentOpeningHold.ts';
 
@@ -189,6 +191,7 @@ export class FFX2BattleHud implements HudPort {
   private labelsAtRest: () => boolean = () => false;
   private lastState: BattleState | null = null;
   private lastSnapshot: AtbSnapshot | null = null;
+  private readonly endHold = new EndHold();
   /** The actor whose command menu is currently open, if any — drives `.ig-stat--acting`. */
   private actingId: CombatantId | null = null;
   private readonly chargeStages = new Map<CombatantId, ChargePip>();
@@ -837,9 +840,11 @@ export class FFX2BattleHud implements HudPort {
     // has no handle on — the fight ending while a menu is still open. The FFX
     // side takes the same precaution in `FFXBattleHud.sync`
     // (AGENTS.md rule 14: shared plumbing behind a defect, critic CHK-020).
-    if (state.result) this.applySelection(null);
+    // r50-rc: the engine's commit window decides the end before it builds the result (`fightEnding`), so the fight is over on screen from the first step of the window.
+    const over = !!state.result || fightEnding(state);
+    if (over) this.applySelection(null);
     // ...and no command menu, reticle or banner either: `onEvent` swept at the last blow; an escape arrives only here.
-    if (state.result) this.endOfFight();
+    if (over) this.endOfFight();
     this.lastState = state;
     this.queued.sync(state);
     this.guide.sync(state);
@@ -1262,7 +1267,7 @@ export class FFX2BattleHud implements HudPort {
       .map((id, i) => {
         const c = state.combatants[id];
         if (!isFfx2(c)) return '';
-        const bar = snapshot.bars.find((b) => b.actorId === id) ?? null;
+        const bar = this.endHold.bar(state, id, snapshot.bars.find((b) => b.actorId === id) ?? null); // frozen while the fight is ending, spells in flight excepted
         return partyRowHtml(c, bar, { actingId: this.actingId, index: i, ...(this.artNamespace ? { artNamespace: this.artNamespace } : {}) });
       })
       .join('');

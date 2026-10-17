@@ -51,6 +51,7 @@ import { FFX2_DEN_OF_WOE_SHIPPED } from './chapter-den-of-woe-ship.ts';
 import { FFX2_IXION_DJOSE } from './chapter-ffx2-ixion-djose.ts';
 import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
 import { SIN_FACE } from './chapter-sin-face.ts';
+import { MIRROR_AEONS } from './chapter-mirror-aeons.ts'; // Chapter XXVII (FFX), listed 2026-10-15 on Bailey's word (the board's nineteenth card)
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 import { experimentChapters } from './chapters-experiments.ts'; // the hidden experiments: the Leblanc preview and the Experiment (FFX-2 only; below)
 
@@ -60,7 +61,7 @@ export type ChapterId =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
-  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc' | 'sinspawn-gui' | 'exp-fayth' | 'ffx2-valefor-besaid' | 'biran-yenke' | 'last-summoning'; // the last six (the sixth, 2026-10-15: The Last Summoning, FFX, the full roster given to Yu Yevon in the player's order; its word is 'summon', `app/screens/frontend/summonDoor.ts`): hidden, no card, each opened by its word on chapter select (`app/screens/frontend/leblancDoor.ts`, `mushroomDoor.ts`, `faythDoor.ts`, `valeforDoor.ts`, `gagazetDoor.ts`): the Leblanc preview (2026-10-06), Sinspawn Gui (FFX, 2026-10-10), Evrae with FFX's camera (FFX, 2026-10-10), Valefor at Besaid (FFX-2, 2026-10-14) and Biran and Yenke (FFX, Kimahri's solo trial, 2026-10-14)
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc' | 'sinspawn-gui' | 'exp-fayth' | 'ffx2-valefor-besaid' | 'biran-yenke' | 'mirror-aeons' | 'last-summoning'; // The Last Summoning (FFX, number 28, 2026-10-15) is hidden too, no card, and its word is 'summon' (`app/screens/frontend/summonDoor.ts`); the last five of those hidden, no card, each opened by its word on chapter select (Mirror Aeons, number 27, is the exception: LISTED 2026-10-15, after Sin, and its word `yojimbo` still opens it) (`app/screens/frontend/leblancDoor.ts`, `mushroomDoor.ts`, `faythDoor.ts`, `valeforDoor.ts`, `gagazetDoor.ts`, `yojimboDoor.ts`): the Leblanc preview (2026-10-06), Sinspawn Gui (FFX, 2026-10-10), Evrae with FFX's camera (FFX, 2026-10-10), Valefor at Besaid (FFX-2, 2026-10-14) and Biran and Yenke (FFX, Kimahri's solo trial, 2026-10-14)
 
 /** Every id that can hold a place on the board: all but the hidden experiments. */
 export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'ffx2-masterpiece-theatre' | 'sinspawn-gui' | 'exp-fayth' | 'ffx2-tourist-trap' | 'ffx2-valefor-besaid' | 'biran-yenke' | 'ffx2-angra-mainyu' | 'last-summoning'>;
@@ -104,8 +105,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on chapter select, 1–18 (XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment); the hidden experiments take 19 (Leblanc preview), 20 (the FFX-2 experiment lane's), 21 (Sinspawn Gui) 22 (Fayth: Evrae with FFX's camera), 23 (Tourist Trap), 24 (Valefor at Besaid), 25 (Biran and Yenke), 26 (Angra Mainyu) and 28 (The Last Summoning; 27 is the Dark Mirror lane's). Unique except 0 (`tests/unit/chapter-numbers.test.ts`). */
-  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 28;
+  /** Display order on chapter select, 1–18 (XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment); the hidden experiments take 19 (Leblanc preview), 20 (the FFX-2 experiment lane's), 21 (Sinspawn Gui) 22 (Fayth: Evrae with FFX's camera), 23 (Tourist Trap), 24 (Valefor at Besaid), 25 (Biran and Yenke), 26 (Angra Mainyu) and 27 (Mirror Aeons, listed after Sin) and 28 (The Last Summoning). Unique except 0 (`tests/unit/chapter-numbers.test.ts`). */
+  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28;
   /** An experiment: its attempts, clears and time go to the experiments' store, never the save, and it is no part of any count. FF7's Guard Scorpion is hidden (no card; `BattleScreenExperiment`); the FFX-2 Leblanc preview is hidden too (no card; its word on chapter select, `./chapter-exp-leblanc.ts`) and plays through the chapters' own flow. */
   experimental?: true;
   /** Card title. The encounter's name. */
@@ -356,7 +357,7 @@ export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN, UNLISTED_CHAPTE
 /** Experiments found by `getChapter` but not in `CHAPTERS` (every count stays 18) and with no board card, each reached by typing its word on chapter select; registered in `./chapters-experiments.ts` (400-line rule). */
 export const EXPERIMENT_CHAPTERS: readonly Chapter[] = experimentChapters(FFX2_LEBLANC);
 
-/** All eighteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
+/** All nineteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29, Mirror Aeons 2026-10-15); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
 export const CHAPTERS: readonly Chapter[] = [
   SEYMOUR_FLUX, YUNALESCA, BRASKAS_FINAL_AEON,
   FFX2_BAHAMUT,
@@ -373,6 +374,7 @@ export const CHAPTERS: readonly Chapter[] = [
   FFX2_DEN_OF_WOE_SHIPPED,
   FFX2_IXION_DJOSE,
   SIN_FINS_CORE, SIN_FACE, // Chapters XVII and XVIII (FFX), listed 2026-09-29 (D-279: the driver's picks, delegated by Bailey)
+  MIRROR_AEONS, // the Dark Magus Sisters and Dark Yojimbo (FFX; number 27, after Sin in the FFX group), listed 2026-10-15 on Bailey's word
 ] as const;
 
 /** Chapter ids, in play order. */
@@ -388,7 +390,7 @@ export const CHAPTER_IDS: readonly ListedChapterId[] = [
   'ffx2-trema',
   'isaaru-via-purifico',
   'ffx2-den-of-woe', 'ffx2-ixion-djose',
-  'sin-fins-core', 'sin-face',
+  'sin-fins-core', 'sin-face', 'mirror-aeons',
 ] as const;
 
 /** Look a chapter up by id, listed or not. Returns `undefined` for an unknown id. */

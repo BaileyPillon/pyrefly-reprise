@@ -50,6 +50,20 @@ describe('aeon turn-order tiles use the aeon painting (PR-0176)', () => {
     expect(srcsFor(list, 'yojimbo').some((s) => s.endsWith('art/characters/yojimbo/idle.png'))).toBe(false);
   });
 
+  it("Yuna's Yojimbo, who draws the approved cavern painting (r50.1, FOC50-01), shows a crop of it in the turn list and in the status row: a face, not the Y monogram, and still never the navy portrait or idle", () => {
+    const yojimbo = { yojimbo: { ...combatant('yojimbo', 'aeon', 'yojimbo-cavern', 'Yojimbo'), hp: 19646, mp: 0, alive: true, stats: { maxHp: 19646, maxMp: 0 }, statuses: {} } } as unknown as Record<CombatantId, AnyCombatant>;
+    const list = new CtbList();
+    list.render([row('yojimbo', true)], yojimbo);
+    const win = new PartyStatusWindow();
+    win.render(['yojimbo'], yojimbo, 'yojimbo');
+    const status = [...(win.el.querySelector('[data-actor="yojimbo"]')?.querySelectorAll('img') ?? [])].map((img) => img.getAttribute('src') ?? '');
+    for (const srcs of [srcsFor(list, 'yojimbo'), status]) {
+      expect(srcs.some((s) => s.endsWith('art/characters/yojimbo-cavern/idle.png'))).toBe(true);
+      expect(srcs.some((s) => s.endsWith('art/portraits/yojimbo.png'))).toBe(false);
+      expect(srcs.some((s) => s.endsWith('art/characters/yojimbo/idle.png'))).toBe(false);
+    }
+  });
+
   it('a party member with its own portraitKey is unchanged', () => {
     const list = new CtbList();
     list.render([row('tidus', true, { portraitKey: 'tidus' } as Partial<TurnPreview>)], {

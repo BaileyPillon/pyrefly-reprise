@@ -77,10 +77,10 @@ afterEach(() => {
 const selectedId = (rig: Rig): unknown => rig.screen.snapshot()['selectedId'];
 
 describe('the board on screen', () => {
-  it('draws the hero plus all eighteen cards, and nothing after them (the Leblanc preview is hidden), in two game groups, the selected one included (D-183)', () => {
+  it('draws the hero plus all nineteen cards, and nothing after them (the Leblanc preview is hidden), in two game groups, the selected one included (D-183)', () => {
     const { root } = mount();
     expect(root.querySelectorAll('.fe-hero')).toHaveLength(1);
-    expect(root.querySelectorAll('.fe-card')).toHaveLength(18); // the eighteen; the FFX-2 experiment (2026-10-06) has no card, only its word
+    expect(root.querySelectorAll('.fe-card')).toHaveLength(19); // the nineteen; the FFX-2 experiment (2026-10-06) has no card, only its word
     expect(root.querySelector('[data-card="exp-leblanc"]')).toBeNull();
     expect(root.querySelectorAll('.fe-card--sel')).toHaveLength(1);
     const groups = [...root.querySelectorAll('.fe-rail__group')].map((g) => g.textContent?.trim());
@@ -154,6 +154,9 @@ describe('the keyboard', () => {
     expect(selectedId(rig)).toBe('sin-fins-core');
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('sin-face');
+    // Mirror Aeons (XXVII) was listed 2026-10-15 on Bailey's word and ends the FFX group.
+    rig.key('ArrowRight');
+    expect(selectedId(rig)).toBe('mirror-aeons');
     rig.key('ArrowRight');
     expect(selectedId(rig)).toBe('ffx2-bahamut');
   });

@@ -103,8 +103,8 @@ describe('registration: listed 2026-09-29 (D-279), reachable by id', () => {
     expect(getChapter('sin')).toBeUndefined();
     // Listed 2026-09-29 (D-279), after Chapter XVII.
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('sin-face');
-    expect(CHAPTERS.map((c) => c.id).at(-1)).toBe('sin-face');
-    expect(CHAPTER_IDS.at(-1)).toBe('sin-face');
+    expect(CHAPTERS.map((c) => c.id).at(-2)).toBe('sin-face'); // Mirror Aeons (2026-10-15) follows it
+    expect(CHAPTER_IDS.at(-2)).toBe('sin-face');
     expect(ENEMY_GROUPS_BY_ID['overdrive-sin']).toBe(overdriveSinGroup);
   });
 });

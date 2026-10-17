@@ -43,7 +43,7 @@ import type { SpeakerId, Step, StoryScript } from '../../../src/story/dsl.ts';
 import { MID_LINE_HOLD_MS, MID_SCRIPT_BUDGET_MS, blockingSteps, midBattleDeadlineMs, scriptDurationMs } from '../../../src/story/registry.ts';
 import { lastSummoningScripts as S } from '../../../src/story/scripts/last-summoning.ts';
 import { docForState } from '../../../src/ui/common/guideDoc.ts';
-import { COMBINE_HELP, PAY_HELP, aeonRowText } from '../../../src/ui/ffx/aeonRowText.ts';
+import { aeonMenuRows } from '../../../src/engine/PayRows.ts';
 import { ALL_KEYS, firstLinkSetup, newEngine } from '../helpers/lastSummoningDrive.ts';
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- registration
@@ -55,7 +55,7 @@ describe('the chapter is registered, hidden, and nowhere in the eighteen', () =>
     expect(EXPERIMENT_CHAPTERS).toContain(LAST_SUMMONING);
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(LAST_SUMMONING_ID);
     expect((CHAPTER_IDS as readonly string[]).includes(LAST_SUMMONING_ID)).toBe(false);
-    expect(CHAPTER_IDS).toHaveLength(18);
+    expect(CHAPTER_IDS).toHaveLength(19); // the eighteen and Mirror Aeons, listed 2026-10-15
     expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length); // every hidden number is its own
   });
 
@@ -141,9 +141,9 @@ describe("an experiment, not a chapter: the board, the experiments' store and th
   afterAll(() => setExperimentStorageForTests(undefined));
 
   it('has no card by default; handed in, it is the last FFX card, labelled EXP', () => {
-    expect(buildChapterTiles(save)).toHaveLength(18);
+    expect(buildChapterTiles(save)).toHaveLength(19);
     const tiles = buildChapterTiles(save, WITH_CARD);
-    expect(tiles).toHaveLength(19);
+    expect(tiles).toHaveLength(20);
     const last = tiles.find((t) => t.id === LAST_SUMMONING_ID)!;
     expect(tiles.filter((t) => t.game === 'ffx').at(-1)).toBe(last);
     expect(last).toMatchObject({ id: LAST_SUMMONING_ID, numeral: 'EXP', title: LAST_SUMMONING_TEXT.title, game: 'ffx', sceneKey: LAST_SUMMONING_SCENE, playable: true });
@@ -167,7 +167,7 @@ describe("an experiment, not a chapter: the board, the experiments' store and th
     expect(card().cleared).toBe(true);
     expect(save.isCleared(LAST_SUMMONING_ID)).toBe(false);
     const progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
-    expect([progress.beaten, progress.total]).toEqual([0, 18]);
+    expect([progress.beaten, progress.total]).toEqual([0, 19]);
   });
 });
 
@@ -417,7 +417,7 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(party.aeons.filter((a) => ['anima', 'yojimbo'].includes(a.id)).map((a) => a.overdriveGauge)).toEqual([0, 0]);
     const e = await lastSummoningEngine(['valefor'], 4);
     const yuna = inputFor(e, 'yuna');
-    const call = yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
+    const call = yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.command.id === 'cindy')!;
     e.submit({ ...call.command, targets: [] });
     expect(e.state().aeonIds).toEqual(['cindy', 'sandy', 'mindy']);
     const turn = inputFor(e, e.state().aeonIds![0]!);
@@ -425,24 +425,25 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(pick).toMatchObject({ kind: 'ability', id: 'sister-order-combine' });
     expect(COMBINE_ID).toBe('sister-order-combine');
     expect(ORDER_IDS).toContain(COMBINE_ID);
-    // The engine's row keeps the RE lane's name (its tests pin the banner's `abilityName`); the HUD's text pass gives the menu and the card the short one and a line that says what it does.
+    // The engine's row keeps the RE lane's name (its tests pin the banner's `abilityName`); a person's menu gets the short one from the presenter's `PayRows.ts` (the live line's own pass, Chapter XXVII's), which this chapter shares.
     const engineRow = turn.commands.find((c) => c.command.kind === 'ability' && c.command.id === COMBINE_ID)!;
     expect(engineRow.label).toBe('Combine for the Delta Attack');
     expect(ORDERS.find((o) => o.id === COMBINE_ID)!.label).toBe(engineRow.label);
-    const menuRow = aeonRowText(turn.commands).find((c) => c.command.kind === 'ability' && c.command.id === COMBINE_ID)!;
-    expect(menuRow).toMatchObject({ label: 'Combine', enabled: true, help: COMBINE_HELP, command: engineRow.command });
+    const menuRow = aeonMenuRows(turn.commands, e.state().flags['yojimbo:gil'] as number | undefined).find((c) => c.command.kind === 'ability' && c.command.id === COMBINE_ID)!;
+    expect(menuRow).toMatchObject({ label: 'Combine', enabled: true, command: engineRow.command });
     e.submit(pick!);
     expect(e.state().log.some((ev) => ev.type === 'action-start' && ev.abilityId === 'delta-attack')).toBe(true);
     expect(e.state().log.some((ev) => ev.type === 'action-start' && ev.abilityName === 'Combine for the Delta Attack')).toBe(true);
   });
 
-  it('sends a Sister’s turn without Combine to Dismiss: nothing else is built', async () => {
+  it('sends a Sister’s turn without Combine to Dismiss: the line uses Combine and none of her other orders (the engine carries all eight out since RE’s follow-up; a player may use them)', async () => {
     const e = await spentSistersEngine(5);
     const yuna = inputFor(e, 'yuna');
-    const call = yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
+    const call = yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.command.id === 'cindy')!;
     e.submit({ ...call.command, targets: [] });
     const turn = inputFor(e, e.state().aeonIds![0]!);
-    expect(turn.commands.some((c) => c.enabled && c.command.kind === 'ability')).toBe(false);
+    expect(turn.commands.some((c) => c.command.kind === 'ability' && c.command.id === COMBINE_ID)).toBe(false); // the bar is spent, so no Combine is offered
+    expect(turn.commands.some((c) => c.enabled && c.command.kind === 'ability')).toBe(true); // the other orders are the player’s to use
     expect(lastSummoning(turn.actorId, turn.commands, e)).toMatchObject({ kind: 'dismiss' });
   });
 
@@ -469,21 +470,20 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(swingOf()?.targets).toEqual(['possessed-mindy']);
   });
 
-  it('shows the card’s top row as Pay on Yojimbo’s turn (the preview cannot price a payment, so the guard leaves it be), and Dismiss on a Sister’s turn with no Combine', async () => {
+  it('shows no card on the menus of Yuna’s own Yojimbo and Sisters (Chapter XXVII’s rule, `advisor-aeons.ts`), while the line still pays Yojimbo and sends a Sister without Combine home', async () => {
     const e = await lastSummoningEngine(['valefor'], 8);
     const yuna = inputFor(e, 'yuna');
     e.submit({ ...yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Yojimbo')!.command, targets: [] });
     const turn = inputFor(e, 'yojimbo');
-    const view = buildAdvisorView(e.state(), { actorId: turn.actorId, commands: aeonRowText(turn.commands) }); // the HUD hands the card the rows after its text pass (`ui/ffx/aeonRowText.ts`)
-    expect(view!.suggestions[0]).toMatchObject({ label: 'Pay', source: 'tactic' });
-    expect(view!.suggestions[0]!.effect).toMatch(/Pay him/);
-    expect(view!.suggestions[0]!.effect).toContain(PAY_HELP);
+    expect(buildAdvisorView(e.state(), { actorId: turn.actorId, commands: turn.commands })).toBeNull(); // a card that says nothing is better than one the simulation cannot price
+    expect(lastSummoning('yojimbo', turn.commands, e)).toMatchObject({ kind: 'ability', id: PAY_ABILITY_ID });
 
     const sisters = await spentSistersEngine(9);
-    const call = inputFor(sisters, 'yuna').commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
+    const call = inputFor(sisters, 'yuna').commands.find((c) => c.enabled && c.command.kind === 'summon' && c.command.id === 'cindy')!;
     sisters.submit({ ...call.command, targets: [] });
     const sturn = inputFor(sisters, sisters.state().aeonIds![0]!);
-    expect(buildAdvisorView(sisters.state(), { actorId: sturn.actorId, commands: sturn.commands })!.suggestions[0]).toMatchObject({ label: 'Dismiss', source: 'tactic' });
+    expect(buildAdvisorView(sisters.state(), { actorId: sturn.actorId, commands: sturn.commands })).toBeNull();
+    expect(lastSummoning(sturn.actorId, sturn.commands, sisters)).toMatchObject({ kind: 'dismiss' });
   });
 
   it('leaves Chapter III’s own link to Chapter III’s line, command for command', async () => {
@@ -493,10 +493,10 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(braskasFinalAeon!('tidus', turn.commands, e)).toEqual(braskasFinalAeon!('tidus', turn.commands, e));
   });
 
-  it('keeps the call order to labels the Summon list can show, the Sisters under their joint name', () => {
-    expect(AEON_CALL_ORDER).toEqual(['Bahamut', 'Anima', 'Magus Sisters', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo']);
+  it('keeps the call order to labels the Summon list can show, the Sisters under Cindy’s row (one row stands for the three)', () => {
+    expect(AEON_CALL_ORDER).toEqual(['Bahamut', 'Anima', 'Cindy', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo']);
     expect(new Set(AEON_CALL_ORDER).size).toBe(8);
-    for (const key of OFFERING_KEYS) expect(AEON_CALL_ORDER.map((l) => l.toLowerCase().replace('magus sisters', 'sisters'))).toContain(key);
+    for (const key of OFFERING_KEYS) expect(AEON_CALL_ORDER.map((l) => l.toLowerCase().replace('cindy', 'sisters'))).toContain(key);
     expect(possessedIdsOf('sisters')).toEqual(SISTER_BODY_IDS);
   });
 });

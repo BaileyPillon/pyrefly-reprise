@@ -11,8 +11,9 @@
  * - **Dismiss**: the ordinary `{ kind: 'dismiss', targets: [] }` (any sister's; Yojimbo's costs 3 compatibility if it is his first action).
  *
  * **Menus**: Yojimbo's is Pay and Dismiss (the two commands the game's requester knows; whether the game's menu holds more is the note's open question 3).
- * A sister's is the orders the game's menu builder offered at the start of her turn, then Dismiss. Only Combine powers has a handler built; the others' rows
- * are listed (the offer is the game's) but disabled with a reason, so a screen does not show a button that does nothing.
+ * A sister's is the orders the game's menu builder offered at the start of her turn, then Dismiss. All eight orders have their handlers built: Combine powers
+ * (`adapt/sisters.ts`) and the other seven (`adapt/sister-orders.ts`, the target search and the sixteen handlers proved on the game's own code); a row whose handler
+ * were missing would be listed but disabled with a reason, so a screen never shows a button that does nothing.
  *
  * Labels are our own words for what the command does, not the game's text; a chapter's screens give the final wording.
  */
@@ -24,7 +25,8 @@ import { SISTER_DISMISS, SisterOrder } from './kernel/sisters.ts';
 import { dismissAeon } from './aeons.ts';
 import { spendOverdrive } from './overdrive.ts';
 import { isPlayerYojimbo, payCommand, yojimboDismiss } from './adapt/yojimbo.ts';
-import { BUILT_ORDERS, combineOrder, isSister } from './adapt/sisters.ts';
+import { BUILT_ORDERS, isSister } from './adapt/sisters.ts';
+import { sisterOrder } from './adapt/sister-orders.ts';
 
 /** The ability id of Yojimbo's Pay. */
 export const PAY_ABILITY_ID = 'yojimbo-pay';
@@ -102,7 +104,7 @@ export function aeonMenuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] |
       enabled: built,
       validTargets: [],
     };
-    if (!built) row.disabledReason = 'Not built: its target search is not decoded';
+    if (!built) row.disabledReason = 'Not built';
     rows.push(row);
   }
   return rows;
@@ -147,9 +149,10 @@ export function executeAeonCommand(ctx: Ctx, actor: FFXCombatant, command: Comma
     if (order === undefined) return null;
     const menu = ctx.rt.sisters!.menu;
     if (menu === null || menu.actorId !== actor.id || !menu.orders.includes(order.command)) return refuse(ctx, `${order.label} was not offered this turn`);
-    if (!BUILT_ORDERS.has(order.command)) return refuse(ctx, `${order.label} is not built yet (its target search is not decoded)`);
+    if (!BUILT_ORDERS.has(order.command)) return refuse(ctx, `${order.label} is not built yet`);
     ctx.emit({ type: 'action-start', actorId: actor.id, command, abilityName: order.label, targets: [] });
-    const result = combineOrder(ctx, actor, (who, cmd) => run(who, cmd));
+    // All eight orders go through the one interpreter (Combine powers, event 18, included: its joint action is run from there).
+    const result = sisterOrder(ctx, actor, order.command, (who, cmd) => run(who, cmd));
     ctx.emit({ type: 'action-end', actorId: actor.id });
     return { rank: result.rank, damageDealt: result.damageDealt };
   }

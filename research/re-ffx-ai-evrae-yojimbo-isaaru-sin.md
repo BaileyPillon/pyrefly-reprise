@@ -754,7 +754,7 @@ functions the anchor map suspected (0x7afe00, 0x7b1b50) are not hook callers.
 * The initial CTB of Evrae, Cid, both Fins, the Core and Isaaru's aeon relative to the party when no start hook exists (the
   ordinary opening applies; not re-read here).
 * Whether the opening start-type roll is overwritten by the formation's write (init order, 1.5), and which of the two start-type
-  writes of the Evrae and Isaaru formations lands last.
+  writes of the Evrae and Isaaru formations lands last. **[Answered 2026-10-15 by re-parity RC8 lane FFX-L, from FFX.exe (read, not run): the roll comes first and the formation's write lands before both readers of the byte, so a chapter formation's 3 or 0 is the start type, which is a normal start either way; `research/re-ffx-battle-entry.md` section 1.]**
 * Whether the opening writes inside the monster inits of Genais and Sin's face survive the engine's opening-CTB pass (6.1, 7.1):
   the party counters get +1 from the start hook either way, +2 if both copies stand.
 * The engine behaviour of a Reflected Evrae's self-Haste, and of a Threatened boss's reaction (the script marks the phase before

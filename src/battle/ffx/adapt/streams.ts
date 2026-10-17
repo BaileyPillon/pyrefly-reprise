@@ -8,6 +8,8 @@
  * | Roll | Stream | Source |
  * |---|---|---|
  * | damage variance, critical roll, Escape, the opening CTB | the roller's own, mode 0: party slot + 20, every aeon and party slot 7: 27, a monster slot + 8 (28 to 35) | `re-ffx-rng-hit.md` 2 |
+ * | the battle's start-type roll: one draw in every battle, spent and discarded (re-parity RC8, FFX only) | 1, `& 0xFF` | `re-ffx-battle-entry.md` 1; `adapt/entry.ts` |
+ * | the placement shuffle of linked monsters: 2n draws for each group of n, before the opening counters (RC8, FFX only) | each member's own mode 0 stream, the monster slot + 8 (28 to 35) | `re-ffx-battle-entry.md` 2; `adapt/entry.ts` |
  * | the hit-or-evade roll | the user's mode 1 (+ 16) | same |
  * | status infliction, extra statuses, shatter, Threaten | the user's mode 2 (+ 32) | same |
  * | steal success and amount | 10; the rare slot 11 (loot and drops are the engine's own model, on `BattleRng.aux`) | `re-ffx-rng-hit.md` 2 |
@@ -16,6 +18,7 @@
  * | the targets of a random-target command, one draw per hit | 5, the same picker | `pp_BtlBuildTargetHits` (0x0078ba70) |
  * | a Reflect bounce | 6, the same picker | same |
  * | a Mix result's auto-target: one ally by the single picker, or one group by the group pick | 4 for the single pick (a draw only with two or more candidates); 5 for the group pick (one draw for any non-empty side), then 5 per hit of a multi-hit result | `FFX-G05` section 5, `pp_BtlAutoTarget` (0x007996d0); `mix.ts` |
+ * | the player's Yojimbo's group commands (Zanmato, Wakizashi on all): the script's `btlSetRandomTarget`, made when the script names the command, before it is queued | 5, ONE draw whenever the legal set (in battle, targetable, alive, distance 1 or less) is not empty, even with one group populated (`value % populated groups`); none when it is empty. The mask is every legal member of the chosen group, and the executor adds no draw of its own: the hit then takes one status draw (the user's mode 2 stream, 59 for an aeon) per target | `research/re-ffx-zanmato-and-orders.md` section 2, `FFX-G08` section 2; `adapt/yojimbo.ts`, `kernel/legal-set.ts#groupPick` |
  * | an Overdrive result's hit removal (Slice and Dice's Fail, Lulu's Fury with fewer casts), one draw per hit taken away | 16, `value % (targets holding the most hits)` | `FFX-G01` section 8 (0x007afe00) |
  * | Chapter VIII's scene and camera draws, the Fins' caption | 2, counted (`ai/airship-scenes.ts`) | the formation scripts |
  * | Wakka's Attack Reels result | 19, **named but not drawn yet**: the engine takes the player's reel input from `BattleRng.aux` | `re-ffx-rng-hit.md` 2 (the anchor map), `re-ffx-ai-evrae-yojimbo-isaaru-sin.md` (0x007b1b50 is the reel builder) |
@@ -32,6 +35,8 @@ import { slotOf } from './slots.ts';
 
 /** The streams that do not depend on a character (`research/re-ffx-rng-hit.md` section 2, and the lane notes named there). */
 export const FfxStream = {
+  /** The battle's start-type roll (VA 0x0078d090): one draw, `value & 0xFF`, in every battle; the engine spends it and discards the answer (RC8 lane FFX-L). */
+  StartType: 1,
   /** A script's `GetRandomValue()`: `value & 0xFFFF`. */
   Script: 2,
   /** A script's `findMatchingChr` pick, and the target of a forced (Berserk, Confuse) single-target action: `value % count`. */

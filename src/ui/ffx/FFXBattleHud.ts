@@ -43,8 +43,6 @@ import { publishOdHang } from './odHang.ts';
 import { FfxTargetPlate } from './targetPlateFfx.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
-import { YojimboPay } from './YojimboPay.ts';
-import { aeonRowText } from './aeonRowText.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
@@ -177,7 +175,6 @@ export class FFXBattleHud implements HudPort {
   private readonly damageNumbers = new DamageNumbers();
   private readonly triggerPrompt = new TriggerPrompt();
   private readonly airship = new AirshipOrders(); // Evrae (FFX) only; inert without the range flag
-  private readonly yojimboPay = new YojimboPay(); // the player's Yojimbo's amount panel (the hidden Last Summoning, FFX only); inert without his Pay row
   private readonly zanmato = new ZanmatoGauge(); // Yojimbo (FFX, Chapter IX) only; hidden without his gauge
   /**
    * The optional strategy guide (`src/ui/common/StrategyGuide.ts`), a left rail
@@ -345,7 +342,7 @@ export class FFXBattleHud implements HudPort {
     this.infoEl.className = 'ig-cutin__info ffx-cmd-info';
     this.infoEl.hidden = true;
     this.infoEl.innerHTML = `<div class="ig-cutin__info-desc" data-role="text"></div>`;
-    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl, this.commandMenu.pagerEl, this.airship.el, this.yojimboPay.el, this.commandMenu.defendEl);
+    cmdArea.append(this.commandMenu.stackEl, this.commandMenu.breadcrumbEl, this.commandMenu.pagerEl, this.airship.el, this.commandMenu.defendEl);
 
     this.stage.append(
       this.bannerEl,
@@ -464,7 +461,6 @@ export class FFXBattleHud implements HudPort {
     // HUD that lit it (`CommandMenu.close`).
     this.commandMenu.close();
     this.airship.dispose();
-    this.yojimboPay.dispose();
     this.zanmato.dispose();
     this.clearTransientOverlays();
     this.el.remove();
@@ -482,7 +478,6 @@ export class FFXBattleHud implements HudPort {
       // quiet dim, the lit party rows) would be painted under it.
       this.commandMenu.close();
       this.airship.abandon();
-      this.yojimboPay.abandon();
       this.clearTransientOverlays();
       // The enemy plate goes with them (before this round one Sensor in Chapter 1
       // left the card up for the rest of the fight, `critic/rounds/round-02.md`).
@@ -558,11 +553,9 @@ export class FFXBattleHud implements HudPort {
 
   async chooseCommand(
     actorId: CombatantId,
-    engineCommands: AvailableCommand[],
+    commands: AvailableCommand[],
     previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot,
   ): Promise<Command> {
-    // The player's Yojimbo's and the Magus Sisters' rows in the menu's own words (short order labels, a help line for Pay and Combine); every other menu comes back as the same array (`./aeonRowText.ts`).
-    const commands = aeonRowText(engineCommands);
     const combatants = this.lastState?.combatants ?? {};
     const wrapped = (cmd: AvailableCommand | null): TurnPreview[] | AtbSnapshot => {
       const result = previewRank(cmd);
@@ -591,8 +584,7 @@ export class FFXBattleHud implements HudPort {
     if (this.lastState) this.advisor.showDecision(actorId, commands, this.lastState);
     try {
       // Evrae only: the orders fold into one row (`AirshipOrders`); elsewhere `commands` as is.
-      // The player's Yojimbo only: choosing his Pay asks how much first (`YojimboPay`); a pass-through for every other menu.
-      return await this.yojimboPay.choose(commands, this.lastState, (payMenu) => this.airship.choose(payMenu, this.lastState, (menuCommands) => this.commandMenu.open({
+      return await this.airship.choose(commands, this.lastState, (menuCommands) => this.commandMenu.open({
         actorId,
         commands: menuCommands,
         previewRank: wrapped,
@@ -611,7 +603,7 @@ export class FFXBattleHud implements HudPort {
         letterTagOf: (id) => this.letterTagOf(id),
         // fb-0929: a Zombie ally says so, and what a restorative will do to it (`zombieTargetNote.ts`).
         targetNoteOf: (id, cmd) => zombieTargetNote(this.lastState, actorId, id, cmd) ?? this.targetNoteOf(id, cmd),
-      })));
+      }));
     } finally {
       this.advisor.clearDecision();
       this.advisorDecisionSeq++;
@@ -632,7 +624,6 @@ export class FFXBattleHud implements HudPort {
         // its help line must not sit over the action.
         this.commandMenu.suspend();
         this.airship.abandon();
-        this.yojimboPay.abandon();
         return;
       case 'turn-start':
         // The turn passing is the actor change: whatever the last actor left

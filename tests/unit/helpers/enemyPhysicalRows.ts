@@ -122,4 +122,15 @@ export const PHYSICAL_BY_CHAPTER: Record<string, string[]> = {
   ],
   // Chapter XVIII (FFX, listed 2026-09-29): Overdrive Sin has no physical row (the pull, Gravija, Gaze, the Graviton).
   'sin-face': [],
+  // Chapter XXVII (FFX, listed 2026-10-15): Mirror Aeons. The pair's physical rows (Passado, Sandy's Attack and Razzia), then Dark Yojimbo's four strikes and his dog's bite; the Dark rows read `damageType` / `formula`.
+  'mirror-aeons': [
+    'dark-mindy:dark-passado',
+    'dark-sandy:dark-sandy-attack',
+    'dark-sandy:dark-razzia',
+    'dark-yojimbo:dark-zanmato',
+    'dark-yojimbo:dark-kozuka',
+    'dark-yojimbo:dark-wakizashi',
+    'dark-yojimbo:dark-wakizashi-all',
+    'dark-daigoro:dark-daigoro-bite',
+  ],
 };

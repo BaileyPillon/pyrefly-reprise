@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CHAPTER_IDS, CHAPTERS } from '../../src/data/encounters.ts';
 import { CHAPTER_META, GAME_LABELS, getChapterMeta, type ChapterMeta } from '../../src/data/chapter-meta.ts';
+import { romanNumeral } from '../../src/ui/common/roman.ts';
 
 // `../..` from `tests/unit/` is the repo root.
 const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
@@ -51,7 +52,7 @@ describe('CHAPTER_META', () => {
     expect(chapter).toBeDefined();
     if (!chapter) return;
     expect(meta.gameLabel).toBe(GAME_LABELS[chapter.game]);
-    expect(meta.numeral).toBe(NUMERALS[chapter.number - 1]);
+    expect(meta.numeral).toBe(chapter.number <= NUMERALS.length ? NUMERALS[chapter.number - 1] : romanNumeral(chapter.number)); // Mirror Aeons is number 27 (XXVII)
   });
 
   it.each(CHAPTER_META)('$id: quote is original and under 18 words', (meta) => {
