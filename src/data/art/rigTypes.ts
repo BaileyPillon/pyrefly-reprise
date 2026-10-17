@@ -206,6 +206,8 @@ export interface RigGate {
   keys?: string[];
   /** Each key's posed silhouette, for the HUD's brackets and the strike's reach (`engine/rig/RigSilhouette.ts`). */
   silhouettes?: Record<string, RigSilhouette>;
+  /** The size of every part's PNG and rim mask as the files are, `[w, h]` (a part's PNG is not always its box: a ribbon-mapped spear shaft is a thin strip). The engine budgets texture memory from it. */
+  textures?: Record<string, { map: [number, number]; rim: [number, number] | null }>;
   rules?: string;
   seal?: string;
 }

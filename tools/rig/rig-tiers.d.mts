@@ -7,7 +7,16 @@ export interface RawImage {
   height: number;
   channels: number;
 }
+export type Size = [number, number];
+export interface PartTextureSizes {
+  map: Size;
+  rim: Size | null;
+}
 export function rigImageNames(raw: Record<string, any>): string[];
+export function pngSize(file: string): { width: number; height: number } | null;
+export function rimNeedsHalving(rim: { width: number; height: number }, map: { width: number; height: number }): boolean;
+export function twinSizes(map: Size, rim: Size | null): { map: Size; rim: Size | null; map1x: Size; rim1x: Size | null };
+export function textureSizes(raw: Record<string, any>, dir: string): Record<string, PartTextureSizes>;
 export function halve(img: RawImage): RawImage;
 export function readImage(file: string): Promise<RawImage>;
 export function encodeImage(img: RawImage): Promise<Buffer>;

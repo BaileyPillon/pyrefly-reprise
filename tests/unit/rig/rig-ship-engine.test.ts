@@ -16,7 +16,7 @@ vi.mock('../../../src/engine/ProceduralArt.ts', () => {
 
 const { buildFigure } = await import('../../../src/engine/rig/RigStage.ts');
 const { chooseRig, clearRigCache, rigReport, uncoveredPoses } = await import('../../../src/engine/rig/RigLoad.ts');
-const { rigLedger, rigTextureMB, planRigTextures, rigFileUrl, wantsMaster, RIG_SHARE } = await import('../../../src/engine/rig/RigTier.ts');
+const { rigLedger, rigTextureMB, planRigTextures, rigFileUrl, wantsMaster, RIG_SHARE, tierPartsOf, twinSizes, rimNeedsHalving } = await import('../../../src/engine/rig/RigTier.ts');
 const { readSilhouettes, blendShape, profileOfShape } = await import('../../../src/engine/rig/RigSilhouette.ts');
 const { readRig } = await import('../../../src/engine/rig/RigData.ts');
 const { profileOfActor } = await import('../../../src/engine/motion/Silhouette.ts');
@@ -139,7 +139,7 @@ describe('the textures: the tier the device would draw the idle painting at, the
     expect(info.textureMB).toBeGreaterThan(0);
     const r = readRig(shipped());
     if (!r.ok) throw new Error(r.reason);
-    const parts = r.data.parts.map((p) => ({ box: p.box, rim: p.rimMode === 'mask' && p.rim !== null }));
+    const parts = tierPartsOf(r.data);
     expect(rigTextureMB(parts, { map: 1, rim: 1 }) * 3.9).toBeLessThan(rigTextureMB(parts, { map: 2, rim: 2 }));
   });
   it('a rig with no 1x tier in the manifest has only the full-size files, whatever the device', async () => {
@@ -160,7 +160,7 @@ describe('the textures: the tier the device would draw the idle painting at, the
     serve(shipped());
     const r = readRig(shipped());
     if (!r.ok) throw new Error(r.reason);
-    const parts = r.data.parts.map((p) => ({ box: p.box, rim: p.rimMode === 'mask' && p.rim !== null }));
+    const parts = tierPartsOf(r.data);
     const big = rigTextureMB(parts, { map: 2, rim: 1 });
     const small = rigTextureMB(parts, { map: 1, rim: 1 });
     expect(big).toBeGreaterThan(small * 1.5);
@@ -183,7 +183,7 @@ describe('the textures: the tier the device would draw the idle painting at, the
     expect(rigLedger.usedMB).toBe(0);
   });
   it('the planner: want 2 with a tier takes 2x maps and 1x rims, want 1 the 1x twins, no tier the full size, and refuses with the numbers when nothing fits', () => {
-    const parts = [{ box: [0, 0, 1000, 2000] as const, rim: true }];
+    const parts = [{ map: [1000, 2000] as const, rim: [500, 1000] as const }];
     expect(planRigTextures({ parts, tiers: [1, 2], want: 2, budgetMB: 1000, usedMB: 0 })).toMatchObject({ ok: true, textures: { map: 2, rim: 1 } });
     expect(planRigTextures({ parts, tiers: [1, 2], want: 3, budgetMB: 1000, usedMB: 0 })).toMatchObject({ ok: true, textures: { map: 2, rim: 1 } });
     expect(planRigTextures({ parts, tiers: [1, 2], want: 1, budgetMB: 1000, usedMB: 0 })).toMatchObject({ ok: true, textures: { map: 1, rim: 1 } });
@@ -247,10 +247,10 @@ describe('a figure on its 1x maps raises them to the 2x when the camera magnifie
   });
 });
 
-function readRigParts(): Array<{ box: [number, number, number, number]; rim: boolean }> {
+function readRigParts(): ReturnType<typeof tierPartsOf> {
   const r = readRig(shipped());
   if (!r.ok) throw new Error(r.reason);
-  return r.data.parts.map((p) => ({ box: p.box, rim: p.rimMode === 'mask' && p.rim !== null }));
+  return tierPartsOf(r.data);
 }
 
 describe('the silhouette per key: the brackets and the strike follow the pose shown', () => {
@@ -338,6 +338,43 @@ describe('the silhouette per key: the brackets and the strike follow the pose sh
     a.setPose('hurt', { immediate: true });
     a.update(1 / 60);
     expect(width(a.contentQuad())).toBeGreaterThan(0);
+  });
+});
+
+describe('the sizes the memory is budgeted from, and the tier rule the tool and the engine share', () => {
+  it('the engine\'s rule for the twins is the tool\'s, on a table of sizes (a rim written at the map\'s size is halved, one already at half or less is copied, an odd edge rounds up)', async () => {
+    const tool = await import('../../../tools/rig/rig-tiers.mjs');
+    const table: Array<[[number, number], [number, number] | null]> = [[[907, 737], [907, 737]], [[907, 737], [453, 368]], [[907, 737], [454, 369]], [[907, 737], [455, 370]], [[307, 201], [154, 101]], [[307, 201], [307, 201]], [[2220, 64], [1110, 32]], [[2220, 64], null], [[1, 1], [1, 1]], [[8, 8], [3, 3]]];
+    for (const [map, rim] of table) {
+      const a = tool.twinSizes(map, rim);
+      const b = twinSizes({ map, rim });
+      expect([b.map, b.rim], JSON.stringify([map, rim])).toEqual([a.map1x, a.rim1x]);
+      if (rim) expect(rimNeedsHalving(rim, map)).toBe(tool.rimNeedsHalving({ width: rim[0], height: rim[1] }, { width: map[0], height: map[1] }));
+    }
+  });
+  it('budgets from the sizes the gate stamped, not from the box: a ribbon part\'s PNG is a thin strip, and a rim mask may be half its map\'s size', () => {
+    const f = shipped();
+    f.gate!.textures = { body: { map: [120, 250], rim: [60, 125] }, tail: { map: [200, 20], rim: [100, 10] } };
+    const r = readRig(f);
+    if (!r.ok) throw new Error(r.reason);
+    const parts = tierPartsOf(r.data);
+    const names = r.data.parts.map((p) => p.name);
+    expect(parts[names.indexOf('body')]).toEqual({ map: [120, 250], rim: [60, 125] });
+    expect(parts[names.indexOf('tail')]).toEqual({ map: [200, 20], rim: [100, 10] }); // not its 80 x 150 box
+    expect(parts[names.indexOf('legN')]).toEqual({ map: [40, 330], rim: [40, 330] }); // no stamp for it: the box, for both files
+    expect(parts[names.indexOf('arm')]!.rim).toBeNull(); // rimEverywhere: no mask texture
+    // an unusable stamp is not believed: a zero, a string and a missing size fall back to the box
+    f.gate!.textures = { body: { map: [0, 250] as never, rim: null }, tail: { map: 'x' as never, rim: null } };
+    const bad = readRig(f);
+    if (!bad.ok) throw new Error(bad.reason);
+    expect(tierPartsOf(bad.data)[names.indexOf('body')]).toEqual({ map: [120, 250], rim: [120, 250] });
+  });
+  it('a rim already at half its map\'s size costs the same at both scales; one written at the map\'s size costs a quarter at 1x', () => {
+    const half = [{ map: [1000, 2000] as const, rim: [500, 1000] as const }];
+    const full = [{ map: [1000, 2000] as const, rim: [1000, 2000] as const }];
+    const rimOnly = (parts: ReadonlyArray<{ map: readonly [number, number]; rim: readonly [number, number] }>, rim: 1 | 2): number => rigTextureMB(parts, { map: 1, rim }) - rigTextureMB([{ map: parts[0]!.map, rim: null }], { map: 1, rim: 1 });
+    expect(rimOnly(half, 1)).toBeCloseTo(rimOnly(half, 2), 9);
+    expect(rimOnly(full, 1) * 4).toBeCloseTo(rimOnly(full, 2), 0);
   });
 });
 

@@ -38,6 +38,7 @@ import { keyPose, restPose, solve, through } from './rig-pose.mjs';
 import { loadTextures } from './rig-raster.mjs';
 import { approvedTarget, drawKey, keyMask, readApproved, readKey, readsBody, rigContext } from './rig-read.mjs';
 import { silhouetteOf } from './rig-silhouette.mjs';
+import { textureSizes } from './rig-tiers.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -214,7 +215,7 @@ const stable = (v) => (Array.isArray(v) ? `[${v.map(stable).join(',')}]` : v && 
  * checked by `verifyStamp({full})`. It catches a hand edit of the record (a typed-in `coverage`, an exempt pose added to excuse a missing key) the way the digest catches an edit of the rig;
  * like the digest it is a tamper-evident seal, not a signature, and the full gate (`rig-gate` without `--verify`, which renders) is what a forged stamp meets.
  */
-export const sealOf = (g) => createHash('sha256').update(stable({ digest: g.digest, keys: g.keys, coverage: g.coverage, uncovered: g.uncovered ?? [], exempt: g.exempt, silhouettes: g.silhouettes })).digest('hex').slice(0, 32);
+export const sealOf = (g) => createHash('sha256').update(stable({ digest: g.digest, keys: g.keys, coverage: g.coverage, uncovered: g.uncovered ?? [], exempt: g.exempt, silhouettes: g.silhouettes, textures: g.textures ?? null })).digest('hex').slice(0, 32);
 
 /**
  * Write the gate's verdict into rig.json: `gate: { status: 'ok' | 'refused', at, by: 'tools/rig-gate.mjs', digest, why?, rules, keys }` (`RigGate` of
@@ -233,7 +234,7 @@ export function stampRig(dir, result, { at = new Date().toISOString().slice(0, 1
     rules: GATE_RULES, digest, keys: result.keys.filter((k) => k.ok).map((k) => k.pose),
     // the ship record: coverage (`full`: every painted pose the battle draws has a key; the deploy and the runtime accept nothing else), the painted poses the rig is not held to, and each key's silhouette
     coverage: (result.uncovered ?? []).length ? 'partial' : 'full', ...((result.uncovered ?? []).length ? { uncovered: result.uncovered } : {}),
-    exempt: result.exempt ?? [], silhouettes: result.silhouettes ?? {},
+    exempt: result.exempt ?? [], silhouettes: result.silhouettes ?? {}, textures: textureSizes(raw, dir), // the size of each file as it is (a ribbon part's PNG is not its box): the engine budgets texture memory from it
   };
   raw.gate.seal = sealOf(raw.gate);
   writeFileSync(file, JSON.stringify(raw));
@@ -256,6 +257,8 @@ export function verifyStamp(rig, { full = false } = {}) {
     if (g.coverage !== 'full') return { ok: false, code: 'gate-partial', message: g.coverage === 'partial' ? `the stamp says coverage partial: no key for ${(g.uncovered ?? []).join(', ') || 'some painted poses'}; a figure turns its rig on only with a key for every pose it is painted in` : 'the stamp does not say coverage full (it is from before the rule): run node tools/rig-gate.mjs again', ...read };
     if (!Array.isArray(g.exempt)) return { ok: false, code: 'gate-exempt', message: 'the stamp does not list the exempt poses: run node tools/rig-gate.mjs again', ...read };
     if (g.seal !== sealOf(g)) return { ok: false, code: 'gate-seal', message: 'the ship record of the stamp (coverage, exempt poses, silhouettes) was edited after the gate wrote it: run node tools/rig-gate.mjs again', ...read };
+    const unsized = (read.raw.parts ?? []).filter((p) => !Array.isArray(g.textures?.[p.name]?.map)).map((p) => p.name);
+    if (unsized.length) return { ok: false, code: 'gate-textures', message: `the stamp has no texture size for ${unsized.join(', ')}: run node tools/rig-gate.mjs again`, ...read };
     const bare = (g.keys ?? []).filter((p) => !g.silhouettes?.[p]);
     if (bare.length) return { ok: false, code: 'gate-silhouettes', message: `the stamp has no silhouette for ${bare.join(', ')}: run node tools/rig-gate.mjs again`, ...read };
   }

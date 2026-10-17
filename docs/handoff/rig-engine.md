@@ -87,7 +87,7 @@ Real attack through the presenter (real keys, Chapter "Biran and Yenke"): the ke
   what is drawn and why not. `RIG_ART_ALIAS="kimahri=kimahri-proto"` serves a fixture folder as a subject's.
 - **Kimahri's real rig** needs: `keys` for `ready`, `attack`, `hurt`, `ko` (else the KO is the lie-down fallback), `victory`; his `motion` (the converter's block is the prototype's); `layers` on the thrust (spear over
   the head). Keys are static poses; the prototype's 4-second run-in is code (choreography), not data, and is not in this lane.
-- **Known and not done in this lane**
+- **Known and not done in this lane** (items 1, 3 and 4 are done by the SHIP lane: [rig-ship.md](rig-ship.md))
   1. **Release builds.** A release takes rigs from a release art mirror (`public/art/rigs/<subject>/` in the mirror, so `tools/gen/manifest.mjs` lists them). Not wired: `tools/art-derive*.mjs`, the art identity and
      load audits and the deploy's file list do not know `rigs/` yet; decide whether rig PNGs ship as WebP (`shippedArtUrl` maps only listed masters, so they ship as PNG today).
   2. **The visible settings row.** The EYE CANDY page keeps its switches in the save schema (the save-data class, ten pinned tests, hard rule 9: Bailey sees a new row). v1 reads `?rig=` and a hidden `fxRig`

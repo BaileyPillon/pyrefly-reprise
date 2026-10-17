@@ -65,6 +65,11 @@ beforeAll(async () => {
   const ramp = Buffer.alloc(50 * 66);
   for (let i = 0; i < ramp.length; i++) ramp[i] = (i * 7) % 256;
   await sharp(ramp, { raw: { width: 50, height: 66, channels: 1 } }).png().toFile(join(w.rig, 'head.rim.png')); // an 8-bit grey mask with a shape
+  const legs = raw.parts.find((p) => p.name === 'legs')!;
+  legs.rim = 'legs.rim.png';
+  const lramp = Buffer.alloc(30 * 60);
+  for (let i = 0; i < lramp.length; i++) lramp[i] = (i * 11) % 256;
+  await sharp(lramp, { raw: { width: 30, height: 60, channels: 1 } }).png().toFile(join(w.rig, 'legs.rim.png')); // already HALF its map's size (60 x 120), as Kimahri's are: its 1x twin is the same file
   writeFileSync(rigJson, JSON.stringify(raw));
   stampRig(w.rig, await gateRig({ rig: w.rig, inputs: w.inputs, blends: false }));
   await writeTiers(w.rig);
@@ -87,7 +92,10 @@ describe('the rig\'s files are art masters', () => {
     expect(rels).toContain(`art/rigs/${SUBJECT}/head.rim.png`);
     expect(rels).toContain(`art/rigs/${SUBJECT}/1x/head.png`);
     expect(rels).toContain(`art/rigs/${SUBJECT}/1x/head.rim.png`);
-    expect(rels.length).toBe(2 * (6 + 2)); // six parts (the cap over the elbow included) and two rim masks, each at both tiers
+    expect(rels.length).toBe(2 * (6 + 3)); // six parts (the cap over the elbow included) and three rim masks, each at both tiers
+    // a rim already at half its map's size has the same bytes as its twin; one written at the map's size is halved
+    expect(readFileSync(join(pub, 'art', 'rigs', SUBJECT, '1x', 'legs.rim.png'))).toEqual(readFileSync(join(pub, 'art', 'rigs', SUBJECT, 'legs.rim.png')));
+    expect(readFileSync(join(pub, 'art', 'rigs', SUBJECT, '1x', 'head.rim.png')).equals(readFileSync(join(pub, 'art', 'rigs', SUBJECT, 'head.rim.png')))).toBe(false);
   });
   it('plans them under the default scope: an opaque one as a lossless WebP, one with partly transparent texels as a recompressed PNG, nothing larger than its master', () => {
     const by = new Map(plan.entries.map((e) => [e.rel, e]));
@@ -122,7 +130,7 @@ describe('the gates over the build', () => {
     const p = planLoads({ distDir: dist, publicDir: pub });
     expect(p.problems).toEqual([]);
     const rig = p.art.filter((a) => a.master?.startsWith('art/rigs/'));
-    expect(rig).toHaveLength(16);
+    expect(rig).toHaveLength(18);
     for (const a of rig) {
       expect(existsSync(join(dist, a.rel)), a.rel).toBe(true);
       expect(a.width ?? 0, a.master ?? '').toBeGreaterThan(0);
@@ -133,7 +141,7 @@ describe('the gates over the build', () => {
   it('the artifact manifest hashes and decode-checks them; a flat rim mask is a mask, a flat part is a blank picture', async () => {
     const m = await buildArtifactManifest(dist);
     expect(m.problems).toEqual([]);
-    expect(Object.keys(m.files).filter((f) => f.startsWith(`art/rigs/${SUBJECT}/`))).toHaveLength(17); // sixteen images and rig.json
+    expect(Object.keys(m.files).filter((f) => f.startsWith(`art/rigs/${SUBJECT}/`))).toHaveLength(19); // eighteen images and rig.json
     // the flat white elbow mask shipped (as a WebP or a PNG) and passed
     expect(Object.keys(m.files).some((f) => /elbow\.rim\.(png|webp)$/.test(f))).toBe(true);
     // a blank PART is still refused
@@ -156,7 +164,7 @@ describe('the deploy\'s rig gate over the build, and the engine against it', () 
     expect(manifest.rigTiers).toEqual({ [SUBJECT]: [1, 2] });
     const out = enforceBuiltRigs({ dist: copy, publicDir: pub, verified, log: () => {}, fail: (m: string) => { throw new Error(m); } });
     expect(out.rigs).toEqual([SUBJECT]);
-    expect(out.files).toBe(17);
+    expect(out.files).toBe(19);
   });
   it('the file the engine asks for is the file the build holds: for every part, rim and tier, rigFileUrl (with the build\'s derived list) names a file of the build', async () => {
     const { rigFileUrl } = await import('../../../src/engine/rig/RigTier.ts');
@@ -178,7 +186,7 @@ describe('the deploy\'s rig gate over the build, and the engine against it', () 
           }
         }
       }
-      expect(checked).toBe(14); // six parts at both tiers, two rim masks at 1x
+      expect(checked).toBe(15); // six parts at both tiers, three rim masks at 1x
       expect(webp).toBeGreaterThan(0);
       for (const e of plan.entries.filter((x) => x.rel.startsWith('art/rigs/'))) expect(files.has(e.kind === 'webp' ? webpName(e.rel) : e.rel), e.rel).toBe(true);
     } finally {

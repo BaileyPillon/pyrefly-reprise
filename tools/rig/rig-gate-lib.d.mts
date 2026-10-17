@@ -74,7 +74,9 @@ export interface RigGateStamp {
   uncovered?: string[];
   exempt: string[];
   silhouettes: Record<string, RigSilhouette>;
-  /** A fingerprint of the digest and the ship record (`sealOf`): a hand edit of `coverage`, `exempt` or `silhouettes` breaks it. */
+  /** The size of every part's PNG and rim mask as the files are (`tools/rig/rig-tiers.mjs#textureSizes`): what the engine budgets texture memory from. */
+  textures: Record<string, { map: [number, number]; rim: [number, number] | null }>;
+  /** A fingerprint of the digest and the ship record (`sealOf`): a hand edit of `coverage`, `exempt`, `silhouettes` or `textures` breaks it. */
   seal: string;
 }
 export function sealOf(g: Record<string, any>): string;

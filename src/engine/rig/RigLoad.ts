@@ -27,7 +27,7 @@ import { artBudget } from '../ArtDevice.ts';
 import { costumeMatches, gateProblem, readRig, type RigData } from './RigData.ts';
 import type { RigActor, RigAsset } from './RigActor.ts';
 import { validateFeet } from './RigValidate.ts';
-import { planRigTextures, rigLedger } from './RigTier.ts';
+import { planRigTextures, rigLedger, tierPartsOf } from './RigTier.ts';
 
 export interface RigChoice {
   subject: string;
@@ -154,7 +154,7 @@ export async function chooseRig(subject: string, idleUrl: string | undefined, sw
   }
   const tiers = 'tiers' in ctx ? ctx.tiers : manifestTiers(subject);
   const plan = planRigTextures({
-    parts: data.parts.map((p) => ({ box: p.box, rim: p.rimMode === 'mask' && p.rim !== null })),
+    parts: tierPartsOf(data),
     tiers,
     want: ctx.want ?? baseScaleFor(idleUrl),
     budgetMB: ctx.budgetMB ?? artBudget().textureMB,

@@ -29,7 +29,7 @@ import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
-import { RIG_SHARE, rigLedger, rigTextureMB, wantsMaster, type RigTextures } from './RigTier.ts';
+import { RIG_SHARE, rigLedger, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
 import { Vector3, type Texture } from 'three';
 import type { PaintedTexture } from '../PaintedArt.ts';
 
@@ -116,11 +116,7 @@ export class RigActor extends PaintedActor {
     this.textures = asset.textures ?? { map: 2, rim: 2 };
     this.tiers = asset.tiers;
     this.releaseTextures = asset.release ?? null;
-    this.textureMB = rigTextureMB(this.tierParts(), this.textures);
-  }
-
-  private tierParts(): Array<{ box: [number, number, number, number]; rim: boolean }> {
-    return this.data.parts.map((p) => ({ box: p.box, rim: p.rimMode === 'mask' && p.rim !== null }));
+    this.textureMB = rigTextureMB(tierPartsOf(this.data), this.textures);
   }
 
   /**
@@ -297,7 +293,7 @@ export class RigActor extends PaintedActor {
     this.raising = true;
     try {
       const next: RigTextures = { map: 2, rim: this.textures.rim };
-      const mb = rigTextureMB(this.tierParts(), next);
+      const mb = rigTextureMB(tierPartsOf(this.data), next);
       if (rigLedger.usedMB - this.textureMB + mb > artBudget().textureMB * RIG_SHARE) {
         this.raiseBlocked = true;
         return;

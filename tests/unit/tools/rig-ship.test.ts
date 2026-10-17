@@ -180,6 +180,20 @@ describe('verifyShippableRig: the cheap check `rig-gate --verify` and the deploy
   });
 });
 
+describe('the stamp records the size of every texture, and verify checks it against the files', () => {
+  it('stamps map and rim sizes as the files are, sealed', async () => {
+    const raw = JSON.parse(readFileSync(join(base.rig, 'rig.json'), 'utf8')) as RigJson;
+    expect(Object.keys(raw.gate.textures).sort()).toEqual(raw.parts.map((p: RigJson) => p.name).sort());
+    for (const p of raw.parts) expect(raw.gate.textures[p.name]).toEqual({ map: [p.box[2], p.box[3]], rim: null }); // the puppet\'s PNG is its box, and it has no rim masks
+  });
+  it('refuses a stamp without them (from before the rule), and one whose sizes are not the files\'', async () => {
+    const none = await ship((x) => editRig(x.rig, (rig) => { delete rig.gate.textures; rig.gate.seal = sealOf(rig.gate); }));
+    expect(verifyStamp(none.rig, { full: true })).toMatchObject({ ok: false, code: 'gate-textures' });
+    const wrong = await ship((x) => editRig(x.rig, (rig) => { rig.gate.textures.head.map = [51, 66]; rig.gate.seal = sealOf(rig.gate); }));
+    expect(await problems(wrong)).toEqual(['textures']);
+  });
+});
+
 describe('the 1x tier is the half of the file, by a rule that is the same on every machine', () => {
   it('halves with premultiplied alpha, keeps the colour bled under alpha 0, and takes an odd edge as it is', () => {
     // 3 x 1 RGBA: an opaque red, a half-transparent blue, a transparent texel that still carries green

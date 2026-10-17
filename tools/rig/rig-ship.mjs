@@ -23,7 +23,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { costumeParts } from './rig-format.mjs';
 import { costumeSha, verifyStamp } from './rig-gate-lib.mjs';
-import { TIER_DIR, rigImageNames, verifyTiers } from './rig-tiers.mjs';
+import { TIER_DIR, rigImageNames, textureSizes, verifyTiers } from './rig-tiers.mjs';
 
 /** A painting's bare name: the manifest's rule for a chosen pose (`tools/gen/manifest.mjs` CHOSEN). */
 const BARE_PNG = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.png$/;
@@ -84,6 +84,12 @@ export async function verifyShippableRig({ dir, artDir, subject, allowPartial = 
   const keys = new Set(info.keys);
   const unkeyed = paintedPosesOf(artDir, raw.name).filter((p) => !keys.has(p) && !exempt.has(p));
   if (unkeyed.length) bad('coverage', `the release art folder paints ${raw.name} in ${unkeyed.join(', ')}, which have no key and were not exempt when the gate ran: a figure turns its rig on only with a key for every pose it is painted in (run node tools/rig-gate.mjs again, and add the keys)`);
+  // the sizes the stamp says the files have are the sizes they have (the engine budgets memory from them)
+  if (g.textures) {
+    const now = textureSizes(raw, dir);
+    const off = Object.keys(now).filter((n) => JSON.stringify(now[n]) !== JSON.stringify(g.textures[n]));
+    if (off.length) bad('textures', `the stamp's texture sizes are not the files' for ${off.join(', ')}: a texture changed after the gate ran (run node tools/rig-gate.mjs again)`);
+  }
   // the 1x twins
   if (tiers) {
     const t = await verifyTiers(dir);

@@ -4,7 +4,8 @@
  * A rig is cut from the 2x master of its costume painting, so a part's PNG is the master's pixels. Six figures of that kind are a quarter of a gigabyte of GPU memory with their mips and
  * rim masks, and a phone budgets 220 MB for all its figures (`ArtBudget.ts`). Beside every part PNG and rim mask the pipeline writes the picture at half the width and height
  * (`<subject>/1x/<same name>`, `tools/rig/rig-tiers.mjs`; the art manifest lists a rig that has them in `rigTiers`). The mesh, the uvs and the rim's width need nothing else (they are 0..1 of
- * the image and painting px), so a figure just binds the other file.
+ * the image and painting px), so a figure just binds the other file. **Memory is budgeted from the files' own sizes**, which the gate stamps (`gate.textures`): a part's PNG is not always its box
+ * (a ribbon-mapped spear shaft is a thin strip), and a rim mask is not always its map's size (Kimahri's are half of it; a mask already at half its map's size or less has a byte-identical twin).
  *
  * **Which tier** is the paintings' own rule, not a second one: a figure loads at the scale the device would draw its idle painting at (`ArtTier.baseScaleFor`: 1x under a 1440p buffer,
  * the 2x master from 1440p up, 1x on a slow link, the device's ceiling, a pinned `?artscale=`), and the on-screen magnification can raise it later, as the art governor raises a painting
@@ -16,6 +17,7 @@
  */
 import { textureMB } from '../ArtBudget.ts';
 import { shippedArtUrl } from '../ArtShipped.ts';
+import type { RigData } from './RigData.ts';
 
 export type RigScale = 1 | 2;
 
@@ -31,21 +33,45 @@ export const RIG_TIER_FOLDER = '1x';
 /** The share of a class's figure-texture budget the rigs may hold at once. */
 export const RIG_SHARE = 0.5;
 
-/** What `planRigTextures` needs of a part. */
+/** What `planRigTextures` needs of a part: the size of its PNG and of its rim mask, as the files are (`[w, h]`; the rim null when the part has no mask texture). */
 export interface TierPart {
-  /** `[x, y, w, h]` in the master's px: the size of the part's PNG (and of its rim mask). */
-  box: readonly [number, number, number, number];
-  /** True when the part has a rim mask texture (`rimMode === 'mask'`). */
-  rim: boolean;
+  map: readonly [number, number];
+  rim: readonly [number, number] | null;
 }
 
-/** Megabytes of GPU memory (RGBA8 with mips) one figure's textures take at these scales. A tier-1 file is `ceil(w / 2) x ceil(h / 2)` (`rig-tiers.mjs` halve). */
+/** Is a rim mask bigger than half its map? Then its 1x twin is halved; otherwise the twin is the same file (`tools/rig/rig-tiers.mjs#rimNeedsHalving`, pinned equal by a test). */
+export const rimNeedsHalving = (rim: readonly [number, number], map: readonly [number, number]): boolean => rim[0] * 2 > map[0] + 1 || rim[1] * 2 > map[1] + 1;
+
+/** The sizes of a part's 1x twins (`tools/rig/rig-tiers.mjs#twinSizes`): the map halved, the rim halved only when it is bigger than half its map. */
+export function twinSizes(p: TierPart): { map: readonly [number, number]; rim: readonly [number, number] | null } {
+  const half = (n: number): number => Math.ceil(n / 2);
+  return { map: [half(p.map[0]), half(p.map[1])], rim: p.rim === null ? null : rimNeedsHalving(p.rim, p.map) ? [half(p.rim[0]), half(p.rim[1])] : p.rim };
+}
+
+const size = (v: unknown): [number, number] | null => (Array.isArray(v) && v.length === 2 && v.every((n) => typeof n === 'number' && Number.isFinite(n) && n >= 1) ? [v[0] as number, v[1] as number] : null);
+
+/** The parts of a rig as the memory budget sees them: the sizes the gate stamped (`gate.textures`), else the part's box for both files (the format's own claim: a PNG is its box, a rim the same size). */
+export function tierPartsOf(data: Pick<RigData, 'parts' | 'gate'>): TierPart[] {
+  const stamped = data.gate?.textures;
+  return data.parts.map((p) => {
+    const t = stamped?.[p.name];
+    const map = size(t?.map) ?? [p.box[2], p.box[3]];
+    const rim = p.rimMode === 'mask' && p.rim !== null ? (size(t?.rim) ?? map) : null;
+    return { map, rim };
+  });
+}
+
+/** Megabytes of GPU memory (RGBA8 with mips) one figure's textures take at these scales. */
 export function rigTextureMB(parts: readonly TierPart[], t: RigTextures): number {
   let mb = 0;
-  const side = (n: number, s: RigScale): number => (s === 1 ? Math.ceil(n / 2) : n);
   for (const p of parts) {
-    mb += textureMB(side(p.box[2], t.map), side(p.box[3], t.map));
-    if (p.rim) mb += textureMB(side(p.box[2], t.rim), side(p.box[3], t.rim));
+    const twin = twinSizes(p);
+    const m = t.map === 1 ? twin.map : p.map;
+    mb += textureMB(m[0], m[1]);
+    if (p.rim) {
+      const r = t.rim === 1 ? twin.rim! : p.rim;
+      mb += textureMB(r[0], r[1]);
+    }
   }
   return mb;
 }
