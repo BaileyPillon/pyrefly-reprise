@@ -26,7 +26,7 @@ export function boardOf(enemyHp: readonly number[], extraParty: readonly string[
 let nextRecord = 0x3a00;
 
 /** A physical striker of the given reach and hit count; its record makes it harmful. `flags` may carry the drain flags. */
-export function striker(opts: { id: string; hits: number; targeting: AbilityDef['targeting']; power?: number; flags?: string[]; formula?: string; element?: string[]; mp?: boolean }): AbilityDef {
+export function striker(opts: { id: string; hits: number; targeting: AbilityDef['targeting']; power?: number; flags?: string[]; formula?: string; element?: string[]; mp?: boolean; classes?: number; extra?: Record<string, unknown> }): AbilityDef {
   return {
     id: opts.id,
     name: opts.id,
@@ -44,7 +44,8 @@ export function striker(opts: { id: string; hits: number; targeting: AbilityDef[
     removesStatuses: [],
     flags: (opts.flags ?? []) as never,
     canMiss: false,
-    record: { id: nextRecord++, type: 0, flagsMisc: 0, flagsDamage: 1, damageClass: opts.mp ? 2 : 1 },
+    record: { id: nextRecord++, type: 0, flagsMisc: 0, flagsDamage: 1, damageClass: opts.classes ?? (opts.mp ? 2 : 1) },
+    ...(opts.extra !== undefined ? { extra: opts.extra } : {}),
   } as unknown as AbilityDef;
 }
 

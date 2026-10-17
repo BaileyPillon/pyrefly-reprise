@@ -259,8 +259,20 @@ describe('S1: the engine\'s events follow the driver model', () => {
     const board = boardOf([1000], ['kimahri', 'auron']);
     const { ctx, events, byId } = contextOfBoard(board, 5, ['tidus', 'kimahri', 'auron']);
     resolveAbility(ctx, byId.get('m0') as FFXCombatant, striker({ id: 'sweep-party', hits: 2, targeting: 'all-enemies' }), ['tidus', 'kimahri', 'auron']);
-    const targets = events.filter((e) => e['type'] === 'damage').map((e) => e['targetId']);
-    expect(targets).toEqual(['tidus', 'auron', 'kimahri', 'tidus', 'auron', 'kimahri']);
+    const damage = events.filter((e) => e['type'] === 'damage');
+    expect(damage.map((e) => e['targetId'])).toEqual(['tidus', 'auron', 'kimahri', 'tidus', 'auron', 'kimahri']);
+    // ... and they were CALCULATED in that order too (hitIndex is the calculation index): Tidus 0 and 1, Auron 2 and 3, Kimahri 4 and 5, not the formation order Tidus, Kimahri, Auron
+    expect(damage.map((e) => e['hitIndex'])).toEqual([0, 2, 4, 1, 3, 5]);
+  });
+
+  it('a script-aimed row keeps the order its script named: calculated and applied hit by hit, not by slot', () => {
+    // Kimahri (slot 3) is named before Auron (slot 2): hit 0 goes to Kimahri, hit 1 to Auron. Each is its own command in the game, so no slot sort and no rounds.
+    const board = boardOf([1000], ['kimahri', 'auron']);
+    const { ctx, events, byId } = contextOfBoard(board, 5);
+    const def = striker({ id: 'aimed', hits: 2, targeting: 'random-enemy', extra: { scriptAims: true } });
+    resolveAbility(ctx, byId.get('m0') as FFXCombatant, def, ['kimahri', 'auron']);
+    const damage = events.filter((e) => e['type'] === 'damage');
+    expect(damage.map((e) => `${e['targetId']}#${e['hitIndex']}`)).toEqual(['kimahri#0', 'auron#1']);
   });
 
   it('events keep their content: only the order moves (hitIndex stays the calculation index) and seq stays the log index', () => {

@@ -83,6 +83,20 @@ describe('S2: the recoil record of an absorb command', () => {
     expect(lulu.mp).toBe(lost.reduce((a, b) => a + b, 0));
   });
 
+  it('a Lancet-like drain (HP and MP) heals HP and then MP, once each, in the class order of the game', () => {
+    const board = boardOf([5000], ['kimahri']);
+    const { ctx, events, byId } = contextOfBoard(board, 26);
+    const kimahri = byId.get('kimahri') as FFXCombatant;
+    kimahri.hp = 10;
+    kimahri.mp = 0;
+    kimahri.stats.maxHp = 1_000_000;
+    kimahri.stats.maxMp = 10_000;
+    const def = striker({ id: 'lancet-like', hits: 2, targeting: 'single-enemy', power: 30, flags: ['drains', 'drains-mp'], classes: 3 });
+    resolveAbility(ctx, kimahri, def, ['m0']);
+    const mine = events.filter((e) => e['targetId'] === 'kimahri' && (e['type'] === 'heal' || e['type'] === 'mp-heal')).map((e) => e['type']);
+    expect(mine).toEqual(['heal', 'mp-heal']);
+  });
+
   it('a drain aimed at its own user skips that slot: no hit on itself, no recoil from it; the other target still feeds the one record', () => {
     const board = boardOf([5000], ['lulu']);
     const { ctx, events, byId } = contextOfBoard(board, 24);
