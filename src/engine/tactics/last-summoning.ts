@@ -16,8 +16,9 @@
  * 2. **The player's Yojimbo pays to be good**: Pay is his whole menu (RE section 8, the aeon-side note). The motivation is `4n + compatibility div 10` with `n = floor(log2 gil) - 2`, and once it is 63 the roll can no
  *    longer fall below Wakizashi on all, whatever the monsters' Zanmato byte (RE section 8.1 point 4), so the line pays **the smallest power of two that reaches 63**, or the largest the purse allows. Every doubling of
  *    the payment adds 4, which is why a payment is always a power of two. [The hire answer is the build's, 1; the line is written for it.]
- * 3. **The player's Sisters act only through the orders the engine has built**: Combine (the Delta Attack: six hits on one foe) when their menu offers it, else the one thing left, Dismiss. The menu offers it only while all
- *    three of the Sisters' own stored gauges are full (RE section 6.4 of the aeon-side note; a Grand Summon's temporary gauge does not count), which the chapter's roster starts them at and which Combine then spends.
+ * 3. **The player's Sisters: Combine when their menu offers it, else home.** Combine powers is the Delta Attack on every foe in reach, six hits on each (RE's follow-up: the possessed aeon and both Pagodas here), offered only
+ *    while all three of the Sisters' own stored gauges are full (a Grand Summon's temporary gauge does not count), which the chapter's roster starts them at, as Chapter XXVII's does, and which Combine then spends. The engine carries
+ *    out all eight of their orders since that follow-up and a player may give any of them; the line uses Combine and nothing else, so the bench does not rest on the other seven.
  *
  * 4. **Yuna calls an aeon when she has nothing urgent to do and the Grand Summon is ready** (not against Yu Yevon, whom no aeon hurts). A Grand Summon arrives with a full temporary gauge, so an aeon with an Overdrive
  *    opens with it (the Sisters and Yojimbo have no Overdrive row: their menus are Combine and Pay); then

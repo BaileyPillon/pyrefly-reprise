@@ -4,7 +4,8 @@
  * **Game case: FFX only** (AGENTS.md rule 14). The FFX encounter guide has no page for this gauntlet (`research/jegged-encounter-guides-ffx-a.md` Chapter 3: "the aeon gauntlet is not covered at all"), so the
  * page is laid out like the one Chapter III has (layout: `../doc-types.ts`) and stands on the research and the game's own files alone (`research/re-ffx-last-summoning.md`, `research/ffx-bfa-yu-yevon.md`),
  * in our own words; the Pagodas and Yu Yevon repeat what Chapter III's page says, which does follow that guide. There is **no HP line**: a possessed aeon takes its HP from the player's own aeon at the
- * battle's start (RE section 7), so no printed number would be true of every party. **Not modelled, so not promised:** the Sisters' other seven orders, and what a landed Zanmato does to a Death-immune target.
+ * battle's start (RE section 7), so no printed number would be true of every party. The player's own Yojimbo and Sisters are the RE lane's engine at its final tip (Pay, a Zanmato that kills every foe of the group, the Sisters'
+ * eight orders and a Delta Attack on every foe in reach): the page says what they do and promises no number of theirs.
  *
  * It stands in front of Chapter III's page in the registry and is found only on this chapter's own board (`onlyWhenFlag`): the possessed aeons and Yu Yevon carry Chapter III's ids.
  */
@@ -58,6 +59,8 @@ export const LAST_SUMMONING_DOC: GuideDoc = {
         'Summon works in every battle. The aeons Yu Yevon has taken are greyed out, and so is the one you are about to face.',
         'While an aeon stands, nobody in the party can be targeted, and the party waits for it.',
         'An aeon that falls needs more battles to recover than the chain has left.',
+        'Yojimbo is paid for each stroke: his menu offers Pay in round amounts and all your gil. A bigger payment buys a better stroke, and a Zanmato, which ends the battle at once, is rare and needs his gauge full (a Grand Summon fills it).',
+        'The Magus Sisters come as one summon, and the Summon row says Cindy. Their orders are yours to give; Combine is the Delta Attack on every foe in reach, six hits each, and needs all three of their gauges full, which they begin with.',
         'HP, MP and items carry over from one battle to the next. The fayth’s Auto-Life stands a fallen friend up again in every battle.',
       ],
     },

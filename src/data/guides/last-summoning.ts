@@ -87,13 +87,13 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
     // ---- the player's own Sisters (the tactic's Combine row: the menu says "Combine", the engine's own name is the longer one; a hint takes either)
     {
       when: { labels: ['Combine', 'Combine for the Delta Attack'] },
-      text: 'All three Sisters are ready: Combine sends Cindy’s Delta Attack, six hits on one foe, and spends all three of their gauges',
+      text: 'All three Sisters are ready: Combine sends Cindy’s Delta Attack, six hits on every foe in reach, the twin and the Pagodas, and spends all three of their gauges',
       cite: 'ffx-combat-core §6.3; re-ffx-last-summoning §1.4, §6.2',
     },
     // a Sister's Dismiss only: the line also dismisses Bahamut and the others after their Overdrive, and the words below are about the Sisters
     ...(['cindy', 'sandy', 'mindy'] as const).map((who) => ({
       when: { kinds: ['dismiss'] as const, actorId: who },
-      text: 'The Sisters have nothing built to do but Combine, which needs all three of their own gauges full: with it spent, send them away',
+      text: 'Combine is spent and needs all three of their own gauges full again: send the Sisters away so the party can act, or give them an order and keep the field',
       cite: 'ffx-combat-core §6.2; re-ffx-last-summoning §5; re-ffx-yojimbo-sisters-feasibility §6',
     })),
     // ---- the Sisters' fight (the tactic's focus: Cindy while she stands, then the Sister with the least HP)

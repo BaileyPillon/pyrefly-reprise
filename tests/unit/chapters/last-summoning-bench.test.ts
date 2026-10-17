@@ -12,9 +12,11 @@
  * The chain cannot be lost by one blow (the fayth's permanent Auto-Life stands a fallen member up in every link), so a lost link means the whole party was petrified or knocked out between two revives.
  * `PYREFLY_BENCH_SEEDS=<n>` raises the seeds per order (the default keeps the suite short).
  *
- * **What this bench does not rely on** (the RE lane FFX-K's open items 1 and 7, `docs/handoff/re-parity-ffx-yojimbo-sisters.md`): the Sisters' seven other orders (the player's Sisters only Combine, the one handler that works) and the
- * effect of a landed Zanmato of the player's Yojimbo (which kills only the first target today and ignores Death resistance, its Slice effect untraced). The advisor's line never calls Yojimbo, and the naive line summons nothing,
- * so no Zanmato of the player's is in these chains; a figure that involved one would be provisional until that engine fix lands. The possessed Yojimbo's own Zanmato is a fixed 9,999 and is this chapter's record fix.
+ * **What this bench rests on, and what it leaves out** (the RE lane FFX-K's engine at its final tip, `docs/handoff/re-parity-ffx-yojimbo-sisters.md`): the advisor's line calls aeons only through Yuna's Grand Summon, and the
+ * table prints which (`calls`), how often the player's Combine powers and Zanmato started (`combine`, `zanmato`) and in how many links. The line **never calls Yojimbo** (he is last in its order and the other aeons are
+ * always on offer first), so no Zanmato of the player's is in these chains, and it uses only Combine of the Sisters' eight orders (a player may use the other seven, which the engine now carries out); a figure that
+ * involved either would be a different line, not this one. The **Pagodas' count toward a Zanmato's byte is INFERRED** (the engine counts a Pagoda that has fallen; whether the game does is not shown), which only matters to
+ * a player's Pay. The possessed Yojimbo's own Zanmato is a fixed 9,999 and is this chapter's record fix.
  */
 import { describe, expect, it } from 'vitest';
 import type { OfferingKey } from '../../../src/data/ffx/last-summoning-ids.ts';
@@ -49,10 +51,14 @@ interface Tally {
   /** [link position 1..9] -> fought, won, turns, ticks, down, aeonStanding */
   byPos: Array<{ fought: number; won: number; turns: number; ticks: number; down: number; aeon: number }>;
   firstLoss: Map<string, number>;
+  /** In how many links each of the player's aeons was called, and how many Combine powers and player's Zanmato started. */
+  calls: Map<string, number>;
+  combine: number;
+  zanmato: number;
 }
 
 function tally(runs: readonly ChainRun[]): Tally {
-  const t: Tally = { chains: runs.length, won: 0, linksFought: 0, byPos: Array.from({ length: 9 }, () => ({ fought: 0, won: 0, turns: 0, ticks: 0, down: 0, aeon: 0 })), firstLoss: new Map() };
+  const t: Tally = { chains: runs.length, won: 0, linksFought: 0, byPos: Array.from({ length: 9 }, () => ({ fought: 0, won: 0, turns: 0, ticks: 0, down: 0, aeon: 0 })), firstLoss: new Map(), calls: new Map(), combine: 0, zanmato: 0 };
   for (const r of runs) {
     if (r.outcome === 'victory') t.won += 1;
     t.linksFought += r.links.length;
@@ -64,6 +70,9 @@ function tally(runs: readonly ChainRun[]): Tally {
       p.ticks += l.ticks;
       p.down += l.partyDown;
       if (l.aeonStanding) p.aeon += 1;
+      for (const a of l.summoned) t.calls.set(a, (t.calls.get(a) ?? 0) + 1);
+      t.combine += l.combine;
+      t.zanmato += l.zanmato;
     });
     const lost = r.links.find((l) => l.outcome !== 'victory');
     if (lost) t.firstLoss.set(lost.fought, (t.firstLoss.get(lost.fought) ?? 0) + 1);
@@ -77,9 +86,11 @@ const avg = (n: number, d: number): string => (d === 0 ? '-' : (n / d).toFixed(1
 function report(title: string, t: Tally): string {
   const rows = t.byPos.map((p, i) => `| ${i + 1} | ${p.fought} | ${pct(p.won, p.fought)} | ${avg(p.turns, p.fought)} | ${avg(p.ticks, p.fought)} | ${avg(p.down, p.fought)} | ${pct(p.aeon, p.fought)} |`);
   const loss = [...t.firstLoss.entries()].map(([k, n]) => `${k} x${n}`).join(', ') || 'none';
+  const called = [...t.calls.entries()].sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(', ') || 'none';
   return [
     `### ${title}`,
     `chains ${t.chains}, won ${pct(t.won, t.chains)}, links fought ${avg(t.linksFought, t.chains)} of 9 on average; first loss at: ${loss}`,
+    `aeons called (links): ${called}; player's Combine ${t.combine}, player's Zanmato ${t.zanmato}`,
     '| link | fought | won | turns | ticks | party down | aeon standing |',
     '|---:|---:|---:|---:|---:|---:|---:|',
     ...rows,
@@ -101,6 +112,9 @@ describe('the chain, played whole', () => {
     const { all, per } = await bench('intended');
     const lines = [`Last Summoning bench, the chapter's own line, ${ORDERS.length} orders x ${SEEDS} seeds`, report('all orders', tally(all)), ...per.map((p) => report(p.name, tally(p.runs)))];
     console.log(lines.join('\n\n'));
+    // The premise of the header: the line never calls Yojimbo, so no Zanmato of the player's is in these chains (a different line would make the figures provisional until that is measured).
+    expect(tally(all).zanmato, 'the advisor line lands no Zanmato of the player’s').toBe(0);
+    expect(tally(all).calls.get('yojimbo') ?? 0, 'the advisor line never calls Yojimbo').toBe(0);
     // Invariants (not balance claims): a chain is never longer than the roster, the Sisters are one link, no link stalls at the turn cap, and every fought link is one the order named.
     for (const r of all) {
       expect(r.links.length, `${r.order.join()} seed ${r.seed}`).toBeLessThanOrEqual(9);
