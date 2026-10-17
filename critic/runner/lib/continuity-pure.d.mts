@@ -12,8 +12,10 @@ export interface Anchors {
   extent?: { top: number; base: number; left: number; right: number } | null;
   /** The subject's kind and the pose's class (tools/posescale/pose-kinds.mjs): which band the pose is judged in. */
   kind?: string | null; cls?: string | null;
-  /** The record's hold: the head the player really sees over the idle's (the registered box is virtual), and the stature it was held to. */
+  /** The record's hold (or the W3 sizing rule's result): the head the player really sees over the idle's (the registered box is virtual), and the stature it was held to. */
   heldHeadRatio?: number | null; recStature?: number | null;
+  /** A raised sword or staff stands above the head (victory, defend): the stature band reads head to soles, from `headTopT` (the top of the REAL head, a fraction of the painting's height) to the ground line. */
+  propsOut?: boolean; headTopT?: number | null;
   /** The painting's sha256 as the registration record carries it, and whether a fresh record backs this painting at all. */
   sha?: string | null; registered?: boolean;
   /** The waiver (docs/target/pose-waivers.json) that lets this painting stand outside its band, or null. */

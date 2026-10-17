@@ -20,6 +20,10 @@ export const BANDS: Readonly<{
   heldHeadGap: number;
 }>;
 export const EXEMPT_CLASSES: readonly string[];
+export const STATURE_CEILING: number;
+export function statureFloorOf(cls: string, pose: string): number;
+/** The stature a reading is judged by: the box, or head to soles (`bodyStature`) for a props-out pose. */
+export function judgedStature(reading: Pick<PoseReading, 'propsOut' | 'bodyStature' | 'stature'>): number | null;
 export type PoseFlag =
   | 'empty' | 'unregistered' | 'stature-low' | 'stature-high' | 'head-small' | 'head-big' | 'feet-x' | 'feet-y' | 'feet-sunk'
   | 'mass-low' | 'mass-high' | 'no-stance' | 'no-overlap' | 'props-only' | 'slab' | 'head-off' | 'no-head' | 'held-head' | 'wide-pose';

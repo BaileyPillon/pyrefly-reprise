@@ -61,6 +61,12 @@ export interface PoseReading {
   hasStance: boolean;
   held: boolean;
   heldHeadRatio: number | null;
+  /** The record carries the W3 sizing rule's result (`ruled`): the registered head box is virtual and `realHeadRatio` is the head the player sees. */
+  ruled: boolean;
+  /** The head the player sees over the idle's where the registered box is virtual (a hold's `held.headRatio`, a ruled pose's `ruled.headRatio`); null with a real box. */
+  realHeadRatio: number | null;
+  /** A raised sword or staff stands above the head (victory, defend): the stature band reads `bodyStature`, not `stature`. */
+  propsOut: boolean;
   status: 'ok' | 'held' | 'waived' | 'blocked' | null;
   rowSha: string | null;
   scale: number | null;

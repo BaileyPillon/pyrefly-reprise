@@ -112,14 +112,24 @@ export function placePose(R, m, { row = {}, rec = {}, koScale, facingOf, mirrorF
   if (headTable && !isRef) { lock = clamp(1 / headTable, HEAD_LOCK_BAND[0], HEAD_LOCK_BAND[1]); locked = true; }
   const uppEff = upp * lock;
   const held = rec.held ?? null;
+  // the W3 sizing rule (pose-ruler.mjs) registers a VIRTUAL head box too (the idle's head over the applied scale, so the head lock stands down and the rule's size stands); the record's
+  // `ruled.headRatio` is then the head the player sees, as a hold's `held.headRatio` is
+  const ruled = rec.ruled ?? null;
+  const realRatio = held?.headRatio || ruled?.headRatio || null;
   const figH = (anchor - box.y0) * upp;
   const statureTable = R.figH ? figH / R.figH : null;
   const stature = R.figH ? (figH * lock) / R.figH : null;
   const lengthRatio = prone && R.figH ? ((box.x1 - box.x0) * uppEff) / R.figH : null;
-  const bodyStature = head && R.bodyH && !prone ? ((anchor - head[1] * m.H) * uppEff) / R.bodyH : null;
+  // head to soles: from the TOP of the real head to the planted row (a virtual box is the real one grown or shrunk about its centre by `realRatio`)
+  let headTopPx = head ? head[1] * m.H : null;
+  if (head && realRatio) {
+    const cy = ((head[1] + head[3]) / 2) * m.H;
+    headTopPx = cy - (cy - headTopPx) * realRatio;
+  }
+  const bodyStature = head && R.bodyH && !prone ? ((anchor - headTopPx) * uppEff) / R.bodyH : null;
   const headEff = headTable ? headTable * lock : null;
   // a hold draws the figure at its height, not its head's: the record's own ratio is the head the player sees
-  const headReal = held?.headRatio ? held.headRatio * lock : headEff;
+  const headReal = realRatio ? realRatio * lock : headEff;
   // a hold's ratio is the applied scale over the ruler's reading, so it can be checked and not just believed (`BANDS.heldHeadGap`)
   const appliedScale = pos(sc) ? sc : null;
   const heldGap = held?.headRatio && pos(held.reading) && appliedScale ? Math.abs(held.headRatio - appliedScale / held.reading) : null;
@@ -138,7 +148,7 @@ export function placePose(R, m, { row = {}, rec = {}, koScale, facingOf, mirrorF
     isRef, prone, clamped, facing, mirror,
     scale: sc, scaleSrc, anchor, anchorSrc, upp, uppEff, lock: locked ? lock : null, shift,
     statureTable, stature, bodyStature, lengthRatio, headTable, headEff, headReal,
-    held: !!held, heldHeadRatio: held?.headRatio ?? null, heldGap,
+    held: !!held, heldHeadRatio: held?.headRatio ?? null, ruled: !!ruled, realHeadRatio: realRatio, heldGap,
     hasRow: Object.keys(row).length > 0, hasHead: !!head, hasStance: stanceReg !== null,
     stanceRegistered: stanceReg, stanceDiffPx: m.stance && stanceReg !== null ? m.stance.x - stanceReg : null,
     feetDx, feetDy,

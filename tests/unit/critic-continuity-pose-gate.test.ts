@@ -123,6 +123,65 @@ describe.skipIf(!artPresent)('the critic and the gate (tools/pose-gate.mjs) read
   });
 });
 
+describe('the HEIGHT reading judges a props-out pose head to soles, as the gate does (W3, 2026-10-17)', () => {
+  // an idle 400 px tall whose head top is at 0.10 of its painting (body 360 px); a victory pose `h` px tall whose real head top is at `t` of it
+  const sq = (hh: number) => unitSquareToQuad([0, 0, 100, 0, 100, hh, 0, hh]);
+  const ext = { top: 0, base: 1, left: 0, right: 1 };
+  const idle = { pose: 'idle', cls: 'idle', extent: ext, headTopT: 0.1, propsOut: false } as unknown as Anchors;
+  const pose = (name: string, t: number, propsOut: boolean) => ({ pose: name, cls: 'standing', extent: ext, headTopT: t, propsOut }) as unknown as Anchors;
+
+  it('reads Tidus\'s victory at box 1.39 and body 1.10 as in band: the raised sword is not height', () => {
+    // 558 px tall, head top at 0.29: body 396 px over the idle\'s 360 = 1.10
+    const r = readHeight({ aFrom: idle, aTo: pose('victory', 0.29, true), Hf: sq(400), Ht: sq(558), k1600: 1 })!;
+    expect(r.stature).toBeCloseTo(1.1, 2);
+    expect(r.basis).toBe('body');
+    expect(r.flags).toEqual([]);
+    // the same painting read by its box, as a pose that is not props out: 558 / 400 = 1.395, out of band
+    const box = readHeight({ aFrom: idle, aTo: pose('attack', 0.29, false), Hf: sq(400), Ht: sq(558), k1600: 1 })!;
+    expect(box.stature).toBeCloseTo(1.395, 2);
+    expect(box.flags).toEqual(['stature-high']);
+  });
+
+  it('still fails a props-out pose whose BODY is out of band (a victory whose body is 1.25 of the idle\'s)', () => {
+    const r = readHeight({ aFrom: idle, aTo: pose('victory', 0.2, true), Hf: sq(400), Ht: sq(562), k1600: 1 })!; // 562 x 0.8 = 450 / 360
+    expect(r.stature).toBeCloseTo(1.249, 2);
+    expect(r.flags).toEqual(['stature-high']);
+    expect(readHeight({ aFrom: idle, aTo: pose('defend', 0.2, true), Hf: sq(400), Ht: sq(300), k1600: 1 })!.flags).toEqual(['stature-low']); // 240 / 360 = 0.67
+  });
+
+  it('falls back to the box for a props-out pose with no head box to measure from', () => {
+    const bare = { pose: 'victory', cls: 'standing', extent: ext, headTopT: null, propsOut: true } as unknown as Anchors;
+    const r = readHeight({ aFrom: idle, aTo: bare, Hf: sq(400), Ht: sq(558), k1600: 1 })!;
+    expect(r.basis).toBeUndefined();
+    expect(r.stature).toBeCloseTo(1.395, 2);
+  });
+
+  it('compares a pair with a props-out pose in it head to soles on both sides, not box to box (a victory against an attack is no 1.5 jump)', () => {
+    const attack = pose('attack', 0.1, false); // 400 px tall, body 360
+    const victory = pose('victory', 0.29, true); // 558 px tall, body 396
+    const r = readHeight({ aFrom: attack, aTo: victory, Hf: sq(400), Ht: sq(558), k1600: 1 })!;
+    expect(r.basis).toBe('body');
+    expect(r.ratio).toBeCloseTo(1.1, 2);
+    expect(r.flags).toEqual([]);
+    // with no head to measure from on one side, the pair is reported unread, never failed on a box ratio that counts the sword
+    const bare = { ...victory, headTopT: null } as unknown as Anchors;
+    const u = readHeight({ aFrom: attack, aTo: bare, Hf: sq(400), Ht: sq(558), k1600: 1 })!;
+    expect(u.flags).toEqual([]);
+    expect(u.report).toContain('props-out-unread');
+  });
+
+  it('anchors a recorded painting with its props-out flag and the top of its REAL head (a virtual box is the real one grown about its centre by the record\'s ratio)', () => {
+    const mask = { w: 8, h: 8, bits: new Uint8Array(64).fill(1), srcW: 200, srcH: 300 };
+    const measure = { path: 'x', sha256: 'x', count: 1, subjects: { tidus: { poses: { victory: { size: [200, 300], head: [70, 40, 130, 100], stance: { x: 100, row: 290 }, prone: false, standing: true, ruled: { headRatio: 0.875 } } } } } } as never;
+    const a = anchorsFor({ url: '/art/characters/tidus/victory.webp', mask, measure });
+    expect(a.propsOut).toBe(true);
+    // the box spans t 0.1333 to 0.3333 (centre 0.2333, half 0.1): the real head is 0.875 of it, so its top is at 0.2333 - 0.1 x 0.875
+    expect(a.headTopT).toBeCloseTo(0.2333 - 0.0875, 3);
+    const attack = anchorsFor({ url: '/art/characters/tidus/attack.webp', mask, measure: null });
+    expect(attack.propsOut).toBe(false);
+  });
+});
+
 describe('the HEIGHT reading allows for reading a stature off the screen (READ_SLACK)', () => {
   // an idle 400 px tall and a pose of `h` px, both planes drawn straight on: the stature is h / 400
   const reading = (h: number) => {

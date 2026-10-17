@@ -16,8 +16,10 @@
  * overlap with its idle (`BANDS.iouFail`), a silhouette that is not a solid rectangle (`BANDS.solidityMax`), a body that is more than half of the height it claims (`BANDS.bodyOverStature`: a small figure holding a full-height pole)
  * and a head box that sits on the head (`BANDS.headBox`, only where the table registers one).
  *
- * The decision to rule the ruler per class (W3: head, height or their mean) is Bailey's; none of it is decided here. The readings come from
- * `pose-model.mjs`; nothing here reads a file.
+ * The W3 sizing rule (2026-10-17, the release driver's pick 89e under Bailey's "I'll go with all of your recommendations"; `pose-ruler.mjs`) sizes a pose by the geometric mean of its
+ * HEAD and HEIGHT scales and writes the result into the tables at install; the bands below judge it as they judge any size. One change here: a PROPS-OUT pose (a raised sword or staff:
+ * `victory`, `defend`; `pose-kinds.mjs` PROPS_OUT_POSES) is judged by its stature head to soles (`bodyStature`), not by its box, which counts the prop as height ({@link judgedStature}).
+ * The readings come from `pose-model.mjs`; nothing here reads a file.
  */
 
 /** The model's own error: a hold's 0.90 reads 0.901, so a band edge gets half a percent of slack. */
@@ -58,6 +60,18 @@ export const BANDS = Object.freeze({
   /** A recorded hold's `headRatio` must equal its applied scale over its ruler reading (`held.reading`), to this much: the ratio is not free to type. */
   heldHeadGap: 0.02,
 });
+
+/** The top of the stature band (standing and low classes alike). */
+export const STATURE_CEILING = 1.1;
+
+/** The stature floor of a pose in a class: 0.90 standing, `LOW_STATURE_MIN` (0.75) for a low pose. */
+export const statureFloorOf = (cls, pose) => (cls === 'low' ? (LOW_STATURE_MIN[pose] ?? BANDS.low.stature[0]) : BANDS.standing.stature[0]);
+
+/**
+ * The stature a reading is judged by: the box (`stature`, the figure's height with whatever it holds), or head to soles (`bodyStature`) for a props-out pose that has a head box to
+ * measure from. A props-out pose with no head box falls back to the box (it is flagged `no-head` or `unregistered` anyway).
+ */
+export const judgedStature = (reading) => (reading.propsOut && Number.isFinite(reading.bodyStature) ? reading.bodyStature : reading.stature);
 
 const outside = (v, [lo, hi], slack = SLACK) => v !== null && v !== undefined && Number.isFinite(v) && (v < lo - slack || v > hi + slack);
 
@@ -117,11 +131,11 @@ export function bandVerdict(reading) {
     if (reading.feetPx === null) flags.push('no-stance');
     if (reading.iou !== null && reading.iou !== undefined && reading.iou < BANDS.iouFail) flags.push('no-overlap');
     if (Number.isFinite(reading.bodyStature) && Number.isFinite(reading.stature) && reading.stature > 0 && reading.bodyStature / reading.stature < BANDS.bodyOverStature) flags.push('props-only');
-    const floor = cls === 'low' ? (LOW_STATURE_MIN[reading.pose] ?? BANDS.low.stature[0]) : BANDS.standing.stature[0];
-    const band = [floor, BANDS[cls].stature[1]];
-    if (reading.stature !== null && reading.stature !== undefined) {
+    const band = [statureFloorOf(cls, reading.pose), BANDS[cls].stature[1]];
+    const stature = judgedStature(reading);
+    if (stature !== null && stature !== undefined) {
       judged.push('stature');
-      if (outside(reading.stature, band)) flags.push(reading.stature < band[0] ? 'stature-low' : 'stature-high');
+      if (outside(stature, band)) flags.push(stature < band[0] ? 'stature-low' : 'stature-high');
     }
     judgeHead();
     judgeFeet();

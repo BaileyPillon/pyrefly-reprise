@@ -7,6 +7,8 @@ export interface HeightReading {
   /** `idle`: one painting is the figure's idle, so `stature` (or, for a KO, `length`) is the pose's own; `pair`: two other poses, judged on their ratio. */
   vs: 'idle' | 'pair'; pose: string | null; side: 'from' | 'to' | null; class: string | null;
   stature: number | null; length: number | null; band: number[] | null;
+  /** `body`: a props-out pose read head to soles (its stature, or a pair's ratio, is body over body); absent: the box. */
+  basis?: 'body';
   /** fail the check unless waived: `stature-low`, `stature-high`. */
   flags: string[];
   /** never fail: `ko-short`, `ko-long`. */
@@ -20,6 +22,7 @@ export interface FeetSilhouetteReading { dx: number; dy: number; px: number; gat
 export interface RealHeadReading { ratio: number; fromHeld: number | null; toHeld: number | null; costPct: number; band: number[]; outsideBand: boolean; waived?: Waiver | null }
 type Map3 = number[];
 export declare function figureHeightPx(H: Map3, ext: NonNullable<Anchors['extent']>): number;
+export declare function bodyHeightPx(H: Map3, ext: Anchors['extent'], headTopT: number | null | undefined): number | null;
 export declare function figureLengthPx(H: Map3, ext: NonNullable<Anchors['extent']>): number;
 export declare function statureBandOf(cls: string | null | undefined, pose: string): number[] | null;
 export declare function readHeight(o: { aFrom: Anchors | null; aTo: Anchors | null; Hf: Map3; Ht: Map3; k1600: number }): HeightReading | null;

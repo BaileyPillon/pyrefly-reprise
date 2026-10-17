@@ -18,8 +18,8 @@ import { POSE_REGISTRATION_EXP } from '../../../src/data/art/poseRegistrationExp
 import { poseStatusTrusted, type PoseRegistrationRow } from '../../../src/data/art/poseRegistrationTypes.ts';
 import { KO_POSE_SCALE } from '../../../src/engine/KoPoseScale.ts';
 import { makeRef, placePose } from '../../../tools/posescale/pose-geometry.mjs';
-import { gameOf, mirrorFor, parseFacing, poseClassOf, sideOf, subjectKind } from '../../../tools/posescale/pose-kinds.mjs';
-import { bandVerdict, proposeStatus } from '../../../tools/posescale/pose-bands.mjs';
+import { gameOf, isPropsOut, mirrorFor, parseFacing, poseClassOf, sideOf, subjectKind } from '../../../tools/posescale/pose-kinds.mjs';
+import { bandVerdict, judgedStature, proposeStatus } from '../../../tools/posescale/pose-bands.mjs';
 import { diffStored, recordStatureGap, rowFieldsFromReading, shaMatches } from '../../../tools/posescale/pose-rows.mjs';
 import { loadModelInputs, readPose, type ModelInputs, type ModelRow, type PoseReading } from '../../../tools/posescale/pose-model.mjs';
 
@@ -66,6 +66,24 @@ describe('the placement maths (PaintedScale + PoseRegistration + HeadLock, in pl
     const g = place({}, { head: [0.4, 0.15, 0.6, 0.25], stanceX: 400 }, { held: { by: 'x', headRatio: 1.354, reading: 0.667, stature: 0.901 } });
     expect(g.held).toBe(true);
     expect(g.headReal).toBeCloseTo(1.354, 6);
+  });
+
+  it("reads a ruled pose's real head from the record (the W3 sizing rule registers a virtual box so the lock stands down), and its body from the REAL head's top", () => {
+    const { place } = rig();
+    // a virtual box: the idle's head over the applied scale, centred on the head at row 200; the real head is the virtual box times the record's ratio (1.2) about its centre
+    const virtual = { head: [0.4, 0.125, 0.6, 0.275], stanceX: 400 }; // 160 x 150 px, centred at row 200
+    const g = place({}, virtual, { ruled: { rule: 'geomean/1', headRatio: 1.2 } });
+    expect(g.ruled).toBe(true);
+    expect(g.held).toBe(false);
+    expect(g.realHeadRatio).toBeCloseTo(1.2, 6);
+    expect(g.headReal).toBeCloseTo(1.2 * (g.lock ?? 1), 6);
+    // the real box's top is the virtual one's scaled by 1.2 about its centre: 200 - 75 * 1.2 = 110, not 125
+    const idleBody = (900 - 50) / 900; // the idle's head top is at 0.05 x 1000, its row 900 on a 900 px ground line (one world height)
+    expect(g.bodyStature).toBeCloseTo(((900 - 110) * g.uppEff) / idleBody, 4);
+    // with no record of a real ratio the box is believed as it stands: its top is 125
+    const plain = place({}, virtual);
+    expect(plain.realHeadRatio).toBeNull();
+    expect(plain.bodyStature).toBeCloseTo(((900 - 125) * plain.uppEff) / idleBody, 4);
   });
 
   it('clamps the longest side to 2.2 world heights and says it', () => {
@@ -172,6 +190,21 @@ describe('the bands', () => {
     expect(bandVerdict(reading({ held: true, stature: 0.85, headReal: 1.356 })).flags).toEqual(['stature-low']);
     expect(bandVerdict(reading({ held: true, stature: 0.95, headReal: 1.5 })).flags).toEqual(['head-big']);
     expect(proposeStatus(reading({ held: true, stature: 0.907, headReal: 1.356 }))).toBe('held');
+  });
+
+  it('judges a props-out pose (victory, defend) head to soles, not by its box: Tidus victory read at box 1.39 is in band at body 1.10', () => {
+    expect(bandVerdict(reading({ pose: 'victory', propsOut: true, stature: 1.39, bodyStature: 1.1 })).flags).toEqual([]);
+    expect(bandVerdict(reading({ pose: 'victory', propsOut: true, stature: 1.0, bodyStature: 1.2 })).flags).toEqual(['stature-high']);
+    expect(bandVerdict(reading({ pose: 'victory', propsOut: true, stature: 1.0, bodyStature: 0.85 })).flags).toEqual(['stature-low']);
+    // not props out: the box is the stature, as before (a strike is read by its box)
+    expect(bandVerdict(reading({ pose: 'attack', propsOut: false, stature: 1.39, bodyStature: 1.1 })).flags).toEqual(['stature-high']);
+    // props out with no head box to measure from: the box stands in
+    expect(bandVerdict(reading({ pose: 'defend', propsOut: true, stature: 1.39, bodyStature: null })).flags).toContain('stature-high');
+    expect(judgedStature(reading({ propsOut: true, stature: 1.39, bodyStature: 1.1 }))).toBe(1.1);
+    expect(judgedStature(reading({ propsOut: false, stature: 1.39, bodyStature: 1.1 }))).toBe(1.39);
+    expect(isPropsOut('victory')).toBe(true);
+    expect(isPropsOut('defend')).toBe(true);
+    expect(isPropsOut('attack')).toBe(false);
   });
 
   it('judges the low class from 0.75 and a KO\'s length by report only', () => {
@@ -283,17 +316,17 @@ interface Known {
 
 /** angle 1's own numbers (poses.csv), from its independent implementation; r50 art. */
 const KNOWN: Known[] = [
-  { subject: 'lulu', pose: 'hurt', sha: '34fc093a2614', why: 'FFX: a stature hold, the head paid for', want: { class: 'standing', hasRow: true, stature: 0.907, bodyStature: 0.874, headReal: 1.356, iou: 0.316, feet: { dx: 0, dy: 0 } } },
-  { subject: 'lulu', pose: 'critical', sha: '01b736ed8dd5', why: 'FFX: the low class, a hold', want: { class: 'low', hasRow: true, stature: 0.754, bodyStature: 0.687, headReal: 1.374, iou: 0.461 } },
+  { subject: 'lulu', pose: 'hurt', sha: '34fc093a2614', why: 'FFX: a stature hold by the W3 sizing rule (r50.1 drew it at 0.907, head 1.356), the head paid for', want: { class: 'standing', hasRow: true, stature: 0.901, bodyStature: 0.877, headReal: 1.346, iou: 0.316, feet: { dx: 0, dy: 0 } } },
+  { subject: 'lulu', pose: 'critical', sha: '01b736ed8dd5', why: 'FFX: the low class, a hold (the rule lifts the mean to the 0.75 floor, as r50.1 did)', want: { class: 'low', hasRow: true, stature: 0.751, bodyStature: 0.694, headReal: 1.369, iou: 0.458 } },
   { subject: 'lulu', pose: 'ko', sha: 'cdd75693478c', why: 'FFX: a KO is read by length', want: { class: 'ko', hasRow: true, lengthRatio: 0.423, headReal: 1, iou: 0.224, feet: null } },
   { subject: 'dark-sandy', pose: 'attack', sha: 'f231535d77ac', before: true, why: 'as r50.1 shipped it, FFX: a Dark Aeon with no row, the stance slides', want: { class: 'standing', hasRow: false, stature: 0.979, headReal: null, iou: 0.07, feet: { dx: -0.084, dy: 0.02 } } },
   { subject: 'paine-lady-luck', pose: 'hurt', sha: '68685265e295', before: true, why: 'as r50.1 shipped it, FFX-2: feetRow at the knees', want: { class: 'standing', hasRow: true, anchorSrc: 'feetRow', stature: 0.495, bodyStature: 0.322, iou: 0.092, feet: { dx: -0.023, dy: -0.356 } } },
   { subject: 'rikku-lady-luck', pose: 'attack', sha: '965c0e6b01b1', before: true, why: 'as r50.1 shipped it, FFX-2: feetRow at the knees', want: { class: 'standing', hasRow: true, anchorSrc: 'feetRow', stature: 0.434, bodyStature: 0.285, iou: 0.146, feet: { dx: -0.007, dy: -0.282 } } },
   { subject: 'bahamut', pose: 'attack', sha: '2331f25b981b', why: 'FFX: a player aeon, no head box', want: { class: 'standing', hasRow: true, stature: 1.047, headReal: null, iou: 0.694, feet: { dx: 0, dy: 0.006 } } },
   { subject: 'valefor', pose: 'attack', sha: '8d98a668c7ca', before: true, why: 'as r50.1 shipped it, FFX: an aeon with no row, laid down by the aspect test', want: { class: 'wide', hasRow: false, stature: 0.977, lengthRatio: 1.65, iou: 0.566, feet: null } },
-  { subject: 'dark-sandy', pose: 'attack', sha: 'f231535d77ac', why: 'FFX: a Dark Aeon registered (2026-10-17), the stance no longer slides', want: { class: 'standing', hasRow: true, stature: 0.979, headReal: 1, iou: 0.331, feet: { dx: 0, dy: 0.0205 } } },
-  { subject: 'paine-lady-luck', pose: 'hurt', sha: '68685265e295', why: "FFX-2: planted at the soles (2026-10-17), the record's own 0.85", want: { class: 'standing', hasRow: true, anchorSrc: 'baseline', stature: 0.851, feet: { dx: 0, dy: 0 } } },
-  { subject: 'rikku-lady-luck', pose: 'attack', sha: '965c0e6b01b1', why: "FFX-2: planted at the soles (2026-10-17), the record's own 0.72", want: { class: 'standing', hasRow: true, anchorSrc: 'baseline', stature: 0.715, feet: { dx: 0, dy: 0 } } },
+  { subject: 'dark-sandy', pose: 'attack', sha: 'f231535d77ac', why: 'FFX: a Dark Aeon registered (2026-10-17), the stance no longer slides (sized by the W3 rule, which read it at 0.979)', want: { class: 'standing', hasRow: true, stature: 0.99, headReal: 1.01, iou: 0.331, feet: { dx: 0, dy: 0.0207 } } },
+  { subject: 'paine-lady-luck', pose: 'hurt', sha: '68685265e295', why: "FFX-2: planted at the soles (2026-10-17), sized by the W3 rule: the mean of its head and height scales, 0.923 (the record's own 0.85 is the head ruler)", want: { class: 'standing', hasRow: true, anchorSrc: 'baseline', stature: 0.923, feet: { dx: 0, dy: 0 } } },
+  { subject: 'rikku-lady-luck', pose: 'attack', sha: '965c0e6b01b1', why: "FFX-2: planted at the soles (2026-10-17), sized by the W3 rule, a hold lifted to the 0.90 floor (the record's own 0.72 is the head ruler)", want: { class: 'standing', hasRow: true, anchorSrc: 'baseline', stature: 0.902, feet: { dx: 0, dy: 0 } } },
   { subject: 'valefor', pose: 'attack', sha: '8d98a668c7ca', why: 'FFX: an aeon registered with its stance (2026-10-17): upright, not laid down by the aspect test', want: { class: 'standing', hasRow: true } },
   { subject: 'rikku-songstress', pose: 'twirl-end', sha: '43c71b80a42c', why: 'FFX-2: the staged costume change', want: { class: 'staged', hasRow: false, stature: 1.121, iou: 0.318 } },
 ];
@@ -319,7 +352,11 @@ const legacyInputs = async (): Promise<ModelInputs> => {
     'od-x2-lady-luck-magic-reels': { scale: 1.298, stanceX: 338.5, feetRow: 760.0, head: head([0.5257, 0.2855, 0.6679, 0.3586]) },
   };
   table['rikku-lady-luck'] = { ...table['rikku-lady-luck'], attack: { scale: 0.86, stanceX: 326.0, feetRow: 594.0, head: head([0.3381, 0.2702, 0.5213, 0.3646]) } };
-  return { ...base, table, refs: new Map() };
+  // the records as r50.1 had them: nothing for the rows the data lane added, and no `ruled` result (the W3 sizing rule, 2026-10-17) on the Lady Luck rows, whose head the player sees is then the table's
+  const records = JSON.parse(JSON.stringify(base.records));
+  for (const s of ['dark-sandy', 'dark-mindy', 'dark-cindy', 'dark-yojimbo', 'valefor']) delete records.subjects[s];
+  for (const s of ['paine-lady-luck', 'rikku-lady-luck']) for (const r of Object.values<Record<string, unknown>>(records.subjects[s].poses)) { delete r['ruled']; delete r['held']; }
+  return { ...base, table, records, refs: new Map() };
 };
 
 describe.skipIf(!artPresent)('readPose against real paintings (angle 1\'s independent numbers)', () => {
@@ -360,8 +397,8 @@ describe.skipIf(!artPresent)('readPose against real paintings (angle 1\'s indepe
     expect(v.report).toContain('ghost-fail');
   });
 
-  it.skipIf(!artHas('paine-lady-luck', 'hurt', '68685265e295'))("the repaired Lady Luck rows (feetRow guard, 2026-10-17) stand on their soles: the pixels' 0.85 is what is drawn, and no feet flag is left", async () => {
-    for (const [subject, pose, stature] of [['paine-lady-luck', 'hurt', 0.851], ['paine-lady-luck', 'follow', 0.989], ['paine-lady-luck', 'od-x2-lady-luck-attack-reels', 1.13], ['rikku-lady-luck', 'attack', 0.715]] as const) {
+  it.skipIf(!artHas('paine-lady-luck', 'hurt', '68685265e295'))("the repaired Lady Luck rows (feetRow guard, 2026-10-17) stand on their soles: the pixels' own height is what is drawn, and no feet flag is left", async () => {
+    for (const [subject, pose, stature] of [['paine-lady-luck', 'hurt', 0.923], ['paine-lady-luck', 'follow', 0.995], ['paine-lady-luck', 'od-x2-lady-luck-attack-reels', 1.062], ['rikku-lady-luck', 'attack', 0.902]] as const) {
       const r = await readPose(subject, pose, { inputs: await inputs() });
       expect(r.feetRowGap, `${subject}/${pose}`).toBe(0);
       expect(r.stature, `${subject}/${pose}`).toBeCloseTo(stature, 2);

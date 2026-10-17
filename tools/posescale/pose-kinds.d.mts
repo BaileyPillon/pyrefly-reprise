@@ -14,3 +14,5 @@ export function sideOf(subject: string): 1 | -1;
 export function parseFacing(v: unknown): 'right' | 'left' | 'front' | 'auto' | null;
 export function mirrorFor(artFacing: string | null, want: number): 1 | -1;
 export function poseClassOf(o: { pose: string; isRef: boolean; prone: boolean; kind: string }): ModelPoseClass;
+export const PROPS_OUT_POSES: Set<string>;
+export function isPropsOut(pose: string): boolean;
