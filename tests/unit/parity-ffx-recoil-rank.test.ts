@@ -13,6 +13,7 @@ import { recoilGain, recoilRecord } from '../../src/battle/ffx/kernel/recoil.ts'
 import { rankOf } from '../../src/battle/ffx/state.ts';
 import { actionRank } from '../../src/battle/ffx/kernel/ctb.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
+import { holdsAbsorbRecord } from '../../src/battle/ffx/hit-order.ts';
 import { contextOfBoard } from './helpers/ffxTargetBoard.ts';
 import { boardOf, striker } from './helpers/ffxHitOrder.ts';
 
@@ -32,6 +33,17 @@ describe('S2: the recoil record of an absorb command', () => {
         }
       }
     }
+  });
+
+  it('the drain flags of the engine name exactly the abilities whose game record carries the absorb bit (bit 0x100 of the flag word)', () => {
+    let absorbing = 0;
+    for (const def of ALL_ABILITIES) {
+      if (def.record === undefined) continue;
+      const bit = (def.record.flagsMisc & 0x100) !== 0;
+      if (bit) absorbing++;
+      expect(holdsAbsorbRecord(def), def.id).toBe(bit);
+    }
+    expect(absorbing).toBeGreaterThan(5);
   });
 
   const drain = (hits: number, targeting: AbilityDef['targeting'], extra: Partial<Parameters<typeof striker>[0]> = {}): AbilityDef =>
