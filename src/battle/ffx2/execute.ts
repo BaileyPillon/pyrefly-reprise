@@ -33,6 +33,7 @@ import type {
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { performSpherechange } from './spherechange.ts';
 import { attachedResult, hitsFromOutcome, requestLayout, rollDefault } from './minigames.ts';
+import { rollDice } from './dice.ts';
 import { shapeLadyLuckSpin } from './reels.ts';
 import { ATB_BASE_VALUE } from './constants.ts';
 import { actionTimeSteps } from './action-time.ts';
@@ -322,7 +323,9 @@ export function performCommand(
     outcome?.kind === 'ladyluck-reels'
       ? shapeLadyLuckSpin(ability, outcome.reels, env.abilities, env.units, actor, command.targets)
       : null;
-  const fired = spin?.def ?? ability;
+  // Two Dice rolls its dice here, at the moment its strikes resolve: the sum is the hit override, two faces that agree fire the stronger row (`dice.ts`).
+  const dice = rollDice(env.state, env.rng.aux, env.abilities, ability);
+  const fired = spin?.def ?? dice?.fired ?? ability;
   const targets = spin ? spin.targets : command.targets;
   if (spin) {
     env.emit({ type: 'message', text: spin.outcome.tier === 'dud' ? 'Dud!' : fired.name, kind: 'system' });
@@ -338,7 +341,8 @@ export function performCommand(
   const gilSpent = 'gilSpent' in command ? command.gilSpent : undefined;
   resolveAbility(env.resolveCtx(), actor, fired, targets, {
     ...('exactTargets' in command && command.exactTargets === true ? { exactTargets: true } : {}), // a script that names its targets exactly (AI-FFX2-b)
-    ...(hits !== null ? { hitsOverride: hits } : {}),
+    ...(dice ? { hitsOverride: dice.hits } : {}),
+    ...(hits !== null ? { shots: hits } : {}), // Trigger Happy's shots; 0 is a window nobody pressed in, which plays no hit (`StrikeOptions#shots`)
     ...(gilSpent !== undefined ? { gilSpent } : {}),
   });
 

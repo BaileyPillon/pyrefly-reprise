@@ -308,8 +308,9 @@ export function pickVariant(ability: AbilityDef, rng: BattleRng): number {
 }
 
 /**
- * The command `user` runs when it uses `ability`. `hitsOverride` is a minigame outcome (Trigger Happy, a dice roll);
- * above 0 it replaces the row's hits, as in the game. `variant` is {@link pickVariant}'s answer.
+ * The command `user` runs when it uses `ability`. `hitsOverride` is a minigame outcome (a dice roll's sum, or Trigger Happy's shots as the engine
+ * reads them); above 0 it replaces the row's hits for the intent line (`hits`), as in the game; 0 is the row's own. It does not decide what a
+ * strike plays: that is `StrikeOptions` (`resolve-strike.ts`), where zero Trigger Happy shots play nothing. `variant` is {@link pickVariant}'s answer.
  */
 export function resolveCommand(ability: AbilityDef, user: Ffx2Unit, hitsOverride = 0, variant = 0): ResolvedCommand {
   const generic = isGenericAttack(ability) ? attackRecordFor(user) : undefined;

@@ -29,7 +29,7 @@ export function resolveAbility(
   user: Ffx2Unit,
   ability: AbilityDef,
   requested: readonly CombatantId[],
-  options: { isCounter?: boolean; counterCause?: string; hitsOverride?: number; gilSpent?: number; inSequence?: boolean; exactTargets?: boolean } = {},
+  options: { isCounter?: boolean; counterCause?: string; hitsOverride?: number; shots?: number; gilSpent?: number; inSequence?: boolean; exactTargets?: boolean } = {},
 ): number {
   const all = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
   // `extra.namedTargetsOnly` (`abilities-shuyin.ts`, Acta Est Fabula): an all-target row whose
@@ -75,13 +75,14 @@ export function resolveAbility(
     return 0;
   }
 
-  // A minigame outcome (Trigger Happy's presses, a reel's hit total) replaces the ability's own hit count
-  // (`docs/CONTRACTS.md`, "Minigame protocol"); the game's row says the rest (`adapt/command.ts`).
-  const hitsOverride = options.hitsOverride ?? 0;
+  // A minigame outcome replaces the ability's own hit count (`docs/CONTRACTS.md`, "Minigame protocol"): Two Dice's dice are the game's hit override,
+  // Trigger Happy's presses are its shots (`StrikeOptions`; zero shots play no hit); the game's row says the rest (`adapt/command.ts`).
+  const hitsOverride = options.hitsOverride ?? Math.max(0, options.shots ?? 0);
   const variant = pickVariant(ability, ctx.rng); // Russian Roulette: the script's pick of one of its five rows
   const command = resolveCommand(ability, user, hitsOverride, variant);
   let total = runStrikes(ctx, user, ability, command, pool, {
-    ...(hitsOverride > 0 ? { hitsOverride } : {}),
+    ...(options.hitsOverride !== undefined && options.hitsOverride > 0 ? { hitsOverride: options.hitsOverride } : {}),
+    ...(options.shots !== undefined ? { shots: options.shots } : {}),
     ...(options.gilSpent !== undefined ? { gilSpent: options.gilSpent } : {}),
     ...(options.isCounter ? { system: true } : {}),
   });
