@@ -36,10 +36,11 @@ export const LEGACY_WORDS = "driver, under Bailey's 2026-10-16 permanent-fix req
 /**
  * The hash of the legacy seal: the first 32 hex characters of sha256 over the sorted entries joined by a newline.
  * Changing it is a change to this file, in a diff somebody reads; a ledger whose `legacySeal` hashes to anything else carries a legacy row the bootstrap did not write.
- * The bootstrap wrote 254 entries on 2026-10-17 (digest 03c93b5a6cf73567da8fa5597177e843). The W3 sizing rule (`tools/posescale/pose-ruler.mjs`, the same day) moved 139 of those paintings into
- * band, and `node tools/pose-gate.mjs --prune-legacy` removed their rows and their seal entries: 115 entries are left, and the 139 cannot be put back. Re-pin it the same way after any later removal.
+ * The bootstrap wrote 254 entries on 2026-10-17 (digest 03c93b5a6cf73567da8fa5597177e843). The W3 sizing rule (`tools/posescale/pose-ruler.mjs`, the same day) moved 175 of those paintings into
+ * band (139 of the registered figures, and 36 of the hidden chapter's once its table followed the new base rows), and `node tools/pose-gate.mjs --prune-legacy` removed their rows and their seal entries:
+ * 79 entries are left, and the 175 cannot be put back. Re-pin it the same way after any later removal.
  */
-export const LEGACY_SEAL_DIGEST = '33f3c41c2ddefae4df5c480dbe5a8dc6';
+export const LEGACY_SEAL_DIGEST = '63472f803a1af17e152010ecc7124667';
 
 /** The digest of a seal (see {@link LEGACY_SEAL_DIGEST}). */
 export const sealDigest = (seal) => createHash('sha256').update([...seal].sort().join('\n')).digest('hex').slice(0, 32);
