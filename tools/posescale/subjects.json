@@ -591,5 +591,21 @@
  "mortiorchis": {
   "game": "foe",
   "rowFromBaseline": true
+ },
+ "dark-yojimbo": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "dark-cindy": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "dark-sandy": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "dark-mindy": {
+  "game": "foe",
+  "rowFromBaseline": true
  }
 }

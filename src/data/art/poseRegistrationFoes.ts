@@ -47,6 +47,30 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     cast: { stanceX: 458.5 },
     idle: { stanceX: 458.5 },
   },
+  'dark-cindy': {
+    attack: { stanceX: 407.5 },
+    cast: { stanceX: 215.5 },
+    hurt: { stanceX: 116.0 },
+    idle: { stanceX: 163.0 },
+  },
+  'dark-mindy': {
+    attack: { stanceX: 229.5 },
+    cast: { stanceX: 95.0 },
+    hurt: { stanceX: 168.0 },
+    idle: { stanceX: 95.0 },
+  },
+  'dark-sandy': {
+    attack: { stanceX: 221.5 },
+    cast: { stanceX: 154.5 },
+    hurt: { stanceX: 91.5 },
+    idle: { stanceX: 168.0 },
+  },
+  'dark-yojimbo': {
+    attack: { stanceX: 401.5 },
+    cast: { stanceX: 242.0 },
+    hurt: { stanceX: 539.0 },
+    idle: { stanceX: 537.5 },
+  },
   'ffx2-bahamut': {
     attack: { stanceX: 487.0, upright: true },
     cast: { stanceX: 590.5, upright: true },
