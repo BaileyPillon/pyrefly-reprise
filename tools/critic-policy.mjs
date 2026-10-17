@@ -158,7 +158,7 @@ export function classifyChange(paths, policy) {
       depth: 'deep', deepBeforeDeploy: true, reasons: ['the change set is unknown, so nothing can be ruled out'],
       systems: ['unknown change set'], games: 'both', chapters: expandChapters('all', policy),
       checks: [...new Set([...policy.alwaysAtDeploy, ...u.checks])].sort(), targetGroups: [],
-      productPaths: [], ignoredPaths: [], dataAudit: false, approvedArtCheck: false,
+      productPaths: [], ignoredPaths: [], dataAudit: false, approvedArtCheck: false, staticChecks: structuredClone(policy.alwaysAtDeployStatic ?? []),
     };
   }
   const systems = new Set(), checks = new Set(policy.alwaysAtDeploy), chapters = new Set(), targetGroups = new Set();
@@ -203,7 +203,7 @@ export function classifyChange(paths, policy) {
     depth, deepBeforeDeploy: depth === 'deep' && deepBeforeDeploy, reasons,
     systems: [...systems].sort(), games: game, chapters: [...chapters],
     checks: [...checks].sort(), targetGroups: [...targetGroups].sort(),
-    productPaths, ignoredPaths, dataAudit, approvedArtCheck,
+    productPaths, ignoredPaths, dataAudit, approvedArtCheck, staticChecks: structuredClone(policy.alwaysAtDeployStatic ?? []),
   };
 }
 

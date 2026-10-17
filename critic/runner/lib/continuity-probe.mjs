@@ -18,7 +18,10 @@
 //   - per visible figure, each plane: pose, fade, and the screen position (CSS px) of the painting's four corners,
 //     mirror and yaw included, so the node side can put any anchor of the painting on the screen exactly;
 //   - per figure, how far the camera alone moved its world point since the previous frame (so a camera cut is not
-//     mistaken for the figure jumping);
+//     mistaken for the figure jumping), and, from probe version 2, per plane the same for each of its four corners (`cs`, appended
+//     to the plane's record while the camera moves): the camera shifts a head 1.8 units above the origin by far more than it shifts
+//     the origin, so the node side projects the shift of each tracked point of the painting (continuity-camera.mjs) and no longer
+//     subtracts the origin's;
 //   - the battle log's new events, with the frame they arrived in;
 //   - a rolling buffer of rendered frames (the WebGL canvas at `ringScale`), from which, around every pose swap and
 //     every jerk candidate, `beforeFrames` before and `afterFrames` after are cropped to the figure, JPEG encoded a
@@ -34,7 +37,7 @@ export function createProbe(cfg, env) {
   const win = env.window, doc = env.document, perf = env.performance;
   const R1 = (v) => Math.round(v * 10) / 10, R3 = (v) => Math.round(v * 1000) / 1000;
   const S = {
-    cfg, version: 1, running: false, stopping: false, frames: 0, t0: perf.now(), view: null,
+    cfg, version: 2, running: false, stopping: false, frames: 0, t0: perf.now(), view: null,
     figs: [], figIdx: new Map(), poses: [], poseIdx: new Map(), fs: new Map(),
     records: [], swaps: [], logEvents: [], logSeen: 0, errors: [],
     ring: [], ringFrame: [], ringSize: null, jobs: [], strips: [], encodeQ: [], idle: null,
@@ -204,6 +207,8 @@ export function createProbe(cfg, env) {
     const t = R1(now - S.t0);
     if (ensureRing(canvas, rect)) copyFrame(canvas, n);
 
+    // did the camera change since the last frame at all? (a still camera adds nothing to the records)
+    const camMoved = Boolean(S.vpPrev) && vp.some((v, j) => Math.abs(v - S.vpPrev[j]) > 1e-9);
     const figs = [];
     for (const [id, st] of stage.actors.entries()) {
       const a = st && st.actor;
@@ -241,10 +246,14 @@ export function createProbe(cfg, env) {
         const k = poseKey(fi, a, sl);
         const m = sl.mesh.matrixWorld.elements;
         const rec = [k, R3(sl.fade), sl.mesh.visible ? 1 : 0];
+        const cs = []; // where the camera's change alone moved each corner (CSS px): the corner's world point under this frame's camera minus under the last frame's
         for (const [lx, ly] of CORNERS) {
-          const p = project(vp, rect, m[0] * lx + m[4] * ly + m[12], m[1] * lx + m[5] * ly + m[13], m[2] * lx + m[6] * ly + m[14]);
+          const wx = m[0] * lx + m[4] * ly + m[12], wy = m[1] * lx + m[5] * ly + m[13], wz = m[2] * lx + m[6] * ly + m[14];
+          const p = project(vp, rect, wx, wy, wz);
           rec.push(R1(p[0]), R1(p[1]));
+          if (camMoved) { const p0 = project(S.vpPrev, rect, wx, wy, wz); cs.push(R1(p[0] - p0[0]), R1(p[1] - p0[1])); }
         }
+        if (camMoved && cs.some((v) => Math.abs(v) >= 0.05)) rec.push(...cs);
         slots[i] = rec;
       }
       if (flip) {

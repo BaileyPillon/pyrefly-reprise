@@ -19,55 +19,17 @@
 //
 // Game case: both (shared critic plumbing; a size jump or a snap is a defect in either game).
 
+import { cameraShiftAt } from './continuity-camera.mjs';
+import { applyH, invertH, polygonArea, unitSquareToQuad } from './continuity-geometry.mjs';
 import { heldPlateau } from './continuity-held.mjs';
+import { poseReadings } from './continuity-readings.mjs';
 import { stagedStepOf } from './continuity-staged.mjs';
 
+export { applyH, invertH, polygonArea, unitSquareToQuad };
 export const FRAME_MS = 1000 / 60;
 
 // ------------------------------------------------------------------ geometry
-
-/**
- * The projective map of the unit square onto a screen quad, as a row-major 3x3: (0,0) -> corner 0 (top-left),
- * (1,0) -> corner 1, (1,1) -> corner 2, (0,1) -> corner 3. A flat plane seen through a camera maps to its four
- * projected corners by exactly this (Heckbert's square-to-quad), so any point of the painting is one multiply.
- * @param {ArrayLike<number>} q [x0,y0,x1,y1,x2,y2,x3,y3]
- */
-export function unitSquareToQuad(q) {
-  const [x0, y0, x1, y1, x2, y2, x3, y3] = q;
-  const dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3;
-  const dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
-  if (Math.abs(dx3) < 1e-9 && Math.abs(dy3) < 1e-9) return [x1 - x0, x3 - x0, x0, y1 - y0, y3 - y0, y0, 0, 0, 1];
-  const den = dx1 * dy2 - dx2 * dy1;
-  const g = (dx3 * dy2 - dx2 * dy3) / den;
-  const h = (dx1 * dy3 - dx3 * dy1) / den;
-  return [x1 - x0 + g * x1, x3 - x0 + h * x3, x0, y1 - y0 + g * y1, y3 - y0 + h * y3, y0, g, h, 1];
-}
-
-/** Map (u,t) of the painting to the screen. */
-export function applyH(H, u, t) {
-  const w = H[6] * u + H[7] * t + H[8];
-  return [(H[0] * u + H[1] * t + H[2]) / w, (H[3] * u + H[4] * t + H[5]) / w];
-}
-
-/** The inverse of a 3x3 (row-major), or null when singular. */
-export function invertH(H) {
-  const [a, b, c, d, e, f, g, h, i] = H;
-  const A = e * i - f * h, B = -(d * i - f * g), C = d * h - e * g;
-  const det = a * A + b * B + c * C;
-  if (!Number.isFinite(det) || Math.abs(det) < 1e-12) return null;
-  const k = 1 / det;
-  return [A * k, -(b * i - c * h) * k, (b * f - c * e) * k, B * k, (a * i - c * g) * k, -(a * f - c * d) * k, C * k, -(a * h - b * g) * k, (a * e - b * d) * k];
-}
-
-/** Shoelace area of a polygon given as [[x,y],...]. */
-export function polygonArea(pts) {
-  let s = 0;
-  for (let i = 0; i < pts.length; i++) {
-    const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
-    s += x0 * y1 - x1 * y0;
-  }
-  return Math.abs(s) / 2;
-}
+// (the projective maps, `unitSquareToQuad`, `applyH`, `invertH` and `polygonArea`, are in continuity-geometry.mjs and re-exported here)
 
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 const WHOLE = { u0: 0, t0: 0, u1: 1, t1: 1 }; // the whole painting, as a box
@@ -131,7 +93,8 @@ export function outlineJump(maskA, HA, maskB, HB, quadA, quadB, cells = 160) {
 /** A plane record from the probe (`[k, fade, visible, x0,y0,x1,y1,x2,y2,x3,y3]`) as an object, or null. */
 export function planeOf(raw) {
   if (!raw || !Array.isArray(raw)) return null;
-  return { k: raw[0], fade: raw[1], vis: raw[2] === 1, q: raw.slice(3, 11) };
+  // `cs` (probe version 2): where the camera's change alone moved each corner since the last frame, present only while the camera moved (continuity-camera.mjs)
+  return { k: raw[0], fade: raw[1], vis: raw[2] === 1, q: raw.slice(3, 11), cs: raw.length >= 19 ? raw.slice(11, 19) : null };
 }
 
 /** The plane that is `act` (the one the actor calls active) and the other one, from a figure record. */
@@ -155,6 +118,9 @@ export function planesOf(fig) {
  */
 export function figureTrack(fig, anchors, byCentroid = false) {
   let wf = 0, fx = 0, fy = 0, wh = 0, hx = 0, hy = 0, wc = 0, cx = 0, cy = 0, headOk = true, seen = 0;
+  // the camera's own shift of each tracked point, weighted like the point (continuity-camera.mjs): a head is moved by the camera far more than the origin is
+  const cf = [0, 0], ch = [0, 0], cc = [0, 0];
+  const add = (acc, plane, an, w) => { const s = cameraShiftAt(plane, an.u, an.t); acc[0] += s[0] * w; acc[1] += s[1] * w; };
   for (const raw of fig.s) {
     const p = planeOf(raw);
     if (!p || p.fade <= 0.001) continue;
@@ -163,15 +129,23 @@ export function figureTrack(fig, anchors, byCentroid = false) {
     seen++;
     const H = unitSquareToQuad(p.q);
     if (byCentroid) {
-      if (an.centroid) { const c = applyH(H, an.centroid.u, an.centroid.t); wc += p.fade; cx += c[0] * p.fade; cy += c[1] * p.fade; }
+      if (an.centroid) { const c = applyH(H, an.centroid.u, an.centroid.t); wc += p.fade; cx += c[0] * p.fade; cy += c[1] * p.fade; add(cc, p, an.centroid, p.fade); }
       continue;
     }
-    if (an.stance) { const f = feetPoint(H, an.stance); wf += p.fade; fx += f[0] * p.fade; fy += f[1] * p.fade; }
-    if (an.head) { const h = headCentre(H, an.head); wh += p.fade; hx += h[0] * p.fade; hy += h[1] * p.fade; } else headOk = false;
+    if (an.stance) { const f = feetPoint(H, an.stance); wf += p.fade; fx += f[0] * p.fade; fy += f[1] * p.fade; add(cf, p, an.stance, p.fade); }
+    if (an.head) {
+      const h = headCentre(H, an.head); wh += p.fade; hx += h[0] * p.fade; hy += h[1] * p.fade;
+      add(ch, p, { u: (an.head.u0 + an.head.u1) / 2, t: (an.head.t0 + an.head.t1) / 2 }, p.fade);
+    } else headOk = false;
   }
   if (!seen || (!wf && !wh && !wc)) return null;
   // The head is followed only while every plane that shows has a registered head: a head and a body centre are not one point.
-  return { feet: wf ? [fx / wf, fy / wf] : null, head: headOk && wh ? [hx / wh, hy / wh] : null, centroid: wc ? [cx / wc, cy / wc] : null };
+  const per = (acc, w) => (w ? [acc[0] / w, acc[1] / w] : null);
+  return {
+    feet: wf ? [fx / wf, fy / wf] : null, head: headOk && wh ? [hx / wh, hy / wh] : null, centroid: wc ? [cx / wc, cy / wc] : null,
+    // `cams`: the camera-only shift of each tracked point (CSS px), for detectJerks; [0, 0] where the recording carries none
+    cams: { feet: per(cf, wf), head: headOk && wh ? per(ch, wh) : null, centroid: per(cc, wc) },
+  };
 }
 
 // ------------------------------------------------------------------ swaps
@@ -214,6 +188,8 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg,
     camCut: Boolean(camCut), costume, sameArt, range, staged,
     head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0,
     held: { frames: 0, ms: 0, from: null }, snap: false, snapStaged: false, hardCut: false, failHead: false, failFeet: false,
+    // pose continuity (W4): the readings from the pixels (continuity-readings.mjs), null until taken
+    height: null, feetSil: null, headReal: null, failHeight: false, failFeetSil: false, failRealHead: false, unregistered: false,
   };
   if (!fromRaw || !toRaw) return { ...out, unmeasured: 'a plane of the swap was not recorded' };
   const Hf = unitSquareToQuad(fromRaw.q), Ht = unitSquareToQuad(toRaw.q);
@@ -235,7 +211,9 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg,
   if (pf !== null && pf > 0) {
     pf *= k1600; pt *= k1600;
     const ratio = pt / pf;
-    out.head = { fromPx: round(pf, 1), toPx: round(pt, 1), ratio: round(ratio, 4), source: bothHeads ? 'registration' : 'silhouette', metric: bothHeads ? 'head' : 'mass' };
+    // `label`: a registered head is held to the idle's size by the head lock and read through the table that drew it, so it agrees with itself whatever the body does: a CONTROL, not a proof
+    // (W4: the HEIGHT and FEET readings below trust nothing the table says). The mass is read from the pixels and is no control.
+    out.head = { fromPx: round(pf, 1), toPx: round(pt, 1), ratio: round(ratio, 4), source: bothHeads ? 'registration' : 'silhouette', metric: bothHeads ? 'head' : 'mass', label: bothHeads ? 'control' : 'mass' };
     out.failHead = judged && Math.abs(ratio - 1) > (bothHeads ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) / 100;
   }
   // --- feet: where the standing figure stands, before and after
@@ -248,6 +226,8 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg,
     out.feet = { dx: round(dx, 1), dy: round(dy, 1), px: round(px, 1), standing, source: coarse ? 'silhouette' : 'registration' };
     if (standing) out.failFeet = judged && px > (coarse ? cfg.size.feetTolerancePxCoarse : cfg.size.feetTolerancePx);
   }
+  // --- pose continuity (W4): the height, the silhouette's own feet and a hold's real head, from the pixels, through the same two planes of the same frame
+  Object.assign(out, poseReadings({ aFrom, aTo, Hf: Hf26, Ht: Ht26, k1600, head: out.head, cfg, judged }));
   // --- the outline: what the swap does to the silhouette as drawn (CHK-027)
   if (aFrom?.mask && aTo?.mask) {
     const oj = outlineJump(aFrom.mask, Hf, aTo.mask, Ht, fromRaw.q, toRaw.q);
@@ -290,9 +270,11 @@ const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
 
 /**
  * Teleports and jerks on every frame of a move. `track` is one figure's samples in order, each
- * `{ n, t, feet:[x,y]|null, head:[x,y]|null, centroid?:[x,y]|null, cam:[dx,dy] }` (a figure with no registration has only a centroid, see
+ * `{ n, t, feet:[x,y]|null, head:[x,y]|null, centroid?:[x,y]|null, cam:[dx,dy], cams?:{feet,head,centroid} }` (a figure with no registration has only a centroid, see
  * `figureTrack`) where `cam` is how far the camera alone moved the
- * figure's world point since the previous sample (so the jump of the figure itself is the step minus `cam`).
+ * figure's world point since the previous sample (so the jump of the figure itself is the step minus `cam`), and `cams` (probe version 2) how far it moved each
+ * TRACKED point (`figureTrack`, continuity-camera.mjs): a head is moved by far more than the origin is, and the step minus `cam` read a camera cut as a 40 to 57 px head jerk
+ * on every figure in the frame. A part with no `cams` entry falls back to `cam`; `cam` alone still decides whether the camera cut (its own shift under `cutPx`).
  * Only consecutive frames count; a gap (the figure hid, the battle paused) resets.
  *
  * A step is a jerk when it is at least `jerkMinPx`, is `jerkRatio` times the local speed of the move (the median
@@ -310,7 +292,9 @@ export function detectJerks(track, k1600, cfg) {
     let best = null;
     for (const part of ['feet', 'head', 'centroid']) {
       if (!a[part] || !b[part]) continue;
-      const dx = (b[part][0] - a[part][0] - b.cam[0]) * k1600, dy = (b[part][1] - a[part][1] - b.cam[1]) * k1600;
+      // the camera's own shift of THIS point (W4, angle 2 section 6: a head 1.8 units above the origin is moved by far more than the origin is), else of the figure's origin (an older recording)
+      const cam = (b.cams && b.cams[part]) || b.cam;
+      const dx = (b[part][0] - a[part][0] - cam[0]) * k1600, dy = (b[part][1] - a[part][1] - cam[1]) * k1600;
       const px = Math.hypot(dx, dy);
       if (!best || px > best.px) best = { part, px, dx, dy };
     }
@@ -355,4 +339,4 @@ export function median(a) {
 
 // ------------------------------------------------------------------ summary and verdicts
 // (in continuity-summary.mjs, split out to keep this file under 400 lines; re-exported so nothing that imports it changes)
-export { summarize, verdicts, swapBadness, distinctFirst, worstSwaps, continuityReportLine } from './continuity-summary.mjs';
+export { summarize, verdicts, swapBadness, distinctFirst, worstSwaps, continuityReportLine, frameTimeOf } from './continuity-summary.mjs';

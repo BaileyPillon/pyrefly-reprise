@@ -8,7 +8,7 @@
  */
 import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
-import { anchorsFor, bboxRows, decodeMask, estimateCentroid, estimateMass, estimateStance, loadPoseMeasure, openMask, subjectPoseOf } from '../../critic/runner/lib/continuity-silhouette.mjs';
+import { anchorsFor, bboxRows, decodeMask, estimateCentroid, estimateExtent, estimateMass, estimateStance, loadPoseMeasure, openMask, subjectPoseOf } from '../../critic/runner/lib/continuity-silhouette.mjs';
 import type { PoseMeasure } from '../../critic/runner/lib/continuity-silhouette.mjs';
 
 const W = 200, H = 300;
@@ -77,6 +77,25 @@ describe('reading a painting', () => {
     expect(estimateStance(m)).toBeNull();
     expect(estimateMass(m)).toBeNull();
     expect(estimateCentroid(m)).toBeNull();
+    expect(estimateExtent(m)).toBeNull();
+  });
+
+  it('takes the extent: the top of the silhouette, its ground line and its sides, the way the engine measures a painting (pose continuity W4: the HEIGHT reading)', async () => {
+    const e = estimateExtent(await decodeMask(await painting({ blade: false })))!;
+    // the head's top is row 27 of 300, the boots end at row 272, the boots span x 66..134
+    expect(e.top).toBeCloseTo(27 / 300, 2);
+    expect(e.base).toBeCloseTo(273 / 300, 2);
+    expect(e.left).toBeCloseTo(66 / 200, 2);
+    expect(e.right).toBeCloseTo(135 / 200, 2);
+    // a thin blade that hangs lower DOES set the ground line, as it does for PaintedArt.measureAlpha (the engine plants what this reads: why a painting with a hanging weapon has a feetRow or an
+    // anchorY); estimateStance is the reading that opens it away
+    const b = estimateExtent(await decodeMask(await painting()))!;
+    expect(b.base).toBeGreaterThan(e.base + 0.05);
+    expect(b.right).toBeGreaterThan(e.right);
+    // the same fractions at twice the size
+    const twice = estimateExtent(await decodeMask(await painting({ width: 400, height: 600 })))!;
+    expect(twice.top).toBeCloseTo(b.top, 2);
+    expect(twice.base).toBeCloseTo(b.base, 2);
   });
 
   it('takes the centroid: the centre of mass of everything solid, the blade included (r40 instrument edit (a))', async () => {
@@ -163,6 +182,28 @@ describe('where a painting\'s anchors come from', () => {
     expect(lunge.prone).toBe(false);
     const ko = anchorsFor({ url: '/art/characters/hero/attack.png', mask: wide, measure: measure([300, 200], { prone: true, standing: false }) });
     expect(ko.prone).toBe(true);
+  });
+
+  it('adds the readings of the pixels and the class of the pose, whatever the registration says (pose continuity W4)', async () => {
+    const mask = await decodeMask(await painting({ blade: false }));
+    const idle = anchorsFor({ url: '/art/characters/lulu/idle.png', mask, measure: null });
+    expect(idle).toMatchObject({ kind: 'party-ffx', cls: 'idle', registered: false, waiver: null, heldHeadRatio: null });
+    expect(idle.stanceSil!.t).toBeCloseTo(idle.extent!.base, 2);
+    const rec = { size: [W, H], head: [80, 20, 120, 60], stance: { x: 100, row: 120 }, prone: false, standing: true, sha: 'ab12cd34ef567890'.repeat(4), stature: 0.901, held: { headRatio: 1.354 } };
+    const m = { path: 'x', sha256: 'x', count: 1, subjects: { lulu: { poses: { hurt: rec } } } } as unknown as PoseMeasure;
+    const hurt = anchorsFor({ url: '/art/characters/lulu/hurt.webp', mask, measure: m });
+    expect(hurt).toMatchObject({ cls: 'standing', registered: true, heldHeadRatio: 1.354, recStature: 0.901, stanceSrc: 'registration' });
+    expect(hurt.sha).toBe(rec.sha);
+    // the registered stance is at row 120 and the silhouette's own is at the boots: the registration can say what the pixels do not
+    expect(hurt.stance!.t).toBeCloseTo(120 / 300, 3);
+    expect(hurt.stanceSil!.t).toBeGreaterThan(0.85);
+    // classes: a KO, a laid-down painting, a dressphere's twirl, a hull part, an FF7 still
+    expect(anchorsFor({ url: '/art/characters/lulu/ko.png', mask, measure: null }).cls).toBe('ko');
+    expect(anchorsFor({ url: '/art/characters/lulu/critical.png', mask, measure: null }).cls).toBe('low');
+    expect(anchorsFor({ url: '/art/characters/yuna-songstress/twirl-mid.png', mask, measure: null }).cls).toBe('staged');
+    expect(anchorsFor({ url: '/art/characters/sin-left-fin/hurt.png', mask, measure: null }).cls).toBe('part');
+    expect(anchorsFor({ url: '/art/characters/dark-sandy/attack.png', mask, measure: null })).toMatchObject({ kind: 'dark-aeon', cls: 'standing', registered: false });
+    expect(anchorsFor({ url: '/some/other/path.png', mask, measure: null })).toMatchObject({ subject: null, cls: null, kind: null });
   });
 
   it('has no records file to read when none is given', () => {
