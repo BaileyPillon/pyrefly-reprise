@@ -273,5 +273,9 @@ export const GRID_LAYOUTS = true;
  */
 export const MIX_PICKER = false;
 
-/** The reason the Mix row is greyed while {@link MIX_PICKER} is off. */
-export const MIX_PICKER_REASON = 'needs the item picker';
+/**
+ * The reason the Mix row is greyed while {@link MIX_PICKER} is off. Short on purpose: the desktop row gives the reason about 70 px beside the name (the phone about 120 px) and cuts it with an ellipsis, and the
+ * first wording, "needs the item picker" (21 letters), showed as "NEEDS THE ITE..." / "NEEDS THE ITEM ...", which reads as a missing item (r51 merge review, defect 2); "Not built yet" (13 letters) still
+ * came out "NOT BUILT Y..." on desktop, so the reason is nine letters. The help line carries the reason before the Mix's effect, so the player still reads what the row does. "Not built" is the wording FFX's aeon order rows already use for a command that is listed but has no code behind it (`ffx/aeon-commands.ts`).
+ */
+export const MIX_PICKER_REASON = 'Not built';
