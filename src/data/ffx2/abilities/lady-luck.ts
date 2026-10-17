@@ -127,6 +127,10 @@ export const ladyLuckAbilities: AbilityDef[] = [
     // removing 75% of current HP from the whole party", ignoring defence [§2.3, §3.12, verified: 2 sources].
     // `all-allies` is relative to the spinner, so it is her own party. It runs the ordinary 20-step pipeline,
     // so step 18 (Cat Nip's 9999) applies — §3.12's "with Cat Nip equipped a Dud can wipe the party".
+    //
+    // **No element** (re-parity RC10, FFX-2 only; FFX2-H04 section 7 row E8, section 8 row W4): the guides call the Dud "gravity", the game's own row for it
+    // (0x31E5: special damage, the percent-of-current-HP formula, power 12) carries no element byte, so no affinity of any girl applies to it. The element
+    // ladder is a rule, so the game's file wins over the guides; before this the Dud ran the gravity ladder (a girl's gravity affinity, a gravity-eating accessory).
     id: 'x2-lady-luck-dud',
     name: 'Dud',
     game: 'ffx2',
@@ -137,7 +141,7 @@ export const ladyLuckAbilities: AbilityDef[] = [
     power: 12, // 12/16 = 75% of current HP
     formula: 'percent-current',
     damageType: 'other',
-    element: ['gravity'],
+    element: ['none'],
     targeting: 'all-allies',
     hits: 1,
     statusEffects: [],
