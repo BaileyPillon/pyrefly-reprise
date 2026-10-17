@@ -2,13 +2,14 @@
  * **Rigs in the pose gate and in the installer** (the rig program; both games). A pose a gate-ok rig serves is reported `rigged` by the pose gate, its painting row staying the fallback;
  * a rig that is not ok changes nothing (a note, never a failure, never a pass it did not earn); and `tools/art-install.mjs --rig` copies a rig into the rig root only through the gate.
  */
+import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { runGate } from '../../../tools/pose-gate-lib.mjs';
 import { gateRig, stampRig } from '../../../tools/rig/rig-gate-lib.mjs';
 import { applyRigInstall, planRigInstall } from '../../../tools/rig/rig-install.mjs';
-import { installedTable, FIXTURE_DECISIONS, modelInputs } from './pose-gate-fixtures.ts';
+import { fakeRoot, installedTable, FIXTURE_DECISIONS, modelInputs } from './pose-gate-fixtures.ts';
 import { POSES, ROOT, SUBJECT, puppetTable, puppetWorld, tempDir, type RigJson } from './rig-gate-fixtures.ts';
 
 vi.setConfig({ testTimeout: 120_000, hookTimeout: 120_000 });
@@ -73,6 +74,21 @@ describe('the pose gate reports what a rig serves', () => {
     const w = await stampedWorld();
     const r = await runGate({ root: ROOT, inputs: await modelInputs(w.art, w.table), ledger: null, concurrency: 1, decisions: FIXTURE_DECISIONS, pin: null, rigs: { dir: join(tempDir('no-rigs-'), 'absent') } });
     expect(r.rigs).toEqual([]);
+  });
+});
+
+describe('node tools/pose-gate.mjs --check --rigs', () => {
+  it('reports the rigged poses in its summary line, and says nothing about rigs without the option', async () => {
+    const w = await stampedWorld();
+    const cli = (extra: string[]): { code: number; out: string } => {
+      const r = spawnSync(process.execPath, [join(ROOT, 'tools', 'pose-gate.mjs'), '--check', '--root', fakeRoot(w.table), '--art', w.art, '--subjects', SUBJECT, '--quiet', ...extra], { encoding: 'utf8', timeout: 120_000 });
+      return { code: r.status ?? -1, out: r.stdout };
+    };
+    const plain = cli([]);
+    expect(plain.out).not.toContain('rigged');
+    const withRigs = cli(['--rigs', w.rigs]);
+    expect(withRigs.out).toMatch(/pose-gate: \d+ paintings of 1 subjects: \d+ pass, \d+ waived, [1-9]\d* rigged, \d+ exempt, \d+ fail;/);
+    expect(withRigs.code).toBe(plain.code);
   });
 });
 

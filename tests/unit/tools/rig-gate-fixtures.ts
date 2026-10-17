@@ -96,15 +96,13 @@ export type RigJson = Record<string, any>;
 export interface Rect { name: string; x: number; y: number; w: number; h: number; bone: number; color: [number, number, number] }
 
 /** A rectangle's mesh: a grid of `nx` by `ny` quads, two triangles each. */
-function gridMesh(r: Rect, nx = 2, ny = 4): { verts: number[]; triangles: number[]; bones: number[]; weights: number[] } {
+function gridMesh(r: Rect, nx = 2, ny = 4): { verts: number[]; triangles: number[]; weights: number[] } {
   const verts: number[] = [];
-  const bones: number[] = [];
   const weights: number[] = [];
   for (let j = 0; j <= ny; j++) {
     for (let i = 0; i <= nx; i++) {
       verts.push(r.x + (r.w * i) / nx, r.y + (r.h * j) / ny);
-      bones.push(r.bone, -1);
-      weights.push(1, 0);
+      weights.push(r.bone, 1, -1, 0); // four numbers a vertex: bone, weight, second bone (-1: none), its weight
     }
   }
   const triangles: number[] = [];
@@ -117,7 +115,7 @@ function gridMesh(r: Rect, nx = 2, ny = 4): { verts: number[]; triangles: number
       triangles.push(a, b, c, b, d, c);
     }
   }
-  return { verts, triangles, bones, weights };
+  return { verts, triangles, weights };
 }
 
 /** Write one rectangle's PNG into `dir` and append its part (a grid mesh, rigid on `r.bone`) to `rig.parts`, last in the draw order. */
@@ -153,14 +151,14 @@ export async function writePuppetRig(dir: string, art: string, o: PuppetRigOptio
   const parts: RigJson[] = [];
   for (const r of rects) await addRectPart(dir, { parts }, r);
   const keyOf = (pose: string, a: Angles): RigJson => ({
-    bones: { chest: { rot: deg(a.chest) }, head: { rot: deg(a.head) }, upperarm: { rot: deg(a.upper) }, forearm: { rot: deg(a.fore) } },
-    source: `art/characters/${SUBJECT}/${pose}.png`,
+    bones: { chest: { rot: a.chest }, head: { rot: a.head }, upperarm: { rot: a.upper }, forearm: { rot: a.fore } },
+    source: `characters/${SUBJECT}/${pose}`,
   });
-  const keys: RigJson = { idle: { bones: {}, source: `art/characters/${SUBJECT}/idle.png` } };
+  const keys: RigJson = { idle: { bones: {}, source: `characters/${SUBJECT}/idle` } };
   for (const [pose, a] of Object.entries(POSES)) if (pose !== 'idle') keys[pose] = keyOf(pose, a);
   const rig: RigJson = {
     version: 1, name: SUBJECT, scale: 1, image: { w: W, h: H }, baselineY: 450,
-    costume: { painting: `art/characters/${SUBJECT}/idle.png`, sha: sha.slice(0, 16) },
+    costume: { painting: `characters/${SUBJECT}/idle`, pose: 'idle', sha },
     bones, parts,
     landmarks: { head: { bone: 3, x: 200, y: 150 }, feet: { bone: 0, x: 200, y: 450 } },
     keys,

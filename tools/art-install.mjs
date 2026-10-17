@@ -12,7 +12,7 @@
  *   --root <repo>  --python <python.exe>   the repository whose tables and records are written (default this one); the interpreter with numpy, scipy, PIL
  *
  * RIGS (the rig program, 2026-10-17): a figure drawn as ONE painting on a bone rig installs the same way, gated:
- *   node tools/art-install.mjs --target D:/pyrefly-art-r51 --rig kimahri --rig-from D:/work/rigs [--rigs-root D:/pyrefly-art-rigs] [--replace --backup <folder>] [--dry]
+ *   node tools/art-install.mjs --target D:/pyrefly-art-r51 --rig kimahri --rig-from D:/work/rigs [--rigs-root D:/pyrefly-art-rigs] [--replace --backup <folder>] [--require-coverage] [--dry]
  * copies <rig-from>/<subject>/rig.json and its PNGs into the rig root (never under public/) after `tools/rig-gate.mjs` says ok for that rig against --target's costume painting,
  * runs the gate on the installed copy and the pose gate (`--rigs`) for the subject. Exit codes as below. See tools/rig/rig-install.mjs.
  *
@@ -47,7 +47,7 @@ async function installRigs(target) {
   const root = resolve(get('--root', ROOT));
   const rigsRoot = resolve(get('--rigs-root', DEFAULT_RIGS_ROOT));
   const subjects = get('--rig').split(',').filter(Boolean);
-  const plan = await planRigInstall({ rigsRoot, artDir: resolve(target), root, items: subjects.map((subject) => ({ subject, from: resolve(from) })), replace: flag('--replace'), backup: get('--backup', null) });
+  const plan = await planRigInstall({ rigsRoot, artDir: resolve(target), root, items: subjects.map((subject) => ({ subject, from: resolve(from) })), replace: flag('--replace'), backup: get('--backup', null), requireCoverage: flag('--require-coverage') });
   for (const p of plan.problems) console.error(`REFUSED  ${p}`);
   if (!plan.ok) { console.error(`art-install: refused, ${plan.problems.length} problem(s); nothing was written`); return 3; }
   for (const w of plan.writes) console.log(`  rig ${w.subject}: ${w.files.length ? `${w.files.length} file(s) -> ${w.dest}${w.replaces.length ? ` (${w.replaces.length} file(s) moved aside first)` : ''}` : 'already in place; gated'}`);
@@ -55,7 +55,7 @@ async function installRigs(target) {
   applyRigInstall(plan, { backup: get('--backup', null) });
   let code = 0;
   for (const w of plan.writes) {
-    const g = await gateRig({ rig: w.dest, root, artDir: resolve(target), blends: true });
+    const g = await gateRig({ rig: w.dest, root, artDir: resolve(target), blends: true, requireCoverage: flag('--require-coverage') });
     console.log(`art-install: rig ${w.subject} installed in ${w.dest}; the rig gate says ${g.status.toUpperCase()}`);
     if (g.status !== 'ok') code = 1;
   }

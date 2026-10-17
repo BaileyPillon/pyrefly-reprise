@@ -19,7 +19,6 @@ from PIL import Image, ImageDraw, ImageFont
 from rig_common import BG, NODE, REPO, Subject, read_json, say
 from rig_skin import RigModel
 
-RAD = np.pi / 180.0
 TILE_H = 420
 
 
@@ -59,9 +58,9 @@ def run(sub: Subject, out=None) -> pathlib.Path:
     fb = _font(16)
     tiles = []
     for pose, key in rig["keys"].items():
-        rot = {n: ch.get("rot", 0.0) * RAD for n, ch in key.get("bones", {}).items()}
+        rot = {n: ch.get("rot", 0.0) for n, ch in key.get("bones", {}).items()}
         r = key.get("root", {})
-        model.pose(rot=rot, root=(r.get("dx", 0.0), r.get("dy", 0.0), r.get("rot", 0.0) * RAD))
+        model.pose(rot=rot, root=(r.get("dx", 0.0), r.get("dy", 0.0), r.get("rot", 0.0)))
         # the rig in colour on a canvas twice as wide as the costume, so a key that steps aside stays in view
         pad = int(W * 0.5)
         canvas_w, canvas_h = W + 2 * pad, H + int(H * 0.12)
@@ -82,7 +81,7 @@ def run(sub: Subject, out=None) -> pathlib.Path:
         if T and pose in T["poses"]:
             timg = np.array(Image.open(sub.work / "targets" / T["poses"][pose]["png"]))
             tgt = (timg[..., 0] if timg.ndim == 3 else timg) > 127
-            model.pose(rot=rot, root=(r.get("dx", 0.0), r.get("dy", 0.0), r.get("rot", 0.0) * RAD))
+            model.pose(rot=rot, root=(r.get("dx", 0.0), r.get("dy", 0.0), r.get("rot", 0.0)))
             rg = model.grid_mask().astype(bool)
             ov = np.zeros((*tgt.shape, 3), np.uint8)
             ov[tgt & ~rg] = (70, 120, 255)
@@ -103,11 +102,12 @@ def run(sub: Subject, out=None) -> pathlib.Path:
             lines.append(f"fitter: overlap {fit.get('iou', 'n/a')}  stature {fit.get('stature', 'n/a')}  feetPx {fit.get('feetPx', 'n/a')}")
         tiles.append((a_img, b_img, o_img, lines, (row["ok"] if row else None)))
     pw = max(t[0].width + t[1].width + t[2].width + 40 for t in tiles)
-    sheet = Image.new("RGB", (pw * 1 + 20, 60 + len(tiles) * (TILE_H + 90)), (14, 16, 22))
+    sheet = Image.new("RGB", (max(pw + 20, 1100), 70 + len(tiles) * (TILE_H + 90)), (14, 16, 22))
     d = ImageDraw.Draw(sheet)
     verdict = gate["status"].upper() if gate else "gate not run"
-    d.text((10, 8), f"{rig['name']}  rig, {len(rig['parts'])} parts, {len(rig['bones'])} bones; gate {verdict}.   left: the approved painting   middle: the rig posed   right: silhouettes on the pose model's grid (blue approved, red rig, purple both)", fill=(235, 235, 240), font=fb)
-    y = 40
+    d.text((10, 6), f"{rig['name']}  rig, {len(rig['parts'])} parts, {len(rig['bones'])} bones; gate {verdict}", fill=(235, 235, 240), font=fb)
+    d.text((10, 28), "left: the approved painting    middle: the rig posed to the key    right: both silhouettes on the pose model's grid (blue approved, red rig, purple both)", fill=(190, 195, 210), font=f)
+    y = 56
     for a, b, o, lines, ok in tiles:
         x = 10
         for im in (a, b, o):

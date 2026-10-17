@@ -894,6 +894,26 @@ gate never read from a master is refused). `--skip-tests` and `--owner-override`
 `node tools/pose-gate.mjs --report [--out F]` prints the census (totals by class and game, the out-of-band list, what is report-only) that the critic's static check
 and the artifact record keep.
 
+### Rigging a figure: one painting, every pose (the rig program, 2026-10-17)
+
+Bailey, 2026-10-17: "start rigging for all chapters please. i want a permanent fix now." A figure that is cut from ONE approved painting (its costume) and bent into every pose cannot differ
+from itself in size, feet or costume. The pipeline is `tools/rig/rig.py`; the file it writes is `src/data/art/rigTypes.ts` (format v1); the gate is `tools/rig-gate.mjs`. Handoff: `docs/handoff/rig-pipeline.md`.
+
+```
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py cut      --subject <name> [--sam]      # SAM masks, label map, classical underlaps and fills (no generative model)
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py build    --subject <name>              # bones, meshes, skin, landmarks
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py fit-keys --subject <name>              # bone transforms matching the approved painting of each pose the game draws
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py export   --subject <name>              # D:/pyrefly-art-rigs/<id>/ (never public/art), then the gate
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py sheet    --subject <name>              # each key beside its approved painting, with the gate's numbers
+node tools/rig-gate.mjs --rig D:/pyrefly-art-rigs/<id> [--require-coverage]                            # the gate: writes gate into rig.json, exit 1 when it refuses
+node tools/art-install.mjs --target <art folder> --rig <id> --rig-from <folder> [--rigs-root ...]      # install a rig THROUGH the gate
+node tools/pose-gate.mjs --check --rigs auto                                                          # poses a gate-ok rig serves are reported `rigged`
+```
+
+A rig is `ok` only when every key overlaps the approved painting of its pose by 0.85 (both registered at the idle's scale and feet), its stature (head to soles for a props-out pose), real head
+and feet are inside the pose class's band, no joint opens a hole in any key or any 25, 50 or 75 percent blend between two keys, and it is inside the budget (24 parts, 48 bones, 8000
+vertices, 9 Mpx, 9 MB of PNG). The runtime draws only a rig whose `gate.status` is `ok`; the paintings of every pose stay the fallback and keep their own rows and waivers.
+
 ---
 
 ## 6. Judging a batch

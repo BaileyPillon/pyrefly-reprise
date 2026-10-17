@@ -33,10 +33,10 @@ export function rigFiles(raw) {
 
 /**
  * Check everything and say what would be written; writes nothing.
- * @param {{rigsRoot: string, artDir?: string, root?: string, inputs?: object, items: Array<{subject: string, from: string}>, replace?: boolean, backup?: string|null}} o
+ * @param {{rigsRoot: string, artDir?: string, root?: string, inputs?: object, items: Array<{subject: string, from: string}>, replace?: boolean, backup?: string|null, requireCoverage?: boolean}} o
  * @returns {Promise<{ok: boolean, problems: string[], writes: Array<{subject: string, from: string, dest: string, files: string[], replaces: string[]}>}>}
  */
-export async function planRigInstall({ rigsRoot, artDir, root, inputs, items, replace = false, backup = null }) {
+export async function planRigInstall({ rigsRoot, artDir, root, inputs, items, replace = false, backup = null, requireCoverage = false }) {
   const problems = [];
   const writes = [];
   const rr = resolve(rigsRoot);
@@ -59,7 +59,7 @@ export async function planRigInstall({ rigsRoot, artDir, root, inputs, items, re
     if (missing.length) { problems.push(`${where}: ${missing.length} file(s) the rig names are missing beside its rig.json (${missing.slice(0, 4).join(', ')})`); continue; }
     const stamp = verifyStamp(from);
     if (!stamp.ok) problems.push(`${where}: the rig is not stamped ok (${stamp.code}: ${stamp.message})`);
-    const g = await gateRig({ rig: from, root, artDir, inputs, blends: true });
+    const g = await gateRig({ rig: from, root, artDir, inputs, blends: true, requireCoverage });
     if (g.status !== 'ok') problems.push(`${where}: the rig gate refuses it against ${g.rigDir ? 'the target art folder' : 'the art'}: ${g.failures.length} failure(s) (${[...new Set(g.failures.map((f) => f.code))].join(', ')}); first: ${g.failures[0]?.message ?? '-'}`);
     const dest = join(rr, it.subject);
     if (resolve(dest) !== resolve(from)) {

@@ -9,7 +9,7 @@
  */
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { gateRig, riggedPoses, verifyStamp } from './rig-gate-lib.mjs';
+import { costumeSha, gateRig, riggedPoses, verifyStamp } from './rig-gate-lib.mjs';
 import { costumeParts, readRigFile } from './rig-format.mjs';
 
 /**
@@ -32,8 +32,8 @@ export async function applyRigs({ entries, inputs, dir, mode = 'full' }) {
     const v = verifyStamp(folder);
     if (!v.ok) { rec.why = `${v.code}: ${v.message}`; continue; }
     const pose = costumeParts(v.raw.costume?.painting)?.pose ?? 'idle';
-    const costume = entries.find((e) => e.subject === name && e.pose === pose);
-    if (!costume || !costume.sha.startsWith(String(v.raw.costume.sha).toLowerCase())) { rec.why = `costume-stale: the ${pose} painting is not the master the rig was cut from`; continue; }
+    const sha = costumeSha(v.raw.costume, v.raw.scale, inputs.artDir, name, pose);
+    if (!sha.ok) { rec.why = `costume-stale: ${sha.why}`; continue; }
     let served = v.raw.gate.keys ?? [];
     if (mode === 'full') {
       const g = await gateRig({ rig: folder, inputs, blends: true });

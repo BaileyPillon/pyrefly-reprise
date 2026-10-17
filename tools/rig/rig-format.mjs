@@ -5,12 +5,12 @@
  *
  * The contract is `src/data/art/rigTypes.ts` (the engine lane's; the runtime reads `src/engine/rig/RigData.ts`). This module is the Node side of the same file: it reads
  * what the cutting pipeline (`tools/rig/rig_export.py`) writes, checks it as strictly as the runtime does and more, and gives the gate (`rig-gate-lib.mjs`) a runtime form
- * (`rt`): angles in RADIANS, uvs with v DOWN (image rows), skin as two influences a vertex, bone references as indices. In the FILE angles are degrees (clockwise on
- * screen) and uvs are v UP, as the types say. A rig lives in `<rig root>/<subject>/rig.json` with one PNG per part (`D:/pyrefly-art-rigs` on this machine), never in `public/art`.
+ * (`rt`): skin as two influences a vertex, bone references as indices, texture rows from the top. In the file key angles (`rot`, `root.rot`) are RADIANS clockwise on screen,
+ * `uvs` are v DOWN like the painting's px (the prototype's `uv` alias is v UP and is flipped here), a part is skinned by `bone`, by `weights` (four numbers a vertex: b0, w0, b1, w1)
+ * or by the prototype's `bones` + `weights` (two each). A rig lives in `<rig root>/<subject>/rig.json` with one PNG per part (`D:/pyrefly-art-rigs` on this machine), never in `public/art`.
  *
- * Beyond the types, the pipeline writes (all additive, the runtime ignores them): `costume.sha2x` (first 16 hex of the `@Nx` master the parts are cut from) and, in `gate`,
- * `digest` (a fingerprint of everything else in the file), `rules` and `keys`. The runtime draws a rig whose `gate.status` is `ok`; `rig-gate-lib.mjs#verifyStamp` is how
- * the pose gate and the deploy know the `ok` is the gate's and still true.
+ * Beyond the types the pipeline writes (additive, the runtime ignores them): `costume.sha2x` (the `@Nx` master the parts are cut from) and, in `gate`, `rules` and `keys`. The runtime
+ * draws a rig whose `gate.status` is `ok`; `rig-gate-lib.mjs#verifyStamp` is how the pose gate and the installer know the `ok` is the gate's and still true of this content.
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
@@ -19,13 +19,12 @@ import { join, resolve } from 'node:path';
 export const RIG_VERSION = 1;
 export const RIG_FILE = 'rig.json';
 /** Who may write `gate.by`. */
-export const GATE_BY = 'rig-gate';
+export const GATE_BY = 'tools/rig-gate.mjs';
 export const GATE_RULES = 'rig-gate/1';
 /** Where rigs live: one folder per subject under this root (the dev server serves it at `/art/rigs/`). `PYREFLY_RIGS_DIR` overrides it. */
 export const DEFAULT_RIGS_ROOT = process.env.PYREFLY_RIGS_DIR ?? 'D:/pyrefly-art-rigs';
 /** The channels of a bone's pose, with their rest values. */
 export const CHANNELS = Object.freeze({ rot: 0, dx: 0, dy: 0, sx: 1, sy: 1 });
-const RAD = Math.PI / 180;
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 const isNumArray = (a, len) => Array.isArray(a) && (len === undefined || a.length === len) && a.every(isNum);
@@ -39,13 +38,13 @@ export function readRigFile(pathOrDir) {
   return { raw: JSON.parse(readFileSync(file, 'utf8')), dir: dirOf, file };
 }
 
-/** The subject and pose a costume painting path names (`art/characters/kimahri/idle@2x.png` is kimahri, idle), or null. */
+/** The subject and pose a costume painting path names (`characters/kimahri/idle`, `art/characters/kimahri/idle@2x.png`: kimahri, idle), or null. */
 export function costumeParts(painting) {
-  const m = /(?:^|\/)characters\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([a-z0-9]+(?:-[a-z0-9]+)*)(?:@\d+x)?\.(?:png|webp)$/i.exec(String(painting).replace(/\\/g, '/').replace(/%40/gi, '@'));
+  const m = /(?:^|\/)characters\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([a-z0-9]+(?:-[a-z0-9]+)*)(?:@\d+x)?(?:\.(?:png|webp))?$/i.exec(String(painting).replace(/\\/g, '/').replace(/%40/gi, '@'));
   return m ? { subject: m[1], pose: m[2] } : null;
 }
 
-/** Per-vertex bones and weights as typed arrays (two influences a vertex): `bone` (a name or an index, rigid), or `bones` + `weights` (two entries a vertex, -1 = none). */
+/** Per-vertex bones and weights as typed arrays (two influences a vertex): `bone` (a name or an index, rigid), `weights` alone (four numbers a vertex: b0, w0, b1, w1), or `bones` + `weights` (two each). */
 function skinOf(part, n, bones, problems, where) {
   const b = new Int16Array(n * 2).fill(-1);
   const w = new Float32Array(n * 2);
@@ -56,16 +55,24 @@ function skinOf(part, n, bones, problems, where) {
     for (let i = 0; i < n; i++) { b[i * 2] = bi; w[i * 2] = 1; }
     return { b, w };
   }
-  if (!isNumArray(part.bones, n * 2) || !isNumArray(part.weights, n * 2)) {
-    problems.push({ code: 'rig-part', message: `${where}: needs \`bone\`, or \`bones\` and \`weights\` with two entries a vertex (got ${Array.isArray(part.bones) ? part.bones.length : 'none'} and ${Array.isArray(part.weights) ? part.weights.length : 'none'} for ${n} vertices)` });
+  let fb = null;
+  let fw = null;
+  if (isNumArray(part.weights, n * 4) && part.bones === undefined) {
+    fb = part.weights.filter((_, i) => i % 2 === 0);
+    fw = part.weights.filter((_, i) => i % 2 === 1);
+  } else if (isNumArray(part.bones, n * 2) && isNumArray(part.weights, n * 2)) {
+    fb = part.bones;
+    fw = part.weights;
+  } else {
+    problems.push({ code: 'rig-part', message: `${where}: needs \`bone\`, or \`weights\` with four numbers a vertex (b0, w0, b1, w1), or \`bones\` and \`weights\` with two each (got ${Array.isArray(part.weights) ? part.weights.length : 'none'} weights for ${n} vertices)` });
     return { b, w };
   }
   for (let i = 0; i < n; i++) {
-    const a = part.bones[i * 2];
-    const c = part.bones[i * 2 + 1];
+    const a = fb[i * 2];
+    const c = fb[i * 2 + 1];
     if (!Number.isInteger(a) || a < 0 || a >= bones.length || !Number.isInteger(c) || c >= bones.length) { problems.push({ code: 'rig-part', message: `${where}: vertex ${i} names bones ${a}, ${c}` }); return { b, w }; }
-    const wa = part.weights[i * 2];
-    const wc = c < 0 ? 0 : part.weights[i * 2 + 1];
+    const wa = fw[i * 2];
+    const wc = c < 0 ? 0 : fw[i * 2 + 1];
     if (wa < 0 || wc < 0 || Math.abs(wa + wc - 1) > 0.02) { problems.push({ code: 'rig-part', message: `${where}: vertex ${i}'s weights ${wa}, ${wc} do not add to 1` }); return { b, w }; }
     b[i * 2] = a; b[i * 2 + 1] = c < 0 ? -1 : c; w[i * 2] = wa; w[i * 2 + 1] = wc;
   }
@@ -119,17 +126,18 @@ export function normaliseRig(raw, { dir } = {}) {
     const tri = p.triangles ?? p.tris ?? (p.verts === undefined ? [0, 1, 2, 0, 2, 3] : undefined);
     if (!Array.isArray(tri) || tri.length < 3 || tri.length % 3 || tri.some((t) => !Number.isInteger(t) || t < 0 || t >= n)) { bad('rig-part', `${where}: triangles do not index its ${n} vertices`); return; }
     const uvIn = p.uvs ?? p.uv;
+    const uvUp = p.uvs === undefined && p.uv !== undefined; // the prototype's `uv` alias is v UP
     if (uvIn && !isNumArray(uvIn, n * 2)) { bad('rig-part', `${where}: uvs is not 2 numbers a vertex`); return; }
     const png = typeof p.png === 'string' && !/[\\/]|^\./.test(p.png) ? p.png : null;
     if (!png) bad('rig-part', `${where}: png ${JSON.stringify(p.png)} is not a file name beside rig.json`);
     else if (dir && !existsSync(join(dir, png))) bad('rig-file', `${where}: ${png} does not exist beside rig.json`);
     if (typeof p.rim === 'string' && dir && !existsSync(join(dir, p.rim))) bad('rig-file', `${where}: ${p.rim} does not exist beside rig.json`);
     const { b, w } = skinOf(p, n, bones, problems, where);
-    // texture rows from the top: the file's v runs UP (three.js), so row = (1 - v) * height
+    // texture rows from the top: `uvs` run DOWN like the painting's px; the prototype's `uv` alias runs UP and is flipped
     const tuv = new Float32Array(n * 2);
     for (let k = 0; k < n; k++) {
       tuv[k * 2] = uvIn ? uvIn[k * 2] : (verts[k * 2] - bx) / bw;
-      tuv[k * 2 + 1] = uvIn ? 1 - uvIn[k * 2 + 1] : (verts[k * 2 + 1] - by) / bh;
+      tuv[k * 2 + 1] = uvIn ? (uvUp ? 1 - uvIn[k * 2 + 1] : uvIn[k * 2 + 1]) : (verts[k * 2 + 1] - by) / bh;
     }
     parts.push({ name: p.name, order: isNum(p.order) ? p.order : i, png, rim: p.rim ?? null, box: p.box, verts: Float32Array.from(verts), tris: Uint32Array.from(tri), tuv, b, w, alpha: null });
   });
@@ -157,14 +165,14 @@ export function normaliseRig(raw, { dir } = {}) {
       const c = { ...CHANNELS };
       for (const [cn, v] of Object.entries(ch ?? {})) {
         if (!(cn in CHANNELS) || !isNum(v)) { bad('rig-key', `key ${pose}.${bn}: ${cn} = ${JSON.stringify(v)} is not a channel (${Object.keys(CHANNELS).join(', ')}) or not a number`); continue; }
-        c[cn] = cn === 'rot' ? v * RAD : v;
+        c[cn] = v;
       }
-      if (Math.abs(c.rot) > 4 * Math.PI || Math.abs(c.dx) > raw.image?.w || Math.abs(c.dy) > raw.image?.h || c.sx <= 0 || c.sy <= 0 || c.sx > 4 || c.sy > 4) bad('rig-key', `key ${pose}.${bn} is out of any sane range`);
+      if (Math.abs(c.rot) > 2 * Math.PI || Math.abs(c.dx) > raw.image?.w || Math.abs(c.dy) > raw.image?.h || c.sx <= 0 || c.sy <= 0 || c.sx > 4 || c.sy > 4) bad('rig-key', `key ${pose}.${bn} is out of any sane range`);
       out.bones[bn] = c;
     }
     for (const [cn, v] of Object.entries(k?.root ?? {})) {
       if (!['dx', 'dy', 'rot'].includes(cn) || !isNum(v)) bad('rig-key', `key ${pose}.root: ${cn} = ${JSON.stringify(v)} is not dx, dy or rot`);
-      else out.root[cn] = cn === 'rot' ? v * RAD : v;
+      else out.root[cn] = v;
     }
     keys[pose] = out;
   }

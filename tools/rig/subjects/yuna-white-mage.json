@@ -56,6 +56,6 @@
     "min_iou": 0.88,
     "limits": { "hip": [-25, 25], "chest": [-30, 30], "head": [-40, 40], "staff": [-120, 120] },
     "chain_limit": 50,
-    "starts": 6
+    "restarts": 1
   }
 }

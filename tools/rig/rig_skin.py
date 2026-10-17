@@ -1,7 +1,7 @@
 """The rig in numbers: bones, skin matrices, skinned vertices and a fast silhouette rasteriser on the pose model's grid, for the fitter (rig_fit.py) and the contact sheets.
 
 The maths is the runtime's (`src/engine/rig/RigSkeleton.ts`) and the Node gate's (`tools/rig/rig-pose.mjs`): a bone's pose is a rotation about its own joint (clockwise on screen, y down), a scale
-and an offset, applied after its parent's; skinning is linear blend, at most two bones a vertex. Angles here are RADIANS; the rig file's are degrees (rig_export.py converts).
+and an offset, applied after its parent's; skinning is linear blend, at most two bones a vertex. Angles here are RADIANS, as in the rig file keys.
 The rasteriser draws a part's texture alpha through its triangles (nearest texel, 2x2 supersampling) and is NOT the gate's: the gate re-reads every key with its own code (tools/rig/rig-raster.mjs).
 """
 from __future__ import annotations
@@ -10,149 +10,30 @@ import math
 import pathlib
 
 import numpy as np
-from numba import njit
 from PIL import Image
 
-
-@njit(cache=True)
-def solve(parent, jx, jy, bx, by, rot, ox, oy, sx, sy, root, k):
-    """Skin matrices `k` (nb x 6): bind point -> posed place. `root` = [dx, dy, rot] applied to every parentless bone."""
-    nb = parent.shape[0]
-    m = np.zeros((nb, 6))
-    for i in range(nb):
-        r = rot[i]
-        dx = ox[i]
-        dy = oy[i]
-        if parent[i] < 0:
-            r += root[2]
-            dx += root[0]
-            dy += root[1]
-        c = math.cos(r)
-        s = math.sin(r)
-        la = c * sx[i]
-        lb = s * sx[i]
-        lc = -s * sy[i]
-        ld = c * sy[i]
-        le = bx[i] + dx
-        lf = by[i] + dy
-        p = parent[i]
-        if p >= 0:
-            m[i, 0] = m[p, 0] * la + m[p, 2] * lb
-            m[i, 1] = m[p, 1] * la + m[p, 3] * lb
-            m[i, 2] = m[p, 0] * lc + m[p, 2] * ld
-            m[i, 3] = m[p, 1] * lc + m[p, 3] * ld
-            m[i, 4] = m[p, 0] * le + m[p, 2] * lf + m[p, 4]
-            m[i, 5] = m[p, 1] * le + m[p, 3] * lf + m[p, 5]
-        else:
-            m[i, 0] = la
-            m[i, 1] = lb
-            m[i, 2] = lc
-            m[i, 3] = ld
-            m[i, 4] = le
-            m[i, 5] = lf
-        k[i, 0] = m[i, 0]
-        k[i, 1] = m[i, 1]
-        k[i, 2] = m[i, 2]
-        k[i, 3] = m[i, 3]
-        k[i, 4] = m[i, 4] - (m[i, 0] * jx[i] + m[i, 2] * jy[i])
-        k[i, 5] = m[i, 5] - (m[i, 1] * jx[i] + m[i, 3] * jy[i])
+from rig_kernels import blur121, chamfer, chamfer_terms, cover, iou, raster, skin_verts, soft_iou, solve  # noqa: F401  (re-exported: the fitter and the tests import them from here)
 
 
-@njit(cache=True)
-def skin_verts(V, B, W, k, out):
-    for i in range(V.shape[0]):
-        x = V[i, 0]
-        y = V[i, 1]
-        a = B[i, 0]
-        X = W[i, 0] * (k[a, 0] * x + k[a, 2] * y + k[a, 4])
-        Y = W[i, 0] * (k[a, 1] * x + k[a, 3] * y + k[a, 5])
-        b = B[i, 1]
-        if b >= 0:
-            X += W[i, 1] * (k[b, 0] * x + k[b, 2] * y + k[b, 4])
-            Y += W[i, 1] * (k[b, 1] * x + k[b, 3] * y + k[b, 5])
-        out[i, 0] = X
-        out[i, 1] = Y
-
-
-@njit(cache=True)
-def raster(P, TUV, tri, tri_part, tex_off, tex_w, tex_h, TEX, ax, bx, ay, by, GW, GH, hi):
-    """Alpha of the posed rig at 2x the grid's resolution into `hi` (uint8, 2GH x 2GW), max over triangles; then the grid's coverage (GH x GW, float32)."""
-    hi[:, :] = 0
-    for t in range(tri.shape[0]):
-        a = tri[t, 0]
-        b = tri[t, 1]
-        c = tri[t, 2]
-        x0 = (P[a, 0] * ax + bx) * 2.0
-        y0 = (P[a, 1] * ay + by) * 2.0
-        x1 = (P[b, 0] * ax + bx) * 2.0
-        y1 = (P[b, 1] * ay + by) * 2.0
-        x2 = (P[c, 0] * ax + bx) * 2.0
-        y2 = (P[c, 1] * ay + by) * 2.0
-        den = (y1 - y2) * (x0 - x2) + (x2 - x1) * (y0 - y2)
-        if abs(den) < 1e-9:
-            continue
-        minx = max(0, int(math.floor(min(x0, min(x1, x2)) - 0.5)))
-        maxx = min(2 * GW - 1, int(math.ceil(max(x0, max(x1, x2)) + 0.5)))
-        miny = max(0, int(math.floor(min(y0, min(y1, y2)) - 0.5)))
-        maxy = min(2 * GH - 1, int(math.ceil(max(y0, max(y1, y2)) + 0.5)))
-        inv = 1.0 / den
-        pi = tri_part[t]
-        off = tex_off[pi]
-        tw = tex_w[pi]
-        th = tex_h[pi]
-        for y in range(miny, maxy + 1):
-            qy = y + 0.5
-            for x in range(minx, maxx + 1):
-                qx = x + 0.5
-                l0 = ((y1 - y2) * (qx - x2) + (x2 - x1) * (qy - y2)) * inv
-                l1 = ((y2 - y0) * (qx - x2) + (x0 - x2) * (qy - y2)) * inv
-                l2 = 1.0 - l0 - l1
-                if l0 < -0.02 or l1 < -0.02 or l2 < -0.02:
-                    continue
-                u = (l0 * TUV[a, 0] + l1 * TUV[b, 0] + l2 * TUV[c, 0]) * tw
-                v = (l0 * TUV[a, 1] + l1 * TUV[b, 1] + l2 * TUV[c, 1]) * th
-                iu = int(math.floor(u))
-                iv = int(math.floor(v))
-                if iu < 0 or iv < 0 or iu >= tw or iv >= th:
-                    continue
-                al = TEX[off + iv * tw + iu]
-                if al > hi[y, x]:
-                    hi[y, x] = al
-
-
-@njit(cache=True)
-def cover(hi, GW, GH, mask):
-    """Grid mask: a cell is on when its four samples average over alpha 0.5 (>= 127.5 of 255)."""
-    for j in range(GH):
-        for i in range(GW):
-            s = 0
-            s += hi[2 * j, 2 * i]
-            s += hi[2 * j, 2 * i + 1]
-            s += hi[2 * j + 1, 2 * i]
-            s += hi[2 * j + 1, 2 * i + 1]
-            mask[j, i] = 1 if s >= 510 else 0
-
-
-@njit(cache=True)
-def iou(a, b):
-    inter = 0
-    union = 0
-    for j in range(a.shape[0]):
-        for i in range(a.shape[1]):
-            x = a[j, i]
-            y = b[j, i]
-            if x and y:
-                inter += 1
-            if x or y:
-                union += 1
-    return inter / union if union else 0.0
+def _touches(a_small, pts, tw, th):
+    """For each triangle's sample points (T x 7 x 2, uv in 0..1), is any texel at or next to one of them opaque?"""
+    iu = (pts[..., 0] * tw).astype(int)
+    iv = (pts[..., 1] * th).astype(int)
+    out = np.zeros(pts.shape[0], bool)
+    for dv in (-1, 0, 1):
+        for du in (-1, 0, 1):
+            u = np.clip(iu + du, 0, tw - 1)
+            v = np.clip(iv + dv, 0, th - 1)
+            out |= (a_small[v, u] > 0).any(1)
+    return out
 
 
 class RigModel:
     """build.json + the part PNGs as flat arrays."""
 
-    def __init__(self, build: dict, parts_dir: pathlib.Path, grid_affine=None, grid=None):
+    def __init__(self, build: dict, parts_dir: pathlib.Path, grid_affine=None, grid=None, window=None, tex_downsample: int = 4):
         self.build = build
+        self.ds = tex_downsample
         self.scale = build["scale"]
         bones = build["bones"]
         self.names = [b["name"] for b in bones]
@@ -164,7 +45,7 @@ class RigModel:
         self.by = np.array([b["y"] - (bones[b["parent"]]["y"] if b["parent"] >= 0 else 0) for b in bones], np.float64)
         nb = len(bones)
         self.nb = nb
-        Vs, Bs, Ws, Ts, tris, tparts, offs, tws, ths, texs, rgba = [], [], [], [], [], [], [], [], [], [], []
+        Vs, Bs, Ws, Ts, tris, tparts, offs, tws, ths, texs, rgba, lives = [], [], [], [], [], [], [], [], [], [], [], []
         base = 0
         self.part_names = []
         self.part_span = []
@@ -177,18 +58,33 @@ class RigModel:
                 bi = self.idx[p["bone"]] if isinstance(p["bone"], str) else int(p["bone"])
                 b = np.stack([np.full(n, bi), np.full(n, -1)], 1)
                 w = np.stack([np.ones(n), np.zeros(n)], 1)
-            else:
+            elif "bones" in p:  # the prototype form: two entries a vertex each
                 b = np.array(p["bones"], np.int64).reshape(-1, 2)
                 w = np.array(p["weights"], np.float64).reshape(-1, 2)
+            else:  # four numbers a vertex: b0, w0, b1, w1
+                q = np.array(p["weights"], np.float64).reshape(-1, 4)
+                b = q[:, [0, 2]].astype(np.int64)
+                w = q[:, [1, 3]].copy()
+                w[b[:, 1] < 0, 1] = 0.0
             bx_, by_, bw_, bh_ = p["box"]
-            if "uvs" in p:
-                uv = np.array(p["uvs"], np.float64).reshape(-1, 2)
+            if "uvs" in p:  # v DOWN like the painting px
+                tuv = np.array(p["uvs"], np.float64).reshape(-1, 2)
+            elif "uv" in p:  # the prototype alias: v UP
+                uv = np.array(p["uv"], np.float64).reshape(-1, 2)
                 tuv = np.stack([uv[:, 0], 1 - uv[:, 1]], 1)
             else:
                 tuv = np.stack([(v[:, 0] - bx_) / bw_, (v[:, 1] - by_) / bh_], 1)
             tr = np.array(p["triangles"], np.int64).reshape(-1, 3) + base
             img = np.array(Image.open(parts_dir / p["png"]).convert("RGBA"))
-            th_, tw_ = img.shape[:2]
+            alpha_img = Image.fromarray(img[..., 3], "L")
+            if self.ds > 1:  # the fit never needs more than a texel every few master px: a small texture stays in the cache
+                alpha_img = alpha_img.resize((max(1, img.shape[1] // self.ds), max(1, img.shape[0] // self.ds)), Image.BOX)
+            a_small = np.array(alpha_img)
+            th_, tw_ = a_small.shape[:2]
+            # triangles with no texture alpha under them (the mesh margin) are never drawn: sample corners, edge midpoints and centre, and one texel around each
+            tri_uv = tuv[tr - base]
+            pts = np.concatenate([tri_uv, (tri_uv[:, 0:1] + tri_uv[:, 1:2]) / 2, (tri_uv[:, 1:2] + tri_uv[:, 2:3]) / 2, (tri_uv[:, 2:3] + tri_uv[:, 0:1]) / 2, tri_uv.mean(1, keepdims=True)], 1)
+            lives.append(np.nonzero(_touches(a_small, pts, tw_, th_))[0] + sum(len(x) for x in tris))
             Vs.append(v)
             Bs.append(b)
             Ws.append(w)
@@ -198,7 +94,7 @@ class RigModel:
             offs.append(off)
             tws.append(tw_)
             ths.append(th_)
-            texs.append(img[..., 3].reshape(-1))
+            texs.append(a_small.reshape(-1))
             rgba.append(img)
             self.part_span.append((base, base + n))
             base += n
@@ -209,6 +105,9 @@ class RigModel:
         self.TUV = np.vstack(Ts)
         self.tri = np.vstack(tris).astype(np.int64)
         self.tri_part = np.concatenate(tparts).astype(np.int64)
+        self.live_all = np.concatenate(lives).astype(np.int64)
+        self.live = self.live_all
+        self.part_live = [l.astype(np.int64) for l in lives]
         self.tex_off = np.array(offs, np.int64)
         self.tex_w = np.array(tws, np.int64)
         self.tex_h = np.array(ths, np.int64)
@@ -218,13 +117,22 @@ class RigModel:
         self.P = np.zeros_like(self.V)
         self.landmarks = build.get("landmarks", {})
         if grid_affine is not None:
-            self.set_grid(grid_affine, grid)
+            self.set_grid(grid_affine, grid, window)
 
-    def set_grid(self, aff, grid):
+    def set_grid(self, aff, grid, window=None):
+        """The grid the silhouette is drawn on. `aff` maps master px to grid cells (X = ax x + bx, Y = ay y + by); `window` = (x0, y0, x1, y1) draws only that part of the grid
+        (a fit works on a crop around the targets: several times faster); `to_grid` and `aff` stay in whole-grid cells."""
         self.aff = aff
         self.GW, self.GH = int(grid["GW"]), int(grid["GH"])
-        self.hi = np.zeros((2 * self.GH, 2 * self.GW), np.uint8)
-        self.mask = np.zeros((self.GH, self.GW), np.uint8)
+        x0, y0, x1, y1 = window or (0, 0, self.GW, self.GH)
+        self.win = (x0, y0, x1, y1)
+        self.waff = {"ax": aff["ax"], "ay": aff["ay"], "bx": aff["bx"] - x0, "by": aff["by"] - y0}
+        self.WW, self.WH = x1 - x0, y1 - y0
+        self.hi = np.zeros((2 * self.WH, 2 * self.WW), np.uint8)
+        self.base = np.zeros_like(self.hi)
+        self.live = self.live_all
+        self.mask = np.zeros((self.WH, self.WW), np.uint8)
+        self.cov = np.zeros((self.WH, self.WW), np.float32)
 
     def pose(self, rot=None, root=(0.0, 0.0, 0.0), off=None, scl=None):
         """Solve a pose. rot: radians per bone (array or {name: rad}); off: {name: (dx, dy)}; scl: {name: (sx, sy)}."""
@@ -248,10 +156,38 @@ class RigModel:
         return self.k
 
     def grid_mask(self) -> np.ndarray:
-        a = self.aff
-        raster(self.P, self.TUV, self.tri, self.tri_part, self.tex_off, self.tex_w, self.tex_h, self.TEX, a["ax"], a["bx"], a["ay"], a["by"], self.GW, self.GH, self.hi)
-        cover(self.hi, self.GW, self.GH, self.mask)
+        a = self.waff
+        raster(self.P, self.TUV, self.tri, self.live, self.tri_part, self.tex_off, self.tex_w, self.tex_h, self.TEX, a["ax"], a["bx"], a["ay"], a["by"], self.WW, self.WH, self.hi, self.base)
+        cover(self.hi, self.WW, self.WH, self.mask, self.cov)
         return self.mask
+
+    def begin_block(self, bones):
+        """Until `end_block`, only the parts skinned to `bones` (or their descendants) are redrawn on each `grid_mask`; every other part is drawn once, now, at the pose last solved. A fit step
+        that moves one limb costs a limb's triangles, not the figure's."""
+        moved = set(int(b) for b in bones)
+        for i in range(self.nb):
+            p = int(self.parent[i])
+            if p in moved:
+                moved.add(i)
+        mv = np.zeros(self.nb, bool)
+        mv[list(moved)] = True
+        aff_parts = []
+        rest = []
+        for pi, (s0, s1) in enumerate(self.part_span):
+            used = self.B[s0:s1]
+            hit = bool(mv[used[used >= 0]].any())
+            (aff_parts if hit else rest).append(pi)
+        self.live = np.concatenate([self.part_live[pi] for pi in aff_parts]).astype(np.int64) if aff_parts else np.zeros(0, np.int64)
+        self.base[:, :] = 0
+        if rest:
+            a = self.waff
+            others = np.concatenate([self.part_live[pi] for pi in rest]).astype(np.int64)
+            raster(self.P, self.TUV, self.tri, others, self.tri_part, self.tex_off, self.tex_w, self.tex_h, self.TEX, a["ax"], a["bx"], a["ay"], a["by"], self.WW, self.WH, self.hi, self.base)
+            self.base[:, :] = self.hi
+
+    def end_block(self):
+        self.live = self.live_all
+        self.base[:, :] = 0
 
     def landmark(self, name):
         """Posed place of a landmark in master px (after `pose`)."""

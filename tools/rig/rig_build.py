@@ -64,16 +64,15 @@ def export_part(state, name, order, rgba_part, mesh_cfg, weights_fn, margin=4, r
         rec["rim"] = f"{name}.rim.png"
     if rim_everywhere:
         rec["rimEverywhere"] = True
-    flat_b, flat_w = [], []
-    for s in skin:
-        b0, w0 = s[0]
-        b1, w1 = s[1] if len(s) > 1 else (-1, 0.0)
-        flat_b += [int(b0), int(b1) if b1 >= 0 else -1]
-        flat_w += [round(float(w0), 4), round(float(w1), 4)]
-    if all(b == flat_b[0] for b in flat_b[0::2]) and all(b == -1 for b in flat_b[1::2]):
-        rec["bone"] = state.bones[flat_b[0]][0]  # one bone for every vertex: a rigid part
+    flat = []
+    for s_ in skin:
+        b0, w0 = s_[0]
+        b1, w1 = s_[1] if len(s_) > 1 else (-1, 0.0)
+        flat += [int(b0), round(float(w0), 4), int(b1) if b1 >= 0 else -1, round(float(w1), 4)]
+    if all(b == flat[0] for b in flat[0::4]) and all(b == -1 for b in flat[2::4]):
+        rec["bone"] = state.bones[flat[0]][0]  # one bone for every vertex: a rigid part
     else:
-        rec["bones"], rec["weights"] = flat_b, flat_w
+        rec["weights"] = flat  # four numbers a vertex: b0, w0, b1, w1 (b1 = -1: one bone)
     return rec
 
 

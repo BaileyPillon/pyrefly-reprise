@@ -2,7 +2,7 @@
 
     python rig.py export --subject kimahri [--no-gate] [--out DIR]
 
-rig.json is the contract file `src/data/art/rigTypes.ts` (format v1): angles in degrees, `costume` = the ONE approved master the parts were cut from (its path and the first 16 hex of
+rig.json is the contract file `src/data/art/rigTypes.ts` (format v1): key angles in radians, skin as `bone` or `weights` (four numbers a vertex), `costume` = the ONE approved master the parts were cut from (its path and the first 16 hex of
 its sha256; `sha2x` = the @Nx master's), `keys` = `idle` (the costume painting at rest) plus every key the fitter kept, `landmarks`, and the config's `motion` (idle sway and lag chains) as given.
 It carries no `gate`: only `node tools/rig-gate.mjs` writes that. Unless --no-gate, the export ends by running the gate on what it wrote (the exit status is the gate's).
 """
@@ -24,10 +24,10 @@ def _guard(out: pathlib.Path) -> None:
 
 def build_rig(sub: Subject, build: dict, keys: dict) -> dict:
     pose = sub.costume_pose
-    painting = f"art/characters/{sub.id}/{pose}.png"
-    costume = {"painting": painting, "sha": sha256_file(sub.costume_1x)[:16]}
+    painting = f"characters/{sub.id}/{pose}"
+    costume = {"painting": painting, "pose": pose, "sha": sha256_file(sub.costume_1x)}
     if sub.scale > 1:
-        costume["sha2x"] = sha256_file(sub.costume_master)[:16]
+        costume["sha2x"] = sha256_file(sub.costume_master)
     all_keys = {"idle": {"bones": {}, "source": painting}}
     for name, k in keys.items():
         if name == "idle":

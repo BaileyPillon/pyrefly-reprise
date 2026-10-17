@@ -1,0 +1,46 @@
+{
+ "subject": "kimahri-mini",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "art": "tests/fixtures/rig/kimahri-mini/art",
+ "table": "tests/fixtures/rig/kimahri-mini/table.json",
+ "build": {
+  "chains": {
+   "tail": {},
+   "mane": {},
+   "sash": {}
+  }
+ },
+ "fit": {
+  "min_iou": 0.86,
+  "limits": {
+   "spine": [
+    -30,
+    30
+   ],
+   "chest": [
+    -30,
+    30
+   ],
+   "head": [
+    -40,
+    40
+   ],
+   "upperarm": [
+    -170,
+    170
+   ],
+   "forearm": [
+    -120,
+    120
+   ],
+   "spear": [
+    -90,
+    90
+   ]
+  },
+  "restarts": 1
+ }
+}

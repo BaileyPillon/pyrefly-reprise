@@ -35,6 +35,8 @@ export interface RigGateResult {
   failures: RigGateFailure[];
   keys: RigGateKey[];
   rest: { iou: number | null } | null;
+  /** Poses the game has a registered painting of that the rig has no key for. */
+  uncovered: string[];
   holes: { joints: string[]; rendered: number; keysWithHoles: string[]; blendsWithHoles: number; blends: Array<{ from: string; to: string; t: number; holes: Array<{ name: string; count: number }> }> } | null;
   size: { parts: number; bones: number; texels: number; bytes: number; verts: number; tris: number };
   digest: string;
@@ -43,8 +45,9 @@ export interface RigGateResult {
   rigDir: string;
 }
 
-export function gateRig(o: { rig: string; root?: string; artDir?: string; inputs?: ModelInputs; blends?: boolean }): Promise<RigGateResult>;
+export function gateRig(o: { rig: string; root?: string; artDir?: string; inputs?: ModelInputs; blends?: boolean; requireCoverage?: boolean }): Promise<RigGateResult>;
+export function costumeSha(costume: { sha?: string; sha2x?: string }, scale: number, artDir: string, subject: string, pose: string): { ok: boolean; why: string };
 export function formatRigFailure(subject: string, x: RigGateFailure): string;
 export function riggedPoses(result: RigGateResult): string[];
-export function stampRig(dir: string, result: RigGateResult, o?: { at?: string }): { status: 'ok' | 'blocked'; at: string; by: string; why?: string; rules: string; digest: string; keys: string[] };
+export function stampRig(dir: string, result: RigGateResult, o?: { at?: string }): { status: 'ok' | 'refused'; at: string; by: string; why?: string; rules: string; digest: string; keys: string[] };
 export function verifyStamp(rig: string): { ok: boolean; code?: string; message?: string; raw?: Record<string, any>; dir?: string };

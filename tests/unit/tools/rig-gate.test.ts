@@ -66,9 +66,9 @@ describe('a hole at the elbow half way between two keys', () => {
         rig.bones.push({ name: 'pad', parent: 0, x: 235, y: 270 });
         await addRectPart(dir, rig as { parts: RigJson[] }, { name: 'padcap', x: 220, y: 255, w: 30, h: 30, bone: 6, color: [184, 138, 96] });
         rig.keys = {
-          idle: { bones: {}, source: 'art/characters/zz-puppet/idle.png' },
-          reacha: { bones: { forearm: { rot: -51.566 } }, source: 'authored' },
-          reachb: { bones: { upperarm: { rot: (swing * 180) / Math.PI }, forearm: { rot: -51.566 }, pad: { dx: -70 * Math.sin(swing), dy: 70 * Math.cos(swing) - 70 } }, source: 'authored' },
+          idle: { bones: {}, source: 'characters/zz-puppet/idle' },
+          reacha: { bones: { forearm: { rot: -0.9 } }, source: 'authored' },
+          reachb: { bones: { upperarm: { rot: swing }, forearm: { rot: -0.9 }, pad: { dx: -70 * Math.sin(swing), dy: 70 * Math.cos(swing) - 70 } }, source: 'authored' },
         };
       },
     });
@@ -119,6 +119,47 @@ describe('the file', () => {
   });
 });
 
+describe('the feet', () => {
+  const swing = (rig: RigJson, planted?: false): void => {
+    rig.landmarks.feet.bone = 1; // the foot landmark rides the pelvis, which this key tips
+    rig.keys.hurt.bones.pelvis = { rot: 0.3 };
+    if (planted === false) rig.keys.hurt.planted = false;
+  };
+  it('fails `key-feet-landmark` when a planted key swings the foot landmark off the bind row (the runtime check)', async () => {
+    const w = await puppetWorld({ patch: (rig) => swing(rig) });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r, 'hurt')).toContain('key-feet-landmark');
+  });
+  it('lets a key that says `planted: false` leave the floor, and still judges everything else about it', async () => {
+    const w = await puppetWorld({ patch: (rig) => swing(rig, false) });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r, 'hurt')).not.toContain('key-feet-landmark');
+    expect(codes(r, 'hurt')).not.toContain('key-feet-y');
+    expect(r.keys.find((k) => k.pose === 'hurt')?.planted).toBe(false);
+  });
+  it('fails `rig-landmark` for a rig with no foot landmark', async () => {
+    const w = await puppetWorld({ patch: (rig) => { delete rig.landmarks.feet; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r)).toContain('rig-landmark');
+  });
+});
+
+describe('coverage: a partial rig changes the poses it does not serve', () => {
+  it('lists the poses with a painting and no key, and refuses them when asked (`requireCoverage`)', async () => {
+    const w = await puppetWorld({ patch: (rig) => { delete rig.keys.item; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(r.uncovered).toEqual(['item']);
+    expect(r.failures.map((f) => f.code)).not.toContain('coverage'); // reported, not refused, by default
+    const strict = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false, requireCoverage: true });
+    expect(strict.status).toBe('refused');
+    expect(strict.failures.find((f) => f.code === 'coverage')?.message).toContain('item');
+  });
+  it('has nothing uncovered when every painted pose has a key', async () => {
+    const w = await puppetWorld();
+    expect((await gateRig({ rig: w.rig, inputs: w.inputs, blends: false, requireCoverage: true })).uncovered).toEqual([]);
+  });
+});
+
 describe('the stamp', () => {
   it('writes ok into rig.json, verifies, and dies with the content', async () => {
     const w = await puppetWorld();
@@ -132,10 +173,10 @@ describe('the stamp', () => {
     writeFileSync(join(w.rig, 'rig.json'), JSON.stringify(raw));
     expect(verifyStamp(w.rig)).toMatchObject({ ok: false, code: 'gate-stale' });
   });
-  it('a refused rig is stamped blocked, never ok', async () => {
+  it('a refused rig is stamped refused, never ok', async () => {
     const w = await puppetWorld({ patch: (rig) => { rig.keys.attack.root = { dx: 22 }; } });
     const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
-    expect(stampRig(w.rig, r).status).toBe('blocked');
+    expect(stampRig(w.rig, r).status).toBe('refused');
     expect(verifyStamp(w.rig).ok).toBe(false);
   });
 });

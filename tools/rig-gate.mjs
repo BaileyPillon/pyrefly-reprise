@@ -8,6 +8,7 @@
  *   node tools/rig-gate.mjs --rig D:/.../kimahri --check                         judge and report, write nothing (what the pose gate and the deploy do)
  *   node tools/rig-gate.mjs --rig D:/.../kimahri --verify                        the cheap check only: is the stamp `ok`, by these rules, for exactly this content (no rendering)
  *   node tools/rig-gate.mjs --rig D:/.../kimahri --no-blends --json out.json     skip the 25/50/75 percent blends; also write the full result
+ *   node tools/rig-gate.mjs --rig D:/.../kimahri --require-coverage               also refuse a rig with no key for a pose the game has a painting of (it would draw that pose as the nearest key, not its painting)
  *
  * The rules (all must hold; `tools/rig/rig-gate-lib.mjs` has the codes): the file is valid; it is cut from the ONE approved master (sha256, size, ground row); the rest pose
  * draws that painting (0.97 overlap); every key overlaps the approved painting of its pose by 0.85 or more, both registered at the idle's scale and feet; every key's stature
@@ -45,10 +46,11 @@ async function main() {
     }
     const t0 = Date.now();
     let r;
-    try { r = await gateRig({ rig: resolve(rig), root, artDir, inputs, blends: !flag('--no-blends') }); } catch (e) { console.error(`rig-gate: ${rig}: ${e instanceof Error ? e.message : String(e)}`); code = Math.max(code, 1); continue; }
+    try { r = await gateRig({ rig: resolve(rig), root, artDir, inputs, blends: !flag('--no-blends'), requireCoverage: flag('--require-coverage') }); } catch (e) { console.error(`rig-gate: ${rig}: ${e instanceof Error ? e.message : String(e)}`); code = Math.max(code, 1); continue; }
     all.push(r);
     const okKeys = r.keys.filter((k) => k.ok).length;
     console.log(`rig-gate: ${r.subject ?? rig}: ${r.status.toUpperCase()}; ${okKeys} of ${r.keys.length} key(s) pass; rest overlap ${r.rest?.iou === null || r.rest?.iou === undefined ? 'n/a' : r.rest.iou.toFixed(3)}; ${r.holes ? `${r.holes.rendered} poses scanned for holes at ${r.holes.joints.length} joints; ` : ''}${r.size.parts} parts, ${r.size.bones} bones, ${r.size.verts} vertices, ${(r.size.texels / 1e6).toFixed(2)} Mpx, ${(r.size.bytes / 1e6).toFixed(2)} MB; ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+    if (r.uncovered.length) console.log(`  no key for ${r.uncovered.length} registered pose(s): ${r.uncovered.join(', ')}${flag('--require-coverage') ? '' : ' (--require-coverage refuses this)'}`);
     for (const k of r.keys) console.log(`  ${k.ok ? 'ok  ' : 'FAIL'} ${k.pose.padEnd(10)} ${k.class.padEnd(8)} iou ${k.iou === null ? 'n/a  ' : k.iou.toFixed(3)}  stature ${k.statureRead === null ? 'n/a  ' : k.statureRead.toFixed(3)}${k.propsOut ? ' (head to soles)' : ''}  feet ${k.feet ? `${k.feet.dx.toFixed(3)}, ${k.feet.dy.toFixed(3)}` : 'n/a'}  head ${k.headReal === null ? 'n/a' : k.headReal.toFixed(3)}`);
     for (const x of r.failures.slice(0, Number(get('--max', 40)))) console.log(`FAIL  ${formatRigFailure(r.subject ?? '?', x)}`);
     if (r.failures.length > Number(get('--max', 40))) console.log(`... and ${r.failures.length - Number(get('--max', 40))} more (--max N)`);

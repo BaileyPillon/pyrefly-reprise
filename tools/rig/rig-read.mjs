@@ -137,6 +137,13 @@ export function statureBand(cls, pose) {
 export const propsOut = (apr) => Number.isFinite(apr?.bodyStature) && apr.bodyStature > 0 && Number.isFinite(apr?.stature) && apr.stature / apr.bodyStature > 1.08;
 
 /**
+ * Is the figure read head to soles? When the pose carries a prop above its head (`propsOut`), and ALSO whenever the IDLE does (a spear whose butt is the top of the idle's silhouette):
+ * the prop's top then moves with the pose (a spear dropped in an attack lowers the silhouette though the body stands as tall), so the silhouette is no measure of the figure's height in
+ * any pose of that subject. The idle is props-out when its head-to-soles height is under 93 percent of the height it is drawn at.
+ */
+export const readsBody = (R, apr) => propsOut(apr) || (Number.isFinite(R?.bodyH) && Number.isFinite(R?.figH) && R.figH > 0 && R.bodyH / R.figH < 0.93);
+
+/**
  * The approved painting of a pose, registered at the idle's scale and feet: its mask on the common grid.
  * Standing and low poses: the game's placement (`apr.drawn`), then rescaled about the painting's soles into the class's stature band if it is outside it (a props-out pose
  * by its head to soles height, not its silhouette), and slid so its measured stance sits on the idle's. Every other class (a KO, a part, a staged painting): as the game draws it.
@@ -149,7 +156,7 @@ export function approvedTarget(ctx, apr, m) {
   const asDrawn = { mask: drawnMask(m, d.upp, d.anchor, d.shift, d.mirror), upp: d.upp, anchor: d.anchor, shift: d.shift, k: 1, band: null, propsOut: false, registered: false };
   const band = statureBand(apr.class, apr.pose);
   if (!band || !m.stance || R.stanceMeasured === null || !R.figH || !m.engineBox) return asDrawn;
-  const po = propsOut(apr);
+  const po = readsBody(R, apr);
   const headTop = apr.hasHead && ctx.inputs.table[apr.subject]?.[apr.pose]?.head ? ctx.inputs.table[apr.subject][apr.pose].head[1] * m.H : null;
   const useBody = po && headTop !== null && R.bodyH;
   const den = useBody ? R.bodyH : R.figH;

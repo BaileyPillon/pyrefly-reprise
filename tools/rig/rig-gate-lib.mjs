@@ -5,11 +5,15 @@
  *   rig-*            the file is a valid v1 rig (shape, bones, meshes, skin, keys, the PNGs it names)               [rig-format.mjs]
  *   costume-*        it is cut from the ONE approved master: `characters/<subject>/<pose>.png` exists, its sha256 is the rig's `costume.sha`, its size is the rig's `image`
  *                    over `scale`, and the rig plants its soles on that painting's registered ground row (`baseline`)
- *   rest-differs     the rest pose draws the costume painting: silhouette overlap 0.97 or more
+ *   rest-differs     the rest pose draws the costume painting: silhouette overlap 0.95 or more
  *   key-iou          every key's silhouette overlaps the approved painting of that pose by 0.85 or more, both registered at the idle's scale and feet (`rig-read.mjs`)
  *   key-<flag>       every key is inside its pose class's bands (`tools/posescale/pose-bands.mjs`): stature (a props-out pose reads head to soles), real head, feet, mass,
  *                    stance, overlap, solidity. The same flags the pose gate raises for a painting.
  *   key-unmatched    a key with no approved painting of its pose (and not `source: "authored"`) cannot be verified
+ *   key-feet-landmark  the runtime's own planted-feet check: a key not marked `planted: false` keeps its lowest foot landmark (feet, foot*, toe*, heel*, sole*) on the bind row, the
+ *                    key's declared `root.dy` aside, to 0.4 percent of the image height (`src/engine/rig/RigValidate.ts`); a rig with no foot landmark fails `rig-landmark`
+ *   coverage         (only with `requireCoverage`) every pose the game has a registered painting of has a key: a pose with no key is drawn as the nearest key down the
+ *                    pose chain (attack to ready to idle), not as its painting, so a partial rig changes poses it does not serve. `result.uncovered` lists them either way
  *   hole-key         no alpha hole (more than HOLE_PX transparent pixels in the joint's disc) at any body joint in any key
  *   hole-blend       ... nor at 25, 50 and 75 percent between any two keys                                          [rig-holes.mjs]
  *   budget-*         parts <= 24, bones <= 48, vertices <= 8000, texels <= 9 Mpx, PNG bytes <= 9 MB: about twice the hand-cut prototype Kimahri (11 parts, 29 bones,
@@ -23,13 +27,14 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { bandVerdict } from '../posescale/pose-bands.mjs';
-import { loadModelInputs } from '../posescale/pose-model.mjs';
+import { listPoses, loadModelInputs } from '../posescale/pose-model.mjs';
+import { poseClassOf } from '../posescale/pose-kinds.mjs';
 import { drawnMask, maskIou } from '../posescale/pose-pixels.mjs';
 import { GATE_BY, GATE_RULES, costumeParts, normaliseRig, readRigFile, rigDigest, rigSize } from './rig-format.mjs';
 import { scanHoles } from './rig-holes.mjs';
-import { keyPose, restPose } from './rig-pose.mjs';
+import { keyPose, restPose, solve, through } from './rig-pose.mjs';
 import { loadTextures } from './rig-raster.mjs';
-import { approvedTarget, drawKey, keyMask, readApproved, readKey, rigContext } from './rig-read.mjs';
+import { approvedTarget, drawKey, keyMask, readApproved, readKey, readsBody, rigContext } from './rig-read.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -37,8 +42,8 @@ export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 export const RIG_BANDS = Object.freeze({
   /** A key's silhouette overlap with the approved painting of its pose (both registered at the idle's scale and feet). */
   iou: 0.85,
-  /** The rest pose against the costume painting itself. */
-  restIou: 0.97,
+  /** The rest pose against the costume painting itself (the cut is made from the defringed painting: its grey matte ring is gone, so 1.0 is not reachable). */
+  restIou: 0.95,
   /** The rig's ground row may differ from the costume painting's registered one by this many 1x painting px. */
   baselinePx: 1.5,
   /** The rig's image over its scale may differ from the costume painting's size by this many px. */
@@ -47,6 +52,25 @@ export const RIG_BANDS = Object.freeze({
   fitIou: 0.05,
   fitStature: 0.04,
 });
+
+/** Landmark names that count as feet (the runtime's `RIG_FOOT_LANDMARKS`), and how far a planted key's lowest foot may leave the bind row, as a share of the image height (`RigValidate.FEET_TOL`). */
+const FOOT_LANDMARKS = ['feet', 'foot', 'toe', 'heel', 'sole'];
+const FEET_LANDMARK_TOL = 0.004;
+
+/**
+ * Is `costume.sha` the sha256 of the master the parts were cut from? The 1x painting (`characters/<subject>/<pose>.png`, the file the pose model reads) or the `@<scale>x` master beside it
+ * (the file the cut is made from) both count, by prefix; `costume.sha2x`, when the rig names one, must be the hi-DPI master's too.
+ * @returns {{ok: boolean, why: string}}
+ */
+export function costumeSha(costume, scale, artDir, subject, pose) {
+  const dir = join(artDir, 'characters', subject);
+  const files = [join(dir, `${pose}.png`), ...(scale > 1 ? [join(dir, `${pose}@${scale}x.png`)] : [])].filter((f) => existsSync(f));
+  const have = files.map((f) => sha256File(f));
+  const want = String(costume.sha ?? '').toLowerCase();
+  if (!want || !have.some((h) => h.startsWith(want))) return { ok: false, why: `characters/${subject}/${pose}.png is not the master the rig was cut from (rig ${want.slice(0, 16)}, files ${have.map((h) => h.slice(0, 16)).join(', ') || 'none'})` };
+  if (costume.sha2x && !have.some((h) => h.startsWith(String(costume.sha2x).toLowerCase()))) return { ok: false, why: `the @${scale}x master beside characters/${subject}/${pose}.png is not the one the parts were cut from` };
+  return { ok: true, why: '' };
+}
 
 export const BUDGET = Object.freeze({ parts: 24, bones: 48, verts: 8000, tris: 14000, texels: 9_000_000, bytes: 9_000_000 });
 
@@ -75,14 +99,15 @@ const FLAG_WORDS = {
  * @param {object} o
  * @param {string} o.rig the folder with rig.json @param {string} [o.root] @param {string} [o.artDir] the art folder with `characters/` (default `<root>/public/art`)
  * @param {object} [o.inputs] pose-model inputs (tests pass a synthetic table) @param {boolean} [o.blends=true] scan the blends too
+ * @param {boolean} [o.requireCoverage=false] fail `coverage` when a registered pose has no key
  * @returns {Promise<object>} `{ subject, status: 'ok'|'refused', failures, keys, rest, holes, size, digest, bands, budget }`
  */
-export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true } = {}) {
+export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true, requireCoverage = false } = {}) {
   const failures = [];
   const fail = (code, message, pose) => failures.push(pose ? { code, pose, message } : { code, message });
   const { raw, dir } = readRigFile(rig);
   const { problems, rt } = normaliseRig(raw, { dir });
-  const result = { subject: raw?.name ?? null, status: 'refused', failures, keys: [], rest: null, holes: null, size: rigSize(raw ?? {}, dir), digest: rigDigest(raw ?? {}, dir), bands: RIG_BANDS, budget: BUDGET, rigDir: dir };
+  const result = { subject: raw?.name ?? null, status: 'refused', failures, keys: [], rest: null, holes: null, uncovered: [], size: rigSize(raw ?? {}, dir), digest: rigDigest(raw ?? {}, dir), bands: RIG_BANDS, budget: BUDGET, rigDir: dir };
   for (const p of problems) fail(p.code, p.message);
   if (!rt) return result;
   // ---- budget
@@ -100,13 +125,8 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true 
   const costumePose = costumeParts(rt.costume.painting)?.pose ?? 'idle';
   const costumeFile = join(inp.artDir, 'characters', rt.name, `${costumePose}.png`);
   if (!existsSync(costumeFile)) { fail('costume-missing', `the costume painting characters/${rt.name}/${costumePose}.png is not in the art folder`); return result; }
-  const costumeSha = sha256File(costumeFile);
-  if (!costumeSha.startsWith(rt.costume.sha.toLowerCase())) fail('costume-stale', `characters/${rt.name}/${costumePose}.png is not the master the rig was cut from (rig ${rt.costume.sha.slice(0, 16)}, file ${costumeSha.slice(0, 16)}): a repainted costume needs its rig cut again`);
-  const hires = rt.scale > 1 ? join(inp.artDir, 'characters', rt.name, `${costumePose}@${rt.scale}x.png`) : null;
-  if (rt.costume.sha2x && hires) {
-    if (!existsSync(hires)) fail('costume-stale', `the @${rt.scale}x master the parts were cut from is not in the art folder`);
-    else if (!sha256File(hires).startsWith(String(rt.costume.sha2x).toLowerCase())) fail('costume-stale', `characters/${rt.name}/${costumePose}@${rt.scale}x.png is not the master the parts were cut from`);
-  }
+  const sha = costumeSha(raw.costume, rt.scale, inp.artDir, rt.name, costumePose);
+  if (!sha.ok) fail('costume-stale', `${sha.why}: a repainted costume needs its rig cut again`);
   let ctx;
   try { ctx = await rigContext(rt, inp); } catch (e) { fail('costume-missing', `the pose model cannot read ${rt.name}: ${e instanceof Error ? e.message : String(e)}`); return result; }
   const { W1, H1, cr } = ctx;
@@ -120,6 +140,10 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true 
   result.rest = { iou: restIou };
   if (restIou === null || restIou < RIG_BANDS.restIou) fail('rest-differs', `the rest pose overlaps the costume painting by ${f3(restIou)}, under ${RIG_BANDS.restIou}: the cut parts do not make the painting`);
   // ---- the keys
+  const footNames = Object.keys(rt.landmarks).filter((n) => FOOT_LANDMARKS.some((f) => n.startsWith(f)));
+  if (!footNames.length) fail('rig-landmark', `no foot landmark (a landmark named ${FOOT_LANDMARKS.join(', ')} ...): the runtime checks a planted key's feet through it`);
+  const lowestFoot = (k) => Math.max(...footNames.map((n) => through(k, rt.landmarks[n].bone, rt.landmarks[n].x, rt.landmarks[n].y)[1]));
+  const bindFoot = footNames.length ? lowestFoot(solve(rt, restPose(rt)).k) : 0;
   for (const [pose, key] of Object.entries(rt.keys)) {
     const drawn = await drawKey(ctx, keyPose(rt, key));
     const reading = readKey(ctx, pose, drawn);
@@ -136,9 +160,14 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true 
     } else if (key.source !== 'authored') {
       fail('key-unmatched', `there is no approved painting of ${pose} to hold the key against (a key with no painting must say \`source: "authored"\`)`, pose);
     }
+    if (!found && readsBody(ctx.R, null) && reading.bodyStature !== null) { entry.propsOut = true; entry.statureRead = reading.bodyStature; reading.stature = reading.bodyStature; } // no painting, but the subject is read head to soles
     // what the pipeline claims it measured (`fit`) must be what the gate measures: a typed-in number is not a reading
     if (key.fit && entry.iou !== null && Number.isFinite(key.fit.iou) && Math.abs(key.fit.iou - entry.iou) > RIG_BANDS.fitIou) fail('key-fit-stale', `the key says it overlaps its painting by ${f3(key.fit.iou)}, the gate reads ${f3(entry.iou)}`, pose);
     if (key.fit && Number.isFinite(key.fit.stature) && entry.statureRead !== null && Math.abs(key.fit.stature - entry.statureRead) > RIG_BANDS.fitStature) fail('key-fit-stale', `the key says it stands ${f3(key.fit.stature)} of the idle's height, the gate reads ${f3(entry.statureRead)}`, pose);
+    if (footNames.length && key.planted) {
+      const err = lowestFoot(drawn.k) - (bindFoot + key.root.dy);
+      if (Math.abs(err) > FEET_LANDMARK_TOL * rt.image.h) fail('key-feet-landmark', `the lowest foot landmark is ${err.toFixed(1)} px from the bind row (limit ${(FEET_LANDMARK_TOL * rt.image.h).toFixed(1)}), the key's own root.dy aside`, pose);
+    }
     const v = bandVerdict({ ...reading, stature: entry.statureRead });
     // a key that is allowed to leave the floor (`planted: false`: a leap, a KO that lies down) is not held to the idle's soles; everything else about it is judged
     entry.planted = key.planted;
@@ -147,6 +176,9 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true 
     for (const f of entry.flags) fail(`key-${f}`, `${FLAG_WORDS[f]?.({ ...reading, statureRead: entry.statureRead }) ?? f}`, pose);
     entry.ok = !failures.some((x) => x.pose === pose);
   }
+  // ---- coverage: the poses the game can draw this figure in that the rig has no key for
+  result.uncovered = listPoses(inp, rt.name).filter((p) => (inp.table[rt.name]?.[p] || p === ctx.R.refName) && !rt.keys[p] && !['staged', 'part'].includes(poseClassOf({ pose: p, isRef: false, prone: false, kind: ctx.R.kind })));
+  if (requireCoverage && result.uncovered.length) fail('coverage', `no key for ${result.uncovered.join(', ')}: those poses would draw as the nearest key down the pose chain, not as their paintings`);
   // ---- holes
   const scan = scanHoles(ctx, { blends });
   result.holes = { joints: scan.joints, rendered: scan.rendered, keysWithHoles: scan.keys.filter((k) => k.holes.length).map((k) => k.pose), blendsWithHoles: scan.blends.filter((b) => b.holes.length).length, blends: scan.blends.filter((b) => b.holes.length).slice(0, 12) };
@@ -163,8 +195,8 @@ export const formatRigFailure = (subject, x) => `${subject}/${x.pose ?? '*'}  ${
 export const riggedPoses = (result) => (result.status === 'ok' ? result.keys.map((k) => k.pose) : []);
 
 /**
- * Write the gate's verdict into rig.json: `gate: { status: 'ok' | 'blocked', at, by: 'rig-gate', why?, rules, digest, keys }` (the first four are `RigGate` of
- * `src/data/art/rigTypes.ts`, which the runtime reads: it draws a rig whose status is `ok`). The digest is the rig's own fingerprint (`rigDigest`), so an `ok` stamp dies the
+ * Write the gate's verdict into rig.json: `gate: { status: 'ok' | 'refused', at, by: 'tools/rig-gate.mjs', digest, why?, rules, keys }` (`RigGate` of
+ * `src/data/art/rigTypes.ts` plus `rules` and `keys`; the runtime draws a rig whose status is `ok`). The digest is the rig's own fingerprint (`rigDigest`), so an `ok` stamp dies the
  * moment a key, a mesh or a texture changes. The only writer of `gate`.
  */
 export function stampRig(dir, result, { at = new Date().toISOString().slice(0, 10) } = {}) {
@@ -174,7 +206,7 @@ export function stampRig(dir, result, { at = new Date().toISOString().slice(0, 1
   const digest = rigDigest(raw, dir);
   const codes = [...new Set(result.failures.map((f) => f.code))];
   raw.gate = {
-    status: result.status === 'ok' ? 'ok' : 'blocked', at, by: GATE_BY,
+    status: result.status === 'ok' ? 'ok' : 'refused', at, by: GATE_BY,
     ...(codes.length ? { why: `${result.failures.length} failure(s): ${codes.join(', ')}` } : {}),
     rules: GATE_RULES, digest, keys: result.keys.filter((k) => k.ok).map((k) => k.pose),
   };

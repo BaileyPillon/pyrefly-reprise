@@ -18,7 +18,7 @@ import sharp from 'sharp';
 import { loadModelInputs, listPoses, readSubject, referenceOf } from '../posescale/pose-model.mjs';
 import { readPaint } from '../posescale/pose-pixels.mjs';
 import { ROOT } from './rig-gate-lib.mjs';
-import { GRID, approvedTarget, propsOut, statureBand } from './rig-read.mjs';
+import { GRID, approvedTarget, statureBand } from './rig-read.mjs';
 
 /**
  * The targets of one subject. @returns {Promise<{info: object, masks: Record<string, Uint8Array>}>}
@@ -53,7 +53,7 @@ export async function buildTargets({ inputs, subject, costume = 'idle', scale = 
     const t = approvedTarget({ R, inputs }, r, m);
     masks[r.pose] = t.mask;
     info.poses[r.pose] = {
-      class: r.class, band: statureBand(r.class, r.pose), propsOut: propsOut(r), normK: Math.round(t.k * 1000) / 1000, registered: t.registered,
+      class: r.class, band: statureBand(r.class, r.pose), propsOut: t.propsOut, normK: Math.round(t.k * 1000) / 1000, registered: t.registered,
       stature: r.stature, bodyStature: r.bodyStature, headReal: r.headReal, status: r.status, feetPx: r.feetPx, png: `${r.pose}.png`,
     };
   }

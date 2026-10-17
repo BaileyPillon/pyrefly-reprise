@@ -3,9 +3,10 @@
  * tubes shows a wedge of background when it bends, worst half way (a tube folded flat shows none; the same tube at 90 degrees shows the most). The gate looks for it
  * at every joint, in every key and at 25, 50 and 75 percent between every two keys, because the game blends between any two.
  *
- * The test is local to each joint: in the rest pose the disc of radius `0.75 * depth` around the joint is solid (depth = how far the opaque body reaches from the joint,
- * read from the rest raster); in any other pose the same disc around the POSED joint must still be solid, to within `HOLE_PX` transparent pixels (a few, at the gate's raster,
- * where a figure is about 1100 px tall). A joint the rest body does not enclose (a spear's pivot, a tail tip: depth under `MIN_DEPTH`) is not a joint of the body and is skipped.
+ * The test is local to each joint: in the rest pose the disc of radius `0.75 * depth` around the joint is solid (depth = how far the parts that MEET at the joint, the ones skinned to
+ * its bone or to its parent's, reach from it: a wrist is covered by the arm, not by the hip the arm happens to hang in front of); in any other pose the same disc around the POSED
+ * joint must still be solid in the whole picture, to within `HOLE_PX` transparent pixels (a few, at the gate's raster, where a figure is about 1100 px tall). A joint those parts do
+ * not enclose (a spear's pivot, a tail tip: depth under `MIN_DEPTH`) is not a joint of the body and is skipped.
  */
 import { blendPose, keyPose, restPose } from './rig-pose.mjs';
 import { rasterize } from './rig-raster.mjs';
@@ -21,14 +22,24 @@ export const MIN_DEPTH = 6;
 /** The blends the game can ask for between two keys. */
 export const BLEND_STEPS = Object.freeze([0.25, 0.5, 0.75]);
 
-/** The joints worth watching: [{bone, name, x, y (raster px at rest), depth, r}]. */
-export function bodyJoints(ctx, restAlpha) {
+/** The names of the parts skinned to bone `i` or to its parent (the two sides of the joint). */
+function partsAt(rt, i) {
+  const want = new Set([i, rt.bones[i].parent].filter((b) => b >= 0));
+  return rt.parts.filter((p) => { for (let v = 0; v < p.b.length; v++) if (p.b[v] >= 0 && want.has(p.b[v]) && p.w[v] > 0.05) return true; return false; }).map((p) => p.name);
+}
+
+/** The joints worth watching: [{bone, name, depth, r}] (depth in raster px). */
+export function bodyJoints(ctx) {
   const { rt, frame } = ctx;
   const { W, H } = frame;
   const out = [];
   const maxR = Math.min(80, Math.round(H * 0.06));
+  const rest = restPose(rt);
   rt.bones.forEach((b, i) => {
     if (b.parent < 0) return;
+    const names = partsAt(rt, i);
+    if (!names.length) return;
+    const restAlpha = rasterize(rt, rest, frame, { parts: names }).alpha;
     const jx = b.x * frame.sx + frame.ox;
     const jy = b.y * frame.sy + frame.oy;
     let depth = 0;
@@ -76,8 +87,7 @@ export function holesAt(ctx, alpha, joints, posedJoints) {
 export function scanHoles(ctx, { blends = true } = {}) {
   const { rt } = ctx;
   const rest = restPose(rt);
-  const restRaster = rasterize(rt, rest, ctx.frame);
-  const joints = bodyJoints(ctx, restRaster.alpha);
+  const joints = bodyJoints(ctx);
   const poses = new Map();
   if (!rt.keys.idle) poses.set('idle', rest);
   for (const [name, key] of Object.entries(rt.keys)) poses.set(name, keyPose(rt, key));
