@@ -29,7 +29,7 @@ export async function applyRigs({ entries, inputs, dir, mode = 'full' }) {
     if (!subjects.has(name)) continue;
     const rec = { subject: name, ok: false, mode, keys: [], why: null };
     out.push(rec);
-    const v = verifyStamp(folder);
+    const v = verifyStamp(folder, { full: true }); // a rig with partial coverage never draws (the driver's rule, 2026-10-17), so the paintings of its poses are not "rigged"
     if (!v.ok) { rec.why = `${v.code}: ${v.message}`; continue; }
     const pose = costumeParts(v.raw.costume?.painting)?.pose ?? 'idle';
     const sha = costumeSha(v.raw.costume, v.raw.scale, inputs.artDir, name, pose);

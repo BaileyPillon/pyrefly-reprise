@@ -12,9 +12,10 @@
  *   --root <repo>  --python <python.exe>   the repository whose tables and records are written (default this one); the interpreter with numpy, scipy, PIL
  *
  * RIGS (the rig program, 2026-10-17): a figure drawn as ONE painting on a bone rig installs the same way, gated:
- *   node tools/art-install.mjs --target D:/pyrefly-art-r51 --rig kimahri --rig-from D:/work/rigs [--rigs-root D:/pyrefly-art-rigs] [--replace --backup <folder>] [--require-coverage] [--dry]
+ *   node tools/art-install.mjs --target D:/pyrefly-art-r51 --rig kimahri --rig-from D:/work/rigs [--rigs-root D:/pyrefly-art-rigs] [--replace --backup <folder>] [--allow-partial] [--dry]
  * copies <rig-from>/<subject>/rig.json and its PNGs into the rig root (never under public/) after `tools/rig-gate.mjs` says ok for that rig against --target's costume painting,
- * runs the gate on the installed copy and the pose gate (`--rigs`) for the subject. Exit codes as below. See tools/rig/rig-install.mjs.
+ * writes the 1x texture tier beside them (`tools/rig-tiers.mjs`), runs the gate on the installed copy and the pose gate (`--rigs`) for the subject. Full coverage is required unless --allow-partial
+ * (a rig still being fitted: the deploy refuses it). Exit codes as below. See tools/rig/rig-install.mjs.
  *
  * --target is required and has no default: nothing is ever installed into `public/art` by accident. <from> holds `<pose>.png` and `<pose>.json` per pose.
  * Steps: (1) check everything, write nothing (hard links, existing files, the ten-field sidecar, paths, decoding, an idle); (2) copy each file under a temporary name,
@@ -32,6 +33,7 @@ import { DEFAULT_PYTHON, ROOT, applyInstall, planInstall, register, runCommand }
 import { gateRig } from './rig/rig-gate-lib.mjs';
 import { DEFAULT_RIGS_ROOT } from './rig/rig-format.mjs';
 import { applyRigInstall, planRigInstall } from './rig/rig-install.mjs';
+import { verifyTiers, writeTiers } from './rig/rig-tiers.mjs';
 
 const argv = process.argv.slice(2);
 const flag = (n) => argv.includes(n);
@@ -47,7 +49,7 @@ async function installRigs(target) {
   const root = resolve(get('--root', ROOT));
   const rigsRoot = resolve(get('--rigs-root', DEFAULT_RIGS_ROOT));
   const subjects = get('--rig').split(',').filter(Boolean);
-  const plan = await planRigInstall({ rigsRoot, artDir: resolve(target), root, items: subjects.map((subject) => ({ subject, from: resolve(from) })), replace: flag('--replace'), backup: get('--backup', null), requireCoverage: flag('--require-coverage') });
+  const plan = await planRigInstall({ rigsRoot, artDir: resolve(target), root, items: subjects.map((subject) => ({ subject, from: resolve(from) })), replace: flag('--replace'), backup: get('--backup', null), requireCoverage: !flag('--allow-partial') });
   for (const p of plan.problems) console.error(`REFUSED  ${p}`);
   if (!plan.ok) { console.error(`art-install: refused, ${plan.problems.length} problem(s); nothing was written`); return 3; }
   for (const w of plan.writes) console.log(`  rig ${w.subject}: ${w.files.length ? `${w.files.length} file(s) -> ${w.dest}${w.replaces.length ? ` (${w.replaces.length} file(s) moved aside first)` : ''}` : 'already in place; gated'}`);
@@ -55,7 +57,11 @@ async function installRigs(target) {
   applyRigInstall(plan, { backup: get('--backup', null) });
   let code = 0;
   for (const w of plan.writes) {
-    const g = await gateRig({ rig: w.dest, root, artDir: resolve(target), blends: true, requireCoverage: flag('--require-coverage') });
+    const tiers = await writeTiers(w.dest); // the 1x twins of the textures, derived and proved (a phone budgets a quarter of the texture memory)
+    const proved = await verifyTiers(w.dest);
+    console.log(`art-install: rig ${w.subject}: ${tiers.written.length} file(s) written into 1x/, ${proved.ok ? 'proved' : `NOT PROVED: ${proved.problems[0]}`}`);
+    if (!proved.ok) code = 1;
+    const g = await gateRig({ rig: w.dest, root, artDir: resolve(target), blends: true, requireCoverage: !flag('--allow-partial') });
     console.log(`art-install: rig ${w.subject} installed in ${w.dest}; the rig gate says ${g.status.toUpperCase()}`);
     if (g.status !== 'ok') code = 1;
   }

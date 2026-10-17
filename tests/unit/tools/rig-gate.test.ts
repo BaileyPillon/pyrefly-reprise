@@ -72,7 +72,7 @@ describe('a hole at the elbow half way between two keys', () => {
         };
       },
     });
-    const r = await gateRig({ rig: w.rig, inputs: w.inputs });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, requireCoverage: false }); // a rig of three authored keys, to read the holes: coverage is not what this case is about
     expect(r.failures.filter((x) => x.code !== 'hole-blend')).toEqual([]);
     const between = r.failures.filter((x) => x.code === 'hole-blend' && x.pose === 'reacha>reachb');
     expect(between.some((x) => x.message.includes('50 percent') && x.message.includes('forearm'))).toBe(true);
@@ -145,12 +145,12 @@ describe('the feet', () => {
 });
 
 describe('coverage: a partial rig changes the poses it does not serve', () => {
-  it('lists the poses with a painting and no key, and refuses them when asked (`requireCoverage`)', async () => {
+  it('lists the poses with a painting and no key, and refuses them BY DEFAULT (the 2026-10-17 rule; `requireCoverage: false` is the dev loop)', async () => {
     const w = await puppetWorld({ patch: (rig) => { delete rig.keys.item; } });
-    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false, requireCoverage: false });
     expect(r.uncovered).toEqual(['item']);
-    expect(r.failures.map((f) => f.code)).not.toContain('coverage'); // reported, not refused, by default
-    const strict = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false, requireCoverage: true });
+    expect(r.failures.map((f) => f.code)).not.toContain('coverage'); // reported, not refused, when the dev loop asks
+    const strict = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
     expect(strict.status).toBe('refused');
     expect(strict.failures.find((f) => f.code === 'coverage')?.message).toContain('item');
   });
