@@ -16,6 +16,7 @@ import { separate } from './separate.ts';
 import { Staging, type Side } from './staging.ts';
 import { onPhone, readStand, standFor } from './stageTable.ts';
 import { menuCalm, type MenuCalm } from './menuCalm.ts';
+import { LensTravel } from './lensTravel.ts';
 
 /**
  * The MAX mix (D-316): CHAPTER FRAMING (BATTLE SPECTACLE's part; both games). The composed master per chapter, ported from option C's prototype
@@ -44,13 +45,7 @@ export class Framing {
   private wantOn = false;
   masterPose: Pose | null = null;
   todayPose: Pose | null = null;
-  lens: [number, number] = [0, 0];
-  /** Where the lens shift's travel to `lens` started (the last commit, or a later move that took over). */
-  private lensFrom: [number, number] = [0, 0];
-  /** The lens shift last put on screen, and the camera move it was travelling with. */
-  private lensShown: [number, number] = [0, 0];
-  private lensSeq = -1;
-  private lensApplied = false;
+  private readonly travel: LensTravel;
   private planWanted = true;
   /** A plan decided on a calm frame while a menu was open: committed the first frame no menu is open. */
   private pending: Decision | null = null;
@@ -76,6 +71,12 @@ export class Framing {
 
   constructor(bc: BattleCameraLike | null, private readonly cam: PerspectiveCamera, private readonly game: 'ffx' | 'ffx2', private readonly scene: Object3D | null = null) {
     this.rigs = bc ? new RigWatch(bc, cam) : null;
+    this.travel = new LensTravel(cam, this.rigs);
+  }
+
+  /** The lens shift the plan on screen wants (`lensTravel.ts`). */
+  get lens(): [number, number] {
+    return this.travel.to;
   }
 
   /** True once a plan is installed (the master may be today's rig). */
@@ -89,6 +90,17 @@ export class Framing {
    */
   get planOwed(): boolean {
     return this.rigs !== null && this.wantOn && (this.planWanted || this.pending !== null);
+  }
+
+  /** The wait ran out: abandon what is not on screen yet (decided or pending) so it can never land on the figures later as a jump; the base presentation stands. A later link's boss, a switched part or a resized window plan again. */
+  retire(): void {
+    [this.planWanted, this.pending] = [false, null];
+    this.report.tries = [...this.report.tries, 'retired: no plan landed in time'];
+  }
+
+  /** Where the plan is this frame: the opening's wait reads it (`openingGate.ts`) and so does `__pyrefly.fx.mix.trace()`. */
+  get state(): { on: boolean; wanted: boolean; pending: boolean; installed: boolean; seen: boolean; age: number } {
+    return { on: this.wantOn, wanted: this.planWanted, pending: this.pending !== null, installed: this.installed, seen: this.time > 0, age: +(this.time - this.sigAt).toFixed(2) };
   }
 
   private layoutKey(canvas: HTMLElement): string {
@@ -130,7 +142,7 @@ export class Framing {
       this.calmSpec = stand?.calm ?? null;
       // An arrival in the opening seconds re-plans; later changes (a death, a summon, a spherechange) keep the master: no cut on them. A giant arriving or leaving (the next link) always re-plans.
       const giant = giantRow(this.game, actors)?.row.id ?? null;
-      if (this.installed && (this.time < 10 || giant !== this.giantId)) this.planWanted = true;
+      if ((this.installed && this.time < 10) || giant !== this.giantId) this.planWanted = true; // a retired plan (`retire`) is planned again for the next link's boss, never for an arrival in the first seconds
       this.giantId = giant;
     }
     this.staging.hold(actors, on && this.staged); // a chapter with a row stands its fiends itself: the formation relaxation leaves them alone from the first frame
@@ -179,39 +191,14 @@ export class Framing {
     return actors.every((a) => !a.visible || stillActor(a));
   }
 
-  /**
-   * The lens shift on screen now: the last master's, travelling to this one's with the camera's move onto it; a
-   * move that takes over half way carries it on from where it is (never back to the start).
-   */
+  /** The lens shift on screen now (`lensTravel.ts`). */
   lensNow(): [number, number] {
-    const r = this.rigs;
-    const p = r?.sinceInstall() ?? 1;
-    if (r && p < 1 && r.moveSeq !== this.lensSeq) {
-      this.lensSeq = r.moveSeq;
-      this.lensFrom = [this.lensShown[0], this.lensShown[1]];
-    }
-    this.lensShown = [this.lensFrom[0] + (this.lens[0] - this.lensFrom[0]) * p, this.lensFrom[1] + (this.lens[1] - this.lensFrom[1]) * p];
-    return this.lensShown;
+    return this.travel.now();
   }
 
-  /**
-   * The master's lens shift on the camera (call after any held shot has been written). `hold`: the lens shift a
-   * held shot was framed against, which stays on screen for as long as the shot does (a shot is one static cut).
-   */
+  /** The master's lens shift on the camera (call after any held shot has been written); `hold`: the shift a held shot was framed against. */
   applyLens(on: boolean, hold: readonly [number, number] | null = null): void {
-    const canvas = battleCanvas();
-    const lens = hold ?? this.lensNow();
-    const want = on && this.wantOn && this.installed && (lens[0] !== 0 || lens[1] !== 0) && !!canvas;
-    if (want && canvas) {
-      const r = canvas.getBoundingClientRect();
-      const W = r.width || window.innerWidth;
-      const H = r.height || window.innerHeight;
-      this.cam.setViewOffset(W, H, -lens[0], -lens[1], W, H);
-      this.lensApplied = true;
-    } else if (this.lensApplied) {
-      this.cam.clearViewOffset();
-      this.lensApplied = false;
-    }
+    this.travel.apply(on && this.wantOn && this.installed, hold);
   }
 
   /** The figures as the plan reads them: the party at the shared height (`planFig.ts`: the camera and the bosses stay as they were); `planned: false`, as drawn. */
@@ -342,17 +329,13 @@ export class Framing {
     this.staging.apply(actors, true);
     this.masterPose = d.pose;
     anticipateView(d.pose); // release 39: the master the camera is about to rest on, so its figures' paintings are the right size when it lands
-    this.lensFrom = this.lensApplied ? [...this.lensNow()] : [0, 0];
-    this.lensShown = [this.lensFrom[0], this.lensFrom[1]];
-    this.lensSeq = rigs.moveSeq;
-    this.lens = d.lens;
+    const lensMoved = this.travel.start(d.lens, rigs.moveSeq);
     this.pinned = d.pin;
     this.giant = d.giant === true;
     this.lock = d.lock;
     this.rule = d.rule;
     this.limitOf.clear();
     for (const [a, l] of d.limitOf) this.limitOf.set(a, l);
-    const lensMoved = Math.abs(this.lens[0] - this.lensFrom[0]) + Math.abs(this.lens[1] - this.lensFrom[1]) > 0.5;
     rigs.install(d.pose, !d.keep, d.giant !== true);
     if (lensMoved && rigs.sinceInstall() >= 1) rigs.holdUntilMove(); // the rig itself unchanged: the lens waits for the camera too
     this.installed = true;

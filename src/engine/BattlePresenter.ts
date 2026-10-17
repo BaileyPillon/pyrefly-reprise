@@ -36,7 +36,7 @@ import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvent
 import { clockEngine, followMenuLevel, MenuWaker, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
-import { settleForMenu } from './BattlePresenterBeats.ts';
+import { settleForMenu, settleOpening } from './BattlePresenterBeats.ts';
 import { aeonMenuRows } from './PayRows.ts';
 import { playOpening } from './OpeningSkip.ts';
 import { playUnheld } from './TargetFrameHold.ts';
@@ -487,6 +487,7 @@ export class BattlePresenter {
     this.phase = 'moment:battle-start';
     const opening = { partyIds: state.activeIds, bossId: boss?.id ?? null, bossName: (boss && headline) || boss?.name || null }; // PR-0205
     await playOpening(this.ctx, () => this.ctx.moments.battleStart(opening)); // a Confirm press ends it (PR-0061)
+    if (!this.aborted) await settleOpening(this.ctx); // CHAPTER FRAMING's first plan lands before the first command menu can open (`fx/mix/openingGate.ts`)
   }
 
   /** Submit one command and play everything it produced, minigames included. */
