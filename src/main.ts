@@ -148,7 +148,7 @@ async function boot(): Promise<void> {
   installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
   installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
-  installPoseSwapDebug(debugApi, app); // W5: `__pyrefly.swap('today' | 'smooth')`, the pose-swap smoothing switch
+  installPoseSwapDebug(debugApi, app); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
 
   await app.push(new TitleScreen());
   app.start();

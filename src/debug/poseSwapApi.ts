@@ -1,19 +1,36 @@
 /**
- * `window.__pyrefly.swap(mode?)`: the pose-swap smoothing switch (W5, pose continuity; both games; captures and checks only).
+ * `window.__pyrefly.motionMode(mode?)` and `window.__pyrefly.swap(mode?)`: the pose-motion switches (W5, pose continuity; both games; captures and checks only).
  *
- * `swap()` returns the mode in force (`'today'` or `'smooth'`, from `?swap=` or `POSE_SWAP_DEFAULT`); `swap('smooth')` and `swap('today')` set it for the actors that change
- * pose from now on, the lunges that start from now on, and the frame clock's clamp (1/40 s or 1/20 s). A page normally just takes `?swap=smooth` in its address.
+ * `motionMode()` returns the mode in force (`'smooth'`, the default, or `'classic'`, from `?motion=`); `motionMode('classic')` and `motionMode('smooth')` set it for the lunges that start
+ * from now on and for the frame clock's clamp (1/40 s or 1/20 s). `swap()` returns `'aligned'` or `'off'` (from `?swap=aligned`, off by default); `swap('aligned')` and `swap('off')` set
+ * the aligned dissolve for the actors that change pose from now on. A page normally just takes the switch in its address.
  */
 import type { App } from '../app/App.ts';
-import { frameClockMax, poseSwapLog, poseSwapMode, poseSwapStats, resetPoseSwapStats, setPoseSwapMode, type PoseSwapMode, type PoseSwapRecord, type PoseSwapStats } from '../engine/PoseSwap.ts';
+import {
+  alignedSwapOn,
+  frameClockMax,
+  motionMode,
+  poseSwapLog,
+  poseSwapStats,
+  resetPoseSwapStats,
+  setAlignedSwap,
+  setMotionMode,
+  type MotionMode,
+  type PoseSwapRecord,
+  type PoseSwapStats,
+} from '../engine/PoseSwap.ts';
 
 export function installPoseSwapDebug(api: Record<string, unknown>, app: Pick<App, 'setMaxDelta'>): void {
-  api['swap'] = (mode?: PoseSwapMode): PoseSwapMode => {
-    if (mode === 'today' || mode === 'smooth') {
-      setPoseSwapMode(mode);
+  api['motionMode'] = (mode?: MotionMode): MotionMode => {
+    if (mode === 'smooth' || mode === 'classic') {
+      setMotionMode(mode);
       app.setMaxDelta(frameClockMax(mode));
     }
-    return poseSwapMode();
+    return motionMode();
+  };
+  api['swap'] = (mode?: 'aligned' | 'off'): 'aligned' | 'off' => {
+    if (mode === 'aligned' || mode === 'off') setAlignedSwap(mode === 'aligned');
+    return alignedSwapOn() ? 'aligned' : 'off';
   };
   api['swapStats'] = (reset = false): PoseSwapStats => {
     const now = poseSwapStats();

@@ -114,10 +114,8 @@ export function footprintOverlap(a: Footprint, b: Footprint, cells = 64): number
 export type AnchorSource = 'head' | 'centroid';
 
 export interface PlaneAnchor {
-  /** World x, in the actor's frame. */
+  /** World x, in the actor's frame (the drift is sideways only, so the anchor's height is not kept). */
   readonly x: number;
-  /** World y, in the actor's frame (the drift never uses it; a cut's jump does). */
-  readonly y: number;
   readonly source: AnchorSource;
 }
 
@@ -163,14 +161,13 @@ export function maskCentroid(mask: CoarseMask): { u: number; t: number } | null 
 export function planeAnchor(p: Footprint): PlaneAnchor | null {
   if (!p.mask || !(p.width > 0)) return null;
   const worldX = (u: number): number => p.cx + p.mirror * (u - 0.5) * p.width;
-  const worldY = (t: number): number => p.cy + (0.5 - t) * p.height;
   if (p.head) {
     const u = (p.head[0] + p.head[2]) / 2;
     const t = (p.head[1] + p.head[3]) / 2;
-    if (nearSolid(p.mask, u, t)) return { x: worldX(u), y: worldY(t), source: 'head' };
+    if (nearSolid(p.mask, u, t)) return { x: worldX(u), source: 'head' };
   }
   const c = maskCentroid(p.mask);
-  return c === null ? null : { x: worldX(c.u), y: worldY(c.t), source: 'centroid' };
+  return c === null ? null : { x: worldX(c.u), source: 'centroid' };
 }
 
 /** How far each plane of a pair drifts at full weight, and how far apart the anchors were. */
@@ -181,14 +178,12 @@ export interface MeetingOffsets {
   readonly inn: number;
   /** The distance between the two anchors along x (world units): what the drift closes. */
   readonly distance: number;
-  /** The straight-line distance between the two anchors (world units): how far the head jumps when one painting replaces the other in one frame. */
-  readonly jump: number;
 }
 
 /** The meeting point is halfway between the anchors; each plane's full shift takes its anchor there. */
 export function meetingOffsets(out: PlaneAnchor, inn: PlaneAnchor): MeetingOffsets {
   const m = (out.x + inn.x) / 2;
-  return { out: m - out.x, inn: m - inn.x, distance: Math.abs(out.x - inn.x), jump: Math.hypot(out.x - inn.x, out.y - inn.y) };
+  return { out: m - out.x, inn: m - inn.x, distance: Math.abs(out.x - inn.x) };
 }
 
 /** How much of its full shift a plane showing `fade` has: 0 at 1, 1 at 0.5 or less, linear between. */

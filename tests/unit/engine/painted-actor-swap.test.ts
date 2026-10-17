@@ -1,14 +1,14 @@
 /**
- * W5 (pose swap smoothing, 2026-10-17; both games): the REAL `PaintedActor` under `?swap=smooth` (`PoseSwap.ts`, `PoseAlign.ts`).
+ * W5 (pose motion, 2026-10-17; both games): the REAL `PaintedActor` under the switches of `PoseSwap.ts` (`PoseAlign.ts`).
  *
  * Tidus is built as the stage builds him (the party faces +x, every pose a real record's painting with its real registration, heads included) and each painting is
  * given a stand-in silhouette: a body box under its registered head (what the loader reads from the pixels). The heads are read the way the harness reads them: the
  * head box's centre through the plane the engine drew. What is pinned:
  *
- * - `today` (the default) moves no plane: no drift, every change a plain cross-fade, the lunge on cubic-out;
- * - an aligned dissolve brings the two heads to one point at the crossing, starts the incoming plane at the meeting point, and ends with every plane at home;
- * - a pair that overlaps by under 0.30 is cut in ONE frame where the game holds still (never two paintings at once), and is not cut while it moves or while another blend runs;
- * - the lunge's first frame is on the velocity-continuous curve, and the strike reaches the same distance at the same moment.
+ * - by default (the aligned dissolve is OFF) no plane drifts: every change is a plain cross-fade, never a one-frame change, and the lunge is on the velocity-continuous curve;
+ * - `?motion=classic` puts the lunge back on cubic-out, and touches nothing else;
+ * - `?swap=aligned` brings the two heads to one point at the crossing, starts the incoming plane at the meeting point, and ends with every plane at home;
+ * - the lunge's first frame is small, and the strike reaches the same distance at the same moment as on cubic-out.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { Vector3 } from 'three';
@@ -16,7 +16,7 @@ import { PaintedActor, cameraAt, painting, reset, slotOf, slotsOf, viewOf, type 
 import { setPace, setPaceGame } from '../../../src/engine/pace.ts';
 import { coarseMask } from '../../../src/engine/PoseAlign.ts';
 import { ATTACK_IMPACT } from '../../../src/engine/BattlePresenterActors.ts';
-import { setPoseSwapMode, setPoseSwapParts } from '../../../src/engine/PoseSwap.ts';
+import { setAlignedSwap, setMotionMode } from '../../../src/engine/PoseSwap.ts';
 
 const FRAME = 1 / 60;
 const cam = cameraAt(3);
@@ -27,8 +27,8 @@ beforeEach(() => {
 });
 afterEach(() => {
   reset();
-  setPoseSwapMode(null);
-  setPoseSwapParts(null);
+  setMotionMode(null);
+  setAlignedSwap(null);
   setPaceGame('other');
 });
 
@@ -89,7 +89,7 @@ function run(a: Actor, pose: string, frames: number): number[] {
   return xs;
 }
 
-describe('today (the default) moves nothing', () => {
+describe('by default (the aligned dissolve off) nothing drifts', () => {
   it('no plane drifts during a change of pose, and no policy is recorded', () => {
     const a = tidus(['idle', 'ready']);
     step(a);
@@ -104,12 +104,12 @@ describe('today (the default) moves nothing', () => {
   });
 });
 
-describe('the aligned dissolve (smooth)', () => {
-  beforeEach(() => setPoseSwapMode('smooth'));
+describe('the aligned dissolve (?swap=aligned)', () => {
+  beforeEach(() => setAlignedSwap(true));
 
   it('brings the two heads to one point at the crossing, starts the incoming plane at the meeting point, and ends with the incoming plane at home', () => {
     // home positions, read with the switch off
-    setPoseSwapMode('today');
+    setAlignedSwap(false);
     const base = tidus(['idle', 'ready']);
     step(base);
     base.setPose('ready');
@@ -118,7 +118,7 @@ describe('the aligned dissolve (smooth)', () => {
     const homeReady = headX(base, 'ready');
     expect(Math.abs(homeReady - homeIdle)).toBeGreaterThan(0.2); // the pair's heads really are apart, or the test proves nothing
 
-    setPoseSwapMode('smooth');
+    setAlignedSwap(true);
     const a = tidus(['idle', 'ready']);
     step(a);
     expect(headX(a, 'idle')).toBeCloseTo(homeIdle, 6);
@@ -152,8 +152,8 @@ describe('the aligned dissolve (smooth)', () => {
   });
 
   it('the drift is only sideways: every plane keeps the height it has under today (to a hair of head lock), frame for frame, so the feet stay on the floor line', () => {
-    const trajectory = (mode: 'today' | 'smooth'): number[][] => {
-      setPoseSwapMode(mode);
+    const trajectory = (on: boolean): number[][] => {
+      setAlignedSwap(on);
       const act = tidus(['idle', 'ready']);
       step(act);
       act.setPose('ready');
@@ -164,8 +164,8 @@ describe('the aligned dissolve (smooth)', () => {
       }
       return rows;
     };
-    const today = trajectory('today');
-    const smooth = trajectory('smooth');
+    const today = trajectory(false);
+    const smooth = trajectory(true);
     expect(smooth.length).toBe(today.length);
     // the head lock rescales a plane about its feet as the camera sees the plane (a yawed plane that slides sideways changes depth): under 1 percent of its height, never the drift itself
     for (let f = 0; f < today.length; f++) for (let i = 0; i < 2; i++) expect(Math.abs(smooth[f]![i]! - today[f]![i]!)).toBeLessThan(0.012);
@@ -182,69 +182,8 @@ describe('the aligned dissolve (smooth)', () => {
   });
 });
 
-describe('the held-frame cut (smooth; the mechanics, on the cutany ablation: a cut at any head distance, the first version)', () => {
-  beforeEach(() => {
-    setPoseSwapMode('smooth');
-    setPoseSwapParts(['cutany', 'align']);
-  });
-
-  /** Two paintings that barely overlap: idle's body is narrow, and so is the pose it changes to, whose head sits far to one side. */
-  const NARROW = { idle: 0.05, hurt: 0.05, follow: 0.05, attack: 0.05, ready: 0.05 };
-
-  it('a pair under 0.30 at a figure that holds still is changed in ONE frame: the new painting at full, the old at nothing, never both', () => {
-    const a = tidus(['idle', 'hurt'], NARROW);
-    for (let f = 0; f < 5; f++) step(a);
-    a.setPose('hurt');
-    expect(policyOf(a)).toBe('cut');
-    expect(slotFade(a, 'hurt')).toBe(1);
-    expect(slotFade(a, 'idle')).toBe(0);
-    expect(a.blending).toBe(false);
-    step(a);
-    expect(live(a)).toEqual(['hurt']);
-  });
-
-  it('a hit-stop (the field frozen while the real clock runs) is a hold too', () => {
-    const a = tidus(['idle', 'hurt'], NARROW);
-    step(a);
-    step(a, 0, FRAME); // the field is frozen
-    a.setPose('hurt');
-    expect(policyOf(a)).toBe('cut');
-  });
-
-  it('is not made while the figure moves: the same pair on a lunge in its step dissolves, aligned', () => {
-    const a = tidus(['idle', 'hurt'], NARROW);
-    for (let f = 0; f < 3; f++) step(a);
-    void a.lunge(1.4, 440);
-    for (let f = 0; f < 3; f++) step(a); // the step beat is under way: the figure moves several centimetres a frame
-    a.setPose('hurt');
-    expect(policyOf(a)).not.toBe('cut');
-    expect(a.blending).toBe(true);
-  });
-
-  it('is not made while another blend runs (two paintings are on screen already)', () => {
-    const a = tidus(['idle', 'hurt', 'follow'], NARROW);
-    for (let f = 0; f < 5; f++) step(a);
-    a.setPose('hurt'); // a cut: the figure is at rest
-    expect(policyOf(a)).toBe('cut');
-    a.setPose('follow', { force: true });
-    expect(policyOf(a)).toBe('cut'); // still at rest, nothing blending: another cut
-    const b = tidus(['idle', 'ready', 'attack']);
-    for (let f = 0; f < 5; f++) step(b);
-    b.setPose('ready'); // overlaps well: an aligned dissolve
-    expect(b.blending).toBe(true);
-    expect(policyOf(b)).toBe('aligned');
-    step(b);
-    b.setPose('attack'); // asked in mid-blend: held by PoseBlend rule 2 or re-pointed, but never cut
-    for (let f = 0; f < 20; f++) {
-      step(b);
-      expect(live(b).length).toBeLessThanOrEqual(2);
-    }
-    expect(policyOf(b)).not.toBe('cut');
-  });
-});
-
-describe('the aligned dissolve must not pull overlapping bodies apart (smooth)', () => {
-  beforeEach(() => setPoseSwapMode('smooth'));
+describe('the aligned dissolve must not pull overlapping bodies apart (?swap=aligned)', () => {
+  beforeEach(() => setAlignedSwap(true));
 
   /** Bodies drawn on the stance (where the feet are, which the registration puts at the same place in every pose), whatever the head does. */
   function onStance(poses: string[]): Actor {
@@ -278,29 +217,31 @@ describe('the aligned dissolve must not pull overlapping bodies apart (smooth)',
   });
 });
 
-describe('the cut and the distance between the heads (smooth, the default parts)', () => {
-  beforeEach(() => setPoseSwapMode('smooth'));
-
-  it('a pair under 0.30 whose heads are far apart is not cut (a cut would jump the head the whole distance in one frame): the aligned dissolve', () => {
-    const a = tidus(['idle', 'hurt'], { idle: 0.05, hurt: 0.05 });
-    for (let f = 0; f < 5; f++) step(a);
-    a.setPose('hurt');
-    expect(policyOf(a)).toBe('aligned');
-    expect(a.blending).toBe(true);
-  });
-
-  it('a pair under 0.30 whose heads are close is cut in one frame at a figure that holds still', () => {
+describe('no pose change is ever made in one frame (the held-frame cut was removed)', () => {
+  /** Two paintings that barely overlap, at a figure that holds still: the case the cut used to take. */
+  it.each([false, true])('a narrow pair at rest still cross-fades over several frames (aligned dissolve %s)', (on) => {
+    setAlignedSwap(on);
     const a = tidus(['idle', 'cast'], { idle: 0.012, cast: 0.012 });
     for (let f = 0; f < 5; f++) step(a);
     a.setPose('cast');
-    expect(policyOf(a)).toBe('cut');
-    expect(slotFade(a, 'cast')).toBe(1);
-    expect(slotFade(a, 'idle')).toBe(0);
-    expect(a.blending).toBe(false);
+    expect(slotFade(a, 'cast')).toBeLessThan(1);
+    expect(a.blending).toBe(true);
+    step(a);
+    expect(live(a).length).toBe(2);
+    for (let f = 0; f < 14; f++) step(a);
+    expect(live(a)).toEqual(['cast']);
+  });
+
+  it('the aligned dissolve records the plain dissolve or the alignment for a narrow pair, never a cut', () => {
+    setAlignedSwap(true);
+    const a = tidus(['idle', 'cast'], { idle: 0.012, cast: 0.012 });
+    for (let f = 0; f < 5; f++) step(a);
+    a.setPose('cast');
+    expect(['aligned', 'dissolve']).toContain(policyOf(a));
   });
 });
 
-describe('the lunge (smooth)', () => {
+describe('the lunge (the first frame is on by default; ?motion=classic restores cubic-out)', () => {
   /** The lunge offset after `frames` frames of a 440 ms strike of 1.4 units. */
   function lungeAfter(frames: number): number {
     const a = tidus(['idle']);
@@ -310,13 +251,17 @@ describe('the lunge (smooth)', () => {
     return (a as unknown as { lungeOffset: number }).lungeOffset;
   }
 
-  it('today: the first moving frame covers over a quarter of the distance from a standing start', () => {
-    setPoseSwapMode('today');
+  it('classic: the first moving frame covers over a quarter of the distance from a standing start', () => {
+    setMotionMode('classic');
     expect(lungeAfter(1)).toBeGreaterThan(0.25 * 1.4);
   });
 
-  it('smooth: the first moving frame is small, the velocity grows, and the step reaches the same place as today at the same moment', () => {
-    setPoseSwapMode('smooth');
+  it('by default, with no switch set: the first moving frame is small, as under smooth', () => {
+    expect(lungeAfter(1)).toBeLessThan(0.1 * 1.4);
+  });
+
+  it('smooth: the velocity grows from a standing start, and the step reaches the same place as classic at the same moment', () => {
+    setMotionMode('smooth');
     const first = lungeAfter(1);
     expect(first).toBeLessThan(0.1 * 1.4);
     // steps grow from a standing start: no frame of the first three covers more than the frame after it
@@ -325,11 +270,26 @@ describe('the lunge (smooth)', () => {
     expect(s[2]! - s[1]!).toBeGreaterThan(s[1]! - s[0]!);
     // the end of the step beat (0.26 of the move = 114 ms, 7 frames) and the apex are the same distance as on cubic-out
     const apex = Math.round((440 * ATTACK_IMPACT) / (1000 / 60));
-    setPoseSwapMode('today');
-    const todayApex = lungeAfter(apex);
-    setPoseSwapMode('smooth');
+    setMotionMode('classic');
+    const classicApex = lungeAfter(apex);
+    setMotionMode('smooth');
     const smoothApex = lungeAfter(apex);
-    expect(smoothApex).toBeCloseTo(todayApex, 1);
+    expect(smoothApex).toBeCloseTo(classicApex, 1);
     expect(smoothApex).toBeLessThanOrEqual(1.4 + 1e-9);
+  });
+
+  it('the lunge and the aligned dissolve are separate switches: classic with the dissolve on still drifts, smooth with it off does not', () => {
+    setMotionMode('classic');
+    setAlignedSwap(true);
+    const a = tidus(['idle', 'ready']);
+    step(a);
+    a.setPose('ready');
+    expect(policyOf(a)).toBe('aligned');
+    setMotionMode('smooth');
+    setAlignedSwap(false);
+    const b = tidus(['idle', 'ready']);
+    step(b);
+    b.setPose('ready');
+    expect(policyOf(b)).toBeNull();
   });
 });

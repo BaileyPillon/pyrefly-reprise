@@ -1,135 +1,197 @@
 /**
- * W5 (pose swap smoothing, 2026-10-17; both games): the switch, the frame clock and the pair policy of `PoseSwap.ts`. Pure: no `three`, no DOM.
+ * W5 (pose motion, 2026-10-17; both games): the switches, the frame clock and the aligned dissolve's pair policy of `PoseSwap.ts`. Pure: no `three`, no DOM.
  *
- * The policy is a function of the pair's overlap (intersection over union of the two silhouettes) and the distance between their anchors, plus whether the
- * game holds still and whether a blend is already running. The table below is the contract the driver read: overlap 0.30 or more is an aligned dissolve, under
- * it a cut where the game holds still, the aligned dissolve where it does not, and the plain dissolve when the heads are already together.
+ * The driver's delegated pick after the measurement: the lunge's first frame and the 1/40 s frame clock are ON by default (`?motion=classic` restores today's lunge and the
+ * 1/20 s clock); the aligned dissolve is OFF by default (`?swap=aligned`); the held-frame cut was removed. The policy is a function of the pair's overlap (intersection over
+ * union of the two silhouettes) and the distance between their anchors.
  */
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ALIGN_MIN_DISTANCE,
   ALIGN_MIN_GAIN,
-  ALIGN_MIN_OVERLAP,
-  CUT_MAX_DISTANCE,
+  MAX_DELTA_CLASSIC,
   MAX_DELTA_SMOOTH,
-  MAX_DELTA_TODAY,
-  POSE_SWAP_DEFAULT,
-  STILL_SPEED,
-  figureHolding,
+  MOTION_DEFAULT,
+  alignedSwapOn,
   frameClockMax,
-  poseSwapMode,
-  poseSwapPart,
-  poseSwapSmooth,
-  setPoseSwapMode,
-  setPoseSwapParts,
+  motionMode,
+  motionSmooth,
+  setAlignedSwap,
+  setMotionMode,
   swapPolicy,
   type SwapPairFacts,
 } from '../../../src/engine/PoseSwap.ts';
+import { installPoseSwapDebug } from '../../../src/debug/poseSwapApi.ts';
 
 afterEach(() => {
-  setPoseSwapMode(null);
-  setPoseSwapParts(null);
+  setMotionMode(null);
+  setAlignedSwap(null);
+  vi.unstubAllGlobals();
 });
 
 const far = 0.4; // anchors 40 percent of the figure's height apart
-const facts = (over: Partial<SwapPairFacts> = {}): SwapPairFacts => ({ overlap: 0.5, anchorDistance: far, hold: false, blending: false, ...over });
+const facts = (over: Partial<SwapPairFacts> = {}): SwapPairFacts => ({ overlap: 0.5, anchorDistance: far, ...over });
+const address = (search: string): void => void vi.stubGlobal('location', { search });
 
-describe('the switch', () => {
-  it('defaults to today until the driver flips the constant', () => {
-    expect(POSE_SWAP_DEFAULT).toBe('today');
-    expect(poseSwapMode()).toBe('today');
-    expect(poseSwapSmooth()).toBe(false);
+describe('the motion switch (the lunge\'s first frame and the frame clock)', () => {
+  it('is ON by default: smooth', () => {
+    expect(MOTION_DEFAULT).toBe('smooth');
+    expect(motionMode()).toBe('smooth');
+    expect(motionSmooth()).toBe(true);
   });
 
-  it('setPoseSwapMode forces either mode, and null reads the address again', () => {
-    setPoseSwapMode('smooth');
-    expect(poseSwapMode()).toBe('smooth');
-    expect(poseSwapSmooth()).toBe(true);
-    setPoseSwapMode('today');
-    expect(poseSwapSmooth()).toBe(false);
-    setPoseSwapMode(null);
-    expect(poseSwapMode()).toBe(POSE_SWAP_DEFAULT);
+  it('?motion=classic restores today\'s lunge and clock; ?motion=smooth and anything else is the default', () => {
+    address('?motion=classic');
+    expect(motionMode()).toBe('classic');
+    expect(motionSmooth()).toBe(false);
+    setMotionMode(null);
+    address('?motion=smooth');
+    expect(motionMode()).toBe('smooth');
+    setMotionMode(null);
+    address('?motion=nonsense&swap=today');
+    expect(motionMode()).toBe(MOTION_DEFAULT);
+    setMotionMode(null);
+    address('');
+    expect(motionMode()).toBe(MOTION_DEFAULT);
+  });
+
+  it('setMotionMode forces either mode, and null reads the address again', () => {
+    setMotionMode('classic');
+    expect(motionSmooth()).toBe(false);
+    setMotionMode('smooth');
+    expect(motionSmooth()).toBe(true);
+    address('?motion=classic');
+    setMotionMode(null);
+    expect(motionMode()).toBe('classic');
+  });
+
+  it('the address is read once: a later change of the address does not move a page that has already looked', () => {
+    address('?motion=classic');
+    expect(motionMode()).toBe('classic');
+    address('');
+    expect(motionMode()).toBe('classic');
   });
 });
 
-describe('the frame clock (change 4)', () => {
-  it('clamps at 1/20 s today and 1/40 s under smooth', () => {
-    expect(MAX_DELTA_TODAY).toBeCloseTo(0.05, 12);
+describe('the frame clock', () => {
+  it('clamps at 1/40 s by default and 1/20 s under classic', () => {
+    expect(MAX_DELTA_CLASSIC).toBeCloseTo(0.05, 12);
     expect(MAX_DELTA_SMOOTH).toBeCloseTo(0.025, 12);
-    expect(frameClockMax('today')).toBe(MAX_DELTA_TODAY);
+    expect(frameClockMax('classic')).toBe(MAX_DELTA_CLASSIC);
     expect(frameClockMax('smooth')).toBe(MAX_DELTA_SMOOTH);
   });
 
   it('follows the mode in force when none is named', () => {
-    expect(frameClockMax()).toBe(MAX_DELTA_TODAY);
-    setPoseSwapMode('smooth');
+    expect(frameClockMax()).toBe(MAX_DELTA_SMOOTH); // the default
+    setMotionMode('classic');
+    expect(frameClockMax()).toBe(MAX_DELTA_CLASSIC);
+    setMotionMode('smooth');
     expect(frameClockMax()).toBe(MAX_DELTA_SMOOTH);
   });
 
-  it('smooth is a stricter clamp than today (a hitch is a slow frame, not a skipped one)', () => {
-    expect(MAX_DELTA_SMOOTH).toBeLessThan(MAX_DELTA_TODAY);
-    expect(MAX_DELTA_SMOOTH).toBeGreaterThan(1 / 60); // but never under one frame of a 60 Hz game: a steady frame is untouched
+  it('smooth is a stricter clamp than classic (a hitch is a slow frame, not a skipped one) but never under one frame of a 60 Hz game: a steady frame is untouched', () => {
+    expect(MAX_DELTA_SMOOTH).toBeLessThan(MAX_DELTA_CLASSIC);
+    expect(MAX_DELTA_SMOOTH).toBeGreaterThan(1 / 60);
   });
 });
 
-describe('the pair policy (changes 1 and 2)', () => {
-  it('a pair that overlaps by 0.30 or more, heads apart: the aligned dissolve, held or not', () => {
-    expect(swapPolicy(facts({ overlap: ALIGN_MIN_OVERLAP }))).toBe('aligned');
+describe('the aligned dissolve switch', () => {
+  it('is OFF by default', () => {
+    expect(alignedSwapOn()).toBe(false);
+  });
+
+  it('?swap=aligned turns it on; every other value, including the old ?swap=today and ?swap=smooth, leaves it off', () => {
+    address('?swap=aligned');
+    expect(alignedSwapOn()).toBe(true);
+    for (const v of ['today', 'smooth', 'off', '']) {
+      setAlignedSwap(null);
+      address(`?swap=${v}`);
+      expect(alignedSwapOn()).toBe(false);
+    }
+  });
+
+  it('is independent of the motion switch', () => {
+    setMotionMode('classic');
+    setAlignedSwap(true);
+    expect(alignedSwapOn()).toBe(true);
+    expect(motionSmooth()).toBe(false);
+    setMotionMode('smooth');
+    setAlignedSwap(false);
+    expect(alignedSwapOn()).toBe(false);
+    expect(motionSmooth()).toBe(true);
+  });
+
+  it('setAlignedSwap forces it, and null reads the address again', () => {
+    setAlignedSwap(true);
+    expect(alignedSwapOn()).toBe(true);
+    address('');
+    setAlignedSwap(null);
+    expect(alignedSwapOn()).toBe(false);
+  });
+});
+
+describe('the debug switches (window.__pyrefly.motionMode and .swap)', () => {
+  function installed(): { api: Record<string, (...a: unknown[]) => unknown>; delta: number[] } {
+    const api: Record<string, unknown> = {};
+    const delta: number[] = [];
+    installPoseSwapDebug(api, { setMaxDelta: (s: number) => void delta.push(s) });
+    return { api: api as Record<string, (...a: unknown[]) => unknown>, delta };
+  }
+
+  it('motionMode() reads the mode; motionMode(mode) sets it and the frame clock with it', () => {
+    const { api, delta } = installed();
+    expect(api['motionMode']!()).toBe('smooth');
+    expect(api['motionMode']!('classic')).toBe('classic');
+    expect(motionSmooth()).toBe(false);
+    expect(delta).toEqual([MAX_DELTA_CLASSIC]);
+    expect(api['motionMode']!('smooth')).toBe('smooth');
+    expect(delta).toEqual([MAX_DELTA_CLASSIC, MAX_DELTA_SMOOTH]);
+    expect(api['motionMode']!('nonsense')).toBe('smooth'); // an unknown mode changes nothing
+    expect(delta.length).toBe(2);
+  });
+
+  it('swap() reads the aligned dissolve; swap(mode) sets it and touches no clock', () => {
+    const { api, delta } = installed();
+    expect(api['swap']!()).toBe('off');
+    expect(api['swap']!('aligned')).toBe('aligned');
+    expect(alignedSwapOn()).toBe(true);
+    expect(api['swap']!('off')).toBe('off');
+    expect(alignedSwapOn()).toBe(false);
+    expect(api['swap']!('smooth')).toBe('off'); // the old spelling is not a mode
+    expect(delta).toEqual([]);
+  });
+
+  it('keeps the counters and the log the captures read', () => {
+    const { api } = installed();
+    expect(api['swapStats']!()).toMatchObject({ dissolve: 0, aligned: 0 });
+    expect(api['swapLog']!()).toEqual([]);
+  });
+});
+
+describe('the aligned dissolve\'s pair policy', () => {
+  it('a pair whose heads are apart: the aligned dissolve, whatever the overlap', () => {
     expect(swapPolicy(facts({ overlap: 0.9 }))).toBe('aligned');
-    expect(swapPolicy(facts({ overlap: 0.9, hold: true }))).toBe('aligned');
+    expect(swapPolicy(facts({ overlap: 0.3 }))).toBe('aligned');
+    expect(swapPolicy(facts({ overlap: 0.135 }))).toBe('aligned');
+    expect(swapPolicy(facts({ overlap: 0 }))).toBe('aligned');
   });
 
-  it('a pair under 0.30 whose heads are close, where the game holds still and nothing blends: a cut', () => {
-    const near = 0.04;
-    expect(swapPolicy(facts({ overlap: 0.29, hold: true, anchorDistance: near }))).toBe('cut');
-    expect(swapPolicy(facts({ overlap: 0, hold: true, anchorDistance: near }))).toBe('cut');
-    expect(swapPolicy(facts({ overlap: 0.135, hold: true, anchorDistance: 0.01 }))).toBe('cut'); // heads together: still a different painting, still a cut
-    expect(swapPolicy(facts({ overlap: 0.135, hold: true, anchorDistance: CUT_MAX_DISTANCE }))).toBe('cut');
-  });
-
-  it('a cut moves the head the whole distance in one frame, so heads further apart than CUT_MAX_DISTANCE are never cut: aligned from ALIGN_MIN_DISTANCE, else the plain dissolve', () => {
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true, anchorDistance: far }))).toBe('aligned');
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true, anchorDistance: ALIGN_MIN_DISTANCE }))).toBe('aligned');
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true, anchorDistance: (CUT_MAX_DISTANCE + ALIGN_MIN_DISTANCE) / 2 }))).toBe('dissolve');
-    expect(CUT_MAX_DISTANCE).toBeLessThan(ALIGN_MIN_DISTANCE);
-  });
-
-  it('the cut is judged on the whole jump of the head when it is told (across and up or down), the x distance otherwise', () => {
-    const base = { overlap: 0.1, hold: true };
-    expect(swapPolicy(facts({ ...base, anchorDistance: 0.05, headJump: 0.06 }))).toBe('cut');
-    expect(swapPolicy(facts({ ...base, anchorDistance: 0.05, headJump: 0.2 }))).toBe('dissolve'); // 0.05 across, 0.19 up: Paine's ready to attack
-    expect(swapPolicy(facts({ ...base, anchorDistance: 0.12, headJump: 0.3 }))).toBe('aligned');
-    expect(swapPolicy(facts({ ...base, anchorDistance: 0.05, headJump: null }))).toBe('cut');
-    expect(swapPolicy(facts({ ...base, anchorDistance: 0.2 }))).toBe('aligned');
-  });
-
-  it('cutMaxDistance: Infinity is the first version (a cut at any distance, known or not), kept as the cutany ablation', () => {
-    const all = { align: true, cut: true, cutMaxDistance: Infinity };
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true, anchorDistance: far }), all)).toBe('cut');
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true, anchorDistance: null }), all)).toBe('cut');
-  });
-
-  it('a pair under 0.30 with no hold near: the aligned dissolve, never a cut', () => {
-    expect(swapPolicy(facts({ overlap: 0.135, hold: false }))).toBe('aligned');
-  });
-
-  it('never a cut while another blend runs (two paintings are already on screen), the aligned dissolve instead', () => {
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true, blending: true }))).toBe('aligned');
-  });
-
-  it('heads already together (under the minimum distance): the plain dissolve, whatever the overlap, unless it is a cut', () => {
+  it('heads already together (under the minimum distance): the plain dissolve, whatever the overlap', () => {
     const near = ALIGN_MIN_DISTANCE - 0.001;
     expect(swapPolicy(facts({ anchorDistance: near }))).toBe('dissolve');
     expect(swapPolicy(facts({ overlap: 0.1, anchorDistance: near }))).toBe('dissolve');
     expect(swapPolicy(facts({ anchorDistance: ALIGN_MIN_DISTANCE }))).toBe('aligned');
   });
 
-  it('unknown anchors: the plain dissolve; unknown overlap is never a cut', () => {
+  it('unknown anchors: the plain dissolve', () => {
     expect(swapPolicy(facts({ anchorDistance: null }))).toBe('dissolve');
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true, anchorDistance: null }))).toBe('dissolve'); // a cut that cannot say how far the head jumps is not made
-    expect(swapPolicy(facts({ overlap: null, hold: true }))).toBe('aligned');
-    expect(swapPolicy(facts({ overlap: null, hold: true, anchorDistance: null }))).toBe('dissolve');
-    expect(swapPolicy(facts({ overlap: Number.NaN, hold: true, anchorDistance: Number.NaN }))).toBe('dissolve');
+    expect(swapPolicy(facts({ overlap: null, anchorDistance: null }))).toBe('dissolve');
+    expect(swapPolicy(facts({ overlap: Number.NaN, anchorDistance: Number.NaN }))).toBe('dissolve');
+    expect(swapPolicy(facts({ overlap: null }))).toBe('aligned'); // no silhouette but the anchors told: judged on the distance alone
+  });
+
+  it('a pair is never cut: there is no cut in the policy', () => {
+    for (const overlap of [0, 0.1, 0.29, 0.5]) for (const anchorDistance of [0, 0.04, 0.07, 0.2]) expect(['aligned', 'dissolve']).toContain(swapPolicy(facts({ overlap, anchorDistance })));
   });
 });
 
@@ -139,84 +201,12 @@ describe('the alignment must not take the paintings out of each other', () => {
     expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: 0.9 }))).toBe('aligned'); // the slide puts the bodies on each other
     expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: 0.46 }))).toBe('aligned'); // no loss
     expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: 0.1 }))).toBe('dissolve'); // Tidus idle to hurt: heads 66 px apart, bodies already together
-    expect(swapPolicy(facts({ overlap: 0.1, overlapAligned: 0.05, hold: false }))).toBe('dissolve');
+    expect(swapPolicy(facts({ overlap: 0.1, overlapAligned: 0.05 }))).toBe('dissolve');
   });
 
   it('an alignment that cannot be judged (no aligned overlap) is judged on the rest', () => {
     expect(swapPolicy(facts({ overlap: 0.46 }))).toBe('aligned');
     expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: null }))).toBe('aligned');
     expect(swapPolicy(facts({ overlap: null, overlapAligned: 0.2 }))).toBe('aligned');
-  });
-
-  it('the cut is not judged on it (a cut shows one painting)', () => {
-    expect(swapPolicy(facts({ overlap: 0.1, overlapAligned: 0.0, hold: true, anchorDistance: 0.04 }))).toBe('cut');
-  });
-});
-
-describe('holding still', () => {
-  it('a field clock frozen while the real frame runs (a hit-stop, a paused field) is a hold', () => {
-    expect(figureHolding(0, 1 / 60, 0)).toBe(true);
-    expect(figureHolding(0, 1 / 60, 5)).toBe(true); // whatever the offset did
-  });
-
-  it('a figure that moves no faster than STILL_SPEED is a hold: a strike waiting at its apex, a figure at rest', () => {
-    expect(figureHolding(1 / 60, 1 / 60, 0)).toBe(true);
-    expect(figureHolding(1 / 60, 1 / 60, (STILL_SPEED / 60) * 0.99)).toBe(true);
-  });
-
-  it('a figure in motion is not: the step of a lunge, the return leg, a recoil', () => {
-    expect(figureHolding(1 / 60, 1 / 60, (STILL_SPEED / 60) * 1.5)).toBe(false);
-    expect(figureHolding(1 / 60, 1 / 60, 0.2)).toBe(false); // the lunge's step moves 0.2 to 0.4 units a frame
-  });
-
-  it('the speed is per second of FIELD time, so a long frame that moves further is judged on its own dt', () => {
-    expect(figureHolding(1 / 20, 1 / 20, (STILL_SPEED / 20) * 0.9)).toBe(true);
-    expect(figureHolding(1 / 20, 1 / 20, (STILL_SPEED / 20) * 1.1)).toBe(false);
-  });
-
-  it('no real time passed (a degenerate frame) is no hold', () => {
-    expect(figureHolding(0, 0, 0)).toBe(false);
-    expect(figureHolding(Number.NaN, Number.NaN, 0)).toBe(false);
-  });
-});
-
-describe('the parts (ablations: ?swapparts=)', () => {
-  it('under smooth all four changes are on unless the address names some', () => {
-    setPoseSwapMode('smooth');
-    for (const part of ['align', 'cut', 'lunge', 'clock'] as const) expect(poseSwapPart(part)).toBe(true);
-  });
-
-  it('under today none is on, whatever the parts say', () => {
-    setPoseSwapParts(['align', 'cut', 'lunge', 'clock']);
-    for (const part of ['align', 'cut', 'lunge', 'clock'] as const) expect(poseSwapPart(part)).toBe(false);
-    expect(frameClockMax('today')).toBe(MAX_DELTA_TODAY);
-  });
-
-  it('cutany is a part of its own: not in smooth by default, named it turns on and the others off', () => {
-    setPoseSwapMode('smooth');
-    expect(poseSwapPart('cutany')).toBe(false);
-    setPoseSwapParts(['cutany']);
-    expect(poseSwapPart('cutany')).toBe(true);
-    expect(poseSwapPart('cut')).toBe(false);
-  });
-
-  it('naming parts turns the others off, the clock included', () => {
-    setPoseSwapMode('smooth');
-    setPoseSwapParts(['lunge']);
-    expect(poseSwapPart('lunge')).toBe(true);
-    expect(poseSwapPart('align')).toBe(false);
-    expect(poseSwapPart('cut')).toBe(false);
-    expect(frameClockMax()).toBe(MAX_DELTA_TODAY);
-    setPoseSwapParts(['clock']);
-    expect(frameClockMax()).toBe(MAX_DELTA_SMOOTH);
-  });
-
-  it('the policy honours what it is allowed to do', () => {
-    const f = facts({ overlap: 0.1, hold: true, anchorDistance: 0.05 });
-    expect(swapPolicy(f)).toBe('cut');
-    expect(swapPolicy(f, { align: true, cut: false })).toBe('dissolve'); // 0.05 is under the alignment's minimum too
-    expect(swapPolicy(facts({ overlap: 0.1, hold: true }), { align: true, cut: false })).toBe('aligned');
-    expect(swapPolicy(f, { align: false, cut: false })).toBe('dissolve');
-    expect(swapPolicy(facts({ overlap: 0.9 }), { align: false, cut: true })).toBe('dissolve');
   });
 });

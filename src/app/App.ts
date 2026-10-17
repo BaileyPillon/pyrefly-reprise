@@ -8,7 +8,7 @@ import { GameFlow, flowReport, type RunChapterOptions } from './screens/BattleSc
 import type { BattleScreenResult } from './screens/BattleScreen.ts';
 import type { ChapterId } from '../data/encounters.ts';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
-import { frameClockMax } from '../engine/PoseSwap.ts'; // W5: 1/40 s under `?swap=smooth`, 1/20 s as before
+import { frameClockMax } from '../engine/PoseSwap.ts'; // W5: 1/40 s by default, 1/20 s under `?motion=classic`
 
 export interface AppOptions {
   /** Container for the WebGL canvas. Defaults to #game. */
@@ -254,7 +254,7 @@ export class App {
     return new Promise((resolve) => this.frameWaiters.push(resolve));
   }
 
-  /** W5: the longest frame handed to screens, seconds. `window.__pyrefly.swap(...)` sets it with the pose-swap mode (1/40 smooth, 1/20 today). */
+  /** W5: the longest frame handed to screens, seconds. `window.__pyrefly.motionMode(...)` sets it with the motion mode (1/40 smooth, 1/20 classic). */
   setMaxDelta(sec: number): void {
     this.maxDelta = sec;
   }

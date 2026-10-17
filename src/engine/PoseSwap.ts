@@ -1,123 +1,96 @@
 /**
- * POSE SWAP SMOOTHING (W5 of the pose-continuity fix; both games; behind a switch, `today` until the driver flips it).
+ * POSE MOTION (W5 of the pose-continuity fix; both games). Bailey, 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for
+ * this please." The size half (W3, the ruler) is data; this is the MOTION half. What a pose swap is: a cross-dissolve of two flat planes whose heads are, at the
+ * median, 13 px apart and, at the worst, 310 px, so the middle of every 120 ms blend is two figures trading places.
  *
- * Bailey, 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please." The size half (W3, the ruler) is data; this
- * is the MOTION half. What a pose swap is today: a cross-dissolve of two flat planes whose heads are, at the median, 13 px apart and, at the worst, 310 px, so
- * the middle of every 120 ms blend is two figures trading places, and the continuity harness (CHK-027) reads the fade-weighted head moving 0.26 of that
- * separation in one frame. Four changes, all behind one switch, `?swap=today|smooth` (default {@link POSE_SWAP_DEFAULT}, `today`):
+ * Two things are ON for everyone (the driver's delegated pick after the measurement, 2026-10-17), and a third is OFF unless the address asks:
  *
- * 1. **Aligned dissolve** for a pair of paintings that overlap by {@link ALIGN_MIN_OVERLAP} or more (`PoseAlign.ts`): during the blend the outgoing plane drifts
- *    toward a meeting point while it fades out, and the incoming plane starts there and settles into its own place, so the two heads coincide at the middle
- *    of the blend. Only the position is eased, along x (the feet stay on the floor line; the head height is the pose's own); size is already locked by the head lock.
- * 2. **Held-frame cut** for a pair that overlaps by less: the painting changes in ONE step on a frame where the game already holds still ({@link figureHolding}:
- *    a hit-stop, the apex of a strike waiting for the blow, the menu open on a figure at rest), never with two paintings at once. With no hold near, the aligned
- *    dissolve.
- * 3. **The lunge's first frame** on the velocity-continuous curve (`BattlePresenterActors.reachOffset`), not `attackOffset`'s cubic-out, whose first moving frame
- *    covers 28 percent of the distance from a standing start (angle 2, section 4.2: detector steps 0, 0, 0, 64, 73, 41 px). Total distance and timing are the same.
- * 4. **The frame clock** clamps one frame's time at {@link MAX_DELTA_SMOOTH} (1/40 s) instead of {@link MAX_DELTA_TODAY} (1/20 s): a hitch is a slow frame, not a skipped one.
+ * - **The lunge's first frame** (ON): the house part of the step rides `BattlePresenterActors.reachOffset`, the velocity-continuous curve, not `attackOffset`'s
+ *   cubic-out, whose first moving frame covers 28 percent of the distance from a standing start (angle 2, section 4.2: detector steps 0, 0, 0, 64, 73, 41 px).
+ *   Total distance and beats are the same.
+ * - **The frame clock** (ON): one frame advances the animation at most {@link MAX_DELTA_SMOOTH} (1/40 s), not {@link MAX_DELTA_CLASSIC} (1/20 s): a hitch is a
+ *   slow frame, not a skipped one.
  *
- * The policy is a pure function ({@link swapPolicy}) of the pair's overlap and anchor distance (and whether a hold is near); `PaintedActor` applies it. Pure: no
- * `three`, no DOM, no clock (hard rule 1).
+ * `?motion=classic` restores both of those as they were (comparison and safety); `?motion=smooth` is the default spelled out.
+ *
+ * - **The aligned dissolve** (OFF): `?swap=aligned` only (`PoseAlign.ts`). During the blend the outgoing plane drifts toward a meeting point while it fades out and
+ *   the incoming plane starts there and settles home, so the two heads coincide at the middle of the blend; sideways only. It was measured better on swap jerks and
+ *   double images and worse on CHK-026's registered feet in every chapter (the bodies slide apart for 120 ms), so it stays an option, not the default.
+ *
+ * The held-frame cut of the first build was removed: it fired 0 times in 180 s of any of four fights once it was limited to heads that do not jump, and when it
+ * was not limited it was the worst part (37 swap jerks of 40 px or more in Sinspawn Gui against 19 today, and snaps).
+ *
+ * The aligned policy is a pure function ({@link swapPolicy}) of the pair's overlap and anchor distance; `PaintedActor` applies it. Pure: no `three`, no DOM,
+ * no clock (hard rule 1).
  */
 
-export type PoseSwapMode = 'today' | 'smooth';
+// ------------------------------------------------------------------ the motion switch: lunge and frame clock
 
-/** What a page plays with no `?swap=`. The driver flips this one constant (or the page's address does) once Bailey has seen the clips. */
-export const POSE_SWAP_DEFAULT: PoseSwapMode = 'today';
+/** `smooth` (the default): the lunge on `reachOffset` and the frame clock at 1/40 s. `classic`: today's lunge and the 1/20 s clock. */
+export type MotionMode = 'smooth' | 'classic';
 
-let mode: PoseSwapMode | null = null;
+/** What a page plays with no `?motion=`. */
+export const MOTION_DEFAULT: MotionMode = 'smooth';
 
-/** `?swap=smooth` turns the four changes on for the page, `?swap=today` off whatever the default is. Read once, like the other URL switches' first look. */
-export function poseSwapMode(): PoseSwapMode {
-  if (mode === null) {
-    const value = new URLSearchParams(globalThis.location?.search ?? '').get('swap');
-    mode = value === 'smooth' || value === 'today' ? value : POSE_SWAP_DEFAULT;
+let motion: MotionMode | null = null;
+
+/** `?motion=classic` restores today's lunge and clock for the page; `?motion=smooth` is the default. Read once, like the other URL switches' first look. */
+export function motionMode(): MotionMode {
+  if (motion === null) {
+    const value = new URLSearchParams(globalThis.location?.search ?? '').get('motion');
+    motion = value === 'smooth' || value === 'classic' ? value : MOTION_DEFAULT;
   }
-  return mode;
+  return motion;
 }
 
-/** Tests and `window.__pyrefly.swap(...)`: force the mode (`null` reads the address again). */
-export function setPoseSwapMode(value: PoseSwapMode | null): void {
-  mode = value;
+/** Tests and `window.__pyrefly.motionMode(...)`: force the mode (`null` reads the address again). */
+export function setMotionMode(value: MotionMode | null): void {
+  motion = value;
 }
 
-/** True when the four changes are on. */
-export const poseSwapSmooth = (): boolean => poseSwapMode() === 'smooth';
+/** True when the lunge's first frame and the 1/40 s clock are on (the default). */
+export const motionSmooth = (): boolean => motionMode() === 'smooth';
 
-/** The four changes, by name: `align` (the aligned dissolve), `cut` (the held-frame cut), `lunge` (the first frame) and `clock` (the 1/40 s clamp). */
-export type PoseSwapPart = 'align' | 'cut' | 'lunge' | 'clock' | 'cutany';
-const ALL_PARTS: readonly PoseSwapPart[] = ['align', 'cut', 'lunge', 'clock', 'cutany'];
-/** What `smooth` means without `?swapparts=`. `cutany` (the cut with no limit on how far the heads are apart: the first version, measured and kept as an ablation) is not in it. */
-const DEFAULT_PARTS: readonly PoseSwapPart[] = ['align', 'cut', 'lunge', 'clock'];
-
-let parts: ReadonlySet<PoseSwapPart> | null = null;
-
-/**
- * `?swapparts=lunge,clock` (captures and ablations only): under `smooth`, only the named changes run. Without it all four do, which is what `smooth` means; the parameter
- * exists so a measurement can say which of the four moves which reading. Read once.
- */
-function swapParts(): ReadonlySet<PoseSwapPart> {
-  if (parts === null) {
-    const value = new URLSearchParams(globalThis.location?.search ?? '').get('swapparts');
-    const named = value === null ? DEFAULT_PARTS : (value.split(',').map((x) => x.trim()).filter((x): x is PoseSwapPart => (ALL_PARTS as readonly string[]).includes(x)));
-    parts = new Set(named);
-  }
-  return parts;
-}
-
-/** Tests: force the parts (`null` reads the address again). */
-export function setPoseSwapParts(value: readonly PoseSwapPart[] | null): void {
-  parts = value === null ? null : new Set(value);
-}
-
-/** True when `smooth` is on and this one of its four changes is in it. */
-export const poseSwapPart = (p: PoseSwapPart): boolean => poseSwapMode() === 'smooth' && swapParts().has(p);
-
-// ------------------------------------------------------------------ the frame clock (change 4)
-
-/** The longest frame the animation clock advances today: 50 ms (3 frames at 60 Hz) in one drawn frame. */
-export const MAX_DELTA_TODAY = 1 / 20;
-/** The longest frame under `smooth`: 25 ms, so a hitch advances every blend, lunge and recoil by at most 1.5 frames of a 60 Hz game. */
+/** The longest frame the animation clock advances in `classic`: 50 ms (3 frames at 60 Hz) in one drawn frame. */
+export const MAX_DELTA_CLASSIC = 1 / 20;
+/** The longest frame by default: 25 ms, so a hitch advances every blend, lunge and recoil by at most 1.5 frames of a 60 Hz game. */
 export const MAX_DELTA_SMOOTH = 1 / 40;
 
 /** The per-frame clamp of `App.tick` for a mode (the current one by default). */
-export function frameClockMax(m: PoseSwapMode = poseSwapMode()): number {
-  return m === 'smooth' && swapParts().has('clock') ? MAX_DELTA_SMOOTH : MAX_DELTA_TODAY;
+export const frameClockMax = (m: MotionMode = motionMode()): number => (m === 'smooth' ? MAX_DELTA_SMOOTH : MAX_DELTA_CLASSIC);
+
+// ------------------------------------------------------------------ the aligned dissolve switch
+
+let aligned: boolean | null = null;
+
+/** True when the aligned dissolve is on: `?swap=aligned` only. Off by default. Read once. */
+export function alignedSwapOn(): boolean {
+  if (aligned === null) aligned = new URLSearchParams(globalThis.location?.search ?? '').get('swap') === 'aligned';
+  return aligned;
 }
 
-// ------------------------------------------------------------------ the pair policy (changes 1 and 2)
+/** Tests and `window.__pyrefly.swap(...)`: force the aligned dissolve on or off (`null` reads the address again). */
+export function setAlignedSwap(value: boolean | null): void {
+  aligned = value;
+}
 
-/**
- * Two paintings that overlap by this much (intersection over union of their silhouettes as drawn) read as one figure changing pose when they are dissolved
- * with their heads together: the aligned dissolve. Under it they read as two figures, and the dissolve is a cut where the game holds still.
- * `[ours]`: the number is the driver's (the swap options page, Part B), not a game fact.
- */
-export const ALIGN_MIN_OVERLAP = 0.3;
+// ------------------------------------------------------------------ the pair policy of the aligned dissolve
 
 /**
  * The anchors of a pair must be at least this far apart (a share of the figure's height) for an alignment to be worth the slide it makes: under it the two
  * heads are already one head to the eye, and the plain dissolve moves the fade-weighted head by less than a harness jerk (0.26 of the separation per frame).
  * 0.10 of a 330 px FFX figure is 33 px, so the weighted step the alignment saves is under 9 px and the slide it costs is under 17 px: not worth it.
+ * `[ours]`: the number is the driver's (the swap options page, Part B), not a game fact.
  */
 export const ALIGN_MIN_DISTANCE = 0.1;
 
-/**
- * A cut moves the head the whole distance between the two paintings' anchors in ONE frame, where a dissolve spreads it over seven (the fade-weighted head moves 0.26 of
- * the distance in its steepest frame). So a cut is a jump of that many pixels, and the continuity harness (CHK-027) reads it as a jerk at the swap, over its 24 px line
- * when the heads are 0.07 of the figure's height apart (23 px of a 330 px figure) and over the 40 px failing line at 0.12. The first version cut at any distance and read
- * 37 swap jerks of 40 px or more in 180 s of Sinspawn Gui against today's 19 (the pairs: Tidus attack to follow 118 px, ready to attack 81 px). A cut is therefore made only
- * where the heads are this close (as a share of the figure's height); a pair that overlaps by under 0.30 with its heads further apart takes the aligned dissolve.
- */
-export const CUT_MAX_DISTANCE = 0.07;
-// (the 0.07 is read against the head's whole jump, across and up or down: Paine's ready to attack in FFX-2 was 0.066 across and read a 56 px jerk)
-
-export type SwapPolicy = 'dissolve' | 'aligned' | 'cut';
+export type SwapPolicy = 'dissolve' | 'aligned';
 
 /**
  * An alignment brings the two HEADS together; it moves the two BODIES with them. Where the heads are far apart but the bodies already overlap well (Tidus idle to hurt: the
  * silhouettes overlap by 0.46, the heads are 66 px apart), the slide pulls the bodies apart (0.10) and the double image the harness reads rises from 0.23 to 0.39. So the
  * aligned dissolve is used only where it does not take the paintings out of each other: the overlap with the anchors at the meeting point must be at least the overlap where they
- * stand. (Dark Mirror and the Bahamut fight, where the two move together, lost two thirds of their double images of 0.30 or more to the alignment.)
+ * stand.
  */
 export const ALIGN_MIN_GAIN = 0;
 
@@ -129,51 +102,34 @@ export interface SwapPairFacts {
   readonly anchorDistance: number | null;
   /** The same overlap with both anchors moved to the meeting point (what the middle of an aligned dissolve shows); null when it cannot be told. */
   readonly overlapAligned?: number | null;
-  /**
-   * How far the head jumps if one painting replaces the other in one frame (the straight-line distance between the anchors, x and y, as a share of the figure's height): what a
-   * cut costs. A pose that stoops or rears moves the head up or down as well as across. Null: not told, and the x distance stands in.
-   */
-  readonly headJump?: number | null;
-  /** The game holds still now ({@link figureHolding}). */
-  readonly hold: boolean;
-  /** Another blend is running (two paintings are already on screen): a cut would drop both. */
-  readonly blending: boolean;
 }
 
 /**
- * How a pair of paintings changes places under `smooth`:
+ * How a pair of paintings changes places under `?swap=aligned`:
  *
- * - `cut`: overlap under {@link ALIGN_MIN_OVERLAP}, the heads no further apart than {@link CUT_MAX_DISTANCE}, the game holds still and nothing is blending: one step, never two paintings at once;
- * - `aligned`: the heads can be brought together (they are {@link ALIGN_MIN_DISTANCE} apart or more), either the pair overlaps well or no hold is near, and the alignment does not take the paintings out of each other ({@link ALIGN_MIN_GAIN});
- * - `dissolve`: everything else, the plain dissolve of today (unknown anchors, heads already together).
- *
- * An unknown overlap is never cut (a pair nobody measured is not a pair that reads as two people).
+ * - `aligned`: the heads can be brought together (they are {@link ALIGN_MIN_DISTANCE} apart or more) and the alignment does not take the paintings out of each other ({@link ALIGN_MIN_GAIN});
+ * - `dissolve`: everything else, the plain dissolve (unknown anchors, heads already together, bodies already on each other).
  */
-export function swapPolicy(f: SwapPairFacts, allow: { align: boolean; cut: boolean; cutMaxDistance?: number } = { align: true, cut: true }): SwapPolicy {
+export function swapPolicy(f: SwapPairFacts): SwapPolicy {
   const known = f.overlap !== null && Number.isFinite(f.overlap);
   const gain = known && f.overlapAligned != null && Number.isFinite(f.overlapAligned) ? f.overlapAligned - (f.overlap as number) : null;
   const canAlign = f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance >= ALIGN_MIN_DISTANCE && (gain === null || gain >= ALIGN_MIN_GAIN);
-  const maxStep = allow.cutMaxDistance ?? CUT_MAX_DISTANCE;
-  const step = f.headJump != null ? f.headJump : f.anchorDistance;
-  const stepOk = maxStep === Infinity || (step !== null && Number.isFinite(step) && step <= maxStep);
-  if (allow.cut && known && (f.overlap as number) < ALIGN_MIN_OVERLAP && f.hold && !f.blending && stepOk) return 'cut';
-  return allow.align && canAlign ? 'aligned' : 'dissolve';
+  return canAlign ? 'aligned' : 'dissolve';
 }
 
 // ------------------------------------------------------------------ what the policy did
 
-/** How many pose changes took each road under `smooth` since the page loaded, and which point anchored the planes of the aligned ones (read by captures: `__pyrefly.swapStats()`). */
+/** How many pose changes took each road under `?swap=aligned` since the page loaded, and which point anchored the planes (read by captures: `__pyrefly.swapStats()`). */
 export interface PoseSwapStats {
   dissolve: number;
   aligned: number;
-  cut: number;
-  /** Planes of an aligned or cut pair whose anchor was the registered head, the silhouette's centroid, or unknown (no silhouette). */
+  /** Planes of a pair whose anchor was the registered head, the silhouette's centroid, or unknown (no silhouette). */
   anchorHead: number;
   anchorCentroid: number;
   anchorNone: number;
 }
 
-const stats: PoseSwapStats = { dissolve: 0, aligned: 0, cut: 0, anchorHead: 0, anchorCentroid: 0, anchorNone: 0 };
+const stats: PoseSwapStats = { dissolve: 0, aligned: 0, anchorHead: 0, anchorCentroid: 0, anchorNone: 0 };
 
 /** One pose change that ran the policy: who, which paintings, what the policy saw and what it chose (kept, the last {@link LOG_CAP}, for captures). */
 export interface PoseSwapRecord {
@@ -183,9 +139,6 @@ export interface PoseSwapRecord {
   overlap: number | null;
   overlapAligned: number | null;
   distance: number | null;
-  jump: number | null;
-  hold: boolean;
-  blending: boolean;
   policy: SwapPolicy;
   /** The anchor of the outgoing and of the incoming plane. */
   anchors: [AnchorKind, AnchorKind];
@@ -222,22 +175,4 @@ export const poseSwapStats = (): PoseSwapStats => ({ ...stats });
 /** Tests and captures: zero the counters. */
 export function resetPoseSwapStats(): void {
   for (const k of Object.keys(stats) as (keyof PoseSwapStats)[]) stats[k] = 0;
-}
-
-// ------------------------------------------------------------------ holding still
-
-/** A figure that moves no faster than this (world units a second; 0.8 is about 2 px a frame at the battle camera) is holding still. The apex of a strike creeps at 0.6. */
-export const STILL_SPEED = 0.8;
-
-/**
- * Whether the game is holding still at this frame, for {@link swapPolicy}: the field clock is frozen (`dt` 0 while the real frame `realDt` runs: a hit-stop, a
- * paused field) or the figure's own offset (lunge, recoil, shake, hop, lean) moved no faster than {@link STILL_SPEED} (the menu open on a figure at rest, the
- * apex of a strike waiting for the blow, the 180 ms follow hold).
- *
- * @param dt the field's seconds this frame, @param realDt the unscaled seconds, @param moved how far the figure's offset moved this frame (world units)
- */
-export function figureHolding(dt: number, realDt: number, moved: number): boolean {
-  if (!(realDt > 0)) return false;
-  if (!(dt > 0)) return true;
-  return moved / dt <= STILL_SPEED;
 }
