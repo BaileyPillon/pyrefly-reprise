@@ -10,7 +10,7 @@ Authority: Bailey, 2026-10-08 "It needs to be a 1:1 parity.", 2026-10-16 "keep g
 | Commit | Branch | What |
 |---|---|---|
 | A (this note's commit) | `re-parity-rc9-x2-link-open` | the bench (`tests/unit/x2-link-open-bench.test.ts`, gated by `PYREFLY_MEASURE=1`), the other-chapters check (`x2-link-open-others.test.ts`, same gate), the path proof (`x2-link-open-path.test.ts`, runs always), the driver (`tests/unit/helpers/x2LinkOpenDrive.ts`), the numbers-only results (`docs/handoff/re-parity-rc9-x2-link-open-results.json`) and this note |
-| B | `re-parity-rc9-x2-link-open-on` | `SEPARATE_BATTLE_GAUGES = true`, the tests that pinned the old default re-pinned with their cause; section 12 |
+| B | `re-parity-rc9-x2-link-open-on` | `SEPARATE_BATTLE_GAUGES = true`, the tests that pinned the old default re-pinned with their cause; section 11 |
 
 ## 1. What the switch is and the code it drives
 
@@ -168,3 +168,26 @@ Commit A (switch OFF): `npx tsc --noEmit` clean. 41 test files were run, with `-
 4. **`tests/unit/iter2-b1-bench.test.ts` is stale after W4**: its minutes column divides ticks by 3,000, the pre-W4 clock (use `STEPS_PER_SECOND`). Not changed here (not this lane's file).
 5. **Not modelled** (plan row XL2, no chapter's rolls depend on them): the layout roll and placement on stream 17, the shuffle draws (only the Experiment has linked monsters), the party-side characters beyond the three in play that the note says the game's character init starts (ids 0 to 8). Each link here re-seeds from `seed + link`, where the game's streams run on across battles: a different deal of the same odds (RNG lane's design).
 6. Act I is a normal start in the engine and is unchanged in every arm.
+
+## 11. Commit B: the ON build (branch `re-parity-rc9-x2-link-open-on`; NOT FOR MERGE and NOT FOR DEPLOY until Bailey says yes)
+
+**What it changes.** `SEPARATE_BATTLE_GAUGES` goes from `false` to `true` in `src/battle/ffx2/constants.ts` (its comment names the branch and the condition), and nothing else under `src/`. Chapter VI's Acts II and III, and the hidden Leblanc preview, which is the same record, open as fresh battles. No other group is flagged. The branch is one commit on top of this branch.
+
+**Tests re-pinned.** Four places pinned Chapter VI's old behaviour. One cause for all: Act I is identical, the first differing event is Act II's opening gauge snapshot, every log is still a victory in three links, and with `separateBattleGauges: false` passed as an option **every old hash returns exactly** (3 of 3, 6 of 6, 8 of 8).
+
+| File | What was re-pinned |
+|---|---|
+| `tests/unit/iter2-b1-rules.test.ts` | "the switch ships OFF ... still opens at zero" becomes "the switch is ON on this branch": a default engine opens Act II with every wait below whole, and the option still turns it off. The old "at zero" check (`atb.ticks === 0`) was already vacuous after W4, because nothing sets the old count-up bar now; the wait that remains is `atb.recovery` |
+| `tests/unit/ffx2-hit-closes-menu.test.ts` | Chapter VI's row of `PINNED` (D = 0, default Wait split, seeds 1 to 3) |
+| `tests/unit/ffx2-menu-cancel-delay.test.ts` | Chapter VI's six hashes (Active and the Wait split at human pace, seeds 1 to 3) |
+| `tests/unit/chapters/den-of-woe-carry.test.ts` | `BASE.ch6` (the eight Chapter VI logs, D = 0); Chapter V, Chapter XI and the Sisters did not move |
+
+**Goldens.** `ffx2-atb-golden` (Chapters IV and V; there is no Chapter VI in it) unchanged and passing; `ffx-engine-golden` and `ff7-golden` unchanged and passing. Each re-pin's cause is written in the header of the test it touches.
+
+**Run on the ON branch.** `npx tsc --noEmit` clean. 54 test files (the 41 of section 8, plus 13 more that mention Chapter VI: the advisor, critic, FX and data files): 51 passed, 2 skipped (the gated bench and the other-chapters check), 1 failed: the same art-hash failure (`exp-leblanc.test.ts`) as on the base, in this worktree's art folder. The bench itself was run on the OFF branch with the option set per arm, so its numbers are the ON build's.
+
+**If Bailey says yes.** Merge the branch (or take its `constants.ts` line and the four re-pins). `node tools/critic-plan.mjs --paths src/battle/ffx2/constants.ts` says DEEP (the FFX-2 ATB engine is a shared system): a focused review of the production candidate before the deploy and the deep review on the live build after it. The driver then writes the decisions row (it reverses the PR-0107 part of D-242) and the actions row, and updates `docs/handoff/combat-switches.md` (still says OFF) and NOW.md.
+
+**CHANGELOG paragraph, for the driver to paste** (lanes never write `CHANGELOG.md`):
+
+- **FFX-2 only, Chapter VI, Acts II and III start like fresh fights (re-parity-rc9, lane X2-L, PR-0107):** the game starts every link of the Chateau as a new battle, so Act II and Act III now open the way Act I does: each fighter's first wait is a random quarter to three quarters of a full bar and the quickest one's wait is cut to a third, instead of every wait starting whole. The first bar fills in about half a second instead of 2.7 seconds (Act II) or 4 seconds (Act III), and the chapter runs 5 to 7 seconds shorter. In Logos's room the Syndicate still moves first almost every time (Logos is the fastest thing in the room); in the Last Room Rikku no longer always goes first, and Leblanc's side moves first about two fights in three at the live Wait pace, which costs the girls about 140 HP in that act. It does not make the chapter harder: 499 of 500 first tries win at the live Wait pace either way, 93 in 100 at Active either way, and no other chapter changes. The 16.5-point drop that kept this switch off on 2026-09-27 (D-242) was measured on an older engine and does not come back.
