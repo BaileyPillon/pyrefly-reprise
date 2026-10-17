@@ -113,3 +113,18 @@ export function poseClassOf({ pose, isRef, prone, kind }) {
   if (LOW_POSES.has(pose)) return 'low';
   return 'standing';
 }
+
+/**
+ * **Props-out poses** (the W3 sizing rule, 2026-10-17; both games): a pose in which a raised sword or staff stands above the head, so the silhouette's box counts the prop
+ * as height. These are measured HEAD TO SOLES (`bodyStature`: the registered head box's top to the planted row, over the idle's), both for the HEIGHT scale the ruler
+ * sizes them by (`pose-ruler.mjs`) and for the stature band they are judged in (`pose-bands.mjs`). From the plan's "strike (head to soles, props out)" and the release
+ * driver's pick of 2026-10-17 (item 89e): Tidus's victory and Yuna's Defend, drawn by the box, stood at 1.26 of the idle's height with the body exactly the idle's size.
+ *
+ * Only `victory` and `defend`. A strike (`attack`) is read by its box, as r50.1 drew it: head to soles would move Auron's attack from 0.90 to 1.00 of the idle's box
+ * and his head from x1.29 to x1.43, Yuna's from 0.94 to 1.04 and Rikku's by 0.03, and the FFX holds are to come out as they were (measured: `docs/handoff/pose-continuity.md`,
+ * "The W3 sizing rule"). Add `attack` here to read strikes head to soles too; nothing else needs to change.
+ */
+export const PROPS_OUT_POSES = new Set(['victory', 'defend']);
+
+/** Is this pose measured head to soles? (Only a standing or low pose has a body to measure; a KO or a laid-down plane is read by its length.) */
+export const isPropsOut = (pose) => PROPS_OUT_POSES.has(pose);

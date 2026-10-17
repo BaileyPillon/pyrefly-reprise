@@ -15,6 +15,9 @@
  *  - a record the table does not agree with (a hand-edited table, or `measure.py table` not run after `measure.py measure --write`): its scale, its stance and, since r394, its head box;
  *  - a reviewed pose whose head, at the scale the engine will use, is not within the reading's resolution (8 percent) of its idle's: either the table
  *    does not carry the reading (it is more than 12 percent from the pose's own scale), or it was edited by hand;
+ *  - a pose the W3 sizing rule sized (`ruled`; a recorded hold is one of them): its record must carry the rule's numbers and the scale must be what the rule gives from them (`ruleSize`: the geometric
+ *    mean of its head and height scales, lifted to the stature floor, refused when no single size is in band), its head ratio the applied scale over its reading, and its registered head the idle's at the
+ *    APPLIED scale (so the head lock does not undo the rule). The height scale itself is read from the pixels: `node tools/posescale/pose-ruler.mjs --check` recomputes it;
  *  - in a subject whose heads were fully reviewed (`headsComplete` in the record), a pose with no reading (a new key).
  * A subject whose heads are not (fully) reviewed yet is listed, not failed; its stances are registered either way.
  */
@@ -23,6 +26,9 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { BANDS, SLACK, statureFloorOf } from './posescale/pose-bands.mjs';
+import { LOW_POSES } from './posescale/pose-kinds.mjs';
+import { RULE_ID, ruleSize } from './posescale/pose-rule.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 /** What a ruler reading can resolve (records carry it as `resolution`): a reviewed pose's head, at the table's scale, must be within it of its idle's. */
@@ -93,7 +99,7 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         if (want && (!got || got.length !== 4 || got.some((v, i) => Math.abs(v - want[i]) > 6e-5))) failures.push(`${key}: the table's head box (${got ? got.join(', ') : 'none'}) is not the record's (${want.map((v) => v.toFixed(4)).join(', ')}); run measure.py table`);
         else if (!want && got) failures.push(`${key}: the table has a head box (${got.join(', ')}) that the record does not; run measure.py table`);
       }
-      if (['reviewed', 'accepted', 'gated', 'held', 'noise'].includes(rec.scaleSrc)) {
+      if (['reviewed', 'accepted', 'gated', 'held', 'noise', 'ruled'].includes(rec.scaleSrc)) {
         reviewed++;
         const koLike = pose === 'ko' && rec.prone && !rec.standing; // a KO's table scale is the reading over the lying plane's projection (measure.py KO_PROJECTION)
         const proj = koLike ? (records.koProjection ?? 1) : 1;
@@ -110,12 +116,29 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
           if (!(rec.reading > 0) || !(rec.current > 0) || Math.abs(rec.reading / rec.current - 1) > res + 1e-6) failures.push(`${key}: the reading (${rec.reading}) is not within ${res * 100} percent of the pose's own scale (${rec.current}); it must be applied (measure.py measure --write)`);
         } else if (rec.scaleSrc === 'gated') {
           if (!(rec.stature >= 0.595)) failures.push(`${key}: gated to the stature floor but its stature is ${rec.stature}`);
+        } else if (rec.scaleSrc === 'ruled' || (rec.scaleSrc === 'held' && rec.ruled)) {
+          // W3 (2026-10-17): the sizing rule's result. The record names the rule and its readings; the scale is the rule's answer for them, the head box is the idle's over the applied scale.
+          const u = rec.ruled;
+          if (!u || u.rule !== RULE_ID || !(u.head > 0) || !(u.height > 0)) failures.push(`${key}: a ruled pose needs the rule's record (ruled.rule ${RULE_ID}, ruled.head, ruled.height); run measure.py table`);
+          else {
+            const floor = statureFloorOf(LOW_POSES.has(pose) ? 'low' : 'standing', pose);
+            const want = ruleSize({ head: u.head, height: u.height, floor });
+            if (rec.reading > 0 && Math.abs(rec.reading - u.head) > 0.0006) failures.push(`${key}: the rule's head scale (${u.head}) is not the record's reading (${rec.reading}); run measure.py table`);
+            else if (Math.abs(rec.scale - want.scale) > 0.0015 || (u.lift ?? null) !== want.lift) failures.push(`${key}: the rule gives scale ${want.scale} (${want.lift ?? 'the mean'}) for head ${u.head} and height ${u.height}, the record has ${rec.scale} (${u.lift ?? 'the mean'}); run measure.py table`);
+            else if (Math.abs(rec.scale / u.head - u.headRatio) > 0.002) failures.push(`${key}: its head ratio (${u.headRatio}) is not the applied scale (${rec.scale}) over the reading (${u.head})`);
+            else if (want.held !== Boolean(rec.held)) failures.push(`${key}: ${want.held ? 'the rule records a hold here (the head cost leaves 0.85 to 1.15 or the stature was lifted) and the record has none' : 'the record carries a hold the rule does not make'}`);
+            else if (rec.held && (!rec.held.by || !(Math.abs(rec.held.headRatio - u.headRatio) < 0.002) || !(rec.held.headRatio >= BANDS.heldHead[0] - SLACK && rec.held.headRatio <= BANDS.heldHead[1] + SLACK))) failures.push(`${key}: a recorded hold needs held.by, and a head ratio the rule's (${u.headRatio}) inside x0.8 to x1.45`);
+            if (rec.head && idleBox && effective) {
+              const ratio = (size(rec.head) * effective) / size(idleBox);
+              if (Math.abs(ratio - 1) > 0.02) failures.push(`${key}: the ruled pose's registered head, at the scale the engine uses (${effective}), is x${ratio.toFixed(3)} of the idle's; run measure.py table`);
+            }
+          }
         } else if (rec.scaleSrc === 'held') {
           // r50.1: a stature hold (measure.py, overrides.json `stature`): drawn at its hold's height, not its head's. The record names whose word it is, what the ruler read and what the hold cost the head; the head box it registers is the one the lock must hold at the APPLIED scale, so the head at that scale is the idle's by construction.
           const h = rec.held;
           if (!h || !h.by || !(h.reading > 0) || !(h.headRatio > 0) || !(h.stature > 0)) failures.push(`${key}: a stature hold needs held.by, held.reading, held.headRatio and held.stature in its record`);
           else if (Math.abs(rec.scale / h.reading - h.headRatio) > 0.002) failures.push(`${key}: its held head ratio (${h.headRatio}) is not the applied scale (${rec.scale}) over the ruler's reading (${h.reading})`);
-          else if (!(h.headRatio > 0.8 && h.headRatio < 1.45)) failures.push(`${key}: a hold may move the head to between x0.8 and x1.45 of the idle's, this one is x${h.headRatio}`);
+          else if (!(h.headRatio >= BANDS.heldHead[0] - SLACK && h.headRatio <= BANDS.heldHead[1] + SLACK)) failures.push(`${key}: a hold may move the head to between x0.8 and x1.45 of the idle's, this one is x${h.headRatio}`);
           if (rec.head && idleBox && effective) {
             const ratio = (size(rec.head) * effective) / size(idleBox);
             if (Math.abs(ratio - 1) > 0.02) failures.push(`${key}: the held pose's registered head, at the scale the engine uses (${effective}), is x${ratio.toFixed(3)} of the idle's; run measure.py measure --write, then table`);
