@@ -72,6 +72,11 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
   // (old hashes in git at 931613a8; the release-17 replay rows that stood beside them are gone with the option).
   // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
   // **Re-pinned 2026-10-15 for the item ledger and the battle-end commit window** (re-parity RC8, FFX-2 only; reason "game-code parity"; `docs/handoff/re-parity-rc8-x2-end-ledger.md`): the end of a fight is committed after the casts in flight have fired, so each log gains the events between the last blow and the victory (see `ffx2-atb-golden.test.ts`, thirteenth re-pin). The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again. The old hashes are in git at ea431aa0.
+  // **Chapter VI's six re-pinned on the branch `re-parity-rc9-x2-link-open-on`, NOT FOR MERGE until Bailey says yes** (lane X2-L row XL1, FFX-2 only; reason "game-code parity":
+  // the game starts every link of a chain as a full battle, FFX2-G10 sections 4 to 6; `docs/handoff/re-parity-rc9-x2-link-open.md`): `SEPARATE_BATTLE_GAUGES` is ON there, so Acts II
+  // and III open on random waits and the opening trim instead of every wait whole. Cause, by comparing full event logs: Act I is identical and the first differing event is the
+  // opening gauge snapshot of Act II (link 2) in all six runs, all still victories. With `separateBattleGauges: false` passed as an option the six old hashes return exactly
+  // (5d54cea5, 63c2b2ad, 0c836ce7, 0383f653, 496e0308, 90c548f8). Chapters IV and V did not move. The old hashes are in git at 23081b6ab (this branch's parent).
   const ON: Record<string, string> = {
     'IV|active|1': '541a5b56a437d847', 'IV|split|1': '72fc047f3b2ce099',
     'IV|active|2': 'de4b9b9272b4f31c', 'IV|split|2': 'e5aeb10ec7664eec',
@@ -79,9 +84,9 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
     'V|active|1': '92819ec58ac5dabc', 'V|split|1': 'e1b009ccb8517b63',
     'V|active|2': '4ca43d65de715648', 'V|split|2': '63746ae49d9356ea',
     'V|active|3': 'fc8876ca27be75d6', 'V|split|3': 'e9f8d18b63f043a1',
-    'VI|active|1': '5d54cea50a535e6d', 'VI|split|1': '63c2b2ad630494a1',
-    'VI|active|2': '0c836ce7dd2b7e47', 'VI|split|2': '0383f65316bb775f',
-    'VI|active|3': '496e0308634852b7', 'VI|split|3': '90c548f8d9cb1508',
+    'VI|active|1': '0e2e3caac907b55b', 'VI|split|1': 'e91ac925acf9a465',
+    'VI|active|2': '0d97433195081355', 'VI|split|2': '36176ed1c71c17b7',
+    'VI|active|3': '337c11c21e41c098', 'VI|split|3': '40ddfd694ac944c8',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 

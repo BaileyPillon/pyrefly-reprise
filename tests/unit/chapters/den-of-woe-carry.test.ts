@@ -207,10 +207,16 @@ describe('the flag is the only way in: every other chain carries what it always 
    * of a link in 30 of the 31 (a cast in flight resolves before the victory); in the other one, Chapter 6 seed 5, the second link opens with an Attack where the base threw a Grenade,
    * because the four Grenades the party carries are no longer the ones a cast in flight at the end of the first link had not yet spent. All thirty-two still win. The old hashes are in
    * git at ea431aa0.
+   *
+   * **Chapter 6's eight re-pinned on the branch `re-parity-rc9-x2-link-open-on`, NOT FOR MERGE until Bailey says yes** (lane X2-L row XL1, FFX-2 only; reason "game-code parity":
+   * the game starts every link of a chain as a full battle, FFX2-G10 sections 4 to 6; `docs/handoff/re-parity-rc9-x2-link-open.md`). No Den code changed; `SEPARATE_BATTLE_GAUGES` is
+   * ON on that branch, so Chapter 6's Acts II and III open on random waits and the opening trim instead of every wait whole. All eight logs moved: Act I is identical in each, the first
+   * differing event is the opening gauge snapshot of Act II (link 2), and all eight are still victories in three links. Chapter 5, Chapter XI and the Sisters did not move (the flag is
+   * on no other group). With `separateBattleGauges: false` passed as an option the eight old hashes return exactly. The old hashes are in git at 23081b6ab (this branch's parent).
    */
   const BASE = {
     ch5: ['bc16d06c2b310e63', '3405995ca875714e', '6f3ff4787d226772', '19e4019ffcf7880c', '48022cc460c8aae2', '71a0d0a7a92737fa', '276aa8ad4aa650ab', '7a1ae4b195157295'],
-    ch6: ['aa6b56cbfa16061b', '2217fd51aa006da2', '78d4ed544301b45b', 'a39696f7ae0ccaa4', 'db1b541da1a3238e', '6b4f4ad70e4a2da1', '6ac5ea70c9ca5a53', 'e476922839d3ad3e'],
+    ch6: ['658c49a9f687413e', 'e8afa5f67590e50d', '9a6d146fa1f391b5', '15ef0057f1255d21', '06289dd5eff90986', '7ab0f9abd6eb9911', '7e7259c65dd8fce3', '2e5dc2b0bffc0cc2'],
     ch11: ['604514318823d2e0', '19c99ef6850db941', 'b11fcb2af7df9162', '748c9f80531df8af', '4f8dd5667cf843f8', '2201781c02da2e62', '387873d77b23913f', '9f660b4d1647783d'],
     sisters: ['c7145c067ca3cb54', 'ce7ed8347fb795be', '1c46c157eb6a5aba', 'ec8e64761ac7c459', '3394a5010e63304e', '59aee9966c69a02f', 'e0fe326b14ac1a8c', '9fc81a1fb15172ec'],
   };

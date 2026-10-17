@@ -134,11 +134,20 @@ describe('PR-0107: Chapter VI Acts II and III open as separate battles, an OFF s
     });
   }
 
-  it('the switch ships OFF (the stop rule: VI moves outside its band), so the chain still opens at zero', () => {
-    expect(SEPARATE_BATTLE_GAUGES).toBe(false);
-    const engine = new FFX2Engine({ atbMode: 'wait' });
-    engine.init({ game: 'ffx2', party: chateauBuild, enemies: ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, triggers: [], seed: 5, condition: 'scripted', canEscape: false });
-    expect((Object.values(engine.state().combatants) as Ffx2Unit[]).every((u) => u.atb.ticks === 0)).toBe(true);
+  // RE-PINNED on the branch `re-parity-rc9-x2-link-open-on` (NOT FOR MERGE until Bailey says yes): this test pinned the default OFF
+  // ("the stop rule: VI moves outside its band", D-242, 2026-09-27) and that a default engine opened the chain "at zero". The switch is
+  // ON here, so a default engine opens Act II as a fresh battle, and the option still turns it off. Re-measured 2026-10-16 on today's
+  // engine the switch moves nothing outside the band (docs/handoff/re-parity-rc9-x2-link-open.md). The "at zero" check was also vacuous
+  // after re-parity W4 (a unit's `atb.ticks` is the old count-up bar and nothing sets it now): the wait that remains is `atb.recovery`.
+  it('the switch is ON on this branch (D-242 kept it OFF; NOT FOR MERGE until Bailey says yes), so a default engine opens Act II as a fresh battle, and the option turns it off', () => {
+    expect(SEPARATE_BATTLE_GAUGES).toBe(true);
+    const waits = (options: { separateBattleGauges?: boolean }): number[] => {
+      const engine = new FFX2Engine({ atbMode: 'wait', ...options });
+      engine.init({ game: 'ffx2', party: chateauBuild, enemies: ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, triggers: [], seed: 5, condition: 'scripted', canEscape: false });
+      return (Object.values(engine.state().combatants) as Ffx2Unit[]).map((u) => u.atb.recovery / u.gauge.recoveryMax);
+    };
+    expect(waits({}).every((f) => f < 1)).toBe(true);
+    expect(waits({ separateBattleGauges: false }).every((f) => f === 1)).toBe(true);
   });
 
   it('Act I and every other chain are untouched: only the two Chateau links carry the flag', () => {

@@ -236,10 +236,16 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // are in git at 931613a8.
   // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. All nine are still victories and no menu is closed; they equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again.
   // **Re-pinned 2026-10-15 for the item ledger and the battle-end commit window** (re-parity RC8, FFX-2 only; reason "game-code parity"; `docs/handoff/re-parity-rc8-x2-end-ledger.md`): the end of a fight is committed after the casts in flight have fired, so each log gains the events between the last blow and the victory (see `ffx2-atb-golden.test.ts`, thirteenth re-pin). All nine are still victories and no menu is closed; they equal CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again. The old hashes are in git at ea431aa0.
+  // **Chapter VI's row re-pinned on the branch `re-parity-rc9-x2-link-open-on`, NOT FOR MERGE until Bailey says yes** (lane X2-L row XL1, FFX-2 only; reason
+  // "game-code parity": the game starts every link of a chain as a full battle, FFX2-G10 sections 4 to 6; `docs/handoff/re-parity-rc9-x2-link-open.md`):
+  // `SEPARATE_BATTLE_GAUGES` is ON there, so Acts II and III open on random waits and the opening trim instead of every wait whole. Cause, by comparing full
+  // event logs: Act I is identical, the first differing event is the opening gauge snapshot of Act II (link 2) in all three seeds, and all three are still
+  // victories with no menu closed. With `separateBattleGauges: false` passed as an option the old row returns exactly (aa6b56cb, 2217fd51, 78d4ed54).
+  // Chapters IV and V did not move. The old Chapter VI hashes are in git at 23081b6ab (this branch's parent).
   const PINNED = [
     ['6baeab06549072aa', 'dabe314b3bcfb98c', '1aca076e62b746d6'],
     ['bc16d06c2b310e63', '3405995ca875714e', '6f3ff4787d226772'],
-    ['aa6b56cbfa16061b', '2217fd51aa006da2', '78d4ed544301b45b'],
+    ['658c49a9f687413e', 'e8afa5f67590e50d', '9a6d146fa1f391b5'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {
