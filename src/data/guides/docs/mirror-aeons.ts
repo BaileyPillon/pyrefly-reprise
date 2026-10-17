@@ -17,7 +17,7 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
   bossIds: ['dark-cindy', 'dark-sandy', 'dark-mindy', 'dark-yojimbo'],
   blocks: [
     { t: 'head', at: ['dark-cindy', 'dark-sandy', 'dark-mindy'], title: 'Dark Magus Sisters', tag: 'Boss Battle' },
-    // No "In Game Description" line here (FOC501-03): the card used to quote one that named Cindy, a sentence of ours that the game never printed, and no file or guide in hand gives the Dark Aeons' own text. Rule 6.
+    // No "In Game Description" line on either card (FOC501-03; the Dark Yojimbo card's was removed the same way, r51 review defect 1): the Sisters' card used to quote one that named Cindy, and Dark Yojimbo's said "in the wrong colours, called up by a Yevon soldier"; both were sentences of ours that the game never printed, and no file or guide in hand gives the Dark Aeons' own text. Rule 6.
     { t: 'field', label: 'Weaknesses', value: 'None: no element is favoured or resisted. Immune to Sensor.' },
     {
       t: 'p',
@@ -65,11 +65,6 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
     { t: 'list', label: 'Drops', items: ['Dark Matter (common)', 'Master Sphere (rare)'] },
 
     { t: 'head', at: ['dark-yojimbo'], title: 'Dark Yojimbo', tag: 'Boss Battle' },
-    {
-      t: 'field',
-      label: 'In Game Description',
-      value: "Yojimbo in the wrong colours, called up by a Yevon soldier in the cavern where Yuna found him.",
-    },
     { t: 'field', label: 'HP', value: '1,600,000' },
     { t: 'field', label: 'Weaknesses', value: 'None. Immune to Sensor. His Luck is high, so many physical blows miss.' },
     {
