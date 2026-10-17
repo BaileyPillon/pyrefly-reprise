@@ -1,0 +1,15 @@
+export type SubjectKind = 'party-ffx' | 'dressphere-ffx2' | 'aeon' | 'dark-aeon' | 'part' | 'boss-foe' | 'exp-leblanc' | 'ff7';
+export type ModelGame = 'FFX' | 'FFX-2' | 'FF7' | 'unknown';
+export type ModelPoseClass = 'idle' | 'standing' | 'low' | 'ko' | 'wide' | 'part' | 'staged';
+export const PARTY: Set<string>;
+export const AEONS: Set<string>;
+export const DARK_AEONS: Set<string>;
+export const PARTS: Set<string>;
+export const GAME_FALLBACK: Readonly<Record<string, 'FFX' | 'FFX-2'>>;
+export const LOW_POSES: Set<string>;
+export function subjectKind(subject: string): SubjectKind;
+export function gameOf(subject: string, sidecarGame: unknown, tableSource?: string): ModelGame;
+export function sideOf(subject: string): 1 | -1;
+export function parseFacing(v: unknown): 'right' | 'left' | 'front' | 'auto' | null;
+export function mirrorFor(artFacing: string | null, want: number): 1 | -1;
+export function poseClassOf(o: { pose: string; isRef: boolean; prone: boolean; kind: string }): ModelPoseClass;

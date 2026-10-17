@@ -1,0 +1,107 @@
+import type { ModelGame, ModelPoseClass, SubjectKind } from './pose-kinds.mjs';
+
+/** One row of the generated registration tables, as the model reads it (`src/data/art/poseRegistrationTypes.ts`). */
+export interface ModelRow {
+  scale?: number;
+  stanceX?: number;
+  feetRow?: number;
+  upright?: true;
+  head?: readonly [number, number, number, number];
+  status?: 'ok' | 'held' | 'waived' | 'blocked';
+  class?: string;
+  stature?: number;
+  headReal?: number;
+  lengthRatio?: number;
+  iou?: number;
+  sha?: string;
+}
+
+export interface ModelInputs {
+  root: string;
+  artDir: string;
+  table: Record<string, Record<string, ModelRow>>;
+  tableSource: Record<string, string>;
+  koScale: Record<string, number>;
+  /** docs/target/pose-measure.json */
+  records: { subjects?: Record<string, { poses?: Record<string, any> }> } & Record<string, any>;
+  refs: Map<string, unknown>;
+}
+
+export interface PoseReading {
+  subject: string;
+  pose: string;
+  kind: SubjectKind;
+  game: ModelGame;
+  class: ModelPoseClass;
+  isRef: boolean;
+  refPose: string;
+  /** sha256 (64 hex) of the master PNG on disk. */
+  sha: string;
+  size: [number, number];
+  hasRow: boolean;
+  hasHead: boolean;
+  hasStance: boolean;
+  held: boolean;
+  heldHeadRatio: number | null;
+  status: 'ok' | 'held' | 'waived' | 'blocked' | null;
+  rowSha: string | null;
+  scale: number | null;
+  scaleSrc: 'reg' | 'ko-table' | 'sidecar' | 'none';
+  anchorRow: number;
+  anchorSrc: 'feetRow' | 'sidecar-anchorY' | 'baseline';
+  clamped: boolean;
+  lock: number | null;
+  prone: boolean;
+  mirror: 1 | -1;
+  /** The figure's height over the idle's, as drawn, head lock applied. */
+  stature: number | null;
+  statureTable: number | null;
+  /** Head top to soles over the idle's (props left out). */
+  bodyStature: number | null;
+  /** The head the player sees over the idle's (a hold's real ratio). Null with no registered head. */
+  headReal: number | null;
+  headTable: number | null;
+  /** A laid-down painting's length over the idle's height. */
+  lengthRatio: number | null;
+  massRatio: number | null;
+  /** Overlap with the idle's silhouette as drawn (1 for the idle). */
+  iou: number | null;
+  /** The stance read from the pixels, in the painting's own pixels. */
+  feetPx: { x: number; row: number } | null;
+  /** Where the stance lands against the idle's, in idle heights. Null for the idle, a laid-down painting, or a missing stance. */
+  feet: { dx: number; dy: number } | null;
+  /** Fraction of the painting's height a registered `feetRow` sits above the alpha baseline (the Lady Luck defect when over 0.02); 0 with none. */
+  feetRowGap: number | null;
+  sinkIdle: number | null;
+  stanceRegistered: number | null;
+  stanceDiffPx: number | null;
+  fromPixels: {
+    size: [number, number];
+    alphaBaseline: number | null;
+    alphaBox: { x0: number; x1: number; y0: number; y1: number } | null;
+    bbox: number[];
+    stanceX: number | null;
+    stanceRow: number | null;
+    figureHeightPx: number | null;
+    /** Height from the alpha baseline over the idle's, whatever the table's feetRow says. */
+    heightOverIdle: number | null;
+    feetRowGap: number | null;
+    sinkIdle: number | null;
+    stanceBothRead: boolean;
+  };
+  drawn: { upp: number; anchor: number; shift: number; mirror: number };
+}
+
+export function loadModelInputs(o?: {
+  root?: string;
+  artDir?: string;
+  table?: ModelInputs['table'];
+  tableSource?: Record<string, string>;
+  koScale?: Record<string, number>;
+  records?: ModelInputs['records'];
+}): Promise<ModelInputs>;
+export function listSubjects(inputs: ModelInputs): string[];
+export function listPoses(inputs: ModelInputs, subject: string): string[];
+export function readSubject(inputs: ModelInputs, subject: string, o?: { poses?: string[] }): Promise<PoseReading[]>;
+export function readPose(subject: string, pose: string, opts?: { inputs?: ModelInputs; root?: string; artDir?: string }): Promise<PoseReading>;
+export function readAll(inputs: ModelInputs, o?: { subjects?: string[]; concurrency?: number; onSubject?: (subject: string, readings: PoseReading[]) => void }): Promise<PoseReading[]>;
