@@ -340,7 +340,7 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the lists above. The other 13 digests, and every outcome and turn count over 500 seeds of all thirteen chapters (the two hidden ones included), are the base's.
  *
  * TEN digests re-baselined 2026-10-17 by RC10 lane FFX hit order (FFX only; `docs/handoff/re-parity-rc10-ffx-hit-order.md`): seymour-flux#1 and #7 (18bfe5b2 -> 530d4776, c3845a -> 1082973e),
- * yunalesca#1 and #7 (73fd4f55 -> fc0f6441, 8e48c312 -> 3a7bc64f), braskas-final-aeon#1 (links 1 and 4: d3eb1d76 -> e3ab9bd0, 9c42c87a -> e32d5371) and #7 (link 1: e2a2a0c3 -> 52c6b675),
+ * yunalesca#1 and #7 (73fd4f55 -> fc0f6441, 8e48c312 -> 3a7bc64f), braskas-final-aeon#1 (links 1, 2 and 4: d3eb1d76 -> e3ab9bd0, 5e4670d -> c45dcb19, 9c42c87a -> e32d5371) and #7 (link 1: e2a2a0c3 -> 52c6b675),
  * evrae-airship#1 and #7 (4f323f6e -> 398f2884, b67a717e -> 9bc2532c) and seymour-omnis#1 and #7 (d2966784 -> c246fd47, dc6a4262 -> 22b5461d); every outcome is still a victory, and the
  * other eight digests (Macalania, Yojimbo, Natus, Isaaru, both seeds) are the base's. THREE causes, each a switch in `src/battle/ffx/hit-order.ts`, told apart by putting each switch alone on a
  * scratch copy of the sources and playing the line (12 seeds of every chapter): (1) HIT_ORDER_ROUND_ROBIN: an action that hits several targets more than
