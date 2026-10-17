@@ -1,7 +1,7 @@
 # Pose continuity: the permanent fix (branch `pose-gate`, 2026-10-16 to 17)
 
 Bailey, 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please." (and, on Lulu's hurt, "lulu looks tiny when hurt - this problem again? ugh").
-Branch `pose-gate`, from `origin/r50-release` 6b638df95 (the r50.1 tree, art r50). **Not merged, not deployed, no review run.** Paper preflight and findings:
+Branch `pose-gate`, from `origin/r50-release` 6b638df95 (the r50.1 tree, art r50). **Status: merged into r52-rc (with release 51, the RE follow-ups and Chapter 28; branch `r52-rc`); not deployed yet; no review run.** Paper preflight and findings:
 `D:/Tools/pyrefly-scratch/2026-10-16/pose-continuity/` (`plan.md`, `angle1-art.md`, `angle2-runtime.md`, `angle3-process.md`); the plan's copy in the repo is `docs/plans/pose-continuity-review.md`.
 Contracts: `docs/CONTRACT-CHANGES.md`, the four entries of 2026-10-16 and 2026-10-17. Game case: **plumbing for both games; the Lady Luck repair FFX-2 only; the Dark Aeons FFX only.**
 

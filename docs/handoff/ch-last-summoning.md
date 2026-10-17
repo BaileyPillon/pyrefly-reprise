@@ -4,6 +4,8 @@
 the **live line `origin/r50-release`** (release 50.1: Chapter XXVII Mirror Aeons listed, the RE engine at its final tip `53ce98a0`) and with RE's Zanmato note `origin/re-ffx-zanmato-and-orders` (`f59c4592`), so the branch is the live line plus
 this chapter and RE can review it as a diff against `origin/r50-release`. In a worktree of its own (a sibling folder of the main tree). Tip: see the last line of this file.
 
+**Release 52 (2026-10-17):** the branch is merged into `r52-rc` (with the permanent pose fix, release 51 and RE's follow-ups); not deployed yet. On that tree three of Chapter III's twelve seeds (1, 2 and 4) read differently from the table below, for a reason that is release 51's and not this chapter's: see the last paragraph of "Chapter III is byte for byte what it was".
+
 **Update 2026-10-17:** RE's review of `ee4469eb` (SHIP WITH MINOR FIXES) is applied: see "Review fixes" below; the commits after `ee4469eb` on this branch are those fixes (`git log ee4469eb..ch-last-summoning`). Still not deployed.
 
 **Authority:** Bailey, 2026-10-15, verbatim: "we definitely need an awesome chapter built with yojimbo AND magus sisters ... the most epic encounter ever!!!!!!!!!" and "I'll go with all your recommendations I like the last
@@ -131,6 +133,8 @@ The two relays from the RE session's check, and how this lane stands:
 It was **recorded before any change of this lane** (on the merged tree), and the same file passes **after** all of it, the live line and RE's final engine included (13 of 13: twelve seeds and the one digest of the whole table,
 **`a26660257ba2716c`**). Eleven seeds are a seven-link victory; seed 3 is a defeat on link 1 (the line is not tuned, and nothing here is a balance measurement). `tests/unit/ffx-engine-golden.test.ts` (the 18 FFX goldens),
 `possessed-aeons.test.ts` and `re-parity-ai-possessed.test.ts` pass as well. A digest that moves is a change of Chapter III to explain, never a number to re-pin.
+
+**On the release tree (r52-rc, 2026-10-17) three rows moved, and it is release 51's Overdrive lane, not this chapter.** Seeds 1 (link 4), 2 (links 5 and 6) and 4 (link 3) read differently; the other nine seeds, every outcome and every turn count are unchanged. `docs/handoff/re-parity-rc9-ffx-overdrives.md` section 5 names exactly these seeds: Energy Rain's limit is the game's 3 s (it was 2.6 s), the stand-in's draws are the same and in the same order, and the time left is read against a different limit, so a timing bonus differs by a point or two. **Ablation, run on the release tree:** with Energy Rain's limit put back to 2.6 s in `kernel/minigame-swordplay.ts` (one number, restored afterwards), all twelve rows below read exactly as recorded. The test now keeps the recorded table as `BEFORE` and asserts `NOW` (`BEFORE` with the three moved rows; the whole-table digest of `NOW` is `29cff1931cbb6349`), with a check that the nine other seeds equal `BEFORE` and that no outcome moved.
 
 ## The bench (what the chain is like to play)
 

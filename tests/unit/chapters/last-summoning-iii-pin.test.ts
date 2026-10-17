@@ -12,6 +12,14 @@
  * `docs/handoff/ch-last-summoning.md`). A digest that moves is a change of Chapter III to explain, never a number to re-pin.
  *
  * Eleven seeds are a seven-link victory; seed 3 is a defeat on link 1 (the line is not tuned, and nothing here is a balance measurement).
+ *
+ * **Release 52 (2026-10-17): three seeds moved, and why.** On the release tree, where this lane meets release 51's re-parity lanes, seeds 1, 2 and 4 read differently (seed 1 link 4, seed 2 links 5 and 6,
+ * seed 4 link 3; the nine other seeds and every outcome are unchanged). The cause is not the hidden chapter: it is release 51's Overdrive lane (FFX only, `docs/handoff/re-parity-rc9-ffx-overdrives.md`
+ * section 5, which names exactly these seeds), which gave Energy Rain the game's limit of 3 s where the engine had 2.6 s. The line rolls Tidus's Swordplay from a stand-in (one draw for the 75 percent
+ * test and, on a success, one draw for the time left); the draws are the same and in the same order, and the time left is read against 3,000 instead of 2,600, so the timing bonus differs by a point or two
+ * in a few of Tidus's Energy Rains. **Proved by ablation on the release tree:** with Energy Rain's limit put back to 2.6 s (`kernel/minigame-swordplay.ts`, one number, then restored) all twelve rows of
+ * `BEFORE` read exactly. `BEFORE` stays as the record of the hidden chapter's own proof (its lane changed nothing of Chapter III); `NOW` is `BEFORE` with the three rows the Overdrive lane moved, and it is
+ * what the test asserts.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -35,21 +43,50 @@ const BEFORE: Readonly<Record<number, string>> = {
   12: '660ec7f50c52d4fd:victory 13a83e344bdf871b:victory 7021e2cb56f5d0d2:victory 856e1e08ccdd0a97:victory 04849d7981dd60de:victory f22d2035c505f2a7:victory 9f161768c3431625:victory',
 };
 
+/** The three rows release 51's Overdrive lane moved (Energy Rain's limit 3 s; see the header). Read from the release tree's own run: the links that moved are the fourth (seed 1), the fifth and sixth (seed 2) and the third (seed 4). */
+const MOVED_BY_THE_OVERDRIVE_LANE: Readonly<Record<number, string>> = {
+  1: '5e08fe33bd187ede:victory f0e86d618825163a:victory 2dc0c7f818b45e95:victory 6887836c3abc9435:victory a86a95e34b022c08:victory 20a7bd6936260852:victory c4097e732b6b791c:victory',
+  2: 'bd8cbfcdeab752da:victory e9bceaec425b412e:victory 8142c90eaed125fc:victory 80a5fe45f7539ce7:victory 509418dc428d0c4b:victory 118c4d9e7178e71e:victory 39affba4f9c2f836:victory',
+  4: '065c748c513f4911:victory 166e3e5547aec6c9:victory 23499ef516629772:victory d86f7a5a47c46d5a:victory 67f9e95b4dbd65d9:victory 802793ded5736938:victory d9e1a30e1f1d9d9b:victory',
+};
+
+/** What Chapter III reads on the release tree: `BEFORE`, with the three moved rows. */
+const NOW: Readonly<Record<number, string>> = { ...BEFORE, ...MOVED_BY_THE_OVERDRIVE_LANE };
+
 describe("Chapter III, twelve seeds, byte for byte (the hidden Last Summoning must not move it)", () => {
   for (let seed = 1; seed <= 12; seed++) {
     it(`seed ${seed}: every link's log digest and outcome`, async () => {
       const got = await chapterChainDigest('braskas-final-aeon', seed);
-      expect(got.parts.join(' ')).toBe(BEFORE[seed]);
+      expect(got.parts.join(' ')).toBe(NOW[seed]);
       // The formations fought are the shipped chain's, five aeons and no Anima, Yojimbo or Sister.
       expect(got.groups).toEqual(GROUPS.slice(0, got.parts.length));
     }, 60_000);
   }
 
-  it('the whole table, as one digest: a26660257ba2716c', () => {
+  it("the nine seeds the Overdrive lane did not touch are BEFORE's rows, and the three it moved differ in some links only, never in an outcome", () => {
+    expect(Object.keys(MOVED_BY_THE_OVERDRIVE_LANE).map(Number)).toEqual([1, 2, 4]);
+    for (let seed = 1; seed <= 12; seed++) {
+      const moved = MOVED_BY_THE_OVERDRIVE_LANE[seed];
+      if (moved === undefined) {
+        expect(NOW[seed], `seed ${seed}`).toBe(BEFORE[seed]);
+        continue;
+      }
+      const before = BEFORE[seed]!.split(' ');
+      const after = moved.split(' ');
+      expect(after.length, `seed ${seed}`).toBe(before.length);
+      expect(after.map((p) => p.split(':')[1]), `seed ${seed}: every outcome is the same`).toEqual(before.map((p) => p.split(':')[1]));
+      expect(after.filter((p, i) => p !== before[i]).length, `seed ${seed}: some links moved`).toBeGreaterThan(0);
+    }
+  });
+
+  it('the whole BEFORE table, as one digest: a26660257ba2716c; and the whole NOW table: 29cff1931cbb6349', () => {
     // The twelve rows of the table, `seed=row`, joined by newlines and hashed: the single value the handoff quotes. The literal was computed from the
     // BEFORE run's own output, not from this file, so a typo in a row above cannot hide behind it.
     const lines: string[] = [];
     for (let seed = 1; seed <= 12; seed++) lines.push(`${seed}=${BEFORE[seed]}`);
     expect(sha16(lines.join('\n'))).toBe('a26660257ba2716c');
+    const now: string[] = [];
+    for (let seed = 1; seed <= 12; seed++) now.push(`${seed}=${NOW[seed]}`);
+    expect(sha16(now.join('\n'))).toBe('29cff1931cbb6349');
   });
 });
