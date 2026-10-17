@@ -6,6 +6,13 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-17 — `EnemyGroupDef.opensAsSeparateBattle` (FFX-2): the doc comment now says every chained link is a full battle start in the game; comment only, no field changes (post-r51 follow-ups, branch `re-parity-rc9-followups`; FFX-2 only)
+
+The comment on `EnemyGroupDef.opensAsSeparateBattle` (`src/battle/common/types.ts`) described the flag as the way Chapter VI's Acts II and III open on randomised bars. It now also says what FFX2-G10 (sections 4 and 16 row 4) reads: in the game every link of a chain is a separate battle start, a full one with the random opening waits and the opening trim, and there is no continuation mode; the flag is the engine's switch for Chapter VI's two links only, read only while `SEPARATE_BATTLE_GAUGES` is on, and it is off by Bailey's D-242.
+
+- **Comment only**: no field is added, renamed or removed, no type changes, nothing reads anything new. The comments of `atb-open.ts` (header) and `Ffx2EngineOptions.rollFirstAttack` (`internal.ts`) say the same thing from their side (the latter also records that the game presets 3, no roll, for every chapter scene).
+- FFX is untouched.
+
 ## 2026-10-17 — `src/data/ffx2/ids.ts` (FFX-2): the Garment Grid node-count comments follow the game's cards, and `SIX_NODE_GRID_IDS` gains `ray-of-hope` (post-r51 follow-ups, branch `re-parity-rc9-followups`; FFX-2 only; additive, comments and one constant)
 
 `src/data/ffx2/ids.ts` is a contract file (the string-literal id unions). The `GarmentGridId` doc comments still carried the node counts of the first data lane, five of which the x2-grids lane (re-parity RC9 lane X2-I, follow-up D1) corrected from the game's own plate rows and grid cards (`docs/handoff/re-parity-rc9-x2-grids.md`).

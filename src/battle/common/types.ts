@@ -3173,6 +3173,8 @@ export interface EnemyGroupDef {
    * FFX-2: a chained link that the source makes a **separate battle** (Chapter VI's Acts II and III,
    * with puzzles and scenes between them), so its bars open at randomised fills (§1.6, `[single
    * source]`) instead of the continuation's zero, while HP, MP and items still carry (PR-0107).
+   * In the game EVERY chained link is a separate, full battle start with the random opening waits and the opening trim (FFX2-G10 section 4 and section 16 row 4);
+   * this flag is the engine's switch for these two links only, read only while `constants.ts` `SEPARATE_BATTLE_GAUGES` is on, and it is off (Bailey, D-242).
    * Absent everywhere else, so no other chain changes (CONTRACT-CHANGES).
    */
   opensAsSeparateBattle?: boolean;
