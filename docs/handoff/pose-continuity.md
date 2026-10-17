@@ -12,6 +12,9 @@ the one pose check saw only subjects already measured, CHK-026 read the engine's
 length (the head after D-420, the height after r50.1). On r50: 205 of 622 game poses broke a band, 105 had no row, five Lady Luck rows planted the figure at the knees (drawn at 0.43 to 0.49), the
 Dark Aeons had no stance (239 swaps over the feet line, FOC501-01), and the owner override cleared 24 of 25 deploys.
 
+> **Update, 2026-10-17 (branch `pose-ruler`, from `117b704b0`): W3 is built.** The release driver picked the ruler (item 89e, from `options/notes.md` Part A, under Bailey's standing "I'll go with all of your recommendations"):
+> see "The W3 sizing rule" below. 139 of the 254 legacy waivers are gone; W5 (swap smoothing), the KO band and W6 are untouched.
+
 ## What was built (the approved scope: W0, W1, W2, W4 and the PoseBlend bug fix; W3 and W5 are options only; W6 is untouched)
 
 | Part | What | Where |
@@ -55,6 +58,45 @@ The full unit suite (`node node_modules/vitest/vitest.mjs run`, 700 s): **1,322 
 `tests/unit/critic-continuity-*.test.ts`. The verifier's installer attacks were run again through the real `tools/art-install.mjs` in a scratch root: a transparent `--replace` fails `empty`, an opaque black slab fails `slab`,
 a new subject with no `subjects.json` entry stops before it measures (scratch `D:/Tools/pyrefly-scratch/2026-10-16/pose-continuity/repair/`). No browser was driven for the repair; the first verifier's browser runs cover the runtime.
 
+## The W3 sizing rule (branch `pose-ruler`, 2026-10-17; both games, the size changes land mostly on FFX-2's dresspheres)
+
+**The rule** (`tools/posescale/pose-rule.mjs` `ruleSize`; the pixels in `pose-ruler.mjs`): a standing pose is drawn at `sqrt(headScale x heightScale)`, where the head scale makes its head the idle's (the reviewed reading) and the
+height scale makes its stature 1.0. Where that falls under the stature floor (0.90; 0.75 for critical, sleep, kneel) the stature is lifted to it and the head cost recorded as a hold (`held`, as r50.1 did); likewise a mean over 1.10 is held
+to the ceiling (r50.1's holds had a ceiling too); a lift whose head would pass the hold range (0.80 to 1.45) is **refused**: no single size is in band, so the pose is drawn at the mean under its legacy waiver and goes on the repaint
+list. `victory` and `defend` (a raised sword or staff) are measured head to soles (`bodyStature`), for the height scale and for the band, in the gate and in the critic. It is computed at install, by `measure.py table` (which now runs
+`pose-ruler.mjs` between the rows and the tables and writes `ruled` / `held` into `docs/target/pose-measure.json`); nothing is decided at run time. A ruled pose registers a virtual head box, so the head lock stands down and the
+rule's size stands; the real head is `ruled.headRatio`. Contract entry: `docs/CONTRACT-CHANGES.md`, 2026-10-17.
+
+**Numbers** (r50 art, all 1,106 paintings). `node tools/pose-gate.mjs --check`: before **654 pass, 254 waived, 198 exempt, 0 fail**; after **793 pass, 115 waived, 198 exempt, 0 fail**. 139 legacy waivers removed (139 paintings came
+into band; six more waivers cover paintings that were never out of band, registered by their waiver alone, and keep their rows), none added; the seal's digest is re-pinned (`33f3c41c2ddefae4df5c480dbe5a8dc6`). Row status: 646 ok / 8 held / 254 waived became **710 ok / 83 held / 115 waived**.
+361 poses are ruled (292 need no lift, 58 are lifted to the floor, 7 held to the ceiling, 4 refused); the one pose model reads every one of them within 0.0031 of the rule's own prediction (stature and head). 283 of 908 judged
+paintings are drawn more than 2 percent differently (FFX 58, FFX-2 225; 220 larger, 63 smaller), no previously passing pose came out of band. The list, per game, with before and after: `D:/Tools/pyrefly-scratch/2026-10-17/pose-ruler/census-moved.md`.
+
+**The seven option poses** (the notes' MEAN column, by the rule; stature box / body / real head): Lulu hurt 0.90 / 0.88 / 1.35 (held, r50.1 drew 0.91 / 0.87 / 1.36); Lulu critical 0.75 / 0.69 / 1.37 (held, same as r50.1);
+Paine Songstress hurt 0.77 / 0.67 / 1.30 (refused: drawn at the mean, 0.59 became 0.77, still waived, repaint); Paine Lady Luck hurt 0.92 / 0.77 / 1.08 (in band, no hold); Tidus victory box 1.39, **body 1.10** / head 0.87 (held at the
+ceiling: the notes' box mean read body 1.00 and head 0.79, which was out of the hold range; with the height scale read head to soles it is in band); Auron attack 0.90 / 0.81 / 1.28 (held, same as r50.1); Yuna defend (the held-out painting,
+not in the art folder, not installed) would draw at scale 1.309, body 1.10, head 0.85 (held, in band).
+
+**The nine r50.1 holds** (FFX): six come out within 0.012 of the stature r50.1 drew (Lulu hurt 0.907 to 0.901, Lulu critical 0.754 to 0.751, Auron attack 0.903 to 0.900, Auron hurt 0.900 to 0.901, Yuna hurt 0.900 to 0.901, Rikku attack 0.890
+to 0.901). **Three do not, on purpose**: where the mean sits inside the band no lift is needed, and the hold had been the head ruler's clamp: Auron's low-HP pose 0.75 to 0.78 (head x1.23 to x1.28, a hold either way), Wakka's cast 1.10 to 1.06
+(held to ok), Yuna's attack 0.90 to 0.94 (held to ok). The brief asked for all nine within 0.01; no rule that is a mean can do that for these three.
+
+**Where the build departs from the brief, and why** (each is one constant or one line):
+1. **Props out is `victory` and `defend` only, not strikes** (`PROPS_OUT_POSES` in `pose-kinds.mjs`). Reading `attack` head to soles too moves Auron's attack from 0.90 to 1.00 of the idle's box (head x1.28 to x1.43), Yuna's from 0.94 to 1.04 and
+   Rikku's from 0.90 to 0.92, against the instruction that the FFX holds come out unchanged (and about a dozen attacks with a raised weapon, mostly FFX-2, would grow 10 to 25 percent more). Add `'attack'` to the set to flip it, then run `measure.py table`.
+2. **A mean over 1.10 is held to the ceiling** as well as a mean under the floor lifted (the brief names the floor). Tidus victory needs it (head to soles the mean is body 1.12); 7 poses use it.
+3. **A mean that is in the stature band but leaves 0.85 to 1.15 for the head is a recorded hold too** (Auron critical, the low class, head x1.28): holds are the head cost on record, whether or not the stature was lifted.
+4. **The r50.1 `stature` holds, the D-298 gate and the r392 camera allowances are removed** (`overrides.json` loses 14 keys; `measure.py` loses the two blocks): the rule is their general case, and a ruled pose's head lock is a few thousandths
+   (a virtual box), so the allowances have nothing to do. A side effect worth knowing: `head-lock-actor.test.ts` had to relax "the camera asks for more than a percent of her": Yuna's victory, now drawn 20 percent larger (body 0.75 to 0.90 of the idle's), has its head
+   nearer the idle's, and the lock asks for 0.3 percent.
+5. **Not covered**: the hidden chapter's 67 waived paintings (not in the records; `exp-install` path), foes with no face box (28 rows: nothing to size by), KOs. They stay waived and are on the repaint list with the reason.
+
+**What is still out of band after the rule** (109 paintings, all on the ledger; `D:/Tools/pyrefly-scratch/2026-10-17/pose-ruler/repaint-list.md`): 4 with no single size (Paine Songstress hurt, Rikku's follow, Rikku Berserker and Rikku Gunner ready: repaint,
+or the waiver stays), 10 whose size is in band but whose stance or head box is not, 28 with no face box, 67 hidden-chapter paintings. 83 poses carry a recorded hold, the head cost on record (mostly a head bigger than the idle's, the biggest x1.41, Paine Black Mage defend); a repaint removes that cost.
+
+**To regenerate**: `measure.py table` (the rule, then the tables, then the stamp); `node tools/pose-gate.mjs --prune-legacy` after a repaint puts more paintings in band (then pin the printed digest and run `pose-stamp.mjs`);
+`node tools/posescale/pose-ruler.mjs --check` recomputes every ruled record from the paintings (about 100 s).
+
 ## What is waived, and why
 
 254 `legacy` rows over 84 subjects: every pose of the r50.1 art that is out of its band (by flag, rows can carry several: 170 stature-low, 56 stature-high, 22 feet, 8 feet-sunk by a weapon's point or a tail marked by eye, 1 head box; six carry none, unregistered by design:
@@ -73,7 +115,7 @@ and the critic failing a painting the gate passes at a band's edge (X2 Ixion's h
 
 ## What waits for Bailey (rule 10, rule 9)
 
-1. **The ruler per pose class (W3).** The painting's head and body proportions differ from the idle's, so no single size is right for both; the 254 legacy waivers wait on this pick. Seven pictures at real resolution plus phone crops,
+1. **The ruler per pose class (W3): picked and built (2026-10-17, see above).** The painting's head and body proportions differ from the idle's, so no single size is right for both; the 254 legacy waivers waited on this pick, 139 are gone. Seven pictures at real resolution plus phone crops,
    the numbers and a recommendation (the geometric mean of the head and height scales, lifted to the stature floor): `D:/Tools/pyrefly-scratch/2026-10-16/pose-continuity/options/notes.md`, `options/ruler/*.png`.
    It includes FFX-2 Lady Luck hurt (0.85) and attack (0.72), repaired for the soles but still out of band, and whether a raised sword or staff counts toward height.
 2. **Swap smoothing (W5).** Four one-page options (today, aligned dissolve, held-frame cut, the frame clock at 1/20 or 1/40) with captures of today: `options/notes.md`, `options/swap/`. Nothing built. CHK-027 still fails in every chapter on both builds
