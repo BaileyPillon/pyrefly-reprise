@@ -2,10 +2,11 @@
  * **A landed Zanmato of the player's Yojimbo ends a possession link at once** (the hidden Last Summoning; **FFX only**; the RE lane FFX-K's engine at its final tip: `docs/handoff/re-parity-ffx-yojimbo-sisters.md` section 10).
  *
  * The game's Zanmato kills every legal foe of the one group it picks, and every foe here is group 0: the possessed twin and both Yu Pagodas. This file runs it on the chapter's real first link and pins what the chapter
- * relies on and what a presenter sees: the foes all fall, the battle is won, and the events come in the order `ko` for each foe, `action-end`, then `victory` (the order the release driver gave; checked below, not assumed).
+ * relies on and what a presenter sees: the foes all fall, the battle is won, and the events come in the order `ko` for each foe, `action-end`, the story's `script-trigger`, then `victory` (the order the release driver gave, with the
+ * trigger's place seen on the real engine; checked below, not assumed).
  *
  * The odds are the engine's and are not tuned: with Yojimbo's gauge full (a Grand Summon fills it) and Dream's End's compatibility, a payment of 10,000 gil makes 15 draws of 64 a Zanmato at a Zanmato byte of 4
- * (`research/re-ffx-zanmato-and-orders.md`, handoff section 10.4; **the Pagodas count toward that byte: INFERRED**), so the test walks seeds until one lands and says how many it took.
+ * (`research/re-ffx-zanmato-and-orders.md`, handoff section 10.4). The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven. L = 4 in every possession link, 5 against Braska (RE review, 2026-10-17). The test walks seeds until one lands and says how many it took.
  *
  * Also pinned: **without a full gauge the same payment cannot be a Zanmato at all** at this compatibility and hire answer, which is why the advisor's line (it calls Yojimbo last and pays without a full gauge) lands none.
  */
@@ -56,7 +57,7 @@ const pay = (turn: Input, gil: number) => {
 };
 
 describe('a landed Zanmato of the player’s Yojimbo, on the chapter’s first link', () => {
-  it('kills the twin and both Pagodas, and the events run ko for each, action-end, then victory', async () => {
+  it('kills the twin and both Pagodas, and the events run ko for each, action-end, the story’s script-trigger, then victory', async () => {
     let landed: { seed: number; events: BattleEvent[] } | undefined;
     for (let seed = 1; seed <= 80 && landed === undefined; seed++) {
       const at = await atYojimbosTurn(seed, 100);
@@ -80,6 +81,11 @@ describe('a landed Zanmato of the player’s Yojimbo, on the chapter’s first l
     expect(actionEnd).toBeGreaterThan(lastKo);
     expect(victory, 'victory is announced').toBeGreaterThanOrEqual(0);
     expect(victory).toBeGreaterThan(actionEnd);
+    // the story's trigger (the fall line of the possessed aeon) runs after the action ends and before the victory is announced: one trigger, in that place
+    const triggers = ev.map((e, i) => (e.type === 'script-trigger' ? i : -1)).filter((i) => i >= 0);
+    expect(triggers, 'one script-trigger after the Pay').toHaveLength(1);
+    expect(triggers[0]).toBeGreaterThan(actionEnd);
+    expect(triggers[0]).toBeLessThan(victory);
     console.log(`first Zanmato at seed ${landed!.seed}; events after the Pay: ${ev.slice(start).map((e) => e.type).join(' ')}`);
   }, 120_000);
 

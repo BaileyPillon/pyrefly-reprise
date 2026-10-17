@@ -19,8 +19,11 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ALL_ABILITIES } from '../../../src/data/ffx/index.ts';
 import { COMMAND_RECORDS } from '../../../src/data/ffx/command-records/index.ts';
+import type { FFXCombatant } from '../../../src/battle/common/types.ts';
 import { FORMULA_NUMBER } from '../../../src/battle/ffx/adapt/command.ts';
-import { buildPossessedAeonChain } from '../../../src/data/ffx/enemies/braskas-final-aeon.ts';
+import { gazeStepOf } from '../../../src/battle/ffx/ai/command-formula.ts';
+import { buildPossessedAeonChain, yuYevonGroup } from '../../../src/data/ffx/enemies/braskas-final-aeon.ts';
+import gazeClasses from '../../fixtures/parity/ffx/evrae-gaze-classes.json';
 import { possessionGroup } from '../../../src/data/ffx/enemies/last-summoning-chain.ts';
 
 interface Fixture {
@@ -123,5 +126,28 @@ describe('what each possessed body can use', () => {
     const levels = new Map(buildPossessedAeonChain(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut', 'anima', 'yojimbo', 'magus-sisters']).flatMap((g) => g.enemies).filter((e) => e.id.startsWith('possessed-')).map((e) => [e.id, e.zanmatoLevel]));
     for (const id of ['possessed-valefor', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'possessed-bahamut', 'possessed-anima', 'possessed-yojimbo']) expect(levels.get(id), id).toBe(3);
     for (const id of ['possessed-cindy', 'possessed-sandy', 'possessed-mindy']) expect(levels.get(id), id).toBe(4);
+  });
+
+  it('Yu Yevon holds byte 4 (level 5, RE section 1.5 "Yu Yevon m176"), as the two Pagodas beside him do; Braska’s Final Aeon byte 5 (level 6) is left as it was', () => {
+    const yuYevon = yuYevonGroup.enemies.find((e) => e.id === 'yu-yevon')!;
+    expect(yuYevon.zanmatoLevel).toBe(5);
+    for (const pagoda of yuYevonGroup.enemies.filter((e) => e.id.startsWith('yu-pagoda'))) expect(pagoda.zanmatoLevel, pagoda.id).toBe(5);
+  });
+});
+
+describe('the source of the Evrae gaze-class fixture’s two entries for Kozuka and Wakizashi', () => {
+  // `tests/fixtures/parity/ffx/evrae-gaze-classes.json` is numbers only (JSON holds no comment), so its source is written here: the class of a command in the fixture is Evrae's Stone Gaze step (`gazeStepOf`), which the
+  // note's section 2.5 reads off the command's damage-formula byte (byte 1 = step 2, byte 3 = step 1, the rest 0). RE's section 1.4 gives Kozuka 0x60E0 and Wakizashi 0x60E1 "physical / 1 / 14 / 1" and the game's own
+  // command records (`command_records.json`, checked below) hold formula 1 for both: so both are step 2, the same as the possessed Daigoro 0x60DF beside them. Sourced by the formula-byte rule, not read from a separate table.
+  it('both read 2 because the game’s own rows hold formula byte 1 for them', () => {
+    const table = gazeClasses as Record<string, number>;
+    for (const id of [0x60e0, 0x60e1]) {
+      const row = GAME.get(id);
+      expect(row, `row 0x${id.toString(16)} in the game's record fixture`).toBeDefined();
+      expect(field(row!, 'formula')).toBe(1);
+      expect(table[`0x${id.toString(16)}`], `0x${id.toString(16)} in the gaze-class fixture`).toBe(2);
+    }
+    const user = { side: 'party' } as FFXCombatant;
+    for (const abilityId of ['possessed-yojimbo-kozuka', 'possessed-yojimbo-wakizashi']) expect(gazeStepOf(ABILITIES_BY_ID[abilityId]!, user), abilityId).toBe(2);
   });
 });

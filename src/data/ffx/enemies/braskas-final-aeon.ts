@@ -371,8 +371,8 @@ export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: num
     flags: { isBoss: true, noRevive: true }, // §2.3 [verified: 3 sources] — permanent Auto-Life on the PARTY, but a defeated possessed aeon is gone for good
     threatenChance: 0,
     // The game's Zanmato byte plus one (`adapt/yojimbo.ts#zanmatoByte`): the possessed Valefor to Yojimbo hold byte 2, the possessed Sisters byte 3 (research/re-ffx-last-summoning.md section 1.5, [bytes]). Read only by the player's
-    // Yojimbo, who no chain of Chapter III ever holds. The Pagodas' byte 4 would then set the penalty in every link (RE 8.3), **INFERRED**: the engine takes the highest byte over every monster still on the field and a
-    // destroyed Pagoda is KO'd here, not removed, so it counts; if the game does not count a Pagoda that has fallen, a link would read a lower byte.
+    // Yojimbo, who no chain of Chapter III ever holds. The Pagodas' byte 4 sets the penalty in every link (RE 8.3): L = 4 in every possession link, 5 against Braska. The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven.
+    // Here the engine takes the highest byte over every monster still on the field and a destroyed Pagoda is KO'd, not removed, so it still counts: that is the unproven case.
     zanmatoLevel: aeonId === 'possessed-cindy' || aeonId === 'possessed-sandy' || aeonId === 'possessed-mindy' ? 4 : 3,
     sensorText: POSSESSED_AEON_SENSOR_TEXT[aeonId] ?? 'Possessed. It used to be an ally.',
     scanText: 'Yu Yevon wears it now. Destroying it is the only mercy left.',
@@ -511,6 +511,7 @@ export const yuYevonGroup: EnemyGroupDef = {
         'A summoner’s remnant, still casting. Hides inside whatever will hold it. Drains life from all, then heals itself endlessly. You cannot be killed here. You can only be delayed.',
       poisonTickPercent: 10, // §3.1 [verified: 2 sources] 10% of 99,999 = 9,999/tick
       doomTurns: 3, // §3.1 [verified: 2 sources] — documents "a Candle of Life kills him in exactly 3 turns", not something Yu Yevon inflicts on the party
+      zanmatoLevel: 5, // the Zanmato byte 4 plus one (research/re-ffx-last-summoning.md section 1.5 "Yu Yevon m176 = 4", [bytes]; RE review, 2026-10-17). Read only by a player's Yojimbo (no Chapter III chain holds him) and the Pagodas beside him already read 5, so no digest of Chapter III moves
     },
     yuPagoda('yu-pagoda-left', 1, 'aeon-or-yu-yevon'),
     yuPagoda('yu-pagoda-right', 2, 'aeon-or-yu-yevon'),

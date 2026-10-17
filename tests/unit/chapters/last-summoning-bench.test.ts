@@ -15,7 +15,7 @@
  * **What this bench rests on, and what it leaves out** (the RE lane FFX-K's engine at its final tip, `docs/handoff/re-parity-ffx-yojimbo-sisters.md`): the advisor's line calls aeons only through Yuna's Grand Summon, and the
  * table prints which (`calls`), how often the player's Combine powers and Zanmato started (`combine`, `zanmato`) and in how many links. The line **never calls Yojimbo** (he is last in its order and the other aeons are
  * always on offer first), so no Zanmato of the player's is in these chains, and it uses only Combine of the Sisters' eight orders (a player may use the other seven, which the engine now carries out); a figure that
- * involved either would be a different line, not this one. The **Pagodas' count toward a Zanmato's byte is INFERRED** (the engine counts a Pagoda that has fallen; whether the game does is not shown), which only matters to
+ * involved either would be a different line, not this one. The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven. L = 4 in every possession link, 5 against Braska (RE review, 2026-10-17). It only matters to
  * a player's Pay. The possessed Yojimbo's own Zanmato is a fixed 9,999 and is this chapter's record fix.
  */
 import { describe, expect, it } from 'vitest';
