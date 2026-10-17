@@ -46,6 +46,7 @@ import { applyAeonDuelSetup } from './aeon-duel.ts';
 import { applyPossessionOpening, mirrorPossessedAeon } from './ai/possession-setup.ts';
 import { initYojimbo } from './adapt/yojimbo.ts';
 import { initSisters } from './adapt/sisters.ts';
+import { applyBossDataCorrections } from './boss-data-corrections.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -254,6 +255,7 @@ export function buildBattle(
   // See `src/battle/common/clone.ts` for the audit that found the leaks.
   const party = cloneData(setup.party) as FFXPartyBuild;
   const group = cloneData(setup.enemies);
+  applyBossDataCorrections(group); // the rows' remaining differences from the game's monster records, each behind a switch that is off (`boss-data-corrections.ts`; RC10, FFX only)
   applyLinkLineUp(party, group); // a link that changes the line-up (FFX only; `EnemyGroupDef.lineUp`): the guest joins, the forced trio opens, Switch may close
   if (group.restoresPartyOnEntry === true) restorePartyOnEntry(party); // a hopeless retry (Sinspawn Gui's second fight): everyone up and full
   if (group.restoresPartyOnEntry === true && group.restoresAeonsOnEntry === true) restoreAeonsOnEntry(party); // the aeons too (the hidden Mirror Aeons chapter's Act II): whole, with no recovery count
