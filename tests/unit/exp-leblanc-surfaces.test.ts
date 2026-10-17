@@ -18,6 +18,15 @@ import { inArtNamespace } from '../../src/data/art/artNamespace.ts';
 import { mirrorFor, parseArtFacing } from '../../src/engine/BattlePresenterActors.ts';
 import { girlOf, namespacePrefixOf, twirlPlan } from '../../src/engine/fx/mix/twirlPlan.ts';
 import { poseRegistrationFor } from '../../src/engine/PoseRegistration.ts';
+
+/** Pose continuity (2026-10-17): a generated row also carries the install's stamp for its painting (`status`, `class`, `stature`, ..., `sha`); the registration is compared without it. */
+const STAMP_FIELDS = ['status', 'class', 'stature', 'headReal', 'lengthRatio', 'iou', 'sha'] as const;
+const sansStamp = <T extends object | undefined>(row: T): T => {
+  if (!row) return row;
+  const rest: Record<string, unknown> = { ...row };
+  for (const k of STAMP_FIELDS) delete rest[k];
+  return rest as T;
+};
 import { characterUrl } from '../../src/engine/BattlePresenterArt.ts';
 import { cutsceneFigure, cutsceneFigureIn } from '../../src/app/screens/cutsceneFigures.ts';
 import { recommendedParty } from '../../src/app/screens/frontend/chapterCards.ts';
@@ -182,7 +191,7 @@ describe('registration: each installed girl\'s idle carries a head box, and ever
       expect(row?.scale, `${pose} scale`).toBeGreaterThan(0.5);
       expect(row?.stanceX, `${pose} stance`).toBeGreaterThan(0);
     }
-    expect(poseRegistrationFor(characterUrl('exp-leblanc-yuna-gunner', 'idle'))).toEqual({ stanceX: INSTALLED['yuna-gunner']!['idle']!.row['stanceX'] });
+    expect(sansStamp(poseRegistrationFor(characterUrl('exp-leblanc-yuna-gunner', 'idle')))).toEqual({ stanceX: INSTALLED['yuna-gunner']!['idle']!.row['stanceX'] });
   });
 
   it('the row builder: a lying KO gets no stance, and the idle is only its stance', () => {

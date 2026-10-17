@@ -112,7 +112,17 @@
  },
  "rikku-berserker": {
   "ready": {
-   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)"
+   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)",
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.9 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  },
+  "critical": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.3 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
   }
  },
  "yuna": {
@@ -187,6 +197,227 @@
     "ceiling": 1.1,
     "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
    }
+  }
+ },
+ "yuna-dark-knight": {
+  "ready": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 9.8 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "yuna-warrior": {
+  "sleep": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 3.8 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "paine-dark-knight": {
+  "critical": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.4 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "rikku-black-mage": {
+  "follow": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.2 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "valefor": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "ixion": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "x2-ixion": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "pterya": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "paragon": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "yunalesca-3": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "overdrive-sin": {
+  "idle": {
+   "standing": true
+  },
+  "stage-0": {
+   "standing": true
+  },
+  "stage-1": {
+   "standing": true
+  },
+  "stage-2": {
+   "standing": true
+  },
+  "stage-3": {
+   "standing": true
+  },
+  "stage-4": {
+   "standing": true
+  }
+ },
+ "sin-core": {
+  "charge": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "sinspawn-genais": {
+  "attack": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "shell": {
+   "standing": true
+  }
+ },
+ "sinspawn-gui": {
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "sinspawn-gui-2": {
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "vegnagun-body": {
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "vegnagun-head": {
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "vegnagun-tail": {
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "ffx2-experiment-proto": {
+  "idle": {
+   "standing": true
   }
  }
 }

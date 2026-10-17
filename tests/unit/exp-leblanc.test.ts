@@ -38,6 +38,19 @@ import {
 import { artCandidatesFor, artIdFor, backdropUrl, characterUrl, isDresspherePainting } from '../../src/engine/BattlePresenterArt.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest, type ArtManifest } from '../../src/engine/ArtManifest.ts';
 import { poseRegistrationFor } from '../../src/engine/PoseRegistration.ts';
+
+/**
+ * Pose continuity (2026-10-17): the generated rows also carry what the install says about THAT painting (`status`, `class`, `stature`, `headReal`, `lengthRatio`,
+ * `iou`, `sha`). The experiment's figures are different paintings from their base ones, so those fields differ by design; the registration (scale, stance, feet row,
+ * upright) is what these tests compare.
+ */
+const STAMP_FIELDS = ['status', 'class', 'stature', 'headReal', 'lengthRatio', 'iou', 'sha'] as const;
+const sansStamp = <T extends object | undefined>(row: T): T => {
+  if (!row) return row;
+  const rest: Record<string, unknown> = { ...row };
+  for (const k of STAMP_FIELDS) delete rest[k];
+  return rest as T;
+};
 import { getScene, loadScene, sceneKeys, type LoadedScene } from '../../src/scenes/index.ts';
 import { buildChapterTiles, silhouetteKeysFor } from '../../src/app/screens/frontend/chapterGrid.ts';
 import { plateArtHtml } from '../../src/app/screens/frontend/chapterPlates.ts';
@@ -334,7 +347,7 @@ describe('every figure and the backdrop resolve to the experimental namespace', 
     const sansHead = (row: ReturnType<typeof poseRegistrationFor>): ReturnType<typeof poseRegistrationFor> => {
       if (!row) return row;
       const { head: _head, ...rest } = row;
-      return rest;
+      return sansStamp(rest);
     };
     const installedSubjects = Object.keys(INSTALLED);
     let checked = 0;
@@ -344,7 +357,7 @@ describe('every figure and the backdrop resolve to the experimental namespace', 
       for (const pose of poses) {
         const theirs = poseRegistrationFor(characterUrl(base, pose));
         const mine = poseRegistrationFor(characterUrl(nsId(base), pose));
-        expect(mine, `${base}/${pose}`).toEqual(sansHead(theirs));
+        expect(sansStamp(mine), `${base}/${pose}`).toEqual(sansHead(theirs));
         expect(mine?.head, `${base}/${pose} carries no head box`).toBeUndefined();
         checked++;
       }
@@ -358,7 +371,7 @@ describe('every figure and the backdrop resolve to the experimental namespace', 
       const idle = poses['idle'];
       if (!idle) continue;
       const mine = (pose: string) => poseRegistrationFor(characterUrl(nsId(base), pose));
-      expect(mine('idle'), `${base}/idle`).toEqual(idle.row);
+      expect(sansStamp(mine('idle')), `${base}/idle`).toEqual(idle.row);
       const states: string[] = snap.subjects[base].manifest.states;
       // The old idle's baseline: Chapter VI's sidecar when the art is here, else the ratio the table itself carries (the attack row's scale over the base row's).
       const oldBaseline = HAVE_ART ? (JSON.parse(readFileSync(join(ART, 'characters', base, 'idle.json'), 'utf8')).baselineY as number) : NaN;

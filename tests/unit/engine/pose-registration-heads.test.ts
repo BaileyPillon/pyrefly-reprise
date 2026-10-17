@@ -29,7 +29,8 @@ describe('the head boxes in the generated tables', () => {
     expect(withHead.length).toBeGreaterThanOrEqual(310);
     expect(Object.keys(POSE_REGISTRATION_FFX).filter((s) => rows.some((r) => r.subject === s && r.row.head)).sort()).toEqual(['auron', 'evrae', 'kimahri', 'lulu', 'rikku', 'tidus', 'wakka', 'yuna']);
     expect(Object.keys(POSE_REGISTRATION_FFX2).every((s) => rows.some((r) => r.subject === s && r.row.head))).toBe(true);
-    expect(Object.keys(POSE_REGISTRATION_FOES).filter((s) => rows.some((r) => r.subject === s && r.row.head))).toEqual(['yunalesca-1']);
+    // the four Dark Aeons joined Yunalesca's first form on 2026-10-17 (pose continuity: they shipped with no record; their face boxes are in tools/posescale/subjects.json)
+    expect(Object.keys(POSE_REGISTRATION_FOES).filter((s) => rows.some((r) => r.subject === s && r.row.head)).sort()).toEqual(['dark-cindy', 'dark-mindy', 'dark-sandy', 'dark-yojimbo', 'yunalesca-1']);
   });
 
   it('are real boxes inside the painting: four fractions that trace a box a twentieth of the painting or more across, never the 1 px stand-in of a foe with no face box', () => {
