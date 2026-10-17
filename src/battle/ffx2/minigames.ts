@@ -114,11 +114,14 @@ export function attachedResult(command: Command): MinigameResult | null {
 }
 
 /**
- * How many hits this action lands, given a minigame outcome.
+ * How many shots this action fires, given a minigame outcome.
  *
- * Trigger Happy is one hit per press. Lady Luck's reels never change a hit
- * count — a spin picks *which ability* fires (`reels.ts`), and that ability
- * keeps its own. Returns `null` when the outcome does not change the count.
+ * Trigger Happy is one hit per press, 0 to 16. **0 is an answer, not "no answer"**: a window nobody pressed in fires nothing, as in the game
+ * (the row plans its 60 hits and each shot executes one, so no press is no hit; FFX2-H05 3.5, 3.8), and the caller passes it on as `shots: 0`.
+ * What has no outcome at all (an AI actor, an auto-battle, a held command) gets `null` here, rolls its own count (`rollDefault`, 6 to 16) and so never
+ * reaches 0; a pad or screen with no way to press (the overlay's "unheard" path, `TriggerHappy.ts`) sends that same 6 to 16 roll as its result. Lady
+ * Luck's reels never change a hit count — a spin picks *which ability* fires (`reels.ts`), and that ability keeps its own. Returns `null` when the
+ * outcome does not change the count.
  */
 export function hitsFromOutcome(outcome: MinigameResult | null): number | null {
   if (!outcome) return null;

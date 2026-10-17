@@ -56,8 +56,14 @@ import { afterAppliedToSelf, landedOf, reportApplied } from './applied.ts';
 
 /** What the caller of `resolveAbility` hands the strikes beyond the ability. */
 export interface StrikeOptions {
-  /** A minigame outcome that replaces the row's hit count (Trigger Happy, a dice roll). */
+  /** A minigame outcome that replaces the row's hit count (the sum of Two Dice's dice, FFX2-H04 3.9). */
   hitsOverride?: number;
+  /**
+   * The shots a Trigger Happy window fired (FFX2-H05 3.5): 1 or more play that many hits, **0 plays none**. The row plans its own 60 hits per target and
+   * each shot executes one, so a window nobody pressed in plans 60 and executes none (the rest is dropped when the action is removed). Absent: no timed
+   * input, the hit count is the row's. Not `hitsOverride`, whose 0 is "no override" as in the game's hit determination.
+   */
+  shots?: number;
   /** The gil offered: a Bribe's amount, Spare Change's gil (`ActionRec+0xb0`). */
   gilSpent?: number;
   /** The action is a counter (a system action): its results set off no counter (`Chr+0x15c1` is not 1). */
@@ -322,7 +328,7 @@ export function runStrikes(
   const determined = determineHits(
     hitAttacker(user, idOf(user)),
     command.hit,
-    { repeatCount: 0, repeatLimit: 3, amount: gilSpent, hitsOverride: options.hitsOverride ?? 0 },
+    { repeatCount: 0, repeatLimit: 3, amount: gilSpent, hitsOverride: options.hitsOverride ?? Math.max(0, options.shots ?? 0) },
     targets.map((t) => hitTarget(t, idOf(t))),
     hitDraw(ctx.rng, command.accuracyFormula, targets),
   );
@@ -335,7 +341,7 @@ export function runStrikes(
   });
 
   // Hit events: how many strikes each target takes, and how many hit events the presenter paces.
-  const planned = determined.perTargetHits;
+  const planned = options.shots !== undefined && options.shots < 1 ? determined.perTargetHits.map(() => 0) : determined.perTargetHits; // no shot fired: planned, none executed
   let hitCount = 0;
   determined.targets.forEach((r, i) => {
     const n = planned[i] ?? 0;

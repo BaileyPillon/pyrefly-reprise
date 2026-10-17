@@ -269,10 +269,10 @@ export function simulateFFX2Command(
     ...(options.items ? { items: options.items } : {}),
   };
 
-  const hitsOverride = expectedMinigameHits(ability, options.roll ?? 'mid');
+  const shots = expectedMinigameHits(ability, options.roll ?? 'mid');
   try {
     resolveAbility(ctx, user, ability, command.targets, {
-      ...(hitsOverride !== null ? { hitsOverride } : {}), ...((command.kind === 'ability' || command.kind === 'item') && command.exactTargets === true ? { exactTargets: true } : {}), // exactTargets: AI-FFX2-b
+      ...(shots !== null ? { shots } : {}), ...((command.kind === 'ability' || command.kind === 'item') && command.exactTargets === true ? { exactTargets: true } : {}), // exactTargets: AI-FFX2-b
     });
   } catch (err) {
     console.warn('[simulate/ffx2] command preview failed', command, err);
