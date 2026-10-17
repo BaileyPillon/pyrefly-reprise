@@ -61,7 +61,7 @@ import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
 import { activeScriptId, chooseAiCommand } from './ai/index.ts';
 import { forcedTurn } from './forced-turn.ts';
-import { keepsControlWhenProvoked } from './adapt/target-world.ts';
+import { defaultAttackOf, keepsControlWhenProvoked } from './adapt/target-world.ts';
 import { cloneLedger } from './adapt/loot.ts';
 import { fluxLine } from './ai/seymour-flux-rules.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
@@ -436,11 +436,12 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
 
   if (has(enemy, 'confuse')) out.push('Confused — it strikes one of its own side, itself included, so this prediction is a guess');
   if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack, at the other side');
-  // The line below is exact only for a monster that has a default attack. Since RC9 slice G-c a monster whose record's forced-action word is 0 (nearly every boss of
-  // the story chapters) has none, so its Provoked turn is dropped, not spent on the provoker (`forced-turn.ts`, `adapt/target-world.ts#defaultAttackOf`). No
-  // recommended line Provokes such a boss and no measured fight reached it (`docs/handoff/re-parity-rc9-ffx-counters.md`, the disclosure on Berserk, Confuse and Provoke);
-  // the player-facing wording is left as it is.
-  if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) out.push('Provoked — it spends its turn attacking whoever provoked it');
+  // Provoked: a monster with a default attack spends its turn on the provoker. Since RC9 slice G-c a monster whose record's forced-action word is 0 (nearly every boss of the
+  // story chapters) has none, so its Provoked turn is dropped (`forced-turn.ts`, `adapt/target-world.ts#defaultAttackOf`); the line says which. No recommended line Provokes such a
+  // boss and no measured fight reached it (`docs/handoff/re-parity-rc9-ffx-counters.md`, the disclosure on Berserk, Confuse and Provoke).
+  if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) {
+    out.push(defaultAttackOf(enemy) === 0 ? 'Provoked — it has no attack of its own, so it loses its turn' : 'Provoked — it spends its turn attacking whoever provoked it');
+  }
   if (has(enemy, 'threaten')) out.push('Threatened — it cannot act or counter at all [ffx-combat-core §4.4]');
   return out;
 }
