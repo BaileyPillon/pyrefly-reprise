@@ -41,7 +41,7 @@ import { gaugeOnOutcome } from './gauge.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
 import { type HitScope, type Touched, newRecordBook, resolveOneHit } from './hit-apply.ts';
-import { DRAIN_RECOIL_ONE_RECORD, HIT_ORDER_ROUND_ROBIN, applyRecoil, holdsAbsorbRecord, inSlotOrder, runInRounds } from './hit-order.ts';
+import { DRAIN_RECOIL_ONE_RECORD, HIT_CALC_SLOT_ORDER, HIT_ORDER_ROUND_ROBIN, applyRecoil, holdsAbsorbRecord, inSlotOrder, runInRounds } from './hit-order.ts';
 import { newRecoilSums } from './kernel/recoil.ts';
 
 /** Knobs the caller can override per resolution. */
@@ -233,9 +233,12 @@ export function resolveAbility(
     passes = passes.filter((p) => p.target.id !== user.id);
   }
 
+  // The game calculates target by target in ascending slot order (`hit-order.ts#HIT_CALC_SLOT_ORDER`); a script-aimed row keeps the order its script named.
+  if (HIT_CALC_SLOT_ORDER && !aimed) passes = inSlotOrder(ctx, passes);
+
   if (HIT_ORDER_ROUND_ROBIN && !aimed) {
-    // The game's order (`hit-order.ts`): every hit calculated target by target in slot order, applied round by round, each death in the round of the target's last hit.
-    runInRounds(scope, inSlotOrder(ctx, passes), (target) => resolveOneHit(scope, target), (target) => finishTarget(scope, target));
+    // The game's order (`hit-order.ts`): every hit calculated target by target, applied round by round, each death in the round of the target's last hit.
+    runInRounds(scope, passes, (target) => resolveOneHit(scope, target), (target) => finishTarget(scope, target));
   } else {
     if (plan) {
       // A planned Overdrive (RC4 lane B): the hits left after the result's removal land target by target in character order.

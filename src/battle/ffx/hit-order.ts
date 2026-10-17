@@ -16,7 +16,7 @@
  * last hit. What is not modelled: HP and statuses are written when a hit is calculated, not when its round comes (the larger split of calculation from application is the
  * note's open item), so a lower slot's death handling sees the higher slot's last hits already written.
  *
- * `HIT_ORDER_ROUND_ROBIN` and `DRAIN_RECOIL_ONE_RECORD` are the rollback switches: `false` runs the code that was there before (`abilities.ts` keeps its three loops; `hit-apply.ts`
+ * `HIT_CALC_SLOT_ORDER`, `HIT_ORDER_ROUND_ROBIN` and `DRAIN_RECOIL_ONE_RECORD` are the rollback switches: `false` runs the code that was there before (`abilities.ts` keeps its three loops; `hit-apply.ts`
  * keeps its per-hit heal).
  */
 
@@ -27,6 +27,12 @@ import { applyMpDelta, healOutsideChain } from './hp.ts';
 import { recoilGain, recoilRecord } from './kernel/recoil.ts';
 import type { HitScope } from './hit-apply.ts';
 
+/**
+ * Calculate an action's hits in the game's slot order (S1). The target kernel returns its targets ascending, but the engine's cheap path (nothing to cover or reflect) kept the
+ * order the targets came in (the party's formation order for a group command), so a group spell drew its variance, critical and status rolls for the targets in that order
+ * where the game draws them for the lowest slot first (note FFX-H01 3.4 step 5, [E L2] 12,000 vectors, 0 order violations). `false`: the order they came in, as before.
+ */
+export const HIT_CALC_SLOT_ORDER = true;
 /** Apply an action's hits round by round, deaths in the round of each target's last hit (S1). `false`: each target's hits, then its death, as before. */
 export const HIT_ORDER_ROUND_ROBIN = true;
 /** Heal the user of an absorb command once, with the summed amounts, after every target (S2). `false`: hit by hit, as before. */
