@@ -5,7 +5,10 @@
  * target, cast cost 100. Only the base row costs MP (4); the swap rows cost none in the game because the base row has paid.
  *
  * Source: the Steam HD build's `command.bin` (build 25501027), read field by field from the three language copies, which agree on these rows; numbers only, no
- * game text and no game code. `tests/unit/parity-ffx2-minigames.test.ts` pins each record against `tests/fixtures/parity/ffx2/lady_luck_rows.json`.
+ * game text and no game code. `tests/unit/parity-ffx2-two-dice.test.ts` pins each record against `tests/fixtures/parity/ffx2/lady_luck_rows.json`.
+ *
+ * Confidence: [verified: the game's own tables, read field by field from three copies that agree]. Research: `research/ffx2-combat-core.md` §3.12 (Lady Luck, Two Dice: "number of hits depends on the two dice rolled"),
+ * `research/re-ffx2-commands.md` §1 (the command rows); the rows' powers and the swap are the RE note FFX2-H04 sections 3.9 and 4.3.
  */
 
 import type { FFX2CommandRecord } from '../../../battle/common/types.ts';
