@@ -146,3 +146,9 @@ per-hit drain stays in `hit-apply.ts`), proved by the ablation in the measuremen
 6. Goldens: `ffx2-atb-golden` and `ff7-golden` unchanged; `ffx-engine-golden` re-pinned only for the digests that move, with the cause in its header.
 7. Measurement: 12 seeds of every FFX chapter, base against tip (event-log digests); every chapter whose log moves is named with its cause (ablation: each switch alone); movers at 500 seeds with first-try wins
    before and after. No boss or party number is retuned.
+
+## 10. Addendum written after the build (2026-10-17)
+
+The preflight said the calculation order stays. The first 12-seed measurement showed that it did not need to: the engine's **cheap target path** (nothing to cover or reflect) keeps the order a group command's targets come in, the party's formation order, where the game visits the lowest slot first (the note's 12,000
+level-2 vectors). That is a fourth cause, so it got its own switch, `HIT_CALC_SLOT_ORDER` (on), and the ablations tell the three causes apart: it alone moves every outcome that moves; the rounds (`HIT_ORDER_ROUND_ROBIN`) and the one recoil (`DRAIN_RECOIL_ONE_RECORD`) move only the log and the deaths. Details and the 500- and 2,000-seed
+measurements: `docs/handoff/re-parity-rc10-ffx-hit-order.md`.
