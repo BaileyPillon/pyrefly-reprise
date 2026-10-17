@@ -14,9 +14,10 @@
  * (a props-out pose reads head to soles), real head and feet are inside the pose class's band (`tools/posescale/pose-bands.mjs`); no alpha hole at any body joint in any key or
  * at 25, 50 and 75 percent between any two keys; parts, bones, vertices and textures inside the budget. Exit: 0 ok, 1 refused, 2 usage.
  */
+import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
-import { writeFileSync } from 'node:fs';
+import { loadModelInputs } from './posescale/pose-model.mjs';
 import { ROOT, formatRigFailure, gateRig, stampRig, verifyStamp } from './rig/rig-gate-lib.mjs';
 
 const argv = process.argv.slice(2);
@@ -28,9 +29,11 @@ const get = (n, d) => {
 
 async function main() {
   const rigs = (get('--rig') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-  if (!rigs.length) { console.error('usage: node tools/rig-gate.mjs --rig <folder with rig.json>[,<folder>...] [--art DIR] [--root DIR] [--check | --verify] [--no-blends] [--json F]  (see the header of tools/rig-gate.mjs)'); return 2; }
+  if (!rigs.length) { console.error('usage: node tools/rig-gate.mjs --rig <folder with rig.json>[,<folder>...] [--art DIR] [--root DIR] [--table JSON] [--check | --verify] [--no-blends] [--json F]  (see the header of tools/rig-gate.mjs)'); return 2; }
   const root = resolve(get('--root', ROOT));
   const artDir = get('--art') ? resolve(get('--art')) : undefined;
+  // --table <json>: a registration table to read instead of the repository's (a fixture, a candidate table)
+  const inputs = get('--table') ? await loadModelInputs({ root, artDir, table: JSON.parse(readFileSync(resolve(get('--table')), 'utf8')), tableSource: {}, koScale: {}, records: { subjects: {} } }) : undefined;
   let code = 0;
   const all = [];
   for (const rig of rigs) {
@@ -42,7 +45,7 @@ async function main() {
     }
     const t0 = Date.now();
     let r;
-    try { r = await gateRig({ rig: resolve(rig), root, artDir, blends: !flag('--no-blends') }); } catch (e) { console.error(`rig-gate: ${rig}: ${e instanceof Error ? e.message : String(e)}`); code = Math.max(code, 1); continue; }
+    try { r = await gateRig({ rig: resolve(rig), root, artDir, inputs, blends: !flag('--no-blends') }); } catch (e) { console.error(`rig-gate: ${rig}: ${e instanceof Error ? e.message : String(e)}`); code = Math.max(code, 1); continue; }
     all.push(r);
     const okKeys = r.keys.filter((k) => k.ok).length;
     console.log(`rig-gate: ${r.subject ?? rig}: ${r.status.toUpperCase()}; ${okKeys} of ${r.keys.length} key(s) pass; rest overlap ${r.rest?.iou === null || r.rest?.iou === undefined ? 'n/a' : r.rest.iou.toFixed(3)}; ${r.holes ? `${r.holes.rendered} poses scanned for holes at ${r.holes.joints.length} joints; ` : ''}${r.size.parts} parts, ${r.size.bones} bones, ${r.size.verts} vertices, ${(r.size.texels / 1e6).toFixed(2)} Mpx, ${(r.size.bytes / 1e6).toFixed(2)} MB; ${((Date.now() - t0) / 1000).toFixed(1)} s`);
