@@ -118,10 +118,8 @@ export interface Ffx2Unit extends FFX2Combatant {
   autoStatuses?: StatusId[];
   /** A girl's automatic-status layer: the auto-ability rows she holds, the kept and SOS sets and the effective layer (`adapt/auto-layer.ts`, `auto-layer.ts`; re-parity X2-D). Absent when she holds no row. */
   autoLayer?: Ffx2AutoLayer;
-  /** A monster's death pattern (`Chr+0x2d8`, set by its script's init, `adapt/death-patterns.ts`; RC9 X2-E): 0 falls and can be raised, any other value leaves the battle at its KO and blocks Auto-Life. Absent: 0. */
-  deathPattern?: number;
-  /** The death entry this monster's knock-out requested and the engine has not run yet (`engineHooks.ts#markDeathEntry`, `runDeathEntries`; RC9 X2-E). */
-  deathPending?: { killer: CombatantId | undefined };
+  deathPattern?: number; // a monster's death pattern (`Chr+0x2d8`, from its script's init, `adapt/death-patterns.ts`; RC9 X2-E): 0 can be raised, any other value leaves the battle at its KO and blocks Auto-Life; absent: 0
+  deathPending?: { killer: CombatantId | undefined }; // the death entry this monster's KO requested and the engine has not run yet (`engineHooks.ts#markDeathEntry`, `runDeathEntries`; RC9 X2-E)
   /** The gil bribed into this enemy so far this battle (`Chr+0x67c`), which the Bribe accuracy formula reads (`adapt/inputs.ts`). */
   bribeAccumulated?: number;
   /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */

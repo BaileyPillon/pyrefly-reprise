@@ -422,7 +422,7 @@ describe('the existence flag (stat 224): which monsters leave the battle-end eva
     }
     // the Nodes, the Bulwarks and the Redoubts are the parts; the Tail, Leg, Body, Head, Shuyin and every other boss of the 36 packages are present
     expect(checked.filter((id) => ENEMY_GROUPS.some((g) => (g.parts ?? []).some((p) => p.id === id) && g.id.startsWith('vegnagun'))).sort()).toEqual(['bulwark-l', 'bulwark-r', 'node-a', 'node-b', 'node-c', 'redoubt-l', 'redoubt-r']);
-    expect(checked.length).toBeGreaterThan(28);
+    expect(checked.length).toBe(35); // 35 enemies of 33 packages, the rows shared by two formations counted twice
     // the two packages with no engine unit: the inert second Shuyin (out of the battle, existence and cursor off) and the Experiment's parts
     expect(clears('m293') && clears('m195')).toBe(true);
     expect((usage.packages['m293'] ?? []).some(([, , , id, v]) => id === StatId.inBattle && v === 0)).toBe(true);

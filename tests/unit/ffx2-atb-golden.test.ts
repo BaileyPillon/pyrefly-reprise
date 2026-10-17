@@ -201,8 +201,8 @@
  * lands on the Right Bulwark as before (896 left of 3,000); the old engine let it Regen 93 and Rikku's later hit (2,241) knocked it out at event 910 of 916; it now stands at 0, gets no Regen,
  * and the same hit knocks it out ten events sooner (906 events). Every other seed of the four arrays is unchanged (recomputed, equal): all twenty `CH5_D0` digests, all twenty `CH4_D0`, all
  * ten `CH4_D1500` and the nine other `CH5_D1500`; D = 0 is still 20/20 in both chapters, the Wait arm still equals the D = 0 arrays, and the outcome of seed 8 is still a win. The line this
- * reaches is the Active arm only: at D = 0 both Bulwarks are down when the Core falls on every seed (490 of 490 in the 500-seed measurement), so the entry stores 0 over 0. Over 60 Active seeds
- * three differ (8, 16 and 28), all still won. The old hash is in git at 748038a0a.
+ * reaches is the Active arm only: at D = 0 both Bulwarks are down when the Core falls on every seed (490 of 490 in the 500-seed measurement), so the entry stores 0 over 0. Over 300 Active
+ * seeds of Chapter V nine differ (8, 16, 28, 80, 83, 100, 130, 264 and 273), all still won (244 of 300 in both trees); Chapters IV and VI over 200 Active seeds each: none. The old hash is in git at 748038a0a.
  */
 
 import { describe, expect, it } from 'vitest';

@@ -26,7 +26,7 @@ or `src/audio`. The note is `FFX2-G05`; the plan's lane is X2-E (rows XE1 to XE6
 ## 3. The proof plan (done in this order)
 
 1. **Kernel against the game's own answers.** The note's layer-1 log (207,552 real-setter vectors, 0 mismatches against the independent port) holds, for each id, the count, the changed bytes and the routines asked for. The worlds were not kept; they are regenerated from the job's
-   seed in pure Python and the port reproduces all 23,736 logged vectors of the ported ids, so the regenerated worlds are the harness's. 4,209 vectors (three group specs, 23 values, one or four worlds) become the fixture. Layer 1 drew species words at random, so none of its species
+   seed in pure Python and the port reproduces all 24,288 logged vectors of the 44 ids checked (the ported ids, 198 and 3), so the regenerated worlds are the harness's. 4,209 vectors (three group specs, 23 values, one or four worlds) become the fixture. Layer 1 drew species words at random, so none of its species
    groups matched a slot; the group-mask builder (live `0x6117b0`) is therefore run for real in the emulator harness over worlds with matching species (3,120 calls, 0 mismatches against the port) and exported as its own fixture.
 2. **Engine against an independent oracle** written from the compiled calls of the packages (`stat_setter_usage.json`, 891 calls), importing no kernel or adapter code.
 3. **A mutation pass** over the kernel and the wiring (33 faults).
@@ -36,15 +36,15 @@ or `src/audio`. The note is `FFX2-G05`; the plan's lane is X2-E (rows XE1 to XE6
 
 | Risk | Bound |
 |---|---|
-| The Core's entry changes the Chapter V fight | it acts only on a Bulwark that stands when the Core falls; on the intended line both are down (490 of 490 seeds), so the fight is the same event for event; on the Active line 3 of 60 seeds differ, all still won; one golden hash is re-pinned with its cause in the file |
+| The Core's entry changes the Chapter V fight | it acts only on a Bulwark that stands when the Core falls; on the intended line both are down (490 of 490 seeds), so the fight is the same event for event; on the Active line 9 of 300 Chapter V seeds differ (none of 200 in IV or in VI), all still won; one golden hash is re-pinned with its cause in the file |
 | The entry runs at the wrong moment | it is a request (the entry runner queues a record on the script thread, read from the code), so it runs after the action that killed the Core has applied every result; an all-enemy move's later hits on the Bulwarks land as before (pinned) |
 | A death pattern changes who can be targeted or revived | only a fallen monster with a pattern other than 0 stops being a target of anything; the Bulwarks and Redoubts (the monsters the scripts revive) are pattern 0; every shipped line is unchanged (144 fights equal at 12 seeds) |
 | A monster the note did not read gets a wrong pattern | it gets none (0 as before): Valefor at Besaid, Yojimbo, Daigoro, Angra Mainyu, Zarich, Tawrich and the Fiend Arena Trema (whose package holds two actors that write 1 and 2) are left out, and a test says which |
-| The 400-line rule | `engine-core.ts` 399, `internal.ts` 398; the new files are 66 to 264 lines |
+| The 400-line rule | `engine-core.ts` 399, `internal.ts` 396; the new files are 66 to 264 lines |
 | Merge with the other RC9 lanes | `resolve-hp.ts`, `internal.ts` and `engine-core.ts` are also touched by X2-C (kill rewards) and X2-H (Confusion); measured with `git merge-tree` in the handoff |
 
 ## 5. What the deep review should look at
 
-1. A Chapter V run on the Active clock (`driveChapter5(seed, 1500)`): after the Core falls, a standing Bulwark is at 0 HP and the next hit knocks it out (seeds 8, 16, 28 of 60).
+1. A Chapter V run on the Active clock (`driveChapter5(seed, 1500)`): after the Core falls, a standing Bulwark is at 0 HP and the next hit knocks it out (seeds 8, 16, 28, 80, 83, 100, 130, 264, 273 of 300).
 2. That nothing on screen changed: no event type, no field of the shared contract and no presenter file is touched; the HUD shows a part at 0 HP as it shows any unit at 0.
 3. The rows left out, in the handoff, each with the exact fact it waits for.
