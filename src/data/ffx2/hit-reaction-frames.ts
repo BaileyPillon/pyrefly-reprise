@@ -8,9 +8,11 @@
  * character updates against the exe, 0 mismatches; live game 2026-10-13, Q2: the counter is on for exactly the reaction).
  * `-1` means the motion set has no such clip.
  *
- * Sources. Note FFX2-G01 section 7.3 (the girls' per-set table and the bosses' table) and its proof data: the game's own
- * frame tables, read as numbers, for the 51 girl motion sets and the 36 monster motion sets below. Every set is looked up
- * by number; no two definitions of one set disagree.
+ * Sources. Note FFX2-G01 § 7.3 (the girls' per-set table and the bosses' table) and its proof data [verified: the note's 267,652
+ * vectors against the game's code, 0 mismatches]: the game's own frame tables, read as numbers, for the 51 girl motion sets and the
+ * 36 monster motion sets below. Every set is looked up by number; no two definitions of one set disagree. (The section sign and the verified tag
+ * are what `data-ffx2-citations.test.ts` asks of a data file; the girls' slots other than 14 are inferred, as the paragraph
+ * "How a girl's slot is known" says.)
  *
  * The three maps a unit goes through:
  * - a girl: her id (`yuna` / `rikku` / `paine`) and the dressphere she wears give a SLOT (`DRESSPHERE_SLOT`), and her slot
