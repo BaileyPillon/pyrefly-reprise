@@ -713,7 +713,8 @@ public/art/
 ```
 
 - `<id>` is lowercase kebab: `tidus`, `yuna`, `seymour-flux`.
-- `<pose>` is one of `idle`, `attack`, `cast`, `hurt`, `ko`, `victory`.
+- `<pose>` is one of `idle`, `attack`, `cast`, `hurt`, `ko`, `victory` (the library has more: `ready`, `defend`, `critical`, `sleep`, `item`,
+  `twirl-*` and others; any painting is installed and registered as below).
 - **`baselineY` is the contract.** It is the bottom row of opaque pixels in the
   cropped PNG. The renderer plants a sprite by aligning `baselineY` to the
   ground plane, *not* the bottom of the image, which is why the 16 px crop
@@ -829,6 +830,69 @@ faithful recipe keeps ESRGAN as a detail source only: its detail relative to the
 and thin dark lines the painting does not imply are blended back to a bounded adaptive unsharp master, so nothing is drawn that the painting does not imply and the tones are the
 painting's own. `node tools/fx-assets.mjs verify --dir <build>/fx` (the deploy runs it for every host) now also
 requires `fx/<key>/depth.png` and `depth.json` for every room in `src/engine/fx/b/ambient/index.ts`. Handoff: [handoff/r39-hires-engine.md](handoff/r39-hires-engine.md), "Fidelity repair".
+
+### Installing character art: the only path (pose continuity, 2026-10-16)
+
+> Bailey, 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please." AGENTS.md hard rule 16:
+> **no character painting ships without a fresh pose record or a waiver that carries Bailey's own words, and `tools/art-install.mjs` is the only
+> install path.** Before it, about 17 throwaway installers under `D:/Tools/pyrefly-scratch` each handled hard links, backups and the ten-field sidecar and
+> none registered what it installed; the Dark Aeons shipped with no stance row (FOC501-01). The plan and the numbers behind the bands are in
+> [plans/pose-continuity-review](plans/pose-continuity-review.md); the contract in [CONTRACT-CHANGES](CONTRACT-CHANGES.md) (2026-10-16).
+
+What the game asks of a figure: one size, one pair of feet, in every pose. A painting's *pose record* is its row in `src/data/art/poseRegistration*.ts`
+(`measure.py table` writes them from `docs/target/pose-measure.json`): the `scale`, `stanceX`, `feetRow` and head box the engine draws it with, and since
+this change the facts the install checked: `status` (`ok`, `held`, `waived` or `blocked`), `class`, `stature`, `headReal`, `lengthRatio`, `iou` and the first 16
+hex characters of the painting's `sha`. The bands and the one model of how the game draws a painting are `tools/posescale/pose-bands.mjs` and `pose-model.mjs`:
+standing, strike and hurt poses are held to 0.90 to 1.10 of the idle's height and 0.85 to 1.15 of its head, low poses (critical, sleep, kneel) to 0.75 to
+1.10, feet within 2 percent of the idle's, a KO's length is reported and not gated, twirl and FF7 paintings are exempt.
+
+**The steps.**
+
+1. **Pick a target folder that holds copies.** The approved masters and the live art are *hard-linked* into every mirror, and a write through a link changes all
+   of them. `art-install` counts the links of the files it would touch and refuses the whole install, writing nothing, if any has more than one. There is no
+   default target: `--target` is required, so nothing lands in `public/art` by accident.
+2. **Prepare the set**: one folder holding `<pose>.png` (a transparent cutout) and `<pose>.json` for each pose, with an `idle` in the set or already in the target.
+   The sidecar carries only the ten fields the game reads (`tools/art-sidecar-fields.mjs`) and no path, drive letter or user name.
+3. **A new subject only**: annotate it in `tools/posescale/subjects.json` first: the idle's face box as `face` for a figure with a face (`game`, `face`, `stance`;
+   [handoff/r39-posescale.md](handoff/r39-posescale.md)), or `"game": "foe", "rowFromBaseline": true` for a creature, hull or part that has none. Without an entry
+   `art-install` and `measure.py` stop and say so (they used to register the figure with no head box and call it done); then run again with `--register`.
+4. **Dry run, then install**:
+   ```
+   node tools/art-install.mjs --target D:/pyrefly-art-rNN --subject dark-sandy --from D:/work/dark-sandy-set --dry
+   node tools/art-install.mjs --target D:/pyrefly-art-rNN --subject dark-sandy --from D:/work/dark-sandy-set
+   node tools/art-install.mjs --target D:/pyrefly-art-rNN --plan plan.json        # { "items": [ { "subject", "from", "poses"? } ] }
+   node tools/art-install.mjs --target D:/pyrefly-art-rNN --subject dark-sandy --from NEWSET --replace --backup D:/work/replaced
+   ```
+   It refuses before it writes (a destination that exists unless `--replace --backup`; a sidecar the game would not read; a painting that does not decode with an
+   alpha channel; a subject with no idle), copies each file under a temporary name, renames it into place and compares sha256; then runs
+   `measure.py measure <subjects> --write` (with `PYREFLY_ART_DIR` set to the target), `measure.py table` (whose last step, `tools/posescale/pose-stamp.mjs`, writes each painting's `status`,
+   `class`, `stature`, `headReal`, `lengthRatio`, `iou` and `sha` into the tables from the pixels), and `node tools/pose-gate.mjs --check --art <target> --subjects <subjects>`.
+5. **Read the gate's lines.** Exit 0 means installed, registered and gated. Exit 1 means the paintings are in the target and are **not shippable**:
+   `unregistered` / `no-status` (run it again with `--register`), `stale-sha` (the file changed since it was measured: measure it again), `stale-reading` (the row says a
+   number the pixels do not give: the second, independent reading; the five Lady Luck rows said 0.85 and drew at 0.49), `out-of-band` / `blocked` (stature or head
+   out of its band: repaint it, or hold it with an `overrides.json` `stature` that records the head's real cost, as r50.1 did, or ask Bailey for a waiver).
+   Also refused, because a stature read off the alpha box alone let them through: `empty` (nothing opaque), `mass-low` / `mass-high` (not the idle's size), `no-stance`,
+   `no-overlap` with the idle, `props-only` (a small figure holding a full-height pole), `slab` (a plain rectangle: an all-black render given an alpha channel), `head-off` (the head box is not on a head; where the table registers one),
+   `no-head` (the idle has a face box and the pose has none), `held-head` (a hold's ratio is not its scale over the ruler's reading) and `wide-pose` (wider than 1.15 times
+   its height, so the engine lays it down, unless the idle is wide too). `hires-size` / `hires-differs` mean a `@2x` to `@4x` master does not match its 1x painting:
+   `--replace` moves them aside with the old file, and `node tools/hires-install.mjs` makes new ones.
+   A `feetRow` more than 2 percent of the painting's height above its alpha baseline is refused by `measure.py` (it planted five Lady Luck figures at the knees): a weapon's point, a tail or a staff
+   foot that really hangs below the boots is marked by eye in `tools/posescale/overrides.json` (`feetRowKept` `{by, why}`, or a hand `stance`).
+6. **A waiver is a row in `docs/target/pose-waivers.json`**, one per (subject, pose, painting sha256), with the reason, **Bailey's own words, quoted**, and the decision
+   that records them (`{ "subject", "pose", "sha", "reason", "words": "Bailey, <date>: \"...\"", "source": "D-nnn", "date" }`): the gate checks the quotation occurs verbatim
+   in that decision's `words` in `docs/target/decisions.json`, so the decision goes into the ledgers first. Then run `measure.py table`: the table's `waived` status is generated from the
+   ledger, never typed (a `waived` in a table with no ledger row behind it fails). The ratchet: a row without `legacy` whose words are not his fails the gate; the
+   `legacy` rows (written once by `node tools/pose-gate.mjs --write-legacy`: every pose out of band on the r50.1 art, "awaiting the ruler pick") may only be removed
+   (the seal that lists them is pinned in `tools/pose-gate-ledger.mjs`, and `--base <ref>` compares with the ledger that is live; a ref git cannot read fails);
+   a re-installed painting has a new sha and loses its waiver.
+7. **Commit what the install changed** (`docs/target/pose-measure.json`, `src/data/art/poseRegistration*.ts`, the ledger if it moved), then `npm run art:manifest`.
+
+**Where the gate runs** (`tools/pose-gate.mjs --check`; the same function, `tools/pose-gate-lib.mjs`): at the end of every install (above); in `npm test`
+(`tests/unit/tools/pose-gate-art.test.ts`, unskipped when `public/art` holds the characters; the ledger and table checks run without art); and in the
+`npm run deploy` preflight, twice: on `public/art` before the build, and on the art list of `dist-release` after it (a character painting in the build that the
+gate never read from a master is refused). `--skip-tests` and `--owner-override` do not reach it: a ledger row with Bailey's quoted words is the only way through.
+`node tools/pose-gate.mjs --report [--out F]` prints the census (totals by class and game, the out-of-band list, what is report-only) that the critic's static check
+and the artifact record keep.
 
 ---
 

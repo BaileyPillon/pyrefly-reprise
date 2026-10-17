@@ -26,6 +26,8 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 | One test file | `npx vitest run tests/unit/<file>.test.ts` |
 | Full unit suite (110 files) | `npm test` |
 | Modules nothing imports | `node tools/orphans.mjs` |
+| Does every character painting have a pose record or a waiver (hard rule 16)? About a minute for the r50 art | `node tools/pose-gate.mjs --check` (`--report` = the census as JSON) |
+| Install character paintings: the only path (hard rule 16) | `node tools/art-install.mjs --target <art folder> --subject <id> --from <set> [--dry]` |
 | Dev server | `npm run dev` (5173; if taken: `npx vite --port 5190`) |
 | Production build to the shared `dist/` | `npm run build` |
 | Screenshot | `npm run screenshot -- --url=http://localhost:5173/ --out=docs/screenshots/<name>.png` |
@@ -52,7 +54,7 @@ debug API that plays a chapter to an outcome from the console) is in
 | `src/app/screens` | Title, chapter select, party prep, pause, results | |
 | `src/story` | Cutscene DSL and scripts | `research/writing-bible.md` |
 | `src/audio`, `public/audio`, `tools/audio` | Prerendered sampled music + SFX, synth fallback | [AUDIO-GUIDE](docs/AUDIO-GUIDE.md), [THEMES](docs/audio/THEMES.md) |
-| `public/art/` | Painted PNGs, the approved masters. **Gitignored on main**, local only, backed up to `D:\Tools\pyrefly-art-backup`. A production build ships a lossless WebP derived from each one that every decoder draws the same from it (the default `exact`: opaque art, and art whose alpha is only 0 and 255 with no colour left under alpha 0; every other master, the 2x ones included, ships as a PNG recompressed at maximum effort with its pixels proved identical) (`tools/art-derive-lib.mjs`, `src/engine/ArtShipped.ts`; masters, hashes and dev are unchanged): build art URLs with `artUrl`, read them back with `logicalArtUrl` | [r38-bytes](docs/handoff/r38-bytes.md) |
+| `public/art/` | Painted PNGs, the approved masters (character paintings go in only through `tools/art-install.mjs`, rule 16). **Gitignored on main**, local only, backed up to `D:\Tools\pyrefly-art-backup`. A production build ships a lossless WebP derived from each one that every decoder draws the same from it (the default `exact`: opaque art, and art whose alpha is only 0 and 255 with no colour left under alpha 0; every other master, the 2x ones included, ships as a PNG recompressed at maximum effort with its pixels proved identical) (`tools/art-derive-lib.mjs`, `src/engine/ArtShipped.ts`; masters, hashes and dev are unchanged): build art URLs with `artUrl`, read them back with `logicalArtUrl` | [r38-bytes](docs/handoff/r38-bytes.md) |
 | `critic/` | `RUBRIC.md` (policy v2: verdicts, schedule, one score, gates), `policy.json` (the same rules as data, enforced by `tools/critic-*.mjs`), `CHECKS.md` (CHK-001 to CHK-024, B1 to B4), `runner/` (the review workflows), `pending/` `cleared/` `reviews/` `rounds/` `artifacts/` `ledger.json` (obligations and evidence) | `RUBRIC.md` §4 and §10 before any release |
 | `docs/handoff/<track>.md` | One file per finished or in-flight track | the one for your area |
 | `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (draft until Bailey approves it) | before proposing or planning anything |
@@ -117,6 +119,22 @@ debug API that plays a chapter to an outcome from the console) is in
     preflight (`docs/plans/<track>-review.md`) before it is built. When Bailey reacts to
     options, record liked / disliked / must remain / must change / undecided in the
     tile's `reaction`, and keep your own guesses under `inferred`: ask before building one.
+16. **No painting ships without a pose record or a waiver (Bailey, 2026-10-16: "pose continuity is the strongest recurring
+    issue we need a permanent fix for this please.").** A character painting under `public/art/characters/` ships only with a
+    fresh row in `src/data/art/poseRegistration*.ts` (`status` `ok` or `held`, with the painting's `sha`, written by the install)
+    or a waiver row in `docs/target/pose-waivers.json` that carries **Bailey's own quoted words** and names the decision that
+    records them (`"source": "D-nnn"`; the gate checks the quotation occurs verbatim in that decision's `words`, so record his
+    decision in the ledgers first). A legacy row may only be removed (the seal is pinned in `tools/pose-gate-ledger.mjs`); a
+    re-installed painting loses its waiver; a table's `waived` is generated from the ledger, never typed.
+    **`tools/art-install.mjs` is the install path for character paintings**: it refuses a folder whose files are hard links (the
+    live art and its mirrors share their bytes), copies the set, runs `measure.py measure` and `table`, then `tools/pose-gate.mjs
+    --check`. `tools/hires-install.mjs` (the `@2x` to `@4x` masters) and `tools/gui-art-install.mjs` end in the same gate for the
+    subjects they touch, and `tools/exp-install.mjs` restamps the hidden chapter's tables; nothing else may write a character
+    painting into the tree. The gate also runs in `npm test` and twice in the `npm run deploy` preflight (on `public/art` before
+    the build, on the built art list after it, which also proves each master is the one the gate read), and
+    neither `--skip-tests` nor `--owner-override` covers it. Bands and the one pose model:
+    `tools/posescale/pose-bands.mjs`, `pose-model.mjs`; steps: [docs/ART-PIPELINE.md](docs/ART-PIPELINE.md) section 5;
+    plan: [pose-continuity-review](docs/plans/pose-continuity-review.md).
 
 ## Shared working tree
 
