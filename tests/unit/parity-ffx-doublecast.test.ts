@@ -270,6 +270,7 @@ describe('brackets, targets, bad picks and which shape wins', () => {
     expect(order).toEqual(['action-start', 'action-end', 'action-start', 'action-end']);
     const same = run([lulu(200), boss()], two('fire', ['boss'], 'fire', ['boss']));
     expect(same.events.filter((e) => e['type'] === 'action-start').length).toBe(1);
+    expect(same.events.filter((e) => e['type'] === 'action-start').map((e) => e['targets'])).toEqual([['boss']]); // announced once, not twice
   });
 
   it('a second cast that cannot start opens no bracket of its own', () => {
@@ -283,6 +284,8 @@ describe('brackets, targets, bad picks and which shape wins', () => {
     expect(hits.indexOf('boss')).toBeLessThan(hits.indexOf('e2'));
     expect(new Set(hits)).toEqual(new Set(['boss', 'e2']));
     expect(hits.slice(0, hits.indexOf('e2')).every((t) => t === 'boss')).toBe(true);
+    // Each bracket announces its own cast's target.
+    expect(events.filter((e) => e['type'] === 'action-start').map((e) => e['targets'])).toEqual([['boss'], ['e2']]);
   });
 
   it('a foe the first cast killed is not hit again, and the second cast (a different spell at the same foe) pays nothing', () => {
@@ -296,6 +299,10 @@ describe('brackets, targets, bad picks and which shape wins', () => {
     const r = reading(fell.events);
     expect(r.pays.length).toBe(2);
     expect(r.pays[1]).toBe(4); // the second pick was a real spell and keeps its own cost
+    // Black Magic the caster has not learned is a bad pick too (Flare is real Black Magic, but Lulu here has only the twelve).
+    const unlearned = run([lulu(200), boss()], two('flare', ['boss'], 'fire', ['boss']));
+    expect(reading(unlearned.events).pays[0]).not.toBe(ABILITIES['flare']!.mpCost);
+    expect(reading(unlearned.events).pays[1]).toBe(4);
     const none = run([lulu(3), boss()], two('cure', ['boss'], 'cure', ['boss']));
     expect(reading(none.events).pays).toEqual([]);
     expect(none.events.some((e) => e['type'] === 'message' && String(e['text']).includes('no spell to double'))).toBe(true);
