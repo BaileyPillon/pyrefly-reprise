@@ -17,11 +17,7 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
   bossIds: ['dark-cindy', 'dark-sandy', 'dark-mindy', 'dark-yojimbo'],
   blocks: [
     { t: 'head', at: ['dark-cindy', 'dark-sandy', 'dark-mindy'], title: 'Dark Magus Sisters', tag: 'Boss Battle' },
-    {
-      t: 'field',
-      label: 'In Game Description',
-      value: "Cindy, Sandy and Mindy, called up by Yevon in the wrong colours: Yuna's own aeons, turned against her.",
-    },
+    // No "In Game Description" line here (FOC501-03): the card used to quote one that named Cindy, a sentence of ours that the game never printed, and no file or guide in hand gives the Dark Aeons' own text. Rule 6.
     { t: 'field', label: 'Weaknesses', value: 'None: no element is favoured or resisted. Immune to Sensor.' },
     {
       t: 'p',

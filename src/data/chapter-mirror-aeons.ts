@@ -49,7 +49,8 @@ export const MIRROR_AEONS: Chapter = {
   game: 'ffx',
   number: 27,
   ...MIRROR_AEONS_TEXT,
-  location: 'Mushroom Rock Road, and the Cavern of the Stolen Fayth',
+  // Short enough for the results strip's vertical caption (282 grid px, "MUSHROOM ROCK ROAD, AND THE CAVERN OF …" was cut with an ellipsis: FOC50-03); the pause tab keeps the full name (`chapter-meta-mirror-aeons.ts`).
+  location: 'Mushroom Rock Road and the Cavern',
   sceneKey: MIRROR_AEONS_SCENE,
   thumbnailKey: 'chapter-mirror-aeons',
   buildRef: mirrorAeonsBuild,
