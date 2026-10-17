@@ -8,6 +8,7 @@ import { GameFlow, flowReport, type RunChapterOptions } from './screens/BattleSc
 import type { BattleScreenResult } from './screens/BattleScreen.ts';
 import type { ChapterId } from '../data/encounters.ts';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
+import { frameClockMax } from '../engine/PoseSwap.ts'; // W5: 1/40 s under `?swap=smooth`, 1/20 s as before
 
 export interface AppOptions {
   /** Container for the WebGL canvas. Defaults to #game. */
@@ -50,7 +51,7 @@ export class App {
 
   private readonly stack: Screen[] = [];
   private readonly registry = new Map<string, ScreenFactory>();
-  private readonly maxDelta: number;
+  private maxDelta: number;
   private lastTime = 0;
   private rafId = 0;
   private running = false;
@@ -65,7 +66,7 @@ export class App {
     this.uiRoot =
       opts.uiRoot ?? (document.getElementById('ui') as HTMLElement | null) ?? document.body;
     this.fadeRoot = opts.fadeRoot ?? (document.getElementById('fade') as HTMLElement | null);
-    this.maxDelta = opts.maxDeltaSec ?? 1 / 20;
+    this.maxDelta = opts.maxDeltaSec ?? frameClockMax();
 
     this.renderer = new Renderer({ container: gameRoot, fov: 34 });
     this.input = new Input({ pointerRoot: this.uiRoot });
@@ -251,6 +252,11 @@ export class App {
   /** Resolves after the next completed frame. Used by `__pyrefly.frame()`. */
   nextFrame(): Promise<void> {
     return new Promise((resolve) => this.frameWaiters.push(resolve));
+  }
+
+  /** W5: the longest frame handed to screens, seconds. `window.__pyrefly.swap(...)` sets it with the pose-swap mode (1/40 smooth, 1/20 today). */
+  setMaxDelta(sec: number): void {
+    this.maxDelta = sec;
   }
 
   private readonly tick = (now: number): void => {

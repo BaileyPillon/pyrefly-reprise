@@ -60,6 +60,8 @@ import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.
 import { paceRate } from './pace.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
+import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
+import { figureHolding, notePoseSwap, poseSwapSmooth, swapPolicy } from './PoseSwap.ts'; // W5: `?swap=smooth`, the pair policy and the lunge's first frame
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
 
@@ -295,6 +297,10 @@ interface PlaneSlot {
   subject: string | null;
   /** FA-2 and FA-3 (`KoTip.ts`): the KO fall (and the revive's rise) tips this plane about its feet; `placeSlot` applies it after every placement, so the head lock's per-frame `sizeSlot` keeps it. */
   tip: SlotTip | null;
+  /** W5 (`PoseSwap.ts`): how far this plane drifts toward the meeting point at full weight (world x); 0 outside an aligned dissolve. */
+  meet: number;
+  /** W5: the drift applied now, `meet` times the weight of this plane's fade (`PoseAlign.alignWeight`); `placeSlot` adds it. */
+  align: number;
 }
 
 /** D-510: what every other pose's head is held to: the idle's head box, its sizing and its art subject (`PaintedActor.headRefOf`). */
@@ -465,6 +471,12 @@ export class PaintedActor extends Group {
   private active = 0;
   /** FB-1: the one pose blend this actor owns (`PoseBlend.ts`); it writes both planes' fades on the real clock (`update`'s `realDt`). */
   private readonly blend: PoseBlend;
+  /** W5 (`PoseSwap.ts`): the game holds still at the last frame (a hit-stop, a strike's apex, a figure at rest): a cut may be made now. */
+  private holding = false;
+  private lastOx = 0;
+  private lastOy = 0;
+  /** W5: how the last pose change under `?swap=smooth` was made (`dissolve`, `aligned` or `cut`); read by the tests and the capture. */
+  swapPolicyLast: 'dissolve' | 'aligned' | 'cut' | null = null;
 
   private readonly poses = new Map<string, PaintedTexture>();
   readonly poseUrls: PoseMap = {};
@@ -865,6 +877,8 @@ export class PaintedActor extends Group {
       lock: 1,
       subject: null,
       tip: null,
+      meet: 0,
+      align: 0,
     };
   }
 
@@ -1072,16 +1086,80 @@ export class PaintedActor extends Group {
     }
 
     // FB-1 (`PoseBlend.ts`): the blend is owned, not a loose tween. A request in mid-blend keeps the stronger plane going out and re-points only the weaker.
+    const midBlend = this.blend.blending;
     const plan = this.blend.request(resolved, this.crossfadeMs, from === 0 ? 0 : 1);
     if (plan.same) return; // also a request PoseBlend rule 2 holds (`plan.deferred`): the blend takes it up in `update` once it can without dropping a painting that still shows
-    this.beginBlend(resolved, next, plan);
+    this.beginBlend(resolved, next, plan, midBlend);
   }
 
   /** Point the plane a blend is bringing in at its painting (when it was re-pointed) and make it the active one: the tail of a pose change, whether it began now or was held. */
-  private beginBlend(resolved: string, next: PaintedTexture | undefined, plan: BlendStarted): void {
+  private beginBlend(resolved: string, next: PaintedTexture | undefined, plan: BlendStarted, midBlend = false): void {
     if (!plan.reversed && next) this.applyPose(plan.to, resolved, next);
     this.active = plan.to;
+    if (!plan.reversed && poseSwapSmooth()) this.smoothSwap(plan.to, midBlend); // W5: a cut where the game holds still, else the heads drift together
     this.syncOpacity();
+  }
+
+  /**
+   * W5 (`PoseSwap.ts`, `?swap=smooth`; both games): decide how the pair of paintings that has just been put on the two planes changes places. The incoming plane `to` is placed
+   * and head-locked and shows nothing yet. A `cut` makes the change in this one step (never two paintings at once); `aligned` gives each plane the shift that brings its
+   * anchor to the meeting point (applied per frame from the fades, `alignPlanes`); `dissolve` leaves today's plain cross-fade.
+   * @param midBlend another blend was running when the request came: two paintings are on screen already, a cut would drop both.
+   */
+  private smoothSwap(to: 0 | 1, midBlend: boolean): void {
+    if (this.poseShiftPx || this.crossfadeMs <= 0) return;
+    const inn = this.slots[to]!;
+    const out = this.slots[to === 0 ? 1 : 0]!;
+    const fi = this.footprintOf(inn);
+    const fo = this.footprintOf(out);
+    const ai = planeAnchor(fi);
+    const ao = planeAnchor(fo);
+    const m = ai && ao ? meetingOffsets(ao, ai) : null;
+    const policy = swapPolicy({
+      overlap: footprintOverlap(fo, fi),
+      anchorDistance: m ? m.distance / Math.max(1e-6, this.worldHeight) : null,
+      hold: this.holding,
+      blending: midBlend,
+    });
+    if (policy === 'cut') {
+      this.blend.cancel();
+      inn.fade = 1;
+      out.fade = 0;
+    } else if (policy === 'aligned' && m) {
+      out.meet = m.out;
+      inn.meet = m.inn;
+      this.alignPlanes();
+    }
+    this.swapPolicyLast = policy;
+    notePoseSwap(policy, [ao?.source ?? null, ai?.source ?? null]);
+  }
+
+  /** One plane as the aligned dissolve sees it: its unit square in the actor's frame without the drift it carries now, and its silhouette. A plane laid on the floor is not read. */
+  private footprintOf(slot: PlaneSlot): Footprint {
+    const s = slot.mesh.scale;
+    const usable = !slot.scale.prone && !slot.tip && slot.mesh.rotation.z === 0;
+    return {
+      cx: slot.mesh.position.x - slot.align,
+      cy: slot.mesh.position.y,
+      width: Math.abs(s.x),
+      height: Math.abs(s.y),
+      mirror: s.x < 0 ? -1 : 1,
+      mask: usable ? slot.meta.silhouette ?? null : null,
+      head: slot.meta.head ?? null,
+    };
+  }
+
+  /** W5: write each plane's drift for this frame: its full shift times the weight of its fade while a blend runs, none otherwise (and the shift is forgotten once the blend is over). */
+  private alignPlanes(): void {
+    const running = this.blend.blending;
+    for (const slot of this.slots) {
+      if (!running) slot.meet = 0;
+      const want = slot.meet * alignWeight(slot.fade);
+      if (want !== slot.align) {
+        slot.align = want;
+        this.placeSlot(slot);
+      }
+    }
   }
 
   /**
@@ -1151,6 +1229,8 @@ export class PaintedActor extends Group {
     });
     slot.base = scale;
     slot.lock = 1;
+    slot.meet = 0; // W5: a plane given a new painting carries no drift from the old pair
+    slot.align = 0;
     slot.subject = subjectOfPainting(tex.url);
 
     // The plane itself never rotates — mirroring is a negative scale.x, and the
@@ -1357,9 +1437,10 @@ export class PaintedActor extends Group {
    */
   lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }, house = distance): Promise<void> {
     const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
+    const houseStep = poseSwapSmooth() ? reachOffset : attackOffset; // W5 (`?swap=smooth`): the house part's step starts on the velocity-continuous curve, not cubic-out's 28 percent first frame; same distance, same beats
     const extra = Math.max(0, distance - house); // the distance beyond the house lunge rides the eased step (`reachOffset`); the house part is `attackOffset` to the frame
     const leg = (a: number, b: number, d: number): Promise<void> => this.tweens.toAsync(a, b, { durationMs: Math.max(1, d), easing: 'linear',
-      onUpdate: (t) => void (this.lungeOffset = (distance - extra) * attackOffset(t) + extra * reachOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
+      onUpdate: (t) => void (this.lungeOffset = (distance - extra) * houseStep(t) + extra * reachOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
     // VP-1001-06 (`ContactBeat.ts`): with a contact, the strike holds at its apex until the blow lands.
     const run = contact ? leg(0, ATTACK_IMPACT, ms * ATTACK_IMPACT).then(() => (contact.reached(), contact.hold)).then(() => leg(ATTACK_IMPACT, 1, ms * (1 - ATTACK_IMPACT))) : leg(0, 1, ms);
     return run.then(() => void (this.lungeOffset = 0));
@@ -2008,6 +2089,7 @@ export class PaintedActor extends Group {
     const dx = this.poseShiftPx?.[slot.pose];
     if (dx) slot.mesh.position.x += dx * slot.scale.unitsPerPixel * (slot.mesh.scale.x < 0 ? -1 : 1);
     slot.mesh.position.x += this.registrationShift(slot);
+    slot.mesh.position.x += slot.align; // W5: the aligned dissolve's drift (0 outside one)
     if (slot.tip) placeTipped(slot.mesh, slot.tip, slot.meta, slot.scale); // FA-2: the KO's topple, on top of the placement above
   }
 
@@ -2180,7 +2262,8 @@ export class PaintedActor extends Group {
     this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`): one-shot moves only, never the idle
     if (this.blend.advance(realDt * 1000)) this.syncOpacity(); // FB-1: the pose blend, on the real clock
     const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
-    if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan);
+    if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan, true);
+    if (poseSwapSmooth()) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
@@ -2236,6 +2319,9 @@ export class PaintedActor extends Group {
     const [lieDx, lieLift, lieDz] = this.lieOffset(lie);
     ox += lieDx;
     oy += lieLift;
+    this.holding = figureHolding(dt, realDt, Math.hypot(ox - this.lastOx, oy - this.lastOy)); // W5: the game holds still now (read by the next pose change)
+    this.lastOx = ox;
+    this.lastOy = oy;
     this.inner.position.set(ox, oy, lieDz);
     // Sway is a standing figure's weight shifting; on a body lying down it only
     // wobbles the painting and shows the corners of the PNG's rectangle.
