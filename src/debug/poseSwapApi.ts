@@ -5,7 +5,7 @@
  * pose from now on, the lunges that start from now on, and the frame clock's clamp (1/40 s or 1/20 s). A page normally just takes `?swap=smooth` in its address.
  */
 import type { App } from '../app/App.ts';
-import { frameClockMax, poseSwapMode, poseSwapStats, resetPoseSwapStats, setPoseSwapMode, type PoseSwapMode, type PoseSwapStats } from '../engine/PoseSwap.ts';
+import { frameClockMax, poseSwapLog, poseSwapMode, poseSwapStats, resetPoseSwapStats, setPoseSwapMode, type PoseSwapMode, type PoseSwapRecord, type PoseSwapStats } from '../engine/PoseSwap.ts';
 
 export function installPoseSwapDebug(api: Record<string, unknown>, app: Pick<App, 'setMaxDelta'>): void {
   api['swap'] = (mode?: PoseSwapMode): PoseSwapMode => {
@@ -17,7 +17,11 @@ export function installPoseSwapDebug(api: Record<string, unknown>, app: Pick<App
   };
   api['swapStats'] = (reset = false): PoseSwapStats => {
     const now = poseSwapStats();
-    if (reset) resetPoseSwapStats();
+    if (reset) {
+      resetPoseSwapStats();
+      poseSwapLog(true);
+    }
     return now;
   };
+  api['swapLog'] = (reset = false): PoseSwapRecord[] => poseSwapLog(reset);
 }

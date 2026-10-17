@@ -16,7 +16,7 @@ import { PaintedActor, cameraAt, painting, reset, slotOf, slotsOf, viewOf, type 
 import { setPace, setPaceGame } from '../../../src/engine/pace.ts';
 import { coarseMask } from '../../../src/engine/PoseAlign.ts';
 import { ATTACK_IMPACT } from '../../../src/engine/BattlePresenterActors.ts';
-import { setPoseSwapMode } from '../../../src/engine/PoseSwap.ts';
+import { setPoseSwapMode, setPoseSwapParts } from '../../../src/engine/PoseSwap.ts';
 
 const FRAME = 1 / 60;
 const cam = cameraAt(3);
@@ -28,6 +28,7 @@ beforeEach(() => {
 afterEach(() => {
   reset();
   setPoseSwapMode(null);
+  setPoseSwapParts(null);
   setPaceGame('other');
 });
 
@@ -181,8 +182,11 @@ describe('the aligned dissolve (smooth)', () => {
   });
 });
 
-describe('the held-frame cut (smooth)', () => {
-  beforeEach(() => setPoseSwapMode('smooth'));
+describe('the held-frame cut (smooth; the mechanics, on the cutany ablation: a cut at any head distance, the first version)', () => {
+  beforeEach(() => {
+    setPoseSwapMode('smooth');
+    setPoseSwapParts(['cutany', 'align']);
+  });
 
   /** Two paintings that barely overlap: idle's body is narrow, and so is the pose it changes to, whose head sits far to one side. */
   const NARROW = { idle: 0.05, hurt: 0.05, follow: 0.05, attack: 0.05, ready: 0.05 };
@@ -236,6 +240,28 @@ describe('the held-frame cut (smooth)', () => {
       expect(live(b).length).toBeLessThanOrEqual(2);
     }
     expect(policyOf(b)).not.toBe('cut');
+  });
+});
+
+describe('the cut and the distance between the heads (smooth, the default parts)', () => {
+  beforeEach(() => setPoseSwapMode('smooth'));
+
+  it('a pair under 0.30 whose heads are far apart is not cut (a cut would jump the head the whole distance in one frame): the aligned dissolve', () => {
+    const a = tidus(['idle', 'hurt'], { idle: 0.05, hurt: 0.05 });
+    for (let f = 0; f < 5; f++) step(a);
+    a.setPose('hurt');
+    expect(policyOf(a)).toBe('aligned');
+    expect(a.blending).toBe(true);
+  });
+
+  it('a pair under 0.30 whose heads are close is cut in one frame at a figure that holds still', () => {
+    const a = tidus(['idle', 'cast'], { idle: 0.012, cast: 0.012 });
+    for (let f = 0; f < 5; f++) step(a);
+    a.setPose('cast');
+    expect(policyOf(a)).toBe('cut');
+    expect(slotFade(a, 'cast')).toBe(1);
+    expect(slotFade(a, 'idle')).toBe(0);
+    expect(a.blending).toBe(false);
   });
 });
 

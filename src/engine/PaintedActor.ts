@@ -61,7 +61,7 @@ import { paceRate } from './pace.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
-import { figureHolding, notePoseSwap, poseSwapSmooth, swapPolicy } from './PoseSwap.ts'; // W5: `?swap=smooth`, the pair policy and the lunge's first frame
+import { figureHolding, notePoseSwap, poseSwapPart, swapPolicy } from './PoseSwap.ts'; // W5: `?swap=smooth`, the pair policy and the lunge's first frame
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
 
@@ -1096,7 +1096,7 @@ export class PaintedActor extends Group {
   private beginBlend(resolved: string, next: PaintedTexture | undefined, plan: BlendStarted, midBlend = false): void {
     if (!plan.reversed && next) this.applyPose(plan.to, resolved, next);
     this.active = plan.to;
-    if (!plan.reversed && poseSwapSmooth()) this.smoothSwap(plan.to, midBlend); // W5: a cut where the game holds still, else the heads drift together
+    if (!plan.reversed && (poseSwapPart('align') || poseSwapPart('cut') || poseSwapPart('cutany'))) this.smoothSwap(plan.to, midBlend); // W5: a cut where the game holds still, else the heads drift together
     this.syncOpacity();
   }
 
@@ -1115,12 +1115,13 @@ export class PaintedActor extends Group {
     const ai = planeAnchor(fi);
     const ao = planeAnchor(fo);
     const m = ai && ao ? meetingOffsets(ao, ai) : null;
-    const policy = swapPolicy({
+    const facts = {
       overlap: footprintOverlap(fo, fi),
       anchorDistance: m ? m.distance / Math.max(1e-6, this.worldHeight) : null,
       hold: this.holding,
       blending: midBlend,
-    });
+    };
+    const policy = swapPolicy(facts, { align: poseSwapPart('align'), cut: poseSwapPart('cut') || poseSwapPart('cutany'), cutMaxDistance: poseSwapPart('cutany') ? Infinity : undefined });
     if (policy === 'cut') {
       this.blend.cancel();
       inn.fade = 1;
@@ -1131,7 +1132,7 @@ export class PaintedActor extends Group {
       this.alignPlanes();
     }
     this.swapPolicyLast = policy;
-    notePoseSwap(policy, [ao?.source ?? null, ai?.source ?? null]);
+    notePoseSwap(policy, [ao?.source ?? null, ai?.source ?? null], { actor: this.name, from: out.pose, to: inn.pose, overlap: facts.overlap, distance: facts.anchorDistance, hold: facts.hold, blending: facts.blending });
   }
 
   /** One plane as the aligned dissolve sees it: its unit square in the actor's frame without the drift it carries now, and its silhouette. A plane laid on the floor is not read. */
@@ -1437,7 +1438,7 @@ export class PaintedActor extends Group {
    */
   lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }, house = distance): Promise<void> {
     const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
-    const houseStep = poseSwapSmooth() ? reachOffset : attackOffset; // W5 (`?swap=smooth`): the house part's step starts on the velocity-continuous curve, not cubic-out's 28 percent first frame; same distance, same beats
+    const houseStep = poseSwapPart('lunge') ? reachOffset : attackOffset; // W5 (`?swap=smooth`): the house part's step starts on the velocity-continuous curve, not cubic-out's 28 percent first frame; same distance, same beats
     const extra = Math.max(0, distance - house); // the distance beyond the house lunge rides the eased step (`reachOffset`); the house part is `attackOffset` to the frame
     const leg = (a: number, b: number, d: number): Promise<void> => this.tweens.toAsync(a, b, { durationMs: Math.max(1, d), easing: 'linear',
       onUpdate: (t) => void (this.lungeOffset = (distance - extra) * houseStep(t) + extra * reachOffset(t) + from * Math.max(0, 1 - t / 0.26)) });
@@ -2263,7 +2264,7 @@ export class PaintedActor extends Group {
     if (this.blend.advance(realDt * 1000)) this.syncOpacity(); // FB-1: the pose blend, on the real clock
     const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
     if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan, true);
-    if (poseSwapSmooth()) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
+    if (poseSwapPart('align')) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 

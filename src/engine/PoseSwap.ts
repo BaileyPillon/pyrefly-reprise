@@ -44,6 +44,35 @@ export function setPoseSwapMode(value: PoseSwapMode | null): void {
 /** True when the four changes are on. */
 export const poseSwapSmooth = (): boolean => poseSwapMode() === 'smooth';
 
+/** The four changes, by name: `align` (the aligned dissolve), `cut` (the held-frame cut), `lunge` (the first frame) and `clock` (the 1/40 s clamp). */
+export type PoseSwapPart = 'align' | 'cut' | 'lunge' | 'clock' | 'cutany';
+const ALL_PARTS: readonly PoseSwapPart[] = ['align', 'cut', 'lunge', 'clock', 'cutany'];
+/** What `smooth` means without `?swapparts=`. `cutany` (the cut with no limit on how far the heads are apart: the first version, measured and kept as an ablation) is not in it. */
+const DEFAULT_PARTS: readonly PoseSwapPart[] = ['align', 'cut', 'lunge', 'clock'];
+
+let parts: ReadonlySet<PoseSwapPart> | null = null;
+
+/**
+ * `?swapparts=lunge,clock` (captures and ablations only): under `smooth`, only the named changes run. Without it all four do, which is what `smooth` means; the parameter
+ * exists so a measurement can say which of the four moves which reading. Read once.
+ */
+function swapParts(): ReadonlySet<PoseSwapPart> {
+  if (parts === null) {
+    const value = new URLSearchParams(globalThis.location?.search ?? '').get('swapparts');
+    const named = value === null ? DEFAULT_PARTS : (value.split(',').map((x) => x.trim()).filter((x): x is PoseSwapPart => (ALL_PARTS as readonly string[]).includes(x)));
+    parts = new Set(named);
+  }
+  return parts;
+}
+
+/** Tests: force the parts (`null` reads the address again). */
+export function setPoseSwapParts(value: readonly PoseSwapPart[] | null): void {
+  parts = value === null ? null : new Set(value);
+}
+
+/** True when `smooth` is on and this one of its four changes is in it. */
+export const poseSwapPart = (p: PoseSwapPart): boolean => poseSwapMode() === 'smooth' && swapParts().has(p);
+
 // ------------------------------------------------------------------ the frame clock (change 4)
 
 /** The longest frame the animation clock advances today: 50 ms (3 frames at 60 Hz) in one drawn frame. */
@@ -53,7 +82,7 @@ export const MAX_DELTA_SMOOTH = 1 / 40;
 
 /** The per-frame clamp of `App.tick` for a mode (the current one by default). */
 export function frameClockMax(m: PoseSwapMode = poseSwapMode()): number {
-  return m === 'smooth' ? MAX_DELTA_SMOOTH : MAX_DELTA_TODAY;
+  return m === 'smooth' && swapParts().has('clock') ? MAX_DELTA_SMOOTH : MAX_DELTA_TODAY;
 }
 
 // ------------------------------------------------------------------ the pair policy (changes 1 and 2)
@@ -72,6 +101,15 @@ export const ALIGN_MIN_OVERLAP = 0.3;
  */
 export const ALIGN_MIN_DISTANCE = 0.1;
 
+/**
+ * A cut moves the head the whole distance between the two paintings' anchors in ONE frame, where a dissolve spreads it over seven (the fade-weighted head moves 0.26 of
+ * the distance in its steepest frame). So a cut is a jump of that many pixels, and the continuity harness (CHK-027) reads it as a jerk at the swap, over its 24 px line
+ * when the heads are 0.07 of the figure's height apart (23 px of a 330 px figure) and over the 40 px failing line at 0.12. The first version cut at any distance and read
+ * 37 swap jerks of 40 px or more in 180 s of Sinspawn Gui against today's 19 (the pairs: Tidus attack to follow 118 px, ready to attack 81 px). A cut is therefore made only
+ * where the heads are this close (as a share of the figure's height); a pair that overlaps by under 0.30 with its heads further apart takes the aligned dissolve.
+ */
+export const CUT_MAX_DISTANCE = 0.07;
+
 export type SwapPolicy = 'dissolve' | 'aligned' | 'cut';
 
 /** What the policy needs to know about a pair of paintings changing places. */
@@ -89,17 +127,19 @@ export interface SwapPairFacts {
 /**
  * How a pair of paintings changes places under `smooth`:
  *
- * - `cut`: overlap under {@link ALIGN_MIN_OVERLAP}, the game holds still, and nothing is blending: one step, never two paintings at once;
+ * - `cut`: overlap under {@link ALIGN_MIN_OVERLAP}, the heads no further apart than {@link CUT_MAX_DISTANCE}, the game holds still and nothing is blending: one step, never two paintings at once;
  * - `aligned`: the heads can be brought together (they are {@link ALIGN_MIN_DISTANCE} apart or more) and either the pair overlaps well or no hold is near;
  * - `dissolve`: everything else, the plain dissolve of today (unknown anchors, heads already together).
  *
  * An unknown overlap is never cut (a pair nobody measured is not a pair that reads as two people).
  */
-export function swapPolicy(f: SwapPairFacts): SwapPolicy {
+export function swapPolicy(f: SwapPairFacts, allow: { align: boolean; cut: boolean; cutMaxDistance?: number } = { align: true, cut: true }): SwapPolicy {
   const canAlign = f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance >= ALIGN_MIN_DISTANCE;
   const known = f.overlap !== null && Number.isFinite(f.overlap);
-  if (known && (f.overlap as number) < ALIGN_MIN_OVERLAP && f.hold && !f.blending) return 'cut';
-  return canAlign ? 'aligned' : 'dissolve';
+  const maxStep = allow.cutMaxDistance ?? CUT_MAX_DISTANCE;
+  const stepOk = maxStep === Infinity || (f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance <= maxStep);
+  if (allow.cut && known && (f.overlap as number) < ALIGN_MIN_OVERLAP && f.hold && !f.blending && stepOk) return 'cut';
+  return allow.align && canAlign ? 'aligned' : 'dissolve';
 }
 
 // ------------------------------------------------------------------ what the policy did
@@ -117,8 +157,37 @@ export interface PoseSwapStats {
 
 const stats: PoseSwapStats = { dissolve: 0, aligned: 0, cut: 0, anchorHead: 0, anchorCentroid: 0, anchorNone: 0 };
 
-/** Count one pose change that ran the policy, with the source of each plane's anchor (null: none). */
-export function notePoseSwap(policy: SwapPolicy, sources: readonly (('head' | 'centroid') | null)[]): void {
+/** One pose change that ran the policy: who, which paintings, what the policy saw and what it chose (kept, the last {@link LOG_CAP}, for captures). */
+export interface PoseSwapRecord {
+  actor: string;
+  from: string;
+  to: string;
+  overlap: number | null;
+  distance: number | null;
+  hold: boolean;
+  blending: boolean;
+  policy: SwapPolicy;
+  /** The anchor of the outgoing and of the incoming plane. */
+  anchors: [AnchorKind, AnchorKind];
+}
+export type AnchorKind = 'head' | 'centroid' | null;
+
+const LOG_CAP = 800;
+const log: PoseSwapRecord[] = [];
+
+/** The recorded pose changes, oldest first (a copy); `reset` empties the record. */
+export function poseSwapLog(reset = false): PoseSwapRecord[] {
+  const out = log.slice();
+  if (reset) log.length = 0;
+  return out;
+}
+
+/** Count one pose change that ran the policy, with the source of each plane's anchor (null: none), and record it. */
+export function notePoseSwap(policy: SwapPolicy, sources: readonly (('head' | 'centroid') | null)[], record?: Omit<PoseSwapRecord, 'policy' | 'anchors'>): void {
+  if (record) {
+    if (log.length >= LOG_CAP) log.shift();
+    log.push({ ...record, policy, anchors: [sources[0] ?? null, sources[1] ?? null] });
+  }
   stats[policy]++;
   for (const s of sources) {
     if (s === 'head') stats.anchorHead++;
