@@ -119,7 +119,7 @@ The spells (Drain, Curaga, Reflect, Haste, Flare) are the player-side command-ta
 | Penance m344 and both arms | 5 |
 | the player-side aeon records m288 to m291 | 0 |
 
-(The wiki's "level 6" for Braska's Final Aeon is not what the Steam file holds: the byte is 5.)
+(The file's byte 5 is the wiki's level 6: the wiki counts levels from 1, the file from 0.)
 
 ## 2. Answer 1: the possession-order menu (field event `sins0700`, worker 26)
 
@@ -299,7 +299,7 @@ As percentages: 1 of 64 is 1.56, 2 is 3.13, 4 is 6.25, 8 is 12.5, 14 is 21.9, 20
 | possessed Cindy, Sandy, Mindy | 3 | divisor 4 (2 for answer 2) |
 | **Yu Pagodas (present in every link and in the Yu Yevon fight)** | **4** | decides `L` in every link |
 | Yu Yevon | 4 | |
-| **Braska's Final Aeon** | **5** | the file holds 5, not the wiki's 6; both forms are one record |
+| **Braska's Final Aeon** | **5** | byte 5 (the wiki's level 6); both forms are one record |
 | Dark Aeons (all of them, Dark Yojimbo and the Dark Sisters included) | 4 | `research/re-ffx-dark-aeons.md` |
 | helper actor, Sinscale stand-in (the dog) | 0 | never lower `L` |
 
@@ -326,4 +326,4 @@ As percentages: 1 of 64 is 1.56, 2 is 3.13, 4 is 6.25, 8 is 12.5, 14 is 21.9, 20
 8. **Unmapped values**, kept raw: properties 295, 296, 217 and 238; the row flag bit 0x40000000 on Zanmato and Delta Attack; the two natives that wrap each launch in the event (one sets a worker flag, one a global byte).
 9. **The starting compatibility and the hire answer** of a given save (aeon-side note, open question 1); every table above takes them as inputs.
 10. **The 12-seed check is a reachability check**, with a naive line and the shipped five-aeon chain. It does not measure balance, and it did not play any chain that holds Anima, Yojimbo or the Sisters (none is built in the shipped game).
-11. **The wiki's "level 6" for Braska's Final Aeon** against the file's 5 is a source conflict; the file wins by the house rule (hard rule 6 and the decompile-over-wiki rule of the earlier notes).
+11. **The wiki's "level 6" for Braska's Final Aeon:** the wiki's level 6 equals the file's byte 5 (levels count from 1); no conflict.
