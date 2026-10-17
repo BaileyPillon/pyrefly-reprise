@@ -17,7 +17,7 @@ import { CHAPTERS, CHAPTER_IDS, UNLISTED_CHAPTERS, getChapter } from '../../../s
 import { checkpointAt } from '../../../src/app/screens/BattleChainCheckpoint.ts';
 import { createFFXEngine } from '../../../src/battle/ffx/index.ts';
 import {
-  GROTHIA, ISAARU, LINKS, actor, content, defend, drive, enabledRow, grandSummon, newEngine, nextInput, row, runChain, setupFor, summon,
+  GROTHIA, ISAARU, LINKS, actor, content, drive, enabledRow, grandSummon, newEngine, nextInput, pass, row, runChain, setupFor, summon,
 } from '../helpers/isaaruUnits.ts';
 
 /** The shipped build with some aeons' HP set (0 = KO'd before this link). */
@@ -71,15 +71,17 @@ describe('the mirror lock (I-G2)', () => {
 });
 
 describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX battle, PR-0155)', () => {
-  it("Yuna's Attack, Talk, Scan and Grenade are greyed with the reason; heals, Nul spells, Pray, Summon, Grand Summon and Defend stay open", () => {
+  it("Yuna's Attack, Talk, Scan and Grenade are greyed with the reason; heals, Nul spells, Pray, Summon and Grand Summon stay open; there is no Defend row (RC10)", () => {
     const d = nextInput(newEngine('isaaru-grothia', 4))!;
     for (const [kind, id] of [['attack', undefined], ['trigger', 'talk'], ['ability', 'scan'], ['item', 'grenade']] as const) {
       expect(row(d.commands, kind, id), `${kind}:${id}`).toMatchObject({ enabled: false, disabledReason: ONLY_AN_AEON });
     }
     for (const [kind, id] of [['ability', 'cura'], ['ability', 'nulblaze'], ['ability', 'pray'], ['item', 'hi-potion'], ['item', 'phoenix-down'],
-      ['overdrive', 'grand-summon'], ['summon', 'shiva'], ['defend', undefined]] as const) {
+      ['overdrive', 'grand-summon'], ['summon', 'shiva']] as const) {
       expect(enabledRow(d.commands, kind, id), `${kind}:${id}`).toBeDefined();
     }
+    // The formation script calls setDefendingEnabled(0): the party's Defend control does nothing here (formation-flags.ts, RC10).
+    expect(row(d.commands, 'defend')).toBeUndefined();
   });
 
   it('a submitted Attack from Yuna is refused and the turn stays open; an aeon has no Items row and an item from it is refused', () => {
@@ -110,9 +112,9 @@ describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX ba
     drive(engine, (d) => {
       if (d.actorId === 'yuna') return summon('ixion');
       actor(engine, 'ixion').statuses.nulblaze = { id: 'nulblaze', turnsRemaining: null, ticksRemaining: null, charges: 1, stacks: 0, permanent: false };
-      return defend();
+      return pass(d);
     }, (e) => e.state().log.some((x) => x.type === 'action-start' && x.abilityId === 'grothia-hellfire'));
-    drive(engine, () => defend(), (e) => e.state().log.some((x) => x.type === 'miss' && x.sourceId === GROTHIA));
+    drive(engine, (d) => pass(d), (e) => e.state().log.some((x) => x.type === 'miss' && x.sourceId === GROTHIA));
     const log = engine.state().log;
     const hf = log.findIndex((e) => e.type === 'action-start' && e.abilityId === 'grothia-hellfire');
     const after = log.slice(hf, hf + 4);
@@ -143,7 +145,7 @@ describe('the loss (I-G3, B11 = a, review E11)', () => {
   it("Yuna's KO is a defeat", () => {
     const engine = newEngine('isaaru-grothia', 11);
     actor(engine, 'yuna').hp = 1;
-    drive(engine, () => defend());
+    drive(engine, (d) => pass(d));
     expect(engine.state().result?.outcome).toBe('defeat');
     expect(actor(engine, 'yuna').hp).toBe(0);
   });
@@ -155,11 +157,11 @@ describe('the chain (research §1.2, §4.4)', () => {
     const runs = runChain(12, (link, engine, d) => {
       if (link === 'isaaru-grothia') {
         if (d.actorId === 'yuna') return lost ? summon('ixion') : summon('valefor');
-        if (d.actorId === 'valefor') { lost = true; return defend(); } // no Shield: Hellfire kills him
+        if (d.actorId === 'valefor') { lost = true; return pass(d); } // no Shield: Hellfire kills him
         actor(engine, GROTHIA).hp = 1;
         return { kind: 'attack', targets: [GROTHIA] };
       }
-      return d.actorId === 'yuna' ? summon('ixion') : defend();
+      return d.actorId === 'yuna' ? summon('ixion') : pass(d);
     });
     expect(runs[0]!.outcome).toBe('victory');
     const end1 = runs[0]!.state;

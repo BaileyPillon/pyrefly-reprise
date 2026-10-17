@@ -1,0 +1,807 @@
+{
+ "note": "Which flag calls the formation scripts of our FFX chapters make, and with which constant, in code order; and, for the whole game, which formation files make each flag call (FFX-G06 sections 4.1 and 4.2: the constant argument pushed just before the call). Derived from the install's own formation files by a static scan; no script text. `reset` is the value the battle set-up (FFX.exe VA 0x00781020) writes before the formation script runs; `setters` is how each call stores its argument (emulated, FFX-G06 section 4.2: a byte keeps the low 8 bits, a bit keeps the lowest bit). Regenerate with the lane scratch in D:/Tools/ffx-parity/tmp/ffx-formation-flags (extract-writes.mjs, make-fixture.mjs); not part of the build.",
+ "reset": {
+  "setDefendingEnabled": 1,
+  "btlSetCounterFlag": 1,
+  "btlSetAnimaChainOff": 0,
+  "btlSetRandPosFlag": 0
+ },
+ "setters": {
+  "setDefendingEnabled": "byte",
+  "btlSetCounterFlag": "byte",
+  "btlSetAnimaChainOff": "bit",
+  "btlSetRandPosFlag": "bit"
+ },
+ "corpus": {
+  "setDefendingEnabled": {
+   "0": {
+    "files": 23,
+    "calls": 24,
+    "names": [
+     "bjyt04_01",
+     "bsil05_50",
+     "bsil05_51",
+     "bsil07_50",
+     "bsil07_51",
+     "bvyt09_10",
+     "bvyt09_11",
+     "bvyt09_12",
+     "genk00_40",
+     "genk16_50",
+     "klyt00_50",
+     "lmyt01_00",
+     "lmyt01_01",
+     "lmyt01_02",
+     "lmyt01_03",
+     "lmyt01_04",
+     "lmyt01_05",
+     "lmyt01_06",
+     "lmyt01_07",
+     "mihn00_50",
+     "mihn00_60",
+     "nagi00_40",
+     "znkd08_01"
+    ]
+   },
+   "1": {
+    "files": 7,
+    "calls": 15,
+    "names": [
+     "bjyt04_01",
+     "bsil05_50",
+     "bsil05_51",
+     "bsil07_51",
+     "genk16_50",
+     "klyt00_50",
+     "znkd08_01"
+    ]
+   }
+  },
+  "btlSetEscape": {
+   "2": {
+    "files": 8,
+    "calls": 8,
+    "names": [
+     "bvyt09_00",
+     "bvyt09_01",
+     "bvyt09_02",
+     "bvyt09_03",
+     "bvyt09_04",
+     "bvyt09_05",
+     "bvyt09_06",
+     "klyt00_00"
+    ]
+   }
+  },
+  "btlSetAnimaChainOff": {
+   "1": {
+    "files": 31,
+    "calls": 33,
+    "names": [
+     "genk00_00",
+     "genk00_01",
+     "genk00_02",
+     "genk00_03",
+     "genk00_04",
+     "genk00_05",
+     "hiku02_00",
+     "hiku02_01",
+     "hiku02_02",
+     "hiku15_70",
+     "kino04_24",
+     "mcyt06_00",
+     "nagi04_00",
+     "nagi04_01",
+     "nagi04_02",
+     "omeg01_10",
+     "sins03_00",
+     "sins06_00",
+     "sins07_00",
+     "sins07_01",
+     "sins07_02",
+     "sins07_03",
+     "sins07_04",
+     "sins07_05",
+     "sins07_06",
+     "sins07_07",
+     "sins07_10",
+     "ssbt00_00",
+     "ssbt01_00",
+     "ssbt02_00",
+     "ssbt03_00"
+    ]
+   }
+  },
+  "btlSetCounterFlag": {
+   "0": {
+    "files": 11,
+    "calls": 11,
+    "names": [
+     "genk00_40",
+     "lmyt01_00",
+     "lmyt01_01",
+     "lmyt01_02",
+     "lmyt01_03",
+     "lmyt01_04",
+     "lmyt01_05",
+     "lmyt01_06",
+     "lmyt01_07",
+     "mihn00_60",
+     "nagi00_40"
+    ]
+   }
+  }
+ },
+ "randPosFlagCorpus": {
+  "value0Files": 847,
+  "calls": 847,
+  "otherValues": []
+ },
+ "chapterFormations": {
+  "mtgz02_00": {
+   "chapter": "seymour-flux",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x3575"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x357b"
+    }
+   ]
+  },
+  "mcyt06_00": {
+   "chapter": "seymour-anima-macalania",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x0036"
+    },
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x0800"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x278d"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x2793"
+    }
+   ]
+  },
+  "stbv01_10": {
+   "chapter": "seymour-natus",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x1eda"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x1ee0"
+    }
+   ]
+  },
+  "sins03_00": {
+   "chapter": "seymour-omnis",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0xc18d"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0xc193"
+    },
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0xc1b1"
+    }
+   ]
+  },
+  "hiku15_00": {
+   "chapter": "evrae-airship (and the hidden Fayth chapter)",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0003"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 0,
+     "at": "0x348c"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x3492"
+    }
+   ]
+  },
+  "nagi05_10": {
+   "chapter": "yojimbo-cavern",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x4b46"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x4ba9"
+    }
+   ]
+  },
+  "bvyt09_10": {
+   "chapter": "isaaru-via-purifico link 1",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 0,
+     "at": "0x0003"
+    },
+    {
+     "call": "setDefendingEnabled",
+     "value": 0,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x447d"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x44e0"
+    }
+   ]
+  },
+  "bvyt09_11": {
+   "chapter": "isaaru-via-purifico link 2",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 0,
+     "at": "0x0003"
+    },
+    {
+     "call": "setDefendingEnabled",
+     "value": 0,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x445a"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x44bd"
+    }
+   ]
+  },
+  "bvyt09_12": {
+   "chapter": "isaaru-via-purifico link 3",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 0,
+     "at": "0x0003"
+    },
+    {
+     "call": "setDefendingEnabled",
+     "value": 0,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0491"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x04f4"
+    }
+   ]
+  },
+  "ssbt00_00": {
+   "chapter": "sin-fins-core (a fin)",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x42fc"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x4302"
+    },
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x4320"
+    }
+   ]
+  },
+  "ssbt01_00": {
+   "chapter": "sin-fins-core (a fin)",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x3e2c"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x3e32"
+    },
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x3e50"
+    }
+   ]
+  },
+  "ssbt02_00": {
+   "chapter": "sin-fins-core (Genais and the Core)",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x2bba"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x2bc0"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x2bc6"
+    }
+   ]
+  },
+  "ssbt03_00": {
+   "chapter": "sin-face (Overdrive Sin)",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x2c03"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x2c09"
+    },
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x2c27"
+    }
+   ]
+  },
+  "dome06_00": {
+   "chapter": "yunalesca",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0b21"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0b27"
+    }
+   ]
+  },
+  "sins06_00": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x0066"
+    },
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x053f"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x2fd2"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x2fd8"
+    }
+   ]
+  },
+  "sins07_00": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0995"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x099b"
+    }
+   ]
+  },
+  "sins07_01": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x09a7"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x09ad"
+    }
+   ]
+  },
+  "sins07_02": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0994"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x099a"
+    }
+   ]
+  },
+  "sins07_03": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0994"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x099a"
+    }
+   ]
+  },
+  "sins07_04": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x099b"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x09a1"
+    }
+   ]
+  },
+  "sins07_05": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0970"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0976"
+    }
+   ]
+  },
+  "sins07_06": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0995"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x099b"
+    }
+   ]
+  },
+  "sins07_07": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0aa6"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0aac"
+    }
+   ]
+  },
+  "sins07_10": {
+   "chapter": "braskas-final-aeon / last-summoning",
+   "writes": [
+    {
+     "call": "btlSetAnimaChainOff",
+     "value": 1,
+     "at": "0x004b"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x08a5"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x08ab"
+    }
+   ]
+  },
+  "kino02_00": {
+   "chapter": "sinspawn-gui fight 1",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x2b06"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x2b0c"
+    }
+   ]
+  },
+  "kino03_10": {
+   "chapter": "sinspawn-gui fight 2",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x2299"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x229f"
+    }
+   ]
+  },
+  "mtgz01_10": {
+   "chapter": "biran-yenke",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x05eb"
+    },
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x05f1"
+    }
+   ]
+  },
+  "nagi05_70": {
+   "chapter": "mirror-aeons pool (tier 1, not the shipped pick)",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0ced"
+    }
+   ]
+  },
+  "nagi05_71": {
+   "chapter": "mirror-aeons act II",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c33"
+    }
+   ]
+  },
+  "nagi05_72": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c33"
+    }
+   ]
+  },
+  "nagi05_73": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c33"
+    }
+   ]
+  },
+  "nagi05_74": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "SetAmbushState",
+     "value": 3,
+     "at": "0x0009"
+    },
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c80"
+    }
+   ]
+  },
+  "kino00_70": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0dbb"
+    }
+   ]
+  },
+  "kino01_70": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c92"
+    }
+   ]
+  },
+  "kino01_71": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c7a"
+    }
+   ]
+  },
+  "kino01_72": {
+   "chapter": "mirror-aeons act I",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c68"
+    }
+   ]
+  },
+  "kino05_70": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0c98"
+    }
+   ]
+  },
+  "kino05_71": {
+   "chapter": "mirror-aeons pool",
+   "writes": [
+    {
+     "call": "btlSetRandPosFlag",
+     "value": 0,
+     "at": "0x0e43"
+    }
+   ]
+  }
+ }
+}

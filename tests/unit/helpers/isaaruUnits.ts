@@ -48,6 +48,22 @@ export function newEngine(link: LinkId = 'isaaru-grothia', seed = 1, party?: FFX
 export type Input = Extract<Decision, { kind: 'player-input' }>;
 export const defend = (): Command => ({ kind: 'defend', targets: [] });
 
+/**
+ * A turn that is spent and changes nothing the tests read. The old filler was Defend; the game's formation script for this contest calls
+ * `setDefendingEnabled(0)` (`bvyt09_10` to `_12`; re-parity RC10, `battle/ffx/formation-flags.ts`), so Yuna and every aeon have no Defend and a
+ * submitted one is refused with the turn kept open. Yuna passes by casting Cura on herself (the same filler the "no aeon left" test uses), an aeon
+ * by attacking its foe. `defend()` stays for the one test that proves it is refused.
+ */
+export function pass(d: Input): Command {
+  const cura = d.commands.find((c) => c.enabled && c.command.kind === 'ability' && 'id' in c.command && c.command.id === 'cura');
+  if (d.actorId === 'yuna' && cura) return { ...cura.command, targets: ['yuna'] } as Command;
+  const attack = d.commands.find((c) => c.enabled && c.command.kind === 'attack' && c.validTargets.length > 0);
+  if (attack) return { ...attack.command, targets: [attack.validTargets[0]!] } as Command;
+  const any = d.commands.find((c) => c.enabled && c.validTargets.length > 0);
+  if (!any) throw new Error(`nothing to pass the turn with for ${d.actorId}`);
+  return { ...any.command, targets: [any.validTargets[0]!] } as Command;
+}
+
 /** Drive until `stop` or the end, answering every player turn with `choose`. */
 export function drive(engine: BattleEngine, choose: (d: Input) => Command, stop: (e: BattleEngine) => boolean = () => false, max = 6000): void {
   for (let i = 0; i < max; i++) {

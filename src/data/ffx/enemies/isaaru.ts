@@ -294,6 +294,7 @@ export const isaaruGrothiaGroup: EnemyGroupDef = {
   nextGroupId: ISAARU_PTERYA_GROUP_ID,
   aeonsOnly: true,
   lockedAeons: [{ aeonId: 'ifrit', mirrorOf: GROTHIA_ID }],
+  defendOff: true, // `bvyt09_10`: the formation script calls setDefendingEnabled(0), so the party's Defend control does nothing (`battle/ffx/formation-flags.ts`, RC10)
   // No `musicCues`: the cue (B21, O-6) is not composed; the chapter record's stand-in applies.
 };
 
@@ -306,6 +307,7 @@ export const isaaruPteryaGroup: EnemyGroupDef = {
   nextGroupId: ISAARU_SPATHI_GROUP_ID,
   aeonsOnly: true,
   lockedAeons: [{ aeonId: 'valefor', mirrorOf: PTERYA_ID }],
+  defendOff: true, // `bvyt09_11`: as link 1
 };
 
 /** Link 3: `[isaaru, spathi]`. **Bahamut is locked** [§1.3]. The chain ends here (§4.4). */
@@ -316,6 +318,7 @@ export const isaaruSpathiGroup: EnemyGroupDef = {
   enemies: [isaaru, spathi],
   aeonsOnly: true,
   lockedAeons: [{ aeonId: 'bahamut', mirrorOf: SPATHI_ID }],
+  defendOff: true, // `bvyt09_12`: as link 1
   victoryBonusAp: ISAARU_DUEL_AP, // B13 = a, [single source: GameFAQs]
 };
 

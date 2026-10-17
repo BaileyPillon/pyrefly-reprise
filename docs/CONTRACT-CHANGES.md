@@ -6,6 +6,10 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-17 — `EnemyGroupDef.defendOff`: a formation that switches the party's Defend off (re-parity RC10, FFX ONLY; additive; branch `re-parity-rc10-ffx-formation-flags`)
+
+`src/battle/common/types.ts` gains one optional field on `EnemyGroupDef`: `defendOff?: boolean`. It is the game's formation-script call `setDefendingEnabled(0)` (FFX-G06 section 4.3; the set-up routine writes the flag to 1 before the script runs). Read by `src/battle/ffx/formation-flags.ts` (copied into `state.flags['formation.defendOff']` at set-up) and by nothing else; absent on every group but Isaaru's three (`isaaru-grothia`, `isaaru-pterya`, `isaaru-spathi`), so no other battle changes. While it is set the FFX command list (`commands.ts`) offers no `defend` row to a party member or an aeon and the executor (`execute.ts`) refuses a submitted `defend`, the turn kept open. One switch, `FORMATION_DEFEND_OFF`, in `formation-flags.ts`: `false` and no group is read. FFX-2 and FF7 read none of it (`ffx2-atb-golden` and `ff7-golden` unchanged). No `AvailableCommand`, `Command`, `BattleEvent` or `BattleState` shape changed. Handoff: `docs/handoff/re-parity-rc10-ffx-formation-flags.md`.
+
 ## 2026-10-17 — Pose continuity, the runtime and the repair after verification: a painting the install never vouched for is not drawn (`PoseMeta.trust`, `PoseBlend` rule 2 holds a re-point), and the gate closes the holes two verifiers found (branch `pose-gate`; plumbing for BOTH games; additive; day one draws as live r50.1 except the subjects that had no record and the five FFX-2 Lady Luck rows)
 
 Bailey, 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please." The runtime lane's half of the entries below (it was not recorded when it landed), and the repair of what the two verifiers found.

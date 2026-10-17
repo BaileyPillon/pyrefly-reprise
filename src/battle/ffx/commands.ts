@@ -14,6 +14,7 @@ import { type AimDef, preferredTargetIds } from '../common/aim.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
 import { applyDuelRows, lockReason, summonLabel } from './aeon-duel.ts';
+import { defendTakenFrom } from './formation-flags.ts';
 import { triggerHandler } from './ai/index.ts';
 import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
@@ -240,7 +241,8 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
   }
 
   const defendDef = abilityOf(ctx, DEFEND_ABILITY_ID);
-  if (defendDef) rows.push(rowFor(ctx, user, defendDef, { kind: 'defend', targets: [] }));
+  // A formation that switched Defend off (Isaaru's aeon contest; `formation-flags.ts`) has no Defend row for the party or an aeon.
+  if (defendDef && !defendTakenFrom(ctx, user)) rows.push(rowFor(ctx, user, defendDef, { kind: 'defend', targets: [] }));
 
   // Switch: the incoming member takes the turn happening right now, so the turn
   // is not consumed by the swap [ffx-combat-core §1.7].

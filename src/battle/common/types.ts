@@ -3151,6 +3151,13 @@ export interface EnemyGroupDef {
    * plan B13 = a]. Absent everywhere else.
    */
   victoryBonusAp?: number;
+  /**
+   * **FFX only, "Defend is off in this formation"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-formation-flags.md`): the game's formation script calls
+   * `setDefendingEnabled(0)` and the party's Defend control (the original's Triangle) does nothing for the whole battle; only Isaaru's three aeon-contest
+   * formations (Chapter XIV) do it among the formations of our chapters. While set, no party or aeon menu offers a `defend` row and a submitted `defend` is refused,
+   * the turn kept open. Read by `battle/ffx/formation-flags.ts` and nothing else; absent everywhere else, so no other battle changes.
+   */
+  defendOff?: boolean;
   /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
   /**

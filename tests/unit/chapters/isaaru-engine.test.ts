@@ -19,7 +19,7 @@ import { highbridgeBuild } from '../../../src/data/ffx/builds/highbridge.ts';
 import { ALL_ABILITIES } from '../../../src/data/ffx/index.ts';
 import { describeAbility } from '../../../src/battle/ffx/intent.ts';
 import {
-  GROTHIA, ISAARU, PTERYA, SPATHI, actor, content, defend, drive, grandSummon, newEngine, nextInput, summon,
+  GROTHIA, ISAARU, PTERYA, SPATHI, actor, content, drive, grandSummon, newEngine, nextInput, pass, summon,
 } from '../helpers/isaaruUnits.ts';
 
 const events = (log: readonly BattleEvent[], type: BattleEvent['type']) => log.filter((e) => e.type === type);
@@ -150,7 +150,7 @@ describe('Grothia (§4.1)', () => {
     expect(actor(engine, GROTHIA).overdrive).toMatchObject({ gauge: 100, enemyGaugeRules: rules.ISAARU_GAUGE_RULES });
     drive(
       engine,
-      (d) => (d.actorId === 'yuna' && starts(engine.state().log, GROTHIA).includes(rows.GROTHIA_ATTACK_YUNA) ? summon('shiva') : defend()),
+      (d) => (d.actorId === 'yuna' && starts(engine.state().log, GROTHIA).includes(rows.GROTHIA_ATTACK_YUNA) ? summon('shiva') : pass(d)),
       (e) => starts(e.state().log, GROTHIA).includes(rows.GROTHIA_HELLFIRE),
     );
     const log = engine.state().log;
@@ -184,7 +184,7 @@ describe('Pterya (§4.2)', () => {
     let t = 0;
     // Ifrit, not Bahamut, since PR-0179 arm a (D-243, 2026-09-27): arm a's Bahamut (STR 53) kills Pterya in
     // three swings, at gauge 75, before Energy Ray can come; this case is about her gauge, not the duel.
-    drive(engine, (d) => (d.actorId === 'yuna' ? (t++ === 0 ? defend() : summon('ifrit')) : { kind: 'attack', targets: [PTERYA] }),
+    drive(engine, (d) => (d.actorId === 'yuna' ? (t++ === 0 ? pass(d) : summon('ifrit')) : { kind: 'attack', targets: [PTERYA] }),
       (e) => starts(e.state().log, PTERYA).includes(rows.PTERYA_ENERGY_RAY));
     const log = engine.state().log;
     const moves = starts(log, PTERYA);
@@ -216,7 +216,7 @@ describe('Spathi (§4.3)', () => {
 
   it('with Yuna alone the count keeps running and Mega Flare lands on her (O-6): a defeat', () => {
     const engine = newEngine('isaaru-spathi', 6);
-    drive(engine, () => defend());
+    drive(engine, (d) => pass(d));
     const st = engine.state();
     expect(st.result?.outcome).toBe('defeat');
     expect(starts(st.log, SPATHI).at(-1)).toBe(rows.SPATHI_MEGA_FLARE);
@@ -241,7 +241,7 @@ describe('Isaaru (B8)', () => {
 describe('repairs after the engine review (2026-09-25)', () => {
   it("the intent slab calls Countdown what it is: no damage, not 'non-elemental damage to itself'", () => {
     const engine = newEngine('isaaru-spathi', 4) as ReturnType<typeof createFFXEngine>;
-    drive(engine, () => defend(), (e) => starts(e.state().log, SPATHI).length >= 1);
+    drive(engine, (d) => pass(d), (e) => starts(e.state().log, SPATHI).length >= 1);
     nextInput(engine);
     const intent = engine.intent();
     expect(intent?.enemyId).toBe(SPATHI);
