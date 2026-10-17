@@ -308,7 +308,7 @@ describe('XE5: the death pattern every boss script writes at init (FFX2-G05 3.10
     expect([...counts].sort((a, c) => a[0] - c[0])).toEqual([[0, 4], [1, 21], [2, 6], [4, 3]]);
   });
 
-  it('every shipped enemy of every formation carries the byte its package writes; one the note did not read (and the arena Trema) carries none', () => {
+  it('every shipped enemy of every formation carries the byte its package writes; one the note did not read carries none; the arena Trema wears the story Trema\'s row 1/295 and carries 1', () => {
     const seen = new Set<number>();
     for (const group of ENEMY_GROUPS) {
       const b = battle(group.id);
@@ -405,7 +405,7 @@ describe('XE5: the death pattern every boss script writes at init (FFX2-G05 3.10
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------------
-describe('the existence flag (stat 224): which monsters leave the battle-end evaluation (closes FFX2-G10 open question 9)', () => {
+describe('the existence flag (stat 224): which monsters leave the battle-end evaluation (an inference from FFX2-G05 4.1 plus FFX2-G10 10.1 that answers FFX2-G10 open question 9)', () => {
   it('the units the engine treats as parts (never present, so they never gate a victory) are exactly the monsters whose init writes the existence flag as 0', () => {
     const clears = (pkg: string): boolean => (usage.packages[pkg] ?? []).some(([w, fn, spec, id, v]) => w === 0 && fn === 0 && spec === -13 && id === StatId.existFlag && v === 0);
     const checked: string[] = [];

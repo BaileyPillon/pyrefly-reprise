@@ -9,8 +9,8 @@
  *
  * Keyed by the monster row (`table/row` of `monster.bin`, or `monster2.bin` for the Oversoul Paragon: the row is the compiled package's number, `m243` is row 243), which every shipped
  * enemy carries (`EnemyDef.ffx2Record`). Source: the first `setstat` of each compiled package's init (`tests/fixtures/parity/ffx2/stat_setter_usage.json`, FFX2-G05 4.1 and 4.2), pinned
- * row for row by `parity-ffx2-stat-setter-engine.test.ts`. Left out, not guessed: row 328 (the Fiend Arena Trema: its package holds two actors that write 1 and 2, and which one the
- * monster is was not read), the Oversoul Paragon's own package (`o152` has no compiled package in the extract; the note reads the pattern, 1, from its source text), and every monster the
+ * row for row by `parity-ffx2-stat-setter-engine.test.ts`. Left out, not guessed: row 328 (the Fiend Arena's own package: it holds two actors that write 1 and 2, and which one the
+ * monster is was not read; the arena Trema does not need it, because the engine builds it from the story's Trema and it wears that Trema's row 1/295 and so carries 1, which is inert), the Oversoul Paragon's own package (`o152` has no compiled package in the extract; the note reads the pattern, 1, from its source text), and every monster the
  * note's 36 packages do not include (Valefor at Besaid, Yojimbo, Daigoro, Angra Mainyu, Zarich and Tawrich): their packages were not read, so they keep 0 as before.
  */
 
@@ -60,7 +60,7 @@ export function deathPatternOf(unit: Ffx2Unit): number | undefined {
   return record === undefined ? undefined : DEATH_PATTERN_OF_ROW[`${record.table}/${record.row}`];
 }
 
-/** Does this unit leave the battle when it falls, so that no Raise and no Auto-Life finds it? Every pattern but 0. */
+/** Does this unit leave the battle when it falls, so that no Raise and no Auto-Life finds it? Every pattern but 0. (That a Raise cannot find it is [I], FFX2-G05 section 8; the Auto-Life refusal is read.) */
 export function leavesOnDeath(unit: Pick<Ffx2Unit, 'deathPattern'>): boolean {
   return (unit.deathPattern ?? 0) !== 0;
 }

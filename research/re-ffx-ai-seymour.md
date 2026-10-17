@@ -476,6 +476,11 @@ Actors: **20 Seymour Omnis** (m131: HP 80,000, MP 999, STR 20, DEF 180, MAG 35, 
 * Formation script init (f0 @0x009): disc states := (0, 0, 0, 1) and **opening scene 4 is run at once**. That scene (@0x506)
   turns disc 1 up one state, disc 2 down one and disc 4 up one so that **the discs end at states (1, 3, 0, 2): all four show Fire.**
   Ambush state 3 (@0xc18d). No Talk, no CTB override.
+* **The discs sit at BattleDistance 2** (the value `re-ffx-targeting.md` section 8 uses for the reach rule). The formation script's battle-start worker (w21.f0, the
+  one that sets the ambush state at @0xc18d) writes the property BattleDistance (id 30) with the value 2 on each of the four discs, actors 21 to 24, at @0xc23e,
+  @0xc26e, @0xc29e and @0xc2ce (lines 9906, 9910, 9914 and 9918 of the AI lane's disassembly of `btl/sins03_00`, a private file). The same run of writes also sets
+  GetsTurns 0 and VisibleOnCTB 0 on each disc. The discs' own script (m106) and Omnis's (m131) write no BattleDistance, so this is the only source of the value
+  (read from the script, not run).
 * m131 init: enlarged model, "Heavy" and "Tough", **Absorb Fire := 1 and Weak Ice := 1** (consistent with the all-Fire opening),
   **hit threshold := 5**.
 * **The formation script gives every party member and aeon a preTurn handler** (workers w1 to w17, slots 41 to 47 and 49 to 58;

@@ -93,7 +93,7 @@ export const REACHES_OUT_OF_MELEE: ReadonlySet<CombatantId> = new Set(['wakka', 
  * record: the command can pick the target only when the reach is **at least** the distance, or when the target is the user. A foe at distance 1 stops the reach-0
  * commands (Attack, the melee skills, Steal, the physical Overdrives); at distance 2 the reach-1 ones too (Spare Change, the aeon Overdrives); at distance 3 every item
  * (reach 2) as well, leaving the spells, Lancet and the commands of Wakka, Valefor, Anima and Mindy's Attack. The distances the project knows: Sinspawn Gui's head 1,
- * the Mortiphasm discs 2 (the formation script's init worker, `research/re-ffx-ai-seymour.md` section 5) and Sin's Genais Core 3 until Genais falls, then 0.
+ * the Mortiphasm discs 2 (the formation script's battle-start worker, `research/re-ffx-ai-seymour.md` section 5.1, from lines 9906 to 9918 of the disassembly of `sins03_00`) and Sin's Genais Core 3 until Genais falls, then 0.
  *
  * A same-side target is always reachable here (the engine's scripts aim their own side's commands without a range test). The airship gap (Evrae's FAR, Overdrive
  * Sin's second pull) is not per target: it is decided by {@link reachesFoesAtRange}.

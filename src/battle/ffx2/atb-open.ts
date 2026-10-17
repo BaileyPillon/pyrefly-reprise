@@ -8,9 +8,11 @@
  * smallest wait on the field is cut by two thirds off everyone. Measured on the running game on 2026-10-09: 13 of 13 opening
  * counters, 9 trims and one preemptive strike matched (`research/re-ffx2-timing-measured.md` section 4).
  *
- * What the engine adds: a CONTINUATION link of a chained fight (`condition: 'scripted'`) opens with every wait whole and no trim
- * ("zero", as it always did: the sources do not say what the game does there); `condition: 'preemptive'` and `'ambush'`
- * are the game's PRESET results.
+ * In the game every link of a chained fight is its own battle start, a full one: each event calls `btlExe` and the lifecycle runs phases 4 to 0x19 again, so every
+ * link gets the random opening waits and the trim above, and there is no continuation mode (FFX2-G10 section 4 and section 16 row 4).
+ * What the engine does: a CONTINUATION link (`condition: 'scripted'`) opens with every wait whole and no trim ("zero", as it always did), which the game does not do.
+ * The switch that gives a link the game's full start is `SEPARATE_BATTLE_GAUGES` (`constants.ts`): it reaches only Chapter VI's Acts II and III
+ * (`EnemyGroupDef.opensAsSeparateBattle`) and is off, by Bailey's D-242. `condition: 'preemptive'` and `'ambush'` are the game's PRESET results.
  */
 
 import type { BattleSetup } from '../common/types.ts';

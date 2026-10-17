@@ -436,6 +436,10 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
 
   if (has(enemy, 'confuse')) out.push('Confused — it strikes one of its own side, itself included, so this prediction is a guess');
   if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack, at the other side');
+  // The line below is exact only for a monster that has a default attack. Since RC9 slice G-c a monster whose record's forced-action word is 0 (nearly every boss of
+  // the story chapters) has none, so its Provoked turn is dropped, not spent on the provoker (`forced-turn.ts`, `adapt/target-world.ts#defaultAttackOf`). No
+  // recommended line Provokes such a boss and no measured fight reached it (`docs/handoff/re-parity-rc9-ffx-counters.md`, the disclosure on Berserk, Confuse and Provoke);
+  // the player-facing wording is left as it is.
   if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) out.push('Provoked — it spends its turn attacking whoever provoked it');
   if (has(enemy, 'threaten')) out.push('Threatened — it cannot act or counter at all [ffx-combat-core §4.4]');
   return out;

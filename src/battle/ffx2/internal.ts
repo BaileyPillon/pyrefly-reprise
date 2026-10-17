@@ -273,9 +273,9 @@ export interface Ffx2EngineOptions {
   separateBattleGauges?: boolean;
   /**
    * Roll the preemptive / ambush result at the start of a `'normal'` battle (`MsCalcFirstAttack`, `kernel/atb-start.ts`),
-   * from the party's and the monsters' average Agility. Default **off**: no shipped encounter rolls it (the chapters are story
-   * battles, and whether the game presets their opening is not in the sources we have), so a `'normal'` opening is the
-   * random gauge alone, as before. `condition: 'preemptive'` and `'ambush'` are the game's PRESET results and always apply.
+   * from the party's and the monsters' average Agility. Default **off**, as the game is for every chapter scene: the scene master presets 3 (no roll) for all of
+   * them (FFX2-G10 7.2 and 16 row 3: the list is data [D], that its init has run before phase 0x17 is inferred [I]); only Monster Arena scenes would roll.
+   * `condition: 'preemptive'` and `'ambush'` are the game's PRESET results and always apply.
    */
   rollFirstAttack?: boolean;
   /** `constants.ts` LEBLANC_SCRIPT_SINIROTHX (PR-0106, Chapter VI's Leblanc), for a measurement run. */
