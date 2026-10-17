@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-16 — `MixResult` (FFX-2): the doc comment now says order matters and a null result is no failure; no field changes shape (re-parity RC9, lane X2-G, branch `re-parity-rc9-x2-mix`; FFX-2 only; documentation only)
+
+The comment on `MixResult` (`src/battle/common/types.ts`, the payload of the `rikku-mix` minigame) said "Order never matters" and "`null` when the pair has no recipe". Both are FFX-only truths (Rikku's chart is symmetric and a pair outside it made "Mix failed!"). FFX-2's Alchemist resolves a Mix by the game's recipe function (`FFX-2.exe` 0x0075A470, checked note FFX2-G06 section 3.8): **the order of the two picks changes the result in 496 of the 2,278 unordered pairs, and every pair makes one of 53 result rows**, so the comment now says so for each game.
+
+- No field is added, renamed or removed. For FFX-2 `ingredients` is the picks in the order made and `resultAbilityId` is ignored on the way in (the engine resolves the result from the ingredients, as the game's HUD does before it queues anything); it may be `null`.
+- The Alchemist's Mix takes the two items the way every minigame outcome travels (`docs/CONTRACTS.md`, "Minigame protocol"): `AbilityCommand.extra = { kind: 'rikku-mix', mix }` on the command `x2-alchemist-mix`; a bare Mix (no `extra`) is what it always was. Nothing in the protocol changed.
+- FFX is untouched: `src/battle/ffx`, `src/data/ffx` and `src/audio` have no line in this lane.
+
 ## 2026-10-16 — FFX kill rewards by the game's own rolls: `FfxLootRecord` and the optional `EnemyRewards.loot` (re-parity RC9, lane FFX-M row M1, branch `re-parity-rc9-ffx-rewards`; FFX only; additive)
 
 Branch `re-parity-rc9-ffx-rewards` (from `origin/r49-rc` f939b87f). Bailey's standing order, 2026-10-08: "It needs to be a 1:1 parity."; the RE session's accepted answer for this area (addendum `wiring-plan-addendum-2026-10-13.md` Q14): yes for items, gil and AP as the game's rolls, after a before/after table of item totals; no to gear drops. Plan: [re-parity-rc9-ffx-rewards-review](plans/re-parity-rc9-ffx-rewards-review.md); handoff: [re-parity-rc9-ffx-rewards](handoff/re-parity-rc9-ffx-rewards.md). **Game case: FFX only** (FFX-2 has its own kill-reward routine, lane X2-C).

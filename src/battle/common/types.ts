@@ -1872,9 +1872,15 @@ export interface FuryResult {
 
 /** Result payload for `rikku-mix`. */
 export interface MixResult {
-  /** The two consumed item ids. Order never matters. */
+  /**
+   * The two consumed item ids. **FFX: order never matters** (Rikku's chart is symmetric). **FFX-2: order matters** (re-parity RC9, lane X2-G): the entries are the picks in the order
+   * made, and the same two items make a different result in 496 of the 2,278 unordered pairs; the Alchemist's Mix takes them on the command's `extra`.
+   */
   ingredients: [ItemId, ItemId];
-  /** The resolved mix ability id, or `null` when the pair has no recipe ("Mix failed!"). */
+  /**
+   * The resolved mix ability id. **FFX:** `null` when the pair has no recipe ("Mix failed!"). **FFX-2:** every pair makes a result (the game's recipe function has no failure outcome), and the engine
+   * resolves it from `ingredients` itself, the way the game's HUD does before it queues anything, so this field is ignored on the way in and may be `null`.
+   */
   resultAbilityId: AbilityId | null;
 }
 
