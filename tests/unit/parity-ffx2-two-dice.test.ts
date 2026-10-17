@@ -10,11 +10,12 @@ import { describe, expect, it } from 'vitest';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { expectedMinigameHits, simulateFFX2Command } from '../../src/battle/ffx2/simulate.ts';
 import { bevelleParty, enemy, group, member } from '../../src/battle/ffx2/fixtures.ts';
-import { DIE_ROWS, coldDieGenerator, dieFace, dieGeneratorInCycle, dieValue } from '../../src/battle/ffx2/kernel/die.ts';
-import { DIE_STATE_FLAG } from '../../src/battle/ffx2/dice.ts';
+import { DIE_CYCLE_LENGTH, DIE_ROWS, DIE_TRANSIENT_CALLS, coldDieGenerator, dieFace, dieGeneratorInCycle, dieValue } from '../../src/battle/ffx2/kernel/die.ts';
+import { DIE_STATE_FLAG, rollDice } from '../../src/battle/ffx2/dice.ts';
+import { SeededRng } from '../../src/battle/common/rng.ts';
 import { FFX2_COMMAND_RECORDS } from '../../src/data/ffx2/command-records/index.ts';
 import type { AbilityRegistry } from '../../src/battle/ffx2/index.ts';
-import type { BattleEvent, BattleSetup, Command, FFX2PartyBuild } from '../../src/battle/common/types.ts';
+import type { BattleEvent, BattleSetup, BattleState, Command, FFX2PartyBuild, Rng } from '../../src/battle/common/types.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 
 /** The real ability catalog (with the game's command rows attached), the way `BattleScreen` injects it. */
@@ -194,6 +195,55 @@ describe('Two Dice: the cast rolls two dice and plays that many hits (FFX2-H04 3
     const seen = new Set<number>();
     for (let seed = 1; seed <= 40; seed++) seen.add(run(seed).hits);
     expect(seen.size).toBeGreaterThan(4); // not one fixed roll
+  });
+
+  // The placement draw is the engine's own modelling choice (HANDOFF section 6 item 1): one draw of `rng.aux` at a battle's first roll, uniform over the 185 positions
+  // of the game's cycle. A mutant that draws `aux.int(0, 90)` places the generator in half the cycle and survived the first mutation pass, so the range is pinned
+  // here directly on the seam (`rollDice`), with a recording stand-in for the stream and then with real streams.
+  describe('the placement draw spans all 185 positions of the cycle', () => {
+    const twoDiceAbility = data.ABILITIES['x2-lady-luck-two-dice']!;
+    const freshBattle = (): BattleState => ({ flags: {} } as unknown as BattleState);
+    const recordingAux = (position: number): { aux: Rng; calls: Array<[number, number]> } => {
+      const calls: Array<[number, number]> = [];
+      const aux = { int: (lo: number, hi: number): number => { calls.push([lo, hi]); return position; } } as unknown as Rng;
+      return { aux, calls };
+    };
+
+    it('the first roll asks the engine-side stream for exactly one integer from 0 to 184, and the next roll in the same battle asks for none', () => {
+      const { aux, calls } = recordingAux(7);
+      const state = freshBattle();
+      rollDice(state, aux, catalog, twoDiceAbility);
+      expect(calls).toEqual([[0, DIE_CYCLE_LENGTH - 1]]);
+      expect(DIE_CYCLE_LENGTH - 1).toBe(184);
+      rollDice(state, aux, catalog, twoDiceAbility);
+      expect(calls).toHaveLength(1);
+    });
+
+    it('every position 0 to 184 is a start the engine can take: 185 different generators, each the game\'s walk that many calls into the cycle, after the roll\'s two calls', () => {
+      const after = new Set<number>();
+      for (let position = 0; position < DIE_CYCLE_LENGTH; position++) {
+        const { aux } = recordingAux(position);
+        const state = freshBattle();
+        const roll = rollDice(state, aux, catalog, twoDiceAbility)!;
+        expect(state.flags[DIE_STATE_FLAG], `position ${position}`).toBe(stateBefore(DIE_TRANSIENT_CALLS + position + 2));
+        const gen = dieGeneratorInCycle(position);
+        expect(roll.faces, `position ${position}`).toEqual([dieFace(gen), dieFace(gen)]);
+        after.add(state.flags[DIE_STATE_FLAG] as number);
+      }
+      expect(after.size).toBe(DIE_CYCLE_LENGTH);
+    });
+
+    it('4,000 battles on real streams reach all 185 start positions (and nothing outside the cycle)', () => {
+      const starts = new Set<number>();
+      for (let seed = 1; seed <= 4000; seed++) {
+        const state = freshBattle();
+        rollDice(state, new SeededRng(seed), catalog, twoDiceAbility);
+        starts.add(state.flags[DIE_STATE_FLAG] as number);
+      }
+      const expected = new Set<number>();
+      for (let position = 0; position < DIE_CYCLE_LENGTH; position++) expected.add(stateBefore(DIE_TRANSIENT_CALLS + position + 2));
+      expect(starts).toEqual(expected);
+    });
   });
 
   it('a command that rolls no dice takes no draw and leaves no generator in the battle', () => {

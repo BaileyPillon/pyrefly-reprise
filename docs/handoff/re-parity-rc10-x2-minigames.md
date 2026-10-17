@@ -3,6 +3,7 @@
 Status: **built, tested, measured and pushed on branch `re-parity-rc10-x2-minigames`; not merged, not deployed** (2026-10-17). Base: `origin/r51-rc` at `d6dc0bdd7`. Tip: see section 1.
 **Game case: FFX-2 only** (AGENTS.md rule 14), and why: Trigger Happy (Gunner) and Lady Luck's Dud and Two Dice exist only in FFX-2 (command rows `0x3032`, `0x31E5`, `0x30EB`, `0x317D`, `0x317E` of FFX-2's `command.bin`); nothing under
 `src/battle/ffx`, `src/data/ffx` or `src/audio` is touched, and `ffx-engine-golden` and `ff7-golden` do not move. No boss number and no party number was changed or added. No screen was touched.
+**Corrected 2026-10-17 after the lane's independent check:** the first version of this note said no player can reach these changes. That is wrong for a human player (sections 0, 3, 5, 6 and 7 are corrected, and section 6 items 8 to 13 are new). Only the **automated shipped line** (the intended strategy every chapter replays) never casts these rows.
 Owner's words: 2026-10-08 "It needs to be a 1:1 parity."; 2026-10-16 "keep going please all of this reverse engineering needs to be incorporated into our game"; 2026-10-17 "continue on please".
 Sources (the lane's private notes, numbers only here): `D:\Tools\ffx-parity\coverage\ffx2\FFX2-H05.md` (Trigger Happy) and `FFX2-H04.md` (Lady Luck), section 7 of each, and rows S10 and S13 (E8, E10) of `coverage/gap-scan-2026-10-17.md`.
 
@@ -12,11 +13,11 @@ Sources (the lane's private notes, numbers only here): `D:\Tools\ffx-parity\cove
   press took 59.97 hits and about 1,260 HP off the first target on average (60 seeds), where one press took 1 hit and 9 HP. Now no press takes no hit, no HP, no status, and starts no counter; the turn is still spent and the
   recovery is the same as after any Trigger Happy. One or more presses play **exactly** what they played (1, 5 and 16 presses read the same figures before and after).
 - **The Dud no longer carries the gravity element.** The game's row for it has none. A girl who is immune to gravity used to take nothing from a Dud, one who absorbs it was healed, one who resists it took 37.5 percent and one
-  weak to it was knocked out; now every girl takes the same 75 percent of her current HP, and the damage event it emits carries no element (it carried gravity), so its hit burst on a girl is the neutral one, not the gravity-coloured one (section 6, item 7).
+  weak to it was knocked out; now every girl takes the same 75 percent of her current HP, and the damage event it emits carries no element (it carried gravity), so its hit burst on a girl changes from the generic impact to the white slash burst (section 6, item 7).
 - **Two Dice now does something.** It was a command that did nothing at all. It rolls two dice, plays as many hits as the dice add up to (2 to 12) at the caster's level times 2 per hit (no Protect, Shell or critical,
   never a miss, cost 4 MP); two dice that agree on 2 to 6 play the stronger row (level times 4 per hit) and two ones play level times 40 per hit, two hits. The dice are the game's own, and not fair (faces 1 to 6 come
   up 17.8, 19.5, 20.5, 14.6, 10.3 and 17.3 percent of the time). It is aimed at one enemy, and its charge is the row's 100 (the old tier was an estimate that charged about a quarter of that).
-- **Nothing in any shipped fight changed.** No chapter's line casts Trigger Happy, Two Dice or a reel, no shipped build has learned Two Dice, and 12 seeds on all 12 FFX-2 chapters replay **byte for byte** (section 5).
+- **The automated line of every chapter did not change; a player who picks these rows sees all of the above.** The shipped intended strategy never casts Trigger Happy, Two Dice or a reel, so 12 seeds on all 12 FFX-2 chapters replay **byte for byte** (section 5). A human reaches the rows: a Gunner Yuna sees Trigger Happy wherever she wears Gunner (Chapter IV included), and a Lady Luck wearer sees Two Dice, Attack Reels and Magic Reels in Chapters V, XI, XIII, XV, XVI and the Tourist Trap, with no row disabled (the lane's independent check). Section 6 items 8 to 13 list what such a player will notice.
 
 ## 1. Commits (oldest first, on `re-parity-rc10-x2-minigames`)
 
@@ -43,10 +44,10 @@ Contract files: none touched (`src/battle/common/types.ts`'s `TriggerHappyResult
 
 | Piece | Decompiled and proven in the harness | Wired into the engine | Live in a deployed build |
 |---|---|---|---|
-| Trigger Happy: zero presses plan 60 and execute none | yes (FFX2-H05: opener, press broadcast, poll, hit event on kind-10 records, close; 66,718 vectors, 0 mismatches) | **yes**, this lane | no (not deployed); a human who never presses is the only player it reaches |
-| The Dud row `0x31E5` has no element | yes (data, three language copies agree; FFX2-H04 7 E8) | **yes**, this lane | no |
-| Two Dice: die result `0x647620` and the face generator `0x685B80` | yes (10,000 and 200,000 vectors, 0 mismatches) | **yes**, this lane (`kernel/die.ts`, `dice.ts`) | no; nothing in a shipped build reaches it |
-| The row `0x30EB`, the swap rows `0x317D`, `0x317E` | yes (read field by field from `command.bin`) | **yes** (records) | no |
+| Trigger Happy: zero presses plan 60 and execute none | yes (FFX2-H05: opener, press broadcast, poll, hit event on kind-10 records, close; 66,718 vectors, 0 mismatches) | **yes**, this lane | no (not merged, not deployed); once released, any human Gunner who presses nothing meets it (a Gunner Yuna in any chapter, Chapter IV included); the automated line never casts Trigger Happy |
+| The Dud row `0x31E5` has no element | yes (data, three language copies agree; FFX2-H04 7 E8) | **yes**, this lane | no (not deployed); once released, a Lady Luck wearer who spins the reels can meet a Dud (section 6 item 7) |
+| Two Dice: die result `0x647620` and the face generator `0x685B80` | yes (10,000 and 200,000 vectors, 0 mismatches) | **yes**, this lane (`kernel/die.ts`, `dice.ts`) | no (not deployed); once released, a Lady Luck wearer sees Two Dice in Chapters V, XI, XIII, XV, XVI and the Tourist Trap (no row disabled); the automated line never casts it |
+| The row `0x30EB`, the swap rows `0x317D`, `0x317E` | yes (read field by field from `command.bin`) | **yes** (records) | no (not deployed); reached through Two Dice, as above |
 | The Lv. 2 and Lv. 3 windows, the shot cadence, simultaneous users, the retarget cost | partly (window length proven; cadence inferred) | **no** (section 8) | no |
 | The five-line reels, strips, stop order, charge-after-spin, Four Dice, Item and Random reels, CONGRATS! | yes (FFX2-H04 sections 3.1 to 3.8) | **no**: a visible redesign, needs Bailey's yes and a mockup | no |
 
@@ -101,11 +102,11 @@ Method: the shipped `ffx2-end-ledger-measure` harness (the shipped `intendedStra
 | What | Result |
 |---|---|
 | Event-log digests, 12 seeds x 12 chapters (144 chains) | **144 of 144 identical** (outcome, links and the full event log), base against tip |
-| Which shipped lines use the changed rows (every party command of every chain, 12 seeds each) | **none**: no Trigger Happy, Two Dice, Attack/Magic Reels or Dud in any chapter (the only Gunner/Lady Luck command anywhere is Cheap Shot, 72 casts in Chapter VI and its hidden copy). `intendedStrategy` takes the first Overdrive-kind row only when a chapter's tactic has no opinion; no tactic picks these, and no shipped build has learned Two Dice (`git grep` over `src/data/ffx2/builds`: Lady Luck is `owned`, never `learned`) |
-| Movers | **none**, so the 500-seed human, Active and bench runs the brief asks for movers have nothing to measure: the changed code runs only when Trigger Happy fires, a Lady Luck Dud or Two Dice resolves, or the advisor previews Two Dice, and none of them is on a line of any pace |
+| Which shipped lines use the changed rows (every party command of every chain, 12 seeds each) | **none**: no Trigger Happy, Two Dice, Attack/Magic Reels or Dud in any chapter (the only Gunner/Lady Luck command anywhere is Cheap Shot, 72 casts in Chapter VI and its hidden copy). `intendedStrategy` takes the first Overdrive-kind row only when a chapter's tactic has no opinion; no tactic picks these, and no shipped build has learned Two Dice (`git grep` over `src/data/ffx2/builds`: Lady Luck is `owned`, never `learned`). That is the automated line only; a human who wears the dress picks rows by hand (section 0) |
+| Movers | **none**, so the 500-seed human, Active and bench runs the brief asks for movers have nothing to measure: the changed code runs only when Trigger Happy fires, a Lady Luck Dud or Two Dice resolves, or the advisor previews Two Dice, and none of them is on an automated line of any pace (a human picking the rows is not a line the harness plays) |
 | Advisor previews | Trigger Happy keeps 6, 11, 16 shots (`min`, `mid`, `max`); Two Dice is previewed at 3, 7, 11 hits (new; the command did nothing before, so there was no figure to move) |
 
-**How the change shows for a human** (the only player it can reach: Trigger Happy's zero-press case is not on any shipped line). Probe `D:\Tools\ffx-parity\rc10\x2-minigames\zero-press-probe.test.ts`: Chapter VI, Yuna's first turn, Trigger Happy with `n` presses attached on the first target the menu offers, 60 seeds, base against tip:
+**How the change shows for a human** (Trigger Happy's zero-press case is on no automated line, but a human Gunner reaches it). Probe `D:\Tools\ffx-parity\rc10\x2-minigames\zero-press-probe.test.ts`: Chapter VI, Yuna's first turn, Trigger Happy with `n` presses attached on the first target the menu offers, 60 seeds, base against tip:
 
 | Presses | Hits, base | Hits, tip | HP off the target, base | HP off the target, tip |
 |---|---|---|---|---|
@@ -125,14 +126,20 @@ Cause: the press count reached the hit determination as its *override*, where 0 
 4. **Two Dice is aimed at one enemy** (`single-enemy`, as Trigger Happy, whose row carries the same target word `0x433`), not at any side as before; a damaging command must not be offered on an ally.
 5. **Trigger Happy's press count is `shots`, not `hitsOverride`.** For one or more presses the shots still reach the hit determination as before, so the event log of a cast is byte for byte what it was; `hitsOverride` keeps the game's meaning (0 = none) for the dice.
 6. **`ResolvedCommand.hits`** (the enemy intent line's count) is unchanged for zero shots (the row's 60); nothing that strikes reads it.
-7. **One small visible change, disclosed (Bailey sees it, no mockup was made):** the Dud's hit burst on each girl. The presenter keys the impact effect to the damage event's element (`BattlePresenterBeats.ts` line 169, `VFX.ts` has a gravity entry), so the burst that was the gravity one is now the neutral one. The hit sound does not change (`ELEMENT_SFX` has no gravity entry, so the cue was `damage` either way) and `audio-sfx-parity-pin` passes unchanged. Nobody can meet a Dud on a shipped line (no chapter spins the reels), so no player sees it today. If Bailey wants the gravity burst kept as presentation, it is a one-line presenter special case; the rule (no element ladder) stays. I did not look at the effect play.
+7. **One small visible change, disclosed (Bailey sees it, no mockup was made):** the Dud's hit burst on each girl. The presenter keys the impact effect to the damage event's element (`BattlePresenterBeats.ts` line 169, `makeVfxPort` in `BattlePresenterStage.ts`). The hit sound does not change (`ELEMENT_SFX` has no gravity entry, so the cue was `damage` either way) and `audio-sfx-parity-pin` passes unchanged. The automated line never spins the reels, but a human Lady Luck wearer can (Chapters V, XI, XIII, XV, XVI and the Tourist Trap), so a player can meet a Dud once this is released. (The first draft said the old burst was a gravity-coloured one; that was wrong.) `VFX_COLOURS` in `BattlePresenterStage.ts` has no gravity entry, so the old Dud's burst was the generic impact (pale icy bloom, no slash arc); with no element the key is `slash`, so it is now the **white slash burst** (white bloom plus the slash arc). If Bailey wants the old look kept as presentation, it is a one-line presenter special case; the rule (no element ladder) stays. I did not look at the effect play (item 13).
+8. **Two Dice was silent before and is not now (disclosed, visible).** It used to do nothing; it now fires 2 to 12 hits per cast, each with its hit cue.
+9. **Its charge is about 3.85 times longer.** The attached record's cast cost is the game's 100 where the old tier was `CT_MEDIUM` (26): 100 / 26 = 3.85 (item 3).
+10. **Its target picker is limited to enemies** (item 4): the picker used to offer allies as well (any side).
+11. **The Dud's hit burst changes** from the generic impact to the white slash burst (item 7).
+12. **A zero-press Trigger Happy now visibly does nothing and costs the turn.** The overlay closes on "0 HITS", the girl plays her action with no shot, and the turn passes (section 5, last paragraph); before, it fired all 60 shots.
+13. **Nobody has watched these effects play.** Not the Two Dice hit sequence, the longer charge, the enemy-only picker, the Dud's white slash burst or the empty Trigger Happy. The tests and the harness read the event log, never the picture. The release driver should look at each before the build goes out.
 
 ## 7. CHANGELOG paragraph (plain words; for the main session to paste, not edited into `CHANGELOG.md` here)
 
 **FFX-2 only.** Trigger Happy now follows the game when you press nothing: a window you never press in fires no shot, so the turn is spent and nothing is hit (it used to fire all 60 shots, a bug that only a player who pressed nothing could ever see; one press or more play exactly what they played).
 Lady Luck's Dud no longer counts as gravity damage, as in the game's own table, so a girl's gravity affinity no longer changes how much of her HP it takes (75 percent of whatever she has left, for everyone). Lady Luck's Two Dice, which did nothing at all, now rolls two dice,
-hits as many times as the dice add up to, hits harder when the two dice agree (twice as hard on a pair of 2 to 6, twenty times as hard on two ones) and costs 4 MP; the game's dice are not fair, so low faces come up more than high ones. Nothing in any chapter changed: every chapter replays byte for byte,
-because no chapter casts any of these.
+hits as many times as the dice add up to, hits harder when the two dice agree (twice as hard on a pair of 2 to 6, twenty times as hard on two ones) and costs 4 MP; the game's dice are not fair, so low faces come up more than high ones. The automated line of every chapter replays byte for byte,
+because it never casts these; a player who picks them sees the changes.
 
 ## 8. Items left out (and why)
 
