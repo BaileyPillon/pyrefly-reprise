@@ -22,7 +22,7 @@ import type { BattleRng } from '../common/streams.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import type { ActorRuntime, FFXRuntime } from './runtime.ts';
 import { baseCtb } from './math.ts';
-import { chrBaseCtb } from './kernel/ctb.ts';
+import { actionRank, chrBaseCtb } from './kernel/ctb.ts';
 import { isAlive, onField, targetable } from './predicates.ts';
 import { changeStock } from './adapt/bag.ts';
 
@@ -216,8 +216,17 @@ export function abilityOf(ctx: Ctx, id: AbilityId): AbilityDef | undefined {
   return ctx.content.ability(id);
 }
 
-/** Ability rank, with the documented rank-0 -> rank-3 fallback [ffx-combat-core §1.3]. */
+/**
+ * Ability rank, with the documented rank-0 -> rank-3 fallback [ffx-combat-core §1.3].
+ *
+ * The game stores the user's rank at the first calculation from the command ids of the action's first entry (FFX.exe 0x007895b0, `kernel/ctb.ts#actionRank`; re-parity
+ * RC10, FFX only). An ability with a game record is asked that way: one id, the record's, and the rank byte the data layer copied onto the ability (a rank of 0 or no rank
+ * is 3, an id that ends the scan is read the same). `tests/unit/parity-ffx-hit-order.test.ts` proves it equals the plain rule for every ability of the registry. Copycat's
+ * substitution flag is 0: the engine has no Copycat.
+ */
 export function rankOf(def: AbilityDef | undefined): number {
+  const id = def?.record?.id;
+  if (def !== undefined && id !== undefined) return actionRank([id, 0xff], 0, (command) => (command === id ? (def.rank ?? null) : null));
   const r = def?.rank ?? 3;
   return r <= 0 ? 3 : r;
 }
