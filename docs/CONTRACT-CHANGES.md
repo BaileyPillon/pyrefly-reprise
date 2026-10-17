@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-17 — `src/data/ffx2/ids.ts` (FFX-2): the Garment Grid node-count comments follow the game's cards, and `SIX_NODE_GRID_IDS` gains `ray-of-hope` (post-r51 follow-ups, branch `re-parity-rc9-followups`; FFX-2 only; additive, comments and one constant)
+
+`src/data/ffx2/ids.ts` is a contract file (the string-literal id unions). The `GarmentGridId` doc comments still carried the node counts of the first data lane, five of which the x2-grids lane (re-parity RC9 lane X2-I, follow-up D1) corrected from the game's own plate rows and grid cards (`docs/handoff/re-parity-rc9-x2-grids.md`).
+
+- **Comments only on the union** (no id added, renamed or removed): `ray-of-hope` 4 nodes -> 6; `seething-cauldron` and `strength-of-one` 5 -> 4; `howling-wind` stays 4 (R G B Y); `healing-wind` now says its gates (R, B: the card has the gates 1 and 4 only); `valiant-lustre`'s "node count unpublished" -> 5, from the card's layout. Every count was taken by counting the nodes in `GARMENT_GRIDS` (all 44 grids, `nodeCount` equal to the layout's dressphere nodes).
+- **`SIX_NODE_GRID_IDS` gains `ray-of-hope`** (eight ids -> nine: the set is now exactly the grids whose `nodeCount` is 6). Additive. **Nothing reads the constant** (`git grep SIX_NODE_GRID_IDS` finds its definition and one comment in `garment-grids/late.ts`), so no behaviour, test or build moves.
+- FFX is untouched.
+
 ## 2026-10-16 — `MixResult` (FFX-2): the doc comment now says order matters and a null result is no failure; no field changes shape (re-parity RC9, lane X2-G, branch `re-parity-rc9-x2-mix`; FFX-2 only; documentation only)
 
 The comment on `MixResult` (`src/battle/common/types.ts`, the payload of the `rikku-mix` minigame) said "Order never matters" and "`null` when the pair has no recipe". Both are FFX-only truths (Rikku's chart is symmetric and a pair outside it made "Mix failed!"). FFX-2's Alchemist resolves a Mix by the game's recipe function (`FFX-2.exe` 0x0075A470, checked note FFX2-G06 section 3.8): **the order of the two picks changes the result in 496 of the 2,278 unordered pairs, and every pair makes one of 53 result rows**, so the comment now says so for each game.
