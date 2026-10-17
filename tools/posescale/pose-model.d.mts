@@ -124,3 +124,34 @@ export function listPoses(inputs: ModelInputs, subject: string): string[];
 export function readSubject(inputs: ModelInputs, subject: string, o?: { poses?: string[] }): Promise<PoseReading[]>;
 export function readPose(subject: string, pose: string, opts?: { inputs?: ModelInputs; root?: string; artDir?: string }): Promise<PoseReading>;
 export function readAll(inputs: ModelInputs, o?: { subjects?: string[]; concurrency?: number; onSubject?: (subject: string, readings: PoseReading[]) => void }): Promise<PoseReading[]>;
+
+/** The idle's side of one subject (everything every other pose is read against), as `referenceOf` builds it; the rig gate reads a rig key against it. */
+export interface ModelReference {
+  subject: string;
+  refName: string;
+  kind: SubjectKind;
+  game: ModelGame;
+  poses: string[];
+  /** The idle, as `pose-pixels.mjs#readPaint` read it. */
+  M: { W: number; H: number; mass: number; area: number; proneRaw: boolean; stance: { x: number; row: number } | null; engineBox: { x0: number; x1: number; y0: number; y1: number } | null; [k: string]: any };
+  row: Record<string, any>;
+  /** Idle heights per painting pixel, as the idle is drawn. */
+  upp: number;
+  /** The row the idle is planted on, in its painting's pixels. */
+  anchor: number;
+  /** The idle's figure height as drawn (1 less its padding). */
+  figH: number;
+  mirror: 1 | -1;
+  want: number;
+  head: readonly number[] | null;
+  headSize: number | null;
+  stanceMeasured: number | null;
+  stanceMeasuredOff: number | null;
+  solesGap: number | null;
+  bodyH: number | null;
+  pixelFigH: number | null;
+  /** The idle's silhouette on the common grid. */
+  mask: Uint8Array;
+  [k: string]: any;
+}
+export function referenceOf(inputs: ModelInputs, subject: string): Promise<ModelReference>;

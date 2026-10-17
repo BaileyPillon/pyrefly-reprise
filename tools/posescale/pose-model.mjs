@@ -95,7 +95,7 @@ async function referenceName(inputs, subject, poses) {
 }
 
 /** The idle's side of one subject, built once: its measurements, its placement and its silhouette on the grid. */
-async function referenceOf(inputs, subject) {
+export async function referenceOf(inputs, subject) {
   const hit = inputs.refs.get(subject);
   if (hit) return hit;
   const poses = listPoses(inputs, subject);
