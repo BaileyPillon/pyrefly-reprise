@@ -207,12 +207,14 @@ describe('the flag is the only way in: every other chain carries what it always 
    * of a link in 30 of the 31 (a cast in flight resolves before the victory); in the other one, Chapter 6 seed 5, the second link opens with an Attack where the base threw a Grenade,
    * because the four Grenades the party carries are no longer the ones a cast in flight at the end of the first link had not yet spent. All thirty-two still win. The old hashes are in
    * git at ea431aa0.
+   *
+   * **Re-pinned once for the hit reaction** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", the checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`): all thirty-two logs of Chapters 5, 6 and XI and the Sisters, seeds 1 to 8 (Chapter 5's eight equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again, Chapter 6's first three equal `ffx2-hit-closes-menu.test.ts`'s). No Den code changed. Cause, found by ablation (`withReactionKnobs(OLD_REACTION)`, the switch `CHAIN_WINDOW_PER_BODY` off): with the slice off every pin below is the old one exactly, with it on every one moves, because the chain window, the span of the halved tick and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, Bahamut 52 and 82) where they were 60 and 90 steps and 15. The old hashes are in git at 87c0dc06e.
    */
   const BASE = {
-    ch5: ['bc16d06c2b310e63', '3405995ca875714e', '6f3ff4787d226772', '19e4019ffcf7880c', '48022cc460c8aae2', '71a0d0a7a92737fa', '276aa8ad4aa650ab', '7a1ae4b195157295'],
-    ch6: ['aa6b56cbfa16061b', '2217fd51aa006da2', '78d4ed544301b45b', 'a39696f7ae0ccaa4', 'db1b541da1a3238e', '6b4f4ad70e4a2da1', '6ac5ea70c9ca5a53', 'e476922839d3ad3e'],
-    ch11: ['604514318823d2e0', '19c99ef6850db941', 'b11fcb2af7df9162', '748c9f80531df8af', '4f8dd5667cf843f8', '2201781c02da2e62', '387873d77b23913f', '9f660b4d1647783d'],
-    sisters: ['c7145c067ca3cb54', 'ce7ed8347fb795be', '1c46c157eb6a5aba', 'ec8e64761ac7c459', '3394a5010e63304e', '59aee9966c69a02f', 'e0fe326b14ac1a8c', '9fc81a1fb15172ec'],
+    ch5: ['507a19349518829d', '54aa13a1f5086d10', '1156c03a53fbaf29', 'df49d8aaa2dce95a', '5e3bed20a1c82a03', '9ebdff1b102d61c1', 'f29b68a6db9a575b', '10daa51e98252588'],
+    ch6: ['010989214829f275', '1a4c05a190b9add5', 'd158f1c9e6584d7b', '65d2515fedb34c4d', '5f8775c117fba052', 'ab5379695b88157c', '88406c7d7660b37a', '474b65b8343acd3f'],
+    ch11: ['95629e138a13aad2', '50ed9b16058acb6f', 'a0b8eda8e36a5bb6', '7cc8c5d7487cd46e', '887de43922e83d62', 'cceb23049028fada', 'a9ebddd03b90c261', '0bf976ad0db50723'],
+    sisters: ['d1d7a45c530adbcd', 'f75600ac8283a3e3', '1537da584d79f65a', '0a3fe98bce3be3eb', 'fc2188c30c33f48a', '9669b3817b4fe464', 'f3835c2271594e6b', '18a2afedb07ea534'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

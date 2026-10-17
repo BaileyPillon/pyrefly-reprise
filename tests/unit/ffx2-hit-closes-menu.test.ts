@@ -236,10 +236,11 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // are in git at 931613a8.
   // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. All nine are still victories and no menu is closed; they equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again.
   // **Re-pinned 2026-10-15 for the item ledger and the battle-end commit window** (re-parity RC8, FFX-2 only; reason "game-code parity"; `docs/handoff/re-parity-rc8-x2-end-ledger.md`): the end of a fight is committed after the casts in flight have fired, so each log gains the events between the last blow and the victory (see `ffx2-atb-golden.test.ts`, thirteenth re-pin). All nine are still victories and no menu is closed; they equal CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again. The old hashes are in git at ea431aa0.
+  // **Re-pinned once for the hit reaction** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", the checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`): the nine D = 0 logs of Chapters IV, V and VI under the default Wait split (Chapters IV and V equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 again; no menu is closed in any of them, as before). Cause, found by ablation (`withReactionKnobs(OLD_REACTION)`, the switch `CHAIN_WINDOW_PER_BODY` off): with the slice off every pin below is the old one exactly, with it on every one moves, because the chain window, the span of the halved tick and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, Bahamut 52 and 82) where they were 60 and 90 steps and 15. The old hashes are in git at 87c0dc06e.
   const PINNED = [
-    ['6baeab06549072aa', 'dabe314b3bcfb98c', '1aca076e62b746d6'],
-    ['bc16d06c2b310e63', '3405995ca875714e', '6f3ff4787d226772'],
-    ['aa6b56cbfa16061b', '2217fd51aa006da2', '78d4ed544301b45b'],
+    ['1ad9fa1f331f712b', '0e6057d4b3acf66e', '09850973c3805a77'],
+    ['507a19349518829d', '54aa13a1f5086d10', '1156c03a53fbaf29'],
+    ['010989214829f275', '1a4c05a190b9add5', 'd158f1c9e6584d7b'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

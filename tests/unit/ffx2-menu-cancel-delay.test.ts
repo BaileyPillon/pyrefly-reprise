@@ -72,16 +72,17 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
   // (old hashes in git at 931613a8; the release-17 replay rows that stood beside them are gone with the option).
   // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
   // **Re-pinned 2026-10-15 for the item ledger and the battle-end commit window** (re-parity RC8, FFX-2 only; reason "game-code parity"; `docs/handoff/re-parity-rc8-x2-end-ledger.md`): the end of a fight is committed after the casts in flight have fired, so each log gains the events between the last blow and the victory (see `ffx2-atb-golden.test.ts`, thirteenth re-pin). The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again. The old hashes are in git at ea431aa0.
+  // **Re-pinned once for the hit reaction** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", the checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`): the eighteen logs of Chapters IV to VI at human pace (Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the top list), seeds 1 to 3. Cause, found by ablation (`withReactionKnobs(OLD_REACTION)`, the switch `CHAIN_WINDOW_PER_BODY` off): with the slice off every pin below is the old one exactly, with it on every one moves, because the chain window, the span of the halved tick and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, Bahamut 52 and 82) where they were 60 and 90 steps and 15. The old hashes are in git at 87c0dc06e.
   const ON: Record<string, string> = {
-    'IV|active|1': '541a5b56a437d847', 'IV|split|1': '72fc047f3b2ce099',
-    'IV|active|2': 'de4b9b9272b4f31c', 'IV|split|2': 'e5aeb10ec7664eec',
-    'IV|active|3': 'efad46ae79750115', 'IV|split|3': 'ebf31178a0344887',
-    'V|active|1': '92819ec58ac5dabc', 'V|split|1': 'e1b009ccb8517b63',
-    'V|active|2': '4ca43d65de715648', 'V|split|2': '63746ae49d9356ea',
-    'V|active|3': 'fc8876ca27be75d6', 'V|split|3': 'e9f8d18b63f043a1',
-    'VI|active|1': '5d54cea50a535e6d', 'VI|split|1': '63c2b2ad630494a1',
-    'VI|active|2': '0c836ce7dd2b7e47', 'VI|split|2': '0383f65316bb775f',
-    'VI|active|3': '496e0308634852b7', 'VI|split|3': '90c548f8d9cb1508',
+    'IV|active|1': '8cca881fce41b154', 'IV|split|1': '7874268d97c7557c',
+    'IV|active|2': 'bac7058bba09fbb8', 'IV|split|2': '56948e4cc8af6066',
+    'IV|active|3': '4b3dc41e7ab7fbd4', 'IV|split|3': 'e391eeaac94412cd',
+    'V|active|1': '07874d4f91a87b81', 'V|split|1': '38e30687e6af6bed',
+    'V|active|2': '0f2d938b522f04ae', 'V|split|2': '4e07ae4f6b957797',
+    'V|active|3': 'd5888f5afdf776cf', 'V|split|3': 'e6aa0e898d318437',
+    'VI|active|1': '5d35e7859f328d45', 'VI|split|1': '9c32713c2c338460',
+    'VI|active|2': '7ffba0a0739dd72d', 'VI|split|2': '47e6afb91be136cb',
+    'VI|active|3': 'ecc05750990bb5c0', 'VI|split|3': 'd5eb43ba86bf0dba',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 
