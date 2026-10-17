@@ -11,6 +11,7 @@ const { PaintedActor } = await import('../../../src/engine/PaintedActor.ts');
 const { RigActor } = await import('../../../src/engine/rig/RigActor.ts');
 const { buildFigure } = await import('../../../src/engine/rig/RigStage.ts');
 const { chooseRig, clearRigCache, rigFromQuery, rigReport, rigSwitch } = await import('../../../src/engine/rig/RigLoad.ts');
+const { parseArtManifest, resetArtManifest, setArtManifest } = await import('../../../src/engine/ArtManifest.ts');
 type RigFile = import('../../../src/data/art/rigTypes.ts').RigFile;
 
 const IDLE = '/art/characters/testfig/idle.png';
@@ -36,6 +37,7 @@ const request = (over: Record<string, unknown> = {}): Parameters<typeof buildFig
   poses: { idle: IDLE, attack: '/art/characters/testfig/attack.png' },
   opts: { name: 'testfig', worldHeight: 1.82, side: 'party', shadow: false },
   hooks,
+  listed: async () => true,
   ...over,
 });
 
@@ -168,9 +170,38 @@ describe('the stage draws a RigActor only for a gated rig whose costume is the f
     expect(f).not.toHaveBeenCalled();
   });
 
+  it('no request at all for a subject the art manifest does not list (a 404 a figure would be a console error); ?rig=on asks anyway', async () => {
+    const f = serve(makeRigFile());
+    const a = await buildFigure(request({ listed: async () => false }));
+    expect(a.rig).toBeNull();
+    expect(f).not.toHaveBeenCalled();
+    expect(lastReason()).toBe('no rig listed in the art manifest');
+    clearRigCache();
+    const b = await buildFigure(request({ listed: async () => false, search: '?rig=on' }));
+    expect(b.rig).not.toBeNull();
+    expect(f).toHaveBeenCalledTimes(1);
+  });
+
+  it('the art manifest is the list: a subject named in its rigs is asked for, one that is not is not, and a manifest with none lists none', async () => {
+    const f = serve(makeRigFile());
+    setArtManifest(parseArtManifest({ subjects: {}, rigs: ['testfig', 7] }));
+    expect((await buildFigure(request({ listed: undefined }))).rig).not.toBeNull();
+    expect(f).toHaveBeenCalledTimes(1);
+    clearRigCache();
+    setArtManifest(parseArtManifest({ subjects: {}, rigs: ['someone'] }));
+    expect((await buildFigure(request({ listed: undefined }))).rig).toBeNull();
+    expect(f).toHaveBeenCalledTimes(1);
+    setArtManifest(parseArtManifest({ subjects: {} }));
+    expect(parseArtManifest({ subjects: {} })).not.toHaveProperty('rigs');
+    expect(parseArtManifest({ subjects: {}, rigs: ['a', 3] })!.rigs).toEqual(['a']);
+    expect((await buildFigure(request({ listed: undefined }))).rig).toBeNull();
+    expect(f).toHaveBeenCalledTimes(1);
+    resetArtManifest();
+  });
+
   it('chooseRig never rejects, whatever the network does', async () => {
     vi.stubGlobal('fetch', async () => { throw new TypeError('offline'); });
-    const c = await chooseRig('testfig', IDLE, { on: true, reason: 'default' });
+    const c = await chooseRig('testfig', IDLE, { on: true, reason: '?rig=on' });
     expect(c).toMatchObject({ on: false, reason: 'no rig.json' });
   });
 });

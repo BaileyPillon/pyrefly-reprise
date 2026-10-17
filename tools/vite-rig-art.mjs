@@ -9,7 +9,7 @@
  * `RIG_ART_ALIAS="kimahri=kimahri-proto"` serves a fixture folder as a subject's (the smoke run's prototype Kimahri).
  * Used by the scratch config `tools/zz-rig.tmp.config.mjs`; it is not wired into `vite.config.ts`.
  */
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 
 const TYPES = { '.json': 'application/json', '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg' };
@@ -37,6 +37,23 @@ export function parseAliases(text) {
   return out;
 }
 
+/** The subjects with a rig in `root` (a folder with a `rig.json`, named for its subject or aliased to one), sorted. */
+export function rigSubjects(root, aliases = {}) {
+  if (!existsSync(root)) return [];
+  const byFolder = Object.fromEntries(Object.entries(aliases).map(([subject, folder]) => [folder, subject]));
+  return readdirSync(root, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && existsSync(join(root, e.name, 'rig.json')))
+    .map((e) => byFolder[e.name] ?? e.name)
+    .sort();
+}
+
+/** The art manifest with `rigs` merged in: the game asks only for the rigs the manifest lists (`src/engine/rig/RigLoad.ts`), and the mirror's manifest knows none. */
+export function manifestWithRigs(manifestText, rigs) {
+  const m = JSON.parse(manifestText);
+  m.rigs = [...new Set([...(Array.isArray(m.rigs) ? m.rigs : []), ...rigs])].sort();
+  return JSON.stringify(m);
+}
+
 export function pyreflyRigArt(root = process.env.RIG_ART_DIR ?? 'D:/pyrefly-art-rigs', aliases = parseAliases(process.env.RIG_ART_ALIAS)) {
   return {
     name: 'pyrefly-rig-art',
@@ -44,6 +61,14 @@ export function pyreflyRigArt(root = process.env.RIG_ART_DIR ?? 'D:/pyrefly-art-
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = typeof req.url === 'string' ? req.url : '';
+        if (url.split(/[?#]/)[0] === '/art/manifest.json') {
+          const file = join(server.config.publicDir, 'art', 'manifest.json');
+          if (!existsSync(file)) return next();
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Cache-Control', 'no-cache');
+          res.end(manifestWithRigs(readFileSync(file, 'utf8'), rigSubjects(resolve(root), aliases)));
+          return undefined;
+        }
         if (!url.startsWith('/art/rigs/')) return next();
         let file = null;
         try {

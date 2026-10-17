@@ -7,9 +7,14 @@
  * `window.__pyrefly.rigs()` (`src/debug/rigApi.ts`).
  *
  * Where rigs live: dev serves `D:/pyrefly-art-rigs` at `/art/rigs/` (`tools/vite-rig-art.mjs`); a release build takes them from a release art mirror (TODO in
- * `docs/handoff/rig-engine.md`). A subject with no rig costs one request per session: a miss is remembered.
+ * `docs/handoff/rig-engine.md`).
+ *
+ * **No request for a rig that is not there.** The art manifest lists the subjects that ship a rig (`ArtManifest.rigs`, written by `tools/gen/manifest.mjs`), and only
+ * those are asked for: a 404 per figure on every battle would be a console error, and a build with no rigs must be silent. `?rig=on` (a person or a check saying "look
+ * for it") asks anyway.
  */
 import { artUrl } from '../PaintedArt.ts';
+import { loadArtManifest } from '../ArtManifest.ts';
 import { costumeMatches, gateProblem, readRig, type RigData } from './RigData.ts';
 import type { RigActor, RigAsset } from './RigActor.ts';
 import { validateFeet } from './RigValidate.ts';
@@ -75,6 +80,12 @@ async function readSubject(subject: string): Promise<{ data: RigData } | { reaso
   return read.ok ? { data: read.data } : { reason: `invalid rig.json: ${read.reason}` };
 }
 
+/** Does the art manifest list a rig for this subject? A missing manifest, or one with no `rigs`, lists none. */
+async function manifestLists(subject: string): Promise<boolean> {
+  const m = await loadArtManifest();
+  return m?.rigs?.includes(subject) === true;
+}
+
 /** Forget what was read (a dev reloading a rig it just changed). */
 export function clearRigCache(): void {
   reads.clear();
@@ -89,9 +100,10 @@ const live = new Map<string, RigActor>();
  * Decide for one figure. `idleUrl` is the idle painting the stage resolved for it (the rig's costume must be that painting). Never rejects. Logs once per subject
  * and decision.
  */
-export async function chooseRig(subject: string, idleUrl: string | undefined, sw: { on: boolean; reason: string }, dressphere = false): Promise<RigChoice> {
+export async function chooseRig(subject: string, idleUrl: string | undefined, sw: { on: boolean; reason: string }, dressphere = false, listed: (subject: string) => Promise<boolean> = manifestLists): Promise<RigChoice> {
   const done = (c: RigChoice): RigChoice => note(c);
   if (!sw.on) return done({ subject, on: false, reason: `switch off (${sw.reason})` });
+  if (sw.reason !== '?rig=on' && !(await listed(subject))) return done({ subject, on: false, reason: 'no rig listed in the art manifest' });
   let got = reads.get(subject);
   if (!got) reads.set(subject, (got = readSubject(subject)));
   const r = await got;

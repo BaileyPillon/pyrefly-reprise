@@ -96,6 +96,12 @@ describe('readRig', () => {
     expect(reason(ghost)).toMatch(/no bone wing/);
   });
 
+  it('refuses a key whose layers name a part that is not there', () => {
+    const f = makeRigFile();
+    f.keys['attack']!.layers = { wing: 3 };
+    expect(reason(f)).toMatch(/layers names a part that is not there/);
+  });
+
   it('refuses a motion block that names a bone that is not there', () => {
     const f = makeRigFile();
     f.motion!.chains![0]!.bones = ['tail0', 'tail9'];

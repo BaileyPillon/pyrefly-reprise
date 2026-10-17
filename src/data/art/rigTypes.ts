@@ -61,7 +61,7 @@ export interface RigBoneXform {
  */
 export interface RigPart {
   name: string;
-  /** Draw order, low = behind. A key may not change it (a part that must change sides is two parts). */
+  /** Draw order, low = behind: a small number (0 to about 100); parts sort by it, and a key may override it (`RigKey.layers`). */
   order: number;
   /** The part's PNG (RGBA, straight alpha), exactly its `box` of the master, cut with a margin of transparent pixels where the mesh needs it. */
   png: string;
@@ -123,6 +123,12 @@ export interface RigKey {
   planted?: boolean;
   /** Milliseconds to move INTO this key (default: the actor's pose cross-fade, 120 ms party, 140 ms foes). */
   ms?: number;
+  /**
+   * Draw order overrides for this pose: a part name to the `order` it takes while the figure is in this key (a spear passing in front of the head in a thrust, behind it
+   * at rest). A number between two parts' `order`s puts it between them. Applied halfway through the move into the key, where the swap hides; parts it does not name
+   * keep their own `order`.
+   */
+  layers?: Record<string, number>;
 }
 
 /** A lag chain (tail, mane, sash, beard, hair): each bone's absolute angle chases its parent's through its own spring (`engine/rig/RigDynamics.ts`, `dyn.ts` ported). */

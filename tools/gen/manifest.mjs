@@ -234,6 +234,8 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     if (m && backdrops.includes(m[1])) (backdropTiers[m[1]] ??= []).push(Number(m[2]));
   }
   for (const key of Object.keys(backdropTiers)) backdropTiers[key].sort((a, b) => a - b);
+  // the rig (2026-10-17): the subjects with a `rigs/<id>/rig.json`; listed only when there are any, so a tree with no rig writes the manifest it always wrote
+  const rigs = listDir(join(artRoot, 'rigs')).filter((e) => e.isDirectory() && existsSync(join(artRoot, 'rigs', e.name, 'rig.json'))).map((e) => e.name).sort();
   const manifest = {
     version: 1,
     generatedAt: now,
@@ -244,6 +246,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     pause2x: retinaStems(join(artRoot, 'pause'), pause),
     title,
     title2x: retinaStems(join(artRoot, 'title'), title),
+    ...(rigs.length ? { rigs } : {}),
     ...(Object.keys(backdropTiers).length ? { backdropTiers: Object.fromEntries(Object.keys(backdropTiers).sort().map((k) => [k, backdropTiers[k]])) } : {}),
   };
 

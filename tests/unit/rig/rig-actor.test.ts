@@ -138,6 +138,23 @@ describe('RigActor', () => {
     expect(Math.hypot(hand2.x - hand0.x, hand2.y - hand0.y)).toBeLessThan(0.05);
   });
 
+  it('a key can reorder parts: the overrides go on halfway through the move and come off again with the next key', async () => {
+    const a = await rigged();
+    const z = (n: string): number => a.figure.plane.children.find((c) => c.name === n)!.position.z;
+    const dz = 0.002;
+    expect(z('head')).toBeCloseTo(5 * dz, 9); // its own order
+    a.setPose('attack');
+    run(a, 0.03); // 140 ms move: not halfway yet
+    expect(z('head')).toBeCloseTo(5 * dz, 9);
+    run(a, 0.2);
+    expect(z('head')).toBeCloseTo(1.5 * dz, 9);
+    expect(z('arm')).toBeCloseTo(6 * dz, 9);
+    expect(z('body')).toBeCloseTo(2 * dz, 9); // untouched
+    a.setPose('idle', { immediate: true });
+    expect(z('head')).toBeCloseTo(5 * dz, 9);
+    expect(z('arm')).toBeCloseTo(4 * dz, 9);
+  });
+
   it('a name resolves down the chain: cast to attack, an Overdrive name with no key leaves the figure as it is, immediate snaps', async () => {
     const a = await rigged();
     a.setPose('cast');

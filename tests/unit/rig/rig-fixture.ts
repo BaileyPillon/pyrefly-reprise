@@ -63,6 +63,7 @@ export function makeRigFile(over: Partial<RigFile> = {}): RigFile {
         bones: { pelvis: { rot: 0.1 }, chest: { rot: 0.3 }, head: { rot: 0.2 }, arm: { rot: -1.2 }, thighN: { rot: -0.1 }, thighF: { rot: -0.1 } },
         source: 'characters/testfig/attack',
         ms: 140,
+        layers: { head: 1.5, arm: 6 }, // the head drops behind the body and the arm comes over the head in this pose
       },
       hurt: {
         bones: { pelvis: { rot: -0.08 }, chest: { rot: -0.25 }, head: { rot: -0.3 }, thighN: { rot: 0.08 }, thighF: { rot: 0.08 } },

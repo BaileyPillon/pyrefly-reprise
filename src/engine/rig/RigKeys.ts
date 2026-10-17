@@ -113,6 +113,11 @@ export class RigTransition {
     return this.moving;
   }
 
+  /** How far through the move in flight the figure is, 0..1 (1 when none is). */
+  get progress(): number {
+    return this.moving ? Math.min(1, this.elapsed / this.dur) : 1;
+  }
+
   /** Jump to `target` at once and stop. */
   snap(target: Float64Array): void {
     this.current.set(target);

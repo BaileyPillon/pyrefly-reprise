@@ -122,7 +122,7 @@ export class RigFigure {
       mesh.name = p.name;
       mesh.frustumCulled = false;
       mesh.renderOrder = renderOrder;
-      mesh.position.z = layer * LAYER_DZ;
+      mesh.position.z = p.order * LAYER_DZ;
       if (layer === 0) mesh.onBeforeRender = (_r, scene, camera: Camera): void => void (scene && this.carrier.noteViewCamera(camera));
       this.plane.add(mesh);
       this.parts.push({ data: p, mesh, geo, pos, material, map, rim });
@@ -150,6 +150,11 @@ export class RigFigure {
       this.texelSeen = k;
       for (const p of this.parts) setPartTexel(p.material, k, p.data.box[2], p.data.box[3]);
     }
+  }
+
+  /** Put the parts at their draw orders, with a key's overrides (`RigKey.layers`) on top; null restores each part's own `order`. */
+  setLayers(layers: Readonly<Record<string, number>> | null): void {
+    for (const p of this.parts) p.mesh.position.z = (layers?.[p.data.name] ?? p.data.order) * LAYER_DZ;
   }
 
   /** Move every part's vertices through the skeleton's current pose. */

@@ -58,6 +58,8 @@ export class RigActor extends PaintedActor {
   private readonly work: Float64Array;
   private chains: RigChains | null = null;
   private key = 'idle';
+  /** True while the draw-order overrides of the key being moved to are not on the parts yet (they go on halfway through the move). */
+  private layersDue = false;
   private readonly crossMs: number;
   private readonly rigBloomMasked: boolean;
   private rigClock: number;
@@ -147,6 +149,7 @@ export class RigActor extends PaintedActor {
     this.key = key;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
     this.trans.retarget(target, ms);
+    this.layersDue = true;
     if (ms <= 0) this.pose0();
   }
 
@@ -175,6 +178,10 @@ export class RigActor extends PaintedActor {
 
   /** The key's pose (mid-move or settled) plus the idle plus the chains, solved and skinned, the parts put where the plane is and drawn as opaque as the actor. */
   private compose(dt: number): void {
+    if (this.layersDue && this.trans.progress >= 0.5) {
+      this.layersDue = false;
+      this.rig.setLayers(this.data.keys.get(this.key)?.layers ?? null);
+    }
     this.work.set(this.trans.current);
 
     const down = this.lifeState === 'down';

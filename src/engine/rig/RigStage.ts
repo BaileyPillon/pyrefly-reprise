@@ -19,6 +19,10 @@ export interface FigureRequest {
   opts: PaintedActorOptions;
   /** The hidden `fxRig` setting, live. Absent reads as on. */
   setting?: () => boolean;
+  /** The query string the switch reads (tests); default the page's. */
+  search?: string;
+  /** Whether the art manifest lists a rig for the subject (tests); default the loaded manifest. */
+  listed?: (subject: string) => Promise<boolean>;
   /** Test hooks handed to the rig's asset: an idle painting already loaded, and how a part PNG becomes a texture. */
   hooks?: Pick<RigAsset, 'idlePainting' | 'loadTexture'>;
 }
@@ -32,7 +36,7 @@ export interface BuiltFigure {
 export async function buildFigure(r: FigureRequest): Promise<BuiltFigure> {
   // a figure-less part (Vegnagun's rings) has no painting to replace
   if (r.opts.figure !== false) {
-    const choice = await chooseRig(r.artId, r.poses['idle'], rigSwitch(r.setting), isDresspherePainting(r.artId));
+    const choice = await chooseRig(r.artId, r.poses['idle'], rigSwitch(r.setting, r.search), isDresspherePainting(r.artId), r.listed);
     if (choice.asset) {
       try {
         // loaded on first use: a build with no rig on disk never fetches the rig code, and a stage that has no use for it never evaluates a class that extends PaintedActor

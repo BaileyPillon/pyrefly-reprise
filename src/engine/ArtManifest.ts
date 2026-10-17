@@ -73,6 +73,11 @@ export interface ArtManifest {
   readonly title2x: readonly string[];
   /** Masters a backdrop ships beyond 1x, `{ gagazet: [2] }`: its painting and depth plates are drawn from the one the budget allows (release 39). */
   readonly backdropTiers?: Readonly<Record<string, readonly number[]>>;
+  /**
+   * The subjects that ship a rig (`public/art/rigs/<id>/rig.json`; the rig, 2026-10-17, `engine/rig/RigLoad.ts`). The stage asks a rig only of the subjects named here, so a
+   * build with no rigs makes no request for one (a 404 per figure would be a console error on every battle). Absent on a manifest with none, and then no figure is a rig.
+   */
+  readonly rigs?: readonly string[];
 }
 
 /** Public path of the manifest, resolved against the Vite base path. */
@@ -154,6 +159,7 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     title: strings(obj.title),
     title2x: strings(obj.title2x),
     backdropTiers: parseTiers(obj.backdropTiers, (key) => strings(obj.backdrops).includes(key)),
+    ...(Array.isArray(obj.rigs) ? { rigs: strings(obj.rigs) } : {}),
   };
 }
 
