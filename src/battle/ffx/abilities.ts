@@ -18,6 +18,10 @@
  * row deals its hits over the whole set (every pick first, stream 5), Cover (Guard, Sentinel) is decided per target, and a Reflecting target sends a
  * reflectable command back (to the caster for a holder on the other side, to a random member of the other side for one on the caster's own).
  * Each target then runs its hits in a row.
+ *
+ * **The order the hits are applied in is the game's too** (re-parity RC10, FFX only; `hit-order.ts`): the hits are still calculated target by target, but an action's events come round by round
+ * (hit 1 of every target, then hit 2) and each target's finish step (its script's `onHit`, the death check) runs in the round of its last hit, lower slot first. An absorb command's user
+ * is healed once, after every target, and skips its own slot.
  */
 
 import type { AbilityDef, AbilityId, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
