@@ -264,3 +264,14 @@ export const CONFUSION_PICK = true;
  * node count with the gates spread over successive links (an `[estimate]`), which is also what a grid with no layout keeps. A measurement and rollback switch; no random draw either way.
  */
 export const GRID_LAYOUTS = true;
+
+/**
+ * Whether a screen exists that lets a player choose the Alchemist's Mix's two items (re-parity RC9 lane X2-G left it for a mockup; the driver's item 88e; FFX-2 only). The engine takes a Mix with two items in
+ * `extra` and makes the game's result (`adapt/mix.ts`), but the menu has no way to ask for them, so a Mix picked from the menu is the bare Mix of before: nothing happens and nothing is spent. Off, the Mix row stays
+ * listed and is greyed with {@link MIX_PICKER_REASON}, so a player never picks it and an unattended Alchemist (the line the benches and the advisor play) never Mixes; the engine itself is unchanged and a test, an AI or
+ * a headless run can still submit a Mix directly. Turn it on when the picker lands.
+ */
+export const MIX_PICKER = false;
+
+/** The reason the Mix row is greyed while {@link MIX_PICKER} is off. */
+export const MIX_PICKER_REASON = 'needs the item picker';

@@ -59,15 +59,20 @@ function rikkuMenu(engine: FFX2Engine, events: BattleEvent[]): Input {
 }
 
 describe("Chapter XIII's real build: Rikku mixes from the real bag", () => {
-  it('she is an Alchemist with Mix learned and the bag the build names; her menu offers the Mix row, which opens the overlay a picker will answer', async () => {
+  it('she is an Alchemist with Mix learned and the bag the build names; her menu lists the Mix row, greyed until the picker exists, and it opens the overlay a picker will answer', async () => {
     const { engine, units, flags } = await trema();
     const rikku = units['rikku'] as Ffx2Unit;
     expect(rikku.dresspheres?.current).toBe('alchemist');
     expect([flags[`inventory:${LIGHT}`], flags[`inventory:${LUNAR}`], flags[`inventory:${MEGALIXIR}`]]).toEqual([10, 10, 99]);
     const menu = rikkuMenu(engine, []);
     const mix = menu.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'x2-alchemist-mix');
-    expect(mix?.enabled).toBe(true);
+    // Greyed on the r51 merge (the driver's item 88e): the row stays listed and opens the overlay the picker will answer, but it cannot be chosen until that screen exists
+    // (`constants.ts#MIX_PICKER`), so no player picks the bare Mix and an unattended Alchemist never Mixes. The next test submits the Mix directly, as an AI or a headless run does.
+    expect(mix?.enabled).toBe(false);
+    expect(mix?.disabledReason).toBe('needs the item picker');
     expect(mix?.opensMinigame).toBe('rikku-mix');
+    expect(menu.commands.filter((c) => c.disabledReason === 'needs the item picker'), 'only the Mix row carries the reason').toHaveLength(1);
+    expect(menu.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'x2-alchemist-stash-potion')?.enabled, 'her other Alchemist rows are unchanged').toBe(true);
   });
 
   it('the two curtains make the Wall (Shell and Protect on the party): one of each leaves the real bag at the pick, the cast fires the RESULT, and the counts stay down', async () => {
