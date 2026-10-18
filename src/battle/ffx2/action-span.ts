@@ -111,7 +111,7 @@ function girlBody(unit: Ffx2Unit): SpanBody {
   return {
     side: 'girl',
     idle: frames[0],
-    attack: frames[1],
+    attack: frames[1], // the girl's hit time is taken at the END of this clip: an ESTIMATE (an upper bound; her clips are short, 2 to 40 frames)
     castStart: frames[2],
     skillStart: frames[3],
     itemStart: frames[4],
