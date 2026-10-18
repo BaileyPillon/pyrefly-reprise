@@ -57,7 +57,7 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
     },
     {
       text: 'Summon works in every battle, but the aeons already taken are gone from Yuna’s Summon list and the one in front of you is never offered. Nothing heals between battles, and a fallen aeon needs more battles to recover than the chain has left.',
-      short: 'Taken aeons leave the list; nothing heals between links',
+      short: 'Taken aeons are gone; nothing heals between links',
       cite: 'ffx-bfa-yu-yevon §2.3; re-ffx-last-summoning §2, §5',
     },
     {

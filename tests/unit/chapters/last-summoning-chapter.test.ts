@@ -350,7 +350,7 @@ describe('the card and the document: cited, in the corpus form, and tied to the 
   it('says what the game does and no more: the twin is a copy at full HP, the lock, the flat 9,999, one Sister down means no Delta Attack, Doom or a blow bigger than what is left', () => {
     const text = LAST_SUMMONING_GUIDE.rules.map((r) => r.text).join(' ');
     expect(text).toMatch(/copy of your own/);
-    expect(text).toMatch(/greyed out/);
+    expect(text).toMatch(/gone from Yuna’s Summon list/); // release 55: a taken aeon has no row (it was "greyed out" before)
     expect(text).toMatch(/flat 9,999 on everyone at the front/);
     expect(text).toMatch(/Fell her first/);
     expect(text).toMatch(/Cindy keeps it going/);

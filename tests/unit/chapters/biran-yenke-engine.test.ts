@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import type { BattleEvent, Command, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { SeededRng } from '../../../src/battle/common/rng.ts';
 import { buildBattle, type Ctx } from '../../../src/battle/ffx/index.ts';
+import { setMenuDrawParity } from '../../../src/battle/ffx/menu-draw-parity.ts';
 import { executeCommand } from '../../../src/battle/ffx/execute.ts';
 import { runPreTurn } from '../../../src/battle/ffx/ai/hooks.ts';
 import { aiContextFor } from '../../../src/battle/ffx/ai/types.ts';
@@ -390,12 +391,28 @@ describe('the end (RE section 4): a defeat is the normal loss; Self-Destruct eje
     expect(over?.result.outcome).toBe('defeat');
   });
 
-  it("Escape, Flee and Switch are not on Kimahri's menu", () => {
+  it("Escape, Flee and Switch cannot be chosen from Kimahri's menu: shipped (r55 RE, MENU_DRAW_PARITY item d) the game draws them as greyed rows with no reason", () => {
     const e = H.newEngine(1);
     const input = H.nextInput(e);
-    const kinds = input.commands.map((c) => c.command.kind);
-    expect(kinds).not.toContain('escape');
-    expect(kinds).not.toContain('switch');
-    expect(input.commands.some((c) => /^(escape|flee|switch)$/i.test(c.label))).toBe(false);
+    const rows = input.commands.filter((c) => c.command.kind === 'escape' || c.command.kind === 'switch' || /^(escape|flee|switch)$/i.test(c.label));
+    expect(rows.length).toBeGreaterThan(0);
+    for (const r of rows) {
+      expect(r.enabled, String(r.label)).toBe(false);
+      expect(r.disabledReason, String(r.label)).toBeUndefined();
+    }
+  });
+
+  it("with the menu-draw switch off (the build before release 55) Escape, Flee and Switch are not on Kimahri's menu at all", () => {
+    const back = setMenuDrawParity(false);
+    try {
+      const e = H.newEngine(1);
+      const input = H.nextInput(e);
+      const kinds = input.commands.map((c) => c.command.kind);
+      expect(kinds).not.toContain('escape');
+      expect(kinds).not.toContain('switch');
+      expect(input.commands.some((c) => /^(escape|flee|switch)$/i.test(c.label))).toBe(false);
+    } finally {
+      back();
+    }
   });
 });

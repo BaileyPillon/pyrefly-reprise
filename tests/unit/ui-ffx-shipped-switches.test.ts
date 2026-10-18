@@ -13,8 +13,9 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import type { AnyCombatant, AvailableCommand, CombatantId, Command } from '../../src/battle/common/types.ts';
 import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
 import { opensList } from '../../src/ui/ffx/targetStepUi.ts';
-import { buildTopRows } from '../../src/ui/ffx/CommandMenuLogic.ts';
-import { actor, engineFor, menuOf } from './helpers/menuParityDrive.ts';
+import { buildTopRows, rowEnabled } from '../../src/ui/ffx/CommandMenuLogic.ts';
+import { topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
+import { actor, engineFor, menuOf, partyOf } from './helpers/menuParityDrive.ts';
 
 const playRefusal = vi.hoisted(() => vi.fn());
 vi.mock('../../src/ui/ffx/refusalCue.ts', () => ({ playRefusal }));
@@ -123,6 +124,34 @@ describe('Silenced Lulu (Chapter III), shipped: Black Magic opens onto grey spel
       expect(selected().toLowerCase()).not.toContain('overdrive');
     }
   });
+});
+
+describe('the ring walk, shipped: for every party member of Chapters I, II, III and XIV the cursor never rests on a greyed top row and reaches every enabled one', () => {
+  for (const [chapter, group] of [['seymour-flux', undefined], ['yunalesca', undefined], ['braskas-final-aeon', undefined], ['isaaru-via-purifico', undefined]] as const) {
+    it(`${chapter}`, async () => {
+      const engine = await engineFor(chapter, group);
+      let checkedGreyed = 0;
+      for (const who of partyOf(engine)) {
+        const commands = menuOf(engine, who);
+        const top = buildTopRows(commands);
+        const enabledLabels = top.filter(rowEnabled).map((r) => topRowVM(r).label);
+        const greyedLabels = top.filter((r) => !rowEnabled(r)).map((r) => topRowVM(r).label);
+        checkedGreyed += greyedLabels.length;
+        document.body.innerHTML = '';
+        const h = open(who, commands, engine.state().combatants as Record<CombatantId, AnyCombatant>);
+        const rested = new Set<string>([selected()]);
+        for (let i = 0; i < 2 * top.length + 2; i += 1) {
+          key('ArrowDown');
+          rested.add(selected());
+        }
+        for (const g of greyedLabels) expect(rested.has(g), `${chapter} ${who}: the cursor rested on the greyed row ${g}`).toBe(false);
+        for (const e of enabledLabels) expect(rested.has(e), `${chapter} ${who}: the enabled row ${e} was never reached`).toBe(true);
+        expect(h.resolved()).toBeNull();
+        h.menu.close();
+      }
+      expect(checkedGreyed, 'a greyed top row exists in this chapter (Escape at least), so the walk checked something').toBeGreaterThan(0);
+    });
+  }
 });
 
 describe('t6b shipped: the five characters\' one-entry Overdrive list opens instead of running its entry', () => {
