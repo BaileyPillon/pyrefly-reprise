@@ -1,9 +1,51 @@
 {
- "source": "FFX-2 Steam build 25501027; kernel/monster.bin rows 268 (Angra Mainyu, id 0x110c), 269 (Zarich, id 0x110d) and 270 (Tawrich, id 0x110e), the formations bika07_229, bika08_229, bika09_229, bika13_229 and bika14_229 and their start positions, read by the RE parity session (research/re-ffx2-angra-mainyu.md, origin/re-ffx2-angra-mainyu, sections 3 to 8). Numbers only. 'raw' is each row's 200 bytes as the note prints them (the English copy; bytes 8 to 199 are equal in all ten locale copies); 'decoded' is the proved columns by the note's column map (section 3), which tests/unit/chapters/angra-mainyu-data.test.ts re-derives from 'raw'. 'research' is research/ffx2-angra-mainyu.md (FF Wiki revisions 4041096, 3573851 and 3573852, and Jegged's Chapter 5 page) for the same monsters.",
+ "source": "FFX-2 Steam build 25501027; kernel/monster.bin rows 268 (Angra Mainyu, id 0x110c), 269 (Zarich, id 0x110d) and 270 (Tawrich, id 0x110e), the formations bika07_229, bika08_229, bika09_229, bika13_229 and bika14_229 and their start positions, read by the RE parity session (research/re-ffx2-angra-mainyu.md, origin/re-ffx2-angra-mainyu, sections 3 to 8). Numbers only. 'decoded' is the proved columns by the note's column map (section 3) and 'unmapped' the columns the note marks unmapped (section 6), each value at the record offset 'columns' gives (the rows' bytes are not kept; the English copy, bytes 8 to 199 equal in all ten locale copies); tests/unit/chapters/angra-mainyu-data.test.ts checks that every row has exactly those fields and that the offsets fit the 200-byte row without overlap. 'research' is research/ffx2-angra-mainyu.md (FF Wiki revisions 4041096, 3573851 and 3573852, and Jegged's Chapter 5 page) for the same monsters.",
+ "columns": {
+  "note": "Offsets from the start of the 200-byte monster.bin row (the note's column map, section 3, and its unmapped table); the row's bytes themselves are not kept.",
+  "decoded": {
+   "hp": "0x08 (4 bytes)",
+   "mp": "0x0c (4 bytes)",
+   "level": "0x10 (1 byte)",
+   "str": "0x11 (1 byte)",
+   "def": "0x12 (1 byte)",
+   "mag": "0x13 (1 byte)",
+   "mdef": "0x14 (1 byte)",
+   "agi": "0x15 (1 byte)",
+   "acc": "0x16 (1 byte)",
+   "eva": "0x17 (1 byte)",
+   "luck": "0x18 (1 byte)",
+   "special": "0x1a (2 bytes)",
+   "absorb": "0x1c (1 byte)",
+   "nullElements": "0x1d (1 byte)",
+   "half": "0x1e (1 byte)",
+   "weak": "0x1f (1 byte)",
+   "resist1": "0x20 (24 bytes; one byte per index, keyed by index, zeros left out)",
+   "resist2": "0x38 (24 bytes; one byte per index, keyed by index, zeros left out)",
+   "abilities": "0x70 (32 bytes; 16 ids of 2 bytes, zeros left out)",
+   "exp": "0x9c (4 bytes)",
+   "gil": "0xa0 (4 bytes)",
+   "pilferGil": "0xa4 (4 bytes)",
+   "ap": "0xa8 (2 bytes)",
+   "dropChanceByte": "0xaa (1 byte)",
+   "stealChanceByte": "0xab (1 byte)",
+   "dropItems": "0xac (8 bytes; 2 bytes each: common id, count, rare id, count)",
+   "stealItems": "0xb4 (8 bytes; 2 bytes each: common id, count, rare id, count)",
+   "bribeItems": "0xbc (8 bytes; 2 bytes each: common id, count, rare id, count)",
+   "zantetsuByte": "0xc4 (1 byte)",
+   "group2AutoMask": "0x54 (4 bytes)",
+   "group2AutoAmounts": "0x58 (24 bytes; one byte per index, keyed by index, zeros left out)"
+  },
+  "unmapped": {
+   "basakuWord": "0x90 (2 bytes)",
+   "soundId": "0x96 (2 bytes)",
+   "monsterTypeWord": "0x9a (2 bytes)",
+   "specialBits7to10": "0x1a (2 bytes; bits 7 to 10 of the special word)",
+   "elementBits6and7": "0x1c (4 bytes; bits 6 and 7 of the four element bytes, 1 if any of the four has the bit)"
+  }
+ },
  "rows": {
   "268": {
    "name": "angra-mainyu",
-   "raw": "8f8556009c85f901841605000f2700002f497c6172445f000200c30700100000ffffffffffffffffff00ff000000000000ffff00000000000000000000ffff0000ffff000000ff00000000000000000000000000000000000000000000000000000000000000000000000000000000002c412d412e416d40ba3082308530b530b830703100000000000000000000000000000c110c110c11000000008813000088130000d00700001e00ffff569001005690010009200100092001000000000000000000ff000000",
    "decoded": {
     "hp": 333444,
     "mp": 9999,
@@ -100,7 +142,6 @@
   },
   "269": {
    "name": "zarich",
-   "raw": "2b8634003286e502401500000f2700002446001963525f000100c30700102f00ffffffffffffffffff00ff000000000000ffff00000000000000ff0000ffff0000ffff000000ff00000000000000000000000000008000000000000000000000000000000000007f00000000000000002a41ed41f041ef41ee41f141f441f341f241000000000000000000000000000000000d110d110d110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff000000",
    "decoded": {
     "hp": 5440,
     "mp": 9999,
@@ -199,7 +240,6 @@
   },
   "270": {
    "name": "tawrich",
-   "raw": "e8863300f0860303401500000f2700002655632a00715f000100c30700100000ffffffffffffffffff00ff000000000000ffff00000000000000ff0000ffff0000ffff000000ff0000000000000000000000000000000100000000000000000000000000000000007f0000000000000029412b410000000000000000000000000000000000000000000000000000000000000e110e110e110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff000000",
    "decoded": {
     "hp": 5440,
     "mp": 9999,
