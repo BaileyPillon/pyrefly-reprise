@@ -15,7 +15,8 @@ import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
 import { applyDuelRows, lockReason, summonLabel } from './aeon-duel.ts';
 import { defendTakenFrom } from './formation-flags.ts';
-import { greyDisabledRows } from './formation-commands.ts';
+import { aeonScriptOff, greyDisabledRows } from './formation-commands.ts';
+import { aeonSummonable } from './adapt/aeon-party.ts';
 import { triggerHandler } from './ai/index.ts';
 import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
@@ -199,14 +200,16 @@ function menuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
       // The Magus Sisters are one entry (a build that owns them, re-parity lane FFX-K): Cindy's row stands for the three, locked or not (a locked Sandy or Mindy would be two more greyed rows). Its label is the game's own, "Magus Sisters" (`summonLabel`); `ctx.rt.sisters` is set by Chapter XXVII and the hidden Chapter 28 alike.
       if (ctx.rt.sisters && (key === 'sandy' || key === 'mindy')) continue;
       const locked = lockReason(ctx, key);
-      if (!free.has(aeon.id) && !(locked !== undefined && aeon.hp > 0)) continue;
+      // A possessed copy's script took this aeon away (`SCRIPT_COMMAND_DISABLES`, off): the game's list builder (0x00785410, category 5) never reads the availability byte, so the entry stays and the draw loop (0x008A49B0) greys it, with no reason.
+      const scriptOff = aeonScriptOff(ctx, key) && locked === undefined && aeonSummonable(aeon);
+      if (!free.has(aeon.id) && !(locked !== undefined && aeon.hp > 0) && !scriptOff) continue;
       const row: AvailableCommand = {
         command: { kind: 'summon', id: aeon.id, targets: [] },
         label: summonLabel(ctx, key, aeon.name),
         category: 'summon',
         mpCost: 0,
         rank: 3,
-        enabled: locked === undefined, // Summon and Grand Summon carry no Silence flag: a Silenced Yuna can summon (FFX-G07 finding 3, re-parity RC7)
+        enabled: locked === undefined && !scriptOff, // Summon and Grand Summon carry no Silence flag: a Silenced Yuna can summon (FFX-G07 finding 3, re-parity RC7)
         validTargets: [],
       };
       if (!row.enabled) row.disabledReason = locked;

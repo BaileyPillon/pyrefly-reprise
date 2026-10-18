@@ -17,6 +17,7 @@
 import type { AbilityId, ItemId } from '../common/types.ts';
 import type { Ctx } from './state.ts';
 import { grandSummonChoices, summonLabel } from './aeon-duel.ts';
+import { aeonScriptOff } from './formation-commands.ts';
 
 /**
  * Whether the Mix picker's preview names the result of **every** pair in the bag (the game's chart, `mixablePairs`), or only the registered recipes
@@ -35,6 +36,8 @@ export interface GrandSummonEntry {
   id: string;
   name: string;
   storedGauge: number;
+  /** `false` for an aeon a possessed copy's script took away (`SCRIPT_COMMAND_DISABLES`, off): the picker draws it greyed and refuses it, as the game's list does. Absent otherwise. */
+  enabled?: false;
 }
 
 /** One row of the Mix list: an item in the bag, by name, with its count. */
@@ -56,9 +59,11 @@ export interface MixPickerParams {
 
 /** The aeons Grand Summon may call, in the menu's (roster) order, as the picker reads them. */
 export function grandSummonEntries(ctx: Ctx): GrandSummonEntry[] {
-  return grandSummonChoices(ctx).map((id) => {
+  return grandSummonChoices(ctx, true).map((id) => {
     const aeon = ctx.rt.aeonRoster.get(id);
-    return { id, name: summonLabel(ctx, id, aeon?.name ?? id), storedGauge: aeon?.overdrive?.gauge ?? 0 };
+    const entry: GrandSummonEntry = { id, name: summonLabel(ctx, id, aeon?.name ?? id), storedGauge: aeon?.overdrive?.gauge ?? 0 };
+    if (aeonScriptOff(ctx, id)) entry.enabled = false;
+    return entry;
   });
 }
 

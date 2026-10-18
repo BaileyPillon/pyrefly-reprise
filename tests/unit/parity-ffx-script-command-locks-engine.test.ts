@@ -7,8 +7,9 @@
  *
  * - **Off** (the shipped state): the field is inert. Yuna's menu in each link holds all five aeons, the Grand Summon picker lists all five, and a link played with the field
  *   taken off the group is identical, event for event, to the shipped one.
- * - **On**: in each link the copy's own aeon is not on Yuna's Summon list (the row is not built), is not a Grand Summon choice, and a submitted Summon of it (or a Grand Summon that names it) is
- *   refused with the turn kept open; every other aeon is as before; a fork sees the same; the Last Summoning (which locks the same aeon with `lockedAeons`) is identical in both states.
+ * - **On**: in each link the copy's own aeon stays on Yuna's Summon list **greyed with no reason** (the game's list builder, 0x00785410 category 5, never reads the availability byte; the draw
+ *   loop 0x008A49B0 greys the entry the resolver refuses: re-parity RC11, the merge onto r54's greyed-row design), is a greyed entry in the Grand Summon picker, is not a Grand Summon default, and a submitted
+ *   Summon of it (or a Grand Summon that names it) is refused with the turn kept open; every other aeon is as before; a fork sees the same; the Last Summoning (which locks the same aeon with `lockedAeons`) is identical in both states.
  * - **A 0x3xxx row** (no shipped fight reaches one; the other eight scripts are in fights no chapter fights) sets the same flags a formation's row sets: a synthetic group shows it.
  */
 
@@ -16,6 +17,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { AvailableCommand, BattleEngine, BattleEvent, Command, Decision, EnemyGroupDef, FFXCombatant } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { grandSummonEntries } from '../../src/battle/ffx/pickerParams.ts';
+import { grandSummonChoices } from '../../src/battle/ffx/aeon-duel.ts';
 import { SCRIPT_COMMAND_DISABLES, commandRefused, menuCommandOf, setScriptCommandDisables } from '../../src/battle/ffx/formation-commands.ts';
 import type { Ctx } from '../../src/battle/ffx/state.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
@@ -103,15 +105,20 @@ describe('the switch is off, and off the field is inert', () => {
 });
 
 describe('the switch is on: each possessed copy takes its own aeon from Yuna', () => {
-  it('in each link the copy\'s aeon is not on the Summon list or in the Grand Summon picker, and the other four are', () => {
+  it('in each link the copy\'s aeon is a greyed Summon row with no reason and a greyed picker entry; the other four are enabled', () => {
     restore = setScriptCommandDisables(true);
     for (const [i, link] of LINKS.entries()) {
       const engine = linkEngine(link);
       const d = turnOf(engine);
-      const others = AEONS.filter((_, j) => j !== i);
-      expect(labelsOf(d), link).toEqual(others.map((a) => LABEL[a]));
-      expect(summonRows(d).every((r) => r.enabled), link).toBe(true);
-      expect(grandSummonEntries(ctxOf(engine)).map((e) => e.id), link).toEqual(others);
+      expect(labelsOf(d), link).toEqual(AEONS.map((a) => LABEL[a]));
+      for (const [j, row] of summonRows(d).entries()) {
+        expect(row.enabled, `${link} ${row.label}`).toBe(j !== i);
+        expect(row.disabledReason, `${link} ${row.label}`).toBeUndefined(); // the game prints none; "Taken by Yu Yevon" is the Last Summoning board's
+      }
+      const entries = grandSummonEntries(ctxOf(engine));
+      expect(entries.map((e) => e.id), link).toEqual([...AEONS]);
+      expect(entries.map((e) => e.enabled), link).toEqual(AEONS.map((_, j) => (j === i ? false : undefined)));
+      expect(grandSummonChoices(ctxOf(engine)), link).toEqual(AEONS.filter((_, j) => j !== i)); // the default roll never lands on it
     }
   });
 
@@ -126,6 +133,7 @@ describe('the switch is on: each possessed copy takes its own aeon from Yuna', (
       expect(again.kind, link).toBe('player-input');
       expect((again as Input).actorId, link).toBe('yuna');
       expect(labelsOf(again as Input), link).toEqual(labelsOf(d));
+      expect(summonRows(again as Input).filter((r) => !r.enabled).map((r) => r.label), link).toEqual([LABEL[own]!]);
       const other = AEONS[(i + 1) % AEONS.length]!;
       const events: BattleEvent[] = engine.submit({ kind: 'summon', id: other, targets: [] } as Command);
       expect(events.some((e) => e.type === 'summon' && (e as { aeonId?: string }).aeonId === other), link).toBe(true);
@@ -154,16 +162,18 @@ describe('the switch is on: each possessed copy takes its own aeon from Yuna', (
     const d = turnOf(engine);
     const fd = turnOf(fork);
     expect(labelsOf(fd)).toEqual(labelsOf(d));
-    expect(labelsOf(fd)).not.toContain('Shiva');
+    expect(summonRows(fd).filter((r) => !r.enabled).map((r) => r.label)).toEqual(['Shiva']);
   });
 
-  it('an aeon that is out already and the rest of the menu are untouched: Yuna keeps Summon, Grand Summon, Attack and Defend, only the one row is gone', () => {
+  it('the rest of the menu is untouched: the same rows in the same order, only the copy\'s aeon row goes from enabled to greyed', () => {
     const off = turnOf(linkEngine('possessed-ifrit'));
     restore = setScriptCommandDisables(true);
     const on = turnOf(linkEngine('possessed-ifrit'));
     const strip = (rows: AvailableCommand[]): string[] => rows.filter((r) => r.command.kind !== 'summon').map((r) => `${r.command.kind}:${r.label}:${r.enabled}`);
     expect(strip(on.commands)).toEqual(strip(off.commands));
-    expect(on.commands.length).toBe(off.commands.length - 1);
+    expect(on.commands.length).toBe(off.commands.length);
+    const flips = on.commands.filter((r, k) => r.enabled !== off.commands[k]!.enabled || r.label !== off.commands[k]!.label);
+    expect(flips.map((r) => r.label)).toEqual(['Ifrit']);
   });
 });
 
@@ -201,7 +211,7 @@ describe('a 0x3xxx row sets the formation\'s flags (synthetic: no shipped fight 
   });
   const kinds = (d: Input): string[] => d.commands.map((c) => c.command.kind);
 
-  it('off: the rows are all there; on: Tidus has no Attack, Yuna no White Magic, nobody an Item, and a submitted Attack of Tidus is refused', () => {
+  it('off: the rows are all there and enabled; on: Tidus\'s Attack, Yuna\'s White Magic and everyone\'s Item stay as greyed rows, and a submitted Attack of Tidus is refused', () => {
     const offEngine = engineAt(synthetic());
     const tidusOff = turnOf(offEngine, 'tidus');
     expect(kinds(tidusOff)).toContain('attack');
@@ -210,17 +220,19 @@ describe('a 0x3xxx row sets the formation\'s flags (synthetic: no shipped fight 
     restore = setScriptCommandDisables(true);
     const engine = engineAt(synthetic());
     const tidus = turnOf(engine, 'tidus');
-    expect(kinds(tidus)).not.toContain('attack');
-    expect(kinds(tidus)).not.toContain('item');
-    expect(tidus.commands.length).toBeGreaterThan(0);
+    const greyed = (d: Input, pick: (c: AvailableCommand) => boolean): boolean => d.commands.filter(pick).length > 0 && d.commands.filter(pick).every((c) => !c.enabled && c.disabledReason === undefined);
+    expect(greyed(tidus, (c) => c.command.kind === 'attack')).toBe(true);
+    expect(greyed(tidus, (c) => c.command.kind === 'item')).toBe(true);
+    expect(tidus.commands.some((c) => c.enabled)).toBe(true);
     const foe = ctxOf(engine).state.enemyIds[0]!;
     expect(engine.submit({ kind: 'attack', targets: [foe] } as Command)).toEqual([]);
     expect((engine.nextDecision() as Input).actorId).toBe('tidus');
     engine.submit(defend());
     const yuna = turnOf(engine, 'yuna');
-    expect(yuna.commands.some((c) => c.category === 'whitemagic')).toBe(false);
-    expect(kinds(yuna)).not.toContain('item');
+    expect(greyed(yuna, (c) => c.category === 'whitemagic')).toBe(true);
+    expect(greyed(yuna, (c) => c.command.kind === 'item')).toBe(true);
     // the synthetic row names no aeon: Yuna's Summon list is untouched
     expect(labelsOf(yuna)).toEqual(AEONS.map((a) => LABEL[a]));
+    expect(summonRows(yuna).every((r) => r.enabled)).toBe(true);
   });
 });

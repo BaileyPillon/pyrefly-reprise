@@ -196,10 +196,10 @@ export function summonLabel(ctx: Ctx, key: string, name: string): string {
  * a KO'd one (an aeon KO'd in an earlier link stays down, research §1.2
  * `[derived]`) are left out, exactly as the Summon list leaves them out.
  */
-export function grandSummonChoices(ctx: Ctx): string[] {
+export function grandSummonChoices(ctx: Ctx, withScriptOff = false): string[] {
   // The Magus Sisters are one choice (a build that owns them, re-parity lane FFX-K): Cindy stands for the three. `ctx.rt.sisters` is set by every build that owns them: Chapter XXVII (Mirror Aeons) and the hidden Chapter 28 (the Last Summoning), so the picker lists one entry for them in both (the game lists one).
-  // An aeon a monster's script made unavailable (`./formation-commands.ts`, off by default) is not a choice either.
-  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')) && !aeonScriptOff(ctx, k));
+  // An aeon a monster's script made unavailable (`./formation-commands.ts`, off by default) is not a choice; `withScriptOff` keeps it, for the picker, which draws it greyed (the game's list does).
+  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')) && (withScriptOff || !aeonScriptOff(ctx, k)));
   if (!aeonsOnly(ctx)) return keys.filter((k) => lockedMirrorOf(ctx, k) === undefined);
   return keys.filter((k) => {
     const aeon = ctx.rt.aeonRoster.get(k);

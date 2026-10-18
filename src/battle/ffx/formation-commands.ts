@@ -36,8 +36,9 @@
  * The same call is made by 18 **monster** scripts. Only the ten possessed aeons and Magus Sisters (m163 to m169, m178 to m180) are fought by a shipped chapter, and each makes one call at its
  * init, `setCommandDisabled(1, <its own aeon's id>, 0)`: an id below 0x1000, the setter's other branch, which writes the flag into the availability byte of that aeon (+0xDD4 of its character);
  * the summon menu's gate (0x0079A080, `aeonUnavailable`) reads the byte, so with 0 Yuna cannot summon that aeon. `EnemyGroupDef.scriptCommandDisables` carries those rows (Chapter III's five
- * possession links); {@link applyFormationCommandDisables} reads them only while {@link SCRIPT_COMMAND_DISABLES} is on (**off**). An aeon that is off leaves `availableAeons` (so its Summon row is
- * **not built**, hidden like Isaaru's rows: the driver's choice) and Grand Summon's choices, and {@link commandRefused} refuses a submitted Summon or a Grand Summon that names it. A 0x3xxx row sets
+ * possession links); {@link applyFormationCommandDisables} reads them only while {@link SCRIPT_COMMAND_DISABLES} is on (**off**). An aeon that is off leaves `availableAeons` and Grand Summon's choices (so the
+ * default roll never lands on it), but its Summon row **stays on Yuna's list greyed with no reason** and it stays in the Grand Summon picker as a greyed entry (re-parity RC11: the game's list builder, 0x00785410
+ * category 5, never reads the availability byte, and the draw loop, 0x008A49B0, greys the entry the resolver refuses); {@link commandRefused} refuses a submitted Summon or a Grand Summon that names it. A 0x3xxx row sets
  * the same flags a formation's row sets (no shipped fight reaches one: the other eight scripts are in fights no chapter fights). The hidden Last Summoning models the same lock with
  * `lockedAeons` ("Taken by Yu Yevon") and carries no `scriptCommandDisables`.
  *
