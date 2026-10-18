@@ -2,8 +2,9 @@
  * **The commands a formation script switches off, in the engine** (re-parity RC10, lane "FFX Isaaru commands"; **FFX only**; the model of the game and the data are
  * `parity-ffx-isaaru-commands.test.ts`; the handoff is `docs/handoff/re-parity-rc10-ffx-isaaru-commands.md`):
  *
- * 1. **The engine** drops the rows of those commands from Yuna's menu (so it is Summon and Grand Summon), refuses a submitted one with the turn kept open, leaves the aeons'
- *    menus and every other chapter alone, and applies "everyone" to a bigger party too.
+ * 1. **The engine** keeps the rows of those commands on Yuna's menu **greyed, with no reason** (the game's draw loop skips a row only for -4; a disabled command answers -1, so
+ *    it is drawn greyed), so the only rows she can pick are Summon and Grand Summon; it refuses a submitted one with the turn kept open, leaves the aeons' menus and every
+ *    other chapter alone, and applies "everyone" to a bigger party too.
  * 2. **The pure rule**: the mapping of a row to the game command (every kind and every ability category), whose side loses it, and the one switch.
  */
 
@@ -16,9 +17,13 @@ import { getChapter } from '../../src/data/encounters.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID } from '../../src/data/ffx/index.ts';
 import { highbridgeBuild } from '../../src/data/ffx/builds/highbridge.ts';
 import {
-  COMMAND_OFF_ANY, FORMATION_COMMAND_DISABLES, GAME_COMMAND, applyFormationCommandDisables, commandOff, commandRefused, menuCommandOf, withoutDisabledRows,
+  COMMAND_OFF_ANY, FORMATION_COMMAND_DISABLES, GAME_COMMAND, applyFormationCommandDisables, commandOff, commandRefused, greyDisabledRows, menuCommandOf,
 } from '../../src/battle/ffx/formation-commands.ts';
-import { actor, content, grandSummon, newEngine, nextInput, row, setupFor, type Input } from './helpers/isaaruUnits.ts';
+import { ONLY_AN_AEON } from '../../src/battle/ffx/aeon-duel.ts';
+import { buildTopRows, firstEnabledIndex, rowEnabled } from '../../src/ui/ffx/CommandMenuLogic.ts';
+import { topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
+import { commandHelpText } from '../../src/ui/ffx/commandHelp.ts';
+import { actor, content, grandSummon, newEngine, nextInput, pass, row, setupFor, type Input } from './helpers/isaaruUnits.ts';
 
 /** The three formation files of Isaaru's contest and the engine group each one is (Fist, Wing and Sword are the first, second and third link). */
 const ISAARU_FORMATIONS: Readonly<Record<string, string>> = { bvyt09_10: 'isaaru-grothia', bvyt09_11: 'isaaru-pterya', bvyt09_12: 'isaaru-spathi' };
@@ -39,16 +44,34 @@ const SWITCHED_OFF: readonly [string, Command][] = [
   ['Flee', { kind: 'escape', targets: [], extra: { mode: 'party' } }],
 ];
 
-describe('the engine: Yuna\'s menu in Isaaru\'s three battles is Summon and Grand Summon', () => {
+/** Is this a row the formation script switched off for Yuna (the game's Attack, Item, Skill, Special, Black Magic and White Magic commands, and Switch and Escape)? */
+const isSwitchedOffRow = (c: AvailableCommand): boolean =>
+  c.command.kind === 'attack' || c.command.kind === 'item' || c.command.kind === 'switch' || c.command.kind === 'escape'
+  || (c.command.kind === 'ability' && ['skill', 'special', 'blackmagic', 'whitemagic'].includes(c.category));
+
+describe('the engine: Yuna\'s menu in Isaaru\'s three battles can pick only Summon and Grand Summon; every other command is drawn greyed with no reason', () => {
   for (const [file, link] of Object.entries(ISAARU_FORMATIONS)) {
-    it(`${file} (${link}): her first menu holds only Summon rows, Grand Summon and the older greyed Talk; every command the script switched off is refused with the turn kept open`, () => {
+    it(`${file} (${link}): the rows she can pick are Summon rows and Grand Summon; the switched-off commands keep their rows, greyed, no reason; each is refused with the turn kept open`, () => {
       const engine = newEngine(link as (typeof LINK_IDS)[number], 3);
       expect(engine.state().flags[COMMAND_OFF_ANY]).toBe(true);
       const d = nextInput(engine)!;
       expect(d.actorId).toBe('yuna');
       const kinds = d.commands.map((c) => c.command.kind);
-      expect(new Set(kinds)).toEqual(new Set(['summon', 'overdrive', 'trigger']));
       expect(kinds.filter((k) => k === 'summon')).toHaveLength(5);
+      // What she can pick (the cursor skips a greyed row): Summon and Grand Summon, and nothing else.
+      expect(new Set(d.commands.filter((c) => c.enabled).map((c) => c.command.kind))).toEqual(new Set(['summon', 'overdrive']));
+      // Greyed, not hidden (the game's draw loop skips a row only for -4; a disabled command answers -1): Attack, the Item rows, Skill, Special and the magic lists keep their
+      // rows, `enabled: false`, and carry no `disabledReason` (the original prints none, not even the duel's older "Only an aeon can fight an aeon").
+      const off = d.commands.filter(isSwitchedOffRow);
+      for (const [kind, id] of [['attack', undefined], ['item', 'potion'], ['ability', 'cura'], ['ability', 'pray'], ['ability', 'scan']] as const) {
+        expect(row(d.commands, kind, id), `${kind}:${id}`).toBeDefined();
+      }
+      expect(off.length).toBeGreaterThan(5);
+      for (const c of off) {
+        expect(c.enabled, c.label).toBe(false);
+        expect(c.disabledReason, c.label).toBeUndefined();
+        expect('disabledReason' in c, c.label).toBe(false);
+      }
       expect(row(d.commands, 'overdrive', 'grand-summon')).toMatchObject({ enabled: true });
       expect(row(d.commands, 'trigger', 'talk')).toMatchObject({ enabled: false }); // greyed by the older B6 rule; no Isaaru script touches Talk (0x3105)
       const before = engine.state().log.length;
@@ -71,8 +94,9 @@ describe('the engine: Yuna\'s menu in Isaaru\'s three battles is Summon and Gran
     const engine = newEngine('isaaru-grothia', 4);
     const fork = (engine as ReturnType<typeof createFFXEngine>).fork(99);
     expect(fork.state().flags[COMMAND_OFF_ANY]).toBe(true);
-    const kinds = new Set(nextInput(fork)!.commands.map((c) => c.command.kind));
-    expect(kinds).toEqual(new Set(['summon', 'overdrive', 'trigger']));
+    const commands = nextInput(fork)!.commands;
+    expect(new Set(commands.filter((c) => c.enabled).map((c) => c.command.kind))).toEqual(new Set(['summon', 'overdrive']));
+    expect(row(commands, 'attack')).toMatchObject({ enabled: false }); // greyed, not hidden, in the fork too
     expect(fork.submit({ kind: 'attack', targets: ['grothia'] })).toEqual([]);
   });
 
@@ -97,19 +121,19 @@ describe('the engine: Yuna\'s menu in Isaaru\'s three battles is Summon and Gran
     expect(e.submit({ kind: 'ability', id: 'cura', targets: ['yuna'] }).some((x) => x.type === 'action-start')).toBe(true);
   });
 
-  it('a bigger party in the same battle: Switch, Escape and Flee are off for everyone (a bench, canEscape and a Flee row are all there), while Attack and the rest stay with everyone but Yuna', () => {
+  it('a bigger party in the same battle: Switch, Escape and Flee are greyed for everyone (a bench, canEscape and a Flee row are all there), while Attack and the rest stay usable for everyone but Yuna', () => {
     const base = ENEMY_GROUPS_BY_ID['isaaru-grothia'] as EnemyGroupDef;
     const make = (group: EnemyGroupDef): Input[] => {
       const e = createFFXEngine({ content, autoResolveMinigames: true });
       e.init({ game: 'ffx', party: highbridgeBuild, enemies: group, triggers: [], seed: 7, condition: 'normal', canEscape: true });
       const seen: Input[] = [];
-      for (let i = 0; i < 400 && seen.length < 3; i++) {
+      for (let i = 0; i < 400 && !seen.some((s) => s.actorId === 'yuna'); i++) {
         const d = e.nextDecision();
         if (d.kind === 'battle-over') break;
         if (d.kind !== 'player-input') continue;
         if (!seen.some((s) => s.actorId === d.actorId)) seen.push(d);
-        e.submit({ kind: 'summon', id: 'shiva', targets: [] }); // any legal move to reach the others' turns; refusals leave the turn open, so only a legal one advances
-        if (e.state().aeonId !== null) break;
+        if (d.actorId === 'yuna') break; // her first menu is what the test reads; the others' turns before it are spent on a move they can make
+        e.submit(pass(d)); // a legal move to reach the others' turns; refusals leave the turn open, so only a legal one advances
       }
       return seen;
     };
@@ -122,14 +146,46 @@ describe('the engine: Yuna\'s menu in Isaaru\'s three battles is Summon and Gran
     expect(tidusPlain).toContain('switch');
     expect(tidusPlain).toContain('escape');
     expect(plain.find((d) => d.actorId === 'tidus')!.commands.some((c) => c.command.kind === 'escape' && c.command.extra?.mode === 'party')).toBe(true);
-    const tidusOff = kindsOf(off, 'tidus');
-    expect(tidusOff.length).toBeGreaterThan(0);
-    expect(tidusOff).not.toContain('switch');
-    expect(tidusOff).not.toContain('escape'); // the Escape row and the Flee row are both `escape`
-    expect(tidusOff).toContain('attack'); // Attack is switched off for Yuna alone
-    expect(tidusOff).toContain('item');
-    const yunaOff = kindsOf(off, 'yuna');
-    for (const gone of ['attack', 'item', 'switch', 'escape', 'ability']) expect(yunaOff, `yuna ${gone}`).not.toContain(gone);
+    // The rows of a switched-off command are still drawn, greyed with no reason, and nothing the player can pick is left of them.
+    const usable = (ds: Input[], id: string) => ds.find((d) => d.actorId === id)?.commands.filter((c) => c.enabled).map((c) => c.command.kind) ?? [];
+    const greyedOf = (ds: Input[], id: string) => ds.find((d) => d.actorId === id)?.commands.filter((c) => !c.enabled && c.disabledReason === undefined).map((c) => c.command.kind) ?? [];
+    expect(kindsOf(off, 'tidus')).toEqual(kindsOf(plain, 'tidus')); // the same rows are on the menu: greyed, not taken away
+    const tidusUsable = usable(off, 'tidus');
+    expect(tidusUsable.length).toBeGreaterThan(0);
+    expect(tidusUsable).not.toContain('switch');
+    expect(tidusUsable).not.toContain('escape'); // the Escape row and the Flee row are both `escape`
+    // Attack is switched off for Yuna alone: Tidus's Attack row is on his menu with the duel's own older reason (only an aeon can fight an aeon), not the formation's no-reason grey.
+    expect(row(off.find((d) => d.actorId === 'tidus')!.commands, 'attack')).toMatchObject({ enabled: false, disabledReason: ONLY_AN_AEON });
+    expect(tidusUsable).toContain('item');
+    expect(greyedOf(off, 'tidus')).toEqual(expect.arrayContaining(['switch', 'escape']));
+    const yunaUsable = usable(off, 'yuna');
+    for (const gone of ['attack', 'item', 'switch', 'escape', 'ability']) expect(yunaUsable, `yuna ${gone}`).not.toContain(gone);
+    expect(greyedOf(off, 'yuna')).toEqual(expect.arrayContaining(['attack', 'item', 'switch', 'escape', 'ability']));
+  });
+});
+
+describe('the FFX command window draws the greyed, reason-less rows (its pure view-model, no DOM)', () => {
+  it("Yuna's first menu: Attack and the Item, Skill, Special and magic groups are greyed rows; the cursor opens on a Summon or Grand Summon row; the help slab prints the effect alone", () => {
+    const d = nextInput(newEngine('isaaru-grothia', 3))!;
+    const top = buildTopRows(d.commands);
+    const attack = top.find((r) => r.kind === 'direct' && r.cmd.command.kind === 'attack')!;
+    expect(attack, 'the Attack row is on the window').toBeDefined();
+    expect(topRowVM(attack)).toMatchObject({ enabled: false, group: false });
+    for (const category of ['item', 'special', 'whitemagic']) {
+      const group = top.find((r) => r.kind === 'group' && r.category === category);
+      expect(group, `the ${category} group is on the window`).toBeDefined();
+      expect(rowEnabled(group!), category).toBe(false);
+      expect(topRowVM(group!).enabled, category).toBe(false);
+    }
+    const first = top[firstEnabledIndex(top)]!;
+    expect(first.kind === 'group' && (first.category === 'summon' || first.category === 'overdrive')).toBe(true);
+    // The help slab: a greyed row with no reason prints the effect alone, never "undefined" and no "reason - " prefix.
+    const cura = row(d.commands, 'ability', 'cura')!;
+    expect(cura.enabled).toBe(false);
+    expect(cura.disabledReason).toBeUndefined();
+    const text = commandHelpText(cura);
+    expect(text).not.toMatch(/undefined|— /);
+    expect(text).toBe(commandHelpText({ ...cura, enabled: true }));
   });
 });
 
@@ -224,16 +280,24 @@ describe('the pure rule', () => {
     expect(commandRefused(ctx, mk('enemy', 'grothia'), { kind: 'switch', targets: [], extra: { outId: 'a', inId: 'b' } })).toBe(false);
   });
 
-  it('a group that lists nothing sets nothing, and the menu filter hands back the very same rows when nothing is switched off, or for a monster', () => {
+  it('a group that lists nothing sets nothing, and the menu rule hands back the very same rows when nothing is switched off, or for a monster; a switched-off row is greyed, no reason, as a copy', () => {
     const ctx = fakeCtx({});
     applyFormationCommandDisables(ctx, { id: 'g', game: 'ffx', enemies: [] } as unknown as EnemyGroupDef);
     expect(Object.keys((ctx as never as { state: { flags: Record<string, unknown> } }).state.flags)).toEqual([]);
     const rows = [{ command: { kind: 'attack', targets: [] }, label: 'Attack', category: 'attack', mpCost: 0, enabled: true, validTargets: [] }] as AvailableCommand[];
-    expect(withoutDisabledRows(ctx, mk('party', 'yuna'), rows)).toBe(rows);
+    expect(greyDisabledRows(ctx, mk('party', 'yuna'), rows)).toBe(rows);
     const on = fakeCtx({ [COMMAND_OFF_ANY]: true, 'formation.cmdOff:yuna:12288': true });
-    expect(withoutDisabledRows(on, mk('party', 'yuna'), rows)).toEqual([]);
-    expect(withoutDisabledRows(on, mk('party', 'tidus'), rows)).toEqual(rows); // a copy, with nothing taken out
-    expect(withoutDisabledRows(on, mk('enemy', 'yuna'), rows)).toBe(rows);
+    const greyed = greyDisabledRows(on, mk('party', 'yuna'), rows);
+    expect(greyed).toHaveLength(1); // kept, not taken out
+    expect(greyed[0]).toEqual({ command: { kind: 'attack', targets: [] }, label: 'Attack', category: 'attack', mpCost: 0, enabled: false, validTargets: [] });
+    expect('disabledReason' in greyed[0]!).toBe(false);
+    expect(rows[0]!.enabled).toBe(true); // the input is never changed
+    // A row that carried a reason of its own (the duel's older one) loses it: the original prints none for a switched-off command.
+    const reasoned = [{ ...rows[0]!, enabled: false, disabledReason: 'Only an aeon can fight an aeon' }] as AvailableCommand[];
+    expect('disabledReason' in greyDisabledRows(on, mk('party', 'yuna'), reasoned)[0]!).toBe(false);
+    expect(greyDisabledRows(on, mk('party', 'tidus'), rows)).toEqual(rows); // a copy, with nothing greyed
+    expect(greyDisabledRows(on, mk('party', 'tidus'), reasoned)[0]!.disabledReason).toBe('Only an aeon can fight an aeon'); // another member's row is left as it was
+    expect(greyDisabledRows(on, mk('enemy', 'yuna'), rows)).toBe(rows);
   });
 });
 

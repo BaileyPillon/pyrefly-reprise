@@ -3191,7 +3191,7 @@ export interface EnemyGroupDef {
    * formation script calls `setCommandDisabled(who, command, 1)` once per command, before the first turn, and the menu gate treats that command as unusable for
    * that actor for the whole battle. Numbers only: `command` is the game's own command id. Only Isaaru's three aeon-contest formations (Chapter XIV) do it among the
    * formations of our chapters (the other chapters' scripts switch off Escape and Flee, which `canEscape` and `lineUp.noSwitch` already carry). While a command is
-   * listed, the FFX command list (`battle/ffx/commands.ts`) drops the rows that belong to it for that actor and `submit()` refuses a command that belongs to it,
+   * listed, the FFX command list (`battle/ffx/commands.ts`) keeps the rows that belong to it for that actor, greyed (`enabled: false`, no `disabledReason`: the game's draw loop draws a disabled command, read as greyed), and `submit()` refuses a command that belongs to it,
    * the turn kept open. Read by `battle/ffx/formation-commands.ts` and nothing else; absent everywhere else, so no other battle changes.
    */
   commandDisables?: readonly FormationCommandOff[];

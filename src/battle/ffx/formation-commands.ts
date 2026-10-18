@@ -6,7 +6,9 @@
  * A formation script's `setCommandDisabled(who, command, flag)` (script call 0x703B, handler 0x007A6EF0) expands `who` to a set of actor slots (a plain number is
  * that slot, so 1 is Yuna; -23 is every slot that is not a monster, "all characters and aeons") and calls 0x0079B470 on each. For a command id of the form 0x3xxx
  * that routine sets (flag non-zero) or clears (flag 0) the command's bit in the actor's disabled bitmap (Chr+0x690, all clear when the character is created), and
- * the menu gate 0x0079A5B0 reads that bit: a disabled command is unusable. (A command id below 0x1000 is the other branch, the availability flag of an aeon: the mirror
+ * the menu gate 0x0079A5B0 reads that bit: a disabled command is unusable. The menu's draw loop (0x008A49B0) calls the gate's resolver (0x0089ACA0) for **every** row and
+ * skips a row only for the result -4; a disabled command answers -1, so its row is drawn with a flag (read from the decompile as the grey flag; not yet watched on screen)
+ * and a pick of it plays cue 3. The original prints no reason text. (A command id below 0x1000 is the other branch, the availability flag of an aeon: the mirror
  * lock `lockedAeons` already carries.) The three formations of Isaaru's contest of aeons (`bvyt09_10`, `_11`, `_12`) run the same eleven flag-1 calls before the first turn:
  * Switch, Escape and Flee for everyone, and Attack, Item, Weapon, Armor, Skill, Special, Black Magic and White Magic for Yuna. Nothing disables Summon, Grand Summon
  * (her Overdrive) or Dismiss, so Yuna's menu in those fights is Summon and Grand Summon. A scan of all 38 formation files our chapters fight shows no other one disables
@@ -17,8 +19,8 @@
  * | Where | Rule |
  * |---|---|
  * | `setup.ts` | {@link applyFormationCommandDisables} copies the group's `commandDisables` into `state.flags` (one boolean per who and command) |
- * | `commands.ts` | {@link withoutDisabledRows} drops every row that belongs to a command disabled for that actor (the last step of `availableCommands`) |
- * | `engine.ts#submit` | {@link commandRefused}: a command the player submits that belongs to a disabled command is refused, the turn kept open, with no message (the game's menu plays a cue; words and cue are presentation) |
+ * | `commands.ts` | {@link greyDisabledRows} keeps every row that belongs to a command disabled for that actor and marks it `enabled: false` with **no** `disabledReason` (the last step of `availableCommands`) |
+ * | `engine.ts#submit` | {@link commandRefused}: a command the player submits that belongs to a disabled command is refused, the turn kept open, with no message (the game's menu plays cue 3; the cue is presentation: the FFX menu shakes a greyed row) |
  *
  * **Which row belongs to which command** ({@link menuCommandOf}): an Attack row is 0x3000, an Item row 0x3001, a Switch row 0x3002, an Escape row 0x3003, a Flee row (the
  * Escape command in `party` mode) 0x3018, and an ability row the command of its category: Skill 0x3113, Special 0x3114, Black Magic 0x3115, White Magic 0x3116. Weapon (0x3004)
@@ -116,8 +118,18 @@ export function commandRefused(ctx: Ctx, user: FFXCombatant, command: Command): 
   return id !== undefined && commandOff(ctx, user, id);
 }
 
-/** The menu's half of the rule: the rows that belong to a switched-off command are not offered. Returns `rows` itself, untouched, when nothing is switched off. */
-export function withoutDisabledRows(ctx: Ctx, user: FFXCombatant, rows: AvailableCommand[]): AvailableCommand[] {
+/**
+ * The menu's half of the rule: the rows that belong to a switched-off command are **kept and greyed**, as the game's draw loop does (it skips a row only for -4; a disabled
+ * command answers -1 and is drawn with a flag that reads as the grey flag, and the original prints no reason). A greyed row has `enabled: false` and **no** `disabledReason`, not even the
+ * duel's older "Only an aeon can fight an aeon" or an `Out of reach`, so the FFX menu's help slab prints the row's effect alone (`commandHelpText`). Returns `rows` itself,
+ * untouched, when nothing is switched off; a row it greys is a copy, the input is never changed.
+ */
+export function greyDisabledRows(ctx: Ctx, user: FFXCombatant, rows: AvailableCommand[]): AvailableCommand[] {
   if (user.side === 'enemy' || ctx.state.flags[COMMAND_OFF_ANY] !== true) return rows;
-  return rows.filter((row) => !commandRefused(ctx, user, row.command));
+  return rows.map((row) => {
+    if (!commandRefused(ctx, user, row.command)) return row;
+    const grey: AvailableCommand = { ...row, enabled: false };
+    delete grey.disabledReason;
+    return grey;
+  });
 }

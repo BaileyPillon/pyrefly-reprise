@@ -71,22 +71,26 @@ describe('the mirror lock (I-G2)', () => {
 });
 
 describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX battle, PR-0155)', () => {
-  it("Yuna's menu is Summon and Grand Summon (RC10: the script switches off her Attack, Item, Skill, Special and both magics); Talk, which no script touches, keeps its older greyed row; no Defend row", () => {
+  it("Yuna can pick only Summon and Grand Summon (RC10: the script switches off her Attack, Item, Skill, Special and both magics, drawn greyed with no reason); Talk, which no script touches, keeps its older greyed row and reason; no Defend row", () => {
     const d = nextInput(newEngine('isaaru-grothia', 4))!;
-    // Only these kinds of row exist for her: five Summon rows (one locked, greyed), Grand Summon, and Talk (greyed by the older B6 = a estimate, `aeon-duel.ts`; no Isaaru script touches command 0x3105).
+    // What she can pick: five Summon rows (one locked, greyed), Grand Summon; Talk is greyed by the older B6 = a estimate (`aeon-duel.ts`; no Isaaru script touches command 0x3105).
     const kinds = d.commands.map((c) => c.command.kind);
     expect(kinds.filter((k) => k === 'summon')).toHaveLength(5);
-    expect(new Set(kinds)).toEqual(new Set(['summon', 'overdrive', 'trigger']));
+    expect(new Set(d.commands.filter((c) => c.enabled).map((c) => c.command.kind))).toEqual(new Set(['summon', 'overdrive']));
     expect(row(d.commands, 'trigger', 'talk')).toMatchObject({ enabled: false, disabledReason: ONLY_AN_AEON });
     for (const [kind, id] of [['overdrive', 'grand-summon'], ['summon', 'shiva']] as const) {
       expect(enabledRow(d.commands, kind, id), `${kind}:${id}`).toBeDefined();
     }
-    // Gone, not greyed: the Attack, the White Magic list (Cura, NulBlaze), the Special list (Pray, Scan) and every Item row (a potion, a Phoenix Down, a Grenade).
+    // Greyed, not hidden, and with no reason (the game's draw loop draws a disabled command; the original prints none, so not even ONLY_AN_AEON): the Attack, the White Magic
+    // list (Cura, NulBlaze), the Special list (Pray, Scan) and every Item row (a potion, a Phoenix Down, a Grenade). None of them can be picked.
     for (const [kind, id] of [['attack', undefined], ['ability', 'cura'], ['ability', 'nulblaze'], ['ability', 'pray'], ['ability', 'scan'], ['item', 'hi-potion'], ['item', 'phoenix-down'],
       ['item', 'grenade']] as const) {
-      expect(row(d.commands, kind, id), `${kind}:${id}`).toBeUndefined();
+      const r = row(d.commands, kind, id);
+      expect(r, `${kind}:${id}`).toMatchObject({ enabled: false });
+      expect(r!.disabledReason, `${kind}:${id}`).toBeUndefined();
+      expect(enabledRow(d.commands, kind, id), `${kind}:${id}`).toBeUndefined();
     }
-    const menuCategories = d.commands.filter((c) => c.command.kind !== 'trigger').map((c) => c.category);
+    const menuCategories = d.commands.filter((c) => c.enabled).map((c) => c.category);
     expect(new Set(menuCategories)).toEqual(new Set(['summon', 'overdrive']));
     // The formation script calls setDefendingEnabled(0): the party's Defend control does nothing here (formation-flags.ts, RC10).
     expect(row(d.commands, 'defend')).toBeUndefined();

@@ -140,7 +140,7 @@ export class FFXEngine implements FFXBattleEngine {
     const actorId = ctx.rt.currentActorId;
     const actor = actorId ? tryActor(ctx, actorId) : undefined;
     if (!actor || ctx.state.result) return [];
-    // A command the formation script switched off for this actor (`formation-commands.ts`, Isaaru's aeon contest) is refused with the turn kept open; the menu never offers it.
+    // A command the formation script switched off for this actor (`formation-commands.ts`, Isaaru's aeon contest) is refused with the turn kept open; the menu draws its row greyed.
     if (commandRefused(ctx, actor, command)) return [];
 
     this.awaitingInput = false;
