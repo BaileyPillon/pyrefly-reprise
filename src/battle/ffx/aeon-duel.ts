@@ -38,7 +38,6 @@ import { aimSideOf } from '../common/aim.ts';
 import { type Ctx, tryActor } from './state.ts';
 import { aeonScriptOff } from './formation-commands.ts';
 import { aeonRosterRemoved } from './roster-removal.ts';
-import { menuParity } from './menu-draw-parity.ts';
 
 /** `state.flags` key: the formation can only be fought by aeons. */
 export const AEONS_ONLY_FLAG = 'aeonDuel.only';
@@ -49,7 +48,7 @@ export const AEON_LOCK_REASON_PREFIX = 'aeonDuel.reason:';
 /** `state.flags` key: AP paid on victory on top of the enemies' own. */
 export const VICTORY_BONUS_AP_FLAG = 'victory.bonusAp';
 
-/** `state.flags` key prefix: `aeonDuel.removed:<aeonId>` is true for a lock that stands for an aeon the field event took out of the party (`LockedAeons.removed`, the hidden Last Summoning), written only while `MENU_DRAW_PARITY`'s `summon` item is on: its Summon row is then not built. */
+/** `state.flags` key prefix: `aeonDuel.removed:<aeonId>` is true for a lock that stands for an aeon the field event took out of the party (`lockedAeons[].removed`, the hidden Last Summoning). Written at set-up whatever the switches say and read only by the Summon list while `MENU_DRAW_PARITY`'s `summon` item is on, which then builds no row for it. */
 export const AEON_LOCK_REMOVED_PREFIX = 'aeonDuel.removed:';
 
 /** B6 = a's reason on a greyed row (our wording, labelled an estimate in the plan). */
@@ -61,7 +60,7 @@ export function applyAeonDuelSetup(ctx: Ctx, group: EnemyGroupDef): void {
   for (const lock of group.lockedAeons ?? []) {
     ctx.state.flags[AEON_LOCK_PREFIX + lock.aeonId] = lock.mirrorOf;
     if (lock.reason !== undefined) ctx.state.flags[AEON_LOCK_REASON_PREFIX + lock.aeonId] = lock.reason;
-    if (lock.removed === true && menuParity('summon')) ctx.state.flags[AEON_LOCK_REMOVED_PREFIX + lock.aeonId] = true;
+    if (lock.removed === true) ctx.state.flags[AEON_LOCK_REMOVED_PREFIX + lock.aeonId] = true;
   }
   if (typeof group.victoryBonusAp === 'number' && group.victoryBonusAp > 0) {
     ctx.state.flags[VICTORY_BONUS_AP_FLAG] = group.victoryBonusAp;
