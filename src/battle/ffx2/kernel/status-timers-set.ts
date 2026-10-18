@@ -141,13 +141,13 @@ export interface Ffx2SetStatusResult {
   timers: number[];
   poisonAcc: number;
   regenAcc: number;
-  /** The petrify bit (1) changed: `FUN_0061b5b0` runs. */
+  /** The petrify bit (1) changed: the function at 0x0061b5b0 runs. */
   petrifyChanged: boolean;
   /** The death bit (0) changed: `pp_death_flag_changed` runs. */
   deathChanged: boolean;
-  /** The eject bit (10) changed: `FUN_00616da0` runs. */
+  /** The eject bit (10) changed: the function at 0x00616da0 runs. */
   ejectChanged: boolean;
-  /** The status link is refreshed (`FUN_006366b0(id, 3)`): the call asked for it and the stop state changed. */
+  /** The status link is refreshed (the function at 0x006366b0, called with `id, 3`): the call asked for it and the stop state changed. */
   linkRefresh: boolean;
 }
 

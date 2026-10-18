@@ -53,7 +53,7 @@ export function isAidedChr(chrId: number, saveIndex: number): boolean {
   return !isMonsterSlot(chrId) && ((saveIndex & 0xff) - 15) >>> 0 < 8;
 }
 
-/** `FUN_00613340` (exe): the character is dead (`Chr+0x1787` non-zero, slots 0 to 30) or petrified (status word 1 bit 1). */
+/** The function at 0x00613340 (exe): the character is dead (`Chr+0x1787` non-zero, slots 0 to 30) or petrified (status word 1 bit 1). */
 export function deadOrStone(dead: boolean, status1: number): boolean {
   return dead || (status1 & 2) !== 0;
 }
@@ -297,7 +297,7 @@ export interface Ffx2AtbStepEnv {
   flags: Ffx2ClockFlags;
   /** How many characters are already on the ready list this step (the list holds 31). */
   readyCount: number;
-  /** Debug switch of `FUN_00634360` (`VA 0x00df68bf` party, `0x00df68be` monsters): thinking is skipped. Off in play. */
+  /** Debug switch of the function at 0x00634360 (`VA 0x00df68bf` party, `0x00df68be` monsters): thinking is skipped. Off in play. */
   skipThinking?: boolean;
 }
 

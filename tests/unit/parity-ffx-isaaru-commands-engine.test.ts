@@ -9,6 +9,7 @@
  */
 
 import { beforeAll, describe, expect, it } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import type { AbilityDef, AvailableCommand, Command, Decision, EnemyGroupDef, FFXCombatant } from '../../src/battle/common/types.ts';
 import { FFXEngine, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
@@ -24,6 +25,8 @@ import { buildTopRows, firstEnabledIndex, rowEnabled } from '../../src/ui/ffx/Co
 import { topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
 import { commandHelpText } from '../../src/ui/ffx/commandHelp.ts';
 import { actor, content, grandSummon, newEngine, nextInput, pass, row, setupFor, type Input } from './helpers/isaaruUnits.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 /** The three formation files of Isaaru's contest and the engine group each one is (Fist, Wing and Sword are the first, second and third link). */
 const ISAARU_FORMATIONS: Readonly<Record<string, string>> = { bvyt09_10: 'isaaru-grothia', bvyt09_11: 'isaaru-pterya', bvyt09_12: 'isaaru-spathi' };
@@ -196,7 +199,7 @@ describe('the FFX command window draws the greyed, reason-less rows (its pure vi
 describe('every other FFX chapter plays as it did: no formation list in the state, and its first menu still has an Attack row', () => {
   const CHAPTERS = [
     'seymour-flux', 'yunalesca', 'braskas-final-aeon', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'seymour-omnis',
-    'sin-fins-core', 'sin-face', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'exp-fayth',
+    'sin-fins-core', 'sin-face', 'sinspawn-gui', 'mirror-aeons', 'exp-fayth',
   ];
   beforeAll(async () => {
     await registerBattleContent();
@@ -217,6 +220,20 @@ describe('every other FFX chapter plays as it did: no formation list in the stat
       if (d.kind === 'player-input') expect(d.commands.some((c) => c.command.kind === 'attack')).toBe(true);
     });
   }
+
+  it('Biran and Yenke carries exactly one entry of the kind (RC11: Kimahri\'s Switch, the script\'s third call), which forbids nothing with an empty bench and has no Attack to touch', () => {
+    const chapter = getChapter('biran-yenke')!;
+    const setup = setupForChapter(chapter, 1);
+    const engine = new FFXEngine({ autoResolveMinigames: true });
+    engine.setSeed(setup.seed);
+    engine.init(setup);
+    expect(engine.state().flags[COMMAND_OFF_ANY]).toBe(true);
+    expect(Object.keys(engine.state().flags).filter((k) => k.startsWith('formation.cmdOff:'))).toEqual(['formation.cmdOff:kimahri:' + 0x3002]);
+    let d: Decision = engine.nextDecision();
+    for (let i = 0; i < 400 && d.kind !== 'player-input' && d.kind !== 'battle-over'; i++) d = engine.nextDecision();
+    expect(d.kind).toBe('player-input');
+    if (d.kind === 'player-input') expect(d.commands.some((c) => c.command.kind === 'attack' && c.enabled)).toBe(true);
+  });
 
   it('and Isaaru\'s chapter, set up the way the app sets it up, has the list from the first link', () => {
     const chapter = getChapter('isaaru-via-purifico')!;

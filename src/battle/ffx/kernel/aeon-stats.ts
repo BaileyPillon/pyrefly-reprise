@@ -10,8 +10,8 @@
  * the engine. Pure.
  *
  * The game keeps the result in the party save record (maximum HP and MP at +0x24 and +0x28, the eight stats at
- * +0x2f..+0x36) and rebuilds all ten aeons after every battle (`FUN_00785fc0`, which runs right after the AP settle) and
- * whenever Yuna's own stats change. At battle start `FUN_0079c5f0` copies those bytes into the battle character, adding the
+ * +0x2f..+0x36) and rebuilds all ten aeons after every battle (the function at 0x00785fc0, which runs right after the AP settle) and
+ * whenever Yuna's own stats change. At battle start the function at 0x0079c5f0 copies those bytes into the battle character, adding the
  * character's equipment-bonus bytes (`Chr+0x5b0..0x5b7`, 0 unless something sets them), and sums the effect of its two pieces
  * of gear (the crit bonus, the element bytes, the auto-ability words, the resistance bytes: note section 4.6, which is NOT
  * modelled here; an aeon's gear shows up in this kernel only through the percents and words of {@link AbilityEffect}).
@@ -32,7 +32,7 @@ export const MAX_TIER = 20;
 /** The eight stats in the order the game stores them. */
 export const STAT_NAMES = ['str', 'def', 'mag', 'mdef', 'agi', 'luck', 'eva', 'acc'] as const;
 
-/** A party member's raw stats as `FUN_00785b60` builds them (HP and MP are unsigned 32-bit, the others sums of two bytes). */
+/** A party member's raw stats as the function at 0x00785b60 builds them (HP and MP are unsigned 32-bit, the others sums of two bytes). */
 export interface PartyRawStats {
   hp: number;
   mp: number;
@@ -41,7 +41,7 @@ export interface PartyRawStats {
 }
 
 /**
- * `FUN_00785b60(id)` for a party member below 8: the save record's HP (+4) and MP (+8) and the eight stat bytes (+0xc to
+ * The function at 0x00785b60 (`id`) for a party member below 8: the save record's HP (+4) and MP (+8) and the eight stat bytes (+0xc to
  * +0x13), plus the stat-bonus record (`bonusHp` x 50 HP, `bonusMp` x 5 MP and one byte per stat), which the Sphere Grid fills.
  */
 export function partyRawStats(

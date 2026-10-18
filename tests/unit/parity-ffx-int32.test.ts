@@ -26,7 +26,7 @@ import {
 
 describe('32-bit integer helpers (what the instruction sequences compute)', () => {
   it('division by a power of two rounds toward zero, not toward minus infinity', () => {
-    // CDQ; AND EDX, mask; ADD EAX, EDX; SAR EAX, n: -17 + 15 = -2, then -2 >> 4 = -1 (floor division would give -2).
+    // add the bias (the divisor minus 1) when negative, then shift right by n: -17 + 15 = -2, then -2 >> 4 = -1 (floor division would give -2).
     expect(div16(17)).toBe(1);
     expect(div16(-17)).toBe(-1);
     expect(div16(-15)).toBe(0);
@@ -44,13 +44,13 @@ describe('32-bit integer helpers (what the instruction sequences compute)', () =
     expect(mul3div2(715827883)).toBe(-1073741823);
   });
 
-  it('IMUL keeps the low 32 bits: a product past 2^31 turns negative', () => {
+  it('the 32-bit product keeps the low 32 bits: a product past 2^31 turns negative', () => {
     expect(mul(65536, 65536)).toBe(0);
     expect(mul(46341, 46341)).toBe(-2147479015); // 2,147,488,281 - 2^32
     expect(mul(3, 715827883)).toBe(-2147483647); // 2,147,483,649 - 2^32
   });
 
-  it('IDIV truncates toward zero, DIV reads both operands as unsigned', () => {
+  it('signed division truncates toward zero, unsigned division reads both operands as unsigned', () => {
     expect(sdiv(-7, 2)).toBe(-3);
     expect(sdiv(7, -2)).toBe(-3);
     expect(sdiv(-7, 100)).toBe(0);
@@ -64,13 +64,13 @@ describe('32-bit integer helpers (what the instruction sequences compute)', () =
     expect(() => udiv(5, 0)).toThrow(RangeError);
   });
 
-  it('NEG never produces -0, and wraps -2^31 to itself', () => {
+  it('negation never produces -0, and wraps -2^31 to itself', () => {
     expect(Object.is(neg(0), 0)).toBe(true);
     expect(neg(5)).toBe(-5);
     expect(neg(-2147483648)).toBe(-2147483648);
   });
 
-  it('CVTTSD2SI truncates, and out-of-range or NaN gives 0x80000000', () => {
+  it('the double-to-int conversion truncates, and out-of-range or NaN gives 0x80000000', () => {
     expect(cvttsd2si(3.99)).toBe(3);
     expect(cvttsd2si(-1.9)).toBe(-1);
     expect(cvttsd2si(2147483647.5)).toBe(2147483647);

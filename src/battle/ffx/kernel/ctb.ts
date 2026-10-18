@@ -183,7 +183,7 @@ export function reviveCtb(baseCtb: number): number {
 /**
  * The script-hold condition of the scheduler (0x00790fb0): while a particular scene is running, or while one of six
  * commands is the one in progress, and a signed byte counter at VA 0x0112c9d1 is above 0, the scheduler does
- * nothing at all as soon as it finds an actor who is ready. The three inputs are `FUN_009da3b0()` (the value at VA
+ * nothing at all as soon as it finds an actor who is ready. The three inputs are the function at 0x009da3b0 (the value at VA
  * 0x00c64ca0), VA 0x0112c8d8 and VA 0x0112c9d1; what they stand for was not traced.
  */
 export function scriptHoldActive(sceneValue: number, commandInProgress: number, holdCounter: number): boolean {

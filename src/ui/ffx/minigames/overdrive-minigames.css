@@ -90,6 +90,9 @@
   cursor: pointer;
 }
 .ffx-mg-list__row--selected { background: var(--ig-accent); font-weight: 700; }
+/* A row the fight has switched off (Grand Summon's aeon a possessed copy took): the flat grey face of the command stack's disabled rows (`ffx-hud.css`), still reachable by the cursor. */
+.ffx-mg-list__row--disabled { background: #2a2a30; color: #d8d8de; }
+.ffx-mg-list__row--disabled.ffx-mg-list__row--selected { background: #3a3a44; }
 .ffx-mg-list__qty {
   margin-left: auto; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 10px; color: var(--ig-gold-on-paper);
 }

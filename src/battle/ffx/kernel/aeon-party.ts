@@ -109,13 +109,13 @@ export interface PartyWorld {
 
 const chrOf = (w: PartyWorld, id: number): PartyChr => w.chr[id] as PartyChr;
 
-/** `FUN_0078d4e0(id)`: everybody provoked by `id` stops being provoked. */
+/** The function at 0x0078d4e0 (`id`): everybody provoked by `id` stops being provoked. */
 function releaseProvoked(w: PartyWorld, id: number): void {
   for (const c of Object.values(w.chr)) if ((c.perm & 0x400) !== 0 && c.provoker === id) c.perm &= 0xfbff;
 }
 
 /**
- * `FUN_0078e410(id)` with `FUN_0078e460`: a leaver that holds a Threaten link breaks it. The Threaten bit goes from the
+ * The function at 0x0078e410 (`id`) with the function at 0x0078e460: a leaver that holds a Threaten link breaks it. The Threaten bit goes from the
  * character at the other end (its `Chr+0x5c6`; itself when that is 0xff), both link bytes are cleared, and so is the
  * far end's bit and link.
  */
@@ -137,7 +137,7 @@ function releaseThreaten(w: PartyWorld, id: number): void {
   }
 }
 
-/** `FUN_007b06e0(chr)`: an aeon that arrives by Grand Summon starts with its gauge full; the old value is kept for later. */
+/** The function at 0x007b06e0 (`chr`): an aeon that arrives by Grand Summon starts with its gauge full; the old value is kept for later. */
 function holdGauge(w: PartyWorld, c: PartyChr): void {
   if (w.grandSummon === 0) return;
   c.gaugeSaved = c.gauge;
@@ -145,7 +145,7 @@ function holdGauge(w: PartyWorld, c: PartyChr): void {
   c.gaugeHeld = 1;
 }
 
-/** `FUN_007b06b0(chr)`: put a held gauge back. */
+/** The function at 0x007b06b0 (`chr`): put a held gauge back. */
 function restoreGauge(c: PartyChr): void {
   if (c.gaugeHeld === 0) return;
   c.gaugeHeld = 0;
@@ -153,7 +153,7 @@ function restoreGauge(c: PartyChr): void {
 }
 
 /**
- * `FUN_007adae0(out, in, mode)`: `out` leaves the fight and `in` takes its place. `mode` 0 is the Switch command, 1 a
+ * The function at 0x007adae0 (`out, in, mode`): `out` leaves the fight and `in` takes its place. `mode` 0 is the Switch command, 1 a
  * summon (the aeon arrives, the summoner is marked as away), -1 the return of a summoner. Either id may be 0xff (nobody).
  *
  * Leaving (when `out` exists): unless it was removed for good it is no longer in the battle and is flagged as having
@@ -208,7 +208,7 @@ export function swapMember(w: PartyWorld, out: number, inn: number, mode: number
 }
 
 /**
- * `FUN_007ade10()`: park the active state and bring the parked one back: the party list, the party order table and the
+ * The function at 0x007ade10: park the active state and bring the parked one back: the party list, the party order table and the
  * in-battle bytes of slots 0 to 0x11 trade places with their saved copies.
  */
 export function swapLists(w: PartyWorld): void {
@@ -221,7 +221,7 @@ export function swapLists(w: PartyWorld): void {
 }
 
 /**
- * `FUN_007adf90(summoner, aeon)`: the summon. Parks the party's in-battle bytes, list and order table; every member of
+ * The function at 0x007adf90 (`summoner, aeon`): the summon. Parks the party's in-battle bytes, list and order table; every member of
  * the active list except the summoner leaves; the summoner leaves and the aeon arrives (all three Magus Sisters, in list
  * positions 0 to 2, when the aeon is one of them); the aeon records who summoned it. It ends by queueing the arrival
  * action, which first swaps the active and parked states ({@link swapLists}); the arrival action's own start swaps them
@@ -255,7 +255,7 @@ export function summon(w: PartyWorld, summoner: number, aeon: number): void {
 /** The arrival action's start (`Chr+0xdea` = 1 in the command state machine at 0x00788480): the same swap again. */
 export const startArrival = swapLists;
 
-/** `FUN_007aeec0()`: when an aeon is out, the parked party list and order table are put back. */
+/** The function at 0x007aeec0: when an aeon is out, the parked party list and order table are put back. */
 export function restoreLists(w: PartyWorld): void {
   if (w.summonActive === 0) return;
   w.summonActive = 0;
@@ -264,7 +264,7 @@ export function restoreLists(w: PartyWorld): void {
 }
 
 /**
- * `FUN_007adf10()`: every member of the (restored) active list comes back into the battle: the summoner as a return
+ * The function at 0x007adf10: every member of the (restored) active list comes back into the battle: the summoner as a return
  * (mode -1), everybody else as a swap-in with no one leaving (mode 0).
  */
 export function returnParty(w: PartyWorld): void {
@@ -291,7 +291,7 @@ function revive(w: PartyWorld, id: number, c: PartyChr): void {
 }
 
 /**
- * `FUN_007aef20(revive)`: the aeon leaves. Each member of the active list gets its held gauge back, is revived when `reviveFallen`
+ * The function at 0x007aef20 (`revive`): the aeon leaves. Each member of the active list gets its held gauge back, is revived when `reviveFallen`
  * is set and its HP is below 1 (a Magus Sister who fell while another did not), and leaves the battle; then the parked lists come
  * back and the party returns. Nothing happens when no aeon is out (`aeonId` 0). Afterwards no aeon and no summoner are recorded.
  */
@@ -313,7 +313,7 @@ export function dismiss(w: PartyWorld, reviveFallen: number): void {
 }
 
 /**
- * `FUN_0078e0a0()`, run by the battle-end state when every aeon out is down: each member of the active
+ * The function at 0x0078e0a0, run by the battle-end state when every aeon out is down: each member of the active
  * list is at 0 HP and starts its recovery counter, one more than the value its `ply_rom` record gives.
  */
 export function aeonWipe(w: PartyWorld): void {
@@ -327,7 +327,7 @@ export function aeonWipe(w: PartyWorld): void {
 }
 
 /**
- * `FUN_0079a080(id)`: 0 when the character can be summoned (alive, available, not removed, no recovery counter left),
+ * The function at 0x0079a080 (`id`): 0 when the character can be summoned (alive, available, not removed, no recovery counter left),
  * else 1.
  */
 export function aeonUnavailable(c: PartyChr): number {

@@ -7,6 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, Command, Decision, FFXCombatant } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
+import { setMenuDrawParity } from '../../src/battle/ffx/menu-draw-parity.ts';
 import { ability, enemy, member, party, setup } from './ffx-fixtures.test.ts';
 import { ABILITIES as LULU_1 } from '../../src/data/ffx/abilities/overdrive-lulu-1.ts';
 import { ABILITIES as LULU_2 } from '../../src/data/ffx/abilities/overdrive-lulu-2.ts';
@@ -381,15 +382,37 @@ describe('mid-battle triggers', () => {
 });
 
 describe('escape and results', () => {
-  it("refuses Escape when the formation forbids it", () => {
+  it("refuses Escape when the formation forbids it: shipped (r55 RE, MENU_DRAW_PARITY item d plus the submit guard) the Escape row is drawn greyed with no reason and a hand-submitted Escape is refused silently, the turn kept open", () => {
     const engine = createFFXEngine({ content: content() });
     engine.init(setup());
     let d = engine.nextDecision();
     while (d.kind === 'resolved') d = engine.nextDecision();
     if (d.kind !== 'player-input') throw new Error('expected player input');
-    expect(d.commands.some((c) => c.command.kind === 'escape')).toBe(false);
+    const rows = d.commands.filter((c) => c.command.kind === 'escape');
+    expect(rows.length).toBeGreaterThan(0);
+    for (const r of rows) {
+      expect(r.enabled, String(r.label)).toBe(false);
+      expect(r.disabledReason, String(r.label)).toBeUndefined();
+    }
     const events = engine.submit({ kind: 'escape', targets: [], extra: { mode: 'single' } });
-    expect(events.some((e) => e.type === 'message' && e.text === "Can't escape!")).toBe(true);
+    expect(events).toEqual([]);
+    expect(engine.nextDecision().kind).toBe('player-input');
+  });
+
+  it("with the menu-draw switch off (the build before release 55) there is no Escape row and a submitted Escape rolls and says \"Can't escape!\"", () => {
+    const back = setMenuDrawParity(false);
+    try {
+      const engine = createFFXEngine({ content: content() });
+      engine.init(setup());
+      let d = engine.nextDecision();
+      while (d.kind === 'resolved') d = engine.nextDecision();
+      if (d.kind !== 'player-input') throw new Error('expected player input');
+      expect(d.commands.some((c) => c.command.kind === 'escape')).toBe(false);
+      const events = engine.submit({ kind: 'escape', targets: [], extra: { mode: 'single' } });
+      expect(events.some((e) => e.type === 'message' && e.text === "Can't escape!")).toBe(true);
+    } finally {
+      back();
+    }
   });
 
   it('reports victory with AP, gil and the chained nextGroupId', () => {

@@ -102,7 +102,7 @@ export const SINSPAWN_GUI_GUIDE: ChapterGuide = {
     {
       bossId: 'sinspawn-gui-2',
       label: 'THE GUEST HOUR',
-      note: 'Yuna, Auron and Seymour, no bench and no Switch. The body has half the HP, and its Demi comes more often from the first turn.',
+      note: 'Yuna, Auron and Seymour, no bench, so Switch is greyed out (locked). The body has half the HP, and its Demi comes more often from the first turn.',
       cite: 'ffx-sinspawn-gui §4.7; re-ffx-ai-gui §2.3, §5.2, §7',
     },
   ],

@@ -1,5 +1,6 @@
 import type { AbilityCategory, AnyCombatant, AvailableCommand, Command, CombatantId, Targeting } from '../../battle/common/types.ts';
 import type { ReticleKind } from './TargetCursor.ts';
+import { menuParity } from '../../battle/ffx/menu-draw-parity.ts';
 
 const CATEGORY_LABEL: Partial<Record<AbilityCategory, string>> = {
   attack: 'Attack',
@@ -230,8 +231,20 @@ export function reticleKind(targetId: CombatantId, actorId: CombatantId, combata
   return c?.side === 'enemy' ? 'enemy' : 'ally';
 }
 
+/**
+ * The groups the original draws as openers (sub-menus): Black Magic, White Magic, Skill, Special, and Summon (Doublecast is a wrapper row, `CommandMenu.openWrap`). The resolver (0x0089ACA0) gives such a
+ * row the list number whenever its list is not empty, whatever Silence or MP did to the entries inside: the row is drawn normally and opens onto grey entries (FFX-G11 sections 4 and 5).
+ */
+const OPENER_CATEGORIES: ReadonlySet<AbilityCategory> = new Set<AbilityCategory>(['skill', 'special', 'blackmagic', 'whitemagic', 'summon']);
+
+/** Is this group an opener the original never greys for what is inside it? Only while `MENU_DRAW_PARITY` item a is on. */
+export function isOpenerGroup(row: TopGroupRow): boolean {
+  return row.role !== 'switch' && OPENER_CATEGORIES.has(row.category) && menuParity('openers');
+}
+
 export function rowEnabled(row: TopRow): boolean {
   if (row.kind === 'direct') return row.cmd.enabled;
+  if (isOpenerGroup(row)) return true;
   return row.items.some((i) => i.enabled);
 }
 

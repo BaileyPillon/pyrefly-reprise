@@ -2084,6 +2084,18 @@ export type Command =
 /** Command kinds, for exhaustive switches. */
 export type CommandKind = Command['kind'];
 
+/**
+ * The target step of one menu row as the original shows it (FFX only; `battle/ffx/target-step-parity.ts`). `candidates` are the combatants the cursor can rest on, in the game's list order (the
+ * party in slot order, the foes in formation order); `start`, when present, is the candidate it opens on (absent = the HUD's own choice); `switchTo` is the other side's candidates when the record lets the cursor switch sides (absent when
+ * it does not or the other side has none); `group` marks a step that rings every candidate at once and confirms them together.
+ */
+export interface TargetStep {
+  candidates: CombatantId[];
+  start?: CombatantId;
+  switchTo?: CombatantId[];
+  group?: boolean;
+}
+
 /** One row the command UI may offer, with its legal targets already resolved. */
 export interface AvailableCommand {
   /** A partially-filled command; the UI fills `targets` from {@link validTargets}. */
@@ -2117,6 +2129,12 @@ export interface AvailableCommand {
    * Optional (hand-built rows, fixtures): absent means "choose one", as before.
    */
   targeting?: Targeting;
+  /**
+   * **The game's target step for this row** (FFX only; set by the FFX engine **only while `TARGET_STEP_PARITY` is on**, which is off): whether the row opens a cursor, on whom, where it starts, and
+   * which other-side combatants the cursor may be switched to. Additive and optional; the UI reads it, the engine's strategies, the advisor and the coach never do (they read `validTargets`), so
+   * nothing about legality or resolution moves. Absent = the row's old behaviour.
+   */
+  targetStep?: TargetStep;
   /** Where the single-target cursor opens: the subset of `validTargets` on the sensible side (enemy for attacks and debuffs, party for cures and buffs, KO'd first for revives; `battle/common/aim.ts`, both games). Set only when it narrows the list; absent = the leftmost valid target, as before. */
   preferredTargets?: CombatantId[];
   /** True when choosing this row opens a minigame overlay before the command resolves. */
@@ -3145,8 +3163,12 @@ export interface EnemyGroupDef {
    *
    * `reason` (the hidden Last Summoning chapter, FFX only; optional, absent for Chapter XIV's): the words the greyed row gives instead of "Mirror of ...", for an aeon Yu Yevon
    * has taken ("Taken by Yu Yevon"). The lock itself is the same: the aeon is off the Summon list and out of Grand Summon's choices.
+   *
+   * `removed` (the hidden Last Summoning chapter, FFX only; optional, absent for Chapter XIV's; re-parity RC11, lane "FFX Chapter III roster"): this lock stands for an aeon the field event took out of the party
+   * (`sins0700`, event native 0xCB removePartyMember, before the link's fight), not for the availability byte. It changes no rule; while `MENU_DRAW_PARITY`'s `summon` item is on, the Summon list builds
+   * no row for it (the game's list never holds a removed aeon) instead of the greyed "Taken by Yu Yevon" row.
    */
-  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId; reason?: string }>;
+  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId; reason?: string; removed?: true }>;
   /**
    * **FFX only (the hidden Last Summoning chapter)**: the number of formations the whole chain has when that number follows from the player's choices, not from walking `nextGroupId` (the
    * pause screen's "BATTLE n OF m", `BattleScreen`'s `chainLengthOf`). Absent for every other chapter, whose chains are counted by walking.
@@ -3195,6 +3217,22 @@ export interface EnemyGroupDef {
    * the turn kept open. Read by `battle/ffx/formation-commands.ts` and nothing else; absent everywhere else, so no other battle changes.
    */
   commandDisables?: readonly FormationCommandOff[];
+  /**
+   * **FFX only, "this monster's own script switches a command off"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-script-command-locks.md`): the same call as
+   * `commandDisables` (`setCommandDisabled(who, command, flag)`, script call 0x703B), made by a **monster's** script instead of the formation's, so a separate
+   * switch (`SCRIPT_COMMAND_DISABLES`, default **off**) holds it. A `command` of 0x3xxx is a menu command; a `command` **below 0x1000** is the setter's other branch,
+   * an aeon's availability byte (8 Valefor, 9 Ifrit, 10 Ixion, 11 Shiva, 12 Bahamut, 13 Anima, 14 Yojimbo, 15 to 17 the Magus Sisters), listed here as "unavailable".
+   * Only Chapter III's five possessed-aeon links carry it. Read by `battle/ffx/formation-commands.ts`; absent everywhere else, and ignored while the switch is off.
+   */
+  scriptCommandDisables?: readonly FormationCommandOff[];
+  /**
+   * **FFX only, "the field event took these aeons out of the party before this battle"** (re-parity RC11, lane "FFX Chapter III roster", `docs/handoff/re-parity-rc11-ffx-ch3-roster.md`): the roster keys
+   * (`valefor`, `ifrit`, ...) the event `sins0700` removed with removePartyMember (event native 0xCB, handler 0x85B820) before launching this link: the aeon chosen for this link and every aeon given up in an earlier
+   * one. The roster flag is cleared, so the battle setup creates no in-battle record for the aeon and the Summon list (builder 0x00785410, case 5), which lists only aeons that exist in the battle, never holds it:
+   * it is absent from the Summon list and Grand Summon's picker, not drawn greyed. Read by `battle/ffx/roster-removal.ts` **only while the switch `CH3_ROSTER_REMOVAL` is on (it is off)**; a removed aeon stays in
+   * the roster (the possessed copy's stats are read from it) and is only left out of the lists and refused if named. Only Chapter III's six links 2 to 7 carry it. Absent everywhere else, and ignored while the switch is off.
+   */
+  rosterRemoved?: readonly string[];
   /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
   /**

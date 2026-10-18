@@ -56,7 +56,7 @@ export const LAST_SUMMONING_DOC: GuideDoc = {
     {
       t: 'ul',
       items: [
-        'Summon works in every battle. The aeons Yu Yevon has taken are greyed out, and so is the one you are about to face.',
+        'Summon works in every battle. The aeons Yu Yevon has taken are gone from Yuna’s Summon list, and so is the one you are about to face.',
         'While an aeon stands, nobody in the party can be targeted, and the party waits for it.',
         'An aeon that falls needs more battles to recover than the chain has left.',
         'Yojimbo is paid for each stroke: his menu offers Pay in round amounts and all your gil. A bigger payment buys a better stroke, and a Zanmato, which ends the battle at once, is rare and needs his gauge full (a Grand Summon fills it).',

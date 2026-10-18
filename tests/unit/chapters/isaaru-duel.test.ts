@@ -16,6 +16,7 @@ import { viaPurificoBuild } from '../../../src/data/ffx/builds/via-purifico.ts';
 import { CHAPTERS, CHAPTER_IDS, UNLISTED_CHAPTERS, getChapter } from '../../../src/data/encounters.ts';
 import { checkpointAt } from '../../../src/app/screens/BattleChainCheckpoint.ts';
 import { createFFXEngine } from '../../../src/battle/ffx/index.ts';
+import { setMenuDrawParity } from '../../../src/battle/ffx/menu-draw-parity.ts';
 import {
   GROTHIA, ISAARU, LINKS, actor, content, drive, enabledRow, grandSummon, newEngine, nextInput, pass, row, runChain, setupFor, summon,
 } from '../helpers/isaaruUnits.ts';
@@ -26,13 +27,30 @@ function withAeonHp(hp: Partial<Record<AeonBuild['id'], number>>): FFXPartyBuild
 }
 
 describe('the solo line-up (I-G1) and Isaaru (I-G5)', () => {
-  it('Yuna alone on the field, no bench, no Switch row, no Flee', () => {
+  it('Yuna alone on the field, no bench, nothing to Switch or Escape to: shipped (r55 RE, MENU_DRAW_PARITY item d) any Switch or Escape row is drawn greyed with no reason and cannot be picked', () => {
     const engine = newEngine('isaaru-grothia', 1);
     expect(engine.state().activeIds).toEqual(['yuna']);
     expect(engine.state().reserveIds).toEqual([]);
     const d = nextInput(engine)!;
     expect(d.actorId).toBe('yuna');
-    expect(d.commands.some((c) => c.command.kind === 'switch' || c.command.kind === 'escape')).toBe(false);
+    const rows = d.commands.filter((c) => c.command.kind === 'switch' || c.command.kind === 'escape');
+    // The greyed rows must be there (a menu that dropped them would otherwise pass): one Switch and one Escape, each disabled with no reason.
+    expect(rows.map((r) => r.command.kind).sort()).toEqual(['escape', 'switch']);
+    for (const r of rows) {
+      expect(r.enabled, String(r.label)).toBe(false);
+      expect(r.disabledReason, String(r.label)).toBeUndefined();
+    }
+  });
+
+  it('with the menu-draw switch off (the build before release 55): Yuna alone, no bench, no Switch row, no Flee', () => {
+    const back = setMenuDrawParity(false);
+    try {
+      const engine = newEngine('isaaru-grothia', 1);
+      const d = nextInput(engine)!;
+      expect(d.commands.some((c) => c.command.kind === 'switch' || c.command.kind === 'escape')).toBe(false);
+    } finally {
+      back();
+    }
   });
 
   it('Isaaru never blocks the victory: the link ends when the aeon falls', () => {
@@ -71,13 +89,19 @@ describe('the mirror lock (I-G2)', () => {
 });
 
 describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX battle, PR-0155)', () => {
-  it("Yuna can pick only Summon and Grand Summon (RC10: the script switches off her Attack, Item, Skill, Special and both magics, drawn greyed with no reason); Talk, which no script touches, keeps its older greyed row and reason; no Defend row", () => {
+  it("Yuna can pick only Summon and Grand Summon (RC10: the script switches off her Attack, Item, Skill, Special and both magics, drawn greyed with no reason); Talk, which no script adds, has no row at all (shipped, MENU_DRAW_PARITY item e: the game's scripts never give Yuna a Talk here); no Defend row", () => {
     const d = nextInput(newEngine('isaaru-grothia', 4))!;
-    // What she can pick: five Summon rows (one locked, greyed), Grand Summon; Talk is greyed by the older B6 = a estimate (`aeon-duel.ts`; no Isaaru script touches command 0x3105).
+    // What she can pick: five Summon rows (one locked, greyed), Grand Summon; Talk has no row (item e; before release 55 it was greyed by the older B6 = a estimate in `aeon-duel.ts`, and still is with the item off).
     const kinds = d.commands.map((c) => c.command.kind);
     expect(kinds.filter((k) => k === 'summon')).toHaveLength(5);
     expect(new Set(d.commands.filter((c) => c.enabled).map((c) => c.command.kind))).toEqual(new Set(['summon', 'overdrive']));
-    expect(row(d.commands, 'trigger', 'talk')).toMatchObject({ enabled: false, disabledReason: ONLY_AN_AEON });
+    expect(row(d.commands, 'trigger', 'talk')).toBeUndefined();
+    const back = setMenuDrawParity(true, ['talk']);
+    try {
+      expect(row(nextInput(newEngine('isaaru-grothia', 4))!.commands, 'trigger', 'talk')).toMatchObject({ enabled: false, disabledReason: ONLY_AN_AEON });
+    } finally {
+      back();
+    }
     for (const [kind, id] of [['overdrive', 'grand-summon'], ['summon', 'shiva']] as const) {
       expect(enabledRow(d.commands, kind, id), `${kind}:${id}`).toBeDefined();
     }
@@ -204,7 +228,15 @@ describe('the chain (research §1.2, §4.4)', () => {
     const engine = newEngine('isaaru-pterya', 13, party);
     const d = nextInput(engine)!;
     const summons = d.commands.filter((c) => c.command.kind === 'summon').map((c) => [('id' in c.command ? c.command.id : ''), c.enabled]);
-    expect(summons).toEqual([['valefor', false], ['ifrit', true], ['ixion', true], ['bahamut', true]]);
+    // shipped (item c): the knocked-out Shiva is a greyed row, not a missing one; with the item off (before release 55) the row was absent
+    expect(summons).toEqual([['valefor', false], ['ifrit', true], ['ixion', true], ['shiva', false], ['bahamut', true]]);
+    const back = setMenuDrawParity(false);
+    try {
+      const old = nextInput(newEngine('isaaru-pterya', 13, party))!.commands.filter((c) => c.command.kind === 'summon').map((c) => [('id' in c.command ? c.command.id : ''), c.enabled]);
+      expect(old).toEqual([['valefor', false], ['ifrit', true], ['ixion', true], ['bahamut', true]]);
+    } finally {
+      back();
+    }
   });
 
   it('the 5,000 AP is paid on the last link only; no link has a retry checkpoint (B12 = a)', () => {

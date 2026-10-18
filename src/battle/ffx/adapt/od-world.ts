@@ -18,8 +18,8 @@
  *   keeps the aeon's gauge in percent so the HUD, the builds and the chain carry are unchanged, and the kernel sees it in
  *   points (`gauge / 5`, written back as `points * 5`).
  * - **A Grand Summon's held gauge**: while the aeon holds one (`AeonFields.temporaryOverdrive`), the kernel sees the gauge at
- *   its maximum with the stored one saved beside it (`FUN_007b06e0`), exactly the game's state; a gain added while it is held
- *   clamps at the maximum and is lost, and the stored gauge is put back when the cost is paid (`FUN_007b06b0`).
+ *   its maximum with the stored one saved beside it (the function at 0x007b06e0), exactly the game's state; a gain added while it is held
+ *   clamps at the maximum and is lost, and the stored gauge is put back when the cost is paid (the function at 0x007b06b0).
  * - **Learning counters**: all `0xffff` (the game's "never counts"). The engine's builds name one mode per member and have no
  *   learning (research note O7); the kernel's counter code therefore changes nothing and its learned flag never rises.
  * - **Reference damage**: `kernel/overdrive.ts#odRefDamage` of the combatant's Strength and Magic (the engine's

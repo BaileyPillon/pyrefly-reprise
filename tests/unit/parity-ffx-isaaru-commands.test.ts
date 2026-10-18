@@ -22,6 +22,7 @@ import { ISAARU_COMMAND_DISABLES, ISAARU_GROUPS } from '../../src/data/ffx/enemi
 import { DARK_AEONS_GROUPS } from '../../src/data/ffx/enemies/dark-aeons-groups.ts';
 import { OFFERING_KEYS, openerGroup, possessionGroup, yuYevonLink } from '../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { GAME_COMMAND } from '../../src/battle/ffx/formation-commands.ts';
+import { BIRAN_YENKE_GROUP_ID } from '../../src/data/ffx/biran-yenke-ids.ts';
 
 // ---------------------------------------------------------------------------------------------------------------------- the fixture
 
@@ -183,10 +184,20 @@ describe('the model of the game against the scan', () => {
 // ---------------------------------------------------------------------------------------------------------------------- the data
 
 describe('the data carries the list on exactly the groups the model says, and it is the model\'s list', () => {
-  it('the three Isaaru groups, and no other group of the game, carry commandDisables', () => {
+  it('the three Isaaru groups, and Biran and Yenke (Kimahri\'s Switch, RC11), and no other group of the game, carry commandDisables', () => {
     const marked = Object.values(ENEMY_GROUPS_BY_ID).filter((g) => g.commandDisables !== undefined).map((g) => g.id).sort();
-    expect(marked).toEqual(Object.values(ISAARU_FORMATIONS).sort());
+    expect(marked).toEqual([...Object.values(ISAARU_FORMATIONS), BIRAN_YENKE_GROUP_ID].sort());
     expect(ISAARU_GROUPS.map((g) => g.commandDisables)).toEqual([ISAARU_COMMAND_DISABLES, ISAARU_COMMAND_DISABLES, ISAARU_COMMAND_DISABLES]);
+  });
+
+  it('Biran and Yenke (mtgz01_10) carries the one disable the model of its file leaves that the engine does not already carry: Kimahri\'s Switch (Escape and Flee are canEscape: false)', () => {
+    const KIMAHRI_SLOT = 3;
+    const w = play(FX.chapterFormations['mtgz01_10']!.calls);
+    expect(offOf(w, KIMAHRI_SLOT)).toEqual([GAME_COMMAND.switch, GAME_COMMAND.escape, GAME_COMMAND.flee].sort((a, b) => a - b));
+    expect(offOf(w, 0)).toEqual([]); // nobody else is touched
+    const group = ENEMY_GROUPS_BY_ID[BIRAN_YENKE_GROUP_ID] as EnemyGroupDef;
+    expect(group.canEscape).toBe(false);
+    expect(group.commandDisables).toEqual([{ who: 'kimahri', command: GAME_COMMAND.switch }]);
   });
 
   it('the groups the data builds on demand (the Dark Aeons pool, the Last Summoning chain: opener, every possession link, Yu Yevon) carry none either', () => {

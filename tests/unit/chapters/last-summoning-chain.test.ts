@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import type { BattleEngine, Decision, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { findEnemyGroup, setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { PAY_ABILITY_ID } from '../../../src/battle/ffx/aeon-commands.ts';
+import { setMenuDrawParity } from '../../../src/battle/ffx/menu-draw-parity.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../../src/data/ffx/index.ts';
 import { lastSummoningGroup, lastSummoningOpener, possessionGroup, yuYevonLink } from '../../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { yuYevonGroup } from '../../../src/data/ffx/enemies/braskas-final-aeon.ts';
@@ -133,11 +134,11 @@ describe('a possession link', () => {
     const order: OfferingKey[] = ['bahamut', 'sisters', 'valefor'];
     const g = possessionGroup(order);
     expect(g.lockedAeons).toEqual([
-      { aeonId: 'bahamut', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'cindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'sandy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'mindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'valefor', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
+      { aeonId: 'bahamut', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'cindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'sandy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'mindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'valefor', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
     ]);
   });
 
@@ -197,10 +198,13 @@ describe('Yu Yevon’s formation is Chapter III’s, a copy with the eight aeons
   it('differs from Chapter III’s only in its id, the locks and the chain length; Chapter III’s object is untouched', () => {
     const copy = yuYevonLink([...ALL_KEYS]);
     const { id, lockedAeons, chainLength, ...rest } = copy;
-    const { id: theirId, ...theirs } = yuYevonGroup;
+    const { id: theirId, rosterRemoved: chapterIII, ...theirs } = yuYevonGroup;
     expect(id).toBe(yuYevonGroupId([...ALL_KEYS]));
     expect(theirId).toBe('yu-yevon');
     expect(rest).toEqual(theirs);
+    // Chapter III's roster field (CH3_ROSTER_REMOVAL) is its own; the hidden chapter locks with lockedAeons and carries none of it (re-parity RC11, lane "FFX Chapter III roster").
+    expect(chapterIII).toEqual(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut']);
+    expect((copy as { rosterRemoved?: unknown }).rosterRemoved).toBeUndefined();
     expect(lockedAeons).toHaveLength(10);
     expect(chainLength).toBe(FULL_CHAIN_LENGTH);
     expect(yuYevonGroup.lockedAeons).toBeUndefined();
@@ -236,7 +240,26 @@ function inputFor(engine: BattleEngine, who: string): Input {
 }
 
 describe('on the real engine, the locks hold', () => {
-  it('greys the aeons taken so far with the reason, offers the rest, and offers the Sisters as one entry', async () => {
+  it('shipped (r55 RE, MENU_DRAW_PARITY item summon): the aeons taken so far have no row, the rest are offered, and the Sisters are one entry', async () => {
+    const { setup } = await firstLinkSetup(['ifrit', 'sisters'], 1);
+    const second = lastSummoningGroup(linkGroupId(['ifrit', 'sisters']))!;
+    const engine = newEngine({ ...setup, enemies: second });
+    const d = inputFor(engine, 'yuna');
+    const summons = d.commands.filter((c) => c.command.kind === 'summon');
+    expect(summons.map((c) => c.label).sort()).toEqual(['Anima', 'Bahamut', 'Ixion', 'Shiva', 'Valefor', 'Yojimbo']);
+    for (const c of summons) expect(c.enabled, c.label).toBe(true);
+  });
+
+  it('with the no-row rule off (the build before release 55) it greys the aeons taken so far with the reason, offers the rest, and offers the Sisters as one entry', async () => {
+    const back = setMenuDrawParity(true, ['summon', 'cursor', 'help']);
+    try {
+      await greyedTakenRows();
+    } finally {
+      back();
+    }
+  });
+
+  async function greyedTakenRows(): Promise<void> {
     const { setup } = await firstLinkSetup(['ifrit', 'sisters'], 1);
     // link 2 of the order ifrit, sisters: the Sisters' own link, Ifrit gone before it
     const second = lastSummoningGroup(linkGroupId(['ifrit', 'sisters']))!;
@@ -250,7 +273,7 @@ describe('on the real engine, the locks hold', () => {
       expect(byLabel.get(taken)!.disabledReason, taken).toBe(TAKEN_REASON);
     }
     for (const held of ['Anima', 'Bahamut', 'Ixion', 'Shiva', 'Valefor', 'Yojimbo']) expect(byLabel.get(held)!.enabled, held).toBe(true);
-  });
+  }
 
   it('refuses a taken aeon even when the command is sent, and Grand Summon never offers one', async () => {
     const { setup } = await firstLinkSetup(['bahamut'], 2);

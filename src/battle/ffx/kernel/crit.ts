@@ -10,7 +10,7 @@
  *
  * Inputs are the numbers the function reads, named after the game's fields, with their offsets
  * (`Cmd+0xNN` command record, `Chr+0xNNN` battle character structure). Bytes are read as bytes (masked to
- * 8 bits, like MOVZX). `draw()` returns the raw 31-bit value the game's RNG returns for the USER's mode 0
+ * 8 bits: a zero-extending byte read). `draw()` returns the raw 31-bit value the game's RNG returns for the USER's mode 0
  * stream, which is the same stream the damage variance draw uses (see `./rng.ts`).
  *
  * When it draws: exactly once, whenever the command can crit (`Cmd+0x20` bit 2), and that draw is not

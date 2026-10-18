@@ -14,7 +14,7 @@
  * Silence, Darkness, Poison, Confusion, Berserk, Curse, Eject, Stop, Doom; the special word's bits 0 and 6), the **steal chance byte 128**, the Zantetsu byte 80, and **Gravity is nulled**, which §7.1's
  * "neutral" omits. The row is laid on this enemy by `../monster-records/records-valefor.ts` (`attachMonsterRecords`, called at the foot of this file). **The second Valefor, row 363 (Lv 48, HP 38,000),
  * sits in no formation and is NOT used here.** Columns the note marks "unmapped (raw N)" are wired to nothing except where the RE review of 2026-10-14 says the engine's table is right: group-1 slots 17 and 18 (Itchy and Auto-Life) are in the record, and the special word's bits 7, 8 and 9 make her immune to Interrupt and Bribe.
- * `tests/unit/chapters/besaid-valefor-data.test.ts` pins this file and the record against `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` (the row's 200 raw bytes, decoded by the test).
+ * `tests/unit/chapters/besaid-valefor-data.test.ts` pins this file and the record against `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` (the row as decoded fields with their record offsets).
  *
  * **Art: provisional.** `spriteKey: 'valefor'` is the FFX aeon's approved painting set (`public/art/characters/valefor/{idle,attack,cast,hurt}`), reused as is. There is no `ko`
  * or `overdrive` painting for her and no possessed look (`x2-` treatments exist only for Shiva, Anima and Ixion); a possessed painting would be a new art step held for Bailey.

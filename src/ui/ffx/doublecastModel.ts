@@ -57,9 +57,9 @@ export interface DoublecastView {
 }
 
 /** Open the wrapper's first round, or `null` when it wraps nothing or nothing in the list can be cast. */
-export function openWrap(wrapper: AvailableCommand, commands: readonly AvailableCommand[], back: 'top' | 'sub', backIndex: number): DoublecastWrap | null {
+export function openWrap(wrapper: AvailableCommand, commands: readonly AvailableCommand[], back: 'top' | 'sub', backIndex: number, opensOnGrey = false): DoublecastWrap | null {
   const group = wrappedGroup(wrapper, commands);
-  if (!group || !group.items.some((c) => c.enabled)) return null;
+  if (!group || (!group.items.some((c) => c.enabled) && !(opensOnGrey && group.items.length > 0))) return null; // `opensOnGrey` (menu-draw parity, item openers): an opener opens onto grey spells
   return { wrapper, group, roundOne: group, round: 1, first: null, picks: null, back, backIndex };
 }
 

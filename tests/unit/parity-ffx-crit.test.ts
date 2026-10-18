@@ -159,7 +159,7 @@ describe('FFX critical check: always-critical buff, debug switch, and the double
     expect(run(make({ flagsDamage: 0, debugAlwaysCrit: true }), 100)).toMatchObject({ crit: false, draws: 0 });
   });
 
-  it('doubles the damage with 32-bit wraparound (ADD EAX, EAX)', () => {
+  it('doubles the damage with 32-bit wraparound (the damage added to itself in 32 bits)', () => {
     const certain = make({ userLuck: 255, critBonus: 255 });
     expect(run(certain, 0, 1234).damage).toBe(2468);
     expect(run(certain, 0, 0).damage).toBe(0);

@@ -1,4 +1,6 @@
 import { commandRowsCap, withTextSizeWatch } from '../common/hudTextSize.ts';
+import { menuParity } from '../../battle/ffx/menu-draw-parity.ts';
+import { playRefusal } from './refusalCue.ts';
 import type { AnyCombatant, AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import {
   buildTopRows,
@@ -12,6 +14,7 @@ import {
   type TopRow,
 } from './CommandMenuLogic.ts';
 import { ffxTargetMode } from './loneTarget.ts';
+import { openStepCursor, opensList, switchStepSide } from './targetStepUi.ts';
 import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
 import { touchTapped } from '../common/touchTapAim.ts';
 import { commandHelpText } from './commandHelp.ts';
@@ -295,7 +298,7 @@ export class CommandMenu {
   /** The Defend press, from Triangle (`Q` or the pad's Triangle; not Shift) or a tap on the tab: the engine's own `defend` command. */
   private defend(): void {
     if (!this.resolve || this.suspended || this.state !== 'top' || !this.defendCmd) return;
-    this.resolveCommand(this.defendCmd);
+    this.resolveCommand({ ...this.defendCmd, targetStep: undefined }); // the hot key bypasses the resolver (0x78FB80): never a target step, whatever the row carries (`TARGET_STEP_PARITY`)
   }
 
   private finish(command: Command): void {
@@ -478,6 +481,8 @@ export class CommandMenu {
       this.syncTargetSurfaces();
     } else if (b === 'confirm') {
       this.confirmTarget();
+    } else if (b === 'l1' || b === 'r1') {
+      if (switchStepSide(this.targetCursor, this.pendingCmd, this.groupTargets, (id, c) => this.entryFor(id, c))) this.syncTargetSurfaces(); // parity item sideSwitch
     } else if (b === 'cancel') {
       // The same chokepoint confirm goes through — restoring every dimmed
       // figure on the field is the half of option B a player notices only when
@@ -497,7 +502,7 @@ export class CommandMenu {
     let i = this.topIndex;
     for (let n = 0; n < this.rows.length; n++) {
       i = (i + dir + this.rows.length) % this.rows.length;
-      if (rowEnabled(this.rows[i]!)) break;
+      if (menuParity('cursor') || rowEnabled(this.rows[i]!)) break; // the game's cursor rests on every row; only a confirm is refused (0x0089C900)
     }
     this.topIndex = i;
     this.pageStart = null;
@@ -526,13 +531,13 @@ export class CommandMenu {
   private chooseTop(i: number): void {
     const row = this.rows[i];
     if (!row) return;
-    if (!rowEnabled(row)) return this.shake();
+    if (!rowEnabled(row)) return this.refuse();
     if (row.kind === 'group') {
       // A single enabled choice needs no submenu hop -- matches the mock's
       // flat "OVERDRIVE -- READY" row (most characters have exactly one
       // usable Overdrive move). The reserve list is the exception: a swap
       // always shows who is coming in, even with one member benched.
-      if (row.items.length === 1 && row.role !== 'switch') {
+      if (row.items.length === 1 && row.role !== 'switch' && row.items[0]!.enabled && !opensList(row, this.opts?.actorId)) { // `opensList`: target-step parity item openerOne
         this.resolveCommand(row.items[0]!);
         return;
       }
@@ -561,7 +566,7 @@ export class CommandMenu {
   private openSwitchList(): void {
     const i = switchRowIndex(this.rows);
     const row = i >= 0 ? this.rows[i] : undefined;
-    if (!row || row.kind !== 'group' || !rowEnabled(row)) return this.shake();
+    if (!row || row.kind !== 'group' || !rowEnabled(row)) return this.refuse();
     this.openGroup(i, row);
   }
 
@@ -571,7 +576,7 @@ export class CommandMenu {
     let i = this.subIndex;
     for (let n = 0; n < group.items.length; n++) {
       i = (i + dir + group.items.length) % group.items.length;
-      if (group.items[i]!.enabled) break;
+      if (menuParity('cursor') || group.items[i]!.enabled) break;
     }
     this.subIndex = i;
     this.pageStart = null;
@@ -582,7 +587,7 @@ export class CommandMenu {
   private chooseSub(group: TopGroupRow, i: number): void {
     const cmd = group.items[i];
     if (!cmd) return;
-    if (!cmd.enabled) return this.shake();
+    if (!cmd.enabled) return this.refuse();
     this.resolveCommand(cmd);
   }
 
@@ -627,16 +632,18 @@ export class CommandMenu {
     this.groupTargets = null;
     // `showSingle` counts from the LEFT OF THE SCREEN, not into `entries` (the
     // engine's slot-then-id order once opened on the aeon mid-field, away from
-    // the player's eye). A row that may also point at the party opens on the
-    // side the engine prefers (`preferredTargets`).
-    this.targetCursor.showSingle(entries, 0, prefer ?? this.dc.prefer(cmd));
+    // the player's eye). A Doublecast's second cast opens on the first cast's
+    // target, a row that may also point at the party on the side the engine
+    // prefers (`preferredTargets`), and with target-step parity on, on the
+    // target step's own start (`targetStepUi.ts`).
+    openStepCursor(this.targetCursor, entries, cmd, prefer ?? this.dc.prefer(cmd));
     this.syncTargetSurfaces();
   }
 
   /** A Doublecast's first round: the Black Magic list replaces the stack as a submenu does, headed "Doublecast · 1 of 2" [PR-0125]; nothing castable shakes. */
   private openDoublecast(wrapper: AvailableCommand): void {
-    const group = this.dc.open(wrapper, this.state === 'sub' ? 'sub' : 'top', this.subIndex);
-    if (!group) return this.shake();
+    const group = this.dc.open(wrapper, this.state === 'sub' ? 'sub' : 'top', this.subIndex, menuParity('openers')); // an opener opens onto grey spells (menu-draw parity)
+    if (!group) return this.refuse();
     this.state = 'sub';
     this.subIndex = firstEnabledCmdIndex(group.items);
     this.showList(this.dc.crumb());
@@ -831,7 +838,7 @@ export class CommandMenu {
     if (this.state === 'top') {
       const row = this.rows[this.topIndex];
       const cmd = row?.kind === 'direct' ? row.cmd : null;
-      this.opts.setHelp(cmd ? commandHelpText(cmd) : row?.kind === 'group' ? groupHelp(row) : '');
+      this.opts.setHelp(cmd ? commandHelpText(cmd) : row?.kind === 'group' ? groupHelp(row, this.opts.actorId) : '');
       this.opts.previewRank(cmd);
       return;
     }
@@ -903,6 +910,12 @@ export class CommandMenu {
     // No single combatant is being aimed at, so the enemy plate has nothing to
     // describe; leaving the last one up would be a lie.
     this.opts.onTargetChange?.(null);
+  }
+
+  /** A confirm on a row the menu refuses: the shake, and (parity item f) the menu set's `error` cue, the stand-in for the original's cue 3 (0x00886BA0). */
+  private refuse(): void {
+    this.shake();
+    if (menuParity('cursor')) playRefusal();
   }
 
   private shake(): void {

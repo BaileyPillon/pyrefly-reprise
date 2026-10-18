@@ -56,8 +56,8 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
       cite: 'ffx-bfa-yu-yevon §2.2; re-ffx-last-summoning §2, §7',
     },
     {
-      text: 'Summon works in every battle, but the aeons already taken are greyed out and the one in front of you is never offered. Nothing heals between battles, and a fallen aeon needs more battles to recover than the chain has left.',
-      short: 'Taken aeons are greyed; nothing heals between links',
+      text: 'Summon works in every battle, but the aeons already taken are gone from Yuna’s Summon list and the one in front of you is never offered. Nothing heals between battles, and a fallen aeon needs more battles to recover than the chain has left.',
+      short: 'Taken aeons are gone; nothing heals between links',
       cite: 'ffx-bfa-yu-yevon §2.3; re-ffx-last-summoning §2, §5',
     },
     {

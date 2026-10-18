@@ -19,6 +19,8 @@ import { type Ctx, type EventInput, canAct, isAlive, livingFriendlies, tryActor 
 import { buildBattle } from './setup.ts';
 import { availableCommands } from './commands.ts';
 import { commandRefused } from './formation-commands.ts';
+import { grandSummonKoRefused } from './grand-summon-ko.ts';
+import { submittedRowGreyed } from './submit-guard.ts';
 import { revealForSensorAuto } from './sensor.ts';
 import { chargeForAction, executeCommand } from './execute.ts';
 import { forcedTurn } from './forced-turn.ts';
@@ -154,6 +156,8 @@ export class FFXEngine implements FFXBattleEngine {
     if (!actor || ctx.state.result) return [];
     // A command the formation script switched off for this actor (`formation-commands.ts`, Isaaru's aeon contest) is refused with the turn kept open; the menu draws its row greyed.
     if (commandRefused(ctx, actor, command)) return [];
+    if (grandSummonKoRefused(ctx, command)) return []; // `GRAND_SUMMON_KO_REFUSED` (off): the game's list greys a knocked-out aeon and refuses a confirm on it
+    if (submittedRowGreyed(ctx, actor, command)) return []; // a row the menu draws greyed is refused here too, the turn kept open (`./submit-guard.ts`; the HUD and every strategy already refuse it)
 
     this.awaitingInput = false;
     this.runTurn(actor, command);

@@ -1,6 +1,6 @@
 /**
  * The Threaten link: both ends of a Threaten carry the bit and name each other (`fh_MsThreatProcess`, VA 0x0078e460),
- * and a pair is dissolved by `FUN_0078e410` (VA 0x0078e410).
+ * and a pair is dissolved by the function at 0x0078e410.
  *
  * **Game case: FFX only.** Source: FFX.exe, Steam build 25501027, SHA-256 0537B2A1...686D. Spec:
  * `research/re-ffx-ctb-status.md` section 14.3. Split out of `turn-ticks.ts` (re-parity W2) when that file passed the
@@ -50,7 +50,7 @@ export function threatProcess(chrs: readonly TickChr[], id: number): TickChr[] {
 }
 
 /**
- * `FUN_0078e410` (0x0078e410): release the Threaten link a character is part of. A character with the Threaten bit
+ * The function at 0x0078e410: release the Threaten link a character is part of. A character with the Threaten bit
  * and a recorded "I threatened" partner (`Chr+0x5c6`) is the USER of a pair; one with the bit and no such partner is
  * the TARGET. In both cases the bit leaves BOTH ends and both link bytes are reset; a character without the bit
  * changes nothing. It runs at the end of every start-of-turn tick, so a pair is dissolved at the start of whichever

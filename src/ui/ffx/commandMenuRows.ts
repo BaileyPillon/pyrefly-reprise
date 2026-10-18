@@ -1,7 +1,8 @@
 import type { AnyCombatant, AvailableCommand, CombatantId } from '../../battle/common/types.ts';
-import { rowEnabled, switchTargetId, type TopGroupRow, type TopRow } from './CommandMenuLogic.ts';
+import { isOpenerGroup, rowEnabled, switchTargetId, type TopGroupRow, type TopRow } from './CommandMenuLogic.ts';
 import { commandHelpText } from './commandHelp.ts';
 import { portraitChipHtml, tintFor } from './portraits.ts';
+import { opensList } from './targetStepUi.ts';
 import { TAKEN_REASON } from '../../data/ffx/last-summoning-ids.ts'; // a module with no imports of its own
 
 /**
@@ -96,7 +97,9 @@ export function topRowVM(row: TopRow): RowVM {
     ? enabled
       ? { kind: 'ready', text: 'READY' }
       : undefined
-    : { kind: 'count', text: `×${row.items.length}` };
+    : row.role === 'switch'
+      ? benchBadge(row)
+      : { kind: 'count', text: `×${row.items.length}` };
   return {
     label: row.label,
     enabled,
@@ -105,6 +108,12 @@ export function topRowVM(row: TopRow): RowVM {
     group: true,
     ...(badge ? { badge } : {}),
   };
+}
+
+/** The Switch row's count is the bench; the one greyed row a forbidden Switch with an empty bench gets (`MENU_DRAW_PARITY` item d) names nobody and carries no count. */
+function benchBadge(row: TopGroupRow): RowBadge | undefined {
+  const benched = row.items.filter((c) => switchTargetId(c)).length;
+  return benched > 0 ? { kind: 'count', text: `×${benched}` } : undefined;
 }
 
 export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: Record<CombatantId, AnyCombatant>): RowVM {
@@ -133,9 +142,9 @@ export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: 
  * characters' Overdrive — describes that entry instead of offering to open a
  * list the player will never see (`chooseTop`). Round 02 #27.
  */
-export function groupHelp(row: TopGroupRow): string {
+export function groupHelp(row: TopGroupRow, actorId?: CombatantId): string {
   if (row.role === 'switch') return 'Swap in a reserve member (L1 / Q). The member coming in takes this turn.';
-  const only = row.items.length === 1 ? row.items[0] : undefined;
+  const only = row.items.length === 1 && (row.items[0]!.enabled || !isOpenerGroup(row)) && !opensList(row, actorId) ? row.items[0] : undefined; // an opener whose one entry is greyed still opens its list
   if (only) return commandHelpText(only) || `Open the ${row.label} menu.`;
   return `Open the ${row.label} menu.`;
 }

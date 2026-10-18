@@ -3,9 +3,9 @@
  *
  * What this pins, against the game's own rows (`research/re-ffx2-angra-mainyu.md`, `monster.bin` **rows 268, 269 and 270** of the Steam build and the appendix of fifteen move rows, the RE session, 2026-10-14)
  * and the first-source research (`research/ffx2-angra-mainyu.md`: the FF Wiki revisions 4041096, 3573851 and 3573852, and Jegged), whose numbers are in
- * `tests/fixtures/parity/ffx2/angra_mainyu_rows.json` (numbers only; the three rows' 200 raw bytes, decoded here by the note's column map, so the fixture cannot drift from its own bytes):
+ * `tests/fixtures/parity/ffx2/angra_mainyu_rows.json` (numbers only; the three rows as decoded fields, each with its record offset in the note's column map; the rows' 200 bytes are not kept):
  *
- * 1. **The rows**: this file decodes the raw bytes itself and checks the enemy data (level, HP, MP, the eight stats, rewards), the attached monster records (Accuracy, the resist bytes, the special word,
+ * 1. **The rows**: this file reads the decoded fields and checks the enemy data (level, HP, MP, the eight stats, rewards), the attached monster records (Accuracy, the resist bytes, the special word,
  *    the steal byte and gil) and the status table the engine builds from them, row by row.
  * 2. **The research**: every number the wiki shares with the rows equals it; the disagreements (Gravity nulled, Reflect landing on the body, Accuracy and Evasion, the arms' missing defences) are the rows'.
  * 3. **The fifteen move rows**: every field of every record is the appendix's, every ability carries its record, the hit rule of hard rule 5 (Punch alone rolls), the costs, the cadence in seconds.
@@ -98,8 +98,9 @@ interface Decoded {
   dropItems: number[]; stealItems: number[]; bribeItems: number[]; zantetsuByte: number;
   group2AutoMask: number; group2AutoAmounts: Record<string, number>;
 }
-interface FixtureRow { name: string; raw: string; decoded: Decoded; unmapped: { basakuWord: number; soundId: number; monsterTypeWord: number; specialBits7to10: number[]; elementBits6and7: number[] } }
+interface FixtureRow { name: string; decoded: Decoded; unmapped: { basakuWord: number; soundId: number; monsterTypeWord: number; specialBits7to10: number[]; elementBits6and7: number[] } }
 interface Fixture {
+  columns: { decoded: Record<string, string>; unmapped: Record<string, string> };
   rows: Record<string, FixtureRow>;
   notUsed: { monster2: Record<string, { level: number; hp: number; agi: number; oversoulType: number }> };
   research: { angraMainyu: Record<string, unknown>; tawrich: Record<string, unknown>; zarich: Record<string, unknown> };
@@ -116,23 +117,6 @@ interface Fixture {
 
 const FIXTURE = JSON.parse(readFileSync(fileURLToPath(new URL('../../fixtures/parity/ffx2/angra_mainyu_rows.json', import.meta.url)), 'utf8')) as Fixture;
 
-/** The note's column map (section 3), applied to the 200 raw bytes. */
-function decode(raw: Buffer): Decoded {
-  const sparse = (o: number): Record<string, number> => Object.fromEntries(Array.from({ length: 24 }, (_, i) => [String(i), raw[o + i]!] as [string, number]).filter(([, v]) => v !== 0));
-  const items = (o: number): number[] => [0, 2, 4, 6].map((i) => raw.readUInt16LE(o + i));
-  return {
-    hp: raw.readUInt32LE(8), mp: raw.readUInt32LE(0xc), level: raw[0x10]!,
-    str: raw[0x11]!, def: raw[0x12]!, mag: raw[0x13]!, mdef: raw[0x14]!, agi: raw[0x15]!, acc: raw[0x16]!, eva: raw[0x17]!, luck: raw[0x18]!,
-    special: raw.readUInt16LE(0x1a), absorb: raw[0x1c]!, nullElements: raw[0x1d]!, half: raw[0x1e]!, weak: raw[0x1f]!,
-    resist1: sparse(0x20), resist2: sparse(0x38),
-    abilities: Array.from({ length: 16 }, (_, i) => raw.readUInt16LE(0x70 + i * 2)).filter((v) => v !== 0),
-    exp: raw.readUInt32LE(0x9c), gil: raw.readUInt32LE(0xa0), pilferGil: raw.readUInt32LE(0xa4), ap: raw.readUInt16LE(0xa8),
-    dropChanceByte: raw[0xaa]!, stealChanceByte: raw[0xab]!,
-    dropItems: items(0xac), stealItems: items(0xb4), bribeItems: items(0xbc), zantetsuByte: raw[0xc4]!,
-    group2AutoMask: raw.readUInt32LE(0x54), group2AutoAmounts: sparse(0x58),
-  };
-}
-
 const ROWS = { angra: FIXTURE.rows['268']!, zarich: FIXTURE.rows['269']!, tawrich: FIXTURE.rows['270']! };
 const ENEMIES = { angra: x2AngraMainyu, zarich: x2Zarich, tawrich: x2Tawrich };
 const RECORD = {
@@ -144,12 +128,21 @@ const KEYS = ['angra', 'zarich', 'tawrich'] as const;
 const ABILITY = Object.fromEntries(x2AngraMainyuAbilities.map((a) => [a.id, a]));
 const hex = (n: number): string => `0x${n.toString(16)}`;
 
-describe('the fixture is the game\'s rows 268, 269 and 270, byte for byte', () => {
-  it('is 200 bytes a row, and the decoded block is exactly what the column map reads from them', () => {
+describe('the fixture is the game\'s rows 268, 269 and 270, as decoded fields', () => {
+  it('has the same decoded fields on every row, each at its own record offset inside the 200-byte row', () => {
+    const spans = Object.entries(FIXTURE.columns.decoded).map(([name, text]) => {
+      const m = /^0x([0-9a-f]+) \((\d+) bytes?/.exec(text);
+      expect(m, name).not.toBeNull();
+      const at = parseInt(m![1]!, 16);
+      return { name, at, end: at + Number(m![2]) };
+    }).sort((a, b) => a.at - b.at);
+    spans.forEach((s, i) => {
+      expect(s.end, s.name).toBeLessThanOrEqual(200);
+      if (i > 0) expect(s.at, s.name).toBeGreaterThanOrEqual(spans[i - 1]!.end);
+    });
     for (const key of KEYS) {
-      const raw = Buffer.from(ROWS[key].raw, 'hex');
-      expect(raw.length, key).toBe(200);
-      expect(decode(raw), key).toEqual(ROWS[key].decoded);
+      expect(Object.keys(ROWS[key].decoded).sort(), key).toEqual(Object.keys(FIXTURE.columns.decoded).sort());
+      expect(Object.keys(ROWS[key].unmapped).sort(), key).toEqual(Object.keys(FIXTURE.columns.unmapped).sort());
     }
     expect(Object.keys(FIXTURE.rows)).toEqual(['268', '269', '270']);
   });
@@ -293,6 +286,7 @@ describe('the monster records are the rows, and the engine\'s status table is bu
 describe('the arms\' permanent immunities: ONE constant, proved, from the rows\' automatic statuses (group 2, slots 15 and 16, amount 127)', () => {
   it('the rows give Zarich slot 15 and Tawrich slot 16 with the amount 127, and the body none', () => {
     expect([ROWS.angra.decoded.group2AutoMask, ROWS.zarich.decoded.group2AutoMask, ROWS.tawrich.decoded.group2AutoMask]).toEqual([0, 0x8000, 0x10000]);
+    expect(ROWS.angra.decoded.group2AutoAmounts).toEqual({}); // the body has none: the amounts as well as the mask
     expect(ROWS.zarich.decoded.group2AutoAmounts).toEqual({ '15': 127 });
     expect(ROWS.tawrich.decoded.group2AutoAmounts).toEqual({ '16': 127 });
     expect([...GROUP2_STATUS[15]!]).toEqual(['null-physical']);

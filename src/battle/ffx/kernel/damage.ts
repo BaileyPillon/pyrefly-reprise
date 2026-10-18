@@ -9,9 +9,9 @@
  * §2; the field offsets in the comments are the battle-character structure
  * (`Chr+0x...`) and the 0x5c-byte command record (`Cmd+0x...`).
  *
- * Every operation mirrors the instruction sequence: IMUL products wrap at 32
+ * Every operation mirrors the game's own arithmetic: products wrap at 32
  * bits, `/ 16`, `/ 32` and `/ 256` round toward zero, the stat divisions are
- * signed except where the game uses unsigned DIV/MUL (formulas 0xa, 0x10 and
+ * signed except where the game divides and multiplies as unsigned (formulas 0xa, 0x10 and
  * 0x11 to 0x13, flagged below). Nothing here reads the engine's types.
  *
  * Randomness: the one draw of a hit's variance happens BEFORE the formula
@@ -285,7 +285,7 @@ export function baseDamage(input: BaseDamageInput, draw: () => number): BaseDama
 
 /**
  * Formulas 0x11 to 0x13: `((a * cube(cheer + STR)) / divisor * power >> 4) * V >> 8`.
- * Every step is UNSIGNED (DIV, MUL and logical shifts), so a wrapped product is
+ * Every step is UNSIGNED (division, multiplication and logical shifts), so a wrapped product is
  * read as a large positive number.
  */
 function celestial(u: BaseDamageUser, power: number, v: number, a: number, divisor: number): number {

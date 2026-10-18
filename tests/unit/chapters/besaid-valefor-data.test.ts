@@ -2,10 +2,10 @@
  * Valefor at Besaid (FFX-2 Chapter 3, "Protect Besaid Temple!"; the hidden chapter "Valefor at Besaid", number 24, typed word `valefor`): the data, pinned. **FFX-2 only** [AGENTS.md rule 14].
  *
  * What this pins, against the game's own row (`research/re-ffx2-yojimbo-valefor.md`, `monster.bin` **row 164** of the Steam build, the RE session, 2026-10-14) and the research
- * (`research/ffx2-fallen-aeons.md` §7.1, SinirothX + the FF Wiki), whose numbers are in `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` (numbers only; the row's 200 raw bytes, decoded
- * here by the note's column map, so the fixture cannot drift from its own bytes):
+ * (`research/ffx2-fallen-aeons.md` §7.1, SinirothX + the FF Wiki), whose numbers are in `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` (numbers only; the row as decoded fields,
+ * each with its record offset in the note's column map; the row's 200 bytes are not kept):
  *
- * 1. **The row**: this file decodes the raw bytes itself and checks the enemy data (level, HP, MP, the eight stats, rewards), the attached monster record (Accuracy, the resist bytes, the special
+ * 1. **The row**: this file reads the decoded fields and checks the enemy data (level, HP, MP, the eight stats, rewards), the attached monster record (Accuracy, the resist bytes, the special
  *    word, the steal byte and gil, the plain Attack) and the status table the engine builds from it against them, field by field.
  * 2. **The research**: every number §7.1 shares with the row equals it; the one disagreement, **Gravity nulled**, is the row's. Row 363 (Lv 48, HP 38,000), which sits in no formation, is NOT used.
  * 3. **What is deliberately not wired**: the columns the note marks unmapped (group-1 resist slots 17 and 18, which the engine's slot table would read as Itchy and Auto-Life; the Bribe flag).
@@ -60,7 +60,7 @@ import { VALEFOR_BESAID_GUIDE_IDS } from '../../../src/data/guides/ffx2-valefor-
 
 interface Fixture {
   row: number;
-  raw: string;
+  columns: { decoded: Record<string, string>; unmapped: Record<string, string> };
   decoded: Decoded;
   unmapped: { basakuWord: number; soundId: number; monsterTypeWord: number; specialBits7and8: number[]; group1ResistSlots17and18: number[]; elementBits6and7: number[] };
   research: Record<string, unknown> & { level: number; hp: number; str: number; mag: number; def: number; mdef: number; agi: number; eva: number; luck: number; exp: number; ap: number; gil: number; pilferGil: number; attackDC: number; sonicWingsDC: number; energyRayDC: number; energyBlastDC: number };
@@ -80,30 +80,24 @@ interface Decoded {
 
 const FIXTURE = JSON.parse(readFileSync(fileURLToPath(new URL('../../fixtures/parity/ffx2/besaid_valefor_rows.json', import.meta.url)), 'utf8')) as Fixture;
 
-/** The note's column map (section 3), applied to the 200 raw bytes. */
-function decode(raw: Buffer): Decoded {
-  const sparse = (o: number): Record<string, number> => Object.fromEntries(Array.from({ length: 24 }, (_, i) => [String(i), raw[o + i]!] as [string, number]).filter(([, v]) => v !== 0));
-  const items = (o: number): number[] => [0, 2, 4, 6].map((i) => raw.readUInt16LE(o + i));
-  return {
-    hp: raw.readUInt32LE(8), mp: raw.readUInt32LE(0xc), level: raw[0x10]!,
-    str: raw[0x11]!, def: raw[0x12]!, mag: raw[0x13]!, mdef: raw[0x14]!, agi: raw[0x15]!, acc: raw[0x16]!, eva: raw[0x17]!, luck: raw[0x18]!,
-    special: raw.readUInt16LE(0x1a), absorb: raw[0x1c]!, nullElements: raw[0x1d]!, half: raw[0x1e]!, weak: raw[0x1f]!,
-    resist1: sparse(0x20), resist2: sparse(0x38),
-    abilities: Array.from({ length: 16 }, (_, i) => raw.readUInt16LE(0x70 + i * 2)).filter((v) => v !== 0),
-    exp: raw.readUInt32LE(0x9c), gil: raw.readUInt32LE(0xa0), pilferGil: raw.readUInt32LE(0xa4), ap: raw.readUInt16LE(0xa8),
-    dropChanceByte: raw[0xaa]!, stealChanceByte: raw[0xab]!,
-    dropItems: items(0xac), stealItems: items(0xb4), bribeItems: items(0xbc), zantetsuByte: raw[0xc4]!,
-  };
-}
-
-const RAW = Buffer.from(FIXTURE.raw, 'hex');
-const ROW = decode(RAW);
+/** The row's decoded fields (the note's column map, section 3), as the fixture holds them. */
+const ROW = FIXTURE.decoded;
 const RECORD = MONSTER_RECORDS[`${BESAID_VALEFOR}/${VALEFOR_ID}`]!;
 
-describe('the fixture is the game\'s row 164, byte for byte', () => {
-  it('is 200 bytes, and the decoded block is exactly what the column map reads from them', () => {
-    expect(RAW.length).toBe(200);
-    expect(ROW).toEqual(FIXTURE.decoded);
+describe('the fixture is the game\'s row 164, as decoded fields', () => {
+  it('has the decoded fields the tests read, each at its own record offset inside the 200-byte row', () => {
+    const spans = Object.entries(FIXTURE.columns.decoded).map(([name, text]) => {
+      const m = /^0x([0-9a-f]+) \((\d+) bytes?/.exec(text);
+      expect(m, name).not.toBeNull();
+      const at = parseInt(m![1]!, 16);
+      return { name, at, end: at + Number(m![2]) };
+    }).sort((a, b) => a.at - b.at);
+    spans.forEach((s, i) => {
+      expect(s.end, s.name).toBeLessThanOrEqual(200);
+      if (i > 0) expect(s.at, s.name).toBeGreaterThanOrEqual(spans[i - 1]!.end);
+    });
+    expect(Object.keys(ROW).sort()).toEqual(Object.keys(FIXTURE.columns.decoded).sort());
+    expect(Object.keys(FIXTURE.unmapped).filter((k) => k !== 'note').sort()).toEqual(Object.keys(FIXTURE.columns.unmapped).sort());
     expect(FIXTURE.row).toBe(164);
   });
 

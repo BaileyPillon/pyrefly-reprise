@@ -13,7 +13,7 @@
  * marked `[RE row N]` below: **Accuracy 95 and Evasion 0** (the wiki lists neither), **Zarich's Defense 0 and Tawrich's Magic Defense 0** (the wiki omits them), **Gravity is nulled on all three** (the wiki says
  * "halves" for the body and Tawrich), **Reflect lands on the body** (the wiki says it is immune; the row reads 0 there and 255 on the arms), and **the arms' permanent physical and magical immunities** (group-2 slots
  * 15 and 16, laid here as `autoStatuses`, the Vegnagun Leg's nodes' precedent). The rows are laid on these enemies by `../monster-records/records-angra-mainyu.ts` (`attachMonsterRecords`, at the foot of this file).
- * `tests/unit/chapters/angra-mainyu-data.test.ts` pins this file and the records against `tests/fixtures/parity/ffx2/angra_mainyu_rows.json` (the rows' 200 raw bytes, decoded by the test).
+ * `tests/unit/chapters/angra-mainyu-data.test.ts` pins this file and the records against `tests/fixtures/parity/ffx2/angra_mainyu_rows.json` (the rows as decoded fields with their record offsets).
  *
  * **Parts.** The two arms are `parts` of the formation (`EnemyGroupDef.parts`, as Vegnagun's Bulwarks): drawn and targeted on their own, never a reason for the fight to go on: **the fight ends when the body
  * falls** (`battle/ffx2/results.ts`). The body revives a fallen arm and heals a hurt one (`../../../battle/ffx2/ai/angra-mainyu.ts`). The formation's slot order is the game's: Angra Mainyu first, Tawrich

@@ -10,7 +10,7 @@
 import type { Command, FFXCombatant } from '../../common/types.ts';
 import { type Ctx, isAlive, livingEnemies, livingFriendlies, tryActor } from '../state.ts';
 import { type AiContext, aiContextFor, getAiScript } from './types.ts';
-import { consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
+import { consumeSeymourTalk, seymourTalkAvailable, seymourTalkOffered } from './seymour-flux.ts';
 import { bfaTalkState, consumeBfaTalk } from './braskas-final-aeon.ts';
 import {
   SEYMOUR_MACALANIA_SCRIPT,
@@ -132,6 +132,21 @@ export function talkAvailable(ctx: Ctx, talker: FFXCombatant): boolean {
   return false;
 }
 
+/**
+ * Is Talk in this character's trigger list in this fight at all? Four formation scripts add command 0x3105 and no other script, formation or monster, names it (FFX-G11b section 5): Seymour Flux's
+ * (Yuna, Kimahri), Macalania's (Tidus, Yuna, Wakka), Natus's (Tidus, Yuna, Auron) and Braska's Final Aeon's (Tidus, which the Last Summoning's first link shares). Everywhere else, Yunalesca, Yu Yevon, the
+ * possessed aeons, Isaaru, the airship and the rest, the game's menu has no Talk row, so under `MENU_DRAW_PARITY` (item e) the engine builds none. Whether the row is *usable* is {@link talkAvailable}.
+ */
+export function talkOffered(ctx: Ctx, talker: FFXCombatant): boolean {
+  const boss = triggerHost(ctx);
+  if (!boss) return false;
+  const script = activeScriptId(boss) ?? boss.id;
+  if (script === 'seymour-flux' || script === 'mortiorchis') return seymourTalkOffered(talker.id);
+  if (isMacalaniaScript(script) || isNatusScript(script)) return true; // their own tables (the builds list the talkers) decide who may use it
+  if (isBfaScript(script)) return talker.id === 'tidus';
+  return false;
+}
+
 function isBfaScript(script: string): boolean {
   return script.startsWith('bfa') || script === 'braskas-final-aeon';
 }
@@ -161,6 +176,8 @@ function talkDisabledReason(ctx: Ctx): string {
  */
 export interface TriggerHandler {
   available: (ctx: Ctx, user: FFXCombatant) => boolean;
+  /** Is the command in this actor's list at all in this fight? Absent: always (the airship orders). Talk only exists where a formation script adds it ({@link talkOffered}); read under `MENU_DRAW_PARITY`. */
+  offered?: (ctx: Ctx, user: FFXCombatant) => boolean;
   apply: (ctx: Ctx, user: FFXCombatant) => boolean;
   /** Why the menu row is greyed when `available` is false (a function when the reason depends on the state). */
   disabledReason: string | ((ctx: Ctx, user: FFXCombatant) => string);
@@ -172,6 +189,7 @@ const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
   /** Seymour Flux, Braska's Final Aeon, Macalania — see {@link applyTalkTrigger}. */
   talk: {
     available: (ctx, user) => talkAvailable(ctx, user),
+    offered: (ctx, user) => talkOffered(ctx, user),
     apply: (ctx, user) => {
       if (!applyTalkTrigger(ctx, user)) return false;
       // A Trigger Command that lands must *say* it landed. Braska's Final Aeon's

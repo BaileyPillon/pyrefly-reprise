@@ -312,7 +312,7 @@ describe('32-bit wraparound inside the base formulas', () => {
   });
 
   it('the celestial formulas read a wrapped product as a big UNSIGNED number', () => {
-    // 0x10: user max HP 99999 * power 255 = 25,499,745;  / 10 = 2,549,974   (no wrap, but unsigned DIV)
+    // 0x10: user max HP 99999 * power 255 = 25,499,745;  / 10 = 2,549,974   (no wrap, but an unsigned division)
     expect(calc(0x10, 255, { u: { maxHp: 99999 } }).value).toBe(2549974);
     // 0xa: 2^31 - 1 max MP * 2 = 0xFFFFFFFE as unsigned = 4,294,967,294;  >>> 4 = 268,435,455
     expect(calc(0xa, 2, { t: { maxMp: 2147483647 } }).value).toBe(268435455);

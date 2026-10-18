@@ -20,6 +20,7 @@
 import type { AnyCombatant, AvailableCommand, Command, CombatantId } from '../../battle/common/types.ts';
 import type { TopGroupRow } from './CommandMenuLogic.ts';
 import { escapeHtml } from './commandMenuRows.ts';
+import { startPreference } from './targetStepUi.ts';
 import { aimLabel, doublecastCommand, lockFirst, openWrap, pendingMp, unlockFirst, type DoublecastPicksSource, type DoublecastView, type DoublecastWrap } from './doublecastModel.ts';
 import { doublecastCrumb, doublecastHelp, doublecastLeadHelp, type DoublecastHelp } from './doublecastText.ts';
 
@@ -82,8 +83,8 @@ export class DoublecastFlow {
   }
 
   /** Open round 1 from the Doublecast row, or say there is nothing to cast (`null`). */
-  open(wrapper: AvailableCommand, back: 'top' | 'sub', backIndex: number): TopGroupRow | null {
-    this.wrap = this.env ? openWrap(wrapper, this.env.commands, back, backIndex) : null;
+  open(wrapper: AvailableCommand, back: 'top' | 'sub', backIndex: number, opensOnGrey = false): TopGroupRow | null {
+    this.wrap = this.env ? openWrap(wrapper, this.env.commands, back, backIndex, opensOnGrey) : null;
     return this.wrap?.group ?? null;
   }
 
@@ -112,9 +113,9 @@ export class DoublecastFlow {
   /** Where the target step's cursor opens: cast 1's target for cast 2 ("the same again" is one press), cast 1's old target when it is re-aimed; the row's own preference otherwise. */
   prefer(cmd: AvailableCommand): readonly CombatantId[] | undefined {
     const wrap = this.wrap;
-    if (!wrap || !this.owns(cmd)) return cmd.preferredTargets;
+    if (!wrap || !this.owns(cmd)) return startPreference(cmd);
     const first = wrap.first?.targets.filter((t) => cmd.validTargets.includes(t));
-    return first?.length ? first : cmd.preferredTargets;
+    return first?.length ? first : startPreference(cmd);
   }
 
   /**

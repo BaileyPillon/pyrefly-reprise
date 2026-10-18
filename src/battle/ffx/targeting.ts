@@ -295,7 +295,7 @@ export function scriptAimsAt(def: AbilityDef): boolean {
 /**
  * Whom hit `hit` of a script-aimed row lands on: the target the command named for it, **if the game's queue would
  * accept it** — on the field, targetable, and alive unless the command can target the dead (the exe's queue,
- * `FUN_007ac9c0`, rejects any other with a "TARGET ERROR" and that command is dropped). Otherwise nobody: the hit is
+ * the function at 0x007ac9c0, rejects any other with a "TARGET ERROR" and that command is dropped). Otherwise nobody: the hit is
  * lost, which is how Natus's script loses half a Multi-ra when it aims the second half at a fallen third party slot.
  */
 export function aimedTargetForHit(

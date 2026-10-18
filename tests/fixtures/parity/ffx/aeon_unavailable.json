@@ -2,7 +2,7 @@
  "schema": "ffx-parity-vectors/1",
  "game": "ffx",
  "name": "aeon_unavailable",
- "description": "The summon menu's test (FUN_0079a080): an aeon can be summoned only when it is alive, available, not removed and its recovery counter is 0.",
+ "description": "The summon menu's test (the function at 0x0079a080): an aeon can be summoned only when it is alive, available, not removed and its recovery counter is 0.",
  "exe": {
   "file": "FFX.exe",
   "sha256": "0537B2A1047F3266E73495CD4E35F63F0777F4231D417699F979954686DA686D",
@@ -25,7 +25,7 @@
  "vectorCount": 598,
  "notes": [
   "in: the four bytes the function reads of the character: hp (Chr+0x5d0, signed 32-bit), avail (Chr+0xdd4, the character can be summoned at all), blocked (Chr+0xdcd, removed for good), recover (Chr+0x6d8, the recovery counter). out.ret: 0 = can be summoned, 1 = cannot.",
-  "Every stored answer is the machine's own: FUN_0079a080 of FFX.exe run for real on random character states."
+  "Every stored answer is the machine's own: the function at 0x0079a080 of FFX.exe run for real on random character states."
  ]
 ,
  "vectors": [

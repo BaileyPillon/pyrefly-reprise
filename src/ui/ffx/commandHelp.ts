@@ -1,5 +1,6 @@
 import type { AbilityDef, AvailableCommand } from '../../battle/common/types.ts';
 import { CORE_ABILITIES } from '../../battle/ffx/registry.ts';
+import { menuParity } from '../../battle/ffx/menu-draw-parity.ts';
 import { ABILITIES, ITEMS } from '../../data/ffx/index.ts';
 import { describeAbility } from '../../engine/tactics/advisor.ts';
 
@@ -110,9 +111,12 @@ export function commandEffectText(cmd: AvailableCommand): string {
  *
  * A disabled row used to print only "Not enough MP", which tells a player what
  * they cannot do and not what they were reaching for.
+ *
+ * `MENU_DRAW_PARITY` item `help` (off): the original prints no reason for a greyed row, and now that the cursor rests on greyed rows the slab would otherwise say "Silenced" under
+ * every spell of a silenced caster; with the item on it prints the row's plain description alone (a row with no description prints nothing).
  */
 export function commandHelpText(cmd: AvailableCommand): string {
   const effect = commandEffectText(cmd);
-  if (cmd.enabled || !cmd.disabledReason) return effect;
+  if (cmd.enabled || !cmd.disabledReason || menuParity('help')) return effect;
   return effect ? `${cmd.disabledReason} — ${effect}` : cmd.disabledReason;
 }

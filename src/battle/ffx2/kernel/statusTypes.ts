@@ -97,7 +97,7 @@ export interface StatusTarget {
   resist2: StatusBytes;
   /** Chr +0x570 OR +0x4fc: group 1 statuses held by permanent sources (cannot be cleansed; some block others). */
   protectMask: number;
-  /** `FUN_00632630(target, 0, 0)`: the target's action-state bits (bit 2 petrified/Stopped, bits 0 and 1 mid-action). */
+  /** The function at 0x00632630 (`target, 0, 0`): the target's action-state bits (bit 2 petrified/Stopped, bits 0 and 1 mid-action). */
   actionState: number;
   /** Chr +0x438 + i (signed): the group 2 byte currently in effect. */
   activeBytes: StatusBytes;
@@ -136,7 +136,7 @@ export interface StatusResult {
   layerCBytes: number[];
   /**
    * The result-kind flag word the rolls add to (result flags: 0x4000 Petrify immune, 0x200 Sleep
-   * immune, 0x400 Silence immune, 0x800 Darkness immune); it is `local_70` of the damage orchestrator.
+   * immune, 0x400 Silence immune, 0x800 Darkness immune); it is a local variable of the damage orchestrator.
    */
   flags: number;
 }
@@ -160,7 +160,7 @@ export interface StatusOutcome {
   applied: boolean;
   /** The status was removed (or the stage went down). */
   removed: boolean;
-  /** Group 2: the attempt left the result unchanged (`local_c` in the decompile). */
+  /** Group 2: the attempt left the result unchanged (a local variable of the group 2 roll). */
   attempted: boolean;
 }
 
@@ -171,7 +171,7 @@ export interface StatusOptions {
   /** VA 0x00df68cf: every roll fails. */
   debugForceFail?: boolean;
   /**
-   * The scripted "check stop" gate (`FUN_0062e4d0` and VA 0x00df948d, or the roll function's last
+   * The scripted "check stop" gate (the function at 0x0062e4d0 and VA 0x00df948d, or the roll function's last
    * argument): while it holds, statuses whose flag word has 0x400 (Petrify, Sleep in group 1; Stop in
    * group 2) read as resisted. False in ordinary play.
    */

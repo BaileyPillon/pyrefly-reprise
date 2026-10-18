@@ -34,7 +34,7 @@ export interface Ffx2Charge {
 export interface Ffx2ChargeStartInput {
   /** `ActionRec+0x04`: the magic tag the action already holds (0 = the charge has not started). */
   handle: number;
-  /** What the tag allocator (`FUN_0062d950`, the command's animation slot) returns: a new non-zero tag, or 0 when none is free. */
+  /** What the tag allocator (the function at 0x0062d950, the command's animation slot) returns: a new non-zero tag, or 0 when none is free. */
   allocated: number;
   /** `ActionRec+0x2f` is non-zero: this record has no charge. */
   noCharge: boolean;
@@ -95,7 +95,7 @@ export interface Ffx2DelayTarget {
 
 /** Result of {@link applyAtbDamage}: the new numbers, and whether the HUD's command menu closes. */
 export interface Ffx2DelayResult extends Ffx2DelayTarget {
-  /** The game closes the character's open command menu (`FUN_00634040(id, 2)`). */
+  /** The game closes the character's open command menu (the function at 0x00634040, called with `id, 2`). */
   closeMenu: boolean;
 }
 
