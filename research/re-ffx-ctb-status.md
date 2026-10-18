@@ -575,7 +575,7 @@ A Threaten that lands makes a **pair**: the target's permanent word gets bit 0x8
 write-back of the hit record then calls `fh_MsThreatProcess` (0x0078e460, Fahrenheit's name) with the bit set, which gives the
 USER bit 0x800 too and sets the user's `Chr+0x5c6` to the target. Both ends therefore carry the bit and name each other.
 
-It is released by `FUN_0078e410`, which runs at the end of **every** start-of-turn tick, in the death handler for the character
+It is released by the function at 0x0078e410, which runs at the end of **every** start-of-turn tick, in the death handler for the character
 that dies, and in the function that takes a character off the field. For a character with the bit, `Chr+0x5c6` not 0xff means
 it is the USER of a pair; otherwise it is the TARGET. In both cases the bit leaves BOTH ends, and both ends' two link bytes
 become 0xff. So **a Threaten ends at the start of whichever end's turn comes first** (the user's, normally, because the target

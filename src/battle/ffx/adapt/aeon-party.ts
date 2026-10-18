@@ -182,7 +182,7 @@ function freedBetween(before: Field, after: Field): PartyOutcome['freed'] {
   return out;
 }
 
-/** `FUN_007adf90` and the arrival step: the party leaves the field and the aeon takes it. */
+/** The summon function at 0x007adf90 and the arrival step: the party leaves the field and the aeon takes it. */
 export function summonOutcome(ctx: Ctx, aeon: FFXCombatant, summoner: FFXCombatant, grand: boolean): PartyOutcome {
   const before = fieldOf(ctx, aeon, false, grand);
   const after = fieldOf(ctx, aeon, false, grand);
@@ -218,7 +218,7 @@ export interface GroupMemberOutcome {
 }
 
 /**
- * The Magus Sisters' summon (`FUN_007adf90` for any one of the three: all three take list positions 0 to 2, each records the summoner) and the
+ * The Magus Sisters' summon (the function at 0x007adf90 for any one of the three: all three take list positions 0 to 2, each records the summoner) and the
  * arrival step, run on the field as it stands. `group` is the three aeons in list order (re-parity lane FFX-K).
  */
 export function summonGroupOutcome(ctx: Ctx, group: readonly FFXCombatant[], summoner: FFXCombatant, grand: boolean): { members: GroupMemberOutcome[]; freed: PartyOutcome['freed'] } {
@@ -236,7 +236,7 @@ export function summonGroupOutcome(ctx: Ctx, group: readonly FFXCombatant[], sum
 
 /**
  * The group leaves: `wiped` is the wipe (every aeon out is down; each starts its recovery count and goes without the revive), else the
- * Dismiss command, which stands a fallen member up at 1 HP (`reviveFallen`, `FUN_007aef20`).
+ * Dismiss command, which stands a fallen member up at 1 HP (`reviveFallen`, the function at 0x007aef20).
  */
 export function dismissGroupOutcome(ctx: Ctx, group: readonly FFXCombatant[], wiped: boolean): GroupMemberOutcome[] {
   const lead = group[0] as FFXCombatant;
@@ -251,7 +251,7 @@ export function dismissGroupOutcome(ctx: Ctx, group: readonly FFXCombatant[], wi
 }
 
 /**
- * `FUN_0079a080` for an aeon: can it be summoned (HP above 0, nothing left of its recovery count, its availability byte set)? `available` is that byte: 1 unless a monster's script
+ * The function at 0x0079a080, for an aeon: can it be summoned (HP above 0, nothing left of its recovery count, its availability byte set)? `available` is that byte: 1 unless a monster's script
  * wrote 0 to it (`setCommandDisabled(1, <aeon id>, 0)`, `../formation-commands.ts#aeonScriptOff`; the possessed aeons' own lock, off by default).
  */
 export function aeonSummonable(aeon: FFXCombatant, available = true): boolean {
@@ -264,7 +264,7 @@ export function aeonSummonable(aeon: FFXCombatant, available = true): boolean {
 }
 
 /**
- * The end-of-battle save for the aeons (`FUN_00785fc0`, `kernel/battle-save.ts#saveCharacter`): an aeon with a recovery count has
+ * The end-of-battle save for the aeons (the function at 0x00785fc0, `kernel/battle-save.ts#saveCharacter`): an aeon with a recovery count has
  * it counted down by one, and the battle that brings it to 0 stands it up at full HP and MP. (The party's own saved HP is not
  * touched here: a chained link carries a fallen member as it fell, which is the seam's own rule.)
  */

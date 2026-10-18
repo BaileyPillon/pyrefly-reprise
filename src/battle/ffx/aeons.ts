@@ -30,7 +30,7 @@ import { SISTER_IDS, asOneSummon, dismissSisters, summonSisters } from './adapt/
 import { yojimboWiped } from './adapt/yojimbo.ts';
 
 /**
- * Aeons Yuna may summon right now: HP above 0 and no recovery count left (`FUN_0079a080`). An aeon under an aeon duel's **mirror
+ * Aeons Yuna may summon right now: HP above 0 and no recovery count left (the function at 0x0079a080). An aeon under an aeon duel's **mirror
  * lock** is not one (`./aeon-duel.ts`, Chapter XIV only; research ffx-isaaru-bevelle §1.2 [verified: 2 sources]).
  */
 export function availableAeons(ctx: Ctx): FFXCombatant[] {

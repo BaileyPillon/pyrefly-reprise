@@ -50,7 +50,7 @@ bookkeeping counters (`blocked`, the result code) the HUD reads. Details in §7.
 row; `ActionRec+0xNN` an offset into the 0xCC-byte queued action. "Attacker" is the user, "target" the defender.
 Stat bytes (STR, DEF, MAG, MDEF, Luck) are read as unsigned bytes; the five stage bytes are read as signed bytes (a
 stage of +3 is a factor of 15/12, of -3 a factor of 9/12). All arithmetic is 32-bit: a product that does not fit
-**wraps** (IMUL keeps the low 32 bits) and every `/` **truncates toward zero** (the shift forms add a bias for negative
+**wraps** (the signed multiply keeps the low 32 bits) and every `/` **truncates toward zero** (the shift forms add a bias for negative
 numbers first). The engine's own integer helpers floor instead.
 
 ## 1. Base damage (0x61b910)

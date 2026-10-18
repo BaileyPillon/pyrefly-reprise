@@ -38,7 +38,7 @@ them through `pp_BtlActionRequest` 0x007aceb0, whose third argument is the slot)
 |---|---|---|---|
 | 0 | onTurn | action executor 0x00792210 | the monster's own turn; the program queues up to four sub-actions |
 | 1 | preTurn | turn start 0x00792a90 | before the turn proper |
-| 2 | onTargeted | `FUN_007ad0c0` from the executor | at the start of each sub-action, once per target in its mask; apparently skipped for a target that already has a reaction queued (`FUN_007b0720`, read; its role is inferred) |
+| 2 | onTargeted | the function at 0x007ad0c0, called from the executor | at the start of each sub-action, once per target in its mask; apparently skipped for a target that already has a reaction queued (the function at 0x007b0720, read; its role is inferred) |
 | 3 | onHit | `pp_BtlApplyHitRecords` 0x0078f060 | **once per target per sub-action, after the last hit record has been applied**, whether the hits damaged, missed, healed or only touched statuses (read in the code, not observed in play); it runs **before** the death check |
 | 4 | onDeath | `pp_BtlDamageCheckDeath` 0x0078c740 | after the death check has found HP < 1 |
 | 5 / 7 | onMove / postMove | move code | cosmetic here |
@@ -70,7 +70,7 @@ those whose property is zero, "Highest" (1) and "Lowest" (2) keep the actors wit
 The `value` argument is never used. Among the survivors the stream-4 pick above chooses one. So
 `findMatchingChr(front line, isAlive, 0, Any)` is a uniform pick among living, targetable front-line actors.
 
-**1.4 Actor specs** (`FUN_00794330`) [eng]: -14 front line (non-monster, in battle, not escaped); -15 monsters in battle;
+**1.4 Actor specs** (the function at 0x00794330) [eng]: -14 front line (non-monster, in battle, not escaped); -15 monsters in battle;
 -13 the script's own actor; -17 the last attacker (the actor recorded in Chr+0xDED by the last hit it took); -16 the
 script's *matching group* (a mask built with `initializeMatchingGroupTo`, `addToMatchingGroup`,
 `removeFromMatchingGroup`); -20 aeons in battle; -24 every non-monster, non-aeon actor whether or not it is in battle;
@@ -191,8 +191,8 @@ statuses, stat stages (Shell, Protect, Haste, Regen) and her stat bytes carry ov
 HP is discarded.** The script does not clear any of her statuses.
 
 **2.11 An engine special case for this fight** [eng, partly inferred]: in `pp_BtlSubHp` (0x0078E230), when the battle id is
-0x02090000, her max HP is 24,000 or 48,000 and the Doublecast counter `DAT_0112CA15` is 1, a form dying sets
-`DAT_011334C4`; `pp_BtlExecuteAction` then cancels the sub-action that follows (the second cast of the same Doublecast)
+0x02090000, her max HP is 24,000 or 48,000 and the Doublecast counter (the global at 0x0112CA15) is 1, a form dying sets
+the global at 0x011334C4; `pp_BtlExecuteAction` then cancels the sub-action that follows (the second cast of the same Doublecast)
 instead of letting it hit the next form. Which exact sub-action the counter marks was not traced.
 
 **2.12 The Zombie interplay** in one line: Hellbiter (Zombie 100%) is her opener for forms II and III and her filler;
@@ -331,7 +331,7 @@ every link. Battle flags: no victory dance, no battle theme; the game-over flag 
 variables cleared; **Permanent Auto-Life** (property 334) on every non-monster, non-aeon actor (the party members);
 the Auto-Life command 0x311F gets its own animation. Each party member has an onHit handler (workers at slots 41 to 47, Tidus
 to Rikku): when the command that hit them was Auto-Life their **CTB := 0**, so a revived character acts next. The engine
-re-applies the Auto-Life status after a permanent holder is revived or at battle start (`FUN_0078deb0`), and the revive
+re-applies the Auto-Life status after a permanent holder is revived or at battle start (the function at 0x0078deb0), and the revive
 itself is command 0x311F (formula 8, power 4: 25% of max HP, floor 1).
 
 **5.3 Per battle, start hook** [read]: the possessed actor gets First Strike and CTB 0, both Pagodas CTB 24, and each of
@@ -448,7 +448,7 @@ events (V4). The mock world is not the engine: anything that depends on how the 
 **Not decoded.**
 
 1. The CTB charged for a turn on which a program queues nothing (the Pagodas' hidden turns, Yu Yevon's first turn). Most
-   likely a rank-3 recovery: the scheduler (`FUN_00790fb0`) stores rank 3 in the actor each time its counter reaches 0 and
+   likely a rank-3 recovery: the scheduler (the function at 0x00790fb0) stores rank 3 in the actor each time its counter reaches 0 and
    `pp_BtlActionDone` pays `tick speed x stored rank`, which would make three Pagoda turns the 63 (AGI 40) or 72 (AGI 30)
    ticks our data already assumes. That the engine calls action-done for an empty turn was not traced.
 2. Whether the second cast of a Doublecast raises its own onHit event (the executor keys the pending slot by sub-action
