@@ -45,6 +45,7 @@ import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExper
 import { drawRunSeed } from '../runSeed.ts';
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
+import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -173,6 +174,7 @@ export interface RunChapterOptions {
    */
   skipResults?: boolean;
   /** RESTART ENCOUNTER: re-enter where RETRY would (FA3 = b, `pause/restartCarry.ts`). */ restart?: boolean;
+  /** One fight of the hidden Pilgrimage (FFX, prototype; `pilgrim/pilgrimHook.ts`): its boon'd chapter, its own progress, a loss that ends the fight, no RESTART ENCOUNTER. Absent for every other run. */ pilgrim?: PilgrimFightHook;
 }
 
 /**
@@ -207,6 +209,8 @@ export class GameFlow {
   /** Set while a chapter is running, so the debug API can see where we are. */
   step: string = 'idle';
   private running = false;
+  /** The chapter the board's `pilgrim` door settled on, until the next `runChapter` takes it as the Pilgrimage's start (`armPilgrimage`). */
+  private pilgrimArmed: ChapterId | null = null;
 
   constructor(app: App) {
     this.app = app;
@@ -297,6 +301,11 @@ export class GameFlow {
     return screen.done;
   }
 
+  /** The board's `pilgrim` door opened (`frontend/pilgrimDoor.ts`): the next `runChapter(id)` is the hidden Pilgrimage, started once. */
+  armPilgrimage(id: ChapterId): void {
+    this.pilgrimArmed = id;
+  }
+
   /**
    * One chapter end to end. Returns how the last attempt ended, or `null` if
    * the player backed out of prep without fighting.
@@ -307,6 +316,12 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
+    const armed = this.pilgrimArmed;
+    this.pilgrimArmed = null; // spent by whatever chapter runs next, so a door that opened and never ran cannot hijack a later one
+    if (armed === id && opts.pilgrim === undefined) {
+      const { runPilgrimage } = await import('../pilgrim/PilgrimFlow.ts'); // its screens and styles load only now: a player who never types the word never fetches them
+      return runPilgrimage({ app: this.app, show: (s) => this.show(s), setStep: (s) => void (this.step = s), fight: (cid, o) => this.runChapter(cid, o), away: () => this.handedOver, claim: () => { if (!this.running) [this.owned, this.handedOver] = [null, false]; } });
+    }
     const release = musicChapter(id, sfxChapter(id, holdIdleLane())); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)
     // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
@@ -314,14 +329,15 @@ export class GameFlow {
   }
 
   private async playChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
-    const chapter = getChapter(id);
+    const shipped = getChapter(id);
+    const chapter = shipped && opts.pilgrim ? opts.pilgrim.chapter(shipped) : shipped; // a run fight is the shipped chapter with its boons in the party
     if (!chapter) return null;
     if (chapter.experimental && chapter.game === 'ff7') { // FF7's hidden experiment has its own flow; the FFX-2 Leblanc preview plays through this one, below
       if (!this.running) [this.owned, this.handedOver] = [null, false]; // a fresh owner, as below
       return runExperiment(chapter, { ...opts, seed: opts.seed ?? drawRunSeed() }, { show: (s) => this.show(s), setStep: (s) => void (this.step = s), makeBattle: (o) => factories.battle?.(o) ?? new BattleScreen(o), results: (c, o) => (c.game === 'ff7' ? ff7Results((s) => this.show(s), c, o) : this.showResults(c, o)), // FF7: its own results windows and Game Over (C1, G1)
         playIn: (swap, o) => experimentPlayIn(this.app.uiRoot, chapter, swap, o) }); // FF7: its own swirl of the frozen board (F1)
     }
-    const save: FlowProgress = chapter.experimental ? experimentProgress : this.app.save; // an experiment keeps its attempts and clears in the experiments' store, never the save
+    const save: FlowProgress = opts.pilgrim?.progress ?? (chapter.experimental ? experimentProgress : this.app.save); // an experiment keeps its attempts and clears in the experiments' store, never the save
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
     let { attempt, carry, opts: { seed } } = ({ opts } = openRun(this, id, opts)); // a fresh first seed (PR-0008)
     void preloadBattle(chapter, seed); // the battle's art loads behind prep and the scene (PR-0061)
@@ -417,6 +433,7 @@ export class GameFlow {
         return outcome;
       }
 
+      if (opts.pilgrim && (outcome.outcome === 'defeat' || outcome.outcome === 'escape')) { this.step = 'idle'; return outcome; } // a loss ends the run: no panel, no retry, no secret-objective reveal (the Pilgrimage's run-over screen follows)
       if (outcome.outcome === 'defeat' || outcome.outcome === 'escape') {
         // A secret objective row shows from now on (Chapter IX's Doom row, objectiveReveal.ts).
         if (outcome.outcome === 'defeat') noteChapterLost(id);

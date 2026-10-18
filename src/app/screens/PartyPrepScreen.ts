@@ -28,8 +28,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import type { FlowScreen } from './BattleScreenFlow.ts';
 import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
-import { escapeHtml } from '../../ui/common/html.ts';
-import { chapterNumeral } from '../../ui/common/roman.ts';
+import { escapeHtml } from '../../ui/common/html.ts'; import { chapterNumeral } from '../../ui/common/roman.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { rosterHtml, slotsHtml, statSheetHtml } from './PartyPrepContent.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
@@ -79,6 +78,7 @@ export interface PrepPanel {
    * tab change; the line is rewritten only when the answer changes.
    */
   hint?(): { keys: string; label: string } | null;
+  /** False hides the tab for this chapter (the hidden Pilgrimage's RUN tab shows only inside a run's fight, `app/pilgrim/pilgrimPrep.ts`). Omitted: always shown. */ visible?(chapter: Chapter): boolean;
 }
 
 /** What a panel is told when it mounts. */
@@ -98,8 +98,8 @@ export function registerPrepPanel(panel: PrepPanel): void {
 }
 
 /** Panels registered for a game, in display order. */
-export function prepPanelsFor(game: GameId): PrepPanel[] {
-  return panels.filter((p) => p.game === game).sort((a, b) => (a.order ?? 50) - (b.order ?? 50));
+export function prepPanelsFor(game: GameId, chapter?: Chapter): PrepPanel[] {
+  return panels.filter((p) => p.game === game && (chapter === undefined || p.visible?.(chapter) !== false)).sort((a, b) => (a.order ?? 50) - (b.order ?? 50));
 }
 
 export interface PartyPrepScreenOptions {
@@ -141,7 +141,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
 
   override enter(): void {
     installInkGoldStyles();
-    this.tabs = prepPanelsFor(this.chapter.game);
+    this.tabs = prepPanelsFor(this.chapter.game, this.chapter);
     this.root.className = 'screen';
 
     if (this.ownsWholeScreen) {

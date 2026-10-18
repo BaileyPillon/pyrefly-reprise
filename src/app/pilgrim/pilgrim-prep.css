@@ -1,0 +1,26 @@
+/*
+ * The RUN tab of party prep (the Pilgrimage, hidden prototype, FFX only; mockup `pilgrim-mock/o2B-c`): the boons in the pack for this fight, a strip under the eyebrow that says where on the road the run stands, and a row of
+ * chips for what the pack holds. Authored on the shared 640x360 grid of the prep stage (`LetterboxStage.ts`): every literal is its 1440 mockup value / 2.25, and a font is never below the stage's floor.
+ * Scoping: only `.pgx-*` rules; the shell's own classes are untouched.
+ */
+
+.pgx-run { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 14px; color: var(--ig-ink, #0b0a12); font-family: var(--ig-font-text); }
+.pgx-run__k { font-family: var(--ig-font-display); font-weight: 700; font-size: max(5.33px, var(--stage-floor, 0px)); letter-spacing: 0.3em; color: var(--ig-accent-text-on-paper, #7f5c0a); text-transform: uppercase; }
+.pgx-run__k--gold { margin-top: 8px; }
+.pgx-run__t { margin: 1px 0 4px; font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; font-size: 15px; line-height: 1.05; }
+.pgx-prow { display: flex; gap: 6px; align-items: center; padding: 2.5px 0; border-top: 1px solid rgba(11, 10, 18, 0.16); }
+.pgx-prow__kind { flex: none; width: 36px; text-align: center; padding: 1px 0 1.5px; border: 0.5px solid var(--ig-accent-text-on-paper, #7f5c0a); color: var(--ig-accent-text-on-paper, #7f5c0a); font-family: var(--ig-font-display); font-weight: 700; font-size: max(4.9px, var(--stage-floor, 0px)); letter-spacing: 0.16em; }
+.pgx-prow__kind--new { background: var(--ig-accent, #e3b94a); border-color: var(--ig-accent, #e3b94a); color: var(--ig-ink, #0b0a12); }
+.pgx-prow__name { font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; font-size: 10.67px; line-height: 1.1; }
+.pgx-prow__fx { font-size: max(6.4px, var(--stage-floor, 0px)); color: #2c2838; line-height: 1.25; }
+.pgx-run__side { padding-left: 10px; border-left: 1px solid rgba(11, 10, 18, 0.2); }
+.pgx-run__side p { margin: 3px 0 0; font-size: max(6.4px, var(--stage-floor, 0px)); line-height: 1.35; color: #2c2838; }
+
+.pgx-strip { position: absolute; left: 31px; top: 33px; z-index: 4; display: flex; align-items: center; gap: 5px; padding: 2.5px 7px; background: rgba(11, 10, 18, 0.82); border-left: 1.3px solid var(--ig-accent, #e3b94a); font-family: var(--ig-font-display); font-weight: 700; font-size: max(5.8px, var(--stage-floor, 0px)); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ig-paper, #f4f1e8); }
+.pgx-strip b { color: var(--ig-accent, #e3b94a); }
+.pgx-strip .pips { display: inline-flex; gap: 1.3px; }
+.pgx-strip .pips i { display: block; width: 8px; height: 4px; background: rgba(244, 241, 232, 0.25); transform: skewX(-20deg); }
+.pgx-strip .pips i.ok { background: var(--ig-accent, #e3b94a); }
+.pgx-strip .pips i.now { background: var(--ig-paper, #f4f1e8); }
+.pgx-chipsbar { position: absolute; right: 31px; bottom: 108px; z-index: 4; display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; max-width: 60%; }
+.pgx-chipsbar span { padding: 2.5px 6px; background: rgba(11, 10, 18, 0.82); border-left: 1.3px solid var(--ig-accent, #e3b94a); font-family: var(--ig-font-display); font-weight: 700; font-size: max(5.8px, var(--stage-floor, 0px)); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ig-paper, #f4f1e8); }

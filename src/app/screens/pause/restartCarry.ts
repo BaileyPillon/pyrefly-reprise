@@ -124,7 +124,7 @@ export async function runWithRestarts<R extends { restartRequested?: boolean; qu
   runsInFlight.set(flow, (runsInFlight.get(flow) ?? 0) + 1);
   try {
     let out = await play(opts);
-    while (out?.restartRequested === true) out = await play({ ...RESTART_RUN });
+    while (out?.restartRequested === true && opts.pilgrim === undefined) out = await play({ ...RESTART_RUN }); // a Pilgrimage fight is never replayed in place: the run takes the result and ends (`pilgrim/PilgrimFlow.ts`)
     if (out?.quitToTitle === true) await toTitle?.();
     return out;
   } finally {
