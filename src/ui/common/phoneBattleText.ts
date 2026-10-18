@@ -28,6 +28,8 @@ export interface PhoneBattleText {
   sensor: boolean;
   /** The step aims at a whole side at once ("ALL ALLIES"): no single figure to switch to. */
   group?: boolean;
+  /** FFX: a strip over the Back / Confirm bar saying which step of a multi-step command this is (Doublecast's "Cast 2 · after 1 Fira › Yu Pagoda A"); `n` is its numeral chip. */
+  step?: { n: string; text: string };
 }
 
 /** Reads what the chrome prints from the HUD's own DOM; one per game. */

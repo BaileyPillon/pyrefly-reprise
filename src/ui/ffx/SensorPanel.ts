@@ -271,6 +271,11 @@ export class SensorPanel {
     this.applyFolded();
   }
 
+  /** The aim ends with no command made (Esc out of a target step; a Doublecast's first target confirmed): a plate the aim opened goes, chip and all, not folded to stand "I YU PAGODA" over the list. FFX only; call before `aimEnded`. */
+  aimCancelled(): void {
+    if (this.byAim && !this.pinned) this.hide();
+  }
+
   /** Off the field entirely: the battle is over, or the HUD is going away. */
   hide(): void {
     this.el.hidden = true;

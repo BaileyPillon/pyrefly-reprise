@@ -1,0 +1,84 @@
+/*
+ * Doublecast as two picks: the chrome around it (FFX only; Option A "Second round", decision queue item 103, delegated).
+ * Frames: D:/Tools/pyrefly-scratch/2026-10-18/doublecast/A-*.png. Logic: `DoublecastFlow.ts`; the elements: `DoublecastHud.ts`.
+ *
+ * Desktop sizes are in the stage's 640x360 logical px with the 14 px floor (`max(its size, var(--hud-floor))`, CHK-003); what hangs in the unscaled overlay
+ * (the lock chip) takes `--dc-k`, the stage scale, from its own element. A phone authors real px at 14 or more.
+ */
+
+/* ------------------------------------------------------------- the numeral chip */
+.ffx-dc-n {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 11.6px; height: 11.6px; background: var(--ig-accent); color: var(--ig-ink);
+  font-family: var(--ig-font-numeral); font-weight: 700; font-size: max(8px, var(--hud-floor)); line-height: 1;
+  font-style: normal; transform: skewX(var(--ig-skew));
+}
+.ffx-dc-n > b { display: block; font-weight: 700; transform: skewX(var(--ig-skew-inverse)); }
+
+/* ------------------------------------------------------------- the help slab: two lines */
+.ffx-cmd-info:has(.ffx-dc-help) { max-height: none; overflow: visible; }
+.ffx-cmd-info .ig-cutin__info-desc:has(> .ffx-dc-help) { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.ffx-dc-help { display: flex; flex-direction: column; gap: 1.4px; }
+.ffx-dc-h1 {
+  display: flex; align-items: center; gap: 3px; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.1em;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: max(6.4px, var(--hud-floor)); color: var(--ig-paper);
+}
+.ffx-dc-t { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ffx-dc-mp { font-family: var(--ig-font-numeral); color: var(--ig-spira-sky); }
+.ffx-dc-h2 { font-family: var(--ig-font-serif); font-style: normal; font-size: max(8px, var(--hud-floor)); line-height: 1.2; color: var(--ig-paper); }
+.ffx-dc-h2 b { font-family: var(--ig-font-numeral); font-weight: 700; color: var(--ig-spira-sky); }
+
+/* ------------------------------------------------------------- the MP the first cast holds, over the caster's MP */
+.ffx-stat__pend {
+  position: absolute; z-index: 5; right: -2px; top: -10.5px; display: flex; align-items: center; gap: 2px; padding: 0.6px 3px; white-space: nowrap;
+  background: var(--ig-ink); border: 0.5px solid var(--ig-spira-sky); color: var(--ig-spira-sky);
+  font-family: var(--ig-font-numeral); font-weight: 700; font-size: max(6.4px, var(--hud-floor)); line-height: 1.25;
+}
+.ffx-stat__pend s { text-decoration: none; opacity: 0.7; color: var(--ig-paper); }
+.ffxhud .ig-stat__value--mp:has(.ffx-stat__pend) { position: relative; }
+
+/* ------------------------------------------------------------- the gold lock chip on cast 1's target (in the unscaled overlay) */
+.ffx-dc-lock {
+  --dc-k: 2.5;
+  position: absolute; z-index: 35; display: flex; align-items: center; pointer-events: none;
+  filter: drop-shadow(0 calc(var(--dc-k) * 0.4px) calc(var(--dc-k) * 0.8px) rgba(0, 0, 0, 0.6));
+}
+.ffx-dc-lock[hidden] { display: none; }
+.ffx-dc-lock .ffx-dc-n { width: calc(13px * var(--dc-k)); height: calc(13px * var(--dc-k)); font-size: max(calc(9px * var(--dc-k)), 14.1px); }
+.ffx-dc-lt {
+  margin-left: calc(var(--dc-k) * -1px); padding: 0 calc(var(--dc-k) * 3px) 0 calc(var(--dc-k) * 4px); height: calc(13px * var(--dc-k));
+  display: flex; align-items: center; background: var(--ig-ink); color: var(--ig-accent); border: calc(var(--dc-k) * 0.5px) solid var(--ig-accent); border-left: 0;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: max(calc(5.8px * var(--dc-k)), 14.1px); letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap;
+  transform: skewX(var(--ig-skew));
+}
+.ffx-dc-lt > i { display: block; font-style: normal; transform: skewX(var(--ig-skew-inverse)); }
+
+/* ------------------------------------------------------------- a greyed tile says why (a phone has no keyboard cursor to read it from) */
+.ffx-cmd__reason { display: none; }
+
+/* ------------------------------------------------------------- the phone */
+html[data-phone-battle='ffx'] .ffxhud .ffx-dc-n { width: 20px; height: 20px; font-size: 14px; transform: none; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-dc-n > b { transform: none; }
+/* Round 2's list header: cast 1 replaces the page count, under the title (the name is too long to sit beside it, so the pager is stacked). */
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-breadcrumb[data-dc] { letter-spacing: 0.12em; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager__count:has(.ffx-dc-n) { display: inline-flex; align-items: center; gap: 6px; max-width: calc(100vw - 130px); overflow: hidden; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager__count .ffx-dc-n { width: 16px; height: 16px; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-dc-sum { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0.02em; text-transform: none; }
+/* A greyed tile: its label, then its price and the reason on one line. */
+html[data-phone-battle='ffx'] .ffxhud .ig-cmd--disabled:has(.ffx-cmd__reason) {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; align-content: center; justify-items: start; column-gap: 8px; row-gap: 4px;
+}
+html[data-phone-battle='ffx'] .ffxhud .ig-cmd--disabled:has(.ffx-cmd__reason) .ffx-cmd__label { grid-column: 1 / -1; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd__reason {
+  display: block; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: 700 14px/1 var(--ig-font-numeral); letter-spacing: 0; text-transform: uppercase; color: rgba(244, 241, 232, 0.8);
+}
+/* The MP the first cast holds: above the caster's card (not its MP value). */
+html[data-phone-battle='ffx'] .ffxhud .ig-stat__value--mp:has(.ffx-stat__pend) { position: static; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-stat__pend { right: 4px; top: -22px; gap: 5px; padding: 1px 6px; border-width: 1px; font-size: 14px; }
+html[data-phone-battle='ffx'] .ffxhud .ig-stat:has(.ffx-stat__pend) { position: relative; overflow: visible; }
+/* The lock chip: real px. */
+html[data-phone-battle='ffx'] .ffxhud .ffx-dc-lock { --dc-k: 1; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-dc-lock .ffx-dc-n { width: 20px; height: 20px; font-size: 14px; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-dc-lt { height: 20px; padding: 0 7px 0 6px; margin-left: 0; font-size: 14px; letter-spacing: 0.1em; border-width: 1px; border-left: 0; transform: none; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-dc-lt > i { transform: none; }
