@@ -30,10 +30,10 @@ text is reproduced here.
 ## 0. How this was checked
 
 1. Each function's decompile and disassembly were read for operand widths and signedness (the decompiler hides the
-   difference between a signed and an unsigned compare, between `movzx` and `movsx`, and between a truncating divide and
+   difference between a signed and an unsigned compare, between a zero-extending and a sign-extending byte read, and between a truncating divide and
    a shift). The reads that mattered: the frame counter and its period are compared as **signed bytes**; the hold counter
    is a signed byte; "Haste halves" is a signed divide that truncates toward zero; every CTB counter is a byte and its
-   adds wrap; the hit-record byte that feeds Double HP/MP is read with `movzx` (the decompile shows a signed char).
+   adds wrap; the hit-record byte that feeds Double HP/MP is read zero-extended, as an unsigned byte (the decompile shows a signed char).
 2. The real machine code of every function below was run in the `re-parity` harness (Unicorn, x86-32, the exe's own
    addresses and the real CTB table loaded from the data file) on generated inputs, with only the RNG function replaced
    by a script (so every draw can be chosen and logged), and every result was compared with the TypeScript kernel. Two
@@ -458,7 +458,7 @@ Break HP and MP Limit bits.
    the live word.
 6. `pp_BtlActionRank` (0x007895b0): the scan stops after Doublecast (0x3029), Quick Pockets (0x305f) or Mix (0x311e),
    so the rank of such an action is that command's own.
-7. `pp_BtlApplyDoubleHpMp` (0x0078d270): the hit-record byte it receives is unsigned (`movzx`); the two other callers
+7. `pp_BtlApplyDoubleHpMp` (0x0078d270): the hit-record byte it receives is unsigned (read zero-extended); the two other callers
    pass 0 and -1.
 8. `pp_BtlApplyStageBuffs` (0x0078d730) changes the **target's** stacks (the decompile hides the pointer the caller
    passes in a register).
