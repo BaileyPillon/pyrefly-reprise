@@ -165,7 +165,7 @@ describe('the engine: Yuna\'s menu in Isaaru\'s three battles can pick only Summ
 });
 
 describe('the FFX command window draws the greyed, reason-less rows (its pure view-model, no DOM)', () => {
-  it("Yuna's first menu: Attack and the Item, Skill, Special and magic groups are greyed rows; the cursor opens on a Summon or Grand Summon row; the help slab prints the effect alone", () => {
+  it("Yuna's first menu: Attack and the Item, Skill, Special and magic groups are greyed rows; the cursor opens on the Overdrive (Grand Summon) row; the help slab prints the effect alone", () => {
     const d = nextInput(newEngine('isaaru-grothia', 3))!;
     const top = buildTopRows(d.commands);
     const attack = top.find((r) => r.kind === 'direct' && r.cmd.command.kind === 'attack')!;
@@ -177,8 +177,12 @@ describe('the FFX command window draws the greyed, reason-less rows (its pure vi
       expect(rowEnabled(group!), category).toBe(false);
       expect(topRowVM(group!).enabled, category).toBe(false);
     }
+    // Where the cursor opens (probed on the real engine's menu, 2026-10-18): the Overdrive group, whose row is Grand Summon, sits above the Summon group in the top list, so the
+    // first enabled row is Overdrive and the cursor opens there, not on Summon. Both rows are pickable; the greyed ones above them are skipped.
     const first = top[firstEnabledIndex(top)]!;
-    expect(first.kind === 'group' && (first.category === 'summon' || first.category === 'overdrive')).toBe(true);
+    expect(first.kind === 'group' && first.category === 'overdrive').toBe(true);
+    if (first.kind === 'group') expect(first.items.map((i) => i.label)).toEqual(['Grand Summon']);
+    expect(top.findIndex((r) => r.kind === 'group' && r.category === 'summon')).toBeGreaterThan(firstEnabledIndex(top));
     // The help slab: a greyed row with no reason prints the effect alone, never "undefined" and no "reason - " prefix.
     const cura = row(d.commands, 'ability', 'cura')!;
     expect(cura.enabled).toBe(false);

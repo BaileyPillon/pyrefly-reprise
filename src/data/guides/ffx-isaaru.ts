@@ -12,7 +12,11 @@
  * summons (research §0.3).
  *
  * Every fact is the research's, with its tag: only aeons can fight his aeons,
- * and never the same aeon (§1.2, `[verified: 2 sources]`); a KO'd aeon stays
+ * and never the same aeon (§1.2, `[verified: 2 sources]`); Yuna's menu in the
+ * duel is Summon and Grand Summon, every other row greyed and refusing a
+ * pick, and Defend off for everyone (the formation scripts `bvyt09_10` to
+ * `_12`, `re-ffx-ai-evrae-yojimbo-isaaru-sin` §4.1, `[decompiled]`;
+ * `docs/handoff/re-parity-r54.md` §3); a KO'd aeon stays
  * down for the rest of the chain (§1.2, `[derived]`); no healing between the
  * links (§1.2, `[single source: GameFAQs]`); Grothia starts with a full gauge
  * (§4.1, `[single source: wiki]`) and absorbs Fire (§2.3, `[verified: 3
@@ -34,9 +38,9 @@ export const ISAARU_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Only an aeon can fight his aeons, and never the same one: while he has Ifrit out, yours will not come. Yuna can summon, heal herself and use items, nothing else.',
+      text: 'Only an aeon can fight his aeons, and never the same one: while he has Ifrit out, yours will not come. Yuna can do one thing here, summon: Summon and Grand Summon are the only rows she can pick, every other row stays on her menu greyed and refuses a pick, and Defend is switched off for everyone in the duel.',
       short: 'Only aeons fight here, never the mirror of his',
-      cite: 'ffx-isaaru-bevelle §1.2; B6 (our estimate for the greyed rows)',
+      cite: 'ffx-isaaru-bevelle §1.2; re-ffx-ai-evrae-yojimbo-isaaru-sin §4.1 and re-parity-rc10-ffx-isaaru-commands §1 (the duel’s formation scripts bvyt09_10 to _12 switch off Yuna’s other commands and Defend); re-parity-r54 §3 (the rows stay, greyed)',
     },
     {
       text: 'Three aeons back to back with no healing between them. An aeon you lose stays down for the rest of the contest, and with none left to summon the contest is lost.',
