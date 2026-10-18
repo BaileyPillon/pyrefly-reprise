@@ -16,6 +16,11 @@
  * | Lost when no aeon is left | `engine.ts#checkEnd`, before the stalemate watch can call it an escape | §1.2 [single source: GameFAQs]; B11 = a |
  * | 5,000 AP for winning the duel | `results.ts`, on top of the enemies' 0 | §11 I-1 [single source: GameFAQs]; B13 = a |
  *
+ * **Since re-parity RC10 (Bailey, 2026-10-17, "Match the game") Yuna's menu in the contest is the game's own**, not the B6 / B7 estimates in the table: the three formation scripts switch
+ * off her Attack, Item, Weapon, Armor, Skill, Special, Black Magic and White Magic (`setCommandDisabled`), so those rows are not offered at all
+ * (`formation-commands.ts`, `EnemyGroupDef.commandDisables`) and her menu is Summon and Grand Summon. What this file still greys is the Talk row, which no script touches, and
+ * every foe-aimed row of a party member the list does not name; with `FORMATION_COMMAND_DISABLES` false the menu is as the table says.
+ *
  * **Game case: FFX only** [AGENTS.md rule 14]: aeons, Summon and Grand Summon
  * exist only in FFX. The plumbing is shared FFX code but **inert** unless a
  * formation sets `EnemyGroupDef.aeonsOnly`, `lockedAeons` or

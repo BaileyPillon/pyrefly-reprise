@@ -8,7 +8,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AeonBuild, EnemyGroupDef, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
+import type { AeonBuild, Command, EnemyGroupDef, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { AEONS_ONLY_FLAG, AEON_LOCK_PREFIX, ONLY_AN_AEON } from '../../../src/battle/ffx/aeon-duel.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx/index.ts';
@@ -17,7 +17,7 @@ import { CHAPTERS, CHAPTER_IDS, UNLISTED_CHAPTERS, getChapter } from '../../../s
 import { checkpointAt } from '../../../src/app/screens/BattleChainCheckpoint.ts';
 import { createFFXEngine } from '../../../src/battle/ffx/index.ts';
 import {
-  GROTHIA, ISAARU, LINKS, actor, content, defend, drive, enabledRow, grandSummon, newEngine, nextInput, row, runChain, setupFor, summon,
+  GROTHIA, ISAARU, LINKS, actor, content, drive, enabledRow, grandSummon, newEngine, nextInput, pass, row, runChain, setupFor, summon,
 } from '../helpers/isaaruUnits.ts';
 
 /** The shipped build with some aeons' HP set (0 = KO'd before this link). */
@@ -71,23 +71,38 @@ describe('the mirror lock (I-G2)', () => {
 });
 
 describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX battle, PR-0155)', () => {
-  it("Yuna's Attack, Talk, Scan and Grenade are greyed with the reason; heals, Nul spells, Pray, Summon, Grand Summon and Defend stay open", () => {
+  it("Yuna's menu is Summon and Grand Summon (RC10: the script switches off her Attack, Item, Skill, Special and both magics); Talk, which no script touches, keeps its older greyed row; no Defend row", () => {
     const d = nextInput(newEngine('isaaru-grothia', 4))!;
-    for (const [kind, id] of [['attack', undefined], ['trigger', 'talk'], ['ability', 'scan'], ['item', 'grenade']] as const) {
-      expect(row(d.commands, kind, id), `${kind}:${id}`).toMatchObject({ enabled: false, disabledReason: ONLY_AN_AEON });
-    }
-    for (const [kind, id] of [['ability', 'cura'], ['ability', 'nulblaze'], ['ability', 'pray'], ['item', 'hi-potion'], ['item', 'phoenix-down'],
-      ['overdrive', 'grand-summon'], ['summon', 'shiva'], ['defend', undefined]] as const) {
+    // Only these kinds of row exist for her: five Summon rows (one locked, greyed), Grand Summon, and Talk (greyed by the older B6 = a estimate, `aeon-duel.ts`; no Isaaru script touches command 0x3105).
+    const kinds = d.commands.map((c) => c.command.kind);
+    expect(kinds.filter((k) => k === 'summon')).toHaveLength(5);
+    expect(new Set(kinds)).toEqual(new Set(['summon', 'overdrive', 'trigger']));
+    expect(row(d.commands, 'trigger', 'talk')).toMatchObject({ enabled: false, disabledReason: ONLY_AN_AEON });
+    for (const [kind, id] of [['overdrive', 'grand-summon'], ['summon', 'shiva']] as const) {
       expect(enabledRow(d.commands, kind, id), `${kind}:${id}`).toBeDefined();
     }
+    // Gone, not greyed: the Attack, the White Magic list (Cura, NulBlaze), the Special list (Pray, Scan) and every Item row (a potion, a Phoenix Down, a Grenade).
+    for (const [kind, id] of [['attack', undefined], ['ability', 'cura'], ['ability', 'nulblaze'], ['ability', 'pray'], ['ability', 'scan'], ['item', 'hi-potion'], ['item', 'phoenix-down'],
+      ['item', 'grenade']] as const) {
+      expect(row(d.commands, kind, id), `${kind}:${id}`).toBeUndefined();
+    }
+    const menuCategories = d.commands.filter((c) => c.command.kind !== 'trigger').map((c) => c.category);
+    expect(new Set(menuCategories)).toEqual(new Set(['summon', 'overdrive']));
+    // The formation script calls setDefendingEnabled(0): the party's Defend control does nothing here (formation-flags.ts, RC10).
+    expect(row(d.commands, 'defend')).toBeUndefined();
   });
 
-  it('a submitted Attack from Yuna is refused and the turn stays open; an aeon has no Items row and an item from it is refused', () => {
+  it('every command the script switched off is refused if it is submitted: no event, the turn stays open; an aeon has no Items row and an item from it is refused', () => {
     const engine = newEngine('isaaru-grothia', 5);
     let d = nextInput(engine)!;
-    const out = engine.submit({ kind: 'attack', targets: [GROTHIA] });
-    expect(out.some((e) => e.type === 'message' && e.text === ONLY_AN_AEON)).toBe(true);
-    expect(out.some((e) => e.type === 'damage')).toBe(false);
+    const before = engine.state().log.length;
+    for (const refused of [
+      { kind: 'attack', targets: [GROTHIA] }, { kind: 'ability', id: 'cura', targets: ['yuna'] }, { kind: 'ability', id: 'pray', targets: ['yuna'] },
+      { kind: 'item', id: 'hi-potion', targets: ['yuna'] }, { kind: 'item', id: 'grenade', targets: [GROTHIA] },
+    ] as Command[]) {
+      expect(engine.submit(refused), JSON.stringify(refused)).toEqual([]);
+    }
+    expect(engine.state().log.length).toBe(before); // nothing was spent, said or drawn
     d = nextInput(engine)!;
     expect(d.actorId).toBe('yuna');
     engine.submit(summon('shiva'));
@@ -110,9 +125,9 @@ describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX ba
     drive(engine, (d) => {
       if (d.actorId === 'yuna') return summon('ixion');
       actor(engine, 'ixion').statuses.nulblaze = { id: 'nulblaze', turnsRemaining: null, ticksRemaining: null, charges: 1, stacks: 0, permanent: false };
-      return defend();
+      return pass(d);
     }, (e) => e.state().log.some((x) => x.type === 'action-start' && x.abilityId === 'grothia-hellfire'));
-    drive(engine, () => defend(), (e) => e.state().log.some((x) => x.type === 'miss' && x.sourceId === GROTHIA));
+    drive(engine, (d) => pass(d), (e) => e.state().log.some((x) => x.type === 'miss' && x.sourceId === GROTHIA));
     const log = engine.state().log;
     const hf = log.findIndex((e) => e.type === 'action-start' && e.abilityId === 'grothia-hellfire');
     const after = log.slice(hf, hf + 4);
@@ -123,10 +138,11 @@ describe('only aeons can fight them (B6 = a); aeons carry no items (every FFX ba
 
 describe('the loss (I-G3, B11 = a, review E11)', () => {
   it('no aeon left to summon is a defeat at once, never the 400-turn stalemate escape', () => {
-    // Pterya's link with every free aeon already down: Yuna could heal through
-    // her weak hits for ever; the duel ends her instead.
+    // Pterya's link with every free aeon already down: before RC10 Yuna could heal
+    // through her weak hits for ever; the duel ends her instead.
     const engine = newEngine('isaaru-pterya', 9, withAeonHp({ ifrit: 0, ixion: 0, shiva: 0, bahamut: 0 }));
-    drive(engine, () => ({ kind: 'ability', id: 'cura', targets: ['yuna'] }));
+    // Yuna never gets a menu: the loss is called before her first turn (and, RC10, she has no Cura to wait with in any case).
+    expect(nextInput(engine)).toBeNull();
     expect(engine.state().result?.outcome).toBe('defeat');
     expect(engine.state().turn).toBeLessThan(5);
   });
@@ -141,9 +157,12 @@ describe('the loss (I-G3, B11 = a, review E11)', () => {
   });
 
   it("Yuna's KO is a defeat", () => {
+    // RC10: Yuna must summon at her first turn (her menu is Summon and Grand Summon), so Grothia's attack on a lone Yuna no longer comes before an aeon is out; the rule
+    // under test is the engine's end check, so she is KO'd directly. (Her aeon's falling is "the last free aeon falling mid-link", above.)
     const engine = newEngine('isaaru-grothia', 11);
-    actor(engine, 'yuna').hp = 1;
-    drive(engine, () => defend());
+    actor(engine, 'yuna').hp = 0;
+    actor(engine, 'yuna').alive = false;
+    expect(nextInput(engine)).toBeNull();
     expect(engine.state().result?.outcome).toBe('defeat');
     expect(actor(engine, 'yuna').hp).toBe(0);
   });
@@ -155,11 +174,11 @@ describe('the chain (research §1.2, §4.4)', () => {
     const runs = runChain(12, (link, engine, d) => {
       if (link === 'isaaru-grothia') {
         if (d.actorId === 'yuna') return lost ? summon('ixion') : summon('valefor');
-        if (d.actorId === 'valefor') { lost = true; return defend(); } // no Shield: Hellfire kills him
+        if (d.actorId === 'valefor') { lost = true; return pass(d); } // no Shield: Hellfire kills him
         actor(engine, GROTHIA).hp = 1;
         return { kind: 'attack', targets: [GROTHIA] };
       }
-      return d.actorId === 'yuna' ? summon('ixion') : defend();
+      return d.actorId === 'yuna' ? summon('ixion') : pass(d);
     });
     expect(runs[0]!.outcome).toBe('victory');
     const end1 = runs[0]!.state;

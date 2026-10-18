@@ -91,7 +91,7 @@ interface ProbeEngine {
   nextDecision(): Decision;
   submit(command: Command): unknown;
   tick?(ms: number): unknown;
-  state(): { log: BattleEvent[]; combatants: Record<string, FFXCombatant>; reserveIds: readonly string[] };
+  state(): { log: BattleEvent[]; combatants: Record<string, FFXCombatant>; reserveIds: readonly string[]; flags: Record<string, unknown> };
 }
 
 function makeEngine(chapter: Chapter, seed: number): ProbeEngine {
@@ -188,6 +188,19 @@ function shouldBeAsked(row: AvailableCommand): boolean {
 }
 
 /**
+ * A turn spent without effect. Defend in every battle, as before; in Chapter XIV's contest Defend is switched off by the formation script (`setDefendingEnabled(0)`, RC10) and so
+ * is everything of Yuna's but Summon and Grand Summon (`setCommandDisabled`, RC10), so there Yuna passes by summoning and an aeon by attacking. Without this the walker stood on
+ * Yuna's first turn for ever (a refused Defend leaves the turn open) and audited five rows.
+ */
+function passFor(engine: ProbeEngine, decision: Extract<Decision, { kind: 'player-input' }>): Command {
+  if (engine.state().flags['formation.defendOff'] !== true) return { kind: 'defend', targets: [] };
+  const rows = decision.commands.filter((c) => c.enabled);
+  const row = rows.find((c) => c.command.kind === 'summon') ?? rows.find((c) => c.command.kind === 'attack' && c.validTargets.length > 0) ?? rows[0];
+  if (!row) throw new Error(`nothing to pass the turn with for ${decision.actorId}`);
+  return { ...row.command, targets: row.validTargets.slice(0, 1) } as Command;
+}
+
+/**
  * Walk one seed `TURNS_PER_SEED` player turns deep, and for every enabled row
  * offered on the way replay a fresh battle to that same turn and submit it.
  *
@@ -218,14 +231,14 @@ function auditChapter(chapter: Chapter): string[] {
             live = at.commands.find((c) => c.enabled && c.label === row.label && c.command.kind === row.command.kind);
             break;
           }
-          engine.submit({ kind: 'defend', targets: [] });
+          engine.submit(passFor(engine, at));
         }
         if (!live) continue;
         const events = submitAndRead(engine, asOffered(live));
         if (realEffects(events).length === 0 && !isCleanseOnClean(events)) inert.push(key);
       }
 
-      walker.submit({ kind: 'defend', targets: [] });
+      walker.submit(passFor(walker, decision));
     }
   }
 

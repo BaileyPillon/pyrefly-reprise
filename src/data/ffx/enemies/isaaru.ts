@@ -46,7 +46,7 @@
  *   template default; the decompile's drop chance is 0. No drops.
  */
 
-import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import type { EnemyDef, EnemyGroupDef, FormationCommandOff, StatusImmunities } from '../../../battle/common/types.ts';
 import { lootRewards } from '../loot/index.ts';
 import {
   GROTHIA_SUMMON,
@@ -282,6 +282,26 @@ const spathi: EnemyDef = {
 };
 
 /**
+ * The menu commands the three formation scripts switch off (`bvyt09_10`, `_11`, `_12`: the same eleven `setCommandDisabled(who, command, 1)` calls in each;
+ * re-parity RC10, `docs/handoff/re-parity-rc10-ffx-isaaru-commands.md`). Numbers are the game's command ids and nothing else. For every character and aeon:
+ * Switch, Escape, Flee. For Yuna (the script's actor 1): Attack, Item, Weapon, Armor, Skill, Special, Black Magic, White Magic, so her menu is Summon and
+ * Grand Summon (and Dismiss, which no script touches). The twelfth call of each file is the mirror lock on the aeon she faces (`lockedAeons`).
+ */
+export const ISAARU_COMMAND_DISABLES: readonly FormationCommandOff[] = [
+  { who: 'everyone', command: 0x3002 }, // Switch
+  { who: 'everyone', command: 0x3003 }, // Escape
+  { who: 'everyone', command: 0x3018 }, // Flee
+  { who: 'yuna', command: 0x3000 }, // Attack
+  { who: 'yuna', command: 0x3001 }, // Item
+  { who: 'yuna', command: 0x3004 }, // Weapon
+  { who: 'yuna', command: 0x3005 }, // Armor
+  { who: 'yuna', command: 0x3113 }, // Skill
+  { who: 'yuna', command: 0x3114 }, // Special
+  { who: 'yuna', command: 0x3115 }, // Black Magic
+  { who: 'yuna', command: 0x3116 }, // White Magic
+];
+
+/**
  * Link 1: `[isaaru, grothia]`. **Ifrit is locked** [§1.3]. Grothia starts
  * with a full gauge, so his first turn against an aeon is Hellfire (§4.1).
  */
@@ -294,6 +314,8 @@ export const isaaruGrothiaGroup: EnemyGroupDef = {
   nextGroupId: ISAARU_PTERYA_GROUP_ID,
   aeonsOnly: true,
   lockedAeons: [{ aeonId: 'ifrit', mirrorOf: GROTHIA_ID }],
+  defendOff: true, // `bvyt09_10`: the formation script calls setDefendingEnabled(0), so the party's Defend control does nothing (`battle/ffx/formation-flags.ts`, RC10)
+  commandDisables: ISAARU_COMMAND_DISABLES, // the same script's setCommandDisabled calls: Yuna keeps only Summon and Grand Summon (`battle/ffx/formation-commands.ts`, RC10)
   // No `musicCues`: the cue (B21, O-6) is not composed; the chapter record's stand-in applies.
 };
 
@@ -306,6 +328,8 @@ export const isaaruPteryaGroup: EnemyGroupDef = {
   nextGroupId: ISAARU_SPATHI_GROUP_ID,
   aeonsOnly: true,
   lockedAeons: [{ aeonId: 'valefor', mirrorOf: PTERYA_ID }],
+  defendOff: true, // `bvyt09_11`: as link 1
+  commandDisables: ISAARU_COMMAND_DISABLES, // `bvyt09_11`: as link 1
 };
 
 /** Link 3: `[isaaru, spathi]`. **Bahamut is locked** [§1.3]. The chain ends here (§4.4). */
@@ -316,6 +340,8 @@ export const isaaruSpathiGroup: EnemyGroupDef = {
   enemies: [isaaru, spathi],
   aeonsOnly: true,
   lockedAeons: [{ aeonId: 'bahamut', mirrorOf: SPATHI_ID }],
+  defendOff: true, // `bvyt09_12`: as link 1
+  commandDisables: ISAARU_COMMAND_DISABLES, // `bvyt09_12`: as link 1
   victoryBonusAp: ISAARU_DUEL_AP, // B13 = a, [single source: GameFAQs]
 };
 

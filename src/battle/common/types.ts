@@ -3050,6 +3050,16 @@ export interface FFXLinkLineUp {
   noSwitch?: boolean;
 }
 
+/**
+ * **FFX only**: one command a formation switches off (`EnemyGroupDef.commandDisables`; re-parity RC10). The game's `setCommandDisabled(actor, command, 1)`:
+ * `who` is the party member it names (`'yuna'` for the script's actor 1) or `'everyone'` for the script's "all characters and aeons" (never a monster);
+ * `command` is the game's command id (`0x3000` Attack, `0x3002` Switch, `0x3113` Skill, ...), a number and nothing else.
+ */
+export interface FormationCommandOff {
+  who: 'everyone' | CombatantId;
+  command: number;
+}
+
 /** One battle's enemy formation. */
 export interface EnemyGroupDef {
   /** Formation id, e.g. `'seymour-flux'`. */
@@ -3169,6 +3179,22 @@ export interface EnemyGroupDef {
    * plan B13 = a]. Absent everywhere else.
    */
   victoryBonusAp?: number;
+  /**
+   * **FFX only, "Defend is off in this formation"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-formation-flags.md`): the game's formation script calls
+   * `setDefendingEnabled(0)` and the party's Defend control (the original's Triangle) does nothing for the whole battle; only Isaaru's three aeon-contest
+   * formations (Chapter XIV) do it among the formations of our chapters. While set, no party or aeon menu offers a `defend` row and a submitted `defend` is refused,
+   * the turn kept open. Read by `battle/ffx/formation-flags.ts` and nothing else; absent everywhere else, so no other battle changes.
+   */
+  defendOff?: boolean;
+  /**
+   * **FFX only, "these menu commands are switched off in this formation"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-isaaru-commands.md`): the game's
+   * formation script calls `setCommandDisabled(who, command, 1)` once per command, before the first turn, and the menu gate treats that command as unusable for
+   * that actor for the whole battle. Numbers only: `command` is the game's own command id. Only Isaaru's three aeon-contest formations (Chapter XIV) do it among the
+   * formations of our chapters (the other chapters' scripts switch off Escape and Flee, which `canEscape` and `lineUp.noSwitch` already carry). While a command is
+   * listed, the FFX command list (`battle/ffx/commands.ts`) drops the rows that belong to it for that actor and `submit()` refuses a command that belongs to it,
+   * the turn kept open. Read by `battle/ffx/formation-commands.ts` and nothing else; absent everywhere else, so no other battle changes.
+   */
+  commandDisables?: readonly FormationCommandOff[];
   /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
   /**
