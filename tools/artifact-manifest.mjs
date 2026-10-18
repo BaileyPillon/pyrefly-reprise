@@ -151,6 +151,9 @@ export function artifactHashAliases(manifest) {
   return [...new Set([artifactHashOf(files), legacyArtifactHashOf(files)])];
 }
 
+/** A rig's rim mask in a build (`tools/rig/rig-tiers.mjs`, `src/data/art/rigTypes.ts` `RigPart.rim`). */
+const RIG_RIM_MASK = /^art\/rigs\/[^/]+\/(?:1x\/)?[^/]+\.rim\.(?:png|webp)$/;
+
 /** Does this media file decode, and is it something other than a blank frame? */
 async function decodeStatus(path, ext) {
   if (IMAGE.has(ext)) {
@@ -189,7 +192,10 @@ export async function buildManifest(dir, { decode = true } = {}) {
     if (isSourceMapFile(rel)) problems.push(`${rel}: a source map must not ship`);
     else if (SOURCE_TEXT.has(extname(rel).toLowerCase()) && hasSourceMapReference(buf.toString('latin1'))) problems.push(`${rel}: points at a source map, and none ships`);
     if (decode) {
-      const status = await decodeStatus(full, extname(rel).toLowerCase());
+      let status = await decodeStatus(full, extname(rel).toLowerCase());
+      // A rig's rim mask (`art/rigs/<subject>/[1x/]<part>.rim.png|webp`, an 8-bit grey: white along the painting's own outline, black along a cut between two parts) is one flat value when a
+      // part's every edge is a cut or every edge is the outline; that is a mask that says so, not a blank picture. It must still decode.
+      if (status === 'blank' && RIG_RIM_MASK.test(rel)) status = 'ok';
       if (status) entry.decode = status;
       if (status === 'failed' || status === 'blank') problems.push(`${rel}: ${status === 'blank' ? 'decodes to a single flat colour' : 'does not decode'}`);
     }

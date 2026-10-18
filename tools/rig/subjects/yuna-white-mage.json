@@ -1,0 +1,61 @@
+{
+  "subject": "yuna-white-mage",
+  "scale": 2,
+  "costume": { "pose": "idle" },
+  "sam": {
+    "parts": {
+      "head": { "pos": [[330, 130], [350, 190], [300, 90], [450, 110], [420, 250], [330, 60]], "neg": [[350, 330], [300, 330], [430, 420], [440, 330], [250, 260]], "box": [270, 10, 540, 300] },
+      "arm": { "pos": [[330, 520], [300, 560], [270, 450], [345, 410], [280, 600]], "neg": [[420, 300], [400, 700], [200, 650], [450, 520], [380, 600]], "box": [250, 380, 420, 640] },
+      "staff": { "pos": [[100, 650], [190, 640], [240, 620], [60, 670]], "neg": [[290, 600], [300, 700], [200, 700], [100, 560]], "box": [10, 590, 300, 730] },
+      "body": { "pos": [[450, 500], [400, 700], [330, 800], [470, 350], [430, 420], [380, 300], [520, 800]], "neg": [[350, 150], [330, 540], [360, 1000], [150, 650], [330, 960]], "box": [225, 230, 570, 960] },
+      "legs": { "pos": [[360, 1010], [400, 1080], [330, 1130], [430, 1030], [320, 1070]], "neg": [[330, 880], [420, 900], [330, 940], [500, 800]], "box": [260, 940, 470, 1170] }
+    }
+  },
+  "cut": {
+    "polys": { "glove": [[250, 548], [338, 548], [340, 642], [252, 642]] },
+    "order": ["legs", "body", "staff", "head"],
+    "parts": {
+      "head": { "sam": ["head"] },
+      "staff": { "include": [{ "sam": "staff" }, { "poly": "glove" }] },
+      "body": { "sam": ["body", "arm"] },
+      "legs": { "sam": ["legs"] }
+    },
+    "nearest": { "maxdist": 40 },
+    "clean": { "min_island": 150, "close": 2 },
+    "ops": [
+      { "op": "skirt", "back": "body", "front": "head", "px": 24 },
+      { "op": "skirt", "back": "legs", "front": "body", "px": 20 },
+      { "op": "skirt", "back": "body", "front": "staff", "px": 16, "zone": "glove" }
+    ]
+  },
+  "build": {
+    "bones": [
+      ["root", null, [345, 1167]],
+      ["hip", "root", [350, 800]],
+      ["chest", "hip", [400, 420]],
+      ["head", "chest", [350, 240]],
+      ["staff", "chest", [262, 606]]
+    ],
+    "skin": {
+      "legs": { "type": "rigid", "bone": "root", "mesh": { "edge": 20, "inner": 40, "grow": 8 } },
+      "body": { "type": "chain", "bones": ["hip", "chest"], "joints": [[350, 800], [400, 420], [410, 330]], "ramps": [120], "mesh": { "edge": 24, "inner": 44, "grow": 8 } },
+      "staff": { "type": "rigid", "bone": "staff", "mesh": { "edge": 20, "inner": 36, "grow": 8 } },
+      "head": { "type": "rigid", "bone": "head", "mesh": { "edge": 18, "inner": 34, "grow": 10 } }
+    },
+    "landmarks": {
+      "head": ["head", [345, 140]],
+      "feet": ["root", [330, 1140]],
+      "footB": ["root", [400, 1120]],
+      "chest": ["chest", [400, 420]],
+      "pelvis": ["hip", [350, 800]],
+      "hand": ["staff", [262, 606]],
+      "staffTip": ["staff", [30, 665]]
+    }
+  },
+  "fit": {
+    "min_iou": 0.88,
+    "limits": { "hip": [-25, 25], "chest": [-30, 30], "head": [-40, 40], "staff": [-120, 120] },
+    "chain_limit": 50,
+    "restarts": 1
+  }
+}

@@ -240,6 +240,12 @@ export function alphaMaskOf(actor: object, pose?: string): AlphaMask | undefined
 
 /** The rows of the pose a painted actor shows now (or of `pose`, as it would stand); `undefined` where its painting cannot be read. */
 export function profileOfActor(actor: object, pose?: string): Profile | undefined {
+  // a rigged figure (`engine/rig/RigActor.ts`) is one painting bent: its rows are the posed key's, measured at the gate, not the idle painting's alpha its carrier happens to hold
+  const rig = (actor as { rigProfile?: (pose?: string) => Profile | undefined }).rigProfile;
+  if (typeof rig === 'function') {
+    const rows = rig.call(actor, pose);
+    if (rows) return rows;
+  }
   const m = alphaMaskOf(actor, pose);
   if (!m) return undefined;
   let p = profiles.get(m);

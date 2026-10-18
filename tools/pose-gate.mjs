@@ -10,6 +10,7 @@
  *   node tools/pose-gate.mjs --report [--full] [--out F]   the census as JSON (the critic's static check and the artifact record read it)
  *   node tools/pose-gate.mjs --prune-legacy [--dry]       remove the legacy waiver rows (and their seal entries) of the paintings that are in band now; prints the seal's new digest to pin
  *                                                          (`LEGACY_SEAL_DIGEST` in tools/pose-gate-ledger.mjs). Rows are only ever removed, never added. Run `node tools/posescale/pose-stamp.mjs` after.
+ *   node tools/pose-gate.mjs --check --rigs auto|<dir>     also: a pose a rig the RIG gate says ok serves is reported `rigged` (the painting stays the fallback; a failing row still fails). --rigs-mode stamp|full
  *   node tools/pose-gate.mjs --write-legacy [--dry] [--except a,b] [--date YYYY-MM-DD]
  *                                                          write docs/target/pose-waivers.json ONCE: a legacy row for every painting that is out of band now.
  *                                                          Refuses when the ledger exists. Run it after `measure.py table` has registered what is to be
@@ -32,6 +33,7 @@ import {
 import { loadModelInputs } from './posescale/pose-model.mjs';
 import { STAMP_FIELDS } from './posescale/pose-stamp-lib.mjs';
 import { LEDGER_PATH, buildLegacyLedger, loadLedger, pruneLegacyLedger, waiverKey, writeNewLedger, writePrunedLedger } from './pose-gate-ledger.mjs';
+import { DEFAULT_RIGS_ROOT } from './rig/rig-format.mjs';
 
 const argv = process.argv.slice(2);
 const flag = (n) => argv.includes(n);
@@ -43,6 +45,8 @@ const list = (s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : und
 const root = resolve(get('--root', ROOT));
 const artDir = get('--art') ? resolve(get('--art')) : undefined;
 const subjects = list(get('--subjects'));
+// --rigs <dir> (or `auto`: PYREFLY_RIGS_DIR or D:/pyrefly-art-rigs when it exists): a pose a gate-ok rig serves is reported `rigged`; --rigs-mode stamp skips running the rig gate again
+const rigs = get('--rigs') ? { dir: get('--rigs') === 'auto' ? DEFAULT_RIGS_ROOT : resolve(get('--rigs')), mode: get('--rigs-mode', 'full') } : undefined;
 
 function progress() {
   let n = 0;
@@ -53,7 +57,7 @@ function progress() {
 }
 
 async function census() {
-  return runGate({ root, artDir, subjects, baseRef: get('--base'), onSubject: progress() });
+  return runGate({ root, artDir, subjects, baseRef: get('--base'), onSubject: progress(), rigs });
 }
 
 async function check() {
@@ -69,7 +73,7 @@ async function check() {
   }
   if (!result.paintings && !failures.length) { console.error('pose-gate: no character paintings found (is --art the art folder, with characters/ in it?)'); return 2; }
   const t = result.entries.reduce((m, e) => ((m[e.outcome] = (m[e.outcome] ?? 0) + 1), m), {});
-  console.log(`pose-gate: ${result.paintings} paintings of ${result.subjects} subjects: ${t.pass ?? 0} pass, ${t.waived ?? 0} waived, ${t.exempt ?? 0} exempt, ${t.fail ?? 0} fail; ledger ${result.ledger.exists ? `${result.ledger.rows} row(s) (${result.ledger.legacy} legacy, ${result.ledger.bailey} Bailey's; compared with ${result.ledger.base === 'ref' ? get('--base') : result.ledger.base === 'absent' ? `${get('--base')} (no ledger there yet)` : 'no base ref, the pinned seal only'})` : 'absent'}; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  console.log(`pose-gate: ${result.paintings} paintings of ${result.subjects} subjects: ${t.pass ?? 0} pass, ${t.waived ?? 0} waived${rigs ? `, ${t.rigged ?? 0} rigged` : ''}, ${t.exempt ?? 0} exempt, ${t.fail ?? 0} fail; ledger ${result.ledger.exists ? `${result.ledger.rows} row(s) (${result.ledger.legacy} legacy, ${result.ledger.bailey} Bailey's; compared with ${result.ledger.base === 'ref' ? get('--base') : result.ledger.base === 'absent' ? `${get('--base')} (no ledger there yet)` : 'no base ref, the pinned seal only'})` : 'absent'}; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
   if (flag('--verbose')) for (const n of result.notes) console.log(`note  ${n.subject ? `${n.subject}/${n.pose}  ` : ''}${n.message}`);
   const max = Number(get('--max', Infinity));
   failures.slice(0, max).forEach((x) => console.log(`FAIL  ${formatFailure(x)}`));

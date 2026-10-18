@@ -24,3 +24,6 @@ export function readAlpha(path: string): Promise<{ W: number; H: number; a: Uint
 export function headBoxOn(m: Pick<Measured, 'W' | 'H' | 'mask' | 'bbox' | 'empty'>, head: readonly number[] | null | undefined): { cy: number; coverage: number } | null;
 export function drawnMask(p: Pick<Measured, 'W' | 'H' | 'mask'>, upp: number, anchor: number, shift: number, mirror: number): Uint8Array;
 export function maskIou(a: Uint8Array, b: Uint8Array): number | null;
+
+/** The common grid every silhouette is drawn on: `GS` cells per idle height, u from `GU0` to `GU1` (right), v from `GV0` to `GV1` (up); `GW` x `GH` cells. */
+export const GRID: Readonly<{ GS: number; GW: number; GH: number; GU0: number; GU1: number; GV0: number; GV1: number }>;

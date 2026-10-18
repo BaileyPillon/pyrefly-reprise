@@ -17,6 +17,7 @@ import { installArtDebug } from './debug/artApi.ts';
 import { installCrispDebug } from './debug/crispApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
+import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
@@ -149,6 +150,7 @@ async function boot(): Promise<void> {
   installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
+  installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
 
   await app.push(new TitleScreen());
   app.start();

@@ -31,7 +31,11 @@ export interface GateEntry {
   class: string;
   kind: string;
   game: string;
-  outcome: PaintingJudgement['outcome'];
+  /** `rigged`: a pass or a waiver whose pose a gate-ok rig serves (the painting stays the fallback). */
+  outcome: PaintingJudgement['outcome'] | 'rigged';
+  rigged?: boolean;
+  /** The outcome before a rig relabelled it. */
+  was?: string;
   status: string | null;
   proposed: string | null;
   flags: string[];
@@ -54,6 +58,8 @@ export interface GateResult {
   failures: GateFailure[];
   notes: GateNote[];
   ledger: { exists: boolean; rows: number; legacy: number; bailey: number; problems: number; stale: number; base: 'none' | 'ref' | 'absent' | 'error' };
+  /** The rigs found under `rigs.dir` for these subjects: whether each counted, its mode, the poses it serves, and why not. */
+  rigs: Array<{ subject: string; ok: boolean; mode: string; keys: string[]; why: string | null }>;
 }
 
 export function flagText(reading: PoseReading, flag: string): string;
@@ -72,6 +78,8 @@ export function runGate(o?: {
   decisions?: Map<string, string> | null;
   /** The legacy seal's expected digest (default: the one pinned in tools/pose-gate-ledger.mjs). */
   pin?: string | null;
+  /** The rig root (`<dir>/<subject>/rig.json`): poses a gate-ok rig serves are reported `rigged`. `mode` `full` (default) runs the rig gate again, `stamp` checks the stamp only. */
+  rigs?: { dir?: string; mode?: 'full' | 'stamp' };
 }): Promise<GateResult>;
 export function formatFailure(x: GateFailure): string;
 export function countByCode(failures: Array<{ code: string }>): Record<string, number>;
@@ -87,6 +95,7 @@ export function enforcePoseGate(o: {
   baseRef?: string | null;
   log?: (line: string) => void;
   fail: (message: string) => never | void;
+  rigs?: { dir?: string; mode?: 'full' | 'stamp' };
 }): Promise<GateResult>;
 export function enforceBuiltPaintings(o: {
   dist: string;

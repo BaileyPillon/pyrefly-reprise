@@ -39,6 +39,7 @@ import { BANDS, bandVerdict, proposeStatus } from './posescale/pose-bands.mjs';
 import { listSubjects, loadModelInputs, readSubject } from './posescale/pose-model.mjs';
 import { diffStored, shaMatches } from './posescale/pose-rows.mjs';
 import { LEDGER_PATH, LEGACY_SEAL_DIGEST, loadDecisionWords, loadLedger, loadLedgerAtRef, validateLedger, waiverKey } from './pose-gate-ledger.mjs';
+import { applyRigs } from './rig/rig-census.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -165,10 +166,11 @@ const entryOf = (reading, row, waiver, j) => ({
  * @param {object} [o.inputs] model inputs (tests pass a synthetic table) @param {string[]} [o.subjects] only these subjects
  * @param {object|null} [o.ledger] the parsed ledger (default: read from `root`) @param {object|null} [o.ledgerBase] the ledger at a base ref (default: from `baseRef`)
  * @param {string} [o.baseRef] a git ref to compare the ledger with (a ref git cannot read is a `ledger-base` failure, never a skipped check)
+ * @param {{dir?: string, mode?: 'full'|'stamp'}} [o.rigs] the rig root: a pose a gate-ok rig serves is reported `rigged` (`rig/rig-census.mjs`); the painting row stays the fallback and is judged as always
  * @param {Map<string,string>} [o.decisions] the decisions ledger's words by id (default: read from `root`), against which a waiver's quotation is verified
  * @returns {Promise<{artDir: string, subjects: number, paintings: number, entries: object[], failures: Array<{subject?: string, pose?: string, code: string, message: string}>, notes: Array<{subject?: string, pose?: string, message: string}>, ledger: object}>}
  */
-export async function runGate({ root = ROOT, artDir, inputs, subjects, ledger, ledgerBase, baseRef, concurrency = 3, onSubject, decisions, pin } = {}) {
+export async function runGate({ root = ROOT, artDir, inputs, subjects, ledger, ledgerBase, baseRef, concurrency = 3, onSubject, decisions, pin, rigs } = {}) {
   const inp = inputs ?? (await loadModelInputs({ root, artDir, hires: true }));
   const failures = [];
   const notes = [];
@@ -226,7 +228,9 @@ export async function runGate({ root = ROOT, artDir, inputs, subjects, ledger, l
   if (!subjects) {
     for (const [k, row] of index) if (!seen.has(k)) { ledgerInfo.stale++; notes.push({ subject: row.subject, pose: row.pose, message: `stale waiver: no painting of ${row.subject}/${row.pose} has sha ${row.sha.slice(0, 16)} any more (remove the row)` }); }
   }
-  return { artDir: inp.artDir, subjects: new Set(entries.map((e) => e.subject)).size, paintings: entries.length, entries, failures, notes, ledger: ledgerInfo };
+  const rigReport = await applyRigs({ entries, inputs: inp, ...(rigs ?? {}) });
+  for (const r of rigReport) if (!r.ok) notes.push({ subject: r.subject, message: `rig not counted (${r.why}): its poses stay paintings` });
+  return { artDir: inp.artDir, subjects: new Set(entries.map((e) => e.subject)).size, paintings: entries.length, entries, failures, notes, ledger: ledgerInfo, rigs: rigReport };
 }
 
 /** One line per failure: `subject/pose  code  message` (or `ledger  code  message`). */
@@ -249,7 +253,7 @@ export function censusReport(result, { full = false } = {}) {
   const count = (key) => result.entries.reduce((m, e) => ((m[e[key] ?? 'none'] = (m[e[key] ?? 'none'] ?? 0) + 1), m), {});
   const bySubject = {};
   for (const e of result.entries) {
-    const s = (bySubject[e.subject] ??= { game: e.game, kind: e.kind, paintings: 0, pass: 0, waived: 0, fail: 0, exempt: 0 });
+    const s = (bySubject[e.subject] ??= { game: e.game, kind: e.kind, paintings: 0, pass: 0, waived: 0, rigged: 0, fail: 0, exempt: 0 });
     s.paintings++;
     s[e.outcome]++;
   }
@@ -262,7 +266,7 @@ export function censusReport(result, { full = false } = {}) {
     bands: BANDS,
     totals: {
       subjects: result.subjects, paintings: result.paintings,
-      pass: result.entries.filter((e) => e.outcome === 'pass').length, waived: result.entries.filter((e) => e.outcome === 'waived').length,
+      pass: result.entries.filter((e) => e.outcome === 'pass').length, waived: result.entries.filter((e) => e.outcome === 'waived').length, rigged: result.entries.filter((e) => e.outcome === 'rigged').length,
       fail: result.entries.filter((e) => e.outcome === 'fail').length, exempt: result.entries.filter((e) => e.outcome === 'exempt').length,
       byClass: count('class'), byGame: count('game'), byRowStatus: count('status'),
     },
@@ -271,6 +275,7 @@ export function censusReport(result, { full = false } = {}) {
     outOfBand: result.entries.filter((e) => e.flags.length).map(slim),
     reportOnly,
     ledger: result.ledger,
+    rigs: result.rigs ?? [],
     subjects: bySubject,
     ...(full ? { entries: result.entries } : {}),
   };
@@ -341,16 +346,16 @@ export function checkMastersUnchanged(built, result) {
  * `baseRef` (the last deployed sha) lets the ledger's ratchet compare with the ledger that was live.
  * @returns {Promise<object>} the gate result (stage two reads it)
  */
-export async function enforcePoseGate({ root = ROOT, artDir, baseRef, log = console.log, fail } = {}) {
+export async function enforcePoseGate({ root = ROOT, artDir, baseRef, log = console.log, fail, rigs } = {}) {
   let result;
   try {
-    result = await runGate({ root, artDir, baseRef: baseRef ?? undefined });
+    result = await runGate({ root, artDir, baseRef: baseRef ?? undefined, rigs });
   } finally {
     sharp.concurrency(0); // the pose model throttles the decoder and turns its cache off; the deploy's own decode-checks later in this process get the defaults back
     sharp.cache(true);
   }
   const waived = result.entries.filter((e) => e.outcome === 'waived').length;
-  log(`pose gate: ${result.paintings} paintings of ${result.subjects} subjects, ${waived} waived, ${result.failures.length} failure(s); ledger ${result.ledger.exists ? `${result.ledger.rows} row(s) (${result.ledger.legacy} legacy)` : 'absent'}`);
+  log(`pose gate: ${result.paintings} paintings of ${result.subjects} subjects, ${waived} waived${rigs ? `, ${result.entries.filter((e) => e.outcome === 'rigged').length} rigged` : ''}, ${result.failures.length} failure(s); ledger ${result.ledger.exists ? `${result.ledger.rows} row(s) (${result.ledger.legacy} legacy)` : 'absent'}`);
   if (!result.paintings) fail(`the pose gate read no character painting under ${result.artDir}: it cannot vouch for an empty art folder (is public/art the art folder, with characters/ in it?)`);
   if (result.failures.length) {
     for (const x of result.failures.slice(0, 25)) log(`  ${formatFailure(x)}`);

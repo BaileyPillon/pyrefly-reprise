@@ -44,6 +44,9 @@ interface PoseWithholder {
  * either. The actor shows the next pose down its chain (hurt, else idle), and this is the answer that lays that one on the floor.
  */
 export function lacksKoPainting(actor: object): boolean {
+  // A rigged figure (`rig/RigActor.ts`) has no KO painting of its own and does not need one: it has a `ko` key or it has not (pose gate: the rig's keys are its poses).
+  const keys = (actor as { rigKeys?: ReadonlySet<string> }).rigKeys;
+  if (keys) return !keys.has('ko');
   const urls = (actor as { poseUrls?: Readonly<Record<string, string>> }).poseUrls;
   if (!urls) return false;
   if ((actor as PoseWithholder).poseWithheld?.('ko')) return true;

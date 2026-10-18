@@ -30,3 +30,16 @@ export function readColourVision(): ColourVision {
     return 'off';
   }
 }
+
+/**
+ * RIGGED FIGURES: whether a figure with a gated rig is drawn as a rig (`engine/rig/`). Read from the hidden `fxRig` setting; anything but an explicit `false` is on, so a
+ * save that never had the field draws rigs where they exist (`?rig=off` / `?rig=on` override it). There is no visible row for it yet (it waits for Bailey's yes: the
+ * EYE CANDY page lists its switches in the save schema).
+ */
+export function readRigFigures(): boolean {
+  try {
+    return (readSetting as (k: string) => unknown)('fxRig') !== false;
+  } catch {
+    return true;
+  }
+}
