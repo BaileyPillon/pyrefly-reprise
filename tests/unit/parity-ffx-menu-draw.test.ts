@@ -1,5 +1,5 @@
 /**
- * **The FFX command menu's draw rules, engine side** (re-parity RC11, lane "FFX menu parity"; **FFX only**; switch `MENU_DRAW_PARITY`, default OFF; handoff
+ * **The FFX command menu's draw rules, engine side** (re-parity RC11, lane "FFX menu parity"; **FFX only**; switch `MENU_DRAW_PARITY` (shipped ON from r55 RE with `cursor` and `help` off; every test here sets its own state, `off()` is an explicit OFF, and the shipped value is pinned in `parity-ffx-shipped-switches.test.ts`); handoff
  * `docs/handoff/re-parity-rc11-ffx-menu-parity.md`). The HUD half (openers, the cursor) is `ui-ffx-menu-draw-parity.test.ts`.
  *
  * 1. **A model of the game** (`FFX-G11` section 4, `FFX-G11b`): the row resolver's result codes and what the draw loop (0x008A49B0) and the confirm handler (0x0089C900) do with each,
@@ -10,7 +10,7 @@
  *    reason (or a Talk row that is not offered): the switch moves the picture, never the rules.
  */
 
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { AvailableCommand } from '../../src/battle/common/types.ts';
 import { MENU_DRAW_PARITY, greyRow, menuParity, overdriveGaugeFull, setMenuDrawParity } from '../../src/battle/ffx/menu-draw-parity.ts';
 import { onLastSummoningBoard } from '../../src/engine/tactics/lookup.ts';
@@ -91,8 +91,14 @@ describe('the model of the game: the resolver, the draw loop and the confirm han
 // ---------------------------------------------------------------------------------------------------------------------- the switch itself
 
 let restore: (() => void) | undefined;
+let restoreBase: (() => void) | undefined;
+beforeEach(() => {
+  restoreBase = setMenuDrawParity(false); // r55 RE: the shipped switch is ON; these tests describe off and on explicitly, so each starts from an explicit OFF
+});
 afterEach(() => {
   off();
+  restoreBase?.();
+  restoreBase = undefined;
 });
 const off = (): void => {
   restore?.();
@@ -104,7 +110,7 @@ const on = (skip: Parameters<typeof setMenuDrawParity>[1] = []): void => {
 };
 
 describe('the switch', () => {
-  it('is off, with nothing skipped', () => {
+  it('setMenuDrawParity(false) turns every item off, with nothing skipped (the shipped value is pinned in parity-ffx-shipped-switches.test.ts)', () => {
     expect(MENU_DRAW_PARITY.on).toBe(false);
     expect(MENU_DRAW_PARITY.skip).toEqual([]);
     for (const item of ['openers', 'overdrive', 'summon', 'blocked', 'talk', 'cursor', 'help'] as const) expect(menuParity(item), item).toBe(false);

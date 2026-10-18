@@ -10,6 +10,7 @@
  */
 
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import type { AnyCombatant, AvailableCommand, CombatantId, Command } from '../../src/battle/common/types.ts';
 import { setTargetStepParity, type TargetStepItem } from '../../src/battle/ffx/target-step-parity.ts';
 import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
@@ -19,6 +20,8 @@ import { ffxTargetMode } from '../../src/ui/ffx/loneTarget.ts';
 import { opensList } from '../../src/ui/ffx/targetStepUi.ts';
 import type { CursorSelection } from '../../src/ui/ffx/TargetCursor.ts';
 import { actor, engineFor, menuOf } from './helpers/menuParityDrive.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 let restore: (() => void) | undefined;
 const on = (skip: readonly TargetStepItem[] = []): void => {

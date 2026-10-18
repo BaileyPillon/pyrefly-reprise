@@ -10,6 +10,7 @@
  */
 
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import type { AnyCombatant, AvailableCommand, CombatantId, Command } from '../../src/battle/common/types.ts';
 import { setMenuDrawParity } from '../../src/battle/ffx/menu-draw-parity.ts';
 import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
@@ -17,6 +18,8 @@ import { buildTopRows, isOpenerGroup, rowEnabled } from '../../src/ui/ffx/Comman
 import { groupHelp, topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
 import { openYunaGrandSummon } from '../../src/ui/ffx/minigames/YunaGrandSummon.ts';
 import { actor, ctxOf, engineFor, menuOf } from './helpers/menuParityDrive.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 const playRefusal = vi.hoisted(() => vi.fn());
 vi.mock('../../src/ui/ffx/refusalCue.ts', () => ({ playRefusal }));

@@ -9,6 +9,7 @@
  */
 
 import { beforeAll, describe, expect, it } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import type { AbilityDef, AvailableCommand, Command, Decision, EnemyGroupDef, FFXCombatant } from '../../src/battle/common/types.ts';
 import { FFXEngine, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
@@ -24,6 +25,8 @@ import { buildTopRows, firstEnabledIndex, rowEnabled } from '../../src/ui/ffx/Co
 import { topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
 import { commandHelpText } from '../../src/ui/ffx/commandHelp.ts';
 import { actor, content, grandSummon, newEngine, nextInput, pass, row, setupFor, type Input } from './helpers/isaaruUnits.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 /** The three formation files of Isaaru's contest and the engine group each one is (Fist, Wing and Sword are the first, second and third link). */
 const ISAARU_FORMATIONS: Readonly<Record<string, string>> = { bvyt09_10: 'isaaru-grothia', bvyt09_11: 'isaaru-pterya', bvyt09_12: 'isaaru-spathi' };

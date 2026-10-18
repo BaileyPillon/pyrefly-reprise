@@ -7,12 +7,15 @@
  */
 
 import { afterEach, describe, expect, it } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import type { AvailableCommand, Command, Decision } from '../../src/battle/common/types.ts';
 import { setMenuDrawParity } from '../../src/battle/ffx/menu-draw-parity.ts';
 import { submittedRowGreyed } from '../../src/battle/ffx/submit-guard.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../src/data/ffx/index.ts';
 import { actor, ctxOf, engineFor, menuOf } from './helpers/menuParityDrive.ts';
 import type { FFXEngine } from '../../src/battle/ffx/index.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 

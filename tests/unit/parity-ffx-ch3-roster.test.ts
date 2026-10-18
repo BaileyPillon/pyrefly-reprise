@@ -14,6 +14,7 @@
  */
 
 import { afterEach, describe, expect, it } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import type { AvailableCommand, BattleEngine, BattleSetup, Command, Decision, EnemyGroupDef, FFXCombatant } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { grandSummonEntries } from '../../src/battle/ffx/pickerParams.ts';
@@ -28,6 +29,8 @@ import { dreamsEndBuild } from '../../src/data/ffx/builds/dreams-end.ts';
 import { lastSummoningGroup } from '../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { OFFERING_KEYS, type OfferingKey, linkGroupId, yuYevonGroupId } from '../../src/data/ffx/last-summoning-ids.ts';
 import { playOrder } from './helpers/lastSummoningDrive.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 

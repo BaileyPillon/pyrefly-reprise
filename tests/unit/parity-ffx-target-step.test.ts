@@ -7,6 +7,7 @@
  */
 
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import fixture from '../fixtures/parity/ffx/target_words.json';
 import type { AvailableCommand, BattleEngine, Command, Decision, FFXCombatant } from '../../src/battle/common/types.ts';
 import { TARGET_WORDS, decodeTargetWord, targetSpecOf } from '../../src/battle/ffx/kernel/target-words.ts';
@@ -18,6 +19,8 @@ import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts'
 import { actor, ctxOf, engineFor, keyOf, menuOf, partyOf } from './helpers/menuParityDrive.ts';
 import { firstLinkSetup, newEngine } from './helpers/lastSummoningDrive.ts';
 import type { FFXEngine } from '../../src/battle/ffx/index.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 let restore: (() => void) | undefined;
 const on = (skip: readonly TargetStepItem[] = []): void => {
