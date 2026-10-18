@@ -368,8 +368,10 @@ describe('FFXBattleHud.chooseCommand', () => {
     hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
 
     const promise = hud.chooseCommand('tidus', makeFakeCommands(), () => makeFakeTurnPreview());
-    // attack -> skill -> whitemagic -> (blackmagic skipped, disabled) -> items -> switch
-    for (let i = 0; i < 4; i++) window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+    // attack -> skill -> whitemagic -> blackmagic -> items -> switch. Black Magic is a greyed row in this fixture; since r55 (MENU_DRAW_PARITY item a) an opener is never greyed, so the cursor
+    // rests on it where it used to skip it: walk to the Switch row by its label, which holds in both states.
+    for (let i = 0; i < 12 && root.querySelector('.ig-cmd--selected .ffx-cmd__label')?.textContent?.trim() !== 'Switch'; i++) window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+    expect(root.querySelector('.ig-cmd--selected .ffx-cmd__label')?.textContent?.trim()).toBe('Switch');
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
 
     // A one-entry group normally resolves straight away; the reserve list is
@@ -461,12 +463,38 @@ describe('FFXBattleHud.chooseCommand', () => {
       },
     ];
 
-    const promise = hud.chooseCommand('tidus', commands, () => makeFakeTurnPreview());
+    // Yuna's Overdrive row is itself the opener of her Grand Summon picker and an aeon's Overdrive is a direct command: neither sits behind a list of one (r55, t6b is for Tidus,
+    // Kimahri, Auron, Wakka and Lulu only), so the shortcut stands for them.
+    const promise = hud.chooseCommand('yuna', commands, () => makeFakeTurnPreview());
     // Down once lands on the sole Overdrive row; confirming it should resolve
     // straight to targeting for spiral-cut, not open a one-item submenu.
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+
+    const command = await promise;
+    expect(command).toMatchObject({ kind: 'overdrive', id: 'spiral-cut', targets: ['seymour-flux'] });
+  });
+
+  it('t6b (r55): the same one-entry Overdrive of Tidus, Kimahri, Auron, Wakka or Lulu opens a list of one first, and Escape backs out of it', async () => {
+    const { hud, root } = mountHud();
+    cleanup = () => hud.unmount();
+    hud.setProjector(() => ({ x: 0, y: 0 }));
+    hud.sync(makeFakeBattleState(), makeFakeTurnPreview());
+
+    const commands: AvailableCommand[] = [
+      { command: { kind: 'attack', targets: [] }, label: 'Attack', category: 'attack', mpCost: 0, enabled: true, validTargets: ['seymour-flux'] },
+      { command: { kind: 'overdrive', id: 'spiral-cut', targets: [] }, label: 'Overdrive', category: 'overdrive', mpCost: 0, enabled: true, validTargets: ['seymour-flux', 'mortiorchis'] },
+    ];
+    const promise = hud.chooseCommand('tidus', commands, () => makeFakeTurnPreview());
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+    expect(root.querySelector<HTMLElement>('.ffx-cmd-breadcrumb')?.hidden).toBe(false); // the list of one is open
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Escape' }));
+    expect(root.querySelector<HTMLElement>('.ffx-cmd-breadcrumb')?.hidden).toBe(true);
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' })); // the entry
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' })); // the target
 
     const command = await promise;
     expect(command).toMatchObject({ kind: 'overdrive', id: 'spiral-cut', targets: ['seymour-flux'] });
