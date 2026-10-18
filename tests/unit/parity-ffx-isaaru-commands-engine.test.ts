@@ -192,7 +192,7 @@ describe('the FFX command window draws the greyed, reason-less rows (its pure vi
 describe('every other FFX chapter plays as it did: no formation list in the state, and its first menu still has an Attack row', () => {
   const CHAPTERS = [
     'seymour-flux', 'yunalesca', 'braskas-final-aeon', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'seymour-omnis',
-    'sin-fins-core', 'sin-face', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'exp-fayth',
+    'sin-fins-core', 'sin-face', 'sinspawn-gui', 'mirror-aeons', 'exp-fayth',
   ];
   beforeAll(async () => {
     await registerBattleContent();
@@ -213,6 +213,20 @@ describe('every other FFX chapter plays as it did: no formation list in the stat
       if (d.kind === 'player-input') expect(d.commands.some((c) => c.command.kind === 'attack')).toBe(true);
     });
   }
+
+  it('Biran and Yenke carries exactly one entry of the kind (RC11: Kimahri\'s Switch, the script\'s third call), which forbids nothing with an empty bench and has no Attack to touch', () => {
+    const chapter = getChapter('biran-yenke')!;
+    const setup = setupForChapter(chapter, 1);
+    const engine = new FFXEngine({ autoResolveMinigames: true });
+    engine.setSeed(setup.seed);
+    engine.init(setup);
+    expect(engine.state().flags[COMMAND_OFF_ANY]).toBe(true);
+    expect(Object.keys(engine.state().flags).filter((k) => k.startsWith('formation.cmdOff:'))).toEqual(['formation.cmdOff:kimahri:' + 0x3002]);
+    let d: Decision = engine.nextDecision();
+    for (let i = 0; i < 400 && d.kind !== 'player-input' && d.kind !== 'battle-over'; i++) d = engine.nextDecision();
+    expect(d.kind).toBe('player-input');
+    if (d.kind === 'player-input') expect(d.commands.some((c) => c.command.kind === 'attack' && c.enabled)).toBe(true);
+  });
 
   it('and Isaaru\'s chapter, set up the way the app sets it up, has the list from the first link', () => {
     const chapter = getChapter('isaaru-via-purifico')!;
