@@ -92,9 +92,12 @@ describe('the model of the game: the resolver, the draw loop and the confirm han
 
 let restore: (() => void) | undefined;
 afterEach(() => {
+  off();
+});
+const off = (): void => {
   restore?.();
   restore = undefined;
-});
+};
 const on = (skip: Parameters<typeof setMenuDrawParity>[1] = []): void => {
   restore?.(); // a second call in one test must not lose the way back to "off"
   restore = setMenuDrawParity(true, skip);
@@ -314,8 +317,7 @@ describe('item d: a blocked Escape, Flee or Switch row is drawn greyed with no r
       expect(rows.length, chapter).toBe(1);
       expect(rows[0]!.label, chapter).toBe('Switch');
       expect(noReason(rows[0]!), chapter).toBe(true);
-      restore?.();
-      restore = undefined;
+      off();
     }
   });
 
@@ -367,15 +369,13 @@ describe('item e: Talk exists only where a formation script adds it (FFX-G11b se
     expect(talkers(first)).toEqual(['tidus']);
     on();
     expect(talkers(first)).toEqual(['tidus']);
-    restore?.();
-    restore = undefined;
+    off();
     for (const group of ['possessed-valefor', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'possessed-bahamut', 'yu-yevon']) {
       const engine = await engineFor('braskas-final-aeon', group);
       expect(talkers(engine), `${group} off`).toEqual(['tidus']); // the build lists it (dreams-end.ts): the answer to FFX-G11b open item 2
       on();
       expect(talkers(engine), `${group} on`).toEqual([]);
-      restore?.();
-      restore = undefined;
+      off();
     }
   });
 
@@ -386,8 +386,7 @@ describe('item e: Talk exists only where a formation script adds it (FFX-G11b se
       on();
       const onRows = partyOf(engine).map((id) => kinds(menuOf(engine, id), 'trigger').map((r) => `${id}:${r.enabled}:${r.disabledReason}`));
       expect(onRows, chapter).toEqual(offRows);
-      restore?.();
-      restore = undefined;
+      off();
     }
   });
 
@@ -433,8 +432,7 @@ describe('the switch moves the picture, never the rules: on every chapter\'s fir
           if (was) expect(r.enabled, `${id} ${member}: ${keyOf(r)} changed legality`).toBe(was.enabled);
         }
       }
-      restore?.();
-      restore = undefined;
+      off();
       // and with the switch off again the menus are the very ones from before
       const again = members.map((m) => menuOf(engine, m));
       expect(JSON.stringify(again)).toBe(JSON.stringify(offMenus));

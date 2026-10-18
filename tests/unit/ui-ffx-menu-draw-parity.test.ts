@@ -14,6 +14,7 @@ import type { AnyCombatant, AvailableCommand, CombatantId, Command } from '../..
 import { setMenuDrawParity } from '../../src/battle/ffx/menu-draw-parity.ts';
 import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
 import { buildTopRows, isOpenerGroup, rowEnabled } from '../../src/ui/ffx/CommandMenuLogic.ts';
+import { topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
 import { actor, ctxOf, engineFor, menuOf } from './helpers/menuParityDrive.ts';
 
 const playRefusal = vi.hoisted(() => vi.fn());
@@ -256,6 +257,15 @@ describe('the pure rule', () => {
     const sw = buildTopRows([{ command: { kind: 'switch', targets: [], extra: { outId: 'a', inId: 'b' } }, label: 'B', category: 'special', mpCost: 0, rank: 3, enabled: false, validTargets: [] }])[0]!;
     expect(sw.kind === 'group' && sw.role).toBe('switch');
     expect(rowEnabled(sw)).toBe(false);
+  });
+
+  it('the Switch row counts the bench; the one greyed placeholder row of an empty bench carries no count', () => {
+    const swap = (inId: string, enabled: boolean): AvailableCommand => ({ command: { kind: 'switch', targets: [], extra: { outId: 'a', inId } }, label: inId || 'Switch', category: 'special', mpCost: 0, rank: 3, enabled, validTargets: [] });
+    const four = buildTopRows([swap('auron', true), swap('wakka', true), swap('lulu', false), swap('rikku', true)])[0]!;
+    expect(topRowVM(four).badge).toEqual({ kind: 'count', text: '×4' });
+    const none = buildTopRows([swap('', false)])[0]!;
+    expect(topRowVM(none).badge).toBeUndefined();
+    expect(topRowVM(none).enabled).toBe(false);
   });
 
   it('on with "openers" skipped: as off', () => {

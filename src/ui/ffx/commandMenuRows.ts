@@ -67,7 +67,9 @@ export function topRowVM(row: TopRow): RowVM {
     ? enabled
       ? { kind: 'ready', text: 'READY' }
       : undefined
-    : { kind: 'count', text: `×${row.items.length}` };
+    : row.role === 'switch'
+      ? benchBadge(row)
+      : { kind: 'count', text: `×${row.items.length}` };
   return {
     label: row.label,
     enabled,
@@ -76,6 +78,12 @@ export function topRowVM(row: TopRow): RowVM {
     group: true,
     ...(badge ? { badge } : {}),
   };
+}
+
+/** The Switch row's count is the bench; the one greyed row a forbidden Switch with an empty bench gets (`MENU_DRAW_PARITY` item d) names nobody and carries no count. */
+function benchBadge(row: TopGroupRow): RowBadge | undefined {
+  const benched = row.items.filter((c) => switchTargetId(c)).length;
+  return benched > 0 ? { kind: 'count', text: `×${benched}` } : undefined;
 }
 
 export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: Record<CombatantId, AnyCombatant>): RowVM {
