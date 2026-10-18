@@ -11,6 +11,7 @@
     sheets --subject S --clips DIR --out DIR [--before DIR] [--before-poses a,b]                                the sheets for Bailey (and the before/after sheet)                          lane_sheets.py
     twin <name> --of <rigged config> [--subject ID] [--art DIR] [--run]                                         a silhouette twin: the cut config and keys carried over                      lane_twin.py
     framediff --a DIR --b DIR [--floor DIR] [--poses a,b] [--every N] [--from FRAME] [--out report.json]                       compare two recordings (rig signature, pixels): before/after an engine change   lane_diff.py
+    jerks --tracks T.json --jerks J.json [--out R.json]    whose is each jerk the tracker flagged: the camera, the engine's placement of the actor, a lunge easing out, or the rig     lane_jerks.py
     report --subject S --gate G.json [--rig rig.json]                                                           the handoff skeleton (the table, the files, the commands) on stdout
 
 The recorder is Node: `node tools/rig/lane/record.mjs` (README). Subjects are the CONFIG names of `tools/rig/subjects/<name>.json`; the recorder's registry is `tools/rig/lane/lane-subjects.json`.
@@ -54,6 +55,7 @@ def main(argv=None) -> int:
     h = sp.add_parser("sheets"); h.add_argument("--subject", required=True); h.add_argument("--clips", required=True); h.add_argument("--out", required=True); h.add_argument("--before"); h.add_argument("--before-poses"); h.add_argument("--registry")
     t = sp.add_parser("twin"); t.add_argument("name"); t.add_argument("--of", required=True); t.add_argument("--subject"); t.add_argument("--art"); t.add_argument("--run", action="store_true")
     d = sp.add_parser("framediff"); d.add_argument("--a", required=True); d.add_argument("--b", required=True); d.add_argument("--poses"); d.add_argument("--every", type=int, default=1); d.add_argument("--out"); d.add_argument("--floor"); d.add_argument("--from", dest="start", type=int, default=0)
+    j = sp.add_parser("jerks"); j.add_argument("--tracks", required=True); j.add_argument("--jerks", required=True); j.add_argument("--out")
     r = sp.add_parser("report"); r.add_argument("--subject", required=True); r.add_argument("--gate", required=True); r.add_argument("--rig")
     a = ap.parse_args(argv)
 
@@ -101,6 +103,10 @@ def main(argv=None) -> int:
     if a.cmd == "framediff":
         import lane_diff
         return lane_diff.run(a.a, a.b, a.poses, a.every, a.out, a.floor, a.start)
+    if a.cmd == "jerks":
+        import lane_jerks
+
+        return lane_jerks.run(a.tracks, a.jerks, a.out)
     if a.cmd == "report":
         from lane_common import read_gate
 

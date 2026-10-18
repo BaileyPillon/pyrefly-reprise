@@ -56,6 +56,9 @@ def build_rig(sub: Subject, build: dict, keys: dict) -> dict:
         kp = rig_v2.key_parts(((sub.cfg.get("fit") or {}).get("keys") or {}).get(name))
         if kp and name != "idle":
             k["parts"] = {**(k.get("parts") or {}), **kp}
+        lay = (((sub.cfg.get("fit") or {}).get("keys") or {}).get(name) or {}).get("layers")  # a key's draw-order overrides (a part drawn behind the body in this pose)
+        if lay and name != "idle":
+            k["layers"] = {**(k.get("layers") or {}), **lay}
     rig = {
         "version": 1, "name": sub.id, "scale": build["scale"], "image": build["image"], "baselineY": build["baselineY"], "costume": costume,
         "bones": build["bones"], "parts": build["parts"], "landmarks": build["landmarks"], "keys": all_keys,

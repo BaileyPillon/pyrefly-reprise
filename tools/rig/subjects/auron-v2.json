@@ -1,0 +1,4383 @@
+{
+ "subject": "auron",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "art": "D:/pyrefly-art-r50",
+ "hooks": "auron_v2_hooks.py",
+ "cut": {
+  "polys": {
+   "head": [
+    [
+     268,
+     0
+    ],
+    [
+     445,
+     0
+    ],
+    [
+     445,
+     100
+    ],
+    [
+     432,
+     128
+    ],
+    [
+     402,
+     142
+    ],
+    [
+     380,
+     150
+    ],
+    [
+     335,
+     148
+    ],
+    [
+     300,
+     138
+    ],
+    [
+     268,
+     128
+    ]
+   ],
+   "collar": [
+    [
+     250,
+     118
+    ],
+    [
+     300,
+     125
+    ],
+    [
+     335,
+     146
+    ],
+    [
+     400,
+     148
+    ],
+    [
+     446,
+     172
+    ],
+    [
+     494,
+     172
+    ],
+    [
+     494,
+     230
+    ],
+    [
+     460,
+     246
+    ],
+    [
+     440,
+     260
+    ],
+    [
+     402,
+     292
+    ],
+    [
+     372,
+     322
+    ],
+    [
+     335,
+     335
+    ],
+    [
+     290,
+     310
+    ],
+    [
+     262,
+     255
+    ],
+    [
+     250,
+     200
+    ]
+   ],
+   "torso": [
+    [
+     262,
+     238
+    ],
+    [
+     300,
+     300
+    ],
+    [
+     440,
+     262
+    ],
+    [
+     500,
+     300
+    ],
+    [
+     545,
+     335
+    ],
+    [
+     590,
+     350
+    ],
+    [
+     590,
+     562
+    ],
+    [
+     430,
+     578
+    ],
+    [
+     330,
+     572
+    ],
+    [
+     272,
+     500
+    ],
+    [
+     240,
+     420
+    ],
+    [
+     240,
+     300
+    ]
+   ],
+   "sleeveL": [
+    [
+     160,
+     447
+    ],
+    [
+     205,
+     392
+    ],
+    [
+     262,
+     372
+    ],
+    [
+     300,
+     372
+    ],
+    [
+     335,
+     430
+    ],
+    [
+     330,
+     520
+    ],
+    [
+     310,
+     578
+    ],
+    [
+     250,
+     572
+    ],
+    [
+     172,
+     527
+    ],
+    [
+     152,
+     472
+    ]
+   ],
+   "armR": [
+    [
+     440,
+     178
+    ],
+    [
+     520,
+     168
+    ],
+    [
+     580,
+     160
+    ],
+    [
+     615,
+     172
+    ],
+    [
+     625,
+     232
+    ],
+    [
+     618,
+     290
+    ],
+    [
+     565,
+     302
+    ],
+    [
+     520,
+     290
+    ],
+    [
+     480,
+     265
+    ],
+    [
+     452,
+     238
+    ]
+   ],
+   "glove": [
+    [
+     588,
+     130
+    ],
+    [
+     690,
+     126
+    ],
+    [
+     702,
+     190
+    ],
+    [
+     655,
+     214
+    ],
+    [
+     600,
+     214
+    ],
+    [
+     582,
+     175
+    ]
+   ],
+   "tassel_a": [
+    [
+     583,
+     296
+    ],
+    [
+     640,
+     296
+    ],
+    [
+     640,
+     620
+    ],
+    [
+     583,
+     620
+    ]
+   ],
+   "tassel_b": [
+    [
+     560,
+     555
+    ],
+    [
+     600,
+     555
+    ],
+    [
+     600,
+     668
+    ],
+    [
+     560,
+     668
+    ]
+   ],
+   "legR_up": [
+    [
+     404,
+     556
+    ],
+    [
+     572,
+     556
+    ],
+    [
+     572,
+     700
+    ],
+    [
+     548,
+     790
+    ],
+    [
+     520,
+     900
+    ],
+    [
+     514,
+     1000
+    ],
+    [
+     410,
+     1000
+    ],
+    [
+     408,
+     900
+    ],
+    [
+     410,
+     700
+    ]
+   ],
+   "legR_lo": [
+    [
+     418,
+     1000
+    ],
+    [
+     512,
+     1000
+    ],
+    [
+     514,
+     1086
+    ],
+    [
+     600,
+     1115
+    ],
+    [
+     600,
+     1196
+    ],
+    [
+     405,
+     1196
+    ],
+    [
+     418,
+     1100
+    ]
+   ],
+   "legL": [
+    [
+     350,
+     998
+    ],
+    [
+     418,
+     998
+    ],
+    [
+     418,
+     1122
+    ],
+    [
+     350,
+     1122
+    ]
+   ],
+   "tail_tip": [
+    [
+     0,
+     1000
+    ],
+    [
+     210,
+     1000
+    ],
+    [
+     210,
+     1200
+    ],
+    [
+     0,
+     1200
+    ]
+   ],
+   "tail_seam": [
+    [
+     0,
+     700
+    ],
+    [
+     420,
+     700
+    ],
+    [
+     420,
+     1000
+    ],
+    [
+     0,
+     1000
+    ]
+   ],
+   "coat_legs": [
+    [
+     380,
+     540
+    ],
+    [
+     600,
+     540
+    ],
+    [
+     600,
+     1000
+    ],
+    [
+     380,
+     1000
+    ]
+   ],
+   "legL_hid": [
+    [
+     396,
+     560
+    ],
+    [
+     480,
+     560
+    ],
+    [
+     480,
+     1000
+    ],
+    [
+     396,
+     1000
+    ]
+   ],
+   "tail": [
+    [
+     0,
+     740
+    ],
+    [
+     330,
+     735
+    ],
+    [
+     255,
+     850
+    ],
+    [
+     200,
+     930
+    ],
+    [
+     145,
+     1005
+    ],
+    [
+     120,
+     1040
+    ],
+    [
+     0,
+     1196
+    ]
+   ]
+  },
+  "order": [
+   "tail",
+   "saya",
+   "coat",
+   "legL",
+   "legR",
+   "torso",
+   "sleeveL",
+   "armR",
+   "sword",
+   "glove",
+   "shoulders",
+   "head",
+   "tassels"
+  ],
+  "priority": [
+   "head",
+   "glove",
+   "shoulders",
+   "tassels",
+   "sword",
+   "armR",
+   "sleeveL",
+   "saya",
+   "legR",
+   "legL",
+   "torso",
+   "tail",
+   "coat"
+  ],
+  "parts": {
+   "head": {
+    "include": [
+     {
+      "poly": "head"
+     }
+    ]
+   },
+   "shoulders": {
+    "include": [
+     {
+      "all": [
+       {
+        "poly": "collar"
+       },
+       {
+        "any": [
+         {
+          "colour": {
+           "g_minus_b_ge": 0.08
+          }
+         },
+         {
+          "colour": {
+           "r_minus_b_le": 0.12
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "torso": {
+    "include": [
+     {
+      "poly": "torso"
+     }
+    ]
+   },
+   "sleeveL": {
+    "include": [
+     {
+      "poly": "sleeveL"
+     }
+    ]
+   },
+   "armR": {
+    "include": [
+     {
+      "poly": "armR"
+     }
+    ]
+   },
+   "glove": {
+    "include": [
+     {
+      "poly": "glove"
+     }
+    ]
+   },
+   "sword": {
+    "include": [
+     {
+      "seg": {
+       "p0": [
+        772,
+        76
+       ],
+       "p1": [
+        598,
+        226
+       ],
+       "r": 26
+      }
+     },
+     {
+      "seg": {
+       "p0": [
+        598,
+        226
+       ],
+       "p1": [
+        498,
+        314
+       ],
+       "r": 24
+      }
+     },
+     {
+      "seg": {
+       "p0": [
+        566,
+        252
+       ],
+       "p1": [
+        604,
+        224
+       ],
+       "r": 22
+      }
+     }
+    ]
+   },
+   "saya": {
+    "include": [
+     {
+      "all": [
+       {
+        "seg": {
+         "p0": [
+          36,
+          772
+         ],
+         "p1": [
+          305,
+          568
+         ],
+         "r": 34
+        }
+       },
+       {
+        "not": {
+         "colour": {
+          "r_minus_g_ge": 0.22
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "tassels": {
+    "include": [
+     {
+      "poly": "tassel_a"
+     },
+     {
+      "all": [
+       {
+        "poly": "tassel_b"
+       },
+       {
+        "colour": {
+         "val_gt": 0.25
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "legR": {
+    "include": [
+     {
+      "all": [
+       {
+        "poly": "legR_up"
+       },
+       {
+        "colour": {
+         "val_lt": 0.45
+        }
+       }
+      ]
+     },
+     {
+      "poly": "legR_lo"
+     }
+    ]
+   },
+   "legL": {
+    "include": [
+     {
+      "all": [
+       {
+        "poly": "legL"
+       },
+       {
+        "colour": {
+         "val_lt": 0.5
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "tail": {
+    "include": [
+     {
+      "poly": "tail"
+     },
+     {
+      "all": [
+       {
+        "poly": "tail_tip"
+       },
+       {
+        "colour": {
+         "r_minus_g_ge": 0.25
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "coat": {
+    "include": [
+     {
+      "opaque": true
+     }
+    ]
+   }
+  },
+  "nearest": {
+   "maxdist": 40
+  },
+  "clean": {
+   "min_island": 60,
+   "close": 2,
+   "coat": false,
+   "tail": false,
+   "torso": false,
+   "legR": false,
+   "sleeveL": false,
+   "sword": false,
+   "saya": false,
+   "glove": false,
+   "head": false,
+   "shoulders": false,
+   "armR": false,
+   "tassels": false,
+   "legL": false
+  },
+  "ops": [
+   {
+    "op": "skirt",
+    "back": "tail",
+    "front": "coat",
+    "px": 70
+   },
+   {
+    "op": "skirt",
+    "back": "coat",
+    "front": "legR",
+    "px": 80,
+    "zone": {
+     "poly": "coat_legs"
+    }
+   },
+   {
+    "op": "skirt",
+    "back": "coat",
+    "front": "torso",
+    "px": 120
+   },
+   {
+    "op": "skirt",
+    "back": "coat",
+    "front": "sleeveL",
+    "px": 70
+   },
+   {
+    "op": "skirt",
+    "back": "coat",
+    "front": "tail",
+    "px": 70,
+    "zone": {
+     "poly": "tail_seam"
+    }
+   },
+   {
+    "op": "skirt",
+    "back": "legR",
+    "front": "torso",
+    "px": 40
+   },
+   {
+    "op": "skirt",
+    "back": "torso",
+    "front": "sleeveL",
+    "px": 60
+   },
+   {
+    "op": "skirt",
+    "back": "torso",
+    "front": "legR",
+    "px": 60
+   },
+   {
+    "op": "skirt",
+    "back": "torso",
+    "front": "shoulders",
+    "px": 24
+   },
+   {
+    "op": "skirt",
+    "back": "armR",
+    "front": "shoulders",
+    "px": 24
+   },
+   {
+    "op": "skirt",
+    "back": "armR",
+    "front": "glove",
+    "px": 20
+   },
+   {
+    "op": "skirt",
+    "back": "shoulders",
+    "front": "head",
+    "px": 18
+   },
+   {
+    "op": "extend",
+    "part": "legL",
+    "zone": {
+     "all": [
+      {
+       "poly": "legL_hid"
+      },
+      {
+       "part": "legR"
+      }
+     ]
+    }
+   },
+   {
+    "op": "extend",
+    "part": "torso",
+    "zone": {
+     "all": [
+      {
+       "poly": "torso"
+      },
+      {
+       "part": "sword"
+      }
+     ]
+    }
+   },
+   {
+    "op": "extend",
+    "part": "sword",
+    "zone": {
+     "all": [
+      {
+       "poly": "glove"
+      },
+      {
+       "opaque": true
+      },
+      {
+       "seg": {
+        "p0": [
+         772,
+         76
+        ],
+        "p1": [
+         598,
+         226
+        ],
+        "r": 20
+       }
+      }
+     ]
+    },
+    "hidden_only": false
+   },
+   {
+    "op": "extend",
+    "part": "saya",
+    "zone": {
+     "seg": {
+      "p0": [
+       305,
+       568
+      ],
+      "p1": [
+       400,
+       486
+      ],
+      "r": 28
+     }
+    }
+   }
+  ]
+ },
+ "build": {
+  "bones": [
+   [
+    "root",
+    null,
+    [
+     500,
+     1188
+    ]
+   ],
+   [
+    "pelvis",
+    "root",
+    [
+     450,
+     560
+    ]
+   ],
+   [
+    "coatL",
+    "pelvis",
+    [
+     450,
+     620
+    ]
+   ],
+   [
+    "tail",
+    "coatL",
+    [
+     370,
+     760
+    ]
+   ],
+   [
+    "coatR",
+    "pelvis",
+    [
+     450,
+     620
+    ]
+   ],
+   [
+    "spine",
+    "pelvis",
+    [
+     445,
+     455
+    ]
+   ],
+   [
+    "chest",
+    "spine",
+    [
+     440,
+     345
+    ]
+   ],
+   [
+    "head",
+    "chest",
+    [
+     375,
+     150
+    ]
+   ],
+   [
+    "upperarm",
+    "chest",
+    [
+     452,
+     200
+    ]
+   ],
+   [
+    "forearm",
+    "upperarm",
+    [
+     530,
+     200
+    ]
+   ],
+   [
+    "hand",
+    "forearm",
+    [
+     595,
+     190
+    ]
+   ],
+   [
+    "sword",
+    "root",
+    [
+     648,
+     168
+    ]
+   ],
+   [
+    "upperarmF",
+    "chest",
+    [
+     335,
+     350
+    ]
+   ],
+   [
+    "forearmF",
+    "upperarmF",
+    [
+     270,
+     455
+    ]
+   ],
+   [
+    "saya",
+    "pelvis",
+    [
+     305,
+     568
+    ]
+   ],
+   [
+    "thighR",
+    "pelvis",
+    [
+     465,
+     556
+    ]
+   ],
+   [
+    "shinR",
+    "thighR",
+    [
+     463,
+     835
+    ]
+   ],
+   [
+    "footR",
+    "shinR",
+    [
+     470,
+     1100
+    ]
+   ],
+   [
+    "thighL",
+    "pelvis",
+    [
+     440,
+     556
+    ]
+   ],
+   [
+    "shinL",
+    "thighL",
+    [
+     435,
+     835
+    ]
+   ],
+   [
+    "footL",
+    "shinL",
+    [
+     405,
+     1100
+    ]
+   ]
+  ],
+  "skin": {
+   "tail": {
+    "type": "hook",
+    "name": "tail",
+    "mesh": {
+     "edge": 24,
+     "inner": 46,
+     "grow": 10
+    }
+   },
+   "coat": {
+    "type": "hook",
+    "name": "coat",
+    "mesh": {
+     "edge": 26,
+     "inner": 48,
+     "grow": 10
+    }
+   },
+   "saya": {
+    "type": "rigid",
+    "bone": "saya",
+    "mesh": {
+     "edge": 22,
+     "inner": 40,
+     "grow": 8
+    }
+   },
+   "sword": {
+    "type": "rigid",
+    "bone": "sword",
+    "mesh": {
+     "edge": 14,
+     "inner": 28,
+     "grow": 6
+    }
+   },
+   "glove": {
+    "type": "rigid",
+    "bone": "hand",
+    "mesh": {
+     "edge": 14,
+     "inner": 26,
+     "grow": 6
+    }
+   },
+   "legR": {
+    "type": "chain",
+    "bones": [
+     "thighR",
+     "shinR",
+     "footR"
+    ],
+    "joints": [
+     [
+      465,
+      556
+     ],
+     [
+      463,
+      835
+     ],
+     [
+      470,
+      1100
+     ],
+     [
+      585,
+      1170
+     ]
+    ],
+    "ramps": [
+     40,
+     30
+    ],
+    "mesh": {
+     "edge": 22,
+     "inner": 40,
+     "grow": 10
+    }
+   },
+   "legL": {
+    "type": "chain",
+    "bones": [
+     "thighL",
+     "shinL",
+     "footL"
+    ],
+    "joints": [
+     [
+      440,
+      556
+     ],
+     [
+      435,
+      835
+     ],
+     [
+      405,
+      1100
+     ],
+     [
+      360,
+      1118
+     ]
+    ],
+    "ramps": [
+     40,
+     30
+    ],
+    "mesh": {
+     "edge": 22,
+     "inner": 40,
+     "grow": 10
+    }
+   },
+   "torso": {
+    "type": "chain",
+    "bones": [
+     "pelvis",
+     "spine",
+     "chest"
+    ],
+    "joints": [
+     [
+      450,
+      560
+     ],
+     [
+      445,
+      455
+     ],
+     [
+      440,
+      345
+     ],
+     [
+      380,
+      170
+     ]
+    ],
+    "ramps": [
+     40,
+     40
+    ],
+    "mesh": {
+     "edge": 22,
+     "inner": 40,
+     "grow": 10
+    }
+   },
+   "sleeveL": {
+    "type": "chain",
+    "bones": [
+     "upperarmF",
+     "forearmF"
+    ],
+    "joints": [
+     [
+      335,
+      350
+     ],
+     [
+      270,
+      455
+     ],
+     [
+      215,
+      550
+     ]
+    ],
+    "ramps": [
+     30
+    ],
+    "mesh": {
+     "edge": 20,
+     "inner": 36,
+     "grow": 10
+    }
+   },
+   "armR": {
+    "type": "chain",
+    "bones": [
+     "upperarm",
+     "forearm",
+     "hand"
+    ],
+    "joints": [
+     [
+      452,
+      200
+     ],
+     [
+      530,
+      200
+     ],
+     [
+      595,
+      190
+     ],
+     [
+      640,
+      170
+     ]
+    ],
+    "ramps": [
+     26,
+     22
+    ],
+    "mesh": {
+     "edge": 18,
+     "inner": 32,
+     "grow": 10
+    }
+   },
+   "shoulders": {
+    "type": "rigid",
+    "bone": "chest",
+    "mesh": {
+     "edge": 20,
+     "inner": 36,
+     "grow": 10
+    }
+   },
+   "head": {
+    "type": "rigid",
+    "bone": "head",
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 10
+    }
+   },
+   "tassels": {
+    "type": "rigid",
+    "bone": "spine",
+    "mesh": {
+     "edge": 20,
+     "inner": 36,
+     "grow": 8
+    }
+   }
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    [
+     375,
+     100
+    ]
+   ],
+   "headCenter": [
+    "head",
+    [
+     375,
+     100
+    ]
+   ],
+   "chestCenter": [
+    "chest",
+    [
+     440,
+     345
+    ]
+   ],
+   "pelvisCenter": [
+    "pelvis",
+    [
+     450,
+     560
+    ]
+   ],
+   "fist": [
+    "hand",
+    [
+     648,
+     168
+    ]
+   ],
+   "wristPt": [
+    "hand",
+    [
+     595,
+     190
+    ]
+   ],
+   "elbowPt": [
+    "forearm",
+    [
+     530,
+     200
+    ]
+   ],
+   "shoulderPt": [
+    "upperarm",
+    [
+     452,
+     200
+    ]
+   ],
+   "swordHilt": [
+    "sword",
+    [
+     768,
+     80
+    ]
+   ],
+   "swordTip": [
+    "sword",
+    [
+     239,
+     545
+    ]
+   ],
+   "toe": [
+    "footR",
+    [
+     585,
+     1170
+    ]
+   ],
+   "feet": [
+    "root",
+    [
+     500,
+     1188
+    ]
+   ]
+  }
+ },
+ "fit": {
+  "min_iou": 0.0,
+  "default_limit": 110,
+  "chain_limit": 40,
+  "offsets": [
+   "pelvis",
+   "sword"
+  ],
+  "fixed": [],
+  "scales": {
+   "sword": [
+    0.4,
+    1.6
+   ],
+   "upperarm": [
+    0.93,
+    1.2
+   ],
+   "forearm": [
+    0.93,
+    1.2
+   ],
+   "thighR": [
+    0.93,
+    1.2
+   ],
+   "thighL": [
+    0.93,
+    1.0
+   ],
+   "shinR": [
+    0.93,
+    1.2
+   ],
+   "shinL": [
+    0.93,
+    1.0
+   ],
+   "spine": [
+    0.93,
+    1.12
+   ],
+   "root": [
+    1.0,
+    1.0
+   ],
+   "head": [
+    1.0,
+    1.0
+   ],
+   "tail": [
+    0.3,
+    0.7
+   ]
+  },
+  "limits": {
+   "head": [
+    -35,
+    35
+   ],
+   "spine": [
+    -40,
+    40
+   ],
+   "chest": [
+    -40,
+    40
+   ],
+   "pelvis": [
+    -30,
+    30
+   ],
+   "upperarm": [
+    -175,
+    100
+   ],
+   "forearm": [
+    -150,
+    20
+   ],
+   "hand": [
+    -40,
+    40
+   ],
+   "sword": [
+    -180,
+    180
+   ],
+   "upperarmF": [
+    -120,
+    90
+   ],
+   "forearmF": [
+    -80,
+    60
+   ],
+   "saya": [
+    -45,
+    45
+   ],
+   "thighR": [
+    -110,
+    60
+   ],
+   "shinR": [
+    -10,
+    150
+   ],
+   "footR": [
+    -30,
+    30
+   ],
+   "thighL": [
+    -110,
+    60
+   ],
+   "shinL": [
+    -10,
+    150
+   ],
+   "footL": [
+    -30,
+    30
+   ],
+   "coatL": [
+    -3,
+    23
+   ],
+   "coatR": [
+    -23,
+    20
+   ],
+   "tail": [
+    -7,
+    7
+   ]
+  },
+  "keys": {
+   "ko": {
+    "planted": false,
+    "root_rot": [
+     70,
+     95
+    ],
+    "root_dx": [
+     -2800,
+     1500
+    ],
+    "root_dy": [
+     -1200,
+     1200
+    ],
+    "limits": {
+     "spine": [
+      -30,
+      30
+     ],
+     "chest": [
+      -30,
+      30
+     ],
+     "head": [
+      -35,
+      35
+     ],
+     "pelvis": [
+      -20,
+      20
+     ],
+     "coatL": [
+      0,
+      0
+     ],
+     "coatR": [
+      0,
+      0
+     ],
+     "tail": [
+      0,
+      0
+     ],
+     "thighR": [
+      -30,
+      20
+     ],
+     "shinR": [
+      0,
+      30
+     ],
+     "thighL": [
+      -30,
+      20
+     ],
+     "shinL": [
+      0,
+      30
+     ],
+     "footR": [
+      -15,
+      15
+     ],
+     "footL": [
+      -15,
+      15
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.03,
+      0.02
+     ],
+     "sword": [
+      0.9,
+      0.9
+     ]
+    },
+    "scales": {
+     "root": [
+      0.78,
+      0.8
+     ],
+     "head": [
+      1.15,
+      1.15
+     ],
+     "spine": [
+      1.0,
+      1.0
+     ]
+    },
+    "mark_w": 3.0,
+    "mark_free": 0.03,
+    "hide": [
+     "saya"
+    ]
+   },
+   "critical": {
+    "init": {
+     "pelvis": 3.66,
+     "pelvis.dx": -10.3,
+     "pelvis.dy": 25.3,
+     "coatL": -2.95,
+     "coatR": -22.99,
+     "spine": 53.68,
+     "spine.s": 0.939,
+     "chest": 59.58,
+     "head": 43.73,
+     "upperarm": 76.62,
+     "upperarm.s": 1.2,
+     "forearm": -128.44,
+     "forearm.s": 1.2,
+     "hand": 3.13,
+     "upperarmF": -63.42,
+     "forearmF": -5.47,
+     "saya": -44.9,
+     "thighR": -37.23,
+     "thighR.s": 1.199,
+     "shinR": 90.0,
+     "footR": 10.24,
+     "thighL": -59.89,
+     "shinL": 10.36,
+     "footL": 11.25,
+     "tail.s": 0.548,
+     "root.dx": 14.6,
+     "shinR.s": 0.98
+    },
+    "feet_x_w": 6.0,
+    "dfoot_w": 8.0,
+    "scales": {
+     "tail": [
+      0.3,
+      0.7
+     ]
+    },
+    "limits": {
+     "pelvis": [
+      -20,
+      35
+     ],
+     "spine": [
+      -10,
+      70
+     ],
+     "chest": [
+      -10,
+      60
+     ],
+     "head": [
+      -30,
+      45
+     ],
+     "thighR": [
+      -60,
+      50
+     ],
+     "shinR": [
+      0,
+      90
+     ],
+     "thighL": [
+      -60,
+      50
+     ],
+     "shinL": [
+      0,
+      90
+     ],
+     "footR": [
+      -20,
+      20
+     ],
+     "footL": [
+      -20,
+      20
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.15,
+      0.06
+     ],
+     "sword": [
+      0.9,
+      0.9
+     ]
+    },
+    "root_dx": [
+     -60,
+     60
+    ],
+    "mark_w": 3.0,
+    "mark_free": 0.03,
+    "image": {
+     "swordX": "critical"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm",
+     "forearm",
+     "hand"
+    ]
+   },
+   "sleep": {
+    "scales": {
+     "tail": [
+      0.3,
+      0.7
+     ]
+    },
+    "limits": {
+     "pelvis": [
+      -10,
+      15
+     ],
+     "spine": [
+      -10,
+      45
+     ],
+     "chest": [
+      -10,
+      45
+     ],
+     "head": [
+      -10,
+      60
+     ],
+     "thighR": [
+      -20,
+      20
+     ],
+     "shinR": [
+      0,
+      25
+     ],
+     "thighL": [
+      -20,
+      20
+     ],
+     "shinL": [
+      0,
+      25
+     ],
+     "footR": [
+      -10,
+      10
+     ],
+     "footL": [
+      -10,
+      10
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.1,
+      0.05
+     ],
+     "sword": [
+      0.9,
+      0.9
+     ]
+    },
+    "root_dx": [
+     -60,
+     60
+    ],
+    "mark_w": 3.0,
+    "mark_free": 0.03,
+    "feet_x_w": 4.0,
+    "dfoot_w": 4.0
+   },
+   "hurt": {
+    "init": {
+     "pelvis": -1.75,
+     "pelvis.dx": -41.1,
+     "pelvis.dy": 43.9,
+     "coatL": -1.43,
+     "coatR": -13.64,
+     "spine": 24.84,
+     "spine.s": 0.93,
+     "chest": 24.23,
+     "head": 30.0,
+     "upperarm": 99.97,
+     "upperarm.s": 1.6648,
+     "forearm": -24.72,
+     "forearm.s": 1.3014,
+     "hand": 12.59,
+     "upperarmF": -119.98,
+     "forearmF": -28.61,
+     "saya": 13.88,
+     "thighR": -18.87,
+     "thighR.s": 1.023,
+     "shinR": 24.92,
+     "shinR.s": 0.932,
+     "footR": 6.02,
+     "thighL": 8.85,
+     "thighL.s": 0.954,
+     "shinL": 20.9,
+     "shinL.s": 0.943,
+     "footL": 5.34,
+     "tail.s": 0.54,
+     "root.dx": -41.4
+    },
+    "feet_x_w": 6.0,
+    "dfoot_w": 10.0,
+    "root_dx": [
+     -60,
+     60
+    ],
+    "mark_w": 5.0,
+    "mark_free": 0.03,
+    "scales": {
+     "tail": [
+      0.3,
+      0.7
+     ],
+     "upperarm": [
+      0.93,
+      1.7
+     ],
+     "forearm": [
+      0.93,
+      1.7
+     ]
+    },
+    "limits": {
+     "pelvis": [
+      -10,
+      10
+     ],
+     "spine": [
+      -20,
+      25
+     ],
+     "chest": [
+      -20,
+      25
+     ],
+     "head": [
+      -30,
+      30
+     ],
+     "thighR": [
+      -20,
+      20
+     ],
+     "shinR": [
+      0,
+      25
+     ],
+     "thighL": [
+      -20,
+      20
+     ],
+     "shinL": [
+      0,
+      25
+     ],
+     "footR": [
+      -10,
+      10
+     ],
+     "footL": [
+      -10,
+      10
+     ]
+    },
+    "image": {
+     "swordX": "hurt"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm",
+     "forearm",
+     "hand"
+    ]
+   },
+   "follow": {
+    "init": {
+     "pelvis": 30.0,
+     "pelvis.dx": -42.9,
+     "pelvis.dy": 48.2,
+     "coatL": -2.99,
+     "coatR": 10.66,
+     "spine": 50.0,
+     "spine.s": 1.116,
+     "chest": -6.85,
+     "head": -30.0,
+     "upperarmF": 34.46,
+     "forearmF": -15.56,
+     "saya": 44.97,
+     "thighR": -84.99,
+     "thighR.s": 1.2,
+     "shinR": 42.22,
+     "shinR.s": 0.982,
+     "thighL": -72.05,
+     "shinL": 21.1,
+     "footL": 2.86,
+     "tail.s": 0.406,
+     "root.dx": 44.0,
+     "footR": -26.89,
+     "thighL.s": 0.975,
+     "shinL.s": 0.973,
+     "upperarm": 90
+    },
+    "feet_x_w": 6.0,
+    "dfoot_w": 10.0,
+    "root_dx": [
+     -60,
+     60
+    ],
+    "limits": {
+     "pelvis": [
+      -25,
+      30
+     ],
+     "spine": [
+      -10,
+      50
+     ],
+     "chest": [
+      -10,
+      45
+     ],
+     "head": [
+      -30,
+      30
+     ],
+     "thighR": [
+      -85,
+      50
+     ],
+     "shinR": [
+      0,
+      100
+     ],
+     "thighL": [
+      -85,
+      50
+     ],
+     "shinL": [
+      0,
+      100
+     ],
+     "upperarm": [
+      90,
+      90
+     ]
+    },
+    "image": {
+     "armX": "follow"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm"
+    ],
+    "scales": {
+     "upperarm": [
+      1.0,
+      1.0
+     ],
+     "forearm": [
+      1.0,
+      1.0
+     ]
+    },
+    "layers": {
+     "armR": 0.5
+    }
+   },
+   "attack": {
+    "init": {
+     "pelvis": 20.0,
+     "pelvis.dx": 191.8,
+     "pelvis.dy": -137.3,
+     "coatL": -2.95,
+     "coatR": -23.0,
+     "spine": -31.99,
+     "spine.s": 0.852,
+     "chest": -38.41,
+     "head": 35.0,
+     "upperarmF": -42.0,
+     "forearmF": 28.89,
+     "saya": -29.57,
+     "thighR": -59.72,
+     "thighR.s": 1.2,
+     "shinR": 87.11,
+     "shinR.s": 1.097,
+     "footR": 29.99,
+     "thighL": 9.71,
+     "shinL": 8.7,
+     "footL": 3.26,
+     "tail.s": 0.549,
+     "root.dx": 60.0,
+     "upperarm": 90
+    },
+    "feet_x_w": 6.0,
+    "dfoot_w": 8.0,
+    "root_dx": [
+     -60,
+     60
+    ],
+    "mark_w": 25.0,
+    "mark_free": 0.02,
+    "band_w": 3.0,
+    "offset_limit": {
+     "pelvis": [
+      0.12,
+      0.08
+     ],
+     "sword": [
+      0.9,
+      0.9
+     ]
+    },
+    "scales": {
+     "spine": [
+      0.85,
+      1.05
+     ],
+     "chest": [
+      0.9,
+      1.05
+     ],
+     "head": [
+      1.0,
+      1.2
+     ],
+     "thighR": [
+      0.75,
+      1.2
+     ],
+     "shinR": [
+      0.75,
+      1.2
+     ],
+     "thighL": [
+      0.93,
+      1.0
+     ],
+     "shinL": [
+      0.93,
+      1.0
+     ],
+     "upperarm": [
+      1.0,
+      1.0
+     ],
+     "forearm": [
+      1.0,
+      1.0
+     ]
+    },
+    "limits": {
+     "pelvis": [
+      -20,
+      20
+     ],
+     "spine": [
+      -40,
+      25
+     ],
+     "chest": [
+      -40,
+      25
+     ],
+     "head": [
+      -35,
+      35
+     ],
+     "thighR": [
+      -60,
+      30
+     ],
+     "shinR": [
+      0,
+      90
+     ],
+     "thighL": [
+      -20,
+      10
+     ],
+     "shinL": [
+      0,
+      15
+     ],
+     "footL": [
+      -8,
+      8
+     ],
+     "upperarm": [
+      90,
+      90
+     ]
+    },
+    "image": {
+     "armX": "attack"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm"
+    ],
+    "layers": {
+     "armR": 0.5
+    }
+   },
+   "cast": {
+    "scales": {
+     "tail": [
+      0.3,
+      0.7
+     ],
+     "upperarm": [
+      1.0,
+      1.0
+     ],
+     "forearm": [
+      1.0,
+      1.0
+     ]
+    },
+    "root_dx": [
+     -60,
+     60
+    ],
+    "feet_x_w": 3.0,
+    "dfoot_w": 3.0,
+    "mark_w": 2.0,
+    "mark_free": 0.03,
+    "limits": {
+     "pelvis": [
+      -10,
+      10
+     ],
+     "spine": [
+      -15,
+      20
+     ],
+     "chest": [
+      -15,
+      20
+     ],
+     "head": [
+      -25,
+      25
+     ],
+     "thighR": [
+      -20,
+      20
+     ],
+     "shinR": [
+      0,
+      25
+     ],
+     "thighL": [
+      -20,
+      20
+     ],
+     "shinL": [
+      0,
+      25
+     ],
+     "footR": [
+      -10,
+      10
+     ],
+     "footL": [
+      -10,
+      10
+     ],
+     "upperarm": [
+      90,
+      90
+     ]
+    },
+    "image": {
+     "armX": "cast",
+     "swordX": "cast"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm"
+    ],
+    "init": {
+     "pelvis": -6.8,
+     "pelvis.dx": -47.94,
+     "pelvis.dy": 48.16,
+     "coatL": -3.0,
+     "coatR": -22.96,
+     "spine": 17.37,
+     "spine.s": 0.93,
+     "chest": 19.75,
+     "head": 25.0,
+     "upperarmF": -118.84,
+     "forearmF": 29.61,
+     "saya": -44.9,
+     "thighR": -11.8,
+     "thighR.s": 0.9357,
+     "shinR": 24.85,
+     "shinR.s": 1.0987,
+     "footR": -8.63,
+     "thighL": -0.21,
+     "shinL": 3.75,
+     "footL": 6.07,
+     "tail.s": 0.4674,
+     "root.dx": -60.0,
+     "upperarm": 90
+    },
+    "layers": {
+     "armR": 0.5
+    }
+   },
+   "item": {
+    "root_dx": [
+     -60,
+     60
+    ],
+    "limits": {
+     "pelvis": [
+      -10,
+      10
+     ],
+     "spine": [
+      -15,
+      20
+     ],
+     "chest": [
+      -15,
+      20
+     ],
+     "head": [
+      -25,
+      25
+     ],
+     "thighR": [
+      -20,
+      20
+     ],
+     "shinR": [
+      0,
+      25
+     ],
+     "thighL": [
+      -20,
+      20
+     ],
+     "shinL": [
+      0,
+      25
+     ],
+     "footR": [
+      -10,
+      10
+     ],
+     "footL": [
+      -10,
+      10
+     ],
+     "upperarm": [
+      90,
+      90
+     ]
+    },
+    "image": {
+     "armX": "item",
+     "swordX": "item"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm"
+    ],
+    "init": {
+     "pelvis": 6.25,
+     "pelvis.dx": 42.31,
+     "pelvis.dy": 48.16,
+     "coatL": -2.99,
+     "coatR": -23.0,
+     "spine": 18.43,
+     "spine.s": 0.93,
+     "chest": 16.0,
+     "head": 25.0,
+     "upperarmF": -119.81,
+     "forearmF": 15.5,
+     "saya": -44.31,
+     "thighR": 1.08,
+     "thighR.s": 0.9304,
+     "shinR": 0.32,
+     "shinR.s": 1.0503,
+     "footR": -9.88,
+     "thighL": 12.04,
+     "shinL": 0.38,
+     "footL": 6.54,
+     "tail.s": 0.5483,
+     "root.dx": 59.95,
+     "upperarm": 90
+    },
+    "scales": {
+     "upperarm": [
+      1.0,
+      1.0
+     ],
+     "forearm": [
+      1.0,
+      1.0
+     ]
+    },
+    "layers": {
+     "armR": 0.5
+    }
+   },
+   "ready": {
+    "root_dx": [
+     -60,
+     60
+    ],
+    "mark_w": 25.0,
+    "mark_free": 0.02,
+    "dfoot_w": 4.0,
+    "init": {
+     "pelvis": 20.0,
+     "pelvis.dx": 79.9,
+     "pelvis.dy": 72.2,
+     "coatL": -2.97,
+     "coatR": -6.6,
+     "spine": 4.17,
+     "spine.s": 0.8,
+     "chest": -38.41,
+     "head": 45.0,
+     "upperarmF": -119.69,
+     "forearmF": 18.34,
+     "saya": -35.63,
+     "thighR": -26.09,
+     "thighR.s": 1.038,
+     "shinR": 25.59,
+     "shinR.s": 0.952,
+     "footR": -28.2,
+     "thighL": -21.1,
+     "thighL.s": 1.199,
+     "shinL": 59.98,
+     "shinL.s": 1.198,
+     "footL": 8.31,
+     "tail.s": 0.874,
+     "root.dx": 2.8,
+     "tail": -5.57,
+     "upperarm": 90
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.12,
+      0.08
+     ],
+     "sword": [
+      0.9,
+      0.9
+     ]
+    },
+    "scales": {
+     "tail": [
+      0.3,
+      0.7
+     ],
+     "spine": [
+      0.85,
+      1.05
+     ],
+     "chest": [
+      0.9,
+      1.05
+     ],
+     "head": [
+      1.0,
+      1.2
+     ],
+     "thighR": [
+      0.75,
+      1.2
+     ],
+     "shinR": [
+      0.75,
+      1.2
+     ],
+     "thighL": [
+      0.93,
+      1.0
+     ],
+     "shinL": [
+      0.93,
+      1.0
+     ],
+     "upperarm": [
+      1.0,
+      1.0
+     ],
+     "forearm": [
+      1.0,
+      1.0
+     ]
+    },
+    "limits": {
+     "pelvis": [
+      -20,
+      20
+     ],
+     "spine": [
+      -40,
+      25
+     ],
+     "chest": [
+      -40,
+      25
+     ],
+     "head": [
+      -35,
+      35
+     ],
+     "thighR": [
+      -60,
+      30
+     ],
+     "shinR": [
+      0,
+      90
+     ],
+     "thighL": [
+      -20,
+      10
+     ],
+     "shinL": [
+      0,
+      15
+     ],
+     "footL": [
+      -8,
+      8
+     ],
+     "upperarm": [
+      90,
+      90
+     ]
+    },
+    "image": {
+     "armX": "ready"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm"
+    ],
+    "layers": {
+     "armR": 0.5
+    },
+    "feet_x_w": 6.0
+   },
+   "victory": {
+    "root_dx": [
+     -60,
+     60
+    ],
+    "mark_w": 10.0,
+    "mark_free": 0.03,
+    "dfoot_w": 4.0,
+    "feet_x_w": 3.0,
+    "limits": {
+     "pelvis": [
+      -10,
+      10
+     ],
+     "spine": [
+      -20,
+      25
+     ],
+     "chest": [
+      -20,
+      25
+     ],
+     "head": [
+      -30,
+      30
+     ],
+     "thighR": [
+      -25,
+      25
+     ],
+     "shinR": [
+      0,
+      30
+     ],
+     "thighL": [
+      -25,
+      25
+     ],
+     "shinL": [
+      0,
+      30
+     ],
+     "footR": [
+      -10,
+      10
+     ],
+     "footL": [
+      -10,
+      10
+     ]
+    },
+    "image": {
+     "swordX": "victory"
+    },
+    "hide": [
+     "sword",
+     "glove",
+     "saya"
+    ],
+    "free": [
+     "pelvis",
+     "spine",
+     "chest",
+     "head",
+     "thighR",
+     "shinR",
+     "footR",
+     "thighL",
+     "shinL",
+     "footL",
+     "coatL",
+     "coatR",
+     "tail",
+     "upperarmF",
+     "forearmF",
+     "upperarm",
+     "forearm",
+     "hand"
+    ],
+    "init": {
+     "pelvis": 5.74,
+     "pelvis.dx": -45.17,
+     "pelvis.dy": 48.16,
+     "coatL": -2.96,
+     "tail": -0.18,
+     "tail.s": 0.5516,
+     "coatR": -22.92,
+     "spine": 25.0,
+     "spine.s": 1.12,
+     "chest": 25.0,
+     "head": -23.89,
+     "upperarm": 27.9,
+     "upperarm.s": 1.2,
+     "forearm": 10.74,
+     "forearm.s": 1.2,
+     "hand": 11.94,
+     "upperarmF": -118.71,
+     "forearmF": 24.17,
+     "saya": -44.89,
+     "thighR": -22.27,
+     "thighR.s": 0.9946,
+     "shinR": 18.75,
+     "footR": -1.83,
+     "thighL": -15.81,
+     "thighL.s": 0.93,
+     "shinL": 29.35,
+     "shinL.s": 0.9322,
+     "footL": 3.31,
+     "root.dx": -59.78
+    }
+   }
+  },
+  "mark_free": 0.04,
+  "mark_soft": 0.012,
+  "mark_w": 3.0,
+  "restarts": 3,
+  "evals": 600,
+  "band_w": 1.0,
+  "feet_x_w": 3.0,
+  "dfoot_w": 8.0,
+  "offset_limit": {
+   "pelvis": [
+    0.03,
+    0.02
+   ],
+   "sword": [
+    0.8,
+    0.9
+   ]
+  },
+  "mirror": [
+   "attack",
+   "item",
+   "victory"
+  ]
+ },
+ "landmarks": {
+  "attack": {
+   "headCenter": [
+    440,
+    235
+   ],
+   "fistAttack": [
+    450,
+    128
+   ],
+   "swordHiltAttack": [
+    375,
+    28
+   ],
+   "swordTipAttack": [
+    680,
+    1065
+   ]
+  },
+  "cast": {
+   "headCenter": [
+    347,
+    135
+   ],
+   "fistCast": [
+    528,
+    255
+   ],
+   "swordHiltCast": [
+    60,
+    560
+   ],
+   "swordTipCast": [
+    655,
+    812
+   ]
+  },
+  "critical": {
+   "headCenter": [
+    595,
+    225
+   ],
+   "fist": [
+    505,
+    372
+   ],
+   "fistCritical": [
+    505,
+    372
+   ],
+   "swordHiltCritical": [
+    500,
+    320
+   ],
+   "swordTipCritical": [
+    482,
+    1062
+   ]
+  },
+  "follow": {
+   "headCenter": [
+    525,
+    135
+   ],
+   "fistFollow": [
+    580,
+    395
+   ],
+   "swordHiltFollow": [
+    556,
+    362
+   ],
+   "swordTipFollow": [
+    781,
+    631
+   ]
+  },
+  "hurt": {
+   "headCenter": [
+    495,
+    140
+   ],
+   "fistHurt": [
+    250,
+    525
+   ],
+   "swordHiltHurt": [
+    80,
+    450
+   ],
+   "swordTipHurt": [
+    795,
+    762
+   ],
+   "fist": [
+    250,
+    525
+   ]
+  },
+  "item": {
+   "headCenter": [
+    356,
+    135
+   ],
+   "fistItem": [
+    60,
+    322
+   ],
+   "swordHiltItem": [
+    555,
+    565
+   ],
+   "swordTipItem": [
+    756,
+    825
+   ]
+  },
+  "ko": {
+   "headCenter": [
+    910,
+    320
+   ],
+   "fist": [
+    275,
+    737
+   ],
+   "swordHilt": [
+    200,
+    758
+   ],
+   "swordTip": [
+    1070,
+    610
+   ]
+  },
+  "ready": {
+   "headCenter": [
+    465,
+    187
+   ],
+   "fistReady": [
+    520,
+    52
+   ],
+   "swordHiltReady": [
+    672,
+    58
+   ],
+   "swordTipReady": [
+    84,
+    356
+   ]
+  },
+  "sleep": {
+   "headCenter": [
+    540,
+    135
+   ],
+   "fist": [
+    475,
+    385
+   ],
+   "swordHilt": [
+    560,
+    400
+   ],
+   "swordTip": [
+    18,
+    765
+   ]
+  },
+  "victory": {
+   "headCenter": [
+    190,
+    124
+   ],
+   "fistVictory": [
+    150,
+    659
+   ],
+   "swordHiltVictory": [
+    200,
+    670
+   ],
+   "swordTipVictory": [
+    585,
+    1053
+   ],
+   "fist": [
+    150,
+    659
+   ]
+  }
+ },
+ "motion": {
+  "idle": {
+   "hz": 0.5,
+   "bones": {
+    "pelvis": {
+     "rot": 0.35,
+     "phase": 0.4
+    },
+    "spine": {
+     "rot": 0.5,
+     "phase": -0.9
+    },
+    "chest": {
+     "rot": 1.0,
+     "phase": -1.2
+    },
+    "head": {
+     "rot": 0.7,
+     "phase": -1.8
+    },
+    "upperarm": {
+     "rot": 0.4,
+     "phase": -1.6
+    },
+    "forearm": {
+     "rot": 0.3,
+     "phase": -2.0
+    }
+   }
+  }
+ },
+ "authored": [
+  "attack",
+  "cast",
+  "critical",
+  "follow",
+  "hurt",
+  "item",
+  "ko",
+  "ready",
+  "sleep",
+  "victory"
+ ],
+ "variants_cut": {
+  "armX:cast": {
+   "part": "armX",
+   "variant": "cast",
+   "pose": "cast",
+   "d": 1.15,
+   "bone": "root",
+   "polys": {
+    "arm": [
+     [
+      868,
+      800
+     ],
+     [
+      868,
+      712
+     ],
+     [
+      905,
+      690
+     ],
+     [
+      960,
+      655
+     ],
+     [
+      1000,
+      630
+     ],
+     [
+      1010,
+      560
+     ],
+     [
+      1020,
+      440
+     ],
+     [
+      1040,
+      380
+     ],
+     [
+      1090,
+      360
+     ],
+     [
+      1100,
+      300
+     ],
+     [
+      1180,
+      150
+     ],
+     [
+      1400,
+      130
+     ],
+     [
+      1560,
+      300
+     ],
+     [
+      1560,
+      640
+     ],
+     [
+      1400,
+      760
+     ],
+     [
+      1250,
+      790
+     ],
+     [
+      1200,
+      840
+     ],
+     [
+      1120,
+      840
+     ],
+     [
+      1100,
+      740
+     ],
+     [
+      1040,
+      700
+     ],
+     [
+      1000,
+      720
+     ],
+     [
+      960,
+      800
+     ]
+    ],
+    "coat": [
+     [
+      850,
+      590
+     ],
+     [
+      880,
+      640
+     ],
+     [
+      960,
+      640
+     ],
+     [
+      1000,
+      590
+     ],
+     [
+      1010,
+      560
+     ],
+     [
+      900,
+      560
+     ]
+    ]
+   },
+   "include": [
+    {
+     "poly": "arm"
+    }
+   ],
+   "exclude": [
+    {
+     "poly": "coat"
+    },
+    {
+     "all": [
+      {
+       "x_lt": 1000
+      },
+      {
+       "colour": {
+        "r_minus_b_ge": 0.3,
+        "sat_ge": 0.5
+       }
+      }
+     ]
+    }
+   ],
+   "close": 2,
+   "min_island": 200,
+   "marks": {
+    "fist": [
+     1056,
+     510
+    ]
+   }
+  },
+  "swordX:cast": {
+   "part": "swordX",
+   "variant": "cast",
+   "pose": "cast",
+   "d": 1.0,
+   "bone": "root",
+   "polys": {
+    "arm_l": [
+     [
+      425,
+      1090
+     ],
+     [
+      520,
+      1085
+     ],
+     [
+      548,
+      1200
+     ],
+     [
+      548,
+      1340
+     ],
+     [
+      525,
+      1400
+     ],
+     [
+      505,
+      1455
+     ],
+     [
+      440,
+      1455
+     ],
+     [
+      395,
+      1385
+     ],
+     [
+      400,
+      1300
+     ],
+     [
+      430,
+      1230
+     ]
+    ],
+    "guard": [
+     [
+      515,
+      1310
+     ],
+     [
+      585,
+      1310
+     ],
+     [
+      590,
+      1420
+     ],
+     [
+      525,
+      1425
+     ]
+    ],
+    "hilt": [
+     [
+      60,
+      1070
+     ],
+     [
+      350,
+      1170
+     ],
+     [
+      345,
+      1290
+     ],
+     [
+      60,
+      1160
+     ]
+    ],
+    "bladezone": [
+     [
+      540,
+      1330
+     ],
+     [
+      1260,
+      1560
+     ],
+     [
+      1260,
+      1700
+     ],
+     [
+      540,
+      1470
+     ]
+    ]
+   },
+   "include": [
+    {
+     "all": [
+      {
+       "poly": "arm_l"
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_b_ge": 0.33,
+         "sat_ge": 0.5,
+         "val_ge": 0.45
+        }
+       }
+      }
+     ]
+    },
+    {
+     "poly": "guard"
+    },
+    {
+     "all": [
+      {
+       "poly": "hilt"
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_b_ge": 0.33,
+         "sat_ge": 0.5,
+         "val_ge": 0.45
+        }
+       }
+      }
+     ]
+    },
+    {
+     "all": [
+      {
+       "seg": {
+        "p0": [
+         560,
+         1380
+        ],
+        "p1": [
+         1225,
+         1650
+        ],
+        "r": 26
+       }
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_b_ge": 0.33,
+         "sat_ge": 0.5,
+         "val_ge": 0.45
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "exclude": [],
+   "close": 2,
+   "min_island": 60,
+   "marks": {
+    "swordHilt": [
+     120,
+     1120
+    ],
+    "swordTip": [
+     1310,
+     1624
+    ]
+   }
+  },
+  "armX:item": {
+   "part": "armX",
+   "variant": "item",
+   "pose": "item",
+   "d": 1.15,
+   "bone": "root",
+   "polys": {
+    "arm": [
+     [
+      10,
+      290
+     ],
+     [
+      260,
+      290
+     ],
+     [
+      270,
+      470
+     ],
+     [
+      310,
+      640
+     ],
+     [
+      310,
+      745
+     ],
+     [
+      240,
+      735
+     ],
+     [
+      130,
+      700
+     ],
+     [
+      10,
+      700
+     ]
+    ]
+   },
+   "include": [
+    {
+     "poly": "arm"
+    }
+   ],
+   "exclude": [
+    {
+     "all": [
+      {
+       "x_ge": 225
+      },
+      {
+       "colour": {
+        "r_minus_b_ge": 0.33,
+        "sat_ge": 0.5,
+        "val_ge": 0.45
+       }
+      }
+     ]
+    }
+   ],
+   "close": 2,
+   "min_island": 200,
+   "marks": {
+    "fist": [
+     120,
+     644
+    ]
+   }
+  },
+  "swordX:item": {
+   "part": "swordX",
+   "variant": "item",
+   "pose": "item",
+   "d": 1.0,
+   "bone": "root",
+   "polys": {
+    "sheath": [
+     [
+      1085,
+      1010
+     ],
+     [
+      1300,
+      1010
+     ],
+     [
+      1335,
+      1130
+     ],
+     [
+      1330,
+      1340
+     ],
+     [
+      1500,
+      1500
+     ],
+     [
+      1545,
+      1665
+     ],
+     [
+      1450,
+      1700
+     ],
+     [
+      1100,
+      1420
+     ],
+     [
+      1060,
+      1250
+     ]
+    ]
+   },
+   "include": [
+    {
+     "poly": "sheath"
+    }
+   ],
+   "exclude": [
+    {
+     "colour": {
+      "r_minus_b_ge": 0.33,
+      "sat_ge": 0.5,
+      "val_ge": 0.45
+     }
+    },
+    {
+     "colour": {
+      "r_minus_b_ge": 0.28,
+      "sat_ge": 0.5,
+      "val_lt": 0.62
+     }
+    }
+   ],
+   "close": 2,
+   "min_island": 120,
+   "marks": {
+    "swordHilt": [
+     1110,
+     1130
+    ],
+    "swordTip": [
+     1512,
+     1650
+    ]
+   }
+  },
+  "armX:attack": {
+   "part": "armX",
+   "variant": "attack",
+   "pose": "attack",
+   "d": 1.0,
+   "bone": "root",
+   "polys": {
+    "sleeve": [
+     [
+      440,
+      545
+     ],
+     [
+      470,
+      400
+     ],
+     [
+      540,
+      260
+     ],
+     [
+      620,
+      170
+     ],
+     [
+      720,
+      120
+     ],
+     [
+      800,
+      150
+     ],
+     [
+      900,
+      200
+     ],
+     [
+      920,
+      330
+     ],
+     [
+      860,
+      420
+     ],
+     [
+      700,
+      520
+     ],
+     [
+      600,
+      560
+     ],
+     [
+      480,
+      560
+     ]
+    ],
+    "tassel": [
+     [
+      290,
+      30
+     ],
+     [
+      760,
+      30
+     ],
+     [
+      760,
+      130
+     ],
+     [
+      620,
+      260
+     ],
+     [
+      430,
+      420
+     ],
+     [
+      300,
+      440
+     ],
+     [
+      280,
+      330
+     ]
+    ],
+    "glove": [
+     [
+      780,
+      170
+     ],
+     [
+      940,
+      170
+     ],
+     [
+      940,
+      330
+     ],
+     [
+      820,
+      330
+     ]
+    ],
+    "face": [
+     [
+      730,
+      300
+     ],
+     [
+      1040,
+      300
+     ],
+     [
+      1065,
+      480
+     ],
+     [
+      1000,
+      610
+     ],
+     [
+      900,
+      620
+     ],
+     [
+      780,
+      560
+     ],
+     [
+      740,
+      430
+     ]
+    ]
+   },
+   "include": [
+    {
+     "poly": "sleeve"
+    },
+    {
+     "poly": "tassel"
+    },
+    {
+     "poly": "glove"
+    },
+    {
+     "seg": {
+      "p0": [
+       1000,
+       490
+      ],
+      "p1": [
+       1395,
+       2110
+      ],
+      "r": 28
+     }
+    }
+   ],
+   "exclude": [
+    {
+     "poly": "face"
+    }
+   ],
+   "close": 2,
+   "min_island": 200,
+   "marks": {
+    "fist": [
+     900,
+     256
+    ],
+    "swordHilt": [
+     750,
+     56
+    ],
+    "swordTip": [
+     1360,
+     2130
+    ]
+   }
+  },
+  "armX:follow": {
+   "part": "armX",
+   "variant": "follow",
+   "pose": "follow",
+   "d": 1.15,
+   "bone": "root",
+   "polys": {
+    "arm": [
+     [
+      1020,
+      640
+     ],
+     [
+      1130,
+      620
+     ],
+     [
+      1220,
+      700
+     ],
+     [
+      1230,
+      820
+     ],
+     [
+      1250,
+      900
+     ],
+     [
+      1600,
+      1250
+     ],
+     [
+      1600,
+      1330
+     ],
+     [
+      1500,
+      1310
+     ],
+     [
+      1200,
+      1030
+     ],
+     [
+      1110,
+      950
+     ],
+     [
+      1080,
+      880
+     ],
+     [
+      1010,
+      760
+     ]
+    ]
+   },
+   "include": [
+    {
+     "poly": "arm"
+    }
+   ],
+   "exclude": [
+    {
+     "all": [
+      {
+       "x_lt": 1110
+      },
+      {
+       "colour": {
+        "r_minus_b_ge": 0.33,
+        "sat_ge": 0.5,
+        "val_ge": 0.45
+       }
+      }
+     ]
+    },
+    {
+     "y_ge": 1215
+    }
+   ],
+   "close": 2,
+   "min_island": 200,
+   "marks": {
+    "fist": [
+     1160,
+     790
+    ],
+    "swordHilt": [
+     1112,
+     724
+    ],
+    "swordTip": [
+     1562,
+     1262
+    ]
+   }
+  },
+  "swordX:victory": {
+   "part": "swordX",
+   "variant": "victory",
+   "pose": "victory",
+   "d": 1.0,
+   "bone": "root",
+   "polys": {
+    "hand": [
+     [
+      245,
+      1225
+     ],
+     [
+      380,
+      1225
+     ],
+     [
+      440,
+      1300
+     ],
+     [
+      440,
+      1400
+     ],
+     [
+      350,
+      1440
+     ],
+     [
+      260,
+      1400
+     ],
+     [
+      240,
+      1300
+     ]
+    ]
+   },
+   "include": [
+    {
+     "all": [
+      {
+       "poly": "hand"
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_b_ge": 0.33,
+         "sat_ge": 0.5,
+         "val_ge": 0.45
+        }
+       }
+      }
+     ]
+    },
+    {
+     "all": [
+      {
+       "seg": {
+        "p0": [
+         395,
+         1355
+        ],
+        "p1": [
+         1170,
+         2106
+        ],
+        "r": 26
+       }
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_b_ge": 0.33,
+         "sat_ge": 0.5,
+         "val_ge": 0.45
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "exclude": [],
+   "close": 2,
+   "min_island": 120,
+   "marks": {
+    "fist": [
+     300,
+     1318
+    ],
+    "swordHilt": [
+     400,
+     1340
+    ],
+    "swordTip": [
+     1170,
+     2106
+    ]
+   }
+  },
+  "swordX:hurt": {
+   "part": "swordX",
+   "variant": "hurt",
+   "pose": "hurt",
+   "d": 1.0,
+   "bone": "root",
+   "polys": {
+    "glove": [
+     [
+      430,
+      940
+     ],
+     [
+      600,
+      940
+     ],
+     [
+      650,
+      1060
+     ],
+     [
+      640,
+      1190
+     ],
+     [
+      560,
+      1190
+     ],
+     [
+      440,
+      1160
+     ],
+     [
+      420,
+      1050
+     ]
+    ],
+    "guard": [
+     [
+      550,
+      1050
+     ],
+     [
+      660,
+      1050
+     ],
+     [
+      670,
+      1200
+     ],
+     [
+      560,
+      1200
+     ]
+    ],
+    "tassel": [
+     [
+      10,
+      990
+     ],
+     [
+      140,
+      990
+     ],
+     [
+      150,
+      1330
+     ],
+     [
+      20,
+      1330
+     ]
+    ]
+   },
+   "include": [
+    {
+     "all": [
+      {
+       "poly": "glove"
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_g_ge": 0.32,
+         "sat_ge": 0.45
+        }
+       }
+      }
+     ]
+    },
+    {
+     "poly": "guard"
+    },
+    {
+     "all": [
+      {
+       "seg": {
+        "p0": [
+         500,
+         1030
+        ],
+        "p1": [
+         150,
+         880
+        ],
+        "r": 42
+       }
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_g_ge": 0.32,
+         "sat_ge": 0.45
+        }
+       }
+      }
+     ]
+    },
+    {
+     "all": [
+      {
+       "seg": {
+        "p0": [
+         600,
+         1130
+        ],
+        "p1": [
+         1590,
+         1535
+        ],
+        "r": 26
+       }
+      },
+      {
+       "not": {
+        "colour": {
+         "r_minus_g_ge": 0.32,
+         "sat_ge": 0.45
+        }
+       }
+      }
+     ]
+    },
+    {
+     "all": [
+      {
+       "poly": "tassel"
+      }
+     ]
+    }
+   ],
+   "exclude": [],
+   "close": 2,
+   "min_island": 80,
+   "marks": {
+    "fist": [
+     500,
+     1050
+    ],
+    "swordHilt": [
+     160,
+     900
+    ],
+    "swordTip": [
+     1590,
+     1524
+    ]
+   }
+  },
+  "armX:ready": {
+   "part": "armX",
+   "variant": "ready",
+   "pose": "ready",
+   "d": 1.15,
+   "bone": "root",
+   "polys": {
+    "arm": [
+     [
+      1000,
+      20
+     ],
+     [
+      1360,
+      20
+     ],
+     [
+      1360,
+      140
+     ],
+     [
+      1400,
+      330
+     ],
+     [
+      1410,
+      520
+     ],
+     [
+      1330,
+      640
+     ],
+     [
+      1200,
+      640
+     ],
+     [
+      1100,
+      500
+     ],
+     [
+      1045,
+      400
+     ],
+     [
+      1025,
+      300
+     ],
+     [
+      1000,
+      160
+     ]
+    ],
+    "blade": [
+     [
+      880,
+      40
+     ],
+     [
+      720,
+      60
+     ],
+     [
+      500,
+      150
+     ],
+     [
+      330,
+      250
+     ],
+     [
+      170,
+      420
+     ],
+     [
+      110,
+      600
+     ],
+     [
+      150,
+      730
+     ],
+     [
+      230,
+      640
+     ],
+     [
+      300,
+      500
+     ],
+     [
+      420,
+      350
+     ],
+     [
+      560,
+      260
+     ],
+     [
+      720,
+      200
+     ],
+     [
+      900,
+      150
+     ]
+    ],
+    "head": [
+     [
+      740,
+      200
+     ],
+     [
+      1000,
+      200
+     ],
+     [
+      1040,
+      420
+     ],
+     [
+      960,
+      560
+     ],
+     [
+      800,
+      540
+     ],
+     [
+      740,
+      420
+     ]
+    ],
+    "tsuba": [
+     [
+      850,
+      30
+     ],
+     [
+      995,
+      30
+     ],
+     [
+      995,
+      215
+     ],
+     [
+      850,
+      215
+     ]
+    ]
+   },
+   "include": [
+    {
+     "poly": "arm"
+    },
+    {
+     "seg": {
+      "p0": [
+       905,
+       125
+      ],
+      "p1": [
+       705,
+       250
+      ],
+      "r": 38
+     }
+    },
+    {
+     "seg": {
+      "p0": [
+       705,
+       250
+      ],
+      "p1": [
+       505,
+       375
+      ],
+      "r": 38
+     }
+    },
+    {
+     "seg": {
+      "p0": [
+       505,
+       375
+      ],
+      "p1": [
+       330,
+       525
+      ],
+      "r": 38
+     }
+    },
+    {
+     "seg": {
+      "p0": [
+       330,
+       525
+      ],
+      "p1": [
+       205,
+       650
+      ],
+      "r": 38
+     }
+    },
+    {
+     "seg": {
+      "p0": [
+       205,
+       650
+      ],
+      "p1": [
+       160,
+       705
+      ],
+      "r": 38
+     }
+    },
+    {
+     "poly": "tsuba"
+    }
+   ],
+   "exclude": [
+    {
+     "poly": "head"
+    }
+   ],
+   "close": 2,
+   "min_island": 200,
+   "marks": {
+    "fist": [
+     1040,
+     104
+    ],
+    "swordHilt": [
+     1344,
+     116
+    ],
+    "swordTip": [
+     168,
+     712
+    ]
+   }
+  },
+  "swordX:critical": {
+   "part": "swordX",
+   "variant": "critical",
+   "pose": "critical",
+   "d": 1.0,
+   "bone": "root",
+   "polys": {
+    "hands": [
+     [
+      940,
+      680
+     ],
+     [
+      1170,
+      680
+     ],
+     [
+      1180,
+      900
+     ],
+     [
+      1000,
+      930
+     ],
+     [
+      945,
+      880
+     ]
+    ],
+    "guard": [
+     [
+      915,
+      1290
+     ],
+     [
+      1065,
+      1290
+     ],
+     [
+      1065,
+      1375
+     ],
+     [
+      915,
+      1375
+     ]
+    ]
+   },
+   "include": [
+    {
+     "poly": "guard"
+    },
+    {
+     "seg": {
+      "p0": [
+       1005,
+       1040
+      ],
+      "p1": [
+       952,
+       2105
+      ],
+      "r": 30
+     }
+    }
+   ],
+   "exclude": [],
+   "close": 2,
+   "min_island": 80,
+   "marks": {
+    "fist": [
+     1010,
+     744
+    ],
+    "swordHilt": [
+     1000,
+     640
+    ],
+    "swordTip": [
+     964,
+     2124
+    ]
+   }
+  }
+ }
+}

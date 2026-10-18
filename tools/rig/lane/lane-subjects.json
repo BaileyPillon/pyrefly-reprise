@@ -22,6 +22,21 @@
         ["lulu-rig-2-attack-hurt-return", ["attack", "hurt", "follow"]],
         ["lulu-rig-3-ready-lowhp-asleep", ["ready", "critical", "sleep"]]
       ]
+    },
+    "auron": {
+      "actor": "auron",
+      "game": "ffx",
+      "chapter": { "door": "mushroom", "id": "sinspawn-gui" },
+      "poses": ["attack", "cast", "critical", "follow", "hurt", "item", "ko", "ready", "sleep", "victory"],
+      "track": { "head": "headCenter", "feet": ["feet"], "centroid": "pelvisCenter", "hand": "fist", "tip": "swordTip" },
+      "beforeAfter": "auron-rig-5-before-after",
+      "labels": { "ko": "KNOCKED OUT", "attack": "ATTACK", "hurt": "HURT", "follow": "RETURNING FROM AN ACTION", "ready": "READY", "critical": "LOW HP", "sleep": "ASLEEP", "cast": "CAST", "item": "ITEM", "victory": "VICTORY" },
+      "sheets": [
+        ["auron-rig-1-ko", ["ko"]],
+        ["auron-rig-2-attack-hurt-return", ["attack", "hurt", "follow"]],
+        ["auron-rig-3-ready-lowhp-asleep", ["ready", "critical", "sleep"]],
+        ["auron-rig-4-cast-item-victory", ["cast", "item", "victory"]]
+      ]
     }
   }
 }

@@ -22,6 +22,7 @@ from PIL import Image  # noqa: E402
 
 import lane_common  # noqa: E402
 import lane_fit  # noqa: E402
+import lane_jerks  # noqa: E402
 import lane_new  # noqa: E402
 import lane_sheets  # noqa: E402
 import lane_twin  # noqa: E402
@@ -226,6 +227,23 @@ class FrameDiff(unittest.TestCase):
             self.assertEqual(lane_diff.compare_signatures(d_ / "a", d_ / "c", ["defend"])["defend"]["mismatched"], 1)  # an unreadable frame is a mismatch, not a pass
             self.assertEqual(lane_diff.compare_signatures(d_ / "a", d_ / "nothing"), {})
             self.assertEqual(lane_diff.figure_rect({"poses": {"p": {"rectPose": {"x": 10, "y": 20, "w": 5, "h": 6}, "rectIdle": {"x": 8, "y": 22, "w": 5, "h": 9}}}}, "p", 2), (6, 18, 17, 33))
+
+
+class Jerks(unittest.TestCase):
+    """Whose a screen jerk is (Auron's pass 2): the camera's, the engine's placement, a lunge easing out, or the rig's."""
+
+    @staticmethod
+    def rec(n, head, root=(0.0, 0.0, 4.45), v=0.0, pose="idle"):
+        return {"n": n, "pose": pose, "head": [head[0], head[1], 4.45], "root": list(root), "V": [v] + [0.0] * 15}
+
+    def test_each_class(self):
+        still = lambda n, v=0.0: self.rec(n, (0.1, 1.7), v=v)  # noqa: E731
+        self.assertEqual(lane_jerks.classify(still(1), still(2, 1.4), still(0), still(3, 1.4))["class"], "camera")
+        self.assertEqual(lane_jerks.classify(still(1), {**still(2), "root": [-0.35, 0.0, 4.45], "head": [-0.25, 1.7, 4.45]}, still(0), still(3))["class"], "placement")
+        run = [self.rec(i, (0.1 + 0.2 * i - 0.01 * i * i, 1.7)) for i in range(6)]
+        self.assertEqual(lane_jerks.classify(run[2], run[3], run[1], run[4])["class"], "motion")
+        self.assertEqual(lane_jerks.classify(still(1), self.rec(2, (0.3, 1.7)), still(0), still(3))["class"], "rig")  # a head that steps in the world, root and camera steady, after a still run
+        self.assertEqual(lane_jerks.classify(still(1), still(2), still(0), still(3))["class"], "rig")  # nothing moved: a pose or blend artefact the detector saw
 
 
 class DryFit(unittest.TestCase):
