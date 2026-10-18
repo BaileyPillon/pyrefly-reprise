@@ -44,6 +44,7 @@ import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
 import { applyAeonDuelSetup } from './aeon-duel.ts';
 import { applyFormationFlags } from './formation-flags.ts';
+import { applyFormationCommandDisables } from './formation-commands.ts';
 import { applyPossessionOpening, mirrorPossessedAeon } from './ai/possession-setup.ts';
 import { initYojimbo } from './adapt/yojimbo.ts';
 import { initSisters } from './adapt/sisters.ts';
@@ -386,6 +387,7 @@ export function buildBattle(
   applyOmnisSetup(ctx); // Chapter XII: four Fire discs, his affinity, discs without turns [ffx-seymour-omnis §4.1]
   applyAeonDuelSetup(ctx, group); // Chapter XIV's mirror lock, "only aeons", the loss and the AP [aeon-duel.ts]
   applyFormationFlags(ctx, group); // Chapter XIV's Defend off, the formation script's setDefendingEnabled(0) [formation-flags.ts; RC10]
+  applyFormationCommandDisables(ctx, group); // Chapter XIV's switched-off commands, the formation script's setCommandDisabled calls [formation-commands.ts; RC10]
   applyIsaaruSetup(ctx); // Grothia's and Pterya's gauges, Spathi's count, Isaaru's no-turn [ffx-isaaru-bevelle §4]
   applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
   applyGuiSetup(ctx); // Sinspawn Gui: the fight number, the body's acceleration line, the arms without turns, Wakka's reach [re-ffx-ai-gui §3, §5]

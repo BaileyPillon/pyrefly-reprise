@@ -15,6 +15,7 @@ import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
 import { applyDuelRows, lockReason, summonLabel } from './aeon-duel.ts';
 import { defendTakenFrom } from './formation-flags.ts';
+import { withoutDisabledRows } from './formation-commands.ts';
 import { triggerHandler } from './ai/index.ts';
 import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
@@ -115,6 +116,11 @@ function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: Availabl
  * [ffx-combat-core §4.2].
  */
 export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
+  // A formation that switched commands off (Isaaru's aeon contest; `formation-commands.ts`) drops the rows of those commands for that actor, whichever way the menu was built.
+  return withoutDisabledRows(ctx, user, menuRows(ctx, user));
+}
+
+function menuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
   // The player's Yojimbo and the Magus Sisters have menus of their own (re-parity lane FFX-K, `aeon-commands.ts`); `null` for everyone else.
   const own = aeonMenuRows(ctx, user);
   if (own !== null) return own;
