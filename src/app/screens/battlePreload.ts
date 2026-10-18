@@ -44,7 +44,7 @@ import { artCandidatesFor, backdropUrl, portraitUrl, resolveArt } from '../../en
 import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
 import { pixelUrlFor } from '../../engine/ArtTier.ts';
-import { artNamespaceOfScene, inArtNamespace } from '../../data/art/artNamespace.ts';
+import { artNamespaceOfScene, backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { pickHeroBackgroundUrl } from '../../ui/common/chapterPanel.ts';
 import { demoteWarm, warmImages, type WarmLane } from '../imageWarm.ts';
 import { plateIdFor } from './pause/plates.ts';
@@ -128,9 +128,10 @@ function stagedIds(state: {
   activeIds: readonly string[];
   enemyIds: readonly string[];
   aeonId?: string | null;
+  aeonIds?: readonly string[];
   combatants: Record<string, { flags: { isPart?: boolean; hidden?: boolean }; removed?: boolean }>;
 }): string[] {
-  const ids = new Set<string>([...state.activeIds, ...(state.aeonId ? [state.aeonId] : []), ...state.enemyIds]);
+  const ids = new Set<string>([...state.activeIds, ...(state.aeonIds ?? (state.aeonId ? [state.aeonId] : [])), ...state.enemyIds]);
   for (const [id, c] of Object.entries(state.combatants)) {
     if (c.flags.isPart && !c.flags.hidden && !c.removed) ids.add(id);
   }
@@ -149,7 +150,7 @@ const SCENE_PLATES: Readonly<Record<string, string>> = { 'sector1-reactor': SECT
 /** The battle backdrop's URL as the scene loads it. */
 export function plateUrlFor(sceneKey: string): string {
   const own = SCENE_PLATES[sceneKey];
-  return own ? artUrl(own) : backdropUrl(sceneKey);
+  return own ? artUrl(own) : backdropUrl(backdropFileOf(sceneKey)); // a code key names its plate (Mirror Aeons: the road; LIVE-R50-01)
 }
 
 /** The pause close-up the pause's `srcset` will pick for this window (`PortraitStage.mountPlate`). */
@@ -234,7 +235,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
       });
     }
     // Phases 1 and 2: the pre-battle scene, its opening frame first.
-    const scene = sceneArtUrls(chapter.scriptsRef?.pre, chapter.sceneKey);
+    const scene = sceneArtUrls(chapter.scriptsRef?.pre, backdropFileOf(chapter.sceneKey));
     await warm(scene.first);
     if (stopped()) return report();
     await warm(scene.rest);

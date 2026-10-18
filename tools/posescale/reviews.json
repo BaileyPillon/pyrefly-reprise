@@ -465,5 +465,29 @@
   "cast": 0.77,
   "hurt": 0.67,
   "ko": "keep"
+ },
+ "dark-sandy": {
+  "attack": "=",
+  "cast": "=",
+  "hurt": "=",
+  "ko": "keep"
+ },
+ "dark-mindy": {
+  "attack": "=",
+  "cast": "=",
+  "hurt": "=",
+  "ko": "keep"
+ },
+ "dark-cindy": {
+  "attack": "=",
+  "cast": "=",
+  "hurt": "=",
+  "ko": "keep"
+ },
+ "dark-yojimbo": {
+  "attack": "=",
+  "cast": "=",
+  "hurt": "=",
+  "ko": "keep"
  }
 }

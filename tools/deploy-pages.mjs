@@ -20,7 +20,7 @@
  *                  in docs/preview-deploys.log (never in docs/deploys.log); no review obligation.
  *   --create-project  Pages only: create the project first when the account has none by that name.
  *   --full-verify  Cloudflare only: compare every file, not a sample (a preview always does).
- *   --skip-tests   skip `npx tsc --noEmit` and `npx vitest run`
+ *   --skip-tests   skip `npx tsc --noEmit` and `npx vitest run` (never the pose gate below)
  *   --allow-dirty  allow deploying even when a build-relevant path is dirty
  *                  (the dirty files are still printed as a warning)
  *   --dry-run      stop right after the dirty-tree check, printing how every
@@ -32,7 +32,10 @@
  *                  release gate below. Off by default; requires at
  *                  least 8 characters of the owner's own words (a bare flag
  *                  or a too-short value is refused before anything runs).
- *                  Nothing else is relaxed — tsc/vitest, the dirty-tree check,
+ *                  Nothing else is relaxed — tsc/vitest, the pose gate (no character
+ *                  painting ships without a fresh pose record or a waiver row with
+ *                  Bailey's own quoted words: tools/pose-gate.mjs, AGENTS.md hard
+ *                  rule 16), the dirty-tree check,
  *                  the artifact manifest and the byte-for-byte live
  *                  verification all still run and can still fail the deploy.
  *                  Every review obligation stays pending: an override ships
@@ -608,6 +611,13 @@ async function main() {
   if (run(process.execPath, [join(ROOT, 'tools', 'audio', 'qa.mjs'), '--strict', '--quiet']).status !== 0) {
     fail('audio QA failed (node tools/audio/qa.mjs --strict) — run it without --quiet to see why');
   }
+  // Pose continuity (Bailey, 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please."): no character painting
+  // ships without a fresh pose record or a waiver row that carries Bailey's own quoted words (tools/pose-gate.mjs, AGENTS.md hard rule 16). Never skipped
+  // (--skip-tests does not reach it) and not covered by --owner-override, which only reaches the review gate further down: the ledger row is the way through.
+  log("preflight: node tools/pose-gate.mjs --check (every character painting of public/art has a fresh pose record or a waiver with Bailey's words)");
+  // (imported here, not at the top: the gate reads pixels with sharp, and the unit tests that import this module for its pure helpers should not load it)
+  const { enforceBuiltPaintings, enforcePoseGate } = await import('./pose-gate-lib.mjs');
+  const poseGate = await enforcePoseGate({ root: ROOT, baseRef: lastDeployedSha(ROOT), log, fail });
 
   // Only paths that can change what `vite build` emits stop the release. The
   // art fleet writes docs/screenshots, docs/handoff and tools/gen/sheet-*.json
@@ -713,6 +723,9 @@ async function main() {
   const artRefs = auditArtReferences(DIST);
   for (const line of formatAudit(artRefs).split(/\r?\n/)) log(line);
   if (!artRefs.ok) fail(`${artRefs.problems.length} reference(s) to an art file the build does not hold — see above`);
+  // Pose continuity again, on what the build actually ships (the art list of dist-release): every character painting in it is one the gate read from a master
+  // above and passed or found waived. A painting that reached the build another way (a synced folder, a file added after the gate ran) is refused here.
+  enforceBuiltPaintings({ dist: DIST, result: poseGate, log, fail });
   // r46-fix (FOC46-01) and r47-rc (FOC46-06): the site is public and names no folder of the PC that built it, no person and no private page. The painting
   // sidecars began as provenance records and carried staging and backup paths of this machine, the owner's name and links to private pages to every release;
   // the build now writes each as only the fields the game reads (the art-derive plugin), and every shipped text file (the data, the code, the stylesheets,

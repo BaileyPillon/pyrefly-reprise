@@ -3,7 +3,7 @@
 //   node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=<dir>
 //        [--size=1600x900] [--budget=<ms>] [--tag=x] [--seed=1|drawn] [--attempts=1]
 //        [--touch] [--gamepad] [--reduce-motion] [--nochange] [--focus=a --avoid=b] [--jpeg]
-//        [--continuity [--pose-measure=<pose-measure.json>]]   CHK-026/027: ONLY when continuity.mjs starts the route (CONT_DEDICATED=1); anywhere else it stops (PR-0450 d)
+//        [--continuity [--pose-measure=<pose-measure.json>] [--pose-waivers=<pose-waivers.json>]]   CHK-026/027: ONLY when continuity.mjs starts the route (CONT_DEDICATED=1); anywhere else it stops (PR-0450 d)
 //   --budget: how long one attempt of the fight may run. Default 15 minutes; Chapters II, III and XVII (FFX) get 50 and Chapter XIII (FFX-2) 100, from
 //   route-pure.mjs LONG_FIGHT_BUDGET_MS (PR-0353, PR-0433); an explicit --budget wins everywhere.
 //
@@ -72,7 +72,7 @@ const addIndex = makeIndexer(evidence);
 const audioFile = path.join(evidence, dir, 'audio-debug.jsonl');
 const aud = makeAudioLog(page, audioFile, t00);
 // CHK-026 and CHK-027 (Bailey, 2026-10-04, D-420 to D-426): the in-page probe watches every rendered frame of the fight. Loaded only on request: it needs sharp.
-const cont = args.continuity ? await (await import('./continuity.mjs')).attachProbe({ page, outDir: path.join(evidence, dir), chapter: id, game, base, mode: MODE, poseMeasurePath: args['pose-measure'] ?? null, log: (m) => note('continuity', m) }) : null;
+const cont = args.continuity ? await (await import('./continuity.mjs')).attachProbe({ page, outDir: path.join(evidence, dir), chapter: id, game, base, mode: MODE, poseMeasurePath: args['pose-measure'] ?? null, poseWaiversPath: args['pose-waivers'] ?? null, log: (m) => note('continuity', m) }) : null;
 const scr = () => page.evaluate(() => window.__pyrefly.screen());
 const ss = () => page.evaluate(() => window.__pyrefly.snapshotState()?.screenState ?? null);
 const selId = async () => (await ss())?.selectedId ?? null;

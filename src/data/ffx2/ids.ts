@@ -167,7 +167,7 @@ export type GarmentGridId =
   | 'ice-queen'
   /** 5 nodes, R G B Y. Use Sleep / Use Bio; per-gate Sleepproof / Poisonproof. */
   | 'restless-sleep'
-  /** 3 nodes. Healing-themed. */
+  /** 3 nodes, R B (the game's card has the gates 1 and 4 only). Healing-themed. */
   | 'healing-wind'
   /** 3 nodes, R B. Use Life / Use Cure; B = Use Cura; B+R = Use Curaga. */
   | 'heart-reborn'
@@ -230,20 +230,24 @@ export type GarmentGridId =
   | 'the-end'
   /** 6 nodes, R G B Y. Included for completeness — a 6-node SDSP host. */
   | 'white-signet'
-  /** 4 nodes, R G B Y. Per-gate stat bonus allocated to every gate. */
+  /** 6 nodes, R G B Y (a 6-node SDSP host). Per-gate stat bonus allocated to every gate. */
   | 'ray-of-hope'
-  /** 5 nodes. Per-gate stat bonus allocated to every gate. */
+  /** 4 nodes, R G B Y. Per-gate stat bonus allocated to every gate. */
   | 'seething-cauldron'
-  /** 5 nodes. Per-gate stat bonus allocated to every gate. */
+  /** 4 nodes, R G B Y. Per-gate stat bonus allocated to every gate. */
   | 'strength-of-one'
-  /** 4 nodes. Per-gate stat bonus allocated to every gate. */
+  /** 4 nodes, R G B Y. Per-gate stat bonus allocated to every gate. */
   | 'howling-wind'
-  /** Equip DEF +20, MDEF +20; Y, B = DEF +20 each; R, G = MDEF +20 each. Node count unpublished. Chapter XIII's kit option. */
+  /** 5 nodes, gates Y B R G (the game's card, `garment-grids/layouts.ts`). Equip DEF +20, MDEF +20; Y, B = DEF +20 each; R, G = MDEF +20 each. Chapter XIII's kit option. */
   | 'valiant-lustre';
 
 /**
  * Six-node Grids — the strongest SDSP hosts, since the main part's HP, MP, Str,
  * Mag, Def and MDef scale with node count [ffx2-combat-core §3.15].
+ *
+ * Kept equal to the grids whose `nodeCount` is 6 in `garment-grids/` (nine; Ray of Hope
+ * joined when the game's card corrected its count from 4 to 6, re-parity RC9 lane X2-I
+ * follow-up D1). Nothing reads this constant: it documents the set.
  */
 export const SIX_NODE_GRID_IDS: readonly GarmentGridId[] = [
   'first-steps',
@@ -251,6 +255,7 @@ export const SIX_NODE_GRID_IDS: readonly GarmentGridId[] = [
   'blood-of-the-beast',
   'chaos-maelstrom',
   'pride-of-the-sword',
+  'ray-of-hope',
   'samurais-honor',
   'tricks-of-the-trade',
   'white-signet',

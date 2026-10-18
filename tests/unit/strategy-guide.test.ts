@@ -327,7 +327,7 @@ describe('phase notes', () => {
 describe('src/data/guides', () => {
   it('has one guide per chapter, and every chapter that ships a tactic has one', () => {
     // The listed chapters' guides; a hidden experiment's guide (the Experiment's, 'ffx2-masterpiece-theatre') rides in GUIDES beside them and is pinned by its own suite.
-    expect(GUIDES.filter((g) => (CHAPTER_IDS as readonly string[]).includes(g.id))).toHaveLength(18);
+    expect(GUIDES.filter((g) => (CHAPTER_IDS as readonly string[]).includes(g.id))).toHaveLength(19);
     for (const id of [
       'seymour-flux',
       'yunalesca',
@@ -377,7 +377,12 @@ describe('src/data/guides', () => {
 
   it('claims no boss id twice, so a board can never match two chapters', () => {
     const seen = new Map<CombatantId, string>();
-    for (const g of GUIDES) {
+    // The one exception, on purpose: the hidden Last Summoning fields Chapter III's possessed aeons and Yu Yevon under the same ids and is told apart by its own locks (`onLastSummoningBoard`, pinned by
+    // `tests/unit/chapters/last-summoning-chapter.test.ts`); every id it lists is Chapter III's, and its card is listed first.
+    const lastSummoning = GUIDES.find((g) => g.id === 'last-summoning')!;
+    const chapterThree = GUIDES.find((g) => g.id === 'braskas-final-aeon')!;
+    for (const id of lastSummoning.bossIds) expect(chapterThree.bossIds, `${id} is Chapter III's`).toContain(id);
+    for (const g of GUIDES.filter((x) => x.id !== 'last-summoning')) {
       for (const id of g.bossIds) {
         expect(seen.get(id), `${id} is claimed by both ${seen.get(id)} and ${g.id}`).toBeUndefined();
         seen.set(id, g.id);
@@ -404,6 +409,8 @@ describe('src/data/guides', () => {
           game: getChapter(g.id)?.game,
           combatants: { [bossId]: { id: bossId, side: 'enemy', name: bossId, alive: true, hp: 1, statuses: {}, stats: { maxHp: 1 } } },
           log: [],
+          // the hidden Last Summoning is on the board only with its own locks (it shares Chapter III's ids)
+          flags: g.id === 'last-summoning' ? { 'aeonDuel.reason:bahamut': 'Taken by Yu Yevon' } : {},
         } as unknown as BattleState;
         expect(guideForState(state)?.id, bossId).toBe(g.id);
       }

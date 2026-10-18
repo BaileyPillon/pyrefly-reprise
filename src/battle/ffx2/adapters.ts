@@ -35,6 +35,8 @@ import type {
   ItemRegistry,
 } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
+import { GRID_LAYOUTS } from './constants.ts';
+import { layoutNodeCount, linksFromLayout, type GridLayoutInput } from './adapt/grid-layout.ts';
 
 /** A list or an id-keyed record — data files ship both shapes. */
 type Collection<T> = readonly T[] | Readonly<Record<string, T>>;
@@ -135,6 +137,8 @@ export interface DataGarmentGrid {
   gateColours?: readonly GateColour[];
   equip?: DataGridEffect;
   gateEffects?: ReadonlyArray<{ gates: readonly GateColour[]; effect: DataGridEffect }>;
+  /** The game's layout of this Grid when the data covers it (re-parity RC9 lane X2-I; `data/ffx2/garment-grids/layouts.ts`). */
+  layout?: GridLayoutInput;
 }
 
 export interface DataGridEffect {
@@ -173,20 +177,20 @@ function toBonus(gates: readonly GateColour[], effect: DataGridEffect): GateBonu
 /**
  * Wrap a Garment Grid table.
  *
- * The data shape publishes a node count and a gate *set*, not a link topology —
- * which is all the source publishes too — so the links are laid out as a ring
- * with one gate per successive link. Adjacency ("one link away") and gate
- * accumulation, the two things the rules key off, come out right; only the
- * exact route is an `[estimate]`. See `garment-grids.ts` for the same note.
+ * A Grid the data has a **layout** for (re-parity RC9 lane X2-I, `GRID_LAYOUTS`) is the game's own grid: its links are the pairs of dressphere nodes the path finder joins,
+ * directly or through exactly one gate (`adapt/grid-layout.ts`, `kernel/grid-path.ts`). A Grid with no layout keeps the old estimate: the data publishes its node count and
+ * gate *set* only, so the links are laid out as a ring with one gate per successive link. Adjacency ("one link away") and gate accumulation, the two things the rules key
+ * off, come out right for a ring Grid; only the exact route is an `[estimate]`. See `garment-grids.ts` for the same note.
  */
 export function garmentGridRegistryFrom(source: Collection<DataGarmentGrid>): GarmentGridRegistry {
   const byId = new Map<string, GarmentGridDef>();
   for (const grid of toArray(source)) {
     if (!grid) continue;
-    const nodes = Math.max(2, Math.min(6, grid.nodeCount));
+    const layout = GRID_LAYOUTS ? grid.layout : undefined;
+    const nodes = layout ? layoutNodeCount(layout) : Math.max(2, Math.min(6, grid.nodeCount));
     const gates = grid.gateColours ?? [];
-    const links: GarmentGridDef['links'] = [];
-    for (let i = 0; i < nodes; i++) {
+    const links: GarmentGridDef['links'] = layout ? linksFromLayout(layout) : [];
+    for (let i = 0; !layout && i < nodes; i++) {
       if (nodes === 2 && i === 1) break;
       const gate = gates[i];
       links.push({ from: i, to: (i + 1) % nodes, gates: gate ? [gate] : [] });

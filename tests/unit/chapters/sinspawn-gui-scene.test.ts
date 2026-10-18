@@ -31,7 +31,7 @@ describe('the two plates', () => {
         expect(b, `${key} ${name}`).toBeLessThanOrEqual(1);
         expect(a, `${key} ${name}`).toBeLessThan(b);
       }
-      expect(look.layer.from).toBeLessThan(look.layer.to);
+      if (look.layer !== undefined) expect(look.layer.from).toBeLessThan(look.layer.to); // the Mirror Aeons chapter's Cavern plate has no masked band
     }
     expect(MUSHROOM_PLATE_LOOK[MUSHROOM_ROCK_SCENE]!.floorRow).toBeLessThan(MUSHROOM_PLATE_LOOK[MUSHROOM_ROCK_RUINED_PLATE]!.floorRow);
   });

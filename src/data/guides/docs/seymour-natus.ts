@@ -101,6 +101,6 @@ export const SEYMOUR_NATUS_DOC: GuideDoc = {
       ],
     },
     { t: 'list', label: 'Steal', items: ['Tetra Elemental (x2) (common)', 'Tetra Elemental (x3) (rare)'] },
-    { t: 'list', label: 'Drops', items: ['None'] },
+    { t: 'list', label: 'Drops', items: ['Lv. 2 Key Sphere x2'] },
   ],
 };

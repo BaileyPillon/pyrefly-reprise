@@ -10,6 +10,10 @@
 import type { AbilityId, CombatantId, FFXCombatant, MinigameKind } from '../common/types.ts';
 import type { AutoState } from './kernel/auto-status.ts';
 import type { PendingItemReaction } from './adapt/reactions.ts';
+import type { YojimboRuntime } from './adapt/yojimbo.ts';
+import type { SistersRuntime } from './adapt/sisters.ts';
+import type { RewardLedger } from './adapt/loot.ts';
+import type { PendingCounter } from './counter-chain.ts';
 
 /** Per-combatant engine bookkeeping. */
 export interface ActorRuntime {
@@ -54,6 +58,17 @@ export interface ActorRuntime {
   abilityIds: string[];
   /** Successful steals against this enemy, halving the base chance each time. */
   stealCount: number;
+  /**
+   * **The Distill bits this monster carries** (`Chr+0x616` bits 1, 2, 3 and 5: Power 0x2, Mana 0x4, Speed 0x8, Ability 0x20; re-parity RC9, FFX only). The engine has no status for them
+   * (`adapt/status.ts`): the status step sets this when a Power, Mana, Speed or Ability Distiller (or one of Kimahri's four Extract skills) lands, a new one replacing the old, and the monster's death reads it:
+   * its drop becomes the matching sphere (`adapt/loot.ts`, `kernel/drops.ts`). Absent when none.
+   */
+  distill?: number;
+  /**
+   * **The gil a Bribe offered this monster** (`Chr+0x701` is 2, value `Chr+0x708`; re-parity RC9, FFX only): a bribed monster that leaves pays no gil and its Bribe item, by the
+   * killer's own stream (`adapt/loot.ts`). Nothing sets it yet: the Bribe command is not in the engine (plan lane FFX-N, N1), so every shipped monster is paid the ordinary way.
+   */
+  bribed?: number;
   /**
    * **The game's Guard status on an enemy** (re-parity, `research/re-ffx-ai-seymour.md` section 3.5; FFX only): a
    * single-target *physical* party action aimed at a monster is redirected to **an ally that holds Guard and can
@@ -141,6 +156,11 @@ export interface FFXRuntime {
   chained: boolean;
   /** Ids of enemies that have been overkilled. */
   overkilled: CombatantId[];
+  /**
+   * **The battle's reward struct, as the kill rewards fill it** (re-parity RC9, FFX only): gil, each slot's AP, the item stacks, paid at each monster's death
+   * (`adapt/loot.ts#payKill`) and read once at the end (`results.ts`). Created by the first death that pays; absent before it.
+   */
+  rewards?: RewardLedger;
   /** Whether Escape / Flee are legal at all. */
   canEscape: boolean;
   /** Switch is disabled for this link (`EnemyGroupDef.lineUp.noSwitch`, the Sinspawn Gui trio): no bench row in any menu, and a Switch command is refused. Absent everywhere else. */
@@ -208,6 +228,11 @@ export interface FFXRuntime {
    * `engine-end.ts#runItemReactions` runs them once the action is over and empties the list. Absent until first needed.
    */
   itemReactions?: PendingItemReaction[];
+  /**
+   * The counters the hits of the action in progress have queued (re-parity RC9 lane FFX-G slice G-c, `counter-chain.ts`): Counterattack, Evade and Counter and
+   * Magic Counter, each decided at its target's first hit of the command. `engine-end.ts#afterAction` runs them once the action is over and empties the list. Absent until first needed.
+   */
+  counters?: PendingCounter[];
   /** The characters that died since the list was last emptied: a record queued for one of them is lost too (`adapt/reactions.ts#cancelReactionsOf`). */
   reactionDeaths?: Set<CombatantId>;
   /** The item an item reaction paid for when it was queued: `execute.ts` takes that one use as already spent. */
@@ -218,4 +243,8 @@ export interface FFXRuntime {
    * lists known results would). Absent until the first Mix.
    */
   mixShared?: number[];
+  /** The player's Yojimbo's own state (compatibility, hire answer, parsed actions); present only when the build owns him (re-parity lane FFX-K, `adapt/yojimbo.ts`). */
+  yojimbo?: YojimboRuntime;
+  /** The Magus Sisters' own state (standing order, motivation, the menu of the open turn); present only when the build owns them (`adapt/sisters.ts`). */
+  sisters?: SistersRuntime;
 }

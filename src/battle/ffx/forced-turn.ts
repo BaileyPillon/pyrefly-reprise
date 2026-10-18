@@ -11,6 +11,8 @@
  *   acts normally); a monster that keeps control of its script ignores the forced attack (its script aims at the provoker itself, `target-build.ts#provokedAim`).
  *
  * The engine has one generic Attack for every actor (an enemy's own plain-Attack record is chosen when it resolves), so the forced action is that Attack.
+ * The exception is a monster with no default attack (its record's forced-action word is 0, nearly every boss of the story chapters; `adapt/target-world.ts#defaultAttackOf`):
+ * its Provoke, Berserk and Confuse turns are dropped, not spent on anyone.
  */
 
 import type { Command, CombatantId, FFXCombatant } from '../common/types.ts';

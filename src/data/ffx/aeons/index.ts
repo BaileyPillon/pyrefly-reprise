@@ -131,7 +131,9 @@ export const AEONS: Record<string, AeonCatalogDef> = {
   yojimbo: {
     id: 'yojimbo',
     name: 'Yojimbo',
-    spriteKey: 'yojimbo',
+    // r50.1 (FFX only; D-054): the approved gold, orange and purple painting (`characters/yojimbo-cavern/`, the one Chapter IX's Yojimbo draws), not the navy one in `characters/yojimbo/` that D-054 says is not approved
+    // and not used (it was zero hits in approved-hashes.json). The turn bar and the aeon's HUD card cut their face from its idle, so no Y monogram; `portraits/yojimbo.png` is that navy bust and is not wired.
+    spriteKey: 'yojimbo-cavern',
     portraitKey: 'yojimbo',
     // 4 attack variants; no Special at all [ffx-combat-core §6.3].
     attackAbilityId: ['daigoro', 'kozuka', 'wakizashi-single', 'wakizashi-multi'],

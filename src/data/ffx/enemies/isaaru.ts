@@ -47,6 +47,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 import {
   GROTHIA_SUMMON,
   PTERYA_SUMMON,
@@ -116,7 +117,7 @@ const isaaru: EnemyDef = {
   immunityFlags: ['immune-to-sensor', 'immune-to-scan', 'immune-to-bribe'],
   forms: [{ name: 'Isaaru', spriteKey: 'isaaru', hp: 10 }],
   aiScriptId: ISAARU_BYSTANDER_SCRIPT,
-  rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 10, drops: [] }, // §2.1 [decompiled] + wiki
+  rewards: lootRewards(248, { overkillThreshold: 10 }), // §2.1 [decompiled] + wiki; the loot record m248 is all zeros
   abilityIds: [],
   // B8 = a (O-4, our estimate): on the field, never targetable, never a victory condition.
   flags: { untargetable: true, hideHpBar: true },
@@ -163,8 +164,8 @@ const AEON_FLAGS: EnemyDef['immunityFlags'] = [
   'immune-to-sensor',
 ];
 
-/** §2.2: 0 gil / 0 AP on every aeon [decompiled + GameFAQs; I-1, B13 = a]; Overkill 2,550 [verified: 3 sources]. */
-const NO_REWARDS: EnemyDef['rewards'] = { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 2_550, drops: [] };
+/** §2.2: 0 gil / 0 AP on every aeon [decompiled + GameFAQs; I-1, B13 = a]; Overkill 2,550 [verified: 3 sources]. The loot records m284, m254 and m287 are all zeros (`../loot/records.ts`). */
+const noRewards = (file: number): EnemyDef['rewards'] => lootRewards(file, { overkillThreshold: 2_550 });
 
 /**
  * Grothia — `m284` "Ifrit#2", bestiary #108 [§2.2, `[decompiled]` + wiki
@@ -198,7 +199,7 @@ const grothia: EnemyDef = {
   immunityFlags: AEON_FLAGS,
   forms: [{ name: 'Grothia', spriteKey: 'grothia', hp: 8_000 }],
   aiScriptId: GROTHIA_SCRIPT,
-  rewards: NO_REWARDS,
+  rewards: noRewards(284),
   abilityIds: [GROTHIA_SUMMON, GROTHIA_ATTACK, GROTHIA_ATTACK_YUNA, GROTHIA_FIRA, GROTHIA_HELLFIRE],
   flags: { isBoss: true },
   doomTurns: 5, // §2.2 [decompiled] + wiki + GameFAQs
@@ -235,7 +236,7 @@ const pterya: EnemyDef = {
   immunityFlags: AEON_FLAGS,
   forms: [{ name: 'Pterya', spriteKey: 'pterya', hp: 12_000 }],
   aiScriptId: PTERYA_SCRIPT,
-  rewards: NO_REWARDS,
+  rewards: noRewards(254),
   abilityIds: [PTERYA_SUMMON, PTERYA_ATTACK, PTERYA_ATTACK_YUNA, PTERYA_SONIC_WINGS, PTERYA_ENERGY_RAY],
   flags: { isBoss: true },
   doomTurns: 5, // §2.2
@@ -272,7 +273,7 @@ const spathi: EnemyDef = {
   immunityFlags: AEON_FLAGS,
   forms: [{ name: 'Spathi', spriteKey: 'spathi', hp: 20_000 }],
   aiScriptId: SPATHI_SCRIPT,
-  rewards: NO_REWARDS,
+  rewards: noRewards(287),
   // The two counter rows (4:127, 4:173) are not shipped: I-4, B9.
   abilityIds: [SPATHI_SUMMON, SPATHI_COUNTDOWN, SPATHI_MEGA_FLARE],
   flags: { isBoss: true },

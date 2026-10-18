@@ -28,7 +28,7 @@ import {
   uiPortsRegistered,
 } from '../../engine/BattlePresenterFallbacks.ts';
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
-import { inArtNamespace } from '../../data/art/artNamespace.ts';
+import { backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -41,6 +41,8 @@ import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
 import { resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
 import { playSaveSphereCard } from './SaveSphereCard.ts';
+import { offeringChooser } from './BattleScreenOffering.ts'; // the hidden Last Summoning's offering seam (FFX only; never asked by any other chapter)
+import type { OfferingOverlay } from '../../ui/ffx/offering/OfferingScreen.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
@@ -140,6 +142,8 @@ export class BattleScreen extends Screen {
   private momentOverlay: MomentOverlay | null = null;
   private setup: BattleSetup | null = null;
   private group: EnemyGroupDef | null = null;
+  /** The hidden Last Summoning's offering screen while it is up (FFX only); the frame's input goes to it first (`handleInput`). */
+  private offering: OfferingOverlay | null = null;
   private checkpoint: ChainCheckpoint | null = null;
 
   private startedAt = 0;
@@ -450,7 +454,7 @@ export class BattleScreen extends Screen {
       bossName: boss.name,
       subline: chapter.subtitle,
       artKey: inArtNamespace(ns, boss.spriteKey || boss.id),
-      backdropKey: chapter.sceneKey,
+      backdropKey: backdropFileOf(chapter.sceneKey), // the start card's wash is a backdrop file (a code key names its plate: `artNamespace.ts#SCENE_BACKDROP_FILE`)
       party,
       game: chapter.game,
       ...(this.opts.openingHurry ? { holdMs: HURRIED_CARD_HOLD_MS } : {}),
@@ -491,6 +495,17 @@ export class BattleScreen extends Screen {
       audio,
       startLink: this.opts.resumeAt?.link ?? 1,
       priorWon: this.opts.resumeAt?.won ?? [], // PR-0138: the links won before the checkpoint
+      // The hidden Last Summoning: asked before the first fight and after each possession link, only by a formation that sets `offersAeons` (`BattleScreenOffering.ts`).
+      choose: offeringChooser({
+        root: this.root,
+        aeonIds: () => (this.setup?.party.game === 'ffx' ? this.setup.party.aeons.map((a) => a.id) : []),
+        sleep: this.pauseGate,
+        instant: () => presenter.playbackSpeed === 'skip',
+        cancelled: () => presenter.isAborted === true || this.exited,
+        reduceMotion: () => this.app.save?.settings?.reduceMotion === true,
+        sfx: (name) => audio.playSfx(name),
+        attach: (overlay) => void (this.offering = overlay),
+      }),
       saveSphere: (swap) =>
         playSaveSphereCard({
           root: this.root,
@@ -507,7 +522,11 @@ export class BattleScreen extends Screen {
         // A link fought on another plate of the scene (the hidden Sinspawn Gui chapter's ruined camp): a white pulse covers the cut and the plate swaps under it (`EnemyGroupDef.plate`).
         if (group.plate && this.scene?.swapBackdrop) {
           this.stage?.screenFlash('#ffffff', 900);
-          void this.scene.swapBackdrop(group.plate);
+          // A link that is a fresh fight (the Mirror Aeons chapter's cavern: the party and the aeons are restored on entry) does not show the road's HUD under the cut: it is taken off the screen now and put
+          // back, rebuilt for the new fight, once the plate has swapped under the white pulse. No other chapter sets `restoresAeonsOnEntry`.
+          const hud = group.restoresAeonsOnEntry === true ? this.hud : null;
+          hud?.setVisible(false);
+          void this.scene.swapBackdrop(group.plate).finally(() => hud?.setVisible(true));
         }
         // A new formation has been staged — Yunalesca's second form, the next
         // Vegnagun part — so its lane owes its own settling window.
@@ -820,6 +839,10 @@ export class BattleScreen extends Screen {
       return;
     }
 
+    // The offering screen (the hidden Last Summoning) takes the arrows and the confirm; the pause keys below still work, and Esc does not (a choice has no back).
+    const offering = this.offering?.visible === true;
+    if (offering) this.offering!.handleInput(input);
+
     // A mid-battle beat owns the input while it is on screen.
     this.cutscenes?.handleInput(input);
 
@@ -848,7 +871,7 @@ export class BattleScreen extends Screen {
       void this.openPause();
       return;
     }
-    if (input.justPressed('cancel') && this.canPauseOnCancel) {
+    if (input.justPressed('cancel') && this.canPauseOnCancel && !offering) {
       input.consume('cancel');
       audio.playSfx('menu-open');
       void this.openPause();

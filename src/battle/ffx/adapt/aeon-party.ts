@@ -12,9 +12,9 @@
  * (`kernel/battle-save.ts#saveCharacter`).
  *
  * This module builds the world those kernels read from the engine's combatants, runs the transition, and hands back what it
- * decided; `../aeons.ts` carries it out with the events the engine always emitted. Magus Sisters (three aeons at once, the joint
- * Delta Attack, the revive of a fallen sister) are in no shipped chapter and the engine has one `aeonId`; the kernel handles
- * them and this adapter does not feed it more than one.
+ * decided; `../aeons.ts` carries it out with the events the engine always emitted. The Magus Sisters (three aeons at once, the revive of
+ * a fallen sister on a Dismiss) go through the same kernel by {@link summonGroupOutcome} and {@link dismissGroupOutcome}, which hand it
+ * all three (re-parity lane FFX-K, `adapt/sisters.ts`; no shipped chapter owns them).
  *
  * Inputs and where each comes from: `docs/handoff/re-parity-w5.md`, section 1.
  */
@@ -81,7 +81,7 @@ function activeSlots(ctx: Ctx): number[] {
  * The field before or after a summon. `aeon` is the aeon the transition is about; `out` says it is already on the field (the
  * party parked behind it).
  */
-function fieldOf(ctx: Ctx, aeon: FFXCombatant, out: boolean, grand: boolean): Field {
+function fieldOf(ctx: Ctx, aeon: FFXCombatant, out: boolean, grand: boolean, group: readonly FFXCombatant[] = [aeon]): Field {
   const at = new Array<FFXCombatant | undefined>(SLOT_COUNT).fill(undefined);
   const chr: Record<number, PartyChr> = {};
   const inField = new Set(friendlies(ctx).map((c) => c.id));
@@ -125,7 +125,7 @@ function fieldOf(ctx: Ctx, aeon: FFXCombatant, out: boolean, grand: boolean): Fi
     if (c.side === 'aeon') {
       row.recover = c.aeon?.reviveCountdown ?? 0;
       row.recoverMax = aeonGearOf(c).recovery;
-      if (out && c.id === aeon.id) {
+      if (out && group.some((g) => g.id === c.id)) {
         row.dc8 = 1;
         row.summoner = ownerSlot;
       }
@@ -150,7 +150,7 @@ function fieldOf(ctx: Ctx, aeon: FFXCombatant, out: boolean, grand: boolean): Fi
   for (let id = 0; id < SLOT_COUNT; id++) if ((id < 0x12 || (id >= 0x14 && id <= 0x1b)) && chr[id] === undefined) chr[id] = emptyChr();
 
   const w: PartyWorld = {
-    active: out ? [aeonSlot, NONE, NONE, NONE, NONE, NONE, NONE] : party,
+    active: out ? [...group.map((g) => slotOf(ctx, g)), ...new Array<number>(7 - group.length).fill(NONE)] : party,
     saved: out ? party : new Array<number>(7).fill(NONE),
     roster: Array.from({ length: 17 }, (_, i) => i),
     rosterSaved: Array.from({ length: 17 }, (_, i) => i),
@@ -202,6 +202,52 @@ export function dismissOutcome(ctx: Ctx, aeon: FFXCombatant, wiped: boolean): Pa
   dismiss(f.w, wiped ? 0 : 1);
   const a = f.w.chr[slotOf(ctx, aeon)]!;
   return { aeonCtb: a.ctb, held: a.gaugeHeld !== 0, freed: [], recover: a.recover };
+}
+
+/** What the transition decided for one aeon of a group. */
+export interface GroupMemberOutcome {
+  c: FFXCombatant;
+  /** Its counter after the transition (the aeon asked for acts next; the others keep theirs). */
+  ctb: number;
+  /** It holds a Grand Summon's full gauge. */
+  held: boolean;
+  /** Its recovery counter after a wipe. */
+  recover: number;
+  /** A fallen member the Dismiss stood up at 1 HP. */
+  revived: boolean;
+}
+
+/**
+ * The Magus Sisters' summon (`FUN_007adf90` for any one of the three: all three take list positions 0 to 2, each records the summoner) and the
+ * arrival step, run on the field as it stands. `group` is the three aeons in list order (re-parity lane FFX-K).
+ */
+export function summonGroupOutcome(ctx: Ctx, group: readonly FFXCombatant[], summoner: FFXCombatant, grand: boolean): { members: GroupMemberOutcome[]; freed: PartyOutcome['freed'] } {
+  const lead = group[0] as FFXCombatant;
+  const before = fieldOf(ctx, lead, false, grand, group);
+  const after = fieldOf(ctx, lead, false, grand, group);
+  summon(after.w, slotOf(ctx, summoner), slotOf(ctx, lead));
+  startArrival(after.w);
+  const members = group.map((c) => {
+    const a = after.w.chr[slotOf(ctx, c)]!;
+    return { c, ctb: a.ctb, held: a.gaugeHeld !== 0, recover: a.recover, revived: false };
+  });
+  return { members, freed: freedBetween(before, after) };
+}
+
+/**
+ * The group leaves: `wiped` is the wipe (every aeon out is down; each starts its recovery count and goes without the revive), else the
+ * Dismiss command, which stands a fallen member up at 1 HP (`reviveFallen`, `FUN_007aef20`).
+ */
+export function dismissGroupOutcome(ctx: Ctx, group: readonly FFXCombatant[], wiped: boolean): GroupMemberOutcome[] {
+  const lead = group[0] as FFXCombatant;
+  const f = fieldOf(ctx, lead, true, false, group);
+  const hpBefore = group.map((c) => f.w.chr[slotOf(ctx, c)]!.hp);
+  if (wiped) aeonWipe(f.w);
+  dismiss(f.w, wiped ? 0 : 1);
+  return group.map((c, i) => {
+    const a = f.w.chr[slotOf(ctx, c)]!;
+    return { c, ctb: a.ctb, held: a.gaugeHeld !== 0, recover: a.recover, revived: !wiped && (hpBefore[i] ?? 0) < 1 && a.hp >= 1 };
+  });
 }
 
 /** `FUN_0079a080` for an aeon: can it be summoned (HP above 0, nothing left of its recovery count)? */

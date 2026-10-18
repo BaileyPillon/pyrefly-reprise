@@ -23,6 +23,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import type { BattleEvent } from '../../../src/battle/common/types.ts';
 import { driveChapter, driveParagon, driveTremaFresh, LINES, type DriveOptions, type LineOptions, type LinkRun } from '../helpers/tremaDrive.ts';
 import { tremaBuildFor, type TremaKitOption } from '../../../src/data/ffx2/builds/via-infinito-kit.ts';
 
@@ -36,11 +37,34 @@ const rows: string[] = [];
 /** These rows measure with action time off (see the header); a row's own engine options are kept. */
 const AT_OFF = (o: DriveOptions): DriveOptions => ({ ...o, engine: { actionTimeSeconds: 0, ...o.engine } });
 
-interface Tally { wins: number; seeds: number; unfinished: number; minutes: number; winMinutes: number; reached: number; bigBang: number; genesis: number; meteor: number; flare: number; blocked: number; darkness: number }
+interface Tally { wins: number; seeds: number; unfinished: number; minutes: number; winMinutes: number; reached: number; bigBang: number; bigBangConfused: number; genesis: number; meteor: number; flare: number; blocked: number; darkness: number }
 type Run = LinkRun | { outcome: string | undefined; links: LinkRun[] };
 
+/**
+ * **Re-parity RC9 lane X2-H (2026-10-15), the cause of the one re-baselined assertion below.** The Cloister Paragon's third normal attack Confuses a girl, and a Confused girl now
+ * takes her turn by the game's own pick (an Attack, one of her direct skills or an item, aimed at anyone: `src/battle/ffx2/kernel/confusion-pick.ts`), no longer by the menu line these
+ * benches script. Her pick sometimes takes a command with neither a physical nor a magical damage bit (an item, Darkness...), and that is exactly what sets Paragon's Big Bang flag
+ * (`ai/paragon.ts`, row P2). So a Big Bang can answer HER pick and not the line. This counts the Big Bangs that follow the end of an action a girl STARTED while Confused (Paragon's answer comes right after the action that set the flag; a later status may have overwritten her Confusion by then). FFX-2 only.
+ */
+function bigBangsAnsweringConfusedGirls(log: readonly BattleEvent[]): number {
+  const girls = new Set(['yuna', 'rikku', 'paine']);
+  const confused = new Set<string>();
+  const startedConfused = new Map<string, boolean>();
+  let lastEndedWasConfused = false;
+  let n = 0;
+  for (const e of log) {
+    if (e.type === 'status-add' && e.status === 'confuse') confused.add(e.targetId);
+    else if (e.type === 'status-remove' && e.status === 'confuse') confused.delete(e.targetId);
+    else if (e.type === 'revive') confused.delete(e.targetId);
+    else if (e.type === 'action-start' && girls.has(e.actorId)) startedConfused.set(e.actorId, confused.has(e.actorId));
+    else if (e.type === 'action-end' && girls.has(e.actorId)) lastEndedWasConfused = startedConfused.get(e.actorId) === true;
+    else if (e.type === 'action-start' && e.abilityId === 'paragon-big-bang' && lastEndedWasConfused) n += 1;
+  }
+  return n;
+}
+
 function bench(run: (seed: number) => Run, seeds: number): Tally {
-  const t: Tally = { wins: 0, seeds, unfinished: 0, minutes: 0, winMinutes: 0, reached: 0, bigBang: 0, genesis: 0, meteor: 0, flare: 0, blocked: 0, darkness: 0 };
+  const t: Tally = { wins: 0, seeds, unfinished: 0, minutes: 0, winMinutes: 0, reached: 0, bigBang: 0, bigBangConfused: 0, genesis: 0, meteor: 0, flare: 0, blocked: 0, darkness: 0 };
   for (let seed = 1; seed <= seeds; seed++) {
     const r = run(seed);
     const links = 'links' in r ? r.links : [r];
@@ -51,6 +75,7 @@ function bench(run: (seed: number) => Run, seeds: number): Tally {
     t.minutes += minutes;
     for (const l of links) {
       t.bigBang += l.count('paragon-big-bang');
+      t.bigBangConfused += bigBangsAnsweringConfusedGirls(l.log);
       t.genesis += l.count('paragon-genesis');
       t.meteor += l.count('trema-meteor');
       t.flare += l.count('trema-flare');
@@ -112,9 +137,19 @@ describe('Chapter XIII benches (200 seeds a line, bench speed, Active)', () => {
     }, 600_000);
   }
 
-  it('the wrong line on Paragon draws Big Bang and the intended one never does', () => {
-    expect(results.get('tr11-a|1 Paragon|intended: Attack, Shell, heals, never Darkness')?.bigBang).toBe(0);
-    expect(results.get('sourced-kit|1 Paragon|kit intended: Tonic, Megalixir, Shell, Attack, Itchy spherechanged')?.bigBang).toBe(0);
+  // RE-BASELINED 2026-10-15 (re-parity RC9 lane X2-H; FFX-2 only). The assertion was "the intended line draws no Big Bang at all" (0 of 200 seeds). Since a Confused girl takes her own
+  // turn by the game's pick, the intended line draws Big Bang in about one seed in ten (tr11-a 0.10 a seed, sourced-kit 0.11) and EVERY one of those answers a Confused girl's pick, not the
+  // line (asserted: the Big Bangs that do not answer one stay at 0, which is the original claim); and some do answer one (so the cause is real, not assumed). The old rule is
+  // `CONFUSION_PICK = false` (`src/battle/ffx2/constants.ts`): with it off both intended lines draw 0 Big Bangs over the same 200 seeds, as on origin/r49-rc (checked once by ablation);
+  // the pick moves the intended lines' other numbers a little too (200 seeds, bench speed, link 1: tr11-a minutes 0.27 to 0.24, wins 0 and 0; the kit line wins 2 to 1, minutes 0.28 to 0.21);
+  // the wrong lines do not move (Big Bang 0.85 and 0.84, 0.37 and 0.37).
+  it('the wrong line on Paragon draws Big Bang and the intended one never does by itself (a Confused girl\'s own pick can: RC9 X2-H)', () => {
+    for (const key of ['tr11-a|1 Paragon|intended: Attack, Shell, heals, never Darkness', 'sourced-kit|1 Paragon|kit intended: Tonic, Megalixir, Shell, Attack, Itchy spherechanged']) {
+      const t = results.get(key);
+      expect(t, key).toBeDefined();
+      expect((t?.bigBang ?? 0) - (t?.bigBangConfused ?? 0), key).toBe(0);
+      expect(t?.bigBangConfused ?? 0, key).toBeGreaterThan(0);
+    }
   });
 
   it('option rows that are not built (T-6 b, Phoenix Downs)', () => {

@@ -19,14 +19,16 @@
  * ## Rewards (RE section 2, `[bytes]`, each brother on his own death)
  *
  * **1,500 gil, 4,500 AP (6,750 on an Overkill, threshold 2,500)**; slot 1 drops a **Return Sphere x1 (a Friend Sphere x1 one time in eight; x2 of either on an Overkill, which the engine's rule doubles)**; steal: **Lv. 3
- * Key Sphere x1 (rare x2)**, Bribe blocked (the record's Bribe item is a Potion). **One slot pays one item** (`ItemDrop.rare`, `battle/ffx/results.ts#collectRewards`): the slot always drops (no chance is listed) and the
- * engine draws one more byte of its own side stream to choose between the two, so a Friend Sphere comes in the Return Sphere's place one time in eight and the Return Sphere otherwise (87.5 and 12.5 percent), never both
- * and never neither, as the game's single slot does; an Overkill doubles whichever was given. **Not modelled:** the gear drop (chance byte 255, a weapon or armour piece; the results screen has no row for equipment),
- * the Pilfer / Nab Gil factor, the Monster Arena price.
+ * Key Sphere x1 (rare x2)**, Bribe blocked (the record's Bribe item is a Potion). **One slot pays one item**: the slot always drops (chance byte 255) and a second draw (stream 11) chooses between the two entries,
+ * so a Friend Sphere comes in the Return Sphere's place one time in eight and the Return Sphere otherwise (87.5 and 12.5 percent), never both and never neither, as the game's single slot does; an Overkill reads
+ * the record's overkill list, x2 of either. Since re-parity RC9 this is the game's own roll (`battle/ffx/adapt/loot.ts` over `kernel/drops.ts`, streams 10 and 11) on the loot records m134 and m135
+ * (`../loot/records.ts`); before it the engine drew the second byte from its own side stream (`ItemDrop.rare`, still the summary field below). **Not modelled:** the gear drop (chance byte 255, a weapon or armour piece;
+ * the results screen has no row for equipment: its roll's one stream-10 draw is made and no piece is given), the Pilfer / Nab Gil factor, the Monster Arena price.
  */
 
 import type { EnemyDef, EnemyGroupDef, StatBlock, StatusId, StatusImmunities } from '../../../battle/common/types.ts';
 import { BIRAN_ID, BIRAN_SCRIPT, BIRAN_YENKE_GROUP_ID, YENKE_ID, YENKE_SCRIPT } from '../biran-yenke-ids.ts';
+import { lootRewards } from '../loot/index.ts';
 import { AQUA_BREATH_ID, BERSERK_SELF_ID, BIRAN_MIGHTY_GUARD_ID, BULLDOZE_ID, FIRE_BREATH_ID, YENKE_WHITE_WIND_ID } from './biran-yenke-abilities.ts';
 
 export { BIRAN_ID, BIRAN_YENKE_GROUP_ID, YENKE_ID };
@@ -43,24 +45,19 @@ const stats = (): StatBlock => ({ ...RECORD, maxHp: RECORD.hp, maxMp: RECORD.mp 
 const IMMUNE_BOTH: readonly StatusId[] = ['ko', 'zombie', 'petrify', 'poison', 'confuse', 'provoke', 'sleep', 'silence', 'darkness', 'reflect', 'slow', 'eject', 'auto-life'];
 const immune = (...statuses: readonly StatusId[]): StatusImmunities => Object.fromEntries(statuses.map((s) => [s, 255])) as StatusImmunities;
 
-/** Rewards, each brother on his own death (RE section 2). */
-const REWARDS: EnemyDef['rewards'] = {
-  ap: 4_500,
-  apOverkill: 6_750,
-  gil: 1_500,
-  overkillThreshold: OVERKILL_THRESHOLD,
-  // ONE drop slot, one item (RE section 2): the slot's chance byte is 255 (always drops), the common item a Return Sphere x1 and the rare one a Friend Sphere x1 in its place when the second draw's low byte is
-  // below 0x20, one time in eight (`ItemDrop.rare`: the engine rolls the slot once and gives one of the two, never both and never neither). An Overkill doubles whichever is given (the note: x2 of either).
-  drops: [{ itemId: 'return-sphere', count: 1, rare: { itemId: 'friend-sphere', count: 1, chance: 12.5 } }],
-  steal: { baseChance: 100, common: { itemId: 'lv-3-key-sphere', count: 1 }, rare: { itemId: 'lv-3-key-sphere', count: 2 } }, // the record's chance byte 255, clamped to the contract's 0-100
-  bribe: { item: { itemId: 'potion', count: 1 }, immune: true },
-};
+/** Rewards, each brother on his own death (RE section 2): the game's loot record of his file (`../loot/records.ts`), the steal and the Bribe row beside it. */
+const rewardsOf = (file: number): EnemyDef['rewards'] =>
+  lootRewards(file, {
+    overkillThreshold: OVERKILL_THRESHOLD,
+    steal: { baseChance: 100, common: { itemId: 'lv-3-key-sphere', count: 1 }, rare: { itemId: 'lv-3-key-sphere', count: 2 } }, // the record's chance byte 255, clamped to the contract's 0-100
+    bribe: { item: { itemId: 'potion', count: 1 }, immune: true },
+  });
 
 const SENSOR = 'He fights for the one who stands behind him.';
 const SCAN_BIRAN = 'A Ronso warrior of Kimahri\'s own tribe. When he drops below half his strength he calls a ward over both brothers, and Kimahri may learn it.';
 const SCAN_YENKE = 'A Ronso warrior of Kimahri\'s own tribe. When he drops below half his strength he calls a healing wind over both brothers, and Kimahri may learn it.';
 
-function brother(opts: { id: string; name: string; slot: number; script: string; berserkImmune: boolean; abilityIds: string[]; scanText: string }): EnemyDef {
+function brother(opts: { id: string; file: number; name: string; slot: number; script: string; berserkImmune: boolean; abilityIds: string[]; scanText: string }): EnemyDef {
   return {
     id: opts.id,
     name: opts.name,
@@ -74,7 +71,7 @@ function brother(opts: { id: string; name: string; slot: number; script: string;
     immunityFlags: ['boss', 'immune-to-life', 'immune-to-delay', 'immune-to-bribe'], // record flags 0x04 and 0x07; boss: the formation disables Escape and Flee (RE section 4)
     forms: [{ name: opts.name, spriteKey: opts.id, hp: RECORD.hp }],
     aiScriptId: opts.script,
-    rewards: { ...REWARDS, drops: REWARDS.drops.map((d) => ({ ...d })) },
+    rewards: rewardsOf(opts.file),
     abilityIds: opts.abilityIds,
     flags: { isBoss: true },
     sensorText: SENSOR,
@@ -87,13 +84,13 @@ function brother(opts: { id: string; name: string; slot: number; script: string;
 
 /** Biran Ronso (m134, actor 20): can be Berserked; the cycle Thunder, Bulldoze, Blizzard, Bulldoze. */
 export const biran: EnemyDef = brother({
-  id: BIRAN_ID, name: 'Biran Ronso', slot: 0, script: BIRAN_SCRIPT, berserkImmune: false, scanText: SCAN_BIRAN,
+  id: BIRAN_ID, file: 134, name: 'Biran Ronso', slot: 0, script: BIRAN_SCRIPT, berserkImmune: false, scanText: SCAN_BIRAN,
   abilityIds: ['thunder', 'blizzard', BULLDOZE_ID, BIRAN_MIGHTY_GUARD_ID, BERSERK_SELF_ID],
 });
 
 /** Yenke Ronso (m135, actor 21): immune to Berserk; the cycle Fire Breath, Aqua Breath, Bulldoze. */
 export const yenke: EnemyDef = brother({
-  id: YENKE_ID, name: 'Yenke Ronso', slot: 1, script: YENKE_SCRIPT, berserkImmune: true, scanText: SCAN_YENKE,
+  id: YENKE_ID, file: 135, name: 'Yenke Ronso', slot: 1, script: YENKE_SCRIPT, berserkImmune: true, scanText: SCAN_YENKE,
   abilityIds: [FIRE_BREATH_ID, AQUA_BREATH_ID, BULLDOZE_ID, YENKE_WHITE_WIND_ID, 'haste'],
 });
 

@@ -13,6 +13,7 @@
  * - **Tourist Trap** (`'ffx2-tourist-trap'`, number 23, 2026-10-14; FFX-2 only): Yojimbo and Daigoro in the Cavern of the Stolen Fayth, the optional mission; word `daigoro`.
  * - **Biran and Yenke** (`'biran-yenke'`, number 25, 2026-10-14; FFX only): Kimahri alone against the two Ronso at the Mountain Gate of Mt. Gagazet, where Lancet teaches him Ronso Rages; word `gagazet`.
  * - **Angra Mainyu** (`'ffx2-angra-mainyu'`, number 26, 2026-10-14; FFX-2 only): the Chapter 5 mission "Showdown in the Sands", the Bikanel Desert fiend and its arms Zarich and Tawrich; word `angra` (25 is the Biran and Yenke lane's).
+ * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
@@ -30,8 +31,9 @@ import { FFX2_TOURIST_TRAP } from './chapter-ffx2-tourist-trap.ts';
 import { FFX2_VALEFOR_BESAID } from './chapter-ffx2-valefor-besaid.ts';
 import { BIRAN_YENKE } from './chapter-biran-yenke.ts';
 import { FFX2_ANGRA_MAINYU } from './chapter-ffx2-angra-mainyu.ts';
+import { LAST_SUMMONING } from './chapter-last-summoning.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING] as const;
 }

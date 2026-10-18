@@ -37,7 +37,7 @@ import { attachMonsterRecords } from '../monster-records/index.ts';
 
 type EarlierOver = {
   id: string; name: string; level: number; hp: number; mp: number; str: number; def: number; mag: number; mdef: number;
-  agi: number; eva?: number; exp: number; gil: number; slot: number; aiScriptId: string; abilityIds: string[];
+  agi: number; eva?: number; exp: number; gil: number; ap: number; drop: string; slot: number; aiScriptId: string; abilityIds: string[];
 };
 
 function earlierRecord(base: EnemyDef, over: EarlierOver): EnemyDef {
@@ -66,28 +66,29 @@ function earlierRecord(base: EnemyDef, over: EarlierOver): EnemyDef {
     forms: [{ name: over.name, spriteKey: base.spriteKey, hp: over.hp }],
     aiScriptId: over.aiScriptId,
     abilityIds: over.abilityIds,
-    rewards: { ...rewards, exp: over.exp, gil: over.gil },
+    // The rewards are the game's rows (`monster.bin` 243, 244 and 249; `../monster-records/kill-rewards.ts`, re-parity RC9 lane X2-C): the AP and the common drop differ from Act III's.
+    rewards: { ...rewards, exp: over.exp, gil: over.gil, ap: over.ap, apOverkill: over.ap, drops: [{ itemId: over.drop, count: 1 }] },
   };
 }
 
 /** Ormi #220 — Act I. Lv 19, 1,640 HP, **Def 120**, **MDef 4** [§2]. */
 const ormiEntrance = earlierRecord(ormiAct3, {
   id: 'ormi-entrance', name: 'Ormi', level: 19, hp: 1640, mp: 40, str: 80, def: 120, mag: 20, mdef: 4, agi: 63,
-  exp: 240, gil: 230, slot: 0, // §13 G9 — the wiki's per-enemy EXP/gil, not zero_six's doubled pair
+  exp: 220, gil: 220, ap: 1, drop: 'black-choker', slot: 0, // row 243: 220 EXP, 1 AP, 220 gil, a Black Choker (the wiki's 240 / 230 and the Twist Headband were Act III's; FFX2-G03 E8)
   aiScriptId: 'ffx2-leblanc-ormi-act1', abilityIds: ['x2-ormi-shield-bash', 'x2-ormi-supercollider', 'x2-ormi-huggles'],
 });
 
 /** Ormi #221 — Act II. Lv 19, 1,840 HP, **Def 121**, **MDef 8** [§2]. */
 const ormiLogosRoom = earlierRecord(ormiAct3, {
   id: 'ormi-logos-room', name: 'Ormi', level: 19, hp: 1840, mp: 42, str: 64, def: 121, mag: 24, mdef: 8, agi: 63,
-  exp: 240, gil: 230, slot: 1,
+  exp: 240, gil: 230, ap: 1, drop: 'defense-veil', slot: 1, // row 244: 240 EXP, 1 AP, 230 gil, a Defense Veil (FFX2-G03 E9)
   aiScriptId: 'ffx2-leblanc-ormi-act2', abilityIds: ['x2-ormi-shield-bash', 'x2-ormi-supercollider', 'x2-ormi-huggles'],
 });
 
 /** Logos #227 — Act II. Lv 20, 1,432 HP, **Def 4**, **Eva 38** [§2]. */
 const logosRoom = earlierRecord(logosAct3, {
   id: 'logos-room', name: 'Logos', level: 20, hp: 1432, mp: 64, str: 16, def: 4, mag: 26, mdef: 14, agi: 90, eva: 38,
-  exp: 240, gil: 230, slot: 0,
+  exp: 240, gil: 230, ap: 1, drop: 'favorite-outfit', slot: 0, // row 249: 240 EXP, 1 AP, 230 gil, a Favorite Outfit (FFX2-G03 E9)
   aiScriptId: 'ffx2-leblanc-logos-act2', abilityIds: ['x2-logos-double-shot', 'x2-logos-russian-roulette'],
 });
 

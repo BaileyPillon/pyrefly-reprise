@@ -82,6 +82,11 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'hp-sphere': { id: 0x2055, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // HP Sphere
   'return-sphere': { id: 0x2060, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Return Sphere
   'friend-sphere': { id: 0x2061, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Friend Sphere (the hidden Biran and Yenke chapter's rare drop; item 97, the entry after the Return Sphere in the game's own order, rank byte 2 read from the table)
+  // The hidden Mirror Aeons chapter's Master Sphere (the rare drop of all four Dark Aeons) and Teleport Sphere (Dark Mindy's steal). The ids are the game's own: RE's note `research/re-ffx-dark-aeons.md` section 1.3 (the loot rows, `[bytes]`) reads the Master
+  // Sphere as 0x2050 and the Teleport Sphere as 0x2062; they had first been inferred from the game's order of the Sphere items (the Master Sphere before the Lv. 1 Key Sphere, the Teleport Sphere after the Friend Sphere), which gave the same two.
+  // Every Sphere Grid item's row is the same blank row (type 0, no flags, rank 2), so nothing depends on the index.
+  'master-sphere': { id: 0x2050, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Master Sphere
+  'teleport-sphere': { id: 0x2062, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Teleport Sphere
   'mp-sphere': { id: 0x2056, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // MP Sphere
   'ability-sphere': { id: 0x2049, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Ability Sphere
   'blk-magic-sphere': { id: 0x204f, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Blk Magic Sphere
@@ -89,4 +94,9 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'lv-1-key-sphere': { id: 0x2051, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 1 Key Sphere (the id 81 the Gui note names)
   'lv-3-key-sphere': { id: 0x2053, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 3 Key Sphere
   'lv-4-key-sphere': { id: 0x2054, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 4 Key Sphere
+  // Re-parity RC9 (kill rewards from the game's loot records, lane FFX-M): the four Sphere Grid items the loot records name that the catalog lacked, each row as the game's table has it (type, both flag words and the damage class 0, rank byte 2, no status bytes).
+  'lv-2-key-sphere': { id: 0x2052, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 2 Key Sphere (Seymour Natus's drop, record m126)
+  'power-sphere': { id: 0x2046, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Power Sphere (what a Power Distiller turns a drop into)
+  'mana-sphere': { id: 0x2047, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Mana Sphere (a Mana Distiller's; also named by the Gui head's record)
+  'speed-sphere': { id: 0x2048, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Speed Sphere (a Speed Distiller's; also named by the Gui arm's record)
 };

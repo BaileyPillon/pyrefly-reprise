@@ -24,15 +24,21 @@ export interface Policy {
   escalation: { focusedSystemsForDeep: number; productFilesForDeep: number };
   release?: Partial<ReleasePolicy>;
   alwaysAtDeploy: string[];
+  /** Static checks every candidate gets, as data (pose continuity W4: the pose census); a reviewer runs the command and records its totals. */
+  alwaysAtDeployStatic?: StaticCheck[];
   rules: PolicyRule[];
   checks: { id: string; title: string; automation: string }[];
   [key: string]: unknown;
 }
 
+export interface StaticCheck { id: string; title?: string; checks: string[]; mode: 'report' | 'gate'; command: string[]; needs?: string[]; adopted?: string; note?: string }
+
 export interface ChangeClass {
   depth: 'none' | 'focused' | 'deep'; deepBeforeDeploy: boolean; reasons: string[]; systems: string[]; games: string;
   chapters: string[]; checks: string[]; targetGroups: string[]; productPaths: string[]; ignoredPaths: string[];
   dataAudit: boolean; approvedArtCheck: boolean;
+  /** Static checks every candidate gets (policy `alwaysAtDeployStatic`), whatever its depth. */
+  staticChecks: StaticCheck[];
 }
 export interface ReviewPlan extends Omit<ChangeClass, 'depth'> {
   depth: ChangeClass['depth']; review: ReviewKind; obligations: ReviewKind[]; carriedDeep: string[];

@@ -19,6 +19,8 @@
  * Game case: the mechanism is shared plumbing (both games); its only user is FFX-2's experimental Leblanc.
  */
 
+import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../ffx/mirror-aeons-ids.ts';
+
 /** Every art namespace there is. A subject id that starts `<namespace>-` belongs to it. */
 export const ART_NAMESPACES = ['exp-leblanc'] as const;
 export type ArtNamespace = (typeof ART_NAMESPACES)[number];
@@ -34,6 +36,22 @@ export const SCENE_ART_NAMESPACE: Readonly<Record<string, ArtNamespace>> = {
 /** The namespace a scene key draws from, or `undefined` for the base art. */
 export function artNamespaceOfScene(sceneKey: string | undefined): ArtNamespace | undefined {
   return sceneKey !== undefined && Object.hasOwn(SCENE_ART_NAMESPACE, sceneKey) ? SCENE_ART_NAMESPACE[sceneKey] : undefined;
+}
+
+/**
+ * A scene key that is a code key and not a backdrop file: the file its plate is painted on (LIVE-R50-01). By convention a chapter's scene key IS its backdrop's name (`art/backdrops/<sceneKey>.png`) and the board, the
+ * party prep, the cutscene, the battle's start card, the pause tab and the preload all build that path from it. Mirror Aeons' scene `mirror-aeons` is one stage built from Mushroom Rock Road's (Act II swaps in the
+ * Cavern's), so no file is named `mirror-aeons` and every one of those requests answered 404; it names the road here, the plate its first act draws. FFX only.
+ */
+export const SCENE_BACKDROP_FILE: Readonly<Record<string, string>> = {
+  [MIRROR_AEONS_SCENE]: MIRROR_ACT_I_PLATE,
+};
+
+/** The backdrop file (`art/backdrops/<file>.png`) a scene key stands for: its own name unless {@link SCENE_BACKDROP_FILE} says it is a code key. */
+export function backdropFileOf(sceneKey: string): string;
+export function backdropFileOf(sceneKey: string | undefined): string | undefined;
+export function backdropFileOf(sceneKey: string | undefined): string | undefined {
+  return sceneKey !== undefined && Object.hasOwn(SCENE_BACKDROP_FILE, sceneKey) ? SCENE_BACKDROP_FILE[sceneKey] : sceneKey;
 }
 
 /** The namespace an art id already belongs to, or `undefined` for a base id. */

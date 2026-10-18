@@ -106,9 +106,13 @@ describe('Swordplay (Tidus): timer expiry resolves the Fail row [§5.3]', () => 
     });
   }
 
-  it('Blitz Ace fail is rank 6 against 7 on success: Tidus comes back sooner', () => {
+  // RE-PARITY RC9, lane FFX-B2 (FFX only): this test said "Blitz Ace fail is rank 6 against 7 on success: Tidus comes back sooner". The cause of the change:
+  // the game charges the user the MENU command's rank whatever the grade (the rank is stored when the action is first calculated, 0x7892E0, and the
+  // result handler never writes it; FFX-G01 row 17, closed by FFX-H01 section 3.5 with 2,400 vectors through the real code, 770 of them Fail grades).
+  // The 6 was the replacement row's own rank, which never reaches the user. The full proof is `parity-ffx-engine-od-results.test.ts`.
+  it('Blitz Ace costs rank 7 on a fail as on a success: Tidus comes back at the same moment', () => {
     const def = TIDUS['blitz-ace']!;
-    expect(fire(def, 'tidus', swordplay(false)).tick).toBeLessThan(fire(def, 'tidus', swordplay(true)).tick);
+    expect(fire(def, 'tidus', swordplay(false)).tick).toBe(fire(def, 'tidus', swordplay(true)).tick);
   });
 });
 
@@ -134,10 +138,12 @@ describe('Bushido (Auron): Fail and Immune rows [§5.5]', () => {
     });
   }
 
-  it('Tornado has no Immune row, so an all-immune target leaves its 20 x 2 success alone; its fail is rank 6', () => {
+  // RC9 lane FFX-B2: the title said "its fail is rank 6" and the second line expected the fail to come back sooner; the game charges rank 7 on a fail
+  // as on a success (the 6 is the rank of the replacement row 0x310D, which never reaches the user; see the Blitz Ace test above).
+  it('Tornado has no Immune row, so an all-immune target leaves its 20 x 2 success alone; its fail costs rank 7 like its success', () => {
     const def = AURON['tornado']!;
     expect(fire(def, 'auron', bushido(true), IMMUNE_TO_ALL).amounts).toEqual(fire(def, 'auron', bushido(true)).amounts);
-    expect(fire(def, 'auron', bushido(false)).tick).toBeLessThan(fire(def, 'auron', bushido(true)).tick);
+    expect(fire(def, 'auron', bushido(false)).tick).toBe(fire(def, 'auron', bushido(true)).tick);
   });
 
   it('PR-0267 holds: a failed Bushido earns no timing bonus whatever the clock showed', () => {
@@ -169,7 +175,8 @@ describe('rowFromExtra', () => {
   it('keeps canMiss false and every other field, and drops Blitz Ace\'s success-only finisher on the fail row', () => {
     const ace = TIDUS['blitz-ace']!;
     const fail = rowFromExtra(ace, 'fail')!;
-    expect(fail).toMatchObject({ id: 'blitz-ace', power: 4, hits: 8, rank: 6, canMiss: false, targeting: 'single-enemy' });
+    // rank 7 (RC9 lane FFX-B2): a fail row keeps the menu row's rank; it was 6, the replacement row's own, which never reaches the user
+    expect(fail).toMatchObject({ id: 'blitz-ace', power: 4, hits: 8, rank: 7, canMiss: false, targeting: 'single-enemy' });
     expect(fail.extra?.['finisherPower']).toBeUndefined();
     expect(ace.extra?.['finisherPower']).toBe(24); // the record itself is not mutated
     expect(rowFromExtra(AURON['shooting-star']!, 'immune')).toMatchObject({ power: 27, hits: 1, rank: 5, canMiss: false });

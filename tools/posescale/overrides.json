@@ -96,12 +96,33 @@
  },
  "lulu": {
   "critical": {
-   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)"
+   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)",
+   "stature": {
+    "floor": 0.75,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
+  },
+  "hurt": {
+   "stature": {
+    "floor": 0.9,
+    "ceiling": 1.1,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
   }
  },
  "rikku-berserker": {
   "ready": {
-   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)"
+   "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)",
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.9 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  },
+  "critical": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.3 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
   }
  },
  "yuna": {
@@ -116,6 +137,20 @@
     "scale": 1.0103,
     "why": "r392 recentring: her critical head reads x0.983 to x0.998 of her idle's in the seven chapters that show it (I, III, VII, IX, X, XII, XVII), all on the small side, so a swap between her critical and her victory (x1.0255 above) would read up to x1.028 bigger (critical to victory x0.9996 to x1.0027 before this change); 1.0103 (table 0.967 to 0.977) centres the critical against the idle (x0.993 to x1.008) and keeps critical to victory at x1.015 to x1.018"
    }
+  },
+  "attack": {
+   "stature": {
+    "floor": 0.9,
+    "ceiling": 1.1,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
+  },
+  "hurt": {
+   "stature": {
+    "floor": 0.9,
+    "ceiling": 1.1,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
   }
  },
  "rikku": {
@@ -124,6 +159,265 @@
     "scale": 1.015,
     "why": "r392 camera allowance, from the harness's on-screen heads (round 23 and the r392 runs): her victory head sits well below her idle's (about a tenth of a figure), so the close victory camera at Macalania draws it x0.967 to x0.970 of the idle's (the only FFX chapter that showed her victory in those runs); the far cameras draw a lower head 2 to 4 percent bigger (Yuna's and Auron's victory heads at Macalania against the other chapters), so 1.015 brings Macalania to x0.981 to x0.984 and a far camera to about x1.01 to x1.02, 3 percent allowed both ways. Seen in one chapter: the far-camera end is inferred from Yuna's and Auron's"
    }
+  },
+  "attack": {
+   "stature": {
+    "floor": 0.9,
+    "ceiling": 1.1,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
+  }
+ },
+ "auron": {
+  "attack": {
+   "stature": {
+    "floor": 0.9,
+    "ceiling": 1.1,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
+  },
+  "hurt": {
+   "stature": {
+    "floor": 0.9,
+    "ceiling": 1.1,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
+  },
+  "critical": {
+   "stature": {
+    "floor": 0.75,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
+  }
+ },
+ "wakka": {
+  "cast": {
+   "stature": {
+    "floor": 0.9,
+    "ceiling": 1.1,
+    "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height"
+   }
+  }
+ },
+ "yuna-dark-knight": {
+  "ready": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 9.8 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "yuna-warrior": {
+  "sleep": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 3.8 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "paine-dark-knight": {
+  "critical": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.4 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "rikku-black-mage": {
+  "follow": {
+   "feetRowKept": {
+    "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+    "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.2 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "valefor": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "ixion": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "x2-ixion": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "pterya": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "overdrive": {
+   "standing": true
+  }
+ },
+ "paragon": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "yunalesca-3": {
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "overdrive-sin": {
+  "idle": {
+   "standing": true
+  },
+  "stage-0": {
+   "standing": true
+  },
+  "stage-1": {
+   "standing": true
+  },
+  "stage-2": {
+   "standing": true
+  },
+  "stage-3": {
+   "standing": true
+  },
+  "stage-4": {
+   "standing": true
+  }
+ },
+ "sin-core": {
+  "charge": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "sinspawn-genais": {
+  "attack": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  },
+  "shell": {
+   "standing": true
+  }
+ },
+ "sinspawn-gui": {
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "sinspawn-gui-2": {
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "vegnagun-body": {
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "vegnagun-head": {
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "vegnagun-tail": {
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle": {
+   "standing": true
+  }
+ },
+ "ffx2-experiment-proto": {
+  "idle": {
+   "standing": true
   }
  }
 }

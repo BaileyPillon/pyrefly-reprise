@@ -178,8 +178,9 @@ describe('Pilfer Gil (FFX-2)', () => {
     const f = theftFixture(scripted([0, 100])); // success, then the top amount roll: floor(200 * 1500 / 200) = 1,500
     applyPilferGil(f.env, f.rikku, f.leblanc);
     const units = f.env.units;
-    const dropGil = units.filter((u) => u.enemy).reduce((s, u) => s + (u.enemy?.rewards.gil ?? 0), 0);
-    expect(buildResult(units, f.state, 'victory', 0).gil).toBe(dropGil + 1500);
+    // Nothing in this fixture was knocked out, so the kills paid nothing (re-parity RC9, lane X2-C: a monster standing when the battle is won pays nothing; it used
+    // to pay its row on every victory, `dropGil` here): the line is the gil Pilfer Gil took, on a victory and on an escape, and nothing on a defeat.
+    expect(buildResult(units, f.state, 'victory', 0).gil).toBe(1500);
     expect(buildResult(units, f.state, 'escape', 0).gil).toBe(1500);
     expect(buildResult(units, f.state, 'defeat', 0).gil).toBe(0);
   });

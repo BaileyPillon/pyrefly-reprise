@@ -88,7 +88,7 @@ describe('Genais’s opening (D-14, D-23; m139 @0x009 to 0x118)', () => {
     expect(t.flags['sin.genais.shelled']).toBe(true);
     expect(t.genais.immunityFlags).toEqual(expect.arrayContaining(['armored', 'immune-to-percentage-damage']));
     expect(t.genais.stats.agi).toBe(25);
-    expect([t.flags['sin.core.state'], t.core.flags.outOfMeleeReach]).toEqual(['charging', true]);
+    expect([t.flags['sin.core.state'], t.core.flags.battleDistance]).toEqual(['charging', 3]); // RC9: the Core's BattleDistance, the game's reach rule
   });
 
   it('acts first: CTB 0 for Genais and one tick more than the ordinary opening for each of the seven party counters', () => {
@@ -407,7 +407,7 @@ describe('the absorbed spell (D-30; m138 onTargeted @0x417)', () => {
     t.genais.hp = 0;
     t.genais.alive = false;
     syncGenaisCoreLiveness(t.ctx);
-    expect(t.core.flags.outOfMeleeReach).toBe(false);
+    expect(t.core.flags.battleDistance).toBe(0);
     expect(t.core.immunityFlags).not.toContain('immune-to-magical-damage');
     const hp = t.core.hp;
     t.rng.wide.push(0, 7);

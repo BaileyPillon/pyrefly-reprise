@@ -583,6 +583,20 @@ function list() {
   console.log(`(${rows.length} installed)  \`node tools/exp-art.mjs status\` lists the placeholders`);
 }
 
+/**
+ * Pose continuity (2026-10-17; FFX-2 only, the hidden chapter): the regenerated table carries what the install says about each painting (`status`, `class`, `sha`, ...),
+ * stamped by `tools/posescale/pose-stamp.mjs` from the experimental workspace's own paintings. The command line only: the tests call `writeTable()` directly and a stamp reads
+ * every painting of the namespace (a minute). Without it `tools/pose-gate.mjs` says `no-status` for every figure of the chapter.
+ */
+function stampTable() {
+  const dir = join(EXP_ART, 'characters');
+  const subjects = readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory() && d.name.startsWith(`${NAMESPACE}-`)).map((d) => d.name);
+  if (!subjects.length) return;
+  const r = spawnSync(process.execPath, [join(REPO, 'tools', 'posescale', 'pose-stamp.mjs'), '--art', EXP_ART, '--subjects', subjects.join(',')], { cwd: REPO, encoding: 'utf8', maxBuffer: 1 << 26 });
+  say(`stamp: ${(r.stdout || '').trim().split(/\r?\n/).at(-1) ?? ''}`);
+  if (r.status !== 0) throw new Error(`pose-stamp failed (${r.status}): ${(r.stderr || r.stdout || '').slice(-600)}`);
+}
+
 async function main() {
   const a = parseArgs(process.argv.slice(2));
   const cmd = a._[0];
@@ -597,7 +611,9 @@ async function main() {
   else {
     console.error('usage: node tools/exp-install.mjs install|backdrop|head|stance|retier|depth|table|list   (see the header of this file)');
     process.exitCode = 2;
+    return;
   }
+  if (['table', 'install', 'head', 'stance'].includes(cmd) && !(cmd === 'install' && a['dry-run'])) stampTable();
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {

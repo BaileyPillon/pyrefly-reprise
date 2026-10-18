@@ -138,12 +138,17 @@ export function rtOf(ctx: Ctx, id: CombatantId): ActorRuntime {
   return r;
 }
 
+/** The ids of the aeons out right now: none, the one aeon, or (FFX lane FFX-K) the three Magus Sisters together. */
+export function aeonsOut(ctx: Ctx): CombatantId[] {
+  return ctx.state.aeonIds ?? (ctx.state.aeonId ? [ctx.state.aeonId] : []);
+}
+
 /** Every combatant, in a stable order (party, aeon, enemies). */
 export function allCombatants(ctx: Ctx): FFXCombatant[] {
   const ids = [
     ...ctx.state.activeIds,
     ...ctx.state.reserveIds,
-    ...(ctx.state.aeonId ? [ctx.state.aeonId] : []),
+    ...aeonsOut(ctx),
     ...ctx.state.enemyIds,
   ];
   const seen = new Set<CombatantId>();
@@ -170,8 +175,7 @@ export function friendlySide(ctx: Ctx): Side {
  */
 export function friendlies(ctx: Ctx): FFXCombatant[] {
   if (ctx.state.aeonId) {
-    const a = tryActor(ctx, ctx.state.aeonId);
-    return a ? [a] : [];
+    return aeonsOut(ctx).map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => !!c);
   }
   return ctx.state.activeIds.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => !!c);
 }

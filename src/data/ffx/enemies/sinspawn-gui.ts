@@ -22,6 +22,7 @@
 
 import type { EnemyDef, EnemyGroupDef, EnemyRewards, StatBlock, StatusId, StatusImmunities } from '../../../battle/common/types.ts';
 import { POSSESSED_PLAIN_ATTACK } from '../command-records/enemies.ts';
+import { type LootWrites, lootRewards } from '../loot/index.ts';
 import {
   GUI_ARM_IDS, GUI_ARM_LEFT_ID, GUI_ARM_RIGHT_ID, GUI_ARM_SCRIPT, GUI_BODY_2_ID, GUI_BODY_SCRIPT, GUI_GROUP_1_ID, GUI_GROUP_2_ID, GUI_HEAD_2_ART, GUI_HEAD_ID, GUI_HEAD_SCRIPT, GUI_ID, MUSHROOM_ROCK_RUINED_PLATE,
 } from '../sinspawn-gui-ids.ts';
@@ -49,9 +50,16 @@ const POTION = { itemId: 'potion', count: 1 } as const;
 const STEAL = { baseChance: 100, common: POTION, rare: POTION } as const; // the record's byte 255, clamped to the contract's 0-100
 const BRIBE = { item: POTION, immune: true } as const;
 
-function rewards(ap: number, apOverkill: number, gil: number, overkillThreshold: number, drops: EnemyRewards['drops'] = []): EnemyRewards {
-  return { ap, apOverkill, gil, overkillThreshold, drops: drops.map((d) => ({ ...d })), steal: { ...STEAL }, bribe: { ...BRIBE } };
+/**
+ * A part's rewards from its game loot record (`../loot/records.ts`: the body m117, the head m160, an arm m161; re-parity RC9). `writes` are the numbers its own init script puts over
+ * the record at run time (RE §3.3 and §2.3), which are the ones in play: the head and the arms zero their item and gear chances, the body does so in fight 1, and in fight 2 its AP.
+ */
+function rewards(file: number, overkillThreshold: number, writes?: LootWrites): EnemyRewards {
+  return lootRewards(file, { overkillThreshold, steal: { ...STEAL }, bribe: { ...BRIBE } }, writes);
 }
+
+/** The chances a part's init zeroes: Item1DropChance, Item2DropChance and GearDropChance (m117 @0x0312 to 0x032a in fight 1; m160 @0x002d to 0x0045; m161 @0x0039 to 0x0051). */
+const NO_DROPS = { chance: [0, 0], gearChance: 0 } as const;
 
 const SCAN_BODY = 'Its arms turn aside every physical blow. Magic and Overdrives go straight through; strike the head when it shakes, or Venom follows.';
 const SCAN_HEAD = 'Out of reach of blades. Whatever strikes it while it shakes stops the Venom.';
@@ -74,8 +82,10 @@ function body(fight: 1 | 2): EnemyDef {
     immunityFlags: ['boss', 'immune-to-life', 'immune-to-delay', 'immune-to-bribe'], // record flags 0x04 and 0x07 (RE §3.1); boss: the party cannot escape (RE §2.2)
     forms: [{ name: 'Sinspawn Gui', spriteKey: second ? GUI_BODY_2_ID : GUI_ID, hp }],
     aiScriptId: GUI_BODY_SCRIPT,
-    // Fight 1 pays 400 / 600 AP; fight 2's script writes 0 / 0. Fight 1's init zeroes the drop chances; fight 2 keeps 3 Lv. 1 Key Spheres (6 on an Overkill, the engine doubles it) (RE §3.3).
-    rewards: second ? rewards(0, 0, 1_000, 800, [{ itemId: 'lv-1-key-sphere', count: 3 }]) : rewards(400, 600, 1_000, 800),
+    // Fight 1 pays 400 / 600 AP; fight 2's script writes 0 / 0. Fight 1's init zeroes the drop chances; fight 2 keeps 3 Lv. 1 Key Spheres (6 on an Overkill, the record's own overkill list) (RE §3.3).
+    rewards: second
+      ? rewards(117, 800, { ap: 0, apOverkill: 0, note: 'm117 init writes APRewardNormal and APRewardOverkill to 0 in fight 2 (RE section 2.3); the item and gear chances stay at the record' })
+      : rewards(117, 800, { ...NO_DROPS, note: 'm117 init writes Item1DropChance, Item2DropChance and GearDropChance to 0 in fight 1 (RE section 3.3)' }),
     abilityIds: ['thunder', 'demi', GUI_VENOM_ID], // Attack is its plain attack (below)
     flags: { isBoss: true },
     sensorText: 'Its arms are its guard.',
@@ -102,7 +112,7 @@ function head(fight: 1 | 2): EnemyDef {
     immunityFlags: ['immune-to-delay', 'immune-to-bribe'],
     forms: [{ name: 'Gui Head', spriteKey: fight === 2 ? GUI_HEAD_2_ART : GUI_HEAD_ID, hp }],
     aiScriptId: GUI_HEAD_SCRIPT,
-    rewards: rewards(48, 72, 200, 800), // its drop chances are zeroed by its own init (RE §3.3)
+    rewards: rewards(160, 800, { ...NO_DROPS, note: 'm160 init writes its three drop chances to 0 (RE section 3.3)' }), // 200 gil, 48 AP (72 on an overkill); its drop chances are zeroed by its own init
     abilityIds: [GUI_SPECIAL_1_ID],
     flags: { isPart: true, partOf: fight === 2 ? GUI_BODY_2_ID : GUI_ID, battleDistance: 1 },
     sensorText: 'Strike it while it shakes.',
@@ -127,7 +137,7 @@ function arm(id: string, slot: number, fight: 1 | 2): EnemyDef {
     immunityFlags: ['armored', 'immune-to-delay', 'immune-to-bribe'], // record flag 0x01 Armored (RE §3.1)
     forms: [{ name: 'Gui Arm', spriteKey: id, hp: 800 }],
     aiScriptId: GUI_ARM_SCRIPT,
-    rewards: rewards(37, 55, 300, 500), // paid again for every regrowth kill (RE §3.3); its drop chances are zeroed
+    rewards: rewards(161, 500, { ...NO_DROPS, note: 'm161 init (and the regrowth scene again) writes its three drop chances to 0 (RE section 3.3)' }), // 300 gil, 37 AP (55 on an overkill), paid again for every regrowth kill
     abilityIds: [],
     flags: { isPart: true, partOf: fight === 2 ? GUI_BODY_2_ID : GUI_ID },
     sensorText: 'They armour the body.',

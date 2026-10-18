@@ -15,6 +15,7 @@ import { GUIDES } from '../../src/data/guides/index.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../src/data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../src/data/ffx2/index.ts';
+import { darkSister } from '../../src/data/ffx/enemies/dark-aeons.ts';
 import { CHAPTER_GAME } from '../../src/engine/tactics/lookup.ts';
 import { anchorBoss, docStrings, docUnits } from './helpers/guideDocStrings.ts';
 
@@ -184,10 +185,18 @@ const num = (s: string): number => Number(s.replace(/,/g, ''));
  */
 const HP_SET_BY_THE_PARTY = new Set(['biran-yenke']);
 
+/**
+ * Numbers a page may print although no fight of its chapter's chain holds them, each read from the data and never typed here, so the exemption cannot hide a wrong number. Mirror Aeons (FFX, listed
+ * 2026-10-16): the page is the Dark Magus Sisters' whole guide page (the boss header names all three), so it prints Dark Cindy's HP, which the game's record holds, though the chapter's Act I fights the
+ * faithful pair, Sandy and Mindy (`MIRROR_ACT_I`); Cindy appears on the player's side, in the Summon list.
+ */
+const HP_ALSO_PRINTED: Record<string, readonly number[]> = { 'mirror-aeons': [darkSister('cindy', 0).stats.maxHp] };
+
 describe('every HP a document prints is one the game uses (AGENTS.md rule 6)', () => {
   for (const d of GUIDE_DOCS) {
     it(`${d.id}`, () => {
       const hps = chapterHps(d.id);
+      for (const extra of HP_ALSO_PRINTED[d.id] ?? []) hps.add(extra);
       const printed: number[] = [];
       for (const b of d.blocks) {
         if (b.t === 'field' && /HP$/.test(b.label)) {
@@ -215,9 +224,10 @@ describe('every HP a document prints is one the game uses (AGENTS.md rule 6)', (
     expect(text('sin-face')).not.toContain('thirteen');
     // Baralai's Drill Shot after 8 changes (the page says 10).
     expect(text('ffx2-den-of-woe')).toContain('changed 8 times');
-    // Natus: the game awards no drop (the item has no record yet); the page lists a Lv. 2 Key Sphere.
+    // Natus: the page lists a Lv. 2 Key Sphere x2. The game awards it (its loot record m126 names it; the item has its row since the loot-record lane, re-parity RC9, FFX only);
+    // until then the build paid nothing and this page said 'None'.
     const natus = doc('seymour-natus').blocks.find((b) => b.t === 'list' && b.label === 'Drops');
-    expect(natus && natus.t === 'list' ? natus.items : []).toEqual(['None']);
+    expect(natus && natus.t === 'list' ? natus.items : []).toEqual(['Lv. 2 Key Sphere x2']);
     // Nemo Ante Mortem Beatus: the game's own range, not the page's observed 700 to 1,500, and the Head's
     // "keep everyone above" line takes the top of that range (the page's 1,500 would leave a character at
     // 1,501 HP short of the 1,685 top).

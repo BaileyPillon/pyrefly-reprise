@@ -235,10 +235,12 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // They equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again. The old hashes
   // are in git at 931613a8.
   // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. All nine are still victories and no menu is closed; they equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again.
+  // **Re-pinned 2026-10-15 for the item ledger and the battle-end commit window** (re-parity RC8, FFX-2 only; reason "game-code parity"; `docs/handoff/re-parity-rc8-x2-end-ledger.md`): the end of a fight is committed after the casts in flight have fired, so each log gains the events between the last blow and the victory (see `ffx2-atb-golden.test.ts`, thirteenth re-pin). All nine are still victories and no menu is closed; they equal CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again. The old hashes are in git at ea431aa0.
+  // **Re-pinned on the r51 merge for the game's kill rewards** (re-parity RC9 lane X2-C, 2026-10-15, FFX-2 only; reason "game-code parity", note FFX2-G03; docs/handoff/re-parity-rc9-x2-rewards.md): the `victory` result is what the reward routine paid at each knock-out, so that one event's payload differs in every log. Cause, by ablation: with each victory result put back to what the old `buildResult` made from the same board (the Syndicate's three corrected records and the Bulwarks' two entries as they were), all nine logs give their old digest again, so no battle changed. The old hashes (the item-ledger and commit-window pins above) are in git at 6b638df95. The lane built these on r49 (before RC8); r51-rc re-recorded them on the merged tree (RC8 plus this lane), and the ablation was re-run there: every one of the 119 logs equals RC8's pin again with the result put back. They equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again.
   const PINNED = [
-    ['08332b98dd23c13e', 'b320e520bf125d9c', '3b1bae27af9363c1'],
-    ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e'],
-    ['2fe934963fc56c3a', 'cb4cab09fb7729df', '8034846edf7dfd10'],
+    ['45734a8be5dd203c', '70e64552622c11e3', '52b166f112447102'],
+    ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5'],
+    ['b0b4c773a1befb90', '8c376b36d385069c', '6fe874b5ecb5b461'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

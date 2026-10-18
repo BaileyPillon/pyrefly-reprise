@@ -12,12 +12,14 @@
  *   Petrify status, Guard and Sentinel are the statuses (and, on an enemy, the Guard mark a boss script sets, `ActorRuntime.guardMark`),
  *   Reflect is the status. **Targetable** folds in everything the engine already decides about whether an action may be aimed at a combatant:
  *   untargetable and hidden, the reach of this ability (`targeting.ts#reachesTarget`: BattleDistance and the Chapter XII discs) and, when asked,
- *   the never-a-random-pick flag. The target class, the "only targetable by" id and BattleDistance themselves are not modelled (open item G13), so
- *   the kernel's class test sees class 0 with the ordinary-actor usage bit set and its distance test sees 0.
+ *   the never-a-random-pick flag. The target class and the "only targetable by" id are not modelled (open item G13), so the kernel's class test sees class 0
+ *   with the ordinary-actor usage bit set. BattleDistance itself is modelled only when {@link chainWorld} is asked for it (`withDistance`: the player's Yojimbo's
+ *   pick); otherwise the kernel's distance test sees 0.
  */
 
 import type { AbilityDef, CombatantId, FFXCombatant, Targeting } from '../../common/types.ts';
 import { type BondArray, newBond } from '../kernel/cover.ts';
+import { FORCED_ACTION_WORD } from '../kernel/forced-action-table.ts';
 import { ExtraBit, PermBit } from '../kernel/status-types.ts';
 import {
   CMD_RANDOM_SPREAD,
@@ -33,8 +35,19 @@ import { actorNumber } from '../ai/script-random.ts';
 import { randomPickable, reachesTarget } from '../targeting.ts';
 import { resolveCommand } from './command.ts';
 
-/** The default attack's command id, which every slot record carries (a non-zero default attack: the engine has one generic Attack). */
+/** The default attack of every party member and aeon: the constant the character initialiser writes into `Chr+0x6c6` (VA 0x0079b68d), the Attack command. */
 const DEFAULT_ATTACK = 0x3000;
+
+/**
+ * A combatant's default attack (`Chr+0x6c6`): 0x3000 for the party and the aeons, and for a monster the forced-action word of its record (`kernel/forced-action-table.ts`;
+ * RC9 lane FFX-G slice G-c). A word of 0 means the monster has no default attack, so its Berserk, Confuse and Provoke turns are dropped and it can never answer with a
+ * counter. A monster whose record is not matched yet (a few possessed aeons, Pterya) keeps the engine's generic Attack, 0x3000. The engine still resolves every default attack as
+ * its one generic `attack` ability (an enemy's own plain-Attack record where the data carries it): the word decides only whether there is one.
+ */
+export function defaultAttackOf(c: FFXCombatant): number {
+  if (c.side !== 'enemy') return DEFAULT_ATTACK;
+  return FORCED_ACTION_WORD.get(c.id) ?? DEFAULT_ATTACK;
+}
 
 /** The game slot of a combatant for the targeting chain, or `undefined` when the game has none for it. */
 export function chainSlotOf(ctx: Pick<Ctx, 'state'>, c: FFXCombatant): number | undefined {
@@ -89,8 +102,13 @@ function extraWord(ctx: Ctx, c: FFXCombatant): number {
 /**
  * The 31-slot world for an action by `user` with `def`. `neverRandom` also takes the never-a-random-pick flag into Targetable (a Reflect bounce
  * and a random-target pick skip such a combatant; a Berserk or Confuse pick does not).
+ *
+ * `withDistance` also gives every slot its BattleDistance (`CombatantFlags.battleDistance`), so the kernel's own reach test runs (a slot whose distance is above the
+ * command's reach, 0 to 3, is not in the legal set: `kernel/legal-set.ts#legalSet`). It is for a pick whose command words carry the GAME's reach: the player's Yojimbo's
+ * (`kernel/yojimbo.ts#YOJIMBO_COMMAND_B1A`, Zanmato and Wakizashi on all reach 1, so a foe at distance 2 or 3 is out). Every other caller builds its command words with
+ * `chainCommand` (no reach bits, reach 0) and the engine's one-bit reach is already folded into Targetable, so they leave it off and nothing about them changes.
  */
-export function chainWorld(ctx: Ctx, user: FFXCombatant, def: AbilityDef, neverRandom: boolean): ChainWorld {
+export function chainWorld(ctx: Ctx, user: FFXCombatant, def: AbilityDef, neverRandom: boolean, withDistance = false): ChainWorld {
   const slots: Array<TargetSlot | undefined> = new Array<TargetSlot | undefined>(SLOT_COUNT).fill(undefined);
   const at = new Map<number, FFXCombatant>();
   for (const c of [...friendlies(ctx), ...enemies(ctx)]) {
@@ -110,8 +128,9 @@ export function chainWorld(ctx: Ctx, user: FFXCombatant, def: AbilityDef, neverR
       extra: extraWord(ctx, c),
       reflect: has(c, 'reflect') ? 1 : 0,
       targetable: targetable(c) && reachesTarget(ctx, user, def, c) && (!neverRandom || randomPickable(c)) ? 1 : 0,
+      ...(withDistance ? { far: c.flags.battleDistance ?? 0 } : {}),
       only: 0xff,
-      defAtk: DEFAULT_ATTACK,
+      defAtk: defaultAttackOf(c),
       keeps: keepsControlWhenProvoked(c) ? 1 : 0,
       ...(provokerSlot !== undefined ? { provokedBy: provokerSlot } : {}),
     };

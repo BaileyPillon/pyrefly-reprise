@@ -6,7 +6,9 @@
  *
  * Runs the real engine through `buildBattleResult`: two 50 HP enemies die to one 50 damage hit each;
  * only one has an overkill threshold the hit reaches, so only its drop doubles, gil does not, and a
- * stack caps at 99.
+ * stack caps at 99. These enemies are hand-built, with no loot record: the engine turns their `drops`
+ * into a record of the same shape (a guaranteed entry is chance byte 255, the overkill list is the same
+ * items at double the quantity: `adapt/loot.ts`) and pays that with the game's roll at each death.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -68,7 +70,8 @@ describe('overkill doubles the killed enemy’s item drops (PR-0258, FFX only)',
       ['over', 'plain'],
     );
     expect(result.overkilled).toEqual(['over']);
-    expect(result.drops.map((d) => d.count)).toEqual([2, 1]);
+    // The game's reward list stacks equal items (re-parity RC9: `adapt/loot.ts` over `kernel/drops.ts`): the overkilled enemy's 2 and the other's 1 are one stack of 3.
+    expect(result.drops).toEqual([{ itemId: 'ability-sphere', count: 3 }]);
     expect(result.gil, 'gil is not doubled').toBe(200);
     expect(result.ap, 'AP keeps its own overkill column').toBe(15 + 10);
   });

@@ -28,6 +28,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import sharp from 'sharp';
+import { poseClassOf, subjectKind } from '../../../tools/posescale/pose-kinds.mjs';
 
 /** The alpha of an image as a binary mask on a grid at most `maxSide` on its long side (aspect kept). */
 export async function decodeMask(buffer, maxSide = 320) {
@@ -132,6 +133,29 @@ export function estimateCentroid(m) {
   return n > 0 ? { u: sx / n / m.w, t: sy / n / m.h } : null;
 }
 
+/**
+ * Where the figure's silhouette ends, normalised (0..1): `top` the first row holding two solid cells, `base` the ground line (the last row holding
+ * at least 0.6 percent of the width, at least two: `PaintedArt.measureAlpha`'s own rule, which is what the engine plants on the floor), `left` and
+ * `right` the first and last column holding two. This is the height and the length the HEIGHT reading of CHK-026 measures through the plane's quad,
+ * from the pixels and from nothing the registration says. Null for an empty mask.
+ */
+export function estimateExtent(m) {
+  const need = Math.max(2, Math.round(m.w * 0.006));
+  let top = -1, base = -1, left = -1, right = -1;
+  for (let y = 0; y < m.h; y++) {
+    const n = rowCount(m, y);
+    if (n >= 2 && top < 0) top = y;
+    if (n >= need) base = y;
+  }
+  for (let x = 0; x < m.w; x++) {
+    let n = 0;
+    for (let y = 0; y < m.h; y++) n += m.bits[y * m.w + x];
+    if (n >= 2) { if (left < 0) left = x; right = x; }
+  }
+  if (top < 0 || base < top || left < 0) return null;
+  return { top: top / m.h, base: (base + 1) / m.h, left: left / m.w, right: (right + 1) / m.w };
+}
+
 // ------------------------------------------------------------------ the registration records
 
 /** The registration records file, or null when there is none. `subjects[subject].poses[pose]` = { head, size, stance, prone, ... }. */
@@ -169,7 +193,16 @@ export function anchorsFor({ url, mask, measure }) {
     subject: sp?.subject ?? null, pose: sp?.pose ?? null, url: String(url ?? '').replace(/[?#].*$/, ''), mask, stale: Boolean(rec) && !fresh,
     prone: fresh ? Boolean(rec.prone) && !rec.standing : mask.srcW > mask.srcH * 1.15,
     head: null, mass: estimateMass(mask), centroid: estimateCentroid(mask), stance: null, stanceSrc: null,
+    // The pixels' own readings, whatever the registration says (pose continuity, W4): the silhouette's stance, its extent, and the class that
+    // decides which band the pose is judged in (tools/posescale/pose-kinds.mjs, the gate's own classification).
+    stanceSil: estimateStance(mask), extent: estimateExtent(mask), kind: sp ? subjectKind(sp.subject) : null, cls: null,
+    // What the record says about a hold (r50.1): the head the player really sees over the idle's (the registered box is a VIRTUAL one, held to the idle's size,
+    // so the head reading passes by construction), the stature it was held to and the painting it was measured on.
+    heldHeadRatio: fresh && Number.isFinite(rec.held?.headRatio) ? rec.held.headRatio : null,
+    recStature: fresh && Number.isFinite(rec.stature) ? rec.stature : null, sha: fresh && typeof rec.sha === 'string' ? rec.sha : null, registered: fresh,
+    waiver: null,
   };
+  if (sp) out.cls = poseClassOf({ pose: sp.pose, isRef: sp.pose === 'idle', prone: out.prone, kind: out.kind });
   if (fresh && Array.isArray(rec.head) && rec.head.length === 4) {
     const [w, h] = rec.size;
     out.head = { u0: rec.head[0] / w, t0: rec.head[1] / h, u1: rec.head[2] / w, t1: rec.head[3] / h };
@@ -179,7 +212,7 @@ export function anchorsFor({ url, mask, measure }) {
     out.stanceSrc = 'registration';
   }
   if (!out.stance) {
-    const st = estimateStance(mask);
+    const st = out.stanceSil;
     if (st) Object.assign(out, { stance: st, stanceSrc: 'silhouette' });
   }
   return out;

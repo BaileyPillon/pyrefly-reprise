@@ -16,7 +16,7 @@
 
 import type { AbilityDef, FFXCombatant, StatusId, StatusInstance } from '../../common/types.ts';
 import { applyStageBuffs } from '../kernel/status-extra.ts';
-import { PermBit, type StatusRecord } from '../kernel/status-types.ts';
+import { ExtraBit, PermBit, type StatusRecord } from '../kernel/status-types.ts';
 import { applyDoubleHpMp, type PoolState } from '../kernel/status-pool.ts';
 import { banishAeon } from '../aeons.ts';
 import { ejectActor, koActor } from '../hp.ts';
@@ -157,6 +157,11 @@ export function applyStatusStep(
       lose(id, cleanse);
     }
   }
+
+  // --- the Distill bits have no engine status: the dying monster's loot roll reads them (`adapt/loot.ts`, re-parity RC9). The record did not hold them before this step, so a bit here is this
+  // command's, and it replaces the old one (the game keeps at most one).
+  const distill = after.extra & (ExtraBit.DistillPower | ExtraBit.DistillMana | ExtraBit.DistillSpeed | ExtraBit.DistillAbility);
+  if (distill !== 0) rtOf(ctx, target.id).distill = distill;
 
   // --- the stage buffs go straight onto the target's stacks (they are not part of the record)
   if (step.status.stageMask !== 0) {

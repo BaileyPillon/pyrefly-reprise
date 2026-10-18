@@ -18,7 +18,7 @@ import { dropAction, runAtbProcess, tickCharges } from './atb-engine.ts';
 import { advanceStatusClocks } from './status-clock.ts';
 import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { has } from './adapt/words.ts';
-import { canAct } from './statuses.ts';
+import { canAct, isConfusedGirl } from './statuses.ts';
 import type { ResolveContext } from './resolve-hp.ts';
 
 /** What one step needs from the engine. */
@@ -49,13 +49,13 @@ function resetDefense(u: Ffx2Unit, emit: Emit): void {
 
 /**
  * Bring the gauge states in line with the statuses after anything may have changed them. A girl whose menu was open
- * when she fell asleep, was Stopped, KO'd, petrified, ejected or Berserked has it closed and goes back to IDLE
+ * when she fell asleep, was Stopped, KO'd, petrified, ejected, Berserked or Confused has it closed and goes back to IDLE
  * (`FUN_00634040`, called from `pp_result_apply`); a unit with a command in flight loses it when it is Stopped,
  * petrified or ejected (the game clears the command queue then).
  */
 export function settleGauges(units: readonly Ffx2Unit[]): void {
   for (const u of units) {
-    if (u.gauge.state === Ffx2AtbState.WaitCommand && (!canAct(u) || has(u, 'berserk'))) u.gauge.state = Ffx2AtbState.Idle;
+    if (u.gauge.state === Ffx2AtbState.WaitCommand && (!canAct(u) || has(u, 'berserk') || isConfusedGirl(u))) u.gauge.state = Ffx2AtbState.Idle;
     if (u.atb.charging !== null && (has(u, 'stop') || has(u, 'petrify') || u.removed)) dropAction(u);
   }
 }

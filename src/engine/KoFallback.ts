@@ -28,16 +28,25 @@ interface LieCapable {
   lieDown?(ms?: number, tilt?: number): Promise<void>;
 }
 
+/** What `PaintedActor` adds for pose continuity (`PoseTrust.ts`): true when it holds a painting for the pose and withholds it as untrusted. */
+interface PoseWithholder {
+  poseWithheld?(name: string): boolean;
+}
+
 /**
  * True when the actor's `ko` pose is some other painting (the idle or hurt a
  * missing KO fell back to), or when its pose map has no `ko` at all (setPose
  * then falls back to a standing painting). False when it has a real KO
  * painting, or when the pose map cannot be read (`PaintedActor.poseUrls`
  * absent: a sprite, a test double): nothing changes then.
+ *
+ * Pose continuity (2026-10-16): a KO painting the runtime withholds (blocked, or never registered: `PaintedActor.poseWithheld`) is no KO painting
+ * either. The actor shows the next pose down its chain (hurt, else idle), and this is the answer that lays that one on the floor.
  */
 export function lacksKoPainting(actor: object): boolean {
   const urls = (actor as { poseUrls?: Readonly<Record<string, string>> }).poseUrls;
   if (!urls) return false;
+  if ((actor as PoseWithholder).poseWithheld?.('ko')) return true;
   const url = urls['ko'];
   // The master's name: a derived `ko.webp` is the KO painting itself (ArtShipped.ts), not a stand-in.
   return url === undefined || !/\/ko\.png(?:[?#].*)?$/.test(logicalArtUrl(url));

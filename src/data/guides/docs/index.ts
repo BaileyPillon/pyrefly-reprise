@@ -12,6 +12,7 @@ import type { GuideDoc } from '../doc-types.ts';
 import { SEYMOUR_FLUX_DOC } from './seymour-flux.ts';
 import { YUNALESCA_DOC } from './yunalesca.ts';
 import { BRASKAS_FINAL_AEON_DOC } from './braskas-final-aeon.ts';
+import { LAST_SUMMONING_DOC } from './last-summoning.ts';
 import { FFX2_BAHAMUT_DOC } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_SHUYIN_DOC } from './ffx2-vegnagun-shuyin.ts';
 import { FFX2_LEBLANC_DOC } from './ffx2-leblanc.ts';
@@ -27,6 +28,7 @@ import { SEYMOUR_NATUS_DOC } from './seymour-natus.ts';
 import { ISAARU_DOC } from './ffx-isaaru.ts';
 import { SINSPAWN_GUI_DOC } from './sinspawn-gui.ts';
 import { BIRAN_YENKE_DOC } from './biran-yenke.ts';
+import { MIRROR_AEONS_DOC } from './mirror-aeons.ts';
 import { SIN_FINS_CORE_DOC } from './sin-fins-core.ts';
 import { SIN_FACE_DOC } from './sin-face.ts';
 import { FFX2_EXPERIMENT_DOC } from './ffx2-experiment.ts';
@@ -37,6 +39,8 @@ import { FFX2_ANGRA_MAINYU_DOC } from './ffx2-angra-mainyu.ts';
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
   YUNALESCA_DOC,
+  // The hidden Last Summoning (FFX only) shares Chapter III's enemy ids, so it is listed AHEAD of Chapter III's document and found only on its own board (`onlyWhenFlag`); Chapter III's answers every other board.
+  LAST_SUMMONING_DOC,
   BRASKAS_FINAL_AEON_DOC,
   FFX2_BAHAMUT_DOC,
   FFX2_VEGNAGUN_SHUYIN_DOC,
@@ -53,6 +57,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   ISAARU_DOC,
   SINSPAWN_GUI_DOC, // the hidden Sinspawn Gui chapter (FFX only)
   BIRAN_YENKE_DOC, // the hidden Biran and Yenke chapter (FFX only)
+  MIRROR_AEONS_DOC, // the hidden Mirror Aeons chapter (FFX only)
   SIN_FINS_CORE_DOC,
   SIN_FACE_DOC,
   FFX2_EXPERIMENT_DOC, // the hidden Experiment (FFX-2 only)

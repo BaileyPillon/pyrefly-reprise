@@ -7,7 +7,7 @@
  * 1. **The word is safe to type.** M, S and R are bound keys (`select`, `down`, `r1`); U, H and O are bound to nothing. The experiment lane's warning (2026-10-10): on the TITLE screen
  *    several letters are bound, so a word's first letter could fire its action before the word completes. Here the title answers only `confirm` and `start` (Enter, Space, Z, E, C),
  *    so no letter of `mushroom` starts the flow there, and on the board `select` and `r1` are ignored while the word claims its S (`down`). Each letter is proven, not argued.
- * 2. **Hidden by default:** the board holds the eighteen; nothing leads in; "of 18" is unchanged.
+ * 2. **Hidden by default:** the board holds the nineteen; nothing leads in; "of 19" is unchanged.
  * 3. **The word opens it** (and only the word): the board settles on the chapter with the cursor where it was, nothing remembered, nothing written to the save or the experiments' store.
  * 4. **The three doors do not interfere:** FF7's "limit", Leblanc's "leblanc" and this word each open their own chapter, and no word begins, ends or contains another.
  * 5. **The last letter is not a press** (the M is `select`): party prep opens and stays until Enter; the board keeps its arrows after part of the word.
@@ -235,26 +235,26 @@ afterEach(() => {
 });
 
 describe('hidden by default', () => {
-  it('the board holds the eighteen: no tile for the chapter, no EXP numeral, no pip, "of 18" unchanged', () => {
+  it('the board holds the nineteen: no tile for the chapter, no EXP numeral, no pip, "of 19" unchanged', () => {
     const tiles = buildChapterTiles(new SaveStore());
     expect(new Set(tiles.map((t) => t.id))).toEqual(new Set(CHAPTERS.map((c) => c.id as string)));
-    expect(tiles).toHaveLength(18);
+    expect(tiles).toHaveLength(19);
     expect(tiles.some((t) => t.id === GUI || t.chapter?.experimental || t.numeral === 'EXP')).toBe(false);
-    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([11, 7]);
-    expect(CHAPTER_IDS).toHaveLength(18);
+    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([12, 7]);
+    expect(CHAPTER_IDS).toHaveLength(19);
     expect((CHAPTER_IDS as readonly string[]).includes(GUI)).toBe(false);
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(GUI);
     const progress = boardProgress(tiles, 0);
-    expect(progress.total).toBe(18);
-    expect(progress.pips).toHaveLength(18);
+    expect(progress.total).toBe(19);
+    expect(progress.pips).toHaveLength(19);
   });
 
-  it('the mounted board draws eighteen cards and says nothing of the chapter', () => {
+  it('the mounted board draws nineteen cards and says nothing of the chapter', () => {
     const rig = mount();
-    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(18);
+    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(19);
     expect(rig.root.querySelector(`[data-card="${GUI}"]`)).toBeNull();
     expect(rig.root.textContent).not.toMatch(/experiment|EXP\b|gui\b|mushroom/i);
-    expect(rig.root.textContent).toMatch(/of 18 beaten/);
+    expect(rig.root.textContent).toMatch(/of 19 beaten/);
     expect(rig.screen.snapshot()['order'] as string[]).not.toContain(GUI);
   });
 

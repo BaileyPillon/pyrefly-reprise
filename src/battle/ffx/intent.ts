@@ -61,7 +61,8 @@ import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
 import { activeScriptId, chooseAiCommand } from './ai/index.ts';
 import { forcedTurn } from './forced-turn.ts';
-import { keepsControlWhenProvoked } from './adapt/target-world.ts';
+import { defaultAttackOf, keepsControlWhenProvoked } from './adapt/target-world.ts';
+import { cloneLedger } from './adapt/loot.ts';
 import { fluxLine } from './ai/seymour-flux-rules.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
@@ -212,6 +213,10 @@ export function cloneCtx(ctx: Ctx, rngState?: RngSnapshot): { ctx: Ctx; events: 
     // The queued item reactions and the death marks (re-parity RC4 lane F): a copy, so a dry run's hits cannot queue into the battle's list.
     ...(ctx.rt.itemReactions ? { itemReactions: ctx.rt.itemReactions.map((r) => ({ ...r })) } : {}),
     ...(ctx.rt.reactionDeaths ? { reactionDeaths: new Set(ctx.rt.reactionDeaths) } : {}),
+    // The battle's reward struct (re-parity RC9): a dry run that kills a monster pays into a copy, never into the battle's own ledger.
+    ...(ctx.rt.rewards ? { rewards: cloneLedger(ctx.rt.rewards) } : {}),
+    // The queued counters (re-parity RC9 lane FFX-G): a copy, so that a dry run's hits cannot queue into the battle's list.
+    ...(ctx.rt.counters ? { counters: ctx.rt.counters.map((c) => ({ ...c })) } : {}),
     // The seven Tidus counters (re-parity RC4 lane FFX-G) are changed in place by Tidus's own actions: a copy, so that a dry run of his heal or his
     // cover cannot move the counters the real battle's Cover scores read (found when the RC4 lanes were merged; `parity-ffx-rc4-merge.test.ts`).
     ...(ctx.rt.coverBond ? { coverBond: [...ctx.rt.coverBond] } : {}),
@@ -431,7 +436,12 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
 
   if (has(enemy, 'confuse')) out.push('Confused — it strikes one of its own side, itself included, so this prediction is a guess');
   if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack, at the other side');
-  if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) out.push('Provoked — it spends its turn attacking whoever provoked it');
+  // Provoked: a monster with a default attack spends its turn on the provoker. Since RC9 slice G-c a monster whose record's forced-action word is 0 (nearly every boss of the
+  // story chapters) has none, so its Provoked turn is dropped (`forced-turn.ts`, `adapt/target-world.ts#defaultAttackOf`); the line says which. No recommended line Provokes such a
+  // boss and no measured fight reached it (`docs/handoff/re-parity-rc9-ffx-counters.md`, the disclosure on Berserk, Confuse and Provoke).
+  if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) {
+    out.push(defaultAttackOf(enemy) === 0 ? 'Provoked — it has no attack of its own, so it loses its turn' : 'Provoked — it spends its turn attacking whoever provoked it');
+  }
   if (has(enemy, 'threaten')) out.push('Threatened — it cannot act or counter at all [ffx-combat-core §4.4]');
   return out;
 }

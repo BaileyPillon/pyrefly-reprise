@@ -27,6 +27,7 @@ import { floralFallalAbilities } from './special-floral-fallal.ts';
 import { machinaMawAbilities } from './special-machina-maw.ts';
 import { fullThrottleAbilities } from './special-full-throttle.ts';
 import { sharedAbilities } from './shared.ts';
+import { mixResultAbilities } from './mix-results.ts';
 
 /** Every FFX-2 ability this project defines, standard dresspheres first. */
 export const ALL_FFX2_ABILITIES: readonly AbilityDef[] = [
@@ -48,6 +49,7 @@ export const ALL_FFX2_ABILITIES: readonly AbilityDef[] = [
   ...machinaMawAbilities,
   ...fullThrottleAbilities,
   ...sharedAbilities,
+  ...mixResultAbilities, // the Alchemist's Mix results: on no dressphere's ladder, made only by `x2-alchemist-mix` (re-parity RC9, lane X2-G)
 ];
 
 /** Lookup by id, for `BattleSetup` consumers and for `ItemDef.effect` resolution. */
@@ -74,6 +76,7 @@ export {
   machinaMawAbilities,
   fullThrottleAbilities,
   sharedAbilities,
+  mixResultAbilities,
 };
 
 export default FFX2_ABILITIES;

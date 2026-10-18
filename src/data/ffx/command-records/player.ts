@@ -176,8 +176,8 @@ export const COMMAND_RECORDS_PLAYER: Readonly<Record<string, FFXCommandRecord>> 
   'oblivion': { id: 0x30dd, type: 0, flagsMisc: 0x44011006, flagsDamage: 0x0, damageClass: 1, shatter: 100, rank: 8 }, // Oblivion
   'daigoro': { id: 0x30de, type: 0, flagsMisc: 0x10006, flagsDamage: 0xd, damageClass: 1, shatter: 100, rank: 3 }, // Daigoro
   'kozuka': { id: 0x30df, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, shatter: 100, rank: 3 }, // Kozuka
-  'wakizashi-single': { id: 0x30e0, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, shatter: 100, rank: 3 }, // Wakizashi (same fields as 0x30e1)
-  'wakizashi-multi': { id: 0x30e0, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, shatter: 100, rank: 3 }, // Wakizashi (same fields as 0x30e1)
+  'wakizashi-single': { id: 0x30e0, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, shatter: 100, rank: 3 }, // Wakizashi on one target (the game's 0x30e0; same fields as 0x30e1)
+  'wakizashi-multi': { id: 0x30e1, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, shatter: 100, rank: 3 }, // Wakizashi on all targets (the game's 0x30e1; same fields as 0x30e0, FFX-G08 D6)
   'zanmato': { id: 0x30e2, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 0, shatter: 100, rank: 3, chances: [[0, 255]] }, // Zanmato
   'cindy-attack': { id: 0x30e4, type: 0, flagsMisc: 0x10006, flagsDamage: 0xd, damageClass: 1, shatter: 20, rank: 3 }, // Attack (picked by hand)
   'sandy-attack': { id: 0x30e6, type: 0, flagsMisc: 0x10006, flagsDamage: 0xd, damageClass: 1, shatter: 20, rank: 3 }, // Attack (picked by hand)

@@ -101,6 +101,7 @@ import {
   previewCritChance as previewCritChanceFfx2,
   previewHitChance as previewHitChanceFfx2,
 } from '../../battle/ffx2/simulate.ts';
+import { damagesMp as ffx2DamagesMp } from '../../battle/ffx2/intentLead.ts';
 import { buildGuideView, recommendedCommand, type GuideDecision } from './guide.ts';
 import {
   type AdvisorIntent,
@@ -137,6 +138,7 @@ import {
   spentAlready,
 } from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
+import { isAeonMenu } from './advisor-aeons.ts';
 import { changeSuggestion, changeSuggestions, lockedToChange, sameChange } from './advisor-change.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
 import type { InFlightSource } from './advisor-inflight.ts';
@@ -657,7 +659,9 @@ export function describeAbility(
   else if (def.formula === 'fixed') parts.push(`Fixed damage${scope}`);
   else if (def.formula !== 'none' && def.power > 0) {
     const kind = def.damageType === 'magical' ? 'magic' : def.damageType === 'physical' ? 'physical' : '';
-    parts.push(`${el.length > 0 ? `${statusLabel(el[0]!)} ` : ''}${kind} damage${scope}`.replace(/\s+/g, ' ').trim());
+    // FFX-2 only: a move whose game row damages MP says so (the party's Osmose, Target MP, Magicide); an FFX ability never has `game: 'ffx2'`.
+    const pool = def.game === 'ffx2' && ffx2DamagesMp(def) ? 'MP ' : '';
+    parts.push(`${el.length > 0 ? `${statusLabel(el[0]!)} ` : ''}${kind} ${pool}damage${scope}`.replace(/\s+/g, ' ').trim());
   }
   if (def.hits > 1) parts.push(`${def.hits} hits`);
   // PR-0324: Ronso Rage is "no timed input; a picker only" (`types.ts#MinigameKind`), so it never claims one.
@@ -1221,6 +1225,7 @@ export function buildAdvisorView(
 ): AdvisorView | null {
   const actor = board.combatants[decision.actorId];
   if (!actor || board.game === 'ff7') return null; // FF7: the advisor is off in the slice (ff7-game-branch-audit)
+  if (isAeonMenu(decision.commands)) return null; // Yuna's own Yojimbo and Magus Sisters: a menu the simulation cannot price (`./advisor-aeons.ts`)
   const planner = given.planner !== false;
   const v3 = v3On(given);
   // DIFF-B (FFX-2, Chapter XIII only): the chapter's line is the card's top row (`./advisor-line.ts`).

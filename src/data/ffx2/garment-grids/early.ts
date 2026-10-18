@@ -139,13 +139,22 @@ export const earlyGarmentGrids: GarmentGridDef[] = [
     citation: 'ffx2-combat-core.md §4.3 [verified: 2 sources]',
   },
   {
+    // Corrected from the game's plate row 29 and card 29 (re-parity RC9 follow-up D1; FFX2-G09 §4.1 shape 3 dressphere nodes + 2 gate nodes, §4.2 conditions, Appendix A;
+    // the row is `kernel/dressphere-grids.ts` 0x601d): the card has two gates, numbers 1 and 4 (the data listed three colours); the row pays Use Cure always on (0x30b3), Use Cura on gate 4
+    // (0x30b4) and Use Curaga once every gate is crossed (0x30b5, condition 100) -- the same three as Heart Reborn's, which has the same two gates and also Use Life.
+    // The two labels, red for gate 1 and blue for gate 4, are the data's own colours kept (a label no number depends on); yellow, which the card has no gate for, is dropped.
     id: 'healing-wind',
     name: 'Healing Wind',
     nodeCount: 3,
-    gateColours: ['red', 'blue', 'yellow'],
-    gateEffects: [],
+    gateColours: ['red', 'blue'],
+    equip: { description: 'Use Cure', grantsAbilityIds: ['x2-white-mage-cure'] },
+    gateEffects: [
+      { gates: ['blue'], effect: { description: 'Use Cura', grantsAbilityIds: ['x2-white-mage-cura'] } },
+      { gates: ['red', 'blue'], effect: { description: 'Use Curaga', grantsAbilityIds: ['x2-white-mage-curaga'] } },
+    ],
     obtained: 'Ch.1, Luca events.',
-    citation: 'ffx2-combat-core.md §4.3 [single source] — healing-themed; exact gate table not published',
+    citation:
+      'ffx2-combat-core.md §4.3 [single source]; ffx2-bahamut.md §4.5 "Cure/Cura/Curaga via gates" [verified: 2 sources]; gates, equip and nodes from the game\'s plate row 29, FFX2-G09 §4.1, §4.2 [verified: the game\'s own files]',
   },
   {
     id: 'heart-reborn',

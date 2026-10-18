@@ -3,6 +3,7 @@
 //   node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=seymour-flux,ffx2-bahamut,evrae-airship
 //        [--goal=win|lose] [--size=1600x900] [--budget=1800000] [--seed=1] [--tag=x] [--pose-measure=<pose-measure.json>]
 //        [--pose-measure-from=<repo root whose docs/target/pose-measure.json to use>] [--summary=<file name under --evidence, default continuity-summary.json>]
+//        [--pose-waivers=<pose-waivers.json>]   (default: the ledger beside the registration records, else the repository's own docs/target/pose-waivers.json)
 //
 // For each chapter it runs `route.mjs` (real keys, title to board again, headless Playwright from node, never the
 // Claude-in-Chrome extension or the in-app browser pane) with `--continuity`, which attaches the in-page probe
@@ -29,6 +30,7 @@ import { parseArgs } from './cli.mjs';
 import { anchorsForPoses, analyzeRun } from './continuity-analyze.mjs';
 import { createProbe } from './continuity-probe.mjs';
 import { loadPoseMeasure } from './continuity-silhouette.mjs';
+import { loadPoseWaivers } from './continuity-waivers.mjs';
 import { HELD_MIN_FRAMES } from './continuity-held.mjs';
 import { composeStrip } from './continuity-strips.mjs';
 import { continuityReportLine, verdicts } from './continuity-pure.mjs';
@@ -66,7 +68,7 @@ const safe = (s) => String(s ?? 'x').replace(/[^a-z0-9._-]+/gi, '-').slice(0, 40
  * Attach the probe to a page the game is already running in and start it. `finish()` stops it, reads everything back and
  * returns the chapter's result (it is safe to call twice: the second call returns the first's answer).
  */
-export async function attachProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, cfg = continuityConfig(), log = console.log }) {
+export async function attachProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath = null, cfg = continuityConfig(), log = console.log }) {
   // r43: `washSelector` has the probe record the Save Sphere wash's opacity on the frames it is up (continuity-wash.mjs); a policy selector of null reads nothing
   const probeCfg = { ...cfg.probe, beforeFrames: cfg.strips.beforeFrames, afterFrames: cfg.strips.afterFrames, cutPx: cfg.motion.cutPx, washSelector: washPolicy(cfg).selector };
   await page.evaluate(`(${createProbe})(${JSON.stringify(probeCfg)}, { window, document, performance })`);
@@ -74,11 +76,23 @@ export async function attachProbe({ page, outDir, chapter, game, base, mode, pos
   let done = null;
   return {
     started: true,
-    finish: () => (done ??= finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, cfg, log }).catch((e) => ({ chapter, game, error: String(e && e.stack ? e.stack : e), checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] }, 'CHK-027': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] } } }))),
+    finish: () => (done ??= finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath, cfg, log }).catch((e) => ({ chapter, game, error: String(e && e.stack ? e.stack : e), checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] }, 'CHK-027': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] } } }))),
   };
 }
 
-async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, cfg, log }) {
+/**
+ * The pose waiver ledger (docs/target/pose-waivers.json, the gate's: continuity-waivers.mjs): `--pose-waivers` names it, else it sits beside the registration records the run was given
+ * (`--pose-measure`, so `--pose-measure-from=<root>` brings both), else the repository's own. Null when the policy does not honour waivers or there is no ledger.
+ */
+export function waiverPathFor({ poseMeasurePath, poseWaiversPath, cfg, root = ROOT }) {
+  if (cfg.waivers?.honour === false) return null;
+  if (poseWaiversPath) return poseWaiversPath;
+  const beside = poseMeasurePath ? path.join(path.dirname(poseMeasurePath), 'pose-waivers.json') : null;
+  const own = path.join(root, cfg.waivers?.path ?? 'docs/target/pose-waivers.json');
+  return beside && fs.existsSync(beside) ? beside : fs.existsSync(own) ? own : null;
+}
+
+async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath, cfg, log }) {
   const dir = path.join(outDir, 'continuity');
   fs.mkdirSync(path.join(dir, 'strips'), { recursive: true });
   if (!(await page.evaluate(() => Boolean(window.__cont)))) throw new Error('the probe is gone from the page (a reload?)');
@@ -97,6 +111,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     fs.writeFileSync(path.join(process.env.CONT_RAW_DIR, `${safe(chapter)}.json.gz`), zlib.gzipSync(JSON.stringify({ meta, records })));
   }
   const measure = loadPoseMeasure(poseMeasurePath);
+  const waivers = loadPoseWaivers(waiverPathFor({ poseMeasurePath, poseWaiversPath, cfg }));
   const pageUrl = page.url();
   const fetchImage = async (url) => {
     const r = await page.request.get(new URL(url, pageUrl).toString());
@@ -109,7 +124,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     fs.writeFileSync(path.join(dir, 'continuity.json'), JSON.stringify(out, null, 1));
     return out;
   }
-  const { anchors, notes } = await anchorsForPoses({ poses: meta.poses, fetchImage, measure });
+  const { anchors, notes } = await anchorsForPoses({ poses: meta.poses, fetchImage, measure, waivers });
   const res = analyzeRun({ meta, records, anchors, cfg });
 
   // ---- the strips of the worst events
@@ -137,7 +152,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     const guide = { headY: ref?.head ? ref.head[1] : null, feetY: ref?.feet ? ref.feet[1] : null, centroidY: ref?.centroid ? ref.centroid[1] : null };
     const caps = fr.map((_, i) => { const d = st.first + i - ev.n; return d === 0 ? (swapEv ? 'swap' : 'jerk') : d > 0 ? `+${d}` : `${d}`; });
     const title = swapEv
-      ? `${ev.figure}  ${ev.fromPose} to ${ev.toPose}  #${ev.id}  frame ${ev.n}${ev.head?.ratio != null ? `  head x${ev.head.ratio} (${ev.head.source})` : ''}${ev.feet?.standing ? `  feet ${ev.feet.px}px` : ''}${ev.outline ? `  IoU ${ev.outline.iou}` : ''}  ghost ${ev.ghost.frames} frames${ev.held?.frames >= HELD_MIN_FRAMES ? `  held ${ev.held.frames} frames` : ''}${ev.staged ? `  STAGED twirl ${ev.staged.step}/${ev.staged.of}` : ev.snap ? '  SNAP' : ev.hardCut ? '  cut' : ''}  [${w.label}]`
+      ? `${ev.figure}  ${ev.fromPose} to ${ev.toPose}  #${ev.id}  frame ${ev.n}${ev.head?.ratio != null ? `  head x${ev.head.ratio} (${ev.head.label ?? ev.head.source})` : ''}${ev.height?.ratio != null ? `  height x${ev.height.stature ?? ev.height.ratio}${ev.failHeight ? ' OUT' : ''}` : ''}${ev.headReal ? `  real head x${ev.headReal.ratio}` : ''}${ev.feet?.standing ? `  feet ${ev.feet.px}px` : ''}${ev.feetSil?.standing ? `  feet(pixels) ${ev.feetSil.gatePx}px${ev.failFeetSil ? ' OUT' : ''}` : ''}${ev.outline ? `  IoU ${ev.outline.iou}` : ''}  ghost ${ev.ghost.frames} frames${ev.held?.frames >= HELD_MIN_FRAMES ? `  held ${ev.held.frames} frames` : ''}${ev.staged ? `  STAGED twirl ${ev.staged.step}/${ev.staged.of}` : ev.snap ? '  SNAP' : ev.hardCut ? '  cut' : ''}  [${w.label}]`
       : `${ev.figure}  jerk ${ev.px} px in one frame (${ev.part}; the move's own speed is ${ev.localPx} px)  frame ${ev.n}${ev.atSwap ? '  at a pose swap' : ''}`;
     const jpg = await composeStrip({ strip: st, frames: fr, marks, guide, title, captions: caps, eventCell });
     const file = `${w.label}-${String(ev.id).padStart(3, '0')}-${safe(ev.figure)}${swapEv ? `-${safe(ev.fromPose)}-${safe(ev.toPose)}` : ''}.jpg`;
@@ -152,6 +167,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     dedicated: process.env.CONT_DEDICATED === '1', // PR-0450 (d): only the dedicated harness's numbers are scored; the chapter row of the summary shows the frame rate it ran at
     view: meta.view, probe: { ...meta.stats, errors: meta.errors.slice(0, 5), eventSource: 'the engine state read from window.__pyrefly (plane fades and corners per frame); no engine hook' },
     poseMeasure: measure ? { path: measure.path, sha256: measure.sha256, subjects: measure.count } : null,
+    poseWaivers: waivers ? (waivers.error ? { path: waivers.path, error: waivers.error } : { path: waivers.path, rows: waivers.count }) : null,
     anchorNotes: notes, coverage: res.coverage, perFigure: res.perFigure, summary: res.summary, checks,
     worst: res.worst, strips,
     swaps: res.swaps.map(({ fi, from, to, ...rest }) => rest),
@@ -161,17 +177,18 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     battleLog: { events: meta.logEvents.length, byType: meta.logEvents.reduce((m, e) => ((m[e.type] = (m[e.type] ?? 0) + 1), m), {}) },
   };
   fs.writeFileSync(path.join(dir, 'continuity.json'), JSON.stringify(out, null, 1));
-  log(`[continuity] ${chapter}: CHK-026 ${checks['CHK-026'].result}, CHK-027 ${checks['CHK-027'].result}; max head jump ${res.summary.size.maxHeadJumpPct}% (${res.summary.size.maxHeadJumpPctRegistration}% registered), max feet shift ${res.summary.size.maxFeetShiftPx}px, ${res.summary.motion.snapsPerMinute} snaps/min, worst jerk ${res.summary.motion.worstJerkPx}px, ${strips.filter((s) => s.file).length} strips`);
+  log(`[continuity] ${chapter}: CHK-026 ${checks['CHK-026'].result}, CHK-027 ${checks['CHK-027'].result}; max head jump ${res.summary.size.maxHeadJumpPct}% (${res.summary.size.maxHeadJumpPctRegistration}% registered, a control), stature ${res.summary.size.minStature} to ${res.summary.size.maxStature} (${res.summary.size.heightOverBand} out of band), max feet shift ${res.summary.size.maxFeetShiftPx}px (${res.summary.size.maxFeetSilPx}px from the pixels), ${res.summary.motion.snapsPerMinute} snaps/min, worst swap jerk ${res.summary.motion.swapJerksWorstPx}px (worst dash ${res.summary.motion.dashesWorstPx}px), frame p99 ${res.summary.frameTime?.p99Ms ?? '?'}ms, ${strips.filter((s) => s.file).length} strips`);
   return out;
 }
 
 // ---------------------------------------------------------------------------------------------------- the CLI
 
-function runRoute({ chapter, goal, base, evidence, size, budget, seed, tag, poseMeasure }) {
+function runRoute({ chapter, goal, base, evidence, size, budget, seed, tag, poseMeasure, poseWaivers }) {
   return new Promise((resolve) => {
     const a = [path.join(HERE, 'route.mjs'), chapter, goal, `--base=${base}`, `--evidence=${evidence}`, `--size=${size}`, `--budget=${budget}`, `--seed=${seed}`, '--continuity'];
     if (tag) a.push(`--tag=${tag}`);
     if (poseMeasure) a.push(`--pose-measure=${poseMeasure}`);
+    if (poseWaivers) a.push(`--pose-waivers=${poseWaivers}`);
     // CONT_DEDICATED=1 is what lets route.mjs accept --continuity (PR-0450 d): the probe runs only under this harness, which passes the registration and plays alone
     const child = spawn(process.execPath, a, { stdio: 'inherit', env: { ...process.env, CONT_DEDICATED: '1' } });
     child.on('exit', (code) => resolve(code));
@@ -185,13 +202,13 @@ export async function runContinuity(argv) {
   const base = base0 && !base0.endsWith('/') ? `${base0}/` : base0;
   const evidence = path.resolve(args.evidence ?? process.env.PYREFLY_EVIDENCE ?? '');
   const chapters = String(args.chapters ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-  if (!base || !args.evidence && !process.env.PYREFLY_EVIDENCE || !chapters.length) throw new Error('usage: continuity.mjs --base=<url> --evidence=<dir> --chapters=a,b,c [--goal=win] [--size=1600x900] [--budget=1800000] [--seed=1] [--tag=x] [--pose-measure=<path>] [--pose-measure-from=<repo root>]');
+  if (!base || !args.evidence && !process.env.PYREFLY_EVIDENCE || !chapters.length) throw new Error('usage: continuity.mjs --base=<url> --evidence=<dir> --chapters=a,b,c [--goal=win] [--size=1600x900] [--budget=1800000] [--seed=1] [--tag=x] [--pose-measure=<path>] [--pose-measure-from=<repo root>] [--pose-waivers=<path>]');
   const goal = args.goal ?? 'win';
   const poseMeasure = args['pose-measure'] ?? (args['pose-measure-from'] ? path.join(args['pose-measure-from'], 'docs', 'target', 'pose-measure.json') : fs.existsSync(path.join(ROOT, 'docs', 'target', 'pose-measure.json')) ? path.join(ROOT, 'docs', 'target', 'pose-measure.json') : null);
   const cfg = continuityConfig();
   const results = [];
   for (const chapter of chapters) {
-    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: continuityBudgetFor(chapter, args.budget), seed: args.seed ?? 1, tag: args.tag, poseMeasure });
+    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: continuityBudgetFor(chapter, args.budget), seed: args.seed ?? 1, tag: args.tag, poseMeasure, poseWaivers: args['pose-waivers'] ?? null });
     const dir = [chapter, goal, args.tag].filter(Boolean).join('-');
     const file = path.join(evidence, dir, 'continuity', 'continuity.json');
     results.push(fs.existsSync(file) ? { ...JSON.parse(fs.readFileSync(file, 'utf8')), dir } : { chapter, error: 'the route wrote no continuity.json', checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] }, 'CHK-027': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] } } });
@@ -230,12 +247,36 @@ export function aggregate(results, cfg) {
     stagedChanges: sum((s) => s.motion.stagedChanges ?? 0), stagedSteps: sum((s) => s.motion.stagedSteps ?? 0),
     stagedSnapsExcused: sum((s) => s.motion.stagedSnapsExcused ?? 0), jerksAtStaged: sum((s) => s.motion.jerksAtStaged ?? 0),
   };
+  // W4: the readings from the pixels, the CHK-027 split and the frame-time number. A chapter summarised before them has none of these (counted as 0, and a run of such chapters keeps the earlier verdicts).
+  const defined = (f) => ok.some((r) => f(r.summary) !== undefined);
+  const n0 = (f) => sum((s) => f(s) ?? 0), m0 = (f) => max((s) => f(s) ?? 0);
+  const lowest = (f) => { const v = ok.map((r) => f(r.summary)).filter((x) => x != null); return v.length ? Math.min(...v) : null; };
+  const highest = (f) => { const v = ok.map((r) => f(r.summary)).filter((x) => x != null); return v.length ? Math.max(...v) : null; };
+  if (defined((s) => s.size.heightMeasured)) {
+    Object.assign(size, {
+      heightMeasured: n0((s) => s.size.heightMeasured), heightOverBand: n0((s) => s.size.heightOverBand), heightWaived: n0((s) => s.size.heightWaived), minStature: lowest((s) => s.size.minStature), maxStature: highest((s) => s.size.maxStature),
+      koLengthMeasured: n0((s) => s.size.koLengthMeasured), minKoLength: lowest((s) => s.size.minKoLength), koLengthReported: n0((s) => s.size.koLengthReported),
+      feetSilMeasured: n0((s) => s.size.feetSilMeasured), feetSilOver: n0((s) => s.size.feetSilOver), feetSilWaived: n0((s) => s.size.feetSilWaived), maxFeetSilPx: m0((s) => s.size.maxFeetSilPx),
+      holdSwaps: n0((s) => s.size.holdSwaps), worstRealHeadPct: m0((s) => s.size.worstRealHeadPct), realHeadOutsideBand: n0((s) => s.size.realHeadOutsideBand), realHeadWaived: n0((s) => s.size.realHeadWaived),
+      unregisteredSwaps: n0((s) => s.size.unregisteredSwaps),
+    });
+  }
+  if (defined((s) => s.motion.swapJerksOverFail)) {
+    Object.assign(motion, {
+      swapJerks: n0((s) => s.motion.swapJerks), swapJerksWorstPx: m0((s) => s.motion.swapJerksWorstPx), swapJerksOverFail: n0((s) => s.motion.swapJerksOverFail),
+      teleports: n0((s) => s.motion.teleports), teleportsWorstPx: m0((s) => s.motion.teleportsWorstPx),
+      dashes: n0((s) => s.motion.dashes), dashesWorstPx: m0((s) => s.motion.dashesWorstPx), dashesOverFail: n0((s) => s.motion.dashesOverFail),
+      jerksLongFrame: n0((s) => s.motion.jerksLongFrame), swapJerksLongFrame: n0((s) => s.motion.swapJerksLongFrame), swapJerksSteadyOverFail: n0((s) => s.motion.swapJerksSteadyOverFail),
+    });
+  }
+  const ft = ok.map((r) => r.summary.frameTime).filter(Boolean);
+  const frameTime = ft.length ? { frames: ft.reduce((n, f) => n + f.frames, 0), longFrames: ft.reduce((n, f) => n + f.longFrames, 0), longFramePct: Math.round((ft.reduce((n, f) => n + f.longFrames, 0) / Math.max(1, ft.reduce((n, f) => n + f.frames, 0))) * 1000) / 10, worstP99Ms: Math.max(...ft.map((f) => f.p99Ms)), maxMs: Math.max(...ft.map((f) => f.maxMs)), longMs: ft[0].longMs } : null;
   const whole = { battleSeconds: Math.round(battleSeconds * 10) / 10, counted: sum((s) => s.counted), swaps: sum((s) => s.swaps), size, motion };
   const unverifiedChapters = results.filter((r) => !r.summary || r.checks?.['CHK-026']?.result === 'UNVERIFIED').map((r) => r.chapter);
   const checks = verdicts(whole, cfg, {});
   // a chapter that could not be verified keeps the whole run from passing, but never hides another chapter's failure
   for (const id of ['CHK-026', 'CHK-027']) if (checks[id].result === 'PASS' && unverifiedChapters.length) checks[id] = { result: 'UNVERIFIED', reasons: [`not verified in: ${unverifiedChapters.join(', ')}`] };
-  const out = { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, jerksCovered: r.summary?.motion?.jerksCovered ?? 0, fps: r.probe?.fps ?? null, dedicated: r.dedicated ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, checks };
+  const out = { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, minStature: r.summary?.size?.minStature ?? null, heightOverBand: r.summary?.size?.heightOverBand ?? null, feetSilOver: r.summary?.size?.feetSilOver ?? null, swapJerksWorstPx: r.summary?.motion?.swapJerksWorstPx ?? null, dashesWorstPx: r.summary?.motion?.dashesWorstPx ?? null, frameP99Ms: r.summary?.frameTime?.p99Ms ?? null, jerksCovered: r.summary?.motion?.jerksCovered ?? 0, fps: r.probe?.fps ?? null, dedicated: r.dedicated ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, frameTime, checks };
   return { ...out, reportLine: continuityReportLine(out) }; // PR-0450: one line for the report, with the frame rates and how many chapters the dedicated harness ran
 }
 

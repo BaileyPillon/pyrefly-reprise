@@ -27,6 +27,7 @@ import { resolveDoublecast } from './doublecast.ts';
 import { carryOutOrder } from './orders.ts';
 import { isVolley, resolveVolley } from './volley.ts';
 import { duelRefusalFor } from './aeon-duel.ts';
+import { executeAeonCommand } from './aeon-commands.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
 export interface ExecutionResult {
@@ -71,6 +72,10 @@ export function executeCommand(
     ctx.emit({ type: 'message', text: refusal, kind: 'system' });
     return { rank: 0, rejected: true, damageDealt: 0 };
   }
+
+  // The player's Yojimbo's and the Magus Sisters' own commands (re-parity lane FFX-K, `aeon-commands.ts`); `null` for everyone else, whose command goes on.
+  const aeonResult = executeAeonCommand(ctx, actor, command, (who, cmd) => executeCommand(ctx, who, cmd, true));
+  if (aeonResult !== null) return aeonResult;
 
   switch (command.kind) {
     case 'attack':
@@ -327,6 +332,11 @@ export function executeCommand(
 
   let damageDealt = resolveAbility(ctx, actor, def, aim, options);
   // Blitz Ace's success-only "Last Hit" (row 274, 24 x 1) lands after the volley, in the same action [§5.3].
+  // **Which hits the timing factor reaches is OPEN** (`FFX-G01` row 22b, open question 4; lane FFX-B4, not built): the game applies it only to the hits
+  // its result handler recalculates. For the three Swordplay moves that is every hit (they start before the animation) and the engine matches; for
+  // Blitz Ace it is the last pending hit, so the eight kicks would go unscaled and only this finisher would carry `options.timing` [I: the start gate
+  // admits only categories 0x20, 0x25, 0x30 and 0x40, so the animation script starts this controller]; for Bushido it depends on where the script
+  // starts it. That needs a read of the animation scripts or a look at the running game; until then every hit of the ability carries the factor.
   if (finisher) damageDealt += resolveAbility(ctx, actor, finisher, command.targets, { ...options, followUp: true });
   ctx.emit({ type: 'action-end', actorId: actor.id });
   // A row that orders another actor to act (Yojimbo -> Daigoro): inert unless `extra.ordersActor` is set [orders.ts].

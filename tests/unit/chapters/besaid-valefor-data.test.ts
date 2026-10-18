@@ -344,7 +344,7 @@ describe('the group, the party and the chapter', () => {
     expect(EXPERIMENT_CHAPTERS).toContain(FFX2_VALEFOR_BESAID);
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(VALEFOR_BESAID_ID);
     expect((CHAPTER_IDS as readonly string[]).includes(VALEFOR_BESAID_ID)).toBe(false);
-    expect(CHAPTERS).toHaveLength(18);
+    expect(CHAPTERS).toHaveLength(19);
     expect(FFX2_VALEFOR_BESAID).toMatchObject({ game: 'ffx2', number: 24, experimental: true, sceneKey: DJOSE_CHAMBER_PLATE, title: 'Valefor' });
     expect(FFX2_VALEFOR_BESAID.buildRef).toBe(besaidBuild);
     expect(FFX2_VALEFOR_BESAID.enemyGroupRef).toBe(besaidValeforGroup);

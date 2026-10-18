@@ -30,11 +30,18 @@
 
 import type { AbilityDef, Command, FFXCombatant } from '../common/types.ts';
 import { type Ctx, canQueueAction, tryActor } from './state.ts';
+import { randomLiving } from './ai/game-rolls.ts';
 
 /** `AbilityDef.extra` key: the combatant id this row orders to act. */
 export const ORDERS_ACTOR = 'ordersActor';
 /** `AbilityDef.extra` key: the ability id the ordered actor uses. */
 export const ORDERED_ABILITY = 'orderedAbility';
+/**
+ * `AbilityDef.extra` key, optional: `'game-picker'` makes the order's victim the game's own pick over the living front line (`findMatchingChr`: one draw on stream 4, and
+ * none with fewer than two candidates; `ai/game-rolls.ts#randomLiving`) instead of the ordered row's own aim. Only the hidden Mirror Aeons chapter's Dark Yojimbo order sets it
+ * (the dog's script picks the victim of its bite: `research/re-ffx-dark-aeons.md` 4.4); the Cavern trial's order does not, so its draws are unchanged.
+ */
+export const ORDERED_AIM = 'orderedAim';
 
 /** One ordered action: who acts, and the command they act with. */
 export interface OrderedAction {
@@ -76,5 +83,12 @@ export function carryOutOrder(
 ): number {
   const order = orderedAction(ctx, orderer, def);
   if (!order) return 0;
+  if (def.extra?.[ORDERED_AIM] === 'game-picker') {
+    // The ordered actor's script picks the victim (the draw is made now, as the order is carried out, never when an intent is estimated).
+    const victim = randomLiving(ctx);
+    if (!victim) return 0;
+    const aimed: Command = order.command.kind === 'ability' ? { ...order.command, targets: [victim.id] } : order.command;
+    return execute(order.actor, aimed);
+  }
   return execute(order.actor, order.command);
 }

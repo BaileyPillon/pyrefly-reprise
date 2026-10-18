@@ -70,6 +70,31 @@ describe('the continuity block of the policy', () => {
     }
   });
 
+  it('holds the pose continuity switches (W4) and each can be switched off for an old-versus-new run of one recording', () => {
+    expect(c.readings).toMatchObject({ height: true, feetSilhouette: true, realHead: true });
+    expect(c.jerks).toMatchObject({ dashesFail: false, teleportPx: 300 });
+    expect(c.jerks!.teleportPx!).toBeGreaterThan(c.motion.cutPx); // a teleport is more than a camera cut's line, and more than a lunge can cover in a frame
+    expect(c.waivers).toMatchObject({ honour: true, path: 'docs/target/pose-waivers.json' });
+    expect(c.tracking!.camera).toBe('point');
+    expect(c.motion.longFrameMs).toBe(34);
+    expect(c.size.feetSilhouettePct).toBe(2);
+    process.env['CONT_CFG'] = '{"readings":{"height":false},"jerks":{"dashesFail":true},"tracking":{"camera":"origin"},"waivers":{"honour":false}}';
+    try {
+      const o = continuityConfig();
+      expect(o.readings).toMatchObject({ height: false, feetSilhouette: true, realHead: true }); // merged block by block
+      expect(o.jerks).toMatchObject({ dashesFail: true, teleportPx: 300 });
+      expect(o.tracking).toMatchObject({ camera: 'origin', unregistered: 'centroid' });
+      expect(o.waivers!.honour).toBe(false);
+    } finally {
+      delete process.env['CONT_CFG'];
+    }
+  });
+
+  it('reads the feet tolerance of the silhouette from the same 2 percent as the gate (tools/posescale/pose-bands.mjs), so a live review and a deploy refusal cannot disagree', async () => {
+    const { BANDS } = await import('../../tools/posescale/pose-bands.mjs');
+    expect(c.size.feetSilhouettePct).toBeCloseTo(BANDS.feet * 100, 9);
+  });
+
   it('has no switch that changes what counts as a jerk or a snap ON unless its note quotes the owner by date (the definition is his, D-420 to D-426; AGENTS.md rule 10: ideas need a yes)', () => {
     // r40 (a) and (b) quote his pick (Bailey 2026-10-10, P5 and P4/P5). r43's wash excuse had only the lane brief behind it, so it ships off until his yes is quoted in its note.
     const quotesOwner = (on: boolean, note?: string): boolean => !on || /Bailey 20\d\d-\d\d-\d\d/.test(note ?? '');
@@ -77,7 +102,12 @@ describe('the continuity block of the policy', () => {
     expect(quotesOwner(true, 'Bailey 2099-01-01 (a fixture for this guard, not a decision)')).toBe(true);
     expect(quotesOwner(false, undefined)).toBe(true);
     const blocks = policy['continuity'] as unknown as Record<string, { note?: string } | undefined>;
-    const switches: Array<[string, boolean]> = [['tracking', c.tracking?.unregistered === 'centroid'], ['staged', c.staged?.twirl === true], ['wash', c.wash?.excuse === true]];
+    // pose continuity (W4, Bailey 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please."): the height, feet and real-head readings, the camera
+    // projected per point, the CHK-027 split and the honouring of the waiver ledger all change what counts, so each quotes him by date
+    const switches: Array<[string, boolean]> = [
+      ['tracking', c.tracking?.unregistered === 'centroid' || c.tracking?.camera === 'point'], ['staged', c.staged?.twirl === true], ['wash', c.wash?.excuse === true],
+      ['readings', Object.entries(c.readings ?? {}).some(([k, v]) => k !== 'note' && v === true)], ['jerks', c.jerks?.dashesFail === false], ['waivers', c.waivers?.honour === true],
+    ];
     for (const [name, on] of switches) {
       expect(quotesOwner(on, blocks[name]?.note), `continuity.${name} is ON in critic/policy.json but its note does not quote the owner ("Bailey <date>"): the definition of a jerk is his (D-420 to D-426), AGENTS.md rule 10. Ship it off, or quote his words and time in the note and add the D-row`).toBe(true);
     }
@@ -232,6 +262,59 @@ describe('the whole run\'s aggregate', () => {
     const a = aggregate([chapter('a'), bad], c);
     expect(a.checks['CHK-026'].result).toBe('FAIL');
     expect(a.checks['CHK-027'].result).toBe('FAIL');
+  });
+
+  /** A chapter summarised with the pose continuity readings (W4). */
+  const w4 = (id: string, size: Record<string, unknown> = {}, motion: Record<string, unknown> = {}, over: Record<string, unknown> = {}): ChapterResult => {
+    const ch = chapter(id, over);
+    Object.assign(ch.summary!['size'] as object, {
+      heightMeasured: 30, heightOverBand: 0, heightWaived: 0, minStature: 0.93, maxStature: 1.05, koLengthMeasured: 2, minKoLength: 0.8, koLengthReported: 0,
+      feetSilMeasured: 28, feetSilOver: 0, feetSilWaived: 0, maxFeetSilPx: 2, holdSwaps: 4, worstRealHeadPct: 24, realHeadOutsideBand: 0, realHeadWaived: 0, unregisteredSwaps: 0, ...size,
+    });
+    Object.assign(ch.summary!['motion'] as object, {
+      swapJerks: 2, swapJerksWorstPx: 30, swapJerksOverFail: 0, teleports: 0, teleportsWorstPx: 0, dashes: 3, dashesWorstPx: 36, dashesOverFail: 0, jerksLongFrame: 1, swapJerksLongFrame: 1, swapJerksSteadyOverFail: 0, ...motion,
+    });
+    ch.summary!['frameTime'] = { frames: 7000, p50Ms: 16.7, p90Ms: 20, p99Ms: 40, maxMs: 90, longFrames: 70, longFramePct: 1, longMs: 34 };
+    return ch;
+  };
+
+  it('adds up the readings from the pixels, takes the lowest stature, and fails a run for one chapter\'s height or feet or hold (W4)', () => {
+    const a = aggregate([w4('a'), w4('b', { minStature: 0.667, heightOverBand: 2, heightWaived: 1 })], c);
+    expect(a.size).toMatchObject({ heightMeasured: 60, heightOverBand: 2, heightWaived: 1, minStature: 0.667, maxStature: 1.05, holdSwaps: 8, worstRealHeadPct: 24 });
+    expect(a.checks['CHK-026'].result).toBe('FAIL');
+    expect(a.checks['CHK-026'].reasons.join(' ')).toMatch(/2 swap\(s\) draw a pose outside its height band .* \(stature 0\.667 to 1\.05/);
+    expect(aggregate([w4('a'), w4('b', { feetSilOver: 1, maxFeetSilPx: 70 })], c).checks['CHK-026'].reasons.join(' ')).toMatch(/silhouette's own stance .*worst 70 px/);
+    expect(aggregate([w4('a'), w4('b', { realHeadOutsideBand: 1 })], c).checks['CHK-026'].result).toBe('FAIL');
+    expect(aggregate([w4('a'), w4('b')], c).checks['CHK-026'].result).toBe('PASS');
+    expect(aggregate([w4('a'), w4('b')], c).checks['CHK-026'].reasons).toEqual([]);
+    // waived poses are shown, not failed
+    expect(aggregate([w4('a'), w4('b', { heightWaived: 5 })], c).checks['CHK-026'].result).toBe('PASS');
+    // the frame-time number is carried apart from the jerks
+    expect(aggregate([w4('a'), w4('b')], c).frameTime).toMatchObject({ frames: 14000, longFrames: 140, longFramePct: 1, worstP99Ms: 40, maxMs: 90, longMs: 34 });
+  });
+
+  it('gates the swap jerks and the teleports of a run and only REPORTS the dashes (the CHK-027 split, W4)', () => {
+    const dashing = aggregate([w4('a'), w4('b', {}, { dashes: 6, dashesWorstPx: 73, dashesOverFail: 4, jerks: 8, jerksOverFail: 4 })], c);
+    expect(dashing.checks['CHK-027'].result).toBe('PASS');
+    expect(dashing.motion).toMatchObject({ dashes: 9, dashesOverFail: 4, swapJerksOverFail: 0 });
+    expect(dashing.checks['CHK-027']).toMatchObject({ note: expect.stringMatching(/4 mid-move dash\(es\) .* are REPORTED, not gated \(worst 73 px/) });
+    const swapping = aggregate([w4('a'), w4('b', {}, { swapJerksOverFail: 3, swapJerksWorstPx: 61, jerksOverFail: 3 })], c);
+    expect(swapping.checks['CHK-027'].result).toBe('FAIL');
+    expect(swapping.checks['CHK-027'].reasons.join(' ')).toMatch(/3 jerk\(s\) of 40 px or more in one frame AT A POSE SWAP \(worst 61 px\)/);
+    expect(aggregate([w4('a'), w4('b', {}, { teleports: 1, teleportsWorstPx: 900 })], c).checks['CHK-027'].reasons.join(' ')).toMatch(/1 MID-MOVE teleport\(s\) of 300 px or more/);
+    // the way back: every jerk gates, as before the split
+    const back = aggregate([w4('a'), w4('b', {}, { dashesOverFail: 4 })], { ...c, jerks: { dashesFail: true } });
+    expect(back.checks['CHK-027'].result).toBe('FAIL');
+  });
+
+  it('keeps the earlier verdicts for chapters summarised before the split and the readings (rounds 19 to 25 and the r50.1 recordings)', () => {
+    const old = chapter('old');
+    (old.summary!['motion'] as Record<string, number>)['jerksOverFail'] = 2;
+    const a = aggregate([old, chapter('old2')], c);
+    expect(a.size).not.toHaveProperty('heightMeasured');
+    expect(a.checks['CHK-027'].result).toBe('FAIL'); // every jerk gates when the summary carries no split
+    expect(a.checks['CHK-026'].result).toBe('PASS');
+    expect(a.checks['CHK-026'].note).not.toMatch(/CONTROL/);
   });
 
   it('never lets a chapter that could not be verified turn into a pass', () => {

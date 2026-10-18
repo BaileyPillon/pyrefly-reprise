@@ -30,6 +30,7 @@ import { cloneData } from '../../battle/common/clone.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
+import { lastSummoningGroup } from '../../data/ffx/enemies/last-summoning-chain.ts'; // the hidden Last Summoning's formations, resolved on demand from their ids (FFX only)
 import { carryFfx2Full, carryWornDresspheres, FFX2_DRESSPHERE_CARRIES } from './BattleScreenCarry.ts';
 
 /** What a chain seam carries beyond the defaults: PR-0124's measurement override. */
@@ -46,7 +47,7 @@ export interface SeamOptions {
  * than the module-scanning glob it started as.
  */
 export async function findEnemyGroup(id: string): Promise<EnemyGroupDef | null> {
-  return FFX_GROUPS[id] ?? FFX2_GROUPS[id] ?? null;
+  return FFX_GROUPS[id] ?? lastSummoningGroup(id) ?? FFX2_GROUPS[id] ?? null;
 }
 
 /**
@@ -170,11 +171,20 @@ function carryFfx(build: FFXPartyBuild, state: BattleState, withStatuses = false
     };
   });
 
+  // A build that owns the player's Yojimbo (re-parity lane FFX-K) carries his compatibility and the gil Pay has spent to the next link; no other build has `yojimbo`.
+  const flagged = (key: string, fallback: number): number => {
+    const v = state.flags[key];
+    return typeof v === 'number' ? v : fallback;
+  };
+  const yojimbo = build.yojimbo;
   return {
     ...build,
     members,
     aeons,
     inventory: carryInventory(build.inventory, state),
+    ...(yojimbo === undefined
+      ? {}
+      : { yojimbo: { ...yojimbo, compatibility: flagged('yojimbo:compatibility', yojimbo.compatibility) }, gil: flagged('yojimbo:gil', build.gil) }),
   };
 }
 

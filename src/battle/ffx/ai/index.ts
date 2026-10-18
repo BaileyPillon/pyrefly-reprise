@@ -35,6 +35,7 @@ import './yunalesca.ts';
 import './braskas-final-aeon.ts';
 import './yu-pagoda.ts';
 import './possessed-aeons.ts';
+import './possessed-sisters.ts'; // the hidden Last Summoning chapter (FFX only): the three possessed Magus Sisters in one battle
 import './yu-yevon.ts';
 import './seymour-anima-macalania.ts';
 import './evrae.ts';
@@ -45,6 +46,7 @@ import './isaaru.ts';
 import './sin-scripts.ts';
 import './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only): the body, the head and the arms
 import './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only): the two Ronso
+import './dark-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only): Dark Yojimbo, the three Dark Magus Sisters and the dog
 
 export * from './types.ts';
 export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';

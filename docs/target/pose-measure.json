@@ -3,6 +3,114 @@
  "metric": "head box read against the idle's by rulers (sqrt(width*height)); stance from the silhouette",
  "resolution": 0.005,
  "subjects": {
+  "angra-mainyu": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 985.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "5a1c2ba039d45dc6f3806f54d585a5f52ac15ab75753d3956c02bfd418788036",
+     "size": [
+      1019,
+      1001
+     ],
+     "stance": {
+      "row": 985.0,
+      "src": "silhouette",
+      "x": 509.0,
+      "x0": 178.0,
+      "x1": 840.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
+  "angra-tawrich": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 910.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "4413cd6437f6060dc78eacd1b3a5576d4548ed75572c8ff4ab1550bed8d323d7",
+     "size": [
+      987,
+      926
+     ],
+     "stance": {
+      "row": 910.0,
+      "src": "silhouette",
+      "x": 404.5,
+      "x0": 107.0,
+      "x1": 702.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
+  "angra-zarich": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 982.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "5eb6144ad236a6e03b031dfad0715440b3e92314893c01be0b71801a839602c5",
+     "size": [
+      974,
+      998
+     ],
+     "stance": {
+      "row": 982.0,
+      "src": "silhouette",
+      "x": 474.0,
+      "x0": 99.0,
+      "x1": 849.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
   "anima": {
    "game": "foe",
    "headsComplete": false,
@@ -172,15 +280,22 @@
      "baseline": 1206.0,
      "current": 1.0,
      "head": [
-      358.4,
-      185.1,
-      481.6,
-      274.9
+      372.1,
+      195.1,
+      467.9,
+      264.9
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.286,
+      "reading": 0.69,
+      "readingStature": 0.701,
+      "stature": 0.901
+     },
      "prone": false,
      "reading": 0.69,
-     "scale": 0.69,
-     "scaleSrc": "reviewed",
+     "scale": 0.887,
+     "scaleSrc": "held",
      "sha": "bd450e3cf4331f4353064a2385c672c28bc35f34936dfee181fd3ae8310acbbd",
      "size": [
       776,
@@ -194,7 +309,7 @@
       "x1": 641.0
      },
      "standing": true,
-     "stature": 0.701
+     "stature": 0.901
     },
     "cast": {
      "anchor": [
@@ -236,15 +351,22 @@
      "baseline": 1116.0,
      "current": 0.64,
      "head": [
-      363.6,
-      71.6,
-      496.4,
-      168.4
+      376.1,
+      80.7,
+      483.9,
+      159.3
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.231,
+      "reading": 0.64,
+      "readingStature": 0.609,
+      "stature": 0.75
+     },
      "prone": false,
      "reading": 0.64,
-     "scale": 0.64,
-     "scaleSrc": "noise",
+     "scale": 0.788,
+     "scaleSrc": "held",
      "sha": "be889ea3e3ad7afaa5691ee91b83dc14decf8a3631af587b5c7db452b7270ab6",
      "size": [
       832,
@@ -258,7 +380,7 @@
       "x1": 602.0
      },
      "standing": true,
-     "stature": 0.609
+     "stature": 0.75
     },
     "follow": {
      "anchor": [
@@ -299,15 +421,22 @@
      "baseline": 1152.0,
      "current": 1.0,
      "head": [
-      383.3,
-      63.7,
-      496.7,
-      146.3
+      394.3,
+      71.7,
+      485.7,
+      138.3
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.24,
+      "reading": 0.75,
+      "readingStature": 0.726,
+      "stature": 0.901
+     },
      "prone": false,
      "reading": 0.75,
-     "scale": 0.75,
-     "scaleSrc": "reviewed",
+     "scale": 0.93,
+     "scaleSrc": "held",
      "sha": "d655e724120abb22f07b433828299bac4ca3ae18f8d602a37c3e6332b73eae4c",
      "size": [
       817,
@@ -321,7 +450,7 @@
       "x1": 505.0
      },
      "standing": true,
-     "stature": 0.726
+     "stature": 0.901
     },
     "idle": {
      "anchor": [
@@ -761,6 +890,42 @@
      ],
      "stance": null,
      "standing": false
+    }
+   }
+  },
+  "biran-ronso": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1196.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "6bb76e5f182ed50d5d32a52aaf730b784fb568b9d15fb8ca6cf52a83388c0c5e",
+     "size": [
+      788,
+      1212
+     ],
+     "stance": {
+      "row": 1196.0,
+      "src": "silhouette",
+      "x": 542.0,
+      "x0": 472.0,
+      "x1": 612.0
+     },
+     "standing": true,
+     "stature": 1.0
     }
    }
   },
@@ -1215,6 +1380,626 @@
      },
      "standing": true,
      "stature": 1.0
+    }
+   }
+  },
+  "dark-cindy": {
+   "game": "foe",
+   "headsComplete": true,
+   "idleHead": [
+    58.0,
+    18.0,
+    255.0,
+    180.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      142.0,
+      139.0
+     ],
+     "baseline": 1132.0,
+     "current": 1.0,
+     "head": [
+      43.5,
+      58.0,
+      240.5,
+      220.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "d669c52847afcd5f57983d499a810253f905427428b79b389733ac379a24117e",
+     "size": [
+      560,
+      1148
+     ],
+     "stance": {
+      "row": 1132.0,
+      "src": "silhouette",
+      "x": 407.5,
+      "x0": 333.0,
+      "x1": 482.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "cast": {
+     "anchor": [
+      234.5,
+      101.0
+     ],
+     "baseline": 1119.0,
+     "current": 1.0,
+     "head": [
+      136.0,
+      20.0,
+      333.0,
+      182.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "ecdea7db55c57c9d0c8e045e3318a2dd62e9987639feff0b9954d2a2c450af20",
+     "size": [
+      473,
+      1135
+     ],
+     "stance": {
+      "row": 1119.0,
+      "src": "silhouette",
+      "x": 215.5,
+      "x0": 136.0,
+      "x1": 295.0
+     },
+     "standing": true,
+     "stature": 1.002
+    },
+    "hurt": {
+     "anchor": [
+      284.7,
+      101.0
+     ],
+     "baseline": 1105.0,
+     "current": 1.0,
+     "head": [
+      186.2,
+      20.0,
+      383.2,
+      182.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "e8d5bf8edb70e1d03284c9d015bab7c2f3f14fbe1ac6f3b038a2bc3c65a1eba6",
+     "size": [
+      454,
+      1122
+     ],
+     "stance": {
+      "row": 1105.0,
+      "src": "silhouette",
+      "x": 116.0,
+      "x0": 33.0,
+      "x1": 199.0
+     },
+     "standing": true,
+     "stature": 0.989
+    },
+    "idle": {
+     "anchor": [
+      156.5,
+      99.0
+     ],
+     "baseline": 1116.0,
+     "head": [
+      58.0,
+      18.0,
+      255.0,
+      180.0
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "667160ec5aba1a951760a60a06cd605287a8f2cf1e2da48b3f1de75392931911",
+     "size": [
+      415,
+      1132
+     ],
+     "stance": {
+      "row": 1116.0,
+      "src": "silhouette",
+      "x": 163.0,
+      "x0": 84.0,
+      "x1": 242.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      963.0,
+      163.3
+     ],
+     "baseline": 506.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "kept",
+     "sha": "15813be6f81195ed883797ebc138c972c4e1abe4d11212f424358321beb57ae6",
+     "size": [
+      1134,
+      523
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "dark-mindy": {
+   "game": "foe",
+   "headsComplete": true,
+   "idleHead": [
+    48.0,
+    93.0,
+    304.0,
+    292.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      218.3,
+      177.5
+     ],
+     "baseline": 1090.0,
+     "current": 1.0,
+     "head": [
+      90.3,
+      78.0,
+      346.3,
+      277.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "53f54ffbd7d1e1af5d3f991874a5a9e53014caf0bc942980cc895a098c1b7e85",
+     "size": [
+      614,
+      1106
+     ],
+     "stance": {
+      "row": 1090.0,
+      "src": "silhouette",
+      "x": 229.5,
+      "x0": 161.0,
+      "x1": 298.0
+     },
+     "standing": true,
+     "stature": 0.974
+    },
+    "cast": {
+     "anchor": [
+      167.9,
+      183.5
+     ],
+     "baseline": 1116.0,
+     "current": 1.0,
+     "head": [
+      39.9,
+      84.0,
+      295.9,
+      283.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "88d25434391b3c94b3035dca9e80386c28131aa8bacbdbdaa77c498c9c9f2156",
+     "size": [
+      576,
+      1132
+     ],
+     "stance": {
+      "row": 1116.0,
+      "src": "silhouette",
+      "x": 95.0,
+      "x0": 29.0,
+      "x1": 161.0
+     },
+     "standing": true,
+     "stature": 0.998
+    },
+    "hurt": {
+     "anchor": [
+      315.3,
+      203.5
+     ],
+     "baseline": 1110.0,
+     "current": 1.0,
+     "head": [
+      187.3,
+      104.0,
+      443.3,
+      303.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "463342991d69ccf3baa9461de813f9dd36ce8e93ce3d0dca6198e5892081172d",
+     "size": [
+      707,
+      1126
+     ],
+     "stance": {
+      "row": 1110.0,
+      "src": "silhouette",
+      "x": 168.0,
+      "x0": 30.0,
+      "x1": 306.0
+     },
+     "standing": true,
+     "stature": 0.992
+    },
+    "idle": {
+     "anchor": [
+      176.0,
+      192.5
+     ],
+     "baseline": 1120.0,
+     "head": [
+      48.0,
+      93.0,
+      304.0,
+      292.0
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "7df84e0023433ff76c8fa4a4e8f58587b322e860ed08e8da05a6efdff9dd81e6",
+     "size": [
+      578,
+      1136
+     ],
+     "stance": {
+      "row": 1120.0,
+      "src": "silhouette",
+      "x": 95.0,
+      "x0": 26.0,
+      "x1": 164.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      931.0,
+      245.6
+     ],
+     "baseline": 778.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "kept",
+     "sha": "6f5dd1a31f7325fba903434af1431cbef431d5e157dd48e476a1002593e0fec3",
+     "size": [
+      1097,
+      796
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "dark-sandy": {
+   "game": "foe",
+   "headsComplete": true,
+   "idleHead": [
+    100.0,
+    122.0,
+    228.0,
+    252.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      136.6,
+      183.0
+     ],
+     "baseline": 1133.0,
+     "current": 1.0,
+     "head": [
+      72.6,
+      118.0,
+      200.6,
+      248.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "f231535d77ac572cc4c901feac5ff037cd4fbb50eeb18991b8edfe8695853f4c",
+     "size": [
+      785,
+      1149
+     ],
+     "stance": {
+      "row": 1133.0,
+      "src": "silhouette",
+      "x": 221.5,
+      "x0": 173.0,
+      "x1": 270.0
+     },
+     "standing": true,
+     "stature": 0.996
+    },
+    "cast": {
+     "anchor": [
+      183.7,
+      181.0
+     ],
+     "baseline": 1133.0,
+     "current": 1.0,
+     "head": [
+      119.7,
+      116.0,
+      247.7,
+      246.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "9ac2f0f476496a42f27f04f875a5bf79231afa90f05d31c6d1cb9e267b50387a",
+     "size": [
+      713,
+      1149
+     ],
+     "stance": {
+      "row": 1133.0,
+      "src": "silhouette",
+      "x": 154.5,
+      "x0": 97.0,
+      "x1": 212.0
+     },
+     "standing": true,
+     "stature": 0.996
+    },
+    "hurt": {
+     "anchor": [
+      201.4,
+      183.0
+     ],
+     "baseline": 1124.0,
+     "current": 1.0,
+     "head": [
+      137.4,
+      118.0,
+      265.4,
+      248.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "a37f38c58aefd16ffe51dc78680699838a3ed0726f88937f99b7e441a28e7451",
+     "size": [
+      470,
+      1140
+     ],
+     "stance": {
+      "row": 1124.0,
+      "src": "silhouette",
+      "x": 91.5,
+      "x0": 29.0,
+      "x1": 154.0
+     },
+     "standing": true,
+     "stature": 0.988
+    },
+    "idle": {
+     "anchor": [
+      164.0,
+      187.0
+     ],
+     "baseline": 1138.0,
+     "head": [
+      100.0,
+      122.0,
+      228.0,
+      252.0
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "51e3a950ab1426a2949d0c47ae26a3eea116d285f9937056b5715b8d99b5dea5",
+     "size": [
+      489,
+      1154
+     ],
+     "stance": {
+      "row": 1138.0,
+      "src": "silhouette",
+      "x": 168.0,
+      "x0": 109.0,
+      "x1": 227.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      948.4,
+      158.6
+     ],
+     "baseline": 488.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "kept",
+     "sha": "56de7737d5d2017c268c891c9bd3638dc7074f86295f432cd2a1af24127de656",
+     "size": [
+      1116,
+      505
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "dark-yojimbo": {
+   "game": "foe",
+   "headsComplete": true,
+   "idleHead": [
+    366.0,
+    190.0,
+    446.0,
+    286.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      358.0,
+      215.0
+     ],
+     "baseline": 1075.0,
+     "current": 1.0,
+     "head": [
+      318.0,
+      167.0,
+      398.0,
+      263.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "aad2d3eccccefe2f42b2a4df75f2099cac13aac5169544f401f99555fc8b7050",
+     "size": [
+      733,
+      1091
+     ],
+     "stance": {
+      "row": 1075.0,
+      "src": "silhouette",
+      "x": 401.5,
+      "x0": 332.0,
+      "x1": 471.0
+     },
+     "standing": true,
+     "stature": 0.96
+    },
+    "cast": {
+     "anchor": [
+      365.0,
+      222.0
+     ],
+     "baseline": 1091.0,
+     "current": 1.0,
+     "head": [
+      325.0,
+      174.0,
+      405.0,
+      270.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "728b034fc0e7c4c422cd03d6cb5f4900887897acff2d9b5815379292430268d0",
+     "size": [
+      723,
+      1108
+     ],
+     "stance": {
+      "row": 1091.0,
+      "src": "silhouette",
+      "x": 242.0,
+      "x0": 64.0,
+      "x1": 420.0
+     },
+     "standing": true,
+     "stature": 0.975
+    },
+    "hurt": {
+     "anchor": [
+      435.0,
+      178.0
+     ],
+     "baseline": 1055.0,
+     "current": 1.0,
+     "head": [
+      395.0,
+      130.0,
+      475.0,
+      226.0
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "33c3f33e8bfd22cca3e13fc2968a4dc90e5a1193c1677fb4961e3277662c3e85",
+     "size": [
+      851,
+      1071
+     ],
+     "stance": {
+      "row": 1055.0,
+      "src": "silhouette",
+      "x": 539.0,
+      "x0": 340.0,
+      "x1": 738.0
+     },
+     "standing": true,
+     "stature": 0.941
+    },
+    "idle": {
+     "anchor": [
+      406.0,
+      238.0
+     ],
+     "baseline": 1120.0,
+     "head": [
+      366.0,
+      190.0,
+      446.0,
+      286.0
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "7aebe571379be405e126e77758649c6b54b13ba03bd505539bd06a07ba14d57c",
+     "size": [
+      788,
+      1137
+     ],
+     "stance": {
+      "row": 1120.0,
+      "src": "silhouette",
+      "x": 537.5,
+      "x0": 340.0,
+      "x1": 735.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      865.0,
+      201.7
+     ],
+     "baseline": 634.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "kept",
+     "sha": "bb7d126a9238451ba6c68dcb8d3d17502fdedf1ae63db66bf28ea0ce16e18ae4",
+     "size": [
+      1020,
+      652
+     ],
+     "stance": null,
+     "standing": false
     }
    }
   },
@@ -1676,6 +2461,77 @@
     }
    }
   },
+  "ffx2-experiment": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 952.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "be3106b38dd210c95ebc053e8dc3bd270603fde1df50dfc4cc6c1bc8f2100570",
+     "size": [
+      1034,
+      968
+     ],
+     "stance": {
+      "row": 952.0,
+      "src": "silhouette",
+      "x": 531.5,
+      "x0": 142.0,
+      "x1": 921.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
+  "ffx2-experiment-proto": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 923.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "d293d2b142eb86362025206a48b72b412d3c8d37b150347655dfa5d67141404d",
+     "size": [
+      1101,
+      939
+     ],
+     "stance": {
+      "row": 923.0,
+      "src": "silhouette",
+      "x": 559.0,
+      "x0": 314.0,
+      "x1": 804.0
+     },
+     "standing": true
+    }
+   }
+  },
   "ffx2-fem-goon": {
    "game": "foe",
    "headsComplete": false,
@@ -1772,6 +2628,42 @@
      ],
      "stance": null,
      "standing": false
+    }
+   }
+  },
+  "ginnem": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1125.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "061d0021abc18af7263fa64923b2f6070f22de7ec0d61c673aa413f511971bee",
+     "size": [
+      757,
+      1164
+     ],
+     "stance": {
+      "row": 1125.0,
+      "src": "silhouette",
+      "x": 368.5,
+      "x0": 134.0,
+      "x1": 603.0
+     },
+     "standing": true,
+     "stature": 1.0
     }
    }
   },
@@ -2306,6 +3198,150 @@
       "x": 360.5,
       "x0": 40.0,
       "x1": 681.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "ixion": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      1125.0,
+      198.4
+     ],
+     "baseline": 624.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "3c12611b4feefaf580cd2ec67c7cea0bc2159159f6d6b3f2f5256d6e688054a8",
+     "size": [
+      1322,
+      640
+     ],
+     "stance": {
+      "row": 624.0,
+      "src": "silhouette",
+      "x": 546.5,
+      "x0": 472.0,
+      "x1": 621.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      1012.7,
+      247.0
+     ],
+     "baseline": 786.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "5267115f68abfea0e5829acd68acb1712aef88ca693cd5e5f519b264fa79303f",
+     "size": [
+      1191,
+      802
+     ],
+     "stance": {
+      "row": 786.0,
+      "src": "silhouette",
+      "x": 565.5,
+      "x0": 338.0,
+      "x1": 793.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      880.4,
+      271.4
+     ],
+     "baseline": 865.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "a59e1b3cd2caae13c6270d33cc21542b93790d742e1cc2f1d02ea918796c8032",
+     "size": [
+      1037,
+      881
+     ],
+     "stance": {
+      "row": 865.0,
+      "src": "silhouette",
+      "x": 414.0,
+      "x0": 188.0,
+      "x1": 640.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 786.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "847b2ff6a3bb94374668bddece2d0633324580a07c44a1504a17d86e9aceb726",
+     "size": [
+      1191,
+      802
+     ],
+     "stance": {
+      "row": 786.0,
+      "src": "silhouette",
+      "x": 565.5,
+      "x0": 338.0,
+      "x1": 793.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1031.1,
+      181.9
+     ],
+     "baseline": 568.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "5dc07a0e5f7a2f4c2bccc33b27faa91fd846af3b6256deec4ff8b5581979ec1b",
+     "size": [
+      1215,
+      585
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "overdrive": {
+     "anchor": [
+      1016.3,
+      244.0
+     ],
+     "baseline": 775.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "73ead13365648582c9896a7c325d7e4528e16c0b6845b981da5536fc8719a93e",
+     "size": [
+      1179,
+      786
+     ],
+     "stance": {
+      "row": 775.0,
+      "src": "silhouette",
+      "x": 501.5,
+      "x0": 319.0,
+      "x1": 684.0
      },
      "standing": true
     }
@@ -2980,6 +4016,42 @@
     }
    }
   },
+  "lenne": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1154.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "f2cb5b523db953792a4b43a0e97ad30634801c1c54ee60ba75c6b4817a346265",
+     "size": [
+      724,
+      1170
+     ],
+     "stance": {
+      "row": 1154.0,
+      "src": "silhouette",
+      "x": 391.5,
+      "x0": 319.0,
+      "x1": 464.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
   "logos": {
    "game": "foe",
    "headsComplete": false,
@@ -3172,15 +4244,22 @@
       "stature": 0.546
      },
      "head": [
-      333.1,
-      225.3,
-      488.9,
-      324.7
+      354.4,
+      238.8,
+      467.6,
+      311.2
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.375,
+      "reading": 0.533,
+      "readingStature": 0.546,
+      "stature": 0.75
+     },
      "prone": false,
      "reading": 0.533,
-     "scale": 0.533,
-     "scaleSrc": "reviewed",
+     "scale": 0.733,
+     "scaleSrc": "held",
      "sha": "01b736ed8dd54544f29728a6e396e43ddf6f6514948328daf0af202bd23ce424",
      "size": [
       647,
@@ -3194,7 +4273,7 @@
       "x1": 465.0
      },
      "standing": true,
-     "stature": 0.546
+     "stature": 0.75
     },
     "defend": {
      "anchor": [
@@ -3268,15 +4347,22 @@
      "baseline": 1136.0,
      "current": 1.0,
      "head": [
-      314.8,
-      160.3,
-      439.2,
-      239.7
+      331.0,
+      170.7,
+      423.0,
+      229.3
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.354,
+      "reading": 0.667,
+      "readingStature": 0.665,
+      "stature": 0.901
+     },
      "prone": false,
      "reading": 0.667,
-     "scale": 0.667,
-     "scaleSrc": "reviewed",
+     "scale": 0.903,
+     "scaleSrc": "held",
      "sha": "34fc093a2614027a8e1e5556b19435a32da5baf296d9dd086f2c594387580818",
      "size": [
       800,
@@ -3290,7 +4376,7 @@
       "x1": 350.0
      },
      "standing": true,
-     "stature": 0.665
+     "stature": 0.901
     },
     "idle": {
      "anchor": [
@@ -3825,6 +4911,78 @@
     }
    }
   },
+  "mortiphasm": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 652.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "962416288387fdfdd998f52575af1a3e6c9c9de6755cc8758126b9afa0c08c0c",
+     "size": [
+      668,
+      668
+     ],
+     "stance": {
+      "row": 652.0,
+      "src": "silhouette",
+      "x": 334.0,
+      "x0": 234.0,
+      "x1": 434.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
+  "mortiphasm-facing": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 652.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "0f5445a99dc8e30b301bfcb8e7032dcf09f3850a6479790b873d5f541df61be2",
+     "size": [
+      668,
+      668
+     ],
+     "stance": {
+      "row": 652.0,
+      "src": "silhouette",
+      "x": 555.5,
+      "x0": 538.0,
+      "x1": 573.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
   "nooj-shade": {
    "game": "foe",
    "headsComplete": false,
@@ -4009,6 +5167,157 @@
      },
      "standing": true,
      "stature": 1.0
+    }
+   }
+  },
+  "overdrive-sin": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 676.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "703748d558232839bc680e4ce3b2ff30c4ee42903c9e3dae16a26ca9be40ec92",
+     "size": [
+      1410,
+      745
+     ],
+     "stance": {
+      "row": 676.0,
+      "src": "silhouette",
+      "x": 900.0,
+      "x0": 863.0,
+      "x1": 937.0
+     },
+     "standing": true
+    },
+    "stage-0": {
+     "anchor": [
+      1215.3,
+      203.1
+     ],
+     "baseline": 676.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "703748d558232839bc680e4ce3b2ff30c4ee42903c9e3dae16a26ca9be40ec92",
+     "size": [
+      1410,
+      745
+     ],
+     "stance": {
+      "row": 676.0,
+      "src": "silhouette",
+      "x": 900.0,
+      "x0": 863.0,
+      "x1": 937.0
+     },
+     "standing": true
+    },
+    "stage-1": {
+     "anchor": [
+      1215.3,
+      203.1
+     ],
+     "baseline": 676.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "ea9c8f84e691791b3aaa04be01e471837a49c7dca8d8b7de2221e588b5af819e",
+     "size": [
+      1410,
+      745
+     ],
+     "stance": {
+      "row": 676.0,
+      "src": "silhouette",
+      "x": 900.0,
+      "x0": 863.0,
+      "x1": 937.0
+     },
+     "standing": true
+    },
+    "stage-2": {
+     "anchor": [
+      1215.3,
+      203.1
+     ],
+     "baseline": 676.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "e6fc458de2e503b668e1275b40d69dfb99f5b89379fe813aaaf4e68bb740e11a",
+     "size": [
+      1410,
+      745
+     ],
+     "stance": {
+      "row": 676.0,
+      "src": "silhouette",
+      "x": 900.0,
+      "x0": 863.0,
+      "x1": 937.0
+     },
+     "standing": true
+    },
+    "stage-3": {
+     "anchor": [
+      1215.3,
+      203.1
+     ],
+     "baseline": 676.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "6b96b323b1118fbb47177938416ce09454da0b51d8b45b08d41e5c7648c9f1a3",
+     "size": [
+      1410,
+      745
+     ],
+     "stance": {
+      "flag": "width x11.15 of the idle's",
+      "row": 676.0,
+      "src": "silhouette",
+      "x": 516.5,
+      "x0": 104.0,
+      "x1": 929.0
+     },
+     "standing": true
+    },
+    "stage-4": {
+     "anchor": [
+      1215.3,
+      218.4
+     ],
+     "baseline": 728.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "757b98ff68d281c4fa7ab4741f511ead37024a93f1a023d01f7ac5206528b96a",
+     "size": [
+      1410,
+      745
+     ],
+     "stance": {
+      "row": 728.0,
+      "src": "silhouette",
+      "x": 210.5,
+      "x0": 101.0,
+      "x1": 320.0
+     },
+     "standing": true
     }
    }
   },
@@ -4520,6 +5829,10 @@
      ],
      "baseline": 1134.0,
      "current": 0.909,
+     "feetRowKept": {
+      "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+      "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.4 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+     },
      "head": [
       485.7,
       494.6,
@@ -5404,11 +6717,11 @@
       768
      ],
      "stance": {
-      "row": 552.0,
-      "src": "silhouette(opened harder)",
-      "x": 328.0,
-      "x0": 221.0,
-      "x1": 435.0
+      "row": 752.0,
+      "src": "silhouette(plain: the harder opening sank the soles 26 percent of the painting above the alpha baseline, so it is refused)",
+      "x": 274.5,
+      "x0": 25.0,
+      "x1": 524.0
      },
      "standing": true,
      "stature": 0.991
@@ -5436,11 +6749,11 @@
       816
      ],
      "stance": {
-      "row": 472.0,
-      "src": "silhouette(opened harder)",
-      "x": 287.5,
-      "x0": 184.0,
-      "x1": 391.0
+      "row": 800.0,
+      "src": "silhouette(plain: the harder opening sank the soles 40 percent of the painting above the alpha baseline, so it is refused)",
+      "x": 266.5,
+      "x0": 78.0,
+      "x1": 455.0
      },
      "standing": true,
      "stature": 0.852
@@ -5555,11 +6868,11 @@
       1062
      ],
      "stance": {
-      "row": 760.0,
-      "src": "silhouette(opened harder)",
-      "x": 338.5,
-      "x0": 170.0,
-      "x1": 507.0
+      "row": 1058.0,
+      "src": "silhouette(plain: the harder opening sank the soles 28 percent of the painting above the alpha baseline, so it is refused)",
+      "x": 368.0,
+      "x0": 125.0,
+      "x1": 611.0
      },
      "standing": true,
      "stature": 1.13
@@ -5587,11 +6900,11 @@
       1062
      ],
      "stance": {
-      "row": 760.0,
-      "src": "silhouette(opened harder)",
-      "x": 338.5,
-      "x0": 170.0,
-      "x1": 507.0
+      "row": 1058.0,
+      "src": "silhouette(plain: the harder opening sank the soles 28 percent of the painting above the alpha baseline, so it is refused)",
+      "x": 368.0,
+      "x0": 125.0,
+      "x1": 611.0
      },
      "standing": true,
      "stature": 1.13
@@ -7909,6 +9222,254 @@
     }
    }
   },
+  "paragon": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      1036.0,
+      242.8
+     ],
+     "baseline": 768.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "93434335f1212c77456e811d650b0a67084e14b55151c1d2b935cceb55b9bd39",
+     "size": [
+      1219,
+      790
+     ],
+     "stance": {
+      "row": 768.0,
+      "src": "silhouette",
+      "x": 507.5,
+      "x0": 340.0,
+      "x1": 675.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      907.1,
+      279.8
+     ],
+     "baseline": 892.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "9f4f2578f6e81168e21f25a7c398548e7518448d66f3a4084ee6c2ebb1e8fe2c",
+     "size": [
+      1068,
+      910
+     ],
+     "stance": {
+      "row": 892.0,
+      "src": "silhouette",
+      "x": 803.0,
+      "x0": 664.0,
+      "x1": 942.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      938.8,
+      256.9
+     ],
+     "baseline": 819.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "e96e71df46350f69fa0372c3c42b269415be7b60e7b0c8c0c2f4914c6b1f2d7a",
+     "size": [
+      1105,
+      836
+     ],
+     "stance": {
+      "row": 819.0,
+      "src": "silhouette",
+      "x": 672.5,
+      "x0": 473.0,
+      "x1": 872.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 797.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "a59653d44fde6afa5fbd19f57d736826e56b59871c3a15ed4583e4e6a6516cd1",
+     "size": [
+      1150,
+      815
+     ],
+     "stance": {
+      "row": 797.0,
+      "src": "silhouette",
+      "x": 717.0,
+      "x0": 512.0,
+      "x1": 922.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "pterya": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      1200.9,
+      310.0
+     ],
+     "baseline": 855.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "d168cea36fcf052a80617bb610766540b9fefb218ef84e0cad6d8f4afcfaf2d9",
+     "size": [
+      1460,
+      932
+     ],
+     "stance": {
+      "row": 855.0,
+      "src": "silhouette",
+      "x": 636.0,
+      "x0": 212.0,
+      "x1": 1060.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      1479.1,
+      314.0
+     ],
+     "baseline": 869.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "bf082ecc8e3c937a9968e234f0e301c3e69fd252d68fb5112c83ab3d6166bfa5",
+     "size": [
+      1785,
+      950
+     ],
+     "stance": {
+      "row": 869.0,
+      "src": "silhouette",
+      "x": 908.0,
+      "x0": 481.0,
+      "x1": 1335.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      1428.3,
+      318.7
+     ],
+     "baseline": 883.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "a3673a5c2a4209238dfc0df21bc8bda43d195cc00f98be3e0b6eb687c37d5fc9",
+     "size": [
+      1768,
+      961
+     ],
+     "stance": {
+      "row": 883.0,
+      "src": "silhouette",
+      "x": 878.5,
+      "x0": 454.0,
+      "x1": 1303.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 869.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "182a2084a3ee0d35da0df17382a458771b61746450ab110b34eea129cc764ad2",
+     "size": [
+      1785,
+      950
+     ],
+     "stance": {
+      "row": 869.0,
+      "src": "silhouette",
+      "x": 908.0,
+      "x0": 481.0,
+      "x1": 1335.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1181.1,
+      240.4
+     ],
+     "baseline": 623.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "3f075d336057c3c14d49deadea109f5385ff5183e090542eecbdeb937485bd65",
+     "size": [
+      1437,
+      684
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "overdrive": {
+     "anchor": [
+      972.1,
+      306.1
+     ],
+     "baseline": 840.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "0534de30bd83be8965cfec5a18f21100c75c3620515293ea51e327dfe28a8f20",
+     "size": [
+      1194,
+      919
+     ],
+     "stance": {
+      "row": 840.0,
+      "src": "silhouette",
+      "x": 272.5,
+      "x0": 143.0,
+      "x1": 402.0
+     },
+     "standing": true
+    }
+   }
+  },
   "rikku": {
    "game": "ffx",
    "headsComplete": true,
@@ -7927,15 +9488,22 @@
      "baseline": 1188.0,
      "current": 1.0,
      "head": [
-      315.5,
-      196.0,
-      484.5,
-      324.0
+      324.8,
+      203.0,
+      475.2,
+      317.0
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.124,
+      "reading": 0.734,
+      "readingStature": 0.801,
+      "stature": 0.901
+     },
      "prone": false,
      "reading": 0.734,
-     "scale": 0.734,
-     "scaleSrc": "reviewed",
+     "scale": 0.825,
+     "scaleSrc": "held",
      "sha": "309579372678765ad7e3751fd0d66b7cd7d922bc2552fae114a0eb3f745000ee",
      "size": [
       772,
@@ -7949,7 +9517,7 @@
       "x1": 563.0
      },
      "standing": true,
-     "stature": 0.801
+     "stature": 0.901
     },
     "cast": {
      "anchor": [
@@ -8841,6 +10409,10 @@
      ],
      "baseline": 1150.0,
      "current": 0.645,
+     "feetRowKept": {
+      "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+      "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.3 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+     },
      "head": [
       180.5,
       377.1,
@@ -9056,6 +10628,10 @@
      ],
      "baseline": 1106.0,
      "current": 1.1,
+     "feetRowKept": {
+      "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+      "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.9 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+     },
      "gateLifted": {
       "by": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)",
       "reading": 0.573,
@@ -9297,6 +10873,10 @@
      ],
      "baseline": 1200.0,
      "current": 1.35,
+     "feetRowKept": {
+      "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+      "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 2.2 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+     },
      "head": [
       287.5,
       507.7,
@@ -10481,11 +12061,11 @@
       983
      ],
      "stance": {
-      "row": 594.0,
-      "src": "silhouette(opened harder)",
-      "x": 326.0,
-      "x0": 185.0,
-      "x1": 467.0
+      "row": 968.0,
+      "src": "silhouette(plain: the harder opening sank the soles 38 percent of the painting above the alpha baseline, so it is refused)",
+      "x": 317.0,
+      "x0": 22.0,
+      "x1": 612.0
      },
      "standing": true,
      "stature": 0.716
@@ -12611,6 +14191,42 @@
     }
    }
   },
+  "seymour-flux": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1198.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "564f7bdc9504549396386762b44b2249d8ae5866ec52b4e509cd340d7ba24a7d",
+     "size": [
+      832,
+      1214
+     ],
+     "stance": {
+      "row": 1198.0,
+      "src": "silhouette",
+      "x": 431.0,
+      "x0": 116.0,
+      "x1": 746.0
+     },
+     "standing": true,
+     "stature": 1.0
+    }
+   }
+  },
   "seymour-flux-body": {
    "game": "foe",
    "headsComplete": false,
@@ -12757,6 +14373,174 @@
       "x": 369.5,
       "x0": 217.0,
       "x1": 522.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "seymour-guest": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      344.8,
+      16.5
+     ],
+     "baseline": 1203.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "fb00d0b4de3cad00f0cab19e48f97a3ac2789b9cc1b33358a3e8201d8dff9b6f",
+     "size": [
+      815,
+      1220
+     ],
+     "stance": {
+      "row": 1203.0,
+      "src": "silhouette",
+      "x": 437.0,
+      "x0": 148.0,
+      "x1": 726.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      330.7,
+      22.5
+     ],
+     "baseline": 1175.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "eb27c8f7599ff317093414a4b821470c4a1e58176f5eb0b87e8400357a521ded",
+     "size": [
+      804,
+      1191
+     ],
+     "stance": {
+      "row": 1175.0,
+      "src": "silhouette",
+      "x": 521.0,
+      "x0": 289.0,
+      "x1": 753.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      476.3,
+      32.5
+     ],
+     "baseline": 1175.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "4b707ad7c8f326e75881ba00a0292dbab610f1f65857a26b316580bfd1bc094b",
+     "size": [
+      804,
+      1191
+     ],
+     "stance": {
+      "row": 1175.0,
+      "src": "silhouette",
+      "x": 521.0,
+      "x0": 289.0,
+      "x1": 753.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1175.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "62dd84ea20e0751a0f6fb06cc5065f064b77f3c3d1904487b995838d46ab0b9e",
+     "size": [
+      804,
+      1191
+     ],
+     "stance": {
+      "row": 1175.0,
+      "src": "silhouette",
+      "x": 520.5,
+      "x0": 289.0,
+      "x1": 752.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "item": {
+     "anchor": [
+      328.4,
+      22.5
+     ],
+     "baseline": 1038.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "d0eef7a142ab6ebcfa0c22286c6479c5a435f5f29e555aa39fcf7181f933910a",
+     "size": [
+      633,
+      1054
+     ],
+     "stance": {
+      "row": 1038.0,
+      "src": "silhouette",
+      "x": 363.5,
+      "x0": 192.0,
+      "x1": 535.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1586.4,
+      149.1
+     ],
+     "baseline": 454.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "e362d51a3afacfbcc9d1f5d7a9c165521544f60409a2984f33b27d14c223be3d",
+     "size": [
+      1858,
+      471
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "victory": {
+     "anchor": [
+      454.7,
+      18.5
+     ],
+     "baseline": 960.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "86998445b0572c2863d0d6c70796a8595354ac7595a6f652dd2dd4c17d1693bd",
+     "size": [
+      810,
+      976
+     ],
+     "stance": {
+      "row": 960.0,
+      "src": "silhouette",
+      "x": 389.5,
+      "x0": 72.0,
+      "x1": 707.0
      },
      "standing": true
     }
@@ -12980,6 +14764,42 @@
      ],
      "stance": null,
      "standing": false
+    }
+   }
+  },
+  "seymour-natus-ring": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 990.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "daa05e9654f6cec906abd2a23b1991e184316e6ac935936e2ac335718f40a56e",
+     "size": [
+      1006,
+      1006
+     ],
+     "stance": {
+      "row": 990.0,
+      "src": "silhouette",
+      "x": 505.0,
+      "x0": 356.0,
+      "x1": 654.0
+     },
+     "standing": true,
+     "stature": 1.0
     }
    }
   },
@@ -13361,6 +15181,64 @@
     }
    }
   },
+  "sin-core": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "charge": {
+     "anchor": [
+      433.4,
+      173.0
+     ],
+     "baseline": 334.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "cf392aa9c1660c250f7953bb3b75c5033cd8e528fa33f93f127a8a06f2d5fa06",
+     "size": [
+      519,
+      441
+     ],
+     "stance": {
+      "row": 334.0,
+      "src": "silhouette",
+      "x": 146.0,
+      "x0": 85.0,
+      "x1": 207.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 334.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "d30203ab4225bdf4ecf21915ee5b0803b4853109066591de1a2f4e9281c98685",
+     "size": [
+      519,
+      441
+     ],
+     "stance": {
+      "row": 334.0,
+      "src": "silhouette",
+      "x": 146.0,
+      "x0": 85.0,
+      "x1": 207.0
+     },
+     "standing": true
+    }
+   }
+  },
   "sin-left-fin": {
    "game": "foe",
    "headsComplete": false,
@@ -13590,6 +15468,588 @@
       "row": 929.0,
       "src": "hand",
       "x": 491
+     },
+     "standing": true
+    }
+   }
+  },
+  "sinspawn-genais": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      738.6,
+      136.9
+     ],
+     "baseline": 454.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "7dec173e3d319c4334469cfea69f46f76f0b9d6c8b0f0d048a87c8abac0948fa",
+     "size": [
+      861,
+      480
+     ],
+     "stance": {
+      "row": 454.0,
+      "src": "silhouette",
+      "x": 652.0,
+      "x0": 574.0,
+      "x1": 730.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 454.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "addcbd7da2e498a562c92c518b7a61f822c57df93e3524e1cda8be15a8425512",
+     "size": [
+      861,
+      480
+     ],
+     "stance": {
+      "row": 454.0,
+      "src": "silhouette",
+      "x": 485.0,
+      "x0": 243.0,
+      "x1": 727.0
+     },
+     "standing": true
+    },
+    "shell": {
+     "anchor": [
+      727.5,
+      175.0
+     ],
+     "baseline": 462.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "d498ba5139875939c3af49270bb48fefa41c1a6bf6ebce1f7dfaa58c8e20e2c2",
+     "size": [
+      861,
+      480
+     ],
+     "stance": {
+      "row": 462.0,
+      "src": "silhouette",
+      "x": 424.5,
+      "x0": 126.0,
+      "x1": 723.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "sinspawn-gui": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "hurt": {
+     "anchor": [
+      896.6,
+      240.7
+     ],
+     "baseline": 764.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "a50e84e1cce4f46de7bfb8c7c038ccca6ed0e5e63534cc0a5d07330fef472ea6",
+     "size": [
+      1056,
+      781
+     ],
+     "stance": {
+      "row": 764.0,
+      "src": "silhouette",
+      "x": 366.5,
+      "x0": 285.0,
+      "x1": 448.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 719.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "9dcbf333412f27954b58f04a2fb01da1a0e9416506fa25b63255b333a612972a",
+     "size": [
+      1061,
+      736
+     ],
+     "stance": {
+      "row": 719.0,
+      "src": "silhouette",
+      "x": 538.5,
+      "x0": 224.0,
+      "x1": 853.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      833.0,
+      233.2
+     ],
+     "baseline": 740.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "96288aa4730118b6ffa42e2ff5c65f055a7e16b0888d950a65fdc621426351a8",
+     "size": [
+      982,
+      756
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "sinspawn-gui-2": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "hurt": {
+     "anchor": [
+      896.6,
+      240.7
+     ],
+     "baseline": 764.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "a50e84e1cce4f46de7bfb8c7c038ccca6ed0e5e63534cc0a5d07330fef472ea6",
+     "size": [
+      1056,
+      781
+     ],
+     "stance": {
+      "row": 764.0,
+      "src": "silhouette",
+      "x": 366.5,
+      "x0": 285.0,
+      "x1": 448.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 723.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "bd8db16dcb30749c301dc208c88305bfd69ec3cc251c7ab24a35804bcedebfaa",
+     "size": [
+      1058,
+      739
+     ],
+     "stance": {
+      "row": 723.0,
+      "src": "silhouette",
+      "x": 537.5,
+      "x0": 218.0,
+      "x1": 857.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      833.0,
+      233.2
+     ],
+     "baseline": 740.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "96288aa4730118b6ffa42e2ff5c65f055a7e16b0888d950a65fdc621426351a8",
+     "size": [
+      982,
+      756
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "sinspawn-gui-arm-left": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "hurt": {
+     "anchor": [
+      547.4,
+      46.5
+     ],
+     "baseline": 1010.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "ca5c3885030fdc643cdd68a2e899359bad390d0cb08de8cb8142746dc02419de",
+     "size": [
+      666,
+      1026
+     ],
+     "stance": {
+      "row": 1010.0,
+      "src": "silhouette",
+      "x": 411.5,
+      "x0": 342.0,
+      "x1": 481.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1013.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "2d4bc5d659d16febe709015b55de36d6227df7bd1b0c783c51b8fbf6addb0db5",
+     "size": [
+      668,
+      1029
+     ],
+     "stance": {
+      "row": 1013.0,
+      "src": "silhouette",
+      "x": 404.5,
+      "x0": 345.0,
+      "x1": 464.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      176.8,
+      16.5
+     ],
+     "baseline": 1081.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "74b28b4743ebc857fd809874a8e6a93a4d0e27b931c336fa74177cda27bfb81a",
+     "size": [
+      483,
+      1097
+     ],
+     "stance": {
+      "row": 1081.0,
+      "src": "silhouette",
+      "x": 365.5,
+      "x0": 305.0,
+      "x1": 426.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "sinspawn-gui-arm-right": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1037.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "da658b9f2f294eb89494cb6b530e75f4af98416f7d32343e1404a85d7f53a214",
+     "size": [
+      664,
+      1053
+     ],
+     "stance": {
+      "row": 1037.0,
+      "src": "silhouette",
+      "x": 393.5,
+      "x0": 232.0,
+      "x1": 555.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      189.4,
+      16.5
+     ],
+     "baseline": 1125.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "c4fae40eb43a6863129fadba8051747a67b225f5d0edac1c089609a09bb41cb1",
+     "size": [
+      502,
+      1141
+     ],
+     "stance": {
+      "row": 1125.0,
+      "src": "silhouette",
+      "x": 321.0,
+      "x0": 252.0,
+      "x1": 390.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "sinspawn-gui-head": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      479.4,
+      18.5
+     ],
+     "baseline": 931.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "bf95f40814d544cd43d099e517f004cee3912dca0c9cb5c9cb73297713c9423c",
+     "size": [
+      823,
+      947
+     ],
+     "stance": {
+      "row": 931.0,
+      "src": "silhouette",
+      "x": 587.0,
+      "x0": 407.0,
+      "x1": 767.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 930.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "52155ed7042208abeff0ed4c7b96fca75ee1b06d1ff566940cc3b7adeb15e6f0",
+     "size": [
+      827,
+      946
+     ],
+     "stance": {
+      "row": 930.0,
+      "src": "silhouette",
+      "x": 596.5,
+      "x0": 416.0,
+      "x1": 777.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      421.1,
+      16.5
+     ],
+     "baseline": 955.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "60a20ab6541ba03bc2969e0d624479666f5bc6c63bc5c471b4c51db702201207",
+     "size": [
+      858,
+      971
+     ],
+     "stance": {
+      "row": 955.0,
+      "src": "silhouette",
+      "x": 618.0,
+      "x0": 421.0,
+      "x1": 815.0
+     },
+     "standing": true
+    },
+    "telegraph": {
+     "anchor": [
+      489.3,
+      16.5
+     ],
+     "baseline": 932.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "bf3c9b2b9b10451a91521f0d212362c8786ab0b8bdb2775022b6206de1815f80",
+     "size": [
+      831,
+      948
+     ],
+     "stance": {
+      "row": 932.0,
+      "src": "silhouette",
+      "x": 592.5,
+      "x0": 412.0,
+      "x1": 773.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "sinspawn-gui-head-2": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      479.4,
+      18.5
+     ],
+     "baseline": 931.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "bf95f40814d544cd43d099e517f004cee3912dca0c9cb5c9cb73297713c9423c",
+     "size": [
+      823,
+      947
+     ],
+     "stance": {
+      "row": 931.0,
+      "src": "silhouette",
+      "x": 587.0,
+      "x0": 407.0,
+      "x1": 767.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 942.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "3eba2ea4d079c52994d4ba5b242e188bc19c8c6576611bd4014f8d81c4dc839b",
+     "size": [
+      800,
+      958
+     ],
+     "stance": {
+      "row": 942.0,
+      "src": "silhouette",
+      "x": 562.5,
+      "x0": 390.0,
+      "x1": 735.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      421.1,
+      16.5
+     ],
+     "baseline": 955.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "60a20ab6541ba03bc2969e0d624479666f5bc6c63bc5c471b4c51db702201207",
+     "size": [
+      858,
+      971
+     ],
+     "stance": {
+      "row": 955.0,
+      "src": "silhouette",
+      "x": 618.0,
+      "x0": 421.0,
+      "x1": 815.0
+     },
+     "standing": true
+    },
+    "telegraph": {
+     "anchor": [
+      489.3,
+      16.5
+     ],
+     "baseline": 932.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "bf3c9b2b9b10451a91521f0d212362c8786ab0b8bdb2775022b6206de1815f80",
+     "size": [
+      831,
+      948
+     ],
+     "stance": {
+      "row": 932.0,
+      "src": "silhouette",
+      "x": 592.5,
+      "x0": 412.0,
+      "x1": 773.0
      },
      "standing": true
     }
@@ -14307,6 +16767,346 @@
     }
    }
   },
+  "valefor": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      1140.9,
+      250.7
+     ],
+     "baseline": 795.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "8d98a668c7ca4d093267c9b10d752ffb26e8864b25e42cf06a91a26c4ebd8284",
+     "size": [
+      1340,
+      812
+     ],
+     "stance": {
+      "row": 795.0,
+      "src": "silhouette",
+      "x": 577.0,
+      "x0": 154.0,
+      "x1": 1000.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      1419.1,
+      254.0
+     ],
+     "baseline": 809.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "3b9ff87ac787e2e1a5895e2fc1f7679049a42e909af24b615a17ecd05b9e9fb8",
+     "size": [
+      1665,
+      830
+     ],
+     "stance": {
+      "row": 809.0,
+      "src": "silhouette",
+      "x": 849.5,
+      "x0": 424.0,
+      "x1": 1275.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      1368.3,
+      259.4
+     ],
+     "baseline": 823.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "e5c78b1175ba510a9e1ac96b0eb49ace825814d09ae8c9d6bc9fe3620611fb88",
+     "size": [
+      1648,
+      841
+     ],
+     "stance": {
+      "row": 823.0,
+      "src": "silhouette",
+      "x": 818.5,
+      "x0": 394.0,
+      "x1": 1243.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 809.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "d5b0f4df0e29451952f5c5ea038fa6e620244b9e8fe0ad17142aa4dce1fb2250",
+     "size": [
+      1665,
+      830
+     ],
+     "stance": {
+      "row": 809.0,
+      "src": "silhouette",
+      "x": 848.0,
+      "x0": 421.0,
+      "x1": 1275.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1120.2,
+      181.8
+     ],
+     "baseline": 564.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "43c798e8005797ff86d169269100e496b4805901766c92318ea9a067b965e172",
+     "size": [
+      1317,
+      564
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "overdrive": {
+     "anchor": [
+      912.1,
+      246.1
+     ],
+     "baseline": 780.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "98d8d774de61e5feb22322db3e52dc198070cb3a7a28c98493fc5f6763ba76d7",
+     "size": [
+      1074,
+      799
+     ],
+     "stance": {
+      "row": 780.0,
+      "src": "silhouette",
+      "x": 212.5,
+      "x0": 83.0,
+      "x1": 342.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "vegnagun-body": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "cast": {
+     "anchor": [
+      1033.4,
+      248.2
+     ],
+     "baseline": 811.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "5a497cc6fa1371cb2d706834a8a65e00b7d5dde1fb93ec3f61c54385fdda0cec",
+     "size": [
+      1213,
+      827
+     ],
+     "stance": {
+      "row": 811.0,
+      "src": "silhouette",
+      "x": 607.0,
+      "x0": 65.0,
+      "x1": 1149.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      1028.2,
+      264.4
+     ],
+     "baseline": 844.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "fb0bbe1df0989be5709670e20071aaada68682142f0fbf9c7220bae03d93713a",
+     "size": [
+      1209,
+      860
+     ],
+     "stance": {
+      "row": 844.0,
+      "src": "silhouette",
+      "x": 600.0,
+      "x0": 58.0,
+      "x1": 1142.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 811.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "53c66e4cb0842a58ca260aef25c68ecd76e279c811f71d3dd400b977831f1f9e",
+     "size": [
+      1213,
+      827
+     ],
+     "stance": {
+      "row": 811.0,
+      "src": "silhouette",
+      "x": 607.0,
+      "x0": 65.0,
+      "x1": 1149.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1036.0,
+      210.7
+     ],
+     "baseline": 665.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "fce427a3332cf6ce5a483f8db638b456f0bb7fbaeb94cf181abccdf15eec8f2f",
+     "size": [
+      1218,
+      681
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "vegnagun-head": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "cast": {
+     "anchor": [
+      1042.3,
+      249.0
+     ],
+     "baseline": 830.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "162816c1b0fd362a26e7b8008850c50ae1ed2fe845379252a36909fc57f6c3f4",
+     "size": [
+      1216,
+      832
+     ],
+     "stance": {
+      "row": 830.0,
+      "src": "silhouette",
+      "x": 515.5,
+      "x0": 481.0,
+      "x1": 550.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      1043.7,
+      269.5
+     ],
+     "baseline": 861.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "3e193565dd9c3e9bc06e457929b715c25cebebb44d37586e551fc09f59a1b99d",
+     "size": [
+      1218,
+      877
+     ],
+     "stance": {
+      "row": 861.0,
+      "src": "silhouette",
+      "x": 608.5,
+      "x0": 452.0,
+      "x1": 765.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 830.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "f40bcb8548a2468bba13aeb3134bda907bf8318400c6ee7f9824c750d127c313",
+     "size": [
+      1216,
+      832
+     ],
+     "stance": {
+      "row": 830.0,
+      "src": "silhouette",
+      "x": 515.5,
+      "x0": 481.0,
+      "x1": 550.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1194.2,
+      280.3
+     ],
+     "baseline": 896.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "eecb1d5a18ffa1d488655d99a0a564db5c1307942850ef22b2c255a9b82f7fb9",
+     "size": [
+      1495,
+      913
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
   "vegnagun-leg": {
    "game": "foe",
    "headsComplete": false,
@@ -14412,6 +17212,104 @@
     }
    }
   },
+  "vegnagun-tail": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "cast": {
+     "anchor": [
+      999.8,
+      253.0
+     ],
+     "baseline": 806.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "7aa5ffd92f71aaaa330a2dd1fcc4f92b7ac77402a8e5002f00377a742090bffb",
+     "size": [
+      1176,
+      822
+     ],
+     "stance": {
+      "row": 806.0,
+      "src": "silhouette",
+      "x": 782.5,
+      "x0": 712.0,
+      "x1": 853.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      973.3,
+      253.3
+     ],
+     "baseline": 807.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "0b08f057d056610e42123f7e9d715ff5740646e8a018f80ae8ce90e6fb6a3a21",
+     "size": [
+      1145,
+      823
+     ],
+     "stance": {
+      "row": 807.0,
+      "src": "silhouette",
+      "x": 736.0,
+      "x0": 672.0,
+      "x1": 800.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 806.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "79193d3c53b697ee50ec1565c430078132cc3efe060c12a41fbd49f803074ade",
+     "size": [
+      1176,
+      822
+     ],
+     "stance": {
+      "row": 806.0,
+      "src": "silhouette",
+      "x": 782.5,
+      "x0": 712.0,
+      "x1": 853.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      951.7,
+      214.6
+     ],
+     "baseline": 675.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "ec67c3fcee40d7a29f1ce2f56e7d9e4ae00e18fcefdb086ffdee83228fbd56f9",
+     "size": [
+      1120,
+      695
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
   "wakka": {
    "game": "ffx",
    "headsComplete": true,
@@ -14462,15 +17360,22 @@
      "baseline": 1204.0,
      "current": 1.0,
      "head": [
-      290.5,
-      93.3,
-      389.5,
-      176.7
+      289.7,
+      92.6,
+      390.3,
+      177.4
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 0.985,
+      "reading": 1.09,
+      "readingStature": 1.116,
+      "stature": 1.1
+     },
      "prone": false,
      "reading": 1.09,
-     "scale": 1.09,
-     "scaleSrc": "reviewed",
+     "scale": 1.074,
+     "scaleSrc": "held",
      "sha": "b4ee8c936c026f4d326b9111975b152643a5c392200ab28c3b800b23d462c911",
      "size": [
       764,
@@ -14484,7 +17389,7 @@
       "x1": 671.0
      },
      "standing": true,
-     "stature": 1.116
+     "stature": 1.1
     },
     "critical": {
      "anchor": [
@@ -14956,6 +17861,150 @@
     }
    }
   },
+  "x2-ixion": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      958.9,
+      316.7
+     ],
+     "baseline": 854.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "cb52a3caef3229bf4a60b2ca0537d1a642f9cf7348605c70583adf0ca15872ec",
+     "size": [
+      1183,
+      941
+     ],
+     "stance": {
+      "row": 854.0,
+      "src": "silhouette",
+      "x": 596.5,
+      "x0": 215.0,
+      "x1": 978.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      1080.2,
+      314.0
+     ],
+     "baseline": 845.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "501f0dc7f5d8ea6a8c026a453842ef858365e1118bc8bf7df4c43d33a06938b7",
+     "size": [
+      1319,
+      926
+     ],
+     "stance": {
+      "row": 845.0,
+      "src": "silhouette",
+      "x": 571.5,
+      "x0": 389.0,
+      "x1": 754.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      950.3,
+      340.7
+     ],
+     "baseline": 935.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "07ebde15e1c6b1e26cfc0e4a5af915ad3a52d8a732dfaceec5ad1e46725b988c",
+     "size": [
+      1177,
+      1021
+     ],
+     "stance": {
+      "row": 935.0,
+      "src": "silhouette",
+      "x": 484.0,
+      "x0": 258.0,
+      "x1": 710.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 856.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "d24f15dfd00a5f146b183a9eb8d4c6065f26cc804905151d23eb73554a890691",
+     "size": [
+      1331,
+      942
+     ],
+     "stance": {
+      "row": 856.0,
+      "src": "silhouette",
+      "x": 635.5,
+      "x0": 408.0,
+      "x1": 863.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1101.1,
+      251.9
+     ],
+     "baseline": 638.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "5347ba687c33f88f59251a84b4272738541839460ca0170b4815ddb2c5cf1771",
+     "size": [
+      1355,
+      725
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "overdrive": {
+     "anchor": [
+      1080.2,
+      314.0
+     ],
+     "baseline": 845.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "721d4433cff32f4ba889abd5b1cbde411a8acb3e50a976d7dd150035a5a599f3",
+     "size": [
+      1319,
+      926
+     ],
+     "stance": {
+      "row": 845.0,
+      "src": "silhouette",
+      "x": 571.5,
+      "x0": 389.0,
+      "x1": 754.0
+     },
+     "standing": true
+    }
+   }
+  },
   "x2-shiva": {
    "game": "foe",
    "headsComplete": false,
@@ -15104,6 +18153,42 @@
       "x1": 543.0
      },
      "standing": true
+    }
+   }
+  },
+  "yenke-ronso": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1185.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "6251764520723d7420ed8dfe6da4e413a41fa4df2b824d924b2788a784bf2d0b",
+     "size": [
+      735,
+      1203
+     ],
+     "stance": {
+      "row": 1185.0,
+      "src": "silhouette",
+      "x": 533.5,
+      "x0": 463.0,
+      "x1": 604.0
+     },
+     "standing": true,
+     "stature": 1.0
     }
    }
   },
@@ -15568,15 +18653,22 @@
      "baseline": 1207.0,
      "current": 1.0,
      "head": [
-      295.6,
-      222.6,
-      420.4,
-      309.4
+      297.3,
+      223.8,
+      418.7,
+      308.2
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.028,
+      "reading": 0.761,
+      "readingStature": 0.877,
+      "stature": 0.901
+     },
      "prone": false,
      "reading": 0.761,
-     "scale": 0.761,
-     "scaleSrc": "reviewed",
+     "scale": 0.782,
+     "scaleSrc": "held",
      "sha": "2a643c14421b6e9fedffbcf09b39039ccbf30621c243aec544514a060d945376",
      "size": [
       813,
@@ -15590,7 +18682,7 @@
       "x1": 788.0
      },
      "standing": true,
-     "stature": 0.877
+     "stature": 0.901
     },
     "cast": {
      "anchor": [
@@ -15732,15 +18824,22 @@
      "baseline": 1021.0,
      "current": 1.0,
      "head": [
-      226.9,
-      99.0,
-      345.1,
-      181.0
+      235.2,
+      104.7,
+      336.8,
+      175.3
      ],
+     "held": {
+      "by": "Bailey 2026-10-16, on Lulu's hurt: \"lulu looks tiny when hurt - this problem again? ugh\"; the release driver's brief for r50.1 extended it to every FFX hurt, attack, cast and critical pose drawn more than about 10 percent off its idle's height",
+      "headRatio": 1.163,
+      "reading": 0.804,
+      "readingStature": 0.774,
+      "stature": 0.9
+     },
      "prone": false,
      "reading": 0.804,
-     "scale": 0.804,
-     "scaleSrc": "reviewed",
+     "scale": 0.935,
+     "scaleSrc": "held",
      "sha": "8b1ff43235f8b039a6fdd970b4046ecc0cfb40c89a284867c16dd1213b0dc556",
      "size": [
       791,
@@ -15754,7 +18853,7 @@
       "x1": 394.0
      },
      "standing": true,
-     "stature": 0.774
+     "stature": 0.9
     },
     "idle": {
      "anchor": [
@@ -16700,6 +19799,10 @@
      ],
      "baseline": 1128.0,
      "current": 1.15,
+     "feetRowKept": {
+      "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+      "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 9.8 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+     },
      "head": [
       146.3,
       424.1,
@@ -18878,6 +21981,10 @@
      ],
      "baseline": 1115.0,
      "current": 1.111,
+     "feetRowKept": {
+      "by": "data lane (pose continuity), 2026-10-17, read by eye on the painting",
+      "why": "a trailing piece (the weapon's point, a tail, a cape or a staff foot) hangs 3.8 percent of the painting below the boots, so the row of the soles is above the alpha baseline by design"
+     },
      "head": [
       372.2,
       346.7,
@@ -19683,6 +22790,127 @@
       "x1": 428.0
      },
      "standing": true
+    }
+   }
+  },
+  "yunalesca-3": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      1037.7,
+      249.6
+     ],
+     "baseline": 832.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "5b47194f372de08262775871973d01b0855b5c56680758bed85b36f3382769af",
+     "size": [
+      1216,
+      832
+     ],
+     "stance": {
+      "row": 832.0,
+      "src": "silhouette",
+      "x": 619.0,
+      "x0": 69.0,
+      "x1": 1169.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      1039.0,
+      249.6
+     ],
+     "baseline": 832.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "a8ff1331c2d8814b5eac3f88c5ea42b2e956bb9d2c37cfa8b64d2a26b6513d7a",
+     "size": [
+      1216,
+      832
+     ],
+     "stance": {
+      "row": 832.0,
+      "src": "silhouette",
+      "x": 621.0,
+      "x0": 71.0,
+      "x1": 1171.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      1047.0,
+      249.6
+     ],
+     "baseline": 832.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "738c259c6595e4ba1188820e3453bbe0093da817596a250d88c22de25f4f0fd5",
+     "size": [
+      1216,
+      832
+     ],
+     "stance": {
+      "row": 832.0,
+      "src": "silhouette",
+      "x": 620.0,
+      "x0": 67.0,
+      "x1": 1173.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 832.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "c37df70b7bd73ede0090ff6a181dfb821a3253717c91ba7d646b06f428b5b2c7",
+     "size": [
+      1216,
+      832
+     ],
+     "stance": {
+      "row": 832.0,
+      "src": "silhouette",
+      "x": 624.0,
+      "x0": 65.0,
+      "x1": 1183.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      1040.4,
+      251.7
+     ],
+     "baseline": 832.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "f0c691862068afb3dd797db84146d0ad5f0b65bbd2696636150d96b3425327a2",
+     "size": [
+      1216,
+      832
+     ],
+     "stance": null,
+     "standing": false
     }
    }
   }

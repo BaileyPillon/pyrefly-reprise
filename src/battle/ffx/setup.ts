@@ -28,19 +28,24 @@ import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { applyEquipmentToCombatant } from './equipment.ts';
 import { startAutoStatuses } from './adapt/auto-status.ts';
 import { stockAfter } from './adapt/bag.ts';
+import { cloneRewards } from './adapt/loot.ts';
 import { rebuildCarriedPools, refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
+import { spendEntryDraws } from './adapt/entry.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
 import { applySinSetups } from './ai/sin-setup.ts';
 import { applyGuiSetup } from './ai/sinspawn-gui-rules.ts';
 import { applyBiranYenkeSetup } from './ai/biran-yenke-setup.ts';
-import { applyLinkLineUp, restorePartyOnEntry } from './line-up.ts';
+import { applyDarkAeonsSetup } from './ai/dark-aeons-setup.ts';
+import { applyLinkLineUp, restoreAeonsOnEntry, restorePartyOnEntry } from './line-up.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
 import { applyAeonDuelSetup } from './aeon-duel.ts';
 import { applyPossessionOpening, mirrorPossessedAeon } from './ai/possession-setup.ts';
+import { initYojimbo } from './adapt/yojimbo.ts';
+import { initSisters } from './adapt/sisters.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -212,7 +217,7 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
       aiScriptId: e.aiScriptId,
       formIndex: 0,
       forms: e.forms.map((f) => ({ ...f })),
-      rewards: { ...e.rewards, drops: e.rewards.drops.map((d) => ({ ...d })) },
+      rewards: cloneRewards(e.rewards),
       ...(e.threatenChance !== undefined ? { threatenChance: e.threatenChance } : {}),
       ...(e.poisonTickPercent !== undefined ? { poisonTickPercent: e.poisonTickPercent } : {}),
       ...(e.doomTurns !== undefined ? { doomTurns: e.doomTurns } : {}),
@@ -251,6 +256,7 @@ export function buildBattle(
   const group = cloneData(setup.enemies);
   applyLinkLineUp(party, group); // a link that changes the line-up (FFX only; `EnemyGroupDef.lineUp`): the guest joins, the forced trio opens, Switch may close
   if (group.restoresPartyOnEntry === true) restorePartyOnEntry(party); // a hopeless retry (Sinspawn Gui's second fight): everyone up and full
+  if (group.restoresPartyOnEntry === true && group.restoresAeonsOnEntry === true) restoreAeonsOnEntry(party); // the aeons too (the hidden Mirror Aeons chapter's Act II): whole, with no recovery count
 
   const state: BattleState = {
     game: 'ffx',
@@ -315,6 +321,8 @@ export function buildBattle(
     rt.actors.set(aeon.id, makeActorRuntime(aeon));
     rt.aeonRoster.set(build.id, aeon);
   }
+  initYojimbo(ctx, party); // the player's Yojimbo and the Magus Sisters (re-parity lane FFX-K): throws when a build owns them and does not say how they start
+  initSisters(ctx, party);
 
   // The fayth's permanent Auto-Life [ffx-bfa-yu-yevon §2.3]. It goes on every
   // member, active and benched, because a switch mid-chain must not lose it.
@@ -367,6 +375,7 @@ export function buildBattle(
     if (c) startAutoStatuses(ctx, c);
   }
 
+  spendEntryDraws(ctx, group.id); // the game's two draws before the opening counters: the start-type roll (stream 1, discarded) and the placement shuffle of linked monsters [adapt/entry.ts; RC8, FFX only]
   seedInitialCtb(ctx, setup.condition ?? 'normal');
   applyPossessionOpening(ctx); // the possession fights' and Yu Yevon's opening counters [ai/possession-setup.ts]
   // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.
@@ -379,5 +388,6 @@ export function buildBattle(
   applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
   applyGuiSetup(ctx); // Sinspawn Gui: the fight number, the body's acceleration line, the arms without turns, Wakka's reach [re-ffx-ai-gui §3, §5]
   applyBiranYenkeSetup(ctx); // Biran and Yenke: both brothers' HP, STR, MAG, AGI and MDF from Kimahri's, at the battle's start [re-ffx-biran-yenke §3]
+  applyDarkAeonsSetup(ctx, group); // Mirror Aeons: the sisters' and Yojimbo's starting gauges, the battle id the scripts branch on, the dog without turns [re-ffx-yojimbo-sisters-feasibility §3, §4]
   return ctx;
 }

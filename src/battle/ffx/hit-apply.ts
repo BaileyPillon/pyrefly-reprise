@@ -31,6 +31,8 @@ import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep
 import { type Before, applyStatusStep } from './adapt/status-apply.ts';
 import { buffByte, stackBytes } from './adapt/status.ts';
 import { reactToHit } from './adapt/reactions.ts';
+import type { HitOutcome } from './kernel/hittypes.ts';
+import { noteCounterHit } from './counter-chain.ts';
 import { gaugeOnHit, gaugeOnOutcome, gaugeTransfer } from './gauge.ts';
 import { runScriptedExtra } from './scripted.ts';
 import { resolveSteal, stealsItem } from './steal.ts';
@@ -70,6 +72,8 @@ export interface HitScope {
    * its hits are in (re-parity).
    */
   touched: Map<CombatantId, Touched>;
+  /** The targets whose counter this command has already decided (a target answers once per command: `counter-chain.ts`). Made when the first hit asks. */
+  answered?: Set<CombatantId>;
 }
 
 /** What an action has done to one target so far, for the target's `onHit` (`abilities.ts#finishTouched`). */
@@ -111,8 +115,16 @@ function writeBackNul(ctx: Ctx, target: FFXCombatant, nul: { tide: number; blaze
   }
 }
 
-/** Resolve one hit on `target`, the target the action's targets were built for (`target-build.ts`). */
+/**
+ * Resolve one hit on `target`, the target the action's targets were built for (`target-build.ts`), and let the target's counter hear of it (`counter-chain.ts`: every
+ * outcome but "no effect" arms it, a target answers once per command).
+ */
 export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
+  noteCounterHit(scope, target, applyOneHit(scope, target));
+}
+
+/** The hit itself: draws, damage, statuses, events. Returns what the hit came to. */
+function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
   const { ctx, user, def, options } = scope;
   // The record lands on `target` (a miss included): its script hears of it after the last one (`onHit`, once per action).
   let seen = scope.touched.get(target.id);
@@ -145,7 +157,8 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
       ...(options.gilSpent !== undefined ? { gilSpent: options.gilSpent } : {}),
       targetCtb: targetRt.ctb,
       targetTick: tickSpeedOf(target),
-      isCounter: options.isCounter === true || hasFlag(def, 'is-counter'),
+      // A reaction never meets Evade and Counter's forced miss (the attacker's `Chr+0xdf1` is non-zero: `kernel/counter.ts#counterKind`).
+      isCounter: options.isCounter === true || hasFlag(def, 'is-counter') || ctx.rt.inReaction === true,
     },
     scope.draws,
     // The infliction step, run by the pipeline once the hit has landed and its damage classes have drawn (`HitIo.status`).
@@ -171,21 +184,21 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
     ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'nullified' });
     gaugeOnOutcome(ctx, user, target, 0, report.outcomeByte); // Rook (byte 3, bit 1)
     scope.hitIndex++;
-    return;
+    return report.outcome;
   }
   // `misses-if-target-alive` (Phoenix Down) whiffs on a living target — but a living **Zombie** is still
   // processed, and killed [ffx-combat-core §12.3]: the game's "no effect" answer, which draws nothing.
   if (report.outcome === 'noEffect') {
     ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'wrong-state' });
     scope.hitIndex++;
-    return;
+    return report.outcome;
   }
   if (report.outcome === 'miss') {
     ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'evaded' });
     gaugeOnOutcome(ctx, user, target, 0, report.outcomeByte); // Dancer (byte 3, bit 0)
     if (stealsItem(def)) resolveSteal(ctx, user, target, true); // a Mug that missed: the roll is drawn, the steal is cancelled
     scope.hitIndex++;
-    return;
+    return report.outcome;
   }
 
   const [hpAmount, mpAmount, ctbAmount] = report.amounts;
@@ -318,4 +331,5 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
 
   runScriptedExtra(ctx, user, def, target, hpAmount);
   scope.hitIndex++;
+  return report.outcome;
 }

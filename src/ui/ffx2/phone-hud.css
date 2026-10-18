@@ -70,14 +70,27 @@ html[data-phone-battle='ffx2'] .ffx2boss__partname,
 html[data-phone-battle='ffx2'] .ffx2boss__down {
   font-size: 14px;
 }
+/* F939-02 (r50; FFX-2 phone only). The part rows are a wrapping row, not a two-column grid: a row is half the strip while its name and its figure fit there and as wide as they need when they do not,
+   and a name is never narrower than its longest word. At 390 px a half-strip row is 133 px, and Angra Mainyu's TAWRICH (76 px) and SCAN (53 px) do not fit in the 112 px the row leaves them, so the
+   name printed over the label; Vegnagun's BULWARK and REDOUBT did the same, and a part's revealed figure is wider than SCAN. Rows that fit stay where they were, to the pixel (Vegnagun's Nodes). */
 html[data-phone-battle='ffx2'] .ffx2boss__parts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: row; /* the desktop rule's column is not this layout's */
+  flex-wrap: wrap;
   gap: 4px 8px;
 }
 html[data-phone-battle='ffx2'] .ffx2boss__part {
+  flex: 1 1 calc(50% - 4px);
+  min-width: min-content;
   width: auto;
   transform: none;
+}
+/* An odd row on its own line keeps the half strip it had in the grid (a row that cannot fit in it is its content's width: `min-width` wins over `max-width`). */
+html[data-phone-battle='ffx2'] .ffx2boss__part:nth-child(odd):last-child {
+  max-width: calc(50% - 4px);
+}
+html[data-phone-battle='ffx2'] .ffx2boss__partname {
+  min-width: min-content;
 }
 html[data-phone-battle='ffx2'] .ffx2boss__part > * {
   transform: none;

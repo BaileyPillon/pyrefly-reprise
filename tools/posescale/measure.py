@@ -4,7 +4,7 @@
     python -s tools/posescale/measure.py tiles tidus [yuna ...] [--poses a,b] --out DIR   the review sheets (ruler tiles, 6 poses each)
     python -s tools/posescale/measure.py pairs yuna-gunner [...] [--poses ready] --out DIR   idle beside each pose at the current scale (a quick same-size check)
     python -s tools/posescale/measure.py measure tidus [yuna ...] [--out DIR] [--write]   the table; --write merges docs/target/pose-measure.json
-    python -s tools/posescale/measure.py table                                            records -> src/data/art/poseRegistration*.ts (scale, stance, feet row, upright and, since r394, each pose's head box as fractions of its painting: src/engine/HeadLock.ts holds it to the idle's size on screen under any stage camera)
+    python -s tools/posescale/measure.py table [--no-stamp]                                records -> src/data/art/poseRegistration*.ts, then each row's status and sha by tools/posescale/pose-stamp.mjs (scale, stance, feet row, upright and, since r394, each pose's head box as fractions of its painting: src/engine/HeadLock.ts holds it to the idle's size on screen under any stage camera)
 
 The head. The reference is the idle's head box (`head` in subjects.json: the hair or headgear mass and the face, hair top to
 chin, outer side to side, thin tassels and hairpins left out), read off the painting by eye. A pose's head is judged against
@@ -29,8 +29,11 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import pathlib
 import re
+import shutil
+import subprocess
 import sys
 
 import numpy as np
@@ -56,6 +59,18 @@ KO_PROJECTION = 0.978
 # factor within 10 percent, and no factor is written for a KO, whose head against the standing one spreads wider than the tolerance between stages (Yuna: x0.972 in Chapter I, x1.033 in Chapter XVII). r394 (D-510): the engine now holds the head on screen instead (src/engine/HeadLock.ts, from the head boxes this script emits), so a KO needs no allowance and the ones written here are starting points the lock moves off.
 # poses-0930's stature gate (D-298): a bent, hunched, kneeling or lunging pose may not be drawn smaller than this fraction of the idle's height, whatever its head says
 STATURE_GATE = 0.60
+# r50.1 (Bailey, 2026-10-16: "lulu looks tiny when hurt - this problem again? ugh"): a STATURE HOLD (overrides.json `stature` {floor, ceiling, by}) draws a pose at no less than `floor` and no more than `ceiling` of its idle's
+# height, whatever its head says. The head-matched reading (reviews.json) keeps the head the idle's and lets a painting whose proportions differ from the idle's (Lulu's hurt and critical are squat, big-headed paintings of
+# a slender idle) come out at two thirds of her height; a hold trades that for a head bigger (or smaller) than the idle's by `held.headRatio`. The record keeps the ruler's reading (`reading`, `held.reading`) and says what the
+# hold cost (`held.headRatio`); the pose's `head` box is the one the engine's head lock must hold at the APPLIED scale (the idle's head box over the applied scale), so the lock, the table and `pose-scale-check.mjs` agree
+# and the lock does not undo the hold. A KO or any other lying pose is never held (its length against the idle's height is a different question, docs/handoff/r50-1.md).
+# r50.2 (pose continuity, 2026-10-17; both games, the repair is FFX-2 only): the FEET-ROW GUARD. A registered `feetRow` plants the figure on that row instead of its alpha baseline (the row of the soles), which is right
+# only where a weapon's tip, a tail or a staff hangs below the boots. A `feetRow` more than this fraction of the PAINTING's height above the alpha baseline plants the figure at the knees and the game draws it a third too
+# short (five FFX-2 Lady Luck rows: Paine hurt, follow and both overdrive reels, Rikku attack, drawn at 0.43 to 0.49 of their idle's height). Cause: the "opened harder" silhouette (the stance block below) deleted the thin boots of
+# a wide lunge, so the reading's row was the knee's. The guard has two parts: (1) the harder opening is accepted only when its row stays within this fraction of the baseline, else the plain reading stands (it holds the boots);
+# (2) `cmd_table` refuses to write a `feetRow` that far above the baseline unless a ruler marked it: a hand `stance` in overrides.json, or `feetRowKept` {by, why} (a tip or a tail read by eye on the painting).
+# The same fraction is the gate's `BANDS.feetRowGap` (tools/posescale/pose-bands.mjs).
+FEET_ROW_GAP_MAX = 0.02
 ANCHORS_JSON = HERE / "anchors.json"
 SEEDS_JSON = HERE / "seeds.json"
 REVIEWS_JSON = HERE / "reviews.json"
@@ -275,6 +290,22 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
                 smin = math.ceil(STATURE_GATE * idle_h / ph * 1000) / 1000  # r391: to the thousandth (it was the hundredth, which left a gated head up to 1.5 percent further off than it had to be)
                 rec["gate"] = {"reading": round(scale, 3), "stature": round(ph * smin / idle_h, 3)}
                 scale, src = smin, "gated"
+        hold = o.get("stature")
+        if hold and scale and not p.prone and src != "unreviewed":
+            idle_h = idle_box[3] - idle_box[1]
+            ph = p.bbox[3] - p.bbox[1]
+            was = ph * scale / idle_h
+            lo, hi = hold.get("floor"), hold.get("ceiling")
+            new = None
+            if lo and was < lo:
+                new = math.ceil(lo * idle_h / ph * 1000) / 1000
+            elif hi and was > hi:
+                new = math.floor(hi * idle_h / ph * 1000) / 1000
+            if new is not None and abs(new / scale - 1) > 1e-9:
+                if not hold.get("by"):
+                    raise SystemExit(f"{subject}/{pose}: a stature hold needs `by` (whose word it is)")
+                rec["held"] = {"reading": round(scale, 3), "readingStature": round(was, 3), "stature": round(ph * new / idle_h, 3), "headRatio": round(new / scale, 3), "by": hold["by"]}
+                scale, src = new, "held"
         if scale and not p.prone:
             rec["stature"] = round((p.bbox[3] - p.bbox[1]) * scale / (idle_box[3] - idle_box[1]), 3)
         rec["scale"], rec["scaleSrc"] = (round(scale, 3) if scale else None), src
@@ -282,13 +313,18 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             rec["allow"] = {"scale": round(float(o["allow"]["scale"]), 4), "why": o["allow"]["why"]}
         if anchor:
             rec["anchor"] = [r1(anchor[0]), r1(anchor[1])]
-            hs = rec.get("reading") or scale
+            hs = scale if rec.get("held") else (rec.get("reading") or scale)  # a held pose registers the head the lock must hold at the applied scale
             if hs and ann.get("face"):  # a foe has no face box: its scale is read by the silhouette's mass, never as a head
                 rec["head"] = [r1(anchor[0] - bw / hs / 2), r1(anchor[1] - bh / hs / 2), r1(anchor[0] + bw / hs / 2), r1(anchor[1] + bh / hs / 2)]
         # ---- stance (standing poses only: a prone body rests by its own rule, PaintedRest.ts)
         # a pose wider than tall is lying down only when it is a KO: a standing lunge of a figure whose idle is upright is standing
         standing = (not p.prone) or o.get("standing") is True or (pose != "ko" and not idle_prone[0])
         rec["standing"] = bool(standing)
+        if o.get("feetRowKept"):  # r50.2: a ruler (an eye on the painting) marked a feetRow far above the baseline as a real tip or tail: the guard in cmd_table lets it through
+            kept = o["feetRowKept"]
+            if not (isinstance(kept, dict) and kept.get("by") and kept.get("why")):
+                raise SystemExit(f"{subject}/{pose}: `feetRowKept` needs `by` (who read it) and `why` (what hangs below the boots)")
+            rec["feetRowKept"] = {"by": kept["by"], "why": kept["why"]}
         if not standing:
             rec["stance"] = None
         elif "stance" in o:
@@ -301,13 +337,21 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
                 idle_width[0] = st["x1"] - st["x0"]
             elif rec["stance"] and idle_width[0]:
                 ratio = (st["x1"] - st["x0"]) / idle_width[0]
+                refused = False
                 if ratio > 6.0 and not mass:  # a ground glyph or an effect in the lowest band: open the silhouette harder (a thin ring goes, the foot stays)
                     st2 = L.stance_from_hem(p, 0.05)
                     ratio2 = (st2["x1"] - st2["x0"]) / idle_width[0] if st2 else 99
                     if st2 and ratio2 <= 6.0:
-                        st, ratio = st2, ratio2
-                        rec["stance"] = {"x": r1(st["x"]), "row": r1(st["row"]), "x0": r1(st["x0"]), "x1": r1(st["x1"]), "src": "silhouette(opened harder)"}
-                if ratio > 6.0:
+                        sunk = (rec["baseline"] - st2["row"]) / p.h
+                        if sunk > FEET_ROW_GAP_MAX:
+                            # r50.2: the feet-row guard, part 1. A ring or a glyph goes at the harder opening and the foot stays within a hair of the baseline; a reading that lands this far above it has
+                            # deleted the boots (a wide lunge's legs are thin at the ankle): the plain reading, which holds them, stands, and its width is the figure's own stance, not a glyph
+                            refused = True
+                            rec["stance"]["src"] = f"silhouette(plain: the harder opening sank the soles {sunk * 100:.0f} percent of the painting above the alpha baseline, so it is refused)"
+                        else:
+                            st, ratio = st2, ratio2
+                            rec["stance"] = {"x": r1(st["x"]), "row": r1(st["row"]), "x0": r1(st["x0"]), "x1": r1(st["x1"]), "src": "silhouette(opened harder)"}
+                if ratio > 6.0 and not refused:
                     rec["stance"]["flag"] = f"width x{ratio:.2f} of the idle's"
         if ann.get("rowFromBaseline") and rec.get("stance"):
             # a foe: the engine plants the painting's baseline on the ground and the stage owns its height (a hover, a pedestal); only the stance's x is registered, its row is the baseline's
@@ -332,8 +376,18 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
 # ---------------------------------------------------------------- the engine table
 
 
-def cmd_table() -> None:
-    """docs/target/pose-measure.json -> the three generated tables the engine reads (src/data/art/poseRegistration*.ts)."""
+def run_stamp() -> None:
+    """The last step of `table` (pose continuity, 2026-10-17): stamp each registered painting's row with what the install says about it (`status`, `class`, `stature`, `headReal`,
+    `lengthRatio`, `iou`, `sha`), read with the one pose model from the art folder (PYREFLY_ART_DIR) and the bands; a `waived` comes only from docs/target/pose-waivers.json.
+    A table without it fails tools/pose-gate.mjs (`no-status`). tools/posescale/pose-stamp.mjs does the work (about a minute); `table --no-stamp` skips it."""
+    node = os.environ.get("NODE") or shutil.which("node") or "node"
+    r = subprocess.run([node, str(HERE / "pose-stamp.mjs")], cwd=str(L.REPO), env=dict(os.environ))
+    if r.returncode != 0:
+        raise SystemExit("pose-stamp.mjs failed: the tables were written without a status; fix the line above and run `node tools/posescale/pose-stamp.mjs`")
+
+
+def cmd_table(stamp: bool = True) -> None:
+    """docs/target/pose-measure.json -> the three generated tables the engine reads (src/data/art/poseRegistration*.ts), then the stamp (run_stamp)."""
     rec = L.load_json(L.RECORDS_JSON, None)
     if not rec:
         raise SystemExit("no records yet")
@@ -356,7 +410,7 @@ def cmd_table() -> None:
             allow = (r.get("allow") or {}).get("scale", 1.0)  # r392: the camera allowance, a factor on the applied scale
             if ko_like and r.get("scale"):
                 row["scale"] = round(r["scale"] / rec.get("koProjection", 1.0) * allow, 3)  # a KO's head is drawn smaller by its lying plane: see KO_PROJECTION
-            elif pose != "idle" and r.get("scale") and (r.get("scaleSrc") in ("reviewed", "accepted", "gated") or allow != 1.0):
+            elif pose != "idle" and r.get("scale") and (r.get("scaleSrc") in ("reviewed", "accepted", "gated", "held") or allow != 1.0):
                 row["scale"] = round(r["scale"] * allow, 3)
             st = r.get("stance")
             if st and st.get("flag"):
@@ -364,7 +418,12 @@ def cmd_table() -> None:
             if st and idle_stance:
                 row["stanceX"] = round(st["x"], 1)
                 if r["baseline"] - st["row"] >= 3.5:  # a weapon's tip hangs lower than the boots
-                    row["feetRow"] = round(st["row"], 1)
+                    gap = (r["baseline"] - st["row"]) / ((r.get("size") or [0, 0])[1] or 1)
+                    if gap > FEET_ROW_GAP_MAX and st.get("src") != "hand" and not r.get("feetRowKept"):
+                        # r50.2: the feet-row guard, part 2: no ruler marked this row, and it is far above the soles: the figure would stand at the knees
+                        print(f"REFUSED feetRow {subject}/{pose}: row {st['row']:.0f} is {gap * 100:.1f} percent of the painting above the alpha baseline {r['baseline']:.0f} and no hand stance or feetRowKept marks it; the soles plant at the baseline")
+                    else:
+                        row["feetRow"] = round(st["row"], 1)
             if r["prone"] and r.get("standing") and pose != "ko":
                 row["upright"] = True
             head, size = r.get("head"), r.get("size")
@@ -392,6 +451,8 @@ def cmd_table() -> None:
         lines.append("};")
         (L.REPO / "src" / "data" / "art" / f"poseRegistration{grp}.ts").write_text("\n".join(lines) + "\n", encoding="utf8")
         print(f"poseRegistration{grp}.ts: {len(subs)} subjects, {len(lines)} lines")
+    if stamp:
+        run_stamp()
 
 
 def main() -> None:
@@ -402,9 +463,10 @@ def main() -> None:
     ap.add_argument("--poses")
     ap.add_argument("--out")
     ap.add_argument("--write", action="store_true")
+    ap.add_argument("--no-stamp", action="store_true", help="table: skip the status stamp (the tables then fail the pose gate)")
     a = ap.parse_args()
     if a.cmd == "table":
-        cmd_table()
+        cmd_table(stamp=not a.no_stamp)
         return
     subjects = L.load_json(L.SUBJECTS_JSON, {})
     overrides = L.load_json(L.OVERRIDES_JSON, {})
@@ -423,6 +485,11 @@ def main() -> None:
     if a.cmd == "props":
         cmd_props(names, out or pathlib.Path("."), only)
         return
+    # r50.2 (pose continuity): a subject with no entry used to be measured as a figure with no face (`subjects.get(s, {})`), which wrote stance-only rows and no head box and
+    # looked like a success. A new subject is annotated first: `face` (the idle's face box) for a figure, `"game": "foe", "rowFromBaseline": true` for a creature or a part.
+    unknown = [n for n in names if n not in subjects]
+    if unknown:
+        raise SystemExit(f"{', '.join(unknown)}: not in tools/posescale/subjects.json. Add an entry first: `face` (the idle's face box, read off the idle sheet) for a figure, or `\"game\": \"foe\", \"rowFromBaseline\": true` for a creature, hull or part that has no face.")
     result = {}
     for s in names:
         result[s] = measure_subject(s, subjects.get(s, {}), overrides.get(s, {}), reviews.get(s, {}), anchors.get(s, {}), seeds.get(s, {}), only, out)

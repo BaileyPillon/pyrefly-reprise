@@ -353,8 +353,8 @@ test.describe('The Experiment (hidden, FFX-2 only): the typed word, both acts, t
         const thrown = await boot(page);
         await toBoard(page, input);
         const before = await board(page);
-        expect(before.tiles).toBe(18); // the board holds the eighteen and nothing else until the word is typed
-        expect([before.beaten, before.total]).toEqual([0, 18]);
+        expect(before.tiles).toBe(19); // the board holds the nineteen and nothing else until the word is typed
+        expect([before.beaten, before.total]).toEqual([0, 19]);
         expect(await page.locator(`[data-card="${ID}"]`).count(), 'no card for the hidden chapter before the word').toBe(0);
         expect(before.selectedId).not.toBe(ID);
 
@@ -456,9 +456,9 @@ test.describe('The Experiment (hidden, FFX-2 only): the typed word, both acts, t
         await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'chapter-select', null, { timeout: 60_000 });
         await page.waitForTimeout(1500);
         await shoot(page, '11-board-after');
-        // The hidden chapter's record is the experiments' store, never the save: the board still reads "0 of 18".
+        // The hidden chapter's record is the experiments' store, never the save: the board still reads "0 of 19".
         const after = await board(page);
-        expect([after.beaten, after.total]).toEqual([0, 18]);
+        expect([after.beaten, after.total]).toEqual([0, 19]);
         const stored = await page.evaluate(() => window.localStorage.getItem('pyrefly-reprise:experiments:v1'));
         expect(stored ?? '', 'the clear went to the experiments store').toContain(ID);
         expect(thrown, 'no uncaught page error').toEqual([]);

@@ -14,17 +14,26 @@ import { BIRAN_ID, YENKE_ID } from '../data/ffx/biran-yenke-ids.ts';
 // same lights, snow, mist, rocks and camera rigs, said so in the handoff. It is the provisional stand-in; the gate itself is Bailey's to commission. Chapter I's scene file is not touched: this is a thin
 // derivation of what `buildGagazetScene` builds, with this fight's staging in place of Seymour Flux's (his and Mortiorchis's pins and giant heights belong to Chapter I's fight, not to two Ronso).
 //
-// STAGING. Kimahri stands on Chapter I's first party slot (the party is held on its slots: `holdParty`). The brothers stand right of centre, **Yenke in front and to the right, Biran behind and to the left of him**, both inside
-// the FFX HUD's safe area (its rail ends at 0.79 of the canvas width; `docs/ENGINE-API.md#hud-safe-area`). Both brothers start on the same side of the arena in the game (Area 0, `research/re-ffx-biran-yenke.md`
-// section 4); a Bulldoze moves the user to the other area, which the engine tracks (`battle/ffx/ai/biran-yenke-rules.ts`) and the stage does not draw: the other area is behind the camera.
+// STAGING. The brothers stand together right of Kimahri, **Yenke in front, Biran behind him and to the left**, both inside the FFX HUD's safe area (its rail ends at 0.79 of the canvas width; `docs/ENGINE-API.md#hud-safe-area`).
+// Both brothers start on the same side of the arena in the game (Area 0, `research/re-ffx-biran-yenke.md` section 4); a Bulldoze moves the user to the other area, which the engine tracks
+// (`battle/ffx/ai/biran-yenke-rules.ts`) and the stage does not draw: the other area is behind the camera. Kimahri stands on Chapter I's first party slot moved 0.59 to the left (the party is held on its slots: `holdParty`).
 //
-// WHO STANDS WHERE IS NOT FREE (the driver's find on the first build's first-menu frame, r49-rc). The Sensor card (`ui/ffx/SensorPanel.ts`) is pinned at grid (436, 166), which at 1600x900 lies over the right-hand front
-// figure, and it names the enemy the party's Sensor read LAST when the battle opens (`battle/ffx/sensor.ts#revealForSensorAuto`, the formation's own order: Biran, then Yenke). In the first build Biran stood there, so the
-// chip read "YENKE RONSO" over the blond brother's head while the turn list showed Biran blond and Yenke brown. The ids and the paintings were right all along (each brother draws his own subject, `characters/<id>`); only the
-// place under the card was wrong, so **the front-right figure is the last brother in the formation's order, Yenke**, and the first menu's chip sits over the brother it names. The target cursor opens on the LEFTMOST figure
-// on screen (`ui/ffx/TargetCursor.ts#showSingle`), which is now Biran, the brother the advisor's first tip names (Lancet -> Biran Ronso): the cursor and the tip agree. `tests/unit/chapters/biran-yenke-stage.test.ts` pins both.
-// What this does not change: the card is one shared FFX read-out, not anchored to a figure, so while the player aims at the OTHER brother it names him and rests over his neighbour (the aimed figure's bracket, its name
-// plate and the TARGET strip, all drawn by id, are right for both).
+// WHO STANDS WHERE IS NOT FREE (two finds on the first-menu frame: the driver's in r49-rc, the focused review's F939-01 on the build that fixed it). The Sensor card (`ui/ffx/SensorPanel.ts`) is the one shared FFX read-out: pinned
+// at grid (436, 166), slid left to clear the turn list's names (`ui/ffx/sensorCtbClear.ts`), 100 grid wide, it names the enemy the party's Sensor read LAST when the battle opens (`battle/ffx/sensor.ts#revealForSensorAuto`, the
+// formation's own order: Biran, then Yenke), stays open seven seconds and opens again on every change of target. Measured on this stage in the browser, it covers x 1017 to 1314 and y 413 to 636 of a 1600x900 window and
+// x 1245 to 1579, y 467 to 714 at 2000x1012: the HUD and the camera both scale with the window's height, so it is the same place in the picture at every window at least 16:9 wide. Its left edge never goes left of grid 406 (u 0.137 in the
+// units of `tests/unit/chapters/biran-yenke-stage.test.ts`). The first build stood Biran under it (the chip read "YENKE RONSO" over the blond brother's head); r49-rc swapped the brothers so the chip sat over the brother it
+// names, and its review found that the open card then hides Yenke completely. The ids and the paintings were right all along (each brother draws his own subject, `characters/<id>`, the turn list's portraits come from the same
+// paintings): only the place was wrong. **The card is not this chapter's to move, so the brothers stand clear of it**: each one's whole picture ends left of that edge, at every window, with 30 px or more to spare at 1600x900.
+// That leaves room for one figure beside Kimahri, not three (left of the card the screen holds about 230 px from his body to the card's edge, and a brother's picture is 150 wide), so Kimahri's slot also moves, 0.59 left of
+// Chapter I's (x -1.9): measured with Kimahri on Chapter I's slot, both brothers stood behind his head and shoulders, 50 to 80 percent of their pictures under his. **Why not further left** (measured on the production build, 1600x900, 8 runs a slot): CHAPTER FRAMING
+// (`engine/fx/mix/framing.ts`, shared) plans the camera once, as the battle opens, and may slide the whole picture sideways by a step of 4 percent of the window's width to keep where a fallen girl would lie off the command column it
+// predicts (that column's right edge is 0.344 of the width, `engine/fx/mix/hudPanels.ts#predictedPanels`). At x -2.1 Kimahri's picture began on that edge and the planner slid everything 64 px to the right in 4 runs of 8, which put the end of Yenke's tail (33 px
+// of his picture) under the open card; at -2.0, -1.9 and -1.8 it never slid (8 runs each), and at -1.9 his picture begins 28 to 41 px clear of that edge, so the stage stays where this file puts it. The
+// brothers stand shoulder to shoulder and overlap about half: the two stand guard for each other, which is also what the fight's first rule says. **Yenke, the brother the card names at the first menu, stands nearest it**, so the card
+// rests beside the brother it names; while the player aims at Biran it names him and rests in the same place, clear of both (nothing for its steer to move). The target cursor opens on the LEFTMOST figure on screen
+// (`ui/ffx/TargetCursor.ts#showSingle`), which is Biran, the brother the advisor's first tip names (Lancet -> Biran Ronso): the cursor and the tip agree. `tests/unit/chapters/biran-yenke-stage.test.ts` pins all of it; the frames
+// are in `docs/screenshots/r50-rc/`.
 //
 // HEIGHTS. A Ronso stands at Kimahri's size (`research/visual-bible.md` section 1.22.4, `[single source]`: the base sheet is Kimahri's; `[estimate]`). His datamined height is 1.211 of Tidus's with the horn
 // included (`data/ffx/party-stature.ts`); the brothers' paintings run horn tip to foot, so 1.211 of the party's shared height is the whole figure: 2.204 units against the party's 1.82.
@@ -34,17 +43,20 @@ const PARTY_HEIGHT = 1.82;
 /** A Ronso brother, horn tip to foot: 1.211 of Tidus's (Kimahri's datamined top, horn included: `data/ffx/party-stature.ts`). */
 const RONSO_HEIGHT = Math.round(PARTY_HEIGHT * 1.211 * 1000) / 1000;
 
-/** Chapter I's three active party slots (`./gagazet.ts`): Kimahri takes the first. */
+/** Chapter I's three active party slots (`./gagazet.ts`): Kimahri takes the first, which is Chapter I's x -1.31 moved to -1.9 (the note above says why); the other two are Chapter I's and unused (Kimahri is alone). */
 const PARTY_SLOTS: Spot[] = [
-  [-1.31, 0, 1.55],
+  [-1.9, 0, 1.55],
   [0.3, 0, 1.0],
   [-0.61, 0, -1.05],
 ];
 
-/** Where the brothers stand (`ENEMY_SPOTS` is the one place to move a body; read the note above before swapping them: Yenke in front on the right, under the Sensor card's resting place). */
+/**
+ * Where the brothers stand (`ENEMY_SPOTS` is the one place to move a body; read the note above before moving one: both pictures must end left of the Sensor card, Yenke nearest it, Biran the leftmost figure).
+ * Biran's z (-3.9) and Yenke's z (-2.0) are the first build's, so each stands the size he did; only x moved (0.55 to -0.65 and 1.85 to -0.1). On the phone (390x844, no card) both stand whole, well inside both edges.
+ */
 const ENEMY_SPOTS: Record<string, Spot> = {
-  [BIRAN_ID]: [0.55, 0, -3.9],
-  [YENKE_ID]: [1.85, 0, -2.0], // 2.15 in the first build, where Biran stood: the phone rig (390 wide) cropped his mane at the right edge in the browser proof, so that spot was moved 0.3 nearer the middle; the r49-rc phone frame shows Yenke whole here
+  [BIRAN_ID]: [-0.65, 0, -3.9],
+  [YENKE_ID]: [-0.1, 0, -2.0],
 };
 
 /** This fight's staging: the party held on its slots, each brother pinned to his spot at the Ronso height. */

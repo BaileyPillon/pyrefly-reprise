@@ -38,3 +38,16 @@ export function restorePartyOnEntry(party: FFXPartyBuild): void {
     delete m.statuses;
   }
 }
+
+/**
+ * **A link whose entry restores the aeons too** (`EnemyGroupDef.restoresAeonsOnEntry`, with `restoresPartyOnEntry`; the hidden Mirror Aeons chapter's Act II): every aeon the party owns is at full HP and MP with no
+ * status and no recovery count, so a fallen aeon stands again. The Overdrive gauges are not touched. Mutates the battle's own copy.
+ */
+export function restoreAeonsOnEntry(party: FFXPartyBuild): void {
+  for (const a of party.aeons) {
+    a.hp = a.stats.maxHp;
+    a.mp = a.stats.maxMp;
+    delete a.statuses;
+    delete a.reviveCountdown;
+  }
+}

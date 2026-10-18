@@ -154,7 +154,9 @@ describe('where a figure is, frame by frame', () => {
   });
 
   it('reads a plane record', () => {
-    expect(planeOf([3, 0.5, 1, 1, 2, 3, 4, 5, 6, 7, 8])).toEqual({ k: 3, fade: 0.5, vis: true, q: [1, 2, 3, 4, 5, 6, 7, 8] });
+    expect(planeOf([3, 0.5, 1, 1, 2, 3, 4, 5, 6, 7, 8])).toEqual({ k: 3, fade: 0.5, vis: true, q: [1, 2, 3, 4, 5, 6, 7, 8], cs: null });
+    // probe version 2 appends, while the camera moves, how far the camera alone moved each corner since the frame before
+    expect(planeOf([3, 0.5, 1, 1, 2, 3, 4, 5, 6, 7, 8, 0.5, -1, 0.5, -1, 0.5, -1, 0.5, -1])).toEqual({ k: 3, fade: 0.5, vis: true, q: [1, 2, 3, 4, 5, 6, 7, 8], cs: [0.5, -1, 0.5, -1, 0.5, -1, 0.5, -1] });
     expect(planeOf(0)).toBeNull();
   });
 });

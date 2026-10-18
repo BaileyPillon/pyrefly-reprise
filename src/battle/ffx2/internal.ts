@@ -31,6 +31,7 @@ import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 import type { ResultsReport } from './results-tally.ts';
 import type { Ffx2AutoLayer } from './adapt/auto-layer.ts';
+import type { ItemHold } from './adapt/item-ledger.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -107,6 +108,8 @@ export interface Ffx2Unit extends FFX2Combatant {
   sdspPartIds?: CombatantId[];
   /** Grid node count she transformed from, 2–6. Drives main-part stat scaling. */
   sdspGridNodeCount?: number;
+  /** The item her cast in flight has reserved (the item ledger, `adapt/item-ledger.ts`; re-parity RC8, lane X2-F): kept spent when the cast fires, given back when it leaves the queue. */
+  itemHold?: ItemHold;
   /** Set on an enemy once an item has been stolen from it: one per battle (`steal.ts`). */
   stolenFrom?: boolean;
   /** Set on an enemy once Pilfer Gil has taken its gil: once per battle (`steal.ts`). */
@@ -115,6 +118,10 @@ export interface Ffx2Unit extends FFX2Combatant {
   autoStatuses?: StatusId[];
   /** A girl's automatic-status layer: the auto-ability rows she holds, the kept and SOS sets and the effective layer (`adapt/auto-layer.ts`, `auto-layer.ts`; re-parity X2-D). Absent when she holds no row. */
   autoLayer?: Ffx2AutoLayer;
+  /** The most hits one chain on this unit ever reached this battle (`Chr+0x5ae`): it never resets, and the drop roll adds it to the current chain (`chain.ts#bumpChain`; re-parity RC9, lane X2-C). */
+  bestChain?: number;
+  deathPattern?: number; // a monster's death pattern (`Chr+0x2d8`, from its script's init, `adapt/death-patterns.ts`; RC9 X2-E): 0 can be raised, any other value leaves the battle at its KO and blocks Auto-Life; absent: 0
+  deathPending?: { killer: CombatantId | undefined }; // the death entry this monster's KO requested and the engine has not run yet (`engineHooks.ts#markDeathEntry`, `runDeathEntries`; RC9 X2-E)
   /** The gil bribed into this enemy so far this battle (`Chr+0x67c`), which the Bribe accuracy formula reads (`adapt/inputs.ts`). */
   bribeAccumulated?: number;
   /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */
@@ -266,9 +273,9 @@ export interface Ffx2EngineOptions {
   separateBattleGauges?: boolean;
   /**
    * Roll the preemptive / ambush result at the start of a `'normal'` battle (`MsCalcFirstAttack`, `kernel/atb-start.ts`),
-   * from the party's and the monsters' average Agility. Default **off**: no shipped encounter rolls it (the chapters are story
-   * battles, and whether the game presets their opening is not in the sources we have), so a `'normal'` opening is the
-   * random gauge alone, as before. `condition: 'preemptive'` and `'ambush'` are the game's PRESET results and always apply.
+   * from the party's and the monsters' average Agility. Default **off**, as the game is for every chapter scene: the scene master presets 3 (no roll) for all of
+   * them (FFX2-G10 7.2 and 16 row 3: the list is data [D], that its init has run before phase 0x17 is inferred [I]); only Monster Arena scenes would roll.
+   * `condition: 'preemptive'` and `'ambush'` are the game's PRESET results and always apply.
    */
   rollFirstAttack?: boolean;
   /** `constants.ts` LEBLANC_SCRIPT_SINIROTHX (PR-0106, Chapter VI's Leblanc), for a measurement run. */
@@ -375,6 +382,8 @@ export interface AiScript {
    * [ffx2-trema §12.2]; an OFF option, and no other script defines it, so no other log changes.
    */
   onPartyAction?(ctx: AiContext, actor: Ffx2Unit, action: { abilityId: string | undefined; aimedAtSelf: boolean }): Command | null;
+  /** Optional **death entry** (kind 4; RC9 X2-E): runs once, at the end of the action or logic step that knocked `self` out (`engineHooks.ts#runDeathEntries`). The Vegnagun Core's sets its Bulwarks' hit points to 0. */
+  onDeath?(ctx: AiContext, killerId: CombatantId | undefined): void;
 }
 
 /** Read or write a numeric AI memory slot. */

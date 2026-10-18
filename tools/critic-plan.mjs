@@ -12,6 +12,10 @@
  * `tools/deploy-pages.mjs` both call `planForRepo`, so they cannot disagree.
  *
  * With no `--since`, the previous build is the last line of docs/deploys.log.
+ *
+ * Pose continuity (W4, Bailey 2026-10-16: the permanent fix): the pose registration tables, the pose scale/registration/head-lock/blend/trust code, `tools/posescale/**`, the pose gate,
+ * the installer and `docs/target/pose-*.json` map to CHK-014, CHK-026 and CHK-027 (rules `pose-*` in critic/policy.json; `tools/**` and `docs/**` are otherwise no product effect), and the
+ * pose census (`node tools/pose-gate.mjs --report`) is listed as a `static` check every candidate gets, a live-only one too (`alwaysAtDeployStatic`).
  * If the change set cannot be established the plan is a deep review.
  */
 
@@ -137,6 +141,8 @@ function main(argv) {
   console.log(`  checks:       ${plan.checks.join(' ')}`);
   console.log(`  targets:      ${plan.targetGroups.join(', ') || 'none'}${plan.dataAudit ? '   + audit every changed data value against research/' : ''}${plan.approvedArtCheck ? '   + approved-art hash check' : ''}`);
   console.log(`  files:        ${plan.productPaths.length} shipped, ${plan.ignoredPaths.length} with no product effect`);
+  // Static checks every candidate gets (policy `alwaysAtDeployStatic`; pose continuity W4: the pose census), whatever the review depth. Data for the reviewer, not a verdict.
+  for (const s of plan.staticChecks ?? []) console.log(`  static:       ${s.id} (${s.mode}; belongs to ${s.checks.join(', ')}): ${s.command.join(' ')}${s.needs?.length ? `   needs ${s.needs.join(', ')}` : ''}`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main(process.argv.slice(2));

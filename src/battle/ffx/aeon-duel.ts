@@ -36,6 +36,8 @@ import { type Ctx, tryActor } from './state.ts';
 export const AEONS_ONLY_FLAG = 'aeonDuel.only';
 /** `state.flags` key prefix: `aeonDuel.lock:<aeonId>` holds the id of the enemy it mirrors. */
 export const AEON_LOCK_PREFIX = 'aeonDuel.lock:';
+/** `state.flags` key prefix: `aeonDuel.reason:<aeonId>` holds the words a lock gives instead of "Mirror of ..." (the hidden Last Summoning's "Taken by Yu Yevon"; absent for Chapter XIV's). */
+export const AEON_LOCK_REASON_PREFIX = 'aeonDuel.reason:';
 /** `state.flags` key: AP paid on victory on top of the enemies' own. */
 export const VICTORY_BONUS_AP_FLAG = 'victory.bonusAp';
 
@@ -45,7 +47,10 @@ export const ONLY_AN_AEON = 'Only an aeon can fight an aeon';
 /** Copy the formation's duel rules into the battle. A no-op for every other formation. */
 export function applyAeonDuelSetup(ctx: Ctx, group: EnemyGroupDef): void {
   if (group.aeonsOnly === true) ctx.state.flags[AEONS_ONLY_FLAG] = true;
-  for (const lock of group.lockedAeons ?? []) ctx.state.flags[AEON_LOCK_PREFIX + lock.aeonId] = lock.mirrorOf;
+  for (const lock of group.lockedAeons ?? []) {
+    ctx.state.flags[AEON_LOCK_PREFIX + lock.aeonId] = lock.mirrorOf;
+    if (lock.reason !== undefined) ctx.state.flags[AEON_LOCK_REASON_PREFIX + lock.aeonId] = lock.reason;
+  }
   if (typeof group.victoryBonusAp === 'number' && group.victoryBonusAp > 0) {
     ctx.state.flags[VICTORY_BONUS_AP_FLAG] = group.victoryBonusAp;
   }
@@ -66,6 +71,8 @@ export function lockedMirrorOf(ctx: Ctx, aeonId: string): CombatantId | undefine
 export function lockReason(ctx: Ctx, aeonId: string): string | undefined {
   const mirror = lockedMirrorOf(ctx, aeonId);
   if (mirror === undefined) return undefined;
+  const said = ctx.state.flags[AEON_LOCK_REASON_PREFIX + aeonId];
+  if (typeof said === 'string') return said;
   return `Mirror of ${tryActor(ctx, mirror)?.name ?? mirror}`;
 }
 
@@ -166,13 +173,26 @@ export function duelRefusalFor(ctx: Ctx, user: FFXCombatant, command: Command): 
 }
 
 /**
+ * The label of the Magus Sisters' one Summon row and Grand Summon entry: **Magus Sisters**, the game's own (`FFX_Data.vbf` `command.bin` row 0xFF, command 0x30FF, field 0; its help text is "Summon the Magus
+ * Sisters."; label `[R]`, a static read). **FFX only.** The three keep their own names (Cindy, Sandy, Mindy) in battle; only the list's row is renamed. The Last Summoning event's own choice window (`sins0700`)
+ * is a different list and is not set here.
+ */
+export const SISTERS_SUMMON_LABEL = 'Magus Sisters';
+
+/** What the Summon list and the Grand Summon picker call a roster entry: the Sisters' lead entry (Cindy, standing for the three) reads {@link SISTERS_SUMMON_LABEL}, every other aeon its own name. */
+export function summonLabel(ctx: Ctx, key: string, name: string): string {
+  return ctx.rt.sisters !== undefined && key === 'cindy' ? SISTERS_SUMMON_LABEL : name;
+}
+
+/**
  * The aeons Grand Summon may call (`overdrive.ts#minigameParams`): the whole
  * roster, as before, **unless** this is an aeon duel, where the locked aeon and
  * a KO'd one (an aeon KO'd in an earlier link stays down, research §1.2
  * `[derived]`) are left out, exactly as the Summon list leaves them out.
  */
 export function grandSummonChoices(ctx: Ctx): string[] {
-  const keys = [...ctx.rt.aeonRoster.keys()];
+  // The Magus Sisters are one choice (a build that owns them, re-parity lane FFX-K): Cindy stands for the three. `ctx.rt.sisters` is set by every build that owns them: Chapter XXVII (Mirror Aeons) and the hidden Chapter 28 (the Last Summoning), so the picker lists one entry for them in both (the game lists one).
+  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')));
   if (!aeonsOnly(ctx)) return keys.filter((k) => lockedMirrorOf(ctx, k) === undefined);
   return keys.filter((k) => {
     const aeon = ctx.rt.aeonRoster.get(k);

@@ -44,11 +44,13 @@ import type { Ffx2EngineOptions } from './internal.ts';
 import { msToSteps, stepsToMs, type AtbSpeed } from './clock.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
+import { isConfusedGirl } from './statuses.ts';
 import { stepsUntilNextEvent } from './lookahead.ts';
 import { buildCommands } from './menu.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { abilityFor, performCommand, suspendedActor } from './execute.ts';
+import { stockShort } from './adapt/mix.ts';
 import {
   allTargetsGone,
   clockHeldByMenu,
@@ -59,6 +61,7 @@ import {
   type TickOptions,
 } from './active.ts';
 import { Ffx2EngineCore } from './engine-core.ts';
+import { EndWindow, type EndWindowStats } from './end-window.ts';
 
 /** Rounding slack when milliseconds become whole logic steps (a call handed exactly the time to an event must reach it). */
 const STEP_EPSILON = 1e-6;
@@ -79,6 +82,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.inputOwner = null;
     this.held = null;
     this.counterQueue = [];
+    this.endWindow = new EndWindow();
     this.carriedSteps = 0;
     this.stepCredit = 0;
     this.ordered = [];
@@ -161,9 +165,9 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
       // anyway, and on a dressphere with no Attack (§3.4-3.6) the menu opened
       // with zero rows and locked the battle [round 05 PR-0045]. A suspended
       // minigame still belongs to the player and keeps its path. FFX-2 only.
-      if (actor.statuses.berserk && !this.awaitingMinigame) {
+      if ((actor.statuses.berserk || isConfusedGirl(actor)) && !this.awaitingMinigame) {
         this.inputOwner = null;
-        this.runBerserkTurn(actor);
+        this.runAutopilotTurn(actor);
         return { kind: 'resolved', events: this.flush() };
       }
       // Her chain lock lifted with a command already chosen: it fires, as her.
@@ -226,7 +230,8 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     // Active ATB, `active.ts`: everything this command aimed at died while the
     // menu was open. Refuse and reopen — the turn is not spent (preflight
     // §4.4 (a)). Under Wait this branch was unreachable.
-    if (actor.controller === 'player' && allTargetsGone(this.units, command, abilityFor(this.env(), command))) {
+    // Likewise an item the reserved stock no longer has, or a Mix whose ingredients it cannot make (the HUD greys it out first; a menu built before another girl's pick can still send it): refused, the turn not spent.
+    if (actor.controller === 'player' && (allTargetsGone(this.units, command, abilityFor(this.env(), command)) || stockShort(this.battleState.flags, this.abilities, command))) {
       return this.flush();
     }
     if (!suspended) this.inputOwner = null;
@@ -271,9 +276,15 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     f.dresspheres = this.dresspheres;
     f.grids = this.grids;
     f.rng = this.rng.fork(seed, rngState);
+    f.endWindow = this.endWindow.clone();
     [f.elapsedMs, f.inputOwner, f.hitClosed, f.carriedSteps, f.stepCredit] = [this.elapsedMs, this.inputOwner, this.hitClosed, this.carriedSteps, this.stepCredit];
     [f.speed, f.mode, f.split, f.level] = [this.speed, this.mode, this.split, this.level];
     return f;
+  }
+
+  /** The commit window's counters (tests and the measurement; deliberately not on the interface): ends opened, lapsed and committed, the steps they waited, what was in flight. */
+  endWindowStats(): EndWindowStats {
+    return { ...this.endWindow.stats, inFlight: { ...this.endWindow.stats.inFlight } };
   }
 
   /** The command a chain-locked girl confirmed and is waiting to fire, if any. */
@@ -286,7 +297,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
    * polls this once per pump step while a menu is up; see `active.ts` {@link inputStillValid}.
    */
   inputValid(actorId: CombatantId): boolean {
-    return inputStillValid(this.units, actorId, !!this.battleState.result, this.awaitingMinigame !== null, this.hitClosed === actorId);
+    return inputStillValid(this.units, actorId, !!this.battleState.result || this.endWindow.open, this.awaitingMinigame !== null, this.hitClosed === actorId); // the end window closes every menu
   }
 
   /**
@@ -331,7 +342,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
         // menu is open (PR-0076). Otherwise, under `throughInput`, the only
         // player `nextActor` hands back is a Berserked one (§2.8): resolve her.
         if (this.held?.actorId === actor.id) this.fireHeld(actor);
-        else if (throughInput) this.runBerserkTurn(actor);
+        else if (throughInput) this.runAutopilotTurn(actor);
         break;
       }
       if (actor) {

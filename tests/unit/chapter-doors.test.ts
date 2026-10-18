@@ -1,7 +1,7 @@
 /**
  * **The chapter-select board's doors, as one table** (`src/app/screens/frontend/chapterDoors.ts`): the one test over every word at once.
  *
- * Each door's own suite (`ff7-secret-door`, `exp-leblanc-door`, `ffx2-experiment-door`, `mushroom-door`, `fayth-door`, `daigoro-door`, `valefor-door`, `gagazet-door`, `angra-door`) drives the board with real key events and compared its word with its neighbours' by hand,
+ * Each door's own suite (`ff7-secret-door`, `exp-leblanc-door`, `ffx2-experiment-door`, `mushroom-door`, `fayth-door`, `daigoro-door`, `valefor-door`, `gagazet-door`, `angra-door`, `yojimbo-door`, `summon-door`) drives the board with real key events and compared its word with its neighbours' by hand,
  * each with the neighbours it knew of. This one reads the table, so a word added tomorrow is checked against every word that is already there:
  *
  * - **no word begins with, ends with or contains another**, and **no end of one word is the beginning of another** (a run of letters that finishes one word must not also start, or finish, a second one:
@@ -28,8 +28,8 @@ function type(doors: BoardDoors, word: string, start = 0, step = 100) {
 }
 
 describe('the table', () => {
-  it('holds the nine doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand', () => {
-    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra']);
+  it('holds the ten doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand', () => {
+    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'yojimbo', 'summon']);
     expect(WORDS[0]).toBe(DOOR_WORD);
     expect(new Set(WORDS).size).toBe(WORDS.length);
     for (const w of WORDS) expect(w, w).toMatch(/^[a-z]{4,}$/);
@@ -52,18 +52,22 @@ describe('the table', () => {
     const chapters = CHAPTER_DOORS.map((d) => d.chapter);
     expect(new Set(chapters).size).toBe(chapters.length);
     for (const id of chapters) expect(getChapter(id), id).toBeDefined();
-    for (const id of chapters) {
+    // Mirror Aeons (the `yojimbo` word) was listed on the board on 2026-10-15 on Bailey's word: its word still opens it, so it is the one door chapter that is also a card.
+    const LISTED_DOOR_CHAPTERS = ['mirror-aeons'];
+    for (const id of chapters.filter((x) => !LISTED_DOOR_CHAPTERS.includes(x))) {
       expect(CHAPTERS.map((c) => c.id as string), id).not.toContain(id);
       expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(false);
     }
+    for (const id of LISTED_DOOR_CHAPTERS) expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(true);
     expect(CHAPTER_DOORS.filter((d) => d.secret === true).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
     expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
-    for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true)) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
+    for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true && x.chapter !== 'mirror-aeons')) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
+    expect(getChapter('mirror-aeons')?.experimental).toBeUndefined();
   });
 
   it('leads the FFX words to FFX chapters and the FFX-2 words to FFX-2 chapters (the game of the row is the chapter\'s)', () => {
     const game = (word: string): string | undefined => getChapter(CHAPTER_DOORS.find((d) => d.word === word)!.chapter)?.game;
-    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('daigoro'), game('valefor'), game('gagazet'), game('angra')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx', 'ffx2']);
+    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('daigoro'), game('valefor'), game('gagazet'), game('angra'), game('yojimbo'), game('summon')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx', 'ffx2', 'ffx', 'ffx']);
   });
 });
 

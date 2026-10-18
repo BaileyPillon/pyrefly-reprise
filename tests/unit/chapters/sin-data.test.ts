@@ -79,7 +79,7 @@ describe('the two records (D-270) and the rename (plan §1.4)', () => {
       expect(CHAPTERS.map((c) => c.id)).toContain(id);
       expect(CHAPTER_IDS as readonly string[]).toContain(id);
     }
-    expect(CHAPTER_IDS.slice(-3)).toEqual(['ffx2-ixion-djose', 'sin-fins-core', 'sin-face']);
+    expect(CHAPTER_IDS.slice(-4, -1)).toEqual(['ffx2-ixion-djose', 'sin-fins-core', 'sin-face']); // Mirror Aeons follows (2026-10-15)
   });
 
   it('links 2 and 3 carry the party state; no other FFX formation sets the flag (R7)', () => {

@@ -49,6 +49,7 @@ import {
 import { computePoseScale, contactBandFor, type PoseScale } from './PaintedScale.ts';
 import { placePlane } from './PaintedRest.ts';
 import { stanceShift, subjectOfPainting } from './PoseRegistration.ts';
+import { WITHHELD_FALLBACKS } from './PoseTrust.ts';
 import { HEAD_BAND, HeadLockStats, projectedHeadSize, scaledPose, solveHeadFactor, type HeadBox } from './HeadLock.ts'; // D-510: the engine keeps the head steady
 import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
@@ -58,7 +59,7 @@ import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (F
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
-import { PoseBlend, poseBlendShape } from './PoseBlend.ts';
+import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
 
@@ -1049,7 +1050,7 @@ export class PaintedActor extends Group {
     }
     // A forced pose is the caller's word: a pending flinch may not hand it back.
     if (opts?.force) this.flinchToken++;
-    const resolved = resolvePoseName(name, (p) => this.poses.has(p));
+    const resolved = this.resolveDrawable(name);
     this.enterLife(name, opts?.immediate === true);
     if (!resolved) return;
     const next = this.poses.get(resolved);
@@ -1072,10 +1073,44 @@ export class PaintedActor extends Group {
 
     // FB-1 (`PoseBlend.ts`): the blend is owned, not a loose tween. A request in mid-blend keeps the stronger plane going out and re-points only the weaker.
     const plan = this.blend.request(resolved, this.crossfadeMs, from === 0 ? 0 : 1);
-    if (plan.same) return;
-    if (!plan.reversed) this.applyPose(plan.to, resolved, next);
+    if (plan.same) return; // also a request PoseBlend rule 2 holds (`plan.deferred`): the blend takes it up in `update` once it can without dropping a painting that still shows
+    this.beginBlend(resolved, next, plan);
+  }
+
+  /** Point the plane a blend is bringing in at its painting (when it was re-pointed) and make it the active one: the tail of a pose change, whether it began now or was held. */
+  private beginBlend(resolved: string, next: PaintedTexture | undefined, plan: BlendStarted): void {
+    if (!plan.reversed && next) this.applyPose(plan.to, resolved, next);
     this.active = plan.to;
     this.syncOpacity();
+  }
+
+  /**
+   * Pose continuity (2026-10-16; `PoseTrust.ts`): whether the pose `name` can be drawn at all: a painting is loaded for it and the install vouched for that painting.
+   * `resolvePoseName` asks this instead of `poses.has`, so a withheld painting (blocked, or never registered) is skipped and the figure shows the next
+   * pose down its chain, ending on the idle. A painting with no trust stamp (a stand-in, a hand-made meta in a test) is drawn as it always was.
+   * **The `idle` slot is never withheld**, whatever painting it holds: it is the reference every other pose is sized and placed against, and a scene
+   * puts a differently named painting in it on purpose (`idle-far`, a Fin's `charge-far`, Sin's `stage-2`: `restPoseMap`), so withholding it would leave the figure with nothing.
+   */
+  private canDraw(name: string): boolean {
+    const p = this.poses.get(name);
+    return !!p && (name === 'idle' || p.meta.trust?.trusted !== false);
+  }
+
+  /**
+   * The pose that gets drawn for a request: {@link resolvePoseName} over the paintings the runtime vouches for. A pose with a painting that is withheld
+   * and no chain of its own (`telegraph`, `critical`, `follow`: names {@link POSE_FALLBACKS} does not list) follows {@link WITHHELD_FALLBACKS} (`follow`
+   * to the attack, the ready, the idle) or goes to the idle, rather than being ignored: that is what "treated as missing" means for it. A pose that simply
+   * has no painting is answered as it always was.
+   */
+  private resolveDrawable(name: string): string | null {
+    const resolved = resolvePoseName(name, (p) => this.canDraw(p));
+    if (resolved || !this.poseWithheld(name)) return resolved;
+    return (WITHHELD_FALLBACKS[name] ?? ['idle']).find((p) => this.canDraw(p)) ?? (this.canDraw('idle') ? 'idle' : null);
+  }
+
+  /** True when a painting is loaded for the pose `name` and the runtime withholds it as untrusted: the KO path asks (`KoFallback.lacksKoPainting`). */
+  poseWithheld(name: string): boolean {
+    return this.poses.has(name) && !this.canDraw(name);
   }
 
   /**
@@ -1547,7 +1582,7 @@ export class PaintedActor extends Group {
    * no painting of its own to size (a placeholder) and for a body lying down (a prone plane is placed by its ground hull).
    */
   poseShape(name: string): PoseShape | null {
-    const resolved = resolvePoseName(name, (p) => this.poses.has(p));
+    const resolved = this.resolveDrawable(name);
     const painted = resolved ? this.poses.get(resolved) : undefined;
     if (!resolved || !painted || painted.placeholder) return null;
     const table = computePoseScale(painted.meta, { worldHeight: this.worldHeight, reference: this.reference, ...this.extents });
@@ -2144,6 +2179,8 @@ export class PaintedActor extends Group {
   update(dt: number, realDt: number = dt): void {
     this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`): one-shot moves only, never the idle
     if (this.blend.advance(realDt * 1000)) this.syncOpacity(); // FB-1: the pose blend, on the real clock
+    const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
+    if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan);
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 

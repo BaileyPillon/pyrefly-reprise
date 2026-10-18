@@ -8,6 +8,8 @@
  *   [ffx2-vegnagun-shuyin §3.2]. Same for the Bulwarks and the Redoubts, which
  *   are levers rather than targets. So only enemies without `flags.isPart`
  *   count.
+ * - **A Petrified enemy is defeated** (re-parity RC8, XK-petrify). The game's evaluation (exe 0x0061ef70) counts a monster that is in the battle, present and not dead only
+ *   if it is not Petrified, so enemies that are all stone end the fight [FFX2-G10 10.1, E 20,000]; a Petrified girl already stopped counting as standing (PR-0145).
  * - **The engine never advances a chained encounter.** On a victory it copies
  *   `EnemyGroupDef.nextGroupId` onto the result and stops; the BattleScreen
  *   re-inits for the next link (CONTRACT-CHANGES, orchestrator decision 6).
@@ -15,6 +17,8 @@
 
 import type { BattleResult, BattleState } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
+import { evaluateEnd, outcomeOfEnd } from './adapt/battle-end.ts';
+import { rewardsOfBattle } from './kill-rewards.ts';
 
 /** Deterministic actor order: party by slot, then enemies by slot. */
 export function actorOrder(units: readonly Ffx2Unit[]): Ffx2Unit[] {
@@ -46,7 +50,8 @@ export function emptyState(): BattleState {
 }
 
 /**
- * Has the battle ended? Returns the outcome, or `null` to keep playing.
+ * Has the battle ended? Returns the outcome, or `null` to keep playing. **The game's evaluation** (exe 0x0061ef70, `kernel/battle-end.ts`, through `adapt/battle-end.ts`);
+ * the engine COMMITS the end only after the commit window (`end-window.ts`, re-parity RC8 XK2), so this says what the evaluation answers now, not when the fight ends.
  *
  * `flags.badEnding` is the Vegnagun head's cannon fail clock: when Shuyin's
  * seventh line fires, Spira is destroyed and the run ends in the bad ending —
@@ -56,14 +61,9 @@ export function battleOutcome(
   units: readonly Ffx2Unit[],
   state: BattleState,
 ): BattleResult['outcome'] | null {
-  // PR-0145: a petrified girl is not standing. 'All three girls petrified = Game Over'
-  // [ffx2-combat-core §2.8, `[verified: 2 sources]`], so the helpless party is not beaten down first.
-  const partyAlive = units.some((u) => u.side === 'party' && u.alive && !u.removed && !u.statuses.petrify);
-  const bossesAlive = units.some((u) => u.side === 'enemy' && !u.flags.isPart && u.alive && !u.removed);
-
-  if (state.flags['badEnding'] === true || !partyAlive) return 'defeat';
-  if (!bossesAlive) return 'victory';
-  return null;
+  // PR-0145: a petrified girl is not standing ('All three girls petrified = Game Over' [ffx2-combat-core §2.8, `[verified: 2 sources]`]); the enemies that are all stone are
+  // defeated (XK-petrify); a girl who is ejected is alive but out of the battle, which ends the fight as a defeat as it always has (result 3, not turned into an escape).
+  return outcomeOfEnd(evaluateEnd(units, state));
 }
 
 /** Gil Pilfer Gil took this battle; kept on a win or an escape, lost with the party. */
@@ -80,23 +80,28 @@ export function buildResult(
   elapsedMs: number,
 ): BattleResult {
   const won = outcome === 'victory';
-  const rewards = units.filter((u) => u.side === 'enemy' && u.enemy).map((u) => u.enemy?.rewards);
+  // What the battle paid is what the game's reward routine paid at each knock-out (`kill-rewards.ts`), not a sum over the monsters still on the field:
+  // one that is still standing when the battle is won pays nothing (re-parity RC9, lane X2-C; note FFX2-G03 section 4).
+  const paid = won ? rewardsOfBattle(units, state) : undefined;
 
   const result: BattleResult = {
     outcome,
     turns: state.turn,
     elapsedTicks: Math.round(state.ticks),
     elapsedMs: Math.round(elapsedMs),
-    // FFX-2 pays EXP, not Sphere Levels; `ap` is still per-dressphere AP.
-    ap: won ? rewards.reduce((sum, r) => sum + (r?.ap ?? 0), 0) : 0,
-    exp: won ? rewards.reduce((sum, r) => sum + (r?.exp ?? 0), 0) : 0,
-    // Pilfered gil was taken mid-battle (`steal.ts`), so it counts unless the party fell.
-    gil: (won ? rewards.reduce((sum, r) => sum + (r?.gil ?? 0), 0) : 0) + stolenGil(state, outcome),
-    drops: won ? rewards.flatMap((r) => r?.drops ?? []) : [],
+    // FFX-2 pays EXP, not Sphere Levels; `ap` is the AP of the best-credited girl, per dressphere (the three are equal unless one wears Double AP or Triple AP).
+    ap: paid?.ap ?? 0,
+    exp: paid?.exp ?? 0,
+    // Pilfered gil was taken mid-battle (`steal.ts`), so it counts unless the party fell. (The game banks it in the wallet at once and its results show only the
+    // kills' gil; the line keeps adding it, a screen item for the results-screen mockup.)
+    gil: (paid?.gil ?? 0) + stolenGil(state, outcome),
+    drops: paid?.drops ?? [],
     // X-2 has no Overkill; the field stays empty rather than being faked.
     overkilled: [],
     sphereLevelsGained: {},
     levelsGained: {},
+    // What each girl earned (her EXP after the end-of-battle rollback, her AP): the per-girl lines a later results screen can show.
+    ...(paid !== undefined && Object.keys(paid.rewardsByMember).length > 0 ? { rewardsByMember: paid.rewardsByMember } : {}),
   };
 
   const next = state.flags['nextGroupId'];

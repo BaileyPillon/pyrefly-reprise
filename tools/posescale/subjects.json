@@ -591,5 +591,174 @@
  "mortiorchis": {
   "game": "foe",
   "rowFromBaseline": true
+ },
+ "valefor": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ixion": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "x2-ixion": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "seymour-guest": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "pterya": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "paragon": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yunalesca-3": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "overdrive-sin": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sin-core": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sinspawn-genais": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sinspawn-gui": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sinspawn-gui-2": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sinspawn-gui-arm-left": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sinspawn-gui-arm-right": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sinspawn-gui-head": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "sinspawn-gui-head-2": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "vegnagun-body": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "vegnagun-head": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "vegnagun-tail": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "angra-mainyu": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "angra-tawrich": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "angra-zarich": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "biran-ronso": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "yenke-ronso": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ffx2-experiment": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ffx2-experiment-proto": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "ginnem": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "lenne": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "mortiphasm": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "mortiphasm-facing": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "seymour-flux": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "seymour-natus-ring": {
+  "game": "foe",
+  "rowFromBaseline": true
+ },
+ "dark-sandy": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "face": [
+   100,
+   122,
+   228,
+   252
+  ]
+ },
+ "dark-mindy": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "face": [
+   48,
+   93,
+   304,
+   292
+  ]
+ },
+ "dark-cindy": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "face": [
+   58,
+   18,
+   255,
+   180
+  ]
+ },
+ "dark-yojimbo": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "face": [
+   366,
+   190,
+   446,
+   286
+  ],
+  "note": "the face box is the skull under the hat (the hat's brim changes with every pose); read by eye 2026-10-17"
  }
 }

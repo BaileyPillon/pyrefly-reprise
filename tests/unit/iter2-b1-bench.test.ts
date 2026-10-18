@@ -31,6 +31,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { afterAll, describe, expect, it, vi } from 'vitest';
 import type { BattleEvent, FFX2PartyBuild } from '../../src/battle/common/types.ts';
 import type { Ffx2EngineOptions } from '../../src/battle/ffx2/internal.ts';
+import { STEPS_PER_SECOND } from '../../src/battle/ffx2/clock.ts';
 
 /**
  * The seam switch, set per run (the drivers call `setupForNextLink` themselves), and PR-0124's probe:
@@ -186,7 +187,8 @@ describe.skipIf(!MEASURE)('B1: the FFX-2 switches on every FFX-2 chapter (PYREFL
             const r = drive(seed, speed, arm.engine);
             if (r.outcome === 'victory') wins += 1;
             if (r.outcome === undefined) unfinished += 1;
-            minutes += r.ticks / 3000 / 60;
+            // A tick is a logic step since re-parity W4 (`clock.ts`: 29.97 a second, about 1,798 a minute); the old 3,000 a second is gone.
+            minutes += r.ticks / (STEPS_PER_SECOND * 60);
             const a = anatomy(r);
             taken += a.taken;
             chain += a.chain;

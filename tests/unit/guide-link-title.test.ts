@@ -58,6 +58,7 @@ describe('the guide headline names the link that stands (FOC16-06)', () => {
     // Plus Chapter XI (FFX-2, unlisted): Shiva, the Magus Sisters, Anima.
     // Plus Chapter XV (FFX-2, unlisted): Baralai, Gippal, Nooj.
     // Plus Chapter XVII (FFX only, unlisted): the Left Fin, the Right Fin, Sinspawn Genais, Sin's Core.
-    expect(GUIDES.filter((g) => g.linkTitles).map((g) => g.id)).toEqual(['ffx2-trema', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'isaaru-via-purifico', 'sin-fins-core']);
+    // Plus the hidden Last Summoning (FFX only, 2026-10-15), listed ahead of Chapter III's card: the aeon the standing link fields, the Sisters under one name.
+    expect(GUIDES.filter((g) => g.linkTitles).map((g) => g.id)).toEqual(['last-summoning', 'ffx2-trema', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'isaaru-via-purifico', 'sin-fins-core']);
   });
 });

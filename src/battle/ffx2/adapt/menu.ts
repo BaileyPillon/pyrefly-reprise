@@ -12,7 +12,7 @@
 
 import type { AbilityDef } from '../../common/types.ts';
 import { menuRow } from '../kernel/command-menu-rows.ts';
-import { buildMenuTable, menuBit, type Ffx2MenuWorld } from '../kernel/command-menu.ts';
+import { buildMenuTable, menuBit, menuLists, type Ffx2MenuWorld } from '../kernel/command-menu.ts';
 import { MISC_SILENCEABLE, silenceable } from '../kernel/command-usable.ts';
 import { abilityList, abilityWords } from '../kernel/dressphere-abilities.ts';
 import { FFX2_JOB_ABILITIES } from '../kernel/dressphere-grids.ts';
@@ -23,8 +23,23 @@ import { ABILITY_GAME_ID, DRESSPHERE_JOB, SPECIAL_DRESSPHERE_IDS, abilityOfGameI
 /** The save record of each girl, by the id the builds give her. */
 const GIRL_RECORD: Readonly<Record<string, number>> = { yuna: 0, rikku: 1, paine: 2 };
 
-/** The auto-ability rows our garment-grid tags stand for, when the tag moves a word the menu reads (MP cost). */
-const TAG_ABILITY: Readonly<Record<string, number>> = { 'magic-booster': 0x8005, 'half-mp-cost': 0x801c, 'one-mp-cost': 0x801d };
+/**
+ * The auto-ability rows our garment-grid tags stand for, when the tag moves a word something reads: the MP cost (the menu) and the reward abilities (the kill
+ * roll, `kill-rewards.ts`: Double AP 0x8009, Triple AP 0x800a, Butterfingers 0x800e, Gillionaire 0x800f, Double Items 0x8010, Double EXP 0x8011, Item Hunter 0x8012;
+ * note FFX2-G03 section 4.8, re-parity RC9 lane X2-C).
+ */
+const TAG_ABILITY: Readonly<Record<string, number>> = {
+  'magic-booster': 0x8005,
+  'half-mp-cost': 0x801c,
+  'one-mp-cost': 0x801d,
+  'double-ap': 0x8009,
+  'triple-ap': 0x800a,
+  butterfingers: 0x800e,
+  gillionaire: 0x800f,
+  'double-items': 0x8010,
+  'double-exp': 0x8011,
+  'item-hunter': 0x8012,
+};
 
 const category = (id: number): number => (id & 0xffff) >> 12;
 const BLANK_GATE: readonly number[] = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff];
@@ -115,10 +130,10 @@ function closed(learned: ReadonlySet<number>): Set<number> {
   return out;
 }
 
-function worldOf(actor: Ffx2Unit, record: number, stored: number, learnedClosed: ReadonlySet<number>): Ffx2MenuWorld {
+function worldOf(actor: Ffx2Unit, record: number, stored: number, learnedClosed: ReadonlySet<number>, saveWord = 0): Ffx2MenuWorld {
   const blank = { job: 0x5000, plate: 0xff, accessories: [0xffff, 0xffff] as [number, number], saveWord: 0, gate: BLANK_GATE, level: actor.level };
   return {
-    record: (i) => (i === record ? { ...blank, job: stored } : blank),
+    record: (i) => (i === record ? { ...blank, job: stored, saveWord } : blank),
     learnedCommand: (_r, low) => learnedClosed.has(0x3000 + low),
     learnedAbility: (_r, low) => learnedClosed.has(0x8000 + low),
     keyItem: () => false,
@@ -138,6 +153,19 @@ export function menuAvailability(actor: Ffx2Unit, ladder: readonly string[] = []
   const free = new Set<number>();
   for (const [pre, id] of pairsOf(girlJob(girl.record, girl.job))) if (pre === 0) free.add(id);
   return { learned, listed, free };
+}
+
+/**
+ * The two lists a Confused girl picks from (re-parity RC9 lane X2-H): her main window list (kind 0, 16 entries) and her shortcut list (kind 0x16, 4 entries), as the
+ * game's list writer files them for what she has learned. The save word is a new game's (Item and Escape; a Special form skips it in the kernel). Null when the kernel
+ * does not apply (not one of the three girls, or a dressphere with no game id).
+ */
+export function confusionLists(actor: Ffx2Unit, ladder: readonly string[] = []): { main: number[]; shortcut: number[] } | null {
+  const girl = girlOf(actor);
+  if (girl === null) return null;
+  const learned = closed(learnedOf(actor, girl.record, girl.job, ladder));
+  const lists = menuLists(worldOf(actor, girl.record, girl.job, learned, 3), girl.record);
+  return { main: [...(lists[0] ?? [])], shortcut: [...(lists[0x16] ?? [])] };
 }
 
 /**

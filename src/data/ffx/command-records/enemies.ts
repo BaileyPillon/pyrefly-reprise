@@ -12,6 +12,7 @@
 import type { FFXCommandRecord, FFXPlainAttack } from '../../../battle/common/types.ts';
 import { COMMAND_RECORDS_GUI } from '../enemies/sinspawn-gui-abilities.ts'; // Sinspawn Gui's Special 1 and Venom (hidden chapter, 2026-10-10)
 import { COMMAND_RECORDS_BIRAN_YENKE } from '../enemies/biran-yenke-abilities.ts'; // Bulldoze, the brothers' Breaths, Berserk and their half-HP Rages (hidden chapter, 2026-10-14)
+import { COMMAND_RECORDS_DARK_AEONS } from '../enemies/dark-aeons-abilities.ts'; // the Dark Aeons' fourteen rows (hidden Mirror Aeons chapter, 2026-10-15)
 
 /**
  * The possessed aeons' plain Attack: monster-magic-2 record 0x6000 "Attack" (accuracy formula 2 on a byte of 90, formula 1,
@@ -28,6 +29,7 @@ export const POSSESSED_PLAIN_ATTACK: FFXPlainAttack = {
 export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>> = {
   ...COMMAND_RECORDS_GUI,
   ...COMMAND_RECORDS_BIRAN_YENKE,
+  ...COMMAND_RECORDS_DARK_AEONS,
   'lance-of-atrophy': { id: 0x6078, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, shatter: 30, rank: 3, chances: [[1, 100]] }, // Lance of Atrophy (our numbers differ: section 4)
   'full-life': { id: 0x60f5, type: 0, flagsMisc: 0x4800086, flagsDamage: 0x32, damageClass: 1, rank: 3, chances: [[0, 254]] }, // Full Life
   'cross-cleave': { id: 0x6074, type: 0, flagsMisc: 0x4006, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Cross Cleave (our numbers differ: section 4)
@@ -76,11 +78,13 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'possessed-bahamut-mega-flare': { id: 0x60dd, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Mega Flare (picked by hand)
   'possessed-anima-pain': { id: 0x60de, type: 0, flagsMisc: 0x4010006, flagsDamage: 0x2, damageClass: 1, rank: 3, chances: [[0, 100]] }, // Pain (our numbers differ: section 4)
   'possessed-anima-oblivion': { id: 0x60df, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Oblivion (our numbers differ: section 4)
-  'possessed-yojimbo-daigoro': { id: 0x40b1, type: 0, flagsMisc: 0x6, flagsDamage: 0xd, damageClass: 1, shatter: 10, rank: 3 }, // Daigoro (picked by hand)
+  // The possessed Yojimbo's two strikes (the hidden Last Summoning chapter, 2026-10-15): monster-magic-2 rows 224 and 225, power 14, pierce Armored, shatter 0 (the first build's Daigoro record, 0x40b1, was a row he never uses).
+  'possessed-yojimbo-kozuka': { id: 0x60e0, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Kozuka
+  'possessed-yojimbo-wakizashi': { id: 0x60e1, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Wakizashi
   'possessed-yojimbo-zanmato': { id: 0x60e2, type: 0, flagsMisc: 0x44010006, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Zanmato
-  'possessed-cindy-camisade': { id: 0x60e3, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Camisade (our numbers differ: section 4)
-  'possessed-cindy-delta-attack': { id: 0x60e6, type: 0, flagsMisc: 0x44010006, flagsDamage: 0xc, damageClass: 1, rank: 3 }, // Delta Attack (our numbers differ: section 4)
-  'possessed-sandy-razzia': { id: 0x60e4, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Razzia (our numbers differ: section 4)
+  'possessed-cindy-camisade': { id: 0x30e5, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, shatter: 30, rank: 5 }, // Camisade: the command-table row the possessed Cindy's script calls (the monster row 0x60e3 is unused; Last Summoning record fix)
+  'possessed-cindy-delta-attack': { id: 0x60e6, type: 0, flagsMisc: 0x44010006, flagsDamage: 0xc, damageClass: 1, rank: 3 }, // Delta Attack
+  'possessed-sandy-razzia': { id: 0x30e7, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, shatter: 30, rank: 5 }, // Razzia: the command-table row the possessed Sandy's script calls (the monster row 0x60e4 is unused; Last Summoning record fix)
   'possessed-mindy-passado': { id: 0x60e5, type: 0, flagsMisc: 0x4010006, flagsDamage: 0xd, damageClass: 1, rank: 3 }, // Passado
   'mac-blizzara': { id: 0x3046, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Blizzara
   'mac-thundara': { id: 0x3047, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1, shatter: 10, rank: 3 }, // Thundara

@@ -250,6 +250,11 @@ export const ABILITIES: Record<string, AbilityDef> = {
     formula: 'none',
     damageType: 'other',
     element: ['none'],
+    // The game's row is a GROUP-type command of reach 1 (command 0x30E2; `research/re-ffx-zanmato-and-orders.md` sections 1 and 2): the player's Yojimbo's
+    // script aims it with the game's auto-target, which makes ONE stream-5 draw to pick one enemy group (every foe of chapters 27 and 28 is group 0) and
+    // returns EVERY legal member of it (in battle, targetable, alive, distance 1 or less). `targeting` stays `single-enemy` (the row's menu shape; nothing
+    // aims this row at nobody), and `extra.groupTarget` (below) makes the executor keep the WHOLE list the pick returned (`targeting.ts#aimOf`; the flag the Mix,
+    // the possessed aeons' group specials and Yu Yevon's Gravija carry), instead of cutting a single-target row's named list to its first entry.
     targeting: 'single-enemy',
     hits: 1,
     canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
@@ -262,8 +267,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     sfxKey: 'sfx-zanmato',
     messageTemplate: '{user} uses Zanmato on {target}',
     minigame: null,
-    // Death at chance 255 ignores ALL resistance, including Aeon Ribbon/Deathproof.
-    extra: { deathChance: 255, ignoresAllResistance: true, vfxKey: 'vfx-zanmato' },
+    // Death at chance 255 ignores ALL resistance, including Aeon Ribbon/Deathproof (the record's own chance of 255 does it: the status step lands a chance of 255
+    // whatever the resistance byte is). The game's Slice flag does nothing in this build, so there is no immunity check of any kind here. `deathChance` and
+    // `ignoresAllResistance` are descriptive: the engine reads the record, not these keys.
+    extra: { deathChance: 255, ignoresAllResistance: true, vfxKey: 'vfx-zanmato', groupTarget: true },
   },
 };
 

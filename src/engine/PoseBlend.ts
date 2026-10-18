@@ -12,7 +12,13 @@
  *
  * 1. **One blend at a time.** A request ends the blend before it.
  * 2. **A request in mid-blend keeps the stronger plane as the outgoing painting** and re-points only the weaker
- *    one, whose fade starts from 0. (The weaker plane's painting is dropped: at most two paintings above 0.02.)
+ *    one, whose fade starts from 0 (at most two paintings above 0.02) **and only once that fade is under
+ *    {@link REPOINT_BELOW}** (pose continuity, 2026-10-16; both games). Re-pointing a plane that still shows 0.15 to
+ *    0.35 of its painting removed it in one frame, a hole in the figure and a step of the fade-weighted head (4 of 177
+ *    FFX requests in the survey, mostly the key chain's ready or attack into follow; angle 2, section 4.5). A request
+ *    that would do it **waits**: it is held (the latest one wins; any later request, a cut or a cancel drops it), and the
+ *    running blend goes on at its own pace until the weaker plane is under {@link REPOINT_BELOW}, or has finished, which
+ *    is never later than the end of that one blend. The caller learns that it began from {@link PoseBlend.takeStart}.
  * 3. **A request naming a painting a plane already holds reverses to it** without touching any fade: no pop.
  * 4. **A request naming the painting already on its way in is nothing** (`same`): the running blend goes on.
  * 5. **The clock is the caller's.** `advance(ms)` takes real milliseconds; `PaintedActor.update(dt, realDt)` hands
@@ -154,11 +160,28 @@ export function poseBlendShape(): BlendShapeSpec {
 }
 
 /**
- * What {@link PoseBlend.request} decided: `same` (the requested painting is already the one on its way in, so the blend that runs goes on and there is
- * nothing to do), or the plane the pose is now on its way into (the actor's new `active`), whether that plane has to be pointed at the painting (it
- * held another, and its fade was set to 0), and whether the request turned a running blend round on a painting a plane already held (no fade moved).
+ * What {@link PoseBlend.request} decided: `same` (nothing to do now: the requested painting is already the one on its way in, so the blend that runs goes
+ * on; or, with `deferred`, rule 2 holds the request and the blend starts it on its own, which {@link PoseBlend.takeStart} reports), or the plane the pose
+ * is now on its way into (the actor's new `active`), whether that plane has to be pointed at the painting (it held another, and its fade was set to 0),
+ * and whether the request turned a running blend round on a painting a plane already held (no fade moved).
  */
-export type BlendPlan = { same: true } | { same: false; to: 0 | 1; repoint: boolean; reversed: boolean };
+export type BlendPlan = { same: true; deferred?: true } | { same: false; to: 0 | 1; repoint: boolean; reversed: boolean };
+
+/** What {@link PoseBlend.request} may start: the second arm of {@link BlendPlan}. */
+export type BlendStarted = Extract<BlendPlan, { same: false }>;
+
+/**
+ * The weaker plane's fade under which a mid-blend request may re-point it (rule 2). 0.05 is below what the eye reads as a painting in a figure (the
+ * harness counts a painting from 0.02 and a ghost from far more), and a blend that has run to there has 1 or 2 frames of its fade-out left at 60 Hz.
+ */
+export const REPOINT_BELOW = 0.05;
+
+/** A request held until the weaker plane can be re-pointed without dropping a painting that still shows. */
+interface Held {
+  readonly key: string;
+  readonly durationMs: number;
+  readonly shape: BlendShapeSpec | undefined;
+}
 
 interface Running {
   readonly from: 0 | 1;
@@ -178,6 +201,9 @@ function curvesOf(spec: BlendShapeSpec): BlendCurves {
 
 export class PoseBlend {
   private run: Running | null = null;
+  private held: Held | null = null;
+  private dropped = 0;
+  private started: { key: string; plan: BlendStarted } | null = null;
   private readonly planes: readonly [BlendPlane, BlendPlane];
   private readonly fallback: BlendCurves;
 
@@ -206,6 +232,15 @@ export class PoseBlend {
    * the planes still end at 1 and 0 on the next advance.
    */
   request(key: string, durationMs: number, active: 0 | 1, shape?: BlendShapeSpec): BlendPlan {
+    this.held = null; // the latest request wins: a held one the caller has since changed its mind about never starts
+    return this.plan(key, durationMs, active, shape, true);
+  }
+
+  /**
+   * The body of {@link request}. `mayHold`: a request that would re-point a plane still showing 0.05 or more of its painting is held for later
+   * (rule 2) rather than done; the held request itself starts through here with it false.
+   */
+  private plan(key: string, durationMs: number, active: 0 | 1, shape: BlendShapeSpec | undefined, mayHold: boolean): BlendPlan {
     const P = this.planes;
     const target = P[active];
     if (target.pose === key) return { same: true };
@@ -226,8 +261,13 @@ export class PoseBlend {
       inn = strong;
       reversed = mid;
     } else {
+      if (mayHold && mid && P[weak].fade >= REPOINT_BELOW) {
+        this.held = { key, durationMs, shape };
+        return { same: true, deferred: true };
+      }
       inn = weak;
       repoint = true;
+      this.dropped = Math.max(this.dropped, P[weak].fade); // what the re-point removes: rule 2 keeps it under REPOINT_BELOW whenever a blend runs
       P[weak].fade = 0;
     }
     const out: 0 | 1 = inn === 0 ? 1 : 0;
@@ -258,6 +298,7 @@ export class PoseBlend {
       to.fade = 1;
       from.fade = 0;
       this.run = null;
+      this.startHeld(r.to);
       return true;
     }
     const u = r.elapsed / r.duration;
@@ -267,11 +308,54 @@ export class PoseBlend {
     if (cap !== undefined && fo > cap) ti = Math.min(ti, Math.max(r.toStart, cap)); // the lesser plane stays under the cap even when it started above it
     from.fade = fo;
     to.fade = ti;
+    this.startHeld(r.to);
     return true;
+  }
+
+  /**
+   * Start the held request (rule 2) once the weaker plane no longer shows a painting worth keeping, or the blend it waited for is over. `active` is the
+   * plane that was on its way in. The caller reads what began from {@link takeStart}; a plan that came to nothing (the painting is already the one on its
+   * way in) is dropped.
+   */
+  private startHeld(active: 0 | 1): void {
+    const h = this.held;
+    if (!h) return;
+    const P = this.planes;
+    const other: 0 | 1 = active === 0 ? 1 : 0;
+    const weak: 0 | 1 = (P[other].fade > P[active].fade ? other : active) === 0 ? 1 : 0;
+    if (this.run !== null && P[weak].fade >= REPOINT_BELOW) return;
+    this.held = null;
+    const plan = this.plan(h.key, h.durationMs, active, h.shape, false);
+    if (!plan.same) this.started = { key: h.key, plan };
+  }
+
+  /**
+   * The request that began on its own since the last call (a held one, rule 2), or null: the caller does with it what it does with a plan from
+   * {@link request} (point `plan.to` at the painting named `key` when `plan.repoint`, make `plan.to` its active plane). Call it after {@link advance}.
+   */
+  takeStart(): { key: string; plan: BlendStarted } | null {
+    const s = this.started;
+    this.started = null;
+    return s;
+  }
+
+  /** True while a request waits for the blend to get far enough on (rule 2). */
+  get holding(): boolean {
+    return this.held !== null;
+  }
+
+  /**
+   * The most of a painting any re-point has removed since this blend was built (0 to 1): the largest fade a plane showed in the frame its painting was
+   * replaced. A telemetry for the tests and a capture: with rule 2 it stays under {@link REPOINT_BELOW} while a blend runs (it was 0.15 to 0.35 before).
+   */
+  get maxDropped(): number {
+    return this.dropped;
   }
 
   /** Drop the running blend where it stands (a cut, a dispose): the planes keep the fades they have. */
   cancel(): void {
     this.run = null;
+    this.held = null; // a cut or a dispose takes the waiting request with it
+    this.started = null;
   }
 }

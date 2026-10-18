@@ -8,14 +8,18 @@
  * | Roll | Stream | Source |
  * |---|---|---|
  * | damage variance, critical roll, Escape, the opening CTB | the roller's own, mode 0: party slot + 20, every aeon and party slot 7: 27, a monster slot + 8 (28 to 35) | `re-ffx-rng-hit.md` 2 |
+ * | the battle's start-type roll: one draw in every battle, spent and discarded (re-parity RC8, FFX only) | 1, `& 0xFF` | `re-ffx-battle-entry.md` 1; `adapt/entry.ts` |
+ * | the placement shuffle of linked monsters: 2n draws for each group of n, before the opening counters (RC8, FFX only) | each member's own mode 0 stream, the monster slot + 8 (28 to 35) | `re-ffx-battle-entry.md` 2; `adapt/entry.ts` |
  * | the hit-or-evade roll | the user's mode 1 (+ 16) | same |
  * | status infliction, extra statuses, shatter, Threaten | the user's mode 2 (+ 32) | same |
- * | steal success and amount | 10; the rare slot 11 (loot and drops are the engine's own model, on `BattleRng.aux`) | `re-ffx-rng-hit.md` 2 |
+ * | steal success and amount | 10; the rare slot 11 | `re-ffx-rng-hit.md` 2 |
+ * | **kill rewards** at each monster's death (re-parity RC9): the two item slots' chance rolls `% 255` and the gear roll, all on 10; the rare entry `& 0xff` after a slot's success, on 11; a bribed monster's two draws on the killer's own mode 0 stream | 10, 11 (shared with steal); the killer's | `FFX-G10` 3.4, `FFX-H02` 3.5, `kernel/drops.ts`, `adapt/loot.ts` |
  * | a script's `GetRandomValue` | 2, `& 0xFFFF`; one stream for every script and actor | `re-ffx-rng-hit.md` 2, `re-ffx-ai-*.md` |
  * | a script's actor picker (`findMatchingChr`), and a Berserk or Confuse target | 4, `% candidates`, ascending actor order, no draw under two | `re-ffx-ai-*.md`; Berserk and Confuse: `pp_BtlPickAutoTarget` (0x007996d0) |
  * | the targets of a random-target command, one draw per hit | 5, the same picker | `pp_BtlBuildTargetHits` (0x0078ba70) |
  * | a Reflect bounce | 6, the same picker | same |
  * | a Mix result's auto-target: one ally by the single picker, or one group by the group pick | 4 for the single pick (a draw only with two or more candidates); 5 for the group pick (one draw for any non-empty side), then 5 per hit of a multi-hit result | `FFX-G05` section 5, `pp_BtlAutoTarget` (0x007996d0); `mix.ts` |
+ * | the player's Yojimbo's group commands (Zanmato, Wakizashi on all): the script's `btlSetRandomTarget`, made when the script names the command, before it is queued | 5, ONE draw whenever the legal set (in battle, targetable, alive, distance 1 or less) is not empty, even with one group populated (`value % populated groups`); none when it is empty. The mask is every legal member of the chosen group, and the executor adds no draw of its own: the hit then takes one status draw (the user's mode 2 stream, 59 for an aeon) per target | `research/re-ffx-zanmato-and-orders.md` section 2, `FFX-G08` section 2; `adapt/yojimbo.ts`, `kernel/legal-set.ts#groupPick` |
  * | an Overdrive result's hit removal (Slice and Dice's Fail, Lulu's Fury with fewer casts), one draw per hit taken away | 16, `value % (targets holding the most hits)` | `FFX-G01` section 8 (0x007afe00) |
  * | Chapter VIII's scene and camera draws, the Fins' caption | 2, counted (`ai/airship-scenes.ts`) | the formation scripts |
  * | Wakka's Attack Reels result | 19, **named but not drawn yet**: the engine takes the player's reel input from `BattleRng.aux` | `re-ffx-rng-hit.md` 2 (the anchor map), `re-ffx-ai-evrae-yojimbo-isaaru-sin.md` (0x007b1b50 is the reel builder) |
@@ -32,6 +36,8 @@ import { slotOf } from './slots.ts';
 
 /** The streams that do not depend on a character (`research/re-ffx-rng-hit.md` section 2, and the lane notes named there). */
 export const FfxStream = {
+  /** The battle's start-type roll (VA 0x0078d090): one draw, `value & 0xFF`, in every battle; the engine spends it and discards the answer (RC8 lane FFX-L). */
+  StartType: 1,
   /** A script's `GetRandomValue()`: `value & 0xFFFF`. */
   Script: 2,
   /** A script's `findMatchingChr` pick, and the target of a forced (Berserk, Confuse) single-target action: `value % count`. */
@@ -42,12 +48,16 @@ export const FfxStream = {
   Reflect: 6,
   /** An Overdrive result's hit removal: `value % (the number of targets holding the most hits)`, one draw for each hit taken away (re-parity RC4 lane B). */
   OverdriveRemoval: 16,
-  /** Steal success (and Pilfer's amount): `value % 255`. */
+  /** Steal success (and Pilfer's amount): `value % 255`. Also the kill rewards' item-slot chance rolls and the gear roll (`adapt/loot.ts`; the exe's loot routine 0x007990d0 shares the stream). */
   Steal: 10,
-  /** The rare-slot roll: `value & 0xff`. */
+  /** The rare-slot roll: `value & 0xff`. Also the kill rewards' rare-entry roll after a slot's success. */
   StealSlot: 11,
   /** Wakka's Attack Reels result. Named for the stream map; nothing draws it yet (the player's reel input is a stand-in on `BattleRng.aux`). */
   Reels: 19,
+  /** The player's Yojimbo: the turn-start free-attack roll and the script's raw draw (re-parity lane FFX-K, `FFX-G08` 3.1; the draw is the 31-bit value, the script masks it). */
+  Yojimbo: 17,
+  /** The Magus Sisters: `RollMagusRandom` and their menu builders (re-parity lane FFX-K, `FFX-G08` 6.2; `(value & 0xFF) < threshold`). */
+  Magus: 18,
 } as const;
 
 /** The FFX generator and seeding, in the shape {@link GameStreams} wants. */

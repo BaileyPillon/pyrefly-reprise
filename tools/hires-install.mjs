@@ -25,6 +25,9 @@
  * Files are hard-linked from the library (no extra bytes; the library is write-once) and copied when the link fails or `--copy`
  * says so. Nothing is ever deleted. Run `node tools/gen/manifest.mjs` afterwards: the manifest lists the masters (`tiers`,
  * `backdropTiers`) and the game never asks for one that is not listed.
+ *
+ * Pose continuity (2026-10-17): `--apply` ends in the pose gate for the character subjects it touched (`tools/pose-gate.mjs`: a master must be N times its 1x painting
+ * and draw its silhouette), and exits 1 when the gate refuses. It registers nothing: a new character painting is installed with `tools/art-install.mjs`.
  */
 import { createHash } from 'node:crypto';
 import { cpus } from 'node:os';
@@ -292,7 +295,11 @@ async function main(argv) {
   }
   const n = await apply(jobs, argv.includes('--copy'), { art, parkDir });
   console.log(`hires-install: ${n} file(s) written under ${art}; run node tools/gen/manifest.mjs next`);
-  return 0;
+  // Pose continuity (2026-10-17): the pose gate reads each painting's @2x/@3x/@4x masters against its 1x master, so a library applied beside a painting that is not the one
+  // it was rendered from is refused here and not only at the deploy. (Imported here: the installer's own pure helpers should not load the image decoder.)
+  const subjects = [...new Set(jobs.map((j) => /^characters\/([^/]+)\//.exec(j.id)?.[1]).filter(Boolean))];
+  const { poseGateAfter } = await import('./art-install-lib.mjs');
+  return poseGateAfter({ art, subjects, root: ROOT });
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

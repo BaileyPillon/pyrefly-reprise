@@ -335,3 +335,10 @@ if (!DRY) {
 }
 console.log(DRY ? 'dry run: nothing written' : 'done');
 void dirname;
+if (!DRY) {
+  // Pose continuity (2026-10-17): this tool writes the paintings and registers nothing, so the pose gate speaks here and not only at the deploy. A refusal means the
+  // subjects still need `node tools/art-install.mjs --target <art> --subject <id> --register` (and their entry in tools/posescale/subjects.json).
+  const { poseGateAfter } = await import('./art-install-lib.mjs');
+  const status = poseGateAfter({ art: DEST, subjects: Object.keys(PICKS), root: REPO });
+  if (status !== 0) process.exitCode = status;
+}

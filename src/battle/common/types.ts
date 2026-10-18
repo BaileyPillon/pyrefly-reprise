@@ -562,10 +562,9 @@ export interface CombatantFlags {
   /** Cannot be revived by anything (possessed aeons, Yu Yevon's shell). */
   noRevive?: boolean;
   /**
-   * **Out of melee reach** (FFX): a *physical* party action reaches this
-   * combatant only from a user who can reach it (`targeting.ts`,
-   * `REACHES_OUT_OF_MELEE`: Wakka, Valefor, Anima, Mindy). Seymour Omnis's
-   * Mortiphasm discs [ffx-seymour-omnis §2, verified: 4 sources]. Magic reaches.
+   * **Out of melee reach** (FFX). *No longer read by any engine since re-parity RC9 (lane FFX-G slice G-c):* the per-target rule it stood for ("a physical action
+   * reaches only from Wakka, Valefor, Anima, Mindy; magic always reaches") is now the game's own 4-level rule, carried by {@link battleDistance} (the Mortiphasm
+   * discs 2, Sin's Genais Core 3). The field stays in the type so that no importer breaks (shared contracts are additive).
    */
   outOfMeleeReach?: boolean;
   /**
@@ -575,10 +574,12 @@ export interface CombatantFlags {
    */
   neverRandomTarget?: boolean;
   /**
-   * **The game's `BattleDistance`** (FFX; Sinspawn Gui's head, 1, `research/re-ffx-ai-gui.md` section 4): a command reaches this combatant only when its
-   * own reach (0 to 3, from its record: `battle/ffx/reach.ts`) is at least this number. 1 puts it out of reach of every reach-0 command (Attack and the melee
-   * skills, Tidus's and Auron's physical Overdrives, Steal, the Breaks) while every spell, Lancet, Scan, item and Requiem lands; a user whose weapon reaches
-   * (Wakka) lands his weapon commands too. Absent (0) for everyone else, so no other battle changes. Read by `targeting.ts#reachesTarget`.
+   * **The game's `BattleDistance`** (FFX; `Chr+0x4ff`): a command reaches this combatant only when its own reach (0 to 3, from its record:
+   * `battle/ffx/reach.ts#reachOf`) is at least this number, or when the combatant is the user. 1 (Sinspawn Gui's head, `research/re-ffx-ai-gui.md` section 4)
+   * puts it out of reach of every reach-0 command (Attack and the melee skills, Steal, the Breaks, the physical Overdrives); 2 (the Mortiphasm discs,
+   * `research/re-ffx-ai-seymour.md` section 5) also stops the reach-1 commands (Spare Change, the aeon Overdrives); 3 (Sin's Genais Core until Genais falls)
+   * leaves only the reach-3 commands: the spells, Lancet, Scan and the Attack of Wakka, Valefor, Anima and Mindy. Absent (0) for everyone else, so no
+   * other battle changes. Read by `targeting.ts#reachesTarget`.
    */
   battleDistance?: number;
 }
@@ -926,6 +927,40 @@ export interface ItemDrop {
   rare?: { itemId: ItemId; count: number; chance: number };
 }
 
+/**
+ * **FFX only: a monster's loot record in the game's own numbers** (additive; re-parity RC9, lane FFX-M). It is chunk 4 (0x118 bytes) of the monster's file `battle/mon/_mNNN/mNNN.bin` in
+ * `FFX_Data.vbf`, read as numbers (layout: the private note FFX-H02 section 3.1); the kill-rewards roll (`battle/ffx/kernel/drops.ts`, FFX.exe 0x007990d0) reads exactly these fields at
+ * each of the monster's deaths. The item numbers are the game's (`0x2000 + n`, `battle/ffx/kernel/mix-table.ts#MIX_ITEM_IDS` names them); a quantity or number of 0 means "nothing".
+ * The gear fields of the record (the owner rows, the slot and ability bytes) are NOT carried: the gear drop is proven (`kernel/gear-drop.ts`) but not wired (M2), so only the gear
+ * roll's chance byte is kept, for the roll's one draw and for the measurement.
+ */
+export interface FfxLootRecord {
+  /** The monster file number `NNN` of `mNNN.bin`. */
+  file: number;
+  /** +0x00 (u16): gil. */
+  gil: number;
+  /** +0x02 (u16): AP for a normal kill; +0x04 (u16): AP for an overkill. */
+  ap: number;
+  apOverkill: number;
+  /** +0x08, +0x09: the chance bytes of the two item slots (a slot drops when a stream-10 draw `% 255` is below its byte; 255 always drops, 0 never). */
+  chance: readonly [number, number];
+  /** +0x0b: the gear roll's chance byte (the roll's draw is made; the gear piece itself is not wired). */
+  gearChance: number;
+  /** +0x0c (u16 x4): slot 1 common, slot 1 rare, slot 2 common, slot 2 rare. The rare entry is taken when a stream-11 draw's low byte is below 0x20. +0x14 (u8 x4): their quantities. */
+  items: readonly [number, number, number, number];
+  qty: readonly [number, number, number, number];
+  /** +0x18 (u16 x4) and +0x20 (u8 x4): the same lists, read instead of the above when the monster dies to an overkill. */
+  overkillItems: readonly [number, number, number, number];
+  overkillQty: readonly [number, number, number, number];
+  /** +0x2a (u16) and +0x2c (u8): the item a bribed monster leaves and the factor of its quantity. */
+  bribeItem: number;
+  bribeFactor: number;
+  /** Where the numbers were read: the file, the chunk and a digest of its 0x118 bytes. */
+  source: string;
+  /** What a script of the monster writes over the record at run time (Sinspawn Gui's parts), when the numbers above are the values in play rather than the file's. */
+  note?: string;
+}
+
 /** What an enemy yields when it dies [ffx-combat-core §12.2]. */
 export interface EnemyRewards {
   /** AP on a normal kill. Range 0–15 000. */
@@ -950,6 +985,12 @@ export interface EnemyRewards {
   bribe?: { item: ItemDrop; immune: boolean };
   /** EXP (FFX-2 only; FFX has no EXP). Range 0–99 999. */
   exp?: number;
+  /**
+   * **FFX only: the monster's loot record** (additive; re-parity RC9). When present the FFX engine pays this monster's death with the game's own roll (`battle/ffx/adapt/loot.ts`):
+   * `ap`, `apOverkill`, `gil` and `drops` above are then the same numbers read from it, kept for display and for the data tests, and nothing rolls from `drops`. Absent (a hand-built rig),
+   * the engine turns `ap`, `gil` and `drops` into a record of the same shape and pays that.
+   */
+  loot?: FfxLootRecord;
 }
 
 /** One boss form. `formIndex` 0 is the starting form. */
@@ -1000,7 +1041,11 @@ export interface EnemyFields {
    * [ffx-bfa-yu-yevon §3.1, verified: 2 sources].
    */
   doomTurns?: number;
-  /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
+  /**
+   * The game's Zanmato byte plus 1 (the data files write "byte 3 -> level 4"); unset reads as byte 0. Only the player's Yojimbo reads it (re-parity lane
+   * FFX-K, `battle/ffx/adapt/yojimbo.ts`): his Pay divides its motivation by the highest byte over the monsters on the field plus 1, and a free attack is never
+   * Zanmato against a group with a byte above 0 (`docs/handoff/re-parity-ffx-yojimbo-sisters.md` section 2.4).
+   */
   zanmatoLevel?: number;
   /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
   plainAttack?: FFXPlainAttack;
@@ -1526,12 +1571,52 @@ export interface FFX2CommandRecord {
 }
 
 /**
+ * The kill-reward fields of one FFX-2 monster row (re-parity RC9, lane X2-C; **FFX-2 only**; note FFX2-G03 section 5.1): what the game's reward routine
+ * pays when the monster falls. Numbers read from `battle/kernel/monster.bin` (`monster2.bin` for the Oversoul Paragon) of the Steam build 25501027.
+ */
+export interface FFX2KillReward {
+  /** The row in monster.bin (`table` 1) or monster2.bin (`table` 2). */
+  table: 1 | 2;
+  row: number;
+  /** Row +0x9c. */
+  exp: number;
+  /** Row +0xa8. */
+  ap: number;
+  /** Row +0xa0. */
+  gil: number;
+  /** Row +0xaa: the drop chance byte out of 255 (0 never drops, 255 always). */
+  dropByte: number;
+  /** Row +0xac: the common slot's item id and quantity, then the rare slot's (the game's item ids: 0x2xxx consumables, 0x9xxx accessories, 0x7xxx key items). */
+  drop: readonly [number, number, number, number];
+}
+
+/**
+ * What a battle has paid so far by the game's kill-reward routine (re-parity RC9, lane X2-C; **FFX-2 only**): the part of the results buffer the routine writes
+ * (the EXP and gil totals, one record per save index with the EXP at battle start and the EXP gained, the five item lists) and each girl's AP pool.
+ * Plain numbers, created at the first knock-out of a battle and carried with the state (`BattleState.ffx2Rewards`); written by `battle/ffx2/kill-rewards.ts` only.
+ */
+export interface FFX2RewardLedger {
+  buffer: {
+    exp: number;
+    gil: number;
+    rec: Array<{ snap: number; pend: number }>;
+    lists: { count: number[]; ids: number[][]; qty: number[][] };
+  };
+  /** The AP credited to each owner slot this battle (capped at 99 for a girl). */
+  pools: number[];
+  /** The authored drops of monsters that carry no row of the game (hand-built test enemies); paid outright. */
+  extraDrops: ItemDrop[];
+}
+
+/**
  * The game's own monster row for one FFX-2 enemy, the part the engine's enemy data does not carry (re-parity W3;
  * **FFX-2 only**). The fields the engine does carry (ACC, the resist bytes, the percent and Delay immunities, the steal
  * byte and the stolen gil) are corrected in place from the same row where they differ, by
  * `src/data/ffx2/monster-records/`; `research/re-ffx2-commands.md` section 7 lists every correction.
  */
 export interface FFX2MonsterRecord {
+  /** The row's kill-reward fields (re-parity RC9, lane X2-C), laid by `attachMonsterRecords` from `data/ffx2/monster-records/kill-rewards.ts`. Absent: the enemy is paid from its authored `rewards`. */
+  kill?: FFX2KillReward;
   /** The row in monster.bin (`table` 1) or monster2.bin (`table` 2, the Oversoul version). */
   row: number;
   table: 1 | 2;
@@ -1724,8 +1809,14 @@ export interface TimingResult {
    * Range 0–`timerMs`.
    */
   timeRemainingMs: number;
-  /** The timer length this Overdrive used, 2 200–3 000 ms. */
+  /** The timer length this Overdrive used: 3 000 ms, or 2 000 ms for Blitz Ace (the game's limits, FFX-G01 section 6.2). */
   timerMs: number;
+  /**
+   * **Additive (re-parity RC9, FFX only).** The controller frame (1/30 s, counted from 1) the move ended in: the frame a hit press was seen in, or the
+   * frame that found the limit gone (91 for a 3 s limit). `timeRemainingMs` is then `(limit - frame / 30) * 1000`, the game's `A`. Absent from a result a
+   * test rig builds by hand.
+   */
+  frame?: number;
 }
 
 /** Result payload for `auron-sequence`. */
@@ -1736,6 +1827,8 @@ export interface SequenceResult {
   correctInputs: number;
   /** `timerMs - msElapsedWhenLastInputLanded` (4 000 ms; Tornado 3 000 ms since od5). Range 0 to the timer. */
   timeRemainingMs: number;
+  /** **Additive (re-parity RC9, FFX only).** The controller frame (1/30 s, from 1) the move ended in; `timeRemainingMs` is then `(limit - frame / 30) * 1000`. */
+  frame?: number;
   /**
    * **Not read since od5 (2026-10-01); kept so the contract stays additive.** The FFX engine
    * decides the higher-DmgCon "immune" row itself, per target, from each target's own
@@ -1768,17 +1861,26 @@ export interface ReelResult {
 
 /** Result payload for `lulu-fury`. */
 export interface FuryResult {
-  /** Total angle swept by the stick, in degrees. Range 0–20 000. */
+  /** Whole rotations of the stick times 360 (a digital pad's two left/right steps are one rotation). Range 0–20 000. */
   sweptDegrees: number;
-  /** `min(16, floor(sweptDegrees / degreesPerCast(spell, lulu.magic)))`. Range 0–16. */
+  /**
+   * The casts the game's table gives those rotations for the spell at Lulu's Magic, at least 1 and at most 16 (re-parity RC9: `kernel/minigame-fury-tables.ts`,
+   * FFX-G01 section 6.4; the engine recomputes it from `sweptDegrees` whenever that is above 0). Range 1–16.
+   */
   casts: number;
 }
 
 /** Result payload for `rikku-mix`. */
 export interface MixResult {
-  /** The two consumed item ids. Order never matters. */
+  /**
+   * The two consumed item ids. **FFX: order never matters** (Rikku's chart is symmetric). **FFX-2: order matters** (re-parity RC9, lane X2-G): the entries are the picks in the order
+   * made, and the same two items make a different result in 496 of the 2,278 unordered pairs; the Alchemist's Mix takes them on the command's `extra`.
+   */
   ingredients: [ItemId, ItemId];
-  /** The resolved mix ability id, or `null` when the pair has no recipe ("Mix failed!"). */
+  /**
+   * The resolved mix ability id. **FFX:** `null` when the pair has no recipe ("Mix failed!"). **FFX-2:** every pair makes a result (the game's recipe function has no failure outcome), and the engine
+   * resolves it from `ingredients` itself, the way the game's HUD does before it queues anything, so this field is ignored on the way in and may be `null`.
+   */
   resultAbilityId: AbilityId | null;
 }
 
@@ -1833,8 +1935,9 @@ export interface AbilityCommand {
    */
   extra?: MinigameResult;
   /**
-   * FFX-2 only (re-parity W3): the gil offered, for Lady Luck's Bribe (the accuracy formula and the reward read it;
+   * FFX-2 (re-parity W3): the gil offered, for Lady Luck's Bribe (the accuracy formula and the reward read it;
    * `ActionRec+0xb0`). Omitted, a Bribe offers nothing and the game's rule makes it miss.
+   * FFX (re-parity lane FFX-K): the payment of the player's Yojimbo's Pay (`PAY_ABILITY_ID` in `battle/ffx/aeon-commands.ts`), 0 to the party's gil.
    */
   gilSpent?: number;
   /**
@@ -1853,6 +1956,8 @@ export interface ItemCommand {
   targets: CombatantId[];
   /** Spare Change only: gil thrown. Damage is `gil // 10`, hard-capped at 9 999. */
   gilSpent?: number;
+  /** FFX-2 only (re-parity RC9 X2-H): the command names its targets exactly, as {@link AbilityCommand.exactTargets} (a Confused girl's pick aims an item by the game's own mask, which can be the other team). */
+  exactTargets?: boolean;
 }
 
 /**
@@ -2399,7 +2504,12 @@ export type TriggerCondition =
    */
   | { type: 'overdrive'; who: CombatantId; at?: number }
   /** Any enemy began a telegraphed charge; `who` narrows it to one enemy. */
-  | { type: 'charge-started'; who?: CombatantId };
+  | { type: 'charge-started'; who?: CombatantId }
+  /**
+   * **FFX only** (additive; the hidden Mirror Aeons chapter, 2026-10-15): every combatant in `ids` that is **in this battle** is down (HP 0 or ejected), and at least one is. Evaluated from the state after each
+   * resolved action, like `hp-below`. A trio has no single "last" member for a `ko` to name, and a list that names members a formation lacks (a lone sister) still works; X-2 never fires it.
+   */
+  | { type: 'all-ko'; ids: CombatantId[] };
 
 /**
  * A story beat wired to a battle state change.
@@ -2443,6 +2553,12 @@ export interface BattleResult {
   sphereLevelsGained: Record<CombatantId, number>;
   /** Levels gained this battle, keyed by member id (FFX-2 only). */
   levelsGained?: Record<CombatantId, number>;
+  /**
+   * FFX-2 only (re-parity RC9, lane X2-C): what each girl earned by the game's kill-reward routine, keyed by member id: her EXP (after the end-of-battle
+   * rollback: a girl who is dead or Petrified loses what she gained) and the AP credited to her (capped at 99 a battle). {@link BattleResult.exp} stays the
+   * results total; **{@link BattleResult.ap} is the AP of the best-credited girl**. Absent outside FFX-2 and on a battle that paid nothing.
+   */
+  rewardsByMember?: Record<CombatantId, { exp: number; ap: number }>;
   /**
    * Party member ids (FFX only) who completed at least one full turn this
    * battle, mapped to how many turns — present only for a completed turn, so
@@ -2531,6 +2647,11 @@ export interface BattleState {
   enemyIds: CombatantId[];
   /** Summoned aeon, or `null`. While non-null, party CTB counters and status durations are frozen. */
   aeonId: CombatantId | null;
+  /**
+   * FFX only (re-parity lane FFX-K): every aeon that is out when more than one is, the three Magus Sisters in list order
+   * (`['cindy', 'sandy', 'mindy']`; `aeonId` is then the first). Absent whenever one aeon, or none, is out, so every other battle's state is unchanged.
+   */
+  aeonIds?: CombatantId[];
   /** Battle turn counter, 1-based; increments on each `turn-start`. */
   turn: number;
   /**
@@ -2552,6 +2673,8 @@ export interface BattleState {
   seed: number;
   /** Encounter-scoped flags an AI script or a story trigger can set and read. */
   flags: Record<string, number | string | boolean>;
+  /** FFX-2 only: what the battle has paid by the game's kill-reward routine so far (created at the first knock-out; `battle/ffx2/kill-rewards.ts`). */
+  ffx2Rewards?: FFX2RewardLedger;
 }
 
 /** Everything needed to start a battle. */
@@ -2712,6 +2835,38 @@ export interface AeonBuild {
   statuses?: Partial<Record<StatusId, StatusInstance>>;
 }
 
+/**
+ * What a build that owns the player's Yojimbo must say (re-parity lane FFX-K, FFX only; the build lists `yojimbo` in `aeons` and gives this, or
+ * `buildBattle` throws). Neither number has a default anywhere in `src/battle`.
+ */
+export interface YojimboBuild {
+  /**
+   * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`**: the game's image holds 0 and no initialiser
+   * was found, and a community save pack (not the owner's: 107 saves, downloaded 2026-09-26) contradicts a default of 0
+   * (RE review, 2026-10-17). 128 is strongly indicated by that pack (slots 1-84 all read 128; 164 by slot 106) and the community says 128, live
+   * confirmation pending; the chapter must say so where it gives its value (`docs/handoff/re-parity-ffx-yojimbo-sisters.md`).
+   * A chain carries the changed value to the next link (`state.flags['yojimbo:compatibility']`).
+   */
+  compatibility: number;
+  /**
+   * The hire answer, 0, 1 or 2: the reply the player gave in the recruitment haggle (0 the dearest start price, 2 the cheapest). It scales the
+   * motivation Pay makes (`kernel/yojimbo.ts`). The image's default, when he was never hired through that scene, is 0 (the same pack contradicts a default of 0: RE review, 2026-10-17; no value changes).
+   */
+  hireAnswer: 0 | 1 | 2;
+}
+
+/**
+ * What a build that owns the Magus Sisters must say (re-parity lane FFX-K, FFX only; the build lists all three of `cindy`, `sandy` and `mindy` in
+ * `aeons` and gives this, or `buildBattle` throws).
+ */
+export interface SistersBuild {
+  /**
+   * Each Sister's motivation at the start of the battle, 0 to 100 (`Chr+0x6e1`). **UNSOURCED**: the note does not say where it starts; the
+   * chapter must label its value an estimate until it is read.
+   */
+  motivation: { cindy: number; sandy: number; mindy: number };
+}
+
 /** The FFX party at a chapter's build point. */
 export interface FFXPartyBuild {
   game: 'ffx';
@@ -2729,6 +2884,10 @@ export interface FFXPartyBuild {
   /** Bench member ids, switchable in. */
   reserve: string[];
   aeons: AeonBuild[];
+  /** Present exactly when `aeons` lists `yojimbo`: the player's Yojimbo's own rules (re-parity lane FFX-K). Absent, no Yojimbo rule runs. */
+  yojimbo?: YojimboBuild;
+  /** Present exactly when `aeons` lists `cindy`, `sandy` and `mindy`: the Magus Sisters' own rules (re-parity lane FFX-K). */
+  sisters?: SistersBuild;
   inventory: InventoryEntry[];
   /** Party gil. Range 0–9 999 999. */
   gil: number;
@@ -2813,7 +2972,11 @@ export interface EnemyDef {
    * Also the countdown Doom runs on when it is inflicted **on** this enemy.
    */
   doomTurns?: number;
-  /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
+  /**
+   * The game's Zanmato byte plus 1 (the data files write "byte 3 -> level 4"); unset reads as byte 0. Only the player's Yojimbo reads it (re-parity lane
+   * FFX-K, `battle/ffx/adapt/yojimbo.ts`): his Pay divides its motivation by the highest byte over the monsters on the field plus 1, and a free attack is never
+   * Zanmato against a group with a byte above 0 (`docs/handoff/re-parity-ffx-yojimbo-sisters.md` section 2.4).
+   */
   zanmatoLevel?: number;
   /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
   plainAttack?: FFXPlainAttack;
@@ -2927,6 +3090,13 @@ export interface EnemyGroupDef {
    */
   noSaveSphereCard?: boolean;
   /**
+   * **FFX, with `restoresPartyOnEntry`: the aeons are restored too** (the hidden Mirror Aeons chapter's Act II; the release driver's delegated pick, 2026-10-15: in the game its two quests are two separate fights, so
+   * between them everyone is whole). Every aeon the party owns enters the link at full HP and MP with no status and no recovery count (a fallen aeon stands again); the Overdrive gauges are left as they are (a Save
+   * Sphere does not touch a gauge). Read by `battle/ffx/line-up.ts#restoreAeonsOnEntry` and nothing else; absent everywhere else, so every other chain, and a hopeless retry's `restoresPartyOnEntry`, keep the
+   * aeons as the previous link left them.
+   */
+  restoresAeonsOnEntry?: boolean;
+  /**
    * **FFX-2, a chained link the party enters carrying everything** (Chapter XV,
    * the Den of Woe; `docs/plans/chapter-gippal-review.md` GP3 = a, `[derived]`:
    * the sources carry HP, the rest is our reading of "no break"). On top of the
@@ -2944,8 +3114,22 @@ export interface EnemyGroupDef {
    * whose name the greyed Summon row gives as its reason ("Mirror of
    * Grothia", Bailey's O-5 pick). Read by `battle/ffx/aeon-duel.ts`; absent
    * everywhere else, so no other chapter's Summon list changes.
+   *
+   * `reason` (the hidden Last Summoning chapter, FFX only; optional, absent for Chapter XIV's): the words the greyed row gives instead of "Mirror of ...", for an aeon Yu Yevon
+   * has taken ("Taken by Yu Yevon"). The lock itself is the same: the aeon is off the Summon list and out of Grand Summon's choices.
    */
-  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId }>;
+  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId; reason?: string }>;
+  /**
+   * **FFX only (the hidden Last Summoning chapter)**: the number of formations the whole chain has when that number follows from the player's choices, not from walking `nextGroupId` (the
+   * pause screen's "BATTLE n OF m", `BattleScreen`'s `chainLengthOf`). Absent for every other chapter, whose chains are counted by walking.
+   */
+  chainLength?: number;
+  /**
+   * **FFX only (the hidden Last Summoning chapter)**: this formation is a seam where the player is asked which formation comes next (the offering screen). `'open'`: the formation is a placeholder that
+   * is never fought, and the chain loop asks before the first fight; `'next'`: the chain asks after this formation's victory, and `nextGroupId` is a marker the screen's chooser replaces. The loop
+   * (`app/screens/BattleEncounterChain.ts`) knows only that a chooser may answer with another formation id; with no chooser a `'next'` seam follows `nextGroupId` as every chain does. Absent everywhere else.
+   */
+  offersAeons?: 'open' | 'next';
   /**
    * **FFX, "can only be fought by aeons"** (Chapter XIV; research §1.2
    * [verified: 2 sources] for the rule, plan B6 / B11 for how it is
@@ -3004,6 +3188,8 @@ export interface EnemyGroupDef {
    * FFX-2: a chained link that the source makes a **separate battle** (Chapter VI's Acts II and III,
    * with puzzles and scenes between them), so its bars open at randomised fills (§1.6, `[single
    * source]`) instead of the continuation's zero, while HP, MP and items still carry (PR-0107).
+   * In the game EVERY chained link is a separate, full battle start with the random opening waits and the opening trim (FFX2-G10 section 4 and section 16 row 4);
+   * this flag is the engine's switch for these two links only, read only while `constants.ts` `SEPARATE_BATTLE_GAUGES` is on, and it is off (Bailey, D-242).
    * Absent everywhere else, so no other chain changes (CONTRACT-CHANGES).
    */
   opensAsSeparateBattle?: boolean;

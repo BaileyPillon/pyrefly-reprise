@@ -515,7 +515,7 @@ describe('the group, the party and the chapter', () => {
     expect(EXPERIMENT_CHAPTERS).toContain(FFX2_ANGRA_MAINYU);
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(ANGRA_MAINYU_ID);
     expect((CHAPTER_IDS as readonly string[]).includes(ANGRA_MAINYU_ID)).toBe(false);
-    expect(CHAPTERS).toHaveLength(18);
+    expect(CHAPTERS).toHaveLength(19);
     expect(FFX2_ANGRA_MAINYU).toMatchObject({ game: 'ffx2', number: 26, experimental: true, sceneKey: ANGRA_MAINYU_SCENE, title: 'Angra Mainyu' });
     expect(ANGRA_MAINYU_PLATE).toBe('bikanel-desert-provisional');
     expect(FFX2_ANGRA_MAINYU.enemyGroupRef).toBe(angraMainyuGroup);

@@ -116,6 +116,38 @@ describe('what the probe records each frame', () => {
     expect(r.probe.records.at(-1)!.f[0]!.g).toEqual([0, 0]);
   });
 
+  it('records, from probe version 2, how far the camera alone moved each CORNER of a plane, and nothing while the camera is still (W4)', async () => {
+    const r = rig();
+    r.probe.start();
+    await r.step(); await r.step();
+    expect(r.probe.meta().version).toBe(2);
+    expect((r.probe.records.at(-1)!.f[0]!.s[0] as number[]).length).toBe(11); // a still camera adds nothing to the record
+    r.camera.matrixWorldInverse.elements[12] = -50;
+    await r.step();
+    const moved = r.probe.records.at(-1)!.f[0]!.s[0] as number[];
+    expect(moved.length).toBe(19); // [k, fade, visible, 8 corners, 8 camera shifts]
+    expect(moved.slice(11)).toEqual([-50, 0, -50, 0, -50, 0, -50, 0]); // orthographic: the same for every corner
+    await r.step();
+    expect((r.probe.records.at(-1)!.f[0]!.s[0] as number[]).length).toBe(11); // and it stops
+  });
+
+  it('projects the shift of each corner through its own depth: a plane in perspective is shifted more at its near edge than at its far one (W4)', async () => {
+    const r = rig();
+    (r.camera as unknown as { projectionMatrix: { elements: number[] } }).projectionMatrix = { elements: [...PROJ] };
+    (r.camera as unknown as { projectionMatrix: { elements: number[] } }).projectionMatrix.elements[11] = 0.002; // w = 1 + 0.002 z
+    r.actor.slots[0].mesh.matrixWorld.elements[2] = 200; // the plane is yawed: its left edge is 100 units nearer than the middle and its right edge 100 farther
+    r.probe.start();
+    await r.step(); await r.step();
+    r.camera.matrixWorldInverse.elements[12] = -50;
+    await r.step();
+    const rec = r.probe.records.at(-1)!.f[0]!.s[0] as number[];
+    const cs = rec.slice(11);
+    expect(cs).toHaveLength(8);
+    expect(cs[0]).toBeCloseTo(-50 / 0.8, 0); // corner 0 (left): w 0.8, so a 50 px slide of the camera is 62.5 px there
+    expect(cs[2]).toBeCloseTo(-50 / 1.2, 0); // corner 1 (right): w 1.2, 41.7 px
+    expect(Math.abs(cs[0]!)).toBeGreaterThan(Math.abs(cs[2]!) + 15);
+  });
+
   it('timestamps the battle log\'s new events with the frame they arrived in', async () => {
     const r = rig();
     r.probe.start();

@@ -19,7 +19,7 @@
 import type { GameId } from '../../../battle/common/types.ts';
 import type { FfxFamilyGame } from '../../../battle/common/game.ts';
 import { CHAPTERS, type Chapter } from '../../../data/encounters.ts';
-import { artNamespaceOfScene, inArtNamespace } from '../../../data/art/artNamespace.ts';
+import { artNamespaceOfScene, backdropFileOf, inArtNamespace } from '../../../data/art/artNamespace.ts';
 import { experimentRecord } from '../../experiments/experimentRecords.ts';
 import { chapterNumeral, romanNumeral } from '../../../ui/common/roman.ts';
 import { COMING_CHAPTERS, LOCKED_CHAPTER_IDS, type ComingChapter } from './comingChapters.ts';
@@ -114,7 +114,7 @@ function tileForChapter(chapter: Chapter, save: ClearedLookup): ChapterTile {
     numeral: chapterNumeral(chapter),
     title: chapter.title,
     location: chapter.location,
-    sceneKey: chapter.sceneKey,
+    sceneKey: backdropFileOf(chapter.sceneKey), // a code key paints another file on its plate and card (`data/art/artNamespace.ts#SCENE_BACKDROP_FILE`: Mirror Aeons' road)
     silhouetteKeys: silhouetteKeysFor(chapter),
     cleared: chapter.experimental ? experimentRecord(chapter.id).clears > 0 : save.isCleared(chapter.id), // an experiment's clears are in its own store, never the save
     playable: true,
@@ -136,7 +136,7 @@ function tileForComing(coming: ComingChapter, registered: Chapter | undefined): 
     numeral: registered ? romanNumeral(registered.number) : null,
     title: coming.title,
     location: coming.location,
-    sceneKey: registered?.sceneKey ?? null,
+    sceneKey: registered ? backdropFileOf(registered.sceneKey) : null,
     silhouetteKeys: coming.silhouetteKeys,
     cleared: false,
     playable: false,

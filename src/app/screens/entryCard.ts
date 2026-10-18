@@ -10,6 +10,7 @@
 import type { Chapter } from '../../data/encounters.ts';
 import { loadingCardWait, type CoverWait } from '../../ui/common/transitions/loadingCard.ts';
 import { battleCardInfo } from './battlePreload.ts';
+import { backdropFileOf } from '../../data/art/artNamespace.ts';
 
 export function entryCardWait(root: HTMLElement, chapter: Chapter): CoverWait {
   return loadingCardWait(root, () => {
@@ -22,7 +23,7 @@ export function entryCardWait(root: HTMLElement, chapter: Chapter): CoverWait {
       bossName: info.bossName,
       subline: chapter.subtitle,
       artKey: info.artKey,
-      backdropKey: chapter.sceneKey,
+      backdropKey: backdropFileOf(chapter.sceneKey),
       party: info.party,
       game: chapter.game,
     };

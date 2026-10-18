@@ -97,7 +97,16 @@ export const ITEMS: Record<string, ItemDef> = {
   'return-sphere': gridItem('return-sphere', 'Return Sphere'),
   // The hidden Biran and Yenke chapter's rare drop (one time in eight instead of the Return Sphere; research/re-ffx-biran-yenke.md section 2): the name and the class only, like every Sphere Grid item here.
   'friend-sphere': gridItem('friend-sphere', 'Friend Sphere'),
+  // The hidden Mirror Aeons chapter's rare drop and Dark Mindy's steal (research/re-ffx-yojimbo-sisters-feasibility.md section 2): the name and the class only, like every Sphere Grid item here.
+  'master-sphere': gridItem('master-sphere', 'Master Sphere'),
+  'teleport-sphere': gridItem('teleport-sphere', 'Teleport Sphere'),
   'mp-sphere': gridItem('mp-sphere', 'MP Sphere'),
+  // Re-parity RC9 (kill rewards from the game's own loot records): Seymour Natus's record m126 drops a Lv. 2 Key Sphere x2 (x4 on an overkill), and a Distill status on a dying monster turns its drop into a Power, Mana,
+  // Speed or Ability Sphere (`battle/ffx/adapt/loot.ts`); the Gui head's and arms' records name a Mana and a Speed Sphere, which their own scripts keep from dropping. The name and the class only, like every Sphere Grid item here.
+  'lv-2-key-sphere': gridItem('lv-2-key-sphere', 'Lv. 2 Key Sphere'),
+  'power-sphere': gridItem('power-sphere', 'Power Sphere'),
+  'mana-sphere': gridItem('mana-sphere', 'Mana Sphere'),
+  'speed-sphere': gridItem('speed-sphere', 'Speed Sphere'),
   'ability-sphere': {
     id: 'ability-sphere',
     name: 'Ability Sphere',

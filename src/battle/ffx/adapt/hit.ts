@@ -21,6 +21,7 @@ import { critCheck, type CritCheckInput } from '../kernel/crit.ts';
 import type { NulCounters } from '../kernel/element.ts';
 import { hitCheck, HIT, type HitCheckInput, type HitResult } from '../kernel/hit.ts';
 import { calcHitDamage, type HitIo, type HitInput, type HitOutcome } from '../kernel/hitdamage.ts';
+import type { ScaleOverride } from '../kernel/modifiers.ts';
 import { equipmentCrit, hasAuto, weaponElements } from '../equipment.ts';
 import { stacks } from '../predicates.ts';
 import { affinityLabel } from './affinity.ts';
@@ -44,6 +45,13 @@ import {
 export interface TimingBonus {
   timeRemainingMs: number;
   timerMs: number;
+  /**
+   * **The game's own `A` and `B`** (re-parity RC9, lane FFX-B3; FFX only): float32 seconds, as the scale override reads them (`Chr+0xd2c` and `+0xd30`).
+   * `timingBonusFrom` sets it for a Swordplay or Bushido result, from the controller's frame (`kernel/minigame-timer.ts#timingScale`). Absent (a
+   * Wakka reel result, whose floats his script passes and nobody has read; a payload built by hand), the override is fed the two milliseconds above, as
+   * it always was.
+   */
+  scale?: ScaleOverride;
 }
 
 /** Everything one hit needs from the engine. */
@@ -192,7 +200,7 @@ export function hitInputOf(req: HitRequest, command: ResolvedCommand): HitInput 
       // plain weapon's 1 and 16, which is what the ability data carries too (checked by the data test).
       weapon: { formula: command.formula, power, element: weaponElement },
       partyDealt: dealt,
-      scale: timer > 0 ? { a: Math.min(req.timing?.timeRemainingMs ?? 0, timer), b: timer } : null,
+      scale: timer > 0 ? (req.timing?.scale ?? { a: Math.min(req.timing?.timeRemainingMs ?? 0, timer), b: timer }) : null,
     },
     target: {
       // The id and the save counter are read by formula 0x16 only, which no ability of ours has (FORMULA_NUMBER cannot give it).

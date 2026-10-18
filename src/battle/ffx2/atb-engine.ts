@@ -19,6 +19,7 @@ import { ATB_BASE_VALUE } from './constants.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { assignSlotIds, statByte } from './adapt/inputs.ts';
 import { has, specialWord, statusWord1 } from './adapt/words.ts';
+import { isConfusedGirl } from './statuses.ts';
 import { FFX2_CLOCK_OPEN, atbSpeeds, type Ffx2AtbSpeeds } from './kernel/atb-clock.ts';
 import {
   Ffx2AtbState,
@@ -107,7 +108,7 @@ export function kernelUnit(u: Ffx2Unit): Ffx2AtbUnit {
       hitReactionExempt: (specialWord(u) & 2) !== 0,
     },
     mode: girl ? 1 : 2,
-    confused: false, // Confusion's own pick (state 7) is not modelled: a confused girl keeps her menu (W3 handoff section 7, item 7)
+    confused: isConfusedGirl(u), // Confusion's own pick (state 7, RC9 X2-H): a Confused girl acts by herself; a Confused monster keeps running its script (its lists are unread)
     berserk: girl && has(u, 'berserk'), // a Berserked enemy keeps running its script (as before)
   };
 }

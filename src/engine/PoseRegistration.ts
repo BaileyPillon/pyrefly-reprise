@@ -58,6 +58,15 @@ export function subjectOfPainting(imageUrl: string): string | null {
   return CHARACTER_POSE.exec(logicalArtUrl(imageUrl))?.[1] ?? null;
 }
 
+/**
+ * Which character painting a URL names: the subject and the pose, the two keys of a registration row (`/art/characters/lulu/hurt.png`, also as the
+ * shipped `.webp`, gives `lulu` and `hurt`), or null for anything else (a backdrop, a portrait, a sprite). `PoseTrust.ts` stamps a painting from this.
+ */
+export function paintingOf(imageUrl: string): { subject: string; pose: string } | null {
+  const m = CHARACTER_POSE.exec(logicalArtUrl(imageUrl));
+  return m ? { subject: m[1]!, pose: m[2]! } : null;
+}
+
 /** What {@link stanceShift} needs to know about one plane. */
 export interface StancePlane {
   /** The stance's x in the painting's own pixels, from its left edge. */

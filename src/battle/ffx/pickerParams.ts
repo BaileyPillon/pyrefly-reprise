@@ -16,7 +16,7 @@
  */
 import type { AbilityId, ItemId } from '../common/types.ts';
 import type { Ctx } from './state.ts';
-import { grandSummonChoices } from './aeon-duel.ts';
+import { grandSummonChoices, summonLabel } from './aeon-duel.ts';
 
 /**
  * Whether the Mix picker's preview names the result of **every** pair in the bag (the game's chart, `mixablePairs`), or only the registered recipes
@@ -58,7 +58,7 @@ export interface MixPickerParams {
 export function grandSummonEntries(ctx: Ctx): GrandSummonEntry[] {
   return grandSummonChoices(ctx).map((id) => {
     const aeon = ctx.rt.aeonRoster.get(id);
-    return { id, name: aeon?.name ?? id, storedGauge: aeon?.overdrive?.gauge ?? 0 };
+    return { id, name: summonLabel(ctx, id, aeon?.name ?? id), storedGauge: aeon?.overdrive?.gauge ?? 0 };
   });
 }
 

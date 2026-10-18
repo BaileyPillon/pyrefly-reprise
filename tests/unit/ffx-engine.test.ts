@@ -250,14 +250,14 @@ describe('the minigame protocol', () => {
     if (request?.type === 'minigame-request') {
       expect(request.who).toBe('tidus');
       expect(request.kind).toBe('tidus-timing');
-      expect(request.params['timerMs']).toBe(2200);
+      expect(request.params['timerMs']).toBe(2000); // Blitz Ace's limit is the game's 2 s (it was 2.2 s; RC9 lane FFX-A)
     }
     // The turn has not resolved: no damage yet.
     expect(first.some((e) => e.type === 'damage')).toBe(false);
 
     const second = engine.submit({
       ...command,
-      extra: { kind: 'tidus-timing', timing: { success: true, timeRemainingMs: 1820, timerMs: 2200 } },
+      extra: { kind: 'tidus-timing', timing: { success: true, timeRemainingMs: 1820, timerMs: 2000 } },
     });
     expect(second.some((e) => e.type === 'damage')).toBe(true);
     expect(second.some((e) => e.type === 'minigame-request')).toBe(false);
@@ -502,14 +502,14 @@ describe("Lulu's Fury: the spell rides on the command, not the result", () => {
       kind: 'overdrive',
       id: 'firaga-fury',
       targets: ['dummy'],
-      // 15 rotations at Magic 44 buys 6 casts of a -ga tier Fury.
-      extra: { kind: 'lulu-fury', fury: { sweptDegrees: 15 * 360, casts: 6 } },
+      // 15 rotations at Magic 44 buy 7 casts of a -ga Fury (the game's table, row 0: thresholds 1 2 4 6 9 12 15 and a counter of 1 + 15 = 16; RC9 lane FFX-A: it was 6).
+      extra: { kind: 'lulu-fury', fury: { sweptDegrees: 15 * 360, casts: 7 } },
     });
 
     // One cast per resolution attempt: a Fury cast can still miss its hit roll,
     // so count damage AND miss events rather than damage alone.
     const casts = events.filter((e) => e.type === 'damage' || e.type === 'miss');
-    expect(casts.length).toBe(6);
+    expect(casts.length).toBe(7);
     expect((engine.state().combatants['lulu'] as FFXCombatant | undefined)?.overdrive?.gauge).toBe(0);
     const start = events.find((e) => e.type === 'action-start');
     if (start?.type === 'action-start') expect(start.abilityId).toBe('firaga-fury');

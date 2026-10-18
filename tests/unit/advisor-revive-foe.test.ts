@@ -23,7 +23,8 @@ import { buildAdvisorView, clearAdvisorCache, type MoveSuggestion } from '../../
 import { wastedRevive } from '../../src/engine/tactics/advisor-guard.ts';
 import { CHAPTERS } from '../../src/data/encounters.ts';
 
-const REVIVES = /Phoenix|Life|Mega Phoenix|Raise/i;
+// Auto-Life is a buff on a living member (the Mirror Aeons line casts it on purpose), never a revive: the pattern skips it.
+const REVIVES = /Phoenix|(?<!Auto-)Life|Mega Phoenix|Raise/i;
 
 /** A row that names a revive and aims it at a foe, or at a living ally. */
 function badRevive(state: Readonly<BattleState>, s: MoveSuggestion): string | null {

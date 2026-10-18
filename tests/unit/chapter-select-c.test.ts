@@ -126,7 +126,7 @@ describe('the fixed list', () => {
     const rig = mount();
     const before = cards(rig);
     const ids = cardIds(rig);
-    expect(ids).toHaveLength(18); // the eighteen: the Leblanc preview (2026-10-06) is hidden, with no card
+    expect(ids).toHaveLength(19); // the nineteen: the Leblanc preview (2026-10-06) is hidden, with no card
     const moves = ['ArrowRight', 'ArrowRight', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowLeft'];
     for (const code of moves) {
       rig.key(code);
@@ -146,7 +146,7 @@ describe('the fixed list', () => {
   it('puts Chapter VII in number order, between III and VIII, and it is playable since its unlock (D-278)', () => {
     const rig = mount();
     const numerals = cards(rig).map((c) => c.querySelector('.fe-card__num')?.textContent);
-    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII', 'IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
+    expect(numerals).toEqual(['I', 'II', 'III', 'VII', 'VIII', 'IX', 'X', 'XII', 'XIV', 'XVII', 'XVIII', 'XXVII', 'IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
     const vii = card(rig, 'seymour-anima-macalania');
     expect(vii.classList.contains('fe-card--coming')).toBe(false);
     expect(vii.getAttribute('data-action')).toBeTruthy();
@@ -187,13 +187,13 @@ describe('numerals never overlap names (the sheet)', () => {
 });
 
 describe('the progress strip', () => {
-  it('reads 0 of 18 on a new save (Chapters X, XII and XIV listed 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, VII unlocked and XVII and XVIII listed 2026-09-29): listed, playable chapters only, no coming card left', () => {
+  it('reads 0 of 19 on a new save (Chapters X, XII and XIV listed 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, VII unlocked and XVII and XVIII listed 2026-09-29): listed, playable chapters only, no coming card left', () => {
     const rig = mount();
     expect(rig.screen.snapshot()['beaten']).toBe(0);
-    expect(rig.screen.snapshot()['total']).toBe(18);
+    expect(rig.screen.snapshot()['total']).toBe(19);
     expect(rig.root.querySelector('.cs-strip__count b')?.textContent).toBe('0');
-    expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 18 beaten');
-    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(18); // no pip for the Leblanc preview: it is hidden
+    expect(rig.root.querySelector('.cs-strip__of')?.textContent).toBe('of 19 beaten');
+    expect(rig.root.querySelectorAll('.cs-pip')).toHaveLength(19); // no pip for the Leblanc preview: it is hidden
     expect(rig.root.querySelectorAll('.cs-pip.is-lit')).toHaveLength(0);
     expect(rig.root.querySelectorAll('.cs-pip.is-coming')).toHaveLength(0);
   });
@@ -208,8 +208,8 @@ describe('the progress strip', () => {
       ['seymour-anima-macalania', 100_000],
     ]);
     expect(rig.screen.snapshot()['beaten']).toBe(3);
-    expect(rig.screen.snapshot()['total']).toBe(18);
-    expect(rig.root.querySelector('.cs-strip')?.getAttribute('aria-label')).toBe('3 of 18 chapters beaten');
+    expect(rig.screen.snapshot()['total']).toBe(19);
+    expect(rig.root.querySelector('.cs-strip')?.getAttribute('aria-label')).toBe('3 of 19 chapters beaten');
     const lit = [...rig.root.querySelectorAll('.cs-pip.is-lit')].map((p) => [p.textContent, p.classList.contains('is-x2')]);
     expect(lit).toEqual([
       ['VII', false],
@@ -292,7 +292,8 @@ describe('the boss painted on its own scene', () => {
       const keys = compositionFor(tile).layers.map((l) => l.key);
       expect(keys.length).toBeGreaterThan(0);
       for (const k of keys) expect(own.has(k) || own.has(baseArtId(k)), `${tile.id} paints ${k}`).toBe(true); // the Leblanc preview paints its namespaced twin of a boss of its own data
-      expect(tile.sceneKey).toBe(tile.chapter!.sceneKey);
+      // Mirror Aeons' scene is a code key (one stage built from Mushroom Rock Road's plates), so its card and plate paint the road's backdrop file (`BOARD_BACKDROP`, chapterGrid.ts).
+      expect(tile.sceneKey).toBe(tile.chapter!.id === 'mirror-aeons' ? 'mushroom-rock-road' : tile.chapter!.sceneKey);
     }
   });
 

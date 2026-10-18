@@ -3,8 +3,9 @@ import type { Anchors, ContinuityConfig, Jerk, SwapRow, Summary } from './contin
 import type { PoseMeasure } from './continuity-silhouette.mjs';
 import type { ProbeFrame, ProbeMeta } from './continuity-probe.mjs';
 import type { WashReport } from './continuity-wash.mjs';
+import type { PoseWaivers } from './continuity-waivers.mjs';
 
-export declare function anchorsForPoses(o: { poses: { fig: number; pose: string; url: string | null }[]; fetchImage: (url: string) => Promise<Buffer>; measure: PoseMeasure | null | undefined }): Promise<{ anchors: (Anchors | null)[]; notes: string[] }>;
+export declare function anchorsForPoses(o: { poses: { fig: number; pose: string; url: string | null }[]; fetchImage: (url: string) => Promise<Buffer>; measure: PoseMeasure | null | undefined; waivers?: PoseWaivers | { path: string; error: string } | null }): Promise<{ anchors: (Anchors | null)[]; notes: string[] }>;
 export declare function causeOf(logEvents: { n: number; type?: string; [key: string]: unknown }[], n: number, within?: number): { type: string | undefined; actorId: unknown; targetId: unknown; abilityId: unknown; framesBefore: number } | null;
 export declare function analyzeRun(o: { meta: ProbeMeta; records: ProbeFrame[]; anchors: (Anchors | null)[]; cfg: ContinuityConfig }): {
   swaps: (SwapRow & { fi: number; from: number; to: number; startFrame: number })[]; jerks: (Jerk & { figure: string; fi: number; id: number })[]; summary: Summary & { run: Record<string, unknown> };

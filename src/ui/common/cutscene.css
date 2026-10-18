@@ -95,6 +95,17 @@
 }
 
 /*
+ * The one beat that is a seam into another fight (the hidden Mirror Aeons chapter's "sisters-fall", FFX only): the road's fight is over, so its HUD (the guide card, the advisor's tip and the turn list) goes
+ * off the screen as the beat begins instead of standing under the white-out, which rises over three seconds (the proof's frames showed the road's "Quick Hit -> Dark Cindy" tip through it).
+ * `BattleScreen` then keeps the HUD hidden through the cut into the cavern and shows it again under the plate swap's white pulse.
+ */
+.battle-midbeat[data-midbeat='sisters-fall'] .ffxhud {
+  opacity: 0;
+  transition: opacity 450ms ease-in;
+  pointer-events: none;
+}
+
+/*
  * Coming out of a beat the dim is simply dropped: the transition above only
  * applies while `.battle-midbeat` is on, so the HUD returns to full strength on
  * the frame the fight resumes. Declaring the transition on `.ffxhud` itself

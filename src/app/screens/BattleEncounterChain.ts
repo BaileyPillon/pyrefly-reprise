@@ -45,6 +45,7 @@ export async function chainLengthOf(
   group: EnemyGroupDef | null,
   find: (id: string) => Promise<EnemyGroupDef | null>,
 ): Promise<number> {
+  if (group?.chainLength !== undefined) return group.chainLength; // the hidden Last Summoning: a length the player's choices decide, so nothing is walked (`EnemyGroupDef.chainLength`)
   let count = 1;
   const seen = new Set<string>();
   while (group?.nextGroupId && !seen.has(group.nextGroupId)) {
@@ -145,6 +146,23 @@ export interface EncounterChainOptions {
    * re-staged exactly as before.
    */
   saveSphere?(swap: () => Promise<void>, info: { link: number; group: EnemyGroupDef }): Promise<void>;
+  /**
+   * The hidden Last Summoning's seam (FFX only; absent for every other chapter, and a formation that does not set `EnemyGroupDef.offersAeons` never asks): the player is asked which formation comes next.
+   * Called with phase `'first'` before the first fight (the formation is the placeholder opener, `offersAeons: 'open'`) and with phase `'next'` after the victory of a formation that sets `offersAeons: 'next'`; the
+   * answer is the id of the formation to fight (resolved by `findGroup`), or `undefined` to keep what the data says (the opener is then fought as it stands; a `'next'` seam follows its `nextGroupId`).
+   * The screen's offering overlay is the one caller (`BattleScreenOffering.ts`); it must resolve even when the screen is left, so the loop is never parked.
+   */
+  choose?(info: ChainChoice): Promise<string | undefined>;
+}
+
+/** What the loop tells the chooser (`EncounterChainOptions.choose`). */
+export interface ChainChoice {
+  phase: 'first' | 'next';
+  /** The 1-based position of `group`: the opener (1) for `'first'`, the formation just won for `'next'`. */
+  link: number;
+  group: EnemyGroupDef;
+  /** The live state: the party as the last link left it (the offering reads which aeons stand and how they fared). */
+  state: BattleState;
 }
 
 export interface EncounterChainResult {
@@ -180,6 +198,19 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
   // Each won link's result before the last, for an FFX-2 chain's summed spoils (PR-0138).
   const won: BattleResult[] = [...(opts.priorWon ?? [])];
 
+  // The hidden Last Summoning (FFX only): the first formation is a placeholder, and the player picks the real first one before anything is fought (`EncounterChainOptions.choose`).
+  if (opts.choose && group.offersAeons === 'open' && startLink === 1) {
+    const pick = await opts.choose({ phase: 'first', link: 1, group, state: engine.state() });
+    const first = pick === undefined || presenter.isAborted === true ? null : await opts.findGroup(pick);
+    if (first) {
+      group = first;
+      setup = { ...setup, enemies: first };
+      engine.setSeed(setup.seed);
+      engine.init(setup);
+      await stage.stage(engine.state());
+    }
+  }
+
   // The first formation's own cue, resolved the same way a chained link's is.
   // Until this existed the pre-scene's boss theme was crossfaded straight back
   // out to `battle-ffx` on the frame the battle screen appeared (#02).
@@ -200,8 +231,16 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
 
     if (outcome.kind !== 'victory') break;
 
-    const nextId = group.nextGroupId;
+    let nextId = group.nextGroupId;
     if (!nextId) break;
+    if (opts.choose && group.offersAeons === 'next') {
+      const pick = await opts.choose({ phase: 'next', link: links, group, state: engine.state() });
+      if (presenter.isAborted === true) {
+        outcome = { kind: 'aborted' };
+        break;
+      }
+      if (pick !== undefined) nextId = pick;
+    }
 
     if (links >= maxLinks) {
       console.error(

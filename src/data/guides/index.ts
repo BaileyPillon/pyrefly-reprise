@@ -11,6 +11,7 @@ import type { ChapterGuide } from './types.ts';
 import { SEYMOUR_FLUX_GUIDE } from './seymour-flux.ts';
 import { YUNALESCA_GUIDE } from './yunalesca.ts';
 import { BRASKAS_FINAL_AEON_GUIDE } from './braskas-final-aeon.ts';
+import { LAST_SUMMONING_GUIDE } from './last-summoning.ts';
 import { FFX2_BAHAMUT_GUIDE } from './ffx2-bahamut.ts';
 import { FFX2_VEGNAGUN_SHUYIN_GUIDE } from './ffx2-vegnagun-shuyin.ts';
 import { FFX2_LEBLANC_GUIDE } from './ffx2-leblanc.ts';
@@ -26,6 +27,7 @@ import { SEYMOUR_NATUS_GUIDE } from './seymour-natus.ts';
 import { ISAARU_GUIDE } from './ffx-isaaru.ts';
 import { SINSPAWN_GUI_GUIDE } from './sinspawn-gui.ts';
 import { BIRAN_YENKE_GUIDE } from './biran-yenke.ts';
+import { MIRROR_AEONS_GUIDE } from './mirror-aeons.ts';
 import { SIN_FINS_CORE_GUIDE } from './sin-fins-core.ts';
 import { SIN_FACE_GUIDE } from './sin-face.ts';
 import { FFX2_EXPERIMENT_GUIDE } from './ffx2-experiment.ts';
@@ -48,6 +50,7 @@ export {
   SEYMOUR_FLUX_GUIDE,
   YUNALESCA_GUIDE,
   BRASKAS_FINAL_AEON_GUIDE,
+  LAST_SUMMONING_GUIDE,
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
   FFX2_LEBLANC_GUIDE,
@@ -63,6 +66,7 @@ export {
   ISAARU_GUIDE,
   SINSPAWN_GUI_GUIDE,
   BIRAN_YENKE_GUIDE,
+  MIRROR_AEONS_GUIDE,
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,
   FFX2_EXPERIMENT_GUIDE,
@@ -71,6 +75,9 @@ export {
 export const GUIDES: readonly ChapterGuide[] = [
   SEYMOUR_FLUX_GUIDE,
   YUNALESCA_GUIDE,
+  // The hidden Last Summoning (FFX only, chapter 28; `EXPERIMENT_CHAPTERS`, not listed) fields Chapter III's possessed aeons and Yu Yevon under the same ids, so its card is listed AHEAD of Chapter III's
+  // and found only on its own board (`src/engine/tactics/lookup.ts#chapterOnBoard`: the "Taken by Yu Yevon" locks); Chapter III's answers every other board.
+  LAST_SUMMONING_GUIDE,
   BRASKAS_FINAL_AEON_GUIDE,
   FFX2_BAHAMUT_GUIDE,
   FFX2_VEGNAGUN_SHUYIN_GUIDE,
@@ -110,6 +117,7 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_VALEFOR_BESAID_GUIDE,
   // The hidden Biran and Yenke chapter (FFX only, Kimahri's solo trial; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   BIRAN_YENKE_GUIDE,
+  MIRROR_AEONS_GUIDE,
   // The hidden Angra Mainyu (FFX-2 only, Chapter 5; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here too.
   FFX2_ANGRA_MAINYU_GUIDE,
 ];

@@ -313,13 +313,16 @@ describe('the arms grow back on the body\'s 3rd or 4th turn, and every death pay
     expect((counts[3] ?? 0) / n).toBeLessThan(0.6);
   });
 
-  it('both arms come back together at 800 HP, and the AP and gil of their first deaths are banked and paid with the battle (37 AP and 300 gil each)', () => {
+  it('both arms come back together at 800 HP, and the AP and gil of their first deaths were paid when they died (37 AP and 300 gil each)', () => {
     const { e } = bodyTurnsUntilRegrowth(2);
     expect(ARMS.map((id) => U.actor(e, id).hp)).toEqual([800, 800]);
     expect(ARMS.every((id) => U.actor(e, id).alive)).toBe(true);
-    expect(U.flags(e)['rewards.bankedAp']).toBe(74);
-    expect(U.flags(e)['rewards.bankedGil']).toBe(600);
-    // Finish the body: the result pays the body's 400 AP and 1,000 gil, plus the banked 74 and 600 (the arms are back and pay nothing more).
+    // Re-parity RC9: no bank any more. The game pays at each death (`adapt/loot.ts#payKill`), so the reward struct already holds both arms' first deaths.
+    const paid = e.transferable().rt.rewards!;
+    expect(paid.baseAp).toBe(74);
+    expect(paid.list.gil).toBe(600);
+    expect(paid.kills).toBe(2);
+    // Finish the body: the result pays the body's 400 AP and 1,000 gil, plus the 74 and 600 the arms' first deaths paid (the arms are back and pay nothing more).
     U.actor(e, BODY).hp = 100;
     U.drive(e, (d) => (d.actorId === 'lulu' ? U.cast(d, 'fire', BODY) ?? U.defend() : U.defend()), (en) => en.state().result !== null, 600);
     const result = e.state().result!;

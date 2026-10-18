@@ -10,7 +10,7 @@
 
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
-import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, summonArtId, worldHeightFor } from './BattlePresenterArt.ts';
 import { figureHeight, formPlanScale, partyStature, sceneOwnHeight, STATURE_KEY } from './PartyStature.ts';
 import { backToShared, statureOf } from './SharedHeight.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
@@ -289,7 +289,7 @@ export class PaintedStage implements BattleStage {
     this.lastState = state;
     const ids = new Set<CombatantId>([
       ...state.activeIds,
-      ...(state.aeonId ? [state.aeonId] : []),
+      ...(state.aeonIds ?? (state.aeonId ? [state.aeonId] : [])),
       ...state.enemyIds,
     ]);
     // Destructible parts are separate combatants that still need drawing.
@@ -704,7 +704,7 @@ export class PaintedStage implements BattleStage {
       id,
       name: id,
       side: opts.side,
-      spriteKey: opts.artId,
+      spriteKey: opts.side === 'aeon' ? summonArtId(this.lastState?.combatants[id], opts.artId) : opts.artId, // r50.1: a summoned aeon draws its combatant's art, not only the id the event names
       slot: opts.slot,
       alive: true,
       removed: false,

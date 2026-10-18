@@ -211,6 +211,12 @@
  *    `[estimate]`) would be inventing a number, and is explicitly not done
  *    here. Note the two fixes above do not change this in either direction —
  *    they are power/hits/formula corrections only.
+ *
+ * LAST SUMMONING RECORD FIXES (2026-10-15, the hidden chapter 28; FFX only; Chapter III never builds these records). The RE session read the possessed Yojimbo's and Sisters' rows from the game's own
+ * files (`research/re-ffx-last-summoning.md` section 1.4 and 4) and this file now carries them word for word (`tests/fixtures/parity/ffx/command_records.json`, `tests/unit/chapters/last-summoning-records.test.ts`):
+ * the possessed Yojimbo has **Kozuka and Wakizashi, power 14, no Daigoro and no plain Attack** (the old `possessed-yojimbo-daigoro` was the PLAYER-side Daigoro at power 10); his **Zanmato is a fixed 9,999 on each
+ * front-line actor, not Death**; Cindy's **Camisade** is power 21 at rank 5, Sandy's **Razzia** power 21 on **one** target at rank 5, the **Delta Attack** formula 15 at power 10 for six hits; **Drain** (Cindy) and **Flare**
+ * (Mindy) are the shared player rows. The records the section 4 table lists as differing now equal the game's, so `KNOWN_DIFFERENCES` in `data-ffx-command-records.test.ts` lost those lines.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
@@ -916,49 +922,64 @@ export const possessedAnimaOblivion: AbilityDef = {
 };
 
 /**
- * Yojimbo's cheapest paid strike — his dog.
+ * **The possessed Yojimbo's two strikes: Kozuka and Wakizashi, power 14 each, and nothing else** (record fix of the hidden Last Summoning chapter, 2026-10-15; FFX only).
  *
- * FIX (2026-09-17, possessed-aeons pass): was `formula: 'piercing-strength'`
- * with `power: 20` and no citation ("no published power figures" — that claim
- * was wrong). `research/ffx-combat-core.md` §6.3's Yojimbo row publishes both
- * numbers: "Daigoro (222) **DmgCon 10**", formula/type column "Strength,
- * Physical" `[verified: 2 sources]`. So `power: 10`, `formula: 'strength'`.
+ * `research/re-ffx-last-summoning.md` section 1.4 and 4 (the game's own rows, `[bytes]`): his script flips a coin and uses monster-magic-2 row 224 (Kozuka, command 0x60E0) or row 225 (Wakizashi, 0x60E1) on a
+ * random living front-line actor. Both rows are physical, formula 1 (Strength against Defense), **power 14**, one hit, accuracy formula 0 (always hits), one target (0x33), can crit, pierce Armored, shatter
+ * chance 0, rank 3, capped at 9,999, and identical in every field (`tests/fixtures/parity/ffx/command_records.json` rows 24800 and 24801 hold them word for word). **He has no plain Attack, and his only Daigoro
+ * row (0x4086) has formula 0 and power 0**: a staging row aimed at a stand-in dog that the coin can never reach, so there is no Daigoro damage in the possessed fight at all. The first build carried one record,
+ * `possessed-yojimbo-daigoro`, named Daigoro, at power 10: that is the PLAYER-side Daigoro (command 0x30DE), a row he never uses. It is gone. The player-side Kozuka (13) and Wakizashi (18, shatter 100) are other rows.
  *
- * The `'piercing'` **flag** is kept and is not the same thing as the
- * `'piercing-strength'` **formula** — §14's flag table (line 2055) defines
- * `piercing` as "Uses Defense 0 **against Armored targets**… aeon weapons
- * except Valefor", whereas §2.5's formula table (line 270) defines
- * `Piercing Strength` (formula 2) as "ignores Defense (treats DEF as 0)"
- * unconditionally. The old record therefore zeroed Defense against *every*
- * target, roughly doubling Daigoro's output against ordinary ones on top of
- * the 2x-too-high power. This now mirrors the player-aeon Daigoro record
- * (`src/data/ffx/aeons/abilities-optional.ts`, `power: 10`,
- * `formula: 'strength'`, `flags: [... 'piercing']`) exactly on the fields
- * §6.3 publishes, per §2.2's "fights as the player's own aeon" rule.
- * `crit-eligible` is deliberately NOT copied across: no possessed-aeon record
- * in this file carries it, and §6.3's table has no crit column for these rows.
+ * Which of the coin's two faces is Kozuka is not in the note (the two rows are identical, so no number depends on it): the draw's 0 is Kozuka and 1 Wakizashi here (`ai/possessed-aeons.ts`).
  */
-export const possessedYojimboDaigoro: AbilityDef = {
-  id: 'possessed-yojimbo-daigoro',
-  name: 'Daigoro',
+export const possessedYojimboKozuka: AbilityDef = {
+  id: 'possessed-yojimbo-kozuka',
+  name: 'Kozuka',
+  game: 'ffx',
+  category: 'aeon',
+  mpCost: 0,
+  rank: 3, // row 224: rank 3
+  power: 14, // row 224: power 14 [bytes]
+  formula: 'strength', // formula 1, Strength against Defense
+  damageType: 'physical',
+  element: ['none'],
+  targeting: 'single-enemy', // target word 0x33: one target
+  hits: 1,
+  statusEffects: [],
+  removesStatuses: [],
+  flags: ['crit-eligible', 'piercing'], // can crit; pierces Armored
+  canMiss: false, // accuracy formula 0: always hits (hard rule 5: stated, not left to the enemy-side default)
+  extra: { mirrorsCasterStats: true },
+  messageTemplate: '{user} uses Kozuka on {target}',
+};
+
+/** Row 225, Wakizashi (0x60E1): the same fields as {@link possessedYojimboKozuka} in every column; see its note. */
+export const possessedYojimboWakizashi: AbilityDef = {
+  id: 'possessed-yojimbo-wakizashi',
+  name: 'Wakizashi',
   game: 'ffx',
   category: 'aeon',
   mpCost: 0,
   rank: 3,
-  power: 10, // ffx-combat-core.md §6.3 Yojimbo row, "Daigoro (222) DmgCon 10" [verified: 2 sources]
-  formula: 'strength', // §6.3 "Strength, Physical"; `piercing` stays as a flag, see doc comment
+  power: 14,
+  formula: 'strength',
   damageType: 'physical',
   element: ['none'],
   targeting: 'single-enemy',
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
-  flags: ['piercing'],
+  flags: ['crit-eligible', 'piercing'],
+  canMiss: false,
   extra: { mirrorsCasterStats: true },
-  messageTemplate: '{user} uses Daigoro on {target}',
+  messageTemplate: '{user} uses Wakizashi on {target}',
 };
 
-/** §2.2 [ids.ts doc comment]. Zanmato is Death at chance 255 (ignores resistance entirely, per `StatusApplication.chance`). */
+/**
+ * **Zanmato is a fixed 9,999 on each front-line actor, not instant death** (record fix, 2026-10-15; FFX only). Row 226 (command 0x60E2, `[bytes]`): formula 6 (Fixed, `power x 50`), power 200, so 200 x 50 = 10,000, cut
+ * to **9,999** on each actor of the front line (no Break Damage Limit), damage class HP, **no status and not a kill**; accuracy formula 0; rank 3; flag bit 0x40000000 (unmapped). The first build gave it Death at chance
+ * 255, which is the PLAYER's Zanmato (command 0x30E2), not this one. The party's permanent Auto-Life answers it: each member it takes down comes back at once. (`research/re-ffx-last-summoning.md` section 1.4.)
+ */
 export const possessedYojimboZanmato: AbilityDef = {
   id: 'possessed-yojimbo-zanmato',
   name: 'Zanmato',
@@ -966,29 +987,44 @@ export const possessedYojimboZanmato: AbilityDef = {
   category: 'overdrive',
   mpCost: 0,
   rank: 3,
-  power: 0,
-  formula: 'none',
+  power: 200, // row 226: power 200
+  formula: 'fixed-no-variance', // formula 6: `power x 50`, no variance
   damageType: 'other',
   element: ['none'],
-  targeting: 'all-enemies',
+  targeting: 'all-enemies', // target word 0x37: a group; the script aims it at the whole front line
   hits: 1,
-  statusEffects: [{ status: 'ko', chance: 255, duration: 0 }], // duration is moot for an instant status
+  statusEffects: [], // no status: not a kill
   removesStatuses: [],
   flags: [],
-  canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — see file header's ACCURACY EDIT note.
-  extra: { mirrorsCasterStats: true },
+  canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]; accuracy formula 0
+  // `groupTarget`: the executor keeps exactly the list the script named, the front line (RE's note `research/re-ffx-zanmato-and-orders.md` and its handoff section 10.5, item 1; the row's group type).
+  extra: { mirrorsCasterStats: true, groupTarget: true },
   messageTemplate: '{user} uses Zanmato',
 };
 
-/** [estimate] — Magus Sisters: Cindy's damage skill. Curaga/Drain/Haste/Reflect reuse the shared player-spell ids. */
+/**
+ * **The possessed Magus Sisters' rows, as the game has them** (record fix, 2026-10-15; FFX only; `research/re-ffx-last-summoning.md` section 1.4 and 4, `[bytes]`; `tests/fixtures/parity/ffx/command_records.json`
+ * holds each row word for word).
+ *
+ * - **Camisade** is the command-table row 0x30E5 (the script calls this one; the monster-magic-2 row 0x60E3 is unused): physical, formula 1, **power 21**, one target, can crit, **rank 5**, shatter chance 30. The
+ *   first build had power 30 and rank 3.
+ * - **Razzia** is row 0x30E7: power 21, **one target** (the first build aimed it at the whole party at power 28), rank 5, shatter chance 30.
+ * - **Passado** is row 0x60E5: 2 x 15 hits, rank 3, no status (the Dark Mindy's Passado carries Death; this one does not). It was right in the first build.
+ * - **Delta Attack** is row 0x60E6: damage class "neither", **formula 15 (a cube of Magic, no defence), power 10, six hits on each front-line actor**, rank 3 (the first build: power 65, one hit).
+ * - Cindy also has **Drain** (command 0x3050, below two thirds of her maximum HP) and Curaga (0x302D); Sandy Haste (0x3036) and Reflect (0x303C); Mindy **Flare** (0x3052): the player's own rows, the shared
+ *   ability ids `drain`, `curaga`, `haste`, `reflect`, `flare`. Monsters pay no MP (`abilities.ts#mpCostFor`).
+ *
+ * Every row has accuracy formula 0 (always hits); `canMiss: false` says so (hard rule 5).
+ */
 export const possessedCindyCamisade: AbilityDef = {
   id: 'possessed-cindy-camisade',
   name: 'Camisade',
   game: 'ffx',
   category: 'aeon',
   mpCost: 0,
-  rank: 3,
-  power: 30,
+  rank: 5, // command 0x30E5: rank 5
+  power: 21, // [bytes]
+  shatterChance: 30, // the record's byte (a Petrified target is shattered 30 times in 100)
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
@@ -996,12 +1032,13 @@ export const possessedCindyCamisade: AbilityDef = {
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
-  flags: [],
+  flags: ['crit-eligible'],
+  canMiss: false,
   extra: { mirrorsCasterStats: true },
   messageTemplate: '{user} uses Camisade on {target}',
 };
 
-/** [estimate] — the trio Overdrive, fielded once all three sisters agree to act together. */
+/** Row 0x60E6: the trio's Overdrive, thrown by Cindy once all three gauges are full and all three Sisters are alive. See the note above. */
 export const possessedCindyDeltaAttack: AbilityDef = {
   id: 'possessed-cindy-delta-attack',
   name: 'Delta Attack',
@@ -1009,76 +1046,44 @@ export const possessedCindyDeltaAttack: AbilityDef = {
   category: 'overdrive',
   mpCost: 0,
   rank: 3,
-  power: 65,
-  formula: 'special-magic',
+  power: 10, // [bytes]
+  formula: 'special-magic', // formula 15: a cube of MAG, no defence
   damageType: 'other',
   element: ['none'],
-  targeting: 'all-enemies',
-  hits: 1,
+  targeting: 'all-enemies', // the whole front line
+  hits: 6, // [bytes]: six hits on each
   statusEffects: [],
   removesStatuses: [],
-  flags: [],
-  canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources] — see file header's ACCURACY EDIT note.
+  flags: ['crit-eligible'],
+  canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]; accuracy formula 0
   extra: { mirrorsCasterStats: true },
   messageTemplate: '{user} uses Delta Attack',
 };
 
-/**
- * FIX (2026-09-16, coordinator review — this was the specific mismatch
- * flagged for investigation): was `formula: 'magic'`, `damageType:
- * 'magical'`, which does not match research. `research/ffx-combat-core.md`
- * §6.3's Magus Sisters row gives Camisade/Razzia/Passado all as "Strength,
- * Physical" (the player-aeon's own `aeons/abilities-optional-2.ts` record
- * already has this right: `formula: 'strength'`, `damageType: 'physical'`).
- * The two records described a genuinely different move before this fix —
- * now they agree, matching `research/ffx-bfa-yu-yevon.md`'s "fights as the
- * player's own aeon" framing for every possessed-aeon fight. [verified: 2
- * sources]. `targeting: 'all-enemies'` is left as-is — research's Target
- * column for this row is blank for the trio, and this is not the
- * discrepancy that was flagged; if it should be `'single-enemy'` (matching
- * this data agent's own player-aeon Razzia, which targets a single enemy
- * like Camisade/Passado), that is a separate question worth a second look.
- */
+/** Command 0x30E7: Sandy's strike on one target. See the note above. */
 export const possessedSandyRazzia: AbilityDef = {
   id: 'possessed-sandy-razzia',
   name: 'Razzia',
   game: 'ffx',
   category: 'aeon',
   mpCost: 0,
-  rank: 3,
-  power: 28,
+  rank: 5, // command 0x30E7: rank 5
+  power: 21, // [bytes]
+  shatterChance: 30, // the record's byte
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'all-enemies',
+  targeting: 'single-enemy', // target word 0x33: one target
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
-  flags: [],
+  flags: ['crit-eligible'],
+  canMiss: false,
   extra: { mirrorsCasterStats: true },
-  messageTemplate: '{user} uses Razzia',
+  messageTemplate: '{user} uses Razzia on {target}',
 };
 
-/**
- * Mindy's damage skill — a 15-hit flurry, not a 2-hit one.
- *
- * FIX (2026-09-17, possessed-aeons pass): was `power: 26`, `hits: 2` and
- * marked `[estimate]`. `research/ffx-combat-core.md` §6.3's Magus Sisters row
- * publishes it outright: "Passado (233) **2 x 15 hits**" `[verified: 2
- * sources]` — DmgCon **2** per hit, **15** hits. The old record had the two
- * numbers transposed *and* inflated the per-hit power, so it modelled a
- * completely different move (2 heavy swings instead of a flurry of chip
- * hits). This matters beyond the damage total: hit count drives per-hit
- * Defense subtraction, per-hit crit rolls and the damage cap, so 26x2 and
- * 2x15 are not interchangeable even where the products would be close.
- * Now mirrors the player-aeon Passado record
- * (`src/data/ffx/aeons/abilities-optional-2.ts`, `power: 2`, `hits: 15`)
- * exactly, per §2.2's "fights as the player's own aeon" rule.
- * `rank: 3` is left alone — §6.3 gives rank 5 for the Magus Sisters' Specials,
- * but every possessed-aeon record in this file is deliberately normalised to
- * rank 3 (see Sonic Wings, rank 2 in §6.3, likewise shipped as 3); changing
- * that convention is a separate question for the whole file, not this fix.
- */
+/** Row 0x60E5: Mindy's flurry, 2 x 15 hits. See the note above. */
 export const possessedMindyPassado: AbilityDef = {
   id: 'possessed-mindy-passado',
   name: 'Passado',
@@ -1086,17 +1091,45 @@ export const possessedMindyPassado: AbilityDef = {
   category: 'aeon',
   mpCost: 0,
   rank: 3,
-  power: 2, // ffx-combat-core.md §6.3 Magus Sisters row, "Passado (233) 2 x 15 hits" [verified: 2 sources]
+  power: 2, // ffx-combat-core.md §6.3 Magus Sisters row, "Passado (233) 2 x 15 hits" [verified: 2 sources]; row 0x60E5 agrees [bytes]
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
   targeting: 'single-enemy',
-  hits: 15, // same citation — 15 hits, DmgCon 2 each
+  hits: 15, // same citation: 15 hits, DmgCon 2 each
+  statusEffects: [],
+  removesStatuses: [],
+  flags: ['crit-eligible'],
+  canMiss: false,
+  extra: { mirrorsCasterStats: true },
+  messageTemplate: '{user} uses Passado on {target}',
+};
+
+/**
+ * **The joint-action token** (ours; the Last Summoning chapter, FFX only). When all three Sisters are alive with full gauges, Sandy's and Mindy's scripts spend their turn sending a one-off "special" to Cindy, who then
+ * throws the Delta Attack at once (`research/re-ffx-last-summoning.md` section 6.2, `[bytes]`: the scripts' test and what Cindy does on receiving it). **The row that carries that token in the game is not named in the
+ * note**, so this is a no-damage, no-status row of ours aimed at Cindy (formula none, power 0, rank 3), the cheapest thing the engine can run as "an action whose hit Cindy's script reacts to": it appears in no
+ * game table (`NO_COMMAND_RECORD`), deals nothing and heals nothing, and the presenter shows only its name.
+ */
+export const possessedSistersToken: AbilityDef = {
+  id: 'possessed-sisters-token',
+  name: 'Join forces',
+  game: 'ffx',
+  category: 'aeon',
+  mpCost: 0,
+  rank: 3,
+  power: 0,
+  formula: 'none',
+  damageType: 'other',
+  element: ['none'],
+  targeting: 'single-ally',
+  hits: 1,
   statusEffects: [],
   removesStatuses: [],
   flags: [],
+  canMiss: false,
   extra: { mirrorsCasterStats: true },
-  messageTemplate: '{user} uses Passado on {target}',
+  messageTemplate: '{user} calls to {target}',
 };
 
 /** All Dream's End-chapter-only abilities, keyed by id, for lookups and tests. */
@@ -1129,12 +1162,14 @@ export const BRASKAS_FINAL_AEON_ABILITIES: Record<string, AbilityDef> = {
   [possessedBahamutMegaFlare.id]: possessedBahamutMegaFlare,
   [possessedAnimaPain.id]: possessedAnimaPain,
   [possessedAnimaOblivion.id]: possessedAnimaOblivion,
-  [possessedYojimboDaigoro.id]: possessedYojimboDaigoro,
+  [possessedYojimboKozuka.id]: possessedYojimboKozuka,
+  [possessedYojimboWakizashi.id]: possessedYojimboWakizashi,
   [possessedYojimboZanmato.id]: possessedYojimboZanmato,
   [possessedCindyCamisade.id]: possessedCindyCamisade,
   [possessedCindyDeltaAttack.id]: possessedCindyDeltaAttack,
   [possessedSandyRazzia.id]: possessedSandyRazzia,
   [possessedMindyPassado.id]: possessedMindyPassado,
+  [possessedSistersToken.id]: possessedSistersToken,
   osmose,
 };
 

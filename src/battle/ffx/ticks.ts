@@ -8,16 +8,15 @@
  * **The tick rules are the game's** (re-parity W2; FFX only): the start-of-turn tick (Regen's payout from each holder's own tick
  * counter, Regen's countdown, the stances, the Threaten pair), Doom's countdown, the end-of-turn counters and Poison are the
  * kernels of `kernel/turn-ticks.ts`, reached through `./adapt/ticks.ts`. What stays here is what the kernels do not model: the
- * Overdrive gauge's turn hooks, the Omnis and Sin hooks and the equipment reactions.
+ * Overdrive gauge's turn hooks and the Omnis and Sin hooks. (The equipment reactions are not decided here any more: Counterattack, Evade and Counter and Magic Counter
+ * are `counter-chain.ts`, the item reactions `adapt/reactions.ts`.)
  */
 
-import type { AbilityDef, CombatantId, FFXCombatant } from '../common/types.ts';
-import { type Ctx, isAlive, onField, tryActor } from './state.ts';
+import type { FFXCombatant } from '../common/types.ts';
+import type { Ctx } from './state.ts';
 import { refreshCriticalStatus } from './statuses.ts';
 import { doomTurn, endOfTurn, startOfTurn } from './adapt/ticks.ts';
-import { hasAuto } from './equipment.ts';
 import { gaugeOnTurn } from './gauge.ts';
-import { ATTACK_ABILITY_ID } from './registry.ts';
 import { runSinLivenessHooks } from './ai/sin-counters.ts';
 import { runPostPoison, runPreTurn } from './ai/hooks.ts';
 
@@ -60,45 +59,4 @@ export function onTurnEnd(ctx: Ctx, actor: FFXCombatant, resultsApplied = true):
   // Sin link 3 (FFX): once more after the counters and the tick, so a Genais KO inside the counter phase (Zombie +
   // its own Cura) frees the Core before the next menu, not an action later (CHECK 2 finding 2). A no-op elsewhere.
   runSinLivenessHooks(ctx);
-}
-
-/** Does this combatant have a counter that fires against `def`? */
-function counterAbilityFor(c: FFXCombatant, def: AbilityDef): string | undefined {
-  if (def.damageType === 'physical') {
-    if (hasAuto(c, 'counterattack') || hasAuto(c, 'evade-and-counter')) return 'counterattack';
-  }
-  if (def.damageType === 'magical' && hasAuto(c, 'magic-counter')) return 'magic-counter';
-  return undefined;
-}
-
-/**
- * Automatic reactions after an action resolved: Counterattack and Magic Counter, all with `ctb = 0`, so they cost no turn
- * [ffx-combat-core §9].
- *
- * Returns the counter-attacks to resolve; the engine runs them so that `abilities.ts` does not have to import the turn loop.
- *
- * **Auto-Potion, Auto-Med and Auto-Phoenix are not decided here any more** (re-parity RC4, lane F; FFX only). The game decides each one
- * where it happens, inside the hit (Auto-Med and Auto-Potion, after the hit's damage and the statuses it newly inflicted) or the death
- * check (Auto-Phoenix), pays the item at once and runs the record when the action is over; that is
- * `adapt/reactions.ts` and `engine-end.ts#runItemReactions`.
- */
-export function collectReactions(
-  ctx: Ctx,
-  attacker: FFXCombatant,
-  def: AbilityDef,
-  affected: readonly CombatantId[],
-): Array<{ actorId: CombatantId; targetId: CombatantId; abilityId: string; cause: string }> {
-  const out: Array<{ actorId: CombatantId; targetId: CombatantId; abilityId: string; cause: string }> = [];
-  if (def.flags.includes('is-counter')) return out;
-
-  for (const id of affected) {
-    const c = tryActor(ctx, id);
-    if (!c || !onField(c)) continue;
-    // Counterattack / Magic Counter, aimed back at the aggressor.
-    const counter = counterAbilityFor(c, def);
-    if (counter && isAlive(c) && isAlive(attacker) && attacker.id !== c.id) {
-      out.push({ actorId: c.id, targetId: attacker.id, abilityId: ATTACK_ABILITY_ID, cause: counter });
-    }
-  }
-  return out;
 }

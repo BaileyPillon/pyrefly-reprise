@@ -9,11 +9,11 @@
  */
 
 import type { BattleResult, CombatantId, ItemDrop } from '../common/types.ts';
-import { byteRoll } from '../common/rng.ts';
-import { type Ctx, has, isAlive, tryActor } from './state.ts';
+import { type Ctx, has, tryActor } from './state.ts';
 import { gaugeOnVictory } from './gauge.ts';
 import { idiv } from './math.ts';
 import { victoryBonusAp } from './aeon-duel.ts';
+import { itemIdOf, memberTotals } from './adapt/loot.ts';
 
 /** `apForLevel(sLv) = min(5*(sLv+1) + floor(sLv^3/50), 22000)` [ffx-combat-core §10.1]. */
 export function apForLevel(sLv: number): number {
@@ -29,37 +29,21 @@ export function apForLevel(sLv: number): number {
  * (`ffx-seymour-anima-macalania.md` §1.4, §2.5), Flux, Evrae, Yojimbo and Natus (x2 normal, x4 overkill),
  * Omnis (x1 / x2, then x2 / x4). Gil, steals and equipment are untouched. A stack still caps at 99
  * (`ItemDrop.count`, 1-99). FFX-2 has no Overkill, and its engine never reaches this.
+ *
+ * Since re-parity RC9 a shipped monster's overkill list is its own record's (`data/ffx/loot/records.ts`: every shipped record's list is the normal one at double the quantity, so the
+ * rule above still holds for all of them); this multiplier is now only how a hand-built enemy with no record is turned into one (`adapt/loot.ts`).
  */
-export const OVERKILL_DROP_MULTIPLIER = 2;
+export { OVERKILL_DROP_MULTIPLIER } from './adapt/loot.ts';
 
-/** Total the rewards of every defeated enemy, rolling each drop's chance. */
+/**
+ * A battle's kill rewards, as the deaths paid them (re-parity RC9; `adapt/loot.ts#payKill`, called from `hp.ts` at each monster's death): the game's reward struct is
+ * read once, here, when the battle is won. The gil is the struct's (a Gillionaire wearer doubled it at each kill), the AP is what the monsters were worth, and the items are its stacks
+ * (equal items stacked, at most eight stacks of 99). Nothing is rolled here.
+ */
 function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] } {
-  let ap = 0;
-  let gil = 0;
-  const drops: ItemDrop[] = [];
-  for (const id of ctx.state.enemyIds) {
-    const enemy = tryActor(ctx, id);
-    const rewards = enemy?.enemy?.rewards;
-    if (!enemy || !rewards || isAlive(enemy)) continue;
-    const overkilled = ctx.rt.overkilled.includes(id);
-    ap += overkilled ? rewards.apOverkill : rewards.ap;
-    gil += rewards.gil;
-    for (const drop of rewards.drops) {
-      // The engine's own drop model (a percent chance per drop), not the game's (stream 10 against a chance byte, `kernel/drops.ts`, not wired):
-      // it draws from the engine-side stream so the battle's game streams end where the fight ended.
-      if (drop.chance === undefined || ctx.rng.aux.int(1, 100) <= drop.chance) {
-        // One drop slot gives ONE item: a slot that names a rare alternative (`ItemDrop.rare`, the game's loot record: a common and a rare item per slot) draws one more byte and gives the rare item
-        // when it falls under the rare chance, the common one otherwise, never both. A drop with no `rare` draws nothing more, so every other chapter's drops are exactly as they were.
-        const { rare, ...common } = drop;
-        const given = rare !== undefined && byteRoll(ctx.rng.aux) * 100 < rare.chance * 256 ? { itemId: rare.itemId, count: rare.count } : common;
-        drops.push({ ...given, count: overkilled ? Math.min(99, given.count * OVERKILL_DROP_MULTIPLIER) : given.count });
-      }
-    }
-  }
-  // A part that grew back and fell again pays for every death (Sinspawn Gui's arms): the earlier ones were banked when it returned (`ai/sinspawn-gui-rules.ts#regrowArms`). Absent everywhere else.
-  ap += Number(ctx.state.flags['rewards.bankedAp'] ?? 0);
-  gil += Number(ctx.state.flags['rewards.bankedGil'] ?? 0);
-  return { ap, gil, drops };
+  const ledger = ctx.rt.rewards;
+  if (ledger === undefined) return { ap: 0, gil: 0, drops: [] };
+  return { ap: ledger.baseAp, gil: ledger.list.gil, drops: ledger.list.items.map((stack) => ({ itemId: itemIdOf(ledger, stack.id), count: stack.qty })) };
 }
 
 /**
@@ -96,14 +80,17 @@ function earnedAp(ctx: Ctx, id: CombatantId): boolean {
  * wrong: it both denied AP to a member switched out after acting, and never
  * excluded one KO'd in an active slot at the very end.
  */
-function sphereLevels(ctx: Ctx, ap: number): Record<CombatantId, number> {
+function sphereLevels(ctx: Ctx, won: boolean, bonus: number): Record<CombatantId, number> {
   const out: Record<CombatantId, number> = {};
+  // Each member's own running total from the kills (a Double or Triple AP wearer's is more, a No AP wearer's none); the settle of the exit (`kernel/drops.ts#settleAp`: a member who never
+  // acted, or is dead or Petrified at the end, goes back to the AP he started with) is `earnedAp` below.
+  const totals = won ? memberTotals(ctx) : new Map<CombatantId, number>();
   for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) {
     if (!earnedAp(ctx, id)) continue;
     const member = tryActor(ctx, id);
     const grid = member?.sphereGrid;
     if (!member || !grid) continue;
-    let banked = grid.ap + ap;
+    let banked = grid.ap + (totals.get(id) ?? 0) + bonus;
     let levels = 0;
     while (banked >= apForLevel(grid.sLv + levels) && levels < 255) {
       banked -= apForLevel(grid.sLv + levels);
@@ -145,7 +132,7 @@ export function buildBattleResult(
   const { gil, drops } = earned;
   // A formation-level reward no enemy carries (Chapter XIV's 5,000 AP, B13 = a); 0 elsewhere.
   const ap = earned.ap + (outcome === 'victory' ? victoryBonusAp(ctx) : 0);
-  if (outcome === 'victory') gaugeOnVictory(ctx); // `pp_BtlOdOnVictory`: every party member in the battle, dead or not, runs the Victor counter
+  gaugeOnVictory(ctx); // `pp_BtlOdOnVictory` (0x007b1540) runs for EVERY result, not only a victory [FFX-G10 3.5; RC8, FFX only]: every party member in the battle, dead or not, runs the Victor counter, and a living Victor free of Curse and Petrify gains 20
 
   const result: BattleResult = {
     outcome,
@@ -157,7 +144,7 @@ export function buildBattleResult(
     gil,
     drops,
     overkilled: [...ctx.rt.overkilled],
-    sphereLevelsGained: sphereLevels(ctx, ap),
+    sphereLevelsGained: sphereLevels(ctx, outcome === 'victory', outcome === 'victory' ? victoryBonusAp(ctx) : 0),
     turnsTaken: turnParticipation(ctx),
   };
   if (outcome === 'victory' && nextGroupId !== undefined) result.nextGroupId = nextGroupId;

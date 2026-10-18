@@ -9,7 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { Easing } from '../../../src/engine/Tween.ts';
-import { KO_CROSS, KO_CROSS_PEAK, PoseBlend, QUAD_IN_OUT, koCross, type BlendPlane } from '../../../src/engine/PoseBlend.ts';
+import { KO_CROSS, KO_CROSS_PEAK, PoseBlend, QUAD_IN_OUT, REPOINT_BELOW, koCross, type BlendPlane } from '../../../src/engine/PoseBlend.ts';
 
 // ---------------------------------------------------------------- a deterministic generator
 
@@ -44,8 +44,14 @@ class Rig {
     return plan;
   }
 
-  step(ms: number): void {
+  /** One frame of the blend, then what `PaintedActor.update` does with a request PoseBlend rule 2 held and has begun on its own (`takeStart`). True when one began. */
+  step(ms: number): boolean {
     this.blend.advance(ms);
+    const s = this.blend.takeStart();
+    if (!s) return false;
+    if (!s.plan.reversed) this.planes[s.plan.to].pose = s.key; // PaintedActor.applyPose
+    this.active = s.plan.to;
+    return true;
   }
 
   fades(): [number, number] {
@@ -102,10 +108,19 @@ function run(seed: number, fps: number, ms: number): Trace {
       const pre = rig.fades();
       const preKeys: [string, string] = [rig.planes[0].pose, rig.planes[1].pose];
       const preActive = rig.active;
+      const preBlending = rig.blend.blending;
       const plan = rig.request(key, ms);
-      if (plan.same) {
+      if (plan.same && plan.deferred) {
+        // rule 2: a painting that still shows is never dropped; the request waits, nothing moves, and the running blend goes on
+        const other: Idx = preActive === 0 ? 1 : 0;
+        const weak: Idx = pre[other] > pre[preActive] ? preActive : other;
+        ok(same2(rig.fades(), pre) && rig.active === preActive, () => `${tag()}: a held request moved something`);
+        ok(preBlending && rig.blend.blending && rig.blend.holding, () => `${tag()}: a request is only held while a blend runs, and it is then held`);
+        ok(pre[weak] >= REPOINT_BELOW, () => `${tag()}: held although the weaker plane was only ${pre[weak]}`);
+      } else if (plan.same) {
         ok(same2(rig.fades(), pre) && rig.active === preActive, () => `${tag()}: a same request moved something`);
         ok(preKeys[preActive] === key, () => `${tag()}: same must mean the painting already on its way in`);
+        ok(!rig.blend.holding, () => `${tag()}: a request for the painting on its way in left an older one held`);
       } else {
         const to = plan.to;
         const out: Idx = to === 0 ? 1 : 0;
@@ -116,6 +131,7 @@ function run(seed: number, fps: number, ms: number): Trace {
           ok(rig.planes[to].fade === 0, () => `${tag()}: a re-pointed plane starts from 0`);
           ok(pre[out] >= pre[to] - EPS, () => `${tag()}: the plane re-pointed is the weaker (${pre[to]} against ${pre[out]})`);
           ok(preKeys[to] !== key, () => `${tag()}: re-pointed to the painting it already held`);
+          ok(!preBlending || pre[to] < REPOINT_BELOW, () => `${tag()}: a re-point dropped a painting still showing at ${pre[to]}`);
         } else {
           // a reversal (or a stale plane that already holds the painting): not one fade moved
           ok(rig.planes[to].fade === pre[to] && preKeys[to] === key, () => `${tag()}: a reversal moved a fade`);
@@ -134,33 +150,38 @@ function run(seed: number, fps: number, ms: number): Trace {
     const dtMs = clock === 0 ? phase : frame;
     const hold = rnd() < 0.15; // a hit-stop frame: the field clock reads 0 (the blend is handed real time only, so a frame of none is what a caller with no time gives)
     const step = hold ? 0 : dtMs;
-    rig.step(step);
+    const began = rig.step(step); // true: a request rule 2 held began in this frame (it re-pointed the weaker plane, which was under REPOINT_BELOW)
     lastRequestPositive += step;
 
     // --- the invariants of every frame
     const now = rig.fades();
     ok(now[0] >= 0 && now[0] <= 1 && now[1] >= 0 && now[1] <= 1, () => `${tag()}: a fade left 0..1: ${now}`);
     ok(rig.keysAbove(0.02).length <= 2, () => `${tag()}: more than two painting keys above 0.02`);
-    const slope = (2 * step) / ms + EPS; // quadInOut's steepest slope is 2
-    for (const i of [0, 1] as const) ok(Math.abs(now[i] - prev[i]) <= slope, () => `${tag()}: plane ${i} moved ${Math.abs(now[i] - prev[i])} in ${step.toFixed(1)} ms`);
-    // roles hold between two requests: the plane on its way in only rises, the other only falls
     const inn = rig.active;
     const out: Idx = inn === 0 ? 1 : 0;
-    ok(now[inn] >= prev[inn] - EPS && now[out] <= prev[out] + EPS, () => `${tag()}: a plane moved against its role (${prev} to ${now}, in ${inn})`);
+    if (!began) {
+      const slope = (2 * step) / ms + EPS; // quadInOut's steepest slope is 2
+      for (const i of [0, 1] as const) ok(Math.abs(now[i] - prev[i]) <= slope, () => `${tag()}: plane ${i} moved ${Math.abs(now[i] - prev[i])} in ${step.toFixed(1)} ms`);
+      // roles hold between two requests: the plane on its way in only rises, the other only falls
+      ok(now[inn] >= prev[inn] - EPS && now[out] <= prev[out] + EPS, () => `${tag()}: a plane moved against its role (${prev} to ${now}, in ${inn})`);
+    } else {
+      ok(now[inn] === 0 && rig.blend.blending, () => `${tag()}: a held request began without a fresh plane on its way in`);
+    }
     if (step === 0) ok(same2(now, prev), () => `${tag()}: a frame of no time moved a fade`);
     prev = now;
     trace.fades.push(now);
     trace.keys.push(rig.keysAbove(0.02));
 
-    // --- the last request has reached its end within the blend length (plus the frame it lands in)
-    if (lastRequestPositive >= ms + frame + 1e-6) {
+    // --- the last request has reached its end: within the blend length (plus the frame it lands in), or, when rule 2 held it until the weaker painting was gone, within two
+    if (lastRequestPositive >= 2 * ms + frame + 1e-6) {
       ok(!rig.blend.blending, () => `${tag()}: still blending ${lastRequestPositive} ms after the last request`);
       ok(rig.planes[rig.active].fade === 1 && rig.planes[out].fade === 0 && rig.planes[rig.active].pose === lastKey, () => `${tag()}: the last request did not land`);
     }
     clock += dtMs;
   }
   // everything settled by the end (the run is long past the last request)
-  ok(!rig.blend.blending && rig.planes[rig.active].fade === 1 && rig.planes[rig.active].pose === lastKey, () => `${tag()}: not settled on the last request at the end`);
+  ok(!rig.blend.blending && !rig.blend.holding && rig.planes[rig.active].fade === 1 && rig.planes[rig.active].pose === lastKey, () => `${tag()}: not settled on the last request at the end`);
+  ok(rig.blend.maxDropped < REPOINT_BELOW, () => `${tag()}: a painting was dropped while it still showed ${rig.blend.maxDropped}`);
   return trace;
 }
 
@@ -222,32 +243,20 @@ describe('PoseBlend: a request in mid-blend', () => {
     return rig;
   }
 
-  it('keeps the stronger plane going out and re-points only the weaker one, from 0', () => {
-    const rig = midBlend();
+  it('keeps the stronger plane going out and re-points only the weaker one, from 0, when the weaker one is under REPOINT_BELOW (rule 2)', () => {
+    const rig = new Rig();
+    rig.request('ready', 120);
+    rig.step(10); // ready 0.014, idle 0.986: the weaker painting is all but gone
     const [idle, ready] = [rig.planes[0].fade, rig.planes[1].fade];
     expect(idle).toBeGreaterThan(ready);
+    expect(ready).toBeLessThan(REPOINT_BELOW);
     const plan = rig.request('attack', 120);
     expect(plan).toEqual({ same: false, to: 1, repoint: true, reversed: false });
     expect(rig.planes[0]).toEqual({ fade: idle, pose: 'idle' }); // the painting the player sees keeps its fade
-    expect(rig.planes[1]).toEqual({ fade: 0, pose: 'attack' }); // the weaker painting is dropped; the new one starts from 0
+    expect(rig.planes[1]).toEqual({ fade: 0, pose: 'attack' }); // the weaker painting is dropped (0.014); the new one starts from 0
     expect(rig.active).toBe(1);
-  });
-
-  it('when the painting on its way in is already the stronger, it is the one that goes out and the OTHER plane is re-pointed (ready > attack > follow)', () => {
-    const rig = new Rig();
-    rig.planes[0].pose = 'ready';
-    rig.request('attack', 120);
-    rig.step(83); // ready 0.19, attack 0.81
-    const [ready, attack] = [rig.planes[0].fade, rig.planes[1].fade];
-    expect(attack).toBeGreaterThan(ready);
-    const plan = rig.request('follow', 120);
-    expect(plan).toEqual({ same: false, to: 0, repoint: true, reversed: false });
-    expect(rig.planes[0]).toEqual({ fade: 0, pose: 'follow' }); // ready (0.19) is dropped, follow starts from 0, never at a third of the way
-    expect(rig.planes[1].fade).toBe(attack);
-    expect(rig.keysAbove(0.02)).toEqual(['attack']);
-    rig.step(1000 / 60);
-    expect(rig.keysAbove(0.02).sort()).toEqual(['attack', 'follow']);
-    expect(rig.planes[0].fade).toBeLessThan(0.05); // follow rose a frame's worth, not to 0.37
+    expect(rig.blend.maxDropped).toBeCloseTo(ready, 12);
+    expect(rig.blend.maxDropped).toBeLessThan(REPOINT_BELOW);
   });
 
   it('naming the weaker plane\'s painting reverses without a pop', () => {

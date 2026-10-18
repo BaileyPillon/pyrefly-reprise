@@ -9,8 +9,10 @@
  * - Delta Attack: HP only (row 0x40a9, class 1; see `ffx2-intent-inert-lead.test.ts`). Zanmato (row 0x40a4, class 3) names both pools.
  * - Looming Glacier: "Empties one girl's MP and inflicts Stop." (row 0x4102, class 2).
  *
- * Open (not changed): the party's Osmose (`x2-shared-osmose`, which the Paragon Oversoul also casts) drains MP but carries
- * neither key, only the `drains-mp` flag, which the HP-and-MP drains share; its sentence still says "damage" without "MP".
+ * The party's Osmose (`x2-shared-osmose`, which the Paragon Oversoul also casts) carries neither key, only the `drains-mp`
+ * flag, which the HP-and-MP drains share. Release candidate r50-fixes reads it from its game row instead (row 0x317b, "MP,
+ * formula 9, power 6", damage class 2 = MP only; `research/re-ffx2-ai-fallen-trema.md`), so its sentence says "MP damage"
+ * too, in the move slab here and in the advisor's line (`ffx2-osmose-mp-damage.test.ts`). **FFX-2 only.**
  */
 
 import { describe, expect, it } from 'vitest';
@@ -29,6 +31,9 @@ const row = (id: string): AbilityDef => {
 
 /** Restated from the extras, not from the builder's own helper. */
 const damagesMp = (d: AbilityDef): boolean => d.extra?.['mpOnly'] === true || d.extra?.['damagesPool'] === 'mp';
+/** The party's Osmose, the one row the extras do not name: the game's row is the MP class alone and the row deals damage. */
+const MP_BY_GAME_ROW = ['x2-shared-osmose'];
+const damagesMpByRow = (d: AbilityDef): boolean => d.game === 'ffx2' && d.ffx2Record?.damageClass === 2 && d.formula !== 'none' && !d.flags.includes('heals');
 
 describe('FFX-2 intent: a move that damages MP says "MP damage"', () => {
   const NAMED: ReadonlyArray<readonly [string, string]> = [
@@ -38,6 +43,7 @@ describe('FFX-2 intent: a move that damages MP says "MP damage"', () => {
     ['magical-attack-detected', 'Non-elemental MP damage to the whole party - strips Mag Up, Mdef Up.'],
     ['x2-bulwark-magical-attack-detected', 'Non-elemental MP damage to the whole party - strips Mag Up, Mdef Up.'],
     ['x2-leblanc-osmose', 'Non-elemental MP damage to one girl.'],
+    ['x2-shared-osmose', 'Magical non-elemental MP damage to anyone.'],
     ['trema-waning-moon', 'Non-elemental MP damage to one girl - 3 hits.'],
     ['x2-yojimbo-kozuka', 'Non-elemental MP damage to one girl.'],
   ];
@@ -46,13 +52,20 @@ describe('FFX-2 intent: a move that damages MP says "MP damage"', () => {
     expect(describeAbility(row(id))).toBe(sentence);
   });
 
-  it('every row with extra.mpOnly or extra.damagesPool "mp" says MP damage, and no other row does', () => {
-    const named = Object.values(all).filter(damagesMp);
+  it('every row with extra.mpOnly, extra.damagesPool "mp" or an MP-only game row says MP damage, and no other row does', () => {
+    const named = Object.values(all).filter((d) => damagesMp(d) || damagesMpByRow(d));
     expect(named.length, 'the rows the pass covers').toBeGreaterThanOrEqual(10);
     const missing = named.filter((d) => !/ MP damage to /.test(describeAbility(d))).map((d) => `${d.id}: ${describeAbility(d)}`);
     expect(missing).toEqual([]);
-    const extra = Object.values(all).filter((d) => !damagesMp(d) && /\bMP damage\b/.test(describeAbility(d))).map((d) => d.id);
+    const extra = Object.values(all)
+      .filter((d) => !damagesMp(d) && !damagesMpByRow(d) && /\bMP damage\b/.test(describeAbility(d)))
+      .map((d) => d.id);
     expect(extra).toEqual([]);
+  });
+
+  it('the game row names exactly one row the extras miss: the party\'s Osmose', () => {
+    const byRowOnly = Object.values(all).filter((d) => damagesMpByRow(d) && !damagesMp(d)).map((d) => d.id);
+    expect(byRowOnly).toEqual(MP_BY_GAME_ROW);
   });
 });
 

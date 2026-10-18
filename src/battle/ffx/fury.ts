@@ -1,106 +1,34 @@
 /**
- * Lulu's Fury: how far the stick has to travel per cast [ffx-combat-core §5.7].
+ * Lulu's Fury: how many casts a number of rotations buys [FFX-G01 section 6.4; re-parity RC9, lane FFX-A].
  *
  * The spell is chosen from a menu **before** the input, so it rides on
  * `OverdriveCommand.id` as a specific `<spell>-fury` id; `FuryResult` carries
  * only what the player's performance produced and deliberately never carries
  * the spell [docs/CONTRACT-CHANGES.md, decision 9].
+ *
+ * **The casts are the game's table, not an interpolation** (FFX only). The game keeps 17 digit rows of "rotations a cast costs" and picks one by
+ * the spell and by Lulu's current Magic (`./kernel/minigame-fury-tables.ts`, VA 0x00A5CC70): at most six Magic brackets for a group of spells,
+ * a free first cast, and a different cost for each later cast. `casts = 1 + the thresholds the counter has reached` (16 at the most). Before
+ * RC9 this file interpolated the casts after 15 rotations at Magic 0, 128 and 255 (an estimate that agreed with the game at those three
+ * anchors and in 74,235 of 199,424 (spell, Magic, rotations) cells); the anchors are still true, the cells between are the game's now.
  */
 
 import type { AbilityDef } from '../common/types.ts';
+import { furyVariantOf } from './adapt/minigame.ts';
+import { FURY_MAX_CASTS, furyCasts } from './kernel/minigame-fury-tables.ts';
 
-/** Rotation-cost tier of a Fury spell. */
-export type FuryTier = 'tier1' | 'tier2' | 'tier3' | 'flare' | 'ultima';
+export { FURY_MAX_CASTS };
 
-/**
- * The published anchors: casts obtained after **15 rotations** at Magic
- * 0 / 128 / 255 [ffx-combat-core §5.7]. The number of casts **rises** with
- * Magic, so the rotation requirement shrinks — the opposite of what the wiki's
- * prose reads like.
- *
- * Stored as the cast counts rather than as pre-divided degrees on purpose:
- * `5400 / 16` is `337.5`, and rounding that to 338 silently costs the 16th
- * cast at Magic 255. Keep the division exact.
- */
-const FURY_ANCHOR_CASTS: Readonly<Record<FuryTier, readonly [number, number, number]>> = {
-  tier1: [7, 12, 16],
-  tier2: [6, 10, 16],
-  tier3: [6, 10, 12],
-  flare: [4, 6, 7],
-  ultima: [4, 4, 4],
-};
-
-const FURY_TIERS: Readonly<Record<string, FuryTier>> = {
-  'fire-fury': 'tier1',
-  'blizzard-fury': 'tier1',
-  'thunder-fury': 'tier1',
-  'water-fury': 'tier1',
-  'fira-fury': 'tier2',
-  'blizzara-fury': 'tier2',
-  'thundara-fury': 'tier2',
-  'watera-fury': 'tier2',
-  'drain-fury': 'tier2',
-  'osmose-fury': 'tier2',
-  'firaga-fury': 'tier3',
-  'blizzaga-fury': 'tier3',
-  'thundaga-fury': 'tier3',
-  'waterga-fury': 'tier3',
-  'bio-fury': 'tier3',
-  'death-fury': 'tier3',
-  'demi-fury': 'tier3',
-  'flare-fury': 'flare',
-  'ultima-fury': 'ultima',
-};
-
-/**
- * Which rotation tier a Fury belongs to.
- *
- * The spell is chosen from a menu *before* the stick input, so it rides on
- * `OverdriveCommand.id` as a specific `<spell>-fury` id — `FuryResult` has no
- * field for it and deliberately never will [CONTRACT-CHANGES decision 9]. A
- * data file may override with `extra.furyTier`.
- */
-export function furyTierOf(def: AbilityDef): FuryTier {
-  const authored = def.extra?.['furyTier'];
-  if (typeof authored === 'string' && authored in FURY_ANCHOR_CASTS) return authored as FuryTier;
-  return FURY_TIERS[def.id] ?? 'tier1';
-}
-
-/** One full rotation of the stick. */
+/** One full rotation of the stick, in the degrees the contract's `FuryResult.sweptDegrees` counts. */
 export const DEGREES_PER_ROTATION = 360;
 
-/** The published anchor budget: 15 rotations. */
-export const FURY_ANCHOR_BUDGET = 15 * DEGREES_PER_ROTATION;
-
-/** Fury never exceeds 16 casts, whatever the input. */
-export const FURY_MAX_CASTS = 16;
-
 /**
- * Degrees of rotation one cast costs, piecewise-linear in Magic between the
- * three published anchors [ffx-combat-core §5.7]. Exact at Magic 0, 128 and
- * 255 for every tier.
- */
-export function degreesPerCast(def: AbilityDef, magic: number): number {
-  const [c0, c128, c255] = FURY_ANCHOR_CASTS[furyTierOf(def)];
-  const a0 = FURY_ANCHOR_BUDGET / c0;
-  const a128 = FURY_ANCHOR_BUDGET / c128;
-  const a255 = FURY_ANCHOR_BUDGET / c255;
-  const mag = Math.max(0, Math.min(255, magic));
-  const value = mag <= 128 ? a0 + ((a128 - a0) * mag) / 128 : a128 + ((a255 - a128) * (mag - 128)) / 127;
-  return Math.max(1, value);
-}
-
-/**
- * `casts = min(16, floor(sweptDegrees / degreesPerCast))`.
- *
- * The epsilon is load-bearing: `degreesPerCast` is an exact division of the
- * 5 400-degree budget, so at an anchor the quotient is a whole number that
- * binary floating point renders as `6.999999999999999`. Without the nudge the
- * published anchors come out one cast short.
+ * The casts `sweptDegrees` of rotation buys `def` at this Magic: the table's casts for the whole rotations made, at least 1. A spell that is not
+ * one of the 19 (a test's) is taken as Fire Fury.
  */
 export function furyCastsFor(def: AbilityDef, magic: number, sweptDegrees: number): number {
-  const quotient = Math.max(0, sweptDegrees) / degreesPerCast(def, magic);
-  return Math.min(FURY_MAX_CASTS, Math.floor(quotient + 1e-9));
+  const rotations = Math.floor(Math.max(0, sweptDegrees) / DEGREES_PER_ROTATION + 1e-9);
+  return furyCasts(furyVariantOf(def) ?? 1, magic, rotations);
 }
 
 /**

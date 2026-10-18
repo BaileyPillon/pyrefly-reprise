@@ -154,7 +154,7 @@ describe('analysing a recording', () => {
     expect(r.cameraCuts.length).toBeGreaterThan(0);
   });
 
-  it('finds a teleport between swaps, with the camera\'s share taken out, and says whether it fell at a swap', async () => {
+  it('finds a 150 px pop between swaps, with the camera\'s share taken out, says whether it fell at a swap, and REPORTS it as a mid-move dash while the policy gates only swap jerks (W4)', async () => {
     const { meta, records } = build(10, (recs) => {
       // between the swaps (150 to 164 is quiet): the whole figure is 150 px to the right for 15 frames, and comes back
       for (let n = 150; n < 165; n++) for (const f of recs[n]!.f) f.s = f.s.map((s) => (s ? [...s.slice(0, 3), ...s.slice(3).map((v, i) => (i % 2 === 0 ? v + 150 : v))] : s));
@@ -165,9 +165,28 @@ describe('analysing a recording', () => {
     expect(pops).toHaveLength(2); // out and back
     expect(Math.max(...pops.map((j) => j.px))).toBeGreaterThan(140);
     expect(pops.every((j) => !j.atSwap)).toBe(true);
-    expect(r.summary.motion.jerksOverFail).toBeGreaterThan(0);
+    expect(r.summary.motion.jerksOverFail).toBeGreaterThan(0); // every jerk, as before
+    expect(r.summary.motion.dashesOverFail).toBe(2);
+    expect(r.summary.motion.swapJerksOverFail).toBe(0);
+    expect(pops.every((j) => j.kind === 'dash')).toBe(true); // 150 px is under the 300 px a lunge cannot reach in one frame
+    expect(r.summary.checks['CHK-027'].result).toBe('PASS');
+    expect(r.summary.checks['CHK-027'].note).toMatch(/2 mid-move dash\(es\) of 40 px or more are REPORTED, not gated/);
+    // the earlier reading, one switch away: every jerk gates
+    const old = analyzeRun({ meta, records, anchors, cfg: { ...CFG, jerks: { ...(CFG['jerks'] as object), dashesFail: true } } });
+    expect(old.summary.checks['CHK-027'].result).toBe('FAIL');
+    expect(old.summary.checks['CHK-027'].reasons.join(' ')).toMatch(/jerk\(s\) of 40 px or more in one frame MID-MOVE/);
+  });
+
+  it('still FAILS a mid-move step no lunge could make: 400 px between swaps is a teleport (W4)', async () => {
+    const { meta, records } = build(10, (recs) => {
+      for (let n = 150; n < 165; n++) for (const f of recs[n]!.f) f.s = f.s.map((s) => (s ? [...s.slice(0, 3), ...s.slice(3).map((v, i) => (i % 2 === 0 ? v + 400 : v))] : s));
+    });
+    const { anchors } = await anchorsForPoses({ poses: meta.poses, fetchImage, measure: MEASURE });
+    const r = analyzeRun({ meta, records, anchors, cfg: CFG });
+    expect(r.jerks.filter((j) => j.kind === 'teleport')).toHaveLength(2);
+    expect(r.summary.motion.teleports).toBe(2);
     expect(r.summary.checks['CHK-027'].result).toBe('FAIL');
-    expect(r.summary.checks['CHK-027'].reasons.join(' ')).toMatch(/jerk\(s\) of 40 px or more/);
+    expect(r.summary.checks['CHK-027'].reasons.join(' ')).toMatch(/2 MID-MOVE teleport\(s\) of 300 px or more/);
   });
 
   it('is UNVERIFIED when the recording is too short to judge', async () => {
