@@ -138,7 +138,7 @@ export interface PipelineInput {
   records: BaseDamageRecords;
   /** rom.bin delay_count[2]; defaults to {4000, 8000}. */
   delay?: readonly [number, number];
-  /** DAT_011b95c4: the aid count, 0..5 (default 3, which scales by exactly 1). */
+  /** The global at 0x011b95c4: the aid count, 0..5 (default 3, which scales by exactly 1). */
   aidCount?: number;
 }
 

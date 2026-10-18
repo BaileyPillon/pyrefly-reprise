@@ -34,7 +34,7 @@ export interface ApCurveRow {
 }
 
 /**
- * `FUN_00784e90(id)`: the AP value of the character's next step, `c * (n + 1) + a * n^3 / 100 + b * n^2 / 10` with
+ * The function at 0x00784e90 (`id`): the AP value of the character's next step, `c * (n + 1) + a * n^3 / 100 + b * n^2 / 10` with
  * truncating divisions, where `n` is the sum of the two level bytes of the party save record (+0x3b and +0x3c).
  * Above 100 the row's cap is returned instead. The Overdrive-to-AP ability turns the whole gauge into this much AP.
  */
@@ -79,7 +79,7 @@ export interface ApRecipient {
 }
 
 /**
- * `FUN_00798a00(id, chr, ap, other)`: adds `ap` to the character's running AP total `totals[id]` (clamped to
+ * The function at 0x00798a00 (`id, chr, ap, other`): adds `ap` to the character's running AP total `totals[id]` (clamped to
  * 0..999999999) and returns the gil multiplier chain value. Returns `other` untouched, adding nothing, when
  * `Chr+0xdcd` is set. The AP is 0 with the No AP ability (bit 0x40). Only a character who is in the battle and not dead
  * gets Double AP (0x10, x2) or Triple AP (0x20, x3, checked first) applied, and only such a character can turn the
@@ -102,7 +102,7 @@ export function awardAp(c: ApRecipient, totals: number[], id: number, ap: number
 export const STAT_COUNTERS = 4;
 
 /**
- * `FUN_00785a00(id, kind)`: bumps statistic counter `kind` (0 to 3) of party member `id` (below 0x12) by one,
+ * The function at 0x00785a00 (`id, kind`): bumps statistic counter `kind` (0 to 3) of party member `id` (below 0x12) by one,
  * clamped to 0..999999999, unless the battle mode byte (0x0112c9e5) is 2. The counter is a u32 read as signed: a
  * value of 0x7fffffff or more reads as negative and the clamp turns the increment into 0. Counter 3 is the one the
  * Overdrive gauge bumps when it reaches full; counter 1 counts kills and counter 2 deaths (death handler 0x78c740).

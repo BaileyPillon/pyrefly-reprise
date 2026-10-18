@@ -1,6 +1,6 @@
 /**
  * FFX end-of-battle save: what the game writes back into each party member's and aeon's save record when a battle ends
- * (`FUN_00785fc0`, VA 0x00785fc0, run by the battle frame after the AP settle), and the rebuild of the ten aeons that
+ * (the function at 0x00785fc0, run by the battle frame after the AP settle), and the rebuild of the ten aeons that
  * follows it.
  *
  * **Game case: FFX only.** Source: FFX.exe, Steam build 25501027, SHA-256 0537B2A1...686D. Spec:
@@ -108,7 +108,7 @@ export interface SettleResult {
 }
 
 /**
- * `FUN_00785fc0()`: the whole end-of-battle save. `chrs` and `saves` hold slots 0 to 0x11; the saves are changed in place
+ * The function at 0x00785fc0: the whole end-of-battle save. `chrs` and `saves` hold slots 0 to 0x11; the saves are changed in place
  * (the aeons' maxima and current values are those of the rebuild).
  */
 export function settleBattle(

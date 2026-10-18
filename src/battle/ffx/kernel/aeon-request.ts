@@ -1,6 +1,6 @@
 /**
  * FFX aeon special-action requests: which of an aeon's commands the executor hands to a battle script
- * (`FUN_007b2980`, called by the action executor `0x00792210` as an action starts; re-parity lane FFX-K, **FFX only**).
+ * (the function at 0x007b2980, called by the action executor `0x00792210` as an action starts; re-parity lane FFX-K, **FFX only**).
  *
  * **Game case: FFX only** (FFX-2 has no aeons in this sense; its Yojimbo is a mission boss with its own rules). Source: FFX.exe, Steam
  * build 25501027, SHA-256 0537B2A1...686D; note `FFX-G08` section 2, 3.1 step 3 and 6.1 (our words here). Proven against the game's own
@@ -54,7 +54,7 @@ export interface AeonRequest {
 }
 
 /**
- * `FUN_007b2980(chr id, ..., source type, entry)`: the request for the sub-action in progress, or `null` when the game passes it over
+ * The function at 0x007b2980 (`chr id, ..., source type, entry`): the request for the sub-action in progress, or `null` when the game passes it over
  * (it returns -1). `commands` are the two command ids of the sub-action.
  */
 export function aeonSpecialRequest(chrId: number, sourceType: number, commands: readonly [number, number]): AeonRequest | null {

@@ -18,7 +18,7 @@
  *
  * What these functions do NOT model is presentation: the animation requests (a wake-up pose, the Regen glow, the
  * damage numbers) and the Sin-style scripted hit-point floors (two special scenes). Death handling after the hit
- * points reach 0 (`pp_BtlDamageCheckDeath`), the SOS refresh (`FUN_007af260`) and the Auto-Life revival stay with the
+ * points reach 0 (`pp_BtlDamageCheckDeath`), the SOS refresh (the function at 0x007af260) and the Auto-Life revival stay with the
  * engine's own KO path.
  */
 

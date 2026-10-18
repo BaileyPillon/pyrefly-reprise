@@ -44,7 +44,7 @@ export interface Ffx2AtbInitInput {
   carry: number;
   /** Second argument of the call is 0: roll a random start. 0 at battle start; 1 when a KO resets the gauge. */
   randomStart: boolean;
-  /** `FUN_00613360`: the character is dead or petrified. */
+  /** The function at 0x00613360: the character is dead or petrified. */
   deadOrStone: boolean;
   /** `Chr+0x650` bit 0 (Initiative, `ABILITY_LEAD`). */
   lead: boolean;
@@ -112,7 +112,7 @@ export interface Ffx2AtbResetInput {
   isMonster: boolean;
   /** `Chr+0x650` bit 0 (Initiative): the reset leaves the counter alone. */
   lead: boolean;
-  /** `FUN_00613360`: dead or petrified: the counter is left alone. */
+  /** The function at 0x00613360: dead or petrified: the counter is left alone. */
   deadOrStone: boolean;
   /** `Chr+0x9d8` before. */
   recovery: number;

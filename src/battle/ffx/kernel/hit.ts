@@ -25,7 +25,7 @@ export const NO_EFFECT = 2;
 export type HitResult = typeof HIT | typeof MISS | typeof NO_EFFECT;
 
 /**
- * Base hit percent by index, `DAT_00c421f0` (9 signed bytes). Indexed by
+ * Base hit percent by index, the table at 0x00c421f0 (9 signed bytes). Indexed by
  * `clamp(base * 2 / 5 - target EVA + 10, 0, 8)`.
  */
 export const ACCURACY_TABLE: readonly number[] = [25, 30, 30, 40, 40, 50, 60, 80, 100];

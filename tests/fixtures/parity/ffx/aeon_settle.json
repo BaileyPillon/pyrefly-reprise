@@ -2,7 +2,7 @@
  "schema": "ffx-parity-vectors/1",
  "game": "ffx",
  "name": "aeon_settle",
- "description": "The end-of-battle save (FUN_00785fc0): the parked party comes back, each character's HP, MP, recovery counter, gear and Overdrive go into its save record, and the ten aeons are rebuilt from Yuna's stats.",
+ "description": "The end-of-battle save (the function at 0x00785fc0): the parked party comes back, each character's HP, MP, recovery counter, gear and Overdrive go into its save record, and the ten aeons are rebuilt from Yuna's stats.",
  "exe": {
   "file": "FFX.exe",
   "sha256": "0537B2A1047F3266E73495CD4E35F63F0777F4231D417699F979954686DA686D",
@@ -125,7 +125,7 @@
   "in: battles (VA 0x011307a4); yunaSave [hp, mp, str, def, mag, mdef, agi, luck, eva, acc] and yunaBonus [hpUnits, mpUnits, 8 stat bytes] (her save record and Sphere Grid bonus record); aeons {slot 8..17: {rom, assure, bonus, abilities?}}: rom is the 18 coefficient bytes of the ply_rom record from +0x18 (or \"real\": the row in defaults.tables.rom), assure the 9 numbers of the sum_assure row of the battle-count tier (null at tier 0, or \"real\": defaults.tables.assure[\"slot:tier\"]), bonus the aeon's own save-record bonuses [hp, mp, 8 stat bytes], abilities (only when not those of the real gear) eight slots [percent, mask, wordA, wordB, wordC] or null; without it they are those of the gear the aeon wears: defaults.tables.gear[gear id] for its weapon, then its armor.",
   "in.chr: 18 rows (slots 0..17) [hp, mp, recover, weapon, armor, odMode, odGauge, odMax, saveMaxHp, saveMaxMp]: the battle character's current HP and MP, recovery counter (Chr+0x6d8), gear ids and Overdrive mode, gauge and maximum, and the save record's maximum HP and MP (the clamp bounds). The other bytes of the save record are overwritten by the function and are not stored. in.active (7 ids), saved (7), roster (17), rosterSaved (17), summon (VA 0x0112c9e7).",
   "out: save (18 rows [hp, mp, recover, weapon, armor, odMode, odGauge, odMax], the save record after), aeon (10 rows for slots 8..17: [maxHp, maxMp, str, def, mag, mdef, agi, luck, eva, acc, word1, word2, word3, pct1, pct2, pct3, pct4]), list (the first three of the active list, VA 0x011307e8), roster (the party order table, VA 0x011307eb), active and summon (the lists after the restore).",
-  "Every stored answer is the machine's own: the real code of FFX.exe (FUN_00785fc0 with the aeon rebuild inside it, run for real), with only the battle RNG and the presentation functions that never touch the stored fields replaced (research/re-ffx-overdrive-steal-aeons.md section 4.9)."
+  "Every stored answer is the machine's own: the real code of FFX.exe (the function at 0x00785fc0 with the aeon rebuild inside it, run for real), with only the battle RNG and the presentation functions that never touch the stored fields replaced (research/re-ffx-overdrive-steal-aeons.md section 4.9)."
  ]
 ,
  "vectors": [

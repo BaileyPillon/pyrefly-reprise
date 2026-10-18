@@ -50,7 +50,7 @@ function resetDefense(u: Ffx2Unit, emit: Emit): void {
 /**
  * Bring the gauge states in line with the statuses after anything may have changed them. A girl whose menu was open
  * when she fell asleep, was Stopped, KO'd, petrified, ejected, Berserked or Confused has it closed and goes back to IDLE
- * (`FUN_00634040`, called from `pp_result_apply`); a unit with a command in flight loses it when it is Stopped,
+ * (the function at 0x00634040, called from `pp_result_apply`); a unit with a command in flight loses it when it is Stopped,
  * petrified or ejected (the game clears the command queue then).
  */
 export function settleGauges(units: readonly Ffx2Unit[]): void {

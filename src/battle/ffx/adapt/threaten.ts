@@ -80,7 +80,7 @@ function emptyField(): TickChr[] {
 }
 
 /**
- * `FUN_0078e410` for a character that dies or leaves the field: dissolve the pair it is an end of, so the other end is no
+ * The function at 0x0078e410, run for a character that dies or leaves the field: dissolve the pair it is an end of, so the other end is no
  * longer Threatened (or, when the dying character was the Threatened one, so its user carries nothing). A no-op for a
  * character with no Threaten on it and none it gave.
  */

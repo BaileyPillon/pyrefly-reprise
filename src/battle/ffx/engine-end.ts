@@ -255,7 +255,7 @@ export function finish(h: EndHooks, outcome: BattleResult['outcome']): void {
   const ctx = h.ctx;
   if (ctx.state.result) return;
   const result = buildBattleResult(ctx, outcome, h.nextGroupId);
-  // The battle's own save counts down every fallen aeon's recovery (`FUN_00785fc0`; re-parity W5): the next link, or the next battle,
+  // The battle's own save counts down every fallen aeon's recovery (the function at 0x00785fc0; re-parity W5): the next link, or the next battle,
   // meets the count one lower, and an aeon whose count reached 0 stands up at full HP and MP.
   settleAeonRecovery(ctx);
   ctx.state.result = result;

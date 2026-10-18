@@ -249,7 +249,7 @@ export class CameraSolver {
     }
   }
 
-  /** `FUN_007C0790`: after a `Set*`, every axis with no armed move is at the new destination at once. */
+  /** The function at 0x007C0790: after a `Set*`, every axis with no armed move is at the new destination at once. */
   private commit(p: PointId): void {
     const P = this.point(p);
     this.resolve(p);

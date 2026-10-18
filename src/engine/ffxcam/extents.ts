@@ -2,9 +2,9 @@
  * **The characters' camera extents** (FFX only): how tall and how wide each character frames for the camera programs. Most of FFX's spell, item and cast shots are recipes around live characters
  * (`./recipe.ts`): the look-at is raised by a fraction of the targets' *height*, the eye stands a multiple of their *width* away, and both numbers are the game's own, not what a model measures.
  *
- * **Where the game keeps them (Proven).** The `.chr` header's entry at +0x58 points at a 0x48-byte "params" block (magic 0x1624). The loader (`FUN_00825ee0` in FFX.exe) copies it into the model record:
- * `record+0x2c` is the block's float at +0x08 and `record+0x24` the one at +0x18. The camera's two getters read exactly those through the model (`FUN_0082ab30`, `FUN_0082adb0`) and multiply them by the
- * character's scale floats (`FUN_00794a30`, `FUN_00794a70`: `Chr+0x3A4` and `Chr+0x3A8`), which the battle sets to 1.0 (`FUN_0079c110`) and only a script's `SetActorScale` changes (none in this fight).
+ * **Where the game keeps them (Proven).** The `.chr` header's entry at +0x58 points at a 0x48-byte "params" block (magic 0x1624). The loader (the function at 0x00825ee0 in FFX.exe) copies it into the model record:
+ * `record+0x2c` is the block's float at +0x08 and `record+0x24` the one at +0x18. The camera's two getters read exactly those through the model (the functions at 0x0082ab30 and 0x0082adb0) and multiply them by the
+ * character's scale floats (the functions at 0x00794a30 and 0x00794a70: `Chr+0x3A4` and `Chr+0x3A8`), which the battle sets to 1.0 (the function at 0x0079c110) and only a script's `SetActorScale` changes (none in this fight).
  * What the scene had measured on its models instead (the idle pose's box) was wrong both ways: Evrae's height more than twice the game's, so every shot around him raised its look-at far too high (the
  * status-spell shots lost him for a quarter of their length at FAR), and the party's widths up to three times theirs, so the shots stood up to three times too wide of them.
  *

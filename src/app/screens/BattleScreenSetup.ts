@@ -159,7 +159,7 @@ function carryFfx(build: FFXPartyBuild, state: BattleState, withStatuses = false
     const live = state.combatants[a.id] as FFXCombatant | undefined;
     if (!live) return a;
     // A fallen aeon's recovery count travels with it (re-parity W5): each link is a battle of the game, and the battle's own save
-    // counted it down once (`FUN_00785fc0`).
+    // counted it down once (the function at 0x00785fc0).
     const recovery = live.aeon?.reviveCountdown !== undefined ? { reviveCountdown: live.aeon.reviveCountdown } : {};
     if (withStatuses) return { ...a, ...carriedFfxState(a.stats, live), overdriveGauge: clamp(live.overdrive?.gauge ?? a.overdriveGauge, 0, 100), ...recovery };
     return {
