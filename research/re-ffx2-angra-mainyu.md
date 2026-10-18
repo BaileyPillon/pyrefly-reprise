@@ -145,16 +145,32 @@ Same 370-row shape. Our notes use it for one thing: a monster whose Oversoul typ
 | Element bits 6 and 7 | unmapped (clear) | unmapped (clear) | unmapped (clear) |
 | Name reference (+0x00) / help reference (+0x04) (English copy; identifiers only) | 0x0056858f / 0x01f9859c | 0x0034862b / 0x02e58632 | 0x003386e8 / 0x030386f0 |
 
-The raw 200 bytes of each row (English copy; the other nine copies are equal from byte 8 on, only the first eight bytes, the name and help references, can differ):
+**Where the six rows were read** [bytes]. The English copy `ffx_ps2/ffx2/master/new_uspc/battle/kernel/monster.bin` (119,716 bytes) and `monster2.bin` (99,912 bytes), extracted read-only from `data/FFX2_Data.vbf` in the game folder (hashes in section 1). The table has 370 rows of 200 bytes, row *i* at file offset 0x20 + 200 *i*, so rows 268, 269 and 270 sit at 0xd180, 0xd248 and 0xd310 in both files. The other nine locale copies, the Japanese-PC copy `jppc/battle/kernel/monster.bin` included, are equal from byte 8 on (only the name and help references, bytes 0 to 7, can differ). Read with our own VBF reader and row parser (section 1; kept outside the repo with the extracted files). The 200-byte listing of the six rows that stood here is removed under hard rule 8 (no game files in the repo); on 2026-10-18 the six rows were re-read from the files and every value in sections 4.1 to 6 agrees with them. Where each field lies in the record, and where this note gives its values:
 
-```
-monster.bin 268  8f8556009c85f901841605000f2700002f497c6172445f000200c30700100000ffffffffffffffffff00ff000000000000ffff00000000000000000000ffff0000ffff000000ff00000000000000000000000000000000000000000000000000000000000000000000000000000000002c412d412e416d40ba3082308530b530b830703100000000000000000000000000000c110c110c11000000008813000088130000d00700001e00ffff569001005690010009200100092001000000000000000000ff000000
-monster.bin 269  2b8634003286e502401500000f2700002446001963525f000100c30700102f00ffffffffffffffffff00ff000000000000ffff00000000000000ff0000ffff0000ffff000000ff00000000000000000000000000008000000000000000000000000000000000007f00000000000000002a41ed41f041ef41ee41f141f441f341f241000000000000000000000000000000000d110d110d110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff000000
-monster.bin 270  e8863300f0860303401500000f2700002655632a00715f000100c30700100000ffffffffffffffffff00ff000000000000ffff00000000000000ff0000ffff0000ffff000000ff0000000000000000000000000000000100000000000000000000000000000000007f0000000000000029412b410000000000000000000000000000000000000000000000000000000000000e110e110e11000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff000000
-monster2.bin 268 e04f5600ed4f1900a45705000f27000038497c6172585f000300c30300100000ffffffffffffffffff0000000000000000ffff00000000000000000000ffff0000ffff000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c110c110c11000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-monster2.bin 269 f24f3400f94f1900501600000f2700002b460019636b5f000100c30300102f00ffffffffffffffffff0000000000000000ffff00000000000000ff0000ffff0000ffff0000000000000000000000000000200000008000000000000000000000000000000000007f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000d110d110d11000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-monster2.bin 270 fe4f330006501900501600000f2700002e55632a00935f000100c30700100000ffffffffffffffffff0000000000000000ffff00000000000000ff0000ffff0000ffff000000000000000000000000000020000000000100000000000000000000000000000000007f00000000000000000000000000000000000000000000000000000000000000000000000000000000000e110e110e11000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-```
+| Field | Record offset | Values in this note |
+|---|---|---|
+| Name reference, help reference | +0x00, +0x04 (32-bit each) | section 6, last row |
+| HP, MP | +0x08, +0x0c (32-bit each) | 4.1 (`monster.bin`), 5 (`monster2.bin`) |
+| Level | +0x10 | 4.1, 5 |
+| STR, DEF, MAG, MDEF, AGI, ACC, EVA, LCK | +0x11 to +0x18 | 4.1, 5 |
+| Thinking byte | +0x19 | 4.1 (0 in all six rows) |
+| Special word | +0x1a (16-bit) | 4.1, 5; its unmapped bits in section 6 |
+| Element bytes (absorb, null, half, weak) | +0x1c to +0x1f | 4.1, 5 |
+| Group-1 and group-2 resist bytes | +0x20 to +0x37 and +0x38 to +0x4f | 4.2 (`monster.bin`); 5 (the differences in `monster2.bin`) |
+| Automatic-status masks, group 1 and group 2 | +0x50, +0x54 (32-bit each) | 4.1, 5 |
+| Automatic-status amounts | from +0x58 (the amount 127 sits at +0x67 on Zarich, group-2 slot 15, and at +0x68 on Tawrich, slot 16; every other byte from +0x58 to +0x6f is 0) | 4.1, 5 |
+| Ability list | +0x70 (16 words of 16 bits) | 4.3 (`monster.bin`); empty in `monster2.bin` |
+| "basaku" word | +0x90 | section 6 (0) |
+| Model id, motion-set id | +0x92, +0x94 (16-bit each; 0x110c, 0x110d, 0x110e in rows 268, 269, 270 of both files; the sound id at +0x96 reads the same number) | 4.1 |
+| Sound id | +0x96 | section 6 |
+| Oversoul type, monster-type word | +0x98, +0x9a | 4.1, 5; section 6 |
+| EXP, Gil, Pilfer Gil figure | +0x9c, +0xa0, +0xa4 (32-bit each) | 4.1; 0 in `monster2.bin` (5) |
+| AP | +0xa8 (16-bit) | 4.1; 0 in `monster2.bin` (5) |
+| Drop chance, steal chance | +0xaa, +0xab | 4.1; 0 in `monster2.bin` (5) |
+| Drop, steal and bribe items | +0xac, +0xb4, +0xbc (8 bytes each: common id and count, rare id and count) | 4.1; empty in `monster2.bin` (5) |
+| Zantetsu byte | +0xc4 | 4.1 (255); 0 in `monster2.bin` (5) |
+
+Every non-zero byte of the six rows belongs to a field in this table.
 
 ## 7. The formation (`btl.txt`)
 
@@ -411,7 +427,7 @@ Searched on `r48-rc`: `research/`, `src/data/`, `docs/plans/`, `docs/handoff/`, 
 
 In the repo (`research/` on `r48-rc`): `re-ffx2-damage.md`, `re-ffx2-hit-status.md`, `re-ffx2-atb-status.md`, `re-ffx2-commands.md`, `re-ffx2-timing-measured.md`, `re-ffx2-ai-bahamut-vegnagun.md`, `re-ffx2-ai-leblanc-den-ixion.md`, `re-ffx2-ai-fallen-trema.md`, `re-ffx2-ai-scene-positions.md`, `re-ffx2-experiment.md`, `ffx2-bahamut.md`, `ffx2-vegnagun-shuyin.md`. On the branch `re-ffx2-yojimbo-valefor` (until merged): `re-ffx2-yojimbo-valefor.md` (the column map, section 3), `re-ffx2-ai-valefor.md` (Itchy and Auto-Life, the special word bits). Kept outside the repo: the coverage notes `FFX2-G04.md` (automatic statuses) and the extraction tools.
 
-## Appendix: the move rows as numbers, and the raw bytes
+## Appendix: the move rows as numbers, and the unmapped bytes as values
 
 Record-shaped numbers (the fields of `FFX2CommandRecord`; status maps are in section 10). File offsets are in the file named in the cell; the row sizes are 136 bytes (`monmagic.bin`) and 140 bytes (`command.bin`).
 
@@ -439,28 +455,28 @@ Record-shaped numbers (the fields of `FFX2CommandRecord`; status maps are in sec
 | Tawrich | Punch | 0x4129 | 0x9de8 (monmagic) | 80 | 20 | 0 | 0x33 | 0x4100000a | 0x1 | 1 | 0 | 0 | 125 | 12 | 1 | 0 | 0x0 | 0 |
 | Tawrich | Bloody Breath | 0x412b | 0x9ef8 (monmagic) | 80 | 120 | 0 | 0x17 | 0x41000006 | 0x0 | 1 | 2 | 0 | 0 | 12 | 1 | 0 | 0x0 | 0 |
 
-The raw bytes the notes do not map (animation ids, the caster animation byte, the menu bytes, and the bytes from +0x78 on), as stored:
+The bytes the notes do not map (animation ids, the caster animation byte, the menu bytes, and the bytes from +0x78 on), as plain values. The word at +0x7c is 0 in all twenty-one rows. The bytes from +0x80 to the end of the row (8 bytes in a `monmagic.bin` row, 12 in a `command.bin` row) are listed only where they are not 0, decimal; every byte not listed is 0. The values were checked against the files on 2026-10-18.
 
-| Move | id | animation ids (+0x08, +0x0a) | caster animation byte (+0x0c) | menu bytes (+0x0d, +0x0e, +0x0f) | +0x78 / +0x7a / +0x7b | +0x7c to +0x7f | tail from +0x80 |
+| Move | id | animation ids (+0x08, +0x0a) | caster animation byte (+0x0c) | menu bytes (+0x0d, +0x0e, +0x0f) | +0x78 / +0x7a / +0x7b | word at +0x7e | non-zero bytes from +0x80 (offset=value) |
 |---|---|---|---|---|---|---|---|
-| Unnatural Selection | 0x412c | 944, 944 | 24 | 0, 0, 0 | 0 / 0 / 2 | 0000d007 | 0303000000011400 |
-| Perdition's Flame | 0x412d | 947, 947 | 27 | 0, 0, 0 | 0 / 0 / 1 | 0000d007 | 0a020a0000011400 |
-| Die | 0x412e | 948, 948 | 33 | 0, 0, 0 | 0 / 0 / 0 | 0000d007 | 0000000000011400 |
-| Osmose | 0x406d | 134, 134 | 3 | 0, 0, 0 | 0 / 0 / 1 | 00007101 | 0909070000013c00 |
-| Full-Life | 0x30ba | 116, 116 | 3 | 0, 2, 2 | 0 / 0 / 11 | 0000ab01 | 0b0b06000001a0000a500000 |
-| Demi | 0x3082 | 102, 102 | 3 | 0, 9, 9 | 0 / 0 / 1 | 00007301 | 0a0a13000001140006500000 |
-| Bio | 0x3085 | 100, 100 | 3 | 0, 9, 9 | 0 / 0 / 7 | 00007801 | 1a1a260000011e0006500000 |
-| Curaga | 0x30b5 | 112, 112 | 3 | 0, 2, 2 | 0 / 0 / 9 | 0000a601 | 06060000000150000a500000 |
-| Dispel | 0x30b8 | 124, 124 | 3 | 0, 2, 2 | 0 / 0 / 10 | 0000a901 | 2727062600011e000a500000 |
-| Flare | 0x3170 | 104, 104 | 3 | 0, 1, 1 | 0 / 0 / 2 | 00009f01 | 030300000001640000000000 |
-| Glimmer of Despair | 0x412a | 946, 946 | 26 | 0, 0, 0 | 0 / 0 / 1 | 0000d007 | 09090e0000010a00 |
-| Fira | 0x41ed | 82, 82 | 3 | 0, 1, 1 | 0 / 0 / 3 | 00009001 | 0f0f000000015000 |
-| Blizzara | 0x41ee | 84, 84 | 3 | 0, 1, 1 | 0 / 0 / 4 | 00009201 | 1010000000011e00 |
-| Thundara | 0x41ef | 86, 86 | 3 | 0, 1, 1 | 0 / 0 / 5 | 00009401 | 1111000000016400 |
-| Watera | 0x41f0 | 88, 88 | 3 | 0, 1, 1 | 0 / 0 / 6 | 00009601 | 1212000000000000 |
-| Firaga | 0x41f1 | 90, 90 | 3 | 0, 1, 1 | 0 / 0 / 3 | 00009801 | 0f0f000000000000 |
-| Blizzaga | 0x41f2 | 92, 92 | 3 | 0, 1, 1 | 0 / 0 / 4 | 00009a01 | 1010000000000000 |
-| Thundaga | 0x41f3 | 94, 94 | 3 | 0, 1, 1 | 0 / 0 / 5 | 00009c01 | 1111000000000000 |
-| Waterga | 0x41f4 | 96, 96 | 3 | 0, 1, 1 | 0 / 0 / 6 | 00009e01 | 1212000000012800 |
-| Punch | 0x4129 | 758, 758 | 3 | 0, 0, 0 | 0 / 0 / 0 | 0000d007 | 0101000000010a00 |
-| Bloody Breath | 0x412b | 945, 945 | 25 | 0, 0, 0 | 0 / 0 / 7 | 0000d007 | 2603260000010a00 |
+| Unnatural Selection | 0x412c | 944, 944 | 24 | 0, 0, 0 | 0 / 0 / 2 | 0x07d0 | +0x80=3, +0x81=3, +0x85=1, +0x86=20 |
+| Perdition's Flame | 0x412d | 947, 947 | 27 | 0, 0, 0 | 0 / 0 / 1 | 0x07d0 | +0x80=10, +0x81=2, +0x82=10, +0x85=1, +0x86=20 |
+| Die | 0x412e | 948, 948 | 33 | 0, 0, 0 | 0 / 0 / 0 | 0x07d0 | +0x85=1, +0x86=20 |
+| Osmose | 0x406d | 134, 134 | 3 | 0, 0, 0 | 0 / 0 / 1 | 0x0171 | +0x80=9, +0x81=9, +0x82=7, +0x85=1, +0x86=60 |
+| Full-Life | 0x30ba | 116, 116 | 3 | 0, 2, 2 | 0 / 0 / 11 | 0x01ab | +0x80=11, +0x81=11, +0x82=6, +0x85=1, +0x86=160, +0x88=10, +0x89=80 |
+| Demi | 0x3082 | 102, 102 | 3 | 0, 9, 9 | 0 / 0 / 1 | 0x0173 | +0x80=10, +0x81=10, +0x82=19, +0x85=1, +0x86=20, +0x88=6, +0x89=80 |
+| Bio | 0x3085 | 100, 100 | 3 | 0, 9, 9 | 0 / 0 / 7 | 0x0178 | +0x80=26, +0x81=26, +0x82=38, +0x85=1, +0x86=30, +0x88=6, +0x89=80 |
+| Curaga | 0x30b5 | 112, 112 | 3 | 0, 2, 2 | 0 / 0 / 9 | 0x01a6 | +0x80=6, +0x81=6, +0x85=1, +0x86=80, +0x88=10, +0x89=80 |
+| Dispel | 0x30b8 | 124, 124 | 3 | 0, 2, 2 | 0 / 0 / 10 | 0x01a9 | +0x80=39, +0x81=39, +0x82=6, +0x83=38, +0x85=1, +0x86=30, +0x88=10, +0x89=80 |
+| Flare | 0x3170 | 104, 104 | 3 | 0, 1, 1 | 0 / 0 / 2 | 0x019f | +0x80=3, +0x81=3, +0x85=1, +0x86=100 |
+| Glimmer of Despair | 0x412a | 946, 946 | 26 | 0, 0, 0 | 0 / 0 / 1 | 0x07d0 | +0x80=9, +0x81=9, +0x82=14, +0x85=1, +0x86=10 |
+| Fira | 0x41ed | 82, 82 | 3 | 0, 1, 1 | 0 / 0 / 3 | 0x0190 | +0x80=15, +0x81=15, +0x85=1, +0x86=80 |
+| Blizzara | 0x41ee | 84, 84 | 3 | 0, 1, 1 | 0 / 0 / 4 | 0x0192 | +0x80=16, +0x81=16, +0x85=1, +0x86=30 |
+| Thundara | 0x41ef | 86, 86 | 3 | 0, 1, 1 | 0 / 0 / 5 | 0x0194 | +0x80=17, +0x81=17, +0x85=1, +0x86=100 |
+| Watera | 0x41f0 | 88, 88 | 3 | 0, 1, 1 | 0 / 0 / 6 | 0x0196 | +0x80=18, +0x81=18 |
+| Firaga | 0x41f1 | 90, 90 | 3 | 0, 1, 1 | 0 / 0 / 3 | 0x0198 | +0x80=15, +0x81=15 |
+| Blizzaga | 0x41f2 | 92, 92 | 3 | 0, 1, 1 | 0 / 0 / 4 | 0x019a | +0x80=16, +0x81=16 |
+| Thundaga | 0x41f3 | 94, 94 | 3 | 0, 1, 1 | 0 / 0 / 5 | 0x019c | +0x80=17, +0x81=17 |
+| Waterga | 0x41f4 | 96, 96 | 3 | 0, 1, 1 | 0 / 0 / 6 | 0x019e | +0x80=18, +0x81=18, +0x85=1, +0x86=40 |
+| Punch | 0x4129 | 758, 758 | 3 | 0, 0, 0 | 0 / 0 / 0 | 0x07d0 | +0x80=1, +0x81=1, +0x85=1, +0x86=10 |
+| Bloody Breath | 0x412b | 945, 945 | 25 | 0, 0, 0 | 0 / 0 / 7 | 0x07d0 | +0x80=38, +0x81=3, +0x82=38, +0x85=1, +0x86=10 |
