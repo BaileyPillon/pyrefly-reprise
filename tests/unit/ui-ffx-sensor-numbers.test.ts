@@ -41,11 +41,16 @@ describe('the Sensor plate prints its numbers in the house style', () => {
     expect(panel.el.textContent).not.toContain('99999');
   });
 
-  it('a long read-out is set a size smaller (more than 13 characters), a short one is not', () => {
+  it('a long read-out is set a size smaller (more than 13 characters) on both lines, a short one is not', () => {
     const panel = new SensorPanel();
     panel.show(yuYevon());
     expect(panel.el.querySelector('.ffx-sensor__hp')?.classList.contains('ffx-sensor__num--long')).toBe(true);
-    expect(panel.el.querySelector('.ffx-sensor__mp')?.classList.contains('ffx-sensor__num--long')).toBe(false);
+    expect(panel.el.querySelector('.ffx-sensor__mp')?.classList.contains('ffx-sensor__num--long')).toBe(true); // one size on both lines
+    const small = { ...(makeFakeCombatants()['mortiorchis'] as FFXCombatant), id: 'small', hp: 4000, mp: 10, stats: { ...(makeFakeCombatants()['mortiorchis'] as FFXCombatant).stats, maxHp: 4000, maxMp: 10 } } as FFXCombatant;
+    const panel2 = new SensorPanel();
+    panel2.show(small);
+    expect(panel2.el.querySelector('.ffx-sensor__hp')?.classList.contains('ffx-sensor__num--long')).toBe(false);
+    expect(panel2.el.querySelector('.ffx-sensor__mp')?.classList.contains('ffx-sensor__num--long')).toBe(false);
     expect(longClass('99,999 / 99,999')).toBe(' ffx-sensor__num--long');
     expect(longClass('4,000 / 4,000')).toBe('');
   });

@@ -344,6 +344,7 @@ export class SensorPanel {
     // FOC54-005: the house number style (thousands separators, as the results and the advisor print them), so Yu Yevon's 99,999 reads as one number, not five digits.
     const hpText = known ? `${plateNumber(target.hp)} / ${plateNumber(maxHp)}` : '? ? ?';
     const mpText = `${plateNumber(target.mp)} / ${plateNumber(target.stats.maxMp || target.mp)}`;
+    const size = longClass(hpText) || longClass(mpText); // both lines at one size, whichever is the long one
     const chips =
       !known
         ? ''
@@ -378,9 +379,9 @@ export class SensorPanel {
 
     this.bodyEl.innerHTML = `
       <div class="ffx-sensor__name">${escapeHtml(target.name)}</div>
-      <div class="ffx-sensor__hp${longClass(hpText)}">HP&nbsp;&nbsp;${hpText}</div>
+      <div class="ffx-sensor__hp${size}">HP&nbsp;&nbsp;${hpText}</div>
       <div class="ffx-sensor__bar"><i style="width:${(hpFrac * 100).toFixed(1)}%"></i></div>
-      ${known ? `<div class="ffx-sensor__mp${longClass(mpText)}">MP&nbsp;&nbsp;${mpText}</div>` : ''}
+      ${known ? `<div class="ffx-sensor__mp${size}">MP&nbsp;&nbsp;${mpText}</div>` : ''}
       ${tail}
     `;
   }
