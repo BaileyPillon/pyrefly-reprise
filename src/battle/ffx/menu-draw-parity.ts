@@ -1,7 +1,7 @@
 /**
  * **Menu draw parity** (re-parity RC11, lane "FFX menu parity"; **FFX only**; handoff `docs/handoff/re-parity-rc11-ffx-menu-parity.md`, plan `docs/plans/re-parity-rc11-ffx-menu-parity-review.md`).
  *
- * One switch, {@link MENU_DRAW_PARITY}, **off**: while it is off the FFX command menu is exactly what it was. While it is on, the menu is *drawn* the way the original draws it. Nothing here
+ * One switch, {@link MENU_DRAW_PARITY}, **on as shipped (r55 RE, Bailey 2026-10-18, "I'll go with all of your recommendations") with items `cursor` (f) and `help` (g, Bailey's "H") left off**: while it is off the FFX command menu is exactly what it was. While it is on, the menu is *drawn* the way the original draws it. Nothing here
  * changes what a player may do, what a battle rolls or what its event log says; it changes which rows are shown, which are greyed, and where the cursor may rest.
  *
  * The original (`FFX.exe`, Steam build 25501027; research notes `FFX-G11` and `FFX-G11b`): the draw loop (0x008A49B0) resolves **every** row of a list (resolver 0x0089ACA0) and skips a row only for -4 (an
@@ -27,10 +27,10 @@ import type { AvailableCommand, FFXCombatant } from '../common/types.ts';
 export type MenuParityItem = 'openers' | 'overdrive' | 'summon' | 'blocked' | 'talk' | 'cursor' | 'help';
 
 /**
- * The one switch. `on: false` and every FFX menu is as before. `skip` lists items to leave off while the switch is on, so Bailey can take the rows of the decision table one at a time without a
+ * The one switch, as shipped by r55 RE: `on: true` with `cursor` and `help` skipped (items a to e on). `on: false` and every FFX menu is as before. `skip` lists items to leave off while the switch is on, so Bailey can take the rows of the decision table one at a time without a
  * second switch. A test or a bench flips it with {@link setMenuDrawParity} and puts it back with the function that returns.
  */
-export const MENU_DRAW_PARITY: { on: boolean; skip: MenuParityItem[] } = { on: false, skip: [] };
+export const MENU_DRAW_PARITY: { on: boolean; skip: MenuParityItem[] } = { on: true, skip: ['cursor', 'help'] };
 
 /** Is this item's parity rule in force right now? */
 export function menuParity(item: MenuParityItem): boolean {

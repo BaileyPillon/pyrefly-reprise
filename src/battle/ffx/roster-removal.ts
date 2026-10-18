@@ -12,11 +12,11 @@
  *
  * ## What this module does
  *
- * One switch, {@link CH3_ROSTER_REMOVAL}, **off**. `EnemyGroupDef.rosterRemoved` (set on Chapter III's links 2 to 7 by `data/ffx/enemies/braskas-final-aeon.ts`) lists the roster keys the event had removed before that
+ * One switch, {@link CH3_ROSTER_REMOVAL}, **on** (Bailey, 2026-10-18, "I'll go with all of your recommendations"; release 55). `EnemyGroupDef.rosterRemoved` (set on Chapter III's links 2 to 7 by `data/ffx/enemies/braskas-final-aeon.ts`) lists the roster keys the event had removed before that
  * link's fight; while the switch is on, {@link applyRosterRemoval} writes one `state.flags` key per aeon (like the script lock's, so a fork and the advisor's dry runs see the rule). A removed aeon **stays in
  * `aeonRoster`** (the possessed copy's stats are read from it; `ai/possession-setup.ts`): it is only left out of `availableAeons`, `grandSummonChoices`, the Summon rows and the picker, and
  * `formation-commands.ts#commandRefused` refuses a Summon or a Grand Summon that names it (0 events, the turn kept open). A Grand Summon with **no aeon left** is refused and its row drawn greyed.
- * With the switch off no flag is written and no battle changes.
+ * With the switch off (`setCh3RosterRemoval(false)`) no flag is written and no battle changes.
  *
  * Layering: pure, deterministic, no DOM [AGENTS.md hard rule 1].
  */
@@ -24,8 +24,8 @@
 import type { EnemyGroupDef } from '../common/types.ts';
 import type { Ctx } from './state.ts';
 
-/** The one switch. `{ on: false }` and no group is read: every battle plays exactly as it did before this lane. */
-export const CH3_ROSTER_REMOVAL: { on: boolean } = { on: false };
+/** The one switch, **on** as shipped (r55 RE). `{ on: false }` and no group is read: every battle plays exactly as it did before this lane. */
+export const CH3_ROSTER_REMOVAL: { on: boolean } = { on: true };
 
 /** Set the switch; the returned function puts it back as it was (the lock lane's pattern). */
 export function setCh3RosterRemoval(on: boolean): () => void {

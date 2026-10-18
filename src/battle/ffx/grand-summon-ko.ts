@@ -15,7 +15,7 @@
  *
  * ## What this module does
  *
- * One switch, {@link GRAND_SUMMON_KO_REFUSED}, **off**. While it is on, `engine.ts#submit` refuses (0 events, the turn kept open) a Grand Summon that **names** an aeon the game's list would draw greyed, and the
+ * One switch, {@link GRAND_SUMMON_KO_REFUSED}, **on** (Bailey, 2026-10-18, "I'll go with all of your recommendations"; release 55). While it is on, `engine.ts#submit` refuses (0 events, the turn kept open) a Grand Summon that **names** an aeon the game's list would draw greyed, and the
  * picker draws that entry greyed (`enabled: false`), so the rule and the drawing come together. A bare Grand Summon (`aeonId: ''`, the roll a headless run makes when no aeon can come) is not refused, so no
  * strategy can loop on a refusal; no player reaches it through the picker, every entry of which is then greyed. The script lock (`formation-commands.ts`) and the mirror lock keep their own refusals.
  *
@@ -27,8 +27,8 @@ import type { Ctx } from './state.ts';
 import { aeonSummonable } from './adapt/aeon-party.ts';
 import { SISTER_IDS } from './adapt/sisters.ts';
 
-/** The one switch. `{ on: false }` and no Grand Summon is refused for the aeon's state: every battle plays exactly as it did before this lane. */
-export const GRAND_SUMMON_KO_REFUSED: { on: boolean } = { on: false };
+/** The one switch, **on** as shipped (r55 RE). `{ on: false }` and no Grand Summon is refused for the aeon's state: every battle plays exactly as it did before this lane. */
+export const GRAND_SUMMON_KO_REFUSED: { on: boolean } = { on: true };
 
 /** Set the switch; the returned function puts it back as it was (the lock lane's pattern). */
 export function setGrandSummonKoRefused(on: boolean): () => void {

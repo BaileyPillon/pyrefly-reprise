@@ -1,7 +1,7 @@
 /**
  * **Target-step parity** (re-parity RC11, lane "FFX target parity"; **FFX only**; handoff `docs/handoff/re-parity-rc11-ffx-target-parity.md`, plan `docs/plans/re-parity-rc11-ffx-target-parity-review.md`).
  *
- * One switch, {@link TARGET_STEP_PARITY}, **off**: while it is off no menu row carries a `targetStep` and nothing about the command menu, the strategies or a battle changes. While it is on the
+ * One switch, {@link TARGET_STEP_PARITY}, **on as shipped (r55 RE, Bailey 2026-10-18) with `cursorStartFoe` (t3b) and `sideSwitch` (t5) left off**: while it is off no menu row carries a `targetStep` and nothing about the command menu, the strategies or a battle changes. While it is on the
  * FFX engine publishes, for each row, the target step the original shows (`AvailableCommand.targetStep`), and the HUD (`src/ui/ffx/loneTarget.ts`, `targetStepUi.ts`) reads it. Legality
  * (`validTargets`) and resolution are untouched, so a strategy, the advisor or the coach, which read `validTargets` only, cannot be moved by it.
  *
@@ -30,8 +30,8 @@ import { targetSpecOf, type TargetWordSpec } from './kernel/target-words.ts';
 /** The items of the plan, by name. */
 export type TargetStepItem = 'selfStep' | 'overdriveStep' | 'cursorStart' | 'cursorStartFoe' | 'sideSwitch' | 'openerOne' | 'copycat';
 
-/** The one switch. `on: false` and every FFX menu is as before. `skip` lists items to leave off while the switch is on. */
-export const TARGET_STEP_PARITY: { on: boolean; skip: TargetStepItem[] } = { on: false, skip: [] };
+/** The one switch, as shipped by r55 RE: `on: true` with `cursorStartFoe` and `sideSwitch` skipped. `on: false` and every FFX menu is as before. `skip` lists items to leave off while the switch is on. */
+export const TARGET_STEP_PARITY: { on: boolean; skip: TargetStepItem[] } = { on: true, skip: ['cursorStartFoe', 'sideSwitch'] };
 
 /** Is this item's parity rule in force right now? */
 export function targetStepParity(item: TargetStepItem): boolean {
