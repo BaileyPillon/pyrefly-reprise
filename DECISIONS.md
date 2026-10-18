@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1359 decisions in all: 897 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 886 of the written decisions record a blanket yes.
+1470 decisions in all: 960 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 963 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1266 |
-| proposed | 15 |
-| deferred | 6 |
-| rejected | 12 |
-| superseded | 60 |
-| **All** | **1359** |
+| adopted | 1375 |
+| proposed | 9 |
+| deferred | 7 |
+| rejected | 13 |
+| superseded | 66 |
+| **All** | **1470** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 108 |
-| art | 284 |
+| combat | 139 |
+| art | 304 |
 | visuals | 90 |
-| camera | 64 |
+| camera | 65 |
 | audio | 127 |
-| ui | 142 |
+| ui | 148 |
 | story | 16 |
-| chapters | 215 |
+| chapters | 227 |
 | guide | 32 |
-| release | 63 |
+| release | 66 |
 | hosting | 18 |
-| process | 117 |
-| critic | 36 |
-| data | 15 |
-| tech | 14 |
+| process | 148 |
+| critic | 37 |
+| data | 17 |
+| tech | 18 |
 | site | 18 |
-| **All** | **1359** |
+| **All** | **1470** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 645 |
-| FFX only | 393 |
-| FFX-2 only | 303 |
+| both games | 699 |
+| FFX only | 424 |
+| FFX-2 only | 329 |
 | FF7 hidden experiment | 18 |
-| **All** | **1359** |
+| **All** | **1470** |
 
 ## Standing rules in force
 
@@ -109,31 +109,28 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **Parity findings reach live builds as they land**: every finished decompilation lane goes into the next release candidate rather than a batch at the end, and each report separates what is decompiled, what is wired into the engine and what is live. Decision [D-654](#d-654) (2026-10-09, both games).
 - **ElevenLabs credits: keep a floor of 10,000 until the monthly reset on 2026-11-07; no top-up or plan change without asking, because that spends money (both games)**: Never let the ElevenLabs credits fall below 10,000 before the 2026-11-07 reset, and never top up or change the plan without asking Bailey first (AGENTS.md rule 11). Decision [D-711](#d-711) (2026-10-10, both games).
 - **Loop seams are judged by measurement (click ratio, level step, run-on error, the thresholds the Bahamut lane used), not by ear; he can flag any seam he hears (both games)**: A music loop seam is accepted or rejected by its measured click ratio, level step and run-on error (the Bahamut lane's thresholds), not by an agent's ear; Bailey can flag any seam he hears. Decision [D-716](#d-716) (2026-10-10, both games).
+- **STANDING DEPLOY WORDS: every release is deployed as soon as its review says it can ship; the driver quotes his sentence as the owner override while the deep-review cap holds, and the deep review owed still runs on the live build (both games)**: Every release is deployed as soon as its review’s ship verdict is SHIP; the driver quotes his sentence as the owner override while the deep-review cap holds, and the deep review still owed runs on the live build afterwards. Decision [D-931](#d-931) (2026-10-17, both games).
+- **The promises tracker: every adopted decision is classified with evidence, read at every session start, every release closes promises or says why, and he can see the list on a phone page (both games, process)**: Every agreed recommendation becomes a ledger row the same day; the promises tracker is read at every session start and before planning a batch; every release says which promises it closed or why none; nothing is marked done without evidence. Decision [D-948](#d-948) (2026-10-17, both games).
+- **The coordination board and the collaboration with Codex are paused until further notice; everything is reported to him in the game chat**: No coordination board, no coordination files and no Codex tasks until he lifts the pause; everything goes to him in the game chat. Decision [D-956](#d-956) (2026-10-17, both games).
 
 ## Waiting on Bailey's yes
 
 Proposed, asked or drafted, with no yes on record. Nothing here is built.
 
 - [D-010](#d-010) — Active mode: an enemy hit closes the open menu and delays that character
-- [D-012](#d-012) — Product brief
 - [D-013](#d-013) — Thrift habits (critic round only at milestones, one deploy per work block, fresh session past about 200k of context, a written weekly brief)
 - [D-160](#d-160) — NOT covered by the 2026-09-25 "I'll go with all your recommendations" yes: battle-pose candidates, the judge-locked art-sets question, and the round-12 human judgments
 - [D-253](#d-253) — Audio (§8 Q1): NOT answered — today's music score, the control/A/B/C pick, the Macalania scene cue and Chapter IX's own cue are all still open
-- [D-254](#d-254) — Phase lighting (D-224, option A): Bailey will look in Chapter I and say stronger or fine — still open
-- [D-255](#d-255) — Vegnagun implosion ships after Bailey looks at its frames — still open, frames owed
 - [D-256](#d-256) — Accessibility Q4 and Q7 (OR-13): pictures first — still open
 - [D-258](#d-258) — Steam session part 2: the yes stands (D-205), but the time is still Bailey's to pick
-- [D-582](#d-582) — ElevenLabs tracks: ship them as he heard them (wide stereo, failing the project's stereo gate) or swap to the staged narrow versions; the driver's default is as heard and he has not chosen (both …
 - [D-633](#d-633) — NOT covered by his yes of 22:42:45, because the driver gave no recommendation first: the name of the Behind the Scenes page, which of his quotes appear, Yunalesca's first form, the art picks and his …
 - [D-779](#d-779) — The fayth session's own defaults, which were not his recommendations: a one-click launcher at D:/Tools/ffx-parity/options/play-fayth.cmd, the comparison page skipped, and the working title "Evrae, …
-- [D-830](#d-830) — NOT decided: titles for the new tracks on the SOUND TEST screen (FOC45-03) are on-screen text; the audio lane only proposes them for him (both games)
-- [D-893](#d-893) — Biran's attack r2-11 is offered as an optional pick (a roaring lunge, the one new-chapter pose clearly better than the idle); every other Biran and Yenke pose slot keeps the idle because the pose …
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17)
 
 ## Ledger
 
@@ -399,8 +396,8 @@ Friday · 38 decisions
   - Source: AGENTS.md hard rule 9
 - <a id="d-012"></a>**D-012** — Product brief
   - Bailey: no verbatim quote on record for this decision
-  - What changed: Nothing changed yet: the draft brief waits for his yes. The four picks it is built from are recorded as E-023.
-  - area process · both games · proposed · nothing to build
+  - What changed: ANSWERED 2026-10-17 by D-932 (part P7), his blanket yes of that day: the Product Brief is adopted as drafted, and docs/PRODUCT-BRIEF.md is committed as ADOPTED 2026-10-17 in the r52 records pass. Before: Nothing changed yet: the draft brief waits for his yes. The four picks it is built from are recorded as E-023.
+  - area process · both games · adopted · delivery implemented
   - Source: docs/PRODUCT-BRIEF.md
 - <a id="d-013"></a>**D-013** — Thrift habits (critic round only at milestones, one deploy per work block, fresh session past about 200k of context, a written weekly brief)
   - Bailey: no verbatim quote on record for this decision
@@ -2030,7 +2027,7 @@ Friday · 175 decisions
 - <a id="d-147"></a>**D-147** — Chapter XIV (FFX), Isaaru: all B1-B22 and O-1..O-6 preflight recommendations adopted, with the review's corrections applied
   - Bailey: “I'll go with all your recommendations” (blanket yes)
   - What changed: All 22 preflight questions (B1 to B22) and all six options rounds (O-1 to O-6) of the Isaaru plan were adopted as recommended, with the review's corrections applied; each is its own row below. Nothing was built by the decision itself; Chapter XIV was listed in release 18 (2026-09-26). FFX only.
-  - area chapters · FFX · adopted · delivery not scheduled · at ~01:40 EDT
+  - area chapters · FFX · adopted · delivery not scheduled · at ~01:40 EDT · partly replaced by [D-959](#d-959)
   - Source: docs/plans/chapter-isaaru-review.md; AGENTS.md
   - <a id="d-147-b1"></a>**D-147/B1** — B1: Title, number, location
     - What changed: Adopted as recommended: "Isaaru" (the bestiary's boss name; the OST title belongs to other fights); XIV by registration (D-058) after Omnis and Trema; "Via Purifico — beneath Bevelle"; story order VIII → this → X.
@@ -2044,8 +2041,10 @@ Friday · 175 decisions
     - What changed: Adopted as recommended: a; it opens the sourced Grand Summon line.
   - <a id="d-147-b6"></a>**D-147/B6** — B6: Yuna's own commands
     - What changed: Adopted as recommended: a, labelled estimate; the mirror-locked aeon greyed with its reason. Still a question: the O-5 frames are *shown with* a (review).
+    - superseded by [D-959](#d-959)
   - <a id="d-147-b7"></a>**D-147/B7** — B7: Items
     - What changed: Adopted as recommended: a, with attack items greyed under B6 = a. Also: may an aeon use Items? Today every aeon's menu has an Items row (commands.ts:195 has no aeon check); no research line sources it, and combat-core §6.1 says party items cannot target aeons [single source] (review S5). Recommend: no Items row on an aeon, [estimate].
+    - superseded by [D-959](#d-959)
   - <a id="d-147-b8"></a>**D-147/B8** — B8: Isaaru
     - What changed: Adopted as recommended: a [estimate] (O-4).
   - <a id="d-147-b9"></a>**D-147/B9** — B9: Unsourced AI
@@ -2731,7 +2730,7 @@ Sunday · 63 decisions
 - <a id="d-242"></a>**D-242** — Three FFX-2 switches (§8 Q4, four including PR-0107): IC-1 ON, PR-0106 ON (once, turn 5 Fan Slap), PR-0124 OFF (dressphere carry), PR-0107 OFF (Chapter VI random opening gauges)
   - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
   - What changed: Four FFX-2 switches are set: IC-1 ON (an immune hit opens no chain; source Split_Infinity), PR-0106 ON (once, turn 5 Fan Slap), PR-0124 OFF (the dressphere carry) and PR-0107 OFF (Chapter VI's random opening gauges); benches were re-measured (Chapter VI 157 to 165, Chapter XV 36 to 48 of 200 at human pace), an independent check found 0 blockers and it merged to main (merge e60afaff). FFX-2 only.
-  - area combat · FFX-2 · adopted · delivery implemented · at ~11:00 EDT
+  - area combat · FFX-2 · adopted · delivery implemented · at ~11:00 EDT · partly replaced by [D-933](#d-933)
   - Source: docs/plans/iteration-2-batches.md; research/ffx2; and others
   - <a id="d-242-ic-1"></a>**D-242/ic-1** — IC-1 ON: an immune hit opens no chain (source Split_Infinity, bench inside the accepted band)
     - What changed: Switched on in src/battle/ffx2/constants.ts. FFX-2 only.
@@ -2836,13 +2835,13 @@ Sunday · 63 decisions
   - Source: docs/plans/iteration-2-batches.md
 - <a id="d-254"></a>**D-254** — Phase lighting (D-224, option A): Bailey will look in Chapter I and say stronger or fine — still open
   - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
-  - What changed: Nothing changed: he has not yet looked at D-224's built phase lighting in Chapter I and said stronger or fine, so that verdict step stays open (D-224 itself stands).
-  - area visuals · both games · proposed · nothing to build
+  - What changed: ANSWERED 2026-10-17 by D-932 (part P5): Chapter I's phase lighting is kept as it is (the driver's recommendation under his blanket yes). Before: Nothing changed: he has not yet looked at D-224's built phase lighting in Chapter I and said stronger or fine, so that verdict step stays open (D-224 itself stands).
+  - area visuals · both games · adopted · nothing to build
   - Source: Item 10 of the driver's list records that Bailey has not yet looked at D-224's built phase lighting (the reduced option A: grade, fog, floor glow, a …
 - <a id="d-255"></a>**D-255** — Vegnagun implosion ships after Bailey looks at its frames — still open, frames owed
   - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
-  - What changed: Nothing changed: the Vegnagun implosion in Chapter V is built but withheld until he looks at its frames, which are still owed to him. FFX-2 only.
-  - area visuals · FFX-2 · proposed · nothing to build
+  - What changed: ANSWERED 2026-10-17 by D-932 (part P6): the driver judges the implosion frames against the target in his place. Before: Nothing changed: the Vegnagun implosion in Chapter V is built but withheld until he looks at its frames, which are still owed to him. FFX-2 only.
+  - area visuals · FFX-2 · adopted · delivery not scheduled
   - Source: Item 11 of the driver's list: the Vegnagun implosion (Chapter V) is built but withheld from shipping until Bailey looks at its frames and gives a …
 - <a id="d-256"></a>**D-256** — Accessibility Q4 and Q7 (OR-13): pictures first — still open
   - Bailey: “I'll go with all of your recommendations. also i tried my overdrive and i think valefor came out i had yuna selected. the aeon looks nothing like valefor though and my whole party was still there.” (blanket yes)
@@ -4724,8 +4723,8 @@ Wednesday · 69 decisions
   - Source: Bailey, 2026-10-07 17:48:45 EDT, in the Claude Code chat (the times are the session transcript's), through the driver's question card (posed …
 - <a id="d-582"></a>**D-582** — ElevenLabs tracks: ship them as he heard them (wide stereo, failing the project's stereo gate) or swap to the staged narrow versions; the driver's default is as heard and he has not chosen (both games)
   - Bailey: no verbatim quote on record for this decision
-  - What changed: Nothing changed: his question and the driver's default are all there is. The three new tracks in 39.4 ship as he heard them, and they fail the project's stereo gate (correlation, side-to-mid and mono loss against 0.60, -6 dB and -1 dB): Seymour A 0.29, -2.6, -1.9; chapter select B 0.43, -4.0, -1.5; the title 0.602, -6.0, -1.0 (it passes only because its 33-second flute opening is nearly mono; its looping piano alone reads 0.469, -4.3, -1.36). Narrow versions of each (correlation 0.73 to 0.74), which pass the gate and hold up better on one small speaker but sound a bit smaller, are staged and swap in with one command: node tools/audio/music-elevenlabs.mjs install --variant=narrow, then measure. The driver told him at 09:47:37 that unless he says "narrow" they ship as heard; he has not said it. If he says "narrow", record that decision instead of this one. UPDATE, 2026-10-08 ~12:00 EDT: the same question now applies to chapter select A in release 39.5: as picked (wide) it fails the stereo gate (correlation 0.529, side-to-mid -5.1 dB against 0.60 and -6 dB), C passes, and a narrow A that passes is staged (A-0548). Still his call; the driver's default is as heard.
-  - area audio · both games · proposed · nothing to build · see [D-544](#d-544), [D-550](#d-550), [D-557](#d-557) · refines [D-521](#d-521)
+  - What changed: ANSWERED 2026-10-17 by D-932 (part P3): the ElevenLabs tracks ship as he heard them (the driver's default under his blanket yes). Before: Nothing changed: his question and the driver's default are all there is. The three new tracks in 39.4 ship as he heard them, and they fail the project's stereo gate (correlation, side-to-mid and mono loss against 0.60, -6 dB and -1 dB): Seymour A 0.29, -2.6, -1.9; chapter select B 0.43, -4.0, -1.5; the title 0.602, -6.0, -1.0 (it passes only because its 33-second flute opening is nearly mono; its looping piano alone reads 0.469, -4.3, -1.36). Narrow versions of each (correlation 0.73 to 0.74), which pass the gate and hold up better on one small speaker but sound a bit smaller, are staged and swap in with one command: node tools/audio/music-elevenlabs.mjs install --variant=narrow, then measure. The driver told him at 09:47:37 that unless he says "narrow" they ship as heard; he has not said it. If he says "narrow", record that decision instead of this one. UPDATE, 2026-10-08 ~12:00 EDT: the same question now applies to chapter select A in release 39.5: as picked (wide) it fails the stereo gate (correlation 0.529, side-to-mid -5.1 dB against 0.60 and -6 dB), C passes, and a narrow A that passes is staged (A-0548). Still his call; the driver's default is as heard.
+  - area audio · both games · adopted · nothing to build · see [D-544](#d-544), [D-550](#d-550), [D-557](#d-557) · refines [D-521](#d-521)
   - Source: docs/audio/music-elevenlabs-2026-10-07.json
 - <a id="d-583"></a>**D-583** — Spend the last 13 percent of the old account's week on the Leblanc fix only, then pause everything else until the weekly reset (both games)
   - Bailey: “Finish Leblanc only, then pause (Recommended)” (blanket yes)
@@ -6004,8 +6003,8 @@ Tuesday · 29 decisions
   - Source: Bailey, 2026-10-13 about 12:45 EDT, in the Claude Code chat, verbatim: “keep going please ill go with all your recommendations even for music and …
 - <a id="d-830"></a>**D-830** — NOT decided: titles for the new tracks on the SOUND TEST screen (FOC45-03) are on-screen text; the audio lane only proposes them for him (both games)
   - Bailey: no verbatim quote on record for this decision
-  - What changed: Item 69g. His blanket yes does not cover on-screen text, which needs options for him first (rule 9). The stand-in cue ids show id-derived titles (“Victory Bahamut” here, “Boss Bahamut” since batch 1) where composed tracks have names (“Iron Undertow”, “Noble Rot”); lane r46-audio2 wrote 17 proposed titles in its note only, and nothing on the screen changed. Still open (FOC45-03, polish).
-  - area audio · both games · proposed · nothing to build · see [D-785](#d-785), [D-824](#d-824) · refines [D-785](#d-785)
+  - What changed: ANSWERED 2026-10-17 by D-932 (part P4): the Sound Test titles are the ones proposed (the driver's recommendation under his blanket yes). Before: Item 69g. His blanket yes does not cover on-screen text, which needs options for him first (rule 9). The stand-in cue ids show id-derived titles (“Victory Bahamut” here, “Boss Bahamut” since batch 1) where composed tracks have names (“Iron Undertow”, “Noble Rot”); lane r46-audio2 wrote 17 proposed titles in its note only, and nothing on the screen changed. Still open (FOC45-03, polish).
+  - area audio · both games · adopted · delivery not scheduled · see [D-785](#d-785), [D-824](#d-824) · refines [D-785](#d-785)
   - Source: Bailey, 2026-10-13 about 12:45 EDT, in the Claude Code chat, verbatim: “keep going please ill go with all your recommendations even for music and …
 
 ### 2026-10-14
@@ -6115,7 +6114,7 @@ Wednesday · 20 decisions
 
 ### 2026-10-15
 
-Thursday · 47 decisions
+Thursday · 58 decisions
 
 - <a id="d-851"></a>**D-851** — The two STAT chapters are built overnight without the concept frames D-536 asked for, hidden behind the words “gagazet” (Biran and Yenke, number 25, FFX only) and “angra” (Angra Mainyu, number 26, FFX-2 only), with provisional local paintings; he plays first and picks the final art later
   - Bailey: “continue on implementing the unimplemented chapters over night please i am going to bed. resume local art generation over night.”
@@ -6329,9 +6328,9 @@ Thursday · 47 decisions
   - Source: Bailey, 2026-10-15 12:11:55 EDT, in the Claude Code chat (the times are the session transcript's), the first message after the chat moved to account …
 - <a id="d-893"></a>**D-893** — Biran's attack r2-11 is offered as an optional pick (a roaring lunge, the one new-chapter pose clearly better than the idle); every other Biran and Yenke pose slot keeps the idle because the pose recipe did not hold the costume (FFX only)
   - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
-  - What changed: Item 84c, offered to him at 14:00 EDT on 2026-10-15 (“Say the word and it goes in”) and not yet answered, so proposed. The pose recipe (text-to-image plus an IP-Adapter of the idle at 0.45) does not hold the idle's costume or mane and no knocked-out painting lies down; the best fallbacks if he wants a pose anyway are Biran attack r2-11, Yenke hurt r2-10 and Yenke cast r2-10, and the Gui recipe (image-to-image from the idle) is the fix to try. The 64 portrait candidates all fail the cutout guard (a zig-zag mane texture), so the installed head crops stay, as do the pause plates of both chapters. Nothing is installed. FFX only.
-  - area art · FFX · proposed · nothing to build · see [D-863](#d-863), [D-870](#d-870) · refines [D-863](#d-863)
-  - Source: Bailey, 2026-10-15 12:11:55 EDT, in the Claude Code chat (the times are the session transcript's), the first message after the chat moved to account …
+  - What changed: ANSWERED 2026-10-17 by D-932 (part P8): Biran's attack r2-11 is installed (the driver's recommendation under his blanket yes). Before: Item 84c, offered to him at 14:00 EDT on 2026-10-15 (“Say the word and it goes in”) and not yet answered, so proposed. The pose recipe (text-to-image plus an IP-Adapter of the idle at 0.45) does not hold the idle's costume or mane and no knocked-out painting lies down; the best fallbacks if he wants a pose anyway are Biran attack r2-11, Yenke hurt r2-10 and Yenke cast r2-10, and the Gui recipe (image-to-image from the idle) is the fix to try. The 64 portrait candidates all fail the cutout guard (a zig-zag mane texture), so the installed head crops stay, as do the pause plates of both chapters. Nothing is installed. FFX only.
+  - area art · FFX · adopted · delivery not scheduled · see [D-863](#d-863), [D-870](#d-870) · refines [D-863](#d-863)
+  - Source: Bailey, 2026-10-15 12:11:55 EDT, in the Claude Code chat (the times are the session transcript's), the first message after the account switch, …
 - <a id="d-894"></a>**D-894** — DELEGATED: art run 8's Angra Mainyu, Zarich and Tawrich jobs (960 to 963) never ran because the runner ended at 05:57 on its C: disk guard; they are rerun after C:'s page-file fix (FFX-2 only)
   - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
   - What changed: Item 84d. 0 of 10 slots were done for each of the three bodies, so nothing was curated. The runner's guard stopped it when C: ran low (C: read 13.6 GB at 04:53 with a 77.7 GB page file; after his next restart the page file drops to 8 GB and frees about 70 GB, with the command given to him by the disk session). The driver had told him at 04:54 that the run would go on to 09:30 and corrected that at 14:00. The three bodies keep their single standing painting each; no hurt or knocked-out painting exists. FFX-2 only.
@@ -6352,3 +6351,455 @@ Thursday · 47 decisions
   - What changed: Item 85c. The shared aeon pack (the kernels yojimbo.ts and sisters.ts and their wiring, re-parity-ffx-yojimbo-sisters 05b77e62) was usable by about 14:00; the RE session read the possession chain by 15:11 (D-895), so The Last Summoning was not held back by it: its scaffold lane was launched at about 18:05 in the tree that built r50-fixes, on branch ch-last-summoning off r49-rc, merging the research note and the engine, with the record fixes and Chapter III's digests pinned (A-0787). The mirror chapter's scaffold waits for the engine's final checked tip before wiring (A-0783). Art: the Dark Aeons' idle paintings are in the r50 mirror and the chapters' other art waits for r51 because of the junction guard (D-871). FFX only.
   - area process · FFX · adopted · delivery in progress · see [D-895](#d-895), [D-886](#d-886), [D-887](#d-887) · refines [D-895](#d-895)
   - Source: Bailey, 2026-10-15 14:37:23 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: “I’ll go with all your recommendations I …
+- <a id="d-898"></a>**D-898** — DELEGATED: the hidden chapters open on a phone: a long press on the chapter board’s “Chapter” label opens a small text field with the phone keyboard, and the typed letters feed the same door words; the chapters stay hidden until he has played them (both games)
+  - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 86a. He was on his phone and could not find the two chapters that had gone live (“You said two new chapters went live but I just went to the website and I don't see it?”): they are hidden behind typed words and the board's doors only listened for physical keys, so on a phone no word could be typed. The driver's recommendation, built in r50 under his standing yes: press and hold the small label at the top of the board for about half a second and a field appears; any hidden chapter's word typed in it opens that chapter exactly as the same word typed on a keyboard does; Enter, putting the keyboard away or Escape closes it; a wrong word opens nothing; nothing shows until asked; FF7's seven taps are unchanged. The chapters stay hidden (not listed) until he has played them and says to list them. LIVE since r50 (8a3e8eff7, 2026-10-16T19:18Z); the r50 focused review tested the field by touch. Both games (shared board).
+  - area ui · both games · adopted · delivery implemented · see [D-848](#d-848), [D-851](#d-851) · refines [D-848](#d-848)
+  - Source: Bailey, 2026-10-15 about 19:30 EDT, in the Claude Code chat, verbatim: “You said two new chapters went live but I just went to the website and I …
+- <a id="d-899"></a>**D-899** — DELEGATED: the RE session’s Overdrive minigames lane (re-parity-rc9-ffx-overdrives 1c21857e) ships in r51, with the opt-in edge-only input watcher accepted, the Bushido key labels kept, the Fury caption showing the real spell name and no gamepad stick for Fury until he asks (FFX only)
+  - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 86b. The lane was checked by the driver and goes in r51. Four picks under his standing yes: the driver accepted the opt-in RawInputWatcher edgeOnly mode at its architecture review; the Bushido key labels are kept; the Fury caption shows the real spell name; there is no gamepad stick for Fury until he asks. The RE session sent him before and after sheets at about 19:20 (D-763 to D-765 had asked for pictures first). LIVE in r51 (d6dc0bdd7, 2026-10-17T16:41Z) and in r52: the marker moves in whole steps thirty times a second and the gold zones are the game's narrower ones, a held key counts once, three of Auron's four Bushido orders are the game's, Lulu's Fury casts from the game's table. FFX only (the lane is the FFX Overdrives).
+  - area combat · FFX · adopted · delivery implemented · see [D-763](#d-763), [D-764](#d-764), [D-765](#d-765)
+  - Source: Bailey's standing yes of 2026-10-15 (D-870), verbatim: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your …
+  - <a id="d-899-e"></a>**D-899/E** — The opt-in edge-only input watcher (RawInputWatcher edgeOnly) is accepted at the architecture review
+    - What changed: A key held down counts once in the three Overdrive screens, as the game reads a button as newly pressed; the mode is opt-in, so no other screen changes. In r51 and r52.
+  - <a id="d-899-b"></a>**D-899/B** — The Bushido key labels are kept
+    - What changed: The Bushido screen keeps its key labels; the game's button orders for three of Auron's four Bushidos are in (Banishing Blade as before).
+  - <a id="d-899-f"></a>**D-899/F** — The Fury caption shows the real spell name
+    - What changed: Lulu's Fury caption names the spell it casts.
+  - <a id="d-899-s"></a>**D-899/S** — No gamepad stick for Fury until Bailey asks
+    - What changed: Fury is played with the keys only; a stick is built only on his word.
+    - delivery not scheduled
+- <a id="d-900"></a>**D-900** — DELEGATED: the RE session’s kill-rewards lane for FFX-2 (re-parity-rc9-x2-rewards b97460e3) is kept and ships in r51: a monster still standing at victory pays nothing, which halves Chapter V’s spoils (FFX-2 only)
+  - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 86c. The lane was checked by the driver. “A monster still standing at victory pays nothing” is the lane's reading of note FFX2-G03, not a sentence of the note; it halves Chapter V's spoils because the Vegnagun Leg's three Nodes stay standing. RE recommends keeping it and it is kept under his standing yes (delegated), pending a live check if a save allows. BattleResult.ap now means the best-credited girl's AP (a documented change of meaning). LIVE in r51 and r52: EXP, AP, gil and loot arrive the moment a monster falls; loot is a roll with the game's numbers; each girl is credited her own AP, at most 99 a battle. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery implemented
+  - Source: Bailey's standing yes of 2026-10-15 (D-870), verbatim: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your …
+- <a id="d-901"></a>**D-901** — Chapter 27, the Dark Mirror, goes live overnight LISTED on the chapter board (not hidden), complete end to end, and deployed on his words, which are the owner override for that deploy (FFX only; the release is both games)
+  - Bailey: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be hidden. It needs to be done and complete end-to-end. Resume local art generation over night. I'm about to go to sleep. It needs to be done when I wake up in the morning.”
+  - What changed: Item 87a. Supersedes “play first, then list” (D-848) for this chapter only: Chapter XXVII, Mirror Aeons, is the last card of the Final Fantasy X group (the board reads “of 19”), its clear, best time and attempts are recorded in the save (the save format is unchanged), and the word `yojimbo` still opens it. The overnight deploy did not happen: the driver's sign-in expired at about 02:30 EDT and nothing ran until 11:30 (D-906, recorded honestly); r50 went out at 15:18 EDT on 2026-10-16 (8a3e8eff7, bundle CDwyZHD2) under his words of that morning. LIVE since then. FFX only for the chapter; the release carries both games' repairs.
+  - area chapters · FFX · adopted · delivery implemented · see [D-887](#d-887), [D-895](#d-895), [D-906](#d-906) · refines [D-887](#d-887)
+  - Source: Bailey, 2026-10-15 about 22:40 EDT, in the Claude Code chat, verbatim: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over …
+- <a id="d-902"></a>**D-902** — Local art generation runs overnight again: the Dark Aeons’ combat poses and the Sisters’ portraits first (installed before the release build), then the never-run Angra Mainyu pose jobs (FFX for the first part, FFX-2 for the second)
+  - Bailey: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be hidden. It needs to be done and complete end-to-end. Resume local art generation over night. I'm about to go to sleep. It needs to be done when I wake up in the morning.”
+  - What changed: Item 87b (rule 12: art generation was on by his word). Order: the Dark Aeons' combat poses and the Sisters' portraits (FFX), installed before the release build, then the Angra Mainyu pose jobs 960 to 963 that never ran (FFX-2). Candidates only; no approved painting is replaced. The night stalled at about 02:30 EDT (D-906) and the runner restarted under D-905; the Dark Aeons' own paintings reached the game in r50.1 (D-908), the rest stays in progress.
+  - area art · both games · adopted · delivery in progress · refines [D-894](#d-894)
+  - Source: Bailey, 2026-10-15 about 22:40 EDT, in the Claude Code chat, verbatim: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over …
+- <a id="d-903"></a>**D-903** — DELEGATED: the driver’s pacing for the night: the windows go to Chapter 27 first, the RE session runs only the engine follow-up (the Zanmato effect and the seven Sisters orders), Chapter 28 and the other RE lanes wait until morning, and r50-rc (code only) is merged into the Chapter 27 release instead of shipping alone
+  - Bailey: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be hidden. It needs to be done and complete end-to-end. Resume local art generation over night. I'm about to go to sleep. It needs to be done when I wake up in the morning.”
+  - What changed: Item 87c, the driver's usage pacing under his words (usage rule 15). r50 as deployed is r49 plus r50-rc (71625df2f: the two rc8 lanes, the two r50-fixes and five repairs) plus the Chapter 27 branch (c1ed918eb); the Last Summoning and the other RE lanes went into r51 and r52.
+  - area process · both games · adopted · delivery implemented · see [D-871](#d-871)
+  - Source: Bailey, 2026-10-15 about 22:40 EDT, in the Claude Code chat, verbatim: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over …
+- <a id="d-904"></a>**D-904** — DELEGATED: the player’s Zanmato stays faithful: it kills every enemy of one group with Death 255 (the Slice flag does nothing in this build), so a landed Zanmato ends a Dark Aeon fight at once; the guide says “a lucky Zanmato can end it” (FFX only)
+  - Bailey: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be hidden. It needs to be done and complete end-to-end. Resume local art generation over night. I'm about to go to sleep. It needs to be done when I wake up in the morning.”
+  - What changed: Item 87d. The RE session proved on the game's own code (origin/re-ffx-zanmato-and-orders 145c7169) that the player's Zanmato kills every legal enemy of the group it picked, whatever its Death or Slice immunity. KEPT as faithful (RE's and the driver's recommendation, under his standing yes; boss rows are never tuned). Dark Yojimbo's own Zanmato is row 0x410A (STR power 250, cap 99,999, cleanses Auto-Life). The possessed Yojimbo of Chapter 28 is a different row, 0x60E2 (a fixed 9,999 per front-liner, no status), fixed in the Chapter 28 lane. LIVE: Chapter XXVII since r50; Chapter 28 since r52. FFX only.
+  - area combat · FFX · adopted · delivery implemented · see [D-888](#d-888), [D-890](#d-890)
+  - Source: Bailey, 2026-10-15 about 22:40 EDT, in the Claude Code chat, verbatim: “We need to prioritize the dark Yojimbo and dark magnus sisters chapters over …
+
+### 2026-10-16
+
+Friday · 22 decisions
+
+- <a id="d-905"></a>**D-905** — The overnight art runner restarts with its output on D: and its guards adjusted (C: 12 to 8 GB, a D: floor of 25 GB to protect the release build, the M: guard dropped), the Angra Mainyu poses first in line
+  - Bailey: “I'm really going to sleep now. Please get it done end-to-end over night while I'm sleeping. Keep going with local art generation! I trust you! &lt;3”
+  - What changed: Item 87e. The runner restarted at about 00:45 EDT with the changes named in the title. The night then stalled: the driver's sign-in expired at about 02:30 and nothing ran until 11:30 (D-906).
+  - area process · both games · adopted · delivery implemented · refines [D-902](#d-902)
+  - Source: Bailey, 2026-10-16 about 00:45 EDT, in the Claude Code chat, verbatim: “I'm really going to sleep now. Please get it done end-to-end over night while …
+- <a id="d-906"></a>**D-906** — r50 (Chapter 27 Dark Mirror listed, plus r50-rc) is deployed the moment its focused review says SHIP; his words are the owner override (both games’ release; the chapter FFX only)
+  - Bailey: “keep going full speed, deploy it as soon as it ships”
+  - What changed: Item 88a. He asked at 11:30 EDT “so did you get it done? its 11:30 am the next day.”, then “ok well if you didnt get it done please do it now, no exceptions, priorities remain the same”, then the words above. The overnight stall is recorded honestly: the driver's sign-in expired at about 02:30 and nothing ran until 11:30. r50 was deployed as 8a3e8eff7 (bundle CDwyZHD2) at 2026-10-16T19:18:57Z (docs/deploys.log line 66) after a focused review of SHIP (FOC50-01 and FOC50-02 disclosed); the live verification passed on the exact artifact.
+  - area release · both games · adopted · delivery implemented · see [D-901](#d-901), [D-908](#d-908)
+  - Source: Bailey, 2026-10-16 about 11:35 to 12:00 EDT, in the Claude Code chat, verbatim, three messages: “so did you get it done? its 11:30 am the next day.” …
+- <a id="d-907"></a>**D-907** — DELEGATED: the driver deleted two FINISHED build folders to rescue D: (2.3 GB free): the r49 review candidate’s dist-gate and the Chapter 27 tree’s proof build, under his pick of 2026-10-04 to delete finished copies and builds
+  - Bailey: “Tell sessions to stop copying: stop making new full repo copies, reuse existing ones, and delete their finished copies and builds (removing folder links first).”
+  - What changed: Item 88b. Two finished folders were deleted under D-436: the r49 review candidate's dist-gate and the chapter 27 tree's dist (its proof build). Neither held anything not in a pushed branch or a live build.
+  - area process · both games · adopted · delivery implemented · refines [D-436](#d-436)
+  - Source: Bailey's pick of 2026-10-04 (D-436), verbatim: “Tell sessions to stop copying: stop making new full repo copies, reuse existing ones, and delete …
+- <a id="d-908"></a>**D-908** — r50.1 carries the repair of the screenshot he sent: Lulu looks tiny when hurt (and any other party pose more than about a tenth off its idle, fixed without repainting), the Dark Sisters drawn with the player’s bright paintings, Yuna’s Yojimbo’s approved painting and face, and the text fixes (FFX only)
+  - Bailey: “keep going full speed, lulu looks tiny when hurt - this problem again? ugh”
+  - What changed: Item 88c. His screenshot of live Chapter XXVII also showed the Dark Sisters drawn with the player's bright Sandy and Mindy paintings (the dark paintings existed but were not wired; the r50 review had filed it only as a suggestion). r50.1 (6b638df95, bundle B_bQDjUG, deployed 2026-10-17T00:44:01Z, docs/deploys.log line 67) holds: the four Dark Aeons wear their own paintings; a hurt figure is drawn within a tenth of her idle's height (Lulu's hurt 0.91 of her idle, was 0.67; her low-HP slouch 0.75, was 0.54; the same for eight others); Yuna's Yojimbo wears the approved painting (characters/yojimbo-cavern, D-054) and has a face in the turn bar and card; the Dark Mirror's words corrected. The live check verified Lulu (0.90 and 0.76) and the Dark paintings fixed. The deeper cause, the sizing rules, is the pose-continuity fix (D-911). FFX only.
+  - area art · FFX · adopted · delivery implemented · see [D-054](#d-054), [D-911](#d-911) · refines [D-906](#d-906)
+  - Source: Bailey, 2026-10-16 about 15:40 EDT, in the Claude Code chat, with a screenshot of live Chapter XXVII, verbatim: “keep going full speed, lulu looks …
+- <a id="d-909"></a>**D-909** — DELEGATED: the RE session’s Garment Grids lane (re-parity-rc9-x2-grids 15dccf81) ships in r51, with its five handoff decisions answered as recommended: correct the five grids’ data and add White Signet’s gate effects, an artwork look before the gate-colour flip, leave the builds’ dress placement, the wheel with its mockup, keep the common colours for 22 grids (FFX-2 only)
+  - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 88d. The lane was checked by the driver. The five decisions of its handoff, answered with the recommended answers (delegated, under his standing yes), one part each. LIVE in r51 (d6dc0bdd7) and r52: the 44 grids are the game's own (39 layouts as numbers, the path finder and the commit as a kernel); a girl can change to a dress joined to hers directly or through one gate; the gate colours are as before. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-875](#d-875)
+  - Source: Bailey's standing yes of 2026-10-15 (D-870), verbatim: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your …
+  - <a id="d-909-d1"></a>**D-909/D1** — D1: correct the five grids’ data and add White Signet’s gate effects from the plate rows (the RE lane)
+    - What changed: YES. Healing Wind, Ray of Hope, Seething Cauldron, Strength of One, Howling Wind and White Signet carry the game's plate rows and all 44 grids have their layouts.
+    - delivery implemented
+  - <a id="d-909-d2"></a>**D-909/D2** — D2: an artwork look (a mockup) before the gate-colour flip
+    - What changed: YES. The gate colours stay as they were until the look is shown to him.
+    - delivery not scheduled
+  - <a id="d-909-d3"></a>**D-909/D3** — D3: leave the builds’ dress placement as it is
+    - What changed: The builds' dress placement is not touched.
+    - delivery implemented
+  - <a id="d-909-d4"></a>**D-909/D4** — D4: decided with the Garment Grid wheel mockup (the Q17 options page)
+    - What changed: The wheel waits for its mockup and his pick.
+    - delivery not scheduled
+  - <a id="d-909-d5"></a>**D-909/D5** — D5: keep the common colours for 22 grids until the artwork look
+    - What changed: Unchanged until the artwork look (D2).
+    - delivery not scheduled
+- <a id="d-910"></a>**D-910** — DELEGATED: the RE session’s Mix rules lane (re-parity-rc9-x2-mix d5901a33) goes in r51, with the Mix row greyed until a picker exists, the picker mocked up first, an unattended Alchemist never mixing, the 27 missing ingredient items waiting for his yes and an FFX-2 back-out for every overlay left for later (FFX-2 only)
+  - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 88e. The lane was checked by the driver. Pre-existing bug: choosing Mix wasted the turn (no item picker). The driver's five picks under his standing yes (delegated), one part each. LIVE in r51 and r52: any two items make one of the game's 53 results, the order of the two changes the result for about a fifth of the pairs, both items leave the bag when the Mix is picked; the row is greyed with the reason “Not built” (the first wording, “needs the item picker”, was cut to “NEEDS THE ITE...” on desktop and was changed after the r51 merge review). FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-874](#d-874)
+  - Source: Bailey's standing yes of 2026-10-15 (D-870), verbatim: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your …
+  - <a id="d-910-m1"></a>**D-910/M1** — M1: grey the Mix row with its reason until the picker exists
+    - What changed: The Alchemist's Mix row is greyed with “Not built” (one switch, MIX_PICKER in src/battle/ffx2/constants.ts, turns it back on).
+    - delivery implemented
+  - <a id="d-910-m2"></a>**D-910/M2** — M2: the picker gets a mockup first (rule 9; the Q16 options spec)
+    - What changed: No picker is built before he picks from the mockup.
+    - delivery not scheduled
+  - <a id="d-910-m3"></a>**D-910/M3** — M3: an unattended Alchemist never mixes until he says otherwise
+    - What changed: The greyed row keeps the AI from Mixing; a test or an AI can still submit a Mix to the engine.
+    - delivery implemented
+  - <a id="d-910-m4"></a>**D-910/M4** — M4: the 27 missing ingredient items wait for his yes (rule 10)
+    - What changed: No item is added without his yes.
+    - delivery not scheduled
+  - <a id="d-910-m5"></a>**D-910/M5** — M5: an FFX-2 back-out for every overlay is a later engineering pick
+    - What changed: Not built; recorded as a later pick.
+    - delivery not scheduled
+- <a id="d-911"></a>**D-911** — Pose continuity gets a permanent fix: the critic measures figure height and feet, a blocking gate refuses an unregistered or out-of-band pose painting, the runtime never draws a wrong-sized pose, the swap is smoothed behind a switch, and the rig is the structural end state (both games)
+  - Bailey: “pose continuity is the strongest recurring issue we need a permanent fix for this please.”
+  - What changed: Item 89, his yes to a permanent fix (every painted figure in FFX and FFX-2 chapters swaps paintings per pose, and a figure's size or feet jump at the swap). The driver's reading of the five parts, under his standing yes (delegated). The diagnosis ran as a paper preflight (205 of 622 game poses outside a band, 36 painted subjects with no record, five FFX-2 Lady Luck rows planted at the knees, CHK-026 passing by construction because it read the engine's own table); the build is D-912; the gate, the install path, the runtime and the critic are LIVE in r52 (3c92b60cc). The ruler and the swap smoothing await his eye; the rig is D-916. r50.1's Lulu stature hold is recorded as a stopgap (heads draw x1.12 to x1.38 larger). Plumbing is both games; the Lady Luck rows are FFX-2 only; the Dark Aeons are FFX only.
+  - area art · both games · adopted · delivery in progress · see [D-908](#d-908), [D-912](#d-912), [D-916](#d-916)
+  - Source: Bailey, 2026-10-16 about 21:45 EDT, in the Claude Code chat, verbatim: “pose continuity is the strongest recurring issue we need a permanent fix for …
+  - <a id="d-911-a"></a>**D-911/a** — a: the critic’s CHK-026 measures figure height and feet, not only head boxes
+    - What changed: CHK-026 reads each pose's height against its idle and its feet from the pixels (the head reading is kept as a control); CHK-027 separates jerks at a swap from mid-move dashes. LIVE in r52.
+    - delivery implemented
+  - <a id="d-911-b"></a>**D-911/b** — b: a blocking gate at art install and at deploy refuses any pose painting without registration or outside its pose-class band
+    - What changed: tools/pose-gate.mjs and the installer tools/art-install.mjs; the gate runs in the tests and twice in a deploy and the owner override does not bypass it (only a waiver row carrying his quoted words clears it). LIVE in r52 (AGENTS.md rule 16).
+    - delivery implemented
+  - <a id="d-911-c"></a>**D-911/c** — c: a fail-safe runtime: a pose with no registration never draws wrong
+    - What changed: A painting nobody vouched for is treated as missing and the pose falls down its chain to the idle (logged once; listed by __pyrefly.poseTrust()). LIVE in r52.
+    - delivery implemented
+  - <a id="d-911-d"></a>**D-911/d** — d: swap smoothing (no single-frame jump, no two-painting ghost) behind a switch, with before and after clips for his eye
+    - What changed: Not built before he has seen the clips (end state first). A pose request in mid-blend no longer drops a painting that still shows (LIVE in r52).
+    - delivery not scheduled
+  - <a id="d-911-e"></a>**D-911/e** — e: the 2.5D-plus rig from the Quality Leap page is the structural end state, cast first
+    - What changed: Started on his later word (D-916).
+
+### 2026-10-17
+
+Saturday · 78 decisions
+
+- <a id="d-912"></a>**D-912** — DELEGATED: the driver’s architecture review of the pose-continuity diagnosis: build the census baseline, the pose gate with its waiver ledger and ratchet, the fail-safe runtime, the feetRow guard and Lady Luck rows, and the critic repairs now; show the ruler and the swap clips to him before building; the rig waits for his go (both games)
+  - Bailey: “pose continuity is the strongest recurring issue we need a permanent fix for this please.”
+  - What changed: Item 89a (2026-10-17 about 02:45 EDT). Findings of the diagnosis: 205 of 622 game poses outside a band, 36 painted subjects with no record, five FFX-2 Lady Luck rows planted at the knees by a measure.py fallback, CHK-026 passing by construction because it read the engine's own table, CHK-027 red in 26 of 26 reports so it carried no signal, the gate unable to hold on pose, no install step owning registration. Picks under his yes and his standing yes (delegated), one part each. Day one draws as live except the newly registered subjects and the Lady Luck rows; the legacy out-of-band poses became driver-recorded legacy waivers (254 rows: 57 FFX, 197 FFX-2) and the ratchet only shrinks. Lane: branch pose-gate from origin/r50-release; merged into r52-rc. LIVE in r52 (3c92b60cc).
+  - area art · both games · adopted · delivery implemented · see [D-911](#d-911) · refines [D-911](#d-911)
+  - Source: Bailey's standing yes of 2026-10-15 (D-870), verbatim: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your …
+  - <a id="d-912-w0"></a>**D-912/W0** — W0: the census baseline (build now)
+    - What changed: Every candidate build gets the static pose census.
+  - <a id="d-912-w1"></a>**D-912/W1** — W1: the pose gate with a sha-bound waiver ledger and a ratchet, one in-repo installer, npm test, a deploy preflight that --owner-override does not bypass, and the fail-safe runtime (build now)
+    - What changed: Only a waiver row carrying his quoted words clears the gate; the subjects with no record were registered. 1,106 paintings of 146 subjects read: 654 pass, 254 waived, 198 exempt, 0 fail.
+  - <a id="d-912-w2"></a>**D-912/W2** — W2 (FFX-2 only): the feetRow guard and the five Lady Luck rows repaired (build now)
+    - What changed: Paine's hurt, follow and two Overdrive reels and Rikku's attack stand on their soles again at 0.85, 0.99, 1.13, 1.13 and 0.72 of the idle's height; the feet gap Chapter IV's Djose showed (up to 93 px) is 2.3 px at worst.
+    - FFX-2
+  - <a id="d-912-w4"></a>**D-912/W4** — W4: CHK-026 reads figure height and feet from the pixels, CHK-027 split into swap jerks and mid-move dashes, the camera projection fixed, the planner maps the registration files to CHK-026 and CHK-027; also the PoseBlend dropped-painting fix and the AGENTS.md hard rule and ART-PIPELINE step (build now)
+    - What changed: LIVE in r52 (the hard rule is AGENTS.md rule 16).
+  - <a id="d-912-w3"></a>**D-912/W3** — W3: the ruler per pose class (head, height or their mean) is SHOWN to him first, with pictures of Lulu hurt, Paine Songstress hurt, Tidus victory and Yuna defend
+    - What changed: Not built: a painting's head and body cannot both match the idle's, so one size is right for one of them and the choice is his. 254 poses wait on it as legacy waivers.
+    - delivery not scheduled
+  - <a id="d-912-w5"></a>**D-912/W5** — W5: the swap smoothing clips (aligned dissolve, held-frame cut, today; frame clock 1/20 against 1/40) are SHOWN to him first
+    - What changed: Not built before he picks.
+    - delivery not scheduled
+  - <a id="d-912-w6"></a>**D-912/W6** — W6: the rig waits for his go and Kimahri’s costume
+    - What changed: He gave both the next day (D-916 and D-917).
+    - superseded by [D-916](#d-916) · nothing to build
+- <a id="d-913"></a>**D-913** — DELEGATED: Chapter 28, The Last Summoning, finished (ee4469eb): align Yojimbo’s hire answer to Chapter 27’s 2, keep the game’s Zanmato rule unfenced, and let the Sisters’ Summon label follow the game’s own menu text once RE reads it; it ships in r52 behind the word “summon” (FFX only)
+  - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 89b. Picks under his standing yes (delegated), one part each. The first pick was reversed by the RE review (D-914): the hire answers stay as benched. With a full gauge each 10,000 to 100,000 gil payment lands Zanmato 15 to 17 times in 64 and wins the link (faithful core, never tune boss numbers). Chapter 28 is LIVE in r52 behind `summon`.
+  - area chapters · FFX · adopted · delivery implemented · see [D-895](#d-895), [D-914](#d-914) · partly replaced by [D-914](#d-914)
+  - Source: Bailey's standing yes of 2026-10-15 (D-870), verbatim: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your …
+  - <a id="d-913-h"></a>**D-913/H** — H: align Yojimbo’s hire answer to Chapter 27’s 2 (one save, one answer) unless RE’s decode argues otherwise
+    - What changed: Reversed by the RE review (D-914 part 2): aligning moves a chapter's Zanmato odds.
+    - superseded by [D-914](#d-914) · nothing to build
+  - <a id="d-913-z"></a>**D-913/Z** — Z: keep the game’s Zanmato rule unfenced
+    - What changed: With a full gauge each payment of 10,000 to 100,000 gil lands Zanmato 15 to 17 times in 64 and wins the link; faithful core, boss numbers never tuned.
+  - <a id="d-913-l"></a>**D-913/L** — L: the Sisters’ Summon row label follows the game’s own menu text once RE reads it
+    - What changed: RE read it (command.bin row 0xFF, “Summon the Magus Sisters.”); the row reads “Magus Sisters” (D-914 part 1).
+- <a id="d-914"></a>**D-914** — DELEGATED: the RE session’s review of Chapter 28 (ee4469eb), SHIP WITH MINOR FIXES: the Sisters’ Summon row reads “Magus Sisters” in both chapters, the hire answers stay as benched, the “owner’s saves” wording is corrected and the Pagodas’ count toward the Zanmato byte is emulated at battle start (FFX only)
+  - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 89c. Picks under his standing yes (delegated), one part each. All LIVE in r52 (3c92b60cc).
+  - area chapters · FFX · adopted · delivery implemented · see [D-913](#d-913)
+  - Source: Bailey's standing yes of 2026-10-15 (D-870), verbatim: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your …
+  - <a id="d-914-1"></a>**D-914/1** — The Sisters’ Summon row reads “Magus Sisters” in both chapters (the game’s command.bin row 0xFF); disclosed for live Chapter XXVII
+    - What changed: Chapter XXVII's Grand Summon list went from nine entries to seven (the Sisters once, as the game's list does); in battle the three keep Cindy, Sandy and Mindy.
+  - <a id="d-914-2"></a>**D-914/2** — The hire answers stay as benched: Chapter XXVII 2, Chapter 28 1
+    - What changed: Aligning them moves a chapter's Zanmato odds (a gauge-less Zanmato appears, full-gauge odds x1.7 to 1.8) and no source picks between two legal player histories.
+  - <a id="d-914-3"></a>**D-914/3** — The “owner’s saves” wording is corrected everywhere: the 107 saves are a community pack, not his
+    - What changed: Every wording in the code comments, tests, handoffs, plans and the CHANGELOG now says a community save pack (downloaded 2026-09-26).
+  - <a id="d-914-4"></a>**D-914/4** — The Pagodas’ count toward the Zanmato byte is emulated at battle start (label E)
+    - What changed: Emulated from the game's spawn code; unproven once a Pagoda is destroyed (the CHANGELOG says so).
+- <a id="d-915"></a>**D-915** — r51 is deployed on his words, which are the owner override: the eight RE lanes (FFX and FFX-2), the FFX-2 Mix row, the Dark Mirror repairs
+  - Bailey: “yes deploy r51, keep going full speed”
+  - What changed: Item 89d. r51 was deployed as d6dc0bdd7 (bundle zpfxlH3Y) at 2026-10-17T16:41:34Z (docs/deploys.log line 68) after a focused review of SHIP (changed area PASS; FOC511-01 swap jerks disclosed, the Sin Fins Core win-rate shift 437 to 432 of 500 and Braska's final aeon not finishing in the sweep budget) and an adversarial merge review of the eight lane merges that found two defects, both fixed first (Dark Yojimbo's guide card quoted a description that was ours; the Mix row's first reason was cut on desktop). The live check passed on the exact artifact (all 5,309 downloadable files, byte for byte). Both games: the RE lanes are FFX and FFX-2, the Mix row FFX-2 only, the Dark Mirror FFX only.
+  - area release · both games · adopted · delivery implemented · see [D-909](#d-909), [D-910](#d-910)
+  - Source: Bailey, 2026-10-17 about 11:45 EDT, in the Claude Code chat, verbatim: “yes deploy r51, keep going full speed”. Item 89d of the driver's list (the …
+- <a id="d-916"></a>**D-916** — Rigging starts for all chapters (Kimahri first, FFX): the layered 2.5D rig becomes the permanent fix for the pose swap, and he wants it now
+  - Bailey: “yes start rigging, you pick kimahri's costume. start rigging for all chapters please. i want a permanent fix now.”
+  - What changed: Item 89f. His yes to part e of D-911 and to W6 of D-912, and his instruction to pick Kimahri's costume (D-917). The rig program starts with Kimahri (FFX) and runs through every chapter's figures in the order of D-918. Both games.
+  - area art · both games · adopted · delivery in progress · refines [D-911](#d-911)
+  - Source: Bailey, 2026-10-17 about 13:20 EDT, in the Claude Code chat, verbatim: “yes start rigging, you pick kimahri's costume. start rigging for all chapters …
+- <a id="d-917"></a>**D-917** — DELEGATED: Kimahri’s one rigged costume is the one his idle painting wears, the gold-trim white vest (FFX only)
+  - Bailey: “yes start rigging, you pick kimahri's costume. start rigging for all chapters please. i want a permanent fix now.”
+  - What changed: Item 89f, the second half: he left the costume pick to the driver. The several approved Kimahri paintings disagree on costume, so every rig needs one pick; this is the first. FFX only.
+  - area art · FFX · adopted · delivery in progress · refines [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:20 EDT, in the Claude Code chat, verbatim: “yes start rigging, you pick kimahri's costume. start rigging for all chapters …
+- <a id="d-918"></a>**D-918** — Rig every chapter’s figures in this order: Kimahri pilot, the FFX party, the FFX-2 dresspheres used by shipped chapters, the aeons, the bosses (multi-part bosses last or painted); each release ships the figures whose rig passes the rig gate; the painting sets stay as the fallback; a ?rig= switch
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90a. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. Each release ships only the figures whose rig passes the gate (90b); the painting sets stay as the fallback, so nothing is lost if a rig fails.
+  - area art · both games · adopted · delivery in progress · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-919"></a>**D-919** — The rig gate: every key against its approved painting’s silhouette at IoU 0.85 or better, stature and feet in band, no joint holes in keys or mid-blend; wired into the pose gate and the installer
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90b. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. The acceptance the rig lane is built against.
+  - area critic · both games · adopted · delivery in progress · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-920"></a>**D-920** — The first two “finished sequences” (ChatGPT point 10) are Kimahri’s Mt. Gagazet fight (FFX) and FFX-2 Chapter IV Bahamut; they set the standard the other chapters inherit
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90c. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. One FFX and one FFX-2 encounter taken through prep, intro, combat, defeat and retry, victory; FFX first, then FFX-2.
+  - area chapters · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-921"></a>**D-921** — One generated “what is live” record (live commit, matching tree, artifact hash, open findings, active experiments) as the entry point, plus the records pass that brings main up to the live build (ChatGPT point 8)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90d. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. Built in the records pass of r52: docs/LIVE.md, written by tools/live-record.mjs from docs/deploys.log and critic/pending and cleared, with a test that fails when it is stale; main is brought to r52 in the same pass.
+  - area process · both games · adopted · delivery implemented · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-922"></a>**D-922** — Measure cold load, time to first command, bytes per chapter, frame-time spikes and memory after chapter changes, and add them to the critic’s numbers (ChatGPT point 5)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90e. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. First in the priority order after the live record, and before rigs reach phones (a rigged Kimahri is about 23 MB of GPU memory).
+  - area tech · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-923"></a>**D-923** — Proper tab and button roles, focus and selected states on the prep tabs and the phone Start Battle dock, keyboard navigation kept (ChatGPT point 6, the invisible half)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90f. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. One focus and input contract first: Input.ts captures Tab, Space and the arrows.
+  - area ui · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-924"></a>**D-924** — Chapter cards 35 to 44 px touch height, shown to him as a picture first (ChatGPT point 6, the visible half)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90g. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. A picture first (end state first).
+  - area ui · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-925"></a>**D-925** — A less crowded battle screen: one compact tactical cue by default, details on request; mockups first (ChatGPT point 3)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90h. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. The advisor is shrunk, not removed.
+  - area ui · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-926"></a>**D-926** — Action-shot choreography (anticipation, travel, contact, reaction, recovery), with FFX CTB and FFX-2 ATB timing kept distinct, after the rigs and clips first (ChatGPT point 7; both games, game-aware)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90i. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. After the rigs; clips first.
+  - area camera · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-927"></a>**D-927** — Portable saves (export and import a save file) are built; this is the save-data class, so a deep review comes before it goes public (ChatGPT point 9)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90j. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. Save-data class (AGENTS.md Release).
+  - area tech · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-928"></a>**D-928** — WebGPU later, only after the measurements of 90e; KTX2 and Basis tried as a separate delivery mode with the approved originals preserved (ChatGPT point 4)
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90k. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. It conflicts with the pixel-identical art guarantee, so it is a separate mode and only after the numbers.
+  - area tech · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-929"></a>**D-929** — Codex coordination by file only (the coordination folder), never typing into Claude windows; its one task the read-only trace of the Chapter IV first-menu camera race
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90l. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. Paused by his own words the same night (D-956).
+  - area process · both games · superseded by [D-956](#d-956) · nothing to build · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-930"></a>**D-930** — The W3 sizing rule (the mean of head and height, plus a floor, props measured head to soles) and the W5 motion fixes (aligned dissolve, held cut, lunge start, a 1/40 clock) stay as the floor under the rigs and for every unrigged figure
+  - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
+  - What changed: Item 90m. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. Shown to him as pictures and clips first (D-912 parts W3 and W5).
+  - area art · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
+- <a id="d-931"></a>**D-931** — STANDING DEPLOY WORDS: every release is deployed as soon as its review says it can ship; the driver quotes his sentence as the owner override while the deep-review cap holds, and the deep review owed still runs on the live build (both games)
+  - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
+  - What changed: Item 91a. Applies from r51 on: r51 (d6dc0bdd7) and r52 (3c92b60cc) were each deployed after a focused review of SHIP. It never overrides a HOLD, and it does not settle a review obligation: the deep review of every build since the last passing one (62 entries in the ledger now) is still owed.
+  - area release · both games · adopted · delivery implemented · see [D-915](#d-915)
+  - Source: Bailey, 2026-10-17 about 14:00 EDT, in the Claude Code chat, verbatim: “deploy every release as soon as its review says it can ship. for all other …
+- <a id="d-932"></a>**D-932** — A blanket yes for every other decision, sound effects and music included; each resulting pick is recorded as its own DELEGATED part naming the driver’s recommendation (both games)
+  - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
+  - What changed: Item 91b. Picks the driver made under it that day, one part each. Still his own, not decided by the driver: a session playing the real FFX on his PC for the RE session's live reads (D-878 and D-883) and the Steam session time (D-258). The remaining old “proposed” rows each get a recommended answer in a records pass: this pass answers the six that item 91b names (D-012, D-254, D-255, D-582, D-830 and D-893); the other eight stay proposed.
+  - area process · both games · adopted · delivery in progress · see [D-012](#d-012), [D-254](#d-254), [D-255](#d-255), [D-582](#d-582), [D-830](#d-830), [D-893](#d-893), [D-878](#d-878), [D-883](#d-883), [D-258](#d-258) · partly replaced by [D-937](#d-937)
+  - Source: Bailey, 2026-10-17 about 14:00 EDT, in the Claude Code chat, verbatim: “deploy every release as soon as its review says it can ship. for all other …
+  - <a id="d-932-p1"></a>**D-932/P1** — DELEGATED: the nine Oct 15 screen specs are built at their recommended options: the FFX-2 Mix picker, the Garment Grid wheel, the gil picker, the per-girl results lines, the special dresspheres, the FFX colour-vision note, the can’t-cast beat, the FFX Mix preview; the FFX Doublecast two-pick waits for the live MP read (D-879)
+    - What changed: The special dresspheres line was withdrawn the same afternoon: he asked for 2 or 3 options first (D-937). Nothing is built before its mockup; the mockups are owed.
+    - delivery not scheduled
+  - <a id="d-932-p2"></a>**D-932/P2** — DELEGATED (FFX-2 only): Chapter VI’s Acts II and III open as fresh battles (Q19, D-877; the RE session’s ON branch f458f1e2), in r53
+    - What changed: Confirmed by his own yes the same day (D-933).
+    - FFX-2
+  - <a id="d-932-p3"></a>**D-932/P3** — DELEGATED: the ElevenLabs tracks ship as heard (D-582)
+    - What changed: The driver's default: wide stereo as he heard them, failing the project's stereo gate. D-582 is answered.
+    - delivery implemented
+  - <a id="d-932-p4"></a>**D-932/P4** — DELEGATED: the Sound Test titles are the ones proposed (D-830)
+    - What changed: D-830 is answered: the titles on the Sound Test screen are the ones the audio lane proposed.
+    - delivery not scheduled
+  - <a id="d-932-p5"></a>**D-932/P5** — DELEGATED: Chapter I’s phase lighting is kept as it is (D-254)
+    - What changed: D-254 is answered: nothing changes in Chapter I's lighting and he is not asked to look.
+    - delivery implemented
+  - <a id="d-932-p6"></a>**D-932/P6** — DELEGATED (FFX-2 only): the Vegnagun implosion frames are judged by the driver against the target (D-255)
+    - What changed: D-255 is answered: the driver looks in his place.
+    - delivery not scheduled · FFX-2
+  - <a id="d-932-p7"></a>**D-932/P7** — DELEGATED: the Product Brief is adopted as drafted (D-012)
+    - What changed: docs/PRODUCT-BRIEF.md is committed as ADOPTED 2026-10-17 in the r52 records pass.
+    - delivery implemented
+  - <a id="d-932-p8"></a>**D-932/P8** — DELEGATED (FFX only): Biran’s attack r2-11 is installed (D-893)
+    - What changed: D-893 is answered; the install follows in the art lane.
+    - delivery not scheduled · FFX
+  - <a id="d-932-p9"></a>**D-932/P9** — DELEGATED (FFX-2 only): the Experiment’s cast2 #104 and KO #3307 are NOT installed (the independent check found drift, D-892)
+    - What changed: They stay held for his eye; nothing is installed.
+    - delivery not scheduled · FFX-2
+  - <a id="d-932-p10"></a>**D-932/P10** — DELEGATED (FFX-2 only): the Vegnagun tail 3x masters stay held (D-329)
+    - What changed: Unchanged: the masters come last and only if the 800 MB line has room.
+    - delivery not scheduled · FFX-2
+  - <a id="d-932-p11"></a>**D-932/P11** — DELEGATED: the Square Enix note stays “said, unverified” and the original-assets rule stands (D-553)
+    - What changed: Unchanged: no retail Square Enix assets, ever.
+    - delivery implemented
+  - <a id="d-932-p12"></a>**D-932/P12** — DELEGATED: the remaining old “proposed” rows each get a recommended answer in a records pass
+    - What changed: Started in the r52 records pass for the six named above; eight proposed rows remain.
+- <a id="d-933"></a>**D-933** — Chapter VI’s opening is turned on: Acts II and III open like fresh battles (FFX-2 only; reverses PR-0107 OFF in D-242), in r53
+  - Bailey: “yes turn on chapter VI opening, keep going full speed”
+  - What changed: Item 91d, relayed by the RE session (verbatim from him in the RE chat; plan addendum Q19). Branch origin/re-parity-rc9-x2-link-open-on f458f1e2 (SEPARATE_BATTLE_GAUGES true; only Chapter VI Acts II and III flagged; the Vegnagun links unflagged). Disclosed: Acts II and III open like fresh battles (the first bar at about 0.5 s instead of 2.7 to 4 s); in the Last Room Leblanc's side opens about 2 fights in 3 (Rikku used to always go first); first-try wins at human pace 499 of 500 both ways, on the Active clock 467 to 465, fights 5 to 7 s shorter; no other chapter changes. Goes in r53: the RE session pre-merges onto the final r52-rc tip and re-records the four pin files. Also covered by the driver's recommendation under D-932. FFX-2 only.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-242](#d-242), [D-877](#d-877), [D-932](#d-932) · refines [D-877](#d-877)
+  - Source: Bailey, 2026-10-17, in the RE session's chat, verbatim: “yes turn on chapter VI opening, keep going full speed”. Item 91d (relayed by the RE session) …
+- <a id="d-934"></a>**D-934** — The live session on the real FFX and FFX-2 (Steam) runs around 15:40 EDT, by the RE main session, read-only, saves restored byte for byte, about 25 minutes of quiet desktop
+  - Bailey: “for the live sesssion: in about 3 hours please. otherwise i will go with all your recommendations” (blanket yes)
+  - What changed: Item 92a (relayed by the RE session). No other session drives the screen in that window (ChatGPT and Codex idle, Chrome left alone, no release live-verification browser run). The RE session corrected its clock: he wrote at about 12:37 EDT. The outcome of the session is the RE session's to report.
+  - area process · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 14:05 EDT, in the RE session's chat, verbatim: “for the live sesssion: in about 3 hours please. otherwise i will go with all …
+- <a id="d-935"></a>**D-935** — The live session uses NO temporary higher encounter rate and leaves GameSetting.ini untouched
+  - Bailey: “for the live sesssion: in about 3 hours please. otherwise i will go with all your recommendations” (blanket yes)
+  - What changed: Item 92b (relayed by the RE session). FFX-2 is partly replaced by 92g for the next session.
+  - area process · both games · adopted · delivery implemented · partly replaced by [D-940](#d-940)
+  - Source: Bailey, 2026-10-17 about 14:05 EDT, in the RE session's chat, verbatim: “for the live sesssion: in about 3 hours please. otherwise i will go with all …
+- <a id="d-936"></a>**D-936** — Live session: Launch C (the Farplane walk for the monster-flinch case) only if time remains inside the window (FFX-2 only)
+  - Bailey: “for the live sesssion: in about 3 hours please. otherwise i will go with all your recommendations” (blanket yes)
+  - What changed: Item 92c (relayed by the RE session). Optional.
+  - area process · FFX-2 · adopted · delivery not scheduled
+  - Source: Bailey, 2026-10-17 about 14:05 EDT, in the RE session's chat, verbatim: “for the live sesssion: in about 3 hours please. otherwise i will go with all …
+- <a id="d-937"></a>**D-937** — Q18 special dresspheres (the three-part form): 2 or 3 options are shown first and nothing is built until he picks; the plain dress change stays until then (FFX-2 only)
+  - Bailey: “for the live sesssion: in about 3 hours please. otherwise i will go with all your recommendations” (blanket yes)
+  - What changed: Item 92d (relayed by the RE session). Supersedes the line of D-932 part P1 that would have built the recommended option.
+  - area chapters · FFX-2 · adopted · delivery not scheduled · refines [D-932](#d-932)
+  - Source: Bailey, 2026-10-17 about 14:05 EDT, in the RE session's chat, verbatim: “for the live sesssion: in about 3 hours please. otherwise i will go with all …
+- <a id="d-938"></a>**D-938** — Q21 Doublecast as two separate picks: yes, after the live check of Lulu’s Doublecast MP (live Case 1), with the driver’s mockup of the pick flow first (FFX only)
+  - Bailey: “for the live sesssion: in about 3 hours please. otherwise i will go with all your recommendations” (blanket yes)
+  - What changed: Item 92e (relayed by the RE session). Refines D-879.
+  - area ui · FFX · adopted · delivery not scheduled
+  - Source: Bailey, 2026-10-17 about 14:05 EDT, in the RE session's chat, verbatim: “for the live sesssion: in about 3 hours please. otherwise i will go with all …
+- <a id="d-939"></a>**D-939** — FFX-F F4 and F5, the faithful reaction-record queue, stay deferred (no action-record queue in the engine); D2b, K5 and N4 with H6 keep waiting (FFX only)
+  - Bailey: “for the live sesssion: in about 3 hours please. otherwise i will go with all your recommendations” (blanket yes)
+  - What changed: Item 92f (relayed by the RE session). Nothing is built.
+  - area combat · FFX · deferred · delivery not scheduled
+  - Source: Bailey, 2026-10-17 about 14:05 EDT, in the RE session's chat, verbatim: “for the live sesssion: in about 3 hours please. otherwise i will go with all …
+- <a id="d-940"></a>**D-940** — The next live session may use the higher encounter rate in FFX-2 (replaces 92b for that session) (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 92g, relayed by the RE session as his yes; his own words are not on record here. Replaces D-935 for the next session only.
+  - area process · FFX-2 · adopted · delivery not scheduled · refines [D-935](#d-935)
+  - Source: Relayed by the RE session as Bailey's yes (2026-10-17); no verbatim line is on record in the driver's list. Item 92g of the driver's list. Game case: …
+- <a id="d-941"></a>**D-941** — FFX’s white window is fixed without a restart: he turns “Optimizations for windowed games” off for FFX.exe himself (a system setting no agent changes) and the RE session retries when he says “done” (FFX only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 92h, relayed by the RE session as his yes; his own words are not on record here. The setting is his to change (AGENTS.md: no agent modifies system settings).
+  - area tech · FFX · adopted · delivery not scheduled
+  - Source: Relayed by the RE session as Bailey's yes (2026-10-17); no verbatim line is on record in the driver's list. Item 92h of the driver's list. Game case: …
+- <a id="d-942"></a>**D-942** — PICKED, then WITHDRAWN: a space guard for agents (sessions cannot make new repo copies, builds or art mirrors while D: is under about 60 GB, and each release deletes the previous one’s leftovers; into AGENTS.md and the release scripts)
+  - Bailey: “Space guard for agents: Sessions can't make new repo copies, builds or art mirrors while D: is under about 60 GB, and each release deletes the previous one's leftovers. It goes into AGENTS.md and the release scripts.”
+  - What changed: Item 93a (relayed by the D emergency session after he asked “if you're so smart and efficient why cant you solve my storage space problem? im always running out of space”). The D session wrote tools/space-guard.mjs and a test, with a config of 60 GB; the driver was to integrate it through the release flow. WITHDRAWN at 13:30 EDT the same day (D-946): no tools/space-guard.mjs, no AGENTS.md rule, no deploy call, and with it the automatic leftovers pass; nothing was wired in.
+  - area process · both games · superseded by [D-946](#d-946) · nothing to build
+  - Source: AGENTS.md
+- <a id="d-943"></a>**D-943** — A nightly junk sweep (test caches and old Temp files only; the one standing exception to “Bailey runs every delete”, for that junk class only)
+  - Bailey: “Nightly junk sweep”
+  - What changed: Item 93b. Registered by the D session as a scheduled task at 04:30, first run 2026-10-18, after its own dry run (it would free 5.7 GB). It never touches art, worktrees or builds, and refuses to run while another cleanup runs.
+  - area process · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-17 (before 13:30 EDT; the time is not on the driver's list), picked from the options the D emergency session offered, verbatim: …
+- <a id="d-944"></a>**D-944** — A weekly restart reminder (Sundays 19:00, shown when the machine has been up more than three days)
+  - Bailey: “Weekly restart reminder”
+  - What changed: Item 93c. Registered by the D session as a scheduled task, first run 2026-10-18.
+  - area process · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-17 (before 13:30 EDT; the time is not on the driver's list), picked from the options the D emergency session offered, verbatim: …
+- <a id="d-945"></a>**D-945** — NOT PICKED: moving the Codex history off C: to another drive
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 93d. He picked the other three options and left this one, so it is not done and is not to be done unasked.
+  - area process · both games · rejected · nothing to build
+  - Source: Not picked from the options the D emergency session offered (2026-10-17, relayed). Item 93d of the driver's list. Game case: both (machine …
+- <a id="d-946"></a>**D-946** — The space guard is withdrawn at 13:30 EDT: no space-guard tool, no AGENTS.md rule, no call from the deploy, and no automatic deletion of the previous release’s leftovers; the usual flow stays (the driver lists what is FINISHED, the D session verifies, he runs it)
+  - Bailey: “ok forget space guard it's interfering with our project here”
+  - What changed: Item 93e (relayed by the D emergency session). The sub-agent building the guard was stopped before it wrote anything; nothing was wired in. The nightly sweep (D-943) and the weekly reminder (D-944) stay.
+  - area process · both games · adopted · delivery implemented · at ~13:30 EDT · replaces [D-942](#d-942)
+  - Source: Bailey, 2026-10-17 13:30 EDT, in the D emergency session's chat, verbatim: “ok forget space guard it's interfering with our project here”. Item 93e …
+- <a id="d-947"></a>**D-947** — ChatGPT’s ten-point critique is a standing program: its points and recommendations are kept, checked when each batch is planned, and reported on (both games)
+  - Bailey: “Ok don't forget them they're all pretty good recommendations” (blanket yes)
+  - What changed: Item 94. The ten points: one animation source per character (the rig); continuity checks independent of the sizing rules; more room in the battle screen; GPU-compressed textures; load and memory budgets; touch targets and real tab and button roles; camera shots around complete actions; a release that is unmistakable; portable saves; finished sequences. Each recommendation the driver stated is its own row (D-918 to D-930). The standing priority order: rigs, main up to the live build with the live record, load and memory measurements, input and focus with touch targets, battle-screen mockups, camera choreography after the rigs, portable saves, the KTX2 experiment, WebGPU later. Point 8 (make the current release unmistakable) is built in the r52 records pass (docs/LIVE.md).
+  - area process · both games · adopted · delivery in progress · see [D-918](#d-918), [D-930](#d-930), [D-956](#d-956), [D-957](#d-957)
+  - Source: Bailey, 2026-10-17 about 16:35 EDT, in the Claude Code chat, verbatim: “Ok don't forget them they're all pretty good recommendations”. Item 94 of the …
+- <a id="d-948"></a>**D-948** — The promises tracker: every adopted decision is classified with evidence, read at every session start, every release closes promises or says why, and he can see the list on a phone page (both games, process)
+  - Bailey: “Ok because part of the problem is you or I bring up recommendations that we agree on then it never gets implemented then you just forget about it. You don't have any sort of long term persistent memory.” (blanket yes)
+  - What changed: Item 95. The decision ledger showed 842 adopted decisions and only 395 marked delivered. The tracker (a script outside the repository, with a session-start hook and a phone page for him) classifies each adopted decision against evidence; the oldest open promises are scheduled first unless blocked; a release runs its release check and its announcement says which promises it closed. Never marked done without a commit, a file or a live behaviour; never dropped without his own words.
+  - area process · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 16:40 EDT, in the Claude Code chat, verbatim: “Ok because part of the problem is you or I bring up recommendations that we …
+- <a id="d-949"></a>**D-949** — DELEGATED: the RE session’s Garment Grid status rows lane (XD1b, re-parity-rc10-x2-grid-status 42d33af5, checked PASS, DEEP class) goes in r53, with three picks: the Chapter XV grid-progress carry is kept, the seven missing grids are added later from the game’s own data, and a Double HP and Double MP HUD icon joins the HUD mockup batch (FFX-2 only)
+  - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
+  - What changed: Item 96. The lane is on r52-rc's line and goes in r53. Three picks under his standing yes (delegated), one part each.
+  - area combat · FFX-2 · adopted · delivery not scheduled
+  - Source: Bailey's standing yes of 2026-10-17 about 14:00 EDT, verbatim: “deploy every release as soon as its review says it can ship. for all other decisions …
+  - <a id="d-949-a"></a>**D-949/a** — a: Chapter XV links 2 and 3 KEEP the grid-progress carry (the lane’s recommendation; the intended play never crosses those gates)
+    - What changed: Unchanged behaviour, kept on purpose.
+  - <a id="d-949-b"></a>**D-949/b** — b: the seven grids with status rows that are not in our registry (Mounted Assault, Selene Guard, Helios Guard, Shining Mirror, Wishbringer, Peerless, Last Resort) are added later from the game’s own grid data, after the Garment Grid wheel mockup
+    - What changed: Sourced, not invented (AGENTS.md rule 6).
+  - <a id="d-949-c"></a>**D-949/c** — c: a HUD icon and message for Double HP and Double MP join the HUD mockup batch
+    - What changed: Today there is no icon, only the generic buff sound and a larger maximum.
+- <a id="d-950"></a>**D-950** — FFX boss data that matches the game, D1: monster stats are floored at 1, as the game does (FFX only)
+  - Bailey: “All six (Recommended)” (blanket yes)
+  - What changed: Item 97a (relayed by the RE session). He picked “All six (Recommended)” for which of the FFX boss-data fixes match the game (branch origin/re-parity-rc10-ffx-boss-data cd962ee2, independent check PASS); this is fix D1. The switched-on tip with 12 re-pinned goldens follows, for r53. FFX only.
+  - area combat · FFX · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 19:10 EDT, in the RE session's chat, verbatim: “All six (Recommended)”. Item 97a (relayed by the RE session) of the driver's …
+- <a id="d-951"></a>**D-951** — FFX boss data that matches the game, D3: the Zanmato levels follow the game: Evrae 3 to 4; Mortibody 4, Ginnem 5 and Isaaru 5 are added (FFX only)
+  - Bailey: “All six (Recommended)” (blanket yes)
+  - What changed: Item 97b (relayed by the RE session). He picked “All six (Recommended)” for which of the FFX boss-data fixes match the game (branch origin/re-parity-rc10-ffx-boss-data cd962ee2, independent check PASS); this is fix D3. The switched-on tip with 12 re-pinned goldens follows, for r53. FFX only.
+  - area combat · FFX · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 19:10 EDT, in the RE session's chat, verbatim: “All six (Recommended)”. Item 97b (relayed by the RE session) of the driver's …
+- <a id="d-952"></a>**D-952** — FFX boss data that matches the game, D7: Seymour Flux is immune to Slow (FFX only)
+  - Bailey: “All six (Recommended)” (blanket yes)
+  - What changed: Item 97c (relayed by the RE session). He picked “All six (Recommended)” for which of the FFX boss-data fixes match the game (branch origin/re-parity-rc10-ffx-boss-data cd962ee2, independent check PASS); this is fix D7. The switched-on tip with 12 re-pinned goldens follows, for r53. FFX only.
+  - area combat · FFX · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 19:10 EDT, in the RE session's chat, verbatim: “All six (Recommended)”. Item 97c (relayed by the RE session) of the driver's …
+- <a id="d-953"></a>**D-953** — FFX boss data that matches the game, D8: Evrae can be Doomed with a 30-turn counter (C-3 was a research conflict, not his earlier decision) (FFX only)
+  - Bailey: “All six (Recommended)” (blanket yes)
+  - What changed: Item 97d (relayed by the RE session). He picked “All six (Recommended)” for which of the FFX boss-data fixes match the game (branch origin/re-parity-rc10-ffx-boss-data cd962ee2, independent check PASS); this is fix D8. The switched-on tip with 12 re-pinned goldens follows, for r53. FFX only.
+  - area combat · FFX · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 19:10 EDT, in the RE session's chat, verbatim: “All six (Recommended)”. Item 97d (relayed by the RE session) of the driver's …
+- <a id="d-954"></a>**D-954** — FFX boss data that matches the game, D9: the Life flag is set on nine rows (FFX only)
+  - Bailey: “All six (Recommended)” (blanket yes)
+  - What changed: Item 97e (relayed by the RE session). He picked “All six (Recommended)” for which of the FFX boss-data fixes match the game (branch origin/re-parity-rc10-ffx-boss-data cd962ee2, independent check PASS); this is fix D9. The switched-on tip with 12 re-pinned goldens follows, for r53. FFX only.
+  - area data · FFX · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 19:10 EDT, in the RE session's chat, verbatim: “All six (Recommended)”. Item 97e (relayed by the RE session) of the driver's …
+- <a id="d-955"></a>**D-955** — FFX boss data that matches the game, D10: the record immunity bits are in (Sensor shows Yu Yevon’s numbers; Scan, Shell, Protect, Reflect and the four Nuls fail on the Pagodas) (FFX only)
+  - Bailey: “All six (Recommended)” (blanket yes)
+  - What changed: Item 97f (relayed by the RE session). He picked “All six (Recommended)” for which of the FFX boss-data fixes match the game (branch origin/re-parity-rc10-ffx-boss-data cd962ee2, independent check PASS); this is fix D10. The switched-on tip with 12 re-pinned goldens follows, for r53. FFX only.
+  - area data · FFX · adopted · delivery in progress
+  - Source: Bailey, 2026-10-17 about 19:10 EDT, in the RE session's chat, verbatim: “All six (Recommended)”. Item 97f (relayed by the RE session) of the driver's …
+- <a id="d-956"></a>**D-956** — The coordination board and the collaboration with Codex are paused until further notice; everything is reported to him in the game chat
+  - Bailey: “do not the coordination board anymore please and do not collaborate with codex until further notice please. communicate with me here.”
+  - What changed: Item 98. Supersedes D-929 (part 90l). The coordination room and the hourly note exchange stop; the Codex critique and recommendations stay a standing program (D-957).
+  - area process · both games · adopted · delivery implemented · replaces [D-929](#d-929)
+  - Source: Bailey, 2026-10-17 about 23:50 EDT, in the Claude Code chat, verbatim: “do not the coordination board anymore please and do not collaborate with …
+- <a id="d-957"></a>**D-957** — The critiques and recommendations of ChatGPT and Codex are still retained as a standing program while the collaboration is paused
+  - Bailey: “however i do want you to still retain all the critiques and recommendations” (blanket yes)
+  - What changed: Item 99. D-956 pauses the collaboration, not the program: the ten points (D-947) and the rows 90a to 90m stay in force, in the promises tracker (D-948) and the driver's memory.
+  - area process · both games · adopted · delivery in progress · refines [D-947](#d-947)
+  - Source: Bailey, 2026-10-17 about 23:55 EDT, in the Claude Code chat, verbatim: “however i do want you to still retain all the critiques and recommendations”. …
+- <a id="d-958"></a>**D-958** — DELEGATED: the RE session’s formation flags lane (842b27c8, checked) turns Defend off in Isaaru’s three aeon duels, as the game’s scripts set it, and a refused Defend plays the game’s refusal cue 3 rather than a new greyed tab (FFX only)
+  - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
+  - What changed: Item 100 (relayed by the RE session). The lane supersedes D-147 part B6 (Yuna's own commands in Chapter XIV). The driver's pick under his standing yes (delegated): a refused Defend plays the game's sourced refusal cue 3. Goes in r53.
+  - area combat · FFX · adopted · delivery in progress · see [D-147](#d-147), [D-959](#d-959)
+  - Source: Bailey's standing yes of 2026-10-17 about 14:00 EDT, verbatim: “deploy every release as soon as its review says it can ship. for all other decisions …
+- <a id="d-959"></a>**D-959** — In Isaaru’s duels the game’s rule is matched: Yuna may only Summon, Grand Summon or Dismiss, and Switch, Escape and Flee are off for everyone (FFX only; replaces D-147 parts B6 and B7)
+  - Bailey: “Match the game (Recommended)” (blanket yes)
+  - What changed: Item 101 (relayed by the RE session). His pick of “Match the game (Recommended)” on Isaaru's duels. It supersedes D-147 parts B6 and B7 (Yuna's own commands, Items). Goes in r53.
+  - area combat · FFX · adopted · delivery in progress · see [D-147](#d-147), [D-958](#d-958)
+  - Source: Bailey, 2026-10-17 (the time is not on the driver's list), in the RE session's chat, verbatim: “Match the game (Recommended)”. Item 101 (relayed by …
+- <a id="d-960"></a>**D-960** — DELEGATED: in Isaaru’s duels the unavailable command rows are hidden as the game hides them, and the guide line in ffx-isaaru.ts is reworded (FFX only)
+  - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
+  - What changed: Item 101, the driver's pick under his standing yes (delegated): unavailable rows are hidden rather than greyed, as the game does; the guide line at ffx-isaaru.ts:37 is reworded to say what the duel allows. Goes in r53.
+  - area ui · FFX · adopted · delivery in progress · refines [D-959](#d-959)
+  - Source: Bailey's standing yes of 2026-10-17 about 14:00 EDT, verbatim: “deploy every release as soon as its review says it can ship. for all other decisions …
