@@ -2084,6 +2084,18 @@ export type Command =
 /** Command kinds, for exhaustive switches. */
 export type CommandKind = Command['kind'];
 
+/**
+ * The target step of one menu row as the original shows it (FFX only; `battle/ffx/target-step-parity.ts`). `candidates` are the combatants the cursor can rest on, in the game's list order (the
+ * party in slot order, the foes in formation order); `start`, when present, is the candidate it opens on (absent = the HUD's own choice); `switchTo` is the other side's candidates when the record lets the cursor switch sides (absent when
+ * it does not or the other side has none); `group` marks a step that rings every candidate at once and confirms them together.
+ */
+export interface TargetStep {
+  candidates: CombatantId[];
+  start?: CombatantId;
+  switchTo?: CombatantId[];
+  group?: boolean;
+}
+
 /** One row the command UI may offer, with its legal targets already resolved. */
 export interface AvailableCommand {
   /** A partially-filled command; the UI fills `targets` from {@link validTargets}. */
@@ -2117,6 +2129,12 @@ export interface AvailableCommand {
    * Optional (hand-built rows, fixtures): absent means "choose one", as before.
    */
   targeting?: Targeting;
+  /**
+   * **The game's target step for this row** (FFX only; set by the FFX engine **only while `TARGET_STEP_PARITY` is on**, which is off): whether the row opens a cursor, on whom, where it starts, and
+   * which other-side combatants the cursor may be switched to. Additive and optional; the UI reads it, the engine's strategies, the advisor and the coach never do (they read `validTargets`), so
+   * nothing about legality or resolution moves. Absent = the row's old behaviour.
+   */
+  targetStep?: TargetStep;
   /** Where the single-target cursor opens: the subset of `validTargets` on the sensible side (enemy for attacks and debuffs, party for cures and buffs, KO'd first for revives; `battle/common/aim.ts`, both games). Set only when it narrows the list; absent = the leftmost valid target, as before. */
   preferredTargets?: CombatantId[];
   /** True when choosing this row opens a minigame overlay before the command resolves. */
