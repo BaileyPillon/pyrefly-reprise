@@ -118,7 +118,7 @@ part of the seven chapters has both a row and a level. Where the table says "our
 | attacker id and level; the weapon's tables | slot id and level; zeros: the engine has no weapon statuses |
 | target level, status word 1, the two resist tables | as above; `immunities` by slot (a stat stage's Up and Down share a slot) |
 | the protect mask (`Chr+0x570 \| 0x4fc`) and the two permanent layers | the statuses a unit carries from `EnemyDef.autoStatuses` (Chapter XIII's Spellspring); nothing else is a permanent source |
-| the action-state mask `FUN_00632630` | constant 0: its low bits are not pinned (`research/re-ffx2-hit-status.md` §7 question 1) and the engine has no matching state, so no target counts as acting |
+| the action-state mask (the function at 0x00632630) | constant 0: its low bits are not pinned (`research/re-ffx2-hit-status.md` §7 question 1) and the engine has no matching state, so no target counts as acting |
 | the starting result buffer | `initialStatusResult` of the target's statuses (`pp_result_init`) |
 | the shatter roll | whether the target was Petrified at the start of the strike, the row's byte, the attacker's slot |
 
@@ -472,7 +472,7 @@ Everything below is the exe's answer (the kernels' own tests prove each function
    Shell (worn by Rikku in Chapter XIII's build) is not applied; the Trema chapter is therefore harder than the game's by that Protect and Shell.
 7. **Not modelled, before or after:** Confusion's all-target coin flip (the game aims a confused girl's command at all targets with
    probability 1/2 when the row can) and the Reflect redirect (`pp_reflect_redirect`, fixed stream 6): the FFX-2 engine has no Reflect bounce.
-8. **The action-state mask** the status functions read (`FUN_00632630`) and `Chr+0x5ac` are not pinned in the exe; both are 0, which never
+8. **The action-state mask** the status functions read (the function at 0x00632630) and `Chr+0x5ac` are not pinned in the exe; both are 0, which never
    blocks a status or a target.
 9. **Weapons**: the engine has no weapon element or weapon status, so the "uses the character's properties" bit adds nothing.
 10. **Abilities outside the seven chapters' reach** (the dresspheres no build teaches, items nobody carries) keep the row derived from

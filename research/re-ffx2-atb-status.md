@@ -475,7 +475,7 @@ Corrections to entries of `D:\Tools\ffx-parity\ffx2\anchors.md`:
 
 Additions:
 
-* **New function, the opening trim at 0x00634280** (the older copy's `FUN_006342b0`), called once from the battle state machine at 0x00609e4d: it subtracts two
+* **New function, the opening trim at 0x00634280** (the older copy's function at 0x006342b0), called once from the battle state machine at 0x00609e4d: it subtracts two
   thirds of the smallest wait from every character at battle start (§4).
 * The group 2 speed choice by flag word: flag 0x40 wins over 0x80; Stop counts at the raw speed, Doom at the awake speed, everything else at the active speed
   (§6.1). A group 1 timer that lands exactly on 0 never expires (§6.4); a Doom counter of exactly 1 never counts (§6.5); Poison's tick skips Regen for that

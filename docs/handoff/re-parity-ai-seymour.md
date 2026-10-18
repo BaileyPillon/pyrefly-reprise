@@ -91,7 +91,7 @@ scenes beyond the state they write; the reset turn's CTB (W2, the shared CTB lan
 
 The note's table says Natus's pair goes "to the two living slots" with two standing. Read in his compiled branch (`m126` @0x29c to 0x510), with
 the third slot down the **false** coin pairs slot 1 with slot 3, the fallen member, where Macalania's Seymour correctly pairs 2 with 1. The exe's
-queue (`FUN_007ac9c0`, "TARGET ERROR") refuses a command at a fallen member, so that half of the cast is lost: **33,441 of 65,536 values, 51.03 %**,
+queue (the function at 0x007ac9c0, "TARGET ERROR") refuses a command at a fallen member, so that half of the cast is lost: **33,441 of 65,536 values, 51.03 %**,
 of Natus's double casts with Kimahri (or whoever stands third) down hit one member, not two. It is built (`slot-pair.ts`, script `'natus'`), pinned
 (`parity-ffx-ai-natus-hooks.test.ts`) and listed in "Open items" so the research note can be corrected.
 
