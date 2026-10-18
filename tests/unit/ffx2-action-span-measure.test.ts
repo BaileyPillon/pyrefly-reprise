@@ -9,6 +9,7 @@
  * - `on-keep`: ON, but a formation that sets a flat 3 s keeps it (what the formation overrides cost);
  * - `phys`: ON, physical spans only (casts, skills, items and specials owe nothing);
  * - `cast`: ON, charge-kind spans only (physical commands owe nothing);
+ * - `none`: ON with both parts off (no action time at all; for a formation that carries a flat 3 s, that flat time gone);
  * - `on-norun` / `on-far`: ON, with the run-up distance taken to 0 / doubled (how much the least known term matters);
  * - `on-hit`: ON, a monster's hit at the macro's normal-attack-frames estimate when later than its clip; `on-fx80` / `on-fx125`: ON, every effect length x0.8 / x1.25.
  *
@@ -43,11 +44,14 @@ const ARMS: Record<string, Partial<ActionSpanKnobs>> = {
   'on-keep': { perCommand: true, supersedeFormation: false },
   phys: { perCommand: true, casts: false },
   cast: { perCommand: true, physical: false },
+  // nothing owed and a formation's flat 3 s taken off: the reference for the six formations that carry one (the ablation arms above drop it too)
+  none: { perCommand: true, physical: false, casts: false },
   // the run-up is the least known term: none at all, and twice the estimated distance
   'on-norun': { perCommand: true, runDistanceScale: 0 },
   'on-far': { perCommand: true, runDistanceScale: 2 },
   // the other soft terms: a monster's hit at the macro's normal-attack-frames estimate when that is later than its clip; every effect 20 percent shorter / 25 percent longer
   'on-hit': { perCommand: true, monsterHit: 'estimate' },
+  'on-hit-half': { perCommand: true, monsterHit: 'half' },
   'on-fx80': { perCommand: true, effectScale: 0.8 },
   'on-fx125': { perCommand: true, effectScale: 1.25 },
 };

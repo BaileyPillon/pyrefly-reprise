@@ -15,11 +15,11 @@ Paper preflight (critic-plan class DEEP): `docs/plans/re-parity-rc10-x2-action-t
 | `e6c4d713a` | tests: hand checks, switch-off digests against the base, the measurement test |
 | later commits | the measurement knobs (run-up distance, a monster's hit time, effect scale), the Slow / Haste / Stop test, this note |
 
-`engine-core.ts` and `internal.ts` (399 lines each on this base) are not touched; no file went over 400 lines (`action-span.ts` 213, `kernel/action-span.ts` 146, `action-frames.ts` 226, `execute.ts` 347). No contract file changed shape, so no CONTRACT-CHANGES entry.
+`engine-core.ts` and `internal.ts` (399 lines each on this base) are not touched; no file went over 400 lines (`action-span.ts` 212, `kernel/action-span.ts` 146, `action-frames.ts` 226, `execute.ts` 347). No contract file changed shape, so no CONTRACT-CHANGES entry.
 
 ## 0. In one paragraph (player words)
 
-Today most FFX-2 fights give a command no time at all: the girl or the boss acts, and its gauge starts refilling the same instant (six fights give every command a flat three seconds instead). In the real game a command holds its user for as long as its animation plays: a girl's Attack is the wait for her idle pose to break, the run to the enemy and the swing up to the hit (about two seconds); a spell, an item or a special is the effect from the moment it is released to its end (Fire was measured at 2.5 s); a boss's cast is three to four and a half seconds, and its plain Attack runs from half a second (Nooj) to six (the Paragon) by its body. This slice makes every command hold its actor for that long, from the game's own animation tables, behind `ACTION_TIME_PER_COMMAND`, **OFF**. With it off every FFX-2 battle is byte for byte what it was (288 of 288 chain-plays compared with the base commit). **With it ON the party wins more in most chapters that move and loses a lot of one** (section 4): because a boss's cast holds the boss longer than a girl's action holds her, the bosses get fewer turns between the girls' turns, except where a boss's plain Attack is short and the girls' spells are not (Den of Woe at the Wait pace). Only three effect lengths are measured; every other is a labelled estimate, and the sensitivity arms show how much the answer leans on them.
+Today most FFX-2 fights give a command no time at all: the girl or the boss acts, and its gauge starts refilling the same instant (six fights give every command a flat three seconds instead). In the real game a command holds its user for as long as its animation plays: a girl's Attack is the wait for her idle pose to break, the run to the enemy and the swing up to the hit (about two seconds); a spell, an item or a special is the effect from the moment it is released to its end (Fire was measured at 2.5 s); a boss's cast is three to four and a half seconds, and its plain Attack runs from half a second (Nooj) to six (the Paragon) by its body. This slice makes every command hold its actor for that long, from the game's own animation tables, behind `ACTION_TIME_PER_COMMAND`, **OFF**. With it off every FFX-2 battle is byte for byte what it was (432 of 432 chain-plays compared with the base commit, at three paces). **With it ON the party wins more in the chapters that move, and loses a lot of one** (section 4): a boss's cast holds the boss longer than a girl's action holds her, so the bosses get fewer turns between the girls' turns (Vegnagun +26 of 500 at the Wait pace, Trema +90, Tourist Trap +60, Angra Mainyu +107, the last two against their flat 3 s). The exception is Den of Woe at the Wait pace (-127), which rests on one number: how long Nooj's plain Attack holds him (the clip is 0.5 s; at the macro's own estimate of its hit, 2 s, the loss disappears). Only three effect lengths are measured; every other is a labelled estimate, and the sensitivity arms show how much the answer leans on them.
 
 ## 1. What the span is made of
 
@@ -62,7 +62,7 @@ Nothing is tuned. No boss or party number changed. The generator is `D:\Tools\ff
 | Proof | What | Result |
 |---|---|---|
 | Hand checks | `tests/unit/ffx2-action-span.test.ts` (23 tests): the kernel's terms by hand, three girls (Yuna 61, Rikku 53 and Hasted 27, Paine 58) and three bosses (Bahamut 43, Leblanc 17, Trema 66), the casts (Fire 75; Bahamut's special 117; No Love Lost 108), Haste, Slow, Stop, the precedence of the switches, the engine's countdown (the enemy's later turns start later with the switch on) | all pass |
-| Switch off is the base | the SHIPPED strategy plays every FFX-2 chapter's whole chain (12 chapters, seeds 1 to 12, bench and human pace; 288 chain-plays) on the base commit `7a1c0cb28` (a `git archive` export) and on this tree; one SHA-1 of every link's whole event log | **288 of 288 identical** (non-trivial: wins and losses both present). 60 of the digests are pinned in `tests/fixtures/parity/ffx2/action_span_off.json` and checked by `ffx2-action-span-off.test.ts` |
+| Switch off is the base | the SHIPPED strategy plays every FFX-2 chapter's whole chain (12 chapters, seeds 1 to 12, bench, human and Active pace; 432 chain-plays) on the base commit `7a1c0cb28` (a `git archive` export) and on this tree; one SHA-1 of every link's whole event log | **432 of 432 identical** (non-trivial: wins and losses both present). 60 of the digests are pinned in `tests/fixtures/parity/ffx2/action_span_off.json` and checked by `ffx2-action-span-off.test.ts` |
 | Goldens | `ffx2-atb-golden` (6), `ffx-engine-golden` (18), `ff7-golden` (3), `ffx2-hit-reaction-wiring` (17), `fallen-aeons-action-time` (5), `parity-ffx2-stat-setter-engine` (32) | all pass, unchanged |
 | Types, orphans | `tsc --noEmit` clean; `node tools/orphans.mjs` lists neither new module | clean |
 | Mutation pass | 16 deliberate faults applied one at a time to a copy of the tree (Haste scaling the effect; the idle break a whole clip, then rounded down; a girl not waiting; every class running; the run-up rounded down; Slow read on the wrong clip; No Love Lost dropped from the casts; a monster always waiting; the two effect defaults swapped; an engine option losing to the span; the switch off still computing spans; the played command dropped at the wiring; the formation test inverted; a girl with a countdown adding the cast-start clip; one wrong clip in the data) | **16 of 16 caught** by the unit file |
@@ -112,24 +112,24 @@ Generated by `D:\Tools\ffx-parity\rc10\x2-action-time\analyze.mjs` from the resu
 | XIII Ixion | 499 -> 500 | +1 | 0 / 1 (p=1.000) | 0.1 -> 0.0 | 1.6 -> 1.6 | 29.5 -> 29.6 | 14.5 -> 14.9 | 2.48 | 2.58 |
 | XI Experiment | 228 -> 224 | -4 | 13 / 9 (p=0.523) | 2.2 -> 2.2 | 1.3 -> 1.7 | 25.2 -> 25.0 | 11.1 -> 11.8 | 2.40 | 1.67 |
 | XIV Tourist Trap | 339 -> 466 | +127 | 14 / 141 (p=0.000) ** | 1.4 -> 0.4 | 2.9 -> 2.7 | 46.9 -> 50.1 | 36.1 -> 29.6 | 2.47 | 2.94 |
-| XV Valefor | (not run: on missing) | | | | | | | | |
-| XVI Angra Mainyu | (not run: base missing: on missing) | | | | | | | | |
+| XV Valefor | 500 -> 500 | +0 | 0 / 0 (p=1.000) | 0.2 -> 0.1 | 2.1 -> 1.9 | 37.7 -> 37.6 | 16.3 -> 14.0 | 2.45 | 3.62 |
+| XVI Angra Mainyu | 24 -> 369 | +345 | 4 / 349 (p=0.000) ** | 9.7 -> 5.0 | 8.6 -> 9.7 | 141.7 -> 181.2 | 142.0 -> 119.9 | 2.49 | 4.50 |
 
 #### bench: whole-chain first-try wins, switch off (base) -> on, 500 seeds unless noted
 
 | Chapter | wins base -> on | change | seeds W->L / L->W (p) | KOs/seed | minutes/seed | party actions/seed | enemy actions/seed | mean span party action (s) | mean span enemy action (s) |
 |---|---|---|---|---|---|---|---|---|---|
-| IV Bahamut | (not run: base missing: on missing) | | | | | | | | |
-| V Vegnagun+Shuyin | (not run: base missing: on missing) | | | | | | | | |
-| VI Leblanc | (not run: base missing: on missing) | | | | | | | | |
-| IX Fallen Aeons | (not run: base missing: on missing) | | | | | | | | |
-| X Trema | (not run: base missing: on missing) | | | | | | | | |
-| XII Den of Woe | (not run: base missing: on missing) | | | | | | | | |
-| XIII Ixion | (not run: base missing: on missing) | | | | | | | | |
-| XI Experiment | (not run: base missing: on missing) | | | | | | | | |
-| XIV Tourist Trap | (not run: base missing: on missing) | | | | | | | | |
-| XV Valefor | (not run: base missing: on missing) | | | | | | | | |
-| XVI Angra Mainyu | (not run: base missing: on missing) | | | | | | | | |
+| IV Bahamut | 500 -> 500 | +0 | 0 / 0 (p=1.000) | 0.0 -> 0.0 | 1.2 -> 1.8 | 45.4 -> 45.1 | 12.3 -> 13.8 | 2.46 | 2.56 |
+| V Vegnagun+Shuyin | 482 -> 497 | +15 | 2 / 17 (p=0.000) ** | 1.2 -> 0.8 | 3.6 -> 4.7 | 98.9 -> 100.8 | 63.1 -> 54.5 | 2.14 | 3.46 |
+| VI Leblanc | 500 -> 499 | -1 | 1 / 0 (p=1.000) | 1.0 -> 1.4 | 2.2 -> 3.3 | 80.9 -> 81.0 | 28.1 -> 35.6 | 2.09 | 1.76 |
+| IX Fallen Aeons | 500 -> 500 | +0 | 0 / 0 (p=1.000) | 0.1 -> 0.1 | 2.2 -> 2.1 | 47.6 -> 48.4 | 24.7 -> 22.8 | 2.30 | 3.24 |
+| X Trema | 336 -> 410 | +74 | 47 / 121 (p=0.000) ** | 1.4 -> 1.3 | 8.7 -> 9.8 | 169.7 -> 203.4 | 119.0 -> 152.1 | 2.39 | 2.51 |
+| XII Den of Woe | 499 -> 497 | -2 | 3 / 1 (p=0.625) | 0.4 -> 0.3 | 1.1 -> 1.5 | 33.3 -> 30.7 | 15.5 -> 13.4 | 2.49 | 2.16 |
+| XIII Ixion | 500 -> 500 | +0 | 0 / 0 (p=1.000) | 0.0 -> 0.0 | 1.3 -> 1.2 | 28.1 -> 28.6 | 10.9 -> 10.8 | 2.47 | 2.63 |
+| XI Experiment | 272 -> 274 | +2 | 9 / 11 (p=0.824) | 1.7 -> 1.6 | 0.9 -> 1.2 | 25.3 -> 24.8 | 8.1 -> 8.9 | 2.35 | 1.70 |
+| XIV Tourist Trap | 464 -> 483 | +19 | 10 / 29 (p=0.003) ** | 0.5 -> 0.2 | 2.2 -> 2.0 | 47.4 -> 47.6 | 26.5 -> 22.3 | 2.44 | 2.93 |
+| XV Valefor | 500 -> 500 | +0 | 0 / 0 (p=1.000) | 0.1 -> 0.1 | 1.7 -> 1.5 | 38.7 -> 38.8 | 12.9 -> 10.8 | 2.33 | 3.63 |
+| XVI Angra Mainyu | 447 -> 496 | +49 | 4 / 53 (p=0.000) ** | 3.0 -> 0.4 | 7.6 -> 5.9 | 169.8 -> 153.0 | 103.1 -> 60.4 | 2.39 | 4.50 |
 
 #### human: the formation flat time kept (on-keep) against superseded (on), 500 seeds
 
@@ -150,8 +150,8 @@ Generated by `D:\Tools\ffx-parity\rc10\x2-action-time\analyze.mjs` from the resu
 | X Trema | 167 | 337 | - |
 | XIII Ixion | 499 | 500 | - |
 | XIV Tourist Trap | 339 | 466 | - |
-| XV Valefor | 500 | - | - |
-| XVI Angra Mainyu | - | - | - |
+| XV Valefor | 500 | 500 | - |
+| XVI Angra Mainyu | 24 | 369 | - |
 
 #### Ablation: 200 seeds, human pace, whole-chain wins (the first 200 seeds), one part at a time
 
@@ -187,11 +187,11 @@ Ablation, party KOs / minutes per seed (first-200 arms run on their own; base an
 
 ### 4.2 What moved, and why, in player words
 
-**In general.** A girl's action holds her 2.1 to 2.5 seconds (her Attack 1.9 to 2.1 s, a spell, an item or a special 2.5 s, which is Fire's measured 75 steps); a boss's holds it 1.7 to 4.5 s, by body and by command: a cast is the 94-step estimate and, for a body that waits for an idle pose before it starts, up to two seconds more; a plain Attack is the idle wait, the run and the swing. So where a boss's actions are longer than a girl's, the girls get relatively more turns, and where they are shorter, fewer. The two sides are slowed together and the fights run longer (Bahamut 1.3 to 1.9 minutes at the human pace, Leblanc 2.7 to 3.7); what changes the odds is the difference between the two sides' spans.
+**In general.** A girl's action holds her 2.1 to 2.5 seconds (her Attack 1.9 to 2.1 s, a spell, an item or a special 2.5 s, which is Fire's measured 75 steps); a boss's holds it 1.7 to 4.5 s, by body and by command: a cast is the 94-step estimate and, for a body that waits for an idle pose before it starts, up to two seconds more; a plain Attack is the idle wait, the run and the swing. So where a boss's actions are longer than a girl's, the girls get relatively more turns, and where they are shorter, fewer. The two sides are slowed together and the fights run longer (Bahamut 1.3 to 1.9 minutes at the human pace, Leblanc 2.7 to 3.7); what changes the odds is the difference between the two sides' spans. At the bench pace (no menu time) only the four chapters whose enemy spans are long move: V +15, X +74, XIV +19, XVI +49 of 500; Den of Woe is -2.
 
 - **V Vegnagun and Shuyin: 463 -> 489 (human), 417 -> 468 (Active), p below 0.001.** The parts' casts hold them 3.5 s each (the 94-step estimate plus the idle pose the part waits for) against 2.1 s for a girl: the enemy acts 73 -> 62 times a fight, the girls are knocked out 1.7 -> 1.1 times. Ablation: the cast spans alone give it (198 of 200 against 184); the physical spans alone cost 5.
-- **X Trema: 288 -> 378 (human), 167 -> 337 (Active), p below 0.001.** Both links already carry the flat 3 s. Trema's three moves are class 1 attacks that take 2.2 s and a girl's action 2.4 s, so each side gets about 0.6 s back per action; and the Paragon's plain Attack, whose swing clip is 138 frames, holds it 5.9 s (the clip's end taken as the hit): the Paragon strikes far less often. Diagnostic on 100 seeds, human: link 1 (the Paragon) 59 -> 87 wins, girls knocked out 1.28 -> 0.43 a fight; link 2 (Trema) 51 of 59 -> 76 of 87 reaching it. **This is the chapter most exposed to the "clip is the hit time" reading** (see the `on-hit-half` row).
-- **XII Den of Woe: 498 -> 371 at the human pace (128 seeds lost, 1 gained, p below 0.001) but 452 -> 488 at Active.** The baseline has no action time. All of the loss is Nooj's link (diagnostic, 100 seeds, human: link 3 99 -> 71 wins; the party takes 16,254 -> 18,934 damage a fight, 0.69 -> 1.26 girls knocked out, and acts 16.5 -> 13.6 times against Nooj's 9.9 -> 7.9). Nooj's plain Attack is a 16-frame swing and holds him **0.5 s**; the girls' Darkness, Cura and Protect hold them 2.5 s. At the Wait pace the girls' menu time is held and costs nothing, so in the base the girls were acting almost for free; with action time each spell now costs her 2.5 s of which the clock runs free while Nooj needs half a second. Ablation: neither part alone does it (physical only 200 of 200, casts only 186, both 146 of 200). **The sign depends on the girls' spell length, which is the estimate (75 steps for a spell nobody measured).**
+- **X Trema: 288 -> 378 (human), 167 -> 337 (Active), p below 0.001.** Both links already carry the flat 3 s. Trema's three moves are class 1 attacks that take 2.2 s and a girl's action 2.4 s, so Trema gets 0.8 s and a girl 0.6 s back on every action; and the Paragon's plain Attack, whose swing clip is 138 frames, holds it 5.9 s (the clip's end taken as the hit): the Paragon strikes far less often. Diagnostic on 100 seeds, human: link 1 (the Paragon) 59 -> 87 wins, girls knocked out 1.28 -> 0.43 a fight; link 2 (Trema) 51 of 59 -> 76 of 87 reaching it. Its sign survives every soft-term variant (143 to 158 of 200 against 114; section 4.4), but its size is the most exposed to the "clip is the hit time" reading: half the clip gives 144.
+- **XII Den of Woe: 498 -> 371 at the human pace (128 seeds lost, 1 gained, p below 0.001) but 452 -> 488 at Active.** The baseline has no action time. The bench pace is neutral (499 -> 497) and Active gains (452 -> 488). All of the Wait-pace loss is Nooj's link (diagnostic, 100 seeds, human: link 3 99 -> 71 wins; the party takes 16,254 -> 18,934 damage a fight, 0.69 -> 1.26 girls knocked out, and acts 16.5 -> 13.6 times against Nooj's 9.9 -> 7.9). Nooj's plain Attack is a 16-frame swing and holds him **0.5 s**; the girls' Darkness, Cura and Protect hold them 2.5 s. At the Wait pace the girls' menu time is held and costs nothing, so in the base the girls were acting almost for free; with action time each spell now costs her 2.5 s of which the clock runs free while Nooj needs half a second. Ablation: neither part alone does it (physical only 200 of 200, casts only 186, both 146 of 200). **Sensitivity (section 4.4): with Nooj's hit taken at the macro's own normal-attack estimate (60 frames, 2 s, instead of his 16-frame clip) the chapter is 200 of 200 again; at half the clip, 153; every effect length x0.8 / x1.25 gives 153 / 156, the run-up none / doubled 148 / 140.** So this one result rests on how long Nooj's plain Attack holds him, which no table reads (his `attack_00` clip carries no hit signal). I did not isolate why the Wait pace shows it and the bench pace does not; my hypothesis is the held menu clock (a girl choosing a spell costs no game time in the base, and an executing girl is not choosing).
 - **XIV Tourist Trap: 423 -> 483 (human), 339 -> 466 (Active).** Flat 3 s baseline. Yojimbo's and Daigoro's actions average 2.9 s and a girl's 2.5 s, so the girls get 0.5 s back on every action and the bosses almost nothing: the enemy acts 29.0 -> 23.8 times a fight, the girls are knocked out 0.8 -> 0.2 times. The cast spans alone give it (195 of 200 against 170).
 - **XVI Angra Mainyu: 383 -> 490 (human).** Flat 3 s baseline. Angra Mainyu's Full-Life and Tawrich's Punch hold them **4.5 s** each (the 94-step estimate plus the 41-step idle pose of a body that waits for it) against 3 s flat, and the girls 2.4 s: diagnostic (100 seeds, human): the enemy acts 113 -> 69 times a fight, the girls are knocked out 4.2 -> 0.8, the fight is 491 -> 392 s, link wins 74 -> 98. Cast spans alone give it (196 of 200 against 142).
 - **XI the Experiment (hidden): 235 -> 244 (human, p = 0.049), 228 -> 224 (Active, noise).** Within noise for practical purposes.
@@ -199,42 +199,45 @@ Ablation, party KOs / minutes per seed (first-200 arms run on their own; base an
 
 ### 4.3 Ablation (200 seeds, human pace)
 
-Read the table above. For the five chapters with no baseline action time the parts are clean: **casts carry V, and for the six flat-time chains the casts carry XIV and XVI**; the physical spans alone are neutral or a little negative; the pair is not a sum (Den of Woe: +1 and -13 alone, -53 together). For the six flat-time chains `phys` and `cast` also drop the flat 3 s on the part that is off, so compare them with `none`.
+Read the table above. **The cast spans carry the gains: V (198 of 200 casts-only, 197 both), XIV (195, 194) and XVI (196, 196); the physical spans alone are neutral or negative** (V 179, XIV 155); the pair is not a sum (Den of Woe: +1 and -13 alone, -53 together). For the six flat-time chains `phys` and `cast` also drop the flat 3 s on the part that is off, which is why Trema reads 60 and 3 there: compare with `none` (Trema 10 of 200 with no action time at all, Tourist Trap 163, Angra Mainyu 171).
 
 ### 4.4 Sensitivity of the soft terms (200 seeds, human pace, the six chapters the main table moves)
 
 | Chapter | base | none (no action time) | on | run-up 0 | run-up x2 | monster hit at normal-attack estimate | monster hit at half the clip | effects x0.8 | effects x1.25 |
 |---|---|---|---|---|---|---|---|---|---|
-| V Vegnagun+Shuyin | 184 | - | 197 | - | - | - | - | - | - |
-| X Trema | 114 | - | 158 | - | - | - | - | - | - |
-| XII Den of Woe | 199 | - | 146 | - | - | - | - | - | - |
-| XI Experiment | 88 | - | 93 | - | - | - | - | - | - |
-| XIV Tourist Trap | 170 | - | 194 | - | - | - | - | - | - |
-| XVI Angra Mainyu | 142 | - | 196 | - | - | - | - | - | - |
+| V Vegnagun+Shuyin | 184 | - | 197 | 198 | 197 | 195 | 197 | 194 | 199 |
+| X Trema | 114 | 10 | 158 | 144 | 143 | 158 | 144 | 146 | 149 |
+| XII Den of Woe | 199 | - | 146 | 148 | 140 | 200 | 153 | 153 | 156 |
+| XI Experiment | 88 | - | 93 | 93 | 93 | 94 | 92 | 85 | 92 |
+| XIV Tourist Trap | 170 | 163 | 194 | 194 | 195 | 193 | 194 | 193 | 194 |
+| XVI Angra Mainyu | 142 | 171 | 196 | 196 | 196 | 196 | 196 | 198 | 197 |
+
+Reading it: **four movers keep their sign under every variant**: V (194 to 199 against 184), XIV (193 to 195 against 170), XVI (196 to 198 against 142) and Trema (143 to 158 against 114; the effect length and the monster hit time move its size by a dozen). **Den of Woe is the one that flips**, on Nooj's hit time alone (200 at the macro's estimate, 146 to 156 otherwise). The run-up, the least known term, matters little anywhere (none at all against twice the distance moves no chapter by more than 14 wins of 200). The Experiment is noise in every arm.
 
 ## 5. Decision for Bailey: turn `ACTION_TIME_PER_COMMAND` on or not
 
-The switch is `ACTION_TIME_PER_COMMAND` in `src/battle/ffx2/action-time.ts` (`false`). Turning it on is one line; with it on, a formation's flat 3 s (Chapters IX, X, XIII, XIV, XV, XVI: D-151, D-187/D-197, D-269) gives way to the span.
+The switch is `ACTION_TIME_PER_COMMAND` in `src/battle/ffx2/action-time.ts` (`false`). Turning it on is one line; with it on, a formation's flat 3 s (Chapters IX, X, XIII, XIV, XV, XVI: D-151, D-187/D-197, D-269) gives way to the span. First-try wins of 500, whole chain, base -> on:
 
-| Chapter | Wait pace (human) | Active | Bench | What it comes from | How soft |
+| Chapter | Wait pace (human) | Active | Bench | What it comes from | What it leans on |
 |---|---|---|---|---|---|
-| IV Bahamut | 500 -> 500 (+0) | 500 -> 500 (+0) | not run | no move; the fight takes longer (1.3 -> 1.9 min) | firm |
-| V Vegnagun and Shuyin | 463 -> 489 (+26) | 417 -> 468 (+51) | not run | the parts' casts hold them 3.5 s against a girl's 2.1 s; the enemy acts 17 percent less | effect length (94 default) |
-| VI Leblanc | 500 -> 500 (+0) | 472 -> 500 (+28) | not run | no move at the Wait pace; the trio's short actions (1.8 s) against the girls' 2.2 s help the girls at Active | run-up, idle break |
-| IX Fallen Aeons | 498 -> 500 (+2) | 497 -> 500 (+3) | not run | no move (500 or within two seeds) | firm |
-| X Trema | 288 -> 378 (+90) | 167 -> 337 (+170) | not run | flat 3 s gives way: the girls and Trema get 0.6 s back per action, the Paragon's plain Attack holds it 5.9 s | monster hit time inside a 138-frame swing |
-| XII Den of Woe | 498 -> 371 (-127) | 452 -> 488 (+36) | not run | Nooj's Attack holds him 0.5 s, the girls' spells 2.5 s: he acts relatively more, and at the Wait pace the girls' free menu time is gone | girls' spell length (75 default), Nooj's hit time |
-| XIII Ixion | 500 -> 500 (+0) | 499 -> 500 (+1) | not run | no move (500 of 500) | firm |
-| XI the Experiment | 235 -> 244 (+9) | 228 -> 224 (-4) | not run | within noise | firm |
-| XIV Tourist Trap | 423 -> 483 (+60) | 339 -> 466 (+127) | not run | flat 3 s gives way: the girls get 0.5 s back per action, Yojimbo and Daigoro almost none | effect length |
-| XV Valefor | 500 -> 500 (+0) | not run | not run | no move (500 of 500) | firm |
-| XVI Angra Mainyu | 383 -> 490 (+107) | not run | not run | Angra Mainyu's and Tawrich's casts hold them 4.5 s against 3 s flat: the enemy acts 113 -> 69 times a fight | effect length (94 default) |
+| IV Bahamut | 500 -> 500 (+0) | 500 -> 500 (+0) | 500 -> 500 (+0) | no move; the fight takes longer (1.3 -> 1.9 min) | firm |
+| V Vegnagun and Shuyin | 463 -> 489 (+26) | 417 -> 468 (+51) | 482 -> 497 (+15) | the parts' casts hold them 3.5 s against a girl's 2.1 s; the enemy acts 17 percent less | sign robust under every variant |
+| VI Leblanc | 500 -> 500 (+0) | 472 -> 500 (+28) | 500 -> 499 (-1) | no move at the Wait pace; at Active the trio's short actions (1.8 s) against the girls' 2.2 s help the girls | small |
+| IX Fallen Aeons | 498 -> 500 (+2) | 497 -> 500 (+3) | 500 -> 500 (+0) | no move (500 or within two seeds) | firm |
+| X Trema | 288 -> 378 (+90) | 167 -> 337 (+170) | 336 -> 410 (+74) | flat 3 s gives way: Trema gets 0.8 s and a girl 0.6 s back per action; the Paragon's plain Attack holds it 5.9 s | sign robust; size leans on the Paragon's 138-frame swing (144 of 200 at half) |
+| XII Den of Woe | 498 -> 371 (-127) | 452 -> 488 (+36) | 499 -> 497 (-2) | Nooj's Attack holds him 0.5 s, the girls' spells 2.5 s: he acts relatively more (neutral at bench, gains at Active) | Nooj's hit time (16-frame clip, no hit signal): at the macro's estimate it is 200 of 200 |
+| XIII Ixion | 500 -> 500 (+0) | 499 -> 500 (+1) | 500 -> 500 (+0) | no move (500 of 500) | firm |
+| XI the Experiment | 235 -> 244 (+9) | 228 -> 224 (-4) | 272 -> 274 (+2) | within noise | firm |
+| XIV Tourist Trap | 423 -> 483 (+60) | 339 -> 466 (+127) | 464 -> 483 (+19) | flat 3 s gives way: the girls get 0.5 s back per action, Yojimbo and Daigoro almost none | sign robust under every variant |
+| XV Valefor | 500 -> 500 (+0) | 500 -> 500 (+0) | 500 -> 500 (+0) | no move (500 of 500) | firm |
+| XVI Angra Mainyu | 383 -> 490 (+107) | 24 -> 369 (+345) | 447 -> 496 (+49) | Angra Mainyu's and Tawrich's casts hold them 4.5 s against 3 s flat: the enemy acts 113 -> 69 times a fight | sign robust under every variant |
 
-**Recommendation: leave it OFF for now and run the stopwatch session of section 6 first; turn it ON after.** Why:
-1. The direction is right (every action takes the time of its animation: that is the 1:1 reading, and the base commit's "no time at all" is the least faithful of the three), and the machinery is proved (switch off is the base, byte for byte; 16 of 16 mutants caught).
-2. But the SIZES lean on three estimates that one session settles: the girls' spell length (75 steps for every spell but Fire; the Dark Knight's Darkness alone is a third of all girl actions in the measured fights), a monster's hit time inside its attack clip (the clip's end is an upper bound), and the run-up. The sensitivity table shows which chapters change sign when they move.
-3. It would move the shipped balance a great deal at once: one chapter loses 127 of 500 first-try wins at the Wait pace (XII), five gain 26 to 170, and it supersedes six of Bailey's own 3-second picks.
-4. If Bailey wants it on before the session, the least-risk choice is **ON with the flat times superseded** (the default here), because "keep the flat time" is the base itself for those six chains; and say so in the CHANGELOG (section 7) as provisional.
+**Recommendation: read one number first, then turn it ON.** The number is how long Nooj's plain Attack holds him (and, by the same method, the Paragon's); everything else in the table survives the soft terms.
+1. **The direction is the 1:1 reading.** In the game a command holds its actor for the time its animation plays, and the base commit's "no time at all" is the least faithful of the three readings (the flat 3 s is the middle one). The machinery is proved: the switch off is the base byte for byte (432 of 432 chain-plays), 16 of 16 mutants are caught, the goldens are unchanged.
+2. **Four of the five chapters it moves keep their sign under every soft-term variant** (the run-up none or doubled, a monster's hit at half its clip or at the macro's estimate, every effect 20 percent shorter or 25 percent longer): V (+26 of 500 at the Wait pace, +51 at Active), X Trema (+90, +170), XIV (+60, +127), XVI (+107, and +345 at Active, where the chapter was 24 of 500). They get easier for the girls because a boss's cast (3.5 to 4.5 s) holds the boss longer than a girl's action holds her (2.1 to 2.5 s), and three of them (X, XIV, XVI) were on the flat 3 s that held both sides alike. That is a balance change Bailey should expect: the party wins more in the long fights.
+3. **The one hazard is Den of Woe at the Wait pace: 498 -> 371 of 500 (-127).** It is neutral at the bench pace (-2) and +36 at Active, and it disappears (200 of 200) if Nooj's plain Attack is taken at the macro's own estimate of its hit (2 s) instead of the end of his 16-frame clip (0.5 s). No table says which is right: his `attack_00` clip carries no hit signal. One stopwatch reading of Nooj's Attack (or the hit frame in his motion script) settles it; the Paragon's 138-frame swing (5.9 s taken as the hit) is the other long-clip body worth the same reading, since Trema's size, not its sign, leans on it.
+4. **It supersedes six of Bailey's own 3-second picks** (the default here). Keeping them ("`on-keep`") is the base itself for those six chains, because every link carries the flat, so there is no third option to measure; `supersedeFormation: false` exists for a test.
+5. **If Bailey wants it ON now:** say so in the CHANGELOG as provisional (section 7), and expect Den of Woe at the Wait pace to read 371 of 500 until the number is read. No boss or party number changes either way.
 
 ## 6. What a live measurement would settle (note FFX2-G11 section 7), in the order that moves these numbers
 
