@@ -22,7 +22,30 @@
   "braskas-final-aeon.mid-valefor-enters.007.fb1"
  ],
  "accepted": [],
- "missing": [],
+ "missing": [
+  "mirror-aeons.pre.001",
+  "mirror-aeons.pre.002",
+  "mirror-aeons.pre.003",
+  "mirror-aeons.pre.005",
+  "mirror-aeons.pre.007",
+  "mirror-aeons.pre.008",
+  "mirror-aeons.post.001",
+  "mirror-aeons.post.002",
+  "mirror-aeons.post.003",
+  "mirror-aeons.post.004",
+  "mirror-aeons.post.006",
+  "mirror-aeons.post.008",
+  "mirror-aeons.mid-sisters-fall.001",
+  "mirror-aeons.mid-sisters-fall.001.fb1",
+  "mirror-aeons.mid-sisters-fall.001.fb2",
+  "mirror-aeons.mid-sisters-fall.002",
+  "mirror-aeons.mid-sisters-fall.003",
+  "mirror-aeons.mid-sisters-fall.003.fb2",
+  "mirror-aeons.mid-sisters-fall.003.fb3",
+  "mirror-aeons.mid-dark-yojimbo-ready.001",
+  "mirror-aeons.mid-dark-yojimbo-ready.001.fb1",
+  "mirror-aeons.mid-dark-yojimbo-ready.001.fb2"
+ ],
  "recordings": [
   {
    "id": "seymour-flux.pre.008",
