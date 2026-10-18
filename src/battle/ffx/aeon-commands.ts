@@ -27,6 +27,7 @@ import { spendOverdrive } from './overdrive.ts';
 import { isPlayerYojimbo, payCommand, yojimboDismiss } from './adapt/yojimbo.ts';
 import { BUILT_ORDERS, isSister } from './adapt/sisters.ts';
 import { sisterOrder } from './adapt/sister-orders.ts';
+import { recordStep } from './target-step-parity.ts';
 
 /** The ability id of Yojimbo's Pay. */
 export const PAY_ABILITY_ID = 'yojimbo-pay';
@@ -105,6 +106,9 @@ export function aeonMenuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] |
       validTargets: [],
     };
     if (!built) row.disabledReason = 'Not built';
+    // The orders' records (0x3124 to 0x312C) carry the step bit with the user-only mode, Combine powers (0x3129) the group mode on the ally side: the original opens a cursor (`TARGET_STEP_PARITY`, item selfStep).
+    const step = recordStep(ctx, user, o.command, true);
+    if (step) row.targetStep = step;
     rows.push(row);
   }
   return rows;
