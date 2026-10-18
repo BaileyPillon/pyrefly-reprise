@@ -49,14 +49,21 @@ export type Input = Extract<Decision, { kind: 'player-input' }>;
 export const defend = (): Command => ({ kind: 'defend', targets: [] });
 
 /**
- * A turn that is spent and changes nothing the tests read. The old filler was Defend; the game's formation script for this contest calls
- * `setDefendingEnabled(0)` (`bvyt09_10` to `_12`; re-parity RC10, `battle/ffx/formation-flags.ts`), so Yuna and every aeon have no Defend and a
- * submitted one is refused with the turn kept open. Yuna passes by casting Cura on herself (the same filler the "no aeon left" test uses), an aeon
- * by attacking its foe. `defend()` stays for the one test that proves it is refused.
+ * A turn that is spent and changes nothing the tests read, **by a command the game lets this actor use** (re-parity RC10).
+ *
+ * - **An aeon** passes by attacking its foe. (Its menu has no Defend: `bvyt09_10` to `_12` call `setDefendingEnabled(0)`, `battle/ffx/formation-flags.ts`.)
+ * - **Yuna** passes by summoning the first aeon her menu offers. The old filler was Cura on herself, and before that Defend; the same three formation scripts also call
+ *   `setCommandDisabled` for her Attack, Item, Weapon, Armor, Skill, Special, Black Magic and White Magic, so her menu is Summon and Grand Summon and nothing else
+ *   (`battle/ffx/formation-commands.ts`). There is no way for her to wait out a turn; a test that needs the enemy to act on a Yuna with no aeon out has no such state to reach.
+ *
+ * `defend()` stays for the tests that prove it is refused.
  */
 export function pass(d: Input): Command {
-  const cura = d.commands.find((c) => c.enabled && c.command.kind === 'ability' && 'id' in c.command && c.command.id === 'cura');
-  if (d.actorId === 'yuna' && cura) return { ...cura.command, targets: ['yuna'] } as Command;
+  if (d.actorId === 'yuna') {
+    const first = d.commands.find((c) => c.enabled && c.command.kind === 'summon');
+    if (!first) throw new Error('nothing to pass the turn with for yuna: her menu is Summon and Grand Summon, and no aeon can be summoned');
+    return { ...first.command, targets: [] } as Command;
+  }
   const attack = d.commands.find((c) => c.enabled && c.command.kind === 'attack' && c.validTargets.length > 0);
   if (attack) return { ...attack.command, targets: [attack.validTargets[0]!] } as Command;
   const any = d.commands.find((c) => c.enabled && c.validTargets.length > 0);

@@ -1,0 +1,262 @@
+{
+ "note": "Every setCommandDisabled call (script call 0x703B) of the formation files our FFX chapters fight, in code order, with its three constant arguments (the actor spec, the command id, the flag) and the function it sits in (w0.f0 is the formation's entry function, which runs before the first turn); and, for the whole game, which battle files switch off an action command there. Derived from the install's own battle files by a static scan (the constants pushed just before the call); numbers and file names only, no script text. The actor spec: a plain number is that actor slot (0 Tidus, 1 Yuna, 2 Auron, 3 Kimahri, 4 Wakka, 5 Lulu, 6 Rikku); -23 every slot that is not a monster (characters and aeons); -21 every slot. A command id 0x3xxx sets (flag 1) or clears (flag 0) a bit of the actor's disabled-command bitmap; an id below 0x1000 is an aeon's availability flag, written with the flag as given (flag 0 = unavailable). Regenerate with the lane scratch in D:/Tools/ffx-parity/tmp/ffx-isaaru-cmds (scan-cmd-disabled.mjs, make-fixture.mjs); not part of the build.",
+ "specs": {"everyoneNonMonster":-23,"everySlot":-21,"slots":{"tidus":0,"yuna":1,"auron":2,"kimahri":3,"wakka":4,"lulu":5,"rikku":6}},
+ "chapterFormations": {
+  "mtgz02_00": { "chapter": "seymour-flux", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":0,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":1,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":2,"command":12291,"flag":1},
+   {"at":"0x002d","fn":"w0.f0","who":4,"command":12291,"flag":1},
+   {"at":"0x0039","fn":"w0.f0","who":3,"command":12291,"flag":1},
+   {"at":"0x0045","fn":"w0.f0","who":5,"command":12291,"flag":1},
+   {"at":"0x0051","fn":"w0.f0","who":6,"command":12291,"flag":1},
+   {"at":"0x005d","fn":"w0.f0","who":0,"command":12312,"flag":1},
+   {"at":"0x0069","fn":"w0.f0","who":1,"command":12312,"flag":1},
+   {"at":"0x0075","fn":"w0.f0","who":2,"command":12312,"flag":1},
+   {"at":"0x0081","fn":"w0.f0","who":4,"command":12312,"flag":1},
+   {"at":"0x008d","fn":"w0.f0","who":3,"command":12312,"flag":1},
+   {"at":"0x0099","fn":"w0.f0","who":5,"command":12312,"flag":1},
+   {"at":"0x00a5","fn":"w0.f0","who":6,"command":12312,"flag":1}
+  ] },
+  "mcyt06_00": { "chapter": "seymour-anima-macalania", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1},
+   {"at":"0x06fa","fn":"w1.f2","who":0,"command":12549,"flag":0},
+   {"at":"0x0709","fn":"w1.f2","who":0,"command":12549,"flag":1},
+   {"at":"0x0765","fn":"w2.f2","who":1,"command":12549,"flag":0},
+   {"at":"0x0774","fn":"w2.f2","who":1,"command":12549,"flag":1},
+   {"at":"0x0796","fn":"w3.f2","who":1,"command":12549,"flag":0},
+   {"at":"0x07a5","fn":"w3.f2","who":1,"command":12549,"flag":1}
+  ] },
+  "stbv01_10": { "chapter": "seymour-natus", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":0,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":1,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":2,"command":12291,"flag":1},
+   {"at":"0x002d","fn":"w0.f0","who":4,"command":12291,"flag":1},
+   {"at":"0x0039","fn":"w0.f0","who":3,"command":12291,"flag":1},
+   {"at":"0x0045","fn":"w0.f0","who":5,"command":12291,"flag":1},
+   {"at":"0x0051","fn":"w0.f0","who":6,"command":12291,"flag":1},
+   {"at":"0x005d","fn":"w0.f0","who":0,"command":12312,"flag":1},
+   {"at":"0x0069","fn":"w0.f0","who":1,"command":12312,"flag":1},
+   {"at":"0x0075","fn":"w0.f0","who":2,"command":12312,"flag":1},
+   {"at":"0x0081","fn":"w0.f0","who":4,"command":12312,"flag":1},
+   {"at":"0x008d","fn":"w0.f0","who":3,"command":12312,"flag":1},
+   {"at":"0x0099","fn":"w0.f0","who":5,"command":12312,"flag":1},
+   {"at":"0x00a5","fn":"w0.f0","who":6,"command":12312,"flag":1}
+  ] },
+  "sins03_00": { "chapter": "seymour-omnis", "calls": [
+   {"at":"0xc19f","fn":"w21.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0xc1ab","fn":"w21.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "hiku15_00": { "chapter": "evrae-airship (and the hidden Fayth chapter)", "calls": [
+   {"at":"0x001b","fn":"w0.f0","who":0,"command":12291,"flag":1},
+   {"at":"0x0027","fn":"w0.f0","who":1,"command":12291,"flag":1},
+   {"at":"0x0033","fn":"w0.f0","who":2,"command":12291,"flag":1},
+   {"at":"0x003f","fn":"w0.f0","who":4,"command":12291,"flag":1},
+   {"at":"0x004b","fn":"w0.f0","who":3,"command":12291,"flag":1},
+   {"at":"0x0057","fn":"w0.f0","who":5,"command":12291,"flag":1},
+   {"at":"0x0063","fn":"w0.f0","who":6,"command":12291,"flag":1},
+   {"at":"0x006f","fn":"w0.f0","who":0,"command":12312,"flag":1},
+   {"at":"0x007b","fn":"w0.f0","who":1,"command":12312,"flag":1},
+   {"at":"0x0087","fn":"w0.f0","who":2,"command":12312,"flag":1},
+   {"at":"0x0093","fn":"w0.f0","who":4,"command":12312,"flag":1},
+   {"at":"0x009f","fn":"w0.f0","who":3,"command":12312,"flag":1},
+   {"at":"0x00ab","fn":"w0.f0","who":5,"command":12312,"flag":1},
+   {"at":"0x00b7","fn":"w0.f0","who":6,"command":12312,"flag":1},
+   {"at":"0x34ce","fn":"w7.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x34da","fn":"w7.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "nagi05_10": { "chapter": "yojimbo-cavern", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":0,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":1,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":2,"command":12291,"flag":1},
+   {"at":"0x002d","fn":"w0.f0","who":4,"command":12291,"flag":1},
+   {"at":"0x0039","fn":"w0.f0","who":3,"command":12291,"flag":1},
+   {"at":"0x0045","fn":"w0.f0","who":5,"command":12291,"flag":1},
+   {"at":"0x0051","fn":"w0.f0","who":6,"command":12291,"flag":1},
+   {"at":"0x005d","fn":"w0.f0","who":0,"command":12312,"flag":1},
+   {"at":"0x0069","fn":"w0.f0","who":1,"command":12312,"flag":1},
+   {"at":"0x0075","fn":"w0.f0","who":2,"command":12312,"flag":1},
+   {"at":"0x0081","fn":"w0.f0","who":4,"command":12312,"flag":1},
+   {"at":"0x008d","fn":"w0.f0","who":3,"command":12312,"flag":1},
+   {"at":"0x0099","fn":"w0.f0","who":5,"command":12312,"flag":1},
+   {"at":"0x00a5","fn":"w0.f0","who":6,"command":12312,"flag":1}
+  ] },
+  "bvyt09_10": { "chapter": "isaaru-via-purifico link 1", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12290,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x002d","fn":"w0.f0","who":-23,"command":12312,"flag":1},
+   {"at":"0x0039","fn":"w0.f0","who":1,"command":12288,"flag":1},
+   {"at":"0x0045","fn":"w0.f0","who":1,"command":12289,"flag":1},
+   {"at":"0x0051","fn":"w0.f0","who":1,"command":12292,"flag":1},
+   {"at":"0x005d","fn":"w0.f0","who":1,"command":12293,"flag":1},
+   {"at":"0x0069","fn":"w0.f0","who":1,"command":12565,"flag":1},
+   {"at":"0x0075","fn":"w0.f0","who":1,"command":12566,"flag":1},
+   {"at":"0x0081","fn":"w0.f0","who":1,"command":12563,"flag":1},
+   {"at":"0x008d","fn":"w0.f0","who":1,"command":12564,"flag":1},
+   {"at":"0x0099","fn":"w0.f0","who":1,"command":9,"flag":0}
+  ] },
+  "bvyt09_11": { "chapter": "isaaru-via-purifico link 2", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12290,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x002d","fn":"w0.f0","who":-23,"command":12312,"flag":1},
+   {"at":"0x0039","fn":"w0.f0","who":1,"command":12288,"flag":1},
+   {"at":"0x0045","fn":"w0.f0","who":1,"command":12289,"flag":1},
+   {"at":"0x0051","fn":"w0.f0","who":1,"command":12292,"flag":1},
+   {"at":"0x005d","fn":"w0.f0","who":1,"command":12293,"flag":1},
+   {"at":"0x0069","fn":"w0.f0","who":1,"command":12565,"flag":1},
+   {"at":"0x0075","fn":"w0.f0","who":1,"command":12566,"flag":1},
+   {"at":"0x0081","fn":"w0.f0","who":1,"command":12563,"flag":1},
+   {"at":"0x008d","fn":"w0.f0","who":1,"command":12564,"flag":1},
+   {"at":"0x0099","fn":"w0.f0","who":1,"command":8,"flag":0}
+  ] },
+  "bvyt09_12": { "chapter": "isaaru-via-purifico link 3", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12290,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x002d","fn":"w0.f0","who":-23,"command":12312,"flag":1},
+   {"at":"0x0039","fn":"w0.f0","who":1,"command":12288,"flag":1},
+   {"at":"0x0045","fn":"w0.f0","who":1,"command":12289,"flag":1},
+   {"at":"0x0051","fn":"w0.f0","who":1,"command":12292,"flag":1},
+   {"at":"0x005d","fn":"w0.f0","who":1,"command":12293,"flag":1},
+   {"at":"0x0069","fn":"w0.f0","who":1,"command":12565,"flag":1},
+   {"at":"0x0075","fn":"w0.f0","who":1,"command":12566,"flag":1},
+   {"at":"0x0081","fn":"w0.f0","who":1,"command":12563,"flag":1},
+   {"at":"0x008d","fn":"w0.f0","who":1,"command":12564,"flag":1},
+   {"at":"0x0099","fn":"w0.f0","who":1,"command":12,"flag":0}
+  ] },
+  "ssbt00_00": { "chapter": "sin-fins-core (a fin)", "calls": [
+   {"at":"0x430e","fn":"w7.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x431a","fn":"w7.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "ssbt01_00": { "chapter": "sin-fins-core (a fin)", "calls": [
+   {"at":"0x3e3e","fn":"w7.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x3e4a","fn":"w7.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "ssbt02_00": { "chapter": "sin-fins-core (Genais and the Core)", "calls": [
+   {"at":"0x2ba8","fn":"w5.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x2bb4","fn":"w5.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "ssbt03_00": { "chapter": "sin-face (Overdrive Sin)", "calls": [
+   {"at":"0x2c15","fn":"w5.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x2c21","fn":"w5.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "dome06_00": { "chapter": "yunalesca", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":0,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":1,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":2,"command":12291,"flag":1},
+   {"at":"0x002d","fn":"w0.f0","who":4,"command":12291,"flag":1},
+   {"at":"0x0039","fn":"w0.f0","who":3,"command":12291,"flag":1},
+   {"at":"0x0045","fn":"w0.f0","who":5,"command":12291,"flag":1},
+   {"at":"0x0051","fn":"w0.f0","who":6,"command":12291,"flag":1},
+   {"at":"0x005d","fn":"w0.f0","who":0,"command":12312,"flag":1},
+   {"at":"0x0069","fn":"w0.f0","who":1,"command":12312,"flag":1},
+   {"at":"0x0075","fn":"w0.f0","who":2,"command":12312,"flag":1},
+   {"at":"0x0081","fn":"w0.f0","who":4,"command":12312,"flag":1},
+   {"at":"0x008d","fn":"w0.f0","who":3,"command":12312,"flag":1},
+   {"at":"0x0099","fn":"w0.f0","who":5,"command":12312,"flag":1},
+   {"at":"0x00a5","fn":"w0.f0","who":6,"command":12312,"flag":1}
+  ] },
+  "sins06_00": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x000f","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x001b","fn":"w0.f0","who":-21,"command":12312,"flag":1},
+   {"at":"0x0365","fn":"w0.f5","who":0,"command":12549,"flag":0},
+   {"at":"0x0412","fn":"w0.f6","who":0,"command":12549,"flag":1},
+   {"at":"0x0472","fn":"w0.f6","who":0,"command":12549,"flag":1}
+  ] },
+  "sins07_00": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_01": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_02": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_03": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_04": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_05": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_06": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_07": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "sins07_10": { "chapter": "braskas-final-aeon / last-summoning", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "kino02_00": { "chapter": "sinspawn-gui fight 1", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1}
+  ] },
+  "kino03_10": { "chapter": "sinspawn-gui fight 2", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":-21,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":-21,"command":12312,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-21,"command":12290,"flag":1}
+  ] },
+  "mtgz01_10": { "chapter": "biran-yenke", "calls": [
+   {"at":"0x0009","fn":"w0.f0","who":3,"command":12291,"flag":1},
+   {"at":"0x0015","fn":"w0.f0","who":3,"command":12312,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":3,"command":12290,"flag":1}
+  ] },
+  "nagi05_70": { "chapter": "mirror-aeons pool (tier 1, not the shipped pick)", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "nagi05_71": { "chapter": "mirror-aeons act II", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "nagi05_72": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "nagi05_73": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "nagi05_74": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "kino00_70": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x001b","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0027","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "kino01_70": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x001b","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0027","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "kino01_71": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x000f","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x001b","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "kino01_72": { "chapter": "mirror-aeons act I", "calls": [
+   {"at":"0x0015","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x0021","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "kino05_70": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x000f","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x001b","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] },
+  "kino05_71": { "chapter": "mirror-aeons pool", "calls": [
+   {"at":"0x000f","fn":"w0.f0","who":-23,"command":12291,"flag":1},
+   {"at":"0x001b","fn":"w0.f0","who":-23,"command":12312,"flag":1}
+  ] }
+ },
+ "corpus": {"filesWithCalls":120,"calls":922,"byCommand":{"0x3003":246,"0x3018":209,"0x3002":93,"0x3000":34,"0x3004":44,"0x3005":44,"0x3113":39,"0x3001":41,"0x3016":2,"0x3114":37,"0x3116":37,"0x3115":35,"0x3119":10,"0x3056":1,"0x311c":3,"0x311d":1,"0x9":3,"0x8":2,"0xc":2,"0x3101":3,"0x3022":1,"0x3023":1,"0xa":2,"0x3017":2,"0x301e":2,"0x3024":2,"0x302a":2,"0x3028":2,"0x30b7":1,"0x311a":2,"0x301f":1,"0xb":2,"0xe":1,"0xd":1,"0x10":1,"0xf":1,"0x11":1,"0x3105":9,"0x311b":2},"entryFunctionActionDisables":{"files":["bjyt04_01","bvyt09_10","bvyt09_11","bvyt09_12","genk00_40","lmyt01_00","lmyt01_01","lmyt01_02","lmyt01_03","lmyt01_04","lmyt01_05","lmyt01_06","lmyt01_07","mihn00_60","nagi00_40"]}}
+}
