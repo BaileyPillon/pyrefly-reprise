@@ -29,6 +29,7 @@ import { sistersTurnStart } from './adapt/sisters.ts';
 import { resolveDuePartRevivals } from './hp.ts';
 import { chooseAiCommand } from './ai/index.ts';
 import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
+import { type DoublecastPick, doublecastPicks } from './doublecast.ts';
 import { afterAction, checkEnd, finish, runItemReactions, type EndHooks } from './engine-end.ts';
 
 export { apForLevel } from './results.ts';
@@ -110,6 +111,17 @@ export class FFXEngine implements FFXBattleEngine {
    */
   intent(): EnemyIntent | null {
     return this.ctx ? predictNextEnemyIntent(this.ctx) : null;
+  }
+
+  /**
+   * The Doublecast picker's rows for `actorId` (FFX only; the HUD's round-2 list, `ui/ffx/doublecastModel.ts`): every learned Black Magic spell with its price, and with `firstId` which are still
+   * offered as the second pick. Read-only: it pays nothing and draws nothing. Not on the `FFXBattleEngine` interface for the reason `intent()` is not: one picker does not earn a contract change; the HUD is handed
+   * a bound copy when it is built (`BattleScreenWiring.createHud`).
+   */
+  doublecastPicks(actorId: string, firstId?: string): DoublecastPick[] {
+    const ctx = this.requireCtx();
+    const actor = tryActor(ctx, actorId);
+    return actor ? doublecastPicks(ctx, actor, firstId) : [];
   }
 
   nextDecision(): Decision {

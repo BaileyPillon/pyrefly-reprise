@@ -196,7 +196,7 @@ describe('the chapter 3 card names the spell and the enemy the menu will ask for
           offered += 1;
           const wrappedId = (s.command as { wrappedId?: string }).wrappedId;
           expect(wrappedId, 'the card named no spell').toBeDefined();
-          expect(s.label).toBe(`Doublecast: ${ABILITIES[wrappedId!]!.name}`);
+          expect(s.label).toBe(`Doublecast: ${ABILITIES[wrappedId!]!.name} + ${ABILITIES[wrappedId!]!.name}`); // the card names both casts (the one spell twice)
           expect(s.command.targets.length).toBeGreaterThan(0);
           for (const t of s.command.targets) expect(state.enemyIds, `card aimed Doublecast at ${t}`).toContain(t);
           expect(s.targetId).not.toBe(d.actorId);
