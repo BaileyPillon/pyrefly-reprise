@@ -11,6 +11,7 @@ import { cachedPainting, paintingKey, type PreparedPainting } from './PaintedArt
 import { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
 import { poseScaleFor } from './KoPoseScale.ts';
 import { poseRegistrationFor } from './PoseRegistration.ts';
+import { coarseMask, type CoarseMask } from './PoseAlign.ts';
 import { stampPainting, type PoseTrustStamp } from './PoseTrust.ts';
 
 export { cleanMatte, type MatteOptions } from './PaintedMatte.ts'; // matte cleanup lives there; re-exported for existing callers
@@ -74,6 +75,11 @@ export interface PoseMeta extends PoseFrame {
    * painting as missing, so the pose falls to the idle. Absent is drawn: a stand-in, a backdrop and a test's hand-made meta all draw as they always did.
    */
   trust?: PoseTrustStamp;
+  /**
+   * W5 (pose swap smoothing, `?swap=smooth`; both games): the painting's silhouette on a coarse grid, read from the same alpha pass as `content` and `ground`.
+   * The aligned dissolve takes the overlap of two paintings and a stand-in anchor from it (`PoseAlign.ts`). Absent where no pixels could be read.
+   */
+  silhouette?: CoarseMask;
 }
 
 export interface PaintedTexture {
@@ -366,6 +372,7 @@ async function preparePainting(
       ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),
       ...(measured.box ? { content: measured.box } : {}),
       ...(measured.ground ? { ground: measured.ground } : {}),
+      ...(measured.mask ? { silhouette: measured.mask } : {}),
     },
   };
 }
@@ -461,7 +468,7 @@ export function measureAlpha(
   width: number,
   height: number,
   opts: BaselineFitOptions = {},
-): { baselineY: number | null; box: AlphaBox | null; ground?: GroundHull | null } {
+): { baselineY: number | null; box: AlphaBox | null; ground?: GroundHull | null; mask?: CoarseMask | null } {
   const empty = { baselineY: null, box: null };
   const w = Math.max(1, Math.floor(width));
   const h = Math.max(1, Math.floor(height));
@@ -527,6 +534,7 @@ export function measureAlpha(
   const ground = count ? groundHullFromBottoms(bottoms, { x: sumX / count + 0.5, y: sumY / count + 0.5 }, scaleX, scaleY) : null;
   return {
     ground,
+    mask: coarseMask(data, sw, sh, cut), // W5: the silhouette on a 48-cell grid, for the aligned dissolve (`PoseAlign.ts`)
     // +1 so the baseline is the ground line *under* the last painted row.
     baselineY: baselineY === null ? null : Math.min(h, Math.round((baselineY + 1) * scaleY)),
     box:
