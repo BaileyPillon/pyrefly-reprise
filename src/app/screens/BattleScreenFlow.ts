@@ -20,6 +20,8 @@ import type { Chapter, ChapterId } from '../../data/encounters.ts';
 import { CHAPTERS, getChapter } from '../../data/encounters.ts';
 import type { StoryScript } from '../../story/dsl.ts';
 import { audio } from '../../audio/index.ts';
+import { readSetting } from '../SaveData.ts';
+import { chapterSelectCue } from '../saveFrontend.ts';
 import { BattleScreen, type BattleScreenOptions, type BattleScreenResult } from './BattleScreen.ts';
 import { PartyPrepScreen } from './PartyPrepScreen.ts';
 // Type-only: erased at build time, so this adds no runtime edge to the screen.
@@ -30,7 +32,7 @@ import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlow
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
 import { resultsCueFor, resultsScreenSilent, startResultsMusic, type ResultsMusicHandle } from './resultsMusic.ts'; // the win's and the loss's cue (music batch 2)
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
-import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts';
+import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts'; import { voiceChapter } from '../voiceChapter.ts';
 import { musicChapter } from '../chapterMusicWarm.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { holdIdleLane } from '../imageWarm.ts';
@@ -289,7 +291,9 @@ export class GameFlow {
   /** Show chapter select and resolve with the player's pick. */
   async chapterSelect(): Promise<ChapterId | null> {
     this.step = 'chapter-select';
-    void audio.playMusic('chapter-select', { fade: 1.2 }).catch(() => {
+    // 39.5 (Bailey, 2026-10-07; both games): B is the default, A and C are selectable (CHAPTER MUSIC in OPTIONS). An
+    // unknown value plays B (`saveFrontend.ts`); a cue whose file cannot load plays B's score through its stand-in.
+    void audio.playMusic(chapterSelectCue(readSetting('chapterSelectMusic')), { fade: 1.2 }).catch(() => {
       /* the track may not be composed yet */
     });
     const screen = await boardWhenWarm(this.app, makeChapterSelect); // PR-0065: no grey busts on arrival
@@ -307,7 +311,7 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
-    const release = musicChapter(id, sfxChapter(id, holdIdleLane())); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep
+    const release = musicChapter(id, sfxChapter(id, voiceChapter(id, holdIdleLane()))); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep; the recorded voice-over (FFX only)
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)
     // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
     return runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(() => { release(); endRun(); });

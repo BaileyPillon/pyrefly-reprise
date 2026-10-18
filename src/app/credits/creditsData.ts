@@ -22,6 +22,7 @@
  * both show it).
  */
 
+import { BTS_LIVE } from '../changelog/behindTheScenes.ts';
 import { AUDIO_SOURCES, requiresAttribution, type AudioSourceId } from './audioSources.ts';
 
 export interface CreditEntry {
@@ -50,7 +51,7 @@ const COMMONS = 'commons.wikimedia.org/wiki/File:';
 /** What `recipes.py` does to them (cut, low-passed, mixed under other layers), as the licence asks us to say. */
 const EDITED = 'edited: cut, filtered and layered into our effects';
 
-export const CREDIT_GROUPS: readonly CreditGroup[] = [
+const BASE_CREDIT_GROUPS: readonly CreditGroup[] = [
   {
     id: 'music',
     heading: 'Music',
@@ -119,6 +120,34 @@ export const CREDIT_GROUPS: readonly CreditGroup[] = [
     ],
   },
 ];
+
+/**
+ * The AI tools the game was made with, named in the credits (Bailey, 2026-10-08, decisions item 31 e: "The in-game Credits
+ * must name them at the same moment the page goes public"). PREPARED, not shown: this group is in `CREDIT_GROUPS` only
+ * while the BEHIND THE SCENES switch is on (`changelog/behindTheScenes.ts`), so the page that tells the story and the credits
+ * that back it go public together and by the same constant. Until then the list is exactly what it was. The names are the
+ * ones the page's "Made with" line uses (`behindTheScenes/facts.ts`, MADE_WITH); a test keeps the two together.
+ * The line under each says what it made, in the quieter note style of the required lines; ComfyUI and Animagine are
+ * licensed and listed under "Art and tools" too, which this group points to.
+ */
+export const AI_TOOLS_GROUP: CreditGroup = {
+  id: 'ai',
+  heading: 'Made with AI tools',
+  entries: [
+    { title: 'ElevenLabs Music and ElevenLabs voices', by: 'ElevenLabs', licence: 'AI-generated', note: 'music tracks and the spoken lines of Tidus, Yuna and Auron, each picked by ear' },
+    { title: 'ChatGPT Images', by: 'OpenAI', licence: 'AI-generated', note: 'the title paintings, made in the Art Room and approved by Bailey' },
+    { title: 'ComfyUI with Animagine XL 4.0', by: 'open tools, run on Bailey’s own computer', licence: 'AI-generated', note: 'most of the paintings; their licences are listed under Art and tools' },
+    { title: 'Claude', by: 'Anthropic', licence: 'AI-assisted', note: 'builds and reviews the game, and plays it as its critic' },
+  ],
+};
+
+/** The groups with the AI tools after them, and without: the two states the switch chooses between (the tests ask for both). */
+export function creditGroups(withAiTools: boolean): readonly CreditGroup[] {
+  return withAiTools ? [...BASE_CREDIT_GROUPS, AI_TOOLS_GROUP] : BASE_CREDIT_GROUPS;
+}
+
+/** What the panel lists: the four groups of the approved frames, and the AI tools after them only while the switch is on. */
+export const CREDIT_GROUPS: readonly CreditGroup[] = BTS_LIVE ? [...BASE_CREDIT_GROUPS, AI_TOOLS_GROUP] : BASE_CREDIT_GROUPS;
 
 /** The README's own notice, verbatim (`README.md` line 7); the frames print it unchanged. */
 export const FAN_NOTICE =

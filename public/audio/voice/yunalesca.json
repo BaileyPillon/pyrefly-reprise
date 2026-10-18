@@ -1,0 +1,161 @@
+{
+ "version": 1,
+ "chapter": "yunalesca",
+ "game": "ffx",
+ "lines": {
+  "1a71c134ce8799": {
+   "id": "yunalesca.pre.006",
+   "file": "yunalesca/yunalesca.pre.006.mp3",
+   "ms": 3296,
+   "bytes": 27092,
+   "who": "tidus"
+  },
+  "158a5c0b6f99f0": {
+   "id": "yunalesca.pre.007",
+   "file": "yunalesca/yunalesca.pre.007.mp3",
+   "ms": 1189,
+   "bytes": 10196,
+   "who": "auron"
+  },
+  "1c775fe173e16b": {
+   "id": "yunalesca.pre.008",
+   "file": "yunalesca/yunalesca.pre.008.mp3",
+   "ms": 1015,
+   "bytes": 8852,
+   "who": "auron"
+  },
+  "13de70dea5893a": {
+   "id": "yunalesca.pre.015",
+   "file": "yunalesca/yunalesca.pre.015.mp3",
+   "ms": 3689,
+   "bytes": 30164,
+   "who": "yuna"
+  },
+  "141d9500b69859": {
+   "id": "yunalesca.pre.025",
+   "file": "yunalesca/yunalesca.pre.025.mp3",
+   "ms": 3170,
+   "bytes": 26132,
+   "who": "tidus"
+  },
+  "030da5a1fd1809": {
+   "id": "yunalesca.pre.030",
+   "file": "yunalesca/yunalesca.pre.030.mp3",
+   "ms": 2106,
+   "bytes": 17492,
+   "who": "auron"
+  },
+  "082492c6c70643": {
+   "id": "yunalesca.pre.031",
+   "file": "yunalesca/yunalesca.pre.031.mp3",
+   "ms": 2174,
+   "bytes": 18068,
+   "who": "auron"
+  },
+  "04cb4eaaffc0a9": {
+   "id": "seymour-flux.pre.017",
+   "file": "seymour-flux/seymour-flux.pre.017.mp3",
+   "ms": 914,
+   "bytes": 8084,
+   "who": "yuna"
+  },
+  "0f7e0727e2c2db": {
+   "id": "yunalesca.post.009",
+   "file": "yunalesca/yunalesca.post.009.mp3",
+   "ms": 1031,
+   "bytes": 8852,
+   "who": "yuna"
+  },
+  "0ee43b3fade144": {
+   "id": "yunalesca.post.010",
+   "file": "yunalesca/yunalesca.post.010.mp3",
+   "ms": 3060,
+   "bytes": 25172,
+   "who": "yuna"
+  },
+  "18dc03badd5c65": {
+   "id": "yunalesca.post.012",
+   "file": "yunalesca/yunalesca.post.012.mp3",
+   "ms": 2036,
+   "bytes": 16916,
+   "who": "tidus"
+  },
+  "0cad5af68ddf03": {
+   "id": "yunalesca.post.013",
+   "file": "yunalesca/yunalesca.post.013.mp3",
+   "ms": 1564,
+   "bytes": 13268,
+   "who": "tidus"
+  },
+  "0e8d0e8f516b10": {
+   "id": "yunalesca.post.014",
+   "file": "yunalesca/yunalesca.post.014.mp3",
+   "ms": 626,
+   "bytes": 5780,
+   "who": "auron"
+  },
+  "13e3b2d716241f": {
+   "id": "yunalesca.post.015",
+   "file": "yunalesca/yunalesca.post.015.mp3",
+   "ms": 2136,
+   "bytes": 17684,
+   "who": "auron"
+  },
+  "1e7266660801b8": {
+   "id": "yunalesca.post.016",
+   "file": "yunalesca/yunalesca.post.016.mp3",
+   "ms": 1394,
+   "bytes": 11924,
+   "who": "tidus"
+  },
+  "1c14f5b75468f3": {
+   "id": "yunalesca.mid-yunalesca-form-3.002",
+   "file": "yunalesca/yunalesca.mid-yunalesca-form-3.002.mp3",
+   "ms": 3122,
+   "bytes": 25748,
+   "who": "auron"
+  },
+  "1dead101d18bc6": {
+   "id": "yunalesca.mid-yunalesca-first-zombie.001.fb1",
+   "file": "yunalesca/yunalesca.mid-yunalesca-first-zombie.001.fb1.mp3",
+   "ms": 2417,
+   "bytes": 19988,
+   "who": "tidus"
+  },
+  "1f39e00096dbdc": {
+   "id": "yunalesca.mid-yunalesca-first-zombie.002.fb1",
+   "file": "yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb1.mp3",
+   "ms": 3573,
+   "bytes": 29204,
+   "who": "auron"
+  },
+  "0144b77116fd2b": {
+   "id": "yunalesca.mid-yunalesca-first-zombie.002.fb2",
+   "file": "yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb2.mp3",
+   "ms": 3540,
+   "bytes": 29012,
+   "who": "yuna"
+  },
+  "126171651fbfc2": {
+   "id": "seymour-flux.quip-tidus.001",
+   "file": "seymour-flux/seymour-flux.quip-tidus.001.mp3",
+   "ms": 1387,
+   "bytes": 11732,
+   "who": "tidus"
+  },
+  "044a725abc62e1": {
+   "id": "seymour-flux.quip-yuna.001",
+   "file": "seymour-flux/seymour-flux.quip-yuna.001.mp3",
+   "ms": 1245,
+   "bytes": 10580,
+   "who": "yuna"
+  },
+  "124a22c590bdd7": {
+   "id": "seymour-flux.quip-auron.001",
+   "file": "seymour-flux/seymour-flux.quip-auron.001.mp3",
+   "ms": 1327,
+   "bytes": 11348,
+   "who": "auron"
+  }
+ }
+}

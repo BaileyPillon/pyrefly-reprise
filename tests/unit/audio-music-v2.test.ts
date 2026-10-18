@@ -41,10 +41,15 @@ const record = read('docs/audio/music-v2-2026-09-30.json') as {
 };
 const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
   cues: { cue: string; before: { bytes: number }; after: { bytes: number } }[];
+  /** Release 39.5: cues ADDED beside these (the two selectable chapter-select alternates): they replace no file. */
+  alternates?: { cue: string; after: { bytes: number } }[];
 };
-/** Cues a later record replaced, and the bytes it moved the music total by. */
+/** Cues a later record replaced or added, and the bytes it moved the music total by. */
 const replacedLater = new Set(later.cues.map((c) => c.cue));
-const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
+// The 39.5 chapter-select alternates (`chapter-select-a`, `-c`): cues this record never saw (they replace no file), with their own record and test.
+const addedLater = new Set((later.alternates ?? []).map((c) => c.cue));
+const movedLater =
+  later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0) + (later.alternates ?? []).reduce((sum, c) => sum + c.after.bytes, 0);
 // The cues added on 2026-10-10 (`boss-leblanc`, `boss-bahamut`, then the six of batch 1) are not in the 2026-09-30 reports: they ship as the raw ElevenLabs take at its own bitrate and are pinned by
 // `audio-music-elevenlabs-2026-10-10.test.ts` against `docs/audio/music-elevenlabs-2026-10-10.json`.
 // Batch 1 of the same day (`docs/audio/music-batch1-2026-10-10.json`, pinned by `audio-music-batch1-2026-10-10.test.ts`) added more of the same kind.
@@ -72,7 +77,7 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
   it('replaces every FFX and FFX-2 cue and leaves the shared cues alone', () => {
     // Batch 2 (2026-10-12) added nine cues and retired three of these (their MP3s are gone; `audio-music-batch2-2026-10-12.test.ts` pins both).
     expect(record.cues.map((c) => c.cue).sort()).toEqual(
-      [...Object.keys(manifest.music).filter((k) => !record.unchanged.includes(k) && !addedCues.has(k) && !batch2Added.has(k)), ...batch2Retired].sort(),
+      [...Object.keys(manifest.music).filter((k) => !record.unchanged.includes(k) && !addedCues.has(k) && !batch2Added.has(k) && !addedLater.has(k)), ...batch2Retired].sort(),
     );
     expect(record.unchanged.sort()).toEqual(['chapter-select', 'pause', 'title']);
     for (const k of record.unchanged) expect(themesGame.get(k), k).toBe('both');
@@ -122,7 +127,7 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
 
   it('passed the headless proof on a production build (for the files it played: not the cues a later record replaced)', () => {
     for (const k of Object.keys(manifest.music)) {
-      if (replacedLater.has(k) || addedCues.has(k) || batch2Cues.has(k)) continue; // the proof played the file this record measured; the release proves the new one
+      if (replacedLater.has(k) || addedCues.has(k) || batch2Cues.has(k) || addedLater.has(k)) continue; // the proof played the file this record measured; the release proves the new one
       const c = proof.cues[k]!;
       expect(c.status, k).toBe(200);
       expect(Math.abs(c.frameDiff), `${k} decoded length`).toBeLessThanOrEqual(2); // the manifest's 4 decimals

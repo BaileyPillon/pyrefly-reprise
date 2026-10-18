@@ -1,0 +1,329 @@
+{
+ "version": 1,
+ "chapter": "braskas-final-aeon",
+ "game": "ffx",
+ "lines": {
+  "15cfb07ae126be": {
+   "id": "braskas-final-aeon.pre.002",
+   "file": "braskas-final-aeon/braskas-final-aeon.pre.002.mp3",
+   "ms": 761,
+   "bytes": 6740,
+   "who": "tidus"
+  },
+  "16b5a810e795f9": {
+   "id": "braskas-final-aeon.pre.005",
+   "file": "braskas-final-aeon/braskas-final-aeon.pre.005.mp3",
+   "ms": 1058,
+   "bytes": 9236,
+   "who": "auron"
+  },
+  "01413a4c7c4466": {
+   "id": "braskas-final-aeon.pre.007",
+   "file": "braskas-final-aeon/braskas-final-aeon.pre.007.mp3",
+   "ms": 2827,
+   "bytes": 23252,
+   "who": "yuna"
+  },
+  "1e5a86c65c7ae4": {
+   "id": "braskas-final-aeon.pre.013",
+   "file": "braskas-final-aeon/braskas-final-aeon.pre.013.mp3",
+   "ms": 2955,
+   "bytes": 24404,
+   "who": "tidus"
+  },
+  "1ec99aca348bad": {
+   "id": "braskas-final-aeon.pre.019",
+   "file": "braskas-final-aeon/braskas-final-aeon.pre.019.mp3",
+   "ms": 1667,
+   "bytes": 14036,
+   "who": "tidus"
+  },
+  "0369e44135566d": {
+   "id": "braskas-final-aeon.post.003",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.003.mp3",
+   "ms": 1116,
+   "bytes": 9620,
+   "who": "auron"
+  },
+  "0a92808eadbb79": {
+   "id": "braskas-final-aeon.post.004",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.004.mp3",
+   "ms": 2550,
+   "bytes": 21140,
+   "who": "auron"
+  },
+  "0a2ced7527c010": {
+   "id": "braskas-final-aeon.post.005",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.005.mp3",
+   "ms": 2284,
+   "bytes": 19028,
+   "who": "yuna"
+  },
+  "02ada8c0a13887": {
+   "id": "braskas-final-aeon.post.006",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.006.mp3",
+   "ms": 2428,
+   "bytes": 20180,
+   "who": "auron"
+  },
+  "11d72ffca4016b": {
+   "id": "braskas-final-aeon.post.007",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.007.mp3",
+   "ms": 2814,
+   "bytes": 23252,
+   "who": "auron"
+  },
+  "11f9762718ce22": {
+   "id": "braskas-final-aeon.post.008",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.008.mp3",
+   "ms": 1912,
+   "bytes": 15956,
+   "who": "auron"
+  },
+  "1bb559d2926552": {
+   "id": "braskas-final-aeon.post.009",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.009.mp3",
+   "ms": 1398,
+   "bytes": 11924,
+   "who": "auron"
+  },
+  "0529b82c58791f": {
+   "id": "braskas-final-aeon.post.010",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.010.mp3",
+   "ms": 1910,
+   "bytes": 15956,
+   "who": "auron"
+  },
+  "126791be646a4f": {
+   "id": "braskas-final-aeon.post.011",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.011.mp3",
+   "ms": 2095,
+   "bytes": 17492,
+   "who": "tidus"
+  },
+  "1be88523b437fb": {
+   "id": "braskas-final-aeon.post.012",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.012.mp3",
+   "ms": 2410,
+   "bytes": 19988,
+   "who": "tidus"
+  },
+  "08bcaea1b095c2": {
+   "id": "braskas-final-aeon.post.013",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.013.mp3",
+   "ms": 2476,
+   "bytes": 20564,
+   "who": "yuna"
+  },
+  "01fe6389ce082c": {
+   "id": "braskas-final-aeon.post.014",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.014.mp3",
+   "ms": 1445,
+   "bytes": 12308,
+   "who": "tidus"
+  },
+  "05a438384dbe14": {
+   "id": "braskas-final-aeon.post.015",
+   "file": "braskas-final-aeon/braskas-final-aeon.post.015.mp3",
+   "ms": 1147,
+   "bytes": 9812,
+   "who": "tidus"
+  },
+  "1e6ff9e7e5fe39": {
+   "id": "braskas-final-aeon.mid-bfa-talk.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-bfa-talk.001.mp3",
+   "ms": 1595,
+   "bytes": 13460,
+   "who": "tidus"
+  },
+  "1a8f23bf20799a": {
+   "id": "braskas-final-aeon.mid-bfa-sword.002",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-bfa-sword.002.mp3",
+   "ms": 2869,
+   "bytes": 23636,
+   "who": "auron"
+  },
+  "084ceadf267179": {
+   "id": "braskas-final-aeon.mid-jecht-falls.005",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.005.mp3",
+   "ms": 1910,
+   "bytes": 15956,
+   "who": "auron"
+  },
+  "13696e9df41b72": {
+   "id": "braskas-final-aeon.mid-jecht-falls.008",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.008.mp3",
+   "ms": 2661,
+   "bytes": 21908,
+   "who": "yuna"
+  },
+  "1754e92924daef": {
+   "id": "braskas-final-aeon.mid-jecht-falls.010",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.010.mp3",
+   "ms": 1463,
+   "bytes": 12308,
+   "who": "tidus"
+  },
+  "099707f43f37eb": {
+   "id": "braskas-final-aeon.mid-jecht-falls.011",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.011.mp3",
+   "ms": 2135,
+   "bytes": 17684,
+   "who": "auron"
+  },
+  "0e9715d1d3a156": {
+   "id": "braskas-final-aeon.mid-valefor-enters.001.fb1",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.001.fb1.mp3",
+   "ms": 2550,
+   "bytes": 21140,
+   "who": "tidus"
+  },
+  "1384aad8e4d4f1": {
+   "id": "braskas-final-aeon.mid-valefor-enters.002",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.002.mp3",
+   "ms": 1752,
+   "bytes": 14612,
+   "who": "auron"
+  },
+  "1a4c113b51591e": {
+   "id": "braskas-final-aeon.mid-valefor-enters.003",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.003.mp3",
+   "ms": 1174,
+   "bytes": 10004,
+   "who": "tidus"
+  },
+  "0e65e79ec7afd9": {
+   "id": "braskas-final-aeon.mid-valefor-enters.004",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.004.mp3",
+   "ms": 1047,
+   "bytes": 9044,
+   "who": "auron"
+  },
+  "1253669d8b7572": {
+   "id": "braskas-final-aeon.mid-valefor-enters.006",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.006.mp3",
+   "ms": 728,
+   "bytes": 6548,
+   "who": "yuna"
+  },
+  "0c29bfa78265a0": {
+   "id": "braskas-final-aeon.mid-valefor-enters.008",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.008.mp3",
+   "ms": 1551,
+   "bytes": 13076,
+   "who": "yuna"
+  },
+  "1e55ce1364360a": {
+   "id": "braskas-final-aeon.mid-valefor-enters.009",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.009.mp3",
+   "ms": 1548,
+   "bytes": 13076,
+   "who": "yuna"
+  },
+  "082cc81b23b7f7": {
+   "id": "braskas-final-aeon.mid-valefor-enters.010",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.010.mp3",
+   "ms": 1442,
+   "bytes": 12308,
+   "who": "yuna"
+  },
+  "03d3046605caa2": {
+   "id": "braskas-final-aeon.mid-valefor-falls.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-valefor-falls.001.mp3",
+   "ms": 2546,
+   "bytes": 21140,
+   "who": "yuna"
+  },
+  "092f7595b3fdbd": {
+   "id": "braskas-final-aeon.mid-ifrit-enters.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-ifrit-enters.001.mp3",
+   "ms": 789,
+   "bytes": 6932,
+   "who": "yuna"
+  },
+  "10ddac235bf7f7": {
+   "id": "braskas-final-aeon.mid-ifrit-enters.002",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-ifrit-enters.002.mp3",
+   "ms": 2283,
+   "bytes": 19028,
+   "who": "yuna"
+  },
+  "127d8424979b95": {
+   "id": "braskas-final-aeon.mid-ifrit-falls.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-ifrit-falls.001.mp3",
+   "ms": 2060,
+   "bytes": 17108,
+   "who": "auron"
+  },
+  "16dfc4c02ec767": {
+   "id": "braskas-final-aeon.mid-ixion-enters.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-ixion-enters.001.mp3",
+   "ms": 3323,
+   "bytes": 27284,
+   "who": "yuna"
+  },
+  "1636c3ebd3f7e4": {
+   "id": "braskas-final-aeon.mid-ixion-falls.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-ixion-falls.001.mp3",
+   "ms": 1056,
+   "bytes": 9044,
+   "who": "yuna"
+  },
+  "1ddfa47d807575": {
+   "id": "braskas-final-aeon.mid-shiva-enters.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-shiva-enters.001.mp3",
+   "ms": 2867,
+   "bytes": 23636,
+   "who": "yuna"
+  },
+  "0da44a33edec8b": {
+   "id": "braskas-final-aeon.mid-bahamut-enters.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-bahamut-enters.001.mp3",
+   "ms": 1005,
+   "bytes": 8660,
+   "who": "yuna"
+  },
+  "19a176c7fb13b9": {
+   "id": "braskas-final-aeon.mid-bahamut-enters.002",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-bahamut-enters.002.mp3",
+   "ms": 2077,
+   "bytes": 17300,
+   "who": "yuna"
+  },
+  "0dc01ad3ab35f9": {
+   "id": "braskas-final-aeon.mid-bahamut-falls.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-bahamut-falls.001.mp3",
+   "ms": 1563,
+   "bytes": 13268,
+   "who": "tidus"
+  },
+  "0d65e50c94760f": {
+   "id": "braskas-final-aeon.mid-bahamut-falls.002",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-bahamut-falls.002.mp3",
+   "ms": 2005,
+   "bytes": 16724,
+   "who": "tidus"
+  },
+  "1da7176a5205a0": {
+   "id": "braskas-final-aeon.mid-yu-yevon-arrives.001",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.001.mp3",
+   "ms": 2469,
+   "bytes": 20372,
+   "who": "tidus"
+  },
+  "0d877fc4c52c3d": {
+   "id": "braskas-final-aeon.mid-yu-yevon-arrives.002",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.002.mp3",
+   "ms": 2380,
+   "bytes": 19796,
+   "who": "auron"
+  },
+  "0d5c9a2cf54201": {
+   "id": "braskas-final-aeon.mid-yu-yevon-arrives.003",
+   "file": "braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.003.mp3",
+   "ms": 1898,
+   "bytes": 15956,
+   "who": "auron"
+  }
+ }
+}

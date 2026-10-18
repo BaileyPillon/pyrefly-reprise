@@ -38,9 +38,14 @@ const v2 = read('docs/audio/music-v2-2026-09-30.json') as { totals: { musicBytes
 const replacedByV2 = new Set(v2.cues.map((c) => c.cue));
 const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
   cues: { cue: string; before: { bytes: number }; after: { bytes: number } }[];
+  /** Release 39.5: cues ADDED beside the 26 (the two selectable chapter-select alternates, at LAME V4: they replace no file). */
+  alternates?: { cue: string; after: { bytes: number } }[];
 };
 const replacedLater = new Set(later.cues.map((c) => c.cue));
-const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
+// The 39.5 chapter-select alternates (`chapter-select-a`, `-c`): cues this record never saw (they replace no file), with their own record and test.
+const addedLater = new Set((later.alternates ?? []).map((c) => c.cue));
+const movedLater =
+  later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0) + (later.alternates ?? []).reduce((sum, c) => sum + c.after.bytes, 0);
 // The cues added on 2026-10-10 (`boss-leblanc`, `boss-bahamut`, then the six of batch 1) are not in the 2026-09-30 reports: they ship as the raw ElevenLabs take at its own bitrate and are pinned by
 // `audio-music-elevenlabs-2026-10-10.test.ts` against `docs/audio/music-elevenlabs-2026-10-10.json`.
 // Batch 1 of the same day (`docs/audio/music-batch1-2026-10-10.json`, pinned by `audio-music-batch1-2026-10-10.test.ts`) added more of the same kind.
@@ -51,7 +56,7 @@ const addedBytes = addedRecords.reduce((total, r) => total + r.cues.reduce((sum,
 describe('music O1: every cue at LAME V0', () => {
   it('records every shipped cue, each reproduced byte for byte before the re-encode', () => {
     // Batch 2 (2026-10-12) added nine cues and took three of these out of the shipped set.
-    expect(report.cues.map((c) => c.cue).sort()).toEqual([...Object.keys(manifest.music).filter((k) => !addedCues.has(k) && !batch2Added.has(k)), ...batch2Retired].sort());
+    expect(report.cues.map((c) => c.cue).sort()).toEqual([...Object.keys(manifest.music).filter((k) => !addedCues.has(k) && !batch2Added.has(k) && !addedLater.has(k)), ...batch2Retired].sort());
     for (const c of report.cues) expect(c.q5ReproducesShipped, `${c.cue} twin`).toBe(true);
   });
 
@@ -65,7 +70,9 @@ describe('music O1: every cue at LAME V0', () => {
 
   it('has not slipped back to q5: at least 200 kbps average, no encoder wall', () => {
     for (const [cue, m] of Object.entries(manifest.music)) {
-      if (addedCues.has(cue) || batch2Cues.has(cue)) continue; // a take at its own bitrate (about 100 to 160 kbps), not a V0 re-encode
+      // The two 39.5 alternates are the one exception among the V0 cues: LAME V4 so that both fit the unchanged 90 MB cap (their record's
+      // `master.why`; `audio-chapter-select-alternates.test.ts` holds them to a 128 kbps floor, the rate their takes came in at).
+      if (addedCues.has(cue) || batch2Cues.has(cue) || addedLater.has(cue)) continue; // a take at its own bitrate (about 100 to 160 kbps), not a V0 re-encode
       expect((m.bytes * 8) / m.duration, `${cue} average bitrate`).toBeGreaterThan(200_000);
     }
     for (const c of report.cues) {

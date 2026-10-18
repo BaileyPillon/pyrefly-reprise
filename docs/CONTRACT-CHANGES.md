@@ -456,6 +456,14 @@ Branch `re-parity-ai-ffx2-b`. One optional field on a shared contract type, `src
 - Engine-internal, no contract file: `AiScript.onResult` (the reaction entry, run once per result applied to an enemy) and `ResolveContext.onResult`, called from `resolve-strike.ts` (each strike, each miss, a drain's
   transfer to the drainer) and `resolve.ts` (a Scan or Libra). Inert for every script that does not define it.
 
+## 2026-10-09 — `npm run deploy` needs `--release=<name>` and a player note: `tools/deploy-pages.mjs` (both games; delivery tooling; NOT additive for the command)
+
+Branch `r395-int` (Bailey, 2026-10-08, the title's CHANGELOG and build number, "all your recommendations"; handoff: [r395-int](handoff/r395-int.md)). No file on the contract list changed (`src/app/Input.ts` is read, not edited); recorded because every deploy command changes.
+
+- `tools/deploy-pages.mjs`: a deploy that is not a `--preview` must pass `--release=<name>` (`39.5`, `39.4.2`), that name must be the NEWEST entry of `src/app/changelog/releaseNotes.ts` (three to six player-word lines a release, tagged FFX / FFX-2 / Both), and the notes must validate (`tools/release-notes.mjs`); otherwise it refuses, before the Cloudflare login and before the build. A `--preview` is stamped `Preview` and needs none. The name goes to `vite build` as `PYREFLY_RELEASE` (`tools/build-stamp.mjs`) and into `docs/deploys.log`, `docs/preview-deploys.log` and `docs/legacy-deploys.log` as a trailing `release=` (readers of the logs match `status=ok` and `main=` and ignore the rest; a line without it is unchanged).
+- `vite.config.ts` defines `__PYREFLY_RELEASE__` (the title's build number) and `__PYREFLY_BTS__` (from `BTS_LIVE`, the Behind the Scenes switch, off). `tools/dist-filter.mjs` treats `public/bts/` as unshipped while that switch is off.
+- Tests: `tests/unit/release-notes.test.ts`, `tests/unit/deploy-release-gate.test.ts`.
+
 ## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
 
 Branch `re-parity-rc1`, merge of `a74b2b8e` (the release driver's final content, `origin/r3943-int`). No file in the contract list changed by the merge. Recorded because the entries below describe the same Omnis module from two sides and neither is

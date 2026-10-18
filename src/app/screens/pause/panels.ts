@@ -20,6 +20,7 @@ import type { ChapterMeta } from '../../../data/chapter-meta.ts';
 import type { Settings } from '../../SaveData.ts';
 import type { EncounterProgress, ObjectiveStatus } from '../../../ui/common/chapterObjectives.ts';
 import { formatPlayTime } from '../../../ui/common/chapterObjectives.ts';
+import { gameHasVoice } from '../../../story/voice/voiceManifest.ts';
 import { accessRows, optionRows } from '../PauseScreenPanels.ts';
 
 /** One row in a tab body. */
@@ -108,6 +109,13 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     const at = settings.findIndex((s) => s.id === 'eyeCandy');
     if (at >= 0) settings.splice(at, 1);
   }
+  if (!gameHasVoice(ctx.game ?? 'ffx')) { // no game context reads as FFX, as `optionRows` does
+    // The recorded voice-over is FFX's alone for now (Bailey picked the FFX voices); FFX-2 and FF7 have none, so their VOICE rows would switch nothing (rule 14).
+    for (const id of ['voiceVolume', 'voiceOn']) {
+      const at = settings.findIndex((s) => s.id === id);
+      if (at >= 0) settings.splice(at, 1);
+    }
+  }
   if (ctx.game !== 'ffx2') {
     // X-2 BATTLE (ACTIVE / WAIT) is FFX-2's Config ATB Mode (§1.5), read by
     // the FFX-2 engine alone; FFX's CTB has no clock under a menu, so an FFX
@@ -123,7 +131,9 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     settings.splice(at < 0 ? settings.length : at + 1, 0, row('ffx2AtbSpeed', 'ATB SPEED', speed.toUpperCase(), { selectable: true }));
   }
   if (ctx.battleHelpOn !== null) {
-    settings.push(row('battleHelp', 'BATTLE HELP', ctx.battleHelpOn ? 'ON' : 'OFF', { selectable: true }));
+    // Under STRATEGY GUIDE, which it belongs with; the PRESENTATION row (39.5) follows.
+    const at = settings.findIndex((r) => r.id === 'guideVisible');
+    settings.splice(at < 0 ? settings.length : at + 1, 0, row('battleHelp', 'BATTLE HELP', ctx.battleHelpOn ? 'ON' : 'OFF', { selectable: true }));
   }
 
   const encounter: PanelRow[] = [];

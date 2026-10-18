@@ -342,21 +342,24 @@ export function compareUploadSet(files, manifestFiles, manifestName) {
 /**
  * A `docs/deploys.log` style line for a Cloudflare preview. `status=preview` never matches the
  * `status=ok` readers look for. A preview that went out under the owner's override says so, as in
- * deploys.log (a trailing `override=owner`).
+ * deploys.log (a trailing `override=owner`). A `release` (what the build was stamped with: `Preview`) is a last
+ * `release=<name>` field; without one the line is exactly what it always was.
  */
-export function formatPreviewLogLine({ isoNow, mainSha, bundleHash, artFileCount, host, kind, site, url, overrideUsed = false }) {
+export function formatPreviewLogLine({ isoNow, mainSha, bundleHash, artFileCount, host, kind, site, url, overrideUsed = false, release = null }) {
   const line = `${isoNow}\tmain=${mainSha}\tbundle=${bundleHash}\tartFiles=${artFileCount}\tstatus=preview\thost=${host}\tkind=${kind}\tsite=${site}\turl=${url}`;
-  return `${overrideUsed ? `${line}\toverride=owner` : line}\n`;
+  const withOverride = overrideUsed ? `${line}\toverride=owner` : line;
+  return `${release ? `${withOverride}\trelease=${release}` : withOverride}\n`;
 }
 
 /**
  * A `docs/legacy-deploys.log` line for a deploy to the old GitHub Pages address. `status=legacy` never
  * matches the `status=ok` readers look for (critic-plan's "last deployed build", critic-status). The
- * owner's override shows as in deploys.log, a trailing `override=owner`.
+ * owner's override shows as in deploys.log, a trailing `override=owner`; a `release` is a last `release=<name>` field.
  */
-export function formatLegacyLogLine({ isoNow, mainSha, bundleHash, artFileCount, host, url, overrideUsed = false }) {
+export function formatLegacyLogLine({ isoNow, mainSha, bundleHash, artFileCount, host, url, overrideUsed = false, release = null }) {
   const line = `${isoNow}\tmain=${mainSha}\tbundle=${bundleHash}\tartFiles=${artFileCount}\tstatus=legacy\thost=${host}\turl=${url}`;
-  return `${overrideUsed ? `${line}\toverride=owner` : line}\n`;
+  const withOverride = overrideUsed ? `${line}\toverride=owner` : line;
+  return `${release ? `${withOverride}\trelease=${release}` : withOverride}\n`;
 }
 
 /** What a run on this host will do, printed at the top of every run and on --dry-run. */

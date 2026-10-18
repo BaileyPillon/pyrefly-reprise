@@ -4,6 +4,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { NO_FLOW, startFlow, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
+import { voice } from '../../audio/voice/index.ts';
 import type { BattleResult } from '../../battle/common/types.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { experimentRecord } from '../experiments/experimentRecords.ts';
@@ -143,6 +144,14 @@ export class ResultsScreen extends Screen {
       this.quip = victoryLine(banks, this.rows.map((r) => r.id), turn);
     }
     this.mountStage();
+    // The member's victory line is spoken when it has a recording (FFX: Tidus, Yuna, Auron); a silent chapter serves no quip, so none speaks.
+    if (this.quip) {
+      try {
+        voice.begin({ who: this.quip.speakerId, text: this.quip.line });
+      } catch {
+        /* the quip shows as text; a voice failure is never a crash */
+      }
+    }
     // PR-0001 B: turning the phone (or resizing a window across the phone
     // query) swaps the page between its phone and desktop forms.
     this.phoneQuery = typeof window.matchMedia === 'function' ? window.matchMedia(RESULTS_PHONE_QUERY) : null;
@@ -181,6 +190,7 @@ export class ResultsScreen extends Screen {
 
   override exit(): void {
     this.endTally(false);
+    voice.stop();
     this.stage?.destroy();
     this.phoneQuery?.removeEventListener?.('change', this.onLayoutChange);
     window.removeEventListener('resize', this.onResize);

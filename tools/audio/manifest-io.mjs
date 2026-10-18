@@ -263,6 +263,15 @@ export const LOOP_DECIMALS = 6;
  */
 export const AUDIO_BUDGET_BYTES = 105e6;
 
+/**
+ * The recorded voice-over's own budget line, beside {@link AUDIO_BUDGET_BYTES} (which stays 90 MB for music and the sfx sprites,
+ * and stood at 88.49 MB with 1.5 MB to spare when the voice work began). PROPOSED, awaiting Bailey's decision:
+ * docs/audio/voice-integration-design.md section 2 sizes the whole game's voice at about 15 MB (mono, 24 kHz, 64 kbps) and proposes a
+ * separate 20 MB line, loaded lazily per chapter and never at first load. Pass 1 (Tidus, Yuna and Auron, FFX only) is a fraction of it
+ * (docs/handoff/r395-voice.md has the measured size). `tools/audio/voice-audit.mjs` enforces it; qa.mjs (the deploy preflight) and the audio-voice-shipped test call that.
+ */
+export const VOICE_BUDGET_BYTES = 20e6;
+
 export function secondsAtSample(sample, sampleRate) {
   return Number((sample / sampleRate).toFixed(LOOP_DECIMALS));
 }
@@ -349,13 +358,13 @@ function entryNumberText(key, value) {
 export function setMusicEntryText(text, name, entry) {
   const eol = text.includes('\r\n') ? '\r\n' : '\n';
   const lines = text.split(eol);
-  const { start, end } = entryRange(lines, name);
-  lines.splice(start, end - start + 1, `    "${name}": {`, ...entryBodyLines(name, entry), lines[end]);
+  const { start, end } = musicEntryLines(lines, name);
+  lines.splice(start, end - start + 1, `    "${name}": {`, ...musicEntryBody(name, entry), lines[end]);
   return lines.join(eol);
 }
 
 /** The first and last line of one music entry's block (its opening line and its `}` or `},`), or a thrown error. */
-function entryRange(lines, name) {
+export function musicEntryLines(lines, name) {
   const start = lines.indexOf(`    "${name}": {`);
   if (start < 0) throw new Error(`the manifest has no music entry "${name}"`);
   let end = start + 1;
@@ -365,7 +374,7 @@ function entryRange(lines, name) {
 }
 
 /** The `"key": value` lines of an entry, without the opening and closing lines. A boolean prints as `true` or `false` (`oneShot`). */
-function entryBodyLines(name, entry) {
+export function musicEntryBody(name, entry) {
   const keys = [
     ...ENTRY_KEY_ORDER.filter((k) => entry[k] !== undefined),
     ...Object.keys(entry).filter((k) => !ENTRY_KEY_ORDER.includes(k) && entry[k] !== undefined),
@@ -388,7 +397,7 @@ function musicEntries(lines) {
   for (let i = open + 1; i < lines.length && lines[i] !== '  },'; i++) {
     const found = /^ {4}"([^"]+)": \{$/.exec(lines[i]);
     if (!found) continue;
-    const { end } = entryRange(lines, found[1]);
+    const { end } = musicEntryLines(lines, found[1]);
     entries.push({ name: found[1], start: i, end });
     i = end;
   }
@@ -406,7 +415,7 @@ export function addMusicEntryText(text, name, entry) {
   const entries = musicEntries(lines);
   if (entries.some((e) => e.name === name)) throw new Error(`the manifest already has a music entry "${name}"`);
   const after = entries.find((e) => e.name.localeCompare(name) > 0);
-  const block = [`    "${name}": {`, ...entryBodyLines(name, entry), after ? '    },' : '    }'];
+  const block = [`    "${name}": {`, ...musicEntryBody(name, entry), after ? '    },' : '    }'];
   if (after) {
     lines.splice(after.start, 0, ...block);
   } else {

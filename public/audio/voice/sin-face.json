@@ -1,0 +1,112 @@
+{
+ "version": 1,
+ "chapter": "sin-face",
+ "game": "ffx",
+ "lines": {
+  "1857bcbde95f48": {
+   "id": "sin-face.pre.001",
+   "file": "sin-face/sin-face.pre.001.mp3",
+   "ms": 2537,
+   "bytes": 20948,
+   "who": "yuna"
+  },
+  "0499e208df017b": {
+   "id": "sin-face.pre.002",
+   "file": "sin-face/sin-face.pre.002.mp3",
+   "ms": 1095,
+   "bytes": 9428,
+   "who": "tidus"
+  },
+  "0a10723b92216b": {
+   "id": "sin-face.pre.003",
+   "file": "sin-face/sin-face.pre.003.mp3",
+   "ms": 2714,
+   "bytes": 22484,
+   "who": "yuna"
+  },
+  "15bfc44a296170": {
+   "id": "sin-face.pre.004",
+   "file": "sin-face/sin-face.pre.004.mp3",
+   "ms": 2986,
+   "bytes": 24596,
+   "who": "yuna"
+  },
+  "18c9f21247cf3f": {
+   "id": "sin-face.pre.005",
+   "file": "sin-face/sin-face.pre.005.mp3",
+   "ms": 2816,
+   "bytes": 23252,
+   "who": "yuna"
+  },
+  "1646fd12b9c668": {
+   "id": "sin-face.pre.006",
+   "file": "sin-face/sin-face.pre.006.mp3",
+   "ms": 3307,
+   "bytes": 27092,
+   "who": "yuna"
+  },
+  "0515e5c1c4abcc": {
+   "id": "sin-face.pre.007",
+   "file": "sin-face/sin-face.pre.007.mp3",
+   "ms": 1077,
+   "bytes": 9236,
+   "who": "tidus"
+  },
+  "0634f174c47dba": {
+   "id": "sin-face.pre.008",
+   "file": "sin-face/sin-face.pre.008.mp3",
+   "ms": 3419,
+   "bytes": 28052,
+   "who": "yuna"
+  },
+  "0c98e3a37aac01": {
+   "id": "sin-face.pre.011",
+   "file": "sin-face/sin-face.pre.011.mp3",
+   "ms": 1612,
+   "bytes": 13652,
+   "who": "auron"
+  },
+  "0212bda9e55f60": {
+   "id": "sin-face.pre.013",
+   "file": "sin-face/sin-face.pre.013.mp3",
+   "ms": 2572,
+   "bytes": 21332,
+   "who": "tidus"
+  },
+  "14f1f2c0c7c9e5": {
+   "id": "sin-face.pre.017",
+   "file": "sin-face/sin-face.pre.017.mp3",
+   "ms": 2260,
+   "bytes": 18836,
+   "who": "tidus"
+  },
+  "024bcfce181839": {
+   "id": "sin-face.mid-sin-first-pull.001",
+   "file": "sin-face/sin-face.mid-sin-first-pull.001.mp3",
+   "ms": 3033,
+   "bytes": 24980,
+   "who": "auron"
+  },
+  "126171651fbfc2": {
+   "id": "seymour-flux.quip-tidus.001",
+   "file": "seymour-flux/seymour-flux.quip-tidus.001.mp3",
+   "ms": 1387,
+   "bytes": 11732,
+   "who": "tidus"
+  },
+  "044a725abc62e1": {
+   "id": "seymour-flux.quip-yuna.001",
+   "file": "seymour-flux/seymour-flux.quip-yuna.001.mp3",
+   "ms": 1245,
+   "bytes": 10580,
+   "who": "yuna"
+  },
+  "124a22c590bdd7": {
+   "id": "seymour-flux.quip-auron.001",
+   "file": "seymour-flux/seymour-flux.quip-auron.001.mp3",
+   "ms": 1327,
+   "bytes": 11348,
+   "who": "auron"
+  }
+ }
+}

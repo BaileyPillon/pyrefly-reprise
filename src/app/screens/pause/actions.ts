@@ -15,6 +15,9 @@ import type { SaveStore } from '../../SaveData.ts';
 import { battleHelpOn, setBattleHelp } from '../../../ui/coach/coachState.ts';
 import { adjustSetting } from './settings.ts';
 
+/** The pages an OPTIONS row opens: the row's own id. */
+export type PauseRowPage = 'credits' | 'eyeCandy' | 'presentation';
+
 export interface PauseActionHost {
   save: SaveStore;
   /** Redraw after a row changed something it shows. */
@@ -24,10 +27,8 @@ export interface PauseActionHost {
   onChapterSelect?: (() => void) | undefined;
   onQuitToTitle?: (() => void) | undefined;
   extraRows?: ReadonlyArray<{ id: string; run: () => void }> | undefined;
-  /** CREDITS (D-305): open the credits panel. */
-  openCredits?: (() => void) | undefined;
-  /** EYE CANDY (D-317): open the EYE CANDY page. */
-  openEyeCandy?: (() => void) | undefined;
+  /** CREDITS (D-305), EYE CANDY (D-317) and PRESENTATION (39.5): open the page the row stands for. */
+  openPage?: ((page: PauseRowPage) => void) | undefined;
 }
 
 /** @param dir which way Left / Right pushed; Confirm passes 1. @param press Confirm or a tap, not an arrow. */
@@ -57,10 +58,9 @@ export function activateRow(host: PauseActionHost, id: string | null, dir: 1 | -
       host.onQuitToTitle?.();
       return;
     case 'credits':
-      host.openCredits?.();
-      return;
     case 'eyeCandy':
-      host.openEyeCandy?.();
+    case 'presentation':
+      host.openPage?.(id);
       return;
     default:
       host.extraRows?.find((e) => e.id === id)?.run();

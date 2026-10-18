@@ -52,7 +52,8 @@ export declare function formatWhenLine(plan: { focusedBeforeDeploy?: boolean; de
 
 /**
  * The `docs/deploys.log` line for one run; `overrideUsed` appends a trailing `override=owner` field and a
- * `host` (github or cloudflare, since r39-cloudflare) a last `host=<name>` field. Without them the line is unchanged.
+ * `host` (github or cloudflare, since r39-cloudflare) a last `host=<name>` field, and a `release` (what the build was
+ * stamped with, `--release=`, since 2026-10-08) a last `release=<name>` field. Without them the line is unchanged.
  */
 export declare function formatDeployLogLine(input: {
   isoNow: string;
@@ -62,6 +63,7 @@ export declare function formatDeployLogLine(input: {
   status: string;
   overrideUsed?: boolean;
   host?: string | null;
+  release?: string | null;
 }): string;
 
 /** The newest deep or milestone report on record for this commit, whatever its verdict — informational only. */

@@ -1,0 +1,363 @@
+/*
+ * The title screen's CHANGELOG entry and panel, and the build number (Bailey, 2026-10-08: "Include a changelog button on
+ * the title screen and build number should be shown on the title screen."; he took OPTION A of the measured mock-up and
+ * "all your recommendations"). Both games: the title is the front door of FFX and FFX-2 alike.
+ *
+ *   - CHANGELOG sits in the key-hint row after "B Briefing" (a gold hairline between), as a key letter and a word in the
+ *     row's own ink chip. BEHIND THE SCENES, when its switch is on (changelog/behindTheScenes.ts), is the second entry.
+ *   - The panel is an Ink & Gold ivory sheet over the dimmed title (a bottom sheet on a phone), newest release first.
+ *   - The build number is a small chip in a corner: bottom right on a desktop window, top right on a phone and in any
+ *     window narrower than 1330 px (the bottom row has no room left beside the longer hint row there).
+ *
+ * Every number is a 1440x810 grid unit times --fe-k and every type size is max(var(--fe-fs-floor), N * --fe-k), the
+ * vocabulary of frontend.css, its hint row and the "we've moved" note (moved-notice.css). A new file because
+ * frontend.css is another batch's. What the measured mock-up proved and this keeps: nothing here covers The Echo's
+ * painted lettering, its painted rule or either title's heroes' faces; the smallest text is 14 px; a phone tap target is
+ * 44 px or more; the whole hint bar is the entries' click area so a near miss opens the entry and does not start the game.
+ */
+
+/* ------------------------------------------------------------------ the build number */
+
+.fe-title__build {
+  position: absolute;
+  z-index: 3;
+  right: calc(46 * var(--fe-k));
+  bottom: calc(26 * var(--fe-k));
+  display: inline-flex;
+  align-items: baseline;
+  gap: calc(10 * var(--fe-k));
+  padding: calc(9 * var(--fe-k)) calc(18 * var(--fe-k));
+  background: var(--ig-ink-chip, rgba(11, 10, 18, 0.62));
+  border-right: calc(3 * var(--fe-k)) solid var(--ig-gold);
+  font-family: var(--ig-font-display);
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.72);
+  line-height: 1.25;
+  white-space: nowrap;
+  /* a tap on it falls through to the plate, like every other tap on the title */
+  pointer-events: none;
+}
+.fe-title__build b {
+  color: var(--ig-gold);
+  font-weight: 700;
+}
+.fe-title__build-dot {
+  opacity: 0.5;
+}
+.fe-title__build-sha {
+  font-style: normal;
+  font-family: var(--ig-font-numeral);
+  font-weight: 600;
+  font-size: 1.1em;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: none;
+}
+/* under the painted rule, as the hint row (title-echo.css) */
+.fe-title--echo .fe-title__build {
+  bottom: calc(12 * var(--fe-k));
+}
+
+/* ------------------------------------------------------------------ the entries in the hint row */
+
+.fe-hint .fe-hint__sep {
+  align-self: stretch;
+  width: 1px;
+  background: rgba(227, 185, 74, 0.5);
+}
+.fe-hint .fe-hint__entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  cursor: pointer;
+  /* the hit area is the bar's whole height and reaches halfway into the gaps: a click that just misses the word must not start the game */
+  margin: calc(-9 * var(--fe-k)) calc(-11 * var(--fe-k));
+  padding: calc(9 * var(--fe-k)) calc(11 * var(--fe-k));
+}
+.fe-hint .fe-hint__entry:hover,
+.fe-hint .fe-hint__entry:focus-visible {
+  color: var(--ig-paper);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+/* ------------------------------------------------------------------ the overlay (the changelog panel, the page behind its switch) */
+
+.fe-info {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  color: #2c2838;
+  /* #ui is pointer-events:none and only buttons, [data-action] and .ui-interactive opt back in (index.html): the overlay
+     opts in as a whole, or a click on its dimmed margin would fall through to the plate and start the game */
+  pointer-events: auto;
+}
+.fe-info__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 4, 10, 0.64);
+}
+.fe-info__close {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  min-height: calc(36 * var(--fe-k));
+  padding: calc(6 * var(--fe-k)) calc(16 * var(--fe-k));
+  background: var(--ig-ink);
+  border: 0;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ig-gold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.fe-info__close b {
+  color: var(--ig-paper);
+  opacity: 0.7;
+}
+.fe-info__close:hover {
+  background: var(--ig-gold);
+  color: var(--ig-ink);
+}
+
+/* ------------------------------------------------------------------ the changelog panel */
+
+.fe-info__wrap {
+  position: absolute;
+  right: calc(58 * var(--fe-k));
+  top: calc(44 * var(--fe-k));
+  bottom: calc(56 * var(--fe-k));
+  width: calc(680 * var(--fe-k));
+  display: flex;
+  filter: drop-shadow(0 calc(10 * var(--fe-k)) calc(30 * var(--fe-k)) rgba(0, 0, 0, 0.6));
+}
+.fe-info__panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--ig-paper);
+  border-left: calc(5 * var(--fe-k)) solid var(--ig-gold);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 28 * var(--fe-k)) 100%, 0 100%);
+}
+.fe-info__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: calc(16 * var(--fe-k));
+  padding: calc(22 * var(--fe-k)) calc(56 * var(--fe-k)) calc(12 * var(--fe-k)) calc(30 * var(--fe-k));
+  border-bottom: calc(2 * var(--fe-k)) solid var(--ig-ink);
+}
+.fe-info__eyebrow {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ig-gold-on-paper);
+}
+.fe-info__title {
+  margin: calc(4 * var(--fe-k)) 0 0;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(42 * var(--fe-k)));
+  line-height: 1;
+  color: var(--ig-ink);
+}
+.fe-info__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  padding: calc(6 * var(--fe-k)) calc(56 * var(--fe-k)) calc(18 * var(--fe-k)) calc(30 * var(--fe-k));
+  scrollbar-width: thin;
+  scrollbar-color: var(--ig-gold-on-paper) transparent;
+}
+.fe-info__rel {
+  padding: calc(16 * var(--fe-k)) 0 calc(14 * var(--fe-k));
+  border-bottom: 1px solid rgba(11, 10, 18, 0.18);
+}
+.fe-info__rel:last-child {
+  border-bottom: 0;
+}
+.fe-info__relhead {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: calc(6 * var(--fe-k)) calc(14 * var(--fe-k));
+}
+.fe-info__relname {
+  margin: 0;
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(30 * var(--fe-k)));
+  line-height: 1.05;
+  color: var(--ig-ink);
+}
+.fe-info__relmeta {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(44, 40, 56, 0.78);
+}
+.fe-info__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.fe-info__li {
+  display: flex;
+  gap: calc(12 * var(--fe-k));
+  margin: calc(9 * var(--fe-k)) 0 0;
+  font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k)));
+  line-height: 1.42;
+}
+/* tag chips: FFX / FFX-2 / BOTH (one accent, never two: the same gold on ink for all three) */
+.fe-info__chip {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  min-width: 4.2em;
+  margin-top: 0.22em;
+  padding: calc(2 * var(--fe-k)) calc(8 * var(--fe-k)) calc(3 * var(--fe-k));
+  background: var(--ig-ink);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--ig-gold);
+}
+.fe-info__none {
+  margin: calc(9 * var(--fe-k)) 0 0;
+  font-size: max(var(--fe-fs-floor), calc(16 * var(--fe-k)));
+  line-height: 1.42;
+  color: rgba(44, 40, 56, 0.72);
+  font-style: italic;
+}
+.fe-info__foot {
+  display: flex;
+  gap: calc(22 * var(--fe-k));
+  padding: calc(10 * var(--fe-k)) calc(56 * var(--fe-k)) calc(14 * var(--fe-k)) calc(30 * var(--fe-k));
+  border-top: 1px solid rgba(11, 10, 18, 0.18);
+  font-family: var(--ig-font-display);
+  font-size: max(var(--fe-fs-floor), calc(13 * var(--fe-k)));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(44, 40, 56, 0.78);
+}
+.fe-info__foot b {
+  color: var(--ig-gold-on-paper);
+}
+
+/* ------------------------------------------------------------------ touch: the key letters mean nothing, the targets grow */
+
+@media (pointer: coarse) {
+  .fe-hint .fe-hint__entry b,
+  .fe-info__close b {
+    display: none;
+  }
+  .fe-hint .fe-hint__entry {
+    min-height: 44px;
+    margin: 0;
+    padding: 0 calc(8 * var(--fe-k));
+  }
+  .fe-info__close {
+    min-height: 44px;
+  }
+}
+
+/* ------------------------------------------------------------------ phone (the same query as frontend.css) */
+
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  /* The build number goes to the top right: the sky above the heroes on the Farplane screen, the black ground above the
+     painting on The Echo. The bottom edge keeps the hint row clear of the heroes' feet. */
+  .fe-title__build {
+    top: calc(14 * var(--fe-k));
+    bottom: auto;
+    right: calc(14 * var(--fe-k));
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+    padding: calc(6 * var(--fe-k)) calc(14 * var(--fe-k)) calc(7 * var(--fe-k));
+    line-height: 1.3;
+  }
+  .fe-title__build-dot {
+    display: none;
+  }
+  .fe-title--echo .fe-title__build {
+    bottom: auto;
+  }
+  /* the entries get a row of their own under the existing hints, so each is a full-width tap target */
+  .fe-hint .fe-hint__sep {
+    flex: 0 0 100%;
+    align-self: auto;
+    width: auto;
+    height: 1px;
+    margin: calc(-3 * var(--fe-k)) 0;
+    background: rgba(227, 185, 74, 0.35);
+  }
+  .fe-hint .fe-hint__entry {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .fe-info__wrap {
+    left: 0;
+    right: 0;
+    top: calc(70 * var(--fe-k));
+    bottom: 0;
+    width: auto;
+  }
+  .fe-info__panel {
+    border-left: 0;
+    border-top: calc(5 * var(--fe-k)) solid var(--ig-gold);
+    clip-path: none;
+  }
+  .fe-info__head {
+    padding: calc(16 * var(--fe-k)) calc(16 * var(--fe-k)) calc(10 * var(--fe-k));
+  }
+  .fe-info__scroll {
+    padding: calc(4 * var(--fe-k)) calc(18 * var(--fe-k)) calc(16 * var(--fe-k));
+  }
+  .fe-info__foot {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ the old address's "we've moved" note owns the top right */
+
+/* (moved-notice.css: top 22, right 34 on a desktop, the whole top edge on a phone.) The build number under it starts lower. */
+@media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
+  .fe:has(.fe-title__moved) .fe-title__build {
+    top: calc(112 * var(--fe-k));
+  }
+}
+
+/* ------------------------------------------------------------------ a desktop window narrower than 1330 px (1280x720, measured) */
+
+/* The bottom row has no room left beside the longer hint row (12 px spare at 1280 with both entries), so the build number
+   goes to the top right, the way the phone's does. */
+@media (max-width: 1330px) and (min-width: 761px) and (min-aspect-ratio: 3 / 4) {
+  .fe-title__build {
+    top: calc(22 * var(--fe-k));
+    bottom: auto;
+    right: calc(34 * var(--fe-k));
+  }
+  .fe-title--echo .fe-title__build {
+    bottom: auto;
+  }
+  .fe:has(.fe-title__moved) .fe-title__build {
+    top: calc(92 * var(--fe-k));
+  }
+}

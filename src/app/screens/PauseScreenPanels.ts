@@ -16,6 +16,7 @@ import type { Settings } from '../SaveData.ts';
 import { fxSummary } from '../fxParts.ts';
 import { TEXT_SIZES, textSizeLabel } from '../saveComfort.ts';
 import { colourVisionLabel } from '../saveAccess.ts';
+import { presentationSummary } from '../saveFrontend.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 
 // ------------------------------------------------------------------ options
@@ -52,7 +53,9 @@ export const TEXT_SPEED_MAX: (typeof TEXT_SPEEDS)[5] = 2;
  * godspeed"), where eye-candy D's three look rows were: one row that opens the EYE CANDY page
  * (`pause/eyeCandyPage.ts`) and reads ALL ON, ALL OFF or `n OF 11` for `game` (`fxParts.ts`); the
  * pause drops it in FF7, which draws no eye candy. Then the FFX-2 Active/Wait toggle, and whether
- * the strategy guide starts visible. `skipSeenCutscenes` stays off the menu.
+ * the strategy guide starts visible. `skipSeenCutscenes` stays off the menu. Last, PRESENTATION (39.5, Bailey, 2026-10-08,
+ * "go with C"): one row that opens the page (`pause/presentationPage.ts`) holding TITLE SCREEN and CHAPTER MUSIC, the two
+ * front-end choices (`saveFrontend.ts`) he asked to be selectable; it reads both at a glance (`THE ECHO · A`).
  *
  * TEXT SIZE, REDUCE MOTION and LOW EFFECTS (the three comfort rows of accessibility A2, D-285) moved
  * to the ACCESSIBILITY tab with REDUCE FLASHES and COLOUR VISION (PR-0032, OPT-B: Bailey, 2026-10-12,
@@ -64,6 +67,9 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
     { id: 'masterVolume', label: 'MASTER VOLUME', value: pct(settings.masterVolume), ratio: settings.masterVolume },
     { id: 'musicVolume', label: 'MUSIC', value: pct(settings.musicVolume), ratio: settings.musicVolume },
     { id: 'sfxVolume', label: 'SOUND EFFECTS', value: pct(settings.sfxVolume), ratio: settings.sfxVolume },
+    // The recorded voice-over (FFX chapters; `optionsColumns` drops both rows where a game has none, rule 14): a level, and a mute.
+    { id: 'voiceVolume', label: 'VOICE', value: pct(settings.voiceVolume), ratio: settings.voiceVolume },
+    { id: 'voiceOn', label: 'VOICE-OVER', value: settings.voiceOn ? 'ON' : 'OFF', ratio: null },
     {
       id: 'textSpeed',
       label: 'TEXT SPEED',
@@ -73,6 +79,8 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
     { id: 'eyeCandy', label: 'EYE CANDY', value: fxSummary(settings, game), ratio: null },
     { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
     { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },
+    // 39.5 (Bailey, 2026-10-07 and 10-08; both games): opens the page for which title screen is drawn and which chapter-select track plays.
+    { id: 'presentation', label: 'PRESENTATION', value: presentationSummary(settings), ratio: null },
   ];
 }
 

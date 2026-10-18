@@ -1,0 +1,84 @@
+{
+ "version": 1,
+ "chapter": "isaaru-via-purifico",
+ "game": "ffx",
+ "lines": {
+  "0dc2210874442e": {
+   "id": "isaaru-via-purifico.pre.007",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.pre.007.mp3",
+   "ms": 2710,
+   "bytes": 22292,
+   "who": "auron"
+  },
+  "09ee76112cdb0c": {
+   "id": "isaaru-via-purifico.pre.009",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.pre.009.mp3",
+   "ms": 3022,
+   "bytes": 24788,
+   "who": "yuna"
+  },
+  "032be62d318d38": {
+   "id": "isaaru-via-purifico.pre.011",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.pre.011.mp3",
+   "ms": 1762,
+   "bytes": 14804,
+   "who": "yuna"
+  },
+  "1f9f247f34563f": {
+   "id": "isaaru-via-purifico.pre.016",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.pre.016.mp3",
+   "ms": 3571,
+   "bytes": 29204,
+   "who": "auron"
+  },
+  "193943e1792c92": {
+   "id": "isaaru-via-purifico.pre.019",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.pre.019.mp3",
+   "ms": 3778,
+   "bytes": 30932,
+   "who": "yuna"
+  },
+  "0d18b5a527fbf9": {
+   "id": "isaaru-via-purifico.post.002",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.post.002.mp3",
+   "ms": 931,
+   "bytes": 8084,
+   "who": "yuna"
+  },
+  "1fba0a799cd109": {
+   "id": "isaaru-via-purifico.post.005",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.post.005.mp3",
+   "ms": 3619,
+   "bytes": 29588,
+   "who": "auron"
+  },
+  "1218c5ca3bf942": {
+   "id": "isaaru-via-purifico.mid-pterya-called.002",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.mid-pterya-called.002.mp3",
+   "ms": 3986,
+   "bytes": 32660,
+   "who": "yuna"
+  },
+  "09803e5c2b5513": {
+   "id": "isaaru-via-purifico.mid-spathi-called.002",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.mid-spathi-called.002.mp3",
+   "ms": 2963,
+   "bytes": 24404,
+   "who": "yuna"
+  },
+  "1c9d9ebf67e216": {
+   "id": "isaaru-via-purifico.mid-grothia-ready.001.fb1",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.mid-grothia-ready.001.fb1.mp3",
+   "ms": 2847,
+   "bytes": 23444,
+   "who": "yuna"
+  },
+  "06f2cb1b4017c6": {
+   "id": "isaaru-via-purifico.quip-yuna.001",
+   "file": "isaaru-via-purifico/isaaru-via-purifico.quip-yuna.001.mp3",
+   "ms": 2059,
+   "bytes": 17108,
+   "who": "yuna"
+  }
+ }
+}

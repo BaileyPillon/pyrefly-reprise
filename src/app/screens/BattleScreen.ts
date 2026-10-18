@@ -45,6 +45,7 @@ import { offeringChooser } from './BattleScreenOffering.ts'; // the hidden Last 
 import type { OfferingOverlay } from '../../ui/ffx/offering/OfferingScreen.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
+import { voice } from '../../audio/voice/index.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
@@ -333,6 +334,7 @@ export class BattleScreen extends Screen {
       root: this.root,
       stage: this.stage,
       audio,
+      voice, // the recorded lines of the chapter (FFX only today): `audio/voice`
       textSpeed: this.app.save.settings.textSpeed,
       ...(scene.slots.artNamespace ? { artNamespace: scene.slots.artNamespace } : {}), // the mid-battle lines show the experiment's own portraits
       // A `'skip'` run is e2e or the critic: no viewer, and a whole chapter to
@@ -677,6 +679,7 @@ export class BattleScreen extends Screen {
         // returned to: this screen is the one that knows which boss theme was
         // playing when the menu went up.
         setPauseMusic(audio, paused);
+        voice.setPaused(paused); // a mid-battle line freezes with the fight and carries on when the menu closes
       },
       onResume: () => void this.closePause(),
       onRestart: () => this.requestExit('restart'),

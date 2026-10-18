@@ -1,0 +1,69 @@
+{
+ "version": 1,
+ "game": "ffx",
+ "voices": [
+  "tidus",
+  "yuna",
+  "auron"
+ ],
+ "encode": {
+  "codec": "mp3",
+  "channels": 1,
+  "rate": 24000,
+  "bitrate": "64k"
+ },
+ "targetLufs": -19,
+ "ceilingDbtp": -1,
+ "chapters": {
+  "seymour-flux": {
+   "lines": 28,
+   "bytes": 416432
+  },
+  "yunalesca": {
+   "lines": 22,
+   "bytes": 383288
+  },
+  "braskas-final-aeon": {
+   "lines": 46,
+   "bytes": 735896
+  },
+  "seymour-anima-macalania": {
+   "lines": 19,
+   "bytes": 327932
+  },
+  "evrae-airship": {
+   "lines": 15,
+   "bytes": 257772
+  },
+  "yojimbo-cavern": {
+   "lines": 10,
+   "bytes": 177032
+  },
+  "seymour-natus": {
+   "lines": 10,
+   "bytes": 184136
+  },
+  "seymour-omnis": {
+   "lines": 15,
+   "bytes": 327276
+  },
+  "isaaru-via-purifico": {
+   "lines": 11,
+   "bytes": 257308
+  },
+  "sin-fins-core": {
+   "lines": 21,
+   "bytes": 372900
+  },
+  "sin-face": {
+   "lines": 15,
+   "bytes": 277548
+  }
+ },
+ "totals": {
+  "files": 200,
+  "bytes": 3600544,
+  "ms": 432809,
+  "lines": 212
+ }
+}

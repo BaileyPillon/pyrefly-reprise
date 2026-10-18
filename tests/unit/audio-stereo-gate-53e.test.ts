@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { AUDIO_BUDGET_BYTES } from '../../tools/audio/manifest-io.mjs';
-import { batch2MusicMoved } from './helpers/musicBatch2.ts';
+import { alternates395Bytes, batch2MusicMoved } from './helpers/musicBatch2.ts';
 import { FFMPEG, STEREO_GATE, judgeStereo, measureFile, measureStereo } from '../../tools/audio/stereo-gate.mjs';
 
 const REPO = fileURLToPath(new URL('../../', import.meta.url));
@@ -236,7 +236,8 @@ describe('the stereo gate (driver item 53e): the shipped files', () => {
     expect(AUDIO_BUDGET_BYTES).toBe(105e6);
     expect(record.totals.budgetBytes).toBe(AUDIO_BUDGET_BYTES);
     // The record's totals are the ones of 2026-10-11; music batch 2 (2026-10-12) moved the music total by `batch2MusicMoved` since (pinned by audio-music-batch2-2026-10-12.test.ts).
-    expect(record.totals.musicBytesAfter + batch2MusicMoved).toBe(music);
+    // ...and by the two release-39.5 chapter-select alternates (`alternates395Bytes`), which came after both.
+    expect(record.totals.musicBytesAfter + batch2MusicMoved + alternates395Bytes).toBe(music);
     // The sprites moved too since (the v2 repack of 2026-10-12 gave back 166,108 bytes; `audio-sfx-parity-repack.test.ts` pins it, `audio-sfx-parity.test.ts` the packs), so the shipped total
     // is not the record's plus the music's movement any more: the record's sprites are what it was minus its music, and the budget holds either way.
     expect(record.totals.shippedAudioBytesAfter - record.totals.musicBytesAfter).toBeGreaterThanOrEqual((manifest.sfx?.bytes ?? 0) + (manifest.sfxV2?.bytes ?? 0));

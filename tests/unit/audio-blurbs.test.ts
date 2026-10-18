@@ -136,7 +136,8 @@ const NOTE_ENTRIES = Object.entries(TRACK_NOTES);
 
 describe('TRACK_NOTES covers the score', () => {
   it('has exactly one note per composed track', () => {
-    // Composed tracks only: a stand-in key (`boss-leblanc`, `boss-bahamut`, 2026-10-10) plays another cue's composition and has no notes of its own.
+    // Composed tracks only (`trackNames()`): a stand-in key (`boss-leblanc`, `boss-bahamut`, 2026-10-10; `chapter-select-a` and `-c`, the 39.5 alternates,
+    // ElevenLabs takes that fall back to B's score) plays another cue's composition and has no notes of its own, so no note and no row.
     expect(Object.keys(TRACK_NOTES).sort()).toEqual(trackNames().sort());
   });
 

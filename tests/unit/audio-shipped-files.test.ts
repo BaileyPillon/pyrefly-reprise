@@ -100,7 +100,8 @@ describe('the shipped audio manifest', () => {
 
   it('lists nothing the game cannot play', () => {
     for (const name of Object.keys(manifest!.music)) {
-      // hasTrack, not trackNames: a stand-in key (`boss-leblanc`, `boss-bahamut`) is playable and has a pre-render but no composition of its own.
+      // hasTrack, not trackNames: a stand-in key (`boss-leblanc`, `boss-bahamut`; the two selectable chapter-select alternates of 39.5) is playable and has a pre-render
+      // but no composition of its own (`audio/tracks/index.ts`), which `trackNames()` leaves out so previews never duplicate.
       expect(hasTrack(name), `manifest lists "${name}", which is not a track`).toBe(true);
     }
     const effects = new Set(sfxNames());

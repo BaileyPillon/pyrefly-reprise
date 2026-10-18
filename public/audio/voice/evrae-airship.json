@@ -1,0 +1,112 @@
+{
+ "version": 1,
+ "chapter": "evrae-airship",
+ "game": "ffx",
+ "lines": {
+  "1a7f1daa0aa073": {
+   "id": "evrae-airship.pre.011",
+   "file": "evrae-airship/evrae-airship.pre.011.mp3",
+   "ms": 3615,
+   "bytes": 29588,
+   "who": "tidus"
+  },
+  "06b19aadd288ec": {
+   "id": "evrae-airship.pre.015",
+   "file": "evrae-airship/evrae-airship.pre.015.mp3",
+   "ms": 1357,
+   "bytes": 11540,
+   "who": "auron"
+  },
+  "0755058b79442c": {
+   "id": "evrae-airship.pre.018",
+   "file": "evrae-airship/evrae-airship.pre.018.mp3",
+   "ms": 2316,
+   "bytes": 19220,
+   "who": "tidus"
+  },
+  "1b0ef42f2e8d02": {
+   "id": "evrae-airship.pre.021",
+   "file": "evrae-airship/evrae-airship.pre.021.mp3",
+   "ms": 2111,
+   "bytes": 17492,
+   "who": "auron"
+  },
+  "13e99b4825d9e4": {
+   "id": "evrae-airship.pre.022",
+   "file": "evrae-airship/evrae-airship.pre.022.mp3",
+   "ms": 2003,
+   "bytes": 16724,
+   "who": "auron"
+  },
+  "16767fda9994aa": {
+   "id": "evrae-airship.post.003",
+   "file": "evrae-airship/evrae-airship.post.003.mp3",
+   "ms": 1935,
+   "bytes": 16148,
+   "who": "tidus"
+  },
+  "0e14af9c898e50": {
+   "id": "evrae-airship.post.004",
+   "file": "evrae-airship/evrae-airship.post.004.mp3",
+   "ms": 665,
+   "bytes": 5972,
+   "who": "auron"
+  },
+  "1ac0820817c934": {
+   "id": "evrae-airship.post.009",
+   "file": "evrae-airship/evrae-airship.post.009.mp3",
+   "ms": 3235,
+   "bytes": 26516,
+   "who": "tidus"
+  },
+  "1310c6d53a9e7b": {
+   "id": "evrae-airship.post.011",
+   "file": "evrae-airship/evrae-airship.post.011.mp3",
+   "ms": 543,
+   "bytes": 5012,
+   "who": "tidus"
+  },
+  "1a73875713538a": {
+   "id": "evrae-airship.mid-evrae-first-inhale.002",
+   "file": "evrae-airship/evrae-airship.mid-evrae-first-inhale.002.mp3",
+   "ms": 2222,
+   "bytes": 18452,
+   "who": "auron"
+  },
+  "16e9120ecc5b13": {
+   "id": "evrae-airship.mid-evrae-first-inhale.002.fb1",
+   "file": "evrae-airship/evrae-airship.mid-evrae-first-inhale.002.fb1.mp3",
+   "ms": 2167,
+   "bytes": 18068,
+   "who": "tidus"
+  },
+  "04c0f76bf5f48d": {
+   "id": "evrae-airship.mid-evrae-haste-phase.001",
+   "file": "evrae-airship/evrae-airship.mid-evrae-haste-phase.001.mp3",
+   "ms": 2510,
+   "bytes": 20756,
+   "who": "tidus"
+  },
+  "0951da2bc08c8a": {
+   "id": "evrae-airship.mid-evrae-haste-phase.002",
+   "file": "evrae-airship/evrae-airship.mid-evrae-haste-phase.002.mp3",
+   "ms": 3017,
+   "bytes": 24788,
+   "who": "auron"
+  },
+  "1d3e0dca2bbe2e": {
+   "id": "evrae-airship.quip-tidus.001",
+   "file": "evrae-airship/evrae-airship.quip-tidus.001.mp3",
+   "ms": 1379,
+   "bytes": 11732,
+   "who": "tidus"
+  },
+  "1310a6600be3fd": {
+   "id": "evrae-airship.quip-auron.001",
+   "file": "evrae-airship/evrae-airship.quip-auron.001.mp3",
+   "ms": 1874,
+   "bytes": 15764,
+   "who": "auron"
+  }
+ }
+}

@@ -28,6 +28,9 @@ import { readColourVision, readReduceFlashes } from '../../src/app/accessFlags.t
 
 const FIXTURES = resolve(__dirname, '..', 'fixtures', 'saves');
 const NEW_KEYS = ['colourVision', 'reduceFlashes'];
+// Release 39.5 (ported onto this line) added four settings of its own, all at their defaults for a save that predates them: the title screen and chapter-select
+// choices (`saveFrontend.ts`) and the recorded voice-over's pair (`voiceOn`, `voiceVolume`). Pinned by save-front-end-39-5.test.ts and voice-settings.test.ts.
+const R395_KEYS = ['chapterSelectMusic', 'titleArt', 'voiceOn', 'voiceVolume'];
 
 class Slot {
   readonly items = new Map<string, string>();
@@ -66,7 +69,7 @@ describe('the new fields: shape and defaults', () => {
       'fxLiving', 'fxSphere', 'fxSpectacle', 'fxSplash', 'guideVisible', 'intentVisible', 'lowEffects', 'masterVolume', 'musicVolume',
       'pausePanelsHidden', 'reduceMotion', 'sfxBalanceMigrated', 'sfxVolume', 'skipSeenCutscenes', 'textSize', 'textSpeed',
     ];
-    expect(Object.keys(defaultSettings()).sort()).toEqual([...OLD, ...NEW_KEYS].sort());
+    expect(Object.keys(defaultSettings()).sort()).toEqual([...OLD, ...NEW_KEYS, ...R395_KEYS].sort());
   });
 
   it('the modes, in the order the row steps through them', () => {
@@ -87,7 +90,7 @@ describe('from the current schema: nothing it had changes, the two defaults arri
     expect(after.unlocked).toEqual(before.unlocked);
     expect(after.flags).toEqual(before.flags);
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
-    expect(Object.keys(after.settings).filter((k) => !(k in before.settings)).sort()).toEqual(NEW_KEYS);
+    expect(Object.keys(after.settings).filter((k) => !(k in before.settings)).sort()).toEqual([...NEW_KEYS, ...R395_KEYS].sort());
     expect(after.settings.reduceFlashes).toBe(false);
     expect(after.settings.colourVision).toBe('off');
   });
