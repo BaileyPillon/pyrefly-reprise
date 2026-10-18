@@ -29,6 +29,8 @@ function fakeRoot(mutate?: (rig: string, root: string) => void): { root: string;
   if (!base) {
     base = tempDir('rig-deploy-');
     cpSync(join(ROOT, 'tools'), join(base, 'tools'), { recursive: true, filter: (src) => !/[\\/]zz-[^\\/]*$/.test(src) && !/__pycache__/.test(src) });
+    // The deploy tools read the title's release notes and the Behind the Scenes switch from the source tree (release 39.5, `tools/release-notes.mjs`, `tools/dist-filter.mjs`): two import-free leaf folders.
+    cpSync(join(ROOT, 'src', 'app', 'changelog'), join(base, 'src', 'app', 'changelog'), { recursive: true });
     symlinkSync(join(ROOT, 'node_modules'), join(base, 'node_modules'), 'junction');
     writeFileSync(join(base, 'package.json'), JSON.stringify({ name: 'fake', type: 'module' }));
     mkdirSync(join(base, 'public'), { recursive: true });
