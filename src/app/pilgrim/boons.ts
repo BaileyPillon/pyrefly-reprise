@@ -38,8 +38,10 @@ export interface BoonDef {
   readonly kind: 'ITEM' | 'ARMOUR' | 'NEW';
   /** What it does, in plain words. */
   readonly fx: string;
-  /** Where it comes from: the repo file and the research section, or NEW. */
+  /** Where it comes from: the repo file and the research section, or NEW. **Code and tests only: it is never shown to a player** (`tag` is what the card prints). */
   readonly src: string;
+  /** The short player-facing footer of the card: what kind of thing this is. */
+  readonly tag: 'FFX item' | 'FFX armour ability' | 'New boon';
   readonly effect: BoonEffect;
   /** True for a row the game does not have (the card wears a NEW tag). */
   readonly isNew: boolean;
@@ -50,16 +52,16 @@ const ABILITY_SRC = 'FFX auto-ability (combat-core 9). A one-fight loan, wearer 
 
 /** The pool: ten boons, each a real FFX item or auto-ability, or plainly NEW. */
 export const BOON_POOL: readonly BoonDef[] = [
-  { id: 'light-curtain', name: 'Light Curtain ×2', kind: 'ITEM', fx: 'Two Light Curtains in your pack: Protect to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), effect: { kind: 'item', itemId: 'light-curtain', count: 2 }, isNew: false },
-  { id: 'lunar-curtain', name: 'Lunar Curtain ×2', kind: 'ITEM', fx: 'Two Lunar Curtains in your pack: Shell to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), effect: { kind: 'item', itemId: 'lunar-curtain', count: 2 }, isNew: false },
-  { id: 'star-curtain', name: 'Star Curtain ×2', kind: 'ITEM', fx: 'Two Star Curtains in your pack: Reflect to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), effect: { kind: 'item', itemId: 'star-curtain', count: 2 }, isNew: false },
-  { id: 'healing-spring', name: 'Healing Spring ×2', kind: 'ITEM', fx: 'Two Healing Springs in your pack: Regen to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), effect: { kind: 'item', itemId: 'healing-spring', count: 2 }, isNew: false },
-  { id: 'stamina-tablet', name: 'Stamina Tablet', kind: 'ITEM', fx: "One Stamina Tablet in your pack: doubles one ally's maximum HP for the next fight.", src: ITEM_SRC('cures-utility-2'), effect: { kind: 'item', itemId: 'stamina-tablet', count: 1 }, isNew: false },
-  { id: 'mega-phoenix', name: 'Mega Phoenix', kind: 'ITEM', fx: 'One Mega Phoenix in your pack: revives every fallen ally at full HP, once, in the next fight only.', src: ITEM_SRC('restoratives-2'), effect: { kind: 'item', itemId: 'mega-phoenix', count: 1 }, isNew: false },
-  { id: 'auto-haste', name: 'Auto-Haste', kind: 'ARMOUR', fx: 'Permanent Haste for the wearer, who is also immune to Slow, for the next fight.', src: ABILITY_SRC, effect: { kind: 'auto-ability', ability: 'auto-haste', prefer: ['tidus', 'rikku', 'wakka', 'auron'] }, isNew: false },
-  { id: 'auto-regen', name: 'Auto-Regen', kind: 'ARMOUR', fx: 'Infinite Regen for the wearer, and it cannot be dispelled, for the next fight.', src: ABILITY_SRC, effect: { kind: 'auto-ability', ability: 'auto-regen', prefer: ['kimahri', 'tidus', 'auron', 'yuna'] }, isNew: false },
-  { id: 'auto-phoenix', name: 'Auto-Phoenix', kind: 'ARMOUR', fx: 'The wearer uses a Phoenix Down on a fallen ally by themselves, for the next fight.', src: ABILITY_SRC, effect: { kind: 'auto-ability', ability: 'auto-phoenix', prefer: ['auron', 'tidus', 'kimahri', 'yuna'] }, isNew: false },
-  { id: 'overdrive-charged', name: 'Overdrive charged', kind: 'NEW', fx: 'One ally starts the next fight with a full Overdrive gauge.', src: 'NEW, ours: no FFX item does this. The gauge is the engine\'s own starting value.', effect: { kind: 'overdrive', prefer: ['wakka', 'auron', 'tidus', 'yuna'] }, isNew: true },
+  { id: 'light-curtain', name: 'Light Curtain ×2', kind: 'ITEM', fx: 'Two Light Curtains in your pack: Protect to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), tag: 'FFX item', effect: { kind: 'item', itemId: 'light-curtain', count: 2 }, isNew: false },
+  { id: 'lunar-curtain', name: 'Lunar Curtain ×2', kind: 'ITEM', fx: 'Two Lunar Curtains in your pack: Shell to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), tag: 'FFX item', effect: { kind: 'item', itemId: 'lunar-curtain', count: 2 }, isNew: false },
+  { id: 'star-curtain', name: 'Star Curtain ×2', kind: 'ITEM', fx: 'Two Star Curtains in your pack: Reflect to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), tag: 'FFX item', effect: { kind: 'item', itemId: 'star-curtain', count: 2 }, isNew: false },
+  { id: 'healing-spring', name: 'Healing Spring ×2', kind: 'ITEM', fx: 'Two Healing Springs in your pack: Regen to one ally, twice, in the next fight only.', src: ITEM_SRC('cures-utility-2'), tag: 'FFX item', effect: { kind: 'item', itemId: 'healing-spring', count: 2 }, isNew: false },
+  { id: 'stamina-tablet', name: 'Stamina Tablet', kind: 'ITEM', fx: "One Stamina Tablet in your pack: doubles one ally's maximum HP for the next fight.", src: ITEM_SRC('cures-utility-2'), tag: 'FFX item', effect: { kind: 'item', itemId: 'stamina-tablet', count: 1 }, isNew: false },
+  { id: 'mega-phoenix', name: 'Mega Phoenix', kind: 'ITEM', fx: 'One Mega Phoenix in your pack: revives every fallen ally at full HP, once, in the next fight only.', src: ITEM_SRC('restoratives-2'), tag: 'FFX item', effect: { kind: 'item', itemId: 'mega-phoenix', count: 1 }, isNew: false },
+  { id: 'auto-haste', name: 'Auto-Haste', kind: 'ARMOUR', fx: 'Permanent Haste for the wearer, who is also immune to Slow, for the next fight.', src: ABILITY_SRC, tag: 'FFX armour ability', effect: { kind: 'auto-ability', ability: 'auto-haste', prefer: ['tidus', 'rikku', 'wakka', 'auron'] }, isNew: false },
+  { id: 'auto-regen', name: 'Auto-Regen', kind: 'ARMOUR', fx: 'Infinite Regen for the wearer, and it cannot be dispelled, for the next fight.', src: ABILITY_SRC, tag: 'FFX armour ability', effect: { kind: 'auto-ability', ability: 'auto-regen', prefer: ['kimahri', 'tidus', 'auron', 'yuna'] }, isNew: false },
+  { id: 'auto-phoenix', name: 'Auto-Phoenix', kind: 'ARMOUR', fx: 'The wearer uses a Phoenix Down on a fallen ally by themselves, for the next fight.', src: ABILITY_SRC, tag: 'FFX armour ability', effect: { kind: 'auto-ability', ability: 'auto-phoenix', prefer: ['auron', 'tidus', 'kimahri', 'yuna'] }, isNew: false },
+  { id: 'overdrive-charged', name: 'Overdrive charged', kind: 'NEW', fx: 'One ally starts the next fight with a full Overdrive gauge.', src: 'NEW, ours: no FFX item does this. The gauge is the engine\'s own starting value.', tag: 'New boon', effect: { kind: 'overdrive', prefer: ['wakka', 'auron', 'tidus', 'yuna'] }, isNew: true },
 ];
 
 const BY_ID: ReadonlyMap<BoonId, BoonDef> = new Map(BOON_POOL.map((b) => [b.id, b]));

@@ -21,6 +21,9 @@ import { pinRunSeed } from '../../src/app/runSeed.ts';
 import { EXPERIMENTS_KEY, experimentRecord, setExperimentStorageForTests } from '../../src/app/experiments/experimentRecords.ts';
 import { experimentRunActive } from '../../src/app/experiments/experimentRun.ts';
 import { activeFight } from '../../src/app/pilgrim/activeRun.ts';
+import { boonHtml, overHtml, routeHtml, runPanelHtml } from '../../src/app/pilgrim/pilgrimMarkup.ts';
+import { BOON_POOL } from '../../src/app/pilgrim/boons.ts';
+import { chooseRoad, finishFight, newRun, pickBoon, summarize } from '../../src/app/pilgrim/runState.ts';
 import { drawOffers, boonById } from '../../src/app/pilgrim/boons.ts';
 import { fightSeed, runPilgrimage } from '../../src/app/pilgrim/PilgrimFlow.ts';
 import type { PilgrimHost } from '../../src/app/pilgrim/pilgrimHook.ts';
@@ -295,5 +298,40 @@ describe('the fight seed', () => {
   it('moves with the fight number, so the same run replays', () => {
     expect(fightSeed({ seed: 100, road: ['macalania'] } as never)).toBe(101);
     expect(fightSeed({ seed: 100, road: ['macalania', 'evrae', 'natus'] } as never)).toBe(103);
+  });
+});
+
+describe('what a player reads', () => {
+  /** Developer text: a repo path, a research reference, or the word "ours". */
+  const DEV = /src\/|\.ts\b|combat-core|data\/ffx|\bours\b/i;
+  const text = (html: string): string => {
+    const el = document.createElement('div');
+    el.innerHTML = html;
+    return el.textContent ?? '';
+  };
+
+  it('no screen prints a file path, a research reference or "ours": the boon cards end in a short tag, the road, the run-over page and the RUN tab say none', () => {
+    const record = { runs: 2, clears: 0, best: { won: 2, reached: 3, cleared: false, timeMs: 5000, boonsUsed: 2, finishedAt: 1 }, last: null };
+    expect(text(routeHtml(record))).not.toMatch(DEV);
+    expect(text(routeHtml({ runs: 0, clears: 0, best: null, last: null }))).not.toMatch(DEV);
+    // The boon pick: every boon of the pool, as a card, on the pick screen.
+    let run = finishFight(newRun(1, 0), 'victory', 1);
+    expect(text(boonHtml(run, { zone: 'boons', boonSel: 0, roadSel: 0, notice: '' }))).not.toMatch(DEV);
+    const tags = new Set<string>();
+    for (let seed = 1; seed < 60; seed++) {
+      const picking = finishFight(newRun(seed, 0), 'victory', 1);
+      const html = boonHtml(picking, { zone: 'boons', boonSel: 1, roadSel: 0, notice: '' });
+      expect(text(html), String(seed)).not.toMatch(DEV);
+      for (const m of html.matchAll(/pgx-card__src">([^<]*)</g)) tags.add(m[1]!);
+    }
+    expect([...tags].sort()).toEqual(['FFX armour ability', 'FFX item', 'New boon']);
+    for (const b of BOON_POOL) expect(text(boonHtml({ ...run, offers: [b.id] }, { zone: 'boons', boonSel: 0, roadSel: 0, notice: '' })), b.id).not.toMatch(DEV);
+    run = chooseRoad(pickBoon(run, 0), 'evrae');
+    expect(text(boonHtml(finishFight(pickBoon(finishFight(run, 'victory', 2), 0), 'victory', 3) && pickBoon(finishFight(run, 'victory', 2), 0), { zone: 'road', boonSel: 0, roadSel: 0, notice: '' }))).not.toMatch(DEV);
+    // The run-over page for a loss, a win and leaving, and the RUN tab with and without boons.
+    const lost = finishFight(run, 'defeat', 9);
+    for (const done of [lost, finishFight(newRun(3, 0), 'left', 5)]) expect(text(overHtml(done, summarize(done, 10), null, true)), String(done.end)).not.toMatch(DEV);
+    expect(text(runPanelHtml(run, []))).not.toMatch(DEV);
+    expect(text(runPanelHtml(run, [{ boon: 'auto-regen', line: 'Auto-Regen is worn by Tidus.' }]))).not.toMatch(DEV);
   });
 });

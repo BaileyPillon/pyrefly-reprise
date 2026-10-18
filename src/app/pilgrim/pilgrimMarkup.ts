@@ -57,7 +57,7 @@ export function routeHtml(record: PilgrimRecord): string {
   return `
     <div class="pgx-page">
       <div class="pgx-top"><div class="pgx-eyebrow"><i></i>Pilgrimage · prototype</div><div class="pgx-hud">${chip('Fight', '1', `/ ${ROUTE_LENGTH}`)}${chip('Boons', '0', 'kept')}</div></div>
-      <div class="pgx-h">Four stops · two forks<i></i><small>Hidden prototype · FFX only</small></div>
+      <div class="pgx-h">Four stops · two forks<i></i><small>Prototype · FFX only</small></div>
       <div class="pgx-tree" data-role="tree"><svg class="pgx-links" data-role="links" aria-hidden="true"></svg>${tiers}</div>
       <div class="pgx-foot">
         <div class="pgx-slab"><h3>Every fight is the faithful one</h3>
@@ -82,7 +82,7 @@ function boonCard(id: BoonId, i: number, sel: boolean): string {
   return `<div class="pgx-card${sel ? ' pgx-card--sel' : ''}" data-action="pg:pick:${i}" data-boon="${id}" role="button" tabindex="0">
     <div class="pgx-card__kind">${def.kind === 'NEW' ? 'One fight' : def.kind}<span class="pgx-card__when">${when}</span></div>
     <div class="pgx-card__name">${esc(def.name)}</div><div class="pgx-card__fx">${esc(def.fx)}</div>
-    <div class="pgx-card__who">${esc(wearerLine(def))}</div><div class="pgx-card__src">${esc(def.src)}</div></div>`;
+    <div class="pgx-card__who">${esc(wearerLine(def))}</div><div class="pgx-card__src">${esc(def.tag)}</div></div>`;
 }
 
 function forkCard(stop: RouteStop, i: number, sel: boolean, live: boolean): string {

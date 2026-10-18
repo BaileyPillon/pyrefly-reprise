@@ -64,6 +64,9 @@ describe('the boon pool and its draw', () => {
       if (b.effect.kind === 'item') expect(b.src, b.id).toMatch(/src\/data\/ffx\/items\/.*combat-core 8\.2/);
       if (b.effect.kind === 'auto-ability') expect(b.src, b.id).toMatch(/combat-core 9/);
       if (b.isNew) expect(b.src, b.id).toMatch(/^NEW, ours/);
+      // The card prints the short tag; the source above stays in code and here.
+      expect(b.tag, b.id).toBe(b.kind === 'ITEM' ? 'FFX item' : b.kind === 'ARMOUR' ? 'FFX armour ability' : 'New boon');
+      expect(b.tag, b.id).not.toMatch(/src\/|\.ts\b|combat-core|\bours\b/i);
     }
     expect(boonById('auto-regen').effect).toMatchObject({ kind: 'auto-ability', ability: 'auto-regen' });
     expect(isBoonId('auto-haste')).toBe(true);
