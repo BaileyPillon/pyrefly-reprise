@@ -37,7 +37,7 @@ export function possessedScriptDisables(possessedId: string): readonly Formation
 }
 
 /**
- * The roster keys the field event removes from the party when it launches this possessed body's link (`sins0700`, call 0xCB removePartyMember, before the battle): the aeon's own, and for a Magus Sister all three
+ * The roster keys the field event removes from the party when it launches this possessed body's link (`sins0700`, event native 0xCB removePartyMember, before the battle): the aeon's own, and for a Magus Sister all three
  * Sisters together (the event removes Sandy and Mindy with the choice of Cindy). `[]` for any other id.
  */
 export function possessedRosterKeys(possessedId: string): readonly string[] {

@@ -3,7 +3,7 @@
  *
  * ## What the game does (`FFX.exe`, Steam build 25501027; research notes `FFX-G11` and `FFX-G11c`, `research/re-ffx-last-summoning.md` sections 2 and 5)
  *
- * The field event `sins0700` (worker 26) lets the player choose one of the aeons Yuna still holds, **calls removePartyMember with it** (event call 0xCB, handler 0x85B820), and **then** launches that
+ * The field event `sins0700` (worker 26) lets the player choose one of the aeons Yuna still holds, **calls removePartyMember with it** (event native 0xCB, handler 0x85B820), and **then** launches that
  * aeon's possession battle. The call clears the aeon's roster flag (bit 0 of its party-record flag byte, via 0x7869B0) and its entry in the party order table. The battle setup (0x79C110) turns a
  * character's in-battle flag on from the roster flag, and the Summon list builder (0x00785410, case 5) lists only the aeons that exist in the battle; Grand Summon opens the same list. So **an aeon the
  * event has removed is absent from Yuna's Summon list and from Grand Summon's picker in every later battle, its own link included**: not drawn greyed, absent. (A script lock alone, the availability

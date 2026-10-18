@@ -3147,7 +3147,7 @@ export interface EnemyGroupDef {
    * has taken ("Taken by Yu Yevon"). The lock itself is the same: the aeon is off the Summon list and out of Grand Summon's choices.
    *
    * `removed` (the hidden Last Summoning chapter, FFX only; optional, absent for Chapter XIV's; re-parity RC11, lane "FFX Chapter III roster"): this lock stands for an aeon the field event took out of the party
-   * (`sins0700`, call 0xCB removePartyMember, before the link's fight), not for the availability byte. It changes no rule; while `MENU_DRAW_PARITY`'s `summon` item is on, the Summon list builds
+   * (`sins0700`, event native 0xCB removePartyMember, before the link's fight), not for the availability byte. It changes no rule; while `MENU_DRAW_PARITY`'s `summon` item is on, the Summon list builds
    * no row for it (the game's list never holds a removed aeon) instead of the greyed "Taken by Yu Yevon" row.
    */
   lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId; reason?: string; removed?: true }>;
@@ -3209,7 +3209,7 @@ export interface EnemyGroupDef {
   scriptCommandDisables?: readonly FormationCommandOff[];
   /**
    * **FFX only, "the field event took these aeons out of the party before this battle"** (re-parity RC11, lane "FFX Chapter III roster", `docs/handoff/re-parity-rc11-ffx-ch3-roster.md`): the roster keys
-   * (`valefor`, `ifrit`, ...) the event `sins0700` removed with removePartyMember (call 0xCB, handler 0x85B820) before launching this link: the aeon chosen for this link and every aeon given up in an earlier
+   * (`valefor`, `ifrit`, ...) the event `sins0700` removed with removePartyMember (event native 0xCB, handler 0x85B820) before launching this link: the aeon chosen for this link and every aeon given up in an earlier
    * one. The roster flag is cleared, so the battle setup creates no in-battle record for the aeon and the Summon list (builder 0x00785410, case 5), which lists only aeons that exist in the battle, never holds it:
    * it is absent from the Summon list and Grand Summon's picker, not drawn greyed. Read by `battle/ffx/roster-removal.ts` **only while the switch `CH3_ROSTER_REMOVAL` is on (it is off)**; a removed aeon stays in
    * the roster (the possessed copy's stats are read from it) and is only left out of the lists and refused if named. Only Chapter III's six links 2 to 7 carry it. Absent everywhere else, and ignored while the switch is off.

@@ -1,7 +1,7 @@
 /**
  * **Chapter III's roster removal** (re-parity RC11, lane "FFX Chapter III roster"; **FFX only**; switch `CH3_ROSTER_REMOVAL`, default OFF; handoff `docs/handoff/re-parity-rc11-ffx-ch3-roster.md`).
  *
- * The game (`FFX-G11c` section 7, `research/re-ffx-last-summoning.md` sections 2 and 5): the field event `sins0700` removes the chosen aeon from the party (removePartyMember, call 0xCB)
+ * The game (`FFX-G11c` section 7, `research/re-ffx-last-summoning.md` sections 2 and 5): the field event `sins0700` removes the chosen aeon from the party (removePartyMember, event native 0xCB)
  * **before** it launches that aeon's possession battle, so in every later battle the aeon has no record and is absent from Yuna's Summon list and Grand Summon's picker; with none left the
  * Summon and Grand Summon openers are drawn greyed (-3).
  *
