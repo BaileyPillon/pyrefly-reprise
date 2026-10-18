@@ -76,10 +76,10 @@ The tracker (`track.mjs`: head, feet, pelvis, hand, tip through the live camera,
 | | result |
 |---|---|
 | `npx tsc --noEmit` | clean |
-| rig vitest files (`tests/unit/rig`, `tests/unit/tools/rig-*`) | TBD_RIGTESTS |
+| rig vitest files (`tests/unit/rig`, `tests/unit/tools/rig-*`) | **26 files, 276 tests, all pass** (199 across 18 files on `rig` before; 77 new) |
 | the new files | `rig-v2-data` (18), `rig-v2-agree` (4), `rig-v2-actor` (8), `rig-v1-unchanged` (2), `rig-v2-gate` (13), `rig-lulu-v2` (5), `rig-lane` (12) |
 | Python | `tools/rig/test_rig_pipeline.py` 12 OK, `tools/rig/test_rig_v2.py` 10 OK, `tools/rig/lane/test_lane.py` 19 OK |
-| full unit suite (`npm test`, TEMP on D:/Tools/pyrefly-scratch/tmp-rig-v2) | TBD_FULL |
+| full unit suite (`npx vitest run`, TEMP on D:/Tools/pyrefly-scratch/tmp-rig-v2) | 1,382 files, 21,918 tests, run while the recorder was using the GPU: **14 files (33 tests) failed, all but one of them by the 15 to 300 second timeouts of the heavy advisor, census and chapter suites under that load**; the 14 re-run alone: 12 pass; `ui-ffx2-atbmode` passes alone (10 s of its 15 s); **`entrance-census` fails 3 tests (seymour-anima-macalania, sinspawn-gui, ffx2-angra-mainyu: "is not whole on its first frame") and fails the same 3 on `origin/rig` 59c766ec0**, so it is not this change's. Everything else is green. |
 | `node tools/orphans.mjs` | 26 orphaned, the same 26 as on `origin/rig` (the two new modules are reachable) |
 | `node tools/critic-plan.mjs --paths <changed files>` | **DEEP** ("src/data/art/rigTypes.ts: unclassified product path is a shared system", "tools/gen/manifest.mjs: asset loader and manifests is a shared system"; focused before deploy, live verification and the deep review after; obligations live + focused + deep; checks CHK-008 012 013 016-022 026 027) |
 

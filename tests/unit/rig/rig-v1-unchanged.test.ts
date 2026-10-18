@@ -20,12 +20,13 @@ vi.mock('../../../src/engine/ProceduralArt.ts', () => {
 const { RigActor } = await import('../../../src/engine/rig/RigActor.ts');
 const { readRig } = await import('../../../src/engine/rig/RigData.ts');
 type Painted = import('../../../src/engine/PaintedArt.ts').PaintedTexture;
+type RigActorT = import('../../../src/engine/rig/RigActor.ts').RigActor;
 
 const GOLDEN = join(ROOT, 'tests', 'fixtures', 'rig', 'v1-geometry-golden.json');
 const RIGS = ['kimahri', 'lulu'].filter((n) => existsSync(`D:/pyrefly-art-rigs/${n}/rig.json`));
 
 /** FNV-1a over the float bits of what a rig hands the GPU. */
-function hashFigure(a: InstanceType<typeof RigActor>): string {
+function hashFigure(a: RigActorT): string {
   let h = 2166136261 >>> 0;
   const f32 = new Float32Array(1);
   const u32 = new Uint32Array(f32.buffer);
