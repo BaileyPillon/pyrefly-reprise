@@ -36,7 +36,12 @@ export interface BuiltFigure {
   rig: RigActor | null;
 }
 
-export async function buildFigure(r: FigureRequest): Promise<BuiltFigure> {
+/**
+ * The rig half of {@link buildFigure}: a built rigged figure, or `null` when the figure is the painting set (no gated rig, the switch off, a figure-less part, a rig that failed to build).
+ * `PaintedStage.add` calls this and then creates the painting set ITSELF, so a painted figure is made by the same single `await PaintedActor.create` it always was: the rig adds its awaits
+ * before the figure exists, never after (the entrance census counts the ticks between a built figure and the presenter's first fade of it, `tests/unit/entrance-census.test.ts`).
+ */
+export async function tryRigFigure(r: FigureRequest): Promise<BuiltFigure | null> {
   // a figure-less part (Vegnagun's rings) has no painting to replace
   if (r.opts.figure !== false) {
     const choice = await chooseRig(r.artId, r.poses['idle'], rigSwitch(r.setting, r.search), isDresspherePainting(r.artId), r.listed, { painted: [...paintedPoses(r.artId, r.poses, characterUrl)], ...r.choose });
@@ -53,5 +58,10 @@ export async function buildFigure(r: FigureRequest): Promise<BuiltFigure> {
       }
     }
   }
-  return { actor: await PaintedActor.create(r.opts), rig: null };
+  return null;
+}
+
+/** The figure for a request: a rig when it has one, the painting set otherwise. */
+export async function buildFigure(r: FigureRequest): Promise<BuiltFigure> {
+  return (await tryRigFigure(r)) ?? { actor: await PaintedActor.create(r.opts), rig: null };
 }

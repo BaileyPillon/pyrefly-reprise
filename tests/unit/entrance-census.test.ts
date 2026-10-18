@@ -104,6 +104,18 @@ interface Row {
   entrance: string;
 }
 
+/**
+ * How much of a built figure a first frame would draw. A figure the stage builds is judged at the virtual time of its first frame after it was built. A figure ADDED mid-fight (a summon, a reveal)
+ * is judged by the first thing the presenter tells it: the presenter hides it in the same microtask burst that follows its creation, before any frame can render. The virtual clock is advanced
+ * synchronously by other timelines (`CensusActor.moveTo`, the sleeps), so reading the clock at `built + FRAME` for an added figure counted a slide that a real frame cannot fall between: which
+ * microtask the clock moved on depended on how many awaits come before the figure is created (release 55: the rig's choice of a rig or a painting set added some), not on what a player sees.
+ */
+function firstSeen(b: CensusRun['built'][number]): number {
+  const log = b.actor.log as Array<{ t: number; alpha?: number; ramp?: unknown }>;
+  const told = b.figure && !b.viaStage ? log.find((e) => e.alpha !== undefined || e.ramp !== undefined) : undefined;
+  return told?.alpha !== undefined ? told.alpha : b.actor.shownAt(b.actor.built + FRAME);
+}
+
 const rows = (run: CensusRun, number: number): Row[] =>
   run.built
     .filter((b) => b.side === 'enemy' || b.side === 'aeon')
@@ -115,7 +127,7 @@ const rows = (run: CensusRun, number: number): Row[] =>
       id: b.id,
       side: b.side,
       how: !b.figure ? ('part' as const) : b.viaStage ? ('stage' as const) : ('added' as const),
-      first: Math.round(b.actor.shownAt(b.actor.built + FRAME) * 1000) / 1000,
+      first: Math.round(firstSeen(b) * 1000) / 1000,
       entrance: run.kinds.get(`${b.id}@${b.stageCall}`) ?? '',
     }));
 

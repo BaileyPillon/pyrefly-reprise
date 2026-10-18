@@ -18,8 +18,8 @@ import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
-import type { PaintedActor } from './PaintedActor.ts';
-import { buildFigure } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
+import { PaintedActor } from './PaintedActor.ts';
+import { tryRigFigure, type BuiltFigure, type FigureRequest } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
 import { unregisterRigUse } from './rig/RigLoad.ts';
 import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
@@ -359,7 +359,7 @@ export class PaintedStage implements BattleStage {
     const k = size.ringScale;
 
     const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
-    const built = await buildFigure({
+    const request: FigureRequest = {
       id: c.id,
       artId,
       poses,
@@ -399,7 +399,9 @@ export class PaintedStage implements BattleStage {
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
       },
-    });
+    };
+    // The rig first (its awaits all come before the figure exists), then the painting set made right here by the one `await PaintedActor.create` it always was: no extra tick between a built figure and what the presenter does with it.
+    const built: BuiltFigure = (await tryRigFigure(request)) ?? { actor: await PaintedActor.create(request.opts), rig: null };
     const actor = built.actor;
     const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, worldHeightFor(c, heights), worldHeight); // a figure at a scene's form height is planned at the shared one too
     if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)

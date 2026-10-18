@@ -196,7 +196,8 @@ describe.skipIf(!HAVE_ART)('every art JSON of the master folder, as the build sh
       if (r.text === text && changed.n !== 0) problems.push(`${m.rel}: reported unchanged`);
     }
     expect(problems).toEqual([]);
-    expect(seen, 'the two manifests').toBe(2);
+    const rigFiles = masters.filter((x) => /^art\/rigs\/[^/]+\/rig\.json$/.test(x.rel)).length; // one per rig the art folder carries (release 55: two)
+    expect(seen, 'the two manifests and the files of the rigs').toBe(2 + rigFiles);
   });
 
   it('leaves nothing the gate finds, and writing it again changes nothing', () => {

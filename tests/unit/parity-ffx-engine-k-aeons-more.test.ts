@@ -307,11 +307,11 @@ describe('Combine powers needs all three ready', () => {
 describe('three aeons: who can be summoned, and the wipe', () => {
   const own = { sisters: { motivation: { cindy: 40, sandy: 40, mindy: 40 } } };
 
-  it('with one sister still recovering there is no Summon row for the Sisters, and a summon sent anyway brings nobody', () => {
+  it('with one sister still recovering no Summon row for the Sisters can be picked (it stays greyed since release 55: menu-draw parity item c), and a summon sent anyway brings nobody', () => {
     const rig = new Rig(build({ aeons: sisters(100), ...own }));
     rig.fighter('mindy').aeon!.reviveCountdown = 5;
     const d = rig.until('yuna');
-    expect(d.commands.filter((c) => c.command.kind === 'summon')).toEqual([]);
+    expect(d.commands.filter((c) => c.command.kind === 'summon' && c.enabled)).toEqual([]);
     rig.submit(SUMMON('cindy'));
     expect(rig.state.aeonId).toBeNull();
     expect(rig.state.aeonIds).toBeUndefined();

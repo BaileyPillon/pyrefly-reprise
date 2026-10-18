@@ -195,7 +195,8 @@ describe.skipIf(!HAVE_ART)('every JSON of the master folder, as the build ships 
     const odd = masters.filter((m) => isSidecarJson(m.rel) !== hasPainting(m.rel)).map((m) => m.rel);
     expect(odd).toEqual([]);
     const others = masters.filter((m) => !isSidecarJson(m.rel)).map((m) => m.rel);
-    expect(others).toEqual(['art/manifest.json', 'art/portrait-parts/manifest.json']); // art/derived.json is the build's own, so it is not a master
+    // the two manifests, and one `rig.json` for each rig the art folder carries (release 55: Kimahri's and Lulu's; a rig file is no sidecar and is taken whole); art/derived.json is the build's own, so it is not a master
+    expect(others.filter((r) => !/^art\/rigs\/[^/]+\/rig\.json$/.test(r))).toEqual(['art/manifest.json', 'art/portrait-parts/manifest.json']);
     expect(masters.filter((m) => isSidecarJson(m.rel)).length).toBeGreaterThan(1000);
   });
 
