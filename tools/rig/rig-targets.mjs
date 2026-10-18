@@ -22,9 +22,10 @@ import { GRID, approvedTarget, statureBand } from './rig-read.mjs';
 
 /**
  * The targets of one subject. @returns {Promise<{info: object, masks: Record<string, Uint8Array>}>}
- * @param {object} o `{ inputs, subject, costume, scale, baseline, poses }`
+ * @param {object} o `{ inputs, subject, costume, scale, baseline, poses, turn }`; `turn`: poses whose painting faces the other way from the rig (the file faces left, the rig right): their TARGET is the painting turned about
+ * its stance, registered as the model registers a painting drawn the other way, and `place` says so (mirror turned), so a landmark mark of such a pose is the painting's own pixel, as the gate reads it for a key that says `turn: true`
  */
-export async function buildTargets({ inputs, subject, costume = 'idle', scale = 2, baseline, poses }) {
+export async function buildTargets({ inputs, subject, costume = 'idle', scale = 2, baseline, poses, turn = [] }) {
   const R = await referenceOf(inputs, subject);
   const names = (poses ?? listPoses(inputs, subject)).filter((p) => inputs.table[subject]?.[p] || p === R.refName);
   const readings = await readSubject(inputs, subject, { poses: [...new Set([costume, ...names])] });
@@ -50,11 +51,15 @@ export async function buildTargets({ inputs, subject, costume = 'idle', scale = 
   for (const r of readings) {
     if (r.pose === costume && !names.includes(costume)) continue;
     const m = await readPaint(join(inputs.artDir, 'characters', subject, `${r.pose}.png`), r.pose);
-    const t = approvedTarget({ R, inputs }, r, m);
-    masks[r.pose] = t.mask;
+    const t = approvedTarget({ R, inputs }, r, m); // the model's own registration: where the gate reads this painting
+    const turned = turn.includes(r.pose) ? approvedTarget({ R, inputs }, { ...r, drawn: { ...r.drawn, mirror: -r.drawn.mirror } }, m) : null;
+    masks[r.pose] = (turned ?? t).mask;
     info.poses[r.pose] = {
       class: r.class, band: statureBand(r.class, r.pose), propsOut: t.propsOut, normK: Math.round(t.k * 1000) / 1000, registered: t.registered,
       stature: r.stature, bodyStature: r.bodyStature, headReal: r.headReal, status: r.status, feetPx: r.feetPx, png: `${r.pose}.png`,
+      // how this pose's painting was placed on the grid (u = (x - W/2) upp mirror + shift, v = (anchor - y) upp, x and y in the painting's 1x px): the fitter puts the painting's landmark marks where the gate does
+      place: { W: m.W, upp: (turned ?? t).upp, anchor: (turned ?? t).anchor, shift: (turned ?? t).shift, mirror: turned ? -r.drawn.mirror : r.drawn.mirror },
+      ...(turned ? { mirroredTarget: true } : {}),
     };
   }
   return { info, masks };
@@ -65,11 +70,11 @@ async function main() {
   const get = (n, d) => { const i = argv.indexOf(n); return i >= 0 && argv[i + 1] !== undefined && !argv[i + 1].startsWith('--') ? argv[i + 1] : d; };
   const subject = get('--subject');
   const out = get('--out');
-  if (!subject || !out) { console.error('usage: node tools/rig/rig-targets.mjs --subject <id> --out <folder> [--art DIR] [--root DIR] [--table JSON] [--costume idle] [--scale 2] [--baseline px] [--poses a,b]'); return 2; }
+  if (!subject || !out) { console.error('usage: node tools/rig/rig-targets.mjs --subject <id> --out <folder> [--art DIR] [--root DIR] [--table JSON] [--costume idle] [--scale 2] [--baseline px] [--poses a,b] [--mirror a,b]'); return 2; }
   // --table <json>: a registration table to read instead of the repository's (`{ subject: { pose: row } }`): a fixture, a candidate table
   const table = get('--table') ? JSON.parse(readFileSync(resolve(get('--table')), 'utf8')) : undefined;
   const inputs = await loadModelInputs({ root: resolve(get('--root', ROOT)), artDir: get('--art') ? resolve(get('--art')) : undefined, ...(table ? { table, tableSource: {}, koScale: {}, records: { subjects: {} } } : {}) });
-  const { info, masks } = await buildTargets({ inputs, subject, costume: get('--costume', 'idle'), scale: Number(get('--scale', 2)), baseline: get('--baseline') ? Number(get('--baseline')) : undefined, poses: get('--poses')?.split(',') });
+  const { info, masks } = await buildTargets({ inputs, subject, costume: get('--costume', 'idle'), scale: Number(get('--scale', 2)), baseline: get('--baseline') ? Number(get('--baseline')) : undefined, poses: get('--poses')?.split(','), turn: get('--mirror')?.split(',') ?? [] });
   mkdirSync(resolve(out), { recursive: true });
   for (const [pose, mask] of Object.entries(masks)) {
     const buf = Buffer.alloc(mask.length);

@@ -110,5 +110,116 @@ class Pipeline(unittest.TestCase):
             self.assertEqual(float(iou(rest, m.grid_mask())), 1.0)
 
 
+class TestFitLandmarks(unittest.TestCase):
+    """The fitter's landmark term (the driver's pose-intent rule, 2026-10-17): a painting's mark lands on the grid where the gate puts it, and the error is in idle heights."""
+
+    def test_grid_point_is_the_gates_world_point_on_the_grid(self):
+        import rig_fit
+
+        place = {"W": 100, "upp": 0.5, "anchor": 150, "shift": 3.0, "mirror": -1}
+        grid = {"GU0": -10.0, "GV1": 20.0, "GS": 2.0}
+        x, y = rig_fit.grid_point(place, grid, 60.0, 100.0)  # u = (60 - 50) * 0.5 * -1 + 3 = -2, v = (150 - 100) * 0.5 = 25
+        self.assertAlmostEqual(x, (-2.0 + 10.0) * 2.0, places=9)
+        self.assertAlmostEqual(y, (20.0 - 25.0) * 2.0, places=9)
+
+    def test_mark_errors_are_idle_heights_and_follow_the_pose(self):
+        import types
+
+        import rig_fit
+
+        with tempfile.TemporaryDirectory() as d:
+            tmp = pathlib.Path(d)
+            m = RigModel(two_rect_rig(tmp), tmp, tex_downsample=1)
+            m.set_grid({"ax": 1.0, "bx": 0.0, "ay": 1.0, "by": 0.0}, {"GW": 100, "GH": 160})
+            stub = types.SimpleNamespace(m=m, GS=1.0, figH=100.0)
+            m.pose()
+            self.assertAlmostEqual(rig_fit.Fitter.mark_errors(stub, [("armtip", 58.0, 90.0)])["armtip"], 0.0, places=9)
+            self.assertAlmostEqual(rig_fit.Fitter.mark_errors(stub, [("armtip", 58.0, 40.0)])["armtip"], 0.5, places=9)  # 50 px of a 100 px figure
+            m.pose(rot={"arm": math.pi / 2})  # the arm now points left: the tip is at (-10, 38)
+            self.assertAlmostEqual(rig_fit.Fitter.mark_errors(stub, [("armtip", -10.0, 38.0)])["armtip"], 0.0, places=6)
+
+    def test_grid_marks_keep_what_the_rig_has_and_the_painting_places(self):
+        import types
+
+        import rig_fit
+
+        stub = types.SimpleNamespace(m=types.SimpleNamespace(landmarks={"armtip": {}}), T={"grid": {"GU0": 0.0, "GV1": 0.0, "GS": 1.0}})
+        place = {"W": 10, "upp": 1.0, "anchor": 10, "shift": 0.0, "mirror": 1}
+        got = rig_fit.Fitter.grid_marks(stub, {"place": place}, {"armtip": [5, 4], "nothere": [1, 1], "_note": [0, 0]})
+        self.assertEqual([g[0] for g in got], ["armtip"])
+        self.assertEqual(rig_fit.Fitter.grid_marks(stub, {}, {"armtip": [5, 4]}), [])  # targets made before `place` existed: no marks, the fit is as it was
+        self.assertEqual(rig_fit.Fitter.grid_marks(stub, {"place": place}, None), [])
+
+    def test_a_limb_block_takes_its_own_offset_and_scale(self):
+        import types
+
+        import rig_fit
+
+        with tempfile.TemporaryDirectory() as d:
+            tmp = pathlib.Path(d)
+            b = two_rect_rig(tmp)
+            b["bones"][2]["parent"] = 0  # the arm hangs from the root, like a spear: its own limb
+            m = RigModel(b, tmp, tex_downsample=1)
+            stub = types.SimpleNamespace(m=m, free=[1, 2], off_idx=[2], scl_idx=[2], nr=2)
+            stub.bone_of = lambda k: rig_fit.Fitter.bone_of(stub, k)
+            # parameters: rot torso (0), rot arm (1), dx, dy of the arm (2, 3), the arm's scale (4), root dx, dy, rot (5, 6, 7)
+            blocks = [list(map(int, x)) for x in rig_fit.Fitter.blocks(stub)]
+            self.assertEqual(blocks[0], [5, 6, 7])  # the trunk first: only the whole-figure offset and rotation
+            self.assertIn([1, 2, 3, 4], blocks)  # the arm: its angle, offset and scale together
+            self.assertIn([0], blocks)
+            self.assertEqual(sorted(sum(blocks, [])), list(range(8)))  # every parameter is in exactly one block
+            self.assertEqual(rig_fit.Fitter.block_bones(stub, [1, 2, 3, 4]), [2, 2, 2, 2])
+            self.assertIsNone(rig_fit.Fitter.block_bones(stub, [5, 6, 7]))  # the whole figure's offset moves everything
+
+    def test_stance_is_the_middle_of_the_lowest_thick_part(self):
+        import types
+
+        import rig_fit
+
+        mask = np.zeros((160, 100), np.uint8)
+        mask[20:110, 20:70] = 1      # the body
+        mask[110:150, 22:36] = 1     # one leg
+        mask[110:150, 54:68] = 1     # the other
+        mask[100:130, 80:82] = 1     # a thin spear that stops above the feet: not in the band, and too thin to be the lowest thick row anyway
+        stub = types.SimpleNamespace(m=types.SimpleNamespace(win=(5, 0, 105, 160)))
+        x = rig_fit.Fitter.stance_x(stub, mask)
+        self.assertAlmostEqual(x, (22 + 67 + 1) / 2.0 + 5, delta=2.0)  # between the legs, in whole-grid cells (the window starts at 5)
+        mask[130:158, 80:82] = 1     # the spear reaches the feet's band: the gate counts it (the idle's stance includes its tip), so the stance moves toward it
+        self.assertGreater(rig_fit.Fitter.stance_x(stub, mask), x + 3)
+        self.assertIsNone(rig_fit.Fitter.stance_x(stub, np.zeros((10, 10), np.uint8)))
+
+
+class TestExportAcceptance(unittest.TestCase):
+    """The config's `acceptance`, `landmarks` and `authored` reach the rig file (the driver's pose-intent rule, 2026-10-17): each marked pose's key carries its `expect`, an authored one says so."""
+
+    def test_acceptance_landmarks_authored(self):
+        import json
+
+        from rig_common import Subject
+        import rig_export
+
+        with tempfile.TemporaryDirectory() as d:
+            d = pathlib.Path(d)
+            art = d / "art" / "characters" / "zz"
+            art.mkdir(parents=True)
+            Image.fromarray(np.full((20, 20, 4), 255, np.uint8), "RGBA").save(art / "idle.png")
+            cfg = d / "zz.json"
+            cfg.write_text(json.dumps({"subject": "zz", "scale": 1, "costume": {"pose": "idle"}, "art": str(d / "art"), "acceptance": {"iou": 0.75, "landmarkPct": 0.06},
+                                       "landmarks": {"attack": {"head": [1, 2]}, "idle": {"head": [9, 9]}}, "authored": ["attack", "nothere"],
+                                       "fit": {"mirror": ["attack", "nothere"]}}))
+            sub = Subject("zz", cfg)
+            build = {"scale": 1, "image": {"w": 20, "h": 20}, "baselineY": 20, "bones": [], "parts": [], "landmarks": {}}
+            rig = rig_export.build_rig(sub, build, {"attack": {"bones": {}, "source": "characters/zz/attack"}, "hurt": {"bones": {}, "source": "characters/zz/hurt"}})
+            self.assertEqual(rig["acceptance"], {"iou": 0.75, "landmarkPct": 0.06})
+            self.assertEqual(rig["keys"]["attack"]["expect"], {"head": [1, 2]})
+            self.assertEqual(rig["keys"]["attack"]["source"], "authored")
+            self.assertIs(rig["keys"]["attack"]["turn"], True)  # fit.mirror: the painting faces the other way, the gate reads it turned
+            self.assertNotIn("turn", rig["keys"]["hurt"])
+            self.assertNotIn("expect", rig["keys"]["idle"])  # the costume painting at rest has no marks
+            self.assertEqual(rig["keys"]["hurt"]["source"], "characters/zz/hurt")  # not listed: a painted key
+            self.assertNotIn("expect", rig["keys"]["hurt"])
+            self.assertNotIn("nothere", rig["keys"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

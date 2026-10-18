@@ -1,0 +1,1795 @@
+{
+ "subject": "kimahri",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "art": "D:/pyrefly-art-r50",
+ "build": {
+  "chains": {
+   "tail": {},
+   "mane": {},
+   "sash": {},
+   "beard": {}
+  }
+ },
+ "fit": {
+  "min_iou": 0.0,
+  "default_limit": 110,
+  "chain_limit": 55,
+  "offsets": [
+   "pelvis",
+   "spear"
+  ],
+  "limits": {
+   "spear": [
+    -180,
+    180
+   ],
+   "hair": [
+    -30,
+    30
+   ],
+   "head": [
+    -45,
+    45
+   ],
+   "spine": [
+    -35,
+    40
+   ],
+   "chest": [
+    -35,
+    40
+   ],
+   "pelvis": [
+    -35,
+    40
+   ],
+   "upperarm": [
+    -175,
+    90
+   ],
+   "upperarmF": [
+    -175,
+    90
+   ],
+   "forearm": [
+    -150,
+    20
+   ],
+   "forearmF": [
+    -150,
+    20
+   ],
+   "hand": [
+    -35,
+    35
+   ],
+   "handF": [
+    -35,
+    35
+   ],
+   "thighN": [
+    -120,
+    60
+   ],
+   "thighF": [
+    -120,
+    60
+   ],
+   "shinN": [
+    -10,
+    150
+   ],
+   "shinF": [
+    -10,
+    150
+   ],
+   "footN": [
+    -30,
+    30
+   ],
+   "footF": [
+    -30,
+    30
+   ]
+  },
+  "keys": {
+   "ready": {
+    "init": {
+     "pelvis": 0.35,
+     "pelvis.dx": -43.71,
+     "pelvis.dy": -71.54,
+     "spine": -2.974,
+     "spine.s": 0.9308,
+     "chest": -12.141,
+     "head": 22.248,
+     "hair": 28.929,
+     "beard0": 9.167,
+     "beard1": 11.219,
+     "upperarm": -81.171,
+     "upperarm.s": 0.93,
+     "forearm": -28.27,
+     "forearm.s": 0.9317,
+     "hand": -24.477,
+     "thighN": -58.276,
+     "thighN.s": 1.1654,
+     "shinN": 38.314,
+     "shinN.s": 1.1743,
+     "footN": -29.639,
+     "thighF": 37.787,
+     "thighF.s": 1.25,
+     "shinF": -9.992,
+     "shinF.s": 0.9372,
+     "footF": 12.376,
+     "spear": 86.969,
+     "spear.dx": 1064.15,
+     "spear.dy": -26.62,
+     "spear.s": 0.9149,
+     "spear_tip": -5.592,
+     "tail0": 51.904,
+     "tail1": -7.998,
+     "tail2": -54.889,
+     "tail3": -2.905,
+     "tail4": 17.59,
+     "mane0": -11.459,
+     "mane1": 46.335,
+     "mane2": -10.731,
+     "sash0": 54.97,
+     "sash1": 42.112,
+     "upperarmF": 86.889,
+     "upperarmF.s": 0.9799,
+     "forearmF": -90.0,
+     "forearmF.s": 0.9537,
+     "handF": -34.217,
+     "root.dx": 251.84
+    },
+    "limits": {
+     "forearm": [
+      -90,
+      20
+     ],
+     "forearmF": [
+      -90,
+      20
+     ],
+     "shinN": [
+      -10,
+      90
+     ],
+     "shinF": [
+      -10,
+      90
+     ],
+     "pelvis": [
+      -15,
+      15
+     ],
+     "tail3": [
+      -20,
+      20
+     ],
+     "tail4": [
+      -20,
+      20
+     ],
+     "thighF": [
+      -80,
+      50
+     ],
+     "thighN": [
+      -80,
+      50
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.03,
+      0.03
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0
+   },
+   "attack": {
+    "init": {
+     "pelvis": 26.115,
+     "pelvis.dx": 55.95,
+     "pelvis.dy": 52.5,
+     "spine": -27.026,
+     "spine.s": 1.0665,
+     "chest": -15.453,
+     "head": 45.0,
+     "hair": 25.989,
+     "beard0": 28.201,
+     "beard1": -45.08,
+     "upperarm": 4.011,
+     "upperarm.s": 0.9242,
+     "forearm": -75.252,
+     "forearm.s": 1.1831,
+     "hand": 34.698,
+     "thighN": -56.322,
+     "thighN.s": 1.25,
+     "shinN": 94.515,
+     "shinN.s": 1.0547,
+     "footN": -17.979,
+     "thighF": -100.354,
+     "thighF.s": 1.1562,
+     "shinF": 59.158,
+     "shinF.s": 1.0472,
+     "footF": 21.755,
+     "spear": -13.831,
+     "spear.dx": 169.92,
+     "spear.dy": 164.04,
+     "spear.s": 0.6719,
+     "spear_tip": -20.134,
+     "tail0": -53.933,
+     "tail1": 33.524,
+     "tail2": 41.58,
+     "tail3": -14.032,
+     "tail4": -35.082,
+     "mane0": 24.5,
+     "mane1": 33.226,
+     "mane2": 9.78,
+     "sash0": -28.224,
+     "sash1": -10.84,
+     "upperarmF": 90.0,
+     "upperarmF.s": 1.1525,
+     "forearmF": -69.889,
+     "forearmF.s": 1.1967,
+     "handF": 33.289,
+     "root.dx": 104.65
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0,
+    "scales": {
+     "spear": [
+      0.45,
+      1.8
+     ],
+     "upperarm": [
+      0.8,
+      1.3
+     ],
+     "upperarmF": [
+      0.8,
+      1.3
+     ],
+     "forearm": [
+      0.85,
+      1.2
+     ],
+     "forearmF": [
+      0.85,
+      1.2
+     ],
+     "thighN": [
+      0.85,
+      1.25
+     ],
+     "thighF": [
+      0.85,
+      1.25
+     ],
+     "shinN": [
+      0.85,
+      1.2
+     ],
+     "shinF": [
+      0.85,
+      1.2
+     ],
+     "spine": [
+      0.88,
+      1.15
+     ]
+    }
+   },
+   "follow": {
+    "init": {
+     "pelvis": 5.999,
+     "pelvis.dx": 6.54,
+     "pelvis.dy": 8.84,
+     "spine": 38.251,
+     "spine.s": 1.1497,
+     "chest": -14.656,
+     "head": 37.781,
+     "hair": -29.989,
+     "beard0": -5.386,
+     "beard1": -31.581,
+     "upperarm": -50.73,
+     "upperarm.s": 1.1379,
+     "forearm": -21.228,
+     "forearm.s": 1.1355,
+     "hand": 3.466,
+     "thighN": -2.435,
+     "thighN.s": 1.0742,
+     "shinN": 39.345,
+     "shinN.s": 1.1256,
+     "footN": -29.96,
+     "thighF": -82.065,
+     "thighF.s": 1.25,
+     "shinF": 51.813,
+     "shinF.s": 1.084,
+     "footF": 29.954,
+     "spear": -10.554,
+     "spear.dx": -144.98,
+     "spear.dy": -617.65,
+     "spear.s": 1.3271,
+     "spear_tip": 4.624,
+     "tail0": -54.167,
+     "tail1": 39.408,
+     "tail2": 54.546,
+     "tail3": -53.48,
+     "tail4": -14.725,
+     "mane0": 7.678,
+     "mane1": 54.798,
+     "mane2": 8.6,
+     "sash0": -26.041,
+     "sash1": -12.21,
+     "upperarmF": 3.088,
+     "upperarmF.s": 1.3,
+     "forearmF": -80.099,
+     "forearmF.s": 0.9468,
+     "handF": -30.395,
+     "root.dx": 111.65
+    },
+    "limits": {
+     "forearm": [
+      -90,
+      20
+     ],
+     "forearmF": [
+      -90,
+      20
+     ],
+     "shinN": [
+      -10,
+      90
+     ],
+     "shinF": [
+      -10,
+      90
+     ],
+     "pelvis": [
+      -6,
+      6
+     ],
+     "thighN": [
+      -95,
+      60
+     ],
+     "thighF": [
+      -95,
+      60
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.01,
+      0.01
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0
+   },
+   "cast": {
+    "init": {
+     "pelvis": 12.806,
+     "pelvis.dx": -43.42,
+     "pelvis.dy": -21.67,
+     "spine": -24.07,
+     "spine.s": 1.0772,
+     "chest": -7.529,
+     "head": 10.497,
+     "hair": -19.498,
+     "beard0": 44.066,
+     "beard1": -7.924,
+     "upperarm": -51.824,
+     "upperarm.s": 0.9624,
+     "forearm": -78.982,
+     "forearm.s": 1.1961,
+     "hand": -33.816,
+     "thighN": -29.53,
+     "thighN.s": 1.1307,
+     "shinN": 28.384,
+     "shinN.s": 0.9416,
+     "footN": -23.125,
+     "thighF": -25.554,
+     "thighF.s": 1.0398,
+     "shinF": -1.415,
+     "shinF.s": 0.9568,
+     "footF": 16.57,
+     "spear": -147.6,
+     "spear.dx": 628.96,
+     "spear.dy": 1677.09,
+     "spear.s": 0.974,
+     "spear_tip": 79.234,
+     "tail0": -54.998,
+     "tail1": 54.471,
+     "tail2": 54.798,
+     "tail3": 50.46,
+     "tail4": 21.073,
+     "mane0": -52.248,
+     "mane1": 38.188,
+     "sash0": -48.782,
+     "sash1": -5.523,
+     "upperarmF": 42.559,
+     "upperarmF.s": 0.9881,
+     "forearmF": -31.914,
+     "handF": -23.136,
+     "root.dx": 231.21
+    },
+    "limits": {
+     "forearm": [
+      -90,
+      20
+     ],
+     "forearmF": [
+      -90,
+      20
+     ],
+     "shinN": [
+      -10,
+      90
+     ],
+     "shinF": [
+      -10,
+      90
+     ],
+     "pelvis": [
+      -15,
+      15
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.03,
+      0.03
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0,
+    "scales": {
+     "spear": [
+      0.45,
+      1.8
+     ],
+     "upperarm": [
+      0.93,
+      1.3
+     ],
+     "upperarmF": [
+      0.93,
+      1.3
+     ],
+     "forearm": [
+      0.93,
+      1.2
+     ],
+     "forearmF": [
+      0.93,
+      1.2
+     ],
+     "thighN": [
+      1.0,
+      1.25
+     ],
+     "thighF": [
+      1.0,
+      1.25
+     ],
+     "shinN": [
+      0.93,
+      1.2
+     ],
+     "shinF": [
+      0.93,
+      1.2
+     ],
+     "spine": [
+      0.93,
+      1.15
+     ]
+    }
+   },
+   "item": {
+    "init": {
+     "pelvis": -11.998,
+     "pelvis.dx": -41.82,
+     "pelvis.dy": -71.88,
+     "spine": -11.568,
+     "spine.s": 1.1456,
+     "chest": 0.281,
+     "head": -13.825,
+     "hair": 22.867,
+     "beard0": 34.051,
+     "beard1": 25.061,
+     "upperarm": -36.686,
+     "upperarm.s": 0.9433,
+     "forearm": 20.002,
+     "forearm.s": 0.9548,
+     "hand": 33.478,
+     "thighN": 14.009,
+     "thighN.s": 1.1412,
+     "shinN": -9.969,
+     "shinN.s": 0.9932,
+     "footN": -29.84,
+     "thighF": 39.838,
+     "thighF.s": 1.0437,
+     "shinF": -9.952,
+     "shinF.s": 1.1979,
+     "footF": 14.851,
+     "spear": 58.167,
+     "spear.dx": 526.96,
+     "spear.dy": 514.7,
+     "spear.s": 0.9637,
+     "spear_tip": -105.585,
+     "tail0": 38.13,
+     "tail1": -31.077,
+     "tail2": -22.242,
+     "tail3": 19.125,
+     "tail4": 15.688,
+     "mane0": -37.873,
+     "mane1": 54.895,
+     "mane2": -5.094,
+     "sash0": 54.987,
+     "sash1": 37.065,
+     "upperarmF": -7.03,
+     "upperarmF.s": 0.9477,
+     "forearmF": -88.694,
+     "forearmF.s": 0.9577,
+     "handF": -34.435,
+     "root.dx": 332.34
+    },
+    "limits": {
+     "forearm": [
+      -90,
+      20
+     ],
+     "forearmF": [
+      -90,
+      20
+     ],
+     "shinN": [
+      -10,
+      90
+     ],
+     "shinF": [
+      -10,
+      90
+     ],
+     "spine": [
+      -12,
+      12
+     ],
+     "chest": [
+      -12,
+      12
+     ],
+     "head": [
+      -25,
+      25
+     ],
+     "pelvis": [
+      -12,
+      12
+     ],
+     "tail3": [
+      -20,
+      20
+     ],
+     "tail4": [
+      -20,
+      20
+     ]
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0,
+    "offset_limit": {
+     "pelvis": [
+      0.03,
+      0.03
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    }
+   },
+   "defend": {
+    "init": {
+     "pelvis": 8.56,
+     "pelvis.dx": -184.16,
+     "pelvis.dy": 33.94,
+     "spine": -11.373,
+     "spine.s": 1.0506,
+     "chest": 6.669,
+     "head": -8.909,
+     "hair": -30.0,
+     "beard0": -1.043,
+     "beard1": -2.017,
+     "upperarm": -28.854,
+     "upperarm.s": 0.9833,
+     "forearm": -101.792,
+     "forearm.s": 1.0079,
+     "hand": -26.895,
+     "thighN": -38.68,
+     "thighN.s": 1.0648,
+     "shinN": 48.552,
+     "shinN.s": 0.9469,
+     "footN": -20.873,
+     "thighF": -96.566,
+     "thighF.s": 1.0365,
+     "shinF": 81.349,
+     "shinF.s": 1.1926,
+     "footF": 14.106,
+     "spear": -153.134,
+     "spear.dx": 567.33,
+     "spear.dy": 1733.77,
+     "spear.s": 0.9156,
+     "spear_tip": 43.9,
+     "tail0": -48.249,
+     "tail1": -54.672,
+     "tail2": -54.998,
+     "tail3": 32.017,
+     "tail4": 44.444,
+     "mane0": -54.689,
+     "mane1": -42.571,
+     "mane2": -27.445,
+     "sash0": -23.062,
+     "sash1": -8.675,
+     "upperarmF": -15.155,
+     "upperarmF.s": 1.137,
+     "forearmF": -102.33,
+     "forearmF.s": 1.0307,
+     "handF": -32.939,
+     "root.dx": 384.0
+    },
+    "limits": {
+     "forearm": [
+      -105,
+      20
+     ],
+     "forearmF": [
+      -105,
+      20
+     ],
+     "shinN": [
+      -10,
+      90
+     ],
+     "shinF": [
+      -10,
+      90
+     ]
+    }
+   },
+   "hurt": {
+    "init": {
+     "pelvis": -0.808,
+     "pelvis.dx": 96.59,
+     "pelvis.dy": 33.31,
+     "spine": 3.564,
+     "spine.s": 1.1082,
+     "chest": 29.141,
+     "head": -1.117,
+     "hair": -29.885,
+     "beard0": -33.191,
+     "beard1": 49.171,
+     "upperarm": -22.506,
+     "upperarm.s": 1.2927,
+     "forearm": -36.767,
+     "forearm.s": 0.9871,
+     "hand": -18.254,
+     "thighN": -51.32,
+     "thighN.s": 1.0441,
+     "shinN": 42.766,
+     "shinN.s": 0.9077,
+     "footN": 29.748,
+     "thighF": 4.687,
+     "thighF.s": 1.0089,
+     "shinF": 32.063,
+     "shinF.s": 1.1263,
+     "footF": -17.733,
+     "spear": 0.074,
+     "spear.dx": 182.42,
+     "spear.dy": 227.97,
+     "spear.s": 0.8531,
+     "spear_tip": -30.831,
+     "tail0": -36.864,
+     "tail1": -50.225,
+     "tail2": -48.678,
+     "tail3": -44.828,
+     "tail4": -54.947,
+     "mane0": -54.998,
+     "mane1": 53.612,
+     "mane2": -14.129,
+     "upperarmF": 3.243,
+     "upperarmF.s": 1.1153,
+     "forearmF": -15.355,
+     "forearmF.s": 1.167,
+     "handF": -34.956,
+     "root.dx": 384.0
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0,
+    "scales": {
+     "spear": [
+      0.45,
+      1.8
+     ],
+     "upperarm": [
+      0.8,
+      1.3
+     ],
+     "upperarmF": [
+      0.8,
+      1.3
+     ],
+     "forearm": [
+      0.85,
+      1.2
+     ],
+     "forearmF": [
+      0.85,
+      1.2
+     ],
+     "thighN": [
+      0.85,
+      1.25
+     ],
+     "thighF": [
+      0.85,
+      1.25
+     ],
+     "shinN": [
+      0.85,
+      1.2
+     ],
+     "shinF": [
+      0.85,
+      1.2
+     ],
+     "spine": [
+      0.88,
+      1.15
+     ]
+    }
+   },
+   "critical": {
+    "init": {
+     "pelvis": 22.489,
+     "pelvis.dx": -10.47,
+     "pelvis.dy": -32.94,
+     "spine": 27.869,
+     "spine.s": 0.9562,
+     "chest": -33.358,
+     "head": 21.411,
+     "hair": 0.733,
+     "beard0": 21.142,
+     "beard1": 27.301,
+     "upperarm": 58.734,
+     "upperarm.s": 1.2736,
+     "forearm": -103.791,
+     "forearm.s": 1.0976,
+     "hand": 23.497,
+     "thighN": -26.574,
+     "thighN.s": 1.092,
+     "shinN": 6.285,
+     "shinN.s": 0.9727,
+     "footN": -6.388,
+     "thighF": -22.741,
+     "thighF.s": 1.0199,
+     "shinF": 1.65,
+     "shinF.s": 0.9838,
+     "footF": -1.828,
+     "spear": 0.447,
+     "spear.dx": 16.56,
+     "spear.dy": 34.01,
+     "spear.s": 0.9824,
+     "spear_tip": -0.458,
+     "tail0": -36.967,
+     "tail1": -20.478,
+     "tail2": 6.572,
+     "tail3": 29.164,
+     "tail4": 30.206,
+     "mane0": 16.089,
+     "mane1": 26.82,
+     "mane2": -22.082,
+     "sash0": -7.036,
+     "sash1": -2.028,
+     "upperarmF": 6.824,
+     "upperarmF.s": 1.0856,
+     "forearmF": -34.979,
+     "forearmF.s": 0.8814,
+     "handF": -8.302,
+     "root.dx": 18.39
+    },
+    "scales": {
+     "spear": [
+      0.45,
+      1.8
+     ],
+     "upperarm": [
+      0.8,
+      1.3
+     ],
+     "upperarmF": [
+      0.8,
+      1.3
+     ],
+     "forearm": [
+      0.85,
+      1.2
+     ],
+     "forearmF": [
+      0.85,
+      1.2
+     ],
+     "thighN": [
+      0.85,
+      1.25
+     ],
+     "thighF": [
+      0.85,
+      1.25
+     ],
+     "shinN": [
+      0.85,
+      1.2
+     ],
+     "shinF": [
+      0.85,
+      1.2
+     ],
+     "spine": [
+      0.88,
+      1.15
+     ]
+    }
+   },
+   "ko": {
+    "planted": false,
+    "root_rot": [
+     60,
+     120
+    ],
+    "init": {
+     "pelvis": -7.981,
+     "pelvis.dx": -6.52,
+     "pelvis.dy": 3.59,
+     "spine": -13.894,
+     "spine.s": 0.93,
+     "chest": 9.408,
+     "head": 44.863,
+     "hair": -28.969,
+     "beard0": -10.703,
+     "beard1": -4.274,
+     "upperarm": -56.906,
+     "upperarm.s": 1.2069,
+     "forearm": -90.0,
+     "forearm.s": 0.9533,
+     "hand": -31.736,
+     "thighN": -14.622,
+     "thighN.s": 0.93,
+     "shinN": -1.398,
+     "shinN.s": 0.93,
+     "footN": 28.327,
+     "thighF": 9.872,
+     "thighF.s": 0.93,
+     "shinF": -8.904,
+     "shinF.s": 0.93,
+     "footF": 30.0,
+     "spear": 59.227,
+     "spear.dx": 796.81,
+     "spear.dy": 523.86,
+     "spear.s": 0.5645,
+     "spear_tip": 86.54,
+     "tail0": 54.076,
+     "tail1": 54.987,
+     "tail2": -29.433,
+     "tail3": -1.702,
+     "tail4": 20.649,
+     "mane0": -54.929,
+     "mane1": 51.028,
+     "mane2": 22.615,
+     "upperarmF": -73.705,
+     "upperarmF.s": 1.0452,
+     "forearmF": -89.605,
+     "forearmF.s": 1.1472,
+     "handF": 30.361,
+     "root.dx": -1462.79,
+     "root.dy": -240.55,
+     "root.rot": 84.517
+    },
+    "limits": {
+     "forearm": [
+      -90,
+      20
+     ],
+     "forearmF": [
+      -90,
+      20
+     ],
+     "shinN": [
+      -10,
+      15
+     ],
+     "shinF": [
+      -10,
+      15
+     ],
+     "pelvis": [
+      -8,
+      8
+     ],
+     "spine": [
+      -15,
+      15
+     ],
+     "chest": [
+      -15,
+      15
+     ],
+     "thighN": [
+      -15,
+      15
+     ],
+     "thighF": [
+      -15,
+      15
+     ]
+    },
+    "root_dx": [
+     -1800,
+     500
+    ],
+    "root_dy": [
+     -700,
+     700
+    ],
+    "offset_limit": {
+     "pelvis": [
+      0.005,
+      0.005
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    }
+   },
+   "victory": {
+    "init": {
+     "pelvis": 10.244,
+     "pelvis.dx": -36.38,
+     "pelvis.dy": -26.02,
+     "spine": -11.969,
+     "spine.s": 0.9302,
+     "chest": -11.923,
+     "head": -24.998,
+     "hair": -8.932,
+     "beard0": -0.092,
+     "beard1": 13.969,
+     "upperarm": 18.048,
+     "upperarm.s": 1.1954,
+     "forearm": -4.721,
+     "forearm.s": 1.1229,
+     "hand": -24.574,
+     "thighN": -64.572,
+     "thighN.s": 1.1422,
+     "shinN": 56.316,
+     "shinN.s": 0.9319,
+     "footN": 26.173,
+     "thighF": -79.292,
+     "thighF.s": 1.0466,
+     "shinF": 71.591,
+     "shinF.s": 1.1966,
+     "footF": 29.891,
+     "spear": -130.176,
+     "spear.dx": 191.22,
+     "spear.dy": 1763.17,
+     "spear.s": 0.913,
+     "spear_tip": 6.285,
+     "tail0": 54.276,
+     "tail1": 54.998,
+     "tail2": -19.784,
+     "tail3": -14.559,
+     "tail4": -6.807,
+     "mane0": -54.528,
+     "mane1": 5.386,
+     "mane2": -52.592,
+     "sash0": -54.947,
+     "sash1": -52.976,
+     "upperarmF": -34.314,
+     "upperarmF.s": 1.0281,
+     "forearmF": -89.931,
+     "forearmF.s": 0.9548,
+     "handF": -35.002,
+     "root.dx": 251.73
+    },
+    "limits": {
+     "forearm": [
+      -90,
+      20
+     ],
+     "forearmF": [
+      -90,
+      20
+     ],
+     "shinN": [
+      -10,
+      90
+     ],
+     "shinF": [
+      -10,
+      90
+     ],
+     "spine": [
+      -12,
+      12
+     ],
+     "chest": [
+      -12,
+      12
+     ],
+     "head": [
+      -25,
+      25
+     ],
+     "pelvis": [
+      -12,
+      12
+     ]
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0,
+    "offset_limit": {
+     "pelvis": [
+      0.03,
+      0.03
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    }
+   },
+   "jump": {
+    "init": {
+     "pelvis": -3.776,
+     "pelvis.dx": -39.71,
+     "pelvis.dy": -71.65,
+     "spine": -16.725,
+     "spine.s": 0.93,
+     "chest": -27.519,
+     "head": 26.362,
+     "hair": -29.943,
+     "beard0": 23.915,
+     "beard1": -33.799,
+     "upperarm": 0.842,
+     "upperarm.s": 0.9303,
+     "forearm": -89.823,
+     "forearm.s": 0.9301,
+     "hand": -34.274,
+     "thighN": -110.833,
+     "thighN.s": 0.9375,
+     "shinN": 89.49,
+     "shinN.s": 0.9306,
+     "footN": 29.313,
+     "thighF": -17.057,
+     "thighF.s": 1.0542,
+     "shinF": 37.855,
+     "shinF.s": 1.1211,
+     "footF": 27.347,
+     "spear": 150.103,
+     "spear.dx": 888.73,
+     "spear.dy": 657.74,
+     "spear.s": 0.5952,
+     "spear_tip": 1.329,
+     "tail0": 16.461,
+     "tail1": 54.574,
+     "tail2": 54.259,
+     "tail3": -47.905,
+     "tail4": -0.705,
+     "mane0": -9.276,
+     "mane1": 54.328,
+     "mane2": -14.227,
+     "sash0": -53.085,
+     "sash1": 2.687,
+     "upperarmF": -3.455,
+     "upperarmF.s": 1.2616,
+     "forearmF": 0.074,
+     "forearmF.s": 1.1337,
+     "handF": 33.81,
+     "root.dx": 315.53
+    },
+    "limits": {
+     "forearm": [
+      -90,
+      20
+     ],
+     "forearmF": [
+      -90,
+      20
+     ],
+     "shinN": [
+      -10,
+      90
+     ],
+     "shinF": [
+      -10,
+      90
+     ],
+     "pelvis": [
+      -15,
+      15
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.03,
+      0.03
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0
+   },
+   "sleep": {
+    "init": {
+     "pelvis": 8.107,
+     "pelvis.dx": 42.23,
+     "pelvis.dy": -27.83,
+     "spine": 7.953,
+     "spine.s": 0.9437,
+     "chest": 3.77,
+     "head": 13.665,
+     "hair": -21.652,
+     "beard0": -4.784,
+     "beard1": 5.437,
+     "upperarm": 3.243,
+     "upperarm.s": 1.2066,
+     "forearm": -8.348,
+     "forearm.s": 0.9931,
+     "hand": 5.518,
+     "thighN": -8.199,
+     "thighN.s": 1.1283,
+     "shinN": 4.314,
+     "shinN.s": 0.9356,
+     "footN": -11.173,
+     "thighF": -2.223,
+     "thighF.s": 1.0355,
+     "shinF": -5.638,
+     "footF": 5.225,
+     "spear": 0.418,
+     "spear.dx": 21.42,
+     "spear.dy": 21.02,
+     "spear_tip": -0.985,
+     "tail0": -16.702,
+     "tail1": -18.38,
+     "tail2": 9.431,
+     "tail3": 16.266,
+     "tail4": 22.832,
+     "mane0": 4.664,
+     "mane1": 39.339,
+     "mane2": -5.712,
+     "upperarmF": 59.748,
+     "forearmF": -89.158,
+     "forearmF.s": 1.0288,
+     "handF": -16.673,
+     "root.dx": -12.85
+    },
+    "scales": {
+     "spear": [
+      0.45,
+      1.8
+     ],
+     "upperarm": [
+      0.93,
+      1.3
+     ],
+     "upperarmF": [
+      0.93,
+      1.3
+     ],
+     "forearm": [
+      0.93,
+      1.2
+     ],
+     "forearmF": [
+      0.93,
+      1.2
+     ],
+     "thighN": [
+      1.0,
+      1.25
+     ],
+     "thighF": [
+      1.0,
+      1.25
+     ],
+     "shinN": [
+      0.93,
+      1.2
+     ],
+     "shinF": [
+      0.93,
+      1.2
+     ],
+     "spine": [
+      0.93,
+      1.15
+     ]
+    },
+    "mark_free": 0.045,
+    "mark_soft": 0.01,
+    "mark_w": 1.0,
+    "offset_limit": {
+     "pelvis": [
+      0.06,
+      0.12
+     ],
+     "spear": [
+      0.7,
+      0.9
+     ]
+    },
+    "limits": {
+     "forearmF": [
+      -95,
+      20
+     ],
+     "forearm": [
+      -95,
+      20
+     ]
+    }
+   }
+  },
+  "mark_free": 0.04,
+  "mark_soft": 0.012,
+  "mark_w": 0.5,
+  "restarts": 3,
+  "evals": 600,
+  "scales": {
+   "spear": [
+    0.45,
+    1.8
+   ],
+   "upperarm": [
+    0.93,
+    1.3
+   ],
+   "upperarmF": [
+    0.93,
+    1.3
+   ],
+   "forearm": [
+    0.93,
+    1.2
+   ],
+   "forearmF": [
+    0.93,
+    1.2
+   ],
+   "thighN": [
+    0.93,
+    1.25
+   ],
+   "thighF": [
+    0.93,
+    1.25
+   ],
+   "shinN": [
+    0.93,
+    1.2
+   ],
+   "shinF": [
+    0.93,
+    1.2
+   ],
+   "spine": [
+    0.93,
+    1.15
+   ]
+  },
+  "band_w": 1.0,
+  "feet_x_w": 0.3,
+  "dfoot_w": 1.0,
+  "offset_limit": {
+   "spear": [
+    0.7,
+    0.9
+   ]
+  },
+  "mirror": [
+   "ready",
+   "jump"
+  ]
+ },
+ "landmarks": {
+  "_note": "The approved paintings' landmarks, marked once per pose by eye on the 1x paintings (x right, y down, the painting's own pixels, +-15 to 25 px, about 0.02 of the idle's height): headCenter = the centre of the registered real-head box; fist / fistF = the near / far hand; toeN / toeF = the near / far foot's toe tips; spearTip = the blade end; spearButt = the spear's other end where the painting shows it whole. A mark is omitted where the painting does not show that part (a hand behind the body, a foot hidden). The paintings of ready and jump face LEFT (the rig faces right; ready's sidecar says facing right, jump's says nothing): their keys say `turn: true` (fit.mirror), the gate reads each against the painting turned about its stance, and the marks stay the painting's own pixels. ko: the feet are not marked (the painting lies with its legs folded under it, out of the frame; the rig's legs cannot be shortened).",
+  "ready": {
+   "headCenter": [
+    377.0,
+    148
+   ],
+   "fist": [
+    178.0,
+    152
+   ],
+   "fistF": [
+    488.0,
+    385
+   ],
+   "toeN": [
+    135.0,
+    943
+   ],
+   "toeF": [
+    488.0,
+    935
+   ],
+   "spearTip": [
+    828.0,
+    632
+   ],
+   "spearButt": [
+    4.0,
+    16
+   ]
+  },
+  "attack": {
+   "headCenter": [
+    512,
+    298
+   ],
+   "fist": [
+    640,
+    625
+   ],
+   "toeN": [
+    78,
+    1100
+   ],
+   "toeF": [
+    730,
+    1130
+   ],
+   "spearTip": [
+    832,
+    690
+   ]
+  },
+  "follow": {
+   "headCenter": [
+    582,
+    422
+   ],
+   "fist": [
+    632,
+    730
+   ],
+   "fistF": [
+    480,
+    688
+   ],
+   "toeN": [
+    135,
+    985
+   ],
+   "toeF": [
+    612,
+    982
+   ],
+   "spearTip": [
+    828,
+    893
+   ],
+   "spearButt": [
+    12,
+    16
+   ]
+  },
+  "cast": {
+   "headCenter": [
+    327,
+    210
+   ],
+   "fist": [
+    508,
+    212
+   ],
+   "fistF": [
+    168,
+    805
+   ],
+   "toeN": [
+    185,
+    1185
+   ],
+   "toeF": [
+    495,
+    1170
+   ],
+   "spearTip": [
+    800,
+    172
+   ]
+  },
+  "item": {
+   "headCenter": [
+    290,
+    105
+   ],
+   "fist": [
+    600,
+    535
+   ],
+   "fistF": [
+    575,
+    345
+   ],
+   "toeN": [
+    478,
+    1135
+   ],
+   "spearTip": [
+    620,
+    1148
+   ],
+   "spearButt": [
+    573,
+    268
+   ]
+  },
+  "defend": {
+   "headCenter": [
+    395,
+    240
+   ],
+   "fist": [
+    535,
+    405
+   ],
+   "fistF": [
+    495,
+    455
+   ],
+   "toeN": [
+    185,
+    1105
+   ],
+   "toeF": [
+    548,
+    1050
+   ],
+   "spearTip": [
+    548,
+    18
+   ],
+   "spearButt": [
+    434,
+    1105
+   ]
+  },
+  "hurt": {
+   "headCenter": [
+    525,
+    197
+   ],
+   "fist": [
+    415,
+    742
+   ],
+   "toeN": [
+    335,
+    1140
+   ],
+   "spearTip": [
+    808,
+    992
+   ]
+  },
+  "critical": {
+   "headCenter": [
+    690,
+    310
+   ],
+   "fist": [
+    330,
+    650
+   ],
+   "fistF": [
+    515,
+    725
+   ],
+   "toeN": [
+    215,
+    1115
+   ],
+   "toeF": [
+    480,
+    1100
+   ],
+   "spearTip": [
+    745,
+    1120
+   ],
+   "spearButt": [
+    74,
+    17
+   ]
+  },
+  "ko": {
+   "headCenter": [
+    912,
+    435
+   ],
+   "fist": [
+    890,
+    690
+   ],
+   "fistF": [
+    1010,
+    650
+   ],
+   "spearTip": [
+    20,
+    28
+   ]
+  },
+  "victory": {
+   "headCenter": [
+    225,
+    300
+   ],
+   "fist": [
+    160,
+    828
+   ],
+   "fistF": [
+    395,
+    335
+   ],
+   "toeN": [
+    185,
+    1170
+   ],
+   "toeF": [
+    392,
+    1140
+   ],
+   "spearTip": [
+    452,
+    22
+   ],
+   "spearButt": [
+    18,
+    1184
+   ]
+  },
+  "jump": {
+   "headCenter": [
+    420.0,
+    98
+   ],
+   "fist": [
+    255.0,
+    285
+   ],
+   "toeN": [
+    168.0,
+    800
+   ],
+   "toeF": [
+    322.0,
+    1050
+   ],
+   "spearTip": [
+    705.0,
+    15
+   ],
+   "spearButt": [
+    36.0,
+    380
+   ]
+  },
+  "sleep": {
+   "headCenter": [
+    605,
+    222
+   ],
+   "fist": [
+    330,
+    720
+   ],
+   "toeN": [
+    230,
+    1150
+   ],
+   "toeF": [
+    470,
+    1140
+   ],
+   "spearTip": [
+    765,
+    1170
+   ],
+   "spearButt": [
+    43,
+    15
+   ]
+  }
+ },
+ "motion": {
+  "idle": {
+   "hz": 0.5,
+   "bones": {
+    "pelvis": {
+     "rot": 0.35,
+     "phase": 0.4
+    },
+    "spine": {
+     "rot": 0.55,
+     "phase": -0.9
+    },
+    "chest": {
+     "rot": 1.5,
+     "phase": -1.2
+    },
+    "head": {
+     "rot": 0.8,
+     "phase": -1.8
+    },
+    "upperarm": {
+     "rot": 0.5,
+     "phase": -1.6
+    },
+    "forearm": {
+     "rot": 0.4,
+     "phase": -2.0
+    },
+    "upperarmF": {
+     "rot": 0.5,
+     "phase": -1.6
+    },
+    "forearmF": {
+     "rot": 0.4,
+     "phase": -2.0
+    },
+    "thighN": {
+     "rot": -0.35,
+     "phase": 0.4
+    },
+    "thighF": {
+     "rot": -0.35,
+     "phase": 0.4
+    },
+    "spear": {
+     "rot": 0.4,
+     "phase": -2.2
+    }
+   }
+  },
+  "chains": [
+   {
+    "bones": [
+     "mane0",
+     "mane1",
+     "mane2"
+    ],
+    "follow": "chest",
+    "f": 2.6,
+    "z": 0.42,
+    "fFalloff": 0.85,
+    "hang": 0.1,
+    "drag": [
+     4,
+     4.86,
+     5.14
+    ]
+   },
+   {
+    "bones": [
+     "tail0",
+     "tail1",
+     "tail2",
+     "tail3",
+     "tail4"
+    ],
+    "follow": "pelvis",
+    "f": 2.2,
+    "z": 0.4,
+    "fFalloff": 0.88,
+    "hang": 0.22,
+    "limit": 60,
+    "drag": [
+     1.43,
+     2,
+     2.57,
+     3.14,
+     3.43
+    ]
+   },
+   {
+    "bones": [
+     "sash0",
+     "sash1"
+    ],
+    "follow": "pelvis",
+    "f": 3.0,
+    "z": 0.38,
+    "fFalloff": 0.9,
+    "hang": 0.35,
+    "drag": [
+     3.14,
+     4.29
+    ]
+   },
+   {
+    "bones": [
+     "beard0",
+     "beard1"
+    ],
+    "follow": "head",
+    "f": 3.2,
+    "z": 0.45,
+    "fFalloff": 0.9,
+    "hang": 0.4,
+    "limit": 40,
+    "drag": [
+     0.86,
+     1.43
+    ]
+   },
+   {
+    "bones": [
+     "hair"
+    ],
+    "follow": "head",
+    "f": 3.4,
+    "z": 0.45,
+    "hang": 0.9,
+    "limit": 40,
+    "drag": [
+     2.86
+    ]
+   }
+  ]
+ },
+ "authored": [
+  "ready",
+  "follow",
+  "item",
+  "ko",
+  "victory",
+  "jump"
+ ]
+}

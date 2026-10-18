@@ -8,13 +8,26 @@ gate refuses: feet off the idle's soles, a stature outside the pose class's band
 does not touch its target yet is still pulled toward it.
 
 config["fit"]:
-  "min_iou": 0.88                 a key is kept when the fitter's overlap is at least this (the gate demands 0.85 of its own reading; the margin is for the two rasterisers)
+  "min_iou": 0.78                 a key is kept when the fitter's overlap is at least this (the gate demands 0.75 of its own reading; the margin is for the two rasterisers)
   "limits": { bone: [lo, hi] }    degrees; default +-110 (chain bones: +-50)
   "fixed": [bone, ...]            bones held at rest in every key
   "chain_bones": [prefix, ...]    bones of lag chains (default: the prefixes in build.chains); held to +-50 and a strong prior
   "root_rot": [lo, hi]            allow the whole figure to rotate (a KO lying down), degrees; planted keys never
   "skip": [pose, ...]  "only": [pose, ...]
-  "keys": { pose: { "init": { bone: degrees }, "planted": false, "free": [bone, ...], "limits": {...}, "root_rot": [lo, hi] } }   hand-given starting points and exceptions
+  "keys": { pose: { "init": { bone: degrees, "bone.dx": px, "bone.s": scale, "root.rot": degrees, "root.dx": px }, "planted": false, "free": [bone, ...], "limits": {...}, "root_rot": [lo, hi],
+                    "root_dx": [lo, hi], "root_dy": [lo, hi] } }   hand-given starting points and exceptions (px: master px)
+  "band_w": 0.2, "dfoot_w": 0.15, "feet_x_w": 0.0   weights of what the gate refuses besides the overlap: a stature outside the pose class's band; a planted key's lowest foot off the bind row
+                                  (the runtime's 0.4 percent of the image height); a planted key's stance (the middle of the lowest thick part, `posescale` `stanceFromHem`) more than 0.02 idle heights
+                                  sideways of the idle's (the gate's `feet-x`; 0 leaves it out). A subject the gate refuses on these raises them
+  "offset_limit": { bone: [fx, fy] }   how far a bone's offset (dx, dy) may go, as shares of the image's width and height (default 0.12 each); `fit.keys.<pose>.offset_limit` per pose
+  "scales": { bone: [lo, hi] }    bones whose UNIFORM SCALE is a parameter (about the bone's joint; none by default): the spear, whose painted length differs from one painting to the next, and limbs
+                                  (an arm or a leg is painted longer or shorter than the costume's). `fit.keys.<pose>.scales` narrows or widens one pose. The key gets `sx` and `sy` for each one that moved
+  "mirror": [pose, ...]           poses whose painting faces the other way from the rig (a rig figure faces one way; a painting that faces the other is a painting fault): the fit's TARGET is the painting turned
+                                  about its stance. The poses' landmark marks are then given where the TURNED painting has them, x' = 2 x stance - x (the gate reads a mark through the model's own placement)
+  "landmarks": { pose: { rig landmark: [x, y] } }   (top level of the config, the table `export` turns into each key's `expect`, and the gate then holds the key to) the approved painting's own landmarks,
+                                  in its 1x pixels. When a pose names them the loss adds a hinge on how far each posed landmark is from the painting's (idle heights): free inside `mark_free` (0.02), the full
+                                  weight `mark_w` (0.15) at `mark_free + mark_soft` (+0.03), so a key matches the pose's INTENT (head, hands, feet, spear ends where the painting shows them), not only its
+                                  silhouette; all three also per pose under `fit.keys.<pose>`. Needs targets made with `place` (rig-targets does; `--retarget` for older ones)
   "restarts": 1, "evals": 450, "blur": [4, 0]   CMA-ES runs per block and round, evaluations per run (the trunk gets twice), one round per smoothing level (passes of [1 2 1])
 Writes <work>/fit/keys.json (the keys in the rig file's shape, radians), fit_report.json (every pose, kept or not, with the numbers) and overlay_<pose>.png (the approved
 silhouette in blue, the rig's in red, both in purple: what the fit could not do).
@@ -29,6 +42,7 @@ from PIL import Image
 
 from rig_common import REPO, Subject, read_json, run_node, say, write_json
 from rig_cma import cma_es
+from rig_fit_terms import MARK_FREE, MARK_SOFT, Terms, grid_point  # noqa: F401  (grid_point: part of this module's surface, the tests use it)
 from rig_skin import RigModel, blur121, chamfer, chamfer_terms, iou, soft_iou
 
 FOOT_NAMES = ("feet", "foot", "toe", "heel", "sole")
@@ -44,11 +58,14 @@ def ensure_targets(sub: Subject, build: dict, poses=None, retarget=False):
             args += ["--poses", ",".join(poses)]
         if sub.cfg.get("table"):
             args += ["--table", str(sub.rel(sub.cfg["table"]))]
+        if sub.cfg.get("fit", {}).get("mirror"):
+            args += ["--mirror", ",".join(sub.cfg["fit"]["mirror"])]
         run_node(args)
     return tdir, read_json(tdir / "targets.json")
 
 
-class Fitter:
+
+class Fitter(Terms):
     def __init__(self, model: RigModel, T: dict, fit_cfg: dict, build: dict, chains):
         self.m = model
         self.T = T
@@ -79,6 +96,9 @@ class Fitter:
             names_off = [model.names[kids[0]]] if kids else []
         self.off_idx = [model.idx[n] for n in names_off if n in model.idx]
         self.nr = len(self.free)
+        sc = fit_cfg.get("scales") or {}
+        self.scl_idx = [model.idx[n] for n in sc if n in model.idx]
+        self.scl_names = [n for n in sc if n in model.idx]
         self.foot_lm = [n for n in model.landmarks if n.lower().startswith(FOOT_NAMES)]
         row = (T["costume"].get("row") or {})
         self.head_box = row.get("head")
@@ -103,13 +123,22 @@ class Fitter:
             hi.append(b * RAD)
         W = self.m.build["image"]["w"]
         H = self.m.build["image"]["h"]
-        for _ in self.off_idx:
-            lo += [-0.12 * W, -0.12 * H]
-            hi += [0.12 * W, 0.12 * H]
+        ol = {**(self.cfg.get("offset_limit") or {}), **(pose_cfg.get("offset_limit") or {})}
+        for b in self.off_idx:
+            fx, fy = ol.get(self.m.names[b], [0.12, 0.12])  # a share of the image's width and height: a spear turned end for end needs to travel the whole figure
+            lo += [-fx * W, -fy * H]
+            hi += [fx * W, fy * H]
+        sc = {**(self.cfg.get("scales") or {}), **(pose_cfg.get("scales") or {})}
+        for n in self.scl_names:
+            a, b = sc.get(n, [1.0, 1.0])
+            lo.append(a)
+            hi.append(b)
         rr = pose_cfg.get("root_rot") or self.cfg.get("root_rot") or [0, 0]
         dy = 0.25 * H if not pose_cfg.get("planted", True) else 0.0  # a planted key does not lift the figure: its feet stay where the bind has them
-        lo += [-0.25 * W, -dy, rr[0] * RAD]
-        hi += [0.25 * W, dy, rr[1] * RAD]
+        rdx = pose_cfg.get("root_dx") or [-0.25 * W, 0.25 * W]  # master px: a figure that lies down swings its whole length sideways, so a KO names a wider range
+        rdy = pose_cfg.get("root_dy") or [-dy, dy]
+        lo += [rdx[0], rdy[0], rr[0] * RAD]
+        hi += [rdx[1], rdy[1], rr[1] * RAD]
         return np.array(lo), np.array(hi)
 
     def unpack(self, x):
@@ -118,10 +147,15 @@ class Fitter:
         off = {self.m.names[b]: (x[self.nr + 2 * k], x[self.nr + 2 * k + 1]) for k, b in enumerate(self.off_idx)}
         return rot, (x[-3], x[-2], x[-1]), off
 
+    def unpack_scl(self, x):
+        """{bone: (s, s)}: the uniform scales (the parameters after the offsets)."""
+        o = self.nr + 2 * len(self.off_idx)
+        return {n: (float(x[o + k]), float(x[o + k])) for k, n in enumerate(self.scl_names)}
+
     def measures(self, x):
         """mask, stature (silhouette), body stature (head top to soles), lowest foot offset in idle heights."""
         rot, root, off = self.unpack(x)
-        self.m.pose(rot=rot, root=root, off=off)
+        self.m.pose(rot=rot, root=root, off=off, scl=self.unpack_scl(x))
         mask = self.m.grid_mask()
         rows = np.flatnonzero(mask.any(1))
         stat = (self.GV1 - (rows[0] + self.m.win[1]) / self.GS) / self.figH if len(rows) else 0.0
@@ -139,7 +173,7 @@ class Fitter:
             dfoot = (Y - self.rest_foot_Y) / self.GS / self.figH
         return mask, stat, body, dfoot
 
-    def make_loss(self, target, band, props_out, planted, prior, blur=0):
+    def make_loss(self, target, band, props_out, planted, prior, blur=0, marks=None, mark_w=0.15, mark_free=MARK_FREE, mark_soft=MARK_SOFT, band_w=0.2, feet_x_w=0.0, stance_ref=None, dfoot_w=0.15):
         """The fit's loss for one pose. `blur` > 0 scores the overlap of smoothed coverages (so a sub-cell move changes the loss); 0 is the plain binary overlap the gate measures."""
         lo_b, hi_b = (band or (None, None))
         tgt_b = target.astype(np.float32)
@@ -164,96 +198,70 @@ class Fitter:
             if band:
                 s = body if (props_out and body is not None) else stat
                 v = min(3.0, max(0.0, lo_b + 0.005 - s, s - (hi_b - 0.005)) / 0.05)
-                L += 0.2 * v * v
+                L += band_w * v * v
             if planted and dfoot is not None:
                 # the runtime check allows 0.4 percent of the image height; stay inside 0.3
                 tol = 0.003 * self.m.build["image"]["h"]
                 v = min(3.0, max(0.0, abs(dfoot) * self.figH * self.GS / self.aff["ay"] - tol) / tol)
-                L += 0.15 * v * v
+                L += dfoot_w * v * v
+            if feet_x_w and planted and stance_ref is not None:
+                sx_ = self.stance_x(mask)
+                if sx_ is not None:
+                    v = min(3.0, max(0.0, abs(sx_ - stance_ref) / self.GS - 0.012) / 0.008)  # the gate refuses 0.02 idle heights
+                    L += feet_x_w * v * v
+            if marks:
+                for e in self.mark_errors(marks).values():
+                    v = max(0.0, e - mark_free) / mark_soft
+                    L += mark_w * (v * v if v < 2.0 else 4.0 * v - 4.0)  # a square to twice `mark_soft`, then a line: a landmark far from its mark (a spear turned the wrong way) still has a slope to follow
             L += 0.002 * float(np.sum((x[: len(self.free)] / prior) ** 2)) / max(1, len(self.free))
             return L
 
         return loss
 
-    def descend(self, loss, x0, lo, hi, sweeps=(1.0, 0.25, 0.08, 0.03, 0.01), n=15):
-        x = np.clip(x0.copy(), lo, hi)
-        best = loss(x)
-        for span in sweeps:
-            for j in range(len(x)):
-                if hi[j] <= lo[j]:
-                    continue
-                if j < len(self.free):  # one bone's angle: only the parts it moves are redrawn
-                    self.measures(x)
-                    self.m.begin_block([self.free[j]])
-                else:
-                    self.m.end_block()
-                half = span * (hi[j] - lo[j]) / 2
-                cand = np.linspace(max(lo[j], x[j] - half), min(hi[j], x[j] + half), n)
-                for c in cand:
-                    if c == x[j]:
-                        continue
-                    old = x[j]
-                    x[j] = c
-                    L = loss(x)
-                    if L < best:
-                        best = L
-                    else:
-                        x[j] = old
-        self.m.end_block()
-        return x, best
-
-    def blocks(self):
-        """The parameter blocks of the search: each LIMB (a bone and all its descendants, when that is six bones or fewer: an arm, a leg, the head, a tail, the spear) and the TRUNK (the whole
-        figure's offset and every bone not in a limb: pelvis, spine, chest). A silhouette's angles are far too many to search at once, but a limb moves only its own pixels."""
-        m = self.m
-        free = set(self.free)
-        kids = {i: [c for c in range(m.nb) if m.parent[c] == i] for i in range(m.nb)}
-
-        def subtree(i):
-            out = [i] if i in free else []
-            for c in kids[i]:
-                out += subtree(c)
-            return out
-
-        limbs, seen = [], set()
-
-        def walk(i):
-            sub = subtree(i)
-            if i in free and 0 < len(sub) <= 6:
-                limbs.append(sub)
-                seen.update(sub)
-            else:
-                for c in kids[i]:
-                    walk(c)
-
-        for r in [i for i in range(m.nb) if m.parent[i] < 0]:
-            for c in kids[r]:
-                walk(c)
-        n = len(self.free)
-        pos = {bi: k for k, bi in enumerate(self.free)}
-        trunk = [pos[bi] for bi in self.free if bi not in seen] + list(range(n, n + 2 * len(self.off_idx) + 3))
-        return [np.array(trunk)] + [np.array([pos[bi] for bi in l]) for l in limbs]
-
-    def fit_pose(self, pose, tinfo, target, pose_cfg, rng, restarts):
+    def fit_pose(self, pose, tinfo, target, pose_cfg, rng, restarts, marks=None):
         """Block-wise CMA-ES in the unit box (each parameter scaled to its limits), three rounds with the smoothing of the overlap shrinking, and a coordinate polish on the binary overlap the gate
         measures. Each block is the trunk or one limb (see `blocks`): a CMA over six or eight angles converges to the sub-cell precision that one over thirty does not."""
         lo, hi = self.bounds(pose_cfg)
         planted = pose_cfg.get("planted", True)
         prior = np.full(len(self.free), 80 * RAD)
         blurs = list(self.cfg.get("blur", [4, 0]))  # one round each: the smoothing of the overlap, in [1 2 1] passes, shrinking to the plain overlap
-        losses = [self.make_loss(target, tinfo.get("band"), tinfo.get("propsOut", False), planted, prior, blur=bl) for bl in blurs + [0]]
+        mark_w = pose_cfg.get("mark_w", self.cfg.get("mark_w", 0.15))
+        mark_free = pose_cfg.get("mark_free", self.cfg.get("mark_free", MARK_FREE))
+        mark_soft = pose_cfg.get("mark_soft", self.cfg.get("mark_soft", MARK_SOFT))
+        band_w = pose_cfg.get("band_w", self.cfg.get("band_w", 0.2))
+        feet_x_w = pose_cfg.get("feet_x_w", self.cfg.get("feet_x_w", 0.0))
+        dfoot_w = pose_cfg.get("dfoot_w", self.cfg.get("dfoot_w", 0.15))
+        o_scl = self.nr + 2 * len(self.off_idx)
+        x_rest = np.zeros(len(lo))
+        x_rest[o_scl:o_scl + len(self.scl_idx)] = 1.0  # the rest pose: no angle, no offset, every scale 1
+        stance_ref = self.stance_x(self.measures(x_rest)[0]) if feet_x_w else None
+        losses = [self.make_loss(target, tinfo.get("band"), tinfo.get("propsOut", False), planted, prior, blur=bl, marks=marks, mark_w=mark_w, mark_free=mark_free, mark_soft=mark_soft, band_w=band_w, feet_x_w=feet_x_w, stance_ref=stance_ref, dfoot_w=dfoot_w) for bl in blurs + [0]]
         half = (hi - lo) / 2
         mid = (hi + lo) / 2
         n = len(lo)
         x = np.zeros(n)
+        o_scl = self.nr + 2 * len(self.off_idx)
+        x[o_scl:o_scl + len(self.scl_idx)] = 1.0
+        root_init = False
         for n_, d in (pose_cfg.get("init") or {}).items():
-            if self.m.idx[n_] in self.free:
-                x[self.free.index(self.m.idx[n_])] = d * RAD
+            # "bone": its angle (degrees); "bone.dx" / "bone.dy": its offset (master px); "bone.s": its scale; "root.dx" / "root.dy" (px) / "root.rot" (degrees): the whole figure
+            name, _, ch = n_.partition(".")
+            if name == "root" and ch in ("dx", "dy", "rot"):
+                x[{"dx": -3, "dy": -2, "rot": -1}[ch]] = d * RAD if ch == "rot" else d
+                root_init = root_init or ch in ("dx", "dy")
+            elif ch in ("dx", "dy") and name in self.m.idx and self.m.idx[name] in self.off_idx:
+                x[self.nr + 2 * self.off_idx.index(self.m.idx[name]) + (ch == "dy")] = d
+            elif ch == "s" and name in self.m.idx and self.m.idx[name] in self.scl_idx:
+                x[o_scl + self.scl_idx.index(self.m.idx[name])] = d
+            elif not ch and name in self.m.idx and self.m.idx[name] in self.free:
+                x[self.free.index(self.m.idx[name])] = d * RAD
         # start the whole figure where the target is: the rest pose's centre of mass slid onto the target's (a pose registered on the idle's feet is often a stride away from the rest)
-        rest = self.measures(np.zeros(n))[0]
+        x_rest = np.zeros(n)
+        x_rest[o_scl:o_scl + len(self.scl_idx)] = 1.0  # the rest pose: no angle, no offset, every scale 1
+        rest = self.measures(x_rest)[0]
         ry, rx = np.nonzero(rest)
         ty, tx = np.nonzero(target)
-        if len(rx) and len(tx):
+        if len(rx) and len(tx) and not root_init:
             x[-3] = float(np.clip((tx.mean() - rx.mean()) / self.aff["ax"], lo[-3], hi[-3]))
             x[-2] = float(np.clip((ty.mean() - ry.mean()) / self.aff["ay"], lo[-2], hi[-2]))
         x = np.clip(x, lo, hi)
@@ -271,8 +279,8 @@ class Fitter:
                     return loss(xx)
 
                 # the bones this block moves: the parts they skin are redrawn on each evaluation, the rest once
-                moved = [self.free[k] for k in idx if k < len(self.free)]
-                if len(idx) > len(moved) or not moved:
+                moved = self.block_bones(idx)
+                if not moved:
                     self.m.end_block()  # the whole-figure offset moves everything
                 else:
                     self.measures(x)
@@ -320,20 +328,21 @@ def run(sub: Subject, poses=None, retarget=False, seed=1) -> None:
     if not any(T["poses"][p]["class"] in ("standing", "low", "ko", "idle") for p in names):
         raise SystemExit("rig fit-keys: no registered pose to fit")
     keys, report = {}, {}
-    min_iou = fit_cfg.get("min_iou", 0.88)
+    min_iou = fit_cfg.get("min_iou", 0.78)
     for pose in names:
         info = T["poses"][pose]
         if info["class"] in ("part", "staged", "wide"):
             report[pose] = {"kept": False, "why": f"class {info['class']}: a rig does not serve it"}
             continue
         target = np.ascontiguousarray(targets[pose][model.win[1]:model.win[3], model.win[0]:model.win[2]])
+        marks = fitter.grid_marks(info, (sub.cfg.get("landmarks") or {}).get(pose))
         pcfg = (fit_cfg.get("keys") or {}).get(pose, {})
         t0 = time.time()
         if pose == T["costume"]["pose"] or info["class"] == "idle":
             x = np.zeros(len(fitter.free) + 3)
             L = 0.0
         else:
-            x, L = fitter.fit_pose(pose, info, target, pcfg, rng, fit_cfg.get("restarts", 2))
+            x, L = fitter.fit_pose(pose, info, target, pcfg, rng, fit_cfg.get("restarts", 2), marks)
         mask, stat, body, dfoot = fitter.measures(x)
         i = float(iou(mask, target))
         rot, root, off = fitter.unpack(x)
@@ -349,7 +358,11 @@ def run(sub: Subject, poses=None, retarget=False, seed=1) -> None:
         planted = pcfg.get("planted", True)
         report[pose] = {"kept": kept, "iou": round(i, 4), "stature": round(float(stat), 4), "bodyStature": None if body is None else round(float(body), 4), "dfoot": None if dfoot is None else round(float(dfoot), 4),
                         "loss": round(float(L), 4), "class": info["class"], "propsOut": info.get("propsOut", False), "seconds": round(time.time() - t0, 1)}
-        say(f"  {pose:10s} {info['class']:8s} iou {i:.3f} stature {stat:.3f} body {body if body is None else round(body, 3)} dfoot {dfoot if dfoot is None else round(dfoot, 4)} {'kept' if kept else 'NOT KEPT (under ' + str(min_iou) + ')'}  {time.time() - t0:.0f} s")
+        if marks:
+            me = fitter.mark_errors(marks)
+            report[pose]["landmarks"] = {n: round(float(e), 3) for n, e in me.items()}
+            report[pose]["landmarkMax"] = round(float(max(me.values())), 3)
+        say(f"  {pose:10s} {info['class']:8s} iou {i:.3f} stature {stat:.3f} body {body if body is None else round(body, 3)} dfoot {dfoot if dfoot is None else round(dfoot, 4)} {'kept' if kept else 'NOT KEPT (under ' + str(min_iou) + ')'}{'  landmarks max ' + str(report[pose]['landmarkMax']) if marks else ''}  {time.time() - t0:.0f} s")
         if not kept:
             continue
         bones = {}
@@ -359,7 +372,13 @@ def run(sub: Subject, poses=None, retarget=False, seed=1) -> None:
         for name, (dx, dy) in off.items():
             if abs(dx) >= 0.05 or abs(dy) >= 0.05:
                 bones[name] = {**bones.get(name, {}), "dx": round(float(dx), 2), "dy": round(float(dy), 2)}
+        for name, (sx_, sy_) in fitter.unpack_scl(x).items():
+            if abs(sx_ - 1.0) >= 0.005 or abs(sy_ - 1.0) >= 0.005:
+                bones[name] = {**bones.get(name, {}), "sx": round(sx_, 4), "sy": round(sy_, 4)}
         key = {"bones": bones, "source": f"characters/{sub.id}/{pose}", "fit": {"iou": round(i, 4), "stature": round(float(body if (info.get('propsOut') and body is not None) else stat), 4), "feetPx": round(abs(float(dfoot)) * fitter.figH * fitter.GS / fitter.aff["ay"], 2) if dfoot is not None else 0.0}}
+        if pose in (fit_cfg.get("mirror") or []):
+            key.pop("fit")  # the overlap is with the painting TURNED: a claim about the painting as the gate reads it would be false (the gate reads it unturned)
+            report[pose]["turnedTarget"] = True
         rr = {"dx": round(float(root[0]), 2), "dy": round(float(root[1]), 2), "rot": round(float(root[2]), 4)}
         rr = {k: v for k, v in rr.items() if abs(v) >= 0.001}
         if rr:

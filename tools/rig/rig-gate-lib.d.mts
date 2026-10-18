@@ -2,7 +2,7 @@
 import type { ModelInputs } from '../posescale/pose-model.mjs';
 
 export const ROOT: string;
-export const RIG_BANDS: Readonly<{ iou: number; restIou: number; baselinePx: number; sizePx: number; fitIou: number; fitStature: number }>;
+export const RIG_BANDS: Readonly<{ iou: number; landmarkPct: number; restIou: number; baselinePx: number; sizePx: number; fitIou: number; fitStature: number }>;
 export const BUDGET: Readonly<{ parts: number; bones: number; verts: number; tris: number; texels: number; bytes: number }>;
 
 export interface RigGateFailure {
@@ -27,6 +27,13 @@ export interface RigGateKey {
   report: string[];
   propsOut: boolean;
   normK: number;
+  /** The key is `source: "authored"` and has an approved painting: its overlap was not required, its landmarks were. */
+  authored?: boolean;
+  /** The approved painting of the pose faces the other way from the rig (`turn: true`): the overlap and the marks were read against it turned about its stance. */
+  turned?: boolean;
+  /** Per landmark named in the key's `expect`: its distance from the approved painting's mark, as a share of the idle's height. */
+  landmarks?: Record<string, number>;
+  landmarkMax?: number | null;
   ok: boolean;
 }
 export interface RigGateResult {
@@ -47,6 +54,12 @@ export interface RigGateResult {
   bands: typeof RIG_BANDS;
   budget: typeof BUDGET;
   rigDir: string;
+  /** Poses whose key is authored (it has an approved painting; its overlap was waived for its landmarks). */
+  authored: string[];
+  /** Poses whose painting faces the other way from the rig (the key says `turn: true`). */
+  turned: string[];
+  /** This rig's bars: the overlap a key must reach and how far a landmark may sit from the painting's (the gate's 0.75 and 0.06; the rig file's `acceptance` may only tighten them). */
+  acceptance: { iou: number; landmarkPct: number } | null;
 }
 
 export function gateRig(o: { rig: string; root?: string; artDir?: string; inputs?: ModelInputs; blends?: boolean; requireCoverage?: boolean }): Promise<RigGateResult>;

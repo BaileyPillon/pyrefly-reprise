@@ -43,6 +43,29 @@ const WAIST = { x: 200, y: 300 };
 
 const deg = (r: number): number => Math.round(((r * 180) / Math.PI) * 1000) / 1000;
 
+/** A point turned `r` radians clockwise (SVG's rotate, y down) about a centre. */
+const turn = (p: [number, number], c: { x: number; y: number }, r: number): [number, number] => {
+  const dx = p[0] - c.x;
+  const dy = p[1] - c.y;
+  return [c.x + dx * Math.cos(r) - dy * Math.sin(r), c.y + dx * Math.sin(r) + dy * Math.cos(r)];
+};
+
+/** The painter's marks of a pose (the driver's rule: a key passes on its landmarks too): where the approved painting has the head (the head tube's turn about the neck, then the chest's about the waist) and the feet (never move). */
+export function painterMarks(pose: string): Record<string, [number, number]> {
+  const a = POSES[pose]!;
+  const w = pose === 'idle' ? a : { chest: a.chest + PAINTER_WOBBLE.chest, head: a.head + PAINTER_WOBBLE.head, upper: a.upper + PAINTER_WOBBLE.upper, fore: a.fore + PAINTER_WOBBLE.fore };
+  const head = turn(turn([200, 150], NECK, w.head), WAIST, w.chest);
+  return { head: [Math.round(head[0] * 10) / 10, Math.round(head[1] * 10) / 10], feet: [200, 450] };
+}
+
+/** Where the approved painting of a pose has the puppet's hand (the forearm's tip, (235, 335) at rest): the forearm's turn about the elbow, the upper arm's about the shoulder, the chest's about the waist. */
+export function paintedHand(pose: string): [number, number] {
+  const a = POSES[pose]!;
+  const w = pose === 'idle' ? a : { chest: a.chest + PAINTER_WOBBLE.chest, head: a.head + PAINTER_WOBBLE.head, upper: a.upper + PAINTER_WOBBLE.upper, fore: a.fore + PAINTER_WOBBLE.fore };
+  const h = turn(turn(turn([235, 335], ELBOW, w.fore), SHOULDER, w.upper), WAIST, w.chest);
+  return [Math.round(h[0] * 10) / 10, Math.round(h[1] * 10) / 10];
+}
+
 /** The puppet drawn as SVG at the given angles: legs, torso (with the head and the arm riding on it). */
 export function puppetSvg(a: Angles): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
@@ -153,6 +176,7 @@ export async function writePuppetRig(dir: string, art: string, o: PuppetRigOptio
   const keyOf = (pose: string, a: Angles): RigJson => ({
     bones: { chest: { rot: a.chest }, head: { rot: a.head }, upperarm: { rot: a.upper }, forearm: { rot: a.fore } },
     source: `characters/${SUBJECT}/${pose}`,
+    expect: painterMarks(pose),
   });
   const keys: RigJson = { idle: { bones: {}, source: `characters/${SUBJECT}/idle` } };
   for (const [pose, a] of Object.entries(POSES)) if (pose !== 'idle') keys[pose] = keyOf(pose, a);

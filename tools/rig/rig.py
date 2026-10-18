@@ -12,7 +12,7 @@ Every step is a command of this file, driven by a per-subject config, tools/rig/
     sheet     --subject S                                 a contact sheet: each key beside its approved painting, with the gate's overlap, stature and feet                         -> rig_sheet.py
     all       --subject S [--sam]                         every step in order
 
-The gate is `node tools/rig-gate.mjs --rig D:/pyrefly-art-rigs/<id>` (tools/rig/rig-gate-lib.mjs): a rig is `ok` only when every key overlaps its approved painting by 0.85 with stature and feet in the pose class's
+The gate is `node tools/rig-gate.mjs --rig D:/pyrefly-art-rigs/<id>` (tools/rig/rig-gate-lib.mjs): a rig is `ok` only when every key overlaps its approved painting by 0.75, its landmarks agree with the painting's, with stature and feet in the pose class's
 band, no joint opens a hole in any key or any blend, and it is inside the budget. The runtime draws only a rig whose gate is ok; the painting-per-pose rows stay the fallback.
 
 Folders: the work folder is D:/pyrefly-art-rigs-work/<name> (RIG_WORK), the rigs are D:/pyrefly-art-rigs (PYREFLY_RIGS_DIR), the art is public/art or PYREFLY_ART_DIR or the config's "art".

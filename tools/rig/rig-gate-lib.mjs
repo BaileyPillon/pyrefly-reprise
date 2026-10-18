@@ -6,10 +6,16 @@
  *   costume-*        it is cut from the ONE approved master: `characters/<subject>/<pose>.png` exists, its sha256 is the rig's `costume.sha`, its size is the rig's `image`
  *                    over `scale`, and the rig plants its soles on that painting's registered ground row (`baseline`)
  *   rest-differs     the rest pose draws the costume painting: silhouette overlap 0.95 or more
- *   key-iou          every key's silhouette overlaps the approved painting of that pose by 0.85 or more, both registered at the idle's scale and feet (`rig-read.mjs`)
+ *   key-iou          every key's silhouette overlaps the approved painting of that pose by 0.75 or more (the driver's pose-intent bar of 2026-10-17, which replaced 0.85), both registered at the idle's
+ *                    scale and feet (`rig-read.mjs`); a key marked `turn: true` is read against the painting turned about its stance (the painting faces the other way from the rig)
  *   key-<flag>       every key is inside its pose class's bands (`tools/posescale/pose-bands.mjs`): stature (a props-out pose reads head to soles), real head, feet, mass,
  *                    stance, overlap, solidity. The same flags the pose gate raises for a painting.
  *   key-unmatched    a key with no approved painting of its pose (and not `source: "authored"`) cannot be verified
+ *   key-landmark     (the driver's pose-intent rule, 2026-10-17: a key passes when the overlap AND the landmarks agree) every key that has an approved painting names the painting's landmarks
+ *                    (`key.expect`: rig landmark name to a point in the approved painting's own 1x pixels, marked once per pose in the subject's config) and puts each of them within 0.06 of the
+ *                    idle's height of the painting's, both registered the way the silhouettes are; `key-landmark-unmarked` when a painted key names none (the costume's own rest pose needs none)
+ *   authored keys    `source: "authored"` on a key that HAS an approved painting waives only the overlap and demands the landmarks instead; the key is listed in `result.authored`, never passed
+ *                    silently, and its bars are the same. `acceptance: {iou, landmarkPct}` in the rig file may only TIGHTEN a bar (a higher overlap, a smaller tolerance), never loosen it
  *   key-feet-landmark  the runtime's own planted-feet check: a key not marked `planted: false` keeps its lowest foot landmark (feet, foot*, toe*, heel*, sole*) on the bind row, the
  *                    key's declared `root.dy` aside, to 0.4 percent of the image height (`src/engine/rig/RigValidate.ts`); a rig with no foot landmark fails `rig-landmark`
  *   coverage         (ON BY DEFAULT since the driver's rule of 2026-10-17; `requireCoverage: false` / `--allow-partial` for a rig still being fitted) every pose the game has a registered
@@ -44,8 +50,10 @@ export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 
 /** The numbers the gate holds a rig to. */
 export const RIG_BANDS = Object.freeze({
-  /** A key's silhouette overlap with the approved painting of its pose (both registered at the idle's scale and feet). */
-  iou: 0.85,
+  /** A key's silhouette overlap with the approved painting of its pose (both registered at the idle's scale and feet): the driver's bar of 2026-10-17 (it was 0.85). */
+  iou: 0.75,
+  /** How far each landmark of a key may sit from the approved painting's mark, as a share of the idle's height. */
+  landmarkPct: 0.06,
   /** The rest pose against the costume painting itself (the cut is made from the defringed painting: its grey matte ring is gone, so 1.0 is not reachable). */
   restIou: 0.95,
   /** The rig's ground row may differ from the costume painting's registered one by this many 1x painting px. */
@@ -56,6 +64,9 @@ export const RIG_BANDS = Object.freeze({
   fitIou: 0.05,
   fitStature: 0.04,
 });
+
+/** A pixel of an image drawn at (upp, anchor, shift, mirror) as the pose model draws it, in the model's world units: u across, v up (idle height about 1). `drawnMask`'s own mapping. */
+const worldPoint = (x, y, W, pl) => [(x - W / 2) * pl.upp * pl.mirror + pl.shift, (pl.anchor - y) * pl.upp];
 
 /** Landmark names that count as feet (the runtime's `RIG_FOOT_LANDMARKS`), and how far a planted key's lowest foot may leave the bind row, as a share of the image height (`RigValidate.FEET_TOL`). */
 const FOOT_LANDMARKS = ['feet', 'foot', 'toe', 'heel', 'sole'];
@@ -112,11 +123,15 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   const fail = (code, message, pose) => failures.push(pose ? { code, pose, message } : { code, message });
   const { raw, dir } = readRigFile(rig);
   const { problems, rt } = normaliseRig(raw, { dir });
-  const result = { subject: raw?.name ?? null, status: 'refused', failures, keys: [], rest: null, holes: null, uncovered: [], size: rigSize(raw ?? {}, dir), digest: rigDigest(raw ?? {}, dir), bands: RIG_BANDS, budget: BUDGET, rigDir: dir };
+  const result = { subject: raw?.name ?? null, status: 'refused', failures, keys: [], rest: null, holes: null, uncovered: [], size: rigSize(raw ?? {}, dir), digest: rigDigest(raw ?? {}, dir), bands: RIG_BANDS, budget: BUDGET, rigDir: dir, authored: [], turned: [], acceptance: null };
   result.exempt = []; // painted poses with no key that the rig is not held to (staged or part paintings): stamped, so the runtime and the deploy can tell them from a pose painted after the gate ran
   result.silhouettes = {}; // each key's posed box, feet and painted front in the master's px (`rig-silhouette.mjs`), stamped for the HUD's brackets and the strike's reach
   for (const p of problems) fail(p.code, p.message);
   if (!rt) return result;
+  // ---- this rig's bars: the gate's (RIG_BANDS); the rig file may only tighten them, so no rig can hold itself to less than the rule
+  const bar = Number.isFinite(raw.acceptance?.iou) ? Math.max(RIG_BANDS.iou, raw.acceptance.iou) : RIG_BANDS.iou;
+  const lmTol = Number.isFinite(raw.acceptance?.landmarkPct) ? Math.min(RIG_BANDS.landmarkPct, raw.acceptance.landmarkPct) : RIG_BANDS.landmarkPct;
+  result.acceptance = { iou: bar, landmarkPct: lmTol };
   // ---- budget
   const sz = result.size;
   const over = (code, n, cap, what) => { if (n > cap) fail(`budget-${code}`, `${n.toLocaleString('en-US')} ${what}, over the budget of ${cap.toLocaleString('en-US')}`); };
@@ -158,12 +173,38 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
     const entry = { pose, class: reading.class, source: key.source, planted: true, iou: null, stature: reading.stature, bodyStature: reading.bodyStature, statureRead: reading.stature, headReal: reading.headReal, feet: reading.feet, flags: [], report: [], propsOut: false, normK: 1, ok: false };
     result.keys.push(entry);
     if (found) {
-      const t = approvedTarget(ctx, found.apr, found.m);
+      // a painting that faces the other way from the rig (`turn: true`): the target is the painting turned about its stance, registered as the model registers a painting drawn the other way
+      const turned = raw.keys?.[pose]?.turn === true;
+      const apr = turned ? { ...found.apr, drawn: { ...found.apr.drawn, mirror: -found.apr.drawn.mirror } } : found.apr;
+      if (turned) { entry.turned = true; result.turned.push(pose); }
+      const t = approvedTarget(ctx, apr, found.m);
       entry.iou = maskIou(keyMask(ctx, drawn.vp), t.mask);
       entry.propsOut = t.propsOut;
       entry.normK = Math.round(t.k * 1000) / 1000;
       if (t.propsOut && reading.bodyStature !== null) { entry.statureRead = reading.bodyStature; reading.stature = reading.bodyStature; }
-      if (entry.iou === null || entry.iou < RIG_BANDS.iou) fail('key-iou', `silhouette overlap ${f3(entry.iou)} with the approved painting of ${pose}, under ${RIG_BANDS.iou} (both registered at the idle's scale and feet)`, pose);
+      const authored = key.source === 'authored';
+      if (authored) { entry.authored = true; result.authored.push(pose); }
+      if (!authored && (entry.iou === null || entry.iou < bar)) fail('key-iou', `silhouette overlap ${f3(entry.iou)} with the approved painting of ${pose}, under ${bar} (both registered at the idle's scale and feet)`, pose);
+      const expect = raw.keys?.[pose]?.expect;
+      if (authored && !expect) fail('key-authored-unverified', `the key is authored (its overlap ${f3(entry.iou)} is not required) but names no landmarks of the approved painting (\`expect\`), so nothing says it is the pose`, pose);
+      else if (!expect && pose !== costumePose) fail('key-landmark-unmarked', `the key names no landmarks of the approved painting of ${pose} (\`expect\`): a key passes on the overlap AND on its head, hands, feet and spear tip being where the painting has them`, pose);
+      if (expect && typeof expect === 'object') {
+        // landmark agreement: the rig's posed landmark and the painting's own mark, each placed on the common grid the way its silhouette is, in idle heights
+        const pl = { upp: t.upp, anchor: t.anchor, shift: t.shift, mirror: apr.drawn.mirror };
+        const place = ctx.place;
+        entry.landmarks = {};
+        for (const [name, pt] of Object.entries(expect)) {
+          const lm = rt.landmarks[name];
+          if (!lm || !Array.isArray(pt) || pt.length !== 2 || !pt.every(Number.isFinite)) { fail('key-landmark', `landmark ${name}: the rig has no such landmark or the painting's mark is not [x, y]`, pose); continue; }
+          const [mx, my] = through(drawn.k, lm.bone, lm.x, lm.y);
+          const rigPt = worldPoint(mx * ctx.frame.sx + ctx.frame.ox, my * ctx.frame.sy + ctx.frame.oy, ctx.frame.W, place);
+          const paintPt = worldPoint(pt[0], pt[1], found.m.W, pl);
+          const err = Math.hypot(rigPt[0] - paintPt[0], rigPt[1] - paintPt[1]) / ctx.R.figH;
+          entry.landmarks[name] = Math.round(err * 1000) / 1000;
+          if (err > lmTol) fail('key-landmark', `${name} is ${f3(err)} of the idle's height from the approved painting's (limit ${lmTol})`, pose);
+        }
+        entry.landmarkMax = Object.values(entry.landmarks).length ? Math.max(...Object.values(entry.landmarks)) : null;
+      }
     } else if (key.source !== 'authored') {
       fail('key-unmatched', `there is no approved painting of ${pose} to hold the key against (a key with no painting must say \`source: "authored"\`)`, pose);
     }

@@ -15,7 +15,7 @@
  *                                                                               (`--require-coverage` is still accepted and means what the default means.)
  *
  * The rules (all must hold; `tools/rig/rig-gate-lib.mjs` has the codes): the file is valid; it is cut from the ONE approved master (sha256, size, ground row); the rest pose
- * draws that painting (0.97 overlap); every key overlaps the approved painting of its pose by 0.85 or more, both registered at the idle's scale and feet; every key's stature
+ * draws that painting (0.97 overlap); every key overlaps the approved painting of its pose by 0.75 or more and puts its landmarks where the painting has them (a key that cannot reach the overlap may be authored), both registered at the idle's scale and feet; every key's stature
  * (a props-out pose reads head to soles), real head and feet are inside the pose class's band (`tools/posescale/pose-bands.mjs`); no alpha hole at any body joint in any key or
  * at 25, 50 and 75 percent between any two keys; parts, bones, vertices and textures inside the budget. Exit: 0 ok, 1 refused, 2 usage.
  */
@@ -57,7 +57,7 @@ async function main() {
     const okKeys = r.keys.filter((k) => k.ok).length;
     console.log(`rig-gate: ${r.subject ?? rig}: ${r.status.toUpperCase()}; ${okKeys} of ${r.keys.length} key(s) pass; rest overlap ${r.rest?.iou === null || r.rest?.iou === undefined ? 'n/a' : r.rest.iou.toFixed(3)}; ${r.holes ? `${r.holes.rendered} poses scanned for holes at ${r.holes.joints.length} joints; ` : ''}${r.size.parts} parts, ${r.size.bones} bones, ${r.size.verts} vertices, ${(r.size.texels / 1e6).toFixed(2)} Mpx, ${(r.size.bytes / 1e6).toFixed(2)} MB; ${((Date.now() - t0) / 1000).toFixed(1)} s`);
     if (r.uncovered.length) console.log(`  no key for ${r.uncovered.length} registered pose(s): ${r.uncovered.join(', ')}${flag('--allow-partial') ? ' (--allow-partial: the stamp will say coverage partial, and the deploy refuses it)' : ''}`);
-    for (const k of r.keys) console.log(`  ${k.ok ? 'ok  ' : 'FAIL'} ${k.pose.padEnd(10)} ${k.class.padEnd(8)} iou ${k.iou === null ? 'n/a  ' : k.iou.toFixed(3)}  stature ${k.statureRead === null ? 'n/a  ' : k.statureRead.toFixed(3)}${k.propsOut ? ' (head to soles)' : ''}  feet ${k.feet ? `${k.feet.dx.toFixed(3)}, ${k.feet.dy.toFixed(3)}` : 'n/a'}  head ${k.headReal === null ? 'n/a' : k.headReal.toFixed(3)}`);
+    for (const k of r.keys) console.log(`  ${k.ok ? 'ok  ' : 'FAIL'} ${k.pose.padEnd(10)} ${k.class.padEnd(8)} iou ${k.iou === null ? 'n/a  ' : k.iou.toFixed(3)}  stature ${k.statureRead === null ? 'n/a  ' : k.statureRead.toFixed(3)}${k.propsOut ? ' (head to soles)' : ''}  feet ${k.feet ? `${k.feet.dx.toFixed(3)}, ${k.feet.dy.toFixed(3)}` : 'n/a'}  head ${k.headReal === null ? 'n/a' : k.headReal.toFixed(3)}${k.landmarkMax === undefined ? '' : `  landmarks ${k.landmarkMax === null ? 'n/a' : k.landmarkMax.toFixed(3)}`}${k.authored ? '  AUTHORED' : ''}${k.turned ? '  (painting turned)' : ''}`);
     for (const x of r.failures.slice(0, Number(get('--max', 40)))) console.log(`FAIL  ${formatRigFailure(r.subject ?? '?', x)}`);
     if (r.failures.length > Number(get('--max', 40))) console.log(`... and ${r.failures.length - Number(get('--max', 40))} more (--max N)`);
     if (!flag('--check') && r.rigDir) {

@@ -910,7 +910,7 @@ node tools/art-install.mjs --target <art folder> --rig <id> --rig-from <folder> 
 node tools/pose-gate.mjs --check --rigs auto                                                          # poses a gate-ok rig serves are reported `rigged`
 ```
 
-A rig is `ok` only when every key overlaps the approved painting of its pose by 0.85 (both registered at the idle's scale and feet), its stature (head to soles for a props-out pose), real head
+A rig is `ok` only when every key overlaps the approved painting of its pose by 0.75 and its landmarks agree with the painting's within 0.06 of the idle's height (the driver's pose-intent rule of 2026-10-18; both registered at the idle's scale and feet), its stature (head to soles for a props-out pose), real head
 and feet are inside the pose class's band, no joint opens a hole in any key or any 25, 50 or 75 percent blend between two keys, and it is inside the budget (24 parts, 48 bones, 8000
 vertices, 9 Mpx, 9 MB of PNG). The runtime draws only a rig whose `gate.status` is `ok`; the paintings of every pose stay the fallback and keep their own rows and waivers.
 

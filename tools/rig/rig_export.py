@@ -4,6 +4,10 @@
 
 rig.json is the contract file `src/data/art/rigTypes.ts` (format v1): key angles in radians, skin as `bone` or `weights` (four numbers a vertex), `costume` = the ONE approved master the parts were cut from (its path and the first 16 hex of
 its sha256; `sha2x` = the @Nx master's), `keys` = `idle` (the costume painting at rest) plus every key the fitter kept, `landmarks`, and the config's `motion` (idle sway and lag chains) as given.
+The config adds what the gate reads under the driver's pose-intent rule (2026-10-17: a key passes when its overlap with the approved painting is 0.75 or more AND its landmarks agree): `landmarks`
+{pose: {rig landmark name: [x, y]}} (the approved painting's own 1x pixels, marked once per pose; each becomes that key's `expect`, which the gate REQUIRES of every painted key), `authored` [pose, ...]
+(those keys say `source: "authored"`: the gate waives their overlap, still demands their landmarks and lists them), `fit.mirror` [pose, ...] (the painting faces the other way from the rig: the key says
+`turn: true`, the gate reads the painting turned about its stance) and `acceptance` {iou, landmarkPct} (this rig's bars; the gate lets a rig only TIGHTEN 0.75 and 0.06).
 It carries no `gate`: only `node tools/rig-gate.mjs` writes that. Unless --no-gate, the export ends by running the gate on what it wrote (the exit status is the gate's).
 """
 from __future__ import annotations
@@ -36,12 +40,23 @@ def build_rig(sub: Subject, build: dict, keys: dict) -> dict:
             all_keys[name] = k
     for name, k in (sub.cfg.get("keys_extra") or {}).items():  # hand-authored keys (a pose with no painting): the gate judges them without an overlap
         all_keys[name] = {"source": "authored", **k}
+    for name, marks in (sub.cfg.get("landmarks") or {}).items():  # the approved painting's landmarks, marked once per pose: the gate's `expect`
+        if name in all_keys and name != sub.costume_pose and not name.startswith("_"):
+            all_keys[name]["expect"] = marks
+    for name in sub.cfg.get("authored") or []:  # a pose that cannot reach the overlap bar: the key is authored, its landmarks must agree, and the gate lists it
+        if name in all_keys:
+            all_keys[name]["source"] = "authored"
+    for name in (sub.cfg.get("fit") or {}).get("mirror") or []:  # the painting of this pose faces the other way from the rig: the gate reads it turned about its stance (marks stay the painting's own px)
+        if name in all_keys:
+            all_keys[name]["turn"] = True
     rig = {
         "version": 1, "name": sub.id, "scale": build["scale"], "image": build["image"], "baselineY": build["baselineY"], "costume": costume,
         "bones": build["bones"], "parts": build["parts"], "landmarks": build["landmarks"], "keys": all_keys,
     }
     if sub.cfg.get("motion"):
         rig["motion"] = sub.cfg["motion"]
+    if sub.cfg.get("acceptance"):
+        rig["acceptance"] = sub.cfg["acceptance"]
     return rig
 
 
