@@ -13,7 +13,7 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 
 ## Start of every session
 
-1. Read [docs/handoff/NOW.md](docs/handoff/NOW.md): what is live, what is in flight, what to do next.
+1. Read [docs/LIVE.md](docs/LIVE.md) (generated: the live commit, bundle and artifact, the open review obligations, the disclosed majors, the branches in flight), then [docs/handoff/NOW.md](docs/handoff/NOW.md): what is in flight, what to do next.
 2. Run `git status --short | head -30`. Modified files you did not touch are
    **another agent's unfinished work**. See "Shared working tree" below.
 3. Read the governing doc for the area you are about to change (map below).
@@ -32,6 +32,7 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 | Production build to the shared `dist/` | `npm run build` |
 | Screenshot | `npm run screenshot -- --url=http://localhost:5173/ --out=docs/screenshots/<name>.png` |
 | What each live build still owes the critic, and which issues have stalled | `npm run critic:status` |
+| What is live, as one generated page (rewrite it after every deploy; `--check` fails when it is stale, and so does `tests/unit/live-record.test.ts`) | `node tools/live-record.mjs` |
 | Which review a change needs, and why | `node tools/critic-plan.mjs` (`--paths a,b` to ask about files) |
 | Settle a review obligation with a report | `node tools/critic-clear.mjs --report <report.json>` (never delete a marker) |
 | Prove a build's art: every derived file equals its PNG master, a WebP ships only where every decoder draws it the same and never under 64 bytes (WebKit cannot load one), nothing names a missing file, every shipped image loads in WebKit and Chromium | `node tools/art-derive.mjs verify --dir <build>` and `audit --dir <build>`; `node tools/art-browser-load.mjs --dir <build>` loads every shipped image in WebKit and Chromium (the deploy runs it, about 20 s); `node tools/art-play-audit.mjs --dir <build>` plays it in headless Chromium; `node tools/art-browser-identity.mjs --dir <build> --screen-exact` compares them as the browser decodes them |
@@ -57,7 +58,8 @@ debug API that plays a chapter to an outcome from the console) is in
 | `public/art/` | Painted PNGs, the approved masters (character paintings go in only through `tools/art-install.mjs`, rule 16). **Gitignored on main**, local only, backed up to `D:\Tools\pyrefly-art-backup`. A production build ships a lossless WebP derived from each one that every decoder draws the same from it (the default `exact`: opaque art, and art whose alpha is only 0 and 255 with no colour left under alpha 0; every other master, the 2x ones included, ships as a PNG recompressed at maximum effort with its pixels proved identical) (`tools/art-derive-lib.mjs`, `src/engine/ArtShipped.ts`; masters, hashes and dev are unchanged): build art URLs with `artUrl`, read them back with `logicalArtUrl` | [r38-bytes](docs/handoff/r38-bytes.md) |
 | `critic/` | `RUBRIC.md` (policy v2: verdicts, schedule, one score, gates), `policy.json` (the same rules as data, enforced by `tools/critic-*.mjs`), `CHECKS.md` (CHK-001 to CHK-024, B1 to B4), `runner/` (the review workflows), `pending/` `cleared/` `reviews/` `rounds/` `artifacts/` `ledger.json` (obligations and evidence) | `RUBRIC.md` §4 and §10 before any release |
 | `docs/handoff/<track>.md` | One file per finished or in-flight track | the one for your area |
-| `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (draft until Bailey approves it) | before proposing or planning anything |
+| `docs/LIVE.md`, `docs/target/in-flight.json` | The generated "what is live" record (Bailey, 2026-10-17: make the current release unmistakable) and the hand-kept list of branches in flight it prints; `tools/live-record.mjs` reads `docs/deploys.log`, `critic/pending` and `critic/cleared`, the live build's focused report and `CHANGELOG.md` | at the start of every session; regenerate with every deploy's records |
+| `docs/PRODUCT-BRIEF.md` | North star, the priority order when goals collide, what "finished" means, what is out of scope (adopted by Bailey 2026-10-17) | before proposing or planning anything |
 | `docs/target/targets.json`, `decisions.json` | Bailey's approved end states, pictures awaiting a verdict, and the gaps; per tile, whether it is built (`delivery`) and what Bailey named versus what an agent guessed (`reaction`). `decisions.json` holds the decisions that are not pictures, with their state. `node tools/end-state-board.mjs` renders the board | before building anything Bailey will see, hear or feel (hard rule 9) |
 | `DECISIONS.md`, `docs/target/decisions-early.json`, `tools/decisions-ledger.mjs` | The central ledger of every decision Bailey has made since 2026-09-15, rendered from `decisions.json` (D-nnn), `decisions-early.json` (E-nnn) and `targets.json`; `node tools/decisions-ledger.mjs` renders it, `--check` and `tests/unit/decisions-ledger.test.ts` fail when it is stale. A blanket "all your recommendations" is never one row: each accepted recommendation gets its own row with a `changed` line | after Bailey decides anything: add the row, rerun the tool |
 | `ACTIONS.md` | The central ledger of everything built and carried out since 2026-09-15 (implementations, art installs, deploys, reviews, records, infrastructure, accounts, downloads, maintenance, process): one row per unit of work with who, decisions, game case, result and evidence. Data in `docs/target/actions.json`; `node tools/actions-ledger.mjs` renders it, `--check` fails when it is stale | its header, which says how to add a row |
@@ -207,7 +209,7 @@ rounds 02 and 03 are rubric v1 history.
   (`live`, `focused`, `deep`, `milestone`). Only
   `node tools/critic-clear.mjs --report <file>` settles one: a focused pass never settles
   a deep review, UNVERIFIED settles nothing, and a deep review a replaced build still
-  owed moves to the new build. The GitHub Actions workflow is manual-only; ignore it.
+  owed moves to the new build. Right after the deploy, run `node tools/live-record.mjs` and commit `docs/LIVE.md` with the deploy records. The GitHub Actions workflow is manual-only; ignore it.
 - While other agents are active, cut releases from the clean worktree
   `D:\pyrefly-release`, never from this tree.
 - The reviews are Claude Code workflows in `critic/runner/` (`release.js` runs the whole
