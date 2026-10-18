@@ -1,0 +1,126 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-10-17T02:41:00Z",
+ "build": {
+  "mainSha": "6b638df95",
+  "bundle": "B_bQDjUG",
+  "artifactHash": "65df5e84588cb7a20d2fd40ad169ca65ae512bf3877c0ccf3396d89996069442"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/6b638df95.json --url https://echoesofspira.com/ --changed-from critic/artifacts/8a3e8eff7.json --full (34 min, 21:55 to 22:29 EDT) -> {result: PASS, artifactHash: 65df5e84588cb7a20d2fd40ad169ca65ae512bf3877c0ccf3396d89996069442, liveManifest: match, checked: 5309, mismatched: [], missing: [], wrongType: [], errors: []}. The manifest lists 5310 files; _headers is host-read, never served, so not downloaded; index.html as a browser asks for it is identical to the artifact once Cloudflare's Web Analytics beacon (366 bytes and the line feed) is cut out. Every smoke context loaded assets/index-B_bQDjUG.js. Across the two full-flow contexts (661 requests) and four probes: 0 image or audio responses served as text/html, 0 page errors, and 14 responses >= 400 over six contexts, all one URL (art/backdrops/mirror-aeons.png, 404), disclosed as LIVE-R50-01 (polish, carried from r50, no visible effect); every audio response 200 audio/mpeg (title, chapter-select, scene-gagazet, boss-challenge, victory-ffx, defeat-ffx, sprites, parity packs). Cold load (critic/runner/lib/coldload.mjs, run alone, cache off): 1.1 s median to an interactive title (1.0 s to 4.5 s over 3 runs), 11.9 s at 1.6 Mbps / 150 ms, host busy 92 to 99 percent so not an idle-host number. Evidence: critic/reviews/6b638df95-live/ (verify-live.json, coldload.txt, results-*.json, audio.json).",
+   "reason": "Every compared file is byte-identical to the stored manifest with the right content type and the live manifest names this artifact. The CHK-017 zero-4xx criterion is met except for the one stray 404 recorded as LIVE-R50-01 (a prewarm request for a painting that does not exist, present on the previous live build too, nothing visible depends on it); a stricter reading would call that one miss, as the r50 live review also noted."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright launched from node scripts with PYREFLY_BROWSER=gpu (renderer ANGLE NVIDIA GeForce RTX 5070 Ti Direct3D11, never SwiftShader; no black canvas), a fresh browser context per run, a ?cb= cache-busting URL, 1600x900 and 390x844, real key presses and real mouse clicks and wheel. Every capture was asserted before it was shot: screen name (battle), the enemies on the field (dark-mindy,dark-sandy in Act I; dark-yojimbo,dark-daigoro in Act II), awaitingMenu true for every battle-menu capture, #ui > [data-screen] roots equal to the screen stack, no title root once past the title. Evidence set: 42 captures in the two full-flow runs (desktop 21, phone 21), 0 unverified, plus the probes' frames. The debug API was read for state and acted only for setSeed(7), setBattleSpeed and autoBattle (to let the Dark Sisters hit the party and to play Act I out after the Sisters and Yojimbo had been summoned and ordered with keys), setAutoPlay(null) when control was returned, and Lulu's HP set to 40 percent for the low-HP capture (allowed by the brief). Every wait matched or threw (assertScreen, waitBattleMenu, waitFor). Two page.goto load timeouts of my own guide probe (host at 100 percent CPU) threw loudly and were re-run; no capture was taken from them.",
+   "reason": "Every capture of the intended states carries its asserted screen, chapter and menu condition; the two harness timeouts are listed in the report's notes and nothing was shot from them."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Light reload smoke on the live URL, desktop and phone contexts, reloaded in Act II of Mirror Aeons (mid-battle): G (real key) hid the guide and saved settings.guideVisible=false; the save also held the seenCoach flags; after page.reload() the whole settings object and the seenCoach list were identical to before, the game came back on the title with no error (485 ms desktop, 264 ms phone) and Enter reached the board with 19 cards. The Options-tab ArrowLeft probe changed nothing (the cursor rests on an already-maximal row), so no volume or other setting was exercised.",
+   "reason": "One setting and the progress flags survived a real reload; this deployment changes no save data (no SaveData, schema or migration in the diff), so the full upgrade matrix is not owed and was not run."
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "exact artifact: all 5309 downloadable files of the 5310-file manifest byte-compared with the live site (--full), content types, live manifest match, index.html with and without the Web Analytics beacon",
+   "title -> chapter select at 1600x900 and 390x844: 19 .fe-card, Chapter XXVII 'Mirror Aeons' reached with the arrow keys, Enter opens party prep for mirror-aeons, Enter plays the intro, then Act I's first menu (screen battle, awaitingMenu true, Tidus, Yuna, Lulu at 9999 against Dark Mindy 2,000,000 and Dark Sandy 2,500,000)",
+   "the Dark paintings: the stage draws dark-sandy from /art/characters/dark-sandy/idle.png and dark-mindy from /art/characters/dark-mindy/idle.png (not the player's sandy and mindy, not placeholders); the turn bar's Dark Sandy and Dark Mindy rows (red-framed face tiles with loaded /art/portraits/dark-sandy.png and dark-mindy.png) once they enter the next six turns; the enemy pair stays dark with Yuna's bright Sisters out; Act II's Dark Yojimbo (characters/dark-yojimbo) and dog (characters/daigoro)",
+   "Lulu's height live: an in-page sampler over real play (idle 1.718 world units; hurt 0.901 of idle over 21 frames; low-HP critical rest 0.758 over 371 frames; phone 0.904 and 0.756) and an A/B probe on the same figure at the same spot (idle 226.0 to 226.5 px, hurt 205.6 to 206.3 px, 0.91; Yuna 0.91; r50 live read 0.67 and 0.78)",
+   "Yuna's Magus Sisters: Summon, Cindy with the keys, all three Sisters on the field, one order (Free choice) taken with the keys and played by Cindy, Dismiss",
+   "Yuna's Yojimbo: Summon, Yojimbo with the keys; drawn from characters/yojimbo-cavern (not the navy characters/yojimbo); his turn-bar tile (71 px) and HUD card carry a loaded image of that painting, not the Y monogram; the Aeon group's Pay ladder (Pay 1,000 / 10,000 / 100,000 / 1,000,000 / Pay all) and its help line; Escape out of the group",
+   "the in-battle chapter guide: on screen at Act I's first menu; names Sandy 9 times and Mindy 8; step 5 reads 'about one Pay in four at a million gil, better with a full Overdrive gauge. It is a chance, not a plan.' (the old 'it is rare' wording absent); the clause scrolled into the sheet window with ] on the desktop and the mouse wheel on the phone; G folds it and saves guideVisible",
+   "pause: P opens it, H hides and restores the panels (same text length), Escape resumes the same menu; Escape on the battle menu opens the pause, a second Escape resumes; no horizontal page scroll at 1600 or 390",
+   "Act II's first menu (Dark Yojimbo and his dog) reached by the debug advisor's line at skip speed after Act I's Sisters and Yojimbo had been used with keys",
+   "prerendered music at Act I's first menu: 10 audio files all 200 audio/mpeg, audioDebug playing boss-challenge, prerendered manifest true, parity packs ffx-core and ffx-final-aeon decoded",
+   "reload smoke (light CHK-024) at 1600x900 and 390x844; the whole flow repeated at 390x844 (34 of 34 checks)",
+   "cold load: 1.1 s median to an interactive title over 3 unthrottled runs, 11.9 s throttled"
+  ],
+  "reused": [],
+  "notTested": [
+   "Act II fought to a win, the post scene, the results screen, the board's clear ribbon and save record, the retry",
+   "a Combine / Delta Attack, a Zanmato actually landing, a Pay actually paid",
+   "the contextual Pay tip's one-in-six-at-100,000 clause (src/data/guides/mirror-aeons.ts line 73): the Curse tip held the guide card whenever Yojimbo's Pay rows were up",
+   "continuity of the new Dark figures (CHK-026 feet and CHK-027 double image, FOC501-01 and FOC501-02 of the focused report) and the data audit: the deep review's",
+   "Lulu's critical rest forced with setPose in the A/B probe (the rest sync reverts it); the low-HP figure comes from the sampler over real play",
+   "other chapters on the live site (the 404 may or may not appear on another card), the full CHK-024 upgrade matrix, listening to any audio, other viewport shapes, a real phone, Safari, a gamepad"
+  ]
+ },
+ "issues": [
+  {
+   "id": "LIVE-R50-01",
+   "severity": "polish",
+   "title": "art/backdrops/mirror-aeons.png answers 404 live (carried from the r50 live review, still open)",
+   "summary": "GET https://echoesofspira.com/art/backdrops/mirror-aeons.png answers 404 (curl confirms, no body type): 3 times in the full desktop session and 2 on the phone, 14 over the six contexts of this review, each also a console error. Nothing visible breaks (the road draws on the card and behind the first menu). Suspected cause (from the r50 review, read from the source, not traced here): battlePreload.ts phase 3 prewarms plateUrlFor(chapter.sceneKey); the scene key mirror-aeons is a code key and SCENE_PLATES names only sector1-reactor. Smallest fix: map mirror-aeons to art/backdrops/mushroom-rock-road.png in SCENE_PLATES, or skip the prewarm. Acceptance: the same walk on the live host reads 0 responses >= 400 and 0 console errors.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true,
+   "confidence": "high that the request and the 404 occur (reproduced in 6 of 6 contexts, curl confirms); suspected for the cause",
+   "evidence": ["critic/reviews/6b638df95-live/results-desk.json", "critic/reviews/6b638df95-live/results-phone.json"]
+  },
+  {
+   "id": "LIVE-R50-02",
+   "severity": "major",
+   "title": "Lulu is drawn at 0.67 of her idle height in her hurt painting (r50 live, owner-reported): verified FIXED on the r50.1 live build",
+   "summary": "r50 live read 0.67 (151.7 px against 226 px) hurt and 0.55 by the table for the Critical rest. On 6b638df95 live: sampler over real play hurt 0.901 and critical 0.758 of idle (phone 0.904 and 0.756); A/B probe on the same figure at the same spot, 226.0 to 226.5 px idle and 205.6 to 206.3 px hurt (0.91). The fix holds at about 0.9 and about 0.75.",
+   "status": "fixed",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "confidence": "high (two independent readings on the live page; the critical figure is from the sampler, the A/B probe could not hold that pose)",
+   "reportedBy": "owner (\"lulu looks tiny when hurt - this problem again?\", 2026-10-16)",
+   "evidence": ["critic/reviews/6b638df95-live/results-desk.json", "critic/reviews/6b638df95-live/results-phone.json", "critic/reviews/6b638df95-live/lulu-ab.json"]
+  },
+  {
+   "id": "LIVE-R50-03",
+   "severity": "polish",
+   "title": "The Dark Mindy and Dark Sandy drew the player's own Mindy and Sandy paintings (r50 live): verified FIXED on the r50.1 live build",
+   "summary": "On 6b638df95 live the stage draws dark-sandy from /art/characters/dark-sandy/idle.png and dark-mindy from /art/characters/dark-mindy/idle.png, and the turn bar's Dark rows carry /art/portraits/dark-sandy.png and dark-mindy.png; with Yuna's Sisters out, hers draw cindy, sandy and mindy and the pair stays dark. Whether the red-and-black look is the one Bailey wants is his pick (handoff ch-mirror-aeons.md section 5) and was not judged here.",
+   "status": "fixed",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true,
+   "confidence": "high (read from the live stage and the loaded images)",
+   "evidence": ["critic/reviews/6b638df95-live/results-desk.json", "critic/reviews/6b638df95-live/desk-02-act1-first-menu.jpg", "critic/reviews/6b638df95-live/desk-08-yojimbo-summoned.jpg"]
+  },
+  {
+   "id": "LIVE-R501-01",
+   "severity": "polish",
+   "title": "At 390x844 the open guide sheet runs under the CURSE tip card",
+   "summary": "While a Curse tip card was up, the phone's guide sheet (window 13,66 to 380,476) extended 48 px under the tip card (from y 428), so the end of the Zanmato-odds paragraph sat behind the card at the scroll position that first showed it; a notch further it reads in full, and with no tip up the sheet is whole. On the desktop the same tip squeezes the guide to a 66 px window until scrolled. Suspected pre-existing and not compared with a previous build. Smallest fix: end the sheet's window above the tip card, or lift the tip while the sheet is open. Acceptance: at 390x844 with a Curse tip up, the whole last line of the sheet is readable at the end of the scroll.",
+   "status": "open",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown",
+   "inNewFeature": false,
+   "confidence": "high that the overlap occurs in the captured frame (critic/reviews/6b638df95-live/phone-11-guide-under-curse-tip.jpg); not traced and not compared with the previous build",
+   "evidence": ["critic/reviews/6b638df95-live/phone-11-guide-under-curse-tip.jpg", "critic/reviews/6b638df95-live/guide-phone-odds-in-window.jpg", "critic/reviews/6b638df95-live/guide-phone.json"]
+  }
+ ],
+ "consoleErrors": 14,
+ "notFound": 14,
+ "elapsedMinutes": 48,
+ "observations": [
+  "The exact artifact is live: all 5309 downloadable files byte-identical, bundle B_bQDjUG, artifactHash 65df5e84588c...9442.",
+  "Dark Sandy and Dark Mindy now draw their own red-and-black paintings (characters/dark-sandy, characters/dark-mindy) with Dark face tiles in the turn bar; at the very first menu the bar lists only the party's rows and the Dark rows join it within the opening turns.",
+  "Lulu's height is fixed live: hurt 0.90 and low HP 0.76 of her idle height (r50 live: 0.67 and 0.55); Tidus's hurt painting is drawn at 1.10 of his idle height (248 px against 226 px), the same 248 px as on r50 live, for the continuity harness to judge.",
+  "Yuna's Yojimbo draws characters/yojimbo-cavern and has a portrait tile in the turn bar and the HUD card, not the Y monogram.",
+  "The chapter guide names Sandy and Mindy and gives the corrected Zanmato odds (about one Pay in four at a million gil, a chance, not a plan).",
+  "art/backdrops/mirror-aeons.png still answers 404 (LIVE-R50-01), the only response >= 400 in the whole review.",
+  "A scratch folder from an earlier attempt of this same brief was found and not used; every result here is from runs made in this pass."
+ ]
+}

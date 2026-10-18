@@ -1,0 +1,946 @@
+{
+ "game": "FFX",
+ "chapter": "mirror-aeons (XXVII)",
+ "viewport": "390x844",
+ "build": {
+  "sha": "d6dc0bdd",
+  "bundle": "index-zpfxlH3Y.js"
+ },
+ "boardCard": "LOCATION | Mushroom Rock Road and the Cavern | BOSS | Dark Sandy and Dark Mindy, then Dark Yojimbo | PARTY | T | TIDUS | Y | YUNA | L | LULU | BEST | Not cleared | TAP A CARD | CHOOSE | · | TAP THE PLATE | BEGIN | · | TAP HERE | BACK",
+ "prepText": "PARTY PREP | CHAPTER | STATS | SPHERE GRID | EQUIPMENT | ITEMS | OVERDRIVE | FFX | · | XXVII | Mirror Aeons | The Dark Mirror | MUSHROOM ROCK ROAD, AND THE CAVERN OF THE STOLEN FAYTH | Yevon has put Yuna's friends in the wrong colours. Call your own sisters and your own blade, and send the shadows home. | the road | two in the wrong colours | the blade below | OBJECTIVES | Send both sisters home | Reach the cavern | Send the dark blade home | TIP | Two sisters, no joint attack, and every fallen member costs a Phoenix Down: heal early, and use spells on Mindy, whom no blade can find. In the cavern, Cheer first and call Yuna's Yojimbo in before his blade is full. | START BATTLE | T | Tidus | H",
+ "staged": [
+  "tidus",
+  "yuna",
+  "lulu",
+  "dark-mindy",
+  "dark-sandy"
+ ],
+ "staticAct1": {
+  "dark-mindy": {
+   "idle": {
+    "pose": "idle",
+    "x": 326.8248926152195,
+    "y": 224.32166569344193,
+    "w": 47.6,
+    "h": 90.1,
+    "bottom": 314.5,
+    "cx": 350.6,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 324.17190398613207,
+    "y": 226.81243347261764,
+    "w": 50.1,
+    "h": 87.8,
+    "bottom": 314.6,
+    "cx": 349.2,
+    "mirrored": false,
+    "dBottomVsIdle": 0.1
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 328.54648595689,
+    "y": 224.55079407336916,
+    "w": 47.7,
+    "h": 89.8,
+    "bottom": 314.3,
+    "cx": 352.4,
+    "mirrored": false,
+    "dBottomVsIdle": -0.2
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 319.6054282668375,
+    "y": 226.21295025039,
+    "w": 56.2,
+    "h": 90.6,
+    "bottom": 316.8,
+    "cx": 347.7,
+    "mirrored": false,
+    "dBottomVsIdle": 2.3
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 289.89438366254046,
+    "y": 253.16341447379028,
+    "w": 96.5,
+    "h": 78.2,
+    "bottom": 331.4,
+    "cx": 338.1,
+    "mirrored": false,
+    "dBottomVsIdle": 16.9
+   },
+   "telegraph": {
+    "pose": "telegraph",
+    "x": 326.4191284841995,
+    "y": 224.47694273479618,
+    "w": 49.2,
+    "h": 89.7,
+    "bottom": 314.2,
+    "cx": 351,
+    "mirrored": false,
+    "dBottomVsIdle": -0.3
+   }
+  },
+  "dark-sandy": {
+   "idle": {
+    "pose": "idle",
+    "x": 220.4044948083806,
+    "y": 166.66026295508323,
+    "w": 59,
+    "h": 140,
+    "bottom": 306.7,
+    "cx": 249.9,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 209.27989265777694,
+    "y": 169.52447135376508,
+    "w": 97.6,
+    "h": 137,
+    "bottom": 306.5,
+    "cx": 258.1,
+    "mirrored": false,
+    "dBottomVsIdle": -0.2
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 217.72853189578564,
+    "y": 167.386261278678,
+    "w": 89.3,
+    "h": 139,
+    "bottom": 306.4,
+    "cx": 262.4,
+    "mirrored": false,
+    "dBottomVsIdle": -0.3
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 233.2237021243095,
+    "y": 170.68566718567365,
+    "w": 55.6,
+    "h": 138.9,
+    "bottom": 309.6,
+    "cx": 261,
+    "mirrored": false,
+    "dBottomVsIdle": 2.9
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 177.89049220431957,
+    "y": 245.67967442320676,
+    "w": 141.4,
+    "h": 78.2,
+    "bottom": 323.9,
+    "cx": 248.6,
+    "mirrored": false,
+    "dBottomVsIdle": 17.2
+   },
+   "telegraph": {
+    "pose": "telegraph",
+    "x": 220.4502987492308,
+    "y": 166.7574615506012,
+    "w": 59.6,
+    "h": 139.8,
+    "bottom": 306.6,
+    "cx": 250.2,
+    "mirrored": false,
+    "dBottomVsIdle": -0.1
+   }
+  }
+ },
+ "staticParty": {
+  "tidus": {
+   "idle": {
+    "pose": "idle",
+    "x": 22.101922238367536,
+    "y": 319.2065039368057,
+    "w": 69.2,
+    "h": 100.8,
+    "bottom": 420,
+    "cx": 56.7,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "ready": {
+    "pose": "ready",
+    "x": 31.523718455472306,
+    "y": 331.08842962340935,
+    "w": 83.8,
+    "h": 90.4,
+    "bottom": 421.5,
+    "cx": 73.4,
+    "mirrored": false,
+    "dBottomVsIdle": 1.5
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 17.26941502436364,
+    "y": 324.0006353334151,
+    "w": 72.8,
+    "h": 96.1,
+    "bottom": 420.1,
+    "cx": 53.7,
+    "mirrored": false,
+    "dBottomVsIdle": 0.1
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 37.49443612621525,
+    "y": 323.7888592488398,
+    "w": 62.6,
+    "h": 95.9,
+    "bottom": 419.7,
+    "cx": 68.8,
+    "mirrored": false,
+    "dBottomVsIdle": -0.3
+   },
+   "item": {
+    "pose": "item",
+    "x": 33.699275769364476,
+    "y": 327.39828394329777,
+    "w": 63.4,
+    "h": 92.4,
+    "bottom": 419.8,
+    "cx": 65.4,
+    "mirrored": false,
+    "dBottomVsIdle": -0.2
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 21.34171227920632,
+    "y": 312.436572433288,
+    "w": 60.9,
+    "h": 109.9,
+    "bottom": 422.4,
+    "cx": 51.8,
+    "mirrored": false,
+    "dBottomVsIdle": 2.4
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 5.609071569873095,
+    "y": 385.61447004942323,
+    "w": 95.1,
+    "h": 44.6,
+    "bottom": 430.2,
+    "cx": 53.2,
+    "mirrored": false,
+    "dBottomVsIdle": 10.2
+   },
+   "victory": {
+    "pose": "victory",
+    "x": 22.82681929984659,
+    "y": 271.4255127014918,
+    "w": 131.9,
+    "h": 169.1,
+    "bottom": 440.5,
+    "cx": 88.8,
+    "mirrored": false,
+    "dBottomVsIdle": 20.5
+   },
+   "defend": {
+    "pose": "defend",
+    "x": 25.51649186550577,
+    "y": 322.74419975002843,
+    "w": 72.2,
+    "h": 101.8,
+    "bottom": 424.5,
+    "cx": 61.6,
+    "mirrored": false,
+    "dBottomVsIdle": 4.5
+   },
+   "sleep": {
+    "pose": "idle",
+    "x": 21.306435881043512,
+    "y": 319.9834099753221,
+    "w": 68.8,
+    "h": 100.5,
+    "bottom": 420.5,
+    "cx": 55.7,
+    "mirrored": false,
+    "dBottomVsIdle": 0.5
+   },
+   "critical": {
+    "pose": "idle",
+    "x": 25.45564278795382,
+    "y": 319.9514724850256,
+    "w": 69.1,
+    "h": 100.7,
+    "bottom": 420.6,
+    "cx": 60,
+    "mirrored": false,
+    "dBottomVsIdle": 0.6
+   },
+   "follow": {
+    "pose": "follow",
+    "x": 19.88383523946544,
+    "y": 341.6234611521104,
+    "w": 96.7,
+    "h": 79,
+    "bottom": 420.7,
+    "cx": 68.3,
+    "mirrored": false,
+    "dBottomVsIdle": 0.7
+   },
+   "od-energy-rain": {
+    "pose": "od-energy-rain",
+    "x": 31.94589616745725,
+    "y": 324.6999468960101,
+    "w": 56,
+    "h": 95.7,
+    "bottom": 420.4,
+    "cx": 60,
+    "mirrored": false,
+    "dBottomVsIdle": 0.4
+   },
+   "od-slice-and-dice": {
+    "pose": "od-slice-and-dice",
+    "x": 18.747418148672693,
+    "y": 339.6240832408133,
+    "w": 78,
+    "h": 80.9,
+    "bottom": 420.5,
+    "cx": 57.8,
+    "mirrored": false,
+    "dBottomVsIdle": 0.5
+   }
+  },
+  "yuna": {
+   "idle": {
+    "pose": "idle",
+    "x": 72.59368548827774,
+    "y": 321.33257296302,
+    "w": 68.8,
+    "h": 89.2,
+    "bottom": 410.5,
+    "cx": 107,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "ready": {
+    "pose": "ready",
+    "x": 84.57663062457482,
+    "y": 316.19133982396824,
+    "w": 78.3,
+    "h": 95.6,
+    "bottom": 411.8,
+    "cx": 123.7,
+    "mirrored": false,
+    "dBottomVsIdle": 1.3
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 80.40292704745502,
+    "y": 329.9321006503155,
+    "w": 54.8,
+    "h": 80.4,
+    "bottom": 410.3,
+    "cx": 107.8,
+    "mirrored": false,
+    "dBottomVsIdle": -0.2
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 72.16644439091743,
+    "y": 317.8341950793723,
+    "w": 64.7,
+    "h": 92.5,
+    "bottom": 410.3,
+    "cx": 104.5,
+    "mirrored": false,
+    "dBottomVsIdle": -0.2
+   },
+   "item": {
+    "pose": "item",
+    "x": 103.42535562114415,
+    "y": 337.9320930166892,
+    "w": 54.7,
+    "h": 72.6,
+    "bottom": 410.6,
+    "cx": 130.8,
+    "mirrored": false,
+    "dBottomVsIdle": 0.1
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 97.62376783668901,
+    "y": 332.0083509770439,
+    "w": 64.9,
+    "h": 80.6,
+    "bottom": 412.6,
+    "cx": 130.1,
+    "mirrored": false,
+    "dBottomVsIdle": 2.1
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 94.9388496384488,
+    "y": 369.3696003848119,
+    "w": 65.2,
+    "h": 55.1,
+    "bottom": 424.5,
+    "cx": 127.6,
+    "mirrored": false,
+    "dBottomVsIdle": 14
+   },
+   "victory": {
+    "pose": "victory",
+    "x": 103.01046484834211,
+    "y": 344.1444195949594,
+    "w": 67.9,
+    "h": 83.5,
+    "bottom": 427.6,
+    "cx": 137,
+    "mirrored": false,
+    "dBottomVsIdle": 17.1
+   },
+   "defend": {
+    "pose": "defend",
+    "x": 83.25809487283925,
+    "y": 320.55789512786083,
+    "w": 76.6,
+    "h": 93.4,
+    "bottom": 414,
+    "cx": 121.6,
+    "mirrored": false,
+    "dBottomVsIdle": 3.5
+   },
+   "sleep": {
+    "pose": "idle",
+    "x": 79.88509649682578,
+    "y": 321.45220621922084,
+    "w": 68.1,
+    "h": 88.6,
+    "bottom": 410,
+    "cx": 113.9,
+    "mirrored": false,
+    "dBottomVsIdle": -0.5
+   },
+   "critical": {
+    "pose": "idle",
+    "x": 79.3391031597356,
+    "y": 321.2476325585482,
+    "w": 68.5,
+    "h": 88.9,
+    "bottom": 410.1,
+    "cx": 113.6,
+    "mirrored": false,
+    "dBottomVsIdle": -0.4
+   },
+   "follow": {
+    "pose": "follow",
+    "x": 80.13940659797333,
+    "y": 349.49030028578323,
+    "w": 74.9,
+    "h": 60.5,
+    "bottom": 410,
+    "cx": 117.6,
+    "mirrored": false,
+    "dBottomVsIdle": -0.5
+   }
+  },
+  "lulu": {
+   "idle": {
+    "pose": "idle",
+    "x": 169.70335530881448,
+    "y": 321.78663108640455,
+    "w": 42.4,
+    "h": 98.7,
+    "bottom": 420.5,
+    "cx": 190.9,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "ready": {
+    "pose": "ready",
+    "x": 172.55902671222708,
+    "y": 332.6352612165789,
+    "w": 55,
+    "h": 88.7,
+    "bottom": 421.3,
+    "cx": 200.1,
+    "mirrored": false,
+    "dBottomVsIdle": 0.8
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 169.13402252805622,
+    "y": 324.5874807377755,
+    "w": 61.3,
+    "h": 95,
+    "bottom": 419.6,
+    "cx": 199.8,
+    "mirrored": false,
+    "dBottomVsIdle": -0.9
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 176.21998512163742,
+    "y": 316.19166985305907,
+    "w": 58.5,
+    "h": 103.5,
+    "bottom": 419.7,
+    "cx": 205.5,
+    "mirrored": false,
+    "dBottomVsIdle": -0.8
+   },
+   "item": {
+    "pose": "item",
+    "x": 171.534404347565,
+    "y": 319.54943939295777,
+    "w": 63.7,
+    "h": 100.1,
+    "bottom": 419.7,
+    "cx": 203.4,
+    "mirrored": false,
+    "dBottomVsIdle": -0.8
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 169.59690870745897,
+    "y": 332.06796064943785,
+    "w": 65.9,
+    "h": 89.8,
+    "bottom": 421.9,
+    "cx": 202.5,
+    "mirrored": false,
+    "dBottomVsIdle": 1.4
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 174.23833166460537,
+    "y": 394.23540002536555,
+    "w": 44.9,
+    "h": 27,
+    "bottom": 421.2,
+    "cx": 196.7,
+    "mirrored": false,
+    "dBottomVsIdle": 0.7
+   },
+   "victory": {
+    "pose": "victory",
+    "x": 174.802479667863,
+    "y": 337.65978437532715,
+    "w": 90.6,
+    "h": 103.3,
+    "bottom": 441,
+    "cx": 220.1,
+    "mirrored": false,
+    "dBottomVsIdle": 20.5
+   },
+   "defend": {
+    "pose": "defend",
+    "x": 154.81111081110572,
+    "y": 311.07028346060173,
+    "w": 74.2,
+    "h": 112.6,
+    "bottom": 423.7,
+    "cx": 191.9,
+    "mirrored": false,
+    "dBottomVsIdle": 3.2
+   },
+   "sleep": {
+    "pose": "idle",
+    "x": 176.29533801408195,
+    "y": 320.930835733599,
+    "w": 41.6,
+    "h": 99.1,
+    "bottom": 420,
+    "cx": 197.1,
+    "mirrored": false,
+    "dBottomVsIdle": -0.5
+   },
+   "critical": {
+    "pose": "idle",
+    "x": 170.97169627578086,
+    "y": 320.97844915721396,
+    "w": 42.2,
+    "h": 98.9,
+    "bottom": 419.9,
+    "cx": 192.1,
+    "mirrored": false,
+    "dBottomVsIdle": -0.6
+   },
+   "follow": {
+    "pose": "follow",
+    "x": 168.30997426956208,
+    "y": 342.6067141391027,
+    "w": 44.8,
+    "h": 76.6,
+    "bottom": 419.2,
+    "cx": 190.7,
+    "mirrored": false,
+    "dBottomVsIdle": -1.3
+   },
+   "od-fury": {
+    "pose": "od-fury",
+    "x": 163.9968733014574,
+    "y": 326.2465018923031,
+    "w": 60.3,
+    "h": 92.8,
+    "bottom": 419.1,
+    "cx": 194.2,
+    "mirrored": false,
+    "dBottomVsIdle": -1.4
+   }
+  }
+ },
+ "guideMentions": {
+  "inGameDescription": false,
+  "wrongColours": false,
+  "guideOpenOnScreen": false
+ },
+ "darkRequests": [
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/characters/dark-mindy/idle.png",
+  "art/characters/dark-mindy/idle.json",
+  "art/characters/dark-sandy/idle.json",
+  "art/characters/dark-sandy/idle.png",
+  "art/characters/dark-yojimbo/idle.png",
+  "art/characters/dark-mindy/attack.json",
+  "art/characters/dark-mindy/attack.png",
+  "art/characters/dark-mindy/cast.png",
+  "art/characters/dark-mindy/hurt.png",
+  "art/characters/dark-mindy/cast.json",
+  "art/characters/dark-mindy/ko.png",
+  "art/characters/dark-mindy/hurt.json",
+  "art/characters/dark-sandy/attack.png",
+  "art/characters/dark-mindy/ko.json",
+  "art/characters/dark-sandy/cast.png",
+  "art/characters/dark-sandy/attack.json",
+  "art/characters/dark-sandy/hurt.png",
+  "art/characters/dark-sandy/cast.json",
+  "art/characters/dark-sandy/ko.png",
+  "art/characters/dark-sandy/hurt.json",
+  "art/characters/dark-sandy/ko.json"
+ ],
+ "backdropRequests": [
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/backdrops/gagazet.json",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/backdrops/farplane.thumb.webp",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/backdrops/den-of-woe.webp",
+  "art/backdrops/macalania-temple.webp",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/backdrops/cavern-stolen-fayth.webp",
+  "art/backdrops/bevelle-highbridge.webp",
+  "art/backdrops/garden-of-pain.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/backdrops/sin-fahrenheit-flight.webp",
+  "art/backdrops/sin-fahrenheit-bevelle.webp",
+  "art/backdrops/mushroom-rock-road.webp",
+  "art/backdrops/mushroom-rock-road.json",
+  "art/backdrops/mushroom-rock-road-ruined.webp"
+ ],
+ "darkRequestsEnd": [
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/characters/dark-mindy/idle.png",
+  "art/characters/dark-mindy/idle.json",
+  "art/characters/dark-sandy/idle.json",
+  "art/characters/dark-sandy/idle.png",
+  "art/characters/dark-yojimbo/idle.png",
+  "art/characters/dark-mindy/attack.json",
+  "art/characters/dark-mindy/attack.png",
+  "art/characters/dark-mindy/cast.png",
+  "art/characters/dark-mindy/hurt.png",
+  "art/characters/dark-mindy/cast.json",
+  "art/characters/dark-mindy/ko.png",
+  "art/characters/dark-mindy/hurt.json",
+  "art/characters/dark-sandy/attack.png",
+  "art/characters/dark-mindy/ko.json",
+  "art/characters/dark-sandy/cast.png",
+  "art/characters/dark-sandy/attack.json",
+  "art/characters/dark-sandy/hurt.png",
+  "art/characters/dark-sandy/cast.json",
+  "art/characters/dark-sandy/ko.png",
+  "art/characters/dark-sandy/hurt.json",
+  "art/characters/dark-sandy/ko.json"
+ ],
+ "footAnalysis": {},
+ "seenPoses": {},
+ "consoleErrors": [],
+ "badResponses": [],
+ "failed": [
+  {
+   "url": "https://echoesofspira.com/art/backdrops/zanarkand-dome.thumb.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/yunalesca-1/idle.thumb.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/rikku-dark-knight/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/paine-warrior/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/macalania-temple.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/evrae-airship-deck.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/cavern-stolen-fayth.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/bevelle-highbridge.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/garden-of-pain.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/via-purifico.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/sin-fahrenheit-flight.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/sin-left-fin/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/garden-of-pain.webp",
+   "why": "net::ERR_ABORTED"
+  }
+ ],
+ "htmlAsMedia": [],
+ "steps": [
+  {
+   "name": "board card BOSS row",
+   "ok": true,
+   "detail": "LOCATION | Mushroom Rock Road and the Cavern | BOSS | Dark Sandy and Dark Mindy, then Dark Yojimbo | PARTY | T | TIDUS | Y | YUNA | L | LULU | BEST | Not cleared | TAP A CARD | CHOOSE | · | TAP THE PLATE | BEGIN | · | TAP HERE | BACK"
+  },
+  {
+   "name": "board card LOCATION whole",
+   "ok": true,
+   "detail": "LOCATION | Mushroom Rock Road and the Cavern | BOSS | Dark Sandy and Dark Mindy,"
+  },
+  {
+   "name": "reached battle by real keys",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "Act I field is the pair",
+   "ok": true,
+   "detail": [
+    "tidus",
+    "yuna",
+    "lulu",
+    "dark-mindy",
+    "dark-sandy"
+   ]
+  },
+  {
+   "name": "baseline party tidus pose deltas vs idle",
+   "ok": true,
+   "detail": {
+    "idle": 0,
+    "ready": 1.5,
+    "attack": 0.1,
+    "cast": -0.3,
+    "item": -0.2,
+    "hurt": 2.4,
+    "ko": 10.2,
+    "victory": 20.5,
+    "defend": 4.5,
+    "sleep": 0.5,
+    "critical": 0.6,
+    "follow": 0.7,
+    "od-energy-rain": 0.4,
+    "od-slice-and-dice": 0.5
+   }
+  },
+  {
+   "name": "baseline party yuna pose deltas vs idle",
+   "ok": true,
+   "detail": {
+    "idle": 0,
+    "ready": 1.3,
+    "attack": -0.2,
+    "cast": -0.2,
+    "item": 0.1,
+    "hurt": 2.1,
+    "ko": 14,
+    "victory": 17.1,
+    "defend": 3.5,
+    "sleep": -0.5,
+    "critical": -0.4,
+    "follow": -0.5
+   }
+  },
+  {
+   "name": "baseline party lulu pose deltas vs idle",
+   "ok": true,
+   "detail": {
+    "idle": 0,
+    "ready": 0.8,
+    "attack": -0.9,
+    "cast": -0.8,
+    "item": -0.8,
+    "hurt": 1.4,
+    "ko": 0.7,
+    "victory": 20.5,
+    "defend": 3.2,
+    "sleep": -0.5,
+    "critical": -0.6,
+    "follow": -1.3,
+    "od-fury": -1.4
+   }
+  },
+  {
+   "name": "static feet line dark-mindy: stances within 2px of idle; hurt within 4% of height; KO is a lying pose",
+   "ok": true,
+   "detail": {
+    "idleH": 90.1,
+    "d": {
+     "idle": 0,
+     "attack": 0.1,
+     "cast": -0.2,
+     "hurt": 2.3,
+     "ko": 16.9,
+     "telegraph": -0.3
+    },
+    "hurtPctOfH": 2.55
+   }
+  },
+  {
+   "name": "static feet line dark-sandy: stances within 2px of idle; hurt within 4% of height; KO is a lying pose",
+   "ok": true,
+   "detail": {
+    "idleH": 140,
+    "d": {
+     "idle": 0,
+     "attack": -0.2,
+     "cast": -0.3,
+     "hurt": 2.9,
+     "ko": 17.2,
+     "telegraph": -0.1
+    },
+    "hurtPctOfH": 2.07
+   }
+  },
+  {
+   "name": "no \"In Game Description\" on the first-menu screen",
+   "ok": true,
+   "detail": {
+    "inGameDescription": false,
+    "wrongColours": false,
+    "guideOpenOnScreen": false
+   }
+  },
+  {
+   "name": "Dark painting files requested",
+   "ok": true,
+   "detail": [
+    "art/characters/dark-mindy/idle.thumb.png",
+    "art/characters/dark-mindy/idle.png",
+    "art/characters/dark-mindy/idle.json",
+    "art/characters/dark-sandy/idle.json",
+    "art/characters/dark-sandy/idle.png",
+    "art/characters/dark-yojimbo/idle.png",
+    "art/characters/dark-mindy/attack.json",
+    "art/characters/dark-mindy/attack.png",
+    "art/characters/dark-mindy/cast.png",
+    "art/characters/dark-mindy/hurt.png",
+    "art/characters/dark-mindy/cast.json",
+    "art/characters/dark-mindy/ko.png",
+    "art/characters/dark-mindy/hurt.json",
+    "art/characters/dark-sandy/attack.png",
+    "art/characters/dark-mindy/ko.json",
+    "art/characters/dark-sandy/cast.png",
+    "art/characters/dark-sandy/attack.json",
+    "art/characters/dark-sandy/hurt.png",
+    "art/characters/dark-sandy/cast.json",
+    "art/characters/dark-sandy/ko.png",
+    "art/characters/dark-sandy/hurt.json",
+    "art/characters/dark-sandy/ko.json"
+   ]
+  },
+  {
+   "name": "backdrop requests",
+   "ok": true,
+   "detail": [
+    "art/backdrops/dreams-end.webp",
+    "art/backdrops/gagazet.webp",
+    "art/backdrops/gagazet.thumb.webp",
+    "art/backdrops/zanarkand-dome.thumb.webp",
+    "art/backdrops/gagazet.json",
+    "art/backdrops/bevelle-underground.thumb.webp",
+    "art/backdrops/djose-chamber-provisional.thumb.webp",
+    "art/backdrops/dreams-end.thumb.webp",
+    "art/backdrops/den-of-woe.thumb.webp",
+    "art/backdrops/macalania-temple.thumb.webp",
+    "art/backdrops/via-infinito.thumb.webp",
+    "art/backdrops/evrae-airship-deck.thumb.webp",
+    "art/backdrops/road-to-the-farplane.thumb.webp",
+    "art/backdrops/cavern-stolen-fayth.thumb.webp",
+    "art/backdrops/leblanc-last-room.thumb.webp",
+    "art/backdrops/bevelle-highbridge.thumb.webp",
+    "art/backdrops/farplane.thumb.webp",
+    "art/backdrops/garden-of-pain.thumb.webp",
+    "art/backdrops/via-purifico.thumb.webp",
+    "art/backdrops/mushroom-rock-road.thumb.webp",
+    "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+    "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+    "art/backdrops/zanarkand-dome.webp",
+    "art/backdrops/bevelle-underground.webp",
+    "art/backdrops/djose-chamber-provisional.webp",
+    "art/backdrops/den-of-woe.webp",
+    "art/backdrops/macalania-temple.webp",
+    "art/backdrops/evrae-airship-deck.webp",
+    "art/backdrops/cavern-stolen-fayth.webp",
+    "art/backdrops/bevelle-highbridge.webp",
+    "art/backdrops/garden-of-pain.webp",
+    "art/backdrops/via-purifico.webp",
+    "art/backdrops/sin-fahrenheit-flight.webp",
+    "art/backdrops/sin-fahrenheit-bevelle.webp",
+    "art/backdrops/mushroom-rock-road.webp",
+    "art/backdrops/mushroom-rock-road.json",
+    "art/backdrops/mushroom-rock-road-ruined.webp"
+   ]
+  },
+  {
+   "name": "no mirror-aeons.png backdrop asked for",
+   "ok": true,
+   "detail": null
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "game": "FFX",
+ "chapter": "mirror-aeons (XXVII)",
+ "viewport": "1600x900",
+ "guideChars": 40261,
+ "patterns": {
+  "inGameDescription": false,
+  "wrongColours": true,
+  "attributedQuote": false,
+  "mentionsDarkYojimbo": true,
+  "mentionsSisters": true
+ },
+ "sample": "Tidus | Yuna | Lulu | Tidus | Yuna | Lulu | TALK | ATTACK | SPECIAL | ▸ | ×5 | WHITE MAGIC | ▸ | ×3 | ITEMS | ▸ | ×14 | FLEE | ▼ | Q | △ | DEFEND | Physical damage | Tidus | 9999 | /9999 | 999 | /999 | OD | Yuna | 9999 | /9999 | 999 | /999 | OD | Lulu | 9999 | /9999 | 999 | /999 | OD | Dark Magus Sisters | BOSS BATTLE | WEAKNESSES: None: no element is favoured or resisted. Immune to Sensor. | In this chapter the first fight is the pair, Sandy and Mindy. Cindy does not take the field, and there is no joint attack. | Cindy | HP: 3,000,000 | Cindy's plain blow strips the party's protections, and Camisade hurts HP and MP together. She is the biggest pool of the three, but she does not take the field in this chapter. | Sandy | HP: 2,500,000 | Sandy's plain blow can Petrify, and Razzia takes away a party's second chance. She hits the hardest of the three. | Mindy | HP: 2,000,000 | Mindy is fast, and almost impossible to hit with a blade: her Evasion is the highest of the three. Spells, Overdrives and aeons find her. Passado is a flurry that kills; Calamity inflicts Poison, Silence, Darkness, Curse and all four Breaks. | Together, in a pair and alone | Sandy and Mindy have no joint attack. Each uses Mega Graviton once her own gauge is full, which harms the whole party and puts Sleep, Silence, Darkness and Slow on it. | Sandy and Mindy together start empty: five plain turns each, then Mega Graviton on the sixth. | THE STRATEGY: | Wear Ribbon, Auto-Haste, Auto-Phoenix and Auto-Protect; keep Stoneproof or Ribbon on someone for Sandy. | Send an aeon in as a Mega Graviton nears; Yuna's",
+ "quotesOnScreen": [
+  "“Sandy and Mindy. Wearing the wrong colours.”"
+ ],
+ "consoleErrors": [],
+ "badResponses": [],
+ "steps": [
+  {
+   "name": "pause opened",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "reached the Guide tab by real keys",
+   "ok": true,
+   "detail": [
+    "Tidus",
+    "Yuna",
+    "Lulu",
+    "Chapter",
+    "Guide"
+   ]
+  },
+  {
+   "name": "Guide tab: no \"In Game Description\" for the Dark Aeons",
+   "ok": true,
+   "detail": {
+    "inGameDescription": false,
+    "wrongColours": true,
+    "attributedQuote": false,
+    "mentionsDarkYojimbo": true,
+    "mentionsSisters": true
+   }
+  },
+  {
+   "name": "Guide tab: Dark Yojimbo and the Sisters both covered",
+   "ok": true,
+   "detail": {
+    "inGameDescription": false,
+    "wrongColours": true,
+    "attributedQuote": false,
+    "mentionsDarkYojimbo": true,
+    "mentionsSisters": true
+   }
+  }
+ ]
+}

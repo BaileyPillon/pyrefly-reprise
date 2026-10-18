@@ -1,0 +1,80 @@
+[
+ {
+  "file": "board.png",
+  "asserted": "screen=chapter-select",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:46:13.042Z"
+ },
+ {
+  "file": "after-word.png",
+  "asserted": "screen=party-prep",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:46:16.766Z"
+ },
+ {
+  "file": "ch28-prebattle-or-scene.png",
+  "asserted": "screen=battle",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:47:15.720Z"
+ },
+ {
+  "file": "ch28-turn1-menu.png",
+  "asserted": "screen=battle awaitingMenu",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:47:27.389Z"
+ },
+ {
+  "file": "ch28-turn2.png",
+  "asserted": "screen=battle",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:47:34.260Z"
+ },
+ {
+  "file": "ch28-turn3.png",
+  "asserted": "screen=battle",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:47:42.007Z"
+ },
+ {
+  "file": "ch28-turn4.png",
+  "asserted": "screen=battle",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:47:49.897Z"
+ },
+ {
+  "file": "layout-2000-title.png",
+  "asserted": "screen=title",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:48:14.400Z"
+ },
+ {
+  "file": "layout-2000-board.png",
+  "asserted": "screen=chapter-select",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:48:17.853Z"
+ },
+ {
+  "file": "layout-2000-prep.png",
+  "asserted": "screen=party-prep",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:48:21.012Z"
+ },
+ {
+  "file": "layout-390-title.png",
+  "asserted": "screen=title",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:48:23.612Z"
+ },
+ {
+  "file": "layout-390-board.png",
+  "asserted": "screen=chapter-select",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:48:26.930Z"
+ },
+ {
+  "file": "layout-390-prep.png",
+  "asserted": "screen=party-prep",
+  "mode": "gpu",
+  "ts": "2026-10-17T18:48:29.957Z"
+ }
+]

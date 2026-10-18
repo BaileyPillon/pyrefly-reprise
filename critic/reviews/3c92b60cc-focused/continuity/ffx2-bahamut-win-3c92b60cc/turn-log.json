@@ -1,0 +1,1890 @@
+[
+ {
+  "turn": 0,
+  "ms": 37,
+  "actor": "idle",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:324/690",
+   "rikku:1150/1839",
+   "paine:986/1706",
+   "bahamut:8400/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 49,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 12375,
+  "actor": "play:damage",
+  "want": {
+   "label": "Shell",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:203/690",
+   "rikku:719/1839",
+   "paine:617/1706",
+   "bahamut:8239/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 73,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 33159,
+  "actor": "script:first-mega-flare-countdown",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:203/690",
+   "rikku:552/1411",
+   "paine:617/1706",
+   "bahamut:8239/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 107,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 39604,
+  "actor": "idle",
+  "want": {
+   "label": "Cura",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:203/690",
+   "rikku:552/1411",
+   "paine:617/1706",
+   "bahamut:8239/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 114,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 46622,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:203/690",
+   "rikku:552/1411",
+   "paine:617/1706",
+   "bahamut:8239/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 123,
+    "actor": "rikku",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 67123,
+  "actor": "idle",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:552/1411",
+   "paine:617/1706",
+   "bahamut:7899/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 176,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 73202,
+  "actor": "idle",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:552/1411",
+   "paine:617/1706",
+   "bahamut:7899/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 185,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 78169,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:552/1411",
+   "paine:617/1706",
+   "bahamut:7899/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 192,
+    "actor": "rikku",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 91188,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:552/1411",
+   "paine:1107/1706",
+   "bahamut:7899/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 220,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 99486,
+  "actor": "play:damage",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:552/1411",
+   "paine:1107/1706",
+   "bahamut:7584/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 244,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 108583,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:552/1411",
+   "paine:1107/1706",
+   "bahamut:7584/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 254,
+    "actor": "rikku",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 124365,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1031/1411",
+   "paine:1107/1706",
+   "bahamut:7584/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 274,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 134789,
+  "actor": "command:paine",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1031/1411",
+   "paine:1107/1706",
+   "bahamut:7439/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 298,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 142370,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1031/1411",
+   "paine:1107/1706",
+   "bahamut:7280/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 320,
+    "actor": "rikku",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 152888,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1031/1411",
+   "paine:1574/1706",
+   "bahamut:7280/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 327,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 161232,
+  "actor": "command:paine",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1031/1411",
+   "paine:1574/1706",
+   "bahamut:7130/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 361,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 170779,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cure",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1031/1411",
+   "paine:1574/1706",
+   "bahamut:7130/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 373,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 176824,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1031/1411",
+   "paine:1574/1706",
+   "bahamut:6955/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 398,
+    "actor": "rikku",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 199877,
+  "actor": "idle",
+  "want": {
+   "label": "Cure",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1266/1411",
+   "paine:1574/1706",
+   "bahamut:6955/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 449,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 204115,
+  "actor": "command:paine",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1266/1411",
+   "paine:1574/1706",
+   "bahamut:6800/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 458,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 211335,
+  "actor": "idle",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:661/690",
+   "rikku:1266/1411",
+   "paine:1574/1706",
+   "bahamut:6641/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 490,
+    "actor": "rikku",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 227349,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cure",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:647/690",
+   "rikku:1411/1411",
+   "paine:1542/1706",
+   "bahamut:6641/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 542,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 235834,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:647/690",
+   "rikku:1411/1411",
+   "paine:1542/1706",
+   "bahamut:6496/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 566,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 242750,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:647/690",
+   "rikku:1411/1411",
+   "paine:1542/1706",
+   "bahamut:6355/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 592,
+    "actor": "rikku",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 255334,
+  "actor": "play:damage",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:556/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:6355/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 652,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 262597,
+  "actor": "play:action-start",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:556/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:6158/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 661,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 269296,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:556/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:5896/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 688,
+    "actor": "rikku",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 284462,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cure",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1356/1411",
+   "paine:1706/1706",
+   "bahamut:5896/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 733,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 291684,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1356/1411",
+   "paine:1706/1706",
+   "bahamut:5652/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 755,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 299984,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1356/1411",
+   "paine:1706/1706",
+   "bahamut:4955/8400"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 31,
+  "ms": 302879,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1356/1411",
+   "paine:1706/1706",
+   "bahamut:4955/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 800,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 309592,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Dispel",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:4661/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 816,
+    "actor": "yuna",
+    "did": "Dispel",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 321376,
+  "actor": "play:damage",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1642/1706",
+   "bahamut:4661/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 867,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 331265,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Shell",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1642/1706",
+   "bahamut:4396/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 889,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 335372,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1642/1706",
+   "bahamut:4396/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 894,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 346347,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1642/1706",
+   "bahamut:4112/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 931,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 350435,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Protect",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1642/1706",
+   "bahamut:3861/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 942,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 356692,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1642/1706",
+   "bahamut:3861/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 953,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 368956,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:432/690",
+   "rikku:882/1411",
+   "paine:1027/1706",
+   "bahamut:3586/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1008,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 40,
+  "ms": 374042,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:432/690",
+   "rikku:882/1411",
+   "paine:1027/1706",
+   "bahamut:3586/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1022,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 41,
+  "ms": 379632,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:432/690",
+   "rikku:882/1411",
+   "paine:1027/1706",
+   "bahamut:3341/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1047,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 42,
+  "ms": 388955,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cure",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:432/690",
+   "rikku:882/1411",
+   "paine:1474/1706",
+   "bahamut:3080/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1088,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 43,
+  "ms": 396765,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:270/690",
+   "rikku:552/1411",
+   "paine:922/1706",
+   "bahamut:3080/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1130,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 44,
+  "ms": 400272,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:270/690",
+   "rikku:552/1411",
+   "paine:922/1706",
+   "bahamut:2815/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1140,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 45,
+  "ms": 406856,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:270/690",
+   "rikku:790/1411",
+   "paine:922/1706",
+   "bahamut:2543/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1174,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 46,
+  "ms": 413677,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:922/1706",
+   "bahamut:2543/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1216,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 47,
+  "ms": 416248,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:922/1706",
+   "bahamut:2303/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1228,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 48,
+  "ms": 422430,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:922/1706",
+   "bahamut:2041/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1266,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 49,
+  "ms": 427321,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:922/1706",
+   "bahamut:2041/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1294,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 50,
+  "ms": 431132,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:922/1706",
+   "bahamut:1781/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1305,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 51,
+  "ms": 443456,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:1706/1706",
+   "bahamut:1493/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1356,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 52,
+  "ms": 447076,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:1706/1706",
+   "bahamut:1493/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1369,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 53,
+  "ms": 449971,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:790/1411",
+   "paine:1706/1706",
+   "bahamut:991/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1380,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 54,
+  "ms": 458578,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:704/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1427,
+    "actor": "yuna",
+    "did": "Light Curtain",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 55,
+  "ms": 462949,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:704/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1436,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 56,
+  "ms": 467008,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:451/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1446,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 57,
+  "ms": 478242,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Remedy",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:186/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1509,
+    "actor": "yuna",
+    "did": "Remedy",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 58,
+  "ms": 481281,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1411/1411",
+   "paine:1706/1706",
+   "bahamut:186/8400"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

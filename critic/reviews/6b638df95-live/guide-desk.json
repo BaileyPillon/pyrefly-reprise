@@ -1,0 +1,65 @@
+{
+ "tag": "desk",
+ "W": 1600,
+ "H": 900,
+ "mode": "gpu",
+ "firstMenu": {
+  "screen": "battle",
+  "enemies": "dark-mindy,dark-sandy"
+ },
+ "open": {
+  "present": true,
+  "off": false,
+  "panel": [
+   53,
+   110,
+   330,
+   178
+  ],
+  "phraseRects": [
+   [
+    93,
+    2369,
+    136,
+    18
+   ]
+  ],
+  "phraseInside": false,
+  "sentence": "Your own Yojimbo can be paid to strike, and a lucky Zanmato can end the fight: about one Pay in four at a million gil, better with a full Overdrive gauge. It is a chance, not a plan.",
+  "names": {
+   "sandy": 9,
+   "mindy": 8
+  }
+ },
+ "scrolls": 14,
+ "atOdds": {
+  "present": true,
+  "off": false,
+  "panel": [
+   53,
+   110,
+   330,
+   178
+  ],
+  "phraseRects": [
+   [
+    93,
+    269,
+    136,
+    18
+   ]
+  ],
+  "phraseInside": true,
+  "sentence": "Your own Yojimbo can be paid to strike, and a lucky Zanmato can end the fight: about one Pay in four at a million gil, better with a full Overdrive gauge. It is a chance, not a plan.",
+  "names": {
+   "sandy": 9,
+   "mindy": 8
+  }
+ },
+ "shot": "M:/pyrefly-tmp/r50-1-live/guide/guide-desk-odds-in-window.jpg",
+ "consoleErrors": 2,
+ "notFound": [
+  "https://echoesofspira.com/art/backdrops/mirror-aeons.png",
+  "https://echoesofspira.com/art/backdrops/mirror-aeons.png"
+ ]
+}

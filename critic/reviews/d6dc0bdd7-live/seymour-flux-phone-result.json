@@ -1,0 +1,187 @@
+{
+ "game": "FFX",
+ "chapter": "seymour-flux",
+ "viewport": "390x844",
+ "menus": [
+  {
+   "actor": "tidus",
+   "rows": [
+    "Talk(off)",
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee(off)"
+   ]
+  },
+  {
+   "actor": "kimahri",
+   "rows": [
+    "Talk",
+    "Attack",
+    "Special",
+    "Items",
+    "Overdrive*OD",
+    "Switch"
+   ]
+  },
+  {
+   "actor": "tidus",
+   "rows": [
+    "Talk(off)",
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee(off)"
+   ]
+  },
+  {
+   "actor": "kimahri",
+   "rows": [
+    "Talk",
+    "Attack",
+    "Special",
+    "Items",
+    "Switch"
+   ]
+  }
+ ],
+ "build": {
+  "sha": "d6dc0bdd",
+  "bundle": "index-zpfxlH3Y.js"
+ },
+ "overdriveSubmenu": {
+  "actor": "kimahri",
+  "rows": [
+   "Jump",
+   "Mighty Guard",
+   "White Wind"
+  ]
+ },
+ "audio": {
+  "fetched": [
+   "audio/music/title.mp3",
+   "audio/sfx/sprite.mp3",
+   "audio/sfx/sprite-v2.mp3",
+   "audio/music/chapter-select.mp3",
+   "audio/sfx/parity-ffx-flux.mp3",
+   "audio/sfx/parity-ffx-core.mp3"
+  ],
+  "dbg": {
+   "playing": "boss-seymour",
+   "current": "boss-seymour",
+   "prerenderedCues": 41,
+   "spriteDecoded": true
+  }
+ },
+ "consoleErrors": [],
+ "badResponses": [],
+ "failed": [
+  {
+   "url": "https://echoesofspira.com/art/backdrops/bevelle-underground.thumb.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/ffx2-bahamut/idle.thumb.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/bevelle-underground.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/pause/tidus.webp",
+   "why": "net::ERR_ABORTED"
+  }
+ ],
+ "htmlAsMedia": [],
+ "steps": [
+  {
+   "name": "reached battle (seymour-flux) by real keys",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "turn 0: tidus Attack by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 10,
+    "after": 20
+   }
+  },
+  {
+   "name": "Overdrive row opens a submenu (kimahri)",
+   "ok": true,
+   "detail": [
+    "Jump",
+    "Mighty Guard",
+    "White Wind"
+   ]
+  },
+  {
+   "name": "cancel path: Escape backs out of the Overdrive list to the top menu",
+   "ok": true,
+   "detail": [
+    "Talk",
+    "Attack",
+    "Special",
+    "Items",
+    "Overdrive",
+    "Switch"
+   ]
+  },
+  {
+   "name": "Overdrive used by real keys (kimahri): the battle log grew",
+   "ok": true,
+   "detail": {
+    "before": 21,
+    "after": 26
+   }
+  },
+  {
+   "name": "turn 2: tidus Attack by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 31,
+    "after": 41
+   }
+  },
+  {
+   "name": "turn 3: kimahri Attack by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 42,
+    "after": 46
+   }
+  },
+  {
+   "name": "4 player turns played",
+   "ok": true,
+   "detail": 4
+  },
+  {
+   "name": "Escape pauses",
+   "ok": true,
+   "detail": "pause"
+  },
+  {
+   "name": "Escape resumes",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "prerendered music fetched and playing",
+   "ok": true,
+   "detail": {
+    "n": 12,
+    "dbg": {
+     "playing": "boss-seymour",
+     "current": "boss-seymour",
+     "prerenderedCues": 41,
+     "spriteDecoded": true
+    }
+   }
+  }
+ ]
+}

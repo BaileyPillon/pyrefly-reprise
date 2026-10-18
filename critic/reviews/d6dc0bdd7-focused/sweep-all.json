@@ -1,0 +1,310 @@
+{
+ "seymour-flux": {
+  "outcome": "victory",
+  "turns": 78,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 233,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "yunalesca": {
+  "error": "Error: timeout 400s",
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "braskas-final-aeon": {
+  "error": "Error: timeout 400s",
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-bahamut": {
+  "outcome": "victory",
+  "turns": 57,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "levelsGained",
+   "rewardsByMember"
+  ],
+  "s": 211,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-vegnagun-shuyin": {
+  "error": "Error: timeout 400s",
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-leblanc": {
+  "outcome": "victory",
+  "turns": 39,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "levelsGained",
+   "rewardsByMember"
+  ],
+  "s": 244,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "seymour-anima-macalania": {
+  "outcome": "victory",
+  "turns": 95,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 247,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "evrae-airship": {
+  "outcome": "victory",
+  "turns": 103,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 249,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "yojimbo-cavern": {
+  "outcome": "victory",
+  "turns": 93,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 211,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "seymour-natus": {
+  "outcome": "victory",
+  "turns": 61,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 169,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-fallen-aeons": {
+  "outcome": "victory",
+  "turns": 43,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "levelsGained",
+   "rewardsByMember"
+  ],
+  "s": 365,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "seymour-omnis": {
+  "outcome": "victory",
+  "turns": 123,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 389,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-trema": {
+  "error": "Error: timeout 400s",
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "isaaru-via-purifico": {
+  "outcome": "victory",
+  "turns": 68,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 227,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-den-of-woe": {
+  "outcome": "victory",
+  "turns": 19,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "levelsGained",
+   "rewardsByMember"
+  ],
+  "s": 186,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-ixion-djose": {
+  "outcome": "victory",
+  "turns": 39,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "levelsGained",
+   "rewardsByMember"
+  ],
+  "s": 154,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "sin-fins-core": {
+  "error": "Error: timeout 400s",
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "sin-face": {
+  "outcome": "victory",
+  "turns": 51,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 132,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "mirror-aeons": {
+  "error": "Error: timeout 400s",
+  "consoleErrors": [],
+  "notFound": []
+ }
+}

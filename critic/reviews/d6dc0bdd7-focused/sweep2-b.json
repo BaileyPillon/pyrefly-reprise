@@ -1,0 +1,93 @@
+{
+ "yunalesca": {
+  "outcome": "victory",
+  "turns": 222,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 520,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "braskas-final-aeon": {
+  "error": "Error: timeout 1100s",
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-vegnagun-shuyin": {
+  "outcome": "victory",
+  "turns": 28,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "levelsGained",
+   "rewardsByMember"
+  ],
+  "s": 559,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2-trema": {
+  "outcome": "victory",
+  "turns": 281,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "levelsGained",
+   "rewardsByMember"
+  ],
+  "s": 595,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "sin-fins-core": {
+  "outcome": "defeat",
+  "turns": 154,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 998,
+  "consoleErrors": [],
+  "notFound": []
+ }
+}

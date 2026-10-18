@@ -1,0 +1,2891 @@
+{
+ "game": "FFX",
+ "chapter": "mirror-aeons (XXVII)",
+ "viewport": "1600x900",
+ "build": {
+  "sha": "d6dc0bdd",
+  "bundle": "index-zpfxlH3Y.js"
+ },
+ "boardCard": "LOCATION | Mushroom Rock Road and the Cavern | BOSS | Dark Sandy and Dark Mindy, then Dark Yojimbo | PARTY | T | TIDUS | Y | YUNA | L | LULU | BEST | Not cleared | LEFT/RIGHT | CHOOSE | · | UP/DOWN | GAME | · | ENTER | BEGIN | · | ESC | BACK",
+ "prepText": "PARTY PREP | XXVII · MIRROR AEONS — MUSHROOM ROCK ROAD AND THE CAVERN | T | Tidus | S.LV 180 | Y | Yuna | S.LV 175 | A | Auron | S.LV 180 | W | Wakka | S.LV 165 | L | Lulu | S.LV 170 | R | Rikku | S.LV 160 | K | Kimahri | S.LV 150 | CHAPTER | STATS | SPHERE GRID | EQUIPMENT | ITEMS | OVERDRIVE | FFX | · | XXVII | Mirror Aeons | The Dark Mirror | Yevon has put Yuna's friends in the wrong colours. Call your own sisters and your own blade, and send the shadows home. | the road | two in the wrong colours | the blade below | OBJECTIVES | Send both sisters home | Reach the cavern | Send the dark blade home | TIP | Two sisters, no joint attack, and every fallen member costs a Phoenix Down: heal ear",
+ "staged": [
+  "tidus",
+  "yuna",
+  "lulu",
+  "dark-mindy",
+  "dark-sandy"
+ ],
+ "staticAct1": {
+  "dark-mindy": {
+   "idle": {
+    "pose": "idle",
+    "x": 1180.4307026802876,
+    "y": 375.5137166630802,
+    "w": 100.8,
+    "h": 187.7,
+    "bottom": 563.3,
+    "cx": 1230.8,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 1152.1499703467025,
+    "y": 380.6358729187712,
+    "w": 105.5,
+    "h": 183,
+    "bottom": 563.6,
+    "cx": 1204.9,
+    "mirrored": false,
+    "dBottomVsIdle": 0.3
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 1174.8038293056584,
+    "y": 375.7568355368252,
+    "w": 99.9,
+    "h": 187.4,
+    "bottom": 563.2,
+    "cx": 1224.8,
+    "mirrored": false,
+    "dBottomVsIdle": -0.1
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 1173.8325002262957,
+    "y": 379.0547070788989,
+    "w": 117.1,
+    "h": 189.5,
+    "bottom": 568.5,
+    "cx": 1232.4,
+    "mirrored": false,
+    "dBottomVsIdle": 5.2
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 1128.4422283388885,
+    "y": 435.55992156903454,
+    "w": 199.5,
+    "h": 162.8,
+    "bottom": 598.4,
+    "cx": 1228.2,
+    "mirrored": false,
+    "dBottomVsIdle": 35.1
+   },
+   "telegraph": {
+    "pose": "telegraph",
+    "x": 1180.5942542278112,
+    "y": 375.95234293522856,
+    "w": 103,
+    "h": 186.7,
+    "bottom": 562.7,
+    "cx": 1232.1,
+    "mirrored": false,
+    "dBottomVsIdle": -0.6
+   }
+  },
+  "dark-sandy": {
+   "idle": {
+    "pose": "idle",
+    "x": 958.0269961687336,
+    "y": 256.0374530468346,
+    "w": 127.4,
+    "h": 289.8,
+    "bottom": 545.8,
+    "cx": 1021.7,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 935.0397587948227,
+    "y": 261.6188491785694,
+    "w": 204.2,
+    "h": 284.4,
+    "bottom": 546,
+    "cx": 1037.2,
+    "mirrored": false,
+    "dBottomVsIdle": 0.2
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 952.486378035502,
+    "y": 257.65379099674846,
+    "w": 185,
+    "h": 288.6,
+    "bottom": 546.2,
+    "cx": 1045,
+    "mirrored": false,
+    "dBottomVsIdle": 0.4
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 982.2946495853911,
+    "y": 263.57256667356006,
+    "w": 115.7,
+    "h": 289.5,
+    "bottom": 553,
+    "cx": 1040.1,
+    "mirrored": false,
+    "dBottomVsIdle": 7.2
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 870.1510528525391,
+    "y": 420.2238191267604,
+    "w": 292,
+    "h": 162.1,
+    "bottom": 582.3,
+    "cx": 1016.2,
+    "mirrored": false,
+    "dBottomVsIdle": 36.5
+   },
+   "telegraph": {
+    "pose": "telegraph",
+    "x": 958.0449546518565,
+    "y": 255.57573294615764,
+    "w": 122.2,
+    "h": 291.4,
+    "bottom": 546.9,
+    "cx": 1019.2,
+    "mirrored": false,
+    "dBottomVsIdle": 1.1
+   }
+  }
+ },
+ "staticParty": {
+  "tidus": {
+   "idle": {
+    "pose": "idle",
+    "x": 555.1180251383345,
+    "y": 586.8973377895419,
+    "w": 158.2,
+    "h": 229,
+    "bottom": 815.9,
+    "cx": 634.2,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "ready": {
+    "pose": "ready",
+    "x": 591.746411920402,
+    "y": 614.0283526775294,
+    "w": 190.2,
+    "h": 204.6,
+    "bottom": 818.7,
+    "cx": 686.9,
+    "mirrored": false,
+    "dBottomVsIdle": 2.8
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 540.677934940072,
+    "y": 597.603856268933,
+    "w": 164.6,
+    "h": 217.1,
+    "bottom": 814.7,
+    "cx": 623,
+    "mirrored": false,
+    "dBottomVsIdle": -1.2
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 601.5994423671395,
+    "y": 596.8219812567052,
+    "w": 141.7,
+    "h": 217,
+    "bottom": 813.8,
+    "cx": 672.5,
+    "mirrored": false,
+    "dBottomVsIdle": -2.1
+   },
+   "item": {
+    "pose": "item",
+    "x": 592.6628503493389,
+    "y": 604.1095390113204,
+    "w": 144.9,
+    "h": 209.8,
+    "bottom": 813.9,
+    "cx": 665.1,
+    "mirrored": false,
+    "dBottomVsIdle": -2
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 563.4017747165431,
+    "y": 569.3681000243292,
+    "w": 138.3,
+    "h": 249.9,
+    "bottom": 819.3,
+    "cx": 632.5,
+    "mirrored": false,
+    "dBottomVsIdle": 3.4
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 551.0008331210793,
+    "y": 734.2497527639257,
+    "w": 219,
+    "h": 101.7,
+    "bottom": 836,
+    "cx": 660.5,
+    "mirrored": false,
+    "dBottomVsIdle": 20.1
+   },
+   "victory": {
+    "pose": "victory",
+    "x": 558.2551186952849,
+    "y": 473.9493573421588,
+    "w": 299,
+    "h": 385.5,
+    "bottom": 859.5,
+    "cx": 707.7,
+    "mirrored": false,
+    "dBottomVsIdle": 43.6
+   },
+   "defend": {
+    "pose": "defend",
+    "x": 550.6430027902906,
+    "y": 592.1812821883467,
+    "w": 166.3,
+    "h": 231.8,
+    "bottom": 824,
+    "cx": 633.8,
+    "mirrored": false,
+    "dBottomVsIdle": 8.1
+   },
+   "sleep": {
+    "pose": "idle",
+    "x": 552.2368264016325,
+    "y": 585.1936586115409,
+    "w": 158.5,
+    "h": 229.3,
+    "bottom": 814.5,
+    "cx": 631.5,
+    "mirrored": false,
+    "dBottomVsIdle": -1.4
+   },
+   "critical": {
+    "pose": "idle",
+    "x": 553.2627664160159,
+    "y": 585.3661390056863,
+    "w": 157.7,
+    "h": 228.9,
+    "bottom": 814.3,
+    "cx": 632.1,
+    "mirrored": false,
+    "dBottomVsIdle": -1.6
+   },
+   "follow": {
+    "pose": "follow",
+    "x": 556.2221561493519,
+    "y": 635.4994811988512,
+    "w": 220.1,
+    "h": 178.4,
+    "bottom": 813.9,
+    "cx": 666.3,
+    "mirrored": false,
+    "dBottomVsIdle": -2
+   },
+   "od-energy-rain": {
+    "pose": "od-energy-rain",
+    "x": 588.9090773670505,
+    "y": 596.3282936032107,
+    "w": 125.9,
+    "h": 216.9,
+    "bottom": 813.3,
+    "cx": 651.9,
+    "mirrored": false,
+    "dBottomVsIdle": -2.6
+   },
+   "od-slice-and-dice": {
+    "pose": "od-slice-and-dice",
+    "x": 558.5057885830446,
+    "y": 630.499771825094,
+    "w": 177.3,
+    "h": 182.8,
+    "bottom": 813.3,
+    "cx": 647.2,
+    "mirrored": false,
+    "dBottomVsIdle": -2.6
+   }
+  },
+  "yuna": {
+   "idle": {
+    "pose": "idle",
+    "x": 684.831291718412,
+    "y": 587.9828161152343,
+    "w": 154.8,
+    "h": 199.1,
+    "bottom": 787.1,
+    "cx": 762.2,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "ready": {
+    "pose": "ready",
+    "x": 712.703700343168,
+    "y": 576.5603190948984,
+    "w": 173.7,
+    "h": 213.8,
+    "bottom": 790.4,
+    "cx": 799.5,
+    "mirrored": false,
+    "dBottomVsIdle": 3.3
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 702.248878312155,
+    "y": 606.5808040344203,
+    "w": 123.1,
+    "h": 180.8,
+    "bottom": 787.3,
+    "cx": 763.8,
+    "mirrored": false,
+    "dBottomVsIdle": 0.2
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 682.6659071389155,
+    "y": 578.8605969223134,
+    "w": 146.3,
+    "h": 209.1,
+    "bottom": 788,
+    "cx": 755.8,
+    "mirrored": false,
+    "dBottomVsIdle": 0.9
+   },
+   "item": {
+    "pose": "item",
+    "x": 737.4918393667622,
+    "y": 623.5967544542029,
+    "w": 124.7,
+    "h": 165.3,
+    "bottom": 788.9,
+    "cx": 799.8,
+    "mirrored": false,
+    "dBottomVsIdle": 1.8
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 723.4667242848892,
+    "y": 611.8112702748425,
+    "w": 145,
+    "h": 179.8,
+    "bottom": 791.6,
+    "cx": 796,
+    "mirrored": false,
+    "dBottomVsIdle": 4.5
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 717.8887083939853,
+    "y": 695.5835136715319,
+    "w": 148.4,
+    "h": 124.7,
+    "bottom": 820.3,
+    "cx": 792.1,
+    "mirrored": false,
+    "dBottomVsIdle": 33.2
+   },
+   "victory": {
+    "pose": "victory",
+    "x": 736.6616292654686,
+    "y": 638.4471080142616,
+    "w": 152.9,
+    "h": 188.3,
+    "bottom": 826.8,
+    "cx": 813.1,
+    "mirrored": false,
+    "dBottomVsIdle": 39.7
+   },
+   "defend": {
+    "pose": "defend",
+    "x": 692.6225099469597,
+    "y": 586.454405190088,
+    "w": 173.6,
+    "h": 210,
+    "bottom": 796.4,
+    "cx": 779.4,
+    "mirrored": false,
+    "dBottomVsIdle": 9.3
+   },
+   "sleep": {
+    "pose": "idle",
+    "x": 686.8289012115202,
+    "y": 588.8852334675373,
+    "w": 154.6,
+    "h": 199.2,
+    "bottom": 788.1,
+    "cx": 764.1,
+    "mirrored": false,
+    "dBottomVsIdle": 1
+   },
+   "critical": {
+    "pose": "idle",
+    "x": 687.2587215576273,
+    "y": 589.2257394447805,
+    "w": 154.5,
+    "h": 198.8,
+    "bottom": 788,
+    "cx": 764.5,
+    "mirrored": false,
+    "dBottomVsIdle": 0.9
+   },
+   "follow": {
+    "pose": "follow",
+    "x": 697.301119170757,
+    "y": 653.5690421877113,
+    "w": 169.4,
+    "h": 134.3,
+    "bottom": 787.9,
+    "cx": 782,
+    "mirrored": false,
+    "dBottomVsIdle": 0.8
+   }
+  },
+  "lulu": {
+   "idle": {
+    "pose": "idle",
+    "x": 904.4280679176101,
+    "y": 591.5775436614717,
+    "w": 98.5,
+    "h": 224.5,
+    "bottom": 816.1,
+    "cx": 953.7,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "ready": {
+    "pose": "ready",
+    "x": 911.6456985858346,
+    "y": 616.2834388869674,
+    "w": 126.1,
+    "h": 202,
+    "bottom": 818.3,
+    "cx": 974.7,
+    "mirrored": false,
+    "dBottomVsIdle": 2.2
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 888.4231636226831,
+    "y": 598.6779473587998,
+    "w": 141.7,
+    "h": 216,
+    "bottom": 814.7,
+    "cx": 959.3,
+    "mirrored": false,
+    "dBottomVsIdle": -1.4
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 903.8735579718125,
+    "y": 579.8669583575929,
+    "w": 135.5,
+    "h": 235.2,
+    "bottom": 815.1,
+    "cx": 971.6,
+    "mirrored": false,
+    "dBottomVsIdle": -1
+   },
+   "item": {
+    "pose": "item",
+    "x": 892.3909036539359,
+    "y": 587.9103359258328,
+    "w": 147.4,
+    "h": 227.4,
+    "bottom": 815.4,
+    "cx": 966.1,
+    "mirrored": false,
+    "dBottomVsIdle": -0.7
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 886.9683453086838,
+    "y": 616.6269632049583,
+    "w": 152,
+    "h": 203.8,
+    "bottom": 820.4,
+    "cx": 963,
+    "mirrored": false,
+    "dBottomVsIdle": 4.3
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 885.2124875818213,
+    "y": 758.1218532094495,
+    "w": 103.3,
+    "h": 61.2,
+    "bottom": 819.3,
+    "cx": 936.9,
+    "mirrored": false,
+    "dBottomVsIdle": 3.2
+   },
+   "victory": {
+    "pose": "victory",
+    "x": 896.9821593937537,
+    "y": 630.0410468961436,
+    "w": 207.5,
+    "h": 233.8,
+    "bottom": 863.9,
+    "cx": 1000.8,
+    "mirrored": false,
+    "dBottomVsIdle": 47.8
+   },
+   "defend": {
+    "pose": "defend",
+    "x": 850.4619172162137,
+    "y": 569.7848248335437,
+    "w": 170.9,
+    "h": 255.6,
+    "bottom": 825.4,
+    "cx": 935.9,
+    "mirrored": false,
+    "dBottomVsIdle": 9.3
+   },
+   "sleep": {
+    "pose": "idle",
+    "x": 899.4831115145072,
+    "y": 592.1385451413862,
+    "w": 96.5,
+    "h": 225,
+    "bottom": 817.1,
+    "cx": 947.7,
+    "mirrored": false,
+    "dBottomVsIdle": 1
+   },
+   "critical": {
+    "pose": "idle",
+    "x": 899.03670082087,
+    "y": 592.3525762088709,
+    "w": 97.7,
+    "h": 224.5,
+    "bottom": 816.9,
+    "cx": 947.9,
+    "mirrored": false,
+    "dBottomVsIdle": 0.8
+   },
+   "follow": {
+    "pose": "follow",
+    "x": 892.1255940575056,
+    "y": 641.3925364451745,
+    "w": 103.4,
+    "h": 173.9,
+    "bottom": 815.3,
+    "cx": 943.9,
+    "mirrored": false,
+    "dBottomVsIdle": -0.8
+   },
+   "od-fury": {
+    "pose": "od-fury",
+    "x": 881.7127058110215,
+    "y": 604.301815069577,
+    "w": 139.3,
+    "h": 210.7,
+    "bottom": 815,
+    "cx": 951.4,
+    "mirrored": false,
+    "dBottomVsIdle": -1.1
+   }
+  }
+ },
+ "guideMentions": {
+  "inGameDescription": false,
+  "wrongColours": false,
+  "guideOpenOnScreen": true
+ },
+ "darkRequests": [
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/characters/dark-mindy/idle.png",
+  "art/characters/dark-mindy/idle.json",
+  "art/characters/dark-sandy/idle.json",
+  "art/characters/dark-sandy/idle.png",
+  "art/characters/dark-yojimbo/idle.png",
+  "art/characters/dark-mindy/attack.json",
+  "art/characters/dark-mindy/attack.png",
+  "art/characters/dark-mindy/cast.png",
+  "art/characters/dark-mindy/hurt.png",
+  "art/characters/dark-mindy/cast.json",
+  "art/characters/dark-mindy/ko.png",
+  "art/characters/dark-mindy/hurt.json",
+  "art/characters/dark-sandy/attack.png",
+  "art/characters/dark-mindy/ko.json",
+  "art/characters/dark-sandy/cast.png",
+  "art/characters/dark-sandy/attack.json",
+  "art/characters/dark-sandy/hurt.png",
+  "art/characters/dark-sandy/cast.json",
+  "art/characters/dark-sandy/ko.png",
+  "art/characters/dark-sandy/hurt.json",
+  "art/characters/dark-sandy/ko.json"
+ ],
+ "backdropRequests": [
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/backdrops/gagazet.json",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/backdrops/farplane.thumb.webp",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/backdrops/macalania-temple.webp",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/backdrops/cavern-stolen-fayth.webp",
+  "art/backdrops/bevelle-highbridge.webp",
+  "art/backdrops/garden-of-pain.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/backdrops/sin-fahrenheit-flight.webp",
+  "art/backdrops/sin-fahrenheit-bevelle.webp",
+  "art/backdrops/mushroom-rock-road.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/backdrops/mushroom-rock-road.json",
+  "art/backdrops/mushroom-rock-road-ruined.webp"
+ ],
+ "stagedAct2": [
+  "tidus",
+  "yuna",
+  "lulu",
+  "dark-yojimbo",
+  "dark-daigoro"
+ ],
+ "staticAct2": {
+  "dark-yojimbo": {
+   "idle": {
+    "pose": "idle",
+    "x": 924.9971757828133,
+    "y": 346.5131496460495,
+    "w": 152,
+    "h": 209.8,
+    "bottom": 556.3,
+    "cx": 1001,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 945.5278695522705,
+    "y": 354.9890471234442,
+    "w": 140.1,
+    "h": 201.3,
+    "bottom": 556.3,
+    "cx": 1015.6,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 975.2115579249189,
+    "y": 351.8748371903108,
+    "w": 139,
+    "h": 204.2,
+    "bottom": 556.1,
+    "cx": 1044.7,
+    "mirrored": false,
+    "dBottomVsIdle": -0.2
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 927.9879394663321,
+    "y": 360.8906599781763,
+    "w": 159.2,
+    "h": 202.1,
+    "bottom": 563,
+    "cx": 1007.6,
+    "mirrored": false,
+    "dBottomVsIdle": 6.7
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 890.4239812390092,
+    "y": 431.41124892237866,
+    "w": 211.6,
+    "h": 160.1,
+    "bottom": 591.5,
+    "cx": 996.2,
+    "mirrored": false,
+    "dBottomVsIdle": 35.2
+   },
+   "telegraph": {
+    "pose": "telegraph",
+    "x": 925.1325191470388,
+    "y": 345.9076579988282,
+    "w": 148.4,
+    "h": 211.4,
+    "bottom": 557.3,
+    "cx": 999.3,
+    "mirrored": false,
+    "dBottomVsIdle": 1
+   }
+  },
+  "dark-daigoro": {
+   "idle": {
+    "pose": "idle",
+    "x": 1167.3511123546323,
+    "y": 479.2504794812342,
+    "w": 95.8,
+    "h": 94.2,
+    "bottom": 573.4,
+    "cx": 1215.3,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "attack": {
+    "pose": "attack",
+    "x": 1164.418947649099,
+    "y": 479.2575060869796,
+    "w": 95.8,
+    "h": 94.2,
+    "bottom": 573.4,
+    "cx": 1212.3,
+    "mirrored": false,
+    "dBottomVsIdle": 0
+   },
+   "cast": {
+    "pose": "cast",
+    "x": 1164.3893432242232,
+    "y": 479.269992149544,
+    "w": 95.5,
+    "h": 94.3,
+    "bottom": 573.5,
+    "cx": 1212.2,
+    "mirrored": false,
+    "dBottomVsIdle": 0.1
+   },
+   "hurt": {
+    "pose": "hurt",
+    "x": 1170.0718033204294,
+    "y": 479.6686215846842,
+    "w": 92.3,
+    "h": 97.3,
+    "bottom": 576.9,
+    "cx": 1216.2,
+    "mirrored": false,
+    "dBottomVsIdle": 3.5
+   },
+   "ko": {
+    "pose": "ko",
+    "x": 1129.89123122746,
+    "y": 478.9486646504348,
+    "w": 123.1,
+    "h": 124.8,
+    "bottom": 603.8,
+    "cx": 1191.5,
+    "mirrored": false,
+    "dBottomVsIdle": 30.4
+   },
+   "telegraph": {
+    "pose": "telegraph",
+    "x": 1167.1630052386492,
+    "y": 478.6934833107873,
+    "w": 94.2,
+    "h": 95.5,
+    "bottom": 574.2,
+    "cx": 1214.3,
+    "mirrored": false,
+    "dBottomVsIdle": 0.8
+   }
+  }
+ },
+ "act2Guide": {
+  "inGameDescription": false,
+  "wrongColours": false
+ },
+ "darkRequestsEnd": [
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/characters/dark-mindy/idle.png",
+  "art/characters/dark-mindy/idle.json",
+  "art/characters/dark-sandy/idle.json",
+  "art/characters/dark-sandy/idle.png",
+  "art/characters/dark-yojimbo/idle.png",
+  "art/characters/dark-mindy/attack.json",
+  "art/characters/dark-mindy/attack.png",
+  "art/characters/dark-mindy/cast.png",
+  "art/characters/dark-mindy/hurt.png",
+  "art/characters/dark-mindy/cast.json",
+  "art/characters/dark-mindy/ko.png",
+  "art/characters/dark-mindy/hurt.json",
+  "art/characters/dark-sandy/attack.png",
+  "art/characters/dark-mindy/ko.json",
+  "art/characters/dark-sandy/cast.png",
+  "art/characters/dark-sandy/attack.json",
+  "art/characters/dark-sandy/hurt.png",
+  "art/characters/dark-sandy/cast.json",
+  "art/characters/dark-sandy/ko.png",
+  "art/characters/dark-sandy/hurt.json",
+  "art/characters/dark-sandy/ko.json",
+  "art/characters/dark-yojimbo/idle.json",
+  "art/characters/dark-yojimbo/attack.json",
+  "art/characters/dark-yojimbo/cast.json",
+  "art/characters/dark-yojimbo/hurt.json",
+  "art/characters/dark-yojimbo/ko.json",
+  "art/characters/dark-yojimbo/attack.png",
+  "art/characters/dark-yojimbo/cast.png",
+  "art/characters/dark-yojimbo/hurt.png",
+  "art/characters/dark-yojimbo/ko.png"
+ ],
+ "footAnalysis": {
+  "dark-mindy": {
+   "samples": 955,
+   "poses": {
+    "idle": {
+     "n": 862,
+     "minBottom": 492.3,
+     "maxBottom": 632.2,
+     "minH": 181.3,
+     "maxH": 233
+    },
+    "hurt": {
+     "n": 33,
+     "minBottom": 494.3,
+     "maxBottom": 574.8,
+     "minH": 185.3,
+     "maxH": 208.6
+    },
+    "cast": {
+     "n": 20,
+     "minBottom": 554.8,
+     "maxBottom": 628.7,
+     "minH": 222.2,
+     "maxH": 229.9
+    },
+    "attack": {
+     "n": 40,
+     "minBottom": 574.3,
+     "maxBottom": 637.9,
+     "minH": 216.8,
+     "maxH": 229.8
+    }
+   },
+   "medianStepPx": 0.7,
+   "p95StepPx": 57.5,
+   "poseChanges": 58,
+   "maxAbsDBottomAtChange": 103.8,
+   "atRestChanges": 0,
+   "maxAbsDBottomAtRestChange": 0,
+   "changes": [
+    {
+     "t": 83879,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -53.9,
+     "dCx": -9.6,
+     "dH": 16.4,
+     "atRest": false
+    },
+    {
+     "t": 84164,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 30.5,
+     "dCx": 152.5,
+     "dH": 38.2,
+     "atRest": false
+    },
+    {
+     "t": 84252,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -46.3,
+     "dCx": 77,
+     "dH": -0.4,
+     "atRest": false
+    },
+    {
+     "t": 84676,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -12.3,
+     "dCx": -71.8,
+     "dH": -1.3,
+     "atRest": false
+    },
+    {
+     "t": 85116,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -0.1,
+     "dCx": 2,
+     "dH": 0.3,
+     "atRest": false
+    },
+    {
+     "t": 85159,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 58,
+     "dCx": -206.9,
+     "dH": 36.8,
+     "atRest": false
+    },
+    {
+     "t": 85396,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -11.8,
+     "dCx": 14,
+     "dH": -36.8,
+     "atRest": false
+    },
+    {
+     "t": 85868,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -15.6,
+     "dCx": -66.7,
+     "dH": -1.9,
+     "atRest": false
+    },
+    {
+     "t": 86252,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 46.6,
+     "dCx": -18.7,
+     "dH": 12.9,
+     "atRest": false
+    },
+    {
+     "t": 86557,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -14,
+     "dCx": -45.6,
+     "dH": -33.6,
+     "atRest": false
+    },
+    {
+     "t": 87604,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 61.2,
+     "dCx": -323.2,
+     "dH": 34.2,
+     "atRest": false
+    },
+    {
+     "t": 87853,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -46.9,
+     "dCx": 63.3,
+     "dH": 2.4,
+     "atRest": false
+    },
+    {
+     "t": 88237,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -22.4,
+     "dCx": -61.4,
+     "dH": 1.2,
+     "atRest": false
+    },
+    {
+     "t": 88279,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 64.4,
+     "dCx": 79.2,
+     "dH": 17.7,
+     "atRest": false
+    },
+    {
+     "t": 88313,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 38.9,
+     "dCx": -147,
+     "dH": -37.5,
+     "atRest": false
+    },
+    {
+     "t": 88836,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -18,
+     "dCx": 147.2,
+     "dH": 18.8,
+     "atRest": false
+    },
+    {
+     "t": 88927,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 22.6,
+     "dCx": 160.1,
+     "dH": 39,
+     "atRest": false
+    },
+    {
+     "t": 89012,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -4.2,
+     "dCx": -86.2,
+     "dH": -35.1,
+     "atRest": false
+    },
+    {
+     "t": 89595,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -24.1,
+     "dCx": -63.5,
+     "dH": 0.8,
+     "atRest": false
+    },
+    {
+     "t": 89638,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 66.8,
+     "dCx": 83,
+     "dH": 19,
+     "atRest": false
+    },
+    {
+     "t": 89722,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -56.8,
+     "dCx": 74.8,
+     "dH": -1.3,
+     "atRest": false
+    },
+    {
+     "t": 90443,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -25.7,
+     "dCx": -57.8,
+     "dH": -1.3,
+     "atRest": false
+    },
+    {
+     "t": 90491,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 54.5,
+     "dCx": 1.5,
+     "dH": -16.5,
+     "atRest": false
+    },
+    {
+     "t": 91083,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -33,
+     "dCx": 70.7,
+     "dH": 17.4,
+     "atRest": false
+    },
+    {
+     "t": 91127,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 42.3,
+     "dCx": 11,
+     "dH": 19.7,
+     "atRest": false
+    },
+    {
+     "t": 91174,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 3.4,
+     "dCx": 2,
+     "dH": 0.8,
+     "atRest": false
+    },
+    {
+     "t": 91761,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": 13.9,
+     "dCx": 93.3,
+     "dH": 36.1,
+     "atRest": false
+    },
+    {
+     "t": 91815,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 7.2,
+     "dCx": -25,
+     "dH": -1.1,
+     "atRest": false
+    },
+    {
+     "t": 92602,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -13.3,
+     "dCx": -76.3,
+     "dH": -1.7,
+     "atRest": false
+    },
+    {
+     "t": 92663,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 32,
+     "dCx": 144.4,
+     "dH": 32.8,
+     "atRest": false
+    },
+    {
+     "t": 92999,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -0.7,
+     "dCx": 21.6,
+     "dH": -33.4,
+     "atRest": false
+    },
+    {
+     "t": 93717,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -16.7,
+     "dCx": -70.1,
+     "dH": 0.7,
+     "atRest": false
+    },
+    {
+     "t": 93765,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 103.8,
+     "dCx": 25.1,
+     "dH": 21.1,
+     "atRest": false
+    },
+    {
+     "t": 93855,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -50.6,
+     "dCx": -7.2,
+     "dH": -37.6,
+     "atRest": false
+    },
+    {
+     "t": 94441,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 17.5,
+     "dCx": -151.9,
+     "dH": -21.7,
+     "atRest": false
+    },
+    {
+     "t": 94476,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 29.5,
+     "dCx": 165.1,
+     "dH": 38.4,
+     "atRest": false
+    },
+    {
+     "t": 94561,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -50.2,
+     "dCx": 67.3,
+     "dH": -1.4,
+     "atRest": false
+    },
+    {
+     "t": 95081,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -52.4,
+     "dCx": -7,
+     "dH": 16.3,
+     "atRest": false
+    },
+    {
+     "t": 95126,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 50.2,
+     "dCx": 31.6,
+     "dH": -14.6,
+     "atRest": false
+    },
+    {
+     "t": 95732,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": 48.3,
+     "dCx": 20.2,
+     "dH": 16.9,
+     "atRest": false
+    },
+    {
+     "t": 95808,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -60.4,
+     "dCx": 82.4,
+     "dH": 4.4,
+     "atRest": false
+    },
+    {
+     "t": 97680,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -36.3,
+     "dCx": 66,
+     "dH": 17.6,
+     "atRest": false
+    },
+    {
+     "t": 97743,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 18.3,
+     "dCx": -128.7,
+     "dH": -17.5,
+     "atRest": false
+    },
+    {
+     "t": 97759,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": 24,
+     "dCx": 152,
+     "dH": 37.9,
+     "atRest": false
+    },
+    {
+     "t": 97822,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 39.8,
+     "dCx": -157.8,
+     "dH": -37.8,
+     "atRest": false
+    },
+    {
+     "t": 98678,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -10.5,
+     "dCx": -64.1,
+     "dH": -1.1,
+     "atRest": false
+    },
+    {
+     "t": 98729,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 35.9,
+     "dCx": 126.6,
+     "dH": 33,
+     "atRest": false
+    },
+    {
+     "t": 98982,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -62.2,
+     "dCx": 94.4,
+     "dH": -33.6,
+     "atRest": false
+    },
+    {
+     "t": 99521,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 60.7,
+     "dCx": -172.5,
+     "dH": 36.5,
+     "atRest": false
+    },
+    {
+     "t": 99730,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -7.9,
+     "dCx": -22.7,
+     "dH": -31.1,
+     "atRest": false
+    },
+    {
+     "t": 100320,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": 57.5,
+     "dCx": -1.2,
+     "dH": 38,
+     "atRest": false
+    },
+    {
+     "t": 100380,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -86.9,
+     "dCx": 72.1,
+     "dH": -20,
+     "atRest": false
+    },
+    {
+     "t": 100806,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -55.2,
+     "dCx": 6.2,
+     "dH": 17.2,
+     "atRest": false
+    },
+    {
+     "t": 100843,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": 60.5,
+     "dCx": 81.3,
+     "dH": 19.6,
+     "atRest": false
+    },
+    {
+     "t": 100877,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 48,
+     "dCx": -164.1,
+     "dH": -37.4,
+     "atRest": false
+    },
+    {
+     "t": 101293,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": 38.9,
+     "dCx": 24.9,
+     "dH": 18.3,
+     "atRest": false
+    },
+    {
+     "t": 101367,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -2.6,
+     "dCx": -67.5,
+     "dH": -34.1,
+     "atRest": false
+    },
+    {
+     "t": 101798,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -37.8,
+     "dCx": 64.1,
+     "dH": 17.4,
+     "atRest": false
+    }
+   ]
+  },
+  "dark-sandy": {
+   "samples": 837,
+   "poses": {
+    "idle": {
+     "n": 607,
+     "minBottom": 492.1,
+     "maxBottom": 614.2,
+     "minH": 281.2,
+     "maxH": 355.1
+    },
+    "hurt": {
+     "n": 201,
+     "minBottom": 481.2,
+     "maxBottom": 616.1,
+     "minH": 285.7,
+     "maxH": 351.5
+    },
+    "attack": {
+     "n": 22,
+     "minBottom": 560.3,
+     "maxBottom": 615.4,
+     "minH": 330,
+     "maxH": 362
+    },
+    "cast": {
+     "n": 7,
+     "minBottom": 558.1,
+     "maxBottom": 610.7,
+     "minH": 344.5,
+     "maxH": 357.8
+    }
+   },
+   "medianStepPx": 0.3,
+   "p95StepPx": 49.9,
+   "poseChanges": 61,
+   "maxAbsDBottomAtChange": 108.8,
+   "atRestChanges": 0,
+   "maxAbsDBottomAtRestChange": 0,
+   "changes": [
+    {
+     "t": 67156,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -0.2,
+     "dCx": 20.5,
+     "dH": -4.6,
+     "atRest": false
+    },
+    {
+     "t": 67638,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -0.5,
+     "dCx": -20,
+     "dH": 3.5,
+     "atRest": false
+    },
+    {
+     "t": 72123,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 2.3,
+     "dCx": 18.9,
+     "dH": -4.3,
+     "atRest": false
+    },
+    {
+     "t": 72596,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -0.5,
+     "dCx": -19.3,
+     "dH": 3.3,
+     "atRest": false
+    },
+    {
+     "t": 76238,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -3.1,
+     "dCx": 11,
+     "dH": -4.2,
+     "atRest": false
+    },
+    {
+     "t": 76689,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -0.8,
+     "dCx": -19.5,
+     "dH": 3,
+     "atRest": false
+    },
+    {
+     "t": 80437,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -0.5,
+     "dCx": 29.6,
+     "dH": -5,
+     "atRest": false
+    },
+    {
+     "t": 80913,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -0.8,
+     "dCx": -20.1,
+     "dH": 3.1,
+     "atRest": false
+    },
+    {
+     "t": 84024,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 57.2,
+     "dCx": 62.7,
+     "dH": -27.1,
+     "atRest": false
+    },
+    {
+     "t": 84252,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": -47.1,
+     "dCx": 84.4,
+     "dH": -0.2,
+     "atRest": false
+    },
+    {
+     "t": 84318,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -7.5,
+     "dCx": -62.1,
+     "dH": -52.6,
+     "atRest": false
+    },
+    {
+     "t": 84521,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -50,
+     "dCx": -39.2,
+     "dH": 25.4,
+     "atRest": false
+    },
+    {
+     "t": 85361,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -5.1,
+     "dCx": -20.8,
+     "dH": 10.4,
+     "atRest": false
+    },
+    {
+     "t": 85483,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 66.6,
+     "dCx": 70.2,
+     "dH": 20,
+     "atRest": false
+    },
+    {
+     "t": 85559,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -100.7,
+     "dCx": -3.5,
+     "dH": -40.1,
+     "atRest": false
+    },
+    {
+     "t": 85749,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 7,
+     "dCx": 12.2,
+     "dH": -4.9,
+     "atRest": false
+    },
+    {
+     "t": 86368,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -3.5,
+     "dCx": -25.9,
+     "dH": 9.9,
+     "atRest": false
+    },
+    {
+     "t": 86653,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": 67.5,
+     "dCx": 90.1,
+     "dH": 16.8,
+     "atRest": false
+    },
+    {
+     "t": 86757,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -13.9,
+     "dCx": -58.6,
+     "dH": -50.6,
+     "atRest": false
+    },
+    {
+     "t": 87117,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -18.5,
+     "dCx": -58,
+     "dH": -3.9,
+     "atRest": false
+    },
+    {
+     "t": 87853,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": -44.7,
+     "dCx": 81.4,
+     "dH": -1.1,
+     "atRest": false
+    },
+    {
+     "t": 87915,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -93.6,
+     "dCx": 79.6,
+     "dH": -24.8,
+     "atRest": false
+    },
+    {
+     "t": 88237,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -18,
+     "dCx": -17.4,
+     "dH": -0.3,
+     "atRest": false
+    },
+    {
+     "t": 88361,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": -42.3,
+     "dCx": 183.6,
+     "dH": 54.9,
+     "atRest": false
+    },
+    {
+     "t": 88444,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -89.3,
+     "dCx": -38.6,
+     "dH": -39.3,
+     "atRest": false
+    },
+    {
+     "t": 88769,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 19.7,
+     "dCx": -10.2,
+     "dH": -31.2,
+     "atRest": false
+    },
+    {
+     "t": 89012,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 0.5,
+     "dCx": -52.9,
+     "dH": -47.3,
+     "atRest": false
+    },
+    {
+     "t": 89036,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 54.2,
+     "dCx": -177.2,
+     "dH": 62.5,
+     "atRest": false
+    },
+    {
+     "t": 89118,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -58.3,
+     "dCx": -40.9,
+     "dH": -65.9,
+     "atRest": false
+    },
+    {
+     "t": 89187,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -6.3,
+     "dCx": -8.9,
+     "dH": -3.3,
+     "atRest": false
+    },
+    {
+     "t": 89722,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": -56.8,
+     "dCx": 93.8,
+     "dH": 2.5,
+     "atRest": false
+    },
+    {
+     "t": 89753,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 44.2,
+     "dCx": -176.5,
+     "dH": -58.1,
+     "atRest": false
+    },
+    {
+     "t": 89998,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -29,
+     "dCx": -57.2,
+     "dH": -4.4,
+     "atRest": false
+    },
+    {
+     "t": 90533,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 52,
+     "dCx": -97.2,
+     "dH": 2.9,
+     "atRest": false
+    },
+    {
+     "t": 90566,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": -39.5,
+     "dCx": 158,
+     "dH": 51.9,
+     "atRest": false
+    },
+    {
+     "t": 90646,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -101.6,
+     "dCx": -87.9,
+     "dH": -32.1,
+     "atRest": false
+    },
+    {
+     "t": 90783,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 38,
+     "dCx": 7.7,
+     "dH": -32.6,
+     "atRest": false
+    },
+    {
+     "t": 91174,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 8.9,
+     "dCx": 38.8,
+     "dH": 0.8,
+     "atRest": false
+    },
+    {
+     "t": 91317,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -91.6,
+     "dCx": 61.6,
+     "dH": -28.3,
+     "atRest": false
+    },
+    {
+     "t": 91667,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 35.5,
+     "dCx": 96.4,
+     "dH": -32.3,
+     "atRest": false
+    },
+    {
+     "t": 91815,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 0.9,
+     "dCx": -3,
+     "dH": -2.1,
+     "atRest": false
+    },
+    {
+     "t": 91875,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -100.4,
+     "dCx": 1.3,
+     "dH": -9.2,
+     "atRest": false
+    },
+    {
+     "t": 92151,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 34.6,
+     "dCx": -8.7,
+     "dH": -31.6,
+     "atRest": false
+    },
+    {
+     "t": 93040,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -108.8,
+     "dCx": 41,
+     "dH": 38.8,
+     "atRest": false
+    },
+    {
+     "t": 93137,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": 60.7,
+     "dCx": 85,
+     "dH": 21.1,
+     "atRest": false
+    },
+    {
+     "t": 93198,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -9.3,
+     "dCx": -63.5,
+     "dH": -63.4,
+     "atRest": false
+    },
+    {
+     "t": 93476,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -52.5,
+     "dCx": -7.7,
+     "dH": 23.6,
+     "atRest": false
+    },
+    {
+     "t": 93855,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -48.6,
+     "dCx": 10.6,
+     "dH": -52.6,
+     "atRest": false
+    },
+    {
+     "t": 93873,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 57,
+     "dCx": -66.8,
+     "dH": 44.2,
+     "atRest": false
+    },
+    {
+     "t": 93958,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": 1.9,
+     "dCx": -64.1,
+     "dH": -59.9,
+     "atRest": false
+    },
+    {
+     "t": 94137,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 26.6,
+     "dCx": -27.8,
+     "dH": -31.8,
+     "atRest": false
+    },
+    {
+     "t": 94561,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": -52.6,
+     "dCx": 78.8,
+     "dH": -1.7,
+     "atRest": false
+    },
+    {
+     "t": 94634,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -99.8,
+     "dCx": 69.4,
+     "dH": -31.2,
+     "atRest": false
+    },
+    {
+     "t": 94765,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 40.2,
+     "dCx": 0.1,
+     "dH": -33.6,
+     "atRest": false
+    },
+    {
+     "t": 95172,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 52.6,
+     "dCx": -103.5,
+     "dH": 0.9,
+     "atRest": false
+    },
+    {
+     "t": 95198,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": -2.6,
+     "dCx": -12.9,
+     "dH": 67.3,
+     "atRest": false
+    },
+    {
+     "t": 95237,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": 4,
+     "dCx": -89.5,
+     "dH": -64,
+     "atRest": false
+    },
+    {
+     "t": 95430,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 40.4,
+     "dCx": -24.3,
+     "dH": -30.7,
+     "atRest": false
+    },
+    {
+     "t": 95808,
+     "from": "hurt",
+     "to": "cast",
+     "dBottom": -57.1,
+     "dCx": 95.2,
+     "dH": 10.9,
+     "atRest": false
+    },
+    {
+     "t": 95907,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": -81.7,
+     "dCx": 64.7,
+     "dH": -28.9,
+     "atRest": false
+    },
+    {
+     "t": 96314,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -0.7,
+     "dCx": 18.8,
+     "dH": -4.3,
+     "atRest": false
+    }
+   ]
+  },
+  "dark-yojimbo": {
+   "samples": 759,
+   "poses": {
+    "idle": {
+     "n": 618,
+     "minBottom": 500.5,
+     "maxBottom": 619,
+     "minH": 209.3,
+     "maxH": 259
+    },
+    "hurt": {
+     "n": 87,
+     "minBottom": 490.8,
+     "maxBottom": 624.3,
+     "minH": 198.6,
+     "maxH": 245.9
+    },
+    "attack": {
+     "n": 27,
+     "minBottom": 555.3,
+     "maxBottom": 628.2,
+     "minH": 241.4,
+     "maxH": 253.1
+    },
+    "cast": {
+     "n": 25,
+     "minBottom": 602.6,
+     "maxBottom": 616.6,
+     "minH": 239,
+     "maxH": 251.7
+    },
+    "ko": {
+     "n": 2,
+     "minBottom": 145.8,
+     "maxBottom": 454.9,
+     "minH": 174.9,
+     "maxH": 180.4
+    }
+   },
+   "medianStepPx": 0.1,
+   "p95StepPx": 35.7,
+   "poseChanges": 36,
+   "maxAbsDBottomAtChange": 368.9,
+   "atRestChanges": 0,
+   "maxAbsDBottomAtRestChange": 0,
+   "changes": [
+    {
+     "t": 102795,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -16.5,
+     "dCx": -65.5,
+     "dH": -10.9,
+     "atRest": false
+    },
+    {
+     "t": 103087,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 73,
+     "dCx": -26.1,
+     "dH": 48.4,
+     "atRest": false
+    },
+    {
+     "t": 103170,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -57.5,
+     "dCx": 18.2,
+     "dH": -39.6,
+     "atRest": false
+    },
+    {
+     "t": 104926,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 0,
+     "dCx": 5.9,
+     "dH": -12.4,
+     "atRest": false
+    },
+    {
+     "t": 105208,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 56.3,
+     "dCx": 101.7,
+     "dH": 22.8,
+     "atRest": false
+    },
+    {
+     "t": 105367,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -4.8,
+     "dCx": -36.2,
+     "dH": -33.4,
+     "atRest": false
+    },
+    {
+     "t": 105519,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -50.9,
+     "dCx": -31.2,
+     "dH": 8.1,
+     "atRest": false
+    },
+    {
+     "t": 105854,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 37.5,
+     "dCx": 14.5,
+     "dH": 22.8,
+     "atRest": false
+    },
+    {
+     "t": 106078,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -58.1,
+     "dCx": 45,
+     "dH": -32.5,
+     "atRest": false
+    },
+    {
+     "t": 106360,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -15,
+     "dCx": -70.7,
+     "dH": -11.8,
+     "atRest": false
+    },
+    {
+     "t": 106596,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 20.4,
+     "dCx": 134,
+     "dH": 42.6,
+     "atRest": false
+    },
+    {
+     "t": 106688,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -59.2,
+     "dCx": 15.8,
+     "dH": -39.4,
+     "atRest": false
+    },
+    {
+     "t": 106907,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 9.3,
+     "dCx": 14.8,
+     "dH": -12.8,
+     "atRest": false
+    },
+    {
+     "t": 107098,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 3.6,
+     "dCx": 13.9,
+     "dH": 11.9,
+     "atRest": false
+    },
+    {
+     "t": 107117,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 8.5,
+     "dCx": 38.3,
+     "dH": 31,
+     "atRest": false
+    },
+    {
+     "t": 107291,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -18.4,
+     "dCx": -16.8,
+     "dH": -34.2,
+     "atRest": false
+    },
+    {
+     "t": 107761,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -57.9,
+     "dCx": 16.2,
+     "dH": 7.2,
+     "atRest": false
+    },
+    {
+     "t": 107807,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 106.7,
+     "dCx": -81.7,
+     "dH": 30,
+     "atRest": false
+    },
+    {
+     "t": 107917,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -82.3,
+     "dCx": 93,
+     "dH": -19.4,
+     "atRest": false
+    },
+    {
+     "t": 108476,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -36.8,
+     "dCx": 57.3,
+     "dH": 6.9,
+     "atRest": false
+    },
+    {
+     "t": 108526,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 57.3,
+     "dCx": 68.7,
+     "dH": 24,
+     "atRest": false
+    },
+    {
+     "t": 108600,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -58.3,
+     "dCx": -12.8,
+     "dH": -34.4,
+     "atRest": false
+    },
+    {
+     "t": 108683,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -52.3,
+     "dCx": -47.4,
+     "dH": 8.1,
+     "atRest": false
+    },
+    {
+     "t": 109466,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": 1.9,
+     "dCx": -4.4,
+     "dH": 11.8,
+     "atRest": false
+    },
+    {
+     "t": 124416,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 2.1,
+     "dCx": 3.1,
+     "dH": -14.7,
+     "atRest": false
+    },
+    {
+     "t": 124888,
+     "from": "hurt",
+     "to": "idle",
+     "dBottom": -2.3,
+     "dCx": -5.9,
+     "dH": 12.6,
+     "atRest": false
+    },
+    {
+     "t": 125095,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": -5.9,
+     "dCx": 58.4,
+     "dH": -9.4,
+     "atRest": false
+    },
+    {
+     "t": 126094,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 2.1,
+     "dCx": -60.6,
+     "dH": 7.3,
+     "atRest": false
+    },
+    {
+     "t": 139369,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -51.3,
+     "dCx": -19.6,
+     "dH": 7.4,
+     "atRest": false
+    },
+    {
+     "t": 139728,
+     "from": "idle",
+     "to": "attack",
+     "dBottom": 59.7,
+     "dCx": -182.2,
+     "dH": 37.7,
+     "atRest": false
+    },
+    {
+     "t": 139843,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": -4.4,
+     "dCx": -16.2,
+     "dH": -31.1,
+     "atRest": false
+    },
+    {
+     "t": 139918,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": -69.3,
+     "dCx": -22.4,
+     "dH": -10.3,
+     "atRest": false
+    },
+    {
+     "t": 140699,
+     "from": "hurt",
+     "to": "attack",
+     "dBottom": 21.1,
+     "dCx": 121.4,
+     "dH": 42.9,
+     "atRest": false
+    },
+    {
+     "t": 140873,
+     "from": "attack",
+     "to": "idle",
+     "dBottom": 44.9,
+     "dCx": -132.3,
+     "dH": -30.8,
+     "atRest": false
+    },
+    {
+     "t": 141054,
+     "from": "idle",
+     "to": "hurt",
+     "dBottom": 0.1,
+     "dCx": 6.4,
+     "dH": -13.3,
+     "atRest": false
+    },
+    {
+     "t": 141360,
+     "from": "hurt",
+     "to": "ko",
+     "dBottom": -368.9,
+     "dCx": -259.7,
+     "dH": -43.9,
+     "atRest": false
+    }
+   ]
+  },
+  "dark-daigoro": {
+   "samples": 754,
+   "poses": {
+    "idle": {
+     "n": 661,
+     "minBottom": 120.2,
+     "maxBottom": 640.2,
+     "minH": 93.5,
+     "maxH": 117
+    },
+    "cast": {
+     "n": 93,
+     "minBottom": 520.1,
+     "maxBottom": 636.7,
+     "minH": 104.1,
+     "maxH": 117.1
+    }
+   },
+   "medianStepPx": 0.1,
+   "p95StepPx": 52.4,
+   "poseChanges": 2,
+   "maxAbsDBottomAtChange": 0.9,
+   "atRestChanges": 1,
+   "maxAbsDBottomAtRestChange": 0,
+   "changes": [
+    {
+     "t": 126327,
+     "from": "idle",
+     "to": "cast",
+     "dBottom": -0.9,
+     "dCx": -0.8,
+     "dH": -0.4,
+     "atRest": false
+    },
+    {
+     "t": 130183,
+     "from": "cast",
+     "to": "idle",
+     "dBottom": 0,
+     "dCx": 0,
+     "dH": 0,
+     "atRest": true
+    }
+   ]
+  }
+ },
+ "seenPoses": {
+  "dark-mindy:idle": {
+   "first": "act1-idle",
+   "art": "dark-mindy",
+   "w": 100.82482514355434,
+   "h": 187.95629404372494,
+   "bottom": 563.9
+  },
+  "dark-sandy:idle": {
+   "first": "act1-idle",
+   "art": "dark-sandy",
+   "w": 122.36314545520486,
+   "h": 290.99857026783116,
+   "bottom": 547.1
+  },
+  "dark-sandy:hurt": {
+   "first": "act1-turn0",
+   "art": "dark-sandy",
+   "w": 136.72332143038227,
+   "h": 343.24936518998595,
+   "bottom": 608.2
+  },
+  "dark-mindy:hurt": {
+   "first": "act1-auto",
+   "art": "dark-mindy",
+   "w": 131.23404321404723,
+   "h": 204.5007498179886,
+   "bottom": 509.4
+  },
+  "dark-sandy:attack": {
+   "first": "act1-auto",
+   "art": "dark-sandy",
+   "w": 235.24761396939448,
+   "h": 357.28506559094274,
+   "bottom": 608.5
+  },
+  "dark-mindy:attack": {
+   "first": "act1-auto",
+   "art": "dark-mindy",
+   "w": 123.73014245371735,
+   "h": 223.14966421899243,
+   "bottom": 626.7
+  },
+  "dark-sandy:cast": {
+   "first": "act1-auto",
+   "art": "dark-sandy",
+   "w": 217.80297316874373,
+   "h": 344.45591714059833,
+   "bottom": 559.6
+  },
+  "dark-mindy:cast": {
+   "first": "act1-auto",
+   "art": "dark-mindy",
+   "w": 115.5440709273305,
+   "h": 228.54336267479476,
+   "bottom": 613.1
+  },
+  "dark-yojimbo:idle": {
+   "first": "act1-auto",
+   "art": "dark-yojimbo",
+   "w": 150.7681154423483,
+   "h": 215.51183999921727,
+   "bottom": 545.7
+  },
+  "dark-daigoro:idle": {
+   "first": "act1-auto",
+   "art": "daigoro",
+   "w": 94.96019696400526,
+   "h": 94.96504878070431,
+   "bottom": 574.3
+  },
+  "dark-yojimbo:hurt": {
+   "first": "act1-auto",
+   "art": "dark-yojimbo",
+   "w": 158.93243905503175,
+   "h": 199.54621062125972,
+   "bottom": 562.9
+  },
+  "dark-yojimbo:attack": {
+   "first": "act1-auto",
+   "art": "dark-yojimbo",
+   "w": 157.48519596286064,
+   "h": 249.17470471843944,
+   "bottom": 618.4
+  },
+  "dark-yojimbo:cast": {
+   "first": "act2-turn0",
+   "art": "dark-yojimbo",
+   "w": 153.24206428471734,
+   "h": 239.53460519340922,
+   "bottom": 603.3
+  },
+  "dark-daigoro:cast": {
+   "first": "act2-turn0",
+   "art": "daigoro",
+   "w": 112.95707352426803,
+   "h": 113.52210913993963,
+   "bottom": 629.4
+  }
+ },
+ "consoleErrors": [],
+ "badResponses": [],
+ "failed": [
+  {
+   "url": "https://echoesofspira.com/art/backdrops/djose-chamber-provisional.thumb.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/overdrive-sin/idle.thumb.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/zanarkand-dome.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/yunalesca-1/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/braskas-final-aeon-1/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/macalania-temple.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/portraits/rikku.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/evrae-airship-deck.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/evrae/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/cavern-stolen-fayth.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/bevelle-highbridge.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/seymour-natus/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/garden-of-pain.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/seymour-omnis/idle.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/via-purifico.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/sin-fahrenheit-flight.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/sin-left-fin/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/sin-fahrenheit-bevelle.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/overdrive-sin/idle.png",
+   "why": "net::ERR_ABORTED"
+  }
+ ],
+ "htmlAsMedia": [],
+ "steps": [
+  {
+   "name": "board card BOSS row",
+   "ok": true,
+   "detail": "LOCATION | Mushroom Rock Road and the Cavern | BOSS | Dark Sandy and Dark Mindy, then Dark Yojimbo | PARTY | T | TIDUS | Y | YUNA | L | LULU | BEST | Not cleared | LEFT/RIGHT | CHOOSE | · | UP/DOWN | GAME | · | ENTER | BEGIN | · | ESC | BACK"
+  },
+  {
+   "name": "board card LOCATION whole",
+   "ok": true,
+   "detail": "LOCATION | Mushroom Rock Road and the Cavern | BOSS | Dark Sandy and Dark Mindy,"
+  },
+  {
+   "name": "reached battle by real keys",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "Act I field is the pair",
+   "ok": true,
+   "detail": [
+    "tidus",
+    "yuna",
+    "lulu",
+    "dark-mindy",
+    "dark-sandy"
+   ]
+  },
+  {
+   "name": "baseline party tidus pose deltas vs idle",
+   "ok": true,
+   "detail": {
+    "idle": 0,
+    "ready": 2.8,
+    "attack": -1.2,
+    "cast": -2.1,
+    "item": -2,
+    "hurt": 3.4,
+    "ko": 20.1,
+    "victory": 43.6,
+    "defend": 8.1,
+    "sleep": -1.4,
+    "critical": -1.6,
+    "follow": -2,
+    "od-energy-rain": -2.6,
+    "od-slice-and-dice": -2.6
+   }
+  },
+  {
+   "name": "baseline party yuna pose deltas vs idle",
+   "ok": true,
+   "detail": {
+    "idle": 0,
+    "ready": 3.3,
+    "attack": 0.2,
+    "cast": 0.9,
+    "item": 1.8,
+    "hurt": 4.5,
+    "ko": 33.2,
+    "victory": 39.7,
+    "defend": 9.3,
+    "sleep": 1,
+    "critical": 0.9,
+    "follow": 0.8
+   }
+  },
+  {
+   "name": "baseline party lulu pose deltas vs idle",
+   "ok": true,
+   "detail": {
+    "idle": 0,
+    "ready": 2.2,
+    "attack": -1.4,
+    "cast": -1,
+    "item": -0.7,
+    "hurt": 4.3,
+    "ko": 3.2,
+    "victory": 47.8,
+    "defend": 9.3,
+    "sleep": 1,
+    "critical": 0.8,
+    "follow": -0.8,
+    "od-fury": -1.1
+   }
+  },
+  {
+   "name": "static feet line dark-mindy: stances within 2px of idle; hurt within 4% of height; KO is a lying pose",
+   "ok": true,
+   "detail": {
+    "idleH": 187.7,
+    "d": {
+     "idle": 0,
+     "attack": 0.3,
+     "cast": -0.1,
+     "hurt": 5.2,
+     "ko": 35.1,
+     "telegraph": -0.6
+    },
+    "hurtPctOfH": 2.77
+   }
+  },
+  {
+   "name": "static feet line dark-sandy: stances within 2px of idle; hurt within 4% of height; KO is a lying pose",
+   "ok": true,
+   "detail": {
+    "idleH": 289.8,
+    "d": {
+     "idle": 0,
+     "attack": 0.2,
+     "cast": 0.4,
+     "hurt": 7.2,
+     "ko": 36.5,
+     "telegraph": 1.1
+    },
+    "hurtPctOfH": 2.48
+   }
+  },
+  {
+   "name": "no \"In Game Description\" on the first-menu screen",
+   "ok": true,
+   "detail": {
+    "inGameDescription": false,
+    "wrongColours": false,
+    "guideOpenOnScreen": true
+   }
+  },
+  {
+   "name": "Dark painting files requested",
+   "ok": true,
+   "detail": [
+    "art/characters/dark-mindy/idle.thumb.png",
+    "art/characters/dark-mindy/idle.png",
+    "art/characters/dark-mindy/idle.json",
+    "art/characters/dark-sandy/idle.json",
+    "art/characters/dark-sandy/idle.png",
+    "art/characters/dark-yojimbo/idle.png",
+    "art/characters/dark-mindy/attack.json",
+    "art/characters/dark-mindy/attack.png",
+    "art/characters/dark-mindy/cast.png",
+    "art/characters/dark-mindy/hurt.png",
+    "art/characters/dark-mindy/cast.json",
+    "art/characters/dark-mindy/ko.png",
+    "art/characters/dark-mindy/hurt.json",
+    "art/characters/dark-sandy/attack.png",
+    "art/characters/dark-mindy/ko.json",
+    "art/characters/dark-sandy/cast.png",
+    "art/characters/dark-sandy/attack.json",
+    "art/characters/dark-sandy/hurt.png",
+    "art/characters/dark-sandy/cast.json",
+    "art/characters/dark-sandy/ko.png",
+    "art/characters/dark-sandy/hurt.json",
+    "art/characters/dark-sandy/ko.json"
+   ]
+  },
+  {
+   "name": "backdrop requests",
+   "ok": true,
+   "detail": [
+    "art/backdrops/dreams-end.webp",
+    "art/backdrops/gagazet.webp",
+    "art/backdrops/gagazet.thumb.webp",
+    "art/backdrops/zanarkand-dome.thumb.webp",
+    "art/backdrops/bevelle-underground.thumb.webp",
+    "art/backdrops/djose-chamber-provisional.thumb.webp",
+    "art/backdrops/gagazet.json",
+    "art/backdrops/dreams-end.thumb.webp",
+    "art/backdrops/den-of-woe.thumb.webp",
+    "art/backdrops/macalania-temple.thumb.webp",
+    "art/backdrops/via-infinito.thumb.webp",
+    "art/backdrops/evrae-airship-deck.thumb.webp",
+    "art/backdrops/road-to-the-farplane.thumb.webp",
+    "art/backdrops/cavern-stolen-fayth.thumb.webp",
+    "art/backdrops/leblanc-last-room.thumb.webp",
+    "art/backdrops/bevelle-highbridge.thumb.webp",
+    "art/backdrops/farplane.thumb.webp",
+    "art/backdrops/garden-of-pain.thumb.webp",
+    "art/backdrops/via-purifico.thumb.webp",
+    "art/backdrops/mushroom-rock-road.thumb.webp",
+    "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+    "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+    "art/backdrops/zanarkand-dome.webp",
+    "art/backdrops/macalania-temple.webp",
+    "art/backdrops/evrae-airship-deck.webp",
+    "art/backdrops/cavern-stolen-fayth.webp",
+    "art/backdrops/bevelle-highbridge.webp",
+    "art/backdrops/garden-of-pain.webp",
+    "art/backdrops/via-purifico.webp",
+    "art/backdrops/sin-fahrenheit-flight.webp",
+    "art/backdrops/sin-fahrenheit-bevelle.webp",
+    "art/backdrops/mushroom-rock-road.webp",
+    "art/backdrops/bevelle-underground.webp",
+    "art/backdrops/mushroom-rock-road.json",
+    "art/backdrops/mushroom-rock-road-ruined.webp"
+   ]
+  },
+  {
+   "name": "no mirror-aeons.png backdrop asked for",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "turn 0: tidus Attack by real keys",
+   "ok": true,
+   "detail": [
+    "Talk",
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee"
+   ]
+  },
+  {
+   "name": "turn 1: yuna Attack by real keys",
+   "ok": true,
+   "detail": [
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Summon",
+    "Switch"
+   ]
+  },
+  {
+   "name": "turn 2: tidus Attack by real keys",
+   "ok": true,
+   "detail": [
+    "Talk",
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee"
+   ]
+  },
+  {
+   "name": "turn 3: yuna Attack by real keys",
+   "ok": true,
+   "detail": [
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Summon",
+    "Switch"
+   ]
+  },
+  {
+   "name": "Act II reached (Act I shortened by debug hp, the smoke tool method)",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "static feet line dark-yojimbo: stances within 2px of idle; hurt within 4% of height; KO is a lying pose",
+   "ok": true,
+   "detail": {
+    "idleH": 209.8,
+    "d": {
+     "idle": 0,
+     "attack": 0,
+     "cast": -0.2,
+     "hurt": 6.7,
+     "ko": 35.2,
+     "telegraph": 1
+    },
+    "hurtPctOfH": 3.19
+   }
+  },
+  {
+   "name": "static feet line dark-daigoro: stances within 2px of idle; hurt within 4% of height; KO is a lying pose",
+   "ok": true,
+   "detail": {
+    "idleH": 94.2,
+    "d": {
+     "idle": 0,
+     "attack": 0,
+     "cast": 0.1,
+     "hurt": 3.5,
+     "ko": 30.4,
+     "telegraph": 0.8
+    },
+    "hurtPctOfH": 3.72
+   }
+  },
+  {
+   "name": "Act II: no \"In Game Description\" on screen",
+   "ok": true,
+   "detail": {
+    "inGameDescription": false,
+    "wrongColours": false
+   }
+  }
+ ]
+}

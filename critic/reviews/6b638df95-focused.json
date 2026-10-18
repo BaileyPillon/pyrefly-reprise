@@ -1,0 +1,497 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-17T00:12:32.581Z",
+ "build": {
+  "mainSha": "6b638df95"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "Lulu hurt and critical poses are fixed against live r50: head swaps over tolerance 80 to 0 in Chapter XXVII (worst 37.6 percent to 12.8 by mass, 0.2 registered); Chapter IX CHK-026 and CHK-027 PASS.",
+  "The Dark Aeons draw their dark paintings and Yuna Yojimbo the approved painting with a tile and card, in both acts at three sizes; the live build drew the wrong paintings.",
+  "No critical defect; the Dark pose continuity major is unregistered new art with regression unknown (no like-for-like), so it is disclosed, not a hold."
+ ],
+ "checks": [
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture of the proof scripts follows an asserted screen and state (assertScreen/waitFor in critic/runner/lib); the one failed outcome (random Zanmato, Act II defeat) was reported as a failed check, not photographed as a win.",
+   "where": "FFX; XXVII",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/proof/desk-12-results.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "FFX only. The change set touches poseRegistrationFfx.ts, the FFX Dark Aeon records, the Aeon catalogue and the FFX Chapter XXVII; poseRegistrationFfx2.ts is untouched in 8a3e8eff7..6b638df95. Presence in FFX: Chapter XXVII and Chapter IX played. Absence in FFX-2: by diff only (no FFX-2 file changed); no FFX-2 chapter played in this pass.",
+   "where": "FFX only",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/proof/desk-1-act-i-first-menu.jpg",
+    "critic/reviews/6b638df95-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 4,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Chapter XXVII: head 0 swaps over tolerance (max 12.8 percent by mass, 0.2 registered), Lulu hurt/critical fixed (live r50: 80 head swaps over, worst 37.6 percent). But 239 standing swaps of the three Dark figures move the silhouette-read feet over 6 px (worst 30.8 px; Dark Sandy 107, Dark Mindy 72, Dark Yojimbo 60); live r50 had 0 (worst 0.9 px) because it drew the wrong, registered painting. Chapter IX (yojimbo-cavern): PASS (head 4.8 percent, feet 0.8 px).",
+   "where": "FFX; XXVII, IX",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/continuity/continuity-summary.json",
+    "critic/reviews/6b638df95-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/6b638df95-focused/continuity/mirror-aeons-win-6b638df95/continuity/strips/swap-121-dark-sandy-cast-idle.jpg",
+    "critic/reviews/6b638df95-focused/continuity-live/mirror-aeons-win-live-r50/continuity/strips/swap-086-lulu-critical-idle.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 45,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "No snaps in either chapter. Chapter XXVII: 154 jerks of 40 px or more (live r50 109 in a shorter fight: 6.6 against 8.4 per minute of battle; the party attack lunges, same worst 210.9 px minigame-request jump as live) and 21 Dark Sandy idle to attack swaps with a double image of 0.40 to 0.423 (live worst 0.379, none over). Chapter IX PASS.",
+   "where": "FFX; XXVII, IX",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/continuity/continuity-summary.json",
+    "critic/reviews/6b638df95-focused/continuity/mirror-aeons-win-6b638df95/continuity/strips/ghost-075-dark-sandy-idle-attack.jpg",
+    "critic/reviews/6b638df95-focused/continuity/mirror-aeons-win-6b638df95/continuity/strips/jerk-004-tidus.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "The Dark Aeons draw their dark paintings in both acts: Act I Dark Sandy and Dark Mindy (red and black), Act II Dark Yojimbo, at 1600x900, 2000x1012 and 390x844; the chapter card snapshot shows Dark Sandy. Yuna Yojimbo is the approved gold and purple painting; its turn-bar tile and HUD card show a crop of it (no Y).",
+   "where": "FFX; XXVII",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/proof/desk-1-act-i-first-menu.jpg",
+    "critic/reviews/6b638df95-focused/proof/desk-6-act-ii-first-menu.jpg",
+    "critic/reviews/6b638df95-focused/proof/desk-7-act-ii-yojimbo-pay-menu.jpg",
+    "critic/reviews/6b638df95-focused/proof-2000/wide-1-act-i-first-menu.jpg",
+    "critic/reviews/6b638df95-focused/proof-phone/phone-act2-z0-pay-all-highlighted.jpg",
+    "critic/reviews/6b638df95-focused/proof-phone/phone-0-card.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 10,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared plumbing (summonArtId, stature override) is FFX-scoped by data; both are bug fixes true for FFX. FFX-2 not exercised.",
+   "where": "FFX played",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 1,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-007",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-012",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-017",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-019",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-022",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-023",
+   "result": "UNVERIFIED",
+   "reason": "Not reviewed in this focused pass (time went to the changed area and the continuity runs).",
+   "where": "both",
+   "evidence": [],
+   "mode": [],
+   "mandatory": 0,
+   "minutes": "manual",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 6b638df95, dist-release rebuilt with BASE_PATH=/ (the build in place pre-dated the code commits), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "mirror-aeons",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1104.7,
+    "swaps": 1090,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 12.8,
+    "maxFeetShiftPx": 30.8,
+    "worstJerkPx": 210.9,
+    "jerksCovered": 0,
+    "fps": 55.6,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-121-dark-sandy-cast-idle.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-937-dark-yojimbo-cast-idle.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-259-dark-sandy-idle-cast.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-936-dark-yojimbo-idle-cast.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-151-dark-sandy-idle-attack.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-042-dark-sandy-attack-idle.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-078-lulu-idle-ko.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-1017-lulu-ko-idle.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-082-lulu-ko-critical.jpg",
+     "mirror-aeons-win-6b638df95/continuity/strips/swap-002-dark-sandy-idle-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "yojimbo-cavern",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 111.7,
+    "swaps": 104,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 4.8,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 27,
+    "jerksCovered": 0,
+    "fps": 59.6,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-103-kimahri-idle-victory.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-083-kimahri-idle-ready.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-036-yuna-idle-hurt.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-077-yuna-hurt-idle.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-008-yuna-ready-item.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-003-kimahri-ready-item.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-071-yojimbo-hurt-idle.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-102-lulu-idle-victory.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-085-yojimbo-idle-hurt.jpg",
+     "yojimbo-cavern-win-6b638df95/continuity/strips/swap-010-yuna-item-idle.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 1216.4,
+  "counted": 1194,
+  "swaps": 1208,
+  "size": {
+   "judged": 1193,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 1,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 12.8,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 30.8,
+   "feetOverTolerance": 239,
+   "headMeasured": 1193,
+   "headRegistration": 864,
+   "headSilhouette": 329,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 1134,
+   "ghostFrames": 4026,
+   "worstGhostSeverity": 0.423,
+   "ghostOverFail": 21,
+   "jerks": 338,
+   "worstJerkPx": 210.9,
+   "jerksOverFail": 154,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 120.7,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "239 swap(s) of a standing figure move its feet more than the tolerance (worst 30.8 px at 1600 wide)"
+    ],
+    "note": "864 of 1193 measured swaps had a registered head (tolerance 3 percent); 329 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "154 jerk(s) of 40 px or more in one frame (worst 210.9 px)",
+     "21 swap(s) show a double image of severity 0.4 or more (worst 0.423)"
+    ]
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 1216.4 s of battle, 55.6 to 59.6 fps, 2 of 2 run by the dedicated harness; CHK-026 FAIL (239 swap(s) of a standing figure move its feet more than the tolerance (worst 30.8 px at 1600 wide)); CHK-027 FAIL (154 jerk(s) of 40 px or more in one frame (worst 210.9 px); 21 swap(s) show a double image of severity 0.4 or more (worst 0.423))",
+  "base": "http://127.0.0.1:5612/",
+  "date": "2026-10-16T23:46:04.377Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "list": []
+ },
+ "issues": [
+  {
+   "id": "FOC501-01",
+   "severity": "major",
+   "title": "Dark Sandy, Dark Mindy and Dark Yojimbo change feet and size across poses with no pose registration (CHK-026 feet FAIL, CHK-027 double image)",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "CHK-026: feet within 6 px (silhouette read) at a pose swap; CHK-027: no swap with a double image of 0.40 or more",
+   "observed": "239 standing swaps over tolerance, worst 30.8 px (Dark Sandy cast to idle); 21 Dark Sandy idle to attack and attack to idle swaps show two figures at 0.40 to 0.423 (the attack painting holds a different stance and scythe). The strips show the feet roughly on one line, so part of the reading is the scythe and wings in the silhouette (suspected); the two-figure crossfade is plainly visible.",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<candidate> --chapters=mirror-aeons",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/continuity/continuity-summary.json",
+    "critic/reviews/6b638df95-focused/continuity/mirror-aeons-win-6b638df95/continuity/strips/swap-121-dark-sandy-cast-idle.jpg",
+    "critic/reviews/6b638df95-focused/continuity/mirror-aeons-win-6b638df95/continuity/strips/ghost-075-dark-sandy-idle-attack.jpg"
+   ],
+   "confidence": "medium on the size of the real slide (strips), high on the counts",
+   "requirement": "CHK-026, CHK-027; D-420, D-421",
+   "where": "src/data/art/poseRegistrationFfx.ts (no dark-sandy, dark-mindy, dark-yojimbo entries; suspected)",
+   "fix": "Register the Dark paintings in tools/posescale and the table, as the player aeons are, then re-run the harness.",
+   "acceptanceCheck": "continuity harness on mirror-aeons: feet and double-image rows for the Dark figures under tolerance",
+   "introducedByCandidate": true,
+   "regressionVsLive": "unknown",
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC501-02",
+   "severity": "major",
+   "title": "Jerks of 40 px or more in one frame on the party and Dark figures (CHK-027)",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "no single-frame step of 40 px or more",
+   "observed": "154 jerks, worst 210.9 px (a Lulu step at a minigame request; same value on live r50); party lunges Tidus 56, Lulu 46, Yuna 38; Dark figures 14. Live r50: 109 in a shorter fight, same causes.",
+   "repro": "continuity harness on mirror-aeons",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/continuity/continuity-summary.json",
+    "critic/reviews/6b638df95-focused/continuity/mirror-aeons-win-6b638df95/continuity/strips/jerk-004-tidus.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027",
+   "where": "unknown",
+   "fix": "Not part of this change; carry into the motion batch.",
+   "acceptanceCheck": "harness jerks under the fail line",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC501-03",
+   "severity": "polish",
+   "title": "Chapter XXVII guide header still reads Cindy, Sandy and Mindy for a first fight with only the pair",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "the in-game description may stay as the game words it",
+   "observed": "The boss card quotes the game description naming all three while Cindy does not take the field in Act I (the doc text below it was corrected).",
+   "repro": "Act I first menu, guide panel",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/proof/desk-1-act-i-first-menu.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "guide accuracy",
+   "where": "src/data/guides/docs/mirror-aeons.ts line 23",
+   "fix": "Leave as the quoted game description or add a note.",
+   "acceptanceCheck": "reads right",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC501-04",
+   "severity": "polish",
+   "title": "Act II is lost by a random Dark Zanmato in the unforced proof run",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "a fight the party can win with the advisor line",
+   "observed": "proof --scenario full ended in Defeat at 3:00, 85 turns, after Dark Zanmato; the forced zanmato scenario won both acts. One seed only; difficulty is Bailey call.",
+   "repro": "proof --scenario full, seed 2",
+   "evidence": [
+    "critic/reviews/6b638df95-focused/proof/desk-12-results.jpg"
+   ],
+   "confidence": "low (one run)",
+   "requirement": "balance",
+   "where": "n/a",
+   "fix": "None proposed.",
+   "acceptanceCheck": "n/a",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "tools/mirror-aeons-proof.mjs full (1600x900), zanmato (1600x900, 2000x1012, 390x844 touch) by real keys: both acts, results, save record, no console or 4xx",
+   "continuity harness on mirror-aeons and yojimbo-cavern (candidate) and mirror-aeons (live r50)",
+   "vitest: mirror-aeons-art, pose-stature-hold, ui-ffx-ctb-aeon-portraits, pose-scale-art (51 pass); pose-scale-check PASS",
+   "data diff read against research (text, steal list, hire-answer notes)"
+  ],
+  "reused": [
+   {
+    "what": "tsc and orphans",
+    "from": "handoff r50-1 (tsc clean, orphans 28)",
+    "why": "not rerun here"
+   }
+  ],
+  "notTested": [
+   "FFX-2 chapters (absence by diff only)",
+   "target tile composites",
+   "CHK-004 to 008, 012, 013, 017, 019, 022, 023"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy, then the deep review owed on the live build (carries 8a3e8eff7).",
+ "elapsedMinutes": 110
+}

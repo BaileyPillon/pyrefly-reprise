@@ -1,0 +1,839 @@
+[
+ {
+  "turn": 0,
+  "ms": 29,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:911/911",
+   "rikku:2426/2426",
+   "paine:2801/2906",
+   "x2-ixion:12380/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 23,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 7183,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:911/911",
+   "rikku:2426/2426",
+   "paine:1051/2906",
+   "x2-ixion:12380/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 31,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 16147,
+  "actor": "play:damage",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:2025/2426",
+   "paine:688/2906",
+   "x2-ixion:10864/12380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 57,
+    "actor": "paine",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 19734,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:2025/2426",
+   "paine:688/2906",
+   "x2-ixion:10864/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 62,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 25254,
+  "actor": "play:action-end",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:2025/2426",
+   "paine:1574/2906",
+   "x2-ixion:10544/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 80,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 29047,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:1722/2426",
+   "paine:1574/2906",
+   "x2-ixion:9923/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 90,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 31534,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:1722/2426",
+   "paine:1574/2906",
+   "x2-ixion:9587/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 98,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 35288,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:1722/2426",
+   "paine:1574/2906",
+   "x2-ixion:9587/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 106,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 40375,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:1419/2426",
+   "paine:228/2906",
+   "x2-ixion:7804/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 125,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 42872,
+  "actor": "command:paine",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:1419/2426",
+   "paine:228/2906",
+   "x2-ixion:7465/12380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 133,
+    "actor": "paine",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 47159,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:1323/2426",
+   "paine:228/2906",
+   "x2-ixion:7465/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 145,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 51921,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:1226/2426",
+   "paine:1228/2906",
+   "x2-ixion:7465/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 159,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 55711,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:923/2426",
+   "paine:1228/2906",
+   "x2-ixion:6813/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 172,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 58374,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:923/2426",
+   "paine:1228/2906",
+   "x2-ixion:6813/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 176,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 61693,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:923/2426",
+   "paine:1228/2906",
+   "x2-ixion:6813/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 188,
+    "actor": "yuna",
+    "did": "Lunar Curtain",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 68625,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:620/2426",
+   "paine:865/2906",
+   "x2-ixion:5371/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 214,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 70869,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:620/2426",
+   "paine:865/2906",
+   "x2-ixion:5371/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 218,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 78065,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1517/1517",
+   "rikku:620/2426",
+   "paine:502/2906",
+   "x2-ixion:4569/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 283,
+    "actor": "yuna",
+    "did": "Mega-Potion",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 84762,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:985/1517",
+   "rikku:1/2426",
+   "paine:137/2906",
+   "x2-ixion:3694/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 294,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 87735,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:985/1517",
+   "rikku:1/2426",
+   "paine:137/2906",
+   "x2-ixion:3326/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 304,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 98610,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:569/1517",
+   "rikku:2001/2426",
+   "paine:2137/2906",
+   "x2-ixion:2857/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 371,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 101556,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:569/1517",
+   "rikku:2001/2426",
+   "paine:2137/2906",
+   "x2-ixion:2857/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 383,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 104299,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:569/1517",
+   "rikku:2001/2426",
+   "paine:2137/2906",
+   "x2-ixion:2857/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 390,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 113606,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:569/1517",
+   "rikku:1484/2426",
+   "paine:1774/2906",
+   "x2-ixion:1193/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 449,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 116376,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:569/1517",
+   "rikku:1484/2426",
+   "paine:1774/2906",
+   "x2-ixion:869/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 459,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 119542,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:569/1517",
+   "rikku:1484/2426",
+   "paine:1774/2906",
+   "x2-ixion:869/12380"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 489,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 128259,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:569/1517",
+   "rikku:1379/2426",
+   "paine:1411/2906",
+   "x2-ixion:58/12380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

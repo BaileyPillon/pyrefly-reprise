@@ -1,0 +1,72 @@
+[
+ {
+  "file": "mix-1600x900-selected.png",
+  "asserted": "ffx2-trema battle, Mix row shown, rows=Attack|Mix|Item|Change",
+  "check": "mix row",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:25:41.612Z"
+ },
+ {
+  "file": "mix-2000x1012-selected.png",
+  "asserted": "ffx2-trema battle, Mix row shown, rows=Attack|Mix|Item|Change",
+  "check": "mix row",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:26:13.919Z"
+ },
+ {
+  "file": "mix-390x844-selected.png",
+  "asserted": "ffx2-trema battle, Mix row shown, rows=Attack|Mix|Item|Change",
+  "check": "mix row",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:26:44.778Z"
+ },
+ {
+  "file": "mix-1600x900-selected2.png",
+  "asserted": "ffx2-trema battle, Mix row shown, rows=Attack|Mix|Item|Change",
+  "check": "mix row",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:27:27.463Z"
+ },
+ {
+  "file": "mirror-1600x900-menu.png",
+  "asserted": "mirror-aeons battle, command menu awaiting",
+  "check": "CHK-016",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:28:01.933Z"
+ },
+ {
+  "file": "mirror-1600x900-after4.png",
+  "asserted": "mirror-aeons after 4 real-input turns",
+  "check": "CHK-016",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:28:21.772Z"
+ },
+ {
+  "file": "mirror-2000x1012-menu.png",
+  "asserted": "mirror-aeons battle, command menu awaiting",
+  "check": "CHK-016",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:28:37.350Z"
+ },
+ {
+  "file": "mirror-2000x1012-after4.png",
+  "asserted": "mirror-aeons after 4 real-input turns",
+  "check": "CHK-016",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:28:57.377Z"
+ },
+ {
+  "file": "mirror-390x844-menu.png",
+  "asserted": "mirror-aeons battle, command menu awaiting",
+  "check": "CHK-016",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:29:12.099Z"
+ },
+ {
+  "file": "mirror-390x844-after4.png",
+  "asserted": "mirror-aeons after 4 real-input turns",
+  "check": "CHK-016",
+  "mode": "gpu",
+  "ts": "2026-10-17T06:29:31.636Z"
+ }
+]

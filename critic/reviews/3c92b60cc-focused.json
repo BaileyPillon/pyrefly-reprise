@@ -1,0 +1,692 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-17T20:20:28.807Z",
+ "build": {
+  "mainSha": "3c92b60cc"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "UNVERIFIED",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect and no regression against live r51 at critical or major severity; the one major (CHK-027 swap jerks) is on live too (introducedByCandidate false, regressionVsLive false).",
+  "The pose fix reads better than live: poseTrust() is empty on the real art (boot, Chapter 28), FFX-2 Ixion/Djose feet shift 1.2 px against 29.4 px live (CHK-026 FAIL live, PASS here), Dark Aeons 0 out of band, 0 console errors.",
+  "Chapter 28 opens by the word summon, is absent from the board and plays its first turns by real keys; its one defect is a polish overlap inside a brand-new feature."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Chapter 28 party prep, board and title own the window at 1600x900, 2000x1012 and 390x844; no stage-sized overlay.",
+   "where": "FFX; board, Ch 28 prep",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/layout-2000-board.png",
+    "critic/reviews/3c92b60cc-focused/layout-390-board.png",
+    "critic/reviews/3c92b60cc-focused/after-word.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-003",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-007",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-009",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-010",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-011",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-012",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-014",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-015",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-017",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-018",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-019",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-022",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-023",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass: time went to the pose-continuity harness (candidate and live) and Chapter 28; covered by the deep review owed on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserted screen() first (title, chapter-select, party-prep, battle with awaitingMenu); harness waits throw on failure; the failed Gui card wait is recorded as UNVERIFIED, not captured.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/index.json",
+    "critic/reviews/3c92b60cc-focused/continuity.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared plumbing (pose gate, fail-safe, PoseBlend) applies to both games: poseTrust() withheld list empty and 0 console errors on FFX boot, Chapter 28 and the FFX-2 fights; the Lady Luck repair is FFX-2 only and showed only in FFX-2 Ixion/Djose.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/continuity/continuity-summary.json",
+    "critic/reviews/3c92b60cc-focused/continuity.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case per docs/handoff/pose-continuity.md: pose plumbing both games; Lady Luck repair FFX-2 only; Dark Aeons FFX only; Chapter 28 and the Magus Sisters Summon row FFX only (research/re-ffx-last-summoning.md). Chapter 28 is hidden (not on the board, 0 of 19 beaten) and opens by the word summon in FFX; no FFX-2 card or word changed. Grand Summon list 9 to 7 and the Sisters row: vitest summon-label-sisters, last-summoning-chapter and -offering pass; source values not re-read line by line here.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/layout-2000-board.png",
+    "critic/reviews/3c92b60cc-focused/ch28-turn1-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 6,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "reason": "Three of four chapters read PASS on the candidate with the new pixel readings: mirror-aeons (stature 0.678 to 1.603, 0 out of band, feet shift 0.9 px), ffx2-ixion-djose (feet shift 1.2 px; live r51 reads 29.4 px and FAILS), ffx2-bahamut (0.4 px). Sinspawn Gui could not be reached by the harness route (UNVERIFIED), so the run aggregate is UNVERIFIED; no size or feet defect was found where it ran.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/continuity/continuity-summary.json",
+    "critic/reviews/3c92b60cc-focused/continuity.log",
+    "critic/reviews/3c92b60cc-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/3c92b60cc-focused/continuity-live.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 70,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Swap jerks of 40 px or more: 125 over the run on the candidate (worst 177.8 px, Bahamut). Live r51 has them on the same chapters (Ixion 112.9 vs 115.7, Bahamut 138.6 vs 177.8, Dark Aeons 170.3 vs 173.8 px), so not new; 119 mid-move dashes are reported, not gated. About a third fall on slow frames (p99 up to 108 ms).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/continuity/continuity-summary.json",
+    "critic/reviews/3c92b60cc-focused/continuity.log",
+    "critic/reviews/3c92b60cc-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/3c92b60cc-focused/continuity-live.log",
+    "critic/reviews/3c92b60cc-focused/continuity/ffx2-ixion-djose-win-3c92b60cc/continuity/strips/jerk-005-x2-ixion.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 70,
+   "artifact": "3c92b60cc dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 3c92b60cc, fresh dist-release, vite preview 5612 (BASE_PATH=/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "mirror-aeons",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1162.6,
+    "swaps": 998,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 8.3,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 173.8,
+    "minStature": 0.678,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 173.8,
+    "dashesWorstPx": 117.4,
+    "frameP99Ms": 46.9,
+    "jerksCovered": 0,
+    "fps": 56.4,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-078-lulu-idle-ko.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-733-lulu-ko-idle.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-113-lulu-ko-critical.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-538-dark-sandy-hurt-ko.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-448-tidus-ko-critical.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-195-tidus-attack-item.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-939-yuna-hurt-critical.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-634-yuna-critical-hurt.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-496-tidus-ready-attack.jpg",
+     "mirror-aeons-win-3c92b60cc/continuity/strips/swap-497-tidus-attack-follow.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "sinspawn-gui",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "UNVERIFIED",
+     "CHK-027": "UNVERIFIED"
+    },
+    "battleSeconds": null,
+    "swaps": null,
+    "snapsPerMinute": null,
+    "maxHeadJumpPct": null,
+    "maxFeetShiftPx": null,
+    "worstJerkPx": null,
+    "minStature": null,
+    "heightOverBand": null,
+    "feetSilOver": null,
+    "swapJerksWorstPx": null,
+    "dashesWorstPx": null,
+    "frameP99Ms": null,
+    "jerksCovered": 0,
+    "fps": null,
+    "dedicated": null,
+    "strips": 0,
+    "worstSwapStrips": [],
+    "unverified": [
+     "the probe saw no battle (1088 frames, 0 figures): no battle screen with its field shown"
+    ]
+   },
+   {
+    "chapter": "ffx2-ixion-djose",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 155.6,
+    "swaps": 235,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 18.9,
+    "maxFeetShiftPx": 1.2,
+    "worstJerkPx": 168.8,
+    "minStature": 0.665,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 115.7,
+    "dashesWorstPx": 168.8,
+    "frameP99Ms": 44.5,
+    "jerksCovered": 0,
+    "fps": 55,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-039-yuna-attack-follow.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-058-yuna-ready-attack.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-139-rikku-critical-cast.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-004-paine-ready-hurt.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-006-paine-hurt-ready.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-169-rikku-ready-attack.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-172-rikku-follow-critical.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-170-rikku-attack-follow.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-028-paine-critical-ready.jpg",
+     "ffx2-ixion-djose-win-3c92b60cc/continuity/strips/swap-159-paine-ready-critical.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 520.3,
+    "swaps": 395,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 9.5,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 177.8,
+    "minStature": 0.775,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 177.8,
+    "dashesWorstPx": 166.6,
+    "frameP99Ms": 107.8,
+    "jerksCovered": 0,
+    "fps": 47.2,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-320-rikku-ready-attack.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-294-paine-ready-follow.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-378-paine-follow-idle.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-252-rikku-attack-follow.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-355-paine-attack-follow.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-375-paine-ready-attack.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-028-paine-cast-hurt.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-031-paine-hurt-cast.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-213-paine-ready-hurt.jpg",
+     "ffx2-bahamut-win-3c92b60cc/continuity/strips/swap-012-paine-hurt-ready.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 1838.5,
+  "counted": 1628,
+  "swaps": 1648,
+  "size": {
+   "judged": 1628,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 18.9,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.2,
+   "feetOverTolerance": 0,
+   "headMeasured": 1628,
+   "headRegistration": 1447,
+   "headSilhouette": 181,
+   "headUnmeasured": 0,
+   "heightMeasured": 1628,
+   "heightOverBand": 0,
+   "heightWaived": 311,
+   "minStature": 0.665,
+   "maxStature": 1.603,
+   "koLengthMeasured": 24,
+   "minKoLength": 0.412,
+   "koLengthReported": 18,
+   "feetSilMeasured": 1584,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 6,
+   "holdSwaps": 102,
+   "worstRealHeadPct": 37.6,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 1598,
+   "ghostFrames": 5462,
+   "worstGhostSeverity": 0.379,
+   "ghostOverFail": 0,
+   "jerks": 577,
+   "worstJerkPx": 177.8,
+   "jerksOverFail": 244,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 122.4,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 4,
+   "swapJerks": 293,
+   "swapJerksWorstPx": 177.8,
+   "swapJerksOverFail": 125,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 284,
+   "dashesWorstPx": 168.8,
+   "dashesOverFail": 119,
+   "jerksLongFrame": 129,
+   "swapJerksLongFrame": 86,
+   "swapJerksSteadyOverFail": 85
+  },
+  "frameTime": {
+   "frames": 98706,
+   "longFrames": 4337,
+   "longFramePct": 4.4,
+   "worstP99Ms": 107.8,
+   "maxMs": 2431.8,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "UNVERIFIED",
+    "reasons": [
+     "not verified in: sinspawn-gui"
+    ]
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "125 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 177.8 px)"
+    ],
+    "note": "119 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 168.8 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 129 of 577 jerk(s) fell on a frame of more than 34 ms (86 of the 293 at a swap; 85 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 4 chapter(s), 1838.5 s of battle, 47.2 to 56.4 fps, 3 of 4 run by the dedicated harness; CHK-026 UNVERIFIED (not verified in: sinspawn-gui); CHK-027 FAIL (125 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 177.8 px)); 1 chapter(s) were not run by the dedicated harness (no marker: an older file or a failed run), so their numbers are not scored",
+  "base": "http://localhost:5612/",
+  "date": "2026-10-17T19:31:36.979Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "FOC52-001",
+   "severity": "major",
+   "title": "Pose-swap position jerks of 40 px or more in one frame (CHK-027), reaching 178 px",
+   "game": "both",
+   "chapter": "ffx2-bahamut, ffx2-ixion-djose, mirror-aeons",
+   "expected": "a pose swap moves the figure by no more than 40 px in one frame",
+   "observed": "125 swap jerks on the candidate (worst 177.8 px, FFX-2 Bahamut); live r51 shows 112.9, 138.6 and 170.3 px on the same chapters",
+   "repro": "node critic/runner/lib/continuity.mjs --chapters=ffx2-bahamut,ffx2-ixion-djose,mirror-aeons --tag=3c92b60cc (seed 1); strips under critic/reviews/3c92b60cc-focused/continuity",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/continuity/continuity-summary.json",
+    "critic/reviews/3c92b60cc-focused/continuity.log"
+   ],
+   "confidence": "high (same reading on live)",
+   "requirement": "CHK-027",
+   "where": "src/engine pose swap and move paths (suspected, not traced)",
+   "fix": "trace the worst strips: separate swaps that coincide with a move's own lunge from true registration offsets",
+   "acceptanceCheck": "CHK-027 swap jerks 0 on the three chapters",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC52-002",
+   "severity": "polish",
+   "title": "Chapter 28: target caption \"POSSESSED VALEFOR\" overlaps the \"ENEMY MOVE\" header at the top right",
+   "game": "ffx",
+   "chapter": "last-summoning",
+   "expected": "no overlapping HUD text",
+   "observed": "at the target-select frame the two labels draw over each other",
+   "repro": "type summon on the board, start battle, play to the third turn, open Attack",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/ch28-turn3.png"
+   ],
+   "confidence": "high",
+   "requirement": "HUD legibility",
+   "where": "FFX battle HUD (not traced)",
+   "fix": "shorten or move the target caption when the move list is open",
+   "acceptanceCheck": "screenshot of the same frame",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC52-003",
+   "severity": "polish",
+   "title": "The harness route cannot open the hidden Sinspawn Gui chapter, so its newly registered poses were not seen in play",
+   "game": "ffx",
+   "chapter": "sinspawn-gui",
+   "expected": "CHK-026 and CHK-027 read on Gui",
+   "observed": "ASSERT-FAIL card sinspawn-gui got yunalesca; 0 frames recorded",
+   "repro": "continuity.mjs --chapters=sinspawn-gui",
+   "evidence": [
+    "critic/reviews/3c92b60cc-focused/continuity.log"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026",
+   "where": "critic/runner/lib/route.mjs (hidden-chapter door)",
+   "fix": "make the route type the chapter word",
+   "acceptanceCheck": "harness plays Gui",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "pose-gate --check exit 0",
+   "tsc clean",
+   "147 vitest tests (pose-trust, pose-blend x2, summon-label-sisters, last-summoning chapter and offering, pose-gate)",
+   "Chapter 28 door word, party prep and first 4 turns by real keys at 1600x900",
+   "board and prep at 2000x1012 and 390x844",
+   "continuity harness on mirror-aeons, ffx2-ixion-djose, ffx2-bahamut (candidate and live r51)"
+  ],
+  "reused": [],
+  "notTested": [
+   "Sinspawn Gui in play",
+   "FFX-2 Chapter V Vegnagun and X-2 Valefor in play",
+   "CHK-003 to CHK-023 except 002, 016, 020, 021",
+   "row-by-row source audit of the Grand Summon list data",
+   "target tile composites"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "deep review on the live build after the deploy (deepAfterDeploy)",
+ "elapsedMinutes": 175
+}

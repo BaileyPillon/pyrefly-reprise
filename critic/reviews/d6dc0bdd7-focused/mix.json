@@ -1,0 +1,92 @@
+{
+ "1600x900": {
+  "info": {
+   "text": "MixNot built",
+   "cls": "ig-cmd ig-cmd--selected ig-cmd--disabled",
+   "disabled": true,
+   "clipped": false,
+   "reasonW": 124.8046875,
+   "reasonSW": 50,
+   "box": [
+    1239.4459228515625,
+    417.8515625,
+    336.6942138671875,
+    57.7734375
+   ],
+   "help": "NOT BUILT"
+  },
+  "rowsBefore": [
+   "Attack",
+   "Mix(dis)",
+   "Item",
+   "Change"
+  ],
+  "menuStillOpen": true,
+  "logDelta": 7,
+  "turn": 3
+ },
+ "1600x900-net": {
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "2000x1012": {
+  "info": {
+   "text": "MixNot built",
+   "cls": "ig-cmd ig-cmd--selected ig-cmd--disabled",
+   "disabled": true,
+   "clipped": false,
+   "reasonW": 140.33544921875,
+   "reasonSW": 50,
+   "box": [
+    1494.12255859375,
+    469.8489990234375,
+    378.592529296875,
+    64.9627685546875
+   ],
+   "help": "NOT BUILT"
+  },
+  "rowsBefore": [
+   "Attack",
+   "Mix(dis)",
+   "Item",
+   "Change"
+  ],
+  "menuStillOpen": true,
+  "logDelta": 7,
+  "turn": 3
+ },
+ "2000x1012-net": {
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "390x844": {
+  "info": {
+   "text": "MixNot built",
+   "cls": "ig-cmd ig-cmd--disabled",
+   "disabled": true,
+   "clipped": false,
+   "reasonW": 83.28125,
+   "reasonSW": 83,
+   "box": [
+    199,
+    610,
+    183,
+    56
+   ],
+   "help": "NOT BUILT"
+  },
+  "rowsBefore": [
+   "Attack",
+   "Mix(dis)",
+   "Item",
+   "Change"
+  ],
+  "menuStillOpen": true,
+  "logDelta": 1,
+  "turn": 3
+ },
+ "390x844-net": {
+  "consoleErrors": [],
+  "notFound": []
+ }
+}

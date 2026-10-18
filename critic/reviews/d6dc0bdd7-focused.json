@@ -1,0 +1,477 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-17T15:18:07.410Z",
+ "build": {
+  "mainSha": "d6dc0bdd7"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical and no confirmed regression: the Mix row reads 'Not built' whole at three sizes and opens nothing; the mirror-aeons backdrop loads with no 404; 15 of 17 swept chapters won, one defeat (a seed inside the measured noise) and Braska's final aeon outran the budget on live too.",
+  "The Dark Aeons' CHK-026 feet swaps over tolerance are gone (191 to 0) and the double images are gone (22 to 0) against live r50.1; the remaining CHK-027 jerks match live and are disclosed."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "The Mix row, the Mirror Aeons battle and the pause were captured at 1600x900, 2000x1012 and 390x844 with no layer covering the stage.",
+   "where": "FFX Chapter XXVII; FFX-2 Chapter XIII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mix-1600x900-selected.png",
+    "critic/reviews/d6dc0bdd7-focused/mix-390x844-selected.png",
+    "critic/reviews/d6dc0bdd7-focused/mirror-390x844-menu.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Greyed Mix row reads \"Not built\" whole at all three sizes (clipped false; reason width 124.8, 140.3 and 83.3 px), help line \"NOT BUILT\"; the Mirror Aeons command menu rows are whole.",
+   "where": "FFX-2 Chapter XIII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mix.json",
+    "critic/reviews/d6dc0bdd7-focused/mix-2000x1012-selected.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "A click on the greyed Mix row opens nothing (menuStillOpen true) and the row says why; no panel names an action the actor cannot press.",
+   "where": "FFX-2 Chapter XIII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mix.json",
+    "critic/reviews/d6dc0bdd7-focused/mix2.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised as a separate walk; the continuity run played Chapter XXVII through prep, pause, menu, target and results without a stuck overlay, but no overlay-lifetime assertion was made.",
+   "where": "FFX Chapter XXVII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No raw ids or debug text in the Mix row, the Mirror Aeons HUD or the guide card; the unsourced Dark Yojimbo \"In Game Description\" is gone (guideHasInGameDescription false at three sizes).",
+   "where": "FFX Chapter XXVII; FFX-2 Chapter XIII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mirror.json",
+    "critic/reviews/d6dc0bdd7-focused/mirror-1600x900-after4.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "Panels against the painted actors were looked at on one frame at 1600x900 only (no overlap seen); not measured.",
+   "where": "FFX Chapter XXVII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mirror-1600x900-after4.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-009",
+   "result": "NOT APPLICABLE",
+   "reason": "No title, chapter-select or name change in this release beyond the Mix reason text.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mix.json"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "reason": "No targeting change; the target picker was only passed through in the continuity run.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/continuity/mirror-aeons-win-d6dc0bdd7/16-target-single.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real keys and touch: Enter turns and a touch tap in the Mirror Aeons run, the full harness flow (title, briefing, prep, scene skip, advisor, guide, pause, target) on real keys; the Mix row clicked.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mirror.json",
+    "critic/reviews/d6dc0bdd7-focused/mix.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 8,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture followed an asserted screen and state (assertScreen / waitBattleMenu); failed waits were recorded as errors (sweep timeouts), never photographed as a pass.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/index.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "No console errors and no 404 on any asserted run: Mix at three sizes, Mirror Aeons at three sizes (mushroom-rock-road.webp loaded, no dreams-end or gagazet 404), the swept chapters.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/sweep-all.json",
+    "critic/reviews/d6dc0bdd7-focused/sweep2-b.json",
+    "critic/reviews/d6dc0bdd7-focused/mirror.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Paired flows: FFX chapters 1 to 3 and 27 and the FFX-2 chapters all played to their real outcome through the production build (see coverage).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/sweep-all.json",
+    "critic/reviews/d6dc0bdd7-focused/sweep2-b.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 60,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Mix row: FFX-2 only (the Alchemist and Mix exist only in FFX-2; MIX_PICKER_REASON feeds only the FFX-2 menu). Present in FFX-2 Chapter XIII (rows Attack, Mix, Item, Change); absent in FFX (Mirror Aeons rows Talk, Attack, Special, White Magic, Items, Flee). Dark Aeon paintings and the mirror-aeons backdrop: FFX only (Chapter XXVII). RE lanes: FFX lanes touch src/battle/ffx, FFX-2 lanes src/battle/ffx2, each game played on its own chapters.",
+   "where": "FFX-2 only (Mix); FFX only (Dark Aeons, backdrop); both (RE lanes, per game)",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mix.json",
+    "critic/reviews/d6dc0bdd7-focused/mirror.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 5,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Wins, losses and transitions reach their destination: 16 chapters reached a results screen through the real flow (15 victories, one defeat: Sin Fins Core seed 1).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/sweep-all.json",
+    "critic/reviews/d6dc0bdd7-focused/sweep2-b.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 60,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Mix row, kill rewards and Dark Aeon stances were seen through the production presenter (menu, results, battle), not only the engine.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/mix-1600x900-selected.png",
+    "critic/reviews/d6dc0bdd7-focused/mirror-1600x900-after4.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "reason": "Mirror Aeons: feet shift max 0.9 px, 0 swaps over tolerance (live r50.1: 191 swaps over tolerance, worst 58.2 px); head jump 0 over tolerance. The Dark Aeons' feet swaps over tolerance are gone.",
+   "where": "FFX Chapter XXVII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/continuity/continuity-summary.json",
+    "critic/reviews/d6dc0bdd7-focused/continuity-live/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 18,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "102 jerks of 40 px or more in one frame (worst 210.9 px), 0 double images of 0.40 or more (live: 86 jerks, worst 210.5 px, and 22 double images up to 0.423). The jerks are the same class on both builds (strips jerk-004 to -006); the double images are fixed.",
+   "where": "FFX Chapter XXVII",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/continuity/continuity-summary.json",
+    "critic/reviews/d6dc0bdd7-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/d6dc0bdd7-focused/continuity/mirror-aeons-win-d6dc0bdd7/continuity/strips/jerk-004-tidus.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 18,
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu d6dc0bdd7, dist-release (index-CX9N1apa.js, BASE_PATH=/), vite preview 127.0.0.1:5612 (stopped); headless Playwright Chromium, PYREFLY_BROWSER=gpu, no black canvas",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "mirror-aeons",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1081.5,
+    "swaps": 1093,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 13,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 210.9,
+    "jerksCovered": 0,
+    "fps": 58.9,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-078-lulu-idle-ko.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1018-lulu-ko-idle.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-299-lulu-ko-critical.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-538-dark-sandy-hurt-ko.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1047-tidus-ko-idle.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-448-tidus-ko-critical.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-195-tidus-attack-item.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1040-yuna-hurt-critical.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1026-yuna-critical-hurt.jpg",
+     "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-496-tidus-ready-attack.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 1081.5,
+  "counted": 1093,
+  "swaps": 1104,
+  "size": {
+   "judged": 1092,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 1,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 13,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 0.9,
+   "feetOverTolerance": 0,
+   "headMeasured": 1092,
+   "headRegistration": 809,
+   "headSilhouette": 283,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 1054,
+   "ghostFrames": 3998,
+   "worstGhostSeverity": 0.379,
+   "ghostOverFail": 0,
+   "jerks": 264,
+   "worstJerkPx": 210.9,
+   "jerksOverFail": 102,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 122.5,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "809 of 1092 measured swaps had a registered head (tolerance 3 percent); 283 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "102 jerk(s) of 40 px or more in one frame (worst 210.9 px)"
+    ]
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 1081.5 s of battle, 58.9 to 58.9 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (102 jerk(s) of 40 px or more in one frame (worst 210.9 px))",
+  "base": "http://127.0.0.1:5612/",
+  "date": "2026-10-17T09:59:14.414Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "list": []
+ },
+ "issues": [
+  {
+   "id": "FOC511-01",
+   "severity": "major",
+   "title": "Jerks of 40 px or more in one frame in Chapter XXVII (CHK-027), the same class the live build has",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "No frame-to-frame head jump of 40 px or more at a pose swap",
+   "observed": "102 jerks, worst 210.9 px (live r50.1: 86, worst 210.5 px). The strips show the figures changing between a close pose and the wide party shot.",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<preview> --chapters=mirror-aeons",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/continuity/continuity-summary.json",
+    "critic/reviews/d6dc0bdd7-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "high on the count; cause not traced (suspected overdrive and camera cuts)",
+   "requirement": "CHK-027; D-420 to D-426",
+   "where": "presenter pose swaps (suspected)",
+   "fix": "Cover the swap with the camera cut or hold the pose across it, then re-run the harness.",
+   "acceptanceCheck": "continuity harness on mirror-aeons: no jerk over 40 px",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC511-02",
+   "severity": "polish",
+   "title": "Sin Fins Core (Chapter XVII) autoplay seed 1 is lost on the candidate and won on live",
+   "game": "FFX",
+   "chapter": "sin-fins-core",
+   "expected": "Same win rate as live",
+   "observed": "Candidate: defeat at 154 turns (seed 1, intended line). Live: victory at 88 turns. The merge review measured 432 of 500 wins on the merged tree against 437 on r50.1 and five flipped seeds of 40, so one seed flipping is inside that noise; not a collapse.",
+   "repro": "window.__pyrefly.gotoChapter(\"sin-fins-core\", {seed: 1, auto: \"intended\"}) on each build",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/sweep2-b.json",
+    "critic/reviews/d6dc0bdd7-focused/live-sweep-b.json",
+    "critic/reviews/r51-merge-review.md"
+   ],
+   "confidence": "medium: one seed here, 500 seeds in the merge review",
+   "requirement": "win rate unchanged within noise",
+   "where": "FFX engine lanes (overdrives, counters; suspected)",
+   "fix": "None needed; the 437 to 432 shift is in the changelog.",
+   "acceptanceCheck": "a 500-seed Chapter XVII measurement stays within a few wins of 437",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC511-03",
+   "severity": "polish",
+   "title": "Braska's Final Aeon did not finish an autoplay inside 1100 s on either build",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon",
+   "expected": "Autoplay reaches a result",
+   "observed": "Timeout at 400 s and 1100 s on the candidate and at 1100 s on live; the long fight outruns the sweep budget. No console error, no 404.",
+   "repro": "gotoChapter(\"braskas-final-aeon\", {auto: \"intended\"})",
+   "evidence": [
+    "critic/reviews/d6dc0bdd7-focused/sweep2-b.json",
+    "critic/reviews/d6dc0bdd7-focused/live-sweep-b.json"
+   ],
+   "confidence": "medium: not played past the timeout",
+   "requirement": "CHK-022",
+   "where": "review budget",
+   "fix": "Give it a longer budget in the deep review.",
+   "acceptanceCheck": "the deep review plays it to a result",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Mix row, Chapter XIII, 3 sizes, real input",
+   "mirror-aeons at 3 sizes with real input; full-flow harness (prep, pause, menu, target, results) at 1600",
+   "chapter autoplay sweep of 17 chapters (both games)",
+   "continuity harness on mirror-aeons, candidate and live",
+   "data tests (9 files, 187 passed)",
+   "data audit: Changed data is game-file sourced and pinned by tests: parity-ffx2-rewards-data (13 tests), parity-ffx-loot-data, parity-ffx2-mix-recipe, parity-ffx2-mix-chapter, garment-grid and stat and confusion parity tests: 9 files, 187 passed, 2 skipped, all green; the merge review checked the forced-action rows against research/re-ffx-dark-aeons.md. Not re-read value by value against research/ by this pass."
+  ],
+  "reused": [
+   {
+    "what": "Mix row, Mirror Aeons 3 sizes, sweeps",
+    "from": "critic/reviews/d6dc0bdd7-focused/ (earlier cut-off passes)",
+    "why": "same commit, same dist-release"
+   },
+   {
+    "what": "12-chapter win rates, 500-seed Chapter XVII",
+    "from": "critic/reviews/r51-merge-review.md",
+    "why": "same commit, engine measurement"
+   }
+  ],
+  "notTested": [
+   "braskas-final-aeon outcome (timeout on both builds)",
+   "mirror-aeons autoplay sweep outcome (the continuity run played it to a win instead)",
+   "phone layout beyond the Mix and Mirror menus",
+   "party prep and pause arena plate seen only in the harness frames, no like-for-like with live",
+   "value-by-value data audit against research/"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy, then the owed deep review (Braska's final aeon, mirror-aeons autoplay and a 500-seed Chapter XVII there).",
+ "elapsedMinutes": 150
+}

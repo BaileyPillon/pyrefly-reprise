@@ -1,0 +1,94 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "mirror-aeons",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 1081.5,
+   "swaps": 1093,
+   "snapsPerMinute": 0,
+   "maxHeadJumpPct": 13,
+   "maxFeetShiftPx": 0.9,
+   "worstJerkPx": 210.9,
+   "jerksCovered": 0,
+   "fps": 58.9,
+   "dedicated": true,
+   "strips": 18,
+   "worstSwapStrips": [
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-078-lulu-idle-ko.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1018-lulu-ko-idle.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-299-lulu-ko-critical.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-538-dark-sandy-hurt-ko.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1047-tidus-ko-idle.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-448-tidus-ko-critical.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-195-tidus-attack-item.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1040-yuna-hurt-critical.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-1026-yuna-critical-hurt.jpg",
+    "mirror-aeons-win-d6dc0bdd7/continuity/strips/swap-496-tidus-ready-attack.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 1081.5,
+ "counted": 1093,
+ "swaps": 1104,
+ "size": {
+  "judged": 1092,
+  "costumeSwaps": 0,
+  "sameArtSwaps": 1,
+  "costumeWorstHeadPct": 0,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 13,
+  "maxHeadJumpPctRegistration": 0.2,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 0.9,
+  "feetOverTolerance": 0,
+  "headMeasured": 1092,
+  "headRegistration": 809,
+  "headSilhouette": 283,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 0,
+  "snapsPerMinute": 0,
+  "hardCuts": 0,
+  "hardCutsPerMinute": 0,
+  "ghostSwaps": 1054,
+  "ghostFrames": 3998,
+  "worstGhostSeverity": 0.379,
+  "ghostOverFail": 0,
+  "jerks": 264,
+  "worstJerkPx": 210.9,
+  "jerksOverFail": 102,
+  "jerksCovered": 0,
+  "worstCoveredJerkPx": 0,
+  "lowestIou": 0,
+  "maxCentroidShiftPx": 122.5,
+  "heldSwaps": 0,
+  "longestHeldFrames": 0,
+  "stagedChanges": 0,
+  "stagedSteps": 0,
+  "stagedSnapsExcused": 0,
+  "jerksAtStaged": 0
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "809 of 1092 measured swaps had a registered head (tolerance 3 percent); 283 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "102 jerk(s) of 40 px or more in one frame (worst 210.9 px)"
+   ]
+  }
+ },
+ "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 1081.5 s of battle, 58.9 to 58.9 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (102 jerk(s) of 40 px or more in one frame (worst 210.9 px))",
+ "base": "http://127.0.0.1:5612/",
+ "date": "2026-10-17T09:59:14.414Z"
+}

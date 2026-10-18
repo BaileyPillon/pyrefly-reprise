@@ -1,0 +1,28 @@
+{
+ "sin-fins-core": {
+  "outcome": "victory",
+  "turns": 88,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 819,
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "braskas-final-aeon": {
+  "error": "Error: timeout 1100s",
+  "consoleErrors": [],
+  "notFound": []
+ }
+}

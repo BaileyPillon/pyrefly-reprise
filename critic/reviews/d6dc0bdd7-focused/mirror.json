@@ -1,0 +1,128 @@
+{
+ "1600x900": {
+  "rows": [
+   "Talk",
+   "Attack",
+   "Special",
+   "White Magic",
+   "Items",
+   "Flee"
+  ],
+  "foes": [
+   "\"name\":\"Tidus\"",
+   "\"name\":\"Baroque Sword\"",
+   "\"name\":\"Tetra Shield\"",
+   "\"name\":\"Yuna\"",
+   "\"name\":\"Yuna's Staff\"",
+   "\"name\":\"Tetra Ring\"",
+   "\"name\":\"Auron\"",
+   "\"name\":\"Auron's Katana\"",
+   "\"name\":\"Tetra Bracer\"",
+   "\"name\":\"Wakka\"",
+   "\"name\":\"Wakka's Ball\"",
+   "\"name\":\"Tetra Armguard\""
+  ],
+  "log": 11,
+  "guideHasInGameDescription": false,
+  "consoleErrors": [],
+  "notFound": [],
+  "mirrorBackdropReq": [
+   "art/backdrops/dreams-end.webp",
+   "art/backdrops/gagazet.webp",
+   "art/backdrops/dreams-end.webp",
+   "art/backdrops/gagazet.webp",
+   "art/backdrops/mushroom-rock-road.webp",
+   "art/backdrops/mushroom-rock-road.webp",
+   "art/backdrops/mushroom-rock-road-ruined.webp",
+   "art/characters/dark-mindy/idle.png",
+   "art/characters/dark-mindy/attack.png",
+   "art/characters/dark-mindy/cast.png",
+   "art/characters/dark-mindy/hurt.png",
+   "art/characters/dark-mindy/ko.png"
+  ]
+ },
+ "2000x1012": {
+  "rows": [
+   "Talk",
+   "Attack",
+   "Special",
+   "White Magic",
+   "Items",
+   "Flee"
+  ],
+  "foes": [
+   "\"name\":\"Tidus\"",
+   "\"name\":\"Baroque Sword\"",
+   "\"name\":\"Tetra Shield\"",
+   "\"name\":\"Yuna\"",
+   "\"name\":\"Yuna's Staff\"",
+   "\"name\":\"Tetra Ring\"",
+   "\"name\":\"Auron\"",
+   "\"name\":\"Auron's Katana\"",
+   "\"name\":\"Tetra Bracer\"",
+   "\"name\":\"Wakka\"",
+   "\"name\":\"Wakka's Ball\"",
+   "\"name\":\"Tetra Armguard\""
+  ],
+  "log": 11,
+  "guideHasInGameDescription": false,
+  "consoleErrors": [],
+  "notFound": [],
+  "mirrorBackdropReq": [
+   "art/backdrops/dreams-end.webp",
+   "art/backdrops/gagazet.webp",
+   "art/backdrops/dreams-end.webp",
+   "art/backdrops/gagazet.webp",
+   "art/backdrops/mushroom-rock-road.webp",
+   "art/backdrops/mushroom-rock-road.webp",
+   "art/backdrops/mushroom-rock-road-ruined.webp",
+   "art/characters/dark-mindy/idle.png",
+   "art/characters/dark-mindy/attack.png",
+   "art/characters/dark-mindy/cast.png",
+   "art/characters/dark-mindy/hurt.png",
+   "art/characters/dark-mindy/ko.png"
+  ]
+ },
+ "390x844": {
+  "rows": [
+   "Talk",
+   "Attack",
+   "Special",
+   "White Magic",
+   "Items",
+   "Flee"
+  ],
+  "foes": [
+   "\"name\":\"Tidus\"",
+   "\"name\":\"Baroque Sword\"",
+   "\"name\":\"Tetra Shield\"",
+   "\"name\":\"Yuna\"",
+   "\"name\":\"Yuna's Staff\"",
+   "\"name\":\"Tetra Ring\"",
+   "\"name\":\"Auron\"",
+   "\"name\":\"Auron's Katana\"",
+   "\"name\":\"Tetra Bracer\"",
+   "\"name\":\"Wakka\"",
+   "\"name\":\"Wakka's Ball\"",
+   "\"name\":\"Tetra Armguard\""
+  ],
+  "log": 1,
+  "guideHasInGameDescription": false,
+  "consoleErrors": [],
+  "notFound": [],
+  "mirrorBackdropReq": [
+   "art/backdrops/dreams-end.webp",
+   "art/backdrops/gagazet.webp",
+   "art/backdrops/dreams-end.webp",
+   "art/backdrops/gagazet.webp",
+   "art/backdrops/mushroom-rock-road.webp",
+   "art/backdrops/mushroom-rock-road.webp",
+   "art/backdrops/mushroom-rock-road-ruined.webp",
+   "art/characters/dark-mindy/idle.png",
+   "art/characters/dark-mindy/attack.png",
+   "art/characters/dark-mindy/cast.png",
+   "art/characters/dark-mindy/hurt.png",
+   "art/characters/dark-mindy/ko.png"
+  ]
+ }
+}

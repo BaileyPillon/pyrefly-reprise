@@ -1,0 +1,167 @@
+{
+ "game": "both (shared plumbing)",
+ "chapter": "ffx2-bahamut then reload",
+ "viewport": "1600x900",
+ "keysBefore": [
+  "pyrefly-reprise:save:v1"
+ ],
+ "tabsWalked": [
+  "Yuna",
+  "Rikku",
+  "Paine",
+  "Chapter",
+  "Guide",
+  "Options"
+ ],
+ "optionsText": "Bahamut | SCAN | WM | WM | Yuna | 690 | /690 | 130 | /130 | DK | DK | Rikku | 1839 | /1839 | 158 | /158 | WR | WR | Paine | 1706 | /1706 | 67 | /67 | ATTACK | SKILL | ◂ | CHANGE | ◂ | ITEM | ◂ | ATTACK | Physical damage | Dark Knight is among the strongest dresspheres in the game, with a slow but heavy attack and strong defense. Put one of your girls in it now. | Save, and start one girl as a Thief so she can steal from the bosses ahead. A Ribbon on one party member is also worth having, to block nasty status effects. | Bahamut | BOSS BATTLE | Time to take on an aeon! Remember to Steal a Mute Shock off him before the battle ends. | Bahamut cycles through one fixed attack pattern: | “Curse” or an ordinary physical hit (Curse locks a girl into her current dressphere) | Ordinary physical hit | Ordinary physical hit | “Impulse” (takes 37.5% of HP) | “Impulse” again | “Countdown” | “Mega Flar",
+ "changedKeys": [
+  "pyrefly-reprise:save:v1"
+ ],
+ "saveAfterChange": [
+  {
+   "key": "pyrefly-reprise:save:v1",
+   "before": "{\"version\":1,\"updatedAt\":1792259968261,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"yunalesca\":{\"id\":\"yunalesca\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"braskas-final-aeon\":{\"id\":\"braskas-final-aeon\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"seymour-anima-macalania\":{\"id\":\"seymour-anima-macalania\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"evrae-airship\":{\"id\":\"evrae-airship\",\"cleared\":false,\"be",
+   "after": "{\"version\":1,\"updatedAt\":1792259973152,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"yunalesca\":{\"id\":\"yunalesca\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"braskas-final-aeon\":{\"id\":\"braskas-final-aeon\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"seymour-anima-macalania\":{\"id\":\"seymour-anima-macalania\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"evrae-airship\":{\"id\":\"evrae-airship\",\"cleared\":false,\"be"
+  }
+ ],
+ "bahamutBefore": {
+  "id": "ffx2-bahamut",
+  "cleared": false,
+  "bestTimeMs": null,
+  "bestTurns": null,
+  "attempts": 1,
+  "playTimeMs": 8349.700000000004
+ },
+ "bahamutProgress": {
+  "id": "ffx2-bahamut",
+  "cleared": false,
+  "bestTimeMs": null,
+  "bestTurns": null,
+  "attempts": 1,
+  "playTimeMs": 8349.700000000004
+ },
+ "afterReloadDiffKeys": [],
+ "bahamutAfterReload": {
+  "id": "ffx2-bahamut",
+  "cleared": false,
+  "bestTimeMs": null,
+  "bestTurns": null,
+  "attempts": 1,
+  "playTimeMs": 8349.700000000004
+ },
+ "settingLeaves": [
+  {
+   "path": "/settings/masterVolume",
+   "before": 0.8,
+   "changedTo": 1,
+   "afterReload": 1
+  }
+ ],
+ "consoleErrors": [],
+ "badResponses": [],
+ "steps": [
+  {
+   "name": "pause opened",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "reached the Options tab by real keys",
+   "ok": true,
+   "detail": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options"
+   ]
+  },
+  {
+   "name": "a setting change reached the save",
+   "ok": true,
+   "detail": [
+    "pyrefly-reprise:save:v1"
+   ]
+  },
+  {
+   "name": "resumed to the battle",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "progress recorded in the save (play time of the chapter grew)",
+   "ok": true,
+   "detail": {
+    "before": {
+     "id": "ffx2-bahamut",
+     "cleared": false,
+     "bestTimeMs": null,
+     "bestTurns": null,
+     "attempts": 1,
+     "playTimeMs": 8349.700000000004
+    },
+    "after": {
+     "id": "ffx2-bahamut",
+     "cleared": false,
+     "bestTimeMs": null,
+     "bestTurns": null,
+     "attempts": 1,
+     "playTimeMs": 8349.700000000004
+    }
+   }
+  },
+  {
+   "name": "reload: app re-boots",
+   "ok": true,
+   "detail": "title"
+  },
+  {
+   "name": "reload: the changed setting survived in the save",
+   "ok": true,
+   "detail": {
+    "sameAll": true,
+    "diffKeys": []
+   }
+  },
+  {
+   "name": "reload: the chapter progress record is unchanged",
+   "ok": true,
+   "detail": {
+    "progress": {
+     "id": "ffx2-bahamut",
+     "cleared": false,
+     "bestTimeMs": null,
+     "bestTurns": null,
+     "attempts": 1,
+     "playTimeMs": 8349.700000000004
+    },
+    "afterReload": {
+     "id": "ffx2-bahamut",
+     "cleared": false,
+     "bestTimeMs": null,
+     "bestTurns": null,
+     "attempts": 1,
+     "playTimeMs": 8349.700000000004
+    }
+   }
+  },
+  {
+   "name": "setting leaves [\"/settings/masterVolume\"] survive the reload",
+   "ok": true,
+   "detail": [
+    {
+     "path": "/settings/masterVolume",
+     "before": 0.8,
+     "changedTo": 1,
+     "afterReload": 1
+    }
+   ]
+  },
+  {
+   "name": "reload: board shows, guide/coach not re-shown as first-time (seen flags kept)",
+   "ok": true,
+   "detail": "clean"
+  }
+ ]
+}

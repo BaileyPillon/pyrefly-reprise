@@ -1,0 +1,78 @@
+import { writeFileSync } from 'node:fs';
+
+const R = 'critic/reviews/d6dc0bdd7-live';
+const report = {
+  rubricVersion: 2,
+  review: 'live',
+  date: new Date().toISOString().replace(/\.\d+Z$/, 'Z'),
+  build: {
+    mainSha: 'd6dc0bdd7',
+    bundle: 'zpfxlH3Y',
+    artifactHash: 'be83da6643c2f1d6176404b8c621507d340a0f4a144cdd9fe5ca47b65cd28b79',
+  },
+  verdicts: { deployment: 'PASS', changedArea: 'NOT APPLICABLE', milestone: 'not assessed' },
+  checks: [
+    {
+      id: 'CHK-017',
+      result: 'PASS',
+      mandatory: true,
+      evidence:
+        'node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/d6dc0bdd7.json --url https://echoesofspira.com/ --changed-from critic/artifacts/6b638df95.json --full -> {result: PASS, artifactHash: be83da6643c2f1d6176404b8c621507d340a0f4a144cdd9fe5ca47b65cd28b79, liveManifest: match, checked: 5309, mismatched: [], missing: [], wrongType: [], errors: []}. The manifest lists 5310 files; _headers is host-read and never served, so not downloaded; index.html as a browser asks for it is identical to the artifact once Cloudflare\'s Web Analytics beacon (366 bytes and the line feed) is cut out. The live app reports sha d6dc0bdd and bundle index-zpfxlH3Y.js. Across the 10 final smoke contexts: 0 console errors, 0 page errors, 0 responses >= 400 (r50.1 live: 14, all art/backdrops/mirror-aeons.png, LIVE-R50-01, now fixed), 0 image or audio responses served as text/html; 159 requestfailed events, all net::ERR_ABORTED prewarm cancellations (no status, no console error). Evidence: ' + R + '/verify-live.json, ' + R + '/*-result.json.',
+      reason:
+        'Every compared file is byte-identical to the stored manifest with the right content type and the live manifest names this artifact. The CHK-017 zero-4xx criterion is met with no exception this time: the one stray 404 of r50 and r50.1 (LIVE-R50-01) is gone.',
+    },
+    {
+      id: 'CHK-016',
+      result: 'PASS',
+      mandatory: true,
+      evidence:
+        'Headless Playwright launched from node scripts with PYREFLY_BROWSER=gpu (never SwiftShader, never the Chrome extension or the browser pane, no headed window), a fresh browser context per run, a ?livesmoke=<ms> cache-busting URL, 1600x900 and 390x844 (touch), real key presses, a real mouse click (desktop) and a real touch tap (phone). Every state was asserted before it was read: screen name via window.__pyrefly.screen(), the board selectedId (mirror-aeons, ffx2-trema, seymour-flux, ffx2-bahamut), the pending menu actor (awaitingMenu), the staged ids (dark-mindy,dark-sandy in Act I; dark-yojimbo,dark-daigoro in Act II), and the menu rows. Debug API use: build(), screen(), targeting() and stage.snapshot() read-only; forced poses with actor.setPose only for the static feet probe (declared); setBattleSpeed, autoBattle and setAutoPlay(null) and the sisters at 1 HP only to reach Act II (the smoke tool\'s own method, declared). No forceCommand was needed. Evidence: ' + R + '/ (result JSONs, logs, scripts, frames in shots/).',
+      reason:
+        'Every reading names the screen, chapter and menu it was taken on. Two harness defects of my own first iterations (an Escape that paused the battle, an Enter on the wrong row) were found by reading frames and logs, fixed, and are not evidence.',
+    },
+    {
+      id: 'CHK-024',
+      result: 'PASS',
+      mandatory: false,
+      evidence:
+        'Light reload smoke on the live URL at 1600x900: real keys (Escape, E to the Options tab, ArrowDown, ArrowRight x2) changed settings.masterVolume 0.8 to 1 in pyrefly-reprise:save:v1; the Bahamut chapter record read attempts 1; after page.reload() the game came back on the title with no error, the whole save was identical, masterVolume read 1, the chapter record was unchanged and the board showed with no first-time card. ' + R + '/reload-desk-result.json.',
+      reason:
+        'The full upgrade matrix (fresh, returning, previous-build fixture, invalid storage, reset) is not part of this pass and was not run; this deployment is not a save-data change on this review\'s reading.',
+    },
+  ],
+  coverage: {
+    tested: [
+      'exact artifact: all 5309 downloadable files of the 5310-file manifest byte-compared with the live site (--full), content types, live manifest match, index.html with and without the Web Analytics beacon',
+      'FFX-2 Chapter XIII (ffx2-trema), Rikku as Alchemist, desktop and phone: the Mix row is greyed and reads "Not built" whole, the help line reads "Not built - Timed input", Enter, a click and a tap open nothing and submit nothing, Rikku\'s Attack plays on, pause, H, P',
+      'FFX Chapter XXVII (mirror-aeons), desktop and phone: the board card (LOCATION whole, BOSS "Dark Sandy and Dark Mindy, then Dark Yojimbo"), party prep, Act I first menu (dark-mindy, dark-sandy) and Act II first menu (dark-yojimbo and his dog), the Dark paintings drawn, no request for art/backdrops/mirror-aeons.png and 0 responses >= 400 (LIVE-R50-01 verified fixed), the guide cards and the pause Guide tab carry no "In Game Description" and none of the old sentences',
+      'Dark Aeons feet line live: forced-pose probe at rest on all four Dark figures and the dog (stances within 1.1 px of the idle; hurt 2.1 to 3.2 percent of height lower; KO lying), the party baseline read the same way, and an in-page 25 Hz sampler over 155 natural pose changes (Mindy 58, Sandy 61, Yojimbo 36)',
+      'FFX Chapter I (seymour-flux), desktop and phone: five and four real-key turns, Kimahri\'s Overdrive row opens Jump, Mighty Guard, White Wind, Escape cancels, the Overdrive is taken and aimed by real keys and the battle log grows',
+      'FFX-2 Chapter IV (ffx2-bahamut), desktop and phone: five real-key turns each (Attack, White Magic), pause and resume',
+      'pause: Escape and P open it, H hides and restores the panels, Escape and P resume (Chapter XIII desktop and phone; Seymour Flux and Bahamut Escape round trip; Mirror Aeons pause and Guide tab)',
+      'prerendered music: title, chapter-select, sprite and parity packs fetched 200 audio/mpeg; audioDebug prerendered manifest true, 41 cues, sprite decoded, playing boss-seymour, boss-bahamut, pause',
+      'light reload smoke (CHK-024): a setting changed by real keys and the chapter attempt record survived a reload',
+    ],
+    reused: [
+      {
+        what: 'swap-level feet continuity of the Dark Aeons (CHK-026: 1093 swaps, worst feet shift 0.9 px, the Dark Aeons\' swaps over tolerance 191 to 0)',
+        from: 'critic/reviews/d6dc0bdd7-focused/continuity/continuity-summary.json',
+        why: 'same commit, and this review proved the live artifact byte-identical to the candidate it ran on',
+      },
+    ],
+    notTested: [
+      'Act II of Chapter XXVII fought to a win, the post scene, the results screen, the board\'s clear ribbon and save record, the retry',
+      'the Dark Aeons\' KO pose seen in play (drawn only by the forced-pose probe at rest)',
+      'Chapter XIII beyond the first turns (Paragon and Trema fights), any Mix executed (the row is greyed by design)',
+      'the other FFX-2 changes of this release (Confusion, Garment Grids, kill rewards, the stat setter) and the FFX Overdrive, counter, reach and kill-reward changes beyond first turns and one Overdrive on live; pinned by the unit suites and the focused review\'s sweeps',
+      'the full CHK-024 upgrade matrix; sizes other than 1600x900 and 390x844; the cold-load timing; FOC511-02 (Chapter XVII autoplay seed) and FOC511-03 (Braska autoplay budget) outcomes on live',
+    ],
+  },
+  consoleErrors: 0,
+  notFound: 0,
+  elapsedMinutes: 76,
+  notes:
+    'LIVE-R50-01 (polish, art/backdrops/mirror-aeons.png 404 on r50 and r50.1 live: 14 over six contexts) is verified fixed on r51: 0 requests for it and 0 responses >= 400 in 10 contexts; a direct curl of the old URL still answers 404 because the file does not exist and nothing asks for it. Observations, not defects: 159 net::ERR_ABORTED prewarm cancellations (earlier live reports did not count requestfailed); the Dark Aeons\' hurt painting alpha-box bottom is 2.1 to 3.2 percent of the idle height below the idle\'s, the party\'s long-registered hurt is 1.4 to 2.4 percent, and the attack, cast and telegraph stances are within 1.1 px; the pause Chapter tab\'s quote "Sandy and Mindy. Wearing the wrong colours." is our own scene line attributed to Yuna, not the game. The first-iteration harness defects (Escape pausing the battle, Enter on the wrong Rikku row) are excluded from the evidence. Two verify-live processes were started by mistake; one was stopped by its PID and the other wrote the result.',
+};
+
+writeFileSync('M:/pyrefly-ch-angra-mainyu/critic/reviews/d6dc0bdd7-live.json', JSON.stringify(report, null, 2) + '\n');
+console.log('written', report.date);

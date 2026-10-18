@@ -1,0 +1,1981 @@
+{
+ "tag": "desk",
+ "w": 1600,
+ "h": 900,
+ "mode": "gpu",
+ "started": "2026-10-17T01:56:07.875Z",
+ "checks": [
+  {
+   "name": "board lists 19 cards (Chapter XXVII listed)",
+   "ok": true,
+   "detail": {
+    "cards": 19,
+    "strip": "0of 19 beaten/19"
+   }
+  },
+  {
+   "name": "arrow keys put the cursor on Chapter XXVII's card (mirror-aeons)",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "Act I first menu: the pair on the field (Dark Mindy, Dark Sandy), no aeon out",
+   "ok": true,
+   "detail": {
+    "turn": 1,
+    "outcome": null,
+    "enemies": [
+     "dark-mindy",
+     "dark-sandy"
+    ],
+    "enemyHp": {
+     "dark-mindy": 2000000,
+     "dark-sandy": 2500000
+    },
+    "active": [
+     "tidus",
+     "yuna",
+     "lulu"
+    ],
+    "party": {
+     "tidus": [
+      9999,
+      9999
+     ],
+     "yuna": [
+      9999,
+      9999
+     ],
+     "lulu": [
+      9999,
+      9999
+     ]
+    },
+    "aeonId": null,
+    "aeonIds": null,
+    "logLen": 1
+   }
+  },
+  {
+   "name": "party opens Tidus, Yuna, Lulu",
+   "ok": true,
+   "detail": [
+    "tidus",
+    "yuna",
+    "lulu"
+   ]
+  },
+  {
+   "name": "stage draws DARK Sandy from characters/dark-sandy (not the player's sandy)",
+   "ok": true,
+   "detail": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "dark-sandy",
+    "pose": "idle",
+    "url": "/art/characters/dark-sandy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   }
+  },
+  {
+   "name": "stage draws DARK Mindy from characters/dark-mindy (not the player's mindy)",
+   "ok": true,
+   "detail": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "dark-mindy",
+    "pose": "idle",
+    "url": "/art/characters/dark-mindy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   }
+  },
+  {
+   "name": "the Dark paintings were fetched (field art)",
+   "ok": true,
+   "detail": 24
+  },
+  {
+   "name": "sampler saw Lulu in her idle pose",
+   "ok": true,
+   "detail": {
+    "pose": "idle",
+    "url": "/art/characters/lulu/idle.png",
+    "n": 155,
+    "nAlpha": 155,
+    "whMin": 1.7566253263707567,
+    "whMax": 1.7566253263707572,
+    "figMin": 1.7083746736292424,
+    "figMax": 1.708374673629243,
+    "pxMin": 230.35430689286073,
+    "pxMax": 230.44314481767648,
+    "frac": {
+     "top": 0.013733905579399141,
+     "bottom": 0.9862660944206009,
+     "h": 0.9725321888412017,
+     "px": [
+      485,
+      1165
+     ]
+    }
+   }
+  },
+  {
+   "name": "Lulu hurt stands about 0.90 of her idle height (live r50 read 0.67)",
+   "ok": true,
+   "detail": [
+    0.901
+   ]
+  },
+  {
+   "name": "Lulu low HP stands about 0.75 of her idle height (live r50 read 0.54)",
+   "ok": true,
+   "detail": [
+    0.758
+   ]
+  },
+  {
+   "name": "Yuna called the Magus Sisters with the keys (Summon, Cindy)",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "all three of Yuna's Sisters stand on the field as one summon",
+   "ok": true,
+   "detail": [
+    "cindy",
+    "sandy",
+    "mindy"
+   ]
+  },
+  {
+   "name": "Yuna's Sisters are drawn from their own (bright) paintings",
+   "ok": true,
+   "detail": {
+    "cindy": "/art/characters/cindy/idle.webp",
+    "sandy": "/art/characters/sandy/idle.png",
+    "mindy": "/art/characters/mindy/idle.png"
+   }
+  },
+  {
+   "name": "the enemy pair is STILL the dark paintings with the Sisters out",
+   "ok": true,
+   "detail": {
+    "ds": "/art/characters/dark-sandy/idle.png",
+    "dm": "/art/characters/dark-mindy/idle.png"
+   }
+  },
+  {
+   "name": "a Sister's order (\"Free choice\") taken with the keys plays out",
+   "ok": true,
+   "detail": {
+    "sample": "Free choice",
+    "ostart": {
+     "actor": "cindy",
+     "name": "Free choice",
+     "id": null
+    }
+   }
+  },
+  {
+   "name": "the Sisters were dismissed with the keys (Dismiss)",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "Yuna called Yojimbo with the keys (Summon, Yojimbo)",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "Yuna's Yojimbo is drawn from the approved characters/yojimbo-cavern painting (not the navy characters/yojimbo)",
+   "ok": true,
+   "detail": {
+    "side": "aeon",
+    "kind": "party",
+    "artId": "yojimbo-cavern",
+    "pose": "ready",
+    "url": "/art/characters/yojimbo-cavern/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   }
+  },
+  {
+   "name": "turn bar shows DARK sandy's portrait (a loaded dark-sandy face in her row, not only the monogram; first seen: during the opening turns)",
+   "ok": true,
+   "detail": {
+    "actor": "dark-sandy",
+    "name": "Dark Sandy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-sandy/idle.png",
+      "body": "dark-sandy",
+      "loaded": true,
+      "w": 489
+     },
+     {
+      "src": "/art/portraits/dark-sandy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1456,
+     450,
+     51,
+     51
+    ]
+   }
+  },
+  {
+   "name": "turn bar shows DARK mindy's portrait (a loaded dark-mindy face in her row, not only the monogram; first seen: during the opening turns)",
+   "ok": true,
+   "detail": {
+    "actor": "dark-mindy",
+    "name": "Dark Mindy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-mindy/idle.png",
+      "body": "dark-mindy",
+      "loaded": true,
+      "w": 578
+     },
+     {
+      "src": "/art/portraits/dark-mindy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1456,
+     450,
+     51,
+     51
+    ]
+   }
+  },
+  {
+   "name": "Yojimbo's turn-bar tile carries a loaded portrait image (not only the 'Y' monogram)",
+   "ok": true,
+   "detail": {
+    "actor": "yojimbo",
+    "name": "Yojimbo",
+    "imgs": [
+     {
+      "src": "/art/characters/yojimbo-cavern/idle.png",
+      "body": "yojimbo-cavern",
+      "loaded": true,
+      "w": 730
+     }
+    ],
+    "monogram": "Y",
+    "rect": [
+     1480,
+     124,
+     71,
+     71
+    ]
+   }
+  },
+  {
+   "name": "every Yojimbo face on screen (tile and HUD card) is a loaded image of the cavern painting or portrait, none navy",
+   "ok": true,
+   "detail": [
+    {
+     "src": "/art/characters/yojimbo-cavern/idle.png",
+     "body": "yojimbo-cavern",
+     "loaded": true,
+     "where": "ig-ctb__tile ig-ctb__tile--now",
+     "rect": [
+      1454,
+      127,
+      124,
+      186
+     ]
+    },
+    {
+     "src": "/art/characters/yojimbo-cavern/idle.png",
+     "body": "yojimbo-cavern",
+     "loaded": true,
+     "where": "ig-ctb__tile",
+     "rect": [
+      1456,
+      330,
+      86,
+      129
+     ]
+    },
+    {
+     "src": "/art/characters/yojimbo-cavern/idle.png",
+     "body": "yojimbo-cavern",
+     "loaded": true,
+     "where": "ig-stat__face",
+     "rect": [
+      1024,
+      801,
+      129,
+      193
+     ]
+    }
+   ]
+  },
+  {
+   "name": "the in-battle chapter guide is on screen (not folded or hidden)",
+   "ok": true,
+   "detail": {
+    "off": false,
+    "squeezed": false,
+    "rect": [
+     53,
+     222,
+     330,
+     66
+    ]
+   }
+  },
+  {
+   "name": "the guide names Sandy and Mindy",
+   "ok": true,
+   "detail": {
+    "sandy": 9,
+    "mindy": 8
+   }
+  },
+  {
+   "name": "the guide gives the corrected Zanmato odds (about one Pay in four at a million gil; \"a chance, not a plan\")",
+   "ok": true,
+   "detail": "Your own Yojimbo can be paid to strike, and a lucky Zanmato can end the fight: about one Pay in four at a million gil, better with a full Overdrive gauge."
+  },
+  {
+   "name": "scrolling the guide with ] brings a line of the Zanmato-odds paragraph into the sheet window",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "G (real key) folds the guide and saves settings.guideVisible=false",
+   "ok": true,
+   "detail": {
+    "before": true,
+    "after": false,
+    "guideOff": true
+   }
+  },
+  {
+   "name": "P opens the pause screen",
+   "ok": true,
+   "detail": "pause"
+  },
+  {
+   "name": "H hides the pause panels (\"SHOW PANELS\" hint) and a second H restores them (\"PAINTING ONLY\" hint, same text as before)",
+   "ok": true,
+   "detail": {
+    "lenA": 908,
+    "lenR": 908,
+    "hintA": {
+     "paintingOnly": true,
+     "showPanels": false
+    },
+    "hintH": {
+     "paintingOnly": false,
+     "showPanels": true
+    },
+    "hintR": {
+     "paintingOnly": true,
+     "showPanels": false
+    }
+   }
+  },
+  {
+   "name": "Escape resumes the battle from pause",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "no horizontal page scroll",
+   "ok": true,
+   "detail": {
+    "scrollW": 1600,
+    "innerW": 1600
+   }
+  },
+  {
+   "name": "Act II: Dark Yojimbo and his dog are drawn from the dark paintings",
+   "ok": true,
+   "detail": {
+    "y": "/art/characters/dark-yojimbo/idle.png",
+    "d": "/art/characters/daigoro/idle.png"
+   }
+  },
+  {
+   "name": "reload: the settings changed with real keys (G hid the guide; Options ArrowLeft) are all still there after a reload, and the progress flags (seenCoach) too",
+   "ok": true,
+   "detail": {
+    "sameSettings": true,
+    "guideVisible": false,
+    "changedByOptions": [],
+    "seenCoach": [
+     "briefing",
+     "firstrun-board",
+     "firstrun-prep",
+     "firstrun-battle",
+     "ffx-turn-order",
+     "ffx-aeon",
+     "ffx-overdrive"
+    ]
+   }
+  },
+  {
+   "name": "after reload the board still lists 19 cards",
+   "ok": true,
+   "detail": {
+    "cards": 19,
+    "strip": "0of 19 beaten/19"
+   }
+  }
+ ],
+ "shots": [
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-00-board-card.jpg",
+   "asserted": "screen=chapter-select, selected card=mirror-aeons"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-01-party-prep.jpg",
+   "asserted": "screen=party-prep after Enter on the mirror-aeons card"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-02-act1-first-menu.jpg",
+   "asserted": "screen=battle awaitingMenu enemies=dark-mindy,dark-sandy aeonId=null chapter=mirror-aeons (card entry)"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-03-lulu-idle-act1.jpg",
+   "asserted": "screen=battle awaitingMenu, Lulu sampled idle"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-02c-turn-bar-with-dark-row.jpg",
+   "asserted": "screen=battle, turn bar has a dark-* enemy row (during the opening turns)"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-02d-turn-bar-crop.jpg",
+   "asserted": "same moment, crop of the turn bar"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-04-lulu-hurt-moment.jpg",
+   "asserted": "screen=battle, sampler last pose=hurt (best-effort capture of a short pose)"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-05-lulu-low-hp.jpg",
+   "asserted": "screen=battle awaitingMenu, Lulu hp=3999/9999, sampler last pose=critical"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-06-sisters-summoned.jpg",
+   "asserted": "screen=battle awaitingMenu aeonIds=[\"cindy\",\"sandy\",\"mindy\"] enemies=dark-mindy,dark-sandy"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-07-sisters-order-playing.jpg",
+   "asserted": "screen=battle, order \"Free choice\" taken with keys, Sister action {\"actor\":\"cindy\",\"name\":\"Free choice\",\"id\":null}"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-08-yojimbo-summoned.jpg",
+   "asserted": "screen=battle awaitingMenu aeonId=yojimbo (Yuna's, summoned with keys)"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-08b-yojimbo-tile-crop.jpg",
+   "asserted": "same menu, crop of the turn bar"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-09-yojimbo-pay-row.jpg",
+   "asserted": "screen=battle, Yojimbo out, cursor on a Pay row"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-10-guide-open.jpg",
+   "asserted": "screen=battle, .sgd visible (not off), Yojimbo out, Act I"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-11-guide-zanmato-odds.jpg",
+   "asserted": "screen=battle, guide scrolled (] key) so the Pay-in-four line is inside the sheet"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-11b-guide-hidden.jpg",
+   "asserted": "screen=battle, .sgd--off after G"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-12-pause.jpg",
+   "asserted": "screen=pause after P"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-13-pause-H-hidden.jpg",
+   "asserted": "screen=pause after H (panels hidden)"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-13b-pause-options-tab.jpg",
+   "asserted": "screen=pause after E x5 (Options tab)"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-13c-pause-options-changed.jpg",
+   "asserted": "screen=pause, Options tab after ArrowLeft"
+  },
+  {
+   "file": "M:\\pyrefly-tmp\\r50-1-live\\desk\\desk-14-act2-first-menu.jpg",
+   "asserted": "screen=battle awaitingMenu enemies=dark-yojimbo,dark-daigoro aeonId=null (Act II, after Act I won by the advisor at skip speed)"
+  }
+ ],
+ "data": {
+  "dialogs": [],
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+  "bundleScripts": [
+   "https://echoesofspira.com/assets/index-B_bQDjUG.js",
+   "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092"
+  ],
+  "screenStateHasChapter": true,
+  "act1Art": {
+   "tidus": {
+    "side": "party",
+    "kind": "party",
+    "artId": "tidus",
+    "pose": "ready",
+    "url": "/art/characters/tidus/ready.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "yuna": {
+    "side": "party",
+    "kind": "party",
+    "artId": "yuna",
+    "pose": "idle",
+    "url": "/art/characters/yuna/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "dark-mindy": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "dark-mindy",
+    "pose": "idle",
+    "url": "/art/characters/dark-mindy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "lulu": {
+    "side": "party",
+    "kind": "party",
+    "artId": "lulu",
+    "pose": "idle",
+    "url": "/art/characters/lulu/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "dark-sandy": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "dark-sandy",
+    "pose": "idle",
+    "url": "/art/characters/dark-sandy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   }
+  },
+  "act1Ctb": [
+   {
+    "actor": "tidus",
+    "name": "Tidus",
+    "imgs": [
+     {
+      "src": "/art/portraits/tidus.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "T",
+    "rect": [
+     1480,
+     124,
+     71,
+     71
+    ]
+   },
+   {
+    "actor": "yuna",
+    "name": "Yuna",
+    "imgs": [
+     {
+      "src": "/art/portraits/yuna.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "Y",
+    "rect": [
+     1491,
+     206,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "lulu",
+    "name": "Lulu",
+    "imgs": [
+     {
+      "src": "/art/portraits/lulu.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "L",
+    "rect": [
+     1482,
+     267,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "tidus",
+    "name": "Tidus",
+    "imgs": [
+     {
+      "src": "/art/portraits/tidus.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "T",
+    "rect": [
+     1473,
+     328,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "yuna",
+    "name": "Yuna",
+    "imgs": [
+     {
+      "src": "/art/portraits/yuna.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "Y",
+    "rect": [
+     1464,
+     389,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "lulu",
+    "name": "Lulu",
+    "imgs": [
+     {
+      "src": "/art/portraits/lulu.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "L",
+    "rect": [
+     1456,
+     450,
+     51,
+     51
+    ]
+   }
+  ],
+  "act1NetDark": [
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.thumb.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/attack.png"
+  ],
+  "luluAfterHurt": {
+   "by": {
+    "idle|/art/characters/lulu/idle.png": {
+     "pose": "idle",
+     "url": "/art/characters/lulu/idle.png",
+     "n": 2379,
+     "nAlpha": 2379,
+     "whMin": 1.7549784445175693,
+     "whMax": 1.77771066411072,
+     "figMin": 1.7067730280157993,
+     "figMax": 1.728880843293945,
+     "pxMin": 230.35430689286073,
+     "pxMax": 354.26500882799246,
+     "frac": {
+      "top": 0.013733905579399141,
+      "bottom": 0.9862660944206009,
+      "h": 0.9725321888412017,
+      "px": [
+       485,
+       1165
+      ]
+     }
+    },
+    "ready|/art/characters/lulu/ready.png": {
+     "pose": "ready",
+     "url": "/art/characters/lulu/ready.png",
+     "n": 87,
+     "nAlpha": 87,
+     "whMin": 1.5710435644478837,
+     "whMax": 1.5797561690458417,
+     "figMin": 1.5243210792598425,
+     "figMax": 1.5327745729403892,
+     "pxMin": 238.04782133509073,
+     "pxMax": 244.67580586647043,
+     "frac": {
+      "top": 0.01486988847583643,
+      "bottom": 0.9851301115241635,
+      "h": 0.9702602230483272,
+      "px": [
+       658,
+       1076
+      ]
+     }
+    },
+    "follow|/art/characters/lulu/follow.png": {
+     "pose": "follow",
+     "url": "/art/characters/lulu/follow.png",
+     "n": 82,
+     "nAlpha": 82,
+     "whMin": 1.3737161592229599,
+     "whMax": 1.3743491014853166,
+     "figMin": 1.335121850974378,
+     "figMax": 1.3357370108377924,
+     "pxMin": 213.5574960944626,
+     "pxMax": 220.16383986169942,
+     "frac": {
+      "top": 0.014047410008779631,
+      "bottom": 0.9859525899912204,
+      "h": 0.9719051799824407,
+      "px": [
+       636,
+       1139
+      ]
+     }
+    },
+    "hurt|/art/characters/lulu/hurt.png": {
+     "pose": "hurt",
+     "url": "/art/characters/lulu/hurt.png",
+     "n": 21,
+     "nAlpha": 21,
+     "whMin": 1.5777648032180163,
+     "whMax": 1.577796311487013,
+     "figMin": 1.547633878156561,
+     "figMax": 1.547664784705143,
+     "pxMin": 253.44794217555292,
+     "pxMax": 256.5622410724987,
+     "frac": {
+      "top": 0.005208333333333333,
+      "bottom": 0.9861111111111112,
+      "h": 0.9809027777777778,
+      "px": [
+       800,
+       1152
+      ]
+     }
+    },
+    "ko|/art/characters/lulu/ko.webp": {
+     "pose": "ko",
+     "url": "/art/characters/lulu/ko.webp",
+     "n": 83,
+     "nAlpha": 83,
+     "whMin": 0.45507525390410414,
+     "whMax": 0.48633314634425734,
+     "figMin": 0.4361875650261128,
+     "figMax": 0.4661481130329522,
+     "pxMin": 66.54393238058985,
+     "pxMax": 77.81217903108515,
+     "frac": {
+      "top": 0.020752269779507133,
+      "bottom": 0.9792477302204928,
+      "h": 0.9584954604409858,
+      "px": [
+       1216,
+       771
+      ]
+     }
+    },
+    "critical|/art/characters/lulu/critical.png": {
+     "pose": "critical",
+     "url": "/art/characters/lulu/critical.png",
+     "n": 163,
+     "nAlpha": 163,
+     "whMin": 1.3294881928756044,
+     "whMax": 1.3460071222613332,
+     "figMin": 1.2937972346776017,
+     "figMax": 1.3098727028717674,
+     "pxMin": 173.67487055128086,
+     "pxMax": 226.49803191099238,
+     "frac": {
+      "top": 0.013422818791946308,
+      "bottom": 0.9865771812080537,
+      "h": 0.9731543624161074,
+      "px": [
+       647,
+       1192
+      ]
+     }
+    }
+   },
+   "last": {
+    "pose": "critical",
+    "fade": 1,
+    "t": 156075.5
+   },
+   "errors": []
+  },
+  "darkSeen": {
+   "sandy": {
+    "where": "during the opening turns",
+    "row": {
+     "actor": "dark-sandy",
+     "name": "Dark Sandy",
+     "imgs": [
+      {
+       "src": "/art/characters/dark-sandy/idle.png",
+       "body": "dark-sandy",
+       "loaded": true,
+       "w": 489
+      },
+      {
+       "src": "/art/portraits/dark-sandy.png",
+       "body": null,
+       "loaded": true,
+       "w": 320
+      }
+     ],
+     "monogram": "D",
+     "rect": [
+      1456,
+      450,
+      51,
+      51
+     ]
+    }
+   },
+   "mindy": {
+    "where": "during the opening turns",
+    "row": {
+     "actor": "dark-mindy",
+     "name": "Dark Mindy",
+     "imgs": [
+      {
+       "src": "/art/characters/dark-mindy/idle.png",
+       "body": "dark-mindy",
+       "loaded": true,
+       "w": 578
+      },
+      {
+       "src": "/art/portraits/dark-mindy.png",
+       "body": null,
+       "loaded": true,
+       "w": 320
+      }
+     ],
+     "monogram": "D",
+     "rect": [
+      1456,
+      450,
+      51,
+      51
+     ]
+    }
+   }
+  },
+  "netDarkPortraits": [
+   "https://echoesofspira.com/art/portraits/dark-sandy.png",
+   "https://echoesofspira.com/art/portraits/dark-mindy.png",
+   "https://echoesofspira.com/art/portraits/dark-sandy.png",
+   "https://echoesofspira.com/art/portraits/dark-sandy.png"
+  ],
+  "luluAll": {
+   "by": {
+    "idle|/art/characters/lulu/idle.png": {
+     "pose": "idle",
+     "url": "/art/characters/lulu/idle.png",
+     "n": 2379,
+     "nAlpha": 2379,
+     "whMin": 1.7549784445175693,
+     "whMax": 1.77771066411072,
+     "figMin": 1.7067730280157993,
+     "figMax": 1.728880843293945,
+     "pxMin": 230.35430689286073,
+     "pxMax": 354.26500882799246,
+     "frac": {
+      "top": 0.013733905579399141,
+      "bottom": 0.9862660944206009,
+      "h": 0.9725321888412017,
+      "px": [
+       485,
+       1165
+      ]
+     }
+    },
+    "ready|/art/characters/lulu/ready.png": {
+     "pose": "ready",
+     "url": "/art/characters/lulu/ready.png",
+     "n": 87,
+     "nAlpha": 87,
+     "whMin": 1.5710435644478837,
+     "whMax": 1.5797561690458417,
+     "figMin": 1.5243210792598425,
+     "figMax": 1.5327745729403892,
+     "pxMin": 238.04782133509073,
+     "pxMax": 244.67580586647043,
+     "frac": {
+      "top": 0.01486988847583643,
+      "bottom": 0.9851301115241635,
+      "h": 0.9702602230483272,
+      "px": [
+       658,
+       1076
+      ]
+     }
+    },
+    "follow|/art/characters/lulu/follow.png": {
+     "pose": "follow",
+     "url": "/art/characters/lulu/follow.png",
+     "n": 82,
+     "nAlpha": 82,
+     "whMin": 1.3737161592229599,
+     "whMax": 1.3743491014853166,
+     "figMin": 1.335121850974378,
+     "figMax": 1.3357370108377924,
+     "pxMin": 213.5574960944626,
+     "pxMax": 220.16383986169942,
+     "frac": {
+      "top": 0.014047410008779631,
+      "bottom": 0.9859525899912204,
+      "h": 0.9719051799824407,
+      "px": [
+       636,
+       1139
+      ]
+     }
+    },
+    "hurt|/art/characters/lulu/hurt.png": {
+     "pose": "hurt",
+     "url": "/art/characters/lulu/hurt.png",
+     "n": 21,
+     "nAlpha": 21,
+     "whMin": 1.5777648032180163,
+     "whMax": 1.577796311487013,
+     "figMin": 1.547633878156561,
+     "figMax": 1.547664784705143,
+     "pxMin": 253.44794217555292,
+     "pxMax": 256.5622410724987,
+     "frac": {
+      "top": 0.005208333333333333,
+      "bottom": 0.9861111111111112,
+      "h": 0.9809027777777778,
+      "px": [
+       800,
+       1152
+      ]
+     }
+    },
+    "ko|/art/characters/lulu/ko.webp": {
+     "pose": "ko",
+     "url": "/art/characters/lulu/ko.webp",
+     "n": 83,
+     "nAlpha": 83,
+     "whMin": 0.45507525390410414,
+     "whMax": 0.48633314634425734,
+     "figMin": 0.4361875650261128,
+     "figMax": 0.4661481130329522,
+     "pxMin": 66.54393238058985,
+     "pxMax": 77.81217903108515,
+     "frac": {
+      "top": 0.020752269779507133,
+      "bottom": 0.9792477302204928,
+      "h": 0.9584954604409858,
+      "px": [
+       1216,
+       771
+      ]
+     }
+    },
+    "critical|/art/characters/lulu/critical.png": {
+     "pose": "critical",
+     "url": "/art/characters/lulu/critical.png",
+     "n": 371,
+     "nAlpha": 371,
+     "whMin": 1.3294636711568255,
+     "whMax": 1.3460071222613332,
+     "figMin": 1.2937733712599981,
+     "figMax": 1.3098727028717674,
+     "pxMin": 173.67487055128086,
+     "pxMax": 226.49803191099238,
+     "frac": {
+      "top": 0.013422818791946308,
+      "bottom": 0.9865771812080537,
+      "h": 0.9731543624161074,
+      "px": [
+       647,
+       1192
+      ]
+     }
+    }
+   },
+   "last": {
+    "pose": "critical",
+    "fade": 1,
+    "t": 159845.5
+   },
+   "errors": []
+  },
+  "luluPoses": {
+   "idle|/art/characters/lulu/idle.png": {
+    "pose": "idle",
+    "frames": 2379,
+    "figWorld": 1.7178269356548723,
+    "ratioToIdle": 1,
+    "pxRange": [
+     230,
+     354
+    ],
+    "spread": 0.013
+   },
+   "ready|/art/characters/lulu/ready.png": {
+    "pose": "ready",
+    "frames": 87,
+    "figWorld": 1.528547826100116,
+    "ratioToIdle": 0.89,
+    "pxRange": [
+     238,
+     245
+    ],
+    "spread": 0.006
+   },
+   "follow|/art/characters/lulu/follow.png": {
+    "pose": "follow",
+    "frames": 82,
+    "figWorld": 1.3354294309060852,
+    "ratioToIdle": 0.777,
+    "pxRange": [
+     214,
+     220
+    ],
+    "spread": 0
+   },
+   "hurt|/art/characters/lulu/hurt.png": {
+    "pose": "hurt",
+    "frames": 21,
+    "figWorld": 1.547649331430852,
+    "ratioToIdle": 0.901,
+    "pxRange": [
+     253,
+     257
+    ],
+    "spread": 0
+   },
+   "ko|/art/characters/lulu/ko.webp": {
+    "pose": "ko",
+    "frames": 83,
+    "figWorld": 0.4511678390295325,
+    "ratioToIdle": 0.263,
+    "pxRange": [
+     67,
+     78
+    ],
+    "spread": 0.064
+   },
+   "critical|/art/characters/lulu/critical.png": {
+    "pose": "critical",
+    "frames": 371,
+    "figWorld": 1.3018230370658828,
+    "ratioToIdle": 0.758,
+    "pxRange": [
+     174,
+     226
+    ],
+    "spread": 0.012
+   }
+  },
+  "sistersArt": {
+   "tidus": {
+    "side": "party",
+    "kind": "party",
+    "artId": "tidus",
+    "pose": "critical",
+    "url": "/art/characters/tidus/critical.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 0
+   },
+   "yuna": {
+    "side": "party",
+    "kind": "party",
+    "artId": "yuna",
+    "pose": "critical",
+    "url": "/art/characters/yuna/critical.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 0
+   },
+   "dark-mindy": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "dark-mindy",
+    "pose": "idle",
+    "url": "/art/characters/dark-mindy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "lulu": {
+    "side": "party",
+    "kind": "party",
+    "artId": "lulu",
+    "pose": "critical",
+    "url": "/art/characters/lulu/critical.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 0
+   },
+   "dark-sandy": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "dark-sandy",
+    "pose": "idle",
+    "url": "/art/characters/dark-sandy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "cindy": {
+    "side": "aeon",
+    "kind": "party",
+    "artId": "cindy",
+    "pose": "ready",
+    "url": "/art/characters/cindy/idle.webp",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "sandy": {
+    "side": "aeon",
+    "kind": "party",
+    "artId": "sandy",
+    "pose": "idle",
+    "url": "/art/characters/sandy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "mindy": {
+    "side": "aeon",
+    "kind": "party",
+    "artId": "mindy",
+    "pose": "idle",
+    "url": "/art/characters/mindy/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   }
+  },
+  "sistersCtb": [
+   {
+    "actor": "cindy",
+    "name": "Cindy",
+    "imgs": [
+     {
+      "src": "/art/characters/cindy/idle.webp",
+      "body": "cindy",
+      "loaded": true,
+      "w": 386
+     },
+     {
+      "src": "/art/portraits/cindy.webp",
+      "body": null,
+      "loaded": true,
+      "w": 330
+     }
+    ],
+    "monogram": "C",
+    "rect": [
+     1480,
+     124,
+     71,
+     71
+    ]
+   },
+   {
+    "actor": "dark-mindy",
+    "name": "Dark Mindy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-mindy/idle.png",
+      "body": "dark-mindy",
+      "loaded": true,
+      "w": 578
+     },
+     {
+      "src": "/art/portraits/dark-mindy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1491,
+     206,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "sandy",
+    "name": "Sandy",
+    "imgs": [
+     {
+      "src": "/art/characters/sandy/idle.png",
+      "body": "sandy",
+      "loaded": true,
+      "w": 489
+     },
+     {
+      "src": "/art/portraits/sandy.png",
+      "body": null,
+      "loaded": true,
+      "w": 330
+     }
+    ],
+    "monogram": "S",
+    "rect": [
+     1482,
+     267,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "mindy",
+    "name": "Mindy",
+    "imgs": [
+     {
+      "src": "/art/characters/mindy/idle.png",
+      "body": "mindy",
+      "loaded": true,
+      "w": 568
+     },
+     {
+      "src": "/art/portraits/mindy.png",
+      "body": null,
+      "loaded": true,
+      "w": 370
+     }
+    ],
+    "monogram": "M",
+    "rect": [
+     1473,
+     328,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "dark-sandy",
+    "name": "Dark Sandy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-sandy/idle.png",
+      "body": "dark-sandy",
+      "loaded": true,
+      "w": 489
+     },
+     {
+      "src": "/art/portraits/dark-sandy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1464,
+     389,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "cindy",
+    "name": "Cindy",
+    "imgs": [
+     {
+      "src": "/art/characters/cindy/idle.webp",
+      "body": "cindy",
+      "loaded": true,
+      "w": 386
+     },
+     {
+      "src": "/art/portraits/cindy.webp",
+      "body": null,
+      "loaded": true,
+      "w": 330
+     }
+    ],
+    "monogram": "C",
+    "rect": [
+     1456,
+     450,
+     51,
+     51
+    ]
+   }
+  ],
+  "sisterOrder": {
+   "sample": "Free choice",
+   "ostart": {
+    "actor": "cindy",
+    "name": "Free choice",
+    "id": null
+   },
+   "orders": [
+    "Free choice",
+    "Attack order",
+    "Cindy: spells",
+    "Cindy: support",
+    "Combine"
+   ]
+  },
+  "yojimboArt": {
+   "side": "aeon",
+   "kind": "party",
+   "artId": "yojimbo-cavern",
+   "pose": "ready",
+   "url": "/art/characters/yojimbo-cavern/idle.png",
+   "placeholder": false,
+   "visible": true,
+   "alpha": 1
+  },
+  "yojimboTileLoadedAfterMs": 8,
+  "yojimboCtb": [
+   {
+    "actor": "yojimbo",
+    "name": "Yojimbo",
+    "imgs": [
+     {
+      "src": "/art/characters/yojimbo-cavern/idle.png",
+      "body": "yojimbo-cavern",
+      "loaded": true,
+      "w": 730
+     }
+    ],
+    "monogram": "Y",
+    "rect": [
+     1480,
+     124,
+     71,
+     71
+    ]
+   },
+   {
+    "actor": "dark-sandy",
+    "name": "Dark Sandy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-sandy/idle.png",
+      "body": "dark-sandy",
+      "loaded": true,
+      "w": 489
+     },
+     {
+      "src": "/art/portraits/dark-sandy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1491,
+     206,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "dark-mindy",
+    "name": "Dark Mindy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-mindy/idle.png",
+      "body": "dark-mindy",
+      "loaded": true,
+      "w": 578
+     },
+     {
+      "src": "/art/portraits/dark-mindy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1482,
+     267,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "yojimbo",
+    "name": "Yojimbo",
+    "imgs": [
+     {
+      "src": "/art/characters/yojimbo-cavern/idle.png",
+      "body": "yojimbo-cavern",
+      "loaded": true,
+      "w": 730
+     }
+    ],
+    "monogram": "Y",
+    "rect": [
+     1473,
+     328,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "dark-sandy",
+    "name": "Dark Sandy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-sandy/idle.png",
+      "body": "dark-sandy",
+      "loaded": true,
+      "w": 489
+     },
+     {
+      "src": "/art/portraits/dark-sandy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1464,
+     389,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "dark-mindy",
+    "name": "Dark Mindy",
+    "imgs": [
+     {
+      "src": "/art/characters/dark-mindy/idle.png",
+      "body": "dark-mindy",
+      "loaded": true,
+      "w": 578
+     },
+     {
+      "src": "/art/portraits/dark-mindy.png",
+      "body": null,
+      "loaded": true,
+      "w": 320
+     }
+    ],
+    "monogram": "D",
+    "rect": [
+     1456,
+     450,
+     51,
+     51
+    ]
+   }
+  ],
+  "yojimboFaces": [
+   {
+    "src": "/art/characters/yojimbo-cavern/idle.png",
+    "body": "yojimbo-cavern",
+    "loaded": true,
+    "where": "ig-ctb__tile ig-ctb__tile--now",
+    "rect": [
+     1454,
+     127,
+     124,
+     186
+    ]
+   },
+   {
+    "src": "/art/characters/yojimbo-cavern/idle.png",
+    "body": "yojimbo-cavern",
+    "loaded": true,
+    "where": "ig-ctb__tile",
+    "rect": [
+     1456,
+     330,
+     86,
+     129
+    ]
+   },
+   {
+    "src": "/art/characters/yojimbo-cavern/idle.png",
+    "body": "yojimbo-cavern",
+    "loaded": true,
+    "where": "ig-stat__face",
+    "rect": [
+     1024,
+     801,
+     129,
+     193
+    ]
+   }
+  ],
+  "netYojimbo": [
+   "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.thumb.png",
+   "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.png",
+   "https://echoesofspira.com/art/pause/ch9-yojimbo.webp",
+   "https://echoesofspira.com/art/characters/dark-yojimbo/idle.png",
+   "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.png",
+   "https://echoesofspira.com/art/characters/yojimbo-cavern/attack.png",
+   "https://echoesofspira.com/art/characters/yojimbo-cavern/cast.png",
+   "https://echoesofspira.com/art/characters/yojimbo-cavern/hurt.png",
+   "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.png"
+  ],
+  "payRows": [
+   "Pay 1,000",
+   "Pay 10,000",
+   "Pay 100,000",
+   "Pay 1,000,000",
+   "Pay all"
+  ],
+  "payHint": " Your own Yojimbo can be paid to strike, and a lucky Zanmato can end the fight: about one Pay in four at a million gil, better with a full Overdrive gauge.",
+  "guide": {
+   "present": true,
+   "off": false,
+   "squeezed": false,
+   "display": "block",
+   "visibility": "visible",
+   "textLen": 3658,
+   "rect": [
+    53,
+    222,
+    330,
+    66
+   ],
+   "textHead": "Dark Magus SistersBoss BattleIn Game Description: Cindy, Sandy and Mindy, called up by Yevon in the wrong colours: Yuna's own aeons, turned against her.Weaknesses: None: no element is favoured or resi"
+  },
+  "guideOdds": "Your own Yojimbo can be paid to strike, and a lucky Zanmato can end the fight: about one Pay in four at a million gil, better with a full Overdrive gauge.",
+  "guideScrolledToOdds": true,
+  "gKey": {
+   "before": true,
+   "after": false,
+   "guideOff": true
+  },
+  "pauseOptionChange": [],
+  "escapeFromBattle": "pause",
+  "act2Reached": true,
+  "act2Seconds": 39,
+  "act2Art": {
+   "tidus": {
+    "side": "party",
+    "kind": "party",
+    "artId": "tidus",
+    "pose": "ready",
+    "url": "/art/characters/tidus/ready.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "yuna": {
+    "side": "party",
+    "kind": "party",
+    "artId": "yuna",
+    "pose": "idle",
+    "url": "/art/characters/yuna/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "lulu": {
+    "side": "party",
+    "kind": "party",
+    "artId": "lulu",
+    "pose": "idle",
+    "url": "/art/characters/lulu/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "dark-yojimbo": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "dark-yojimbo",
+    "pose": "idle",
+    "url": "/art/characters/dark-yojimbo/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   },
+   "dark-daigoro": {
+    "side": "enemy",
+    "kind": "enemy",
+    "artId": "daigoro",
+    "pose": "idle",
+    "url": "/art/characters/daigoro/idle.png",
+    "placeholder": false,
+    "visible": true,
+    "alpha": 1
+   }
+  },
+  "act2Ctb": [
+   {
+    "actor": "tidus",
+    "name": "Tidus",
+    "imgs": [
+     {
+      "src": "/art/portraits/tidus.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "T",
+    "rect": [
+     1480,
+     124,
+     71,
+     71
+    ]
+   },
+   {
+    "actor": "yuna",
+    "name": "Yuna",
+    "imgs": [
+     {
+      "src": "/art/portraits/yuna.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "Y",
+    "rect": [
+     1491,
+     206,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "lulu",
+    "name": "Lulu",
+    "imgs": [
+     {
+      "src": "/art/portraits/lulu.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "L",
+    "rect": [
+     1482,
+     267,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "tidus",
+    "name": "Tidus",
+    "imgs": [
+     {
+      "src": "/art/portraits/tidus.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "T",
+    "rect": [
+     1473,
+     328,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "yuna",
+    "name": "Yuna",
+    "imgs": [
+     {
+      "src": "/art/portraits/yuna.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "Y",
+    "rect": [
+     1464,
+     389,
+     51,
+     51
+    ]
+   },
+   {
+    "actor": "lulu",
+    "name": "Lulu",
+    "imgs": [
+     {
+      "src": "/art/portraits/lulu.webp",
+      "body": null,
+      "loaded": true,
+      "w": 832
+     }
+    ],
+    "monogram": "L",
+    "rect": [
+     1456,
+     450,
+     51,
+     51
+    ]
+   }
+  ],
+  "reload": {
+   "settingsBefore": {
+    "masterVolume": 0.8,
+    "musicVolume": 0.7,
+    "sfxVolume": 0.7,
+    "sfxBalanceMigrated": true,
+    "textSpeed": 1,
+    "skipSeenCutscenes": false,
+    "lowEffects": false,
+    "fxLight": true,
+    "fxLiving": true,
+    "fxSpectacle": true,
+    "fxDof": true,
+    "fxFog": true,
+    "fxEdges": true,
+    "fxBreath": true,
+    "fxKo": true,
+    "fxFraming": true,
+    "fxHero": true,
+    "fxSphere": true,
+    "fxSplash": true,
+    "textSize": 1,
+    "reduceFlashes": false,
+    "colourVision": "off",
+    "guideVisible": false,
+    "advisorVisible": true,
+    "intentVisible": true,
+    "ffx2Atb": "wait",
+    "ffx2AtbMigrated": true,
+    "pausePanelsHidden": false,
+    "battleHelp": true,
+    "reduceMotion": false
+   },
+   "saveKeys": [
+    "version",
+    "updatedAt",
+    "chapters",
+    "unlocked",
+    "settings",
+    "seenCoach",
+    "flags"
+   ],
+   "seenCoach": [
+    "briefing",
+    "firstrun-board",
+    "firstrun-prep",
+    "firstrun-battle",
+    "ffx-turn-order",
+    "ffx-aeon",
+    "ffx-overdrive"
+   ],
+   "screenBeforeReload": "battle",
+   "settingsAfter": {
+    "masterVolume": 0.8,
+    "musicVolume": 0.7,
+    "sfxVolume": 0.7,
+    "sfxBalanceMigrated": true,
+    "textSpeed": 1,
+    "skipSeenCutscenes": false,
+    "lowEffects": false,
+    "fxLight": true,
+    "fxLiving": true,
+    "fxSpectacle": true,
+    "fxDof": true,
+    "fxFog": true,
+    "fxEdges": true,
+    "fxBreath": true,
+    "fxKo": true,
+    "fxFraming": true,
+    "fxHero": true,
+    "fxSphere": true,
+    "fxSplash": true,
+    "textSize": 1,
+    "reduceFlashes": false,
+    "colourVision": "off",
+    "guideVisible": false,
+    "advisorVisible": true,
+    "intentVisible": true,
+    "ffx2Atb": "wait",
+    "ffx2AtbMigrated": true,
+    "pausePanelsHidden": false,
+    "battleHelp": true,
+    "reduceMotion": false
+   },
+   "seenCoachAfter": [
+    "briefing",
+    "firstrun-board",
+    "firstrun-prep",
+    "firstrun-battle",
+    "ffx-turn-order",
+    "ffx-aeon",
+    "ffx-overdrive"
+   ],
+   "mixerAfter": {
+    "master": null,
+    "keys": [
+     "ready",
+     "sampleRate",
+     "playing",
+     "muted",
+     "volumes",
+     "sfxMix",
+     "music",
+     "prerendered",
+     "tracks",
+     "sfx",
+     "sfxLog"
+    ]
+   }
+  },
+  "reloadMs": 485,
+  "consoleErrors": [
+   "Failed to load resource: the server responded with a status of 404 ()",
+   "Failed to load resource: the server responded with a status of 404 ()",
+   "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "notFound": [
+   {
+    "url": "https://echoesofspira.com/art/backdrops/mirror-aeons.png",
+    "status": 404
+   },
+   {
+    "url": "https://echoesofspira.com/art/backdrops/mirror-aeons.png",
+    "status": 404
+   },
+   {
+    "url": "https://echoesofspira.com/art/backdrops/mirror-aeons.png",
+    "status": 404
+   }
+  ],
+  "htmlImages": [],
+  "netCount": 323,
+  "netAudio": 18,
+  "netMirrorBackdrop": [
+   "https://echoesofspira.com/art/backdrops/mirror-aeons.png",
+   "https://echoesofspira.com/art/backdrops/mirror-aeons.png",
+   "https://echoesofspira.com/art/backdrops/mirror-aeons.png"
+  ],
+  "netDarkAll": [
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.thumb.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-yojimbo/idle.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/cast.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/ko.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/attack.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-sandy.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-mindy.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-sandy.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-sandy.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-sandy.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-mindy.png",
+   "https://echoesofspira.com/art/characters/dark-sandy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-sandy.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png",
+   "https://echoesofspira.com/art/portraits/dark-mindy.png",
+   "https://echoesofspira.com/art/characters/dark-yojimbo/idle.png",
+   "https://echoesofspira.com/art/characters/dark-yojimbo/attack.png",
+   "https://echoesofspira.com/art/characters/dark-yojimbo/cast.png",
+   "https://echoesofspira.com/art/characters/dark-yojimbo/hurt.png",
+   "https://echoesofspira.com/art/characters/dark-yojimbo/ko.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.thumb.png",
+   "https://echoesofspira.com/art/characters/dark-mindy/idle.png"
+  ]
+ },
+ "notes": [
+  "Options-tab ArrowLeft probe changed nothing (the cursor opens on the Eye Candy row, already ALL ON); not counted; the Options tab itself read STRATEGY GUIDE OFF after G"
+ ],
+ "finished": "2026-10-17T02:01:10.699Z"
+}

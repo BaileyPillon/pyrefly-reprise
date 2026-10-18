@@ -1,0 +1,419 @@
+{
+ "game": "FFX-2",
+ "chapter": "ffx2-trema (XIII)",
+ "viewport": "1600x900",
+ "build": {
+  "sha": "d6dc0bdd",
+  "bundle": "index-zpfxlH3Y.js"
+ },
+ "passedTurns": [
+  {
+   "actor": "paine",
+   "rows": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  }
+ ],
+ "topRows": [
+  {
+   "label": "Attack",
+   "disabled": false,
+   "selected": true
+  },
+  {
+   "label": "Mix",
+   "disabled": true,
+   "selected": false
+  },
+  {
+   "label": "Item",
+   "disabled": false,
+   "selected": false
+  },
+  {
+   "label": "Change",
+   "disabled": false,
+   "selected": false
+  }
+ ],
+ "actorDress": "Paragon | SCAN | DK | DK | Yuna | 5355 | /5355 | 338 | /338 | AL | AL | Rikku | 5106 | /5106 | 107 | /107 | DK | DK | Paine | 5355 | /5355 | 338 | /338 | ATTACK | MIX | NOT BUILT | ITEM | ◂ | CHANGE | ◂ | ATTACK | Physical damage | This is the lowest floor of the Via Infinito. Two bosses wait here: Paragon first, then Trema straight after with no break in between. | Paragon Oversoul | HELPFUL HINT | Trigger Paragon in its Oversouled form, which is recommended. I",
+ "alchemist": true,
+ "subRows": [
+  {
+   "label": "Attack",
+   "full": "Attack",
+   "disabled": false,
+   "selected": true,
+   "w": 337
+  },
+  {
+   "label": "Mix",
+   "full": "MixNot built",
+   "disabled": true,
+   "selected": false,
+   "w": 337
+  },
+  {
+   "label": "Item",
+   "full": "Item◂",
+   "disabled": false,
+   "selected": false,
+   "w": 337
+  },
+  {
+   "label": "Change",
+   "full": "Change◂",
+   "disabled": false,
+   "selected": false,
+   "w": 337
+  }
+ ],
+ "mixReason": [
+  {
+   "text": "Not built",
+   "sw": 50,
+   "cw": 50,
+   "truncated": false,
+   "ellipsis": "ellipsis"
+  }
+ ],
+ "helpLines": [
+  "NOT BUILT",
+  "Not built — Timed input"
+ ],
+ "rowBox": {
+  "x": 1407.7930297851562,
+  "y": 446.73828125
+ },
+ "audioRequests": [
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "audio/music/chapter-select.mp3",
+  "audio/sfx/parity-ffx2-core.mp3",
+  "audio/music/scene-bevelle-underground.mp3",
+  "audio/music/victory-ffx2.mp3",
+  "audio/music/defeat-ffx2.mp3"
+ ],
+ "audioDebug": {
+  "keys": [
+   "ready",
+   "sampleRate",
+   "playing",
+   "muted",
+   "volumes",
+   "sfxMix",
+   "music",
+   "prerendered",
+   "tracks",
+   "sfx",
+   "sfxLog"
+  ],
+  "now": null,
+  "mode": null
+ },
+ "consoleErrors": [],
+ "badResponses": [],
+ "failed": [
+  {
+   "url": "https://echoesofspira.com/art/backdrops/djose-chamber-provisional.thumb.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/x2-ixion/idle.thumb.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/portraits/rikku-x2.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/macalania-temple.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/portraits/rikku.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/evrae-airship-deck.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/evrae/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/cavern-stolen-fayth.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/bevelle-highbridge.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/garden-of-pain.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/via-purifico.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/sin-fahrenheit-flight.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/sin-left-fin/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/sin-fahrenheit-bevelle.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/overdrive-sin/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/mushroom-rock-road.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/bevelle-underground.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/ffx2-bahamut/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/rikku-dark-knight/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/paine-dark-knight/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/leblanc-last-room.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/leblanc/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/road-to-the-farplane.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/x2-anima/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/rikku-dark-knight/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/pause/yuna-ffx2.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/pause/yuna-ffx2.webp",
+   "why": "net::ERR_ABORTED"
+  }
+ ],
+ "htmlAsMedia": [],
+ "steps": [
+  {
+   "name": "reached battle (Chapter XIII) by real keys",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "Rikku's menu reached",
+   "ok": true,
+   "detail": {
+    "passed": 1,
+    "forceCommand": 0
+   }
+  },
+  {
+   "name": "the menu is Rikku's, dressed Alchemist",
+   "ok": true,
+   "detail": "Paragon | SCAN | DK | DK | Yuna | 5355 | /5355 | 338 | /338 | AL | AL | Rikku | 5106 | /5106 | 107 | /107 | DK | DK | Paine | 5355 | /5355 | 338 | /338 | ATTACK | MIX | NOT BUILT | ITEM | ◂ | CHANGE | ◂ | ATTACK | Physical damage | This is the lowest floor of the"
+  },
+  {
+   "name": "a Mix row exists",
+   "ok": true,
+   "detail": {
+    "i": 1,
+    "label": "Mix",
+    "full": "MixNot built",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "cls": "ig-cmd ig-cmd--disabled",
+    "x": 1239,
+    "y": 418,
+    "w": 337,
+    "h": 58
+   }
+  },
+  {
+   "name": "Mix row is greyed (disabled)",
+   "ok": true,
+   "detail": "ig-cmd ig-cmd--disabled"
+  },
+  {
+   "name": "Mix row says \"Not built\"",
+   "ok": true,
+   "detail": "MixNot built"
+  },
+  {
+   "name": "reason is not the old words",
+   "ok": true,
+   "detail": "MixNot built"
+  },
+  {
+   "name": "\"Not built\" is whole (not cut by an ellipsis)",
+   "ok": true,
+   "detail": [
+    {
+     "text": "Not built",
+     "sw": 50,
+     "cw": 50,
+     "truncated": false,
+     "ellipsis": "ellipsis"
+    }
+   ]
+  },
+  {
+   "name": "arrow keys can rest on the greyed Mix row",
+   "ok": true,
+   "detail": {
+    "i": 1,
+    "label": "Mix",
+    "full": "MixNot built",
+    "selected": true,
+    "disabled": true,
+    "overdrive": false,
+    "cls": "ig-cmd ig-cmd--selected ig-cmd--disabled",
+    "x": 1239,
+    "y": 418,
+    "w": 337,
+    "h": 58
+   }
+  },
+  {
+   "name": "help line names the reason",
+   "ok": true,
+   "detail": [
+    "NOT BUILT",
+    "Not built — Timed input"
+   ]
+  },
+  {
+   "name": "Enter on the greyed Mix opens nothing and submits nothing",
+   "ok": true,
+   "detail": {
+    "before": {
+     "len": 21,
+     "title": "Attack|Mix|Item|Change",
+     "text": 4285
+    },
+    "afterKey": {
+     "len": 21,
+     "title": "Attack|Mix|Item|Change",
+     "pend": true
+    }
+   }
+  },
+  {
+   "name": "Click on the greyed Mix row opens nothing",
+   "ok": true,
+   "detail": {
+    "before": 21,
+    "after": 21,
+    "overlay": false
+   }
+  },
+  {
+   "name": "arrow keys leave the greyed row and rest on Attack",
+   "ok": true,
+   "detail": [
+    "Attack",
+    "Mix",
+    "Item",
+    "Change"
+   ]
+  },
+  {
+   "name": "Rikku's Attack by real keys grows the battle log",
+   "ok": true,
+   "detail": {
+    "before": 21,
+    "after": 28
+   }
+  },
+  {
+   "name": "Escape pauses",
+   "ok": true,
+   "detail": "pause"
+  },
+  {
+   "name": "H hides the pause panels and H restores them",
+   "ok": true,
+   "detail": {
+    "shown": 4618,
+    "hidden": 4191,
+    "restored": 4618
+   }
+  },
+  {
+   "name": "Escape resumes to the battle",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "P pauses and P resumes",
+   "ok": true,
+   "detail": {
+    "paused": true,
+    "after": "battle"
+   }
+  },
+  {
+   "name": "prerendered music fetched",
+   "ok": true,
+   "detail": {
+    "n": 12,
+    "dbg": {
+     "keys": [
+      "ready",
+      "sampleRate",
+      "playing",
+      "muted",
+      "volumes",
+      "sfxMix",
+      "music",
+      "prerendered",
+      "tracks",
+      "sfx",
+      "sfxLog"
+     ],
+     "now": null,
+     "mode": null
+    }
+   }
+  }
+ ]
+}

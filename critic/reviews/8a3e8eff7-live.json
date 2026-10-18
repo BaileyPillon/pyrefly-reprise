@@ -1,0 +1,119 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-16T20:05:50Z",
+  "build": {
+    "mainSha": "8a3e8eff7",
+    "bundle": "CDwyZHD2",
+    "artifactHash": "fbc87c4b5cf40d8241056f2f19e8927970a853b18d48e8be5e3dbda196ef8664"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/8a3e8eff7.json --url https://echoesofspira.com/ --changed-from critic/artifacts/f939b87f2.json --full (37 min, 19:23 to 20:00 UTC) -> {result: PASS, artifactHash: fbc87c4b5cf40d8241056f2f19e8927970a853b18d48e8be5e3dbda196ef8664, liveManifest: match, checked: 5309, mismatched: [], missing: [], wrongType: [], errors: []}. The manifest lists 5310 files; _headers is host-read, never served, so not downloaded; index.html as a browser asks for it is identical to the artifact once Cloudflare's Web Analytics beacon (366 bytes and the line feed) is cut out. In the page, __pyrefly.build() read {sha: 8a3e8eff, bundle: index-CDwyZHD2.js} in all 4 smoke contexts and the served page's script tag is assets/index-CDwyZHD2.js. Across 4 smoke contexts and 995 requests: 0 image or audio responses served as text/html, 0 page errors, and 4 responses >= 400, all one URL (art/backdrops/mirror-aeons.png, 404, twice in each of the two desktop contexts), disclosed as LIVE-R50-01 (polish, no visible effect); 15 audio responses in the final desktop context, all 200 audio/mpeg (music title, chapter-select, scene-gagazet, boss-challenge, victory-ffx, defeat-ffx, pause, boss-yojimbo, plus sprite.mp3, sprite-v2.mp3 and two parity packs). Cold load (critic/runner/lib/coldload.mjs, run alone, cache off): 0.9 s median to an interactive title (0.8 s to 3.7 s over 3 runs), 11.9 s at 1.6 Mbps / 150 ms, host busy 58 to 74 percent so not an idle-host number.",
+      "reason": "Every compared file is byte-identical to the stored manifest with the right content type and the live manifest names this artifact. The CHK-017 zero-4xx criterion is met except for the one stray 404 recorded as LIVE-R50-01: a prewarm request for a painting that does not exist, nothing visible depends on it; a stricter reading would call that one miss."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright launched from node scripts with PYREFLY_BROWSER=gpu (renderer ANGLE NVIDIA GeForce RTX 5070 Ti Direct3D11, never SwiftShader; no black canvas), a fresh browser context per run, a ?cb= cache-busting URL, 1600x900 and 390x844, real key presses, real mouse events (hold, click) and real touch events through CDP. Every capture was asserted before it was shot, with the state read before and after: screen name, chapter id, game, awaitingMenu === true for every battle-menu capture, #ui > [data-screen] roots equal to the screen stack, no title root once past the title. Final evidence set (3 contexts): 29 captures, 0 unverified (desktop 21, phone-mouse 5, phone-touch 3). The first desktop attempt recorded 3 captures as UNVERIFIED (the state was not the one asked for, after my own pause-sequence mistake) and its 13 captures are not used. Every wait matched or threw (assertScreen, waitBattleMenu, waitFor); the debug API was read for state and acted only for setSeed(2), setBattleSpeed and autoBattle('intended') to play Act I out, and setAutoPlay(null) when Act II opened. Evidence: M:/pyrefly-tmp/r50-1/evidence/results/*.json and M:/pyrefly-tmp/r50-1/shots/*.jpg.",
+      "reason": "Every capture of the intended states carries its asserted screen, chapter and menu condition; the harness's three wrong assumptions are listed in the notes (LV-2), were corrected by a new run from the title, and none is hidden."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Light reload smoke on the live URL, final desktop context: in the pause OPTIONS tab (reached with Tab) MASTER VOLUME was lowered 0.8 -> 0.7 with the real keys and the save held masterVolume 0.7; after page.reload() (taken in Act II of Mirror Aeons, mid-battle) the save still read 0.7, audioDebug().volumes.master read 0.7 at boot, the whole settings object was otherwise unchanged (empty diff) and the game was on the title.",
+      "reason": "The one setting survived a real reload and was applied at boot; this deployment changes no save data, so the full upgrade matrix is not owed."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact: all 5309 downloadable files of the 5310-file manifest byte-compared with the live site (--full), content types, live manifest match, index.html as a browser asks for it",
+      "title -> chapter select at 1600x900: 0 OF 19 BEATEN, 19 .fe-card, tiles 19 and total 19, Chapter XXVII \"Mirror Aeons\" last of the FFX group (after sin-face, before ffx2-bahamut); the compact 0/19 at 390x844 with no horizontal scroll",
+      "the arrow keys reach the card, Enter opens party prep for mirror-aeons (game ffx), Enter plays the intro cutscene, then Act I's first menu: Tidus, Yuna and Lulu at 9999 against Dark Mindy 2,000,000 and Dark Sandy 2,500,000 on Mushroom Rock Road, rows Talk(greyed)/Attack/Special/White Magic/Items/Flee(greyed)",
+      "pause on that battle: Escape opens it, H hides and restores the panels (pause--bare, panelsHidden), Tab reaches OPTIONS, ArrowLeft lowers MASTER VOLUME 0.8 -> 0.7 and stores it, two Escapes resume to the same menu and actor with the frame counter running, P opens and P resumes",
+      "Yuna's Summon list (Valefor, Ifrit, Ixion, Shiva, Bahamut, Yojimbo, Cindy), the three Magus Sisters summoned with the keys (aeonIds cindy, sandy, mindy), Cindy's Aeon group (Free choice, Cindy: spells, Cindy: support, Combine) beside Dismiss, one order (Free choice) given with the keys and Cindy acting on it",
+      "Act I played out by the debug API's advisor line at skip speed (2 min 24 s, won, the sisters-fall seam beat seen) only to reach Act II; Act II's first menu: Dark Yojimbo 1,600,000 and his dog on the cavern plate, a whole party and whole aeons (the heal)",
+      "Yuna called Yojimbo with the keys in Act II and his Aeon group shows the Pay ladder Pay 1,000 / 10,000 / 100,000 / 1,000,000 / Pay all, Escape closes it without paying",
+      "music (network and state only, nothing was listened to): 15 audio responses, all 200 audio/mpeg, music title, chapter-select, scene-gagazet, boss-challenge, victory-ffx, defeat-ffx, pause, boss-yojimbo; the loader reported source prerendered and cached true for chapter-select, scene-gagazet, pause and boss-yojimbo, prerendered.manifest true throughout",
+      "390x844 (desktop browser at a phone viewport): a long press (800 ms) on the \"Chapter select\" label puts up the door field (in the viewport, focused, still the board) with a real mouse hold and with real touch events; gagazet typed in it opens Biran and Yenke (ffx) and the field closes; a click on START BATTLE reaches Kimahri's first menu, rows inside the viewport, no horizontal scroll",
+      "one setting changed through the real UI, reload, kept and applied (CHK-024 light)",
+      "cold load: 0.9 s median to an interactive title (3 cold runs, cache off), 11.9 s throttled, host busy",
+      "console errors, page errors, responses >= 400 and wrong-type media over 4 smoke contexts and 995 requests: 4 console errors and 4 responses >= 400, all one missing URL (LIVE-R50-01); 0 page errors; 0 wrong-type media",
+      "second pass: verify-live re-run on the 119 changed files (PASS, same hash); Act I first menu reached again with real Enter presses; every figure's pose, world size and screen box read from the stage; Tidus, Yuna and Lulu in the hurt painting; ?posereg=off and ?headlock=off A/B on Lulu's hurt painting; the art id each Dark Sister draws"
+    ],
+    "reused": [],
+    "notTested": [
+      "Act II fought to a win, the post scene, the results screen and the board's clear ribbon / save record, and the retry (the proof tool's 29-check runs cover them against a preview build, not the live host)",
+      "a Combine / Delta Attack, a Dark Zanmato, a Pay actually paid",
+      "Mirror Aeons on a phone (only the board and the door field at 390x844 were exercised)",
+      "the full CHK-024 upgrade matrix (fresh / returning / previous-build save fixture / invalid or truncated storage / reset flow)",
+      "continuity (CHK-026, CHK-027), the data audit (CHK-008, CHK-011), the first-time-fan lens: the deep review's obligation, still pending on this build",
+      "listening to any audio, other viewport shapes, a real phone, Safari, a gamepad",
+      "Lulu in the Critical rest as a captured frame (setting HP through the state did not run the rest sync), a real hit that hurts her, the previous live build's Lulu (reasoned from an empty git diff)"
+    ]
+  },
+  "issues": [
+    {
+      "id": "LIVE-R50-01",
+      "severity": "polish",
+      "title": "art/backdrops/mirror-aeons.png answers 404 live, twice per session",
+      "summary": "GET https://echoesofspira.com/art/backdrops/mirror-aeons.png answers 404, once while the cursor walks to Chapter XXVII's card and once when the chapter's battle starts (both desktop contexts), with a console error each. Nothing visible breaks. Suspected cause (read from the source, not traced): battlePreload.ts phase 3 prewarms plateUrlFor(chapter.sceneKey); the scene key mirror-aeons is a code key and SCENE_PLATES names only sector1-reactor. A vite preview (the proof tool's host) likely answers the missing file with index.html and a 200, which hid it. Smallest fix: map mirror-aeons to art/backdrops/mushroom-rock-road.png in SCENE_PLATES, or skip the prewarm. Acceptance: the same walk on the live host reads 0 responses >= 400 and 0 console errors.",
+      "status": "open",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "confidence": "high that the request and the 404 occur (reproduced in 2 of 2 desktop contexts, curl confirms 404); suspected for the cause"
+    },
+    {
+      "id": "LIVE-R50-02",
+      "severity": "major",
+      "title": "Lulu is drawn at 0.67 of her idle height in her hurt painting (and 0.55 in her Critical rest by the table)",
+      "summary": "Live, Act I first menu, 1600x900: Lulu's silhouette is 226 px standing and 151.7 px in the hurt painting (0.67); Tidus is 1.22 and Yuna 0.78 of theirs. src/data/art/poseRegistrationFfx.ts gives lulu.hurt scale 0.667 and lulu.critical scale 0.533 (the smallest of the seven heroes), a head match from the pose-measure table. ?posereg=off draws the hurt painting at 1.206 x 1.737 (225 px, 99 percent of idle); ?headlock=off changes nothing. The four engine and table files are byte-identical between f939b87f2 and 8a3e8eff7, so every FFX chapter on the previous live build draws her the same. FFX only. Smallest fix: re-measure the two rows from the body, not the head box, and re-run the pose-size gate; paintings untouched. Acceptance: hurt silhouette within about 15 percent of the standing one on the same walk.",
+      "status": "open",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "confidence": "high for the measurement and the table rows; suspected for the head-box cause; the Critical figure is arithmetic from the table, not a captured frame",
+      "reportedBy": "owner (\"lulu looks tiny when hurt - this problem again?\", 2026-10-16)",
+      "evidence": [
+        "M:/pyrefly-tmp/r50-1/dup/shots/p3-idle-full.png",
+        "M:/pyrefly-tmp/r50-1/dup/shots/p3-hurt-full.png",
+        "M:/pyrefly-tmp/r50-1/dup/shots/p4-posereg-hurt-full.png",
+        "M:/pyrefly-tmp/r50-1/dup/shots/p3-results.json",
+        "M:/pyrefly-tmp/r50-1/dup/shots/p4-posereg-results.json",
+        "M:/pyrefly-tmp/r50-1/dup/shots/p4-headlock-results.json"
+      ]
+    },
+    {
+      "id": "LIVE-R50-03",
+      "severity": "polish",
+      "title": "The Dark Mindy and Dark Sandy are drawn with the player's own Mindy and Sandy paintings",
+      "summary": "stage.snapshot() reads dark-mindy art mindy and dark-sandy art sandy; the enemies and Yuna's summoned Sisters are the same paintings. By design and documented as provisional (mirror-aeons-ids.ts; handoff ch-mirror-aeons.md section 5: red-and-black Dark paintings are Bailey's pick). art/characters/dark-{cindy,sandy,mindy,yojimbo} ship in the artifact and no run requested one. Smallest fix: Bailey's pick, then point the Dark combatants' sprite key at those sets.",
+      "status": "open",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "confidence": "high (read from the live stage and the source)"
+    }
+  ],
+  "consoleErrors": 4,
+  "notFound": 4,
+  "elapsedMinutes": 60,
+  "observations": [
+    "Lulu is visibly small when hurt: 151.7 px against 226 px standing (0.67), the smallest hurt of the seven heroes; the cause is the registration table row lulu.hurt scale 0.667 (and lulu.critical 0.533), pre-existing on the previous live build, FFX only (LIVE-R50-02).",
+    "The Dark Mindy and Dark Sandy draw the player's own Mindy and Sandy paintings, so the enemy Sisters and the summoned Sisters look identical; the dark-* sets ship but are never requested (LIVE-R50-03).",
+    "art/backdrops/mirror-aeons.png answered 404 three times per session in the second pass's runs (twice in the first pass's), the same URL (LIVE-R50-01).",
+    "The board's card reads Mirror Aeons, not Dark Mirror; the pause tab's tagline reads The Dark Mirror."
+  ],
+  "amendedAt": "2026-10-16T21:00:00Z"
+}

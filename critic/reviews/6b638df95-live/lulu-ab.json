@@ -1,0 +1,1341 @@
+{
+ "mode": "gpu",
+ "started": "2026-10-17T02:04:53.944Z",
+ "reads": {
+  "luluIdleAtMenu": {
+   "h": 226.55306386918426,
+   "w": 95.25699687841075,
+   "y": 589.3184480316877,
+   "x": 899.7349978828045
+  },
+  "lulu": {
+   "idle": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/lulu/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.5,
+      "w": 95.3,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.5,
+      "w": 95.3,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.5,
+      "w": 95.3,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.5,
+      "w": 95.4,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.4,
+      "w": 95.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.4,
+      "w": 95.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.4,
+      "w": 95.7,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.3,
+      "w": 95.9,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.2,
+      "w": 96,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.2,
+      "w": 96.2,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 96.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226,
+      "w": 96.5,
+      "y": 590
+     }
+    ],
+    "poseSize": [
+     0.7312989556135769,
+     1.756625326370757
+    ]
+   },
+   "hurt": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/lulu/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 205.6,
+      "w": 154,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 205.8,
+      "w": 154.3,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 205.9,
+      "w": 154.4,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206,
+      "w": 154.6,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.1,
+      "w": 154.8,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.1,
+      "w": 154.9,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.2,
+      "w": 155,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.2,
+      "w": 155,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.2,
+      "w": 155.1,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.3,
+      "w": 155.2,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.3,
+      "w": 155.2,
+      "y": 614
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/lulu/hurt.png",
+      "h": 206.3,
+      "w": 155.2,
+      "y": 614
+     }
+    ],
+    "poseSize": [
+     1.0945830116532334,
+     1.5761995367806558
+    ]
+   },
+   "critical": {
+    "before": {
+     "pose": "hurt",
+     "fade": 1,
+     "url": "/art/characters/lulu/hurt.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 224.9,
+      "w": 99.1,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 224.9,
+      "w": 99.1,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 224.9,
+      "w": 99,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225,
+      "w": 98.9,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.1,
+      "w": 98.6,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.1,
+      "w": 98.5,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.2,
+      "w": 98.2,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.3,
+      "w": 97.9,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.4,
+      "w": 97.7,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.4,
+      "w": 97.5,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.5,
+      "w": 97.3,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.6,
+      "w": 97,
+      "y": 590
+     }
+    ],
+    "poseSize": [
+     0.7312989556135769,
+     1.756625326370757
+    ]
+   },
+   "idle#2": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/lulu/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 225.9,
+      "w": 96.1,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226,
+      "w": 95.9,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226,
+      "w": 95.7,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226,
+      "w": 95.6,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.5,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.3,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.2,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.2,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.2,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.2,
+      "y": 591
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/lulu/idle.png",
+      "h": 226.1,
+      "w": 95.2,
+      "y": 591
+     }
+    ],
+    "poseSize": [
+     0.7312989556135769,
+     1.756625326370757
+    ]
+   }
+  },
+  "yuna": {
+   "idle": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/yuna/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.7,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.7,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.5,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.3,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.1,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.8,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.6,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.5,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.4,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.3,
+      "w": 154.6,
+      "y": 590
+     }
+    ],
+    "poseSize": [
+     1.2077195754716983,
+     1.616810141509434
+    ]
+   },
+   "hurt": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/yuna/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.8,
+      "w": 148.1,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.8,
+      "w": 148.2,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.8,
+      "w": 148.2,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.8,
+      "w": 148.2,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.8,
+      "w": 148.1,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.8,
+      "w": 148.1,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.7,
+      "w": 148,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.7,
+      "w": 148,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.6,
+      "w": 147.9,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.5,
+      "w": 147.8,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.4,
+      "w": 147.6,
+      "y": 613
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/yuna/hurt.png",
+      "h": 181.3,
+      "w": 147.5,
+      "y": 613
+     }
+    ],
+    "poseSize": [
+     1.1178841165177764,
+     1.4655446635005487
+    ]
+   },
+   "critical": {
+    "before": {
+     "pose": "hurt",
+     "fade": 1,
+     "url": "/art/characters/yuna/hurt.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200,
+      "w": 154.5,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.1,
+      "w": 154.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.3,
+      "w": 154.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.4,
+      "w": 154.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.5,
+      "w": 154.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.6,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.6,
+      "w": 154.8,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.7,
+      "w": 154.9,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.8,
+      "w": 155,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.9,
+      "w": 155.1,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.9,
+      "w": 155.2,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 201,
+      "w": 155.3,
+      "y": 589
+     }
+    ],
+    "poseSize": [
+     1.2077195754716983,
+     1.616810141509434
+    ]
+   },
+   "idle#2": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/yuna/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.7,
+      "w": 155,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.6,
+      "w": 154.8,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.4,
+      "w": 154.6,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.3,
+      "w": 154.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200.2,
+      "w": 154.4,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200,
+      "w": 154.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 200,
+      "w": 154.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.8,
+      "w": 154.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.7,
+      "w": 154.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.5,
+      "w": 154.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.4,
+      "w": 154.4,
+      "y": 590
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/yuna/idle.png",
+      "h": 199.3,
+      "w": 154.4,
+      "y": 590
+     }
+    ],
+    "poseSize": [
+     1.2077195754716983,
+     1.616810141509434
+    ]
+   }
+  },
+  "tidus": {
+   "idle": {
+    "before": {
+     "pose": "ready",
+     "fade": 1,
+     "url": "/art/characters/tidus/ready.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.2,
+      "w": 155.8,
+      "y": 588
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.1,
+      "w": 155.7,
+      "y": 588
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.9,
+      "w": 155.4,
+      "y": 588
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.8,
+      "w": 155.2,
+      "y": 588
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.7,
+      "w": 155,
+      "y": 588
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.6,
+      "w": 154.8,
+      "y": 588
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.5,
+      "w": 154.7,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.4,
+      "w": 154.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.3,
+      "w": 154.5,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.2,
+      "w": 154.2,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.2,
+      "w": 154.2,
+      "y": 589
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.1,
+      "w": 154,
+      "y": 589
+     }
+    ],
+    "poseSize": [
+     1.1436884512085945,
+     1.773500447627574
+    ]
+   },
+   "hurt": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/tidus/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 249,
+      "w": 137.9,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 249,
+      "w": 137.7,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.9,
+      "w": 137.5,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.8,
+      "w": 137.3,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.7,
+      "w": 137.1,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.6,
+      "w": 136.9,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.5,
+      "w": 136.7,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.4,
+      "w": 136.5,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.3,
+      "w": 136.3,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.2,
+      "w": 136,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248.1,
+      "w": 135.8,
+      "y": 571
+     },
+     {
+      "pose": "hurt",
+      "fade": 1,
+      "url": "/art/characters/tidus/hurt.png",
+      "h": 248,
+      "w": 135.5,
+      "y": 571
+     }
+    ],
+    "poseSize": [
+     1.0234060921700536,
+     1.9116156806125733
+    ]
+   },
+   "critical": {
+    "before": {
+     "pose": "hurt",
+     "fade": 1,
+     "url": "/art/characters/tidus/hurt.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.4,
+      "w": 157.8,
+      "y": 587
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.5,
+      "w": 157.9,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.6,
+      "w": 158,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.6,
+      "w": 158.1,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.6,
+      "w": 158.2,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.7,
+      "w": 158.2,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.7,
+      "w": 158.2,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.7,
+      "w": 158.2,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.7,
+      "w": 158.2,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.6,
+      "w": 158.1,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.6,
+      "w": 158,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 228.5,
+      "w": 157.8,
+      "y": 586
+     }
+    ],
+    "poseSize": [
+     1.1436884512085945,
+     1.773500447627574
+    ]
+   },
+   "idle#2": {
+    "before": {
+     "pose": "idle",
+     "fade": 1,
+     "url": "/art/characters/tidus/idle.png"
+    },
+    "seen": [
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.8,
+      "w": 156.6,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.7,
+      "w": 156.5,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.6,
+      "w": 156.2,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.4,
+      "w": 155.8,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.3,
+      "w": 155.6,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227.1,
+      "w": 155.4,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 227,
+      "w": 155.2,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.9,
+      "w": 155,
+      "y": 586
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.9,
+      "w": 154.9,
+      "y": 587
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.8,
+      "w": 154.7,
+      "y": 587
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.7,
+      "w": 154.6,
+      "y": 587
+     },
+     {
+      "pose": "idle",
+      "fade": 1,
+      "url": "/art/characters/tidus/idle.png",
+      "h": 226.6,
+      "w": 154.4,
+      "y": 587
+     }
+    ],
+    "poseSize": [
+     1.1436884512085945,
+     1.773500447627574
+    ]
+   }
+  }
+ },
+ "firstMenu": {
+  "screen": "battle",
+  "enemies": [
+   "dark-mindy",
+   "dark-sandy"
+  ],
+  "active": [
+   "tidus",
+   "yuna",
+   "lulu"
+  ],
+  "turn": 1
+ },
+ "consoleErrors": 3,
+ "notFound": 3
+}

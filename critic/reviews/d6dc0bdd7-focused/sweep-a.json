@@ -1,0 +1,38 @@
+{
+ "seymour-flux": {
+  "outcome": "victory",
+  "turns": 78,
+  "screen": "battle",
+  "rewards": [
+   "outcome",
+   "turns",
+   "elapsedTicks",
+   "elapsedMs",
+   "ap",
+   "exp",
+   "gil",
+   "drops",
+   "overkilled",
+   "sphereLevelsGained",
+   "turnsTaken"
+  ],
+  "s": 235,
+  "consoleErrors": [
+   "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+   "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+   "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+   "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+  ],
+  "notFound": [
+   {
+    "url": "http://127.0.0.1:5612/art/characters/mortiorchis/idle.png",
+    "status": 404
+   }
+  ]
+ },
+ "yunalesca": {
+  "error": "Error: timeout 400s",
+  "consoleErrors": [],
+  "notFound": []
+ }
+}

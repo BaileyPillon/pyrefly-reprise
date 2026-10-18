@@ -1,0 +1,635 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-16T18:50:43.177Z",
+ "build": {
+  "mainSha": "8a3e8eff7",
+  "fullSha": "8a3e8eff7e8346c3859436cbb72e1dea673b470f",
+  "bundle": "index-CDwyZHD2.js",
+  "candidate": "M:/pyrefly-ch-angra-mainyu/dist-release",
+  "previousLive": "f939b87f2 (r49)"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect is introduced or reachable, and nothing regressed against live r49: 11 of 11 FFX chapters give the same-seed battle log as live and 7 of 7 FFX-2 chapters still win (their battle logs differ, as the rc8 item ledger and end window predict; Leblanc takes 39 turns against 44).",
+  "Chapter XXVII works end to end by the player's own keys at 1600x900, 2000x1012 and 390x844: both acts, the heal, the Pay ladder, Sister orders, Combine powers, results, a loss and RETRY, the card, the ribbon and \"1 of 19\" (31/31, 31/31, 24/24).",
+  "The r50-rc fixes verify: the Sensor card clears both brothers at 1600x900, the Angra Mainyu phone header no longer prints TAWRICH over SCAN, and the phone door field opens a hidden chapter and nothing else.",
+  "The two majors are a missing Yojimbo face in a brand-new feature (FOC50-01) and a jerk class live already has (FOC50-02); neither holds the build, both are disclosed."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear (CHK-B1). The technical side is covered by the full unit suite (audio-yojimbo and the sfx pack tests pass) and the route recorded an audio-debug.jsonl; nobody auditioned the Dark Aeon cues, boss-challenge/boss-yojimbo under Chapter XXVII or Lulu's Ultima pack.",
+   "where": "FFX; mirror-aeons",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/vitest-full.log",
+    "critic/reviews/8a3e8eff7-focused/route/mirror-aeons-win-long/audio-debug.jsonl"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Full-screen layers own the window at 1600x900, 2000x1012 and 390x844: the card board, party prep, pre scene, the seam white-out, results and the post scene. No stage-sized overlay seen.",
+   "where": "FFX; Chapter XXVII, all states",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-5-seam-04.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-12-results.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/phone/phone-12-results.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/w2000/w2000-12-results.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Order rows, the Pay ladder, the Combine help line and the Sensor card are readable on the phone and desktop frames. \"Pay all\" and \"Combine\" fit the phone tile. One exception, FOC50-03: the results location line is cut with an ellipsis.",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/phone/phone-7-act-ii-yojimbo-pay-menu.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/phone/phone-3-act-i-sisters-combine-lit.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The advisor card names Quick Hit, Cheer, Ultima and Yojimbo as enabled rows reachable by the stated menu, and stays off the Sisters' and Yojimbo's own menus (RE open item 12).",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/route/mirror-aeons-win-long/turn-log.json",
+    "critic/reviews/8a3e8eff7-focused/route/mirror-aeons-win-long/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-005",
+   "result": "PASS",
+   "reason": "In the long route the card kept naming legal, enabled heals (Curaga, Pray, Life, Hi-Potion) while the party sat at 2,000 to 5,000 HP and after Yojimbo fell; no empty or impossible advice in 186 turns.",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/route/mirror-aeons-win-long/turn-log.json",
+    "critic/reviews/8a3e8eff7-focused/proof/desk-full.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The Sensor card, the Auron guide card and the advisor go with the decision: the seam hides the HUD behind the white-out (opacity 0 to 0.96 timeline) and Act II rebuilds it; the retry run shows Act II reopened clean.",
+   "where": "FFX; Chapter XXVII seam and retry",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-full-s1.log",
+    "critic/reviews/8a3e8eff7-focused/proof/retry.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No ids, kino/nagi names or developer words on any Chapter XXVII frame; the Sisters' orders read Free choice, Attack order, Combine; Pay reads Pay 1,000 to Pay all.",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-full-s1.log",
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Biran and Yenke (r50-rc staging fix): at 1600x900 the open Sensor card starts at x=1017 and Yenke's tail ends near x=965, clear of both brothers. Chapter XXVII's panels leave the Sisters and Dark Yojimbo uncovered (Auron's first-time guide card covers part of Kimahri as before).",
+   "where": "FFX; biran-yenke, mirror-aeons",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/shots/biran-1600-menu.png",
+    "critic/reviews/8a3e8eff7-focused/proof/w2000/w2000-6-act-ii-first-menu.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 4,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Names are shown whole on the turn list, guide card and Sensor card: Dark Mindy, Dark Sandy, Dark Yojimbo, \"Pay 1,000,000\". Exception: the results location (FOC50-03).",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-6-act-ii-first-menu.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/phone/phone-7-act-ii-yojimbo-pay-menu.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Single, group and all-enemy picks read clearly: Quick Hit aimed at Dark Sandy, Ultima on all enemies, party-wide Cheer. The route's target confirms matched the wanted target on every turn (targetMismatches empty).",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/route/mirror-aeons-win-long/run.json",
+    "critic/reviews/8a3e8eff7-focused/route/mirror-aeons-win-long/16-target-single.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Every enemy in both acts (Dark Mindy, Dark Sandy, Dark Yojimbo; the dog is untargetable by design) is visible and listed on the turn bar on desktop and phone.",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-1-act-i-first-menu.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/phone/phone-1-act-i-first-menu.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Art is judged by a human against a fixed target. New art in r50 (four Dark Aeons with attack/cast/hurt/ko, the Sisters' portraits, Sinspawn Gui dome states) was looked at in-game, but only FOC50-01 and FOC50-04 are findings; the taste judgement is Bailey's (CHK-B3). The approved-hash check passed (916 ok, 0 mismatched, 0 missing).",
+   "where": "FFX; mirror-aeons",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk/desk-4-act-i-delta-attack-1.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Chapter XXVII was proved with the player's own keys (arrows on the board, Enter, the Summon rows, the Aeon group, Pay rows) and on the phone with touch; the debug API was used only for setSeed (labelled setup hook) and to read state. Phone door field by CDP touch events.",
+   "where": "FFX; Chapter XXVII; both games for the door field",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-full-s1.log",
+    "critic/reviews/8a3e8eff7-focused/proof/phone-full.log",
+    "critic/reviews/8a3e8eff7-focused/door-run.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 25,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture follows an assertScreen / waitBattleMenu in the proof tool and the route library; the one wait that did not hold (seed 2, Act I lost, so no seam) is recorded as a failed check, not a screenshot.",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-full.log",
+    "critic/reviews/8a3e8eff7-focused/route/win1600-long.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "The live site is checked after the deploy. The live build was only used here as the comparison for same-seed pairs and the Angra header.",
+   "where": "both",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "Every shipped image in the candidate loads: verify-approved 916 ok / 0 / 0 on the candidate tree (the art-load tools were not run), 0 4xx or 5xx responses in every browser run, no HTML served as an image (htmlImages empty).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/route/mirror-aeons-win-long/run.json",
+    "critic/reviews/8a3e8eff7-focused/proof/w2000.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared plumbing is proved in both games: the phone door field opens a hidden FFX chapter (gagazet) from the FFX-2-capable board; the FFX-2 phone header fix is visible on Angra Mainyu (FFX-2); the same-seed pairs ran all 11 FFX and 7 FFX-2 chapters that exist live.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/door-run.log",
+    "critic/reviews/8a3e8eff7-focused/pair-live.json",
+    "critic/reviews/8a3e8eff7-focused/pair-cand.json",
+    "critic/reviews/8a3e8eff7-focused/shots/hdr-cand-ffx2-angra-mainyu.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 12,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case: Chapter XXVII is FFX only (research/ffx-mirror-aeons.md: the Dark Aeons exist only in the FFX releases). Present: card XXVII under FINAL FANTASY X, \"of 19\", word yojimbo. Absent in FFX-2: no XXVII card in the X-2 group on the board at 1600x900 and 390x844. r50-rc parts keep their tags: FFX-2 header, item ledger and end wait are FFX-2 only (FFX same-seed logs identical to live, 11 of 11); door field is both.",
+   "where": "FFX only (chapter); FFX-2 only (rc fixes); both (door field)",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/shots/board-1600.png",
+    "critic/reviews/8a3e8eff7-focused/proof/phone/phone-0-card.jpg",
+    "critic/reviews/8a3e8eff7-focused/pair-cand.json",
+    "critic/reviews/8a3e8eff7-focused/pair-live.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Act I win leads through the seam to Act II, the Act II win to the post scene, the results (Victory, NEW BEST), and back to the board with the ribbon and \"1 of 19\"; the clear is recorded in the save (attempts 1, bestTurns 45). A loss goes to Results, RETRY reopens Act II on a whole party (24 of 24). Desktop 31/31 (seed 3 at 2000x1012), phone 31/31 (seed 1), retry 24/24.",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/w2000.log",
+    "critic/reviews/8a3e8eff7-focused/proof/phone-full.log",
+    "critic/reviews/8a3e8eff7-focused/proof/retry.log",
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-13-board-cleared.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 20,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Pay ladder, Sister orders, Combine powers (a real Delta Attack of 12 hits on the pair), the heal between acts and Yojimbo's Zanmato all run through the real presenter and menus (seeds 1, 3), not forceCommand.",
+   "where": "FFX; Chapter XXVII",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/combine-s1.log",
+    "critic/reviews/8a3e8eff7-focused/proof/combine-s3.log",
+    "critic/reviews/8a3e8eff7-focused/proof/w2000.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 10,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "reason": "Harness result on Chapter XXVII (1,009 swaps, 978 s of battle, 59 fps): size continuity passes, max head jump 13.2 percent (0.2 registered), max feet shift 0.9 px. Chapter biran-yenke is hidden and cannot be entered by the harness (card assert failed): UNVERIFIED for it. The other chapters' pose, stage and scene code is unchanged apart from a 12 + 8 + 2 line presenter change, reused from critic/reviews/continuity-baseline-r38.",
+   "where": "FFX; mirror-aeons",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/continuity/mirror-aeons-win-8a3e8eff7/continuity/continuity.json",
+    "critic/reviews/8a3e8eff7-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 30,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "117 jerks of 40 px or more in one frame (worst 210.6 px; 311 jerks overall), on the party figures (Lulu 115, Yuna 97, Tidus 89) and a few on the dark foes (1, 4, 5). No snaps, no hard cuts, no ghost over the limit. The r38 baseline already has the same class at 211 to 371 px in Chapters I, IV and VIII, so this is not introduced by the candidate and not a regression (FOC50-04).",
+   "where": "FFX; mirror-aeons",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/continuity/mirror-aeons-win-8a3e8eff7/continuity/continuity.json",
+    "critic/reviews/8a3e8eff7-focused/continuity/mirror-aeons-win-8a3e8eff7/continuity/strips/jerk-004-tidus.jpg",
+    "critic/reviews/continuity-baseline-r38/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 30,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Whether the music and effects are beautiful: no agent can hear. Bailey judges from docs/audio/audition.html.",
+   "where": "FFX; mirror-aeons",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "8a3e8eff7 / dist-release bundle index-CDwyZHD2.js (BASE_PATH=/)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 8a3e8eff7 production build (npx vite build --outDir dist-release, BASE_PATH=/), vite preview localhost:5611; headless Playwright Chromium from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback)"
+  }
+ ],
+ "continuity": {
+  "battleSeconds": 978.7,
+  "swaps": 1009,
+  "counted": 1001,
+  "excludedByCut": 0,
+  "excludedNotShowing": 4,
+  "swapsPerMinute": 61.37,
+  "size": {
+   "judged": 979,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 22,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "headMeasured": 979,
+   "headRegistration": 751,
+   "headSilhouette": 228,
+   "headUnmeasured": 0,
+   "maxHeadJumpPct": 13.2,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "feetMeasured": 936,
+   "maxFeetShiftPx": 0.9,
+   "feetOverTolerance": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "snapsByToPose": {},
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 124.9,
+   "ghostSwaps": 923,
+   "ghostFrames": 3518,
+   "worstGhostSeverity": 0.379,
+   "ghostOverFail": 0,
+   "jerks": 311,
+   "jerksMidMove": 199,
+   "worstJerkPx": 210.6,
+   "jerksOverFail": 117,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "751 of 979 measured swaps had a registered head (tolerance 3 percent); 228 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "117 jerk(s) of 40 px or more in one frame (worst 210.6 px)"
+    ]
+   }
+  },
+  "run": {
+   "fps": 59,
+   "maxDtMs": 3365,
+   "slowFrames": 701,
+   "frames": 57702,
+   "probeErrors": 0
+  }
+ },
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "list": [
+   {
+    "tile": "Chapter select",
+    "result": "matched",
+    "evidence": "critic/reviews/8a3e8eff7-focused/Chapter-select.jpg; critic/reviews/8a3e8eff7-focused/shots/board-1600.png",
+    "note": "the approved board (docs/screenshots/mockups/A-chapter-select.jpg, superseded by the v2 board) still reads as the approved frame with chapter I highlighted; the build adds the XXVII tab, \"0 OF 19 BEATEN\" and, after a clear, the ribbon and \"1 OF 19\". The other required tile groups are not touched by this change."
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "FOC50-01",
+   "severity": "major",
+   "title": "Chapter XXVII: Yuna's own Yojimbo has a Y monogram for a face, and both Yojimbos draw the painting D-054 says is not approved",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "CHK-012: a party-side aeon shows a painted face in the turn list and its HUD card; D-054: the navy Yojimbo painting \"is not approved and is not used\"",
+   "observed": "In Act II, after Yuna summons Yojimbo, the turn bar (desktop and phone) shows green Y letter tiles for him and the aeon HUD card is a Y tile; the field figures of Yuna's Yojimbo and Dark Yojimbo are the same navy painting, the one D-054 rejected. src/ui/ffx/portraits.ts suppresses portraits/yojimbo.png for exactly that reason, so the monogram is the deliberate fallback of a decision this chapter then needs painted art for.",
+   "repro": "node tools/mirror-aeons-proof.mjs --scenario full --seed 1 (frame 7), or the board, XXVII, Act II, Summon > Yojimbo",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-7-act-ii-yojimbo-pay-menu.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/phone/phone-7-act-ii-yojimbo-pay-menu.jpg"
+   ],
+   "confidence": "high (read in the running game at 1600x900 and 390x844)",
+   "requirement": "CHK-012; D-054",
+   "where": "src/ui/ffx/portraits.ts ENEMY_WITHOUT_PORTRAIT and the aeon chip (CtbList.ts); characters/yojimbo/idle.png",
+   "fix": "Paint Yojimbo's approved gold/orange/purple painting and portrait (D-054, Bailey's pick), or ship Chapter XXVII's Yojimbo with a cut of the Dark Yojimbo portrait until then",
+   "acceptanceCheck": "Act II turn bar and aeon HUD show a painted Yojimbo face at 1600x900 and 390x844",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC50-02",
+   "severity": "major",
+   "title": "CHK-027: 117 one-frame jumps of 40 px or more on the party in Chapter XXVII (worst 210.6 px)",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "motion without jerks (CHK-027)",
+   "observed": "The harness found 117 jerks of 40 px or more in 978 s of battle, of 311 jerks overall 301 are on Tidus, Yuna and Lulu (the worst two coincide with the Swordplay minigame request) (199 mid-move); no snaps, no hard cuts. Release 38's baseline has the same class at 211 to 371 px in Chapters I, IV and VIII.",
+   "repro": "node critic/runner/lib/continuity.mjs --chapters=mirror-aeons",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/continuity/mirror-aeons-win-8a3e8eff7/continuity/continuity.json",
+    "critic/reviews/8a3e8eff7-focused/continuity/mirror-aeons-win-8a3e8eff7/continuity/strips/jerk-004-tidus.jpg"
+   ],
+   "confidence": "high (harness measure; the strips were looked at)",
+   "requirement": "CHK-027",
+   "where": "the shared party figure motion, not this chapter (suspected)",
+   "fix": "Take it with the existing continuity ticket for the party's lunges (shared presenter)",
+   "acceptanceCheck": "CHK-027 PASS on Chapter XXVII and Chapter I",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC50-03",
+   "severity": "polish",
+   "title": "Chapter XXVII text that is cut or short: the results location line and the board's boss line",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "CHK-009 whole names",
+   "observed": "The results screen's vertical location reads \"MUSHROOM ROCK ROAD, AND THE CAVERN OF … · CLEARED\" (cut with an ellipsis); the board card's BOSS line lists only \"Dark Mindy + Dark Sandy\", not Dark Yojimbo.",
+   "repro": "clear Chapter XXVII; look at the results screen and the board card",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-12-results.jpg",
+    "critic/reviews/8a3e8eff7-focused/proof/desk-s1/desk-13-board-cleared.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-009",
+   "where": "the chapter record's location text and boss list (src/data/chapter-mirror-aeons.ts)",
+   "fix": "a shorter location for the results strip; list both acts' bosses",
+   "acceptanceCheck": "the results location is whole and the card names Dark Yojimbo",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC50-04",
+   "severity": "suggestion",
+   "title": "Dark Aeons draw the same paintings as Yuna's own Sisters and Yojimbo, so the two sides differ only by the HUD",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "the foes read as \"the wrong colours\" (the chapter's own blurb)",
+   "observed": "On the field the Dark Sandy and Dark Mindy are the same red and bee paintings as Yuna's Sandy and Cindy and the two Yojimbos are one painting; the turn bar and the red-bordered tiles say who is who. This is the documented \"possessed aeons' precedent\" in chapter-meta-mirror-aeons.ts, noted here as a taste item for Bailey (CHK-B3).",
+   "repro": "Act I, Summon > Cindy",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk/desk-4-act-i-delta-attack-1.jpg"
+   ],
+   "confidence": "medium (taste)",
+   "requirement": "CHK-013, B3",
+   "where": "sprite choice",
+   "fix": "recoloured Dark paintings (needs Bailey's yes first)",
+   "acceptanceCheck": "Bailey's pick",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "FOC50-05",
+   "severity": "polish",
+   "title": "Not reproduced: one run where Combine was lit and chosen and no Delta Attack played",
+   "game": "FFX",
+   "chapter": "mirror-aeons",
+   "expected": "Combine powers plays the Delta Attack when lit",
+   "observed": "In one keyed run (seed 1, desktop) the Sister's Enter on Combine produced no Delta Attack within 25 s and no damage; two later runs with the same keys (seeds 1 and 3) played it at once (12 hits, Cindy). Suspected: the Enter landed while the previous order's animation still played (a harness race); a game-side swallow is not excluded.",
+   "repro": "node tools/mirror-aeons-proof.mjs --scenario full --seed 1 (first run only)",
+   "evidence": [
+    "critic/reviews/8a3e8eff7-focused/proof/desk-full-s1.log",
+    "critic/reviews/8a3e8eff7-focused/proof/combine-s1.log",
+    "critic/reviews/8a3e8eff7-focused/proof/combine-s3.log"
+   ],
+   "confidence": "low (unreproduced)",
+   "requirement": "CHK-015",
+   "where": "unknown",
+   "fix": "if it recurs, log the keypress and the engine's command queue",
+   "acceptanceCheck": "ten keyed Combine runs all play the Delta Attack",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "tsc clean",
+   "full unit suite on the candidate: 1,290 files passed, 16 skipped, 0 failed (20,484 tests)",
+   "orphans 28, none in the Chapter XXVII folders (listing read)",
+   "approved and judge-locked hashes on the candidate tree: 916 ok, 0 mismatched, 0 missing",
+   "data audit of the Dark Aeons' records vs research/re-ffx-dark-aeons.md section 2 (HP 1,600,000, 3,000,000, 2,500,000, 2,000,000; STR, DEF, MAG, MDEF, AGI, LUCK, EVA, ACC match)",
+   "Chapter XXVII by real keys: desktop 1600x900 route (win attempt, Act II lost on seed 1 without paying; retry reached battle), proof tool full 31/31 at 2000x1012 (seed 3) and 390x844 touch (seed 1), retry 24/24, Combine on seeds 1 and 3",
+   "board at 1600x900 and 390x844: card XXVII, \"of 19\", ribbon",
+   "phone door field by CDP touch: no field before or after a tap, field after a 0.9 s hold, wrong word opens nothing, \"gagazet\" opens Biran and Yenke",
+   "Biran and Yenke first menu at 1600x900",
+   "Angra Mainyu phone header at 390x844, candidate vs live",
+   "same-seed pairs, live vs candidate, seed 1, autoBattle intended: 18 chapters",
+   "Chapter XXVII by autoBattle on 7 seeds: 5 wins, 2 losses (seeds 1 and 5); the keyed proof lost Act I on seed 2: in line with the disclosed 294 of 400",
+   "continuity harness on Chapter XXVII (CHK-026 PASS, CHK-027 FAIL)"
+  ],
+  "reused": [
+   {
+    "what": "FFX-2 end wait (3e4a94caf), Itchy White Magic reason (LV48-1), Osmose as MP damage, FFX-2 item ledger",
+    "from": "the full unit suite (1,290 files pass) and the r50-rc handoff frames",
+    "why": "text, rows and engine rules the suite pins; same-seed FFX-2 chapters all still win; not re-shot in a browser"
+   },
+   {
+    "what": "continuity of the 18 other chapters",
+    "from": "critic/reviews/continuity-baseline-r38",
+    "why": "pose, stage and scene code unchanged except the 22-line presenter change and the Biran/Yenke stage nudge"
+   }
+  ],
+  "notTested": [
+   "Chapter XXVII's Act II win by the route driver (it cannot Pay Yojimbo; the proof tool covers it)",
+   "a phone Act I loss and retry",
+   "Dark Zanmato on a person's own party (proof seed 1 ended with the player's Yojimbo Zanmato; the 17-of-17 Zanmato scenario was not re-run)",
+   "continuity for the hidden Biran and Yenke chapter (harness cannot enter it)",
+   "audio, device performance"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of 8a3e8eff7 after the deploy (CHK-017); then the deep review the plan owes on the live build (deepAfterDeploy). Next batch: FOC50-01 (Yojimbo's painted face), FOC50-02, FOC50-03.",
+ "elapsedMinutes": 215
+}

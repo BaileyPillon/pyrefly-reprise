@@ -1,0 +1,268 @@
+{
+ "game": "FFX2",
+ "chapter": "ffx2-bahamut",
+ "viewport": "1600x900",
+ "menus": [
+  {
+   "actor": "yuna",
+   "rows": [
+    "White Magic",
+    "Change*OD",
+    "Item"
+   ]
+  },
+  {
+   "actor": "paine",
+   "rows": [
+    "Attack",
+    "Skill",
+    "Change*OD",
+    "Item"
+   ]
+  },
+  {
+   "actor": "rikku",
+   "rows": [
+    "Attack",
+    "Skill",
+    "Change*OD",
+    "Item"
+   ]
+  },
+  {
+   "actor": "yuna",
+   "rows": [
+    "White Magic",
+    "Change*OD",
+    "Item"
+   ]
+  },
+  {
+   "actor": "paine",
+   "rows": [
+    "Attack",
+    "Skill",
+    "Change*OD(off)",
+    "Item"
+   ]
+  }
+ ],
+ "build": {
+  "sha": "d6dc0bdd",
+  "bundle": "index-zpfxlH3Y.js"
+ },
+ "fallbackRow": [
+  {
+   "actor": "yuna",
+   "opened": "White Magic",
+   "sub": [
+    "Cure",
+    "Shell",
+    "Protect",
+    "Esuna",
+    "Cura",
+    "Vigor",
+    "Dispel",
+    "Pray"
+   ]
+  },
+  {
+   "actor": "yuna",
+   "opened": "White Magic",
+   "sub": [
+    "Cure",
+    "Shell",
+    "Protect",
+    "Esuna",
+    "Cura",
+    "Vigor",
+    "Dispel",
+    "Pray"
+   ]
+  }
+ ],
+ "audio": {
+  "fetched": [
+   "audio/music/title.mp3",
+   "audio/sfx/sprite.mp3",
+   "audio/sfx/sprite-v2.mp3",
+   "audio/music/chapter-select.mp3",
+   "audio/sfx/parity-ffx2-bahamut.mp3",
+   "audio/sfx/parity-ffx2-core.mp3"
+  ],
+  "dbg": {
+   "playing": "pause",
+   "current": "pause",
+   "prerenderedCues": 41,
+   "spriteDecoded": true
+  }
+ },
+ "consoleErrors": [],
+ "badResponses": [],
+ "failed": [
+  {
+   "url": "https://echoesofspira.com/art/backdrops/zanarkand-dome.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/yunalesca-1/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/braskas-final-aeon-1/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/macalania-temple.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/anima/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/portraits/rikku.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/evrae-airship-deck.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/evrae/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/cavern-stolen-fayth.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/bevelle-highbridge.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/seymour-natus/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/garden-of-pain.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/seymour-omnis/idle.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/via-purifico.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/isaaru/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/sin-fahrenheit-flight.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/sin-left-fin/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/sin-fahrenheit-bevelle.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/overdrive-sin/idle.png",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/backdrops/mushroom-rock-road.webp",
+   "why": "net::ERR_ABORTED"
+  },
+  {
+   "url": "https://echoesofspira.com/art/pause/yuna-ffx2.webp",
+   "why": "net::ERR_ABORTED"
+  }
+ ],
+ "htmlAsMedia": [],
+ "steps": [
+  {
+   "name": "reached battle (ffx2-bahamut) by real keys",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "turn 0: yuna White Magic (first entry) by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 8,
+    "after": 11
+   }
+  },
+  {
+   "name": "turn 1: paine Attack by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 14,
+    "after": 21
+   }
+  },
+  {
+   "name": "turn 2: rikku Attack by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 21,
+    "after": 30
+   }
+  },
+  {
+   "name": "turn 3: yuna White Magic (first entry) by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 31,
+    "after": 43
+   }
+  },
+  {
+   "name": "turn 4: paine Attack by real keys grows the log",
+   "ok": true,
+   "detail": {
+    "before": 43,
+    "after": 52
+   }
+  },
+  {
+   "name": "5 player turns played",
+   "ok": true,
+   "detail": 5
+  },
+  {
+   "name": "Escape pauses",
+   "ok": true,
+   "detail": "pause"
+  },
+  {
+   "name": "Escape resumes",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "prerendered music fetched and playing",
+   "ok": true,
+   "detail": {
+    "n": 12,
+    "dbg": {
+     "playing": "pause",
+     "current": "pause",
+     "prerenderedCues": 41,
+     "spriteDecoded": true
+    }
+   }
+  }
+ ]
+}

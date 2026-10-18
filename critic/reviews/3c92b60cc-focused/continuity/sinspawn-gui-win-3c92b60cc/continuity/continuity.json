@@ -1,0 +1,25 @@
+{
+ "schema": "continuity/1",
+ "chapter": "sinspawn-gui",
+ "game": "ffx",
+ "base": "http://localhost:5612/",
+ "mode": "gpu",
+ "unverified": [
+  "the probe saw no battle (1088 frames, 0 figures): no battle screen with its field shown"
+ ],
+ "summary": null,
+ "checks": {
+  "CHK-026": {
+   "result": "UNVERIFIED",
+   "reasons": [
+    "the probe saw no battle (1088 frames, 0 figures): no battle screen with its field shown"
+   ]
+  },
+  "CHK-027": {
+   "result": "UNVERIFIED",
+   "reasons": [
+    "the probe saw no battle (1088 frames, 0 figures): no battle screen with its field shown"
+   ]
+  }
+ }
+}
