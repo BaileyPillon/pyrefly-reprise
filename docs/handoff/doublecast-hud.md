@@ -37,20 +37,19 @@ spell and its target, which commits both.
 | d | The lock chip on Yu Pagoda B stays clear of the boss in the menu camera pose: home is the target box's top-left and stays while the target mostly sticks out of the other fiends' boxes (A); a target they cover 85 percent or more of (B: 95 percent under the boss's box) takes the first clear place on its own box, else the lower part of its outer side; always off the turn list's rows, the party window, the command stack and the help slab | `doublecastLock.placeLockChip`, `DoublecastHud.placeLock` |
 | e | The advisor card names both casts: "Doublecast: Fira + Blizzard" (`casts`), "Doublecast: Firaga + Firaga" (the shipped tactics' `wrappedId`: one spell twice) | `advisor.wrappedLabel`; the pinned test in `ffx-doublecast-aim.test.ts` follows |
 
-### The dead end (no second spell is affordable): the finding
+### The dead end (no second spell is affordable): the game's answer (settled 2026-10-18 by the RE session)
 
-Sources read: the engine at `c030970a` and this lane's handoff. **They do not say what the game's menu shows.** What they do say:
+The engine's picker returns every row with `second.enabled: false`, reason "Not enough MP", and has no "nothing offered" state; a `casts` command whose second spell cannot be paid is not an error: that
+cast "does not start and pays nothing" (engine handoff section 2). When this lane was built the game's menu behaviour there was not in any source, so the build did what the approved spec said and invented
+nothing. **The RE session has since read it from FFX.exe and run the game's own code in its harness: answer (a), source note `FFX-G11d-doublecast-deadend.md` (the RE session's coverage notes, `D:/Tools/ffx-parity/coverage/ffx/FFX-G11d-doublecast-deadend.md`).**
 
-- The engine's picker returns every row with `second.enabled: false`, reason "Not enough MP"; it has no "nothing offered" state. A `casts` command whose second spell cannot be paid is not an error: that cast
-  "does not start and pays nothing" (handoff section 2), and the first cast is paid and played.
-- Handoff 7.3(b): what the game does when Doublecast is chosen with MP for only one spell is **inferred** (the engine casts the first spell alone and the turn still costs rank 3), never measured.
-- The 2026-10-15 spec (shared item 5, which Option A carries): "A dead end shows its reason. If no round-2 row fits, the list greys out and the help line says so and names Esc; the menu never commits a
-  single cast by itself. Ours."
+1. In the game the second list opens with every row greyed (a spell's cost plus the first spell's cost is above Lulu's MP), and only Back gets out. (One refinement in the note: a spell record that costs 0 MP, Osmose's id, is never greyed by the pending MP, so an "all grey" list needs a learned list without it.)
+2. The game never refuses the first pick and never casts the first spell alone (no code looks for an affordable second spell, and none commits the first cast by itself).
+3. Back from the second list returns to the first spell's target cursor, with the pending MP cleared.
 
-So the build does what the instruction allows and the spec said, and invents nothing: **every row stays greyed, the cursor stays on cast 1's spell, Back is available, nothing is committed.** The slab says
-"No second spell fits. Esc goes back." (a phone: "...Tap the title to go back."). **Open question for the driver (and for the next live check on the Steam copy, a minute with Lulu on 10 MP and Fira):** does the
-real game offer nothing there, force a Back, or cast the first spell alone? If the game casts it alone, the menu's dead end is a deviation and the fix is one line (commit the first cast when nothing is offered).
-The same live look would settle whether the first list should grey a spell that leaves nothing for a second pick (not in any source; not built).
+**The build already matches:** every row stays greyed, the cursor stays on cast 1's spell, Back is available (Esc, or a tap on the title on a phone), nothing is committed, and Esc from list 2 goes to cast 1's target step with the first cast's hold released. The slab says
+"No second spell fits. Esc goes back." (a phone: "...Tap the title to go back."). **One difference stays, pre-existing HUD behaviour that waits for Bailey's decision:** our cursor lands on the nearest offered row, where the game's cursor rests on the greyed
+row and a confirm there plays the refusal cue (cue 3), which we have no sound for. The note also records that the default-command key (the Defend shortcut) is handled at the top of the game's list handler and so still commits a Defend from the all-grey list (read from the decompile, not traced past the commit, not live-tested); this build does not model it. Whether the first list should grey a spell that leaves nothing for a second pick is not in the note either (not built).
 
 ## Files
 
@@ -116,12 +115,11 @@ Target and build side by side: `D:/Tools/pyrefly-scratch/2026-10-18/doublecast/A
 - **FFX, Lulu's Doublecast is now two separate choices at the menu, in the game's own order:** pick a spell and its target, and the list comes back for the second cast, headed "Doublecast · 2 of 2", with the first
   cast shown on its target, the MP it holds on Lulu's card ("20 -8 -> 12") and every spell the MP left cannot pay greyed. One spell can now go on each Yu Pagoda, or Firaga then Fire; the second target commits both.
   Esc steps back one stage at a time; on a phone a tap on the list's title goes back, and a greyed tile says "Not enough MP". Also fixed in every FFX chapter: backing out of an aim with Esc no longer leaves the
-  folded "I YU PAGODA" chip standing over the list. The advisor card now names both casts ("Doublecast: Firaga + Firaga"). FFX only: Doublecast is Lulu's FFX command. One thing the game has not told us: with MP for
-  only one spell, the menu keeps every row greyed and waits for Esc (it never casts one spell on its own).
+  folded "I YU PAGODA" chip standing over the list. The advisor card now names both casts ("Doublecast: Firaga + Firaga"). FFX only: Doublecast is Lulu's FFX command. When Lulu's remaining MP cannot pay for any second spell, the list opens with every spell greyed and only Back leaves it, as the game does (read from the game's menu code and emulated).
 
 ## Open
 
-1. **The dead end** (above): not in the sources; the game's behaviour needs a live look. Two small additions of ours the sources are silent on (both from the approved spec's shared items): Esc undoes one
+1. **The dead end** (above): settled by the RE session (`FFX-G11d`): the build matches the game; the cursor's landing row and the missing refusal cue stay as disclosed. Two small additions of ours the sources are silent on (both from the approved spec's shared items): Esc undoes one
    stage at a time (list 2 goes back to cast 1's target step, not to list 1), and a second target step opens on cast 1's target.
 2. **Disclosed edit.** Chapter III gives Lulu One MP Cost, so every spell costs 1 MP there and nothing can grey: the natural run shows two rounds with no greyed row. The greyed frames use the same disclosed
    debug edit as the mockups (One MP Cost stripped from the engine's own copy of Lulu, MP set), which gives the engine's real costs (Fire 4, Fira 8, Firaga 16); Chapter XVIII's Lulu has them unedited.
