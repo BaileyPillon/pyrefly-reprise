@@ -1,5 +1,5 @@
 /**
- * **The rig file, format v1** (2026-10-17; both games; additive: nothing existing reads it).
+ * **The rig file, format v1, and v2** (v1 2026-10-17, v2 2026-10-18; both games; additive: v2 only ADDS fields, a v1 file reads and draws as it always did).
  *
  * One painting per figure, cut into parts on a bone rig and posed, instead of one painting per pose swapped at each pose change (the pose continuity problem,
  * `docs/handoff/pose-continuity.md`). This file is the contract between three lanes: the cutting pipeline WRITES it, Kimahri's rig is the first DATA in it, and the
@@ -14,12 +14,17 @@
  *   The runtime maps them onto the figure's idle plane, so a rig is resolution-independent: whatever tier the game draws the idle at, the plane is the same.
  * - Angles in a KEY (`rot`, `root.rot`) are **radians, clockwise on screen** (a lean forward for a figure facing right is positive): the fitter writes them, the rig gate
  *   reads them, and a value past 2 pi is refused. Angles in the `motion` block (`limit`, `bias`, `drag`, the idle's `rot`) are **degrees**, because a person tunes them.
+ * - **v2 (2026-10-18):** a key may SHOW or HIDE a part and may SWAP a part's image for a named variant (`RigPart.hidden`, `RigPart.variants`, `RigKey.parts`). The state is a pure
+ *   function of the key and the file (no inheritance: a part a key does not name takes its default, shown with its own image unless the part is `hidden`), and it takes effect at progress 0.5 of the
+ *   move into the key, exactly where `RigKey.layers` does. `src/engine/rig/RigPartState.ts` and `tools/rig/rig-pose.mjs#stateAt` are the same function (a test feeds both the same vectors).
  * - A bone's transform in a key is a deviation from bind: `rot` about the bone's own joint, then `dx`/`dy` (painting px) added to its offset from the parent joint,
  *   scale `sx`/`sy` about the joint. Children inherit it (a normal 2D bone chain).
  */
 
-/** The only version the runtime accepts. A file with another `version` is refused (the figure draws as the painting set). */
-export const RIG_VERSION = 1;
+/** The newest version this build reads and the pipeline writes (it writes 2 only when a rig uses a v2 field; every other file stays 1). */
+export const RIG_VERSION = 2;
+/** The versions the runtime reads. A file with another `version` is refused (the figure draws as the painting set), so an art mirror carrying a newer rig never meets an old runtime without a clean fallback. */
+export const RIG_VERSIONS: readonly number[] = [1, 2];
 
 /** One bone. Parents come BEFORE their children in `bones`; the first bone with `parent: -1` is the root (it normally sits on the baseline between the feet). */
 export interface RigBone {
@@ -60,6 +65,10 @@ export interface RigBoneXform {
  * The prototype's own spellings are accepted by the loader as aliases: `uv` for `uvs` (**but `uv` is v UP, see `uvs`**), `tris` for `triangles`.
  */
 export interface RigPart {
+  /** v2: hidden at rest (and in every key that does not show it): a part a key brings in (a front-view upper body, a drawn-on scar). The idle still reproduces the painting without it. */
+  hidden?: boolean;
+  /** v2: other images of THIS part, by name, that a key may swap in (`RigKeyPart.image`). Same mesh and skin as the part unless the variant gives its own (a front head is not a side head's shape). */
+  variants?: Record<string, RigPartVariant>;
   name: string;
   /** Draw order, low = behind: a small number (0 to about 100); parts sort by it, and a key may override it (`RigKey.layers`). */
   order: number;
@@ -85,6 +94,31 @@ export interface RigPart {
   bone?: string | number;
   bones?: number[];
   weights?: number[];
+}
+
+/**
+ * v2: another image of the same part. With no `box`, `verts`, `triangles`, `uvs`, `bone` or `weights` it uses the part's mesh and skin as they are (a repaint: a wound, a different mouth). With any of
+ * them it has its OWN mesh, read like a part's (`box`, `verts`, `uvs`, `triangles`, then `bone` or `weights` or `bones` + `weights`); a variant that gives `verts` and no skin of its own is skinned rigidly
+ * to the part's `bone` (a part skinned by weights must give its variant's).
+ */
+export interface RigPartVariant {
+  /** The variant's PNG, beside rig.json (and its 1x twin, like a part's). */
+  png: string;
+  rim?: string;
+  rimEverywhere?: boolean;
+  box?: [number, number, number, number];
+  verts?: number[];
+  uvs?: number[];
+  triangles?: number[];
+  bone?: string | number;
+  bones?: number[];
+  weights?: number[];
+}
+
+/** v2: what a key says about one part. Naming a part makes `show` true unless it says false; `image` is a key of the part's `variants` (absent = the part's own PNG). */
+export interface RigKeyPart {
+  show?: boolean;
+  image?: string;
 }
 
 /** A named point on the figure that follows a bone (painting px, bind pose): `head`, `feet`, `footN`, `hand`, `spearTip` ... */
@@ -129,6 +163,11 @@ export interface RigKey {
    * keep their own `order`.
    */
   layers?: Record<string, number>;
+  /**
+   * v2: which parts this key shows and with which image. A part the key does not name takes its default (shown with its own image, or hidden if the part is `hidden`). The state flips halfway through
+   * the move into the key (`RigPartState.partStateAt`). The `idle` key names none: it is the rest.
+   */
+  parts?: Record<string, RigKeyPart>;
 }
 
 /** A lag chain (tail, mane, sash, beard, hair): each bone's absolute angle chases its parent's through its own spring (`engine/rig/RigDynamics.ts`, `dyn.ts` ported). */
@@ -206,14 +245,15 @@ export interface RigGate {
   keys?: string[];
   /** Each key's posed silhouette, for the HUD's brackets and the strike's reach (`engine/rig/RigSilhouette.ts`). */
   silhouettes?: Record<string, RigSilhouette>;
-  /** The size of every part's PNG and rim mask as the files are, `[w, h]` (a part's PNG is not always its box: a ribbon-mapped spear shaft is a thin strip). The engine budgets texture memory from it. */
+  /** The size of every part's PNG and rim mask as the files are, `[w, h]` (a v2 variant is listed as `<part>:<variant>`) (a part's PNG is not always its box: a ribbon-mapped spear shaft is a thin strip). The engine budgets texture memory from it. */
   textures?: Record<string, { map: [number, number]; rim: [number, number] | null }>;
   rules?: string;
   seal?: string;
 }
 
 export interface RigFile {
-  version: typeof RIG_VERSION;
+  /** 1, or 2 when the file uses a v2 field (`hidden`, `variants`, `parts` on a key). */
+  version: 1 | 2;
   /** The subject (art id) this rig is for, e.g. `kimahri`. */
   name: string;
   /** The prototype's `scale` field: the master's resolution tier (2 = the cut is from a 2x master). Kept for the pipeline; the runtime does not use it. */

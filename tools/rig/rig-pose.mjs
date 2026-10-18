@@ -8,6 +8,49 @@ import { CHANNELS } from './rig-format.mjs';
 
 export const POSE_STRIDE = 5;
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Format v2: which parts a pose shows, and with which image. A state is `{ <part>: { shown: boolean, image: string | null } }` for EVERY part (image null = the part's own).
+// It is a pure function of the key and the file (no inheritance: a part a key does not name takes its default), and it flips HALFWAY through a move into the key. The runtime's
+// `src/engine/rig/RigPartState.ts` is the same function; `tests/unit/rig/rig-v2-agree.test.ts` feeds both the same vectors.
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/** The move into a key flips the state at this progress (the runtime's `STATE_FLIP`, and where `layers` flips). */
+export const STATE_FLIP = 0.5;
+
+/** The rest state: every part shown with its own image, except the ones marked `hidden`. */
+export function restState(rt) {
+  const s = {};
+  for (const p of rt.parts) s[p.name] = { shown: !p.hidden, image: null };
+  return s;
+}
+
+/** The state a key describes (`key.parts` as `normaliseRig` reads it: `{ show, image }`; naming a part shows it unless `show` is false). */
+export function keyState(rt, key) {
+  const s = restState(rt);
+  for (const [pn, e] of Object.entries(key?.parts ?? {})) {
+    if (!s[pn]) continue;
+    s[pn] = e?.show === false ? { shown: false, image: null } : { shown: true, image: e?.image ?? null };
+  }
+  return s;
+}
+
+/** The state `t` (0 to 1) of the way through the move from the key whose state is `a` into the one whose state is `b`: `a` below 0.5, `b` from 0.5. */
+export function stateAt(a, b, t) {
+  return t >= STATE_FLIP ? b : a;
+}
+
+export function sameState(a, b) {
+  if (a === b) return true;
+  return Object.keys(a).every((k) => a[k].shown === b[k]?.shown && a[k].image === b[k]?.image);
+}
+
+/** What a part draws in `state`: null when hidden, else the record that holds the image and the mesh (the part itself, or one of its variants). `state` undefined = the rest state. */
+export function visualOf(part, state) {
+  const st = state ? state[part.name] : undefined;
+  if (st ? !st.shown : part.hidden) return null;
+  return st?.image ? part.variants[st.image] : part;
+}
+
 /** The rest pose of `rt`: every bone at its bind. */
 export function restPose(rt) {
   const bones = new Float64Array(rt.bones.length * POSE_STRIDE);

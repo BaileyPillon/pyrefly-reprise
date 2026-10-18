@@ -160,3 +160,9 @@ The merged final keys are in `D:/Tools/pyrefly-scratch/2026-10-18/rig-lulu/fit/k
 - ~~A skirt cut into panels~~ (done in pass 2: it lifted attack over the bar, ready and follow did not follow; see Pass 2).
 - The doll's hem fill (a pleat-matching fill with the belt carried across the hole; designed, not built), and the arm sleeves that read as ribbons when raised (a wider cut). The two-doll od-fury painting is now served by its own front part (both dolls are its pixels).
 - The other chapters' figures are cut the same way, one subject config each; Lulu's config is the example for a figure with no hand-cut prototype (parts by polygons and capsules, a hook for a skirt, marks, `authored`, `fit.mirror`, per-pose limits).
+
+## Format v2 variant of this rig (2026-10-18): `D:/pyrefly-art-rigs/lulu-v2`
+
+`tools/rig/subjects/lulu-v2-from-v1.mjs` turns this rig's two "speck" front parts into ONE hidden part `front` (defend's image; the Overdrive image is its variant `od-fury`, with a mesh of its own) that the keys `defend` and `od-fury` show,
+while they hide the side head, collar, hanging arm, braid and doll instead of shrinking and layering them; the four chain bones and the `layers` are gone. Gated `ok` (13 of 13 keys, 270 poses scanned, defend overlap 0.617 against 0.615,
+od-fury 0.699 against 0.695). This folder (`lulu`, version 1) is what release 55 ships and is unchanged. See `rig-v2-and-kit.md`.

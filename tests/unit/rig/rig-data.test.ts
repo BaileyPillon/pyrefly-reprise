@@ -68,7 +68,7 @@ describe('readRig', () => {
 
   it('says why it refuses a file', () => {
     expect(reason(null)).toMatch(/not an object/);
-    expect(reason({ ...makeRigFile(), version: 2 })).toMatch(/version 2/);
+    expect(reason({ ...makeRigFile(), version: 3 as 1 })).toContain('version 3 (this build reads 1 and 2)');
     expect(reason({ ...makeRigFile(), image: { w: 0, h: 10 } })).toMatch(/image size/);
     const noIdle = makeRigFile();
     delete (noIdle.keys as Record<string, unknown>)['idle'];

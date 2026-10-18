@@ -112,3 +112,10 @@ reading, the fitter having claimed 0.87, 0.94, 0.87 and 0.94. It passes the gate
   pass `rigs: {dir}` to `enforcePoseGate` (full re-gate, about 5 to 10 s a rig). The runtime trusts `gate.status === 'ok'` alone.
 * The hole test is local to each joint and strict; a rig whose lag-chain joints sit inside the body and are covered by parts on other bones may need underlap added in the cut (see `skirt`). Reported by joint name.
 * Rig textures are the 2x masters' crops; the budget counts them as such.
+
+## Format v2 in the pipeline and the gate (2026-10-18, branch `rig-v2`)
+
+The gate reads every key and blend in the part state it describes (`rig-pose.mjs#keyState`/`stateAt`, `rig-raster.mjs`, `rig-holes.mjs`), counts every variant in the budget and the stamp (`<part>:<variant>`), and adds `hidden-share` (a key may
+hide at most 60 percent of the idle's rest alpha area), `part-never-shown`, `variant-unused` and `variant-missing` (`rig-variants.mjs`), plus a report of each variant's palette distance. Config: `build.hidden`, `build.variants`,
+`fit.keys.<pose>.show|hide|image`, `keys_extra.<pose>.parts` (`rig_v2.py`; the fitter draws the pose's state while it scores; the exporter writes `version: 2` exactly when one is used). The lane kit that drives the pipeline is
+`tools/rig/lane/README.md`. See `rig-v2-and-kit.md`.

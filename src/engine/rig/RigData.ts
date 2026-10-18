@@ -5,7 +5,8 @@
  * Nothing here trusts the file. Every index is range-checked and every number must be finite, because the first frame after a bad file would otherwise be NaN
  * positions on a figure the player is looking at. The reasons are short and end up in the `[rig] subject off (reason)` line.
  */
-import { RIG_REQUIRED_KEYS, RIG_VERSION, type RigFile, type RigGate, type RigKey, type RigMotion } from '../../data/art/rigTypes.ts';
+import { RIG_REQUIRED_KEYS, RIG_VERSIONS, type RigFile, type RigGate, type RigKey, type RigMotion } from '../../data/art/rigTypes.ts';
+import { readMesh, type RigMeshData } from './RigMesh.ts';
 
 export interface RigBoneData {
   name: string;
@@ -19,7 +20,15 @@ export interface RigBoneData {
   by: number;
 }
 
-export interface RigPartData {
+/** Another image of a part (format v2): its file names, rim mode, and mesh (the part's own when the variant gave none). */
+export interface RigVariantData extends RigMeshData {
+  name: string;
+  png: string;
+  rim: string | null;
+  rimMode: 'mask' | 'all' | 'off';
+}
+
+export interface RigPartData extends RigMeshData {
   name: string;
   order: number;
   png: string;
@@ -27,17 +36,10 @@ export interface RigPartData {
   rim: string | null;
   /** `mask`: the rim runs where the mask is white; `all`: along the whole alpha edge; `off`: no rim light on this part. */
   rimMode: 'mask' | 'all' | 'off';
-  box: [number, number, number, number];
-  /** Bind positions, painting px, x/y pairs. */
-  verts: Float32Array;
-  /** u/v pairs, 0..1, v up. */
-  uvs: Float32Array;
-  triangles: Uint16Array | Uint32Array;
-  /** Two influences a vertex: bone indices (-1 = none) and weights. */
-  boneA: Int16Array;
-  boneB: Int16Array;
-  wA: Float32Array;
-  wB: Float32Array;
+  /** v2: hidden at rest (see `RigPartState.ts`). */
+  hidden: boolean;
+  /** v2: the images a key may swap in, in the order the file lists them (a state names one by its index). Empty for a v1 part. */
+  variants: RigVariantData[];
 }
 
 export interface RigLandmarkData {
@@ -47,6 +49,8 @@ export interface RigLandmarkData {
 }
 
 export interface RigData {
+  /** The file's `version` (1 or 2). */
+  version: number;
   name: string;
   image: { w: number; h: number };
   baselineY: number;
@@ -67,13 +71,19 @@ export type RigRead = { ok: true; data: RigData } | { ok: false; reason: string 
 const fail = (reason: string): RigRead => ({ ok: false, reason });
 const finite = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n);
 const isObj = (o: unknown): o is Record<string, unknown> => typeof o === 'object' && o !== null && !Array.isArray(o);
-const allFinite = (a: unknown, len?: number): a is number[] => Array.isArray(a) && (len === undefined || a.length === len) && a.every(finite);
+
+/** The rim mask file and mode of a part or variant: `noRim` is the prototype's spelling of `rimEverywhere` (the mask is ignored). */
+function rimOf(p: Record<string, unknown>): { rim: string | null; rimMode: 'mask' | 'all' | 'off' } {
+  const rim = typeof p['rim'] === 'string' && p['rim'] ? p['rim'] : null;
+  return { rim, rimMode: p['rimEverywhere'] === true || p['noRim'] === true ? 'all' : rim ? 'mask' : 'off' };
+}
 
 /** Parse and check a rig file. `raw` is the JSON as fetched. */
 export function readRig(raw: unknown): RigRead {
   if (!isObj(raw)) return fail('not an object');
   const f = raw as unknown as Partial<RigFile> & Record<string, unknown>;
-  if (f.version !== RIG_VERSION) return fail(`version ${String(f.version)} (this build reads ${RIG_VERSION})`);
+  if (typeof f.version !== 'number' || !RIG_VERSIONS.includes(f.version)) return fail(`version ${String(f.version)} (this build reads ${RIG_VERSIONS.join(' and ')})`);
+  const v2 = f.version >= 2;
   if (typeof f.name !== 'string' || !f.name) return fail('no name');
   if (!isObj(f.image) || !finite(f.image.w) || !finite(f.image.h) || f.image.w <= 0 || f.image.h <= 0) return fail('bad image size');
   if (!finite(f.baselineY)) return fail('bad baselineY');
@@ -106,77 +116,31 @@ export function readRig(raw: unknown): RigRead {
     if (!isObj(p) || typeof p.name !== 'string' || typeof p.png !== 'string' || !finite(p.order) || Math.abs(p.order) > 1000) return fail('a part has bad fields');
     if (seenParts.has(p.name)) return fail(`part ${p.name}: duplicated`);
     seenParts.add(p.name);
-    const box = p.box;
-    if (!allFinite(box, 4) || box[2]! <= 0 || box[3]! <= 0) return fail(`part ${p.name}: bad box`);
-    const [bx, by, bw, bh] = box as [number, number, number, number];
-    const verts = p.verts === undefined ? [bx, by, bx + bw, by, bx + bw, by + bh, bx, by + bh] : p.verts;
-    if (!allFinite(verts) || verts.length < 6 || verts.length % 2) return fail(`part ${p.name}: bad verts`);
-    const n = verts.length / 2;
-    const tri = p.triangles ?? p.tris ?? (p.verts === undefined ? [0, 1, 2, 0, 2, 3] : undefined);
-    if (!allFinite(tri) || tri.length === 0 || tri.length % 3) return fail(`part ${p.name}: bad triangles`);
-    if (tri.some((i) => !Number.isInteger(i) || i < 0 || i >= n)) return fail(`part ${p.name}: a triangle index is out of range`);
-    // `uvs` is v DOWN (the painting's own px); the prototype's `uv` is v up (three.js flipY). The mesh wants v up.
-    const uvsIn = p.uvs ?? p.uv;
-    const vDown = p.uvs !== undefined || p.uv === undefined;
-    let uvs: number[];
-    if (uvsIn === undefined) {
-      uvs = new Array<number>(n * 2);
-      for (let i = 0; i < n; i++) {
-        uvs[i * 2] = (verts[i * 2]! - bx) / bw;
-        uvs[i * 2 + 1] = (verts[i * 2 + 1]! - by) / bh;
-      }
-    } else if (allFinite(uvsIn, n * 2)) uvs = uvsIn.slice();
-    else return fail(`part ${p.name}: bad uvs`);
-    if (vDown) for (let i = 0; i < n; i++) uvs[i * 2 + 1] = 1 - uvs[i * 2 + 1]!;
-
-    const boneA = new Int16Array(n);
-    const boneB = new Int16Array(n).fill(-1);
-    const wA = new Float32Array(n);
-    const wB = new Float32Array(n);
-    if (p.bone !== undefined) {
-      const bi = boneRef(p.bone);
-      if (bi < 0) return fail(`part ${p.name}: no bone ${String(p.bone)}`);
-      boneA.fill(bi);
-      wA.fill(1);
-    } else {
-      // [b0, w0, b1, w1, ...] (four a vertex, the pipeline's), or the prototype's `bones` + `weights` (two each)
-      let pb: number[];
-      let pw: number[];
-      if (allFinite(p.weights, n * 4) && p.bones === undefined) {
-        pb = p.weights.filter((_, i) => i % 2 === 0);
-        pw = p.weights.filter((_, i) => i % 2 === 1);
-      } else if (allFinite(p.bones, n * 2) && allFinite(p.weights, n * 2)) {
-        pb = p.bones;
-        pw = p.weights;
-      } else return fail(`part ${p.name}: needs "bone", or "weights" with four numbers a vertex, or "bones" and "weights" with two`);
-      for (let i = 0; i < n; i++) {
-        const a = pb[i * 2]!;
-        const b = pb[i * 2 + 1]!;
-        if (!Number.isInteger(a) || a < 0 || a >= bones.length) return fail(`part ${p.name}: vertex ${i} has no first bone`);
-        if (!Number.isInteger(b) || b >= bones.length) return fail(`part ${p.name}: vertex ${i} has a bad second bone`);
-        boneA[i] = a;
-        boneB[i] = b < 0 ? -1 : b;
-        wA[i] = pw[i * 2]!;
-        wB[i] = b < 0 ? 0 : pw[i * 2 + 1]!;
+    if (!v2 && (p.hidden !== undefined || p.variants !== undefined)) return fail(`part ${p.name}: hidden and variants need version 2 (this file says ${String(f.version)})`);
+    if (p.hidden !== undefined && typeof p.hidden !== 'boolean') return fail(`part ${p.name}: bad hidden`);
+    const mesh = readMesh(p, `part ${p.name}`, bones.length, boneRef);
+    if (!mesh.ok) return fail(mesh.reason);
+    const { rim, rimMode } = rimOf(p);
+    const variants: RigVariantData[] = [];
+    if (p.variants !== undefined) {
+      if (!isObj(p.variants)) return fail(`part ${p.name}: bad variants`);
+      for (const [vn, v] of Object.entries(p.variants)) {
+        const where = `part ${p.name} variant ${vn}`;
+        if (!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(vn)) return fail(`${where}: the name is not a plain name`);
+        if (!isObj(v) || typeof v.png !== 'string' || !v.png) return fail(`${where}: bad fields`);
+        const own = ['box', 'verts', 'uvs', 'uv', 'triangles', 'tris', 'bone', 'bones', 'weights'].some((k) => v[k] !== undefined);
+        let vm: RigMeshData = mesh.mesh;
+        if (own) {
+          // its own mesh: read like a part's; a variant that names no skin of its own is rigid on the part's `bone` (a part skinned by weights must give its variant's)
+          const skinned = v.bone !== undefined || v.weights !== undefined || v.bones !== undefined;
+          const r = readMesh({ ...v, box: v.box ?? p.box, ...(skinned || p.bone === undefined ? {} : { bone: p.bone }) }, where, bones.length, boneRef);
+          if (!r.ok) return fail(r.reason);
+          vm = r.mesh;
+        }
+        variants.push({ ...vm, name: vn, png: v.png, ...rimOf(v) });
       }
     }
-    const rim = typeof p.rim === 'string' && p.rim ? p.rim : null;
-    const rimMode = p.rimEverywhere === true || p.noRim === true ? 'all' : rim ? 'mask' : 'off'; // `noRim` is the prototype's spelling of rimEverywhere (the mask is ignored)
-    parts.push({
-      name: p.name,
-      order: p.order,
-      png: p.png,
-      rim,
-      rimMode,
-      box: [bx, by, bw, bh],
-      verts: Float32Array.from(verts),
-      uvs: Float32Array.from(uvs),
-      triangles: n > 65535 ? Uint32Array.from(tri) : Uint16Array.from(tri),
-      boneA,
-      boneB,
-      wA,
-      wB,
-    });
+    parts.push({ ...mesh.mesh, name: p.name, order: p.order, png: p.png, rim, rimMode, hidden: p.hidden === true, variants });
   }
   parts.sort((a, b) => a.order - b.order);
 
@@ -208,7 +172,21 @@ export function readRig(raw: unknown): RigRead {
       if (!isObj(k.layers)) return fail(`key ${name}: bad layers`);
       for (const [pn, v] of Object.entries(k.layers)) if (!seenParts.has(pn) || !finite(v)) return fail(`key ${name}: layers names a part that is not there or a non-number: ${pn}`);
     }
+    if (k.parts !== undefined) {
+      if (!v2) return fail(`key ${name}: parts need version 2 (this file says ${String(f.version)})`);
+      if (!isObj(k.parts)) return fail(`key ${name}: bad parts`);
+      if (name === 'idle' && Object.keys(k.parts).length) return fail('the idle key names parts (it is the rest: hide a part by marking it hidden)');
+      for (const [pn, e] of Object.entries(k.parts)) {
+        const part = parts.find((x) => x.name === pn);
+        if (!part) return fail(`key ${name}: parts names a part that is not there: ${pn}`);
+        if (!isObj(e) || (e.show !== undefined && typeof e.show !== 'boolean') || (e.image !== undefined && typeof e.image !== 'string')) return fail(`key ${name}: part ${pn} has bad fields`);
+        if (e.image !== undefined && !part.variants.some((v) => v.name === e.image)) return fail(`key ${name}: part ${pn} has no variant ${String(e.image)}`);
+      }
+    }
     keys.set(name, k as unknown as RigKey);
+  }
+  for (const p of parts) {
+    if (p.hidden && ![...keys].some(([kn, k]) => kn !== 'idle' && k.parts?.[p.name] !== undefined && k.parts[p.name]!.show !== false)) return fail(`part ${p.name} is hidden at rest and no key shows it`);
   }
   for (const need of RIG_REQUIRED_KEYS) if (!keys.has(need)) return fail(`no "${need}" key`);
 
@@ -230,6 +208,7 @@ export function readRig(raw: unknown): RigRead {
   return {
     ok: true,
     data: {
+      version: f.version,
       name: f.name,
       image: { w: f.image.w, h: f.image.h },
       baselineY: f.baselineY,

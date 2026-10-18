@@ -31,6 +31,8 @@ export interface RigGateKey {
   authored?: boolean;
   /** The approved painting of the pose faces the other way from the rig (`turn: true`): the overlap and the marks were read against it turned about its stance. */
   turned?: boolean;
+  /** Format v2: the share of the idle's rest figure this key hides (absent when it hides nothing; at most 0.6). */
+  hiddenShare?: number;
   /** Per landmark named in the key's `expect`: its distance from the approved painting's mark, as a share of the idle's height. */
   landmarks?: Record<string, number>;
   landmarkMax?: number | null;
@@ -48,8 +50,10 @@ export interface RigGateResult {
   exempt: string[];
   /** Each key's posed box, feet and painted front in the master's px (`tools/rig/rig-silhouette.mjs`), stamped into `gate.silhouettes`. */
   silhouettes: Record<string, RigSilhouette>;
+  /** Format v2: each variant's palette distance from its base part, 0 to 1 (a report for the clip review, never a refusal). */
+  variants: Array<{ part: string; variant: string; distance: number }>;
   holes: { joints: string[]; rendered: number; keysWithHoles: string[]; blendsWithHoles: number; blends: Array<{ from: string; to: string; t: number; holes: Array<{ name: string; count: number }> }> } | null;
-  size: { parts: number; bones: number; texels: number; bytes: number; verts: number; tris: number };
+  size: { parts: number; bones: number; texels: number; bytes: number; verts: number; tris: number; variants: number };
   digest: string;
   bands: typeof RIG_BANDS;
   budget: typeof BUDGET;

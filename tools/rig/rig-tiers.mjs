@@ -23,14 +23,15 @@
 import { closeSync, copyFileSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
+import { partImages } from './rig-format.mjs';
 
 export const TIER_RULE = 'rig-tier/1';
 /** The folder beside `rig.json` that holds the half-size twins, under the same names. */
 export const TIER_DIR = '1x';
 
-/** The image files a rig names (each part's PNG and rim mask), once, in order. */
+/** The image files a rig names (each part's PNG and rim mask, and, format v2, each variant's), once, in order. */
 export function rigImageNames(raw) {
-  return [...new Set((raw.parts ?? []).flatMap((p) => [p.png, p.rim]).filter((f) => typeof f === 'string' && f))];
+  return [...new Set(partImages(raw).flatMap((p) => [p.png, p.rim]).filter((f) => typeof f === 'string' && f))];
 }
 
 /** Width and height from a PNG's header, or null when the file is not a PNG. */
@@ -66,10 +67,10 @@ export function twinSizes(map, rim) {
  */
 export function textureSizes(raw, dir) {
   const out = {};
-  for (const p of raw.parts ?? []) {
+  for (const p of partImages(raw)) {
     const m = existsSync(join(dir, p.png)) ? pngSize(join(dir, p.png)) : null;
     const r = p.rim && existsSync(join(dir, p.rim)) ? pngSize(join(dir, p.rim)) : null;
-    if (m) out[p.name] = { map: [m.width, m.height], rim: r ? [r.width, r.height] : null };
+    if (m) out[p.variant === null ? p.part : `${p.part}:${p.variant}`] = { map: [m.width, m.height], rim: r ? [r.width, r.height] : null }; // a format v2 variant is listed as <part>:<variant>
   }
   return out;
 }
@@ -128,10 +129,11 @@ const rigOf = (dir) => JSON.parse(readFileSync(join(dir, 'rig.json'), 'utf8'));
 /** For each file the 1x folder holds: `{ name, kind: 'map' | 'rim', from }`. A rim shared by two parts, or named like a map, is one file with the strictest rule that applies. */
 function twinPlan(raw, dir) {
   const plan = new Map();
-  for (const p of raw.parts ?? []) {
+  const images = partImages(raw);
+  for (const p of images) {
     if (p.png) plan.set(p.png, { name: p.png, kind: 'map', from: join(dir, p.png), map: null });
   }
-  for (const p of raw.parts ?? []) {
+  for (const p of images) {
     if (!p.rim || plan.has(p.rim)) continue;
     plan.set(p.rim, { name: p.rim, kind: 'rim', from: join(dir, p.rim), map: p.png ? join(dir, p.png) : null });
   }

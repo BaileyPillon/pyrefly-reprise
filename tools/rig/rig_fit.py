@@ -40,6 +40,7 @@ import time
 import numpy as np
 from PIL import Image
 
+import rig_v2
 from rig_common import REPO, Subject, read_json, run_node, say, write_json
 from rig_cma import cma_es
 from rig_fit_terms import MARK_FREE, MARK_SOFT, Terms, grid_point  # noqa: F401  (grid_point: part of this module's surface, the tests use it)
@@ -337,6 +338,7 @@ def run(sub: Subject, poses=None, retarget=False, seed=1) -> None:
         target = np.ascontiguousarray(targets[pose][model.win[1]:model.win[3], model.win[0]:model.win[2]])
         marks = fitter.grid_marks(info, (sub.cfg.get("landmarks") or {}).get(pose))
         pcfg = (fit_cfg.get("keys") or {}).get(pose, {})
+        model.set_state(rig_v2.state_of(build["parts"], rig_v2.key_parts(pcfg)))  # format v2: the pose's own part state (the rest state when it names none): a pose that hides a part is fitted without it
         t0 = time.time()
         if pose == T["costume"]["pose"] or info["class"] == "idle":
             x = np.zeros(len(fitter.free) + 3)
