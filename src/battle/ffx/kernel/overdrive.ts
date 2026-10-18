@@ -10,7 +10,7 @@
  * the way the game changes its character structures, and return what the game returns.
  *
  * Integer rules (as `./int32.ts`): products wrap at 32 bits, divisions truncate toward zero, and a zero divisor is a
- * `RangeError` where the game faults. `udiv` is used where the machine code uses DIV.
+ * `RangeError` where the game faults. `udiv` is used where the machine code divides as unsigned.
  */
 
 import { type ApCurveRow, apCurve, awardAp, AUTO_B, bumpStat, clamp, STAT_COUNTERS } from './ap-award.ts';

@@ -92,7 +92,7 @@ export function critChance(input: CritInput): number {
 export function rollCritical(input: CritInput, damage: number, draw: Ffx2Draw, options: CritOptions = {}): CritResult {
   if (!input.canCrit) return { critical: false, damage, chance: null, roll: null, stream: null };
   const stream = rngStreamForChr(input.attackerSlot, Ffx2RngKind.Variance);
-  const roll = drawValue(draw, stream) % 100; // IDIV by 100 of a non-negative 31-bit value
+  const roll = drawValue(draw, stream) % 100; // the remainder of a signed division by 100, of a non-negative 31-bit value
   const chance = critChance(input);
   const critical = roll < chance || input.alwaysCritical || options.debugForceCrit === true;
   return { critical, damage: critical ? (damage + damage) | 0 : damage, chance, roll, stream };

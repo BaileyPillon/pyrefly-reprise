@@ -85,7 +85,7 @@ describe('FFX hit check: counter kind and debug switches', () => {
   });
 });
 
-describe('FFX hit check: stats are read as bytes (MOVZX), as in the game', () => {
+describe('FFX hit check: stats are read as bytes (zero-extended), as in the game', () => {
   it('masks every stat to 0..255', () => {
     const wide = make({ flagsMisc: formulaFlags(2, DARK), accuracy: 256 + 90, eva: 256 + 40, userLuck: 256 + 5, targetLuck: 256 + 3, darkness: 256 });
     // accuracy 90, EVA 40, user LCK 5, target LCK 3, Darkness counter 256 -> 0 (not blind): 90 - 40 + 5 - 3 = 52.

@@ -29,7 +29,7 @@ export interface ApCurveRow {
   b: number;
   /** Byte at record +0x13: the linear term. */
   c: number;
-  /** u32 at record +0x14: the value used when the level is above 100 (signed 32-bit here, as the game returns it in EAX). */
+  /** u32 at record +0x14: the value used when the level is above 100 (signed 32-bit here, as the game returns it). */
   cap: number;
 }
 

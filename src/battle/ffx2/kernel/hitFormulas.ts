@@ -70,7 +70,7 @@ export function raceThreshold(t: RaceTerms): number {
 }
 
 /**
- * Darkness: `base / 4` rounded toward zero (CDQ; AND EDX, 3; ADD; SAR 2). `base` is a byte, so this is
+ * Darkness: `base / 4` rounded toward zero (add 3 when negative, then shift right by 2). `base` is a byte, so this is
  * a floor in practice.
  */
 export function darknessBase(base: number): number {
@@ -137,7 +137,7 @@ export interface BribeAccuracy {
 
 /**
  * Formula 6 (exe 0x00641500, 0x0064173f to 0x006417e3): the Bribe accuracy. The sum and the divisor are
- * converted to 32-bit floats, the rest is x87 arithmetic at 53-bit precision, the result is stored as a
+ * converted to 32-bit floats, the rest is double-precision arithmetic (53-bit), the result is stored as a
  * float32 and then truncated to an int:
  *
  *     base = 128 for command 0x31da, else -64                        (float32 constants)
@@ -165,7 +165,7 @@ export function bribeAccuracy(commandId: number, old: number, amount: number, ma
  *     v = a^6 / t / t / t / float32(r + 10) / float32(r + 10) / float32(floor(r / 20) + 1)
  *     threshold = trunc(float32(v))
  *
- * x87 at 53-bit precision, left to right (the power is built by five multiplications, each rounded).
+ * Double precision (53-bit), left to right (the power is built by five multiplications, each rounded).
  * The roll is `draw & 0x3ff` (0 to 1023). A threshold of 2^31 or more converts to the "integer
  * indefinite" value and cannot beat any roll.
  */

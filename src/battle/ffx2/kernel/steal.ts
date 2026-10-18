@@ -212,10 +212,10 @@ export function stealGil(input: StealGilInput, draw: Ffx2Draw, debug: StealDebug
   result.success = true;
   const amountRoll = smod(drawValue(draw, Ffx2FixedStream.Steal), 101);
   result.amountRoll = amountRoll;
-  const product = Math.imul(amountRoll + 100, input.gil | 0) >>> 0; // IMUL then read as unsigned
-  const half = Math.floor(product / 200); // unsigned DIV (compiler magic number 0x51eb851f)
+  const product = Math.imul(amountRoll + 100, input.gil | 0) >>> 0; // 32-bit product, low 32 bits kept (wraps), then read as unsigned
+  const half = Math.floor(product / 200); // unsigned division by 200 (compiled as a multiply by the magic number 0x51eb851f and a shift)
   const scaled = Math.imul(half, chance) >>> 0;
-  result.amount = Math.floor(scaled / 255) | 0; // unsigned DIV (magic number 0x80808081), stored as a dword
+  result.amount = Math.floor(scaled / 255) | 0; // unsigned division by 255 (compiled as a multiply by the magic number 0x80808081 and a shift), stored as a 32-bit value
   return result;
 }
 
@@ -267,7 +267,7 @@ export interface BribeRewardResult {
  *         q := float32( float32(sqrt(threshold)) * quantity * 0.0625 * f / 25 + d )   truncated toward zero
  *         quantity := clamp(q, 1, 99)
  *
- * The arithmetic is x87 with 53-bit precision (the CRT leaves that setting) and float32 stores where the
+ * The arithmetic is double precision, 53-bit (the C runtime leaves that setting) and float32 stores where the
  * code stores to float memory; JavaScript doubles plus `Math.fround` reproduce it. A negative threshold
  * gives a NaN square root, which converts to the "integer indefinite" value and clamps to 1.
  */

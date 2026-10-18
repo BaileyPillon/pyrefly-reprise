@@ -8,7 +8,7 @@
  * Every input field names the byte, word or dword of the game's structures it stands for (`Chr+0x...` is the
  * 0x17e0-byte battle character, `Cmd+0x...` the command row, `ActionRec+0x...` the queued action). The values
  * are the raw bytes: the kernel zero-extends the stat bytes and sign-extends the stage bytes itself, as the
- * game's MOVZX / MOVSX do, so a caller hands over exactly what is stored.
+ * game's zero-extending and sign-extending byte reads do, so a caller hands over exactly what is stored.
  *
  * Pure, DOM-free, no `three`.
  */

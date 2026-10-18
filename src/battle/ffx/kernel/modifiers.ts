@@ -311,7 +311,7 @@ export interface ScaleOverride {
 }
 
 /**
- * 0x78bd90. With the override active: `damage * (a + 2b) / (2b)` in x87
+ * 0x78bd90. With the override active: `damage * (a + 2b) / (2b)` in
  * double precision, the damage first rounded to single precision, then
  * converted to int by truncation. Without it: the damage unchanged.
  */

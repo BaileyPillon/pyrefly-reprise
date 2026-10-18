@@ -8,7 +8,7 @@
  *
  * Inputs are the numbers the function reads, named after the game's fields, with their offsets:
  * `Cmd+0xNN` is the command record, `Chr+0xNNN` the battle character structure, `Rec+0xNN` the 0x2c-byte
- * hit record. Bytes are read as bytes (masked to 8 bits, like the machine code's MOVZX).
+ * hit record. Bytes are read as bytes (masked to 8 bits, like the machine code's zero-extending byte read).
  * The randomness comes from `draw()`, which returns the raw 31-bit value the game's RNG returns for the
  * USER's mode 1 stream (see `./rng.ts`); the kernel takes it modulo 101 like the exe.
  *

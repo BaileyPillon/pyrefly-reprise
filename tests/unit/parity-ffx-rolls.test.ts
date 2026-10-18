@@ -39,7 +39,7 @@ describe('FFX Escape roll (exe 0x0078a780)', () => {
     expect(run(2, 0x10, true)).toEqual({ ok: false, drawn: 1 });
   });
 
-  it('reads the flag as a signed byte, as the exe does (MOVSX)', () => {
+  it('reads the flag as a signed byte, as the exe does (sign-extended)', () => {
     // 0x101 is the byte 1 (cannot escape); 0xff is -1, an ordinary value that rolls.
     expect(run(0x101, 0x10)).toEqual({ ok: false, drawn: 1 });
     expect(run(0xff, 0x10)).toEqual({ ok: true, drawn: 1 });

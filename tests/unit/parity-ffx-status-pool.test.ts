@@ -102,7 +102,7 @@ describe('Double HP and Double MP (0x78d270)', () => {
 
   it('the 32-bit product wraps: a base maximum of 0x40000000 doubles to a negative number and clamps up to 0', () => {
     const r = applyDoubleHpMp(state({ baseMaxHp: 0x40000000, maxHp: 7, hp: 5 }), 1);
-    expect(r.maxHp).toBe(0); // imul(0x40000000, 2) = -2147483648 -> raised to 0
+    expect(r.maxHp).toBe(0); // the 32-bit product of 0x40000000 and 2 = -2147483648 -> raised to 0
     expect(r.hp).toBe(0); // clamp(5, 0, 0)
     const edge = applyDoubleHpMp(state({ baseMaxHp: 0x3fffffff, maxHp: 7 }), 1);
     expect(edge.maxHp).toBe(9999); // 0x7ffffffe, clamped to the cap
