@@ -132,8 +132,8 @@ The probe reads painted-plane pixels, so with the rig on it judges nothing of he
 
 ## Tests run
 
-Pass 2: see the end of the Pass 2 section for the final numbers. (Pass 1: `npx tsc --noEmit` clean. vitest: the 18 rig files (`tests/unit/tools/rig-*.test.ts` and `tests/unit/rig/*`): **199 passed, 0 failed**, including the new `tests/unit/tools/rig-subject-lulu.test.ts` (7: the config's parts, skin, bones, landmarks and marks cannot drift). Python `tools/rig/test_rig_pipeline.py`: 12 passed.
-`node tools/pose-gate.mjs --check --rigs D:/pyrefly-art-rigs`: 26 rigged (13 of Kimahri's and 13 of Lulu's: the census counts an authored key as rigged, as for Kimahri), 0 fail.
+**Pass 2:** vitest `tests/unit/tools/rig-subject-lulu.test.ts` 11 passed (the config's parts, skin, bones, marks, and four new ones: the skirt column and train hung from the hips, the shell bones, the front chains, the KO's root scale); with the gate, landmark, Kimahri mini-rig and engine rig tests (14 files, 152 tests) passed; Python `tools/rig/test_rig_pipeline.py` 12 OK; `node tools/pose-gate.mjs --check --rigs D:/pyrefly-art-rigs`: 1,106 paintings, 26 rigged, 0 fail; the engine's own `readRig` reads the file and `gateProblem` is null (checked in a scratch test, not committed). `npx tsc --noEmit` clean.
+**Pass 1:** `npx tsc --noEmit` clean. vitest: the 18 rig files (`tests/unit/tools/rig-*.test.ts` and `tests/unit/rig/*`): 199 passed, 0 failed, including `rig-subject-lulu.test.ts` (7). Python 12 passed. `pose-gate --check --rigs`: 26 rigged (13 of Kimahri's and 13 of Lulu's: the census counts an authored key as rigged, as for Kimahri), 0 fail.
 
 ## Findings worth a decision
 
