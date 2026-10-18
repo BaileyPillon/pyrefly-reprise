@@ -233,6 +233,24 @@
      215,
      600
     ]
+   ],
+   "hem_cut": [
+    [
+     316,
+     985
+    ],
+    [
+     416,
+     985
+    ],
+    [
+     416,
+     1117
+    ],
+    [
+     316,
+     1127
+    ]
    ]
   },
   "order": [
@@ -447,7 +465,12 @@
   },
   "clean": {
    "min_island": 60,
-   "close": 2
+   "close": 2,
+   "skirt": false,
+   "torso": false,
+   "armA": false,
+   "armB": false,
+   "shoulders": false
   },
   "ops": [
    {
@@ -472,7 +495,7 @@
     "op": "skirt",
     "back": "skirt",
     "front": "torso",
-    "px": 50
+    "px": 70
    },
    {
     "op": "extend",
@@ -525,12 +548,19 @@
     "zone": {
      "any": [
       {
-       "grown": {
-        "of": {
-         "part": "doll"
+       "all": [
+        {
+         "grown": {
+          "of": {
+           "part": "doll"
+          },
+          "px": 2
+         }
         },
-        "px": 2
-       }
+        {
+         "poly": "hem_cut"
+        }
+       ]
       },
       {
        "all": [
@@ -565,7 +595,15 @@
     ]
    ],
    [
-    "skirt",
+    "skirtL",
+    "root",
+    [
+     245,
+     1142
+    ]
+   ],
+   [
+    "skirtR",
     "root",
     [
      245,
@@ -931,92 +969,97 @@
  "fit": {
   "min_iou": 0.0,
   "default_limit": 110,
-  "chain_limit": 55,
+  "chain_limit": 40,
   "offsets": [
    "pelvis",
    "doll"
   ],
   "fixed": [
-   "skirt"
+   "skirtL",
+   "skirtR"
   ],
   "scales": {
-   "skirt": [
-    0.85,
+   "skirtL": [
+    0.95,
     1.6
    ],
+   "skirtR": [
+    0.95,
+    1.3
+   ],
    "upperarm": [
-    0.85,
-    1.3
-   ],
-   "upperarmF": [
-    0.85,
-    1.3
-   ],
-   "forearm": [
-    0.85,
-    1.25
-   ],
-   "forearmF": [
-    0.85,
-    1.25
-   ],
-   "spine": [
     0.9,
     1.15
+   ],
+   "upperarmF": [
+    0.9,
+    1.15
+   ],
+   "forearm": [
+    0.9,
+    1.15
+   ],
+   "forearmF": [
+    0.9,
+    1.15
+   ],
+   "spine": [
+    0.95,
+    1.1
    ]
   },
   "limits": {
    "head": [
-    -45,
-    45
+    -25,
+    25
    ],
    "spine": [
-    -40,
-    40
+    -20,
+    20
    ],
    "chest": [
-    -35,
-    40
+    -20,
+    20
    ],
    "pelvis": [
-    -35,
-    40
+    -15,
+    15
    ],
    "upperarm": [
     -175,
-    175
+    100
    ],
    "upperarmF": [
     -175,
-    175
+    100
    ],
    "forearm": [
     -150,
-    20
+    10
    ],
    "forearmF": [
     -150,
-    20
+    10
    ],
    "hand": [
-    -45,
-    45
+    -35,
+    35
    ],
    "handF": [
-    -45,
-    45
+    -35,
+    35
    ],
    "doll": [
-    -60,
-    60
+    -45,
+    45
    ]
   },
   "keys": {
    "ko": {
     "planted": false,
     "root_rot": [
-     60,
-     120
+     70,
+     95
     ],
     "root_dx": [
      -1800,
@@ -1025,18 +1068,356 @@
     "root_dy": [
      -700,
      700
+    ],
+    "init": {
+     "pelvis": 10.0,
+     "spine": 15.0,
+     "chest": 4.0,
+     "head": 30.0,
+     "upperarm": -112.7,
+     "forearm": -82.3,
+     "hand": -24.2,
+     "upperarmF": -19.3,
+     "forearmF": -5.5,
+     "handF": 4.1,
+     "pelvis.dx": -29.1,
+     "pelvis.dy": 46.6,
+     "doll.dx": 60.1,
+     "doll.dy": -1293.6,
+     "root.dx": -1564.0,
+     "root.dy": -654.0,
+     "root.rot": 85.3
+    },
+    "limits": {
+     "spine": [
+      -15,
+      15
+     ],
+     "chest": [
+      -15,
+      15
+     ],
+     "head": [
+      -30,
+      30
+     ],
+     "pelvis": [
+      -10,
+      10
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.03,
+      0.02
+     ],
+     "doll": [
+      0.7,
+      0.9
+     ]
+    },
+    "mark_w": 3.0,
+    "mark_free": 0.03,
+    "scales": {
+     "skirtL": [
+      0.7,
+      1.1
+     ],
+     "skirtR": [
+      0.7,
+      1.1
+     ]
+    }
+   },
+   "item": {
+    "limits": {
+     "doll": [
+      0,
+      0
+     ]
+    },
+    "offset_limit": {
+     "doll": [
+      0,
+      0
+     ]
+    },
+    "root_dx": [
+     -45,
+     45
     ]
+   },
+   "victory": {
+    "limits": {
+     "doll": [
+      0,
+      0
+     ]
+    },
+    "offset_limit": {
+     "doll": [
+      0,
+      0
+     ]
+    },
+    "root_dx": [
+     -45,
+     45
+    ]
+   },
+   "critical": {
+    "limits": {
+     "doll": [
+      0,
+      0
+     ],
+     "pelvis": [
+      -50,
+      50
+     ],
+     "spine": [
+      -55,
+      55
+     ],
+     "chest": [
+      -45,
+      60
+     ],
+     "head": [
+      -50,
+      50
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.15,
+      0.06
+     ],
+     "doll": [
+      0,
+      0
+     ]
+    },
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      1.15
+     ],
+     "skirtR": [
+      0.95,
+      1.15
+     ]
+    }
+   },
+   "sleep": {
+    "limits": {
+     "pelvis": [
+      -55,
+      55
+     ],
+     "spine": [
+      -70,
+      70
+     ],
+     "chest": [
+      -60,
+      60
+     ],
+     "head": [
+      -70,
+      70
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.15,
+      0.06
+     ],
+     "doll": [
+      0.7,
+      0.9
+     ]
+    },
+    "mark_w": 2.0,
+    "mark_free": 0.03,
+    "root_dx": [
+     -45,
+     45
+    ],
+    "feet_x_w": 4.0,
+    "scales": {
+     "skirtL": [
+      0.95,
+      1.15
+     ],
+     "skirtR": [
+      0.95,
+      1.15
+     ]
+    }
+   },
+   "hurt": {
+    "limits": {
+     "chest": [
+      -35,
+      35
+     ],
+     "spine": [
+      -30,
+      30
+     ],
+     "pelvis": [
+      -20,
+      20
+     ],
+     "head": [
+      -30,
+      30
+     ]
+    },
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      2.0
+     ],
+     "skirtR": [
+      0.95,
+      1.8
+     ]
+    }
+   },
+   "follow": {
+    "limits": {
+     "chest": [
+      -30,
+      35
+     ],
+     "spine": [
+      -30,
+      30
+     ],
+     "head": [
+      -30,
+      30
+     ]
+    },
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      2.0
+     ],
+     "skirtR": [
+      0.95,
+      1.8
+     ]
+    }
+   },
+   "attack": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      2.0
+     ],
+     "skirtR": [
+      0.95,
+      1.8
+     ]
+    }
+   },
+   "cast": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      2.0
+     ],
+     "skirtR": [
+      0.95,
+      1.8
+     ]
+    }
+   },
+   "ready": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      2.0
+     ],
+     "skirtR": [
+      0.95,
+      1.8
+     ]
+    }
+   },
+   "od-fury": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      2.0
+     ],
+     "skirtR": [
+      0.95,
+      1.8
+     ]
+    }
+   },
+   "defend": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "scales": {
+     "skirtL": [
+      0.95,
+      2.0
+     ],
+     "skirtR": [
+      0.95,
+      1.8
+     ]
+    }
    }
   },
   "mark_free": 0.04,
   "mark_soft": 0.012,
   "mark_w": 0.5,
-  "restarts": 2,
-  "evals": 450,
+  "restarts": 4,
+  "evals": 1000,
   "band_w": 1.0,
-  "feet_x_w": 0.3,
+  "feet_x_w": 1.5,
   "dfoot_w": 1.0,
   "offset_limit": {
+   "pelvis": [
+    0.02,
+    0.015
+   ],
    "doll": [
     0.7,
     0.9
@@ -1208,8 +1589,8 @@
   },
   "sleep": {
    "headCenter": [
-    520,
-    250
+    522,
+    86
    ],
    "fist": [
     425,
