@@ -3177,6 +3177,14 @@ export interface EnemyGroupDef {
    * the turn kept open. Read by `battle/ffx/formation-commands.ts` and nothing else; absent everywhere else, so no other battle changes.
    */
   commandDisables?: readonly FormationCommandOff[];
+  /**
+   * **FFX only, "this monster's own script switches a command off"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-script-command-locks.md`): the same call as
+   * `commandDisables` (`setCommandDisabled(who, command, flag)`, script call 0x703B), made by a **monster's** script instead of the formation's, so a separate
+   * switch (`SCRIPT_COMMAND_DISABLES`, default **off**) holds it. A `command` of 0x3xxx is a menu command; a `command` **below 0x1000** is the setter's other branch,
+   * an aeon's availability byte (8 Valefor, 9 Ifrit, 10 Ixion, 11 Shiva, 12 Bahamut, 13 Anima, 14 Yojimbo, 15 to 17 the Magus Sisters), listed here as "unavailable".
+   * Only Chapter III's five possessed-aeon links carry it. Read by `battle/ffx/formation-commands.ts`; absent everywhere else, and ignored while the switch is off.
+   */
+  scriptCommandDisables?: readonly FormationCommandOff[];
   /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
   /**

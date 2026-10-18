@@ -250,11 +250,14 @@ export function dismissGroupOutcome(ctx: Ctx, group: readonly FFXCombatant[], wi
   });
 }
 
-/** `FUN_0079a080` for an aeon: can it be summoned (HP above 0, nothing left of its recovery count)? */
-export function aeonSummonable(aeon: FFXCombatant): boolean {
+/**
+ * `FUN_0079a080` for an aeon: can it be summoned (HP above 0, nothing left of its recovery count, its availability byte set)? `available` is that byte: 1 unless a monster's script
+ * wrote 0 to it (`setCommandDisabled(1, <aeon id>, 0)`, `../formation-commands.ts#aeonScriptOff`; the possessed aeons' own lock, off by default).
+ */
+export function aeonSummonable(aeon: FFXCombatant, available = true): boolean {
   const row = emptyChr();
   row.hp = aeon.hp;
-  row.avail = 1;
+  row.avail = available ? 1 : 0;
   row.blocked = has(aeon, 'eject') ? 1 : 0;
   row.recover = aeon.aeon?.reviveCountdown ?? 0;
   return aeonUnavailable(row) === 0;

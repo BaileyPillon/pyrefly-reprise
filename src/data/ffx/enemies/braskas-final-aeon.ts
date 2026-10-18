@@ -36,6 +36,7 @@ import { MANDATORY_AEON_IDS, POSSESSED_AEON_ORDER } from '../ids.ts';
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 import { POSSESSED_PLAIN_ATTACK } from '../command-records/enemies.ts';
 import { BFA_LINE_FILE, lootRewards } from '../loot/index.ts';
+import { possessedScriptDisables } from './possessed-script-locks.ts';
 
 // ---------------------------------------------------------------------------
 // Yu Pagodas
@@ -384,6 +385,7 @@ export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: num
  * starts; Valefor's link starts nothing, so that scene alone owns it (§5.3's own track has no cue here).
  */
 function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: string): EnemyGroupDef {
+  const scriptLocks = possessedScriptDisables(aeonId);
   return {
     id: `possessed-${aeonId.replace('possessed-', '')}`,
     game: 'ffx',
@@ -399,6 +401,8 @@ function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: strin
       yuPagoda('yu-pagoda-right', 2, 'aeon-or-yu-yevon'),
     ],
     musicCues: [{ at: 'start', track: aeonId === 'possessed-valefor' ? null : 'boss-yu-yevon', fadeMs: 800 }],
+    // The copy's own script takes its aeon from Yuna (init: setCommandDisabled(1, <the aeon's id>, 0)); read only while SCRIPT_COMMAND_DISABLES is on, which it is not (`./possessed-script-locks.ts`).
+    ...(scriptLocks !== undefined ? { scriptCommandDisables: scriptLocks } : {}),
   };
 }
 

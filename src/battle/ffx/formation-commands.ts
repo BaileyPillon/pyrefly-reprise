@@ -29,14 +29,40 @@
  * **The switch.** {@link FORMATION_COMMAND_DISABLES} is the one switch: `false` and no group is read, so every battle plays exactly as it did before this lane.
  * The flags live in `state.flags` (like the aeon duel's), not on the runtime, so a rebuilt runtime and the advisor's dry runs see the same rule as the battle.
  *
+ * ## Script locks (re-parity RC10, lane "FFX script command locks"; handoff `docs/handoff/re-parity-rc10-ffx-script-command-locks.md`)
+ *
+ * The same call is made by 18 **monster** scripts. Only the ten possessed aeons and Magus Sisters (m163 to m169, m178 to m180) are fought by a shipped chapter, and each makes one call at its
+ * init, `setCommandDisabled(1, <its own aeon's id>, 0)`: an id below 0x1000, the setter's other branch, which writes the flag into the availability byte of that aeon (+0xDD4 of its character);
+ * the summon menu's gate (0x0079A080, `aeonUnavailable`) reads the byte, so with 0 Yuna cannot summon that aeon. `EnemyGroupDef.scriptCommandDisables` carries those rows (Chapter III's five
+ * possession links); {@link applyFormationCommandDisables} reads them only while {@link SCRIPT_COMMAND_DISABLES} is on (**off**). An aeon that is off leaves `availableAeons` (so its Summon row is
+ * **not built**, hidden like Isaaru's rows: the driver's choice) and Grand Summon's choices, and {@link commandRefused} refuses a submitted Summon or a Grand Summon that names it. A 0x3xxx row sets
+ * the same flags a formation's row sets (no shipped fight reaches one: the other eight scripts are in fights no chapter fights). The hidden Last Summoning models the same lock with
+ * `lockedAeons` ("Taken by Yu Yevon") and carries no `scriptCommandDisables`.
+ *
  * Layering: pure, deterministic, no DOM [AGENTS.md hard rule 1].
  */
 
 import type { AbilityCategory, AvailableCommand, Command, EnemyGroupDef, FFXCombatant } from '../common/types.ts';
 import { type Ctx, abilityOf } from './state.ts';
+import { AEON_SLOT } from './adapt/slots.ts';
 
 /** The one switch. `false` makes {@link applyFormationCommandDisables} a no-op, so no battle sets a flag and every menu is as before. */
 export const FORMATION_COMMAND_DISABLES = true;
+
+/**
+ * The second switch, **off** (re-parity RC10; Bailey decides): when `on` is true the monster-script rows (`EnemyGroupDef.scriptCommandDisables`) are read as well. A test or a bench flips it with
+ * {@link setScriptCommandDisables} and puts it back with the function that returns.
+ */
+export const SCRIPT_COMMAND_DISABLES: { on: boolean } = { on: false };
+
+/** Set the script-locks switch; the returned function puts it back as it was. */
+export function setScriptCommandDisables(on: boolean): () => void {
+  const before = SCRIPT_COMMAND_DISABLES.on;
+  SCRIPT_COMMAND_DISABLES.on = on;
+  return () => {
+    SCRIPT_COMMAND_DISABLES.on = before;
+  };
+}
 
 /** The game's command ids this module knows (the numbers the formation scripts pass). */
 export const GAME_COMMAND = {
@@ -71,13 +97,41 @@ function offKey(who: string, command: number): string {
   return `${COMMAND_OFF_PREFIX}${who === 'everyone' ? '*' : who}:${command}`;
 }
 
-/** Copy the formation's disabled commands into the battle. A no-op for every formation that lists none, and for every formation while the switch is off. */
+/** `state.flags` key prefix: `formation.aeonOff:<aeonId>` is true while a monster's script has made that aeon unavailable (a script row whose command is below 0x1000). */
+export const AEON_OFF_PREFIX = 'formation.aeonOff:';
+
+/** The first command id of the setter's menu-command branch (0x3xxx); an id below it is an aeon's availability. */
+const MENU_COMMAND_FLOOR = 0x1000;
+
+/** The roster key of the aeon a game slot (8 to 17) names. */
+const AEON_OF_SLOT: ReadonlyMap<number, string> = new Map(Object.entries(AEON_SLOT).map(([key, slot]) => [slot, key]));
+
+/**
+ * Copy the formation's disabled commands into the battle. A no-op for every formation that lists none, and for every formation while the switch is off. Then, only while
+ * {@link SCRIPT_COMMAND_DISABLES} is on, the monster scripts' rows: a command below 0x1000 makes that aeon unavailable, any other sets the same flags a formation's row sets.
+ */
 export function applyFormationCommandDisables(ctx: Ctx, group: EnemyGroupDef): void {
-  if (!FORMATION_COMMAND_DISABLES) return;
-  for (const off of group.commandDisables ?? []) {
+  if (FORMATION_COMMAND_DISABLES) {
+    for (const off of group.commandDisables ?? []) {
+      ctx.state.flags[offKey(off.who, off.command)] = true;
+      ctx.state.flags[COMMAND_OFF_ANY] = true;
+    }
+  }
+  if (!SCRIPT_COMMAND_DISABLES.on) return;
+  for (const off of group.scriptCommandDisables ?? []) {
+    if (off.command < MENU_COMMAND_FLOOR) {
+      const aeon = AEON_OF_SLOT.get(off.command);
+      if (aeon !== undefined) ctx.state.flags[AEON_OFF_PREFIX + aeon] = true;
+      continue;
+    }
     ctx.state.flags[offKey(off.who, off.command)] = true;
     ctx.state.flags[COMMAND_OFF_ANY] = true;
   }
+}
+
+/** Has a monster's script made this aeon unavailable (the roster key)? Always false while the switch is off, or in a battle whose group lists none. */
+export function aeonScriptOff(ctx: Ctx, aeonId: string): boolean {
+  return ctx.state.flags[AEON_OFF_PREFIX + aeonId] === true;
 }
 
 /**
@@ -112,6 +166,11 @@ export function commandOff(ctx: Ctx, user: FFXCombatant, command: number): boole
 
 /** Does this submitted command belong to a command the formation switched off for this actor? `submit()`'s half of the rule. */
 export function commandRefused(ctx: Ctx, user: FFXCombatant, command: Command): boolean {
+  if (command.kind === 'summon') return aeonScriptOff(ctx, command.id);
+  if (command.kind === 'overdrive' && command.extra?.kind === 'yuna-grand-summon') {
+    const named = command.extra.grandSummon.aeonId;
+    return named !== '' && aeonScriptOff(ctx, named);
+  }
   const id = menuCommandOf(ctx, command);
   return id !== undefined && commandOff(ctx, user, id);
 }

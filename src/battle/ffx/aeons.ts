@@ -24,6 +24,7 @@ import { aeonGearOf } from './aeon-gear.ts';
 import { removeStatus } from './statuses.ts';
 import { setGauge } from './overdrive.ts';
 import { duelLost, lockedMirrorOf } from './aeon-duel.ts';
+import { aeonScriptOff } from './formation-commands.ts';
 import { SISTER_IDS, asOneSummon, dismissSisters, summonSisters } from './adapt/sisters.ts';
 import { yojimboWiped } from './adapt/yojimbo.ts';
 
@@ -34,7 +35,7 @@ import { yojimboWiped } from './adapt/yojimbo.ts';
 export function availableAeons(ctx: Ctx): FFXCombatant[] {
   const out: FFXCombatant[] = [];
   for (const [key, aeon] of ctx.rt.aeonRoster) {
-    if (!aeonSummonable(aeon)) continue;
+    if (!aeonSummonable(aeon, !aeonScriptOff(ctx, key))) continue; // the byte a possessed copy's script clears: Chapter III's own-aeon lock, off by default (`./formation-commands.ts`)
     if (lockedMirrorOf(ctx, key) !== undefined) continue;
     out.push(aeon);
   }

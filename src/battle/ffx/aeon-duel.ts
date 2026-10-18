@@ -36,6 +36,7 @@
 import type { AbilityDef, AvailableCommand, CombatantId, Command, EnemyGroupDef, FFXCombatant } from '../common/types.ts';
 import { aimSideOf } from '../common/aim.ts';
 import { type Ctx, tryActor } from './state.ts';
+import { aeonScriptOff } from './formation-commands.ts';
 
 /** `state.flags` key: the formation can only be fought by aeons. */
 export const AEONS_ONLY_FLAG = 'aeonDuel.only';
@@ -197,7 +198,8 @@ export function summonLabel(ctx: Ctx, key: string, name: string): string {
  */
 export function grandSummonChoices(ctx: Ctx): string[] {
   // The Magus Sisters are one choice (a build that owns them, re-parity lane FFX-K): Cindy stands for the three. `ctx.rt.sisters` is set by every build that owns them: Chapter XXVII (Mirror Aeons) and the hidden Chapter 28 (the Last Summoning), so the picker lists one entry for them in both (the game lists one).
-  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')));
+  // An aeon a monster's script made unavailable (`./formation-commands.ts`, off by default) is not a choice either.
+  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')) && !aeonScriptOff(ctx, k));
   if (!aeonsOnly(ctx)) return keys.filter((k) => lockedMirrorOf(ctx, k) === undefined);
   return keys.filter((k) => {
     const aeon = ctx.rt.aeonRoster.get(k);
