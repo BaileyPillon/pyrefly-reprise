@@ -7,7 +7,7 @@
 - **[bytes]** read from the game's own file by a script of this lane (FFX_Data.vbf of the Steam build 25501027, files extracted read-only and kept outside the repo). **[disasm: file @offset]** read from the disassembly of that file's program; the offset is a code offset inside the monster file (or formation file) program, as in `research/re-ffx-biran-yenke.md`. No script line is reproduced; scripts are described by what they do to the battle.
 - **[run]** the hook was executed: the real bytecode of the monster file ran in the small Atel interpreter of the earlier AI lanes (the Seymour/Evrae lane's, used unchanged) against a mock battle with the real command-table rows, with exact tallies over the shared random result where a draw is involved. A run proves the script's own behaviour; it does not prove the engine facts around it (section 3).
 - **[note: X section]** taken from a checked note: a note in this repo (`research/...`), `research/re-ffx-yojimbo-sisters-feasibility.md` (branch `re-ffx-yojimbo-sisters-feasibility`, 8892f8f6, called "the feasibility note" below, which this note re-reads and extends), or one of the private coverage notes kept outside the repo (FFX-G04 targeting and counters, FFX-G08 aeon-side logic, FFX-G10 battle entry and hand-off, FFX-H02 record layouts).
-- **[inferred]** not read directly, or arithmetic on [bytes] constants. Fields no note maps are given raw and never guessed (AGENTS.md hard rule 6).
+- **[inferred]** not read directly, or arithmetic on [bytes] constants. Fields no note maps are given as plain values (never as a run of bytes, hard rule 8) and never guessed (AGENTS.md hard rule 6).
 
 Files used (size in bytes, SHA-256 prefix): monster files `m340` Dark Yojimbo (50,840, 82da17d4), `m341` Dark Cindy (55,592, 53cac21e), `m342` Dark Sandy (53,176, 58012d66), `m343` Dark Mindy (47,912, db183406), `m116` the dog's file (2,996, f34e962d); formations `nagi05_70` to `_74` (7,156 / 6,900 / 6,900 / 6,900 / 7,028; 3a0b0a26, aa7c1276, d746a6d5, 03f837ca, 58dd948f), `kino00_70` (7,780, ba2a0b01), `kino01_70` to `_72` (7,396 each; e82fb469, f7d54c35, 140500fa), `kino05_70` (7,396, 9bffc1aa), `kino05_71` (7,972, 25e4c5aa); kernel tables `monmagic1.bin` (31,420, 31a83925), `btl.bin` (4,096, c4e27912) and the monster tables; field events `nagi0500` (79,296, b2a53ecd), `kino0000` (115,392, d3178365), `kino0100` (114,112, 8e120aec), `kino0500` (88,704, 118fda05); the executable FFX.exe (SHA-256 0537B2A1...686D) for a handful of engine addresses. The sizes and hashes of the monster, formation and event files equal those the feasibility note lists. Move and item names are the English names of the game's own tables.
 
@@ -61,8 +61,8 @@ No monster record carries a level. The Zanmato byte (loot +0x112) is the only gr
 | Forced action (+0x70) / monster index (+0x72) | none / 340 | none / 341 | none / 342 | none / 343 | none / 116 | [bytes] |
 | Doom counter (+0x77) / Arena index (+0x78) | 255 / 255 | 255 / 255 | 255 / 255 | 255 / 255 | 3 / 255 | [bytes] |
 | Word at +0x7A (sound bank by the layout note) | 0x1120 | 0x1122 | 0x1121 | 0x1123 | 0x0000 | [bytes] |
-| Unmapped +0x79, +0x7B to +0x7F | 00, 00 00 00 00 00 | same | same | same | 00, 00 00 00 00 00 | [bytes] |
-| Unmapped +0x00 to +0x13 (text offsets) | 00 00 ad 00 0e 00 49 00 16 00 33 00 1b 00 57 00 24 00 33 00 | 00 00 76 00 0a 00 49 00 12 00 33 00 17 00 57 00 20 00 33 00 | 00 00 78 00 0a 00 49 00 12 00 33 00 17 00 57 00 20 00 33 00 | 00 00 75 00 0a 00 49 00 12 00 33 00 17 00 57 00 20 00 33 00 | 00 00 41 00 06 00 49 00 0e 00 33 00 13 00 55 00 1c 00 33 00 | [bytes] |
+| Unmapped +0x79, +0x7B to +0x7F | all 0 | all 0 | all 0 | all 0 | all 0 | [bytes] |
+| Unmapped +0x00 to +0x13 (text offsets) | ten 16-bit text offsets (not reproduced) | same | same | same | same | [bytes] |
 
 **Flag bytes.** +0x28 = 0x1E (the Dark rows): immune to percentage damage (bit 1), Life (bit 2), Sensor (bit 3) and the second Scan (bit 4); **not** armored, not immune to physical, magical or HP damage. +0x29 = 0x07: immune to CTB damage, Slice and Bribe. +0x4E = 0x432F: immune to Scan, Distill Power, Distill Mana, Distill Speed, Distill Ability, Eject, Auto-Life and Doom. The dog: +0x28 = 0x18 (Sensor, second Scan), +0x29 = 0x06 (Slice, Bribe), extra word 0x0201 (Scan, Auto-Life). [bytes]
 
@@ -344,7 +344,7 @@ All fourteen rows are in `monmagic1` (monster magic table 1, 92-byte records; la
 - **Mega Graviton** has no cleanse flag, so its extra word **inflicts Doom**; it deals `7/16 x the target's maximum HP` (Shell halves it), and inflicts Sleep, Silence and Darkness (duration 99) and Slow (254) at chance 254 against the target's byte. **Calamity** does no damage (power 0) and inflicts Poison, the four Breaks, Silence and Darkness at 254 plus the Curse bit. **Passado** is 15 hits of power 4 with Death at 254 on each hit (the status step sits inside the per-hit pipeline [note: re-ffx-damage.md 3], so it rolls per hit [inferred]), crit bonus 15. **Attack (0x4127)** inflicts Petrify at 254. **Kozuka** inflicts the four Breaks and Slow at 254 (Slow duration 254). **The dog's bite** inflicts Petrify and Poison at 254. Statuses land when the chance 254 exceeds the target's resist byte (a byte of 255 blocks all of them), so a character with the matching proof gear or an aeon with 255 in that slot is immune. [bytes] [note: re-ffx-biran-yenke.md 2 for the byte rule]
 - **Camisade is the only row with the MP class**: it deals its (capped) damage to HP and also to MP. [bytes]
 - **Shatter byte 100** on Zanmato, both Wakizashi, Camisade, Razzia, Attack, 0x412B and Passado means a hit on an already Petrified target shatters it with certainty [note: re-ffx-commands.md 7.4]; Sandy's Attack petrifies, so a following hit from any of these ends that character. [bytes] [inferred for the chain]
-- **Unmapped bits.** Zanmato and Delta Attack set bit 0x40000000 of the +0x1c flag word, which no checked note maps; byte +0x1b (usage) is 0x45 / 0x47 / 0x06 as listed; bytes +0x00 to +0x0f are text offsets. The rest of each row is in the raw listing. [bytes]
+- **Unmapped bits.** Zanmato and Delta Attack set bit 0x40000000 of the +0x1c flag word, which no checked note maps; byte +0x1b (usage) is 0x45 / 0x47 / 0x06 as listed; bytes +0x00 to +0x0f are text offsets. The other unmapped values of each row are in section 6.4. [bytes]
 
 ### 6.3 What the numbers mean against a player-side aeon (arithmetic on the formulas; no engine was run)
 
@@ -366,24 +366,32 @@ Reference defenders are the minimum aeon stats of the last tier in the feasibili
 
 Reading: **every damaging move except Passado per hit and Mega Graviton exceeds an aeon's whole HP several times over, before Protect or Shell halves it once**; Passado's first hit already exceeds every one of the four minimum HP figures (Death at 254 on every hit besides). The cap (99,999) is far above any aeon HP the feasibility note lists, and Zanmato, Delta Attack and Razzia also strip Auto-Life. Therefore a mirror chapter that keeps these rows unchanged is decided by who acts first and by whether the player's side ever gets a move; the scaling knobs that exist in the data are the enemy's STR and MAG (the cube makes damage grow with the cube of the stat), HP, the gauge steps, and which formation or tier is used. Nothing here proposes a number.
 
-### 6.4 The raw rows (bytes +0x10 to +0x5b of each record; the first sixteen bytes are text offsets)
+### 6.4 Where the rows were read, and the fields table 6.1 does not carry
 
-```
-0x410A Zanmato: b2 01 b2 01 00 03 00 00 00 00 3b 47 06 00 00 40 a0 00 00 01 03 00 00 00 01 00 fa 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00
-0x4109 Wakizashi (group): b0 01 b0 01 00 03 00 00 00 00 3b 47 06 00 00 00 81 00 00 01 03 00 00 00 01 00 1c 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x4107 Kozuka: af 01 af 01 00 03 00 00 00 00 33 47 06 00 00 00 81 00 00 01 03 00 00 00 01 00 10 01 00 00 00 00 00 00 fe fe fe fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fe 00 00 00 00 00 00 00 00 00 00 00 00 fe 00 00 00 00 00 00 00 00
-0x4086 Daigoro (order): 00 00 00 00 00 12 00 00 00 00 33 45 06 00 00 00 00 00 00 00 03 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x410B Daigoro (bite): 00 00 00 00 00 01 00 00 00 00 33 45 06 00 00 00 80 00 00 01 03 00 00 00 01 00 08 01 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x4108 Wakizashi (single): b0 01 b0 01 00 03 00 00 00 00 33 47 06 00 00 00 81 00 00 01 03 00 00 00 01 00 20 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x4106 Delta Attack: 03 02 03 02 00 03 00 00 00 00 3b 45 06 00 00 40 ac 00 00 01 03 00 00 00 0f 00 50 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00
-0x4105 Mega Graviton: 66 00 67 00 00 03 00 00 00 00 3b 06 06 00 00 00 82 00 00 01 03 00 00 00 08 00 07 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fe fe fe 00 00 00 00 00 00 00 00 00 fe 63 63 63 00 00 00 00 00 00 00 00 00 fe 00 40 00 00 00 00 00 00
-0x4101 Camisade: 01 02 01 02 00 03 00 00 00 00 33 45 06 00 00 00 81 00 00 03 03 00 00 00 04 00 64 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x412B "Extra 44": 00 00 00 00 00 01 00 00 00 00 33 06 02 00 00 00 ad 00 00 01 03 00 00 00 01 00 24 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fe fe fe fe fe fe fe fe fe 00 00 00 00 fe fe fe fe fe fe fe fe fe 00 00 02 00 00 00 00 00 00
-0x4100 Razzia: 00 02 00 02 00 03 00 00 00 00 33 45 06 00 00 00 a1 00 00 01 03 00 00 00 04 00 64 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00
-0x4127 Attack: 00 00 00 00 00 01 00 00 00 00 33 06 02 00 00 00 8d 00 00 01 03 00 00 00 01 00 24 01 64 00 00 00 fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x4102 Passado: 02 02 02 02 00 03 00 00 00 00 33 45 06 00 00 00 84 00 00 01 03 00 00 0f 01 00 04 0f 64 00 fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-0x4104 Calamity: 52 01 6d 01 00 03 00 00 00 00 33 45 06 00 00 00 80 00 00 00 03 00 00 00 03 00 00 01 00 00 00 00 00 fe fe fe fe fe 00 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00
-```
+**Source.** [bytes] `ffx_ps2/ffx/master/jppc/battle/kernel/monmagic1.bin`, extracted read-only from `data/FFX_Data.vbf` in the game folder (31,420 bytes, SHA-256 starts 31a83925). The table has rows 0 to 299 of 92 bytes; the row of move id 0x4000 + n starts at file offset 0x14 + 92 n (0x410A is row 266, at 0x5FAC). Read with this lane's VBF reader and kernel-table reader (standard library only, kept outside the repo with the extracted files) and decoded by the lane's row decoder, whose output is table 6.1: it was re-run on 2026-10-18 and its fourteen lines equal table 6.1 character for character. The English copy (`new_uspc/battle/kernel/monmagic1.bin`, 31,060 bytes, SHA-256 starts 50d67377) equals the Japanese-PC copy from +0x10 to +0x5b in all fourteen rows.
+
+This section used to print bytes +0x10 to +0x5b of each of the fourteen rows as hex. They are removed (hard rule 8: no game files in the repo). Everything they proved is table 6.1, which carries every mapped field of every row by the record layout of [note: re-ffx-commands.md 1, 7]. What table 6.1 does not carry follows.
+
+**Unmapped values** (no checked note maps them; given as plain values, no meaning claimed) [bytes]:
+
+| Move (id) | Table row | File offset of the record | 16-bit word at +0x10 | 16-bit word at +0x12 | Byte at +0x15 | Flag word 1 (+0x1c) |
+|---|---:|---|---|---|---:|---|
+| Zanmato 0x410A | 266 | 0x5FAC | 0x01B2 | 0x01B2 | 3 | 0x40000006 |
+| Wakizashi (group) 0x4109 | 265 | 0x5F50 | 0x01B0 | 0x01B0 | 3 | 0x00000006 |
+| Kozuka 0x4107 | 263 | 0x5E98 | 0x01AF | 0x01AF | 3 | 0x00000006 |
+| Daigoro (order) 0x4086 | 134 | 0x303C | 0x0000 | 0x0000 | 18 | 0x00000006 |
+| Daigoro (bite) 0x410B | 267 | 0x6008 | 0x0000 | 0x0000 | 1 | 0x00000006 |
+| Wakizashi (single) 0x4108 | 264 | 0x5EF4 | 0x01B0 | 0x01B0 | 3 | 0x00000006 |
+| Delta Attack 0x4106 | 262 | 0x5E3C | 0x0203 | 0x0203 | 3 | 0x40000006 |
+| Mega Graviton 0x4105 | 261 | 0x5DE0 | 0x0066 | 0x0067 | 3 | 0x00000006 |
+| Camisade 0x4101 | 257 | 0x5C70 | 0x0201 | 0x0201 | 3 | 0x00000006 |
+| "Extra 44" 0x412B | 299 | 0x6B88 | 0x0000 | 0x0000 | 1 | 0x00000002 |
+| Razzia 0x4100 | 256 | 0x5C14 | 0x0200 | 0x0200 | 3 | 0x00000006 |
+| Attack 0x4127 | 295 | 0x6A18 | 0x0000 | 0x0000 | 1 | 0x00000002 |
+| Passado 0x4102 | 258 | 0x5CCC | 0x0202 | 0x0202 | 3 | 0x00000006 |
+| Calamity 0x4104 | 260 | 0x5D84 | 0x0152 | 0x016D | 3 | 0x00000006 |
+
+Bits 1 and 2 of flag word 1 are set in every row except 0x412B and Attack 0x4127 (bit 1 only), and no checked note maps them; bit 0x40000000 is the one table 6.1 names on Zanmato and Delta Attack. **Zero in all fourteen rows** [bytes]: +0x14; +0x16 to +0x19 (so the command type at +0x17 is 0 in every row); +0x1d and +0x1e; +0x21 and +0x22; +0x25 and +0x26; the accuracy byte +0x29; the element byte +0x2d; the status chance bytes +0x2f and +0x36 to +0x39 (no row inflicts Zombie, Confuse, Berserk, Provoke or Threaten); +0x54 (the low byte of the extra word); and +0x56 to +0x5b (no row carries a stage buff or a buff flag).
 
 ## 7. Randomness at a glance (for an exact replay) [run]
 
@@ -406,7 +414,7 @@ The formation scripts' camera functions draw stream 2 too (modulo 3, to pick an 
 4. **The dog's hit event** while the dog is untargetable (section 4.4): from the Cavern trial's identical chain, not run.
 5. **The start of a battle for a player who summons**: how the front line, the opening counters and the start type behave when the player's aeons take the field mid-battle (the chapter's own hand-off) is not covered; section 2.2 gives the figures for a battle whose party starts on the field.
 6. **Event conditions**: what sets the quest bit that allows the Dark Yojimbo ladder, why the stage ids alternate, what area (0 or 1) a battle starts in, what room 223 holds after the eight Dark Aeons, and the tail of the `nagi0500` launch function (bits 128 of the progress and quest words) were not traced.
-7. **Unmapped fields**, listed raw: monster record +0x00 to +0x13 and +0x79 to +0x7F; loot +0x110 and +0x111; the unmapped property 296 (written 300 / 100 / 200 / none); the +0x1c flag bit 0x40000000 on Zanmato and Delta Attack; the +0x1b usage byte (0x45 / 0x47 / 0x06) and the first sixteen bytes of each move row; flag-word bits 0x400, 0x800 and 0x1000 of the battle flag words.
+7. **Unmapped fields**, named by offset (no run of unmapped bytes is reproduced): monster record +0x00 to +0x13 (text offsets) and +0x79 to +0x7F (all 0); loot +0x110 and +0x111; the unmapped property 296 (written 300 / 100 / 200 / none); the +0x1c flag bit 0x40000000 on Zanmato and Delta Attack; the +0x1b usage byte (0x45 / 0x47 / 0x06) and the first sixteen bytes of each move row; flag-word bits 0x400, 0x800 and 0x1000 of the battle flag words; the move rows' other unmapped values (+0x10 to +0x13, +0x15, bits 1 and 2 of the +0x1c word) are in section 6.4.
 8. **Arithmetic marked [inferred]**: the CTB figures (9 ticks per enemy turn, the player aeon's 24), the timelines of section 2.6, the damage table of section 6.3 (formulas applied by hand to the minimum aeon stats; no criticals, no Protect, Shell, Defend or Shield, variance taken as 1) and the gauge-sync reading in 5.3.
 9. **Corrections to the feasibility note, each from bytes or a run, none against its bytes:** the Zanmato turn restarts the gauge at the tier's step, not at 0 (4.2); Kozuka picks a random living front-line character, not the first (section 3); 0x412B dispels (cleanse flag) rather than buffs (6.2); the "further branch" of Cindy's script is a coin between Camisade and 0x412B (5.2); Sandy's and Mindy's later branches are Mega Graviton at 100 and the same coin (5.2); the "counter allowed" test it left open is `isCounterattackAllowed` (section 3); the dog's file is authored for the five Dark Yojimbo battle ids (1.4).
 10. Everything tagged [note] is as proved in its own note; none was re-run here.
