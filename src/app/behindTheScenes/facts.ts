@@ -43,7 +43,7 @@ export const FACTS = {
   posesRepaired: 586,
   musicTracks: 28,
   elevenLabsTracks: 5,
-  voiceLines: 200,
+  voiceLines: 222,
 } as const;
 
 /** One row of the critic's chart: the first score under today's rules and the latest, out of ten (null = never scored). */
@@ -104,7 +104,8 @@ export const MADE_WITH: readonly MadeWith[] = [
   { name: 'Claude', by: 'Anthropic', did: 'building and reviewing the game' },
   { name: 'ChatGPT Images', by: 'OpenAI', did: 'the title paintings' },
   { name: 'ComfyUI with Animagine XL 4.0', by: 'open tools, run on Bailey’s own computer', did: 'most of the paintings' },
-  { name: 'ElevenLabs Music and ElevenLabs voices', by: 'ElevenLabs', did: 'five music tracks and the spoken lines' },
+  { name: 'ElevenLabs Music', by: 'ElevenLabs', did: 'five music tracks' },
+  { name: 'Fish Audio Drama 3', by: 'Fish Audio', did: 'the spoken lines' },
   { name: 'Three.js, TypeScript and Vite', by: 'open source', did: 'the game itself' },
 ];
 

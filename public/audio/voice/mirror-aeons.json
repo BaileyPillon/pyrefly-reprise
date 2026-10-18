@@ -1,0 +1,161 @@
+{
+ "version": 1,
+ "chapter": "mirror-aeons",
+ "game": "ffx",
+ "lines": {
+  "0e1f14dabdbbb1": {
+   "id": "mirror-aeons.pre.001",
+   "file": "mirror-aeons/mirror-aeons.pre.001.mp3",
+   "ms": 3698,
+   "bytes": 30356,
+   "who": "tidus"
+  },
+  "1b0af9d6f6626d": {
+   "id": "mirror-aeons.pre.002",
+   "file": "mirror-aeons/mirror-aeons.pre.002.mp3",
+   "ms": 3278,
+   "bytes": 26900,
+   "who": "yuna"
+  },
+  "05ad1cdc966484": {
+   "id": "mirror-aeons.pre.003",
+   "file": "mirror-aeons/mirror-aeons.pre.003.mp3",
+   "ms": 2119,
+   "bytes": 17684,
+   "who": "auron"
+  },
+  "05fae23d958e19": {
+   "id": "mirror-aeons.pre.005",
+   "file": "mirror-aeons/mirror-aeons.pre.005.mp3",
+   "ms": 3430,
+   "bytes": 28052,
+   "who": "yuna"
+  },
+  "003ba952bed8b4": {
+   "id": "mirror-aeons.pre.007",
+   "file": "mirror-aeons/mirror-aeons.pre.007.mp3",
+   "ms": 1901,
+   "bytes": 15956,
+   "who": "auron"
+  },
+  "046f9363fd8af5": {
+   "id": "mirror-aeons.pre.008",
+   "file": "mirror-aeons/mirror-aeons.pre.008.mp3",
+   "ms": 1819,
+   "bytes": 15188,
+   "who": "tidus"
+  },
+  "11d5046f8c74d0": {
+   "id": "mirror-aeons.post.001",
+   "file": "mirror-aeons/mirror-aeons.post.001.mp3",
+   "ms": 1785,
+   "bytes": 14996,
+   "who": "yuna"
+  },
+  "08e826c203ac46": {
+   "id": "mirror-aeons.post.002",
+   "file": "mirror-aeons/mirror-aeons.post.002.mp3",
+   "ms": 2403,
+   "bytes": 19988,
+   "who": "auron"
+  },
+  "0595e1f88ebf45": {
+   "id": "mirror-aeons.post.003",
+   "file": "mirror-aeons/mirror-aeons.post.003.mp3",
+   "ms": 2171,
+   "bytes": 18068,
+   "who": "tidus"
+  },
+  "1c2da73a4b0fce": {
+   "id": "mirror-aeons.post.004",
+   "file": "mirror-aeons/mirror-aeons.post.004.mp3",
+   "ms": 2042,
+   "bytes": 17108,
+   "who": "yuna"
+  },
+  "16c77905b6c436": {
+   "id": "mirror-aeons.post.006",
+   "file": "mirror-aeons/mirror-aeons.post.006.mp3",
+   "ms": 2635,
+   "bytes": 21716,
+   "who": "yuna"
+  },
+  "13dd373b1f8986": {
+   "id": "mirror-aeons.post.008",
+   "file": "mirror-aeons/mirror-aeons.post.008.mp3",
+   "ms": 2523,
+   "bytes": 20948,
+   "who": "auron"
+  },
+  "0cd6eaf64465c6": {
+   "id": "mirror-aeons.mid-sisters-fall.001",
+   "file": "mirror-aeons/mirror-aeons.mid-sisters-fall.001.mp3",
+   "ms": 1699,
+   "bytes": 14228,
+   "who": "auron"
+  },
+  "159e63e2e3dec2": {
+   "id": "mirror-aeons.mid-sisters-fall.001.fb1",
+   "file": "mirror-aeons/mirror-aeons.mid-sisters-fall.001.fb1.mp3",
+   "ms": 1521,
+   "bytes": 12884,
+   "who": "tidus"
+  },
+  "18adad3ac46e96": {
+   "id": "mirror-aeons.mid-sisters-fall.001.fb2",
+   "file": "mirror-aeons/mirror-aeons.mid-sisters-fall.001.fb2.mp3",
+   "ms": 1712,
+   "bytes": 14420,
+   "who": "yuna"
+  },
+  "19d4ef535ddc7b": {
+   "id": "mirror-aeons.mid-sisters-fall.002",
+   "file": "mirror-aeons/mirror-aeons.mid-sisters-fall.002.mp3",
+   "ms": 740,
+   "bytes": 6548,
+   "who": "tidus"
+  },
+  "0fc37ed96488c8": {
+   "id": "mirror-aeons.mid-sisters-fall.003",
+   "file": "mirror-aeons/mirror-aeons.mid-sisters-fall.003.mp3",
+   "ms": 2705,
+   "bytes": 22292,
+   "who": "auron"
+  },
+  "05ccbe0a9708c9": {
+   "id": "mirror-aeons.mid-sisters-fall.003.fb2",
+   "file": "mirror-aeons/mirror-aeons.mid-sisters-fall.003.fb2.mp3",
+   "ms": 2674,
+   "bytes": 22100,
+   "who": "yuna"
+  },
+  "16f4e996eccdd1": {
+   "id": "mirror-aeons.mid-sisters-fall.003.fb3",
+   "file": "mirror-aeons/mirror-aeons.mid-sisters-fall.003.fb3.mp3",
+   "ms": 2746,
+   "bytes": 22676,
+   "who": "tidus"
+  },
+  "08f7e73b81ccff": {
+   "id": "mirror-aeons.mid-dark-yojimbo-ready.001",
+   "file": "mirror-aeons/mirror-aeons.mid-dark-yojimbo-ready.001.mp3",
+   "ms": 3549,
+   "bytes": 29012,
+   "who": "auron"
+  },
+  "161e7d87ab7e1e": {
+   "id": "mirror-aeons.mid-dark-yojimbo-ready.001.fb1",
+   "file": "mirror-aeons/mirror-aeons.mid-dark-yojimbo-ready.001.fb1.mp3",
+   "ms": 3286,
+   "bytes": 26900,
+   "who": "tidus"
+  },
+  "1a679a6be91714": {
+   "id": "mirror-aeons.mid-dark-yojimbo-ready.001.fb2",
+   "file": "mirror-aeons/mirror-aeons.mid-dark-yojimbo-ready.001.fb2.mp3",
+   "ms": 3305,
+   "bytes": 27092,
+   "who": "yuna"
+  }
+ }
+}

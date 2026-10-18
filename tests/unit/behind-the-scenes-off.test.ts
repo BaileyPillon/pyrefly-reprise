@@ -145,14 +145,14 @@ describe('the credits with the switch off', () => {
     expect(CREDIT_GROUPS).toBe(creditGroups(false));
   });
 
-  it('have the AI tools prepared behind the same constant: ElevenLabs Music and voices, ChatGPT Images, ComfyUI and Animagine, Claude', () => {
+  it('have the AI tools prepared behind the same constant: ElevenLabs Music, Fish Audio Drama 3, ChatGPT Images, ComfyUI and Animagine, Claude', () => {
     const on = creditGroups(true);
     expect(on.map((g) => g.id)).toEqual(['music', 'sfx', 'type', 'art', 'ai']);
     expect(on.slice(0, 4)).toEqual(CREDIT_GROUPS);
     expect(on[4]).toBe(AI_TOOLS_GROUP);
     expect(AI_TOOLS_GROUP.heading).toBe('Made with AI tools');
     const titles = AI_TOOLS_GROUP.entries.map((e) => e.title);
-    for (const wanted of ['ElevenLabs Music and ElevenLabs voices', 'ChatGPT Images', 'ComfyUI with Animagine XL 4.0', 'Claude']) expect(titles).toContain(wanted);
+    for (const wanted of ['ElevenLabs Music', 'Fish Audio Drama 3', 'ChatGPT Images', 'ComfyUI with Animagine XL 4.0', 'Claude']) expect(titles).toContain(wanted);
     // the page's "Made with" line and the credits name the same tools, so they cannot say two things
     for (const m of MADE_WITH.filter((t) => !/Three\.js/.test(t.name))) expect(titles, m.name).toContain(m.name);
     for (const e of AI_TOOLS_GROUP.entries) {
@@ -206,7 +206,7 @@ import { CREDIT_GROUPS } from '${slash(REPO)}/src/app/credits/creditsData.ts';
 console.log(TitleScreen, titleMarkup({ briefingChip: true }), CREDIT_GROUPS);
 `;
   /** Strings that exist only in the page, its entry and its credits (the page's words, its classes, its picture folder, its action). */
-  const SENTINELS = ['Behind the Scenes', 'title:bts', 'Made with AI tools', 'ElevenLabs Music and ElevenLabs voices', 'bts__', 'keyart-farplane.jpg', 'In two minutes', 'Numbers with a source', 'measured from the real game'];
+  const SENTINELS = ['Behind the Scenes', 'title:bts', 'Made with AI tools', 'Fish Audio Drama 3', 'bts__', 'keyart-farplane.jpg', 'In two minutes', 'Numbers with a source', 'measured from the real game'];
 
   async function bundle(on: boolean): Promise<{ files: string[]; text: string }> {
     const config = ((await import('../../vite.config.ts')) as { default: (env: { command: string; mode: string }) => { define: Record<string, string> } }).default({ command: 'build', mode: 'production' });

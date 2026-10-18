@@ -84,6 +84,7 @@ const BASE_CREDIT_GROUPS: readonly CreditGroup[] = [
       { title: 'jRhodes3d', by: 'Jeff Learman', licence: 'CC0', sources: ['jrhodes3d'] },
       { title: 'Surge XT', by: 'Surge Synth Team', licence: 'GPL-3', sources: ['surge'] },
       { title: 'ACE-Step v1 and 1.5', by: 'ACE Studio and StepFun', licence: 'Apache-2.0, MIT', sources: ['ace-step-v1', 'ace-step-15'] },
+      { title: 'Voices: Fish Audio (Drama 3)', by: 'Fish Audio', licence: 'Fish Audio Community License', note: 'the spoken lines of Tidus, Yuna and Auron in the Final Fantasy X chapters; built with Fish Audio' },
     ],
   },
   {
@@ -134,7 +135,8 @@ export const AI_TOOLS_GROUP: CreditGroup = {
   id: 'ai',
   heading: 'Made with AI tools',
   entries: [
-    { title: 'ElevenLabs Music and ElevenLabs voices', by: 'ElevenLabs', licence: 'AI-generated', note: 'music tracks and the spoken lines of Tidus, Yuna and Auron, each picked by ear' },
+    { title: 'ElevenLabs Music', by: 'ElevenLabs', licence: 'AI-generated', note: 'music tracks, each picked by ear' },
+    { title: 'Fish Audio Drama 3', by: 'Fish Audio', licence: 'AI-generated', note: 'the spoken lines of Tidus, Yuna and Auron, each picked by ear' },
     { title: 'ChatGPT Images', by: 'OpenAI', licence: 'AI-generated', note: 'the title paintings, made in the Art Room and approved by Bailey' },
     { title: 'ComfyUI with Animagine XL 4.0', by: 'open tools, run on Bailey’s own computer', licence: 'AI-generated', note: 'most of the paintings; their licences are listed under Art and tools' },
     { title: 'Claude', by: 'Anthropic', licence: 'AI-assisted', note: 'builds and reviews the game, and plays it as its critic' },

@@ -178,7 +178,7 @@ export const CARDS: readonly Card[] = [
     text:
       'The score began as original music written as code and played through sampled instruments. On 7 October **five tracks** were ' +
       'made with ElevenLabs Music from written briefs that name no composer, franchise, character or melody, and the lines of ' +
-      'Tidus, Yuna and Auron are spoken by ElevenLabs voices. AI agents cannot hear, so **Bailey picked each one by ear**.',
+      'Tidus, Yuna and Auron are spoken by Fish Audio voices. AI agents cannot hear, so **Bailey picked each one by ear**.',
     credit: `**Voices:** ${FACTS.voiceLines} lines for Tidus, Yuna and Auron play in the Final Fantasy X chapters.`,
     visual: {
       kind: 'listen',
@@ -320,7 +320,7 @@ export const CHAPTERS: readonly Chapter[] = [
     prose: [
       'The original score is written as code: notes and instruments described in files, then played through freely licensed sampled instruments (a grand piano, an orchestra, a drum kit, a concert hall) and rendered to sound before the game ships. The game began that way, and most of its music still is.',
       `On 7 October some tracks became AI-made takes: ==${FACTS.elevenLabsTracks} tracks==, among them the title music and the chapter select board, were generated with **ElevenLabs Music** from written briefs that name no composer, franchise, character or melody. Several takes of each were made; Bailey listened and picked. If a take ever fails to load, the game falls back to the older rendered score.`,
-      `Tidus, Yuna and Auron speak in the Final Fantasy X chapters: ==${FACTS.voiceLines} spoken lines==, made with **ElevenLabs voices** and picked by Bailey against how the characters sound in the real game. Nothing is taken from the games’ own voice recordings. Every other character, and Final Fantasy X-2, is still text only.`,
+      `Tidus, Yuna and Auron speak in the Final Fantasy X chapters: ==${FACTS.voiceLines} spoken lines==, made with **Fish Audio Drama 3** and picked by Bailey against how the characters sound in the real game. Every other character, and Final Fantasy X-2, is still text only.`,
       'Every cue passes the checks an agent can run (loudness, clipping, length). Whether it is good is a question only ears can answer, so the critic gives audio no score.',
     ],
     side: [

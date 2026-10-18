@@ -1,7 +1,13 @@
 {
-  "about": "The two variants of the FFX voice recordings (Tidus, Yuna, Auron), read by tools/audio/voice-variant.mjs. Bailey has not picked between them (2026-10-07). Folders live outside the repo; a variant is staged as hard links so voice-ship.mjs sees <id>.mp3.",
-  "default": "tight",
+  "about": "The variants of the FFX voice recordings (Tidus, Yuna, Auron), read by tools/audio/voice-variant.mjs. The default is the Fish Audio Drama 3 clone Bailey picked on 2026-10-18 (\"i'll go with the fish clone for all characters\"); the two ElevenLabs variants stay for comparison. Folders live outside the repo; a variant is staged as hard links so voice-ship.mjs sees <id>.mp3.",
+  "default": "fish-drama3-clone",
   "variants": {
+    "fish-drama3-clone": {
+      "label": "Fish Audio Drama 3, cloned from the cast",
+      "about": "The 222 recordings of Tidus, Yuna and Auron rendered with Fish Audio Drama 3 from reference clips of the cast (2 takes each, the take with the lowest word error picked by speech-to-text, a pronunciation lexicon on the text sent to Fish, any inner pause over 370 ms shortened to 340 ms or less). 200 are the FFX chapters of 39.5; 22 are Chapter XXVII (mirror-aeons). Passes the ship gate on its own. Provenance (lexicon, picks, scores) is in the folder beside the takes.",
+      "dir": "D:/Tools/pyrefly-voice-fish-drama3/takes",
+      "staging": "D:/Tools/pyrefly-voice-fish-drama3/staging"
+    },
     "tight": {
       "label": "pauses shortened",
       "about": "The 203 recordings with the 81 over-long inner pauses shortened (<id>.tight.mp3 in the listening folder); the other 122 are the originals. The only variant that passes the ship gate by itself.",
@@ -18,5 +24,9 @@
       "acceptPausesOf": "tight"
     }
   },
-  "mute": ["braskas-final-aeon.mid-valefor-enters.005", "braskas-final-aeon.mid-valefor-enters.011", "braskas-final-aeon.mid-valefor-enters.007.fb1"]
+  "mute": [
+    "braskas-final-aeon.mid-valefor-enters.005",
+    "braskas-final-aeon.mid-valefor-enters.011",
+    "braskas-final-aeon.mid-valefor-enters.007.fb1"
+  ]
 }

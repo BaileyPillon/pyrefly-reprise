@@ -2,7 +2,7 @@
 /**
  * The BEHIND THE SCENES page's content (built, switched OFF: tests/unit/behind-the-scenes-off.test.ts). Bailey, 2026-10-08,
  * decisions item 31: the format is A (a story in six chapters) opening with C's five cards as the two-minute summary; the
- * page shows the critic's REAL scores; it names the AI tools (ElevenLabs Music and voices, ChatGPT Images, local
+ * page shows the critic's REAL scores; it names the AI tools (ElevenLabs Music, Fish Audio Drama 3, ChatGPT Images, local
  * ComfyUI/Animagine); it credits the community sources; and where it says something was measured the words are exactly
  * "measured from the real game on Bailey's own copy", nothing more. Not decided, so not built in: his own quotes (NONE of
  * them appear; the draft's "look terrible" is gone). The page's name is settled: "Behind the Scenes" (Bailey, 2026-10-09
@@ -83,8 +83,8 @@ describe('what it must say, and must not', () => {
     for (const extra of [/decompil/i, /datamin/i, /extract(?:ed)? from/i, /rip(?:ped)?\b/i, /ghidra/i, /game files? (?:were|was) read/i, /emulator/i, /pcsx2/i, /\bHD (?:models?|remaster)\b/i]) expect(text, String(extra)).not.toMatch(extra);
   });
 
-  it('names the AI tools: ElevenLabs Music and voices, ChatGPT Images, ComfyUI and Animagine (and Claude, which builds the game)', () => {
-    for (const name of ['ElevenLabs Music', 'ElevenLabs voices', 'ChatGPT Images', 'ComfyUI', 'Animagine XL 4.0', 'Claude']) expect(text, name).toContain(name);
+  it('names the AI tools: ElevenLabs Music, Fish Audio voices, ChatGPT Images, ComfyUI and Animagine (and Claude, which builds the game)', () => {
+    for (const name of ['ElevenLabs Music', 'Fish Audio', 'ChatGPT Images', 'ComfyUI', 'Animagine XL 4.0', 'Claude']) expect(text, name).toContain(name);
     for (const t of MADE_WITH) expect(text, t.name).toContain(t.name);
     expect(text).toMatch(/Made with:/);
     expect(text).toMatch(/every painting in the game is AI-generated/i);

@@ -100,8 +100,12 @@ describe('the arguments the ship step is given', () => {
 });
 
 describe('voice-variants.json', () => {
-  it('defaults to "pauses shortened" because only it passes the ship gate, and "as recorded" accepts its pauses from it', () => {
-    expect(config.default).toBe('tight');
+  it('defaults to the Fish Audio Drama 3 clone (Bailey, 2026-10-18), which passes the ship gate by itself; "pauses shortened" is the only ElevenLabs variant that does, and "as recorded" accepts its pauses from it', () => {
+    expect(config.default).toBe('fish-drama3-clone');
+    const fish = config.variants['fish-drama3-clone'] as Variant;
+    expect(fish.dir).toBeTruthy();
+    expect(fish.overlay).toBeUndefined(); // the takes are final: no overlay, no accepted findings
+    expect(fish.acceptPausesOf).toBeUndefined();
     expect(config.variants.tight?.overlay).toBeTruthy();
     expect(config.variants.tight?.acceptPausesOf).toBeUndefined();
     const other = config.variants.recorded as Variant;
