@@ -10,10 +10,11 @@ import { setShotHold } from '../shotHold.ts';
 import { panelsNdc } from './downed.ts';
 import { ejectDefringe, injectDefringe } from './patch.ts';
 import { Framing } from './framing.ts';
+import { cameraOwed, OpeningGate } from './openingGate.ts';
 import { aaKind, deviceCloses, deviceNote, fightFacts, liveGates, MIX_PARTS, partsOn, twirlKeysOn, type Device, type MixGame } from './gates.ts';
 import { crispLive } from '../../crisp/crispLive.ts';
 import { menuCalm } from './menuCalm.ts';
-import { cameraAt, centroid, figOf, type Actor, type Box } from './geometry.ts';
+import { cameraAt, centroid, figOf, stillActor, subjectId, type Actor, type Box } from './geometry.ts';
 import { followFlourish } from './followFlourish.ts';
 import { HeldShots } from './heldShots.ts';
 import { battleCanvas, forgetMenuPanels, hudPanels, menuOpen, phoneBattle } from './hudPanels.ts';
@@ -97,6 +98,7 @@ class Mix {
   private readonly living = new Map<Object3D, LivingFigure>();
   private readonly defringed = new Set<ShaderMaterial>();
   private readonly roster: Roster;
+  private readonly gate = new OpeningGate(); // the opening's wait for the first plan (`openingGate.ts`)
   private plans = -1;
   private lastActors: readonly Actor[] = [];
   private band: DofBand | null = null;
@@ -132,6 +134,12 @@ class Mix {
     return this.framing.planOwed;
   }
 
+  /** The opening waits here until the first plan has landed or been given up, and asks whether the resting camera owes its arrival (`openingGate.ts`). */
+  settled = (): Promise<void> => this.gate.wait(this.framing);
+  get arrivalOwed(): boolean {
+    return cameraOwed(this.framing);
+  }
+
   /** @param realDt the same frame's unscaled seconds (default `dt`): the KO's cross runs on it, so a hit-stop never freezes it (`KoFall.ts`). */
   update(dt: number, realDt: number = dt): void {
     const t0 = performance.now();
@@ -144,6 +152,7 @@ class Mix {
     // CHAPTER FRAMING: the master, the staging, the menu clearance.
     this.framingOn = parts.chapterFraming;
     this.framing.update(dt, actors, parts.chapterFraming);
+    this.gate.update(dt, this.framing);
     this.card.update(parts.chapterFraming ? this.framing.cardPlace : null);
     // The held shots (on today's rig too when CHAPTER FRAMING is off).
     const master = this.framing.masterPose ?? this.framing.rigs?.base('idle') ?? null;
@@ -270,6 +279,9 @@ class Mix {
     };
   }
 
+  /** Checks only (`__pyrefly.fx.mix.trace()`, once a frame): the plan's state and what gates it. */
+  trace = (): Record<string, unknown> => ({ ...this.framing.state, plans: this.framing.report.plans, ph: this.lastActors.filter((x) => x.isPlaceholder === true).map(subjectId), calm: this.lastActors.every((x) => !x.visible || stillActor(x)), menu: menuOpen(), rest: this.framing.rigs?.atRest() ?? null });
+
   /** Checks only: the framing's plan for a pin override (`colossusPin.ts`: `off`, or the nine numbers of `?natus=`), without putting it on screen. */
   probe(o: PinOverride): ReturnType<Framing['probe']> {
     return this.framing.probe(this.lastActors, o);
@@ -293,6 +305,7 @@ class Mix {
   dispose(): void {
     setProneAvoid(null);
     setShotHold(null);
+    this.gate.dispose();
     this.framing.dispose();
     this.card.dispose();
     this.roster.dispose();
@@ -337,6 +350,19 @@ export function framingPlanOwed(): boolean {
   return current?.planOwed ?? false;
 }
 
+/** The opening's wait for CHAPTER FRAMING's first plan (`openingGate.ts`): resolves once it has landed, was given up, or has nothing to land; at once with no mix bound (a preview, FF7). */
+export function framingPlanSettled(): Promise<void> {
+  return openingWaitOn ? (current?.settled() ?? Promise.resolve()) : Promise.resolve();
+}
+
+/** The master is installed and the camera, resting, has not gone onto it: the opening moves it (`BattlePresenterBeats.settleOpening`). */
+export function framingArrivalOwed(): boolean {
+  return openingWaitOn && (current?.arrivalOwed ?? false);
+}
+
+/** Checks only (`__pyrefly.fx.mix.openingWait(false)`, before the fight): the opening as it was before it waited for the first plan. */
+let openingWaitOn = true;
+
 export function releaseMaxMix(): void {
   current?.dispose();
   current = null;
@@ -358,6 +384,8 @@ fxDebugHooks['mix'] = {
     parts: (off: readonly string[] | boolean) => provide(off),
     keys: () => [...MIX_PARTS],
     snapshot: () => current?.snapshot() ?? null,
+    trace: () => current?.trace() ?? null,
+    openingWait: (on: boolean) => void (openingWaitOn = on),
     resetCost: () => current?.resetCost(),
     twirlPin: (on: boolean) => current?.setTwirlPin(on),
     bodyAvoid: (on: boolean) => current?.setBodyAvoid(on),

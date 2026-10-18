@@ -88,6 +88,10 @@ export interface PaintedStageOptions {
    * (`entrance/StageEntrances.ts`, FOC44A-05). Read live. Absent = never owed, as for a stage with no framing.
    */
   planOwed?: () => boolean;
+  /** The opening's wait for that plan (`fx/mix/MaxMix.ts` `framingPlanSettled`): resolves once it has landed or been given up. Absent = nothing to wait for. */
+  planSettled?: () => Promise<void>;
+  /** The installed master is up and the resting camera has not gone onto it (`framingArrivalOwed`). Absent = never. */
+  arrivalOwed?: () => boolean;
   /** Camera comfort preset (fb2-0929 options, default `current` = untouched; `CameraPreset.ts`). */
   cameraPreset?: () => CameraPresetSpec;
   /** The renderer, so a master the art governor loads is uploaded ahead of its swap (release 39.1, `TextureStager.ts`); without it the swap is release 39's. */
@@ -780,6 +784,16 @@ export class PaintedStage implements BattleStage {
   /** `BattleStage.settleEntrances`: the opening is over. */
   settleEntrances(now = true): void {
     this.entrances?.settle(now);
+  }
+
+  /** `BattleStage.planSettled`: the opening waits for CHAPTER FRAMING's first plan. */
+  planSettled(): Promise<void> {
+    return this.opts.planSettled?.() ?? Promise.resolve();
+  }
+
+  /** `BattleStage.planArrivalOwed`. */
+  planArrivalOwed(): boolean {
+    return this.opts.arrivalOwed?.() === true;
   }
 
   /** For the debug snapshot and the tests: who is held and who is playing which entrance. */

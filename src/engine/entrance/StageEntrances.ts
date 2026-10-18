@@ -60,9 +60,12 @@ export const PATIENCE_MS = 1600;
 /**
  * The most a figure waits for CHAPTER FRAMING's plan (ms of the stage's clock since it was built): the plan lands 1.0 to 1.7 s after the screen comes up on the machines measured
  * (a CPU six times slower included), so this is a ceiling for a plan that never comes (no canvas, no idle rig), not a time anything is expected to reach. After it the gate and the
- * hurried opening act as they did before the plan was waited for.
+ * hurried opening act as they did before the plan was waited for. **It is the net, not the verdict**: the opening waits for the plan itself and retires one that does not come
+ * (`fx/mix/openingGate.ts`, `PLAN_WAIT_S` after the battle-start card's hold), which on a fresh profile can be 6 s after the boss was built (the paintings of the Chapter IV fight arrive
+ * 3 s or more after it, and a first menu in a hurried opening 7 s after that). Raised from 3000 so that ceiling can never free a boss before the opening has given its verdict, which
+ * would let the plan land on a boss on screen (2026-10-17).
  */
-export const PLAN_MAX_MS = 3000;
+export const PLAN_MAX_MS = 9000;
 /** A figure held this long (ms of the stage's clock) with no opening is let in: nothing may be left invisible. */
 export const HOLD_MAX_MS = 30_000;
 /** A frame longer than this (ms) counts as this long, so a hitch does not swallow the entrance. */
