@@ -11,7 +11,11 @@
  * set on the live engine by the page after the first menu opens, exactly as the engine tests do; the next menu of that actor then shows it. Output: the full 1600x900 captures in `--work`, and with
  * `--compose` the menu column of each before/after pair side by side in `--out` (small jpgs).
  *
- * Flags: --tag=before|after  --url=<dev server>  --work=<dir>  --out=<dir>  --scenario=a|b|c|d|e|all  --seed=1  --width=1600  --height=900  --compose  --debug
+ * Chapter III roster lane (re-parity RC11): scenarios g (Chapter III link 3, Yuna's Summon list: `CH3_ROSTER_REMOVAL`), h (the hidden Chapter 28's board with Valefor and Ifrit taken: the `summon` item shows no row) and i (the Grand Summon picker with
+ * Valefor knocked out: `GRAND_SUMMON_KO_REFUSED`) run on `--scenario=g|h|i` (`all` runs only a to e); `--tag=after` turns those switches on as well. A link a chapter reaches only after play is entered by pointing the chapter record's `enemyGroupRef`
+ * at it in the page before the battle starts (the live app's own module instance), the way the engine tests build a link.
+ *
+ * Flags: --tag=before|after  --url=<dev server>  --work=<dir>  --out=<dir>  --scenario=a|b|c|d|e|g|h|i|all  --seed=1  --width=1600  --height=900  --compose  --debug
  */
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -69,14 +73,27 @@ async function newPage(browser) {
 }
 
 /** Boot, optionally turn the switch on in the page, and start the chapter (cutscenes and prep skipped). */
-async function boot(page, chapter) {
+async function boot(page, chapter, startGroup = null, extra = {}) {
   await page.goto(`${URL}?coach=off`);
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 180_000 });
   if (TAG === 'after') {
-    await page.evaluate(async () => {
+    await page.evaluate(async (want) => {
       const m = await import('/src/battle/ffx/menu-draw-parity.ts');
       m.setMenuDrawParity(true);
-    });
+      if (want.roster) (await import('/src/battle/ffx/roster-removal.ts')).setCh3RosterRemoval(true);
+      if (want.gsko) (await import('/src/battle/ffx/grand-summon-ko.ts')).setGrandSummonKoRefused(true);
+    }, extra);
+  }
+  if (startGroup) {
+    await page.evaluate(
+      async ({ id, group }) => {
+        const enc = await import('/src/data/encounters.ts');
+        const rec = enc.getChapter(id);
+        if (group.startsWith('last-summoning:')) rec.enemyGroupRef = (await import('/src/data/ffx/enemies/last-summoning-chain.ts')).lastSummoningGroup(group);
+        else rec.enemyGroupRef = (await import('/src/data/ffx/index.ts')).ENEMY_GROUPS_BY_ID[group];
+      },
+      { id: chapter, group: startGroup },
+    );
   }
   await page.evaluate(
     ({ id, seed }) => {
@@ -286,9 +303,63 @@ async function scenarioD(browser, log) {
   await p3.context().close();
 }
 
+/** g: Chapter III link 3 (possessed Ifrit), every aeon alive: Yuna's Summon list (CH3_ROSTER_REMOVAL). */
+async function scenarioG(browser, log) {
+  console.log("g: Chapter III link 3: Yuna's Summon list");
+  const page = await newPage(browser);
+  lastLog = 0;
+  await boot(page, 'braskas-final-aeon', 'possessed-ifrit', { roster: true });
+  await untilActor(page, 'yuna');
+  if (!(await pickRow(page, 'Summon'))) throw new Error('Summon missing');
+  await press(page, 'Enter', 500);
+  await shoot(page, 'g-1-summon-list-link3', log, `link 3 Summon list: ${(await readState(page)).rows.map((r) => (r.disabled ? `(${r.label})` : r.label)).join(', ')}`);
+  await page.context().close();
+}
+
+/** h: the hidden Last Summoning, the link after Valefor and Ifrit were given up: Yuna's Summon list (the parity item `summon`). */
+async function scenarioH(browser, log) {
+  console.log("h: Chapter 28, Valefor and Ifrit taken: Yuna's Summon list");
+  const page = await newPage(browser);
+  lastLog = 0;
+  await boot(page, 'last-summoning', 'last-summoning:valefor+ifrit');
+  await untilActor(page, 'yuna');
+  if (!(await pickRow(page, 'Summon'))) throw new Error('Summon missing');
+  await press(page, 'Enter', 500);
+  await shoot(page, 'h-1-chapter28-summon-list', log, `Chapter 28 Summon list: ${(await readState(page)).rows.map((r) => (r.disabled ? `(${r.label})` : r.label)).join(', ')}`);
+  await page.context().close();
+}
+
+/** i: Chapter III link 2 with Valefor knocked out and Yuna's gauge full: the Grand Summon picker (GRAND_SUMMON_KO_REFUSED). */
+async function scenarioI(browser, log) {
+  console.log('i: the Grand Summon picker with Valefor knocked out');
+  const page = await newPage(browser);
+  lastLog = 0;
+  await boot(page, 'braskas-final-aeon', 'possessed-ifrit', { gsko: true });
+  const first = await nextMenu(page);
+  await onEngine(page, (e) => {
+    const valefor = e.ctx.rt.aeonRoster.get('valefor');
+    valefor.hp = 0;
+    valefor.alive = false;
+    valefor.aeon.reviveCountdown = 8;
+    e.state().combatants['yuna'].overdrive.gauge = 100;
+  });
+  if (first.actor !== 'yuna') await defend(page);
+  else await defend(page);
+  await untilActor(page, 'yuna');
+  if (!(await pickRow(page, 'Overdrive'))) throw new Error('Overdrive missing');
+  await press(page, 'Enter', 900);
+  await page.waitForTimeout(900);
+  console.log('  picker:', JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.ffx-mg-list__row')].map((r) => { const cs = getComputedStyle(r); return { t: r.textContent.trim(), c: r.className.replace(/ffx-mg-list__row/g, '').trim(), color: cs.color, font: cs.fontFamily.slice(0, 40), size: cs.fontSize, op: cs.opacity, vis: cs.visibility }; }))));
+  await shoot(page, 'i-1-grand-summon-picker', log, 'the Grand Summon picker, Valefor knocked out');
+  await page.context().close();
+}
+
 // ------------------------------------------------------------------------------------------------------------------------------ compose
 
 const PAIRS = [
+  { name: 'g-chapter3-link3-summon', before: 'g-1-summon-list-link3', after: 'g-1-summon-list-link3', title: "g. Chapter III link 3 (Ifrit's): Yuna's Summon list", crop: { left: 0, top: 310, width: 640, height: 560 } },
+  { name: 'h-chapter28-board', before: 'h-1-chapter28-summon-list', after: 'h-1-chapter28-summon-list', title: 'h. Last Summoning (Chapter 28), Valefor and Ifrit given up: the Summon list', crop: { left: 0, top: 250, width: 640, height: 620 } },
+  { name: 'i-grand-summon-picker', before: 'i-1-grand-summon-picker', after: 'i-1-grand-summon-picker', title: 'i. The Grand Summon picker with Valefor knocked out', crop: { left: 20, top: 130, width: 900, height: 380 } },
   { name: 'a-opener-row', before: 'a-1-silenced-yuna-menu', after: 'a-1-silenced-yuna-menu', title: 'a. Chapter I, Yuna Silenced: the White Magic row', crop: { left: 0, top: 310, width: 640, height: 560 } },
   { name: 'a-opener-opened', before: 'a-1-silenced-yuna-menu', after: 'a-2-white-magic-opened', title: 'a. White Magic opened (before: the row is grey and will not open)', crop: { left: 0, top: 310, width: 640, height: 560 } },
   { name: 'b-overdrive-curse', before: 'b-1-cursed-tidus-menu', after: 'b-1-cursed-tidus-menu', title: 'b. Chapter I, Tidus Cursed, gauge full: the Overdrive row', crop: { left: 0, top: 310, width: 640, height: 560 } },
@@ -349,6 +420,9 @@ async function main() {
     if (want('b')) await scenarioB(browser, log);
     if (want('c')) await scenarioC(browser, log);
     if (want('d') || want('e')) await scenarioD(browser, log);
+    if (SCENARIO === 'g') await scenarioG(browser, log);
+    if (SCENARIO === 'h') await scenarioH(browser, log);
+    if (SCENARIO === 'i') await scenarioI(browser, log);
   } catch (e) {
     failure = e;
   } finally {
