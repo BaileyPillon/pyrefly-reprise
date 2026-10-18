@@ -8,8 +8,9 @@
  * - **The lunge's first frame** (ON): the house part of the step rides `BattlePresenterActors.reachOffset`, the velocity-continuous curve, not `attackOffset`'s
  *   cubic-out, whose first moving frame covers 28 percent of the distance from a standing start (angle 2, section 4.2: detector steps 0, 0, 0, 64, 73, 41 px).
  *   Total distance and beats are the same.
- * - **The frame clock** (ON): one frame advances the animation at most {@link MAX_DELTA_SMOOTH} (1/40 s), not {@link MAX_DELTA_CLASSIC} (1/20 s): a hitch is a
- *   slow frame, not a skipped one.
+ * - **The animation clock** (ON): one frame advances what is only drawn (the battle field's tweens, lunges, blends and recoils, the camera, the numerals, the beats) at most
+ *   {@link MAX_DELTA_SMOOTH} (1/40 s), not {@link MAX_DELTA_CLASSIC} (1/20 s): a hitch is a slow frame, not a skipped one. Every TIMER keeps the 1/20 s clamp: see
+ *   {@link battleFrameClocks}.
  *
  * `?motion=classic` restores both of those as they were (comparison and safety); `?motion=smooth` is the default spelled out.
  *
@@ -51,13 +52,35 @@ export function setMotionMode(value: MotionMode | null): void {
 /** True when the lunge's first frame and the 1/40 s clock are on (the default). */
 export const motionSmooth = (): boolean => motionMode() === 'smooth';
 
-/** The longest frame the animation clock advances in `classic`: 50 ms (3 frames at 60 Hz) in one drawn frame. */
+/** The longest frame `App.tick` hands any screen, and the longest the animation clock advances in `classic`: 50 ms (3 frames at 60 Hz) in one drawn frame. */
 export const MAX_DELTA_CLASSIC = 1 / 20;
-/** The longest frame by default: 25 ms, so a hitch advances every blend, lunge and recoil by at most 1.5 frames of a 60 Hz game. */
+/** The longest frame of the battle field's animation clock by default: 25 ms, so a hitch advances every blend, lunge and recoil by at most 1.5 frames of a 60 Hz game. */
 export const MAX_DELTA_SMOOTH = 1 / 40;
 
-/** The per-frame clamp of `App.tick` for a mode (the current one by default). */
+/** The per-frame clamp of the battle field's ANIMATION clock for a mode (the current one by default). `App.tick` keeps its own 1/20 s for everything. */
 export const frameClockMax = (m: MotionMode = motionMode()): number => (m === 'smooth' ? MAX_DELTA_SMOOTH : MAX_DELTA_CLASSIC);
+
+/**
+ * The two clocks of one battle frame. The driver's rule for the 1/40 s clamp (2026-10-17): it may apply to the presentation clock alone, and every timer keeps the
+ * 1/20 s clamp, so a slow phone never counts a stall, a play-time total or a settle window slower than real time because of it.
+ *
+ * - `timer`: the frame as `App.tick` clamps it, at {@link MAX_DELTA_CLASSIC} in BOTH modes (the stall watchdog, the play-time total, the formation settle window).
+ *   The battle engines' own clocks are not on the frame clock at all (the ATB pump and the CTB steps read the wall clock, `BattlePresenterActive.ts`), so the ATB
+ *   cannot run slow because of a slow frame, under either mode.
+ * - `animation`: the same frame clamped at {@link frameClockMax} (1/40 s by default, 1/20 s under `?motion=classic`): everything that is only drawn, the tweens,
+ *   lunges, pose blends and recoils, the camera moves, the damage numerals, the cut-ins, and the mid-battle beats' budgets, which are spent out of the SAME clock as the
+ *   camera moves they wait for (`BattleScreenCutscenes.ts` "Two clocks").
+ */
+export interface BattleFrameClocks {
+  readonly timer: number;
+  readonly animation: number;
+}
+
+/** Split one frame into its timer clock and its animation clock (pure). */
+export function battleFrameClocks(dt: number, m: MotionMode = motionMode()): BattleFrameClocks {
+  const timer = Math.min(dt, MAX_DELTA_CLASSIC);
+  return { timer, animation: Math.min(timer, frameClockMax(m)) };
+}
 
 // ------------------------------------------------------------------ the aligned dissolve switch
 

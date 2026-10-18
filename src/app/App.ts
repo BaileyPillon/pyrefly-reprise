@@ -8,7 +8,6 @@ import { GameFlow, flowReport, type RunChapterOptions } from './screens/BattleSc
 import type { BattleScreenResult } from './screens/BattleScreen.ts';
 import type { ChapterId } from '../data/encounters.ts';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
-import { frameClockMax } from '../engine/PoseSwap.ts'; // W5: 1/40 s by default, 1/20 s under `?motion=classic`
 
 export interface AppOptions {
   /** Container for the WebGL canvas. Defaults to #game. */
@@ -51,7 +50,7 @@ export class App {
 
   private readonly stack: Screen[] = [];
   private readonly registry = new Map<string, ScreenFactory>();
-  private maxDelta: number;
+  private readonly maxDelta: number;
   private lastTime = 0;
   private rafId = 0;
   private running = false;
@@ -66,7 +65,7 @@ export class App {
     this.uiRoot =
       opts.uiRoot ?? (document.getElementById('ui') as HTMLElement | null) ?? document.body;
     this.fadeRoot = opts.fadeRoot ?? (document.getElementById('fade') as HTMLElement | null);
-    this.maxDelta = opts.maxDeltaSec ?? frameClockMax();
+    this.maxDelta = opts.maxDeltaSec ?? 1 / 20; // every timer in the game counts this frame; the battle field's animation clock clamps it further (`battleFrameClocks`, PoseSwap.ts)
 
     this.renderer = new Renderer({ container: gameRoot, fov: 34 });
     this.input = new Input({ pointerRoot: this.uiRoot });
@@ -252,11 +251,6 @@ export class App {
   /** Resolves after the next completed frame. Used by `__pyrefly.frame()`. */
   nextFrame(): Promise<void> {
     return new Promise((resolve) => this.frameWaiters.push(resolve));
-  }
-
-  /** W5: the longest frame handed to screens, seconds. `window.__pyrefly.motionMode(...)` sets it with the motion mode (1/40 smooth, 1/20 classic). */
-  setMaxDelta(sec: number): void {
-    this.maxDelta = sec;
   }
 
   private readonly tick = (now: number): void => {

@@ -1,8 +1,8 @@
 /**
  * W5 (pose motion, 2026-10-17; both games): the switches, the frame clock and the aligned dissolve's pair policy of `PoseSwap.ts`. Pure: no `three`, no DOM.
  *
- * The driver's delegated pick after the measurement: the lunge's first frame and the 1/40 s frame clock are ON by default (`?motion=classic` restores today's lunge and the
- * 1/20 s clock); the aligned dissolve is OFF by default (`?swap=aligned`); the held-frame cut was removed. The policy is a function of the pair's overlap (intersection over
+ * The driver's delegated pick after the measurement: the lunge's first frame and the 1/40 s ANIMATION clock are ON by default (`?motion=classic` restores today's lunge and the
+ * 1/20 s clock); every timer keeps the 1/20 s clamp in both modes (`battleFrameClocks`, the driver's rule of 2026-10-17); the aligned dissolve is OFF by default (`?swap=aligned`); the held-frame cut was removed. The policy is a function of the pair's overlap (intersection over
  * union of the two silhouettes) and the distance between their anchors.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -13,6 +13,7 @@ import {
   MAX_DELTA_SMOOTH,
   MOTION_DEFAULT,
   alignedSwapOn,
+  battleFrameClocks,
   frameClockMax,
   motionMode,
   motionSmooth,
@@ -95,6 +96,57 @@ describe('the frame clock', () => {
   });
 });
 
+/**
+ * The driver's rule for the 1/40 s clamp (2026-10-17): it may stay only on the presentation/animation clock; battle and ATB timers keep 1/20 s, so a slow phone never counts a
+ * timer slower than real time because of it. `battleFrameClocks` is the one place a battle frame is split, and `BattleScreen.update` the one caller
+ * (`tests/unit/battle-screen-frame-clocks.test.ts` drives the real screen).
+ */
+describe('the two clocks of a battle frame', () => {
+  const frames = [0.001, 1 / 144, 1 / 60, 0.02, 1 / 40, 0.03, 1 / 30, 0.04, 1 / 20, 0.2, 5];
+
+  it("the timer clock is App's 1/20 s clamp in both modes, whatever the motion mode", () => {
+    for (const mode of ['smooth', 'classic'] as const) {
+      for (const dt of frames) expect(battleFrameClocks(dt, mode).timer).toBe(Math.min(dt, MAX_DELTA_CLASSIC));
+    }
+    expect(MAX_DELTA_CLASSIC).toBe(1 / 20); // the number App.tick clamps at
+  });
+
+  it('the animation clock is 1/40 s in smooth and 1/20 s in classic, and never longer than the timer clock', () => {
+    for (const dt of frames) {
+      const smooth = battleFrameClocks(dt, 'smooth');
+      const classic = battleFrameClocks(dt, 'classic');
+      expect(smooth.animation).toBe(Math.min(dt, MAX_DELTA_SMOOTH));
+      expect(classic.animation).toBe(Math.min(dt, MAX_DELTA_CLASSIC));
+      expect(smooth.animation).toBeLessThanOrEqual(smooth.timer);
+      expect(classic.animation).toBe(classic.timer); // classic is one clock, as before
+    }
+  });
+
+  it('a slow frame costs the timer nothing: at 30 fps a smooth battle counts a real second in full on its timers and three quarters of it on its animation', () => {
+    const frame = 1 / 30;
+    let timer = 0;
+    let animation = 0;
+    for (let i = 0; i < 30; i++) {
+      const c = battleFrameClocks(frame, 'smooth');
+      timer += c.timer;
+      animation += c.animation;
+    }
+    expect(timer).toBeCloseTo(1, 9); // one real second of frames is one second on the timers: nothing runs slow
+    expect(animation).toBeCloseTo(30 * MAX_DELTA_SMOOTH, 9); // 0.75 s of animation: the field plays at 75 percent speed below 40 fps (below 20 fps before)
+  });
+
+  it('a steady frame is untouched on both clocks (60 Hz and 144 Hz)', () => {
+    for (const dt of [1 / 60, 1 / 144]) expect(battleFrameClocks(dt, 'smooth')).toEqual({ timer: dt, animation: dt });
+  });
+
+  it('follows the mode in force when none is named', () => {
+    expect(battleFrameClocks(0.05).animation).toBe(MAX_DELTA_SMOOTH);
+    setMotionMode('classic');
+    expect(battleFrameClocks(0.05).animation).toBe(MAX_DELTA_CLASSIC);
+    expect(battleFrameClocks(0.05).timer).toBe(MAX_DELTA_CLASSIC);
+  });
+});
+
 describe('the aligned dissolve switch', () => {
   it('is OFF by default', () => {
     expect(alignedSwapOn()).toBe(false);
@@ -131,34 +183,32 @@ describe('the aligned dissolve switch', () => {
 });
 
 describe('the debug switches (window.__pyrefly.motionMode and .swap)', () => {
-  function installed(): { api: Record<string, (...a: unknown[]) => unknown>; delta: number[] } {
+  function installed(): { api: Record<string, (...a: unknown[]) => unknown> } {
     const api: Record<string, unknown> = {};
-    const delta: number[] = [];
-    installPoseSwapDebug(api, { setMaxDelta: (s: number) => void delta.push(s) });
-    return { api: api as Record<string, (...a: unknown[]) => unknown>, delta };
+    installPoseSwapDebug(api);
+    return { api: api as Record<string, (...a: unknown[]) => unknown> };
   }
 
-  it('motionMode() reads the mode; motionMode(mode) sets it and the frame clock with it', () => {
-    const { api, delta } = installed();
+  it('motionMode() reads the mode; motionMode(mode) sets it, and the animation clock follows it on the next frame', () => {
+    const { api } = installed();
     expect(api['motionMode']!()).toBe('smooth');
     expect(api['motionMode']!('classic')).toBe('classic');
     expect(motionSmooth()).toBe(false);
-    expect(delta).toEqual([MAX_DELTA_CLASSIC]);
+    expect(battleFrameClocks(0.05).animation).toBe(MAX_DELTA_CLASSIC);
     expect(api['motionMode']!('smooth')).toBe('smooth');
-    expect(delta).toEqual([MAX_DELTA_CLASSIC, MAX_DELTA_SMOOTH]);
+    expect(battleFrameClocks(0.05).animation).toBe(MAX_DELTA_SMOOTH);
     expect(api['motionMode']!('nonsense')).toBe('smooth'); // an unknown mode changes nothing
-    expect(delta.length).toBe(2);
   });
 
   it('swap() reads the aligned dissolve; swap(mode) sets it and touches no clock', () => {
-    const { api, delta } = installed();
+    const { api } = installed();
     expect(api['swap']!()).toBe('off');
     expect(api['swap']!('aligned')).toBe('aligned');
     expect(alignedSwapOn()).toBe(true);
     expect(api['swap']!('off')).toBe('off');
     expect(alignedSwapOn()).toBe(false);
     expect(api['swap']!('smooth')).toBe('off'); // the old spelling is not a mode
-    expect(delta).toEqual([]);
+    expect(motionMode()).toBe('smooth'); // the dissolve switch moves no clock
   });
 
   it('keeps the counters and the log the captures read', () => {
