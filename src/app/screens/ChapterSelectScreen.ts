@@ -326,6 +326,7 @@ export class ChapterSelectScreen extends Screen {
   private openDoor(id: ChapterId): boolean {
     if (this.confirming || !this.doors.isOpen(id)) return false; // the phone's field is told, so a word behind a shut switch looks like any other word
     this.confirming = true;
+    if (this.doors.isRun(id)) this.app.flow.armPilgrimage(id); // the `pilgrim` word (FFX, hidden prototype): the flow plays the run, not the chapter alone
     (this.opts.onSelect ?? defaultOnSelect)(id);
     // No reset: the FF7 swirl now holds this frozen board while the fight loads (r29 PR-0222), and a key
     // pressed then must not move the cursor or start a card's preload under it. The flow replaces the board.
