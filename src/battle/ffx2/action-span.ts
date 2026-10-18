@@ -57,11 +57,13 @@ export interface ActionSpanKnobs {
   casts: boolean;
   /** A formation's flat 3 s gives way to the per-command span (the default); false keeps the flat value where a formation sets one. */
   supersedeFormation: boolean;
+  /** A measurement run only: the run-up distance as a multiple of the estimate (0 = no run-up, 2 = twice as far); the run-up is the least known term. */
+  runDistanceScale: number;
   /** A measurement run only: told each span the per-command rule computed (the unit, its steps), so a run can report the mean span a side's actions took. */
   record?: (unit: Ffx2Unit, steps: number) => void;
 }
 
-const PRODUCTION: ActionSpanKnobs = { perCommand: ACTION_TIME_PER_COMMAND, physical: true, casts: true, supersedeFormation: true };
+const PRODUCTION: ActionSpanKnobs = { perCommand: ACTION_TIME_PER_COMMAND, physical: true, casts: true, supersedeFormation: true, runDistanceScale: 1 };
 let knobs: ActionSpanKnobs = PRODUCTION;
 
 /** Run `fn` with other knobs (a measurement run); the production ones come back whatever happens. */
@@ -182,7 +184,7 @@ export function commandSpanSteps(unit: Ffx2Unit, ctx: ActionContext): number {
     actionRatio: ratioOf(unit, MOTION_ACTION),
     costCast,
     effectSteps: effectStepsOf(unit, effect),
-    runDistance: RUN_DISTANCE_ESTIMATE,
+    runDistance: RUN_DISTANCE_ESTIMATE * knobs.runDistanceScale,
     physical: knobs.physical,
     casts: knobs.casts,
   });

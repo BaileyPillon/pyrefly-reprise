@@ -169,6 +169,12 @@ describe('three girls and three bosses, by hand', () => {
     expect(attack(status(girl('rikku', 'mascot'), 'haste'))).toBe(27);
   });
 
+  it('Slow lengthens only the idle break (Yuna Mascot: 48 + 29 + 8 = 85), Haste halves every clip term (Yuna: 12 + 15 + 4 = 31), a Stopped girl plays nothing', () => {
+    expect(attack(status(girl('yuna', 'mascot'), 'slow'))).toBe(48 + 29 + 8);
+    expect(attack(status(girl('yuna', 'mascot'), 'haste'))).toBe(12 + 15 + 4);
+    expect(attack(status(girl('yuna', 'mascot'), 'stop'))).toBe(0);
+  });
+
   it('Bahamut 43, Leblanc 17, Trema 66 (their own plain Attack row 0x41da, class 1)', () => {
     const ability = abilityWithRecord({ id: 0x41da, costCast: 0 }, ATTACK ?? FIRE);
     const span = (row: number): number => withActionSpanKnobs({ perCommand: true }, () => commandSpanSteps(monster(row), ctxOf(ability, ATTACK_CMD)));

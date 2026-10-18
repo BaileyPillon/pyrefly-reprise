@@ -8,7 +8,8 @@
  * - `on`: `ACTION_TIME_PER_COMMAND` ON, a formation's flat 3 s superseded (the design: the per-command span everywhere);
  * - `on-keep`: ON, but a formation that sets a flat 3 s keeps it (what the formation overrides cost);
  * - `phys`: ON, physical spans only (casts, skills, items and specials owe nothing);
- * - `cast`: ON, charge-kind spans only (physical commands owe nothing).
+ * - `cast`: ON, charge-kind spans only (physical commands owe nothing);
+ * - `on-norun` / `on-far`: ON, with the run-up distance taken to 0 / doubled (how much the least known term matters).
  *
  * **Measure, never tune.** Besides wins it counts what explains a move: the actions each side finished, the mean span the per-command rule gave a side's actions, the party's
  * KOs, the party's turns and the minutes the chain took. Rows carry `perSeed` (one letter a seed) so runs split across processes merge exactly.
@@ -41,6 +42,9 @@ const ARMS: Record<string, Partial<ActionSpanKnobs>> = {
   'on-keep': { perCommand: true, supersedeFormation: false },
   phys: { perCommand: true, casts: false },
   cast: { perCommand: true, physical: false },
+  // the run-up is the least known term: none at all, and twice the estimated distance
+  'on-norun': { perCommand: true, runDistanceScale: 0 },
+  'on-far': { perCommand: true, runDistanceScale: 2 },
 };
 
 /** Spans the per-command rule computed in one seed, by side. */
