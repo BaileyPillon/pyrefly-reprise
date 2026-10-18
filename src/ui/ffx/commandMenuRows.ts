@@ -1,6 +1,7 @@
 import type { AnyCombatant, AvailableCommand, CombatantId } from '../../battle/common/types.ts';
 import { isOpenerGroup, rowEnabled, switchTargetId, type TopGroupRow, type TopRow } from './CommandMenuLogic.ts';
 import { commandHelpText } from './commandHelp.ts';
+import { opensList } from './targetStepUi.ts';
 import { TAKEN_REASON } from '../../data/ffx/last-summoning-ids.ts'; // a module with no imports of its own
 
 /**
@@ -113,7 +114,7 @@ export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: 
  */
 export function groupHelp(row: TopGroupRow): string {
   if (row.role === 'switch') return 'Swap in a reserve member (L1 / Q). The member coming in takes this turn.';
-  const only = row.items.length === 1 && (row.items[0]!.enabled || !isOpenerGroup(row)) ? row.items[0] : undefined; // an opener whose one entry is greyed still opens its list
+  const only = row.items.length === 1 && (row.items[0]!.enabled || !isOpenerGroup(row)) && !opensList(row) ? row.items[0] : undefined; // an opener whose one entry is greyed still opens its list
   if (only) return commandHelpText(only) || `Open the ${row.label} menu.`;
   return `Open the ${row.label} menu.`;
 }

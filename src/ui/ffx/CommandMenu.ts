@@ -17,6 +17,7 @@ import {
   type TopRow,
 } from './CommandMenuLogic.ts';
 import { ffxTargetMode } from './loneTarget.ts';
+import { opensList, startPreference, stepSideIds } from './targetStepUi.ts';
 import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
 import { touchTapped } from '../common/touchTapAim.ts';
 import { commandHelpText } from './commandHelp.ts';
@@ -297,7 +298,8 @@ export class CommandMenu {
   /** The Defend press, from Triangle (`Q` or the pad's Triangle; not Shift) or a tap on the tab: the engine's own `defend` command. */
   private defend(): void {
     if (!this.resolve || this.suspended || this.state !== 'top' || !this.defendCmd) return;
-    this.resolveCommand(this.defendCmd);
+    // The hot key bypasses the resolver (0x78FB80): it never opens a target step, whatever the row carries (`TARGET_STEP_PARITY`).
+    this.resolveCommand({ ...this.defendCmd, targetStep: undefined });
   }
 
   private finish(command: Command): void {
@@ -369,6 +371,7 @@ export class CommandMenu {
   private endSelection(): void {
     this.groupTargets = null;
     this.pendingCmd = null;
+    this.stepOtherSide = false;
     this.targetCursor.hide();
     this.opts?.onSelection?.(null);
     this.opts?.onTargetChange?.(null);
@@ -480,6 +483,8 @@ export class CommandMenu {
       this.syncTargetSurfaces();
     } else if (b === 'confirm') {
       this.confirmTarget();
+    } else if (b === 'l1' || b === 'r1') {
+      this.switchTargetSide();
     } else if (b === 'cancel') {
       // The same chokepoint confirm goes through — restoring every dimmed
       // figure on the field is the half of option B a player notices only when
@@ -533,7 +538,7 @@ export class CommandMenu {
       // flat "OVERDRIVE -- READY" row (most characters have exactly one
       // usable Overdrive move). The reserve list is the exception: a swap
       // always shows who is coming in, even with one member benched.
-      if (row.items.length === 1 && row.role !== 'switch' && row.items[0]!.enabled) {
+      if (row.items.length === 1 && row.role !== 'switch' && row.items[0]!.enabled && !opensList(row)) { // `opensList`: target-step parity item openerOne
         this.resolveCommand(row.items[0]!);
         return;
       }
@@ -585,6 +590,8 @@ export class CommandMenu {
   // -------------------------------------------------------------- targeting
 
   private pendingCmd: AvailableCommand | null = null;
+  /** True while the target step shows the other side of the row's step (`switchTargetSide`). */
+  private stepOtherSide = false;
   /** Set while a multi-target command is awaiting confirmation. */
   private groupTargets: CombatantId[] | null = null;
 
@@ -625,7 +632,18 @@ export class CommandMenu {
     // engine's slot-then-id order once opened on the aeon mid-field, away from
     // the player's eye). A row that may also point at the party opens on the
     // side the engine prefers (`preferredTargets`).
-    this.targetCursor.showSingle(entries, 0, cmd.preferredTargets);
+    this.stepOtherSide = false;
+    this.targetCursor.showSingle(entries, 0, startPreference(cmd)); // the target step's start (parity item cursorStart), else the engine's aim hint
+    this.syncTargetSurfaces();
+  }
+
+  /** Target-step parity (item sideSwitch): L1 / R1 in the target step show the other side of the row's step, opening on its first candidate. A no-op for a row with no `switchTo`. */
+  private switchTargetSide(): void {
+    const cmd = this.pendingCmd;
+    const ids = cmd && !this.groupTargets ? stepSideIds(cmd, !this.stepOtherSide) : null;
+    if (!cmd || !ids) return;
+    this.stepOtherSide = !this.stepOtherSide;
+    this.targetCursor.showSingle(ids.map((id) => this.entryFor(id, cmd)), 0, [ids[0]!]);
     this.syncTargetSurfaces();
   }
 
