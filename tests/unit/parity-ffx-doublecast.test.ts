@@ -383,7 +383,7 @@ describe('a real turn: Lulu in Chapter XVIII picks two different spells and the 
         const before = lulu.mp;
         const log = e.state().log.length;
         e.submit({ kind: 'ability', id: 'doublecast', targets: [], casts: [{ id: 'fire', targets: ['overdrive-sin'] }, { id: 'firaga', targets: ['overdrive-sin'] }] });
-        const mine = (e.state().log.slice(log) as Ev[]).filter((x) => x['type'] === 'mp-damage' && x['targetId'] === 'lulu').map((x) => x['amount']);
+        const mine = (e.state().log.slice(log) as unknown as Ev[]).filter((x) => x['type'] === 'mp-damage' && x['targetId'] === 'lulu').map((x) => x['amount']);
         expect(mine).toEqual([fire!.mpCost, firaga!.mpCost]);
         expect(lulu.mp).toBe(before - fire!.mpCost - firaga!.mpCost);
         seen = true;
