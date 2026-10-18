@@ -1,4 +1,6 @@
 import { commandRowsCap, withTextSizeWatch } from '../common/hudTextSize.ts';
+import { menuParity } from '../../battle/ffx/menu-draw-parity.ts';
+import { playRefusal } from './refusalCue.ts';
 import type { AnyCombatant, AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import {
   buildTopRows,
@@ -496,7 +498,7 @@ export class CommandMenu {
     let i = this.topIndex;
     for (let n = 0; n < this.rows.length; n++) {
       i = (i + dir + this.rows.length) % this.rows.length;
-      if (rowEnabled(this.rows[i]!)) break;
+      if (menuParity('cursor') || rowEnabled(this.rows[i]!)) break; // the game's cursor rests on every row; only a confirm is refused (0x0089C900)
     }
     this.topIndex = i;
     this.pageStart = null;
@@ -525,13 +527,13 @@ export class CommandMenu {
   private chooseTop(i: number): void {
     const row = this.rows[i];
     if (!row) return;
-    if (!rowEnabled(row)) return this.shake();
+    if (!rowEnabled(row)) return this.refuse();
     if (row.kind === 'group') {
       // A single enabled choice needs no submenu hop -- matches the mock's
       // flat "OVERDRIVE -- READY" row (most characters have exactly one
       // usable Overdrive move). The reserve list is the exception: a swap
       // always shows who is coming in, even with one member benched.
-      if (row.items.length === 1 && row.role !== 'switch') {
+      if (row.items.length === 1 && row.role !== 'switch' && row.items[0]!.enabled) {
         this.resolveCommand(row.items[0]!);
         return;
       }
@@ -555,7 +557,7 @@ export class CommandMenu {
   private openSwitchList(): void {
     const i = switchRowIndex(this.rows);
     const row = i >= 0 ? this.rows[i] : undefined;
-    if (!row || row.kind !== 'group' || !rowEnabled(row)) return this.shake();
+    if (!row || row.kind !== 'group' || !rowEnabled(row)) return this.refuse();
     this.openGroup(i, row);
   }
 
@@ -565,7 +567,7 @@ export class CommandMenu {
     let i = this.subIndex;
     for (let n = 0; n < group.items.length; n++) {
       i = (i + dir + group.items.length) % group.items.length;
-      if (group.items[i]!.enabled) break;
+      if (menuParity('cursor') || group.items[i]!.enabled) break;
     }
     this.subIndex = i;
     this.pageStart = null;
@@ -576,7 +578,7 @@ export class CommandMenu {
   private chooseSub(group: TopGroupRow, i: number): void {
     const cmd = group.items[i];
     if (!cmd) return;
-    if (!cmd.enabled) return this.shake();
+    if (!cmd.enabled) return this.refuse();
     this.resolveCommand(cmd);
   }
 
@@ -634,7 +636,7 @@ export class CommandMenu {
    */
   private openWrap(wrapper: AvailableCommand): void {
     const group = wrappedGroup(wrapper, this.opts?.commands ?? []);
-    if (!group || !group.items.some((c) => c.enabled)) return this.shake();
+    if (!group || (!group.items.some((c) => c.enabled) && !(menuParity('openers') && group.items.length > 0))) return this.refuse(); // an opener opens onto grey spells
     this.wrap = { wrapper, group, back: this.state === 'sub' ? 'sub' : 'top', backIndex: this.subIndex };
     this.state = 'sub';
     this.subIndex = firstEnabledCmdIndex(group.items);
@@ -910,6 +912,12 @@ export class CommandMenu {
     // No single combatant is being aimed at, so the enemy plate has nothing to
     // describe; leaving the last one up would be a lie.
     this.opts.onTargetChange?.(null);
+  }
+
+  /** A confirm on a row the menu refuses: the shake, and (parity item f) the menu set's `error` cue, the stand-in for the original's cue 3 (0x00886BA0). */
+  private refuse(): void {
+    this.shake();
+    if (menuParity('cursor')) playRefusal();
   }
 
   private shake(): void {
