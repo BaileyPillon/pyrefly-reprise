@@ -36,6 +36,7 @@ import type {
 } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { GRID_LAYOUTS } from './constants.ts';
+import { gridPlateOf } from './adapt/auto-grid.ts';
 import { layoutNodeCount, linksFromLayout, type GridLayoutInput } from './adapt/grid-layout.ts';
 
 /** A list or an id-keyed record — data files ship both shapes. */
@@ -198,7 +199,9 @@ export function garmentGridRegistryFrom(source: Collection<DataGarmentGrid>): Ga
     const bonuses: GateBonus[] = [];
     if (grid.equip) bonuses.push(toBonus([], grid.equip));
     for (const entry of grid.gateEffects ?? []) bonuses.push(toBonus(entry.gates, entry.effect));
-    byId.set(grid.id, { id: grid.id, nodes, links, bonuses });
+    // The plate and the gate numbers come from the layout whether or not the real links are used, so the rows a grid lists do not depend on `GRID_LAYOUTS`.
+    const gateRows = grid.layout ? gridPlateOf(grid.layout) : undefined;
+    byId.set(grid.id, { id: grid.id, nodes, links, bonuses, ...(gateRows ? { gateRows } : {}) });
   }
   return { get: (id) => byId.get(id) };
 }

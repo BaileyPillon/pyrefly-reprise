@@ -7,7 +7,7 @@
  */
 
 import type { BattleRng } from '../../../src/battle/common/streams.ts';
-import type { AbilityDef, BattleSetup, Command, FFX2MemberBuild, StatusId, StatusInstance } from '../../../src/battle/common/types.ts';
+import type { AbilityDef, BattleSetup, Command, FFX2MemberBuild, GateColour, StatusId, StatusInstance } from '../../../src/battle/common/types.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import { performCommand } from '../../../src/battle/ffx2/execute.ts';
@@ -28,6 +28,8 @@ export interface Loadout {
   sos: StatusId[];
   /** Ability word 0 (Counterattack 4, Evade & Counter 8, Magic Counter 0x10). */
   word0: number;
+  /** The Garment Grid she wears and the colours of the gates she has crossed (re-parity RC10 lane XD1b); absent: the build's own grid, no gate crossed. */
+  grid?: { id: string; passed: GateColour[] };
 }
 
 const BERSERKER = 'berserker';
@@ -129,6 +131,7 @@ export function board(loadouts: Partial<Record<'yuna' | 'rikku' | 'paine', Loado
       owned: [...new Set([l.dressphere ?? 'gunner', 'gunner', 'warrior'])],
       abilitiesLearned: Object.fromEntries(Object.entries(l.learned ?? {}).map(([k, v]) => [k, { learned: [...v], ap: 0 }])),
       accessories: [...(l.accessories ?? [])],
+      ...(l.grid ? { garmentGrid: { ...copy.garmentGrid, id: l.grid.id, passedGates: [...l.grid.passed] } } : {}),
     };
   });
   const engine = new Probe(ffx2Options(extra));

@@ -8,14 +8,16 @@
  * rows she holds. It changes nothing and draws nothing; `auto-layer.ts` (one level up) applies the answer to the unit.
  */
 
-import type { StatusId } from '../../common/types.ts';
-import type { Ffx2Unit } from '../internal.ts';
+import type { FFX2MemberBuild, GateColour, StatusId } from '../../common/types.ts';
+import { GRID_AUTO_STATUS } from '../constants.ts';
+import type { Ffx2Unit, GarmentGridRegistry } from '../internal.ts';
 import { applyAbilityEffects, emptyChrTables } from '../kernel/ability-effects.ts';
 import { abilityWords, jobAbilityGroup, type Ffx2AbilityEnv } from '../kernel/dressphere-abilities.ts';
 import { abilityRow } from '../kernel/dressphere-rows.ts';
 import { girlJob } from '../kernel/dressphere-stats.ts';
 import type { Ffx2AutoLayerChr } from '../kernel/sos-layer.ts';
 import { s8 } from '../kernel/intops.ts';
+import { gateRows, plateRows } from './auto-grid.ts';
 import { AUTO_ROWS_OF_ACCESSORY, AUTO_ROW_OF_ABILITY, JOB_OF_DRESSPHERE } from './auto-rows.ts';
 import { GROUP1_STATUS, GROUP2_STATUS, isStageSlot } from './slots.ts';
 
@@ -41,48 +43,106 @@ export interface Ffx2AutoLayer {
 
 const GIRLS = ['yuna', 'rikku', 'paine'] as const;
 
-/** The game's character number of an engine unit: 0 to 2 for the three girls, past the girls for anyone else. */
-function chrNumber(unit: Ffx2Unit): number {
-  const i = (GIRLS as readonly string[]).indexOf(unit.id);
+/** The game's character number of an engine girl: 0 to 2 for the three girls, past the girls for anyone else. */
+function chrNumber(id: string): number {
+  const i = (GIRLS as readonly string[]).indexOf(id);
   return i >= 0 ? i : 15;
 }
 
 /**
- * The auto-ability rows the girl holds: the worn dressphere's list (the kernel's job pairs, with the rows the engine has her
- * mastered; a command a pair names as its prerequisite is taken as met, because the engine only lets her learn the ability after it),
- * then each accessory's rows. A row already listed is not listed again unless its row is stackable (special bit 2), as the game's list.
+ * What decides the rows a girl holds, in the shape both a unit in a battle and a member at the build share (the build asks before the unit exists, to size her pools):
+ * the dressphere she wears and what she has learned in each, her accessories, and her Garment Grid with the colours of the gates she has crossed.
  */
-export function autoAbilityRows(unit: Ffx2Unit): number[] {
+export interface AutoLoadout {
+  readonly id: string;
+  readonly level: number;
+  readonly dress: string | undefined;
+  readonly learned: Readonly<Record<string, { readonly learned: readonly string[] }>> | undefined;
+  readonly accessories: readonly string[];
+  readonly gridId: string | undefined;
+  readonly passed: readonly GateColour[];
+}
+
+export function loadoutOfUnit(unit: Ffx2Unit): AutoLoadout {
   const dress = unit.dresspheres;
+  return {
+    id: unit.id,
+    level: unit.level ?? 1,
+    dress: dress?.current,
+    learned: dress?.abilitiesLearned,
+    accessories: unit.accessories,
+    gridId: dress?.garmentGrid.id,
+    passed: dress?.garmentGrid.passedGates ?? [],
+  };
+}
+
+export function loadoutOfMember(member: FFX2MemberBuild): AutoLoadout {
+  return {
+    id: member.id,
+    level: member.level,
+    dress: member.currentDressphere,
+    learned: member.abilitiesLearned,
+    accessories: member.accessories,
+    gridId: member.garmentGrid.id,
+    passed: member.garmentGrid.passedGates,
+  };
+}
+
+/**
+ * The auto-ability rows a girl holds, in the order of the game's list (`kernel/dressphere-abilities.ts#abilityList`): the worn dressphere's (the kernel's job pairs, with the
+ * rows the engine has her mastered; a command a pair names as its prerequisite is taken as met, because the engine only lets her learn the ability after it), the rows the gates
+ * she has crossed put in her gate slots, the grid's always-on rows (`adapt/auto-grid.ts`; only those that keep a status or set an SOS set, and only for a grid the registry has
+ * a plate for), then each accessory's rows. A row already listed is not listed again unless its row is stackable (special bit 2), as the game's list.
+ */
+export function autoRowsOf(l: AutoLoadout, grids?: GarmentGridRegistry): number[] {
   const out: number[] = [];
   const add = (id: number): void => {
     if (!out.includes(id) || (abilityRow(id).special & 4) !== 0) out.push(id);
   };
-  const job = dress === undefined ? undefined : JOB_OF_DRESSPHERE[dress.current];
-  if (dress !== undefined && job !== undefined) {
+  const job = l.dress === undefined ? undefined : JOB_OF_DRESSPHERE[l.dress];
+  if (l.dress !== undefined && job !== undefined) {
     const mastered = new Set<number>();
-    for (const progress of Object.values(dress.abilitiesLearned ?? {})) {
+    for (const progress of Object.values(l.learned ?? {})) {
       for (const abilityId of progress.learned) {
         const row = AUTO_ROW_OF_ABILITY[abilityId];
         if (row !== undefined) mastered.add(row);
       }
     }
     const env: Ffx2AbilityEnv = {
-      level: unit.level ?? 1,
+      level: l.level,
       learned: (id) => (id >> 12 === 8 ? mastered.has(id) : true),
       keyItem: () => false,
       gateSlots: [],
     };
-    for (const id of jobAbilityGroup(girlJob(chrNumber(unit), job), env)) if (id >> 12 === 8) add(id);
+    for (const id of jobAbilityGroup(girlJob(chrNumber(l.id), job), env)) if (id >> 12 === 8) add(id);
   }
-  for (const accessory of unit.accessories) for (const id of AUTO_ROWS_OF_ACCESSORY[accessory] ?? []) add(id);
+  const plate = GRID_AUTO_STATUS && l.gridId !== undefined ? grids?.get(l.gridId)?.gateRows : undefined;
+  if (plate !== undefined) {
+    for (const id of gateRows(plate, l.passed)) add(id);
+    for (const id of plateRows(plate)) add(id);
+  }
+  for (const accessory of l.accessories) for (const id of AUTO_ROWS_OF_ACCESSORY[accessory] ?? []) add(id);
   return out;
 }
 
+/** The rows a unit holds. */
+export function autoAbilityRows(unit: Ffx2Unit, grids?: GarmentGridRegistry): number[] {
+  return autoRowsOf(loadoutOfUnit(unit), grids);
+}
+
+/**
+ * Does the kept layer of these rows hold Double HP (group 1 bit 11, status word `0x800`) or Double MP (bit 12, `0x1000`)? The game's maximum recompute (`0x00636560`) reads the merged
+ * status word, which ORs in the effective layer, so a row that keeps the bit doubles the maximum like the Stamina Tonic's status does. No SOS row sets either bit.
+ */
+export function poolHolds(rows: readonly number[]): { hp: boolean; mp: boolean } {
+  const kept = applyAbilityEffects(rows, emptyChrTables()).autoMask1;
+  return { hp: (kept & 0x800) !== 0, mp: (kept & 0x1000) !== 0 };
+}
+
 /** The layer of a girl, or `null` when she holds no auto-ability row at all (then nothing about her is changed). */
-export function buildAutoLayer(unit: Ffx2Unit): Ffx2AutoLayer | null {
+export function buildAutoLayer(unit: Ffx2Unit, grids?: GarmentGridRegistry): Ffx2AutoLayer | null {
   if (unit.side !== 'party') return null;
-  const rows = autoAbilityRows(unit);
+  const rows = autoAbilityRows(unit, grids);
   if (rows.length === 0) return null;
   const tables = applyAbilityEffects(rows, emptyChrTables());
   return {

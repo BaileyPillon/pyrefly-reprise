@@ -16,7 +16,7 @@
 
 import type { StatusId, StatusInstance } from '../common/types.ts';
 import type { BattleRng } from '../common/streams.ts';
-import type { Emit, Ffx2Unit } from './internal.ts';
+import type { Emit, Ffx2Unit, GarmentGridRegistry } from './internal.ts';
 import { buildAutoLayer, effectiveStatuses, layerChr } from './adapt/auto-layer.ts';
 import { modDraw } from './adapt/draws.ts';
 import { assignSlots } from './atb-engine.ts';
@@ -30,6 +30,8 @@ export const AUTO_LAYER_OWNER = 'auto-layer';
 export interface LayerHost {
   emit: Emit;
   rng: BattleRng;
+  /** The Garment Grids, to list the rows a grid carries (re-parity RC10 lane XD1b); absent: a grid lists none. */
+  grids?: GarmentGridRegistry;
 }
 
 /** Is the status one the layer would put on, but the game's status recompute clears (Slow while Haste is in effect and nothing is Stopped)? */
@@ -106,11 +108,11 @@ function apply(host: LayerHost, unit: Ffx2Unit, result: Ffx2AutoCopyResult, sile
  * auto-ability row gets no layer and nothing about her changes. Slots are given first, because a Poison or Regen that appears takes
  * its phase from the unit's own stream.
  */
-export function initAutoLayers(units: readonly Ffx2Unit[], rng: BattleRng): void {
+export function initAutoLayers(units: readonly Ffx2Unit[], rng: BattleRng, grids?: GarmentGridRegistry): void {
   assignSlots(units);
-  const host: LayerHost = { emit: () => undefined, rng };
+  const host: LayerHost = { emit: () => undefined, rng, ...(grids ? { grids } : {}) };
   for (const unit of units) {
-    const layer = buildAutoLayer(unit);
+    const layer = buildAutoLayer(unit, grids);
     if (layer === null) {
       delete unit.autoLayer;
       if (unit.side === 'party') releaseStale(host, unit, [], true); // she holds no row now: what the layer put on in the last link goes
@@ -123,7 +125,7 @@ export function initAutoLayers(units: readonly Ffx2Unit[], rng: BattleRng): void
 
 /** The forced copy (a rebuild: the dress changed, so her list did): her layer is built again from what she wears now. */
 export function rebuildAutoLayer(host: LayerHost, unit: Ffx2Unit): void {
-  const layer = buildAutoLayer(unit);
+  const layer = buildAutoLayer(unit, host.grids);
   if (layer === null) {
     if (unit.autoLayer === undefined) return;
     unit.autoLayer = { ...unit.autoLayer, rows: [], words: [0, 0, 0], kept: 0, keptCnt: new Array<number>(24).fill(0), sos: 0, sosCnt: new Array<number>(24).fill(0), flag: 0 };
