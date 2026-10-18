@@ -48,8 +48,8 @@ const fieldsOf = (scope: Scope): string[] => [...new Set(READERS.filter((r) => r
 /** The fields the game reads of one file of the master folder (a path relative to `public/`). */
 const readFieldsFor = (rel: string): string[] => (rel === 'art/manifest.json' || rel === 'art/portrait-parts/manifest.json' ? fieldsOf(rel) : fieldsOf('painting'));
 
-/** Not art JSON: the audio manifest, the dev-only route to Bailey's own converted FFX files (`/__ffx-local/`, never in a build), a lint pattern. */
-const NOT_ART = [`src${sep}audio${sep}`, `src${sep}engine${sep}ffx3d${sep}`, `src${sep}engine${sep}ffxcam${sep}`, `src${sep}story${sep}textLint.ts`];
+/** Not art JSON: the audio manifest, the voice-over's chapter manifests (`public/audio/voice/<chapter>.json`, release 39.5: audio, read by `story/voice/voiceManifest.ts`), the dev-only route to Bailey's own converted FFX files (`/__ffx-local/`, never in a build), a lint pattern. */
+const NOT_ART = [`src${sep}audio${sep}`, `src${sep}story${sep}voice${sep}`, `src${sep}engine${sep}ffx3d${sep}`, `src${sep}engine${sep}ffxcam${sep}`, `src${sep}story${sep}textLint.ts`];
 
 const sourceFiles = (dir: string): string[] =>
   readdirSync(dir).flatMap((name) => {
