@@ -1287,8 +1287,8 @@
      ]
     ],
     "ramps": [
-     26,
-     22
+     70,
+     55
     ],
     "mesh": {
      "edge": 18,
@@ -1976,8 +1976,6 @@
      "spine.s": 1.116,
      "chest": -6.85,
      "head": -30.0,
-     "upperarmF": 34.46,
-     "forearmF": -15.56,
      "saya": 44.97,
      "thighR": -84.99,
      "thighR.s": 1.2,
@@ -1990,8 +1988,7 @@
      "root.dx": 44.0,
      "footR": -26.89,
      "thighL.s": 0.975,
-     "shinL.s": 0.973,
-     "upperarm": 90
+     "shinL.s": 0.973
     },
     "feet_x_w": 6.0,
     "dfoot_w": 10.0,
@@ -2032,9 +2029,17 @@
       0,
       100
      ],
-     "upperarm": [
-      90,
-      90
+     "upperarmF": [
+      -30,
+      30
+     ],
+     "forearmF": [
+      -30,
+      30
+     ],
+     "hand": [
+      0,
+      0
      ]
     },
     "image": {
@@ -2061,20 +2066,28 @@
      "tail",
      "upperarmF",
      "forearmF",
-     "upperarm"
+     "upperarm",
+     "forearm",
+     "hand"
     ],
     "scales": {
      "upperarm": [
-      1.0,
-      1.0
+      0.93,
+      1.7
      ],
      "forearm": [
+      0.5,
+      1.0
+     ],
+     "hand": [
       1.0,
       1.0
      ]
     },
+    "mark_w": 5.0,
+    "mark_free": 0.03,
     "layers": {
-     "armR": 0.5
+     "sleeveL": 0.5
     }
    },
    "attack": {
@@ -2239,10 +2252,14 @@
       0.7
      ],
      "upperarm": [
-      1.0,
-      1.0
+      0.93,
+      1.7
      ],
      "forearm": [
+      0.12,
+      0.3
+     ],
+     "hand": [
       1.0,
       1.0
      ]
@@ -2253,7 +2270,7 @@
     ],
     "feet_x_w": 3.0,
     "dfoot_w": 3.0,
-    "mark_w": 2.0,
+    "mark_w": 5.0,
     "mark_free": 0.03,
     "limits": {
      "pelvis": [
@@ -2296,9 +2313,9 @@
       -10,
       10
      ],
-     "upperarm": [
-      90,
-      90
+     "hand": [
+      0,
+      0
      ]
     },
     "image": {
@@ -2326,7 +2343,9 @@
      "tail",
      "upperarmF",
      "forearmF",
-     "upperarm"
+     "upperarm",
+     "forearm",
+     "hand"
     ],
     "init": {
      "pelvis": -6.8,
@@ -2350,11 +2369,7 @@
      "shinL": 3.75,
      "footL": 6.07,
      "tail.s": 0.4674,
-     "root.dx": -60.0,
-     "upperarm": 90
-    },
-    "layers": {
-     "armR": 0.5
+     "root.dx": -60.0
     }
    },
    "item": {
@@ -2403,9 +2418,17 @@
       -10,
       10
      ],
-     "upperarm": [
-      90,
-      90
+     "upperarmF": [
+      -30,
+      30
+     ],
+     "forearmF": [
+      -30,
+      30
+     ],
+     "hand": [
+      0,
+      0
      ]
     },
     "image": {
@@ -2433,7 +2456,9 @@
      "tail",
      "upperarmF",
      "forearmF",
-     "upperarm"
+     "upperarm",
+     "forearm",
+     "hand"
     ],
     "init": {
      "pelvis": 6.25,
@@ -2445,8 +2470,6 @@
      "spine.s": 0.93,
      "chest": 16.0,
      "head": 25.0,
-     "upperarmF": -119.81,
-     "forearmF": 15.5,
      "saya": -44.31,
      "thighR": 1.08,
      "thighR.s": 0.9304,
@@ -2457,21 +2480,26 @@
      "shinL": 0.38,
      "footL": 6.54,
      "tail.s": 0.5483,
-     "root.dx": 59.95,
-     "upperarm": 90
+     "root.dx": 59.95
     },
     "scales": {
      "upperarm": [
-      1.0,
-      1.0
+      0.93,
+      1.7
      ],
      "forearm": [
+      0.5,
+      1.0
+     ],
+     "hand": [
       1.0,
       1.0
      ]
     },
+    "mark_w": 5.0,
+    "mark_free": 0.03,
     "layers": {
-     "armR": 0.5
+     "sleeveL": 0.5
     }
    },
    "ready": {
@@ -2769,6 +2797,9 @@
    "attack",
    "item",
    "victory"
+  ],
+  "foot_landmarks": [
+   "toe"
   ]
  },
  "landmarks": {
@@ -2806,6 +2837,10 @@
    "swordTipCast": [
     655,
     812
+   ],
+   "elbowPt": [
+    452,
+    380
    ]
   },
   "critical": {
@@ -2846,6 +2881,10 @@
    "swordTipFollow": [
     781,
     631
+   ],
+   "wristPt": [
+    540,
+    335
    ]
   },
   "hurt": {
@@ -2886,6 +2925,10 @@
    "swordTipItem": [
     756,
     825
+   ],
+   "wristPt": [
+    140,
+    350
    ]
   },
   "ko": {
@@ -3163,7 +3206,8 @@
      1056,
      510
     ]
-   }
+   },
+   "defringe": false
   },
   "swordX:cast": {
    "part": "swordX",
@@ -3344,7 +3388,8 @@
      1310,
      1624
     ]
-   }
+   },
+   "defringe": false
   },
   "armX:item": {
    "part": "armX",
@@ -3416,7 +3461,8 @@
      120,
      644
     ]
-   }
+   },
+   "defringe": false
   },
   "swordX:item": {
    "part": "swordX",
@@ -3496,7 +3542,8 @@
      1512,
      1650
     ]
-   }
+   },
+   "defringe": false
   },
   "armX:attack": {
    "part": "armX",
@@ -3678,7 +3725,8 @@
      1360,
      2130
     ]
-   }
+   },
+   "defringe": false
   },
   "armX:follow": {
    "part": "armX",
@@ -3777,7 +3825,8 @@
      1562,
      1262
     ]
-   }
+   },
+   "defringe": false
   },
   "swordX:victory": {
    "part": "swordX",
@@ -3877,7 +3926,8 @@
      1170,
      2106
     ]
-   }
+   },
+   "defringe": false
   },
   "swordX:hurt": {
    "part": "swordX",
@@ -4046,7 +4096,8 @@
      1590,
      1524
     ]
-   }
+   },
+   "defringe": false
   },
   "armX:ready": {
    "part": "armX",
@@ -4293,7 +4344,8 @@
      168,
      712
     ]
-   }
+   },
+   "defringe": false
   },
   "swordX:critical": {
    "part": "swordX",
@@ -4377,7 +4429,8 @@
      964,
      2124
     ]
-   }
+   },
+   "defringe": false
   }
  }
 }

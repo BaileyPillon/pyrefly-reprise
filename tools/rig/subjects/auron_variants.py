@@ -60,7 +60,7 @@ def cut_variant(spec: dict, art_dir, T: dict, S: int, R, Pred, out_dir, name_png
     """Cut one variant: write its PNG and rim mask into `out_dir` and return (variant record, `{mark name: [bind x, bind y]}`, the mask at @2x, the placement)."""
     pose = spec["pose"]
     src = np.array(Image.open(f"{art_dir}/characters/auron/{pose}@2x.png").convert("RGBA"))
-    rgba = R.defringe_alpha(src)
+    rgba = R.defringe_alpha(src) if spec.get("defringe", True) else src.copy()  # `defringe: false`: the grey matte ring is taken off the outer edge, which also takes the thin pale blade of a katana (it reads as matte)
     H, W = rgba.shape[:2]
     polys = {n: R.poly_mask((H, W), [pts], 1.0) for n, pts in (spec.get("polys") or {}).items()}
     m, pred = _mask(spec, rgba, polys, R, Pred)

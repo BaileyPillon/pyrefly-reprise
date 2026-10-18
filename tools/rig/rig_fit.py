@@ -28,6 +28,7 @@ config["fit"]:
                                   in its 1x pixels. When a pose names them the loss adds a hinge on how far each posed landmark is from the painting's (idle heights): free inside `mark_free` (0.02), the full
                                   weight `mark_w` (0.15) at `mark_free + mark_soft` (+0.03), so a key matches the pose's INTENT (head, hands, feet, spear ends where the painting shows them), not only its
                                   silhouette; all three also per pose under `fit.keys.<pose>`. Needs targets made with `place` (rig-targets does; `--retarget` for older ones)
+  "foot_landmarks": [name, ...]   the landmarks the planted-feet term reads (default: every landmark named feet, foot*, toe*, heel* or sole*; the root's `feet` never moves, so with it in the list a key that floats cannot be seen)
   "restarts": 1, "evals": 450, "blur": [4, 0]   CMA-ES runs per block and round, evaluations per run (the trunk gets twice), one round per smoothing level (passes of [1 2 1])
 Writes <work>/fit/keys.json (the keys in the rig file's shape, radians), fit_report.json (every pose, kept or not, with the numbers) and overlay_<pose>.png (the approved
 silhouette in blue, the rig's in red, both in purple: what the fit could not do).
@@ -101,6 +102,8 @@ class Fitter(Terms):
         self.scl_idx = [model.idx[n] for n in sc if n in model.idx]
         self.scl_names = [n for n in sc if n in model.idx]
         self.foot_lm = [n for n in model.landmarks if n.lower().startswith(FOOT_NAMES)]
+        if fit_cfg.get("foot_landmarks"):  # a subject whose `feet` landmark sits on the root (it never moves) names the landmarks that ARE its feet, so a key that floats is seen, not only a key that sinks
+            self.foot_lm = [n for n in fit_cfg["foot_landmarks"] if n in model.landmarks]
         row = (T["costume"].get("row") or {})
         self.head_box = row.get("head")
         self.W1, self.H1 = T["costume"]["size"]
