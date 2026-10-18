@@ -6475,8 +6475,7 @@ Friday · 22 decisions
     - What changed: A painting nobody vouched for is treated as missing and the pose falls down its chain to the idle (logged once; listed by __pyrefly.poseTrust()). LIVE in r52.
     - delivery implemented
   - <a id="d-911-d"></a>**D-911/d** — d: swap smoothing (no single-frame jump, no two-painting ghost) behind a switch, with before and after clips for his eye
-    - What changed: Not built before he has seen the clips (end state first). A pose request in mid-blend no longer drops a painting that still shows (LIVE in r52).
-    - delivery not scheduled
+    - What changed: Built on the branch pose-swap (d7287e101, not merged): the aligned dissolve is behind ?swap=aligned and the clips are for his eye (end state first). A pose request in mid-blend no longer drops a painting that still shows (LIVE in r52).
   - <a id="d-911-e"></a>**D-911/e** — e: the 2.5D-plus rig from the Quality Leap page is the structural end state, cast first
     - What changed: Started on his later word (D-916).
 
@@ -6499,13 +6498,13 @@ Saturday · 78 decisions
   - <a id="d-912-w4"></a>**D-912/W4** — W4: CHK-026 reads figure height and feet from the pixels, CHK-027 split into swap jerks and mid-move dashes, the camera projection fixed, the planner maps the registration files to CHK-026 and CHK-027; also the PoseBlend dropped-painting fix and the AGENTS.md hard rule and ART-PIPELINE step (build now)
     - What changed: LIVE in r52 (the hard rule is AGENTS.md rule 16).
   - <a id="d-912-w3"></a>**D-912/W3** — W3: the ruler per pose class (head, height or their mean) is SHOWN to him first, with pictures of Lulu hurt, Paine Songstress hurt, Tidus victory and Yuna defend
-    - What changed: Not built: a painting's head and body cannot both match the idle's, so one size is right for one of them and the choice is his. 254 poses wait on it as legacy waivers.
-    - delivery not scheduled
+    - What changed: A painting's head and body cannot both match the idle's, so one size is right for one of them. Built since as the sizing rule the driver recommended and he accepted (D-930): the branch pose-ruler, merged into r53-rc and not live (the legacy waivers fall from 254 to 79); the pictures of the classes are for his eye.
+    - delivery in progress
   - <a id="d-912-w5"></a>**D-912/W5** — W5: the swap smoothing clips (aligned dissolve, held-frame cut, today; frame clock 1/20 against 1/40) are SHOWN to him first
-    - What changed: Not built before he picks.
-    - delivery not scheduled
+    - What changed: Built since on the branch pose-swap (not merged): the aligned dissolve is behind ?swap=aligned, a lunge fix and a 1/40 s frame clock are the branch's default; the clips are for his eye.
+    - delivery in progress
   - <a id="d-912-w6"></a>**D-912/W6** — W6: the rig waits for his go and Kimahri’s costume
-    - What changed: He gave both the next day (D-916 and D-917).
+    - What changed: He gave both later that same day (D-916 and D-917).
     - superseded by [D-916](#d-916) · nothing to build
 - <a id="d-913"></a>**D-913** — DELEGATED: Chapter 28, The Last Summoning, finished (ee4469eb): align Yojimbo’s hire answer to Chapter 27’s 2, keep the game’s Zanmato rule unfenced, and let the Sisters’ Summon label follow the game’s own menu text once RE reads it; it ships in r52 behind the word “summon” (FFX only)
   - Bailey: “ok keep going we have full usage! republish all artifacts here. I'll go with all of your recommendations” (blanket yes)
@@ -6609,12 +6608,12 @@ Saturday · 78 decisions
   - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
 - <a id="d-930"></a>**D-930** — The W3 sizing rule (the mean of head and height, plus a floor, props measured head to soles) and the W5 motion fixes (aligned dissolve, held cut, lunge start, a 1/40 clock) stay as the floor under the rigs and for every unrigged figure
   - Bailey: “i'll go with all of your recommendations. any other decisions left for me to make?” (blanket yes)
-  - What changed: Item 90m. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. Shown to him as pictures and clips first (D-912 parts W3 and W5).
-  - area art · both games · adopted · delivery not scheduled · see [D-916](#d-916)
+  - What changed: Item 90m. The driver's recommendation on the rig plan and ChatGPT's critique (its reply of about 13:40 EDT), accepted by his yes; each recommendation is its own row. Built since: the W3 rule on the branch pose-ruler (merged into r53-rc, not live) and the W5 motion fixes on the branch pose-swap (not merged); the pictures and clips are for his eye (D-912 parts W3 and W5).
+  - area art · both games · adopted · delivery in progress · see [D-916](#d-916)
   - Source: Bailey, 2026-10-17 about 13:50 EDT, in the Claude Code chat, verbatim: “i'll go with all of your recommendations. any other decisions left for me to …
 - <a id="d-931"></a>**D-931** — STANDING DEPLOY WORDS: every release is deployed as soon as its review says it can ship; the driver quotes his sentence as the owner override while the deep-review cap holds, and the deep review owed still runs on the live build (both games)
   - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
-  - What changed: Item 91a. Applies from r51 on: r51 (d6dc0bdd7) and r52 (3c92b60cc) were each deployed after a focused review of SHIP. It never overrides a HOLD, and it does not settle a review obligation: the deep review of every build since the last passing one (62 entries in the ledger now) is still owed.
+  - What changed: Item 91a. Applies from r52: r52 (3c92b60cc) was deployed at 19:46 EDT after a focused review of SHIP, with these words recorded as its override (r51 had gone out earlier that day on its own words, D-915). It never overrides a HOLD, and it does not settle a review obligation: the deep review of every build since the last passing one (62 entries in the ledger now) is still owed.
   - area release · both games · adopted · delivery implemented · see [D-915](#d-915)
   - Source: Bailey, 2026-10-17 about 14:00 EDT, in the Claude Code chat, verbatim: “deploy every release as soon as its review says it can ship. for all other …
 - <a id="d-932"></a>**D-932** — A blanket yes for every other decision, sound effects and music included; each resulting pick is recorded as its own DELEGATED part naming the driver’s recommendation (both games)
