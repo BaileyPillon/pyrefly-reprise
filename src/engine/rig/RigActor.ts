@@ -9,7 +9,7 @@
  *
  * What this class adds is the pose itself: `setPose` runs the actor's own (state, flinch tokens, ring) and then resolves the name to a key of the rig and moves
  * the bones there (`RigKeys.ts`: the game's ease, a start that keeps the speed the figure had), the idle and the lag chains play on top (`RigDynamics.ts`), and
- * every frame the parts are re-skinned. `pose` reads the key being shown, `blending` is "a move between keys is in flight", `poseNames` are the rig's keys.
+ * every frame the parts are re-skinned (a part a v2 key hides is not: `RigPartState.ts`). `pose` reads the key being shown, `blending` is "a move between keys is in flight", `poseNames` are the rig's keys.
  *
  * Feet: a planted key keeps its lowest foot on the bind row (`RigValidate.ts` proves it for every key of a rig); the idle and the chains never move a foot.
  * Clocks: transitions run on the field clock scaled by the pacing option (`pace.ts`, like the actor's own one-shot moves), so a hit-stop freezes the rig with the
@@ -27,6 +27,7 @@ import type { RigData } from './RigData.ts';
 import { applyIdle, RigChains } from './RigDynamics.ts';
 import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
+import { compileStates, partStateAt } from './RigPartState.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
 import { RIG_SHARE, rigLedger, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
@@ -74,6 +75,11 @@ export class RigActor extends PaintedActor {
   private key = 'idle';
   /** True while the draw-order overrides of the key being moved to are not on the parts yet (they go on halfway through the move). */
   private layersDue = false;
+  /** Format v2: each key's part state, the state the parts are in now, and the two the move in flight is between (`partStateAt` picks one at progress 0.5). */
+  private readonly states: Map<string, Int16Array>;
+  private appliedState: Int16Array;
+  private stateFrom: Int16Array;
+  private stateTo: Int16Array;
   private readonly crossMs: number;
   private readonly rigBloomMasked: boolean;
   private rigClock: number;
@@ -104,6 +110,8 @@ export class RigActor extends PaintedActor {
     this.data = asset.data;
     this.dressphere = asset.dressphere === true;
     this.compiled = compileKeys(this.data);
+    this.states = compileStates(this.data);
+    this.appliedState = this.stateFrom = this.stateTo = this.states.get('idle')!;
     this.rigKeys = new Set(this.compiled.keys());
     this.trans = new RigTransition(this.data.bones.length * CH, this.compiled.get('idle')!);
     this.work = new Float64Array(this.data.bones.length * CH);
@@ -181,6 +189,8 @@ export class RigActor extends PaintedActor {
     const target = this.compiled.get(key)!;
     this.track.leave(this.key, this.trans.busy, this.trans.progress);
     this.key = key;
+    this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
+    this.stateTo = this.states.get(key)!;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
     this.trans.retarget(target, ms);
     this.layersDue = true;
@@ -216,6 +226,11 @@ export class RigActor extends PaintedActor {
     if (this.layersDue && this.trans.progress >= 0.5) {
       this.layersDue = false;
       this.rig.setLayers(this.data.keys.get(this.key)?.layers ?? null);
+    }
+    const shown = partStateAt(this.stateFrom, this.stateTo, this.trans.progress); // format v2: which parts show, with which image
+    if (shown !== this.appliedState) {
+      this.rig.setPartState(shown);
+      this.appliedState = shown;
     }
     this.work.set(this.trans.current);
 

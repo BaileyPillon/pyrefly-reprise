@@ -12,6 +12,7 @@ import pathlib
 import numpy as np
 from PIL import Image
 
+import rig_v2
 from rig_kernels import blur121, chamfer, chamfer_terms, cover, iou, raster, skin_verts, soft_iou, solve  # noqa: F401  (re-exported: the fitter and the tests import them from here)
 
 
@@ -29,7 +30,8 @@ def _touches(a_small, pts, tw, th):
 
 
 class RigModel:
-    """build.json + the part PNGs as flat arrays."""
+    """build.json + the part PNGs as flat arrays. Format v2 (2026-10-18): every look of every part (its own image, and each variant) is a SLOT with its own mesh and texture; `set_state` says which slots are drawn
+    (`rig_v2.state_of`), and the fitter sets it per pose. A rig with no v2 field has one slot a part, all drawn, and does what it did."""
 
     def __init__(self, build: dict, parts_dir: pathlib.Path, grid_affine=None, grid=None, window=None, tex_downsample: int = 4):
         self.build = build
@@ -50,7 +52,8 @@ class RigModel:
         self.part_names = []
         self.part_span = []
         off = 0
-        for pi, p in enumerate(sorted(build["parts"], key=lambda r: r["order"])):
+        self.slots = rig_v2.slots(build["parts"])
+        for pi, (_pname, _vname, p) in enumerate(self.slots):
             self.part_names.append(p["name"])
             v = np.array(p["verts"], np.float64).reshape(-1, 2)
             n = len(v)
@@ -105,9 +108,10 @@ class RigModel:
         self.TUV = np.vstack(Ts)
         self.tri = np.vstack(tris).astype(np.int64)
         self.tri_part = np.concatenate(tparts).astype(np.int64)
-        self.live_all = np.concatenate(lives).astype(np.int64)
-        self.live = self.live_all
         self.part_live = [l.astype(np.int64) for l in lives]
+        self.state = rig_v2.rest_state(build["parts"])
+        self.active = rig_v2.active(self.slots, self.state)
+        self._refresh()
         self.tex_off = np.array(offs, np.int64)
         self.tex_w = np.array(tws, np.int64)
         self.tex_h = np.array(ths, np.int64)
@@ -118,6 +122,18 @@ class RigModel:
         self.landmarks = build.get("landmarks", {})
         if grid_affine is not None:
             self.set_grid(grid_affine, grid, window)
+
+    def _refresh(self):
+        """The triangles drawn: those of the active slots."""
+        live = [self.part_live[i] for i in range(len(self.slots)) if self.active[i]]
+        self.live_all = np.concatenate(live).astype(np.int64) if live else np.zeros(0, np.int64)
+        self.live = self.live_all
+
+    def set_state(self, state=None):
+        """Draw the parts as a pose's state says (`rig_v2.state_of`): hidden parts are not drawn, a swapped part is drawn with its variant. None = the rest state."""
+        self.state = state if state is not None else rig_v2.rest_state(self.build["parts"])
+        self.active = rig_v2.active(self.slots, self.state)
+        self._refresh()
 
     def set_grid(self, aff, grid, window=None):
         """The grid the silhouette is drawn on. `aff` maps master px to grid cells (X = ax x + bx, Y = ay y + by); `window` = (x0, y0, x1, y1) draws only that part of the grid
@@ -174,6 +190,8 @@ class RigModel:
         aff_parts = []
         rest = []
         for pi, (s0, s1) in enumerate(self.part_span):
+            if not self.active[pi]:
+                continue
             used = self.B[s0:s1]
             hit = bool(mv[used[used >= 0]].any())
             (aff_parts if hit else rest).append(pi)
@@ -203,6 +221,8 @@ class RigModel:
         """Colour preview of the posed rig on a W x H canvas of master px / scale_down (parts back to front, straight alpha, nearest texel). Slow (numpy); sheets only."""
         out = np.zeros((int(H / scale_down), int(W / scale_down), 4), np.float32)
         for pi, (s0, s1) in enumerate(self.part_span):
+            if not self.active[pi]:
+                continue
             sel = (self.tri_part == pi)
             tris = self.tri[sel]
             img = self.rgba[pi].astype(np.float32)

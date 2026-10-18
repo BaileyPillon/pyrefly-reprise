@@ -50,15 +50,19 @@ export function twinSizes(p: TierPart): { map: readonly [number, number]; rim: r
 
 const size = (v: unknown): [number, number] | null => (Array.isArray(v) && v.length === 2 && v.every((n) => typeof n === 'number' && Number.isFinite(n) && n >= 1) ? [v[0] as number, v[1] as number] : null);
 
-/** The parts of a rig as the memory budget sees them: the sizes the gate stamped (`gate.textures`), else the part's box for both files (the format's own claim: a PNG is its box, a rim the same size). */
+/**
+ * The textures of a rig as the memory budget sees them: the sizes the gate stamped (`gate.textures`), else the part's box for both files (the format's own claim: a PNG is its box, a rim the same
+ * size). **Every v2 variant is another texture** (loaded eagerly in v2.0), listed here after its part under the key `<part>:<variant>`, so the budget, the tier plan and the ledger all count it.
+ */
 export function tierPartsOf(data: Pick<RigData, 'parts' | 'gate'>): TierPart[] {
   const stamped = data.gate?.textures;
-  return data.parts.map((p) => {
-    const t = stamped?.[p.name];
-    const map = size(t?.map) ?? [p.box[2], p.box[3]];
-    const rim = p.rimMode === 'mask' && p.rim !== null ? (size(t?.rim) ?? map) : null;
+  const one = (key: string, m: { box: readonly number[]; rimMode: string; rim: string | null }): TierPart => {
+    const t = stamped?.[key];
+    const map = size(t?.map) ?? [m.box[2]!, m.box[3]!];
+    const rim = m.rimMode === 'mask' && m.rim !== null ? (size(t?.rim) ?? map) : null;
     return { map, rim };
-  });
+  };
+  return data.parts.flatMap((p) => [one(p.name, p), ...p.variants.map((v) => one(`${p.name}:${v.name}`, v))]);
 }
 
 /** Megabytes of GPU memory (RGBA8 with mips) one figure's textures take at these scales. */

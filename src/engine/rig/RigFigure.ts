@@ -7,6 +7,10 @@
  *
  * Depth: the renderer sorts transparent meshes by the depth of their geometry's bounding-sphere centre, then by creation order. Every part's centre is pinned to the
  * plane's centre and its `position.z` steps by `LAYER_DZ` in draw order, so the parts sort among themselves by `order` and against other actors' planes as the plane did.
+ *
+ * **Format v2 (2026-10-18).** A part has one or more LOOKS: its own image and mesh, and one per variant (a variant with no mesh of its own shares the part's geometry). `setPartState` (a state from
+ * `RigPartState.ts`) makes a part hidden (its mesh is not drawn and `skin()` does not touch it) or swaps the look the part's material and mesh show. A figure with no v2 field has one look a part,
+ * shown, and does exactly what it did.
  */
 import {
   BufferAttribute,
@@ -29,7 +33,8 @@ import {
   type Texture,
 } from 'three';
 import { syncPaintedBloom } from '../BloomMask.ts';
-import type { RigData, RigPartData } from './RigData.ts';
+import type { RigData, RigPartData, RigVariantData } from './RigData.ts';
+import { HIDDEN, OWN, restState } from './RigPartState.ts';
 import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
 import { RigSkeleton } from './RigSkeleton.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
@@ -38,14 +43,23 @@ import { rigFileUrl, type RigScale, type RigTextures } from './RigTier.ts';
 /** World-z step between draw-order layers: far below anything that reorders two actors, far above double precision's sort noise. */
 export const LAYER_DZ = 0.002;
 
+/** One image of a part with its mesh: the part's own (index 0) or a variant's. */
+interface Look {
+  src: RigPartData | RigVariantData;
+  geo: BufferGeometry;
+  pos: Float32Array;
+  map: Texture;
+  rim: Texture | null;
+}
+
 interface PartRt {
   data: RigPartData;
   mesh: Mesh;
-  geo: BufferGeometry;
-  pos: Float32Array;
   material: ShaderMaterial;
-  map: Texture;
-  rim: Texture | null;
+  /** `looks[0]` is the part's own, `looks[i + 1]` is `data.variants[i]`. */
+  looks: Look[];
+  /** The part's state: `HIDDEN`, `OWN`, or the index of the variant shown. */
+  state: number;
 }
 
 const configure = (t: Texture, mips: boolean): Texture => {
@@ -86,8 +100,13 @@ export class RigFigure {
     const fetchTex = loadTexture ?? fig.defaultFetch();
     const need = data.parts.map(async (p) => ({
       p,
-      map: configure(await fetchTex(rigFileUrl(base, p.png, textures.map)), true),
-      rim: p.rimMode === 'mask' && p.rim ? configure(await fetchTex(rigFileUrl(base, p.rim, textures.rim)), true) : null,
+      images: await Promise.all(
+        [p, ...p.variants].map(async (src) => ({
+          src,
+          map: configure(await fetchTex(rigFileUrl(base, src.png, textures.map)), true),
+          rim: src.rimMode === 'mask' && src.rim ? configure(await fetchTex(rigFileUrl(base, src.rim, textures.rim)), true) : null,
+        })),
+      ),
     }));
     const loaded = await Promise.all(need);
     fig.build(loaded);
@@ -116,16 +135,18 @@ export class RigFigure {
   async swapMaps(base: string, scale: RigScale, loadTexture?: (url: string) => Promise<Texture>): Promise<void> {
     if (scale === this.scales.map) return;
     const fetchTex = loadTexture ?? this.defaultFetch();
-    const fresh = await Promise.all(this.parts.map(async (p) => configure(await fetchTex(rigFileUrl(base, p.data.png, scale)), true)));
+    const fresh = await Promise.all(this.parts.map(async (p) => Promise.all(p.looks.map(async (l) => configure(await fetchTex(rigFileUrl(base, l.src.png, scale)), true)))));
     if (this.parts.length !== fresh.length) {
-      for (const t of fresh) t.dispose(); // the figure went while the textures were on their way
+      for (const t of fresh.flat()) t.dispose(); // the figure went while the textures were on their way
       return;
     }
     this.parts.forEach((p, i) => {
-      const old = p.map;
-      p.map = fresh[i]!;
-      p.material.uniforms['map']!.value = p.map;
-      old.dispose();
+      p.looks.forEach((l, j) => {
+        const old = l.map;
+        l.map = fresh[i]![j]!;
+        old.dispose();
+      });
+      p.material.uniforms['map']!.value = this.lookOf(p).map;
     });
     this.scales = { ...this.scales, map: scale };
   }
@@ -139,33 +160,44 @@ export class RigFigure {
     return this.white;
   }
 
-  private build(loaded: Array<{ p: RigPartData; map: Texture; rim: Texture | null }>): void {
+  private build(loaded: Array<{ p: RigPartData; images: Array<{ src: RigPartData | RigVariantData; map: Texture; rim: Texture | null }> }>): void {
     const slot = idleSlot(this.carrier);
     const rimK = this.rimTexelK();
     this.texelSeen = rimK;
     const renderOrder = slot.mesh.renderOrder;
     const centre = new Sphere(new Vector3(0, 0, 0), 1);
-    loaded.forEach(({ p, map, rim }, layer) => {
-      const n = p.verts.length / 2;
-      const geo = new BufferGeometry();
-      const pos = new Float32Array(n * 3);
-      const attr = new BufferAttribute(pos, 3);
-      attr.setUsage(35048); // DynamicDrawUsage
-      geo.setAttribute('position', attr);
-      geo.setAttribute('uv', new BufferAttribute(p.uvs, 2));
-      geo.setIndex(new BufferAttribute(p.triangles, 1));
-      geo.boundingSphere = centre.clone();
+    const rest = restState(this.data);
+    loaded.forEach(({ p, images }, layer) => {
+      const geos = new Map<Float32Array, { geo: BufferGeometry; pos: Float32Array }>(); // a variant with the part's own mesh shares its geometry
+      const looks: Look[] = images.map(({ src, map, rim }) => {
+        let g = geos.get(src.verts);
+        if (!g) {
+          const n = src.verts.length / 2;
+          const geo = new BufferGeometry();
+          const pos = new Float32Array(n * 3);
+          const attr = new BufferAttribute(pos, 3);
+          attr.setUsage(35048); // DynamicDrawUsage
+          geo.setAttribute('position', attr);
+          geo.setAttribute('uv', new BufferAttribute(src.uvs, 2));
+          geo.setIndex(new BufferAttribute(src.triangles, 1));
+          geo.boundingSphere = centre.clone();
+          g = { geo, pos };
+          geos.set(src.verts, g);
+        }
+        return { src, geo: g.geo, pos: g.pos, map, rim };
+      });
+      const own = looks[0]!;
       const material = makePartMaterial({
         shared: this.carrier.u,
         contactBand: slot.material.uniforms['contactBand']!,
-        map,
-        rimMask: rim ?? this.whiteMask(),
+        map: own.map,
+        rimMask: own.rim ?? this.whiteMask(),
         rimMode: p.rimMode,
         boxW: p.box[2],
         boxH: p.box[3],
         rimTexelK: rimK,
       });
-      const mesh = new Mesh(geo, material);
+      const mesh = new Mesh(own.geo, material);
       mesh.name = p.name;
       mesh.frustumCulled = false;
       mesh.renderOrder = renderOrder;
@@ -177,12 +209,48 @@ export class RigFigure {
           if ((camera as PerspectiveCamera).isPerspectiveCamera) this.seen = { camera: camera as PerspectiveCamera, height: renderer.getDrawingBufferSize(this.bufferSize).y };
         };
       }
+      mesh.visible = rest[layer] !== HIDDEN;
       this.plane.add(mesh);
-      this.parts.push({ data: p, mesh, geo, pos, material, map, rim });
+      this.parts.push({ data: p, mesh, material, looks, state: rest[layer]! });
     });
     this.carrier.inner.add(this.plane);
     this.sync();
     this.skin();
+  }
+
+  /** The look a part shows now (a hidden part: its own). */
+  private lookOf(p: PartRt): Look {
+    return p.looks[p.state >= 0 ? p.state + 1 : 0]!;
+  }
+
+  /**
+   * Show, hide and swap parts to the state `s` (`RigPartState.ts`, one number a part in `data.parts` order). Cheap when nothing changed; a change is a few assignments, once. The caller skins after it
+   * (`RigActor.compose` does), because a part that was hidden has not been skinned since it went.
+   */
+  setPartState(s: Int16Array): void {
+    this.parts.forEach((p, i) => {
+      const v = s[i] ?? OWN;
+      if (v === p.state) return;
+      p.state = v;
+      if (v === HIDDEN) {
+        p.mesh.visible = false;
+        return;
+      }
+      const l = this.lookOf(p);
+      const u = p.material.uniforms;
+      p.mesh.geometry = l.geo;
+      u['map']!.value = l.map;
+      u['rimMask']!.value = l.rim ?? this.whiteMask();
+      u['rimOn']!.value = l.src.rimMode === 'mask' ? 1 : 0;
+      u['rimGain']!.value = l.src.rimMode === 'off' ? 0 : 1;
+      setPartTexel(p.material, this.texelSeen, l.src.box[2], l.src.box[3]);
+      p.mesh.visible = this.plane.visible;
+    });
+  }
+
+  /** The state the parts are in now (a copy), for the tests and `rigInfo`. */
+  partState(): Int16Array {
+    return Int16Array.from(this.parts, (p) => p.state);
   }
 
   /** Painting px per texel of the texture the game binds for the idle plane: the rim's width is measured in those. */
@@ -201,7 +269,10 @@ export class RigFigure {
     const k = this.rimTexelK();
     if (Math.abs(k - this.texelSeen) > 1e-6) {
       this.texelSeen = k;
-      for (const p of this.parts) setPartTexel(p.material, k, p.data.box[2], p.data.box[3]);
+      for (const p of this.parts) {
+        const box = this.lookOf(p).src.box;
+        setPartTexel(p.material, k, box[2], box[3]);
+      }
     }
   }
 
@@ -210,11 +281,13 @@ export class RigFigure {
     for (const p of this.parts) p.mesh.position.z = (layers?.[p.data.name] ?? p.data.order) * LAYER_DZ;
   }
 
-  /** Move every part's vertices through the skeleton's current pose. */
+  /** Move the vertices of every part that is drawn through the skeleton's current pose (a hidden part costs nothing). */
   skin(): void {
     for (const p of this.parts) {
-      this.skeleton.skin(p.data, p.pos);
-      (p.geo.getAttribute('position') as BufferAttribute).needsUpdate = true;
+      if (p.state === HIDDEN) continue;
+      const l = this.lookOf(p);
+      this.skeleton.skin(l.src, l.pos);
+      (l.geo.getAttribute('position') as BufferAttribute).needsUpdate = true;
     }
   }
 
@@ -223,7 +296,7 @@ export class RigFigure {
     const on = visible && alpha > 0.001;
     for (const p of this.parts) {
       p.material.uniforms['opacity']!.value = alpha;
-      p.mesh.visible = on;
+      p.mesh.visible = on && p.state !== HIDDEN;
     }
     this.plane.visible = on;
   }
@@ -248,10 +321,12 @@ export class RigFigure {
 
   dispose(): void {
     for (const p of this.parts) {
-      p.geo.dispose();
+      for (const geo of new Set(p.looks.map((l) => l.geo))) geo.dispose();
       p.material.dispose();
-      p.map.dispose();
-      p.rim?.dispose();
+      for (const l of p.looks) {
+        l.map.dispose();
+        l.rim?.dispose();
+      }
     }
     this.white?.dispose();
     this.parts.length = 0;

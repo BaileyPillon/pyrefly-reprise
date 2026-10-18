@@ -1,5 +1,5 @@
 /**
- * **The rig file, format v1: read it, check it, fingerprint it** (the rig program, 2026-10-17; both games, shared plumbing). Bailey, 2026-10-17: "start rigging for all
+ * **The rig file, formats v1 and v2: read it, check it, fingerprint it** (the rig program, 2026-10-17; both games, shared plumbing). Bailey, 2026-10-17: "start rigging for all
  * chapters please. i want a permanent fix now." A figure is ONE approved painting (its costume) cut into parts on a bone rig; every pose is that painting bent, so two
  * poses can never differ in size, feet or costume.
  *
@@ -9,6 +9,10 @@
  * `uvs` are v DOWN like the painting's px (the prototype's `uv` alias is v UP and is flipped here), a part is skinned by `bone`, by `weights` (four numbers a vertex: b0, w0, b1, w1)
  * or by the prototype's `bones` + `weights` (two each). A rig lives in `<rig root>/<subject>/rig.json` with one PNG per part (`D:/pyrefly-art-rigs` on this machine), never in `public/art`.
  *
+ * **Format v2 (2026-10-18; additive)**: a part may be `hidden` (at rest) and may have `variants` (other images of it, by name, each with the part's mesh or its own), and a key may carry `parts`
+ * (`{ <part>: { show?, image? } }`: show or hide the part, swap its image for a variant). The reader accepts versions 1 and 2; a v1 file with a v2 field is refused. The state a key describes is
+ * `rig-pose.mjs#keyState`, the flip halfway through a move `stateAt`: the runtime's `RigPartState.ts` is the same function, and a test feeds both the same vectors.
+ *
  * Beyond the types the pipeline writes (additive, the runtime ignores them): `costume.sha2x` (the `@Nx` master the parts are cut from) and, in `gate`, `rules` and `keys`. The runtime
  * draws a rig whose `gate.status` is `ok`; `rig-gate-lib.mjs#verifyStamp` is how the pose gate and the installer know the `ok` is the gate's and still true of this content.
  */
@@ -16,7 +20,9 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
-export const RIG_VERSION = 1;
+/** The newest version (the pipeline writes 2 only when a rig uses a v2 field) and the ones this module reads. */
+export const RIG_VERSION = 2;
+export const RIG_VERSIONS = Object.freeze([1, 2]);
 export const RIG_FILE = 'rig.json';
 /** Who may write `gate.by`. */
 export const GATE_BY = 'tools/rig-gate.mjs';
@@ -79,6 +85,57 @@ function skinOf(part, n, bones, problems, where) {
   return { b, w };
 }
 
+/** A plain variant name: no colon (the stamp lists a variant's textures as `<part>:<variant>`) and no path. */
+export const VARIANT_NAME = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
+
+/** The members of a part or variant record that give it a mesh or a skin of its own (a variant with none of them uses the part's). */
+const OWN_MESH = ['box', 'verts', 'uvs', 'uv', 'triangles', 'tris', 'bone', 'bones', 'weights'];
+
+/**
+ * One part's (or variant's) mesh, skin and files, in the runtime form: `{png, rim, box, verts, tris, tuv, b, w}`, or null when it is malformed (the problem is pushed). `p` is the record,
+ * `where` the words every problem starts with. Checks the PNG and rim exist when `dir` is given.
+ */
+function meshOf(p, where, raw, bones, problems, dir) {
+  if (!isNumArray(p?.box, 4) || p.box[2] <= 0 || p.box[3] <= 0) { problems.push({ code: 'rig-part', message: `${where}: box [x, y, w, h] is missing` }); return null; }
+  const [bx, by, bw, bh] = p.box;
+  if (raw.image && (bx < -1 || by < -1 || bx + bw > raw.image.w + 1 || by + bh > raw.image.h + 1)) problems.push({ code: 'rig-box', message: `${where}: box ${JSON.stringify(p.box)} leaves the ${raw.image.w} x ${raw.image.h} image` });
+  const verts = p.verts ?? [bx, by, bx + bw, by, bx + bw, by + bh, bx, by + bh];
+  if (!isNumArray(verts) || verts.length < 6 || verts.length % 2) { problems.push({ code: 'rig-part', message: `${where}: verts is not a list of x, y pairs` }); return null; }
+  const n = verts.length / 2;
+  const tri = p.triangles ?? p.tris ?? (p.verts === undefined ? [0, 1, 2, 0, 2, 3] : undefined);
+  if (!Array.isArray(tri) || tri.length < 3 || tri.length % 3 || tri.some((t) => !Number.isInteger(t) || t < 0 || t >= n)) { problems.push({ code: 'rig-part', message: `${where}: triangles do not index its ${n} vertices` }); return null; }
+  const uvIn = p.uvs ?? p.uv;
+  const uvUp = p.uvs === undefined && p.uv !== undefined; // the prototype's `uv` alias is v UP
+  if (uvIn && !isNumArray(uvIn, n * 2)) { problems.push({ code: 'rig-part', message: `${where}: uvs is not 2 numbers a vertex` }); return null; }
+  const png = typeof p.png === 'string' && !/[\\/]|^\./.test(p.png) ? p.png : null;
+  if (!png) problems.push({ code: 'rig-part', message: `${where}: png ${JSON.stringify(p.png)} is not a file name beside rig.json` });
+  else if (dir && !existsSync(join(dir, png))) problems.push({ code: 'rig-file', message: `${where}: ${png} does not exist beside rig.json` });
+  if (typeof p.rim === 'string' && dir && !existsSync(join(dir, p.rim))) problems.push({ code: 'rig-file', message: `${where}: ${p.rim} does not exist beside rig.json` });
+  const { b, w } = skinOf(p, n, bones, problems, where);
+  // texture rows from the top: `uvs` run DOWN like the painting's px; the prototype's `uv` alias runs UP and is flipped
+  const tuv = new Float32Array(n * 2);
+  for (let k = 0; k < n; k++) {
+    tuv[k * 2] = uvIn ? uvIn[k * 2] : (verts[k * 2] - bx) / bw;
+    tuv[k * 2 + 1] = uvIn ? (uvUp ? 1 - uvIn[k * 2 + 1] : uvIn[k * 2 + 1]) : (verts[k * 2 + 1] - by) / bh;
+  }
+  return { png, rim: p.rim ?? null, box: p.box, verts: Float32Array.from(verts), tris: Uint32Array.from(tri), tuv, b, w };
+}
+
+/** Every image file a rig names, with whose it is: `{part, variant: string|null, png, rim, box}`, parts first (in file order), each followed by its variants. A variant's box is its own or the part's. */
+export function partImages(raw) {
+  const out = [];
+  for (const p of raw.parts ?? []) {
+    out.push({ part: p.name, variant: null, png: p.png, rim: p.rim ?? null, box: p.box });
+    for (const [vn, v] of Object.entries(p.variants ?? {})) out.push({ part: p.name, variant: vn, png: v?.png, rim: v?.rim ?? null, box: v?.box ?? p.box });
+  }
+  return out;
+}
+
+/** Does the file use a field only format v2 has? (The exporter writes version 2 exactly then.) */
+export function usesV2(raw) {
+  return (raw.parts ?? []).some((p) => p?.hidden !== undefined || p?.variants !== undefined) || Object.values(raw.keys ?? {}).some((k) => k?.parts !== undefined);
+}
+
 /**
  * Check a parsed rig and build the runtime form. Problems are `{code, message}`; a rig with any is not usable and the gate refuses it. `dir` (optional) checks that every
  * PNG the rig names exists. Never throws on a malformed rig: it says what is wrong.
@@ -88,7 +145,8 @@ export function normaliseRig(raw, { dir } = {}) {
   const problems = [];
   const bad = (code, message) => problems.push({ code, message });
   if (!raw || typeof raw !== 'object') return { problems: [{ code: 'rig-shape', message: 'rig.json is not an object' }], rt: null };
-  if (raw.version !== RIG_VERSION) bad('rig-version', `version ${JSON.stringify(raw.version)} is not ${RIG_VERSION}`);
+  if (!RIG_VERSIONS.includes(raw.version)) bad('rig-version', `version ${JSON.stringify(raw.version)} is not ${RIG_VERSIONS.join(' or ')}`);
+  else if (raw.version < 2 && usesV2(raw)) bad('rig-version', 'the file uses hidden, variants or key parts, which are format v2, but says version 1');
   if (typeof raw.name !== 'string' || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(raw.name)) bad('rig-shape', `name ${JSON.stringify(raw.name)} is not a subject id (lowercase kebab)`);
   if (!isNum(raw.scale) || raw.scale <= 0) bad('rig-shape', `scale ${JSON.stringify(raw.scale)} is not a positive number`);
   if (!raw.image || !Number.isInteger(raw.image.w) || !Number.isInteger(raw.image.h) || raw.image.w < 8 || raw.image.h < 8) bad('rig-shape', 'image {w, h} is missing');
@@ -117,29 +175,28 @@ export function normaliseRig(raw, { dir } = {}) {
     const where = `part ${p?.name ?? i}`;
     if (typeof p?.name !== 'string' || names.has(p.name)) bad('rig-part', `${where}: the name is missing or listed twice`);
     names.add(p?.name);
-    if (!isNumArray(p?.box, 4) || p.box[2] <= 0 || p.box[3] <= 0) { bad('rig-part', `${where}: box [x, y, w, h] is missing`); return; }
-    const [bx, by, bw, bh] = p.box;
-    if (raw.image && (bx < -1 || by < -1 || bx + bw > raw.image.w + 1 || by + bh > raw.image.h + 1)) bad('rig-box', `${where}: box ${JSON.stringify(p.box)} leaves the ${raw.image.w} x ${raw.image.h} image`);
-    const verts = p.verts ?? [bx, by, bx + bw, by, bx + bw, by + bh, bx, by + bh];
-    if (!isNumArray(verts) || verts.length < 6 || verts.length % 2) { bad('rig-part', `${where}: verts is not a list of x, y pairs`); return; }
-    const n = verts.length / 2;
-    const tri = p.triangles ?? p.tris ?? (p.verts === undefined ? [0, 1, 2, 0, 2, 3] : undefined);
-    if (!Array.isArray(tri) || tri.length < 3 || tri.length % 3 || tri.some((t) => !Number.isInteger(t) || t < 0 || t >= n)) { bad('rig-part', `${where}: triangles do not index its ${n} vertices`); return; }
-    const uvIn = p.uvs ?? p.uv;
-    const uvUp = p.uvs === undefined && p.uv !== undefined; // the prototype's `uv` alias is v UP
-    if (uvIn && !isNumArray(uvIn, n * 2)) { bad('rig-part', `${where}: uvs is not 2 numbers a vertex`); return; }
-    const png = typeof p.png === 'string' && !/[\\/]|^\./.test(p.png) ? p.png : null;
-    if (!png) bad('rig-part', `${where}: png ${JSON.stringify(p.png)} is not a file name beside rig.json`);
-    else if (dir && !existsSync(join(dir, png))) bad('rig-file', `${where}: ${png} does not exist beside rig.json`);
-    if (typeof p.rim === 'string' && dir && !existsSync(join(dir, p.rim))) bad('rig-file', `${where}: ${p.rim} does not exist beside rig.json`);
-    const { b, w } = skinOf(p, n, bones, problems, where);
-    // texture rows from the top: `uvs` run DOWN like the painting's px; the prototype's `uv` alias runs UP and is flipped
-    const tuv = new Float32Array(n * 2);
-    for (let k = 0; k < n; k++) {
-      tuv[k * 2] = uvIn ? uvIn[k * 2] : (verts[k * 2] - bx) / bw;
-      tuv[k * 2 + 1] = uvIn ? (uvUp ? 1 - uvIn[k * 2 + 1] : uvIn[k * 2 + 1]) : (verts[k * 2 + 1] - by) / bh;
+    if (p?.hidden !== undefined && typeof p.hidden !== 'boolean') bad('rig-part', `${where}: hidden is not true or false`);
+    const m = meshOf(p, where, raw, bones, problems, dir);
+    if (!m) return;
+    const variants = {};
+    for (const [vn, v] of Object.entries(p.variants ?? {})) {
+      const vw = `${where} variant ${vn}`;
+      if (!VARIANT_NAME.test(vn) || !v || typeof v !== 'object') { bad('rig-part', `${vw}: the name is not a plain name or the record is not an object`); continue; }
+      let vm = { ...m, png: v.png, rim: v.rim ?? null };
+      if (OWN_MESH.some((k) => v[k] !== undefined)) {
+        const skinned = v.bone !== undefined || v.weights !== undefined || v.bones !== undefined;
+        vm = meshOf({ ...v, box: v.box ?? p.box, ...(skinned || p.bone === undefined ? {} : { bone: p.bone }) }, vw, raw, bones, problems, dir);
+        if (!vm) continue;
+      } else {
+        const png = typeof v.png === 'string' && !/[\\/]|^\./.test(v.png) ? v.png : null;
+        if (!png) bad('rig-part', `${vw}: png ${JSON.stringify(v.png)} is not a file name beside rig.json`);
+        else if (dir && !existsSync(join(dir, png))) bad('rig-file', `${vw}: ${png} does not exist beside rig.json`);
+        if (typeof v.rim === 'string' && dir && !existsSync(join(dir, v.rim))) bad('rig-file', `${vw}: ${v.rim} does not exist beside rig.json`);
+        vm = { ...m, png, rim: v.rim ?? null };
+      }
+      variants[vn] = { ...vm, alpha: null };
     }
-    parts.push({ name: p.name, order: isNum(p.order) ? p.order : i, png, rim: p.rim ?? null, box: p.box, verts: Float32Array.from(verts), tris: Uint32Array.from(tri), tuv, b, w, alpha: null });
+    parts.push({ name: p.name, order: isNum(p.order) ? p.order : i, ...m, hidden: p.hidden === true, variants, alpha: null });
   });
   if (!parts.length) bad('rig-part', 'a rig has parts');
   parts.sort((a, b) => a.order - b.order);
@@ -159,7 +216,7 @@ export function normaliseRig(raw, { dir } = {}) {
   for (const [pose, k] of Object.entries(raw.keys ?? {})) {
     if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(pose)) { bad('rig-key', `key ${JSON.stringify(pose)} is not a pose name the game can ask for`); continue; }
     if (typeof k?.source !== 'string' || !k.source) bad('rig-key', `key ${pose}: \`source\` (the approved painting it was fitted to, or "authored") is missing`);
-    const out = { bones: {}, root: { dx: 0, dy: 0, rot: 0 }, source: k?.source ?? null, fit: k?.fit ?? null, planted: k?.planted !== false };
+    const out = { bones: {}, root: { dx: 0, dy: 0, rot: 0 }, source: k?.source ?? null, fit: k?.fit ?? null, planted: k?.planted !== false, parts: null };
     for (const [bn, ch] of Object.entries(k?.bones ?? {})) {
       if (!boneIdx.has(bn)) { bad('rig-key', `key ${pose}: bone ${bn} does not exist`); continue; }
       const c = { ...CHANNELS };
@@ -173,6 +230,20 @@ export function normaliseRig(raw, { dir } = {}) {
     for (const [cn, v] of Object.entries(k?.root ?? {})) {
       if (!['dx', 'dy', 'rot'].includes(cn) || !isNum(v)) bad('rig-key', `key ${pose}.root: ${cn} = ${JSON.stringify(v)} is not dx, dy or rot`);
       else out.root[cn] = v;
+    }
+    if (k?.parts !== undefined) {
+      if (!k.parts || typeof k.parts !== 'object' || Array.isArray(k.parts)) bad('rig-key', `key ${pose}: parts is not an object`);
+      else {
+        out.parts = {};
+        if (pose === 'idle' && Object.keys(k.parts).length) bad('rig-key', 'the idle key names parts (it is the rest: hide a part by marking it hidden)');
+        for (const [pn, e] of Object.entries(k.parts)) {
+          const part = parts.find((x) => x.name === pn);
+          if (!part) { bad('rig-key', `key ${pose}: parts names a part that is not there: ${pn}`); continue; }
+          if (!e || typeof e !== 'object' || (e.show !== undefined && typeof e.show !== 'boolean') || (e.image !== undefined && typeof e.image !== 'string')) { bad('rig-key', `key ${pose}.${pn}: show is not true or false, or image is not a name`); continue; }
+          if (e.image !== undefined && !part.variants[e.image]) { bad('variant-missing', `key ${pose}: part ${pn} has no variant ${JSON.stringify(e.image)}`); continue; }
+          out.parts[pn] = { show: e.show !== false, image: e.show === false ? null : (e.image ?? null) };
+        }
+      }
     }
     keys[pose] = out;
   }
@@ -192,8 +263,9 @@ export function rigDigest(raw, dir) {
   const h = createHash('sha256');
   const { gate: _gate, ...rest } = raw;
   h.update(canon(rest));
+  // a v1 rig has no variants, so its list is the part files in part order, exactly as before; a v2 variant's files follow their part's
   for (const p of [...(raw.parts ?? [])].sort((a, b) => (a.name < b.name ? -1 : 1))) {
-    for (const f of [p.png, p.rim]) {
+    for (const f of [p.png, p.rim, ...Object.entries(p.variants ?? {}).sort(([x], [y]) => (x < y ? -1 : 1)).flatMap(([, v]) => [v?.png, v?.rim])]) {
       if (!f) continue;
       const file = join(dir, f);
       h.update(`\n${f}:`);
@@ -209,12 +281,24 @@ export function rigSize(raw, dir) {
   let bytes = 0;
   let verts = 0;
   let tris = 0;
+  let variants = 0;
+  const png = (name) => { const f = join(dir, name ?? ''); if (name && existsSync(f)) bytes += readFileSync(f).length; };
   for (const p of raw.parts ?? []) {
-    const f = join(dir, p.png ?? '');
-    if (p.png && existsSync(f)) bytes += readFileSync(f).length;
+    png(p.png);
     texels += (p.box?.[2] ?? 0) * (p.box?.[3] ?? 0);
     verts += p.verts ? p.verts.length / 2 : 4;
     tris += ((p.triangles ?? p.tris)?.length ?? 6) / 3;
+    // format v2: every variant is another texture (and, with a mesh of its own, more vertices); a variant that uses the part's mesh adds none
+    for (const v of Object.values(p.variants ?? {})) {
+      variants++;
+      png(v?.png);
+      const box = v?.box ?? p.box;
+      texels += (box?.[2] ?? 0) * (box?.[3] ?? 0);
+      if (OWN_MESH.some((k) => v?.[k] !== undefined)) {
+        verts += v.verts ? v.verts.length / 2 : 4;
+        tris += ((v.triangles ?? v.tris)?.length ?? 6) / 3;
+      }
+    }
   }
-  return { parts: (raw.parts ?? []).length, bones: (raw.bones ?? []).length, texels, bytes, verts, tris };
+  return { parts: (raw.parts ?? []).length, bones: (raw.bones ?? []).length, texels, bytes, verts, tris, variants };
 }

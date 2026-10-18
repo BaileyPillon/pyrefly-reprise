@@ -5,7 +5,8 @@
  * parent joint), `sx`, `sy` (scale about the joint). `solve` turns a pose into one world matrix a bone, `skin` moves the bind-pose vertices of a part through them
  * (linear blend, two influences a vertex). Everything is in painting px (y down); the mesh layer maps to the plane.
  */
-import type { RigData, RigPartData } from './RigData.ts';
+import type { RigData } from './RigData.ts';
+import type { RigMeshData } from './RigMesh.ts';
 
 /** Numbers a bone has in a pose. */
 export const CH = 5;
@@ -92,7 +93,7 @@ export class RigSkeleton {
    * origin and one unit wide and tall: x = px / W - 0.5, y = 0.5 - py / H. This is the idle plane's own space, so the mesh just sits under a group that carries the
    * plane's scale and place.
    */
-  skin(part: RigPartData, out: Float32Array): void {
+  skin(part: RigMeshData, out: Float32Array): void {
     const { k } = this;
     const { verts, boneA, boneB, wA, wB } = part;
     const iw = 1 / this.data.image.w;

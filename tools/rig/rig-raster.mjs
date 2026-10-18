@@ -8,11 +8,12 @@
  */
 import { join } from 'node:path';
 import sharp from 'sharp';
-import { skinPart, solve } from './rig-pose.mjs';
+import { skinPart, solve, visualOf } from './rig-pose.mjs';
 
-/** Decode every part's PNG alpha once (`part.alpha = { data, w, h }`). */
+/** Decode every part's PNG alpha once (`part.alpha = { data, w, h }`), and every format v2 variant's (`variant.alpha`). */
 export async function loadTextures(rt, dir) {
-  await Promise.all(rt.parts.filter((p) => !p.alpha).map(async (p) => {
+  const todo = rt.parts.flatMap((p) => [p, ...Object.values(p.variants ?? {})]).filter((p) => !p.alpha);
+  await Promise.all(todo.map(async (p) => {
     const { data, info } = await sharp(join(dir, p.png)).ensureAlpha().extractChannel(3).raw().toBuffer({ resolveWithObject: true });
     p.alpha = { data: new Uint8Array(data.buffer, data.byteOffset, data.length), w: info.width, h: info.height };
   }));
@@ -32,17 +33,20 @@ function sampleAlpha(tex, tx, ty) {
 }
 
 /**
- * The silhouette of `rt` in `pose`, as alpha 0..255 over the frame. `parts` limits it to the named parts (the gate draws the body without its props).
+ * The silhouette of `rt` in `pose`, as alpha 0..255 over the frame. `parts` limits it to the named parts (the gate draws the body without its props). `state` (format v2, `rig-pose.mjs#keyState`)
+ * says which parts are drawn and with which image; absent, the REST state (a v1 rig has no hidden part and no variant, so it is every part).
  * @returns {{alpha: Uint8Array, k: Float64Array, joints: Float64Array}}
  */
-export function rasterize(rt, pose, frame, { parts } = {}) {
+export function rasterize(rt, pose, frame, { parts, state } = {}) {
   const { W, H, sx, sy, ox, oy } = frame;
   const acc = new Float32Array(W * H);
   const layer = new Float32Array(W * H); // one part at a time: triangles of a part overlap at their edges, so a part keeps the MAX; parts compose with `over`
   const { k, joints } = solve(rt, pose);
-  for (const part of rt.parts) {
-    if (parts && !parts.includes(part.name)) continue;
-    if (!part.alpha) throw new Error(`rig-raster: part ${part.name} has no decoded texture (call loadTextures first)`);
+  for (const whole of rt.parts) {
+    if (parts && !parts.includes(whole.name)) continue;
+    const part = visualOf(whole, state); // the part, or the variant the state names (same mesh unless it has its own); null: hidden
+    if (!part) continue;
+    if (!part.alpha) throw new Error(`rig-raster: part ${whole.name} has no decoded texture (call loadTextures first)`);
     const n = part.verts.length / 2;
     const posed = new Float64Array(n * 2);
     skinPart(part, k, posed);

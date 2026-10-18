@@ -16,6 +16,7 @@ config["build"] (every coordinate is a 1x painting pixel; the build scales them 
   M =        { "edge": 22, "inner": 44, "grow": 16 } | { "grid": [nx, ny] }               mesh density (master px); `grid` = a plain quad grid (a rigid prop)
   "landmarks": { name: [bone, [x, y]] }              bind points: `head` (required: the bone that carries the head), `feet`, footN, hand, spearTip ...
   "rim":      true                                   write a rim mask per part (white along the painting's own outline only)
+  "hidden":   [part, ...]   and   "variants": { part: { name: {png, rim, ...} } }          format v2 (2026-10-18, rig_v2.py): parts hidden at rest, other images of a part a key may swap in
   hooks:      build(state) may add parts (state.parts.append(record)) and bones (state.add_bone)
 
 Writes <work>/build/<part>.png (cropped), <part>.rim.png and build.json: bones, parts (the rig file's own part records), landmarks, in master px.
@@ -28,6 +29,7 @@ import numpy as np
 from PIL import Image
 
 import rig_geom as R
+import rig_v2
 from rig_common import Subject, costume_anchor, load_rgba, say, write_json
 
 
@@ -150,6 +152,8 @@ def run(sub: Subject) -> None:
     state.parts = records
     if hooks and hasattr(hooks, "build"):
         hooks.build(state)
+    if rig_v2.apply_build_cfg(state.parts, cfg):  # format v2: `build.hidden` and `build.variants` (the variants' files are in the build folder: a hook or `from_painting` wrote them)
+        say(f"  format v2: hidden {sum(1 for r in state.parts if r.get('hidden'))}, variants {sum(len(r.get('variants') or {}) for r in state.parts)}")
     records = sorted(state.parts, key=lambda r: r["order"])
     BI = state.BI
     lm = {}

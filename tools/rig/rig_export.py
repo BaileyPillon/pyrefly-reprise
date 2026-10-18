@@ -8,6 +8,8 @@ The config adds what the gate reads under the driver's pose-intent rule (2026-10
 {pose: {rig landmark name: [x, y]}} (the approved painting's own 1x pixels, marked once per pose; each becomes that key's `expect`, which the gate REQUIRES of every painted key), `authored` [pose, ...]
 (those keys say `source: "authored"`: the gate waives their overlap, still demands their landmarks and lists them), `fit.mirror` [pose, ...] (the painting faces the other way from the rig: the key says
 `turn: true`, the gate reads the painting turned about its stance) and `acceptance` {iou, landmarkPct} (this rig's bars; the gate lets a rig only TIGHTEN 0.75 and 0.06).
+Format v2 (2026-10-18, `rig_v2.py`): parts the build marked `hidden` and their `variants` are written as they are (and their PNGs copied), a key's `parts` come from `fit.keys.<pose>` (`show`, `hide`, `image`) and
+`keys_extra.<pose>.parts`, and the file says `version: 2` exactly when it uses one of those; a subject that uses none writes the version 1 file it always wrote.
 It carries no `gate`: only `node tools/rig-gate.mjs` writes that. Unless --no-gate, the export ends by running the gate on what it wrote (the exit status is the gate's).
 """
 from __future__ import annotations
@@ -16,6 +18,7 @@ import pathlib
 import shutil
 import subprocess
 
+import rig_v2
 from rig_common import NODE, REPO, Subject, read_json, say, sha256_file, write_json
 
 
@@ -49,6 +52,10 @@ def build_rig(sub: Subject, build: dict, keys: dict) -> dict:
     for name in (sub.cfg.get("fit") or {}).get("mirror") or []:  # the painting of this pose faces the other way from the rig: the gate reads it turned about its stance (marks stay the painting's own px)
         if name in all_keys:
             all_keys[name]["turn"] = True
+    for name, k in all_keys.items():  # format v2: which parts the key shows, hides or swaps (the fitter drew it in that state)
+        kp = rig_v2.key_parts(((sub.cfg.get("fit") or {}).get("keys") or {}).get(name))
+        if kp and name != "idle":
+            k["parts"] = {**(k.get("parts") or {}), **kp}
     rig = {
         "version": 1, "name": sub.id, "scale": build["scale"], "image": build["image"], "baselineY": build["baselineY"], "costume": costume,
         "bones": build["bones"], "parts": build["parts"], "landmarks": build["landmarks"], "keys": all_keys,
@@ -57,6 +64,8 @@ def build_rig(sub: Subject, build: dict, keys: dict) -> dict:
         rig["motion"] = sub.cfg["motion"]
     if sub.cfg.get("acceptance"):
         rig["acceptance"] = sub.cfg["acceptance"]
+    if rig_v2.uses_v2(rig):
+        rig["version"] = 2
     return rig
 
 
@@ -71,11 +80,9 @@ def run(sub: Subject, gate: bool = True, out=None) -> int:
     rig = build_rig(sub, build, keys)
     out.mkdir(parents=True, exist_ok=True)
     wanted = {"rig.json"}
-    for p in rig["parts"]:
-        for f in (p.get("png"), p.get("rim")):
-            if f:
-                shutil.copyfile(sub.work / "build" / f, out / f)
-                wanted.add(f)
+    for f in rig_v2.image_files(rig["parts"]):  # every part's PNG and rim mask, and every variant's
+        shutil.copyfile(sub.work / "build" / f, out / f)
+        wanted.add(f)
     for stale in out.glob("*.png"):
         if stale.name not in wanted:
             stale.unlink()

@@ -15,7 +15,7 @@ import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { basename, dirname, extname, join, resolve, sep } from 'node:path';
 import { gateRig, verifyStamp } from './rig-gate-lib.mjs';
-import { readRigFile } from './rig-format.mjs';
+import { partImages, readRigFile } from './rig-format.mjs';
 
 const SUBJECT = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const sha256 = (p) => createHash('sha256').update(readFileSync(p)).digest('hex');
@@ -28,7 +28,7 @@ function hardLinked(dir) {
 
 /** The files a rig folder must hold: rig.json and every PNG and rim mask it names. */
 export function rigFiles(raw) {
-  return ['rig.json', ...new Set((raw.parts ?? []).flatMap((p) => [p.png, p.rim]).filter(Boolean))];
+  return ['rig.json', ...new Set(partImages(raw).flatMap((p) => [p.png, p.rim]).filter(Boolean))];
 }
 
 /**

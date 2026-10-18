@@ -25,7 +25,10 @@
  *   hole-key         no alpha hole (more than HOLE_PX transparent pixels in the joint's disc) at any body joint in any key
  *   hole-blend       ... nor at 25, 50 and 75 percent between any two keys                                          [rig-holes.mjs]
  *   budget-*         parts <= 24, bones <= 48, vertices <= 8000, texels <= 9 Mpx, PNG bytes <= 9 MB: about twice the hand-cut prototype Kimahri (11 parts, 29 bones,
- *                    3068 vertices, 4.2 Mpx, 4.5 MB), the largest figure cut so far. Four such rigs on screen stay near 140 MB of texture.
+ *                    3068 vertices, 4.2 Mpx, 4.5 MB), the largest figure cut so far. Four such rigs on screen stay near 140 MB of texture. EVERY format v2 variant counts in the texels, the
+ *                    bytes and (with a mesh of its own) the vertices: a variant is another texture the engine loads.
+ *   hidden-share, part-never-shown, variant-unused, variant-missing   (format v2, `rig-variants.mjs`) a key may hide at most 60 percent of the idle's rest alpha area; no dead parts or variants.
+ *                    Every key is drawn and scanned in the part state it describes (`rig-pose.mjs#keyState`); a joint none of whose parts is shown in a pose is not watched there.
  *
  * The readings are the pose model's (`tools/posescale/pose-model.mjs`): this module invents no number and shares no code with the fitter (`tools/rig/rig_fit.py`), so
  * the gate is an independent second reading of what the fitter claims.
@@ -38,12 +41,13 @@ import { bandVerdict } from '../posescale/pose-bands.mjs';
 import { listPoses, loadModelInputs } from '../posescale/pose-model.mjs';
 import { poseClassOf } from '../posescale/pose-kinds.mjs';
 import { drawnMask, maskIou } from '../posescale/pose-pixels.mjs';
-import { GATE_BY, GATE_RULES, costumeParts, normaliseRig, readRigFile, rigDigest, rigSize } from './rig-format.mjs';
+import { GATE_BY, GATE_RULES, costumeParts, normaliseRig, partImages, readRigFile, rigDigest, rigSize } from './rig-format.mjs';
 import { scanHoles } from './rig-holes.mjs';
-import { keyPose, restPose, solve, through } from './rig-pose.mjs';
+import { keyPose, keyState, restPose, solve, through } from './rig-pose.mjs';
 import { loadTextures } from './rig-raster.mjs';
 import { approvedTarget, drawKey, keyMask, readApproved, readKey, readsBody, rigContext } from './rig-read.mjs';
 import { silhouetteOf } from './rig-silhouette.mjs';
+import { HIDDEN_SHARE_MAX, hiddenShare, variantPalettes, variantRules } from './rig-variants.mjs';
 import { textureSizes } from './rig-tiers.mjs';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -125,6 +129,7 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   const { problems, rt } = normaliseRig(raw, { dir });
   const result = { subject: raw?.name ?? null, status: 'refused', failures, keys: [], rest: null, holes: null, uncovered: [], size: rigSize(raw ?? {}, dir), digest: rigDigest(raw ?? {}, dir), bands: RIG_BANDS, budget: BUDGET, rigDir: dir, authored: [], turned: [], acceptance: null };
   result.exempt = []; // painted poses with no key that the rig is not held to (staged or part paintings): stamped, so the runtime and the deploy can tell them from a pose painted after the gate ran
+  result.variants = []; // format v2: each variant's palette distance from its base part (a report, never a refusal; `rig-variants.mjs`)
   result.silhouettes = {}; // each key's posed box, feet and painted front in the master's px (`rig-silhouette.mjs`), stamped for the HUD's brackets and the strike's reach
   for (const p of problems) fail(p.code, p.message);
   if (!rt) return result;
@@ -140,8 +145,9 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   over('verts', sz.verts, BUDGET.verts, 'vertices');
   over('tris', sz.tris, BUDGET.tris, 'triangles');
   over('texels', sz.texels, BUDGET.texels, 'texels');
-  over('bytes', sz.bytes, BUDGET.bytes, 'bytes of PNG');
+  over('bytes', sz.bytes, BUDGET.bytes, 'bytes of PNG (variants included)');
   if (failures.some((f) => f.code.startsWith('rig-'))) return result;
+  for (const v of variantRules(rt)) fail(v.code, v.message);
   // ---- the costume painting
   const inp = inputs ?? (await loadModelInputs({ root, artDir }));
   const costumePose = costumeParts(rt.costume.painting)?.pose ?? 'idle';
@@ -158,6 +164,7 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   // ---- the rest pose is the costume painting
   const rest = await drawKey(ctx, restPose(rt));
   const costume = await readApproved(ctx, costumePose);
+  const restArea = rest.alpha.reduce((n, a) => n + (a > 128 ? 1 : 0), 0); // format v2: the figure a key may hide a share of
   const restIou = costume ? maskIou(keyMask(ctx, rest.vp), drawnMask(costume.m, cr.drawn.upp, cr.drawn.anchor, cr.drawn.shift, cr.drawn.mirror)) : null;
   result.rest = { iou: restIou };
   if (restIou === null || restIou < RIG_BANDS.restIou) fail('rest-differs', `the rest pose overlaps the costume painting by ${f3(restIou)}, under ${RIG_BANDS.restIou}: the cut parts do not make the painting`);
@@ -167,7 +174,7 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   const lowestFoot = (k) => Math.max(...footNames.map((n) => through(k, rt.landmarks[n].bone, rt.landmarks[n].x, rt.landmarks[n].y)[1]));
   const bindFoot = footNames.length ? lowestFoot(solve(rt, restPose(rt)).k) : 0;
   for (const [pose, key] of Object.entries(rt.keys)) {
-    const drawn = await drawKey(ctx, keyPose(rt, key));
+    const drawn = await drawKey(ctx, keyPose(rt, key), { state: keyState(rt, key) });
     const reading = readKey(ctx, pose, drawn);
     const found = await readApproved(ctx, pose);
     const entry = { pose, class: reading.class, source: key.source, planted: true, iou: null, stature: reading.stature, bodyStature: reading.bodyStature, statureRead: reading.stature, headReal: reading.headReal, feet: reading.feet, flags: [], report: [], propsOut: false, normK: 1, ok: false };
@@ -216,6 +223,9 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
       const err = lowestFoot(drawn.k) - (bindFoot + key.root.dy);
       if (Math.abs(err) > FEET_LANDMARK_TOL * rt.image.h) fail('key-feet-landmark', `the lowest foot landmark is ${err.toFixed(1)} px from the bind row (limit ${(FEET_LANDMARK_TOL * rt.image.h).toFixed(1)}), the key's own root.dy aside`, pose);
     }
+    const share = hiddenShare(rt, ctx.frame, key, restArea);
+    if (share > 0) entry.hiddenShare = Math.round(share * 1000) / 1000;
+    if (share > HIDDEN_SHARE_MAX) fail('hidden-share', `the key hides ${f3(share)} of the idle's rest figure (the most a key may hide is ${HIDDEN_SHARE_MAX}): hiding a part is not a way to remove the figure`, pose);
     const sil = silhouetteOf(ctx.frame, drawn, rt, footNames);
     if (sil) result.silhouettes[pose] = sil;
     const v = bandVerdict({ ...reading, stature: entry.statureRead });
@@ -235,6 +245,7 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   result.exempt = painted.filter((p) => !rt.keys[p] && !required.includes(p));
   if (requireCoverage && result.uncovered.length) fail('coverage', `no key for ${result.uncovered.join(', ')}: a figure turns its rig on only with a key for every pose it is painted in, and those poses would draw as the nearest key down the pose chain, not as their paintings (--allow-partial is for a rig still being fitted, and the deploy refuses it)`);
   // ---- holes
+  result.variants = await variantPalettes(rt, dir);
   const scan = scanHoles(ctx, { blends });
   result.holes = { joints: scan.joints, rendered: scan.rendered, keysWithHoles: scan.keys.filter((k) => k.holes.length).map((k) => k.pose), blendsWithHoles: scan.blends.filter((b) => b.holes.length).length, blends: scan.blends.filter((b) => b.holes.length).slice(0, 12) };
   for (const k of scan.keys) if (k.holes.length) fail('hole-key', `a hole at ${k.holes.map((h) => `${h.name} (${h.count} px)`).join(', ')}`, k.pose);
@@ -298,7 +309,7 @@ export function verifyStamp(rig, { full = false } = {}) {
     if (g.coverage !== 'full') return { ok: false, code: 'gate-partial', message: g.coverage === 'partial' ? `the stamp says coverage partial: no key for ${(g.uncovered ?? []).join(', ') || 'some painted poses'}; a figure turns its rig on only with a key for every pose it is painted in` : 'the stamp does not say coverage full (it is from before the rule): run node tools/rig-gate.mjs again', ...read };
     if (!Array.isArray(g.exempt)) return { ok: false, code: 'gate-exempt', message: 'the stamp does not list the exempt poses: run node tools/rig-gate.mjs again', ...read };
     if (g.seal !== sealOf(g)) return { ok: false, code: 'gate-seal', message: 'the ship record of the stamp (coverage, exempt poses, silhouettes) was edited after the gate wrote it: run node tools/rig-gate.mjs again', ...read };
-    const unsized = (read.raw.parts ?? []).filter((p) => !Array.isArray(g.textures?.[p.name]?.map)).map((p) => p.name);
+    const unsized = partImages(read.raw).map((p) => (p.variant === null ? p.part : `${p.part}:${p.variant}`)).filter((n) => !Array.isArray(g.textures?.[n]?.map));
     if (unsized.length) return { ok: false, code: 'gate-textures', message: `the stamp has no texture size for ${unsized.join(', ')}: run node tools/rig-gate.mjs again`, ...read };
     const bare = (g.keys ?? []).filter((p) => !g.silhouettes?.[p]);
     if (bare.length) return { ok: false, code: 'gate-silhouettes', message: `the stamp has no silhouette for ${bare.join(', ')}: run node tools/rig-gate.mjs again`, ...read };

@@ -240,7 +240,8 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
   const rigTiers = {};
   for (const id of rigs) {
     const dir = join(artRoot, 'rigs', id);
-    const names = [...new Set((readJson(join(dir, 'rig.json'))?.parts ?? []).flatMap((p) => [p?.png, p?.rim]).filter((f) => typeof f === 'string' && f))];
+    // a part's PNG and rim mask, and (rig format v2) each variant's
+    const names = [...new Set((readJson(join(dir, 'rig.json'))?.parts ?? []).flatMap((p) => [p?.png, p?.rim, ...Object.values(p?.variants ?? {}).flatMap((v) => [v?.png, v?.rim])]).filter((f) => typeof f === 'string' && f))];
     if (names.length && names.every((n) => existsSync(join(dir, '1x', n)))) rigTiers[id] = [1, 2];
   }
   const manifest = {

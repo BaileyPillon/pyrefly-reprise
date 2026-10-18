@@ -2,7 +2,7 @@
  * A small synthetic rig for the rig engine's tests (`src/engine/rig/`): a 400 x 800 painting, eleven bones (a root on the floor, pelvis, chest, head, two legs of two
  * bones, an arm, a two-bone tail), six parts, five keys and a motion block. Soles on row 770, baseline 780. Keys are in RADIANS, the motion block in degrees.
  */
-import { RIG_VERSION, type RigFile } from '../../../src/data/art/rigTypes.ts';
+import type { RigFile } from '../../../src/data/art/rigTypes.ts';
 import { readRig, type RigData } from '../../../src/engine/rig/RigData.ts';
 
 export function makeRigFile(over: Partial<RigFile> = {}): RigFile {
@@ -21,7 +21,7 @@ export function makeRigFile(over: Partial<RigFile> = {}): RigFile {
   ];
   const legQuad = (x: number): { box: [number, number, number, number] } => ({ box: [x, 450, 40, 330] });
   return {
-    version: RIG_VERSION,
+    version: 1,
     name: 'testfig',
     scale: 2,
     image: { w: 400, h: 800 },

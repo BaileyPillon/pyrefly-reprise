@@ -101,3 +101,9 @@ Real attack through the presenter (real keys, Chapter "Biran and Yenke"): the ke
   7. **Edge-feathered subjects** (Yunalesca 1 to 3, Valefor, Ixion): a cut part has no feather; their rigs need clean cuts.
   8. **`tests/unit/tools/rig-census-install.test.ts`** (the pipeline lane's) fails `tsc` on a missing declaration for `tools/rig/rig-install.mjs`; not this lane's file.
   9. **NOW.md** is not updated here (the driver owns it): "rig engine built on branch `rig`, awaiting Kimahri's gated rig and the release mirror".
+
+## Format v2 (2026-10-18, branch `rig-v2`): parts a key shows, hides or swaps
+
+A key may show or hide a part and swap a part's image for a named variant (`RigPart.hidden`, `RigPart.variants`, `RigKey.parts`); the state flips at progress 0.5 of the move into the key, where `layers` flips. Files:
+`RigMesh.ts` (the mesh reader, shared by a part and a variant), `RigPartState.ts` (`keyState`, `partStateAt`: the same function as the gate's `rig-pose.mjs#stateAt`), `RigFigure` (a LOOK per part and variant; `setPartState`;
+`skin()` skips hidden parts), `RigActor.compose`, `RigTier.tierPartsOf` (every variant's textures are budgeted). A v1 rig has one look a part and never changes state. See `rig-v2-and-kit.md`, the contract entry of 2026-10-18.
