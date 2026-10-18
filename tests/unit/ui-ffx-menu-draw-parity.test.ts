@@ -14,7 +14,8 @@ import type { AnyCombatant, AvailableCommand, CombatantId, Command } from '../..
 import { setMenuDrawParity } from '../../src/battle/ffx/menu-draw-parity.ts';
 import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
 import { buildTopRows, isOpenerGroup, rowEnabled } from '../../src/ui/ffx/CommandMenuLogic.ts';
-import { topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
+import { groupHelp, topRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
+import { openYunaGrandSummon } from '../../src/ui/ffx/minigames/YunaGrandSummon.ts';
 import { actor, ctxOf, engineFor, menuOf } from './helpers/menuParityDrive.ts';
 
 const playRefusal = vi.hoisted(() => vi.fn());
@@ -268,9 +269,49 @@ describe('the pure rule', () => {
     expect(topRowVM(none).enabled).toBe(false);
   });
 
+  it('the help line of an opener whose one entry is grey says it opens a list; off (and for a non-opener) it describes the entry', () => {
+    const entry: AvailableCommand = { command: { kind: 'ability', id: 'scan', targets: [] }, label: 'Scan', category: 'skill', mpCost: 0, rank: 3, enabled: false, validTargets: [], help: 'Reveals an enemy' };
+    const skill = buildTopRows([entry])[0]!;
+    if (skill.kind !== 'group') throw new Error('a group');
+    const live = { ...skill, items: [{ ...entry, enabled: true }] };
+    const off = groupHelp(skill);
+    const offLive = groupHelp(live);
+    expect(off).not.toBe('Open the Skill menu.');
+    expect(offLive).not.toBe('Open the Skill menu.');
+    on();
+    expect(groupHelp(skill)).toBe('Open the Skill menu.');
+    expect(groupHelp(live)).toBe(offLive); // an enabled single entry is described as before
+  });
+
   it('on with "openers" skipped: as off', () => {
     on(['openers']);
     expect(rowEnabled(groupOf('blackmagic', false))).toBe(false);
+  });
+});
+
+describe('the Grand Summon picker draws an aeon the fight\'s script took as a greyed entry the cursor rests on and a confirm refuses (the game\'s list 5)', () => {
+  const aeons = [
+    { id: 'valefor', name: 'Valefor', storedGauge: 0, enabled: false },
+    { id: 'ifrit', name: 'Ifrit', storedGauge: 0 },
+    { id: 'ixion', name: 'Ixion', storedGauge: 0 },
+  ];
+  it('opens on the first enabled aeon, rests on the greyed one, ignores Enter there, and picks the next', async () => {
+    const picked = openYunaGrandSummon(document.body, { aeons });
+    const rows = (): Array<{ label: string; selected: boolean; disabled: boolean }> =>
+      [...document.querySelectorAll('.ffx-mg-list__row')].map((r) => ({ label: r.firstChild?.textContent ?? '', selected: r.classList.contains('ffx-mg-list__row--selected'), disabled: r.classList.contains('ffx-mg-list__row--disabled') }));
+    expect(rows()).toEqual([
+      { label: 'Valefor', selected: false, disabled: true },
+      { label: 'Ifrit', selected: true, disabled: false },
+      { label: 'Ixion', selected: false, disabled: false },
+    ]);
+    key('ArrowUp');
+    expect(rows()[0]).toEqual({ label: 'Valefor', selected: true, disabled: true });
+    key('Enter');
+    const settled = await Promise.race([picked.then(() => 'picked'), new Promise((r) => setTimeout(() => r('open'), 50))]);
+    expect(settled).toBe('open'); // the confirm on the greyed aeon did nothing
+    key('ArrowDown');
+    key('Enter');
+    await expect(picked).resolves.toEqual({ kind: 'yuna-grand-summon', grandSummon: { aeonId: 'ifrit' } });
   });
 });
 

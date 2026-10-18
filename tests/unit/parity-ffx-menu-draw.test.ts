@@ -379,6 +379,14 @@ describe('item e: Talk exists only where a formation script adds it (FFX-G11b se
     }
   });
 
+  it('Braska\'s Final Aeon\'s script adds Talk for Tidus only: a Talk given to anyone else has no row on', async () => {
+    const engine = await engineFor('braskas-final-aeon');
+    actor(engine, 'yuna').learnedAbilityIds.push('talk');
+    expect(talkers(engine).sort()).toEqual(['tidus', 'yuna']);
+    on();
+    expect(talkers(engine)).toEqual(['tidus']);
+  });
+
   it('Macalania (VII) and Natus (X) keep their own talkers, unchanged', async () => {
     for (const chapter of ['seymour-anima-macalania', 'seymour-natus']) {
       const engine = await engineFor(chapter);
