@@ -19,6 +19,7 @@ const cfg = JSON.parse(readFileSync(SUBJECT_PATH, 'utf8')) as {
 };
 
 /** The poses the game paints Lulu in (`public/art/characters/lulu/*.png`, FFX: chapters 1 to 3 and the hidden chapters that field her). */
+const FRONT_POSES = ['defend', 'od-fury'];
 const PAINTED = ['attack', 'cast', 'critical', 'defend', 'follow', 'hurt', 'item', 'ko', 'od-fury', 'ready', 'sleep', 'victory'];
 
 describe('the Lulu subject config', () => {
@@ -80,7 +81,8 @@ describe('the Lulu subject config', () => {
       const marks = cfg.landmarks[pose];
       expect(marks, `${pose} has marks`).toBeTruthy();
       expect(marks!.headCenter, `${pose} marks the head`).toBeTruthy();
-      expect(Object.keys(marks!).length, `${pose} marks at least the head and one more part`).toBeGreaterThanOrEqual(2);
+      // a front-view pose (pass 2) is a front painting cut in as one part: its hands and its doll are that painting's pixels, not bones the gate can ask for, so it marks the head alone
+      expect(Object.keys(marks!).length, `${pose} marks at least the head and one more part`).toBeGreaterThanOrEqual(FRONT_POSES.includes(pose) ? 1 : 2);
     }
     expect(Object.keys(cfg.landmarks).filter((k) => !k.startsWith('_') && !PAINTED.includes(k))).toEqual([]);
   });
@@ -95,5 +97,54 @@ describe('the Lulu subject config', () => {
 
   it('lets the KO lie down (not planted) and nothing else', () => {
     for (const [pose, k] of Object.entries(cfg.fit.keys ?? {})) expect(k.planted === false, pose).toBe(pose === 'ko');
+  });
+
+  it('cuts the skirt into a column and a train and hangs both from the hips (pass 2)', () => {
+    const order = cfg.cut.order;
+    expect(order).toContain('train');
+    expect(order.indexOf('train'), 'the train is drawn behind the column, so it can tuck under it').toBeLessThan(order.indexOf('skirt'));
+    const bone = (n: string) => cfg.build.bones.find((b) => b[0] === n);
+    // the two flare bones swing about the hips (row 620), not scale about the hem
+    for (const n of ['skirtL', 'skirtR']) expect(bone(n)?.[2][1], `${n} swings about the hips`).toBe(620);
+    expect(bone('train')?.[1], 'the train hangs from the left of the skirt and swings with it').toBe('skirtL');
+    expect(cfg.build.skin.train?.type).toBe('hook');
+    expect(cfg.fit.scales?.skirtL).toBeUndefined();
+    expect(cfg.fit.scales?.skirtR).toBeUndefined();
+  });
+
+  it('gives the head and the collar shell bones, so a front key can hide them without touching the head bone the gate reads (pass 2)', () => {
+    const bone = (n: string) => cfg.build.bones.find((b) => b[0] === n);
+    expect(bone('headS')?.[1]).toBe('head');
+    expect(bone('chestS')?.[1]).toBe('chest');
+    expect(cfg.build.skin.head?.bone).toBe('headS');
+    expect(cfg.build.skin.shoulders?.bone).toBe('chestS');
+    expect(cfg.build.chains?.braid?.parent).toBe('headS');
+    expect(cfg.build.landmarks.head?.[0], 'the gate reads the size of the head bone').toBe('head');
+  });
+
+  it('keeps each front part on a two-bone chain under the root, magnified by the chain (pass 2)', () => {
+    const bones = cfg.build.bones;
+    const byName = new Map(bones.map((b) => [b[0], b]));
+    for (const f of ['fdef', 'fod']) {
+      const a = byName.get(`${f}1`);
+      const b = byName.get(`${f}2`);
+      expect(a?.[1], `${f}1 hangs from the root (a body joint the hole test watches is a bone whose neighbours are parts)`).toBe('root');
+      expect(b?.[1]).toBe(`${f}1`);
+      expect(b?.[2], 'one joint for the whole chain').toEqual(a?.[2]);
+      expect(cfg.fit.fixed ?? []).toEqual(expect.arrayContaining([`${f}1`, `${f}2`]));
+    }
+    const hook = readFileSync(`tools/rig/subjects/${cfg.hooks}`, 'utf8');
+    const speck = Number(/FRONT_S = ([0-9.]+)/.exec(hook)?.[1]);
+    expect(speck, 'the speck factor is what two bones can magnify (the gate takes a scale of at most 4 a bone)').toBeLessThanOrEqual(4 ** 2);
+    for (const pose of FRONT_POSES) expect(hook, `the hook cuts ${pose}`).toContain(`pose="${pose}"`);
+  });
+
+  it('puts the KO at a smaller root scale, with the head scaled back up so the gate head band holds (pass 2)', () => {
+    const k = (cfg.fit.keys?.ko ?? {}) as { scales?: Record<string, [number, number]> };
+    const root = k.scales?.root?.[0] ?? 1;
+    const head = k.scales?.head?.[0] ?? 1;
+    expect(root, 'under 0.75 the hole disc of the pelvis joint is no longer covered').toBeGreaterThanOrEqual(0.75);
+    expect(root * head, 'the gate head band is 0.85 to 1.15 of the idle head').toBeGreaterThanOrEqual(0.85);
+    expect(root * head).toBeLessThanOrEqual(1.15);
   });
 });
