@@ -26,7 +26,6 @@ import type { AbilityDef, AvailableCommand, CombatantId, FFXCombatant, TargetSte
 import { type Ctx, alliesOf, enemies, isAlive, onField, targetable, tryActor } from './state.ts';
 import { reachesFoesAtRange, reachesTarget } from './targeting.ts';
 import { targetSpecOf, type TargetWordSpec } from './kernel/target-words.ts';
-import { DEFAULT_ATTACK_COMMAND, isDefaultAttack } from './adapt/command.ts';
 
 /** The items of the plan, by name. */
 export type TargetStepItem = 'selfStep' | 'overdriveStep' | 'cursorStart' | 'cursorStartFoe' | 'sideSwitch' | 'openerOne' | 'copycat';
@@ -111,7 +110,7 @@ function otherSide(ctx: Ctx, user: FFXCombatant, def: AbilityDef, row: Available
  */
 export function targetStepFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, row: AvailableCommand): TargetStep | undefined {
   if (!TARGET_STEP_PARITY.on || user.side === 'enemy') return undefined;
-  const recordId = def.record?.id ?? (isDefaultAttack(def) ? DEFAULT_ATTACK_COMMAND : undefined); // the party's plain Attack carries no record of its own (adapt/command.ts)
+  const recordId = def.record?.id; // the party's plain Attack carries the 0x3000 record too (the engine registry's core ability)
   const spec = targetSpecOf(recordId);
   if (spec === undefined || recordId === undefined || !spec.step) return undefined;
   const t = row.targeting;

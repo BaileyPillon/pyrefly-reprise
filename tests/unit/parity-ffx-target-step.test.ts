@@ -8,13 +8,15 @@
 
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import fixture from '../fixtures/parity/ffx/target_words.json';
-import type { AvailableCommand, Command, FFXCombatant } from '../../src/battle/common/types.ts';
+import type { AvailableCommand, BattleEngine, Command, Decision, FFXCombatant } from '../../src/battle/common/types.ts';
 import { TARGET_WORDS, decodeTargetWord, targetSpecOf } from '../../src/battle/ffx/kernel/target-words.ts';
-import { TARGET_STEP_PARITY, recordStep, setTargetStepParity, type TargetStepItem } from '../../src/battle/ffx/target-step-parity.ts';
+import { TARGET_STEP_PARITY, recordStep, setTargetStepParity, targetStepFor, type TargetStepItem } from '../../src/battle/ffx/target-step-parity.ts';
+import { abilityOf } from '../../src/battle/ffx/state.ts';
 import { COMMAND_RECORDS_ITEMS } from '../../src/data/ffx/command-records/items.ts';
 import { COMMAND_RECORDS_PLAYER } from '../../src/data/ffx/command-records/player.ts';
 import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 import { actor, ctxOf, engineFor, keyOf, menuOf, partyOf } from './helpers/menuParityDrive.ts';
+import { firstLinkSetup, newEngine } from './helpers/lastSummoningDrive.ts';
 import type { FFXEngine } from '../../src/battle/ffx/index.ts';
 
 let restore: (() => void) | undefined;
@@ -271,6 +273,36 @@ describe('t1 selfStep: a self-only command with the step bit opens a cursor on t
     expect(recordStep(ctx, user, 0x3129, false)).toBeUndefined(); // a caller that does not allow a group gets none
   });
 
+  it("on: the real Sisters' menu (the hidden Last Summoning): the self orders open a cursor on Cindy, Combine powers rings the three, Dismiss has none; off: none", async () => {
+    type Input = Extract<Decision, { kind: 'player-input' }>;
+    const turnOf = async (parity: boolean): Promise<AvailableCommand[]> => {
+      restore?.();
+      restore = undefined;
+      if (parity) on();
+      const { setup } = await firstLinkSetup(['valefor'], 4);
+      const e: BattleEngine = newEngine(setup);
+      const inputFor = (who: string): Input => {
+        for (let i = 0; i < 600; i += 1) {
+          const d = e.nextDecision();
+          if (d.kind === 'player-input') {
+            if (d.actorId === who) return d;
+            e.submit({ kind: 'defend', targets: [] });
+          }
+        }
+        throw new Error(`no input for ${who}`);
+      };
+      const call = inputFor('yuna').commands.find((c) => c.enabled && c.command.kind === 'summon' && c.command.id === 'cindy')!;
+      e.submit({ ...call.command, targets: [] });
+      return inputFor(e.state().aeonIds![0]!).commands;
+    };
+    const off = await turnOf(false);
+    expect(off.some((r) => r.targetStep !== undefined)).toBe(false);
+    const rows = await turnOf(true);
+    expect(rowOf(rows, 'Free choice').targetStep).toEqual({ candidates: ['cindy'], start: 'cindy' });
+    expect(rowOf(rows, 'Combine for the Delta Attack').targetStep).toEqual({ candidates: ['cindy', 'sandy', 'mindy'], start: 'cindy', group: true });
+    expect(rowOf(rows, 'Dismiss').targetStep).toBeUndefined();
+  });
+
   it("on: Talk (0x3105, foe side first) opens a cursor on the foes, not on the user; the commit target is the foe's", async () => {
     const engine = await engineFor('seymour-natus');
     on();
@@ -444,6 +476,28 @@ describe('t5 sideSwitch: Attack and the spells may switch to the other side (FFX
     const engine = await engineFor('yunalesca');
     on(['sideSwitch']);
     expect(rowOf(menuOf(engine, 'tidus'), 'Attack').targetStep?.switchTo).toBeUndefined();
+  });
+
+  it('at the airship gap an item cannot be switched to the foe (it does not reach); near it can', async () => {
+    const engine = await engineFor('evrae-airship');
+    on();
+    ctxOf(engine).state.flags['airship.range'] = 'far';
+    expect(rowOf(menuOf(engine, 'tidus'), 'Hi-Potion').targetStep?.switchTo).toBeUndefined();
+    ctxOf(engine).state.flags['airship.range'] = 'near';
+    expect(rowOf(menuOf(engine, 'tidus'), 'Hi-Potion').targetStep?.switchTo).toEqual(['evrae']);
+  });
+
+  it('a record the rows do not match builds no step: a random-foe row whose record is ally side first, a single row whose record is a group mode, and an enemy user', async () => {
+    const engine = await engineFor('yunalesca');
+    on();
+    const ctx = ctxOf(engine);
+    const yuna = actor(engine, 'yuna');
+    const cure = abilityOf(ctx, 'cure')!;
+    const row = rowOf(menuOf(engine, 'yuna'), 'Cure');
+    expect(targetStepFor(ctx, yuna, cure, row)).toBeDefined();
+    expect(targetStepFor(ctx, yuna, cure, { ...row, targeting: 'random-enemy', validTargets: ['yunalesca'] })).toBeUndefined(); // 0x302B is ally side first
+    expect(targetStepFor(ctx, yuna, { ...cure, record: { ...cure.record!, id: 0x30ac } }, row)).toBeUndefined(); // 0x30AC is a group mode record
+    expect(recordStep(ctx, actor(engine, 'yunalesca'), 0x3022)).toBeUndefined(); // an enemy user never gets a player's step
   });
 
   it('the engine applies an Attack aimed at an ally (the cursor switched): that ally is hit, nothing else changes', async () => {

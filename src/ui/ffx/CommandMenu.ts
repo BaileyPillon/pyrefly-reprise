@@ -371,7 +371,6 @@ export class CommandMenu {
   private endSelection(): void {
     this.groupTargets = null;
     this.pendingCmd = null;
-    this.stepOtherSide = false;
     this.targetCursor.hide();
     this.opts?.onSelection?.(null);
     this.opts?.onTargetChange?.(null);
