@@ -26,6 +26,7 @@ import type {
   ReelResult,
 } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
+import { setMenuDrawParity } from '../../src/battle/ffx/menu-draw-parity.ts';
 import { ABILITIES, ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
 import { gagazetBuild } from '../../src/data/ffx/builds/gagazet.ts';
 import { dreamsEndBuild } from '../../src/data/ffx/builds/dreams-end.ts';
@@ -391,13 +392,24 @@ describe('#12 Trigger Commands fire from the player command list', () => {
     }
   });
 
-  it('gives Tidus no line here, and says so instead of eating his turn', () => {
+  it('gives Tidus no line here: shipped (r55 RE, MENU_DRAW_PARITY item talk) he has no Talk row at all, as the game’s script gives it to Yuna and Kimahri only', () => {
     const engine = newEngine('seymour-flux', seedWhereActing('seymour-flux', gagazetBuild, ['tidus'], () => undefined), gagazetBuild);
     const decision = turnFor(engine, 'tidus');
-    const talk = decision.commands.find((c) => c.label === 'Talk');
     // §4.7 lists Kimahri and Yuna and nobody else.
-    expect(talk?.enabled).toBe(false);
-    expect(talk?.disabledReason).toBe('Nothing left to say');
+    expect(decision.commands.find((c) => c.label === 'Talk')).toBeUndefined();
+  });
+
+  it('with the talk item off (the build before release 55) Tidus has a greyed Talk that says "Nothing left to say" instead of eating his turn', () => {
+    const back = setMenuDrawParity(true, ['talk']);
+    try {
+      const engine = newEngine('seymour-flux', seedWhereActing('seymour-flux', gagazetBuild, ['tidus'], () => undefined), gagazetBuild);
+      const decision = turnFor(engine, 'tidus');
+      const talk = decision.commands.find((c) => c.label === 'Talk');
+      expect(talk?.enabled).toBe(false);
+      expect(talk?.disabledReason).toBe('Nothing left to say');
+    } finally {
+      back();
+    }
   });
 });
 
