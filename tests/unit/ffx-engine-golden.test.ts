@@ -357,16 +357,22 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * THE CAUSE IS D1 ALONE, the Defence and Magic Defence floors: the game treats a monster's 0 as 1, so each blow or spell lands about 0.7 percent weaker on a boss row that read 0 (Chapters III, VII, VIII, IX, X and XIV), which shifts a few damage
  * numbers by a point and so the rolls after them. PROOF, the 18 played under 9 switch sets on this tree: all six OFF = r53-rc's table (18 of 18); D3, D7, D8, D9, D10 alone and together move 0 of 18; D1 alone = all six on = this table; D1 on the Defence
  * floor alone moves 10 (not yojimbo-cavern), on the Magic Defence floor alone 4 (evrae-airship, yojimbo-cavern), on Accuracy, Agility, Magic and Luck 0. With the six false the table above is back (tests/unit/parity-ffx-boss-data*.test.ts hold that).
+ *
+ * FOUR digests re-pinned 2026-10-18 by release 55's FOC54-003 (FFX only; `src/battle/ffx/immune-status-miss.ts`): a status move the target is wholly immune to (resistance 255) used to land nothing and say nothing; it now emits one
+ * `miss` event with `reason: 'immune'`, the event Scan on a Pagoda already emitted, so the HUD prints IMMUNE. yunalesca#1 (fc0f6441 -> 77e21916) and #7 (3a7bc64f -> 677d1f07): the line's items and counters against Yunalesca's
+ * immunities (13 and 12 events of Darkness and Sleep that did nothing); seymour-anima-macalania#1 (c4ad03e -> b427e39) and #7 (ff0b2fa0 -> d2dfeaab): Rikku's Petrify Grenade on Seymour, who cannot be Petrified (1 event each).
+ * Every outcome is still a victory and every other digest is the base's. PROOF, `tests/unit/ffx-immune-status-miss.test.ts`: with `IMMUNE_STATUS_MISS.on = false` the four old digests come back (all 18 of 18 on the table above), and with
+ * it on the logs differ from the switched-off logs by those miss events and nothing else (same outcomes, same turns, every other event identical). No roll is drawn and no number moves.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '530d4776:victory',
   'seymour-flux#7': '1082973e:victory',
-  'yunalesca#1': 'fc0f6441:victory',
-  'yunalesca#7': '3a7bc64f:victory',
+  'yunalesca#1': '77e21916:victory',
+  'yunalesca#7': '677d1f07:victory',
   'braskas-final-aeon#1': 'e3ab9bd0:victory 2ae22767:victory bd952081:victory cb91b2df:victory cf6bdf71:victory 97585c97:victory 420d8443:victory',
   'braskas-final-aeon#7': '52c6b675:victory 8d75fead:victory 9482b803:victory 46ee87e5:victory e43f9a91:victory a8adb1e1:victory b6291175:victory',
-  'seymour-anima-macalania#1': 'c4ad03e:victory',
-  'seymour-anima-macalania#7': 'ff0b2fa0:victory',
+  'seymour-anima-macalania#1': 'b427e39:victory',
+  'seymour-anima-macalania#7': 'd2dfeaab:victory',
   'evrae-airship#1': '9c6cc0f9:victory',
   'evrae-airship#7': 'd82a7350:victory',
   'yojimbo-cavern#1': 'aaafef63:victory',

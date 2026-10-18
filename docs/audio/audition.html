@@ -169,6 +169,23 @@
 </script>
 <!-- fb-0929-music:end -->
 
+<!-- r55-error-cue:begin — release 55, the FFX command menu's stand-in "no" (parity item f, switched OFF in the build; docs/handoff/re-parity-r55-re.md section 9). -->
+<h2 style="margin-top:0">The menu&rsquo;s &ldquo;no&rdquo; cue (new, 18 October)</h2>
+<p class="group-note">When the FFX command menu refuses a pick (a greyed Escape, Flee or Switch row, a spell with no MP), the original plays a short refusal sound. We do not have that sound, so this is the stand-in the build would use: the menu set&rsquo;s existing <code>error</code> cue, <code>src/audio/sfxV2/cues.ts</code> line 126, cut from <code>public/audio/sfx/parity-ffx-core.mp3</code> at 0.677 s, 0.43 s long. It is <strong>switched off</strong> in this build (the cursor-and-cue item f of the menu parity); nobody has heard it in the game. Agents cannot hear, so this is yours to judge: is it a fitting &ldquo;no&rdquo;, too sharp, too soft, or the wrong kind of sound? Say yes and the build turns the cue on.</p>
+<div class="cue-grid"><article class="cue" id="r55-error-cue"><h4>error, the menu&rsquo;s stand-in &ldquo;no&rdquo; (FFX)</h4><p class="blurb" style="margin:8px 0 2px">The sprite file holds the whole menu set; the player below starts at 0.677 s and stops at 1.107 s.</p><audio controls preload="none" id="r55-error-audio" src="../../public/audio/sfx/parity-ffx-core.mp3#t=0.677,1.107"></audio><p class="stats"><span>0.43 s</span><span>offset 0.677 s</span><span>parity-ffx-core.mp3</span><span>cue <code>error</code></span><span>FFX only</span><span>off in this build</span></p><p><button type="button" id="r55-error-play" style="font:inherit;padding:6px 14px;cursor:pointer;color:var(--paper);background:var(--gold);border:0;border-radius:6px">Play the cue again</button></p></article></div>
+<script>
+(function () {
+  var audio = document.getElementById('r55-error-audio');
+  var button = document.getElementById('r55-error-play');
+  if (!audio || !button) return;
+  var START = 0.677, END = 1.107;
+  audio.addEventListener('timeupdate', function () { if (audio.currentTime >= END) audio.pause(); });
+  button.addEventListener('click', function () { audio.currentTime = START; audio.play(); });
+})();
+</script>
+<!-- r55-error-cue:end -->
+
+
 <!-- soundtrack-r1-2026-09-29 — see docs/handoff/r31-soundtrack.md and docs/audio/soundtrack-r1-2026-09-29.json. -->
 <div class="guide">
   <p style="margin:0"><strong>Shipped: the whole score in R1 (2026-09-29).</strong> You said &ldquo;all your recommendations, full speed ahead&rdquo;, so the game now plays the Direction B cues through the R1 &ldquo;focus&rdquo; remaster: 23 cues, plus the Chapter VII scene cue already shipped that way. Every player on this page that points at the game&rsquo;s own files (<code>public/audio/music/</code>) played the R1 version until 30 September and now plays music v2 (the note at the top); the Direction B and remaster sections below still play the files they were made with. Two cues keep today&rsquo;s sampled render because their R1 take missed a stereo gate: <code>boss-vegnagun</code> and <code>scene-bevelle-underground</code>. What an agent could check is measured in <code>docs/audio/soundtrack-r1-2026-09-29.json</code>; how it sounds is yours to judge (agents cannot hear).</p>

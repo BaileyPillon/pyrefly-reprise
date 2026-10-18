@@ -11,8 +11,8 @@
  "voiceBudgetBytes": 20000000,
  "totals": {
   "files": 222,
-  "bytes": 4046040,
-  "ms": 486635,
+  "bytes": 4044888,
+  "ms": 486496,
   "lines": 234
  },
  "variant": "fish-drama3-clone",
@@ -2577,17 +2577,17 @@
    "warn": []
   },
   {
-   "id": "isaaru-via-purifico.mid-grothia-ready.001.fb1",
+   "id": "isaaru-via-purifico.mid-grothia-ready.002.fb1",
    "voice": "yuna",
-   "chars": 31,
-   "ms": 2775,
-   "bytes": 22868,
-   "sha256": "7057f3cf5d532ed9c6e5d9d943d9d43e27b568a8c466602176c29ed666d96f61",
-   "lufs": -18.99,
-   "truePeakDb": -5.74,
-   "gainDb": -1.94,
+   "chars": 32,
+   "ms": 2636,
+   "bytes": 21716,
+   "sha256": "1accc146835c549bc697be2cb7ee1950d03568dbb7bd5a56c50298cfdf3ee0a0",
+   "lufs": -19,
+   "truePeakDb": -7.69,
+   "gainDb": -2.35,
    "limited": false,
-   "innerSilenceMs": 339,
+   "innerSilenceMs": 288,
    "take": 1,
    "warn": []
   },
@@ -3648,8 +3648,8 @@
    "id": "isaaru-via-purifico.mid-grothia-ready",
    "seam": false,
    "budgetMs": 8000,
-   "authoredMs": 2681,
-   "voicedMs": 2975,
+   "authoredMs": 2705,
+   "voicedMs": 2836,
    "verdict": "fits"
   },
   {

@@ -273,8 +273,8 @@ describe('the panel itself', () => {
     const p = panel();
     const releases = [...p.querySelectorAll<HTMLElement>('.fe-info__rel')];
     expect(releases.map((r) => r.dataset['release'])).toEqual(RELEASE_NOTES.map((n) => n.release));
-    expect(releases[0]!.querySelector('.fe-info__relname')?.textContent).toBe('Release 39.4.2');
-    expect(releases[0]!.querySelector('.fe-info__relmeta')?.textContent).toBe('2026-10-08');
+    expect(releases[0]!.querySelector('.fe-info__relname')?.textContent).toBe(`Release ${RELEASE_NOTES[0]!.release}`);
+    expect(releases[0]!.querySelector('.fe-info__relmeta')?.textContent).toBe(RELEASE_NOTES[0]!.date);
     RELEASE_NOTES.forEach((note, i) => {
       const lines = [...releases[i]!.querySelectorAll('.fe-info__li')];
       expect(lines).toHaveLength(note.lines.length);

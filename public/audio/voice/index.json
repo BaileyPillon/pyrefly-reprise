@@ -49,7 +49,7 @@
   },
   "isaaru-via-purifico": {
    "lines": 11,
-   "bytes": 247708
+   "bytes": 246556
   },
   "sin-fins-core": {
    "lines": 21,
@@ -66,8 +66,8 @@
  },
  "totals": {
   "files": 222,
-  "bytes": 4046040,
-  "ms": 486635,
+  "bytes": 4044888,
+  "ms": 486496,
   "lines": 234
  }
 }

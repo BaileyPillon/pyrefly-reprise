@@ -10,15 +10,15 @@
     "speech": "estSpeechMs = chars / 15 per second + 250 ms; a planning figure, replaced by the recorded duration once a line exists.",
     "ids": "<chapter>.<script part>.<NNN>; kept while chapter, part, speaker and text are unchanged, new lines take the next number, edits retire the old id (never reused)."
   },
-  "sourceDigest": "10fcfd671b55b5",
+  "sourceDigest": "1dd60dddd3b652",
   "totals": {
     "lines": 1024,
-    "chars": 30640,
+    "chars": 30642,
     "voicedLines": 1004,
-    "voicedChars": 29876,
-    "uniqueVoicedChars": 29423,
+    "voicedChars": 29878,
+    "uniqueVoicedChars": 29425,
     "standInLines": 44,
-    "standInChars": 1498,
+    "standInChars": 1499,
     "quipLines": 102,
     "midBeats": 119,
     "speakingVoices": 31,
@@ -27,10 +27,10 @@
     "byGame": {
       "ffx": {
         "lines": 660,
-        "chars": 20108,
+        "chars": 20110,
         "voicedLines": 649,
-        "voicedChars": 19647,
-        "uniqueVoicedChars": 19236
+        "voicedChars": 19649,
+        "uniqueVoicedChars": 19238
       },
       "ffx2": {
         "lines": 364,
@@ -294,10 +294,10 @@
       },
       "alsoPlaysIn": [],
       "lines": 33,
-      "chars": 1250,
+      "chars": 1252,
       "voicedLines": 33,
-      "voicedChars": 1250,
-      "uniqueVoicedChars": 1250
+      "voicedChars": 1252,
+      "uniqueVoicedChars": 1252
     },
     {
       "key": "ffx2-den-of-woe",
@@ -471,10 +471,10 @@
         "yunalesca"
       ],
       "lines": 80,
-      "chars": 2161,
+      "chars": 2162,
       "voicedLines": 80,
-      "voicedChars": 2161,
-      "uniqueVoicedChars": 2126
+      "voicedChars": 2162,
+      "uniqueVoicedChars": 2127
     },
     {
       "voice": "narrator",
@@ -560,10 +560,10 @@
         "yunalesca"
       ],
       "lines": 70,
-      "chars": 2023,
+      "chars": 2024,
       "voicedLines": 69,
-      "voicedChars": 2020,
-      "uniqueVoicedChars": 1960
+      "voicedChars": 2021,
+      "uniqueVoicedChars": 1961
     },
     {
       "voice": "seymour",
@@ -2538,8 +2538,8 @@
       "once": true,
       "seam": false,
       "budgetMs": 8000,
-      "authoredMs": 2681,
-      "voicedMs": 2717,
+      "authoredMs": 2705,
+      "voicedMs": 2783,
       "voicedLines": 1
     },
     {
@@ -2823,7 +2823,22 @@
       "voicedLines": 1
     }
   ],
-  "retired": [],
+  "retired": [
+    {
+      "id": "isaaru-via-purifico.mid-grothia-ready.001",
+      "chapter": "isaaru-via-purifico",
+      "speaker": "lulu",
+      "text": "Yuna. His aeon is ready. Guard first.",
+      "textHash": "025c2ccf3da2db"
+    },
+    {
+      "id": "isaaru-via-purifico.mid-grothia-ready.001.fb1",
+      "chapter": "isaaru-via-purifico",
+      "speaker": "yuna",
+      "text": "His aeon is ready. Guard first.",
+      "textHash": "1c9d9ebf67e216"
+    }
+  ],
   "lines": [
     {"id":"seymour-flux.pre.001","chapter":"seymour-flux","game":"ffx","script":"pre","part":"pre","order":1,"kind":"say","speaker":"kimahri","voice":"kimahri","text":"Kimahri knows this one. And this one.","chars":37,"voiced":"yes","emotion":"pained","textHash":"04f446bb281ef1","estSpeechMs":2717,"flags":[]},
     {"id":"seymour-flux.pre.002","chapter":"seymour-flux","game":"ffx","script":"pre","part":"pre","order":2,"kind":"say","speaker":"seymour","voice":"seymour","text":"They held the gate. All of them.","chars":32,"voiced":"yes","textHash":"0afa9830bfeae1","estSpeechMs":2383,"flags":[]},
@@ -3644,8 +3659,8 @@
     {"id":"isaaru-via-purifico.mid-pterya-called.002","chapter":"isaaru-via-purifico","game":"ffx","script":"mid","scriptName":"pterya-called","part":"mid-pterya-called","order":2,"kind":"say","speaker":"yuna","voice":"yuna","text":"Valefor... You can't come to me while he holds you.","chars":51,"voiced":"yes","auto":1800,"textHash":"1218c5ca3bf942","estSpeechMs":3650,"flags":[]},
     {"id":"isaaru-via-purifico.mid-spathi-called.001","chapter":"isaaru-via-purifico","game":"ffx","script":"mid","scriptName":"spathi-called","part":"mid-spathi-called","order":1,"kind":"say","speaker":"isaaru","voice":"isaaru","text":"Spathi... let this be the last.","chars":31,"voiced":"yes","auto":1600,"textHash":"1850ea791cb34c","estSpeechMs":2317,"flags":[]},
     {"id":"isaaru-via-purifico.mid-spathi-called.002","chapter":"isaaru-via-purifico","game":"ffx","script":"mid","scriptName":"spathi-called","part":"mid-spathi-called","order":2,"kind":"say","speaker":"yuna","voice":"yuna","text":"Not Bahamut. Not against himself.","chars":33,"voiced":"yes","auto":1800,"textHash":"09803e5c2b5513","estSpeechMs":2450,"flags":[]},
-    {"id":"isaaru-via-purifico.mid-grothia-ready.001","chapter":"isaaru-via-purifico","game":"ffx","script":"mid","scriptName":"grothia-ready","part":"mid-grothia-ready","order":1,"kind":"say","speaker":"lulu","voice":"lulu","text":"Yuna. His aeon is ready. Guard first.","chars":37,"voiced":"yes","auto":1800,"textHash":"025c2ccf3da2db","estSpeechMs":2717,"flags":[]},
-    {"id":"isaaru-via-purifico.mid-grothia-ready.001.fb1","chapter":"isaaru-via-purifico","game":"ffx","script":"mid","scriptName":"grothia-ready","part":"mid-grothia-ready","order":1,"kind":"fallback","speaker":"yuna","voice":"yuna","text":"His aeon is ready. Guard first.","chars":31,"voiced":"yes","fallbackOf":"isaaru-via-purifico.mid-grothia-ready.001","textHash":"1c9d9ebf67e216","estSpeechMs":2317,"flags":["stand-in"]},
+    {"id":"isaaru-via-purifico.mid-grothia-ready.002","chapter":"isaaru-via-purifico","game":"ffx","script":"mid","scriptName":"grothia-ready","part":"mid-grothia-ready","order":1,"kind":"say","speaker":"lulu","voice":"lulu","text":"Yuna. His aeon is ready. Shield first.","chars":38,"voiced":"yes","auto":1800,"textHash":"1cbebd1d710312","estSpeechMs":2783,"flags":[]},
+    {"id":"isaaru-via-purifico.mid-grothia-ready.002.fb1","chapter":"isaaru-via-purifico","game":"ffx","script":"mid","scriptName":"grothia-ready","part":"mid-grothia-ready","order":1,"kind":"fallback","speaker":"yuna","voice":"yuna","text":"His aeon is ready. Shield first.","chars":32,"voiced":"yes","fallbackOf":"isaaru-via-purifico.mid-grothia-ready.002","textHash":"0848e13ff2845e","estSpeechMs":2383,"flags":["stand-in"]},
     {"id":"isaaru-via-purifico.quip-yuna.001","chapter":"isaaru-via-purifico","game":"ffx","script":"quip","scriptName":"yuna","part":"quip-yuna","order":1,"kind":"quip","speaker":"yuna","voice":"yuna","text":"...I'm sorry, Isaaru.","chars":21,"voiced":"yes","textHash":"06f2cb1b4017c6","estSpeechMs":1650,"flags":[]},
     {"id":"ffx2-den-of-woe.pre.001","chapter":"ffx2-den-of-woe","game":"ffx2","script":"pre","part":"pre","order":1,"kind":"narrate","speaker":"narrator","voice":"yuna-x2","treatment":"narration","text":"Ten old spheres. Paine's recordings, every one.","chars":47,"voiced":"yes","textHash":"1c1c82d5e53a19","estSpeechMs":3383,"flags":[]},
     {"id":"ffx2-den-of-woe.pre.002","chapter":"ffx2-den-of-woe","game":"ffx2","script":"pre","part":"pre","order":2,"kind":"narrate","speaker":"narrator","voice":"yuna-x2","treatment":"narration","text":"Together they opened a door in the ravine.","chars":42,"voiced":"yes","textHash":"11830c65005f91","estSpeechMs":3050,"flags":[]},

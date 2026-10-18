@@ -28,6 +28,7 @@ import { removeStatus } from './statuses.ts';
 import { addCtb, tickSpeedOf } from './adapt/ctb.ts';
 import { PermBit, ResultCounter, type StatusRecord } from './kernel/status-types.ts';
 import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep } from './adapt/status.ts';
+import { statusRefusedAsImmune } from './immune-status-miss.ts';
 import { type Before, applyStatusStep } from './adapt/status-apply.ts';
 import { buffByte, stackBytes } from './adapt/status.ts';
 import { reactToHit } from './adapt/reactions.ts';
@@ -333,8 +334,12 @@ function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
   // field) the record carries. A petrified monster always shatters because Petrify on a monster puts Death and Eject in the
   // record itself, and the shatter roll against an already petrified target is the step's own (`Cmd+0x2c`).
   if (step) {
-    applyStatusStep(ctx, user, target, def, before, step);
+    const applied = applyStatusStep(ctx, user, target, def, before, step);
     book.record = step.result.record;
+    // A status move the target is wholly immune to lands nothing and used to say nothing; it reads as an immune miss like Scan on a Pagoda (`immune-status-miss.ts`, FOC54-003).
+    if (report.outcome === 'hit' && statusRefusedAsImmune({ row, target, amounts: [hpAmount, mpAmount, ctbAmount], changed: applied.added.length + applied.removed.length > 0 || applied.killed || applied.ejected })) {
+      ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
+    }
   }
   // The game's hit applier then asks the target's Auto-Med and Auto-Potion (FFX only, re-parity RC4 lane F): each one decided here, from this
   // hit's HP damage and the statuses it newly inflicted, and paid for now; the reaction itself runs when the action is over.

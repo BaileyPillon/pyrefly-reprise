@@ -611,7 +611,9 @@
   font-family: var(--ig-font-serif); font-weight: 700; font-style: italic;
   font-size: 11px; color: var(--ig-paper); margin-bottom: 3px;
 }
-.ffx-sensor__hp { font-family: var(--ig-font-numeral); font-size: 10px; color: var(--ig-paper); margin-bottom: 2px; }
+.ffx-sensor__hp, .ffx-sensor__mp { font-family: var(--ig-font-numeral); font-size: 10px; color: var(--ig-paper); margin-bottom: 2px; white-space: nowrap; }
+/* FOC54-005: a read-out like "99,999 / 99,999" is set a size smaller so it stays inside the plate (`sensorNumbers.ts#longClass`). */
+.ffx-sensor .ffx-sensor__num--long { font-size: 8px; }
 .ffx-sensor__bar { width: 100%; height: 4px; background: #2a3246; margin-bottom: 4px; }
 .ffx-sensor__bar i { display: block; height: 100%; background: var(--ig-blood); }
 .ffx-sensor__chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
