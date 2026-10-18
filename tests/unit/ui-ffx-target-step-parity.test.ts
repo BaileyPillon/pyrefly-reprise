@@ -16,6 +16,7 @@ import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
 import { buildTopRows } from '../../src/ui/ffx/CommandMenuLogic.ts';
 import { groupHelp } from '../../src/ui/ffx/commandMenuRows.ts';
 import { ffxTargetMode } from '../../src/ui/ffx/loneTarget.ts';
+import { opensList } from '../../src/ui/ffx/targetStepUi.ts';
 import type { CursorSelection } from '../../src/ui/ffx/TargetCursor.ts';
 import { actor, engineFor, menuOf } from './helpers/menuParityDrive.ts';
 
@@ -271,12 +272,106 @@ describe('t6 openerOne by real keys: a one-entry opener opens its list', () => {
   it('the group row\'s help line says it opens a menu (not the entry\'s own help) while the item is on', () => {
     const group = buildTopRows([ATTACK, od]).find((r) => r.kind === 'group');
     if (group?.kind !== 'group') throw new Error('no group');
-    const old = groupHelp(group);
+    const old = groupHelp(group, 'tidus');
     on();
-    expect(groupHelp(group)).toBe('Open the Overdrive menu.');
+    expect(groupHelp(group, 'tidus')).toBe('Open the Overdrive menu.');
+    expect(groupHelp(group, 'valefor')).toBe(old); // an aeon's Overdrive is a direct command: its own help line, as before
     restore?.();
     restore = undefined;
-    expect(groupHelp(group)).toBe(old);
+    expect(groupHelp(group, 'tidus')).toBe(old);
+  });
+});
+
+describe('t6 openerOne, check B1 (2026-10-18): the Overdrive group is a list opener only for Tidus, Kimahri, Auron, Wakka and Lulu', () => {
+  const group = (category: 'overdrive' | 'special' | 'aeon' | 'item', role?: 'switch') => {
+    const items = [row({ label: 'Only', category, command: { kind: 'overdrive', id: 'only', targets: [] } })];
+    return { kind: 'group' as const, category, label: category, items, ...(role ? { role } : {}) };
+  };
+
+  it("opensList: the five characters' Overdrive group opens a list; an aeon, Yuna (Grand Summon), Rikku (Mix) and an unknown user do not", () => {
+    on();
+    for (const who of ['tidus', 'kimahri', 'auron', 'wakka', 'lulu']) expect(opensList(group('overdrive'), who), who).toBe(true);
+    for (const who of ['yuna', 'rikku', 'valefor', 'ixion', 'ifrit', 'shiva', 'bahamut', 'anima', 'cindy', undefined]) expect(opensList(group('overdrive'), who), String(who)).toBe(false);
+  });
+
+  it('opensList: every other opener category opens for anyone; the aeon group, the Switch role, the skipped item and the switch off never do', () => {
+    on();
+    for (const who of ['tidus', 'yuna', 'rikku', 'valefor', undefined]) {
+      expect(opensList(group('special'), who), String(who)).toBe(true);
+      expect(opensList(group('item'), who), String(who)).toBe(true);
+      expect(opensList(group('aeon'), who), String(who)).toBe(false);
+      expect(opensList(group('overdrive', 'switch'), 'tidus'), String(who)).toBe(false);
+    }
+    on(['openerOne']);
+    expect(opensList(group('overdrive'), 'tidus')).toBe(false);
+    expect(opensList(group('special'), 'tidus')).toBe(false);
+    restore?.();
+    restore = undefined;
+    expect(opensList(group('overdrive'), 'tidus')).toBe(false);
+    expect(opensList(group('special'), 'tidus')).toBe(false);
+  });
+
+  /** The rows the real engine offers `id` with a full gauge, for the real menu. */
+  const withGauge = (engine: Awaited<ReturnType<typeof engineFor>>, id: string): AvailableCommand[] => {
+    actor(engine, id).overdrive!.gauge = 100;
+    return menuOf(engine, id);
+  };
+  const openOverdrive = (actorId: string, rows: AvailableCommand[], engine: Awaited<ReturnType<typeof engineFor>>): Opened => {
+    const h = open(actorId, rows, engine.state().combatants as Record<CombatantId, AnyCombatant>);
+    for (let i = 0; i < 12 && selected() !== 'Overdrive'; i += 1) key('ArrowDown');
+    expect(selected()).toBe('Overdrive');
+    key('Enter');
+    return h;
+  };
+
+  it("real engine rows: Tidus' one-entry Overdrive group (Spiral Cut) opens a list of one", async () => {
+    const engine = await engineFor('seymour-flux');
+    on();
+    const rows = withGauge(engine, 'tidus');
+    expect(buildTopRows(rows).filter((r) => r.kind === 'group' && r.category === 'overdrive').map((r) => (r.kind === 'group' ? r.items.length : 0))).toEqual([1]);
+    const h = openOverdrive('tidus', rows, engine);
+    expect(h.menu.breadcrumbEl.hidden).toBe(false);
+    expect(h.menu.breadcrumbEl.textContent).toBe('Overdrive');
+    expect(selected()).toBe('Spiral Cut');
+  });
+
+  it("real engine rows: Yuna's Grand Summon and Rikku's Mix are the openers themselves (our existing pickers): no extra list, the command goes out", async () => {
+    const engine = await engineFor('seymour-anima-macalania');
+    on();
+    for (const [who, label] of [['yuna', 'Grand Summon'], ['rikku', 'Mix']] as const) {
+      for (const m of opened.splice(0)) m.close();
+      document.body.innerHTML = '';
+      const rows = withGauge(engine, who);
+      const group = buildTopRows(rows).find((r) => r.kind === 'group' && r.category === 'overdrive');
+      expect(group?.kind === 'group' ? group.items.map((i) => i.label) : null, who).toEqual([label]);
+      const h = openOverdrive(who, rows, engine);
+      expect(h.menu.breadcrumbEl.hidden, who).toBe(true);
+      await h.flush();
+      expect(h.result(), who).toMatchObject({ kind: 'overdrive' });
+    }
+  });
+
+  it("real engine rows: an aeon's Overdrive (Valefor's Energy Ray) is a direct command: the target step opens at once, no list", async () => {
+    const engine = await engineFor('yunalesca');
+    let rows: AvailableCommand[] | undefined;
+    for (let i = 0; i < 60 && !rows; i += 1) {
+      const d = engine.nextDecision();
+      if (d.kind === 'resolved' || d.kind === 'waiting') continue;
+      if (d.kind === 'battle-over') break;
+      if (d.actorId === 'valefor') {
+        rows = withGauge(engine, 'valefor');
+        break;
+      }
+      const summon = d.actorId === 'yuna' ? d.commands.find((c) => c.command.kind === 'summon' && c.command.id === 'valefor') : undefined;
+      engine.submit(summon ? { ...summon.command, targets: [] } : { kind: 'defend', targets: [] });
+    }
+    if (!rows) throw new Error('no aeon turn');
+    on();
+    const group = buildTopRows(rows).find((r) => r.kind === 'group' && r.category === 'overdrive');
+    expect(group?.kind === 'group' ? group.items.map((i) => i.label) : null).toEqual(['Energy Ray']);
+    const h = openOverdrive('valefor', rows, engine);
+    expect(h.menu.breadcrumbEl.hidden).toBe(true);
+    expect(h.seen.at(-1)?.activeId).toBeTruthy(); // the foe cursor (the target step) is up; the same Enter did not stop on a list
   });
 });
 

@@ -17,7 +17,7 @@ import {
   type TopRow,
 } from './CommandMenuLogic.ts';
 import { ffxTargetMode } from './loneTarget.ts';
-import { opensList, startPreference, stepSideIds } from './targetStepUi.ts';
+import { openStepCursor, opensList, switchStepSide } from './targetStepUi.ts';
 import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
 import { touchTapped } from '../common/touchTapAim.ts';
 import { commandHelpText } from './commandHelp.ts';
@@ -298,8 +298,7 @@ export class CommandMenu {
   /** The Defend press, from Triangle (`Q` or the pad's Triangle; not Shift) or a tap on the tab: the engine's own `defend` command. */
   private defend(): void {
     if (!this.resolve || this.suspended || this.state !== 'top' || !this.defendCmd) return;
-    // The hot key bypasses the resolver (0x78FB80): it never opens a target step, whatever the row carries (`TARGET_STEP_PARITY`).
-    this.resolveCommand({ ...this.defendCmd, targetStep: undefined });
+    this.resolveCommand({ ...this.defendCmd, targetStep: undefined }); // the hot key bypasses the resolver (0x78FB80): never a target step, whatever the row carries (`TARGET_STEP_PARITY`)
   }
 
   private finish(command: Command): void {
@@ -483,7 +482,7 @@ export class CommandMenu {
     } else if (b === 'confirm') {
       this.confirmTarget();
     } else if (b === 'l1' || b === 'r1') {
-      this.switchTargetSide();
+      if (switchStepSide(this.targetCursor, this.pendingCmd, this.groupTargets, (id, c) => this.entryFor(id, c))) this.syncTargetSurfaces(); // parity item sideSwitch
     } else if (b === 'cancel') {
       // The same chokepoint confirm goes through — restoring every dimmed
       // figure on the field is the half of option B a player notices only when
@@ -537,7 +536,7 @@ export class CommandMenu {
       // flat "OVERDRIVE -- READY" row (most characters have exactly one
       // usable Overdrive move). The reserve list is the exception: a swap
       // always shows who is coming in, even with one member benched.
-      if (row.items.length === 1 && row.role !== 'switch' && row.items[0]!.enabled && !opensList(row)) { // `opensList`: target-step parity item openerOne
+      if (row.items.length === 1 && row.role !== 'switch' && row.items[0]!.enabled && !opensList(row, this.opts?.actorId)) { // `opensList`: target-step parity item openerOne
         this.resolveCommand(row.items[0]!);
         return;
       }
@@ -589,8 +588,6 @@ export class CommandMenu {
   // -------------------------------------------------------------- targeting
 
   private pendingCmd: AvailableCommand | null = null;
-  /** True while the target step shows the other side of the row's step (`switchTargetSide`). */
-  private stepOtherSide = false;
   /** Set while a multi-target command is awaiting confirmation. */
   private groupTargets: CombatantId[] | null = null;
 
@@ -627,22 +624,7 @@ export class CommandMenu {
     }
 
     this.groupTargets = null;
-    // `showSingle` counts from the LEFT OF THE SCREEN, not into `entries` (the
-    // engine's slot-then-id order once opened on the aeon mid-field, away from
-    // the player's eye). A row that may also point at the party opens on the
-    // side the engine prefers (`preferredTargets`).
-    this.stepOtherSide = false;
-    this.targetCursor.showSingle(entries, 0, startPreference(cmd)); // the target step's start (parity item cursorStart), else the engine's aim hint
-    this.syncTargetSurfaces();
-  }
-
-  /** Target-step parity (item sideSwitch): L1 / R1 in the target step show the other side of the row's step, opening on its first candidate. A no-op for a row with no `switchTo`. */
-  private switchTargetSide(): void {
-    const cmd = this.pendingCmd;
-    const ids = cmd && !this.groupTargets ? stepSideIds(cmd, !this.stepOtherSide) : null;
-    if (!cmd || !ids) return;
-    this.stepOtherSide = !this.stepOtherSide;
-    this.targetCursor.showSingle(ids.map((id) => this.entryFor(id, cmd)), 0, [ids[0]!]);
+    openStepCursor(this.targetCursor, entries, cmd); // counts from the left of the screen; opens on the aim hint, or the target step's start (`targetStepUi.ts`)
     this.syncTargetSurfaces();
   }
 
@@ -860,7 +842,7 @@ export class CommandMenu {
     if (this.state === 'top') {
       const row = this.rows[this.topIndex];
       const cmd = row?.kind === 'direct' ? row.cmd : null;
-      this.opts.setHelp(cmd ? commandHelpText(cmd) : row?.kind === 'group' ? groupHelp(row) : '');
+      this.opts.setHelp(cmd ? commandHelpText(cmd) : row?.kind === 'group' ? groupHelp(row, this.opts.actorId) : '');
       this.opts.previewRank(cmd);
       return;
     }

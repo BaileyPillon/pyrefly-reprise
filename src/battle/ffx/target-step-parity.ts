@@ -16,7 +16,7 @@
  * | `cursorStart` | ally side first opens on the user's own entry; a record that may target the dead opens on the first KO'd ally in party order |
  * | `cursorStartFoe` | foe side first opens on index 0 of the foe list (formation order, `ctx.state.enemyIds`, the game's actor numbers 20 and up) |
  * | `sideSwitch` | a record with the side-switch bit lets the cursor switch to the other side; `switchTo` lists that side. Legality moves, so it is its own item |
- * | `openerOne` | a one-entry opener opens its list (HUD only, `targetStepUi.ts`) |
+ * | `openerOne` | a one-entry opener opens its list (HUD only, `targetStepUi.ts`; the Overdrive group only for Tidus, Kimahri, Auron, Wakka and Lulu) |
  * | `copycat` | Copycat is self-only with the step bit: its row is `self`, not `single-any` |
  *
  * Layering: pure, deterministic, no DOM [AGENTS.md hard rule 1].
