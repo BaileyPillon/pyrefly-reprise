@@ -48,6 +48,7 @@
 import type { AbilityCategory, AvailableCommand, Command, EnemyGroupDef, FFXCombatant } from '../common/types.ts';
 import { type Ctx, abilityOf } from './state.ts';
 import { AEON_SLOT } from './adapt/slots.ts';
+import { aeonRosterRemoved, applyRosterRemoval, rosterEmptied } from './roster-removal.ts';
 
 /** The one switch. `false` makes {@link applyFormationCommandDisables} a no-op, so no battle sets a flag and every menu is as before. */
 export const FORMATION_COMMAND_DISABLES = true;
@@ -120,6 +121,8 @@ export function applyFormationCommandDisables(ctx: Ctx, group: EnemyGroupDef): v
       ctx.state.flags[COMMAND_OFF_ANY] = true;
     }
   }
+  // Chapter III's roster removal (`./roster-removal.ts`, switch off): the aeons the field event took out of the party before this link; the Grand Summon row is checked for "nothing left".
+  if (applyRosterRemoval(ctx, group)) ctx.state.flags[COMMAND_OFF_ANY] = true;
   if (!SCRIPT_COMMAND_DISABLES.on) return;
   for (const off of group.scriptCommandDisables ?? []) {
     if (off.command < MENU_COMMAND_FLOOR) {
@@ -167,12 +170,19 @@ export function commandOff(ctx: Ctx, user: FFXCombatant, command: number): boole
   return flags[offKey('everyone', command)] === true || flags[offKey(user.id, command)] === true;
 }
 
+/** Is this Yuna's Grand Summon: a command carrying its pick, or the menu's own row for the Overdrive (no pick yet)? */
+function isGrandSummon(ctx: Ctx, command: Command): boolean {
+  if (command.kind !== 'overdrive') return false;
+  return command.extra?.kind === 'yuna-grand-summon' || abilityOf(ctx, command.id)?.minigame === 'yuna-grand-summon';
+}
+
 /** Does this submitted command belong to a command the formation switched off for this actor? `submit()`'s half of the rule. */
 export function commandRefused(ctx: Ctx, user: FFXCombatant, command: Command): boolean {
-  if (command.kind === 'summon') return aeonScriptOff(ctx, command.id);
-  if (command.kind === 'overdrive' && command.extra?.kind === 'yuna-grand-summon') {
-    const named = command.extra.grandSummon.aeonId;
-    return named !== '' && aeonScriptOff(ctx, named);
+  if (command.kind === 'summon') return aeonScriptOff(ctx, command.id) || aeonRosterRemoved(ctx, command.id);
+  if (command.kind === 'overdrive' && isGrandSummon(ctx, command)) {
+    if (rosterEmptied(ctx)) return true; // the field event took every aeon out of the party: the list is empty, the game draws the opener greyed (-3) and refuses it
+    const named = command.extra?.kind === 'yuna-grand-summon' ? command.extra.grandSummon.aeonId : '';
+    return named !== '' && (aeonScriptOff(ctx, named) || aeonRosterRemoved(ctx, named));
   }
   const id = menuCommandOf(ctx, command);
   return id !== undefined && commandOff(ctx, user, id);

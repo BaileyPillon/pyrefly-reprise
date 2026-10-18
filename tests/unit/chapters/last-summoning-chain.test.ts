@@ -133,11 +133,11 @@ describe('a possession link', () => {
     const order: OfferingKey[] = ['bahamut', 'sisters', 'valefor'];
     const g = possessionGroup(order);
     expect(g.lockedAeons).toEqual([
-      { aeonId: 'bahamut', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'cindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'sandy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'mindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
-      { aeonId: 'valefor', mirrorOf: 'yu-yevon', reason: TAKEN_REASON },
+      { aeonId: 'bahamut', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'cindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'sandy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'mindy', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
+      { aeonId: 'valefor', mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true },
     ]);
   });
 
@@ -197,10 +197,13 @@ describe('Yu Yevon’s formation is Chapter III’s, a copy with the eight aeons
   it('differs from Chapter III’s only in its id, the locks and the chain length; Chapter III’s object is untouched', () => {
     const copy = yuYevonLink([...ALL_KEYS]);
     const { id, lockedAeons, chainLength, ...rest } = copy;
-    const { id: theirId, ...theirs } = yuYevonGroup;
+    const { id: theirId, rosterRemoved: chapterIII, ...theirs } = yuYevonGroup;
     expect(id).toBe(yuYevonGroupId([...ALL_KEYS]));
     expect(theirId).toBe('yu-yevon');
     expect(rest).toEqual(theirs);
+    // Chapter III's roster field (CH3_ROSTER_REMOVAL) is its own; the hidden chapter locks with lockedAeons and carries none of it (re-parity RC11, lane "FFX Chapter III roster").
+    expect(chapterIII).toEqual(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut']);
+    expect((copy as { rosterRemoved?: unknown }).rosterRemoved).toBeUndefined();
     expect(lockedAeons).toHaveLength(10);
     expect(chainLength).toBe(FULL_CHAIN_LENGTH);
     expect(yuYevonGroup.lockedAeons).toBeUndefined();

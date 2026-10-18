@@ -7,6 +7,9 @@
  * cannot be summoned. So the copy takes its own aeon away from Yuna for the whole battle. The ids below are the ones the ten scripts pass (the raw scan is
  * `tests/fixtures/parity/ffx/monster_command_disables.json`); they are the game's aeon slots (`battle/ffx/adapt/slots.ts#AEON_SLOT`), which the test pins to the same numbers.
  *
+ * The same file carries the field event's half (re-parity RC11, lane "FFX Chapter III roster"; `docs/handoff/re-parity-rc11-ffx-ch3-roster.md`): `sins0700` removes the chosen aeon from the party before its link, so {@link possessedRosterKeys}
+ * names the roster keys that go with a link (`EnemyGroupDef.rosterRemoved`, read by `battle/ffx/roster-removal.ts` only while `CH3_ROSTER_REMOVAL` is on, off).
+ *
  * Read by `battle/ffx/formation-commands.ts` only while the switch `SCRIPT_COMMAND_DISABLES` is on (it is off). Chapter III's five links carry it
  * (`braskas-final-aeon.ts#possessedAeonBattle`); the hidden Last Summoning builds its groups on its own and models the same lock with `lockedAeons` ("Taken by Yu Yevon"), so it carries none of this.
  */
@@ -31,4 +34,14 @@ export const POSSESSED_SCRIPT_LOCK_ID: Readonly<Record<string, number>> = {
 export function possessedScriptDisables(possessedId: string): readonly FormationCommandOff[] | undefined {
   const command = POSSESSED_SCRIPT_LOCK_ID[possessedId];
   return command === undefined ? undefined : [{ who: 'yuna', command }];
+}
+
+/**
+ * The roster keys the field event removes from the party when it launches this possessed body's link (`sins0700`, call 0xCB removePartyMember, before the battle): the aeon's own, and for a Magus Sister all three
+ * Sisters together (the event removes Sandy and Mindy with the choice of Cindy). `[]` for any other id.
+ */
+export function possessedRosterKeys(possessedId: string): readonly string[] {
+  if (POSSESSED_SCRIPT_LOCK_ID[possessedId] === undefined) return [];
+  if (possessedId === 'possessed-cindy' || possessedId === 'possessed-sandy' || possessedId === 'possessed-mindy') return ['cindy', 'sandy', 'mindy'];
+  return [possessedId.replace('possessed-', '')];
 }

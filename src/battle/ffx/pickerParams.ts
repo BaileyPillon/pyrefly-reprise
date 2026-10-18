@@ -17,6 +17,7 @@
 import type { AbilityId, ItemId } from '../common/types.ts';
 import type { Ctx } from './state.ts';
 import { grandSummonChoices, summonLabel } from './aeon-duel.ts';
+import { GRAND_SUMMON_KO_REFUSED, aeonKnockedOut } from './grand-summon-ko.ts';
 import { aeonScriptOff } from './formation-commands.ts';
 
 /**
@@ -63,6 +64,7 @@ export function grandSummonEntries(ctx: Ctx): GrandSummonEntry[] {
     const aeon = ctx.rt.aeonRoster.get(id);
     const entry: GrandSummonEntry = { id, name: summonLabel(ctx, id, aeon?.name ?? id), storedGauge: aeon?.overdrive?.gauge ?? 0 };
     if (aeonScriptOff(ctx, id)) entry.enabled = false;
+    else if (GRAND_SUMMON_KO_REFUSED.on && aeonKnockedOut(ctx, id)) entry.enabled = false; // a knocked-out or recovering aeon is a greyed entry, as the game's list draws it (`./grand-summon-ko.ts`, off)
     return entry;
   });
 }

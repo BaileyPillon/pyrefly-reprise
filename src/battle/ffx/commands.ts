@@ -13,7 +13,8 @@ import { reachesAtRange, validTargets } from './targeting.ts';
 import { type AimDef, preferredTargetIds } from '../common/aim.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
-import { applyDuelRows, lockReason, summonLabel } from './aeon-duel.ts';
+import { applyDuelRows, lockReason, lockRemoved, summonLabel } from './aeon-duel.ts';
+import { aeonRosterRemoved } from './roster-removal.ts';
 import { defendTakenFrom } from './formation-flags.ts';
 import { GAME_COMMAND, aeonScriptOff, commandOff, greyDisabledRows } from './formation-commands.ts';
 import { greyRow, menuParity, overdriveGaugeFull } from './menu-draw-parity.ts';
@@ -207,6 +208,7 @@ function menuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
     for (const [key, aeon] of ctx.rt.aeonRoster) {
       // The Magus Sisters are one entry (a build that owns them, re-parity lane FFX-K): Cindy's row stands for the three, locked or not (a locked Sandy or Mindy would be two more greyed rows). Its label is the game's own, "Magus Sisters" (`summonLabel`); `ctx.rt.sisters` is set by Chapter XXVII and the hidden Chapter 28 alike.
       if (ctx.rt.sisters && (key === 'sandy' || key === 'mindy')) continue;
+      if (aeonRosterRemoved(ctx, key) || (menuParity('summon') && lockRemoved(ctx, key))) continue; // the field event took it out of the party: the game's list never holds it, so no row (Chapter III with `CH3_ROSTER_REMOVAL`; the Last Summoning's removed locks with the parity item)
       const locked = lockReason(ctx, key);
       // A possessed copy's script took this aeon away (`SCRIPT_COMMAND_DISABLES`, off): the game's list builder (0x00785410, category 5) never reads the availability byte, so the entry stays and the draw loop (0x008A49B0) greys it, with no reason.
       const scriptOff = aeonScriptOff(ctx, key) && locked === undefined && aeonSummonable(aeon);

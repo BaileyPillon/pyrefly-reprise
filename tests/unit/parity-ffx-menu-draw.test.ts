@@ -223,7 +223,7 @@ describe('item c: the Summon list keeps a knocked-out or recovering aeon, greyed
     expect(rows.every(noReason)).toBe(true);
   });
 
-  it('the Last Summoning board rule: Chapter III never looks like the board, and a taken aeon keeps its words', async () => {
+  it('the Last Summoning board rule: Chapter III never looks like the board, and the board still reads as the board when a taken aeon has no row', async () => {
     const chapterIII = await setup();
     on();
     menuOf(chapterIII, 'yuna');
@@ -232,16 +232,25 @@ describe('item c: the Summon list keeps a knocked-out or recovering aeon, greyed
     const board = newLastSummoningEngine(lsSetup);
     expect(onLastSummoningBoard(board.state())).toBe(true);
     const lsRows = (): AvailableCommand[] => kinds(menuOf(board as never, 'yuna'), 'summon');
-    // a KO'd aeon that is also taken keeps the lock's reason; a KO'd aeon that is not taken has none
+    // a KO'd aeon that is not taken is a greyed row with no reason; an aeon the event took out of the party (the locks' `removed`) has no row at all, KO'd or not (item i of the Chapter III roster lane)
     ctxOf(board as never).rt.aeonRoster.get('valefor')!.hp = 0;
     ctxOf(board as never).rt.aeonRoster.get('ixion')!.hp = 0;
-    const off = lsRows().map((r) => `${r.label}:${r.enabled}:${r.disabledReason}`);
-    on();
     const onRows = lsRows();
-    expect(onRows.find((r) => r.label === 'Valefor')!.disabledReason).toBe(TAKEN_REASON);
+    expect(onRows.find((r) => r.label === 'Valefor')).toBeUndefined();
+    expect(onRows.find((r) => r.label === 'Ifrit')!.enabled).toBe(true); // the first link has taken Valefor only
     expect(onRows.find((r) => r.label === 'Ixion')!.enabled).toBe(false);
     expect(onRows.find((r) => r.label === 'Ixion')!.disabledReason).toBeUndefined();
-    expect(onRows.map((r) => r.label).length).toBeGreaterThanOrEqual(off.length);
+    expect(onRows.map((r) => r.label)).toContain('Shiva');
+    expect(onLastSummoningBoard(board.state())).toBe(true); // the board is told by the locks' flags, never by a row
+  });
+
+  it('skip "summon" leaves the taken aeons of the Last Summoning as greyed rows with their words', async () => {
+    on(['summon']);
+    const { setup: lsSetup } = await firstLinkSetup(['valefor', 'ifrit'], 3);
+    const board = newLastSummoningEngine(lsSetup);
+    const rows = kinds(menuOf(board as never, 'yuna'), 'summon');
+    expect(rows.find((r) => r.label === 'Valefor')!.disabledReason).toBe(TAKEN_REASON);
+    expect(rows.find((r) => r.label === 'Ifrit')!.disabledReason).toBeUndefined();
     expect(onLastSummoningBoard(board.state())).toBe(true);
   });
 

@@ -36,7 +36,7 @@ import { MANDATORY_AEON_IDS, POSSESSED_AEON_ORDER } from '../ids.ts';
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 import { POSSESSED_PLAIN_ATTACK } from '../command-records/enemies.ts';
 import { BFA_LINE_FILE, lootRewards } from '../loot/index.ts';
-import { possessedScriptDisables } from './possessed-script-locks.ts';
+import { possessedRosterKeys, possessedScriptDisables } from './possessed-script-locks.ts';
 
 // ---------------------------------------------------------------------------
 // Yu Pagodas
@@ -384,7 +384,7 @@ export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: num
  * {@link buildPossessedAeonChain}. Music (PR-0129): the chapter's `phase2`, `boss-yu-yevon`, which 'valefor-enters'
  * starts; Valefor's link starts nothing, so that scene alone owns it (§5.3's own track has no cue here).
  */
-function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: string): EnemyGroupDef {
+function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: string, removed: readonly string[]): EnemyGroupDef {
   const scriptLocks = possessedScriptDisables(aeonId);
   return {
     id: `possessed-${aeonId.replace('possessed-', '')}`,
@@ -403,6 +403,8 @@ function possessedAeonBattle(aeonId: BraskasFinalAeonEnemyId, nextGroupId: strin
     musicCues: [{ at: 'start', track: aeonId === 'possessed-valefor' ? null : 'boss-yu-yevon', fadeMs: 800 }],
     // The copy's own script takes its aeon from Yuna (init: setCommandDisabled(1, <the aeon's id>, 0)); read only while SCRIPT_COMMAND_DISABLES is on, which it is not (`./possessed-script-locks.ts`).
     ...(scriptLocks !== undefined ? { scriptCommandDisables: scriptLocks } : {}),
+    // The field event took this link's aeon, and every aeon given up before it, out of the party before the fight (`sins0700`, removePartyMember); read only while CH3_ROSTER_REMOVAL is on, which it is not.
+    ...(removed.length > 0 ? { rosterRemoved: removed } : {}),
   };
 }
 
@@ -424,10 +426,12 @@ export function buildPossessedAeonChain(ownedAeonIds: readonly AeonId[]): EnemyG
     return owned.has(aeon);
   });
 
+  const gone = new Set<string>();
   return sequence.map((aeonId, i) => {
     const next = sequence[i + 1];
     const nextGroupId = next !== undefined ? `possessed-${next.replace('possessed-', '')}` : 'yu-yevon';
-    return possessedAeonBattle(aeonId, nextGroupId);
+    for (const key of possessedRosterKeys(aeonId)) gone.add(key); // removed before its own link's fight, and kept off every later list
+    return possessedAeonBattle(aeonId, nextGroupId, [...gone]);
   });
 }
 
@@ -454,6 +458,7 @@ export const yuYevonGroup: EnemyGroupDef = {
   game: 'ffx',
   canEscape: false,
   grantsPermanentAutoLife: true, // §2.3 [verified: 3 sources] — "cannot lose"
+  rosterRemoved: [...MANDATORY_AEON_IDS], // the five aeons the event removed on the way here (CH3_ROSTER_REMOVAL, off); the hidden Last Summoning's copies strip it (`./last-summoning-chain.ts`)
 
   enemies: [
     {
