@@ -297,6 +297,8 @@ braskas-final-aeon links 1 and 3 (#1) and 1 to 3 (#7), isaaru links 1 and 2, and
 
 So the table before this commit is exactly what the tree gives with the six OFF, and the table after it is exactly what D1 gives. `ffx-engine-golden` itself passes on the new table (18 of 18) and the header of that file carries the cause.
 
+**A correction to the commit that turned the switches on** (`a66426afe`; its subject cannot be amended here): it says "13 digests re-pinned"; the count is **23 rows**: 12 digests of `ffx-engine-golden` (11.2) plus 11 seed rows of Chapter III's pin in `chapters/last-summoning-iii-pin.test.ts` (11.3).
+
 ### 11.3 The lane's tests, from "all off" to "all on, with the off state kept as its own proof"
 
 - `parity-ffx-boss-data.test.ts` (13 -> 14 tests): "the switches are all ON" (was "are all off"); `setBossDataSwitches` is shown by switching two OFF and putting them back to ON; a new test that a battle copy built with the shipped switches carries every corrected row (Evrae 1/1/4, no Doom bit, the Life flag; and every mapped row equals `corrected(id, ALL_ON)`) while the module rows stay as they were; the off-state test is explicit now (`setBossDataSwitches(ALL_OFF)` or `applyBossDataCorrections(group, ALL_OFF)`: the group is not read, a getter that throws is never reached, and the copy equals the group), so it is the proof that the six OFF give back the tree as it was before they were turned on. `afterEach` puts the switches back to the shipped values (it used to put them to false).
