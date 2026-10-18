@@ -33,8 +33,8 @@ afterEach(() => {
 /** Boxes of the three fiends in the menu camera pose: A's top-left is clear, B stands mostly behind the boss. */
 const BOXES: Record<string, { x: number; y: number; w: number; h: number }> = {
   [PAGODA_A]: { x: 571, y: 152, w: 238, h: 366 },
-  [BOSS]: { x: 800, y: 100, w: 520, h: 420 },
-  [PAGODA_B]: { x: 1226, y: 300, w: 200, h: 260 },
+  [BOSS]: { x: 793, y: 42, w: 569, h: 556 },
+  [PAGODA_B]: { x: 1132, y: 124, w: 241, h: 392 }, // the boss's box covers all of B's but 11 px
 };
 
 function rig(mp: number | undefined = 20): { hud: ReturnType<typeof wrapped>['hud']; root: HTMLElement; engine: ReturnType<typeof lulusTurn>['engine']; done: Promise<unknown> } {
@@ -144,11 +144,13 @@ describe('the slab, the MP preview and the lock chip in round 2', () => {
     const lock = root.querySelector<HTMLElement>('.ffx-dc-lock')!;
     const x = parseFloat(lock.style.left);
     const y = parseFloat(lock.style.top);
-    const boss = BOXES[BOSS]!;
-    // jsdom has no layout: the chip's box is the placer's default size (90 x 32), whatever the CSS makes of it
-    const touchesBoss = x < boss.x + boss.w && boss.x < x + 90 && y < boss.y + boss.h && boss.y < y + 32;
-    expect(touchesBoss, `the chip at ${x},${y} sits on the boss`).toBe(false);
-    expect(x).toBeGreaterThanOrEqual(BOXES[PAGODA_B]!.x);
+    const box = BOXES[PAGODA_B]!;
+    // The box is all but covered by the boss's, so the chip is not at B's top-left (the boss's torso): it is on B's own box, away from that corner.
+    expect([x, y], "not at the top-left of the box, which is the boss torso").not.toEqual([box.x + 2, box.y + 2]);
+    expect(x).toBeGreaterThanOrEqual(box.x - 45);
+    expect(x).toBeLessThanOrEqual(box.x + box.w);
+    expect(y).toBeGreaterThan(box.y + 100);
+    expect(y).toBeLessThan(box.y + box.h - 100);
   });
 });
 

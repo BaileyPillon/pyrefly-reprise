@@ -60,7 +60,7 @@
 html[data-phone-battle='ffx'] .ffxhud .ffx-dc-n { width: 20px; height: 20px; font-size: 14px; transform: none; }
 html[data-phone-battle='ffx'] .ffxhud .ffx-dc-n > b { transform: none; }
 /* Round 2's list header: cast 1 replaces the page count, under the title (the name is too long to sit beside it, so the pager is stacked). */
-html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-breadcrumb[data-dc] { letter-spacing: 0.12em; }
+html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-breadcrumb[data-dc] { font-size: 14px; letter-spacing: 0.05em; white-space: nowrap; }
 html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager__count:has(.ffx-dc-n) { display: inline-flex; align-items: center; gap: 6px; max-width: calc(100vw - 130px); overflow: hidden; }
 html[data-phone-battle='ffx'] .ffxhud .ffx-cmd-pager__count .ffx-dc-n { width: 16px; height: 16px; }
 html[data-phone-battle='ffx'] .ffxhud .ffx-dc-sum { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0.02em; text-transform: none; }

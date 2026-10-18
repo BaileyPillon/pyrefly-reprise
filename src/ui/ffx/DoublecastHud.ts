@@ -24,6 +24,9 @@ import type { DoublecastPicksSource, DoublecastView } from './doublecastModel.ts
 import type { DoublecastHelp } from './doublecastText.ts';
 import { placeLockChip, type Box } from './doublecastLock.ts';
 
+/** The HUD panels the lock chip keeps off: the turn list's rows (its own box is narrower than its right-aligned rows), the party window, the command stack, the help slab. */
+const PANELS = ['.ig-ctb__row', '.ig-stat-list', '.ffx-cmd-area', '.ffx-cmd-info'];
+
 /** The stage's grid width: the stage scale is its box over this. */
 const STAGE_W = 640;
 
@@ -106,7 +109,11 @@ export class DoublecastHud {
     const k = Math.round(((stage?.getBoundingClientRect().width ?? STAGE_W * 2.5) / STAGE_W) * 100) / 100;
     const here = root.getBoundingClientRect();
     const others = this.enemies.filter((id) => id !== v.firstTargetId).flatMap((id) => this.rect?.(id) ?? []);
-    const at = placeLockChip(target, others, { w: el.offsetWidth || 90, h: el.offsetHeight || 32 }, { w: here.width || Infinity, h: here.height || Infinity }); // no layout (a test): nothing to keep it inside
+    const panels = [...root.querySelectorAll<HTMLElement>(PANELS.join(','))].flatMap((e) => {
+      const r = e.getBoundingClientRect();
+      return r.width > 0 && r.height > 0 ? [{ x: r.x - here.x, y: r.y - here.y, w: r.width, h: r.height }] : [];
+    });
+    const at = placeLockChip(target, others, { w: el.offsetWidth || 90, h: el.offsetHeight || 32 }, { w: here.width || Infinity, h: here.height || Infinity }, panels); // no layout (a test): nothing to keep it inside
     const key = `${k}/${Math.round(at.x)}/${Math.round(at.y)}`;
     if (key === this.placed) return;
     this.placed = key;

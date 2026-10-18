@@ -223,7 +223,7 @@ describe('Esc steps back one stage at a time (and a tap on the title does the sa
     key('Enter');
     key('Enter');
     const cmd = await h.done;
-    expect((cmd as { casts: Array<{ id: string; targets: string[] }> }).casts).toEqual([{ id: 'fira', targets: [PAGODA_B] }, { id: 'fire', targets: [PAGODA_B] }]);
+    expect((cmd as unknown as { casts: Array<{ id: string; targets: string[] }> }).casts).toEqual([{ id: 'fira', targets: [PAGODA_B] }, { id: 'fire', targets: [PAGODA_B] }]);
   });
 });
 

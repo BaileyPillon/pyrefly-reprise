@@ -211,20 +211,39 @@ describe('the lock chip\'s place (fix d)', () => {
   it('home is the top-left of the target\'s box', () => {
     expect(placeLockChip({ x: 571, y: 152, w: 238, h: 366 }, [], chip, bounds)).toEqual({ x: 573, y: 154 });
   });
-  it('clear of the boss: a target whose top-left is the boss\'s torso takes the first clear place on its own box (the visible wedge)', () => {
-    const boss = { x: 800, y: 100, w: 500, h: 420 }; // covers B's top-left
-    const pagodaB = { x: 1226, y: 300, w: 200, h: 260 }; // B is mostly behind it: only the right wedge sticks out
-    const at = placeLockChip(pagodaB, [boss], chip, bounds);
-    expect(at.x).toBeGreaterThanOrEqual(boss.x + boss.w); // right of the boss's box
-    expect(at.x).toBeGreaterThanOrEqual(pagodaB.x);
-    expect(at.x + chip.w).toBeLessThanOrEqual(pagodaB.x + pagodaB.w);
-    expect(at.y).toBeGreaterThanOrEqual(pagodaB.y);
+  it('a target that mostly sticks out keeps its home even where a box clips it (A on a phone: the boss box starts over its inner side)', () => {
+    const boss = { x: 64, y: 136, w: 261, h: 253 };
+    const pagodaA = { x: 21, y: 163, w: 119, h: 183 }; // 63 percent under the boss box
+    expect(placeLockChip(pagodaA, [boss], { w: 70, h: 20 }, { w: 390, h: 844 })).toEqual({ x: 23, y: 165 });
   });
-  it('beside the box when its own box has no clear place (above, then right, then left)', () => {
-    const cover = { x: 1000, y: 310, w: 600, h: 400 };
-    const target = { x: 1100, y: 300, w: 120, h: 200 };
-    const at = placeLockChip(target, [cover], chip, bounds);
-    expect(at).toEqual({ x: 1102, y: 300 - 32 - 2 }); // above its top-left, clear of the cover
+  it('a target the others cover nearly all of takes the first place on its own box clear of them (a wedge that sticks out)', () => {
+    const boss = { x: 700, y: 100, w: 700, h: 500 };
+    const pagodaB = { x: 1226, y: 300, w: 200, h: 260 }; // 87 percent covered: only the strip right of the boss box is clear
+    const small = { w: 20, h: 20 };
+    const at = placeLockChip(pagodaB, [boss], small, bounds);
+    expect(at.x).toBeGreaterThanOrEqual(boss.x + boss.w);
+    expect(at.x + small.w).toBeLessThanOrEqual(pagodaB.x + pagodaB.w);
+  });
+  it('a target the others cover entirely gets the outer, lower part of its box, kept off the HUD panels (B in the menu pose)', () => {
+    const boss = { x: 793, y: 42, w: 569, h: 556 }; // the boss's box covers all of B's but 11 px
+    const pagodaB = { x: 1132, y: 124, w: 241, h: 392 };
+    const turnList = { x: 1345, y: 100, w: 205, h: 410 };
+    const at = placeLockChip(pagodaB, [boss], chip, bounds, [turnList]);
+    expect(at.x + chip.w, 'off the turn list').toBeLessThanOrEqual(turnList.x);
+    expect(at.x).toBeGreaterThanOrEqual(pagodaB.x);
+    expect(at.y, 'the lower part, not the top-left that is the boss torso').toBeGreaterThan(pagodaB.y + 0.5 * pagodaB.h - chip.h);
+    expect(at.y + chip.h).toBeLessThan(pagodaB.y + pagodaB.h);
+    expect(at.x, 'B is right of the boss: its outer side is the right, pushed in off the turn list').toBeGreaterThan(pagodaB.x + pagodaB.w / 2 - chip.w);
+    // and the mirror: a target left of its cover is placed on its left
+    const mirror = placeLockChip({ x: 1600 - pagodaB.x - pagodaB.w, y: pagodaB.y, w: pagodaB.w, h: pagodaB.h }, [{ x: 1600 - boss.x - boss.w, y: boss.y, w: boss.w, h: boss.h }], chip, bounds);
+    expect(mirror.x).toBeLessThan(1600 - pagodaB.x - pagodaB.w / 2 - chip.w);
+  });
+  it('home yields to a panel it would sit on', () => {
+    const slab = { x: 560, y: 140, w: 120, h: 60 };
+    const at = placeLockChip({ x: 571, y: 152, w: 238, h: 366 }, [], chip, bounds, [slab]);
+    const clearOfSlab = at.x >= slab.x + slab.w || at.x + chip.w <= slab.x || at.y >= slab.y + slab.h || at.y + chip.h <= slab.y;
+    expect(clearOfSlab, 'the first place on the target box (top, left to right) that is off the slab').toBe(true);
+    expect([at.x, at.y]).toEqual([693, 154]);
   });
   it('never off the screen: with nowhere clear it stays home, clamped', () => {
     const everything = { x: 0, y: 0, w: 1600, h: 900 };
