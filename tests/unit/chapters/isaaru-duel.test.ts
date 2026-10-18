@@ -34,6 +34,8 @@ describe('the solo line-up (I-G1) and Isaaru (I-G5)', () => {
     const d = nextInput(engine)!;
     expect(d.actorId).toBe('yuna');
     const rows = d.commands.filter((c) => c.command.kind === 'switch' || c.command.kind === 'escape');
+    // The greyed rows must be there (a menu that dropped them would otherwise pass): one Switch and one Escape, each disabled with no reason.
+    expect(rows.map((r) => r.command.kind).sort()).toEqual(['escape', 'switch']);
     for (const r of rows) {
       expect(r.enabled, String(r.label)).toBe(false);
       expect(r.disabledReason, String(r.label)).toBeUndefined();

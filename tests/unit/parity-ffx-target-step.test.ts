@@ -306,12 +306,33 @@ describe('t1 selfStep: a self-only command with the step bit opens a cursor on t
     expect(rowOf(rows, 'Dismiss').targetStep).toBeUndefined();
   });
 
-  it("on: Talk (0x3105, foe side first) opens a cursor on the foes, not on the user; the commit target is the foe's", async () => {
+  it("on: Talk (0x3105, foe side first) opens a cursor on the foes, not on the user; with cursorStartFoe on it starts on formation index 0, with it off (as shipped) it carries no start", async () => {
     const engine = await engineFor('seymour-natus');
-    on();
+    on(); // every item, cursorStartFoe included
     const talk = rowOf(menuOf(engine, 'tidus'), 'Talk');
     expect(talk.targeting).toBe('self');
     expect(talk.targetStep).toEqual({ candidates: ['seymour-natus', 'mortibody'], start: 'seymour-natus' });
+    on(['cursorStartFoe']); // the shipped state for this item: the HUD opens where it does for every other foe command
+    const shipped = rowOf(menuOf(engine, 'tidus'), 'Talk').targetStep!;
+    expect(shipped.candidates).toEqual(['seymour-natus', 'mortibody']);
+    expect(shipped).not.toHaveProperty('start');
+  });
+
+  it("the foe start of Talk, Pull back (0x3107) and Cancel order (0x3108) follows cursorStartFoe: formation index 0 on, no start off, the candidates the same", async () => {
+    const engine = await engineFor('seymour-natus');
+    const ctx = ctxOf(engine);
+    const tidus = actor(engine, 'tidus');
+    const foes = ['seymour-natus', 'mortibody'];
+    for (const id of [0x3105, 0x3107, 0x3108]) {
+      on();
+      expect(recordStep(ctx, tidus, id), `0x${id.toString(16)} on`).toEqual({ candidates: foes, start: 'seymour-natus' });
+      on(['cursorStartFoe']);
+      const off = recordStep(ctx, tidus, id)!;
+      expect(off.candidates, `0x${id.toString(16)} off`).toEqual(foes);
+      expect(off, `0x${id.toString(16)} off`).not.toHaveProperty('start');
+      on(['selfStep']);
+      expect(recordStep(ctx, tidus, id), `0x${id.toString(16)} selfStep skipped`).toBeUndefined();
+    }
   });
 
   it('on: the rows that commit at once still do: Flee, Doublecast, Grand Summon, Summon entries, the Defend row, Switch, Escape', async () => {

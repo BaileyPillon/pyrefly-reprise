@@ -52,8 +52,13 @@ describe('the first fight opens as the game does (RE 2.2, 3.1)', () => {
     expect(U.flags(e)[GUI_HEAD_STATE_FLAG]).toBe(1);
     const d = U.inputFor(e, 'tidus', false);
     expect(d.commands.some((c) => c.command.kind === 'switch' && c.enabled)).toBe(true);
-    expect(d.commands.some((c) => c.command.kind === 'escape' && c.enabled)).toBe(false); // r55 RE (MENU_DRAW_PARITY item d): the Escape row is drawn greyed with no reason, never pickable
-    for (const c of d.commands.filter((x) => x.command.kind === 'escape')) expect(c.disabledReason, String(c.label)).toBeUndefined();
+    // r55 RE (MENU_DRAW_PARITY item d): the Escape row is drawn greyed with no reason, never pickable. It must be there: a menu that dropped it would otherwise pass.
+    const escapes = d.commands.filter((x) => x.command.kind === 'escape');
+    expect(escapes.length).toBeGreaterThan(0);
+    for (const c of escapes) {
+      expect(c.enabled, String(c.label)).toBe(false);
+      expect(c.disabledReason, String(c.label)).toBeUndefined();
+    }
   });
 
   it('three of the six open, three wait', () => {
@@ -343,7 +348,12 @@ describe('the second fight: Yuna, Auron and Seymour, the weaker rematch (RE 2.1,
     expect(U.actor(e, BODY_2).stats.mdef).toBe(1);
     expect(U.flags(e)[GUI_FIGHT]).toBe(2);
     expect(U.flags(e)['gui.accelLine']).toBe(12_000);
-    for (const who of ['yuna', 'seymour', 'auron']) expect(U.inputFor(e, who, true).commands.some((c) => c.command.kind === 'switch' && c.enabled), who).toBe(false); // r55 RE (item d): at most a greyed placeholder row, never pickable
+    for (const who of ['yuna', 'seymour', 'auron']) {
+      // r55 RE (item d): the Switch row is a greyed placeholder (locked in this fight), never pickable. It must be there.
+      const switches = U.inputFor(e, who, true).commands.filter((c) => c.command.kind === 'switch');
+      expect(switches.length, who).toBeGreaterThan(0);
+      for (const c of switches) expect(c.enabled, who).toBe(false);
+    }
   });
 
   it('the parts belong to the second body, so the formation lays them along it', () => {

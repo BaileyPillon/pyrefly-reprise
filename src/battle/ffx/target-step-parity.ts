@@ -11,7 +11,7 @@
  *
  * | Item | Rule |
  * |---|---|
- * | `selfStep` | a self-only command with the step bit (mode 3: Guard, Sentinel, the aeon Shield and Boost) opens a cursor on the user and waits; Talk (0x3105, foe side first, single) opens a cursor on the foes |
+ * | `selfStep` | a self-only command with the step bit (mode 3: Guard, Sentinel, the aeon Shield and Boost) opens a cursor on the user and waits; Talk, Pull back and Cancel order (0x3105 and the like, foe side first, single) open a cursor on the foes; where it first rests is `cursorStartFoe` |
  * | `overdriveStep` | a command that picks a random foe (the party Overdrives, the reels, the Gems) has the step bit with the foe side first: one valid foe opens a cursor |
  * | `cursorStart` | ally side first opens on the user's own entry; a record that may target the dead opens on the first KO'd ally in party order |
  * | `cursorStartFoe` | foe side first opens on index 0 of the foe list (formation order, `ctx.state.enemyIds`, the game's actor numbers 20 and up) |
@@ -70,7 +70,8 @@ export function recordStep(ctx: Ctx, user: FFXCombatant, recordId: number, group
   if (spec.mode === 3) return { candidates: [user.id], start: user.id };
   if (spec.mode === 0 && spec.foeFirst) {
     const foes = foeList(ctx);
-    return foes.length > 0 ? { candidates: foes, start: foes[0]! } : undefined;
+    // Where the cursor first rests is item `cursorStartFoe` (t3b), off as shipped: then the step carries no start and the HUD opens where it does for every other foe command.
+    return foes.length > 0 ? { candidates: foes, ...(targetStepParity('cursorStartFoe') ? { start: foes[0]! } : {}) } : undefined;
   }
   if (group && spec.mode === 2 && !spec.foeFirst) {
     const allies = alliesOf(ctx, user).filter((c) => targetable(c) && isAlive(c)).map((c) => c.id);
