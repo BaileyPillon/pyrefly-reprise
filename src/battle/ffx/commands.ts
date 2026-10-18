@@ -10,7 +10,8 @@ import type { AbilityDef, AvailableCommand, Command, FFXCombatant } from '../com
 import { type Ctx, abilityOf, canSwitchIn, has, isSubmenuMarker, rankOf, tryActor } from './state.ts';
 import { blockedBySilence, mpCostFor } from './abilities.ts';
 import { reachesAtRange, validTargets } from './targeting.ts';
-import { type AimDef, preferredTargetIds } from '../common/aim.ts';
+import { preferredTargetIds } from '../common/aim.ts';
+import { applyCopycatSelf, targetStepFor } from './target-step-parity.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
 import { applyDuelRows, lockReason, lockRemoved, summonLabel } from './aeon-duel.ts';
@@ -57,7 +58,10 @@ function markerCommand(def: AbilityDef): Command | null {
  * for a cure, a KO'd one first for a revive (`battle/common/aim.ts`). Both games
  * share the rule; this is FFX's half of it.
  */
-function withAim(ctx: Ctx, user: FFXCombatant, def: AimDef, row: AvailableCommand): AvailableCommand {
+function withAim(ctx: Ctx, user: FFXCombatant, def: AbilityDef, row: AvailableCommand): AvailableCommand {
+  applyCopycatSelf(user, def, row); // `TARGET_STEP_PARITY` item copycat: a self row (a no-op while the switch is off)
+  const step = targetStepFor(ctx, user, def, row); // the game's target step for the row (undefined while the switch is off)
+  if (step) row.targetStep = step;
   if (row.validTargets.length < 2) return row; // nothing to narrow
   const candidates = row.validTargets.flatMap((id) => {
     const c = ctx.state.combatants[id];
