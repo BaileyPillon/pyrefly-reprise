@@ -264,7 +264,7 @@ describe('the ceiling: a plan that never comes does not keep a boss off the fiel
     const r = rig();
     const first = built(r);
     r.plan.owed = true;
-    r.step(Math.round(4000 / FRAME)); // the first figure has been owed for longer than the ceiling
+    r.step(Math.round((PLAN_MAX_MS + 1000) / FRAME)); // the first figure has been owed for longer than the ceiling
     const second = r.figure('trema');
     r.ent.hold(second, 'trema');
     void r.ent.enter(true);

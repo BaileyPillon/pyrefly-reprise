@@ -361,6 +361,21 @@ export async function defeat(ctx: EventCtx): Promise<void> {
 }
 
 /**
+ * The opening's end, before the first decision is asked for (so before any command menu can open): CHAPTER FRAMING's first plan has landed on the figures, or been given up after a
+ * bounded wait (`fx/mix/openingGate.ts`; both games). The plan is put on screen only while no menu is open, so a menu that opened first used to hold it back until the first confirm and
+ * then re-size a boss on screen (Chapter IV, Bahamut 420 to 629 px). The battle-start card already waited for it (`BattleStartBanner` `until`); this covers the opening that has no card
+ * left (hurried, skipped). A plan that landed after the opening's last camera move leaves the resting camera on the old rig, so the camera moves onto the master here, with the opening's
+ * own motion (a cut under REDUCE MOTION), before anything is offered. The engine does not tick before its first decision, so FFX's CTB and FFX-2's Active and Wait clocks are not touched.
+ * Nothing waits at `'skip'` speed (an automated run).
+ */
+export async function settleOpening(ctx: EventCtx): Promise<void> {
+  if (ctx.speed() === 'skip') return;
+  await ctx.stage.planSettled?.();
+  const idle = ctx.moments.pick('idle');
+  if (idle && ctx.stage.planArrivalOwed?.()) await ctx.moments.moveToRig(idle, MOMENT_TIMING.returnOut);
+}
+
+/**
  * Before a command menu opens: if the shot is anywhere but `idle`, bring it
  * back (and let go of any held push) so the player chooses with the whole
  * field in frame.

@@ -84,7 +84,7 @@ describe('PaintedStage hands its option to the entrance', () => {
 describe('the battle screen gives the stage the framing\'s answer', () => {
   const src = readFileSync('src/app/screens/BattleScreen.ts', 'utf8');
   it('imports `framingPlanOwed` from the MAX mix and passes it as the stage\'s `planOwed`', () => {
-    expect(src).toMatch(/import \{ framingPlanOwed \} from '\.\.\/\.\.\/engine\/fx\/mix\/MaxMix\.ts'/);
+    expect(src).toMatch(/import \{[^}]*\bframingPlanOwed\b[^}]*\} from '\.\.\/\.\.\/engine\/fx\/mix\/MaxMix\.ts'/);
     const stageBlock = /this\.stage = new PaintedStage\(\{([\s\S]*?)\n    \}\);/.exec(src);
     expect(stageBlock, 'the screen builds its PaintedStage in one literal').not.toBeNull();
     expect(stageBlock![1]).toMatch(/\bplanOwed: framingPlanOwed\b/);
