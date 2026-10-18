@@ -107,7 +107,7 @@ describe('the switch', () => {
   it('is off, with nothing skipped', () => {
     expect(MENU_DRAW_PARITY.on).toBe(false);
     expect(MENU_DRAW_PARITY.skip).toEqual([]);
-    for (const item of ['openers', 'overdrive', 'summon', 'blocked', 'talk', 'cursor'] as const) expect(menuParity(item), item).toBe(false);
+    for (const item of ['openers', 'overdrive', 'summon', 'blocked', 'talk', 'cursor', 'help'] as const) expect(menuParity(item), item).toBe(false);
   });
 
   it('on turns every item on; skip leaves the named ones off; the returned function puts both back', () => {

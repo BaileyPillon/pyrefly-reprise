@@ -12,10 +12,11 @@
  * |---|---|---|
  * | a | `openers` | Black Magic, White Magic, Skill, Special, Doublecast (and Summon) carry no Silence bit and no MP cost: the row is never greyed by Silence or MP, it opens, and the entries inside are greyed |
  * | b | `overdrive` | Curse with a full gauge: the Overdrive rows are drawn greyed, not left out (the Overdrive key counts the gauge, not Curse) |
- * | c | `summon` | the Summon list holds every aeon in the battle; a KO'd or recovering aeon is a greyed row, not a missing one |
+ * | c | `summon` | the Summon list holds every aeon in the battle; a KO'd or recovering aeon is a greyed row, not a missing one; an aeon the field event removed (the hidden Last Summoning's taken aeons, `lockedAeons[].removed`) has no row at all |
  * | d | `blocked` | a blocked Escape, Flee or Switch row (a formation's disabled bit) is drawn greyed with no reason |
  * | e | `talk` | Talk (0x3105) exists only in the four formations whose scripts add it; elsewhere there is no row |
  * | f | `cursor` | the cursor rests on greyed rows, and a confirm on one is refused (the shake, and the menu set's `error` cue) |
+ * | g | `help` | the help slab under a greyed row prints the row's plain description and no reason (the original prints none; re-parity RC11, lane "FFX Chapter III roster") |
  *
  * Layering: pure, deterministic, no DOM [AGENTS.md hard rule 1]. The HUD (`src/ui/ffx`) reads {@link menuParity} for items a and f.
  */
@@ -23,7 +24,7 @@
 import type { AvailableCommand, FFXCombatant } from '../common/types.ts';
 
 /** The six items of the plan, by name. */
-export type MenuParityItem = 'openers' | 'overdrive' | 'summon' | 'blocked' | 'talk' | 'cursor';
+export type MenuParityItem = 'openers' | 'overdrive' | 'summon' | 'blocked' | 'talk' | 'cursor' | 'help';
 
 /**
  * The one switch. `on: false` and every FFX menu is as before. `skip` lists items to leave off while the switch is on, so Bailey can take the rows of the decision table one at a time without a
