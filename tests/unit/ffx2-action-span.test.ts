@@ -52,7 +52,7 @@ function monster(row: number): Ffx2Unit {
 }
 
 const status = (u: Ffx2Unit, id: string): Ffx2Unit => {
-  u.statuses[id] = { id, ticksRemaining: null } as never;
+  (u.statuses as Record<string, unknown>)[id] = { id, ticksRemaining: null };
   return u;
 };
 

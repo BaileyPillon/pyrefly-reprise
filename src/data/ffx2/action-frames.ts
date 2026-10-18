@@ -30,8 +30,13 @@ export const MT_ENERGY_ATTACK = 0x4000;
 /** A girl's motion set: `[idle1, attack1_00, magic2_00, skill_00, item_00]` in motion frames (0 = no such clip). */
 export type GirlFrames = readonly [idle: number, attack: number, castStart: number, skillStart: number, itemStart: number];
 
-/** A monster's motion set: `[idle1 (idle2 if none), attack1_00, magic2_00, skill_00, motion-type bits, run speed, attack-start distance]`. */
-export type MonsterFrames = readonly [idle: number, attack: number, castStart: number, skillStart: number, bits: number, runSpeed: number, startDist: number];
+/**
+ * A monster's motion set: `[idle1 (idle2 if none), attack1_00, magic2_00, skill_00, motion-type bits, run speed, attack-start distance, normal-attack frames]`.
+ * The last is the macro's `stat_attack_normal_frame`: the game's own estimate of the frames from the start of `attack_00` to the hit, which it overwrites with the
+ * measured count after the first hit (note FFX2-G01 8.6). It is NOT used for the span (the clip is the first-order hit time); a measurement arm reads it to show what the
+ * clip-as-hit-time reading costs (`ActionSpanKnobs.monsterHit`).
+ */
+export type MonsterFrames = readonly [idle: number, attack: number, castStart: number, skillStart: number, bits: number, runSpeed: number, startDist: number, normalAttackFrames: number];
 
 export const GIRL_ACTION_FRAMES: Readonly<Record<number, GirlFrames>> = {
   0x1: [30, 13, 20, 20, 20],
@@ -101,42 +106,42 @@ export const GIRL_RUN: Readonly<Record<string, readonly [speed: number, startDis
 export const GIRL_NO_RUN: ReadonlyArray<readonly [girl: string, slot: number]> = [['yuna', 15]];
 
 export const MONSTER_ACTION_FRAMES: Readonly<Record<number, MonsterFrames>> = {
-  0x1081: [50, 10, 24, 24, 0x191, 37, 20],
-  0x1082: [45, 7, 20, 40, 0x192, 38.5, 20],
-  0x1083: [28, 3, 15, 15, 0x192, 70, 20],
-  0x1085: [46, 14, 13, 13, 0x192, 49, 28],
-  0x1088: [0, 3, 15, 15, 0x191, 55, 15],
-  0x1096: [80, 138, 50, 85, 0x3c8, 40, 90],
-  0x10a4: [42, 80, 34, 34, 0x41b8, 40, 40],
-  0x10a6: [60, 20, 19, 19, 0x1b8, 40, 35],
-  0x10a7: [60, 29, 30, 30, 0x1b8, 40, 40],
-  0x10a8: [45, 43, 41, 41, 0x1e8, 40, 40],
-  0x10a9: [63, 78, 36, 36, 0x7c8, 40, 40],
-  0x10aa: [68, 68, 40, 40, 0x1b8, 40, 40],
-  0x10ab: [60, 27, 62, 62, 0x1b8, 40, 40],
-  0x10ac: [50, 26, 25, 25, 0x1b8, 40, 40],
-  0x10ad: [60, 23, 25, 25, 0x1b8, 50, 40],
-  0x10ae: [60, 20, 10, 10, 0xc8, 70, 80],
-  0x10b0: [36, 10, 14, 14, 0x199, 50, 20],
-  0x10b1: [40, 8, 15, 38, 0x19a, 42, 20],
-  0x10c2: [84, 24, 28, 28, 0x1c8, 40, 30],
-  0x1102: [44, 16, 25, 25, 0x188, 40, 40],
-  0x1104: [28, 21, 20, 21, 0x189, 40, 40],
-  0x110c: [81, 81, 19, 19, 0x188, 40, 40],
-  0x110d: [81, 81, 15, 15, 0x188, 40, 40],
-  0x110e: [81, 32, 13, 13, 0x188, 40, 40],
-  0x111a: [100, 30, 50, 50, 0x16c8, 0, 0],
-  0x111b: [120, 30, 30, 30, 0x16c8, 0, 20],
-  0x111c: [10, 10, 10, 10, 0x16c8, 0, 0],
-  0x111d: [10, 10, 10, 10, 0x16c8, 0, 0],
-  0x111e: [10, 10, 10, 10, 0x16c8, 0, 0],
-  0x111f: [96, 84, 84, 84, 0x16c8, 0, 0],
-  0x1120: [0, 0, 0, 0, 0x16c8, 0, 0],
-  0x1121: [0, 0, 0, 0, 0x16c8, 0, 0],
-  0x1122: [100, 20, 50, 50, 0x16c8, 0, 0],
-  0x1123: [100, 100, 12, 12, 0x16c8, 0, 0],
-  0x1124: [100, 100, 12, 12, 0x16c8, 0, 0],
-  0x1127: [60, 10, 40, 40, 0x381, 50, 10],
+  0x1081: [50, 10, 24, 24, 0x191, 37, 20, 40],
+  0x1082: [45, 7, 20, 40, 0x192, 38.5, 20, 18],
+  0x1083: [28, 3, 15, 15, 0x192, 70, 20, 24],
+  0x1085: [46, 14, 13, 13, 0x192, 49, 28, 42],
+  0x1088: [0, 3, 15, 15, 0x191, 55, 15, 14],
+  0x1096: [80, 138, 50, 85, 0x3c8, 40, 90, 100],
+  0x10a4: [42, 80, 34, 34, 0x41b8, 40, 40, 162],
+  0x10a6: [60, 20, 19, 19, 0x1b8, 40, 35, 40],
+  0x10a7: [60, 29, 30, 30, 0x1b8, 40, 40, 58],
+  0x10a8: [45, 43, 41, 41, 0x1e8, 40, 40, 118],
+  0x10a9: [63, 78, 36, 36, 0x7c8, 40, 40, 88],
+  0x10aa: [68, 68, 40, 40, 0x1b8, 40, 40, 60],
+  0x10ab: [60, 27, 62, 62, 0x1b8, 40, 40, 60],
+  0x10ac: [50, 26, 25, 25, 0x1b8, 40, 40, 56],
+  0x10ad: [60, 23, 25, 25, 0x1b8, 50, 40, 62],
+  0x10ae: [60, 20, 10, 10, 0xc8, 70, 80, 40],
+  0x10b0: [36, 10, 14, 14, 0x199, 50, 20, 26],
+  0x10b1: [40, 8, 15, 38, 0x19a, 42, 20, 32],
+  0x10c2: [84, 24, 28, 28, 0x1c8, 40, 30, 60],
+  0x1102: [44, 16, 25, 25, 0x188, 40, 40, 60],
+  0x1104: [28, 21, 20, 21, 0x189, 40, 40, 40],
+  0x110c: [81, 81, 19, 19, 0x188, 40, 40, 60],
+  0x110d: [81, 81, 15, 15, 0x188, 40, 40, 60],
+  0x110e: [81, 32, 13, 13, 0x188, 40, 40, 60],
+  0x111a: [100, 30, 50, 50, 0x16c8, 0, 0, 80],
+  0x111b: [120, 30, 30, 30, 0x16c8, 0, 20, 60],
+  0x111c: [10, 10, 10, 10, 0x16c8, 0, 0, 60],
+  0x111d: [10, 10, 10, 10, 0x16c8, 0, 0, 60],
+  0x111e: [10, 10, 10, 10, 0x16c8, 0, 0, 60],
+  0x111f: [96, 84, 84, 84, 0x16c8, 0, 0, 60],
+  0x1120: [0, 0, 0, 0, 0x16c8, 0, 0, 60],
+  0x1121: [0, 0, 0, 0, 0x16c8, 0, 0, 60],
+  0x1122: [100, 20, 50, 50, 0x16c8, 0, 0, 60],
+  0x1123: [100, 100, 12, 12, 0x16c8, 0, 0, 60],
+  0x1124: [100, 100, 12, 12, 0x16c8, 0, 0, 60],
+  0x1127: [60, 10, 40, 40, 0x381, 50, 10, 18],
 };
 
 /** Command-row id to `[sequence class, effect id]` (the row's class byte at +0x0C and its first effect id). */
@@ -218,4 +223,4 @@ export const RUN_DISTANCE_ESTIMATE = 52.4;
 
 /** [estimate] A body outside the data (a test rig, a unit with no monster row): a girl's median clips, or a plain 20-frame Attack and no waits. */
 export const FALLBACK_GIRL: GirlFrames = [40, 15, 26, 26, 20];
-export const FALLBACK_MONSTER: MonsterFrames = [0, 20, 25, 25, 0, 0, 0];
+export const FALLBACK_MONSTER: MonsterFrames = [0, 20, 25, 25, 0, 0, 0, 0];

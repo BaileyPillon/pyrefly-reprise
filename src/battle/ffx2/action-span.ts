@@ -59,11 +59,15 @@ export interface ActionSpanKnobs {
   supersedeFormation: boolean;
   /** A measurement run only: the run-up distance as a multiple of the estimate (0 = no run-up, 2 = twice as far); the run-up is the least known term. */
   runDistanceScale: number;
+  /** A measurement run only: 'clip' (production) takes a monster's `attack_00` clip as its hit time; 'estimate' takes the longer of the clip and the macro's normal-attack-frames estimate. */
+  monsterHit: 'clip' | 'estimate';
+  /** A measurement run only: every effect length (measured and class default) times this; 1 in production. */
+  effectScale: number;
   /** A measurement run only: told each span the per-command rule computed (the unit, its steps), so a run can report the mean span a side's actions took. */
   record?: (unit: Ffx2Unit, steps: number) => void;
 }
 
-const PRODUCTION: ActionSpanKnobs = { perCommand: ACTION_TIME_PER_COMMAND, physical: true, casts: true, supersedeFormation: true, runDistanceScale: 1 };
+const PRODUCTION: ActionSpanKnobs = { perCommand: ACTION_TIME_PER_COMMAND, physical: true, casts: true, supersedeFormation: true, runDistanceScale: 1, monsterHit: 'clip', effectScale: 1 };
 let knobs: ActionSpanKnobs = PRODUCTION;
 
 /** Run `fn` with other knobs (a measurement run); the production ones come back whatever happens. */
@@ -128,7 +132,7 @@ function monsterBody(unit: Ffx2Unit): SpanBody {
   return {
     side: 'monster',
     idle: f[0],
-    attack: f[1],
+    attack: knobs.monsterHit === 'estimate' ? Math.max(f[1], f[7]) : f[1],
     castStart: f[2],
     skillStart: f[3],
     itemStart: 0,
@@ -183,7 +187,7 @@ export function commandSpanSteps(unit: Ffx2Unit, ctx: ActionContext): number {
     stanceRatio: ratioOf(unit, MOTION_STANCE),
     actionRatio: ratioOf(unit, MOTION_ACTION),
     costCast,
-    effectSteps: effectStepsOf(unit, effect),
+    effectSteps: Math.round(effectStepsOf(unit, effect) * knobs.effectScale),
     runDistance: RUN_DISTANCE_ESTIMATE * knobs.runDistanceScale,
     physical: knobs.physical,
     casts: knobs.casts,
