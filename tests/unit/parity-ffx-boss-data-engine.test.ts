@@ -2,6 +2,9 @@
  * Re-parity RC10, lane FFX boss data (FFX only), the engine side: what the note listed that was already the game's (D5 steal byte, Regen 255, the Pagoda HP), the words the
  * game's status and damage steps read (resistance bytes, extra word, special word, Zanmato byte) moving with a switch and only with it, and real casts through the engine's own
  * path (`buildBattle`, then `resolveAbility`). The data side is `parity-ffx-boss-data.test.ts`; the fixture and the id map are `helpers/ffxBossData.ts`.
+ *
+ * All six switches ship ON (Bailey, 2026-10-17: "All six (Recommended)"). "Off" in a test is always explicit (`ALL_OFF`, or `only(id)` for one switch), and `{}` means "as shipped",
+ * so each case below proves both states: the row as the tree had it before the switches were turned on, and the game's record now.
  */
 
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
@@ -19,14 +22,17 @@ import { getChapter, type Chapter } from '../../src/data/encounters.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
 import { lastSummoningGroup } from '../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { ability } from './ffx-fixtures.test.ts';
-import { MAP, ST, loadWorld, rec, world } from './helpers/ffxBossData.ts';
+import { ALL_OFF, ALL_ON, MAP, ST, loadWorld, only, rec, world } from './helpers/ffxBossData.ts';
 
 const { rows } = world;
 
 beforeAll(loadWorld);
 
+/** The switches as the module shipped them, read when this file is loaded (before any test or hook): all ON. */
+const SHIPPED = { ...BOSS_DATA_SWITCHES };
+
 afterEach(() => {
-  for (const id of BOSS_DATA_SWITCH_IDS) BOSS_DATA_SWITCHES[id] = false;
+  for (const id of BOSS_DATA_SWITCH_IDS) BOSS_DATA_SWITCHES[id] = SHIPPED[id];
 });
 
 describe('what the note listed that was already the game\'s', () => {
@@ -83,33 +89,43 @@ describe('through the engine', () => {
     }
   }
 
-  it('off: Evrae is the row (DEF 0, Zanmato 3, Doom immune, no Life flag); on: the record', async () => {
-    const off = (await combatants('evrae-airship', {}))['evrae'] as FFXCombatant;
+  it('off (all six false): Evrae is the row as it was (DEF 0, Zanmato 3, Doom immune, no Life flag); as shipped (all ON): the record', async () => {
+    const off = (await combatants('evrae-airship', ALL_OFF))['evrae'] as FFXCombatant;
     expect([off.stats.def, off.stats.mdef, off.enemy?.zanmatoLevel, off.immunities.doom, off.immunityFlags.includes('immune-to-life')]).toEqual([0, 0, 3, 255, false]);
-    const on = (await combatants('evrae-airship', { D1: true, D3: true, D8: true, D9: true }))['evrae'] as FFXCombatant;
+    const on = (await combatants('evrae-airship', {}))['evrae'] as FFXCombatant;
     expect([on.stats.def, on.stats.mdef, on.enemy?.zanmatoLevel, on.immunities.doom, on.immunityFlags.includes('immune-to-life')]).toEqual([1, 1, 4, undefined, true]);
+    // each switch alone does its own row and no other
+    expect(((await combatants('evrae-airship', only('D1')))['evrae'] as FFXCombatant).stats.def).toBe(1);
+    expect(((await combatants('evrae-airship', only('D3')))['evrae'] as FFXCombatant).enemy?.zanmatoLevel).toBe(4);
+    expect(((await combatants('evrae-airship', only('D8')))['evrae'] as FFXCombatant).immunities.doom).toBeUndefined();
+    expect(((await combatants('evrae-airship', only('D9')))['evrae'] as FFXCombatant).immunityFlags).toContain('immune-to-life');
   });
 
-  it('D7 in Chapter I: Flux resists Slow only with the switch', async () => {
-    expect(((await combatants('seymour-flux', {}))['seymour-flux'] as FFXCombatant).immunities.slow).toBeUndefined();
-    expect(((await combatants('seymour-flux', { D7: true }))['seymour-flux'] as FFXCombatant).immunities.slow).toBe(255);
+  it('D7 in Chapter I: Flux resists Slow only with the switch (which is how it ships)', async () => {
+    expect(((await combatants('seymour-flux', ALL_OFF))['seymour-flux'] as FFXCombatant).immunities.slow).toBeUndefined();
+    expect(((await combatants('seymour-flux', only('D7')))['seymour-flux'] as FFXCombatant).immunities.slow).toBe(255);
+    expect(((await combatants('seymour-flux', {}))['seymour-flux'] as FFXCombatant).immunities.slow).toBe(255);
   });
 
   it('the words the status and damage steps read (resistance bytes, extra word, special word, Zanmato byte) move with the switch and only with it', async () => {
     const SLOW = ST.indexOf('slow');
     const flux = async (on: Partial<Record<BossDataSwitch, boolean>>): Promise<FFXCombatant> => (await combatants('seymour-flux', on))['seymour-flux'] as FFXCombatant;
-    expect(resistBytesWith(await flux({}), 0)[SLOW]).toBe(0);
-    expect(resistBytesWith(await flux({ D7: true }), 0)[SLOW]).toBe(255);
+    expect(resistBytesWith(await flux(ALL_OFF), 0)[SLOW]).toBe(0);
+    expect(resistBytesWith(await flux(only('D7')), 0)[SLOW]).toBe(255);
+    expect(resistBytesWith(await flux({}), 0)[SLOW]).toBe(255); // as shipped
     const evrae = async (on: Partial<Record<BossDataSwitch, boolean>>): Promise<FFXCombatant> => (await combatants('evrae-airship', on))['evrae'] as FFXCombatant;
-    expect(extraImmuneWord(await evrae({})) & 0x4000).toBe(0x4000); // Doom
-    expect(extraImmuneWord(await evrae({ D8: true })) & 0x4000).toBe(0);
-    expect(specialWord(await evrae({})) & 0x04).toBe(0); // Life
-    expect(specialWord(await evrae({ D9: true })) & 0x04).toBe(0x04);
-    expect(zanmatoByte(await evrae({}))).toBe(2); // level 3 reads as byte 2 today
-    expect(zanmatoByte(await evrae({ D3: true }))).toBe(3); // the record's byte
+    expect(extraImmuneWord(await evrae(ALL_OFF)) & 0x4000).toBe(0x4000); // Doom
+    expect(extraImmuneWord(await evrae(only('D8'))) & 0x4000).toBe(0);
+    expect(extraImmuneWord(await evrae({})) & 0x4000).toBe(0); // as shipped
+    expect(specialWord(await evrae(ALL_OFF)) & 0x04).toBe(0); // Life
+    expect(specialWord(await evrae(only('D9'))) & 0x04).toBe(0x04);
+    expect(specialWord(await evrae({})) & 0x04).toBe(0x04); // as shipped
+    expect(zanmatoByte(await evrae(ALL_OFF))).toBe(2); // level 3 reads as byte 2 with the switch off
+    expect(zanmatoByte(await evrae(only('D3')))).toBe(3); // the record's byte
+    expect(zanmatoByte(await evrae({}))).toBe(3); // as shipped
     const pagoda = async (on: Partial<Record<BossDataSwitch, boolean>>): Promise<FFXCombatant> => (await combatants('braskas-final-aeon', on))['yu-pagoda-left'] as FFXCombatant;
-    const base = await pagoda({});
-    const d10 = await pagoda({ D10: true });
+    const base = await pagoda(ALL_OFF);
+    const d10 = await pagoda(only('D10'));
     for (const s of ['shell', 'protect', 'reflect', 'nul-tide', 'nul-blaze', 'nul-shock', 'nul-frost'] as const) {
       expect(resistBytesWith(base, 0)[ST.indexOf(s)], s).toBe(0);
       expect(resistBytesWith(d10, 0)[ST.indexOf(s)], s).toBe(255);
@@ -117,21 +133,28 @@ describe('through the engine', () => {
     expect(resistBytesWith(base, 0)[ST.indexOf('regen')]).toBe(255); // already, through the flag
     expect(extraImmuneWord(d10) & 0x401).toBe(0x001); // Scan in, Curse out (the base has Curse and no Scan)
     expect(extraImmuneWord(base) & 0x401).toBe(0x400);
+    const shipped = await pagoda({});
+    for (const s of ['shell', 'protect', 'reflect', 'nul-tide', 'nul-blaze', 'nul-shock', 'nul-frost'] as const) expect(resistBytesWith(shipped, 0)[ST.indexOf(s)], `${s} as shipped`).toBe(255);
+    expect(extraImmuneWord(shipped) & 0x401).toBe(0x001);
   });
 
   it('D10 reaches the Yu Pagodas of Chapter III and of the hidden Last Summoning, and Yu Yevon', async () => {
-    const on = await combatants('braskas-final-aeon', { D10: true, D9: true });
+    const on = await combatants('braskas-final-aeon', { ...ALL_OFF, D10: true, D9: true });
     for (const id of ['yu-pagoda-left', 'yu-pagoda-right']) {
       const c = on[id] as FFXCombatant;
       expect([c.immunities.shell, c.immunities.protect, c.immunities.reflect, c.immunities.nulblaze, c.immunities.scan, c.immunities.curse]).toEqual([255, 255, 255, 255, 255, undefined]);
       expect(c.immunityFlags).toEqual(expect.arrayContaining(['immune-to-regen', 'immune-to-scan', 'immune-to-bribe', 'immune-to-life']));
     }
     expect((on['braskas-final-aeon'] as FFXCombatant).immunities['auto-life']).toBe(255);
-    const yy = await combatants('braskas-final-aeon', { D10: true }, (await findEnemyGroup('yu-yevon')) as EnemyGroupDef);
+    const yy = await combatants('braskas-final-aeon', only('D10'), (await findEnemyGroup('yu-yevon')) as EnemyGroupDef);
     const y = yy['yu-yevon'] as FFXCombatant;
     expect([y.immunities.scan, y.immunities['auto-life'], y.immunityFlags.includes('immune-to-sensor')]).toEqual([255, 255, false]);
-    const ls = await combatants('braskas-final-aeon', { D10: true }, lastSummoningGroup('last-summoning:ifrit') as EnemyGroupDef);
+    const ls = await combatants('braskas-final-aeon', only('D10'), lastSummoningGroup('last-summoning:ifrit') as EnemyGroupDef);
     expect((ls['yu-pagoda-left'] as FFXCombatant).immunities.shell).toBe(255);
+    const lsOff = await combatants('braskas-final-aeon', ALL_OFF, lastSummoningGroup('last-summoning:ifrit') as EnemyGroupDef);
+    expect((lsOff['yu-pagoda-left'] as FFXCombatant).immunities.shell).toBeUndefined();
+    const lsShipped = await combatants('braskas-final-aeon', {}, lastSummoningGroup('last-summoning:ifrit') as EnemyGroupDef);
+    expect((lsShipped['yu-pagoda-left'] as FFXCombatant).immunities.shell).toBe(255);
   });
 });
 
@@ -154,16 +177,27 @@ describe('a real cast at the row (the status step through the engine\'s own path
     }
   }
 
-  it('D7: Slow lands on Seymour Flux today and never with the switch (200 casts)', () => {
+  it('D7: Slow lands on Seymour Flux with the switch off (the row as it was) and never with it on, which is how it ships (200 casts)', () => {
     const slow = ALL_ABILITIES.find((a) => a.id === 'slow') as ReturnType<typeof ability>;
-    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', {}, 200)).toBeGreaterThan(100);
-    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', { D7: true }, 200)).toBe(0);
-    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', { D1: true, D3: true, D8: true, D9: true, D10: true }, 200)).toBeGreaterThan(100); // no other switch touches it
+    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', ALL_OFF, 200)).toBeGreaterThan(100);
+    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', only('D7'), 200)).toBe(0);
+    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', {}, 200)).toBe(0); // as shipped
+    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', { ...ALL_ON, D7: false }, 200)).toBeGreaterThan(100); // no other switch touches it
   });
 
-  it('D8: a Doom lands on Evrae only with the switch (50 casts)', () => {
+  it('D8: a Doom lands on Evrae only with the switch, which is how it ships (50 casts)', () => {
     const doom = ability({ id: 'doom-probe', formula: 'none', canMiss: false, targeting: 'single-enemy', statusEffects: [{ status: 'doom', chance: 100, duration: 30 }] });
-    expect(landed('evrae-airship', 'evrae', doom, 'doom', {}, 50)).toBe(0);
-    expect(landed('evrae-airship', 'evrae', doom, 'doom', { D8: true }, 50)).toBe(50);
+    expect(landed('evrae-airship', 'evrae', doom, 'doom', ALL_OFF, 50)).toBe(0);
+    expect(landed('evrae-airship', 'evrae', doom, 'doom', only('D8'), 50)).toBe(50);
+    expect(landed('evrae-airship', 'evrae', doom, 'doom', {}, 50)).toBe(50); // as shipped
+  });
+
+  it('D10: Shell and Protect land on a Yu Pagoda with the switch off and fail with it on, which is how it ships (200 casts each)', () => {
+    for (const id of ['shell', 'protect']) {
+      const def = ALL_ABILITIES.find((a) => a.id === id) as ReturnType<typeof ability>;
+      expect(landed('braskas-final-aeon', 'yu-pagoda-left', def, id, ALL_OFF, 200), `${id} off`).toBeGreaterThan(100);
+      expect(landed('braskas-final-aeon', 'yu-pagoda-left', def, id, only('D10'), 200), `${id} D10`).toBe(0);
+      expect(landed('braskas-final-aeon', 'yu-pagoda-left', def, id, {}, 200), `${id} as shipped`).toBe(0);
+    }
   });
 });

@@ -1,12 +1,14 @@
 /**
- * The boss rows' remaining differences from the game's own monster records, each behind a switch that is **off** (re-parity RC10, lane FFX boss data; **FFX only**).
+ * The boss rows' remaining differences from the game's own monster records, each behind a switch (re-parity RC10, lane FFX boss data; **FFX only**). **All six are ON since
+ * 2026-10-17 (Bailey: "All six (Recommended)")**; the paragraph below describes how the module was built, with the switches off.
  *
  * Source: the private note FFX-H02 section 7 (rows D1, D3, D7, D8, D9, D10) and the status / element / flag paragraph under it, re-read for this lane from the game's own
  * monster files (361 records, 6,498 fields compared with the note's decode, 0 differences). Every number below is a byte of a record, written as our ids and our status names:
  * no game text, no game code. `tests/unit/parity-ffx-boss-data.test.ts` holds each table to a fixture of those bytes (`tests/fixtures/ffx-boss-records.json`).
  *
- * **House rule for boss data: never tune a boss number.** These are the game's, built so they can be measured and then chosen by the owner; nothing here is on. With every
- * switch false `applyBossDataCorrections` returns before it reads a row, so every battle is the one it was (proved: the 12-seed logs of every FFX chapter are byte-identical).
+ * **House rule for boss data: never tune a boss number.** These are the game's, built so they could be measured and then chosen by the owner, who chose all six on 2026-10-17.
+ * With every switch false `applyBossDataCorrections` returns before it reads a row, so every battle is the one it was before (proved: the 12-seed logs of every FFX chapter are
+ * byte-identical, and with the six off `ffx-engine-golden` gives back the digests it had before they were turned on).
  *
  * Rows the note lists that are **not** here, and why: D5 (steal chance byte 255) is already the game's since re-parity W5 (`adapt/steal.ts` turns the table's 100 percent into
  * the byte 255 and halves a byte: 255, 127, 63 ...); D2 (enemy Overdrive reference damage) has no reader; D4 (two missing drops) was closed by the kill-rewards lane; D6 (Bribe items of
@@ -24,7 +26,9 @@ export type BossDataSwitch = 'D1' | 'D3' | 'D7' | 'D8' | 'D9' | 'D10';
 export const BOSS_DATA_SWITCH_IDS: readonly BossDataSwitch[] = ['D1', 'D3', 'D7', 'D8', 'D9', 'D10'];
 
 /**
- * The switches. All **false** (the owner decides; a bench or a test flips one and puts it back with the function `setBossDataSwitches` returns).
+ * The switches. All **true** since 2026-10-17: Bailey, asked which FFX boss-data fixes should match the game, picked "All six (Recommended)", with his standing order
+ * "It needs to be a 1:1 parity." (He decides; a bench or a test flips one and puts it back with the function `setBossDataSwitches` returns; every one can be set back to false
+ * to give back the battle as it was before this commit, which `tests/unit/parity-ffx-boss-data*.test.ts` and the ablation in `docs/handoff/re-parity-rc10-ffx-boss-data.md` prove.)
  * - **D1** monster stat floors: STR, DEF, MAG, MDEF, AGI, LCK and ACC are at least 1 in the game's character (EVA and the poison percent may be 0).
  * - **D3** the Zanmato level of the rows whose record byte plus 1 differs from ours (Evrae 3 -> 4; Mortibody, Ginnem, Isaaru carry none).
  * - **D7** Seymour Flux cannot be Slowed (the record's Slow byte is 255; the data said landable).
@@ -32,7 +36,7 @@ export const BOSS_DATA_SWITCH_IDS: readonly BossDataSwitch[] = ['D1', 'D3', 'D7'
  * - **D9** the Life-immune flag the record sets on nine of our rows.
  * - **D10** the immunity bytes, bits and flags the record has and our rows lack (Braska's Final Aeon, Yu Pagodas, Mortiphasm, Yu Yevon, Cid, Ginnem, Daigoro, Isaaru).
  */
-export const BOSS_DATA_SWITCHES: Record<BossDataSwitch, boolean> = { D1: false, D3: false, D7: false, D8: false, D9: false, D10: false };
+export const BOSS_DATA_SWITCHES: Record<BossDataSwitch, boolean> = { D1: true, D3: true, D7: true, D8: true, D9: true, D10: true };
 
 /** Set switches; the returned function puts every switch back as it was. */
 export function setBossDataSwitches(on: Partial<Record<BossDataSwitch, boolean>>): () => void {

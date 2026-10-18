@@ -351,26 +351,32 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * formation order; the variance, critical and status draws of the hits land on other targets, so numbers, KOs and turn counts of the later fight move. It alone moves yunalesca, braskas-final-aeon,
  * seymour-omnis and (seed 1) evrae-airship. (3) DRAIN_RECOIL_ONE_RECORD: Drain, Osmose and Lancet heal their user once after every target (0x0078a240) instead of hit by hit; it alone moves the
  * absorb events of yunalesca (Absorb) and the order of the heal in the log. With all three switches false the eighteen digests are the base's again (and 180 of 180 seeds, all fifteen chapters).
+ *
+ * TWELVE digests re-baselined 2026-10-17 by RC10 lane FFX boss data ON (FFX only; Bailey: "All six (Recommended)"; the six switches of `boss-data-corrections.ts` are now true; `docs/handoff/re-parity-rc10-ffx-boss-data.md`, "Turned on"):
+ * braskas-final-aeon#1 (links 2, 4 to 7) and #7 (links 4 to 7), seymour-anima-macalania, evrae-airship, yojimbo-cavern, seymour-natus (seeds 1 and 7), isaaru-via-purifico (link 3); every outcome is still a victory; Flux, Yunalesca, Omnis are the base's.
+ * THE CAUSE IS D1 ALONE, the Defence and Magic Defence floors: the game treats a monster's 0 as 1, so each blow or spell lands about 0.7 percent weaker on a boss row that read 0 (Chapters III, VII, VIII, IX, X and XIV), which shifts a few damage
+ * numbers by a point and so the rolls after them. PROOF, the 18 played under 9 switch sets on this tree: all six OFF = r53-rc's table (18 of 18); D3, D7, D8, D9, D10 alone and together move 0 of 18; D1 alone = all six on = this table; D1 on the Defence
+ * floor alone moves 10 (not yojimbo-cavern), on the Magic Defence floor alone 4 (evrae-airship, yojimbo-cavern), on Accuracy, Agility, Magic and Luck 0. With the six false the table above is back (tests/unit/parity-ffx-boss-data*.test.ts hold that).
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '530d4776:victory',
   'seymour-flux#7': '1082973e:victory',
   'yunalesca#1': 'fc0f6441:victory',
   'yunalesca#7': '3a7bc64f:victory',
-  'braskas-final-aeon#1': 'e3ab9bd0:victory c45dcb19:victory bd952081:victory e32d5371:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
-  'braskas-final-aeon#7': '52c6b675:victory 8d75fead:victory 9482b803:victory 31e06759:victory ab0e939f:victory 76f6bfc5:victory f2f0106a:victory',
-  'seymour-anima-macalania#1': '3f4769eb:victory',
-  'seymour-anima-macalania#7': 'c69441ce:victory',
-  'evrae-airship#1': '398f2884:victory',
-  'evrae-airship#7': '9bc2532c:victory',
-  'yojimbo-cavern#1': 'daacc3d9:victory',
-  'yojimbo-cavern#7': '164be66a:victory',
-  'seymour-natus#1': '336d9ea6:victory',
-  'seymour-natus#7': '8097fc70:victory',
+  'braskas-final-aeon#1': 'e3ab9bd0:victory 2ae22767:victory bd952081:victory cb91b2df:victory cf6bdf71:victory 97585c97:victory 420d8443:victory',
+  'braskas-final-aeon#7': '52c6b675:victory 8d75fead:victory 9482b803:victory 46ee87e5:victory e43f9a91:victory a8adb1e1:victory b6291175:victory',
+  'seymour-anima-macalania#1': 'c4ad03e:victory',
+  'seymour-anima-macalania#7': 'ff0b2fa0:victory',
+  'evrae-airship#1': '9c6cc0f9:victory',
+  'evrae-airship#7': 'd82a7350:victory',
+  'yojimbo-cavern#1': 'aaafef63:victory',
+  'yojimbo-cavern#7': 'b8d03c28:victory',
+  'seymour-natus#1': 'ac9d49d4:victory',
+  'seymour-natus#7': '72c18e1e:victory',
   'seymour-omnis#1': 'c246fd47:victory',
   'seymour-omnis#7': '22b5461d:victory',
-  'isaaru-via-purifico#1': '133684ff:victory 7cfaa2ad:victory 13b0bd8a:victory',
-  'isaaru-via-purifico#7': '6a55a1ad:victory cfd75f2d:victory a36d68be:victory',
+  'isaaru-via-purifico#1': '133684ff:victory 7cfaa2ad:victory 78ff97b5:victory',
+  'isaaru-via-purifico#7': '6a55a1ad:victory cfd75f2d:victory d0a1f362:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {

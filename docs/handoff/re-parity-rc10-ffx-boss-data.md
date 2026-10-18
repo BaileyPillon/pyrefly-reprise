@@ -1,8 +1,8 @@
-# Re-parity RC10, lane FFX boss data (gap-scan rows S5 and S6): the boss rows' remaining differences from the game's monster records, built as six switches, all off, and measured
+# Re-parity RC10, lane FFX boss data (gap-scan rows S5 and S6): the boss rows' remaining differences from the game's monster records, built as six switches, all off, and measured; **turned ON by Bailey on 2026-10-17 (section 11)**
 
-Status: **built, tested, measured and pushed on branch `re-parity-rc10-ffx-boss-data`; every switch is OFF; not merged, not deployed** (2026-10-17). Cut from `origin/r52-rc` (`3c92b60cc`). **Game case: FFX only** (AGENTS.md rule 14): the monster records and the character initialiser that clamps them (FFX.exe 0x0079b4f0) exist only in FFX; `src/battle/ffx2`, `src/data/ffx2`, `src/battle/ff7`, `src/audio` are untouched; `ffx2-atb-golden` (6) and `ff7-golden` (3) pass unchanged.
+Status: **built, tested, measured and pushed on branch `re-parity-rc10-ffx-boss-data`; every switch was OFF in that state; not merged, not deployed** (2026-10-17). **Update, 2026-10-17 evening: Bailey chose "All six (Recommended)" and all six switches are now ON, on branch `re-parity-rc10-ffx-boss-data-on`: read section 11 first** (sections 0 to 10 below describe the lane as built and measured, with the switches off). Cut from `origin/r52-rc` (`3c92b60cc`). **Game case: FFX only** (AGENTS.md rule 14): the monster records and the character initialiser that clamps them (FFX.exe 0x0079b4f0) exist only in FFX; `src/battle/ffx2`, `src/data/ffx2`, `src/battle/ff7`, `src/audio` are untouched; `ffx2-atb-golden` (6) and `ff7-golden` (3) pass unchanged.
 **Independent check (2026-10-17): PASSED**, with text corrections that are made here and in the preflight: D10 has a second visible change (Scan on a Pagoda stops working, 5.7), Sensor on Yu Yevon replaces the plate "Immune to sensors." (D-221) rather than "- - -", C-3 is a research conflict and not a decision of Bailey's (section 2, D8), D1 is a small deterministic effect and not noise (5.2), and the other visible effects are listed in one place (5.10). No number, table or test changed.
-Owner: Bailey. His words, as the brief quoted them: 2026-10-08 "It needs to be a 1:1 parity."; 2026-10-16 "keep going please all of this reverse engineering needs to be incorporated into our game"; 2026-10-17 "keep going full speed". House rule (memory `boss-side-fix-needs-measured-options`): **never tune boss numbers**: build each sourced answer behind its own switch, measure it, ask him once. **This lane turned nothing on and decides nothing.**
+Owner: Bailey. His words, as the brief quoted them: 2026-10-08 "It needs to be a 1:1 parity."; 2026-10-16 "keep going please all of this reverse engineering needs to be incorporated into our game"; 2026-10-17 "keep going full speed". House rule (memory `boss-side-fix-needs-measured-options`): **never tune boss numbers**: build each sourced answer behind its own switch, measure it, ask him once. **This lane turned nothing on and decides nothing.** (Bailey then decided, on 2026-10-17: all six, section 11.)
 Sources: the private note `D:\Tools\ffx-parity\coverage\ffx\FFX-H02.md` section 7 (rows D1 to D10) and the sections it cites; gap scan `coverage\gap-scan-2026-10-17.md` section 3, rows S5 and S6. Paper preflight: [`docs/plans/re-parity-rc10-ffx-boss-data-review.md`](../plans/re-parity-rc10-ffx-boss-data-review.md) (DEEP by `critic-plan`; written after the inert module landed, which the page discloses).
 
 ## 0. In one paragraph
@@ -254,3 +254,72 @@ node tools/orphans.mjs
 ```
 
 Measurement and mutation tooling (outside the repo, in the lane's folder, deleted at the end of the lane; each script is small): `read-records.mjs` (the VBF read), `compare.mjs` (engine rows against records), the RC9 counters lane's `zz-digest.test.ts` with a `ZZ_SWITCHES` line (and `ZZ_D1_KEYS` for the ablation), `digest-compare.mjs`, `tables.mjs` (the tables above), `mutate2.mjs` with `mutants.json`, run in scratch copies made with `git archive <ref> src vitest.config.ts package.json tsconfig.json`. To turn a switch on for a measurement without editing the repo: `ZZ_SWITCHES=D1,D7` in the digest test, or `setBossDataSwitches({ D1: true })` in any test (and call the function it returns).
+
+## 11. Turned on (Bailey 2026-10-17)
+
+**Status: all six switches are ON** (`BOSS_DATA_SWITCHES` in `src/battle/ffx/boss-data-corrections.ts` is `{ D1: true, D3: true, D7: true, D8: true, D9: true, D10: true }`), on branch `re-parity-rc10-ffx-boss-data-on`: the merge `8c0dd80d2` (`origin/r53-rc` `aef7e0e73` plus this lane's `cd962ee25`, switches still OFF in that commit) and, on top of it, the commit that turns them on. **Game case: FFX only** (AGENTS.md rule 14): `src/battle/ffx2`, `src/data/ffx2` and `src/battle/ff7` are untouched, and `ffx2-atb-golden` (6) and `ff7-golden` (3) pass unchanged. Not merged to `main`, not deployed.
+Bailey's decision (2026-10-17, asked which FFX boss-data fixes should match the game): **"All six (Recommended)"**, so D1, D3, D7, D8, D9 and D10; his standing order of 2026-10-08, "It needs to be a 1:1 parity." Nothing here was tuned: the numbers are the game's own record bytes, as in sections 2 and 3.
+
+### 11.1 What changed in the code
+
+- `boss-data-corrections.ts`: the one constant `BOSS_DATA_SWITCHES` (`false` x 6 -> `true` x 6) and the header comments (they cite the decision). `setBossDataSwitches(on)` still returns the function that puts every switch back, so a bench or a test can read the tree as it was before (`ALL_OFF`).
+- `setup.ts`: one comment ("each behind a switch, all six ON since 2026-10-17"). The call in `buildBattle` is the same line; it still works on the battle's own deep copy, so the module rows in `src/data/ffx/enemies/**` are not edited (the tests that read those rows, e.g. `chapters/evrae-engine.test.ts` with Evrae's Zanmato level 3, stay true: the corrected row exists only in a battle).
+
+### 11.2 The re-pin of `ffx-engine-golden` (12 of 18 digests; all outcomes still victories)
+
+| Digest | Before (r53-rc) | After (all six ON) |
+|---|---|---|
+| braskas-final-aeon#1 link 2 | c45dcb19 | 2ae22767 |
+| braskas-final-aeon#1 link 4 / 5 / 6 / 7 | e32d5371 / b8fc718 / fc9cfb11 / 70b56493 | cb91b2df / cf6bdf71 / 97585c97 / 420d8443 |
+| braskas-final-aeon#7 link 4 / 5 / 6 / 7 | 31e06759 / ab0e939f / 76f6bfc5 / f2f0106a | 46ee87e5 / e43f9a91 / a8adb1e1 / b6291175 |
+| seymour-anima-macalania#1 / #7 | 3f4769eb / c69441ce | c4ad03e / ff0b2fa0 |
+| evrae-airship#1 / #7 | 398f2884 / 9bc2532c | 9c6cc0f9 / d82a7350 |
+| yojimbo-cavern#1 / #7 | daacc3d9 / 164be66a | aaafef63 / b8d03c28 |
+| seymour-natus#1 / #7 | 336d9ea6 / 8097fc70 | ac9d49d4 / 72c18e1e |
+| isaaru-via-purifico#1 / #7, link 3 (the boss) | 13b0bd8a / a36d68be | 78ff97b5 / d0a1f362 |
+
+braskas-final-aeon links 1 and 3 (#1) and 1 to 3 (#7), isaaru links 1 and 2, and the six digests of seymour-flux, yunalesca and seymour-omnis (both seeds) do not move.
+
+**The cause is D1 alone**, the Defence and Magic Defence floors: the game treats a monster's 0 as 1, so each blow or spell lands about 0.7 percent weaker on a boss row that read 0, which shifts a few damage numbers by a point and so the rolls after them. D3, D7, D8, D9 and D10 move no digest, as the lane's own runs said (section 5).
+
+**Proof** (re-run on this tree, `r53-rc` `aef7e0e73` + the lane; a scratch test played the 18 digests of the golden under 9 switch sets, the driver being the golden's own; the scratch file is not committed):
+
+| Switch set | Digests that differ from r53-rc's table (the line before this commit) | Digests that differ from the new table |
+|---|---:|---:|
+| all six OFF | **0 of 18** | 12 |
+| D1 alone | 12 | **0** |
+| all six ON | 12 | **0** |
+| D3 alone / D7 alone / D8 alone / D9 alone / D10 alone | 0 of 18 each | 12 |
+| D3 + D7 + D8 + D9 + D10 together (all but D1) | **0 of 18** | 12 |
+| D1 on the Defence floor only | 10 (all but yojimbo-cavern) | 4 |
+| D1 on the Magic Defence floor only | 4 (evrae-airship, yojimbo-cavern) | 10 |
+| D1 on Accuracy, Agility, Magic and Luck only | 0 | 12 |
+
+So the table before this commit is exactly what the tree gives with the six OFF, and the table after it is exactly what D1 gives. `ffx-engine-golden` itself passes on the new table (18 of 18) and the header of that file carries the cause.
+
+### 11.3 The lane's tests, from "all off" to "all on, with the off state kept as its own proof"
+
+- `parity-ffx-boss-data.test.ts` (13 -> 14 tests): "the switches are all ON" (was "are all off"); `setBossDataSwitches` is shown by switching two OFF and putting them back to ON; a new test that a battle copy built with the shipped switches carries every corrected row (Evrae 1/1/4, no Doom bit, the Life flag; and every mapped row equals `corrected(id, ALL_ON)`) while the module rows stay as they were; the off-state test is explicit now (`setBossDataSwitches(ALL_OFF)` or `applyBossDataCorrections(group, ALL_OFF)`: the group is not read, a getter that throws is never reached, and the copy equals the group), so it is the proof that the six OFF give back the tree as it was before they were turned on. `afterEach` puts the switches back to the shipped values (it used to put them to false).
+- `parity-ffx-boss-data-engine.test.ts` (10 -> 11 tests): every state is named (`ALL_OFF` for the old row, `only('Dn')` for one switch, `{}` for "as shipped"), so each case proves both states: Evrae (DEF 0, MDEF 0, Zanmato 3, Doom immune, no Life flag with the six OFF; 1, 1, 4, no Doom bit, the Life flag as shipped), Flux's Slow byte (0 off, 255 as shipped), the Pagoda's resistance bytes and Scan bit, the Last Summoning's Pagodas, and the real casts (Slow at Flux 200: lands with D7 off, 0 as shipped; Doom at Evrae 50: 0 off, 50 as shipped; **new:** Shell and Protect at a Yu Pagoda, 200 casts each: land with D10 off, 0 as shipped).
+- `ffx-engine-golden.test.ts`: the 12 re-pins above, the cause in the header.
+- `chapters/last-summoning-iii-pin.test.ts` (**the one other test that pinned the old data**: Chapter III's twelve seeds, whole chain, a SHA-256 of every link's log): 11 of its 12 seed rows moved, so `NOW` is now the boss-data-ON table (whole-table digest `81dec25351f5f13d`) and the old `NOW` is kept as `RELEASE_53` (digest `1a75c7ad63ce11ae`, as the record, like `BEFORE` and `RELEASE_52`). The cause is D1 (the Yu Pagodas' and Yu Yevon's Defence, and his Magic Defence, read 1 in the game): no outcome, no number of links and no formation moved; seed 3, the defeat on link 1, is the one seed that does not move; the other eleven move in 2 to 5 of their 7 links. Proved on this tree with a scratch test (not committed) over 9 switch sets: all six OFF = `RELEASE_53`, 12 of 12; D1 alone = all six ON = `NOW`; D3, D7, D8, D9, D10 alone and together move 0 of 12. The file now also holds the off-state proof as tests: a test that plays the twelve seeds with the six false and with only D3, D7, D8, D9, D10 on and expects `RELEASE_53`, and a test that the move changes no outcome and no link count and leaves exactly seeds 1, 2, 4 to 12 moved. 15 -> 17 tests.
+- **No other FFX test pinned the old data**: **272 test files** that run the FFX engine, build a battle, or read an immunity, a flag or a Zanmato level (211 found by grep for `FFXEngine`, `buildBattle`, `setupForChapter`, `immunities.`, `zanmatoLevel`, `immune-to-` and the module's name, plus 61 FFX files that reach the engine only through a helper) were run with the six ON: every test passes (2,855 + 858 tests) apart from (a) three 15-second timeouts of `advisor-floor.test.ts` in the first batch, run on a machine shared with other lanes, which passes alone (23 of 23, 165 s), and (b) four assertions of `chapters/mirror-aeons-art.test.ts` (art-manifest rows for dark-cindy, dark-sandy, dark-mindy and dark-yojimbo are undefined: the art-only failure the brief expects in a worktree, nothing to do with the engine). The tests that read the module rows (e.g. `chapters/evrae-engine.test.ts`: Evrae's `zanmatoLevel` 3 and no Sensor flag; `chapters/last-summoning-records.test.ts`: Yu Yevon's level 5) are still true because the corrected row exists only in a battle's own copy. The three-seed FFX-2 and FF7 goldens are unchanged; nothing of FFX-2 or FF7 was touched.
+### 11.4 Visible text for the release driver (found by grep, NOT edited)
+
+No strategy-guide line or card claims that Slow lands on Seymour Flux, that Shell, Protect or Reflect lands on a Yu Pagoda, or that Scan works on a Pagoda (searched `src/data/guides/**`, `src/engine/tactics/**`, `src/ui/**`, `src/data/chapter-*.ts`, `learn/**`, `CHANGELOG.md`). The nearest lines, all still true:
+
+- `src/data/guides/seymour-flux.ts:42` (Provoke, the Breaks and Delay Attack are dead rows; "Slowga" is the Mortiorchis's reply to a Delay hit, not a Slow on Flux) and `:60-61` (Haste, which still lands on Flux; D7 touches only Slow).
+- `src/data/guides/braskas-final-aeon.ts:43` ("Killing or slowing them") and `:81-82` ("Slow a Pagoda and its Power Wave stops feeding him"): Slow is the one status a Pagoda still takes (resistance 50), so these stay true. `:86-87` and `:102`, and `src/data/guides/last-summoning.ts:106` and `:115-116`, are the party's Protect, not a Protect on a Pagoda. `src/engine/tactics/braskas-final-aeon.ts:70` and `:282` (code comments: a Pagoda is immune to everything but Slow and Delay) are now closer to true.
+
+In-game **data text whose reach changes** (the Sensor and Scan readouts):
+
+- `src/data/ffx/enemies/braskas-final-aeon.ts:129-130`, the Yu Pagodas' `scanText` ("Support construct. Restores HP ...", also Chapter 28's Pagodas): Scan on a Pagoda now fails (D10 sets the Pagoda's `immune-to-scan` flag), so this line is never shown; the Pagodas' Sensor line at `:128` is unchanged.
+- `src/data/ffx/enemies/braskas-final-aeon.ts:508`, Yu Yevon's `sensorText` ("It cannot be reasoned with ..."): D10 removes his `immune-to-sensor` flag, so Sensor now reveals him with this line, HP 99,999 and MP 1, where it showed "Immune to sensors." (D-221, `src/ui/ffx/sensorImmune.ts:17`) before; his `scanText` (`:509-510`) stays unreachable (he was already Scan-immune). Chapter III's last link and Chapter 28.
+- `CHANGELOG.md`: the paragraphs are written (section 9 of this note, one per switch, plain words, FFX only); the release driver pastes them. D10's two visible changes are the ones a player meets.
+
+### 11.5 Open items
+
+1. **Real-input check of the two visible D10 changes** (Scan on a Yu Pagoda; Sensor on Yu Yevon) in a browser, Chapter III and Chapter 28, before release (this note's section 7, item 5; not run here: this lane runs no game and no dev server).
+2. **Data-file comments that describe the old rows**: `src/data/ffx/enemies/seymour-flux.ts` (header, lines about Slow), `evrae.ts` (the `doom: 255` line and the Zanmato 3 comment) and `braskas-final-aeon.ts` (the Pagodas' flags) say what the module row holds, which is unchanged; the battle copy differs from it by `boss-data-corrections.ts`. A one-line pointer in each would help the next reader; not done here (those files are shared and the rows must not move).
+3. **Merge order**: `ffx-engine-golden` is also re-pinned by other RC10 lanes (hit order is already in this tree). Whichever lands second must re-derive its digests on the merged tree: the recipe is the 9-set run above (a scratch vitest file that plays the golden's 18 chains under `setBossDataSwitches(...)`), whose "all six OFF" row must equal the table before the commit that turns them on.
+4. **Everything in sections 6 and 7** that does not depend on the decision still stands (script writes beating records, the Scan bits, the Curse bit's name, Chapter 28 not benched).

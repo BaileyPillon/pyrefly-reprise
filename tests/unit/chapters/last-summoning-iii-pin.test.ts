@@ -26,11 +26,19 @@
  * is dealt to a different character (that handoff's section 5.1 lists Chapter III as 0 of 12 identical logs). Every seed's first link reads differently (and some later links, not all), **and no
  * outcome moved**: seed 3 is still the defeat on link 1, the eleven others are still seven-link victories over the same seven formations. **Proved by ablation on the release 53 tree:** with
  * `HIT_CALC_SLOT_ORDER`, `HIT_ORDER_ROUND_ROBIN` and `DRAIN_RECOIL_ONE_RECORD` (`src/battle/ffx/hit-order.ts`, the lane's three rollback switches) all put to false, all twelve rows of `RELEASE_52` read exactly
- * (14 of 14 tests of this file as they stood passed; the switches were then put back). `NOW` is what Chapter III reads on the release 53 tree, and it is what the test asserts; the two tables before it stay as the record.
+ * (14 of 14 tests of this file as they stood passed; the switches were then put back). `RELEASE_53` is what Chapter III reads on the release 53 tree, and it stays as the record with the two tables before it.
+ *
+ * **Boss data ON (2026-10-17, FFX only): eleven of the twelve seeds moved, and why.** Bailey chose "All six (Recommended)" for RC10's boss-data switches (`src/battle/ffx/boss-data-corrections.ts`,
+ * `docs/handoff/re-parity-rc10-ffx-boss-data.md` section 11), and Chapter III's rows are among those the game's records correct: the Yu Pagodas' and Yu Yevon's Defence (and Yu Yevon's Magic Defence) are
+ * 1 in the game where the rows read 0, so each blow or spell on them lands about 0.7 percent weaker, which shifts a few damage numbers by a point and the rolls after them (D1). Seed 3, the defeat on its first
+ * link, is the one seed it does not reach; the other eleven change in some links only (2 to 5 of the 7), and **no outcome, no number of links and no formation moved**. **Proved by ablation on this tree:** with all six
+ * switches false all twelve rows of `RELEASE_53` read exactly; with D1 alone on, the twelve rows of `NOW` read (equal to all six on); with D3, D7, D8, D9 and D10 on and D1 off, or each of the five alone, all twelve
+ * rows of `RELEASE_53` read (the five move no digest of this chain). `NOW` is what Chapter III reads with the switches as shipped, and it is what the test asserts.
  */
 
 import { describe, expect, it } from 'vitest';
 import { chapterChainDigest, sha16 } from '../helpers/ffxChainDigest.ts';
+import { setBossDataSwitches } from '../../../src/battle/ffx/boss-data-corrections.ts';
 
 const GROUPS = ['braskas-final-aeon', 'possessed-valefor', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'possessed-bahamut', 'yu-yevon'];
 
@@ -61,7 +69,7 @@ const MOVED_BY_THE_OVERDRIVE_LANE: Readonly<Record<number, string>> = {
 const RELEASE_52: Readonly<Record<number, string>> = { ...BEFORE, ...MOVED_BY_THE_OVERDRIVE_LANE };
 
 /** What Chapter III reads on the release 53 tree: the twelve rows RC10's hit-order lane moved (see the header; read from the release 53 tree's own run, whole-table digest 1a75c7ad63ce11ae). */
-const NOW: Readonly<Record<number, string>> = {
+const RELEASE_53: Readonly<Record<number, string>> = {
   1: 'd6afd80f44b44e89:victory b4fc81c50ae62729:victory 2dc0c7f818b45e95:victory cb98eaa0075d2b13:victory a86a95e34b022c08:victory 20a7bd6936260852:victory c4097e732b6b791c:victory',
   2: 'a3935a1059d729c7:victory d78d1085e1a1318e:victory 51b493eeb8cda593:victory fa524ab719904f7d:victory 8ebf250428d2f4c3:victory 3b61e63950439088:victory e42029a56c95e6ed:victory',
   3: 'ec1cfe8a7902e35b:defeat',
@@ -75,6 +83,36 @@ const NOW: Readonly<Record<number, string>> = {
   11: '92893773947efa83:victory 960bd8a3bd295aa3:victory 7e079e1c4f10ba2a:victory bc62766350792449:victory 1f34d8063ffae9e4:victory a698d76089fa4ddc:victory 0607123504460421:victory',
   12: 'd46c6b0c17faa02b:victory 13a83e344bdf871b:victory 7021e2cb56f5d0d2:victory 856e1e08ccdd0a97:victory 04849d7981dd60de:victory f22d2035c505f2a7:victory 9f161768c3431625:victory',
 };
+
+/** What Chapter III reads with RC10's six boss-data switches ON, as shipped from 2026-10-17 (see the header; the tree's own run, whole-table digest 81dec25351f5f13d). */
+const NOW: Readonly<Record<number, string>> = {
+  1: 'd6afd80f44b44e89:victory 4e98fd050e16dac8:victory 2dc0c7f818b45e95:victory 90ade832106931e0:victory 2987f2e3d55cc77f:victory 6ef0a57dfbd781c5:victory 379d7ba6ebd259e1:victory',
+  2: 'a3935a1059d729c7:victory d78d1085e1a1318e:victory 51b493eeb8cda593:victory 6f0ddfd428656cac:victory 8ebf250428d2f4c3:victory b1cf0297d86a7b6e:victory 09465941cf26372e:victory',
+  3: 'ec1cfe8a7902e35b:defeat',
+  4: '02ae5c9551851e1e:victory 166e3e5547aec6c9:victory 78019427dee0ad12:victory bcb6bd6352700875:victory 54ea68bce6287b56:victory cc271eecab3d1551:victory e73427c44ca8aeea:victory',
+  5: '812493cca3351f56:victory 9d302c70796b09d9:victory ecdadf9baca3ae60:victory 5d925e96b17cfe18:victory 5f04420cf1016666:victory 784495c3a1e2affc:victory bb6a8441b7d98d30:victory',
+  6: '24d41f9769be1bb8:victory 1b40c0095668f813:victory 29e5cc43dd10a0d0:victory 12f28c455a9fdf3b:victory 1907ff16135dd7fb:victory d78629d45c7460bc:victory ed6b09eddb546b6a:victory',
+  7: 'f24212315fbf4c99:victory 9eba2aff8f421263:victory 2fece7f57db94e10:victory acced37bd78148ba:victory 4f65ccc35f5d07e2:victory a48acabd30ccf5ae:victory c5309ef62ac68d91:victory',
+  8: 'c75777b90c959ba7:victory 8d6fd9ccb549b223:victory b91e9db7951a26d1:victory ddd891f318b3f6ed:victory 97e4264cd4ecb159:victory 17e396b39edecf89:victory 251cbae0d40b6659:victory',
+  9: 'dec0a5dae07a1321:victory c452237cfab21fbd:victory 3e8f27661817a6a2:victory da0da26264b54623:victory af16f6bad20c29fd:victory 69221e0133278902:victory b79f8fcb957e4946:victory',
+  10: '9c1db34fb251a176:victory 6868bb4184b59fcd:victory 83e7542cbd7b0027:victory f2c44334b77f7df6:victory 4ca258ae2cdbffd9:victory 057277854d984c81:victory aa7949c4509a1b3c:victory',
+  11: '92893773947efa83:victory 528b5c101138d977:victory 7e079e1c4f10ba2a:victory bc62766350792449:victory 1f34d8063ffae9e4:victory 2e675b176069bcf9:victory a5466bb391091dd1:victory',
+  12: 'd46c6b0c17faa02b:victory 13a83e344bdf871b:victory 7021e2cb56f5d0d2:victory 856e1e08ccdd0a97:victory 04849d7981dd60de:victory 85d1456ff1555c09:victory 7eec9c0c2cf3136f:victory',
+};
+
+/** Play the twelve seeds of Chapter III under a switch set and put the switches back. */
+async function playTwelve(on: Parameters<typeof setBossDataSwitches>[0]): Promise<string[]> {
+  const restore = setBossDataSwitches(on);
+  try {
+    const out: string[] = [];
+    for (let seed = 1; seed <= 12; seed++) out.push((await chapterChainDigest('braskas-final-aeon', seed)).parts.join(' '));
+    return out;
+  } finally {
+    restore();
+  }
+}
+
+const ALL_FALSE = { D1: false, D3: false, D7: false, D8: false, D9: false, D10: false };
 
 describe("Chapter III, twelve seeds, byte for byte (the hidden Last Summoning must not move it)", () => {
   for (let seed = 1; seed <= 12; seed++) {
@@ -105,15 +143,37 @@ describe("Chapter III, twelve seeds, byte for byte (the hidden Last Summoning mu
   it("release 53: every one of the twelve seeds moved (RC10's hit order), none in its outcome, its number of links or the formations fought", () => {
     for (let seed = 1; seed <= 12; seed++) {
       const before = RELEASE_52[seed]!.split(' ');
-      const after = NOW[seed]!.split(' ');
+      const after = RELEASE_53[seed]!.split(' ');
       expect(after.length, `seed ${seed}: the same number of links`).toBe(before.length);
       expect(after.map((p) => p.split(':')[1]), `seed ${seed}: every outcome is the same`).toEqual(before.map((p) => p.split(':')[1]));
       expect(after[0], `seed ${seed}: the first link moved`).not.toBe(before[0]);
     }
-    expect(Object.values(NOW).filter((row) => row.endsWith(':defeat'))).toEqual([NOW[3]]); // seed 3 is the only defeat, as it was
+    expect(Object.values(RELEASE_53).filter((row) => row.endsWith(':defeat'))).toEqual([RELEASE_53[3]]); // seed 3 is the only defeat, as it was
   });
 
-  it('the whole BEFORE table, as one digest: a26660257ba2716c; release 52: 29cff1931cbb6349; and the whole NOW table (release 53): 1a75c7ad63ce11ae', () => {
+  it('boss data ON: eleven of the twelve seeds moved (D1, the Defence floors), none in its outcome, its number of links or the formations; seed 3, the defeat on link 1, did not', () => {
+    const moved: number[] = [];
+    for (let seed = 1; seed <= 12; seed++) {
+      const before = RELEASE_53[seed]!.split(' ');
+      const after = NOW[seed]!.split(' ');
+      expect(after.length, `seed ${seed}: the same number of links`).toBe(before.length);
+      expect(after.map((p) => p.split(':')[1]), `seed ${seed}: every outcome is the same`).toEqual(before.map((p) => p.split(':')[1]));
+      if (NOW[seed] !== RELEASE_53[seed]) moved.push(seed);
+    }
+    expect(moved).toEqual([1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    expect(Object.values(NOW).filter((row) => row.endsWith(':defeat'))).toEqual([NOW[3]]);
+  });
+
+  it('the off-state proof: with all six boss-data switches false, Chapter III reads release 53 exactly; with the five that are not D1 on and D1 off, too (they move no digest of this chain)', async () => {
+    const off = await playTwelve(ALL_FALSE);
+    const allButD1 = await playTwelve({ ...ALL_FALSE, D3: true, D7: true, D8: true, D9: true, D10: true });
+    for (let seed = 1; seed <= 12; seed++) {
+      expect(off[seed - 1], `seed ${seed}: all six off`).toBe(RELEASE_53[seed]);
+      expect(allButD1[seed - 1], `seed ${seed}: D3, D7, D8, D9, D10 on`).toBe(RELEASE_53[seed]);
+    }
+  }, 120_000);
+
+  it('the whole BEFORE table, as one digest: a26660257ba2716c; release 52: 29cff1931cbb6349; the whole RELEASE_53 table: 1a75c7ad63ce11ae; and the whole NOW table (boss data ON): 81dec25351f5f13d', () => {
     // The twelve rows of the table, `seed=row`, joined by newlines and hashed: the single value the handoff quotes. The literal was computed from the
     // BEFORE run's own output, not from this file, so a typo in a row above cannot hide behind it.
     const lines: string[] = [];
@@ -122,8 +182,11 @@ describe("Chapter III, twelve seeds, byte for byte (the hidden Last Summoning mu
     const r52: string[] = [];
     for (let seed = 1; seed <= 12; seed++) r52.push(`${seed}=${RELEASE_52[seed]}`);
     expect(sha16(r52.join('\n'))).toBe('29cff1931cbb6349');
+    const r53: string[] = [];
+    for (let seed = 1; seed <= 12; seed++) r53.push(`${seed}=${RELEASE_53[seed]}`);
+    expect(sha16(r53.join('\n'))).toBe('1a75c7ad63ce11ae'); // from the run's own output (the print before this table was pasted), not from the rows above
     const now: string[] = [];
     for (let seed = 1; seed <= 12; seed++) now.push(`${seed}=${NOW[seed]}`);
-    expect(sha16(now.join('\n'))).toBe('1a75c7ad63ce11ae'); // from the run's own output (the print before this table was pasted), not from the rows above
+    expect(sha16(now.join('\n'))).toBe('81dec25351f5f13d'); // from the scratch run's own output, not from the rows above
   });
 });

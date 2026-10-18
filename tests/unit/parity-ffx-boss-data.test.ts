@@ -1,8 +1,11 @@
 /**
- * Re-parity RC10, lane FFX boss data (FFX only): the six switches of `src/battle/ffx/boss-data-corrections.ts`, each held to the game's own monster record.
+ * Re-parity RC10, lane FFX boss data (FFX only): the six switches of `src/battle/ffx/boss-data-corrections.ts`, each held to the game's own monster record. **All six ship ON**
+ * (Bailey, 2026-10-17: "All six (Recommended)"); every test that needs a switch OFF sets it off explicitly (`ALL_OFF`, `only(id)`), so the off state stays proved as the switch's
+ * own test and nothing depends on a hook resetting the module's switches.
  *
  * The record bytes are `tests/fixtures/ffx-boss-records.json` (numbers read from the owner's install for FFX-H02, 32 records; `helpers/ffxBossData.ts`). This file proves:
- *  1. with every switch off nothing is read and nothing moves;
+ *  0. the switches ship ON, and a battle built with the shipped switches carries the corrected rows;
+ *  1. with every switch off nothing is read and nothing moves (the off-state proof, which is what gives back the digests of the tree before they were turned on);
  *  2. each switch's table says exactly what the record says (every listed byte is in the record; nothing the record disagrees with is added);
  *  3. closure: with every switch on, every engine row that stands for a record equals it on the floored stats, the 24 status bytes (Regen through its flag), the five extra
  *     bits, the seven flags and the Zanmato level, except the rows listed in EXPECTED_RESIDUE (each a script write, with the reason).
@@ -35,32 +38,58 @@ beforeAll(loadWorld);
 /** The switches as the module shipped them, read when this file is loaded (before any test or hook). */
 const SHIPPED = { ...BOSS_DATA_SWITCHES };
 
+/** Whatever a test did to the module's switches, put them back to the shipped values (all ON) after it. */
 afterEach(() => {
-  for (const id of BOSS_DATA_SWITCH_IDS) BOSS_DATA_SWITCHES[id] = false;
+  for (const id of BOSS_DATA_SWITCH_IDS) BOSS_DATA_SWITCHES[id] = SHIPPED[id];
 });
 
 describe('the switches', () => {
-  it('are all off', () => {
+  it('are all ON (Bailey, 2026-10-17: "All six (Recommended)")', () => {
     expect(BOSS_DATA_SWITCH_IDS).toEqual(['D1', 'D3', 'D7', 'D8', 'D9', 'D10']);
-    for (const id of BOSS_DATA_SWITCH_IDS) expect(SHIPPED[id], id).toBe(false);
+    for (const id of BOSS_DATA_SWITCH_IDS) expect(SHIPPED[id], id).toBe(true);
   });
 
   it('setBossDataSwitches puts every switch back as it was', () => {
-    const restore = setBossDataSwitches({ D1: true, D7: true });
-    expect(BOSS_DATA_SWITCHES.D1).toBe(true);
-    expect(BOSS_DATA_SWITCHES.D3).toBe(false);
+    const restore = setBossDataSwitches({ D1: false, D7: false });
+    expect(BOSS_DATA_SWITCHES.D1).toBe(false);
+    expect(BOSS_DATA_SWITCHES.D7).toBe(false);
+    expect(BOSS_DATA_SWITCHES.D3).toBe(true);
     restore();
-    for (const id of BOSS_DATA_SWITCH_IDS) expect(BOSS_DATA_SWITCHES[id], id).toBe(false);
+    for (const id of BOSS_DATA_SWITCH_IDS) expect(BOSS_DATA_SWITCHES[id], id).toBe(true);
   });
 
-  it('with every switch off the group is not read (a getter that throws is never reached) and equals itself', () => {
+  it('with the shipped switches (all ON) the battle copy of a group carries the corrected rows and the module rows stay as they were', () => {
+    const g = cloneData(world.groups.find((x) => x.enemies.some((e) => e.id === 'evrae')) as EnemyGroupDef);
+    const moduleRows = JSON.stringify(world.groups.find((x) => x.enemies.some((e) => e.id === 'evrae')));
+    applyBossDataCorrections(g); // the module's own switches
+    const evrae = g.enemies.find((e) => e.id === 'evrae') as EnemyDef;
+    expect([evrae.stats.def, evrae.stats.mdef, evrae.zanmatoLevel, evrae.immunities.doom, evrae.immunityFlags.includes('immune-to-life')]).toEqual([1, 1, 4, undefined, true]);
+    expect(JSON.stringify(world.groups.find((x) => x.enemies.some((e) => e.id === 'evrae')))).toBe(moduleRows);
+    for (const id of Object.keys(MAP)) {
+      const copy = cloneData(world.groups.find((x) => [...x.enemies, ...(x.parts ?? [])].some((e) => e.id === id)) as EnemyGroupDef);
+      applyBossDataCorrections(copy);
+      expect([...copy.enemies, ...(copy.parts ?? [])].find((e) => e.id === id), id).toEqual(corrected(id, ALL_ON));
+    }
+  });
+
+  it('OFF is the off-state proof: with the six set false the group is not read (a getter that throws is never reached) and equals itself', () => {
     const trap = {
       get enemies(): never {
         throw new Error('read');
       },
     } as unknown as EnemyGroupDef;
     expect(() => applyBossDataCorrections(trap, ALL_OFF)).not.toThrow();
-    expect(() => applyBossDataCorrections(trap)).not.toThrow(); // the module's own switches, all off
+    const restore = setBossDataSwitches(ALL_OFF);
+    try {
+      expect(() => applyBossDataCorrections(trap)).not.toThrow(); // the module's own switches, set all false
+      for (const g of groups) {
+        const copy = cloneData(g);
+        applyBossDataCorrections(copy);
+        expect(JSON.stringify(copy)).toBe(JSON.stringify(g));
+      }
+    } finally {
+      restore();
+    }
     for (const g of groups) {
       const copy = cloneData(g);
       applyBossDataCorrections(copy, ALL_OFF);

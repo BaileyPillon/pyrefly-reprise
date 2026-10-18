@@ -255,7 +255,7 @@ export function buildBattle(
   // See `src/battle/common/clone.ts` for the audit that found the leaks.
   const party = cloneData(setup.party) as FFXPartyBuild;
   const group = cloneData(setup.enemies);
-  applyBossDataCorrections(group); // the rows' remaining differences from the game's monster records, each behind a switch that is off (`boss-data-corrections.ts`; RC10, FFX only)
+  applyBossDataCorrections(group); // the rows' remaining differences from the game's monster records, each behind a switch, all six ON since 2026-10-17 (`boss-data-corrections.ts`; RC10, FFX only)
   applyLinkLineUp(party, group); // a link that changes the line-up (FFX only; `EnemyGroupDef.lineUp`): the guest joins, the forced trio opens, Switch may close
   if (group.restoresPartyOnEntry === true) restorePartyOnEntry(party); // a hopeless retry (Sinspawn Gui's second fight): everyone up and full
   if (group.restoresPartyOnEntry === true && group.restoresAeonsOnEntry === true) restoreAeonsOnEntry(party); // the aeons too (the hidden Mirror Aeons chapter's Act II): whole, with no recovery count
