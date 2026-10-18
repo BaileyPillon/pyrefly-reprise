@@ -138,6 +138,41 @@ describe('the guard leaves everything else alone', () => {
     expect(Object.keys(ENEMY_GROUPS_BY_ID).length).toBeGreaterThan(0);
   });
 
+  it('a command is refused only when EVERY row that stands for it is greyed: an id-less Summon matches every Summon row, so it is refused only when all the aeons are down', async () => {
+    parityOn();
+    const engine = await engineFor('braskas-final-aeon', 'possessed-ifrit');
+    const ctx = ctxOf(engine);
+    const valefor = ctx.rt.aeonRoster.get('valefor')!;
+    valefor.hp = 0;
+    valefor.alive = false;
+    valefor.aeon!.reviveCountdown = 8;
+    turnOf(engine, 'yuna');
+    const yuna = actor(engine, 'yuna');
+    const anySummon = { kind: 'summon', targets: [] } as unknown as Command;
+    expect(submittedRowGreyed(ctx, yuna, anySummon)).toBe(false); // Valefor's row is greyed, the others are not
+    for (const a of ctx.rt.aeonRoster.values()) {
+      a.hp = 0;
+      a.alive = false;
+      a.aeon!.reviveCountdown = 8;
+    }
+    expect(submittedRowGreyed(ctx, yuna, anySummon)).toBe(true); // every aeon down: every row greyed
+  });
+
+  it('the escape mode is compared: with Flee switched off for the party by a formation and Escape still on, only the Flee command is refused', async () => {
+    parityOn();
+    const engine = await engineFor('seymour-flux');
+    const ctx = ctxOf(engine);
+    ctx.rt.canEscape = true;
+    ctx.state.flags['formation.cmdOff'] = true;
+    ctx.state.flags['formation.cmdOff:*:' + 0x3018] = true; // the Flee command (0x3018), switched off for everyone
+    const d = turnOf(engine, 'tidus');
+    const escape = d.commands.filter((c) => c.command.kind === 'escape');
+    expect(escape.map((r) => [(r.command as { extra?: { mode?: string } }).extra?.mode, r.enabled])).toEqual([['party', false], ['single', true]]);
+    const tidus = actor(engine, 'tidus');
+    expect(submittedRowGreyed(ctx, tidus, { kind: 'escape', targets: [], extra: { mode: 'party' } })).toBe(true);
+    expect(submittedRowGreyed(ctx, tidus, { kind: 'escape', targets: [], extra: { mode: 'single' } })).toBe(false);
+  });
+
   it('an enemy actor is never checked', async () => {
     parityOn();
     const engine = await engineFor('seymour-flux');
