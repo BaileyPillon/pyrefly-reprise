@@ -108,8 +108,11 @@ def apply_build_cfg(parts: list[dict], build_cfg: dict | None) -> bool:
     for name, variants in (cfg.get("variants") or {}).items():
         if name not in by:
             raise SystemExit(f"rig build: build.variants names {name!r}, which is not a part")
-        by[name].setdefault("variants", {}).update({vn: {k: v for k, v in rec.items() if k != "from_painting"} for vn, rec in variants.items()})
-        used = True
+        plain = {vn: {k: v for k, v in rec.items() if k != "from_painting"} for vn, rec in variants.items()}
+        plain = {vn: rec for vn, rec in plain.items() if rec}  # a variant that says only `from_painting` is cut by the `variants` step (rig_vcut.py), after the fit; one that also names its files keeps them as before
+        if plain:
+            by[name].setdefault("variants", {}).update(plain)
+        used = used or bool(plain)
     return used
 
 

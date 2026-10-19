@@ -35,7 +35,7 @@ export function summarise(ko, tracks, probe, continuity) {
     out.boxAreaRatio = num((out.boxAfter.w * out.boxAfter.h) / (out.boxBefore.w * out.boxBefore.h));
     out.boxShiftPx = num(Math.hypot(out.boxAfter.x + out.boxAfter.w / 2 - (out.boxBefore.x + out.boxBefore.w / 2), out.boxAfter.y + out.boxAfter.h / 2 - (out.boxBefore.y + out.boxBefore.h / 2)), 1);
   }
-  const partArea = (m, name) => m?.parts?.filter((p) => (name ? p.name === name : true)).reduce((s, p) => s + p.area, 0) ?? null;
+  const partArea = (m, name) => m?.parts?.filter((p) => (name ? p.name === name : true) && p.visible !== false).reduce((s, p) => s + p.area, 0) ?? null; // a hidden part (format v2) keeps the geometry it had when it was last drawn: only what is drawn counts
   const before = byN.get(swap - 1);
   const after = byN.get(swap);
   if (before?.parts) {
