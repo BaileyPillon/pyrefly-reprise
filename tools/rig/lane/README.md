@@ -95,7 +95,7 @@ A registry entry with no door word in `chapter` is a LISTED chapter: the recorde
 (`setAutoPlay(null)`, speed normal) and waits for the first human menu. Pterya (Chapter XIV link 2: 1 s), Ifrit (Chapter III link 3, the possessed Ifrit: about 45 s) and Shiva (link 5) are reached that way.
 The `ko` mode then plays the fight on the exact clock to the actor's KO swap (once it is under half its HP every frame is grabbed into a ring; the ring and `--tail` frames after the KO are kept) and records, a frame,
 the pose, life, HP, projected box and a rig's part meshes with the area of each. `--off` records the painting set the same way: the head area of the rig (hurt against KO) against the painting set's box and the
-continuity probe's head reading is the KO jump, rig on and off. The probe is vacuous for a rig; the part areas are the measure.
+continuity probe's head reading is the KO jump, rig on and off. The probe is vacuous for a rig; the part areas are the measure. `node tools/rig/lane/ko-summary.mjs --on <rec>/ko [--off <rec>/ko-off]` reads both runs into one table: the swap frame, the projected box before and after, the head and whole-figure mesh area hurt against KO (rig), the probe's own row for the KO swap (painting set) and the worst one-frame step of the head, centroid and feet through the camera. For a figure whose KO lies down (Shiva) the rig's own lie-down transition has a large one-frame step too: read it against the painting set's, not against zero.
 
 ## Format v2 (parts a key shows, hides or swaps)
 
