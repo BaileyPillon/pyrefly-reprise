@@ -8,6 +8,9 @@
  *   node tools/pose-gate.mjs --check --dist dist-release   also: every character painting the build ships is one the gate read and passed
  *   node tools/pose-gate.mjs --check --base origin/main    also: the ledger gained no legacy row since that ref (a ref git cannot read FAILS: `ledger-base`)
  *   node tools/pose-gate.mjs --report [--full] [--out F]   the census as JSON (the critic's static check and the artifact record read it)
+ *   node tools/pose-gate.mjs --prune-legacy [--dry]       remove the legacy waiver rows (and their seal entries) of the paintings that are in band now; prints the seal's new digest to pin
+ *                                                          (`LEGACY_SEAL_DIGEST` in tools/pose-gate-ledger.mjs). Rows are only ever removed, never added. Run `node tools/posescale/pose-stamp.mjs` after.
+ *   node tools/pose-gate.mjs --check --rigs auto|<dir>     also: a pose a rig the RIG gate says ok serves is reported `rigged` (the painting stays the fallback; a failing row still fails). --rigs-mode stamp|full
  *   node tools/pose-gate.mjs --write-legacy [--dry] [--except a,b] [--date YYYY-MM-DD]
  *                                                          write docs/target/pose-waivers.json ONCE: a legacy row for every painting that is out of band now.
  *                                                          Refuses when the ledger exists. Run it after `measure.py table` has registered what is to be
@@ -27,7 +30,10 @@ import process from 'node:process';
 import {
   ROOT, censusReport, checkBuilt, countByCode, formatFailure, legacyPaintings, listBuiltPaintings, runGate,
 } from './pose-gate-lib.mjs';
-import { LEDGER_PATH, buildLegacyLedger, loadLedger, writeNewLedger } from './pose-gate-ledger.mjs';
+import { loadModelInputs } from './posescale/pose-model.mjs';
+import { STAMP_FIELDS } from './posescale/pose-stamp-lib.mjs';
+import { LEDGER_PATH, buildLegacyLedger, loadLedger, pruneLegacyLedger, waiverKey, writeNewLedger, writePrunedLedger } from './pose-gate-ledger.mjs';
+import { DEFAULT_RIGS_ROOT } from './rig/rig-format.mjs';
 
 const argv = process.argv.slice(2);
 const flag = (n) => argv.includes(n);
@@ -39,6 +45,8 @@ const list = (s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : und
 const root = resolve(get('--root', ROOT));
 const artDir = get('--art') ? resolve(get('--art')) : undefined;
 const subjects = list(get('--subjects'));
+// --rigs <dir> (or `auto`: PYREFLY_RIGS_DIR or D:/pyrefly-art-rigs when it exists): a pose a gate-ok rig serves is reported `rigged`; --rigs-mode stamp skips running the rig gate again
+const rigs = get('--rigs') ? { dir: get('--rigs') === 'auto' ? DEFAULT_RIGS_ROOT : resolve(get('--rigs')), mode: get('--rigs-mode', 'full') } : undefined;
 
 function progress() {
   let n = 0;
@@ -49,7 +57,7 @@ function progress() {
 }
 
 async function census() {
-  return runGate({ root, artDir, subjects, baseRef: get('--base'), onSubject: progress() });
+  return runGate({ root, artDir, subjects, baseRef: get('--base'), onSubject: progress(), rigs });
 }
 
 async function check() {
@@ -65,7 +73,7 @@ async function check() {
   }
   if (!result.paintings && !failures.length) { console.error('pose-gate: no character paintings found (is --art the art folder, with characters/ in it?)'); return 2; }
   const t = result.entries.reduce((m, e) => ((m[e.outcome] = (m[e.outcome] ?? 0) + 1), m), {});
-  console.log(`pose-gate: ${result.paintings} paintings of ${result.subjects} subjects: ${t.pass ?? 0} pass, ${t.waived ?? 0} waived, ${t.exempt ?? 0} exempt, ${t.fail ?? 0} fail; ledger ${result.ledger.exists ? `${result.ledger.rows} row(s) (${result.ledger.legacy} legacy, ${result.ledger.bailey} Bailey's; compared with ${result.ledger.base === 'ref' ? get('--base') : result.ledger.base === 'absent' ? `${get('--base')} (no ledger there yet)` : 'no base ref, the pinned seal only'})` : 'absent'}; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  console.log(`pose-gate: ${result.paintings} paintings of ${result.subjects} subjects: ${t.pass ?? 0} pass, ${t.waived ?? 0} waived${rigs ? `, ${t.rigged ?? 0} rigged` : ''}, ${t.exempt ?? 0} exempt, ${t.fail ?? 0} fail; ledger ${result.ledger.exists ? `${result.ledger.rows} row(s) (${result.ledger.legacy} legacy, ${result.ledger.bailey} Bailey's; compared with ${result.ledger.base === 'ref' ? get('--base') : result.ledger.base === 'absent' ? `${get('--base')} (no ledger there yet)` : 'no base ref, the pinned seal only'})` : 'absent'}; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
   if (flag('--verbose')) for (const n of result.notes) console.log(`note  ${n.subject ? `${n.subject}/${n.pose}  ` : ''}${n.message}`);
   const max = Number(get('--max', Infinity));
   failures.slice(0, max).forEach((x) => console.log(`FAIL  ${formatFailure(x)}`));
@@ -106,10 +114,35 @@ async function writeLegacy() {
   return 0;
 }
 
-const modes = ['--check', '--report', '--write-legacy'].filter(flag);
+async function pruneLegacy() {
+  const L = loadLedger(root);
+  if (!L.exists || !L.ledger) { console.error(`pose-gate: ${LEDGER_PATH} ${L.error ?? 'does not exist'}: nothing to prune`); return 2; }
+  if (subjects) { console.error('pose-gate: --prune-legacy reads every painting; drop --subjects'); return 2; }
+  const result = await runGate({ root, artDir, ledger: null, onSubject: progress() });
+  const stillOut = new Set(legacyPaintings(result).map((p) => waiverKey(p.subject, p.pose, p.sha)));
+  // a painting registered by its waiver alone (Evrae's far paintings, the Sin fins' far-range ones: no record, no base row) is not "in band", it is unregistered by design: its row stays
+  const inp = await loadModelInputs({ root, artDir });
+  const registeredOtherwise = (s, p) => {
+    const row = inp.table[s]?.[p];
+    const rec = inp.records.subjects?.[s]?.poses?.[p];
+    return (!!row && Object.keys(row).some((k) => !STAMP_FIELDS.includes(k))) || (!!rec && !rec.skip);
+  };
+  for (const r of L.ledger.rows) if (r.legacy === true && !registeredOtherwise(r.subject, r.pose)) stillOut.add(waiverKey(r.subject, r.pose, r.sha));
+  const { ledger, removed, digest } = pruneLegacyLedger(L.ledger, stillOut);
+  const bySubject = {};
+  for (const r of removed) (bySubject[r.subject] ??= []).push(r.pose);
+  for (const [s, ps] of Object.entries(bySubject)) console.log(`  removed ${s}: ${ps.join(' ')}`);
+  console.log(`pose-gate: ${removed.length} legacy waiver row(s) removed (in band now), ${ledger.rows.length} left; the seal has ${ledger.legacySeal.length} entries, digest ${digest}`);
+  if (flag('--dry')) { console.log('pose-gate: --dry, nothing written'); return 0; }
+  writePrunedLedger(root, ledger);
+  console.log(`pose-gate: wrote ${LEDGER_PATH}. Next: set LEGACY_SEAL_DIGEST = '${digest}' in tools/pose-gate-ledger.mjs, then node tools/posescale/pose-stamp.mjs, then node tools/pose-gate.mjs --check.`);
+  return 0;
+}
+
+const modes = ['--check', '--report', '--write-legacy', '--prune-legacy'].filter(flag);
 if (modes.length !== 1) {
-  console.error('usage: node tools/pose-gate.mjs --check | --report | --write-legacy  [--art DIR] [--root DIR] [--subjects a,b] [--dist DIR] [--base REF]  (see the header of tools/pose-gate.mjs)');
+  console.error('usage: node tools/pose-gate.mjs --check | --report | --write-legacy | --prune-legacy  [--art DIR] [--root DIR] [--subjects a,b] [--dist DIR] [--base REF]  (see the header of tools/pose-gate.mjs)');
   process.exit(2);
 }
-const code = await ({ '--check': check, '--report': report, '--write-legacy': writeLegacy }[modes[0]])();
+const code = await ({ '--check': check, '--report': report, '--write-legacy': writeLegacy, '--prune-legacy': pruneLegacy }[modes[0]])();
 process.exitCode = code;

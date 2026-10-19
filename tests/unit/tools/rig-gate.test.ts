@@ -1,0 +1,193 @@
+/**
+ * **The rig gate, on fixtures** (the rig program; both games). Bailey, 2026-10-17: "start rigging for all chapters please. i want a permanent fix now."
+ * A rig ships only when `tools/rig-gate.mjs` says ok. The control passes; each case that follows is a rig that LOOKS fine in the file (it loads, its mesh is sound) and
+ * must be refused by the pixels: a key that does not make its painting (overlap 0.6), a foot that floats, a hole at the elbow half way between two keys, a costume that
+ * is not the approved master, a rig over the budget, a stamp that outlived the rig it vouched for.
+ */
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe, expect, it, vi } from 'vitest';
+import { gateRig, stampRig, verifyStamp, type RigGateResult } from '../../../tools/rig/rig-gate-lib.mjs';
+import { POSES, SUBJECT, addRectPart, paintPuppetArt, puppetInputs, puppetWorld, tempDir, writePuppetRig, type RigJson } from './rig-gate-fixtures.ts';
+
+vi.setConfig({ testTimeout: 120_000, hookTimeout: 120_000 });
+
+const codes = (r: RigGateResult, pose?: string): string[] => r.failures.filter((x) => !pose || x.pose === pose).map((x) => x.code);
+
+describe('the control: a sound puppet rig is ok', () => {
+  it('passes every key and every blend', async () => {
+    const w = await puppetWorld();
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs });
+    expect(r.failures).toEqual([]);
+    expect(r.status).toBe('ok');
+    expect(r.keys.map((k) => k.pose).sort()).toEqual(Object.keys(POSES).sort());
+    for (const k of r.keys) expect(k.iou).toBeGreaterThan(0.9);
+    expect(r.rest?.iou).toBeGreaterThan(0.99);
+    expect(r.holes?.rendered).toBeGreaterThan(20);
+  });
+});
+
+describe('a key that does not make its painting', () => {
+  it('fails `key-iou` at an overlap of about 0.6', async () => {
+    const w = await puppetWorld({ patch: (rig) => { rig.keys.attack.root = { dx: 22 }; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(r.status).toBe('refused');
+    expect(codes(r, 'attack')).toContain('key-iou');
+    const k = r.keys.find((x) => x.pose === 'attack');
+    expect(k?.iou).toBeGreaterThan(0.5);
+    expect(k?.iou).toBeLessThan(0.7);
+  });
+});
+
+describe('a foot that floats', () => {
+  it('fails `key-feet-y` and nothing else when the rig is lifted 14 px off the ground', async () => {
+    const w = await puppetWorld({ patch: (rig) => { rig.keys.hurt.root = { dy: -14 }; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(r.status).toBe('refused');
+    expect(codes(r, 'hurt')).toEqual(['key-feet-y']);
+    expect(r.keys.find((x) => x.pose === 'hurt')?.iou).toBeGreaterThan(0.85); // it still makes the painting: only the feet are wrong
+  });
+});
+
+describe('a hole at the elbow half way between two keys', () => {
+  it('passes with the underlap (a cap over the joint)', async () => {
+    const w = await puppetWorld({ cap: true, overlap: 0 });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs });
+    expect(codes(r)).toEqual([]);
+  });
+  it('fails `hole-blend`, and only that, for a cap that rides the elbow along a chord while the elbow swings along an arc', async () => {
+    // the cap is a free bone moved by explicit offsets (a shoulder pad, a hand-authored fix): at the two keys it sits exactly on the elbow, half way between them the
+    // linear blend of its offset is a chord and the elbow is on an arc, 12 px apart, more than the cap's reach
+    const swing = -2;
+    const w = await puppetWorld({
+      cap: false,
+      overlap: 0,
+      patch: async (rig, dir) => {
+        rig.bones.push({ name: 'pad', parent: 0, x: 235, y: 270 });
+        await addRectPart(dir, rig as { parts: RigJson[] }, { name: 'padcap', x: 220, y: 255, w: 30, h: 30, bone: 6, color: [184, 138, 96] });
+        rig.keys = {
+          idle: { bones: {}, source: 'characters/zz-puppet/idle' },
+          reacha: { bones: { forearm: { rot: -0.9 } }, source: 'authored' },
+          reachb: { bones: { upperarm: { rot: swing }, forearm: { rot: -0.9 }, pad: { dx: -70 * Math.sin(swing), dy: 70 * Math.cos(swing) - 70 } }, source: 'authored' },
+        };
+      },
+    });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, requireCoverage: false }); // a rig of three authored keys, to read the holes: coverage is not what this case is about
+    expect(r.failures.filter((x) => x.code !== 'hole-blend')).toEqual([]);
+    const between = r.failures.filter((x) => x.code === 'hole-blend' && x.pose === 'reacha>reachb');
+    expect(between.some((x) => x.message.includes('50 percent') && x.message.includes('forearm'))).toBe(true);
+    expect(r.keys.every((k) => k.ok)).toBe(true); // both keys are sound; only the road between them is not
+  });
+});
+
+describe('the costume is the approved master', () => {
+  it('fails `costume-stale` when the painting was repainted after the rig was cut', async () => {
+    const w = await puppetWorld();
+    const idle = join(w.art, 'characters', SUBJECT, 'idle.png');
+    const sharp = (await import('sharp')).default;
+    const buf = await sharp(idle).modulate({ brightness: 1.05 }).png().toBuffer();
+    writeFileSync(idle, buf);
+    const r = await gateRig({ rig: w.rig, inputs: await puppetInputs(w.art), blends: false });
+    expect(codes(r)).toContain('costume-stale');
+  });
+  it('fails `baseline` when the rig plants its soles on another row than the painting is registered on', async () => {
+    const w = await puppetWorld({ patch: (rig) => { rig.baselineY = 430; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r)).toContain('baseline');
+  });
+});
+
+describe('the budget', () => {
+  it('fails `budget-parts` over 24 parts', async () => {
+    const w = await puppetWorld({ patch: (rig) => { const p = rig.parts[0]; for (let i = 0; i < 25; i++) rig.parts.push({ ...p, name: `copy${i}`, order: 10 + i }); } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r)).toContain('budget-parts');
+  });
+});
+
+describe('the file', () => {
+  it('names what is wrong with a rig whose triangles index nothing', async () => {
+    const w = await puppetWorld({ patch: (rig) => { rig.parts[0].triangles = [0, 1, 999]; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(r.status).toBe('refused');
+    expect(codes(r)).toContain('rig-part');
+  });
+  it('refuses a key on a bone that is not there', async () => {
+    const w = await puppetWorld({ patch: (rig) => { rig.keys.attack.bones.tail = { rot: 1 }; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r)).toContain('rig-key');
+  });
+});
+
+describe('the feet', () => {
+  const swing = (rig: RigJson, planted?: false): void => {
+    rig.landmarks.feet.bone = 1; // the foot landmark rides the pelvis, which this key tips
+    rig.keys.hurt.bones.pelvis = { rot: 0.3 };
+    if (planted === false) rig.keys.hurt.planted = false;
+  };
+  it('fails `key-feet-landmark` when a planted key swings the foot landmark off the bind row (the runtime check)', async () => {
+    const w = await puppetWorld({ patch: (rig) => swing(rig) });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r, 'hurt')).toContain('key-feet-landmark');
+  });
+  it('lets a key that says `planted: false` leave the floor, and still judges everything else about it', async () => {
+    const w = await puppetWorld({ patch: (rig) => swing(rig, false) });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r, 'hurt')).not.toContain('key-feet-landmark');
+    expect(codes(r, 'hurt')).not.toContain('key-feet-y');
+    expect(r.keys.find((k) => k.pose === 'hurt')?.planted).toBe(false);
+  });
+  it('fails `rig-landmark` for a rig with no foot landmark', async () => {
+    const w = await puppetWorld({ patch: (rig) => { delete rig.landmarks.feet; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(codes(r)).toContain('rig-landmark');
+  });
+});
+
+describe('coverage: a partial rig changes the poses it does not serve', () => {
+  it('lists the poses with a painting and no key, and refuses them BY DEFAULT (the 2026-10-17 rule; `requireCoverage: false` is the dev loop)', async () => {
+    const w = await puppetWorld({ patch: (rig) => { delete rig.keys.item; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false, requireCoverage: false });
+    expect(r.uncovered).toEqual(['item']);
+    expect(r.failures.map((f) => f.code)).not.toContain('coverage'); // reported, not refused, when the dev loop asks
+    const strict = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(strict.status).toBe('refused');
+    expect(strict.failures.find((f) => f.code === 'coverage')?.message).toContain('item');
+  });
+  it('has nothing uncovered when every painted pose has a key', async () => {
+    const w = await puppetWorld();
+    expect((await gateRig({ rig: w.rig, inputs: w.inputs, blends: false, requireCoverage: true })).uncovered).toEqual([]);
+  });
+});
+
+describe('the stamp', () => {
+  it('writes ok into rig.json, verifies, and dies with the content', async () => {
+    const w = await puppetWorld();
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(verifyStamp(w.rig).ok).toBe(false); // no stamp yet
+    const g = stampRig(w.rig, r);
+    expect(g.status).toBe('ok');
+    expect(verifyStamp(w.rig).ok).toBe(true);
+    const raw = JSON.parse(readFileSync(join(w.rig, 'rig.json'), 'utf8')) as RigJson;
+    raw.keys.attack.bones.upperarm.rot = -0.5; // a hand edit after the gate
+    writeFileSync(join(w.rig, 'rig.json'), JSON.stringify(raw));
+    expect(verifyStamp(w.rig)).toMatchObject({ ok: false, code: 'gate-stale' });
+  });
+  it('a refused rig is stamped refused, never ok', async () => {
+    const w = await puppetWorld({ patch: (rig) => { rig.keys.attack.root = { dx: 22 }; } });
+    const r = await gateRig({ rig: w.rig, inputs: w.inputs, blends: false });
+    expect(stampRig(w.rig, r).status).toBe('refused');
+    expect(verifyStamp(w.rig).ok).toBe(false);
+  });
+});
+
+describe('the helpers agree with themselves', () => {
+  it('paints the same art twice to the same bytes (so a stale sha is the test\'s doing)', async () => {
+    const a = tempDir('rig-twice-a-');
+    const b = tempDir('rig-twice-b-');
+    await paintPuppetArt(a);
+    await paintPuppetArt(b);
+    expect(readFileSync(join(a, 'characters', SUBJECT, 'idle.png')).equals(readFileSync(join(b, 'characters', SUBJECT, 'idle.png')))).toBe(true);
+    void writePuppetRig;
+  });
+});

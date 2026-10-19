@@ -18,7 +18,7 @@
  *
  * **The slip in Natus's script** (found reading its compiled branch; the research note's table says "the two living
  * slots"): with slot 3 down, the *false* coin pairs slot 1 with slot 3, the fallen one, where Macalania's Seymour
- * correctly pairs 2 with 1. The queue rejects a command aimed at a fallen member (`FUN_007ac9c0`, "TARGET ERROR"),
+ * correctly pairs 2 with 1. The queue rejects a command aimed at a fallen member (the function at 0x007ac9c0, "TARGET ERROR"),
  * so that half of the cast is lost: 51.03 % of Natus's double casts with Auron down hit one member, not two.
  * `script: 'natus'` follows his branch; `'macalania'` follows Seymour's.
  */

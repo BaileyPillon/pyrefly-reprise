@@ -9,6 +9,8 @@ interface AeonEntry {
   name: string;
   /** The aeon's own stored gauge, 0-100 — separate from the temporary full gauge Grand Summon grants. */
   storedGauge: number;
+  /** False for an aeon the fight's script has taken away (`battle/ffx/pickerParams.ts`, off by default): drawn greyed, the cursor rests on it, a confirm is refused. */
+  enabled: boolean;
 }
 
 /**
@@ -23,7 +25,7 @@ function aeonRows(v: unknown): AeonEntry[] {
     const entry = typeof raw === 'string' ? { id: raw } : raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : null;
     const id = entry && typeof entry['id'] === 'string' && entry['id'] ? entry['id'] : null;
     if (!entry || !id) continue;
-    rows.push({ id, name: str(entry['name'], id), storedGauge: num(entry['storedGauge'], 0) });
+    rows.push({ id, name: str(entry['name'], id), storedGauge: num(entry['storedGauge'], 0), enabled: entry['enabled'] !== false });
   }
   return rows;
 }
@@ -42,20 +44,20 @@ export function openYunaGrandSummon(root: HTMLElement, params: Record<string, un
   overlay.open({
     title: 'Grand Summon',
     mechanic: 'Grand Summon',
-    instruction: aeons.length ? 'aeon arrives with a full overdrive' : 'no aeon available · cancel to go back',
+    instruction: aeons.some((a) => a.enabled) ? 'aeon arrives with a full overdrive' : 'no aeon available · cancel to go back',
   });
   overlay.bodyEl.innerHTML = `<div class="ffx-mg-list" data-role="list"></div>`;
   const listEl = overlay.bodyEl.querySelector<HTMLElement>('[data-role="list"]')!;
 
   return new Promise<MinigameResult>((resolve, reject) => {
-    let cursor = 0;
+    let cursor = Math.max(0, aeons.findIndex((a) => a.enabled)); // opens on the first aeon that can be called
     let settled = false;
 
     const render = (): void => {
       listEl.innerHTML = aeons.length
         ? aeons
             .map((a, i) => {
-              const cls = ['ffx-mg-list__row', i === cursor ? 'ffx-mg-list__row--selected' : ''].filter(Boolean).join(' ');
+              const cls = ['ffx-mg-list__row', i === cursor ? 'ffx-mg-list__row--selected' : '', a.enabled ? '' : 'ffx-mg-list__row--disabled'].filter(Boolean).join(' ');
               const doubleChip = a.storedGauge >= 100 ? '<span class="ffx-mg-list__qty">×2</span>' : '';
               return `<div class="${cls}">${escapeHtml(a.name)}${doubleChip}<span class="ffx-mg-list__gauge"><i style="width:${Math.max(0, Math.min(100, a.storedGauge))}%"></i></span></div>`;
             })
@@ -98,7 +100,7 @@ export function openYunaGrandSummon(root: HTMLElement, params: Record<string, un
       else if (b === 'down') cursor = (cursor + 1) % aeons.length;
       else if (b === 'confirm') {
         const a = aeons[cursor];
-        if (a) void finish(a.id);
+        if (a?.enabled) void finish(a.id); // a greyed aeon is refused: nothing happens
         return;
       }
       render();

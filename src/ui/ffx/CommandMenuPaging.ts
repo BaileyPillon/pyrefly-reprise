@@ -40,15 +40,15 @@ export function selectionAfterPage(selected: number, from: MenuWindow, to: MenuW
   return Math.max(to.start, Math.min(selected + (to.start - from.start), to.end - 1));
 }
 
-/** The header's inner markup: the counter, then the up and down buttons. */
-export function pagerHtml(win: MenuWindow, total: number, label: string): string {
+/** The header's inner markup: the counter (or `count`, markup that takes its place: a Doublecast's cast 1), then the up and down buttons. */
+export function pagerHtml(win: MenuWindow, total: number, label: string, count?: string): string {
   const btn = (dir: 1 | -1, glyph: string, name: string): string => {
     const off = !canPage(win, total, dir);
     return `<button type="button" class="ffx-cmd-pager__btn" data-page="${dir}" tabindex="-1" aria-label="${name}"${off ? ' disabled aria-disabled="true"' : ''}>${glyph}</button>`;
   };
   const what = label ? ` of ${label}` : '';
   return (
-    `<div class="ffx-cmd-pager__count">${pagerCounter(win, total)}</div>` +
+    `<div class="ffx-cmd-pager__count">${count || pagerCounter(win, total)}</div>` +
     btn(-1, '\u25B2', `Previous page${what}`) +
     btn(1, '\u25BC', `Next page${what}`)
   );

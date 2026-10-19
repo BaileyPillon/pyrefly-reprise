@@ -29,6 +29,13 @@ export interface HitInfo {
   magic?: boolean;
   /** Playback speed; nothing holds at `fast` or `skip`. */
   speed: 'normal' | 'fast' | 'skip' | string;
+  /**
+   * This blow is the LAST ONE THE ACTION SHOWS, in the order the engine applied its hits (FFX only; `presenterHooks.ts#isLastShownBlow`). Since RC10 an action that hits several targets
+   * replays its hits round by round, and a damage event keeps the index it was CALCULATED at, so `hitIndex >= hitCount - 1` is the last calculated hit: with unequal hit counts (Fire Fury over foes
+   * taking five and two hits) that is the fourth blow of seven shown. Absent: no burst was at hand (a test rig), and the index rule stands. FFX-2 never reads it (its blows are shown in the order they
+   * were calculated, and its accent keeps the index rule).
+   */
+  lastShown?: boolean | undefined;
 }
 
 export interface SpectacleFlags {
@@ -168,7 +175,9 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
   const t = SPECTACLE_TUNING[game];
   const normal = hit.speed === 'normal';
   const first = hit.hitIndex === 0;
-  const last = hit.hitIndex >= hit.hitCount - 1;
+  // The finishing blow of an Overdrive or Special. FFX: the last blow SHOWN (the engine replays a spread round by round, so the highest calculation index is not always the last one on screen);
+  // FFX-2 and any caller that does not say: the highest index, as before.
+  const last = game === 'ffx' && hit.lastShown !== undefined ? hit.lastShown : hit.hitIndex >= hit.hitCount - 1;
   // FFX holds on every heavy blow; FFX-2 only on a crit, and never on chain hits 2 and later.
   const holdsHeavy = game === 'ffx' ? hit.heavy : hit.crit && first;
   let freezeMs = 0;

@@ -21,7 +21,7 @@ own estimates and WHICH of the game's own fights each act uses (the plan: `docs/
 > | tier 3 `nagi05_72` | 100 percent (200) | 23 percent (46) | 100 percent (199) | 0 of 200 |
 >
 > **Pay is final for Act II**: it barely decides it (Pay on and no Yojimbo are within three seeds in a hundred), and the worst thing a player can do is call Yojimbo and not pay him (23 to 28 percent). What would change it is Yojimbo's starting gauge (a lever the preset names: full raises the
-> Zanmato chance from 11 to 31 in 64 per Pay at 100,000 gil (hire answer 2, an ESTIMATE), and a Zanmato ends the fight), which this pass does not move.
+> Zanmato chance from 11 to 31 in 64 per Pay at 100,000 gil (hire answer 2, the game's own starting value (read at boot, 2026-10-17)), and a Zanmato ends the fight), which this pass does not move.
 
 Bailey, 2026-10-15: "i like the mirror match but make the difficulty appropriate not too easy not too hard". The target the plan turned that into: **a full run (Act I, the heal, Act II) with the advisor's line is won about
 70 percent of the time (60 to 80 accepted), and a careless line (the plain Attack on the first living enemy, no aeon, no item) mostly loses (under 20 percent).** Prefer the game's own formations; the trio with its gauges
@@ -193,8 +193,7 @@ Every rule is load-bearing, and none is a secret: they appear in the guide's hin
 
 **Estimates (named constants, one place each; none is a game number):** 17 Phoenix Downs (the lever, measured above); the party at the caps with Luck 60 (`ENDGAME_LUCK`); the Sisters' start gauges at 100 and
 Yojimbo's at 0 (`SISTERS_START_GAUGE`, `YOJIMBO_START_GAUGE`: the Sisters' first menu offers Combine powers only while all three gauges are full; the orders that fill a bar work now, so 0 is playable); the Sisters' start
-motivation 50 (`SISTERS_START_MOTIVATION`: RE marks it unsourced; it sets Combine powers' chance, 200 plus motivation in RE's kernel, and was not measured as a lever); Yojimbo's start compatibility 128 (**strongly indicated
-by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26), live confirmation pending**; a fixed per-chapter value, never persisted across sessions) and hire answer 2; the party's gil 1,500,000 (the line pays Yojimbo 100,000, `PAY_GIL`). The advisor's constants
+motivation 50 (`SISTERS_START_MOTIVATION`: RE marks it unsourced; it sets Combine powers' chance, 200 plus motivation in RE's kernel, and was not measured as a lever); Yojimbo's start compatibility 128 (**the game's own starting value (read at boot, 2026-10-17)**; a community save pack, not the owner's, had strongly indicated it; a fixed per-chapter value, never persisted across sessions) and hire answer 2 (the game's own starting value too); the party's gil 1,500,000 (the line pays Yojimbo 100,000, `PAY_GIL`). The advisor's constants
 (`SHIELD_AT_GAUGE` 88, `HEAL_UNDER` 0.6, `ITEM_HEAL_UNDER` 0.25, `CHEER_STACKS` 5) are the line's own.
 
 **What waited for RE, and what is open.** Closed on 2026-10-16 (the engine merged at `53ce98a05`): the group Zanmato, the seven orders, the group Delta Attack; the bench was re-run and the picks stand. **Open, none of it moves a number today:** the order of Zanmato and Auto-Life inside a hit

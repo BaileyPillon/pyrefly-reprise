@@ -1,0 +1,252 @@
+{
+ "mode": "gpu",
+ "base": "http://127.0.0.1:5602/",
+ "runs": [
+  {
+   "label": "kimahri-rig-biran-yenke-1600x900",
+   "shots": [
+    "docs/screenshots/r55/kimahri-rig-biran-yenke-1600x900.jpg"
+   ],
+   "rigs": [
+    {
+     "subject": "biran-ronso",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "kimahri",
+     "on": true,
+     "reason": "gate ok, 15 parts, 32 bones, 13 keys, 1x maps"
+    },
+    {
+     "subject": "yenke-ronso",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    }
+   ]
+  },
+  {
+   "label": "kimahri-rig-biran-yenke-390x844",
+   "shots": [
+    "docs/screenshots/r55/kimahri-rig-biran-yenke-390x844.jpg"
+   ],
+   "rigs": [
+    {
+     "subject": "biran-ronso",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "kimahri",
+     "on": true,
+     "reason": "gate ok, 15 parts, 32 bones, 13 keys, 1x maps"
+    },
+    {
+     "subject": "yenke-ronso",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    }
+   ]
+  },
+  {
+   "label": "lulu-rig-sinspawn-gui-1600x900",
+   "shots": [
+    "docs/screenshots/r55/lulu-rig-sinspawn-gui-1600x900.jpg"
+   ],
+   "rigs": [
+    {
+     "subject": "auron",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "lulu",
+     "on": true,
+     "reason": "gate ok, 11 parts, 25 bones, 13 keys, 1x maps"
+    },
+    {
+     "subject": "sinspawn-gui",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "sinspawn-gui-arm-left",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "sinspawn-gui-arm-right",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "sinspawn-gui-head",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "tidus",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    }
+   ]
+  },
+  {
+   "label": "lulu-rig-sinspawn-gui-390x844",
+   "shots": [
+    "docs/screenshots/r55/lulu-rig-sinspawn-gui-390x844.jpg"
+   ],
+   "rigs": [
+    {
+     "subject": "auron",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "lulu",
+     "on": true,
+     "reason": "gate ok, 11 parts, 25 bones, 13 keys, 1x maps"
+    },
+    {
+     "subject": "sinspawn-gui",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "sinspawn-gui-arm-left",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "sinspawn-gui-arm-right",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "sinspawn-gui-head",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    },
+    {
+     "subject": "tidus",
+     "on": false,
+     "reason": "no rig listed in the art manifest"
+    }
+   ]
+  }
+ ],
+ "console": [],
+ "pageErrors": [],
+ "failedRequests": [
+  "lulu-rig-sinspawn-gui-1600x900: http://127.0.0.1:5602/art/backdrops/via-purifico.png net::ERR_ABORTED",
+  "lulu-rig-sinspawn-gui-1600x900: http://127.0.0.1:5602/art/backdrops/mushroom-rock-road.png net::ERR_ABORTED",
+  "lulu-rig-sinspawn-gui-1600x900: http://127.0.0.1:5602/art/characters/rikku-dark-knight/idle.png net::ERR_ABORTED",
+  "lulu-rig-sinspawn-gui-1600x900: http://127.0.0.1:5602/art/characters/paine-warrior/idle.png net::ERR_ABORTED"
+ ],
+ "checks": [
+  {
+   "name": "kimahri-rig-biran-yenke-1600x900: Enter on the title reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-1600x900: the door word \"gagazet\" typed on the board opens the chapter",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-1600x900: biran-yenke reaches party prep",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-1600x900: the battle reaches a command menu",
+   "ok": true
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-1600x900: kimahri is drawn as a rig",
+   "ok": true,
+   "detail": "true gate ok, 15 parts, 32 bones, 13 keys, 1x maps"
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-390x844: Enter on the title reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-390x844: a long press on the label puts up the door field",
+   "ok": true
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-390x844: the door word \"gagazet\" typed in the phone door field opens the chapter",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-390x844: biran-yenke reaches party prep",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-390x844: the battle reaches a command menu",
+   "ok": true
+  },
+  {
+   "name": "kimahri-rig-biran-yenke-390x844: kimahri is drawn as a rig",
+   "ok": true,
+   "detail": "true gate ok, 15 parts, 32 bones, 13 keys, 1x maps"
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-1600x900: Enter on the title reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-1600x900: the door word \"mushroom\" typed on the board opens the chapter",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-1600x900: sinspawn-gui reaches party prep",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-1600x900: the battle reaches a command menu",
+   "ok": true
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-1600x900: lulu is drawn as a rig",
+   "ok": true,
+   "detail": "true gate ok, 11 parts, 25 bones, 13 keys, 1x maps"
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-390x844: Enter on the title reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-390x844: a long press on the label puts up the door field",
+   "ok": true
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-390x844: the door word \"mushroom\" typed in the phone door field opens the chapter",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-390x844: sinspawn-gui reaches party prep",
+   "ok": true,
+   "detail": "party-prep"
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-390x844: the battle reaches a command menu",
+   "ok": true
+  },
+  {
+   "name": "lulu-rig-sinspawn-gui-390x844: lulu is drawn as a rig",
+   "ok": true,
+   "detail": "true gate ok, 11 parts, 25 bones, 13 keys, 1x maps"
+  }
+ ],
+ "summary": {
+  "passed": 22,
+  "failed": 0
+ }
+}

@@ -1,0 +1,268 @@
+{
+ "mode": "gpu",
+ "base": "http://127.0.0.1:5917/",
+ "runs": [
+  {
+   "label": "title-echo-1600x900",
+   "shots": [
+    "docs/screenshots/r55/presentation-page-1600x900.jpg",
+    "docs/screenshots/r55/title-echo-1600x900.jpg"
+   ],
+   "facts": {
+    "echoClass": true,
+    "htmlWordmark": 0,
+    "build": "ba5b1f5c"
+   }
+  },
+  {
+   "label": "title-echo-390x844",
+   "shots": [
+    "docs/screenshots/r55/presentation-page-390x844.jpg",
+    "docs/screenshots/r55/title-echo-390x844.jpg"
+   ],
+   "facts": {
+    "echoClass": true,
+    "htmlWordmark": 0,
+    "build": "ba5b1f5c"
+   }
+  },
+  {
+   "label": "voice-line-1600x900",
+   "shots": [
+    "docs/screenshots/r55/voice-line-1600x900.jpg"
+   ],
+   "played": [
+    {
+     "id": "seymour-flux.pre.008",
+     "state": "playing",
+     "speaker": "Tidus",
+     "caption": "That's not",
+     "chapter": "seymour-flux",
+     "started": 1,
+     "asked": 1,
+     "contextState": "running",
+     "after": {
+      "id": "seymour-flux.pre.008",
+      "at": 39409,
+      "heard": true,
+      "why": "ended"
+     }
+    },
+    {
+     "id": "seymour-flux.pre.013",
+     "state": "playing",
+     "speaker": "Tidus",
+     "caption": "...You're",
+     "chapter": "seymour-flux",
+     "started": 2,
+     "asked": 2,
+     "contextState": "running",
+     "after": {
+      "id": "seymour-flux.pre.013",
+      "at": 44619,
+      "heard": true,
+      "why": "ended"
+     }
+    },
+    {
+     "id": "seymour-flux.pre.014",
+     "state": "playing",
+     "speaker": "Tidus",
+     "caption": "Auron. Tel",
+     "chapter": "seymour-flux",
+     "started": 3,
+     "asked": 3,
+     "contextState": "running",
+     "after": {
+      "id": "seymour-flux.pre.014",
+      "at": 47280,
+      "heard": true,
+      "why": "ended"
+     }
+    }
+   ],
+   "final": {
+    "started": 3,
+    "asked": 3,
+    "enabled": true,
+    "chapter": "seymour-flux",
+    "contextState": "running"
+   }
+  },
+  {
+   "label": "voice-line-390x844",
+   "shots": [
+    "docs/screenshots/r55/voice-line-390x844.jpg"
+   ],
+   "played": [
+    {
+     "id": "seymour-flux.pre.008",
+     "state": "playing",
+     "speaker": "Tidus",
+     "caption": "That's no",
+     "chapter": "seymour-flux",
+     "started": 1,
+     "asked": 1,
+     "contextState": "running",
+     "after": {
+      "id": "seymour-flux.pre.008",
+      "at": 40749,
+      "heard": true,
+      "why": "ended"
+     }
+    },
+    {
+     "id": "seymour-flux.pre.013",
+     "state": "playing",
+     "speaker": "Tidus",
+     "caption": "...You're ",
+     "chapter": "seymour-flux",
+     "started": 2,
+     "asked": 2,
+     "contextState": "running",
+     "after": {
+      "id": "seymour-flux.pre.013",
+      "at": 46069,
+      "heard": true,
+      "why": "ended"
+     }
+    },
+    {
+     "id": "seymour-flux.pre.014",
+     "state": "playing",
+     "speaker": "Tidus",
+     "caption": "Auron. Tel",
+     "chapter": "seymour-flux",
+     "started": 3,
+     "asked": 3,
+     "contextState": "running",
+     "after": {
+      "id": "seymour-flux.pre.014",
+      "at": 48770,
+      "heard": true,
+      "why": "ended"
+     }
+    }
+   ],
+   "final": {
+    "started": 3,
+    "asked": 3,
+    "enabled": true,
+    "chapter": "seymour-flux",
+    "contextState": "running"
+   }
+  }
+ ],
+ "console": [],
+ "pageErrors": [],
+ "failedRequests": [
+  "title-echo-1600x900: http://127.0.0.1:5917/art/backdrops/leblanc-last-room.png net::ERR_ABORTED",
+  "title-echo-1600x900: http://127.0.0.1:5917/art/characters/leblanc/idle.png net::ERR_ABORTED"
+ ],
+ "checks": [
+  {
+   "name": "title-echo-1600x900: Enter reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "title-echo-1600x900: Chapter I reaches party prep",
+   "ok": true
+  },
+  {
+   "name": "title-echo-1600x900: Esc opens the pause",
+   "ok": true
+  },
+  {
+   "name": "title-echo-1600x900: reached the OPTIONS tab",
+   "ok": true,
+   "detail": "options"
+  },
+  {
+   "name": "title-echo-1600x900: Down reaches the PRESENTATION row",
+   "ok": true,
+   "detail": "presentation"
+  },
+  {
+   "name": "title-echo-1600x900: Right on TITLE SCREEN steps to THE ECHO",
+   "ok": true,
+   "detail": "THE ECHO"
+  },
+  {
+   "name": "title-echo-1600x900: after the choice the title is The Echo (no HTML wordmark)",
+   "ok": true,
+   "detail": "{\"echoClass\":true,\"htmlWordmark\":0,\"build\":\"ba5b1f5c\"}"
+  },
+  {
+   "name": "title-echo-390x844: Enter reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "title-echo-390x844: Chapter I reaches party prep",
+   "ok": true
+  },
+  {
+   "name": "title-echo-390x844: Esc opens the pause",
+   "ok": true
+  },
+  {
+   "name": "title-echo-390x844: reached the OPTIONS tab",
+   "ok": true,
+   "detail": "options"
+  },
+  {
+   "name": "title-echo-390x844: Down reaches the PRESENTATION row",
+   "ok": true,
+   "detail": "presentation"
+  },
+  {
+   "name": "title-echo-390x844: Right on TITLE SCREEN steps to THE ECHO",
+   "ok": true,
+   "detail": "THE ECHO"
+  },
+  {
+   "name": "title-echo-390x844: after the choice the title is The Echo (no HTML wordmark)",
+   "ok": true,
+   "detail": "{\"echoClass\":true,\"htmlWordmark\":0,\"build\":\"ba5b1f5c\"}"
+  },
+  {
+   "name": "voice-line-1600x900: Enter reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "voice-line-1600x900: the pre-battle scene plays",
+   "ok": true
+  },
+  {
+   "name": "voice-line-1600x900: a recorded line started in the scene (voice director: started > 0)",
+   "ok": true,
+   "detail": "{\"started\":3,\"asked\":3,\"enabled\":true,\"chapter\":\"seymour-flux\",\"contextState\":\"running\"}"
+  },
+  {
+   "name": "voice-line-1600x900: at least one line was heard to the end (state ended)",
+   "ok": true,
+   "detail": "[[\"seymour-flux.pre.008\",{\"id\":\"seymour-flux.pre.008\",\"at\":39409,\"heard\":true,\"why\":\"ended\"}],[\"seymour-flux.pre.013\",{\"id\":\"seymour-flux.pre.013\",\"at\":44619,\"heard\":true,\"why\":\"ended\"}],[\"seymour-flux.pre.014\",{\"id\":\"seymour-flux.pre.014\",\"at\":47280,\"heard\":true,\"why\":\"ended\"}]]"
+  },
+  {
+   "name": "voice-line-390x844: Enter reaches the chapter board",
+   "ok": true
+  },
+  {
+   "name": "voice-line-390x844: the pre-battle scene plays",
+   "ok": true
+  },
+  {
+   "name": "voice-line-390x844: a recorded line started in the scene (voice director: started > 0)",
+   "ok": true,
+   "detail": "{\"started\":3,\"asked\":3,\"enabled\":true,\"chapter\":\"seymour-flux\",\"contextState\":\"running\"}"
+  },
+  {
+   "name": "voice-line-390x844: at least one line was heard to the end (state ended)",
+   "ok": true,
+   "detail": "[[\"seymour-flux.pre.008\",{\"id\":\"seymour-flux.pre.008\",\"at\":40749,\"heard\":true,\"why\":\"ended\"}],[\"seymour-flux.pre.013\",{\"id\":\"seymour-flux.pre.013\",\"at\":46069,\"heard\":true,\"why\":\"ended\"}],[\"seymour-flux.pre.014\",{\"id\":\"seymour-flux.pre.014\",\"at\":48770,\"heard\":true,\"why\":\"ended\"}]]"
+  }
+ ],
+ "summary": {
+  "passed": 22,
+  "failed": 0
+ }
+}

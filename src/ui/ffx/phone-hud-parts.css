@@ -35,7 +35,8 @@ html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__name {
   font-size: 22px;
   margin-bottom: 6px;
 }
-html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__hp {
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__hp,
+html[data-phone-battle='ffx'] .ffxhud .ffx-sensor__mp {
   font-size: 16px;
   margin-bottom: 6px;
 }

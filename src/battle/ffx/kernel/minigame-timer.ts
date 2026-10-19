@@ -8,7 +8,7 @@
  *
  * Each call adds 1 to the tick counter and stores `A = float32(B - ticks / 30)`, or `/ 25` when the PAL flag is set (the language codes of
  * the original European release); when the result is 0 or below, `A` is stored as 0. `B` is the limit in seconds, a float32 too. The
- * arithmetic is x87 at 53-bit precision, i.e. IEEE double, so `Math.fround` of a double expression is exact.
+ * arithmetic is done at 53-bit precision, i.e. IEEE double, so `Math.fround` of a double expression is exact.
  *
  * The English Steam build reads PAL = 0 and the language byte 0 at the title screen (live read, 2026-10-13, `FFX-G01` section 6.1), so
  * 30 ticks a second is the rate; 25 is kept for the proof only. How many battle frames the dispatcher gets in a second is not measured

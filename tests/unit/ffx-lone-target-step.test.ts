@@ -1,9 +1,12 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
+import { pinSwitchesToPreR55 } from './helpers/pinPreR55Switches.ts';
 import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
 import { ffxTargetMode } from '../../src/ui/ffx/loneTarget.ts';
 import type { CursorSelection } from '../../src/ui/ffx/TargetCursor.ts';
 import type { AnyCombatant, AvailableCommand, CombatantId, Command } from '../../src/battle/common/types.ts';
+
+pinSwitchesToPreR55(); // r55 RE: the four parity switches ship ON; this file was written for OFF and turns on what it exercises
 
 /**
  * PR-0170: in FFX, one valid target still opens the target step.

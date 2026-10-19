@@ -28,7 +28,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import sharp from 'sharp';
-import { poseClassOf, subjectKind } from '../../../tools/posescale/pose-kinds.mjs';
+import { isPropsOut, poseClassOf, subjectKind } from '../../../tools/posescale/pose-kinds.mjs';
 
 /** The alpha of an image as a binary mask on a grid at most `maxSide` on its long side (aspect kept). */
 export async function decodeMask(buffer, maxSide = 320) {
@@ -198,14 +198,21 @@ export function anchorsFor({ url, mask, measure }) {
     stanceSil: estimateStance(mask), extent: estimateExtent(mask), kind: sp ? subjectKind(sp.subject) : null, cls: null,
     // What the record says about a hold (r50.1): the head the player really sees over the idle's (the registered box is a VIRTUAL one, held to the idle's size,
     // so the head reading passes by construction), the stature it was held to and the painting it was measured on.
-    heldHeadRatio: fresh && Number.isFinite(rec.held?.headRatio) ? rec.held.headRatio : null,
+    // (W3, 2026-10-17: a pose the sizing rule sized registers a virtual box too, and its `ruled.headRatio` is the head the player sees, as a hold's `held.headRatio` is)
+    heldHeadRatio: fresh ? (Number.isFinite(rec.held?.headRatio) ? rec.held.headRatio : Number.isFinite(rec.ruled?.headRatio) ? rec.ruled.headRatio : null) : null,
+    // props out (victory, defend: a raised sword or staff): the stature band reads head to soles, from the TOP of the REAL head (`headTopT`, a fraction of the painting's height) to the ground line
+    propsOut: false, headTopT: null,
     recStature: fresh && Number.isFinite(rec.stature) ? rec.stature : null, sha: fresh && typeof rec.sha === 'string' ? rec.sha : null, registered: fresh,
     waiver: null,
   };
   if (sp) out.cls = poseClassOf({ pose: sp.pose, isRef: sp.pose === 'idle', prone: out.prone, kind: out.kind });
+  if (sp && (out.cls === 'standing' || out.cls === 'low') && isPropsOut(sp.pose)) out.propsOut = true;
   if (fresh && Array.isArray(rec.head) && rec.head.length === 4) {
     const [w, h] = rec.size;
     out.head = { u0: rec.head[0] / w, t0: rec.head[1] / h, u1: rec.head[2] / w, t1: rec.head[3] / h };
+    // a virtual box is the real one grown or shrunk about its centre by the record's ratio
+    const cy = (out.head.t0 + out.head.t1) / 2;
+    out.headTopT = out.heldHeadRatio ? cy - (cy - out.head.t0) * out.heldHeadRatio : out.head.t0;
   }
   if (fresh && rec.stance && Number.isFinite(rec.stance.x) && Number.isFinite(rec.stance.row)) {
     out.stance = { u: rec.stance.x / rec.size[0], t: rec.stance.row / rec.size[1] };

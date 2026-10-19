@@ -106,7 +106,7 @@ export function rollGroup2(
     let applied = false;
     let removed = false;
     let immune = false;
-    let attempted = false; // `local_c`: the attempt was made and changed nothing
+    let attempted = false; // the attempt was made and changed nothing
     const counters = result.counters;
 
     if (!landed || options.debugForceFail === true) {

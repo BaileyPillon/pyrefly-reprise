@@ -381,10 +381,15 @@ describe('the real fight through the flow (the intended line, the real engine)',
  * different replay, and seed 73 now wins Paragon with all three girls on their feet. The same scan on `r42-rc`, run seeds 1 to
  * 5400: 4,161 win link 1 (48 percent before, 77 percent now), 4,017 of them leave three girls standing, 138 leave two and
  * **6 leave one** (seeds 3543, 4053, 4404, 4518 and 4624 leave Yuna alone; seed 4559 leaves Paine). Seed 3543 is the first.
+ *
+ * **Re-pinned for the hit reaction** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", note FFX2-G01 section 7): the girls' flinch is their own damage clip (the Paragon answers every hit, so the
+ * girls are hit often and their gauge crawls for it) and the Paragon's chain window is 62 / 76 steps, so the same run seeds are other fights, and seed 3543 now wins Paragon with all three girls on their feet.
+ * The same scan on this branch, run seeds 1 to 6000 (`play` on link 1, then a forced defeat at Trema): 4,181 win link 1, 4,084 of them leave three girls standing, 91 leave two and **6 leave one**
+ * (seeds 789, 2659 and 2833 leave Paine alone; seeds 3116, 4053 and 5723 leave Yuna alone). The tests below need Yuna alone: seed 3116 is the first. With `CHAIN_WINDOW_PER_BODY` off seed 3543 leaves her alone as before.
  * The Retry rule (fewer than two standing means the Save Sphere's rule) is not changed by this.
  */
-describe('a real Paragon win that leaves one girl standing (run seed 3543, nothing forced)', () => {
-  const ALONE_SEED = 3543;
+describe('a real Paragon win that leaves one girl standing (run seed 3116, nothing forced)', () => {
+  const ALONE_SEED = 3116;
   async function fromTheRealSeam(which: Answer, retries: number): Promise<Attempt[]> {
     pinRunSeed(ALONE_SEED);
     answer = which;
@@ -414,7 +419,9 @@ describe('a real Paragon win that leaves one girl standing (run seed 3543, nothi
     // recovery (`cost_atb x 10000 / (AGI + 1)`: an item 40, an Attack 70, a spell 0 plus its cast counted at the full tick) where every command
     // left 70, so one girl alone is paced differently and gets more menus before the same defeat. The four Retries on this seed ran 3, 22, 2 and
     // 12 menus, every one still a defeat; the eight Retries on each of the six one-girl run seeds (3543, 4053, 4404, 4518, 4559, 4624) ran 0 to 22 menus, 48 of 48 defeats.
-    expect(retries.every((a) => a.fights[0]!.outcome === 'defeat' && a.fights[0]!.decisions <= 22)).toBe(true);
+    // Re-parity RC9 lane X2-A, slice 1 (FFX-2 only; reason "game-code parity"): on run seed 3116 the four Retries ran 3, 3, 13 and 24 menus, every one still a defeat; the bound is the largest of them, 24 (it was 22
+    // on seed 3543). Run seeds 4053 and 5723, the other two that leave Yuna alone, ran up to 36 and 31 menus and lost all eight Retries as well.
+    expect(retries.every((a) => a.fights[0]!.outcome === 'defeat' && a.fights[0]!.decisions <= 24)).toBe(true);
   }, 120000);
 
   it('shipped answer (D-506): every Retry opens at Trema with all three up at full HP, and a Retry can be won', async () => {

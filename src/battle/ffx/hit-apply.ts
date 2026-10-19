@@ -28,11 +28,13 @@ import { removeStatus } from './statuses.ts';
 import { addCtb, tickSpeedOf } from './adapt/ctb.ts';
 import { PermBit, ResultCounter, type StatusRecord } from './kernel/status-types.ts';
 import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep } from './adapt/status.ts';
+import { statusRefusedAsImmune } from './immune-status-miss.ts';
 import { type Before, applyStatusStep } from './adapt/status-apply.ts';
 import { buffByte, stackBytes } from './adapt/status.ts';
 import { reactToHit } from './adapt/reactions.ts';
 import type { HitOutcome } from './kernel/hittypes.ts';
 import { noteCounterHit } from './counter-chain.ts';
+import type { RecoilSums } from './kernel/recoil.ts';
 import { gaugeOnHit, gaugeOnOutcome, gaugeTransfer } from './gauge.ts';
 import { runScriptedExtra } from './scripted.ts';
 import { resolveSteal, stealsItem } from './steal.ts';
@@ -74,6 +76,11 @@ export interface HitScope {
   touched: Map<CombatantId, Touched>;
   /** The targets whose counter this command has already decided (a target answers once per command: `counter-chain.ts`). Made when the first hit asks. */
   answered?: Set<CombatantId>;
+  /**
+   * An absorb command's running sums (RC10, `kernel/recoil.ts`, FFX only): present when the user is healed **once**, after every target (`hit-order.ts#applyRecoil`), instead of hit by hit.
+   * A scope without it (a hand-built one, the switch off) heals per hit as before.
+   */
+  recoil?: RecoilSums;
 }
 
 /** What an action has done to one target so far, for the target's `onHit` (`abilities.ts#finishTouched`). */
@@ -201,6 +208,7 @@ function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
     return report.outcome;
   }
 
+  if (scope.recoil !== undefined) scope.recoil.landed++; // a hit that was neither evaded nor nullified (the game's landed-hit counter)
   const [hpAmount, mpAmount, ctbAmount] = report.amounts;
   const crit = report.crit;
   const step = made.step;
@@ -243,11 +251,15 @@ function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
     // The MP class: restores (Ether) or drains (Osmose, Lancet), and the drainer gains what was taken.
     if ((report.classes & 2) !== 0 && mpAmount !== 0) {
       const drained = applyMpDelta(ctx, target, mpAmount, user.id);
-      if (hasFlag(def, 'drains-mp') || def.formula === 'lancet') applyMpDelta(ctx, user, -Math.abs(drained), user.id);
+      if (hasFlag(def, 'drains-mp') || def.formula === 'lancet') {
+        if (scope.recoil !== undefined) scope.recoil.mp += Math.abs(drained); // one recoil record after every target (`hit-order.ts#applyRecoil`)
+        else applyMpDelta(ctx, user, -Math.abs(drained), user.id);
+      }
     }
 
     // The HP class.
     if ((report.classes & 1) !== 0 && hpAmount !== 0) {
+      if (scope.recoil !== undefined && hasFlag(def, 'drains')) scope.recoil.hp += hpAmount; // signed, summed over the action
       seen.lastDamage += hpAmount; // LastDamageTakenHP: after the cap, before the clamp to the HP that was left
       dealDamage(ctx, target, hpAmount, {
         sourceId: user.id,
@@ -279,7 +291,7 @@ function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
         }
         hpDamage = hpAmount;
         scope.totalDealt += hpAmount;
-        if (hasFlag(def, 'drains')) {
+        if (hasFlag(def, 'drains') && scope.recoil === undefined) {
           healOutsideChain(ctx, user, hpAmount, 'drain', user.id);
         }
       }
@@ -322,8 +334,12 @@ function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
   // field) the record carries. A petrified monster always shatters because Petrify on a monster puts Death and Eject in the
   // record itself, and the shatter roll against an already petrified target is the step's own (`Cmd+0x2c`).
   if (step) {
-    applyStatusStep(ctx, user, target, def, before, step);
+    const applied = applyStatusStep(ctx, user, target, def, before, step);
     book.record = step.result.record;
+    // A status move the target is wholly immune to lands nothing and used to say nothing; it reads as an immune miss like Scan on a Pagoda (`immune-status-miss.ts`, FOC54-003).
+    if (report.outcome === 'hit' && statusRefusedAsImmune({ row, target, amounts: [hpAmount, mpAmount, ctbAmount], changed: applied.added.length + applied.removed.length > 0 || applied.killed || applied.ejected })) {
+      ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
+    }
   }
   // The game's hit applier then asks the target's Auto-Med and Auto-Potion (FFX only, re-parity RC4 lane F): each one decided here, from this
   // hit's HP damage and the statuses it newly inflicted, and paid for now; the reaction itself runs when the action is over.

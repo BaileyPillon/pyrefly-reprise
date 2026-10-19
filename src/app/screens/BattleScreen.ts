@@ -45,6 +45,7 @@ import { offeringChooser } from './BattleScreenOffering.ts'; // the hidden Last 
 import type { OfferingOverlay } from '../../ui/ffx/offering/OfferingScreen.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
+import { voice } from '../../audio/voice/index.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
@@ -62,13 +63,13 @@ import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { StallWatch } from './BattleScreenStall.ts';
 import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/GoldenHour.ts';
 import { bindLivingScene, releaseLivingScene, updateLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
-import { framingPlanOwed } from '../../engine/fx/mix/MaxMix.ts'; // FOC44A-05: the boss entrance waits for CHAPTER FRAMING's plan
+import { framingArrivalOwed, framingPlanOwed, framingPlanSettled } from '../../engine/fx/mix/MaxMix.ts'; // FOC44A-05: the boss entrance waits for CHAPTER FRAMING's plan; the opening waits for it too (`openingGate.ts`)
 import { patchSideFogIn, setSideFogGame } from '../../engine/PlateSideFog.ts';
 import { startMarkRecorder, type MarkRecorder } from '../markRecorder.ts';
 import { defaultSettings } from '../SaveData.ts';
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { battleComfort } from './battleComfort.ts';
-import { readReduceFlashes } from '../accessFlags.ts';
+import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
@@ -77,6 +78,7 @@ import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
+import { battleFrameClocks } from '../../engine/PoseSwap.ts';
 import { onSceneScale, sceneScale } from '../../engine/crisp/sceneScale.ts';
 
 /**
@@ -269,7 +271,10 @@ export class BattleScreen extends Screen {
       grade: this.app.renderer,
       comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)
       planOwed: framingPlanOwed, // FOC44A-05: a boss is let in only once CHAPTER FRAMING's plan (Paragon's giant size) has landed on it (`entrance/StageEntrances.ts`)
+      planSettled: framingPlanSettled, // the battle-start card and the opening wait for that plan before a menu can open (`fx/mix/openingGate.ts`)
+      arrivalOwed: framingArrivalOwed,
       reduceFlashes: readReduceFlashes, // PR-0032: phase lighting lands at once, every wash and flash is softened, the bloom peaks at 35 %
+      rigs: readRigFigures, // the rig: a figure with a gated rig is drawn as one (`engine/rig/`; `?rig=off` and the hidden `fxRig` setting turn it off)
       cameraPreset: battleCameraPreset(chapter.game), // fb2-0929: `calm` by default (D-291), `?cam=current` for the old camera (CameraPreset.ts)
     });
 
@@ -330,6 +335,7 @@ export class BattleScreen extends Screen {
       root: this.root,
       stage: this.stage,
       audio,
+      voice, // the recorded lines of the chapter (FFX only today): `audio/voice`
       textSpeed: this.app.save.settings.textSpeed,
       ...(scene.slots.artNamespace ? { artNamespace: scene.slots.artNamespace } : {}), // the mid-battle lines show the experiment's own portraits
       // A `'skip'` run is e2e or the critic: no viewer, and a whole chapter to
@@ -458,6 +464,7 @@ export class BattleScreen extends Screen {
       party,
       game: chapter.game,
       ...(this.opts.openingHurry ? { holdMs: HURRIED_CARD_HOLD_MS } : {}),
+      until: () => this.stage?.planSettled() ?? Promise.resolve(), // the card is the cover: CHAPTER FRAMING's first plan lands under it, never under the first menu (`fx/mix/openingGate.ts`)
     });
     this.battleStartBanner = banner;
     await banner.show();
@@ -673,6 +680,7 @@ export class BattleScreen extends Screen {
         // returned to: this screen is the one that knows which boss theme was
         // playing when the menu went up.
         setPauseMusic(audio, paused);
+        voice.setPaused(paused); // a mid-battle line freezes with the fight and carries on when the menu closes
       },
       onResume: () => void this.closePause(),
       onRestart: () => this.requestExit('restart'),
@@ -762,7 +770,10 @@ export class BattleScreen extends Screen {
     this.finish(outcome);
   }
 
-  override update(dt: number): void {
+  override update(frameDt: number): void {
+    // Two clocks (W5, `battleFrameClocks`): `dt` counts the battle's timers (the stall watchdog, the play time, the settle window) at App's 1/20 s clamp; `animDt` is the same frame clamped
+    // at 1/40 s (1/20 under `?motion=classic`) for everything that is only drawn. The engines are on neither: the ATB pump and the CTB steps read the wall clock.
+    const { timer: dt, animation: animDt } = battleFrameClocks(frameDt);
     this.checkForStall(dt);
 
     // Play time, for the pause screen's PLAY TIME row. `update` is only called
@@ -773,9 +784,9 @@ export class BattleScreen extends Screen {
     if (!this.preview && this.opts.chapter.experimental) addExperimentPlayTime(this.opts.chapter.id, dt * 1000);
     else if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
 
-    const fieldDt = this.spectacle?.stageDt(dt) ?? dt; // option C's hit-stop holds the field, never the engine or the HUD
+    const fieldDt = this.spectacle?.stageDt(animDt) ?? animDt; // option C's hit-stop holds the field, never the engine or the HUD
     this.scene?.update(fieldDt);
-    updateLivingScene(fieldDt, dt); // eye-candy option B: drift, weather, lamps (after the rig, before the render); the KO's cross runs on the real frame time (a hit-stop never freezes it)
+    updateLivingScene(fieldDt, animDt); // eye-candy option B: drift, weather, lamps (after the rig, before the render); the KO's cross runs on the real frame time (a hit-stop never freezes it)
     // Settle the enemy lane against the camera, before the player's first
     // decision and never during one.
     //
@@ -788,12 +799,12 @@ export class BattleScreen extends Screen {
     // nothing can be projected yet, so a slow first frame simply retries.
     this.settleFormation(dt);
     this.airship?.sync(this.engine?.state());
-    this.stage?.update(fieldDt, dt); // the pose blends run on the real frame time: a hit-stop holds the field, never a half-mixed crossfade (FB-1)
-    this.spectacle?.update(dt);
+    this.stage?.update(fieldDt, animDt); // the pose blends run on the real frame time: a hit-stop holds the field, never a half-mixed crossfade (FB-1)
+    this.spectacle?.update(animDt);
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
-    this.hud?.update?.(dt);
-    this.cutscenes?.update(dt);
+    this.hud?.update?.(animDt);
+    this.cutscenes?.update(animDt); // the beats' budgets are spent out of the same clock as the camera moves they wait for
   }
 
   /**

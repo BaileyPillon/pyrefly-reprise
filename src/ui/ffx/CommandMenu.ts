@@ -1,4 +1,6 @@
 import { commandRowsCap, withTextSizeWatch } from '../common/hudTextSize.ts';
+import { menuParity } from '../../battle/ffx/menu-draw-parity.ts';
+import { playRefusal } from './refusalCue.ts';
 import type { AnyCombatant, AtbSnapshot, AvailableCommand, Command, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import {
   buildTopRows,
@@ -8,25 +10,24 @@ import {
   reticleKind,
   rowEnabled,
   switchRowIndex,
-  wrapCommand,
-  wrappedGroup,
-  wrappedHelp,
   type TopGroupRow,
   type TopRow,
 } from './CommandMenuLogic.ts';
 import { ffxTargetMode } from './loneTarget.ts';
+import { openStepCursor, opensList, switchStepSide } from './targetStepUi.ts';
 import { noteWarnsZombieHarm, zombieWarnOn } from './zombieWarnOptions.ts';
 import { touchTapped } from '../common/touchTapAim.ts';
 import { commandHelpText } from './commandHelp.ts';
 import { DefendTag, defendCommandOf, pressDefends } from './defendControl.ts';
 import { DeviceTracker } from './minigames/overlayInput.ts';
-import { portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
+import { wirePortraitFallbacks } from './portraits.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
 import { TargetCursor, type CursorChrome, type CursorSelection, type RectProjector, type TargetEntry, type TargetRect } from './TargetCursor.ts';
 import { pagerHtml, pagerNeedsStack } from './CommandMenuPaging.ts';
 import { windowMove, wireListScroll } from './CommandMenuScroll.ts';
-import { badgeHtml, CURSOR_SVG, escapeHtml, groupHelp, subRowVM, topRowVM, type RowVM } from './commandMenuRows.ts';
+import { groupHelp, rowsHtml, subRowVM, topRowVM, type RowVM } from './commandMenuRows.ts';
+import { DoublecastFlow, type CommandMenuPort } from './DoublecastFlow.ts';
 
 export { buildTopRows, computeMenuWindow, resolveTargetMode, switchTargetId } from './CommandMenuLogic.ts';
 export type { MenuWindow, TargetResolution, TopDirectRow, TopGroupRow, TopRow } from './CommandMenuLogic.ts';
@@ -161,13 +162,8 @@ export class CommandMenu {
   /** The window `renderRows` last drew, so a page tap knows where it stands. */
   private lastWindow = { start: 0, end: 0, total: 0 };
   private preTargetState: 'top' | 'sub' = 'top';
-  /**
-   * The open second step of a wrapper row (FFX's Doublecast, PR-0125): the
-   * list it opened, the row itself, and where Esc steps back to. `null`
-   * everywhere else. It survives a target-step cancel (back to the spell list)
-   * and nothing else.
-   */
-  private wrap: { wrapper: AvailableCommand; group: TopGroupRow; back: 'top' | 'sub'; backIndex: number } | null = null;
+  /** FFX's Doublecast (PR-0125), as two rounds of a spell and its target (`DoublecastFlow.ts`); nothing is open outside it. */
+  private readonly dc = new DoublecastFlow();
   private opts: CommandMenuOpenOptions | null = null;
   private resolve: ((cmd: Command) => void) | null = null;
   private readonly watcher = new RawInputWatcher((b, source, code) => {
@@ -223,6 +219,7 @@ export class CommandMenu {
     // already reported the end. This is the FFX side adopting the same rule,
     // not a second implementation.
     this.targetCursor.setOnSelection((sel) => this.opts?.onSelection?.(sel));
+    this.breadcrumbEl.addEventListener('click', () => this.dc.active && this.state === 'sub' && this.onButton('cancel')); // a tap on a Doublecast list's title is Back: a phone has no Esc
     // PR-0019 (FFX only): a whole-party or whole-field row (Al Bhed Potion,
     // Cheer...) keeps its list open while the player confirms, so the "ALL
     // ALLIES" / "ALL ENEMIES" chip hangs off the row that was chosen instead
@@ -234,6 +231,11 @@ export class CommandMenu {
 
   setProjector(project: RectProjector): void {
     this.targetCursor.setProjector(project);
+  }
+
+  /** What the HUD adds to the menu: the engine's Doublecast picker, the Doublecast's extra chrome, the Sensor chip's clearing (`withDoublecastHud`). */
+  setPort(port: CommandMenuPort | null): void {
+    this.dc.port = port;
   }
 
   /** FFX's hand, or FFX-2's flower. See {@link CursorChrome}. */
@@ -262,7 +264,8 @@ export class CommandMenu {
     // and its ring under three allies while the next actor chose.
     this.endSelection();
     this.suspended = false;
-    this.wrap = null;
+    this.dc.reset();
+    this.dc.bind(opts);
     this.opts = opts;
     this.rows = buildTopRows(opts.commands);
     this.defendCmd = defendCommandOf(opts.commands);
@@ -295,12 +298,12 @@ export class CommandMenu {
   /** The Defend press, from Triangle (`Q` or the pad's Triangle; not Shift) or a tap on the tab: the engine's own `defend` command. */
   private defend(): void {
     if (!this.resolve || this.suspended || this.state !== 'top' || !this.defendCmd) return;
-    this.resolveCommand(this.defendCmd);
+    this.resolveCommand({ ...this.defendCmd, targetStep: undefined }); // the hot key bypasses the resolver (0x78FB80): never a target step, whatever the row carries (`TARGET_STEP_PARITY`)
   }
 
   private finish(command: Command): void {
     this.suspended = false;
-    this.wrap = null;
+    this.dc.reset();
     this.defendCmd = null;
     this.syncDefendTag();
     // No menu is open any more, so Esc is nobody's back button until the next
@@ -337,7 +340,7 @@ export class CommandMenu {
    */
   close(): void {
     this.suspended = false;
-    this.wrap = null;
+    this.dc.reset();
     this.defendCmd = null;
     this.watcher.detach();
     this.unwireClicks?.();
@@ -458,7 +461,7 @@ export class CommandMenu {
     } else if (b === 'confirm') {
       this.chooseSub(group, this.subIndex);
     } else if (b === 'cancel') {
-      if (this.wrap) return this.closeWrap();
+      if (this.dc.active) return this.dcBack();
       this.state = 'top';
       this.breadcrumbEl.hidden = true;
       this.renderStack();
@@ -478,10 +481,13 @@ export class CommandMenu {
       this.syncTargetSurfaces();
     } else if (b === 'confirm') {
       this.confirmTarget();
+    } else if (b === 'l1' || b === 'r1') {
+      if (switchStepSide(this.targetCursor, this.pendingCmd, this.groupTargets, (id, c) => this.entryFor(id, c))) this.syncTargetSurfaces(); // parity item sideSwitch
     } else if (b === 'cancel') {
       // The same chokepoint confirm goes through — restoring every dimmed
       // figure on the field is the half of option B a player notices only when
       // it is missing, and it must not depend on which branch you left by.
+      this.dc.port?.aimCancelled?.(); // the plate the aim opened goes with it: no folded Sensor chip stands over the list
       this.endSelection();
       this.state = this.preTargetState;
       this.renderStack();
@@ -496,7 +502,7 @@ export class CommandMenu {
     let i = this.topIndex;
     for (let n = 0; n < this.rows.length; n++) {
       i = (i + dir + this.rows.length) % this.rows.length;
-      if (rowEnabled(this.rows[i]!)) break;
+      if (menuParity('cursor') || rowEnabled(this.rows[i]!)) break; // the game's cursor rests on every row; only a confirm is refused (0x0089C900)
     }
     this.topIndex = i;
     this.pageStart = null;
@@ -525,13 +531,13 @@ export class CommandMenu {
   private chooseTop(i: number): void {
     const row = this.rows[i];
     if (!row) return;
-    if (!rowEnabled(row)) return this.shake();
+    if (!rowEnabled(row)) return this.refuse();
     if (row.kind === 'group') {
       // A single enabled choice needs no submenu hop -- matches the mock's
       // flat "OVERDRIVE -- READY" row (most characters have exactly one
       // usable Overdrive move). The reserve list is the exception: a swap
       // always shows who is coming in, even with one member benched.
-      if (row.items.length === 1 && row.role !== 'switch') {
+      if (row.items.length === 1 && row.role !== 'switch' && row.items[0]!.enabled && !opensList(row, this.opts?.actorId)) { // `opensList`: target-step parity item openerOne
         this.resolveCommand(row.items[0]!);
         return;
       }
@@ -545,8 +551,13 @@ export class CommandMenu {
     this.topIndex = i;
     this.state = 'sub';
     this.subIndex = firstEnabledCmdIndex(row.items);
+    this.showList(row.label);
+  }
+
+  /** The list on screen, under its header `label`. */
+  private showList(label: string): void {
     this.breadcrumbEl.hidden = false;
-    this.breadcrumbEl.textContent = row.label;
+    this.breadcrumbEl.textContent = label;
     this.renderStack();
     this.updateHelpAndPreview();
   }
@@ -555,7 +566,7 @@ export class CommandMenu {
   private openSwitchList(): void {
     const i = switchRowIndex(this.rows);
     const row = i >= 0 ? this.rows[i] : undefined;
-    if (!row || row.kind !== 'group' || !rowEnabled(row)) return this.shake();
+    if (!row || row.kind !== 'group' || !rowEnabled(row)) return this.refuse();
     this.openGroup(i, row);
   }
 
@@ -565,7 +576,7 @@ export class CommandMenu {
     let i = this.subIndex;
     for (let n = 0; n < group.items.length; n++) {
       i = (i + dir + group.items.length) % group.items.length;
-      if (group.items[i]!.enabled) break;
+      if (menuParity('cursor') || group.items[i]!.enabled) break;
     }
     this.subIndex = i;
     this.pageStart = null;
@@ -576,7 +587,7 @@ export class CommandMenu {
   private chooseSub(group: TopGroupRow, i: number): void {
     const cmd = group.items[i];
     if (!cmd) return;
-    if (!cmd.enabled) return this.shake();
+    if (!cmd.enabled) return this.refuse();
     this.resolveCommand(cmd);
   }
 
@@ -586,8 +597,8 @@ export class CommandMenu {
   /** Set while a multi-target command is awaiting confirmation. */
   private groupTargets: CombatantId[] | null = null;
 
-  private resolveCommand(cmd: AvailableCommand): void {
-    if (cmd.wrapsCategory && !this.wrap) return this.openWrap(cmd);
+  private resolveCommand(cmd: AvailableCommand, prefer?: readonly CombatantId[]): void {
+    if (cmd.wrapsCategory && !this.dc.active) return this.openDoublecast(cmd);
     // PR-0170: a lone valid target still opens the step in FFX (`loneTarget.ts`).
     const resolution = ffxTargetMode(cmd);
     if (resolution.mode === 'none' || resolution.mode === 'auto') {
@@ -596,7 +607,7 @@ export class CommandMenu {
       // Switch, Escape, Dismiss, Summon, Spherechange never offer >0
       // `validTargets`), so the runtime shape always matches `Command` even
       // though the generic spread below cannot express that statically.
-      this.finish(this.commandFor(cmd, resolution.targets));
+      this.commit(cmd, resolution.targets);
       return;
     }
 
@@ -621,52 +632,58 @@ export class CommandMenu {
     this.groupTargets = null;
     // `showSingle` counts from the LEFT OF THE SCREEN, not into `entries` (the
     // engine's slot-then-id order once opened on the aeon mid-field, away from
-    // the player's eye). A row that may also point at the party opens on the
-    // side the engine prefers (`preferredTargets`).
-    this.targetCursor.showSingle(entries, 0, cmd.preferredTargets);
+    // the player's eye). A Doublecast's second cast opens on the first cast's
+    // target, a row that may also point at the party on the side the engine
+    // prefers (`preferredTargets`), and with target-step parity on, on the
+    // target step's own start (`targetStepUi.ts`).
+    openStepCursor(this.targetCursor, entries, cmd, prefer ?? this.dc.prefer(cmd));
     this.syncTargetSurfaces();
   }
 
-  /**
-   * A wrapper row's second step: its list replaces the stack exactly as a
-   * submenu does, and the breadcrumb names the wrapper [PR-0125]. A list with
-   * nothing castable in it shakes rather than opening.
-   */
-  private openWrap(wrapper: AvailableCommand): void {
-    const group = wrappedGroup(wrapper, this.opts?.commands ?? []);
-    if (!group || !group.items.some((c) => c.enabled)) return this.shake();
-    this.wrap = { wrapper, group, back: this.state === 'sub' ? 'sub' : 'top', backIndex: this.subIndex };
+  /** A Doublecast's first round: the Black Magic list replaces the stack as a submenu does, headed "Doublecast · 1 of 2" [PR-0125]; nothing castable shakes. */
+  private openDoublecast(wrapper: AvailableCommand): void {
+    const group = this.dc.open(wrapper, this.state === 'sub' ? 'sub' : 'top', this.subIndex, menuParity('openers')); // an opener opens onto grey spells (menu-draw parity)
+    if (!group) return this.refuse();
     this.state = 'sub';
     this.subIndex = firstEnabledCmdIndex(group.items);
-    this.breadcrumbEl.hidden = false;
-    this.breadcrumbEl.textContent = group.label;
-    this.renderStack();
-    this.updateHelpAndPreview();
+    this.showList(this.dc.crumb());
   }
 
-  /** Esc from the wrapper's list: back to the list (or row) the wrapper was chosen from. */
-  private closeWrap(): void {
-    const wrap = this.wrap;
-    if (!wrap) return;
-    this.wrap = null;
-    this.state = wrap.back;
-    this.subIndex = wrap.backIndex;
+  /** Esc from a Doublecast's list: round 2 to cast 1's target step (spell kept, cursor on its old target; no step to show: round 1's list), round 1 to where it was chosen from. */
+  private dcBack(): void {
+    const again = this.dc.unlock();
+    if (again) {
+      this.subIndex = Math.max(0, this.dc.group?.items.indexOf(again.cmd) ?? 0);
+      const mode = ffxTargetMode(again.cmd).mode;
+      if (mode === 'none' || mode === 'auto') return this.showList(this.dc.crumb());
+      this.breadcrumbEl.textContent = this.dc.crumb(); // the list behind the step is round 1's again
+      this.renderStack();
+      return this.resolveCommand(again.cmd, again.prefer);
+    }
+    const back = this.dc.close();
+    if (!back) return;
+    this.state = back.back;
+    this.subIndex = back.backIndex;
     const from = this.rows[this.topIndex];
-    this.breadcrumbEl.hidden = wrap.back !== 'sub';
-    if (wrap.back === 'sub' && from?.kind === 'group') this.breadcrumbEl.textContent = from.label;
+    this.breadcrumbEl.hidden = back.back !== 'sub';
+    if (back.back === 'sub' && from?.kind === 'group') this.breadcrumbEl.textContent = from.label;
     this.renderStack();
     this.updateHelpAndPreview();
   }
 
-  /** The list the `'sub'` state is showing: a wrapper's, or the chosen category's. */
+  /** The list the `'sub'` state is showing: a Doublecast's, or the chosen category's. */
   private currentGroup(): TopRow | undefined {
-    return this.wrap?.group ?? this.rows[this.topIndex];
+    return this.dc.group ?? this.rows[this.topIndex];
   }
 
-  /** The command a chosen row submits, wrapped when it was picked inside a wrapper's list. */
-  private commandFor(cmd: AvailableCommand, targets: CombatantId[]): Command {
-    if (this.wrap && this.wrap.group.items.includes(cmd)) return wrapCommand(this.wrap.wrapper, cmd, targets);
-    return { ...cmd.command, targets } as Command;
+  /** A spell's target is chosen: a Doublecast's first pick brings round 2's list back, its second submits both casts as one command, anything else submits as ever. */
+  private commit(cmd: AvailableCommand, targets: CombatantId[]): void {
+    const at = this.dc.lock(cmd, targets);
+    if (at < 0) return this.finish(this.dc.finish(cmd, targets) ?? ({ ...cmd.command, targets } as Command));
+    this.endSelection();
+    this.state = 'sub';
+    this.subIndex = at;
+    this.showList(this.dc.crumb());
   }
 
   /** One candidate, with the letter tag and the note the HUD can answer for. */
@@ -696,7 +713,7 @@ export class CommandMenu {
     // by hand, with a bare `targetCursor.hide()` that nothing was listening
     // to — which is exactly how the dim came to outlive every confirmed
     // command in all three FFX chapters.
-    this.finish(this.commandFor(cmd, targets));
+    this.commit(cmd, targets);
   }
 
   /**
@@ -737,6 +754,7 @@ export class CommandMenu {
 
   private renderStack(): void {
     this.syncDefendTag();
+    this.breadcrumbEl.toggleAttribute('data-dc', this.dc.active);
     if (this.state === 'sub') {
       const group = this.currentGroup();
       if (group?.kind === 'group') {
@@ -761,29 +779,7 @@ export class CommandMenu {
       ? { start: Math.min(this.pageStart!, total - maxVisible), end: Math.min(this.pageStart!, total - maxVisible) + maxVisible }
       : computeMenuWindow(total, selectedIndex, maxVisible);
     this.lastWindow = { start, end, total };
-    const rows = vms
-      .slice(start, end)
-      .map((vm, localI) => {
-        const i = start + localI;
-        const selected = i === selectedIndex;
-        const cls = [
-          'ig-cmd',
-          selected ? 'ig-cmd--selected' : '',
-          !vm.enabled ? 'ig-cmd--disabled' : '',
-          vm.overdrive ? 'ig-cmd--overdrive' : '',
-          vm.trigger ? 'ffx-cmd--trigger' : '',
-          vm.portrait ? 'ffx-cmd--member' : '',
-        ]
-          .filter(Boolean)
-          .join(' ');
-        const cursor = selected ? CURSOR_SVG : '';
-        const face = vm.portrait
-          ? `<span class="ffx-cmd__face">${portraitChipHtml(vm.portrait.key, vm.portrait.name, tintFor('party'))}</span>`
-          : '';
-        const chevron = vm.group ? '<span class="ffx-cmd__chev" aria-hidden="true">▸</span>' : '';
-        return `<div class="${cls}" style="margin-left:calc(var(--ig-cascade-step) * ${localI})" data-ui-action="${i}">${cursor}${face}<span class="ffx-cmd__label">${escapeHtml(vm.label)}</span>${chevron}${badgeHtml(vm.badge)}</div>`;
-      })
-      .join('');
+    const rows = rowsHtml(vms, start, end, selectedIndex);
     // Out of flow (`ffx-hud.css`): the arrows never grow the stack, so the
     // breadcrumb above it stays clear of the help slab in every scroll state.
     const moreAbove = start > 0 ? '<div class="ffx-cmd-more ffx-cmd-more--up">▲</div>' : '';
@@ -795,7 +791,8 @@ export class CommandMenu {
 
   /** The list header's page buttons: only while a list is longer than its window. */
   private renderPager(win: { start: number; end: number }, total: number): void {
-    const long = total > MAX_VISIBLE_ROWS && this.state === 'sub';
+    const sum = this.dc.summaryHtml(); // a Doublecast's round 2: cast 1's summary takes the page count's place
+    const long = (total > MAX_VISIBLE_ROWS || sum !== '') && this.state === 'sub';
     this.pagerEl.hidden = !long;
     if (!long) {
       this.pagerEl.textContent = '';
@@ -805,10 +802,10 @@ export class CommandMenu {
     // Lay out with the widest counter this list can show, decide once whether
     // the name and the counter fit on one line, then write the real counter.
     this.pagerEl.removeAttribute('data-stack');
-    this.pagerEl.innerHTML = pagerHtml({ start: total - MAX_VISIBLE_ROWS, end: total }, total, label);
+    this.pagerEl.innerHTML = pagerHtml({ start: total - MAX_VISIBLE_ROWS, end: total }, total, label, sum);
     const stack = pagerNeedsStack(this.breadcrumbEl, this.pagerEl);
     if (stack) this.pagerEl.setAttribute('data-stack', '');
-    this.pagerEl.innerHTML = pagerHtml(win, total, label);
+    this.pagerEl.innerHTML = pagerHtml(win, total, label, sum);
   }
 
   /**
@@ -841,7 +838,7 @@ export class CommandMenu {
     if (this.state === 'top') {
       const row = this.rows[this.topIndex];
       const cmd = row?.kind === 'direct' ? row.cmd : null;
-      this.opts.setHelp(cmd ? commandHelpText(cmd) : row?.kind === 'group' ? groupHelp(row) : '');
+      this.opts.setHelp(cmd ? commandHelpText(cmd) : row?.kind === 'group' ? groupHelp(row, this.opts.actorId) : '');
       this.opts.previewRank(cmd);
       return;
     }
@@ -853,9 +850,10 @@ export class CommandMenu {
           ? `${cmd.label} takes this turn on entering the fight.`
           : null;
       const help = cmd ? (swap ?? commandHelpText(cmd)) : '';
-      this.opts.setHelp(this.wrap && cmd ? wrappedHelp(this.wrap.wrapper, help) : help);
+      if (this.dc.active) this.dc.help('list', cmd ?? null, help, (t) => this.opts?.setHelp(t));
+      else this.opts.setHelp(help);
       // Inside a wrapper the turn is charged at the wrapper's rank, not the spell's.
-      this.opts.previewRank(this.wrap ? this.wrap.wrapper : (cmd ?? null));
+      this.opts.previewRank(this.dc.wrapper ?? cmd ?? null);
     }
   }
 
@@ -881,7 +879,8 @@ export class CommandMenu {
     const cmd = this.pendingCmd;
     if (!cmd) return;
     const help = commandHelpText(cmd);
-    this.opts.setHelp(this.wrap ? wrappedHelp(this.wrap.wrapper, help) : help);
+    if (this.dc.active) this.dc.help('target', cmd, help, (t) => this.opts?.setHelp(t));
+    else this.opts.setHelp(help);
   }
 
   /**
@@ -905,11 +904,18 @@ export class CommandMenu {
     // than upstream, where every other caller of `commandHelpText` still
     // wants the bare sentence.
     const terminatedHelp = help && !/[.!?]$/.test(help) ? `${help}.` : help;
-    this.opts.setHelp(terminatedHelp ? `${terminatedHelp} Hits ${who}.` : `Hits ${who}.`);
+    if (this.dc.active && cmd) this.dc.help('target', cmd, help, (t) => this.opts?.setHelp(t));
+    else this.opts.setHelp(terminatedHelp ? `${terminatedHelp} Hits ${who}.` : `Hits ${who}.`);
     // `showGroup` already published the selection through the cursor's handler.
     // No single combatant is being aimed at, so the enemy plate has nothing to
     // describe; leaving the last one up would be a lie.
     this.opts.onTargetChange?.(null);
+  }
+
+  /** A confirm on a row the menu refuses: the shake, and (parity item f) the menu set's `error` cue, the stand-in for the original's cue 3 (0x00886BA0). */
+  private refuse(): void {
+    this.shake();
+    if (menuParity('cursor')) playRefusal();
   }
 
   private shake(): void {

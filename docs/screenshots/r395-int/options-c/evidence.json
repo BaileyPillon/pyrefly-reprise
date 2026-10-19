@@ -1,0 +1,1873 @@
+{
+ "port": 5629,
+ "runs": {
+  "ffx-desk": {
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "list": {
+    "viewport": {
+     "w": 1600,
+     "h": 900
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "columnBox": {
+     "top": 297,
+     "bottom": 693,
+     "left": 48,
+     "right": 499
+    },
+    "objectiveTop": 702,
+    "lastRowId": "presentation",
+    "lastRowBottom": 681,
+    "clearanceAboveObjective": 21,
+    "settingsRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "encounterRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 654,
+     "bottom": 681,
+     "left": 64,
+     "right": 483,
+     "h": 27,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 531,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 330,
+      "bottom": 357,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "musicVolume",
+      "top": 357,
+      "bottom": 384,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "sfxVolume",
+      "top": 384,
+      "bottom": 411,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "voiceVolume",
+      "top": 411,
+      "bottom": 438,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "voiceOn",
+      "top": 438,
+      "bottom": 465,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSpeed",
+      "top": 465,
+      "bottom": 492,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSize",
+      "top": 492,
+      "bottom": 519,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "reduceMotion",
+      "top": 519,
+      "bottom": 546,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "lowEffects",
+      "top": 546,
+      "bottom": 573,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "eyeCandy",
+      "top": 573,
+      "bottom": 600,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "guideVisible",
+      "top": 600,
+      "bottom": 627,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "battleHelp",
+      "top": 627,
+      "bottom": 654,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "presentation",
+      "top": 654,
+      "bottom": 681,
+      "h": 27,
+      "visible": true
+     }
+    ]
+   }
+  },
+  "ffx2-desk": {
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "list": {
+    "viewport": {
+     "w": 1600,
+     "h": 900
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "columnBox": {
+     "top": 297,
+     "bottom": 693,
+     "left": 48,
+     "right": 499
+    },
+    "objectiveTop": 702,
+    "lastRowId": "presentation",
+    "lastRowBottom": 681,
+    "clearanceAboveObjective": 21,
+    "settingsRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "encounterRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 654,
+     "bottom": 681,
+     "left": 64,
+     "right": 483,
+     "h": 27,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 531,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 330,
+      "bottom": 357,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "musicVolume",
+      "top": 357,
+      "bottom": 384,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "sfxVolume",
+      "top": 384,
+      "bottom": 411,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSpeed",
+      "top": 411,
+      "bottom": 438,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSize",
+      "top": 438,
+      "bottom": 465,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "reduceMotion",
+      "top": 465,
+      "bottom": 492,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "lowEffects",
+      "top": 492,
+      "bottom": 519,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "eyeCandy",
+      "top": 519,
+      "bottom": 546,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "ffx2Atb",
+      "top": 546,
+      "bottom": 573,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "ffx2AtbSpeed",
+      "top": 573,
+      "bottom": 600,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "guideVisible",
+      "top": 600,
+      "bottom": 627,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "battleHelp",
+      "top": 627,
+      "bottom": 654,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "presentation",
+      "top": 654,
+      "bottom": 681,
+      "h": 27,
+      "visible": true
+     }
+    ]
+   }
+  },
+  "ffx-phone": {
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "list": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 3,
+    "allVisible": false,
+    "columnScrolls": true,
+    "columnBox": {
+     "top": 398,
+     "bottom": 498,
+     "left": 4,
+     "right": 386
+    },
+    "objectiveTop": 692,
+    "lastRowId": "presentation",
+    "lastRowBottom": 670,
+    "clearanceAboveObjective": 22,
+    "settingsRowHit": {
+     "min": 18,
+     "max": 19
+    },
+    "encounterRowHit": {
+     "min": 20,
+     "max": 20
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 652,
+     "bottom": 670,
+     "left": 20,
+     "right": 370,
+     "h": 18,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 20,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 430,
+      "bottom": 449,
+      "h": 19,
+      "visible": true
+     },
+     {
+      "id": "musicVolume",
+      "top": 449,
+      "bottom": 468,
+      "h": 19,
+      "visible": true
+     },
+     {
+      "id": "sfxVolume",
+      "top": 468,
+      "bottom": 487,
+      "h": 19,
+      "visible": true
+     },
+     {
+      "id": "voiceVolume",
+      "top": 487,
+      "bottom": 506,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "voiceOn",
+      "top": 506,
+      "bottom": 524,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "textSpeed",
+      "top": 524,
+      "bottom": 543,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "textSize",
+      "top": 543,
+      "bottom": 562,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "reduceMotion",
+      "top": 562,
+      "bottom": 580,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "lowEffects",
+      "top": 580,
+      "bottom": 598,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "eyeCandy",
+      "top": 598,
+      "bottom": 616,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "guideVisible",
+      "top": 616,
+      "bottom": 634,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "battleHelp",
+      "top": 634,
+      "bottom": 652,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "presentation",
+      "top": 652,
+      "bottom": 670,
+      "h": 18,
+      "visible": false
+     }
+    ]
+   },
+   "listScrolledToFoot": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 4,
+    "allVisible": false,
+    "columnScrolls": true,
+    "columnBox": {
+     "top": 398,
+     "bottom": 498,
+     "left": 4,
+     "right": 386
+    },
+    "objectiveTop": 692,
+    "lastRowId": "presentation",
+    "lastRowBottom": 496,
+    "clearanceAboveObjective": 196,
+    "settingsRowHit": {
+     "min": 18,
+     "max": 19
+    },
+    "encounterRowHit": {
+     "min": 20,
+     "max": 20
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 478,
+     "bottom": 496,
+     "left": 20,
+     "right": 370,
+     "h": 18,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 20,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 256,
+      "bottom": 275,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "musicVolume",
+      "top": 275,
+      "bottom": 294,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "sfxVolume",
+      "top": 294,
+      "bottom": 313,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "voiceVolume",
+      "top": 313,
+      "bottom": 332,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "voiceOn",
+      "top": 332,
+      "bottom": 350,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "textSpeed",
+      "top": 350,
+      "bottom": 369,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "textSize",
+      "top": 369,
+      "bottom": 388,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "reduceMotion",
+      "top": 388,
+      "bottom": 406,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "lowEffects",
+      "top": 406,
+      "bottom": 424,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "eyeCandy",
+      "top": 424,
+      "bottom": 442,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "guideVisible",
+      "top": 442,
+      "bottom": 460,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "battleHelp",
+      "top": 460,
+      "bottom": 478,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "presentation",
+      "top": 478,
+      "bottom": 496,
+      "h": 18,
+      "visible": false
+     }
+    ]
+   },
+   "page": {
+    "rows": [
+     {
+      "id": "titleArt",
+      "label": "TITLE SCREEN",
+      "value": "FARPLANE",
+      "h": 40,
+      "top": 142,
+      "bottom": 182,
+      "visible": true,
+      "cut": false
+     },
+     {
+      "id": "chapterSelectMusic",
+      "label": "CHAPTER MUSIC",
+      "value": "B  PIANO",
+      "h": 40,
+      "top": 182,
+      "bottom": 222,
+      "visible": true,
+      "cut": false
+     }
+    ],
+    "rowHit": {
+     "min": 40,
+     "max": 40
+    },
+    "allVisible": true,
+    "help": [
+     "TITLE SCREEN",
+     "FARPLANE is the title painting you know: the airship over the Farplane shore. THE ECHO is Yuna kneeling in still water, with its own lettering. It shows the next time the title is drawn.",
+     "Both games."
+    ],
+    "helpBottom": 786,
+    "helpWithinViewport": true,
+    "objectiveVisibleOnPage": false,
+    "back": "EscBack",
+    "smallestText": {
+     "px": 14,
+     "which": "pause__ec-h: Presentation"
+    },
+    "horizontalOverflow": false
+   },
+   "afterTapMusic": {
+    "rows": [
+     "TITLE SCREEN=FARPLANE",
+     "CHAPTER MUSIC=A  WALTZ"
+    ],
+    "cursor": "chapterSelectMusic",
+    "stored": {
+     "titleArt": "farplane",
+     "chapterSelectMusic": "a"
+    }
+   },
+   "afterTapTitle": {
+    "rows": [
+     "TITLE SCREEN=THE ECHO",
+     "CHAPTER MUSIC=A  WALTZ"
+    ],
+    "cursor": "titleArt",
+    "stored": {
+     "titleArt": "echo",
+     "chapterSelectMusic": "a"
+    }
+   },
+   "afterBackTap": {
+    "pageClosed": true,
+    "cursor": "presentation",
+    "value": "THE ECHO · A"
+   }
+  },
+  "ffx2-phone": {
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "list": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 3,
+    "allVisible": false,
+    "columnScrolls": true,
+    "columnBox": {
+     "top": 398,
+     "bottom": 498,
+     "left": 4,
+     "right": 386
+    },
+    "objectiveTop": 692,
+    "lastRowId": "presentation",
+    "lastRowBottom": 669,
+    "clearanceAboveObjective": 23,
+    "settingsRowHit": {
+     "min": 18,
+     "max": 19
+    },
+    "encounterRowHit": {
+     "min": 20,
+     "max": 20
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 651,
+     "bottom": 669,
+     "left": 20,
+     "right": 370,
+     "h": 18,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 20,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 430,
+      "bottom": 449,
+      "h": 19,
+      "visible": true
+     },
+     {
+      "id": "musicVolume",
+      "top": 449,
+      "bottom": 468,
+      "h": 19,
+      "visible": true
+     },
+     {
+      "id": "sfxVolume",
+      "top": 468,
+      "bottom": 487,
+      "h": 19,
+      "visible": true
+     },
+     {
+      "id": "textSpeed",
+      "top": 487,
+      "bottom": 506,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "textSize",
+      "top": 506,
+      "bottom": 525,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "reduceMotion",
+      "top": 525,
+      "bottom": 543,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "lowEffects",
+      "top": 543,
+      "bottom": 561,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "eyeCandy",
+      "top": 561,
+      "bottom": 579,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "ffx2Atb",
+      "top": 579,
+      "bottom": 597,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "ffx2AtbSpeed",
+      "top": 597,
+      "bottom": 615,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "guideVisible",
+      "top": 615,
+      "bottom": 633,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "battleHelp",
+      "top": 633,
+      "bottom": 651,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "presentation",
+      "top": 651,
+      "bottom": 669,
+      "h": 18,
+      "visible": false
+     }
+    ]
+   },
+   "listScrolledToFoot": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 4,
+    "allVisible": false,
+    "columnScrolls": true,
+    "columnBox": {
+     "top": 398,
+     "bottom": 498,
+     "left": 4,
+     "right": 386
+    },
+    "objectiveTop": 692,
+    "lastRowId": "presentation",
+    "lastRowBottom": 496,
+    "clearanceAboveObjective": 196,
+    "settingsRowHit": {
+     "min": 18,
+     "max": 19
+    },
+    "encounterRowHit": {
+     "min": 20,
+     "max": 20
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 478,
+     "bottom": 496,
+     "left": 20,
+     "right": 370,
+     "h": 18,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 20,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 257,
+      "bottom": 276,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "musicVolume",
+      "top": 276,
+      "bottom": 295,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "sfxVolume",
+      "top": 295,
+      "bottom": 314,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "textSpeed",
+      "top": 314,
+      "bottom": 333,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "textSize",
+      "top": 333,
+      "bottom": 352,
+      "h": 19,
+      "visible": false
+     },
+     {
+      "id": "reduceMotion",
+      "top": 352,
+      "bottom": 370,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "lowEffects",
+      "top": 370,
+      "bottom": 388,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "eyeCandy",
+      "top": 388,
+      "bottom": 406,
+      "h": 18,
+      "visible": false
+     },
+     {
+      "id": "ffx2Atb",
+      "top": 406,
+      "bottom": 424,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "ffx2AtbSpeed",
+      "top": 424,
+      "bottom": 442,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "guideVisible",
+      "top": 442,
+      "bottom": 460,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "battleHelp",
+      "top": 460,
+      "bottom": 478,
+      "h": 18,
+      "visible": true
+     },
+     {
+      "id": "presentation",
+      "top": 478,
+      "bottom": 496,
+      "h": 18,
+      "visible": false
+     }
+    ]
+   },
+   "page": {
+    "rows": [
+     {
+      "id": "titleArt",
+      "label": "TITLE SCREEN",
+      "value": "FARPLANE",
+      "h": 40,
+      "top": 142,
+      "bottom": 182,
+      "visible": true,
+      "cut": false
+     },
+     {
+      "id": "chapterSelectMusic",
+      "label": "CHAPTER MUSIC",
+      "value": "B  PIANO",
+      "h": 40,
+      "top": 182,
+      "bottom": 222,
+      "visible": true,
+      "cut": false
+     }
+    ],
+    "rowHit": {
+     "min": 40,
+     "max": 40
+    },
+    "allVisible": true,
+    "help": [
+     "TITLE SCREEN",
+     "FARPLANE is the title painting you know: the airship over the Farplane shore. THE ECHO is Yuna kneeling in still water, with its own lettering. It shows the next time the title is drawn.",
+     "Both games."
+    ],
+    "helpBottom": 786,
+    "helpWithinViewport": true,
+    "objectiveVisibleOnPage": false,
+    "back": "EscBack",
+    "smallestText": {
+     "px": 14,
+     "which": "pause__ec-h: Presentation"
+    },
+    "horizontalOverflow": false
+   },
+   "afterTapMusic": {
+    "rows": [
+     "TITLE SCREEN=FARPLANE",
+     "CHAPTER MUSIC=A  WALTZ"
+    ],
+    "cursor": "chapterSelectMusic",
+    "stored": {
+     "titleArt": "farplane",
+     "chapterSelectMusic": "a"
+    }
+   },
+   "afterTapTitle": {
+    "rows": [
+     "TITLE SCREEN=THE ECHO",
+     "CHAPTER MUSIC=A  WALTZ"
+    ],
+    "cursor": "titleArt",
+    "stored": {
+     "titleArt": "echo",
+     "chapterSelectMusic": "a"
+    }
+   },
+   "afterBackTap": {
+    "pageClosed": true,
+    "cursor": "presentation",
+    "value": "THE ECHO · A"
+   }
+  }
+ },
+ "keys": {
+  "ffx-desk": {
+   "waits": {
+    "down-into-list": true,
+    "down-0": true,
+    "down-1": true,
+    "down-2": true,
+    "down-3": true,
+    "down-4": true,
+    "down-5": true,
+    "down-6": true,
+    "down-7": true,
+    "down-8": true,
+    "down-9": true,
+    "down-10": true,
+    "down-11": true,
+    "enter-opens": true,
+    "right-steps-title": true,
+    "down-to-music": true,
+    "right-steps-music": true,
+    "right-steps-music-2": true,
+    "right-wraps-music": true,
+    "left-steps-music-back": true,
+    "left-steps-music-back-2": true,
+    "esc-closes": true,
+    "left-on-row-opens": true,
+    "esc-closes-again": true
+   },
+   "orderToPresentation": [
+    "masterVolume",
+    "musicVolume",
+    "sfxVolume",
+    "voiceVolume",
+    "voiceOn",
+    "textSpeed",
+    "textSize",
+    "reduceMotion",
+    "lowEffects",
+    "eyeCandy",
+    "guideVisible",
+    "battleHelp",
+    "presentation"
+   ],
+   "reachedPresentation": true,
+   "listValueBefore": "FARPLANE · B",
+   "storedBefore": {
+    "titleArt": "farplane",
+    "chapterSelectMusic": "b"
+   },
+   "pageOpen": true,
+   "pageRowsAfterEnter": [
+    "TITLE SCREEN=FARPLANE",
+    "CHAPTER MUSIC=B  PIANO"
+   ],
+   "pageCursorAfterEnter": "titleArt",
+   "storedAfterEnter": {
+    "titleArt": "farplane",
+    "chapterSelectMusic": "b"
+   },
+   "pageMeasure": {
+    "rows": [
+     {
+      "id": "titleArt",
+      "label": "TITLE SCREEN",
+      "value": "FARPLANE",
+      "h": 27,
+      "top": 330,
+      "bottom": 357,
+      "visible": true,
+      "cut": false
+     },
+     {
+      "id": "chapterSelectMusic",
+      "label": "CHAPTER MUSIC",
+      "value": "B  PIANO",
+      "h": 27,
+      "top": 357,
+      "bottom": 384,
+      "visible": true,
+      "cut": false
+     }
+    ],
+    "rowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "allVisible": true,
+    "help": [
+     "TITLE SCREEN",
+     "FARPLANE is the title painting you know: the airship over the Farplane shore. THE ECHO is Yuna kneeling in still water, with its own lettering. It shows the next time the title is drawn.",
+     "Both games."
+    ],
+    "helpBottom": 478,
+    "helpWithinViewport": true,
+    "objectiveVisibleOnPage": true,
+    "back": "EscBack",
+    "smallestText": {
+     "px": 14,
+     "which": "pause__ec-h: Presentation"
+    },
+    "horizontalOverflow": false
+   },
+   "pageRowsAfterRight": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=B  PIANO"
+   ],
+   "storedAfterRight": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "b"
+   },
+   "pageCursorAfterDown": "chapterSelectMusic",
+   "helpAfterDown": [
+    "CHAPTER MUSIC",
+    "The track on the chapter select board. B is the piano, the one you know. A is a waltz. C is a harp with a wordless voice. It plays the next time the board opens.",
+    "Both games."
+   ],
+   "pageRowsAfterDownRight": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=A  WALTZ"
+   ],
+   "pageRowsAfterDownRightRight": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=C  VOICE"
+   ],
+   "pageRowsAfterWrap": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=B  PIANO"
+   ],
+   "pageRowsAfterLeft": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=C  VOICE"
+   ],
+   "pageRowsAfterLeft2": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=A  WALTZ"
+   ],
+   "pageMeasureStepped": {
+    "rows": [
+     {
+      "id": "titleArt",
+      "label": "TITLE SCREEN",
+      "value": "THE ECHO",
+      "h": 27,
+      "top": 330,
+      "bottom": 357,
+      "visible": true,
+      "cut": false
+     },
+     {
+      "id": "chapterSelectMusic",
+      "label": "CHAPTER MUSIC",
+      "value": "A  WALTZ",
+      "h": 27,
+      "top": 357,
+      "bottom": 384,
+      "visible": true,
+      "cut": false
+     }
+    ],
+    "rowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "allVisible": true,
+    "help": [
+     "CHAPTER MUSIC",
+     "The track on the chapter select board. B is the piano, the one you know. A is a waltz. C is a harp with a wordless voice. It plays the next time the board opens.",
+     "Both games."
+    ],
+    "helpBottom": 459,
+    "helpWithinViewport": true,
+    "objectiveVisibleOnPage": true,
+    "back": "EscBack",
+    "smallestText": {
+     "px": 14,
+     "which": "pause__ec-h: Presentation"
+    },
+    "horizontalOverflow": false
+   },
+   "storedBeforeEsc": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "a"
+   },
+   "pageClosed": true,
+   "cursorBack": "presentation",
+   "domFocusBack": "presentation",
+   "mainRowValue": "THE ECHO · A",
+   "stillInPause": true,
+   "listAfter": {
+    "viewport": {
+     "w": 1600,
+     "h": 900
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "columnBox": {
+     "top": 297,
+     "bottom": 693,
+     "left": 48,
+     "right": 496
+    },
+    "objectiveTop": 702,
+    "lastRowId": "presentation",
+    "lastRowBottom": 681,
+    "clearanceAboveObjective": 21,
+    "settingsRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "encounterRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 654,
+     "bottom": 681,
+     "left": 64,
+     "right": 480,
+     "h": 27,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 528,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 330,
+      "bottom": 357,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "musicVolume",
+      "top": 357,
+      "bottom": 384,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "sfxVolume",
+      "top": 384,
+      "bottom": 411,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "voiceVolume",
+      "top": 411,
+      "bottom": 438,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "voiceOn",
+      "top": 438,
+      "bottom": 465,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSpeed",
+      "top": 465,
+      "bottom": 492,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSize",
+      "top": 492,
+      "bottom": 519,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "reduceMotion",
+      "top": 519,
+      "bottom": 546,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "lowEffects",
+      "top": 546,
+      "bottom": 573,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "eyeCandy",
+      "top": 573,
+      "bottom": 600,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "guideVisible",
+      "top": 600,
+      "bottom": 627,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "battleHelp",
+      "top": 627,
+      "bottom": 654,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "presentation",
+      "top": 654,
+      "bottom": 681,
+      "h": 27,
+      "visible": true
+     }
+    ]
+   },
+   "leftOnRowOpensPage": true,
+   "storedAfterLeftOpen": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "a"
+   }
+  },
+  "ffx2-desk": {
+   "waits": {
+    "down-into-list": true,
+    "down-0": true,
+    "down-1": true,
+    "down-2": true,
+    "down-3": true,
+    "down-4": true,
+    "down-5": true,
+    "down-6": true,
+    "down-7": true,
+    "down-8": true,
+    "down-9": true,
+    "down-10": true,
+    "down-11": true,
+    "enter-opens": true,
+    "right-steps-title": true,
+    "down-to-music": true,
+    "right-steps-music": true,
+    "right-steps-music-2": true,
+    "right-wraps-music": true,
+    "left-steps-music-back": true,
+    "left-steps-music-back-2": true,
+    "esc-closes": true,
+    "left-on-row-opens": true,
+    "esc-closes-again": true
+   },
+   "orderToPresentation": [
+    "masterVolume",
+    "musicVolume",
+    "sfxVolume",
+    "textSpeed",
+    "textSize",
+    "reduceMotion",
+    "lowEffects",
+    "eyeCandy",
+    "ffx2Atb",
+    "ffx2AtbSpeed",
+    "guideVisible",
+    "battleHelp",
+    "presentation"
+   ],
+   "reachedPresentation": true,
+   "listValueBefore": "FARPLANE · B",
+   "storedBefore": {
+    "titleArt": "farplane",
+    "chapterSelectMusic": "b"
+   },
+   "pageOpen": true,
+   "pageRowsAfterEnter": [
+    "TITLE SCREEN=FARPLANE",
+    "CHAPTER MUSIC=B  PIANO"
+   ],
+   "pageCursorAfterEnter": "titleArt",
+   "storedAfterEnter": {
+    "titleArt": "farplane",
+    "chapterSelectMusic": "b"
+   },
+   "pageMeasure": {
+    "rows": [
+     {
+      "id": "titleArt",
+      "label": "TITLE SCREEN",
+      "value": "FARPLANE",
+      "h": 27,
+      "top": 330,
+      "bottom": 357,
+      "visible": true,
+      "cut": false
+     },
+     {
+      "id": "chapterSelectMusic",
+      "label": "CHAPTER MUSIC",
+      "value": "B  PIANO",
+      "h": 27,
+      "top": 357,
+      "bottom": 384,
+      "visible": true,
+      "cut": false
+     }
+    ],
+    "rowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "allVisible": true,
+    "help": [
+     "TITLE SCREEN",
+     "FARPLANE is the title painting you know: the airship over the Farplane shore. THE ECHO is Yuna kneeling in still water, with its own lettering. It shows the next time the title is drawn.",
+     "Both games."
+    ],
+    "helpBottom": 478,
+    "helpWithinViewport": true,
+    "objectiveVisibleOnPage": true,
+    "back": "EscBack",
+    "smallestText": {
+     "px": 14,
+     "which": "pause__ec-h: Presentation"
+    },
+    "horizontalOverflow": false
+   },
+   "pageRowsAfterRight": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=B  PIANO"
+   ],
+   "storedAfterRight": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "b"
+   },
+   "pageCursorAfterDown": "chapterSelectMusic",
+   "helpAfterDown": [
+    "CHAPTER MUSIC",
+    "The track on the chapter select board. B is the piano, the one you know. A is a waltz. C is a harp with a wordless voice. It plays the next time the board opens.",
+    "Both games."
+   ],
+   "pageRowsAfterDownRight": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=A  WALTZ"
+   ],
+   "pageRowsAfterDownRightRight": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=C  VOICE"
+   ],
+   "pageRowsAfterWrap": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=B  PIANO"
+   ],
+   "pageRowsAfterLeft": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=C  VOICE"
+   ],
+   "pageRowsAfterLeft2": [
+    "TITLE SCREEN=THE ECHO",
+    "CHAPTER MUSIC=A  WALTZ"
+   ],
+   "pageMeasureStepped": {
+    "rows": [
+     {
+      "id": "titleArt",
+      "label": "TITLE SCREEN",
+      "value": "THE ECHO",
+      "h": 27,
+      "top": 330,
+      "bottom": 357,
+      "visible": true,
+      "cut": false
+     },
+     {
+      "id": "chapterSelectMusic",
+      "label": "CHAPTER MUSIC",
+      "value": "A  WALTZ",
+      "h": 27,
+      "top": 357,
+      "bottom": 384,
+      "visible": true,
+      "cut": false
+     }
+    ],
+    "rowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "allVisible": true,
+    "help": [
+     "CHAPTER MUSIC",
+     "The track on the chapter select board. B is the piano, the one you know. A is a waltz. C is a harp with a wordless voice. It plays the next time the board opens.",
+     "Both games."
+    ],
+    "helpBottom": 459,
+    "helpWithinViewport": true,
+    "objectiveVisibleOnPage": true,
+    "back": "EscBack",
+    "smallestText": {
+     "px": 14,
+     "which": "pause__ec-h: Presentation"
+    },
+    "horizontalOverflow": false
+   },
+   "storedBeforeEsc": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "a"
+   },
+   "pageClosed": true,
+   "cursorBack": "presentation",
+   "domFocusBack": "presentation",
+   "mainRowValue": "THE ECHO · A",
+   "stillInPause": true,
+   "listAfter": {
+    "viewport": {
+     "w": 1600,
+     "h": 900
+    },
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "columnBox": {
+     "top": 297,
+     "bottom": 693,
+     "left": 48,
+     "right": 496
+    },
+    "objectiveTop": 702,
+    "lastRowId": "presentation",
+    "lastRowBottom": 681,
+    "clearanceAboveObjective": 21,
+    "settingsRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "encounterRowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "smallestTextBody": {
+     "px": 14,
+     "which": "H3: Settings"
+    },
+    "cutLabelsOrValues": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 654,
+     "bottom": 681,
+     "left": 64,
+     "right": 480,
+     "h": 27,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    },
+    "encounterLeft": 528,
+    "rows": [
+     {
+      "id": "masterVolume",
+      "top": 330,
+      "bottom": 357,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "musicVolume",
+      "top": 357,
+      "bottom": 384,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "sfxVolume",
+      "top": 384,
+      "bottom": 411,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSpeed",
+      "top": 411,
+      "bottom": 438,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "textSize",
+      "top": 438,
+      "bottom": 465,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "reduceMotion",
+      "top": 465,
+      "bottom": 492,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "lowEffects",
+      "top": 492,
+      "bottom": 519,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "eyeCandy",
+      "top": 519,
+      "bottom": 546,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "ffx2Atb",
+      "top": 546,
+      "bottom": 573,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "ffx2AtbSpeed",
+      "top": 573,
+      "bottom": 600,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "guideVisible",
+      "top": 600,
+      "bottom": 627,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "battleHelp",
+      "top": 627,
+      "bottom": 654,
+      "h": 27,
+      "visible": true
+     },
+     {
+      "id": "presentation",
+      "top": 654,
+      "bottom": 681,
+      "h": 27,
+      "visible": true
+     }
+    ]
+   },
+   "leftOnRowOpensPage": true,
+   "storedAfterLeftOpen": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "a"
+   }
+  }
+ },
+ "sizes": {
+  "ffx-desk": {
+   "1600x900": {
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "lastRowBottom": 681,
+    "objectiveTop": 702,
+    "clearanceAboveObjective": 21,
+    "rowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "smallestText": 14,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 654,
+     "bottom": 681,
+     "left": 64,
+     "right": 483,
+     "h": 27,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    }
+   },
+   "1920x1080": {
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "lastRowBottom": 818,
+    "objectiveTop": 842,
+    "clearanceAboveObjective": 24,
+    "rowHit": {
+     "min": 32.4,
+     "max": 32.4
+    },
+    "smallestText": 16.8,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 785,
+     "bottom": 818,
+     "left": 72,
+     "right": 570,
+     "h": 32.4,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    }
+   },
+   "1366x768": {
+    "rowsTotal": 13,
+    "rowsVisible": 12,
+    "allVisible": false,
+    "columnScrolls": true,
+    "lastRowBottom": 596,
+    "objectiveTop": 599,
+    "clearanceAboveObjective": 3,
+    "rowHit": {
+     "min": 24,
+     "max": 24
+    },
+    "smallestText": 14,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 572,
+     "bottom": 596,
+     "left": 55,
+     "right": 454,
+     "h": 24,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    }
+   },
+   "1280x720": {
+    "rowsTotal": 13,
+    "rowsVisible": 12,
+    "allVisible": false,
+    "columnScrolls": false,
+    "lastRowBottom": 536,
+    "objectiveTop": 547,
+    "clearanceAboveObjective": 11,
+    "rowHit": {
+     "min": 22.3,
+     "max": 22.3
+    },
+    "smallestText": 14,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 514,
+     "bottom": 536,
+     "left": 51,
+     "right": 444,
+     "h": 22.3,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    }
+   }
+  },
+  "ffx2-desk": {
+   "1600x900": {
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "lastRowBottom": 681,
+    "objectiveTop": 702,
+    "clearanceAboveObjective": 21,
+    "rowHit": {
+     "min": 27,
+     "max": 27
+    },
+    "smallestText": 14,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 654,
+     "bottom": 681,
+     "left": 64,
+     "right": 483,
+     "h": 27,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    }
+   },
+   "1920x1080": {
+    "rowsTotal": 13,
+    "rowsVisible": 13,
+    "allVisible": true,
+    "columnScrolls": false,
+    "lastRowBottom": 818,
+    "objectiveTop": 842,
+    "clearanceAboveObjective": 24,
+    "rowHit": {
+     "min": 32.4,
+     "max": 32.4
+    },
+    "smallestText": 16.8,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 785,
+     "bottom": 818,
+     "left": 72,
+     "right": 570,
+     "h": 32.4,
+     "visible": true,
+     "keyCut": false,
+     "valueCut": false
+    }
+   },
+   "1366x768": {
+    "rowsTotal": 13,
+    "rowsVisible": 12,
+    "allVisible": false,
+    "columnScrolls": true,
+    "lastRowBottom": 596,
+    "objectiveTop": 599,
+    "clearanceAboveObjective": 3,
+    "rowHit": {
+     "min": 24,
+     "max": 24
+    },
+    "smallestText": 14,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 572,
+     "bottom": 596,
+     "left": 55,
+     "right": 454,
+     "h": 24,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    }
+   },
+   "1280x720": {
+    "rowsTotal": 13,
+    "rowsVisible": 12,
+    "allVisible": false,
+    "columnScrolls": false,
+    "lastRowBottom": 536,
+    "objectiveTop": 547,
+    "clearanceAboveObjective": 11,
+    "rowHit": {
+     "min": 22.3,
+     "max": 22.3
+    },
+    "smallestText": 14,
+    "cut": [],
+    "presentation": {
+     "id": "presentation",
+     "top": 514,
+     "bottom": 536,
+     "left": 51,
+     "right": 444,
+     "h": 22.3,
+     "visible": false,
+     "keyCut": false,
+     "valueCut": false
+    }
+   }
+  }
+ },
+ "errors": {
+  "console": [],
+  "pageErrors": [],
+  "failed": []
+ },
+ "note": "Run 2 (desktop, real keys) and run 3 (phones, after the page-glyph fix on the phone list) merged; same script, same build otherwise."
+}

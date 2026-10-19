@@ -127,6 +127,11 @@ const SEYMOUR_TALK_BONUS: Readonly<Record<string, { readonly stat: 'str' | 'mdef
 
 const TALKED = 'seymour.talked.';
 
+/** Does the Flux formation (`mtgz02_00`) give this character a Talk command at all? Yuna and Kimahri only: its script adds Talk for those two slots (FFX-G11b section 5). */
+export function seymourTalkOffered(talkerId: string): boolean {
+  return talkerId in SEYMOUR_TALK_BONUS;
+}
+
 /** Who still has a Talk line left, for the menu and the intent panel. */
 export function seymourTalkAvailable(ctx: Ctx, talkerId: string): boolean {
   if (!(talkerId in SEYMOUR_TALK_BONUS)) return false;

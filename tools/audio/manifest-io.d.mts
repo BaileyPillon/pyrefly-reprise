@@ -61,6 +61,9 @@ export declare const LOOP_DECIMALS: number;
 /** The shipping budget for public/audio in bytes: 105 MB for the FF7 cue of batch 1 (driver decision item 53a, 2026-10-11, under Bailey's 23:05 EDT words of 2026-10-10 'i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please.'; supersedes item 47e's 100 MB); 100 MB under D-6xx (Bailey 2026-10-10 'Whatever you recommend for sound effects and music I'll go with those recommendations'; driver item 47e); 90 MB since D-306 (sfx sprite-v2 at LAME V0); 85 MB under D-292. */
 export declare const AUDIO_BUDGET_BYTES: number;
 
+/** The recorded voice-over's own budget line beside the audio cap (20 MB, the design's proposal; awaiting Bailey). */
+export declare const VOICE_BUDGET_BYTES: number;
+
 export declare function manifestPath(outRoot: string): string;
 
 export declare function readManifest(outRoot: string): Promise<AudioManifestFile>;
@@ -93,6 +96,12 @@ export declare function setMusicEntryText(
   name: string,
   entry: { file: string; [key: string]: string | number | boolean | undefined },
 ): string;
+
+/** The first and last line of a music entry's block in the manifest's text (split into lines). Throws when it is missing. */
+export declare function musicEntryLines(lines: string[], name: string): { start: number; end: number };
+
+/** The key lines of a music entry's block, in the manifest's order. */
+export declare function musicEntryBody(name: string, entry: { [key: string]: string | number | undefined }): string[];
 
 /**
  * Add one music entry to the manifest's text in the key order the house writer uses (`localeCompare` on the cue name), leaving every other byte as it

@@ -30,7 +30,7 @@ describe('what is registered (all of it, and the status object agrees with the r
 });
 
 describe('the two named estimates the engine reads (lane FFX-K asks a build for both, or `buildBattle` throws)', () => {
-  it("Yojimbo's hire answer 2 and starting compatibility 128 (strongly indicated by a community save pack, not the owner's; live confirmation pending) reach the battle's own state", () => {
+  it("Yojimbo's hire answer 2 and starting compatibility 128 (the game's own starting values, read at boot, 2026-10-17) reach the battle's own state", () => {
     expect([YOJIMBO_HIRE_ANSWER, YOJIMBO_START_COMPATIBILITY]).toEqual([2, 128]);
     expect(mirrorAeonsBuild.yojimbo).toEqual({ compatibility: YOJIMBO_START_COMPATIBILITY, hireAnswer: YOJIMBO_HIRE_ANSWER });
     expect(H.flags(H.newEngine(1))['yojimbo:compatibility']).toBe(128);

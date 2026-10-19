@@ -865,12 +865,13 @@ standing, strike and hurt poses are held to 0.90 to 1.10 of the idle's height an
    ```
    It refuses before it writes (a destination that exists unless `--replace --backup`; a sidecar the game would not read; a painting that does not decode with an
    alpha channel; a subject with no idle), copies each file under a temporary name, renames it into place and compares sha256; then runs
-   `measure.py measure <subjects> --write` (with `PYREFLY_ART_DIR` set to the target), `measure.py table` (whose last step, `tools/posescale/pose-stamp.mjs`, writes each painting's `status`,
+   `measure.py measure <subjects> --write` (with `PYREFLY_ART_DIR` set to the target), `measure.py table` (which first sizes every standing pose by the W3 sizing rule, `tools/posescale/pose-ruler.mjs`: the geometric mean of its head
+   and height scales, lifted to the stature floor and recorded as a hold where the head pays, `victory` and `defend` measured head to soles, written into the records as `ruled`/`held`; and whose last step, `tools/posescale/pose-stamp.mjs`, writes each painting's `status`,
    `class`, `stature`, `headReal`, `lengthRatio`, `iou` and `sha` into the tables from the pixels), and `node tools/pose-gate.mjs --check --art <target> --subjects <subjects>`.
 5. **Read the gate's lines.** Exit 0 means installed, registered and gated. Exit 1 means the paintings are in the target and are **not shippable**:
    `unregistered` / `no-status` (run it again with `--register`), `stale-sha` (the file changed since it was measured: measure it again), `stale-reading` (the row says a
    number the pixels do not give: the second, independent reading; the five Lady Luck rows said 0.85 and drew at 0.49), `out-of-band` / `blocked` (stature or head
-   out of its band: repaint it, or hold it with an `overrides.json` `stature` that records the head's real cost, as r50.1 did, or ask Bailey for a waiver).
+   out of its band: the sizing rule (below) has already done what a size can do, so repaint it or ask Bailey for a waiver; a pose the rule `refused` (`ruled.lift` in its record) has a head and a body that no single size puts in band).
    Also refused, because a stature read off the alpha box alone let them through: `empty` (nothing opaque), `mass-low` / `mass-high` (not the idle's size), `no-stance`,
    `no-overlap` with the idle, `props-only` (a small figure holding a full-height pole), `slab` (a plain rectangle: an all-black render given an alpha channel), `head-off` (the head box is not on a head; where the table registers one),
    `no-head` (the idle has a face box and the pose has none), `held-head` (a hold's ratio is not its scale over the ruler's reading) and `wide-pose` (wider than 1.15 times
@@ -882,7 +883,7 @@ standing, strike and hurt poses are held to 0.90 to 1.10 of the idle's height an
    that records them (`{ "subject", "pose", "sha", "reason", "words": "Bailey, <date>: \"...\"", "source": "D-nnn", "date" }`): the gate checks the quotation occurs verbatim
    in that decision's `words` in `docs/target/decisions.json`, so the decision goes into the ledgers first. Then run `measure.py table`: the table's `waived` status is generated from the
    ledger, never typed (a `waived` in a table with no ledger row behind it fails). The ratchet: a row without `legacy` whose words are not his fails the gate; the
-   `legacy` rows (written once by `node tools/pose-gate.mjs --write-legacy`: every pose out of band on the r50.1 art, "awaiting the ruler pick") may only be removed
+   `legacy` rows (written once by `node tools/pose-gate.mjs --write-legacy`: every pose out of band on the r50.1 art, "awaiting the ruler pick"; the sizing rule moved 175 of the 254 into band and `--prune-legacy` removed them) may only be removed
    (the seal that lists them is pinned in `tools/pose-gate-ledger.mjs`, and `--base <ref>` compares with the ledger that is live; a ref git cannot read fails);
    a re-installed painting has a new sha and loses its waiver.
 7. **Commit what the install changed** (`docs/target/pose-measure.json`, `src/data/art/poseRegistration*.ts`, the ledger if it moved), then `npm run art:manifest`.
@@ -893,6 +894,26 @@ standing, strike and hurt poses are held to 0.90 to 1.10 of the idle's height an
 gate never read from a master is refused). `--skip-tests` and `--owner-override` do not reach it: a ledger row with Bailey's quoted words is the only way through.
 `node tools/pose-gate.mjs --report [--out F]` prints the census (totals by class and game, the out-of-band list, what is report-only) that the critic's static check
 and the artifact record keep.
+
+### Rigging a figure: one painting, every pose (the rig program, 2026-10-17)
+
+Bailey, 2026-10-17: "start rigging for all chapters please. i want a permanent fix now." A figure that is cut from ONE approved painting (its costume) and bent into every pose cannot differ
+from itself in size, feet or costume. The pipeline is `tools/rig/rig.py`; the file it writes is `src/data/art/rigTypes.ts` (format v1); the gate is `tools/rig-gate.mjs`. Handoff: `docs/handoff/rig-pipeline.md`.
+
+```
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py cut      --subject <name> [--sam]      # SAM masks, label map, classical underlaps and fills (no generative model)
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py build    --subject <name>              # bones, meshes, skin, landmarks
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py fit-keys --subject <name>              # bone transforms matching the approved painting of each pose the game draws
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py export   --subject <name>              # D:/pyrefly-art-rigs/<id>/ (never public/art), then the gate
+D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/rig.py sheet    --subject <name>              # each key beside its approved painting, with the gate's numbers
+node tools/rig-gate.mjs --rig D:/pyrefly-art-rigs/<id> [--require-coverage]                            # the gate: writes gate into rig.json, exit 1 when it refuses
+node tools/art-install.mjs --target <art folder> --rig <id> --rig-from <folder> [--rigs-root ...]      # install a rig THROUGH the gate
+node tools/pose-gate.mjs --check --rigs auto                                                          # poses a gate-ok rig serves are reported `rigged`
+```
+
+A rig is `ok` only when every key overlaps the approved painting of its pose by 0.75 and its landmarks agree with the painting's within 0.06 of the idle's height (the driver's pose-intent rule of 2026-10-18; both registered at the idle's scale and feet), its stature (head to soles for a props-out pose), real head
+and feet are inside the pose class's band, no joint opens a hole in any key or any 25, 50 or 75 percent blend between two keys, and it is inside the budget (24 parts, 48 bones, 8000
+vertices, 9 Mpx, 9 MB of PNG). The runtime draws only a rig whose `gate.status` is `ok`; the paintings of every pose stay the fallback and keep their own rows and waivers.
 
 ---
 

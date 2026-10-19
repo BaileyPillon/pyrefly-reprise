@@ -16,6 +16,11 @@
  * | Lost when no aeon is left | `engine.ts#checkEnd`, before the stalemate watch can call it an escape | §1.2 [single source: GameFAQs]; B11 = a |
  * | 5,000 AP for winning the duel | `results.ts`, on top of the enemies' 0 | §11 I-1 [single source: GameFAQs]; B13 = a |
  *
+ * **Since re-parity RC10 (Bailey, 2026-10-17, "Match the game") Yuna's menu in the contest is the game's own**, not the B6 / B7 estimates in the table: the three formation scripts switch
+ * off her Attack, Item, Weapon, Armor, Skill, Special, Black Magic and White Magic (`setCommandDisabled`), so those rows are drawn greyed, with no reason, as the game's draw loop
+ * draws a disabled command (`formation-commands.ts`, `EnemyGroupDef.commandDisables`), and the only rows she can pick are Summon and Grand Summon. What this file still greys,
+ * with its own reason, is the Talk row, which no script touches, and every foe-aimed row of a party member the list does not name; with `FORMATION_COMMAND_DISABLES` false the menu is as the table says.
+ *
  * **Game case: FFX only** [AGENTS.md rule 14]: aeons, Summon and Grand Summon
  * exist only in FFX. The plumbing is shared FFX code but **inert** unless a
  * formation sets `EnemyGroupDef.aeonsOnly`, `lockedAeons` or
@@ -31,6 +36,8 @@
 import type { AbilityDef, AvailableCommand, CombatantId, Command, EnemyGroupDef, FFXCombatant } from '../common/types.ts';
 import { aimSideOf } from '../common/aim.ts';
 import { type Ctx, tryActor } from './state.ts';
+import { aeonScriptOff } from './formation-commands.ts';
+import { aeonRosterRemoved } from './roster-removal.ts';
 
 /** `state.flags` key: the formation can only be fought by aeons. */
 export const AEONS_ONLY_FLAG = 'aeonDuel.only';
@@ -41,6 +48,9 @@ export const AEON_LOCK_REASON_PREFIX = 'aeonDuel.reason:';
 /** `state.flags` key: AP paid on victory on top of the enemies' own. */
 export const VICTORY_BONUS_AP_FLAG = 'victory.bonusAp';
 
+/** `state.flags` key prefix: `aeonDuel.removed:<aeonId>` is true for a lock that stands for an aeon the field event took out of the party (`lockedAeons[].removed`, the hidden Last Summoning). Written at set-up whatever the switches say and read only by the Summon list while `MENU_DRAW_PARITY`'s `summon` item is on, which then builds no row for it. */
+export const AEON_LOCK_REMOVED_PREFIX = 'aeonDuel.removed:';
+
 /** B6 = a's reason on a greyed row (our wording, labelled an estimate in the plan). */
 export const ONLY_AN_AEON = 'Only an aeon can fight an aeon';
 
@@ -50,6 +60,7 @@ export function applyAeonDuelSetup(ctx: Ctx, group: EnemyGroupDef): void {
   for (const lock of group.lockedAeons ?? []) {
     ctx.state.flags[AEON_LOCK_PREFIX + lock.aeonId] = lock.mirrorOf;
     if (lock.reason !== undefined) ctx.state.flags[AEON_LOCK_REASON_PREFIX + lock.aeonId] = lock.reason;
+    if (lock.removed === true) ctx.state.flags[AEON_LOCK_REMOVED_PREFIX + lock.aeonId] = true;
   }
   if (typeof group.victoryBonusAp === 'number' && group.victoryBonusAp > 0) {
     ctx.state.flags[VICTORY_BONUS_AP_FLAG] = group.victoryBonusAp;
@@ -65,6 +76,11 @@ export function aeonsOnly(ctx: Ctx): boolean {
 export function lockedMirrorOf(ctx: Ctx, aeonId: string): CombatantId | undefined {
   const v = ctx.state.flags[AEON_LOCK_PREFIX + aeonId];
   return typeof v === 'string' ? v : undefined;
+}
+
+/** Is this aeon one the field event took out of the party (the Last Summoning's removed lock, with the parity item on)? Its Summon row is not built: the game's list never holds a removed aeon. */
+export function lockRemoved(ctx: Ctx, aeonId: string): boolean {
+  return ctx.state.flags[AEON_LOCK_REMOVED_PREFIX + aeonId] === true;
 }
 
 /** "Mirror of Grothia": the greyed Summon row's reason (Bailey's O-5 pick, sheet B). */
@@ -190,9 +206,11 @@ export function summonLabel(ctx: Ctx, key: string, name: string): string {
  * a KO'd one (an aeon KO'd in an earlier link stays down, research §1.2
  * `[derived]`) are left out, exactly as the Summon list leaves them out.
  */
-export function grandSummonChoices(ctx: Ctx): string[] {
+export function grandSummonChoices(ctx: Ctx, withScriptOff = false): string[] {
   // The Magus Sisters are one choice (a build that owns them, re-parity lane FFX-K): Cindy stands for the three. `ctx.rt.sisters` is set by every build that owns them: Chapter XXVII (Mirror Aeons) and the hidden Chapter 28 (the Last Summoning), so the picker lists one entry for them in both (the game lists one).
-  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')));
+  // An aeon a monster's script made unavailable (`./formation-commands.ts`, off by default) is not a choice; `withScriptOff` keeps it, for the picker, which draws it greyed (the game's list does).
+  // An aeon the field event took out of the party (Chapter III's later links, `./roster-removal.ts`, off by default) is not on the list at all, the picker's included.
+  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')) && (withScriptOff || !aeonScriptOff(ctx, k)) && !aeonRosterRemoved(ctx, k));
   if (!aeonsOnly(ctx)) return keys.filter((k) => lockedMirrorOf(ctx, k) === undefined);
   return keys.filter((k) => {
     const aeon = ctx.rt.aeonRoster.get(k);

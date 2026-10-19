@@ -8,7 +8,7 @@
  * The roll is only reached from the kill rewards (`./drops.ts`) when the monster's gear-drop chance succeeds. It makes six
  * or more draws in this order: stream 12 (who gets the gear), stream 12 (weapon or armor), stream 12 twice (slot count and
  * extra-ability count), then one stream-13 draw for each ability it tries to add. Everything about the display name and the
- * model of the finished gear (`FUN_007a0cf0`, `FUN_007a0c50`) is cosmetic and is not part of the roll; the entry's first word
+ * model of the finished gear (the functions at 0x007a0cf0 and 0x007a0c50) is cosmetic and is not part of the roll; the entry's first word
  * is whatever `nameOf` returns (the emulator checks used a fixed stub).
  */
 

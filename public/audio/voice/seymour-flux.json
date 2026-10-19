@@ -1,0 +1,203 @@
+{
+ "version": 1,
+ "chapter": "seymour-flux",
+ "game": "ffx",
+ "lines": {
+  "156c3b6a7d26cd": {
+   "id": "seymour-flux.pre.008",
+   "file": "seymour-flux/seymour-flux.pre.008.mp3",
+   "ms": 3554,
+   "bytes": 29204,
+   "who": "tidus"
+  },
+  "1f2042cd37c6cb": {
+   "id": "seymour-flux.pre.013",
+   "file": "seymour-flux/seymour-flux.pre.013.mp3",
+   "ms": 1174,
+   "bytes": 10004,
+   "who": "tidus"
+  },
+  "008ca43c7ff05e": {
+   "id": "seymour-flux.pre.014",
+   "file": "seymour-flux/seymour-flux.pre.014.mp3",
+   "ms": 2032,
+   "bytes": 16916,
+   "who": "tidus"
+  },
+  "04cb4eaaffc0a9": {
+   "id": "seymour-flux.pre.017",
+   "file": "seymour-flux/seymour-flux.pre.017.mp3",
+   "ms": 537,
+   "bytes": 5012,
+   "who": "yuna"
+  },
+  "15ad623c8e1030": {
+   "id": "seymour-flux.pre.018",
+   "file": "seymour-flux/seymour-flux.pre.018.mp3",
+   "ms": 2105,
+   "bytes": 17492,
+   "who": "yuna"
+  },
+  "07c8082e93dcb8": {
+   "id": "seymour-flux.pre.019",
+   "file": "seymour-flux/seymour-flux.pre.019.mp3",
+   "ms": 3417,
+   "bytes": 28052,
+   "who": "tidus"
+  },
+  "0e6759ec2c2d17": {
+   "id": "seymour-flux.pre.024",
+   "file": "seymour-flux/seymour-flux.pre.024.mp3",
+   "ms": 1700,
+   "bytes": 14228,
+   "who": "yuna"
+  },
+  "1ff6f03232b146": {
+   "id": "seymour-flux.pre.026",
+   "file": "seymour-flux/seymour-flux.pre.026.mp3",
+   "ms": 1898,
+   "bytes": 15956,
+   "who": "auron"
+  },
+  "1a90969ed5e3f7": {
+   "id": "seymour-flux.post.004",
+   "file": "seymour-flux/seymour-flux.post.004.mp3",
+   "ms": 994,
+   "bytes": 8660,
+   "who": "yuna"
+  },
+  "1bcda0f3f8f284": {
+   "id": "seymour-flux.post.006",
+   "file": "seymour-flux/seymour-flux.post.006.mp3",
+   "ms": 1335,
+   "bytes": 11348,
+   "who": "auron"
+  },
+  "1dccfa1d3d5353": {
+   "id": "seymour-flux.post.007",
+   "file": "seymour-flux/seymour-flux.post.007.mp3",
+   "ms": 2546,
+   "bytes": 21140,
+   "who": "tidus"
+  },
+  "0c9521f5c1d460": {
+   "id": "seymour-flux.post.008",
+   "file": "seymour-flux/seymour-flux.post.008.mp3",
+   "ms": 794,
+   "bytes": 7124,
+   "who": "auron"
+  },
+  "187790868027ad": {
+   "id": "seymour-flux.post.009",
+   "file": "seymour-flux/seymour-flux.post.009.mp3",
+   "ms": 2248,
+   "bytes": 18644,
+   "who": "tidus"
+  },
+  "1fd23f1346f05a": {
+   "id": "seymour-flux.post.010",
+   "file": "seymour-flux/seymour-flux.post.010.mp3",
+   "ms": 922,
+   "bytes": 8084,
+   "who": "tidus"
+  },
+  "13c000275bdb73": {
+   "id": "seymour-flux.post.011",
+   "file": "seymour-flux/seymour-flux.post.011.mp3",
+   "ms": 1025,
+   "bytes": 8852,
+   "who": "yuna"
+  },
+  "136c9bea50752a": {
+   "id": "seymour-flux.post.012",
+   "file": "seymour-flux/seymour-flux.post.012.mp3",
+   "ms": 1740,
+   "bytes": 14612,
+   "who": "auron"
+  },
+  "144212b61e1d36": {
+   "id": "seymour-flux.post.013",
+   "file": "seymour-flux/seymour-flux.post.013.mp3",
+   "ms": 1951,
+   "bytes": 16340,
+   "who": "auron"
+  },
+  "148785810bace9": {
+   "id": "seymour-flux.post.014",
+   "file": "seymour-flux/seymour-flux.post.014.mp3",
+   "ms": 1699,
+   "bytes": 14228,
+   "who": "auron"
+  },
+  "18353d293e2682": {
+   "id": "seymour-flux.post.015",
+   "file": "seymour-flux/seymour-flux.post.015.mp3",
+   "ms": 936,
+   "bytes": 8084,
+   "who": "yuna"
+  },
+  "06aaf398a2266c": {
+   "id": "seymour-flux.post.016",
+   "file": "seymour-flux/seymour-flux.post.016.mp3",
+   "ms": 2603,
+   "bytes": 21524,
+   "who": "tidus"
+  },
+  "02b52c88b6933b": {
+   "id": "seymour-flux.post.022",
+   "file": "seymour-flux/seymour-flux.post.022.mp3",
+   "ms": 1178,
+   "bytes": 10196,
+   "who": "tidus"
+  },
+  "185932547db412": {
+   "id": "seymour-flux.mid-mortiorchis-first-charge.001",
+   "file": "seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+   "ms": 2234,
+   "bytes": 18644,
+   "who": "auron"
+  },
+  "09aded7027a4dc": {
+   "id": "seymour-flux.mid-mortiorchis-first-charge.001.fb2",
+   "file": "seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+   "ms": 2426,
+   "bytes": 20180,
+   "who": "tidus"
+  },
+  "0b69e70f0c5b05": {
+   "id": "seymour-flux.mid-first-zombie.001.fb2",
+   "file": "seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+   "ms": 2849,
+   "bytes": 23444,
+   "who": "tidus"
+  },
+  "12ac33f19fe31c": {
+   "id": "seymour-flux.mid-first-zombie.002.fb1",
+   "file": "seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+   "ms": 3046,
+   "bytes": 24980,
+   "who": "yuna"
+  },
+  "126171651fbfc2": {
+   "id": "seymour-flux.quip-tidus.001",
+   "file": "seymour-flux/seymour-flux.quip-tidus.001.mp3",
+   "ms": 1447,
+   "bytes": 12308,
+   "who": "tidus"
+  },
+  "044a725abc62e1": {
+   "id": "seymour-flux.quip-yuna.001",
+   "file": "seymour-flux/seymour-flux.quip-yuna.001.mp3",
+   "ms": 1076,
+   "bytes": 9236,
+   "who": "yuna"
+  },
+  "124a22c590bdd7": {
+   "id": "seymour-flux.quip-auron.001",
+   "file": "seymour-flux/seymour-flux.quip-auron.001.mp3",
+   "ms": 1193,
+   "bytes": 10196,
+   "who": "auron"
+  }
+ }
+}

@@ -1,0 +1,117 @@
+/*
+ * The Echo: the selectable alternate title screen (release 39.5; both games; Bailey, 2026-10-07: "go with this as a new
+ * selectable title screen, and once selected it hides echoes of spira since it's already in the image itself. it will
+ * look neater that way. current title screen is still the default.").
+ *
+ * The picture is public/art/title/echo.png, 1682x932 (1.805:1): Yuna kneeling in still water at night, centred, her
+ * reflection below her, the crystal city on the far right, and the lettering ECHOES OF SPIRA painted at the bottom centre
+ * over a thin painted rule. Almost all of it is black. Measured off the picture (u across, v down, fractions):
+ *
+ *   Yuna            u 0.31 to 0.61, v 0.10 to 0.55   (head u 0.47 to 0.53, v 0.10 to 0.24)
+ *   the lettering   u 0.31 to 0.70, v 0.85 to 0.92
+ *   the painted rule  u 0.02 to 0.98, v 0.923
+ *
+ * So the two things the screen must never cover or crop are the figure and the lettering, and the chrome (the slab, the
+ * hint row) lives where the picture is empty: the slab top-left as on the Farplane screen, the hint row bottom-left,
+ * lowered so that it sits UNDER the painted rule (at 2000x1012, Bailey's window, the lettering stands 8 % of the picture's
+ * height above the foot of the frame, and the hint row's usual 26 grid units covered it). The HTML wordmark is not drawn
+ * at all (titleMarkup.ts), so the slab is the eyebrow, the rule and the chip.
+ *
+ * Fit, by window shape (the crop anchor is --fe-art-x / --fe-art-y, as on the Farplane screen):
+ *   - 0.8:1 to 1.9:1 (a laptop, a monitor, a 16:9 window): cover, centred across and anchored 65 % down. Between 1.8:1 and
+ *     1.9:1 that crops at most 5 % of the height (3 % off the top, 2 % off the bottom), which keeps the rule and the
+ *     lettering and Yuna's hair; at 16:9 nothing is cropped but 1.5 % of the width.
+ *   - 1.9:1 and wider (2000x1012, 21:9 and more): the whole picture, contained; the ground behind it is the picture's own
+ *     black (#050402, its edge pixels are rgb 5, 4, 2), so the sides read as more of the picture rather than as bars.
+ *   - a portrait window that is not a phone (a tablet, a narrow desktop window): the picture drawn 140 vw wide (the
+ *     middle 71 % of it shows: Yuna and the whole lettering, which is then 55 % of the window), in the middle of the window,
+ *     its top and bottom edges feathered into the black.
+ *   - a portrait phone (up to 760 px wide): the picture is drawn 192 vw wide (the middle 52 % of it shows) and held
+ *     vertically in the middle, which keeps Yuna whole and the whole lettering (it is 39 % of the width) with a margin of
+ *     6.5 % each side; its top and bottom edges are feathered. The Farplane screen gives up its spire on a phone; this
+ *     gives up the ribbons and the city.
+ *
+ * The 32 px placeholder (title-reveal.css) fills the whole far plane, which is right under a picture that covers the
+ * window and wrong beside one that does not: it is drawn the way the picture is drawn, and gone once the picture has decoded.
+ *
+ * Nothing here applies to the Farplane screen: every rule is under .fe-title--echo, which TitleScreen puts on the root
+ * only when Settings.titleArt is 'echo'.
+ */
+
+.fe.fe-title--echo {
+  --fe-art-x: 50%;
+  --fe-art-y: 65%;
+  /* The picture's own ground, so a letterbox or the parallax drift never shows the page's blue-black beside it. */
+  background: #050402;
+}
+
+.fe-title--echo .fe-title__plane img {
+  object-fit: cover;
+}
+
+/* The placeholder is the picture's own size, and is not left under it once the picture is there. */
+.fe-title--echo .fe-title__plane--far::before {
+  inset: 0;
+  transition: opacity 400ms ease;
+}
+.fe-title--echo.fe-title--decoded .fe-title__plane--far::before {
+  opacity: 0;
+}
+
+/* Under the painted rule, not against it (see above). */
+.fe-title--echo .fe-hint {
+  bottom: calc(12 * var(--fe-k));
+}
+
+/*
+ * Narrower than 3:2 the painted city reaches the right edge of the window, where the vertical strap stands; the phone
+ * already drops the strap (frontend.css), and so does this.
+ */
+@media (max-aspect-ratio: 3 / 2) {
+  .fe-title--echo .fe-title__strap,
+  .fe-title--echo .fe-title__verr {
+    display: none;
+  }
+}
+
+/* 1.9:1 and wider: the whole picture. */
+@media (min-aspect-ratio: 19 / 10) {
+  .fe-title--echo .fe-title__plane img {
+    object-fit: contain;
+    object-position: 50% 50%;
+  }
+  .fe-title--echo .fe-title__plane--far::before {
+    background-size: contain;
+  }
+}
+
+/*
+ * A portrait window. The plane is a box of the picture's own aspect (1682 / 932 = 1.8047), --echo-w wide, centred on the
+ * window by its offsets (not a transform: the parallax owns the plane's transform): 140 vw for a tablet, which shows the
+ * middle 71 %, and 192 vw for a phone (below), which shows its middle 52 %. Its top and bottom edges fade into the ground.
+ */
+@media (max-aspect-ratio: 4 / 5) {
+  .fe.fe-title--echo {
+    --echo-w: 140vw;
+  }
+  .fe.fe-title--echo .fe-title__plane {
+    inset: auto;
+    left: calc(50% - var(--echo-w) / 2);
+    width: var(--echo-w);
+    height: calc(var(--echo-w) / 1.8047);
+    top: calc(50% - var(--echo-w) / 3.6094);
+  }
+  .fe.fe-title--echo .fe-title__plane img {
+    object-fit: fill;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
+  }
+  .fe.fe-title--echo .fe-title__plane--far::before {
+    background-size: 100% 100%;
+  }
+}
+@media (max-aspect-ratio: 4 / 5) and (max-width: 760px) {
+  .fe.fe-title--echo {
+    --echo-w: 192vw;
+  }
+}

@@ -1,0 +1,260 @@
+{
+ "mode": "gpu",
+ "base": "http://127.0.0.1:5530/",
+ "runs": [
+  {
+   "label": "sensor-yu-yevon-1600x900",
+   "shots": [
+    "docs/screenshots/r55/sensor-yu-yevon-1600x900.jpg",
+    "docs/screenshots/r55/sensor-yu-yevon-1600x900-aimed.jpg",
+    "docs/screenshots/r55/sensor-yu-yevon-1600x900-aimed-scan.jpg"
+   ],
+   "facts": {
+    "hp": 99999,
+    "maxHp": 99999,
+    "mp": 1,
+    "maxMp": 1,
+    "rows": [
+     {
+      "cls": "ffx-sensor__hp ffx-sensor__num--long",
+      "text": "HP 99,999 / 99,999",
+      "scrollW": 84,
+      "clientW": 84
+     },
+     {
+      "cls": "ffx-sensor__mp ffx-sensor__num--long",
+      "text": "MP 1 / 1",
+      "scrollW": 84,
+      "clientW": 84
+     }
+    ],
+    "plate": {
+     "x": 1064,
+     "y": 413,
+     "w": 303,
+     "h": 248
+    },
+    "hidden": false
+   },
+   "width10px": {
+    "textWidthNormalSize": 198,
+    "textWidthLongClass": 158,
+    "plateInner": 84,
+    "plateWidth": 303
+   },
+   "aimed": "Yu Yevon",
+   "bracketOverlap": {
+    "glyphs": [
+     {
+      "cls": "ffx-sensor__name",
+      "text": "Yu Yevon",
+      "right": null,
+      "plateRight": 1216
+     },
+     {
+      "cls": "ffx-sensor__hp",
+      "text": "HP 99,999 / 99,999",
+      "right": null,
+      "plateRight": 1216
+     },
+     {
+      "cls": "ffx-sensor__mp",
+      "text": "MP 1 / 1",
+      "right": null,
+      "plateRight": 1216
+     }
+    ],
+    "strokes": 24,
+    "hit": []
+   },
+   "bracketOverlapScanWhileAiming": {
+    "glyphs": [
+     {
+      "cls": "ffx-sensor__name",
+      "text": "Yu Yevon",
+      "right": 1196,
+      "plateRight": 1359
+     },
+     {
+      "cls": "ffx-sensor__hp",
+      "text": "HP 99,999 / 99,999",
+      "right": 1264,
+      "plateRight": 1359
+     },
+     {
+      "cls": "ffx-sensor__mp",
+      "text": "MP 1 / 1",
+      "right": 1172,
+      "plateRight": 1359
+     }
+    ],
+    "strokes": 24,
+    "hit": [
+     {
+      "line": "ffx-sensor__name",
+      "text": "Yu Yevon",
+      "glyph": [
+       1106,
+       113,
+       91,
+       33
+      ],
+      "stroke": [
+       1110,
+       61,
+       2,
+       54
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "label": "sensor-yu-yevon-390x844",
+   "shots": [
+    "docs/screenshots/r55/sensor-yu-yevon-390x844.jpg",
+    "docs/screenshots/r55/sensor-yu-yevon-390x844-aimed.jpg",
+    "docs/screenshots/r55/sensor-yu-yevon-390x844-aimed-scan.jpg"
+   ],
+   "facts": {
+    "hp": 99999,
+    "maxHp": 99999,
+    "mp": 1,
+    "maxMp": 1,
+    "rows": [
+     {
+      "cls": "ffx-sensor__hp ffx-sensor__num--long",
+      "text": "HP 99,999 / 99,999",
+      "scrollW": 0,
+      "clientW": 0
+     },
+     {
+      "cls": "ffx-sensor__mp ffx-sensor__num--long",
+      "text": "MP 1 / 1",
+      "scrollW": 0,
+      "clientW": 0
+     }
+    ],
+    "plate": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0
+    },
+    "hidden": false
+   },
+   "width10px": {
+    "textWidthNormalSize": 0,
+    "textWidthLongClass": 0,
+    "plateInner": 0,
+    "plateWidth": 0
+   },
+   "aimed": "Yu Yevon",
+   "bracketOverlap": {
+    "glyphs": [
+     {
+      "cls": "ffx-sensor__name",
+      "text": "Yu Yevon",
+      "right": 97,
+      "plateRight": 382
+     },
+     {
+      "cls": "ffx-sensor__hp",
+      "text": "HP 99,999 / 99,999",
+      "right": 152,
+      "plateRight": 382
+     },
+     {
+      "cls": "ffx-sensor__mp",
+      "text": "MP 1 / 1",
+      "right": 78,
+      "plateRight": 382
+     }
+    ],
+    "strokes": 24,
+    "hit": []
+   },
+   "bracketOverlapScanWhileAiming": {
+    "glyphs": [
+     {
+      "cls": "ffx-sensor__name",
+      "text": "Yu Yevon",
+      "right": 97,
+      "plateRight": 382
+     },
+     {
+      "cls": "ffx-sensor__hp",
+      "text": "HP 99,999 / 99,999",
+      "right": 152,
+      "plateRight": 382
+     },
+     {
+      "cls": "ffx-sensor__mp",
+      "text": "MP 1 / 1",
+      "right": 78,
+      "plateRight": 382
+     }
+    ],
+    "strokes": 24,
+    "hit": []
+   }
+  }
+ ],
+ "console": [],
+ "pageErrors": [],
+ "failedRequests": [],
+ "checks": [
+  {
+   "name": "sensor-yu-yevon-1600x900: the battle reaches a command menu",
+   "ok": true
+  },
+  {
+   "name": "sensor-yu-yevon-1600x900: the plate reads HP 99,999 / 99,999 and MP 1 / 1",
+   "ok": true,
+   "detail": "[{\"cls\":\"ffx-sensor__hp ffx-sensor__num--long\",\"text\":\"HP 99,999 / 99,999\",\"scrollW\":84,\"clientW\":84},{\"cls\":\"ffx-sensor__mp ffx-sensor__num--long\",\"text\":\"MP 1 / 1\",\"scrollW\":84,\"clientW\":84}]"
+  },
+  {
+   "name": "sensor-yu-yevon-1600x900: no read-out is wider than its line (nothing clipped)",
+   "ok": true,
+   "detail": "[[84,84],[84,84]]"
+  },
+  {
+   "name": "sensor-yu-yevon-1600x900: aiming at Yu Yevon (target plate says Yu Yevon) no bracket stroke touches a read-out glyph",
+   "ok": true,
+   "detail": "{\"glyphs\":[{\"cls\":\"ffx-sensor__name\",\"text\":\"Yu Yevon\",\"right\":null,\"plateRight\":1216},{\"cls\":\"ffx-sensor__hp\",\"text\":\"HP 99,999 / 99,999\",\"right\":null,\"plateRight\":1216},{\"cls\":\"ffx-sensor__mp\",\"text\":\"MP 1 / 1\",\"right\":null,\"plateRight\":1216}],\"strokes\":24,\"hit\":[]}"
+  },
+  {
+   "name": "sensor-yu-yevon-1600x900: a Scan landing while aiming: no bracket stroke touches a read-out glyph",
+   "ok": false,
+   "detail": "{\"glyphs\":[{\"cls\":\"ffx-sensor__name\",\"text\":\"Yu Yevon\",\"right\":1196,\"plateRight\":1359},{\"cls\":\"ffx-sensor__hp\",\"text\":\"HP 99,999 / 99,999\",\"right\":1264,\"plateRight\":1359},{\"cls\":\"ffx-sensor__mp\",\"text\":\"MP 1 / 1\",\"right\":1172,\"plateRight\":1359}],\"strokes\":24,\"hit\":[{\"line\":\"ffx-sensor__name\",\"text\":\"Yu Yevon\",\"glyph\":[1106,113,91,33],\"stroke\":[1110,61,2,54]}]}"
+  },
+  {
+   "name": "sensor-yu-yevon-390x844: the battle reaches a command menu",
+   "ok": true
+  },
+  {
+   "name": "sensor-yu-yevon-390x844: the plate reads HP 99,999 / 99,999 and MP 1 / 1",
+   "ok": true,
+   "detail": "[{\"cls\":\"ffx-sensor__hp ffx-sensor__num--long\",\"text\":\"HP 99,999 / 99,999\",\"scrollW\":0,\"clientW\":0},{\"cls\":\"ffx-sensor__mp ffx-sensor__num--long\",\"text\":\"MP 1 / 1\",\"scrollW\":0,\"clientW\":0}]"
+  },
+  {
+   "name": "sensor-yu-yevon-390x844: no read-out is wider than its line (nothing clipped)",
+   "ok": true,
+   "detail": "[[0,0],[0,0]]"
+  },
+  {
+   "name": "sensor-yu-yevon-390x844: aiming at Yu Yevon (target plate says Yu Yevon) no bracket stroke touches a read-out glyph",
+   "ok": true,
+   "detail": "{\"glyphs\":[{\"cls\":\"ffx-sensor__name\",\"text\":\"Yu Yevon\",\"right\":97,\"plateRight\":382},{\"cls\":\"ffx-sensor__hp\",\"text\":\"HP 99,999 / 99,999\",\"right\":152,\"plateRight\":382},{\"cls\":\"ffx-sensor__mp\",\"text\":\"MP 1 / 1\",\"right\":78,\"plateRight\":382}],\"strokes\":24,\"hit\":[]}"
+  },
+  {
+   "name": "sensor-yu-yevon-390x844: a Scan landing while aiming: no bracket stroke touches a read-out glyph",
+   "ok": true,
+   "detail": "{\"glyphs\":[{\"cls\":\"ffx-sensor__name\",\"text\":\"Yu Yevon\",\"right\":97,\"plateRight\":382},{\"cls\":\"ffx-sensor__hp\",\"text\":\"HP 99,999 / 99,999\",\"right\":152,\"plateRight\":382},{\"cls\":\"ffx-sensor__mp\",\"text\":\"MP 1 / 1\",\"right\":78,\"plateRight\":382}],\"strokes\":24,\"hit\":[]}"
+  }
+ ],
+ "summary": {
+  "passed": 9,
+  "failed": 1
+ }
+}

@@ -24,17 +24,20 @@ import { aeonGearOf } from './aeon-gear.ts';
 import { removeStatus } from './statuses.ts';
 import { setGauge } from './overdrive.ts';
 import { duelLost, lockedMirrorOf } from './aeon-duel.ts';
+import { aeonScriptOff } from './formation-commands.ts';
+import { aeonRosterRemoved } from './roster-removal.ts';
 import { SISTER_IDS, asOneSummon, dismissSisters, summonSisters } from './adapt/sisters.ts';
 import { yojimboWiped } from './adapt/yojimbo.ts';
 
 /**
- * Aeons Yuna may summon right now: HP above 0 and no recovery count left (`FUN_0079a080`). An aeon under an aeon duel's **mirror
+ * Aeons Yuna may summon right now: HP above 0 and no recovery count left (the function at 0x0079a080). An aeon under an aeon duel's **mirror
  * lock** is not one (`./aeon-duel.ts`, Chapter XIV only; research ffx-isaaru-bevelle §1.2 [verified: 2 sources]).
  */
 export function availableAeons(ctx: Ctx): FFXCombatant[] {
   const out: FFXCombatant[] = [];
   for (const [key, aeon] of ctx.rt.aeonRoster) {
-    if (!aeonSummonable(aeon)) continue;
+    if (!aeonSummonable(aeon, !aeonScriptOff(ctx, key))) continue; // the byte a possessed copy's script clears: Chapter III's own-aeon lock, off by default (`./formation-commands.ts`)
+    if (aeonRosterRemoved(ctx, key)) continue; // the field event took it out of the party (Chapter III's later links; `./roster-removal.ts`, off by default)
     if (lockedMirrorOf(ctx, key) !== undefined) continue;
     out.push(aeon);
   }

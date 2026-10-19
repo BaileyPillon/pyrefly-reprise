@@ -250,3 +250,28 @@ export function inlineProbeRefusal(args, env) {
  */
 export const CONTINUITY_BUDGET_MS = 1800000;
 export const continuityBudgetFor = (chapterId, explicit) => (explicit !== undefined && explicit !== null && explicit !== '' ? Number(explicit) : Math.max(CONTINUITY_BUDGET_MS, LONG_FIGHT_BUDGET_MS[chapterId] ?? 0));
+
+/**
+ * FOC52-003 (the deep review of release 52): `route.mjs` walks the chapter board with the arrow keys until the chapter's card is selected, and a HIDDEN chapter has no card
+ * ("ASSERT-FAIL card sinspawn-gui got yunalesca": the walk went right over every tile and found nothing). The board opens a hidden chapter when its word is typed on it
+ * (`src/app/screens/frontend/chapterDoors.ts#CHAPTER_DOORS`, one row per door), and the route now types the word. This is that table as data the harness can read without importing the app
+ * (`tests/unit/critic-route-harness.test.ts` runs the app's own table beside this copy, so the two cannot drift). The FF7 door (`limit`) also needs the FF7 switch on.
+ * Game case: both (shared critic plumbing); each row's game is its chapter's: FFX-2 for `exp-leblanc`, `ffx2-masterpiece-theatre`, `ffx2-tourist-trap`, `ffx2-valefor-besaid` and `ffx2-angra-mainyu`, FF7 for
+ * `ff7-guard-scorpion`, FFX for the others.
+ */
+export const DOOR_WORDS = Object.freeze({
+  'ff7-guard-scorpion': 'limit',
+  'exp-leblanc': 'leblanc',
+  'ffx2-masterpiece-theatre': 'experiment',
+  'sinspawn-gui': 'mushroom',
+  'exp-fayth': 'fayth',
+  'ffx2-tourist-trap': 'daigoro',
+  'ffx2-valefor-besaid': 'valefor',
+  'biran-yenke': 'gagazet',
+  'ffx2-angra-mainyu': 'angra',
+  'mirror-aeons': 'yojimbo',
+  'last-summoning': 'summon',
+});
+
+/** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */
+export const doorWordFor = (chapterId) => (Object.prototype.hasOwnProperty.call(DOOR_WORDS, chapterId) ? DOOR_WORDS[chapterId] : null);

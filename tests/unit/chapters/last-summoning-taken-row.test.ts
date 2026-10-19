@@ -7,8 +7,9 @@
  * row view-model, and the row the player's list draws (label, disabled class, badge text and class), reached by opening Summon and paging to the row. The label plus the badge must fit a phone's list; jsdom
  * measures nothing, so the length is pinned here and the pictures are `docs/screenshots/ch-last-summoning/1600x900-summon-list-magus-sisters-taken.jpg` and `390x844-summon-list-magus-sisters-taken.jpg` (headless Chromium on the GPU, real keys; at phone width the label keeps its line and TAKEN sits under it, nothing is cut: the row's scroll width equals its client width).
  */
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { AvailableCommand, BattleEngine, BattleState, Decision } from '../../../src/battle/common/types.ts';
+import { setMenuDrawParity } from '../../../src/battle/ffx/menu-draw-parity.ts';
 import { lastSummoningGroup } from '../../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { TAKEN_REASON, linkGroupId } from '../../../src/data/ffx/last-summoning-ids.ts';
 import { badgeHtml, subRowVM } from '../../../src/ui/ffx/commandMenuRows.ts';
@@ -76,7 +77,33 @@ function pageTo(root: HTMLElement, label: string): HTMLElement {
   throw new Error(`no ${label} row`);
 }
 
-describe('Chapter 28, the Sisters taken: the Summon list draws one greyed "Magus Sisters" row with the TAKEN badge', () => {
+describe('Chapter 28, the Sisters taken, shipped (r55 RE, MENU_DRAW_PARITY item summon): the game’s list holds no row for an aeon the event removed', () => {
+  it('the engine offers no Magus Sisters row and no row for Ifrit; the held aeons are enabled', async () => {
+    const summons = (await yunaAfterSistersTaken()).commands.filter((c) => c.command.kind === 'summon');
+    const labels = summons.map((c) => c.label).sort();
+    expect(labels).toEqual(['Anima', 'Bahamut', 'Ixion', 'Shiva', 'Valefor', 'Yojimbo']);
+    for (const c of summons) expect(c.enabled, c.label).toBe(true);
+  });
+
+  it('the list on screen has no Magus Sisters row and no TAKEN badge', async () => {
+    const root = openSummon(await yunaAfterSistersTaken());
+    const shown = rowsOf(root).map(labelOf);
+    expect(shown).not.toContain('Magus Sisters');
+    expect(shown).not.toContain('Ifrit');
+    expect(root.querySelector('.ffx-cmd__badge--taken')).toBeNull();
+  });
+});
+
+describe('Chapter 28, the Sisters taken, with the no-row rule left off (the build before release 55): the Summon list draws one greyed "Magus Sisters" row with the TAKEN badge', () => {
+  let back: (() => void) | undefined;
+  beforeEach(() => {
+    back = setMenuDrawParity(true, ['summon', 'cursor', 'help']); // the shipped state with only item summon off
+  });
+  afterEach(() => {
+    back?.();
+    back = undefined;
+  });
+
   it('the engine offers the row disabled with Yu Yevon’s reason, once, under the game’s label', async () => {
     const summons = (await yunaAfterSistersTaken()).commands.filter((c) => c.command.kind === 'summon');
     const sisters = summons.filter((c) => c.label === 'Magus Sisters');

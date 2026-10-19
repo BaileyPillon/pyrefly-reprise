@@ -1920,6 +1920,17 @@ export interface AttackCommand {
   targets: CombatantId[];
 }
 
+/**
+ * One cast of a Doublecast: the Black Magic spell the player picked and where it goes (FFX only, re-parity RC10 lane FFX-N).
+ * The game closes one sub-action at each target pick, so a Doublecast is two of these, each with its own spell and its own target.
+ */
+export interface DoublecastCast {
+  /** The Black Magic spell of this cast. */
+  id: AbilityId;
+  /** Its target pick. A self-only placeholder for a spell that points at foes is replaced by the spell's legal targets, as the single-spell form always has been. */
+  targets: CombatantId[];
+}
+
 /** Any ability from any menu, including aeon sub-commands and enemy actions. */
 export interface AbilityCommand {
   kind: 'ability';
@@ -1927,6 +1938,13 @@ export interface AbilityCommand {
   targets: CombatantId[];
   /** Doublecast / Copycat wrapper: the ability id this one is repeating. */
   wrappedId?: AbilityId;
+  /**
+   * FFX only (re-parity RC10 lane FFX-N, rows N2 and N3): a Doublecast as the game composes it, **two separate picks**, spell 1 with target 1 and then spell 2
+   * with target 2, in cast order. Each cast is its own sub-action with its own cost check: it pays **its own spell's** MP (Half MP and the other modifiers applied
+   * to that spell) when it starts, and a cast the MP that is left cannot pay does not start. When present, `wrappedId` and `targets` are not read; omitted, the
+   * older shape (`wrappedId` + `targets`: one spell twice, or at two targets) is read as the two casts it always stood for. Additive and optional.
+   */
+  casts?: readonly [DoublecastCast, DoublecastCast];
   /**
    * The minigame outcome, for a menu ability that opens an overlay. FFX-2 only:
    * Trigger Happy and Lady Luck's reels are ordinary abilities there, not
@@ -2066,6 +2084,18 @@ export type Command =
 /** Command kinds, for exhaustive switches. */
 export type CommandKind = Command['kind'];
 
+/**
+ * The target step of one menu row as the original shows it (FFX only; `battle/ffx/target-step-parity.ts`). `candidates` are the combatants the cursor can rest on, in the game's list order (the
+ * party in slot order, the foes in formation order); `start`, when present, is the candidate it opens on (absent = the HUD's own choice); `switchTo` is the other side's candidates when the record lets the cursor switch sides (absent when
+ * it does not or the other side has none); `group` marks a step that rings every candidate at once and confirms them together.
+ */
+export interface TargetStep {
+  candidates: CombatantId[];
+  start?: CombatantId;
+  switchTo?: CombatantId[];
+  group?: boolean;
+}
+
 /** One row the command UI may offer, with its legal targets already resolved. */
 export interface AvailableCommand {
   /** A partially-filled command; the UI fills `targets` from {@link validTargets}. */
@@ -2099,6 +2129,12 @@ export interface AvailableCommand {
    * Optional (hand-built rows, fixtures): absent means "choose one", as before.
    */
   targeting?: Targeting;
+  /**
+   * **The game's target step for this row** (FFX only; set by the FFX engine **only while `TARGET_STEP_PARITY` is on**, which is off): whether the row opens a cursor, on whom, where it starts, and
+   * which other-side combatants the cursor may be switched to. Additive and optional; the UI reads it, the engine's strategies, the advisor and the coach never do (they read `validTargets`), so
+   * nothing about legality or resolution moves. Absent = the row's old behaviour.
+   */
+  targetStep?: TargetStep;
   /** Where the single-target cursor opens: the subset of `validTargets` on the sensible side (enemy for attacks and debuffs, party for cures and buffs, KO'd first for revives; `battle/common/aim.ts`, both games). Set only when it narrows the list; absent = the leftmost valid target, as before. */
   preferredTargets?: CombatantId[];
   /** True when choosing this row opens a minigame overlay before the command resolves. */
@@ -2841,16 +2877,16 @@ export interface AeonBuild {
  */
 export interface YojimboBuild {
   /**
-   * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`**: the game's image holds 0 and no initialiser
-   * was found, and a community save pack (not the owner's: 107 saves, downloaded 2026-09-26) contradicts a default of 0
-   * (RE review, 2026-10-17). 128 is strongly indicated by that pack (slots 1-84 all read 128; 164 by slot 106) and the community says 128, live
-   * confirmation pending; the chapter must say so where it gives its value (`docs/handoff/re-parity-ffx-yojimbo-sisters.md`).
+   * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`** (a build must say): the game's image holds 0 because the game writes its starting value at boot, and
+   * that value is **128, the game's own starting value (read at boot, 2026-10-17: before any save was loaded, FFX itself wrote compatibility 128 and hire answer 2)**. It is no longer an estimate;
+   * the earlier evidence, a community save pack (not the owner's: 107 saves, downloaded 2026-09-26: slots 1-84 all read 128; 164 by slot 106), agreed with it.
    * A chain carries the changed value to the next link (`state.flags['yojimbo:compatibility']`).
    */
   compatibility: number;
   /**
    * The hire answer, 0, 1 or 2: the reply the player gave in the recruitment haggle (0 the dearest start price, 2 the cheapest). It scales the
-   * motivation Pay makes (`kernel/yojimbo.ts`). The image's default, when he was never hired through that scene, is 0 (the same pack contradicts a default of 0: RE review, 2026-10-17; no value changes).
+   * motivation Pay makes (`kernel/yojimbo.ts`). The game's own starting value is **2** (read at boot, 2026-10-17, as above), not the image's 0, so a Yojimbo never hired through that scene answers 2.
+   * A chapter may give a player's own answer instead: Chapter XXVII gives 2, the game's start; Chapter 28 (the Last Summoning) gives 1, a player's Cavern answer (the two are not aligned on purpose).
    */
   hireAnswer: 0 | 1 | 2;
 }
@@ -3032,6 +3068,16 @@ export interface FFXLinkLineUp {
   noSwitch?: boolean;
 }
 
+/**
+ * **FFX only**: one command a formation switches off (`EnemyGroupDef.commandDisables`; re-parity RC10). The game's `setCommandDisabled(actor, command, 1)`:
+ * `who` is the party member it names (`'yuna'` for the script's actor 1) or `'everyone'` for the script's "all characters and aeons" (never a monster);
+ * `command` is the game's command id (`0x3000` Attack, `0x3002` Switch, `0x3113` Skill, ...), a number and nothing else.
+ */
+export interface FormationCommandOff {
+  who: 'everyone' | CombatantId;
+  command: number;
+}
+
 /** One battle's enemy formation. */
 export interface EnemyGroupDef {
   /** Formation id, e.g. `'seymour-flux'`. */
@@ -3117,8 +3163,12 @@ export interface EnemyGroupDef {
    *
    * `reason` (the hidden Last Summoning chapter, FFX only; optional, absent for Chapter XIV's): the words the greyed row gives instead of "Mirror of ...", for an aeon Yu Yevon
    * has taken ("Taken by Yu Yevon"). The lock itself is the same: the aeon is off the Summon list and out of Grand Summon's choices.
+   *
+   * `removed` (the hidden Last Summoning chapter, FFX only; optional, absent for Chapter XIV's; re-parity RC11, lane "FFX Chapter III roster"): this lock stands for an aeon the field event took out of the party
+   * (`sins0700`, event native 0xCB removePartyMember, before the link's fight), not for the availability byte. It changes no rule; while `MENU_DRAW_PARITY`'s `summon` item is on, the Summon list builds
+   * no row for it (the game's list never holds a removed aeon) instead of the greyed "Taken by Yu Yevon" row.
    */
-  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId; reason?: string }>;
+  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId; reason?: string; removed?: true }>;
   /**
    * **FFX only (the hidden Last Summoning chapter)**: the number of formations the whole chain has when that number follows from the player's choices, not from walking `nextGroupId` (the
    * pause screen's "BATTLE n OF m", `BattleScreen`'s `chainLengthOf`). Absent for every other chapter, whose chains are counted by walking.
@@ -3151,6 +3201,38 @@ export interface EnemyGroupDef {
    * plan B13 = a]. Absent everywhere else.
    */
   victoryBonusAp?: number;
+  /**
+   * **FFX only, "Defend is off in this formation"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-formation-flags.md`): the game's formation script calls
+   * `setDefendingEnabled(0)` and the party's Defend control (the original's Triangle) does nothing for the whole battle; only Isaaru's three aeon-contest
+   * formations (Chapter XIV) do it among the formations of our chapters. While set, no party or aeon menu offers a `defend` row and a submitted `defend` is refused,
+   * the turn kept open. Read by `battle/ffx/formation-flags.ts` and nothing else; absent everywhere else, so no other battle changes.
+   */
+  defendOff?: boolean;
+  /**
+   * **FFX only, "these menu commands are switched off in this formation"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-isaaru-commands.md`): the game's
+   * formation script calls `setCommandDisabled(who, command, 1)` once per command, before the first turn, and the menu gate treats that command as unusable for
+   * that actor for the whole battle. Numbers only: `command` is the game's own command id. Only Isaaru's three aeon-contest formations (Chapter XIV) do it among the
+   * formations of our chapters (the other chapters' scripts switch off Escape and Flee, which `canEscape` and `lineUp.noSwitch` already carry). While a command is
+   * listed, the FFX command list (`battle/ffx/commands.ts`) keeps the rows that belong to it for that actor, greyed (`enabled: false`, no `disabledReason`: the game's draw loop draws a disabled command, read as greyed), and `submit()` refuses a command that belongs to it,
+   * the turn kept open. Read by `battle/ffx/formation-commands.ts` and nothing else; absent everywhere else, so no other battle changes.
+   */
+  commandDisables?: readonly FormationCommandOff[];
+  /**
+   * **FFX only, "this monster's own script switches a command off"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-script-command-locks.md`): the same call as
+   * `commandDisables` (`setCommandDisabled(who, command, flag)`, script call 0x703B), made by a **monster's** script instead of the formation's, so a separate
+   * switch (`SCRIPT_COMMAND_DISABLES`, default **off**) holds it. A `command` of 0x3xxx is a menu command; a `command` **below 0x1000** is the setter's other branch,
+   * an aeon's availability byte (8 Valefor, 9 Ifrit, 10 Ixion, 11 Shiva, 12 Bahamut, 13 Anima, 14 Yojimbo, 15 to 17 the Magus Sisters), listed here as "unavailable".
+   * Only Chapter III's five possessed-aeon links carry it. Read by `battle/ffx/formation-commands.ts`; absent everywhere else, and ignored while the switch is off.
+   */
+  scriptCommandDisables?: readonly FormationCommandOff[];
+  /**
+   * **FFX only, "the field event took these aeons out of the party before this battle"** (re-parity RC11, lane "FFX Chapter III roster", `docs/handoff/re-parity-rc11-ffx-ch3-roster.md`): the roster keys
+   * (`valefor`, `ifrit`, ...) the event `sins0700` removed with removePartyMember (event native 0xCB, handler 0x85B820) before launching this link: the aeon chosen for this link and every aeon given up in an earlier
+   * one. The roster flag is cleared, so the battle setup creates no in-battle record for the aeon and the Summon list (builder 0x00785410, case 5), which lists only aeons that exist in the battle, never holds it:
+   * it is absent from the Summon list and Grand Summon's picker, not drawn greyed. Read by `battle/ffx/roster-removal.ts` **only while the switch `CH3_ROSTER_REMOVAL` is on (it is off)**; a removed aeon stays in
+   * the roster (the possessed copy's stats are read from it) and is only left out of the lists and refused if named. Only Chapter III's six links 2 to 7 carry it. Absent everywhere else, and ignored while the switch is off.
+   */
+  rosterRemoved?: readonly string[];
   /** A chained link that is a retry checkpoint with no Save Sphere: FFX-2's Trema (TR5 b) and Shuyin (D-217); FFX, Sin's link 3 only, through the switch `SIN_LINK3_CHECKPOINT` (on since D-284; CONTRACT-CHANGES). */
   checkpointOnEntry?: boolean;
   /**

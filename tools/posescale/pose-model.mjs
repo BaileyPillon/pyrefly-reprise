@@ -24,7 +24,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import sharp from 'sharp';
-import { gameOf, mirrorFor, parseFacing, poseClassOf, sideOf, subjectKind } from './pose-kinds.mjs';
+import { gameOf, isPropsOut, mirrorFor, parseFacing, poseClassOf, sideOf, subjectKind } from './pose-kinds.mjs';
 import { makeRef, placePose } from './pose-geometry.mjs';
 import { checkHires } from './pose-hires.mjs';
 import { drawnMask, headBoxOn, maskIou, readPaint } from './pose-pixels.mjs';
@@ -95,7 +95,7 @@ async function referenceName(inputs, subject, poses) {
 }
 
 /** The idle's side of one subject, built once: its measurements, its placement and its silhouette on the grid. */
-async function referenceOf(inputs, subject) {
+export async function referenceOf(inputs, subject) {
   const hit = inputs.refs.get(subject);
   if (hit) return hit;
   const poses = listPoses(inputs, subject);
@@ -131,7 +131,9 @@ async function readOne(inputs, R, pose) {
     subject, pose, kind: R.kind, game: R.game, class: cls, isRef: g.isRef, refPose: R.refName,
     sha: m.sha, size: [m.W, m.H], empty: m.empty, solidity: round(m.empty ? null : m.area / ((m.bbox[2] - m.bbox[0]) * (m.bbox[3] - m.bbox[1]))), areaOverIdle: round(R.M.area ? (m.area * g.uppEff ** 2) / (R.M.area * R.upp ** 2) : null),
     headBox: (() => { const b = headBoxOn(m, row.head); return b ? { cy: round(b.cy), coverage: round(b.coverage) } : null; })(),
-    hasRow: g.hasRow, hasHead: g.hasHead, hasStance: g.hasStance, held: g.held, heldHeadRatio: g.heldHeadRatio, heldGap: round(g.heldGap),
+    hasRow: g.hasRow, hasHead: g.hasHead, hasStance: g.hasStance, held: g.held, heldHeadRatio: g.heldHeadRatio, ruled: g.ruled, realHeadRatio: round(g.realHeadRatio), heldGap: round(g.heldGap),
+    // a raised sword or staff stands above the head: the band reads head to soles (`bodyStature`), not the box (pose-kinds.mjs PROPS_OUT_POSES)
+    propsOut: (cls === 'standing' || cls === 'low') && isPropsOut(pose),
     refHasHead: !!R.head, refWide: R.M.proneRaw,
     status: row.status ?? null, rowSha: row.sha ?? null,
     scale: g.scale, scaleSrc: g.scaleSrc, anchorRow: g.anchor, anchorSrc: g.anchorSrc, clamped: g.clamped, lock: round(g.lock), prone: g.prone, mirror: g.mirror,

@@ -65,7 +65,7 @@ export class App {
     this.uiRoot =
       opts.uiRoot ?? (document.getElementById('ui') as HTMLElement | null) ?? document.body;
     this.fadeRoot = opts.fadeRoot ?? (document.getElementById('fade') as HTMLElement | null);
-    this.maxDelta = opts.maxDeltaSec ?? 1 / 20;
+    this.maxDelta = opts.maxDeltaSec ?? 1 / 20; // every timer in the game counts this frame; the battle field's animation clock clamps it further (`battleFrameClocks`, PoseSwap.ts)
 
     this.renderer = new Renderer({ container: gameRoot, fov: 34 });
     this.input = new Input({ pointerRoot: this.uiRoot });

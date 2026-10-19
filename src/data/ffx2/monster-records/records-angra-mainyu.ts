@@ -3,7 +3,7 @@
  *
  * Source: `kernel/monster.bin` **rows 268 (Angra Mainyu, id 0x110c), 269 (Zarich, 0x110d) and 270 (Tawrich, 0x110e)** of the Steam HD build, formation rows 1241, 1284, 1313, 1350 and 1384 (`bika08_229`,
  * `bika07_229`, `bika09_229`, `bika14_229`, `bika13_229`: the same three monsters in five desert maps), read field by field by the RE parity session (`research/re-ffx2-angra-mainyu.md` §3 the column map, §4
- * the rows, §6 the raw bytes), numbers only. Merged into `MONSTER_RECORDS` by `./records.ts`. **The second stat block in `monster2.bin` (boss Lv 56, HP 350,116, AGI 88) is NOT used**: all three rows
+ * the rows, §6 the unmapped columns), numbers only. Merged into `MONSTER_RECORDS` by `./records.ts`. **The second stat block in `monster2.bin` (boss Lv 56, HP 350,116, AGI 88) is NOT used**: all three rows
  * have Oversoul type 0, so nothing in our notes says the game reads it for these monsters (the note's §5 and §12 item 8).
  *
  * What the rows say: Accuracy 95; Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse (group-1 slots 0 to 8), Eject (10) and slots 17 and 18 immune on all three; group 2 Slow (5), Stop

@@ -502,9 +502,9 @@ export function metaRowFor(
 }
 
 /**
- * The card's label for a **wrapper** row's command — `"Doublecast: Firaga"`,
- * the name the battle log gives the action — or `null` when `command` is not
- * a wrapper's or names no row of the wrapped category.
+ * The card's label for a **wrapper** row's command, naming both casts — `"Doublecast: Firaga + Firaga"` (the
+ * older `wrappedId` shape: one spell twice) or `"Doublecast: Fira + Blizzard"` (`casts`) — or `null` when
+ * `command` is not a wrapper's or names no row of the wrapped category.
  *
  * The card has to say which spell, because the menu now asks for it: Special >
  * Doublecast opens the Black Magic list and then that spell's target step
@@ -518,11 +518,10 @@ export function wrappedLabel(
   row: AvailableCommand,
   command: Command,
 ): string | null {
-  if (!row.wrapsCategory || command.kind !== 'ability' || command.wrappedId === undefined) return null;
-  const inner = commands.find(
-    (c) => c.category === row.wrapsCategory && c.command.kind === 'ability' && c.command.id === command.wrappedId,
-  );
-  return inner ? `${row.label}: ${inner.label}` : null;
+  if (!row.wrapsCategory || command.kind !== 'ability') return null;
+  const ids = command.casts ? command.casts.map((c) => c.id) : command.wrappedId === undefined ? [] : [command.wrappedId, command.wrappedId];
+  const names = ids.map((id) => commands.find((c) => c.category === row.wrapsCategory && c.command.kind === 'ability' && c.command.id === id)?.label);
+  return names.length > 0 && names.every((n) => n !== undefined) ? `${row.label}: ${names.join(' + ')}` : null;
 }
 
 /** The gate a tactic's own pick is held to: the strict row, or a meta row. */

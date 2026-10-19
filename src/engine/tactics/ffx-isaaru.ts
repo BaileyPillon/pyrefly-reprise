@@ -11,7 +11,7 @@
  *
  * It is the **intended** line of `tests/unit/chapters/isaaru-tactic-bench.test.ts`
  * (`docs/plans/isaaru-bench.md`), written as a tactic. It only picks among the rows the engine
- * offers (the duel greys the mirror aeon, the KO'd aeons and every non-aeon command), and returns
+ * offers (the duel greys the mirror aeon and the KO'd aeons; since RC10 Yuna's menu is only Summon and Grand Summon, the formation script switching the rest off), and returns
  * `null` (the generic ladder) when none of his three aeons is standing.
  *
  * **Yuna** summons, in the sources' order for each link, the first aeon the menu offers:

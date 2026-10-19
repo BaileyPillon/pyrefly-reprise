@@ -4,7 +4,7 @@
  * `./last-summoning-roster.ts` (inside Sin's stat block, N = 360). Game case: FFX only.
  *
  * It is a **copy**: Chapter III's build is never touched and nothing here can mutate it (`cloneData`). The two optional states the engine asks of a build that owns Yojimbo or the Sisters are given where
- * they are named (`FFXPartyBuild.yojimbo`: compatibility 128 and the neutral hire answer; `FFXPartyBuild.sisters`: every motivation 50), each a labelled estimate.
+ * they are named (`FFXPartyBuild.yojimbo`: compatibility 128, the game's own starting value read at boot on 2026-10-17, and hire answer 1, a player's Cavern answer that this chapter keeps on purpose (the game's own start is 2); `FFXPartyBuild.sisters`: every motivation 50, an estimate).
  *
  * **The chain carries the party forward as every chain does** (`BattleScreenSetup.carryPartyForward`): HP, MP, statuses, gauges, the items and the gil Pay spends, Yojimbo's compatibility; an aeon that fell keeps its
  * recovery count. What Yu Yevon takes is not a change of this build: the aeon stays in the list (its stats are what the possessed copy copies) and the link's formation locks it

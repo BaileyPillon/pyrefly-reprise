@@ -19,6 +19,8 @@ import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresent
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
+import { tryRigFigure, type BuiltFigure, type FigureRequest } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
+import { unregisterRigUse } from './rig/RigLoad.ts';
 import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
@@ -88,10 +90,16 @@ export interface PaintedStageOptions {
    * (`entrance/StageEntrances.ts`, FOC44A-05). Read live. Absent = never owed, as for a stage with no framing.
    */
   planOwed?: () => boolean;
+  /** The opening's wait for that plan (`fx/mix/MaxMix.ts` `framingPlanSettled`): resolves once it has landed or been given up. Absent = nothing to wait for. */
+  planSettled?: () => Promise<void>;
+  /** The installed master is up and the resting camera has not gone onto it (`framingArrivalOwed`). Absent = never. */
+  arrivalOwed?: () => boolean;
   /** Camera comfort preset (fb2-0929 options, default `current` = untouched; `CameraPreset.ts`). */
   cameraPreset?: () => CameraPresetSpec;
   /** The renderer, so a master the art governor loads is uploaded ahead of its swap (release 39.1, `TextureStager.ts`); without it the swap is release 39's. */
   renderer?: StageHost;
+  /** The hidden `fxRig` setting, read live: false draws every figure as its painting set. Absent reads as on (`?rig=on|off` overrides it; `rig/RigLoad.ts`). */
+  rigs?: () => boolean;
 }
 
 interface StagedActor {
@@ -351,7 +359,12 @@ export class PaintedStage implements BattleStage {
     const k = size.ringScale;
 
     const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
-    const actor = await PaintedActor.create({
+    const request: FigureRequest = {
+      id: c.id,
+      artId,
+      poses,
+      ...(this.opts.rigs ? { setting: this.opts.rigs } : {}),
+      opts: {
       name: c.id,
       ...(anchor ? SA.anchoredActorOptions(anchor) : {}),
       // The *body's* facing, from the side: party and aeons toward +x, enemies toward -x, unless the scene
@@ -385,7 +398,11 @@ export class PaintedStage implements BattleStage {
         radius: anchor ? SA.anchoredRingRadius(anchor) : (kind === 'party' ? 0.78 : 1.7) * k,
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
-    });
+      },
+    };
+    // The rig first (its awaits all come before the figure exists), then the painting set made right here by the one `await PaintedActor.create` it always was: no extra tick between a built figure and what the presenter does with it.
+    const built: BuiltFigure = (await tryRigFigure(request)) ?? { actor: await PaintedActor.create(request.opts), rig: null };
+    const actor = built.actor;
     const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, worldHeightFor(c, heights), worldHeight); // a figure at a scene's form height is planned at the shared one too
     if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
 
@@ -393,12 +410,14 @@ export class PaintedStage implements BattleStage {
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
     const spot = pin ?? spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
     actor.position.set(spot[0], spot[1], spot[2]);
+    // The poses with a painting of their own (a rigged figure: its keys), which `paints` answers from.
+    const painted = built.rig ? new Set(built.rig.rigKeys) : paintedPoses(artId, poses, characterUrl);
     // Already down when staged: snap to it (`immediate`: no topple on frame one). Seymour's
     // body (D-046) is the one enemy that stays down; a figure with no KO painting lies down.
     if (!c.alive && (c.side === 'party' || departureKindOf(c.id) === 'body')) {
       actor.setPose('ko', { immediate: true });
       if (c.side === 'party') downWithoutKoPainting(actor, 0); // VP-1001-04
-      else if (!paintedPoses(artId, poses, characterUrl).has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
+      else if (!painted.has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
     }
 
     this.opts.scene.add(actor);
@@ -414,7 +433,7 @@ export class PaintedStage implements BattleStage {
       slot: c.slot,
       artId,
       kind,
-      painted: paintedPoses(artId, poses, characterUrl),
+      painted,
       // A destructible part is laid out along its machine rather than given a
       // lane of its own — Vegnagun's leg is not a fourth fiend.
       ...(c.flags.isPart ? { isPart: true } : {}),
@@ -782,6 +801,16 @@ export class PaintedStage implements BattleStage {
     this.entrances?.settle(now);
   }
 
+  /** `BattleStage.planSettled`: the opening waits for CHAPTER FRAMING's first plan. */
+  planSettled(): Promise<void> {
+    return this.opts.planSettled?.() ?? Promise.resolve();
+  }
+
+  /** `BattleStage.planArrivalOwed`. */
+  planArrivalOwed(): boolean {
+    return this.opts.arrivalOwed?.() === true;
+  }
+
   /** For the debug snapshot and the tests: who is held and who is playing which entrance. */
   entranceSnapshot(): ReturnType<StageEntrances['snapshot']> {
     return this.entrances?.snapshot() ?? { held: [], playing: [] };
@@ -797,6 +826,7 @@ export class PaintedStage implements BattleStage {
     this.entrances?.forget(id);
     this.pyreflies.leave(id);
     disposeFootOcclusion(staged.actor.shadow);
+    unregisterRigUse(id);
     this.partRings.remove(id);
     staged.actor.dispose();
   }

@@ -25,7 +25,7 @@ import { RETIRED_MUSIC_CUES, TRACKS, getTrack, hasTrack, isRetiredMusic, isStand
 import { getChapterMeta } from '../../src/data/chapter-meta.ts';
 import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS, type Chapter } from '../../src/data/encounters.ts';
 import { AUDIO_BUDGET_BYTES, externalSource } from '../../tools/audio/manifest-io.mjs';
-import { batch2, batch2Added, batch2Replaced, batch2Retired } from './helpers/musicBatch2.ts';
+import { alternates395Bytes, batch2, batch2Added, batch2Replaced, batch2Retired } from './helpers/musicBatch2.ts';
 
 const REPO = join(__dirname, '..', '..'); // jsdom: import.meta.url is not a file URL here
 const text = (p: string) => readFileSync(join(REPO, p), 'utf8');
@@ -127,7 +127,8 @@ describe('batch 2 (2026-10-12): the record and the files', () => {
     }
     for (const r of batch2.retired) moved -= r.bytes;
     expect(batch2.totals.musicBytesAfter - batch2.totals.musicBytesBefore).toBe(moved);
-    expect(Object.values(manifest.music).reduce((sum, e) => sum + e.bytes, 0)).toBe(batch2.totals.musicBytesAfter);
+    // plus release 39.5's two chapter-select alternates, which were ported on after this batch was measured and replace no file
+    expect(Object.values(manifest.music).reduce((sum, e) => sum + e.bytes, 0)).toBe(batch2.totals.musicBytesAfter + alternates395Bytes);
   });
 
   it('leaves what Bailey chose by ear alone (58d): Chapter I\'s boss-seymour and the chapter-select board are not in the record', () => {

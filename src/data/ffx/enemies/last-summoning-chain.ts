@@ -34,7 +34,7 @@ import {
 
 /** Every aeon given up so far, locked with its reason. The mirror is the enemy the lock is about: Yu Yevon, who holds them. */
 function locksFor(taken: readonly OfferingKey[]): NonNullable<EnemyGroupDef['lockedAeons']> {
-  return taken.flatMap((key) => aeonIdsOf(key).map((aeonId) => ({ aeonId, mirrorOf: 'yu-yevon', reason: TAKEN_REASON })));
+  return taken.flatMap((key) => aeonIdsOf(key).map((aeonId) => ({ aeonId, mirrorOf: 'yu-yevon', reason: TAKEN_REASON, removed: true as const }))); // `removed`: the event took it out of the party; `MENU_DRAW_PARITY` draws no row for it
 }
 
 /** The Sensor's lines for the three Sisters (ours; each says what her script does: `research/re-ffx-last-summoning.md` section 6.2). The record's `sensorTexts` (`../../chapter-last-summoning.ts`) carries the same words. */
@@ -87,13 +87,15 @@ export function possessionGroup(order: readonly OfferingKey[]): EnemyGroupDef {
 
 /** Yu Yevon's formation after the whole of `order`: Chapter III's, a copy, with all eight aeons locked. */
 export function yuYevonLink(order: readonly OfferingKey[]): EnemyGroupDef {
-  const copy = cloneData(yuYevonGroup);
+  const { rosterRemoved: _chapterIII, ...copy } = cloneData(yuYevonGroup); // Chapter III's roster field is its own (`CH3_ROSTER_REMOVAL`); this chain locks with `lockedAeons`
+  void _chapterIII;
   return { ...copy, id: yuYevonGroupId(order), lockedAeons: locksFor(order), chainLength: FULL_CHAIN_LENGTH };
 }
 
 /** The placeholder first formation: Yu Yevon staged behind the first offering, replaced by the pick before anything is fought. */
 export function openerGroup(): EnemyGroupDef {
-  const copy = cloneData(yuYevonGroup);
+  const { rosterRemoved: _chapterIII, ...copy } = cloneData(yuYevonGroup);
+  void _chapterIII;
   return { ...copy, id: OPENER_GROUP_ID, nextGroupId: OFFERING_NEXT_ID, offersAeons: 'open', lockedAeons: [], chainLength: FULL_CHAIN_LENGTH };
 }
 

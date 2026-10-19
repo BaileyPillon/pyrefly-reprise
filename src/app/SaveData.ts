@@ -14,6 +14,7 @@ import { ACCESS_DEFAULTS, type ColourVision } from './saveAccess.ts';
 import { applyComfort } from './applyComfort.ts';
 import { writeMerged } from './saveMerge.ts';
 import { migrateSfxBalance, SFX_DEFAULT_VOLUME } from './saveSfxBalance.ts';
+import { DEFAULT_CHAPTER_SELECT_MUSIC, DEFAULT_TITLE_ART, migrateFrontend, type ChapterSelectMusic, type TitleArt } from './saveFrontend.ts';
 
 export const SAVE_VERSION = 1;
 export const SAVE_KEY = 'pyrefly-reprise:save:v1';
@@ -62,6 +63,10 @@ export interface Settings extends FxLookSettings, FxPartSettings {
   musicVolume: number;
   sfxVolume: number;
   sfxBalanceMigrated?: boolean; // set once D-293's one-time migration ran (`saveSfxBalance.ts`); absent = older
+  /** VOICE-OVER: the recorded lines in the dialogue box (FFX chapters, Tidus / Yuna / Auron today). Defaults ON; off, or a VOICE level of 0, is text only. A save older than the setting reads ON. */
+  voiceOn: boolean;
+  /** VOICE level, 0..1 (the voice bus; stepped like the other sliders). */
+  voiceVolume: number;
   /** Battle message speed multiplier; 1 = normal. */
   textSpeed: number;
   /** Skip cutscenes already seen. */
@@ -166,6 +171,17 @@ export interface Settings extends FxLookSettings, FxPartSettings {
    * be coached on his own game.
    */
   battleHelp: boolean;
+  /**
+   * Which title screen is drawn: `'farplane'` (today's Gullwings painting, the default) or `'echo'` (Yuna in still
+   * water, with its own painted lettering, so the HTML "Echoes of Spira" is left out). A list, so a third can be
+   * added. Absent before release 39.5: reads `'farplane'` (`saveFrontend.ts`; Bailey, 2026-10-07).
+   */
+  titleArt: TitleArt;
+  /**
+   * Which chapter-select track plays on the board: `'b'` (the default), `'a'` or `'c'`, the three ElevenLabs takes
+   * Bailey heard (`chapter-select`, `chapter-select-a`, `chapter-select-c`). Absent before release 39.5: reads `'b'`.
+   */
+  chapterSelectMusic: ChapterSelectMusic;
 }
 
 export interface SaveData {
@@ -194,6 +210,7 @@ export function defaultSettings(): Settings {
     masterVolume: 0.8,
     musicVolume: 0.7,
     sfxVolume: SFX_DEFAULT_VOLUME, sfxBalanceMigrated: true, // D-293 (refines D-210): balance b, 0.35 +6 dB
+    voiceOn: true, voiceVolume: 0.9, // the recorded voice-over defaults ON (Bailey, 2026-10-07)
     textSpeed: 1,
     skipSeenCutscenes: false,
     lowEffects: false, ...defaultFxLooks(), ...defaultFxParts(), // eye-candy D's looks and D-317's parts, all ON
@@ -206,6 +223,8 @@ export function defaultSettings(): Settings {
     ffx2AtbMigrated: true,
     pausePanelsHidden: false,
     battleHelp: true,
+    titleArt: DEFAULT_TITLE_ART, // 39.5: today's painting stays the default
+    chapterSelectMusic: DEFAULT_CHAPTER_SELECT_MUSIC, // 39.5: "B as the default"
     reduceMotion:
       typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&
@@ -279,9 +298,12 @@ export function migrate(raw: Partial<SaveData> & { version?: number }): SaveData
   const settings: Settings = { ...base.settings, ...(raw.settings ?? {}) };
   if (!hadCoach && veteran) settings.battleHelp = false;
   if (typeof settings.battleHelp !== 'boolean') settings.battleHelp = base.settings.battleHelp;
+  if (typeof settings.voiceOn !== 'boolean') settings.voiceOn = base.settings.voiceOn; // VOICE-OVER: a save older than the setting, or a malformed one, reads ON
+  if (typeof settings.voiceVolume !== 'number' || !Number.isFinite(settings.voiceVolume)) settings.voiceVolume = base.settings.voiceVolume;
   migrateComfort(settings, base.settings, raw.settings); // + D-317: a missing part takes its look's value
   migrateFfx2Atb(settings, raw.settings);
   migrateSfxBalance(settings, raw.settings); // D-293: an untouched 0.35 follows the new default, once
+  migrateFrontend(settings); // 39.5: a title screen or a chapter-select track that is not on the list reads as the default
   const out: SaveData = {
     ...base,
     ...raw,

@@ -1,0 +1,404 @@
+{
+ "mode": "gpu",
+ "base": "http://127.0.0.1:5634/",
+ "runs": [
+  {
+   "label": "desktop-ffx",
+   "width": 1600,
+   "height": 900,
+   "mobile": false,
+   "chapter": "seymour-flux",
+   "shots": [
+    "docs/screenshots/r395-port/title-farplane-1600x900.jpg",
+    "docs/screenshots/r395-port/options-list-seymour-flux-1600x900.jpg",
+    "docs/screenshots/r395-port/presentation-page-seymour-flux-1600x900-default.jpg",
+    "docs/screenshots/r395-port/presentation-page-seymour-flux-1600x900-stepped.jpg",
+    "docs/screenshots/r395-port/options-list-after-seymour-flux-1600x900.jpg",
+    "docs/screenshots/r395-port/title-echo-1600x900.jpg",
+    "docs/screenshots/r395-port/title-echo-changelog-1600x900.jpg"
+   ],
+   "titleDefault": {
+    "echoClass": false,
+    "htmlWordmark": 2,
+    "images": [
+     {
+      "src": "title/keyart.png",
+      "done": true
+     },
+     {
+      "src": "title/keyart.png",
+      "done": true
+     }
+    ],
+    "alt": "",
+    "buildChip": "34166782"
+   },
+   "optionRows": [
+    "masterVolume=80",
+    "musicVolume=70",
+    "sfxVolume=70",
+    "voiceVolume=90",
+    "voiceOn=ON",
+    "textSpeed=1x",
+    "eyeCandy=ALL ON",
+    "guideVisible=ON",
+    "battleHelp=ON",
+    "presentation=FARPLANE · B"
+   ],
+   "pageDefault": {
+    "titleArt": "FARPLANE",
+    "chapterSelectMusic": "B  PIANO"
+   },
+   "pageStepped": {
+    "titleArt": "THE ECHO",
+    "chapterSelectMusic": "A  WALTZ"
+   },
+   "stored": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "a"
+   },
+   "titleEcho": {
+    "echoClass": true,
+    "htmlWordmark": 0,
+    "images": [
+     {
+      "src": "title/echo.png",
+      "done": true
+     }
+    ],
+    "alt": "Echoes of Spira",
+    "buildChip": "34166782"
+   },
+   "changelogPanelOpen": true
+  },
+  {
+   "label": "phone-ffx",
+   "width": 390,
+   "height": 844,
+   "mobile": true,
+   "chapter": "seymour-flux",
+   "shots": [
+    "docs/screenshots/r395-port/title-farplane-390x844.jpg",
+    "docs/screenshots/r395-port/options-list-seymour-flux-390x844.jpg",
+    "docs/screenshots/r395-port/presentation-page-seymour-flux-390x844-default.jpg",
+    "docs/screenshots/r395-port/presentation-page-seymour-flux-390x844-stepped.jpg",
+    "docs/screenshots/r395-port/options-list-after-seymour-flux-390x844.jpg",
+    "docs/screenshots/r395-port/title-echo-390x844.jpg",
+    "docs/screenshots/r395-port/title-echo-changelog-390x844.jpg"
+   ],
+   "titleDefault": {
+    "echoClass": false,
+    "htmlWordmark": 2,
+    "images": [
+     {
+      "src": "title/keyart.png",
+      "done": true
+     },
+     {
+      "src": "title/keyart.png",
+      "done": true
+     }
+    ],
+    "alt": "",
+    "buildChip": "34166782"
+   },
+   "optionRows": [
+    "masterVolume=80",
+    "musicVolume=70",
+    "sfxVolume=70",
+    "voiceVolume=90",
+    "voiceOn=ON",
+    "textSpeed=1x",
+    "eyeCandy=ALL ON",
+    "guideVisible=ON",
+    "battleHelp=ON",
+    "presentation=FARPLANE · B"
+   ],
+   "pageDefault": {
+    "titleArt": "FARPLANE",
+    "chapterSelectMusic": "B  PIANO"
+   },
+   "pageStepped": {
+    "titleArt": "THE ECHO",
+    "chapterSelectMusic": "A  WALTZ"
+   },
+   "stored": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "a"
+   },
+   "titleEcho": {
+    "echoClass": true,
+    "htmlWordmark": 0,
+    "images": [
+     {
+      "src": "title/echo.png",
+      "done": true
+     }
+    ],
+    "alt": "Echoes of Spira",
+    "buildChip": "34166782"
+   },
+   "changelogPanelOpen": true
+  },
+  {
+   "label": "desktop-ffx2",
+   "width": 1600,
+   "height": 900,
+   "mobile": false,
+   "chapter": "ffx2-bahamut",
+   "shots": [
+    "docs/screenshots/r395-port/options-list-ffx2-bahamut-1600x900.jpg",
+    "docs/screenshots/r395-port/presentation-page-ffx2-bahamut-1600x900-default.jpg",
+    "docs/screenshots/r395-port/presentation-page-ffx2-bahamut-1600x900-stepped.jpg",
+    "docs/screenshots/r395-port/options-list-after-ffx2-bahamut-1600x900.jpg"
+   ],
+   "titleDefault": {
+    "echoClass": false,
+    "htmlWordmark": 2,
+    "images": [
+     {
+      "src": "title/keyart.png",
+      "done": true
+     },
+     {
+      "src": "title/keyart.png",
+      "done": true
+     }
+    ],
+    "alt": "",
+    "buildChip": "34166782"
+   },
+   "optionRows": [
+    "masterVolume=80",
+    "musicVolume=70",
+    "sfxVolume=70",
+    "textSpeed=1x",
+    "eyeCandy=ALL ON",
+    "ffx2Atb=WAIT",
+    "ffx2AtbSpeed=NORMAL",
+    "guideVisible=ON",
+    "battleHelp=ON",
+    "presentation=FARPLANE · B"
+   ],
+   "pageDefault": {
+    "titleArt": "FARPLANE",
+    "chapterSelectMusic": "B  PIANO"
+   },
+   "pageStepped": {
+    "titleArt": "THE ECHO",
+    "chapterSelectMusic": "A  WALTZ"
+   },
+   "stored": {
+    "titleArt": "echo",
+    "chapterSelectMusic": "a"
+   }
+  }
+ ],
+ "console": [],
+ "pageErrors": [],
+ "failedRequests": [],
+ "checks": [
+  {
+   "name": "desktop-ffx: default title is Farplane (no .fe-title--echo, HTML wordmark drawn, keyart plate)",
+   "ok": true,
+   "detail": "{\"echoClass\":false,\"htmlWordmark\":2,\"images\":[{\"src\":\"title/keyart.png\",\"done\":true},{\"src\":\"title/keyart.png\",\"done\":true}],\"alt\":\"\",\"buildChip\":\"34166782\"}"
+  },
+  {
+   "name": "desktop-ffx: Enter on the title reaches chapter select",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx: seymour-flux reaches party prep",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx: the opening scene plays",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx: Esc opens the pause",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx: reached the OPTIONS tab by E",
+   "ok": true,
+   "detail": "options"
+  },
+  {
+   "name": "desktop-ffx: the OPTIONS list ends in PRESENTATION and has neither old row",
+   "ok": true,
+   "detail": "masterVolume=80 | musicVolume=70 | sfxVolume=70 | voiceVolume=90 | voiceOn=ON | textSpeed=1x | eyeCandy=ALL ON | guideVisible=ON | battleHelp=ON | presentation=FARPLANE · B"
+  },
+  {
+   "name": "desktop-ffx: Down reaches the PRESENTATION row",
+   "ok": true,
+   "detail": "presentation"
+  },
+  {
+   "name": "desktop-ffx: Enter opens the PRESENTATION page",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx: Right on TITLE SCREEN steps to THE ECHO",
+   "ok": true,
+   "detail": "THE ECHO"
+  },
+  {
+   "name": "desktop-ffx: Right on CHAPTER MUSIC steps to A",
+   "ok": true,
+   "detail": "A  WALTZ"
+  },
+  {
+   "name": "desktop-ffx: the choices are written to the save's settings",
+   "ok": true,
+   "detail": "{\"titleArt\":\"echo\",\"chapterSelectMusic\":\"a\"}"
+  },
+  {
+   "name": "desktop-ffx: Esc goes back to the row, which reads the new values",
+   "ok": true,
+   "detail": "{\"page\":false,\"sel\":\"presentation\",\"value\":\"THE ECHO · A\"}"
+  },
+  {
+   "name": "desktop-ffx: after the choice, the title is The Echo (.fe-title--echo, no HTML wordmark, echo plate, alt text carries the words)",
+   "ok": true,
+   "detail": "{\"echoClass\":true,\"htmlWordmark\":0,\"images\":[{\"src\":\"title/echo.png\",\"done\":true}],\"alt\":\"Echoes of Spira\",\"buildChip\":\"34166782\"}"
+  },
+  {
+   "name": "desktop-ffx: L opens the CHANGELOG panel",
+   "ok": true
+  },
+  {
+   "name": "phone-ffx: default title is Farplane (no .fe-title--echo, HTML wordmark drawn, keyart plate)",
+   "ok": true,
+   "detail": "{\"echoClass\":false,\"htmlWordmark\":2,\"images\":[{\"src\":\"title/keyart.png\",\"done\":true},{\"src\":\"title/keyart.png\",\"done\":true}],\"alt\":\"\",\"buildChip\":\"34166782\"}"
+  },
+  {
+   "name": "phone-ffx: Enter on the title reaches chapter select",
+   "ok": true
+  },
+  {
+   "name": "phone-ffx: seymour-flux reaches party prep",
+   "ok": true
+  },
+  {
+   "name": "phone-ffx: the opening scene plays",
+   "ok": true
+  },
+  {
+   "name": "phone-ffx: Esc opens the pause",
+   "ok": true
+  },
+  {
+   "name": "phone-ffx: reached the OPTIONS tab by E",
+   "ok": true,
+   "detail": "options"
+  },
+  {
+   "name": "phone-ffx: the OPTIONS list ends in PRESENTATION and has neither old row",
+   "ok": true,
+   "detail": "masterVolume=80 | musicVolume=70 | sfxVolume=70 | voiceVolume=90 | voiceOn=ON | textSpeed=1x | eyeCandy=ALL ON | guideVisible=ON | battleHelp=ON | presentation=FARPLANE · B"
+  },
+  {
+   "name": "phone-ffx: Down reaches the PRESENTATION row",
+   "ok": true,
+   "detail": "presentation"
+  },
+  {
+   "name": "phone-ffx: Enter opens the PRESENTATION page",
+   "ok": true
+  },
+  {
+   "name": "phone-ffx: Right on TITLE SCREEN steps to THE ECHO",
+   "ok": true,
+   "detail": "THE ECHO"
+  },
+  {
+   "name": "phone-ffx: Right on CHAPTER MUSIC steps to A",
+   "ok": true,
+   "detail": "A  WALTZ"
+  },
+  {
+   "name": "phone-ffx: the choices are written to the save's settings",
+   "ok": true,
+   "detail": "{\"titleArt\":\"echo\",\"chapterSelectMusic\":\"a\"}"
+  },
+  {
+   "name": "phone-ffx: Esc goes back to the row, which reads the new values",
+   "ok": true,
+   "detail": "{\"page\":false,\"sel\":\"presentation\",\"value\":\"THE ECHO · A\"}"
+  },
+  {
+   "name": "phone-ffx: after the choice, the title is The Echo (.fe-title--echo, no HTML wordmark, echo plate, alt text carries the words)",
+   "ok": true,
+   "detail": "{\"echoClass\":true,\"htmlWordmark\":0,\"images\":[{\"src\":\"title/echo.png\",\"done\":true}],\"alt\":\"Echoes of Spira\",\"buildChip\":\"34166782\"}"
+  },
+  {
+   "name": "phone-ffx: L opens the CHANGELOG panel",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx2: default title is Farplane (no .fe-title--echo, HTML wordmark drawn, keyart plate)",
+   "ok": true,
+   "detail": "{\"echoClass\":false,\"htmlWordmark\":2,\"images\":[{\"src\":\"title/keyart.png\",\"done\":true},{\"src\":\"title/keyart.png\",\"done\":true}],\"alt\":\"\",\"buildChip\":\"34166782\"}"
+  },
+  {
+   "name": "desktop-ffx2: Enter on the title reaches chapter select",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx2: ffx2-bahamut reaches party prep",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx2: the opening scene plays",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx2: Esc opens the pause",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx2: reached the OPTIONS tab by E",
+   "ok": true,
+   "detail": "options"
+  },
+  {
+   "name": "desktop-ffx2: the OPTIONS list ends in PRESENTATION and has neither old row",
+   "ok": true,
+   "detail": "masterVolume=80 | musicVolume=70 | sfxVolume=70 | textSpeed=1x | eyeCandy=ALL ON | ffx2Atb=WAIT | ffx2AtbSpeed=NORMAL | guideVisible=ON | battleHelp=ON | presentation=FARPLANE · B"
+  },
+  {
+   "name": "desktop-ffx2: Down reaches the PRESENTATION row",
+   "ok": true,
+   "detail": "presentation"
+  },
+  {
+   "name": "desktop-ffx2: Enter opens the PRESENTATION page",
+   "ok": true
+  },
+  {
+   "name": "desktop-ffx2: Right on TITLE SCREEN steps to THE ECHO",
+   "ok": true,
+   "detail": "THE ECHO"
+  },
+  {
+   "name": "desktop-ffx2: Right on CHAPTER MUSIC steps to A",
+   "ok": true,
+   "detail": "A  WALTZ"
+  },
+  {
+   "name": "desktop-ffx2: the choices are written to the save's settings",
+   "ok": true,
+   "detail": "{\"titleArt\":\"echo\",\"chapterSelectMusic\":\"a\"}"
+  },
+  {
+   "name": "desktop-ffx2: Esc goes back to the row, which reads the new values",
+   "ok": true,
+   "detail": "{\"page\":false,\"sel\":\"presentation\",\"value\":\"THE ECHO · A\"}"
+  }
+ ],
+ "summary": {
+  "passed": 43,
+  "failed": 0
+ }
+}

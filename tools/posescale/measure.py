@@ -4,7 +4,7 @@
     python -s tools/posescale/measure.py tiles tidus [yuna ...] [--poses a,b] --out DIR   the review sheets (ruler tiles, 6 poses each)
     python -s tools/posescale/measure.py pairs yuna-gunner [...] [--poses ready] --out DIR   idle beside each pose at the current scale (a quick same-size check)
     python -s tools/posescale/measure.py measure tidus [yuna ...] [--out DIR] [--write]   the table; --write merges docs/target/pose-measure.json
-    python -s tools/posescale/measure.py table [--no-stamp]                                records -> src/data/art/poseRegistration*.ts, then each row's status and sha by tools/posescale/pose-stamp.mjs (scale, stance, feet row, upright and, since r394, each pose's head box as fractions of its painting: src/engine/HeadLock.ts holds it to the idle's size on screen under any stage camera)
+    python -s tools/posescale/measure.py table [--no-stamp] [--no-ruler]                   records -> the W3 sizing rule (tools/posescale/pose-ruler.mjs: each standing pose is sized by the geometric mean of its head and height scales, written back into the records as `ruled`/`held`) -> src/data/art/poseRegistration*.ts, then each row's status and sha by tools/posescale/pose-stamp.mjs (scale, stance, feet row, upright and, since r394, each pose's head box as fractions of its painting: src/engine/HeadLock.ts holds it to the idle's size on screen under any stage camera)
 
 The head. The reference is the idle's head box (`head` in subjects.json: the hair or headgear mass and the face, hair top to
 chin, outer side to side, thin tassels and hairpins left out), read off the painting by eye. A pose's head is judged against
@@ -16,6 +16,11 @@ draws the normalised sheet (every head at its recorded scale in the idle's recta
 
 A reading within half a percent of the scale the pose already has (its sidecar's, or the KO table's) is that same scale: it is recorded (`reading`)
 and not applied (`scaleSrc: noise`); any other replaces the pose's scale (`reviewed`). (Until r391 the band was 8 percent.)
+
+The size a standing pose is DRAWN at is not its reading. Since the W3 sizing rule (2026-10-17, the release driver's pick 89e) `table` sizes each standing pose by the geometric mean of its head scale
+(this reading) and its height scale (the scale at which its stature is 1.0), lifted to the stature floor where it falls under it (tools/posescale/pose-ruler.mjs): the reading stays the head ruler, `ruled`
+records the rule's numbers, `held` the head cost where the stature is lifted or the head leaves 0.85 to 1.15. The r50.1 stature holds and the D-298 stature gate (overrides.json `stature`, `gateLift`)
+are that rule's special cases and are gone.
 
 The stance. The middle of the support under the figure (every opaque pixel in the 4 percent of its height above the lowest thick row, thin
 soles included, outliers trimmed): automatic, shown on the stance sheet, with a hand `stance` in overrides.json when a weapon's tip is lower than the boots.
@@ -57,13 +62,10 @@ KO_PROJECTION = 0.978
 # x0.967 to 0.970 of their idle's head; x0.986 to 0.996 in the far cameras). The record keeps the head box and the reading as they are (what the painting is), `allow` rides beside them, and the table
 # multiplies it in: the head on screen is the idle's to within the tolerance in every chapter measured, not at one camera. It is not a way to pass a check: pose-scale-check.mjs wants the reason and a
 # factor within 10 percent, and no factor is written for a KO, whose head against the standing one spreads wider than the tolerance between stages (Yuna: x0.972 in Chapter I, x1.033 in Chapter XVII). r394 (D-510): the engine now holds the head on screen instead (src/engine/HeadLock.ts, from the head boxes this script emits), so a KO needs no allowance and the ones written here are starting points the lock moves off.
-# poses-0930's stature gate (D-298): a bent, hunched, kneeling or lunging pose may not be drawn smaller than this fraction of the idle's height, whatever its head says
-STATURE_GATE = 0.60
-# r50.1 (Bailey, 2026-10-16: "lulu looks tiny when hurt - this problem again? ugh"): a STATURE HOLD (overrides.json `stature` {floor, ceiling, by}) draws a pose at no less than `floor` and no more than `ceiling` of its idle's
-# height, whatever its head says. The head-matched reading (reviews.json) keeps the head the idle's and lets a painting whose proportions differ from the idle's (Lulu's hurt and critical are squat, big-headed paintings of
-# a slender idle) come out at two thirds of her height; a hold trades that for a head bigger (or smaller) than the idle's by `held.headRatio`. The record keeps the ruler's reading (`reading`, `held.reading`) and says what the
-# hold cost (`held.headRatio`); the pose's `head` box is the one the engine's head lock must hold at the APPLIED scale (the idle's head box over the applied scale), so the lock, the table and `pose-scale-check.mjs` agree
-# and the lock does not undo the hold. A KO or any other lying pose is never held (its length against the idle's height is a different question, docs/handoff/r50-1.md).
+# W3 (pose continuity, 2026-10-17; both games): the SIZING RULE replaced two earlier mechanisms that each chose one length to match. poses-0930's stature gate (D-298: no bent pose below 0.60 of the idle's
+# height, overrides.json `gateLift`) and r50.1's stature holds (Bailey, 2026-10-16, "lulu looks tiny when hurt - this problem again? ugh": nine FFX poses held to 0.90 to 1.10, 0.75 for the low-HP slouch,
+# overrides.json `stature`) are the rule's special cases: tools/posescale/pose-ruler.mjs sizes every standing pose by the geometric mean of its head scale (the reading below) and its height scale, lifts a
+# stature under the floor to it (a recorded hold: `held`, the head cost), and writes the result back into the records as `ruled`. `table` runs it; see its header.
 # r50.2 (pose continuity, 2026-10-17; both games, the repair is FFX-2 only): the FEET-ROW GUARD. A registered `feetRow` plants the figure on that row instead of its alpha baseline (the row of the soles), which is right
 # only where a weapon's tip, a tail or a staff hangs below the boots. A `feetRow` more than this fraction of the PAINTING's height above the alpha baseline plants the figure at the knees and the game draws it a third too
 # short (five FFX-2 Lady Luck rows: Paine hurt, follow and both overdrive reels, Rikku attack, drawn at 0.43 to 0.49 of their idle's height). Cause: the "opened harder" silhouette (the stance block below) deleted the thin boots of
@@ -279,33 +281,7 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             scale, src = float(proposals_cache[pose]["scale"]), "accepted"
         else:
             scale, src = None, "unreviewed"
-        if src == "reviewed" and scale and not p.prone:
-            idle_h = idle_box[3] - idle_box[1]
-            ph = p.bbox[3] - p.bbox[1]
-            stature = ph * scale / idle_h
-            if stature < STATURE_GATE and o.get("gateLift"):
-                # r391: Bailey lifted the D-298 floor for exactly the poses that name it here (overrides.json `gateLift`, with his words): the head-matched reading stands
-                rec["gateLifted"] = {"reading": round(scale, 3), "stature": round(stature, 3), "by": o["gateLift"]}
-            elif stature < STATURE_GATE:
-                smin = math.ceil(STATURE_GATE * idle_h / ph * 1000) / 1000  # r391: to the thousandth (it was the hundredth, which left a gated head up to 1.5 percent further off than it had to be)
-                rec["gate"] = {"reading": round(scale, 3), "stature": round(ph * smin / idle_h, 3)}
-                scale, src = smin, "gated"
-        hold = o.get("stature")
-        if hold and scale and not p.prone and src != "unreviewed":
-            idle_h = idle_box[3] - idle_box[1]
-            ph = p.bbox[3] - p.bbox[1]
-            was = ph * scale / idle_h
-            lo, hi = hold.get("floor"), hold.get("ceiling")
-            new = None
-            if lo and was < lo:
-                new = math.ceil(lo * idle_h / ph * 1000) / 1000
-            elif hi and was > hi:
-                new = math.floor(hi * idle_h / ph * 1000) / 1000
-            if new is not None and abs(new / scale - 1) > 1e-9:
-                if not hold.get("by"):
-                    raise SystemExit(f"{subject}/{pose}: a stature hold needs `by` (whose word it is)")
-                rec["held"] = {"reading": round(scale, 3), "readingStature": round(was, 3), "stature": round(ph * new / idle_h, 3), "headRatio": round(new / scale, 3), "by": hold["by"]}
-                scale, src = new, "held"
+        # the stature gate (D-298) and the stature holds (r50.1) are gone: the W3 sizing rule (pose-ruler.mjs, run by `table`) sizes the pose from this reading and its height
         if scale and not p.prone:
             rec["stature"] = round((p.bbox[3] - p.bbox[1]) * scale / (idle_box[3] - idle_box[1]), 3)
         rec["scale"], rec["scaleSrc"] = (round(scale, 3) if scale else None), src
@@ -386,11 +362,8 @@ def run_stamp() -> None:
         raise SystemExit("pose-stamp.mjs failed: the tables were written without a status; fix the line above and run `node tools/posescale/pose-stamp.mjs`")
 
 
-def cmd_table(stamp: bool = True) -> None:
-    """docs/target/pose-measure.json -> the three generated tables the engine reads (src/data/art/poseRegistration*.ts), then the stamp (run_stamp)."""
-    rec = L.load_json(L.RECORDS_JSON, None)
-    if not rec:
-        raise SystemExit("no records yet")
+def build_rows(rec: dict) -> dict:
+    """The registration rows of every subject, by table group (Ffx, Ffx2, Foes), from the records. Reads nothing but `rec`."""
     groups: dict = {"Ffx": {}, "Ffx2": {}, "Foes": {}}
     for subject, sub in sorted(rec["subjects"].items()):
         game = sub.get("game") or "ffx"
@@ -410,7 +383,7 @@ def cmd_table(stamp: bool = True) -> None:
             allow = (r.get("allow") or {}).get("scale", 1.0)  # r392: the camera allowance, a factor on the applied scale
             if ko_like and r.get("scale"):
                 row["scale"] = round(r["scale"] / rec.get("koProjection", 1.0) * allow, 3)  # a KO's head is drawn smaller by its lying plane: see KO_PROJECTION
-            elif pose != "idle" and r.get("scale") and (r.get("scaleSrc") in ("reviewed", "accepted", "gated", "held") or allow != 1.0):
+            elif pose != "idle" and r.get("scale") and (r.get("scaleSrc") in ("reviewed", "accepted", "gated", "held", "ruled") or allow != 1.0):
                 row["scale"] = round(r["scale"] * allow, 3)
             st = r.get("stance")
             if st and st.get("flag"):
@@ -433,6 +406,49 @@ def cmd_table(stamp: bool = True) -> None:
                 rows[pose] = row
         if rows:
             groups[grp][subject] = rows
+    return groups
+
+
+def run_ruler(rec: dict, groups: dict) -> bool:
+    """The W3 sizing rule (2026-10-17; tools/posescale/pose-ruler.mjs): size each standing pose by the geometric mean of its head scale (`reading`) and its height scale, lift a stature under the floor to it,
+    and write the result back into the records (`scale`, `scaleSrc` ruled|held, `ruled`, `held`, the virtual `head` box). The rule reads the painting's pixels and the rows just built (`feetRow` and `stanceX` do
+    not depend on the scale), and returns patches; this applies them and saves the records when anything changed. True when the records changed (the rows are then built again)."""
+    import tempfile
+
+    node = os.environ.get("NODE") or shutil.which("node") or "node"
+    flat = {subject: rows for subs in groups.values() for subject, rows in subs.items()}
+    with tempfile.TemporaryDirectory(prefix="pose-ruler-") as tmp:
+        rows_path, out_path = pathlib.Path(tmp) / "rows.json", pathlib.Path(tmp) / "patches.json"
+        rows_path.write_text(json.dumps(flat), encoding="utf8")
+        r = subprocess.run([node, str(HERE / "pose-ruler.mjs"), "--rows", str(rows_path), "--out", str(out_path)], cwd=str(L.REPO), env=dict(os.environ))
+        if r.returncode != 0 or not out_path.exists():
+            raise SystemExit("pose-ruler.mjs failed: the tables were not written; fix the line above and run `node tools/posescale/pose-ruler.mjs`")
+        patches = json.loads(out_path.read_text(encoding="utf8"))["patches"]
+    changed = 0
+    for subject, poses in patches.items():
+        for pose, patch in poses.items():
+            target = rec["subjects"][subject]["poses"][pose]
+            before = json.dumps(target, sort_keys=True)
+            for key, value in patch.items():
+                if value is None:
+                    target.pop(key, None)
+                else:
+                    target[key] = value
+            changed += json.dumps(target, sort_keys=True) != before
+    if changed:
+        L.RECORDS_JSON.write_text(json.dumps(rec, indent=1, sort_keys=True) + "\n", encoding="utf8")
+    print(f"pose-ruler: {sum(len(p) for p in patches.values())} poses ruled, {changed} record(s) changed")
+    return bool(changed)
+
+
+def cmd_table(stamp: bool = True, ruler: bool = True) -> None:
+    """docs/target/pose-measure.json -> the sizing rule (run_ruler) -> the three generated tables the engine reads (src/data/art/poseRegistration*.ts), then the stamp (run_stamp)."""
+    rec = L.load_json(L.RECORDS_JSON, None)
+    if not rec:
+        raise SystemExit("no records yet")
+    groups = build_rows(rec)
+    if ruler and run_ruler(rec, groups):
+        groups = build_rows(rec)
     for grp, subs in groups.items():
         lines = [
             "import type { PoseRegistrationTable } from './poseRegistrationTypes.ts';",
@@ -464,9 +480,10 @@ def main() -> None:
     ap.add_argument("--out")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--no-stamp", action="store_true", help="table: skip the status stamp (the tables then fail the pose gate)")
+    ap.add_argument("--no-ruler", action="store_true", help="table: skip the W3 sizing rule (the records' scales stand as they are; the tables then differ from what an install writes)")
     a = ap.parse_args()
     if a.cmd == "table":
-        cmd_table(stamp=not a.no_stamp)
+        cmd_table(stamp=not a.no_stamp, ruler=not a.no_ruler)
         return
     subjects = L.load_json(L.SUBJECTS_JSON, {})
     overrides = L.load_json(L.OVERRIDES_JSON, {})

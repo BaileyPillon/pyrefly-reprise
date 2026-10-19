@@ -50,7 +50,7 @@ bookkeeping counters (`blocked`, the result code) the HUD reads. Details in §7.
 row; `ActionRec+0xNN` an offset into the 0xCC-byte queued action. "Attacker" is the user, "target" the defender.
 Stat bytes (STR, DEF, MAG, MDEF, Luck) are read as unsigned bytes; the five stage bytes are read as signed bytes (a
 stage of +3 is a factor of 15/12, of -3 a factor of 9/12). All arithmetic is 32-bit: a product that does not fit
-**wraps** (IMUL keeps the low 32 bits) and every `/` **truncates toward zero** (the shift forms add a bias for negative
+**wraps** (the signed multiply keeps the low 32 bits) and every `/` **truncates toward zero** (the shift forms add a bias for negative
 numbers first). The engine's own integer helpers floor instead.
 
 ## 1. Base damage (0x61b910)
@@ -104,7 +104,7 @@ After the switch, if the command row exists and `Cmd.flags_damage & 0x10`, the r
 Where the variance reaches the result: formulas 0 to 3, 6, 8, 9, 0x10 and 0x14 to 0x17. For 4, 5, 7, 0xa to 0xf, 0x11 to
 0x13 and 0x18 the number is the same at every draw, but the draw still happens. Overflow: the cubic term of formula 0
 reaches 8.9 million at Lv 99 and STR 255, the largest products stay below 2^31 for every in-game input, so the wrap is
-only reachable with out-of-range numbers (the vectors include them and the kernel wraps like IMUL). The only
+only reachable with out-of-range numbers (the vectors include them and the kernel wraps like the game's 32-bit product, low 32 bits kept). The only
 floating-point formula is 0xc. Formulas 0xd and 0x16/0x17 read the 0x80-byte per-character records (base 0xe006c0 live)
 whose +0x40 and +0x44 fields are not named yet; the engine's Momentum and Finale rules look like their users, but that
 is a guess (§7).

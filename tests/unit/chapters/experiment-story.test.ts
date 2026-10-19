@@ -249,7 +249,10 @@ describe('the triggers, by running the engine (AGENTS.md rule 3)', () => {
   it('through both acts: the seam fires once, in Act I; the callouts never fire in Act I (the Prototype has neither move)', () => {
     // RC3 (FFX-2 only; reason "game-code parity"): seeds 1, 2 and 3 became 1, 3 and 6 (the first three seeds on which the shipped line wins both acts under
     // the game's gauges; seed 2 loses Act II now, see experiment-engine.test.ts).
-    for (const seed of [1, 3, 6]) {
+    // Re-parity RC9 lane X2-A, slice 1 (FFX-2 only; reason "game-code parity", note FFX2-G01 section 7): the Experiment's flinch is 22 frames (23 steps) and the girls' are their own, so the same seeds
+    // are other fights: seed 1 now loses Act II (it won), seeds 3 and 5 win. Seeds 1, 3 and 6 became 2, 3 and 5, the first three seeds on which the shipped line wins both acts (scanned 1 to 24:
+    // wins on 2, 3, 5, 6, 7, 9, 11, 13, 15, 18, 22). With `CHAIN_WINDOW_PER_BODY` off seeds 1, 3 and 6 win as before.
+    for (const seed of [2, 3, 5]) {
       const r = driveChapterWithTriggers(seed);
       expect(r.outcome, `seed ${seed}`).toBe('victory');
       expect(names(r.logs[0]!), `seed ${seed}`).toEqual([EXPERIMENT_SEAM]);

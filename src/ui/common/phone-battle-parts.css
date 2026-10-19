@@ -349,3 +349,36 @@ html[data-phone-battle] .bstart__skip {
 html[data-phone-battle] .ffx-target__note {
   font-size: 14px;
 }
+
+/* A multi-step command's strip over the Back / Confirm bar (FFX: a Doublecast's "Cast 2 · after 1 Fira › Yu Pagoda A"; read by readFfxPhone). Nothing for a command with no steps. */
+html[data-phone-battle] .phud-step {
+  margin: 0 0 8px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: rgba(11, 10, 18, 0.96);
+  border-left: 3px solid var(--ig-accent);
+  font: 700 14px/1.2 var(--ig-font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ig-paper);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html[data-phone-battle] .phud-step[hidden] {
+  display: none;
+}
+html[data-phone-battle] .phud-step[data-n]:not([data-n=''])::before {
+  content: attr(data-n);
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  background: var(--ig-accent);
+  color: var(--ig-ink);
+  font: 700 14px/1 var(--ig-font-numeral);
+}

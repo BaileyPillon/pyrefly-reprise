@@ -67,7 +67,7 @@ export function elementLadder(target: ElementAffinities, elementMask: number, da
   const half = target.half & 0xff;
   const weak = target.weak & 0xff;
 
-  // Rung 2: weakness. ADD EAX, EAX per shared low bit (wraps), and an immediate return for bit 7.
+  // Rung 2: weakness. The damage is added to itself per shared low bit (a 32-bit sum, wraps), and an immediate return for bit 7.
   let d = damage;
   let anyWeak = false;
   for (const bit of LOW_BITS) {

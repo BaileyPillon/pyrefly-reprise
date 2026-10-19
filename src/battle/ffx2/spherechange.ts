@@ -32,6 +32,7 @@ import {
   waitDownPercent,
   withStatBonus,
 } from './garment-grids.ts';
+import { autoAbilityRows, poolHolds } from './adapt/auto-layer.ts';
 import { autoWordsOf } from './adapt/menu.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { removeStatus } from './statuses.ts';
@@ -58,7 +59,10 @@ export function refreshDerivedStats(unit: Ffx2Unit, deps: SpherechangeDeps): Sta
   // (grid, then accessories). Until 2026-09-25 this dropped them, so crossing a gate cost her the
   // Crystal Bangle's HP for the rest of the battle [combat-core §4.2, §5.4; method check E2].
   // A Stamina Tonic she drank stays doubled on the new pool (`kit.ts`).
-  const stats = withPoolStatuses(withAccessories(withStatBonus(base, gateStatTotal(bonuses)), unit.accessories), unit.statuses);
+  // Double HP and Double MP a grid's crossed gates keep (re-parity RC10 lane XD1b): the game's rebuild merges the new layer into the status word before it recomputes the maxima,
+  // so the maximum doubles in the very change that crosses the gate and the pool rule below scales HP and MP to it.
+  const held = poolHolds(autoAbilityRows(unit, deps.grids));
+  const stats = withPoolStatuses(withAccessories(withStatBonus(base, gateStatTotal(bonuses)), unit.accessories), unit.statuses, held);
 
   // Keep the HP/MP *ratio* across the change: X-2 swaps the pool, not the wound.
   const hpRatio = unit.stats.maxHp > 0 ? unit.hp / unit.stats.maxHp : 1;

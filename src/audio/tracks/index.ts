@@ -139,6 +139,11 @@ const STAND_INS: Record<string, string> = {
   'victory-bahamut': 'pause',
   'defeat-ffx': 'pause',
   'defeat-ffx2': 'scene-farplane',
+  // The two selectable alternates of the chapter-select board (39.5; Bailey, 2026-10-07: "C as a selectable alternate",
+  // "and A as a selectable alternate as well"; both games). Each plays an ElevenLabs take from its own file; with no score
+  // of their own they fall back to the board's composition, which `trackNames()` (COMPOSED only) lists once, not three times.
+  'chapter-select-a': 'chapter-select',
+  'chapter-select-c': 'chapter-select',
 };
 
 /**

@@ -10,10 +10,16 @@ import type { AbilityDef, AvailableCommand, Command, FFXCombatant } from '../com
 import { type Ctx, abilityOf, canSwitchIn, has, isSubmenuMarker, rankOf, tryActor } from './state.ts';
 import { blockedBySilence, mpCostFor } from './abilities.ts';
 import { reachesAtRange, validTargets } from './targeting.ts';
-import { type AimDef, preferredTargetIds } from '../common/aim.ts';
+import { preferredTargetIds } from '../common/aim.ts';
+import { applyCopycatSelf, targetStepFor } from './target-step-parity.ts';
 import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
-import { applyDuelRows, lockReason, summonLabel } from './aeon-duel.ts';
+import { applyDuelRows, lockReason, lockRemoved, summonLabel } from './aeon-duel.ts';
+import { aeonRosterRemoved } from './roster-removal.ts';
+import { defendTakenFrom } from './formation-flags.ts';
+import { GAME_COMMAND, aeonScriptOff, commandOff, greyDisabledRows } from './formation-commands.ts';
+import { greyRow, menuParity, overdriveGaugeFull } from './menu-draw-parity.ts';
+import { aeonSummonable } from './adapt/aeon-party.ts';
 import { triggerHandler } from './ai/index.ts';
 import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
@@ -52,7 +58,10 @@ function markerCommand(def: AbilityDef): Command | null {
  * for a cure, a KO'd one first for a revive (`battle/common/aim.ts`). Both games
  * share the rule; this is FFX's half of it.
  */
-function withAim(ctx: Ctx, user: FFXCombatant, def: AimDef, row: AvailableCommand): AvailableCommand {
+function withAim(ctx: Ctx, user: FFXCombatant, def: AbilityDef, row: AvailableCommand): AvailableCommand {
+  applyCopycatSelf(user, def, row); // `TARGET_STEP_PARITY` item copycat: a self row (a no-op while the switch is off)
+  const step = targetStepFor(ctx, user, def, row); // the game's target step for the row (undefined while the switch is off)
+  if (step) row.targetStep = step;
   if (row.validTargets.length < 2) return row; // nothing to narrow
   const candidates = row.validTargets.flatMap((id) => {
     const c = ctx.state.combatants[id];
@@ -114,6 +123,11 @@ function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: Availabl
  * [ffx-combat-core §4.2].
  */
 export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
+  // A formation that switched commands off (Isaaru's aeon contest; `formation-commands.ts`) leaves the rows of those commands on that actor's menu, greyed with no reason (the game draws them so), whichever way the menu was built.
+  return greyDisabledRows(ctx, user, menuRows(ctx, user));
+}
+
+function menuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
   // The player's Yojimbo and the Magus Sisters have menus of their own (re-parity lane FFX-K, `aeon-commands.ts`); `null` for everyone else.
   const own = aeonMenuRows(ctx, user);
   if (own !== null) return own;
@@ -134,9 +148,12 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     const row = rowFor(ctx, user, def, marker ?? { kind: 'ability', id, targets: [] });
     if (marker?.kind === 'escape' && !ctx.rt.canEscape) {
       row.enabled = false;
-      row.disabledReason = "Can't escape";
+      if (menuParity('blocked')) delete row.disabledReason; // the game draws the blocked Flee row greyed and prints no reason (FFX-G11b section 4)
+      else row.disabledReason = "Can't escape";
     }
     if (marker?.kind === 'trigger') {
+      // Talk exists only in the fights whose formation script adds it (FFX-G11b section 5): elsewhere the row is not in the list at all.
+      if (menuParity('talk') && triggerHandler(marker.id)?.offered?.(ctx, user) === false) continue;
       // An exhausted or ineligible trigger row stays visible and says why —
       // a Talk that waits on the boss's turn is greyed until he has taken it,
       // §1.6 offers a third Talk on purpose, and the Evrae orders belong to
@@ -152,8 +169,10 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     rows.push(row);
   }
 
-  // Overdrives. Silence never blocks one [ffx-combat-core §5.1].
-  if (overdriveReady(user)) {
+  // Overdrives. Silence never blocks one [ffx-combat-core §5.1]. A Cursed actor with a full gauge keeps the rows, greyed (the game's Overdrive key counts the gauge, not Curse; item b of `./menu-draw-parity.ts`).
+  const cursedFull = menuParity('overdrive') && has(user, 'curse') && overdriveGaugeFull(user);
+  const odFrom = rows.length;
+  if (overdriveReady(user) || cursedFull) {
     for (const id of user.overdrive?.unlockedOverdriveIds ?? []) {
       const def = abilityOf(ctx, id);
       if (!def) continue;
@@ -181,6 +200,8 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     }
   }
 
+  if (cursedFull) for (let i = odFrom; i < rows.length; i += 1) rows[i] = greyRow(rows[i]!);
+
   // Summon, Yuna only, rank 3. **Not** blocked by Silence (its record carries no Silence flag: FFX-G07
   // finding 3, re-parity RC7), and never while an aeon is already out.
   // An aeon duel's mirror-locked aeon stays on the list, greyed with its
@@ -191,15 +212,19 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     for (const [key, aeon] of ctx.rt.aeonRoster) {
       // The Magus Sisters are one entry (a build that owns them, re-parity lane FFX-K): Cindy's row stands for the three, locked or not (a locked Sandy or Mindy would be two more greyed rows). Its label is the game's own, "Magus Sisters" (`summonLabel`); `ctx.rt.sisters` is set by Chapter XXVII and the hidden Chapter 28 alike.
       if (ctx.rt.sisters && (key === 'sandy' || key === 'mindy')) continue;
+      if (aeonRosterRemoved(ctx, key) || (menuParity('summon') && lockRemoved(ctx, key))) continue; // the field event took it out of the party: the game's list never holds it, so no row (Chapter III with `CH3_ROSTER_REMOVAL`; the Last Summoning's removed locks with the parity item)
       const locked = lockReason(ctx, key);
-      if (!free.has(aeon.id) && !(locked !== undefined && aeon.hp > 0)) continue;
+      // A possessed copy's script took this aeon away (`SCRIPT_COMMAND_DISABLES`, off): the game's list builder (0x00785410, category 5) never reads the availability byte, so the entry stays and the draw loop (0x008A49B0) greys it, with no reason.
+      const scriptOff = aeonScriptOff(ctx, key) && locked === undefined && aeonSummonable(aeon);
+      // Item c of `./menu-draw-parity.ts`: the list holds every aeon in the battle; a KO'd or recovering one is a greyed row (the class-0 test, 0x0079A080, not the list builder, refuses it).
+      if (!free.has(aeon.id) && !(locked !== undefined && aeon.hp > 0) && !scriptOff && !menuParity('summon')) continue;
       const row: AvailableCommand = {
         command: { kind: 'summon', id: aeon.id, targets: [] },
         label: summonLabel(ctx, key, aeon.name),
         category: 'summon',
         mpCost: 0,
         rank: 3,
-        enabled: locked === undefined, // Summon and Grand Summon carry no Silence flag: a Silenced Yuna can summon (FFX-G07 finding 3, re-parity RC7)
+        enabled: locked === undefined && !scriptOff && (free.has(aeon.id) || !menuParity('summon')), // Summon and Grand Summon carry no Silence flag: a Silenced Yuna can summon (FFX-G07 finding 3, re-parity RC7)
         validTargets: [],
       };
       if (!row.enabled) row.disabledReason = locked;
@@ -240,7 +265,8 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
   }
 
   const defendDef = abilityOf(ctx, DEFEND_ABILITY_ID);
-  if (defendDef) rows.push(rowFor(ctx, user, defendDef, { kind: 'defend', targets: [] }));
+  // A formation that switched Defend off (Isaaru's aeon contest; `formation-flags.ts`) has no Defend row for the party or an aeon.
+  if (defendDef && !defendTakenFrom(ctx, user)) rows.push(rowFor(ctx, user, defendDef, { kind: 'defend', targets: [] }));
 
   // Switch: the incoming member takes the turn happening right now, so the turn
   // is not consumed by the swap [ffx-combat-core §1.7].
@@ -251,7 +277,10 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
   // ever built and four of the seven guardians could never enter a battle.
   // §1.7's rule is that any reserve member may be swapped in; only one who
   // cannot take the handed-over turn — KO'd, petrified, ejected — may not.
-  if (user.side === 'party' && ctx.rt.noSwitch !== true) {
+  // Item d: where a formation forbids Switch the row is drawn greyed with no reason (Sinspawn Gui's second fight, the whole party; Chapter XXV, Kimahri: FFX-G11b table 1), not left out.
+  const switchBlocked = ctx.rt.noSwitch === true || commandOff(ctx, user, GAME_COMMAND.switch);
+  const switchRows = rows.length;
+  if (user.side === 'party' && (ctx.rt.noSwitch !== true || menuParity('blocked'))) {
     for (const id of ctx.state.reserveIds) {
       const bench = tryActor(ctx, id);
       if (!bench || bench.removed === false || has(bench, 'eject')) continue;
@@ -261,11 +290,23 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
         category: 'special',
         mpCost: 0,
         rank: 3,
-        enabled: canSwitchIn(bench),
+        enabled: canSwitchIn(bench) && ctx.rt.noSwitch !== true,
         validTargets: [],
       };
-      if (!row.enabled) row.disabledReason = 'Unable to fight';
+      if (!row.enabled && ctx.rt.noSwitch !== true) row.disabledReason = 'Unable to fight';
       rows.push(row);
+    }
+    // A forbidden Switch with nobody on the bench is still one greyed row (the game's row is in the root list whatever the bench holds).
+    if (menuParity('blocked') && switchBlocked && rows.length === switchRows) {
+      rows.push({
+        command: { kind: 'switch', targets: [], extra: { outId: user.id, inId: '' } },
+        label: 'Switch',
+        category: 'special',
+        mpCost: 0,
+        rank: 3,
+        enabled: false,
+        validTargets: [],
+      });
     }
   }
 
@@ -282,14 +323,15 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     });
   }
 
-  if (ctx.rt.canEscape) {
+  // Item d: a blocked Escape is a greyed row with no reason (the game keeps it in the trigger list and refuses it, -1); the party's only, as the original's aeons have no Escape to refuse.
+  if (ctx.rt.canEscape || (menuParity('blocked') && user.side === 'party')) {
     rows.push({
       command: { kind: 'escape', targets: [], extra: { mode: 'single' } },
       label: 'Escape',
       category: 'special',
       mpCost: 0,
       rank: 1,
-      enabled: true,
+      enabled: ctx.rt.canEscape,
       validTargets: [],
     });
   }

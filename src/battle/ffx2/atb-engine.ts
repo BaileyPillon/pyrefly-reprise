@@ -101,8 +101,8 @@ export function kernelUnit(u: Ffx2Unit): Ffx2AtbUnit {
       // The game's own rule halves the tick while the charging flag `Chr+0xd65` is set, but the flag stayed 0 through every charge
       // countdown on the running game (`research/re-ffx2-timing-measured.md` section 6): in play only a hit reaction halves.
       charging: false,
-      // The hit reaction is a motion-system state the exe holds no length for: the engine runs it for the 15 steps the running game
-      // showed after a weak Delay hit (HIT_REACTION_STEPS), from the moment a damaging hit lands.
+      // The hit reaction lasts as long as the body's damage clip plays (re-parity lane X2-A, `reaction.ts reactionSpan`, set when a damaging hit lands),
+      // or the 15 steps the running game showed after a weak Delay hit (HIT_REACTION_STEPS) for a body outside the data.
       hitReaction: u.gauge.hitReaction > 0,
       // `Chr+0x3a6` bit 1: a monster whose row says hit reactions do not slow it (every boss).
       hitReactionExempt: (specialWord(u) & 2) !== 0,

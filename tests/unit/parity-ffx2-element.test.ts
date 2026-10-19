@@ -117,7 +117,7 @@ describe('element ladder: rungs 6 and 7, null and absorb', () => {
     expect(elementMod(target({ absorb: FIRE }), FIRE, 11)).toBe(-11);
     expect(elementLadder(target({ absorb: FIRE }), FIRE, 11).outcome).toBe('absorb');
     expect(elementMod(target({ absorb: FIRE }), FIRE, -11)).toBe(11); // an absorbed heal hurts
-    expect(elementMod(target({ absorb: FIRE }), FIRE, -2147483648)).toBe(-2147483648); // NEG of INT_MIN
+    expect(elementMod(target({ absorb: FIRE }), FIRE, -2147483648)).toBe(-2147483648); // the negation of INT_MIN
   });
 
   it('a bit that is null and absorb is absorbed (null needs "not absorb")', () => {

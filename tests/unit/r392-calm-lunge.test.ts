@@ -9,6 +9,7 @@ import { REACH_CAP } from '../../src/engine/motion/StandReach.ts';
 import type { StageMotionPort } from '../../src/engine/motion/StageMotionPort.ts';
 import { CALM_REACH_SHARE, HOUSE_LUNGE, calmLunge, lungeDistance, lungePlan } from '../../src/engine/motion/StrikeReach.ts';
 import { TweenGroup } from '../../src/engine/Tween.ts';
+import { setMotionMode } from '../../src/engine/PoseSwap.ts';
 import { FakeActor, FakeStage, noSleep } from './helpers/FakeStage.ts';
 
 /**
@@ -21,6 +22,7 @@ import { FakeActor, FakeStage, noSleep } from './helpers/FakeStage.ts';
 const figs: object[] = [];
 afterEach(() => {
   figs.length = 0;
+  setMotionMode(null); // W5: a test that forces the lunge's curve leaves the page's own
 });
 
 /** A fake actor that records what the presenter asked of its lunge. */
@@ -261,7 +263,8 @@ describe('PaintedActor.lunge with the shortened extra: no kick, no overshoot, th
     expect(apex.offset()).toBeCloseTo(distance, 3);
   });
 
-  it('carries the extra on the eased step: its first frame travels the house lunge\'s first frame and almost none of the (halved) extra', () => {
+  it('under ?motion=classic: carries the extra on the eased step: its first frame travels the house lunge\'s first frame and almost none of the (halved) extra', () => {
+    setMotionMode('classic');
     const frame = 1000 / 60 / 440;
     expect(reachOffset(frame)).toBeLessThan(attackOffset(frame) / 5);
     expect(ATTACK_BEATS.step).toBeGreaterThan(0);
@@ -270,5 +273,15 @@ describe('PaintedActor.lunge with the shortened extra: no kick, no overshoot, th
     void actor.lunge(distance, 440, undefined, 1.4);
     tweens.update(1 / 60);
     expect(offset()).toBeCloseTo(1.4 * attackOffset(frame) + (distance - 1.4) * reachOffset(frame), 3);
+  });
+
+  it('by default (W5): the whole distance, the house part and the extra alike, is on the eased step, so the first frame is almost none of it', () => {
+    const frame = 1000 / 60 / 440;
+    const { actor, tweens, offset } = lungeActor();
+    const distance = calmLunge(1.4, 4.4);
+    void actor.lunge(distance, 440, undefined, 1.4);
+    tweens.update(1 / 60);
+    expect(offset()).toBeCloseTo(distance * reachOffset(frame), 3);
+    expect(offset()).toBeLessThan(0.1 * distance);
   });
 });

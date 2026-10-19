@@ -46,7 +46,7 @@ export function placePose(
   isRef: boolean; prone: boolean; clamped: boolean; facing: string | null; mirror: number;
   scale: number | null; scaleSrc: string; anchor: number; anchorSrc: string; upp: number; uppEff: number; lock: number | null; shift: number;
   statureTable: number | null; stature: number | null; bodyStature: number | null; lengthRatio: number | null; headTable: number | null; headEff: number | null; headReal: number | null;
-  held: boolean; heldHeadRatio: number | null; hasRow: boolean; hasHead: boolean; hasStance: boolean; stanceRegistered: number | null; stanceDiffPx: number | null;
+  held: boolean; heldHeadRatio: number | null; ruled: boolean; realHeadRatio: number | null; hasRow: boolean; hasHead: boolean; hasStance: boolean; stanceRegistered: number | null; stanceDiffPx: number | null;
   feetDx: number | null; feetDy: number | null; feetRowGap: number; sinkIdle: number | null;
   drawn: { upp: number; anchor: number; shift: number; mirror: number };
 };

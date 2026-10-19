@@ -33,8 +33,12 @@
  * - **B5 = a, her Grand Summon gauge is full** (Jegged: "fully charge" it
  *   before the hallway [single source]), which opens the sourced Grand Summon
  *   line.
- * - **B7 = a, Chapter X's bag** (Chapter VIII's, carried): attack items are
- *   greyed by the duel's "only aeons" rule (B6 = a), not removed.
+ * - **B7 = a, Chapter X's bag** (Chapter VIII's, carried): attack items were
+ *   greyed by the duel's "only aeons" rule (B6 = a), not removed. Superseded
+ *   2026-10-17 (RC10, Bailey: "Match the game"): the formation scripts switch
+ *   Yuna's Item command off, so the bag is still carried and its row is
+ *   drawn greyed in the contest, as the game draws a disabled command, with
+ *   no reason (`battle/ffx/formation-commands.ts`).
  *
  * Chapters are standalone, so this preset and `highbridge.ts` **agree** rather
  * than carry (B3): same aeon rows, same Yuna, same bag.

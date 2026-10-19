@@ -14,12 +14,14 @@
  */
 
 import { audio } from '../../../audio/index.ts';
+import { voice } from '../../../audio/voice/index.ts';
 import type { GameId } from '../../../battle/common/types.ts';
 import type { SaveStore } from '../../SaveData.ts';
 import { isFxLookField } from '../../fxLooks.ts';
 import { fxLookOnPatch, isFxSwitchField } from '../../fxParts.ts';
 import { stepColourVision } from '../../saveAccess.ts';
 import { stepTextSize, wrapTextSize } from '../../saveComfort.ts';
+import { CHAPTER_SELECT_MUSICS, TITLE_ARTS, cycle } from '../../saveFrontend.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
 /** FFX-2's Config ATB speeds, slowest first (`research/ffx2-combat-core.md` §1.2). */
@@ -61,6 +63,21 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = 
       audio.setSfxVolume(value);
       return true;
     }
+    case 'voiceVolume': {
+      const value = clamp01(settings.voiceVolume + dir * VOLUME_STEP);
+      save.setSettings({ voiceVolume: value });
+      audio.setVoiceVolume(value);
+      if (value === 0) voice.stop(); // a VOICE of 0 is text only: a line already speaking stops with it
+      return true;
+    }
+    case 'voiceOn': {
+      // VOICE-OVER flips whichever way you push it (Confirm works on it as on the other toggles); off stops a line already speaking.
+      const on = !settings.voiceOn;
+      save.setSettings({ voiceOn: on });
+      audio.setVoiceOn(on);
+      if (!on) voice.stop();
+      return true;
+    }
     case 'textSpeed': {
       const i = TEXT_SPEEDS.indexOf(settings.textSpeed as (typeof TEXT_SPEEDS)[number]);
       const next = TEXT_SPEEDS[Math.min(TEXT_SPEEDS.length - 1, Math.max(0, (i < 0 ? 2 : i) + dir))];
@@ -100,6 +117,14 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = 
     }
     case 'guideVisible':
       save.setSettings({ guideVisible: !settings.guideVisible });
+      return true;
+    case 'titleArt':
+      // 39.5: the title screens in a list; Left, Right and Confirm step and wrap. It shows the next time the title is drawn.
+      save.setSettings({ titleArt: cycle(TITLE_ARTS, settings.titleArt, dir) });
+      return true;
+    case 'chapterSelectMusic':
+      // 39.5: B, A, C in a list, B first (the default); steps and wraps. The board plays it the next time it opens.
+      save.setSettings({ chapterSelectMusic: cycle(CHAPTER_SELECT_MUSICS, settings.chapterSelectMusic, dir) });
       return true;
     default:
       return false;

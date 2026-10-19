@@ -220,12 +220,29 @@ describe('the flag is the only way in: every other chain carries what it always 
    * real Pride of the Sword, no gate, where the ring's first link was red. Same girl, same dresses, other gate, so other stats and other draws from there. The other ten logs of the two chains,
    * and Chapters 5 and 6, are byte-identical. Cause re-proved on the merged tree: with `GRID_LAYOUTS = false` (src/battle/ffx2/constants.ts) all four pinned-log tests give the pins above
    * this paragraph again. The old hashes are in git at the commit before the r51 grids merge.
+   *
+   * **Chapter 6's eight re-pinned on the merge of the Chapter VI link opening onto r52-rc** (lane X2-L row XL1, FFX-2 only; reason "game-code parity": the game starts every link of a chain as a full
+   * battle, FFX2-G10 sections 4 to 6; `docs/handoff/re-parity-rc9-x2-link-open.md`; PR-0107 turned ON by Bailey's yes of 2026-10-17, "yes turn on chapter VI opening, keep going full speed"). No Den code changed; `SEPARATE_BATTLE_GAUGES` is
+   * `true` in `src/battle/ffx2/constants.ts`, so Chapter 6's Acts II and III open on random waits and the opening trim instead of every wait whole. All eight logs moved: Act I is identical in each, the first
+   * differing event is the opening gauge snapshot of Act II (link 2), and all eight are still victories in three links. Chapter 5, Chapter XI and the Sisters did not move (the flag is on no other group).
+   * With `separateBattleGauges: false` passed as an option on the merged tree the eight r52-rc hashes above return exactly (recorded and compared hash for hash). The old hashes are in git at 3c92b60cc (r52-rc).
+   *
+   * **Re-pinned once for the hit reaction, stacked on r52-rc and the Chapter VI link opening** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", the checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`): all thirty-two logs of Chapters 5, 6 and XI and the Sisters, seeds 1 to 8 (Chapter 5's eight equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again, Chapter 6's first three equal `ffx2-hit-closes-menu.test.ts`'s). No Den code changed. Cause, found by ablation (the switch `CHAIN_WINDOW_PER_BODY` forced off): X2-A per-body windows, on top of the link opening. The chain window, the span of the halved tick and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, Bahamut 52 and 82) where they were 60 and 90 steps and 15. The old hashes are the base 35aa31e77 (r52-rc 3c92b60cc plus the Chapter VI link opening)'s, Chapter 6's eight being the link-opening row above. Proof on the merged tree (branch `re-parity-rc9-x2-hit-reaction-r52`, 2026-10-17): with `CHAIN_WINDOW_PER_BODY` forced off for the whole run through a module mock (a vitest setup file; `withReactionKnobs(OLD_REACTION)` is the same switch inside the process), these thirty-two pins: 32 of 32 of the base's hashes come back exactly, and with it on all 32 move. All thirty-two are still victories in every link.
+   *
+   * **Chapter XI's seeds 2, 3, 6 and 7 and the Sisters' seeds 1, 3, 4, 7 and 8 re-pinned on the merge of RE parity RC10 lane XD1b, the Garment Grids that keep a status, onto r53-rc** (FFX-2 only; reason "game-data parity";
+   * `docs/handoff/re-parity-rc10-x2-grid-status.md`; the notes FFX2-G04 3.4 and FFX2-G09 3.5). No Den code changed; the grid did: Yuna wears Tempered Will (Chapter V's build), whose red gate
+   * keeps Double MP (row 0x8099) once it is crossed. The lane read four of the logs in full on r52-rc (Chapter XI seeds 2 and 3, the Sisters' seeds 1 and 3): the first event that differs is the girl's own Change
+   * out of Itchy (White Mage to Gunner, the autopilot's first row), which crosses the red gate; the log then holds one more event (`status-add` of Double MP) and Yuna's maximum MP is doubled
+   * from there, so other MP, other casts, other draws. The nine hashes above are RE-RECORDED ON THE MERGED TREE (the lane's own were recorded on r52-rc, before the per-body chain windows and the Chapter VI link opening
+   * that r53-rc carries): the same nine logs move there, the other seven of the two chains and all sixteen of Chapters 5 and 6 are byte-identical to the pins above this paragraph, and all thirty-two still win. Cause, by
+   * ablation on the merged tree (all nine): with `GRID_AUTO_STATUS = false` (src/battle/ffx2/constants.ts, run through a module mock) all thirty-two logs give the pins above this paragraph again, hash for hash.
+   * The old hashes are in git at c9467574d, the commit before this merge.
    */
   const BASE = {
-    ch5: ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5', '1df2185cc633c36e', 'e31506651bcd11b4', '72d5806b5c3b2b61', '683b6b8ff95c67ce', '5a286d9847ac4940'],
-    ch6: ['b0b4c773a1befb90', '8c376b36d385069c', '6fe874b5ecb5b461', '365c1eba055fd59c', 'b1d1d6d41283bcbb', '6cd025c80519651f', 'fd7f0e2d43ee3a08', '3ed02b1a62e706f7'],
-    ch11: ['b7cd66c2076fa8a6', '063311ab99058636', 'fdaf94c2b6de27be', '9e690bd8530228f8', '37f93f7640f15530', 'dc51ac6c750a7377', 'dba02b8a2f188141', 'ec3840d5d577ec90'],
-    sisters: ['a19749ad75adca36', '2da59bd1e36d06ad', '18b968df4c813a5a', 'fe112e3ff0c86ad1', 'af10ad8707ac5fc5', '0a72d2cf3d8fc46a', 'f1f2cba71e613d17', 'a870e972600b2493'],
+    ch5: ['f088d67c48d6cc10', '3a74b5193adc4161', 'aeca4110de447dc4', '9d515113ea9a9092', '1dd5bc74fe420ad8', 'e563354e0f016d58', '701eb9b3d45999b7', '95d2d4057334651c'],
+    ch6: ['eb0956532a9a6edd', '7900cad6eaeb5c12', '06350f07dfd4fd6a', 'b385184ac92f3ad8', 'bc1eae198e9039a2', 'd81e3009fa1544d4', '0aa5a5b1cb5dacab', 'ba2b58339bdcef64'],
+    ch11: ['4ab82301c611caeb', '3bd0f3efab8e6adf', '03982e844150ccc9', '443c4b1c7012a824', '2e118d063fe18d83', '0646e5f2952a3650', 'a9fc882ab3097d87', '66d9793939e77626'],
+    sisters: ['3143237f4bb44982', 'e3c5ff00dd446e97', 'ada333a7d40034d7', 'a0f04b97b82cac16', 'b0bd3deea1b16efa', '9d24bf9dbe7aed2a', 'ff342fd893c83cc6', 'b2f35d32e78d3913'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

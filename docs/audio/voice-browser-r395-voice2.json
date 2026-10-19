@@ -1,0 +1,617 @@
+{
+ "when": "2026-10-08T07:51:37.670Z",
+ "base": "http://127.0.0.1:5800/",
+ "chapter": "seymour-flux",
+ "midChapter": "evrae-airship",
+ "files": {
+  "chapters": 11,
+  "lines": 212,
+  "files": 200,
+  "ok": 200,
+  "badStatus": [],
+  "badBytes": [],
+  "undecoded": [],
+  "badLength": [],
+  "maxLengthDiffMs": 1,
+  "totalBytes": 3600544,
+  "totalMs": 432800,
+  "indexTotals": {
+   "files": 200,
+   "bytes": 3600544,
+   "ms": 432809,
+   "lines": 212
+  },
+  "muted": {
+   "listed": [
+    "braskas-final-aeon.mid-valefor-enters.005",
+    "braskas-final-aeon.mid-valefor-enters.011",
+    "braskas-final-aeon.mid-valefor-enters.007.fb1"
+   ],
+   "stillInAManifest": []
+  }
+ },
+ "cutscene": {
+  "voicedLines": [
+   {
+    "n": 1,
+    "speaker": "Tidus",
+    "text": "That's not",
+    "id": "seymour-flux.pre.008",
+    "state": "playing",
+    "chapter": "seymour-flux",
+    "started": 1,
+    "ducked": true
+   },
+   {
+    "n": 2,
+    "speaker": "Tidus",
+    "text": "...You're ",
+    "id": "seymour-flux.pre.013",
+    "state": "playing",
+    "chapter": "seymour-flux",
+    "started": 2,
+    "ducked": true
+   },
+   {
+    "n": 3,
+    "speaker": "Tidus",
+    "text": "Auron. Tel",
+    "id": "seymour-flux.pre.014",
+    "state": "playing",
+    "chapter": "seymour-flux",
+    "started": 3,
+    "ducked": true
+   },
+   {
+    "n": 4,
+    "speaker": "Yuna",
+    "text": "No.",
+    "id": "seymour-flux.pre.017",
+    "state": "playing",
+    "chapter": "seymour-flux",
+    "started": 4,
+    "ducked": true
+   },
+   {
+    "n": 5,
+    "speaker": "Yuna",
+    "text": "You don't ",
+    "id": "seymour-flux.pre.018",
+    "state": "playing",
+    "chapter": "seymour-flux",
+    "started": 5,
+    "ducked": true
+   },
+   {
+    "n": 6,
+    "speaker": "Tidus",
+    "text": "He's not a",
+    "id": "seymour-flux.pre.019",
+    "state": "playing",
+    "chapter": "seymour-flux",
+    "started": 6,
+    "ducked": true
+   },
+   {
+    "n": 7,
+    "speaker": "Yuna",
+    "text": "No. Not th",
+    "id": "seymour-flux.pre.024",
+    "state": "playing",
+    "chapter": "seymour-flux",
+    "started": 7,
+    "ducked": true
+   }
+  ],
+  "confirmCut": {
+   "id": "seymour-flux.pre.014",
+   "play": {
+    "id": "seymour-flux.pre.014",
+    "at": 49144,
+    "heard": true,
+    "why": "stopped"
+   }
+  },
+  "skipCheck": {
+   "currentAfterSkip": null,
+   "lastPlay": {
+    "id": "seymour-flux.pre.024",
+    "at": 62137,
+    "heard": true,
+    "why": "stopped"
+   }
+  },
+  "final": {
+   "screen": "battle",
+   "started": 7,
+   "asked": 7,
+   "chapter": "seymour-flux",
+   "enabled": true,
+   "contextState": "running",
+   "cache": {
+    "manifests": [
+     "seymour-flux"
+    ],
+    "buffers": 15,
+    "decodedBytes": 5742464,
+    "pinned": 7,
+    "failed": 0,
+    "requests": 16
+   },
+   "plays": [
+    {
+     "id": "seymour-flux.pre.008",
+     "at": 42810,
+     "heard": true,
+     "why": "ended"
+    },
+    {
+     "id": "seymour-flux.pre.013",
+     "at": 47760,
+     "heard": true,
+     "why": "ended"
+    },
+    {
+     "id": "seymour-flux.pre.014",
+     "at": 49144,
+     "heard": true,
+     "why": "stopped"
+    },
+    {
+     "id": "seymour-flux.pre.017",
+     "at": 51970,
+     "heard": true,
+     "why": "ended"
+    },
+    {
+     "id": "seymour-flux.pre.018",
+     "at": 54731,
+     "heard": true,
+     "why": "ended"
+    },
+    {
+     "id": "seymour-flux.pre.019",
+     "at": 57900,
+     "heard": true,
+     "why": "ended"
+    },
+    {
+     "id": "seymour-flux.pre.024",
+     "at": 62137,
+     "heard": true,
+     "why": "stopped"
+    }
+   ]
+  }
+ },
+ "pauseRows": {
+  "viewport": {
+   "width": 1600,
+   "height": 900
+  },
+  "voiceRows": [
+   {
+    "id": "voiceVolume",
+    "k": "VOICE",
+    "v": "90",
+    "sel": false
+   },
+   {
+    "id": "voiceOn",
+    "k": "VOICE-OVER",
+    "v": "ON",
+    "sel": false
+   }
+  ],
+  "optionRows": [
+   "MASTER VOLUME 80",
+   "MUSIC 70",
+   "SOUND EFFECTS 70",
+   "VOICE 90",
+   "VOICE-OVER ON",
+   "TEXT SPEED 1x",
+   "TEXT SIZE 100%",
+   "REDUCE MOTION OFF",
+   "LOW EFFECTS OFF",
+   "EYE CANDY ALL ON",
+   "STRATEGY GUIDE ON",
+   "BATTLE HELP ON",
+   "Replay briefing ▸",
+   "Restart encounter ▸",
+   "Chapter select ▸",
+   "Quit to title ▸",
+   "About ",
+   "Credits ▸"
+  ],
+  "screenshot": "docs/screenshots/r395-voice2/pause-options-voice-desktop-1600x900.png",
+  "start": {
+   "voiceVolume": 0.9,
+   "row": "90"
+  },
+  "reachedVoice": true,
+  "afterTwoLeft": {
+   "bus": 0.7,
+   "row": "70"
+  },
+  "afterTwoRight": {
+   "bus": 0.9,
+   "row": "90"
+  },
+  "reachedOnOff": true,
+  "afterOff": {
+   "bus": 0,
+   "row": "OFF",
+   "enabled": false
+  },
+  "afterOn": {
+   "bus": 0.9,
+   "row": "ON",
+   "enabled": true
+  }
+ },
+ "midBattle": {
+  "seenWhileSpeaking": [
+   {
+    "id": "evrae-airship.mid-evrae-haste-phase.001",
+    "speaker": "Tidus",
+    "text": "",
+    "ducked": true,
+    "at": 84697
+   }
+  ],
+  "screenshot": "docs/screenshots/r395-voice2/mid-battle-voiced-line.png",
+  "midPlays": [
+   {
+    "id": "evrae-airship.mid-evrae-haste-phase.001",
+    "at": 119200,
+    "heard": true,
+    "why": "ended"
+   }
+  ],
+  "started": 1,
+  "asked": 1,
+  "askedDuringBattle": 1,
+  "progress": [
+   {
+    "fps": 5.5,
+    "logLen": 13,
+    "phase": "play:damage",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "",
+     "text": ""
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 1.5,
+    "logLen": 54,
+    "phase": "play:mp-damage",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "",
+     "text": ""
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 6.5,
+    "logLen": 70,
+    "phase": "script:cid-first-volley",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": false,
+     "speaker": "Cid",
+     "text": "Missiles aw"
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 8,
+    "logLen": 88,
+    "phase": "play:action-start",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "Cid",
+     "text": "Missiles away! Count them, they are not "
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 5,
+    "logLen": 159,
+    "phase": "play:damage",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "Cid",
+     "text": "Missiles away! Count them, they are not "
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 4,
+    "logLen": 207,
+    "phase": "play:action-start",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "Cid",
+     "text": "Missiles away! Count them, they are not "
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 6,
+    "logLen": 260,
+    "phase": "play:damage",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "Cid",
+     "text": "Missiles away! Count them, they are not "
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 8.5,
+    "logLen": 310,
+    "phase": "play:switch",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "Cid",
+     "text": "Missiles away! Count them, they are not "
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 5.5,
+    "logLen": 342,
+    "phase": "play:damage",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "Cid",
+     "text": "Missiles away! Count them, they are not "
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 3,
+    "logLen": 388,
+    "phase": "play:damage",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 0,
+    "started": 0,
+    "box": {
+     "hidden": true,
+     "speaker": "Cid",
+     "text": "Missiles away! Count them, they are not "
+    },
+    "ctx": "running",
+    "enabled": true
+   },
+   {
+    "fps": 6.5,
+    "logLen": 421,
+    "phase": "script:evrae-haste-phase",
+    "menu": false,
+    "voiceChapter": "evrae-airship",
+    "asked": 1,
+    "started": 1,
+    "box": {
+     "hidden": false,
+     "speaker": "Tidus",
+     "text": ""
+    },
+    "ctx": "running",
+    "enabled": true
+   }
+  ],
+  "voiceCalls": [
+   {
+    "call": "spokenMs",
+    "who": "cid",
+    "text": "Missiles away! Count them, they are not free!",
+    "ms": 0,
+    "t": 46796
+   },
+   {
+    "call": "begin",
+    "who": "cid",
+    "text": "Missiles away! Count them, they are not free!",
+    "answer": "null",
+    "t": 46843
+   },
+   {
+    "call": "spokenMs",
+    "who": "cid",
+    "text": "Missiles away! Count them, they are not free!",
+    "ms": 0,
+    "t": 46844
+   },
+   {
+    "call": "spokenMs",
+    "who": "tidus",
+    "text": "It's faster. Why's it faster?",
+    "ms": 2710,
+    "t": 113945
+   },
+   {
+    "call": "spokenMs",
+    "who": "auron",
+    "text": "It stopped guarding. Now it hunts.",
+    "ms": 3217,
+    "t": 113945
+   },
+   {
+    "call": "spokenMs",
+    "who": "wakka",
+    "text": "It quit guarding, ya? Now it's hunting.",
+    "ms": 0,
+    "t": 113945
+   },
+   {
+    "call": "begin",
+    "who": "tidus",
+    "text": "It's faster. Why's it faster?",
+    "answer": "run",
+    "t": 116688
+   },
+   {
+    "call": "spokenMs",
+    "who": "tidus",
+    "text": "It's faster. Why's it faster?",
+    "ms": 2710,
+    "t": 116688
+   },
+   {
+    "call": "begin",
+    "who": "wakka",
+    "text": "It quit guarding, ya? Now it's hunting.",
+    "answer": "null",
+    "t": 120444
+   },
+   {
+    "call": "spokenMs",
+    "who": "wakka",
+    "text": "It quit guarding, ya? Now it's hunting.",
+    "ms": 0,
+    "t": 120444
+   }
+  ],
+  "screen": "battle",
+  "battleMs": 89764,
+  "attempt": 1
+ },
+ "phone": {
+  "viewport": {
+   "width": 390,
+   "height": 844
+  },
+  "voiceRows": [
+   {
+    "id": "voiceVolume",
+    "k": "VOICE",
+    "v": "90",
+    "sel": false
+   },
+   {
+    "id": "voiceOn",
+    "k": "VOICE-OVER",
+    "v": "ON",
+    "sel": false
+   }
+  ],
+  "optionRows": [
+   "MASTER VOLUME 80",
+   "MUSIC 70",
+   "SOUND EFFECTS 70",
+   "VOICE 90",
+   "VOICE-OVER ON",
+   "TEXT SPEED 1x",
+   "TEXT SIZE 100%",
+   "REDUCE MOTION OFF",
+   "LOW EFFECTS OFF",
+   "EYE CANDY ALL ON",
+   "STRATEGY GUIDE ON",
+   "BATTLE HELP ON",
+   "Replay briefing ▸",
+   "Restart encounter ▸",
+   "Chapter select ▸",
+   "Quit to title ▸",
+   "About ",
+   "Credits ▸"
+  ],
+  "screenshot": "docs/screenshots/r395-voice2/pause-options-voice-phone-390x844.png",
+  "tapFlipped": {
+   "was": "ON",
+   "now": "OFF",
+   "bus": 0
+  },
+  "tapBack": {
+   "now": "ON",
+   "bus": 0.9
+  }
+ },
+ "console": [],
+ "pageErrors": [],
+ "failedRequests": [],
+ "ok": true,
+ "midAttempts": [
+  {
+   "attempt": 1,
+   "heard": [
+    "evrae-airship.mid-evrae-haste-phase.001"
+   ],
+   "fpsSeen": [
+    5.5,
+    1.5,
+    6.5,
+    8,
+    5,
+    4,
+    6,
+    8.5,
+    5.5,
+    3,
+    6.5
+   ]
+  }
+ ],
+ "checks": {
+  "mutedLinesAreTextOnly": true,
+  "filesAllLoadAndDecode": true,
+  "cutsceneChapterAndStarts": true,
+  "cutsceneLinesHeard": true,
+  "confirmCutALine": true,
+  "skipStoppedTheLine": true,
+  "pauseRowsPresent": true,
+  "voiceSwitchesWork": true,
+  "midBattleLineHeard": true,
+  "phoneRowsPresent": true,
+  "phoneTapFlipsVoiceOver": true,
+  "noPageErrors": true
+ }
+}

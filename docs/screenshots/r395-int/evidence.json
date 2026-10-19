@@ -1,0 +1,222 @@
+{
+ "note": "Merged tree r395-int (settings + voice2 on live 39.4.1). Headless Chromium on SwiftShader, real keys; run 1 = title (both variants, desktop and phone), the FFX cutscene frame with a recorded line, the first OPTIONS shots; run 2 repeated OPTIONS (adding the CHAPTER MUSIC row shot), the phone OPTIONS tab and the FFX-2 OPTIONS tab (run 1 stopped at the phone: Escape was pressed before the first line showed).",
+ "run1": {
+  "when": "2026-10-08T08:42:46.322Z",
+  "titles": {
+   "farplane-desktop": {
+    "screen": "title",
+    "classes": "screen fe fe-title ig fe-title--decoded",
+    "imgSrc": "/art/title/keyart.png",
+    "imgAlt": "",
+    "imgNatural": [
+     1776,
+     1014
+    ],
+    "htmlWordmark": true,
+    "textPresent": false
+   },
+   "echo-desktop": {
+    "screen": "title",
+    "classes": "screen fe fe-title ig fe-title--echo fe-title--decoded",
+    "imgSrc": "/art/title/echo.png",
+    "imgAlt": "Echoes of Spira",
+    "imgNatural": [
+     1682,
+     932
+    ],
+    "htmlWordmark": false,
+    "textPresent": false
+   },
+   "farplane-phone": {
+    "screen": "title",
+    "classes": "screen fe fe-title ig fe-title--decoded",
+    "imgSrc": "/art/title/keyart.png",
+    "imgAlt": "",
+    "imgNatural": [
+     1639,
+     936
+    ],
+    "htmlWordmark": true,
+    "textPresent": false
+   },
+   "echo-phone": {
+    "screen": "title",
+    "classes": "screen fe fe-title ig fe-title--echo fe-title--decoded",
+    "imgSrc": "/art/title/echo.png",
+    "imgAlt": "Echoes of Spira",
+    "imgNatural": [
+     1682,
+     932
+    ],
+    "htmlWordmark": false,
+    "textPresent": false
+   }
+  },
+  "scene": {
+   "speaker": "Tidus",
+   "text": "That's not",
+   "voiceId": "seymour-flux.pre.008",
+   "state": "playing",
+   "chapter": "seymour-flux",
+   "started": 1,
+   "asked": 1,
+   "enabled": true,
+   "contextState": "running",
+   "ducked": true,
+   "stillCurrent": "seymour-flux.pre.008"
+  },
+  "options": {
+   "ffxDesktop": [
+    "MASTER VOLUME: 80",
+    "MUSIC: 70",
+    "SOUND EFFECTS: 70",
+    "VOICE: 90",
+    "VOICE-OVER: ON",
+    "TEXT SPEED: 1x",
+    "TEXT SIZE: 100%",
+    "REDUCE MOTION: OFF",
+    "LOW EFFECTS: OFF",
+    "EYE CANDY: ALL ON",
+    "STRATEGY GUIDE: ON",
+    "BATTLE HELP: ON",
+    "TITLE SCREEN: FARPLANE",
+    "CHAPTER MUSIC: B  PIANO",
+    "Replay briefing: ▸",
+    "Skip Scene: ▸",
+    "Chapter select: ▸",
+    "Quit to title: ▸",
+    "About: ",
+    "Credits: ▸"
+   ],
+   "ffxSteps": {
+    "reachedTitle": true,
+    "titleAfterRight": "THE ECHO",
+    "reachedMusic": true,
+    "musicAfterRight": "A  WALTZ",
+    "musicAfterRight2": "C  VOICE",
+    "reachedVoice": true,
+    "voiceAfterLeft": "80",
+    "reachedVoiceOn": true,
+    "voiceOnAfterEnter": "OFF",
+    "voiceOnBack": "ON",
+    "saved": {
+     "titleArt": "echo",
+     "chapterSelectMusic": "c",
+     "voiceOn": true,
+     "voiceVolume": 0.8
+    }
+   }
+  },
+  "console": [],
+  "pageErrors": [],
+  "failedRequests": [],
+  "stoppedWith": "Error: Escape did not open the pause"
+ },
+ "run2": {
+  "when": "2026-10-08T08:48:23.316Z",
+  "options": {
+   "ffxDesktop": [
+    "MASTER VOLUME: 80",
+    "MUSIC: 70",
+    "SOUND EFFECTS: 70",
+    "VOICE: 90",
+    "VOICE-OVER: ON",
+    "TEXT SPEED: 1x",
+    "TEXT SIZE: 100%",
+    "REDUCE MOTION: OFF",
+    "LOW EFFECTS: OFF",
+    "EYE CANDY: ALL ON",
+    "STRATEGY GUIDE: ON",
+    "BATTLE HELP: ON",
+    "TITLE SCREEN: FARPLANE",
+    "CHAPTER MUSIC: B  PIANO",
+    "Replay briefing: ▸",
+    "Skip Scene: ▸",
+    "Chapter select: ▸",
+    "Quit to title: ▸",
+    "About: ",
+    "Credits: ▸"
+   ],
+   "ffxSteps": {
+    "reachedTitle": true,
+    "titleAfterRight": "THE ECHO",
+    "reachedMusic": true,
+    "musicAfterRight": "A  WALTZ",
+    "musicAfterRight2": "C  VOICE",
+    "reachedVoice": true,
+    "voiceAfterLeft": "80",
+    "reachedVoiceOn": true,
+    "voiceOnAfterEnter": "OFF",
+    "voiceOnBack": "ON",
+    "saved": {
+     "titleArt": "echo",
+     "chapterSelectMusic": "c",
+     "voiceOn": true,
+     "voiceVolume": 0.8
+    }
+   },
+   "ffxPhone": [
+    "MASTER VOLUME: 80",
+    "MUSIC: 70",
+    "SOUND EFFECTS: 70",
+    "VOICE: 90",
+    "VOICE-OVER: ON",
+    "TEXT SPEED: 1x",
+    "TEXT SIZE: 100%",
+    "REDUCE MOTION: OFF",
+    "LOW EFFECTS: OFF",
+    "EYE CANDY: ALL ON",
+    "STRATEGY GUIDE: ON",
+    "BATTLE HELP: ON",
+    "TITLE SCREEN: FARPLANE",
+    "CHAPTER MUSIC: B  PIANO",
+    "Replay briefing: ▸",
+    "Skip Scene: ▸",
+    "Chapter select: ▸",
+    "Quit to title: ▸",
+    "About: ",
+    "Credits: ▸"
+   ],
+   "ffx2Desktop": [
+    "MASTER VOLUME: 80",
+    "MUSIC: 70",
+    "SOUND EFFECTS: 70",
+    "TEXT SPEED: 1x",
+    "TEXT SIZE: 100%",
+    "REDUCE MOTION: OFF",
+    "LOW EFFECTS: OFF",
+    "EYE CANDY: ALL ON",
+    "X-2 BATTLE: WAIT",
+    "ATB SPEED: NORMAL",
+    "STRATEGY GUIDE: ON",
+    "BATTLE HELP: ON",
+    "TITLE SCREEN: FARPLANE",
+    "CHAPTER MUSIC: B  PIANO",
+    "Replay briefing: ▸",
+    "Skip Scene: ▸",
+    "Chapter select: ▸",
+    "Quit to title: ▸",
+    "About: ",
+    "Credits: ▸"
+   ]
+  },
+  "console": [],
+  "pageErrors": [],
+  "failedRequests": [],
+  "error": null
+ },
+ "shots": [
+  "ffx-cutscene-voice-playing-1600x900.png",
+  "options-ffx-1600x900-after.png",
+  "options-ffx-1600x900-chapter-music-row.png",
+  "options-ffx-1600x900.png",
+  "options-ffx-phone-390x844-bottom.png",
+  "options-ffx-phone-390x844-top.png",
+  "options-ffx-phone-390x844-voice.png",
+  "options-ffx2-1600x900.png",
+  "title-echo-1600x900.png",
+  "title-echo-390x844.png",
+  "title-farplane-1600x900.png",
+  "title-farplane-390x844.png"
+ ]
+}

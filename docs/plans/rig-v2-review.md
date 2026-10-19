@@ -1,0 +1,65 @@
+# The rig format v2: paper preflight (AGENTS rule 15), 2026-10-18
+
+Lane: the kit-and-v2 lane of the rig program (branch `rig-v2`, from `origin/rig` 59c766ec0). Bailey, 2026-10-18: "We need this done for all characters and bosses. It's a priority." The driver adopted the rig plan
+(`D:/Tools/pyrefly-scratch/2026-10-18/rig-plan/plan.md`, decision 123); this is its section 4, copied here when the lane started, with what changed when it was built appended. **Game case: both games, shared plumbing**
+(a figure is FFX or FFX-2 by its art id; nothing in the format knows which). Review class: `src/data/art/rigTypes.ts` alone is DEEP; `src/engine/rig/*.ts` is "effects, lighting and sprites"; `tools/rig/**` and `tests/**`
+have no review of their own (`node tools/critic-plan.mjs --paths ...`, run on the built change in the handoff). Landing v2 before the first rig ships means it rides in the one focused and one deep review the rig release owes anyway.
+
+## The preflight as written (the plan's section 4; paper only)
+
+**Why.** Format v1 has one image a part and no visibility: a key can move, scale (0 < s <= 4) and reorder what is there. Lulu's two front-view poses (defend, Overdrive) therefore stored each front upper body as a *speck* (its mesh divided by 16, hidden under the hips on a two-bone chain, scaled 16 times by the key that wants it, `lulu_hooks.FRONTS`, about 100 lines), hid the side arms, braid and head behind it by `layers` and 0.8 scales, and passed the hole test only after a scale-to-nothing attempt was refused. 19 of the 27 dressphere idles are front or straight-on and the other poses are three-quarter or side: the FFX-2 girls need this constantly.
+
+**The change (additive).** A key may show or hide a part, or swap a part's image for a named variant.
+
+*Type change (`src/data/art/rigTypes.ts`)*:
+```ts
+export const RIG_VERSION = 2;                       // the version the pipeline writes when a rig uses a v2 field
+export const RIG_VERSIONS: readonly number[] = [1, 2]; // readRig accepts both; a v1 file has none of the new fields
+export interface RigPartVariant {                   // another image of the SAME part: same mesh, same skin, same box
+  png: string; rim?: string; rimEverywhere?: boolean;       // beside rig.json, like RigPart.png
+  verts?: number[]; uvs?: number[]; triangles?: number[];   // optional own mesh (a front head is not a side head's shape); skin = the part's
+}
+export interface RigPart { /* v1 fields */ hidden?: boolean; variants?: Record<string, RigPartVariant>; }
+export interface RigKeyPart { show?: boolean; image?: string }   // image = a key of the part's variants; absent = the part's own png
+export interface RigKey { /* v1 fields */ parts?: Record<string, RigKeyPart>; }
+```
+Semantics: a key's state is a pure function of the key and the file, with no inheritance: a part not named by the key takes its default (`hidden` false: shown, image its own). `idle` is the rest; every part `hidden: true` is hidden at rest and the idle must still reproduce the painting (rest overlap 0.95 as now). The state flips **at progress 0.5 of the move into the key**, exactly where `layers` already flips (`RigActor.ts` line 216: `layersDue && trans.progress >= 0.5`). An optional `fadeMs` per key part is the v2.1 add-on (one per-part opacity uniform; not needed for the first subjects).
+A reader that sees `version: 2` on a build that reads only 1 refuses it (`version 2 (this build reads 1)`) and the figure draws as the painting set, so an art mirror carrying a v2 rig can never meet an old runtime without a clean fallback. The exporter writes 2 only when a rig uses a v2 field; v1 files and the two existing rigs are untouched.
+
+*Runtime (`RigData`, `RigKeys`, `RigFigure`, `RigActor`)*:
+- `readRig`: parse and validate `variants`, `hidden`, `key.parts` (names exist; `image` names a variant; a variant's PNG is named; a part hidden in the idle must be shown by some key or the file is refused as dead data).
+- `RigKeys.partStateAt(data, from, to, progress)` (pure, shared vector with the gate): below 0.5 the `from` key's state, from 0.5 the `to` key's.
+- `RigFigure.setPartState(state)`: per part `mesh.visible` and, for a swap, the material's `map` and `rimMask` uniform; for a variant with its own mesh a second `BufferGeometry` per part, swapped by reference. `skin()` skips hidden parts, so a hidden part costs nothing per frame.
+- **Cost**: per frame, none beyond a boolean test per part (the rig's whole update is 0.05 ms a rig a frame today, `rig-engine.md`); a state change is a handful of assignments once per key change. Draw calls fall when parts are hidden (a plane is 1 draw call, a rig 11 to 15 today). **Memory is the real cost**: every variant is another texture. The gate counts them in the texel and byte budget (9 Mpx, 9 MB; Kimahri is 6.95 Mpx, Lulu 4.03) and in `gate.textures` (the engine budgets GPU memory from it, 12 MB a figure at the 1x tier today); the 1x tier derivation and the release art mirror enumerate variants too. v2.0 loads every variant eagerly; lazy loading of variants a key has not asked for yet is the later optimisation if the budget bites.
+- Not changed: `RigDynamics` chains (a hidden part's chain keeps simulating, cheap), `RigShape`/`RigSilhouette` (they read the gate's stamped per-key silhouettes, which now come from the raster with the key's state), the carrier, the material (no new string patch in v2.0).
+
+*Gate and pipeline (`tools/rig/`)*:
+- `rig-format.mjs`: the same parse and validation; the file listing (`digest`, `textureSizes`, `rig-tiers`, `rig-ship`'s "the folder holds exactly the derived files", `rig-mirror`) learns `variants` so the digest binds the variant PNGs and their 1x twins.
+- `rig-raster.mjs` `rasterize(rt, pose, frame, { parts, state })`: skips a hidden part and samples a swapped part's variant alpha. `loadTextures` decodes variants.
+- `rig-pose.mjs`: `keyState(rt, key)` and `stateAt(rt, a, b, t)` with the same halfway rule; **a unit test feeds the same vectors to this and to `RigKeys.partStateAt` so the gate and the runtime cannot disagree**.
+- `rig-holes.mjs`: `scanHoles` passes the state. A joint is watched in a pose only if at least one of the parts that meet there is visible in that pose; a blend at 25, 50 and 75 percent uses the state `stateAt` gives. This is what lets a front key hide the side arms instead of burying them.
+- **Anti-gaming rules, new** (the hole test must not become a way to delete a figure): `hidden-share` (a key may hide at most 60 percent of the idle's rest alpha area; the overlap bar of 0.75 and the landmark rule still judge the figure as drawn), `variant-unused`, `part-never-shown`, `variant-missing`, and a **report, not a refusal**, of each variant's palette distance from its base part (the driver's clip review reads it: a mixed costume is allowed, as Lulu's front parts were, but it is said).
+- `rig_export.py` and the config: `build.variants`, `keys_extra.<pose>.parts`, and `fit.keys.<pose>.show|hide|image`; `rig_cut.py` gains a declarative op `from_painting: {pose, region}` (what `lulu_hooks._front_part` does by hand: cut a part from another painting's `@4x` master, soft edge, no repaint). `rig_fit.py`/`rig_skin.py` (the fitter has its own rasteriser) draw the key's configured state while scoring.
+- Tests: reader (v1 accepted, v2 accepted, each malformed case refused), the puppet fixture with a swapped head (passes), hide-everything (`hidden-share`), the blend vectors, `RigActor` integration (setPose flips at 0.5, `mesh.visible` and the map uniform), the art pipeline (variants in the mirror, tier and manifest), and a Python case for export and the fitter.
+
+*Contract.* `rigTypes.ts` is not one of the five files in `docs/CONTRACTS.md`, but it declares itself "the contract between three lanes" and v1 has its own `CONTRACT-CHANGES.md` entry, so add one, newest first: "2026-10-xx: The rig, format v2 (both games; additive; version 1 and 2 accepted)", with the field list above. `rig-engine.md`, `rig-pipeline.md` and the Lulu handoff gain a line each.
+
+*Review class* (`node tools/critic-plan.mjs --paths ...`, run now on this tree):
+- `src/data/art/rigTypes.ts` alone: **DEEP**, "unclassified product path is a shared system" (focused before deploy, live verification and a deep review after; checks CHK-016, 017, 020, 021, 022).
+- `src/engine/rig/*.ts`: system "effects, lighting and sprites" (the `visual-engine` rule is focused; the plan says DEEP only because 52 substantial checkpoints have accrued since the last deep review; checks CHK-008, 013, 016, 017, 020, 021, 026, 027).
+- `tools/rig/**`, `tests/**`: no shipped file, no review of their own.
+- **The point**: the whole rig stack on `rig` is unmerged and unreviewed, and the plan already says a deep review is owed from a061e9dc (the third deploy while one is owed refuses unless Bailey overrides). Land v2 **before the first rig ships** and it rides in the one focused review and one deep review the rig release owes anyway; land it after, and it costs a second deep review. Paper preflight is the AGENTS rule 15 requirement for a deep class: this section is it.
+
+*Estimated saving.* Per subject with a front view or a costume swap, 0.2 to 0.3M tokens and 2 to 3 h: Lulu's speck design, its three refused attempts and the shrink-and-hide layering (about 40 percent of pass 2), and for the FFX-2 girls a front head and torso for every front idle and `dance`/`victory` pose, which v1 can only fake with an authored side pose. About 30 of the 146 subjects have a front pose that v2 serves (19 front dressphere idles, the three songstresses' `dance` and `victory` fronts, Tidus and Wakka defends, Seymour Natus, the Sin parts), and each of the 25 colour-drifting party and dressphere subjects can use a variant for the few poses whose costume no bend reaches. **Build cost est. 0.8M tokens and one lane-day** (types and reader 0.1, runtime 0.2, gate and raster and holes 0.25, exporter, cut op and fitter 0.15, tests and docs 0.1): break-even at 3 to 4 subjects. The first users inside the 3 days are Tidus's defend and Yuna White Mage; the 19 front-idle dresspheres and the songstresses come after. **One risk to say plainly**: v2 makes mixed costumes easy, and the program's whole point is that a figure keeps one costume across poses. The gate reports it; the driver should decide the policy once (section 6) and not leave it to each lane.
+
+## As built (2026-10-18): where it differs from the paper
+
+- **`RIG_VERSION` is 2 and `RIG_VERSIONS` is `[1, 2]`** as written. `RigFile.version` is typed `1 | 2`; a v1 file that carries a v2 field is refused by the reader and by the gate (`rig-version`), which the paper left open.
+- **A key names a part with `{}` to show it** (`show` defaults to true once a part is named; `show: false` hides). The `idle` key names none (the reader and the gate refuse it): the rest is `hidden` flags and own images.
+- **A variant with its own mesh** is read by the same code as a part (`RigMesh.ts`); one that gives `verts` or `box` and no skin of its own is rigid on the part's `bone`, and a part skinned by weights must give its variant's. The gate rasterises, budgets (texels, bytes, vertices) and stamps it (`gate.textures` key `<part>:<variant>`).
+- **A joint is watched in a pose only if a part that is SHOWN AT REST and meets there is shown in that pose** (not "any part that meets there"): a part that is hidden at rest and brought in by a key (a front body rigid on the root) must not make the root's children joints of its own. Found on Lulu's front keys: with the paper's wording the doll's joint was owed a cover that the key had hidden on purpose (14 false `hole-blend`s).
+- **At exactly 50 percent between two keys whose states differ, both directions are scanned** (the state is the target's from 0.5, so a move one way and a move the other show different states at the same pose). A v1 rig renders exactly as many poses as before (247 for Lulu and Kimahri).
+- **`hidden-share`** is the share of the idle's rest alpha area (at the gate's raster) under the parts a key hides; the cap is 0.6. Lulu's two front keys hide 0.275 each.
+- **The palette distance** is the total-variation distance of the two alpha-weighted 4-bit colour histograms (0 the same, 1 nothing in common), reported in `result.variants` and the key table. Lulu's `od-fury` against `front` (defend's) reads 0.372.
+- **`fadeMs`, lazy variant loading, the exporter's `from_painting` cut**: `fadeMs` is not built (the paper says v2.1). Variants load eagerly. `from_painting` is built as its pure core in `rig_v2.py` (`soft_cut`, `placement`) and the config words `build.variants.<part>.<name>.from_painting` are accepted and kept out of the file, but the image cut itself is still `lulu_hooks.py#_front_part` by hand: the first subject that needs it writes the glue.
+- **Cost** (paper: 0.8M tokens and one lane-day): the runtime, gate and exporter are as listed; the one-subject demonstration (Lulu) took a converter and two gate iterations, no refit.

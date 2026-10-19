@@ -49,6 +49,14 @@ export function doubledMaxHp(maxHp: number): number {
   return Math.min(maxHp * 2, Math.max(maxHp, MAX_HP_CAP));
 }
 
+/** The default max MP cap without Break MP Limit (the game's maximum recompute, `0x00636560`: 999). */
+export const MAX_MP_CAP = 999;
+
+/** A doubled max MP under the default cap; a maximum already above the cap is kept. */
+export function doubledMaxMp(maxMp: number): number {
+  return Math.min(maxMp * 2, Math.max(maxMp, MAX_MP_CAP));
+}
+
 /**
  * The sources whose `max-hp-x2` moves the pool: the Stamina Tonic item only. Songstress's Carnival
  * Cancan sets the same status, but its "while she keeps dancing" end is not modelled
@@ -56,9 +64,15 @@ export function doubledMaxHp(maxHp: number): number {
  */
 export const POOL_DOUBLING_SOURCES: readonly string[] = ['x2-item-stamina-tonic'];
 
-/** A freshly derived stat block with the pool statuses she carries (Stamina Tonic) laid on. */
-export function withPoolStatuses(stats: StatBlock, statuses: Readonly<Record<string, unknown>> | undefined): StatBlock {
+/**
+ * A freshly derived stat block with the pool statuses she carries laid on: the Stamina Tonic's (`max-hp-x2`), and what her auto-abilities keep (`held`, from
+ * `adapt/auto-layer.ts#poolHolds`: Double HP and Double MP of Downtrodder and Tempered Will, re-parity RC10 lane XD1b). The game has one bit for each, so a tonic and a
+ * row together double once.
+ */
+export function withPoolStatuses(stats: StatBlock, statuses: Readonly<Record<string, unknown>> | undefined, held?: { hp: boolean; mp: boolean }): StatBlock {
   const tonic = statuses?.['max-hp-x2'] as { sourceAbilityId?: string } | undefined;
-  if (!tonic || !POOL_DOUBLING_SOURCES.includes(tonic.sourceAbilityId ?? '')) return stats;
-  return { ...stats, maxHp: doubledMaxHp(stats.maxHp) };
+  const hp = (tonic !== undefined && POOL_DOUBLING_SOURCES.includes(tonic.sourceAbilityId ?? '')) || held?.hp === true;
+  const mp = held?.mp === true;
+  if (!hp && !mp) return stats;
+  return { ...stats, ...(hp ? { maxHp: doubledMaxHp(stats.maxHp) } : {}), ...(mp ? { maxMp: doubledMaxMp(stats.maxMp) } : {}) };
 }

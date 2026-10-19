@@ -58,7 +58,7 @@ own words: no game code and no game text is reproduced here.
 
 Everything is 32-bit integer arithmetic on registers.
 
-* **Products wrap.** A product past 2^31 turns negative (IMUL keeps the low 32 bits). Section 7 lists where that can
+* **Products wrap.** A product past 2^31 turns negative (the signed multiply keeps the low 32 bits). Section 7 lists where that can
   actually happen.
 * **Division by 2, 4, 16, 32 and 256 rounds toward zero**, not toward minus infinity: the compiler adds `2^k - 1` to a
   negative value before the arithmetic shift. This is why negative values (healing, and a Zombie turning a heal into

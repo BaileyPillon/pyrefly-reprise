@@ -2,7 +2,7 @@
  "schema": "ffx-parity-vectors/1",
  "game": "ffx",
  "name": "aeon_party",
- "description": "The party transitions around an aeon: the summon, the arrival step, the dismissal, the aeon wipe, the lists swap and the Switch swap (FUN_007adf90, 7ade10, 7adae0, 7aef20, 7aeec0, 7adf10, 78e0a0).",
+ "description": "The party transitions around an aeon: the summon, the arrival step, the dismissal, the aeon wipe, the lists swap and the Switch swap (the functions at 0x007adf90, 0x007ade10, 0x007adae0, 0x007aef20, 0x007aeec0, 0x007adf10 and 0x0078e0a0).",
  "exe": {
   "file": "FFX.exe",
   "sha256": "0537B2A1047F3266E73495CD4E35F63F0777F4231D417699F979954686DA686D",

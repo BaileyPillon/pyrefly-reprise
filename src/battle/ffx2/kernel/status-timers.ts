@@ -94,7 +94,7 @@ export interface Ffx2TimerEvents {
   expiredGroup1: number[];
   /** Group 2 statuses whose counter reached its floor, with their flag words, in index order. */
   expiredGroup2: Array<{ index: number; flags: number }>;
-  /** A Doom expiry condemned the character: the HUD menu is closed (`FUN_00634010(id, 3)`) and command 0x3026 is queued on itself with its own bit as the target mask. */
+  /** A Doom expiry condemned the character: the HUD menu is closed (the function at 0x00634010, called with `id, 3`) and command 0x3026 is queued on itself with its own bit as the target mask. */
   doom: boolean;
   /** A Poison or Regen tick: HP amount through `MsDamageBufferExe` (flags word 0x100ff): positive damage, negative healing. */
   tick: { kind: 'poison' | 'regen'; amount: number } | null;
@@ -102,7 +102,7 @@ export interface Ffx2TimerEvents {
   recompute: boolean;
   /** Something expired: `MsStatusEffectCheck(id)` follows. */
   effectCheck: boolean;
-  /** The notice routine `FUN_006330c0(id, n)`: 0xc when anything expired while Sleep was still set, 2 when something expired, else none. */
+  /** The notice routine at 0x006330c0 (`id, n`): 0xc when anything expired while Sleep was still set, 2 when something expired, else none. */
   notice: number | null;
 }
 

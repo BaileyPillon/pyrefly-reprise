@@ -97,13 +97,16 @@
   }
 
   /*
-   * The three rows make FFX-2's settings column fourteen rows (X-2 BATTLE and ATB SPEED are FFX-2 only),
-   * which ran BATTLE HELP into the objective's eyebrow at 1600x900. The column now stops one row short
-   * of the objective and scrolls on its own, as the phone's has since PR-0098 (the selected row is
-   * scrolled into view by `PauseView.scrollSelectedRowIntoView`); FFX's twelve rows still fit unscrolled.
+   * The column stops at the objective line and scrolls on its own when a short window or a larger TEXT SIZE
+   * needs it, as the phone's has since PR-0098 (the selected row is scrolled into view by
+   * `PauseView.scrollSelectedRowIntoView`). Both games' lists are thirteen rows (VOICE and VOICE-OVER are
+   * FFX's, X-2 BATTLE and ATB SPEED FFX-2's; TITLE SCREEN and CHAPTER MUSIC sit on the PRESENTATION page,
+   * 39.5, Bailey 2026-10-08 "go with C"), which all stand above the objective's line, unscrolled, at 1600x900 and 1920x1080 (FFX and FFX-2).
+   * The one-row reserve that stood here (eye-candy D, 2026-09-29: fourteen rows ran BATTLE HELP into the
+   * objective's eyebrow) is given back, measured with the mock: `docs/screenshots/r395-int/options-c/`.
    */
   .pause__body .pause__col[data-col='settings'] {
-    max-height: calc(var(--pu-top-obj) - var(--pu-top-body) - var(--pu-row));
+    max-height: calc(var(--pu-top-obj) - var(--pu-top-body));
     /* The fade below lands on this padding while the column fits, and on the cut row once it scrolls. */
     padding-bottom: 12px;
     box-sizing: border-box;

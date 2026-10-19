@@ -213,6 +213,16 @@
  * ten `CH4_D1500` and the nine other `CH5_D1500`; D = 0 is still 20/20 in both chapters, the Wait arm still equals the D = 0 arrays, and the outcome of seed 8 is still a win. The line this
  * reaches is the Active arm only: at D = 0 both Bulwarks are down when the Core falls on every seed (490 of 490 in the 500-seed measurement), so the entry stores 0 over 0. Over 300 Active
  * seeds of Chapter V nine differ (8, 16, 28, 80, 83, 100, 130, 264 and 273), all still won (244 of 300 in both trees); Chapters IV and VI over 200 Active seeds each: none. The old hash is in git at 748038a0a; on the r51 merge it was re-recorded on the merged tree (RC8 plus the kill rewards plus this lane), where seed 8's digest differs from the lane's own because the kill rewards moved every `victory` payload; the other nineteen arrays keep the kill rewards lane's values, and the ablation (the entry's two calls removed) returns the kill rewards lane's digest for seed 8.
+ *
+ * **Re-pinned a sixteenth time, every array, for the hit reaction** (re-parity lane X2-A, slice 1, branch `re-parity-rc9-x2-hit-reaction`, 2026-10-16, stacked as `re-parity-rc9-x2-hit-reaction-r52` on r52-rc and the Chapter VI link opening, 2026-10-17, FFX-2 only; reason "game-code parity", the
+ * checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`). All sixty digests moved: the chain window, the span of the halved tick
+ * and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, 0.8 to 1.7 s; Bahamut 52 and 82; Vegnagun's parts 11 to 17) where they were 60 and 90 steps for the window and
+ * the forced hit and 15 for the span. Cause: X2-A per-body windows, on top of the link opening; found by ablation (`reaction.ts` knobs, the four arrays recomputed with one part of the slice on): the girls' windows alone, the monsters' windows alone and the
+ * halved-tick span with the forced hit alone each move all sixty; the Haste halving alone moves none (no Hasted target is chained in these two chapters). **With the switch off
+ * (`CHAIN_WINDOW_PER_BODY`, or `withReactionKnobs(OLD_REACTION)`) the four arrays are the old ones exactly** (recomputed, equal), so the switch restores the base engine byte for byte (release 50 on the branch's own base, r51-rc on the r51 merge, the base 35aa31e77 here). Outcomes:
+ * Chapter IV is still 20/20 at D = 0 and 10/10 on the Active arm; Chapter V is still 20/20 at D = 0 (the chain takes 126,455 steps over the 20 seeds where it took 120,045, +5.3 %; Chapter IV 44,791
+ * where it took 43,127, +3.9 %); **the Chapter V Active D = 1500 arm goes from 9/10 to 8/10** (seeds 1 and 9 are lost, seed 10 is no longer), ten seeds, disclosed and measured at 500 seeds in the handoff, not tuned.
+ * The Wait arm still equals the D = 0 arrays and a Wait engine switched to Active still equals the Active arrays (both asserted below). The old hashes are the base 35aa31e77 (r52-rc 3c92b60cc plus the Chapter VI link opening); they equal r51-rc d6dc0bdd7's, because the link opening moves only Chapter VI's Acts II and III and r52 moved neither chapter. Proof on the merged tree (branch `re-parity-rc9-x2-hit-reaction-r52`, 2026-10-17): with `CHAIN_WINDOW_PER_BODY` forced off for the whole run through a module mock (a vitest setup file; `withReactionKnobs(OLD_REACTION)` is the same switch inside the process), the four arrays: 60 of 60 of the base's hashes come back exactly, and with it on all 60 move. The four new arrays also equal, digit for digit, the ones the lane recomputed on the r51-rc merge (d6dc0bdd7), so the stacking on r52 and the link opening moved none of the sixty.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -222,29 +232,29 @@ const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
 /** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D0 = [
-  '45734a8be5dd203c', '70e64552622c11e3', '52b166f112447102', 'ca9ad0689e657475', 'fdc102f04be24914',
-  '26f7d686e3ead858', 'c35a0a9e8a563eb4', 'db598dacdbdc041c', 'aaf5d86512e297d9', '2fd566e67b8d999a',
-  '57d908e9458ef109', '8dbdd39920320d99', '0768c0be16dc273f', '2ae3d98cdb7bddec', '87e2d0381ce589ad',
-  'e85acfb7b2a6761a', '9c1dab89a4cb5a66', '81b082250deaaa55', '75d7b3a92bcd5b27', 'db08cd1c22fdd9bd',
+  '911ada24be11c668', '88653e45b18896cd', 'cc1d746de1a57bd1', '4100b491f0b3a687', '0e1226e139a6574b',
+  '2679f7e9f92f0470', '0a0e4ed5fef47b90', '64274fc47cb9608f', 'f62df706ff0ce1d9', '1f872277ef3155b1',
+  'b620811b0e92fd6f', '74bbe96fc33b5086', '77a69c05d95d6d91', '67a2d731381147c9', 'c9258ceb988465c2',
+  '48c4d7d43ce00a18', 'ee4d1d5d422f980e', 'ff30eef053b72ada', '78dd0fd9c8170a81', 'bfc8431dafecfb0c',
 ];
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D0 = [
-  '879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5', '1df2185cc633c36e', 'e31506651bcd11b4',
-  '72d5806b5c3b2b61', '683b6b8ff95c67ce', '5a286d9847ac4940', '71dde76a1993fc57', '9ed10998a85f5170',
-  '8f0a09c84381f65f', '33d6020772c0e9b4', '2206bb1a9eaff82a', 'd413824ed77a1fc7', '8da869e86b98e325',
-  'fd963d585536f8d6', '76514c555d30ec1c', 'b34b0685b396a4b2', '195b3513e9f13f62', '5434643746ee06c0',
+  'f088d67c48d6cc10', '3a74b5193adc4161', 'aeca4110de447dc4', '9d515113ea9a9092', '1dd5bc74fe420ad8',
+  'e563354e0f016d58', '701eb9b3d45999b7', '95d2d4057334651c', '493c3f8811a9ae86', '96120300b4653b8a',
+  '0cc2281806680f27', '9deac322a8b5f735', 'fd64046b73e04c91', '481ac10578d06aac', '00721cd403a9fb6e',
+  'a7bc4127664fe3a8', 'dd21bd09c48fe576', '22e687f78936576b', '3b5c33ac11689efe', '4a3a57989f0bb061',
 ];
 
 /** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D1500 = [
-  'e65e760c1ac142e6', '038b6876c64668be', '77fffbaa2465740d', '0215917ad148e7a3', 'e545b8da99c618be',
-  '58672e3d620855a9', 'a7d5a8cdd88520cf', '64a95bd84e97ab16', '432ba0925b4c68fe', 'da5c4743e5da05b7',
+  '5385f128d0bbe00a', '878b4ca5279f18f1', 'ba024bdd4db15f3f', 'bbe8992e5e0a8c83', 'd2be188b084106ca',
+  '4a8f56069d683671', 'a0059342190063e5', '27a0eb4946ed27d7', 'b7504fb3289da37e', 'e674ca1bd816d5db',
 ];
 /** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Seed 8 re-pinned a fourth time for the Core's death entry (RC9 X2-E, see the fourteenth re-pin above); its old hash is in git at 748038a0a. */
 const CH5_D1500 = [
-  'b48f133a94b43bda', '972a2c6e15a91cb4', '22f26e178f22dc79', '1b7114b300491d91', '4b4d635fa07e9d26',
-  'bfbdf0da96a1d104', 'd70c807c59cc3b6b', '6630724652e01f6a', 'de09fabd64d2f030', 'dffb3e303697f33d',
+  'c568c06af2d32d4a', '70c9b63427a29c45', '08d0977e0d1536cb', '0aa149db07fed35b', 'c5aa8074c9904ac5',
+  '2dfcb54f91efbb42', '2befeca3f6206c28', '53886a21b2085bed', '2e1fa19a8241c83a', 'ec84435db84ffac6',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 /** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */

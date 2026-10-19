@@ -37,14 +37,16 @@ export type { AtbSpeed } from './clock.ts';
 export const LEBLANC_SCRIPT_SINIROTHX = true;
 
 /**
- * PR-0107's switch, **OFF** until Bailey rules: a chained link flagged
- * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the
- * source) opens on randomised bars (§1.6, `[single source]`) instead of the continuation's zero.
- * Sourced, but it moves Chapter VI outside its band at human pace (measured in
- * `docs/handoff/iter2-b1.md`), so the plan's stop rule keeps it off; Bailey kept it off on 2026-09-27 (D-242).
- * `Ffx2EngineOptions.separateBattleGauges` overrides it for a measurement run. FFX-2 only.
+ * PR-0107's switch, **ON since Bailey's yes of 2026-10-17** ("yes turn on chapter VI opening, keep going full speed"; merged onto r52-rc for release 53)
+ * (plan question Q19; it was `false` until then). A chained link flagged
+ * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the source) opens as the game opens every
+ * battle (FFX2-G10 sections 4 to 6): a random opening wait for each character, then the opening trim, no preemptive or ambush roll
+ * (`atb-open.ts`, `kernel/atb-start.ts`) instead of the continuation's every wait whole. Bailey kept it OFF on 2026-09-27 (D-242)
+ * because it moved Chapter VI 16.5 points at human pace on the engine of that day; re-measured on the engine as it is now it moves
+ * nothing outside the band (human 499/500 off and on, Active 467 against 465, bench 500/500; 500 seeds a row),
+ * `docs/handoff/re-parity-rc9-x2-link-open.md`. `Ffx2EngineOptions.separateBattleGauges` overrides it for a measurement run. FFX-2 only.
  */
-export const SEPARATE_BATTLE_GAUGES = false;
+export const SEPARATE_BATTLE_GAUGES = true;
 
 /** One *drawn* full HUD bar: 24,000 units (8.43 s of the Normal speed). Presentation only. */
 export const TICKS_PER_BAR = 24000;
@@ -84,22 +86,39 @@ export const CHARGE_VALUE_LONG = 39;
 // ---------------------------------------------------------------------------
 
 /*
- * The chain window stands in for the game's HIT REACTION (a motion-system state the exe holds no length for: re-parity W3
- * handoff section 7). It stays the 2 s and 3 s the old engine used, now in logic steps (29.97 a second): 60 and 90.
+ * The chain window stands in for the game's HIT REACTION. Re-parity lane X2-A (FFX-2 only, Bailey 2026-10-08 "1:1 parity", D-768): the exe holds no
+ * 2 s or 3 s; the counter lives as long as the target's damage clip plays (note FFX2-G01 section 7), so while `CHAIN_WINDOW_PER_BODY` is on the
+ * window is that clip per body (`reaction.ts`, `data/ffx2/hit-reaction-frames.ts`). The 2 s and 3 s below are what a body outside the data keeps
+ * (and what every body gets with the switch off), now in logic steps (29.97 a second): 60 and 90.
  */
+/**
+ * THE SWITCH of lane X2-A, slice 1 (FFX-2 only; the release driver turns the whole slice off by setting it `false`): the chain window, the
+ * span of the halved tick, the forced hit and the Haste halving follow each body's own hit reaction (rows XA1, XA2, XA4 and XA7 of the
+ * wiring plan's lane X2-A). Off, the engine is byte for byte the one of release 50.
+ */
+export const CHAIN_WINDOW_PER_BODY = true;
+
+/**
+ * Logic steps a reaction lasts beyond its clip: **1**, calibrated on the running game (2026-10-13, question Q1 of that day's live session): Yuna's Moogle Mascot
+ * reacted for 31 steps against a 30-frame clip, Paine's Tonberry Mascot 37 against 36, a Hasted Rikku's Black Cat Mascot 15 against a
+ * 28-frame clip at twice the speed (14 steps). One offset fits all three (clip +1, not +2 or +3); the girls' own damage script holds
+ * a one-step wait the monsters' lacks, so on a monster the offset is the same number carried over, not a measurement.
+ */
+export const HIT_REACTION_SCHEDULING_STEPS = 1;
+
 /**
  * How long a hit reaction halves the tick: **15 logic steps (0.5 s)**, MEASURED on the running game (2026-10-09,
  * `research/re-ffx2-timing-measured.md` section 5): after a weak Delay hit a girl's tick read 49 (99 halved) for 14 steps in two cases and 15
- * in the third, which is what makes her 4,000 units take 48 steps. The reaction is a motion-system state, so no number in the exe says
- * how long it lasts for another hit; this is one command's measurement used for every damaging hit (a listed open item). The 2 s of the
- * chain window below is a different clock: how long the chain counter lives.
+ * in the third, which is what makes her 4,000 units take 48 steps. That one command's measurement stood for every damaging hit; with
+ * `CHAIN_WINDOW_PER_BODY` on, a body in the data halves for its own reaction (31 steps for Yuna's Mascot) and 15 is what the others keep.
+ * The 2 s of the chain window below is a different clock: how long the chain counter lived.
  */
 export const HIT_REACTION_STEPS = 15;
 
-/** Chain window after a normal hit: 2 s = 60 logic steps. `[verified: 2 sources]` */
+/** Chain window after a normal hit: 2 s = 60 logic steps. `[verified: 2 sources]` Kept for a body outside the data. */
 export const CHAIN_WINDOW_TICKS = Math.round(2 * STEPS_PER_SECOND);
 
-/** Chain window after a **critical** hit: 3 s = 90 logic steps. `[verified: 2 sources]` */
+/** Chain window after a **critical** hit: 3 s = 90 logic steps. `[verified: 2 sources]` Kept for a body outside the data. */
 export const CHAIN_WINDOW_TICKS_CRIT = Math.round(3 * STEPS_PER_SECOND);
 
 /** `chainMult = CHAIN_BASE + CHAIN_STEP * chainNumber`. `[verified: 2 sources]` */
@@ -264,6 +283,13 @@ export const CONFUSION_PICK = true;
  * node count with the gates spread over successive links (an `[estimate]`), which is also what a grid with no layout keeps. A measurement and rollback switch; no random draw either way.
  */
 export const GRID_LAYOUTS = true;
+
+/**
+ * Whether a Garment Grid lists the auto-ability rows its plate row carries (re-parity RC10 lane XD1b; `FFX2-G04` 3.4, `FFX2-G09` 3.5; FFX-2 only): a gate pair is listed once the gates it names are crossed, an
+ * always-on pair as soon as the grid is worn, and the ones that keep a status or set an SOS set (Highroad Winds' SOS Haste, Double HP and Double MP of Downtrodder and Tempered Will) join the girl's automatic-status layer
+ * (`adapt/auto-grid.ts`). Off, a grid lists no row, as every build before RC10. A measurement and rollback switch; no random draw either way.
+ */
+export const GRID_AUTO_STATUS = true;
 
 /**
  * Whether a screen exists that lets a player choose the Alchemist's Mix's two items (re-parity RC9 lane X2-G left it for a mockup; the driver's item 88e; FFX-2 only). The engine takes a Mix with two items in

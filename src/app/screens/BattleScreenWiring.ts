@@ -33,6 +33,7 @@ import { withOmnisDiscs } from '../../engine/OmnisDiscTap.ts';
 import { withOmnisGlow } from '../../engine/OmnisGlowLook.ts';
 import { withOmnisReadout } from '../../ui/ffx/OmnisReadout.ts';
 import { withSinHud } from '../../ui/ffx/SinHud.ts';
+import { withDoublecastHud } from '../../ui/ffx/DoublecastHud.ts';
 import { Ff7BattleHud } from '../../ui/ff7/Ff7BattleHud.ts';
 import { withStatusLooks, type StatusField } from '../../ui/common/withStatusLooks.ts';
 import { isPhysicalAction } from '../../engine/EnemyActionPose.ts';
@@ -155,7 +156,7 @@ export function createHud(game: GameId, field?: () => (OversoulField & StatusFie
   // `intentRoof`: the scene hangs the enemy-intent slab over the highest enemy's head (`SceneStaging.intentRoof`; Chapter VI), unset everywhere else.
   const ffx2Options = { engine: engine instanceof FFX2Engine ? engine : null, ...(artNamespace ? { artNamespace } : {}), ...(advisorCap !== undefined ? { advisorCap } : {}), ...(intentRoof ? { intentRoof } : {}) };
   const hud: HudPort = game === 'ffx'
-    ? withSinHud(withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)))
+    ? withDoublecastHud(withSinHud(withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))), engine instanceof FFXEngine ? (actorId, firstId) => engine.doublecastPicks(actorId, firstId) : null) // Doublecast's two rounds: the engine's picker (FFX only)
     : withPhoneLayout(new FFX2BattleHud(ffx2Options), installFfx2PhoneHud); // advisor v3
   // `guideFolded`: the scene starts its fights with the strategy guide folded to its chip (`SceneStaging.guideFolded`; FFX Chapters I and III), unset everywhere else. The wrappers above patch the HUD
   // they are given and hand the same object back, so it is the FFX HUD itself; the FFX-2 HUD has no such start and ignores the argument.

@@ -37,7 +37,7 @@ import {
 } from './adapt/inputs.ts';
 import { has, luckStage, specialWord, statusWord1 } from './adapt/words.ts';
 import { bumpChain, chainBefore, chainMultiplier } from './chain.ts';
-import { HIT_REACTION_STEPS } from './constants.ts';
+import { reactionSpan } from './reaction.ts';
 import { rollCritical, type CritInput } from './kernel/crit.ts';
 import { elementLadder } from './kernel/element.ts';
 import { HitResult, determineHits } from './kernel/hit.ts';
@@ -56,8 +56,14 @@ import { afterAppliedToSelf, landedOf, reportApplied } from './applied.ts';
 
 /** What the caller of `resolveAbility` hands the strikes beyond the ability. */
 export interface StrikeOptions {
-  /** A minigame outcome that replaces the row's hit count (Trigger Happy, a dice roll). */
+  /** A minigame outcome that replaces the row's hit count (the sum of Two Dice's dice, FFX2-H04 3.9). */
   hitsOverride?: number;
+  /**
+   * The shots a Trigger Happy window fired (FFX2-H05 3.5): 1 or more play that many hits, **0 plays none**. The row plans its own 60 hits per target and
+   * each shot executes one, so a window nobody pressed in plans 60 and executes none (the rest is dropped when the action is removed). Absent: no timed
+   * input, the hit count is the row's. Not `hitsOverride`, whose 0 is "no override" as in the game's hit determination.
+   */
+  shots?: number;
   /** The gil offered: a Bribe's amount, Spare Change's gil (`ActionRec+0xb0`). */
   gilSpent?: number;
   /** The action is a counter (a system action): its results set off no counter (`Chr+0x15c1` is not 1). */
@@ -230,7 +236,7 @@ function strike(env: Env, target: Ffx2Unit): number {
       if (hp > 0 && !noChain) {
         ctx.emit({ type: 'chain', targetId: target.id, count: before, multiplier: chainMultiplier(before) });
         bumpChain(target, before, classes.critical);
-        target.gauge.hitReaction = HIT_REACTION_STEPS; // the flinch halves the target's tick for a while (`atb-engine.ts kernelUnit`)
+        target.gauge.hitReaction = reactionSpan(target, classes.critical); // the flinch halves the target's tick for as long as it lasts (`atb-engine.ts kernelUnit`, `reaction.ts`)
       }
       if (wasAlive) {
         ctx.emit({
@@ -322,7 +328,7 @@ export function runStrikes(
   const determined = determineHits(
     hitAttacker(user, idOf(user)),
     command.hit,
-    { repeatCount: 0, repeatLimit: 3, amount: gilSpent, hitsOverride: options.hitsOverride ?? 0 },
+    { repeatCount: 0, repeatLimit: 3, amount: gilSpent, hitsOverride: options.hitsOverride ?? Math.max(0, options.shots ?? 0) },
     targets.map((t) => hitTarget(t, idOf(t))),
     hitDraw(ctx.rng, command.accuracyFormula, targets),
   );
@@ -335,7 +341,7 @@ export function runStrikes(
   });
 
   // Hit events: how many strikes each target takes, and how many hit events the presenter paces.
-  const planned = determined.perTargetHits;
+  const planned = options.shots !== undefined && options.shots < 1 ? determined.perTargetHits.map(() => 0) : determined.perTargetHits; // no shot fired: planned, none executed
   let hitCount = 0;
   determined.targets.forEach((r, i) => {
     const n = planned[i] ?? 0;

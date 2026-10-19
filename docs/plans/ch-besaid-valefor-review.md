@@ -48,7 +48,7 @@ ordered the production build **off the project drive** (vite `--outDir` on the s
 
 Sources, in order of authority: **`research/re-ffx2-yojimbo-valefor.md`** (the RE session's read of the Steam build's `monster.bin`, **row 164**, `[RE row 164]`), then `research/ffx2-fallen-aeons.md` §7.1
 (SinirothX's *Enemy Encyclopedia*, GameFAQs 31807, and the FF Wiki page, revision 3979327; HP, EXP, AP, gil and items also FFExodus, GamerGuides and Split_Infinity). The two **agree in every field they
-share**; the row adds the rest. `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` carries the row's 200 raw bytes, and `besaid-valefor-data.test.ts` decodes them and pins the data and the record to them.
+share**; the row adds the rest. `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` carries the row as decoded fields with their record offsets (the 200 raw bytes are not kept), and `besaid-valefor-data.test.ts` pins the data and the record to them.
 
 | Field | Value | Source | Tag |
 |---|---|---|---|

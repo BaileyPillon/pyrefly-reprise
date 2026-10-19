@@ -155,21 +155,21 @@ describe.skipIf(!haveArt)('the measured art on this disk', () => {
   });
 });
 
-describe.skipIf(!existsSync(resolve('docs/target/pose-measure.json')))('the D-298 stature floor (a bent, hunched or kneeling pose is not drawn under 0.60 of its idle height)', () => {
-  // Bailey, 2026-10-05, on the driver's recommendation: lifted for exactly these two poses and no other.
-  const LIFTED = ['lulu/critical', 'rikku-berserker/ready'];
-  // r50.1: Lulu's critical is held at 0.75 of her idle's height (a stature hold, `tests/unit/engine/pose-stature-hold.test.ts`: Bailey, 2026-10-16, "lulu looks tiny when hurt"), so of the two lifts only Rikku Berserker's ready still stands under the floor.
-  const UNDER = ['rikku-berserker/ready'];
-  it('holds for every measured pose except the two Bailey lifted, and those two say so in the record (Lulu critical now stands above the floor, held)', () => {
-    const records = JSON.parse(readFileSync(resolve('docs/target/pose-measure.json'), 'utf8')) as { subjects: Record<string, { poses: Record<string, { stature?: number; gateLifted?: unknown }> }> };
+describe.skipIf(!existsSync(resolve('docs/target/pose-measure.json')))('the D-298 stature floor (a bent, hunched or kneeling pose is not drawn under 0.60 of its idle height), now met by the sizing rule', () => {
+  // D-298's gate and Bailey's two lifts of it (Lulu critical, Rikku Berserker ready; 2026-10-05) and r50.1's stature holds were special cases of one rule: the W3 sizing rule (tools/posescale/pose-ruler.mjs,
+  // 2026-10-17) sizes every standing pose by the geometric mean of its head and height scales and lifts a stature under the floor (0.90, 0.75 low) to it. No gate and no lift are left in the records.
+  it('no measured pose stands under 0.595 of its idle, and no record carries a lifted gate any more', () => {
+    const records = JSON.parse(readFileSync(resolve('docs/target/pose-measure.json'), 'utf8')) as { subjects: Record<string, { poses: Record<string, { stature?: number; gateLifted?: unknown; gate?: unknown; scaleSrc?: string }> }> };
     const under: string[] = [];
     for (const [subject, sub] of Object.entries(records.subjects)) {
       for (const [pose, r] of Object.entries(sub.poses)) {
         const key = `${subject}/${pose}`;
         if (typeof r.stature === 'number' && r.stature < 0.595) under.push(key);
-        if (r.gateLifted) expect(LIFTED, `${key} lifts the floor without Bailey's yes`).toContain(key);
+        expect(r.gateLifted, `${key} still carries a lifted D-298 gate`).toBeUndefined();
+        expect(r.gate, `${key} still carries a D-298 gate`).toBeUndefined();
+        expect(r.scaleSrc, `${key}`).not.toBe('gated');
       }
     }
-    expect(under.sort()).toEqual([...UNDER].sort());
+    expect(under.sort()).toEqual([]);
   });
 });

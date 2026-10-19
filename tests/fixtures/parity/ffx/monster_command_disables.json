@@ -1,0 +1,858 @@
+{
+ "note": "Every setCommandDisabled call (script call 0x703B) of every FFX monster script (361 files), in code order, with its three constant arguments (the actor spec, the command id, the flag, or null where the script passes a variable), the function it sits in and the hook that function is (init = the monster's first function; the others are the monster-AI worker's hook table). A plain actor spec is that slot (0 Tidus, 1 Yuna, 4 Wakka, 5 Lulu, 6 Rikku); -23 every slot that is not a monster; -21 every slot. A command id 0x3xxx (12288 and up) sets (flag 1) or clears (flag 0) a bit of the actor's disabled-command bitmap; an id below 0x1000 is an aeon's availability byte, written with the flag as given (flag 0 = unavailable): 8 Valefor, 9 Ifrit, 10 Ixion, 11 Shiva, 12 Bahamut, 13 Anima, 14 Yojimbo, 15 to 17 Cindy, Sandy, Mindy. 'fights' is the battle files whose formation holds the monster (the 863 battle files; the zzzz test formations left out); 'chaptersWhichFightIt' maps those files to our chapters through formation_commands.json. Numbers and file names only, no script text. Regenerate with the lane scratch in D:/Tools/ffx-parity/tmp/ffx-script-locks (scan-mon.mjs, make-fixture.mjs); not part of the build.",
+ "corpus": {
+  "monsterFilesScanned": 361,
+  "battleFilesScanned": 863,
+  "monsterFilesWithCalls": 18,
+  "totalCalls": 81
+ },
+ "monsters": {
+  "m101": {
+   "name": "Tros",
+   "calls": [
+    {
+     "at": "0x0423",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 0,
+     "command": 12548,
+     "flag": 1
+    },
+    {
+     "at": "0x042f",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 6,
+     "command": 12548,
+     "flag": 1
+    },
+    {
+     "at": "0x0480",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 0,
+     "command": 12548,
+     "flag": 0
+    },
+    {
+     "at": "0x048c",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 6,
+     "command": 12548,
+     "flag": 0
+    },
+    {
+     "at": "0x0605",
+     "fn": "w1.f4",
+     "hook": "onTargeted",
+     "who": 0,
+     "command": 12288,
+     "flag": 0
+    },
+    {
+     "at": "0x0611",
+     "fn": "w1.f4",
+     "hook": "onTargeted",
+     "who": 6,
+     "command": 12288,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "cdsp07_00"
+   ],
+   "chaptersWhichFightIt": []
+  },
+  "m109": {
+   "name": "Geosgaeno",
+   "calls": [
+    {
+     "at": "0x0225",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12288,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x0231",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12566,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x023d",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12565,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x0249",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12289,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x0255",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12563,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x0261",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12564,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x026d",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12292,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x0279",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12293,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x0298",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 0,
+     "command": 12569,
+     "flag": 0
+    },
+    {
+     "at": "0x02a7",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 4,
+     "command": 12572,
+     "flag": 0
+    },
+    {
+     "at": "0x02b6",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 6,
+     "command": 12574,
+     "flag": 0
+    },
+    {
+     "at": "0x03f1",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12288,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x03fd",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12566,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x0409",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12565,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x0415",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12289,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x0421",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12563,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x042d",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12564,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x0439",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12292,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x0445",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 12293,
+     "command": 1,
+     "flag": null
+    },
+    {
+     "at": "0x0464",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 0,
+     "command": 12569,
+     "flag": 1
+    },
+    {
+     "at": "0x0473",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 4,
+     "command": 12572,
+     "flag": 1
+    },
+    {
+     "at": "0x0482",
+     "fn": "w1.f2",
+     "hook": "onTurn",
+     "who": 6,
+     "command": 12574,
+     "flag": 1
+    },
+    {
+     "at": "0x05aa",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12288,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x05b6",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12566,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x05c2",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12565,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x05ce",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12289,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x05da",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12563,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x05e6",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12564,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x05f2",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12292,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x05fe",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 12293,
+     "command": 0,
+     "flag": null
+    },
+    {
+     "at": "0x061d",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 0,
+     "command": 12569,
+     "flag": 0
+    },
+    {
+     "at": "0x062c",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 4,
+     "command": 12572,
+     "flag": 0
+    },
+    {
+     "at": "0x063b",
+     "fn": "w1.f4",
+     "hook": "onHit",
+     "who": 6,
+     "command": 12574,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "bjyt02_01",
+    "bjyt02_02"
+   ],
+   "chaptersWhichFightIt": []
+  },
+  "m123": {
+   "name": "Negator",
+   "calls": [
+    {
+     "at": "0x01cf",
+     "fn": "w1.f2",
+     "hook": "onTargeted",
+     "who": -21,
+     "command": 12565,
+     "flag": 1
+    },
+    {
+     "at": "0x01db",
+     "fn": "w1.f2",
+     "hook": "onTargeted",
+     "who": -21,
+     "command": 12566,
+     "flag": 1
+    },
+    {
+     "at": "0x01e7",
+     "fn": "w1.f2",
+     "hook": "onTargeted",
+     "who": -21,
+     "command": 12329,
+     "flag": 1
+    },
+    {
+     "at": "0x01f3",
+     "fn": "w1.f2",
+     "hook": "onTargeted",
+     "who": 1,
+     "command": 12567,
+     "flag": 1
+    },
+    {
+     "at": "0x01ff",
+     "fn": "w1.f2",
+     "hook": "onTargeted",
+     "who": 1,
+     "command": 12568,
+     "flag": 1
+    },
+    {
+     "at": "0x020b",
+     "fn": "w1.f2",
+     "hook": "onTargeted",
+     "who": 5,
+     "command": 12573,
+     "flag": 1
+    },
+    {
+     "at": "0x0224",
+     "fn": "w1.f3",
+     "hook": "onDeath",
+     "who": -21,
+     "command": 12565,
+     "flag": 0
+    },
+    {
+     "at": "0x0230",
+     "fn": "w1.f3",
+     "hook": "onDeath",
+     "who": -21,
+     "command": 12566,
+     "flag": 0
+    },
+    {
+     "at": "0x023c",
+     "fn": "w1.f3",
+     "hook": "onDeath",
+     "who": -21,
+     "command": 12329,
+     "flag": 0
+    },
+    {
+     "at": "0x0248",
+     "fn": "w1.f3",
+     "hook": "onDeath",
+     "who": 1,
+     "command": 12567,
+     "flag": 0
+    },
+    {
+     "at": "0x0254",
+     "fn": "w1.f3",
+     "hook": "onDeath",
+     "who": 1,
+     "command": 12568,
+     "flag": 0
+    },
+    {
+     "at": "0x0260",
+     "fn": "w1.f3",
+     "hook": "onDeath",
+     "who": 5,
+     "command": 12573,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "maca02_00"
+   ],
+   "chaptersWhichFightIt": []
+  },
+  "m163": {
+   "name": "possessed Valefor",
+   "calls": [
+    {
+     "at": "0x0292",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 8,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_00"
+   ],
+   "chaptersWhichFightIt": [
+    "braskas-final-aeon",
+    "last-summoning"
+   ]
+  },
+  "m164": {
+   "name": "possessed Ifrit",
+   "calls": [
+    {
+     "at": "0x0289",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 9,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_01"
+   ],
+   "chaptersWhichFightIt": [
+    "braskas-final-aeon",
+    "last-summoning"
+   ]
+  },
+  "m165": {
+   "name": "possessed Ixion",
+   "calls": [
+    {
+     "at": "0x028f",
+     "fn": "w1.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 10,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_02"
+   ],
+   "chaptersWhichFightIt": [
+    "braskas-final-aeon",
+    "last-summoning"
+   ]
+  },
+  "m166": {
+   "name": "possessed Shiva",
+   "calls": [
+    {
+     "at": "0x027d",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 11,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_03"
+   ],
+   "chaptersWhichFightIt": [
+    "braskas-final-aeon",
+    "last-summoning"
+   ]
+  },
+  "m167": {
+   "name": "possessed Bahamut",
+   "calls": [
+    {
+     "at": "0x0295",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 12,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_04"
+   ],
+   "chaptersWhichFightIt": [
+    "braskas-final-aeon",
+    "last-summoning"
+   ]
+  },
+  "m168": {
+   "name": "possessed Anima",
+   "calls": [
+    {
+     "at": "0x02cb",
+     "fn": "w1.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 13,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_05"
+   ],
+   "chaptersWhichFightIt": [
+    "last-summoning"
+   ]
+  },
+  "m169": {
+   "name": "possessed Yojimbo",
+   "calls": [
+    {
+     "at": "0x0289",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 14,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_06"
+   ],
+   "chaptersWhichFightIt": [
+    "last-summoning"
+   ]
+  },
+  "m178": {
+   "name": "possessed Cindy",
+   "calls": [
+    {
+     "at": "0x0201",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 15,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_07"
+   ],
+   "chaptersWhichFightIt": [
+    "last-summoning"
+   ]
+  },
+  "m179": {
+   "name": "possessed Sandy",
+   "calls": [
+    {
+     "at": "0x01ef",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 16,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_07"
+   ],
+   "chaptersWhichFightIt": [
+    "last-summoning"
+   ]
+  },
+  "m180": {
+   "name": "possessed Mindy",
+   "calls": [
+    {
+     "at": "0x01ef",
+     "fn": "w0.f0",
+     "hook": "init",
+     "who": 1,
+     "command": 17,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "sins07_07"
+   ],
+   "chaptersWhichFightIt": [
+    "last-summoning"
+   ]
+  },
+  "m211": {
+   "name": null,
+   "calls": [
+    {
+     "at": "0x0841",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12328,
+     "flag": 1
+    },
+    {
+     "at": "0x084d",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12291,
+     "flag": 1
+    },
+    {
+     "at": "0x0859",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12312,
+     "flag": 1
+    },
+    {
+     "at": "0x08c8",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12328,
+     "flag": 1
+    },
+    {
+     "at": "0x08d4",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12291,
+     "flag": 1
+    },
+    {
+     "at": "0x08e0",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12312,
+     "flag": 1
+    },
+    {
+     "at": "0x0955",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12328,
+     "flag": 1
+    },
+    {
+     "at": "0x0961",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12291,
+     "flag": 1
+    },
+    {
+     "at": "0x096d",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12312,
+     "flag": 1
+    },
+    {
+     "at": "0x09dc",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12328,
+     "flag": 1
+    },
+    {
+     "at": "0x09e8",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12291,
+     "flag": 1
+    },
+    {
+     "at": "0x09f4",
+     "fn": "w0.f3",
+     "hook": "onHit",
+     "who": -23,
+     "command": 12312,
+     "flag": 1
+    }
+   ],
+   "fights": [
+    "bika02_11",
+    "bika02_12",
+    "bika02_13",
+    "genk16_00",
+    "genk16_01",
+    "genk16_02",
+    "omeg00_12",
+    "omeg00_13",
+    "omeg00_14",
+    "omeg00_15",
+    "omeg00_16",
+    "omeg01_06"
+   ],
+   "chaptersWhichFightIt": []
+  },
+  "m251": {
+   "name": "Mimic",
+   "calls": [
+    {
+     "at": "0x026c",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12291,
+     "flag": 0
+    },
+    {
+     "at": "0x0278",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12312,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "omeg00_13"
+   ],
+   "chaptersWhichFightIt": []
+  },
+  "m252": {
+   "name": "Mimic",
+   "calls": [
+    {
+     "at": "0x0263",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12291,
+     "flag": 0
+    },
+    {
+     "at": "0x026f",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12312,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "omeg00_14"
+   ],
+   "chaptersWhichFightIt": []
+  },
+  "m253": {
+   "name": "Mimic",
+   "calls": [
+    {
+     "at": "0x02b2",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12291,
+     "flag": 0
+    },
+    {
+     "at": "0x02be",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12312,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "omeg00_15"
+   ],
+   "chaptersWhichFightIt": []
+  },
+  "m256": {
+   "name": "Mimic",
+   "calls": [
+    {
+     "at": "0x026c",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12291,
+     "flag": 0
+    },
+    {
+     "at": "0x0278",
+     "fn": "w1.f7",
+     "hook": "onDeath",
+     "who": -23,
+     "command": 12312,
+     "flag": 0
+    }
+   ],
+   "fights": [
+    "omeg00_16"
+   ],
+   "chaptersWhichFightIt": []
+  }
+ }
+}

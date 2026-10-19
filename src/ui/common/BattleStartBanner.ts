@@ -69,6 +69,11 @@ export interface BattleStartBannerOptions {
   game?: GameId;
   /** How long the card holds with no input. */
   holdMs?: number;
+  /**
+   * Held past `holdMs` until this settles (it always does: the caller bounds it), never past a press or a click. CHAPTER FRAMING's first plan lands while the card covers the field
+   * (`engine/fx/mix/openingGate.ts`), so the first menu never opens under a plan that is still to land.
+   */
+  until?: () => Promise<unknown>;
   /** An experiment (the FFX-2 Leblanc preview): the eyebrow says EXPERIMENTAL, not a chapter numeral. */
   experimental?: true;
 }
@@ -207,7 +212,12 @@ export class BattleStartBanner {
     this.opts.root.appendChild(this.el);
     return new Promise<void>((resolve) => {
       this.done = resolve;
-      this.timer = setTimeout(() => this.dismiss(), this.holdMs);
+      this.timer = setTimeout(() => {
+        this.timer = null;
+        const wait = this.opts.until?.();
+        if (!wait) return this.dismiss();
+        void wait.then(() => this.dismiss(), () => this.dismiss());
+      }, this.holdMs);
     });
   }
 

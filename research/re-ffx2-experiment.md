@@ -165,7 +165,7 @@ third weight (x5) 1, 2, 4, 8. **Any of the 125 combinations is reachable** (the 
 | Defense index d | body DEF and MDEF (physical and magical damage taken); shows defense modules 1..d; adds `256 d` to the effect-level number | everything else |
 | Special index s | the scene (so the move list and the poll pattern), the number of part actors (2 s); adds `16 s` to the effect-level number | stats |
 
-The **effect-level number** (`stat 222`) is `a + 16 s + 256 d`; the setter stores it on the character and on the model object (`FUN_006e5990`), so it is a
+The **effect-level number** (`stat 222`) is `a + 16 s + 256 d`; the setter stores it on the character and on the model object (the function at 0x006e5990), so it is a
 presentation parameter [M: its readers were not traced]. The body model's **head module** is shown only when the scene is the Special 5 scene **and** the
 Attack and Defense indices are both 4; in every other case it is hidden.
 

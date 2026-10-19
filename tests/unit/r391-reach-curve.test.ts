@@ -1,11 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ATTACK_BEATS, ATTACK_IMPACT, attackOffset, reachOffset } from '../../src/engine/BattlePresenterActors.ts';
 import { PaintedActor } from '../../src/engine/PaintedActor.ts';
 import { TweenGroup } from '../../src/engine/Tween.ts';
+import { setMotionMode } from '../../src/engine/PoseSwap.ts';
 
 /**
  * r391-reach: a strike carried beyond the house lunge to reach its target moves the extra distance on an eased step (`reachOffset`); the house part keeps `attackOffset`
  * to the frame. Both games (shared plumbing): every number here is the move's own timing, none of it a game rule.
+ *
+ * W5 (pose motion, 2026-10-17): the house part's first frame is now ON `reachOffset` by default too (`PoseSwap.ts`, `?motion=classic` restores `attackOffset`): the `classic` block pins
+ * the lunge as it was, the `default` block pins the new one, the same distance and the same beats.
  */
 
 describe('reachOffset: the attack beats with the step eased in and out', () => {
@@ -40,7 +44,10 @@ describe('reachOffset: the attack beats with the step eased in and out', () => {
   });
 });
 
-describe('PaintedActor.lunge: the house part on attackOffset, the rest on reachOffset', () => {
+describe('PaintedActor.lunge under ?motion=classic: the house part on attackOffset, the rest on reachOffset', () => {
+  beforeEach(() => setMotionMode('classic'));
+  afterEach(() => setMotionMode(null));
+
   /** An actor with only what `lunge` touches: the tween group and the offset it writes. */
   function lungeActor(): { actor: PaintedActor; tweens: TweenGroup; offset: () => number } {
     const actor = Object.create(PaintedActor.prototype) as Record<string, unknown>;
@@ -90,5 +97,51 @@ describe('PaintedActor.lunge: the house part on attackOffset, the rest on reachO
     void actor.lunge(1.4, 440, undefined, 2.5);
     tweens.update(0.1);
     expect(offset()).toBeCloseTo(1.4 * attackOffset(at(100)), 6);
+  });
+});
+
+describe('PaintedActor.lunge by default (W5: the house part on reachOffset too; the same distance and the same beats)', () => {
+  function lungeActor(): { actor: PaintedActor; tweens: TweenGroup; offset: () => number } {
+    const actor = Object.create(PaintedActor.prototype) as Record<string, unknown>;
+    const tweens = new TweenGroup();
+    actor['tweens'] = tweens;
+    actor['lungeOffset'] = 0;
+    return { actor: actor as unknown as PaintedActor, tweens, offset: () => actor['lungeOffset'] as number };
+  }
+  const at = (ms: number, total = 440): number => ms / total;
+  afterEach(() => setMotionMode(null));
+
+  it('the whole distance rides reachOffset, with or without a house part: no cubic-out kick from a standing start', () => {
+    for (const house of [undefined, 3, 1.4]) {
+      const { actor, tweens, offset } = lungeActor();
+      void actor.lunge(3, 440, undefined, house);
+      let elapsed = 0;
+      for (const ms of [17, 34, 60, 114, 200, 255]) {
+        tweens.update((ms - elapsed) / 1000);
+        elapsed = ms;
+        expect(offset()).toBeCloseTo(3 * reachOffset(at(ms)), 6);
+      }
+      expect(offset()).toBeCloseTo(3, 3); // the apex, where the move has always put it
+    }
+  });
+
+  it('a house part over the distance is the house lunge alone, on the same curve', () => {
+    const { actor, tweens, offset } = lungeActor();
+    void actor.lunge(1.4, 440, undefined, 2.5);
+    tweens.update(0.1);
+    expect(offset()).toBeCloseTo(1.4 * reachOffset(at(100)), 6);
+  });
+
+  it('?motion=classic and the default meet at the end of the step and at the apex, and differ only inside the step', () => {
+    const run = (mode: 'classic' | 'smooth', ms: number): number => {
+      setMotionMode(mode);
+      const { actor, tweens, offset } = lungeActor();
+      void actor.lunge(1.4, 440);
+      tweens.update(ms / 1000);
+      return offset();
+    };
+    expect(run('smooth', 17)).toBeLessThan(run('classic', 17) / 4); // the first frame
+    expect(run('smooth', (ATTACK_BEATS.step * 440) + 1)).toBeCloseTo(run('classic', (ATTACK_BEATS.step * 440) + 1), 1); // past the step
+    expect(run('smooth', ATTACK_IMPACT * 440)).toBeCloseTo(run('classic', ATTACK_IMPACT * 440), 3); // the apex
   });
 });

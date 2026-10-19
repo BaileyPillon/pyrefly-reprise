@@ -258,7 +258,7 @@ character-properties flag, `Cmd+0x14` bit 0x10000, is set):
 
 Common refusals when inflicting on the main layer: nothing is added to a petrified target or to a result set that is petrified;
 a status the target already has is skipped; Petrify and Eject (flag word bit 0x100) are skipped while the target's action-state
-mask has any bit other than 4 (`FUN_00632630`: bit 2 comes from the helper the anchor map reads as "petrified or Stopped", bits 0 and 1
+mask has any bit other than 4 (the function at 0x00632630: bit 2 comes from the helper the anchor map reads as "petrified or Stopped", bits 0 and 1
 from counters in the command-queue header and the charging flag; their exact meaning is open, see §7). Then, by status:
 
 | Status | Rule |
@@ -342,7 +342,7 @@ formula 6 stored at `Chr+0x680`. A negative threshold gives a NaN root and a qua
 
 ## 7. Open questions
 
-1. `FUN_00632630(target, 0, 0)` (the action-state mask passed to both status functions): what exactly sets its low two bits for a
+1. The function at 0x00632630, called with the target and two zero arguments (the action-state mask passed to both status functions): what exactly sets its low two bits for a
    target in an ordinary fight. The kernels take the mask as an input; an adapter that passes 0 never blocks Petrify, Eject or Stop.
 2. `Rec+0xa6` / `+0xa7` for records the monster AI queues: only the command start was seen setting them (0 and 3). The kernel takes
    them as inputs; an adapter should pass (0, 3).

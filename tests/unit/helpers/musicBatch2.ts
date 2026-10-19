@@ -48,3 +48,12 @@ export const batch2Cues: ReadonlySet<string> = new Set(batch2.cues.map((c) => c.
 export const batch2Retired: ReadonlySet<string> = new Set(batch2.retired.map((r) => r.cue));
 /** How far batch 2 moved the music total: new files, plus each replaced file's change, minus each retired file. */
 export const batch2MusicMoved: number = batch2.totals.musicBytesAfter - batch2.totals.musicBytesBefore;
+
+/**
+ * The bytes of the two chapter-select alternates of release 39.5 (`chapter-select-a`, `-c`, LAME V4; Bailey, 2026-10-07), ported onto this line after batch 2 was measured:
+ * they replace no file, so the manifest's music total is batch 2's `musicBytesAfter` plus these (`docs/audio/music-elevenlabs-2026-10-07.json` `alternates`, pinned by
+ * `audio-chapter-select-alternates.test.ts`).
+ */
+export const alternates395Bytes: number = (
+  (JSON.parse(readFileSync(join(REPO, 'docs/audio/music-elevenlabs-2026-10-07.json'), 'utf8')) as { alternates?: { after: { bytes: number } }[] }).alternates ?? []
+).reduce((sum, a) => sum + a.after.bytes, 0);

@@ -18,6 +18,10 @@
  * row deals its hits over the whole set (every pick first, stream 5), Cover (Guard, Sentinel) is decided per target, and a Reflecting target sends a
  * reflectable command back (to the caster for a holder on the other side, to a random member of the other side for one on the caster's own).
  * Each target then runs its hits in a row.
+ *
+ * **The order the hits are applied in is the game's too** (re-parity RC10, FFX only; `hit-order.ts`): the hits are still calculated target by target, but an action's events come round by round
+ * (hit 1 of every target, then hit 2) and each target's finish step (its script's `onHit`, the death check) runs in the round of its last hit, lower slot first. An absorb command's user
+ * is healed once, after every target, and skips its own slot.
  */
 
 import type { AbilityDef, AbilityId, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
@@ -40,7 +44,9 @@ import { removePlannedHits } from './adapt/overdrive-result.ts';
 import { gaugeOnOutcome } from './gauge.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
-import { type HitScope, newRecordBook, resolveOneHit } from './hit-apply.ts';
+import { type HitScope, type Touched, newRecordBook, resolveOneHit } from './hit-apply.ts';
+import { DRAIN_RECOIL_ONE_RECORD, HIT_CALC_SLOT_ORDER, HIT_ORDER_ROUND_ROBIN, applyRecoil, holdsAbsorbRecord, inSlotOrder, runInRounds } from './hit-order.ts';
+import { newRecoilSums } from './kernel/recoil.ts';
 
 /** Knobs the caller can override per resolution. */
 export interface ResolveOptions {
@@ -115,18 +121,29 @@ function elementFor(elements: readonly ElementId[]): ElementId {
  * Targets are visited in the order of their **last** hit record, as the game applies them.
  */
 function finishTouched(scope: HitScope): void {
-  const { ctx, user, def } = scope;
   const done = [...scope.touched.values()].sort((a, b) => a.last - b.last);
   scope.touched.clear();
-  for (const { target, hpBefore, lastDamage } of done) {
-    tidusCounter(ctx, user, target, hpBefore);
-    // A follow-up row (Blitz Ace's Last Hit) is part of the action its main row already announced: one `onHit` per action.
-    if (scope.options.followUp !== true && listensToHit(target)) {
-      const affectsHp = (resolveCommand(def, user).record.damageClass & 1) !== 0;
-      runOnHit(ctx, { def, user }, target, { hpBefore, lostHp: target.hp < hpBefore, lastDamage, affectsHp });
-    }
-    settleDeferredDeath(ctx, target, user.id, lastDamage);
+  for (const entry of done) finishEntry(scope, entry);
+}
+
+/** One touched target's finish step: Tidus's counter update, the script's `onHit`, the death check. */
+function finishEntry(scope: HitScope, { target, hpBefore, lastDamage }: Touched): void {
+  const { ctx, user, def } = scope;
+  tidusCounter(ctx, user, target, hpBefore);
+  // A follow-up row (Blitz Ace's Last Hit) is part of the action its main row already announced: one `onHit` per action.
+  if (scope.options.followUp !== true && listensToHit(target)) {
+    const affectsHp = (resolveCommand(def, user).record.damageClass & 1) !== 0;
+    runOnHit(ctx, { def, user }, target, { hpBefore, lostHp: target.hp < hpBefore, lastDamage, affectsHp });
   }
+  settleDeferredDeath(ctx, target, user.id, lastDamage);
+}
+
+/** The finish step of `target`, in the round of its last hit (`hit-order.ts#runInRounds`): the game's death check runs in the call that applies a target's last hit. */
+function finishTarget(scope: HitScope, target: FFXCombatant): void {
+  const entry = scope.touched.get(target.id);
+  if (entry === undefined) return;
+  scope.touched.delete(target.id);
+  finishEntry(scope, entry);
 }
 
 /**
@@ -200,6 +217,7 @@ export function resolveAbility(
     rank: rankOf(def),
     records: newRecordBook(),
     touched: new Map(),
+    ...(DRAIN_RECOIL_ONE_RECORD && holdsAbsorbRecord(def) ? { recoil: newRecoilSums() } : {}),
   };
 
   // A reflecting target's hits go elsewhere: the reflecting target runs the outcome hook once per hit, as a hit that a Shell, Protect or Nul
@@ -212,21 +230,37 @@ export function resolveAbility(
     }
   }
 
-  if (plan) {
-    // A planned Overdrive (RC4 lane B): the hits left after the result's removal land target by target in character order.
-    for (const { target, hits } of plan) {
-      for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
-      finishTouched(scope);
-    }
-  } else if (perHitRandom) {
-    // A spread (or a script-aimed row): the hit records of the whole action are in before any target's script hears of it.
-    for (const { target, hits } of built.targets) for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
-    finishTouched(scope);
+  // An absorb command skips its own user's slot (the game counts it and moves on, FFX-H01 3.4 step 5): no hit against itself, and the recoil knows it was a target.
+  let passes: ReadonlyArray<{ target: FFXCombatant; hits: number }> = plan ?? built.targets;
+  if (scope.recoil !== undefined && passes.some((p) => p.target.id === user.id)) {
+    scope.recoil.userTargeted = true;
+    passes = passes.filter((p) => p.target.id !== user.id);
+  }
+
+  // The game calculates target by target in ascending slot order (`hit-order.ts#HIT_CALC_SLOT_ORDER`); a script-aimed row keeps the order its script named.
+  if (HIT_CALC_SLOT_ORDER && !aimed) passes = inSlotOrder(ctx, passes);
+
+  if (HIT_ORDER_ROUND_ROBIN && !aimed) {
+    // The game's order (`hit-order.ts`): every hit calculated target by target, applied round by round, each death in the round of the target's last hit.
+    runInRounds(scope, passes, (target) => resolveOneHit(scope, target), (target) => finishTarget(scope, target));
   } else {
-    for (const { target, hits } of built.targets) {
-      for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
+    if (plan) {
+      // A planned Overdrive (RC4 lane B): the hits left after the result's removal land target by target in character order.
+      for (const { target, hits } of passes) {
+        for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
+        finishTouched(scope);
+      }
+    } else if (perHitRandom) {
+      // A spread (or a script-aimed row): the hit records of the whole action are in before any target's script hears of it.
+      for (const { target, hits } of passes) for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
       finishTouched(scope);
+    } else {
+      for (const { target, hits } of passes) {
+        for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
+        finishTouched(scope);
+      }
     }
+    applyRecoil(scope); // one record, after every target (the rounds above place it themselves)
   }
 
   // Scan opens the info panel. It is emitted **after** the hits, so the whole of it is pure

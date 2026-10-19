@@ -7,11 +7,11 @@
  * `research/re-ffx2-damage.md` section 1. The engine's hand-written float chain (`formulas.ts`, one truncation
  * at the end) is gone: every damage class of every strike is computed here, through `./pipeline.ts`.
  *
- * Every operation mirrors the instruction sequence: IMUL products wrap at 32 bits, `/ 16`, `/ 64`, `/ 128`,
+ * Every operation mirrors the game's own arithmetic: products wrap at 32 bits (low 32 bits kept), `/ 16`, `/ 64`, `/ 128`,
  * `/ 256` and `/ 1024` round toward zero, and the divisions by 12 and 255 are truncating signed divides. All
  * the arguments are signed 32-bit values (the caller, the damage orchestrator, has already zero-extended the
- * stat bytes and sign-extended the stage bytes). The one non-integer step is formula 0xc, which runs on the
- * x87 stack (see {@link gilCurve}).
+ * stat bytes and sign-extended the stage bytes). The one non-integer step is formula 0xc, which runs in
+ * floating point (see {@link gilCurve}).
  *
  * Randomness: the one draw of the variance happens BEFORE the formula switch, whenever the call is not a
  * preview, even for the formulas that never use it (4, 5, 7, 0xa, 0xb, 0xe, 0xf, 0x11 to 0x13, 0x18 and any
@@ -145,9 +145,9 @@ function hasRecord(id: number): boolean {
  *
  *     result = trunc( float32( 22 * A * r / (A + 20 * r) ) )        (0 when amount <= 0)
  *
- * The products and the quotient run on the x87 stack at 53-bit precision (the C runtime start-up leaves the
- * control word at 0x27F), so double arithmetic in this order reproduces it; the two `float32` roundings are
- * the stores to memory, the last one is read back by `_ftol`.
+ * The products and the quotient run in floating point at 53-bit precision (the C runtime start-up leaves the
+ * floating-point control word at 0x27F), so double arithmetic in this order reproduces it; the two `float32` roundings are
+ * the stores to memory, the last one is read back by the float-to-int conversion.
  */
 export function gilCurve(amount: number): number {
   if (amount <= 0) return 0;
@@ -248,7 +248,7 @@ export function baseDamageAt(input: BaseDamageInput, variance: number): number {
       r = div16(mul(power, user.maxHp)); // attacker max HP * power / 16
       break;
     case 0x0c:
-      r = gilCurve(input.amount); // x87: 22 * A * sqrt(A) / (A + 20 * sqrt(A))
+      r = gilCurve(input.amount); // floating point: 22 * A * sqrt(A) / (A + 20 * sqrt(A))
       break;
     case 0x0d:
       r = hasRecord(input.targetId) ? mul(records.targetF44, power) : 0; // target record +0x44 * power

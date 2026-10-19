@@ -241,8 +241,9 @@ describe('chapter 28: a landed Zanmato against the Yu Pagodas, Braska Final Aeon
     const group = ENEMY_GROUPS_BY_ID['braskas-final-aeon']!;
     const { rig, events, streams } = zanmatoOn(group.enemies);
     expect(zanmatoTargets(events)).toEqual(['braskas-final-aeon', 'yu-pagoda-left', 'yu-pagoda-right']);
-    // BFA's status draw, then each Pagoda's status draw and the one script draw its on-hit takes (how many turns it stays hidden).
-    expect(streams).toEqual([17, 5, STATUS_STREAM, STATUS_STREAM, 2, STATUS_STREAM, 2]);
+    // BFA's status draw and each Pagoda's, then the one script draw the on-hit of each Pagoda takes (how many turns it stays hidden). RC10 (FFX only; FFX-H01 3.4, 3.7): the game
+    // calculates every target first and handles the deaths when the hits are applied, so the three status draws come before the two script draws (they were interleaved before).
+    expect(streams).toEqual([17, 5, STATUS_STREAM, STATUS_STREAM, STATUS_STREAM, 2, 2]);
     expect(types(events, 'form-change')).toHaveLength(1);
     expect(rig.fighter('braskas-final-aeon').alive).toBe(true); // his second form stands
     for (const id of ['yu-pagoda-left', 'yu-pagoda-right']) {
@@ -260,7 +261,7 @@ describe('chapter 28: a landed Zanmato against the Yu Pagodas, Braska Final Aeon
     const enemies = link.enemies.map((e) => (e.id.startsWith('possessed-') ? { ...e, stats: { ...e.stats, hp: 90_000, maxHp: 90_000 }, hp: 90_000 } : e));
     const { rig, events, streams } = zanmatoOn(enemies);
     expect(zanmatoTargets(events)).toEqual(['possessed-yojimbo', 'yu-pagoda-left', 'yu-pagoda-right']);
-    expect(streams).toEqual([17, 5, STATUS_STREAM, STATUS_STREAM, 2, STATUS_STREAM, 2]);
+    expect(streams).toEqual([17, 5, STATUS_STREAM, STATUS_STREAM, STATUS_STREAM, 2, 2]); // all statuses calculated, then the deaths (RC10, as above)
     expect(count(events, 'ko', 'possessed-yojimbo')).toBe(1);
     expect(rig.fighter('possessed-yojimbo').alive).toBe(false);
     for (const id of ['yu-pagoda-left', 'yu-pagoda-right']) expect(count(events, 'ko', id), id).toBe(1);

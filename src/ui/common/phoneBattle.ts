@@ -129,12 +129,13 @@ export function installPhoneBattle(
   cardText.append(cardName, cardHp);
   card.append(cardFace, cardText, cardNote);
   const target = make('div', 'phud-target');
+  const step = make('div', 'phud-step');
   const hint = make('p', 'phud-target__hint');
   const bar = make('div', 'phud-target__bar');
   const back = tapButton('phud-target__back', 'Back', () => sendKey('Escape', win));
   const confirm = tapButton('phud-target__go', 'Confirm', () => sendKey('Enter', win));
   bar.append(back, confirm);
-  target.append(hint, bar);
+  target.append(step, hint, bar);
   const chrome = [panel, shade, foot, guide, card, target];
   // The panel and the shade go under everything the HUD draws.
   hud.prepend(panel, shade);
@@ -275,6 +276,9 @@ export function installPhoneBattle(
     cardNote.textContent = [text.command, text.help].filter(Boolean).join(' · ');
     cardFace.style.backgroundImage = text.targetFace ? `url("${text.targetFace}")` : '';
     cardFace.hidden = !text.targetFace;
+    step.hidden = !text.step;
+    step.dataset['n'] = text.step?.n ?? '';
+    step.textContent = text.step?.text ?? '';
     hint.textContent = targetHint(game, text.ally, text.group === true);
     confirm.textContent = confirmLabel(text);
   };

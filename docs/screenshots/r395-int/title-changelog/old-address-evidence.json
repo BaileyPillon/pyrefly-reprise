@@ -1,0 +1,122 @@
+{
+ "farplane-1600x900": {
+  "notice": {
+   "x": 1063.4,
+   "y": 24.4,
+   "r": 1562.2,
+   "b": 86.6
+  },
+  "tag": {
+   "x": 1284.8,
+   "y": 833.1,
+   "r": 1548.9,
+   "b": 871.1
+  },
+  "noticeTag": 0,
+  "noticeSlab": 0,
+  "tagSlab": 0,
+  "tagHint": 0,
+  "noticeHint": 0,
+  "errors": 0
+ },
+ "echo-1600x900": {
+  "notice": {
+   "x": 1063.4,
+   "y": 24.4,
+   "r": 1562.2,
+   "b": 86.6
+  },
+  "tag": {
+   "x": 1284.8,
+   "y": 848.6,
+   "r": 1548.9,
+   "b": 886.7
+  },
+  "noticeTag": 0,
+  "noticeSlab": 0,
+  "tagSlab": 0,
+  "tagHint": 0,
+  "noticeHint": 0,
+  "errors": 0
+ },
+ "farplane-1280x720": {
+  "notice": {
+   "x": 773.8,
+   "y": 19.5,
+   "r": 1249.8,
+   "b": 76.7
+  },
+  "tag": {
+   "x": 1005.2,
+   "y": 81.8,
+   "r": 1249.8,
+   "b": 115.3
+  },
+  "noticeTag": 0,
+  "noticeSlab": 0,
+  "tagSlab": 0,
+  "tagHint": 0,
+  "noticeHint": 0,
+  "errors": 0
+ },
+ "echo-1280x720": {
+  "notice": {
+   "x": 773.8,
+   "y": 19.5,
+   "r": 1249.8,
+   "b": 76.7
+  },
+  "tag": {
+   "x": 1005.2,
+   "y": 81.8,
+   "r": 1249.8,
+   "b": 115.3
+  },
+  "noticeTag": 0,
+  "noticeSlab": 0,
+  "tagSlab": 0,
+  "tagHint": 0,
+  "noticeHint": 0,
+  "errors": 0
+ },
+ "farplane-390x844": {
+  "notice": {
+   "x": 10.3,
+   "y": 5.9,
+   "r": 379.7,
+   "b": 74.2
+  },
+  "tag": {
+   "x": 232.6,
+   "y": 82.2,
+   "r": 379.7,
+   "b": 125.3
+  },
+  "noticeTag": 0,
+  "noticeSlab": 9742,
+  "tagSlab": 0,
+  "tagHint": 0,
+  "noticeHint": 0,
+  "errors": 0
+ },
+ "echo-390x844": {
+  "notice": {
+   "x": 10.3,
+   "y": 5.9,
+   "r": 379.7,
+   "b": 74.2
+  },
+  "tag": {
+   "x": 232.6,
+   "y": 82.2,
+   "r": 379.7,
+   "b": 125.3
+  },
+  "noticeTag": 0,
+  "noticeSlab": 9278,
+  "tagSlab": 0,
+  "tagHint": 0,
+  "noticeHint": 0,
+  "errors": 0
+ }
+}

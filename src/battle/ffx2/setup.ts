@@ -30,6 +30,7 @@ import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
 import { accessoryImmunities, withPoolStatuses } from './kit.ts';
 import { initAutoLayers } from './auto-layer.ts';
+import { autoRowsOf, loadoutOfMember, poolHolds } from './adapt/auto-layer.ts';
 import { activeGateBonuses, breaksDamageLimit, gateAutoTags, gateStatTotal, waitDownPercent, withStatBonus } from './garment-grids.ts';
 import { autoWordsOf } from './adapt/menu.ts';
 import { baseRequired } from './gauges.ts';
@@ -82,7 +83,9 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
   // §5.4]. Without it the researched loadouts are inert and Chapter 5's Tail
   // kills the White Mage from full on its first Noli Me Tangere.
   // A carried Stamina Tonic (`kit.ts`) doubles the pool before her carried HP is clamped to it.
-  const stats: StatBlock = withPoolStatuses(withAccessories(withStatBonus(base, equip), member.accessories), member.statuses);
+  // …and the Double HP / Double MP her grid's crossed gates keep (`adapt/auto-layer.ts#poolHolds`; only a full carry arrives with gates crossed).
+  const held = poolHolds(autoRowsOf(loadoutOfMember(member), grids));
+  const stats: StatBlock = withPoolStatuses(withAccessories(withStatBonus(base, equip), member.accessories), member.statuses, held);
   // Carried across a chain seam (CONTRACT-CHANGES §6, `BattleScreenSetup.carryFfx2`)
   // as a raw number on the build, with no maximum to check against until the
   // dressphere's stats are derived, right above — so it is clamped here, not
@@ -304,7 +307,7 @@ export function buildState(
   for (const part of enemies.parts ?? []) units.push(buildEnemy(part, true));
 
   // Each girl's automatic-status layer (re-parity X2-D): the rows her dressphere and accessories list, the kept set at once, the SOS set while her HP is under a third.
-  initAutoLayers(units, rng);
+  initAutoLayers(units, rng, grids);
 
   // The scripts' init entries run before the first gauge is rolled (AiScript.init, RC3): the Vegnagun Head's Agility 110 (row H3) and, in every boss script, the death pattern
   // (`setdeathpat`, re-parity RC9 lane X2-E row XE5). Both go through the stat setter (`adapt/stat-setter.ts`), as the script's own calls do.

@@ -4,10 +4,10 @@
  * **Game case: FFX-2 only** (the FFX kernels keep their own copy in `../../ffx/kernel/int32.ts`; the two are
  * written from different executables and are not shared on purpose, AGENTS.md rule 14).
  *
- * FFX-2.exe is 32-bit x86 code. Every number in its damage chain is a 32-bit register: a product that does
- * not fit WRAPS (IMUL keeps the low 32 bits), a signed division rounds toward zero, and the compiler writes
+ * FFX-2.exe is 32-bit x86 code. Every number in its damage chain is a 32-bit integer: a product that does
+ * not fit WRAPS (the low 32 bits are kept), a signed division rounds toward zero, and the compiler writes
  * `/ 2`, `/ 16`, `/ 64`, `/ 128`, `/ 256` and `/ 1024` as a shift that first adds a bias for negative values
- * (`CDQ; AND EDX, mask; ADD EAX, EDX; SAR EAX, n`) so they also round toward zero. The division by 12, 20 and
+ * (add `(v >> 31) & mask` to `v`, where mask is the divisor minus 1, then shift right by n) so they also round toward zero. The division by 12, 20 and
  * 255 is a multiply by a magic constant (0x2AAAAAAB, 0x66666667, 0x80808081) plus a shift and a sign
  * correction, which is exactly `trunc(x / d)` for every 32-bit `x` (tested against the magic sequences in
  * `tests/unit/parity-ffx2-damage.test.ts`). The engine's own integer helpers (`../../ffx/math.ts`) floor
@@ -23,18 +23,18 @@ export function s32(x: number): number {
   return x | 0;
 }
 
-/** `a + b` in a 32-bit register (ADD / LEA wrap). */
+/** `a + b` as a 32-bit integer (wraps). */
 export function add(a: number, b: number): number {
   return (a + b) | 0;
 }
 
-/** `a - b` in a 32-bit register (SUB wraps). */
+/** `a - b` as a 32-bit integer (wraps). */
 export function sub(a: number, b: number): number {
   return (a - b) | 0;
 }
 
 /**
- * IMUL r32: the low 32 bits of the product, signed. `Math.imul` does exactly this (the 64-bit product is
+ * The 32-bit signed product, low 32 bits kept (wraps). `Math.imul` does exactly this (the 64-bit product is
  * never formed in a double), so a product past 2^31 wraps the way the game's does.
  */
 export function mul(a: number, b: number): number {
@@ -42,7 +42,7 @@ export function mul(a: number, b: number): number {
 }
 
 /**
- * IDIV by a non-zero 32-bit divisor: truncation toward zero.
+ * Signed division by a non-zero 32-bit divisor: truncation toward zero.
  *
  * `Math.trunc(a / b)` is exact for 32-bit operands: a non-integer quotient is at least 1/|b| from the
  * nearest integer, while the double rounding error is at most |a/b| * 2^-53, far below that. The CPU raises a
@@ -55,42 +55,42 @@ export function sdiv(a: number, b: number): number {
   return Math.trunc(a / b) | 0;
 }
 
-/** `a * num / den` as the game writes the stage and defence factors: wrapping IMUL, then a truncating divide. */
+/** `a * num / den` as the game writes the stage and defence factors: the product wraps at 32 bits, then a truncating divide. */
 export function scale(a: number, num: number, den: number): number {
   return sdiv(Math.imul(a, num), den);
 }
 
-/** `v / 2`, rounding toward zero: CDQ; SUB EAX, EDX; SAR EAX, 1. */
+/** `v / 2`, rounding toward zero: subtract the sign mask (-1 when `v` is negative), then shift right by 1. */
 export function div2(v: number): number {
   return (v - (v >> 31)) >> 1;
 }
 
-/** `v / 4`, rounding toward zero: CDQ; AND EDX, 3; ADD EAX, EDX; SAR EAX, 2. */
+/** `v / 4`, rounding toward zero: add 3 when `v` is negative (a bias), then shift right by 2. */
 export function div4(v: number): number {
   return (v + ((v >> 31) & 3)) >> 2;
 }
 
-/** `v / 16`, rounding toward zero: CDQ; AND EDX, 0xf; ADD EAX, EDX; SAR EAX, 4. */
+/** `v / 16`, rounding toward zero: add 0xf when `v` is negative (a bias), then shift right by 4. */
 export function div16(v: number): number {
   return (v + ((v >> 31) & 15)) >> 4;
 }
 
-/** `v / 64`, rounding toward zero: CDQ; AND EDX, 0x3f; ADD EAX, EDX; SAR EAX, 6. */
+/** `v / 64`, rounding toward zero: add 0x3f when `v` is negative (a bias), then shift right by 6. */
 export function div64(v: number): number {
   return (v + ((v >> 31) & 63)) >> 6;
 }
 
-/** `v / 128`, rounding toward zero: CDQ; AND EDX, 0x7f; ADD EAX, EDX; SAR EAX, 7. */
+/** `v / 128`, rounding toward zero: add 0x7f when `v` is negative (a bias), then shift right by 7. */
 export function div128(v: number): number {
   return (v + ((v >> 31) & 127)) >> 7;
 }
 
-/** `v / 256`, rounding toward zero: CDQ; AND EDX, 0xff; ADD EAX, EDX; SAR EAX, 8. */
+/** `v / 256`, rounding toward zero: add 0xff when `v` is negative (a bias), then shift right by 8. */
 export function div256(v: number): number {
   return (v + ((v >> 31) & 255)) >> 8;
 }
 
-/** `v / 1024`, rounding toward zero: CDQ; AND EDX, 0x3ff; ADD EAX, EDX; SAR EAX, 10. */
+/** `v / 1024`, rounding toward zero: add 0x3ff when `v` is negative (a bias), then shift right by 10. */
 export function div1024(v: number): number {
   return (v + ((v >> 31) & 1023)) >> 10;
 }
@@ -100,22 +100,22 @@ export function mul3div2(v: number): number {
   return div2(Math.imul(v, 3));
 }
 
-/** NEG: two's-complement negation in 32 bits (and never `-0`). */
+/** Two's-complement negation in 32 bits (and never `-0`). */
 export function neg(v: number): number {
   return -v | 0;
 }
 
-/** MOVZX r32, byte: the low 8 bits as an unsigned number (a stat byte read from the character record). */
+/** Zero-extend a byte to 32 bits: the low 8 bits as an unsigned number (a stat byte read from the character record). */
 export function u8(x: number): number {
   return x & 0xff;
 }
 
-/** MOVSX r32, byte: the low 8 bits as a signed number (a stat-stage byte read from the character record). */
+/** Sign-extend a byte to 32 bits: the low 8 bits as a signed number (a stat-stage byte read from the character record). */
 export function s8(x: number): number {
   return (x << 24) >> 24;
 }
 
-/** MOVZX r32, word: the low 16 bits as an unsigned number. */
+/** Zero-extend a word to 32 bits: the low 16 bits as an unsigned number. */
 export function u16(x: number): number {
   return x & 0xffff;
 }
@@ -132,7 +132,7 @@ export function clamp(v: number, lo: number, hi: number): number {
 }
 
 /**
- * CVTTSD2SI / `_ftol`: double to int32 by truncation. NaN and anything outside the int32 range give the
+ * Double to int32 by truncation (the game's float-to-int conversion). NaN and anything outside the int32 range give the
  * "integer indefinite" value 0x80000000, as the hardware does.
  */
 export function cvttsd2si(x: number): number {

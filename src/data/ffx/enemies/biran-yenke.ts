@@ -99,6 +99,8 @@ export const biranYenkeGroup: EnemyGroupDef = {
   id: BIRAN_YENKE_GROUP_ID,
   game: 'ffx',
   canEscape: false, // the formation script disables Escape and Flee for Kimahri (RE section 4)
+  // The same script's third call, setCommandDisabled(Kimahri's slot, Switch 0x3002, 1) (FFX-G11b table 1): with the bench empty it forbids nothing, so no battle changes; it is what lets `MENU_DRAW_PARITY` draw the game's greyed Switch row.
+  commandDisables: [{ who: 'kimahri', command: 0x3002 }],
   enemies: [biran, yenke],
   bossId: BIRAN_ID,
   headline: 'Biran and Yenke',

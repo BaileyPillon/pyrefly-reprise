@@ -283,3 +283,4 @@ export function maskIou(a, b) {
   }
   return union ? inter / union : null;
 }
+export const GRID = Object.freeze({ GS, GW, GH, GU0, GU1, GV0, GV1 });

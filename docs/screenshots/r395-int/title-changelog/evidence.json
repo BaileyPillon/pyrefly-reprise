@@ -1,0 +1,2342 @@
+{
+ "when": "2026-10-09T15:29:57.434Z",
+ "server": "http://127.0.0.1:5395",
+ "flows": {
+  "measure farplane-1600x900": [
+   {
+    "step": "the entry, the build number and the hint row cover no face and no painted lettering or rule",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 700,
+      "y": 833.1,
+      "w": 139.9,
+      "h": 38,
+      "r": 839.9,
+      "b": 871.1
+     },
+     "tag": {
+      "x": 1281.3,
+      "y": 833.1,
+      "w": 267.6,
+      "h": 38,
+      "r": 1548.9,
+      "b": 871.1
+     },
+     "hint": {
+      "x": 51.1,
+      "y": 833.1,
+      "w": 796.5,
+      "h": 38,
+      "r": 847.7,
+      "b": 871.1
+     },
+     "nearest": {
+      "paine": 72.1,
+      "rikku": 124.6,
+      "yuna": 148.5
+     }
+    }
+   },
+   {
+    "step": "the build number reads Release 39.4.2 and the commit (8 characters)",
+    "ok": true,
+    "detail": "RELEASE 39.4.2 · a66d4b19"
+   },
+   {
+    "step": "the tag is inside the window and does not touch the hint row or the slab",
+    "ok": true,
+    "detail": {
+     "tag": {
+      "x": 1281.3,
+      "y": 833.1,
+      "w": 267.6,
+      "h": 38,
+      "r": 1548.9,
+      "b": 871.1
+     },
+     "over": {},
+     "hintOverlapsTag": 0
+    }
+   },
+   {
+    "step": "smallest text in the hint row and the open panel is at least 14 px",
+    "ok": true,
+    "detail": {
+     "hint": {
+      "text": "Arrows / WASD",
+      "px": 14.44
+     },
+     "panel": {
+      "text": "Changelog",
+      "px": 14.44
+     }
+    }
+   },
+   {
+    "step": "every new element is inside the window and the open panel does not scroll sideways (the Farplane screen’s own planes overscan the page, as the baseline mock-up measured: closed scrollsX is information, not a result)",
+    "ok": true,
+    "detail": {
+     "closedPageScrollsX": true,
+     "openScrollsX": false
+    }
+   },
+   {
+    "step": "the panel covers a share of the frame, is a modal, and the console is clean",
+    "ok": true,
+    "detail": {
+     "coversFramePct": 41.4,
+     "panel": {
+      "x": 780,
+      "y": 48.9,
+      "w": 755.5,
+      "h": 788.9,
+      "r": 1535.6,
+      "b": 837.8
+     },
+     "errors": 0,
+     "failed": 0
+    }
+   }
+  ],
+  "measure echo-1600x900": [
+   {
+    "step": "the entry, the build number and the hint row cover no face and no painted lettering or rule",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 700,
+      "y": 848.7,
+      "w": 139.9,
+      "h": 38,
+      "r": 839.9,
+      "b": 886.7
+     },
+     "tag": {
+      "x": 1281.3,
+      "y": 848.6,
+      "w": 267.6,
+      "h": 38,
+      "r": 1548.9,
+      "b": 886.7
+     },
+     "hint": {
+      "x": 51.1,
+      "y": 848.7,
+      "w": 796.5,
+      "h": 38,
+      "r": 847.7,
+      "b": 886.7
+     },
+     "nearest": {
+      "painted rule": 11.7,
+      "painted lettering": 20.7,
+      "yuna": 353.7
+     }
+    }
+   },
+   {
+    "step": "the build number reads Release 39.4.2 and the commit (8 characters)",
+    "ok": true,
+    "detail": "RELEASE 39.4.2 · a66d4b19"
+   },
+   {
+    "step": "the tag is inside the window and does not touch the hint row or the slab",
+    "ok": true,
+    "detail": {
+     "tag": {
+      "x": 1281.3,
+      "y": 848.6,
+      "w": 267.6,
+      "h": 38,
+      "r": 1548.9,
+      "b": 886.7
+     },
+     "over": {},
+     "hintOverlapsTag": 0
+    }
+   },
+   {
+    "step": "smallest text in the hint row and the open panel is at least 14 px",
+    "ok": true,
+    "detail": {
+     "hint": {
+      "text": "Arrows / WASD",
+      "px": 14.44
+     },
+     "panel": {
+      "text": "Changelog",
+      "px": 14.44
+     }
+    }
+   },
+   {
+    "step": "every new element is inside the window and the open panel does not scroll sideways (the Farplane screen’s own planes overscan the page, as the baseline mock-up measured: closed scrollsX is information, not a result)",
+    "ok": true,
+    "detail": {
+     "closedPageScrollsX": false,
+     "openScrollsX": false
+    }
+   },
+   {
+    "step": "the panel covers a share of the frame, is a modal, and the console is clean",
+    "ok": true,
+    "detail": {
+     "coversFramePct": 41.4,
+     "panel": {
+      "x": 780,
+      "y": 48.9,
+      "w": 755.5,
+      "h": 788.9,
+      "r": 1535.6,
+      "b": 837.8
+     },
+     "errors": 0,
+     "failed": 0
+    }
+   }
+  ],
+  "measure farplane-1280x720": [
+   {
+    "step": "the entry, the build number and the hint row cover no face and no painted lettering or rule",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 647.1,
+      "y": 662.9,
+      "w": 131.4,
+      "h": 34,
+      "r": 778.5,
+      "b": 696.9
+     },
+     "tag": {
+      "x": 1001.8,
+      "y": 19.5,
+      "w": 248,
+      "h": 33.5,
+      "r": 1249.8,
+      "b": 53
+     },
+     "hint": {
+      "x": 40.9,
+      "y": 662.9,
+      "w": 743.9,
+      "h": 34,
+      "r": 784.8,
+      "b": 696.9
+     },
+     "nearest": {
+      "paine": 54,
+      "rikku": 96.1,
+      "yuna": 115.2
+     }
+    }
+   },
+   {
+    "step": "the build number reads Release 39.4.2 and the commit (8 characters)",
+    "ok": true,
+    "detail": "RELEASE 39.4.2 · a66d4b19"
+   },
+   {
+    "step": "the tag is inside the window and does not touch the hint row or the slab",
+    "ok": true,
+    "detail": {
+     "tag": {
+      "x": 1001.8,
+      "y": 19.5,
+      "w": 248,
+      "h": 33.5,
+      "r": 1249.8,
+      "b": 53
+     },
+     "over": {},
+     "hintOverlapsTag": 0
+    }
+   },
+   {
+    "step": "smallest text in the hint row and the open panel is at least 14 px",
+    "ok": true,
+    "detail": {
+     "hint": {
+      "text": "Arrows / WASD",
+      "px": 14
+     },
+     "panel": {
+      "text": "Changelog",
+      "px": 14
+     }
+    }
+   },
+   {
+    "step": "every new element is inside the window and the open panel does not scroll sideways (the Farplane screen’s own planes overscan the page, as the baseline mock-up measured: closed scrollsX is information, not a result)",
+    "ok": true,
+    "detail": {
+     "closedPageScrollsX": true,
+     "openScrollsX": false
+    }
+   },
+   {
+    "step": "the panel covers a share of the frame, is a modal, and the console is clean",
+    "ok": true,
+    "detail": {
+     "coversFramePct": 41.4,
+     "panel": {
+      "x": 624,
+      "y": 39.1,
+      "w": 604.4,
+      "h": 631.1,
+      "r": 1228.5,
+      "b": 670.2
+     },
+     "errors": 0,
+     "failed": 0
+    }
+   }
+  ],
+  "measure echo-1280x720": [
+   {
+    "step": "the entry, the build number and the hint row cover no face and no painted lettering or rule",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 647.1,
+      "y": 675.3,
+      "w": 131.4,
+      "h": 34,
+      "r": 778.5,
+      "b": 709.3
+     },
+     "tag": {
+      "x": 1001.8,
+      "y": 19.5,
+      "w": 248,
+      "h": 33.5,
+      "r": 1249.8,
+      "b": 53
+     },
+     "hint": {
+      "x": 40.9,
+      "y": 675.3,
+      "w": 743.9,
+      "h": 34,
+      "r": 784.8,
+      "b": 709.3
+     },
+     "nearest": {
+      "painted rule": 5.7,
+      "painted lettering": 12.9,
+      "yuna": 279.3
+     }
+    }
+   },
+   {
+    "step": "the build number reads Release 39.4.2 and the commit (8 characters)",
+    "ok": true,
+    "detail": "RELEASE 39.4.2 · a66d4b19"
+   },
+   {
+    "step": "the tag is inside the window and does not touch the hint row or the slab",
+    "ok": true,
+    "detail": {
+     "tag": {
+      "x": 1001.8,
+      "y": 19.5,
+      "w": 248,
+      "h": 33.5,
+      "r": 1249.8,
+      "b": 53
+     },
+     "over": {},
+     "hintOverlapsTag": 0
+    }
+   },
+   {
+    "step": "smallest text in the hint row and the open panel is at least 14 px",
+    "ok": true,
+    "detail": {
+     "hint": {
+      "text": "Arrows / WASD",
+      "px": 14
+     },
+     "panel": {
+      "text": "Changelog",
+      "px": 14
+     }
+    }
+   },
+   {
+    "step": "every new element is inside the window and the open panel does not scroll sideways (the Farplane screen’s own planes overscan the page, as the baseline mock-up measured: closed scrollsX is information, not a result)",
+    "ok": true,
+    "detail": {
+     "closedPageScrollsX": false,
+     "openScrollsX": false
+    }
+   },
+   {
+    "step": "the panel covers a share of the frame, is a modal, and the console is clean",
+    "ok": true,
+    "detail": {
+     "coversFramePct": 41.4,
+     "panel": {
+      "x": 624,
+      "y": 39.1,
+      "w": 604.4,
+      "h": 631.1,
+      "r": 1228.5,
+      "b": 670.2
+     },
+     "errors": 0,
+     "failed": 0
+    }
+   }
+  ],
+  "measure farplane-390x844": [
+   {
+    "step": "the entry, the build number and the hint row cover no face and no painted lettering or rule",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 25.5,
+      "y": 783.1,
+      "w": 341.1,
+      "h": 44,
+      "r": 366.5,
+      "b": 827.1
+     },
+     "tag": {
+      "x": 232.6,
+      "y": 10.3,
+      "w": 147.1,
+      "h": 43.1,
+      "r": 379.7,
+      "b": 53.4
+     },
+     "hint": {
+      "x": 10.3,
+      "y": 743.9,
+      "w": 369.5,
+      "h": 89.8,
+      "r": 379.7,
+      "b": 833.7
+     },
+     "nearest": {
+      "paine": 35.3,
+      "rikku": 83.8,
+      "yuna": 105.8
+     }
+    }
+   },
+   {
+    "step": "the build number reads Release 39.4.2 and the commit (8 characters)",
+    "ok": true,
+    "detail": "RELEASE 39.4.2 a66d4b19"
+   },
+   {
+    "step": "the tag is inside the window and does not touch the hint row or the slab",
+    "ok": true,
+    "detail": {
+     "tag": {
+      "x": 232.6,
+      "y": 10.3,
+      "w": 147.1,
+      "h": 43.1,
+      "r": 379.7,
+      "b": 53.4
+     },
+     "over": {},
+     "hintOverlapsTag": 0
+    }
+   },
+   {
+    "step": "smallest text in the hint row and the open panel is at least 14 px",
+    "ok": true,
+    "detail": {
+     "hint": {
+      "text": "Tap",
+      "px": 14
+     },
+     "panel": {
+      "text": "Changelog",
+      "px": 14
+     }
+    }
+   },
+   {
+    "step": "every new element is inside the window and the open panel does not scroll sideways (the Farplane screen’s own planes overscan the page, as the baseline mock-up measured: closed scrollsX is information, not a result)",
+    "ok": true,
+    "detail": {
+     "closedPageScrollsX": true,
+     "openScrollsX": false
+    }
+   },
+   {
+    "step": "phone tap targets are at least 44 px (the entry, the close button)",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 25.5,
+      "y": 783.1,
+      "w": 341.1,
+      "h": 44,
+      "r": 366.5,
+      "b": 827.1
+     },
+     "close": {
+      "x": 296.8,
+      "y": 73.8,
+      "w": 81.5,
+      "h": 44,
+      "r": 378.3,
+      "b": 117.8,
+      "tapMin": 44
+     }
+    }
+   },
+   {
+    "step": "the panel covers a share of the frame, is a modal, and the console is clean",
+    "ok": true,
+    "detail": {
+     "coversFramePct": 93.9,
+     "panel": {
+      "x": 0,
+      "y": 51.4,
+      "w": 390,
+      "h": 792.6,
+      "r": 390,
+      "b": 844
+     },
+     "errors": 0,
+     "failed": 0
+    }
+   }
+  ],
+  "measure echo-390x844": [
+   {
+    "step": "the entry, the build number and the hint row cover no face and no painted lettering or rule",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 25.5,
+      "y": 784.6,
+      "w": 341.1,
+      "h": 44,
+      "r": 366.5,
+      "b": 828.6
+     },
+     "tag": {
+      "x": 232.6,
+      "y": 10.3,
+      "w": 147.1,
+      "h": 43.1,
+      "r": 379.7,
+      "b": 53.4
+     },
+     "hint": {
+      "x": 10.3,
+      "y": 745.4,
+      "w": 369.5,
+      "h": 89.8,
+      "r": 379.7,
+      "b": 835.2
+     },
+     "nearest": {
+      "painted rule": 145,
+      "painted lettering": 149.2,
+      "yuna": 302.7
+     }
+    }
+   },
+   {
+    "step": "the build number reads Release 39.4.2 and the commit (8 characters)",
+    "ok": true,
+    "detail": "RELEASE 39.4.2 a66d4b19"
+   },
+   {
+    "step": "the tag is inside the window and does not touch the hint row or the slab",
+    "ok": true,
+    "detail": {
+     "tag": {
+      "x": 232.6,
+      "y": 10.3,
+      "w": 147.1,
+      "h": 43.1,
+      "r": 379.7,
+      "b": 53.4
+     },
+     "over": {},
+     "hintOverlapsTag": 0
+    }
+   },
+   {
+    "step": "smallest text in the hint row and the open panel is at least 14 px",
+    "ok": true,
+    "detail": {
+     "hint": {
+      "text": "Tap",
+      "px": 14
+     },
+     "panel": {
+      "text": "Changelog",
+      "px": 14
+     }
+    }
+   },
+   {
+    "step": "every new element is inside the window and the open panel does not scroll sideways (the Farplane screen’s own planes overscan the page, as the baseline mock-up measured: closed scrollsX is information, not a result)",
+    "ok": true,
+    "detail": {
+     "closedPageScrollsX": true,
+     "openScrollsX": false
+    }
+   },
+   {
+    "step": "phone tap targets are at least 44 px (the entry, the close button)",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 25.5,
+      "y": 784.6,
+      "w": 341.1,
+      "h": 44,
+      "r": 366.5,
+      "b": 828.6
+     },
+     "close": {
+      "x": 296.8,
+      "y": 73.8,
+      "w": 81.5,
+      "h": 44,
+      "r": 378.3,
+      "b": 117.8,
+      "tapMin": 44
+     }
+    }
+   },
+   {
+    "step": "the panel covers a share of the frame, is a modal, and the console is clean",
+    "ok": true,
+    "detail": {
+     "coversFramePct": 93.9,
+     "panel": {
+      "x": 0,
+      "y": 51.4,
+      "w": 390,
+      "h": 792.6,
+      "r": 390,
+      "b": 844
+     },
+     "errors": 0,
+     "failed": 0
+    }
+   }
+  ],
+  "switch off": [
+   {
+    "step": "the title markup holds no BEHIND THE SCENES entry, action or words",
+    "ok": true,
+    "detail": []
+   },
+   {
+    "step": "the T key does nothing: no overlay, nothing claimed, still the title",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "shift+T does nothing either",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "a title:bts action (what a click on a missing entry would send) does nothing",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "the page asked for no behindTheScenes module and no picture of /bts/",
+    "ok": true,
+    "detail": []
+   },
+   {
+    "step": "nothing in the page markup or scripts can open it (dev note: this dev server serves public/ whole; a build prunes bts/)",
+    "ok": true,
+    "detail": {
+     "dev": true,
+     "status": 200
+    }
+   }
+  ],
+  "desktop (keys + mouse)": [
+   {
+    "step": "start: the title, nothing open, nothing claimed",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "Tab does not move focus onto the entries (Input turns Tab into the pad Y button and eats it)",
+    "ok": true,
+    "detail": {
+     "activeElement": "BODY"
+    }
+   },
+   {
+    "step": "L opens the changelog; the keyboard is claimed; still the title and not advancing",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": "changelog",
+     "claimed": true,
+     "active": "DIV"
+    }
+   },
+   {
+    "step": "Down x3, PageDown, Up and PageUp scroll the list (scrollTop)",
+    "ok": true,
+    "detail": {
+     "t0": 0,
+     "t1": 216,
+     "t2": 447,
+     "t3": 375,
+     "t4": 0
+    }
+   },
+   {
+    "step": "Enter inside the panel closes it and does NOT start the game (still the title, not advancing 1.6 s later)",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "L again closes the open changelog (the same letter closes)",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "L then Esc: closed, keyboard handed back, still the title, nothing advancing",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "a held L opens it once and the key repeats neither close nor re-open it",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": "changelog",
+     "claimed": true,
+     "active": "DIV"
+    }
+   },
+   {
+    "step": "x also closes it (the game's own cancel keys)",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "Backspace also closes it (the game's own cancel keys)",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   },
+   {
+    "step": "a click 2 px inside the bar, above the word CHANGELOG, still opens it (the hit area is the bar's full height) and does not start the game",
+    "ok": true,
+    "detail": {
+     "entry": {
+      "x": 700,
+      "y": 833.125,
+      "w": 139.875,
+      "h": 38,
+      "barTop": 833.125,
+      "barBottom": 871.125
+     },
+     "state": {
+      "screen": "title",
+      "advancing": false,
+      "overlay": "changelog",
+      "claimed": true,
+      "active": "DIV"
+     }
+    }
+   },
+   {
+    "step": "a click on the dimmed title behind the panel closes it, and does not start the game",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "SPAN"
+    }
+   },
+   {
+    "step": "the CLOSE button closes it",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "SPAN"
+    }
+   },
+   {
+    "step": "a click on the panel itself does nothing: still open, still the title",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": "changelog",
+     "claimed": true,
+     "active": "DIV"
+    }
+   },
+   {
+    "step": "control: Enter on the closed title starts the game (it is advancing, or already on the chapter board)",
+    "ok": true,
+    "detail": {
+     "screen": "chapter-select",
+     "overlay": null,
+     "claimed": false,
+     "active": "BODY"
+    }
+   }
+  ],
+  "phone (touch)": [
+   {
+    "step": "a tap on CHANGELOG opens the panel (the game does not start)",
+    "ok": true,
+    "detail": {
+     "tap": {
+      "x": 196,
+      "y": 805.140625,
+      "w": 341.0625,
+      "h": 44
+     },
+     "state": {
+      "screen": "title",
+      "advancing": false,
+      "overlay": "changelog",
+      "claimed": true,
+      "active": "DIV"
+     }
+    }
+   },
+   {
+    "step": "the panel scrolls (wheel; the list is overflow-y: auto, touch-action: pan-y)",
+    "ok": true,
+    "detail": {
+     "scrollTop": 248
+    }
+   },
+   {
+    "step": "a tap on the dimmed title above the sheet closes it",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": null,
+     "claimed": false,
+     "active": "SPAN"
+    }
+   },
+   {
+    "step": "the CLOSE button closes it",
+    "ok": true,
+    "detail": {
+     "close": {
+      "x": 337.515625,
+      "y": 95.84375,
+      "w": 81.5,
+      "h": 44
+     },
+     "state": {
+      "screen": "title",
+      "advancing": false,
+      "overlay": null,
+      "claimed": false,
+      "active": "SPAN"
+     }
+    }
+   },
+   {
+    "step": "control: a tap on the bar outside the entries starts the game, as any tap on the title does",
+    "ok": true,
+    "detail": {
+     "bar": {
+      "x": 40.265625,
+      "y": 757.890625,
+      "hintTop": 743.890625,
+      "entryTop": 783.140625
+     },
+     "state": {
+      "screen": "chapter-select",
+      "overlay": null,
+      "claimed": false,
+      "active": "BODY"
+     }
+    }
+   }
+  ],
+  "narrow 1280x720 (The Echo)": [
+   {
+    "step": "L opens the changelog",
+    "ok": true,
+    "detail": {
+     "screen": "title",
+     "advancing": false,
+     "overlay": "changelog",
+     "claimed": true,
+     "active": "DIV"
+    }
+   },
+   {
+    "step": "the build number is at the top right and the hint row keeps the bottom, under the painted rule",
+    "ok": true,
+    "detail": {
+     "tag": {
+      "x": 1001.8,
+      "y": 19.5,
+      "w": 248,
+      "h": 33.5,
+      "r": 1249.8,
+      "b": 53
+     },
+     "hint": {
+      "x": 40.9,
+      "y": 675.3,
+      "w": 743.9,
+      "h": 34,
+      "r": 784.8,
+      "b": 709.3
+     }
+    }
+   }
+  ]
+ },
+ "measurements": {
+  "farplane-1600x900": {
+   "closed": {
+    "variant": "farplane",
+    "viewport": [
+     1600,
+     900
+    ],
+    "dpr": 1,
+    "coarse": false,
+    "painting": {
+     "x": -36,
+     "y": -26.6,
+     "w": 1672,
+     "h": 954.6,
+     "fit": "cover",
+     "natural": [
+      1776,
+      1014
+     ]
+    },
+    "protected": {
+     "yuna": {
+      "x": 131.2,
+      "y": 379.1,
+      "w": 167.2,
+      "h": 305.5,
+      "r": 298.4,
+      "b": 684.6
+     },
+     "rikku": {
+      "x": 298.4,
+      "y": 379.1,
+      "w": 158.8,
+      "h": 329.3,
+      "r": 457.2,
+      "b": 708.5
+     },
+     "paine": {
+      "x": 448.9,
+      "y": 388.7,
+      "w": 209,
+      "h": 372.3,
+      "r": 657.9,
+      "b": 761
+     },
+     "yuna head": {
+      "x": 131.2,
+      "y": 379.1,
+      "w": 167.2,
+      "h": 71.6,
+      "r": 298.4,
+      "b": 450.7
+     },
+     "rikku head": {
+      "x": 298.4,
+      "y": 379.1,
+      "w": 158.8,
+      "h": 71.6,
+      "r": 457.2,
+      "b": 450.7
+     },
+     "paine head": {
+      "x": 448.9,
+      "y": 388.7,
+      "w": 209,
+      "h": 71.6,
+      "r": 657.9,
+      "b": 460.3
+     }
+    },
+    "chrome": {
+     "slab": {
+      "x": -85.7,
+      "y": 24.4,
+      "w": 553.7,
+      "h": 305,
+      "r": 468,
+      "b": 329.4
+     },
+     "chip": {
+      "x": 14.1,
+      "y": 255.2,
+      "w": 234.2,
+      "h": 45.3,
+      "r": 248.3,
+      "b": 300.6
+     },
+     "hint": {
+      "x": 51.1,
+      "y": 833.1,
+      "w": 796.5,
+      "h": 38,
+      "r": 847.7,
+      "b": 871.1
+     },
+     "strap": {
+      "x": 1544.2,
+      "y": 290.8,
+      "w": 18,
+      "h": 318.4,
+      "r": 1562.2,
+      "b": 609.2
+     }
+    },
+    "items": [
+     {
+      "name": "sep",
+      "rect": {
+       "x": 686.8,
+       "y": 843.1,
+       "w": 1,
+       "h": 18,
+       "r": 687.8,
+       "b": 861.1
+      },
+      "tapMin": 1,
+      "minText": null,
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 87,
+       "rikku": 266.1,
+       "paine head": 383.9
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "entry-changelog",
+      "rect": {
+       "x": 700,
+       "y": 833.1,
+       "w": 139.9,
+       "h": 38,
+       "r": 839.9,
+       "b": 871.1
+      },
+      "tapMin": 38,
+      "minText": {
+       "text": "L",
+       "px": 14.44
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 83.5,
+       "rikku": 272.9,
+       "paine head": 375.2
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "tag",
+      "rect": {
+       "x": 1281.3,
+       "y": 833.1,
+       "w": 267.6,
+       "h": 38,
+       "r": 1548.9,
+       "b": 871.1
+      },
+      "tapMin": 38,
+      "minText": {
+       "text": "Release",
+       "px": 14.44
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 627.6,
+       "paine head": 726.4,
+       "rikku": 833.5
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     }
+    ],
+    "hint": {
+     "rect": {
+      "x": 51.1,
+      "y": 833.1,
+      "w": 796.5,
+      "h": 38,
+      "r": 847.7,
+      "b": 871.1
+     },
+     "coversProtected": {},
+     "nearestProtectedGap": {
+      "paine": 72.1,
+      "rikku": 124.6,
+      "yuna": 148.5
+     },
+     "overlapsTag": 0,
+     "overlapsSlab": 0,
+     "inViewport": true,
+     "minText": {
+      "text": "Arrows / WASD",
+      "px": 14.44
+     }
+    },
+    "pairs": [],
+    "scrollsX": true
+   },
+   "open": {
+    "open": true,
+    "kind": "changelog",
+    "minText": {
+     "text": "Changelog",
+     "px": 14.44
+    },
+    "textRuns": 46,
+    "panel": {
+     "x": 780,
+     "y": 48.9,
+     "w": 755.5,
+     "h": 788.9,
+     "r": 1535.6,
+     "b": 837.8
+    },
+    "coversFramePct": 41.4,
+    "scroll": {
+     "clientHeight": 634,
+     "scrollHeight": 1081,
+     "scrollTop": 0
+    },
+    "close": {
+     "x": 1331.8,
+     "y": 102.4,
+     "w": 141.6,
+     "h": 40,
+     "r": 1473.3,
+     "b": 142.4,
+     "tapMin": 40
+    },
+    "scrollsX": false
+   },
+   "console": [],
+   "failed": []
+  },
+  "echo-1600x900": {
+   "closed": {
+    "variant": "echo",
+    "viewport": [
+     1600,
+     900
+    ],
+    "dpr": 1,
+    "coarse": false,
+    "painting": {
+     "x": -12.1,
+     "y": 0,
+     "w": 1624.2,
+     "h": 900,
+     "fit": "cover",
+     "natural": [
+      1682,
+      932
+     ]
+    },
+    "protected": {
+     "yuna": {
+      "x": 491.4,
+      "y": 90,
+      "w": 487.3,
+      "h": 405,
+      "r": 978.7,
+      "b": 495
+     },
+     "yuna head": {
+      "x": 751.3,
+      "y": 90,
+      "w": 97.5,
+      "h": 126,
+      "r": 848.7,
+      "b": 216
+     },
+     "painted lettering": {
+      "x": 491.4,
+      "y": 765,
+      "w": 633.5,
+      "h": 63,
+      "r": 1124.8,
+      "b": 828
+     },
+     "painted rule": {
+      "x": 20.4,
+      "y": 823.5,
+      "w": 1559.3,
+      "h": 13.5,
+      "r": 1579.6,
+      "b": 837
+     }
+    },
+    "chrome": {
+     "slab": {
+      "x": -69.6,
+      "y": 24.4,
+      "w": 521.5,
+      "h": 153.3,
+      "r": 451.8,
+      "b": 177.7
+     },
+     "chip": {
+      "x": 30.2,
+      "y": 103.5,
+      "w": 234.2,
+      "h": 45.3,
+      "r": 264.4,
+      "b": 148.8
+     },
+     "hint": {
+      "x": 51.1,
+      "y": 848.7,
+      "w": 796.5,
+      "h": 38,
+      "r": 847.7,
+      "b": 886.7
+     },
+     "strap": {
+      "x": 1544.2,
+      "y": 290.8,
+      "w": 18,
+      "h": 318.4,
+      "r": 1562.2,
+      "b": 609.2
+     }
+    },
+    "items": [
+     {
+      "name": "sep",
+      "rect": {
+       "x": 686.8,
+       "y": 858.7,
+       "w": 1,
+       "h": 18,
+       "r": 687.8,
+       "b": 876.7
+      },
+      "tapMin": 1,
+      "minText": null,
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "painted rule": 21.7,
+       "painted lettering": 30.7,
+       "yuna": 363.7
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "entry-changelog",
+      "rect": {
+       "x": 700,
+       "y": 848.7,
+       "w": 139.9,
+       "h": 38,
+       "r": 839.9,
+       "b": 886.7
+      },
+      "tapMin": 38,
+      "minText": {
+       "text": "L",
+       "px": 14.44
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "painted rule": 11.7,
+       "painted lettering": 20.7,
+       "yuna": 353.7
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "tag",
+      "rect": {
+       "x": 1281.3,
+       "y": 848.6,
+       "w": 267.6,
+       "h": 38,
+       "r": 1548.9,
+       "b": 886.7
+      },
+      "tapMin": 38,
+      "minText": {
+       "text": "Release",
+       "px": 14.44
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "painted rule": 11.6,
+       "painted lettering": 157.8,
+       "yuna": 465.4
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     }
+    ],
+    "hint": {
+     "rect": {
+      "x": 51.1,
+      "y": 848.7,
+      "w": 796.5,
+      "h": 38,
+      "r": 847.7,
+      "b": 886.7
+     },
+     "coversProtected": {},
+     "nearestProtectedGap": {
+      "painted rule": 11.7,
+      "painted lettering": 20.7,
+      "yuna": 353.7
+     },
+     "overlapsTag": 0,
+     "overlapsSlab": 0,
+     "inViewport": true,
+     "minText": {
+      "text": "Arrows / WASD",
+      "px": 14.44
+     }
+    },
+    "pairs": [],
+    "scrollsX": false
+   },
+   "open": {
+    "open": true,
+    "kind": "changelog",
+    "minText": {
+     "text": "Changelog",
+     "px": 14.44
+    },
+    "textRuns": 46,
+    "panel": {
+     "x": 780,
+     "y": 48.9,
+     "w": 755.5,
+     "h": 788.9,
+     "r": 1535.6,
+     "b": 837.8
+    },
+    "coversFramePct": 41.4,
+    "scroll": {
+     "clientHeight": 634,
+     "scrollHeight": 1081,
+     "scrollTop": 0
+    },
+    "close": {
+     "x": 1331.8,
+     "y": 102.4,
+     "w": 141.6,
+     "h": 40,
+     "r": 1473.3,
+     "b": 142.4,
+     "tapMin": 40
+    },
+    "scrollsX": false
+   },
+   "console": [],
+   "failed": []
+  },
+  "farplane-1280x720": {
+   "closed": {
+    "variant": "farplane",
+    "viewport": [
+     1280,
+     720
+    ],
+    "dpr": 1,
+    "coarse": false,
+    "painting": {
+     "x": -28.8,
+     "y": -21.4,
+     "w": 1337.6,
+     "h": 763.9,
+     "fit": "cover",
+     "natural": [
+      1420,
+      811
+     ]
+    },
+    "protected": {
+     "yuna": {
+      "x": 105,
+      "y": 303.3,
+      "w": 133.8,
+      "h": 244.5,
+      "r": 238.7,
+      "b": 547.7
+     },
+     "rikku": {
+      "x": 238.7,
+      "y": 303.3,
+      "w": 127.1,
+      "h": 263.6,
+      "r": 365.8,
+      "b": 566.8
+     },
+     "paine": {
+      "x": 359.1,
+      "y": 310.9,
+      "w": 167.2,
+      "h": 297.9,
+      "r": 526.3,
+      "b": 608.9
+     },
+     "yuna head": {
+      "x": 105,
+      "y": 303.3,
+      "w": 133.8,
+      "h": 57.3,
+      "r": 238.7,
+      "b": 360.6
+     },
+     "rikku head": {
+      "x": 238.7,
+      "y": 303.3,
+      "w": 127.1,
+      "h": 57.3,
+      "r": 365.8,
+      "b": 360.6
+     },
+     "paine head": {
+      "x": 359.1,
+      "y": 310.9,
+      "w": 167.2,
+      "h": 57.3,
+      "r": 526.3,
+      "b": 368.2
+     }
+    },
+    "chrome": {
+     "slab": {
+      "x": -70.9,
+      "y": 19.5,
+      "w": 447.6,
+      "h": 266,
+      "r": 376.7,
+      "b": 285.5
+     },
+     "chip": {
+      "x": 9,
+      "y": 225.8,
+      "w": 193.9,
+      "h": 36.6,
+      "r": 202.9,
+      "b": 262.4
+     },
+     "hint": {
+      "x": 40.9,
+      "y": 662.9,
+      "w": 743.9,
+      "h": 34,
+      "r": 784.8,
+      "b": 696.9
+     },
+     "strap": {
+      "x": 1231.8,
+      "y": 205.7,
+      "w": 18,
+      "h": 308.6,
+      "r": 1249.8,
+      "b": 514.3
+     }
+    },
+    "items": [
+     {
+      "name": "sep",
+      "rect": {
+       "x": 636.3,
+       "y": 670.9,
+       "w": 1,
+       "h": 18,
+       "r": 637.3,
+       "b": 688.9
+      },
+      "tapMin": 1,
+      "minText": null,
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 126.3,
+       "rikku": 289.8,
+       "paine head": 322.1
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "entry-changelog",
+      "rect": {
+       "x": 647.1,
+       "y": 662.9,
+       "w": 131.4,
+       "h": 34,
+       "r": 778.5,
+       "b": 696.9
+      },
+      "tapMin": 34,
+      "minText": {
+       "text": "L",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 132.3,
+       "rikku": 297.3,
+       "paine head": 318.5
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "tag",
+      "rect": {
+       "x": 1001.8,
+       "y": 19.5,
+       "w": 248,
+       "h": 33.5,
+       "r": 1249.8,
+       "b": 53
+      },
+      "tapMin": 33.5,
+      "minText": {
+       "text": "Release",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 540.9,
+       "paine head": 540.9,
+       "rikku": 683.5
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     }
+    ],
+    "hint": {
+     "rect": {
+      "x": 40.9,
+      "y": 662.9,
+      "w": 743.9,
+      "h": 34,
+      "r": 784.8,
+      "b": 696.9
+     },
+     "coversProtected": {},
+     "nearestProtectedGap": {
+      "paine": 54,
+      "rikku": 96.1,
+      "yuna": 115.2
+     },
+     "overlapsTag": 0,
+     "overlapsSlab": 0,
+     "inViewport": true,
+     "minText": {
+      "text": "Arrows / WASD",
+      "px": 14
+     }
+    },
+    "pairs": [],
+    "scrollsX": true
+   },
+   "open": {
+    "open": true,
+    "kind": "changelog",
+    "minText": {
+     "text": "Changelog",
+     "px": 14
+    },
+    "textRuns": 46,
+    "panel": {
+     "x": 624,
+     "y": 39.1,
+     "w": 604.4,
+     "h": 631.1,
+     "r": 1228.5,
+     "b": 670.2
+    },
+    "coversFramePct": 41.4,
+    "scroll": {
+     "clientHeight": 501,
+     "scrollHeight": 881,
+     "scrollTop": 0
+    },
+    "close": {
+     "x": 1047.4,
+     "y": 85.5,
+     "w": 131.3,
+     "h": 32,
+     "r": 1178.7,
+     "b": 117.5,
+     "tapMin": 32
+    },
+    "scrollsX": false
+   },
+   "console": [],
+   "failed": []
+  },
+  "echo-1280x720": {
+   "closed": {
+    "variant": "echo",
+    "viewport": [
+     1280,
+     720
+    ],
+    "dpr": 1,
+    "coarse": false,
+    "painting": {
+     "x": -9.7,
+     "y": 0,
+     "w": 1299.4,
+     "h": 720,
+     "fit": "cover",
+     "natural": [
+      1682,
+      932
+     ]
+    },
+    "protected": {
+     "yuna": {
+      "x": 393.1,
+      "y": 72,
+      "w": 389.8,
+      "h": 324,
+      "r": 782.9,
+      "b": 396
+     },
+     "yuna head": {
+      "x": 601,
+      "y": 72,
+      "w": 78,
+      "h": 100.8,
+      "r": 679,
+      "b": 172.8
+     },
+     "painted lettering": {
+      "x": 393.1,
+      "y": 612,
+      "w": 506.8,
+      "h": 50.4,
+      "r": 899.9,
+      "b": 662.4
+     },
+     "painted rule": {
+      "x": 16.3,
+      "y": 658.8,
+      "w": 1247.4,
+      "h": 10.8,
+      "r": 1263.7,
+      "b": 669.6
+     }
+    },
+    "chrome": {
+     "slab": {
+      "x": -58,
+      "y": 19.5,
+      "w": 421.8,
+      "h": 144.6,
+      "r": 363.8,
+      "b": 164.2
+     },
+     "chip": {
+      "x": 21.9,
+      "y": 104.4,
+      "w": 193.9,
+      "h": 36.6,
+      "r": 215.7,
+      "b": 141
+     },
+     "hint": {
+      "x": 40.9,
+      "y": 675.3,
+      "w": 743.9,
+      "h": 34,
+      "r": 784.8,
+      "b": 709.3
+     },
+     "strap": {
+      "x": 1231.8,
+      "y": 205.7,
+      "w": 18,
+      "h": 308.6,
+      "r": 1249.8,
+      "b": 514.3
+     }
+    },
+    "items": [
+     {
+      "name": "sep",
+      "rect": {
+       "x": 636.3,
+       "y": 683.3,
+       "w": 1,
+       "h": 18,
+       "r": 637.3,
+       "b": 701.3
+      },
+      "tapMin": 1,
+      "minText": null,
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "painted rule": 13.7,
+       "painted lettering": 20.9,
+       "yuna": 287.3
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "entry-changelog",
+      "rect": {
+       "x": 647.1,
+       "y": 675.3,
+       "w": 131.4,
+       "h": 34,
+       "r": 778.5,
+       "b": 709.3
+      },
+      "tapMin": 34,
+      "minText": {
+       "text": "L",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "painted rule": 5.7,
+       "painted lettering": 12.9,
+       "yuna": 279.3
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "tag",
+      "rect": {
+       "x": 1001.8,
+       "y": 19.5,
+       "w": 248,
+       "h": 33.5,
+       "r": 1249.8,
+       "b": 53
+      },
+      "tapMin": 33.5,
+      "minText": {
+       "text": "Release",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "yuna": 219.7,
+       "yuna head": 323.4,
+       "painted lettering": 568.2
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     }
+    ],
+    "hint": {
+     "rect": {
+      "x": 40.9,
+      "y": 675.3,
+      "w": 743.9,
+      "h": 34,
+      "r": 784.8,
+      "b": 709.3
+     },
+     "coversProtected": {},
+     "nearestProtectedGap": {
+      "painted rule": 5.7,
+      "painted lettering": 12.9,
+      "yuna": 279.3
+     },
+     "overlapsTag": 0,
+     "overlapsSlab": 0,
+     "inViewport": true,
+     "minText": {
+      "text": "Arrows / WASD",
+      "px": 14
+     }
+    },
+    "pairs": [],
+    "scrollsX": false
+   },
+   "open": {
+    "open": true,
+    "kind": "changelog",
+    "minText": {
+     "text": "Changelog",
+     "px": 14
+    },
+    "textRuns": 46,
+    "panel": {
+     "x": 624,
+     "y": 39.1,
+     "w": 604.4,
+     "h": 631.1,
+     "r": 1228.5,
+     "b": 670.2
+    },
+    "coversFramePct": 41.4,
+    "scroll": {
+     "clientHeight": 501,
+     "scrollHeight": 881,
+     "scrollTop": 0
+    },
+    "close": {
+     "x": 1047.4,
+     "y": 85.5,
+     "w": 131.3,
+     "h": 32,
+     "r": 1178.7,
+     "b": 117.5,
+     "tapMin": 32
+    },
+    "scrollsX": false
+   },
+   "console": [],
+   "failed": []
+  },
+  "farplane-390x844": {
+   "closed": {
+    "variant": "farplane",
+    "viewport": [
+     390,
+     844
+    ],
+    "dpr": 2,
+    "coarse": true,
+    "painting": {
+     "x": -167.9,
+     "y": -19,
+     "w": 1544.4,
+     "h": 882,
+     "fit": "cover",
+     "natural": [
+      1639,
+      936
+     ]
+    },
+    "protected": {
+     "yuna": {
+      "x": -13.5,
+      "y": 355.9,
+      "w": 154.4,
+      "h": 282.2,
+      "r": 140.9,
+      "b": 638.1
+     },
+     "rikku": {
+      "x": 140.9,
+      "y": 355.9,
+      "w": 146.7,
+      "h": 304.3,
+      "r": 287.7,
+      "b": 660.1
+     },
+     "paine": {
+      "x": 279.9,
+      "y": 364.7,
+      "w": 193.1,
+      "h": 344,
+      "r": 473,
+      "b": 708.6
+     },
+     "yuna head": {
+      "x": -13.5,
+      "y": 355.9,
+      "w": 154.4,
+      "h": 66.1,
+      "r": 140.9,
+      "b": 422
+     },
+     "rikku head": {
+      "x": 140.9,
+      "y": 355.9,
+      "w": 146.7,
+      "h": 66.1,
+      "r": 287.7,
+      "b": 422
+     },
+     "paine head": {
+      "x": 279.9,
+      "y": 364.7,
+      "w": 193.1,
+      "h": 66.1,
+      "r": 473,
+      "b": 430.8
+     }
+    },
+    "chrome": {
+     "slab": {
+      "x": -54.1,
+      "y": 26.4,
+      "w": 268.3,
+      "h": 274.7,
+      "r": 214.1,
+      "b": 301.1
+     },
+     "chip": {
+      "x": 12.6,
+      "y": 230.6,
+      "w": 131,
+      "h": 51.4,
+      "r": 143.7,
+      "b": 282
+     },
+     "hint": {
+      "x": 10.3,
+      "y": 743.9,
+      "w": 369.5,
+      "h": 89.8,
+      "r": 379.7,
+      "b": 833.7
+     }
+    },
+    "items": [
+     {
+      "name": "sep",
+      "rect": {
+       "x": 25.5,
+       "y": 773.6,
+       "w": 341.1,
+       "h": 1,
+       "r": 366.5,
+       "b": 774.6
+      },
+      "tapMin": 1,
+      "minText": null,
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 65,
+       "rikku": 113.5,
+       "yuna": 135.5
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "entry-changelog",
+      "rect": {
+       "x": 25.5,
+       "y": 783.1,
+       "w": 341.1,
+       "h": 44,
+       "r": 366.5,
+       "b": 827.1
+      },
+      "tapMin": 44,
+      "minText": {
+       "text": "Changelog",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "paine": 74.5,
+       "rikku": 123,
+       "yuna": 145
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "tag",
+      "rect": {
+       "x": 232.6,
+       "y": 10.3,
+       "w": 147.1,
+       "h": 43.1,
+       "r": 379.7,
+       "b": 53.4
+      },
+      "tapMin": 43.1,
+      "minText": {
+       "text": "Release",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "rikku": 302.5,
+       "rikku head": 302.5,
+       "paine": 311.3
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     }
+    ],
+    "hint": {
+     "rect": {
+      "x": 10.3,
+      "y": 743.9,
+      "w": 369.5,
+      "h": 89.8,
+      "r": 379.7,
+      "b": 833.7
+     },
+     "coversProtected": {},
+     "nearestProtectedGap": {
+      "paine": 35.3,
+      "rikku": 83.8,
+      "yuna": 105.8
+     },
+     "overlapsTag": 0,
+     "overlapsSlab": 0,
+     "inViewport": true,
+     "minText": {
+      "text": "Tap",
+      "px": 14
+     }
+    },
+    "pairs": [],
+    "scrollsX": true
+   },
+   "open": {
+    "open": true,
+    "kind": "changelog",
+    "minText": {
+     "text": "Changelog",
+     "px": 14
+    },
+    "textRuns": 39,
+    "panel": {
+     "x": 0,
+     "y": 51.4,
+     "w": 390,
+     "h": 792.6,
+     "r": 390,
+     "b": 844
+    },
+    "coversFramePct": 93.9,
+    "scroll": {
+     "clientHeight": 718,
+     "scrollHeight": 966,
+     "scrollTop": 0
+    },
+    "close": {
+     "x": 296.8,
+     "y": 73.8,
+     "w": 81.5,
+     "h": 44,
+     "r": 378.3,
+     "b": 117.8,
+     "tapMin": 44
+    },
+    "scrollsX": false
+   },
+   "console": [],
+   "failed": []
+  },
+  "echo-390x844": {
+   "closed": {
+    "variant": "echo",
+    "viewport": [
+     390,
+     844
+    ],
+    "dpr": 2,
+    "coarse": true,
+    "painting": {
+     "x": -179.4,
+     "y": 214.5,
+     "w": 748.8,
+     "h": 414.9,
+     "fit": "fill",
+     "natural": [
+      1682,
+      932
+     ]
+    },
+    "protected": {
+     "yuna": {
+      "x": 52.7,
+      "y": 256,
+      "w": 224.6,
+      "h": 186.7,
+      "r": 277.4,
+      "b": 442.7
+     },
+     "yuna head": {
+      "x": 172.5,
+      "y": 256,
+      "w": 44.9,
+      "h": 58.1,
+      "r": 217.5,
+      "b": 314.1
+     },
+     "painted lettering": {
+      "x": 52.7,
+      "y": 567.2,
+      "w": 292,
+      "h": 29,
+      "r": 344.8,
+      "b": 596.2
+     },
+     "painted rule": {
+      "x": -164.4,
+      "y": 594.2,
+      "w": 718.8,
+      "h": 6.2,
+      "r": 554.4,
+      "b": 600.4
+     }
+    },
+    "chrome": {
+     "slab": {
+      "x": -44.4,
+      "y": 26.4,
+      "w": 248.7,
+      "h": 182.8,
+      "r": 204.4,
+      "b": 209.2
+     },
+     "chip": {
+      "x": 22.4,
+      "y": 138.7,
+      "w": 131,
+      "h": 51.4,
+      "r": 153.4,
+      "b": 190.1
+     },
+     "hint": {
+      "x": 10.3,
+      "y": 745.4,
+      "w": 369.5,
+      "h": 89.8,
+      "r": 379.7,
+      "b": 835.2
+     }
+    },
+    "items": [
+     {
+      "name": "sep",
+      "rect": {
+       "x": 25.5,
+       "y": 775.1,
+       "w": 341.1,
+       "h": 1,
+       "r": 366.5,
+       "b": 776.1
+      },
+      "tapMin": 1,
+      "minText": null,
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "painted rule": 174.7,
+       "painted lettering": 178.9,
+       "yuna": 332.4
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "entry-changelog",
+      "rect": {
+       "x": 25.5,
+       "y": 784.6,
+       "w": 341.1,
+       "h": 44,
+       "r": 366.5,
+       "b": 828.6
+      },
+      "tapMin": 44,
+      "minText": {
+       "text": "Changelog",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "painted rule": 184.2,
+       "painted lettering": 188.4,
+       "yuna": 341.9
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     },
+     {
+      "name": "tag",
+      "rect": {
+       "x": 232.6,
+       "y": 10.3,
+       "w": 147.1,
+       "h": 43.1,
+       "r": 379.7,
+       "b": 53.4
+      },
+      "tapMin": 43.1,
+      "minText": {
+       "text": "Release",
+       "px": 14
+      },
+      "coversProtected": {},
+      "nearestProtectedGap": {
+       "yuna": 202.6,
+       "yuna head": 203.2,
+       "painted lettering": 513.8
+      },
+      "overlapsChrome": {},
+      "inViewport": true
+     }
+    ],
+    "hint": {
+     "rect": {
+      "x": 10.3,
+      "y": 745.4,
+      "w": 369.5,
+      "h": 89.8,
+      "r": 379.7,
+      "b": 835.2
+     },
+     "coversProtected": {},
+     "nearestProtectedGap": {
+      "painted rule": 145,
+      "painted lettering": 149.2,
+      "yuna": 302.7
+     },
+     "overlapsTag": 0,
+     "overlapsSlab": 0,
+     "inViewport": true,
+     "minText": {
+      "text": "Tap",
+      "px": 14
+     }
+    },
+    "pairs": [],
+    "scrollsX": true
+   },
+   "open": {
+    "open": true,
+    "kind": "changelog",
+    "minText": {
+     "text": "Changelog",
+     "px": 14
+    },
+    "textRuns": 39,
+    "panel": {
+     "x": 0,
+     "y": 51.4,
+     "w": 390,
+     "h": 792.6,
+     "r": 390,
+     "b": 844
+    },
+    "coversFramePct": 93.9,
+    "scroll": {
+     "clientHeight": 718,
+     "scrollHeight": 966,
+     "scrollTop": 0
+    },
+    "close": {
+     "x": 296.8,
+     "y": 73.8,
+     "w": 81.5,
+     "h": 44,
+     "r": 378.3,
+     "b": 117.8,
+     "tapMin": 44
+    },
+    "scrollsX": false
+   },
+   "console": [],
+   "failed": []
+  }
+ },
+ "switchOff": {
+  "markupHits": [],
+  "requests": {
+   "total": 99,
+   "behindTheScenes": []
+  },
+  "devServerServesPublicBts": {
+   "dev": true,
+   "status": 200
+  }
+ },
+ "errors": []
+}

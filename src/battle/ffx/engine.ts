@@ -18,6 +18,9 @@ import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
 import { type Ctx, type EventInput, canAct, isAlive, livingFriendlies, tryActor } from './state.ts';
 import { buildBattle } from './setup.ts';
 import { availableCommands } from './commands.ts';
+import { commandRefused } from './formation-commands.ts';
+import { grandSummonKoRefused } from './grand-summon-ko.ts';
+import { submittedRowGreyed } from './submit-guard.ts';
 import { revealForSensorAuto } from './sensor.ts';
 import { chargeForAction, executeCommand } from './execute.ts';
 import { forcedTurn } from './forced-turn.ts';
@@ -28,6 +31,7 @@ import { sistersTurnStart } from './adapt/sisters.ts';
 import { resolveDuePartRevivals } from './hp.ts';
 import { chooseAiCommand } from './ai/index.ts';
 import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
+import { type DoublecastPick, doublecastPicks } from './doublecast.ts';
 import { afterAction, checkEnd, finish, runItemReactions, type EndHooks } from './engine-end.ts';
 
 export { apForLevel } from './results.ts';
@@ -111,6 +115,17 @@ export class FFXEngine implements FFXBattleEngine {
     return this.ctx ? predictNextEnemyIntent(this.ctx) : null;
   }
 
+  /**
+   * The Doublecast picker's rows for `actorId` (FFX only; the HUD's round-2 list, `ui/ffx/doublecastModel.ts`): every learned Black Magic spell with its price, and with `firstId` which are still
+   * offered as the second pick. Read-only: it pays nothing and draws nothing. Not on the `FFXBattleEngine` interface for the reason `intent()` is not: one picker does not earn a contract change; the HUD is handed
+   * a bound copy when it is built (`BattleScreenWiring.createHud`).
+   */
+  doublecastPicks(actorId: string, firstId?: string): DoublecastPick[] {
+    const ctx = this.requireCtx();
+    const actor = tryActor(ctx, actorId);
+    return actor ? doublecastPicks(ctx, actor, firstId) : [];
+  }
+
   nextDecision(): Decision {
     const ctx = this.requireCtx();
     if (ctx.state.result) return { kind: 'battle-over', result: ctx.state.result };
@@ -139,6 +154,10 @@ export class FFXEngine implements FFXBattleEngine {
     const actorId = ctx.rt.currentActorId;
     const actor = actorId ? tryActor(ctx, actorId) : undefined;
     if (!actor || ctx.state.result) return [];
+    // A command the formation script switched off for this actor (`formation-commands.ts`, Isaaru's aeon contest) is refused with the turn kept open; the menu draws its row greyed.
+    if (commandRefused(ctx, actor, command)) return [];
+    if (grandSummonKoRefused(ctx, command)) return []; // `GRAND_SUMMON_KO_REFUSED` (off): the game's list greys a knocked-out aeon and refuses a confirm on it
+    if (submittedRowGreyed(ctx, actor, command)) return []; // a row the menu draws greyed is refused here too, the turn kept open (`./submit-guard.ts`; the HUD and every strategy already refuse it)
 
     this.awaitingInput = false;
     this.runTurn(actor, command);

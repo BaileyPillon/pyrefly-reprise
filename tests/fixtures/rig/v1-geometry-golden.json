@@ -1,0 +1,32 @@
+{
+ "kimahri": {
+  "attack": "30743582",
+  "cast": "648959e4",
+  "critical": "733474ba",
+  "defend": "49bdfa5b",
+  "follow": "3297819",
+  "hurt": "3bb20b70",
+  "idle": "b774f542",
+  "item": "cd8ee638",
+  "jump": "96b35e96",
+  "ko": "195f2f0f",
+  "ready": "f6b942f",
+  "sleep": "efbaf19b",
+  "victory": "7ca11649"
+ },
+ "lulu": {
+  "attack": "730554b0",
+  "cast": "b6883a25",
+  "critical": "501a578",
+  "defend": "3b3ad8c6",
+  "follow": "87f992cb",
+  "hurt": "13312dc4",
+  "idle": "393c95cf",
+  "item": "1bddfb56",
+  "ko": "5acbf70e",
+  "od-fury": "4b0f641d",
+  "ready": "e410643d",
+  "sleep": "ae273878",
+  "victory": "aed9978d"
+ }
+}

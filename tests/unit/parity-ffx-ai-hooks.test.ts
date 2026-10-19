@@ -283,11 +283,14 @@ describe('the hit event: once per action per target, after the last record, befo
     expect(calls[0]!.report).toEqual({ hpBefore: 5_000, lostHp: false, lastDamage: 0, affectsHp: false });
   });
 
-  it('an all-target action: each target hears of it right after its own last record, before the next target is touched', () => {
+  it('an all-target action: each target hears of it in the round of its own last record, the lower slot first', () => {
     const { ctx } = probed();
     act(ctx, 'tidus', exactHit('probe-all', 100, { hits: 2, targeting: 'all-enemies' }), ['guado-guardian-a']);
     expect(calls.map((c) => c.id)).toEqual(['guado-guardian-a', 'guado-guardian-b']);
-    expect(calls[0]!.other).toBe(5_000); // the second target has not been touched when the first one's hook runs
+    // RC10 (FFX only; FFX-H01 3.7): the game applies round by round, so when the first target's script hears of it (round 2) the second target has taken the first of its two
+    // records (4,900) and not the second. The engine writes HP when a hit is calculated, so the second target already carries both (4,800): the larger split of calculation
+    // from application is the note's open item. The order of the two scripts (lower slot first) is the game's.
+    expect(calls[0]!.other).toBe(4_800);
     expect(calls[1]!.other).toBe(4_800); // the first target's two records are in when the second one's runs
     expect(calls.map((c) => c.report.lastDamage)).toEqual([200, 200]);
   });

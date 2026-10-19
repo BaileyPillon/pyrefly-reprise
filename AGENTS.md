@@ -36,6 +36,7 @@ Jules, ...). `CLAUDE.md` only imports it. Keep it short; details live in `docs/`
 | Which review a change needs, and why | `node tools/critic-plan.mjs` (`--paths a,b` to ask about files) |
 | Settle a review obligation with a report | `node tools/critic-clear.mjs --report <report.json>` (never delete a marker) |
 | Prove a build's art: every derived file equals its PNG master, a WebP ships only where every decoder draws it the same and never under 64 bytes (WebKit cannot load one), nothing names a missing file, every shipped image loads in WebKit and Chromium | `node tools/art-derive.mjs verify --dir <build>` and `audit --dir <build>`; `node tools/art-browser-load.mjs --dir <build>` loads every shipped image in WebKit and Chromium (the deploy runs it, about 20 s); `node tools/art-play-audit.mjs --dir <build>` plays it in headless Chromium; `node tools/art-browser-identity.mjs --dir <build> --screen-exact` compares them as the browser decodes them |
+| A rig (one painting cut into parts on a bone rig) may ship: full-coverage stamp, costume unchanged, 1x tier proved, nothing unvetted in its folder; the release mirror that carries it | `node tools/rig-gate.mjs --rig <folder> --verify --art <release art>`; `node tools/art-mirror-add-rigs.mjs --from <mirror> --rigs D:/pyrefly-art-rigs --to <new mirror>` ([rig-ship](docs/handoff/rig-ship.md)) |
 | Release | `npm run deploy` (read "Release" first) |
 
 Everything else (ports, base path, the screenshot flags, the `window.__pyrefly`
@@ -197,6 +198,10 @@ encounter through its real flow, every required target in `docs/target/targets.j
 matched, the exact artifact verified live). An old score never certifies a new build;
 rounds 02 and 03 are rubric v1 history.
 
+- `npm run deploy -- --release=<name>` (since 2026-10-08, Bailey) names the release for the title screen's build number
+  and **refuses** unless that release's player note is the newest in `src/app/changelog/releaseNotes.ts`: write the note
+  (three to six lines, player words, tagged FFX / FFX-2 / Both, never a hidden chapter or a secret word) and commit it first.
+  A `--preview` is stamped `Preview` and needs none ([DEV.md](docs/DEV.md) "Deploy").
 - `npm run deploy` builds locally (the art is only on this disk), deploys the Worker
   `echoes-of-spira` to Cloudflare (the default host; Custom Domain `echoesofspira.com`) and
   appends to `docs/deploys.log`; `--host=github` publishes the old GitHub Pages address as a
@@ -204,7 +209,9 @@ rounds 02 and 03 are rubric v1 history.
   hashes and decode-checks every shipped file (`artifact-manifest.json`), refuses a
   candidate with no validated focused or deep report for that commit, one whose ship
   verdict is HOLD, a save-data change with only a focused report, and the third deploy
-  while a deep review is owed; then compares the live files with the build byte for byte
+  while a deep review is owed; its FIRST preflight step is the rig gate (every rig of `public/art/rigs` must
+  verify as a shipping rig, any refusal stops the deploy, and neither `--skip-tests` nor `--owner-override`
+  reaches it: `docs/handoff/rig-ship.md`); then compares the live files with the build byte for byte
   and leaves `critic/pending/<sha>.json` listing the separate obligations that build owes
   (`live`, `focused`, `deep`, `milestone`). Only
   `node tools/critic-clear.mjs --report <file>` settles one: a focused pass never settles

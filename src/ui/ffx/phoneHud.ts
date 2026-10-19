@@ -35,9 +35,14 @@ export function readFfxPhone(hud: HTMLElement): PhoneBattleText {
   if (row) targetHp = `HP ${textOf(row, '.ig-stat__value:not(.ig-stat__value--mp)').replace(/\s*\/\s*/, ' / ')}`;
   else if (sensorName && sensorName === target) targetHp = textOf(sensorEl!, '.ffx-sensor__hp').replace(/^HP\s*/, 'HP ');
   const info = hud.querySelector<HTMLElement>('.ffx-cmd-info');
+  // A Doublecast's slab holds two lines of chips and numerals; the phone reads its own sentence off it (`ui/ffx/DoublecastHud.ts`): the footer's line in a list, the strip's in a target step.
+  const dc = info && !info.hidden ? info.querySelector<HTMLElement>('.ffx-dc-help') : null;
+  const dcText = dc?.dataset['phoneText'] ?? '';
+  const dcStep = dc?.dataset['phoneAt'] === 'step';
   return {
     actor: textOf(hud, '.ig-stat--acting .ig-stat__name'),
-    help: info && !info.hidden ? textOf(info, '[data-role="text"]') : '',
+    help: dc ? (dcStep ? '' : dcText) : info && !info.hidden ? textOf(info, '[data-role="text"]') : '',
+    ...(dc && dcStep ? { step: { n: dc.dataset['phoneN'] ?? '', text: dcText } } : {}),
     command: textOf(hud, '.ffx-cmd-area .ig-cmd--selected .ffx-cmd__label'),
     target,
     targetHp,

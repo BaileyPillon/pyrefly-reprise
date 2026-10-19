@@ -39,6 +39,7 @@ import { GAGAZET_DOOR_CHAPTER, GAGAZET_DOOR_WORD } from './gagazetDoor.ts';
 import { ANGRA_DOOR_CHAPTER, ANGRA_DOOR_WORD } from './angraDoor.ts';
 import { YOJIMBO_DOOR_CHAPTER, YOJIMBO_DOOR_WORD } from './yojimboDoor.ts';
 import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
+import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -70,6 +71,12 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: SUMMON_DOOR_WORD, chapter: SUMMON_DOOR_CHAPTER },
 ];
 
+/**
+ * The doors that lead to a run, not to a chapter of their own (FFX's Pilgrimage, `./pilgrimDoor.ts`, 2026-10-18): kept beside `CHAPTER_DOORS` because the table's test forbids the one-letter overlap `pilgrim` has with `mushroom`
+ * (a harmless one, written up in `./pilgrimDoor.ts`). They are plain typed words (the next frame, later letters claimed) and `BoardDoors.isRun` says which chapter's door is one.
+ */
+export const RUN_DOORS: readonly ChapterDoor[] = [{ word: PILGRIM_DOOR_WORD, chapter: PILGRIM_DOOR_CHAPTER }];
+
 /** What one key did to the doors. */
 export interface KeyFeed {
   /** A door that opens in this key's own handler (FF7's), or null. */
@@ -86,7 +93,7 @@ const SECRET_ROW = CHAPTER_DOORS.find((row) => row.secret === true);
 /** One board visit's doors: the table's words, and FF7's label taps and pad sequence. Make a new one each time the board is entered. */
 export class BoardDoors {
   private readonly secret = new SecretDoor();
-  private readonly matchers: ReadonlyArray<{ row: ChapterDoor; door: { feedKey(key: string, atMs: number): DoorResult; readonly continued?: boolean } }> = CHAPTER_DOORS.map((row) => ({
+  private readonly matchers: ReadonlyArray<{ row: ChapterDoor; door: { feedKey(key: string, atMs: number): DoorResult; readonly continued?: boolean } }> = [...CHAPTER_DOORS, ...RUN_DOORS].map((row) => ({
     row,
     door: row.secret === true ? this.secret : new WordDoor(row.word),
   }));
@@ -114,6 +121,11 @@ export class BoardDoors {
   /** A tap or click on the "Chapter select" label: the chapter the taps opened, or null. */
   feedTap(atMs: number): ChapterId | null {
     return this.secret.feedTap(atMs) === 'open' ? (SECRET_ROW?.chapter ?? null) : null;
+  }
+
+  /** True when `chapter`'s door leads to a run (the Pilgrimage), not to the chapter alone: the board then arms the flow. */
+  isRun(chapter: ChapterId): boolean {
+    return RUN_DOORS.some((row) => row.chapter === chapter);
   }
 
   /** False while the chapter's door is gated shut (FF7's switch); true for every other chapter. */

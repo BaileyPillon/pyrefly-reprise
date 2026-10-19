@@ -73,7 +73,7 @@ export interface DropOptions {
 }
 
 /**
- * `FUN_00798ac0(item, qty, list)`: adds `qty` of `item` to the reward list. Nothing happens for item 0 or a quantity
+ * The function at 0x00798ac0 (`item, qty, list`): adds `qty` of `item` to the reward list. Nothing happens for item 0 or a quantity
  * below 1. An item already listed has the quantity added (clamped to 0..99); otherwise a new stack of
  * `clamp(qty, 0, 99)` is appended while fewer than eight stacks exist.
  */
@@ -175,7 +175,7 @@ export function rollDrops(inp: DropsInput, reward: RewardList, draw: (stream: nu
   }
 }
 
-/** One slot of the settle: the flags and counters `FUN_00798b70` reads. */
+/** One slot of the settle: the flags and counters the function at 0x00798b70 reads. */
 export interface SettleSlot {
   /** `R+0x24+i`: the member took a command other than Switch this battle (set by the command code for ids below 8). */
   acted: boolean;
@@ -191,7 +191,7 @@ export interface SettleSlot {
 }
 
 /**
- * `FUN_00798b70()`, run once when a battle ends: every slot 0 to 0x11 that never acted, is dead or is Petrified loses the
+ * The function at 0x00798b70, run once when a battle ends: every slot 0 to 0x11 that never acted, is dead or is Petrified loses the
  * AP it earned in this battle (the value goes back to the one stored at the start); every slot that was in the battle
  * has its battles-fought counter bumped. Returns nothing; the dword at 0x02310f68 is cleared (its meaning was not traced).
  */

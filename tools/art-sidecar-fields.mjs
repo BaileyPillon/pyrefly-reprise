@@ -44,10 +44,16 @@ const FIELD_SET = new Set(SIDECAR_FIELDS);
  */
 export const NON_SIDECAR_ART_JSON = Object.freeze(['art/manifest.json', 'art/portrait-parts/manifest.json', 'art/derived.json']);
 
+/**
+ * A rig's file (`art/rigs/<subject>/rig.json`, the rig program of 2026-10-17: one painting cut into parts on a bone rig, `src/data/art/rigTypes.ts`) is the game's data read whole, not a painting's
+ * sidecar: cut to the ten sidecar fields it would be `{}`, and the stamp the deploy verifies is a digest of its content. It takes the other art JSON's rule (local paths replaced, nothing else).
+ */
+const RIG_FILE = /^art\/rigs\/[^/]+\/rig\.json$/i;
+
 /** Is this site-relative path (`art/characters/yuna/idle.json`) a painting sidecar, whose keys the build cuts to {@link SIDECAR_FIELDS}? */
 export function isSidecarJson(rel) {
   const r = rel.replace(/\\/g, '/');
-  return r.startsWith('art/') && r.toLowerCase().endsWith('.json') && !NON_SIDECAR_ART_JSON.includes(r);
+  return r.startsWith('art/') && r.toLowerCase().endsWith('.json') && !NON_SIDECAR_ART_JSON.includes(r) && !RIG_FILE.test(r);
 }
 
 // ---------------------------------------------------------------------------------------------------- a small scanner for the top level of an object

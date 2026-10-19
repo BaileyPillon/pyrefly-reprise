@@ -19,7 +19,7 @@ import { highbridgeBuild } from '../../../src/data/ffx/builds/highbridge.ts';
 import { ALL_ABILITIES } from '../../../src/data/ffx/index.ts';
 import { describeAbility } from '../../../src/battle/ffx/intent.ts';
 import {
-  GROTHIA, ISAARU, PTERYA, SPATHI, actor, content, defend, drive, grandSummon, newEngine, nextInput, summon,
+  GROTHIA, ISAARU, PTERYA, SPATHI, actor, content, drive, grandSummon, newEngine, nextInput, pass, summon,
 } from '../helpers/isaaruUnits.ts';
 
 const events = (log: readonly BattleEvent[], type: BattleEvent['type']) => log.filter((e) => e.type === type);
@@ -143,22 +143,23 @@ describe('damage, on the engine chain at roll 16 (research §5.2 [derived], §5.
 });
 
 describe('Grothia (§4.1)', () => {
-  // Re-parity (AI lane C, D-15, D-17): his first turn is the Summon; the gauge starts at 100, and his attack on Yuna alone adds 5 to it
-  // like any other (capped at 100, so it shows nothing yet); the first turn against an aeon is Hellfire and spends the gauge.
-  it('Summon first; Yuna alone: his Yuna attack (the gauge stays at its cap); then, an aeon out: Hellfire, gauge spent', () => {
+  // Re-parity (AI lane C, D-15, D-17): his first turn is the Summon; the gauge starts at 100; the first turn against an aeon is Hellfire and spends the gauge.
+  // RC10: Yuna's menu is Summon and Grand Summon, so she summons at her first turn and the "Yuna alone" branch (his attack on her adds 5 to the gauge, capped at 100) is not
+  // reached at the start of a link; that branch is `re-parity-ai-isaaru.test.ts` (the script on a board with no aeon out).
+  it('Summon first; Yuna must summon at her first turn; then, with the aeon out: Hellfire, gauge spent', () => {
     const engine = newEngine('isaaru-grothia', 3);
     expect(actor(engine, GROTHIA).overdrive).toMatchObject({ gauge: 100, enemyGaugeRules: rules.ISAARU_GAUGE_RULES });
     drive(
       engine,
-      (d) => (d.actorId === 'yuna' && starts(engine.state().log, GROTHIA).includes(rows.GROTHIA_ATTACK_YUNA) ? summon('shiva') : defend()),
+      (d) => (d.actorId === 'yuna' ? summon('shiva') : pass(d)),
       (e) => starts(e.state().log, GROTHIA).includes(rows.GROTHIA_HELLFIRE),
     );
     const log = engine.state().log;
     const moves = starts(log, GROTHIA);
-    expect(moves.slice(0, 3)).toEqual([rows.GROTHIA_SUMMON, rows.GROTHIA_ATTACK_YUNA, rows.GROTHIA_HELLFIRE]);
+    expect(moves.slice(0, 2)).toEqual([rows.GROTHIA_SUMMON, rows.GROTHIA_HELLFIRE]);
     const hellfire = log.findIndex((e) => e.type === 'action-start' && e.abilityId === rows.GROTHIA_HELLFIRE);
     const gaugeBefore = log.slice(0, hellfire).filter((e) => e.type === 'overdrive-gauge' && e.who === GROTHIA && e.cause !== 'overdrive');
-    expect(gaugeBefore).toEqual([]); // 100 plus 5 is still 100: the cap shows nothing (the spend, cause 'overdrive', is Hellfire's own)
+    expect(gaugeBefore).toEqual([]); // nothing moved the gauge before it was spent (the spend, cause 'overdrive', is Hellfire's own)
     expect(actor(engine, GROTHIA).overdrive?.gauge).toBeLessThan(10);
   });
 
@@ -178,13 +179,12 @@ describe('Grothia (§4.1)', () => {
 });
 
 describe('Pterya (§4.2)', () => {
-  it('starts at 0 (O-9); +10 per attack, +15 per targeting; Energy Ray at 100; her Yuna attack when alone', () => {
+  it('starts at 0 (O-9); +10 per attack, +15 per targeting; Energy Ray at 100; the Summon first (D-17)', () => {
     const engine = newEngine('isaaru-pterya', 2);
     expect(actor(engine, PTERYA).overdrive?.gauge).toBe(0);
-    let t = 0;
     // Ifrit, not Bahamut, since PR-0179 arm a (D-243, 2026-09-27): arm a's Bahamut (STR 53) kills Pterya in
     // three swings, at gauge 75, before Energy Ray can come; this case is about her gauge, not the duel.
-    drive(engine, (d) => (d.actorId === 'yuna' ? (t++ === 0 ? defend() : summon('ifrit')) : { kind: 'attack', targets: [PTERYA] }),
+    drive(engine, (d) => (d.actorId === 'yuna' ? summon('ifrit') : { kind: 'attack', targets: [PTERYA] }),
       (e) => starts(e.state().log, PTERYA).includes(rows.PTERYA_ENERGY_RAY));
     const log = engine.state().log;
     const moves = starts(log, PTERYA);
@@ -214,12 +214,16 @@ describe('Spathi (§4.3)', () => {
     expect(dmg?.type === 'damage' ? dmg.amount : 9_999).toBeLessThan(650);
   });
 
-  it('with Yuna alone the count keeps running and Mega Flare lands on her (O-6): a defeat', () => {
-    const engine = newEngine('isaaru-spathi', 6);
-    drive(engine, () => defend());
+  // RC10: Yuna cannot wait with no aeon out (her menu is Summon and Grand Summon), so the old "Yuna alone when Mega Flare lands" is not a state play reaches. The same rule
+  // from the reachable side: with one free aeon left and no Shield, the count runs out, Mega Flare takes the aeon, nothing is left to summon, and the duel is lost.
+  it('with one free aeon and no Shield the count keeps running and Mega Flare takes it: a defeat, Mega Flare the last move', () => {
+    const party = { ...viaPurificoBuild, aeons: viaPurificoBuild.aeons.map((a) => (a.id === 'ixion' ? a : { ...a, hp: 0 })) };
+    const engine = newEngine('isaaru-spathi', 6, party);
+    drive(engine, (d) => pass(d));
     const st = engine.state();
     expect(st.result?.outcome).toBe('defeat');
     expect(starts(st.log, SPATHI).at(-1)).toBe(rows.SPATHI_MEGA_FLARE);
+    expect(st.combatants['ixion']!.hp).toBe(0);
   });
 });
 
@@ -241,7 +245,7 @@ describe('Isaaru (B8)', () => {
 describe('repairs after the engine review (2026-09-25)', () => {
   it("the intent slab calls Countdown what it is: no damage, not 'non-elemental damage to itself'", () => {
     const engine = newEngine('isaaru-spathi', 4) as ReturnType<typeof createFFXEngine>;
-    drive(engine, () => defend(), (e) => starts(e.state().log, SPATHI).length >= 1);
+    drive(engine, (d) => pass(d), (e) => starts(e.state().log, SPATHI).length >= 1);
     nextInput(engine);
     const intent = engine.intent();
     expect(intent?.enemyId).toBe(SPATHI);

@@ -402,6 +402,14 @@ export interface BattleStage {
    */
   settleEntrances?(now?: boolean): void;
   /**
+   * CHAPTER FRAMING's first plan (`fx/mix/openingGate.ts`; both games): resolves once it has landed on the figures, was given up after a bounded wait, or has nothing to land (the part is off).
+   * The opening waits on it before the first decision is asked for, so no command menu opens under a plan that is still to land (it would land at the first confirm, on figures already on
+   * screen). Resolves at once for a stage with no framing. Optional and additive: a stage without it (a test fake) has nothing to wait for.
+   */
+  planSettled?(): Promise<void>;
+  /** The master the plan installed is up and the camera, resting on `idle`, has not gone onto it: the opening moves it. Optional and additive, as {@link planSettled}. */
+  planArrivalOwed?(): boolean;
+  /**
    * Does this combatant have a painting of its **own** for `pose`, not a
    * fallback (`BattlePresenterArt.resolvePoseMap` points a missing pose at the
    * nearest one there is)? Optional and additive (iter2 attack-pose,

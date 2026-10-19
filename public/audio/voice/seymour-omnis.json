@@ -1,0 +1,112 @@
+{
+ "version": 1,
+ "chapter": "seymour-omnis",
+ "game": "ffx",
+ "lines": {
+  "07d4e029a03a98": {
+   "id": "seymour-omnis.pre.003",
+   "file": "seymour-omnis/seymour-omnis.pre.003.mp3",
+   "ms": 3382,
+   "bytes": 27668,
+   "who": "tidus"
+  },
+  "16497f2e556cbf": {
+   "id": "seymour-omnis.pre.007",
+   "file": "seymour-omnis/seymour-omnis.pre.007.mp3",
+   "ms": 2810,
+   "bytes": 23252,
+   "who": "tidus"
+  },
+  "134e481e798553": {
+   "id": "seymour-anima-macalania.pre.027",
+   "file": "seymour-anima-macalania/seymour-anima-macalania.pre.027.mp3",
+   "ms": 629,
+   "bytes": 5780,
+   "who": "yuna"
+  },
+  "1ac9988caad197": {
+   "id": "seymour-omnis.post.006",
+   "file": "seymour-omnis/seymour-omnis.post.006.mp3",
+   "ms": 1211,
+   "bytes": 10388,
+   "who": "yuna"
+  },
+  "05018ff79f6bc2": {
+   "id": "seymour-omnis.post.007",
+   "file": "seymour-omnis/seymour-omnis.post.007.mp3",
+   "ms": 2931,
+   "bytes": 24212,
+   "who": "tidus"
+  },
+  "1025bc9873e487": {
+   "id": "seymour-omnis.post.008",
+   "file": "seymour-omnis/seymour-omnis.post.008.mp3",
+   "ms": 1671,
+   "bytes": 14036,
+   "who": "auron"
+  },
+  "18289abe99e6ec": {
+   "id": "seymour-omnis.mid-omnis-disc-lesson.001",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-disc-lesson.001.mp3",
+   "ms": 3995,
+   "bytes": 32660,
+   "who": "auron"
+  },
+  "007016c8a2742d": {
+   "id": "seymour-omnis.mid-omnis-disc-lesson.001.fb1",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-disc-lesson.001.fb1.mp3",
+   "ms": 3814,
+   "bytes": 31124,
+   "who": "tidus"
+  },
+  "1461ad2c02d264": {
+   "id": "seymour-omnis.mid-omnis-disc-lesson.001.fb2",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-disc-lesson.001.fb2.mp3",
+   "ms": 3689,
+   "bytes": 30164,
+   "who": "yuna"
+  },
+  "1d44730ac5b047": {
+   "id": "seymour-omnis.mid-omnis-disc-turned.001",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-disc-turned.001.mp3",
+   "ms": 2649,
+   "bytes": 21908,
+   "who": "tidus"
+  },
+  "1609248256a12d": {
+   "id": "seymour-omnis.mid-omnis-disc-turned.001.fb1",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-disc-turned.001.fb1.mp3",
+   "ms": 2927,
+   "bytes": 24020,
+   "who": "yuna"
+  },
+  "0aca79c694177d": {
+   "id": "seymour-omnis.mid-omnis-first-glow.001",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-first-glow.001.mp3",
+   "ms": 2537,
+   "bytes": 20948,
+   "who": "auron"
+  },
+  "1c16b9c466e4fa": {
+   "id": "seymour-omnis.mid-omnis-first-glow.001.fb1",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-first-glow.001.fb1.mp3",
+   "ms": 2180,
+   "bytes": 18068,
+   "who": "tidus"
+  },
+  "0e321e4e3f2e3b": {
+   "id": "seymour-omnis.mid-omnis-first-reset.001",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-first-reset.001.mp3",
+   "ms": 2589,
+   "bytes": 21332,
+   "who": "tidus"
+  },
+  "0564bf2088859c": {
+   "id": "seymour-omnis.mid-omnis-first-reset.001.fb1",
+   "file": "seymour-omnis/seymour-omnis.mid-omnis-first-reset.001.fb1.mp3",
+   "ms": 2680,
+   "bytes": 22100,
+   "who": "yuna"
+  }
+ }
+}

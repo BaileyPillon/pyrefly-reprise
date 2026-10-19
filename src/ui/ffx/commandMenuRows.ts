@@ -1,6 +1,8 @@
 import type { AnyCombatant, AvailableCommand, CombatantId } from '../../battle/common/types.ts';
-import { rowEnabled, switchTargetId, type TopGroupRow, type TopRow } from './CommandMenuLogic.ts';
+import { isOpenerGroup, rowEnabled, switchTargetId, type TopGroupRow, type TopRow } from './CommandMenuLogic.ts';
 import { commandHelpText } from './commandHelp.ts';
+import { portraitChipHtml, tintFor } from './portraits.ts';
+import { opensList } from './targetStepUi.ts';
 import { TAKEN_REASON } from '../../data/ffx/last-summoning-ids.ts'; // a module with no imports of its own
 
 /**
@@ -46,6 +48,34 @@ export interface RowVM {
   badge?: RowBadge;
   /** Portrait chip for a reserve member in the Switch list. */
   portrait?: { key: string | undefined; name: string };
+  /** Why a greyed row is greyed ("Not enough MP", "Silenced"): a short line on a phone tile, where the keyboard cursor that would read it does not exist. */
+  reason?: string;
+}
+
+/** A greyed row's reason as its own line (`ffx-cmd__reason`: shown on a phone tile only, hidden by the desktop stylesheet). */
+export function reasonHtml(reason: string | undefined): string {
+  return reason ? `<span class="ffx-cmd__reason">${escapeHtml(reason)}</span>` : '';
+}
+
+/**
+ * The stack's rows from `start` up to (not including) `end`: one `.ig-cmd` per view-model, cascading right by its place in the window, the selected one carrying the
+ * cursor. `data-ui-action` is the row's index in the whole list (`CommandMenu.onAction`).
+ */
+export function rowsHtml(vms: readonly RowVM[], start: number, end: number, selectedIndex: number): string {
+  return vms
+    .slice(start, end)
+    .map((vm, localI) => {
+      const i = start + localI;
+      const selected = i === selectedIndex;
+      const cls = ['ig-cmd', selected ? 'ig-cmd--selected' : '', !vm.enabled ? 'ig-cmd--disabled' : '', vm.overdrive ? 'ig-cmd--overdrive' : '', vm.trigger ? 'ffx-cmd--trigger' : '', vm.portrait ? 'ffx-cmd--member' : '']
+        .filter(Boolean)
+        .join(' ');
+      const cursor = selected ? CURSOR_SVG : '';
+      const face = vm.portrait ? `<span class="ffx-cmd__face">${portraitChipHtml(vm.portrait.key, vm.portrait.name, tintFor('party'))}</span>` : '';
+      const chevron = vm.group ? '<span class="ffx-cmd__chev" aria-hidden="true">▸</span>' : '';
+      return `<div class="${cls}" style="margin-left:calc(var(--ig-cascade-step) * ${localI})" data-ui-action="${i}">${cursor}${face}<span class="ffx-cmd__label">${escapeHtml(vm.label)}</span>${chevron}${badgeHtml(vm.badge)}${reasonHtml(vm.reason)}</div>`;
+    })
+    .join('');
 }
 
 export function topRowVM(row: TopRow): RowVM {
@@ -67,7 +97,9 @@ export function topRowVM(row: TopRow): RowVM {
     ? enabled
       ? { kind: 'ready', text: 'READY' }
       : undefined
-    : { kind: 'count', text: `×${row.items.length}` };
+    : row.role === 'switch'
+      ? benchBadge(row)
+      : { kind: 'count', text: `×${row.items.length}` };
   return {
     label: row.label,
     enabled,
@@ -76,6 +108,12 @@ export function topRowVM(row: TopRow): RowVM {
     group: true,
     ...(badge ? { badge } : {}),
   };
+}
+
+/** The Switch row's count is the bench; the one greyed row a forbidden Switch with an empty bench gets (`MENU_DRAW_PARITY` item d) names nobody and carries no count. */
+function benchBadge(row: TopGroupRow): RowBadge | undefined {
+  const benched = row.items.filter((c) => switchTargetId(c)).length;
+  return benched > 0 ? { kind: 'count', text: `×${benched}` } : undefined;
 }
 
 export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: Record<CombatantId, AnyCombatant>): RowVM {
@@ -89,6 +127,7 @@ export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: 
     trigger: false,
     group: false,
     ...(badge ? { badge } : {}),
+    ...(!cmd.enabled && !taken && cmd.disabledReason ? { reason: cmd.disabledReason } : {}),
   };
   if (group.role !== 'switch') return vm;
   const benched = switchTargetId(cmd);
@@ -103,9 +142,9 @@ export function subRowVM(cmd: AvailableCommand, group: TopGroupRow, combatants: 
  * characters' Overdrive — describes that entry instead of offering to open a
  * list the player will never see (`chooseTop`). Round 02 #27.
  */
-export function groupHelp(row: TopGroupRow): string {
+export function groupHelp(row: TopGroupRow, actorId?: CombatantId): string {
   if (row.role === 'switch') return 'Swap in a reserve member (L1 / Q). The member coming in takes this turn.';
-  const only = row.items.length === 1 ? row.items[0] : undefined;
+  const only = row.items.length === 1 && (row.items[0]!.enabled || !isOpenerGroup(row)) && !opensList(row, actorId) ? row.items[0] : undefined; // an opener whose one entry is greyed still opens its list
   if (only) return commandHelpText(only) || `Open the ${row.label} menu.`;
   return `Open the ${row.label} menu.`;
 }

@@ -25,7 +25,7 @@ export const TIDUS_OVERDRIVES: ReadonlyArray<{ command: number; uses: number }> 
 ];
 
 /**
- * `FUN_007b0cd0(id)` (0x007b0cd0): after an Overdrive is paid for. For Tidus (id 0) outside demo mode 2 the use counter
+ * The function at 0x007b0cd0 (`id`): after an Overdrive is paid for. For Tidus (id 0) outside demo mode 2 the use counter
  * goes up by one; then for each of his four Overdrives in order, one he has not learned and whose threshold the counter
  * has reached (signed compare) raises the learned flag and records its id (a later entry overwrites an earlier one).
  * Returns 1 when any did. Every other character, and mode 2, leave everything alone.
@@ -46,7 +46,7 @@ export function tidusOverdriveLearn(w: OdWorld, id: number): number {
 }
 
 /**
- * `FUN_007b06e0(chr)` (0x007b06e0), run when an action is prepared: when it contains Grand Summon the character's gauge is
+ * The function at 0x007b06e0 (`chr`), run when an action is prepared: when it contains Grand Summon the character's gauge is
  * saved and then held at its maximum (so the 100-point cost can be paid whatever the gauge was), and the restore flag is set.
  */
 export function odHoldForGrandSummon(w: OdWorld, c: OdSlot): void {

@@ -8,7 +8,7 @@
  *
  * Inputs are the numbers the function reads, named after the game's fields, with their offsets:
  * `Cmd+0xNN` is the command record, `Chr+0xNNN` the battle character structure, `Rec+0xNN` the 0x2c-byte
- * hit record. Bytes are read as bytes (masked to 8 bits, like the machine code's MOVZX).
+ * hit record. Bytes are read as bytes (masked to 8 bits, like the machine code's zero-extending byte read).
  * The randomness comes from `draw()`, which returns the raw 31-bit value the game's RNG returns for the
  * USER's mode 1 stream (see `./rng.ts`); the kernel takes it modulo 101 like the exe.
  *
@@ -25,7 +25,7 @@ export const NO_EFFECT = 2;
 export type HitResult = typeof HIT | typeof MISS | typeof NO_EFFECT;
 
 /**
- * Base hit percent by index, `DAT_00c421f0` (9 signed bytes). Indexed by
+ * Base hit percent by index, the table at 0x00c421f0 (9 signed bytes). Indexed by
  * `clamp(base * 2 / 5 - target EVA + 10, 0, 8)`.
  */
 export const ACCURACY_TABLE: readonly number[] = [25, 30, 30, 40, 40, 50, 60, 80, 100];

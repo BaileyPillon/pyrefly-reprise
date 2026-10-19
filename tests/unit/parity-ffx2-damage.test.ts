@@ -78,14 +78,14 @@ describe('32-bit helpers: the compiler idioms are exact truncating division', ()
   // each sequence with BigInt (a real 64-bit product) and check it equals sdiv (trunc(x / d)) for edge values
   // and a pseudo-random sample of 32-bit numbers.
   const asInt = (x: bigint): number => Number(BigInt.asIntN(32, x));
-  const hi32 = (x: number, magic: bigint): number => asInt((BigInt(x) * magic) >> 32n); // IMUL r/m32: EDX
-  const addSign = (q: number): number => (q + (q >>> 31)) | 0; // MOV ECX,EDX; SHR ECX,31; ADD ECX,EDX
+  const hi32 = (x: number, magic: bigint): number => asInt((BigInt(x) * magic) >> 32n); // the high 32 bits of the signed 64-bit product
+  const addSign = (q: number): number => (q + (q >>> 31)) | 0; // the sign fix: add 1 to a negative quotient (add its sign bit)
 
-  /** /255: MOV EAX,0x80808081; IMUL ESI; ADD EDX,ESI; SAR EDX,7; then the sign fix. */
+  /** /255: the high 32 bits of x * 0x80808081 (as a signed constant), plus x, shifted right by 7; then the sign fix. */
   const magic255 = (x: number): number => addSign(((hi32(x, BigInt.asIntN(32, 0x80808081n)) + x) | 0) >> 7);
-  /** /12: MOV EAX,0x2AAAAAAB; IMUL ECX; SAR EDX,1; then the sign fix. */
+  /** /12: the high 32 bits of x * 0x2AAAAAAB, shifted right by 1; then the sign fix. */
   const magic12 = (x: number): number => addSign(hi32(x, 0x2aaaaaabn) >> 1);
-  /** /20: MOV EAX,0x66666667; IMUL ECX; SAR EDX,3; then the sign fix. */
+  /** /20: the high 32 bits of x * 0x66666667, shifted right by 3; then the sign fix. */
   const magic20 = (x: number): number => addSign(hi32(x, 0x66666667n) >> 3);
 
   const edges = [0, 1, -1, 2, -2, 11, 12, 13, -11, -12, -13, 19, 20, 21, -19, -20, -21, 254, 255, 256, -254, -255, -256,
@@ -97,15 +97,15 @@ describe('32-bit helpers: the compiler idioms are exact truncating division', ()
     sample.push(seed);
   }
 
-  it('x / 255 (IMUL 0x80808081, SAR 7) equals sdiv(x, 255) for 20,000+ values', () => {
+  it('x / 255 (high word of x * 0x80808081, shift right by 7) equals sdiv(x, 255) for 20,000+ values', () => {
     for (const x of sample) expect(magic255(x), `x=${x}`).toBe(sdiv(x, 255));
   });
 
-  it('x / 12 (IMUL 0x2AAAAAAB, SAR 1) equals sdiv(x, 12)', () => {
+  it('x / 12 (high word of x * 0x2AAAAAAB, shift right by 1) equals sdiv(x, 12)', () => {
     for (const x of sample) expect(magic12(x), `x=${x}`).toBe(sdiv(x, 12));
   });
 
-  it('x / 20 (IMUL 0x66666667, SAR 3) equals sdiv(x, 20)', () => {
+  it('x / 20 (high word of x * 0x66666667, shift right by 3) equals sdiv(x, 20)', () => {
     for (const x of sample) expect(magic20(x), `x=${x}`).toBe(sdiv(x, 20));
   });
 
@@ -114,14 +114,14 @@ describe('32-bit helpers: the compiler idioms are exact truncating division', ()
     for (const [fn, d] of pairs) {
       for (const x of sample) expect(fn(x), `/${d} x=${x}`).toBe(sdiv(x, d));
     }
-    // -7 / 2: the plain shift gives -4, the game gives -3 (CDQ; SUB EAX,EDX; SAR EAX,1).
+    // -7 / 2: the plain shift gives -4, the game gives -3 (subtract the sign mask, then shift right by 1).
     expect(-7 >> 1).toBe(-4);
     expect(div2(-7)).toBe(-3);
     expect(div16(-17)).toBe(-1);
     expect(div256(-255)).toBe(0);
   });
 
-  it('products wrap at 32 bits like IMUL; division by zero and INT_MIN / -1 are errors (the CPU faults)', () => {
+  it('products wrap at 32 bits (low 32 bits kept); division by zero and INT_MIN / -1 are errors (the CPU faults)', () => {
     expect(mul(65536, 65536)).toBe(0);
     expect(mul(46341, 46341)).toBe(-2147479015); // 2,147,488,281 - 2^32
     expect(mul3div2(1000000000)).toBe(-647483648); // 3e9 wraps to -1,294,967,296, then halves toward zero
@@ -131,7 +131,7 @@ describe('32-bit helpers: the compiler idioms are exact truncating division', ()
     expect(neg(-2147483648)).toBe(-2147483648);
   });
 
-  it('byte reads: MOVZX for stats, MOVSX for stages; clamp is the game helper (low bound first)', () => {
+  it('byte reads: stats zero-extended, stages sign-extended; clamp is the game helper (low bound first)', () => {
     expect(u8(300)).toBe(44);
     expect(u8(-1)).toBe(255);
     expect(s8(200)).toBe(-56);
@@ -242,7 +242,7 @@ describe('formula 0, physical: STR and level against DEF, with stage factors', (
   });
 
   it('the products wrap at 32 bits (a level of 100,000 is outside the game; it pins the wrap)', () => {
-    // (255+100000)*255 = 25,563,... * 100000 overflows 2^31: the game's own IMUL result is what is returned
+    // (255+100000)*255 = 25,563,... * 100000 overflows 2^31: the game's own 32-bit product (low 32 bits kept) is what is returned
     expect(at(256, { power: 255, user: { str: 255, level: 100000 }, target: { def: 0 } })).toBe(-343550);
   });
 });

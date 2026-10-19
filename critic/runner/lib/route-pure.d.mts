@@ -25,3 +25,5 @@ export function budgetFor(chapterId: string, explicit?: unknown): number;
 export function inlineProbeRefusal(args: { continuity?: unknown } | null | undefined, env?: { CONT_DEDICATED?: string } | null): string | null;
 export const CONTINUITY_BUDGET_MS: number;
 export function continuityBudgetFor(chapterId: string, explicit?: unknown): number;
+export const DOOR_WORDS: Readonly<Record<string, string>>;
+export function doorWordFor(chapterId: string): string | null;

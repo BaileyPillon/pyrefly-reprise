@@ -171,14 +171,14 @@ describe('one enemy-health presentation, and Sensor is what unlocks it', () => {
     const panel = new SensorPanel();
     const boss = enemy('mortiorchis');
     panel.show(boss);
-    expect(panel.el.textContent).toContain('48000');
+    expect(panel.el.textContent).toContain('48,000');
     expect(panel.isScanned('mortiorchis')).toBe(true);
 
     // Aim somewhere else, then come back: what Sensor told you is not forgotten.
     panel.focus(enemy('seymour-flux'));
     expect(panel.el.textContent).toContain('? ? ?');
     panel.focus(boss);
-    expect(panel.el.textContent).toContain('48000');
+    expect(panel.el.textContent).toContain('48,000');
   });
 
   it('a new battle starts blind', () => {

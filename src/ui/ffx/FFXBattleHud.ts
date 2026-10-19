@@ -710,7 +710,7 @@ export class FFXBattleHud implements HudPort {
     // Before the advisor, because folding the enemy plate gives the shelf its
     // height back and `placeAdvisor` should see that on the same frame.
     this.sensorPanel.update(dt);
-    keepSensorOffCtb(this.sensorPanel.el, this.ctbList.el, this.hudScale()); // PR-0233: off the turn list's names
+    keepSensorOffCtb(this.sensorPanel.el, this.ctbList.el, this.hudScale(), this.intent.el.querySelector<HTMLElement>('.eint__toggle')); // PR-0233: off the turn list's names; FOC52-002: and off the parked E ENEMY MOVE chip
     // r37-ui-floor, third attempt (FFX only): the Sensor card settles after the cursor's layout (steered sideways, kept off the turn list,
     // folded), so the hand is cleared of it every frame the hand is up, against where the card is now (`handClear.ts`).
     clearHandOfCards(this.commandMenu.targetCursor.el, this.el);
@@ -750,9 +750,7 @@ export class FFXBattleHud implements HudPort {
   }
 
   /** The guide rail, for tests and the debug snapshot. */
-  get strategyGuide(): StrategyGuide {
-    return this.guide;
-  }
+  get strategyGuide(): StrategyGuide { return this.guide; }
 
   /** This fight starts with the guide folded to its chip and the card in its place (`SceneStaging.guideFolded`; Chapters I and III). Called once, before the HUD is mounted. */
   startGuideFolded(): void {
@@ -761,9 +759,7 @@ export class FFXBattleHud implements HudPort {
   }
 
   /** The move-advisor card, for tests and the debug snapshot. */
-  get moveAdvisor(): MoveAdvisor {
-    return this.advisor;
-  }
+  get moveAdvisor(): MoveAdvisor { return this.advisor; }
 
   /**
    * The painted field's targeting surface — silhouette rectangles in, accent
@@ -860,6 +856,9 @@ export class FFXBattleHud implements HudPort {
   get enemyPlate(): SensorPanel {
     return this.sensorPanel;
   }
+
+  /** The command menu, for the Doublecast wrapper (`withDoublecastHud`) and tests. */
+  get menu(): CommandMenu { return this.commandMenu; }
 
   // ------------------------------------------------------- target selection
 

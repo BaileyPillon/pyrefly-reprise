@@ -90,10 +90,13 @@ describe('the waiver ledger (docs/target/pose-waivers.json)', () => {
 // ------------------------------------------------------------------ r50.1's nine holds
 
 describe('r50.1\'s nine holds read honestly (their real head cost, not hidden behind the lock\'s 1.000)', () => {
-  /** The nine FFX poses r50.1 held to a stature (docs/target/pose-measure.json `held`): subject, pose, headRatio. Bailey 2026-10-16: "lulu looks tiny when hurt - this problem again? ugh". */
+  /**
+   * The nine FFX poses r50.1 held to a stature, with the head ratio the W3 sizing rule records for them now (docs/target/pose-measure.json: `held.headRatio`, or `ruled.headRatio` for the two the mean
+   * leaves inside the band, Wakka's cast and Yuna's attack): subject, pose, headRatio. Bailey 2026-10-16: "lulu looks tiny when hurt - this problem again? ugh".
+   */
   const NINE: [string, string, number][] = [
-    ['auron', 'attack', 1.286], ['auron', 'critical', 1.231], ['auron', 'hurt', 1.24], ['lulu', 'critical', 1.375], ['lulu', 'hurt', 1.354],
-    ['rikku', 'attack', 1.124], ['wakka', 'cast', 0.985], ['yuna', 'attack', 1.028], ['yuna', 'hurt', 1.163],
+    ['auron', 'attack', 1.284], ['auron', 'critical', 1.281], ['auron', 'hurt', 1.241], ['lulu', 'critical', 1.368], ['lulu', 'hurt', 1.345],
+    ['rikku', 'attack', 1.138], ['wakka', 'cast', 0.947], ['yuna', 'attack', 1.068], ['yuna', 'hurt', 1.164],
   ];
   const mask = { w: 8, h: 8, bits: new Uint8Array(64).fill(1), srcW: 200, srcH: 300 };
 
@@ -110,12 +113,24 @@ describe('r50.1\'s nine holds read honestly (their real head cost, not hidden be
     if (subject !== 'wakka') expect(Math.abs(real.costPct)).toBeGreaterThan(2); // not hidden: eight of the nine cost a head
   });
 
-  it('still carries those nine, with those ratios, in docs/target/pose-measure.json (the record the critic reads)', () => {
+  it('still carries those nine, with those ratios, in docs/target/pose-measure.json (the record the critic reads: `held`, or `ruled` where the mean needs no hold)', () => {
     const file = resolve(ROOT, 'docs', 'target', 'pose-measure.json');
     if (!existsSync(file)) return;
-    const json = JSON.parse(readFileSync(file, 'utf8')) as { subjects: Record<string, { poses: Record<string, { held?: { headRatio: number } }> }> };
-    const held = Object.entries(json.subjects).flatMap(([s, v]) => Object.entries(v.poses).filter(([, p]) => p.held).map(([p, rr]) => [s, p, rr.held!.headRatio] as [string, string, number]));
-    expect(held.sort()).toEqual([...NINE].sort());
+    const json = JSON.parse(readFileSync(file, 'utf8')) as { subjects: Record<string, { poses: Record<string, { held?: { headRatio: number }; ruled?: { headRatio: number } }> }> };
+    for (const [s, p, ratio] of NINE) {
+      const r = json.subjects[s]!.poses[p]!;
+      expect(r.held?.headRatio ?? r.ruled?.headRatio, `${s}/${p}`).toBeCloseTo(ratio, 3);
+    }
+  });
+
+  it('reads a ruled pose that is no hold the same way: its record\'s ratio is the head the player sees, and the anchors carry it', () => {
+    const measure = measureOf('wakka', { cast: rec([70, 10, 130, 70], { x: 100, row: SOLE }, { ruled: { headRatio: 0.947 } }) });
+    const a = anchorsFor({ url: '/art/characters/wakka/cast.webp', mask, measure });
+    const idle = anchorsFor({ url: '/art/characters/wakka/idle.webp', mask, measure });
+    expect(a.heldHeadRatio).toBe(0.947);
+    const real = readRealHead({ aFrom: idle, aTo: a, head: { ratio: 1, source: 'registration' } })!;
+    expect(real.ratio).toBeCloseTo(0.947, 3);
+    expect(real.outsideBand).toBe(false);
   });
 
   it('is judged against the gate\'s hold band, not the 3 percent: a 1.375 head across the hold is no failure, a 1.5 is', () => {

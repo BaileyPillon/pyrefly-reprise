@@ -27,6 +27,7 @@ import { resolveDoublecast } from './doublecast.ts';
 import { carryOutOrder } from './orders.ts';
 import { isVolley, resolveVolley } from './volley.ts';
 import { duelRefusalFor } from './aeon-duel.ts';
+import { defendRefused } from './formation-flags.ts';
 import { executeAeonCommand } from './aeon-commands.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
@@ -72,6 +73,9 @@ export function executeCommand(
     ctx.emit({ type: 'message', text: refusal, kind: 'system' });
     return { rank: 0, rejected: true, damageDealt: 0 };
   }
+
+  // A Defend in a formation that switched it off (`formation-flags.ts`) is refused, the turn kept open; the menu never offers it, so this is the engine refusing a command that never should have arrived.
+  if (defendRefused(ctx, actor, command)) return { rank: 0, rejected: true, damageDealt: 0 };
 
   // The player's Yojimbo's and the Magus Sisters' own commands (re-parity lane FFX-K, `aeon-commands.ts`); `null` for everyone else, whose command goes on.
   const aeonResult = executeAeonCommand(ctx, actor, command, (who, cmd) => executeCommand(ctx, who, cmd, true));
@@ -209,11 +213,12 @@ export function executeCommand(
   if (!costGate(actor, def, command.kind === 'overdrive')) return fizzle(ctx, actor, command, false);
   // **Doublecast** [ffx-combat-core §7.4 row 41; ffx-bfa-yu-yevon §4.2
   // "grant ... Doublecast + Firaga/Thundaga", verified: 2 sources]. Only an
-  // ability whose own record sets the flag takes this path; the wrapped spell
-  // rides on `AbilityCommand.wrappedId`. See `./doublecast.ts`, which also
-  // holds the PR-0125 guard against a self-only placeholder aim.
+  // ability whose own record sets the flag takes this path; the two casts ride on
+  // `AbilityCommand.casts` (two picks, each its own spell and target, each paid at its
+  // own cost check) or, in the older shape, one spell on `wrappedId` twice. See
+  // `./doublecast.ts`, which also holds the PR-0125 guard against a self-only placeholder aim.
   if (command.kind === 'ability' && def.extra?.['castsTwoBlackMagicSpells'] === true) {
-    return resolveDoublecast(ctx, actor, def, command.wrappedId, command.targets);
+    return resolveDoublecast(ctx, actor, def, command);
   }
   // **A volley**: several spells in one enemy turn (Seymour Omnis's four disc
   // spells, Chapter XII) — inert unless the row sets `extra.volley` [volley.ts].

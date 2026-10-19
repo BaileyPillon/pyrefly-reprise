@@ -73,16 +73,22 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
   // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
   // **Re-pinned 2026-10-15 for the item ledger and the battle-end commit window** (re-parity RC8, FFX-2 only; reason "game-code parity"; `docs/handoff/re-parity-rc8-x2-end-ledger.md`): the end of a fight is committed after the casts in flight have fired, so each log gains the events between the last blow and the victory (see `ffx2-atb-golden.test.ts`, thirteenth re-pin). The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again. The old hashes are in git at ea431aa0.
   // **Re-pinned on the r51 merge for the game's kill rewards** (re-parity RC9 lane X2-C, 2026-10-15, FFX-2 only; reason "game-code parity", note FFX2-G03; docs/handoff/re-parity-rc9-x2-rewards.md): the `victory` result is what the reward routine paid at each knock-out, so that one event's payload differs in every log. Cause, by ablation: with each victory result put back to what the old `buildResult` made from the same board, all eighteen logs give their old digest again, so no battle changed. The old hashes (the item-ledger and commit-window pins above) are in git at 6b638df95. The lane built these on r49 (before RC8); r51-rc re-recorded them on the merged tree (RC8 plus this lane), and the ablation was re-run there: every one of the 119 logs equals RC8's pin again with the result put back. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
+  // **Chapter VI's six re-pinned on the merge of the Chapter VI link opening onto r52-rc** (lane X2-L row XL1, FFX-2 only; reason "game-code parity": the game starts every link of a chain as a full
+  // battle, FFX2-G10 sections 4 to 6; `docs/handoff/re-parity-rc9-x2-link-open.md`; PR-0107 turned ON by Bailey's yes of 2026-10-17, "yes turn on chapter VI opening, keep going full speed"): `SEPARATE_BATTLE_GAUGES` is `true` in
+  // `src/battle/ffx2/constants.ts`, so Acts II and III open on random waits and the opening trim instead of every wait whole. Cause, by comparing full event logs: Act I is identical and the first
+  // differing event is the opening gauge snapshot of Act II (link 2) in all six runs, all still victories. With `separateBattleGauges: false` passed as an option on the merged tree the six old hashes (the
+  // r52-rc pins above: 1135b38b, a7917cc4, 552525db, bde33d49, a6475afe, 0baa4501) return exactly. Chapters IV and V did not move. The old hashes are in git at 3c92b60cc (r52-rc).
+  // **Re-pinned once for the hit reaction, stacked on r52-rc and the Chapter VI link opening** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", the checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`): the eighteen logs of Chapters IV to VI at human pace (Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the top list), seeds 1 to 3. Cause, found by ablation (the switch `CHAIN_WINDOW_PER_BODY` forced off): X2-A per-body windows, on top of the link opening. The chain window, the span of the halved tick and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, Bahamut 52 and 82) where they were 60 and 90 steps and 15. The old hashes are the base 35aa31e77 (r52-rc 3c92b60cc plus the Chapter VI link opening)'s, the six Chapter VI ones being the link-opening row above. Proof on the merged tree (branch `re-parity-rc9-x2-hit-reaction-r52`, 2026-10-17): with `CHAIN_WINDOW_PER_BODY` forced off for the whole run through a module mock (a vitest setup file; `withReactionKnobs(OLD_REACTION)` is the same switch inside the process), these eighteen pins: 18 of 18 of the base's hashes come back exactly, and with it on all 18 move.
   const ON: Record<string, string> = {
-    'IV|active|1': 'e65e760c1ac142e6', 'IV|split|1': 'dd2e85d54614475b',
-    'IV|active|2': '038b6876c64668be', 'IV|split|2': 'e0f4699bd8328f26',
-    'IV|active|3': '77fffbaa2465740d', 'IV|split|3': '6dae5a3bdf819aa7',
-    'V|active|1': 'b48f133a94b43bda', 'V|split|1': 'e7777c9a48e7ffaf',
-    'V|active|2': '972a2c6e15a91cb4', 'V|split|2': '9ba0f62fc7f031c7',
-    'V|active|3': '22f26e178f22dc79', 'V|split|3': '58d6f4a3a023ae98',
-    'VI|active|1': '1135b38b3aa0ed40', 'VI|split|1': 'a7917cc4420d1a99',
-    'VI|active|2': '552525db77d1cb43', 'VI|split|2': 'bde33d49c2b4c689',
-    'VI|active|3': 'a6475afe3df6dc6c', 'VI|split|3': '0baa45010a693814',
+    'IV|active|1': '5385f128d0bbe00a', 'IV|split|1': 'b24d44c5d0c66291',
+    'IV|active|2': '878b4ca5279f18f1', 'IV|split|2': '96e98b1c96cf0327',
+    'IV|active|3': 'ba024bdd4db15f3f', 'IV|split|3': '62141f29d511d76d',
+    'V|active|1': 'c568c06af2d32d4a', 'V|split|1': '1dddc6c69afc6440',
+    'V|active|2': '70c9b63427a29c45', 'V|split|2': '8e2804953639b4cd',
+    'V|active|3': '08d0977e0d1536cb', 'V|split|3': 'eeed11d89e64f1ad',
+    'VI|active|1': '1343541dd9a41b91', 'VI|split|1': 'd36c552702cfb9d1',
+    'VI|active|2': '54b3e83d36657ff5', 'VI|split|2': 'fce586323e03384e',
+    'VI|active|3': '03fa0366b5f66ae4', 'VI|split|3': 'aa64389eb1c1a467',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 
