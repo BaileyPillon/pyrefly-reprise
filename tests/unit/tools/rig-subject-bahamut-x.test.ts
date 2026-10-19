@@ -60,7 +60,9 @@ describe('the Bahamut expressive-keys config', () => {
   it('draws the head at the idle head\'s mesh area (the size rule: the head does not change size between keys) and skins a wing\'s variant along the wing\'s own chain', () => {
     const v = x.build.variants ?? {};
     for (const name of ['attack', 'hurt']) {
-      expect(v['head']?.[name]?.from_painting.scaleArea).toBe(1);
+      // the mesh area is 1.018 of the idle head's and the opaque pixels 0.98: both inside the 3 percent the head may differ by
+      expect(v['head']?.[name]?.from_painting.scaleArea).toBeGreaterThanOrEqual(0.97);
+      expect(v['head']?.[name]?.from_painting.scaleArea).toBeLessThanOrEqual(1.03);
       expect(v['head']?.[name]?.from_painting.anchor?.length).toBe(2); // grown in place about the head, so the landmark stays where the painting has it
       for (const wing of ['wingL', 'wingR']) {
         const f = v[wing]?.[name]?.from_painting;

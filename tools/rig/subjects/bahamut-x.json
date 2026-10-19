@@ -1785,7 +1785,7 @@
               "inner": 34,
               "grow": 10
             },
-            "scaleArea": 1.0,
+            "scaleArea": 1.018,
             "anchor": [
               580,
               536
@@ -1906,7 +1906,7 @@
               "inner": 34,
               "grow": 10
             },
-            "scaleArea": 1.0,
+            "scaleArea": 1.018,
             "anchor": [
               1035,
               510

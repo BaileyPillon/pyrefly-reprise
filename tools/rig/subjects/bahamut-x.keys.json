@@ -87,7 +87,7 @@
   },
   "source": "characters/bahamut/attack",
   "fit": {
-   "iou": 0.885,
+   "iou": 0.8845,
    "stature": 1.0398,
    "feetPx": 0.0
   },
@@ -235,8 +235,8 @@
   },
   "source": "characters/bahamut/hurt",
   "fit": {
-   "iou": 0.8732,
-   "stature": 0.9312,
+   "iou": 0.8727,
+   "stature": 0.9323,
    "feetPx": 0.0
   },
   "root": {
