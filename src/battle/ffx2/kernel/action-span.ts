@@ -7,9 +7,9 @@
  * - **A physical command** (sequence class 1, 0xD to 0x14, 0x1D, 0x25, 0x26, 0x2B) completes at its last planned hit, not when its follow-through
  *   and return clips end (those only hold the NEXT command's start). So its span is the wait for the idle clip's break (a girl's tag script always
  *   begins with it; a monster only when its motion type carries `idle_wait` or `energy_attack`), then the run-up (bodies with a run bit; the macro
- *   polls once a step until the distance falls to the attack-start distance), then the `attack_00` clip up to the hit. **The hit time is an ESTIMATE:**
- *   the span takes the END of the clip, for a girl's clip and a monster's alike, because the hit-signal frames of the attack clips are not extracted (note
- *   FFX2-G01 section 8.7); the clip's end is an upper bound on the hit (a girl's clips run 2 to 40 frames, a monster's up to 138).
+ *   polls once a step until the distance falls to the attack-start distance), then the attack up to the hit. **The hit time is READ where the game's hit signals
+ *   were found** (note FFX2-G12 section 5: the first hit's frame from the start of `attack_00`, for 31 girl sets and 22 monster sets) **and an ESTIMATE elsewhere:**
+ *   a set with no signal read takes the END of the `attack_00` clip, an upper bound (a girl's clips run 2 to 40 frames, a monster's up to 138).
  * - **A charge kind** (classes 2 to 4, 0x15 to 0x1C, 0x1F to 0x24, 0x29, 0x2C to 0x2F) spans from the release to the end of the effect module's
  *   timeline: the module's own length (a measured total for three effects, a labelled class default for every other) plus, for a command that has no
  *   countdown, the girl's idle break and cast-start clip (with a countdown they play during it). A monster whose motion type carries a start-wait
@@ -61,7 +61,7 @@ export interface SpanBody {
   side: 'girl' | 'monster';
   /** `idle1` (`idle2` when there is no idle1): the clip the idle break waits on. 0 = none. */
   idle: number;
-  /** The `attack_00` clip's frames. The span takes their END as the hit time: an estimate, an upper bound (the hit-signal frame is not extracted), for a girl and a monster alike. */
+  /** The frames from the start of the attack to its first hit: READ from the game's hit signals where the data has them, else the END of the `attack_00` clip (an estimate, an upper bound). */
   attack: number;
   castStart: number;
   skillStart: number;

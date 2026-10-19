@@ -11,19 +11,27 @@
  * What is measured, what is read and what is an estimate (every estimate is labelled; none is a game number):
  * - READ [D] [verified: the note's frame tables agree with the banks' own programs, FFX2-G01 §8.3]: the clip lengths below, the motion-type bits,
  *   the run speed and attack-start distance of each body, each row's class and effect id.
- * - MEASURED [M] (2026-10-09 live session, `research/re-ffx2-timing-measured.md`): the release-to-completion length of three effects:
- *   Fire (effect 76) 75 steps on a girl; a monster cast of effect 176 (Umbral Gaze, `Lingering Gaze` shares the effect) 94, 94 and 94 steps (a fourth
- *   was 114 while it waited behind another effect); a monster cast of effect 368 (Strength Up) 84 steps. These totals include whatever start-gate wait the
- *   measured body had, so no separate gate term is added (the monsters' chant loop clip is absent from 28 of the 36 sets below, so the clip playing at
- *   release cannot be named from the tables). One body each: Darkness (row 0x307f, effect 844) is NOT one of them.
+ * - READ [R] (note FFX2-G12 §5; rerun of 2026-10-19): the frame of the FIRST HIT of a plain Attack, from the start of the `attack1_00` clip (a hit signal that sits in
+ *   `attack1_01` counts as the length of `attack1_00` plus its frame), found by matching each clip's length to the bank's own programs: 31 girl sets and 22 monster sets
+ *   (`GIRL_HIT_FRAMES`, `MONSTER_HIT_FRAMES`; Nooj 17, the Oversoul Paragon 33, Trema 6, Tawrich 34, Bahamut 41, Leblanc 8; the girls' Mascot clips Yuna 12, Rikku 4, Paine 11).
+ *   [R~] marks a set whose same-length programs disagree: the lowest candidate is taken and the candidates stand beside it (4 girl sets, 2 monster sets).
+ * - MEASURED [M] (live sessions of 2026-10-09 and 2026-10-19; note FFX2-G12 §4 and §7): the release-to-completion length of four effects and one item:
+ *   Fire (effect 76) 75 steps on a girl (twice, both unhasted); a monster cast of effect 176 (Umbral Gaze, `Lingering Gaze` shares the effect) 94, 94 and 94 steps (a fourth
+ *   was 114 while it waited behind another effect); a monster cast of effect 368 (Strength Up) 84 steps; Darkness (row 0x307f, effect 844, a Dark Knight, TWO targets, both
+ *   hit in the same step) 81 steps from its begin event, which comes about 2 steps after release when nothing waits (Fire and Potion), so 83 from release (one cast; its
+ *   own release-to-completion read 138 because it sat 53 steps in the manager's queue first, a wait this data does not model); a Potion (an item, one target) 79, 79 and 80,
+ *   taken as 80 for every item. These totals include whatever start-gate wait the measured body had, so no separate gate term is added (the monsters' chant loop clip is
+ *   absent from 28 of the 36 sets below, so the clip playing at release cannot be named from the tables).
  * - ESTIMATE [I], every one (the handoff's section 2 lists the same six; none is a game number):
- *   1. every effect length but those three takes the class default below (75 for a girl's, 94 for an enemy's);
+ *   1. every effect length but those measured takes the class default below (75 for a girl's, 94 for an enemy's); Darkness's rests on one cast at two targets;
  *   2. the run-up uses the median starting distance (RUN_DISTANCE_ESTIMATE) and the macro's run speed as units a second, with no ramp or turning (a lower bound);
  *   3. the idle wait before a command is half the idle clip (the phase is a script random pick; no draw is made);
- *   4. the hit time of a physical command is the END of the `attack1_00` clip, for a girl's and a monster's alike: an upper bound on the hit, because the
- *      hit-signal frames of the attack clips are not extracted (FFX2-G01 §8.7; most monster clips carry none). A girl's clips run 2 to 40 frames, a monster's up to 138;
- *   5. Haste halves the clip terms but leaves every effect length unscaled: nothing says Haste shortens an effect module (FFX2-G11 §2.2 item 3), so it is UNKNOWN;
- *   6. an item is not a command row and runs on the fallback class with the girl default of 75; a body outside the data runs on the FALLBACK rows below.
+ *   4. a set with no hit signal read (GIRL_HIT_FRAMES / MONSTER_HIT_FRAMES have no entry: 19 girl sets, 12 monster sets) takes the END of its `attack1_00` clip as the
+ *      hit: an upper bound. A girl's clips run 2 to 40 frames, a monster's up to 138. A multi-hit command is taken at its first hit, not its last;
+ *   5. Haste halves the clip terms but leaves every effect length unscaled: nothing says Haste shortens an effect module (FFX2-G11 §2.2 item 3; FFX2-G12 §6 expects only the
+ *      throw wait to shrink), so it is UNKNOWN;
+ *   6. an item is not a command row: every item takes the one measured Potion's 80 steps (Ether, Phoenix Down and the rest are unmeasured); a body outside the data runs on the
+ *      FALLBACK rows below.
  */
 
 /** Motion-type bits (the game's header names), as the macros set them. */
@@ -151,6 +159,77 @@ export const MONSTER_ACTION_FRAMES: Readonly<Record<number, MonsterFrames>> = {
   0x1127: [60, 10, 40, 40, 0x381, 50, 10, 18],
 };
 
+/**
+ * [R] A girl motion set's FIRST HIT, in motion frames from the start of its `attack1_00` clip (note FFX2-G12 §5: the first hit-type signal of the attack clips, matched by clip
+ * length against the bank's own programs; a signal in `attack1_01` counts as the length of `attack1_00` plus its frame). [R~] = several same-length programs disagree; the lowest
+ * candidate is taken. A set missing here has no hit signal read and keeps the END of its `attack1_00` clip as the hit time ([I], an upper bound).
+ */
+export const GIRL_HIT_FRAMES: Readonly<Record<number, number>> = {
+  0x2: 14,
+  0x3: 20,
+  0x6: 6, // [R~] ambiguous: 6 or 18
+  0x8: 12,
+  0xb: 10,
+  0xc: 6,
+  0xd: 24,
+  0xe: 24,
+  0x10: 17,
+  0x12: 16,
+  0x13: 20,
+  0x1a: 10,
+  0x1c: 4,
+  0x1f: 7,
+  0x20: 16,
+  0x21: 12,
+  0x22: 15,
+  0x24: 12,
+  0x27: 9,
+  0x28: 18,
+  0x29: 9,
+  0x2e: 12, // [R~] ambiguous: 12 or 14
+  0x30: 11,
+  0x33: 3,
+  0x34: 13,
+  0x35: 21,
+  0x36: 6,
+  0x38: 21,
+  0x3b: 8,
+  0x3c: 21,
+  0x45: 24, // [R~] ambiguous: 24 or 32
+  0x46: 33,
+  0x3ce: 18,
+  0x3cf: 26,
+  0x3d0: 28, // [R~] ambiguous: 28 or 34
+};
+
+/** [R] The same for a monster motion set (the Paragon's Attack hits at 33, not at the end of its 138-frame clip). Missing = no signal read: the END of the clip stands in ([I]). */
+export const MONSTER_HIT_FRAMES: Readonly<Record<number, number>> = {
+  0x1081: 17,
+  0x1082: 5, // [R~] ambiguous: 5 or 7
+  0x1083: 8,
+  0x1085: 17,
+  0x1088: 1,
+  0x1096: 33,
+  0x10a4: 78,
+  0x10a6: 8,
+  0x10a7: 16,
+  0x10a8: 41,
+  0x10a9: 30,
+  0x10ab: 14,
+  0x10ac: 13,
+  0x10ad: 17,
+  0x10ae: 10,
+  0x10b0: 10,
+  0x10b1: 13,
+  0x10c2: 26,
+  0x1102: 17,
+  0x1104: 14,
+  0x110e: 34,
+  0x111a: 31, // [R~] ambiguous: 31 or 32
+  0x111f: 39,
+  0x1127: 6,
+};
+
 /** Command-row id to `[sequence class, effect id]` (the row's class byte at +0x0C and its first effect id). */
 export const COMMAND_ROW_ACTION: Readonly<Record<number, readonly [cls: number, effect: number]>> = {
   0x3000: [2, 0], 0x3001: [30, 0], 0x3002: [0, 0], 0x3003: [0, 0], 0x3006: [0, 0], 0x3009: [0, 0], 0x300c: [0, 0], 0x300f: [0, 0], 0x3012: [0, 0],
@@ -218,8 +297,18 @@ export const COMMAND_ROW_ACTION: Readonly<Record<number, readonly [cls: number, 
   0x41f4: [3, 96], 0x41fa: [3, 104],
 };
 
-/** Effect id to its measured release-to-completion length in logic steps [M]: Fire, Umbral Gaze, Strength Up. */
-export const MEASURED_EFFECT_STEPS: Readonly<Record<number, number>> = { 76: 75, 176: 94, 368: 84 };
+/**
+ * Effect id to its measured release-to-completion length in logic steps [M]: Fire (76; 75 twice, 2026-10-09 and 2026-10-19), Umbral Gaze (176; 94, 94, 94), Strength Up (368; 84) and
+ * Darkness (844; live 2026-10-19: 81 steps from begin, about 2 steps after release, so 83 from release; ONE cast at TWO targets, both hit in the same step; the cast's own
+ * release-to-completion read 138 because it first sat 53 steps in the manager's queue, a pre-begin wait the span does not model).
+ */
+export const MEASURED_EFFECT_STEPS: Readonly<Record<number, number>> = { 76: 75, 176: 94, 368: 84, 844: 83 };
+
+/**
+ * [M] An item's release-to-completion length in steps (one target): a Potion cast three times on 2026-10-19 read 79, 79 and 80. Every item takes it; Ether, Phoenix Down and the
+ * rest are not measured. An item is not a command row; its ability carries a casting countdown (the Potion's is the medium tier), so the girl's idle break and item clip are not added.
+ */
+export const ITEM_EFFECT_STEPS = 80;
 
 /** [estimate] The length of an effect nobody measured: a girl's cast takes Fire's 75 steps, an enemy's the monsters' median of 94 (four of five agree). */
 export const EFFECT_STEPS_PARTY_ESTIMATE = 75;

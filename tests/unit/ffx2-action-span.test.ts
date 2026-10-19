@@ -6,12 +6,14 @@
  * production; every case that needs it ON says so through `withActionSpanKnobs`. Switch-off equivalence with the base commit is `ffx2-action-span-off.test.ts`.
  *
  * The hand arithmetic (steps; one frame is one step at ratio 1.0; 29.97003 steps a second; the run distance is 52.4 field units):
- * - idle break = ceil(idle / 2); run-up = ceil((52.4 - startDist) / speed * 29.97003); attack = attack1_00. A girl always waits for the idle break; a monster only with `idle_wait`.
- * - Yuna, Mascot (set 0x8: idle 48, attack 8; speed 40, start 15): 24 + ceil(28.02) + 8 = 24 + 29 + 8 = 61.
- * - Rikku, Mascot (set 0x1c: idle 28, attack 6; speed 44, start 5): 14 + ceil(32.29) + 6 = 14 + 33 + 6 = 53. Hasted: 7 + ceil(16.14) + 3 = 7 + 17 + 3 = 27.
- * - Paine, Mascot (set 0x30: idle 36, attack 10; speed 38, start 15): 18 + ceil(29.50) + 10 = 18 + 30 + 10 = 58.
- * - Bahamut (set 0x10a8: no run bit, no idle_wait, attack 43): 43. Leblanc (0x1083: run_01, speed 70, start 20, attack 3): ceil(13.87) + 3 = 14 + 3 = 17.
- *   Trema (0x1127: run_00_01, idle_wait, idle 60, speed 50, start 10, attack 10): 30 + ceil(25.41) + 10 = 30 + 26 + 10 = 66.
+ * - idle break = ceil(idle / 2); run-up = ceil((52.4 - startDist) / speed * 29.97003); hit = the READ first-hit frame of the set (note FFX2-G12 section 5), the `attack1_00`
+ *   clip's end where none was read. A girl always waits for the idle break; a monster only with `idle_wait`.
+ * - Yuna, Mascot (set 0x8: idle 48, hit 12 (clip 8); speed 40, start 15): 24 + ceil(28.02) + 12 = 24 + 29 + 12 = 65.
+ * - Rikku, Mascot (set 0x1c: idle 28, hit 4 (clip 6); speed 44, start 5): 14 + ceil(32.29) + 4 = 14 + 33 + 4 = 51. Hasted: 7 + ceil(16.14) + 2 = 7 + 17 + 2 = 26.
+ * - Paine, Mascot (set 0x30: idle 36, hit 11 (clip 10); speed 38, start 15): 18 + ceil(29.50) + 11 = 18 + 30 + 11 = 59.
+ * - Bahamut (set 0x10a8: no run bit, no idle_wait, hit 41 (clip 43)): 41. Leblanc (0x1083: run_01, speed 70, start 20, hit 8 (clip 3)): ceil(13.87) + 8 = 14 + 8 = 22.
+ *   Trema (0x1127: run_00_01, idle_wait, idle 60, speed 50, start 10, hit 6 (clip 10)): 30 + ceil(25.41) + 6 = 30 + 26 + 6 = 62.
+ * - A set with no hit read keeps its clip's end (set 0x10aa: 68). Items take the measured Potion's 80; Darkness (effect 844) the measured 83.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -32,8 +34,11 @@ import {
   EFFECT_STEPS_ENEMY_ESTIMATE,
   EFFECT_STEPS_PARTY_ESTIMATE,
   GIRL_ACTION_FRAMES,
+  GIRL_HIT_FRAMES,
+  ITEM_EFFECT_STEPS,
   MEASURED_EFFECT_STEPS,
   MONSTER_ACTION_FRAMES,
+  MONSTER_HIT_FRAMES,
   RUN_DISTANCE_ESTIMATE,
 } from '../../src/data/ffx2/action-frames.ts';
 import { GIRL_MOTION_SETS, MONSTER_MOTION_SET } from '../../src/data/ffx2/hit-reaction-frames.ts';
@@ -136,14 +141,18 @@ describe('the data', () => {
     for (const s of new Set(Object.values(MONSTER_MOTION_SET))) expect(MONSTER_ACTION_FRAMES[s], `monster set ${s.toString(16)}`).toBeDefined();
   });
 
-  it('carries the hand-read numbers: the Mascots, Bahamut, Leblanc, Trema; and the three measured effects', () => {
+  it('carries the hand-read numbers: the Mascots, Bahamut, Leblanc, Trema; the READ hit frames; and the measured effects and item', () => {
     expect(GIRL_ACTION_FRAMES[0x8]).toEqual([48, 8, 25, 25, 10]);
     expect(GIRL_ACTION_FRAMES[0x1c]).toEqual([28, 6, 10, 10, 14]);
     expect(GIRL_ACTION_FRAMES[0x30]).toEqual([36, 10, 15, 15, 16]);
     expect(MONSTER_ACTION_FRAMES[0x10a8]?.slice(0, 2)).toEqual([45, 43]);
     expect(MONSTER_ACTION_FRAMES[0x1083]?.[5]).toBe(70);
     expect(MONSTER_ACTION_FRAMES[0x1127]?.[1]).toBe(10);
-    expect(MEASURED_EFFECT_STEPS).toEqual({ 76: 75, 176: 94, 368: 84 });
+    expect(MEASURED_EFFECT_STEPS).toEqual({ 76: 75, 176: 94, 368: 84, 844: 83 });
+    expect(ITEM_EFFECT_STEPS).toBe(80);
+    expect([0x8, 0x1c, 0x30].map((s) => GIRL_HIT_FRAMES[s])).toEqual([12, 4, 11]); // the Mascots: Yuna, Rikku, Paine
+    expect([0x1102, 0x1096, 0x1127, 0x110e, 0x10a8, 0x1083].map((s) => MONSTER_HIT_FRAMES[s])).toEqual([17, 33, 6, 34, 41, 8]); // Nooj, the Paragon, Trema, Tawrich, Bahamut, Leblanc
+    expect(MONSTER_HIT_FRAMES[0x10aa]).toBeUndefined(); // no hit signal read: the clip's end (68) stands in
     expect([EFFECT_STEPS_PARTY_ESTIMATE, EFFECT_STEPS_ENEMY_ESTIMATE, RUN_DISTANCE_ESTIMATE]).toEqual([75, 94, 52.4]);
   });
 
@@ -162,25 +171,33 @@ describe('three girls and three bosses, by hand', () => {
     return withActionSpanKnobs({ perCommand: true }, () => commandSpanSteps(u, ctxOf(ATTACK as AbilityDef, ATTACK_CMD)));
   };
 
-  it('Yuna, Rikku and Paine in the Mascot dressphere: 61, 53 and 58 steps (Rikku Hasted: 27)', () => {
-    expect(attack(girl('yuna', 'mascot'))).toBe(61);
-    expect(attack(girl('rikku', 'mascot'))).toBe(53);
-    expect(attack(girl('paine', 'mascot'))).toBe(58);
-    expect(attack(status(girl('rikku', 'mascot'), 'haste'))).toBe(27);
+  it('Yuna, Rikku and Paine in the Mascot dressphere: 65, 51 and 59 steps (Rikku Hasted: 26)', () => {
+    expect(attack(girl('yuna', 'mascot'))).toBe(65);
+    expect(attack(girl('rikku', 'mascot'))).toBe(51);
+    expect(attack(girl('paine', 'mascot'))).toBe(59);
+    expect(attack(status(girl('rikku', 'mascot'), 'haste'))).toBe(26);
   });
 
-  it('Slow lengthens only the idle break (Yuna Mascot: 48 + 29 + 8 = 85), Haste halves every clip term (Yuna: 12 + 15 + 4 = 31), a Stopped girl plays nothing', () => {
-    expect(attack(status(girl('yuna', 'mascot'), 'slow'))).toBe(48 + 29 + 8);
-    expect(attack(status(girl('yuna', 'mascot'), 'haste'))).toBe(12 + 15 + 4);
+  it('Slow lengthens only the idle break (Yuna Mascot: 48 + 29 + 12 = 89), Haste halves every clip term (Yuna: 12 + 15 + 6 = 33), a Stopped girl plays nothing', () => {
+    expect(attack(status(girl('yuna', 'mascot'), 'slow'))).toBe(48 + 29 + 12);
+    expect(attack(status(girl('yuna', 'mascot'), 'haste'))).toBe(12 + 15 + 6);
     expect(attack(status(girl('yuna', 'mascot'), 'stop'))).toBe(0);
   });
 
-  it('Bahamut 43, Leblanc 17, Trema 66 (their own plain Attack row 0x41da, class 1)', () => {
+  it('Bahamut 41, Leblanc 22, Trema 62 (their own plain Attack row 0x41da, class 1; each at its READ first hit)', () => {
     const ability = abilityWithRecord({ id: 0x41da, costCast: 0 }, ATTACK ?? FIRE);
     const span = (row: number): number => withActionSpanKnobs({ perCommand: true }, () => commandSpanSteps(monster(row), ctxOf(ability, ATTACK_CMD)));
-    expect(span(168)).toBe(43);
-    expect(span(253)).toBe(17);
-    expect(span(295)).toBe(66);
+    expect(span(168)).toBe(41);
+    expect(span(253)).toBe(22);
+    expect(span(295)).toBe(62);
+  });
+
+  it('a monster with no hit read keeps the end of its clip (set 0x10aa: 68); the measurement arm "estimate" ignores a read hit, as it did before', () => {
+    const row = Number(Object.entries(MONSTER_MOTION_SET).find(([, set]) => set === 0x10aa)?.[0]);
+    expect(Number.isInteger(row)).toBe(true);
+    expect(spanBodyOf(monster(row)).attack).toBe(68);
+    expect(spanBodyOf(monster(168)).attack).toBe(41);
+    withActionSpanKnobs({ monsterHit: 'estimate' }, () => expect(spanBodyOf(monster(168)).attack).toBe(Math.max(43, MONSTER_ACTION_FRAMES[0x10a8]?.[7] ?? 0)));
   });
 
   it('a body outside the data takes the labelled fallbacks (Yuna in a dressphere with no set: idle 40/2 = 20, attack 15; her Attack is the gun row, class 0x25, which never runs)', () => {
@@ -197,6 +214,16 @@ describe('casts', () => {
     expect(classAndEffect(girl('yuna', 'black-mage'), ctxOf(FIRE))).toMatchObject({ cls: 3, effect: 76, costCast: 70 });
     expect(span(girl('yuna', 'black-mage'), FIRE)).toBe(75);
     expect(span(status(girl('paine', 'black-mage'), 'haste'), FIRE)).toBe(75);
+  });
+
+  it('Darkness (row 0x307f, effect 844) is the measured 83; a Potion is the measured 80 (its ability has a casting countdown, so no idle break or item clip is added)', () => {
+    expect(COMMAND_ROW_ACTION[0x307f]).toEqual([3, 844]);
+    expect(effectStepsOf(girl('paine', 'dark-knight'), 844)).toBe(83);
+    const potion = ABILITIES['x2-item-potion'] as AbilityDef;
+    expect(potion.chargeTicks).toBeGreaterThan(0);
+    const cmd: Command = { kind: 'item', id: 'x2-item-potion', targets: [] } as Command;
+    expect(withActionSpanKnobs({ perCommand: true }, () => commandSpanSteps(girl('yuna', 'mascot'), ctxOf(potion, cmd)))).toBe(ITEM_EFFECT_STEPS);
+    expect(withActionSpanKnobs({ perCommand: true }, () => commandSpanSteps(girl('paine', 'mascot'), ctxOf(potion, cmd)))).toBe(80);
   });
 
   it('an effect nobody measured takes the class default of the actor\'s side: 75 for a girl, 94 for an enemy', () => {

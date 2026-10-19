@@ -4,7 +4,7 @@
  * `ACTION_TIME_PER_COMMAND` in `action-time.ts`, **OFF**: with it off nothing here is read and every FFX-2 battle is byte for byte what it was.
  *
  * The maths is the pure kernel `kernel/action-span.ts` (its header lists the stages and the waits); the numbers are `data/ffx2/action-frames.ts`
- * (the game's frame tables, motion macros and command classes; three measured effect lengths, labelled estimates for the rest). This module is the
+ * (the game's frame tables, motion macros, command classes and first-hit frames; measured lengths for four effects and one item, labelled estimates for the rest). This module is the
  * adapter: it finds the actor's body (the same motion-set maps the hit reaction uses, `reaction.ts`), the command row's class, the unit's
  * animation ratios, and applies the precedence of the switches.
  *
@@ -15,7 +15,9 @@
  *
  * Not modelled, on purpose (each a later slice or an open question of note FFX2-G11): the global executing flag that freezes the group-2 status clocks
  * during a cast (slice B1); hits that land at their real steps instead of at the command's start (B2); the flinch that replays a cast's start clip (XA9);
- * the blends between clips; the run-up's acceleration and turning; the one-cast-at-a-time release; per-effect lengths beyond the three measured.
+ * the blends between clips; the run-up's acceleration and turning; the one-cast-at-a-time release, and with it the wait a cast can spend in the game's manager queue before it
+ * begins (measured once, 53 steps, behind a monster's cast: no queue is modelled, so an action starts the step it is chosen and a cast's span is its own length only);
+ * per-effect lengths beyond the ones measured.
  */
 
 import type { AbilityDef, Command } from '../common/types.ts';
@@ -31,10 +33,13 @@ import {
   FALLBACK_GIRL,
   FALLBACK_MONSTER,
   GIRL_ACTION_FRAMES,
+  GIRL_HIT_FRAMES,
   GIRL_NO_RUN,
   GIRL_RUN,
+  ITEM_EFFECT_STEPS,
   MEASURED_EFFECT_STEPS,
   MONSTER_ACTION_FRAMES,
+  MONSTER_HIT_FRAMES,
   MT_CHANT_START_WAIT,
   MT_ENERGY_ATTACK,
   MT_IDLE_WAIT,
@@ -59,15 +64,19 @@ export interface ActionSpanKnobs {
   supersedeFormation: boolean;
   /** A measurement run only: the run-up distance as a multiple of the estimate (0 = no run-up, 2 = twice as far); the run-up is the least known term. */
   runDistanceScale: number;
-  /** A measurement run only: 'clip' (production) takes a monster's `attack_00` clip as its hit time; 'estimate' takes the longer of the clip and the macro's normal-attack-frames estimate; 'half' takes half the clip (a long wind-up and follow-through around an early hit). */
-  monsterHit: 'clip' | 'estimate' | 'half';
+  /**
+   * A measurement run only: 'read' (production) takes a monster's READ first-hit frame, and the END of its `attack_00` clip where none was read; 'estimate' takes the longer of the
+   * clip and the macro's normal-attack-frames estimate; 'half' takes half the clip (a long wind-up and follow-through around an early hit). The last two ignore the read frames:
+   * they are the earlier sensitivity arms of the clip-as-hit-time reading.
+   */
+  monsterHit: 'read' | 'estimate' | 'half';
   /** A measurement run only: every effect length (measured and class default) times this; 1 in production. */
   effectScale: number;
   /** A measurement run only: told each span the per-command rule computed (the unit, its steps), so a run can report the mean span a side's actions took. */
   record?: (unit: Ffx2Unit, steps: number) => void;
 }
 
-const PRODUCTION: ActionSpanKnobs = { perCommand: ACTION_TIME_PER_COMMAND, physical: true, casts: true, supersedeFormation: true, runDistanceScale: 1, monsterHit: 'clip', effectScale: 1 };
+const PRODUCTION: ActionSpanKnobs = { perCommand: ACTION_TIME_PER_COMMAND, physical: true, casts: true, supersedeFormation: true, runDistanceScale: 1, monsterHit: 'read', effectScale: 1 };
 let knobs: ActionSpanKnobs = PRODUCTION;
 
 /** Run `fn` with other knobs (a measurement run); the production ones come back whatever happens. */
@@ -111,7 +120,8 @@ function girlBody(unit: Ffx2Unit): SpanBody {
   return {
     side: 'girl',
     idle: frames[0],
-    attack: frames[1], // the girl's hit time is taken at the END of this clip: an ESTIMATE (an upper bound; her clips are short, 2 to 40 frames)
+    // the girl's hit: the READ first-hit frame of her set (note FFX2-G12 section 5) where there is one, else the END of her clip (an ESTIMATE, an upper bound; her clips are 2 to 40 frames)
+    attack: (set !== undefined ? GIRL_HIT_FRAMES[set] : undefined) ?? frames[1],
     castStart: frames[2],
     skillStart: frames[3],
     itemStart: frames[4],
@@ -132,7 +142,8 @@ function monsterBody(unit: Ffx2Unit): SpanBody {
   return {
     side: 'monster',
     idle: f[0],
-    attack: knobs.monsterHit === 'estimate' ? Math.max(f[1], f[7]) : knobs.monsterHit === 'half' ? Math.ceil(f[1] / 2) : f[1],
+    // the monster's hit: the READ first-hit frame of its set where there is one, else the END of its `attack_00` clip (an ESTIMATE, an upper bound)
+    attack: knobs.monsterHit === 'estimate' ? Math.max(f[1], f[7]) : knobs.monsterHit === 'half' ? Math.ceil(f[1] / 2) : ((set !== undefined ? MONSTER_HIT_FRAMES[set] : undefined) ?? f[1]),
     castStart: f[2],
     skillStart: f[3],
     itemStart: 0,
@@ -168,7 +179,7 @@ export function classAndEffect(unit: Ffx2Unit, ctx: ActionContext): { cls: numbe
   return { cls: ctx.ability.damageType === 'physical' ? 1 : 3, effect: 0, costCast: costs.costCast };
 }
 
-/** The effect module's length: the measured total for the three measured effects, else the labelled class default of the actor's side. */
+/** The effect module's length: the measured total for the measured effects (Fire, Umbral Gaze, Strength Up, Darkness), else the labelled class default of the actor's side. An item takes `ITEM_EFFECT_STEPS` (see `commandSpanSteps`). */
 export function effectStepsOf(unit: Ffx2Unit, effect: number): number {
   const measured = MEASURED_EFFECT_STEPS[effect];
   if (measured !== undefined) return measured;
@@ -187,7 +198,7 @@ export function commandSpanSteps(unit: Ffx2Unit, ctx: ActionContext): number {
     stanceRatio: ratioOf(unit, MOTION_STANCE),
     actionRatio: ratioOf(unit, MOTION_ACTION),
     costCast,
-    effectSteps: Math.round(effectStepsOf(unit, effect) * knobs.effectScale),
+    effectSteps: Math.round((ctx.command.kind === 'item' ? ITEM_EFFECT_STEPS : effectStepsOf(unit, effect)) * knobs.effectScale),
     runDistance: RUN_DISTANCE_ESTIMATE * knobs.runDistanceScale,
     physical: knobs.physical,
     casts: knobs.casts,
