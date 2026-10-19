@@ -1,7 +1,7 @@
 /**
  * **The recorder** (the lane kit; the rig program, 2026-10-18): one command that does what `record.sh` and the six per-subject play scripts did for Kimahri and for Lulu, for any subject.
  *
- *   PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject lulu --out <dir> [--modes poses,cast,hurtko] [--poses a,b] [--off] [--rigs-dir D:/pyrefly-art-rigs] [--alias lulu=lulu-v2]
+ *   PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject lulu --out <dir> [--modes poses,cast,hurtko,anim [--variants today,A,B,C]] [--poses a,b] [--off] [--rigs-dir D:/pyrefly-art-rigs] [--alias lulu=lulu-v2]
  *                                                    [--repo <tree>] [--port N] [--tail 150] [--cap 40000] [--no-warm] [--wait] [--still [--settle 1800]]
  *
  * What it does, in order, and why each step is there:
@@ -97,12 +97,16 @@ async function main() {
       try { const g = await openGame({ repo, base, rig: 'on', log, loadTimeout: 240000 }); await g.browser.close(); } catch (e) { log('warm-up failed (continuing):', String(e).slice(0, 200)); }
     }
     let failed = 0;
-    const runs = modeList.flatMap((m) => [{ mode: m, rig: 'on', dir: m }, ...(a.off === true && (m === 'poses' || m === 'cast') ? [{ mode: m, rig: 'off', dir: `${m}-off` }] : [])]);
+    const variants = String(a.variants ?? 'today').split(',').filter(Boolean); // `anim` only: today (no prototype) and the prototype's styles A, B, C
+    const runs = modeList.flatMap((m) => m === 'anim'
+      ? variants.map((v) => ({ mode: m, rig: 'on', dir: `anim-${v}`, variant: v, query: v === 'today' ? '' : `anim=proto&style=${v}` }))
+      : [{ mode: m, rig: 'on', dir: m }, ...(a.off === true && (m === 'poses' || m === 'cast') ? [{ mode: m, rig: 'off', dir: `${m}-off` }] : [])]);
     for (const r of runs) {
       const dir = path.join(out, r.dir);
       let done = false;
       for (let attempt = 1; attempt <= 2 && !done; attempt++) {
         const args = [path.join(here, 'play.mjs'), '--subject', a.subject, '--mode', r.mode, '--base', base, '--out', dir, '--rig', r.rig, '--repo', repo, '--tail', String(a.tail ?? 150), '--cap', String(a.cap ?? 40000)];
+        if (r.variant) args.push('--variant', r.variant, '--query', r.query);
         if (a.poses) args.push('--poses', String(a.poses));
         if (a['any-pose']) args.push('--any-pose');
         if (a.still === true) args.push('--still', '--settle', String(a.settle ?? 1800));

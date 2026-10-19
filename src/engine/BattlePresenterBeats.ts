@@ -63,6 +63,8 @@ export async function actionStart(
   const windUp = !odOpensAction(od) && !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose); // D-313: the wind-up painting, then the impact at the apex
   if (odOpensAction(od)) showOdOnOpen(ctx, od); // FFX: the held shot and the strike are on the key painting
   else actor?.setPose(windUp ? 'ready' : pose);
+  const animOn = ctx.moments?.reducedMotion !== true && !odOpensAction(od) && (pose !== 'attack' || windUp); // the animation prototype (dev only; a no-op on any actor without it)
+  if (animOn) actor?.animBegin?.(pose, (event.targets ?? []).flatMap((id) => ctx.stage.actor(id)?.centerPoint() ?? []));
   const motion = ctx.deps.actionMotion; // FF7: the melee run to the target (none for FFX and FFX-2)
   if (motion) await settled(ctx, motion.open(event, motionCtx(ctx)), MOTION_GUARD_MS);
 
@@ -81,6 +83,7 @@ export async function actionStart(
   // RUN-IN (FFX-2 only, r38-motion): the girl runs to her target before the blow; the lunge below then only carries the strike (`lungeFor`).
   if (motion?.strike && motionAllowed(ctx, 'runin')) await settled(ctx, motion.strike(event, motionCtx(ctx), pose), MOTION_GUARD_MS);
 
+  if (animOn && pose === 'attack') await ctx.sleep(actor?.animLead?.('attack') ?? 0); // the wind-up's tension, before the lunge
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
@@ -95,7 +98,7 @@ export async function actionStart(
     cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
   }
   planSkill(ctx, event, pose); // SKILL TRAVEL (both games, r38-motion): which shot this action would send; it leaves at the first blow, not here
-  await ctx.sleep(pose === 'attack' ? TIMING.windUp : TIMING.actionStart);
+  await ctx.sleep(pose === 'attack' ? TIMING.windUp : Math.max(TIMING.actionStart, animOn ? (actor?.animLead?.(pose) ?? 0) : 0)); // a spell's release or a thrown vial's landing comes at the end of its clip
 }
 
 export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<void> {

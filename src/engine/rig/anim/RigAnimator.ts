@@ -200,11 +200,13 @@ export class RigAnimator {
     return at === undefined ? 0 : Math.max(0, at + l.offsetMs - this.t);
   }
 
-  /** The strike is scheduled so its contact lands on the apex of a lunge of `ms` (the actor's real ms), `rate` the pace's clock rate: `ATTACK_IMPACT` of the move from now. */
-  lunge(ms: number, rate: number): void {
+  /**
+   * The strike is scheduled so its contact lands on the apex of a lunge of `ms` (the tween's own time: the actor's tweens run on the same pace-scaled clock as this one, so `ms` is in this clock's
+   * ms): `ATTACK_IMPACT` of the move from now, less the strike's own run-up to its contact.
+   */
+  lunge(ms: number): void {
     const c = this.clips.get('strike')!;
-    const run = (c.marks['contact'] ?? 0) / Math.max(1e-6, rate); // the contact is this far into the clip, in real ms at this pace
-    this.strikeAt = this.clock + Math.max(0, ms * ATTACK_IMPACT - run) * rate;
+    this.strikeAt = this.clock + Math.max(0, ms * ATTACK_IMPACT - (c.marks['contact'] ?? 0));
   }
 
   /** A blow landed (the presenter's damage handler). Returns the camera punch to give, a fraction of the subject distance (0 none). */

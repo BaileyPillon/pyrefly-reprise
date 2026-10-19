@@ -128,7 +128,7 @@ export class RigAnimLayer {
   }
 
   lunge(ms: number): void {
-    this.anim.lunge(ms, this.rate);
+    this.anim.lunge(ms);
   }
 
   dispose(): void {

@@ -20,6 +20,8 @@ import { trackerPoints } from './lane-pure.mjs';
 import { analyse, collectTracks, installTracker, pushTrack, toSamples } from './track.mjs';
 import { installGrabber, makeStepper, pauseClock, reachFirstMenu } from './play-common.mjs';
 
+export { anim } from './play-anim.mjs'; // the animation prototype's recording: one session per variant of the engine
+
 const writeJson = (file, obj) => fs.writeFileSync(file, JSON.stringify(obj, null, 1));
 
 /** Everything a mode shares: the game at the first menu, the clock paused, the grabber and the tracker installed, a stepper that tracks as it shoots. */

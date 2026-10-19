@@ -190,8 +190,9 @@ export function buildLibrary(style: AnimStyle, acc: Accents = {}): Library {
     key: 'victory',
     segments: [
       seg({ base: 'idle', to: 'victory', mix: 0.18, ...(acc.dip ? { add: scaleDeltas(acc.dip, S.anticipation) } : {}) }, S.victory.dip, S.easeAnt, { mark: 'dip', alive: 0.6 }),
-      seg({ base: 'victory', to: 'idle', mix: -(0.1 + ov * 1.6), ...(acc.burst ? { add: at(acc.burst) } : {}) }, S.victory.burst, S.easeAct, { mark: 'burst', alive: 0.4 }),
-      seg({ base: 'victory' }, S.victory.settle, { backOut: S.settle }, { alive: 1 }),
+      // the flourish: the doll held up in triumph (the `ready` stance with the arm high), a beat, then down into the painted victory with a settle
+      seg({ base: 'ready', to: 'idle', mix: 0.12, ...(acc.burst ? { add: at(acc.burst) } : {}) }, S.victory.burst, S.easeAct, { mark: 'burst', hold: S.victory.settle * 0.5, alive: 0.5 }),
+      seg({ base: 'victory' }, S.victory.settle * 1.3, { backOut: S.settle }, { alive: 1 }),
     ],
   };
 

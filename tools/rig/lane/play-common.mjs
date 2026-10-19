@@ -19,7 +19,7 @@ export async function waitForGuards(log, exists = fs.existsSync) {
 }
 
 /** Launch headless Chromium from the tree's own Playwright and open the game at `base` (rig on or off), 1600 x 900, localStorage cleared. */
-export async function openGame({ repo, base, rig = 'on', log = console.log, loadTimeout = 240000 }) {
+export async function openGame({ repo, base, rig = 'on', log = console.log, loadTimeout = 240000, query = '' }) {
   const { chromium } = await import(pathToFileURL(`${repo}/node_modules/playwright/index.mjs`).href);
   const { currentChromiumArgs } = await import(pathToFileURL(`${repo}/tools/browser-mode.mjs`).href);
   const browser = await chromium.launch({ args: [...currentChromiumArgs()] });
@@ -31,9 +31,10 @@ export async function openGame({ repo, base, rig = 'on', log = console.log, load
   page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${String(e).slice(0, 400)}`));
   page.on('response', (r) => { if (r.status() >= 400) notFound.push({ url: r.url(), status: r.status() }); });
   await page.clock.install();
-  await page.goto(`${base}?rig=${rig}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
+  const more = query ? `&${query}` : ''; // extra query parameters (the animation prototype's `anim=proto&style=B`)
+  await page.goto(`${base}?rig=${rig}${more}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
   await page.evaluate(() => { try { localStorage.clear(); } catch { /* blocked */ } });
-  await page.goto(`${base}?rig=${rig}&crisp=a2`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
+  await page.goto(`${base}?rig=${rig}&crisp=a2${more}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: loadTimeout });
   log('the game is ready');
   const input = {
