@@ -167,12 +167,13 @@ export const STYLE_P2: AnimStyle = {
   id: 'P2',
   label: 'Pass 2',
   blurb: "B's look on the game's own clock: Lulu's frame counts at 30 fps, a cast and an item with a looping hold and a release, an orb and no vial, bent knees, a hit-stop of 30 and 80 ms.",
-  anticipation: 1.2,
+  anticipation: 1.7, // a deeper coil than B's 1.35: the game's wind-up is 12 frames and the figure is already in the ready stance
   easeFol: { backOut: 0.7 },
   attack: { ...STYLE_B.attack, hitStop: 30 },
   item: { ...STYLE_B.item, flight: 420 },
   idle: { ...STYLE_B.idle, breathHz: 0.5, amp: 1.2 }, // the game's idle loop is 60 frames: 2 s, 0.5 Hz
   camera: { contact: 0.04, release: 0.035, ms: 170 },
+  glow: 0.55, // the figure's own pulse at a spell's release: B's 0.9 washed her to grey in the recording
   p2: { castDwell: 800, itemDwell: 330, castType: 1, hitStopWeak: 30, hitStopStrong: 80, orbFlight: 420, selfWait: 160, lockToEnd: true },
 };
 

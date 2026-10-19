@@ -18,12 +18,12 @@ export async function waitForGuards(log, exists = fs.existsSync) {
   for (let g = guards(exists); g.length; g = guards(exists)) { log(`${g.join(' and ')} exists: waiting 60 s`); await sleep(60000); }
 }
 
-/** Launch headless Chromium from the tree's own Playwright and open the game at `base` (rig on or off), 1600 x 900, localStorage cleared. */
-export async function openGame({ repo, base, rig = 'on', log = console.log, loadTimeout = 240000, query = '' }) {
+/** Launch headless Chromium from the tree's own Playwright and open the game at `base` (rig on or off), 1600 x 900 unless `view` ({ width, height, dpr }) says otherwise, localStorage cleared. */
+export async function openGame({ repo, base, rig = 'on', log = console.log, loadTimeout = 240000, query = '', view = {} }) {
   const { chromium } = await import(pathToFileURL(`${repo}/node_modules/playwright/index.mjs`).href);
   const { currentChromiumArgs } = await import(pathToFileURL(`${repo}/tools/browser-mode.mjs`).href);
   const browser = await chromium.launch({ args: [...currentChromiumArgs()] });
-  const context = await browser.newContext({ viewport: { width: 1600, height: 900 }, deviceScaleFactor: 1 });
+  const context = await browser.newContext({ viewport: { width: view.width ?? 1600, height: view.height ?? 900 }, deviceScaleFactor: view.dpr ?? 1 });
   const page = await context.newPage();
   const consoleErrors = [];
   const notFound = [];

@@ -76,7 +76,7 @@ describe('the scratch Vite config, the lock and the guards', () => {
   });
 
   it('knows each mode and the files it must leave (the recorder retries a mode that left none)', () => {
-    expect(MODES).toEqual(['poses', 'cast', 'hurtko', 'fight', 'anim']);
+    expect(MODES).toEqual(['poses', 'cast', 'hurtko', 'fight', 'anim', 'anim2']);
     for (const m of MODES) expect(expectedOutputs(m).length, m).toBeGreaterThan(0);
     expect(expectedOutputs('poses')).toEqual(['poses-info.json']);
     expect(expectedOutputs('anim')).toEqual(['segments.json', 'console.json']); // the animation prototype's recording (one session a variant of the engine)

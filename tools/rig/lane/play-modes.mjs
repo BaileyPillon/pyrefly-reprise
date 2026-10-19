@@ -21,6 +21,7 @@ import { analyse, collectTracks, installTracker, pushTrack, toSamples } from './
 import { installGrabber, makeStepper, pauseClock, reachFirstMenu } from './play-common.mjs';
 
 export { anim } from './play-anim.mjs'; // the animation prototype's recording: one session per variant of the engine
+export { anim2 } from './play-anim2.mjs'; // pass 2's recording: a fixed close camera, one video an action
 
 const writeJson = (file, obj) => fs.writeFileSync(file, JSON.stringify(obj, null, 1));
 

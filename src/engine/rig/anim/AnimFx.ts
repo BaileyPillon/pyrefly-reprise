@@ -186,7 +186,7 @@ export class AnimFx {
     this.orb.set(hand.x, hand.y + lift * this.unit, hand.z + 0.05);
     const flick = 1 + 0.07 * Math.sin(this.clock * 17) + 0.04 * Math.sin(this.clock * 41);
     this.set(this.halo, this.orb, (0.16 + 0.5 * L) * u * flick, 0.75 * Math.min(1.1, L * 1.3), c.halo);
-    this.set(this.core, this.orb, (0.05 + 0.13 * Math.min(1.3, L)) * u * flick, Math.min(1, L * 1.6), c.core);
+    this.set(this.core, this.orb, (0.05 + 0.13 * Math.min(1.3, L)) * u * flick, Math.min(0.85, L * 1.4), c.core); // the game's bloom streaks a full-white core: kept just under
     const n = Math.round(Math.min(1, L) * SPARKS);
     for (let i = 0; i < SPARKS; i++) {
       if (i >= n) {

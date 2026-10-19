@@ -82,8 +82,8 @@ export function buildLibrary2(style: AnimStyle, acc: Accents = {}, poses: P2Pose
   const endMs = f(re.attack.end);
   const coil: PoseSpec = { base: 'ready', to: 'attack', mix: -0.12 * S.anticipation, ...(acc.windup ? { add: scaleDeltas(acc.windup, S.anticipation) } : {}) };
   const swing: PoseSpec = { base: 'ready', to: 'attack', mix: 0.62, root: smear(1), ...(acc.windup ? { add: scaleDeltas(acc.windup, -0.25) } : {}) };
-  const contact: PoseSpec = { base: 'attack', to: 'ready', mix: -ov, ...(acc.strike ? { add: scaleDeltas(acc.strike, 1) } : {}) };
-  const followA: PoseSpec = { base: 'follow', to: 'attack', mix: -ov * 0.8, ...(acc.follow ? { add: scaleDeltas(acc.follow, 1) } : {}) };
+  const contact: PoseSpec = { base: 'attack', to: 'ready', mix: -ov, ...(acc.strike ? { add: scaleDeltas(acc.strike, 1.5) } : {}) }; // the lean into the blow, a half more than pass 1's
+  const followA: PoseSpec = { base: 'follow', to: 'attack', mix: -ov * 0.35, ...(acc.follow ? { add: scaleDeltas(acc.follow, 1) } : {}) }; // the arm swings through, a little less wildly than pass 1's B
   const relax: PoseSpec = { base: 'follow', to: 'idle', mix: 0.55 };
   const settleMs = f(7);
   const followMs = f(10);
@@ -118,8 +118,8 @@ export function buildLibrary2(style: AnimStyle, acc: Accents = {}, poses: P2Pose
         seg(hold, startMs - gatherMs, 'cubicInOut', { mark: 'rise', alive: 0.5, charge: 0.5 }),
         seg(hold, 0, 'linear', { hold: P.castDwell, mark: 'hold', alive: 0.4, charge: 0.5, sustain: { pose: holdB, period: f(c.loop), grow: 0.65, growMs: 700 } }),
         seg(pull, f(c.hit) - f(thrustF), { backIn: 0.5 }, { mark: 'pulled', alive: 0.3, charge: 1.3 }),
-        seg(thrust, f(thrustF), S.easeAct, { mark: 'release', alive: 0.3, charge: 0, ...(sm ? { marks: { smear: 0.1 } } : {}) }),
-        seg({ base: 'cast' }, f(c.end - c.hit), { backOut: S.settle }, { mark: 'end', alive: 1 }),
+        seg(thrust, f(thrustF), S.easeAct, { mark: 'release', alive: 0.3, charge: 1.3, ...(sm ? { marks: { smear: 0.1 } } : {}) }), // the glow stays to the release frame (the thrust's last) and goes out with it
+        seg({ base: 'cast' }, f(c.end - c.hit), { backOut: S.settle }, { mark: 'end', alive: 1, charge: 0 }),
       ],
     };
   };
@@ -141,8 +141,8 @@ export function buildLibrary2(style: AnimStyle, acc: Accents = {}, poses: P2Pose
     segments: [
       ...itemStart(),
       seg(poses.itemCock ?? { base: 'item', to: 'attack', mix: -0.25 }, f(it.ally.hit) - f(tossF), { backIn: 0.5 }, { mark: 'cocked', alive: 0.3, charge: 1 }),
-      seg(poses.itemToss ?? { base: 'item', to: 'attack', mix: 0.78, root: smear(0.7) }, f(tossF), S.easeAct, { mark: 'release', alive: 0.3, charge: 0, ...(sm ? { marks: { smear: 0.12 } } : {}) }),
-      seg(poses.itemTossFollow ?? { base: 'item', to: 'attack', mix: 0.95 }, f(it.ally.end - it.ally.hit) * 0.3, 'quadOut', { alive: 0.4 }),
+      seg(poses.itemToss ?? { base: 'item', to: 'attack', mix: 0.78, root: smear(0.7) }, f(tossF), S.easeAct, { mark: 'release', alive: 0.3, charge: 1, ...(sm ? { marks: { smear: 0.12 } } : {}) }), // the orb is in the hand to the release frame
+      seg(poses.itemTossFollow ?? { base: 'item', to: 'attack', mix: 0.95 }, f(it.ally.end - it.ally.hit) * 0.3, 'quadOut', { alive: 0.4, charge: 0 }),
       seg({ base: 'item', to: 'attack', mix: 0.8 }, f(it.ally.end - it.ally.hit) * 0.7, { backOut: S.settle }, { mark: 'end', alive: 1 }),
     ],
   };
@@ -152,8 +152,8 @@ export function buildLibrary2(style: AnimStyle, acc: Accents = {}, poses: P2Pose
     segments: [
       ...itemStart(),
       seg(poses.selfIn ?? { base: 'item', to: 'idle', mix: 0.1 }, f(it.self.hit) - f(10), { backIn: 0.4 }, { mark: 'cocked', alive: 0.4, charge: 1 }),
-      seg(poses.selfDown ?? { base: 'idle', to: 'item', mix: 0.22 }, f(10), S.easeAct, { mark: 'release', alive: 0.4, charge: 0 }),
-      seg({ base: 'idle', to: 'item', mix: 0.12 }, f(it.self.end - it.self.hit), { backOut: S.settle }, { mark: 'end', alive: 1 }),
+      seg(poses.selfDown ?? { base: 'idle', to: 'item', mix: 0.22 }, f(10), S.easeAct, { mark: 'release', alive: 0.4, charge: 1 }),
+      seg({ base: 'idle', to: 'item', mix: 0.12 }, f(it.self.end - it.self.hit), { backOut: S.settle }, { mark: 'end', alive: 1, charge: 0 }),
     ],
   };
 
