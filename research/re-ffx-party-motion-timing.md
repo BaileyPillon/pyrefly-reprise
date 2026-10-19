@@ -5,10 +5,10 @@ Part of the `re-parity` track, requested by the animation track ("it needs to lo
 
 **Source note (applies to every number below unless a line says otherwise):** Bailey's own Steam copy, FFX.exe build 25501027 (SHA-256 0537B2A1...686D, image base 0x00400000) and the PS2-tree files inside `FFX_Data.vbf`
 (`chr/pc/c001`, `c003`, `c006` `mot/resident0..3.mgrp`, `battle/mot/regmot.mgrp`, `battle/btl/system_01/system_01.bin`, `new_uspc/battle/kernel/command.bin` and `item.bin`), read with our own VBF reader and a read-only
-motion-bank reader (the FFX-2 lane's `mgrp.py`, which parses FFX banks unchanged). The game was never run. **Only timings were read** (frame counts, event frames, program structure). No mesh, skeleton, texture or animation curve
+motion-bank reader (the FFX-2 lane's `mgrp.py`, which parses FFX banks unchanged). The game was not run for any table below; the one exception is the live reading in section 6 (label [M]). **Only timings were read** (frame counts, event frames, program structure). No mesh, skeleton, texture or animation curve
 was extracted, converted or copied (hard rule 8 and the 2026-10-13 rule). Everything is in our own words; no game code or game text is reproduced.
 
-Labels: **[R]** = read in the game's files or in the exe's decompile (not run). **[E]** = taken from our earlier notes, cited. **[I]** = inferred; nothing ran it. Motion names are the community names for the numeric motion ids
+Labels: **[R]** = read in the game's files or in the exe's decompile (not run). **[E]** = taken from our earlier notes, cited. **[I]** = inferred; nothing ran it. **[M]** = measured live: Bailey's own Steam copy running, read from screen frames and the read-only sampler's logs of live session 6 (2026-10-19); the logs and frames stay local and nothing from them is in the repo (frames are cited by name only). Motion names are the community names for the numeric motion ids
 (`refs/FFXDataParser/.../motions.csv`, matched by id [E]); the ids themselves are in the bank [R].
 
 ## 1. How the game plays a motion (what the tables mean)
@@ -103,6 +103,17 @@ All from the common battle script `system_01.bin` (worker 37, the motion handler
 
 **The files do not settle it.** What is read: there is a start clip (ITEM_00), a hold loop (ITEM_01) and two release clips, each with **a sound event (type 1, id 1) one to three frames before the release signal 0**; the start tag and the launch tag each start their own sound effect (30, then 29); and the release variant depends on whether the target is in the party's front line. The item records themselves (`item.bin`) point at effect ids (Potion 0x6C, Hi-Potion 0x6E, X-Potion and Mega-Potion 0x70, Phoenix Down 0x72/0x73, Mega Phoenix 0x74/0x75, Grenade 0xF1/0xF2) and use caster animation class 2 (Attack is 1, Black Magic spells 3); the effect files themselves were not opened, so whether an object is drawn, thrown or only a glow appears is **not read**. The shape of the data (a swing with a release signal in the middle, a different swing for allies and enemies, a sound just before the release) is that of a toss toward the target, but that is an inference [I], not a reading. It is on the live-check list (frames only).
 
+**Live answer (live session 6, 2026-10-19) [M].** Two item uses were played in a real battle and read frame by frame (Silenced party, a lone foe; frame names s6-i03 to s6-i10 and s6-r05 to s6-r12, local only):
+
+| Item use | What the screen showed | Label |
+|---|---|---|
+| **A Potion used on oneself** (Yuna on Yuna) | The camera closes in on the user. **The staff stays in her hand and no item object is drawn.** Green glow particles gather around her, and the gesture ends with her hands brought to her chest. The heal (HP 428 to 628) lands about 5.8 s after the command is taken, read from the sampler: a wall-clock figure that includes the camera move and the hold. | [M] |
+| **A Phoenix Down used on an ally** (Tidus on a K.O.'d Yuna) | The camera closes in on the user. **A green glowing orb rises from his hand, he makes an overhand toss toward the target, and sparkles fall on the target.** No item model is drawn at any point. The revive (Yuna HP 0 to 1937) lands about 3.5 s after the command is taken, read from the sampler, wall-clock. | [M] |
+
+What this settles: the earlier [I] reading that the item swing "reads like a toss" is **confirmed for an ally target** (Tidus, Phoenix Down on a party member): there is an overhand toss, but what is thrown is a glowing orb of effect light, not a bottle or any model. For a Potion used on oneself there is no throw at all, only a glow and a hands-to-chest finish with the weapon still held.
+
+What it does not settle: whether the no-throw of the first use comes from the self target or from the character (the two uses differ in both: Yuna on herself, Tidus on an ally), which release clip ran (`_02_1` or `_02_2`; a party-target use is the first one by the script reading, but nothing on screen tells them apart), an **enemy** target (a Grenade or a damaging item thrown at a foe), Lulu's and Auron's item gestures (the two uses above are Yuna's and Tidus's; Yuna's own motion set is not in the tables here), and the frame counts of the gesture (the two times above are wall-clock, command to HP change, and include the hold).
+
 ## 7. What this means for our rigs (plain words)
 
 - **The hit is not at the end of the clip, except Tidus's strike.** Lulu's doll throw puts contact a third of the way in (20 of 60) and then spends 34 frames in follow-through and 6 frames settling: the throw is a quick snap with a long, lazy finish. Tidus's stand-still strike is the same shape (26 of 86). Tidus's normal melee hit lands on the **last frame of its 21-frame lunge** (frame 20), so everything before it is anticipation and run-in, and the follow-through is the next 15-frame clip. Auron needs a 10-frame step first and then lands the hit 12 frames into a 39-frame swing (22 of 49 overall, 45 %), with 20 frames of follow-through to the end signal and 7 more to the end of the clip.
@@ -116,7 +127,7 @@ All from the common battle script `system_01.bin` (worker 37, the motion handler
 ## 8. Open items and the live-check list (frames only; the game was not run)
 
 1. **Update tick rate.** Confirm one Lulu ATTACK2 (60 frames) takes 2.0 s wall-clock in the HD game; that fixes the ms column. (Count frames from the command to the idle pose.)
-2. **Item gesture.** Frame-step an item use (Lulu: about frames 55 to 64 after the command) and note whether a bottle or other object is in the hand, flies, or whether only a glow appears; compare party target versus enemy target for the two release clips.
+2. **Item gesture.** ANSWERED IN PART by live session 6 (section 6) [M]: no bottle or other object is drawn; a self-use Potion shows only a glow and a hands-to-chest finish, an ally-use Phoenix Down shows a glowing orb tossed overhand. STILL OPEN: an enemy target (the other release clip), Lulu's and Auron's gestures, and frame-stepped counts (about frames 55 to 64 after the command for Lulu) instead of wall-clock seconds.
 3. **Cast type per spell.** Which of Lulu's three cast types Fire, Fira, Firaga (and the other elements) use; type 3's long 90-frame finish suggests the top tier, but nothing here sources that.
 4. **Cross-fade length** between clips (Chr+0x73A): the value in a running battle.
 5. **Tidus's double hit event.** Does a single normal attack show one slash or two, and does the second delivery of signal 0 do anything.
