@@ -75,7 +75,7 @@ function relatedDecisions(t) {
   const ids = [];
   const r = t.reaction ?? {};
   const text = [t.note, t.build, t.deliveryNote, r.how, ...(Array.isArray(r.mustChange) ? r.mustChange : []), ...(Array.isArray(r.mustRemain) ? r.mustRemain : [])].map((x) => String(x ?? '')).join(' ');
-  for (const m of text.matchAll(/\bD-\d{3}\b/g)) if (!ids.includes(m[0])) ids.push(m[0]);
+  for (const m of text.matchAll(/\bD-\d{3,}\b/g)) if (!ids.includes(m[0])) ids.push(m[0]);
   return ids.slice(0, 5);
 }
 

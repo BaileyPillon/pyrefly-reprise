@@ -10,7 +10,7 @@ const DELIVERY_LABEL = { 'not-scheduled': 'not scheduled', 'in-progress': 'in pr
 const AREA_ORDER = ['combat', 'art', 'visuals', 'camera', 'audio', 'ui', 'story', 'chapters', 'guide', 'release', 'hosting', 'process', 'critic', 'data', 'tech', 'site'];
 
 const anchor = (id) => String(id).toLowerCase().replace(/[^a-z0-9]+/g, '-');
-const link = (id) => (/^[DE]-\d{3}(\/[\w-]+)?$/.test(String(id)) ? `[${id}](#${anchor(id)})` : esc(clip(id, 90)));
+const link = (id) => (/^[DE]-\d{3,}(\/[\w-]+)?$/.test(String(id)) ? `[${id}](#${anchor(id)})` : esc(clip(id, 90)));
 
 function count(entries, key) {
   const m = new Map();

@@ -71,7 +71,7 @@ export function validateModel(model) {
   const day = /^\d{4}-\d{2}-\d{2}$/;
   for (const { d, file } of rows) {
     const at = d?.id ?? '(no id)';
-    const idShape = file === 'early' ? /^E-\d{3}$/ : /^D-\d{3}$/;
+    const idShape = file === 'early' ? /^E-\d{3}$/ : /^D-\d{3,}$/;
     if (!idShape.test(String(d.id))) errors.push(`${at}: id must look like ${file === 'early' ? 'E-001' : 'D-001'}`);
     if (!day.test(String(d.date)) || String(d.date) < PROJECT_START) errors.push(`${at}: date must be YYYY-MM-DD on or after ${PROJECT_START}`);
     if (typeof d.title !== 'string' || d.title.length < 8) errors.push(`${at}: title must state the decision`);
