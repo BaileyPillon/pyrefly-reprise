@@ -1,5 +1,6 @@
 /** Types for `critic/runner/lib/continuity-pure.mjs`, so the unit tests can import it. */
 import type { FeetSilhouetteReading, HeightReading, RealHeadReading } from './continuity-readings.mjs';
+import type { RigConfig, RigRecord, RigSwapInfo } from './continuity-rig.mjs';
 export type Quad = number[]; // [x0,y0,x1,y1,x2,y2,x3,y3]: top-left, top-right, bottom-right, bottom-left, CSS px
 export type Mat3 = number[]; // row-major 3x3
 export interface Box { u0: number; t0: number; u1: number; t1: number }
@@ -23,7 +24,7 @@ export interface Anchors {
 }
 /** `cs` (probe version 2): where the camera's change alone moved each corner since the last frame, present only while the camera moved. */
 export interface PlaneRec { k: number; fade: number; vis: boolean; q: number[]; cs: number[] | null }
-export interface FigRec { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number] }
+export interface FigRec { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number]; /** R57-002: a RIGGED figure's frame (continuity-rig-probe.mjs): where its head, feet and centroid are drawn and in the idle plane's own coordinates. */ rg?: RigRecord }
 export interface FrameOfFig { n: number; t: number; fig: FigRec }
 
 export interface ContinuityConfig {
@@ -36,6 +37,8 @@ export interface ContinuityConfig {
     /** W4: a frame longer than this (ms) is a long frame, the clock's hitch and not the design (default 34). */
     longFrameMs?: number;
   };
+  /** R57-002: how a RIGGED figure is read (continuity-rig.mjs); `false` gives the earlier reading back, in which a rig had no swaps. */
+  rig?: false | Partial<RigConfig>;
   /** W4: the readings from the pixels; `false` switches one off. */
   readings?: { height?: boolean; feetSilhouette?: boolean; realHead?: boolean };
   /** W4, the CHK-027 split: `dashesFail` gates the mid-move dashes as every jerk was gated; `teleportPx` is the mid-move step that is gated either way. A cfg without this block gates every jerk. */
@@ -59,14 +62,16 @@ export interface Held { frames: number; ms: number; from: number | null }
 export interface SwapResult {
   camCut: boolean; costume?: boolean; sameArt?: boolean; range?: boolean; staged: StagedStep | null; held: Held; snapStaged: boolean;
   /** `label`: 'control' for a registered head (held to the idle's by the head lock, so it agrees with itself), 'mass' for the silhouette's. */
-  head: { fromPx: number; toPx: number; ratio: number | null; source: 'registration' | 'silhouette'; metric: 'head' | 'mass'; label?: 'control' | 'mass' } | null;
-  feet: { dx: number; dy: number; px: number; standing: boolean; source: string } | null;
+  head: { fromPx: number; toPx: number; ratio: number | null; source: 'registration' | 'silhouette' | 'rig'; metric: 'head' | 'mass'; label?: 'control' | 'mass' | 'rig' } | null;
+  feet: { dx: number; dy: number; px: number; standing: boolean; source: string; /** a rig's: the part that judges, the ground line */ gate?: string; gatePx?: number; tolerancePx?: number; sidewaysPx?: number } | null;
   outline: { iou: number; centroidShiftPx: number; areaRatio: number | null } | null;
   ghost: { frames: number; ms: number; peak: number; severity: number; worstFrame: number | null };
   blendFrames: number; snap: boolean; hardCut: boolean; failHead: boolean; failFeet: boolean; unmeasured?: string;
   /** Pose continuity (W4): the readings from the pixels and whether each fails CHK-026 (never for a waived pose). */
   height?: HeightReading | null; feetSil?: FeetSilhouetteReading | null; headReal?: RealHeadReading | null;
   failHeight?: boolean; failFeetSil?: boolean; failRealHead?: boolean; unregistered?: boolean;
+  /** R57-002: what a change of a rig's key adds (continuity-rig.mjs). */
+  rig?: RigSwapInfo;
 }
 export interface SwapRow extends Partial<SwapResult> {
   id?: number; figure?: string; fromPose?: string; toPose?: string; n?: number; counted?: boolean; camCut?: boolean; notShowing?: boolean; snap?: boolean; hardCut?: boolean;
@@ -94,7 +99,7 @@ export declare function median(a: number[]): number;
 export interface Summary {
   battleSeconds: number; swaps: number; counted: number; excludedByCut: number; excludedNotShowing: number; swapsPerMinute: number | null;
   size: {
-    judged?: number; costumeSwaps?: number; sameArtSwaps?: number; costumeWorstHeadPct?: number; costumeWorstFeetPx?: number; headMeasured: number; headRegistration: number; headSilhouette: number; headUnmeasured: number; maxHeadJumpPct: number; maxHeadJumpPctRegistration: number; headOverTolerance: number; feetMeasured: number; maxFeetShiftPx: number; feetOverTolerance: number;
+    judged?: number; costumeSwaps?: number; sameArtSwaps?: number; costumeWorstHeadPct?: number; costumeWorstFeetPx?: number; headMeasured: number; headRegistration: number; headRig?: number; maxHeadJumpPctRig?: number; rigSwaps?: number; headSilhouette: number; headUnmeasured: number; maxHeadJumpPct: number; maxHeadJumpPctRegistration: number; headOverTolerance: number; feetMeasured: number; maxFeetShiftPx: number; feetOverTolerance: number;
     /** W4: height (stature; a KO's length is report-only), the silhouette's own feet, the real head across a hold, unregistered paintings. */
     heightMeasured: number; heightOverBand: number; heightWaived: number; minStature: number | null; maxStature: number | null; koLengthMeasured: number; minKoLength: number | null; koLengthReported: number;
     feetSilMeasured: number; feetSilOver: number; feetSilWaived: number; maxFeetSilPx: number; holdSwaps: number; worstRealHeadPct: number; realHeadOutsideBand: number; realHeadWaived: number; unregisteredSwaps: number;

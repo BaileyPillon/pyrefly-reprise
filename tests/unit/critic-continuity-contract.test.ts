@@ -76,6 +76,19 @@ describe('the engine fields the continuity probe reads', () => {
     expect(api, `__pyrefly.battleState: ${WHY}`).toMatch(/battleState\(\): Readonly<BattleState> \| null;/);
   });
 
+  it('a rigged figure keeps the public surface the rig reader reads (R57-002): its key, its move, its landmarks, its feet, its box and its part meshes', () => {
+    const rig = read('src/engine/rig/RigActor.ts');
+    const figure = read('src/engine/rig/RigFigure.ts');
+    const reader = read('critic/runner/lib/continuity-rig-probe.mjs');
+    for (const sig of ['override get pose(): string', 'override get blending(): boolean', 'rigInfo(): {', 'landmark(name: string): { x: number; y: number } | null', 'feetPoint(): Vector3 | null', 'override contentQuad(', 'get figure(): RigFigure']) {
+      expect(rig, `RigActor ${sig}: ${WHY.replace('continuity-probe.mjs', 'continuity-rig-probe.mjs')}`).toContain(sig);
+    }
+    expect(figure, `RigFigure.plane: ${WHY}`).toMatch(/readonly plane = new Group\(\);/);
+    expect(figure, 'a part mesh is named by its part, which is how the reader finds the head').toContain('mesh.name = p.name;');
+    for (const name of ['rigInfo', 'landmark', 'feetPoint', 'contentQuad', 'blending', 'figure', 'plane', 'children', 'geometry', 'getAttribute', 'matrixWorld']) expect(reader).toContain(name);
+    expect(reader, 'the reader must not depend on a hook that only a newer build has').not.toMatch(/onPoseSwap|__pyrefly\.motion|__pyrefly\.continuity/);
+  });
+
   it('the probe reads exactly these names and no engine hook', () => {
     for (const name of ['slots', 'active', '_alpha', 'showFigure', 'poseUrls', 'painted', 'stage', 'actors', 'opts', 'fieldShown', 'matrixWorld', 'projectionMatrix', 'matrixWorldInverse']) expect(probe).toContain(name);
     expect(probe, 'the probe must not depend on a hook that only a newer build has').not.toMatch(/onPoseSwap|__pyrefly\.motion|__pyrefly\.continuity/);

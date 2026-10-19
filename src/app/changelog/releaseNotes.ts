@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 57 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 58 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '58',
+    date: '2026-10-19',
+    lines: [
+      { tag: 'FFX', text: 'Ifrit now animates as one jointed figure, in Braska’s last fight and wherever you summon him.' },
+      { tag: 'FFX', text: 'Pterya, Isaaru’s aeon in Chapter XIV, is drawn the same way.' },
+      { tag: 'FFX', text: 'Neither shrinks when knocked out any more.' },
+    ],
+  },
   {
     release: '57',
     date: '2026-10-19',

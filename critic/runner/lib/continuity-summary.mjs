@@ -41,8 +41,11 @@ export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg,
   const costume = counted.filter((s) => s.costume);
   const heads = judged.filter((s) => s.head && s.head.ratio !== null);
   const regHeads = heads.filter((s) => s.head.source === 'registration');
+  // R57-002: a RIGGED figure's head is read from its own head mesh (continuity-rig.mjs), judged at the registered tolerance; a rig whose key hides the head is read by mass, as a painting with no registered head is
+  const rigHeads = heads.filter((s) => s.head.source === 'rig' && s.head.metric === 'head');
   const worstHead = heads.reduce((m, s) => Math.max(m, Math.abs(s.head.ratio - 1)), 0);
   const worstHeadReg = regHeads.reduce((m, s) => Math.max(m, Math.abs(s.head.ratio - 1)), 0);
+  const worstHeadRig = rigHeads.reduce((m, s) => Math.max(m, Math.abs(s.head.ratio - 1)), 0);
   const feetSwaps = judged.filter((s) => s.feet && s.feet.standing);
   const snaps = counted.filter((s) => s.snap);
   const hard = counted.filter((s) => s.hardCut);
@@ -82,8 +85,8 @@ export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg,
       judged: judged.length, costumeSwaps: costume.length, sameArtSwaps: counted.length - judged.length - costume.length,
       costumeWorstHeadPct: round(costume.reduce((m, s) => (s.head && s.head.ratio !== null ? Math.max(m, Math.abs(s.head.ratio - 1)) : m), 0) * 100, 1),
       costumeWorstFeetPx: round(costume.reduce((m, s) => (s.feet && s.feet.standing ? Math.max(m, s.feet.px) : m), 0), 1),
-      headMeasured: heads.length, headRegistration: regHeads.length, headSilhouette: heads.length - regHeads.length, headUnmeasured: judged.length - heads.length,
-      maxHeadJumpPct: round(worstHead * 100, 1), maxHeadJumpPctRegistration: round(worstHeadReg * 100, 1),
+      headMeasured: heads.length, headRegistration: regHeads.length, headRig: rigHeads.length, headSilhouette: heads.length - regHeads.length - rigHeads.length, headUnmeasured: judged.length - heads.length,
+      maxHeadJumpPct: round(worstHead * 100, 1), maxHeadJumpPctRegistration: round(worstHeadReg * 100, 1), maxHeadJumpPctRig: round(worstHeadRig * 100, 1), rigSwaps: judged.filter((s) => s.rig).length,
       headOverTolerance: failHead.length,
       feetMeasured: feetSwaps.length, maxFeetShiftPx: round(feetSwaps.reduce((m, s) => Math.max(m, s.feet.px), 0), 1), feetOverTolerance: failFeet.length,
       // W4: the HEIGHT reading (a pose drawn against the idle in the same frame, from the alpha masks and the planes' quads; stature, or length for a KO, which is report-only)
@@ -161,7 +164,7 @@ export function verdicts(s, cfg, run = {}) {
   ]);
   const result = (reasons) => (unverified.length ? 'UNVERIFIED' : reasons.length ? 'FAIL' : 'PASS');
   // what a PASS rests on: how many swaps had a registered head (judged at 3 percent) and how many were read by mass (30 percent)
-  const basis = `${s.size.headRegistration} of ${s.size.headMeasured} measured swaps had a registered head (tolerance ${cfg.size.headTolerancePct} percent); ${s.size.headSilhouette} were read by the figure's mass (tolerance ${cfg.size.headTolerancePctCoarse} percent, whole-figure jumps only); ${s.size.headUnmeasured} had no reading`;
+  const basis = `${s.size.headRegistration} of ${s.size.headMeasured} measured swaps had a registered head (tolerance ${cfg.size.headTolerancePct} percent); ${s.size.headRig ? `${s.size.headRig} were read from a rig's own head mesh (tolerance ${cfg.size.headTolerancePct} percent; ${s.size.rigSwaps} swap(s) were changes of a rig's key); ` : ''}${s.size.headSilhouette} were read by the figure's mass (tolerance ${cfg.size.headTolerancePctCoarse} percent, whole-figure jumps only); ${s.size.headUnmeasured} had no reading`;
   // W4: what the rest of the PASS rests on. The head reading is a CONTROL (the table that drew the pose agrees with itself); the independent evidence is the pixels' height and feet.
   const readings = s.size.heightMeasured !== undefined
     ? `; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height ${s.size.heightMeasured} swap(s) (stature ${s.size.minStature ?? 'none'} to ${s.size.maxStature ?? 'none'}, ${s.size.heightWaived} out of band but waived), the silhouette's own feet ${s.size.feetSilMeasured} swap(s) (worst ${s.size.maxFeetSilPx} px, ${s.size.feetSilWaived} waived), ${s.size.holdSwaps} swap(s) across a recorded hold (real head worst ${s.size.worstRealHeadPct} percent from the idle's), ${s.size.unregisteredSwaps} on a painting with no fresh registration record`
@@ -196,8 +199,8 @@ export function continuityReportLine(s) {
 export function swapBadness(s, cfg) {
   if (s.staged) return 0; // a step of the twirl is stagecraft (continuity-staged.mjs): never among the worst swaps a reviewer should open, only filler when nothing else is left
   const sized = !s.costume && !s.sameArt; // a costume change and a swap of one painting to itself are not judged on size or feet
-  const head = sized && s.head && s.head.ratio !== null ? Math.abs(s.head.ratio - 1) * 100 / (s.head.source === 'registration' ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) : 0;
-  const feet = sized && s.feet && s.feet.standing ? s.feet.px / (s.feet.source === 'registration' ? cfg.size.feetTolerancePx : cfg.size.feetTolerancePxCoarse) : 0;
+  const head = sized && s.head && s.head.ratio !== null ? Math.abs(s.head.ratio - 1) * 100 / (s.head.source === 'registration' || s.head.label === 'rig' ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) : 0;
+  const feet = sized && s.feet && s.feet.standing ? s.feet.px / (s.feet.tolerancePx ?? (s.feet.source === 'registration' ? cfg.size.feetTolerancePx : cfg.size.feetTolerancePxCoarse)) : 0; // a rig's feet carry the tolerance they were judged at (R57-002)
   const outline = s.outline ? (1 - s.outline.iou) / 0.25 : 0;
   const ghost = s.ghost.severity / Math.max(0.01, cfg.motion.ghostSeverityFail);
   // W4: the readings from the pixels, so Lulu drawn at two thirds of her idle's height outranks a mild ghost although her registered head agrees to the pixel. How far outside the band
