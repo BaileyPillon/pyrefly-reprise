@@ -22,9 +22,9 @@
  * `research/ffx-yojimbo.md` §8.2 and Y-10, `[single source: wiki]`; the review's init for the dog: cursor off) and is **not counted for victory**: a *part* of the group (`parts`), so the engine never counts him
  * (`results.ts`), the targeting code skips `untargetable`, and the HUD draws no bar for him (`hideHpBar`).
  *
- * **Pace** is the rows' (costs over AGI 120, `../command-records/tourist-trap.ts`), and the formation carries **action time ON at 3 s on top**, **kept by precedent, awaiting Bailey's pick for this chapter**:
+ * **Pace** is the rows' (costs over AGI 120, `../command-records/tourist-trap.ts`), and the formation carries **action time ON at 3 s on top**, **kept by precedent, then confirmed for this chapter by Bailey (D-846, 2026-10-14), and SUPERSEDED by the per-command span since r56 (2026-10-19, `action-span.ts`)**:
  * his add-on picks were per chapter (the Cloister, Chapter XIII: D-151; the Road, Chapter XI, `./fallen-aeons-road.ts`: option A, D-187 and D-197, 2026-09-25; Ixion at Djose, Chapter XVI, `./ixion-djose.ts`: D-269,
- * 2026-09-27, `docs/handoff/chapter-ixion.md` and `docs/plans/ixion-bench.md`), and there is no row for this one. The rule is sourced `[verified: 2 sources]`, its length is not (`src/battle/ffx2/action-time.ts`).
+ * 2026-09-27, `docs/handoff/chapter-ixion.md` and `docs/plans/ixion-bench.md`), and D-846 (2026-10-14) is the row for this one. The rule is sourced `[verified: 2 sources]`, its length is not (`src/battle/ffx2/action-time.ts`).
  * `TOURIST_TRAP_ACTION_TIME_ON = false` turns it off; no boss number moves either way, and the handoff reports the Zanmato cycle both ways as an open decision.
  *
  * The painting is PROVISIONAL and borrowed: Lady Ginnem's Yojimbo and Daigoro of the FFX Chapter IX (`characters/yojimbo-cavern`, `characters/daigoro`): same aeon, same dog. Nothing is replaced.
@@ -55,7 +55,7 @@ export const YOJIMBO_MP = 9999;
 export const YOJIMBO_AGI = 120;
 
 /**
- * **Action time, ON at 3 s** (see the header): the sibling possessed-aeon chapters' flat add-on, on top of the rows. `[estimate]`: unsourced length; **kept by precedent, awaiting Bailey's pick for this chapter** (his picks
+ * **Action time, ON at 3 s** (see the header): the sibling possessed-aeon chapters' flat add-on, on top of the rows. `[estimate]`: unsourced length; **kept by precedent, then confirmed by D-846 (2026-10-14); superseded by the per-command span since r56 (2026-10-19): while the span is on this flat 3 s is not read** (his picks
  * were per chapter: D-151, D-187 / D-197, D-269). `false` turns it off.
  */
 export const TOURIST_TRAP_ACTION_TIME_ON: boolean = true;

@@ -12,14 +12,7 @@
  * 5. **The cadence.** The steps from the start of one turn to the start of the next, per move, with the 3 s window (kept by precedent, awaiting Bailey's pick) and without it. They follow from the move rows' costs and each body's
  *    agility (68, 82, 113); the window adds exactly 3 s (90 steps) to every turn.
  */
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 
 import type { Command } from '../../../src/battle/common/types.ts';
 import type { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
@@ -28,6 +21,7 @@ import { ABILITIES } from '../../../src/data/ffx2/index.ts';
 import { ANGRA_MAINYU_ACTION_TIME_SECONDS } from '../../../src/data/ffx2/enemies/angra-mainyu.ts';
 import { X2_ANGRA_MAINYU_ID as BODY } from '../../../src/data/angra-mainyu-ids.ts';
 import { commandOf, driveAngra, logOf, nextInput, openAngra, playAngra, startsOf, topUp, type AngraEv, type AngraInput } from '../helpers/angraMainyuDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 const GIRLS = ['yuna', 'rikku', 'paine'];
 const SPELLS: string[] = [A.firaga, A.waterga, A.thundaga, A.blizzaga];
@@ -344,7 +338,8 @@ describe('the cadence in the real engine: steps from one turn\'s start to the ne
     }
   });
 
-  it('with the 3 s window (kept by precedent, awaiting Bailey\'s pick) every turn is exactly 90 steps longer', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('with the 3 s window (kept by precedent, awaiting Bailey\'s pick) every turn is exactly 90 steps longer', () => withActionSpanKnobs({ perCommand: false }, () => {
     const window = ANGRA_MAINYU_ACTION_TIME_SECONDS * STEPS_PER_SECOND;
     expect(window).toBe(90);
     const by = cadence(true);
@@ -352,7 +347,7 @@ describe('the cadence in the real engine: steps from one turn\'s start to the ne
       expect(by[ability]?.length ?? 0, ability).toBeGreaterThanOrEqual(2);
       expect(new Set(by[ability]), ability).toEqual(new Set([steps + window]));
     }
-  });
+  }));
 });
 
 void nextInput;

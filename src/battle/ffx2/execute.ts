@@ -164,10 +164,10 @@ function sameAction(a: Command, b: Command): boolean {
 
 /**
  * End the action: the command is complete (`MsCommandComplete`: the actor's recovery becomes the command's ATB cost over
- * (AGI + 1)), close it out, and run the hooks. `plays` adds the battle's action time (method check E4, `action-time.ts`; OFF
- * unless a switch sets it): the command then stays EXECUTING for that many logic steps before it completes (the step loop
+ * (AGI + 1)), close it out, and run the hooks. `plays` adds the battle's action time (method check E4, `action-time.ts`; 0
+ * unless the per-command switch (ON since r56) or an option or a formation sets it): the command then stays EXECUTING for that many logic steps before it completes (the step loop
  * does it); a spherechange passes `false` (a Short change freezes everyone, §12.4). `played` names the command that resolved, for the per-command
- * span (`action-span.ts`, the switch `ACTION_TIME_PER_COMMAND`, OFF); a command that played nothing passes none and owes 0 under that switch.
+ * span (`action-span.ts`, the switch `ACTION_TIME_PER_COMMAND`, ON since r56); a command that played nothing passes none and owes 0 under that switch.
  */
 function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, costAtb: number, plays = true, played?: ActionContext): void {
   const acting = plays ? actionStepsFor(env.options.actionTimeSeconds, env.state.flags, actor, played) : 0;

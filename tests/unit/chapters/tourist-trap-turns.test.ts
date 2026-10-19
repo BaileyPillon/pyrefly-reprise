@@ -12,14 +12,7 @@
  *   before: 82 turns (82 turn-starts, 16 of them bare: 12 dog picks and 4 sleeping polls)
  *   after:  66 turns (66 turn-starts, none bare), the same fight
  */
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 
 import type { BattleEvent, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
@@ -29,6 +22,7 @@ import { YOJIMBO_ACTIONS } from '../../../src/data/ffx2/enemies/tourist-trap-abi
 import { LIVELOCK_SPINS } from '../../../src/engine/BattlePresenterUtil.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { driveFight, recordPolls, type TouristTrapPoll } from '../helpers/touristTrapDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 type Ev = BattleEvent & { actorId?: string; turn?: number };
 const SEEDS = [1, 2, 3, 4, 5, 6];
@@ -148,11 +142,12 @@ describe("the results' TURNS counts the turns of the fight, not its polls", () =
   // Re-pinned for the hit reaction (re-parity RC9 lane X2-A, slice 1; FFX-2 only; reason "game-code parity", note FFX2-G01 section 7): the chain windows of Yojimbo (31 steps, 58 after a critical)
   // and Daigoro (61) are their own flinches now, so the party's chains on them break sooner and the same seed is another replay: 69 turns, 12 dog picks and 5 sleeping polls, 86 polls in all, where it
   // was 66, 12, 4 and 82. Cause, by ablation: with `CHAIN_WINDOW_PER_BODY` off the old figures return.
-  it('seed 1, the intended line: 69 turns, with the 12 dog picks and 5 sleeping polls out of it (the same fight counted 86 before the fix)', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('seed 1, the intended line: 69 turns, with the 12 dog picks and 5 sleeping polls out of it (the same fight counted 86 before the fix)', () => withActionSpanKnobs({ perCommand: false }, () => {
     const run = driveFight(1, { line: 'intended' });
     expect([run.turns, run.dogPicks, run.sleepingPolls]).toEqual([69, 12, 5]);
     expect(run.turns + run.dogPicks + run.sleepingPolls, 'the old count: every poll was a turn').toBe(86);
-  });
+  }));
 
   it('Zanmato is still the 14th poll of its cycle (28th, 42nd ...), counted in polls, which are no longer the turns', () => {
     let zanmatos = 0;

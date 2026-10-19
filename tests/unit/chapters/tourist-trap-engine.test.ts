@@ -16,14 +16,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 
 import type { BattleEvent, FFX2PartyBuild, StatusId } from '../../../src/battle/common/types.ts';
 import { makeRng } from '../../../src/battle/common/rng.ts';
@@ -54,6 +47,7 @@ import {
 import { DAIGORO_ACTIONS, TOURIST_TRAP_ACTION_IDS, WAKIZASHI_B_HITS_ONE_GIRL, YOJIMBO_ACTIONS, YOJIMBO_ACTION_IDS, YOJIMBO_SCRIPTS } from '../../../src/data/ffx2/enemies/tourist-trap-abilities.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { driveFight, recordPolls, withoutActionTime } from '../helpers/touristTrapDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 interface Row {
   row: number; formation: number; slot: number; level: number; hp: number; mp: number; str: number; def: number; mag: number; mdef: number; agi: number; acc: number; eva: number; luck: number;
@@ -701,7 +695,8 @@ describe("Daigoro's flag: one flag, not a count; he bites on his own gauge", () 
     expect(dogBites(engine), 'no call, no bite: two calls were one bite, not two').toBe(2);
   }));
 
-  it("his rest after a bite is the row's 87 steps (cost 100 over AGI 120), Yojimbo's ordinary moves rest 105 and Zanmato charges 105 and rests 174: the rows' own pace, action time off", () => recordPolls((polls) => {
+  // OLD timeline (r55): the rows' own pace means no action time at all, which only the per-command span put back off gives; the rest of the file runs on production.
+  it("his rest after a bite is the row's 87 steps (cost 100 over AGI 120), Yojimbo's ordinary moves rest 105 and Zanmato charges 105 and rests 174: the rows' own pace, action time off", () => withActionSpanKnobs({ perCommand: false }, () => recordPolls((polls) => {
     // The bite: poll to poll, with a call waiting for the next one.
     const engine = quietYojimbo(2, withoutActionTime());
     playDefending(engine, () => dogPolls(polls) >= 1, 4000);
@@ -735,7 +730,7 @@ describe("Daigoro's flag: one flag, not a count; he bites on his own gauge", () 
     }
     expect([...rest], 'Kozuka, Wakizashi A and B: 120 over AGI 120 is 104.39 steps, rounded up').toEqual([105]);
     expect([...zanmato], 'Zanmato: a 105-step charge, then a 174-step rest').toEqual([279]);
-  }));
+  })));
 
   it('a dog pick has no rest at all: Yojimbo is polled again on the very next step, with the counter already raised', () => {
     const run = driveFight(1, { line: 'intended', group: withoutActionTime() });

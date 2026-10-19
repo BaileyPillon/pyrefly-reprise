@@ -7,14 +7,7 @@
  * records [hard rule 3]. **FFX-2 only** [AGENTS.md rule 14].
  */
 
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 import type { BattleSetup, Command, EnemyGroupDef } from '../../../src/battle/common/types.ts';
 import { SeededRng } from '../../../src/battle/common/rng.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
@@ -39,6 +32,7 @@ import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts'
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { driveParagon, driveTremaFresh, LINES } from '../helpers/tremaDrive.ts';
 import { board } from '../helpers/tremaUnits.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 const idOf = (c: Command | null): string | null => (c && 'id' in c ? (c as { id: string }).id : null);
 
@@ -143,7 +137,8 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     for (const [i, g] of gaps(on).entries()) expect(Math.abs(g - (gaps(off)[i] ?? 0) - 45)).toBeLessThanOrEqual(1); // 1.5 s = 45 logic steps
   });
 
-  it('the formation\'s value turns it on for that battle alone, and the engine option wins', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('the formation\'s value turns it on for that battle alone, and the engine option wins', () => withActionSpanKnobs({ perCommand: false }, () => {
     const group = { ...cloisterTremaGroup, actionTimeSeconds: 2 };
     const b = tremaTurns(group, {}, 3);
     const off = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 0 }, 3);
@@ -152,7 +147,7 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     // The shipped formation: 3 s, 90 logic steps (the step is the same length at every speed).
     const shipped = tremaTurns(cloisterTremaGroup, {}, 3);
     expect(Math.abs((shipped[1]! - shipped[0]!) - (off[1]! - off[0]!) - 90)).toBeLessThanOrEqual(1);
-  });
+  }));
 
   it('other gauges keep filling while it plays out (Active), and the Wait hold stops it too', () => {
     for (const mode of ['active', 'wait'] as const) {

@@ -6,14 +6,7 @@
  * Each block says where its number comes from. **Game case: FFX-2 only.**
  */
 
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 import { makeFfx2Rng } from '../../src/battle/ffx2/adapt/streams.ts';
 import type { AbilityDef, Command, StatusId } from '../../src/battle/common/types.ts';
 import { FFX2Engine, STEPS_PER_SECOND, STEP_MS, baseRequired, isReady } from '../../src/battle/ffx2/index.ts';
@@ -54,7 +47,9 @@ interface Battle {
 function battle(over: { agis?: number[]; condition?: 'normal' | 'scripted' | 'preemptive' | 'ambush'; seed?: number; level?: number; options?: Ffx2EngineOptions } = {}): Battle {
   const agis = over.agis ?? [60];
   const enemies = agis.map((agi, i) => enemy(`m${i}`, `M${i}`, 'zz-hand-quiet', { agi, hp: 9_999_999, maxHp: 9_999_999 }, { slot: i, immunityFlags: [], flags: {} }));
-  const engine = new FFX2Engine({ abilities: registry, minigames: false, ...over.options });
+  // r56: `actionTimeSeconds: 0` is an explicit "no action time" (the engine option wins over the formation and the per-command span, `action-span.ts`): these blocks measure the gauge
+  // and the clocks by hand, and the command's span (proved by `ffx2-action-span.test.ts`) would hold the actor EXECUTING while they read it. A test that wants action time passes its own.
+  const engine = new FFX2Engine({ abilities: registry, minigames: false, actionTimeSeconds: 0, ...over.options });
   engine.init({ ...setup(group('zz-hand', enemies), { seed: over.seed ?? 1, level: over.level ?? 24 }), condition: over.condition ?? 'scripted' });
   const state = engine.state();
   return { engine, u: (id) => (state.combatants as Record<string, Ffx2Unit>)[id] as Ffx2Unit };

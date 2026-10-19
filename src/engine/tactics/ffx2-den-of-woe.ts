@@ -65,7 +65,7 @@ const GUARD_TURNS = 8;
  * action time on (`ACTION_TIME_PER_COMMAND`) a Dark Knight's Darkness holds her 83 steps, so she is still casting when Nooj, brought under 3,000 HP by the
  * volley, starts Lightfall; drinking at about half his health keeps the Wait and bench paces level with the previous build (194 to 200 of 200).
  */
-const DRINK_FROM = 12000;
+export const DRINK_FROM = 12000;
 
 /** The tactic's switches: the Lightfall prep (M1, `DEN_OF_WOE_LIGHTFALL_PREP`). */
 export interface DenOfWoeTacticOptions {

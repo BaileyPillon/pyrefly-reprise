@@ -1,7 +1,7 @@
 /**
  * **Action time per command** (re-parity lane X2-A, row XA6 slice A; **FFX-2 only**): how many logic steps a command stays EXECUTING, from the
  * command's own class, its actor's body and the animation ratio, instead of one flat estimate for every command. Behind ONE switch,
- * `ACTION_TIME_PER_COMMAND` in `action-time.ts`, **OFF**: with it off nothing here is read and every FFX-2 battle is byte for byte what it was.
+ * `ACTION_TIME_PER_COMMAND` in `action-time.ts`, **ON since r56 (2026-10-19)**: with it off nothing here is read and every FFX-2 battle is byte for byte what it was (r55).
  *
  * The maths is the pure kernel `kernel/action-span.ts` (its header lists the stages and the waits); the numbers are `data/ffx2/action-frames.ts`
  * (the game's frame tables, motion macros, command classes and first-hit frames; measured lengths for four effects and one item, labelled estimates for the rest). This module is the

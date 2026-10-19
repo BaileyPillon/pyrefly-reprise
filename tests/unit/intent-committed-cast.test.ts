@@ -36,6 +36,7 @@ import { setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
 import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 import { buildGuideView } from '../../src/engine/tactics/guide.ts';
 import { EnemyIntentPanel, type IntentView } from '../../src/ui/common/EnemyIntent.ts';
+import { withActionSpanKnobs } from '../../src/battle/ffx2/action-span.ts';
 
 function options() {
   return {
@@ -90,6 +91,10 @@ function link5(seed = 1): { engine: FFX2Engine; decision: Extract<Decision, { ki
  * Re-parity W3 (FFX-2 only; reason "game-code parity"): the first seed of 1 to 40 whose link-5 first menu finds Shuyin with Terror of
  * Zanarkand already on the charge bar. Seed 1 was that board; the game's draw order moved the stream, so on seed 1 the first menu now
  * finds a different Shuyin (the case needs the board, not the number). A seed whose chain does not reach link 5 is passed over.
+ *
+ * r56 (2026-10-19, FFX-2 only): with the per-command action time ON (production) no seed of 1 to 400 finds Shuyin with the cast on the bar at that first menu, so the case that
+ * needs this board runs on the OLD timeline (`withActionSpanKnobs({ perCommand: false })`); the committed-cast naming it pins (the predictor reads `atb.charging`) does not depend
+ * on the timeline, and the second test of this file (the rolled move's Odds row) runs on production.
  */
 function committedSeed(): number {
   for (let seed = 1; seed <= 40; seed++) {
@@ -147,7 +152,8 @@ function render(view: IntentView | null): HTMLElement {
 }
 
 describe('PR-0123: Chapter V link 5, first menu (FFX-2)', () => {
-  it('names the move already on the charge bar, and the guide WATCH line agrees', () => {
+  // OLD timeline (r55): the board this pins (Shuyin already charging Terror of Zanarkand at link 5's first menu) does not occur on production in 400 seeds; see {@link committedSeed}.
+  it('names the move already on the charge bar, and the guide WATCH line agrees', () => withActionSpanKnobs({ perCommand: false }, () => {
     const { engine, decision } = link5(committedSeed());
     const shuyin = engine.state().combatants['shuyin'] as unknown as { atb: { charging: { commandRef: Command } | null } };
     expect(shuyin.atb.charging?.commandRef).toMatchObject({ id: 'terror-of-zanarkand' });
@@ -169,7 +175,7 @@ describe('PR-0123: Chapter V link 5, first menu (FFX-2)', () => {
     const overlay = render(intent as unknown as IntentView);
     expect(overlay.querySelector('.eint__label')?.textContent).toBe('Terror of Zanarkand');
     expect(overlay.querySelector('.eint__conf')?.textContent).toBe('Scripted');
-  });
+  }));
 
   it("once the cast is off the bar, the headline's percent is the rolled move's own Odds row", () => {
     const { engine } = link5(branchingSeed());

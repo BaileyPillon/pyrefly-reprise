@@ -9,16 +9,13 @@
  * the kit's intended line (`LINES.kitIntended`). 200 seeds at bench speed (zero decision time) and
  * 200 at human speed under Wait split (1.5 s a menu: 0.5 s on the top-level list with the clock
  * running, 1.0 s held), the live default. The table is copied into `docs/plans/trema-bench.md`.
+ *
+ * Since r56 (2026-10-19) the per-command span (`action-span.ts`) supersedes the formations' flat 3 s, so the rows are the span; the flat 3 s is the OLD timeline, which only the
+ * engine option `actionTimeSeconds: 3` (it outranks the span) or `withActionSpanKnobs({ perCommand: false })` still gives.
  */
 
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 import { driveChapter, driveParagon, driveTremaFresh, LINES, type DriveOptions, type LinkRun } from '../helpers/tremaDrive.ts';
 import { FFX2_TREMA } from '../../../src/data/chapter-ffx2-trema.ts';
 import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
@@ -76,15 +73,34 @@ describe('Chapter XIII as shipped: Oversoul Paragon, Split_Infinity\'s kit, 3 s 
     }, 900_000);
   }
 
-  it('the chapter is winnable at both speeds; the formations\' 3 s equals the engine option the options sheet measured', () => {
+  it('the chapter is winnable at both speeds (as built, the per-command span)', () => {
     expect(tallies.get('Chapter (1-2)|bench')?.wins).toBeGreaterThan(0);
     expect(tallies.get('Chapter (1-2)|human')?.wins).toBeGreaterThan(0);
+  });
+
+  const logsOf = (r: { links: LinkRun[] }): string => JSON.stringify(r.links.map((l) => l.log));
+
+  // OLD timeline (r55): the formations' 3 s only exists with the span put back off; the rest of the file runs on production.
+  it("OLD timeline: the formations' 3 s equals the engine option the options sheet measured", () => withActionSpanKnobs({ perCommand: false }, () => {
     for (let seed = 1; seed <= 10; seed++) {
       const viaFormation = driveChapter(LINES.kitIntended, seed, SHIPPED);
       const viaEngine = driveChapter(LINES.kitIntended, seed, { ...SHIPPED, engine: { actionTimeSeconds: 3 } });
       expect(viaFormation.outcome).toBe(viaEngine.outcome);
-      expect(JSON.stringify(viaFormation.links.map((l) => l.log))).toBe(JSON.stringify(viaEngine.links.map((l) => l.log)));
+      expect(logsOf(viaFormation)).toBe(logsOf(viaEngine));
     }
+  }), 300_000);
+
+  it("as built the span supersedes the formations' 3 s, and the engine option 3 is still exactly the old flat window (it outranks the span)", () => {
+    let differs = 0;
+    for (let seed = 1; seed <= 10; seed++) {
+      const viaFormation = driveChapter(LINES.kitIntended, seed, SHIPPED);
+      const viaEngine = driveChapter(LINES.kitIntended, seed, { ...SHIPPED, engine: { actionTimeSeconds: 3 } });
+      const oldFormation = withActionSpanKnobs({ perCommand: false }, () => driveChapter(LINES.kitIntended, seed, SHIPPED));
+      expect(viaEngine.outcome).toBe(oldFormation.outcome);
+      expect(logsOf(viaEngine)).toBe(logsOf(oldFormation));
+      if (logsOf(viaFormation) !== logsOf(viaEngine)) differs += 1;
+    }
+    expect(differs, "the formations' flat 3 s gives way to the span: the shipped fight is not the flat-3 s fight").toBeGreaterThan(0);
   }, 300_000);
 
   it('prints the table', () => {

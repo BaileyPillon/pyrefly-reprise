@@ -16,19 +16,12 @@
  * Game case: **FFX-2 only** (rule 14): only ATB opens a menu while another command is in flight.
  */
 
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 import type { BattleState, Command, CombatantId } from '../../src/battle/common/types.ts';
 import type { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { buildAdvisorView, clearAdvisorCache, type AdvisorView } from '../../src/engine/tactics/advisor.ts';
 import { boardFor } from '../../src/engine/tactics/advisor-v3.ts';
-import { inFlight, type InFlightSource } from '../../src/engine/tactics/advisor-inflight.ts';
+import { inFlight, projectBoard, type InFlightSource } from '../../src/engine/tactics/advisor-inflight.ts';
 import { buildGuideView, recommendedCommand } from '../../src/engine/tactics/guide.ts';
 import { chosenAlready } from '../../src/engine/tactics/guide-inflight.ts';
 import { provedSave } from '../../src/engine/tactics/advisor-lethal.ts';
@@ -110,33 +103,58 @@ describe('advisor v3 repair (FFX-2 only)', () => {
     expect(found!.card?.suggestions.some((s) => idOf(s.command) === 'x2-mega-potion')).toBe(false);
   }, 600_000);
 
-  it('FM2: a projection in which the battle ends is not ranked on (the v2 reading stands)', async () => {
-    const found = await search(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-vegnagun-shuyin'], 40, (ctx) => {
-      if (pendingCommands(ctx).length === 0) return null;
-      // Watch the forks the projection makes: one that ends with a result is the case.
-      let ended = false;
-      const live = engineOf(ctx);
-      const watched: InFlightSource = {
-        state: () => live.state(),
-        heldCommand: () => live.heldCommand(),
-        fork: (seed: number) => {
-          const f = live.fork(seed);
-          const tick = f.tick.bind(f);
-          f.tick = (ms, o) => {
-            const ev = tick(ms, o);
-            if (f.state().result) ended = true;
-            return ev;
-          };
-          return f;
+  // r56 (2026-10-19, FFX-2 only; the per-command action time is ON, so these are the production fights): FM2 was found by running the engine, a charging hit that ends the battle inside the
+  // projection (seeds 1 to 40 of ffx2-bahamut, ffx2-den-of-woe and ffx2-vegnagun-shuyin), and that board no longer turns up: the same probe finds none over seeds 41 to 140 of those three
+  // chapters, nor over seeds 1 to 40 of ffx2-leblanc, ffx2-fallen-aeons, ffx2-trema and ffx2-ixion-djose. The rule does not depend on the timeline (advisor-inflight.ts: a charging or held
+  // hit finished the battle, so there is no enemy left to rank against), so it is pinned where it lives: projectBoard and boardFor over a source whose fork lands the charging hit and ends
+  // the battle, with a control whose fork lands it and the battle goes on.
+  it('FM2: a projection in which the battle ends is not ranked on (the v2 reading stands)', () => {
+    const charging = { kind: 'ability', id: 'x2-black-mage-fire', targets: ['boss'] } as unknown as Command;
+    const mk = (over: Record<string, unknown> = {}): BattleState =>
+      ({
+        game: 'ffx2',
+        nextSeq: 7,
+        activeIds: ['paine', 'rikku', 'boss'],
+        combatants: {
+          paine: { id: 'paine', side: 'party', alive: true, atb: { charging: { commandRef: charging } } },
+          rikku: { id: 'rikku', side: 'party', alive: true, atb: { charging: null } },
+          boss: { id: 'boss', side: 'enemy', alive: true, atb: { charging: null } },
         },
-      };
-      const b = boardFor(ctx.state, ctx.decision.actorId, { ...ctx.advisorOptions, v3: true, engine: () => watched });
-      return ended ? { b } : null;
+        ...over,
+      }) as unknown as BattleState;
+    const real = mk();
+    /** A fork on which Paine's charge lands on the first step; `ends` says whether that finishes the battle. */
+    const sourceOf = (ends: boolean): InFlightSource => ({
+      state: () => real,
+      heldCommand: () => null,
+      fork: () => {
+        let landed = false;
+        return {
+          state: () => (landed ? mk({ combatants: { ...real.combatants, paine: { id: 'paine', side: 'party', alive: true, atb: { charging: null } } }, ...(ends ? { result: { outcome: 'victory' } } : {}) }) : real),
+          setAtbMode: () => undefined,
+          setMenuLevel: () => undefined,
+          tick: () => {
+            landed = true;
+            return [];
+          },
+          inputValid: () => true,
+          heldCommand: () => null,
+          submit: () => [],
+        };
+      },
     });
-    expect(found, 'a board where a charging hit ends the battle inside the projection').not.toBeNull();
-    expect(found!.b.projection).toBeNull();
-    expect(found!.b.state.result ?? null).toBeNull();
-  }, 600_000);
+    const pending = inFlight(real, 'rikku', []);
+    expect(pending.map((p) => p.actorId)).toEqual(['paine']);
+    // control: the charge lands and the battle goes on: the projection is the board after the hit
+    const goes = boardFor(real, 'rikku', { v3: true, engine: () => sourceOf(false) });
+    expect(goes.projection, 'a charge that lands and leaves the battle going is projected').not.toBeNull();
+    // the case: the charge lands and ends the battle: nothing is ranked on, and the board is the real one
+    const ends = boardFor(real, 'rikku', { v3: true, engine: () => sourceOf(true) });
+    expect(ends.projection).toBeNull();
+    expect(ends.state).toBe(real);
+    expect(ends.state.result ?? null).toBeNull();
+    expect(projectBoard(real, 'rikku', sourceOf(true), pending)).toBeNull();
+  });
 
   it('FM3: the last copy of an item already in flight is not advised again', async () => {
     // A/B on one board: with a second copy on the shelf the card names the item; with only the

@@ -16,14 +16,7 @@
  * checkpoint seam, pinned for every other chain by `flow-checkpoint-retry.test.ts` and `sin-checkpoint-flow.test.ts`.
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { App } from '../../../src/app/App.ts';
 import { pinRunSeed } from '../../../src/app/runSeed.ts';
@@ -394,9 +387,13 @@ describe('the real fight through the flow (the intended line, the real engine)',
  * The same scan on this branch, run seeds 1 to 6000 (`play` on link 1, then a forced defeat at Trema): 4,181 win link 1, 4,084 of them leave three girls standing, 91 leave two and **6 leave one**
  * (seeds 789, 2659 and 2833 leave Paine alone; seeds 3116, 4053 and 5723 leave Yuna alone). The tests below need Yuna alone: seed 3116 is the first. With `CHAIN_WINDOW_PER_BODY` off seed 3543 leaves her alone as before.
  * The Retry rule (fewer than two standing means the Save Sphere's rule) is not changed by this.
+ *
+ * **Re-pinned for the per-command action time** (r56, 2026-10-19, FFX-2 only; the switch is ON, so these are the production fights): the formations' flat 3 s gives way to the span, so run seed 3116 now loses
+ * Paragon. The same scan on this tip, run seeds 1 to 6000 (the first link played by the intended line, the engine alone): 4,930 win link 1 (82 percent), and **12 leave one girl standing**
+ * (seeds 154, 521, 620, 2341, 2504, 4266, 4588 and 4687 leave Yuna alone; seeds 3589, 3777, 3888 and 4635 leave Paine). The tests below need Yuna alone: seed 154 is the first.
  */
-describe('a real Paragon win that leaves one girl standing (run seed 3116, nothing forced)', () => {
-  const ALONE_SEED = 3116;
+describe('a real Paragon win that leaves one girl standing (run seed 154, nothing forced)', () => {
+  const ALONE_SEED = 154;
   async function fromTheRealSeam(which: Answer, retries: number): Promise<Attempt[]> {
     pinRunSeed(ALONE_SEED);
     answer = which;
@@ -428,6 +425,7 @@ describe('a real Paragon win that leaves one girl standing (run seed 3116, nothi
     // 12 menus, every one still a defeat; the eight Retries on each of the six one-girl run seeds (3543, 4053, 4404, 4518, 4559, 4624) ran 0 to 22 menus, 48 of 48 defeats.
     // Re-parity RC9 lane X2-A, slice 1 (FFX-2 only; reason "game-code parity"): on run seed 3116 the four Retries ran 3, 3, 13 and 24 menus, every one still a defeat; the bound is the largest of them, 24 (it was 22
     // on seed 3543). Run seeds 4053 and 5723, the other two that leave Yuna alone, ran up to 36 and 31 menus and lost all eight Retries as well.
+    // r56: on run seed 154 (production, the per-command action time on) the four Retries are all defeats inside the same bound of 24 menus.
     expect(retries.every((a) => a.fights[0]!.outcome === 'defeat' && a.fights[0]!.decisions <= 24)).toBe(true);
   }, 120000);
 

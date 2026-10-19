@@ -7,20 +7,14 @@
  * inside a submenu, held). 200 seeds a row. Lines (`../helpers/ixionDrive.ts`): **sensible** (the guides'
  * clear, answering the Recharge tell) and **naive** (no Shell, no Protect, the tell ignored).
  *
- * The chapter is built with action time **on, 3 s** (`DJOSE_ACTION_TIME_ON`, Bailey's pick, 2026-09-27, D-269;
- * the length Chapters XI and XIII ship); the "OFF" rows are the same fight with the switch's time taken away by
- * the engine option (`actionTimeSeconds: 0`, the most specific switch). The table is copied into
+ * The chapter's formation names action time **on, 3 s** (`DJOSE_ACTION_TIME_ON`, Bailey's pick, 2026-09-27, D-269;
+ * the length Chapters XI and XIII ship). Since r56 (2026-10-19) the per-command span (`action-span.ts`) supersedes that flat 3 s,
+ * so "as built" below is the span; the "OFF" rows are the same fight with all action time taken away by the engine option
+ * (`actionTimeSeconds: 0`, the most specific switch, which also outranks the span). The table is copied into
  * `docs/plans/ixion-bench.md`.
  */
 
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { djoseBuild } from '../../../src/data/ffx2/builds/djose.ts';
 import { DJOSE_ACTION_TIME_ON, DJOSE_ACTION_TIME_SECONDS, djoseIxionGroup } from '../../../src/data/ffx2/enemies/ixion-djose.ts';
@@ -83,7 +77,7 @@ describe('Ixion at Djose: 200 seeds, sensible and naive, bench and human pace (W
     expect(djoseIxionGroup.actionTimeSeconds).toBe(3);
   });
 
-  const ON_LABEL = `action time ON, ${DJOSE_ACTION_TIME_SECONDS} s (as built)`;
+  const ON_LABEL = `action time ON, ${DJOSE_ACTION_TIME_SECONDS} s (as built; the per-command span since r56)`;
   for (const [label, wrap] of [['action time OFF (the switch off)', off], [ON_LABEL, (o: IxionDriveOptions) => o]] as const) {
     for (const line of ['sensible', 'naive'] as const) {
       it(`${line}, ${label}: bench and human`, () => {
@@ -123,8 +117,22 @@ describe('Ixion at Djose: 200 seeds, sensible and naive, bench and human pace (W
     }
   }, 1_800_000);
 
-  it('as built (switch ON) the lines separate: sensible wins more often than naive at human pace', () => {
-    expect(tallies.get(`sensible|${ON_LABEL}|human`)!.wins).toBeGreaterThan(tallies.get(`naive|${ON_LABEL}|human`)!.wins);
+  it('as built (the per-command span) both lines clear it at human pace: the separation the flat 3 s and no action time showed is gone', () => {
+    // Measured at 200 seeds and human pace (Wait split), r56: both lines 200 / 200 as built, where action time OFF leaves the naive line (no Shell, no Protect, the Recharge tell
+    // ignored) at 173 / 200 (86.5 %) and the sensible line at 200 / 200, and the previous timeline (the formation's flat 3 s, r55, the live build before r56) leaves the naive line at
+    // 197 / 200 and the sensible line at 200 / 200. So the span makes Ixion at Djose a little easier for the line that ignores the tell (197 to 200) and much easier than with no
+    // action time at all (173 to 200); the cause is not diagnosed here.
+    // Recorded, not tuned: the assertion is "about 100 percent" for both, not a rate to hold.
+    const sensible = tallies.get(`sensible|${ON_LABEL}|human`)!;
+    const naive = tallies.get(`naive|${ON_LABEL}|human`)!;
+    expect(sensible.wins).toBeGreaterThanOrEqual(0.975 * SEEDS);
+    expect(naive.wins).toBeGreaterThanOrEqual(0.975 * SEEDS);
+    expect(sensible.unfinished + naive.unfinished).toBe(0);
+  });
+
+  it('with all action time taken away (the engine option 0, which outranks the span) the lines still separate at human pace: sensible wins more often than naive', () => {
+    const offLabel = 'action time OFF (the switch off)';
+    expect(tallies.get(`sensible|${offLabel}|human`)!.wins).toBeGreaterThan(tallies.get(`naive|${offLabel}|human`)!.wins);
   });
 
   it('prints the table', () => {

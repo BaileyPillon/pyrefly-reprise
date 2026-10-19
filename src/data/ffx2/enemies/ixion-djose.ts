@@ -39,7 +39,7 @@ const IXION_IMMUNE: StatusImmunities = { ...STANDARD_AILMENT_IMMUNITY, stop: 255
  * Chapter XI and XIII switch, `src/battle/ffx2/action-time.ts`). The rule is sourced `[verified: 2 sources]`, its
  * length is not (`research/ffx2-trema.md` §12.4); the Road (Chapter XI) and Cloister 100 (Chapter XIII) ship the
  * same 3 s. `docs/plans/ixion-bench.md` measures both: with it off the preset almost never wins at human pace.
- * `false` turns it off; no boss number moves either way.
+ * `false` turns it off; no boss number moves either way. **Superseded by the per-command span since r56 (2026-10-19, `ACTION_TIME_PER_COMMAND`, `action-span.ts`; the release driver's delegated pick under Bailey's advance yes): D-269's 3 s stays in the code, unused while the span is on.**
  */
 export const DJOSE_ACTION_TIME_ON: boolean = true;
 /** **`[estimate]`**: the length the Road and the Cloister ship, measured here as the option. Unsourced (§12.4). */

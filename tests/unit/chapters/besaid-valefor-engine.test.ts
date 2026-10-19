@@ -14,14 +14,7 @@
  * 4. **The real engine**: against a party that only defends (her own turns fill the gauge alone) her moves follow the script to the turn, Sonic Wings takes MP and never HP from the farthest girl, and every Ray
  *    and Blast damages exactly the girls who are up.
  */
-import { describe, expect, it, vi } from 'vitest';
-// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
-// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
-vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
-  ACTION_TIME_PER_COMMAND: false,
-}));
-
+import { describe, expect, it } from 'vitest';
 
 import type { BattleEvent, BattleSetup, Command, Decision, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
@@ -51,6 +44,7 @@ import { VALEFOR_BESAID_ID } from '../../../src/data/chapter-ffx2-valefor-besaid
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import { bench, enemy, type Bench } from '../helpers/ffx2ScriptRig.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 const ATTACK = VALEFOR_ABILITY.attack;
 const WINGS = VALEFOR_ABILITY.sonicWings;
@@ -432,13 +426,14 @@ describe('the cadence in the real engine: the game\'s own rows and the 3 s anima
     }
   });
 
-  it('with the 3 s window (90 steps a move, kept by precedent, awaiting Bailey\'s pick): Attack 174, Sonic Wings 241, Energy Ray and Energy Blast 275', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('with the 3 s window (90 steps a move, kept by precedent, awaiting Bailey\'s pick): Attack 174, Sonic Wings 241, Energy Ray and Energy Blast 275', () => withActionSpanKnobs({ perCommand: false }, () => {
     const by = startToStart(true);
     for (const [ability, steps] of [[ATTACK, 174], [WINGS, 241], [RAY, 275], [BLAST, 275]] as const) {
       expect(by[ability]?.length ?? 0, ability).toBeGreaterThanOrEqual(1);
       expect(new Set(by[ability]), ability).toEqual(new Set([steps]));
     }
-  });
+  }));
 });
 
 describe('the pause objectives read her real moves', () => {
