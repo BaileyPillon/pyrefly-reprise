@@ -1,0 +1,221 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-18T20:50:33Z",
+  "build": {
+    "mainSha": "4f4dc77bc",
+    "bundle": "CLLPzAAR",
+    "artifactHash": "f94803ed3a121626c561eb627c95ec51dfb31273b329f533bec994fb78e2224c"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/4f4dc77bc.json --url https://echoesofspira.com/ --changed-from critic/artifacts/9c91a8c3a.json --full --out critic/reviews/4f4dc77bc-live/verify-live.json (about 36 min, 19:22:33Z to about 19:58Z) -> {result: PASS, artifactHash: f94803ed3a121626c561eb627c95ec51dfb31273b329f533bec994fb78e2224c, liveManifest: match, checked: 5309, mismatched: [], missing: [], wrongType: [], errors: []}. The manifest lists 5310 files (10,811,006,079 bytes); _headers is host-read and never served, so not downloaded; index.html as a browser asks for it is identical to the artifact once Cloudflare's Web Analytics beacon (366 bytes and the line feed) is cut out. Diff from r53 (9c91a8c3a): 4 added (assets/index-CLLPzAAR.js, assets/index-BoGf7TDm.css, assets/exp-fayth-table-DXHbnl4T.js, assets/worker-DRncs48z.js), 4 removed (their predecessors), 1 changed (index.html); no painting, audio, data or font file moved. The two manifest problems (art/portrait-parts/paine/1x and 2x eyeR-catch.png decode to a flat colour) are the intentionalFlatImages entries r53 carried. window.__pyrefly.build() read {sha: 4f4dc77b, bundle: index-CLLPzAAR.js} in all 17 live contexts. Across 17 live contexts and the continuity harness context: 0 console errors, 0 page errors, 0 responses with status >= 400 (0 404s), 0 image or audio responses served as text/html.",
+      "reason": "Every compared file is byte-identical to the stored manifest with the right content type and the live manifest names this artifact; the zero-4xx criterion is met with no exception."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright launched from node scripts with PYREFLY_BROWSER=gpu (ANGLE, D3D11; never SwiftShader, never the Chrome extension or the browser pane, no headed window), a fresh browser context per run (cold HTTP cache, empty storage), a ?livesmoke=<ms> cache-busting URL, 1600x900 and 390x844 (touch), real key presses, a real mouse click, real touch taps (rows, the list title as Back, the aimed target as confirm, a greyed row) and, for the continuity harness, critic/runner/lib/continuity.mjs (real keys from the title to the fight's end, GPU). Every state was asserted before it was read: screen name via window.__pyrefly.screen(), pending menu actor, menu rows with their greyed flags, the Doublecast crumb, lock chip, help and MP-left lines, target selection (targeting()), the battle log (action-start, mp-damage, damage, miss, sensor events) and poseTrust(). Runs (17 live contexts, 185 steps, 0 failed in the final runs): FFX Chapter III Lulu Doublecast x6 (natural, with the One MP Cost state edit, dead end; desktop and phone), Scan on a Yu Pagoda and the Sensor plate on Yu Yevon x5 (pagoda and yevon on both viewports, plus one debug-goto comparison), FFX Chapter XIV Isaaru x3 (desktop, phone, and a longer run to later menus), FFX-2 Chapter IV Bahamut x2 (desktop hurried, phone), FFX Chapter I Seymour Flux x1; plus the continuity harness on Chapter III. poseTrust() read withheld [] and unregistered [] at the first menu and after the turns in every context. Debug API use: build(), screen(), poseTrust(), targeting(), battleState() (read; a state edit of Lulu's One MP Cost and MP in the edit and dead Doublecast runs, disclosed), battleLog(), snapshotState(), setBattleSpeed('skip') and autoBattle('intended') for the Yu Yevon route (disclosed), gotoChapter with skipPrep for one comparison run (disclosed). Evidence: critic/reviews/4f4dc77bc-live/ (run/ result JSONs and logs, summary.json, frames as .json.gz, screenshots as JPEG; scripts/; continuity/; verify-live.json; run/superseded/ holds the runs whose pass test or helper was the harness's mistake).",
+      "reason": "Every reading names the screen, chapter and menu it was taken on. My first phone Doublecast runs, the first Pagoda-chip assertion, the first dead-end header assertion and the first phone Yu Yevon poll failed because of my harness (an extra Enter, a wrong expectation of the chip, no MP-left line in the dead end by design, a null battleState between phases); they are kept in run/superseded/ and the final runs are the evidence."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact: all 5309 downloadable files of the 5310-file manifest byte-compared with the live site (--full), content types, live manifest match, index.html with and without the Web Analytics beacon",
+      "window.__pyrefly.poseTrust() empty (withheld [] and unregistered []) in FFX Chapter III, Chapter XIV, Chapter I and FFX-2 Chapter IV, desktop and phone, at the first menu and after the turns (17 contexts)",
+      "FFX Chapter III Lulu's Doublecast as two picks by real keys (desktop) and real taps (phone): natural state (One MP Cost), with the One MP Cost state edit (greyed rows, 'Not enough MP'), and the dead end; the DOUBLECAST 2 OF 2 header, the lock chip, the MP-left line, Back from list 2 to target 1 (Esc, or a tap on the list title on the phone), a commit that logs two Doublecast casts each paying its own MP (8 then 4; 1 then 1), a greyed pick committing nothing",
+      "Scan on a Yu Pagoda (miss, immune) and Kimahri's Sensor chips; the Sensor plate on Yu Yevon reading HP 99999 / 99999 (the fight brought to Yu Yevon by the debug autopilot, then real keys), desktop and phone",
+      "FFX Chapter XIV: Yuna's first menu (Attack, Special, White Magic and Items greyed, cursor on Overdrive, no Defend), a click or tap on a greyed row, Enter shaking the stack and resolving nothing, Q doing nothing, Overdrive starting the Grand Summon; a later Yuna menu with the same lock and Valefor's and Ixion's menus (desktop)",
+      "FFX-2 Chapter IV (Bahamut) cold loads, 4 real-key turns on desktop and 3 turns (2 tapped) on the phone, and FFX Chapter I (Seymour Flux) 3 real-key turns, as regression smokes, each with a reload and the save key",
+      "the continuity harness on Chapter III on the live artifact: CHK-026 FAIL (head 23.7 percent, one feet excess 21.9 px), CHK-027 FAIL (28 swap jerks of 40 px or more, worst 160.4 px), frame p99 56.2 ms at 55.9 fps on a busy machine, compared with the focused review's candidate (23.5, 161.2) and live r53 (23.6, 159.9) readings"
+    ],
+    "reused": [
+      {
+        "what": "code-level findings of the changed area (boss data, Doublecast two-pick menu, Isaaru lock, Slow and Doom casts, the research-note audit)",
+        "from": "critic/reviews/4f4dc77bc-focused.json",
+        "why": "the focused review ran on the production candidate; this review proved the live artifact byte-identical to it"
+      }
+    ],
+    "notTested": [
+      "a full Chapter III fight to a win by real keys on the live artifact (the harness loses it on FOC54-007; the autopilot route was used for Yu Yevon)",
+      "Sensor on Yu Yevon in Chapter 28; Slow on Seymour Flux and Doom on Evrae on live; Shell, Protect, Reflect and Nuls on a Pagoda; Zanmato's counter",
+      "the second Isaaru duel (Grothia's) beyond the later menus up to Ixion's",
+      "the gamepad",
+      "a dead end reached without the One MP Cost state edit in a shipped chapter",
+      "any FFX-2 chapter beyond Chapter IV, any FFX chapter other than III, XIV and I; sizes other than 1600x900 and 390x844; the full CHK-024 upgrade matrix (a reload per run only)",
+      "a quiet machine (the continuity numbers are from a busy one); listening to any audio; a real phone, Safari"
+    ]
+  },
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "run": "node critic/runner/lib/continuity.mjs --base=https://echoesofspira.com/ --evidence=critic/reviews/4f4dc77bc-live/continuity --chapters=braskas-final-aeon --tag=live-r54",
+    "chapter": {
+      "chapter": "braskas-final-aeon",
+      "game": "ffx",
+      "checks": {
+        "CHK-026": "FAIL",
+        "CHK-027": "FAIL"
+      },
+      "battleSeconds": 1777.8,
+      "swaps": 2456,
+      "snapsPerMinute": 0,
+      "maxHeadJumpPct": 23.7,
+      "maxFeetShiftPx": 1.5,
+      "worstJerkPx": 160.4,
+      "minStature": 0.747,
+      "heightOverBand": 0,
+      "feetSilOver": 1,
+      "swapJerksWorstPx": 160.4,
+      "dashesWorstPx": 46.8,
+      "frameP99Ms": 56.2,
+      "jerksCovered": 0,
+      "fps": 55.9,
+      "dedicated": true,
+      "strips": 9,
+      "worstSwapStrips": [
+        "braskas-final-aeon-win-live-r54/continuity/strips/swap-250-shiva-hurt-ko.jpg",
+        "braskas-final-aeon-win-live-r54/continuity/strips/swap-333-valefor-hurt-ko.jpg",
+        "braskas-final-aeon-win-live-r54/continuity/strips/swap-175-ixion-hurt-ko.jpg",
+        "braskas-final-aeon-win-live-r54/continuity/strips/swap-125-ifrit-hurt-ko.jpg"
+      ],
+      "unverified": null
+    },
+    "size": {
+      "judged": 2450,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 6,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 23.7,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 1.5,
+      "feetOverTolerance": 0,
+      "headMeasured": 2450,
+      "headRegistration": 1524,
+      "headSilhouette": 926,
+      "headUnmeasured": 0,
+      "heightMeasured": 2450,
+      "heightOverBand": 0,
+      "heightWaived": 6,
+      "minStature": 0.747,
+      "maxStature": 1.12,
+      "koLengthMeasured": 5,
+      "minKoLength": 0.417,
+      "koLengthReported": 5,
+      "feetSilMeasured": 2433,
+      "feetSilOver": 1,
+      "feetSilWaived": 4,
+      "maxFeetSilPx": 21.9,
+      "holdSwaps": 1519,
+      "worstRealHeadPct": 38.1,
+      "realHeadOutsideBand": 0,
+      "realHeadWaived": 0,
+      "unregisteredSwaps": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "ghostSwaps": 2327,
+      "ghostFrames": 8934,
+      "worstGhostSeverity": 0.414,
+      "ghostOverFail": 4,
+      "jerks": 271,
+      "worstJerkPx": 160.4,
+      "jerksOverFail": 30,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0,
+      "maxCentroidShiftPx": 438.9,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 0,
+      "swapJerks": 258,
+      "swapJerksWorstPx": 160.4,
+      "swapJerksOverFail": 28,
+      "teleports": 0,
+      "teleportsWorstPx": 0,
+      "dashes": 13,
+      "dashesWorstPx": 46.8,
+      "dashesOverFail": 2,
+      "jerksLongFrame": 19,
+      "swapJerksLongFrame": 17,
+      "swapJerksSteadyOverFail": 25
+    },
+    "frameTime": {
+      "frames": 99404,
+      "longFrames": 2421,
+      "longFramePct": 2.4,
+      "worstP99Ms": 56.2,
+      "maxMs": 332.5,
+      "longMs": 34
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "FAIL",
+        "reasons": [
+          "1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 21.9 px at 1600 wide), whatever stance the registration claims"
+        ],
+        "note": "1524 of 2450 measured swaps had a registered head (tolerance 3 percent); 926 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 2450 swap(s) (stature 0.747 to 1.12, 6 out of band but waived), the silhouette's own feet 2433 swap(s) (worst 21.9 px, 4 waived), 1519 swap(s) across a recorded hold (real head worst 38.1 percent from the idle's), 0 on a painting with no fresh registration record"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "28 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 160.4 px)",
+          "4 swap(s) show a double image of severity 0.4 or more (worst 0.414)"
+        ],
+        "note": "2 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 46.8 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 19 of 271 jerk(s) fell on a frame of more than 34 ms (17 of the 258 at a swap; 25 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+      }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 1777.8 s of battle, 55.9 to 55.9 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 21.9 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (28 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 160.4 px); 4 swap(s) show a double image of severity 0.4 or more (worst 0.414))",
+    "comparison": {
+      "candidate4f4dc77bc": {
+        "maxHeadJumpPct": 23.5,
+        "worstSwapJerkPx": 161.2,
+        "swapJerksOver40px": 31,
+        "battleSeconds": 1883.2,
+        "frameP99Ms": 162,
+        "fps": 47
+      },
+      "liveR53": {
+        "maxHeadJumpPct": 23.6,
+        "worstSwapJerkPx": 159.9,
+        "swapJerksOver40px": 37,
+        "battleSeconds": 1622.3,
+        "frameP99Ms": 33.6,
+        "fps": 59.3
+      },
+      "liveR54": {
+        "maxHeadJumpPct": 23.7,
+        "worstSwapJerkPx": 160.4,
+        "swapJerksOver40px": 28,
+        "battleSeconds": 1777.8,
+        "frameP99Ms": 56.2,
+        "fps": 55.9
+      }
+    }
+  },
+  "disclosedShortcuts": [
+    "Doublecast edit and dead runs: One MP Cost removed from Lulu's gear and her MP set to 20 or 10 through the debug battleState() before her turn, to see greyed rows (the natural runs have no edit)",
+    "Yu Yevon runs: the debug autopilot (setBattleSpeed skip, autoBattle intended) brought the fight to Yu Yevon; Kimahri's Scan and the plate were then read by real keys or taps",
+    "one comparison run used the debug gotoChapter with the cutscenes and prep skipped"
+  ],
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 100,
+  "notes": "No new issue. Observations: LV54-1 CHK-026 FAIL and CHK-027 FAIL on Chapter III on the live artifact, the disclosed FOC54-001 and FOC54-002 with the same figures as the candidate (head 23.7 against 23.5, worst swap jerk 160.4 px against 161.2, 28 swap jerks of 40 px or more in 1777.8 s against 31 in 1883.2 s; r53 live 23.6, 159.9, 37 in 1622.3 s), the worst swaps aeon hurt-to-KO paintings, frame p99 56.2 ms on a busy machine; LV54-2 the harness cannot play the two-pick Doublecast (FOC54-007), 370 turns, outcome undecided then defeat; LV54-3 FOC54-004 reproduced live ('His aeon is ready. Guard first.' over Yuna's menu with no Defend); LV54-4 FOC54-005 reproduced live (Yu Yevon plate HP 99999 / 99999, no digit grouping, HP only, a reticle corner crossing the element row); LV54-5 with Kimahri on the field the Sensor chips read HP of every target at once (his weapon carries Sensor), where the focused review's pagoda log read HP ? ? ? at the same step, not reproduced in the real or the debug-goto flow; LV54-6 the FFX-2 Chapter IV start card held 0.99 s on a desktop cold load and 7.27 s on a phone cold load, r53's disclosed cost, not r54's (no start-card, stage or pose file is in the r54 diff); LV54-7 my first phone Doublecast runs failed on my own helper (superseded). The r54 changes under test (Doublecast two picks, Scan immunity on the Pagodas, the Yu Yevon plate, Isaaru's locked duels) work live on both viewports; 0 console errors, 0 responses of 400 or more, 0 media served as HTML in 17 contexts; the save key changes only by updatedAt, a seenCoach entry and the board's chapter rows, nothing removed."
+}
