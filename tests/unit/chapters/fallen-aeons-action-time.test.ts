@@ -21,6 +21,7 @@ import {
 import { CLOISTER_ACTION_TIME_SECONDS } from '../../../src/data/ffx2/enemies/trema.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { driveLink, LINES } from '../helpers/fallenAeonsDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 /** Shiva's turn starts (elapsed ticks), the girls defending, under the engine option given. */
 function shivaTurns(actionTimeSeconds: number | undefined, count = 6, seed = 3): number[] {
@@ -68,13 +69,14 @@ describe('Chapter XI option A: 3 s of action time on the Road links only (FFX-2 
     expect(x2Anima.stats.agi).toBe(133);
   });
 
-  it("each of Shiva's turns lands exactly 3 s (90 logic steps) later than with the switch forced off", () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it("each of Shiva's turns lands exactly 3 s (90 logic steps) later than with the switch forced off", () => withActionSpanKnobs({ perCommand: false }, () => {
     const on = shivaTurns(undefined);
     const off = shivaTurns(0);
     expect(on.length).toBe(6);
     expect(off.length).toBe(6);
     for (let i = 1; i < on.length; i++) expect((on[i]! - on[i - 1]!) - (off[i]! - off[i - 1]!)).toBe(90);
-  });
+  }));
 
   it('is deterministic: the same seed gives the same Sisters log', () => {
     const a = driveLink(FALLEN_AEONS_CHAIN_ORDER[1], LINES.sistersDarknessDispel, 7);

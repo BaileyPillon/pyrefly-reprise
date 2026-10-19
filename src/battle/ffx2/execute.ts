@@ -36,7 +36,7 @@ import { attachedResult, hitsFromOutcome, requestLayout, rollDefault } from './m
 import { rollDice } from './dice.ts';
 import { shapeLadyLuckSpin } from './reels.ts';
 import { ATB_BASE_VALUE } from './constants.ts';
-import { actionTimeSteps } from './action-time.ts';
+import { actionStepsFor, type ActionContext } from './action-span.ts';
 import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { beginCharge, castTime, completeCommand } from './atb-engine.ts';
 import { commandCosts } from './adapt/command.ts';
@@ -164,12 +164,13 @@ function sameAction(a: Command, b: Command): boolean {
 
 /**
  * End the action: the command is complete (`MsCommandComplete`: the actor's recovery becomes the command's ATB cost over
- * (AGI + 1)), close it out, and run the hooks. `plays` adds the battle's action time (method check E4, `action-time.ts`; OFF
- * unless a switch sets it): the command then stays EXECUTING for that many logic steps before it completes (the step loop
- * does it); a spherechange passes `false` (a Short change freezes everyone, §12.4).
+ * (AGI + 1)), close it out, and run the hooks. `plays` adds the battle's action time (method check E4, `action-time.ts`; 0
+ * unless the per-command switch (ON since r56) or an option or a formation sets it): the command then stays EXECUTING for that many logic steps before it completes (the step loop
+ * does it); a spherechange passes `false` (a Short change freezes everyone, §12.4). `played` names the command that resolved, for the per-command
+ * span (`action-span.ts`, the switch `ACTION_TIME_PER_COMMAND`, ON since r56); a command that played nothing passes none and owes 0 under that switch.
  */
-function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, costAtb: number, plays = true): void {
-  const acting = plays ? actionTimeSteps(env.options.actionTimeSeconds, env.state.flags) : 0;
+function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, costAtb: number, plays = true, played?: ActionContext): void {
+  const acting = plays ? actionStepsFor(env.options.actionTimeSeconds, env.state.flags, actor, played) : 0;
   actor.gauge.costAtb = costAtb;
   if (acting > 0) {
     actor.gauge.executing = acting;
@@ -346,5 +347,5 @@ export function performCommand(
     ...(gilSpent !== undefined ? { gilSpent } : {}),
   });
 
-  finishAction(env, actor, before, costs.costAtb);
+  finishAction(env, actor, before, costs.costAtb, true, { ability: fired, command });
 }

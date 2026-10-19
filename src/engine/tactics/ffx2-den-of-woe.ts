@@ -41,7 +41,8 @@
  *   Dark Knights keep to Darkness. {@link makeDenOfWoeTactic} takes it as an option.
  * - **GP6 b** (Hero Drinks in the bag, ON as shipped): before step 4, and before a Dark Knight's
  *   Darkness, a girl Lightfall would kill (Yuna always; a Dark Knight at 5,000 HP or less) drinks one
- *   once Nooj is at 4,500 HP or less and Lightfall is still to come (our line, not game data). The
+ *   once Nooj is at 12,000 HP or less (about half his 23,800) and Lightfall is still to come (our line, not game data; r56: it was 4,500 while a spell freed its
+ *   caster at once, and with the per-command action time on, the Dark Knights are still in their cast when Lightfall lands, so the drink goes in earlier). The
  *   step asks for a row only the bag can offer, so with the Chapter V bag alone it never fires.
  */
 
@@ -58,8 +59,13 @@ const DK_FLOOR = 5000;
 const PREP_FROM = 8000;
 /** "Early in each link": the White Mage's first turns, as the bench line counts them. */
 const GUARD_TURNS = 8;
-/** GP6 b: Nooj's HP from which a girl drinks a Hero Drink (the bench's what-if window; our line, not data). */
-const DRINK_FROM = 4500;
+/**
+ * GP6 b: Nooj's HP from which a girl drinks a Hero Drink (our line, not data). **12,000 since r56 (FFX-2 only; the release driver's delegated pick of 2026-10-19,
+ * under Bailey's advance yes):** it was 4,500, the bench's first what-if window, tuned to a world where a spell frees its caster at once. With the per-command
+ * action time on (`ACTION_TIME_PER_COMMAND`) a Dark Knight's Darkness holds her 83 steps, so she is still casting when Nooj, brought under 3,000 HP by the
+ * volley, starts Lightfall; drinking at about half his health keeps the Wait and bench paces level with the previous build (194 to 200 of 200).
+ */
+export const DRINK_FROM = 12000;
 
 /** The tactic's switches: the Lightfall prep (M1, `DEN_OF_WOE_LIGHTFALL_PREP`). */
 export interface DenOfWoeTacticOptions {

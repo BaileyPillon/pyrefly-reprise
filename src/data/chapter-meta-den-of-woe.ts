@@ -61,7 +61,7 @@ export const DEN_OF_WOE_META: ChapterMeta = {
   ],
   tip:
     'Nothing heals between the three shades. Baralai counts every blow and at eight hits back for three quarters of max HP. ' +
-    'Near the end Nooj calls down Lightfall, 5,000 to everyone, once: a Hero Drink just before it makes a girl Invincible.',
+    'Near the end Nooj calls down Lightfall, 5,000 to all, once: from half his health, time a Hero Drink so a girl is Invincible.',
   snapshots: [
     { image: 'backdrops/den-of-woe.png', caption: 'the sealed cave' },
     { image: 'characters/gippal-shade/idle.png', caption: 'his anger, two years old' },

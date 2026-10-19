@@ -119,8 +119,8 @@ export function bodyOf(unit: FFX2Combatant): Body | null {
   return { side, dmg1: clips[0], hdmg1: clips[1] };
 }
 
-/** The animation ratio (8.8 fixed point) a damage clip of `unit` plays at: the game's rule, read off the unit's statuses. */
-function ratioOf(unit: FFX2Combatant, motion: number): number {
+/** The animation ratio (8.8 fixed point) a clip of motion id `motion` plays at on `unit`: the game's rule, read off the unit's statuses (also read by `action-span.ts`). */
+export function ratioOf(unit: FFX2Combatant, motion: number): number {
   return animationRatio({
     motion,
     freezeTest: false,

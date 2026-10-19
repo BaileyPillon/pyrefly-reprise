@@ -45,7 +45,7 @@ const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-fallen-aeons' as con
  * gauge refills (`src/battle/ffx2/action-time.ts`): the rule is sourced `[verified: 2 sources]`, the
  * length is not (`research/ffx2-trema.md` §12.4). The same switch and labelled estimate as Chapter
  * XIII's `CLOISTER_ACTION_TIME_SECONDS`; no other chapter moves (`ACTION_TIME_ALL_FFX2` stays
- * false). `ROAD_ACTION_TIME_ON = false` turns it off again. No boss number moves.
+ * false). `ROAD_ACTION_TIME_ON = false` turns it off again. No boss number moves. **Superseded by the per-command span since r56 (2026-10-19, `ACTION_TIME_PER_COMMAND`, `action-span.ts`; the release driver's delegated pick under Bailey's advance yes): D-187 / D-197's 3 s stays in the code, unused while the span is on.**
  */
 export const ROAD_ACTION_TIME_ON: boolean = true;
 /** **`[estimate]`, Bailey's pick: 3 s of game time per action, on the Road links only.** Unsourced (§12.4). */

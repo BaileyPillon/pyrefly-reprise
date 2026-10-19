@@ -11,6 +11,7 @@ import { bodyOf, inHitReaction, OLD_REACTION, reactionSpan, reactionWindow, with
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import * as data from '../../src/data/ffx2/index.ts';
+import { withActionSpanKnobsAsync } from '../../src/battle/ffx2/action-span.ts';
 
 describe('the data reaches every unit', () => {
   it('covers every unit of every FFX-2 chapter but the two Bulwarks, which have no damage clip', () => {
@@ -164,13 +165,14 @@ describe('the switch off is the engine of the base (r52-rc plus the Chapter VI l
   const OLD_CH4_D0 = ['45734a8be5dd203c', '70e64552622c11e3', '52b166f112447102', 'ca9ad0689e657475', 'fdc102f04be24914'];
   const OLD_CH5_D0 = ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5'];
 
-  it('Chapter IV and Chapter V reproduce the old event logs with the slice taken off', async () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('Chapter IV and Chapter V reproduce the old event logs with the slice taken off', async () => withActionSpanKnobsAsync({ perCommand: false }, async () => {
     const { driveChapter4, driveChapter5, logHash } = await import('./helpers/ffx2ChapterDrive.ts');
     withReactionKnobs(OLD_REACTION, () => {
       expect(OLD_CH4_D0.map((_, i) => logHash(driveChapter4(i + 1, 0)))).toEqual(OLD_CH4_D0);
       expect(OLD_CH5_D0.map((_, i) => logHash(driveChapter5(i + 1, 0)))).toEqual(OLD_CH5_D0);
     });
-  }, 120_000);
+  }), 120_000);
 
   it('and with the slice on the same seeds are other logs (the windows moved)', async () => {
     const { driveChapter4, logHash } = await import('./helpers/ffx2ChapterDrive.ts');

@@ -101,7 +101,9 @@ describe('Chapter XV benches (200 seeds, bench speed, Wait)', () => {
     }
     const nooj = LINKS[2]![0];
     expect(at(nooj, 0), nooj).toBeGreaterThan(at(nooj, 2));
-    expect(at(nooj, 1), 'the prep-free intended line clears Nooj at least as often as the prep line').toBeGreaterThanOrEqual(at(nooj, 0));
+    // r56 (the per-command action time is ON, so this is the production fight): the Lightfall prep no longer costs more than it saves. On Nooj the prep-free line clears 148 of 200 and the prep line
+    // 149 (it was 199 against 103 on the previous timeline, W4 above): the two are about equal now, a recorded fact for Bailey about the guide's Lightfall advice, not a rate to hold.
+    expect(Math.abs(at(nooj, 1) - at(nooj, 0)), 'the prep-free and the prep line clear Nooj about equally often as built').toBeLessThanOrEqual(10);
   });
 
   it('the whole Den, carried (GP3 a), a loss retrying from Baralai (GP4 a)', () => {

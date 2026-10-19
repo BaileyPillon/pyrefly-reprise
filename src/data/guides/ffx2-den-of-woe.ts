@@ -88,8 +88,8 @@ const LIGHTFALL_RULE: GuideRule = {
  */
 const LIGHTFALL_RULE_HERO: GuideRule = {
   text:
-    'Near the end Nooj calls down Lightfall, 5,000 to everyone, once. Invincible is the answer: a Hero Drink just before it, ' +
-    'for Yuna and for a Dark Knight at 5,000 HP or less.',
+    'Near the end Nooj calls down Lightfall, 5,000 to everyone, once. Invincible is the answer: start the Hero Drinks once he is down to about half his health ' +
+    '(12,000 HP); time one so a girl is Invincible as Lightfall lands, Yuna and a Dark Knight at 5,000 HP or less.',
   short: 'Nooj: Lightfall, 5,000 to all, once',
   cite: 'ffx2-gippal-den-of-woe §4.3, §5',
 };

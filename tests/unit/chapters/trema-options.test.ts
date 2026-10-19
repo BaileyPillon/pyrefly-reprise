@@ -32,6 +32,7 @@ import { viaInfinitoBuild } from '../../../src/data/ffx2/builds/via-infinito.ts'
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { driveParagon, driveTremaFresh, LINES } from '../helpers/tremaDrive.ts';
 import { board } from '../helpers/tremaUnits.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 const idOf = (c: Command | null): string | null => (c && 'id' in c ? (c as { id: string }).id : null);
 
@@ -136,7 +137,8 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     for (const [i, g] of gaps(on).entries()) expect(Math.abs(g - (gaps(off)[i] ?? 0) - 45)).toBeLessThanOrEqual(1); // 1.5 s = 45 logic steps
   });
 
-  it('the formation\'s value turns it on for that battle alone, and the engine option wins', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('the formation\'s value turns it on for that battle alone, and the engine option wins', () => withActionSpanKnobs({ perCommand: false }, () => {
     const group = { ...cloisterTremaGroup, actionTimeSeconds: 2 };
     const b = tremaTurns(group, {}, 3);
     const off = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 0 }, 3);
@@ -145,7 +147,7 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     // The shipped formation: 3 s, 90 logic steps (the step is the same length at every speed).
     const shipped = tremaTurns(cloisterTremaGroup, {}, 3);
     expect(Math.abs((shipped[1]! - shipped[0]!) - (off[1]! - off[0]!) - 90)).toBeLessThanOrEqual(1);
-  });
+  }));
 
   it('other gauges keep filling while it plays out (Active), and the Wait hold stops it too', () => {
     for (const mode of ['active', 'wait'] as const) {

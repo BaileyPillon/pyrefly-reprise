@@ -44,6 +44,7 @@ import { VALEFOR_BESAID_ID } from '../../../src/data/chapter-ffx2-valefor-besaid
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import { bench, enemy, type Bench } from '../helpers/ffx2ScriptRig.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 const ATTACK = VALEFOR_ABILITY.attack;
 const WINGS = VALEFOR_ABILITY.sonicWings;
@@ -425,13 +426,14 @@ describe('the cadence in the real engine: the game\'s own rows and the 3 s anima
     }
   });
 
-  it('with the 3 s window (90 steps a move, kept by precedent, awaiting Bailey\'s pick): Attack 174, Sonic Wings 241, Energy Ray and Energy Blast 275', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('with the 3 s window (90 steps a move, kept by precedent, awaiting Bailey\'s pick): Attack 174, Sonic Wings 241, Energy Ray and Energy Blast 275', () => withActionSpanKnobs({ perCommand: false }, () => {
     const by = startToStart(true);
     for (const [ability, steps] of [[ATTACK, 174], [WINGS, 241], [RAY, 275], [BLAST, 275]] as const) {
       expect(by[ability]?.length ?? 0, ability).toBeGreaterThanOrEqual(1);
       expect(new Set(by[ability]), ability).toEqual(new Set([steps]));
     }
-  });
+  }));
 });
 
 describe('the pause objectives read her real moves', () => {
