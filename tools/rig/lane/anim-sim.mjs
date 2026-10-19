@@ -5,7 +5,7 @@
  * is NOT: the game's scene, shading, camera, enemies or spell effects (a plain glow marks where the effect lands), and the vial is an SVG of the same design. So it shows the MOTION, honestly;
  * the recordings of the real game (`record.mjs --modes anim`) are the pictures.
  *
- *   node tools/rig/lane/anim-sim.mjs --rig D:/pyrefly-art-rigs/lulu-v2 --style B --out <dir> [--pace 1.2] [--scale 0.27] [--segments idle,attack,cast,item,hurt,ko,victory]
+ *   node tools/rig/lane/anim-sim.mjs --rig D:/pyrefly-art-rigs/lulu-v2 --style A|B|C|today --out <dir> [--pace 1.2] [--scale 0.27] [--segments idle,attack,cast,item,hurt,ko,victory]
  *
  * Writes `<dir>/frames/f000000.jpg ...` (1280 x 720) and `<dir>/sim-<style>.mp4` (ffmpeg on PATH), and `<dir>/sim-<style>.json` (the frame each segment and each event is on).
  */
@@ -19,9 +19,11 @@ import { carrySkeleton, loadTextures, render, toGatePose } from './anim-draw.mjs
 import { RigAnimator } from '../../../src/engine/rig/anim/RigAnimator.ts';
 import { STYLES } from '../../../src/engine/rig/anim/AnimStyles.ts';
 import { LULU } from '../../../src/engine/rig/anim/LuluAnim.ts';
+import { makeToday } from './anim-today.mjs';
 
 const args = Object.fromEntries(process.argv.slice(2).reduce((acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc), []));
-const style = STYLES[String(args.style ?? 'A').toUpperCase()];
+const TODAY = String(args.style ?? 'A').toLowerCase() === 'today'; // the rig engine as it ships: the same script, no clips
+const style = TODAY ? { ...STYLES.A, id: 'today', label: 'Today (rig as it ships)' } : STYLES[String(args.style ?? 'A').toUpperCase()];
 const PACE = Number(args.pace ?? 1.2); // the game's default FFX pace ("steady"): every wait and the animator's clock are scaled by it
 const SCALE = Number(args.scale ?? 0.27);
 const OUT = path.resolve(args.out);
@@ -34,14 +36,14 @@ const { rt, problems } = normaliseRig(raw, { dir });
 if (!rt) throw new Error(problems.map((p) => p.message).join('; '));
 await loadTextures(rt, dir);
 const rig = clipRigOf(rt);
-const an = new RigAnimator({ boneIndex: rig.boneIndex, roots: rig.roots, keys: rig.keys, channels: rig.channels, bones: rt.bones, skeleton: carrySkeleton(rt) }, style, LULU, PX_PER_UNIT);
+const an = TODAY ? makeToday(rt, rig) : new RigAnimator({ boneIndex: rig.boneIndex, roots: rig.roots, keys: rig.keys, channels: rig.channels, bones: rt.bones, skeleton: carrySkeleton(rt) }, style, LULU, PX_PER_UNIT);
 const sk = carrySkeleton(rt);
 const cur = Float64Array.from(rig.keys.get('idle'));
 const tvel = new Float64Array(rig.channels);
 const work = new Float64Array(rig.channels);
 const vel = new Float64Array(rig.channels);
 let key = 'idle';
-const frame = { W: Math.round(rt.image.w * 2.4 * SCALE), H: Math.round(rt.image.h * SCALE + 40), sx: SCALE, sy: SCALE, ox: rt.image.w * 0.9 * SCALE, oy: 30 };
+const frame = { W: Math.round(rt.image.w * 3.2 * SCALE), H: Math.round(rt.image.h * SCALE + 40), sx: SCALE, sy: SCALE, ox: rt.image.w * 0.9 * SCALE, oy: 30 };
 
 // ------------------------------------------------------------------------------------------------------------------ the presenter's calls
 const request = (k) => { if (k === key) return; an.request(k, key, cur, tvel); key = k; };
@@ -103,7 +105,7 @@ async function emit() {
     const u = (frameNo - glow.f0) / 36;
     if (u <= 1) comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500"><circle cx="250" cy="250" r="${30 + 200 * u}" fill="#bfe6ff" opacity="${0.75 * (1 - u)}"/></svg>`), left: TARGET.x + 95 - 250, top: TARGET.y + 150 - 250 });
   }
-  const label = `STYLE ${style.id} ${style.label.toUpperCase()}  /  ${segName.toUpperCase()}  /  ${Math.round(segT * 1000 / FPS)} ms  (pace x${PACE})`;
+  const label = `${TODAY ? '' : 'STYLE '}${TODAY ? '' : style.id + ' '}${style.label.toUpperCase()}  /  ${segName.toUpperCase()}  /  ${Math.round(segT * 1000 / FPS)} ms  (pace x${PACE})`;
   const fl = flags.filter((x) => x.until > frameNo).map((x, i) => `<text x="30" y="${96 + i * 30}" font-family="sans-serif" font-size="24" fill="#f0d68a">${x.text}</text>`).join('');
   comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="120"><rect width="${W}" height="44" fill="#0c0a12"/><text x="16" y="30" font-family="sans-serif" font-size="22" font-weight="bold" fill="#fff">${label}</text>${fl}</svg>`), left: 0, top: 0 });
   await sharp(bg).composite(comps).jpeg({ quality: 88 }).toFile(path.join(OUT, 'frames', `f${String(frameNo).padStart(6, '0')}.jpg`));
@@ -214,3 +216,24 @@ const mp4 = path.join(OUT, `sim-${style.id}.mp4`);
 const r = spawnSync('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error', '-framerate', String(FPS), '-i', path.join(OUT, 'frames', 'f%06d.jpg'), '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', mp4], { encoding: 'utf8' });
 if (r.status !== 0) throw new Error(r.stderr);
 console.log('wrote', mp4, frameNo, 'frames');
+
+// a contact sheet: a row a segment, eight frames across it (the figure and its target, cropped)
+{
+  const cw = 360, ch = 288, lab = 90;
+  const comps = [];
+  let row = 0;
+  for (const s of SEGMENTS) {
+    const seg = info.segments[s];
+    if (!seg) continue;
+    const last = s === 'idle' ? seg.frames - 1 : Math.min(seg.frames - 1, 200);
+    comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${lab}" height="${ch}"><text x="6" y="24" font-family="sans-serif" font-size="16" fill="#f0d68a">${s.toUpperCase()}</text></svg>`), left: 0, top: row * ch });
+    for (let i = 0; i < 8; i++) {
+      const n = seg.first + Math.round((last * i) / 7);
+      const buf = await sharp(path.join(OUT, 'frames', `f${String(n).padStart(6, '0')}.jpg`)).extract({ left: 0, top: 44, width: 1100, height: 676 }).resize(cw, ch, { fit: 'fill' }).toBuffer();
+      comps.push({ input: buf, left: lab + i * cw, top: row * ch });
+    }
+    row++;
+  }
+  await sharp({ create: { width: lab + 8 * cw, height: row * ch, channels: 3, background: '#17141f' } }).composite(comps).png().toFile(path.join(OUT, `contact-sim-${style.id}.png`));
+  console.log('wrote', path.join(OUT, `contact-sim-${style.id}.png`));
+}
