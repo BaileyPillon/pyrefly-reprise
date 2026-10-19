@@ -19,6 +19,7 @@ $PY -I tools/rig/lane/lane.py new <name> --preset humanoid-side|creature-quadrup
 $PY -I tools/rig/rig.py cut --subject <name>   ;   $PY -I tools/rig/rig.py build --subject <name>
 
 # 2. fit: the sweep, the selection, the merge
+$PY -I tools/rig/lane/lane_marks.py --subject <name> --pose <pose> [--restarts 400]   # MARKS FIRST (2026-10-18, Rikku Dark Knight): a minute a pose, no silhouette; its init goes under fit.keys.<pose>.init before the fit
 $PY -I tools/rig/lane/lane.py fit    --subject <name> [--poses all|a,b] [--seeds 3] [--procs 8] [--tag T] [--dry]
 $PY -I tools/rig/lane/lane.py select --subject <name> --tag T [--write]          # a rig per candidate, gated; the best a pose; claims = the gate's readings; the table
 $PY -I tools/rig/lane/lane.py eval   --subject <name> --keys K.json [--full]     # export one keys file and gate it
@@ -46,6 +47,7 @@ $PY -I tools/rig/lane/lane.py framediff --a <recording A>/poses --b <recording B
 | `record.mjs`, `play.mjs`, `play-modes.mjs`, `play-common.mjs`, `track.mjs`, `lane-subjects.json` | `record.sh`, `lulu-moment.mjs`, `fight-virtual-lulu.mjs`, `trk-lulu.mjs`, `hurtko-real.mjs`, `strike-frames.mjs`, `poses-clip.mjs`, `warm.mjs` |
 | `lane.py fit / select / eval`, `lane_fit.py`, `lane_common.py` (fit slots) | `fitbatch.sh`, `select_best.py`, `claims.py`, `mergekeys.py`, `evalrig.sh`, `gaterun.sh` |
 | `lane.py keytable / clips / sheets`, `lane_sheets.py` | `keytable.py`, `authored_clips.py`, `build_sheets.py` (the same labels and layout as Lulu's pass-2 sheets) |
+| `lane_marks.py` | nothing (a marks-only search that gives the fit a start inside the marks: see its docstring) |
 | `lane.py new`, `lane_new.py`, `lane-pose-table.mjs` | the hand-made `lulu.json` skeleton |
 | `lane.py twin`, `lane_twin.py` | nothing (the T class of the plan: 23 silhouette twins) |
 | `lane.py framediff`, `lane_diff.py` | nothing (the proof that an engine change leaves a rig drawing the same) |

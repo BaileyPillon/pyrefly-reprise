@@ -22,6 +22,7 @@ from PIL import Image  # noqa: E402
 
 import lane_common  # noqa: E402
 import lane_fit  # noqa: E402
+import lane_marks  # noqa: E402
 import lane_new  # noqa: E402
 import lane_sheets  # noqa: E402
 import lane_twin  # noqa: E402
@@ -238,6 +239,24 @@ class DryFit(unittest.TestCase):
             self.assertFalse(sub.work.exists())
             with self.assertRaises(SystemExit):
                 lane_fit.target_poses(sub)  # no targets yet: it says how to make them
+
+
+class TestMarksFirst(unittest.TestCase):
+    def test_loss_is_light_inside_the_aim_and_heavy_past_it(self):
+        self.assertAlmostEqual(lane_marks.mark_loss([0.0, 0.0]), 0.0)
+        inside = lane_marks.mark_loss([0.02, 0.02])
+        outside = lane_marks.mark_loss([0.05, 0.05])
+        self.assertLess(inside, 0.1)
+        self.assertGreater(outside, 5.0)  # the hinge is what pulls a far mark in
+
+    def test_init_dict_has_the_shape_the_fitter_reads(self):
+        x = np.array([0.5, 0.25, 10.0, -20.0, 1.5, 33.0, 7.0, 0.0])  # rot of bones 1 and 2, one offset bone (dx, dy), one scale, root dx dy rot
+        init = lane_marks.init_dict(["root", "a", "b"], [1, 2], ["a"], ["b"], x, 2)
+        self.assertEqual(init["a"], round(0.5 * 180 / 3.141592653589793, 1))
+        self.assertEqual(init["a.dx"], 10.0)
+        self.assertEqual(init["a.dy"], -20.0)
+        self.assertEqual(init["b.s"], 1.5)
+        self.assertEqual(init["root.dx"], 33.0)
 
 
 if __name__ == "__main__":
