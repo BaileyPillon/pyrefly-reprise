@@ -14,7 +14,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import type { BattleSetup, BattleState, Command, Decision, EnemyGroupDef, FFXCombatant } from '../../src/battle/common/types.ts';
 import { FFXEngine, getFFXRegistry, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { BOSS_DATA_SWITCH_IDS, BOSS_DATA_SWITCHES, setBossDataSwitches } from '../../src/battle/ffx/boss-data-corrections.ts';
-import { IMMUNE_STATUS_MISS } from '../../src/battle/ffx/immune-status-miss.ts';
+import { IMMUNE_STATUS_MISS, statusRefusedAsImmune } from '../../src/battle/ffx/immune-status-miss.ts';
 import { makeFfxRng } from '../../src/battle/ffx/adapt/streams.ts';
 import type { EventInput } from '../../src/battle/ffx/state.ts';
 import { buildBattle } from '../../src/battle/ffx/setup.ts';
@@ -170,4 +170,63 @@ describe('only an event is added: the whole-chain logs of the chapters whose gol
     });
     expect(added).toBeGreaterThan(0);
   }, 120_000);
+});
+
+
+describe("only a status move aimed at someone says IMMUNE: Defend and a self command never do (PR-0383, release 56)", () => {
+  const hit = (over: Partial<Parameters<typeof statusRefusedAsImmune>[0]> = {}): Parameters<typeof statusRefusedAsImmune>[0] => ({
+    abilityId: 'slow',
+    targeting: 'single-enemy',
+    row: { statusEffects: [{ status: 'slow', chance: 255, duration: 0 }] },
+    target: { immunities: { slow: 255 } },
+    amounts: [0, 0, 0],
+    changed: false,
+    ...over,
+  });
+
+  it('Slow on Flux (a move aimed at a foe) still says immune: FOC54-003 keeps working', () => {
+    expect(statusRefusedAsImmune(hit())).toBe(true);
+  });
+
+  it('Defend says nothing, however immune the one defending is', () => {
+    const defend = { abilityId: 'defend', targeting: 'self' as const, row: { statusEffects: [{ status: 'defend' as const, chance: 255, duration: 1 }] }, target: { immunities: { defend: 255 } } };
+    expect(statusRefusedAsImmune(hit(defend))).toBe(false);
+    expect(statusRefusedAsImmune(hit({ ...defend, targeting: 'single-enemy' }))).toBe(false); // by the move's id, not only by its aim
+  });
+
+  it("a command aimed at its own user says nothing (an aeon's Shield, Boost)", () => {
+    expect(statusRefusedAsImmune(hit({ abilityId: 'aeon-shield', targeting: 'self' }))).toBe(false);
+  });
+
+  it("a foe-aimed move that bounced back onto its own caster still says immune (Yunalesca's reflected Blind counter): the move's aim is what counts, not who ends up hit", () => {
+    expect(statusRefusedAsImmune(hit({ abilityId: 'blind-counter', targeting: 'single-enemy', row: { statusEffects: [{ status: 'darkness', chance: 100, duration: 3 }] }, target: { immunities: { darkness: 255 } } }))).toBe(true);
+  });
+
+  it("an aeon's Defend over the player's own aeon emits no miss in the real engine (Chapter III, Valefor summoned, seed 3); the fuzz's ten friendly misses were all this", async () => {
+    await registerBattleContent();
+    const e = new FFXEngine({ autoResolveMinigames: true });
+    const setup = setupForChapter(getChapter('braskas-final-aeon') as Chapter, 3);
+    e.setSeed(setup.seed);
+    e.init(setup);
+    let aeonTurn: Input | null = null;
+    for (let step = 0; step < 600 && !aeonTurn; step++) {
+      const d = e.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      const summon = d.actorId === 'yuna' ? d.commands.find((c) => c.command.kind === 'summon' && c.enabled) : undefined;
+      if (summon) {
+        e.submit({ ...summon.command, targets: [] } as Command);
+        continue;
+      }
+      const who = e.state().combatants[d.actorId] as FFXCombatant;
+      if (who.aeon) aeonTurn = d;
+      else e.submit({ kind: 'defend', targets: [] } as Command);
+    }
+    if (!aeonTurn) throw new Error('no aeon turn came');
+    const defend = aeonTurn.commands.find((c) => c.command.kind === 'defend');
+    if (!defend) throw new Error('the aeon menu has no Defend row');
+    const events = e.submit({ ...defend.command, targets: [] } as Command);
+    expect(events.filter((ev) => ev.type === 'miss')).toEqual([]);
+    expect(events.some((ev) => ev.type === 'action-start')).toBe(true);
+  });
 });

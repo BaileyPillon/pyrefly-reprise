@@ -337,7 +337,7 @@ function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
     const applied = applyStatusStep(ctx, user, target, def, before, step);
     book.record = step.result.record;
     // A status move the target is wholly immune to lands nothing and used to say nothing; it reads as an immune miss like Scan on a Pagoda (`immune-status-miss.ts`, FOC54-003).
-    if (report.outcome === 'hit' && statusRefusedAsImmune({ row, target, amounts: [hpAmount, mpAmount, ctbAmount], changed: applied.added.length + applied.removed.length > 0 || applied.killed || applied.ejected })) {
+    if (report.outcome === 'hit' && statusRefusedAsImmune({ abilityId: def.id, targeting: def.targeting, row, target, amounts: [hpAmount, mpAmount, ctbAmount], changed: applied.added.length + applied.removed.length > 0 || applied.killed || applied.ejected })) {
       ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
     }
   }
