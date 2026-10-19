@@ -11,7 +11,7 @@
  * Game case: both (shared plumbing); the manifests decide which chapters have voice.
  */
 
-import { chapterManifestPath, parseChapterVoiceManifest, voiceFilePath, type ChapterVoiceManifest, type VoiceLineEntry } from '../../story/voice/voiceManifest.ts';
+import { chapterManifestPath, parseChapterVoiceManifest, parseVoiceIndexChapters, voiceFilePath, VOICE_INDEX_PATH, type ChapterVoiceManifest, type VoiceLineEntry } from '../../story/voice/voiceManifest.ts';
 
 /** The part of an `AudioBuffer` the cache reads. */
 export interface DecodedVoice {
@@ -43,6 +43,8 @@ const bytesOf = (b: DecodedVoice): number => b.length * b.numberOfChannels * 4;
 export class VoiceBank<B extends DecodedVoice> {
   private readonly manifests = new Map<string, ChapterVoiceManifest | null>();
   private readonly manifestLoads = new Map<string, Promise<ChapterVoiceManifest | null>>();
+  /** The chapters `voice/index.json` lists, fetched once; `null` inside when the index is unreadable (then every chapter is asked for as before). */
+  private index: Promise<ReadonlySet<string> | null> | null = null;
   private readonly slots = new Map<string, Slot<B>>();
   private readonly loading = new Map<string, Promise<B | null>>();
   private readonly failed = new Set<string>();
@@ -55,16 +57,33 @@ export class VoiceBank<B extends DecodedVoice> {
 
   // ------------------------------------------------------------- manifests
 
-  /** Fetch a chapter's manifest once; a miss (no file, bad JSON) is remembered as `null`. */
+  /** The voiced chapters from `voice/index.json`, asked for once; `null` when it cannot be read (no list: the manifest decides, as it did before the list was used). */
+  private voicedChapters(): Promise<ReadonlySet<string> | null> {
+    if (!this.index) {
+      this.requests.push(VOICE_INDEX_PATH);
+      this.index = this.deps
+        .fetchJson(VOICE_INDEX_PATH)
+        .then((raw) => parseVoiceIndexChapters(raw))
+        .catch(() => null);
+    }
+    return this.index;
+  }
+
+  /**
+   * Fetch a chapter's manifest once; a miss (no file, bad JSON) is remembered as `null`. A chapter the index does not list is a miss
+   * with no request at all: a hidden chapter with no recording used to ask for a file the host answers 404 (LV55-1, release 55).
+   */
   loadChapter(chapter: string): Promise<ChapterVoiceManifest | null> {
     if (this.manifests.has(chapter)) return Promise.resolve(this.manifests.get(chapter) ?? null);
     const inflight = this.manifestLoads.get(chapter);
     if (inflight) return inflight;
-    const path = chapterManifestPath(chapter);
-    this.requests.push(path);
-    const load = this.deps
-      .fetchJson(path)
-      .then((raw) => parseChapterVoiceManifest(raw, chapter))
+    const load = this.voicedChapters()
+      .then((voiced) => {
+        if (voiced && !voiced.has(chapter)) return null; // listed chapters only: no request, no 404, no console line
+        const path = chapterManifestPath(chapter);
+        this.requests.push(path);
+        return this.deps.fetchJson(path).then((raw) => parseChapterVoiceManifest(raw, chapter));
+      })
       .catch(() => null)
       .then((manifest) => {
         this.manifests.set(chapter, manifest);

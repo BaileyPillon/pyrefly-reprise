@@ -30,22 +30,60 @@ describe('chapter manifests', () => {
     expect(bank.entry('seymour-flux', 'aaa')).toBeNull(); // not loaded yet: the line is text only
     const [a, b] = await Promise.all([bank.loadChapter('seymour-flux'), bank.loadChapter('seymour-flux')]);
     expect(a).toBe(b);
-    expect(d.fetched).toEqual(['voice/seymour-flux.json']);
+    expect(d.fetched).toEqual(['voice/index.json', 'voice/seymour-flux.json']); // the chapter list answers with a manifest here: no list, so the chapter is asked for
     expect(bank.entry('seymour-flux', 'aaa')?.id).toBe('seymour-flux.pre.001');
     expect(bank.entry(null, 'aaa')).toBeNull();
     expect(bank.entry('seymour-flux', 'zzz')).toBeNull();
     await bank.loadChapter('seymour-flux');
-    expect(d.fetched).toHaveLength(1);
+    expect(d.fetched).toHaveLength(2);
   });
 
   it('remembers a miss (a 404, an HTML fallback, a throw) so the chapter is not asked again', async () => {
     let calls = 0;
-    const bank = new VoiceBank<DecodedVoice>({ ...deps().deps, fetchJson: async () => { calls++; return '<!doctype html>'; } });
+    const bank = new VoiceBank<DecodedVoice>({ ...deps().deps, fetchJson: async (p) => { if (p !== 'voice/index.json') calls++; return '<!doctype html>'; } });
     expect(await bank.loadChapter('yunalesca')).toBeNull();
     expect(await bank.loadChapter('yunalesca')).toBeNull();
     expect(calls).toBe(1);
     const throwing = new VoiceBank<DecodedVoice>({ ...deps().deps, fetchJson: async () => { throw new Error('offline'); } });
     expect(await throwing.loadChapter('yunalesca')).toBeNull();
+  });
+});
+
+describe('the chapter list (voice/index.json)', () => {
+  const index = { version: 1, game: 'ffx', voices: ['tidus'], chapters: { 'seymour-flux': { lines: 1, bytes: 10 } } };
+  const withIndex = (served: unknown = index) => {
+    const d = deps({ fetchJson: async (p) => { d.fetched.push(p); return p === 'voice/index.json' ? served : manifest; } });
+    return d;
+  };
+
+  it('asks for the list once, then for a listed chapter only, and for an unlisted chapter not at all (LV55-1)', async () => {
+    const d = withIndex();
+    const bank = new VoiceBank(d.deps);
+    expect(await bank.loadChapter('biran-yenke')).toBeNull();
+    expect(await bank.loadChapter('sinspawn-gui')).toBeNull();
+    expect(await bank.loadChapter('biran-yenke')).toBeNull();
+    expect((await bank.loadChapter('seymour-flux'))?.chapter).toBe('seymour-flux');
+    expect(d.fetched).toEqual(['voice/index.json', 'voice/seymour-flux.json']);
+    expect(bank.requests).toEqual(['voice/index.json', 'voice/seymour-flux.json']);
+  });
+
+  it('two chapters begun at once share the one list request', async () => {
+    const d = withIndex();
+    const bank = new VoiceBank(d.deps);
+    await Promise.all([bank.loadChapter('seymour-flux'), bank.loadChapter('exp-fayth'), bank.loadChapter('last-summoning')]);
+    expect(d.fetched.filter((p) => p === 'voice/index.json')).toHaveLength(1);
+    expect(d.fetched.filter((p) => p.endsWith('exp-fayth.json') || p.endsWith('last-summoning.json'))).toEqual([]);
+  });
+
+  it('an unreadable list (a 404, an HTML fallback page, a throw, a list with no chapters) changes nothing: the manifest decides, as before', async () => {
+    for (const served of [null, '<!doctype html>', { version: 1 }, { version: 2, chapters: {} }]) {
+      const d = withIndex(served);
+      const bank = new VoiceBank(d.deps);
+      expect((await bank.loadChapter('seymour-flux'))?.chapter).toBe('seymour-flux');
+      expect(d.fetched).toEqual(['voice/index.json', 'voice/seymour-flux.json']);
+    }
+    const throwing = new VoiceBank<DecodedVoice>({ ...deps().deps, fetchJson: async (p) => { if (p === 'voice/index.json') throw new Error('offline'); return manifest; } });
+    expect((await throwing.loadChapter('seymour-flux'))?.chapter).toBe('seymour-flux');
   });
 });
 
