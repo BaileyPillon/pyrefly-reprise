@@ -1,7 +1,7 @@
 /**
  * **Assemble pass 2's videos and contact sheets** from a recording (`record.mjs --modes anim2 --variants today,B,P2`; the animation prototype; `docs/handoff/anim-proto.md`).
  *
- *   node tools/rig/lane/anim2-assemble.mjs --in <recording dir> --out <final dir> [--ffmpeg <path>] [--crop attack=x,y,w,h ...]
+ *   node tools/rig/lane/anim2-assemble.mjs --in <recording dir> --out <final dir> [--in-today <dir>] [--in-B <dir>] [--in-P2 <dir>] [--ffmpeg <path>] [--crop attack=x,y,w,h ...]
  *
  * Every video starts `--pre` frames (default 30) before the action starts (the frame the battle log first grows: the same instant in every variant, so the three line up) and ends `--post` frames
  * (default 45) after the last frame anything moved; the hurt-and-KO video runs whole.
@@ -17,18 +17,21 @@ import sharp from 'sharp';
 
 const args = Object.fromEntries(process.argv.slice(2).reduce((acc, a, i, all) => (a.startsWith('--') && a !== '--crop' ? [...acc, [a.slice(2), all[i + 1]]] : acc), []));
 const crops = Object.fromEntries(process.argv.slice(2).flatMap((a, i, all) => (a === '--crop' ? [all[i + 1].split('=')] : [])).map(([k, v]) => [k, v.split(',').map(Number)]));
-const IN = path.resolve(args.in);
+const IN = path.resolve(args.in ?? args['in-P2'] ?? '.');
+/** A variant may be read from its own recording folder (`--in-today <dir>`, `--in-B <dir>`, `--in-P2 <dir>`: each holds `anim2-<variant>/`); `--in` is the default. */
+const inOf = (v) => (args[`in-${v}`] ? path.resolve(args[`in-${v}`]) : IN);
 const OUT = path.resolve(args.out);
 const FFMPEG = args.ffmpeg ?? 'ffmpeg';
 const FONT = 'C\\:/Windows/Fonts/arialbd.ttf';
 fs.mkdirSync(OUT, { recursive: true });
 
-const ACTIONS = ['attack', 'cast', 'item-ally', 'item-self', 'hurt-ko'];
-const VARIANTS = ['today', 'B', 'P2'].filter((v) => fs.existsSync(path.join(IN, `anim2-${v}`, 'segments.json')));
+const ACTIONS = ['attack', 'cast', 'item-ally', 'item-self', 'hurt-ko'].filter((a) => !args.actions || String(args.actions).split(',').includes(a));
+const PARTS = new Set(String(args.parts ?? 'pass2,compare,contact').split(',')); // `--parts contact` redoes only the sheets, `--actions hurt-ko` only that action
+const VARIANTS = ['today', 'B', 'P2'].filter((v) => fs.existsSync(path.join(inOf(v), `anim2-${v}`, 'segments.json')));
 const NAME = { today: 'TODAY (the rig as it ships)', B: 'PASS 1  B SHOWPIECE', P2: 'PASS 2' };
 const TITLE = { attack: 'ATTACK', cast: 'CAST', 'item-ally': 'ITEM ON AN ALLY', 'item-self': 'ITEM ON HERSELF', 'hurt-ko': 'HURT, THEN KO' };
-const info = Object.fromEntries(VARIANTS.map((v) => [v, JSON.parse(fs.readFileSync(path.join(IN, `anim2-${v}`, 'segments.json'), 'utf8'))]));
-const dirOf = (v, a) => path.join(IN, `anim2-${v}`, a);
+const info = Object.fromEntries(VARIANTS.map((v) => [v, JSON.parse(fs.readFileSync(path.join(inOf(v), `anim2-${v}`, 'segments.json'), 'utf8'))]));
+const dirOf = (v, a) => path.join(inOf(v), `anim2-${v}`, a);
 const has = (v, a) => info[v]?.segments?.[a] && fs.existsSync(dirOf(v, a));
 
 function ff(argv) {
@@ -53,7 +56,7 @@ function windowOf(v, a, pre = PRE) {
   if (crit > 0) end = Math.min(end, crit - 1);
   return { t0, from, count: end - from + 1, last: end };
 }
-const input = (v, a, win = windowOf(v, a), count = win.count) => ['-framerate', '60', '-start_number', String(win.from), '-i', path.join(dirOf(v, a), 'f%04d.jpg'), '-frames:v', String(count)];
+const input = (v, a, win = windowOf(v, a), count = win.count) => ['-framerate', '60', '-start_number', String(win.from), '-t', (count / 60 + 0.001).toFixed(3), '-i', path.join(dirOf(v, a), 'f%04d.jpg')];
 const enc = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', 'yuv420p', '-r', '60'];
 /** `ms` since the first key press: the recorder presses on frame 6. */
 /** Milliseconds since the action started (0 before it): `pre` is how many frames of lead-in the video has. */
@@ -62,7 +65,7 @@ const clock = (x, y, size, pre) => text(`%{eif\\:max(0\\,(n-${pre})*1000/60)\\:d
 // 1. one labelled video an action: the P2 variant (or the first variant present)
 const lead = VARIANTS.includes('P2') ? 'P2' : VARIANTS[VARIANTS.length - 1];
 for (const a of ACTIONS) {
-  if (!has(lead, a)) continue;
+  if (!PARTS.has('pass2') || !has(lead, a)) continue;
   const win = windowOf(lead, a);
   const vf = [...(crops[a] ? [`crop=${crops[a].join(':')}`] : []), 'scale=1280:720:flags=lanczos', text(`${NAME[lead]}  /  ${TITLE[a]}`, 24, 20, 32), clock(24, 'h-64', 30, win.t0 - win.from)].join(',');
   ff([...input(lead, a), '-vf', vf, ...enc, path.join(OUT, `pass2-${a}.mp4`)]);
@@ -71,7 +74,7 @@ for (const a of ACTIONS) {
 
 // 2. today | B | P2 side by side, started on the first press
 for (const a of ACTIONS) {
-  if (VARIANTS.length < 2 || VARIANTS.some((v) => !has(v, a))) continue;
+  if (!PARTS.has('compare') || VARIANTS.length < 2 || VARIANTS.some((v) => !has(v, a))) continue;
   const w = Number(args.panelw ?? 960);
   const h = Math.round((w * 9) / 16);
   const pre = Math.min(PRE, ...VARIANTS.map((v) => windowOf(v, a, PRE).t0)); // the same lead-in for every variant, so the action starts on the same frame in all three
@@ -92,7 +95,7 @@ const lastMove = (s) => {
 };
 for (const a of ACTIONS) {
   const rows = VARIANTS.filter((v) => has(v, a));
-  if (!rows.length) continue;
+  if (!PARTS.has('contact') || !rows.length) continue;
   const cw = 384, ch = 216, lab = 110, COLS = 5, N = 10; // ten frames a variant, two rows of five
   const comps = [];
   let r = 0;
@@ -101,8 +104,12 @@ for (const a of ACTIONS) {
     const w = windowOf(v, a);
     const first = w.from, last = w.last;
     comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${lab}" height="${ch}"><text x="6" y="22" font-family="sans-serif" font-size="15" font-weight="bold" fill="#f0d68a">${v === 'today' ? 'TODAY' : v === 'B' ? 'PASS 1 B' : 'PASS 2'}</text><text x="6" y="42" font-family="sans-serif" font-size="13" fill="#d8d0e0">${((last - w.t0) / 60).toFixed(1)} s</text></svg>`), left: 0, top: r * ch });
+    // hurt-ko: four frames across the first blow and six across the KO (the pose changes name them: `hurt` first, `ko` first), not ten spread over eleven seconds
+    const h0 = s.samples.findIndex((x) => x.pose === 'hurt');
+    const k0 = s.samples.findIndex((x) => x.pose === 'ko');
+    const picks = a === 'hurt-ko' && h0 >= 0 && k0 >= 0 ? [h0 + 3, h0 + 8, h0 + 20, h0 + 45, k0 + 2, k0 + 10, k0 + 22, k0 + 38, k0 + 62, k0 + 110].map((n) => Math.min(n, last)) : null;
     for (let i = 0; i < N; i++) {
-      const n = Math.round(first + ((last - first) * i) / (N - 1));
+      const n = picks ? picks[i] : Math.round(first + ((last - first) * i) / (N - 1));
       const f = path.join(dirOf(v, a), `f${String(n).padStart(4, '0')}.jpg`);
       let img = sharp(f);
       if (crops[a]) img = img.extract({ left: crops[a][0], top: crops[a][1], width: crops[a][2], height: crops[a][3] });
