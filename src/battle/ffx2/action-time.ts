@@ -57,6 +57,14 @@ export const ACTION_TIME_ESTIMATE_SECONDS = 1.5;
 /** **The global switch: OFF.** `true` gives every FFX-2 battle action time of the estimate's length. */
 export const ACTION_TIME_ALL_FFX2 = false;
 
+/**
+ * **The per-command switch: OFF** (re-parity X2-A, row XA6 slice A; Bailey decides whether it goes on). `true` replaces the flat estimate (and a
+ * formation's flat 3 s) with a span per command: the idle break, run-up and attack clip of a physical command, the effect length of a cast, skill, item
+ * or special, each from the actor's own body and the command row's class (`action-span.ts`, `kernel/action-span.ts`, `data/ffx2/action-frames.ts`).
+ * With it off nothing of that is read and every FFX-2 battle is byte for byte what it was. FFX-2 only.
+ */
+export const ACTION_TIME_PER_COMMAND = false;
+
 /** The battle flag `setup.ts` copies from `EnemyGroupDef.actionTimeSeconds`. */
 export const ACTION_TIME_FLAG = 'actionTimeSeconds';
 
