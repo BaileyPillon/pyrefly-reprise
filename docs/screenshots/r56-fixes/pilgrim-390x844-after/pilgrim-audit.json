@@ -1,0 +1,177 @@
+{
+ "size": "390x844",
+ "touch": true,
+ "injected": [
+  "setSeed(7) before the first key",
+  "autoBattle('intended') for the stop-1 fight at skip speed"
+ ],
+ "pages": {
+  "1-route": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 780,
+    "h": 52
+   },
+   "scrollH": 1193,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "2-prep-run-tab": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [
+    {
+     "t": "EQUIPMENT",
+     "l": 370,
+     "r": 467
+    },
+    {
+     "t": "ITEMS",
+     "l": 485,
+     "r": 535
+    },
+    {
+     "t": "OVERDRIVE",
+     "l": 553,
+     "r": 648
+    }
+   ],
+   "beginInView": true,
+   "beginRect": {
+    "y": 0,
+    "h": 0
+   },
+   "scrollH": 844,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "3-boons": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 780,
+    "h": 52
+   },
+   "scrollH": 1518,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "4-road": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 780,
+    "h": 52
+   },
+   "scrollH": 1102,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "5-stop-2-prep": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [
+    {
+     "t": "EQUIPMENT",
+     "l": 370,
+     "r": 467
+    },
+    {
+     "t": "ITEMS",
+     "l": 485,
+     "r": 535
+    },
+    {
+     "t": "OVERDRIVE",
+     "l": 553,
+     "r": 648
+    }
+   ],
+   "beginInView": true,
+   "beginRect": {
+    "y": 0,
+    "h": 0
+   },
+   "scrollH": 844,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "6-over": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 414,
+    "h": 52
+   },
+   "scrollH": 844,
+   "clientH": 844,
+   "hscroll": false
+  }
+ },
+ "problems": [],
+ "prep1": {
+  "chapter": "seymour-anima-macalania",
+  "game": "ffx",
+  "tabs": [
+   "pilgrim-run",
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "pilgrim-run",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 7
+ },
+ "prep2": {
+  "chapter": "evrae-airship",
+  "game": "ffx",
+  "tabs": [
+   "pilgrim-run",
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "pilgrim-run",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 7
+ },
+ "afterEscapes": "pilgrim-over",
+ "errors": [],
+ "notFound": [],
+ "pass": true
+}

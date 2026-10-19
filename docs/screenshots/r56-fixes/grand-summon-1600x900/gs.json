@@ -1,0 +1,124 @@
+{
+ "size": "1600x900",
+ "touch": false,
+ "injected": [
+  "setSeed(1)",
+  "valefor hp=0 alive=false reviveCountdown=8, yuna overdrive gauge=100 via the live engine"
+ ],
+ "problems": [],
+ "steps": [],
+ "reach": "cutscene",
+ "inject": {
+  "ok": true
+ },
+ "actor": "yuna",
+ "walk": true,
+ "helpAtOverdrive": "Yuna Auron Braska's Final Aeon Tidus Yu Pagoda A Yu Pagoda B ▲ SPECIAL ▸ ×2 WHITE MAGIC ▸ ×14 ITEMS ▸ ×15 OVERDRIVE ▸ READY SUMMON ▸ ×5 ESCAPE ▼ Q △ DEFEND Open the Overdrive menu. Tidus 6492 /6492 140 /140 OD Yuna 5130 /5130 320 /320 OVERDRIVE Auron 4281 /6492 100 /100 OD I YU PAGODA G GUIDE NEXT BEST MOVE Yuna Protect → Tidus IN WHITE MAGIC 12 MP + PROTECT It puts Protect on Tidus. N HIDE MOVES E ENEMY MOVE AURON “You have taken enough. Spend it — an Overdrive never misses.” ENTER CONTINUE FIRST TIME ONLY PAUSE",
+ "helpOk": true,
+ "opened": true,
+ "geom": {
+  "rows": [
+   {
+    "x": 94,
+    "y": 247,
+    "w": 720,
+    "h": 55,
+    "fs": "10px",
+    "pe": "auto"
+   },
+   {
+    "x": 94,
+    "y": 302,
+    "w": 720,
+    "h": 55,
+    "fs": "10px",
+    "pe": "auto"
+   },
+   {
+    "x": 94,
+    "y": 357,
+    "w": 720,
+    "h": 55,
+    "fs": "10px",
+    "pe": "auto"
+   },
+   {
+    "x": 94,
+    "y": 412,
+    "w": 720,
+    "h": 55,
+    "fs": "10px",
+    "pe": "auto"
+   },
+   {
+    "x": 94,
+    "y": 467,
+    "w": 720,
+    "h": 55,
+    "fs": "10px",
+    "pe": "auto"
+   }
+  ],
+  "title": {
+   "x": 130,
+   "y": 164,
+   "w": 244,
+   "h": 42,
+   "fs": "16.89px",
+   "pe": "auto"
+  },
+  "subtitle": {
+   "x": 130,
+   "y": 212,
+   "w": 720,
+   "h": 15,
+   "fs": "5.33px",
+   "pe": "none",
+   "text": "GRAND SUMMON · AEON ARRIVES WITH A FULL OVERDRIVE"
+  },
+  "list": {
+   "x": 94,
+   "y": 247,
+   "w": 720,
+   "h": 230,
+   "fs": "16px",
+   "pe": "auto"
+  },
+  "vp": {
+   "w": 1600,
+   "h": 900
+  }
+ },
+ "tapValefor": true,
+ "shakeAfterTap": true,
+ "afterValefor": {
+  "stillOpen": true,
+  "actor": "yuna",
+  "gauge": 100,
+  "newEvents": [],
+  "valeforSelected": "Valefor"
+ },
+ "tapTitle": true,
+ "afterTitle": {
+  "pickerGone": true,
+  "gauge": 100,
+  "actor": "yuna",
+  "rowSelected": "Attack"
+ },
+ "reopened": true,
+ "tapIfrit": true,
+ "afterIfrit": {
+  "gauge": 0,
+  "events": [
+   "yuna-grand-summon",
+   null,
+   null,
+   null,
+   null,
+   null
+  ]
+ },
+ "errors": [],
+ "notFound": [],
+ "pass": true
+}

@@ -1,0 +1,440 @@
+{
+ "size": "1600x900",
+ "touch": false,
+ "injected": [
+  "setSeed(7) before the first key",
+  "autoBattle('intended') for the stop-1 fight at skip speed"
+ ],
+ "pages": {
+  "1-route": {
+   "small": [
+    {
+     "t": "Macalania Temple",
+     "fs": 12.2,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "The deck of the Fahrenheit",
+     "fs": 12.2,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Cavern of the Stolen Fayth",
+     "fs": 12.2,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Highbridge of Bevelle",
+     "fs": 12.2,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Mushroom Rock Road",
+     "fs": 12.2,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Dream's End",
+     "fs": 12.2,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Enter begin",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Enter",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "·",
+     "fs": 12,
+     "cls": "chint__sep"
+    },
+    {
+     "t": "Esc back",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Esc",
+     "fs": 12,
+     "cls": ""
+    }
+   ],
+   "smallCount": 11,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "Enter begin",
+     "w": 100,
+     "h": 16
+    },
+    {
+     "t": "Esc back",
+     "w": 75,
+     "h": 16
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 758,
+    "h": 62
+   },
+   "scrollH": 918,
+   "clientH": 900,
+   "hscroll": false
+  },
+  "2-prep-run-tab": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "EscTap here skip the guide",
+     "w": 192,
+     "h": 18
+    },
+    {
+     "t": "RUN",
+     "w": 46,
+     "h": 36
+    },
+    {
+     "t": "CHAPTER",
+     "w": 101,
+     "h": 36
+    },
+    {
+     "t": "STATS",
+     "w": 66,
+     "h": 36
+    },
+    {
+     "t": "SPHERE GRID",
+     "w": 148,
+     "h": 36
+    },
+    {
+     "t": "EQUIPMENT",
+     "w": 127,
+     "h": 36
+    },
+    {
+     "t": "ITEMS",
+     "w": 67,
+     "h": 36
+    },
+    {
+     "t": "OVERDRIVE",
+     "w": 125,
+     "h": 36
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 533,
+    "h": 20
+   },
+   "scrollH": 927,
+   "clientH": 900,
+   "hscroll": false
+  },
+  "3-boons": {
+   "small": [
+    {
+     "t": "Left/Right choose",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Left/Right",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "·",
+     "fs": 12,
+     "cls": "chint__sep"
+    },
+    {
+     "t": "Enter take it",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Enter",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "·",
+     "fs": 12,
+     "cls": "chint__sep"
+    },
+    {
+     "t": "Esc twice leave the road",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Esc twice",
+     "fs": 12,
+     "cls": ""
+    }
+   ],
+   "smallCount": 8,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "Enter take it",
+     "w": 111,
+     "h": 16
+    },
+    {
+     "t": "Esc twice leave the road",
+     "w": 213,
+     "h": 16
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 758,
+    "h": 62
+   },
+   "scrollH": 918,
+   "clientH": 900,
+   "hscroll": false
+  },
+  "4-road": {
+   "small": [
+    {
+     "t": "Left/Right choose",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Left/Right",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "·",
+     "fs": 12,
+     "cls": "chint__sep"
+    },
+    {
+     "t": "Enter take it",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Enter",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "·",
+     "fs": 12,
+     "cls": "chint__sep"
+    },
+    {
+     "t": "Esc twice leave the road",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Esc twice",
+     "fs": 12,
+     "cls": ""
+    }
+   ],
+   "smallCount": 8,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "Enter take it",
+     "w": 111,
+     "h": 16
+    },
+    {
+     "t": "Esc twice leave the road",
+     "w": 213,
+     "h": 16
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 758,
+    "h": 62
+   },
+   "scrollH": 918,
+   "clientH": 900,
+   "hscroll": false
+  },
+  "5-stop-2-prep": {
+   "small": [],
+   "smallCount": 0,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "RUN",
+     "w": 46,
+     "h": 36
+    },
+    {
+     "t": "CHAPTER",
+     "w": 101,
+     "h": 36
+    },
+    {
+     "t": "STATS",
+     "w": 66,
+     "h": 36
+    },
+    {
+     "t": "SPHERE GRID",
+     "w": 148,
+     "h": 36
+    },
+    {
+     "t": "EQUIPMENT",
+     "w": 127,
+     "h": 36
+    },
+    {
+     "t": "ITEMS",
+     "w": 67,
+     "h": 36
+    },
+    {
+     "t": "OVERDRIVE",
+     "w": 125,
+     "h": 36
+    },
+    {
+     "t": "ENTER BEGINS THE BATTLE",
+     "w": 248,
+     "h": 20
+    },
+    {
+     "t": "ESC BACK",
+     "w": 90,
+     "h": 20
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 533,
+    "h": 20
+   },
+   "scrollH": 927,
+   "clientH": 900,
+   "hscroll": false
+  },
+  "6-over": {
+   "small": [
+    {
+     "t": "Enter again",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Enter",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "·",
+     "fs": 12,
+     "cls": "chint__sep"
+    },
+    {
+     "t": "Esc chapter select",
+     "fs": 12,
+     "cls": "chint__item"
+    },
+    {
+     "t": "Esc",
+     "fs": 12,
+     "cls": ""
+    }
+   ],
+   "smallCount": 5,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "Enter again",
+     "w": 100,
+     "h": 16
+    },
+    {
+     "t": "Esc chapter select",
+     "w": 166,
+     "h": 16
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 793,
+    "h": 62
+   },
+   "scrollH": 900,
+   "clientH": 900,
+   "hscroll": false
+  }
+ },
+ "problems": [],
+ "prep1": {
+  "chapter": "seymour-anima-macalania",
+  "game": "ffx",
+  "tabs": [
+   "pilgrim-run",
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "pilgrim-run",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 7
+ },
+ "prep2": {
+  "chapter": "evrae-airship",
+  "game": "ffx",
+  "tabs": [
+   "pilgrim-run",
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "pilgrim-run",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 7
+ },
+ "afterEscapes": "pilgrim-over",
+ "errors": [],
+ "notFound": [],
+ "pass": true
+}
