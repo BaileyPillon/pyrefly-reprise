@@ -118,9 +118,17 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
     src = sub.dir_chars / f"{spec['pose']}@{S}x.png"
     rgba = R.defringe_alpha(load_rgba(src))
     ax, bx, ay, by = painting_map(T, spec["pose"], S)
-    if abs(ax - 1) > 1e-6 or abs(ay - 1) > 1e-6 or abs(bx - round(bx)) > 1e-6 or abs(by - round(by)) > 1e-6:
-        raise SystemExit(f"rig variants: {spec['pose']} is registered with a scale or a fraction of a px ({ax}, {bx}, {ay}, {by}); a variant needs a plain shift")
-    ox, oy = int(round(bx)), int(round(by))  # master px = painting px + (ox, oy)
+    if ax < 0 or ay < 0:
+        raise SystemExit(f"rig variants: {spec['pose']} is registered turned about its stance (mirror); a variant of a turned painting is not built yet")
+    if abs(ax - 1) > 1e-6 or abs(ay - 1) > 1e-6:  # a pose the model registered at a slightly different scale (Ifrit's attack 1.011, Shiva's hurt 1.012): the painting is resized into the idle frame first
+        h0, w0 = rgba.shape[:2]
+        pm = rgba.astype(np.float32)
+        pm[..., :3] *= pm[..., 3:4] / 255.0
+        size = (max(1, round(w0 * ax)), max(1, round(h0 * ay)))
+        small = np.asarray(Image.fromarray(np.clip(pm, 0, 255).astype(np.uint8), "RGBA").resize(size, Image.LANCZOS), np.float32)
+        small[..., :3] = np.where(small[..., 3:4] > 0, small[..., :3] * 255.0 / np.maximum(small[..., 3:4], 1.0), 0)
+        rgba = np.clip(small, 0, 255).astype(np.uint8)
+    ox, oy = int(round(bx)), int(round(by))  # master px = painting px + (ox, oy) (a fraction of a px is dropped)
     to_p = lambda pts: [(x - ox, y - oy) for x, y in pts]  # noqa: E731
     a_cut = cut_alpha(rgba[..., 3], to_p(spec["poly"]), [to_p(c) for c in spec.get("cutline", [])], float(spec.get("feather", 14)))
     img = rgba.copy()
