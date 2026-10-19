@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 55 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 57 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '57',
+    date: '2026-10-19',
+    lines: [
+      { tag: 'Both', text: 'Valefor now animates as one jointed figure and no longer shrinks when knocked out.' },
+      { tag: 'FFX', text: 'IMMUNE now shows when a status move is resisted completely, as with Slow on Seymour Flux or Shell on a Yu Pagoda.' },
+      { tag: 'FFX', text: 'Releases 55 and 56 said this already worked; it showed MISS until now.' },
+    ],
+  },
   {
     release: '56',
     date: '2026-10-19',

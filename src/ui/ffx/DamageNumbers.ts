@@ -140,9 +140,20 @@ export class DamageNumbers {
     return this.sideOf?.(id) ?? null;
   }
 
-  /** Spawns a numeral for a damage/heal/miss/mp event; no-ops for every other event type. */
+  /**
+   * Spawns a numeral for a damage/heal/miss/mp event; no-ops for every other event type.
+   *
+   * **A miss whose reason is `'immune'` prints IMMUNE, not MISS** (release 57, R56-003 of the Release 56 focused review; **FFX only**). The engine
+   * emits that miss for a status move the target is wholly immune to (Slow on Seymour Flux, Shell on a Pagoda: `immune-status-miss.ts`), a revival that
+   * cannot stand its target up, and Scan on a foe that refuses it; the shared `spawnEvent` reads only `hit: false` and so drew all three as a plain MISS.
+   * IMMUNE here is the same numeral a hit on an immune affinity draws (`damageLadder`'s `immune` kind: 12 px, 700 ms), so the two read alike.
+   * Every other miss reason (`evaded`, `nullified`, `wrong-state`) is unchanged.
+   */
   spawn(event: BattleEvent): void {
-    const spawned = this.core.spawnEvent(event as Parameters<SharedDamageNumbers['spawnEvent']>[0]);
+    const spawned =
+      event.type === 'miss' && event.reason === 'immune'
+        ? this.core.spawn({ target: event.targetId, affinity: 'immune' })
+        : this.core.spawnEvent(event as Parameters<SharedDamageNumbers['spawnEvent']>[0]);
     if (spawned) this.startRafFallback();
   }
 
