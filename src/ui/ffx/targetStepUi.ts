@@ -7,6 +7,7 @@
 
 import type { AbilityCategory, AvailableCommand, CombatantId } from '../../battle/common/types.ts';
 import { targetStepParity } from '../../battle/ffx/target-step-parity.ts';
+import { opensPickerList } from './commandHelp.ts';
 import type { TopGroupRow } from './CommandMenuLogic.ts';
 import type { TargetCursor, TargetEntry } from './TargetCursor.ts';
 
@@ -74,4 +75,12 @@ export function opensList(row: TopGroupRow, actorId?: CombatantId): boolean {
   if (row.role === 'switch' || !targetStepParity('openerOne')) return false;
   if (row.category === 'overdrive') return actorId !== undefined && OVERDRIVE_OPENER_OWNERS.has(actorId);
   return LIST_OPENERS.has(row.category);
+}
+
+/**
+ * Is this group row a one-entry Overdrive that is itself the opener of a picker (Yuna's Grand Summon, Rikku's Mix) under item `openerOne`? Such a row does not hop to a second list
+ * (`opensList` is false for it: the command goes out and the overlay is the list), but its help line says it opens a menu, as every other one-entry opener's does (LV55-4, release 56).
+ */
+export function opensPicker(row: TopGroupRow): boolean {
+  return targetStepParity('openerOne') && row.role !== 'switch' && row.category === 'overdrive' && row.items.length === 1 && opensPickerList(row.items[0]!);
 }
