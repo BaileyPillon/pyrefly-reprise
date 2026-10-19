@@ -1,7 +1,7 @@
 /**
  * **The KO swap, read from a `ko` recording, rig on and off** (the lane kit; the rig program, rig-aeons lane, 2026-10-19; both games, shared plumbing).
  *
- *   node tools/rig/lane/ko-summary.mjs --on <rec>/ko --off <rec>/ko-off [--json out.json]
+ *   node tools/rig/lane/ko-summary.mjs --on <rec>/ko [--off <rec>/ko-off] [--json out.json]
  *
  * For each run: the frame the actor's pose first reads `ko` (the swap) and the hurt pose before it; the projected box (`projectRect`) a frame before and after; the worst one-frame step of the head, the
  * centroid and the feet through the live camera in the 40 frames after the swap (the skeleton tracker for a rig, the painted anchors for the painting set; the camera's own shift of the root is not taken out
@@ -65,14 +65,14 @@ export function summarise(ko, tracks, probe, continuity) {
 
 async function main() {
   const a = parseArgs(process.argv.slice(2));
-  if (!a.on || !a.off) throw new Error('ko-summary: --on <rec>/ko and --off <rec>/ko-off are required');
+  if (!a.on) throw new Error('ko-summary: --on <rec>/ko is required (--off <rec>/ko-off is the painting set, optional)');
   const one = (dir) => {
     const t = fs.existsSync(path.join(dir, 'tracks.json')) ? read(path.join(dir, 'tracks.json')) : null;
     const pr = fs.existsSync(path.join(dir, 'probe.json')) ? read(path.join(dir, 'probe.json')) : null;
     const cf = path.join(dir, 'continuity', 'continuity.json');
     return summarise(read(path.join(dir, 'ko.json')), t, pr, fs.existsSync(cf) ? read(cf) : null);
   };
-  const res = { on: one(a.on), off: one(a.off) };
+  const res = { on: one(a.on), off: a.off && fs.existsSync(path.join(a.off, 'ko.json')) ? one(a.off) : null };
   console.log(JSON.stringify(res, null, 1));
   if (a.json) fs.writeFileSync(a.json, JSON.stringify(res, null, 1));
 }
