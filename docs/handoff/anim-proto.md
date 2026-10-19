@@ -70,3 +70,41 @@ Counts: 5 new files, 74 tests; the whole rig set (`tests/unit/rig`, `tests/unit/
 - The lattice warp (a rippling skirt), a painted smear and the mocap retarget of the research notes are not built (the lattice and the mocap wait for the pick).
 - The `ActorHandle` members `animBegin`, `animLead` and `animBeat` are optional and additive; no other actor answers them. `docs/CONTRACTS.md` does not list `BattlePresenterPorts.ts`, so no `CONTRACT-CHANGES` entry was written.
 - See "What still looks wrong" and the recommendation in `notes.md` (B's look on A's clock for the actions that repeat).
+
+---
+
+# Pass 2 (branch `anim-proto-2`, from `anim-proto` cfff4367d, 2026-10-19): "B's look on A's clock"
+
+Bailey took the pass-1 recommendation ("I'll go with all of your recommendations"). Still a PROTOTYPE: dev flag only (`?anim=proto&style=P2`), nothing ships, nothing merges, no deploy. Game case: **FFX** (Lulu; the frame counts are FFX's `c006` motion set, `research/re-ffx-party-motion-timing.md`); the clip system, the hold, the light and the recorder are plumbing for both games (no file but `AnimRE.ts` and `LuluAnim2.ts` knows which game a figure is from). Pass 1's styles A, B and C are unchanged (`?style=A|B|C` plays them as before; the vial is theirs).
+
+## What changed, per item
+
+| # | Ask | What is built |
+|---|---|---|
+| 1 | B's look on A's clock, start -> looping hold -> release, the game's frames | `STYLE_P2` is B's shapes (anticipation, overshoot, stretch, springs, braid, camera punch) with durations from the game's own frame counts at 30 fps (`AnimRE.ts`; `AnimLibrary2.ts` builds every clip from them). A clip segment may carry `sustain` (`AnimClip.ts`): its `hold` is the shortest stay, the pose then swings from the segment's pose to a second pose and back every loop period (the game's `_01` clip), and `RigAnimator.keepHolding(true)` keeps the clip there until `release()` (or 9 s): the engine can hold a cast until its effect resolves (`AnimHold.ts`). |
+| 2 | Item: no model | There is no vial, bottle or prop in P2. An ally: a green orb of additive light rises from the raised hand as the clip's glow level grows, the arm cocks back and tosses overhand, the orb arcs to the target with a trail and bursts into sparkles on it (`AnimFx.ts`). The user: no orb, glow particles rise around her at the release. The presenter waits for the orb's landing before the heal. |
+| 3 | Cast | gather (the doll offered low) -> rise -> HOLD (a growing glow at the doll, orbiting sparkles, a swing that lifts her and flares the skirt so the springs lift the robe and the hair) -> draw in -> a sharp thrust (smear, camera punch) -> the glow flashes out with a ring on the release frame -> follow-through. Cast type 1 by default (`?cast=2`, `?cast=3` for the others; which spell uses which type was not read). |
+| 4 | Knees | A hurt and a KO bend the knees (the pelvis sinks, the skirt bunches, the spine folds) and the KO folds into the KO key as ONE gravity curve; its lowest point is on the floor (re-measured by the tests: within 50 px of `baselineY` every frame) and her feet are pinned from the first blow to the end of the kneel (`tools/rig/lane/anim-measure.mjs`). The rig has no leg bones: the knees are the pelvis and the skirt. |
+| 5 | Framing | The recorder's `anim2` mode puts the battle camera on its own rig and FREEZES it (every move the presenter asks is answered and ignored; the shake and the punch still play), 1280 x 720 at a pixel ratio of 1.5, so Lulu is 450 to 520 px tall and the contact stays in frame (the game's impact cut no longer leaves her). |
+| 6 | Hit-stop | weak 30 ms, strong (a crit, an overkill, a capped blow) 80 ms, first and last hit of a strike only; the contact lands on the game's frame (hit frame 20: the wind-up is 20 frames less the strike's own 255 ms run-up, which is the lunge's apex). |
+
+## The presenter's three new hooks (optional and additive, `BattlePresenterPorts.ts`; every one a no-op on an actor that does not answer)
+
+`animBeat(kind, hitIndex, hitCount, heavy)` (a strong blow holds longer), `animLead('end')` (pass 2 only: what is left of the clip's end signal; `BattlePresenterBeats.actionEnd` waits for it before it sends the actor home, as the game does: ATTACK2's end signal is frame 54 of 60, a cast type 3's is 70 frames after its hit), and the item's target (`animBegin`'s points: the user is told from an ally by being within 0.6 units).
+
+## Run it
+
+```
+node tools/rig/lane/anim-sim2.mjs --rig D:/pyrefly-art-rigs/lulu-v2 --out <dir>      # no browser: the real animator over a flat stage
+node tools/rig/lane/anim-timings2.mjs --rig D:/pyrefly-art-rigs/lulu-v2               # every clip in the game's frames and seconds, next to the game's counts
+PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject lulu --out <dir> --modes anim2 --variants today,B,P2 --alias lulu=lulu-v2 --width 1280 --height 720 --dpr 1.5 --wait
+node tools/rig/lane/anim2-assemble.mjs --in <dir> --out <final dir>                   # pass2-<action>.mp4, compare-<action>.mp4 (today | pass 1 B | pass 2), contact-<action>.png
+```
+
+## Tests
+
+`tests/unit/rig/anim-pass2.test.ts` (the game's clock, the hold track, every clip's frame counts on Lulu's real rig, the KO's floor and feet), `anim-pass2-play.test.ts` (the animator: a kept-open hold and its release, the self/ally item, the strike on the apex, `lead('end')`, the two hit-stops), `anim-fx.test.ts` (the light's state machine, and through the real actor). `tests/unit/tools/rig-lane.test.ts` knows the `anim2` mode. `npx tsc --noEmit` clean; every file under 400 lines; `node tools/orphans.mjs` still 26 (the base's).
+
+## Not done / what to know
+
+See `D:/Tools/pyrefly-scratch/2026-10-19/anim-proto-2/notes.md` (what still looks wrong, with the videos). FFX-2 was not run (its ATB calls the presenter differently; a dressphere's `cast`, `item` and `ko` fall straight to idle). `critic-plan --paths` still classes the presenter hooks DEEP: nothing ships from this branch without Bailey's pick and the review that class owes.

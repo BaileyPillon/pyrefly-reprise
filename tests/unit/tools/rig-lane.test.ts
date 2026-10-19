@@ -80,6 +80,7 @@ describe('the scratch Vite config, the lock and the guards', () => {
     for (const m of MODES) expect(expectedOutputs(m).length, m).toBeGreaterThan(0);
     expect(expectedOutputs('poses')).toEqual(['poses-info.json']);
     expect(expectedOutputs('anim')).toEqual(['segments.json', 'console.json']); // the animation prototype's recording (one session a variant of the engine)
+    expect(expectedOutputs('anim2')).toEqual(['segments.json', 'console.json']); // pass 2's recording (a fixed camera of its own, one video an action)
     expect(expectedOutputs('nothing')).toEqual([]);
   });
 

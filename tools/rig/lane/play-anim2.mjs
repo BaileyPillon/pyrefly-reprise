@@ -23,11 +23,11 @@ const writeJson = (file, obj) => fs.writeFileSync(file, JSON.stringify(obj, null
 
 /** The cameras, by segment: `dist` is a fraction of the game's own camera distance (smaller = closer), `look` an offset in world units from Lulu's centre (x along the stage, y up, z toward the camera). */
 export const SHOTS = {
-  attack: { dist: 0.25, look: [1.3, 0.0, 0] }, // she lunges to the RIGHT of the stage (about 2.9 world units, the game's own choreography), the target's hit effect is just left of where she starts
+  attack: { dist: 0.28, look: [1.0, 0.0, 0] }, // she lunges to the RIGHT of the stage (the game's own choreography, about 4 world units from the target's hit effect at the left): the look-at sits between her start and her end
   cast: { dist: 0.28, look: [-0.2, 0.05, 0] },
-  'item-ally': { dist: 0.25, look: [-1.9, 0.0, 0] }, // Lulu on the right, the first ally (Tidus) 3.8 units to her left
+  'item-ally': { dist: 0.27, look: [-0.7, 0.0, 0] }, // Lulu on the right, the first ally (Tidus) about 4 units to her left: both in frame
   'item-self': { dist: 0.25, look: [0.0, 0.0, 0] },
-  'hurt-ko': { dist: 0.25, look: [-0.2, 0.0, 0] },
+  'hurt-ko': { dist: 0.28, look: [-0.2, 0.0, 0] },
 };
 
 export async function anim2(g, spec, o) {
@@ -44,7 +44,7 @@ export async function anim2(g, spec, o) {
   const shots = { ...SHOTS, ...(o.shots ?? {}) };
 
   /** Put the battle camera on this segment's rig and freeze it. Returns the figures' facts for the log. */
-  const shot = (name) => page.evaluate(({ id, s, name: n }) => {
+  const shot = (name, first = true) => page.evaluate(({ id, s, name: n, first: f0 }) => {
     const b = window.__pyrefly.battle();
     const bc = b.scene.battleCamera;
     if (!bc.__orig) {
@@ -56,7 +56,10 @@ export async function anim2(g, spec, o) {
     const base = bc.__orig.idle;
     const a = b.stage.actor(id);
     const c = a.centerPoint();
-    const look = base.lookAt.clone().set(c.x + s.look[0], c.y + s.look[1], c.z + s.look[2]);
+    if (f0 || !bc.__follow) bc.__follow = { x: c.x };
+    if (s.follow) bc.__follow.x += (c.x - bc.__follow.x) * s.follow; // a follow shot: the look-at chases her (a fraction of the gap a frame), so a lunge pans the picture
+    const fx = s.follow ? bc.__follow.x : c.x;
+    const look = base.lookAt.clone().set(fx + s.look[0], c.y + s.look[1], c.z + s.look[2]);
     const dir = base.position.clone().sub(base.lookAt);
     const len = dir.length();
     dir.normalize();
@@ -69,7 +72,7 @@ export async function anim2(g, spec, o) {
     const px = (p) => { const v = new V(p.x, p.y, p.z).project(bc.camera); return [Math.round((v.x * 0.5 + 0.5) * cv.width), Math.round((1 - (v.y * 0.5 + 0.5)) * cv.height)]; };
     const at = (aid) => { const x = b.stage.actor(aid); return x ? { centre: px(x.centerPoint()), head: px(x.headPoint()), feet: px(x.position) } : null; };
     return { proj: { canvas: [cv.width, cv.height], lulu: at(id), tidus: at('tidus'), auron: at('auron'), armLeft: at('sinspawn-gui-arm-left'), body: at('sinspawn-gui') }, len, centre: [c.x, c.y, c.z], pos: pos.toArray(), look: look.toArray(), fov: bc.camera.fov, size: [window.innerWidth, window.innerHeight, window.devicePixelRatio] };
-  }, { id: who, s: shots[name], name });
+  }, { id: who, s: shots[name], name, first });
 
   if (o.probe) { // what the camera really is after the shot, a few frames on (the first run's frames showed the game's own wide camera)
     for (const n of Object.keys(shots)) { const r = await shot(n); g.log('SHOT', n, JSON.stringify(r.proj)); }
@@ -102,6 +105,7 @@ export async function anim2(g, spec, o) {
     let stop = -1;
     for (let i = 0; i < n; i++) {
       if (onFrame) await onFrame(i);
+      if (shots[name]?.follow) await shot(name, false);
       const pending = page.evaluate(() => window.__grab());
       await page.clock.runFor(st.frame % 3 === 0 ? 16 : 17);
       const r = await pending;

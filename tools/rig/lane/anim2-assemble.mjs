@@ -7,7 +7,7 @@
  * (default 45) after the last frame anything moved; the hurt-and-KO video runs whole.
  *
  * Writes, in `--out`: `pass2-attack.mp4`, `pass2-cast.mp4`, `pass2-item-ally.mp4`, `pass2-item-self.mp4`, `pass2-hurt-ko.mp4` (1280 x 720, 60 fps, the P2 variant of each action, labelled with the
- * action and a time since the first key press), `compare3-<action>.mp4` (TODAY | PASS 1 B | PASS 2 side by side, started on the same frame; attack, cast, item-ally, item-self, hurt-ko) and
+ * action and a time since the first key press), `compare-<action>.mp4` (TODAY | PASS 1 B | PASS 2 side by side, started on the same frame; attack, cast, item (the ally one), item-self, hurt-ko) and
  * `contact-<action>.png` (a row a variant, ten frames across the part that moves, each row labelled with its own length). Reads only the recording; needs ffmpeg and `sharp`.
  */
 import { spawnSync } from 'node:child_process';
@@ -78,8 +78,8 @@ for (const a of ACTIONS) {
   const cells = VARIANTS.map((v, i) => `[${i}:v]${crops[a] ? `crop=${crops[a].join(':')},` : ''}scale=${w}:${h}:flags=lanczos,${text(NAME[v], 14, 12, 24)},${clock(14, h - 44, 24, wins[i].t0 - wins[i].from)}[v${i}]`);
   const layout = VARIANTS.map((_, i) => `${i * w}_0`).join('|');
   const filter = `${cells.join(';')};${VARIANTS.map((_, i) => `[v${i}]`).join('')}xstack=inputs=${VARIANTS.length}:layout=${layout}:shortest=0[o]`;
-  ff([...VARIANTS.flatMap((v, i) => input(v, a, wins[i], wins[i].count)), '-filter_complex', filter, '-map', '[o]', '-frames:v', String(count + 30), ...enc, path.join(OUT, `compare3-${a}.mp4`)]);
-  console.log('wrote', `compare3-${a}.mp4`, wins.map((x) => x.count).join(' / '), 'frames');
+  ff([...VARIANTS.flatMap((v, i) => input(v, a, wins[i], wins[i].count)), '-filter_complex', filter, '-map', '[o]', '-frames:v', String(count + 30), ...enc, path.join(OUT, `compare-${a === 'item-ally' ? 'item' : a}.mp4`)]);
+  console.log('wrote', `compare-${a === 'item-ally' ? 'item' : a}.mp4`, wins.map((x) => x.count).join(' / '), 'frames');
 }
 
 // 3. a contact sheet an action: a row a variant, ten frames across the part that moves
@@ -91,23 +91,25 @@ const lastMove = (s) => {
 for (const a of ACTIONS) {
   const rows = VARIANTS.filter((v) => has(v, a));
   if (!rows.length) continue;
-  const cw = 384, ch = 216, lab = 110, N = 10;
+  const cw = 384, ch = 216, lab = 110, COLS = 5, N = 10; // ten frames a variant, two rows of five
   const comps = [];
   let r = 0;
   for (const v of rows) {
     const s = info[v].segments[a];
-    const last = a === 'hurt-ko' ? s.samples.length - 1 : lastMove(s);
-    comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${lab}" height="${ch}"><text x="6" y="22" font-family="sans-serif" font-size="15" font-weight="bold" fill="#f0d68a">${v === 'today' ? 'TODAY' : v === 'B' ? 'PASS 1 B' : 'PASS 2'}</text><text x="6" y="42" font-family="sans-serif" font-size="13" fill="#d8d0e0">${((last - 6) / 60).toFixed(1)} s</text></svg>`), left: 0, top: r * ch });
+    const w = windowOf(v, a);
+    const first = w.from, last = w.last;
+    comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${lab}" height="${ch}"><text x="6" y="22" font-family="sans-serif" font-size="15" font-weight="bold" fill="#f0d68a">${v === 'today' ? 'TODAY' : v === 'B' ? 'PASS 1 B' : 'PASS 2'}</text><text x="6" y="42" font-family="sans-serif" font-size="13" fill="#d8d0e0">${((last - w.t0) / 60).toFixed(1)} s</text></svg>`), left: 0, top: r * ch });
     for (let i = 0; i < N; i++) {
-      const n = Math.round((last * i) / (N - 1));
+      const n = Math.round(first + ((last - first) * i) / (N - 1));
       const f = path.join(dirOf(v, a), `f${String(n).padStart(4, '0')}.jpg`);
       let img = sharp(f);
-      if (crops[a]) img = img.extract({ left: crops[a][2] ? crops[a][0] : 0, top: crops[a][1], width: crops[a][2], height: crops[a][3] });
-      comps.push({ input: await img.resize(cw, ch, { fit: 'fill' }).toBuffer(), left: lab + i * cw, top: r * ch });
-      comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="80" height="20"><text x="3" y="15" font-family="sans-serif" font-size="12" fill="#fff" stroke="#000" stroke-width="0.6">${Math.round(((n - 6) * 1000) / 60)} ms</text></svg>`), left: lab + i * cw + 2, top: r * ch + ch - 20 });
+      if (crops[a]) img = img.extract({ left: crops[a][0], top: crops[a][1], width: crops[a][2], height: crops[a][3] });
+      const x = lab + (i % COLS) * cw, y = (r + Math.floor(i / COLS)) * ch;
+      comps.push({ input: await img.resize(cw, ch, { fit: 'fill' }).toBuffer(), left: x, top: y });
+      comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="90" height="20"><text x="3" y="15" font-family="sans-serif" font-size="13" fill="#fff" stroke="#000" stroke-width="0.7">${Math.round(((n - w.t0) * 1000) / 60)} ms</text></svg>`), left: x + 2, top: y + ch - 20 });
     }
-    r++;
+    r += N / COLS;
   }
-  await sharp({ create: { width: lab + N * cw, height: r * ch, channels: 3, background: '#17141f' } }).composite(comps).png().toFile(path.join(OUT, `contact-${a}.png`));
+  await sharp({ create: { width: lab + COLS * cw, height: r * ch, channels: 3, background: '#17141f' } }).composite(comps).png().toFile(path.join(OUT, `contact-${a}.png`));
   console.log('wrote', `contact-${a}.png`);
 }

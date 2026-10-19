@@ -29,7 +29,7 @@ PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject <id> --out <dir> --
 # 3b. the animation prototype's recordings (branch anim-proto / anim-proto-2; docs/handoff/anim-proto.md): `anim` is pass 1 (the game's own camera), `anim2` is pass 2 (a fixed close camera of its own,
 #     one video an action, 1280 x 720 at a pixel ratio of 1.5 so the frames are 1920 x 1080 and are scaled down)
 PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject lulu --out <dir> --modes anim2 --variants today,B,P2 --alias lulu=lulu-v2 --width 1280 --height 720 --dpr 1.5 [--segments attack,cast,item-ally,item-self,hurt-ko] [--shots shots.json] --wait
-node tools/rig/lane/anim2-assemble.mjs --in <dir> --out <final dir>     # pass2-<action>.mp4, compare3-<action>.mp4 (today | pass 1 B | pass 2), contact-<action>.png
+node tools/rig/lane/anim2-assemble.mjs --in <dir> --out <final dir>     # pass2-<action>.mp4, compare-<action>.mp4 (today | pass 1 B | pass 2), contact-<action>.png
 node tools/rig/lane/anim-sim2.mjs --rig D:/pyrefly-art-rigs/lulu-v2 --out <dir>    # pass 2's actions with no browser (the real animator over a flat stage): the fallback while REVIEW-BROWSER holds the browser
 node tools/rig/lane/anim-measure.mjs --rig <rig folder> --keys idle,ko              # where a posed rig is in painting px: its lowest point, edges and feet (does she float, sink or slide)
 
