@@ -4,13 +4,14 @@
  * for a weak blow and 80 for a strong one.
  */
 import { describe, expect, it } from 'vitest';
-import { markTime } from '../../../src/engine/rig/anim/AnimClip.ts';
-import { buildLibrary2, LULU_RE, STRIKE_RUN_MS } from '../../../src/engine/rig/anim/AnimLibrary2.ts';
+import { compileClip, markTime, sampleClip } from '../../../src/engine/rig/anim/AnimClip.ts';
+import { compileKeys } from '../../../src/engine/rig/RigKeys.ts';
+import { buildLibrary2, libraryFor, LULU_RE, STRIKE_RUN_MS } from '../../../src/engine/rig/anim/AnimLibrary2.ts';
 import { frameMs } from '../../../src/engine/rig/anim/AnimRE.ts';
 import { STYLE_B, STYLE_P2 } from '../../../src/engine/rig/anim/AnimStyles.ts';
 import { ATTACK_IMPACT } from '../../../src/engine/BattlePresenterActors.ts';
 import { LUNGE_MS } from '../../../src/engine/StrikeBeat.ts';
-import { animator, frame, near, run } from './anim-pass2-fixture.ts';
+import { animator, fixture, frame, near, run } from './anim-pass2-fixture.ts';
 
 describe('the animator with pass 2\'s clips', () => {
   it('a cast kept open stays in its hold for seconds, glowing more, and let go it releases once and goes on to its end', () => {
@@ -120,5 +121,28 @@ describe('the animator with pass 2\'s clips', () => {
     expect(a.an.compiled('cast')!.sustain).toBeNull();
     const lib = buildLibrary2(STYLE_P2, {}, {}, LULU_RE);
     expect(lib.extra).toBeDefined();
+  });
+});
+
+describe('a rig with no authored poses still plays pass 2 (every pose derived from its keys)', () => {
+  it('every clip compiles on the synthetic rig, is finite to the end, and the hold, the glow and the two item clips are there', () => {
+    const d = fixture();
+    const rig = { boneIndex: d.boneIndex, roots: d.roots, keys: compileKeys(d), channels: d.bones.length * 5 };
+    const lib = libraryFor(STYLE_P2, {});
+    for (const def of [lib.windup, lib.strike, lib.cast, lib.item, lib.itemSelf!, lib.hurt, lib.ko, lib.victory, lib.recover('ko'), lib.recover('hurt'), ...Object.values(lib.extra ?? {})]) {
+      const c = compileClip(rig, def);
+      const out = new Float64Array(rig.channels);
+      sampleClip(c, c.total + 5, rig.keys.get('idle')!, out);
+      expect(out.every(Number.isFinite), def.name).toBe(true);
+      expect(c.total, def.name).toBeGreaterThan(0);
+    }
+    expect(compileClip(rig, lib.cast).sustain).not.toBeNull();
+    expect(compileClip(rig, lib.item).sustain).not.toBeNull();
+    near(compileClip(rig, lib.ko).total, frameMs(65), 0.5); // the KO's frame counts do not depend on the authored poses
+    near(markTime(compileClip(rig, lib.ko), 'ground'), frameMs(37), 0.5);
+  });
+  it('the style without p2 is refused by the pass-2 builder (the older styles use the older library)', () => {
+    expect(() => buildLibrary2(STYLE_B, {}, {}, LULU_RE)).toThrow();
+    expect(libraryFor(STYLE_B, {}).itemSelf).toBeUndefined();
   });
 });
