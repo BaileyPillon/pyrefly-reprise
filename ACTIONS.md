@@ -18,39 +18,276 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 824, from 2026-09-15 to 2026-10-18 (ids A-0001 to A-0824), 584 of them linked to at least one decision (795 distinct decision ids).
+- **Rows:** 863, from 2026-09-15 to 2026-10-19 (ids A-0001 to A-0863), 621 of them linked to at least one decision (887 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
-| implementation | 269 |
-| art | 84 |
-| deploy | 79 |
-| review | 170 |
-| records | 47 |
+| implementation | 283 |
+| art | 88 |
+| deploy | 82 |
+| review | 176 |
+| records | 48 |
 | infrastructure | 29 |
-| account | 21 |
+| account | 22 |
 | download | 14 |
-| maintenance | 31 |
-| process | 80 |
+| maintenance | 33 |
+| process | 88 |
 
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 527 |
+| October 2026 | 566 |
 
-- **By game:** 589 both, 90 n/a, 75 FFX, 70 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
-- **Deploys and releases:** 79 deploy rows: 68 lines of docs/deploys.log (58 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to "deploy every release as soon as its review says it can ship" (2026-10-17).
-- **Reviews:** 170 rows: 53 focused reviews (51 SHIP, 1 HOLD, 1 no verdict), 58 live checks (55 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 22 deep rounds with a report (12 SHIP, 6 HOLD, 4 no verdict) and 37 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
-- **Not finished or not shipped:** 59 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
+- **By game:** 612 both, 92 n/a, 87 FFX, 72 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **Deploys and releases:** 82 deploy rows: 71 lines of docs/deploys.log (58 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to b24614c05, bundle Cokaxk4X, release 55 (2026-10-19).
+- **Reviews:** 176 rows: 53 focused reviews (51 SHIP, 1 HOLD, 1 no verdict), 58 live checks (55 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 22 deep rounds with a report (12 SHIP, 6 HOLD, 4 no verdict) and 43 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
+- **Not finished or not shipped:** 61 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-18](#2026-10-18) (1) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-19](#2026-10-19) (9) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
+### 2026-10-19
+
+- **A-0863** · `records` · both · **Recorded r53, r54 and r55 on main: D-961 to D-1060 (items 101a to 135), A-0825 to A-0863, the deploy and review records, docs/LIVE.md, the product brief and AGENTS.md rule 8, NOW.md (records only)**
+  - What: The eighth records pass (a Sonnet sub-agent for the release driver), reusing the rig-v2 worktree on branch records-r55 from origin/main. It merged origin/r55-rc (b24614c05, which holds r53 and r54) with CHANGELOG.md the one conflict (the four new entries above Release 52, now with their live addresses, 78 entries); copied the deploy records of the three builds from the release tree D:/pyrefly-release55, read only (docs/deploys.log lines 70 to 72, the ledger with its three new deploys, the three artifact manifests, the markers so that critic/pending holds only b24614c05.json and critic/cleared gains 3c92b60cc, 4f4dc77bc and 9c91a8c3a, the focused and live reports and round 26 as it ended); recorded items 101a to 135 of the decisions queue as 100 rows with his words checked against the driver's transcript (times from DRIVER-STATE.md and the transcript's own stamps, which show some hand-typed times ran up to two hours early; five old proposed rows answered, one row superseded, others updated); wrote these actions; widened the ledger tool's decision id shape to four digits because D-999 was reached; regenerated docs/LIVE.md; wrote the Pilgrimage change into docs/PRODUCT-BRIEF.md; and rewrote AGENTS.md hard rule 8 on his words.
+  - Who: records sub-agent for the release driver (Sonnet) · Decisions: D-961, D-1009, D-1010, D-1041
+  - Result: done; recorded on the records branch for a fast-forward push to origin/main
+  - Evidence: `docs/target/decisions.json and actions.json` · `DECISIONS.md, ACTIONS.md and CHANGELOG.md` · `docs/LIVE.md and tools/live-record.mjs` · `docs/handoff/NOW.md`
+  - Reversible: yes, documentation only; revert the records commits
+- **A-0862** · `maintenance` · n/a · **The disk emergency of the night of 2026-10-18: D: fell from 201 GB to 40 GB in ten hours (full worktrees, a 10.1 GB candidate build, scratch), the list was updated, and M: reached 3 GB**
+  - What: At 23:58 EDT the D emergency session reported D: at 40 GB; the driver acknowledged that its lanes had added about 75 GB, changed every later brief to use sparse trees without docs/, and updated the list (2026-10-19 00:38 EDT: FINISHED D: 34.25 GiB, five rig and Pilgrimage trees, 127 Auron pass-1 fit folders and scratch; M: 28.70 GiB; caveated the release55 candidate build until after the r55 deploy; new KEEP paths for release55, anim-proto, art-r55 and the rig fit slots). At 02:43 EDT M: held 3.2 GB: the driver stopped the deep review's leftover preview server by PID, finished the round 26 copy into release55, declared the M: release tree and mockup folders FINISHED, and made no more writes to M:. Two stale wait loops were stopped by PID.
+  - Who: release driver session; the D emergency session; Bailey runs any delete
+  - Result: contained: no more writes to M:; the cleanup is his to run
+  - Evidence: `D:/Tools/disk-cleanup/pyrefly-driver-list-2026-10-18.md (outside the repository)` · `docs/handoff/NOW.md (the 2026-10-19 banner)`
+  - Reversible: yes, nothing deleted by an agent
+- **A-0860** · `process` · both · **Release 56 lanes launched: the RE session's reverse-engineering tip (action time ON, the Den of Woe trigger, FFX-2 pins re-derived) and r56-fixes for the r55 live findings and the review tooling (both games)**
+  - What: At 02:30 EDT the RE session started origin/re-parity-r56-re from b24614c05. At 02:49 EDT the driver launched r56-fixes (reusing the Pilgrimage worktree, branch r56-fixes from r55-rc): LV55-1 (the voice 404s), LV55-2 (phone Grand Summon taps), PR-0467 (the greyed refusal cue), PR-0383 (IMMUNE on Defend regression), PR-0462 and PR-0463 (Kimahri), LV55-4 (the help line), PR-0465 and PR-0466 (the Pilgrimage on a phone, and its music), and decision 134 (the review build uses the deploy's release stamp). Neither branch exists on origin yet.
+  - Who: release driver session; the RE session · Decisions: D-1059, D-1060
+  - Result: in progress; nothing pushed yet
+  - Evidence: `docs/target/in-flight.json (the branch list)` · `docs/target/decisions.json (D-1059, D-1060)`
+  - Reversible: yes, branches to be made; nothing in a build
+- **A-0859** · `review` · both · **Release 55 live check: PASS, 5,656 of 5,657 files byte for byte; the title, the voice-over, both rigs, the Pilgrimage and 14 older saves work live**
+  - What: verify-live --full (5,656 of 5,657 files; \_headers is read by the host and never served), 29 smoke contexts and 229 steps with 0 failures in the final runs at 1600x900 and 390x844: the title's build tag, the CHANGELOG, The Echo and back; the FFX voice-over in Chapter I (8 lines started, 0 with VOICE-OVER OFF); Kimahri and Lulu as rigs with real turns; the Pilgrimage to the first stop's RUN tab; Chapter III's menus, Summon list, Grand Summon picker and second-link roster; poseTrust() empty in 13 battle contexts. One new minor: LV55-1, four hidden FFX chapters request audio/voice/&lt;chapter&gt;.json, answer 404 and log a console error each start (handled; nothing a player sees). Observations: LV55-2 a tap on a Grand Summon picker row does nothing on the phone, LV55-3 PR-0460 reads as round 26 described, LV55-4 Yuna's Overdrive help reads 'Timed input'.
+  - Who: release driver session (a Sonnet review lane) · Decisions: D-931
+  - Result: PASS: exact artifact; no regression against live r54 apart from the minor LV55-1
+  - Evidence: `critic/reviews/b24614c05-live.json` · `critic/reviews/b24614c05-live.md`
+  - Reversible: no, a record of a review
+- **A-0858** · `deploy` · both · **Release 55 deployed to echoesofspira.com (b24614c05, bundle Cokaxk4X, release 55) at 01:28 EDT on the standing deploy words and an owner override of the deep-review cap**
+  - What: From a new release tree D:/pyrefly-release55 (node\_modules and the art folder junctioned to D:/pyrefly-art-r55, so no write to the full M: drive). The first deploy attempt was refused at once: release 39.5's gate needs --release=&lt;name&gt; (the newest player note is 55); re-launched with --release=55. main b24614c05, bundle Cokaxk4X, 2026-10-19T05:28:20Z, 4,630 art files, exit 0, byte check PASS on workers.dev and the apex (397 files); 65 builds owed a deep review and the cap was overridden under his standing words. critic-clear with round 26 settled nothing, because the review's candidate bundle (DyWSjMya) was built without the release stamp the deploy puts in the bundle (Cokaxk4X); no report was faked: the deep and focused obligations stay pending on b24614c05.
+  - Who: release driver session · Decisions: D-931, D-932, D-1059
+  - Result: done: live; byte check PASS; deep and focused still pending
+  - Evidence: `docs/deploys.log line 72` · `critic/pending/b24614c05.json` · `critic/artifacts/b24614c05.json`
+  - Reversible: yes, deploy the previous build again (r54, 4f4dc77bc)
+- **A-0857** · `review` · both · **Release 55 deep review (round 26) on the candidate: SHIP, changed area FAIL on the disclosed CHK-026, CHK-027 and PR-0460; the save-data class passes in a browser**
+  - What: A deep review of b24614c05 against live r54 (the save-data class, before the deploy): no critical defect, no regression (the three-chapter live comparison has the candidate better on CHK-027, 4 swap jerks against 10; possession-link Summon rows draw an inert menu where live drew a Switch row). 14 older saves and the live r54 save keep everything; garbage or blocked storage boots clean (CHK-024 PASS); benches of 2,400 FFX and 700 FFX-2 identical. Scores provisional (combat 9.5, encounter 8.9, visual 8.6, feel 8.3, narrative 8.7, interface 8.2; audio, onboarding, prep and delivery UNVERIFIED); milestone not accepted. Disclosed majors: PR-0380, PR-0379, PR-0459, PR-0460, PR-0295, PR-0148, PR-0099, PR-0461, PR-0421. New to fix: PR-0462 and PR-0463 (Kimahri's follow key 1.29x height and his KO).
+  - Who: release driver session (a Sonnet deep-review workflow) · Decisions: D-1021, D-1059
+  - Result: SHIP; changed area FAIL (carried majors); the report cannot settle the deep obligation (built without the release stamp)
+  - Evidence: `critic/rounds/round-26.json` · `critic/rounds/round-26.md`
+  - Reversible: no, a record of a review
+- **A-0845** · `implementation` · FFX · **Valefor's rig started on branch rig-valefor (2af625c95), the first single-costume boss and aeon: the Chapter III aeons' hurt-to-KO size jump of about 25 percent is the first target (FFX only; in progress)**
+  - What: Launched at 01:34 EDT on 2026-10-19 on a sparse tree without docs/ (the D: emergency's lesson), rig folder D:/pyrefly-art-rigs/valefor. In progress: nothing is switched on, and the sheets come to him first.
+  - Who: release driver session; a Sonnet rig lane · Decisions: D-1050, D-1029
+  - Result: in progress; a branch exists, no result yet
+  - Evidence: `origin/rig-valefor 2af625c95`
+  - Reversible: yes, a branch; nothing in a build
+- **A-0839** · `implementation` · FFX-2 · **FFX-2 action time per command: the measured rerun (re-parity-rc10-x2-action-time 1318aeb2d, switch OFF) and release 56's reverse-engineering tip with it ON and the Den of Woe trigger at 12,000 HP (FFX-2 only)**
+  - What: The RE session reran the action-time lane with the measured Potion 80, Fire 75 and Darkness 83 steps and 53 read hit frames (the Paragon 33, Nooj 17), with the switch OFF equal to the base (432 of 432). The driver took item 135 under the advance yes: ON in the next release with the Hero Drink trigger moved to 12,000 HP so switch ON equals OFF in the Den of Woe (194 to 200 of 200), and asked the RE session to build origin/re-parity-r56-re from the r55 line (the FFX-2 pins re-derived with switch-off proofs, the FFX and FF7 results identical).
+  - Who: the RE session (a Sonnet lane); release driver session · Decisions: D-994, D-995, D-1060
+  - Result: the rerun is done; the r56 tip is being built (in progress)
+  - Evidence: `commit 1318aeb2d (origin/re-parity-rc10-x2-action-time)` · `docs/target/decisions.json (D-1060)`
+  - Reversible: yes, the switch defaults to OFF in the engine until the r56 build turns it on
+- **A-0838** · `process` · both · **The RE session's live session on the real FFX-2 and FFX (Steam) after release 54: action-time readings, the dress change and a Fire after Hayate, saves restored by hash**
+  - What: Run by the RE main session from about 00:41 EDT on 2026-10-19, after he told it 'You can launch the games if you need to do any research'. Report D:/Tools/ffx-parity/live/2026-10-18-live-session.md (session 5): Fire after Hayate completed at 75 steps (matches 2026-10-09), unhasted; Darkness's pre-begin wait 53 to 57 steps with HP 1,338 paid at the end of the wait (cause not isolated), begin to completion 81; a Dark Knight dress change 38 steps. Owed to the next slot: the FFX t3b frame, a greyed row, case 2; a Hasted Fire and Cure in FFX-2. Read-only memory; the original GameSetting.ini is kept.
+  - Who: the RE session · Decisions: D-1007, D-1008
+  - Result: done for this slot; the remaining readings are owed
+  - Evidence: `D:/Tools/ffx-parity/live/2026-10-18-live-session.md (outside the repository)`
+  - Reversible: yes, read-only; saves restored byte for byte
+
 ### 2026-10-18
 
+- **A-0861** · `maintenance` · n/a · **The driver's disk lists for deletion by him: FINISHED build and scratch folders on M: and D: with a protected-paths check, and a dry-run-first cleanup script he can run**
+  - What: D:/Tools/disk-cleanup/pyrefly-driver-list-2026-10-18.md and .json (parser check PASS, 2,526 KEEP paths carried, no protection lost): FINISHED on M: 30.50 GiB (ch4-builds, focus-mock, pose-gate-tmp, temp roots) plus 50.25 GiB carried from the 10-15 list, D: 1.14 GiB; the drain on D: was Codex's own lsd-emulator runs (110 folders, 49.5 GiB in 48 hours), reported to him and not stopped. The script m-clean-1018.ps1 (16 M: rows; dry run by default; per item: exists, not named by a process, idle an hour, links unlinked without following, none left, then delete; a tripwire on the art folder's file count) was dry-run by the driver (80.75 GiB would be freed, 0 skipped) and handed to him with the -Apply command. The deleting is his.
+  - Who: release driver session (Sonnet lists); Bailey runs any delete
+  - Result: done: lists and script written; nothing deleted by an agent
+  - Evidence: `D:/Tools/disk-cleanup/pyrefly-driver-list-2026-10-18.md (outside the repository)` · `D:/Tools/disk-cleanup/m-clean-1018.ps1`
+  - Reversible: yes, lists only; nothing deleted
+- **A-0856** · `implementation` · both · **Release 55 assembled on branch r55-rc (b24614c05): Release 54 and 39.5 together, the Fish voices, the Kimahri and Lulu rigs, rig format v2, the RE menu and Chapter III rules, the Pilgrimage prototype and three fixes**
+  - What: At 19:01 EDT the driver's assembly lane merged, one at a time with each merge's tests run: r395-port (on r54), origin/rig, the Fish voices (222 recordings, 0 missing), origin/re-parity-r55-re 0d67115d7, the FOC54-003/004/005 fixes (IMMUNE on a fully resisted status, 'Shield first', the Sensor plate), origin/rig-v2 and origin/pilgrim-proto. Conflicts: main.ts, pose-gate.mjs and CONTRACT-CHANGES (rig), CommandMenu.ts and commandMenuRows.ts (RE, resolved to keep Release 54's two-pick flow with the lane's rules), BattleScreenFlow.ts (the Pilgrimage). Merge interactions fixed and proved by switching the cause off. Full suite 1,481 files, 23,468 tests, 0 failing; tsc clean; pose-gate PASS; audio QA 0; art mirror D:/pyrefly-art-r55 proved (5,506 files, 104 rig files). Finding disclosed: the full rig gate refuses both rigs on this base (Kimahri 10 of 13, Lulu 9 of 13) because release 53's sizing rule registers the paintings differently; the deploy's --verify passes and the game draws both.
+  - Who: release driver session (a Sonnet assembly lane) · Decisions: D-1015, D-1021, D-1029, D-1030, D-1042, D-971, D-1005
+  - Result: built and checked; deep review before the deploy (save-data class)
+  - Evidence: `commit b24614c05 (origin/r55-rc)` · `docs/handoff/r55-assembly.md` · `CHANGELOG.md (the Release 55 entry)`
+  - Reversible: yes, revert the merge on the branch; not live until the deploy row
+- **A-0855** · `process` · both · **The new-chapter candidates, ranked for both games, and the Spectral Keeper data and AI extraction (research/re-ffx-spectral-keeper.md) after his pick (FFX and FFX-2)**
+  - What: Candidates (D:/Tools/pyrefly-scratch/2026-10-18/new-chapters/candidates.md): FFX Spectral Keeper, Penance, the six Dark Aeons, Omega and Ultima Weapon, Evrae Altana; FFX-2 the Fallen Maesters at Via Infinito 20, 40, 60 and 80, the Youth League Tournament, the Bevelle Underground guardians, Ifrit at Kilika, Farplane Cup duels. Correction recorded: Mirror Aeons covers only the Dark Magus Sisters and the Dark Yojimbo. He picked Spectral Keeper and the Fallen Maesters at 16:50 EDT. The RE session's extraction (origin/re-parity-new-chapters-1018 40aaa301e, 2026-10-19 02:52 EDT): formation dome02\_00 (Keeper plus seven Circles, six platforms and a seventh with an aeon out), Escape, Flee, Guard and Sentinel off, a Move command, the Keeper at 52,000 HP, a counter Attack All, mines at four damaging hits. Engine needs: platforms, mines, battle-level Guard and Sentinel disable, First Strike. The Maesters extraction comes after r56; next a paper preflight and his arena and art pick.
+  - Who: release driver session; the RE session · Decisions: D-1038, D-1039
+  - Result: research done for the Keeper; nothing built
+  - Evidence: `commit 40aaa301e (origin/re-parity-new-chapters-1018)` · `research/re-ffx-spectral-keeper.md (on that branch)`
+  - Reversible: yes, research notes on a branch
+- **A-0854** · `process` · both · **Animation references research for the rigs: Inochi2D, Live2D, Spine, DragonBones, Rive, Animated Drawings with a CMU motion-capture retarget, spring bones, pose-guided video and combat timing references (both games)**
+  - What: A research lane (D:/Tools/pyrefly-scratch/2026-10-18/anim-refs/notes.md) after his 'poses look too stiff' message: adopt first angle-space blending, three-phase clips and a contact event (hit-stop 0 to 30, 50 to 80 and 100 to 150 ms, a shake, a 0.08 s flash) and smear variants; then VRM-style Verlet chains at a fixed 1/120 s step; later a lattice warp on one character and an offline CMU retarget pilot (free for all uses, ask for an acknowledgement); not adopted as runtimes: Live2D (proprietary), Spine (editor licence), Inochi2D, DragonBones, Rive. He also asked which installed games already do 2.5D well: the best technique references are Vanillaware and UbiArt games, none installed (buying needs his yes).
+  - Who: release driver session (a Sonnet research lane) · Decisions: D-1051, D-1052, D-1053, D-1054, D-1055, D-1056, D-1057, D-1058
+  - Result: done: notes; the animation prototype lane (branch anim-proto) is running
+  - Evidence: `D:/Tools/pyrefly-scratch/2026-10-18/anim-refs/notes.md (outside the repository)` · `docs/target/decisions.json (D-1052 to D-1058)`
+  - Reversible: yes, research notes
+- **A-0853** · `implementation` · FFX · **The Pilgrimage prototype (origin/pilgrim-proto de67ac6b4): a four-stop branching run of existing FFX fights behind the word 'pilgrim', with boons and a run-over page, never touching the save (FFX only; hidden)**
+  - What: Built at 18:01 EDT (ec6346f09) and fixed at 18:05 (de67ac6b4: boon cards showed repo paths such as 'src/data/ffx/items/...' and 'Count ours' to players; now 'FFX item', 'FFX armour ability' and 'New boon', with a test that fails on repo paths): the road Chapter VII, then VIII or IX, then X or the Mirror Aeons elite, then III; a RUN tab in Party Prep; one of three boons after each win; a run-over page with Again in two presses; storage in its own keys (pyrefly-reprise:pilgrim:v1) and the experiments key; 55 tests plus an end-to-end spec at both sizes; no engine rule or boss number changed (a test runs every boon on every stop). src/app/pilgrim/ is classed with the front-end screens in critic/policy.json. Shipped hidden in r55.
+  - Who: release driver session; a Sonnet lane · Decisions: D-1030, D-1041
+  - Result: built and live (hidden) in r55; the live check reached the first stop's RUN tab
+  - Evidence: `commit de67ac6b4 (origin/pilgrim-proto)` · `docs/handoff/pilgrim-proto.md`
+  - Reversible: yes, a hidden door word; remove the branch merge, or never type the word
+- **A-0852** · `art` · both · **The Pilgrimage run mockups: 25 frames, compare sheets and phone sheets for two route styles and two growth models, with an FFX-2 Gullwings hunt frame (both games)**
+  - What: D:/Tools/pyrefly-scratch/2026-10-18/pilgrim-mock/: Option 1 Pilgrim's road (seven fights, Chapter VII to III) and Option 2 Branching path (three forks, elites the Mirror Aeons and Sin's Fins or Core); rewards sourced from FFX items, auto-abilities, Sphere Grid node values and FFX-2 dresspheres and grids; the new boons labelled new (Overdrive charged, Grand Summon charge); prices and run minutes are placeholders. Findings: A's stat gap (Tidus HP 1,265 at Chapter VII to 6,492 at Omnis) cannot be closed by rewards, elites with fixed parties do not fit A, some fights pay no gil. The agent recommended Option 2 + B; the driver agreed; he picked it.
+  - Who: release driver session (a Sonnet mockup lane) · Decisions: D-1024, D-1026, D-1030
+  - Result: done: he picked Option 2 + B at 16:31 EDT
+  - Evidence: `D:/Tools/pyrefly-scratch/2026-10-18/pilgrim-mock/ (outside the repository)` · `docs/target/decisions.json (D-1030)`
+  - Reversible: yes, mockups are scratch files
+- **A-0851** · `implementation` · both · **Release 39.5 ported onto the live line (origin/r395-port 28cc87148): the Echo title, chapter-select tracks A and C, the PRESENTATION page, a CHANGELOG button, a build number and voice-over (both games; voice FFX only)**
+  - What: He asked at 13:42 EDT why the selectable title screens he had asked for were not in the live build. The ledger showed them built on origin/r395-int and never merged. A port lane merged r395-int onto r54-rc (22 conflicts, every one kept both sides; tsc clean; suite 22,798 passed with one art-sidecar test fixed after; pose-gate PASS; audio QA 0 findings; 43 real-key checks, 0 failed, 18 screenshots). It is a save-data class change only because SaveData.ts gains four settings fields (voiceOn, voiceVolume, titleArt, chapterSelectMusic; no schema bump). The driver kept the fields in SaveData and asked for the deep review before the deploy.
+  - Who: release driver session; a Sonnet port lane · Decisions: D-1021, D-1015, D-548, D-561, D-603, D-551
+  - Result: built and checked; shipped in r55
+  - Evidence: `commit 28cc87148 (origin/r395-port)` · `docs/screenshots/r395-port/`
+  - Reversible: yes, revert the merge; the settings fields are additive
+- **A-0850** · `art` · FFX · **The Fish re-voice of release 39.5's 200 lines (Tidus 74, Yuna 62, Auron 64), with a pronunciation lexicon for aeon and about 26 FFX names, and the review and pronunciation pages (FFX only)**
+  - What: Two takes per line, the take with the lowest speech-to-text word error picked (mean 0.2 percent), 75 lines' pauses cut to about 340 ms, finished to -19 LUFS by the project's ship tool (0 failures, 20 length warnings), 3.60 MB of the 20 MB budget, Fish's native Arpabet phoneme tags for 20 or more terms (37 lines re-rendered), spend $0.235 on Fish and about $0.08 on ElevenLabs. Three lines flagged for his ear. Pages published private: pronunciation (179 clips) and the full review (400 clips). The 22 Chapter XXVII lines were added in the r55 assembly, making 222 recordings.
+  - Who: release driver session; a Sonnet voice lane · Decisions: D-1015, D-1016, D-1019, D-1020
+  - Result: done; live in r55; nobody has heard them (agents cannot hear)
+  - Evidence: `D:/Tools/pyrefly-scratch/2026-10-18/voice/fish-full (outside the repository)` · `CHANGELOG.md (the Release 55 entry)`
+  - Reversible: yes, the ElevenLabs variants stay in tools/audio/voice-variants.json; switch the default back
+- **A-0849** · `account` · FFX · **A Fish Audio account for the voices: created and paid for by him, the API credit topped up, the API key saved by him to the pilot's private folder (no key is in the repository)**
+  - What: He created the account and paid at about 13:53 EDT, found the platform package did not cover API credit (the first run stopped on HTTP 402, 'Insufficient API credit'), and topped up $50 of API credit; the key lives only in the pilot's private folder on this machine. Spending is the driver's within the $30 pilot cap and the approved re-voice; the driver does not log the key.
+  - Who: Bailey (account, payment); release driver session (usage within the cap) · Decisions: D-1012, D-1015
+  - Result: done: the account works; $0.24 spent on the full re-voice
+  - Evidence: `docs/target/decisions.json (D-1012)`
+  - Reversible: no, the account and its credit are his; delete or revoke the key on Fish Audio's developer page
+- **A-0848** · `art` · FFX · **The three-way voice pilot for Tidus, Yuna and Auron (30 lines each way): references decoded from the game's voice banks, ElevenLabs instant clones and Fish Audio Drama 3 takes on a private audition page**
+  - What: Cast references decoded from FFX\_Data.vbf's FSB5 voice banks with our own reader and a new IMA decoder (Tidus 30.4 s, Yuna 30.7 s, Auron 27.3 s); three ElevenLabs instant clones (slots 11 to 14 of 30, about $0.08); the Fish takes on 2026-10-18 at 14:02 EDT (2 x 30 lines, 1,974 characters, $0.015, level-matched to -22.2 to -22.5 LUFS, word error 8.3 percent against 4.7 for the B voices and 5.2 for ElevenLabs). The audition page (63 audio files, then all three columns) was published private. Total pilot spend about $0.10 of the $30 cap.
+  - Who: release driver session; a Sonnet voice lane · Decisions: D-1012, D-1015
+  - Result: done; he picked Fish for all characters at 14:09 EDT
+  - Evidence: `docs/target/decisions.json (D-1012, D-1015)`
+  - Reversible: yes, scratch files and a private page; no product change
+- **A-0847** · `process` · both · **Voiced-lines research for both games: what r395-int already has (an FFX voice-over of 200 lines), the NPCTalk repository, chasm's video, voice-cloning law, and options A to F**
+  - What: A read-only research lane (notes D:/Tools/pyrefly-scratch/2026-10-18/voice/notes.md): origin/r395-int fbff68c54 already carried an FFX voice-over for Tidus, Yuna and Auron (200 lines, 3.60 MB, ElevenLabs designed voices, never heard in game, never merged); the whole game would be about 973 lines and 33 voices (about $34.70 on ElevenLabs); NPCTalk (MIT) needs 1.15 to 2.2 s per reply; Fish Audio's Drama 3 is a community-licence model that asks for a credit. Memory voiced-npcs-research-2026-10-18 saved at his request.
+  - Who: release driver session (a Sonnet research lane) · Decisions: D-1011
+  - Result: done: notes written; option F (live Talk with bosses) waits for his yes
+  - Evidence: `D:/Tools/pyrefly-scratch/2026-10-18/voice/notes.md (outside the repository)` · `docs/target/decisions.json (D-1011)`
+  - Reversible: yes, research notes
+- **A-0846** · `process` · both · **The rig census and cost model: 146 painted subjects become about 100 jobs, ordered by benefit, with a re-plan trigger if Auron costs over 1.4M tokens (both games)**
+  - What: A planning lane (D:/Tools/pyrefly-scratch/2026-10-18/rig-plan/plan.md): 21 subjects do not swap and 23 are silhouette twins that carry over; the top fifteen by benefit start with Rikku Dark Knight, Tidus, Paine Dark Knight and Yuna; at most two lanes fitting at once, below-normal CPU priority while a review runs. His 'Single-costume figures first' pick later narrowed the party-member order.
+  - Who: release driver session (a Sonnet planning lane) · Decisions: D-1031, D-1032, D-1033, D-1034, D-1035, D-1036, D-1037, D-1050
+  - Result: done: the plan; adjusted by item 131
+  - Evidence: `docs/target/decisions.json (D-1031)`
+  - Reversible: yes, documentation only
+- **A-0844** · `implementation` · FFX-2 · **Rikku Dark Knight's rig (origin/rig-rikku-dk a956811b9): version 2, all poses authored, gated OK and OFF; the in-game sheets recorded on 2026-10-19 (FFX-2 only)**
+  - What: D:/pyrefly-art-rigs/rikku-dark-knight, gate OK 11 of 11 with thin margins (item 0.054, critical 0.050); every painting is drawn in a different costume (IoU 0.38 to 0.60), so every non-idle key is authored; a marks-only search (lane\_marks.py) took the blend holes from 52 to 0; about 0.54M tokens and 83 fits. The driver's offline review: consistent idle armour, but legs long and bendy, the item pose without a potion and a huge gauntlet. In-game sheets and harness (ffx2-valefor-besaid, CHK-027 jerks 6 to 2 to 4) were recorded on 2026-10-19 02:00 EDT. Stays OFF in the refine queue.
+  - Who: release driver session; a Sonnet rig lane · Decisions: D-1043, D-1050
+  - Result: built and recorded; OFF by his pick
+  - Evidence: `commit a956811b9 (origin/rig-rikku-dk)` · `docs/handoff/rig-rikku-dark-knight.md (on branch rig-rikku-dk)`
+  - Reversible: yes, not in the manifest; nothing to undo
+- **A-0843** · `implementation` · FFX · **Auron's rig: pass 1 (all ten painted poses authored, not switched on) and pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); sheets recorded in game; OFF in the refine queue (FFX only)**
+  - What: Pass 1 (origin/rig db2caa6d9, about 560k tokens, 128 fits): consistent costume but stiff, near-identical poses, no orb or flask, a blade bar, floaty legs, a scabbard bar on the KO. Pass 2 (origin/rig-auron2 72528aa3b, D:/pyrefly-art-rigs/auron-v2, gate OK 11 of 11, about 0.65M tokens): per-pose painted arm and prop variants over the idle body, the grey blade gone, the KO scabbard hidden, the pass-1 'rig' jerks traced to camera steps. In game on 2026-10-19 02:00 EDT (harness Sinspawn Gui): CHK-027 jerks 27 to 16, worst 207 to 59 px; four rig-class jerks at the first frame of hurt (head steps of 24 to 26 px). Still wrong: the idle body and coat in every pose, a red sleeve wedge, a thin blade, variants that pop at half a move.
+  - Who: release driver session; Sonnet rig lanes · Decisions: D-1040, D-1043, D-1050
+  - Result: built and recorded; OFF by his pick (item 131)
+  - Evidence: `commit 72528aa3b (origin/rig-auron2)` · `docs/handoff/rig-auron.md (on branch rig-auron2)`
+  - Reversible: yes, not in the manifest; nothing to undo
+- **A-0842** · `implementation` · both · **Rig format v2 and the lane kit (origin/rig-v2 e027f779c): a key may show, hide or swap a part, and tools/rig/lane/ cuts, fits and checks the next rigs (both games, shared plumbing)**
+  - What: Additive: versions 1 and 2 read, and a version 1 file draws exactly as it did (the gate digest unchanged, a 26-key hash golden equal through the new engine, GPU frame diffs within the run-to-run floor). New gate rules (hidden-share 0.6, part-never-shown, variant-unused and missing); the kit is record.mjs plus lane.py (new, fit, select, eval, keytable, clips, sheets, report, twin, framediff); Lulu's front views as a v2 demo rig. 276 rig tests pass. Deep class (rigTypes.ts); merged into r55 so its one deep review covers the v2 engine and later rigs can ship as data. The rig program plan behind it: 146 subjects to about 100 jobs, a census and a cost model (D:/Tools/pyrefly-scratch/2026-10-18/rig-plan/plan.md).
+  - Who: release driver session; a Sonnet rig lane · Decisions: D-1031, D-1034, D-1035, D-1036, D-1037
+  - Result: built, reviewed in round 26 and live in r55 (the engine; no v2 rig is shipped)
+  - Evidence: `commit e027f779c (origin/rig-v2)` · `docs/handoff/rig-v2-and-kit.md` · `docs/CONTRACT-CHANGES.md (the 2026-10-18 rig format v2 entry)`
+  - Reversible: yes, revert the merge; versions 1 rigs are unaffected
+- **A-0841** · `implementation` · FFX · **Lulu's rig: pass 1 gated, a bounded fix pass (skirt panels, front-view parts for defend and Overdrive, a KO near the painted footprint), pass 2 recorded on four sheets and approved by him (FFX only)**
+  - What: Pass 1 gated OK at 06:33 EDT (origin/rig f03eea833, 9 of 12 poses authored; the driver's review: continuity solved, quality not yet). His pick 'One fix pass, then show me' started pass 2 (origin/rig 67ad03847): the skirt a column plus a left train hung from the hips, the attack painted at 0.755, defend and Overdrive cut from those paintings (a mixed costume: painting top over the idle skirt), the KO 0.64 of her height against 0.43 painted. Sheets were recorded after r54 went live (59c766ec0, four sheets); the driver recommended ON and he approved it in his own words at 15:33 EDT. Live in r55 in Sinspawn Gui.
+  - Who: release driver session; a Sonnet rig lane · Decisions: D-1006, D-1028, D-1029, D-1032, D-1033
+  - Result: built, approved and live in r55
+  - Evidence: `commit 59c766ec0 (origin/rig)` · `docs/handoff/rig-lulu.md`
+  - Reversible: yes, ?rig=off, or remove lulu from the art manifest's rigs list
+- **A-0840** · `implementation` · FFX · **Kimahri's rig built and accepted (origin/rig eb4778b58): one painting cut into 15 parts on 32 bones with a key for each of 13 poses, six of them authored; Biran and Yenke swaps 83 to 0 (FFX only)**
+  - What: Branch rig, rig folder D:/pyrefly-art-rigs/kimahri, the rig gate OK on 13 of 13 keys with full coverage and no joint holes, 'rig-gate --verify' pass. Six authored keys (ready, follow, item, victory, jump, ko) with clips; the driver watched the strike, the hurt-then-KO and the victory clip: one costume in every pose, feet planted, the KO lies down. On the Biran and Yenke harness Kimahri's painting swaps drop from 83 to 0 and the ghost swaps from 83 to 0; with the rig off CHK-027 reads FAIL at 53.8 px. His costume is the idle painting's gold-trim white vest. Shipped on in r55.
+  - Who: release driver session; a Sonnet rig lane · Decisions: D-970, D-971, D-972, D-973, D-916, D-917
+  - Result: built, gated and live in r55 (the rig is on for Kimahri in Biran and Yenke)
+  - Evidence: `commit eb4778b58 (origin/rig)` · `docs/handoff/rig-kimahri.md`
+  - Reversible: yes, ?rig=off, or remove kimahri from the art manifest's rigs list
+- **A-0837** · `implementation` · FFX · **The reverse-engineering stack for release 55 (re-parity-r55-re 0d67115d7): the FFX command menu and Chapter III rules follow the game, the Grand Summon KO refusal, a submit guard and a rule-8 comment cleanup (FFX only)**
+  - What: Built on the r54 line by the RE session: the greyed-row menu (spell groups under Silence or at 0 MP, Curse's Overdrive row, KO and recovering aeons in the Summon list, Escape, Flee and Switch greyed with no reason, Talk only where the script gives it), the target-step cursors (t1, t2, t3a, t6a, t6b, t7), Chapter III's taken-aeon removal, Chapter 28's TAKEN row gone, the Grand Summon KO refusal with a submit guard, and a sweep that rewrote auto-generated names and x86 idioms in comments and test titles (97bd9a226, e3cae5aa8, then b843823d2 for the target parity). Independent check PASS: 192 plays with 0 outcome differences, goldens identical, a HUD walk of 15,856 commits accepted. Switches ON: a, b, c, C28, d, e, can't-escape, R, G, t1, t2, t3a, t6a, t6b, t7; OFF: f, H, t3b, t5 and SCRIPT\_COMMAND\_DISABLES.
+  - Who: the RE session (a Sonnet lane); release driver session for the switches · Decisions: D-982, D-983, D-984, D-985, D-986, D-987, D-988, D-991, D-992, D-993, D-996, D-997, D-998, D-1001, D-1003, D-1004
+  - Result: built and checked; merged into r55 and live there
+  - Evidence: `commit 0d67115d7 (origin/re-parity-r55-re)` · `docs/handoff/re-parity-r55-re.md` · `D:/Tools/ffx-parity/rc11/r55-re-check.md`
+  - Reversible: yes, each behaviour has a named switch in the engine; turn it off
+- **A-0836** · `process` · both · **The Battle Parity Choices page (20 rows, version 2) and the night's parity branches for his decision: the menu, the target step and the cursor starts, and FFX-2 action time**
+  - What: The RE session published a private decisions page (rows a to f, H, Can't-escape, R, C28, G, action time with the Den of Woe trigger, and t1 to t7 with the t6b conflict noted against the approved Ink & Gold mockup) at 07:01 EDT and version 2 at 08:48; the driver put the night's picks in the same chat. His answer was 'I'll go with all of your recommendations' at 11:05 EDT and 'For t6b my answer is on' at 11:08: recorded as D-984 to D-1005.
+  - Who: release driver session; the RE session · Decisions: D-984, D-985, D-986, D-987, D-988, D-989, D-990, D-991, D-992, D-993, D-994, D-995, D-996, D-997, D-998, D-999, D-1000, D-1001, D-1002, D-1003, D-1004, D-1005
+  - Result: done: answered; the switches went to the r55 stack
+  - Evidence: `docs/target/decisions.json (D-984 to D-1005)`
+  - Reversible: yes, a published private page; no product change
+- **A-0835** · `review` · both · **Release 54 live check: PASS, 5,309 files byte for byte; the two-pick Doublecast, Scan, the Sensor plate and Isaaru's locked duels work live on both viewports**
+  - What: verify-live --full (5,309 files, 0 mismatched), 17 contexts with 0 console errors and 0 responses of 400 or more, poseTrust() empty, Doublecast as two picks by real keys on desktop and real taps on the phone (natural, with the One MP Cost state edit, and the dead end with Back), Scan's immune miss on a Pagoda, the Sensor plate reading 'HP 99999 / 99999', Chapter XIV's locked menu, FFX-2 Chapter IV and FFX Chapter I as regression smokes. Chapter III continuity read as disclosed (head 23.7 percent, worst jerk 160.4 px). FOC54-004 and FOC54-005 reproduced live (fixed in r55); the start card read 7.27 s on a cold phone load (release 53's cost).
+  - Who: release driver session (a Sonnet review lane) · Decisions: D-931
+  - Result: PASS: exact artifact, no regression against r53; deep still owed
+  - Evidence: `critic/reviews/4f4dc77bc-live.json` · `critic/reviews/4f4dc77bc-live.md`
+  - Reversible: no, a record of a review
+- **A-0834** · `deploy` · both · **Release 54 deployed to echoesofspira.com (4f4dc77bc, bundle CLLPzAAR) at 15:14 EDT on the standing deploy words**
+  - What: npm run deploy from the release tree under the owner override of the standing words: main 4f4dc77bc, bundle CLLPzAAR, 2026-10-18T19:14:59Z, 4,630 art files; the byte check passed on workers.dev and the apex. The r53 marker moved to critic/cleared; the live, focused and deep obligations were recorded in critic/pending/4f4dc77bc.json.
+  - Who: release driver session · Decisions: D-931, D-932
+  - Result: done: live; byte check PASS
+  - Evidence: `docs/deploys.log line 71` · `critic/artifacts/4f4dc77bc.json`
+  - Reversible: yes, deploy the previous build again (r53, 9c91a8c3a)
+- **A-0833** · `review` · FFX · **Release 54 focused review: SHIP, changed area PASS (Doublecast two picks, Scan and Sensor, Slow on Flux, Doom on Evrae, Isaaru's locked duels), two majors carried unchanged from live**
+  - What: A focused review of 4f4dc77bc against live r53 (about 190 minutes, 110 of them harness time), real input: Doublecast as two picks, Scan and Sensor on the Pagodas and Yu Yevon, Slow on Seymour Flux, Doom on Evrae and Isaaru's locked duels behave as the notes say; FFX-2 untouched. Disclosed majors, both carried and not introduced: FOC54-001 (Chapter III aeon hurt-to-KO head jump 23.5 percent, live 23.6) and FOC54-002 (swap jerks of 40 px or more persist). Polish: FOC54-003 Slow on Flux shows nothing, FOC54-004 'Guard first' with Defend off, FOC54-005 Yu Yevon's plate, FOC54-006 a research note, FOC54-007 the harness cannot play the two-pick card; 003 to 005 were fixed in r55.
+  - Who: release driver session (a Sonnet review lane) · Decisions: D-958, D-959, D-969
+  - Result: SHIP; changed area PASS; no regression against live r53
+  - Evidence: `critic/reviews/4f4dc77bc-focused.json` · `critic/reviews/4f4dc77bc-focused.md`
+  - Reversible: no, a record of a review
+- **A-0832** · `implementation` · FFX · **Release 54 assembled on branch r54-rc (4f4dc77bc): Release 53 plus the FFX boss rows as the game's records have them, Doublecast as two casts and Isaaru's aeon duels as the game's scripts set them (FFX only)**
+  - What: The RE session's one checked branch re-parity-r54 (94012a68d: boss-data build with all six switches on, the Doublecast engine lane, Isaaru's formation flags and command lock, the follow-up that draws Yuna's switched-off rows greyed, goldens re-derived with switch-off proofs, independent check PASS on 592 plays) with the Release 53 candidate merged in, then the two-pick Doublecast menu (dcast-hud, no conflict) and the docs-only research notes (re-parity-r54-docs-c). The one merge conflict was docs/CONTRACT-CHANGES.md (every entry of both sides kept, newest first); no pin overlapped. Full suite 1,386 files, 22,372 tests, 0 failing; tsc clean; pose-gate PASS. FFX-2 and FF7 engines untouched (ffx2-atb-golden 6 of 6, ff7-golden 3 of 3).
+  - Who: release driver session (a Sonnet assembly lane); the RE session · Decisions: D-950, D-951, D-952, D-953, D-954, D-955, D-958, D-959, D-961, D-969
+  - Result: built and checked; went on to its focused review
+  - Evidence: `commit 4f4dc77bc (origin/r54-rc)` · `CHANGELOG.md (the Release 54 entry)` · `docs/handoff/re-parity-r54.md`
+  - Reversible: yes, revert the merge on the branch; not live until the deploy row
+- **A-0831** · `art` · both · **Focus and touch-target mockups M1 to M7 on real screens (focus ring, 44 px chapter cards, pause rows, phone chips, FFX-2 story choices, prep tabs, wording drafts), with the picks recorded as delegated rows**
+  - What: Seven compare sheets from real screens (D:/Tools/pyrefly-scratch/2026-10-18/focus-mock/): the driver viewed M1 and M3 and took the agents' recommendations (ring C, 44 px everywhere, pause rows A). His 11:05 EDT 'I'll go with all of your recommendations' approved the build; it is deep class and not scheduled yet. The wording drafts of M7 stay his to edit.
+  - Who: release driver session (Sonnet mockup lanes) · Decisions: D-975, D-976, D-977, D-978, D-979, D-980, D-981, D-1005
+  - Result: done: mockups and picks; the build is not started
+  - Evidence: `docs/target/decisions.json (D-975 to D-981)`
+  - Reversible: yes, mockups are scratch files; no product change
+- **A-0830** · `process` · both · **The input and focus plan, on paper: Tab, Space and arrows are blocked for any target, Enter double-fires on focused buttons, four key tables and thirty listeners; decisions D1 to D5 and two more (both games)**
+  - What: A 467-line paper plan (D:/Tools/pyrefly-scratch/2026-10-18/input-focus/plan.md) answering ChatGPT point 6 and Codex's audit T-0002: Tab nearly free once the preventDefault is narrowed, the lone-Shift-tap triangle latch, narrow live regions in place of aria-live on #ui, the secret-door label kept dark, the pause screen's Tab exception, and the order of work. Decisions recorded as DELEGATED rows 102a to 102g. Nothing was built.
+  - Who: release driver session (a Sonnet planning lane) · Decisions: D-962, D-963, D-964, D-965, D-966, D-967, D-968
+  - Result: done: the plan; no code written
+  - Evidence: `docs/target/decisions.json (D-962 to D-968)`
+  - Reversible: yes, documentation only
+- **A-0829** · `implementation` · FFX · **Doublecast as two picks: the pick-flow mockups on the real HUD and engine (option A "Second round" chosen), then the HUD built on branch dcast-hud (FFX only)**
+  - What: Mockups first (D:/Tools/pyrefly-scratch/2026-10-18/doublecast/, real HUD and engine c030970a, real keys, one disclosed state edit), then option A built (origin/dcast-hud 4c1bf5461, later 869c03518 in r54): the same list returns as DOUBLECAST 2 OF 2 with a chip for the first cast and the remaining MP, the spells it cannot pay greyed (from the engine's doublecastPicks verdict), the second target commits both; five fixes with it (cursor lands on the nearest offered row, greyed phone tiles get a reason line, Esc out of a target step clears the Sensor's folded chip, a lock chip on Pagoda B clear of the boss, the advisor card names both casts). The RE session confirmed from the game that the dead end, a second list opened all greyed, leaves only Back. Full suite 1,375 of 1,376 files (one load timeout, passing alone), tsc clean. Game case: FFX only.
+  - Who: release driver session; a Sonnet lane; the RE session · Decisions: D-969, D-938
+  - Result: built and merged into r54; live in r54 and r55
+  - Evidence: `commit 4c1bf5461 (origin/dcast-hud)` · `docs/handoff/re-parity-r54.md` · `critic/reviews/4f4dc77bc-live.md`
+  - Reversible: yes, revert the merge of dcast-hud; the engine seam adds no contract field
+- **A-0828** · `review` · both · **Release 53 live check: PASS, 5,309 files byte for byte, with the lunge, the held start card and the Chapter IV opening seen on the live site**
+  - What: verify-live --full against the manifest (5,309 files, 0 mismatched or missing), poseTrust() empty in 15 live contexts, FFX-2 Chapter IV fitted at the first menu in 5 of 5 cold loads (the held start card lasted 3.9 to 6.2 s, the cost of the framing fix), Seymour Flux, hidden Sinspawn Gui and FFX-2 Chapter XI by real keys and taps at 1600x900 and 390x844. Observations, no new major: LV53-1 one borderline CHK-026 reading on 1 of 271 swaps; LV53-2 CHK-027 still FAIL (4 jerks of 40 px or more in 170 s, worst 70.9 px, against r52 live 20 in 192 s, worst 224 px); LV53-3 the card duration. critic-clear settled the live obligation.
+  - Who: release driver session (a Sonnet review lane) · Decisions: D-931
+  - Result: PASS: exact artifact, no regression; the focused and deep obligations stay open
+  - Evidence: `critic/reviews/9c91a8c3a-live.json` · `critic/reviews/9c91a8c3a-live.md`
+  - Reversible: no, a record of a review
+- **A-0827** · `deploy` · both · **Release 53 deployed to echoesofspira.com (9c91a8c3a, bundle D9wTDH4W) at 03:43 EDT on the standing deploy words**
+  - What: npm run deploy from the release tree, under the owner override of Bailey's standing words (D-931): main 9c91a8c3a, bundle D9wTDH4W, 2026-10-18T07:43:48Z, 4,630 art files, exit 0. The deploy's own byte check passed on the workers.dev address and the apex; www answers 301. The r52 marker moved to critic/cleared; the live, focused and deep obligations were recorded in critic/pending/9c91a8c3a.json.
+  - Who: release driver session · Decisions: D-931, D-932
+  - Result: done: live; byte check PASS on both addresses
+  - Evidence: `docs/deploys.log line 70` · `critic/artifacts/9c91a8c3a.json`
+  - Reversible: yes, deploy the previous build again (r52, 3c92b60cc)
+- **A-0826** · `review` · both · **Release 53 focused review on its candidate: SHIP, changed area FAIL on the disclosed FOC53-001 (swap jerks of 40 px or more still occur)**
+  - What: A focused review of 9c91a8c3a against live r52 (about 215 minutes, about 150 of them harness time), headless Chromium on the real GPU. CHK-026 flips from FAIL (live) to PASS for Sinspawn Gui and Seymour Flux; CHK-027 improves 1.5 to 8 times in swap jerks per minute (Ixion at Djose 3.86 to 1.23, Dark Aeons 3.77 to 1.92, Bahamut 4.84 to 0.56, Gui 1.66 to 0.96, Seymour Flux 1.62 to 1.08). Disclosed: FOC53-001 (jerks persist, worst 141 px), FOC53-002 (double-image severity 0.413, polish) and FOC53-003 (the slow-load held card not exercised). Ship verdict SHIP: no critical, no regression at major severity.
+  - Who: release driver session (a Sonnet review lane) · Decisions: D-911
+  - Result: SHIP; changed area FAIL on FOC53-001 (carried as a disclosed major); no regression against live r52
+  - Evidence: `critic/reviews/9c91a8c3a-focused.json` · `critic/reviews/9c91a8c3a-focused.md`
+  - Reversible: no, a record of a review; it can only be superseded by a later one
+- **A-0825** · `implementation` · both · **Release 53 assembled on branch r53-rc (9c91a8c3a): the pose sizing rule, the FFX hit order, the FFX-2 chain windows, minigames and Garment Grid statuses, a gentler lunge and an opening that waits for its framing**
+  - What: Stage 2 of the release line that began as r52-rc: release 52 with Chapter VI's fresh-battle openings and the FFX-2 per-body chain windows (re-parity-rc9-x2-hit-reaction-r52), the FFX-2 minigames lane, the FFX hit-order lane, the pose sizing rule (pose-ruler), the pose motion lane (pose-swap: the lunge's first frame and a 1/40 s animation clock, the timer clock staying 1/20 for the watchdog, play time and settling; seven tests including a mutation), the Chapter IV opening lane (ch4-camera) and the Garment Grid status lane (grid-status, nine Den of Woe carry pins re-recorded on the merged tree), merged one at a time with each merge's tests run, then the driver's text and small fixes. The CHANGELOG entry tags every paragraph FFX, FFX-2 or both. critic-plan: a deep review class, focused before the deploy and deep after, no save-data change.
+  - Who: release driver session (a Sonnet assembly lane); the RE session for its lanes · Decisions: D-911, D-912, D-949
+  - Result: built and checked: tsc clean, full suite green, pose gate PASS; went on to its focused review
+  - Evidence: `commit 9c91a8c3a (origin/r53-rc)` · `CHANGELOG.md (the Release 53 entry)`
+  - Reversible: yes, revert the merge on the branch; the build was not live until the deploy row below
 - **A-0824** · `records` · both · **Recorded r52 on main: D-898 to D-960, A-0789 to A-0824, three CHANGELOG entries, the product brief adopted, the generated what-is-live record (docs/LIVE.md) and the NOW.md banners (records only)**
   - What: The seventh records pass (a Sonnet sub-agent for the release driver), the answer to ChatGPT's point 8 ("make the current release unmistakable"). It merged origin/r52-rc (3c92b60cc, which holds r51, r50.1 and r50) into records-r52 (CHANGELOG.md was the one conflict: main's consolidated entries kept from Release 49 down, the Release 52, 50.1 and 50 entries put above them with their live addresses, 74 entries), copied the uncommitted deploy records of the four builds from the r50 release tree, read only (docs/deploys.log lines 66 to 69, the ledger with 62 deploys since the last deep review, the artifact manifests, the markers so that critic/pending holds only 3c92b60cc and critic/cleared gains 8a3e8eff7, 6b638df95, d6dc0bdd7 and f939b87f2, the focused and live reports and the small evidence under 60 KB; the large pictures and run files stay in the release tree), recorded items 86 to 101 of the decisions queue as 63 rows (his words checked against the driver's transcript; six old proposed rows answered and two earlier rows marked partly superseded), wrote these actions, committed docs/PRODUCT-BRIEF.md as ADOPTED, wrote tools/live-record.mjs and docs/LIVE.md with a test that fails when it is stale, and updated the NOW.md banners. Checks: tsc clean; the ledger and live-record tests pass; the full unit suite on the committed tree ran in three processes because the machine stood at 100 percent CPU with 92 node processes when it began: the first (2 workers, 45 minutes) finished the 53 heaviest files (1,047 tests, all passed) and was stopped by its PID when the load fell; part A (4 workers, 1,270 files, everything that is not a bench, measure, strategy or sweep file) ran 20,521 tests, 20,489 passed, 31 skipped, 1 todo, none failed; part B (2 workers, the 52 bench, measure and strategy files left) ran 346, 291 passed, 55 skipped by their own gates, none failed. Every one of the 1,373 test files ran (two in both parts): 21,878 tests, 21,791 passed, 86 skipped, 1 todo, none failing, with the art folder pointed at the r50 mirror; none of the 26 load failures the r52 assembly saw recurred. Game case: both.
   - Who: records sub-agent (Sonnet) under the release driver session · Decisions: D-898, D-960
