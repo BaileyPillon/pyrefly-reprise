@@ -111,6 +111,8 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
+  const lock = actor?.animLead?.('end') ?? -1; // pass 2 (dev only): the game holds the actor in its clip until the clip's end signal (the follow-through of a strike, a spell, a throw)
+  if (lock > 0) await ctx.sleep(lock);
   actor?.setPose('idle');
   ctx.actingId = null;
   endSpellAction(ctx);
@@ -168,7 +170,7 @@ export async function damage(
   // multi-hit action moves the camera (see `BattleMoments.impact`).
   const heavy = event.crit || event.overkill === true || event.capped === true;
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex, heavy });
-  const beat = ctx.stage.actor((event.sourceId ?? ctx.actingId)!)?.animBeat?.('contact', event.hitIndex, event.hitCount); // the animation prototype: hit-stop, springs, camera punch
+  const beat = ctx.stage.actor((event.sourceId ?? ctx.actingId)!)?.animBeat?.('contact', event.hitIndex, event.hitCount, heavy); // the animation prototype: hit-stop (30 ms a weak blow, 80 a strong one in pass 2), springs, camera punch
   if (beat && beat.punch > 0) void ctx.stage.camera.punch(beat.punch, beat.ms);
 
   const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms

@@ -10,12 +10,13 @@ import { ATTACK_IMPACT } from '../../BattlePresenterActors.ts';
 import type { RigData } from '../RigData.ts';
 import type { RigTransition } from '../RigKeys.ts';
 import { RigSkeleton } from '../RigSkeleton.ts';
-import { RigAnimator, type AnimFrame } from './RigAnimator.ts';
+import { RigAnimator, type AnimEvent, type AnimFrame } from './RigAnimator.ts';
 import type { IdleTerm } from './AnimIdle.ts';
 import type { Subject } from './AnimLibrary.ts';
 import { LULU } from './LuluAnim.ts';
 import { animFromQuery, type AnimStyle } from './AnimStyles.ts';
 import { VialProp } from './AnimProp.ts';
+import { AnimFx } from './AnimFx.ts';
 
 /** What the layer needs of the actor: where it stands, the scene it is in, a landmark of the posed rig (local world units). */
 export interface AnimHost {
@@ -55,6 +56,8 @@ export class RigAnimLayer {
   readonly anim: RigAnimator;
   private readonly host: AnimHost;
   private prop: VialProp | null = null;
+  /** Pass 2 (`P2`): light instead of a vial (`AnimFx.ts`). */
+  private fx: AnimFx | null = null;
   private targets: ReadonlyArray<{ x: number; y: number; z: number }> = [];
   private readonly vel: Float64Array;
   private rate = 1;
@@ -70,6 +73,7 @@ export class RigAnimLayer {
     this.anim = new RigAnimator({ boneIndex: data.boneIndex, roots: data.roots, keys: compiled, channels, bones: data.bones, skeleton: new RigSkeleton(data) }, style, subject, pxPerUnit);
     this.vel = new Float64Array(channels);
     this.imageH = data.image.h;
+    if (style.p2) this.fx = new AnimFx();
   }
 
   /** The layer for this figure, or null: the prototype is off, or the rig lacks a key the clips need. */
@@ -90,13 +94,16 @@ export class RigAnimLayer {
   /** A pose request that resolved to `key` (the one the actor was showing is `fromKey`). True when a clip plays it. */
   request(key: string, fromKey: string, trans: RigTransition): boolean {
     if (key !== 'item' && this.prop?.held) this.prop.drop();
+    if (key === 'idle' || key === 'ko') this.fx?.rest();
     return this.anim.request(key, fromKey, trans.current, trans.velocity);
   }
 
   /** The presenter's action start: `targets` are the world points the action is aimed at (a thrown vial flies to the first). */
   begin(pose: string, targets: ReadonlyArray<{ x: number; y: number; z: number }>, trans: RigTransition): void {
     this.targets = targets;
-    this.anim.begin(pose, trans.current, trans.velocity);
+    const h = this.host.position;
+    const self = pose === 'item' && targets.length > 0 && targets.every((t) => Math.abs(t.x - h.x) < 0.6 && Math.abs(t.z - h.z) < 0.6); // an item on the user: a glow around her, no orb
+    this.anim.begin(pose, trans.current, trans.velocity, self);
   }
 
   /** One frame: the clip's pose into `work` (and into `trans`, so a request that is not a clip moves on from here), the living layer, the secondary motion; solves `sk` twice. */
@@ -123,7 +130,12 @@ export class RigAnimLayer {
       if (spec) this.host.figure.setSmear(spec.parts, spec.dx, spec.dy, this.smearOn);
     }
     if (sm) this.lastSmear = sm;
-    for (const e of this.anim.drain()) {
+    const events = this.anim.drain();
+    if (this.fx) {
+      this.fxStep(dt, events);
+      return;
+    }
+    for (const e of events) {
       if (e === 'reach') (this.prop ??= new VialProp()).hold();
       else if (e === 'release' && this.anim.playing === 'cast') this.host.flash(0xe8f6ff, 260, this.anim.style.glow); // the figure's own pulse as the thrust lets go; the spell effect lands on the presenter's cue
       else if (e === 'release' && this.prop?.held) this.prop.throwTo(this.targets[0] ?? this.forward(), (this.anim.style.item.flight / Math.max(0.05, this.rate)) | 0);
@@ -144,6 +156,35 @@ export class RigAnimLayer {
     p.update(dt, this.host.parent);
   }
 
+  /**
+   * Pass 2's light (`AnimFx.ts`): a cast's glow at the doll that grows through the hold and flashes out on the release; an item's orb that rises from the hand and is tossed to the ally (or glow particles
+   * around the user); driven by the clip's own glow level (`RigAnimator.charge`) and its marks.
+   */
+  private fxStep(dt: number, events: readonly AnimEvent[]): void {
+    const fx = this.fx!;
+    const p2 = this.anim.style.p2!;
+    const kind = this.anim.playing;
+    const self = this.anim.usedOnSelf;
+    const pos = this.host.position;
+    const h = this.host.figure.plane.scale.y;
+    fx.setUnit(h / 1.8);
+    const fist = this.host.landmark(kind === 'cast' ? (this.host.landmark('doll') ? 'doll' : this.anim.handLandmark) : this.anim.handLandmark); // a spell gathers at the doll (it rides her fist), an item at the hand
+    const hand = fist ? { x: pos.x + fist.x, y: pos.y + fist.y, z: pos.z + 0.1 } : null;
+    for (const e of events) {
+      if (e !== 'release') continue;
+      if (kind === 'cast' && hand) {
+        fx.flashOut(hand, 'cast');
+        this.host.flash(0xe8f6ff, 260, this.anim.style.glow); // the figure's own pulse; the spell effect lands on the presenter's cue
+      } else if (kind === 'item') fx.toss(this.targets[0] ?? this.forward(), p2.orbFlight / Math.max(0.05, this.rate));
+      else if (kind === 'itemSelf') fx.aura({ x: pos.x, y: pos.y, z: pos.z }, h);
+    }
+    const level = this.anim.charge;
+    const isItem = kind === 'item' || kind === 'itemSelf';
+    if (hand && (kind === 'cast' || isItem) && level > 0.02) fx.gather(hand, level * (self ? 0.45 : 1), isItem && !self ? 0.05 + 0.09 * Math.min(1, Math.max(0, (level - 0.1) / 0.9)) : 0, isItem ? 'item' : 'cast');
+    else fx.rest();
+    fx.update(dt, this.host.parent);
+  }
+
   /** A point a body-length in front of the figure at chest height, for a throw with no target. */
   private forward(): { x: number; y: number; z: number } {
     const h = this.host.position;
@@ -162,5 +203,7 @@ export class RigAnimLayer {
   dispose(): void {
     this.prop?.dispose();
     this.prop = null;
+    this.fx?.dispose();
+    this.fx = null;
   }
 }

@@ -15,7 +15,9 @@
 import { Carry, type CarrySkeleton } from './AnimCarry.ts';
 import { applyIdleLayer, type IdleSpec } from './AnimIdle.ts';
 import { compileClip, sampleClip, unwrapTargets, type ClipDef, type ClipLive, type ClipRig, type CompiledClip } from './AnimClip.ts';
-import { buildLibrary, type Library, type Subject } from './AnimLibrary.ts';
+import type { Library, Subject } from './AnimLibrary.ts';
+import { libraryFor } from './AnimLibrary2.ts';
+import { HoldTrack } from './AnimHold.ts';
 import { halfLifeStep, SecondaryLayer, type LayerBone } from './AnimSecondary.ts';
 import type { AnimStyle } from './AnimStyles.ts';
 
@@ -38,9 +40,9 @@ export interface AnimFrame {
 }
 
 /** Events a frame can raise, in the order they happened. */
-export type AnimEvent = 'reach' | 'drawn' | 'release' | 'contact' | 'impact' | 'ground' | 'burst' | 'smear';
+export type AnimEvent = 'reach' | 'drawn' | 'hold' | 'release' | 'contact' | 'impact' | 'ground' | 'burst' | 'smear' | 'end';
 
-const EVENT_MARKS: readonly string[] = ['reach', 'drawn', 'release', 'contact', 'impact', 'ground', 'burst', 'smear'];
+const EVENT_MARKS: readonly string[] = ['reach', 'drawn', 'hold', 'release', 'contact', 'impact', 'ground', 'burst', 'smear', 'end'];
 /** A smear frame is shown for this long (ms of the animator's clock): two frames at 60 Hz. */
 const SMEAR_MS = 34;
 const HALFLIFE = 0.12;
@@ -75,16 +77,22 @@ export class RigAnimator {
   private smearUntil = -1;
   private readonly smearSpec: Subject['smear'] | undefined;
   private kindName = '';
+  /** Pass 2: the looping hold of the clip in flight (`AnimHold.ts`) and the glow level the hands show (0..1 and above, smoothed). */
+  private readonly hold = new HoldTrack();
+  private chargeNow = 0;
+  private chargeV = 0;
+  /** The item in flight is used on the user (a glow around the user, no orb). */
+  private selfUse = false;
 
   constructor(rig: AnimRigData, style: AnimStyle, subject: Subject, pxPerUnit: number) {
     this.rig = rig;
     this.style = style;
-    this.lib = buildLibrary(style, subject.accents);
+    this.lib = libraryFor(style, subject.accents, subject.p2);
     this.idleSpec = subject.idle;
     this.hand = subject.hand;
     this.smearSpec = subject.smear;
     this.att = subject.attach ? Carry.create(rig.bones, rig.boneIndex, subject.attach, rig.skeleton) : null;
-    for (const c of [this.lib.ready, this.lib.windup, this.lib.strike, this.lib.follow, this.lib.cast, this.lib.item, this.lib.hurt, this.lib.ko, this.lib.victory]) this.clips.set(c.name, compileClip(rig, c));
+    for (const c of [this.lib.ready, this.lib.windup, this.lib.strike, this.lib.follow, this.lib.cast, this.lib.item, this.lib.hurt, this.lib.ko, this.lib.victory, ...(this.lib.itemSelf ? [this.lib.itemSelf] : [])]) this.clips.set(c.name, compileClip(rig, c));
     this.secondary = new SecondaryLayer(rig.bones, rig.boneIndex, subject.secondary(style), style.secondary, pxPerUnit);
     this.from = new Float64Array(rig.channels);
     this.v0 = new Float64Array(rig.channels);
@@ -134,6 +142,8 @@ export class RigAnimator {
     this.t = 0;
     this.fired.clear();
     this.kindName = c.name;
+    this.hold.reset();
+    this.hold.open = c.open;
     this.att?.offsetOf(cur, this.fromOff, 0);
   }
 
@@ -151,9 +161,11 @@ export class RigAnimator {
         return this.play(this.clips.get('strike')!, cur, vel);
       case 'cast':
       case 'item':
-        return this.kindName === key ? true : this.play(this.clips.get(key)!, cur, vel);
-      case 'ready':
+        return this.kindName === key || (key === 'item' && this.kindName === 'itemSelf') ? true : this.play(this.clips.get(key)!, cur, vel);
       case 'follow':
+        if (this.lib.style.p2 && this.clip === this.clips.get('strike')) return true; // pass 2's strike carries its own follow-through
+        return this.play(this.clips.get(key)!, cur, vel);
+      case 'ready':
       case 'hurt':
       case 'ko':
       case 'victory':
@@ -194,17 +206,24 @@ export class RigAnimator {
     return true;
   }
 
-  /** The presenter's first beat of an action: a strike starts its wind-up (held until the strike), a spell or an item its clip if the request has not. */
-  begin(pose: string, cur: Float64Array, vel: Float64Array): void {
+  /** The presenter's first beat of an action: a strike starts its wind-up (held until the strike), a spell or an item its clip if the request has not. `self`: the item is used on the user (pass 2: a glow, no orb). */
+  begin(pose: string, cur: Float64Array, vel: Float64Array, self = false): void {
+    const want = pose === 'item' && self && this.clips.has('itemSelf') ? 'itemSelf' : pose;
+    this.selfUse = want === 'itemSelf';
     if (pose === 'attack' && this.kindName !== 'windup') this.start(this.clips.get('windup')!, cur, vel);
-    else if ((pose === 'cast' || pose === 'item') && this.kindName !== pose) this.start(this.clips.get(pose)!, cur, vel);
+    else if ((pose === 'cast' || pose === 'item') && this.kindName !== want) this.start(this.clips.get(want)!, cur, vel);
   }
 
   /** How long, in base ms, the presenter should still wait before the beat the clip leads to: the lunge after a wind-up, the spell's release, the vial's landing (0 when the beat has passed, -1 when no clip is playing for `pose`). */
   lead(pose: string): number {
-    const c = pose === 'attack' ? this.clips.get('windup')! : pose === 'cast' || pose === 'item' ? this.clips.get(pose)! : null;
+    if (pose === 'end') { // pass 2: the clip's own end signal (the game locks the actor until it)
+      if (!this.style.p2?.lockToEnd) return -1;
+      const at = this.lib.leads.end && this.clip ? this.clip.marks[this.lib.leads.end.mark] : undefined;
+      return at === undefined ? -1 : Math.max(0, at - this.t);
+    }
+    const c = pose === 'attack' ? this.clips.get('windup')! : pose === 'cast' ? this.clips.get(pose)! : pose === 'item' ? this.clips.get(this.selfUse ? 'itemSelf' : 'item')! : null;
     if (!c || this.clip !== c) return -1;
-    const l = pose === 'attack' ? this.lib.leads.attack : this.lib.leads[pose as 'cast' | 'item'];
+    const l = pose === 'attack' ? this.lib.leads.attack : pose === 'item' && this.selfUse ? this.lib.leads.itemSelf! : this.lib.leads[pose as 'cast' | 'item'];
     const at = c.marks[l.mark];
     return at === undefined ? 0 : Math.max(0, at + l.offsetMs - this.t);
   }
@@ -219,15 +238,41 @@ export class RigAnimator {
   }
 
   /** A blow landed (the presenter's damage handler). Returns the camera punch to give, a fraction of the subject distance (0 none). */
-  beat(kind: string, hitIndex: number, hitCount: number): { punch: number } {
+  beat(kind: string, hitIndex: number, hitCount: number, heavy = false): { punch: number } {
     const S = this.style;
     if (kind !== 'contact') return { punch: 0 };
     const striking = this.kindName === 'strike' || this.kindName === 'windup';
     const first = hitIndex === 0;
-    if (striking && (first || hitIndex === hitCount - 1) && S.attack.hitStop > 0) this.frozen = Math.max(this.frozen, S.attack.hitStop);
-    this.secondary.impulse(striking ? 4 : 2.5, striking ? 260 : 140);
+    const stop = S.p2 ? (heavy ? S.p2.hitStopStrong : S.p2.hitStopWeak) : S.attack.hitStop; // pass 2: a weak blow 0 to 30 ms, a strong one (crit, overkill, capped) 50 to 80 (the research notes)
+    if (striking && (first || hitIndex === hitCount - 1) && stop > 0) this.frozen = Math.max(this.frozen, stop);
+    this.secondary.impulse((striking ? 4 : 2.5) * (heavy ? 1.4 : 1), striking ? 260 : 140);
     if (!first) return { punch: 0 };
-    return { punch: striking ? S.camera.contact : this.kindName === 'cast' ? S.camera.release : 0 };
+    return { punch: striking ? S.camera.contact * (heavy ? 1.5 : 1) : this.kindName === 'cast' ? S.camera.release : 0 };
+  }
+
+  /** The glow level the hands show (0 none, 1 a spell fully gathered, above it the squeeze before the release): pass 2's cast and item clips carry it. */
+  get charge(): number {
+    return this.chargeNow;
+  }
+
+  /** The clip is in its looping hold, and for how long (ms). */
+  get holding(): number {
+    return this.clip && this.hold.holding(this.clip, this.t) ? this.hold.h : -1;
+  }
+
+  /** Keep the clip in its hold past the shortest stay (the engine's effect is not ready), or let it go (`release`). A hold never outlasts `HOLD_MAX_MS`. */
+  keepHolding(on: boolean): void {
+    this.hold.open = on;
+  }
+
+  /** Let go of the hold: the clip goes on to its release at once (after the shortest stay). */
+  release(): void {
+    this.hold.release();
+  }
+
+  /** The item in flight is used on the user. */
+  get usedOnSelf(): boolean {
+    return this.selfUse;
   }
 
   get punchMs(): number {
@@ -261,10 +306,16 @@ export class RigAnimator {
       this.strikeAt = -1;
       this.start(this.clips.get('strike')!, out, vel);
     }
-    if (!this.clip) return false;
+    if (!this.clip) {
+      this.stepCharge(0, f.dt);
+      return false;
+    }
     this.t += dtMs;
+    if (this.clip.sustain) this.t = this.hold.advance(this.clip, this.t, dtMs);
     this.prev.set(this.scratch);
     sampleClip(this.clip, this.t, this.from, this.scratch, this.v0, this.targets, this.live);
+    if (this.clip.sustain) this.hold.apply(this.clip, this.t, this.scratch); // the loop's swing, and its fading residual after the release
+    this.stepCharge(this.clip.sustain || this.clip.charge.some((c) => c > 0) ? this.hold.charge(this.clip, this.live.seg) : 0, f.dt);
     if (this.att) this.att.place(this.scratch, this.offsetsOf(this.clip), this.fromOff, this.live.seg, this.live.e); // the doll rides the hand
     this.fire(this.t);
     for (let i = 0; i < out.length; i++) {
@@ -272,6 +323,13 @@ export class RigAnimator {
       if (f.dt > 0) vel[i] = (this.scratch[i]! - this.prev[i]!) / f.dt;
     }
     return true;
+  }
+
+  private stepCharge(goal: number, dt: number): void {
+    if (!(dt > 0)) return;
+    const [x, v] = halfLifeStep(this.chargeNow, this.chargeV, goal, goal === 0 && this.chargeNow > 0.2 ? 0.05 : 0.12, dt); // a flash goes out fast, a gather builds slowly
+    this.chargeNow = Math.max(0, x);
+    this.chargeV = v;
   }
 
   private fire(t: number): void {

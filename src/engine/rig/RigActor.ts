@@ -273,8 +273,8 @@ export class RigActor extends PaintedActor {
   }
 
   /** A blow landed: the hit-stop and the springs' impulse happen here; the camera punch the style asks for (a fraction, its length in ms) is answered. */
-  animBeat(kind: string, hitIndex = 0, hitCount = 1): { punch: number; ms: number } {
-    return { punch: this.anim?.anim.beat(kind, hitIndex, hitCount).punch ?? 0, ms: this.anim?.style.camera.ms ?? 0 };
+  animBeat(kind: string, hitIndex = 0, hitCount = 1, heavy = false): { punch: number; ms: number } {
+    return { punch: this.anim?.anim.beat(kind, hitIndex, hitCount, heavy).punch ?? 0, ms: this.anim?.style.camera.ms ?? 0 };
   }
 
   // ------------------------------------------------------------------- misc

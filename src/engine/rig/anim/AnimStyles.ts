@@ -9,7 +9,7 @@
 import type { EaseSpec } from './AnimEase.ts';
 import type { SecondaryTune } from './AnimSecondary.ts';
 
-export type StyleId = 'A' | 'B' | 'C';
+export type StyleId = 'A' | 'B' | 'C' | 'P2';
 
 export interface IdleStyle {
   /** Breaths a second. */
@@ -19,6 +19,28 @@ export interface IdleStyle {
   /** The weight shift's cycle, hertz (a slow sway of the hips from one foot to the other). */
   shiftHz: number;
   shift: number;
+}
+
+/**
+ * Pass 2 (`P2`, "B's look on A's clock"): what is NOT a duration of ours. The clock is the game's own (`AnimRE.ts`: Lulu's frame counts at 30 fps; the clips are built from them in `AnimLibrary2.ts`), so
+ * what is left to choose is here: how long a looping hold lasts at least (the game's own length is the spell effect's), which cast type plays, the hit-stop of a weak and of a strong blow, whether
+ * the figure stays in its clip until the game's end signal (the presenter waits for it: the game locks the actor until then), and how a thrown item leaves.
+ */
+export interface P2Spec {
+  /** Shortest stay in a cast's looping hold, ms (the game's loop is 24, 23 or 30 frames; one loop by default: the glow needs a beat to build). */
+  castDwell: number;
+  /** Shortest stay in an item's looping hold, ms. */
+  itemDwell: number;
+  /** Lulu's cast type 1, 2 or 3 (which spell uses which was not read; `?cast=2` asks). */
+  castType: 1 | 2 | 3;
+  /** Hit-stop of a weak and of a strong (crit, overkill, capped) blow, ms: the research notes' weak 0 to 30 and strong 50 to 80. */
+  hitStopWeak: number;
+  hitStopStrong: number;
+  /** The orb's flight to an ally, ms, and the glow's wait on the user for an item used on the user. */
+  orbFlight: number;
+  selfWait: number;
+  /** The presenter waits for the clip's end signal (the game's attack, cast and item clips end with one) before it lets the actor go home. */
+  lockToEnd: boolean;
 }
 
 export interface AnimStyle {
@@ -53,6 +75,8 @@ export interface AnimStyle {
   camera: { contact: number; release: number; ms: number };
   /** The figure's own glow pulse at a spell's release, 0..1 of the actor's flash peak (the spell effect itself is the game's, on the presenter's cue). */
   glow: number;
+  /** Pass 2 only: the clock is the game's (`AnimRE.ts`), the clips come from `AnimLibrary2.ts`. */
+  p2?: P2Spec;
 }
 
 /** A "Faithful FFX": the researcher's SNAPPY profile. Readable, hard ease-out into contact, a short hit-stop, modest overshoot. */
@@ -133,7 +157,26 @@ export const STYLE_C: AnimStyle = {
   glow: 0.4,
 };
 
-export const STYLES: Readonly<Record<StyleId, AnimStyle>> = { A: STYLE_A, B: STYLE_B, C: STYLE_C };
+/**
+ * P2, pass 2 of the prototype (Bailey, 2026-10-18: "I'll go with all of your recommendations"; the recommendation: "B's look on A's clock"): the showpiece's shapes (deep anticipation, a stretched fast arc, big
+ * overshoot, loose hair, cloth and arms, a camera punch) on the game's own clock (Lulu's frame counts, `AnimRE.ts`), a cast and an item that start, hold in a loop and release, no vial, bent knees. The numbers
+ * of `attack`, `cast`, `item`, `hurt`, `ko` below only serve the code that still reads them (the item's flight, the cast release's half width): the clips take their lengths from the frame counts.
+ */
+export const STYLE_P2: AnimStyle = {
+  ...STYLE_B,
+  id: 'P2',
+  label: 'Pass 2',
+  blurb: "B's look on the game's own clock: Lulu's frame counts at 30 fps, a cast and an item with a looping hold and a release, an orb and no vial, bent knees, a hit-stop of 30 and 80 ms.",
+  anticipation: 1.2,
+  easeFol: { backOut: 0.7 },
+  attack: { ...STYLE_B.attack, hitStop: 30 },
+  item: { ...STYLE_B.item, flight: 420 },
+  idle: { ...STYLE_B.idle, breathHz: 0.5, amp: 1.2 }, // the game's idle loop is 60 frames: 2 s, 0.5 Hz
+  camera: { contact: 0.04, release: 0.035, ms: 170 },
+  p2: { castDwell: 800, itemDwell: 330, castType: 1, hitStopWeak: 30, hitStopStrong: 80, orbFlight: 420, selfWait: 160, lockToEnd: true },
+};
+
+export const STYLES: Readonly<Record<StyleId, AnimStyle>> = { A: STYLE_A, B: STYLE_B, C: STYLE_C, P2: STYLE_P2 };
 
 /** `?anim=proto&style=B` from a query string (style A by default; null when the prototype is not asked for). */
 export function animFromQuery(search: string): AnimStyle | null {
@@ -141,7 +184,9 @@ export function animFromQuery(search: string): AnimStyle | null {
     const q = new URLSearchParams(search);
     if (q.get('anim') !== 'proto') return null;
     const s = (q.get('style') ?? 'A').toUpperCase();
-    return STYLES[s as StyleId] ?? STYLE_A;
+    const st = STYLES[s as StyleId] ?? STYLE_A;
+    const type = Number(q.get('cast'));
+    return st.p2 && (type === 2 || type === 3) ? { ...st, p2: { ...st.p2, castType: type } } : st;
   } catch {
     return null;
   }

@@ -16,6 +16,7 @@ import type { BoneDelta, ClipDef, PoseSpec, Segment } from './AnimClip.ts';
 import type { IdleSpec } from './AnimIdle.ts';
 import type { SecondarySpec } from './AnimSecondary.ts';
 import type { AnimStyle } from './AnimStyles.ts';
+import type { P2Poses } from './AnimLibrary2.ts';
 
 export type Deltas = Readonly<Record<string, BoneDelta>>;
 
@@ -50,6 +51,8 @@ export interface Subject {
   attach?: { bone: string; landmark: string };
   /** The parts that show a smear frame at the peak speed of a fast move (the style's stretch asks for it) and the direction of the smear, fractions of the part's image. */
   smear?: { parts: readonly string[]; dx: number; dy: number };
+  /** Pass 2 (`P2`): the poses authored for this subject (cast, item, hurt, KO); any absent pose is derived from the keys. */
+  p2?: P2Poses;
 }
 
 /** How long the presenter should wait after the action starts before its main beat, as a mark and an offset: `marks[mark] + offsetMs`. */
@@ -70,7 +73,11 @@ export interface Library {
   ko: ClipDef;
   victory: ClipDef;
   recover: (from: string) => ClipDef;
-  leads: { attack: Lead; cast: Lead; item: Lead };
+  /** Pass 2: an item used on the user (a glow around the user, no orb) and clips the tools can name (`castType2`...). */
+  itemSelf?: ClipDef;
+  extra?: Readonly<Record<string, ClipDef>>;
+  /** `end`: the clip's own end signal (pass 2: the presenter waits for it); `itemSelf`: the glow's landing. */
+  leads: { attack: Lead; cast: Lead; item: Lead; itemSelf?: Lead; end?: Lead };
 }
 
 /** Deltas times `k`, `sx` and `sy` and `rot` and the offsets alike. */

@@ -43,6 +43,18 @@ export interface PoseSpec {
   root?: BoneDelta;
 }
 
+/**
+ * A looping HOLD (the game's `_01` clip between a cast's or an item's start and its release; `docs/handoff/anim-proto.md`, pass 2). The segment's own `hold` is the SHORTEST stay; the pose then swings from the segment's
+ * pose toward `pose` and back every `period` ms (a cosine, so it leaves and returns to the segment's pose exactly), and the clip may be kept in it until the engine lets it go (`RigAnimator.holdOpen`/`release`).
+ * `grow` is a glow level that builds in the hold (approaching it with time constant `growMs`).
+ */
+export interface Sustain {
+  pose: PoseSpec;
+  period: number;
+  grow?: number;
+  growMs?: number;
+}
+
 export interface Segment {
   pose: PoseSpec;
   /** Milliseconds to move into the pose (0 = at once). */
@@ -59,6 +71,10 @@ export interface Segment {
   alive?: number;
   /** The same for the secondary layer (the springs and the braid), 0..1 (default 1): a body going down keeps its arms flopping while the breath stops. */
   sec?: number;
+  /** This segment's hold is a looping hold the engine may keep the clip in (see {@link Sustain}). At most one a clip. */
+  sustain?: Sustain;
+  /** The glow level the figure's hands show at the end of this move, 0..1 and above (default: the level before): what a gather builds and a release flashes out. */
+  charge?: number;
 }
 
 export interface ClipDef {
@@ -68,6 +84,8 @@ export interface ClipDef {
   segments: readonly Segment[];
   /** Plays again from the start when it ends (a held stance with life in it). */
   loop?: boolean;
+  /** The clip stays in its looping hold (`Segment.sustain`) until something replaces it (the victory's `_01` loop), instead of leaving it after the shortest stay. */
+  open?: boolean;
   /** Turn every bone the SHORT way round between one pose and the next (angle space: a rotation 270 degrees apart in the keys is 90 the other way), see {@link unwrapTargets}. Off by default: the gate scanned the linear path. */
   shortArc?: boolean;
 }
@@ -84,6 +102,7 @@ export interface CompiledClip {
   readonly name: string;
   readonly key: string;
   readonly loop: boolean;
+  readonly open: boolean;
   readonly shortArc: boolean;
   readonly count: number;
   /** Per segment: the start of its move, the length of its move, its hold, in ms. */
@@ -94,6 +113,10 @@ export interface CompiledClip {
   readonly alive: readonly number[];
   readonly sec: readonly number[];
   readonly target: readonly Float64Array[];
+  /** Per segment: the glow level at the end of its move. */
+  readonly charge: readonly number[];
+  /** The looping hold, or null: the segment it is in, when it starts and the shortest stay (ms), its period (ms), its swing target (a pose), the glow it builds and how fast. */
+  readonly sustain: { readonly seg: number; readonly start: number; readonly min: number; readonly period: number; readonly target: Float64Array; readonly grow: number; readonly growMs: number } | null;
   /** Mark name to the ms it happens at. */
   readonly marks: Readonly<Record<string, number>>;
   /** Length of the whole clip in ms (the end of the last hold). */
@@ -153,7 +176,9 @@ export function compileClip(rig: ClipRig, def: ClipDef): CompiledClip {
   const alive: number[] = [];
   const sec: number[] = [];
   const target: Float64Array[] = [];
+  const charge: number[] = [];
   const marks: Record<string, number> = {};
+  let sustain: CompiledClip['sustain'] = null;
   let t = 0;
   for (const s of def.segments) {
     const ms = Math.max(0, s.ms);
@@ -165,11 +190,16 @@ export function compileClip(rig: ClipRig, def: ClipDef): CompiledClip {
     alive.push(Math.min(1, Math.max(0, s.alive ?? 1)));
     sec.push(Math.min(1, Math.max(0, s.sec ?? 1)));
     target.push(compilePose(rig, s.pose));
+    charge.push(s.charge ?? charge[charge.length - 1] ?? 0);
+    if (s.sustain) {
+      if (sustain) throw new Error(`anim: clip ${def.name} has two looping holds`);
+      sustain = { seg: target.length - 1, start: t + ms, min: held, period: Math.max(1, s.sustain.period), target: compilePose(rig, s.sustain.pose), grow: s.sustain.grow ?? 0, growMs: Math.max(1, s.sustain.growMs ?? 700) };
+    }
     if (s.mark !== undefined) marks[s.mark] = s.markAt === 'start' ? t : t + ms;
     for (const [name, u] of Object.entries(s.marks ?? {})) marks[name] = t + ms * Math.min(1, Math.max(0, u));
     t += ms + held;
   }
-  return { name: def.name, key: def.key, loop: def.loop === true, shortArc: def.shortArc === true, count: def.segments.length, start, dur, hold, ease: easeOf, alive, sec, target, marks, total: t };
+  return { name: def.name, key: def.key, loop: def.loop === true, open: def.open === true, shortArc: def.shortArc === true, count: def.segments.length, start, dur, hold, ease: easeOf, alive, sec, target, charge, sustain, marks, total: t };
 }
 
 /** The ms a mark happens at (NaN for a name the clip does not have). */
