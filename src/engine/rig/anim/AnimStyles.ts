@@ -173,7 +173,7 @@ export const STYLE_P2: AnimStyle = {
   item: { ...STYLE_B.item, flight: 420 },
   idle: { ...STYLE_B.idle, breathHz: 0.5, amp: 1.2 }, // the game's idle loop is 60 frames: 2 s, 0.5 Hz
   camera: { contact: 0.04, release: 0.035, ms: 170 },
-  glow: 0.55, // the figure's own pulse at a spell's release: B's 0.9 washed her to grey in the recording
+  glow: 0.22, // the figure's own pulse at a spell's release: B's 0.9 (and 0.55) washed her to grey in the recordings
   p2: { castDwell: 800, itemDwell: 330, castType: 1, hitStopWeak: 30, hitStopStrong: 80, orbFlight: 420, selfWait: 160, lockToEnd: true },
 };
 

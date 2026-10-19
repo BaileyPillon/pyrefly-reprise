@@ -46,9 +46,11 @@ function windowOf(v, a, pre = PRE) {
   if (a === 'hurt-ko') return { t0: 0, from: 0, count: n, last: n - 1 };
   const t0 = Math.max(0, s.samples.findIndex((x) => x.log > s.samples[0].log));
   let last = t0;
-  for (let i = 1; i < n; i++) if (s.samples[i].pose !== s.samples[i - 1].pose || s.samples[i].clip !== s.samples[i - 1].clip) last = i;
+  for (let i = 1; i < n; i++) if ((s.samples[i].pose !== s.samples[i - 1].pose || s.samples[i].clip !== s.samples[i - 1].clip) && s.samples[i].pose !== 'critical' && !String(s.samples[i].clip).includes('critical')) last = i;
   const from = Math.max(0, t0 - pre);
-  const end = Math.min(n - 1, last + POST);
+  let end = Math.min(n - 1, last + POST);
+  const crit = s.samples.findIndex((x, i) => i > t0 && (x.pose === 'critical' || String(x.clip).includes('critical'))); // the game's low-HP crouch can follow an action in the recording: not part of the action
+  if (crit > 0) end = Math.min(end, crit - 1);
   return { t0, from, count: end - from + 1, last: end };
 }
 const input = (v, a, win = windowOf(v, a), count = win.count) => ['-framerate', '60', '-start_number', String(win.from), '-i', path.join(dirOf(v, a), 'f%04d.jpg'), '-frames:v', String(count)];
