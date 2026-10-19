@@ -1,9 +1,13 @@
 /**
  * **Switch OFF is the base, byte for byte** (re-parity lane X2-A, row XA6 slice A; FFX-2 only).
  *
- * `ACTION_TIME_PER_COMMAND` is OFF, so the new per-command action time must change nothing: every FFX-2 chapter's whole chain, played through the app's own path with
- * the shipped strategy, has to produce the same event log as the base commit (`7a1c0cb28`, the r53 line before this slice). The pinned file holds one SHA-1 of the whole event
- * log of every link, per chapter, seed and pace; it was recorded on the BASE tree (a `git archive` export of that commit) and is checked here on this one.
+ * **r56 (2026-10-19): the switch `ACTION_TIME_PER_COMMAND` is ON in production** (the release driver's delegated pick under Bailey's advance yes), so this file now plays every
+ * chain with the knob OFF (`withActionSpanKnobsAsync({ perCommand: false })`): the previous action time must be exactly what it was. Every FFX-2 chapter's whole chain, played through
+ * the app's own path with the shipped strategy, has to produce the same event log as the r55 commit (`b24614c05`, the live build before r56). The pinned file holds one SHA-1 of the whole event
+ * log of every link, per chapter, seed and pace; it was re-recorded on r55 (b24614c05 put in place in-process, an overlay of the files that differ, no worktree or copy) and is checked here on
+ * the r56 tree. **The one exception is `ffx2-den-of-woe`:** r56 also moves the scripted line's Hero Drink trigger from 4,500 to 12,000 HP (`src/engine/tactics/ffx2-den-of-woe.ts` DRINK_FROM, our line,
+ * not data), which changes that chapter's play with the switch off too, so its pins are the r56 line with the knob off; the proof that the old digests come back with the trigger at 4,500
+ * is in `docs/handoff/re-parity-r56-re.md` (12 seeds, 3 paces, identical to b24614c05).
  *
  * - Always on: the pinned digests (a few seeds per chapter at the bench pace, plus a few at the human pace for the chapters that carry a formation's flat 3 s).
  * - `PYREFLY_X2AT_DIGEST=1`: instead of checking, print the digests of the chapters in `PYREFLY_X2AT_CHAPTERS` (default all twelve) for seeds `PYREFLY_X2AT_SEEDS` (`<n>` or
@@ -15,6 +19,7 @@ import { describe, expect, it } from 'vitest';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { ACTION_TIME_PER_COMMAND } from '../../src/battle/ffx2/action-time.ts';
+import { withActionSpanKnobsAsync } from '../../src/battle/ffx2/action-span.ts';
 import { FFX2_CHAPTERS, playChain, type Pace } from './helpers/ffx2ChainPlay.ts';
 
 const PRINT = process.env['PYREFLY_X2AT_DIGEST'] === '1';
@@ -34,7 +39,7 @@ describe.skipIf(!PRINT)('action span off: print digests (PYREFLY_X2AT_DIGEST=1)'
       const chapter = getChapter(id);
       if (!chapter || chapter.game !== 'ffx2') continue;
       for (let seed = FIRST; seed <= LAST; seed += 1) {
-        const one = await playChain(chapter, seed, PACE);
+        const one = await withActionSpanKnobsAsync({ perCommand: false }, () => playChain(chapter, seed, PACE));
         out[`${id}:${seed}:${PACE}`] = `${one.outcome[0]}:${one.digest}`;
       }
     }
@@ -45,8 +50,8 @@ describe.skipIf(!PRINT)('action span off: print digests (PYREFLY_X2AT_DIGEST=1)'
 });
 
 describe.skipIf(PRINT)('action span off: the base, byte for byte', () => {
-  it('the switch is off in production', () => {
-    expect(ACTION_TIME_PER_COMMAND).toBe(false);
+  it('the switch is on in production (r56); the knob turns it off for this file', () => {
+    expect(ACTION_TIME_PER_COMMAND).toBe(true);
   });
 
   it.skipIf(!existsSync(PIN_FILE))('every pinned chapter, seed and pace plays the base commit\'s event log', async () => {
@@ -57,7 +62,7 @@ describe.skipIf(PRINT)('action span off: the base, byte for byte', () => {
       const [id, seed, pace] = key.split(':') as [string, string, Pace];
       const chapter = getChapter(id);
       if (!chapter) continue;
-      const one = await playChain(chapter, Number(seed), pace);
+      const one = await withActionSpanKnobsAsync({ perCommand: false }, () => playChain(chapter, Number(seed), pace));
       const got = `${one.outcome[0]}:${one.digest}`;
       if (got !== want) bad.push(key);
     }

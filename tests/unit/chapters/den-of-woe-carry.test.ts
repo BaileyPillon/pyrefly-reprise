@@ -9,7 +9,14 @@
  * real seam, and the absence on full event logs.
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+// r56 (2026-10-19, FFX-2 only): ACTION_TIME_PER_COMMAND is ON in production. This file pins seeds, hashes or counts of the previous action-time timeline (the flat time, or none), so it plays
+// with the switch OFF, exactly as it did on b24614c05; the production timeline is measured in docs/handoff/re-parity-r56-re.md. Re-pin it on the production timeline when it next changes.
+vi.mock('../../../src/battle/ffx2/action-time.ts', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../../src/battle/ffx2/action-time.ts')>()),
+  ACTION_TIME_PER_COMMAND: false,
+}));
+
 import type { BattleSetup, FFX2Combatant, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import { buildState, gridNodeContents } from '../../../src/battle/ffx2/setup.ts';

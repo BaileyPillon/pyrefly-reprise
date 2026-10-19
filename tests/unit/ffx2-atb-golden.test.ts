@@ -223,6 +223,15 @@
  * Chapter IV is still 20/20 at D = 0 and 10/10 on the Active arm; Chapter V is still 20/20 at D = 0 (the chain takes 126,455 steps over the 20 seeds where it took 120,045, +5.3 %; Chapter IV 44,791
  * where it took 43,127, +3.9 %); **the Chapter V Active D = 1500 arm goes from 9/10 to 8/10** (seeds 1 and 9 are lost, seed 10 is no longer), ten seeds, disclosed and measured at 500 seeds in the handoff, not tuned.
  * The Wait arm still equals the D = 0 arrays and a Wait engine switched to Active still equals the Active arrays (both asserted below). The old hashes are the base 35aa31e77 (r52-rc 3c92b60cc plus the Chapter VI link opening); they equal r51-rc d6dc0bdd7's, because the link opening moves only Chapter VI's Acts II and III and r52 moved neither chapter. Proof on the merged tree (branch `re-parity-rc9-x2-hit-reaction-r52`, 2026-10-17): with `CHAIN_WINDOW_PER_BODY` forced off for the whole run through a module mock (a vitest setup file; `withReactionKnobs(OLD_REACTION)` is the same switch inside the process), the four arrays: 60 of 60 of the base's hashes come back exactly, and with it on all 60 move. The four new arrays also equal, digit for digit, the ones the lane recomputed on the r51-rc merge (d6dc0bdd7), so the stacking on r52 and the link opening moved none of the sixty.
+ *
+ * **Re-pinned a seventeenth time, every array, for r56: the per-command action time is ON** (re-parity r56 RE, branch `re-parity-r56-re`, 2026-10-19, FFX-2 only; reason "game-code parity": every command holds its user
+ * for its own animation time, `ACTION_TIME_PER_COMMAND` in `src/battle/ffx2/action-time.ts` is `true`; the release driver's delegated pick under Bailey's advance yes, which he may veto;
+ * `docs/handoff/re-parity-r56-re.md`, `docs/handoff/re-parity-rc10-x2-action-time.md`). Chapter 4's Bahamut and Chapter 5's chain now keep each actor EXECUTING for its command's span (a girl's Attack about
+ * 2 s, a spell 2.5 s, a boss's cast 3 to 4.5 s), so every turn after the first action comes later and all sixty digests moved. **Cause, proved two ways.** (1) The tree with only the switch put back
+ * to `false` (and the Den of Woe trigger back at 4,500, which no seed here reaches), run as an in-process overlay of its own sources with no other change, passes this file's PREVIOUS pins, all six tests, byte for byte.
+ * (2) The r55 commit `b24614c05` put in place as an in-process overlay of every source that differs (no worktree or copy) passes the same previous pins, all six tests. So the only thing that moved these digests is the switch.
+ * Outcomes: D = 0 is still 20/20 in both chapters and the Chapter 4 Active D = 1500 arm 10/10; the Chapter 5 Active D = 1500 arm is 8/10 (seeds 9 and 10 lost; it was 8/10 with seeds 1 and 9 lost before). The Wait arm still equals
+ * the D = 0 arrays (no menu invalidated, held or refused) and a Wait engine switched to Active still equals the Active arrays: asserted below and checked on the new arrays. The 500-seed effect of the switch on the whole chain is in the handoff.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -230,31 +239,31 @@ import { driveChapter4, driveChapter5, logHash } from './helpers/ffx2ChapterDriv
 
 const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
-/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
+/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
 const CH4_D0 = [
-  '911ada24be11c668', '88653e45b18896cd', 'cc1d746de1a57bd1', '4100b491f0b3a687', '0e1226e139a6574b',
-  '2679f7e9f92f0470', '0a0e4ed5fef47b90', '64274fc47cb9608f', 'f62df706ff0ce1d9', '1f872277ef3155b1',
-  'b620811b0e92fd6f', '74bbe96fc33b5086', '77a69c05d95d6d91', '67a2d731381147c9', 'c9258ceb988465c2',
-  '48c4d7d43ce00a18', 'ee4d1d5d422f980e', 'ff30eef053b72ada', '78dd0fd9c8170a81', 'bfc8431dafecfb0c',
+  'd84f79cdb1248069', '21d0b1333d2baaad', '6fcba9a94d0cea6b', 'db5568a12aaa4980', 'dba7fed2a70899ca',
+  'f6ffc26a2c9c7674', 'b3e52416ff584b55', '830bf534fae444e8', '4d85b070eb356dfa', '7ca9cddce0e8666b',
+  '6832f184572dbec0', 'e814c2c9b6361374', 'b469abb7488ca816', 'ce7ab90a3400caa2', '31a17d6dd825c387',
+  'a6f276a925574072', 'e0823e549f6b5e2a', '0e4dcf77195500b7', 'fc4de1f9242f3039', '8a9da43349c3a451',
 ];
 
-/** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
+/** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
 const CH5_D0 = [
-  'f088d67c48d6cc10', '3a74b5193adc4161', 'aeca4110de447dc4', '9d515113ea9a9092', '1dd5bc74fe420ad8',
-  'e563354e0f016d58', '701eb9b3d45999b7', '95d2d4057334651c', '493c3f8811a9ae86', '96120300b4653b8a',
-  '0cc2281806680f27', '9deac322a8b5f735', 'fd64046b73e04c91', '481ac10578d06aac', '00721cd403a9fb6e',
-  'a7bc4127664fe3a8', 'dd21bd09c48fe576', '22e687f78936576b', '3b5c33ac11689efe', '4a3a57989f0bb061',
+  'ace57ea9a92545e6', '057972b4244c84a2', '011e0f0bde5c76ca', '4bd94bd600bb76f5', '326e08f769748577',
+  'e265c0531211fc9d', 'fee5bd81add69d03', '6b69ef7a7ff3d5d7', '92022c56d9f0c9e6', 'ab6892d74b9ff6d1',
+  'ad271832045e6d18', 'ff820aefbcf84146', 'dd30b0a92edbe3ca', '5a5816acd3795714', 'b2e4865eb3e5205f',
+  '31d23ca9b190505a', 'd1c5f19ce4ffec88', '6bf573cf89ac6417', '8cd8943f11edbbe8', '26658648c2e1ecc8',
 ];
 
-/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
+/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
 const CH4_D1500 = [
-  '5385f128d0bbe00a', '878b4ca5279f18f1', 'ba024bdd4db15f3f', 'bbe8992e5e0a8c83', 'd2be188b084106ca',
-  '4a8f56069d683671', 'a0059342190063e5', '27a0eb4946ed27d7', 'b7504fb3289da37e', 'e674ca1bd816d5db',
+  'd05af09f2f024710', 'e6b1613688ba5c31', '5b383b9b7dd5312d', '3f1263cb4d27b50f', '1a3675d1bd051fb3',
+  '9b5e0b592f17a495', '0508868d04be1da0', '461679bccffcd6d8', 'd34b909ef87d245a', 'ca07ba0fb0d0f7e8',
 ];
-/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Seed 8 re-pinned a fourth time for the Core's death entry (RC9 X2-E, see the fourteenth re-pin above); its old hash is in git at 748038a0a. */
+/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Seed 8 re-pinned a fourth time for the Core's death entry (RC9 X2-E, see the fourteenth re-pin above); its old hash is in git at 748038a0a. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
 const CH5_D1500 = [
-  'c568c06af2d32d4a', '70c9b63427a29c45', '08d0977e0d1536cb', '0aa149db07fed35b', 'c5aa8074c9904ac5',
-  '2dfcb54f91efbb42', '2befeca3f6206c28', '53886a21b2085bed', '2e1fa19a8241c83a', 'ec84435db84ffac6',
+  'c229420de5468c17', '863887973360035b', '1280db08377c983b', 'c78240b88a8787b8', 'c2d6291631c31cea',
+  '948c4519f4812a4b', 'ce304ad0bec87e53', '84e73e6597c01056', '6301af4648c76063', '091552d5ada7d8eb',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 /** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */

@@ -2,8 +2,9 @@
  * **Action time per command** (re-parity lane X2-A, row XA6 slice A; FFX-2 only; note FFX2-G11 sections 2, 3 and 6).
  *
  * The kernel (`kernel/action-span.ts`), the adapter (`action-span.ts`) and the data (`data/ffx2/action-frames.ts`) are checked here against numbers worked out BY HAND from the
- * data's own frame counts: three girls, three bosses, the casts, Haste, Slow, the precedence of the switches and the engine's executing countdown. The switch is OFF in
- * production; every case that needs it ON says so through `withActionSpanKnobs`. Switch-off equivalence with the base commit is `ffx2-action-span-off.test.ts`.
+ * data's own frame counts: three girls, three bosses, the casts, Haste, Slow, the precedence of the switches and the engine's executing countdown. The switch is ON in
+ * production since r56 (2026-10-19, the release driver's delegated pick under Bailey's advance yes); every case that needs it OFF says so through `withActionSpanKnobs({ perCommand: false })`.
+ * Switch-off equivalence with the r55 commit (b24614c05) is `ffx2-action-span-off.test.ts`.
  *
  * The hand arithmetic (steps; one frame is one step at ratio 1.0; 29.97003 steps a second; the run distance is 52.4 field units):
  * - idle break = ceil(idle / 2); run-up = ceil((52.4 - startDist) / speed * 29.97003); hit = the READ first-hit frame of the set (note FFX2-G12 section 5), the `attack1_00`
@@ -242,12 +243,16 @@ describe('casts', () => {
 describe('the switches', () => {
   const ctx = ctxOf(FIRE);
 
-  it('is OFF in production, and OFF it is exactly the flat time that was there', () => {
-    expect(ACTION_TIME_PER_COMMAND).toBe(false);
+  it('is ON in production (r56), and with the knob OFF it is exactly the flat time that was there', () => {
+    expect(ACTION_TIME_PER_COMMAND).toBe(true);
     const u = girl('yuna', 'black-mage');
-    expect(actionStepsFor(undefined, {}, u, ctx)).toBe(0);
-    expect(actionStepsFor(undefined, { actionTimeSeconds: 3 }, u, ctx)).toBe(actionTimeSteps(undefined, { actionTimeSeconds: 3 }));
-    expect(actionStepsFor(2, {}, u, ctx)).toBe(actionTimeSteps(2, {}));
+    expect(actionStepsFor(undefined, {}, u, ctx)).toBe(75); // Fire, measured
+    expect(actionStepsFor(undefined, { actionTimeSeconds: 3 }, u, ctx)).toBe(75); // a formation's flat 3 s is superseded
+    withActionSpanKnobs({ perCommand: false }, () => {
+      expect(actionStepsFor(undefined, {}, u, ctx)).toBe(0);
+      expect(actionStepsFor(undefined, { actionTimeSeconds: 3 }, u, ctx)).toBe(actionTimeSteps(undefined, { actionTimeSeconds: 3 }));
+      expect(actionStepsFor(2, {}, u, ctx)).toBe(actionTimeSteps(2, {}));
+    });
   });
 
   it('ON, the span replaces a formation\'s flat 3 s (or keeps it with supersedeFormation off); an engine option always wins; a command that played nothing owes 0', () => {
@@ -269,7 +274,8 @@ describe('the switches', () => {
     const u = girl('yuna', 'black-mage');
     withActionSpanKnobs({ perCommand: true, record: (_unit, steps) => heard.push(steps) }, () => actionStepsFor(undefined, {}, u, ctx));
     expect(heard).toEqual([75]);
-    expect(actionStepsFor(undefined, {}, u, ctx)).toBe(0);
+    expect(actionStepsFor(undefined, {}, u, ctx)).toBe(75); // the production knobs (ON) are back
+    withActionSpanKnobs({ perCommand: false }, () => expect(actionStepsFor(undefined, {}, u, ctx)).toBe(0));
   });
 });
 
@@ -297,12 +303,13 @@ describe('the engine', () => {
     });
   }
 
-  it('with the switch OFF, a battle plays as it did (the same turn starts as the knobs-off run)', () => {
-    expect(shivaTurns({})).toEqual(shivaTurns({ perCommand: false }));
+  it('production is the switch ON (the same turn starts as the explicit ON run); OFF is the knob', () => {
+    expect(shivaTurns({})).toEqual(shivaTurns({ perCommand: true }));
+    expect(shivaTurns({ perCommand: false })).not.toEqual(shivaTurns({}));
   });
 
   it('ON, the enemy\'s actions take their span: its later turns start later, the first one does not move', () => {
-    const off = shivaTurns({});
+    const off = shivaTurns({ perCommand: false });
     const on = shivaTurns({ perCommand: true });
     expect(on[0]).toBe(off[0]);
     expect(on.length).toBeGreaterThan(1);
