@@ -267,9 +267,9 @@ export class RigActor extends PaintedActor {
     this.anim?.begin(pose, targets, this.trans);
   }
 
-  /** Base ms the presenter should still wait for `pose`'s clip to reach its beat (0 when none plays). */
+  /** Base ms the presenter should still wait for `pose`'s clip to reach its beat (0: it has; -1: no clip plays, wait as ever). */
   animLead(pose: string): number {
-    return this.anim?.lead(pose) ?? 0;
+    return this.anim?.lead(pose) ?? -1;
   }
 
   /** A blow landed: the hit-stop and the springs' impulse happen here; the camera punch the style asks for (a fraction, its length in ms) is answered. */

@@ -201,10 +201,10 @@ export class RigAnimator {
     else if ((pose === 'cast' || pose === 'item') && this.kindName !== pose) this.start(this.clips.get(pose)!, cur, vel);
   }
 
-  /** How long, in base ms, the presenter should still wait before the beat the clip leads to: the lunge after a wind-up, the spell's release, the vial's landing (0 when nothing is playing for `pose`). */
+  /** How long, in base ms, the presenter should still wait before the beat the clip leads to: the lunge after a wind-up, the spell's release, the vial's landing (0 when the beat has passed, -1 when no clip is playing for `pose`). */
   lead(pose: string): number {
     const c = pose === 'attack' ? this.clips.get('windup')! : pose === 'cast' || pose === 'item' ? this.clips.get(pose)! : null;
-    if (!c || this.clip !== c) return 0;
+    if (!c || this.clip !== c) return -1;
     const l = pose === 'attack' ? this.lib.leads.attack : this.lib.leads[pose as 'cast' | 'item'];
     const at = c.marks[l.mark];
     return at === undefined ? 0 : Math.max(0, at + l.offsetMs - this.t);

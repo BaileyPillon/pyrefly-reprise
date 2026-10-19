@@ -103,8 +103,9 @@ export async function anim(g, spec, o) {
   await record('idle', 300);
 
   /** One real action: `keys` are pressed (each followed by a few frames), recording from the first press until the action has played and `o.tail` frames after. */
-  async function action(name, keys, tail = 100) {
+  async function action(name, keys, tail = 100, prelude = null) {
     await toHerTurn();
+    if (prelude) await prelude(); // menu moves that are not part of the shot
     const from = await logLen();
     const playedBefore = await played();
     const pressLog = [];
@@ -114,7 +115,7 @@ export async function anim(g, spec, o) {
       onFrame: async (i) => {
         if (i < 6) return;
         const k = Math.floor((i - 6) / 16);
-        if ((i - 6) % 16 === 0 && k < keys.length) { const key = typeof keys[k] === 'function' ? await keys[k]() : keys[k]; if (key) { await input.press(key); pressLog.push({ frame: i, key }); } }
+        if ((i - 6) % 16 === 0 && k < keys.length) { await input.press(keys[k]); pressLog.push({ frame: i, key: keys[k] }); }
         if (!done && k >= keys.length && !(await started(from)) && (i - 6) % 24 === 0) { await input.press('Enter'); pressLog.push({ frame: i, key: 'Enter (retry)' }); }
       },
       until: async () => { done = true; return (await started(from)) && (await played()) >= playedBefore + 5 && (await ended()); },
@@ -127,8 +128,7 @@ export async function anim(g, spec, o) {
 
   await action('attack', ['Enter', 'Enter']);
   await action('cast', spec.castKeys ?? ['ArrowDown', 'ArrowDown', 'Enter', 'Enter']);
-  const itemKeys = [async () => { await pickRow('item'); return 'Enter'; }, 'Enter', 'Enter'];
-  await action('item', itemKeys);
+  await action('item', ['Enter', 'Enter', 'Enter'], 100, async () => { if (!(await pickRow('item'))) throw new Error('no Item row in the command menu'); });
 
   // victory, hurt and ko: the actor, as the presenter calls it
   await page.evaluate((id) => { const a = window.__pyrefly.battle().stage.actor(id); a.setPose('idle', { immediate: true }); }, who);

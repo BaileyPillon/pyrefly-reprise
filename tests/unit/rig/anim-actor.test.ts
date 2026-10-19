@@ -46,12 +46,12 @@ const run = (a: RigActorT, seconds: number, dt = 1 / 60): void => {
 const armRot = (a: RigActorT): number => a.figure.skeleton.pose[8 * 5]!; // the `arm` bone's rot in the pose last solved
 
 describe('the prototype is off unless asked for', () => {
-  it('with no style the actor is the rig it always was: no layer, no clip, the lead is 0', async () => {
+  it('with no style the actor is the rig it always was: no layer, no clip, the lead is -1 (wait as ever)', async () => {
     const a = await rigged(fullFile(), null);
     expect(a.rigInfo().anim).toBeNull();
     a.setPose('attack');
     expect(a.blending).toBe(true); // the ordinary move
-    expect(a.animLead('cast')).toBe(0);
+    expect(a.animLead('cast')).toBe(-1);
     expect(a.animBeat('contact', 0, 1)).toEqual({ punch: 0, ms: 0 });
     a.animBegin('cast', []); // a no-op
     run(a, 0.3);
