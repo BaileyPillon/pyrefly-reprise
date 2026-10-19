@@ -75,6 +75,17 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
   {
+    release: '56',
+    date: '2026-10-19',
+    lines: [
+      { tag: 'FFX-2', text: 'Actions now take the time their own animation takes, so bosses act less often between your turns and several fights, Trema and Angra Mainyu among them, get easier.' },
+      { tag: 'FFX-2', text: 'The Den of Woe guide and tip now have you start the Hero Drinks once Nooj is down to about half his health, so a girl is Invincible when his Lightfall lands.' },
+      { tag: 'FFX', text: 'Yuna’s Grand Summon works with a finger on a phone: tap an aeon to choose it, tap the title to go back, and a greyed aeon shakes.' },
+      { tag: 'FFX', text: 'An aeon’s Defend no longer prints IMMUNE over your own aeon; a status move a foe resists completely still says IMMUNE.' },
+      { tag: 'FFX', text: 'Yuna’s Overdrive row now reads “Open the Overdrive menu.” where it used to say “Timed input”.' },
+    ],
+  },
+  {
     release: '55',
     date: '2026-10-18',
     lines: [
