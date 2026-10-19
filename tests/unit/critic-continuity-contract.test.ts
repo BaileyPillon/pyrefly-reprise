@@ -89,6 +89,19 @@ describe('the engine fields the continuity probe reads', () => {
     expect(reader, 'the reader must not depend on a hook that only a newer build has').not.toMatch(/onPoseSwap|__pyrefly\.motion|__pyrefly\.continuity/);
   });
 
+  it('a rig is judged by whether it is DRAWN, not by the painted actor\'s figure flag (R58-T1): it is built with figure: false, so that flag is false for its whole life', () => {
+    const rig = read('src/engine/rig/RigActor.ts');
+    const figure = read('src/engine/rig/RigFigure.ts');
+    const probe = read('critic/runner/lib/continuity-probe.mjs');
+    expect(rig, 'RigActor draws no plane: it hands PaintedActor figure: false, which is what makes showFigure false (and its carrier meshes hidden)').toMatch(/super\(\{\s*\.\.\.opts,\s*figure: false,/);
+    expect(figure, 'the rig switches its parts with the actor: plane.visible = visible && alpha > 0.001, the thing the probe reads').toMatch(/this\.plane\.visible = on;/);
+    expect(figure).toMatch(/const on = visible && alpha > 0\.001;/);
+    const sampleRig = /const sampleRig = [\s\S]*?\n  \};/.exec(probe)?.[0] ?? '';
+    expect(sampleRig.length, 'sampleRig is found').toBeGreaterThan(200);
+    expect(sampleRig, 'sampleRig must not gate a rig on the carrier\'s showFigure (every rig swap was dropped as notShowing in release 58)').not.toMatch(/\ba\.showFigure\b/);
+    expect(sampleRig).toMatch(/rigPlane\.visible === false/);
+  });
+
   it('the probe reads exactly these names and no engine hook', () => {
     for (const name of ['slots', 'active', '_alpha', 'showFigure', 'poseUrls', 'painted', 'stage', 'actors', 'opts', 'fieldShown', 'matrixWorld', 'projectionMatrix', 'matrixWorldInverse']) expect(probe).toContain(name);
     expect(probe, 'the probe must not depend on a hook that only a newer build has').not.toMatch(/onPoseSwap|__pyrefly\.motion|__pyrefly\.continuity/);

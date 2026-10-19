@@ -244,7 +244,11 @@ export function createProbe(cfg, env) {
     S.figs[fi].rig = rec.name;
     const fs = figState(fi);
     const alpha = typeof a._alpha === 'number' ? a._alpha : 1;
-    const showing = a.visible !== false && a.showFigure !== false && alpha > 0.02;
+    // Whether the rig is DRAWN is not a painted actor's `showFigure`: `RigActor` builds its PaintedActor with `figure: false` (it draws no plane), so `showFigure` is false and the carrier's
+    // meshes are hidden for the figure's whole life. What a viewer sees is the parts under `figure.plane`, which the rig switches with the actor (`RigFigure.setOpacity(alpha, visible)`).
+    // Read that. Reading the carrier's flag here (release 58, R58-T1) made every rig "not showing": its swaps were logged, no frame was ever stored, and the analysis dropped them all as notShowing.
+    const rigPlane = a.figure && a.figure.plane;
+    const showing = a.visible !== false && alpha > 0.02 && !(rigPlane && rigPlane.visible === false);
     const k = rigKey(fi, rec.key, rec.name);
     if (fs.shown !== -1 && k !== fs.shown) {
       fs.lastFlip = c.n;

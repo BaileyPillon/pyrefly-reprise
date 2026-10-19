@@ -358,3 +358,5 @@ nothing captured with these scripts is trustworthy either.
 a chapter actually used. No new debug API was needed after all:
 `battleState().seed` is the engine's own seed, and `route.mjs` records it at
 every battle start, link and retry (PR-0202, batch t1-b5).
+
+**Lulu's Doublecast (release 59, CHK-022; FFX only).** `route-doublecast.mjs` plays the card's `"Doublecast: Firaga + Firaga"` as Special > Doublecast > the first cast's row and its target > the second cast's row and its target (`playDoublecast`; `doublecastCasts` reads both names, an exact row name is tried before one that merely contains it). The route used to look for one row containing the whole text after the colon (`firaga + firaga`); the list's rows are the spell names alone, so no Doublecast was ever played, `dcFail` reached 2 on the second try and every later one fell to Attack: in the release 58 review's Chapter III run 84 of 368 picks were Lulu's Doublecast turned into an Attack, and the party fell with the boss at about half HP (live r57 too). Cases: `tests/unit/critic-route-doublecast.test.ts`, built on that run's card, Special rows and recorded steps.

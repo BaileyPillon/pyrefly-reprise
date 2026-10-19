@@ -31,8 +31,10 @@ function fakeRig(over: { rigInfo?: () => unknown } = {}) {
   const am = IDENT();
   am[12] = 10; am[13] = 20;
   const actor = {
-    visible: true, showFigure: true, _alpha: 1, active: 0,
-    slots: [{ pose: 'idle', fade: 1, meta: { width: 800, height: 1000 }, mesh: plane }, { pose: 'idle', fade: 0, meta: { width: 800, height: 1000 }, mesh: { ...plane } }],
+    // as the running game's RigActor is: it hands PaintedActor `figure: false` (a rig draws no plane), so showFigure is false and the carrier's meshes are hidden for its whole life (R58-T1:
+    // the reader's fake had showFigure true, which is why release 58's tests passed while no rig swap was ever counted in a real run; `critic-continuity-rig-real.test.ts` drives the real RigActor)
+    visible: true, showFigure: false, _alpha: 1, active: 0,
+    slots: [{ pose: 'idle', fade: 1, meta: { width: 800, height: 1000 }, mesh: { ...plane, visible: false } }, { pose: 'idle', fade: 0, meta: { width: 800, height: 1000 }, mesh: { ...plane, visible: false } }],
     poseUrls: { idle: '/art/characters/valefor/idle.png' } as Record<string, string>,
     matrixWorld: { elements: am },
     get pose() { return state.pose; }, get blending() { return state.busy; },
@@ -40,7 +42,7 @@ function fakeRig(over: { rigInfo?: () => unknown } = {}) {
     landmark: (n: string) => (n === 'head' ? { x: 390, y: 640 } : n === 'bodyCenter' ? { x: 390, y: 480 } : null),
     feetPoint: () => state.feet,
     contentQuad: () => state.box,
-    figure: { plane: { children: [mesh('head', 0.2, 0.1), mesh('body', 0.5, 0.3), mesh('wing', 0.4, 0.4, false)] } },
+    figure: { plane: { visible: true, children: [mesh('head', 0.2, 0.1), mesh('body', 0.5, 0.3), mesh('wing', 0.4, 0.4, false)] } },
   };
   return { actor, state };
 }
@@ -173,6 +175,6 @@ describe('the probe with the rig reader beside it', () => {
     p.state.pose = 'ko'; p.state.busy = true;
     for (let i = 0; i < 3; i++) await p.step();
     expect(p.probe.swaps).toHaveLength(0);
-    expect(p.probe.records.at(-1)!.f[0]!.rg).toBeUndefined();
+    expect(p.probe.records.at(-1)?.f[0]?.rg).toBeUndefined(); // a real rig has showFigure false, so the painted reader stored no frame of it at all
   });
 });
