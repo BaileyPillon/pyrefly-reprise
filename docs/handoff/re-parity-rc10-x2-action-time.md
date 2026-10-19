@@ -1,6 +1,6 @@
 # Re-parity RC10 X2-A, slice A (row XA6): FFX-2 action time per command, behind `ACTION_TIME_PER_COMMAND` (OFF)
 
-Status: **built, tested, measured and committed on branch `re-parity-rc10-x2-action-time` (from `origin/re-parity-rc9-x2-hit-reaction-r52`, `7a1c0cb28`, the r53 base); pushed; not merged, not deployed; the switch is OFF** (written 2026-10-18). **The independent check of 2026-10-18 (`D:\Tools\ffx-parity\rc10\xa6-check.md`) failed it on three items and found the engine, the data and the switch-off proof sound; this version fixes the three: a red data-citation test (a `§` reference and all six estimates are now in the data header), the Den of Woe explanation and the recommendation resting on it (rewritten from the check's evidence and a follow-up investigation, sections 4.2, 4.4 and 5), and the incomplete list of Bailey's superseded 3-second picks (all six formations by name, section 5); plus the non-blocking items (the girl's hit time labelled, a list of about 8 stopwatch readings with Darkness first, the girls'-default sign-robustness result, a recommendation with the honest uncertainty).** Tip: the commit that adds this version.
+Status: **built, tested, measured and committed on branch `re-parity-rc10-x2-action-time` (from `origin/re-parity-rc9-x2-hit-reaction-r52`, `7a1c0cb28`, the r53 base); pushed; not merged, not deployed; the switch is OFF** (written 2026-10-18). **The independent check of 2026-10-18 (`D:\Tools\ffx-parity\rc10\xa6-check.md`) failed it on three items and found the engine, the data and the switch-off proof sound; this version fixes the three: a red data-citation test (a `§` reference and all six estimates are now in the data header), the Den of Woe explanation and the recommendation resting on it (rewritten from the check's evidence and a follow-up investigation, sections 4.2, 4.4 and 5), and the incomplete list of Bailey's superseded 3-second picks (all six formations by name, section 5); plus the non-blocking items (the girl's hit time labelled, a list of about 8 stopwatch readings with Darkness first, the girls'-default sign-robustness result, a recommendation with the honest uncertainty).** **Update 2026-10-19: the measured values (Darkness, a Potion, the game's own first-hit frames) are in the data and the tables are rerun: see section 9 (the switch is still OFF; the recommendation is rewritten there).** Tip: the commit that adds section 9.
 **Game case: FFX-2 only** (AGENTS.md rule 14), and why: FFX is CTB; it has no per-actor motion machines, no effect modules and no action-executing flag (note FFX2-G11 line 3). Nothing here touches an FFX file; `ffx-engine-golden` and `ff7-golden` run unchanged and green.
 Sources: note `FFX2-G11` (sections 2, 3, 6, 7) and `FFX2-G01` (sections 8 and 9) in `D:\Tools\ffx-parity\coverage\ffx2\`; the live stopwatch session of 2026-10-09 (`research/re-ffx2-timing-measured.md`, three effect lengths); the game's own frame tables and motion macros, read as numbers.
 Authority: Bailey, 2026-10-08 "It needs to be a 1:1 parity."; 2026-10-18 "keep going full speed". The house rule for a change that moves how a whole game plays: **build it behind a switch defaulted OFF, measure it, then ask Bailey once.** This lane built and measured; it did not turn the switch on. **No boss number and no party number was changed or added.** No random number is drawn by anything in this slice. The game was not run.
@@ -16,6 +16,8 @@ Paper preflight (critic-plan class DEEP): `docs/plans/re-parity-rc10-x2-action-t
 | later commits | the measurement knobs (run-up distance, a monster's hit time, effect scale), the Slow / Haste / Stop test, the first version of this note (`dd928a1df`) |
 | `eba6bd476` | fix B1 of the check: the data header cites `§` sections and lists all six estimates; the girl's hit time is labelled where it is used (comments only) |
 | the commit that adds this version | fixes B2 and B3 and the non-blocking items (this note only) |
+| `0ea7b0ba1` | rerun, data: the read first-hit frames (31 girl + 22 monster sets, 6 ambiguous), Darkness 83 and items 80 (data, one adapter line, hand checks) |
+| the commit that adds section 9 | the rerun tables, the Den of Woe sweep, the recommendation (this note only) |
 
 `engine-core.ts` and `internal.ts` (399 lines each on this base) are not touched; no file went over 400 lines (`action-span.ts` 212, `kernel/action-span.ts` 149, `action-frames.ts` 233, `execute.ts` 347). No contract file changed shape, so no CONTRACT-CHANGES entry.
 
@@ -340,3 +342,144 @@ A decode of the effect modules (note FFX2-G11 slice C) would replace all the cas
 8. **Den of Woe's scripted line** (`DRINK_FROM = 4500` in `src/engine/tactics/ffx2-den-of-woe.ts`, "our line, not data"): its Hero Drink trigger is tuned to a world where a spell frees its caster at once. If the switch goes on, the line (and the guide that teaches it) would need to drink earlier (a trigger of 12,000 gives 198 of 200 at the 0.5 / 1.0 s pace, run as an overlay; no file was changed). That is a content and tuning change for Bailey's yes (AGENTS.md rules 6 and 10), not made here.
 9. **Comments in `src/data/ffx2` for Valefor and Angra Mainyu** still say "kept by precedent, awaiting Bailey's pick" although D-846 and D-857 are his "keep it" for them (comment only; other lanes' files, not touched).
 10. **Housekeeping from the independent check:** `withActionSpanKnobs*` is a global mutable setter exported from a production module (measurement only; the `finally` restores it; sequential use only), harmless now but a test helper would be tidier; the girls' non-Mascot motion sets rest on the inferred dressphere-slot order (casts with a countdown, Darkness, Cure and Fire, do not use those clips); the check re-ran the switch-off identity (432 of 432 on seeds 13 to 24) and the cells of section 4, not the mutation pass or the 500-seed ablation.
+
+## 9. Rerun with measured values (2026-10-19)
+
+Written 2026-10-19 on top of the commit `0ea7b0ba1` (the data and the hand checks). **The switch `ACTION_TIME_PER_COMMAND` is still OFF.** Game case: **FFX-2 only** (FFX is CTB and has no effect modules or motion machines); no FFX file, no `ffx-engine-golden`, no `ff7-golden` line changed. No boss or party number changed and no random number is drawn. The game was not run by this rerun; its inputs are numbers read from the game's own motion data (note `FFX2-G12`, 2026-10-18) and the live session of 2026-10-19 (`live/2026-10-18-live-session.md`). Sections 1 to 8 above describe the first version's numbers and stay as the record; this section replaces the estimates that were measured and re-states the decision.
+
+### 9.0 In one paragraph (player words)
+
+Several of the softest guesses are now numbers. A girl's plain Attack lands a few frames later than the clip's end for two of the three Mascot girls (Yuna 12, Paine 11; Rikku 4), a boss's plain Attack lands where its motion data says (Nooj 17, Trema 6, Tawrich 34, Bahamut 41, Leblanc 8, **the Oversoul Paragon 33 where the first version held it for the whole 138-frame swing**), Darkness lasts 83 steps from release instead of Fire's 75, and an item (a Potion) 80. The answer to "does the switch help" does not change direction anywhere: Vegnagun and Shuyin, Trema, Tourist Trap and Angra Mainyu still get easier for the girls at every pace, by about the same amount, except that **Trema gets a good deal smaller at the bench pace (+74 to +27 of 500) because the Paragon strikes again about as often as before the switch**, and **Den of Woe now loses at the bench pace too (-2 to -115 of 500)**, because a longer Darkness moves the Dark Knights' rhythm into the zone where Nooj's Lightfall lands before the Hero Drink is in place. If the scripted line drinks its Hero Drink earlier (Nooj at 12,000 HP, not 4,500), Den of Woe is level with the base at every pace tried (194 to 200 of 200).
+
+### 9.1 What went into the data (`src/data/ffx2/action-frames.ts`, regenerated by `gen_action_frames.py`, which now reads `FFX2-G12/hit-roster.json`)
+
+| Label | Count | What |
+|---|---|---|
+| [R] read, one candidate | 31 girl sets, 22 monster sets (of 54 and 36) | `GIRL_HIT_FRAMES` / `MONSTER_HIT_FRAMES`: the first hit-type signal of the attack clips, in frames from the start of `attack1_00` (a signal in `attack1_01` counts as the length of `attack1_00` plus its frame). Replaces the clip-end estimate. |
+| [R~] read, several same-length programs disagree | 4 girl sets (0x6: 6 or 18; 0x2e: 12 or 14; 0x45: 24 or 32; 0x3d0: 28 or 34), 2 monster sets (0x1082: 5 or 7; 0x111a: 31 or 32) | the lowest candidate is taken, the candidates are in a comment beside it |
+| [I] estimate kept | 19 girl sets, 12 monster sets | no hit signal found: the end of the `attack1_00` clip stays, labelled an upper bound |
+| [M] measured, new | Darkness (effect 844) 83 steps; every item 80 steps | `MEASURED_EFFECT_STEPS[844] = 83` (81 from the begin event, which comes 2 steps after release; one cast, two targets, both hit in the same step); `ITEM_EFFECT_STEPS = 80` (a Potion, three casts, 79, 79, 80). An item's ability carries a casting countdown, so a Potion's span is exactly 80 (a test pins it). |
+| [M] measured, unchanged | Fire 75 (read twice now: 2026-10-09 and 2026-10-19, both unhasted); Umbral Gaze 94; Strength Up 84 | |
+| not entered | Hayate 77 (row 0x307c, effect 834), the Dark Knight dress change 38 (Berserker 80), Haste's duration 789 steps | measured, but the engine takes them from the class default or models no span for them; entering them is a later step |
+
+Hit times and the spans they give, old (first version) to new (steps; 29.97 a second):
+
+| Body | Hit, old (clip end) -> new | Plain Attack span, old -> new |
+|---|---|---|
+| Yuna, Mascot | 8 -> 12 | 61 -> 65 |
+| Rikku, Mascot | 6 -> 4 | 53 -> 51 (Hasted 27 -> 26) |
+| Paine, Mascot | 10 -> 11 | 58 -> 59 |
+| Nooj | 16 -> 17 | 16 -> 17 (0.53 s -> 0.57 s) |
+| the Oversoul Paragon | 138 -> 33 | 178 -> 73 (5.9 s -> 2.4 s: its idle wait 40 + the swing up to the hit) |
+| Trema | 10 -> 6 | 66 -> 62 |
+| Tawrich | 32 -> 34 | 32 -> 34 |
+| Bahamut | 43 -> 41 | 43 -> 41 |
+| Leblanc | 3 -> 8 | 17 -> 22 |
+
+A multi-hit command is still taken at its **first** hit, not its last (an estimate, a few frames at most for these bodies). The measurement-arm names in `ActionSpanKnobs.monsterHit` are now `'read'` (production), `'estimate'` and `'half'`; the last two ignore the read frames (they are the earlier clip-as-hit sensitivity arms and are not used here). Hand checks and new tests: `tests/unit/ffx2-action-span.test.ts` (25 tests; Yuna 65, Rikku 51 and Hasted 26, Paine 59, Bahamut 41, Leblanc 22, Trema 62, a body with no hit read keeps its clip, Darkness 83, a Potion 80).
+
+### 9.2 Does the engine's action time include a wait in the game's queue before a cast begins? No.
+
+From the code: each unit counts its **own** `gauge.executing` countdown (`logic-step.ts`, `execute.ts#finishAction`), "which every other gauge ignores" (`action-time.ts`); there is no shared action manager, so an action begins the step it is chosen (a cast, the step its countdown ends) and its span is its own length only. The live session saw a Darkness sit **53 steps in the manager's queue before it began** (and the HP cost paid when it began), most likely behind a monster's Umbral Gaze (consistent, not isolated; the same 114-step reading of 2026-10-09 is the other sighting). So **a real cast can wait behind another action's effect, once measured at 53 to 57 steps (1.8 to 1.9 s); the model has no such wait, and none was built.** The direction of the error is that real casts are slower than the model's when a monster is casting at the same time, which would favour the bosses; the size is unmeasured. (Also stated in the header of `action-span.ts`.)
+
+### 9.3 The six chapters, old and new (500 seeds per cell; base = the switch OFF, unchanged; old on = section 4; new on = this rerun)
+
+Whole-chain first-try wins of 500. "change" is against the base.
+
+| Chapter | Wait pace (human): base -> old on -> new on | change old -> new | Active: base -> old -> new | change | Bench: base -> old -> new | change |
+|---|---|---|---|---|---|---|
+| V Vegnagun and Shuyin | 463 -> 489 -> 490 | +26 -> +27 | 417 -> 468 -> 459 | +51 -> +42 | 482 -> 497 -> 489 | +15 -> +7 (p=0.17) |
+| VI Leblanc | 500 -> 500 -> 500 | 0 -> 0 | 472 -> 500 -> 497 | +28 -> +25 | 500 -> 499 -> 500 | -1 -> 0 |
+| X Trema | 288 -> 378 -> 357 | +90 -> +69 | 167 -> 337 -> 302 | +170 -> +135 | 336 -> 410 -> 363 | +74 -> +27 (p=0.046) |
+| XII Den of Woe | 498 -> 371 -> 376 | -127 -> -122 | 452 -> 488 -> 483 | +36 -> +31 | 499 -> 497 -> **384** | -2 -> **-115** |
+| XIV Tourist Trap | 423 -> 483 -> 481 | +60 -> +58 | 339 -> 466 -> 460 | +127 -> +121 | 464 -> 483 -> 484 | +19 -> +20 |
+| XVI Angra Mainyu | 383 -> 490 -> 491 | +107 -> +108 | 24 -> 369 -> 348 | +345 -> +324 | 447 -> 496 -> 500 | +49 -> +53 |
+
+Every new cell except Leblanc at the Wait and bench paces (no move) and V at the bench pace is significant at p below 0.05 by the sign test of the seeds that changed (new column: V 5 lost / 32 gained, Trema 64 / 133, Den of Woe 123 / 1, Tourist Trap 10 / 68, Angra Mainyu 6 / 114, all at the Wait pace). What moved it (Wait pace, base -> old -> new, per seed):
+
+| Chapter | party KOs | minutes | enemy actions | mean span of a girl's action (s) | mean span of a boss's action (s) |
+|---|---|---|---|---|---|
+| V | 1.7 -> 1.1 -> 1.2 | 4.1 -> 5.2 -> 5.6 | 73.3 -> 61.7 -> 66.0 | 2.14 -> 2.37 | 3.46 -> 3.43 |
+| VI | 1.4 -> 1.7 -> 1.6 | 2.7 -> 3.7 -> 3.7 | 36.7 -> 42.0 -> 42.3 | 2.11 -> 2.16 | 1.79 -> 1.86 |
+| X | 1.7 -> 1.5 -> 1.7 | 8.3 -> 9.9 -> 10.0 | 113.6 -> 154.2 -> 165.2 | 2.39 -> 2.62 | 2.51 -> 2.19 |
+| XII | 0.6 -> 1.2 -> 1.1 | 1.3 -> 1.6 -> 1.6 | 18.9 -> 14.9 -> 14.9 | 2.49 -> 2.68 | 2.21 -> 2.21 |
+| XIV | 0.8 -> 0.2 -> 0.2 | 2.4 -> 2.1 -> 2.1 | 29.0 -> 23.8 -> 23.9 | 2.46 -> 2.64 | 2.94 -> 2.81 |
+| XVI | 4.1 -> 1.0 -> 1.1 | 8.3 -> 6.7 -> 7.0 | 115.1 -> 71.4 -> 76.1 | 2.43 -> 2.60 | 4.50 -> 4.50 |
+
+**What changed and why, in player words.**
+- **A girl's action got longer by 0.05 to 0.23 s** in every chapter: Darkness is 83 steps, not Fire's 75; a Potion is 80; Yuna's and Paine's Attacks land 1 to 4 frames later. A boss's cast did not change (the 94-step estimate and the idle wait are unchanged; Angra Mainyu's Full-Life and Tawrich's Punch still hold them 4.5 s). So the girls lose a little of the head start the first version gave them: **V, Active and bench gains shrink by 8 to 9, Angra Mainyu at Active by 21 (345 -> 324 of 500, from a base of 24), Tourist Trap by 2 to 6.** None changes direction.
+- **Trema got smaller (Wait +90 -> +69, Active +170 -> +135, bench +74 -> +27).** The first version held the Oversoul Paragon for its whole 138-frame swing (5.9 s) on every Attack; the motion data says it lands at frame 33, so it now holds 2.4 s and strikes again about as often as it did with no action time (the bosses of this chain act 113.6 times a fight with no action time, 154.2 in the first version, 165.2 now, at the Wait pace). The girls' hold is also a little longer. At the bench pace what remains is the 3-second flat time giving way: only +27 (p=0.046).
+- **Leblanc's** own Attack hits later (frame 8, not 3), so it is 22 steps, not 17; nothing moves at the Wait pace (500 of 500), +25 at Active.
+- **Den of Woe at the bench pace went from -2 to -115 of 500.** Not new code and not a new rule: Darkness is 8 steps longer than the Fire-based guess, which shifts the Dark Knights' cast cycle by 8 steps, and 8 steps is enough to move it from where the first version's bad zone was to where the bench pace sits (9.5).
+
+### 9.4 Sensitivity left in (200 seeds, Wait pace; every effect length, the measured ones included, times 0.8 and 1.25)
+
+| Chapter | base | on (measured) | effects x0.8 | effects x1.25 |
+|---|---|---|---|---|
+| V Vegnagun and Shuyin | 184 | 196 | 195 | 195 |
+| X Trema | 114 | 131 | 143 | 144 |
+| XII Den of Woe | 199 | 152 | 151 | 157 |
+| XIV Tourist Trap | 170 | 191 | 193 | 196 |
+| XVI Angra Mainyu | 142 | 196 | 199 | 197 |
+
+The four gains keep their sign under a 20 percent shorter or 25 percent longer set of effects (the unmeasured Cure, Full-Life, Punch and the enemy casts sit in this range); Den of Woe keeps its loss (-42 to -48 of 200). The run-up and the idle break (both still estimates) were varied only in the first version's arms (no chapter moved more than 14 of 200).
+
+### 9.5 Den of Woe: the menu-pace sweep again (200 seeds, whole chain, switch off -> on, measured values)
+
+The Wait engine, 1.5 s of menu per decision split into a **running** part (the top list; the clock runs) and a **held** part (a submenu; the clock is held), as in 4.4. 0 / 0 is no menu time at all (the bench pace). "old on" is 4.4's table (Darkness on Fire's 75); the base is unchanged.
+
+| running / held (ms) | base | old on | **new on** | new lost / gained |
+|---|---|---|---|---|
+| 0 / 0 (bench) | 200 | not run (500-seed bench: 499 -> 497) | **160** | 40 / 0 |
+| 0 / 1500 | 200 | 199 | **160** | 40 / 0 |
+| 50 / 1450 | 200 | not run | **160** | 40 / 0 |
+| 100 / 1400 | 200 | 189 | **134** | 66 / 0 |
+| 250 / 1250 | 200 | 150 | **139** | 61 / 0 |
+| 500 / 1000 (the "human" pace) | 199 | 146 | **152** | 48 / 1 |
+| 750 / 750 | 198 | 185 | **197** | 3 / 2 |
+| 1000 / 500 | 199 | 199 | **200** | 0 / 1 |
+| 1250 / 250 | 191 | not run | **197** | 3 / 9 |
+| 1500 / 0 (all running) | 181 | 198 | **195** | 4 / 18 |
+
+Averaged over the six Wait splits from 0 to 1000 ms (0, 100, 250, 500, 750, 1000): **-36 of 200 (-18 percent) with the measured values, against -21 (-11 percent) in the first version; the worst point -66 (was -53)**, and the bad zone (losses of 20 or more) now covers the top-list times from 0 to 500 ms (the bench pace included) instead of 250 to 500 ms; from 750 ms up it is level. The 500-seed cells above (human 498 -> 376, bench 499 -> 384, Active 452 -> 483) agree with these 200-seed ones.
+
+- **Why (the same lock as 4.2, moved by 8 steps).** The Dark Knights' Darkness-to-Darkness cycle was 211, 216, 228, 237, 246 and 262 steps at 0, 250, 500, 750, 1000 and 1500 ms of running menu time with Darkness on 75 steps; Darkness is now 83, so each is 8 longer (219, 224, 236, 245, 254, 270, [I] by that arithmetic, not re-measured from event logs), and Nooj's cast cycle (Rippling Chroma and Greedy Aura 7.4 s apart, unchanged: his casts are still the 94-step default, only his Attack moved from 16 to 17 frames) did not move. The worst zone follows the Dark Knights' cycle, which is where 4.2 said it would sit once Darkness was measured. The bench pace's cycle (219) lands inside the zone the first version's 500 ms pace (228) was in.
+- **Does a 2-step uncertainty in Darkness matter?** No: with Darkness at 85 (the live report's own 84 to 85 if the begin gap is as long as the 4 steps its one cast showed after the manager's state change), 200 seeds: 0/0 154 (160), 250 ms 136 (139), 500 ms 157 (152), 750 ms 199 (197), all running 193 (195); the shape is the same (overlay on the measured constant; no file changed).
+- **What removes it (overlay, no file changed): the scripted line drinks its Hero Drink earlier.** `DRINK_FROM` in `src/engine/tactics/ffx2-den-of-woe.ts` ("our line, not data") from 4,500 to 12,000, switch on against switch off **on the same line** (200 seeds): bench 200 -> 200, 250 ms 200 -> 198, 500 ms 200 -> 195, 750 ms 199 -> 198, 1000 ms 200 -> 199, all running 200 -> 194, **Active ATB 200 -> 194**. Level with the base at every pace tried, the worst -6 of 200; and the base on that line is better than on today's at the all-running pace (200 against 181). **This is a change to what the fight asks of a human (drink when Nooj is at about half his health, not when he is nearly down), a content/tuning change that needs Bailey's separate yes (AGENTS.md rules 6 and 10); I did not make it.**
+
+### 9.6 Proofs
+
+| Proof | Result |
+|---|---|
+| Switch OFF is identical | the 60 pinned digests of the pre-lane base (`tests/fixtures/parity/ffx2/action_span_off.json`, `ffx2-action-span-off.test.ts`) pass; and a 12-seed spot check against `586ede9a5` (the three changed files rebuilt from that commit and mapped in-process, no worktree or copy): 4 chapters (Vegnagun and Shuyin, Trema, Den of Woe, Angra Mainyu) x seeds 1 to 12 x 3 paces (Wait, Active, bench) = **144 of 144 chain-plays identical** (110 victories and 34 defeats among them). The overlay is live: with the switch ON, Trema at the Wait pace, 6 seeds, gives 84,918 party span steps on `586ede9a5` and 61,789 on the tip. |
+| Goldens unchanged | `ffx2-atb-golden` (6), `ffx-engine-golden` (18), `ff7-golden` (3) pass |
+| Types, tests | `tsc --noEmit` clean; `ffx2-action-span` (25), `ffx2-action-span-off` (60 pins) and all eight `data-ffx2-*` files (2,234 tests, the citations test green with the new `§` references) pass; 2,288 tests in the 14 files run together |
+| Nothing else | no new module (`orphans.mjs` not affected); `action-frames.ts` 322 lines, no source file near 400 |
+
+### 9.7 Decision for Bailey, updated
+
+| | State |
+|---|---|
+| The switch | `ACTION_TIME_PER_COMMAND = false`; turning it on is one line |
+| Measured now | Fire 75 (twice), Darkness 83 (one cast, two targets), a Potion 80, Umbral Gaze 94, Strength Up 84; the first-hit frame of 53 body sets' Attacks (read from the game's motion data) |
+| Still estimated | every other effect length (75 for a girl's, 94 for an enemy's: Cure, Full-Life, Punch, Nooj's three casts, every item but the Potion); the hit time of 31 body sets (clip end); a multi-hit command taken at its first hit; the run-up (a lower bound); the idle break (half a clip); whether Haste shortens an effect (the data says only the throw wait should); a cast's wait in the game's queue (9.2, not modelled) |
+
+**Recommendation: ON now, as provisional, with one decision attached.** Why: the three measurements that were the most-used guesses (Darkness 35 to 41 percent of all actions in four of the six chapters, the Paragon's swing, the girls' Attack) are numbers now, and none flipped a sign; the four gains (V, X Trema, XIV, XVI) hold at all three paces and under a 20 percent shorter or 25 percent longer set of effects; Active ATB, where most of the fights were easier to lose, gains in every one of the six (+25 to +324 of 500). **The attached decision is Den of Woe:** the scripted line loses 23 to 24 percent of 500 at the Wait and bench paces with the switch on (and gains 31 at Active), and the loss disappears if the line drinks its Hero Drink at 12,000 HP (9.5). So the choices are:
+- **A. ON, and the Den of Woe line drinks earlier in the same release** (the recommended pair; the line change needs Bailey's separate yes, and the guide that teaches it changes with it);
+- **B. ON alone:** four chapters easier, Den of Woe harder at the Wait pace (the changelog says so);
+- **C. MEASURE MORE first:** the one reading that would most change the Den of Woe answer is Nooj's Rippling Chroma and Greedy Aura (his cast cycle sets where the bad zone sits); the one that most changes the biggest gain is Angra Mainyu's Full-Life and Tawrich's Punch (about a quarter of that chapter's actions, today the 94-step default);
+- **D. OFF:** nothing changes; Angra Mainyu stays at 24 of 500 on the Active clock.
+
+The honest uncertainty: Den of Woe's size rests on Nooj's three casts (estimated) and on Darkness measured once at two targets (a 2-step change does not move it); the queue wait (9.2) is unmodelled and would favour the bosses. The Paragon's hit is read from the data, not watched in a live fight.
+
+### 9.8 Live readings still owed (the plan's "AFTER SESSION 5")
+
+1. **Cure** (effect 110): neither Mascot girl's menu has a White Magic row; needs a girl in a White Mage dressphere (and then Curaga, Esuna, Protect are neighbours that need their own reading unless the effect modules are decoded).
+2. **A Hasted Fire:** Hayate, then Fire inside 26 s (Haste lasted 789 steps = 26.3 s at ratio 512); expected about 6 steps shorter than 75 (the throw wait only, `FFX2-G12` 6); settles whether Haste shortens an effect.
+3. **Angra Mainyu's Full-Life** (effect 116).
+4. **Tawrich's Punch** (effect 758, the block-player module `FFX2-G12` could not decode).
+Also useful: a **one-target Darkness with nothing queued** (separates the two-target caveat and the 2-step begin gap from the 83), an item other than the Potion, and Nooj's Rippling Chroma and Greedy Aura (if Den of Woe's size is to be trusted).
+
+### 9.9 How this was run
+
+Files (outside the repo, per-lane scratch deleted at the end; the result rows below are reproducible from the commit): the generator `D:\Tools\ffx-parity\coverage\ffx2\FFX2-G11\gen_action_frames.py` (now also reads `FFX2-G12\hit-roster.json`; `python -I gen_action_frames.py <repo> <ids.out> <out.ts>`, `ids.out` from `D:\Tools\ffx-parity\rc10\x2-action-time\proof\`); the 500-seed cells are `tests/unit/ffx2-action-span-measure.test.ts` (arm `on`; the base rows are the first version's, unchanged because the switch is off); the Den of Woe sweep and the two overlays use the menu-split harness of the independent check (`rc10/xa6-check-evidence/variants/den.test.ts`). Two vitest workers at most; the game was not run.
