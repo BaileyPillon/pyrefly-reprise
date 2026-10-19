@@ -91,6 +91,47 @@
         ["shiva-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
         ["shiva-rig-2-ko-overdrive", ["ko", "overdrive"]]
       ]
+    },
+    "bahamut": {
+      "actor": "possessed-bahamut",
+      "game": "ffx",
+      "chapter": { "id": "braskas-final-aeon" },
+      "reach": { "auto": true },
+      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
+      "track": { "head": "head", "feet": ["toeN"], "centroid": "bodyCenter", "hand": "handL", "tip": "wingLTip" },
+      "beforeAfter": "bahamut-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "sheets": [
+        ["bahamut-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["bahamut-rig-2-ko-overdrive", ["ko", "overdrive"]]
+      ]
+    },
+    "grothia": {
+      "actor": "grothia",
+      "game": "ffx",
+      "chapter": { "id": "isaaru-via-purifico" },
+      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
+      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "hand": "handF", "tip": "tailU" },
+      "beforeAfter": "grothia-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "sheets": [
+        ["grothia-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["grothia-rig-2-ko-overdrive", ["ko", "overdrive"]]
+      ]
+    },
+    "spathi": {
+      "actor": "spathi",
+      "game": "ffx",
+      "chapter": { "id": "isaaru-via-purifico" },
+      "reach": { "auto": true },
+      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
+      "track": { "head": "head", "feet": ["toeN"], "centroid": "bodyCenter", "hand": "handL", "tip": "wingLTip" },
+      "beforeAfter": "spathi-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "sheets": [
+        ["spathi-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["spathi-rig-2-ko-overdrive", ["ko", "overdrive"]]
+      ]
     }
   }
 }
