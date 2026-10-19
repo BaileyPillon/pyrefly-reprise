@@ -22,6 +22,20 @@
         ["lulu-rig-2-attack-hurt-return", ["attack", "hurt", "follow"]],
         ["lulu-rig-3-ready-lowhp-asleep", ["ready", "critical", "sleep"]]
       ]
+    },
+    "rikku-dark-knight": {
+      "actor": "rikku",
+      "game": "ffx2",
+      "chapter": { "door": "valefor", "id": "ffx2-valefor-besaid" },
+      "poses": ["attack", "cast", "critical", "follow", "hurt", "item", "ko", "ready", "sleep", "victory"],
+      "track": { "head": "headCenter", "feet": ["soleL", "soleR"], "centroid": "pelvisCenter", "hand": "fist", "tip": "tip" },
+      "beforeAfter": "rikku-dk-rig-4-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "item": "ITEM", "hurt": "HURT", "follow": "RETURNING FROM AN ACTION", "ko": "KNOCKED OUT", "ready": "READY", "critical": "LOW HP", "sleep": "ASLEEP", "victory": "VICTORY" },
+      "sheets": [
+        ["rikku-dk-rig-1-attack-cast-item", ["attack", "cast", "item"]],
+        ["rikku-dk-rig-2-hurt-follow-ko", ["hurt", "follow", "ko"]],
+        ["rikku-dk-rig-3-ready-lowhp-asleep-victory", ["ready", "critical", "sleep", "victory"]]
+      ]
     }
   }
 }
