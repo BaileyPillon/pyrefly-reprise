@@ -53,7 +53,7 @@ for (const v of VARIANTS) {
   for (const seg of ORDER) {
     if (!info[v].segments[seg]) continue;
     const out = path.join(TMP, `${v}-${seg}.mp4`);
-    const vf = [text(NAMES[v], 24, 20, 34), text(LABEL[seg], 24, 'h-70', 34), text('frame %{eif\\:n\\:d\\:3}', 'w-230', 'h-70', 28)].join(',');
+    const vf = [`crop=${CROP.w}:${CROP.h}:${CROP.x}:${CROP.y}`, 'scale=1280:720:flags=lanczos', text(NAMES[v], 24, 20, 34), text(LABEL[seg], 24, 'h-70', 34), text('frame %{eif\\:n\\:d\\:3}', 'w-230', 'h-70', 28)].join(',');
     ff(['-framerate', '60', '-i', path.join(IN, `anim-${v}`, seg, 'f%04d.jpg'), '-vf', vf, '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-pix_fmt', 'yuv420p', '-r', '60', out]);
     parts.push(out);
   }
