@@ -7,9 +7,10 @@
     select --subject S --tag T [--write]                                                                        the best candidate a pose by the gate; claims rewritten; the table          lane_fit.py
     eval --subject S --keys K.json [--out DIR] [--full]                                                         export a keys file and gate it; the table                                   lane_fit.py
     keytable --gate G.json --rig rig.json [--out T.txt]                                                         the per-key table                                                           lane_sheets.py
-    clips --subject S --gate G.json --on DIR --off DIR --out DIR [--poses a,b]                                  the rig beside its painting, a clip a pose                                  lane_sheets.py
+    clips --subject S --gate G.json --on DIR --off DIR --out DIR [--poses a,b] [--last p=N[:M]] [--crop p=x,y,w,h] [--painting-file p=PNG]   the rig beside its painting, a clip a pose   lane_sheets.py
     sheets --subject S --clips DIR --out DIR [--before DIR] [--before-poses a,b]                                the sheets for Bailey (and the before/after sheet)                          lane_sheets.py
-    twin <name> --of <rigged config> [--subject ID] [--art DIR] [--run]                                         a silhouette twin: the cut config and keys carried over                      lane_twin.py
+    hurtko --on DIR --off DIR --out FILE.png --crop x0,y0,x1,y1 [--hurt N[:M]] [--ko N[:M]] [--texts a b c d] [--foot TEXT]    the hurt/KO before-and-after sheet (rig off above, rig on below)             lane_sheets.py
+    twin <name> --of <rigged config> [--subject ID] [--art DIR] [--run] [--no-register]                         a silhouette twin: the cut config (registered onto its painting) and keys   lane_twin.py
     framediff --a DIR --b DIR [--floor DIR] [--poses a,b] [--every N] [--from FRAME] [--out report.json]                       compare two recordings (rig signature, pixels): before/after an engine change   lane_diff.py
     report --subject S --gate G.json [--rig rig.json]                                                           the handoff skeleton (the table, the files, the commands) on stdout
 
@@ -50,9 +51,10 @@ def main(argv=None) -> int:
     s = sp.add_parser("select"); s.add_argument("--subject", required=True); s.add_argument("--tag", required=True); s.add_argument("--write", action="store_true")
     e = sp.add_parser("eval"); e.add_argument("--subject", required=True); e.add_argument("--keys", required=True); e.add_argument("--out"); e.add_argument("--full", action="store_true")
     k = sp.add_parser("keytable"); k.add_argument("--gate", required=True); k.add_argument("--rig", required=True); k.add_argument("--out")
-    c = sp.add_parser("clips"); c.add_argument("--subject", required=True); c.add_argument("--gate", required=True); c.add_argument("--on", required=True); c.add_argument("--off", required=True); c.add_argument("--out", required=True); c.add_argument("--poses")
+    c = sp.add_parser("clips"); c.add_argument("--subject", required=True); c.add_argument("--gate", required=True); c.add_argument("--on", required=True); c.add_argument("--off", required=True); c.add_argument("--out", required=True); c.add_argument("--poses"); c.add_argument("--last", action="append"); c.add_argument("--crop", action="append"); c.add_argument("--painting-file", action="append")
     h = sp.add_parser("sheets"); h.add_argument("--subject", required=True); h.add_argument("--clips", required=True); h.add_argument("--out", required=True); h.add_argument("--before"); h.add_argument("--before-poses"); h.add_argument("--registry")
-    t = sp.add_parser("twin"); t.add_argument("name"); t.add_argument("--of", required=True); t.add_argument("--subject"); t.add_argument("--art"); t.add_argument("--run", action="store_true")
+    b = sp.add_parser("hurtko"); b.add_argument("--on", required=True); b.add_argument("--off", required=True); b.add_argument("--out", required=True); b.add_argument("--crop", required=True); b.add_argument("--hurt", default="70"); b.add_argument("--ko", default="70"); b.add_argument("--texts", nargs=4); b.add_argument("--foot", default="")
+    t = sp.add_parser("twin"); t.add_argument("name"); t.add_argument("--of", required=True); t.add_argument("--subject"); t.add_argument("--art"); t.add_argument("--run", action="store_true"); t.add_argument("--no-register", action="store_true")
     d = sp.add_parser("framediff"); d.add_argument("--a", required=True); d.add_argument("--b", required=True); d.add_argument("--poses"); d.add_argument("--every", type=int, default=1); d.add_argument("--out"); d.add_argument("--floor"); d.add_argument("--from", dest="start", type=int, default=0)
     r = sp.add_parser("report"); r.add_argument("--subject", required=True); r.add_argument("--gate", required=True); r.add_argument("--rig")
     a = ap.parse_args(argv)
@@ -84,7 +86,8 @@ def main(argv=None) -> int:
         import lane_sheets
         from lane_common import read_gate
 
-        made = lane_sheets.make_clips(read_gate(a.gate), pathlib.Path(a.on), pathlib.Path(a.off), pathlib.Path(a.out), [p for p in (a.poses or "").split(",") if p] or None)
+        made = lane_sheets.make_clips(read_gate(a.gate), pathlib.Path(a.on), pathlib.Path(a.off), pathlib.Path(a.out), [p for p in (a.poses or "").split(",") if p] or None,
+                                      last=lane_sheets.parse_overrides(a.last, "last"), crop=lane_sheets.parse_overrides(a.crop, "crop"), painting_file=lane_sheets.parse_overrides(a.painting_file, "file"))
         print(f"lane clips: {len(made)} clip(s) in {a.out}")
         return 0
     if a.cmd == "sheets":
@@ -95,9 +98,16 @@ def main(argv=None) -> int:
         wrote = lane_sheets.make_sheets(spec, pathlib.Path(a.clips), pathlib.Path(a.out), pathlib.Path(a.before) if a.before else None, [p for p in (a.before_poses or "").split(",") if p] or None)
         print(f"lane sheets: {len(wrote)} sheet(s) in {a.out}")
         return 0
+    if a.cmd == "hurtko":
+        import lane_sheets
+
+        pair = lambda v: tuple(int(n) for n in (v if ":" in v else f"{v}:{v}").split(":"))  # noqa: E731
+        f = lane_sheets.make_hurtko(pathlib.Path(a.on), pathlib.Path(a.off), pathlib.Path(a.out), tuple(int(n) for n in a.crop.split(",")), pair(a.hurt), pair(a.ko), tuple(a.texts) if a.texts else lane_sheets.HURTKO_TEXTS, foot=a.foot)
+        print("lane hurtko: wrote", f)
+        return 0
     if a.cmd == "twin":
         import lane_twin
-        return lane_twin.run(a.name, a.of, a.subject, a.art, a.run)
+        return lane_twin.run(a.name, a.of, a.subject, a.art, a.run, register=not a.no_register)
     if a.cmd == "framediff":
         import lane_diff
         return lane_diff.run(a.a, a.b, a.poses, a.every, a.out, a.floor, a.start)

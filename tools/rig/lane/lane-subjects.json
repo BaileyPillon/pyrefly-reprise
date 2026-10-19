@@ -1,5 +1,5 @@
 {
-  "_about": "The lane kit's subject registry (tools/rig/lane/README.md). One entry a rigged subject: the combatant id, the hidden chapter that fields it (the door word typed on the chapter board, and the chapter id the board must report), the poses to play for the authored clips, the rig landmarks the tracker follows, the menu keys that open its first spell for the cast clip, and (optional) how the sheets group the poses. `lane.py new` adds an entry for a new subject; the lane fills in the door word and the chapter. Door words and chapter ids come from src/story or the chapter registry, never from memory.",
+  "_about": "The lane kit's subject registry (tools/rig/lane/README.md). One entry a rigged subject: the combatant id, the chapter that fields it (a hidden chapter's door word typed on the chapter board, or none for a listed chapter whose card is picked; and the chapter id the board must report), `reach: {auto: true}` for an actor that only stands on the field in a later link, the poses to play for the authored clips, the rig landmarks the tracker follows, the menu keys that open its first spell for the cast clip, and (optional) how the sheets group the poses. `lane.py new` adds an entry for a new subject; the lane fills in the door word and the chapter. Door words and chapter ids come from src/story or the chapter registry, never from memory.",
   "subjects": {
     "kimahri": {
       "actor": "kimahri",
@@ -48,6 +48,20 @@
         ["rikku-dk-rig-1-attack-cast-item", ["attack", "cast", "item"]],
         ["rikku-dk-rig-2-hurt-follow-ko", ["hurt", "follow", "ko"]],
         ["rikku-dk-rig-3-ready-lowhp-asleep-victory", ["ready", "critical", "sleep", "victory"]]
+      ]
+    },
+    "pterya": {
+      "actor": "pterya",
+      "game": "ffx",
+      "chapter": { "id": "isaaru-via-purifico" },
+      "reach": { "auto": true },
+      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
+      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "tip": "wingTip" },
+      "beforeAfter": "pterya-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "sheets": [
+        ["pterya-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["pterya-rig-2-ko-overdrive", ["ko", "overdrive"]]
       ]
     }
   }
