@@ -63,6 +63,20 @@
         ["pterya-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
         ["pterya-rig-2-ko-overdrive", ["ko", "overdrive"]]
       ]
+    },
+    "ifrit": {
+      "actor": "possessed-ifrit",
+      "game": "ffx",
+      "chapter": { "id": "braskas-final-aeon" },
+      "reach": { "auto": true },
+      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
+      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "hand": "handF", "tip": "tailU" },
+      "beforeAfter": "ifrit-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "sheets": [
+        ["ifrit-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["ifrit-rig-2-ko-overdrive", ["ko", "overdrive"]]
+      ]
     }
   }
 }
