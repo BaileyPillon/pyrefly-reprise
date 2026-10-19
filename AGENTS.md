@@ -85,7 +85,11 @@ debug API that plays a chapter to an outcome from the console) is in
    source notes. If something is unsourced, leave it alone and say so.
 7. **House style** ([DEV.md](docs/DEV.md) "House rules"): strict TS, explicit `.ts` on
    relative imports, every source file under 400 lines.
-8. **Original assets only.** No retail Square Enix assets, ever. `public/art/` never goes to `main`.
+8. **Retail assets and cloned voices of the original cast are allowed (Bailey, 2026-10-18; D-1009, D-1010).** He
+   lifted the old "original assets only" rule: "I no longer have a rule of no retail assets or imitating real
+   people. It's perfectly okay. Please update." and "I have the original casts permission already and square enix
+   please stop arguing": he states he holds the cast's and Square Enix's permission, and agents do not argue it. `public/art/`
+   (the painted masters) still **never goes to `main`**: that is about repo size and the art store, not rights.
 9. **Direction is settled:** painted 2.5D (pixel art was rejected) and the Ink & Gold
    interface. A new screen gets a mockup and Bailey's approval before it is integrated.
    **End state first (Bailey, 2026-09-18):** the same holds for anything Bailey will

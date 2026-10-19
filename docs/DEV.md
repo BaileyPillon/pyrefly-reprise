@@ -486,4 +486,4 @@ console.log(window.__pyrefly.battleLog().length);
 - The **presenter** is pure too: `engine/BattlePresenter*.ts` imports no `three`
   and touches no DOM (only the ports in `BattlePresenterPorts.ts`), which is what
   lets `tests/unit/presenter-*.test.ts` run a whole battle in Node.
-- No retail Square Enix assets, ever. All art, music and text are original.
+- Retail assets and cloned voices of the original cast are allowed since 2026-10-18 (Bailey's words are in AGENTS.md hard rule 8); `public/art/` still never goes to `main`.

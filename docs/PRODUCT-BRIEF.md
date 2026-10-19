@@ -1,5 +1,7 @@
 # Pyrefly Reprise — product brief
 
+> **Changed 2026-10-18 (Bailey): the Pilgrimage runs are the core loop; see “The feeling and the core loop” below.** Everything else stands as adopted.
+>
 > **Status: ADOPTED 2026-10-17**, as drafted (his blanket yes of that day, decision D-932 part P7, answering D-012: “for all other decisions i'll go with all your recommendations even for sound effects and music.”). Built on 2026-09-18 from five picks
 > Bailey made between concrete options (not from a questionnaire). A pick approves only
 > what Bailey named, so every line below is marked **picked** (Bailey chose it),
@@ -19,18 +21,16 @@ frame could be the poster.
 Not picked, and therefore not a goal on its own: "the link you send a friend who never
 played" and "a boss-rush challenge game".
 
-## The feeling (picked: "One more try", coming from "the fight itself")
+## The feeling and the core loop (CHANGED 2026-10-18: the Pilgrimage runs are the core loop)
 
-The pull to play again comes from hard, fair fights, not from systems around them.
+> **Bailey, 2026-10-18 about 15:28 EDT** (D-1024): “I feel like the game still kind of bare bones. It’s a greatest hits anthology of encounters which is great but it needs a really addictive aspect and tighter core gameplay loop.” He picked “Pilgrimage runs + party growth” to be shown as mockups, then “Option 2 + B: branching, boons” (D-1030), and after the prototype shipped hidden in release 55 he wrote (about 18:59 EDT, D-1041): “The new gameplay idea you recommended is awesome. I absolute love the pilgrimage idea.”
+> **This replaces the 2026-09-18 pick that the “one more try” feeling comes only from the fight itself, with no medals or modifiers (E-023, partly replaced).** The Pilgrimage runs are the game’s core loop from here on.
 
-- **follows** Every chapter is losable if you ignore what the fight is asking for, and
-  winnable with the tactics that worked in the original.
-- **follows** A loss tells you why in plain words, and getting back in is fast (retry
-  from the form change, retry the chapter, or change party prep). The defeat screen
-  shown in the picker was an illustration, not an approved design: it is a gap on the
-  end-state board and gets its own options round.
-- **follows** No medals, modifiers, rankings or unlocks in season 1. They stay
-  proposals that need Bailey's yes.
+- **picked** The loop is a *run*: a road of the game’s own fights, with forks (elite fights such as the Mirror Aeons and Sin’s Fins or Core pay double), where after each win the player picks one of three **boons** for the next fight (real FFX items and auto-abilities; “Overdrive charged” is labelled new). Every fight keeps its faithful party and bosses are never tuned. A run ends in a run-over page with Again in two presses and a best run. The “carry the party” growth model (A) is parked until the stat gap is measured. FFX first (the prototype is hidden behind the word `pilgrim`, release 55); FFX-2 gets a Gullwings sphere hunt later.
+- **follows** The fights themselves are still the pull: they stay hard, fair and faithful, and a loss still tells you why. The run is the reason to go back; it is not a reason to bend a rule. Boons are one-fight and sourced from the game, not a power curve.
+- **follows** What is next, after he plays the prototype: measure boon difficulty on the engine, the FFX-2 Gullwings hunt, longer roads, and the new chapters (Spectral Keeper, the Fallen Maesters) as stops. Cutting friction in the loop (time from a loss to the next attempt, time to the first command, a loss screen that says why) is adopted as a driver recommendation (D-1027).
+- **Superseded 2026-10-18** (kept for the history): “The pull to play again comes from hard, fair fights, not from systems around them”, and “no medals, modifiers, rankings or unlocks in season 1; they stay proposals that need Bailey’s yes”. Boons are the one system he has now said yes to; medals, rankings and unlocks are still proposals.
+- **follows (unchanged)** Every chapter is losable if you ignore what the fight is asking for, and winnable with the tactics that worked in the original. The defeat screen shown in the picker was an illustration, not an approved design: it is a gap on the end-state board and gets its own options round.
 
 ## When two goals collide (picked: "Faithful core, showpiece surface")
 
