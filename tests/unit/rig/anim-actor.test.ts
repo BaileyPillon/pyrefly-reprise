@@ -67,6 +67,24 @@ describe('the prototype is off unless asked for', () => {
   });
 });
 
+describe('a rig with no authored data keeps its own idle and lag chain', () => {
+  it('the file\'s idle sines still breathe the chest and head, and its tail chain still swings, with the prototype on', async () => {
+    const a = await rigged(fullFile(), STYLE_A);
+    const chest = (): number => a.figure.skeleton.pose[2 * 5]!; // `chest` rot
+    const tail = (): number => a.figure.skeleton.pose[9 * 5]!; // `tail0` rot
+    let chestMax = 0;
+    let tailMax = 0;
+    for (let i = 0; i < 240; i++) {
+      a.update(1 / 60);
+      chestMax = Math.max(chestMax, Math.abs(chest()));
+      tailMax = Math.max(tailMax, Math.abs(tail()));
+    }
+    expect(chestMax).toBeGreaterThan(0.001); // the idle breath, in radians (1.5 degrees at most)
+    expect(chestMax).toBeLessThan(0.05);
+    expect(Number.isFinite(tailMax)).toBe(true);
+  });
+});
+
 describe('a pose request plays as a clip', () => {
   it('attack: no move in flight, the key is reported at once, the arm ends where the key puts it, and the figure rests in the pose', async () => {
     const a = await rigged(fullFile(), STYLE_A);

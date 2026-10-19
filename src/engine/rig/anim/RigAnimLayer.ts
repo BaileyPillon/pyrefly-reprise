@@ -11,6 +11,7 @@ import type { RigData } from '../RigData.ts';
 import type { RigTransition } from '../RigKeys.ts';
 import { RigSkeleton } from '../RigSkeleton.ts';
 import { RigAnimator, type AnimFrame } from './RigAnimator.ts';
+import type { IdleTerm } from './AnimIdle.ts';
 import type { Subject } from './AnimLibrary.ts';
 import { LULU } from './LuluAnim.ts';
 import { animFromQuery, type AnimStyle } from './AnimStyles.ts';
@@ -33,7 +34,22 @@ const NEEDED = ['idle', 'ready', 'attack', 'follow', 'cast', 'item', 'hurt', 'ko
 
 /** Subjects the prototype has authored data for; any other rig with the keys gets the procedural clips and no idle or secondary motion of its own. */
 const SUBJECTS: Readonly<Record<string, Subject>> = { lulu: LULU };
-const GENERIC: Subject = { accents: {}, idle: { breath: {}, shift: {} }, secondary: () => ({ rots: [], points: [] }), hand: 'fist' };
+
+/**
+ * A rig the prototype has no authored data for: the procedural clips, and the rig's OWN idle and lag chains carried over (its `motion.idle` sines become the breath, each `motion.chains` entry a Verlet
+ * chain with the style's stiffness, drag and trail and the file's own `hang` and `limit`), so a rig with the nine keys is animated with no authoring at all.
+ */
+function genericOf(data: RigData): Subject {
+  const m = data.motion;
+  const breath: Record<string, IdleTerm> = {};
+  for (const [bone, a] of Object.entries(m?.idle?.bones ?? {})) breath[bone] = { ...(a.rot !== undefined ? { rot: a.rot } : {}), ...(a.dx !== undefined ? { dx: a.dx } : {}), ...(a.dy !== undefined ? { dy: a.dy } : {}), ...(a.phase !== undefined ? { phase: a.phase } : {}) };
+  return {
+    accents: {},
+    idle: { breath, shift: {} },
+    secondary: (st) => ({ rots: [], points: [], chains: (m?.chains ?? []).map((c) => ({ bones: c.bones, hang: c.hang ?? 0.15, stiffness: st.braid.stiffness, drag: st.braid.drag, trail: st.braid.trail, limit: c.limit ?? 70 })) }),
+    hand: 'fist',
+  };
+}
 
 export class RigAnimLayer {
   readonly anim: RigAnimator;
@@ -60,7 +76,7 @@ export class RigAnimLayer {
   static create(host: AnimHost, data: RigData, compiled: ReadonlyMap<string, Float64Array>, style: AnimStyle | null, pxPerUnit = 1280): RigAnimLayer | null {
     if (!style || NEEDED.some((k) => !compiled.has(k))) return null;
     try {
-      return new RigAnimLayer(host, data, compiled, style, SUBJECTS[data.name] ?? GENERIC, pxPerUnit);
+      return new RigAnimLayer(host, data, compiled, style, SUBJECTS[data.name] ?? genericOf(data), pxPerUnit);
     } catch (e) {
       console.warn(`[anim] ${data.name}: the prototype's clips do not fit this rig (${e instanceof Error ? e.message : String(e)}); it plays as it always did`);
       return null;
