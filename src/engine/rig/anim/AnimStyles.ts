@@ -51,8 +51,8 @@ export interface AnimStyle {
   idle: IdleStyle;
   /** Camera punch-in as a fraction of the subject distance at the attack's contact and the spell's release (0 = none), and its length, ms. */
   camera: { contact: number; release: number; ms: number };
-  /** Skip the fixed `lead` for items and spells shorter than this, ms (the presenter's own 380 ms beat is the floor). */
-  floorMs: number;
+  /** The figure's own glow pulse at a spell's release, 0..1 of the actor's flash peak (the spell effect itself is the game's, on the presenter's cue). */
+  glow: number;
 }
 
 /** A "Faithful FFX": the researcher's SNAPPY profile. Readable, hard ease-out into contact, a short hit-stop, modest overshoot. */
@@ -78,7 +78,7 @@ export const STYLE_A: AnimStyle = {
   braid: { stiffness: 3.2, drag: 0.1, trail: 0.5, limit: 50 },
   idle: { breathHz: 0.32, amp: 0.8, shiftHz: 0.1, shift: 0.7 },
   camera: { contact: 0, release: 0, ms: 150 },
-  floorMs: 380,
+  glow: 0.5,
 };
 
 /** B "Showpiece": the WEIGHTY profile pushed: a long wind-up, a fast arc with stretch, exaggerated overshoot, a 80 ms hold, loose secondary motion, a camera punch. */
@@ -104,7 +104,7 @@ export const STYLE_B: AnimStyle = {
   braid: { stiffness: 2.0, drag: 0.04, trail: 0.95, limit: 75 },
   idle: { breathHz: 0.38, amp: 1.25, shiftHz: 0.12, shift: 1.2 },
   camera: { contact: 0.045, release: 0.035, ms: 170 },
-  floorMs: 380,
+  glow: 0.9,
 };
 
 /** C "Painterly calm": the FLOATY profile: soft in and out, long holds, a gentle sway, a strong spring follow-through, no hit-stop. Elegant, not punchy. */
@@ -130,7 +130,7 @@ export const STYLE_C: AnimStyle = {
   braid: { stiffness: 1.6, drag: 0.07, trail: 0.7, limit: 62 },
   idle: { breathHz: 0.24, amp: 1.5, shiftHz: 0.08, shift: 1.6 },
   camera: { contact: 0, release: 0, ms: 200 },
-  floorMs: 380,
+  glow: 0.4,
 };
 
 export const STYLES: Readonly<Record<StyleId, AnimStyle>> = { A: STYLE_A, B: STYLE_B, C: STYLE_C };

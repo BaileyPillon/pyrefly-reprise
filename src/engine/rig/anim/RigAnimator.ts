@@ -12,7 +12,6 @@
  *   `begin('cast'|'item')` the clip plays from the request; the lead is the time to its release (a spell) or to the vial's landing (an item).
  *   `beat('contact')`  at each blow: a hit-stop on the attacker for the first and the last hit of a strike, an impulse in the springs, and the camera punch the style asks for.
  */
-import { ATTACK_IMPACT } from '../../BattlePresenterActors.ts';
 import { Carry, type CarrySkeleton } from './AnimCarry.ts';
 import { applyIdleLayer, type IdleSpec } from './AnimIdle.ts';
 import { compileClip, sampleClip, unwrapTargets, type ClipDef, type ClipLive, type ClipRig, type CompiledClip } from './AnimClip.ts';
@@ -212,11 +211,11 @@ export class RigAnimator {
 
   /**
    * The strike is scheduled so its contact lands on the apex of a lunge of `ms` (the tween's own time: the actor's tweens run on the same pace-scaled clock as this one, so `ms` is in this clock's
-   * ms): `ATTACK_IMPACT` of the move from now, less the strike's own run-up to its contact.
+   * ms): `apex` (`ATTACK_IMPACT`, passed in so this file stays free of the presenter's modules) of the move from now, less the strike's own run-up to its contact.
    */
-  lunge(ms: number): void {
+  lunge(ms: number, apex: number): void {
     const c = this.clips.get('strike')!;
-    this.strikeAt = this.clock + Math.max(0, ms * ATTACK_IMPACT - (c.marks['contact'] ?? 0));
+    this.strikeAt = this.clock + Math.max(0, ms * apex - (c.marks['contact'] ?? 0));
   }
 
   /** A blow landed (the presenter's damage handler). Returns the camera punch to give, a fraction of the subject distance (0 none). */

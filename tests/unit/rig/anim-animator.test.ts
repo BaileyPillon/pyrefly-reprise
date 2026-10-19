@@ -54,7 +54,7 @@ describe('the strike lands on the lunge\'s apex', () => {
       an.begin('attack', work, vel);
       for (let i = 0; i < 40; i++) an.step(frame(), work, vel); // the wind-up, held
       an.drain();
-      an.lunge(440);
+      an.lunge(440, ATTACK_IMPACT);
       const apex = 440 * ATTACK_IMPACT;
       let contactFrame = -1;
       for (let i = 1; i <= 60 && contactFrame < 0; i++) {
@@ -71,7 +71,7 @@ describe('the strike lands on the lunge\'s apex', () => {
   it('a request for the attack that finds the strike already running does not restart it; one that finds it not running starts it at once', () => {
     const { an, work, vel } = animator(STYLE_B);
     an.begin('attack', work, vel);
-    an.lunge(440);
+    an.lunge(440, ATTACK_IMPACT);
     for (let i = 0; i < 12; i++) an.step(frame(), work, vel);
     expect(an.playing).toBe('strike');
     const t0 = an.compiled('strike');

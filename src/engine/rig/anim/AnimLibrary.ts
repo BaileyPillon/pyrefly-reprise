@@ -109,7 +109,8 @@ export function buildLibrary(style: AnimStyle, acc: Accents = {}): Library {
   const ready: ClipDef = {
     name: 'ready',
     key: 'ready',
-    segments: [seg({ base: 'ready', to: 'idle', mix: -ov * 0.8 }, S.ready.into, S.easeFol)],
+    // a calm stance (the command menu is open): a soft start and a small overshoot at the end, not the front-loaded back curve of a recovery
+    segments: [seg({ base: 'ready' }, S.ready.into, [0.3, 0, 0.25, 1 + ov * 0.7])],
   };
 
   const windup: ClipDef = {

@@ -6,6 +6,7 @@
  * prototype has data for or the generic (procedural) set is enough: a rig without all the keys is left alone (`create` answers null).
  */
 import { Vector3, type Object3D } from 'three';
+import { ATTACK_IMPACT } from '../../BattlePresenterActors.ts';
 import type { RigData } from '../RigData.ts';
 import type { RigTransition } from '../RigKeys.ts';
 import { RigSkeleton } from '../RigSkeleton.ts';
@@ -21,6 +22,7 @@ export interface AnimHost {
   readonly parent: Object3D | null;
   landmark(name: string): { x: number; y: number } | null;
   /** The rig's plane, whose scale is the figure's size in world units. */
+  flash(colour?: number | string, ms?: number, peak?: number): void;
   readonly figure: { plane: { scale: { y: number } }; setSmear(names: readonly string[], dx: number, dy: number, on: boolean): boolean };
 }
 
@@ -107,6 +109,7 @@ export class RigAnimLayer {
     if (sm) this.lastSmear = sm;
     for (const e of this.anim.drain()) {
       if (e === 'reach') (this.prop ??= new VialProp()).hold();
+      else if (e === 'release' && this.anim.playing === 'cast') this.host.flash(0xe8f6ff, 260, this.anim.style.glow); // the figure's own pulse as the thrust lets go; the spell effect lands on the presenter's cue
       else if (e === 'release' && this.prop?.held) this.prop.throwTo(this.targets[0] ?? this.forward(), (this.anim.style.item.flight / Math.max(0.05, this.rate)) | 0);
     }
     const p = this.prop;
@@ -137,7 +140,7 @@ export class RigAnimLayer {
   }
 
   lunge(ms: number): void {
-    this.anim.lunge(ms);
+    this.anim.lunge(ms, ATTACK_IMPACT);
   }
 
   dispose(): void {
