@@ -83,7 +83,8 @@ export async function actionStart(
   // RUN-IN (FFX-2 only, r38-motion): the girl runs to her target before the blow; the lunge below then only carries the strike (`lungeFor`).
   if (motion?.strike && motionAllowed(ctx, 'runin')) await settled(ctx, motion.strike(event, motionCtx(ctx), pose), MOTION_GUARD_MS);
 
-  if (animOn && pose === 'attack') await ctx.sleep(Math.max(0, actor?.animLead?.('attack') ?? 0)); // the wind-up's tension, before the lunge
+  const coil: unknown = animOn && pose === 'attack' ? actor?.animLead?.('attack') : undefined; // the wind-up's tension, before the lunge (a number only: a stand-in actor may answer anything)
+  if (typeof coil === 'number' && coil > 0) await ctx.sleep(coil);
   if (pose === 'attack') {
     cue(ctx, 'attack', { volume: 0.8 });
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
@@ -111,8 +112,8 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
-  const lock = actor?.animLead?.('end') ?? -1; // pass 2 (dev only): the game holds the actor in its clip until the clip's end signal (the follow-through of a strike, a spell, a throw)
-  if (lock > 0) await ctx.sleep(lock);
+  const lock: unknown = actor?.animLead?.('end'); // pass 2 (dev only): the game holds the actor in its clip until the clip's end signal (the follow-through of a strike, a spell, a throw)
+  if (typeof lock === 'number' && lock > 0) await ctx.sleep(lock);
   actor?.setPose('idle');
   ctx.actingId = null;
   endSpellAction(ctx);
