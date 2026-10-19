@@ -2,8 +2,8 @@
  * **Spathi's subject config stays self-consistent** (the rig program, rig-aeons-2 lane, 2026-10-19; FFX ONLY: Spathi is Isaaru's Bahamut in Chapter XIV link 3, `characters/spathi/*`, the silhouette twin of
  * Bahamut: the same cut, bones, marks and keys moved by the registration of its canvases onto Bahamut's, `lane.py twin`). No art is read: only `tools/rig/subjects/spathi.json`, Bahamut's, the keys and the lane
  * registry. What the gate demands of the rig the pipeline makes from it is proved by the gate itself (`node tools/rig-gate.mjs`); what this proves is that the twin cannot drift from its base by accident:
- * every coordinate of the cut moved by the registration (Pterya's canvases sat 60 px off Valefor's and a blind copy tore every part), the one place it differs on purpose is named, and nothing in a key
- * can scale a head, the spine, an arm or a tail.
+ * every coordinate of the cut moved by the registration (Pterya's canvases sat 60 px off Valefor's and a blind copy tore every part), the one thing it does differently on purpose is named (its underlaps leave the
+ * sea-green glow alone), and nothing in a key can scale a head, the spine, an arm or a tail.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 type Pt = [number, number];
 type Cfg = {
   subject: string; scale: number; costume: { pose: string }; hooks?: string; _twin_of?: string; _twin_shift?: Record<string, [number, number, number]>;
-  cut: { order: string[]; priority: string[]; parts: Record<string, unknown>; polys: Record<string, Pt[]>; ops: { op: string; back?: string; front?: string; px?: number }[] };
+  cut: { order: string[]; priority: string[]; parts: Record<string, unknown>; polys: Record<string, Pt[]>; ops: { op: string; back?: string; front?: string; px?: number; zone?: unknown }[] };
   build: { bones: [string, string | null, Pt][]; skin: Record<string, { type: string; bone?: string; bones?: string[]; joints?: Pt[] }>; landmarks: Record<string, [string, Pt]> };
   fit: { mirror?: string[]; offsets?: string[]; scales?: Record<string, [number, number]>; limits?: Record<string, [number, number]> };
   landmarks: Record<string, Record<string, Pt>>;
@@ -25,9 +25,10 @@ const registry = read('tools/rig/lane/lane-subjects.json') as { subjects: Record
 /** The base poses the game paints Spathi in. */
 const PAINTED = ['attack', 'cast', 'hurt', 'ko', 'overdrive'];
 const mv = ([x, y]: Pt): Pt => [x + 60, y + 60];
-/** The wing root's pivot of Spathi sits 10 px lower than Bahamut's moved one: its sea-green glow fills the gap between the jaw and the neck at rest, so the gate's disc around the joint grows (depth 52 against
- * 34) and reaches a one-pixel seam of the glow (alpha 0.27, under the gate's 0.3) that the head's lean opens: 5 to 9 transparent pixels against the allowed 4 in hurt and three blends. 10 px lower the disc is clear. */
-const WING_ROOT: Pt = [530, 420];
+/** Spathi's paintings carry a sea-green glow (alpha 0.1 to 0.5 round the whole figure). A skirt copies the front part's pixels under the back part, and the glow's pixels were copied with them: drawn once a part,
+ * the glow stacked three deep at the jaw gap (alpha over 0.5 where the painting has 0.3), which showed as bright blobs in the game and made the gate's joint disc at the wing root reach a one-pixel seam of it
+ * (5 to 9 transparent pixels in hurt and three blends). So every skirt of the twin takes only the pixels that are not that glow: teal, green over red, green over blue. */
+const GLOW = { colour: { r_minus_g_lt: -0.2, g_minus_b_gt: 0.0, val_gt: 0.4 } };
 
 describe('the Spathi subject config (a registered twin of Bahamut)', () => {
   it('names the subject, its costume (the idle), the twin\'s base and the hook file', () => {
@@ -39,7 +40,7 @@ describe('the Spathi subject config (a registered twin of Bahamut)', () => {
     expect(existsSync(`tools/rig/subjects/${cfg.hooks}`)).toBe(true);
   });
 
-  it('is registered: its canvases sit 60 px from Bahamut\'s in every pose, and the cut, the bones, the skins and the landmarks were all moved by that (but the wing root, which is 10 px lower)', () => {
+  it('is registered: its canvases sit 60 px from Bahamut\'s in every pose, and the cut, the bones, the skins and the landmarks were all moved by that ', () => {
     for (const pose of ['idle', ...PAINTED]) {
       const s = cfg._twin_shift?.[pose];
       expect(s, `${pose} has a registration`).toBeTruthy();
@@ -48,12 +49,10 @@ describe('the Spathi subject config (a registered twin of Bahamut)', () => {
     }
     for (const [name, pts] of Object.entries(base.cut.polys)) expect(cfg.cut.polys[name], name).toEqual(pts.map(mv));
     const bones = Object.fromEntries(cfg.build.bones.map((b) => [b[0], b[2]]));
-    for (const [name, , pos] of base.build.bones) expect(bones[name], name).toEqual(name === 'wingLA' ? WING_ROOT : mv(pos));
+    for (const [name, , pos] of base.build.bones) expect(bones[name], name).toEqual(mv(pos));
     for (const [part, s] of Object.entries(base.build.skin)) {
       if (!s.joints) continue;
-      const want = s.joints.map(mv);
-      if (part === 'wingL') want[0] = WING_ROOT;
-      expect(cfg.build.skin[part]!.joints, `${part} joints`).toEqual(want);
+      expect(cfg.build.skin[part]!.joints, `${part} joints`).toEqual(s.joints.map(mv));
     }
     for (const [name, [bone, pt]] of Object.entries(base.build.landmarks)) expect(cfg.build.landmarks[name], name).toEqual([bone, mv(pt)]);
     for (const [pose, marks] of Object.entries(base.landmarks)) for (const [name, pt] of Object.entries(marks)) expect(cfg.landmarks[pose]![name], `${pose}.${name}`).toEqual(mv(pt as Pt));
@@ -62,7 +61,8 @@ describe('the Spathi subject config (a registered twin of Bahamut)', () => {
   it('keeps Bahamut\'s draw order, underlaps, tail extensions, bones and limits (the same creature)', () => {
     expect(cfg.cut.order).toEqual(base.cut.order);
     expect(cfg.cut.priority).toEqual(base.cut.priority);
-    expect(cfg.cut.ops).toEqual(base.cut.ops);
+    // the same underlaps and tail extensions, but every skirt leaves the glow alone
+    expect(cfg.cut.ops).toEqual(base.cut.ops.map((o) => (o.op === 'skirt' ? { ...o, zone: { not: GLOW } } : o)));
     expect(cfg.build.bones.map((b) => [b[0], b[1]])).toEqual(base.build.bones.map((b) => [b[0], b[1]]));
     expect(cfg.fit.limits).toEqual(base.fit.limits);
     expect(cfg.fit.scales).toEqual(base.fit.scales);

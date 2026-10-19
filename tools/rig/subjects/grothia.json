@@ -612,43 +612,106 @@
         "op": "skirt",
         "back": "body",
         "front": "head",
-        "px": 60
+        "px": 60,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "tailL",
         "front": "body",
-        "px": 40
+        "px": 40,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "tailU",
         "front": "tailL",
-        "px": 30
+        "px": 30,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "tailU",
         "front": "body",
-        "px": 30
+        "px": 30,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "armF",
         "front": "head",
-        "px": 30
+        "px": 30,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "armF",
         "front": "body",
-        "px": 30
+        "px": 30,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "armF",
         "front": "legF",
-        "px": 20
+        "px": 20,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",

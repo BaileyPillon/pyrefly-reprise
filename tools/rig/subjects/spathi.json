@@ -1016,55 +1016,136 @@
         "op": "skirt",
         "back": "body",
         "front": "head",
-        "px": 60
+        "px": 60,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "wingL",
         "front": "body",
-        "px": 60
+        "px": 60,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "wingL",
         "front": "armL",
-        "px": 30
+        "px": 30,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "wingL",
         "front": "head",
-        "px": 40
+        "px": 40,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "wingR",
         "front": "body",
-        "px": 60
+        "px": 60,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "wingR",
         "front": "head",
-        "px": 40
+        "px": 40,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "tail",
         "front": "body",
-        "px": 40
+        "px": 40,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "leg",
         "front": "body",
-        "px": 40
+        "px": 40,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "skirt",
         "back": "armL",
         "front": "body",
-        "px": 50
+        "px": 50,
+        "zone": {
+          "not": {
+            "colour": {
+              "r_minus_g_lt": -0.2,
+              "g_minus_b_gt": 0.0,
+              "val_gt": 0.4
+            }
+          }
+        }
       },
       {
         "op": "extend",
@@ -1159,7 +1240,7 @@
         "chest",
         [
           530.0,
-          420.0
+          410.0
         ]
       ],
       [
@@ -1380,7 +1461,7 @@
         "joints": [
           [
             530.0,
-            420.0
+            410.0
           ],
           [
             380,

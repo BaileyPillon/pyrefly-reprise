@@ -2,7 +2,8 @@
  * **Grothia's subject config stays self-consistent** (the rig program, rig-aeons-2 lane, 2026-10-19; FFX ONLY: Grothia is Isaaru's Ifrit in Chapter XIV link 1, `characters/grothia/*`, the silhouette twin of
  * Ifrit: the same cut, bones, marks and keys moved by the registration of its canvases onto Ifrit's, `lane.py twin`). No art is read: only `tools/rig/subjects/grothia.json`, Ifrit's, the keys and the lane
  * registry. What the gate demands of the rig the pipeline makes from it is proved by the gate itself (`node tools/rig-gate.mjs`); what this proves is that the twin cannot drift from its base by accident:
- * every coordinate of the cut moved by the registration (Pterya's canvases sat 60 px off Valefor's and a blind copy tore every part), and nothing in a key can scale a head, a body, an arm or a tail.
+ * every coordinate of the cut moved by the registration (Pterya's canvases sat 60 px off Valefor's and a blind copy tore every part), the one thing it does differently on purpose is named (its underlaps leave the
+ * sea-green glow alone, but for the leg ones), and nothing in a key can scale a head, a body, an arm or a tail.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -10,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 type Pt = [number, number];
 type Cfg = {
   subject: string; scale: number; costume: { pose: string }; hooks?: string; _twin_of?: string; _twin_shift?: Record<string, [number, number, number]>;
-  cut: { order: string[]; priority: string[]; parts: Record<string, unknown>; polys: Record<string, Pt[]>; ops: { op: string; back?: string; front?: string; px?: number }[] };
+  cut: { order: string[]; priority: string[]; parts: Record<string, unknown>; polys: Record<string, Pt[]>; ops: { op: string; back?: string; front?: string; px?: number; zone?: unknown }[] };
   build: { bones: [string, string | null, Pt][]; skin: Record<string, { type: string; bone?: string; bones?: string[]; joints?: Pt[] }>; landmarks: Record<string, [string, Pt]> };
   fit: { mirror?: string[]; offsets?: string[]; offset_limit?: Record<string, [number, number]>; scales?: Record<string, [number, number]>; limits?: Record<string, [number, number]>; keys?: Record<string, { planted?: boolean; init?: Record<string, number> }> };
   landmarks: Record<string, Record<string, Pt>>;
@@ -23,6 +24,11 @@ const registry = read('tools/rig/lane/lane-subjects.json') as { subjects: Record
 
 /** The base poses the game paints Grothia in. */
 const PAINTED = ['attack', 'cast', 'hurt', 'ko', 'overdrive'];
+/** Grothia's paintings carry a sea-green glow (alpha 0.1 to 0.5 round the whole figure). A skirt copies the front part's pixels under the back part, and the glow's pixels were copied with them: drawn once a part, the
+ * glow stacked two and three deep along the seams (13 percent of the glow's pixels more than 20 alpha brighter than the painting's). So the skirts take only the pixels that are not that glow (teal: green over red,
+ * green over blue) -- all but the three that put a leg under the body or under the other leg: leaving the glow out of those moved the hurt key's stance reading 0.02 sideways (past the gate's 0.02 bar), and the key
+ * could not be fitted back over the 0.75 bar (best 0.7500 in 20 fits). */
+const GLOW = { colour: { r_minus_g_lt: -0.2, g_minus_b_gt: 0.0, val_gt: 0.4 } };
 
 describe('the Grothia subject config (a registered twin of Ifrit)', () => {
   it('names the subject, its costume (the idle), the twin\'s base and the hook file', () => {
@@ -53,7 +59,8 @@ describe('the Grothia subject config (a registered twin of Ifrit)', () => {
   it('keeps Ifrit\'s draw order, underlaps, bones and limits (the same creature)', () => {
     expect(cfg.cut.order).toEqual(base.cut.order);
     expect(cfg.cut.priority).toEqual(base.cut.priority);
-    expect(cfg.cut.ops).toEqual(base.cut.ops);
+    // the same underlaps, but the ones whose back part is not a leg leave the glow alone
+    expect(cfg.cut.ops).toEqual(base.cut.ops.map((o) => (o.op === 'skirt' && !/^leg[FN]$/.test(o.back ?? '') ? { ...o, zone: { not: GLOW } } : o)));
     expect(cfg.build.bones.map((b) => [b[0], b[1]])).toEqual(base.build.bones.map((b) => [b[0], b[1]]));
     expect(cfg.fit.limits).toEqual(base.fit.limits);
     expect(cfg.fit.scales).toEqual(base.fit.scales);
