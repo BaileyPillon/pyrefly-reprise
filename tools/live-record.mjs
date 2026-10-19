@@ -74,6 +74,19 @@ function loadReport(root, sha, kind) {
   return null;
 }
 
+/** The newest deep round (critic/rounds/round-NN.json) that reviewed this sha: the stand-in for a focused report when a build was deployed on its deep review. */
+function loadRound(root, sha) {
+  const dir = join(root, 'critic', 'rounds');
+  if (!existsSync(dir)) return null;
+  for (const n of readdirSync(dir).filter((x) => /^round-\d+\.json$/.test(x)).sort().reverse()) {
+    let data;
+    try { data = readJson(join(dir, n)); } catch { continue; }
+    const m = String(data?.build?.mainSha ?? '');
+    if (m && (m.startsWith(sha.slice(0, 8)) || sha.startsWith(m.slice(0, 8)))) return { file: `critic/rounds/${n}`, data, round: true };
+  }
+  return null;
+}
+
 /** The CHANGELOG entry whose Address line names the sha: its heading, or null. */
 export function changelogEntry(text, sha) {
   const lines = text.replace(/\r\n/g, '\n').split('\n');
@@ -93,7 +106,7 @@ export function buildLive(root) {
   const live = okRows[okRows.length - 1];
   const after = log.filter((r) => r.line > live.line);
   const marker = loadMarker(root, live.sha);
-  const focused = loadReport(root, live.sha, 'focused');
+  const focused = loadReport(root, live.sha, 'focused') ?? loadRound(root, live.sha);
   const liveReport = loadReport(root, live.sha, 'live');
   const changelog = existsSync(join(root, 'CHANGELOG.md')) ? changelogEntry(readFileSync(join(root, 'CHANGELOG.md'), 'utf8'), live.sha) : null;
   const flightFile = join(root, 'docs', 'target', 'in-flight.json');
@@ -126,7 +139,7 @@ export function renderLive(m) {
   L.push(`| Marker | ${marker.state === 'missing' ? 'none' : `\`critic/${marker.state}/${live.sha}.json\` (${marker.state})`} |`);
   L.push(`| Owner override | ${d.ownerOverride?.words ? `“${cell(d.ownerOverride.words)}”` : live.override ? 'recorded as owner in the log; the words are in the decisions ledger' : 'none'} |`);
   L.push(`| CHANGELOG entry | ${m.changelog ? cell(m.changelog) : 'none names this commit'} |`);
-  L.push(`| Focused review | ${focused ? `${focused.file}: ship ${focused.data.verdicts?.ship ?? '?'}, changed area ${focused.data.verdicts?.changedArea ?? '?'}` : 'no report found'} |`);
+  L.push(`| Focused review | ${focused ? `${focused.round ? 'no focused report; the deep round before the deploy, ' : ''}${focused.file}: ship ${focused.data.verdicts?.ship ?? '?'}, changed area ${focused.data.verdicts?.changedArea ?? '?'}` : 'no report found'} |`);
   L.push(`| Live check | ${liveReport ? `${liveReport.file}: deployment ${liveReport.data.verdicts?.deployment ?? '?'}` : 'no report yet'} |`);
   if (m.after.length) L.push(`| Later log lines | ${m.after.length} line(s) after this one have a status other than ok (${m.after.map((r) => `${r.sha}: ${r.status}`).join(', ')}) |`);
   L.push('', 'Is this commit on main? `git merge-base --is-ancestor ' + live.sha + ' origin/main` exits 0 when it is.', '');
@@ -139,11 +152,11 @@ export function renderLive(m) {
     L.push('');
   }
   if (m.deploysSinceDeep !== null) L.push(`The ledger counts ${m.deploysSinceDeep} deploys since the last passing deep review (\`critic/ledger.json\`). \`npm run critic:status\` says what each live build still owes.`, '');
-  L.push('## Majors disclosed by the focused review of this build', '');
+  L.push(`## Majors disclosed by the ${focused?.round ? 'deep' : 'focused'} review of this build`, '');
   if (!focused) L.push('No focused report was found for this commit.', '');
   else if (!m.majors.length) L.push(`None: \`${focused.file}\` lists no major or critical issue.`, '');
   else {
-    L.push(`From \`${focused.file}\` (a major that is not a regression is disclosed and carried into the next batch):`, '');
+    L.push(`From \`${focused.file}\`${focused.round ? ' (the deep round that reviewed the candidate; this build had no focused report)' : ''} (a major that is not a regression is disclosed and carried into the next batch):`, '');
     L.push('| Issue | Severity | Introduced by this build | Regression against the previous live build | What |', '|---|---|---|---|---|');
     for (const i of m.majors) L.push(`| ${cell(i.id)} | ${cell(i.severity)} | ${yn(i.introducedByCandidate)} | ${yn(i.regressionVsLive)} | ${cell(i.title)} |`);
     L.push('');
