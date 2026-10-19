@@ -36,6 +36,7 @@ import { syncPaintedBloom } from '../BloomMask.ts';
 import type { RigData, RigPartData, RigVariantData } from './RigData.ts';
 import { HIDDEN, OWN, restState } from './RigPartState.ts';
 import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
+import { makeSmear } from './RigSmear.ts';
 import { RigSkeleton } from './RigSkeleton.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
 import { rigFileUrl, type RigScale, type RigTextures } from './RigTier.ts';
@@ -84,6 +85,7 @@ export class RigFigure {
   /** The camera and the drawing buffer's height as of the last draw: what the magnification of the idle's texel is measured with (`view`). */
   private seen: { camera: PerspectiveCamera; height: number } | null = null;
   private readonly bufferSize = new Vector2();
+  private readonly smears = new Map<string, Texture>(); // the animation prototype's smear frames, drawn on first use (`RigSmear.ts`)
 
   private constructor(readonly data: RigData, private readonly carrier: CarrierInternals) {
     this.skeleton = new RigSkeleton(data);
@@ -248,6 +250,25 @@ export class RigFigure {
     });
   }
 
+  /**
+   * The animation prototype's smear frame: while `on`, the named parts sample a motion-blurred copy of their own image (`RigSmear.ts`) instead of the image itself, and the image again when off. True when
+   * a part changed (false where there is no canvas to draw the smear in).
+   */
+  setSmear(names: readonly string[], dx: number, dy: number, on: boolean): boolean {
+    let did = false;
+    for (const p of this.parts) {
+      if (p.state === HIDDEN || !names.includes(p.data.name)) continue;
+      const look = this.lookOf(p);
+      const key = `${p.data.name}:${look.src.png}:${dx}:${dy}`;
+      const t = on ? (this.smears.get(key) ?? makeSmear(look.map, dx, dy)) : look.map;
+      if (!t) continue;
+      if (on) this.smears.set(key, t);
+      p.material.uniforms['map']!.value = t;
+      did = true;
+    }
+    return did;
+  }
+
   /** The state the parts are in now (a copy), for the tests and `rigInfo`. */
   partState(): Int16Array {
     return Int16Array.from(this.parts, (p) => p.state);
@@ -329,6 +350,8 @@ export class RigFigure {
       }
     }
     this.white?.dispose();
+    for (const t of this.smears.values()) t.dispose();
+    this.smears.clear();
     this.parts.length = 0;
     this.plane.removeFromParent();
   }

@@ -48,6 +48,8 @@ export interface Subject {
   hand: string;
   /** A bone that is carried by a landmark (Lulu's moogle doll rides her fist): its offset from the landmark is each key's own and is blended with the clip, so the doll follows the hand through the move instead of flying its own straight line. */
   attach?: { bone: string; landmark: string };
+  /** The parts that show a smear frame at the peak speed of a fast move (the style's stretch asks for it) and the direction of the smear, fractions of the part's image. */
+  smear?: { parts: readonly string[]; dx: number; dy: number };
 }
 
 /** How long the presenter should wait after the action starts before its main beat, as a mark and an offset: `marks[mark] + offsetMs`. */
@@ -100,6 +102,7 @@ export function buildLibrary(style: AnimStyle, acc: Accents = {}): Library {
   const smear = (a: number): BoneDelta => ({ rot: 0.05 * a * S.stretch, sx: 0.07 * a * S.stretch, sy: -0.035 * a * S.stretch });
   /** An extrapolation may add this much to a bone (more for a style that exaggerates). */
   const cap = { rot: 0.12 + ov * 0.9, px: 40 + ov * 260, scale: 0.12 };
+  const sm = S.stretch > 0; // the style asks for smear frames: marks at the peak speed of the fastest moves
   const seg = (pose: PoseSpec, ms: number, ease: Segment['ease'], extra: Partial<Segment> = {}): Segment => ({ pose: { cap, ...pose }, ms, ease, ...extra });
   const at = (a: Deltas, k = 1): Deltas => scaleDeltas(a, k);
 
@@ -122,7 +125,7 @@ export function buildLibrary(style: AnimStyle, acc: Accents = {}): Library {
     name: 'strike',
     key: 'attack',
     segments: [
-      seg({ base: 'ready', to: 'attack', mix: 0.62, root: smear(1), ...(acc.windup ? { add: scaleDeltas(acc.windup, -0.25) } : {}) }, S.attack.action * 0.55, 'quadIn', { alive: 0.3 }),
+      seg({ base: 'ready', to: 'attack', mix: 0.62, root: smear(1), ...(acc.windup ? { add: scaleDeltas(acc.windup, -0.25) } : {}) }, S.attack.action * 0.55, 'quadIn', { alive: 0.3, ...(sm ? { mark: 'smear' } : {}) }),
       seg(contact, S.attack.action * 0.45, S.easeAct, { mark: 'contact', alive: 0.3 }),
       seg({ base: 'attack' }, S.attack.settle, { backOut: S.settle }, { alive: 1 }),
     ],
@@ -145,7 +148,7 @@ export function buildLibrary(style: AnimStyle, acc: Accents = {}): Library {
     segments: [
       seg(castGather, S.cast.gather, S.easeAnt, { mark: 'gather', alive: 0.7 }),
       seg({ base: 'cast', to: 'idle', mix: -0.12 * (1 + S.anticipation * 0.5), ...(acc.channel ? { add: at(acc.channel) } : {}) }, S.cast.channel, 'cubicOut', { hold: S.cast.beat, mark: 'channel', alive: 0.5 }),
-      seg({ base: 'cast', to: 'idle', mix: -(0.22 + ov * 2), root: smear(0.8), ...(acc.release ? { add: at(acc.release) } : {}) }, S.cast.release, S.easeAct, { mark: 'release', alive: 0.3 }),
+      seg({ base: 'cast', to: 'idle', mix: -(0.22 + ov * 2), root: smear(0.8), ...(acc.release ? { add: at(acc.release) } : {}) }, S.cast.release, S.easeAct, { mark: 'release', alive: 0.3, ...(sm ? { marks: { smear: 0.1 } } : {}) }),
       seg({ base: 'cast' }, S.cast.settle, { backOut: S.settle }, { alive: 1 }),
     ],
   };
@@ -158,7 +161,7 @@ export function buildLibrary(style: AnimStyle, acc: Accents = {}): Library {
     segments: [
       seg(itemReach, S.item.reach, S.easeAnt, { mark: 'reach', alive: 0.7 }),
       seg({ base: 'item', ...(acc.draw ? { add: at(acc.draw) } : {}) }, S.item.draw, 'cubicInOut', { hold: S.item.beat, mark: 'drawn', alive: 0.6 }),
-      seg(swing, S.item.throw * 0.7, S.easeAct, { mark: 'release', alive: 0.3 }),
+      seg(swing, S.item.throw * 0.7, S.easeAct, { mark: 'release', alive: 0.3, ...(sm ? { marks: { smear: 0.12 } } : {}) }),
       seg({ base: 'item', to: 'attack', mix: 0.95, ...(armN ? { only: armN } : {}), ...(acc.snap ? { add: at(acc.snap) } : {}) }, S.item.throw * 0.3, 'quadOut', { alive: 0.4 }),
       seg({ base: 'item', to: 'attack', mix: 0.8, ...(armN ? { only: armN } : {}) }, S.item.settle, { backOut: S.settle }, { alive: 1 }),
     ],

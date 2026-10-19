@@ -21,7 +21,7 @@ export interface AnimHost {
   readonly parent: Object3D | null;
   landmark(name: string): { x: number; y: number } | null;
   /** The rig's plane, whose scale is the figure's size in world units. */
-  readonly figure: { plane: { scale: { y: number } } };
+  readonly figure: { plane: { scale: { y: number } }; setSmear(names: readonly string[], dx: number, dy: number, on: boolean): boolean };
 }
 
 /** The prototype is a dev tool: a production bundle replaces `import.meta.env.DEV` with false and never reads the query. */
@@ -43,6 +43,8 @@ export class RigAnimLayer {
   private readonly tmp = new Vector3();
   private readonly imageH: number;
   private scaled = false;
+  private smearOn = false;
+  private lastSmear: NonNullable<RigAnimator['smearing']> | null = null;
 
   private constructor(host: AnimHost, data: RigData, compiled: ReadonlyMap<string, Float64Array>, style: AnimStyle, subject: Subject, pxPerUnit: number) {
     this.host = host;
@@ -96,6 +98,13 @@ export class RigAnimLayer {
       this.scaled = true;
       this.anim.setScale(this.imageH / h);
     }
+    const sm = this.anim.smearing;
+    if ((sm !== null) !== this.smearOn) {
+      this.smearOn = sm !== null;
+      const spec = sm ?? this.lastSmear;
+      if (spec) this.host.figure.setSmear(spec.parts, spec.dx, spec.dy, this.smearOn);
+    }
+    if (sm) this.lastSmear = sm;
     for (const e of this.anim.drain()) {
       if (e === 'reach') (this.prop ??= new VialProp()).hold();
       else if (e === 'release' && this.prop?.held) this.prop.throwTo(this.targets[0] ?? this.forward(), (this.anim.style.item.flight / Math.max(0.05, this.rate)) | 0);

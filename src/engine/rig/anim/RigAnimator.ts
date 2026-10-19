@@ -39,9 +39,11 @@ export interface AnimFrame {
 }
 
 /** Events a frame can raise, in the order they happened. */
-export type AnimEvent = 'reach' | 'drawn' | 'release' | 'contact' | 'impact' | 'ground' | 'burst';
+export type AnimEvent = 'reach' | 'drawn' | 'release' | 'contact' | 'impact' | 'ground' | 'burst' | 'smear';
 
-const EVENT_MARKS: readonly string[] = ['reach', 'drawn', 'release', 'contact', 'impact', 'ground', 'burst'];
+const EVENT_MARKS: readonly string[] = ['reach', 'drawn', 'release', 'contact', 'impact', 'ground', 'burst', 'smear'];
+/** A smear frame is shown for this long (ms of the animator's clock): two frames at 60 Hz. */
+const SMEAR_MS = 34;
 const HALFLIFE = 0.12;
 
 export class RigAnimator {
@@ -71,6 +73,8 @@ export class RigAnimator {
   private readonly smooth = { alive: 1, va: 0, sec: 1, vs: 0 };
   private events: AnimEvent[] = [];
   private readonly fired = new Set<string>();
+  private smearUntil = -1;
+  private readonly smearSpec: Subject['smear'] | undefined;
   private kindName = '';
 
   constructor(rig: AnimRigData, style: AnimStyle, subject: Subject, pxPerUnit: number) {
@@ -79,6 +83,7 @@ export class RigAnimator {
     this.lib = buildLibrary(style, subject.accents);
     this.idleSpec = subject.idle;
     this.hand = subject.hand;
+    this.smearSpec = subject.smear;
     this.att = subject.attach ? Carry.create(rig.bones, rig.boneIndex, subject.attach, rig.skeleton) : null;
     for (const c of [this.lib.ready, this.lib.windup, this.lib.strike, this.lib.follow, this.lib.cast, this.lib.item, this.lib.hurt, this.lib.ko, this.lib.victory]) this.clips.set(c.name, compileClip(rig, c));
     this.secondary = new SecondaryLayer(rig.bones, rig.boneIndex, subject.secondary(style), style.secondary, pxPerUnit);
@@ -86,6 +91,11 @@ export class RigAnimator {
     this.v0 = new Float64Array(rig.channels);
     this.prev = new Float64Array(rig.channels);
     this.scratch = new Float64Array(rig.channels);
+  }
+
+  /** The part and direction of the smear frame the figure shows now, or null (the style has no smear, or the moment has passed). */
+  get smearing(): NonNullable<Subject['smear']> | null {
+    return this.smearSpec && this.clock < this.smearUntil ? this.smearSpec : null;
   }
 
   /** The landmark the held prop follows. */
@@ -272,6 +282,7 @@ export class RigAnimator {
       if (at !== undefined && t >= at - 1e-9 && !this.fired.has(m)) {
         this.fired.add(m);
         this.events.push(m as AnimEvent);
+        if (m === 'smear') this.smearUntil = this.clock + SMEAR_MS;
       }
     }
   }

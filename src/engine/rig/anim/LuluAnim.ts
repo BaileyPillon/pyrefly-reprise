@@ -84,4 +84,4 @@ export function luluSecondary(style: AnimStyle): SecondarySpec {
   };
 }
 
-export const LULU: Subject = { accents: LULU_ACCENTS, idle: LULU_IDLE, secondary: luluSecondary, hand: 'fist', attach: { bone: 'doll', landmark: 'fist' } };
+export const LULU: Subject = { accents: LULU_ACCENTS, idle: LULU_IDLE, secondary: luluSecondary, hand: 'fist', attach: { bone: 'doll', landmark: 'fist' }, smear: { parts: ['armB'], dx: 0.22, dy: 0 } };

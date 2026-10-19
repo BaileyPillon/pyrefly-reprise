@@ -53,6 +53,8 @@ export interface Segment {
   /** Names the moment the pose is reached (the end of the move), or the start of the move with `markAt: 'start'`. */
   mark?: string;
   markAt?: 'start' | 'end';
+  /** More marks inside the move, each at a fraction (0..1) of its length: the instant of peak speed a smear frame sits on. */
+  marks?: Readonly<Record<string, number>>;
   /** How much of the living layer (breath, weight shift, secondary motion) shows at the end of this move, 0..1 (default 1; an action that must read crisp lowers it). */
   alive?: number;
   /** The same for the secondary layer (the springs and the braid), 0..1 (default 1): a body going down keeps its arms flopping while the breath stops. */
@@ -164,6 +166,7 @@ export function compileClip(rig: ClipRig, def: ClipDef): CompiledClip {
     sec.push(Math.min(1, Math.max(0, s.sec ?? 1)));
     target.push(compilePose(rig, s.pose));
     if (s.mark !== undefined) marks[s.mark] = s.markAt === 'start' ? t : t + ms;
+    for (const [name, u] of Object.entries(s.marks ?? {})) marks[name] = t + ms * Math.min(1, Math.max(0, u));
     t += ms + held;
   }
   return { name: def.name, key: def.key, loop: def.loop === true, shortArc: def.shortArc === true, count: def.segments.length, start, dur, hold, ease: easeOf, alive, sec, target, marks, total: t };
