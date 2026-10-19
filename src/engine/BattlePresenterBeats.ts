@@ -12,6 +12,7 @@ import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
+import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
@@ -61,8 +62,9 @@ export async function actionStart(
   );
   const od = armOdKey(ctx, event); // r37 slot: this move's own Overdrive / Special painting (null when it has none)
   const windUp = !odOpensAction(od) && !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose); // D-313: the wind-up painting, then the impact at the apex
+  const item = pose === 'item' ? itemGestureFor(ctx, event) : null; // FFX only: no flask (the stance), the orb or the glow (`BattlePresenterItem.ts`); null everywhere else
   if (odOpensAction(od)) showOdOnOpen(ctx, od); // FFX: the held shot and the strike are on the key painting
-  else actor?.setPose(windUp ? 'ready' : pose);
+  else actor?.setPose(item?.pose ?? (windUp ? 'ready' : pose));
   const motion = ctx.deps.actionMotion; // FF7: the melee run to the target (none for FFX and FFX-2)
   if (motion) await settled(ctx, motion.open(event, motionCtx(ctx)), MOTION_GUARD_MS);
 
@@ -93,9 +95,10 @@ export async function actionStart(
     actor?.flash(0x9fd8ff, 560, 0.45);
   } else if (pose === 'item') {
     cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
+    if (item) startItemGesture(ctx, event, item);
   }
   planSkill(ctx, event, pose); // SKILL TRAVEL (both games, r38-motion): which shot this action would send; it leaves at the first blow, not here
-  await ctx.sleep(pose === 'attack' ? TIMING.windUp : TIMING.actionStart);
+  await ctx.sleep(pose === 'attack' ? TIMING.windUp : (item?.waitMs ?? TIMING.actionStart)); // an FFX item use waits for its orb (form + flight); everything else as before
 }
 
 export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<void> {
