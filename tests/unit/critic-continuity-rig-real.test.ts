@@ -113,6 +113,8 @@ describe('a real RigActor on the probe\'s stage', () => {
     const records = probe.drain(100000).records as ProbeFrame[];
     const keys = meta.swaps.map((s: { from: number; to: number }) => `${meta.poses[s.from]!.pose}>${meta.poses[s.to]!.pose}`);
     expect(keys).toEqual(['idle>hurt', 'hurt>idle', 'idle>ready', 'ready>attack', 'attack>idle', 'idle>ko', 'ko>idle']);
+    expect(meta.errors).toEqual([]);
+    expect(meta.strips.length).toBeGreaterThan(0); // the strips of a rig's swaps are made too (before the fix none was: a strip starts only for a figure that is showing)
     const run = analyzeRun({ meta, records, anchors: meta.poses.map(() => null), cfg: continuityConfig() });
     const mine = run.swaps.filter((s) => s.figure === 'testfig');
     expect(mine).toHaveLength(keys.length);
