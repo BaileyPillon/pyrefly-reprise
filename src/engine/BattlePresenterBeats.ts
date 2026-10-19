@@ -164,6 +164,8 @@ export async function damage(
   // multi-hit action moves the camera (see `BattleMoments.impact`).
   const heavy = event.crit || event.overkill === true || event.capped === true;
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex, heavy });
+  const beat = ctx.stage.actor((event.sourceId ?? ctx.actingId)!)?.animBeat?.('contact', event.hitIndex, event.hitCount); // the animation prototype: hit-stop, springs, camera punch
+  if (beat && beat.punch > 0) void ctx.stage.camera.punch(beat.punch, beat.ms);
 
   const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });

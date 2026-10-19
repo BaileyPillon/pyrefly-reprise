@@ -68,6 +68,14 @@ export interface ActorHandle {
   setStone?(amount: number): void;
   centerPoint(): Point3;
   headPoint(): Point3;
+  /**
+   * Optional, additive: the animation prototype's beats (`engine/rig/anim/`, `?anim=proto`, dev builds; only a `RigActor` that has it on answers). `animBegin`: an action starts, aimed at
+   * these world points; `animLead`: base ms the presenter should still wait for the clip's beat (the lunge after a wind-up, a spell's release, a thrown vial's landing); `animBeat`: a blow
+   * landed (the hit-stop and the springs' impulse happen inside; the camera punch the style asks for, a fraction of the subject distance and its length in ms, is answered).
+   */
+  animBegin?(pose: string, targets: readonly Point3[]): void;
+  animLead?(pose: string): number;
+  animBeat?(kind: string, hitIndex?: number, hitCount?: number): { punch: number; ms: number };
 }
 
 /**

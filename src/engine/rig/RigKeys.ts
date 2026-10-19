@@ -128,6 +128,14 @@ export class RigTransition {
     this.elapsed = 0;
   }
 
+  /** Follow a pose another system draws (the animation prototype's clip): the figure IS `pose`, moving at `velocity`, with no move in flight; a request that is not a clip then moves on from here, at this speed. */
+  drive(pose: Float64Array, velocity: Float64Array): void {
+    this.current.set(pose);
+    this.velocity.set(velocity);
+    this.moving = false;
+    this.elapsed = 0;
+  }
+
   /** Start moving to `target` over `ms`, from where the figure is and at the speed it has. `ms <= 0` snaps. */
   retarget(target: Float64Array, ms: number): void {
     if (ms <= 0) return this.snap(target);

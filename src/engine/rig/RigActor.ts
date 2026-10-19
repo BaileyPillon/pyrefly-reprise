@@ -1,19 +1,17 @@
 /**
  * A figure drawn as ONE painting cut into parts on a bone rig, instead of one painting per pose.
  *
- * `RigActor extends PaintedActor`, so everything the stage and the presenter ask of a figure is already answered, by the same code that answers it for a painted
- * plane: the pose names and the life layer (the ready lean, the guard brace, the KO fall, the victory hop), lunge, recoil, hop, shake and squash, flash, tint, dim and
- * dissolve, facing and mirroring, scale and placement, the contact shadow and the rings, and every projection point. The actor loads only its idle painting (the
- * rig's costume) and draws no plane ("the carrier", `RigCarrier.ts`); the rig's parts hang under the same motion group and share the same uniform cells, so a
- * stage move that carries the plane carries them.
+ * `RigActor extends PaintedActor`, so everything the stage and the presenter ask of a figure is already answered by the code that answers it for a painted plane (pose names and the life
+ * layer, lunge, recoil, hop, shake and squash, flash, tint, dim and dissolve, facing, placement, the shadow and rings, every projection point). The actor loads only its idle painting (the rig's
+ * costume) and draws no plane ("the carrier", `RigCarrier.ts`); the rig's parts hang under the same motion group and share the same uniform cells.
  *
- * What this class adds is the pose itself: `setPose` runs the actor's own (state, flinch tokens, ring) and then resolves the name to a key of the rig and moves
- * the bones there (`RigKeys.ts`: the game's ease, a start that keeps the speed the figure had), the idle and the lag chains play on top (`RigDynamics.ts`), and
- * every frame the parts are re-skinned (a part a v2 key hides is not: `RigPartState.ts`). `pose` reads the key being shown, `blending` is "a move between keys is in flight", `poseNames` are the rig's keys.
+ * What this class adds is the pose itself: `setPose` runs the actor's own (state, flinch tokens, ring), resolves the name to a key of the rig and moves the bones there (`RigKeys.ts`: the game's
+ * ease, a start that keeps the speed the figure had), the idle and the lag chains play on top (`RigDynamics.ts`), and every frame the parts are re-skinned (a part a v2 key hides is not:
+ * `RigPartState.ts`). `pose` reads the key shown, `blending` is "a move between keys is in flight", `poseNames` are the rig's keys. With the animation prototype on (`anim/`, dev only) the
+ * layer plays a pose as a clip and carries the secondary motion; without it nothing below changes.
  *
- * Feet: a planted key keeps its lowest foot on the bind row (`RigValidate.ts` proves it for every key of a rig); the idle and the chains never move a foot.
- * Clocks: transitions run on the field clock scaled by the pacing option (`pace.ts`, like the actor's own one-shot moves), so a hit-stop freezes the rig with the
- * rest of the picture; the idle and the chains run on the field clock.
+ * Feet: a planted key keeps its lowest foot on the bind row (`RigValidate.ts`); the idle and the chains never move a foot. Clocks: transitions run on the field clock scaled by the pacing option
+ * (`pace.ts`), so a hit-stop freezes the rig with the rest of the picture; the idle and the chains run on the field clock.
  */
 import { PaintedActor, type PaintedActorOptions, type PoseShape } from '../PaintedActor.ts';
 import { pixelsPer1xTexel } from '../ArtMeasure.ts';
@@ -30,35 +28,16 @@ import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { compileStates, partStateAt } from './RigPartState.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
+import { pageAnimStyle, RigAnimLayer } from './anim/RigAnimLayer.ts';
 import { RIG_SHARE, rigLedger, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
 import { Vector3, type Texture } from 'three';
-import type { PaintedTexture } from '../PaintedArt.ts';
+import type { RigAsset } from './RigAsset.ts';
 
-/** What the loader hands the actor. */
-export interface RigAsset {
-  data: RigData;
-  /** The URL folder the part PNGs are under (no trailing slash). */
-  base: string;
-  /** FFX-2 dressphere: cast, item and KO fall straight to the idle (D-179). */
-  dressphere?: boolean;
-  /** An idle painting already loaded, adopted instead of fetched (a share between actors; the unit tests). */
-  idlePainting?: PaintedTexture;
-  /** How a part PNG becomes a texture (default: three's `TextureLoader`); the unit tests hand textures that need no image. */
-  loadTexture?: (url: string) => Promise<Texture>;
-  /** The scales the textures load at (`RigTier.planRigTextures`); default the full-size files for both. */
-  textures?: RigTextures;
-  /** The scales the art manifest lists for this rig (`rigTiers`): a figure on its 1x maps raises them to the 2x when the camera magnifies a texel past a pixel (and the budget has room). */
-  tiers?: readonly number[];
-  /** Gives back the texture memory this figure reserved in `rigLedger`; called once, when the figure goes (or fails to build). */
-  release?: () => void;
-}
+export type { RigAsset };
 
-/** The idle plays in over this long when a figure stands up from a KO or a guard (seconds, the approach's time constant). */
-const IDLE_TAU = 0.25;
-/** The forward speed the chains read is smoothed over this long (seconds). */
-const SPEED_TAU = 0.06;
-/** A figure on its 1x maps measures the magnification of the idle's texel every this many frames. */
-const RAISE_EVERY = 15;
+const IDLE_TAU = 0.25; // seconds: the idle plays in over this when a figure stands up from a KO or a guard (the approach's time constant)
+const SPEED_TAU = 0.06; // seconds: the forward speed the chains read is smoothed over this
+const RAISE_EVERY = 15; // frames: a figure on its 1x maps measures the magnification of the idle's texel this often
 
 export class RigActor extends PaintedActor {
   /** The keys of the rig, by name (`KoFallback.lacksKoPainting` asks for `ko`). */
@@ -72,9 +51,9 @@ export class RigActor extends PaintedActor {
   private readonly trans: RigTransition;
   private readonly work: Float64Array;
   private chains: RigChains | null = null;
+  private anim: RigAnimLayer | null = null; // the animation prototype (`anim/`): null unless asked for and the rig has the keys it needs
   private key = 'idle';
-  /** True while the draw-order overrides of the key being moved to are not on the parts yet (they go on halfway through the move). */
-  private layersDue = false;
+  private layersDue = false; // the draw-order overrides of the key being moved to are not on the parts yet (they go on halfway through the move)
   /** Format v2: each key's part state, the state the parts are in now, and the two the move in flight is between (`partStateAt` picks one at progress 0.5). */
   private readonly states: Map<string, Int16Array>;
   private appliedState: Int16Array;
@@ -88,8 +67,7 @@ export class RigActor extends PaintedActor {
   private lastX = 0;
   private haveX = false;
   private readonly scratch = new Vector3();
-  /** Each key's posed silhouette as the gate stamped it, and where the figure's painted shape is now (`RigShape.ts`). */
-  private readonly track: ShapeTrack;
+  private readonly track: ShapeTrack; // each key's posed silhouette as the gate stamped it, and where the figure's painted shape is now (`RigShape.ts`)
   // ---- texture tier (RigTier.ts)
   private readonly base: string;
   private readonly loadTexture: ((url: string) => Promise<Texture>) | undefined;
@@ -149,6 +127,7 @@ export class RigActor extends PaintedActor {
       actor.carrier = carrier;
       actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture, actor.textures);
       actor.chains = asset.data.motion?.chains?.length ? new RigChains(actor.rig.skeleton, asset.data.motion.chains) : null;
+      actor.anim = RigAnimLayer.create(actor, asset.data, actor.compiled, asset.anim !== undefined ? asset.anim : pageAnimStyle());
       actor.ready = true;
       actor.trans.snap(actor.compiled.get('idle')!);
       actor.pose0();
@@ -188,13 +167,22 @@ export class RigActor extends PaintedActor {
     if (key === this.key && !opts?.force) return;
     const target = this.compiled.get(key)!;
     this.track.leave(this.key, this.trans.busy, this.trans.progress);
+    const clip = this.anim !== null && this.tryClip(key, opts?.immediate === true); // the animation prototype plays the pose as a clip
     this.key = key;
     this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
     this.stateTo = this.states.get(key)!;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
-    this.trans.retarget(target, ms);
+    if (clip) this.trans.drive(this.trans.current, this.trans.velocity);
+    else this.trans.retarget(target, ms);
     this.layersDue = true;
-    if (ms <= 0) this.pose0();
+    if (ms <= 0 && !clip) this.pose0();
+  }
+
+  private tryClip(key: string, immediate: boolean): boolean {
+    const want = this.states.get(key)!; // a clip never changes which parts show: only between keys with the same part state
+    const ok = !immediate && this.appliedState.every((v, i) => v === want[i]) && this.anim!.request(key, this.key, this.trans);
+    if (!ok) this.anim!.anim.cancel(); // snapped, or a pose the clips do not play
+    return ok;
   }
 
   /** A body on the ground ignores a pose the life layer refuses (`PaintedActor.setPose`'s first rule), judged before the call moves the state. */
@@ -235,30 +223,28 @@ export class RigActor extends PaintedActor {
     this.work.set(this.trans.current);
 
     const down = this.lifeState === 'down';
-    const idle = this.data.motion?.idle;
+    const idle = this.anim ? undefined : this.data.motion?.idle;
     if (idle) {
-      const calm = this.still?.() === true;
-      const target = down || calm ? 0 : 1;
+      const target = down || this.still?.() === true ? 0 : 1;
       this.idleAmount += (target - this.idleAmount) * (dt > 0 ? 1 - Math.exp(-dt / IDLE_TAU) : 0);
       applyIdle(this.work, this.data, idle, this.rigClock, this.idleAmount);
     }
 
     const sk = this.rig.skeleton;
-    sk.solve(this.work);
-    if (this.chains) {
-      this.trackSpeed(dt);
-      this.chains.update(this.work, dt, this.forwardSpeed);
+    if (this.anim) this.anim.compose(this.work, this.trans, sk, { dt, rate: paceRate('action'), forward: this.trackSpeed(dt), calm: down || this.still?.() === true });
+    else {
       sk.solve(this.work);
+      if (this.chains) { this.chains.update(this.work, dt, this.trackSpeed(dt)); sk.solve(this.work); }
     }
     this.rig.skin();
     this.rig.sync();
     this.rig.setOpacity(this.alpha, this.visible);
-    const dissolving = (this.carrier.u['dissolve']!.value as number) > 0;
-    this.rig.syncBloom(dissolving, this.rigBloomMasked);
+    this.rig.syncBloom((this.carrier.u['dissolve']!.value as number) > 0, this.rigBloomMasked);
+    this.anim?.afterSync(dt);
   }
 
   /** How fast the figure travels the way it faces, world units a second, from where its motion group stands in the world. */
-  private trackSpeed(dt: number): void {
+  private trackSpeed(dt: number): number {
     const x = this.carrier.inner.getWorldPosition(this.scratch).x;
     if (this.haveX && dt > 0) {
       const v = ((x - this.lastX) * this.facingDir) / dt;
@@ -266,6 +252,29 @@ export class RigActor extends PaintedActor {
     }
     this.lastX = x;
     this.haveX = true;
+    return this.forwardSpeed;
+  }
+
+  // ----------------------------------------- the animation prototype's beats (`anim/RigAnimator.ts`; no-ops without it)
+
+  override lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }, house?: number): Promise<void> {
+    this.anim?.lunge(ms ?? 320); // the strike clip's contact lands on the lunge's apex
+    return super.lunge(distance, ms, contact, house);
+  }
+
+  /** The presenter's action start: begin the clip for `pose`, aimed at `targets` (world points). */
+  animBegin(pose: string, targets: ReadonlyArray<{ x: number; y: number; z: number }>): void {
+    this.anim?.begin(pose, targets, this.trans);
+  }
+
+  /** Base ms the presenter should still wait for `pose`'s clip to reach its beat (0 when none plays). */
+  animLead(pose: string): number {
+    return this.anim?.lead(pose) ?? 0;
+  }
+
+  /** A blow landed: the hit-stop and the springs' impulse happen here; the camera punch the style asks for (a fraction, its length in ms) is answered. */
+  animBeat(kind: string, hitIndex = 0, hitCount = 1): { punch: number; ms: number } {
+    return { punch: this.anim?.anim.beat(kind, hitIndex, hitCount).punch ?? 0, ms: this.anim?.style.camera.ms ?? 0 };
   }
 
   // ------------------------------------------------------------------- misc
@@ -276,7 +285,7 @@ export class RigActor extends PaintedActor {
   }
 
   /** For `window.__pyrefly.rigs()` and the tests: the rig as it stands. */
-  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; textures: RigTextures; textureMB: number } {
+  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; anim: string | null; textures: RigTextures; textureMB: number } {
     return {
       name: this.data.name,
       key: this.key,
@@ -286,6 +295,7 @@ export class RigActor extends PaintedActor {
       bones: this.data.bones.length,
       chains: this.chains?.size ?? 0,
       idle: this.data.motion?.idle !== undefined,
+      anim: this.anim?.style.id ?? null,
       textures: { ...this.textures },
       textureMB: Math.round(this.textureMB * 10) / 10,
     };
@@ -373,6 +383,7 @@ export class RigActor extends PaintedActor {
 
   override dispose(): void {
     if (this.ready) this.rig.dispose();
+    this.anim?.dispose();
     this.ready = false;
     this.releaseTextures?.();
     this.releaseTextures = null;
