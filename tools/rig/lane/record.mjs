@@ -10,7 +10,7 @@
  *   2. picks a free port, writes the scratch Vite config beside `vite.config.ts` (the repo's config plus `tools/vite-rig-art.mjs`, a private cache dir; `--alias subject=folder` serves a fixture
  *      or a candidate rig folder AS the subject's) and starts Vite. The server's PID is the child's own: it is stopped BY PID, on a normal end, on an error and on a signal.
  *   3. warms the server with one long-timeout page load (the first load compiles everything and used to hit the recorder's 30 s timeout) and then runs `play.mjs` for each mode, retrying a mode
- *      once when it left no result file (`expectedOutputs`). `--off` also records the painting set (`--rig off`) into `<out>/<mode>-off/`, the other half of a clip beside its painting.
+ *      once when it left no result file (`expectedOutputs`). `--off` also records the painting set (`--rig off`) into `<out>/<mode>-off/` (for poses, cast, fight and ko), the other half of a clip beside its painting.
  *   4. stops Vite by PID, removes the scratch config and the lock.
  * Output: `<out>/<mode>/` (and `<mode>-off/`); `poses-info.json`, `window-log.json`, `jerks.json`, `tracks.json`, `console.json` and the frames (see `play-modes.mjs`).
  */
@@ -97,7 +97,7 @@ async function main() {
       try { const g = await openGame({ repo, base, rig: 'on', log, loadTimeout: 240000 }); await g.browser.close(); } catch (e) { log('warm-up failed (continuing):', String(e).slice(0, 200)); }
     }
     let failed = 0;
-    const runs = modeList.flatMap((m) => [{ mode: m, rig: 'on', dir: m }, ...(a.off === true && (m === 'poses' || m === 'cast' || m === 'fight') ? [{ mode: m, rig: 'off', dir: `${m}-off` }] : [])]);
+    const runs = modeList.flatMap((m) => [{ mode: m, rig: 'on', dir: m }, ...(a.off === true && (m === 'poses' || m === 'cast' || m === 'fight' || m === 'ko') ? [{ mode: m, rig: 'off', dir: `${m}-off` }] : [])]);
     for (const r of runs) {
       const dir = path.join(out, r.dir);
       let done = false;

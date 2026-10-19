@@ -5,9 +5,17 @@ today`; and the before/after sheet (`old rig | new rig | the painting`).
     lane.py keytable --gate G.json --rig rig.json [--out T.txt]
     lane.py clips    --subject S --gate G.json --on <recording>/poses --off <recording>/poses-off --out <clips dir> [--poses a,b]
     lane.py sheets   --subject S --clips <clips dir> --out <sheets dir> [--before <clips dir of the old rig>] [--before-poses a,b]
+    lane.py hurtko   --on <recording>/poses --off <recording>/poses-off --out FILE.png --crop x0,y0,x1,y1 [--hurt N[:M]] [--ko N[:M]] [--texts ...] [--foot TEXT]
 
 A clip is the rig (left) beside the painting the game draws (right), the same real-game frame, idle easing into the pose and held, 60 fps; its caption is what the gate read. `clips` also keeps
 `<pose>-last.png`, the clip's last frame, which the sheets are made of (no second decode).
+
+Three per-pose overrides, from the Valefor, Pterya, Ifrit and Shiva lanes (a lane picks them by looking at the clip; none changes the video's frames):
+  --last pose=N[:M]     the sheet frame is frame N of the rig recording (and M of the painting set's; default N) instead of the clip's last. An enemy at full HP holds its KO key about 110 frames and then
+                        eases back to the idle while the painted actor dissolves, so the last frame of a KO clip is not the KO.
+  --crop pose=x,y,w,h   the crop (screen px of the 1600 x 900 frame) instead of the one made from the projected boxes, which leave out a lunging head.
+  --painting-file pose=PNG   the right panel of the sheet frame is that approved painting file (centred on the panel's dark ground) instead of the game's frame: the game's painted actor does not draw an
+                        `overdrive` pose on the battle plane (it stays idle), so the painting file is the only honest picture of it. The panel says so.
 """
 from __future__ import annotations
 
@@ -98,7 +106,40 @@ def keytable(gate: dict, rig: dict) -> str:
     return "\n".join(w) + "\n"
 
 
-def make_clips(gate: dict, on: pathlib.Path, off: pathlib.Path, out: pathlib.Path, poses: list[str] | None = None, ffmpeg: str = FFMPEG) -> list[str]:
+def parse_overrides(items: list[str] | None, kind: str) -> dict:
+    """`['ko=70:36', 'hurt=70']` -> `{'ko': (70, 36), 'hurt': (70, 70)}`; kind `crop`: `['hurt=600,250,700,500']` -> `{'hurt': (600, 250, 700, 500)}`; kind `file`: `['overdrive=a.png']` -> `{'overdrive': 'a.png'}`."""
+    out: dict = {}
+    for it in items or []:
+        pose, _, val = it.partition("=")
+        if not pose or not val:
+            raise SystemExit(f"lane clips: {it!r} is not pose=value")
+        if kind == "last":
+            a, _, b = val.partition(":")
+            out[pose] = (int(a), int(b or a))
+        elif kind == "crop":
+            nums = tuple(int(n) for n in val.split(","))
+            if len(nums) != 4:
+                raise SystemExit(f"lane clips: --crop {it!r} needs x,y,w,h")
+            out[pose] = nums
+        else:
+            out[pose] = val
+    return out
+
+
+def painting_panel(path: str, size: tuple[int, int]) -> Image.Image:
+    """The right panel for a pose the game does not draw: the approved painting file centred on the panel's dark ground, with a line saying what it is."""
+    panel = Image.new("RGB", size, (10, 10, 14))
+    art = Image.open(path).convert("RGBA")
+    k = min((size[0] - 20) / art.width, (size[1] - 40) / art.height)
+    art = art.resize((max(1, int(art.width * k)), max(1, int(art.height * k))), Image.LANCZOS)
+    panel.paste(art, ((size[0] - art.width) // 2, 36 + (size[1] - 36 - art.height) // 2), art)
+    ImageDraw.Draw(panel).text((10, 8), "the APPROVED painting of the pose: the game draws the idle for it (no overdrive on the battle plane)", fill=(255, 200, 120), font=ImageFont.load_default())
+    return panel
+
+
+def make_clips(gate: dict, on: pathlib.Path, off: pathlib.Path, out: pathlib.Path, poses: list[str] | None = None, ffmpeg: str = FFMPEG,
+               last: dict | None = None, crop: dict | None = None, painting_file: dict | None = None) -> list[str]:
+    last, crop, painting_file = last or {}, crop or {}, painting_file or {}
     keys = {k["pose"]: k for k in gate["keys"]}
     info_on = json.loads((on / "poses-info.json").read_text())["poses"]
     info_off = json.loads((off / "poses-info.json").read_text())["poses"]
@@ -110,27 +151,32 @@ def make_clips(gate: dict, on: pathlib.Path, off: pathlib.Path, out: pathlib.Pat
         if k is None or pose not in info_off:
             print(f"  {pose}: no gate key or no painting-set recording: skipped")
             continue
-        x0, y0, w, h = crop_box([info_on[pose]["rectPose"], info_off[pose]["rectPose"], info_on[pose]["rectIdle"], info_off[pose]["rectIdle"]])
+        x0, y0, w, h = crop.get(pose) or crop_box([info_on[pose]["rectPose"], info_off[pose]["rectPose"], info_on[pose]["rectIdle"], info_off[pose]["rectIdle"]])
         tmp = pathlib.Path(tempfile.mkdtemp(prefix="clip-"))
         fa = sorted((on / "frames" / pose).glob("f*.jpg"))
         fb = sorted((off / "frames" / pose).glob("f*.jpg"))
-        last = None
-        for i in range(min(len(fa), len(fb))):
+        n = min(len(fa), len(fb))
+        if n == 0:
+            shutil.rmtree(tmp, ignore_errors=True)
+            continue
+
+        def tile(i: int, j: int, right: Image.Image | None = None) -> Image.Image:
             ia = Image.open(fa[i]).crop((x0, y0, x0 + w, y0 + h)).resize((w * 2, h * 2), Image.LANCZOS)
-            ib = Image.open(fb[i]).crop((x0, y0, x0 + w, y0 + h)).resize((w * 2, h * 2), Image.LANCZOS)
+            ib = right or Image.open(fb[j]).crop((x0, y0, x0 + w, y0 + h)).resize((w * 2, h * 2), Image.LANCZOS)
             t = Image.new("RGB", (w * 4 + 4, h * 2 + CAP), (10, 10, 14))
             t.paste(ia, (0, CAP))
             t.paste(ib, (w * 2 + 4, CAP))
             d = ImageDraw.Draw(t)
             d.text((6, 4), caption(pose, k), fill=(255, 235, 120), font=font)
             d.text((6, 22), "idle, then the pose (the game's own blend)", fill=(190, 200, 230), font=font)
-            d.text((w * 2 + 10, 22), "the PAINTING of the pose, as the game draws it (the painting set)", fill=(190, 200, 230), font=font)
-            t.save(tmp / f"a{i:04d}.png")
-            last = t
-        if last is None:
-            shutil.rmtree(tmp, ignore_errors=True)
-            continue
-        last.save(out / f"{pose}-last.png")
+            if right is None:
+                d.text((w * 2 + 10, 22), "the PAINTING of the pose, as the game draws it (the painting set)", fill=(190, 200, 230), font=font)
+            return t
+
+        for i in range(n):
+            tile(i, i).save(tmp / f"a{i:04d}.png")
+        li, lj = last.get(pose, (n - 1, n - 1))
+        tile(min(li, len(fa) - 1), min(lj, len(fb) - 1), painting_panel(painting_file[pose], (w * 2, h * 2)) if pose in painting_file else None).save(out / f"{pose}-last.png")
         subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-framerate", "60", "-i", str(tmp / "a%04d.png"), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", str(out / f"{pose}.mp4")], check=True)
         shutil.rmtree(tmp, ignore_errors=True)
         made.append(pose)
@@ -193,3 +239,41 @@ def make_sheets(spec: dict, clips: pathlib.Path, out: pathlib.Path, before: path
             wrote.append(f)
             print("  wrote", f)
     return wrote
+
+
+HURTKO_TEXTS = ("HURT: the painting at its own size", "KNOCKED OUT: the painting set's KO", "HURT: the same creature, bent", "KNOCKED OUT: the same creature, lower")
+
+
+def make_hurtko(on: pathlib.Path, off: pathlib.Path, out: pathlib.Path, crop: tuple[int, int, int, int], hurt: tuple[int, int] = (70, 70), ko: tuple[int, int] = (70, 70),
+                texts: tuple[str, str, str, str] = HURTKO_TEXTS,
+                titles: tuple[str, str] = ("BEFORE  the painting set (rig off)", "AFTER  the rig (rig on)"), foot: str = "") -> pathlib.Path:
+    """The hurt-and-KO before/after sheet for Bailey (the Valefor lane's `before_after.py`): the painting set above and the rig below, the same real-game camera and crop, hurt on the left and knocked out
+    on the right, a gold caption on each panel and a footer for the harness numbers. Frames are the poses recordings' (`<rec>/frames/<pose>/f<N>.jpg`); `hurt` and `ko` are `(rig frame, painting frame)`."""
+    big, small = ImageFont.truetype(FONT, 22) if pathlib.Path(FONT).exists() else ImageFont.load_default(), ImageFont.load_default()
+    pw = 760
+    ph = int(pw * (crop[3] - crop[1]) / (crop[2] - crop[0]))
+
+    def panel(rec: pathlib.Path, pose: str, frame: int) -> Image.Image:
+        return Image.open(rec / "frames" / pose / f"f{frame:04d}.jpg").crop(crop).resize((pw, ph), Image.LANCZOS)
+
+    width = pw * 2 + 12
+    parts: list[Image.Image] = []
+    for title, rec, (hf, kf), (t1, t2) in ((titles[0], off, (hurt[1], ko[1]), texts[:2]), (titles[1], on, (hurt[0], ko[0]), texts[2:])):
+        b = Image.new("RGB", (width, CAP), BAR)
+        ImageDraw.Draw(b).text((14, 8), title, font=big, fill=GOLD)
+        parts.append(b)
+        row = Image.new("RGB", (width, ph + CAP), BAR)
+        row.paste(panel(rec, "hurt", hf), (0, CAP))
+        row.paste(panel(rec, "ko", kf), (pw + 12, CAP))
+        d = ImageDraw.Draw(row)
+        d.text((14, 8), t1, font=small, fill=GOLD)
+        d.text((pw + 26, 8), t2, font=small, fill=GOLD)
+        parts.append(row)
+    if foot:
+        b = Image.new("RGB", (width, CAP), BAR)
+        ImageDraw.Draw(b).text((14, 6), foot, font=small, fill=GOLD)
+        parts.append(b)
+    sheet = _stack(parts)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out)
+    return out

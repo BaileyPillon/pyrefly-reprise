@@ -10,13 +10,16 @@
  *            played action and a tail
  *   hurtko   the presenter plays an auto battle where everyone defends; the first enemy action that hurts the actor is recorded; then its HP is set to 1 (the ONLY debug write) and the next one downs it
  *   fight    the whole fight on the game's own `autoBattle('intended')`, seed 1, no frames kept: the tracker table and, when the tree has the critic's continuity probe, the probe's verdicts
+ *   ko       the same fight, stopped `--tail` frames after the actor's KO swap, with the frames of the last stretch before it kept: once the actor is under half its HP every frame is grabbed into a ring, and
+ *            the ring plus the tail is written (`frames/f<n>.jpg`, `ko.json`: the pose, life, projected box and, for a rig, the area of every part mesh as the GPU gets it, a frame). The hurt-to-KO size
+ *            jump of an aeon is measured from this (rig on, and `--off` for the painting set), in the real chapter that fields it; the continuity probe runs in it too (vacuous for a rig)
  *
  * Real key presses everywhere else. The page's time only moves when the stepper runs the clock. Nothing in the repository is touched.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { trackerPoints } from './lane-pure.mjs';
+import { frameMs, trackerPoints } from './lane-pure.mjs';
 import { analyse, collectTracks, installTracker, pushTrack, toSamples } from './track.mjs';
 import { installGrabber, makeStepper, pauseClock, reachFirstMenu } from './play-common.mjs';
 
@@ -242,4 +245,82 @@ export async function fight(g, spec, o) {
     writeJson(path.join(o.out, 'probe.json'), { checks: res.checks ?? null, error: res.error ?? null });
   }
   await finish(g, o, { ...meta, mode: 'fight', frames: st.frame, probe: probe !== null }, true);
+}
+
+/** In the page: what the KO measurement reads of the actor this frame (its pose and life, HP, projected box, and a rig's part meshes with the area of each as the GPU gets it). */
+const koFrameMeta = (id) => {
+  const b = window.__pyrefly.battle();
+  const a = b.stage.actor(id);
+  const u = window.__pyrefly.battleState().combatants;
+  const c = Array.isArray(u) ? u.find((x) => x.id === id) : u[id];
+  if (!a) return { inStage: false, hp: c?.hp ?? null, maxHp: c?.stats?.maxHp ?? null };
+  const parts = a.figure ? a.figure.plane.children.map((mm) => {
+    const pos = mm.geometry.getAttribute('position').array;
+    const idx = mm.geometry.index ? mm.geometry.index.array : null;
+    let area = 0;
+    const T = idx ? idx.length / 3 : pos.length / 9;
+    for (let t = 0; t < T; t++) {
+      const i0 = idx ? idx[t * 3] : t * 3, i1 = idx ? idx[t * 3 + 1] : t * 3 + 1, i2 = idx ? idx[t * 3 + 2] : t * 3 + 2;
+      area += Math.abs((pos[i1 * 3] - pos[i0 * 3]) * (pos[i2 * 3 + 1] - pos[i0 * 3 + 1]) - (pos[i1 * 3 + 1] - pos[i0 * 3 + 1]) * (pos[i2 * 3] - pos[i0 * 3])) / 2;
+    }
+    return { name: mm.name || null, visible: mm.visible, area };
+  }) : null;
+  let rect = null;
+  try { rect = b.stage.projectRect(id); } catch { /* not projectable this frame */ }
+  return { inStage: true, pose: a.pose, life: a.lifeState, blending: a.blending ?? null, hp: c?.hp ?? null, maxHp: c?.stats?.maxHp ?? null, alive: c?.alive ?? null, rect, parts };
+};
+
+export async function ko(g, spec, o) {
+  const { st, meta } = await prepare(g, spec, o);
+  st.recording = false; // this mode grabs its own frames (a ring, written at the end)
+  const { page } = g;
+  const who = spec.actor;
+  let probe = null;
+  const probePath = `${o.repo}/critic/runner/lib/continuity.mjs`;
+  if (fs.existsSync(probePath)) {
+    const { attachProbe } = await import(pathToFileURL(probePath).href);
+    probe = await attachProbe({ page, outDir: o.out, chapter: spec.chapter.id, game: spec.game ?? 'ffx', base: o.base, mode: process.env.PYREFLY_BROWSER ?? 'gpu', poseMeasurePath: `${o.repo}/docs/target/pose-measure.json`, log: g.log });
+  }
+  const started = await page.evaluate(() => window.__pyrefly.autoBattle('intended'));
+  g.log('autoBattle handed over:', started);
+  const ringMax = 240;
+  const ring = [];
+  let armed = false;
+  let koFrame = -1;
+  const t0 = Date.now();
+  for (let i = 0; i < o.cap; i++) {
+    const n = st.frame;
+    const pending = armed ? page.evaluate(() => window.__grab()) : null;
+    await page.clock.runFor(frameMs(n));
+    let m = null;
+    if (pending) {
+      const r = await pending;
+      m = await page.evaluate(koFrameMeta, who);
+      ring.push({ n, b64: r.b64, m });
+      if (koFrame < 0 && ring.length > ringMax) ring.shift();
+    }
+    await pushTrack(page, n);
+    st.frame++;
+    if (armed || i % 15 === 14) {
+      m = m ?? (await page.evaluate(koFrameMeta, who));
+      const frac = m.maxHp ? (m.hp ?? 0) / m.maxHp : 1;
+      if (!armed && frac < 0.5) armed = true;
+      if (koFrame < 0 && (m.pose === 'ko' || (m.hp ?? 1) <= 0)) { koFrame = n; g.log('KO beat at frame', n, JSON.stringify({ pose: m.pose, life: m.life, hp: m.hp })); armed = true; }
+    }
+    if (koFrame >= 0 && n >= koFrame + o.tail) break;
+    if (i % 120 === 119 && (await g.scr()) !== 'battle') break;
+    if (i % 1800 === 1799) g.log('frame', st.frame, 'virtual s', ((st.frame * 16.67) / 1000).toFixed(1), 'real s', ((Date.now() - t0) / 1000).toFixed(0), armed ? 'armed' : '');
+  }
+  await page.clock.resume();
+  const dir = path.join(o.out, 'frames');
+  fs.mkdirSync(dir, { recursive: true });
+  for (const f of ring) fs.writeFileSync(path.join(dir, `f${String(f.n).padStart(5, '0')}.jpg`), Buffer.from(f.b64, 'base64'));
+  writeJson(path.join(o.out, 'ko.json'), { actor: who, rig: o.rig, koFrame, tail: o.tail, frames: ring.map((f) => f.n), meta: ring.map((f) => ({ n: f.n, ...f.m })) });
+  g.log('ko run over: KO frame', koFrame, '; kept', ring.length, 'frames; screen', await g.scr());
+  if (probe) {
+    const res = await probe.finish();
+    writeJson(path.join(o.out, 'probe.json'), { checks: res.checks ?? null, error: res.error ?? null });
+  }
+  await finish(g, o, { ...meta, mode: 'ko', koFrame, frames: st.frame, probe: probe !== null }, true);
+  if (koFrame < 0) throw new Error(`${who} was never knocked out in ${st.frame} frames (the fight was lost, or the cap was too small)`);
 }
