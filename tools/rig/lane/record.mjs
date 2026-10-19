@@ -2,7 +2,7 @@
  * **The recorder** (the lane kit; the rig program, 2026-10-18): one command that does what `record.sh` and the six per-subject play scripts did for Kimahri and for Lulu, for any subject.
  *
  *   PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject lulu --out <dir> [--modes poses,cast,hurtko,anim,anim2 [--variants today,A,B,C,P2]] [--poses a,b] [--off] [--rigs-dir D:/pyrefly-art-rigs] [--alias lulu=lulu-v2]
- *                                                    [--repo <tree>] [--port N] [--tail 150] [--cap 40000] [--no-warm] [--wait] [--still [--settle 1800]]
+ *                                                    [--repo <tree>] [--port N] [--tail 150] [--cap 40000] [--no-warm] [--wait] [--wait-lock] [--still [--settle 1800]]
  *
  * What it does, in order, and why each step is there:
  *   1. refuses while `D:/Tools/pyrefly-scratch/REVIEW-BROWSER` exists (no Vite, no browser at all; `--wait` polls instead) and while another recording holds `RIG-RECORD` (one recording at a time:
@@ -38,8 +38,14 @@ async function freePort(from = 5880) {
   throw new Error('no free port');
 }
 
-function takeLock() {
-  const st = lockStatus(fs.existsSync(LOCK) ? fs.readFileSync(LOCK, 'utf8') : null, alive);
+function readLock() {
+  try { return lockStatus(fs.existsSync(LOCK) ? fs.readFileSync(LOCK, 'utf8') : null, alive); } catch { return { state: 'free' }; }
+}
+
+/** Take the lock. With `wait`, a held lock is polled every 25 ms and taken in the same tick it is seen free (the check and the write are one synchronous step, so a queue of lanes does not starve this one). */
+async function takeLock(wait) {
+  let st = readLock();
+  if (st.state === 'held' && wait) { log(`${LOCK} is held by pid ${st.by.pid} (${st.by.what ?? '?'}): waiting, polled every 25 ms`); while (st.state === 'held') { await sleep(25); st = readLock(); } }
   if (st.state === 'held') throw new Error(`lane: another recording holds ${LOCK} (pid ${st.by.pid}, ${st.by.what ?? '?'}): one recording at a time`);
   fs.mkdirSync(path.dirname(LOCK), { recursive: true });
   fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, what: `${a.subject} ${a.modes ?? 'poses'}`, at: new Date().toISOString() }));
@@ -67,7 +73,7 @@ async function main() {
     log('REVIEW-BROWSER exists: waiting 60 s');
     await sleep(60000);
   }
-  takeLock();
+  await takeLock(a['wait-lock'] === true);
   const port = Number(a.port ?? (await freePort()));
   const cfgFile = path.join(repo, 'tools', `zz-rig-lane-${port}.tmp.config.mjs`);
   const aliases = Object.fromEntries(String(a.alias ?? '').split(',').filter(Boolean).map((s) => s.split('=')));
