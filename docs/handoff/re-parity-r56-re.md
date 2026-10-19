@@ -7,9 +7,9 @@ Status: **built, proved, measured and committed on branch `re-parity-r56-re` (fr
 | Commit | What |
 |---|---|
 | `54d332db7` | merge `origin/re-parity-rc10-x2-action-time` (`1318aeb2d`, the action-time lane, switch OFF) into `b24614c05` |
-| the next commit | the two changes: the switch ON and `DRINK_FROM` 12,000, with the visible text |
-| the next commit | tests and pins: the switch tests, the re-recorded switch-off pins, `ffx2-atb-golden` re-pinned, the HUD test |
-| the commit that adds this note | this note and the CONTRACT-CHANGES entry |
+| `fd3cc3a33` | the two changes: the switch ON and `DRINK_FROM` 12,000, with the visible text |
+| `ec9c28ddc` | tests and pins: the switch tests, the re-recorded switch-off pins, `ffx2-atb-golden` re-pinned, the HUD test, 19 files kept on the old timeline, the CONTRACT-CHANGES entry |
+| `0902246c6` and the commit after it | this note, and its commit shas |
 
 ## 1. The merge
 
