@@ -11,6 +11,8 @@
  *
  * Game case: both (shared critic plumbing; the rigs it reads are FFX's Kimahri, Lulu and aeons and Valefor, which FFX-2's Besaid chapter shares).
  */
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { PerspectiveCamera, Texture } from 'three';
 import { describe, expect, it, vi } from 'vitest';
 import { makeRigFile } from './rig/rig-fixture.ts';
@@ -34,11 +36,13 @@ type ProbeFrame = import('../../critic/runner/lib/continuity-probe.mjs').ProbeFr
 const CFG = { ringScale: 0.6, ringFrames: 16, maxStrips: 50, cellHeight: 120, encodePerFrame: 2, jpegQuality: 0.7, recentFrames: 14, jerkCandidatePx: 28, jerkCandidateRatio: 3, candidateWindow: 8, beforeFrames: 6, afterFrames: 6, cutPx: 120 };
 const DT = 1 / 60;
 
-async function riggedActor(): Promise<RigActorT> {
-  const r = readRig(makeRigFile());
+/** The test fixture's rig, or (with `shipped`) a rig file as the game ships it, built into the engine's own RigActor with the textures stubbed. */
+async function riggedActor(shipped?: { name: string; json: unknown }): Promise<RigActorT> {
+  const name = shipped?.name ?? 'testfig';
+  const r = readRig(shipped ? shipped.json : makeRigFile());
   if (!r.ok) throw new Error(r.reason);
-  const idle = { texture: new Texture(), meta: { width: 400, height: 800, baselineY: 780 }, placeholder: false, url: '/art/characters/testfig/idle.png' };
-  const a = await RigActor.createRigged({ name: 'testfig', worldHeight: 1.82, side: 'party', shadow: false }, { data: r.data, base: '/art/rigs/testfig', idlePainting: idle, loadTexture: async () => new Texture() });
+  const idle = { texture: new Texture(), meta: { width: r.data.image.w, height: r.data.image.h, baselineY: r.data.baselineY }, placeholder: false, url: `/art/characters/${name}/idle.png` };
+  const a = await RigActor.createRigged({ name, worldHeight: 1.82, side: 'party', shadow: false }, { data: r.data, base: `/art/rigs/${name}`, idlePainting: idle, loadTexture: async () => new Texture() });
   a.position.set(0, 0, 0);
   return a;
 }
@@ -148,4 +152,38 @@ describe('a real RigActor on the probe\'s stage', () => {
     for (let i = 0; i < 6; i++) await step();
     expect(probe.records.length).toBeGreaterThan(shown);
   });
+});
+
+// The five rigs the game ships, from their own rig.json (the art is gitignored and lives in the release art mirror, so this runs where `public/art/rigs` is and is skipped elsewhere): the key names, the landmark
+// names, the gate's stamped boxes and the skinned meshes are the real ones, which a hand-built rig is not. The rigs are played through hurt, knock-out and one more key and back to the idle. This pins that every
+// change of key of a real rig is COUNTED (read at both ends, head and feet measured); whether a key passes CHK-026 is the rig's and the check's, not asserted here.
+const RIGS_DIR = resolve(__dirname, '..', '..', 'public', 'art', 'rigs');
+const SHIPPED = ['kimahri', 'lulu', 'valefor', 'ifrit', 'pterya'].filter((n) => existsSync(resolve(RIGS_DIR, n, 'rig.json')));
+
+describe.skipIf(SHIPPED.length === 0)('the rigs the game ships, from their own files', () => {
+  it.each(SHIPPED)('%s: every change of key is counted, settled and measured', async (name) => {
+    const json = JSON.parse(readFileSync(resolve(RIGS_DIR, name, 'rig.json'), 'utf8')) as unknown;
+    const actor = await riggedActor({ name, json });
+    const { probe, step } = stageOf(actor, name);
+    probe.start();
+    const run = async (n: number): Promise<void> => { for (let i = 0; i < n; i++) await step(); };
+    await run(20);
+    const keys = ['hurt', 'ko', ...actor.poseNames.filter((k) => !['idle', 'hurt', 'ko'].includes(k)).slice(0, 1)].filter((k) => actor.poseNames.includes(k));
+    for (const k of keys) {
+      actor.setPose(k, { force: true });
+      await run(30);
+      actor.setPose('idle', { force: true });
+      await run(30);
+    }
+    const meta = probe.meta();
+    const records = probe.drain(100000).records as ProbeFrame[];
+    expect(meta.errors).toEqual([]);
+    expect(meta.swaps).toHaveLength(keys.length * 2);
+    const out = analyzeRun({ meta, records, anchors: meta.poses.map(() => null), cfg: continuityConfig() });
+    const cov = (out.coverage as { rigs: { figure: string; rig: string; swaps: number; counted: number; settled: number; headMeasured: number; feetMeasured: number }[] }).rigs.find((r) => r.figure === name);
+    expect(cov, `${name} is in coverage.rigs`).toBeDefined();
+    expect(cov).toMatchObject({ rig: name, swaps: keys.length * 2, counted: keys.length * 2, settled: keys.length * 2, headMeasured: keys.length * 2, feetMeasured: keys.length * 2 });
+    expect(out.swaps.filter((w) => w.figure === name && w.notShowing)).toHaveLength(0);
+    expect(out.summary.size.rigSwaps).toBe(keys.length * 2);
+  }, 120_000);
 });
