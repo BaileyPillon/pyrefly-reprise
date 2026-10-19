@@ -22,6 +22,19 @@
         ["lulu-rig-2-attack-hurt-return", ["attack", "hurt", "follow"]],
         ["lulu-rig-3-ready-lowhp-asleep", ["ready", "critical", "sleep"]]
       ]
+    },
+    "valefor": {
+      "actor": "x2-valefor",
+      "game": "ffx2",
+      "chapter": { "door": "valefor", "id": "ffx2-valefor-besaid" },
+      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
+      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "tip": "wingTip" },
+      "beforeAfter": "valefor-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "sheets": [
+        ["valefor-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["valefor-rig-2-ko-overdrive", ["ko", "overdrive"]]
+      ]
     }
   }
 }
