@@ -157,27 +157,45 @@
 
 /* ------------------------------------------------ narrow and portrait windows */
 
+/*
+ * One scrolling column, in px. Release 56 (PR-0465, round 26: at 390x844 the road cut its place names and its ELITE tag, BEGIN sat below the fold, and most text was 11 to 13 px): every line of text is
+ * 14 px or more, a name and a tag wrap inside their card instead of ending in an ellipsis or running past its edge, the primary button is pinned to the bottom of the screen while the page runs (sticky,
+ * 52 px tall), and every card is a target of 44 px or more. The look is the approved mockups' (`pilgrim-mock/o2B-a`, `o2B-b`, `o2B-d`); only sizes, wrapping and the pin changed. Desktop is untouched.
+ */
 @media (max-width: 760px), (max-aspect-ratio: 3 / 4) {
-  .pgx { overflow-y: auto; overscroll-behavior: contain; --fs-s: 12px; --fs-m: 14px; --fs-l: 18px; --fs-xl: 24px; }
-  .pgx-page, .pgx-page--boons { position: relative; inset: auto; min-height: 100%; display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 28px; }
+  .pgx { overflow-y: auto; overscroll-behavior: contain; --fs-s: 14px; --fs-m: 14px; --fs-l: 18px; --fs-xl: 24px; }
+  .pgx-page, .pgx-page--boons { position: relative; inset: auto; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 16px; }
   .pgx-page--boons { display: flex; }
   .pgx-top { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .pgx-eyebrow { margin-top: 0; font-size: 13px; letter-spacing: 0.24em; }
+  .pgx-eyebrow { margin-top: 0; font-size: 14px; letter-spacing: 0.2em; }
   .pgx-eyebrow i { width: 32px; }
   .pgx-hud { flex-wrap: wrap; gap: 8px; }
   .pgx-chip { padding: 6px 12px; gap: 8px; }
   .pgx-chip b { font-size: 20px; }
+  .pgx-h { letter-spacing: 0.16em; flex-wrap: wrap; row-gap: 4px; }
+  .pgx-h small { letter-spacing: 0.1em; }
+  .pgx-tag { white-space: normal; max-width: calc(100% - 16px); line-height: 1.15; letter-spacing: 0.1em; }
   .pgx-tree { flex-direction: column; gap: 14px; padding-top: 0; }
   .pgx-links { display: none; }
   .pgx-tier { flex: none; flex-direction: row; flex-wrap: wrap; gap: 8px; }
-  .pgx-tier__label { flex: 0 0 100%; text-align: left; }
-  .pgx-node { flex: 1 1 150px; height: 128px; }
-  .pgx-node__name { font-size: 17px; }
-  .pgx-foot { flex-direction: column; align-items: stretch; gap: 16px; }
+  .pgx-tier__label { flex: 0 0 100%; text-align: left; letter-spacing: 0.2em; }
+  /* A stop is a plate over a caption that grows with its words: the place name wraps whole (it used to end in an ellipsis at 155 px). */
+  .pgx-node { flex: 1 1 150px; height: auto; display: flex; flex-direction: column; min-height: 44px; }
+  .pgx-node__art { position: relative; flex: none; height: 92px; }
+  .pgx-node__cap { position: static; height: auto; padding: 8px 10px 10px; gap: 2px; }
+  .pgx-node__name { font-size: 18px; white-space: normal; overflow: visible; text-overflow: clip; }
+  .pgx-node__sub { font-size: 14px; letter-spacing: 0.06em; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.2; }
+  .pgx-node__no { font-size: 14px; }
+  .pgx-node__tag { top: 40px; max-width: calc(100% - 16px); }
+  /* BEGIN, GO ON and AGAIN stay in reach: the foot stops being a box of its own, so the button's containing block is the whole page and `sticky` pins it to the bottom edge while the page runs. */
+  .pgx-foot { display: contents; }
   .pgx-slab { clip-path: none; padding: 14px 16px; }
   .pgx-slab h3 { font-size: 22px; }
   .pgx-slab p { font-size: 14px; }
   .pgx-btn { height: 52px; padding: 0 22px; font-size: 16px; letter-spacing: 0.22em; align-self: stretch; }
+  /* Pinned over the page it must not show the page through it: the waiting state is a solid, dimmer gold, not the desktop's see-through one. */
+  .pgx-btn--wait { background: #5b4e23; outline-color: #5b4e23; color: #e8e1c8; }
+  .pgx-foot > .pgx-btn, .pgx-main > .pgx-btn, .pgx-over__btns { position: sticky; bottom: 12px; z-index: 6; }
   .pgx-cards { flex-direction: column; gap: 12px; max-height: none; }
   .pgx-card { flex: none; min-height: 150px; }
   .pgx-card[data-held] { flex: none; }
@@ -185,22 +203,28 @@
   .pgx-card--sel { transform: none; }
   .pgx-card__name { font-size: 24px; }
   .pgx-card__fx { font-size: 14px; }
+  .pgx-main { display: contents; }
   .pgx-forks { flex-direction: column; gap: 12px; }
-  .pgx-fork { flex: none; height: 150px; }
+  .pgx-fork { flex: none; height: auto; display: flex; flex-direction: column; min-height: 44px; }
+  .pgx-fork__art { position: relative; flex: none; height: 104px; }
+  .pgx-fork__cap { position: static; height: auto; padding: 8px 14px 10px; }
   .pgx-fork__cap .n { font-size: 22px; }
+  .pgx-fork__cap .l { font-size: 14px; letter-spacing: 0.1em; line-height: 1.25; }
+  .pgx-fork__tags { left: 8px; top: 8px; max-width: calc(100% - 16px); }
   .pgx-main .pgx-btn { margin-top: 4px; }
   .pgx-recap .t { font-size: 24px; }
-  .pgx-over { position: relative; overflow-y: auto; min-height: 100%; }
+  .pgx-over { position: relative; overflow: visible; min-height: 100vh; min-height: 100dvh; }
   .pgx-over__ink, .pgx-over__stripe, .pgx-over__cap { display: none; }
-  .pgx-over__page { position: relative; left: auto; top: auto; bottom: auto; width: auto; padding: 18px 16px 28px; }
+  .pgx-over__page { position: relative; left: auto; top: auto; bottom: auto; width: auto; padding: 18px 16px 16px; }
   .pgx-over__title { font-size: 52px; white-space: normal; }
   .pgx-over__rule { width: 160px; height: 4px; }
   .pgx-over__sub { font-size: 18px; }
   .pgx-over__ledger .k { width: 84px; letter-spacing: 0.18em; }
-  .pgx-over__ledger .v { font-size: 26px; }
+  .pgx-over__ledger .v { font-size: 26px; white-space: nowrap; }
+  .pgx-over__ledger .d { letter-spacing: 0.08em; }
   .pgx-over__route span { width: 34px; height: 14px; }
   .pgx-over__list { grid-template-columns: 1fr; }
-  .pgx-over__btns { flex-direction: column; margin-top: 16px; padding-left: 0; }
+  .pgx-over__btns { flex-direction: column; margin-top: 16px; padding-left: 0; gap: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

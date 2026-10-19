@@ -89,7 +89,8 @@ export function installPhonePrep(prep: HTMLElement, stage: HTMLElement, chapter:
   const onKey = (e: KeyboardEvent): void => {
     // The CHAPTER tab pages the page itself on L1 / R1 (PageUp / PageDown), and so do
     // the stacked tabs (PR-0295); the browser's default scroll of the same key would move it twice.
-    if ((prep.dataset['tab'] !== 'chapter' && prep.dataset['phone'] !== 'page') || !mq?.matches) return;
+    const stacked = prep.dataset['tab'] === 'chapter' || prep.dataset['tab'] === 'pilgrim-run' || prep.dataset['phone'] === 'page';
+    if (!stacked || !mq?.matches) return;
     if (e.code === 'PageDown' || e.code === 'PageUp') e.preventDefault();
   };
   // The open tab in the pinned strip: the tab before it starts at the left edge, so the one the player came from and

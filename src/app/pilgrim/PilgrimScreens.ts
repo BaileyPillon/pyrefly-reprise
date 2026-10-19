@@ -12,6 +12,8 @@ import './pilgrim.css';
 import '../screens/frontend/frontend.css';
 import '../screens/frontend/chapter-select-c.css';
 import { Screen } from '../Screen.ts';
+import { readSetting } from '../SaveData.ts';
+import { chapterSelectCue } from '../saveFrontend.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { ControlsHint, type ControlHintItem } from '../../ui/common/ControlsHint.ts';
@@ -61,7 +63,8 @@ abstract class PilgrimScreen<T> extends Screen {
     this.hint = new ControlsHint({ root: this.root, items: this.hints() });
     this.hint.mount();
     this.paint();
-    void audio.playMusic('chapter-select', { fade: 1.2 }).catch(() => undefined);
+    // PR-0466 (release 56): the run's screens follow OPTIONS > PRESENTATION > CHAPTER MUSIC like the board (an unknown value plays B).
+    void audio.playMusic(chapterSelectCue(readSetting('chapterSelectMusic')), { fade: 1.2 }).catch(() => undefined);
     void this.app.fade('clear', 500);
   }
 
