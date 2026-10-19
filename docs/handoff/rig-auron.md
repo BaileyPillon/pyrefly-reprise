@@ -97,3 +97,86 @@ Vitest `tests/unit/tools/rig-subject-auron.test.ts` 11 passed (the config's part
 - The orb of `cast` and the flask of `item` (two hands, a prop in the second), the hidden blade's fill, the far leg's fill, and the idle-to-pose tail pop are the visible faults; none was attempted.
 - The 11 rig-only head jerks in the harness are undiagnosed.
 - The other chapters' figures are cut the same way, one subject config each; Auron's config is the example for a figure with a long coat, a detachable prop sword on its own bone, two legs, and no front-view painting.
+
+
+## Pass 2 (branch `rig-auron2`, 2026-10-18; format v2; Game case: FFX only)
+
+Bailey, 2026-10-18: "We need this done for all characters and bosses. It's a priority" and, in advance, "I will go with all your recommendations". The driver judged pass 1 not good enough to switch on (the poses stiff and too alike, cast no orb, item no flask, a flat grey blade bar, the far leg floaty, a stray scabbard bar in the KO) and asked for one bounded pass 2 on format v2 ([rig-v2-and-kit.md](rig-v2-and-kit.md)). Game case: **FFX only** (Auron is an FFX figure; the kit changes below are additive plumbing that changes nothing for a subject that does not use them). **The rig stays OFF**: nothing is installed into any art mirror, nothing is merged to main, no review was run. `D:/pyrefly-art-rigs/auron` (pass 1) is untouched; the new rig is `D:/pyrefly-art-rigs/auron-v2` (config `tools/rig/subjects/auron-v2.json`, art id `auron`).
+
+**The recipe: the body, head and coat come from the idle; each pose brings its OWN painted limb and prop, cut from that pose's painting.** `auron_variants.py` cuts a variant from a pose painting by a mask (polygons, capsules, colour tests: the cut's own predicate language) and places it where the pose model registers that painting, so it lies in the bind frame exactly where the painted limb lies in the registered painting (the three paintings that face left are turned, as the gate reads them). No SAM, no generative model: the painting's own pixels, resampled once. Variants are rigid on `root`; the body is fitted around them.
+- **Two hidden parts, `armX` (the limb) and `swordX` (the prop), carry the variants** (their own base look is a 4 x 4 transparent PNG, so the budget counts only the variants). Not variants of `armR` and `sword`: the first try made them variants of `armR`, and the gate's hole watch then kept the idle's shoulder, elbow and wrist joints under watch in poses where the idle arm was no longer drawn (hole-key 76 to 256 px at `upperarm`, `forearm`, `hand`, `sword`, in every blend). A joint none of whose rest-shown parts is shown is not watched; that is what a part of its own buys.
+- **What each key does** (`fit.keys.<pose>`: `image`, `hide`, `layers`): every key with a variant hides the idle's `glove` and `saya` (and `sword`, where a variant carries the blade). `attack` and `ready` bring the whole arm (sleeve, glove, hilt, blade as painted): the idle's `armR` stays in the key, **hung straight down behind the coat** (`upperarm` fixed at 90 degrees, `layers: {armR: 0.5}`), where the painting hides it, which keeps its joints covered. `cast`, `item` and `follow` bring the forearm, hand and prop; the idle's sleeve is fitted to reach the cut end (the pose expects `elbowPt` / `wristPt` at the painted cuff), its `hand` segment held straight and the `forearm` scale capped (a child inherits its parent's scale). `hurt`, `victory` and `critical` bring the sword with its hand (and the saya in `victory`, the planted blade in `critical`); the idle's arm stays fitted. `sleep` and `ko` have no variant (below).
+- **Marks.** Each variant's own landmarks (`fistCast`, `swordHiltCast`, `swordTipCast`, ...) sit on `root` at the registered position of a painting point; the pose's `expect` names them (the painting's own 1x points, the same ones pass 1 marked where they still apply). They check that the registration and the key agree; they are not a tuning handle.
+
+| variant | pose | what it brings | PNG px | verts |
+|---|---|---|---|---|
+| `armX:cast` | cast | the arm with the orb: black forearm, glove, the orb with its two diamonds and spikes | 331 x 326 | 132 |
+| `swordX:cast` | cast | the left hand and the drawn katana at the hip, hilt and blade | 532 x 265 | 126 |
+| `armX:item` | item | the arm and the flask: glove, flask and its red liquid, the cuff | 156 x 232 | 58 |
+| `swordX:item` | item | the sheathed katana at the hip: hilt, tassel, saya | 220 x 309 | 86 |
+| `armX:attack` | attack | the raised sword arm: the sleeve that billows over his head, the glove, the hilt and its tassel, the whole blade | 576 x 1066 | 258 |
+| `armX:follow` | follow | the low sword arm: forearm, glove, the guard, the curved blade (cut above the soles, see the feet) | 460 x 575 | 153 |
+| `armX:ready` | ready | the raised arm and the sword over his head: sleeve, glove, red-wrapped hilt, the crescent blade | 671 x 368 | 196 |
+| `swordX:hurt` | hurt | the hand, the hilt with its tassel, the drawn blade held low | 749 x 322 | 167 |
+| `swordX:critical` | critical | the katana planted point down: hilt, guard, saya | 67 x 455 | 79 |
+| `swordX:victory` | victory | the hand on the hilt and the long blue saya | 476 x 459 | 102 |
+
+Variants are 1.0 to 1.15 PNG px per idle-1x px (the idle's own parts are 2.0): 857 KB of PNG for ten variants against a 9 MB budget that the rest of the rig already spends 8.0 MB of. Palette distance: the gate prints 0.5 for every variant (its base look is the empty placeholder, so the number says nothing); the same measure against the idle part each stands in for (`armR` for `armX`, `sword` for `swordX`) is 0.69 to 0.83 (`D:/Tools/pyrefly-scratch/2026-10-18/rig-auron2/palette.json`): different pixels of a different costume by construction (black gloves, an orb, steel against a red sleeve), so read it as "these are not the idle's colours", which is the point.
+
+**The grey blade.** The `blade` part (the flat grey-blue fill of the hidden length of the katana) is gone: its cut rules, skin and PNG (314 KB). Where a variant brings a blade, that blade is the painted one; where a key still shows the idle's sword (`sleep`, `ko`) it is the idle's own sword part, a hilt and the visible 360 px of blade.
+**The far leg.** `legL`'s hidden length (under the near leg) is now a darkened copy of the NEAR leg's own trouser pixels (they lie under it at rest) instead of the boot's flat navy; a scrap of the coat's red at its top is the trouser's black. Classical, no new colour. Not done: hiding `legL` where a painting hides it (cast and hurt show one leg): the hole watch and the overlap were not re-measured for it.
+**The KO.** The key hides the scabbard (`hide: [saya]`): the thin vertical bar is gone. The footprint: the key's stance reads -0.211 idle heights from the idle's against -0.223 for the painted KO on the same registration (pass 1: -0.184): 0.012 apart. The painted KO is a cropped close-up, so the rig's whole lying figure is longer than the painting and still lies mostly behind Tidus in the sheet; the gate registers the painting by its own table and the game draws it by another, and the landmarks hold the key to the first (a head 0.03 from the painted head), so moving it toward where the game draws the painting would fail the gate's marks.
+**The tail** still shrinks as a pose starts (0.3 to 0.7 of its length in every key): not changed.
+
+## Pass 2: the gate, verbatim (`node tools/rig-gate.mjs --rig D:/pyrefly-art-rigs/auron-v2 --art D:/pyrefly-art-r50 --require-coverage`)
+
+```
+rig-gate: auron: OK; 11 of 11 key(s) pass; rest overlap 0.994; 230 poses scanned for holes at 18 joints; 15 parts, 21 bones, 5175 vertices, 8.16 Mpx, 8.86 MB; 17.3 s
+  ok   idle       idle     iou 0.994  stature 0.999  feet 0.000, -0.001  head 1.000
+  ok   attack     standing iou 0.648  stature 0.911 (head to soles)  feet -0.012, -0.003  head 0.896  landmarks 0.013  AUTHORED  (painting turned)
+  ok   cast       standing iou 0.546  stature 0.940  feet 0.011, 0.001  head 0.930  landmarks 0.046  AUTHORED
+  ok   critical   low      iou 0.620  stature 0.895  feet -0.009, 0.012  head 0.930  landmarks 0.030  AUTHORED
+  ok   follow     standing iou 0.519  stature 0.901  feet 0.013, 0.016  head 1.094  landmarks 0.027  AUTHORED
+  ok   hurt       standing iou 0.581  stature 0.906  feet 0.013, 0.007  head 0.930  landmarks 0.029  AUTHORED
+  ok   item       standing iou 0.494  stature 0.919  feet -0.010, -0.003  head 0.930  landmarks 0.038  AUTHORED  (painting turned)
+  ok   ko         ko       iou 0.299  stature 0.411  feet -0.211, -0.025  head 0.900  landmarks 0.030  AUTHORED
+  ok   ready      standing iou 0.735  stature 0.910  feet -0.011, 0.012  head 0.900  landmarks 0.019  AUTHORED
+  ok   sleep      low      iou 0.418  stature 0.887  feet 0.003, -0.014  head 0.961  landmarks 0.029  AUTHORED
+  ok   victory    standing iou 0.457  stature 0.975  feet 0.015, -0.010  head 1.120  landmarks 0.050  AUTHORED  (painting turned)
+  format v2 variants (palette distance from the base part, 0 same to 1 nothing in common): armX:cast 0.5, armX:item 0.5, armX:attack 0.5, armX:follow 0.5, armX:ready 0.5, swordX:cast 0.5, swordX:item 0.5, swordX:victory 0.5, swordX:hurt 0.5, swordX:critical 0.5
+rig-gate: wrote gate.status ok into D:\pyrefly-art-rigs\auron-v2
+rig-gate: PASS
+```
+
+`hidden-share` (a key may hide 0.6 of the idle's rest alpha area): 0.096 in every key that hides the glove, sword, scabbard and the arm's pieces, 0.053 in `ko` (the scabbard alone), none in `idle` and `sleep`. `--verify` on a copy named `auron` (the folder must carry its subject's name to ship): "verified: stamp ok (11 key(s), full coverage), 1x tier proved (48 file(s))" (`gate-verify.txt`); the 1x tier is 4.08 Mpx, 2.66 MB. `node tools/pose-gate.mjs --check --rigs D:/pyrefly-art-rigs`: 1,106 paintings, 37 rigged, 0 fail.
+
+## Pass 2: the harness, rig on and off (the whole Sinspawn Gui fight, door word `mushroom`)
+
+Not run in this lane yet. `D:/Tools/pyrefly-scratch/REVIEW-BROWSER` (the r55 deep review) existed from 19:22 and the recorder refuses to start while it does; the recorder was left polling (`--wait`) and the two commands are written down in `.../rig-auron2/run-final.sh`: `node tools/rig/lane/record.mjs --subject auron --out <dir> --modes fight --off --wait --alias auron=auron-v2` (the whole Sinspawn Gui fight at an exact 60 Hz on a virtual clock, seed 1, rig on and, with `--off`, the painting set). Then `lane.py jerks --tracks <dir>/fight/tracks.json --jerks <dir>/fight/jerks.json` classes every tracker jerk.
+
+## Pass 2: the 11 tracker jerks of pass 1 were not the rig's
+
+`lane.py jerks` (new: `tools/rig/lane/lane_jerks.py`) classes each jerk the tracker flags from what the records already carry (the camera's view matrix, the actor's root, the head's world position). Pass 1's 25 head jerks: **23 camera, 1 placement, 1 motion, 0 rig** (`jerks-pass1.json`). Every one of the 11 "rig-only" jerks has the camera's view matrix stepping by 0.9 to 1.4 in that frame and the head's WORLD step at 0.000 to 0.07 (in `idle` the head does not move at all); the two exceptions are frame 22 (the engine puts the actor on the field: its root jumps 0.35) and frame 12100 (a lunge easing out: world steps 0.38, 0.28, 0.21, 0.15). So there was no coat tail drawing in and no blend artefact in the tracker's numbers: a camera step moves every figure on the screen by 25 to 40 px, and the painted run had its own at other frames because the two fights are not the same fight. The tail shrinking at the start of a pose is real, but it is a visible pop, not a tracker jerk (not measured here).
+
+## Pass 2: what changed in the kit (additive; nothing here changes a subject that does not use it)
+
+- `tools/rig/lane/lane-render.mjs`: a key drawn in COLOUR by the gate's own maths (the key's part state, so variants show and hidden parts do not, and the key's `layers`), because the gate draws alpha only and the real game refuses a rig whose gate is not `ok`: a lane fixing a hole could not see its keys. `--skip part,part` finds which part a stray shape belongs to.
+- `lane.py jerks` (above) and its test; `record.mjs --off` now also records the painting set for the `fight` mode (the harness's two runs in one command); the registry entry `auron`.
+- `rig_fit.py`: `fit.foot_landmarks` (default unchanged). The planted-feet term read the max over every landmark named `feet`, `foot*`, `toe*`, and the root's `feet` never moves, so a key that FLOATED could not be seen (the first follow and critical fits floated 0.09 to 0.1 idle heights and the gate caught it); naming `["toe"]` makes the term see both ways. `rig_export.py`: a key's `layers` from `fit.keys.<pose>.layers`.
+- Tests: `tests/unit/tools/rig-subject-auron-v2.test.ts` (6), `test_lane.py` 20 OK (the jerk classes), `test_rig_pipeline.py` 12 OK, `test_rig_v2.py` 10 OK, the 28 rig vitest files 293 passed, `npx tsc --noEmit` clean.
+
+## Pass 2: sheets, files, effort
+
+Sheets for Bailey (the same three as pass 1 plus the KO alone, and a before/after of pass 1, pass 2 and the painting for cast, item, attack and ko): `D:/Tools/pyrefly-scratch/2026-10-18/rig-auron2/for-bailey/auron-rig-1-ko.png`, `-2-attack-hurt-return.png`, `-3-ready-lowhp-asleep.png`, `-4-cast-item-victory.png`, `-5-before-after.png`; the clips behind them in `.../rig-auron2/clips/*.mp4`, the recordings in `.../rig-auron2/rec/`. Colour renders of every key straight from the rig, no game: `.../rig-auron2/render/final-keys/`. Final keys, gate output, specs and the helper scripts: `.../rig-auron2/` (`keys-final.json`, `gate-final.txt`, `specs.json`, `tools/`).
+
+Fits: 28 jobs in 9 batches under ONE folder, `D:/pyrefly-art-rigs-work/auron-v2/lane/a1` to `a9` (3 to 6 minutes each at below-normal priority, under one fit slot), not the 156 scattered folders of pass 1; two were wasted and reverted (a sleep variant whose painted hilt and glove floated off a body that does not stand where the painting's does, and the sleeve cap above). The work folder `D:/pyrefly-art-rigs-work/auron-v2` holds the cut, the build, `fit/keys.json` and the batches.
+
+## Pass 2: what still looks wrong (plainly)
+
+- **It is still the idle's body in every pose.** The coat gathers in a red mass at the shoulders when the spine bends; the poses are better (an orb, a flask, a raised sword over the head, the blade low, a planted sword) and the limbs are real painted limbs, but the torso, head and coat are the idle's, so `cast` and `item` read as Auron in his red coat holding an orb and a flask, not as the painted robe.
+- **A small red wedge floats beside the hip in `item` and `follow`** (a smaller one in `cast`): the idle sleeve's lower flap, torn where the arm is bent and scaled (the sleeve scales 1.7 and the forearm inherits it). Hiding the sleeve's hand zone, a wider skin ramp and a forearm scale cap shrank it; none removed it, and capping the whole sleeve at 1.4 (a9, reverted) left a gap between the sleeve and the flask. Cutting the flap off the `armR` part and re-fitting the arm poses is the fix.
+- **The attack blade is thin** (the painted blade narrows to a few pixels in the middle and the 1x tier halves it again) and lies on the other side of the figure from the painting because the painting is turned for the rig; the red hood above the head is the painted sleeve and reads as a hat. The budget has 140 KB of PNG left, so the attack variant could not be made sharper.
+- **Variants swap in at half of the move** (the format's rule, no fade yet): the orb, the flask and the blade appear at once in the middle of the blend. The blends were looked at for `cast` only: no hole, no tear.
+- **`sleep` and `ko` have no variant.** `sleep` is pass 1's key with the idle's sword (a stub now that the grey blade is gone) and the idle's scabbard; `ko` has the idle's sword in the hand. A first sleep variant floated off the body and was reverted.
+- **Thin margins**: `cast` worst landmark 0.046 and `victory` 0.050 against the 0.06 bar (`attack` head 0.896 and `ready` head 0.900 against 0.85 now have room); the marks are by eye. Texels 8.16 of 9.0 Mpx and PNG 8.86 of 9.0 MB: one more variant needs a smaller one, or the base parts re-encoded.
+- The far leg is still a stand-in (darker, not a leg); `follow` and `ready` have both legs bent and the figure reads as hopping.
