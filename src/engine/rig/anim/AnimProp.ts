@@ -21,8 +21,8 @@ import {
   type Texture,
 } from 'three';
 
-/** World units: the vial is this tall in the hand (the figure is about 1.8 tall). */
-const VIAL_H = 0.2;
+/** World units: the vial is this tall in the hand (the figure is about 1.8 tall): a sixth of her height, a little over the painted vial's, so it reads at the game's camera distance. */
+const VIAL_H = 0.3;
 const DROPS = 9;
 
 /** Paint the vial: 128 x 256, upright, transparent around it. Null where there is no 2D canvas (a unit test). */
@@ -135,6 +135,8 @@ export class VialProp {
   readonly group = new Group();
   private readonly vial: Mesh;
   private readonly glow: Mesh;
+  /** A soft additive halo behind the vial while it is held and in flight, so the small prop reads. */
+  private readonly aura: Mesh;
   private readonly drops: Drop[] = [];
   private readonly mats: MeshBasicMaterial[] = [];
   private state: State = 'hidden';
@@ -159,6 +161,9 @@ export class VialProp {
     const glowMat = new MeshBasicMaterial({ map: glowTexture(), transparent: true, depthTest: false, depthWrite: false, toneMapped: false, blending: AdditiveBlending, opacity: 0 });
     this.glow = new Mesh(new PlaneGeometry(1, 1), glowMat);
     this.mats.push(mat, glowMat);
+    const auraMat = new MeshBasicMaterial({ map: glowTexture(), transparent: true, depthTest: false, depthWrite: false, toneMapped: false, blending: AdditiveBlending, opacity: 0.6, color: 0x7fd8ff });
+    this.aura = new Mesh(new PlaneGeometry(VIAL_H * 1.9, VIAL_H * 1.9), auraMat);
+    this.mats.push(auraMat);
     for (let i = 0; i < DROPS; i++) {
       const dm = new MeshBasicMaterial({ map: glowTexture(), transparent: true, depthTest: false, depthWrite: false, toneMapped: false, blending: AdditiveBlending, opacity: 0, color: 0x9fe8ff });
       const m = new Mesh(new PlaneGeometry(0.05, 0.05), dm);
@@ -167,11 +172,12 @@ export class VialProp {
       this.drops.push({ mesh: m, v: new Vector3() });
       this.group.add(m);
     }
-    this.group.add(this.vial, this.glow);
+    this.group.add(this.aura, this.vial, this.glow);
     this.group.visible = false;
     this.group.renderOrder = 999;
     for (const m of [this.vial, this.glow, ...this.drops.map((d) => d.mesh)]) m.renderOrder = 999;
-    for (const m of [this.glow, ...this.drops.map((d) => d.mesh)]) m.onBeforeRender = (_r, _s, camera: Camera): void => void m.quaternion.copy(camera.quaternion);
+    this.aura.renderOrder = 998;
+    for (const m of [this.aura, this.glow, ...this.drops.map((d) => d.mesh)]) m.onBeforeRender = (_r, _s, camera: Camera): void => void m.quaternion.copy(camera.quaternion);
   }
 
   get active(): boolean {
@@ -189,6 +195,7 @@ export class VialProp {
     this.scale = 0.2;
     this.group.visible = true;
     this.vial.visible = true;
+    this.aura.visible = true;
     this.glow.visible = false;
     for (const d of this.drops) d.mesh.visible = false;
   }
@@ -227,6 +234,8 @@ export class VialProp {
     if (this.state === 'held') {
       this.scale += (1 - this.scale) * Math.min(1, dt * 14);
       this.vial.scale.setScalar(this.scale);
+      this.aura.position.copy(this.vial.position);
+      this.aura.scale.setScalar(this.scale * (1 + 0.08 * Math.sin(this.t / 90)));
       return;
     }
     if (this.state === 'flying') {
@@ -238,6 +247,8 @@ export class VialProp {
       this.spin += dt * 17;
       this.vial.rotation.z = this.spin;
       this.vial.scale.setScalar(1 - 0.15 * u);
+      this.aura.position.copy(this.at);
+      this.aura.scale.setScalar(1 - 0.15 * u);
       if (u >= 1) this.burst();
       return;
     }
@@ -257,6 +268,7 @@ export class VialProp {
     this.state = 'burst';
     this.t = 0;
     this.vial.visible = false;
+    this.aura.visible = false;
     this.glow.visible = true;
     this.glow.position.copy(this.to);
     for (let i = 0; i < this.drops.length; i++) {
@@ -270,7 +282,7 @@ export class VialProp {
 
   dispose(): void {
     this.group.removeFromParent();
-    for (const m of [this.vial, this.glow, ...this.drops.map((d) => d.mesh)]) m.geometry.dispose();
+    for (const m of [this.vial, this.aura, this.glow, ...this.drops.map((d) => d.mesh)]) m.geometry.dispose();
     for (const m of this.mats) {
       m.map?.dispose();
       m.dispose();

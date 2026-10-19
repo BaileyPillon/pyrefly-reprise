@@ -68,6 +68,15 @@ export async function anim(g, spec, o) {
   const idleBusy = async () => !((await g.awaitingMenu()) && !(await page.evaluate(() => window.__pyrefly.battle().battlePresenter.playing)));
   const settle = async (max = 2400) => { for (let i = 0; i < max && (await idleBusy()); i++) await st.step(false); await skip(40); };
 
+  /** The one debug write besides the three actor calls: the party back to full HP and no statuses (`poses` mode's own rest set), so a blow of the foe's in the tail of a shot never downs her mid-recording. */
+  const heal = () => page.evaluate(() => {
+    const bs = window.__pyrefly.battle();
+    const s = window.__pyrefly.battleState();
+    const u = s.combatants;
+    for (const c of Array.isArray(u) ? u : Object.values(u)) if (c.side !== 'enemy') { c.hp = c.stats.maxHp; c.statuses = {}; }
+    bs.hud.syncVitals(s);
+  });
+
   /** Pass every turn that is not hers (defend) until her menu is up. */
   async function toHerTurn() {
     for (let k = 0; k < 12 && (await g.curActor()) !== who; k++) {
@@ -77,6 +86,7 @@ export async function anim(g, spec, o) {
       await settle();
     }
     if ((await g.curActor()) !== who) throw new Error(`${who} never got a turn`);
+    await heal();
     await skip(30);
   }
   const rows = () => page.evaluate(() => [...document.querySelectorAll('.ig-cmd-stack .ig-cmd')].map((e) => ({ label: e.querySelector('.ffx-cmd__label')?.textContent?.trim() ?? '', sel: e.classList.contains('ig-cmd--selected'), i: Number(e.getAttribute('data-ui-action')) })));
@@ -93,8 +103,8 @@ export async function anim(g, spec, o) {
     return false;
   }
   const logLen = () => page.evaluate(() => window.__pyrefly.battleLog().length);
-  const played = () => page.evaluate(() => window.__pyrefly.snapshotState()?.screenState?.playback?.played ?? 0);
-  const ended = () => page.evaluate(() => (window.__pyrefly.snapshotState()?.screenState?.playback?.lastEvents ?? []).some((e) => (e.type ?? e) === 'action-end'));
+  // `battlePresenter.playing` is the PROMISE of the burst in play (it stays set after it settles): a microtask race tells a settled one (false) from a pending one (true) without waiting on the paused clock
+  const playing = () => page.evaluate(() => { const p = window.__pyrefly.battle().battlePresenter.playing; return p ? Promise.race([p.then(() => false, () => false), Promise.resolve().then(() => true)]) : false; });
   const started = (from) => page.evaluate((f) => window.__pyrefly.battleLog().slice(f).some((e) => e.type === 'action-start'), from);
 
   // idle: she must be standing, not choosing
@@ -103,22 +113,22 @@ export async function anim(g, spec, o) {
   await record('idle', 300);
 
   /** One real action: `keys` are pressed (each followed by a few frames), recording from the first press until the action has played and `o.tail` frames after. */
-  async function action(name, keys, tail = 100, prelude = null) {
+  async function action(name, keys, tail = 50, prelude = null) {
     await toHerTurn();
     if (prelude) await prelude(); // menu moves that are not part of the shot
     const from = await logLen();
-    const playedBefore = await played();
     const pressLog = [];
-    let done = false;
-    const seg = await record(name, 2400, {
+    let sawPlaying = false;
+    const seg = await record(name, 1500, {
       extra: tail,
       onFrame: async (i) => {
         if (i < 6) return;
         const k = Math.floor((i - 6) / 16);
         if ((i - 6) % 16 === 0 && k < keys.length) { await input.press(keys[k]); pressLog.push({ frame: i, key: keys[k] }); }
-        if (!done && k >= keys.length && !(await started(from)) && (i - 6) % 24 === 0) { await input.press('Enter'); pressLog.push({ frame: i, key: 'Enter (retry)' }); }
+        if (k >= keys.length && (i - 6) % 24 === 0 && !(await started(from))) { await input.press('Enter'); pressLog.push({ frame: i, key: 'Enter (retry)' }); } // the target prompt, or a confirm
       },
-      until: async () => { done = true; return (await started(from)) && (await played()) >= playedBefore + 5 && (await ended()); },
+      // over when the action has started and the presenter, having played it, is idle again (the burst's own event count varies: an attack is three events)
+      until: async () => { const pl = await playing(); if (pl) sawPlaying = true; return sawPlaying && !pl && (await started(from)); },
     });
     seg.presses = pressLog;
     seg.events = await page.evaluate((f) => window.__pyrefly.battleLog().slice(f).map((e) => ({ type: e.type, actorId: e.actorId ?? null, targetId: e.targetId ?? null, abilityId: e.abilityId ?? null })), from);
@@ -128,9 +138,10 @@ export async function anim(g, spec, o) {
 
   await action('attack', ['Enter', 'Enter']);
   await action('cast', spec.castKeys ?? ['ArrowDown', 'ArrowDown', 'Enter', 'Enter']);
-  await action('item', ['Enter', 'Enter', 'Enter'], 100, async () => { if (!(await pickRow('item'))) throw new Error('no Item row in the command menu'); });
+  await action('item', ['Enter', 'Enter', 'Enter'], 50, async () => { if (!(await pickRow('item'))) throw new Error('no Item row in the command menu'); });
 
   // victory, hurt and ko: the actor, as the presenter calls it
+  await heal();
   await page.evaluate((id) => { const a = window.__pyrefly.battle().stage.actor(id); a.setPose('idle', { immediate: true }); }, who);
   await skip(60);
   await record('victory', 215, { onFrame: async (i) => { if (i === 20) await page.evaluate((id) => window.__pyrefly.battle().stage.actor(id).setPose('victory'), who); } });

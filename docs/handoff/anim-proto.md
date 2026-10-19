@@ -5,13 +5,13 @@ Today a rig figure blends from one key pose to the next: one key an action, a li
 same clips on Lulu (whose rig Bailey approved), recorded as short in-game videos for Bailey to pick from (end state first, `AGENTS.md` rule 9). **Nothing ships, no switch is on for players.**
 Game case: **FFX** (Lulu is an FFX figure, `characters/lulu/*`); the animation system itself is shared plumbing (both games: no file in it knows which game a figure is from).
 
-**State:** built, unit-tested, recorded; on branch `anim-proto` (pushed). Not merged, not deployed, no review run. Videos and notes: `D:/Tools/Tools/pyrefly-scratch/2026-10-18/anim-proto/` (see "Videos").
+**State:** built, unit-tested, recorded; on branch `anim-proto` (pushed). Not merged, not deployed, no review run. Videos and notes: `D:/Tools/pyrefly-scratch/2026-10-18/anim-proto/` (`notes.md` first; "Videos" below).
 
 ## What a player sees
 
 Nothing. The prototype is read from the page's query (`?anim=proto&style=A|B|C`) **only in a dev build** (`import.meta.env.DEV`; a production bundle replaces it with `false` and never reads the query), and only a
 rig that has the keys the clips are made of (`idle ready attack follow cast item hurt ko victory`) gets a layer. With the flag off the actor is the rig it always was: `tests/unit/rig/rig-v1-unchanged.test.ts`
-(the exact geometry golden) and the 201 rig tests of the base pass unchanged, and `anim-actor.test.ts` pins "off means the ordinary move".
+(the exact geometry golden) and the rest of the base's rig tests (276) pass unchanged, and `anim-actor.test.ts` pins "off means the ordinary move".
 
 ## The pieces (`src/engine/rig/anim/`, every file under 400 lines, strict TS, explicit `.ts` imports)
 
@@ -55,8 +55,18 @@ By hand: a dev server with the rig served as `lulu` (`tools/vite-rig-art.mjs`, `
 
 `tests/unit/rig/anim-clip.test.ts` (curves, poses, the sampler, exact marks and the hit frame), `anim-secondary.test.ts` (stable and bounded springs, the fixed step, the residual is zero at rest, drag, the braid, the idle), `anim-library.test.ts`
 (the three styles; every clip on Lulu's real rig and on a bare rig; the leads), `anim-animator.test.ts` (the strike on the apex, events, the smear), `anim-actor.test.ts` (off by default; on, the clip plays; the beats; determinism).
-See the end of this note for the counts.
+Counts: 5 new files, 74 tests; the whole rig set (`tests/unit/rig`, `tests/unit/tools/rig-*`) is 350 tests in 31 files, all passing. `npx tsc --noEmit` is clean. `node tools/orphans.mjs`: 26 orphans, the same 26 as the base (the new modules are reachable).
+`node tools/critic-plan.mjs --paths <the presenter hooks>` classes the change **DEEP** (`BattlePresenterBeats.ts` and `BattlePresenterPorts.ts` are the shared presenter system; `RigActor.ts` and `RigKeys.ts` the rig engine); nothing ships from this branch without Bailey's pick and the review that class owes.
+
+## Videos
+
+`D:/Tools/pyrefly-scratch/2026-10-18/anim-proto/final/`: `style-A.mp4`, `style-B.mp4`, `style-C.mp4`, `today.mp4`, `compare-cast.mp4`, `compare-item.mp4`, `compare-attack.mp4`, `contact-{today,A,B,C}.png`; `timings.md`, `notes.md`; `sim/` (the no-browser simulation); `rec/` (the raw frames and `segments.json`). The recordings are the real game (hidden Sinspawn Gui chapter, door word `mushroom`), 1600 x 900 at 60 fps from the kit's recorder (`record.mjs --modes anim`), one session a variant, the same script every time: attack, cast and item are real key presses through the real presenter; victory, hurt and KO are the actor calls the presenter makes (`setPose('victory')`; `flash`, `shake`, `recoil`; `setPose('ko')`), so no foe has to hit her; the party's HP is set to full before each of her turns (the one debug write). At the game's default pace ("steady", x1.2 on FFX) every clip and every presenter wait is 1.2 times its base ms.
 
 ## What is NOT done and what to know
 
-See "What still looks wrong" and the recommendation in `D:/Tools/pyrefly-scratch/2026-10-18/anim-proto/notes.md`.
+- Only Lulu has authored accents; any rig with the nine keys gets the procedural set and keeps its own idle and chains (`genericOf`), but it is untried on a second rig.
+- FFX-2 was not run (its ATB and Active mode call the presenter differently, and a dressphere's `cast`, `item` and `ko` fall straight to the idle, D-179, which the clips do not honour yet): the presenter's waits would apply to both games, so FFX-2 needs its own case (AGENTS.md rule 14).
+- The styles lengthen an item (A +0.4 s, B +0.9 s, C +1.5 s) and an attack (+0.1 to 0.4 s): a pacing decision for Bailey, see `notes.md`.
+- The lattice warp (a rippling skirt), a painted smear and the mocap retarget of the research notes are not built (the lattice and the mocap wait for the pick).
+- The `ActorHandle` members `animBegin`, `animLead` and `animBeat` are optional and additive; no other actor answers them. `docs/CONTRACTS.md` does not list `BattlePresenterPorts.ts`, so no `CONTRACT-CHANGES` entry was written.
+- See "What still looks wrong" and the recommendation in `notes.md` (B's look on A's clock for the actions that repeat).

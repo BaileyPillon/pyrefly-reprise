@@ -42,19 +42,10 @@ function box(r) {
   return [x0, y0, x1, y1].every(Number.isFinite) ? { x0, y0, x1, y1 } : null;
 }
 
-/** The crop of a segment, the same for every variant: the union of Lulu's and her target's rects (when the segment has one), padded, made 16:9 and kept inside 1600 x 900. */
-function cropOf(seg, withTarget) {
-  const rs = VARIANTS.flatMap((v) => { const s = info[v].segments[seg]; return s ? [box(s.rectLulu), ...(withTarget ? [box(s.rectTarget)] : [])] : []; }).filter(Boolean);
-  if (!rs.length) return { x: 0, y: 0, w: 1600, h: 900 };
-  let x0 = Math.min(...rs.map((r) => r.x0)), y0 = Math.min(...rs.map((r) => r.y0)), x1 = Math.max(...rs.map((r) => r.x1)), y1 = Math.max(...rs.map((r) => r.y1));
-  const padX = (x1 - x0) * (withTarget ? 0.35 : 0.9), padY = (y1 - y0) * 0.2;
-  x0 -= padX; x1 += padX; y0 -= padY; y1 += padY;
-  let w = x1 - x0, h = y1 - y0;
-  if (w / h > 16 / 9) { const nh = w * 9 / 16; y0 -= (nh - h) / 2; h = nh; } else { const nw = h * 16 / 9; x0 -= (nw - w) / 2; w = nw; }
-  w = Math.min(w, 1600); h = Math.min(h, 900);
-  const x = Math.round(Math.max(0, Math.min(1600 - w, x0))), y = Math.round(Math.max(0, Math.min(900 - h, y0)));
-  return { x, y, w: Math.round(w) & ~1, h: Math.round(h) & ~1 };
-}
+/** The crop every video and sheet uses: the party's side of the field (Lulu, the ally a vial is thrown to, the foe's feet), 1000 x 562 at (420, 337) of the 1600 x 900 canvas. The game's camera pushes in and out a little during a cast; she stays inside it. */
+const CROP = { x: 420, y: 337, w: 1000, h: 562 };
+const CROP_SHEET = { x: 470, y: 440, w: 800, h: 450 }; // the contact sheets are tighter on Lulu
+const cropOf = () => CROP;
 
 // 1. one labelled video per variant, the segments in sequence
 for (const v of VARIANTS) {
@@ -88,13 +79,13 @@ for (const seg of ['cast', 'item', 'attack']) {
 // 3. a contact sheet a variant: a row a segment, eight frames across the part of it that moves
 for (const v of VARIANTS) {
   const comps = [];
-  const cw = 300, ch = 169, lab = 96;
+  const cw = 360, ch = 203, lab = 96;
   let row = 0;
   for (const seg of ORDER) {
     const s = info[v].segments[seg];
     if (!s) continue;
     const n = frames(v, seg);
-    const c = cropOf(seg, seg === 'attack' || seg === 'cast' || seg === 'item');
+    const c = CROP_SHEET;
     const last = seg === 'idle' ? n - 1 : Math.min(n - 1, Math.max(40, lastMove(s)));
     const picks = Array.from({ length: 8 }, (_, i) => Math.round((last * i) / 7));
     comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${lab}" height="${ch}"><text x="6" y="22" font-family="sans-serif" font-size="16" fill="#f0d68a">${LABEL[seg]}</text></svg>`), left: 0, top: row * ch });
