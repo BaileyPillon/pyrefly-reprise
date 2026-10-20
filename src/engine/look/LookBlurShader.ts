@@ -1,4 +1,4 @@
-import { Vector2 } from 'three';
+import { Vector2, Vector4 } from 'three';
 
 /**
  * Demo looks: the mask-aware tilt-shift (HD-2D, and a trace of it in the cinematic look). Two passes (`direction` (1,0) then (0,1)) with a variable radius from a
@@ -7,6 +7,8 @@ import { Vector2 } from 'three';
  *  - the blur gathers only from backdrop pixels, so a figure's colour never smears into the background (no ghost halo round a silhouette);
  *  - the far side (top) and the near side (bottom) have their own strengths, and bright points in the blur grow into soft bokeh discs (`bokeh`);
  *  - the taps are jittered per pixel (interleaved gradient noise) so a wide blur from few taps is a fine grain, not bands.
+ *  - bold strength: `uBox` holds every actor's screen box (party and foes, `LookBold.boxes`); the blur is zero inside one (feathered at its edge) and a box's pixels are never gathered,
+ *    so an actor whose alpha a hit flash or a glow has raised (and so reads as backdrop in the mask) still stays razor sharp.
  * `BLUR_TAPS` is a compile-time constant (the quality tier). The alpha is passed through untouched, so the next passes still see the mask. Both games.
  */
 export const LookBlurShader = {
@@ -26,6 +28,9 @@ export const LookBlurShader = {
     nearPx: { value: 7 },
     /** How much a highlight's weight grows in the blur (0 = a plain blur). */
     bokeh: { value: 1.5 },
+    /** Bold: each actor's screen box (x0, y0, x1, y1 in frame uv) and how many (0 = none: pass 1's blur exactly). */
+    uBox: { value: [] as Vector4[] },
+    boxN: { value: 0 },
   },
 
   vertexShader: /* glsl */ `
@@ -48,7 +53,22 @@ export const LookBlurShader = {
     uniform float farPx;
     uniform float nearPx;
     uniform float bokeh;
+    uniform vec4 uBox[MAX_BOX];
+    uniform float boxN;
     varying vec2 vUv;
+
+    // 1 inside any actor's box, feathered at its edge (a twelfth of its size), 0 outside
+    float boxMask(vec2 p) {
+      float m = 0.0;
+      for (int i = 0; i < MAX_BOX; i++) {
+        if (float(i) >= boxN) break;
+        vec4 b = uBox[i];
+        vec2 f = max((b.zw - b.xy) * 0.08, vec2(0.005));
+        vec2 q = smoothstep(b.xy - f, b.xy + f, p) * (1.0 - smoothstep(b.zw - f, b.zw + f, p));
+        m = max(m, q.x * q.y);
+      }
+      return m;
+    }
 
     float ign(vec2 p) {
       return fract(52.9829189 * fract(dot(p, vec2(0.06711056, 0.00583715))));
@@ -63,6 +83,7 @@ export const LookBlurShader = {
       float fig = 1.0 - clamp(base.a, 0.0, 1.0);
       // a figure keeps its own pixels: its blur share fades out as the pixel becomes mostly figure
       float keep = smoothstep(0.15, 0.85, fig);
+      if (boxN > 0.5) keep = max(keep, boxMask(vUv));
       if (radius < 0.4 || keep >= 0.999) {
         gl_FragColor = base;
         return;
@@ -76,6 +97,7 @@ export const LookBlurShader = {
         vec4 s = texelAt(vUv + stepUv * o);
         float w = exp(-(o * o) * 2.0);
         w *= smoothstep(0.5, 1.0, s.a); // backdrop pixels only: a figure never smears into the background
+        if (boxN > 0.5) w *= 1.0 - boxMask(vUv + stepUv * o);
         float l = dot(s.rgb, vec3(0.2126, 0.7152, 0.0722));
         w *= 1.0 + bokeh * smoothstep(0.75, 1.6, l);
         sum += s.rgb * w;
