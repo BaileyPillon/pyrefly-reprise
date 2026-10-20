@@ -7,7 +7,7 @@ import { LUT_SIZE } from '../../src/engine/fx/a/LookLut.ts';
 /** Demo looks (dev flag only; both games): the address, the presets as data, the quality tiers and the grades. */
 describe('parseLook', () => {
   it('is off with no flag and not armed', () => {
-    expect(parseLook('')).toEqual({ armed: false, name: null, quality: 'high', debug: null });
+    expect(parseLook('')).toEqual({ armed: false, name: null, quality: 'high', debug: null, strength: 'subtle', drift: false });
     expect(parseLook('?fx=off&crisp=a2')).toMatchObject({ armed: false, name: null });
   });
 

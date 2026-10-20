@@ -34,6 +34,8 @@ export const LookMainShader = {
     shaftRays: { value: 0.5 },
     /** hd2d motes: gain, size (frame heights), speed. */
     motes: { value: new Vector3(1, 0.003, 1) },
+    /** Bold: the soft glow round each mote and the share of grid cells that carry one (0.4 = pass 1's). */
+    moteExtra: { value: new Vector2(0, 0.4) },
     moteColor: { value: new Vector3(1, 0.82, 0.55) },
     /** cinematic fog: density, speed, height (0..1 up the frame). */
     fog: { value: new Vector3(0.5, 1, 0.6) },
@@ -77,6 +79,7 @@ export const LookMainShader = {
     uniform float shaftDecay;
     uniform float shaftRays;
     uniform vec3 motes;
+    uniform vec2 moteExtra;
     uniform vec3 moteColor;
     uniform vec3 fog;
     uniform float fogOnFigures;
@@ -160,12 +163,13 @@ export const LookMainShader = {
         col = mix(col, f, fig);
       }
 
-      #ifdef LOOK_HD2D
+      #if defined(LOOK_HD2D) || defined(LOOK_CINE)
       {
         vec2 toL = uLight - uv;
         vec2 toLa = toL * vec2(aspect, 1.0);
         float dist = length(toLa);
         // light shafts: march from this pixel toward the light, gathering light from the bright backdrop pixels on the way (a figure blocks it)
+        if (shaft.x > 0.0) {
         vec3 acc = vec3(0.0);
         float wgt = 1.0;
         vec2 stepv = toL * shaft.y / float(SHAFT_SAMPLES);
@@ -184,9 +188,11 @@ export const LookMainShader = {
         float atSrc = 1.0 - smoothstep(0.02, 0.1, dist);
         float reach = 1.0 - smoothstep(0.35, 1.25, dist);
         vec3 sh = acc * lightColor * shaft.x * beams * reach * (0.4 + 0.6 * (1.0 - atSrc));
-        col += sh * (1.0 - 0.7 * fig);
+        col += sh * (1.0 - (shaft.x > 0.9 ? 0.45 : 0.7) * fig);
+        }
 
         // motes: drifting points of light in layers; the far ones go behind the figures, the near one passes in front
+        if (motes.x > 0.0) {
         vec2 q = vec2(uv.x * aspect, uv.y);
         vec3 m = vec3(0.0);
         for (int L = 0; L < MOTE_LAYERS; L++) {
@@ -200,19 +206,22 @@ export const LookMainShader = {
             for (int dx = -1; dx <= 1; dx++) {
               vec2 c = id + vec2(float(dx), float(dy));
               vec2 h = hash22(c + fl * 31.7);
-              float present = step(0.6, hash21(c * 1.37 + fl * 7.1));
+              float present = step(1.0 - moteExtra.y, hash21(c * 1.37 + fl * 7.1));
               vec2 pos = (c + 0.15 + 0.7 * h) * gs;
               float r = motes.y * (1.0 + 1.1 * fl) * (0.6 + 0.8 * h.x);
               float d = length(qq - pos);
               float tw = 0.55 + 0.45 * sin(time * (0.8 + 1.7 * h.y) + h.x * 40.0);
               float a = 1.0 - smoothstep(0.0, r, d);
               float core = a * a * (0.35 + 0.65 * a);
+              float halo = 1.0 - smoothstep(0.0, r * 3.4, d);
+              core += moteExtra.x * halo * halo * 0.4;
               float front = (L == MOTE_LAYERS - 1) ? 1.0 : 0.0;
               m += moteColor * core * tw * present * (0.55 + 0.45 * fl / max(1.0, float(MOTE_LAYERS - 1))) * mix(1.0 - fig, 1.0, front);
             }
           }
         }
         col += m * motes.x * 0.7;
+        }
       }
       #endif
 

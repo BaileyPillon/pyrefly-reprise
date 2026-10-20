@@ -14,14 +14,17 @@ import { applyFigureTrue, figureTrueOf } from '../figureTrue.ts';
 import { setMaskEveryFigure } from '../BloomMask.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { boundEyeCandyScene } from '../fx/a/GoldenHour.ts';
-import { LOOKS, QUALITY_COST, type LookName, type LookParams, type LookQuality } from './LookConfig.ts';
+import { QUALITY_COST, type LookName, type LookParams, type LookQuality } from './LookConfig.ts';
+import { lookParams, relightParams, roomBold } from './LookBoldConfig.ts';
+import { LookBold } from './LookBold.ts';
+import { LookDrift } from './LookDrift.ts';
 import { ROOM_LOOKS } from './LookGrades.ts';
 import { LookBlurShader } from './LookBlurShader.ts';
 import { LookMainShader } from './LookMainShader.ts';
 import { lightColour } from './LookMaths.ts';
 import { LookRoom, lin, mixc } from './LookRoom.ts';
 import { relightCells, relightStats } from './relight/FigureRelight.ts';
-import { RELIGHT, keyDirection, rimDirection } from './relight/RelightConfig.ts';
+import { keyDirection, rimDirection } from './relight/RelightConfig.ts';
 import { RelightLights } from './relight/RelightLights.ts';
 import { lookState } from './LookState.ts';
 
@@ -36,6 +39,9 @@ export class LookRig {
   private active: LookName | null = null;
   private readonly room = new LookRoom();
   private readonly lights = new RelightLights();
+  /** Bold strength (`?lookstrength=bold`): the extra pass; built the first time it is wanted. */
+  private bold: LookBold | null = null;
+  private readonly drift = new LookDrift();
   private version = -1;
   private quality: LookQuality = lookState.quality;
   private prevSub: string[] = [];
@@ -46,7 +52,7 @@ export class LookRig {
   private lastNow = 0;
   private readonly buf = new Vector2();
   /** For the debug API and the captures. */
-  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> } };
+  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> }, strength: 'subtle' as string, bold: null as LookBold['stats'] | null, drift: null as LookDrift['stats'] | null };
 
   constructor(private readonly r: Renderer) {}
 
@@ -58,7 +64,8 @@ export class LookRig {
     p = new ShaderPass({ ...LookMainShader, defines: this.defines(name) } as never);
     p.enabled = false;
     const gi = this.r.composer.passes.indexOf(this.r.gradePass);
-    this.r.composer.insertPass(p, gi < 0 ? this.r.composer.passes.length : gi);
+    const bi = this.bold?.pass ? this.r.composer.passes.indexOf(this.bold.pass) : -1; // the bold pass runs after the compound pass
+    this.r.composer.insertPass(p, bi >= 0 ? bi : gi < 0 ? this.r.composer.passes.length : gi);
     this.main.set(name, p);
     return p;
   }
@@ -151,7 +158,7 @@ export class LookRig {
     }
     if (this.active !== wantName) {
       this.active = wantName;
-      this.applyPolicy(LOOKS[wantName]);
+      this.applyPolicy(lookParams(wantName, lookState.strength));
       this.prevFigureTrue = figureTrueOf(this.r);
       this.prevTilt = { focus: this.r.tiltH.uniforms['focus']!.value as number, band: this.r.tiltH.uniforms['bandWidth']!.value as number };
     }
@@ -168,7 +175,8 @@ export class LookRig {
   }
 
   private frame(name: LookName, camera: Camera): void {
-    const p = LOOKS[name];
+    const p = lookParams(name, lookState.strength);
+    const bold = lookState.strength === 'bold' && name !== 'anime';
     const v = (path: string): number => this.val(p, path);
     const r = this.r;
     const cost = QUALITY_COST[lookState.quality];
@@ -186,7 +194,7 @@ export class LookRig {
 
     // --- the grade: the look LUT, the vignette, the grain, the saturation (written after option A, which writes its own each frame)
     const g = r.gradePass.uniforms;
-    g['uLook']!.value = this.room.lutFor(name);
+    g['uLook']!.value = this.room.lutFor(name, lookState.strength);
     g['lookAmount']!.value = v('grade.lookAmount');
     (g['vignetteTint']!.value as Vector3).set(...p.grade.vignetteTint);
     g['vignette']!.value = (pal.vignette ?? 0.46) + v('grade.vignetteAdd');
@@ -253,6 +261,7 @@ export class LookRig {
     u['shaftDecay']!.value = p.shaft.decay;
     u['shaftRays']!.value = v('shaft.rays');
     (u['motes']!.value as Vector3).set(v('motes.gain'), (v('motes.size') * scale) / H, v('motes.speed'));
+    (u['moteExtra']!.value as Vector2).set(v('motes.glow'), p.motes.density ?? 0.4);
     (u['moteColor']!.value as Vector3).set(...lin(mixc(lightColour(this.room.light.color), [1, 0.84, 0.58], 0.5)));
     (u['fog']!.value as Vector3).set(v('fog.density'), v('fog.speed'), v('fog.height'));
     u['fogOnFigures']!.value = v('fog.onFigures');
@@ -267,6 +276,16 @@ export class LookRig {
     (u['figLift']!.value as Vector3).set(...p.figure.lift);
     u['figContrast']!.value = v('figure.contrast');
     this.relight(name, u['uLight']!.value as Vector2, W / Math.max(1, H), camera);
+    const lightUv = u['uLight']!.value as Vector2;
+    if (bold) {
+      this.bold ??= new LookBold(r);
+      this.bold.update({ scene: this.room.scene!, camera, name, room: this.room, lights: this.lights, quality: lookState.quality, dt, time: eyeCandy.frozen ? 0.5 : this.clock, scale, W, H, aspect: W / Math.max(1, H), lightUv: [lightUv.x, lightUv.y], tweak: (k, d) => lookState.tweaks[k] ?? d });
+    } else this.bold?.off();
+    if (lookState.drift) this.drift.update(this.room.scene!, camera, this.room.painting, roomBold(this.room.key).driftPx ?? 3, dt, W, scale, lookState.commandOpen);
+    else this.drift.release();
+    this.stats.strength = bold ? 'bold' : 'subtle';
+    this.stats.bold = bold ? (this.bold?.stats ?? null) : null;
+    this.stats.drift = lookState.drift ? this.drift.stats : null;
     this.stats.look = name;
     this.stats.quality = lookState.quality;
     this.stats.relight = { any: relightCells.relightAny.value > 0, bound: relightStats.bound, loaded: relightStats.loaded, missing: relightStats.missing, lights: this.lights.stats.lights };
@@ -275,7 +294,7 @@ export class LookRig {
 
   /** Light on the paintings: the figures lit with their normal maps (hd2d and cinematic; anime stays flat): a key from the room's light, a rim from behind, coloured lights for spells and the orb. */
   private relight(name: LookName, lightUv: Vector2, aspect: number, camera: Camera): void {
-    const rl = RELIGHT[name];
+    const rl = relightParams(name, lookState.strength);
     const c = relightCells;
     if (!rl) {
       c.relightAny.value = 0;
@@ -303,6 +322,8 @@ export class LookRig {
     this.room.leave();
     relightCells.relightAny.value = 0;
     this.lights.remove();
+    this.bold?.off();
+    this.drift.release();
     for (const mp of this.main.values()) mp.enabled = false;
     if (this.blurH && this.blurV) this.blurH.enabled = this.blurV.enabled = false;
     this.restorePolicy();
@@ -335,6 +356,7 @@ export class LookRig {
       this.r.composer.removePass(b);
       b.dispose();
     }
+    this.bold?.dispose();
     this.room.dispose();
     this.main.clear();
   }

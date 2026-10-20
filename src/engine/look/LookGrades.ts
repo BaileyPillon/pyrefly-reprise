@@ -8,7 +8,8 @@
  * (`pivot`), where option A's S-curve (`fx/a/LookLut.ts`) pivots at 0.5 and so darkens every mid tone.
  */
 import { FFX2_RECIPE, LUT_DOMAIN, LUT_SIZE, atLuma, complement, hexRgb, luma, shoulder, type LookPalette } from '../fx/a/LookLut.ts';
-import type { LookName, Rgb } from './LookConfig.ts';
+import type { LookName, LookStrength, Rgb } from './LookConfig.ts';
+import { BOLD_BASE, applyHueBoosts, boldRoom, type HueBoost } from './LookGradesBold.ts';
 
 export type GameKey = 'ffx' | 'ffx2';
 
@@ -35,6 +36,8 @@ export interface GradeRecipe {
   deepDesat: number;
   /** A global saturation multiplier on the graded colour (1 = as it is). */
   sat: number;
+  /** Bold strength: pulls on single hues (`LookGradesBold.ts`), so a room's own colours separate. */
+  hues?: readonly HueBoost[];
 }
 
 /** One room's overrides for one look. Every field is optional: unset means "derive it from the painting". */
@@ -85,9 +88,10 @@ const smooth = (a: number, b: number, x: number): number => {
 };
 
 /** The recipe in force for a look, a game and a room: the base, the game's flavour of it, the painting's hues, the room's overrides. */
-export function recipeFor(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette): GradeRecipe {
-  const room = ROOM_LOOKS[look][sceneKey];
-  const r: GradeRecipe = { ...BASE[look] };
+export function recipeFor(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle'): GradeRecipe {
+  const bold = strength === 'bold' && look !== 'anime';
+  const room = (bold ? boldRoom(look, sceneKey) : undefined) ?? ROOM_LOOKS[look][sceneKey];
+  const r: GradeRecipe = { ...(bold ? BOLD_BASE[look as 'hd2d' | 'cinematic'] : BASE[look]) };
   const key = hexRgb(palette.key);
   const sky = hexRgb(palette.sky);
   if (look === 'cinematic') {
@@ -143,12 +147,13 @@ export function applyGrade(c: Readonly<Rgb>, r: GradeRecipe): Rgb {
   const mids = Math.max(0, 1 - Math.abs(l2 - 0.3) / 0.7);
   const deep = 1 - smooth(0.0, 0.12, l2);
   const sat = (1 + r.midSat * mids - r.deepDesat * deep) * r.sat;
-  return [0, 1, 2].map((i) => clamp01(l2 + (o[i]! - l2) * sat)) as Rgb;
+  const out = [0, 1, 2].map((i) => clamp01(l2 + (o[i]! - l2) * sat)) as Rgb;
+  return r.hues && r.hues.length ? applyHueBoosts(out, r.hues) : out;
 }
 
 /** The LUT bytes for a look in a room (`LUT_SIZE` cubed RGBA, red fastest, each axis encoded `c = LUT_DOMAIN * u^2`): `GradeShader`'s `uLook`. */
-export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette): Uint8Array {
-  const r = recipeFor(look, game, sceneKey, palette);
+export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle'): Uint8Array {
+  const r = recipeFor(look, game, sceneKey, palette, strength);
   const out = new Uint8Array(LUT_SIZE * LUT_SIZE * LUT_SIZE * 4);
   const dec = (k: number): number => {
     const u = k / (LUT_SIZE - 1);
@@ -170,6 +175,6 @@ export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palett
 }
 
 /** A cache key that changes whenever the LUT would. */
-export function lutKey(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette): string {
-  return `${look}:${game}:${sceneKey}:${palette.key}:${palette.sky}`;
+export function lutKey(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle'): string {
+  return `${look}:${game}:${sceneKey}:${palette.key}:${palette.sky}${strength === 'bold' && look !== 'anime' ? ':bold' : ''}`;
 }

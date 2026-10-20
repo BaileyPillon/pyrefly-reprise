@@ -1,0 +1,105 @@
+/**
+ * Demo looks, BOLD strength: the grade recipes of `?lookstrength=bold` (richer contrast, a per-room grade) and the hue-selective boost the LUT carries so a room's own
+ * colours separate: Chapter I's icy blue stays luminous (cyan pushed up, never grey), Chapter IV's lamps go warm amber against the cyan skylight (orange and cyan each
+ * lifted and pulled toward their pure hue). A LUT cannot know where a pixel is, only what colour it is, so the boost is by hue: whatever is orange in the Bevelle
+ * underground (a lamp, the dragon's wing) gets warmer, which is what the painting already says. Pure data and maths (no `three`). Both games: each room's recipe answers
+ * to its own painting.
+ */
+import type { GradeRecipe, RoomLook } from './LookGrades.ts';
+import type { LookName, Rgb } from './LookConfig.ts';
+
+/** A pull on one hue: its centre (degrees), how wide (degrees, each side), the saturation and the brightness multipliers, and a nudge toward a pure colour. */
+export interface HueBoost {
+  hue: number;
+  width: number;
+  sat: number;
+  lum: number;
+  toward?: Rgb;
+  shift?: number;
+}
+
+const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
+
+/** Hue 0..360 and saturation 0..1 of an RGB colour (0..1 per channel). */
+export function hueSat(c: Readonly<Rgb>): { h: number; s: number; v: number } {
+  const mx = Math.max(c[0], c[1], c[2]);
+  const mn = Math.min(c[0], c[1], c[2]);
+  const d = mx - mn;
+  let h = 0;
+  if (d > 1e-6) {
+    if (mx === c[0]) h = ((c[1] - c[2]) / d) % 6;
+    else if (mx === c[1]) h = (c[2] - c[0]) / d + 2;
+    else h = (c[0] - c[1]) / d + 4;
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+  return { h, s: mx > 1e-6 ? d / mx : 0, v: mx };
+}
+
+/** The boosts applied to a graded colour (0..1 per channel): weighted by closeness in hue, and by how coloured (a grey is left alone) and how bright the pixel is. */
+export function applyHueBoosts(c: Readonly<Rgb>, boosts: readonly HueBoost[]): Rgb {
+  let o: Rgb = [c[0], c[1], c[2]];
+  const hs = hueSat(c);
+  const luma = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  for (const b of boosts) {
+    let dh = Math.abs(hs.h - b.hue);
+    if (dh > 180) dh = 360 - dh;
+    const wh = clamp01(1 - dh / b.width);
+    const w = wh * wh * (3 - 2 * wh) * clamp01(hs.s * 2.2) * clamp01(0.12 + hs.v * 2);
+    if (w <= 0) continue;
+    const sat = 1 + (b.sat - 1) * w;
+    const lum = 1 + (b.lum - 1) * w;
+    o = [0, 1, 2].map((i) => clamp01((luma + (o[i]! - luma) * sat) * lum)) as Rgb;
+    if (b.toward && b.shift) {
+      const k = b.shift * w;
+      o = [0, 1, 2].map((i) => clamp01(o[i]! + (b.toward![i]! - o[i]!) * k * 0.6 * o[i]!)) as Rgb;
+    }
+  }
+  return o;
+}
+
+/** The base recipes of the two bold looks (anime has none). */
+export const BOLD_BASE: Readonly<Record<'hd2d' | 'cinematic', GradeRecipe>> = {
+  hd2d: { exposure: 1.12, gamma: 1.1, contrast: 0.34, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.25, shadowHue: [0.2, 0.28, 0.66], highlightHue: [1.0, 0.9, 0.7], topBias: [1, 0.92, 0.74], topBiasAmount: 0.3, midSat: 0.5, deepDesat: 0, sat: 1.2 },
+  cinematic: { exposure: 1.0, gamma: 1.02, contrast: 0.72, pivot: 0.3, shoulder: 0.76, shadowSplit: 0.6, highlightSplit: 0.4, shadowHue: null, highlightHue: null, topBias: null, topBiasAmount: 0, midSat: 0.25, deepDesat: 0.1, sat: 0.95 },
+};
+
+type RoomRecipes = Readonly<Record<string, RoomLook>>;
+
+/** The bold grade per room. `hues` rides in the recipe (`GradeRecipe.hues`). */
+export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
+  hd2d: {
+    // Chapter I: luminous icy blue: lifted mids, indigo shadows (not teal-black), cyan-white highlights, the moon a touch warm; cyan and blue pushed, never greyed.
+    gagazet: {
+      shadow: [0.1, 0.2, 0.66],
+      highlight: [0.82, 0.96, 1.0],
+      recipe: { exposure: 1.17, gamma: 1.13, contrast: 0.42, pivot: 0.28, shoulder: 0.86, shadowSplit: 0.36, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.25, midSat: 0.55, sat: 1.22, hues: [{ hue: 195, width: 45, sat: 1.22, lum: 1.07 }, { hue: 228, width: 30, sat: 1.1, lum: 1.03 }] },
+      focus: 0.36,
+    },
+    // Chapter IV: violet shadows, amber lamps against the cyan skylight (each hue lifted and pulled toward itself).
+    'bevelle-underground': {
+      shadow: [0.2, 0.12, 0.52],
+      highlight: [1.0, 0.82, 0.58],
+      recipe: { exposure: 1.12, gamma: 1.08, contrast: 0.4, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.5, sat: 1.16, hues: [{ hue: 26, width: 32, sat: 1.5, lum: 1.3, toward: [1, 0.68, 0.26], shift: 0.5 }, { hue: 192, width: 36, sat: 1.35, lum: 1.12, toward: [0.2, 0.9, 1.0], shift: 0.4 }] },
+      focus: 0.4,
+    },
+  },
+  cinematic: {
+    // Chapter I: deep indigo shadows and silver-cyan highlights, but with its colour (pass 1's 0.72 saturation read muddy): a cold, clear night.
+    gagazet: {
+      shadow: [0.03, 0.1, 0.38],
+      highlight: [0.84, 0.95, 1.0],
+      recipe: { exposure: 1.06, gamma: 1.06, contrast: 0.68, pivot: 0.3, shoulder: 0.78, shadowSplit: 0.55, highlightSplit: 0.4, topBias: [1, 0.9, 0.7], topBiasAmount: 0.2, midSat: 0.3, sat: 1.02, hues: [{ hue: 195, width: 45, sat: 1.2, lum: 1.06 }] },
+      fog: [0.46, 0.64, 0.92],
+    },
+    // Chapter IV: violet-black shadows, amber lamps, cyan skylight, a cool violet fog.
+    'bevelle-underground': {
+      shadow: [0.1, 0.05, 0.32],
+      highlight: [1.0, 0.76, 0.48],
+      recipe: { exposure: 1.02, gamma: 1.02, contrast: 0.7, pivot: 0.32, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 26, width: 32, sat: 1.6, lum: 1.35, toward: [1, 0.66, 0.24], shift: 0.6 }, { hue: 192, width: 36, sat: 1.4, lum: 1.12, toward: [0.2, 0.9, 1.0], shift: 0.45 }] },
+      fog: [0.24, 0.28, 0.56],
+    },
+  },
+};
+
+export const boldRoom = (look: LookName, key: string): RoomLook | undefined => (look === 'anime' ? undefined : BOLD_ROOMS[look][key]);

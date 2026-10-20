@@ -21,12 +21,18 @@ export const LOOK_QUALITIES: readonly LookQuality[] = ['high', 'medium', 'low'];
 /** Debug views for captures: the figure mask (the frame's alpha) as a picture. */
 export type LookDebug = 'mask' | null;
 
+/** `?lookstrength=bold`: the conference strength of hd2d and cinematic (`LookBoldConfig.ts`); the default is the first pass's values, untouched. */
+export type LookStrength = 'subtle' | 'bold';
+
 export interface LookRequest {
   /** True when the address carries a `look` key at all (even `off`): the live hotkeys and the API are armed. */
   armed: boolean;
   name: LookName | null;
   quality: LookQuality;
   debug: LookDebug;
+  strength: LookStrength;
+  /** `?lookdrift=1`: the backdrop's very slow idle drift (the battle camera's grammar is its own approved test, so it is its own flag). */
+  drift: boolean;
 }
 
 /** `?look=` and friends from a search string. Anything unknown is ignored; no flag is today's look. */
@@ -35,14 +41,15 @@ export function parseLook(search: string): LookRequest {
   try {
     p = new URLSearchParams(search);
   } catch {
-    return { armed: false, name: null, quality: 'high', debug: null };
+    return { armed: false, name: null, quality: 'high', debug: null, strength: 'subtle', drift: false };
   }
   const raw = p.get('look');
   const v = (raw ?? '').trim().toLowerCase();
   const name = (LOOK_NAMES as readonly string[]).includes(v) ? (v as LookName) : null;
   const q = (p.get('lookq') ?? '').trim().toLowerCase();
   const quality = (LOOK_QUALITIES as readonly string[]).includes(q) ? (q as LookQuality) : 'high';
-  return { armed: raw !== null, name, quality, debug: p.get('lookdebug') === 'mask' ? 'mask' : null };
+  const strength: LookStrength = (p.get('lookstrength') ?? '').trim().toLowerCase() === 'bold' ? 'bold' : 'subtle';
+  return { armed: raw !== null, name, quality, debug: p.get('lookdebug') === 'mask' ? 'mask' : null, strength, drift: p.get('lookdrift') === '1' };
 }
 
 /** The next look in the F6 cycle: off, hd2d, cinematic, anime, off. */
@@ -84,8 +91,8 @@ export interface LookParams {
   blur: { far: number; near: number; focus: number; band: number; falloff: number; bokeh: number };
   /** The shafts: strength, reach (frame heights), the luma a pixel must pass to throw light, the per-sample decay, how beam-like they are (0 smooth .. 1 beams). */
   shaft: { gain: number; reach: number; threshold: number; decay: number; rays: number };
-  /** The motes: strength, size in px at 900p, drift speed. */
-  motes: { gain: number; size: number; speed: number };
+  /** The motes: strength, size in px at 900p, drift speed; bold adds a soft glow round each (0 = none) and how many cells carry one (0.4 = today's). */
+  motes: { gain: number; size: number; speed: number; glow?: number; density?: number };
   /** The fog: how much of the backdrop it veils (0..1), drift speed, how far it climbs the frame (0..1 from the bottom), how much of it reaches a figure's feet. */
   fog: { density: number; speed: number; height: number; onFigures: number };
   /** The rim on silhouettes: strength, width in px at 900p, how strongly it follows the side the light comes from (0 even all round .. 1 only the lit side). */
