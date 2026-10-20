@@ -88,5 +88,5 @@ else:
                 p = ex[min(max(0, f - int(ex[0].stem[1:])), len(ex) - 1)]
             row.append(Image.open(p).crop(crop_around(s['boxBefore'])))
         frames.append(row)
-    marks[before] = 'the pose swap to KNOCKED OUT (each panel aligned on its own swap)'
-    encode(frames, [t for t, r, s in recs], out / f'{label}-hurt-to-ko-motion.mp4', f'{label.upper()}  HURT TO KNOCKED OUT: {before} frames before the swap, {after} after (60 fps)', {before + k: marks[before] for k in range(0, 12)})
+    marks[before] = opt('--mark', 'the pose swap to KNOCKED OUT (each panel aligned on its own swap)')
+    encode(frames, [t for t, r, s in recs], out / f"{label}-{opt('--name', 'hurt-to-ko')}-motion.mp4", opt('--title', f'{label.upper()}  HURT TO KNOCKED OUT: {before} frames before the swap, {after} after (60 fps)'), {before + k: marks[before] for k in range(0, 12)})

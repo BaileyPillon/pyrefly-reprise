@@ -95,8 +95,8 @@ export async function poses(g, spec, o) {
     await g.page.evaluate((id) => { window.__pyrefly.battle().stage.actor(id).still = () => true; }, who);
     await st.steps(o.settle, false);
   }
-  // `--keep-sway` (demo-bosses lane, 2026-10-20): leave the actor's own breathing and sway on, as the game runs it, so a painting set is compared with a rig as they really move (the default zeroes both for a still comparison of poses)
-  if (o.keepSway) await g.page.evaluate(() => { window.__pyrefly.trigger?.('hud:off'); });
+  // `--keep-sway` (demo-bosses lane, 2026-10-20): leave the actor's own breathing and sway on (the camera's is off), as the game runs it, so a painting set is compared with a rig as they really move (the default zeroes both for a still comparison of poses)
+  if (o.keepSway) await g.page.evaluate(() => { const b = window.__pyrefly.battle(); b.scene.battleCamera.swayOff = () => true; window.__pyrefly.trigger?.('hud:off'); }); // the camera still (a clip is cropped round the figure), the figure's own breathing and sway on
   else await g.page.evaluate((id) => { const b = window.__pyrefly.battle(); b.scene.battleCamera.swayOff = () => true; window.__pyrefly.trigger?.('hud:off'); const a = b.stage.actor(id); a.breatheAmp = 0; a.swayAmp = 0; }, who);
   const rectOf = () => g.page.evaluate((id) => window.__pyrefly.battle().stage.projectRect(id), who);
   const info = { rig: o.rig, actor: who, poses: {} };

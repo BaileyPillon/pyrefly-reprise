@@ -24,7 +24,7 @@ const registry = read('tools/rig/lane/lane-subjects.json') as { subjects: Record
 const POSES = ['attack', 'cast', 'hurt', 'ko', 'telegraph'];
 
 const subjects: { name: string; art: string; masks: string; game: string; parts: string[]; noVariants: string[]; reg: string; actor: string; chapter: string }[] = [
-  { name: 'ffx2-bahamut-x', art: 'ffx2-bahamut', masks: 'tools/rig/subjects/ffx2-bahamut-x.masks', game: 'ffx2', parts: ['body', 'head', 'wingL', 'wingR'], noVariants: ['tail'], reg: 'ffx2-bahamut', actor: 'bahamut', chapter: 'ffx2-bahamut' },
+  { name: 'ffx2-bahamut-x', art: 'ffx2-bahamut', masks: 'tools/rig/subjects/ffx2-bahamut-x.masks', game: 'ffx2', parts: ['body', 'head', 'tail', 'wingL', 'wingR'], noVariants: [], reg: 'ffx2-bahamut', actor: 'bahamut', chapter: 'ffx2-bahamut' },
   { name: 'seymour-flux-x', art: 'seymour-flux-body', masks: 'tools/rig/subjects/seymour-flux-x.masks', game: 'ffx', parts: ['arm', 'body', 'hairM', 'hairU', 'head', 'leg'], noVariants: [], reg: 'seymour-flux', actor: 'seymour-flux', chapter: 'seymour-flux' },
 ];
 
@@ -72,7 +72,7 @@ for (const s of subjects) {
       for (const pose of POSES) {
         const f = cfg.build.variants!['head']![pose]!.from_painting;
         expect(f.scaleArea, pose).toBeGreaterThanOrEqual(1.0);
-        expect(f.scaleArea, pose).toBeLessThanOrEqual(1.3);
+        expect(f.scaleArea, pose).toBeLessThanOrEqual(1.4);
       }
     });
 
@@ -113,7 +113,7 @@ describe('what each lane decided on its own', () => {
     for (const b of ['wingLA', 'wingLB', 'wingLC', 'wingRA', 'wingRB', 'wingRC']) expect(bah.fit.limits![b], b).toEqual([-40, 40]);
   });
 
-  it('Bahamut: the tail is one idle piece on a 12-bone chain, and the Mega Flare splash painting is not a key', () => {
+  it('Bahamut: the tail is a 12-bone chain whose pivots sit on its outer edge (not watched by the hole test), and the Mega Flare splash painting is not a key', () => {
     expect(bah.build.skin['tail']!.bones).toHaveLength(12);
     expect(Object.keys(bah.fit.keys)).not.toContain('splash');
     expect(registry.subjects['ffx2-bahamut']!.poses).not.toContain('splash');

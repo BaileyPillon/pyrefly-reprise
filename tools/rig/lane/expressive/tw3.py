@@ -3,7 +3,7 @@ difference of A and B, three times brighter: what the rig moved, redrew or lost 
 
   tw3.py poses --out FILE --new <rec>/poses --off <rec>/poses-off --rows attack:70,hurt:70,ko:70 [--size 520,560] [--title TEXT]
         rows = pose:frame (a frame of the `poses` mode's 130: 0 to 19 idle, the pose from 20, settled by about 70)
-  tw3.py hurtko --out FILE --newko <rec>/ko --offko <rec>/ko-off --sum ko-summary.json [--size 520,560] [--title TEXT]
+  tw3.py hurtko --out FILE --newko <rec>/ko --offko <rec>/ko-off --sum ko-summary.json [--size 520,560] [--title TEXT] [--deltas "label:frames|label:frames"]
         two rows (A and B recordings... as columns): hurt just before the swap and the KO a few frames after, for the painting set and the rig, with the difference column
 """
 import json
@@ -75,7 +75,8 @@ else:
     summ = json.load(open(opt('--sum')))
     offd, newd = pathlib.Path(opt('--offko')), pathlib.Path(opt('--newko'))
     rows = []
-    for lab, delta in (('HURT, the frame before the pose swap', -1), ('KNOCKED OUT, 12 frames after the swap', 12)):
+    deltas = [(x.rpartition(':')[0], int(x.rpartition(':')[2])) for x in opt('--deltas').split('|')] if opt('--deltas') else [('HURT, the frame before the pose swap', -1), ('KNOCKED OUT, 12 frames after the swap', 12), ('KNOCKED OUT, 50 frames after the swap', 50)]
+    for lab, delta in deltas:
         panels = []
         for d_, s in ((offd, summ['off']), (newd, summ['on'])):
             f = s['swapFrame'] + delta
