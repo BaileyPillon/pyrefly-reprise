@@ -161,6 +161,8 @@ export function createHud(game: GameId, field?: () => (OversoulField & StatusFie
   // `guideFolded`: the scene starts its fights with the strategy guide folded to its chip (`SceneStaging.guideFolded`; FFX Chapters I and III), unset everywhere else. The wrappers above patch the HUD
   // they are given and hand the same object back, so it is the FFX HUD itself; the FFX-2 HUD has no such start and ignores the argument.
   if (guideFolded && hud instanceof FFXBattleHud) hud.startGuideFolded();
+  // The FFX card reads a chapter's line through the live engine where it puts the line first (`AdvisorOptions.lineEngine`, release 59, decision 145); read-only, and nothing else of the card changes.
+  if (hud instanceof FFXBattleHud && engine instanceof FFXEngine) hud.setLineEngine(engine);
   // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
   // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`). The FFX side gets the
   // Mortiphasm disc colours and Omnis's red glow (FFX only, Chapter XII; inert without the Omnis state,

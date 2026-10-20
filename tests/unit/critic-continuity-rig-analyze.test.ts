@@ -12,12 +12,13 @@ import { continuityConfig } from '../../critic/runner/lib/continuity.mjs';
 import { rigConfig, rigProbeConfig, rigTrack } from '../../critic/runner/lib/continuity-rig.mjs';
 import type { RigRecord } from '../../critic/runner/lib/continuity-rig.mjs';
 import type { ProbeFrame, ProbeMeta } from '../../critic/runner/lib/continuity-probe.mjs';
+import type { PoseMeasure } from '../../critic/runner/lib/continuity-silhouette.mjs';
 
 const CFG = continuityConfig();
 const FRAME_MS = 1000 / 60;
 const PW = 400, PH = 600, X0 = 200, Y0 = 100; // the idle plane on the canvas
 
-interface Key { hu: [number, number]; fu: [number, number]; cu: [number, number]; ha: number; ma: number; bh: number; bw: number }
+interface Key { hu: [number, number]; fu: [number, number]; cu: [number, number]; ha: number; ma: number; bh: number; bw: number; hv?: string }
 /** The three keys of the test rig, in the plane's own coordinates. The head part is 0.01 of the plane, the box of the idle is 0.9 of the plane's height. */
 const KEYS: Record<string, Key> = {
   idle: { hu: [0.5, 0.12], fu: [0.5, 1], cu: [0.5, 0.5], ha: 0.01, ma: 0.5, bh: 0.9, bw: 0.45 },
@@ -59,7 +60,8 @@ function build(changes: Change[], opts: { total?: number; seconds?: number; keys
     const hu = mix2(A.hu, B.hu, t), fu = mix2(A.fu, B.fu, t), cu = mix2(A.cu, B.cu, t);
     const h = screen(hu), f = screen(fu), c = screen(cu);
     const bh = mix(A.bh, B.bh, t), bw = mix(A.bw, B.bw, t);
-    const rg: RigRecord = { b: moving ? 1 : 0, h, f, c, hu, fu, cu, ha: mix(A.ha, B.ha, t), ma: mix(A.ma, B.ma, t), bh, bw, pw: PW, ph: PH };
+    const hv = (t >= 0.5 ? B : A).hv; // a part a key brings in shows at the half way point of the move into the key (RigPartState)
+    const rg: RigRecord = { b: moving ? 1 : 0, h, f, c, hu, fu, cu, ha: mix(A.ha, B.ha, t), ma: mix(A.ma, B.ma, t), ...(hv ? { hv } : {}), bh, bw, pw: PW, ph: PH };
     const top = Y0 + PH * (fu[1] - bh), left = X0 + PW * (fu[0] - bw / 2), right = left + PW * bw, bottom = Y0 + PH * fu[1];
     const sa = [NAMES.indexOf(to), 1, 1, left, top, right, top, right, bottom, left, bottom];
     records.push({ n, t: Math.round(n * FRAME_MS * 10) / 10, f: [{ i: 0, a: 1, act: 0, s: [sa, 0], g: [0, 0], rg }] });
@@ -74,7 +76,7 @@ const cycles = (count: number): Change[] => {
   return out;
 };
 
-const run = (b: { meta: ProbeMeta; records: ProbeFrame[] }, cfg = CFG) => analyzeRun({ meta: b.meta, records: b.records, anchors: b.meta.poses.map(() => null), cfg });
+const run = (b: { meta: ProbeMeta; records: ProbeFrame[] }, cfg = CFG, measure: PoseMeasure | null = null) => analyzeRun({ meta: b.meta, records: b.records, anchors: b.meta.poses.map(() => null), cfg, measure });
 
 describe('a rigged figure\'s changes of key are swaps', () => {
   const r = run(build(cycles(5)));
@@ -109,6 +111,70 @@ describe('a rigged figure\'s changes of key are swaps', () => {
     expect(t.centroid).toEqual([400, 400]);
     expect(rigTrack({ ...({} as RigRecord), f: [1, 2], h: null, c: null, cs: [1, 2, 3, 4, 5, 6] })).toEqual({ feet: [1, 2], head: null, centroid: null, cams: { head: null, feet: [3, 4], centroid: null } });
     expect(rigTrack(undefined)).toBeNull();
+  });
+});
+
+// R59, decision 146 (both games, review tooling): Lulu's defend and od-fury keys bring in a front-view upper body in front of the side head and shrink the side head to 0.8, so the head part's mesh read
+// 0.80 going in and 1.25 coming out, a 25 percent head jump that nobody sees: the head the player sees is the front view's, whose size the painting's registration gives.
+describe('a key that brings in another head (a front view) is judged by the head the player sees, not by the head part\'s mesh', () => {
+  /** The key hurt stands for the front-view key: its head part shrinks to 0.8 linear (0.64 of the area) and the named variant part is drawn. */
+  const front = (hv: string | undefined): Parameters<typeof build>[1] => ({ keys: { hurt: { ha: 0.0064, ...(hv ? { hv } : {}) } } });
+  const registered = (headRatio: number | null): PoseMeasure => ({ path: 'x', sha256: 'x', count: 1, subjects: { valefor: { poses: headRatio === null ? {} : { hurt: { ruled: { headRatio } } } } } });
+
+  it('reads the earlier way, a 25 percent head jump, when no part is named as the other head (the control: what the release 58 harness said of Lulu)', () => {
+    const r = run(build(cycles(5), front(undefined)));
+    expect(r.swaps[0]!.head).toMatchObject({ metric: 'head', ratio: 0.8 });
+    expect(r.swaps[1]!.head).toMatchObject({ metric: 'head', ratio: 1.25 });
+    expect(r.swaps.every((s) => s.failHead)).toBe(true);
+    expect(r.summary.checks['CHK-026'].result).toBe('FAIL');
+  });
+
+  it('does not compare the head part\'s mesh across the change; the real head from the registration, inside the class band, passes', () => {
+    const r = run(build(cycles(5), front('front')), CFG, registered(0.959));
+    expect(r.swaps).toHaveLength(10);
+    for (const s of r.swaps) {
+      expect(s.rig).toMatchObject({ settled: true, headMetric: 'variant' });
+      expect(s.head).toMatchObject({ metric: 'variant', ratio: null, label: 'front view' });
+      expect(s.headReal).toMatchObject({ ratio: 0.959, band: [0.85, 1.15], outsideBand: false, source: 'registration' });
+      expect(s.failHead).toBe(false);
+      expect(s.failRealHead).toBe(false);
+    }
+    expect(r.summary.size.headOverTolerance).toBe(0);
+    expect(r.summary.size.variantHeadSwaps).toBe(10);
+    expect(r.summary.size.variantHeadOutsideBand).toBe(0);
+    expect(r.summary.size.headMeasured).toBe(0); // no mesh ratio was read for any of the ten
+    expect(r.summary.checks['CHK-026'].result).toBe('PASS');
+    expect(r.coverage.rigs).toEqual([expect.objectContaining({ swaps: 10, counted: 10, headMeasured: 10 })]); // the swaps are measured: each has a head reading, of the other kind
+  });
+
+  it('fails the change when the head the registration gives the key is outside the class band, and says which kind of head it is', () => {
+    const r = run(build(cycles(5), front('front')), CFG, registered(0.7));
+    expect(r.swaps.every((s) => s.failRealHead && s.headReal!.outsideBand)).toBe(true);
+    expect(r.summary.size.variantHeadOutsideBand).toBe(10);
+    expect(r.summary.size.realHeadOutsideBand).toBe(0); // a recorded hold's count is its own
+    expect(r.summary.checks['CHK-026'].result).toBe('FAIL');
+    expect(r.summary.checks['CHK-026'].reasons.join(' ')).toMatch(/10 rig swap\(s\) bring in another head \(a front view\) whose real head is outside its pose class's band/);
+  });
+
+  it('shows the change and judges nothing about the head when the registration has no record of the key', () => {
+    for (const measure of [null, registered(null)]) {
+      const r = run(build(cycles(5), front('front')), CFG, measure);
+      expect(r.swaps.every((s) => s.head!.metric === 'variant' && s.head!.ratio === null && s.headReal === null && !s.failHead && !s.failRealHead)).toBe(true);
+      expect(r.summary.checks['CHK-026'].result).toBe('PASS');
+    }
+  });
+
+  it('still fails what the head swap does not hide: a front-view key drawn at two thirds of the idle\'s height; and a head part shrunk with no other head drawn is still read as a mesh', () => {
+    const tall = run(build(cycles(5), { keys: { hurt: { ha: 0.0064, hv: 'front', bh: 0.6 } } }), CFG, registered(0.959));
+    expect(tall.swaps.every((s) => s.failHeight && !s.failHead)).toBe(true);
+    expect(tall.summary.checks['CHK-026'].result).toBe('FAIL');
+    const plain = run(build(cycles(5), { keys: { hurt: { ha: 0.0064 } } }), CFG, registered(0.959)); // no variant part drawn: the mesh is read as before
+    expect(plain.swaps.every((s) => s.head!.metric === 'head' && s.failHead)).toBe(true);
+  });
+
+  it('asks the page-side reader for the variant parts by name and the size at which one counts as drawn', () => {
+    expect(rigProbeConfig(CFG)).toMatchObject({ headVariants: ['front', 'fdef', 'fod'], variantMinArea: 0.02 });
+    expect(rigConfig({ ...CFG, rig: { headVariants: ['mask'] } })).toMatchObject({ headVariants: ['mask'], headPart: 'head' });
   });
 });
 

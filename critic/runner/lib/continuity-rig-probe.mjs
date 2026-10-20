@@ -15,6 +15,8 @@
 //   rg.hu, fu, cu   the same three in the idle plane's own coordinates (u across from the left, t down from the top, 0..1: the master's pixels over its size), where neither the stage's
 //                   motion (a lunge, a recoil, a hop) nor the camera is: what the pose itself moved, as a painted swap reads its two planes in one frame
 //   rg.ha, ma       the area of the `head` part's mesh and of every drawn part, in the plane's own units (a head the rig resizes shows in `ha`; the rig's gate keeps it at 1.0000)
+//   rg.hv           (only when present) the name of a head VARIANT part drawn at a real size in this key: another part that carries a head, which the key brings in over the head part (Lulu's front-view
+//                   upper body: `front` in format v2; `fdef` and `fod` in version 1, where the part is stored as a speck that is always visible and is told apart by its area, `variantMinArea` of the plane)
 //   rg.bh, bw       the key's painted box as a fraction of the idle plane's height (a stature against the idle's; a lying figure's length)
 //   rg.pw, ph       the idle plane's size on screen (CSS px), to turn a fraction of the plane into px
 //
@@ -28,6 +30,8 @@ export function createRigReader(cfg) {
   const R1 = (v) => Math.round(v * 10) / 10, R4 = (v) => Math.round(v * 10000) / 10000, R7 = (v) => Math.round(v * 1e7) / 1e7;
   const CORNERS = [[-0.5, 0.5], [0.5, 0.5], [0.5, -0.5], [-0.5, -0.5]]; // top-left, top-right, bottom-right, bottom-left of a plane's unit quad
   const found = new Map(); // rig name -> the landmark names that resolved, so a missing name is tried once
+  const variants = Array.isArray(cfg.headVariants) ? cfg.headVariants : []; // parts, other than the head part, that carry a head when a key brings them in
+  const variantMin = Number.isFinite(cfg.variantMinArea) ? cfg.variantMinArea : 0.02; // smallest share of the idle plane's area at which such a part counts as drawn
 
   const is = (a) => Boolean(a) && typeof a.rigInfo === 'function' && typeof a.landmark === 'function' && typeof a.feetPoint === 'function' && typeof a.contentQuad === 'function';
 
@@ -98,7 +102,7 @@ export function createRigReader(cfg) {
     const r1 = (xy) => (xy ? [R1(xy[0]), R1(xy[1])] : null);
     const q = box ? box.flatMap((p) => { const s = P(p); return [R1(s[0]), R1(s[1])]; }) : null;
     const planeH = Math.hypot(M[4], M[5], M[6]) || 1;
-    let ha = null, ma = null;
+    let ha = null, ma = null, hv = null;
     try {
       const kids = a.figure.plane.children;
       let sum = 0, any = false;
@@ -108,13 +112,15 @@ export function createRigReader(cfg) {
         if (ar === null) continue;
         sum += ar; any = true;
         if (m.name === (cfg.headPart || 'head')) ha = ar;
+        // R59 (decision 146): a key may bring in ANOTHER part that carries a head (Lulu's front-view upper body); a version 1 rig stores it as a speck that is always visible, so it counts as drawn only at a real size
+        else if (hv === null && variants.indexOf(m.name) >= 0 && ar >= variantMin) hv = m.name;
       }
       ma = any ? sum : null;
-    } catch { ha = null; ma = null; }
+    } catch { ha = null; ma = null; hv = null; }
     const rg = {
       b: a.blending ? 1 : 0, h: r1(scr(head)), f: r1(scr(feet)), c: r1(scr(cen)),
       hu: uv(head), fu: uv(feet), cu: uv(cen),
-      ha: ha === null ? null : R7(ha), ma: ma === null ? null : R7(ma),
+      ha: ha === null ? null : R7(ha), ma: ma === null ? null : R7(ma), ...(hv === null ? {} : { hv }),
       bh: box ? R4(dist2(box[0], box[3]) / planeH) : null, bw: box ? R4(dist2(box[0], box[1]) / planeH) : null,
       pw: R1(dist(pp[0], pp[1])), ph: R1(dist(pp[0], pp[3])),
     };

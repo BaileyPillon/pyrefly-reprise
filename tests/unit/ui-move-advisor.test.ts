@@ -809,6 +809,18 @@ describe('the FFX HUD’s own card, on a real Chapter 1 board', () => {
     throw new Error('Chapter 1 gave no Tidus decision inside 80 steps');
   }
 
+  // Release 59, decision 145 (FFX only): `createHud` hands the FFX card the live engine, read-only, for the chapters whose card puts the chapter's line first; a bare HUD still passes nothing.
+  it('setLineEngine hands the card the engine (the chapter\'s line is read through it) and null takes it back', () => {
+    const hud = new FFXBattleHud();
+    const opts = (hud.moveAdvisor as unknown as { opts: { advisor?: () => { lineEngine?: () => unknown } } }).opts;
+    expect(opts.advisor).toBeUndefined();
+    const engine = { state: () => ({}) } as never;
+    hud.setLineEngine(engine);
+    expect(opts.advisor?.().lineEngine?.()).toBe(engine);
+    hud.setLineEngine(null);
+    expect(opts.advisor).toBeUndefined();
+  });
+
   it('reads the boss’s next move with nothing wired to it', () => {
     // The process-wide registry is what `BattleScreenContent` fills at boot and
     // what the advisor falls back to when a HUD passes no content — so filling

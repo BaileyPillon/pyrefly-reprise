@@ -62,7 +62,7 @@ export interface Held { frames: number; ms: number; from: number | null }
 export interface SwapResult {
   camCut: boolean; costume?: boolean; sameArt?: boolean; range?: boolean; staged: StagedStep | null; held: Held; snapStaged: boolean;
   /** `label`: 'control' for a registered head (held to the idle's by the head lock, so it agrees with itself), 'mass' for the silhouette's. */
-  head: { fromPx: number; toPx: number; ratio: number | null; source: 'registration' | 'silhouette' | 'rig'; metric: 'head' | 'mass'; label?: 'control' | 'mass' | 'rig' } | null;
+  head: { fromPx: number | null; toPx: number | null; ratio: number | null; source: 'registration' | 'silhouette' | 'rig'; metric: 'head' | 'mass' | 'variant'; label?: 'control' | 'mass' | 'rig' | 'front view'; variant?: { from: string | null; to: string | null } } | null;
   feet: { dx: number; dy: number; px: number; standing: boolean; source: string; /** a rig's: the part that judges, the ground line */ gate?: string; gatePx?: number; tolerancePx?: number; sidewaysPx?: number } | null;
   outline: { iou: number; centroidShiftPx: number; areaRatio: number | null } | null;
   ghost: { frames: number; ms: number; peak: number; severity: number; worstFrame: number | null };
@@ -102,7 +102,7 @@ export interface Summary {
     judged?: number; costumeSwaps?: number; sameArtSwaps?: number; costumeWorstHeadPct?: number; costumeWorstFeetPx?: number; headMeasured: number; headRegistration: number; headRig?: number; maxHeadJumpPctRig?: number; rigSwaps?: number; headSilhouette: number; headUnmeasured: number; maxHeadJumpPct: number; maxHeadJumpPctRegistration: number; headOverTolerance: number; feetMeasured: number; maxFeetShiftPx: number; feetOverTolerance: number;
     /** W4: height (stature; a KO's length is report-only), the silhouette's own feet, the real head across a hold, unregistered paintings. */
     heightMeasured: number; heightOverBand: number; heightWaived: number; minStature: number | null; maxStature: number | null; koLengthMeasured: number; minKoLength: number | null; koLengthReported: number;
-    feetSilMeasured: number; feetSilOver: number; feetSilWaived: number; maxFeetSilPx: number; holdSwaps: number; worstRealHeadPct: number; realHeadOutsideBand: number; realHeadWaived: number; unregisteredSwaps: number;
+    feetSilMeasured: number; feetSilOver: number; feetSilWaived: number; maxFeetSilPx: number; holdSwaps: number; worstRealHeadPct: number; realHeadOutsideBand: number; realHeadWaived: number; variantHeadSwaps?: number; worstVariantHeadPct?: number; variantHeadOutsideBand?: number; unregisteredSwaps: number;
   };
   motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number; heldSwaps: number; longestHeldFrames: number; stagedChanges: number; stagedSteps: number; stagedSnapsExcused: number; jerksAtStaged: number; jerksCovered?: number; worstCoveredJerkPx?: number;
     /** W4, the CHK-027 split: jerks at a swap (gated), mid-move teleports (gated), mid-move dashes (reported), and the same by the frame they fell on. */

@@ -1,10 +1,29 @@
 /**
- * **Chapter XIII's card follows the chapter's own line** (DIFF-B, PR-0227; Bailey, 2026-10-12:
- * "I'll go with all of your recommendations", the options page's DIFF-B for Chapter XIII).
+ * **A chapter's card follows the chapter's own line** (DIFF-B, PR-0227, Chapter XIII; extended in
+ * release 59 to the FFX chapters whose card lost, decision 145). Bailey, 2026-10-12: "I'll go with
+ * all of your recommendations", the options page's DIFF-B for Chapter XIII; 2026-10-19, the same
+ * words for the release 59 list, and his 2026-09-18 criticism of "advisor errors".
  *
- * **Game case: FFX-2 only, Chapter XIII (Paragon, then Trema).** Chapters V and XV and every FFX
- * chapter keep the card they have: nothing here is reached on a board whose governing tactic is not
- * `ffx2Trema`.
+ * **Game case, chapter by chapter** ({@link LINE_FIRST_CHAPTERS}): FFX-2 Chapter XIII (Paragon,
+ * then Trema), FFX Chapter XIV (Isaaru's three aeons) and FFX Mirror Aeons (the Dark Magus Sisters
+ * and Dark Yojimbo). Every other chapter of either game keeps the card it has: nothing here is
+ * reached on a board whose governing tactic is not one of those.
+ *
+ * ## Release 59 (decision 145; FFX only; measured on the engine, 40 seeds a chapter)
+ *
+ * In FFX Chapter XIV the card was the simulated ranking and a player who pressed its top row every
+ * turn won 13 of 40 seeds, where the chapter's own tactic (the strategy guide's NEXT line, what the
+ * auto-battler plays) won 35 of 40: the card spent Yuna's full Grand Summon gauge on a lesser aeon
+ * and the party fell to Spathi's Mega Flare in the third link. In Mirror Aeons it was 3 of 40 against
+ * the line's 24. A sweep of every listed chapter, FFX and FFX-2, and of the hidden ones, found no
+ * other chapter where the card wins clearly less than the line (the largest gap elsewhere is 3 seeds
+ * of 40, a paired sign test p of 0.37 or more): `critic/bench/r59-advisor/`, the table is in
+ * `docs/handoff/r59-advisor-line.md`. The same rule as DIFF-B then applies to those two: the line's
+ * row is the card's top row (below), and where the tactic names nothing this actor can press the
+ * ranking stands as it was. Bailey's ruling of 2026-09-21 ("the ranking may outrank the guide") is
+ * not overturned anywhere the ranking was not losing: the other FFX chapters keep a card that may
+ * differ from the guide's NEXT line, and advisor v4's look-ahead pick (`AdvisorOptions.lift`) still
+ * goes on top of any card, this one included, when its search proves it better.
  *
  * ## What the option was, and what is built
  *
@@ -46,15 +65,26 @@
 
 import type { BattleState, Command } from '../../battle/common/types.ts';
 import type { Tactic } from './common.ts';
-import { ffx2Trema } from './ffx2-trema.ts';
 import { stateOnlyEngine } from './guide.ts';
-import { tacticFor } from './index.ts';
+import { TACTICS, tacticFor } from './index.ts';
 
 /** The switch. See the module note and `docs/handoff/r44-diffb.md` for the measurement behind it. */
 export const ADVISOR_LINE_FIRST = true;
 
-/** The tactics whose chapter's card puts the line on top: Chapter XIII's, and no other. */
-const LINE_FIRST: ReadonlySet<Tactic> = new Set<Tactic>([ffx2Trema]);
+/**
+ * The chapters whose card puts the line on top, and the measurement that put each one here (engine, house pace for FFX-2,
+ * the card against the chapter's tactic over the same seeds; `docs/handoff/r44-diffb.md`, `docs/handoff/r59-advisor-line.md`):
+ *
+ *  - `ffx2-trema` (FFX-2 XIII, DIFF-B, release 44): 91 of 200 against 127 of 200.
+ *  - `isaaru-via-purifico` (FFX XIV, release 59): 13 of 40 against 35 of 40.
+ *  - `mirror-aeons` (FFX Mirror Aeons, release 59): 3 of 40 against 24 of 40.
+ *
+ * A chapter is added only when the card wins clearly less than the line over a seed-paired sweep, never because it has a tactic.
+ */
+export const LINE_FIRST_CHAPTERS: readonly string[] = ['ffx2-trema', 'isaaru-via-purifico', 'mirror-aeons'];
+
+/** The tactics of those chapters, from the registry (`./index.ts`): what `tacticFor` returns on their boards. */
+const LINE_FIRST: ReadonlySet<Tactic> = new Set<Tactic>(TACTICS.filter((t) => LINE_FIRST_CHAPTERS.includes(t.chapterId)).map((t) => t.tactic));
 
 /** What `buildAdvisorView` needs from its options here (structurally `AdvisorOptions`). */
 export interface LineFirstOptions {
@@ -63,15 +93,16 @@ export interface LineFirstOptions {
 }
 
 /**
- * Does the card on this board put the chapter's line first? Only a board the Chapter XIII tactic
- * governs (`tacticFor` is the lookup the line itself uses, game first, then the boss on the enemy
- * side). An explicit look-ahead pick (`AdvisorOptions.lift`, advisor v4's, FFX only in the game) is
- * left on top, as it always was.
+ * Does the card on this board put the chapter's line first? Only a board a {@link LINE_FIRST_CHAPTERS}
+ * tactic governs (`tacticFor` is the lookup the line itself uses, game first, then the boss on the
+ * enemy side, so an FFX board never reaches an FFX-2 chapter's line or the reverse). An explicit
+ * look-ahead pick (`AdvisorOptions.lift`, advisor v4's, FFX only in the game) is left on top, as it
+ * always was.
  */
 export function lineFirstOn(board: Readonly<BattleState>, options: LineFirstOptions): boolean {
   if (!(options.lineFirst ?? ADVISOR_LINE_FIRST)) return false;
   if (options.lift !== undefined) return false;
-  if (board.game !== 'ffx2') return false;
+  if (board.game === 'ff7') return false;
   const governing = tacticFor(stateOnlyEngine(board));
   return governing !== null && LINE_FIRST.has(governing);
 }
