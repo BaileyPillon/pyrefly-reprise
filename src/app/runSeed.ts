@@ -7,6 +7,9 @@
  * 1000 per attempt (`BattleScreenFlow.runChapter`). The odds per attempt do not change: the
  * seed only picks which of the fight's own rolls come up. It is our plumbing, not game data.
  *
+ * **Demo mode** (release 60, `demoMode.ts`, `?demo=1`): for a chapter that has a demo table a fresh run takes the next of its verified seeds instead of a draw; a pinned seed still wins, and without
+ * demo mode nothing here changes.
+ *
  * Tests and the critic keep fixed seeds: any caller that passes `RunChapterOptions.seed`
  * gets exactly that seed, and `window.__pyrefly.setSeed(n)` pins every later run started
  * from real keys to `n` (see `docs/DEV.md`).
@@ -14,6 +17,8 @@
  * Layering: no `three`, no DOM. `Math.random` is fine here: this is the one place a run's
  * seed is chosen, outside `src/battle/`, whose engines stay deterministic under it.
  */
+
+import { nextDemoRunSeed } from './demoMode.ts';
 
 /** Largest drawn seed; leaves room for the retry's `+ attempt * 1000` in 32 bits. */
 export const MAX_DRAWN_SEED = 0x7fff_0000;
@@ -33,8 +38,10 @@ export function pinnedRunSeed(): number | null {
   return pinned;
 }
 
-/** The first seed of a run that did not name one: the pinned seed, else a fresh one in 1..MAX. */
-export function drawRunSeed(random: () => number = Math.random): number {
+/** The first seed of a run that did not name one: the pinned seed, else (demo mode, a chapter with a table) the next demo seed, else a fresh one in 1..MAX. */
+export function drawRunSeed(random: () => number = Math.random, chapterId?: string): number {
   if (pinned !== null) return pinned;
+  const demo = chapterId === undefined ? null : nextDemoRunSeed(chapterId);
+  if (demo !== null) return demo;
   return 1 + Math.floor(random() * MAX_DRAWN_SEED);
 }

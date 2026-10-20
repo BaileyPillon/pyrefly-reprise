@@ -45,6 +45,7 @@ import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
+import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conference demo's seeds
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
@@ -385,8 +386,8 @@ export class GameFlow {
       this.step = 'battle';
       const battleOpts: BattleScreenOptions = {
         chapter,
-        // A retry reseeds, so the same losing fight does not replay verbatim.
-        seed: seed + attempt * 1000,
+        // A retry reseeds, so the same losing fight does not replay verbatim (demo mode: the next of the chapter's verified seeds, `demoMode.ts`).
+        seed: attemptSeed(id, seed, attempt),
         auto: opts.auto ?? null,
         ...(opts.speed ? { speed: opts.speed } : {}),
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
