@@ -34,6 +34,10 @@ describe('what never ships', () => {
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
       'models-exp/yrp/yuna.glb', // the hidden 3D Bahamut's local-only models (branch exp-yrp-3d)
       'models-exp/yrp/bahamut.glb',
+      'models-exp/yrp/bahamut-ai.glb', // the real-models branch (exp-yrp-real): the AI boss, the clips, the HD folder and the clip map; Bailey's own extracted files, never shipped
+      'models-exp/yrp/yuna-anims.glb',
+      'models-exp/yrp/clipmap.json',
+      'models-exp/yrp-hd/yuna.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',
