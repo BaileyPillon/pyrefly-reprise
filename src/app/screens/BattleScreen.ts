@@ -52,6 +52,7 @@ import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transit
 import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
+import { coachCardUp } from '../../ui/coach/cardPress.ts'; // R61: a first-use card is up: Esc closes it, the next Esc pauses
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
 import { attachAdvisorV4 } from '../advisorV4/wiring.ts';
 import { PauseScreen } from './PauseScreen.ts';
@@ -633,6 +634,9 @@ export class BattleScreen extends Screen {
    */
   private get canPauseOnCancel(): boolean {
     if (!this.canPause) return false;
+    // R61 (booth, both games): a first-use card is up, so Back belongs to the card (it takes itself down on the same press and absorbs it, `cardPress.ts`).
+    // This is the one-frame case the card's own absorb cannot reach: the pad's edge read here before the card's poll has run.
+    if (coachCardUp()) return false;
     if (this.presenter?.snapshot()['awaitingMenu'] !== true) return true;
     return !menuOwnsCancel();
   }
