@@ -80,3 +80,10 @@ The rAF interval is 16.7 / 16.7 to 16.8 / 16.8 in every cell (locked 60 fps); on
 - The maps lane's normal maps cover the FFX party, the bosses of Chapters 1 to 5 and the FFX-2 first dresspheres; a figure with no map (a rig's part textures, Chapter VII's guardians) is lit by nothing and stays as it was.
 - The title screen is DOM, not WebGL, so a look cannot run on it live: the demo stills compose the picture through the same shaders (`tools/zz-demolooks-title.tmp.html`, scratch) and lay the real UI over it.
 - A battle capture taken on a paused page clock still has CSS animations on real time (HUD panels fade on their own), so two runs can differ by a panel's opacity.
+
+## Checked by hand (2026-10-20)
+
+- Real keys: `F6` cycles off, hd2d, cinematic, anime and `F7` cycles the quality, in a real page, with no console errors.
+- The coloured point lights reach the shader (`__pyrefly.look.stats().relight.lights`): a cure on Tidus puts a green light at his position at strength 0.8, fire an orange one, ice a cyan one; the light starts when the blow lands in the drawn effect and follows its envelope (`RelightConfig.POINT_KINDS`).
+- Default off: with no `look` key in the address `lookState.armed` is false, `Renderer` never builds the rig, `bindRelight` returns at once (no `PAINTED_RELIGHT` define, so every figure program is the one it was) and the shader strings are unchanged except for the two `#ifdef` blocks. A pixel comparison against the pre-change build was not possible on the scratch harness (a flag-free run differs from another by the opening camera's real-time easing).
+- The three goldens (`ff7-golden`, `ffx-engine-golden`, `ffx2-atb-golden`) and 114 related unit files (1399 tests) pass; `tsc --noEmit` is clean.
