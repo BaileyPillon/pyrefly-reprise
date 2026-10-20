@@ -18,6 +18,11 @@
 //   HEAD     the head part's mesh area before and after, as a linear size (its square root), judged at the registered tolerance (`size.headTolerancePct`, 3 percent): the rig's gate keeps the head
 //            at 1.0000 by construction, so this reads the build, not a table. Where the head part is not drawn in either key the whole figure's mesh area is read instead, `metric: 'mass'`,
 //            judged at the coarse tolerance, as a painted pose with no registered head is.
+//            Only between two keys that show THE SAME head (R59, decision 146). A key may bring in another part that carries a head in front of the head part (Lulu's front-view upper body in
+//            `defend` and `od-fury`; the page-side reader names it, `rg.hv`): the head part is then a side head the rig shrinks and tucks behind the front view, and its mesh area is a bookkeeping number
+//            of the rig (0.80 and its inverse 1.25 in Lulu's two keys), not a head anyone sees change. Such a change of key is `metric: 'variant'`: the mesh ratio is not read, and the key is
+//            judged by the head the player really sees over the idle's (`headReal`, the owner-reviewed registration of the painting the key reproduces, `ruled.headRatio`) against its pose
+//            class's band (`BANDS[class].head`, 0.85 to 1.15), the band a painted pose is judged in. With no registration for the key it is shown, not judged.
 //   FEET     the lowest foot the gate stamped for each key, in the plane's coordinates, mapped through the plane as drawn after the change: the vertical gap (the ground line) is judged at the
 //            silhouette reading's tolerance (2 percent of the figure's height, never under 6 px at 1600 wide: `feetSilhouetteTolerancePx`), the sideways gap is shown, not judged (the lowest foot
 //            is the near foot in one key and the far foot in another, which is not the figure sliding). Only for two PLANTED keys: a knock-out and a key that leaves the ground by design
@@ -36,6 +41,9 @@ export const RIG_DEFAULTS = Object.freeze({
   centroid: ['bodyCenter', 'pelvisCenter', 'chestCenter'],
   feet: ['soleN', 'soleF', 'soleL', 'soleR', 'toeN', 'toeF', 'feet'],
   headPart: 'head',
+  /** Parts other than the head part that carry a head when a key brings them in (Lulu's front-view upper body: `front` in format v2, `fdef` and `fod` in version 1), and the share of the idle plane's area at which one counts as drawn (a version 1 rig stores such a part as an always-visible speck). */
+  headVariants: ['front', 'fdef', 'fod'],
+  variantMinArea: 0.02,
   settleFrames: 120,
   notPlanted: ['jump', 'overdrive'],
 });
@@ -50,7 +58,7 @@ export function rigConfig(cfg) {
 /** What the page-side reader needs (`createRigReader`), or null when rig reading is off. */
 export function rigProbeConfig(cfg) {
   const r = rigConfig(cfg);
-  return r ? { head: r.head, centroid: r.centroid, feet: r.feet, headPart: r.headPart } : null;
+  return r ? { head: r.head, centroid: r.centroid, feet: r.feet, headPart: r.headPart, headVariants: r.headVariants, variantMinArea: r.variantMinArea } : null;
 }
 
 const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
@@ -88,9 +96,11 @@ export function idleBoxOf(list, poses, fi) {
  * @param {number} o.k1600 px scale to a 1600-wide canvas
  * @param {boolean} o.camCut a camera cut or whip near the change
  * @param {object} o.cfg the policy's `continuity` block
+ * @param {((pose:string) => number|null)|null} [o.realHead] the head the player really sees in a key over the idle's, from the owner-reviewed registration of the painting the key reproduces
+ *   (`realHeadOfRegistration`); read only for a change of key that swaps the head (see HEAD above). Absent or null for a key: that key's head is shown, not judged.
  * @returns {object} the swap's analysis, shaped as `analyzeSwap`'s
  */
-export function analyzeRigSwap({ frames, at, from, to, idleBh, k1600, camCut, cfg }) {
+export function analyzeRigSwap({ frames, at, from, to, idleBh, k1600, camCut, cfg, realHead = null }) {
   const rc = rigConfig(cfg) ?? RIG_DEFAULTS;
   const rgOf = (e) => (e && e.fig ? e.fig.rg ?? null : null);
   const out = {
@@ -123,8 +133,24 @@ export function analyzeRigSwap({ frames, at, from, to, idleBh, k1600, camCut, cf
   const lin = (rg, key) => (finite(rg?.[key]) && rg[key] > 0 && finite(rg.pw) && finite(rg.ph) ? Math.sqrt(rg[key] * rg.pw * rg.ph) * k1600 : null);
   const bothHead = finite(before.ha) && before.ha > 0 && finite(after.ha) && after.ha > 0;
   const bothMass = finite(before.ma) && before.ma > 0 && finite(after.ma) && after.ma > 0;
-  const metric = bothHead ? 'head' : bothMass ? 'mass' : null;
-  if (metric) {
+  const hvBefore = typeof before.hv === 'string' ? before.hv : null, hvAfter = typeof after.hv === 'string' ? after.hv : null;
+  const swapsHead = hvBefore !== hvAfter; // one key shows a head the other does not (or two different ones): the head part's mesh is not what the player sees change
+  const metric = swapsHead ? 'variant' : bothHead ? 'head' : bothMass ? 'mass' : null;
+  if (metric === 'variant') {
+    // the head the player really sees, in the key that brings the variant in (idle is the reference, 1), against the band of that key's class
+    const sides = [[hvBefore, from.pose], [hvAfter, to.pose]].filter(([hv]) => hv !== null).map(([hv, pose]) => ({ hv, pose, real: pose === 'idle' ? 1 : realHead ? realHead(pose) : null }));
+    const read = sides.length > 0 && sides.every((x) => finite(x.real));
+    const ratio = read ? (sides.length === 1 ? sides[0].real : round(realHead(to.pose) / realHead(from.pose), 4)) : null;
+    out.head = { fromPx: null, toPx: null, ratio: null, source: 'rig', metric: 'variant', label: 'front view', variant: { from: hvBefore, to: hvAfter } };
+    out.rig.headMetric = 'variant';
+    if (read) {
+      const bandOf = (pose) => BANDS[cls(pose)]?.head ?? BANDS.standing.head;
+      const worst = sides.map((x) => ({ ...x, band: bandOf(x.pose) })).sort((a, b) => Math.abs(b.real - 1) - Math.abs(a.real - 1))[0];
+      const outsideBand = sides.some((x) => outside(x.real, bandOf(x.pose)));
+      out.headReal = { ratio: round(ratio, 4), fromHeld: null, toHeld: null, costPct: round((ratio - 1) * 100, 1), band: worst.band, outsideBand, waived: null, source: 'registration', variant: { from: hvBefore, to: hvAfter } };
+      out.failRealHead = judged && outsideBand;
+    }
+  } else if (metric) {
     const key = metric === 'head' ? 'ha' : 'ma';
     const ratio = Math.sqrt(after[key] / before[key]);
     out.head = { fromPx: round(lin(before, key) ?? 0, 1), toPx: round(lin(after, key) ?? 0, 1), ratio: round(ratio, 4), source: 'rig', metric, label: metric === 'head' ? 'rig' : 'mass' };

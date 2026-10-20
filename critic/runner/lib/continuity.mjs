@@ -130,7 +130,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     return out;
   }
   const { anchors, notes } = await anchorsForPoses({ poses: meta.poses, fetchImage, measure, waivers });
-  const res = analyzeRun({ meta, records, anchors, cfg });
+  const res = analyzeRun({ meta, records, anchors, cfg, measure });
 
   // ---- the strips of the worst events
   const want = [];
@@ -263,6 +263,7 @@ export function aggregate(results, cfg) {
       koLengthMeasured: n0((s) => s.size.koLengthMeasured), minKoLength: lowest((s) => s.size.minKoLength), koLengthReported: n0((s) => s.size.koLengthReported),
       feetSilMeasured: n0((s) => s.size.feetSilMeasured), feetSilOver: n0((s) => s.size.feetSilOver), feetSilWaived: n0((s) => s.size.feetSilWaived), maxFeetSilPx: m0((s) => s.size.maxFeetSilPx),
       holdSwaps: n0((s) => s.size.holdSwaps), worstRealHeadPct: m0((s) => s.size.worstRealHeadPct), realHeadOutsideBand: n0((s) => s.size.realHeadOutsideBand), realHeadWaived: n0((s) => s.size.realHeadWaived),
+      variantHeadSwaps: n0((s) => s.size.variantHeadSwaps), worstVariantHeadPct: m0((s) => s.size.worstVariantHeadPct), variantHeadOutsideBand: n0((s) => s.size.variantHeadOutsideBand), // R59: a rig's front-view key
       unregisteredSwaps: n0((s) => s.size.unregisteredSwaps),
     });
   }

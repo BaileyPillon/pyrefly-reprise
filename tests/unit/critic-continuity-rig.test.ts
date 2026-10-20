@@ -75,6 +75,26 @@ describe('the page-side reader of a rigged figure', () => {
     expect(s.rg.cs).toBeUndefined();
   });
 
+  // R59, decision 146: a key may bring in another part that carries a head (Lulu's front-view upper body). Format v2 hides the part at rest (its mesh is not visible), version 1 stores it as a speck that
+  // is always visible and that the key scales up, so a variant counts as drawn only when it is visible AND has a real size (a share of the idle plane's area).
+  it('names the head variant part a key draws, and none for a hidden one or a speck (version 1 stores the part tiny and always visible)', () => {
+    const cfg = { ...RIG_CFG, headVariants: ['front', 'fdef'], variantMinArea: 0.02 };
+    const { actor } = fakeRig();
+    const kids = actor.figure.plane.children;
+    expect(createRigReader(cfg).sample(actor, P, null)!.rg.hv).toBeUndefined(); // no variant part on the rig at all
+    kids.push(mesh('front', 0.5, 0.5, false));
+    expect(createRigReader(cfg).sample(actor, P, null)!.rg.hv).toBeUndefined(); // version 2, hidden at rest
+    kids.pop(); kids.push(mesh('fdef', 0.01, 0.01)); // version 1's speck: visible, 0.0001 of the plane
+    expect(createRigReader(cfg).sample(actor, P, null)!.rg.hv).toBeUndefined();
+    kids.pop(); kids.push(mesh('fdef', 0.5, 0.5)); // brought in by a key: 0.25 of the plane
+    const s = createRigReader(cfg).sample(actor, P, null) as RigSample;
+    expect(s.rg.hv).toBe('fdef');
+    expect(s.rg.ha).toBeCloseTo(0.02, 6); // the head part is still read beside it
+    expect(createRigReader({ ...RIG_CFG }).sample(actor, P, null)!.rg.hv).toBeUndefined(); // a policy that names no variants reads none
+    const inPage = runInNewContext('(' + String(createRigReader) + ')(' + JSON.stringify(cfg) + ')') as ReturnType<typeof createRigReader>;
+    expect(inPage.sample(actor, P, null)!.rg.hv).toBe('fdef'); // and it stays self-contained
+  });
+
   it('says a move between two keys is in flight, and how far the camera alone moved each point while it moves', () => {
     const { actor, state } = fakeRig();
     state.busy = true;

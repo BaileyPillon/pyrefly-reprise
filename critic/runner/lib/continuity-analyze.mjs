@@ -36,6 +36,18 @@ export async function anchorsForPoses({ poses, fetchImage, measure, waivers = nu
   return { anchors, notes };
 }
 
+/**
+ * The head the player really sees in a key of a rigged figure over the idle's, from the pose registration records (`loadPoseMeasure`): the head ratio of the painting the key reproduces
+ * (`held.headRatio`, else the sizing rule's `ruled.headRatio`; the same fields `anchorsFor` reads for a painted pose). Null for a key the records do not give.
+ */
+export function realHeadOfRegistration(measure, subject) {
+  return (pose) => {
+    const rec = measure?.subjects?.[subject]?.poses?.[pose];
+    const v = rec?.held?.headRatio ?? rec?.ruled?.headRatio;
+    return Number.isFinite(v) ? v : null;
+  };
+}
+
 /** The last battle-log event at or before frame `n` (within `within` frames), preferring what moves a figure. */
 export function causeOf(logEvents, n, within = 90) {
   const MOVES = new Set(['action-start', 'damage', 'ko', 'heal', 'turn-start', 'spell', 'status', 'phase-change']);
@@ -54,8 +66,10 @@ export function causeOf(logEvents, n, within = 90) {
  * @param {Array} o.records  the probe's frame records, in order
  * @param {Array} o.anchors  from anchorsForPoses
  * @param {object} o.cfg     policy.json `continuity`
+ * @param {{subjects:object}|null} [o.measure] the pose registration records (`loadPoseMeasure`): a rigged figure's change of key that swaps the head (Lulu's front view) is judged by the head the
+ *   registration gives the key's painting (R59, decision 146); without it such a change is shown, not judged
  */
-export function analyzeRun({ meta, records, anchors, cfg }) {
+export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   const k1600 = scale1600(meta.view?.[2] ?? 1600);
   const figs = meta.figs, poses = meta.poses;
   const byFig = new Map();
@@ -116,7 +130,7 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
       const nextN = meta.swaps.reduce((m, x) => (x.i === sw.i && x.n > sw.n ? Math.min(m, x.n) : m), Infinity); // the window ends where the next change of key begins
       const start = Math.max(0, at - 1), win = [];
       for (let j = start; j < list.length && list[j].n < nextN && j - at <= rigOn.settleFrames; j++) { if (win.length && list[j].n !== win[win.length - 1].n + 1) break; win.push(list[j]); }
-      const res = analyzeRigSwap({ frames: win, at: at - start, from: poses[sw.from], to: poses[sw.to], idleBh: idleBox.get(sw.i), k1600, camCut: nearCut(sw.n), cfg });
+      const res = analyzeRigSwap({ frames: win, at: at - start, from: poses[sw.from], to: poses[sw.to], idleBh: idleBox.get(sw.i), k1600, camCut: nearCut(sw.n), cfg, realHead: measure ? realHeadOfRegistration(measure, poses[sw.to].rig ?? poses[sw.from].rig) : null });
       swaps.push({ ...base, startFrame: list[start].n, ...res, notShowing: false, counted: !res.camCut && !res.unmeasured });
       continue;
     }
@@ -167,7 +181,7 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
   for (const s of swaps.filter((x) => x.counted)) {
     const f = (perFigure[s.figure] ??= { swaps: 0, headRegistered: 0, headRig: 0, massRead: 0, worstHeadPct: 0, worstMassPct: 0, worstFeetPx: 0, snaps: 0, sizeOver: 0, feetOver: 0, heightOver: 0, feetSilOver: 0, minStature: null });
     f.swaps++;
-    if (s.head) {
+    if (s.head && s.head.ratio !== null) {
       const pct = Math.round(Math.abs(s.head.ratio - 1) * 1000) / 10;
       if (s.head.source === 'registration') { f.headRegistered++; f.worstHeadPct = Math.max(f.worstHeadPct, pct); } else if (s.head.source === 'rig' && s.head.metric === 'head') { f.headRig++; f.worstHeadPct = Math.max(f.worstHeadPct, pct); } else { f.massRead++; f.worstMassPct = Math.max(f.worstMassPct, pct); }
     }

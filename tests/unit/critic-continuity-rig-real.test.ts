@@ -30,6 +30,7 @@ const { createRigReader } = await import('../../critic/runner/lib/continuity-rig
 const { analyzeRun } = await import('../../critic/runner/lib/continuity-analyze.mjs');
 const { continuityConfig } = await import('../../critic/runner/lib/continuity.mjs');
 const { rigProbeConfig } = await import('../../critic/runner/lib/continuity-rig.mjs');
+const { loadPoseMeasure } = await import('../../critic/runner/lib/continuity-silhouette.mjs');
 type RigActorT = import('../../src/engine/rig/RigActor.ts').RigActor;
 type ProbeFrame = import('../../critic/runner/lib/continuity-probe.mjs').ProbeFrame;
 
@@ -186,4 +187,72 @@ describe.skipIf(SHIPPED.length === 0)('the rigs the game ships, from their own f
     expect(out.swaps.filter((w) => w.figure === name && w.notShowing)).toHaveLength(0);
     expect(out.summary.size.rigSwaps).toBe(keys.length * 2);
   }, 120_000);
+});
+
+// R59, decision 146 (both games, review tooling). Every key of Lulu and Kimahri played from their own rig.json and read with the pose registration records (docs/target/pose-measure.json), as a real run reads
+// them. Lulu's defend and od-fury bring in a front-view upper body and shrink her side head to 0.8, so the head part's mesh read 0.80 and 1.25 (a 25 percent head jump) in those four changes of key; they
+// are now read as a change of head (the head the registration gives the key, 0.959 and 1.029 of the idle's, inside the standing band 0.85 to 1.15) and the mesh ratio is not compared. Kimahri's follow key
+// (1.29 of the idle's height, PR-0462, the spear bone's scale of 1.327) is a real defect of the rig and still fails on its height. The head meshes of the keys that keep the same head part are read as before.
+describe.skipIf(!SHIPPED.includes('lulu') || !SHIPPED.includes('kimahri'))('a front-view key is not a head jump, and a real defect is still one', () => {
+  const MEASURE = loadPoseMeasure(resolve(__dirname, '..', '..', 'docs', 'target', 'pose-measure.json'));
+  type Row = { fromPose: string; toPose: string; counted: boolean; failHead: boolean; failHeight: boolean; failRealHead?: boolean; head: { metric: string; ratio: number | null } | null; headReal: { ratio: number; outsideBand: boolean; band: number[] } | null; height: { stature: number | null; flags: string[] } | null; rig: { headMetric: string | null } };
+  const replay = async (name: string, measure: unknown): Promise<Row[]> => {
+    const json = JSON.parse(readFileSync(resolve(RIGS_DIR, name, 'rig.json'), 'utf8')) as unknown;
+    const actor = await riggedActor({ name, json });
+    const { probe, step } = stageOf(actor, name);
+    probe.start();
+    const run = async (n: number): Promise<void> => { for (let i = 0; i < n; i++) await step(); };
+    await run(20);
+    const keys = actor.poseNames.filter((k) => k !== 'idle');
+    for (const k of keys) {
+      actor.setPose(k, { force: true });
+      await run(40);
+      actor.setPose('idle', { force: true });
+      await run(40);
+    }
+    const meta = probe.meta();
+    const records = probe.drain(100000).records as ProbeFrame[];
+    const out = analyzeRun({ meta, records, anchors: meta.poses.map(() => null), cfg: continuityConfig(), measure: measure as never });
+    expect(meta.errors).toEqual([]);
+    expect(out.swaps).toHaveLength(keys.length * 2);
+    expect(out.swaps.every((w) => w.counted)).toBe(true);
+    return out.swaps as unknown as Row[];
+  };
+
+  it('lulu: defend and od-fury (four changes of key) swap the head and pass on the head the registration gives them; the first reading, without the records, only shows them', async () => {
+    const swaps = await replay('lulu', MEASURE);
+    const front = swaps.filter((s) => ['defend', 'od-fury'].includes(s.fromPose) || ['defend', 'od-fury'].includes(s.toPose));
+    expect(front).toHaveLength(4);
+    for (const s of front) {
+      expect(s.rig.headMetric).toBe('variant');
+      expect(s.head).toMatchObject({ metric: 'variant', ratio: null }); // no mesh ratio: not 0.8, not 1.25
+      expect(s.failHead).toBe(false);
+      expect(s.headReal!.band).toEqual([0.85, 1.15]);
+      expect(s.headReal!.outsideBand).toBe(false);
+      expect(s.failRealHead).toBe(false);
+    }
+    expect(front.filter((s) => s.toPose === 'defend' || s.fromPose === 'defend').map((s) => s.headReal!.ratio)).toEqual([0.959, 0.959]);
+    expect(front.filter((s) => s.toPose === 'od-fury' || s.fromPose === 'od-fury').map((s) => s.headReal!.ratio)).toEqual([1.029, 1.029]);
+    // every other change of key keeps the head part on both sides and is read by its mesh as before
+    expect(swaps.filter((s) => !front.includes(s)).every((s) => s.rig.headMetric === 'head')).toBe(true);
+    const bare = await replay('lulu', null); // without the registration records: shown, not judged
+    expect(bare.filter((s) => s.rig.headMetric === 'variant').every((s) => s.headReal === null && !s.failHead && !s.failRealHead)).toBe(true);
+    expect(bare.filter((s) => s.rig.headMetric === 'variant')).toHaveLength(4);
+  }, 240_000);
+
+  it('kimahri: the follow key is still 1.29 of the idle\'s height and still fails CHK-026 on it (PR-0462), with or without the records', async () => {
+    for (const measure of [MEASURE, null]) {
+      const swaps = await replay('kimahri', measure);
+      const follow = swaps.filter((s) => s.fromPose === 'follow' || s.toPose === 'follow');
+      expect(follow).toHaveLength(2);
+      for (const s of follow) {
+        expect(s.height!.stature).toBeGreaterThan(1.28);
+        expect(s.height!.stature).toBeLessThan(1.30);
+        expect(s.height!.flags).toEqual(['stature-high']);
+        expect(s.failHeight).toBe(true);
+      }
+      expect(swaps.filter((s) => s.failHeight)).toHaveLength(2); // and it is the only key outside its height band
+      expect(swaps.every((s) => s.rig.headMetric === 'head')).toBe(true); // Kimahri has no second head: every change of key keeps the mesh reading
+    }
+  }, 240_000);
 });
