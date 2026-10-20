@@ -24,6 +24,9 @@ interface Harness {
   sleeps: number[];
   tosses: string[];
   glows: string[];
+  /** The spell layer's `land` calls (`ability@target`), and the colour of every flash on each target. */
+  lands: string[];
+  flashes: string[];
   play(events: Array<Unsequenced<BattleEvent>>): Promise<unknown>;
 }
 
@@ -43,6 +46,13 @@ function harness(deps: Partial<PresenterDeps> = { itemGesture: 'orb' }, o: { sta
       glows.push(`${at}:${opt.formMs}${opt.style ? `:${opt.style}` : ''}`);
     };
   }
+  const lands: string[] = [];
+  const flashes: string[] = [];
+  (stage.vfx as unknown as Record<string, unknown>)['land'] = (at: string, opt: { abilityId?: string }): number => {
+    lands.push(`${opt.abilityId ?? '?'}@${at}`);
+    return 300;
+  };
+  for (const [id, actor] of stage.actors) (actor as unknown as { flash: (c?: number) => void }).flash = (c?: number): void => void flashes.push(`${id}:${c === undefined ? '' : c.toString(16)}`);
   const sleeps: number[] = [];
   const moments = o.reduce ? ({ reduceMotion: () => true } as never) : undefined;
   const presenter = new BattlePresenter({
@@ -59,6 +69,8 @@ function harness(deps: Partial<PresenterDeps> = { itemGesture: 'orb' }, o: { sta
     sleeps,
     tosses,
     glows,
+    lands,
+    flashes,
     play: (events) => presenter.play(events.map((e, i) => ({ ...e, seq: i }) as BattleEvent)),
   };
 }
@@ -152,6 +164,21 @@ describe('an item in an FFX-2 chapter: a quick small white-blue spark, no orb', 
     await h.play([use('yuna', ['yuna', 'rikku', 'lulu'], 'mega-phoenix'), end('yuna'), use('rikku', ['seymour-flux'], 'grenade'), end('rikku')]);
     expect(h.tosses[0]).toBe(`yuna>yuna+rikku+lulu:${ITEM_SPARK.formMs}:${ITEM_SPARK.flightMs}:heal:spark`);
     expect(h.tosses[1]).toBe(`rikku>seymour-flux:${ITEM_SPARK.formMs}:${ITEM_SPARK.flightMs}:foe:spark`);
+  });
+  it('the spell layer draws nothing for an FFX-2 item (the burst is its picture) and the heal flash is white-blue; a spell in FFX-2 and an item in FFX keep the heal effect', async () => {
+    const h = harness(FFX2);
+    await h.play([use('yuna', ['rikku']), heal('rikku'), end('yuna')]);
+    expect(h.lands).toEqual([]);
+    expect(h.flashes).toContain('rikku:cfe9ff');
+    expect(h.flashes).not.toContain('rikku:9dffc4');
+    const spell = harness(FFX2);
+    await spell.play([{ type: 'action-start', actorId: 'yuna', command: { kind: 'ability', id: 'cure', targets: ['rikku'] }, abilityId: 'cure', targets: ['rikku'] } as never, heal('rikku'), end('yuna')]);
+    expect(spell.lands).toEqual(['cure@rikku']); // a spell is untouched
+    expect(spell.flashes).toContain('rikku:9dffc4');
+    const ffx = harness({ itemGesture: 'orb' });
+    await ffx.play([use('tidus', ['yuna']), heal('yuna'), end('tidus')]);
+    expect(ffx.lands).toEqual(['potion@yuna']); // FFX keeps the heal effect after its orb
+    expect(ffx.flashes).toContain('yuna:9dffc4');
   });
   it('REDUCE MOTION and skip speed draw nothing', async () => {
     const h = harness(FFX2, { reduce: true });

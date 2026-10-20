@@ -15,12 +15,17 @@ interface FakeOpts {
   at: P3;
   height?: number;
   fist?: { x: number; y: number } | null | 'throws';
+  /** The pose the figure shows (`ko`: lying down) and, for a rig in its `ko` key, the corners of the key's painted box. */
+  pose?: string;
+  koBox?: [number, number, number, number]; // x0, y0, x1, y1 of the lying body, world units relative to the figure's feet
 }
 
 /** A figure that answers what `ItemOrbStage` asks of a `PaintedActor`: a plane that maps (u, t) to a world point, a middle, a feet position, a height, and (a rig) a landmark. */
 interface FakeActor {
   position: Vector3;
   height: number;
+  pose?: string;
+  poseShape?: (name: string) => { corners: Vector3[] } | null;
   paintPoint(u: number, t: number, out?: Vector3): Vector3;
   centerPoint(out?: Vector3): Vector3;
   landmark?: (name: string) => { x: number; y: number } | null;
@@ -38,6 +43,14 @@ function figure(artId: string, o: FakeOpts): OrbFigure {
       return out.set(this.position.x, this.position.y + height * 0.52, this.position.z);
     },
   };
+  if (o.pose) actor.pose = o.pose;
+  const box = o.koBox;
+  if (box) {
+    actor.poseShape = (name: string) =>
+      name === 'ko'
+        ? { corners: [new Vector3(o.at.x + box[0], o.at.y + box[1], 0), new Vector3(o.at.x + box[2], o.at.y + box[1], 0), new Vector3(o.at.x + box[2], o.at.y + box[3], 0), new Vector3(o.at.x + box[0], o.at.y + box[3], 0)] }
+        : null;
+  }
   const fist = o.fist;
   if (fist !== undefined) {
     actor.landmark = (name: string): { x: number; y: number } | null => {
@@ -164,6 +177,24 @@ describe('the orb\'s timeline', () => {
     expect(mid.y).toBeGreaterThan(line + 0.05);
     expect(mid.x).toBeLessThan(from.x); // it has left the hand toward the ally
     expect(mid.x).toBeGreaterThan(to.x);
+  });
+  it('Phoenix Down: a rig lying in its ko key is aimed at through the key\'s painted box (the body on the ground), not through the standing figure\'s middle', () => {
+    const user = figure('yuna', { at: { x: 2, y: 0, z: 0 } });
+    const down = figure('kimahri', { at: { x: -2, y: 0, z: 0 }, height: 2.4, fist: { x: 0, y: 1 }, pose: 'ko', koBox: [-0.8, 0, 0.8, 0.5] });
+    const { stage } = stageOf({ yuna: user, kimahri: down });
+    stage.toss('yuna', ['kimahri'], { formMs: 100, flightMs: 200, tone: 'heal' });
+    step(stage, 100 + 200 + 40);
+    expect(stage.state.phase).toBe('burst');
+    expect(stage.state.at.x).toBeCloseTo(-2, 1);
+    expect(stage.state.at.y).toBeCloseTo(0.25, 1); // the middle of the lying body, not the 1.25 of a standing one (height 2.4 x 0.52)
+  });
+  it('a painted figure lying down is aimed at by its own middle', () => {
+    const user = figure('yuna', { at: { x: 2, y: 0, z: 0 } });
+    const down = figure('tidus', { at: { x: -2, y: 0, z: 0 }, pose: 'ko' }); // no poseShape: centerPoint (which the actor already follows to its prone painting)
+    const { stage } = stageOf({ yuna: user, tidus: down });
+    stage.toss('yuna', ['tidus'], { formMs: 100, flightMs: 200, tone: 'heal' });
+    step(stage, 340);
+    expect(stage.state.at.y).toBeCloseTo(1.8 * 0.52, 1);
   });
   it('a group item (more than one target) lands in the middle of them', () => {
     const user = figure('tidus', { at: { x: 2, y: 0, z: 0 } });

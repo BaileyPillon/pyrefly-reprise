@@ -68,6 +68,22 @@ export class ItemOrbStage {
     return f.actor.paintPoint(h.u, h.t, this.handV);
   }
 
+  /**
+   * The middle of one figure's body: `centerPoint`, except for a figure lying knocked out in its `ko` key. A painted figure's `centerPoint` already follows its prone painting, but a rig draws no plane of its
+   * own (its plane stays the standing idle), so a rig in its `ko` key is read through the key's own painted box (`poseShape`): the orb lands on the body on the ground, not in the air above it (Phoenix Down).
+   */
+  private bodyOf(f: OrbFigure, out: Vector3): Vector3 {
+    if (f.actor.pose === 'ko') {
+      const box = (f.actor as unknown as { poseShape?: (name: string) => { corners: readonly Vector3[] } | null }).poseShape?.('ko');
+      if (box && box.corners.length === 4) {
+        out.set(0, 0, 0);
+        for (const c of box.corners) out.add(c);
+        return out.multiplyScalar(0.25);
+      }
+    }
+    return f.actor.centerPoint(out);
+  }
+
   /** The middle of these figures' bodies (one figure: its middle), or null when none of them is on the field. */
   private middleOf(ids: readonly CombatantId[]): P3 | null {
     let n = 0;
@@ -75,7 +91,7 @@ export class ItemOrbStage {
     for (const id of ids) {
       const f = this.figure(id);
       if (!f) continue;
-      this.sumV.add(f.actor.centerPoint(this.aimV));
+      this.sumV.add(this.bodyOf(f, this.aimV));
       n++;
     }
     return n > 0 ? this.sumV.multiplyScalar(1 / n) : null;
@@ -114,7 +130,7 @@ export class ItemOrbStage {
     const unit = f.actor.height / 1.8;
     if (o.style === 'spark') {
       const mid = new Vector3();
-      this.take().sparkle({ at: () => mid.copy(f.actor.centerPoint(this.aimV)), formMs: o.formMs, unit });
+      this.take().sparkle({ at: () => mid.copy(this.bodyOf(f, this.aimV)), formMs: o.formMs, unit });
       return;
     }
     const hand = new Vector3();

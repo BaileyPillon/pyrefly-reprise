@@ -10,7 +10,7 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
-import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
+import { awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -136,7 +136,7 @@ export async function damage(
     await awaitSpellLanding(ctx, event, true);
     await shotLanded(ctx, event);
     odApex(ctx, event.sourceId ?? ctx.actingId); // r37 slot (FFX-2: the move's apex)
-    target?.flash(0x9dffc4, 320, 0.6);
+    target?.flash(sparkItem(ctx, event.sourceId) ? 0xcfe9ff : 0x9dffc4, 320, 0.6); // FFX-2's item burst is white-blue
     await revealBlow(ctx, event); // a held blow's numeral and HP row, now it has landed
     numeral(ctx, event.targetId, {
       kind: 'heal',
