@@ -136,6 +136,20 @@ What the pilot taught, in the order it bit:
 - `key-fit-stale` after any change: the key's recorded `fit` is a claim; `lane_fit.rewrite_claims` sets it to the gate's reading (the scratch driver ran export, gate with `--json`, rewrite, export, gate).
 - `ko-summary.mjs`'s head area is the part named `head`: with variants the one mesh swaps its geometry, so the area is the variant's (the idle head's area by the rule above).
 
+### What the second expressive lane taught (rig-expressive-2: Ifrit, Grothia, Spathi, Shiva, Pterya)
+
+Tools are in `tools/rig/lane/expressive/` (README there). New `rig_vcut.py` fields: `mask` (a partition image instead of a polygon), `fill_joints` (fill discs at the joints the hole test watches, placed AFTER the piece's scale: a `scaleArea` piece is
+scaled about its anchor, so the disc is moved back through the scale and the scale re-measured until it settles), `filter` (the `tex` resize is Hamming: Lanczos rings at a mask's hard edge and the un-premultiply turns it into a pale line).
+- **Head first, then what the head needs.** A head that takes the painting's pose drags a neck: Ifrit's head variant needed the far arm (it carries the neck under the chin); Pterya's head needed the neck piece; Spathi's head needed its wings to
+  keep the silhouette; Shiva's attack is another drawing, so every part is a piece.
+- **The head's size rule is the OPAQUE area, not only the mesh.** A painting with a broad glow ring (Grothia, Spathi, Pterya: alpha 25 to 64 round the figure) has a mesh that is mostly glow: `scaleArea 1.0` gave opaque heads 0.74 to 0.92 of the
+  idle's. Tune `scaleArea` until `ha.py` reads the opaque ratio inside 0.97 to 1.03 (Pterya attack 1.29, hurt 1.24).
+- **The hole test is local to the key's bones, and a piece lands where the painting has it whatever the bones are.** So the bones are free: `jfit.py` moves rotations and offsets until every watched pivot sits deep inside its own pieces, keeping marks
+  and planted feet (Shiva's hurt and attack keys; the gate's overlap went 0.75 to 0.98). What the nudge cannot reach is filled with `fill_joints`; keep the discs small, a fill is made-up pixels that can show against the sky.
+- **Budgets: lossless recompression gives back 5 to 10 percent** (`recomp.mjs`, sharp level 9, pixels proved identical). Spathi's four wing pieces needed `tex: 0.3` on top of it. `tex 0.75` for heads reads clean at the game's size.
+- **Twins: move the variants with the registration** (`lane_twin.shift_config` now moves a variant's polygon, cut lines, anchor and fills by the shift times the scale); check the twin's rest composite count before trusting the cut (Grothia's glow skirts).
+- **A variant swap is a hard pop at the half-way of the blend** (the state of the key moved FROM below 50 percent, the one moved TO from 50), exactly as the painting set pops a whole figure. Watch the clips for it.
+
 ## Tests
 
 `$PY -I tools/rig/lane/test_lane.py` (the pure parts of the Python commands, 19 cases) and `npx vitest run tests/unit/tools/rig-lane.test.ts` (the recorder's pure parts and the registry, 12 cases). The browser

@@ -1,0 +1,1808 @@
+{
+ "_lane": "Pterya (FFX: Isaaru's Valefor, Chapter XIV; the silhouette twin of Valefor, `lane.py twin pterya --of valefor`): the same cut, bones, marks and keys as valefor.json, moved onto Pterya's own paintings (its canvases are Valefor's with 60 px more margin on every side: registration (60, 60), silhouettes equal to 0.999 at alpha 128; `_twin_shift` has each pose's). One costume across idle, attack, cast, hurt and KO (a re-colouring of Valefor's with a soft outer glow). Game case: FFX only (Pterya is an FFX enemy, chapter 14 link 2); the rig stays OFF.",
+ "subject": "pterya",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "hooks": "valefor_hooks.py",
+ "cut": {
+  "polys": {
+   "head_zone": [
+    [
+     345,
+     60
+    ],
+    [
+     558,
+     60
+    ],
+    [
+     554,
+     105
+    ],
+    [
+     538,
+     160
+    ],
+    [
+     526,
+     210
+    ],
+    [
+     530,
+     260
+    ],
+    [
+     528,
+     300
+    ],
+    [
+     505,
+     345
+    ],
+    [
+     445,
+     410
+    ],
+    [
+     345,
+     410
+    ]
+   ],
+   "neck_zone": [
+    [
+     526,
+     90
+    ],
+    [
+     732,
+     90
+    ],
+    [
+     732,
+     285
+    ],
+    [
+     712,
+     395
+    ],
+    [
+     558,
+     395
+    ],
+    [
+     530,
+     360
+    ],
+    [
+     540,
+     300
+    ],
+    [
+     526,
+     295
+    ],
+    [
+     526,
+     210
+    ]
+   ],
+   "body_zone": [
+    [
+     455,
+     345
+    ],
+    [
+     530,
+     350
+    ],
+    [
+     580,
+     365
+    ],
+    [
+     700,
+     358
+    ],
+    [
+     775,
+     368
+    ],
+    [
+     830,
+     388
+    ],
+    [
+     910,
+     426
+    ],
+    [
+     970,
+     458
+    ],
+    [
+     1025,
+     492
+    ],
+    [
+     1072,
+     530
+    ],
+    [
+     1072,
+     620
+    ],
+    [
+     845,
+     672
+    ],
+    [
+     770,
+     675
+    ],
+    [
+     750,
+     660
+    ],
+    [
+     620,
+     658
+    ],
+    [
+     455,
+     638
+    ]
+   ],
+   "wing_zone": [
+    [
+     708,
+     354
+    ],
+    [
+     722,
+     298
+    ],
+    [
+     800,
+     274
+    ],
+    [
+     850,
+     118
+    ],
+    [
+     910,
+     90
+    ],
+    [
+     1700,
+     90
+    ],
+    [
+     1700,
+     512
+    ],
+    [
+     1082,
+     512
+    ],
+    [
+     1072,
+     530
+    ],
+    [
+     1025,
+     492
+    ],
+    [
+     970,
+     458
+    ],
+    [
+     910,
+     426
+    ],
+    [
+     830,
+     388
+    ],
+    [
+     775,
+     368
+    ]
+   ],
+   "legF_zone": [
+    [
+     620,
+     645
+    ],
+    [
+     750,
+     645
+    ],
+    [
+     750,
+     685
+    ],
+    [
+     732,
+     710
+    ],
+    [
+     710,
+     760
+    ],
+    [
+     680,
+     810
+    ],
+    [
+     652,
+     852
+    ],
+    [
+     605,
+     862
+    ],
+    [
+     595,
+     892
+    ],
+    [
+     440,
+     892
+    ],
+    [
+     440,
+     805
+    ],
+    [
+     620,
+     765
+    ]
+   ],
+   "legN_zone": [
+    [
+     750,
+     645
+    ],
+    [
+     870,
+     645
+    ],
+    [
+     870,
+     785
+    ],
+    [
+     825,
+     892
+    ],
+    [
+     595,
+     892
+    ],
+    [
+     608,
+     860
+    ],
+    [
+     652,
+     852
+    ],
+    [
+     680,
+     810
+    ],
+    [
+     710,
+     760
+    ],
+    [
+     732,
+     710
+    ],
+    [
+     750,
+     685
+    ]
+   ],
+   "plume_zone": [
+    [
+     760,
+     539
+    ],
+    [
+     834,
+     544
+    ],
+    [
+     865,
+     552
+    ],
+    [
+     918,
+     563
+    ],
+    [
+     970,
+     569
+    ],
+    [
+     1012,
+     568
+    ],
+    [
+     1052,
+     574
+    ],
+    [
+     1060,
+     600
+    ],
+    [
+     1065,
+     608
+    ],
+    [
+     1160,
+     685
+    ],
+    [
+     1210,
+     728
+    ],
+    [
+     1260,
+     772
+    ],
+    [
+     1310,
+     816
+    ],
+    [
+     1360,
+     860
+    ],
+    [
+     1392,
+     868
+    ],
+    [
+     1385,
+     875
+    ],
+    [
+     1350,
+     873
+    ],
+    [
+     1260,
+     835
+    ],
+    [
+     1210,
+     806
+    ],
+    [
+     1160,
+     776
+    ],
+    [
+     1060,
+     710
+    ],
+    [
+     960,
+     665
+    ],
+    [
+     860,
+     620
+    ],
+    [
+     840,
+     612
+    ],
+    [
+     800,
+     595
+    ],
+    [
+     760,
+     582
+    ]
+   ],
+   "tail_zone": [
+    [
+     795,
+     615
+    ],
+    [
+     1075,
+     660
+    ],
+    [
+     1090,
+     515
+    ],
+    [
+     1280,
+     515
+    ],
+    [
+     1280,
+     880
+    ],
+    [
+     795,
+     880
+    ]
+   ]
+  },
+  "order": [
+   "tail",
+   "wing",
+   "plume",
+   "legF",
+   "legN",
+   "neck",
+   "body",
+   "head"
+  ],
+  "priority": [
+   "head",
+   "plume",
+   "body",
+   "legN",
+   "legF",
+   "wing",
+   "neck",
+   "tail"
+  ],
+  "parts": {
+   "head": {
+    "include": [
+     {
+      "poly": "head_zone"
+     }
+    ]
+   },
+   "neck": {
+    "include": [
+     {
+      "poly": "neck_zone"
+     }
+    ]
+   },
+   "body": {
+    "include": [
+     {
+      "poly": "body_zone"
+     }
+    ]
+   },
+   "wing": {
+    "include": [
+     {
+      "poly": "wing_zone"
+     }
+    ]
+   },
+   "plume": {
+    "include": [
+     {
+      "all": [
+       {
+        "poly": "plume_zone"
+       },
+       {
+        "x_ge": 920
+       }
+      ]
+     },
+     {
+      "all": [
+       {
+        "poly": "plume_zone"
+       },
+       {
+        "colour": {
+         "r_lt": 0.4,
+         "g_minus_b_lt": -0.08
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "tail": {
+    "include": [
+     {
+      "poly": "tail_zone"
+     }
+    ]
+   },
+   "legF": {
+    "include": [
+     {
+      "poly": "legF_zone"
+     }
+    ]
+   },
+   "legN": {
+    "include": [
+     {
+      "poly": "legN_zone"
+     }
+    ]
+   }
+  },
+  "nearest": {
+   "maxdist": 40
+  },
+  "clean": {
+   "min_island": 150,
+   "close": 2
+  },
+  "ops": [
+   {
+    "op": "skirt",
+    "back": "neck",
+    "front": "body",
+    "px": 40
+   },
+   {
+    "op": "skirt",
+    "back": "neck",
+    "front": "head",
+    "px": 30
+   },
+   {
+    "op": "skirt",
+    "back": "wing",
+    "front": "body",
+    "px": 60
+   },
+   {
+    "op": "skirt",
+    "back": "plume",
+    "front": "body",
+    "px": 50
+   },
+   {
+    "op": "skirt",
+    "back": "tail",
+    "front": "plume",
+    "px": 30
+   },
+   {
+    "op": "skirt",
+    "back": "tail",
+    "front": "body",
+    "px": 40
+   },
+   {
+    "op": "skirt",
+    "back": "tail",
+    "front": "legN",
+    "px": 20
+   },
+   {
+    "op": "skirt",
+    "back": "legN",
+    "front": "body",
+    "px": 40
+   },
+   {
+    "op": "skirt",
+    "back": "legF",
+    "front": "body",
+    "px": 40
+   },
+   {
+    "op": "skirt",
+    "back": "legF",
+    "front": "legN",
+    "px": 25
+   }
+  ]
+ },
+ "build": {
+  "bones": [
+   [
+    "root",
+    null,
+    [
+     680,
+     874
+    ]
+   ],
+   [
+    "pelvis",
+    "root",
+    [
+     750,
+     645
+    ]
+   ],
+   [
+    "chest",
+    "pelvis",
+    [
+     660,
+     490
+    ]
+   ],
+   [
+    "neck0",
+    "chest",
+    [
+     625,
+     385
+    ]
+   ],
+   [
+    "neck1",
+    "neck0",
+    [
+     625,
+     250
+    ]
+   ],
+   [
+    "head",
+    "neck1",
+    [
+     535,
+     210
+    ]
+   ],
+   [
+    "wingA",
+    "chest",
+    [
+     760,
+     360
+    ]
+   ],
+   [
+    "wingB",
+    "wingA",
+    [
+     910,
+     180
+    ]
+   ],
+   [
+    "wingC",
+    "wingB",
+    [
+     1310,
+     210
+    ]
+   ],
+   [
+    "plume0",
+    "pelvis",
+    [
+     780,
+     530
+    ]
+   ],
+   [
+    "plume1",
+    "plume0",
+    [
+     980,
+     660
+    ]
+   ],
+   [
+    "plume2",
+    "plume1",
+    [
+     1170,
+     775
+    ]
+   ],
+   [
+    "tail0",
+    "pelvis",
+    [
+     830,
+     660
+    ]
+   ],
+   [
+    "tail1",
+    "tail0",
+    [
+     960,
+     765
+    ]
+   ],
+   [
+    "tail2",
+    "tail1",
+    [
+     1090,
+     825
+    ]
+   ],
+   [
+    "tail3",
+    "tail2",
+    [
+     1210,
+     795
+    ]
+   ],
+   [
+    "tail4",
+    "tail3",
+    [
+     1255,
+     700
+    ]
+   ],
+   [
+    "tail5",
+    "tail4",
+    [
+     1190,
+     585
+    ]
+   ],
+   [
+    "thighN",
+    "pelvis",
+    [
+     790,
+     670
+    ]
+   ],
+   [
+    "shinN",
+    "thighN",
+    [
+     770,
+     750
+    ]
+   ],
+   [
+    "footN",
+    "shinN",
+    [
+     700,
+     835
+    ]
+   ],
+   [
+    "thighF",
+    "pelvis",
+    [
+     690,
+     670
+    ]
+   ],
+   [
+    "shinF",
+    "thighF",
+    [
+     670,
+     755
+    ]
+   ],
+   [
+    "footF",
+    "shinF",
+    [
+     550,
+     835
+    ]
+   ]
+  ],
+  "skin": {
+   "tail": {
+    "type": "chain",
+    "bones": [
+     "tail0",
+     "tail1",
+     "tail2",
+     "tail3",
+     "tail4",
+     "tail5"
+    ],
+    "joints": [
+     [
+      830,
+      660
+     ],
+     [
+      960,
+      765
+     ],
+     [
+      1090,
+      825
+     ],
+     [
+      1210,
+      795
+     ],
+     [
+      1255,
+      700
+     ],
+     [
+      1190,
+      585
+     ],
+     [
+      1095,
+      532
+     ]
+    ],
+    "ramps": [
+     40,
+     40,
+     40,
+     40,
+     40
+    ],
+    "mesh": {
+     "edge": 24,
+     "inner": 48,
+     "grow": 10
+    }
+   },
+   "wing": {
+    "type": "chain",
+    "bones": [
+     "wingA",
+     "wingB",
+     "wingC"
+    ],
+    "joints": [
+     [
+      760,
+      360
+     ],
+     [
+      910,
+      180
+     ],
+     [
+      1310,
+      210
+     ],
+     [
+      1690,
+      295
+     ]
+    ],
+    "ramps": [
+     60,
+     100
+    ],
+    "mesh": {
+     "edge": 30,
+     "inner": 64,
+     "grow": 12
+    }
+   },
+   "plume": {
+    "type": "chain",
+    "bones": [
+     "plume0",
+     "plume1",
+     "plume2"
+    ],
+    "joints": [
+     [
+      780,
+      530
+     ],
+     [
+      980,
+      660
+     ],
+     [
+      1170,
+      775
+     ],
+     [
+      1370,
+      870
+     ]
+    ],
+    "ramps": [
+     60,
+     60
+    ],
+    "mesh": {
+     "edge": 22,
+     "inner": 44,
+     "grow": 10
+    }
+   },
+   "legF": {
+    "type": "chain",
+    "bones": [
+     "thighF",
+     "shinF",
+     "footF"
+    ],
+    "joints": [
+     [
+      690,
+      670
+     ],
+     [
+      670,
+      755
+     ],
+     [
+      550,
+      835
+     ],
+     [
+      460,
+      860
+     ]
+    ],
+    "ramps": [
+     30,
+     30
+    ],
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 8
+    }
+   },
+   "legN": {
+    "type": "chain",
+    "bones": [
+     "thighN",
+     "shinN",
+     "footN"
+    ],
+    "joints": [
+     [
+      790,
+      670
+     ],
+     [
+      770,
+      750
+     ],
+     [
+      700,
+      835
+     ],
+     [
+      605,
+      860
+     ]
+    ],
+    "ramps": [
+     30,
+     30
+    ],
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 8
+    }
+   },
+   "neck": {
+    "type": "chain",
+    "bones": [
+     "neck0",
+     "neck1"
+    ],
+    "joints": [
+     [
+      625,
+      385
+     ],
+     [
+      625,
+      250
+     ],
+     [
+      540,
+      185
+     ]
+    ],
+    "ramps": [
+     50
+    ],
+    "mesh": {
+     "edge": 20,
+     "inner": 38,
+     "grow": 10
+    }
+   },
+   "body": {
+    "type": "chain",
+    "bones": [
+     "pelvis",
+     "chest"
+    ],
+    "joints": [
+     [
+      750,
+      645
+     ],
+     [
+      660,
+      490
+     ],
+     [
+      630,
+      360
+     ]
+    ],
+    "ramps": [
+     60
+    ],
+    "mesh": {
+     "edge": 24,
+     "inner": 48,
+     "grow": 10
+    }
+   },
+   "head": {
+    "type": "rigid",
+    "bone": "head",
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 10
+    }
+   }
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    [
+     440,
+     288
+    ]
+   ],
+   "beak": [
+    "head",
+    [
+     398,
+     378
+    ]
+   ],
+   "feet": [
+    "root",
+    [
+     680,
+     874
+    ]
+   ],
+   "toeN": [
+    "footN",
+    [
+     608,
+     862
+    ]
+   ],
+   "toeF": [
+    "footF",
+    [
+     462,
+     860
+    ]
+   ],
+   "wingTip": [
+    "wingC",
+    [
+     1657,
+     288
+    ]
+   ],
+   "plumeTip": [
+    "plume2",
+    [
+     1360,
+     865
+    ]
+   ],
+   "tailTip": [
+    "tail5",
+    [
+     1094,
+     532
+    ]
+   ],
+   "bodyCenter": [
+    "chest",
+    [
+     700,
+     530
+    ]
+   ]
+  },
+  "variants": {
+   "head": {
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "tools/rig/subjects/pterya-x.masks/attack.head.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "mesh": {
+       "edge": 18,
+       "inner": 34,
+       "grow": 10
+      },
+      "tex": 0.75,
+      "scaleArea": 1.29
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "tools/rig/subjects/pterya-x.masks/hurt.head.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "mesh": {
+       "edge": 18,
+       "inner": 34,
+       "grow": 10
+      },
+      "tex": 0.75,
+      "scaleArea": 1.24
+     }
+    }
+   },
+   "neck": {
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "tools/rig/subjects/pterya-x.masks/attack.neck.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "mesh": {
+       "edge": 20,
+       "inner": 38,
+       "grow": 10
+      },
+      "skin": "chain",
+      "tex": 0.75,
+      "fill_joints": {
+       "neck0": 120,
+       "neck1": 72
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "tools/rig/subjects/pterya-x.masks/hurt.neck.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "mesh": {
+       "edge": 20,
+       "inner": 38,
+       "grow": 10
+      },
+      "skin": "chain",
+      "tex": 0.75,
+      "fill_joints": {
+       "neck0": 120,
+       "neck1": 85
+      }
+     }
+    }
+   }
+  }
+ },
+ "fit": {
+  "min_iou": 0.0,
+  "default_limit": 110,
+  "chain_limit": 40,
+  "restarts": 3,
+  "evals": 900,
+  "mark_free": 0.025,
+  "mark_soft": 0.015,
+  "mark_w": 2,
+  "band_w": 1,
+  "feet_x_w": 3,
+  "dfoot_w": 2,
+  "offsets": [
+   "pelvis"
+  ],
+  "offset_limit": {
+   "pelvis": [
+    0.15,
+    0.15
+   ]
+  },
+  "scales": {
+   "thighN": [
+    0.9,
+    1.15
+   ],
+   "thighF": [
+    0.9,
+    1.15
+   ],
+   "shinN": [
+    0.9,
+    1.15
+   ],
+   "shinF": [
+    0.9,
+    1.15
+   ]
+  },
+  "limits": {
+   "pelvis": [
+    -25,
+    25
+   ],
+   "chest": [
+    -30,
+    30
+   ],
+   "neck0": [
+    -45,
+    45
+   ],
+   "neck1": [
+    -55,
+    55
+   ],
+   "head": [
+    -60,
+    60
+   ],
+   "wingA": [
+    -70,
+    70
+   ],
+   "wingB": [
+    -80,
+    60
+   ],
+   "wingC": [
+    -60,
+    60
+   ],
+   "plume0": [
+    -25,
+    25
+   ],
+   "plume1": [
+    -25,
+    25
+   ],
+   "plume2": [
+    -25,
+    25
+   ],
+   "tail0": [
+    -35,
+    35
+   ],
+   "tail1": [
+    -35,
+    35
+   ],
+   "tail2": [
+    -35,
+    35
+   ],
+   "tail3": [
+    -35,
+    35
+   ],
+   "tail4": [
+    -35,
+    35
+   ],
+   "tail5": [
+    -35,
+    35
+   ],
+   "thighN": [
+    -70,
+    70
+   ],
+   "shinN": [
+    -80,
+    80
+   ],
+   "footN": [
+    -45,
+    45
+   ],
+   "thighF": [
+    -70,
+    70
+   ],
+   "shinF": [
+    -80,
+    80
+   ],
+   "footF": [
+    -45,
+    45
+   ]
+  },
+  "mirror": [],
+  "keys": {
+   "ko": {
+    "planted": false,
+    "root_rot": [
+     -45,
+     45
+    ],
+    "root_dx": [
+     -300,
+     300
+    ],
+    "limits": {
+     "neck0": [
+      -12,
+      12
+     ],
+     "neck1": [
+      -25,
+      25
+     ],
+     "head": [
+      -40,
+      40
+     ],
+     "chest": [
+      -35,
+      35
+     ],
+     "pelvis": [
+      -35,
+      35
+     ]
+    },
+    "init": {
+     "pelvis": -30.3,
+     "chest": 24.9,
+     "neck0": -8.8,
+     "neck1": 7.0,
+     "head": -34.0,
+     "wingA": 70.0,
+     "wingB": -38.6,
+     "wingC": -31.0,
+     "plume0": -25.0,
+     "plume1": -15.1,
+     "plume2": 23.9,
+     "tail0": 10.8,
+     "tail1": -12.7,
+     "tail2": -28.7,
+     "tail3": -16.9,
+     "tail4": -33.8,
+     "tail5": 20.2,
+     "thighN": 43.3,
+     "shinN": -4.2,
+     "footN": -1.7,
+     "thighF": 41.3,
+     "shinF": -3.3,
+     "footF": 44.8,
+     "pelvis.dx": -207.9,
+     "pelvis.dy": 233.4,
+     "thighN.s": 0.974,
+     "thighF.s": 0.992,
+     "shinN.s": 0.91,
+     "shinF.s": 1.121,
+     "root.dx": 43.4
+    }
+   },
+   "overdrive": {
+    "planted": false,
+    "root_rot": [
+     -80,
+     80
+    ],
+    "root_dx": [
+     -300,
+     300
+    ],
+    "limits": {
+     "neck0": [
+      -45,
+      45
+     ],
+     "neck1": [
+      -110,
+      110
+     ],
+     "head": [
+      -110,
+      110
+     ],
+     "thighF": [
+      -50,
+      50
+     ],
+     "shinF": [
+      -50,
+      50
+     ],
+     "shinN": [
+      -80,
+      80
+     ],
+     "chest": [
+      -70,
+      70
+     ],
+     "pelvis": [
+      -45,
+      45
+     ],
+     "wingA": [
+      -110,
+      110
+     ],
+     "wingB": [
+      -110,
+      80
+     ]
+    },
+    "init": {
+     "pelvis": -45.0,
+     "chest": 69.9,
+     "neck0": 22.7,
+     "neck1": -109.3,
+     "head": 48.2,
+     "wingA": -13.3,
+     "wingB": -16.7,
+     "wingC": 26.4,
+     "plume0": 22.9,
+     "plume1": 25.0,
+     "plume2": 14.7,
+     "tail0": 21.2,
+     "tail1": 34.7,
+     "tail2": -26.8,
+     "tail3": 29.5,
+     "tail4": 0.9,
+     "tail5": 34.2,
+     "thighN": 18.1,
+     "shinN": 26.2,
+     "footN": -35.1,
+     "thighF": 9.8,
+     "shinF": 50.0,
+     "footF": 43.7,
+     "pelvis.dx": 461.7,
+     "pelvis.dy": 45.1,
+     "thighN.s": 1.004,
+     "thighF.s": 0.9,
+     "shinN.s": 1.018,
+     "shinF.s": 1.03,
+     "root.dx": 163.6
+    }
+   },
+   "attack": {
+    "init": {
+     "pelvis": -6.9,
+     "chest": -10.1,
+     "neck0": -2.3,
+     "neck1": 14.2,
+     "head": -16.4,
+     "wingA": 33.7,
+     "wingB": -14.7,
+     "wingC": -8.7,
+     "plume0": 8.2,
+     "plume1": -5.3,
+     "plume2": 12.9,
+     "tail0": 2.8,
+     "tail1": 16.8,
+     "tail2": -11.8,
+     "tail3": 7.8,
+     "tail4": -15.4,
+     "tail5": 8.0,
+     "thighN": 16.8,
+     "shinN": -6.2,
+     "footN": -22.2,
+     "thighF": -15.3,
+     "shinF": 32.9,
+     "footF": -12.8,
+     "pelvis.dx": -30.9,
+     "pelvis.dy": -47.7,
+     "thighN.s": 0.983,
+     "thighF.s": 1.044,
+     "shinN.s": 1.026,
+     "shinF.s": 1.104,
+     "root.dx": 51.0
+    },
+    "image": {
+     "head": "attack",
+     "neck": "attack"
+    }
+   },
+   "hurt": {
+    "init": {
+     "pelvis": 1.0,
+     "chest": -2.9,
+     "neck0": 12.8,
+     "neck1": -0.9,
+     "head": -0.7,
+     "wingA": -8.1,
+     "wingB": 8.7,
+     "wingC": 6.9,
+     "plume0": 4.6,
+     "plume1": 1.8,
+     "plume2": -14.2,
+     "tail0": 19.0,
+     "tail1": -17.4,
+     "tail2": 2.4,
+     "tail3": -8.2,
+     "tail4": 8.7,
+     "tail5": 11.3,
+     "thighN": 24.6,
+     "shinN": -33.6,
+     "footN": 3.4,
+     "thighF": 0.5,
+     "shinF": 3.5,
+     "footF": -15.4,
+     "pelvis.dx": -118.6,
+     "pelvis.dy": -30.5,
+     "thighN.s": 1.055,
+     "thighF.s": 1.034,
+     "shinN.s": 0.938,
+     "shinF.s": 0.993,
+     "root.dx": 144.9
+    },
+    "image": {
+     "head": "hurt",
+     "neck": "hurt"
+    }
+   }
+  }
+ },
+ "landmarks": {
+  "attack": {
+   "head": [
+    104,
+    328
+   ],
+   "beak": [
+    128,
+    415
+   ],
+   "toeN": [
+    332,
+    844
+   ],
+   "toeF": [
+    202,
+    836
+   ],
+   "wingTip": [
+    1382,
+    275
+   ],
+   "plumeTip": [
+    1087,
+    855
+   ],
+   "tailTip": [
+    828,
+    522
+   ]
+  },
+  "cast": {
+   "head": [
+    440,
+    288
+   ],
+   "beak": [
+    398,
+    385
+   ],
+   "toeN": [
+    607,
+    863
+   ],
+   "toeF": [
+    462,
+    860
+   ],
+   "wingTip": [
+    1657,
+    288
+   ],
+   "plumeTip": [
+    1362,
+    865
+   ],
+   "tailTip": [
+    1083,
+    530
+   ]
+  },
+  "hurt": {
+   "head": [
+    445,
+    255
+   ],
+   "beak": [
+    393,
+    340
+   ],
+   "toeN": [
+    570,
+    866
+   ],
+   "toeF": [
+    436,
+    862
+   ],
+   "wingTip": [
+    1597,
+    285
+   ],
+   "plumeTip": [
+    1330,
+    882
+   ],
+   "tailTip": [
+    1060,
+    552
+   ]
+  },
+  "ko": {
+   "head": [
+    108,
+    210
+   ],
+   "beak": [
+    145,
+    250
+   ],
+   "toeN": [
+    345,
+    545
+   ],
+   "toeF": [
+    208,
+    545
+   ],
+   "wingTip": [
+    1358,
+    357
+   ]
+  },
+  "overdrive": {
+   "head": [
+    120,
+    540
+   ],
+   "beak": [
+    108,
+    670
+   ],
+   "toeN": [
+    360,
+    838
+   ],
+   "wingTip": [
+    1115,
+    190
+   ],
+   "plumeTip": [
+    855,
+    580
+   ],
+   "toeF": [
+    225,
+    728
+   ]
+  }
+ },
+ "authored": [
+  "ko",
+  "overdrive"
+ ],
+ "motion": {
+  "idle": {
+   "hz": 0.5,
+   "bones": {
+    "chest": {
+     "rot": 0.5,
+     "phase": -0.8
+    },
+    "neck0": {
+     "rot": 0.6,
+     "phase": -1.4
+    },
+    "neck1": {
+     "rot": 0.8,
+     "phase": -2.0
+    },
+    "head": {
+     "rot": 0.7,
+     "phase": -2.6
+    },
+    "wingA": {
+     "rot": 0.5,
+     "phase": -0.5
+    },
+    "wingB": {
+     "rot": 0.9,
+     "phase": -1.2
+    },
+    "wingC": {
+     "rot": 1.3,
+     "phase": -2.0
+    },
+    "tail1": {
+     "rot": 0.8,
+     "phase": -1.6
+    },
+    "tail3": {
+     "rot": 1.2,
+     "phase": -2.6
+    },
+    "tail5": {
+     "rot": 1.6,
+     "phase": -3.6
+    },
+    "plume1": {
+     "rot": 0.5,
+     "phase": -1.2
+    },
+    "plume2": {
+     "rot": 0.8,
+     "phase": -2.0
+    }
+   }
+  }
+ },
+ "_twin_of": "valefor",
+ "_twin_shift": {
+  "idle": [
+   60,
+   60,
+   0.9999
+  ],
+  "attack": [
+   60,
+   60,
+   0.9994
+  ],
+  "cast": [
+   60,
+   60,
+   0.9995
+  ],
+  "hurt": [
+   60,
+   60,
+   0.9997
+  ],
+  "ko": [
+   60,
+   60,
+   0.9994
+  ],
+  "overdrive": [
+   60,
+   60,
+   0.9992
+  ]
+ }
+}
