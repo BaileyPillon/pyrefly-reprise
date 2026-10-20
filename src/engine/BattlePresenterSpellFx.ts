@@ -61,7 +61,7 @@ export function actionOfBlow(ctx: EventCtx, sourceId: CombatantId | undefined): 
  * heal column would sit on top of the burst) and the heal's flash is white-blue. FFX keeps the heal effect after its orb (Bailey liked pass 2's), and FF7 has no gesture.
  */
 export function sparkItem(ctx: EventCtx, sourceId: CombatantId | undefined): boolean {
-  return ctx.deps.itemGesture === 'spark' && actionOfBlow(ctx, sourceId)?.item === true;
+  return ctx.deps?.itemGesture === 'spark' && actionOfBlow(ctx, sourceId)?.item === true;
 }
 
 /**
