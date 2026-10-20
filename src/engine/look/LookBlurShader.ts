@@ -38,6 +38,8 @@ export const LookBlurShader = {
 
   fragmentShader: /* glsl */ `
     uniform sampler2D tDiffuse;
+    // level 0 always: the chain's targets have no mipmaps, and a loop or a branch must not ask the GPU for derivatives
+    vec4 texelAt(vec2 uv) { return textureLod(tDiffuse, uv, 0.0); }
     uniform vec2 resolution;
     uniform vec2 direction;
     uniform float focus;
@@ -53,7 +55,7 @@ export const LookBlurShader = {
     }
 
     void main() {
-      vec4 base = texture2D(tDiffuse, vUv);
+      vec4 base = texelAt(vUv);
       float d = vUv.y - focus;
       float span = d >= 0.0 ? max(1.0 - focus - band, 1e-4) : max(focus - band, 1e-4);
       float t = clamp((abs(d) - band) / span, 0.0, 1.0);
@@ -71,7 +73,7 @@ export const LookBlurShader = {
       float wsum = 0.0;
       for (int i = 0; i < BLUR_TAPS; i++) {
         float o = float(i) / float(BLUR_TAPS - 1) * 2.0 - 1.0 + jitter;
-        vec4 s = texture2D(tDiffuse, vUv + stepUv * o);
+        vec4 s = texelAt(vUv + stepUv * o);
         float w = exp(-(o * o) * 2.0);
         w *= smoothstep(0.5, 1.0, s.a); // backdrop pixels only: a figure never smears into the background
         float l = dot(s.rgb, vec3(0.2126, 0.7152, 0.0722));

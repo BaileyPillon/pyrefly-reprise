@@ -65,6 +65,8 @@ export const LookMainShader = {
 
   fragmentShader: /* glsl */ `
     uniform sampler2D tDiffuse;
+    // level 0 always: the chain's targets have no mipmaps, and a loop or a branch must not ask the GPU for derivatives
+    vec4 texelAt(vec2 uv) { return textureLod(tDiffuse, uv, 0.0); }
     uniform vec2 resolution;
     uniform float time;
     uniform float pxScale;
@@ -121,12 +123,12 @@ export const LookMainShader = {
       return s;
     }
     float figAt(vec2 uv) {
-      return 1.0 - clamp(texture2D(tDiffuse, uv).a, 0.0, 1.0);
+      return 1.0 - clamp(texelAt(uv).a, 0.0, 1.0);
     }
 
     void main() {
       vec2 uv = vUv;
-      vec4 src = texture2D(tDiffuse, uv);
+      vec4 src = texelAt(uv);
       float fig = 1.0 - clamp(src.a, 0.0, 1.0);
       if (debugMask > 0.5) {
         gl_FragColor = vec4(vec3(1.0 - fig), 1.0);
@@ -137,15 +139,15 @@ export const LookMainShader = {
       #ifdef USE_CA
       if (caShift > 0.0) {
         vec2 sh = (uv - 0.5) * caShift;
-        col.r = texture2D(tDiffuse, uv + sh).r;
-        col.b = texture2D(tDiffuse, uv - sh).b;
+        col.r = texelAt(uv + sh).r;
+        col.b = texelAt(uv - sh).b;
       }
       #endif
 
       #if defined(LOOK_ANIME) || defined(LOOK_CINE)
       if (sharpen > 0.0) {
-        vec3 n = texture2D(tDiffuse, uv + vec2(resolution.x, 0.0)).rgb + texture2D(tDiffuse, uv - vec2(resolution.x, 0.0)).rgb
-               + texture2D(tDiffuse, uv + vec2(0.0, resolution.y)).rgb + texture2D(tDiffuse, uv - vec2(0.0, resolution.y)).rgb;
+        vec3 n = texelAt(uv + vec2(resolution.x, 0.0)).rgb + texelAt(uv - vec2(resolution.x, 0.0)).rgb
+               + texelAt(uv + vec2(0.0, resolution.y)).rgb + texelAt(uv - vec2(0.0, resolution.y)).rgb;
         vec3 detail = col - n * 0.25;
         col += clamp(detail, vec3(-0.18), vec3(0.18)) * sharpen;
       }
@@ -169,7 +171,7 @@ export const LookMainShader = {
         vec2 stepv = toL * shaft.y / float(SHAFT_SAMPLES);
         vec2 p = uv + stepv * ign(gl_FragCoord.xy);
         for (int i = 0; i < SHAFT_SAMPLES; i++) {
-          vec4 s = texture2D(tDiffuse, p);
+          vec4 s = texelAt(p);
           float l = luma3(s.rgb);
           float lit = smoothstep(shaft.z, shaft.z + 0.35, l) * smoothstep(0.35, 0.95, s.a);
           acc += s.rgb * lit * wgt;
@@ -189,7 +191,7 @@ export const LookMainShader = {
         vec3 m = vec3(0.0);
         for (int L = 0; L < MOTE_LAYERS; L++) {
           float fl = float(L);
-          float gs = 0.17 - 0.045 * fl;
+          float gs = (L == MOTE_LAYERS - 1 && MOTE_LAYERS > 1) ? 0.3 : 0.17 - 0.04 * fl;
           vec2 qq = q;
           qq.y -= time * motes.z * (0.012 + 0.009 * fl);
           qq.x += sin(time * motes.z * 0.21 + fl * 2.0 + q.y * 3.0) * 0.012;
@@ -198,7 +200,7 @@ export const LookMainShader = {
             for (int dx = -1; dx <= 1; dx++) {
               vec2 c = id + vec2(float(dx), float(dy));
               vec2 h = hash22(c + fl * 31.7);
-              float present = step(0.52, hash21(c * 1.37 + fl * 7.1));
+              float present = step(0.6, hash21(c * 1.37 + fl * 7.1));
               vec2 pos = (c + 0.15 + 0.7 * h) * gs;
               float r = motes.y * (1.0 + 1.1 * fl) * (0.6 + 0.8 * h.x);
               float d = length(qq - pos);
@@ -221,7 +223,7 @@ export const LookMainShader = {
         vec2 q = vec2(uv.x * aspect, uv.y);
         float n1 = fbm(q * vec2(1.5, 3.4) + vec2(t * 0.014, 0.0));
         float n2 = fbm(q * vec2(3.2, 5.6) + vec2(-t * 0.024, t * 0.004) + 11.7);
-        float body = smoothstep(0.28, 0.78, n1 * 0.7 + n2 * 0.5);
+        float body = smoothstep(0.2, 0.66, n1 * 0.7 + n2 * 0.5);
         float band = 1.0 - smoothstep(0.0, max(fog.z, 1e-3), uv.y);
         float onFig = fogOnFigures * (1.0 - smoothstep(0.12, 0.34, uv.y));
         float amt = fog.x * (0.25 + 0.75 * body) * (0.35 + 0.65 * band) * mix(1.0, onFig, fig);

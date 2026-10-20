@@ -20,6 +20,9 @@ import { LookBlurShader } from './LookBlurShader.ts';
 import { LookMainShader } from './LookMainShader.ts';
 import { lightColour } from './LookMaths.ts';
 import { LookRoom, lin, mixc } from './LookRoom.ts';
+import { relightCells, relightStats } from './relight/FigureRelight.ts';
+import { RELIGHT, keyDirection, rimDirection } from './relight/RelightConfig.ts';
+import { RelightLights } from './relight/RelightLights.ts';
 import { lookState } from './LookState.ts';
 
 export { lookWanted } from './LookState.ts';
@@ -32,7 +35,9 @@ export class LookRig {
   private blurV: ShaderPass | null = null;
   private active: LookName | null = null;
   private readonly room = new LookRoom();
+  private readonly lights = new RelightLights();
   private version = -1;
+  private quality: LookQuality = lookState.quality;
   private prevSub: string[] = [];
   private prevDials: Record<string, number | undefined> = {};
   private prevFigureTrue = -1;
@@ -41,7 +46,7 @@ export class LookRig {
   private lastNow = 0;
   private readonly buf = new Vector2();
   /** For the debug API and the captures. */
-  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[] };
+  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> } };
 
   constructor(private readonly r: Renderer) {}
 
@@ -132,7 +137,10 @@ export class LookRig {
     }
     if (lookState.version !== this.version) {
       this.version = lookState.version;
-      this.rebuildDefines();
+      if (lookState.quality !== this.quality) {
+        this.quality = lookState.quality;
+        this.rebuildDefines();
+      }
       if (this.active && this.active !== wantName) this.deactivate();
     }
     if (info.scene !== this.room.scene || this.active !== wantName) {
@@ -258,15 +266,43 @@ export class LookRig {
     (u['figGain']!.value as Vector3).set(...p.figure.gain);
     (u['figLift']!.value as Vector3).set(...p.figure.lift);
     u['figContrast']!.value = v('figure.contrast');
+    this.relight(name, u['uLight']!.value as Vector2, W / Math.max(1, H), camera);
     this.stats.look = name;
     this.stats.quality = lookState.quality;
+    this.stats.relight = { any: relightCells.relightAny.value > 0, bound: relightStats.bound, loaded: relightStats.loaded, missing: relightStats.missing, lights: this.lights.stats.lights };
     this.stats.passes = r.composer.passes.map((q, i) => `${i}:${q.constructor.name}${q.enabled ? '' : '(off)'}`);
+  }
+
+  /** Light on the paintings: the figures lit with their normal maps (hd2d and cinematic; anime stays flat): a key from the room's light, a rim from behind, coloured lights for spells and the orb. */
+  private relight(name: LookName, lightUv: Vector2, aspect: number, camera: Camera): void {
+    const rl = RELIGHT[name];
+    const c = relightCells;
+    if (!rl) {
+      c.relightAny.value = 0;
+      this.lights.remove();
+      return;
+    }
+    const tw = lookState.tweaks;
+    const p = { ...rl, key: tw['relight.key'] ?? rl.key, rim: tw['relight.rim'] ?? rl.rim, point: tw['relight.point'] ?? rl.point };
+    this.lights.install();
+    const from: [number, number] = [0.5, 0.34];
+    c.relightKeyDir.value.set(...keyDirection([lightUv.x, lightUv.y], from, aspect, p.keyZ));
+    c.relightRimDir.value.set(...rimDirection([lightUv.x, lightUv.y], from, aspect, p.rimZ));
+    c.relightKeyCol.value.set(...lin(lightColour(this.room.light.color)));
+    c.relightRimCol.value.set(...lin(lightColour(this.room.light.color, 0.12)));
+    c.relightKey.value.set(p.key, p.keyTint, p.gainMin, p.gainMax);
+    c.relightRimAmt.value = p.rim;
+    c.relightAspect.value = aspect;
+    c.relightAny.value = tw['relight.off'] ? 0 : 1;
+    this.lights.update(this.clock, camera, p);
   }
 
   private deactivate(): void {
     if (this.active === null) return;
     this.active = null;
     this.room.leave();
+    relightCells.relightAny.value = 0;
+    this.lights.remove();
     for (const mp of this.main.values()) mp.enabled = false;
     if (this.blurH && this.blurV) this.blurH.enabled = this.blurV.enabled = false;
     this.restorePolicy();

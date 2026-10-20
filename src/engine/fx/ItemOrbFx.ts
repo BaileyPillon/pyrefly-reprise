@@ -9,6 +9,7 @@
  */
 import { AdditiveBlending, Group, Sprite, SpriteMaterial, Vector3, type Object3D } from 'three';
 import { lcg, paintShape, type Shape } from './ItemOrbShapes.ts';
+import { orbLights } from './orbLight.ts';
 
 export interface P3 {
   x: number;
@@ -116,6 +117,7 @@ export class ItemOrbFx {
     this.glowTall = this.sprite('glow', 0x3fe27a);
     this.group.visible = false;
     this.group.renderOrder = ORDER;
+    orbLights.add(this); // demo looks: the figures near it are lit (`orbLight.ts`)
   }
 
   private sprite(kind: Shape, color: number): Sprite {
@@ -129,9 +131,7 @@ export class ItemOrbFx {
   }
 
   /** True while any of it is on screen or still to come. */
-  get active(): boolean {
-    return this.mode !== 'rest';
-  }
+  get active(): boolean { return this.mode !== 'rest'; }
 
   /** Where the orb is now (the hand plus its rise, in flight the arc, after it lands the target): for the tests and the debug snapshot. */
   get orbAt(): P3 {
@@ -141,6 +141,8 @@ export class ItemOrbFx {
   get phase(): Mode {
     return this.mode;
   }
+  /** Demo looks: its colours and how strongly it is lit (`orbLight.ts`). */
+  get lightNow(): { tone: ItemTone | 'spark'; k: number } { return { tone: this.pal, k: this.mode === 'burst' ? Math.max(0, 1 - this.burstT / BURST_MS) : this.mode === 'form' || this.mode === 'self' ? 0.55 : 1 }; }
 
   private set(s: Sprite, p: Vector3 | P3, size: number, opacity: number, color?: number): void {
     s.visible = opacity > 0.005 && size > 0;
@@ -384,6 +386,7 @@ export class ItemOrbFx {
   }
 
   dispose(): void {
+    orbLights.delete(this);
     this.group.removeFromParent();
     for (const m of this.mats) m.dispose();
     for (const t of Object.values(this.tex)) t?.dispose();

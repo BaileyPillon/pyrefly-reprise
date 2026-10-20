@@ -27,3 +27,12 @@ export const spellTaps: {
   beforeDraw: ((renderer: WebGLRenderer, batch: FxBatch, view: { w: number; h: number }) => void) | null;
   land: ((tap: SpellLandTap) => void) | null;
 } = { beforeDraw: null, land: null };
+
+/** More listeners for the same event (demo looks, `engine/look/relight/`: a coloured light on the figures near an effect): called after `spellTaps.land`, whatever an option installed there. */
+export const landListeners = new Set<(tap: SpellLandTap) => void>();
+
+/** What the spell layer calls when an effect lands (or is previewed): `spellTaps.land`, then every listener. */
+export function notifyLand(tap: SpellLandTap): void {
+  spellTaps.land?.(tap);
+  for (const f of landListeners) f(tap);
+}

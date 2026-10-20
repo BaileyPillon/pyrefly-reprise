@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { FX_DIALS } from '../../src/engine/fx/EyeCandy.ts';
 import { LOOKS, LOOK_NAMES, LOOK_QUALITIES, QUALITY_COST, nextLook, nextQuality, parseLook, type LookName } from '../../src/engine/look/LookConfig.ts';
-import { ROOM_LOOKS, lutBytes, lutKey, recipeFor } from '../../src/engine/look/LookGrades.ts';
+import { ROOM_LOOKS, applyGrade, lutBytes, lutKey, recipeFor, sCurveAt } from '../../src/engine/look/LookGrades.ts';
 import { LUT_SIZE } from '../../src/engine/fx/a/LookLut.ts';
 
 /** Demo looks (dev flag only; both games): the address, the presets as data, the quality tiers and the grades. */
@@ -92,7 +92,10 @@ describe('the presets', () => {
     expect(anime.blur.near).toBe(0);
     expect(anime.bloom.threshold).toBeGreaterThanOrEqual(1);
     expect(anime.bloom.selective).toBe(false);
-    expect(anime.grade.saturation).toBeGreaterThan(hd2d.grade.saturation);
+    const pal = { key: 0xcfe0ff, sky: 0x1a2f6e };
+    const total = (n: LookName, g: typeof anime): number => g.grade.saturation * recipeFor(n, 'ffx', 'x', pal).sat;
+    expect(total('anime', anime)).toBeGreaterThan(total('hd2d', hd2d)); // the LUT's own saturation counts too
+    expect(total('cinematic', cinematic)).toBeLessThan(1); // the painterly look pulls the colour back
     expect(anime.fog.density).toBe(0);
     expect(anime.shaft.gain).toBe(0);
     expect(anime.motes.gain).toBe(0);
@@ -183,5 +186,37 @@ describe('the grades', () => {
     expect(lutKey('hd2d', 'ffx', 's', pal)).not.toBe(k);
     expect(lutKey('hd2d', 'ffx', 'r', { ...pal, key: 1 })).not.toBe(k);
     expect(lutKey('hd2d', 'ffx', 'r', pal)).toBe(k);
+  });
+});
+
+describe('the tone curve', () => {
+  it('keeps 0 and 1 fixed, darkens under the pivot and brightens over it', () => {
+    expect(sCurveAt(0, 0.5, 0.3)).toBe(0);
+    expect(sCurveAt(1, 0.5, 0.3)).toBe(1);
+    expect(sCurveAt(0.1, 0.5, 0.3)).toBeLessThan(0.1);
+    expect(sCurveAt(0.6, 0.5, 0.3)).toBeGreaterThan(0.6);
+    expect(sCurveAt(0.3, 0.5, 0.3)).toBeCloseTo(0.3, 8);
+  });
+
+  it('is monotonic for every look (a grade never inverts a gradient)', () => {
+    const pal = { key: 0xcfe0ff, sky: 0x1a2f6e };
+    for (const n of LOOK_NAMES) {
+      const r = recipeFor(n, 'ffx', 'x', pal);
+      let prev = -1;
+      for (let i = 0; i <= 20; i++) {
+        const v = i / 10;
+        const l = applyGrade([v, v, v], r)[1];
+        expect(l).toBeGreaterThanOrEqual(prev - 1e-9);
+        prev = l;
+      }
+    }
+  });
+
+  it('hd2d and anime lift a mid tone (they are the bright looks), cinematic does not', () => {
+    const pal = { key: 0xcfe0ff, sky: 0x1a2f6e };
+    const mid = (n: LookName): number => applyGrade([0.2, 0.2, 0.2], recipeFor(n, 'ffx', 'x', pal))[1];
+    expect(mid('hd2d')).toBeGreaterThan(0.2);
+    expect(mid('anime')).toBeGreaterThan(0.2);
+    expect(mid('cinematic')).toBeLessThanOrEqual(0.2);
   });
 });

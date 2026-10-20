@@ -21,11 +21,34 @@
  *   feet read as contacting the ground rather than floating;
  * - a noise-threshold `dissolve` with an emissive edge, for KO / pyrefly death.
  */
+/**
+ * Demo looks (dev flag only, engine/look/relight/): the plane's own axes in view space and its clip position, so a normal map can be lit by the fragment shader.
+ * Compiled only into a material that defines PAINTED_RELIGHT. Every vertex shader that feeds the painted fragment shader (this one, the sway of fx/b/Figures.ts) includes both.
+ */
+export const RELIGHT_VARYINGS = /* glsl */ `
+  #ifdef PAINTED_RELIGHT
+  varying vec3 vNR;
+  varying vec3 vNU;
+  varying vec3 vNF;
+  varying vec4 vClip;
+  #endif
+`;
+export const RELIGHT_VERTEX = /* glsl */ `
+    #ifdef PAINTED_RELIGHT
+    vNR = normalize((modelViewMatrix * vec4(1.0, 0.0, 0.0, 0.0)).xyz);
+    vNU = normalize((modelViewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz);
+    vNF = normalize((modelViewMatrix * vec4(0.0, 0.0, 1.0, 0.0)).xyz);
+    vClip = gl_Position;
+    #endif
+`;
+
 export const paintedVertexShader = /* glsl */ `
   varying vec2 vUv;
+  ${RELIGHT_VARYINGS}
   void main() {
     vUv = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    ${RELIGHT_VERTEX}
   }
 `;
 
@@ -75,6 +98,26 @@ export const paintedFragmentShader = /* glsl */ `
   uniform float glowAmount;
   uniform vec3 glowOffset;
   uniform vec3 glowSlope;
+  #endif
+  // Demo looks (dev flag only, engine/look/relight/): the figure lit with its surface-normal map. Compiled only into a figure whose material defines
+  // PAINTED_RELIGHT, so every other figure's program is exactly as before. A key light, a rim from behind and up to four coloured point lights (spells, the orb).
+  #ifdef PAINTED_RELIGHT
+  uniform sampler2D relightNormal;
+  uniform float relightOn;
+  uniform float relightAny;
+  uniform vec3 relightKeyDir;
+  uniform vec3 relightKeyCol;
+  uniform vec4 relightKey;
+  uniform vec3 relightRimDir;
+  uniform vec3 relightRimCol;
+  uniform float relightRimAmt;
+  uniform vec4 relightPtA[4];
+  uniform vec3 relightPtC[4];
+  uniform float relightAspect;
+  varying vec3 vNR;
+  varying vec3 vNU;
+  varying vec3 vNF;
+  varying vec4 vClip;
   #endif
   // UV height of the contact ramp. Set per plane from the pose's world height
   // (see contactBandFor) so the darkening is a fixed distance off the ground
@@ -144,6 +187,33 @@ export const paintedFragmentShader = /* glsl */ `
     // is a pastel well above this floor, so it changes nothing on screen.
     const float TINT_FLOOR = 0.18;
     vec3 c = texel4.rgb * max(tint, vec3(TINT_FLOOR)) * brightness;
+
+    // --- demo looks: the figure lit with its normal map (a fraction of the painting's own shading, never black) ---------------------
+    #ifdef PAINTED_RELIGHT
+    if (relightOn > 0.5 && relightAny > 0.5) {
+      vec3 nt = texture2D(relightNormal, uv).xyz * 2.0 - 1.0;
+      nt.z = max(nt.z, 0.05);
+      vec3 nn = normalize(nt.x * vNR + nt.y * vNU + nt.z * vNF);
+      vec3 flatN = normalize(vNF);
+      float dk = dot(nn, relightKeyDir) - dot(flatN, relightKeyDir);
+      vec3 tintK = mix(vec3(1.0), relightKeyCol, relightKey.y);
+      c *= clamp(vec3(1.0) + relightKey.x * dk * tintK, vec3(relightKey.z), vec3(relightKey.w));
+      float rimT = pow(clamp(dot(nn, relightRimDir), 0.0, 1.0), 1.6);
+      c += relightRimCol * relightRimAmt * rimT * (0.25 + 0.75 * dot(c, vec3(0.2126, 0.7152, 0.0722)));
+      vec2 suv = vClip.xy / vClip.w * 0.5 + 0.5;
+      for (int i = 0; i < 4; i++) {
+        float st = relightPtA[i].w;
+        if (st > 0.0) {
+          vec2 dp = (relightPtA[i].xy - suv) * vec2(relightAspect, 1.0);
+          float q = dot(dp, dp) / (relightPtA[i].z * relightPtA[i].z);
+          float att = 1.0 / (1.0 + 3.0 * q);
+          att *= att * max(0.0, 1.0 - q / 6.0);
+          vec3 lp = normalize(vec3(dp, 0.16));
+          c += c * relightPtC[i] * (st * att * (0.35 + 0.65 * max(dot(nn, lp), 0.0)));
+        }
+      }
+    }
+    #endif
 
     // --- rim light from the alpha silhouette -------------------------------
     if (rimStrength > 0.0) {
