@@ -1,0 +1,89 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-19T23:57:47.150Z",
+  "build": {
+    "mainSha": "2a1777281",
+    "bundle": "CEDFXO0J",
+    "artifactHash": "84002367112e21f3da17a6d8d75dfe459eb1b3624d216dc1fb7db7c2809c6af0"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/2a1777281.json --url https://echoesofspira.com/ --changed-from critic/artifacts/ed5cf5224.json --full: PASS, liveManifest match, 5751 files checked, 0 mismatched, 0 missing, 0 wrong type; artifactHash 84002367...c6af0; the served bundle is assets/index-CEDFXO0J.js."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Every capture followed an asserted state: screen name read from window.__pyrefly.app.current.name (title, chapter-select, party-prep, battle, pause) and the player turn (awaitingMenu or the command menu rows) before each shot; rigs() read from the debug surface; shots in critic/reviews/2a1777281-live/{shots,probe,probe2}. Pterya standing with the rig: probe/pterya-stand.png (rigs(): pterya on, gate ok, 8 parts, 24 bones, 6 keys). Ifrit summoned by Yuna in Chapter II: probe2/ifrit-summon.png (ifrit on, 7 parts, 19 bones, 6 keys). Valefor (Yuna summon, Chapter XIV): valefor on, 8 parts, 24 bones. Console lines \"[rig] pterya on\", \"[rig] ifrit on\", \"[rig] valefor on\" seen. Cancel path (submenu then Escape returns to the command menu), P and Escape pause and resume, H hides and restores the pause panels: all OK in the first full run (Chapter III)."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Reload smoke: MASTER VOLUME lowered 80 to 60 with real ArrowLeft in the pause OPTIONS; save pyrefly-reprise:save:v1 held masterVolume 0.6 before and after page.reload; boot reached title and chapter-select again. Lightweight only: the full upgrade matrix was not run."
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 146,
+      "paintings": 1106,
+      "pass": 829,
+      "waived": 79,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": {
+        "idle": 146,
+        "standing": 565,
+        "ko": 90,
+        "low": 71,
+        "wide": 4,
+        "staged": 176,
+        "part": 54
+      },
+      "byGame": {
+        "FFX-2": 777,
+        "FFX": 307,
+        "FF7": 22
+      },
+      "byRowStatus": {
+        "ok": 746,
+        "held": 83,
+        "waived": 79,
+        "none": 198
+      }
+    }
+  },
+  "coverage": {
+    "tested": [
+      "Exact artifact: 5751 files byte-identical, content types right (full compare against ed5cf5224)",
+      "Title to chapter select to Chapter III (Braska) and Chapter XIV (Isaaru) by real keys, player turn reached on both",
+      "Chapter XIV: Pterya reached by real keys (Yuna Grand Summon to Bahamut, Overdrive Mega Flare took Grothia down, Isaaru then called Pterya): pterya rig ON; Yuna-summoned Valefor rig ON",
+      "Chapter II (Yunalesca): Yuna Summon to Ifrit by real keys: ifrit rig ON (the same subject Chapter III uses)",
+      "Cancel path, Escape and P pause and resume, H hide and restore, MASTER VOLUME edit, reload persistence",
+      "Prerendered music fetched over the network (title.mp3, boss-isaaru.mp3, victory/defeat mp3; 68 audio requests in one run), not the procedural fallback; the debug audio surface returned null so the network log is the evidence",
+      "Console errors 0 and 404s 0 across all four runs (headless Chromium, PYREFLY_BROWSER=gpu, 1600x900, cache-busting query, fresh context each run)"
+    ],
+    "reused": [],
+    "notTested": [
+      "The possessed Ifrit in Chapter III itself: with plain Enter input the party was wiped in 26 turns (Defeat) before Valefor was beaten, so the possessed Ifrit never appeared; the ifrit rig is on live (same subject, proved in Chapter II) but its Chapter III use is not seen",
+      "Kimahri and Lulu rigs were not exercised (neither is in the fights played); the live art manifest lists the rigs [\"ifrit\",\"kimahri\",\"lulu\",\"pterya\",\"valefor\"]",
+      "Full CHK-024 upgrade matrix",
+      "Positive and cancel path of any changed flow beyond the rig staging (the release changes art and rig, no new flow)",
+      "Deep review (owed after deploy) beyond this live verification"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "notes": "The first smoke attempt (Enter spam) showed rigs() with every figure off; that is correct there, since Chapter III staged auron, tidus, yuna, yu-pagoda and braskas-final-aeon-1 (no rig listed) before any aeon appeared, and Chapter XIV had not yet called Pterya.",
+  "elapsedMinutes": 60
+}

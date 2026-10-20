@@ -1,0 +1,509 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-19T19:09:44.967278+00:00",
+ "build": {
+  "mainSha": "ed5cf5224"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect and no regression against live r56: the Valefor rig is on in FFX and FFX-2 with no console error and no 400, Kimahri and Lulu stay on, all three rigs verify against the mirror, and FFX-2 Besaid plays to Victory on both builds.",
+  "Both targets of the change are met: Valefor's KO no longer jumps in size (head jump 0.2 percent against 25.8 percent live; frames show a full-size crouch against a shrunken bird), and Slow on Seymour Flux draws IMMUNE where live r56 draws MISS, while evaded, nullified and wrong-state misses still draw MISS.",
+  "The failing continuity findings (R57-001, R56-002, and the harness blind spot R57-002) are not introduced by this change and measure the same or better than live: disclosed and carried forward."
+ ],
+ "checks": [
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "where": "FFX Seymour Flux, Slow on a foe, 1600x900 and 390x844",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 4,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The IMMUNE numeral draws in full and readable at both sizes; the Valefor command menu rows are unclipped at 390x844.",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/cand-flux-slow.png",
+    "critic/reviews/ed5cf5224-focused/cand-flux-slow-390.png",
+    "critic/reviews/ed5cf5224-focused/valefor-ffx-attack-390x844-sheet.jpg"
+   ]
+  },
+  {
+   "id": "CHK-004",
+   "result": "NOT APPLICABLE",
+   "where": "-",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No advisor or tip code changed (diff: releaseNotes.ts, ui/ffx/DamageNumbers.ts and tools only)."
+  },
+  {
+   "id": "CHK-006",
+   "result": "NOT APPLICABLE",
+   "where": "-",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No overlay lifetime changed; the IMMUNE numeral is the same dnum element and 700 ms ladder as an immune hit."
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "where": "FFX Seymour Flux",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The word IMMUNE replaces MISS for a fully resisted status; no raw id or debug text in the HUD.",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/runs/cand-flux-slow.json",
+    "critic/reviews/ed5cf5224-focused/runs/cand-inject.json"
+   ]
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "where": "FFX Seymour Flux, Valefor summoned; FFX-2 Besaid",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Valefor (rig) stays whole and in front of the HUD panels at 1600x900 and 390x844; the numeral does not hide an actor.",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/valefor-ffx-sheet-1600x900.jpg",
+    "critic/reviews/ed5cf5224-focused/valefor-ffx-attack-390x844-sheet.jpg",
+    "critic/reviews/ed5cf5224-focused/besaid-sheet-1600x900.jpg"
+   ]
+  },
+  {
+   "id": "CHK-009",
+   "result": "NOT APPLICABLE",
+   "where": "-",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No name display changed."
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "where": "-",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No targeting UI changed."
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "where": "FFX Seymour Flux (Yuna Summon, Valefor, Attack; Tidus White Magic, Slow, target), FFX-2 Besaid (Attack; door word by the harness)",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 18,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Every state was reached with real keys (ArrowDown/Enter) at 1600x900 and 390x844; the debug API only set the chapter and seed and, for the Besaid KO, autoBattle. The 390x844 runs used a touch-enabled phone viewport but keys, not taps (the picker taps were checked in release 56 and the change does not touch them).",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/runs/valefor-ffx-1600x900.json",
+    "critic/reviews/ed5cf5224-focused/runs/valefor-ffx-390x844.json",
+    "critic/reviews/ed5cf5224-focused/runs/cand-flux-slow.json",
+    "critic/reviews/ed5cf5224-focused/runs/cand-flux-slow-390.json",
+    "critic/reviews/ed5cf5224-focused/runs/besaid-1600x900.json",
+    "critic/reviews/ed5cf5224-focused/runs/besaid-390x844.json"
+   ]
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "where": "all captures",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Each capture waited for the asserted phase (command:<actor>, the aeon own menu, the results screen) and a failed wait threw ASSERT-FAIL; no screenshot of a wrong screen is used.",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/valefor-ffx.mjs",
+    "critic/reviews/ed5cf5224-focused/flux-slow.mjs",
+    "critic/reviews/ed5cf5224-focused/besaid.mjs"
+   ]
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "where": "candidate artifact",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Built by tools/candidate-build.mjs (release 57 stamp). art-derive verify --dir dist-gate: PASS (3955 masters, 0 problems); audit: PASS (0 dangling). rig-gate --verify on kimahri, lulu, valefor in the mirror D:/pyrefly-art-r57: all verified (stamp ok, full coverage, 1x tier proved). No 4xx response and no console error in any run. Save key pyrefly-reprise:save:v1 present, SaveData untouched. The live URL smoke belongs to the live review.",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/runs/besaid-1600x900.json",
+    "critic/reviews/ed5cf5224-focused/runs/valefor-ffx-1600x900.json"
+   ]
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "where": "both games",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 8,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Valefor rig on in FFX (summoned) and FFX-2 (hidden Besaid, enemy) through one art id; IMMUNE is FFX only and FFX-2 is unchanged (see CHK-021).",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/runs/cand-lulu-x2.json"
+   ]
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "where": "FFX Seymour Flux; FFX-2 Besaid",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 6,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Case: Valefor rig = both (one art id serves the FFX aeon and the FFX-2 hidden-chapter enemy; the FFX handoff said FFX only, the release note tags it Both, which matches the shipped behaviour); IMMUNE = FFX only (src/ui/ffx/DamageNumbers.ts). Presence: FFX Flux Slow draws IMMUNE on the candidate and MISS on live r56. Absence: an injected immune-reason miss in the FFX-2 HUD draws MISS on both builds (FFX-2 unchanged, as intended).",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/runs/cand-flux-slow.json",
+    "critic/reviews/ed5cf5224-focused/runs/live-flux-slow.json",
+    "critic/reviews/ed5cf5224-focused/runs/cand-inject.json",
+    "critic/reviews/ed5cf5224-focused/runs/live-inject.json",
+    "critic/reviews/ed5cf5224-focused/runs/cand-lulu-x2.json",
+    "critic/reviews/ed5cf5224-focused/runs/live-lulu-x2.json"
+   ]
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "where": "FFX-2 Besaid; FFX Braska final aeon",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 20,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "FFX-2 Besaid played with real keys from the title door word to Victory and the results screen on the candidate and live (harness runs); Braska final aeon ran to its result (defeat by the harness autoplay, the same outcome on live).",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/continuity/continuity-summary.json",
+    "critic/reviews/ed5cf5224-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/ed5cf5224-focused/besaid-sheet-1600x900.jpg"
+   ]
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "where": "FFX-2 Besaid PASS; FFX Braska final aeon FAIL",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 25,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Besaid: PASS, largest head jump 0.2 percent on the candidate against 25.8 percent on live r56 (the rig removes the KO size jump); the harness records no pose swap for the rigged figure, so the KO was also read from frames (besaid-ko-cand-sheet.jpg against besaid-ko-live-sheet.jpg). Braska final aeon: FAIL on 1 swap, Shiva attack to idle, silhouette feet 80.4 px; the same swap measures 80.3 px on live r56, where that run did not gate it (a verdict difference between runs, suspected). Shiva is not rigged and this change touches no pose code.",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/continuity/continuity-summary.json",
+    "critic/reviews/ed5cf5224-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/ed5cf5224-focused/besaid-ko-cand-sheet.jpg",
+    "critic/reviews/ed5cf5224-focused/besaid-ko-live-sheet.jpg"
+   ]
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "where": "FFX-2 Besaid; FFX Braska final aeon",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 25,
+   "artifact": "ed5cf5224 dist-gate (node tools/candidate-build.mjs, release 57 stamp, bundle index-nBl6O4vJ.js), vite preview 127.0.0.1:5420, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Both chapters FAIL on pose-swap jerks of party figures and aeons (candidate: 16 jerks of 40 px or more, worst 134.9 px; Besaid worst 50.8 px). Live r56, same chapters: 19 jerks, worst 159.2 px, Besaid worst 59.4 px. Not worse than live; the open issue R56-002.",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/continuity/continuity-summary.json",
+    "critic/reviews/ed5cf5224-focused/continuity-live/continuity-summary.json"
+   ]
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ffx2-valefor-besaid",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 349,
+    "swaps": 340,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 0.2,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 50.8,
+    "minStature": 0.884,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 50.8,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 41.1,
+    "jerksCovered": 0,
+    "fps": 59.5,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-111-paine-attack-follow.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-061-rikku-ready-attack.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-160-paine-ready-follow.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-250-paine-ready-attack.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-074-paine-follow-idle.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-062-rikku-attack-follow.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-248-paine-ready-critical.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-249-paine-critical-ready.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-246-paine-hurt-critical.jpg",
+     "ffx2-valefor-besaid-win-ed5cf5224/continuity/strips/swap-016-paine-cast-od-x2-warrior-power-break.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "braskas-final-aeon",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1725.6,
+    "swaps": 1992,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 17,
+    "maxFeetShiftPx": 1.2,
+    "worstJerkPx": 134.9,
+    "minStature": 0.782,
+    "heightOverBand": 0,
+    "feetSilOver": 1,
+    "swapJerksWorstPx": 134.9,
+    "dashesWorstPx": 35.3,
+    "frameP99Ms": 45.2,
+    "jerksCovered": 0,
+    "fps": 58.9,
+    "dedicated": true,
+    "strips": 7,
+    "worstSwapStrips": [
+     "braskas-final-aeon-win-ed5cf5224/continuity/strips/swap-250-shiva-hurt-ko.jpg",
+     "braskas-final-aeon-win-ed5cf5224/continuity/strips/swap-175-ixion-hurt-ko.jpg",
+     "braskas-final-aeon-win-ed5cf5224/continuity/strips/swap-125-ifrit-hurt-ko.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 2074.6,
+  "counted": 2332,
+  "swaps": 2361,
+  "size": {
+   "judged": 2327,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 5,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 17,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.2,
+   "feetOverTolerance": 0,
+   "headMeasured": 2327,
+   "headRegistration": 1401,
+   "headSilhouette": 926,
+   "headUnmeasured": 0,
+   "heightMeasured": 2327,
+   "heightOverBand": 0,
+   "heightWaived": 6,
+   "minStature": 0.782,
+   "maxStature": 1.12,
+   "koLengthMeasured": 3,
+   "minKoLength": 0.604,
+   "koLengthReported": 3,
+   "feetSilMeasured": 2316,
+   "feetSilOver": 1,
+   "feetSilWaived": 4,
+   "maxFeetSilPx": 22,
+   "holdSwaps": 1398,
+   "worstRealHeadPct": 38.1,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 2204,
+   "ghostFrames": 8881,
+   "worstGhostSeverity": 0.415,
+   "ghostOverFail": 7,
+   "jerks": 103,
+   "worstJerkPx": 134.9,
+   "jerksOverFail": 16,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 439.9,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 4,
+   "swapJerks": 95,
+   "swapJerksWorstPx": 134.9,
+   "swapJerksOverFail": 16,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 8,
+   "dashesWorstPx": 35.3,
+   "dashesOverFail": 0,
+   "jerksLongFrame": 6,
+   "swapJerksLongFrame": 5,
+   "swapJerksSteadyOverFail": 15
+  },
+  "frameTime": {
+   "frames": 122352,
+   "longFrames": 1945,
+   "longFramePct": 1.6,
+   "worstP99Ms": 45.2,
+   "maxMs": 3576.8,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 22 px at 1600 wide), whatever stance the registration claims"
+    ],
+    "note": "1401 of 2327 measured swaps had a registered head (tolerance 3 percent); 926 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 2327 swap(s) (stature 0.782 to 1.12, 6 out of band but waived), the silhouette's own feet 2316 swap(s) (worst 22 px, 4 waived), 1398 swap(s) across a recorded hold (real head worst 38.1 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "16 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 134.9 px)",
+     "7 swap(s) show a double image of severity 0.4 or more (worst 0.415)"
+    ],
+    "note": "6 of 103 jerk(s) fell on a frame of more than 34 ms (5 of the 95 at a swap; 15 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 2074.6 s of battle, 58.9 to 59.5 fps, 2 of 2 run by the dedicated harness; CHK-026 FAIL (1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 22 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (16 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 134.9 px); 7 swap(s) show a double image of severity 0.4 or more (worst 0.415))",
+  "base": "http://127.0.0.1:5420/pyrefly-reprise/",
+  "date": "2026-10-19T18:18:29.984Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R57-001",
+   "severity": "major",
+   "title": "CHK-026: Shiva attack to idle in Braska's final aeon fight moves the feet 80 px (gated on the candidate run, not on the live run)",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon",
+   "expected": "A standing figure's feet stay within the silhouette tolerance (about 12 px) across a pose swap",
+   "observed": "Swap 238, Shiva attack to idle: silhouette feet shift 80.4 px on the candidate; 80.3 px on live r56, which the live run did not gate",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<preview> --chapters=braskas-final-aeon (about 31 min)",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/continuity/braskas-final-aeon-win-ed5cf5224/continuity/continuity.json",
+    "critic/reviews/ed5cf5224-focused/continuity-live/braskas-final-aeon-win-live-r56/continuity/continuity.json"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-026",
+   "where": "Shiva painting registration (suspected); no pose, stage or scene code and no Shiva art is in the diff",
+   "fix": "Register or waive the Shiva attack painting; rerun the chapter twice on both builds to settle why the verdict differed",
+   "acceptanceCheck": "CHK-026 PASS on braskas-final-aeon, two runs",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R56-002",
+   "severity": "major",
+   "title": "CHK-027: pose-swap jerks of 40 px or more in FFX-2 Besaid and FFX Braska's final aeon (open since release 56, live too)",
+   "game": "both",
+   "chapter": "ffx2-valefor-besaid, braskas-final-aeon",
+   "expected": "No jerk of 40 px or more in one frame at a pose swap",
+   "observed": "Candidate: 16 jerks, worst 134.9 px (Besaid worst 50.8 px). Live r56: 19 jerks, worst 159.2 px (Besaid 59.4 px)",
+   "repro": "the continuity harness on the two chapters",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/continuity/continuity-summary.json",
+    "critic/reviews/ed5cf5224-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027",
+   "where": "pose swaps of party figures and aeons (the rigged Valefor and Kimahri are not among the worst strips)",
+   "fix": "The rig program: more figures as rigs; the strips name the worst swaps",
+   "acceptanceCheck": "CHK-027 PASS on both chapters",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R57-002",
+   "severity": "polish",
+   "title": "The continuity harness records no pose swap for a rigged figure, so Valefor's own KO is invisible to CHK-026 and CHK-027",
+   "game": "both",
+   "chapter": "ffx2-valefor-besaid",
+   "expected": "The harness measures a rig's size and motion through its KO",
+   "observed": "perFigure holds x2-valefor idle only; the KO size claim was checked by frames in this review",
+   "repro": "read continuity.json perFigure and swaps for x2-valefor",
+   "evidence": [
+    "critic/reviews/ed5cf5224-focused/continuity/ffx2-valefor-besaid-win-ed5cf5224/continuity/continuity.json",
+    "critic/reviews/ed5cf5224-focused/besaid-ko-cand-sheet.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026",
+   "where": "critic/runner/lib/continuity-*.mjs",
+   "fix": "Track a rigged figure by its silhouette per frame",
+   "acceptanceCheck": "the harness reports a head or mass ratio for x2-valefor across the KO",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "FFX Seymour Flux at 1600x900 and 390x844: Yuna Summon to Valefor by real keys (rig on, attack, scripted Banish dismisses it), Tidus Slow shows IMMUNE on the candidate and MISS on live; injected miss reasons (evaded, nullified, wrong-state, immune) into the FFX HUD on both builds",
+   "FFX-2 hidden Besaid at 1600x900, 2000x1012, 390x844: first menu and Attack by real keys, rig on, autoplay to the KO and Victory; KO frames candidate against live",
+   "Kimahri and Lulu rigs on in Yojimbo's cavern, candidate and live",
+   "rig-gate --verify of kimahri, lulu, valefor against D:/pyrefly-art-r57; art-derive verify and audit of dist-gate; verify-approved with ROOT=the release tree: 917 ok, 0 mismatched, 0 missing; poseTrust empty in Besaid and Flux",
+   "continuity harness on ffx2-valefor-besaid and braskas-final-aeon, candidate and live r56"
+  ],
+  "reused": [],
+  "notTested": [
+   "Valefor hurt, KO and Overdrive in an FFX chapter (Banish dismisses it in Flux) and the other 11 chapters that summon it",
+   "FFX-2 Ixion/Djose and the other plan chapters (the diff touches no pose, stage or scene code), so R56-001 is not re-measured",
+   "a real physical evaded miss in the browser (24 seeds of Tidus attacks produced none): the MISS text is proved by the injected event and the ui-ffx-hud tests",
+   "taps on a 390x844 touch screen (keys used)",
+   "audio (nothing heard)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "The deep review of the live build after the deploy (owed): R57-001, R56-002 and a Valefor hurt/KO read in an FFX chapter.",
+ "elapsedMinutes": 165
+}

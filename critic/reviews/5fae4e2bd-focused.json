@@ -1,0 +1,563 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-19T11:34:18.239207+00:00",
+ "build": {
+  "mainSha": "5fae4e2bd"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect was found and nothing that works on live r55 is broken in the candidate: the FFX-2 chapters (X, XV, XVI, Angra Mainyu) play to Victory with the new action timing, Wait and Active, with no stall, no double turn, no console error and no 400 response.",
+  "The FFX fixes work where live r55 does not: the Grand Summon picker takes taps on a 390x844 phone (rows 44 px at 14 px against 22 px at 10 px), the aeon Defend adds no IMMUNE, the four hidden FFX chapters make no voice 404 (live r55 makes one each), the Pilgrimage route and prep fit a phone with the Begin button pinned.",
+  "R56-001 to R56-003 are majors this change did not introduce (pose code untouched, the MISS text exists live): disclosed and carried forward, they do not hold the build. changedArea is FAIL because of them."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "NOT APPLICABLE",
+   "where": "Pilgrimage stop 1",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No audio file or cue changed in this batch; the only audio-adjacent change is the Pilgrimage battle music following its chapter, read from audioDebug (boss-seymour-macalania playing in the first Pilgrimage fight). Nobody listened: agents cannot hear."
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "where": "Pilgrimage route and prep, 390x844",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The phone layout pass of the Pilgrimage route and party prep has no clipped or off-window element at 390x844: no horizontal overflow, the Begin button is pinned at 780 to 832 px of 844.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-pilgrim-phone.json",
+    "critic/reviews/5fae4e2bd-focused/cand-pilgrim-route-390.png",
+    "critic/reviews/5fae4e2bd-focused/cand-pilgrim-prep-390.png"
+   ]
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "where": "Pilgrimage route; FFX Ch III Grand Summon picker, 390x844",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Pilgrimage text floor 14 px (live r55 11 px) and the Grand Summon picker rows 14 px at 44 px height (live r55 10 px at 22 px) at 390x844.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-pilgrim-phone.json",
+    "critic/reviews/5fae4e2bd-focused/runs/live-pilgrim-phone.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx-phone.json",
+    "critic/reviews/5fae4e2bd-focused/runs/live-ffx-phone.json"
+   ]
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "where": "FFX Ch III picker, 390x844; FFX-2 Den of Woe, Nooj link",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The picker caption says tap the title to go back on a coarse pointer, and the title tap does go back (picker closed, Yuna menu again, no aeon). The Den of Woe tip names the Hero Drink at half his health and the pause view reads it at Nooj.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx-phone.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-nooj-guide.json",
+    "critic/reviews/5fae4e2bd-focused/cand-nooj-guide.png"
+   ]
+  },
+  {
+   "id": "CHK-005",
+   "result": "NOT APPLICABLE",
+   "where": "FFX-2 Den of Woe",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No advisor recommendation logic for the broken board changed; src/engine/tactics/ffx2-den-of-woe.ts changed only the Hero Drink threshold (4,500 to 12,000 HP), proved by the unit suite (denOfWoeDrive), not on a broken board in a browser."
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "where": "FFX Ch III, 390x844",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The Grand Summon picker closed with its title tap and with the aeon pick; no leftover overlay and the Yuna menu returned.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx-phone.json"
+   ]
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "where": "FFX Ch III; FFX-2 Den of Woe",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The Den of Woe tip, the Overdrive row help and the picker caption carry no raw ids or debug text; the console is clean.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx-phone.json",
+    "critic/reviews/5fae4e2bd-focused/cand-denwoe-1600x900.png"
+   ]
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "where": "FFX-2 Den of Woe, Baralai link",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "At 1600x900, 2000x1012 and 390x844 the Den of Woe battle HUD has no element outside the window and no horizontal overflow. (A quip banner overlaps the left guide column on the 1600x900 view; the same banner style as live.)",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-layout-guide.json",
+    "critic/reviews/5fae4e2bd-focused/cand-denwoe-1600x900.png",
+    "critic/reviews/5fae4e2bd-focused/cand-denwoe-pause-2000x1012.png"
+   ]
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "where": "FFX-2 Den of Woe",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The Den of Woe pause tip and guide text read in full in the screenshots.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/cand-nooj-guide.png"
+   ]
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "where": "FFX Ch III",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No selection or targeting design changed; the picker cursor row is highlighted as before."
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "where": "FFX Ch III 390x844; FFX-2 Ch X, XV, XVI, Angra Mainyu",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 15,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Grand Summon by touch (hasTouch, isMobile): a tap on the Overdrive row opens the picker, a tap on the title goes back, a tap on an aeon row summons it (Ifrit). Live r55 cannot: its picker ignores taps (the title tap left the picker open). Setup (Yuna gauge 100) used the debug API; the first attack turns used keys. A tap on a greyed aeon was not tested in the browser (no greyed aeon arose; the unit test ffx-grand-summon-tap covers it). FFX-2: the first command of each chapter by real Enter keys, then engine autoplay.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx-phone.json",
+    "critic/reviews/5fae4e2bd-focused/runs/live-ffx-phone.json",
+    "critic/reviews/5fae4e2bd-focused/cand-phone-picker.png"
+   ]
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "where": "all",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Every capture asserts the screen and the phase first (waits throw): the command menu, the picker rows and the aeon id were read back before each shot; nothing was captured from the wrong screen.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx-phone.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-layout-guide.json"
+   ]
+  },
+  {
+   "id": "CHK-017",
+   "result": "UNVERIFIED",
+   "where": "candidate vs live r55",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The live artifact check belongs to the post-deploy live review; this focused pass reviewed the production candidate built by tools/candidate-build.mjs (bundle index-DXrkBaKj.js, build 5fae4e2b read from window.__pyrefly.build()). Live r55 (b24614c0, index-Cokaxk4X.js) was opened for comparison only."
+  },
+  {
+   "id": "CHK-019",
+   "result": "NOT APPLICABLE",
+   "where": "all",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No art or media file changed (approvedArtCheck false)."
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "where": "FFX Ch III, Flux; FFX-2 Ch X, XV, XVI",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Paired game check: FFX-only items (picker tap, immune-miss exclusion, Overdrive help) behaved in FFX and left FFX-2 alone; FFX-2-only items (action time, Den of Woe drink) changed FFX-2 timing and left FFX Chapter III and the Flux menus unchanged. The voice index fix is shared plumbing and works for the hidden FFX chapters (they ask for no manifest).",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx-phone.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-voice404.json"
+   ]
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "where": "FFX-2 and FFX",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 10,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Case stated: FFX-2 only (ACTION_TIME_PER_COMMAND, DRINK_FROM 12,000), FFX only (picker tap, Defend exclusion, Overdrive help), both (voice index, review tooling). Presence in the intended game: FFX-2 bosses act less often with the span on (Angra Mainyu 11 acts a minute against 15 on live r55). Absence in the other game: FFX Chapter III and Flux played with no span and no change. The action-frame data carries labelled READ, MEASURED and ESTIMATE source notes in the file header; the lane notes FFX2-G01, G11 and G12 were not found in this worktree, so the numbers were not re-read against them.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-angra-mainyu-wait-2.json",
+    "critic/reviews/5fae4e2bd-focused/runs/live-ffx2-angra-mainyu-wait-2.json"
+   ]
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "where": "FFX-2 Ch X, XV, XVI, Angra Mainyu",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 40,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "FFX-2 XV Den of Woe (three links, to the results screen), XVI Ixion and Djose, X Trema (Paragon then Trema) and the hidden Angra Mainyu reached results with Victory, Wait and Active, seed 2, 1600x900, GPU. Live r55 Chapter X with the same seed and policy was a defeat at Paragon (the policy is not the shipped benchmark; one seed is no rate).",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-trema-wait-2.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-den-of-woe-wait-2.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-den-of-woe-active-2.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-ixion-djose-wait-2.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-angra-mainyu-wait-2.json"
+   ]
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "where": "FFX-2 Ch X, XV, XVI, Angra Mainyu",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 20,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "The action span runs through the real battle presenter: the first command of each FFX-2 chapter was entered with real Enter keys and left the menu; no stall of 40 s, no double turn (same actor twice without an action end), no console error and no response of 400 or more in the candidate FFX-2 runs.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-trema-active-2.json",
+    "critic/reviews/5fae4e2bd-focused/runs/cand-ffx2-angra-mainyu-active-2.json"
+   ]
+  },
+  {
+   "id": "CHK-B1",
+   "result": "NOT APPLICABLE",
+   "where": "Pilgrimage",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "No cue or mix changed; the Pilgrimage music change was read from the audio debug, not listened to."
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "where": "FFX-2 Ch XVI",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 12,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Continuity harness, FFX-2 Chapter XVI (Ixion and Djose), real keys, 1600x900, GPU, 133 s of battle, 233 swaps: 1 swap draws a pose outside its stature band (0.884 to 1.109). Live r55, same chapter: PASS (237 swaps, 0 out of band). One run each; pose, stage and scene code are untouched by the diff, so a chance difference cannot be excluded.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/continuity/continuity-summary.json",
+    "critic/reviews/5fae4e2bd-focused/continuity-live/continuity-summary.json"
+   ]
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "where": "FFX-2 Ch XVI",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 12,
+   "artifact": "5fae4e2bd dist-gate (node tools/candidate-build.mjs, release 56 stamp), vite preview 127.0.0.1:5410, headless Chromium PYREFLY_BROWSER=gpu",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "reason": "Continuity harness, FFX-2 Chapter XVI: 3 jerks of 40 px or more at a pose swap (worst 46.2 px). Live r55, same chapter: 1 jerk (41.3 px, on a long frame). Both builds fail; the candidate counts 28 swap jerks against 20.",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/continuity/continuity-summary.json",
+    "critic/reviews/5fae4e2bd-focused/continuity-live/continuity-summary.json"
+   ]
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ffx2-ixion-djose",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 133.4,
+    "swaps": 233,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 18.9,
+    "maxFeetShiftPx": 0.6,
+    "worstJerkPx": 46.2,
+    "minStature": 0.884,
+    "heightOverBand": 1,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 46.2,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 29.2,
+    "jerksCovered": 0,
+    "fps": 59.5,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-086-yuna-attack-follow.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-111-yuna-ready-attack.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-163-rikku-critical-cast.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-147-rikku-cast-critical.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-132-rikku-hurt-critical.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-149-rikku-critical-hurt.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-153-paine-critical-ready.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-079-paine-ready-critical.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-134-yuna-item-idle.jpg",
+     "ffx2-ixion-djose-win-5fae4e2bd/continuity/strips/swap-130-yuna-idle-item.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 133.4,
+  "counted": 233,
+  "swaps": 240,
+  "size": {
+   "judged": 233,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 18.9,
+   "maxHeadJumpPctRegistration": 0.1,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 0.6,
+   "feetOverTolerance": 0,
+   "headMeasured": 233,
+   "headRegistration": 166,
+   "headSilhouette": 67,
+   "headUnmeasured": 0,
+   "heightMeasured": 233,
+   "heightOverBand": 1,
+   "heightWaived": 0,
+   "minStature": 0.884,
+   "maxStature": 1.109,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 232,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 2.3,
+   "holdSwaps": 166,
+   "worstRealHeadPct": 45.1,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 233,
+   "ghostFrames": 960,
+   "worstGhostSeverity": 0.361,
+   "ghostOverFail": 0,
+   "jerks": 28,
+   "worstJerkPx": 46.2,
+   "jerksOverFail": 3,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.087,
+   "maxCentroidShiftPx": 108.6,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 2,
+   "swapJerks": 28,
+   "swapJerksWorstPx": 46.2,
+   "swapJerksOverFail": 3,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 0,
+   "dashesWorstPx": 0,
+   "dashesOverFail": 0,
+   "jerksLongFrame": 0,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 3
+  },
+  "frameTime": {
+   "frames": 7928,
+   "longFrames": 40,
+   "longFramePct": 0.5,
+   "worstP99Ms": 29.2,
+   "maxMs": 153.4,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "1 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.884 to 1.109; the bands are tools/posescale/pose-bands.mjs's)"
+    ],
+    "note": "166 of 233 measured swaps had a registered head (tolerance 3 percent); 67 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 233 swap(s) (stature 0.884 to 1.109, 0 out of band but waived), the silhouette's own feet 232 swap(s) (worst 2.3 px, 0 waived), 166 swap(s) across a recorded hold (real head worst 45.1 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "3 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 46.2 px)"
+    ]
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 133.4 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (1 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.884 to 1.109; the bands are tools/posescale/pose-bands.mjs's)); CHK-027 FAIL (3 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 46.2 px))",
+  "base": "http://127.0.0.1:5410/pyrefly-reprise/",
+  "date": "2026-10-19T11:14:44.364Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R56-001",
+   "severity": "major",
+   "title": "CHK-026: one FFX-2 pose swap in Chapter XVI is outside its stature band on the candidate (live r55 passed one run)",
+   "game": "FFX-2",
+   "chapter": "ffx2-ixion-djose",
+   "expected": "Every pose swap within its height band against the idle",
+   "observed": "1 of 233 swaps outside the band (stature 0.884 to 1.109); live r55 0 of 237",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<preview> --chapters=ffx2-ixion-djose",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/continuity/continuity-summary.json",
+    "critic/reviews/5fae4e2bd-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-026",
+   "where": "pose registrations of the FFX-2 paintings (suspected); pose, stage and scene code are not in the diff",
+   "fix": "Re-run the same chapter twice on both builds; register or rescale the one pose the strips name",
+   "acceptanceCheck": "CHK-026 PASS on Chapter XVI, two runs",
+   "introducedByCandidate": false,
+   "regressionVsLive": "unknown",
+   "inNewFeature": false
+  },
+  {
+   "id": "R56-002",
+   "severity": "major",
+   "title": "CHK-027: pose-swap jerks of 40 px or more in FFX-2 Chapter XVI, on the candidate and on live r55",
+   "game": "FFX-2",
+   "chapter": "ffx2-ixion-djose",
+   "expected": "No jerk of 40 px or more in one frame at a pose swap",
+   "observed": "candidate 3 jerks (worst 46.2 px); live r55 1 jerk (41.3 px)",
+   "repro": "the harness run of R56-001",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/continuity/continuity-summary.json",
+    "critic/reviews/5fae4e2bd-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-027",
+   "where": "the pose-swap motion of the FFX-2 figures (suspected); not part of this change",
+   "fix": "As the earlier FFX-2 continuity tickets; compare two runs per build before reading the count as a change",
+   "acceptanceCheck": "CHK-027 PASS on Chapter XVI",
+   "introducedByCandidate": false,
+   "regressionVsLive": "unknown",
+   "inNewFeature": false
+  },
+  {
+   "id": "R56-003",
+   "severity": "major",
+   "title": "FFX: an immune status move shows MISS on the HUD, not IMMUNE (Slow in the Flux chapter), on the candidate and on live r55; the release note says IMMUNE",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "Slow on a Slow-proof foe prints IMMUNE (changelog lines of releases 55 and 56)",
+   "observed": "The engine emits the immune miss on mortiorchis (Slow cast with real keys) and the only floating text for it is MISS, on both builds; no IMMUNE in the DOM for 6 s",
+   "repro": "Flux chapter, Tidus White Magic, Slow, confirm the target; watch the numerals",
+   "evidence": [
+    "critic/reviews/5fae4e2bd-focused/runs/cand-flux-slow.json",
+    "critic/reviews/5fae4e2bd-focused/runs/live-flux-slow.json",
+    "critic/reviews/5fae4e2bd-focused/cand-flux-slow.png"
+   ],
+   "confidence": "medium",
+   "requirement": "FOC54-003 (release 55 changelog)",
+   "where": "src/ui/ffx/FFXBattleHud.ts case miss calls damageNumbers.spawn(event), whose miss branch ignores event.reason (suspected; src/ui/common/DamageNumbers.ts)",
+   "fix": "Pass the reason to the numeral (kind immune) in the FFX HUD path",
+   "acceptanceCheck": "Slow on a Slow-proof foe shows IMMUNE in the DOM",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "FFX-2 Chapters X (Trema: Paragon then Trema), XV (Den of Woe, three links), XVI (Ixion and Djose) and the hidden Angra Mainyu, Wait and Active, seed 2 (seed 3 on part of them), 1600x900, GPU, first command by real keys then engine autoplay at fast speed; live r55 control in Wait",
+   "FFX Chapter III on a 390x844 touch phone: Overdrive and Grand Summon by tap, title tap back, aeon pick by tap, aeon Defend through the engine hook (no IMMUNE)",
+   "FFX Seymour Flux: Slow by real keys on candidate and live",
+   "Voice 404 in the four hidden FFX chapters (sinspawn-gui, exp-fayth, biran-yenke, last-summoning) and Flux, candidate and live",
+   "Pilgrimage route, party prep and first battle music at 390x844, candidate and live",
+   "Den of Woe at 1600x900, 2000x1012 and 390x844, the pause strategy view, the tip text at Nooj",
+   "CHK-026 and CHK-027 harness on FFX-2 Chapter XVI, candidate and live",
+   "Unit suites of the 35 changed test files: 445 passed; one time-out in tourist-trap-bench under load passed alone with a longer limit (a printed table, not a gate)",
+   "Save key and SaveData unchanged by the diff"
+  ],
+  "reused": [],
+  "notTested": [
+   "A tap on a greyed aeon in the browser (none arose; unit test ffx-grand-summon-tap)",
+   "The Den of Woe guide rule line inside the guide sheet (the chapter tip and the shipped bundle string were read; the rule line is covered by the unit suite)",
+   "A human holding a menu open in ATB Active (autoplay chooses at once, so Wait and Active produced the same battles)",
+   "The 500-seed first-try win rates (not re-measured in a browser; the bench unit tests passed)",
+   "The action-frame data against the lane notes FFX2-G01, G11, G12 (not found in the worktree)",
+   "Chapter numbering: the brief names Chapter XVI as Angra Mainyu; in this build XVI is Ixion and Djose and Angra Mainyu is the hidden chapter with the word angra; both were played",
+   "Gamepad, a real phone, Safari",
+   "poseTrust read directly",
+   "The save upgrade matrix (CHK-024) and a real-key full win of every chapter"
+  ],
+  "requiredNotTested": []
+ },
+ "regressions": [],
+ "nextReview": "The deep review of the live build after the deploy (an obligation of this build); it should run CHK-026 and CHK-027 twice per build on an FFX-2 chapter and take R56-003 to the owner.",
+ "elapsedMinutes": 120
+}

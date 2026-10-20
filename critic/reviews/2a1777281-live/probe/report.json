@@ -1,0 +1,197 @@
+{
+  "rigLines": [
+    "[chapter-select] confirmed \"isaaru-via-purifico\" — no onSelect wired; the presenter agent replaces this factory.",
+    "[rig] yuna off (no rig listed in the art manifest)",
+    "[rig] isaaru off (no rig listed in the art manifest)",
+    "[rig] grothia off (no rig listed in the art manifest)",
+    "[entry] battle-start card over the ink after 3145 ms",
+    "[entry] loading card handed over after 850 ms",
+    "[rig] bahamut off (no rig listed in the art manifest)",
+    "[cutscene] mid-battle beat \"pterya-called\" ran past its 8000ms budget; cut short and resuming the battle (logged once per beat)",
+    "[rig] pterya on (gate ok, 8 parts, 24 bones, 6 keys, 1x maps)",
+    "[painted] pose \"idle\" (1785x950) is at a very different pixel scale from \"idle\"; clamped to 7.04x3.75 world units. Add a `scale` override to its sidecar JSON if that is wrong."
+  ],
+  "mode": "gpu",
+  "url": "https://echoesofspira.com/?livesmoke=1792452861546",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "steps": [
+    {
+      "step": "boot: __pyreflyReady",
+      "ok": true,
+      "detail": "loadMs=1568"
+    },
+    {
+      "step": "boot: title screen",
+      "ok": true,
+      "detail": "screen=title"
+    },
+    {
+      "step": "served bundle names CEDFXO0J",
+      "ok": true,
+      "detail": "https://echoesofspira.com/assets/index-CEDFXO0J.js"
+    },
+    {
+      "step": "title -> chapter-select (real Enter)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached isaaru-via-purifico",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "isaaru-via-purifico: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "isaaru-via-purifico: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "isaaru-via-purifico: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch XIV rigs(): pterya on",
+      "ok": true,
+      "detail": "bahamut:off(no rig listed in the art manifest) | grothia:off(no rig listed in the art manifest) | isaaru:off(no rig listed in the art manifest) | pterya:on(gate ok, 8 parts, 24 bones, 6 keys, 1x maps) | yuna:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch XIV console [rig] pterya on",
+      "ok": false,
+      "detail": "[chapter-select] confirmed \"isaaru-via-purifico\" — no onSelect wired; the presenter agent replaces this factory. || [rig] yuna off (no rig listed in the art manifest) || [rig] isaaru off (no rig listed in the art manifest) || [rig] grothia off (no rig listed in the art manifest) || [entry] battle-start card over the ink after 3145 ms || [entry] loading card handed over after 850 ms || [rig] bahamut off (no rig listed in the art manifest) || [cutscene] mid-battle beat \"pterya-called\" ran past its 8000ms budget; cut short and resuming the battle (logged once per beat) || [rig] pterya on (gate ok, 8 parts, 24 bones, 6 keys, 1x maps) || [painted] pose \"idle\" (1785x950) is at a very different pixel scale from \"idle\"; clamped to 7.04x3.75 world units. Add a `scale` override to its sidecar JSON if that is wrong."
+    },
+    {
+      "step": "Ch XIV Kimahri/Lulu/Valefor not off",
+      "ok": true,
+      "detail": "bahamut:off(no rig listed in the art manifest) | grothia:off(no rig listed in the art manifest) | isaaru:off(no rig listed in the art manifest) | pterya:on(gate ok, 8 parts, 24 bones, 6 keys, 1x maps) | yuna:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch XIV: P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch XIV: Escape closes pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "prerendered audio fetched over network",
+      "ok": true,
+      "detail": "count=20 sample=https://echoesofspira.com/audio/music/title.mp3 | https://echoesofspira.com/audio/sfx/sprite.mp3 | https://echoesofspira.com/audio/sfx/sprite-v2.mp3 dbg=null"
+    }
+  ],
+  "errors": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.mid-pterya-called.002.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.mid-spathi-called.002.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.mid-grothia-ready.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.quip-yuna.001.mp3",
+    "https://echoesofspira.com/audio/music/boss-isaaru.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.007.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.009.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.011.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.016.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.019.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-isaaru.mp3"
+  ],
+  "html404img": [],
+  "living": [],
+  "partReqs": [
+    "200 art/portrait-parts/manifest.json",
+    "200 art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+    "200 art/portrait-parts/yuna/2x/eyeL-socket.webp",
+    "200 art/portrait-parts/yuna/2x/eyeR-iris.webp",
+    "200 art/portrait-parts/yuna/2x/mouth-open-smile.png",
+    "200 art/portrait-parts/yuna/2x/eyeR-window.png",
+    "200 art/portrait-parts/yuna/2x/lidL-closed.png",
+    "200 art/portrait-parts/yuna/2x/eyeL-iris.webp",
+    "200 art/portrait-parts/yuna/2x/lidR-closed.png",
+    "200 art/portrait-parts/yuna/2x/eyeR-catch.png",
+    "200 art/portrait-parts/yuna/2x/eyeL-window.png",
+    "200 art/portrait-parts/yuna/2x/eyeR-socket.webp",
+    "200 art/portrait-parts/yuna/2x/eyeL-catch.png"
+  ],
+  "rigs": {
+    "ch14": {
+      "switch": {
+        "on": true,
+        "reason": "default"
+      },
+      "figures": [
+        {
+          "subject": "bahamut",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "grothia",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "isaaru",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "pterya",
+          "on": true,
+          "reason": "gate ok, 8 parts, 24 bones, 6 keys, 1x maps",
+          "ids": [
+            "pterya"
+          ],
+          "info": {
+            "name": "pterya",
+            "key": "idle",
+            "keys": [
+              "idle",
+              "attack",
+              "cast",
+              "hurt",
+              "ko",
+              "overdrive"
+            ],
+            "parts": 8,
+            "vertices": 2889,
+            "bones": 24,
+            "chains": 0,
+            "idle": true,
+            "textures": {
+              "map": 1,
+              "rim": 1
+            },
+            "textureMB": 14.7
+          }
+        },
+        {
+          "subject": "yuna",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        }
+      ]
+    }
+  },
+  "audioDebug": null,
+  "elapsedMin": "4.3"
+}
