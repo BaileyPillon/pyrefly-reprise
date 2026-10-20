@@ -232,6 +232,18 @@
  * (2) The r55 commit `b24614c05` put in place as an in-process overlay of every source that differs (no worktree or copy) passes the same previous pins, all six tests. So the only thing that moved these digests is the switch.
  * Outcomes: D = 0 is still 20/20 in both chapters and the Chapter 4 Active D = 1500 arm 10/10; the Chapter 5 Active D = 1500 arm is 8/10 (seeds 9 and 10 lost; it was 8/10 with seeds 1 and 9 lost before). The Wait arm still equals
  * the D = 0 arrays (no menu invalidated, held or refused) and a Wait engine switched to Active still equals the Active arrays: asserted below and checked on the new arrays. The 500-seed effect of the switch on the whole chain is in the handoff.
+ *
+ * **Re-pinned an eighteenth time, nine hashes (`CH4_D0` seeds 2, 3, 4, 6, 7, 14, 16 and 19; `CH4_D1500` seed 7), for the retarget of a skill whose foe has fallen** (re-parity lane x2-retarget, branch
+ * `re-parity-x2-retarget-fix`, 2026-10-20, FFX-2 only; reason "game-code parity", `research/re-ffx2-ai-leblanc-den-ixion.md` section 1.12 and the demo audit of Chapter IV; `docs/handoff/re-parity-x2-retarget-fix.md`).
+ * A `single-any` skill (Paine's Armor Break is one) whose named foe was gone when it landed fell to every living unit of both sides; with Bahamut down that is only the girls, so a skill queued at him
+ * before the last blow struck Yuna, Rikku or Paine herself after he fell. `resolveTargets` now keeps to the side of the target it was given and, with nobody left there, picks no one (the skill plays and
+ * does nothing, and the engine-side draw it used to spend is not spent). **Cause, proved two ways.** (1) With only `src/battle/ffx2/targeting.ts` put back to r59 (6db09ac86) as an in-process overlay of its own source
+ * (no worktree or copy), this tree passes this file's PREVIOUS pins, all six tests, byte for byte. (2) Event by event (the full logs of all thirty Chapter 4 runs, old against new): every moved log is the
+ * old log minus exactly four events, the chain open, the damage, the Defense Down status-add and the chain close of Paine's Armor Break on a girl (or on herself), all after Bahamut's knock-out; nothing is added
+ * and no earlier event differs. The other twelve `CH4_D0` and nine `CH4_D1500` hashes, and every `CH5_D0` and `CH5_D1500` hash, are unchanged (recomputed, equal): Chapter 5 has no skill that meets this case. Outcomes: D = 0 is
+ * still 20/20 in both chapters, the Chapter 4 Active D = 1500 arm 10/10 and the Chapter 5 one 8/10, as before; over 200 seeds of Chapter IV the shipped line wins 200/200 at Wait, Active and zero decision time both before and
+ * after, and the fights where a girl was hit by a girl's skill go from 48, 23 and 77 to 0. The Wait arm still equals the D = 0 arrays and a Wait engine switched to Active still equals the Active arrays (both asserted
+ * below). The old hashes are in git at 6db09ac86.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -239,12 +251,12 @@ import { driveChapter4, driveChapter5, logHash } from './helpers/ffx2ChapterDriv
 
 const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
-/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
+/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. Re-pinned an eighteenth time, seeds 2, 3, 4, 6, 7, 14, 16 and 19, for the retarget of a skill whose foe has fallen (see the eighteenth re-pin above); the old hashes are in git at 6db09ac86. */
 const CH4_D0 = [
-  'd84f79cdb1248069', '21d0b1333d2baaad', '6fcba9a94d0cea6b', 'db5568a12aaa4980', 'dba7fed2a70899ca',
-  'f6ffc26a2c9c7674', 'b3e52416ff584b55', '830bf534fae444e8', '4d85b070eb356dfa', '7ca9cddce0e8666b',
-  '6832f184572dbec0', 'e814c2c9b6361374', 'b469abb7488ca816', 'ce7ab90a3400caa2', '31a17d6dd825c387',
-  'a6f276a925574072', 'e0823e549f6b5e2a', '0e4dcf77195500b7', 'fc4de1f9242f3039', '8a9da43349c3a451',
+  'd84f79cdb1248069', 'd9941dba34311e21', '7a26453a2c587787', 'ce8ec9310191fb3b', 'dba7fed2a70899ca',
+  '38beb20fe33c522d', '4099cae45713149c', '830bf534fae444e8', '4d85b070eb356dfa', '7ca9cddce0e8666b',
+  '6832f184572dbec0', 'e814c2c9b6361374', 'b469abb7488ca816', 'ac4e156f3bdaebf0', '31a17d6dd825c387',
+  '9d881d5b6464876d', 'e0823e549f6b5e2a', '0e4dcf77195500b7', 'b9585aa3359090cc', '8a9da43349c3a451',
 ];
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
@@ -255,10 +267,10 @@ const CH5_D0 = [
   '31d23ca9b190505a', 'd1c5f19ce4ffec88', '6bf573cf89ac6417', '8cd8943f11edbbe8', '26658648c2e1ecc8',
 ];
 
-/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
+/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. Re-pinned an eighteenth time, seed 7, for the same retarget (see the eighteenth re-pin above); the old hash is in git at 6db09ac86. */
 const CH4_D1500 = [
   'd05af09f2f024710', 'e6b1613688ba5c31', '5b383b9b7dd5312d', '3f1263cb4d27b50f', '1a3675d1bd051fb3',
-  '9b5e0b592f17a495', '0508868d04be1da0', '461679bccffcd6d8', 'd34b909ef87d245a', 'ca07ba0fb0d0f7e8',
+  '9b5e0b592f17a495', '7d11c5edc47a1a40', '461679bccffcd6d8', 'd34b909ef87d245a', 'ca07ba0fb0d0f7e8',
 ];
 /** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Seed 8 re-pinned a fourth time for the Core's death entry (RC9 X2-E, see the fourteenth re-pin above); its old hash is in git at 748038a0a. Re-pinned a seventeenth time for r56 (ACTION_TIME_PER_COMMAND on; see the header); the old hashes are in git at b24614c05. */
 const CH5_D1500 = [
