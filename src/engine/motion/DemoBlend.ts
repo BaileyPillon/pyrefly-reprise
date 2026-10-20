@@ -7,13 +7,13 @@
  *
  * **The blend is chosen from the pair.** `difference` (0 for an overlap of 0.6 or more, 1 for 0.15 or less, 0.5 when the overlap is unknown) sets
  *
- * - the length: 110 ms (party) or 120 ms (foes) for a pair that agrees, up to 140 or 150 ms for one that does not (a longer blend smooths the head further but keeps the double image on screen longer; at 60 fps and the
+ * - the length: today's 120 ms (party) or 140 ms (foes) for a pair that agrees (shortening it to 110 or 120 read as a 62 px feet jerk on Bahamut idle to attack in the harness: a shorter blend takes bigger steps), up to 140 or 150 ms for one that does not (a longer blend smooths the head further but keeps the double image on screen longer; at 60 fps and the
  *   capped cross, 140 ms reads the head at 0.258 of the gap a frame where today's 120 ms quad dissolve reads 0.252, shows the lesser painting above the harness's 0.15 for 46 ms where today's shows it for 54, and its
  *   peak is 0.33 where today's is 0.43); a KO, an Overdrive or a victory swap is 40 ms longer (200 at most);
  * - the shape, {@link cappedCross}: the outgoing painting leaves as `(1 - s) ** k`, the incoming one comes in as `s` (`s` is `u` eased, {@link easeMap}), with `k = 1 + difference` (1 is a plain blend, 2 is the capped
  *   cross). At `k = 2` the two paintings never both show more than 0.382 (`1 - s = s * s` at its crossing), so a double image of two different outlines is at most 0.382 of the figure for a few frames, under the harness's
  *   0.4, whatever the frame rate; the new painting comes in promptly (it is the action) and the old one is gone first. The body thins to 0.76 at the crossing for a pair that shares nothing, and not at all for one that shares
- *   everything. A pair that agrees (k = 1) reads the head at 0.215 a frame at 120 ms against 0.252. (Numbers, and what the harness read of both chapters: `docs/handoff/demo-motion.md`.)
+ *   everything. A pair that agrees (k = 1) reads the head at 0.215 a frame at 120 ms (party) and 0.185 at 140 ms (foes) against 0.252 and 0.219. (Numbers, and what the harness read of both chapters: `docs/handoff/demo-motion.md`.)
  *
  * Pure: no `three`, no DOM, no clock. `PaintedActor.beginBlend` reads the overlap of the two planes it has just placed (the same reading the aligned dissolve takes, `PoseAlign.footprintOverlap`)
  * and hands it in; `PoseBlend.retune` puts the result on the blend it has just started. Every number is `[ours]`.
@@ -26,8 +26,8 @@ export const AGREE_OVERLAP = 0.6;
 /** An overlap at or below this is a pair that does not: its blend is the long capped one. */
 export const DISAGREE_OVERLAP = 0.15;
 /** The length of a pair that agrees, ms, per side; a pair that does not adds {@link LENGTH_SPREAD}. */
-export const AGREE_MS = { party: 110, foe: 120 } as const;
-export const LENGTH_SPREAD = { party: 30, foe: 30 } as const;
+export const AGREE_MS = { party: 120, foe: 140 } as const;
+export const LENGTH_SPREAD = { party: 20, foe: 10 } as const;
 /** A KO, an Overdrive, a special or a victory swap runs this much longer, and never past {@link LONG_MS_MAX}. */
 export const LONG_EXTRA_MS = 40;
 export const LONG_MS_MAX = 200;

@@ -86,32 +86,32 @@ describe('with the switch', () => {
     expect(Math.min(...b.sums.slice(0, -1))).toBeLessThan(0.9);
   });
 
-  it('two paintings that agree cross on a short linear blend over 110 ms with no dip', () => {
+  it('two paintings that agree cross on a plain eased blend over 120 ms (the length of today) with no dip', () => {
     setDemoMotion(true);
     const b = blendOf(yuna(ALL, ALL, { same: true }), 'hurt');
-    expect(b.ms).toBeGreaterThanOrEqual(110 - 17);
-    expect(b.ms).toBeLessThanOrEqual(110 + 17);
+    expect(b.ms).toBeGreaterThanOrEqual(120 - 17);
+    expect(b.ms).toBeLessThanOrEqual(120 + 17);
     for (const s of b.sums.slice(0, -1)) expect(s).toBeCloseTo(1, 6);
   });
 
-  it('a foe\'s pair that agrees is 120 ms (its own base), and a KO swap is 40 ms longer than the same pair\'s other swaps', () => {
+  it('a foe pair that agrees is 140 ms (its own base), and a KO swap is 40 ms longer than the same pair\'s other swaps', () => {
     setDemoMotion(true);
     const foe = blendOf(yuna(ALL, ALL, { side: 'enemy', same: true }), 'hurt');
-    expect(foe.ms).toBeGreaterThanOrEqual(120 - 17);
-    expect(foe.ms).toBeLessThanOrEqual(120 + 17);
-    const ko = blendOf(yuna(ALL, ALL, { same: true }), 'ko'); // a lying body's outline is not read (prone), so the pair is judged in between: 120 + 40
-    expect(ko.ms).toBeGreaterThanOrEqual(160 - 17);
-    expect(ko.ms).toBeLessThanOrEqual(160 + 17);
+    expect(foe.ms).toBeGreaterThanOrEqual(140 - 17);
+    expect(foe.ms).toBeLessThanOrEqual(140 + 17);
+    const ko = blendOf(yuna(ALL, ALL, { same: true }), 'ko'); // a lying body's outline is not read (prone), so the pair is judged in between: 130 + 40
+    expect(ko.ms).toBeGreaterThanOrEqual(170 - 17);
+    expect(ko.ms).toBeLessThanOrEqual(170 + 17);
   });
 
-  it('an unknown overlap (a painting with no silhouette) reads as in between: 120 ms', () => {
+  it('an unknown overlap (a painting with no silhouette) reads as in between: 130 ms', () => {
     setDemoMotion(true);
     const a = new PaintedActor({ name: 'yuna', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
     a.adoptPoses({ idle: painting('yuna', 'idle'), hurt: painting('yuna', 'hurt') }, 'idle');
     a.position.set(-2, 0, 0);
     const b = blendOf(a, 'hurt');
-    expect(b.ms).toBeGreaterThanOrEqual(120 - 17);
-    expect(b.ms).toBeLessThanOrEqual(120 + 17);
+    expect(b.ms).toBeGreaterThanOrEqual(130 - 17);
+    expect(b.ms).toBeLessThanOrEqual(130 + 17);
   });
 
   it('a cut stays a cut (FF7\'s hand-placed key set) and a scene\'s own long dissolve stays long', () => {

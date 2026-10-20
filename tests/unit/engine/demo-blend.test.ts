@@ -82,7 +82,7 @@ describe('the capped cross', () => {
 });
 
 describe('demoBlend: length and shape of one pose change', () => {
-  it('a pair that agrees is short (110 party, 120 foe), a pair that does not is long, nothing ordinary past 160', () => {
+  it('a pair that agrees keeps the length of today (120 party, 140 foe), a pair that does not is a little longer (140, 150), nothing ordinary past 160', () => {
     expect(demoBlend({ side: 'party', to: 'ready', overlap: 0.8 }).ms).toBe(AGREE_MS.party);
     expect(demoBlend({ side: 'foe', to: 'ready', overlap: 0.8 }).ms).toBe(AGREE_MS.foe);
     expect(demoBlend({ side: 'party', to: 'follow', overlap: 0.05 }).ms).toBe(140);
@@ -90,7 +90,7 @@ describe('demoBlend: length and shape of one pose change', () => {
     for (let o = 0; o <= 1; o += 0.05) {
       for (const side of ['party', 'foe'] as const) {
         const b = demoBlend({ side, to: 'attack', overlap: o });
-        expect(b.ms).toBeGreaterThanOrEqual(110);
+        expect(b.ms).toBeGreaterThanOrEqual(120);
         expect(b.ms).toBeLessThanOrEqual(BLEND_MS_MAX);
       }
     }
