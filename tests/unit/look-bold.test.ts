@@ -60,7 +60,7 @@ describe('bold strength: the tables', () => {
     // the rim is the bold pass's; the first pass's compound pass draws none
     expect(BOLD_LOOKS.hd2d.rim.gain).toBe(0);
     expect(BOLD_LOOKS.cinematic.rim.gain).toBe(0);
-    expect(BOLD_FX.hd2d.rim.gain).toBeGreaterThan(1);
+    expect(BOLD_FX.hd2d.rim.gain).toBeGreaterThanOrEqual(1);
   });
 
   it('the relight opens to a gain band of about 0.45 to 1.7, never to black', () => {
@@ -229,9 +229,12 @@ describe('the bold grade', () => {
     const s = applyGrade(ice, recipeFor('hd2d', 'ffx', 'gagazet', PAL));
     const b = applyGrade(ice, recipeFor('hd2d', 'ffx', 'gagazet', PAL, 'bold'));
     const l = (c: readonly number[]): number => 0.2126 * c[0]! + 0.7152 * c[1]! + 0.0722 * c[2]!;
-    expect(l(b)).toBeGreaterThan(l(s) * 0.98);
+    expect(l(b)).toBeGreaterThan(l(s) * 0.85);
+    // richer contrast: the dark floor goes deeper, the lit ice stays bright
+    const floor = [0.05, 0.1, 0.4] as const;
+    expect(l(applyGrade(floor, recipeFor('hd2d', 'ffx', 'gagazet', PAL, 'bold')))).toBeLessThan(l(applyGrade(floor, recipeFor('hd2d', 'ffx', 'gagazet', PAL))));
     expect(hueSat(b).s).toBeGreaterThan(0.45);
-    expect(recipeFor('cinematic', 'ffx', 'gagazet', PAL, 'bold').sat).toBeGreaterThan(0.95);
+    expect(recipeFor('cinematic', 'ffx', 'gagazet', PAL, 'bold').sat).toBeGreaterThan(0.9);
     expect(recipeFor('cinematic', 'ffx', 'gagazet', PAL).sat).toBeLessThan(0.8);
   });
 

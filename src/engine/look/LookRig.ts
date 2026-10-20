@@ -194,7 +194,7 @@ export class LookRig {
 
     // --- the grade: the look LUT, the vignette, the grain, the saturation (written after option A, which writes its own each frame)
     const g = r.gradePass.uniforms;
-    g['uLook']!.value = this.room.lutFor(name, lookState.strength);
+    g['uLook']!.value = this.room.lutFor(name, lookState.strength, lookState.recipe);
     g['lookAmount']!.value = v('grade.lookAmount');
     (g['vignetteTint']!.value as Vector3).set(...p.grade.vignetteTint);
     g['vignette']!.value = (pal.vignette ?? 0.46) + v('grade.vignetteAdd');
@@ -308,7 +308,8 @@ export class LookRig {
     c.relightKeyDir.value.set(...keyDirection([lightUv.x, lightUv.y], from, aspect, p.keyZ));
     c.relightRimDir.value.set(...rimDirection([lightUv.x, lightUv.y], from, aspect, p.rimZ));
     c.relightKeyCol.value.set(...lin(lightColour(this.room.light.color)));
-    c.relightRimCol.value.set(...lin(lightColour(this.room.light.color, 0.12)));
+    const bRim = lookState.strength === 'bold' ? roomBold(this.room.key).rim : undefined; // bold: the room's key colour, saturated
+    c.relightRimCol.value.set(...lin(bRim ?? lightColour(this.room.light.color, 0.12)));
     c.relightKey.value.set(p.key, p.keyTint, p.gainMin, p.gainMax);
     c.relightRimAmt.value = p.rim;
     c.relightAspect.value = aspect;

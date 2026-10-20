@@ -60,7 +60,7 @@ export function applyHueBoosts(c: Readonly<Rgb>, boosts: readonly HueBoost[]): R
 
 /** The base recipes of the two bold looks (anime has none). */
 export const BOLD_BASE: Readonly<Record<'hd2d' | 'cinematic', GradeRecipe>> = {
-  hd2d: { exposure: 1.12, gamma: 1.1, contrast: 0.34, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.25, shadowHue: [0.2, 0.28, 0.66], highlightHue: [1.0, 0.9, 0.7], topBias: [1, 0.92, 0.74], topBiasAmount: 0.3, midSat: 0.5, deepDesat: 0, sat: 1.2 },
+  hd2d: { exposure: 1.1, gamma: 1.07, contrast: 0.46, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.25, shadowHue: [0.2, 0.28, 0.66], highlightHue: [1.0, 0.9, 0.7], topBias: [1, 0.92, 0.74], topBiasAmount: 0.3, midSat: 0.46, deepDesat: 0, sat: 1.14 },
   cinematic: { exposure: 1.0, gamma: 1.02, contrast: 0.72, pivot: 0.3, shoulder: 0.76, shadowSplit: 0.6, highlightSplit: 0.4, shadowHue: null, highlightHue: null, topBias: null, topBiasAmount: 0, midSat: 0.25, deepDesat: 0.1, sat: 0.95 },
 };
 
@@ -73,14 +73,14 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
     gagazet: {
       shadow: [0.1, 0.2, 0.66],
       highlight: [0.82, 0.96, 1.0],
-      recipe: { exposure: 1.17, gamma: 1.13, contrast: 0.42, pivot: 0.28, shoulder: 0.86, shadowSplit: 0.36, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.25, midSat: 0.55, sat: 1.22, hues: [{ hue: 195, width: 45, sat: 1.22, lum: 1.07 }, { hue: 228, width: 30, sat: 1.1, lum: 1.03 }] },
+      recipe: { exposure: 0.9, gamma: 0.98, contrast: 0.76, pivot: 0.44, shoulder: 0.84, shadowSplit: 0.3, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.25, midSat: 0.25, sat: 0.96, hues: [{ hue: 195, width: 45, sat: 1.12, lum: 1.05 }] },
       focus: 0.36,
     },
     // Chapter IV: violet shadows, amber lamps against the cyan skylight (each hue lifted and pulled toward itself).
     'bevelle-underground': {
       shadow: [0.2, 0.12, 0.52],
       highlight: [1.0, 0.82, 0.58],
-      recipe: { exposure: 1.12, gamma: 1.08, contrast: 0.4, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.5, sat: 1.16, hues: [{ hue: 26, width: 32, sat: 1.5, lum: 1.3, toward: [1, 0.68, 0.26], shift: 0.5 }, { hue: 192, width: 36, sat: 1.35, lum: 1.12, toward: [0.2, 0.9, 1.0], shift: 0.4 }] },
+      recipe: { exposure: 1.0, gamma: 1.0, contrast: 0.62, pivot: 0.38, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.35, sat: 1.08, hues: [{ hue: 26, width: 32, sat: 1.25, lum: 1.12, toward: [1, 0.68, 0.26], shift: 0.3 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
       focus: 0.4,
     },
   },
@@ -89,14 +89,14 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
     gagazet: {
       shadow: [0.03, 0.1, 0.38],
       highlight: [0.84, 0.95, 1.0],
-      recipe: { exposure: 1.06, gamma: 1.06, contrast: 0.68, pivot: 0.3, shoulder: 0.78, shadowSplit: 0.55, highlightSplit: 0.4, topBias: [1, 0.9, 0.7], topBiasAmount: 0.2, midSat: 0.3, sat: 1.02, hues: [{ hue: 195, width: 45, sat: 1.2, lum: 1.06 }] },
+      recipe: { exposure: 0.86, gamma: 1.0, contrast: 0.88, pivot: 0.46, shoulder: 0.78, shadowSplit: 0.62, highlightSplit: 0.4, topBias: [1, 0.92, 0.8], topBiasAmount: 0.06, midSat: 0.2, sat: 0.85, hues: [{ hue: 195, width: 45, sat: 1.15, lum: 1.05 }] },
       fog: [0.46, 0.64, 0.92],
     },
     // Chapter IV: violet-black shadows, amber lamps, cyan skylight, a cool violet fog.
     'bevelle-underground': {
       shadow: [0.1, 0.05, 0.32],
       highlight: [1.0, 0.76, 0.48],
-      recipe: { exposure: 1.02, gamma: 1.02, contrast: 0.7, pivot: 0.32, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 26, width: 32, sat: 1.6, lum: 1.35, toward: [1, 0.66, 0.24], shift: 0.6 }, { hue: 192, width: 36, sat: 1.4, lum: 1.12, toward: [0.2, 0.9, 1.0], shift: 0.45 }] },
+      recipe: { exposure: 0.94, gamma: 1.0, contrast: 0.74, pivot: 0.4, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 26, width: 32, sat: 1.3, lum: 1.15, toward: [1, 0.66, 0.24], shift: 0.35 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
       fog: [0.24, 0.28, 0.56],
     },
   },

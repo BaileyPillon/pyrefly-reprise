@@ -28,25 +28,25 @@ export const BOLD_LOOKS: Readonly<Record<'hd2d' | 'cinematic', LookParams>> = {
     blur: { far: 20, near: 12, focus: 0.38, band: 0.18, falloff: 1.45, bokeh: 2.6 },
     // shafts you can see from across the room: 2.6 times the gain, a lower threshold so more of the painting throws light, beamier
     shaft: { gain: 1.3, reach: 1.0, threshold: 0.4, decay: 0.968, rays: 0.8 },
-    motes: { gain: 1.7, size: 5.5, speed: 1, glow: 0.55, density: 0.5 },
+    motes: { gain: 1.1, size: 4.6, speed: 1, glow: 0.35, density: 0.45 },
     rim: NO_RIM, // the bold pass draws the rim
     figure: { gain: [1.05, 1.02, 0.95], lift: [0, 0, 0], contrast: 0.12 },
     grade: { ...LOOKS.hd2d.grade, vignetteAdd: 0.22, saturation: 1.16 },
-    bloom: { threshold: 0.52, strength: 1.25, radius: 0.9, tint: [1.1, 1.0, 0.88], selective: true },
+    bloom: { threshold: 0.62, strength: 0.85, radius: 0.55, tint: [1.1, 1.0, 0.88], selective: true },
   },
   cinematic: {
     ...LOOKS.cinematic,
     blur: { far: 9, near: 5.5, focus: 0.4, band: 0.24, falloff: 1.6, bokeh: 1.2 },
     shaft: { gain: 1.0, reach: 1.0, threshold: 0.42, decay: 0.966, rays: 0.85 },
-    motes: { gain: 1.0, size: 4.4, speed: 0.8, glow: 0.5, density: 0.5 },
+    motes: { gain: 0.8, size: 4.0, speed: 0.8, glow: 0.35, density: 0.45 },
     // fog stays behind the figures: a trace at their feet, none over a face
-    fog: { density: 0.95, speed: 1, height: 0.78, onFigures: 0.1 },
+    fog: { density: 0.55, speed: 1, height: 0.78, onFigures: 0.1 },
     rim: NO_RIM,
     sharpen: 0.2,
     ca: 1.1,
     figure: { gain: [1.06, 1.04, 1.04], lift: [0, 0.002, 0.006], contrast: 0.14 },
     grade: { ...LOOKS.cinematic.grade, vignetteAdd: 0.5, grain: 0.05, saturation: 0.98 },
-    bloom: { threshold: 0.62, strength: 1.0, radius: 0.75, tint: [1.0, 0.95, 0.88], selective: true },
+    bloom: { threshold: 0.66, strength: 0.85, radius: 0.5, tint: [1.0, 0.95, 0.88], selective: true },
   },
 };
 
@@ -58,8 +58,8 @@ export function lookParams(name: LookName, strength: LookStrength): LookParams {
 
 /** The normal-map relight at a strength: the gain band opens to 0.45 .. 1.7, the rim and the coloured lights roughly double. */
 export const BOLD_RELIGHT: Readonly<Record<'hd2d' | 'cinematic', RelightParams>> = {
-  hd2d: { key: 1.35, keyTint: 0.6, keyZ: 0.5, rimZ: -0.8, rim: 1.5, gainMin: 0.45, gainMax: 1.7, point: 1.8, reach: 0.34 },
-  cinematic: { key: 1.45, keyTint: 0.7, keyZ: 0.45, rimZ: -0.8, rim: 1.8, gainMin: 0.42, gainMax: 1.7, point: 1.8, reach: 0.34 },
+  hd2d: { key: 1.35, keyTint: 0.6, keyZ: 0.5, rimZ: -0.8, rim: 0.8, gainMin: 0.45, gainMax: 1.7, point: 1.8, reach: 0.34 },
+  cinematic: { key: 1.45, keyTint: 0.7, keyZ: 0.45, rimZ: -0.8, rim: 1.0, gainMin: 0.42, gainMax: 1.7, point: 1.8, reach: 0.34 },
 };
 
 export function relightParams(name: LookName, strength: LookStrength): RelightParams | null {
@@ -88,19 +88,19 @@ export interface BoldFx {
 export const BOLD_FX: Readonly<Record<'hd2d' | 'cinematic', BoldFx>> = {
   hd2d: {
     shadow: { strength: 0.78, core: 0.6 },
-    reflect: { amount: 0.55, length: 0.5, blur: 5, squash: 0.85 },
-    depthFog: { density: 0.55, start: 0.2 },
-    heightFog: { density: 0.55, height: 0.34, feet: 0.25 },
-    rim: { gain: 1.7, width: 2.6, lit: 0.85 },
+    reflect: { amount: 0.8, length: 0.6, blur: 4, squash: 0.85 },
+    depthFog: { density: 0.5, start: 0.25 },
+    heightFog: { density: 0.55, height: 0.36, feet: 0.2 },
+    rim: { gain: 1.0, width: 3.0, lit: 1.0 },
     pool: { gain: 1.0 },
     embers: { gain: 1.0, size: 3.2, rate: 0.16 },
   },
   cinematic: {
     shadow: { strength: 0.85, core: 0.65 },
-    reflect: { amount: 0.5, length: 0.45, blur: 6, squash: 0.85 },
-    depthFog: { density: 0.7, start: 0.2 },
-    heightFog: { density: 0.7, height: 0.4, feet: 0.2 },
-    rim: { gain: 2.0, width: 2.9, lit: 0.9 },
+    reflect: { amount: 0.75, length: 0.55, blur: 4.5, squash: 0.85 },
+    depthFog: { density: 0.6, start: 0.25 },
+    heightFog: { density: 0.6, height: 0.4, feet: 0.15 },
+    rim: { gain: 1.2, width: 3.2, lit: 1.0 },
     pool: { gain: 1.1 },
     embers: { gain: 1.1, size: 3.4, rate: 0.14 },
   },
@@ -114,6 +114,8 @@ export interface RoomBold {
   embers: ReadonlyArray<readonly [number, number]>;
   /** The fog's colour for this room (sRGB 0..1), else the look's own. */
   fog?: Rgb;
+  /** The rim light's colour (sRGB 0..1): the room's key, saturated, never a white line. */
+  rim?: Rgb;
   /** What the contact shadow multiplies the floor by (linear, per channel, at its darkest): the room's own dark, tinted, not black. */
   shadow?: Rgb;
   /** A multiplier on the depth and height fog for this room (a luminous room wants less haze). */
@@ -126,10 +128,11 @@ export const DEFAULT_ROOM_BOLD: RoomBold = { gloss: 0, embers: [], driftPx: 3 };
 
 export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
   // Chapter I (FFX), Gagazet at night: snow and ice, a matte floor: no reflection; a pale icy haze, never a grey one.
-  gagazet: { gloss: 0, embers: [], fog: [0.46, 0.66, 0.98], shadow: [0.13, 0.19, 0.42], fogScale: 0.8, driftPx: 3 },
+  gagazet: { gloss: 0, embers: [], rim: [0.55, 0.85, 1.0], fog: [0.46, 0.66, 0.98], shadow: [0.13, 0.19, 0.42], fogScale: 0.8, driftPx: 3 },
   // Chapter IV (FFX-2), the Bevelle underground: a polished cathedral floor (the lamps and the skylight sit in it); the four lamps of the painting throw embers.
   'bevelle-underground': {
     gloss: 0.8,
+    rim: [0.35, 0.78, 1.0],
     embers: [[0.018, 0.532], [0.124, 0.61], [0.871, 0.605], [0.979, 0.529]],
     fog: [0.24, 0.28, 0.56],
     shadow: [0.16, 0.1, 0.3],

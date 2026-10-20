@@ -49,7 +49,7 @@ export class LookBold {
   private quality: LookQuality | null = null;
   private readonly homo = new Matrix3();
   /** For the debug API and the captures. */
-  readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0 };
+  readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
 
   constructor(private readonly r: Renderer) {}
 
@@ -188,7 +188,7 @@ export class LookBold {
 
   private loadDepth(key: string): void {
     this.depth = 'loading';
-    const url = artUrl(`backdrops/${key}.depth.png`);
+    const url = artUrl(`art/backdrops/${key}.depth.png`);
     new TextureLoader().load(
       url,
       (t) => {
@@ -250,7 +250,7 @@ export class LookBold {
     camera.updateMatrixWorld();
     const u = pass.uniforms;
     const gloss = rb.gloss * o.tweak('bold.gloss', 1);
-    const n = this.figures(camera, o.aspect, fx, gloss, u['uFigA']!.value as Vector4[], u['uFigB']!.value as Vector4[]);
+    const n = this.figures(camera, o.aspect, { ...fx, shadow: { ...fx.shadow, strength: fx.shadow.strength * o.tweak('bold.shadow', 1) } }, gloss, u['uFigA']!.value as Vector4[], u['uFigB']!.value as Vector4[]);
     (u['resolution']!.value as { set(x: number, y: number): void }).set(1 / Math.max(1, o.W), 1 / Math.max(1, o.H));
     u['time']!.value = o.time;
     u['pxScale']!.value = o.scale;
@@ -286,7 +286,7 @@ export class LookBold {
     u['poolGain']!.value = fx.pool.gain * o.tweak('bold.pool', 1);
     // rim, in the room's key colour
     (u['bRim']!.value as Vector3).set(fx.rim.gain * o.tweak('bold.rim', 1), fx.rim.width * o.scale, fx.rim.lit);
-    (u['rimColor']!.value as Vector3).set(...lin(lightColour(room.light.color, 0.12)));
+    (u['rimColor']!.value as Vector3).set(...lin(rb.rim ?? lightColour(room.light.color, 0.05)));
     // embers over the room's lamps (the painting's own uv to the frame)
     const E = u['uEmber']!.value as Vector3[];
     let ne = 0;
@@ -309,6 +309,10 @@ export class LookBold {
     this.stats.depth = this.depth === null ? 'none' : typeof this.depth === 'string' ? this.depth : 'loaded';
     this.stats.gloss = gloss;
     this.stats.embers = ne;
+    const FA = u['uFigA']!.value as Vector4[];
+    const FB = u['uFigB']!.value as Vector4[];
+    this.stats.fig = FA.slice(0, n).map((a, i) => [a.x, a.y, a.z, a.w, FB[i]!.x, FB[i]!.y, FB[i]!.z, FB[i]!.w].map((v) => Math.round(v * 1000) / 1000));
+    this.stats.homo = this.homo.elements.map((v) => Math.round(v * 1000) / 1000);
   }
 
   off(): void {

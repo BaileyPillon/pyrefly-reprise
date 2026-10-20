@@ -9,7 +9,7 @@ import type { FxSceneInfo } from '../fx/a/GoldenHour.ts';
 import { LUT_SIZE, hexRgb } from '../fx/a/LookLut.ts';
 import { hex3, sceneLookA } from '../fx/a/sceneLooks.ts';
 import type { LookName, LookStrength, Rgb } from './LookConfig.ts';
-import { ROOM_LOOKS, lutBytes, lutKey, type GameKey } from './LookGrades.ts';
+import { ROOM_LOOKS, lutBytes, lutKey, type GameKey, type GradeRecipe } from './LookGrades.ts';
 import { findLight } from './LookLight.ts';
 
 /** One room's light on the painting (0..1 from its top-left) and its colour. */
@@ -82,14 +82,14 @@ export class LookRoom {
   }
 
   /** The grade's LUT for `name` in this room (built once, kept for the last eight). */
-  lutFor(name: LookName, strength: LookStrength = 'subtle'): Data3DTexture {
+  lutFor(name: LookName, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null): Data3DTexture {
     const info = this.info!;
     const pal = info.palette ?? { key: 0xffe0b0, sky: 0x30405a };
-    const id = lutKey(name, this.game, info.key, pal, strength);
+    const id = lutKey(name, this.game, info.key, pal, strength, patch);
     if (this.lut && id === this.lutId) return this.lut;
     let t = this.luts.get(id);
     if (!t) {
-      t = new Data3DTexture(lutBytes(name, this.game, info.key, pal, strength), LUT_SIZE, LUT_SIZE, LUT_SIZE);
+      t = new Data3DTexture(lutBytes(name, this.game, info.key, pal, strength, patch), LUT_SIZE, LUT_SIZE, LUT_SIZE);
       t.minFilter = t.magFilter = LinearFilter;
       t.needsUpdate = true;
       this.luts.set(id, t);

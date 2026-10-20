@@ -140,10 +140,11 @@ export const LookBoldShader = {
         float hfog = heightFog.x * low * low;
         float backAmt = (dfog + hfog) * body;
         float feet = heightFog.z * (1.0 - smoothstep(0.05, 0.3, uv.y)) * (0.5 + 0.9 * n);
-        float amt = clamp(mix(backAmt, feet, fig), 0.0, 0.86);
+        float amt = clamp(mix(backAmt, feet, fig), 0.0, 0.62);
         vec2 dL = (uLight - uv) * vec2(aspect, 1.0);
-        vec3 fc = fogColor + lightColor * exp(-dot(dL, dL) * 2.0) * 0.5;
-        col = mix(col, fc * (0.55 + 0.9 * lum0), amt * 0.85);
+        vec3 fc = fogColor + lightColor * exp(-dot(dL, dL) * 2.0) * 0.35;
+        // the haze follows the scene's own light (dark floor, dark haze): it veils the far and the low without lifting the blacks into a flat colour
+        col = mix(col, fc * (0.22 + 1.05 * lum0), amt);
       }
 
       // ---- 2. contact shadows under every figure, from the base width, darker under the feet
@@ -239,7 +240,7 @@ export const LookBoldShader = {
           sumBg += bg;
         }
         float e = fig * mix(sumBg / float(EDGE_TAPS), lit / wl, bRim.z);
-        e = smoothstep(0.08, 0.7, e);
+        e = smoothstep(0.04, 0.85, e);
         col += rimColor * e * bRim.x * (0.5 + 0.9 * luma3(col));
       }
 

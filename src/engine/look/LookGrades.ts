@@ -88,7 +88,7 @@ const smooth = (a: number, b: number, x: number): number => {
 };
 
 /** The recipe in force for a look, a game and a room: the base, the game's flavour of it, the painting's hues, the room's overrides. */
-export function recipeFor(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle'): GradeRecipe {
+export function recipeFor(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null): GradeRecipe {
   const bold = strength === 'bold' && look !== 'anime';
   const room = (bold ? boldRoom(look, sceneKey) : undefined) ?? ROOM_LOOKS[look][sceneKey];
   const r: GradeRecipe = { ...(bold ? BOLD_BASE[look as 'hd2d' | 'cinematic'] : BASE[look]) };
@@ -114,7 +114,8 @@ export function recipeFor(look: LookName, game: GameKey, sceneKey: string, palet
   }
   if (room?.shadow) r.shadowHue = room.shadow;
   if (room?.highlight) r.highlightHue = room.highlight;
-  return room?.recipe ? { ...r, ...room.recipe } : r;
+  const out = room?.recipe ? { ...r, ...room.recipe } : r;
+  return patch ? { ...out, ...patch } : out; // a live override for tuning (`__pyrefly.look.recipe`)
 }
 
 /** The S-curve about a pivot: keeps 0 and 1 fixed, darkens below the pivot and brightens above it (`k` negative does the reverse). */
@@ -152,8 +153,8 @@ export function applyGrade(c: Readonly<Rgb>, r: GradeRecipe): Rgb {
 }
 
 /** The LUT bytes for a look in a room (`LUT_SIZE` cubed RGBA, red fastest, each axis encoded `c = LUT_DOMAIN * u^2`): `GradeShader`'s `uLook`. */
-export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle'): Uint8Array {
-  const r = recipeFor(look, game, sceneKey, palette, strength);
+export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null): Uint8Array {
+  const r = recipeFor(look, game, sceneKey, palette, strength, patch);
   const out = new Uint8Array(LUT_SIZE * LUT_SIZE * LUT_SIZE * 4);
   const dec = (k: number): number => {
     const u = k / (LUT_SIZE - 1);
@@ -175,6 +176,6 @@ export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palett
 }
 
 /** A cache key that changes whenever the LUT would. */
-export function lutKey(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle'): string {
-  return `${look}:${game}:${sceneKey}:${palette.key}:${palette.sky}${strength === 'bold' && look !== 'anime' ? ':bold' : ''}`;
+export function lutKey(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null): string {
+  return `${look}:${game}:${sceneKey}:${palette.key}:${palette.sky}${strength === 'bold' && look !== 'anime' ? ':bold' : ''}${patch ? ':' + JSON.stringify(patch) : ''}`;
 }
