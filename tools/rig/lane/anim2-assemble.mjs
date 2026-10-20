@@ -27,8 +27,12 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const ACTIONS = ['attack', 'cast', 'item-ally', 'item-self', 'hurt-ko'].filter((a) => !args.actions || String(args.actions).split(',').includes(a));
 const PARTS = new Set(String(args.parts ?? 'pass2,compare,contact').split(',')); // `--parts contact` redoes only the sheets, `--actions hurt-ko` only that action
-const VARIANTS = ['today', 'B', 'P2'].filter((v) => fs.existsSync(path.join(inOf(v), `anim2-${v}`, 'segments.json')));
-const NAME = { today: 'TODAY (the rig as it ships)', B: 'PASS 1  B SHOWPIECE', P2: 'PASS 2' };
+// `--variants today,P2,P3` (pass 3's three-way); `--tag pass3` names the files `pass3-<action>.mp4`, `compare3-<action>.mp4`
+const VARIANTS = String(args.variants ?? 'today,B,P2').split(',').filter((v) => fs.existsSync(path.join(inOf(v), `anim2-${v}`, 'segments.json')));
+const TAG = args.tag ?? 'pass2';
+const CMP = TAG === 'pass3' ? 'compare3' : 'compare';
+const NAME = { today: 'TODAY (the rig as it ships)', B: 'PASS 1  B SHOWPIECE', P2: 'PASS 2', P3: 'PASS 3' };
+const SHORT = { today: 'TODAY', B: 'PASS 1 B', P2: 'PASS 2', P3: 'PASS 3' };
 const TITLE = { attack: 'ATTACK', cast: 'CAST', 'item-ally': 'ITEM ON AN ALLY', 'item-self': 'ITEM ON HERSELF', 'hurt-ko': 'HURT, THEN KO' };
 const info = Object.fromEntries(VARIANTS.map((v) => [v, JSON.parse(fs.readFileSync(path.join(inOf(v), `anim2-${v}`, 'segments.json'), 'utf8'))]));
 const dirOf = (v, a) => path.join(inOf(v), `anim2-${v}`, a);
@@ -63,13 +67,13 @@ const enc = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', '
 const clock = (x, y, size, pre) => text(`%{eif\\:max(0\\,(n-${pre})*1000/60)\\:d} ms`, x, y, size);
 
 // 1. one labelled video an action: the P2 variant (or the first variant present)
-const lead = VARIANTS.includes('P2') ? 'P2' : VARIANTS[VARIANTS.length - 1];
+const lead = VARIANTS.includes('P3') ? 'P3' : VARIANTS.includes('P2') ? 'P2' : VARIANTS[VARIANTS.length - 1];
 for (const a of ACTIONS) {
   if (!PARTS.has('pass2') || !has(lead, a)) continue;
   const win = windowOf(lead, a);
   const vf = [...(crops[a] ? [`crop=${crops[a].join(':')}`] : []), 'scale=1280:720:flags=lanczos', text(`${NAME[lead]}  /  ${TITLE[a]}`, 24, 20, 32), clock(24, 'h-64', 30, win.t0 - win.from)].join(',');
-  ff([...input(lead, a), '-vf', vf, ...enc, path.join(OUT, `pass2-${a}.mp4`)]);
-  console.log('wrote', `pass2-${a}.mp4`, win.count, 'frames; the action starts on frame', win.t0 - win.from);
+  ff([...input(lead, a), '-vf', vf, ...enc, path.join(OUT, `${TAG}-${a}.mp4`)]);
+  console.log('wrote', `${TAG}-${a}.mp4`, win.count, 'frames; the action starts on frame', win.t0 - win.from);
 }
 
 // 2. today | B | P2 side by side, started on the first press
@@ -83,8 +87,8 @@ for (const a of ACTIONS) {
   const cells = VARIANTS.map((v, i) => `[${i}:v]${crops[a] ? `crop=${crops[a].join(':')},` : ''}scale=${w}:${h}:flags=lanczos,${text(NAME[v], 14, 12, 24)},${clock(14, h - 44, 24, wins[i].t0 - wins[i].from)}[v${i}]`);
   const layout = VARIANTS.map((_, i) => `${i * w}_0`).join('|');
   const filter = `${cells.join(';')};${VARIANTS.map((_, i) => `[v${i}]`).join('')}xstack=inputs=${VARIANTS.length}:layout=${layout}:shortest=0[o]`;
-  ff([...VARIANTS.flatMap((v, i) => input(v, a, wins[i], wins[i].count)), '-filter_complex', filter, '-map', '[o]', '-frames:v', String(count + 30), ...enc, path.join(OUT, `compare-${a === 'item-ally' ? 'item' : a}.mp4`)]);
-  console.log('wrote', `compare-${a === 'item-ally' ? 'item' : a}.mp4`, wins.map((x) => x.count).join(' / '), 'frames');
+  ff([...VARIANTS.flatMap((v, i) => input(v, a, wins[i], wins[i].count)), '-filter_complex', filter, '-map', '[o]', '-frames:v', String(count + 30), ...enc, path.join(OUT, `${CMP}-${a === 'item-ally' ? 'item' : a}.mp4`)]);
+  console.log('wrote', `${CMP}-${a === 'item-ally' ? 'item' : a}.mp4`, wins.map((x) => x.count).join(' / '), 'frames');
 }
 
 // 3. a contact sheet an action: a row a variant, ten frames across the part that moves
@@ -103,7 +107,7 @@ for (const a of ACTIONS) {
     const s = info[v].segments[a];
     const w = windowOf(v, a);
     const first = w.from, last = w.last;
-    comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${lab}" height="${ch}"><text x="6" y="22" font-family="sans-serif" font-size="15" font-weight="bold" fill="#f0d68a">${v === 'today' ? 'TODAY' : v === 'B' ? 'PASS 1 B' : 'PASS 2'}</text><text x="6" y="42" font-family="sans-serif" font-size="13" fill="#d8d0e0">${((last - w.t0) / 60).toFixed(1)} s</text></svg>`), left: 0, top: r * ch });
+    comps.push({ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${lab}" height="${ch}"><text x="6" y="22" font-family="sans-serif" font-size="15" font-weight="bold" fill="#f0d68a">${SHORT[v] ?? v}</text><text x="6" y="42" font-family="sans-serif" font-size="13" fill="#d8d0e0">${((last - w.t0) / 60).toFixed(1)} s</text></svg>`), left: 0, top: r * ch });
     // hurt-ko: four frames across the first blow and six across the KO (the pose changes name them: `hurt` first, `ko` first), not ten spread over eleven seconds
     const h0 = s.samples.findIndex((x) => x.pose === 'hurt');
     const k0 = s.samples.findIndex((x) => x.pose === 'ko');
@@ -119,6 +123,6 @@ for (const a of ACTIONS) {
     }
     r += N / COLS;
   }
-  await sharp({ create: { width: lab + COLS * cw, height: r * ch, channels: 3, background: '#17141f' } }).composite(comps).png().toFile(path.join(OUT, `contact-${a}.png`));
-  console.log('wrote', `contact-${a}.png`);
+  await sharp({ create: { width: lab + COLS * cw, height: r * ch, channels: 3, background: '#17141f' } }).composite(comps).png().toFile(path.join(OUT, `${TAG === 'pass3' ? 'contact3' : 'contact'}-${a}.png`));
+  console.log('wrote', `${TAG === 'pass3' ? 'contact3' : 'contact'}-${a}.png`);
 }

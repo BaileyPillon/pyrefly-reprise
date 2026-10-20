@@ -28,7 +28,7 @@ const RISERS = 22;
 const ORDER = 999;
 
 /** A soft round glow (white centre falling off to nothing), 64 px, and a thin ring and a four-point star for the burst. Null where there is no 2D canvas (a unit test). */
-function paint(kind: 'glow' | 'ring' | 'star'): Texture | null {
+export function paint(kind: 'glow' | 'ring' | 'star'): Texture | null {
   if (typeof document === 'undefined') return null;
   const c = document.createElement('canvas');
   c.width = c.height = 64;

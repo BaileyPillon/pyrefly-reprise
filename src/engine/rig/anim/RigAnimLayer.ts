@@ -17,6 +17,7 @@ import { LULU } from './LuluAnim.ts';
 import { animFromQuery, type AnimStyle } from './AnimStyles.ts';
 import { VialProp } from './AnimProp.ts';
 import { AnimFx } from './AnimFx.ts';
+import { CastFx } from './AnimCastFx.ts';
 import type { BendSpec } from './AnimBend.ts';
 
 /** The name of the pseudo-bone whose `rot` is the knee's bend (pass 3): one more than the rig's last bone. */
@@ -64,6 +65,8 @@ export class RigAnimLayer {
   private prop: VialProp | null = null;
   /** Pass 2 (`P2`): light instead of a vial (`AnimFx.ts`). */
   private fx: AnimFx | null = null;
+  /** Pass 3 (`P3`): the cast's channel drawn so it reads (`AnimCastFx.ts`). */
+  private castFx: CastFx | null = null;
   private targets: ReadonlyArray<{ x: number; y: number; z: number }> = [];
   private readonly vel: Float64Array;
   private rate = 1;
@@ -82,6 +85,7 @@ export class RigAnimLayer {
     this.vel = new Float64Array(channels);
     this.imageH = data.image.h;
     if (style.p2) this.fx = new AnimFx();
+    if (style.p3) this.castFx = new CastFx();
   }
 
   /** The layer for this figure, or null: the prototype is off, or the rig lacks a key the clips need. */
@@ -102,7 +106,10 @@ export class RigAnimLayer {
   /** A pose request that resolved to `key` (the one the actor was showing is `fromKey`). True when a clip plays it. */
   request(key: string, fromKey: string, trans: RigTransition): boolean {
     if (key !== 'item' && this.prop?.held) this.prop.drop();
-    if (key === 'idle' || key === 'ko') this.fx?.rest();
+    if (key === 'idle' || key === 'ko') {
+      this.fx?.rest();
+      this.castFx?.rest();
+    }
     return this.anim.request(key, fromKey, trans.current, trans.velocity);
   }
 
@@ -189,8 +196,14 @@ export class RigAnimLayer {
     }
     const level = this.anim.charge;
     const isItem = kind === 'item' || kind === 'itemSelf';
-    if (hand && (kind === 'cast' || isItem) && level > 0.02) fx.gather(hand, level * (self ? 0.45 : 1), isItem && !self ? 0.05 + 0.09 * Math.min(1, Math.max(0, (level - 0.1) / 0.9)) : 0, isItem ? 'item' : 'cast');
+    const cf = this.castFx;
+    if (hand && (kind === 'cast' || isItem) && level > 0.02) fx.gather(hand, level * (self ? 0.45 : 1), isItem && !self ? 0.05 + 0.09 * Math.min(1, Math.max(0, (level - 0.1) / 0.9)) : 0, isItem ? 'item' : 'cast', cf && kind === 'cast' ? 1.55 : 1); // P3: the cast's own glow is half as big again
     else fx.rest();
+    if (cf) {
+      if (hand && kind === 'cast' && level > 0.02) cf.gather(hand, level, pos, h, h / 1.8);
+      else cf.rest();
+      cf.update(dt, this.host.parent);
+    }
     fx.update(dt, this.host.parent);
   }
 
@@ -214,5 +227,7 @@ export class RigAnimLayer {
     this.prop = null;
     this.fx?.dispose();
     this.fx = null;
+    this.castFx?.dispose();
+    this.castFx = null;
   }
 }
