@@ -8,6 +8,8 @@
  * - **The ink.** An inverted hull: the same geometry drawn a second time with its back faces only, pushed out along its normals by a fixed thickness in the model's units, in a flat ink colour. The silhouette is where
  *   the hull shows beyond the model. A skinned mesh's hull is a skinned mesh bound to the same skeleton, so it moves with the bones; its normal is the skinned normal.
  * - **Glow.** The materials' emissive is the one channel the figure's flash, cast glow and tint drive (`./skin.ts`): `setEmissive`.
+ * - **The wing flap** (a rigid mesh with wings, Bahamut's): a few lines of vertex shader that lift the vertices out beyond the shoulders by a travelling sine, more toward the wingtips, the body still. The toon materials and the
+ *   ink hull read one set of uniform cells, so the outline flaps with the wing it outlines (`FlapUniforms`, `setFlap`).
  *
  * Needs three.js only; no DOM (the ramp is a `DataTexture`). Game case: FFX-2 only.
  */
@@ -27,9 +29,60 @@ import {
   type BufferGeometry,
   type Material,
   type Object3D,
+
   type Texture,
 } from 'three';
 import { rampAt, TOON } from './layout.ts';
+
+/** What the wing flap needs to know of the model: where the shoulders end and where the wingtips are, along x in the file's units (from the centre). */
+export interface FlapSpec {
+  readonly shoulder: number;
+  readonly halfSpan: number;
+}
+
+/** The uniform cells the flap reads, shared by reference between every toon material and the ink hull of one model. */
+export interface FlapUniforms {
+  uFlapTime: { value: number };
+  uFlapAmp: { value: number };
+  uFlapShoulder: { value: number };
+  uFlapHalf: { value: number };
+}
+
+/** The shoulder width as a share of the whole wingspan, from the centre (Bailey's brief for the rigid Bahamut: about 0.18). */
+export const SHOULDER_SHARE = 0.18;
+
+/** The flap's cells for `spec`, at rest (no amplitude). */
+export function makeFlap(spec: FlapSpec): FlapUniforms {
+  return { uFlapTime: { value: 0 }, uFlapAmp: { value: 0 }, uFlapShoulder: { value: spec.shoulder }, uFlapHalf: { value: spec.halfSpan } };
+}
+
+/** The wingspan of a scene along x, read from its meshes' own bounding boxes (the file's units): the half of it and the shoulder (`SHOULDER_SHARE` of the whole span from the centre). Null for a scene with no mesh. */
+export function flapSpecOf(root: Object3D): FlapSpec | null {
+  let half = 0;
+  root.traverse((o) => {
+    const mesh = o as Mesh;
+    if (!mesh.isMesh) return;
+    if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+    const b = mesh.geometry.boundingBox!;
+    half = Math.max(half, Math.abs(b.min.x), Math.abs(b.max.x));
+  });
+  return half > 0 ? { shoulder: SHOULDER_SHARE * 2 * half, halfSpan: half } : null;
+}
+
+/** The vertex shader's uniforms and the displacement: past the shoulder, a sine that travels out along the wing (the tip lags the root), growing toward the tip, mostly up and down with a little forward. */
+const FLAP_UNIFORMS_GLSL = ['uniform float uFlapTime;', 'uniform float uFlapAmp;', 'uniform float uFlapShoulder;', 'uniform float uFlapHalf;'].join('\n');
+const FLAP_GLSL = [
+  'float yrpAx = abs( position.x );',
+  'float yrpW = smoothstep( uFlapShoulder, uFlapHalf, yrpAx );',
+  'float yrpFlap = sin( uFlapTime - yrpAx * ( 3.0 / uFlapHalf ) ) * yrpW * yrpW * uFlapAmp;',
+  'transformed.y += yrpFlap;',
+  'transformed.z += yrpFlap * 0.22;',
+].join('\n');
+
+/** Add the flap to a vertex shader (after `begin_vertex`, so every later step sees the displaced vertex). */
+export function withFlap(shader: { vertexShader: string }): void {
+  shader.vertexShader = shader.vertexShader.replace('#include <common>', `#include <common>\n${FLAP_UNIFORMS_GLSL}`).replace('#include <begin_vertex>', `#include <begin_vertex>\n${FLAP_GLSL}`);
+}
 
 /** The gradient map: {@link rampAt} sampled across `width` texels, grey, linearly filtered so the blends between the steps stay soft. One per model set; free it with `dispose()`. */
 export function toonRamp(width = 64): DataTexture {
@@ -58,7 +111,7 @@ function baseOf(src: Material): { map: Texture | null; color: Color } {
 }
 
 /** The toon material for a loaded one: its base colour map and colour, the ramp, front faces only (the hull draws the back), and an emissive of black to be driven. */
-export function toonMaterialOf(src: Material, ramp: DataTexture): MeshToonMaterial {
+export function toonMaterialOf(src: Material, ramp: DataTexture, flap?: FlapUniforms): MeshToonMaterial {
   const base = baseOf(src);
   if (base.map) {
     base.map.colorSpace = SRGBColorSpace;
@@ -66,16 +119,27 @@ export function toonMaterialOf(src: Material, ramp: DataTexture): MeshToonMateri
   }
   const m = new MeshToonMaterial({ name: src.name, color: base.color, map: base.map, gradientMap: ramp, emissive: new Color(0x000000), transparent: false, opacity: 1 });
   m.userData['toonBase'] = { color: base.color.clone() } satisfies ToonBase;
+  if (flap) {
+    m.onBeforeCompile = (shader) => {
+      Object.assign(shader.uniforms, flap); // the shared cells themselves, so one write moves every material
+      withFlap(shader);
+    };
+    m.customProgramCacheKey = () => 'yrp-toon-flap';
+  }
   return m;
 }
 
 /** The hull's material: a flat ink colour on the back faces, each vertex pushed out along its normal by `uInk` (a uniform, in the model's units). Shared by every hull of a model. */
-export function inkMaterial(thickness: number, colour: number = TOON.ink): MeshBasicMaterial {
+export function inkMaterial(thickness: number, colour: number = TOON.ink, flap?: FlapUniforms): MeshBasicMaterial {
   const m = new MeshBasicMaterial({ color: colour, side: BackSide, fog: false, toneMapped: false });
   const uInk = { value: thickness }; // the one uniform cell every compile of this material reads, so a later thickness needs no recompile
   m.userData['uInk'] = uInk;
   m.onBeforeCompile = (shader) => {
     shader.uniforms['uInk'] = uInk;
+    if (flap) {
+      Object.assign(shader.uniforms, flap);
+      withFlap(shader); // the hull is displaced like the wing it outlines, before the push along the normal
+    }
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nuniform float uInk;')
       .replace(
@@ -83,7 +147,7 @@ export function inkMaterial(thickness: number, colour: number = TOON.ink): MeshB
         '#include <skinning_vertex>\n#ifdef USE_SKINNING\n  transformed += normalize( objectNormal ) * uInk;\n#else\n  transformed += normalize( normal ) * uInk;\n#endif',
       );
   };
-  m.customProgramCacheKey = () => 'yrp-ink-hull';
+  m.customProgramCacheKey = () => (flap ? 'yrp-ink-hull-flap' : 'yrp-ink-hull');
   return m;
 }
 
@@ -101,15 +165,17 @@ export interface ToonSet {
   /** Geometry and textures of the file, freed once with the set (each is counted once). */
   readonly geometries: Set<BufferGeometry>;
   readonly textures: Set<Texture>;
+  /** The wing flap's cells, or null for a model that does not flap. */
+  readonly flap: FlapUniforms | null;
 }
 
 /**
  * Make every mesh under `root` toon: its materials swapped for toon ones, a hull beside it. Meshes are never frustum-culled (a skinned mesh's bounds are the bind pose's and an arm swung out would pop). Returns what was
  * made. `thickness` is the hull's thickness in the units of `root`'s own space (world thickness over the fit's scale).
  */
-export function toonify(root: Object3D, thickness: number, ramp: DataTexture = toonRamp()): ToonSet {
+export function toonify(root: Object3D, thickness: number, ramp: DataTexture = toonRamp(), flap: FlapUniforms | null = null): ToonSet {
   const made = new Map<Material, MeshToonMaterial>();
-  const set: ToonSet = { materials: [], hulls: [], hullMaterial: inkMaterial(thickness), ramp, geometries: new Set(), textures: new Set() };
+  const set: ToonSet = { materials: [], hulls: [], hullMaterial: inkMaterial(thickness, TOON.ink, flap ?? undefined), ramp, geometries: new Set(), textures: new Set(), flap };
   const meshes: Mesh[] = [];
   root.traverse((o) => {
     if ((o as Mesh).isMesh && !(o as Mesh).userData['yrpHull']) meshes.push(o as Mesh);
@@ -119,7 +185,7 @@ export function toonify(root: Object3D, thickness: number, ramp: DataTexture = t
     const swapped = list.map((m) => {
       let t = made.get(m);
       if (!t) {
-        t = toonMaterialOf(m, ramp);
+        t = toonMaterialOf(m, ramp, flap ?? undefined);
         made.set(m, t);
         set.materials.push(t);
         if (t.map) set.textures.add(t.map);
@@ -174,6 +240,13 @@ export function drive(set: ToonSet, channels: { colour: Color; emissive: Color; 
     hm.needsUpdate = true;
   }
   hm.opacity = channels.opacity;
+}
+
+/** The flap's clock (radians of the sine) and its amplitude (the file's units: how far the wingtips swing); a no-op for a set with no flap. */
+export function setFlap(set: ToonSet, time: number, amplitude: number): void {
+  if (!set.flap) return;
+  set.flap.uFlapTime.value = time;
+  set.flap.uFlapAmp.value = amplitude;
 }
 
 /** Free what a set made. The file's own geometry and textures are freed here too (the set owns them: the loader's cache hands each clone the same ones, and frees them once when the last user is gone). */

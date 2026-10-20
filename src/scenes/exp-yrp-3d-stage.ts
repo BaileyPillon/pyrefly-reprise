@@ -21,6 +21,7 @@
 
 import { Color, DirectionalLight, Vector3, type Object3D } from 'three';
 import type { CameraRig } from '../engine/BattleCamera.ts';
+import { tapDirector } from '../engine/yrp3d/beats.ts';
 import { YRP_SHOT_DIRECTOR } from '../engine/yrp3d/director.ts';
 import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_BOSS_ID, type RigData, type V3 } from '../engine/yrp3d/layout.ts';
 import { EXP_YRP_SCENE, YRP_MODEL_DIR } from '../data/yrp-ids.ts';
@@ -109,12 +110,14 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
 
   const search = typeof location === 'undefined' ? '' : location.search;
   let skin: { update(dt: number): void; dispose(): void } | null = null;
+  let directed: SceneStaging['shotDirector'] = YRP_SHOT_DIRECTOR;
   if (!paintedForced(search)) {
     const [{ YrpSkin }, { loadYrpModels }] = await Promise.all([import('../engine/yrp3d/skin.ts'), import('../engine/yrp3d/model.ts')]);
     const heights = { yuna: PARTY_HEIGHT, rikku: PARTY_HEIGHT, paine: PARTY_HEIGHT, bahamut: BOSS_HEIGHT };
     const models = await loadYrpModels({ base: import.meta.env.BASE_URL, dir: YRP_MODEL_DIR, heights, warn: (m) => console.warn(m) });
     const made = new YrpSkin({ host: base.group, models });
     skin = made;
+    directed = tapDirector(YRP_SHOT_DIRECTOR, made.listener); // the beats also start the models' clips (attack and cast), and put the strike on the blow
     if (import.meta.env.DEV) (globalThis as { __yrp3d?: unknown }).__yrp3d = { skin: made, models }; // the debug handle (a dev server only)
   }
 
@@ -125,6 +128,7 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
     partyHeight: PARTY_HEIGHT,
     enemyHeight: BOSS_HEIGHT,
     ...STAGING,
+    ...(directed ? { shotDirector: directed } : {}),
     update(dt: number): void {
       base.update(dt);
       skin?.update(dt);

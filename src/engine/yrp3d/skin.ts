@@ -25,7 +25,9 @@
 import { Color, Group, type Object3D } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
 import { castGlow, yawFor, YRP_BOSS_ID, YRP_CAST, type YrpId } from './layout.ts';
+import type { BeatListener } from './beats.ts';
 import type { YrpModel, YrpModels } from './model.ts';
+import { paceRate } from '../pace.ts';
 
 /** What a `PaintedActor` keeps private and the skin needs: the switch of its painted figure, its plane meshes, its motion group and its uniform cells. */
 export interface PaintedInternals {
@@ -75,6 +77,7 @@ const GLOW_GAIN = 0.5;
 /** Seconds a downed body takes to tip, and a glow to fade. */
 const LIE_TAU = 0.2;
 const GLOW_TAU = 0.18;
+const ACT_TAU = 0.25;
 const STONE = new Color(0.6, 0.6, 0.64);
 
 const approach = (from: number, to: number, tau: number, dt: number): number => from + (to - from) * (dt > 0 ? 1 - Math.exp(-dt / tau) : 1);
@@ -88,6 +91,10 @@ interface Bound {
   lie: number;
   glow: number;
   castAt: number | null;
+  /** How much the figure is acting, for a model that flaps (Bahamut's wings). */
+  act: number;
+  /** A cast is open (the beat), so the glow holds whatever painting the actor shows. */
+  castHold: boolean;
 }
 
 export interface YrpSkinOptions {
@@ -104,6 +111,24 @@ export class YrpSkin {
   private clock = 0;
 
   constructor(private readonly opts: YrpSkinOptions) {}
+
+  /**
+   * What the shot director's beats tell the skin (`./beats.ts`, wired by the scene): an attack or a cast opening starts that clip on the figure that does it, a blow landing puts the attack's strike on it. The speed of a
+   * one-shot follows the pacing option.
+   */
+  readonly listener: BeatListener = {
+    open: (actorId, kind, lead) => {
+      const b = this.bound.get(actorId as YrpId);
+      if (!b) return;
+      b.castHold = kind === 'cast'; // the glow follows the cast the beat announced, whatever painting the actor shows
+      b.model.noteOpen(kind, lead, paceRate('action'));
+    },
+    impact: (actorId) => this.bound.get(actorId as YrpId)?.model.noteImpact(paceRate('action')),
+    close: (actorId) => {
+      const b = this.bound.get(actorId as YrpId);
+      if (b) b.castHold = false;
+    },
+  };
 
   /** The ids that carry a model now, and whether it is the id's own file or the neutral capsule (the debug view's and the tests' read). */
   get carrying(): Record<string, 'own' | 'capsule'> {
@@ -145,7 +170,7 @@ export class YrpSkin {
     model.setYaw(yawFor(id));
     model.fitTo(actor.height);
     parts.inner.add(model.root);
-    this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' ? 1 : 0, glow: 0, castAt: null });
+    this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' ? 1 : 0, glow: 0, castAt: null, act: 0, castHold: false });
   }
 
   private follow(b: Bound, dt: number): void {
@@ -162,8 +187,13 @@ export class YrpSkin {
     if (b.lie < 0.002) b.lie = 0;
     model.setLie(b.lie, actor.facingDir);
 
-    // glow: the cast pose swells one; anything else lets it go
-    if (actor.pose === 'cast') {
+    // what the actor is doing: the requested pose (the life layer's state, so a figure with no painting for it still reads as hurt or victorious), else the pose shown
+    const life = actor.lifeState;
+    const pose = life === 'hurt' || life === 'victory' ? life : actor.pose;
+    const casting = pose === 'cast' || b.castHold;
+
+    // glow: a cast swells one; anything else lets it go
+    if (casting) {
       b.castAt ??= this.clock;
       b.glow = approach(b.glow, Math.max(0, Math.min(1, castGlow(this.clock - b.castAt))), GLOW_TAU, dt);
     } else {
@@ -187,9 +217,15 @@ export class YrpSkin {
     }
     model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha });
     model.setOrb(b.glow);
+    // a rigid winged model flaps harder as it acts, and rears back as its glow swells (Bahamut's Mega Flare)
+    b.act = approach(b.act, pose === 'attack' || casting ? 1 : pose === 'hurt' ? 0.5 : 0, ACT_TAU, dt);
+    model.setActivity(b.act);
+    if (b.id === YRP_BOSS_ID) model.setRear(Math.min(1, b.glow / 0.5));
 
     const still = (actor as unknown as { still?: () => boolean }).still?.() === true; // REDUCE MOTION stills the idle
-    model.update(still ? 0 : dt);
+    const down = actor.lifeState === 'down';
+    model.notePose(pose, down, paceRate('action')); // a rise to hurt or victory starts that clip
+    model.update(dt, still || down); // a body that is down holds its pose while the actor tips it over
   }
 
   dispose(): void {

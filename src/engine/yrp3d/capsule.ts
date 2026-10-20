@@ -27,20 +27,20 @@ export function capsuleFigure(id: YrpId): Group {
   g.name = `capsule-${id}`;
   const colour = CAPSULE_COLOUR[id];
   if (id !== 'bahamut') {
-    part(g, new CapsuleGeometry(0.16, 0.42, 6, 14), colour, [0, 0.4, 0], 'body');
+    part(g, new CapsuleGeometry(0.16, 0.42, 6, 14), colour, [0, 0.37, 0], 'body');
     part(g, new SphereGeometry(0.115, 18, 12), colour, [0, 0.86, 0], 'head');
     part(g, new BoxGeometry(0.05, 0.05, 0.07), 0x2a2a30, [0, 0.86, 0.12], 'nose'); // the way it faces
     return g;
   }
-  part(g, new CapsuleGeometry(0.24, 0.5, 6, 16), colour, [0, 0.55, 0], 'body');
-  part(g, new CapsuleGeometry(0.09, 0.3, 4, 10), colour, [0, 1.0, 0.1], 'neck', [0.35, 0, 0]);
-  part(g, new SphereGeometry(0.15, 18, 12), colour, [0, 1.2, 0.2], 'head');
-  part(g, new BoxGeometry(0.08, 0.07, 0.14), 0x2a2a30, [0, 1.19, 0.34], 'snout');
-  const tail = part(g, new ConeGeometry(0.17, 0.95, 12), colour, [0, 0.32, -0.7], 'tail', [-Math.PI / 2 - 0.25, 0, 0]);
+  part(g, new CapsuleGeometry(0.24, 0.5, 6, 16), colour, [0, 0.49, 0], 'body');
+  part(g, new CapsuleGeometry(0.09, 0.3, 4, 10), colour, [0, 0.94, 0.1], 'neck', [0.35, 0, 0]);
+  part(g, new SphereGeometry(0.15, 18, 12), colour, [0, 1.14, 0.2], 'head');
+  part(g, new BoxGeometry(0.08, 0.07, 0.14), 0x2a2a30, [0, 1.13, 0.34], 'snout');
+  const tail = part(g, new ConeGeometry(0.17, 0.95, 12), colour, [0, 0.26, -0.7], 'tail', [-Math.PI / 2 - 0.25, 0, 0]);
   tail.scale.set(1, 1, 0.6);
   // the wings: two flat panels, spread to either side and raised, each pivoting at the shoulder
   for (const side of [-1, 1]) {
-    const wing = part(g, new BoxGeometry(0.95, 0.025, 0.55), 0xb05a2a, [side * 0.55, 0.88, -0.1], side < 0 ? 'wing-left' : 'wing-right', [0, side * 0.2, side * 0.32]);
+    const wing = part(g, new BoxGeometry(0.95, 0.025, 0.55), 0xb05a2a, [side * 0.55, 0.82, -0.1], side < 0 ? 'wing-left' : 'wing-right', [0, side * 0.2, side * 0.32]);
     wing.castShadow = true;
   }
   return g;

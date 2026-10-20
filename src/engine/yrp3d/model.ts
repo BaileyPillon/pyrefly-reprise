@@ -6,7 +6,7 @@
  * ## What a file must be (the contract the real models are made to)
  *
  * A binary glTF (`.glb`), **Y up, facing +Z, the feet on y 0** (their centre does not matter: the fit centres the footprint), in any scale (the fit scales the box's height to the figure's world height, so a
- * model of 2.3 units and one of 180 both stand 1.9 tall). Skinned or not; if it carries animation clips, one named like `idle` loops under the procedural motion. Draco and Meshopt are not decoded. Its base colour map is
+ * model of 2.3 units and one of 180 both stand 1.9 tall). Skinned or not; if it carries animation clips they are named for what they are (`idle`, `attack`, `hit`, `cast`, `victory`; `./clips.ts`): the idle loops under the procedural motion and the others play on the battle's events. Draco and Meshopt are not decoded. Its base colour map is
  * what the toon look uses (`./toon.ts`).
  *
  * ## Layers
@@ -17,7 +17,10 @@
  * Needs three.js (and the glTF loader, imported on use); no DOM beyond `fetch`. Game case: FFX-2 only.
  */
 
-import { AnimationMixer, Box3, Color, Group, LoopRepeat, Vector3, type AnimationAction, type AnimationClip, type Object3D } from 'three';
+import { Box3, Color, Group, Vector3, type AnimationClip, type Object3D } from 'three';
+import { ClipRig, roleClips } from './clips.ts';
+import { attachProps, type Attached } from './props.ts';
+import { flapSpecOf, makeFlap, setFlap, type FlapUniforms } from './toon.ts';
 import { capsuleFigure } from './capsule.ts';
 import { fitBox, looksLikeGlb, modelUrl, TOON, YRP_BOSS_ID, YRP_CAST, type BoxData, type YrpId } from './layout.ts';
 import { Orb } from './orb.ts';
@@ -34,10 +37,15 @@ export interface Channels {
   opacity: number;
 }
 
-/** How far a body lying down is lifted off the floor so it rests on it instead of sinking through (a share of the figure's height). */
-const LIE_LIFT = 0.08;
+/** How far a rigid winged model's wingtips swing at rest, and the most they add when it acts, as shares of the half-span; and the flap's speed at rest and the most it adds, radians a second. */
+export const FLAP = { rest: 0.03, active: 0.11, rate: 1.6, rateActive: 3.4 } as const;
 
-const idleOf = (clips: readonly AnimationClip[]): AnimationClip | undefined => clips.find((c) => /idle|breath|stand/i.test(c.name));
+/** How far a model rears back at full strength (radians about its feet, top toward the back) and how much it swells: Bahamut's Mega Flare. */
+export const REAR = { tilt: 0.3, swell: 0.04 } as const;
+
+/** How far a body lying down is lifted off the floor so it rests on it instead of sinking through (a share of the figure's height). */
+const LIE_LIFT = 0.12;
+
 
 export class YrpModel {
   readonly id: YrpId;
@@ -46,13 +54,23 @@ export class YrpModel {
   readonly root = new Group();
   private readonly lie = new Group();
   private readonly yaw = new Group();
+  /** Between the yaw and the fit: the body rears back about its feet (`setRear`). */
+  private readonly rear = new Group();
   private readonly fit = new Group();
   private readonly set: ToonSet;
   private readonly natural: BoxData;
-  private readonly mixer: AnimationMixer | null;
-  private readonly idle: AnimationAction | null;
+  /** The model's clips driven by the battle (`./clips.ts`), or null for a model with no idle clip (Bahamut is unrigged; a capsule has none): it stays procedural. */
+  private readonly rig: ClipRig | null;
+  /** The weapons parented to the hand bones (`./props.ts`), or none. */
+  private readonly props: Attached;
   /** Bahamut's gathering orb (his Mega Flare's windup); the girls have none. */
   private readonly orb: Orb | null;
+  /** The wing flap of a rigid model with wings (Bahamut's), or null: the cells every material and the ink hull read, and the half-span in the file's units. */
+  private readonly flap: { cells: FlapUniforms; halfSpan: number } | null;
+  private flapClock = 0;
+  private activity = 0;
+  /** Seconds left of the pulse a model with no clips (Bahamut) takes from an attack or cast opening: his wings beat harder for it. */
+  private pulse = 0;
   private figureHeight: number;
   private lieAmount = 0;
 
@@ -64,27 +82,22 @@ export class YrpModel {
     scene.updateMatrixWorld(true);
     const box = new Box3().setFromObject(scene);
     this.natural = { min: [box.min.x, box.min.y, box.min.z], max: [box.max.x, box.max.y, box.max.z] };
+    this.props = attachProps(id, scene, this.natural.max[1] - this.natural.min[1]); // after the box is measured (a sword must not change the fit), before the toon pass (so it becomes toon too)
     const fit = fitBox(this.natural, height);
-    this.set = toonify(scene, TOON.inkWorld / fit.scale, toonRamp());
+    const byRole = roleClips(clips);
+    const spec = id === YRP_BOSS_ID && !byRole.has('idle') ? flapSpecOf(scene) : null; // a rigid winged model (Bahamut's): the wings flap in the vertex shader
+    this.flap = spec ? { cells: makeFlap(spec), halfSpan: spec.halfSpan } : null;
+    this.set = toonify(scene, TOON.inkWorld / fit.scale, toonRamp(), this.flap?.cells ?? null);
     this.root.name = `yrp-${id}`;
     this.fit.add(scene);
-    this.yaw.add(this.fit);
+    this.rear.add(this.fit);
+    this.yaw.add(this.rear);
     this.lie.add(this.yaw);
     this.root.add(this.lie);
     this.orb = id === YRP_BOSS_ID ? new Orb() : null;
-    if (this.orb) this.yaw.add(this.orb.sprite);
+    if (this.orb) this.rear.add(this.orb.sprite); // the orb rears with the chest it hangs at
     this.place();
-    const idle = idleOf(clips);
-    if (idle) {
-      this.mixer = new AnimationMixer(scene);
-      this.idle = this.mixer.clipAction(idle);
-      this.idle.setLoop(LoopRepeat, Infinity);
-      this.idle.play();
-      this.mixer.setTime(phaseOf(id) * idle.duration); // the party does not breathe in step
-    } else {
-      this.mixer = null;
-      this.idle = null;
-    }
+    this.rig = byRole.has('idle') ? new ClipRig(scene, byRole, id) : null;
   }
 
   /** The figure's height now, world units. */
@@ -97,9 +110,9 @@ export class YrpModel {
     return fitBox(this.natural, this.figureHeight).widthOverHeight;
   }
 
-  /** True when the file has an idle clip playing. */
+  /** True when the file has an idle clip playing (and so the battle's clips: `noteOpen`, `noteImpact`, `notePose`). */
   get animated(): boolean {
-    return this.idle !== null;
+    return this.rig !== null;
   }
 
   /** Refit to a figure of another height (the stage re-sizes a boss): the scale, the offset and the ink's thickness in the file's units follow. */
@@ -116,6 +129,28 @@ export class YrpModel {
     this.fit.position.set(f.offset[0], f.offset[1], f.offset[2]);
     setInkThickness(this.set.hullMaterial, TOON.inkWorld / f.scale);
     this.orb?.place(this.figureHeight);
+  }
+
+  /** How much a flapping model is acting now: what the skin says (its pose) or a pulse from an action that opened. */
+  private get acting(): number {
+    return Math.max(this.activity, this.pulse > 0 ? 1 : 0);
+  }
+
+  /** How much the model is acting, 0..1 (an attack, a cast): a flapping model flaps harder and faster. A no-op for a model with no flap. */
+  setActivity(activity: number): void {
+    this.activity = Math.min(1, Math.max(0, activity));
+  }
+
+  /** Rear back about the feet, 0 standing to 1 at full (`REAR`): Bahamut's Mega Flare. */
+  setRear(amount: number): void {
+    const a = Math.min(1, Math.max(0, amount));
+    this.rear.rotation.x = -REAR.tilt * a;
+    this.rear.scale.setScalar(1 + REAR.swell * a);
+  }
+
+  /** The flap's amplitude now in the file's units, or 0 for a model with no flap (a test's read). */
+  get flapAmplitude(): number {
+    return this.flap ? (FLAP.rest + FLAP.active * this.acting) * this.flap.halfSpan : 0;
   }
 
   /** The orb's strength, 0..1 (the cast glow); a no-op for a figure with no orb. */
@@ -148,23 +183,44 @@ export class YrpModel {
     return this.set.hulls.length;
   }
 
-  update(dt: number): void {
-    this.mixer?.update(dt);
+  /** The clip role playing now, or null for a model with no rig. */
+  get playing(): string | null {
+    return this.rig?.current ?? null;
+  }
+
+  /** An action by this figure opened (`attack` or `cast` start their clips), the blow lands `lead` seconds on; `paceRate` is the pacing option's rate for one-shots. A model with no rig has no clips to start and takes a pulse on its wings instead. */
+  noteOpen(kind: string, lead: number | undefined, paceRate = 1): void {
+    if (this.rig) this.rig.open(kind, lead, paceRate);
+    else if (kind === 'attack' || kind === 'cast') this.pulse = 1.4; // no clips: the wings beat harder for a moment
+  }
+
+  /** The blow landed. */
+  noteImpact(paceRate = 1): void {
+    this.rig?.impact(paceRate);
+  }
+
+  /** The pose the actor shows and whether it is down, once a frame (a hit and a victory start their clips). */
+  notePose(pose: string, down: boolean, paceRate = 1): void {
+    this.rig?.pose(pose, down, paceRate);
+  }
+
+  /** Advance the clips by `dt` seconds; `frozen` (a body that is down, REDUCE MOTION) holds the pose. */
+  update(dt: number, frozen = false): void {
+    this.rig?.update(dt, frozen);
+    if (this.pulse > 0) this.pulse = Math.max(0, this.pulse - dt);
+    if (this.flap) {
+      if (!frozen) this.flapClock += dt * (FLAP.rate + FLAP.rateActive * this.acting);
+      setFlap(this.set, this.flapClock, this.flapAmplitude);
+    }
   }
 
   dispose(): void {
-    this.mixer?.stopAllAction();
+    this.rig?.dispose();
+    this.props.dispose();
     disposeToon(this.set, this.source === 'capsule'); // a capsule's geometry is its own; a file's is shared with the clones of it and freed with the loader
     this.orb?.dispose();
     this.root.removeFromParent();
   }
-}
-
-/** A fraction in [0, 1) that is the same for the same id: where in its idle each model starts. */
-export function phaseOf(id: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < id.length; i++) h = Math.imul(h ^ id.charCodeAt(i), 16777619);
-  return ((h >>> 0) % 1000) / 1000;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
