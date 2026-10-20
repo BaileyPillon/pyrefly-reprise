@@ -9,6 +9,7 @@ import {
   applyH,
   baseExtents,
   driftPx,
+  easeStage,
   gateStep,
   invert3,
   lookParams,
@@ -18,6 +19,7 @@ import {
   roomBold,
   shadowAmount,
   squareToQuad,
+  stageEllipse,
 } from '../../src/engine/look/LookBoldConfig.ts';
 import { RELIGHT } from '../../src/engine/look/relight/RelightConfig.ts';
 import { applyGrade, lutBytes, lutKey, recipeFor } from '../../src/engine/look/LookGrades.ts';
@@ -71,7 +73,7 @@ describe('bold strength: the tables', () => {
       expect(b.gainMax).toBeGreaterThanOrEqual(1.65);
       expect(b.gainMax).toBeLessThanOrEqual(1.75);
       expect(b.key).toBeGreaterThan(RELIGHT[n]!.key);
-      expect(b.rim).toBeGreaterThan(RELIGHT[n]!.rim);
+      expect(b.rim).toBeGreaterThan(0); // the bold rim is the post pass's: the normal-map bevel rim is kept thin
       expect(b.point).toBeGreaterThan(RELIGHT[n]!.point);
       expect(b.reach).toBeGreaterThan(RELIGHT[n]!.reach);
     }
@@ -249,5 +251,32 @@ describe('the bold grade', () => {
     expect(hueSat(sky).h).toBeGreaterThan(170);
     expect(hueSat(sky).h).toBeLessThan(215);
     expect(BOLD_ROOMS.cinematic['bevelle-underground']!.recipe!.hues!.length).toBe(2);
+  });
+});
+
+describe('the stage light', () => {
+  it('centres on the fight, covers every figure, and never shrinks below a floor', () => {
+    const feet: Array<[number, number]> = [[0.3, 0.12], [0.42, 0.18], [0.7, 0.4]];
+    const e = stageEllipse(feet, 16 / 9);
+    expect(e.cx).toBeCloseTo((0.3 + 0.7) / 2, 6);
+    expect(e.cy).toBeGreaterThan((0.12 + 0.4) / 2); // a little above the feet: the bosses' bodies are in it
+    for (const [u, v] of feet) {
+      const dx = ((u - e.cx) * 16) / 9 / e.rx;
+      const dy = (v - e.cy) / e.ry;
+      expect(dx * dx + dy * dy).toBeLessThan(1);
+    }
+    const tight = stageEllipse([[0.5, 0.3]], 16 / 9);
+    expect(tight.rx).toBeGreaterThanOrEqual(0.55);
+    expect(tight.ry).toBeGreaterThanOrEqual(0.42);
+    expect(stageEllipse([], 16 / 9).rx).toBeGreaterThan(0.5);
+  });
+
+  it('eases toward its goal and arrives', () => {
+    let cur = { cx: 0.2, cy: 0.2, rx: 0.6, ry: 0.4 };
+    const goal = { cx: 0.6, cy: 0.4, rx: 1.0, ry: 0.7 };
+    for (let i = 0; i < 90; i++) cur = easeStage(cur, goal, 5 / 60);
+    expect(cur.cx).toBeCloseTo(0.6, 2);
+    expect(cur.rx).toBeCloseTo(1.0, 2);
+    expect(easeStage(cur, goal, 0)).toEqual(cur);
   });
 });

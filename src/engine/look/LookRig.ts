@@ -260,6 +260,7 @@ export class LookRig {
     (u['shaft']!.value as Vector3).set(v('shaft.gain'), v('shaft.reach'), v('shaft.threshold'));
     u['shaftDecay']!.value = p.shaft.decay;
     u['shaftRays']!.value = v('shaft.rays');
+    u['shaftFreq']!.value = p.shaft.freq ?? 6;
     (u['motes']!.value as Vector3).set(v('motes.gain'), (v('motes.size') * scale) / H, v('motes.speed'));
     (u['moteExtra']!.value as Vector2).set(v('motes.glow'), p.motes.density ?? 0.4);
     (u['moteColor']!.value as Vector3).set(...lin(mixc(lightColour(this.room.light.color), [1, 0.84, 0.58], 0.5)));

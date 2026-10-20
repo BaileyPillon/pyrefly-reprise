@@ -10,7 +10,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { artUrl } from '../PaintedArt.ts';
 import type { Renderer } from '../Renderer.ts';
 import { QUALITY_COST, type LookName, type LookQuality } from './LookConfig.ts';
-import { BOLD_FX, baseExtents, invert3, reflectAmount, roomBold, shadowAmount, squareToQuad, type Extents } from './LookBoldConfig.ts';
+import { BOLD_FX, baseExtents, easeStage, invert3, reflectAmount, roomBold, shadowAmount, squareToQuad, stageEllipse, type Extents } from './LookBoldConfig.ts';
 import { LookBoldShader } from './LookBoldShader.ts';
 import { lightColour } from './LookMaths.ts';
 import { lin, type LookRoom } from './LookRoom.ts';
@@ -48,6 +48,7 @@ export class LookBold {
   private canvas: HTMLCanvasElement | null = null;
   private quality: LookQuality | null = null;
   private readonly homo = new Matrix3();
+  private stage: { cx: number; cy: number; rx: number; ry: number } | null = null;
   /** For the debug API and the captures. */
   readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
 
@@ -251,6 +252,12 @@ export class LookBold {
     const u = pass.uniforms;
     const gloss = rb.gloss * o.tweak('bold.gloss', 1);
     const n = this.figures(camera, o.aspect, { ...fx, shadow: { ...fx.shadow, strength: fx.shadow.strength * o.tweak('bold.shadow', 1) } }, gloss, u['uFigA']!.value as Vector4[], u['uFigB']!.value as Vector4[]);
+    // the stage light: an ellipse round the fight, eased so a figure arriving or leaving never makes it jump
+    const FA0 = u['uFigA']!.value as Vector4[];
+    const goal = stageEllipse(FA0.slice(0, n).map((a) => [a.x, a.y] as const), o.aspect);
+    this.stage = this.stage ? easeStage(this.stage, goal, Math.min(1, o.dt * 5)) : goal;
+    (u['stage']!.value as Vector4).set(this.stage.cx, this.stage.cy, this.stage.rx, this.stage.ry);
+    (u['stageAmt']!.value as { set(x: number, y: number): void }).set(fx.stage.dark * o.tweak('bold.stage', 1), fx.stage.lift * o.tweak('bold.stage', 1));
     (u['resolution']!.value as { set(x: number, y: number): void }).set(1 / Math.max(1, o.W), 1 / Math.max(1, o.H));
     u['time']!.value = o.time;
     u['pxScale']!.value = o.scale;

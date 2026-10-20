@@ -27,17 +27,17 @@ export const BOLD_LOOKS: Readonly<Record<'hd2d' | 'cinematic', LookParams>> = {
     // the backdrop clearly soft (20 px at 900p, up from 10), the fighters untouched by it (the blur is mask-aware)
     blur: { far: 20, near: 12, focus: 0.38, band: 0.18, falloff: 1.45, bokeh: 2.6 },
     // shafts you can see from across the room: 2.6 times the gain, a lower threshold so more of the painting throws light, beamier
-    shaft: { gain: 2.0, reach: 1.0, threshold: 0.35, decay: 0.968, rays: 0.85 },
+    shaft: { gain: 2.2, reach: 1.0, threshold: 0.35, decay: 0.968, rays: 0.85, freq: 3.2 },
     motes: { gain: 1.1, size: 4.6, speed: 1, glow: 0.35, density: 0.45 },
     rim: NO_RIM, // the bold pass draws the rim
     figure: { gain: [1.05, 1.02, 0.95], lift: [0, 0, 0], contrast: 0.12 },
-    grade: { ...LOOKS.hd2d.grade, vignetteAdd: 0.22, saturation: 1.16 },
+    grade: { ...LOOKS.hd2d.grade, vignetteAdd: 0.3, saturation: 1.16 },
     bloom: { threshold: 0.62, strength: 0.85, radius: 0.55, tint: [1.1, 1.0, 0.88], selective: true },
   },
   cinematic: {
     ...LOOKS.cinematic,
     blur: { far: 9, near: 5.5, focus: 0.4, band: 0.24, falloff: 1.6, bokeh: 1.2 },
-    shaft: { gain: 1.5, reach: 1.0, threshold: 0.38, decay: 0.966, rays: 0.9 },
+    shaft: { gain: 1.7, reach: 1.0, threshold: 0.38, decay: 0.966, rays: 0.9, freq: 3.2 },
     motes: { gain: 0.8, size: 4.0, speed: 0.8, glow: 0.35, density: 0.45 },
     // fog stays behind the figures: a trace at their feet, none over a face
     fog: { density: 0.55, speed: 1, height: 0.78, onFigures: 0.1 },
@@ -45,7 +45,7 @@ export const BOLD_LOOKS: Readonly<Record<'hd2d' | 'cinematic', LookParams>> = {
     sharpen: 0.2,
     ca: 1.1,
     figure: { gain: [1.06, 1.04, 1.04], lift: [0, 0.002, 0.006], contrast: 0.14 },
-    grade: { ...LOOKS.cinematic.grade, vignetteAdd: 0.5, grain: 0.05, saturation: 0.98 },
+    grade: { ...LOOKS.cinematic.grade, vignetteAdd: 0.3, grain: 0.05, saturation: 0.98 },
     bloom: { threshold: 0.66, strength: 0.85, radius: 0.5, tint: [1.0, 0.95, 0.88], selective: true },
   },
 };
@@ -58,8 +58,8 @@ export function lookParams(name: LookName, strength: LookStrength): LookParams {
 
 /** The normal-map relight at a strength: the gain band opens to 0.45 .. 1.7, the rim and the coloured lights roughly double. */
 export const BOLD_RELIGHT: Readonly<Record<'hd2d' | 'cinematic', RelightParams>> = {
-  hd2d: { key: 1.35, keyTint: 0.6, keyZ: 0.5, rimZ: -0.8, rim: 0.8, gainMin: 0.45, gainMax: 1.7, point: 1.8, reach: 0.34 },
-  cinematic: { key: 1.45, keyTint: 0.7, keyZ: 0.45, rimZ: -0.8, rim: 1.0, gainMin: 0.42, gainMax: 1.7, point: 1.8, reach: 0.34 },
+  hd2d: { key: 1.35, keyTint: 0.6, keyZ: 0.5, rimZ: -0.8, rim: 0.5, gainMin: 0.45, gainMax: 1.7, point: 1.8, reach: 0.34 },
+  cinematic: { key: 1.45, keyTint: 0.7, keyZ: 0.45, rimZ: -0.8, rim: 0.6, gainMin: 0.42, gainMax: 1.7, point: 1.8, reach: 0.34 },
 };
 
 export function relightParams(name: LookName, strength: LookStrength): RelightParams | null {
@@ -77,6 +77,8 @@ export interface BoldFx {
   depthFog: { density: number; start: number };
   /** Height fog: density, how far it climbs from the floor (0..1 of the frame), how much of it reaches a figure's feet. */
   heightFog: { density: number; height: number; feet: number };
+  /** The stage light: how far the frame outside the fight is darkened and how much the fight itself is lifted (a lit diorama in a dark room). */
+  stage: { dark: number; lift: number };
   /** The rim on the silhouettes' back edge, from the room's key colour: strength, width, how much it follows the light's side. */
   rim: { gain: number; width: number; lit: number };
   /** The floor pools under a spell or the orb: strength. */
@@ -91,7 +93,8 @@ export const BOLD_FX: Readonly<Record<'hd2d' | 'cinematic', BoldFx>> = {
     reflect: { amount: 0.8, length: 0.6, blur: 4, squash: 0.85 },
     depthFog: { density: 0.5, start: 0.25 },
     heightFog: { density: 0.55, height: 0.36, feet: 0.2 },
-    rim: { gain: 1.0, width: 3.0, lit: 1.0 },
+    rim: { gain: 2.2, width: 3.4, lit: 1.0 },
+    stage: { dark: 0.3, lift: 0.06 },
     pool: { gain: 1.0 },
     embers: { gain: 1.0, size: 3.2, rate: 0.16 },
   },
@@ -100,7 +103,8 @@ export const BOLD_FX: Readonly<Record<'hd2d' | 'cinematic', BoldFx>> = {
     reflect: { amount: 0.75, length: 0.55, blur: 4.5, squash: 0.85 },
     depthFog: { density: 0.6, start: 0.25 },
     heightFog: { density: 0.6, height: 0.4, feet: 0.15 },
-    rim: { gain: 1.2, width: 3.2, lit: 1.0 },
+    rim: { gain: 2.4, width: 3.6, lit: 1.0 },
+    stage: { dark: 0.4, lift: 0.04 },
     pool: { gain: 1.1 },
     embers: { gain: 1.1, size: 3.4, rate: 0.14 },
   },
@@ -257,4 +261,33 @@ export function driftPx(t: number, amp: number, period: number, gate: number): n
 /** One step of a smoothed gate toward `target` (1 = drifting, 0 = still), `tau` seconds. */
 export function gateStep(cur: number, target: number, dt: number, tau: number): number {
   return cur + (target - cur) * (1 - Math.exp(-Math.max(0, dt) / Math.max(1e-3, tau)));
+}
+
+/**
+ * The stage light's ellipse (frame uv, 0 bottom-left) from the figures' feet: centred on the fight (a little above the feet, so the bosses' bodies are in it), wide enough
+ * for all of them, never smaller than a floor. `aspect` is the frame's width over its height; radii are in frame heights.
+ */
+export function stageEllipse(feet: ReadonlyArray<readonly [number, number]>, aspect: number): { cx: number; cy: number; rx: number; ry: number } {
+  if (!feet.length) return { cx: 0.5, cy: 0.35, rx: 0.9, ry: 0.6 };
+  let u0 = 1;
+  let u1 = 0;
+  let v0 = 1;
+  let v1 = 0;
+  for (const [u, v] of feet) {
+    u0 = Math.min(u0, u);
+    u1 = Math.max(u1, u);
+    v0 = Math.min(v0, v);
+    v1 = Math.max(v1, v);
+  }
+  return {
+    cx: (u0 + u1) / 2,
+    cy: (v0 + v1) / 2 + 0.1,
+    rx: Math.max(0.55, ((u1 - u0) / 2) * aspect * 1.25 + 0.38),
+    ry: Math.max(0.42, ((v1 - v0) / 2) * 1.3 + 0.34),
+  };
+}
+
+/** One smoothing step of the stage ellipse toward its target (`k` of the way). */
+export function easeStage(cur: { cx: number; cy: number; rx: number; ry: number }, to: { cx: number; cy: number; rx: number; ry: number }, k: number): { cx: number; cy: number; rx: number; ry: number } {
+  return { cx: cur.cx + (to.cx - cur.cx) * k, cy: cur.cy + (to.cy - cur.cy) * k, rx: cur.rx + (to.rx - cur.rx) * k, ry: cur.ry + (to.ry - cur.ry) * k };
 }

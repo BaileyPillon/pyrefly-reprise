@@ -9,6 +9,7 @@ import { Matrix3, Vector2, Vector3, Vector4 } from 'three';
  *   2. contact      a soft ellipse under every figure, shaped from the figure's own base width (`uFigA`, `uFigB`), darker under the feet, leaning away from the light.
  *   3. reflection   on a glossy floor: the figure flipped about its foot line, blurred more the farther it falls, faded and cut off by distance (never over another figure).
  *   4. pools        a coloured pool of light on the floor round the target of a spell or the orb (`uPoolA`, `uPoolC`), sized to the effect.
+ *   4b. stage light the fight lifted, the room round it darkened (a lit diorama in a dark room).
  *   5. rim          a bright rim along each figure's back edge, in the room's key colour (an edge ring over the mask, weighted toward the light's side), inside the silhouette.
  *   6. embers       sparks rising from the room's lamps (`uEmber`).
  * Constants: `MAX_FIG`, `MAX_POOL`, `MAX_EMB`, `EMBER_PARTS`, `FOG_OCTAVES`, `EDGE_TAPS`. Both games.
@@ -41,6 +42,9 @@ export const LookBoldShader = {
     depthFog: { value: new Vector2(0.5, 0.2) },
     heightFog: { value: new Vector3(0.5, 0.34, 0.25) },
     fogColor: { value: new Vector3(0.4, 0.5, 0.7) },
+    /** The stage light: xy the ellipse's centre (frame uv), zw its radii (frame heights); x how far the rest is darkened, y how much the fight is lifted. */
+    stage: { value: new Vector4(0.5, 0.4, 0.9, 0.6) },
+    stageAmt: { value: new Vector2(0.3, 0.06) },
     uPoolA: { value: [] as Vector4[] },
     uPoolC: { value: [] as Vector4[] },
     poolGain: { value: 1 },
@@ -82,6 +86,8 @@ export const LookBoldShader = {
     uniform vec2 depthFog;
     uniform vec3 heightFog;
     uniform vec3 fogColor;
+    uniform vec4 stage;
+    uniform vec2 stageAmt;
     uniform vec4 uPoolA[MAX_POOL];
     uniform vec4 uPoolC[MAX_POOL];
     uniform float poolGain;
@@ -221,6 +227,13 @@ export const LookBoldShader = {
             }
           }
         }
+      }
+
+      // ---- 4b. the stage light: the fight lifted, the room round it darkened (half as much on the figures themselves)
+      {
+        vec2 sd = vec2((uv.x - stage.x) * aspect, uv.y - stage.y) / stage.zw;
+        float sm = mix(1.0 - stageAmt.x, 1.0 + stageAmt.y, exp(-dot(sd, sd) * 1.15));
+        col *= mix(sm, mix(1.0, sm, 0.5), fig);
       }
 
       // ---- 5. a bright rim along the back edge of each figure, in the key colour, inside the silhouette (no halo)

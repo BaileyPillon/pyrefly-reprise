@@ -90,7 +90,7 @@ export interface LookParams {
   /** The mask-aware tilt-shift (`LookBlur`): blur radius in px at 900p above (`far`) and below (`near`) the sharp band; the band is centred on `focus` (0 bottom .. 1 top). */
   blur: { far: number; near: number; focus: number; band: number; falloff: number; bokeh: number };
   /** The shafts: strength, reach (frame heights), the luma a pixel must pass to throw light, the per-sample decay, how beam-like they are (0 smooth .. 1 beams). */
-  shaft: { gain: number; reach: number; threshold: number; decay: number; rays: number };
+  shaft: { gain: number; reach: number; threshold: number; decay: number; rays: number; freq?: number };
   /** The motes: strength, size in px at 900p, drift speed; bold adds a soft glow round each (0 = none) and how many cells carry one (0.4 = today's). */
   motes: { gain: number; size: number; speed: number; glow?: number; density?: number };
   /** The fog: how much of the backdrop it veils (0..1), drift speed, how far it climbs the frame (0..1 from the bottom), how much of it reaches a figure's feet. */

@@ -32,6 +32,8 @@ export const LookMainShader = {
     shaft: { value: new Vector3(0.5, 0.9, 0.5) },
     shaftDecay: { value: 0.96 },
     shaftRays: { value: 0.5 },
+    /** The beams' angular frequency (6 = pass 1's; bold uses fewer, broader ones). */
+    shaftFreq: { value: 6 },
     /** hd2d motes: gain, size (frame heights), speed. */
     motes: { value: new Vector3(1, 0.003, 1) },
     /** Bold: the soft glow round each mote and the share of grid cells that carry one (0.4 = pass 1's). */
@@ -78,6 +80,7 @@ export const LookMainShader = {
     uniform vec3 shaft;
     uniform float shaftDecay;
     uniform float shaftRays;
+    uniform float shaftFreq;
     uniform vec3 motes;
     uniform vec2 moteExtra;
     uniform vec3 moteColor;
@@ -184,7 +187,7 @@ export const LookMainShader = {
         }
         acc /= float(SHAFT_SAMPLES) * 0.28;
         vec2 dirL = toLa / max(dist, 1e-4);
-        float beams = mix(1.0, 0.25 + 1.5 * vnoise(vec2(atan(dirL.y, dirL.x) * 6.0 + time * 0.04, 3.7) * 0.9 + dirL * 3.0), shaftRays);
+        float beams = mix(1.0, 0.25 + 1.5 * vnoise(vec2(atan(dirL.y, dirL.x) * shaftFreq + time * 0.04, 3.7) * 0.9 + dirL * 3.0), shaftRays);
         float atSrc = 1.0 - smoothstep(0.02, 0.1, dist);
         float reach = 1.0 - smoothstep(0.35, 1.25, dist);
         vec3 sh = acc * lightColor * shaft.x * beams * reach * (0.4 + 0.6 * (1.0 - atSrc));
