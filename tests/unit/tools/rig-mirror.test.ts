@@ -127,6 +127,29 @@ describe('the new mirror', () => {
     expect(readFileSync(join(src, 'rigs', SUBJECT, 'rig.json'), 'utf8')).toBe('{"old":true}');
     expect((await verifyMirror({ from: src, rigsRoot, to, plan })).ok).toBe(true);
   });
+  it('leaves out a rig the source mirror holds (release 59 takes Kimahri\'s rig off): not linked, not in the manifest, the source untouched', async () => {
+    await writeTiers(world.rig);
+    const src = sourceMirror(world.art);
+    mkdirSync(join(src, 'rigs', 'zz-old'), { recursive: true });
+    writeFileSync(join(src, 'rigs', 'zz-old', 'rig.json'), '{"old":true}');
+    writeFileSync(join(src, 'rigs', 'zz-old', 'part.png'), 'x');
+    const before = snapshot(src);
+    const to = target();
+    expect((await planMirror({ from: src, rigsRoot, to, without: ['zz-nope'] })).problems.join('\n')).toMatch(/no rig of that name/);
+    expect((await planMirror({ from: src, rigsRoot, to, without: [SUBJECT] })).problems.join('\n')).toMatch(/both added and left out/);
+    const plan = await planMirror({ from: src, rigsRoot, to, without: ['zz-old'] });
+    expect(plan.problems).toEqual([]);
+    expect(plan.links.some((f) => f.startsWith('rigs/zz-old/'))).toBe(false);
+    const made = await buildMirror({ from: src, rigsRoot, to, plan });
+    expect(made.manifest.rigs).toEqual([SUBJECT]);
+    expect(existsSync(join(to, 'rigs', 'zz-old'))).toBe(false);
+    expect(existsSync(join(to, 'rigs', SUBJECT, 'rig.json'))).toBe(true);
+    expect(snapshot(src).split('\n').map((l) => l.split(':').slice(0, 2).join(':'))).toEqual(before.split('\n').map((l) => l.split(':').slice(0, 2).join(':')));
+    expect(existsSync(join(src, 'rigs', 'zz-old', 'part.png'))).toBe(true);
+    const proved = await verifyMirror({ from: src, rigsRoot, to, plan });
+    expect(proved.problems).toEqual([]);
+    expect(proved.ok).toBe(true);
+  });
   it('is caught when it is wrong: a rig file changed in the new mirror, a linked file missing', async () => {
     await writeTiers(world.rig);
     const src = sourceMirror(world.art);
