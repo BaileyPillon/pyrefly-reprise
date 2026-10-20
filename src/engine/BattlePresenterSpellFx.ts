@@ -18,6 +18,8 @@ export interface ActingAction {
   actorId: CombatantId;
   abilityId?: string;
   targets: readonly CombatantId[];
+  /** True for an item command (`BattlePresenterItem.ts`: FFX-2's item draws its own white-blue burst, not the spell layer's heal). */
+  item?: true;
 }
 
 /**
@@ -39,7 +41,7 @@ const byActor = new WeakMap<EventCtx, Map<CombatantId, ActingAction>>();
 export function beginSpellAction(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>): void {
   const serial = (serials.get(ctx) ?? 0) + 1;
   serials.set(ctx, serial);
-  ctx.acting = { serial, actorId: event.actorId, ...(event.abilityId ? { abilityId: event.abilityId } : {}), targets: event.targets };
+  ctx.acting = { serial, actorId: event.actorId, ...(event.abilityId ? { abilityId: event.abilityId } : {}), targets: event.targets, ...(event.command.kind === 'item' ? { item: true as const } : {}) };
   let m = byActor.get(ctx);
   if (!m) byActor.set(ctx, (m = new Map()));
   m.set(event.actorId, ctx.acting);
@@ -55,6 +57,14 @@ export function actionOfBlow(ctx: EventCtx, sourceId: CombatantId | undefined): 
 }
 
 /**
+ * FFX-2 only: is this blow part of an item use whose picture is the white-blue spark and burst (`BattlePresenterItem.ts`, `deps.itemGesture === 'spark'`)? Then the spell layer draws nothing for it (its green
+ * heal column would sit on top of the burst) and the heal's flash is white-blue. FFX keeps the heal effect after its orb (Bailey liked pass 2's), and FF7 has no gesture.
+ */
+export function sparkItem(ctx: EventCtx, sourceId: CombatantId | undefined): boolean {
+  return ctx.deps?.itemGesture === 'spark' && actionOfBlow(ctx, sourceId)?.item === true;
+}
+
+/**
  * Start (or find) the effect for this blow and wait until it lands. The camera
  * cuts to the target first, so the spell is seen arriving rather than only its
  * aftermath. A blow is matched to its striker's latest action; one from a
@@ -62,7 +72,7 @@ export function actionOfBlow(ctx: EventCtx, sourceId: CombatantId | undefined): 
  */
 export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, heal: boolean): Promise<void> {
   const vfx = ctx.stage.vfx;
-  if (!vfx.land) return;
+  if (!vfx.land || sparkItem(ctx, event.sourceId)) return;
   const a = event.sourceId === undefined ? ctx.acting : byActor.get(ctx)?.get(event.sourceId);
   const ours = a !== undefined;
   const ms = vfx.land(event.targetId, {
