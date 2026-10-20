@@ -26,6 +26,7 @@ import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './m
 import { lungePlan } from './motion/StrikeReach.ts'; // r391-reach: the house lunge, solved against its target where the game's rules let it
 import { partyOffStage } from './SummonStaging.ts';
 import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
+import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
   banner,
@@ -170,7 +171,7 @@ export async function damage(
 
   const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });
-  if (flashes) target?.flash(event.crit ? 0xffffff : 0xffd0c0, event.crit ? 260 : 200, event.crit ? 1 : 0.8);
+  if (flashes) blowFlash(target, event); // `?motion=demo`: 0.08 s white; else warm 200 ms, white 260 ms on a crit (`motion/DemoHitBeat.ts`)
   target?.shake(event.crit ? 0.16 : 0.1, 340);
   void target?.recoil(360, event.crit ? 0.34 : 0.22);
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });
@@ -187,12 +188,7 @@ export async function damage(
   // Hit-stop: the whole frame holds for a beat on a crit or a finishing blow.
   // (The punch that goes with it is part of the impact cut, above.)
   const fxc = fxHit(ctx, event, heavy); // option C: null = today's shake and hit-stop sleep
-  if (heavy) {
-    if (!fxc?.shook) ctx.stage.camera.shake(0.16, 340);
-    await ctx.sleep(Math.max(TIMING.hitStop, fxc?.waitMs ?? 0));
-  } else if (event.hitIndex === 0 && !fxc?.shook) {
-    ctx.stage.camera.shake(0.08, 220);
-  }
+  await holdBlow(ctx, event, heavy, fxc); // the shake and the hold: as before, or `?motion=demo`'s (`motion/DemoHitBeat.ts`)
 
   // Multi-hit actions run tight; a single blow gets room to land.
   await ctx.sleep(event.hitCount > 1 ? TIMING.perHit : TIMING.damage);

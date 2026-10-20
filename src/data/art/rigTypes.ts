@@ -168,6 +168,13 @@ export interface RigKey {
    * the move into the key (`RigPartState.partStateAt`). The `idle` key names none: it is the rest.
    */
   parts?: Record<string, RigKeyPart>;
+  /**
+   * v2.1 (2026-10-20, additive; decision 153a): milliseconds over which the part changes this key makes (`parts`: an image swapped for a variant, a part shown or hidden) CROSS-FADE, centred on
+   * the half-way point of the move, instead of flipping there in one frame. `0` is a cut (a smear frame is meant to snap). Absent: the engine's default (110 ms). Read by the runtime only under
+   * `?motion=demo` (`engine/rig/RigFade.ts`); a build without the switch flips at 0.5 exactly as v2.0 did, so a file that carries it draws the same there. The rig gate and its agreement
+   * test are unchanged: the STATE a key asks for is the same pure function; the fade is only how it is drawn. Not a new `version`: a reader that does not know the field ignores it.
+   */
+  fadeMs?: number;
 }
 
 /** A lag chain (tail, mane, sash, beard, hair): each bone's absolute angle chases its parent's through its own spring (`engine/rig/RigDynamics.ts`, `dyn.ts` ported). */

@@ -149,6 +149,8 @@ export interface EventCtx {
    * for a blow whose spell or shot is still on its way (`motion/SkillTravel.ts`: SKILL TRAVEL). Set by `BattlePresenter`.
    */
   reveal?: (event: BattleEvent) => Promise<void>;
+  /** `?motion=demo` (part 4): the target's maximum HP as the player has been shown it (`BattlePresenter` sets it from its vitals), for the blow's power; absent in tests. */
+  hpMaxOf?: (id: CombatantId) => number | undefined;
   /**
    * The burst being played and where the event in hand is in it (set by `BattlePresenter.playBurst` before each event, cleared when the burst ends): the events that
    * FOLLOW the one in hand are the action's own. `motion/StrikeReach.ts` reads them for the target of a fiend's ability, which names none at `action-start`.

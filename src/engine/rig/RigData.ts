@@ -168,6 +168,7 @@ export function readRig(raw: unknown): RigRead {
     }
     if (k.root !== undefined && (!isObj(k.root) || Object.values(k.root).some((v) => !finite(v)) || Math.abs((k.root as { rot?: number }).rot ?? 0) > 2 * Math.PI)) return fail(`key ${name}: bad root`);
     if (k.ms !== undefined && (!finite(k.ms) || k.ms < 0)) return fail(`key ${name}: bad ms`);
+    if (k.fadeMs !== undefined && (!finite(k.fadeMs) || k.fadeMs < 0 || k.fadeMs > 2000)) return fail(`key ${name}: bad fadeMs`); // v2.1: 0 to 2000; the runtime plays at most 400
     if (k.layers !== undefined) {
       if (!isObj(k.layers)) return fail(`key ${name}: bad layers`);
       for (const [pn, v] of Object.entries(k.layers)) if (!seenParts.has(pn) || !finite(v)) return fail(`key ${name}: layers names a part that is not there or a non-number: ${pn}`);

@@ -141,6 +141,7 @@ export class BattlePresenter {
       () => this.speed,
     );
     this.ctx.menuOpen = () => this.pendingMenu !== null; // r37 slots: FFX-2 key paintings stand aside for a menu
+    this.ctx.hpMaxOf = (id) => this.vitals?.get(id)?.maxHp; // `?motion=demo`: a blow's power is its damage against the target's pool
     this.ctx.reveal = async (event) => { // SKILL TRAVEL: the late half of what `playBurst` does before an event (the HUD's look, then the HP rows)
       const was = this.phase;
       this.phase = `hud:${event.type}`;

@@ -140,6 +140,9 @@ node critic/runner/lib/route.mjs <chapterId> <win|lose> --base=<url> --evidence=
      [--touch] [--gamepad] [--reduce-motion] [--nochange] [--jpeg]
 ```
 
+- **A query on the address (conference demo motion, 2026-10-20).** `PYREFLY_QUERY="?motion=demo"` in the environment of `route.mjs` or `continuity.mjs` (which hands it
+  on to the route) opens the page at `<base>?motion=demo`, to measure a URL switch on a build (the demo motion's A/B: the same chapter, route and seed with and without it).
+  It is recorded in `run.json.contexts.query`; without it the address is the base, as before. Game case: both (shared critic plumbing).
 - **The seed (PR-0202).** `--seed=N` (default 1) calls
   `window.__pyrefly.setSeed(N)` before the first key and lists it in
   `run.json.hooks` (a labelled setup hook, CHK-015). `run.json.seed` is the

@@ -12,6 +12,8 @@
 
 import type { BattleEvent, CombatantId } from '../../../battle/common/types.ts';
 import type { EventCtx } from '../../BattlePresenterEvents.ts';
+import { hitPower } from '../../motion/DemoHit.ts';
+import { demoMotionOn } from '../../motion/DemoMotion.ts';
 
 /** What the stage offers option C. Every method is optional; `enabled()` false = today's look. */
 export interface FxStagePort {
@@ -37,6 +39,8 @@ export interface FxStagePort {
     speed: string;
     /** This blow is the last the action shows (`isLastShownBlow`); absent when the burst is not at hand. FFX's finishing accent reads it; FFX-2's does not. */
     lastShown?: boolean | undefined;
+    /** `?motion=demo` only (`motion/DemoHit.hitPower`): how hard the blow is. */
+    power?: number | undefined;
   }): { freezeMs: number; shook: boolean };
   /** A fiend is sent (only where the departure is a dissolve, C8). */
   dissolve?(id: CombatantId): void;
@@ -133,8 +137,9 @@ export function fxHit(
     action: mark?.count ?? -1,
     speed: ctx.speed(),
     lastShown: lastShownAt(ctx, event),
+    ...(demoMotionOn() ? { power: hitPower(event.amount, ctx.hpMaxOf?.(event.targetId)) } : {}), // `?motion=demo`: the stop and the shake grow with the blow (`motion/DemoHit.ts`)
   });
-  return { waitMs: heavy ? r.freezeMs : 0, shook: r.shook };
+  return { waitMs: heavy || demoMotionOn() ? r.freezeMs : 0, shook: r.shook }; // the demo waits out every stop it makes, so the next beat does not run ahead of a held field
 }
 
 /** A fiend is sent: the richer dissolve (C8). Only called on the dissolve path. */

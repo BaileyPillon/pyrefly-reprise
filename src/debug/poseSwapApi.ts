@@ -18,7 +18,14 @@ import {
   type PoseSwapStats,
 } from '../engine/PoseSwap.ts';
 
+import { demoMotionOn, setDemoMotion } from '../engine/motion/DemoMotion.ts';
+
 export function installPoseSwapDebug(api: Record<string, unknown>): void {
+  /** `window.__pyrefly.demoMotion()`: whether `?motion=demo` is in force (the conference demo's motion: `engine/motion/DemoMotion.ts`); `demoMotion(true|false)` flips it for what is built or changes from now on (captures only). */
+  api['demoMotion'] = (on?: boolean): boolean => {
+    if (typeof on === 'boolean') setDemoMotion(on);
+    return demoMotionOn();
+  };
   api['motionMode'] = (mode?: MotionMode): MotionMode => {
     if (mode === 'smooth' || mode === 'classic') setMotionMode(mode);
     return motionMode();
