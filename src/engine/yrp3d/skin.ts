@@ -80,9 +80,9 @@ export function hidePaintedFigure(actor: PaintedActor): boolean {
 
 /** A hit's flash is white, the girls' cast glow warm, Bahamut's his possession violet (the stage's boss pool, `scenes/bevelle-underground.ts`). */
 const GLOW_COLOUR: Readonly<Record<'party' | 'boss', number>> = { party: 0xffe2a6, boss: 0xb468ff };
-/** The share of full emissive the flash and the glow reach (full emissive would flatten the figure to a flat shape). */
-const FLASH_GAIN = 0.85;
-const GLOW_GAIN = 0.5;
+/** The share of full emissive the flash and the glow reach: higher turned a hit on a soft-shaded figure into a flat white or pink silhouette (0.85 and 0.5 on the first branch's toon look, where the ramp's lit side was 1). */
+const FLASH_GAIN = 0.42;
+const GLOW_GAIN = 0.3;
 /** Seconds a downed body takes to tip, and a glow to fade. */
 const LIE_TAU = 0.2;
 const GLOW_TAU = 0.18;

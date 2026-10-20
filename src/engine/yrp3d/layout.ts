@@ -334,12 +334,12 @@ export interface LightData {
 /**
  * The figures' light, three lights beside the chamber's own (which light all real geometry too): **a warm key** from the front left and above (the lamps' glow warmed toward white), **a soft fill** (a hemisphere:
  * the vault's cool sky over a dim warm floor, no direction, so no shadow side goes black) and **a cool rim** from behind and to the right that edges each figure against the dark. None casts a shadow (the chamber's
- * key casts the models' shadows on the deck). Staging, ours; the numbers are tuned by eye against the game's own battle frames (`research/ffx-vs-ffx2-presentation.md`).
+ * key casts the models' shadows on the deck). Staging, ours; the numbers are tuned by eye on frozen frames of the live scene (the white trim of the girls blooms above about 1.7 times the old values) against the game's own battle frames (`research/ffx-vs-ffx2-presentation.md`).
  */
 export const LIGHTS: Readonly<Record<'key' | 'fill' | 'rim', LightData & { ground?: number }>> = {
-  key: { colour: 0xffe3c6, intensity: 2.6, position: [-4.5, 8.5, 11.5], target: [0, 1.2, -1.5] },
-  fill: { colour: 0xb9c4e6, intensity: 1.15, ground: 0x4a3f4c },
-  rim: { colour: 0x8db2ff, intensity: 2.2, position: [5.5, 6.5, -12], target: [0.5, 1.4, -1.5] },
+  key: { colour: 0xffe3c6, intensity: 3.6, position: [-4.5, 8.5, 11.5], target: [0, 1.2, -1.5] },
+  fill: { colour: 0xb9c4e6, intensity: 1.6, ground: 0x4a3f4c },
+  rim: { colour: 0x8db2ff, intensity: 3.0, position: [5.5, 6.5, -12], target: [0.5, 1.4, -1.5] },
 };
 
 /** The cast glow's strength over time: a swell while a figure holds a `cast` pose (seconds since it began), breathing between 0.35 and 0.75 of the peak. */

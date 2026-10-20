@@ -166,15 +166,37 @@ describe('how they sit in the hand', () => {
     expect(big.z).toBeCloseTo(small.z * 2, 4);
   });
 
-  it('tilts Paine\'s sword up toward the thumb by 0.2 radians, and leaves the pistols and the daggers straight', () => {
+  it('holds the daggers and the sword across the palm with the blade out of the thumb side (forward), not dragged along the forearm: the pistols keep the barrel along the arm', () => {
+    const { root, left, right } = skeleton();
+    const rikku = attachProps('rikku', root, REFERENCE_HEIGHT);
+    for (const [side, a] of [['left', left], ['right', right]] as const) {
+      const object = rikku.props.find((q) => q.side === side)!.prop.object;
+      const { z } = axes(object);
+      const along = world(a.palm).sub(world(a.wrist)).normalize();
+      expect(z.z, side).toBeGreaterThan(0.95); // the blade points forward, the thumb's way
+      expect(Math.abs(z.dot(along)), side).toBeLessThan(0.3); // and is no longer along the forearm
+    }
+    const pistols = attachProps('yuna', skeleton().root, REFERENCE_HEIGHT);
+    expect(pistols.props).toHaveLength(2);
+  });
+
+  it('tilts the dagger a little and the sword of Paine more, toward the shoulder (back along the forearm), and leaves the pistols straight', () => {
     const s = skeleton();
     const p = attachProps('paine', s.root, REFERENCE_HEIGHT);
     const hand = findHands(s.root).find((h) => h.side === 'right')!;
-    const straight = gripRotation(hand);
-    expect(p.props[0]!.prop.object.quaternion.angleTo(straight)).toBeCloseTo(0.2, 6);
-    expect(axes(p.props[0]!.prop.object).z.z).toBeGreaterThan(Math.sin(0.1)); // the blade's point rises toward +Z (the thumb)
-    const y = attachProps('yuna', skeleton().root, REFERENCE_HEIGHT);
-    expect(y.props[0]!.prop.object.quaternion.angleTo(straight)).toBeCloseTo(0, 6);
+    const straight = gripRotation(hand, 0, 'thumb');
+    const object = p.props[0]!.prop.object;
+    expect(object.quaternion.angleTo(straight)).toBeCloseTo(0.3, 6);
+    const along = world(s.right.palm).sub(world(s.right.wrist)).normalize();
+    const { z } = axes(object);
+    expect(z.dot(along)).toBeLessThan(-Math.sin(0.25)); // the point rises back toward the shoulder
+    expect(z.z).toBeGreaterThan(Math.cos(0.35)); // and still points forward
+    const r = skeleton();
+    const dagger = attachProps('rikku', r.root, REFERENCE_HEIGHT).props.find((q) => q.side === 'right')!.prop.object;
+    expect(dagger.quaternion.angleTo(gripRotation(findHands(r.root).find((h) => h.side === 'right')!, 0, 'thumb'))).toBeCloseTo(0.15, 6);
+    const y = skeleton();
+    const pistol = attachProps('yuna', y.root, REFERENCE_HEIGHT).props[0]!.prop.object;
+    expect(pistol.quaternion.angleTo(gripRotation(findHands(y.root).find((h) => h.side === 'right')!))).toBeCloseTo(0, 6);
   });
 });
 

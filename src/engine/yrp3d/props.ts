@@ -3,9 +3,9 @@
  * models are not extracted yet, so the weapons are small low-poly props built in code, original shapes (no one's asset), parented to the models' hands so they move with the game's own motion, and given the same soft material
  * as the figure (the model's own pass, `./shade.ts`, covers every mesh under it; props are added to the scene before that pass).
  *
- * - **Yuna**: two pistols, one in each hand: a gunmetal blue-grey slide with a barrel and a small sight on top, a darker grip across the palm.
- * - **Rikku**: two daggers, one in each hand: a short curved steel blade, a small guard, a brown grip.
- * - **Paine**: one long sword in her right hand: a dark blade with a point, a red guard, a red grip and pommel.
+ * - **Yuna**: two pistols, one in each hand: a gunmetal blue-grey slide with a barrel and a small sight on top, a darker grip across the palm; the barrel runs on along the forearm.
+ * - **Rikku**: two daggers, one in each hand: a short curved steel blade, a small guard, a brown grip; the hilt across the palm and the blade out of the thumb side (forward).
+ * - **Paine**: one long sword in her right hand: a dark blade with a point, a red guard, a red grip and pommel; held the same way, the blade out of the thumb side, raised a little.
  *
  * ## The hand
  *
@@ -38,7 +38,7 @@ import type { YrpId } from './layout.ts';
 export const REFERENCE_HEIGHT = 1.6;
 
 /** The colours: a gunmetal blue-grey, a darker grip, steel, a brown wrap, a dark blade and a red hilt. */
-export const PROP_COLOUR = { gun: 0x5b6b80, gunGrip: 0x2d3440, steel: 0xc9d3de, wrap: 0x5a3a2a, darkBlade: 0x23262f, red: 0xa82424, redDark: 0x7e1a1a } as const;
+export const PROP_COLOUR = { gun: 0x5b6b80, gunGrip: 0x2d3440, steel: 0xa3aeba, wrap: 0x5a3a2a, darkBlade: 0x23262f, red: 0xa82424, redDark: 0x7e1a1a } as const;
 
 /** What a builder hands back: the prop, and the geometries it made (so the model can free them). */
 export interface Prop {
@@ -172,8 +172,17 @@ export function findHands(root: Object3D): Hand[] {
   return out;
 }
 
-/** The turn that puts a prop in a hand: its +Z along the arm (wrist to palm) and its +Y toward the thumb (forward, +Z of the model, squared to the arm), as a rotation in the palm's own frame; `tilt` raises the point toward the thumb. */
-export function gripRotation(hand: Hand, tilt = 0): Quaternion {
+/**
+ * How a prop lies in the fist: `arm` (a pistol: the barrel runs on along the forearm, the grip across the palm) or `thumb` (a dagger or a sword: the hilt runs across the palm, perpendicular to the forearm, and the blade
+ * stands out of the thumb side, forward in the bind pose with the arm hanging). A blade along the forearm reads as a stick dragged from the hand; out of the thumb side it reads as held.
+ */
+export type Mount = 'arm' | 'thumb';
+
+/**
+ * The turn that puts a prop in a hand, as a rotation in the palm's own frame. `arm` mount: the prop's +Z along the arm (wrist to palm) and its +Y toward the thumb (forward, +Z of the model, squared to the arm); `thumb`
+ * mount: its +Z toward the thumb and its +Y along the arm (toward the fingers). `tilt` raises the point (radians): toward the thumb for the `arm` mount, toward the shoulder (back along the forearm) for the `thumb` one.
+ */
+export function gripRotation(hand: Hand, tilt = 0, mount: Mount = 'arm'): Quaternion {
   const wrist = hand.wrist.getWorldPosition(new Vector3());
   const palm = hand.palm.getWorldPosition(new Vector3());
   const along = palm.clone().sub(wrist).normalize();
@@ -181,10 +190,10 @@ export function gripRotation(hand: Hand, tilt = 0): Quaternion {
   thumb.addScaledVector(along, -thumb.dot(along));
   if (thumb.lengthSq() < 1e-6) thumb.set(0, 1, 0).addScaledVector(along, -along.y);
   thumb.normalize();
-  const side = new Vector3().crossVectors(thumb, along);
-  const world = new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(side, thumb, along));
+  const basis = mount === 'arm' ? [new Vector3().crossVectors(thumb, along), thumb, along] : [new Vector3().crossVectors(along, thumb), along, thumb];
+  const world = new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(basis[0]!, basis[1]!, basis[2]!));
   const q = hand.palm.getWorldQuaternion(new Quaternion()).invert().multiply(world);
-  if (tilt) q.multiply(new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -tilt)); // raise the point toward the thumb side
+  if (tilt) q.multiply(new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), mount === 'arm' ? -tilt : tilt)); // raise the point
   return q;
 }
 
@@ -198,17 +207,17 @@ export function gripPosition(hand: Hand): Vector3 {
 /** How far back from the palm node toward the wrist the grip sits, as a share of the way. */
 export const GRIP_BACK = 0.45;
 
-/** Which hand holds which prop, by figure: `[side, builder, tilt]`, `tilt` raising the point (radians about the prop's x, toward the thumb). */
-const KIT: Readonly<Partial<Record<YrpId, ReadonlyArray<readonly [Side, (unit: number) => Prop, number]>>>> = {
+/** Which hand holds which prop, by figure: `[side, builder, mount, tilt]` (the mount says how it lies in the fist; the tilt raises the point, radians). */
+const KIT: Readonly<Partial<Record<YrpId, ReadonlyArray<readonly [Side, (unit: number) => Prop, Mount, number]>>>> = {
   yuna: [
-    ['right', pistol, 0],
-    ['left', pistol, 0],
+    ['right', pistol, 'arm', 0],
+    ['left', pistol, 'arm', 0],
   ],
   rikku: [
-    ['right', dagger, 0],
-    ['left', dagger, 0],
+    ['right', dagger, 'thumb', 0.15],
+    ['left', dagger, 'thumb', 0.15],
   ],
-  paine: [['right', sword, 0.2]],
+  paine: [['right', sword, 'thumb', 0.3]],
 };
 
 /** What was attached, by side (the model frees the geometries). */
@@ -225,12 +234,12 @@ export function attachProps(id: YrpId, root: Object3D, height: number): Attached
   const unit = height > 0 ? height / REFERENCE_HEIGHT : 1;
   const props: Array<{ side: Side; prop: Prop }> = [];
   const hands = findHands(root);
-  for (const [side, build, tilt] of KIT[id] ?? []) {
+  for (const [side, build, mount, tilt] of KIT[id] ?? []) {
     const hand = hands.find((h) => h.side === side);
     if (!hand) continue;
     const prop = build(unit);
     prop.object.name = `prop-${id}-${side}`;
-    prop.object.quaternion.copy(gripRotation(hand, tilt));
+    prop.object.quaternion.copy(gripRotation(hand, tilt, mount));
     prop.object.position.copy(gripPosition(hand));
     hand.palm.add(prop.object);
     props.push({ side, prop });
