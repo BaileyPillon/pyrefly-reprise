@@ -129,8 +129,21 @@ def shift_config(cfg: dict, shifts: dict[str, tuple[int, int]], idle: str = "idl
                 skipped.append(f"cut.ops.{op.get('op')}.{k}")
     build = out.get("build") or {}
     for k in build:
-        if k not in ("bones", "skin", "landmarks"):
+        if k not in ("bones", "skin", "landmarks", "variants"):
             skipped.append(f"build.{k}")
+    S = int(out.get("scale", 2))  # a variant's polygon is in MASTER px of the idle frame (the shift is in 1x painting px)
+    for part_variants in (build.get("variants") or {}).values():
+        for rec in part_variants.values():
+            fp = rec.get("from_painting")
+            if not fp:
+                continue
+            mx, my = dx * S, dy * S
+            fp["poly"] = [_pt(q, mx, my) for q in fp.get("poly", [])]
+            fp["cutline"] = [[_pt(q, mx, my) for q in line] for line in fp.get("cutline", [])]
+            if fp.get("anchor"):
+                fp["anchor"] = _pt(fp["anchor"], mx, my)
+            if fp.get("fill"):
+                fp["fill"] = [[f[0] + mx, f[1] + my, f[2]] for f in fp["fill"]]
     for b in build.get("bones") or []:
         b[2] = _pt(b[2], dx, dy)
     for sk in (build.get("skin") or {}).values():

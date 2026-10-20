@@ -1,0 +1,2166 @@
+{
+ "_lane": "Ifrit (FFX aeon; the hunched horned beast; the possessed Ifrit of Chapter III link 3 and a summon in eleven more chapters): one costume across idle, attack, cast, hurt and KO (palette 0.94 to 1.00), so the idle's painting is the costume and the other poses are bent from it. Cut by polygons and the underlaps (no SAM): the two tails (an upper curved spike and a lower thick curl), the far arm and the far leg (dark), the near leg, the body (torso, back mane, hips and the near arm, which hangs in front of the knee) and the head with its horns. The head may translate a little (offset 0.06, covered by a 60 px skirt of head pixels under the body; a bigger one opened a hole at the neck in every blend) and nothing but the four leg bones scales. Game case: FFX only (an FFX aeon's painting set); the rig stays OFF. EXPRESSIVE KEYS (rig-expressive-2 lane, 2026-10-19): the head (face, mane, horns, beard) and the far arm of the attack and hurt keys are CUT FROM those PAINTINGS (build.variants, rig_vcut.py) and registered to the keys' bones; the head is held to the idle head mesh area (scaleArea 1.0, opaque 1.007 / 1.022); the far arm pieces carry the neck under the chin and a fill disc at the joints the hole test watches (fill_joints). Built into the NEW folder D:/pyrefly-art-rigs/ifrit-x (rig.py variants, export --out); the shipped ifrit folder is untouched.",
+ "subject": "ifrit",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "hooks": "ifrit_hooks.py",
+ "cut": {
+  "polys": {
+   "head_zone": [
+    [
+     5,
+     190
+    ],
+    [
+     60,
+     150
+    ],
+    [
+     150,
+     60
+    ],
+    [
+     250,
+     40
+    ],
+    [
+     330,
+     30
+    ],
+    [
+     430,
+     40
+    ],
+    [
+     470,
+     80
+    ],
+    [
+     470,
+     200
+    ],
+    [
+     440,
+     230
+    ],
+    [
+     445,
+     330
+    ],
+    [
+     450,
+     430
+    ],
+    [
+     440,
+     500
+    ],
+    [
+     400,
+     512
+    ],
+    [
+     330,
+     500
+    ],
+    [
+     300,
+     480
+    ],
+    [
+     240,
+     470
+    ],
+    [
+     215,
+     430
+    ],
+    [
+     150,
+     420
+    ],
+    [
+     60,
+     415
+    ],
+    [
+     10,
+     380
+    ],
+    [
+     5,
+     300
+    ]
+   ],
+   "body_zone": [
+    [
+     440,
+     40
+    ],
+    [
+     500,
+     15
+    ],
+    [
+     600,
+     30
+    ],
+    [
+     700,
+     100
+    ],
+    [
+     760,
+     220
+    ],
+    [
+     790,
+     330
+    ],
+    [
+     775,
+     420
+    ],
+    [
+     805,
+     570
+    ],
+    [
+     805,
+     610
+    ],
+    [
+     760,
+     600
+    ],
+    [
+     700,
+     580
+    ],
+    [
+     640,
+     560
+    ],
+    [
+     560,
+     540
+    ],
+    [
+     490,
+     548
+    ],
+    [
+     480,
+     640
+    ],
+    [
+     482,
+     735
+    ],
+    [
+     400,
+     745
+    ],
+    [
+     350,
+     722
+    ],
+    [
+     342,
+     650
+    ],
+    [
+     362,
+     600
+    ],
+    [
+     400,
+     560
+    ],
+    [
+     430,
+     520
+    ],
+    [
+     445,
+     430
+    ],
+    [
+     440,
+     300
+    ]
+   ],
+   "legN_zone": [
+    [
+     470,
+     540
+    ],
+    [
+     560,
+     520
+    ],
+    [
+     700,
+     570
+    ],
+    [
+     810,
+     610
+    ],
+    [
+     812,
+     720
+    ],
+    [
+     700,
+     732
+    ],
+    [
+     620,
+     735
+    ],
+    [
+     598,
+     780
+    ],
+    [
+     640,
+     860
+    ],
+    [
+     645,
+     960
+    ],
+    [
+     560,
+     996
+    ],
+    [
+     330,
+     996
+    ],
+    [
+     328,
+     940
+    ],
+    [
+     420,
+     925
+    ],
+    [
+     452,
+     880
+    ],
+    [
+     385,
+     780
+    ],
+    [
+     338,
+     700
+    ],
+    [
+     348,
+     620
+    ],
+    [
+     420,
+     568
+    ]
+   ],
+   "legF_zone": [
+    [
+     170,
+     700
+    ],
+    [
+     230,
+     620
+    ],
+    [
+     330,
+     560
+    ],
+    [
+     420,
+     535
+    ],
+    [
+     470,
+     545
+    ],
+    [
+     440,
+     640
+    ],
+    [
+     430,
+     740
+    ],
+    [
+     480,
+     800
+    ],
+    [
+     500,
+     850
+    ],
+    [
+     520,
+     900
+    ],
+    [
+     500,
+     950
+    ],
+    [
+     420,
+     962
+    ],
+    [
+     350,
+     988
+    ],
+    [
+     220,
+     992
+    ],
+    [
+     198,
+     960
+    ],
+    [
+     260,
+     935
+    ],
+    [
+     330,
+     915
+    ],
+    [
+     380,
+     870
+    ],
+    [
+     300,
+     830
+    ],
+    [
+     230,
+     780
+    ],
+    [
+     190,
+     740
+    ]
+   ],
+   "armF_zone": [
+    [
+     190,
+     470
+    ],
+    [
+     260,
+     440
+    ],
+    [
+     330,
+     470
+    ],
+    [
+     320,
+     560
+    ],
+    [
+     250,
+     640
+    ],
+    [
+     230,
+     740
+    ],
+    [
+     240,
+     800
+    ],
+    [
+     260,
+     850
+    ],
+    [
+     300,
+     860
+    ],
+    [
+     312,
+     892
+    ],
+    [
+     250,
+     902
+    ],
+    [
+     190,
+     902
+    ],
+    [
+     160,
+     852
+    ],
+    [
+     170,
+     760
+    ],
+    [
+     190,
+     700
+    ],
+    [
+     180,
+     600
+    ]
+   ],
+   "tailL_zone": [
+    [
+     690,
+     640
+    ],
+    [
+     740,
+     630
+    ],
+    [
+     800,
+     650
+    ],
+    [
+     860,
+     700
+    ],
+    [
+     872,
+     780
+    ],
+    [
+     852,
+     880
+    ],
+    [
+     792,
+     952
+    ],
+    [
+     700,
+     962
+    ],
+    [
+     636,
+     922
+    ],
+    [
+     636,
+     862
+    ],
+    [
+     660,
+     832
+    ],
+    [
+     720,
+     802
+    ],
+    [
+     760,
+     772
+    ],
+    [
+     730,
+     722
+    ],
+    [
+     700,
+     690
+    ]
+   ],
+   "tailU_zone": [
+    [
+     828,
+     278
+    ],
+    [
+     900,
+     318
+    ],
+    [
+     952,
+     400
+    ],
+    [
+     968,
+     520
+    ],
+    [
+     922,
+     642
+    ],
+    [
+     872,
+     722
+    ],
+    [
+     835,
+     702
+    ],
+    [
+     850,
+     640
+    ],
+    [
+     900,
+     520
+    ],
+    [
+     920,
+     420
+    ],
+    [
+     880,
+     340
+    ]
+   ]
+  },
+  "order": [
+   "tailU",
+   "tailL",
+   "armF",
+   "legF",
+   "legN",
+   "body",
+   "head"
+  ],
+  "priority": [
+   "head",
+   "body",
+   "legN",
+   "legF",
+   "armF",
+   "tailL",
+   "tailU"
+  ],
+  "parts": {
+   "head": {
+    "include": [
+     {
+      "poly": "head_zone"
+     }
+    ]
+   },
+   "body": {
+    "include": [
+     {
+      "poly": "body_zone"
+     }
+    ]
+   },
+   "legN": {
+    "include": [
+     {
+      "poly": "legN_zone"
+     }
+    ]
+   },
+   "legF": {
+    "include": [
+     {
+      "poly": "legF_zone"
+     }
+    ]
+   },
+   "armF": {
+    "include": [
+     {
+      "poly": "armF_zone"
+     }
+    ]
+   },
+   "tailL": {
+    "include": [
+     {
+      "poly": "tailL_zone"
+     }
+    ]
+   },
+   "tailU": {
+    "include": [
+     {
+      "poly": "tailU_zone"
+     }
+    ]
+   }
+  },
+  "nearest": {
+   "maxdist": 40
+  },
+  "clean": {
+   "min_island": 150,
+   "close": 2
+  },
+  "ops": [
+   {
+    "op": "skirt",
+    "back": "body",
+    "front": "head",
+    "px": 60
+   },
+   {
+    "op": "skirt",
+    "back": "tailL",
+    "front": "body",
+    "px": 40
+   },
+   {
+    "op": "skirt",
+    "back": "tailU",
+    "front": "tailL",
+    "px": 30
+   },
+   {
+    "op": "skirt",
+    "back": "tailU",
+    "front": "body",
+    "px": 30
+   },
+   {
+    "op": "skirt",
+    "back": "armF",
+    "front": "head",
+    "px": 30
+   },
+   {
+    "op": "skirt",
+    "back": "armF",
+    "front": "body",
+    "px": 30
+   },
+   {
+    "op": "skirt",
+    "back": "armF",
+    "front": "legF",
+    "px": 20
+   },
+   {
+    "op": "skirt",
+    "back": "legF",
+    "front": "legN",
+    "px": 25
+   },
+   {
+    "op": "skirt",
+    "back": "legF",
+    "front": "body",
+    "px": 40
+   },
+   {
+    "op": "skirt",
+    "back": "legN",
+    "front": "body",
+    "px": 40
+   }
+  ]
+ },
+ "build": {
+  "bones": [
+   [
+    "root",
+    null,
+    [
+     480,
+     1001
+    ]
+   ],
+   [
+    "pelvis",
+    "root",
+    [
+     690,
+     610
+    ]
+   ],
+   [
+    "chest",
+    "pelvis",
+    [
+     570,
+     400
+    ]
+   ],
+   [
+    "head",
+    "chest",
+    [
+     440,
+     320
+    ]
+   ],
+   [
+    "armF0",
+    "chest",
+    [
+     300,
+     470
+    ]
+   ],
+   [
+    "armF1",
+    "armF0",
+    [
+     205,
+     620
+    ]
+   ],
+   [
+    "armF2",
+    "armF1",
+    [
+     190,
+     800
+    ]
+   ],
+   [
+    "thighF",
+    "pelvis",
+    [
+     640,
+     600
+    ]
+   ],
+   [
+    "shinF",
+    "thighF",
+    [
+     215,
+     710
+    ]
+   ],
+   [
+    "footF",
+    "shinF",
+    [
+     430,
+     890
+    ]
+   ],
+   [
+    "thighN",
+    "pelvis",
+    [
+     690,
+     610
+    ]
+   ],
+   [
+    "shinN",
+    "thighN",
+    [
+     385,
+     690
+    ]
+   ],
+   [
+    "footN",
+    "shinN",
+    [
+     560,
+     880
+    ]
+   ],
+   [
+    "tailL0",
+    "pelvis",
+    [
+     740,
+     660
+    ]
+   ],
+   [
+    "tailL1",
+    "tailL0",
+    [
+     845,
+     770
+    ]
+   ],
+   [
+    "tailL2",
+    "tailL1",
+    [
+     810,
+     900
+    ]
+   ],
+   [
+    "tailU0",
+    "pelvis",
+    [
+     850,
+     690
+    ]
+   ],
+   [
+    "tailU1",
+    "tailU0",
+    [
+     935,
+     560
+    ]
+   ],
+   [
+    "tailU2",
+    "tailU1",
+    [
+     945,
+     420
+    ]
+   ]
+  ],
+  "skin": {
+   "body": {
+    "type": "chain",
+    "bones": [
+     "pelvis",
+     "chest"
+    ],
+    "joints": [
+     [
+      700,
+      620
+     ],
+     [
+      570,
+      400
+     ],
+     [
+      470,
+      250
+     ]
+    ],
+    "ramps": [
+     70
+    ],
+    "mesh": {
+     "edge": 24,
+     "inner": 48,
+     "grow": 10
+    }
+   },
+   "head": {
+    "type": "rigid",
+    "bone": "head",
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 10
+    }
+   },
+   "armF": {
+    "type": "chain",
+    "bones": [
+     "armF0",
+     "armF1",
+     "armF2"
+    ],
+    "joints": [
+     [
+      300,
+      470
+     ],
+     [
+      205,
+      620
+     ],
+     [
+      190,
+      800
+     ],
+     [
+      220,
+      890
+     ]
+    ],
+    "ramps": [
+     40,
+     40
+    ],
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 8
+    }
+   },
+   "legF": {
+    "type": "chain",
+    "bones": [
+     "thighF",
+     "shinF",
+     "footF"
+    ],
+    "joints": [
+     [
+      640,
+      600
+     ],
+     [
+      215,
+      710
+     ],
+     [
+      430,
+      890
+     ],
+     [
+      235,
+      975
+     ]
+    ],
+    "ramps": [
+     30,
+     30
+    ],
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 8
+    }
+   },
+   "legN": {
+    "type": "chain",
+    "bones": [
+     "thighN",
+     "shinN",
+     "footN"
+    ],
+    "joints": [
+     [
+      690,
+      610
+     ],
+     [
+      385,
+      690
+     ],
+     [
+      560,
+      880
+     ],
+     [
+      345,
+      985
+     ]
+    ],
+    "ramps": [
+     30,
+     30
+    ],
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 8
+    }
+   },
+   "tailL": {
+    "type": "chain",
+    "bones": [
+     "tailL0",
+     "tailL1",
+     "tailL2"
+    ],
+    "joints": [
+     [
+      740,
+      660
+     ],
+     [
+      845,
+      770
+     ],
+     [
+      810,
+      900
+     ],
+     [
+      650,
+      915
+     ]
+    ],
+    "ramps": [
+     40,
+     40
+    ],
+    "mesh": {
+     "edge": 24,
+     "inner": 48,
+     "grow": 10
+    }
+   },
+   "tailU": {
+    "type": "chain",
+    "bones": [
+     "tailU0",
+     "tailU1",
+     "tailU2"
+    ],
+    "joints": [
+     [
+      850,
+      690
+     ],
+     [
+      935,
+      560
+     ],
+     [
+      945,
+      420
+     ],
+     [
+      830,
+      290
+     ]
+    ],
+    "ramps": [
+     40,
+     40
+    ],
+    "mesh": {
+     "edge": 22,
+     "inner": 44,
+     "grow": 10
+    }
+   }
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    [
+     286,
+     266
+    ]
+   ],
+   "feet": [
+    "root",
+    [
+     480,
+     1001
+    ]
+   ],
+   "toeN": [
+    "footN",
+    [
+     345,
+     985
+    ]
+   ],
+   "toeF": [
+    "footF",
+    [
+     235,
+     975
+    ]
+   ],
+   "handF": [
+    "armF2",
+    [
+     215,
+     880
+    ]
+   ],
+   "tailU": [
+    "tailU2",
+    [
+     830,
+     290
+    ]
+   ],
+   "tailL": [
+    "tailL2",
+    [
+     650,
+     915
+    ]
+   ],
+   "bodyCenter": [
+    "chest",
+    [
+     570,
+     420
+    ]
+   ]
+  },
+  "variants": {
+   "head": {
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "poly": [
+       [
+        150,
+        290
+       ],
+       [
+        330,
+        190
+       ],
+       [
+        480,
+        140
+       ],
+       [
+        580,
+        160
+       ],
+       [
+        650,
+        300
+       ],
+       [
+        720,
+        500
+       ],
+       [
+        790,
+        700
+       ],
+       [
+        810,
+        800
+       ],
+       [
+        760,
+        900
+       ],
+       [
+        700,
+        1010
+       ],
+       [
+        400,
+        1030
+       ],
+       [
+        300,
+        1010
+       ],
+       [
+        -130,
+        1000
+       ],
+       [
+        -140,
+        880
+       ],
+       [
+        -130,
+        760
+       ],
+       [
+        -70,
+        640
+       ],
+       [
+        -10,
+        520
+       ],
+       [
+        60,
+        420
+       ]
+      ],
+      "cutline": [
+       [
+        [
+         580,
+         160
+        ],
+        [
+         650,
+         300
+        ],
+        [
+         720,
+         500
+        ],
+        [
+         790,
+         700
+        ],
+        [
+         810,
+         800
+        ],
+        [
+         760,
+         900
+        ],
+        [
+         700,
+         1010
+        ]
+       ],
+       [
+        [
+         700,
+         1010
+        ],
+        [
+         400,
+         1030
+        ]
+       ]
+      ],
+      "scaleArea": 1.0,
+      "anchor": [
+       300,
+       700
+      ],
+      "feather": 36,
+      "register": "attack",
+      "mesh": {
+       "edge": 18,
+       "inner": 34,
+       "grow": 10
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "poly": [
+       [
+        250,
+        -30
+       ],
+       [
+        1300,
+        -30
+       ],
+       [
+        1300,
+        260
+       ],
+       [
+        1150,
+        400
+       ],
+       [
+        1000,
+        440
+       ],
+       [
+        930,
+        480
+       ],
+       [
+        930,
+        620
+       ],
+       [
+        900,
+        780
+       ],
+       [
+        870,
+        900
+       ],
+       [
+        800,
+        990
+       ],
+       [
+        640,
+        990
+       ],
+       [
+        520,
+        950
+       ],
+       [
+        450,
+        870
+       ],
+       [
+        400,
+        790
+       ],
+       [
+        380,
+        700
+       ],
+       [
+        390,
+        600
+       ],
+       [
+        380,
+        540
+       ],
+       [
+        300,
+        530
+       ],
+       [
+        120,
+        520
+       ],
+       [
+        90,
+        380
+       ],
+       [
+        120,
+        230
+       ],
+       [
+        200,
+        120
+       ]
+      ],
+      "cutline": [
+       [
+        [
+         1300,
+         -30
+        ],
+        [
+         1300,
+         260
+        ],
+        [
+         1150,
+         400
+        ],
+        [
+         1000,
+         440
+        ],
+        [
+         930,
+         480
+        ],
+        [
+         930,
+         620
+        ],
+        [
+         900,
+         780
+        ],
+        [
+         870,
+         900
+        ],
+        [
+         800,
+         990
+        ]
+       ]
+      ],
+      "scaleArea": 1.0,
+      "anchor": [
+       620,
+       420
+      ],
+      "feather": 36,
+      "register": "hurt",
+      "mesh": {
+       "edge": 18,
+       "inner": 34,
+       "grow": 10
+      }
+     }
+    }
+   },
+   "armF": {
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "poly": [
+       [
+        415,
+        880
+       ],
+       [
+        700,
+        880
+       ],
+       [
+        720,
+        1100
+       ],
+       [
+        700,
+        1250
+       ],
+       [
+        690,
+        1500
+       ],
+       [
+        720,
+        1600
+       ],
+       [
+        760,
+        1750
+       ],
+       [
+        760,
+        1880
+       ],
+       [
+        480,
+        1885
+       ],
+       [
+        405,
+        1850
+       ],
+       [
+        365,
+        1794
+       ],
+       [
+        362,
+        1728
+       ],
+       [
+        350,
+        1639
+       ],
+       [
+        355,
+        1506
+       ],
+       [
+        385,
+        1417
+       ],
+       [
+        390,
+        1283
+       ],
+       [
+        395,
+        1139
+       ],
+       [
+        435,
+        1000
+       ],
+       [
+        415,
+        940
+       ]
+      ],
+      "cutline": [
+       [
+        [
+         415,
+         880
+        ],
+        [
+         700,
+         880
+        ]
+       ],
+       [
+        [
+         700,
+         880
+        ],
+        [
+         720,
+         1100
+        ],
+        [
+         700,
+         1250
+        ],
+        [
+         690,
+         1500
+        ],
+        [
+         720,
+         1600
+        ],
+        [
+         760,
+         1750
+        ]
+       ]
+      ],
+      "skin": "chain",
+      "tex": 0.5,
+      "scale": 1.0,
+      "feather": 30,
+      "mesh": {
+       "edge": 24,
+       "inner": 48,
+       "grow": 10
+      },
+      "fill_joints": {
+       "armF0": 34,
+       "armF2": 44
+      },
+      "register": "attack"
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "poly": [
+       [
+        330,
+        560
+       ],
+       [
+        520,
+        560
+       ],
+       [
+        530,
+        850
+       ],
+       [
+        470,
+        900
+       ],
+       [
+        440,
+        980
+       ],
+       [
+        560,
+        1040
+       ],
+       [
+        570,
+        1500
+       ],
+       [
+        440,
+        1520
+       ],
+       [
+        420,
+        1640
+       ],
+       [
+        300,
+        1670
+       ],
+       [
+        80,
+        1675
+       ],
+       [
+        10,
+        1640
+       ],
+       [
+        -15,
+        1550
+       ],
+       [
+        0,
+        1465
+       ],
+       [
+        35,
+        1390
+       ],
+       [
+        80,
+        1295
+       ],
+       [
+        110,
+        1200
+       ],
+       [
+        165,
+        1100
+       ],
+       [
+        195,
+        960
+       ],
+       [
+        215,
+        870
+       ],
+       [
+        265,
+        800
+       ],
+       [
+        320,
+        750
+       ],
+       [
+        370,
+        690
+       ]
+      ],
+      "cutline": [
+       [
+        [
+         330,
+         560
+        ],
+        [
+         520,
+         560
+        ],
+        [
+         530,
+         850
+        ],
+        [
+         470,
+         900
+        ]
+       ],
+       [
+        [
+         440,
+         980
+        ],
+        [
+         560,
+         1040
+        ],
+        [
+         570,
+         1500
+        ],
+        [
+         440,
+         1520
+        ],
+        [
+         420,
+         1640
+        ]
+       ]
+      ],
+      "skin": "chain",
+      "tex": 0.5,
+      "scale": 1.0,
+      "feather": 30,
+      "mesh": {
+       "edge": 24,
+       "inner": 48,
+       "grow": 10
+      },
+      "fill_joints": {
+       "armF0": 34,
+       "armF2": 44
+      },
+      "register": "hurt"
+     }
+    }
+   }
+  }
+ },
+ "fit": {
+  "min_iou": 0.0,
+  "default_limit": 110,
+  "chain_limit": 40,
+  "restarts": 3,
+  "evals": 900,
+  "mark_free": 0.025,
+  "mark_soft": 0.015,
+  "mark_w": 2,
+  "band_w": 1,
+  "feet_x_w": 10,
+  "dfoot_w": 2,
+  "offsets": [
+   "pelvis",
+   "head"
+  ],
+  "offset_limit": {
+   "pelvis": [
+    0.15,
+    0.15
+   ],
+   "head": [
+    0.06,
+    0.06
+   ]
+  },
+  "scales": {
+   "thighN": [
+    0.9,
+    1.15
+   ],
+   "thighF": [
+    0.9,
+    1.15
+   ],
+   "shinN": [
+    0.9,
+    1.15
+   ],
+   "shinF": [
+    0.9,
+    1.15
+   ]
+  },
+  "limits": {
+   "pelvis": [
+    -30,
+    30
+   ],
+   "chest": [
+    -35,
+    35
+   ],
+   "head": [
+    -50,
+    50
+   ],
+   "armF0": [
+    -60,
+    60
+   ],
+   "armF1": [
+    -70,
+    70
+   ],
+   "armF2": [
+    -60,
+    60
+   ],
+   "thighN": [
+    -60,
+    60
+   ],
+   "shinN": [
+    -70,
+    70
+   ],
+   "footN": [
+    -45,
+    45
+   ],
+   "thighF": [
+    -60,
+    60
+   ],
+   "shinF": [
+    -70,
+    70
+   ],
+   "footF": [
+    -45,
+    45
+   ],
+   "tailL0": [
+    -35,
+    35
+   ],
+   "tailL1": [
+    -35,
+    35
+   ],
+   "tailL2": [
+    -35,
+    35
+   ],
+   "tailU0": [
+    -35,
+    35
+   ],
+   "tailU1": [
+    -35,
+    35
+   ],
+   "tailU2": [
+    -35,
+    35
+   ]
+  },
+  "mirror": [],
+  "keys": {
+   "ko": {
+    "planted": false,
+    "root_rot": [
+     -45,
+     45
+    ],
+    "root_dx": [
+     -300,
+     300
+    ],
+    "limits": {
+     "head": [
+      -35,
+      35
+     ],
+     "chest": [
+      -50,
+      50
+     ],
+     "pelvis": [
+      -40,
+      40
+     ]
+    },
+    "init": {
+     "pelvis": 1.2,
+     "chest": -1.7,
+     "head": 0.2,
+     "armF0": 0.2,
+     "armF1": -0.1,
+     "armF2": 1.5,
+     "thighF": -0.2,
+     "shinF": 5.3,
+     "footF": 0.7,
+     "thighN": -1.9,
+     "shinN": -0.4,
+     "footN": 2.2,
+     "tailL0": -4.4,
+     "tailL1": -8.5,
+     "tailL2": 13.4,
+     "tailU0": -13.5,
+     "tailU1": -2.3,
+     "tailU2": -10.4,
+     "pelvis.dx": 36.5,
+     "pelvis.dy": 277.0,
+     "head.dx": -42.7,
+     "head.dy": 19.1,
+     "thighN.s": 0.936,
+     "thighF.s": 0.948,
+     "shinN.s": 1.056,
+     "shinF.s": 1.011,
+     "root.dx": -25.1
+    }
+   },
+   "overdrive": {
+    "planted": false,
+    "root_rot": [
+     -80,
+     80
+    ],
+    "root_dx": [
+     -300,
+     300
+    ],
+    "limits": {
+     "head": [
+      -50,
+      50
+     ],
+     "chest": [
+      -45,
+      45
+     ],
+     "pelvis": [
+      -40,
+      40
+     ],
+     "thighN": [
+      -80,
+      80
+     ],
+     "thighF": [
+      -80,
+      80
+     ]
+    },
+    "init": {
+     "pelvis": -0.8,
+     "chest": 6.0,
+     "head": 30.1,
+     "armF0": 6.3,
+     "armF1": 9.1,
+     "armF2": 1.6,
+     "thighF": -1.2,
+     "shinF": -0.3,
+     "footF": -5.6,
+     "thighN": -8.8,
+     "shinN": -11.7,
+     "footN": -18.3,
+     "tailL0": -5.4,
+     "tailL1": 9.0,
+     "tailL2": -26.3,
+     "tailU0": -14.9,
+     "tailU1": -3.3,
+     "tailU2": 6.1,
+     "pelvis.dx": 151.6,
+     "pelvis.dy": 44.7,
+     "head.dx": 24.1,
+     "head.dy": -51.8,
+     "thighN.s": 0.958,
+     "thighF.s": 1.126,
+     "shinN.s": 1.006,
+     "shinF.s": 0.906,
+     "root.dx": -89.7
+    }
+   },
+   "attack": {
+    "init": {
+     "pelvis": -11.4,
+     "chest": -8.1,
+     "head": 10.6,
+     "armF0": 3.8,
+     "armF1": 2.3,
+     "armF2": 2.2,
+     "thighF": -0.4,
+     "shinF": 0.2,
+     "footF": 6.8,
+     "thighN": 2.9,
+     "shinN": -10.4,
+     "footN": -0.3,
+     "tailL0": -2.3,
+     "tailL1": -10.4,
+     "tailL2": -7.4,
+     "tailU0": -9.3,
+     "tailU1": 7.0,
+     "tailU2": 1.7,
+     "pelvis.dx": -55.3,
+     "pelvis.dy": -162.0,
+     "head.dx": -21.4,
+     "head.dy": -122.2,
+     "thighN.s": 1.059,
+     "thighF.s": 1.001,
+     "shinN.s": 1.052,
+     "shinF.s": 1.118,
+     "root.dx": -108.1
+    },
+    "image": {
+     "head": "attack",
+     "armF": "attack"
+    }
+   },
+   "cast": {
+    "init": {
+     "pelvis": 1.8,
+     "chest": -3.0,
+     "head": -1.0,
+     "armF0": -0.2,
+     "armF1": 3.2,
+     "armF2": 1.5,
+     "thighF": -2.3,
+     "shinF": -2.3,
+     "footF": 3.9,
+     "thighN": -2.2,
+     "shinN": -0.2,
+     "footN": 0.9,
+     "tailL0": -0.2,
+     "tailL1": -4.8,
+     "tailL2": 3.7,
+     "tailU0": 0.0,
+     "tailU1": -3.2,
+     "tailU2": 3.2,
+     "pelvis.dx": 139.8,
+     "pelvis.dy": -9.6,
+     "thighN.s": 1.0,
+     "thighF.s": 1.022,
+     "shinN.s": 1.017,
+     "shinF.s": 1.031,
+     "root.dx": -144.8
+    }
+   },
+   "hurt": {
+    "init": {
+     "pelvis": 1.3,
+     "chest": 9.5,
+     "head": 1.5,
+     "armF0": 1.3,
+     "armF1": 5.2,
+     "armF2": 4.6,
+     "thighF": 2.2,
+     "shinF": -0.1,
+     "footF": 5.2,
+     "thighN": -4.1,
+     "shinN": 1.6,
+     "footN": 0.9,
+     "tailL0": -9.2,
+     "tailL1": -2.2,
+     "tailL2": 7.4,
+     "tailU0": 8.4,
+     "tailU1": 4.2,
+     "tailU2": -0.9,
+     "pelvis.dx": -241.0,
+     "pelvis.dy": 56.0,
+     "head.dx": -17.2,
+     "head.dy": -91.8,
+     "thighN.s": 0.944,
+     "thighF.s": 0.916,
+     "shinN.s": 0.95,
+     "shinF.s": 0.988,
+     "root.dx": 143.4
+    },
+    "image": {
+     "head": "hurt",
+     "armF": "hurt"
+    }
+   }
+  }
+ },
+ "landmarks": {
+  "attack": {
+   "toeN": [
+    428,
+    893
+   ],
+   "toeF": [
+    292,
+    893
+   ],
+   "handF": [
+    297,
+    832
+   ],
+   "tailU": [
+    708,
+    95
+   ],
+   "tailL": [
+    745,
+    790
+   ]
+  },
+  "cast": {
+   "head": [
+    286,
+    266
+   ],
+   "toeN": [
+    345,
+    985
+   ],
+   "toeF": [
+    235,
+    975
+   ],
+   "handF": [
+    215,
+    880
+   ],
+   "tailU": [
+    830,
+    290
+   ],
+   "tailL": [
+    650,
+    915
+   ]
+  },
+  "hurt": {
+   "head": [
+    282,
+    211
+   ],
+   "toeN": [
+    333,
+    1010
+   ],
+   "handF": [
+    55,
+    842
+   ],
+   "tailU": [
+    875,
+    342
+   ],
+   "tailL": [
+    645,
+    960
+   ]
+  },
+  "ko": {
+   "toeN": [
+    387,
+    712
+   ],
+   "toeF": [
+    245,
+    693
+   ],
+   "handF": [
+    240,
+    625
+   ],
+   "tailU": [
+    725,
+    75
+   ],
+   "tailL": [
+    700,
+    640
+   ]
+  },
+  "overdrive": {
+   "head": [
+    118,
+    210
+   ],
+   "toeN": [
+    685,
+    940
+   ],
+   "handF": [
+    170,
+    940
+   ]
+  }
+ },
+ "authored": [
+  "ko",
+  "overdrive"
+ ],
+ "motion": {
+  "idle": {
+   "hz": 0.5,
+   "bones": {
+    "chest": {
+     "rot": 0.5,
+     "phase": -0.8
+    },
+    "head": {
+     "rot": 0.7,
+     "phase": -1.6
+    },
+    "armF1": {
+     "rot": 0.6,
+     "phase": -1.0
+    },
+    "armF2": {
+     "rot": 0.8,
+     "phase": -1.8
+    },
+    "tailL1": {
+     "rot": 0.9,
+     "phase": -1.6
+    },
+    "tailL2": {
+     "rot": 1.3,
+     "phase": -2.6
+    },
+    "tailU1": {
+     "rot": 0.8,
+     "phase": -1.2
+    },
+    "tailU2": {
+     "rot": 1.4,
+     "phase": -2.4
+    }
+   }
+  }
+ }
+}

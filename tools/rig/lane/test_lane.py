@@ -218,6 +218,18 @@ class TwinRegistration(unittest.TestCase):
         _o, skip2 = lane_twin.shift_config({"cut": {"polys": {}, "circles": []}, "sam": {"parts": {"a": {}}}}, {"idle": (1, 1)})
         self.assertEqual(skip2, ["cut.circles", "sam"])  # what it cannot move it names
 
+    def test_shift_config_moves_a_variants_polygon_in_master_px(self):
+        cfg = {"scale": 2, "build": {"variants": {"head": {"attack": {"from_painting": {"pose": "attack", "poly": [[0, 0], [10, 20]], "cutline": [[[1, 1], [2, 2]]], "anchor": [5, 6], "fill": [[7, 8, 9]], "scaleArea": 1.0}}}}}}
+        out, skipped = lane_twin.shift_config(cfg, {"idle": (60, 50)})
+        fp = out["build"]["variants"]["head"]["attack"]["from_painting"]
+        self.assertEqual(fp["poly"], [[120, 100], [130, 120]])  # the shift is 1x painting px, the polygon master px (x2)
+        self.assertEqual(fp["cutline"], [[[121, 101], [122, 102]]])
+        self.assertEqual(fp["anchor"], [125, 106])
+        self.assertEqual(fp["fill"], [[127, 108, 9]])
+        self.assertEqual(fp["scaleArea"], 1.0)
+        self.assertEqual(skipped, [])
+        self.assertEqual(cfg["build"]["variants"]["head"]["attack"]["from_painting"]["poly"], [[0, 0], [10, 20]])
+
 
 class Sheets(unittest.TestCase):
     def test_crop_holds_every_rect_and_stays_in_the_frame(self):

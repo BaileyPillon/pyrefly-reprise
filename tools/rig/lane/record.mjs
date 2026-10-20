@@ -40,7 +40,7 @@ async function freePort(from = 5880) {
 
 function takeLock() {
   const st = lockStatus(fs.existsSync(LOCK) ? fs.readFileSync(LOCK, 'utf8') : null, alive);
-  if (st.state === 'held') throw new Error(`lane: another recording holds ${LOCK} (pid ${st.by.pid}, ${st.by.what ?? '?'}): one recording at a time`);
+  if (st.state === 'held' && st.by.pid !== process.ppid) throw new Error(`lane: another recording holds ${LOCK} (pid ${st.by.pid}, ${st.by.what ?? '?'}): one recording at a time`); // a lock held by THIS process's parent is a queue's hand-over (a waiter that claimed the free slot, then started the recorder)
   fs.mkdirSync(path.dirname(LOCK), { recursive: true });
   fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, what: `${a.subject} ${a.modes ?? 'poses'}`, at: new Date().toISOString() }));
 }
@@ -106,6 +106,7 @@ async function main() {
         if (a.poses) args.push('--poses', String(a.poses));
         if (a['any-pose']) args.push('--any-pose');
         if (a.still === true) args.push('--still', '--settle', String(a.settle ?? 1800));
+        if (a['keep-sway'] === true) args.push('--keep-sway');
         if (a.registry) args.push('--registry', String(a.registry));
         fs.mkdirSync(dir, { recursive: true });
         const logFd = fs.openSync(path.join(dir, 'play.log'), 'w');

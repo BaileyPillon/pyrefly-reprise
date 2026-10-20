@@ -151,7 +151,7 @@ def target_poses(sub) -> list[str]:
     f = sub.work / "targets" / "targets.json"
     if not f.exists():
         raise SystemExit(f"lane fit: {f} is missing: run `rig.py fit-keys --subject {sub.name} --poses {sub.costume_pose}` once to make the targets")
-    return [p for p, info in json.loads(f.read_text())["poses"].items() if p != sub.costume_pose and info.get("class") not in ("part", "staged", "wide")]
+    return [p for p, info in json.loads(f.read_text())["poses"].items() if p != sub.costume_pose and (info.get("class") not in ("part", "staged", "wide") or info.get("class") in sub.cfg.get("fit", {}).get("fit_classes", []))]
 
 
 def cmd_fit(sub, poses: list[str] | None, seeds: int, procs: int, tag: str, dry: bool = False) -> int:

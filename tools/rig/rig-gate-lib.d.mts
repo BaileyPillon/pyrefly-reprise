@@ -4,6 +4,10 @@ import type { ModelInputs } from '../posescale/pose-model.mjs';
 export const ROOT: string;
 export const RIG_BANDS: Readonly<{ iou: number; landmarkPct: number; restIou: number; baselinePx: number; sizePx: number; fitIou: number; fitStature: number }>;
 export const BUDGET: Readonly<{ parts: number; bones: number; verts: number; tris: number; texels: number; bytes: number }>;
+/** The budget of an aeon or a boss (12 Mpx, 12 MB; the rest as `BUDGET`). */
+export const BUDGET_BOSS: typeof BUDGET;
+/** The budget a subject (an art id) is held to: `BUDGET_BOSS` for an aeon, a dark aeon, a boss or a part, else `BUDGET`. */
+export function budgetOf(subject: string | null | undefined): typeof BUDGET;
 
 export interface RigGateFailure {
   code: string;

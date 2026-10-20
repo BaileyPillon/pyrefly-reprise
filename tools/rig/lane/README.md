@@ -102,6 +102,54 @@ continuity probe's head reading is the KO jump, rig on and off. The probe is vac
 `docs/handoff/rig-v2-and-kit.md` and the contract entry of 2026-10-18. In a subject config: `build.hidden: [part]`, `build.variants: {part: {name: {png, rim, box?, verts?, ...}}}`,
 `fit.keys.<pose>.show|hide|image`, `keys_extra.<pose>.parts`. The fitter draws a pose in the state it names; the gate scans every key and blend in it; a rig that uses none of it is a v1 file.
 
+## Lessons from the Bahamut, Grothia and Spathi lane (rig-aeons-2, 2026-10-19)
+
+1. **The gate's feet are the lowest THICK part of the silhouette, not the toes.** The pose model's stance is "the middle of the lowest thick part" (the alpha opened by a disc of 2 percent of the figure's height). A creature whose
+   tail hangs below its feet (Bahamut's tail loop, 50 px under the foot) is standing on the loop as far as the gate is concerned: the first attack fits (0.66 to 0.71) all failed `key-feet-y` (-0.047) however hard the toe landmark was weighted.
+   Fix: a landmark named `soleLoop` on the loop's bone, with a mark in every pose (the fitter's planted-feet term reads every landmark named `sole...`, `toe...` or `foot...`): attack 0.709 to 0.778, flag gone. **A figure whose tail, wing strut or
+   cloak hangs lower than its feet needs one.**
+2. **A skirt copies the front part's pixels, glow included.** Paintings with a glow (alpha 0.1 to 0.5 round the whole figure: Grothia, Spathi) had it copied under every seam, so it stacked two and three deep (13 percent of its pixels more than 20 alpha
+   brighter than the painting's, bright blobs in the game). A skirt `op`'s `zone` takes a predicate: the twins' skirts take only the pixels that are not the glow (`"zone": {"not": {"colour": {"r_minus_g_lt": -0.2, "g_minus_b_gt": 0.0, "val_gt": 0.4}}}`, teal over red and blue; halo brighter share 13 percent to 4 and 1.5). Keep
+   the glow in a skirt when leaving it out moves the stance reading (Grothia's leg skirts: the claws' glow counts as the lowest thick part).
+3. **"The rest composite differs from the painting in N pixels" is a count over a premultiplied composite**: every semi-transparent glow pixel "differs", so a glow painting reads hundreds of thousands. Read the opaque core (9 to 10 thousand of 2 million
+   is the honest figure for a cut like this); the glow itself is carried.
+4. **`rig.py sheet` draws rotations only**: no offsets, no scales, no root, no v2 part state. A key whose overlap came from a leg stretch, a wing scale or a pelvis offset looks wrong in it and right in the game. `render_key.py` (this folder, no browser)
+   draws every key faithfully beside its painting: `$PY -I tools/rig/lane/render_key.py <rig folder name> out.png [pose ...] --art D:/pyrefly-art-r55`.
+
+## Expressive keys: pieces cut from the pose's own painting (`rig.py variants`, `rig_vcut.py`; the rig-expressive lane, Bahamut pilot, 2026-10-19)
+
+A key that bends the idle's body only leans it; the pose's painting has its own head, neck and wing shapes. A format v2 **variant** with its own mesh brings them in: `build.variants.<part>.<name>.from_painting` (the fields are in the header of
+`tools/rig/rig_vcut.py`) cuts a polygon out of that painting, registers it through the fitted key's bones so it lands where the painting has it, and `fit.keys.<pose>.image` makes the key show it. Run `rig.py variants` after the fit and before `export`
+(`rig.py cut`, `build`, `variants`, `export --out <folder>`: the pilot is `tools/rig/subjects/bahamut-x.json`, its keys `bahamut-x.keys.json`, built into the NEW folder `bahamut-x` so the rig it improves stays the baseline).
+What the pilot taught, in the order it bit:
+- **Polygons are in the idle frame's master px** (the registered painting: a pose's painting is the idle's shifted by a plain integer in the Bahamut case): draw them on the painting with a labelled grid, put every stretch that runs through sky generously
+  outside the figure (alpha 0 costs nothing), and put the inner edge of a wing deep inside the torso: the pixels there are covered by the front parts, and where they are not they are the painting's own armour instead of a hole.
+- **The head's size rule is the head mesh's area** (`ko-summary.mjs`, now counting only meshes that are drawn): `scaleArea: 1.0` grows the piece about the head landmark until its mesh is the idle head's area (Bahamut's attack and hurt heads were
+  x1.39 smaller in area, a real size jump the paintings had). The piece is not the painting's size afterwards: say so in the report.
+- **A wing's piece must be skinned along the wing's own chain** (`skin: "chain"`), or a joint of the chain leaves it in a blend and the hole test (every joint, every key, 25/50/75 percent between every two) refuses the rig. The weights are stored numbers, so
+  they are the chain's weights read at the POSED places of the painted cut, and each rest position is the exact linear solution of its own blend (a fixed point over rest-position weights oscillates across a ramp: residual 91 px then 349 px; this is 0.00).
+- **The key's wing bones are free, the pieces are registered to whatever they are**: choose them so the joints' discs sit inside the painted wing (the gate's disc is 0.75 of the joint's rest depth, up to 120 master px for a root joint; `wingRB` sat on the wing's
+  top edge until the key's `wingRA` scale went from 1.0755 to 1.0). A landmark bound to a wing bone (`wingRTip`) limits how far a wing bone may move (0.06 of the idle's height). Where the painting has a gap exactly at a joint (the sky inside a neck loop,
+  a membrane notch) `fill: [[x, y, r]]` fills the disc's transparent pixels with the painting's own colours.
+- **Budgets count the box**: a big sheet at full size is 3 Mpx. `tex: 0.5` stores the PNG at half size (the mesh and uvs are unchanged; the box says the PNG's size); the 1x tier is then a quarter of the master, which reads soft on a wing at 1440p and
+  is fine under it. Eight Mpx of the nine are used by Bahamut's four wing pieces and two heads.
+- `key-fit-stale` after any change: the key's recorded `fit` is a claim; `lane_fit.rewrite_claims` sets it to the gate's reading (the scratch driver ran export, gate with `--json`, rewrite, export, gate).
+- `ko-summary.mjs`'s head area is the part named `head`: with variants the one mesh swaps its geometry, so the area is the variant's (the idle head's area by the rule above).
+
+### What the second expressive lane taught (rig-expressive-2: Ifrit, Grothia, Spathi, Shiva, Pterya)
+
+Tools are in `tools/rig/lane/expressive/` (README there). New `rig_vcut.py` fields: `mask` (a partition image instead of a polygon), `fill_joints` (fill discs at the joints the hole test watches, placed AFTER the piece's scale: a `scaleArea` piece is
+scaled about its anchor, so the disc is moved back through the scale and the scale re-measured until it settles), `filter` (the `tex` resize is Hamming: Lanczos rings at a mask's hard edge and the un-premultiply turns it into a pale line).
+- **Head first, then what the head needs.** A head that takes the painting's pose drags a neck: Ifrit's head variant needed the far arm (it carries the neck under the chin); Pterya's head needed the neck piece; Spathi's head needed its wings to
+  keep the silhouette; Shiva's attack is another drawing, so every part is a piece.
+- **The head's size rule is the OPAQUE area, not only the mesh.** A painting with a broad glow ring (Grothia, Spathi, Pterya: alpha 25 to 64 round the figure) has a mesh that is mostly glow: `scaleArea 1.0` gave opaque heads 0.74 to 0.92 of the
+  idle's. Tune `scaleArea` until `ha.py` reads the opaque ratio inside 0.97 to 1.03 (Pterya attack 1.29, hurt 1.24).
+- **The hole test is local to the key's bones, and a piece lands where the painting has it whatever the bones are.** So the bones are free: `jfit.py` moves rotations and offsets until every watched pivot sits deep inside its own pieces, keeping marks
+  and planted feet (Shiva's hurt and attack keys; the gate's overlap went 0.75 to 0.98). What the nudge cannot reach is filled with `fill_joints`; keep the discs small, a fill is made-up pixels that can show against the sky.
+- **Budgets: lossless recompression gives back 5 to 10 percent** (`recomp.mjs`, sharp level 9, pixels proved identical). Spathi's four wing pieces needed `tex: 0.3` on top of it. `tex 0.75` for heads reads clean at the game's size.
+- **Twins: move the variants with the registration** (`lane_twin.shift_config` now moves a variant's polygon, cut lines, anchor and fills by the shift times the scale); check the twin's rest composite count before trusting the cut (Grothia's glow skirts).
+- **A variant swap is a hard pop at the half-way of the blend** (the state of the key moved FROM below 50 percent, the one moved TO from 50), exactly as the painting set pops a whole figure. Watch the clips for it.
+
 ## Tests
 
 `$PY -I tools/rig/lane/test_lane.py` (the pure parts of the Python commands, 19 cases) and `npx vitest run tests/unit/tools/rig-lane.test.ts` (the recorder's pure parts and the registry, 12 cases). The browser
