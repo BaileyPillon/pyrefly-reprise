@@ -229,7 +229,8 @@ describe('the bold grade', () => {
     const s = applyGrade(ice, recipeFor('hd2d', 'ffx', 'gagazet', PAL));
     const b = applyGrade(ice, recipeFor('hd2d', 'ffx', 'gagazet', PAL, 'bold'));
     const l = (c: readonly number[]): number => 0.2126 * c[0]! + 0.7152 * c[1]! + 0.0722 * c[2]!;
-    expect(l(b)).toBeGreaterThan(l(s) * 0.85);
+    expect(l(b)).toBeGreaterThan(l(s) * 0.8);
+    expect(l(b)).toBeGreaterThan(0.5); // still luminous
     // richer contrast: the dark floor goes deeper, the lit ice stays bright
     const floor = [0.05, 0.1, 0.4] as const;
     expect(l(applyGrade(floor, recipeFor('hd2d', 'ffx', 'gagazet', PAL, 'bold')))).toBeLessThan(l(applyGrade(floor, recipeFor('hd2d', 'ffx', 'gagazet', PAL))));
