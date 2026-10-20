@@ -3,7 +3,7 @@
  * **The shipped FFX command menu, HUD side** (re-parity r55 RE; **FFX only**; Bailey, 2026-10-18, "I'll go with all of your recommendations", and for t6b "For t6b my answer is on").
  *
  * No switch is set by this file: the real `CommandMenu` is driven with real `KeyboardEvent`s on the rows the real FFX engine offers, with the module defaults a player gets in release 55
- * (`MENU_DRAW_PARITY` items a to e on, f `cursor` and g `help` off; `TARGET_STEP_PARITY` all but `cursorStartFoe` and `sideSwitch`). The engine half is `parity-ffx-shipped-switches.test.ts`.
+ * (`MENU_DRAW_PARITY` items a to e on, f `cursor` and g `help` off; `TARGET_STEP_PARITY` all but `sideSwitch`; `cursorStartFoe` has been on since r60). The engine half is `parity-ffx-shipped-switches.test.ts`.
  *
  * What the walk proves: an opener opens onto grey spells and the cursor SKIPS greyed rows (item f is off), so no path leaves a player stuck; a confirm on a grey spell shakes the stack and plays no
  * cue; Escape backs out; the greyed Escape, Flee and Switch rows are never reachable by the cursor; a one-entry Overdrive list of the five characters (t6b) opens instead of running its entry.
@@ -191,5 +191,21 @@ describe('t6b shipped: the five characters\' one-entry Overdrive list opens inst
     for (const who of ['yuna', 'rikku', 'valefor', 'ixion', 'bahamut']) expect(opensList(od, who), who).toBe(false);
     for (const c of ['skill', 'special', 'blackmagic', 'whitemagic', 'summon', 'item'] as const) expect(opensList(group(c), 'tidus'), c).toBe(true);
     expect(opensList({ ...od, role: 'switch' }, 'tidus')).toBe(false);
+  });
+});
+
+describe('t3b shipped (r60, measured live in session 8, decision 158): the first foe command opens the cursor on formation index 0', () => {
+  it('Chapter I: Tidus\'s Attack opens on Seymour Flux (formation index 0), not on the mount that stands leftmost on screen', async () => {
+    const engine = await engineFor('seymour-flux');
+    const commands = menuOf(engine, 'tidus');
+    const h = open('tidus', commands, engine.state().combatants as Record<CombatantId, AnyCombatant>);
+    const X: Record<string, number> = { tidus: 300, yuna: 420, kimahri: 540, mortiorchis: 40, 'seymour-flux': 700 }; // the mount stands LEFT of Seymour on screen
+    h.menu.setProjector((id) => ({ x: X[id] ?? 800, y: 300, w: 100, h: 260 }));
+    walkTo('Attack');
+    key('Enter');
+    expect(h.resolved()).toBeNull(); // the target step is up, nothing resolved yet
+    expect(h.menu.targetCursor.activeTargetId).toBe('seymour-flux');
+    key('Escape');
+    expect(h.menu.targetCursor.activeTargetId).toBeNull();
   });
 });

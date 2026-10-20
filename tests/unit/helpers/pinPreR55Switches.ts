@@ -1,7 +1,7 @@
 /**
  * **Pins the four FFX parity switches to what they were before release 55** (re-parity r55 RE; **FFX only**).
  *
- * Release 55 ships `MENU_DRAW_PARITY` (items a to e), `TARGET_STEP_PARITY` (all but `cursorStartFoe` and `sideSwitch`), `CH3_ROSTER_REMOVAL` and `GRAND_SUMMON_KO_REFUSED` ON. The tests of the lanes
+ * Release 55 ships `MENU_DRAW_PARITY` (items a to e), `TARGET_STEP_PARITY` (all but `sideSwitch` since r60; `cursorStartFoe` was left off in r55), `CH3_ROSTER_REMOVAL` and `GRAND_SUMMON_KO_REFUSED` ON. The tests of the lanes
  * that built them were written when every one of them was OFF: they describe "off" (the old menu) and "on" (the game's) side by side, and the "off" halves ran on the module defaults. Calling this
  * once at the top of such a file makes every test in it start from an explicit OFF (the switch off, nothing skipped), exactly the state the test was written for, and put the shipped values back
  * after each test. The tests then turn on what they exercise, as they always did. The shipped values themselves are pinned in `parity-ffx-shipped-switches.test.ts`, which does not call this.
