@@ -9,6 +9,7 @@ import { anchorsFor, decodeMask } from './continuity-silhouette.mjs';
 import { waiverFor } from './continuity-waivers.mjs';
 import { STAGED_GAP_FRAMES, groupStaged, stagedStepOf } from './continuity-staged.mjs';
 import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
+import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 
 /**
  * The anchors of every pose in the probe's pose table (`poses[k] = { url, ... }`), by pose key; null for a pose with no painting. `waivers` (continuity-waivers.mjs) is the ledger of poses
@@ -20,6 +21,7 @@ export async function anchorsForPoses({ poses, fetchImage, measure, waivers = nu
   const notes = [];
   for (let k = 0; k < poses.length; k++) {
     const p = poses[k];
+    if (p.rig) continue; // a rig's key has no painting to read: the page measured it (continuity-rig.mjs)
     if (!p.url) { notes.push(`pose ${p.pose} of figure ${p.fig} has no painting url (a stand-in)`); continue; }
     if (!masks.has(p.url)) {
       try { masks.set(p.url, await decodeMask(await fetchImage(p.url))); } catch (e) { masks.set(p.url, null); notes.push(`could not read ${p.url}: ${String(e).slice(0, 120)}`); }
@@ -99,6 +101,7 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
   // ---- swaps (every flip of which painting dominates a figure)
   const fadeOf = (fig, k) => fig.s.reduce((m, raw) => { const p = planeOf(raw); return p && p.k === k ? Math.max(m, p.fade) : m; }, 0);
   const swaps = [];
+  const rigOn = rigConfig(cfg), idleBox = new Map(); // R57-002: a rigged figure's change of key is read by continuity-rig.mjs
   let seq = 0;
   for (const sw of meta.swaps) {
     if (sw.from < 0) continue;
@@ -107,6 +110,16 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
     const base = { id: seq++, figure: figs[sw.i]?.id ?? String(sw.i), side: figs[sw.i]?.side ?? null, fromPose: poses[sw.from]?.pose, toPose: poses[sw.to]?.pose, n: sw.n, tMs: sw.t, fi: sw.i, from: sw.from, to: sw.to, cause: causeOf(meta.logEvents, sw.n) };
     const names = { from: poses[sw.from]?.pose, to: poses[sw.to]?.pose };
     if (at === undefined || sw.a < 0.9) { swaps.push({ ...base, startFrame: sw.n, notShowing: true, counted: false, camCut: false, staged: stagedStepOf(anchors[sw.from], anchors[sw.to], cfg, names), head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0, snap: false, hardCut: false, failHead: false, failFeet: false }); continue; }
+    if (sw.rig) {
+      if (!rigOn) continue; // policy continuity.rig is false: the earlier reading, in which a rig had no swaps
+      if (!idleBox.has(sw.i)) idleBox.set(sw.i, idleBoxOf(list, poses, sw.i));
+      const nextN = meta.swaps.reduce((m, x) => (x.i === sw.i && x.n > sw.n ? Math.min(m, x.n) : m), Infinity); // the window ends where the next change of key begins
+      const start = Math.max(0, at - 1), win = [];
+      for (let j = start; j < list.length && list[j].n < nextN && j - at <= rigOn.settleFrames; j++) { if (win.length && list[j].n !== win[win.length - 1].n + 1) break; win.push(list[j]); }
+      const res = analyzeRigSwap({ frames: win, at: at - start, from: poses[sw.from], to: poses[sw.to], idleBh: idleBox.get(sw.i), k1600, camCut: nearCut(sw.n), cfg });
+      swaps.push({ ...base, startFrame: list[start].n, ...res, notShowing: false, counted: !res.camCut && !res.unmeasured });
+      continue;
+    }
     // from where the incoming painting first showed (it cannot have been showing longer than the window) to a window after the flip
     let first = at;
     while (first > 0 && at - first < cfg.motion.windowFrames && list[first - 1].n === list[first].n - 1 && fadeOf(list[first - 1].fig, sw.to) > cfg.motion.blendFadeMin) first--;
@@ -152,11 +165,11 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
   // ---- who was measured how (so a reader can see what a PASS rests on)
   const perFigure = {};
   for (const s of swaps.filter((x) => x.counted)) {
-    const f = (perFigure[s.figure] ??= { swaps: 0, headRegistered: 0, massRead: 0, worstHeadPct: 0, worstMassPct: 0, worstFeetPx: 0, snaps: 0, sizeOver: 0, feetOver: 0, heightOver: 0, feetSilOver: 0, minStature: null });
+    const f = (perFigure[s.figure] ??= { swaps: 0, headRegistered: 0, headRig: 0, massRead: 0, worstHeadPct: 0, worstMassPct: 0, worstFeetPx: 0, snaps: 0, sizeOver: 0, feetOver: 0, heightOver: 0, feetSilOver: 0, minStature: null });
     f.swaps++;
     if (s.head) {
       const pct = Math.round(Math.abs(s.head.ratio - 1) * 1000) / 10;
-      if (s.head.source === 'registration') { f.headRegistered++; f.worstHeadPct = Math.max(f.worstHeadPct, pct); } else { f.massRead++; f.worstMassPct = Math.max(f.worstMassPct, pct); }
+      if (s.head.source === 'registration') { f.headRegistered++; f.worstHeadPct = Math.max(f.worstHeadPct, pct); } else if (s.head.source === 'rig' && s.head.metric === 'head') { f.headRig++; f.worstHeadPct = Math.max(f.worstHeadPct, pct); } else { f.massRead++; f.worstMassPct = Math.max(f.worstMassPct, pct); }
     }
     if (s.feet && s.feet.standing) f.worstFeetPx = Math.max(f.worstFeetPx, s.feet.px);
     if (s.snap) f.snaps++;
@@ -170,7 +183,9 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
   const coverage = {
     figures: figs.map((f) => f.id),
     measuredWithRegistration: Object.entries(perFigure).filter(([, v]) => v.headRegistered > 0).map(([k]) => k),
-    measuredFromSilhouetteOnly: Object.entries(perFigure).filter(([, v]) => v.headRegistered === 0).map(([k]) => k),
+    measuredFromRig: Object.entries(perFigure).filter(([, v]) => v.headRig > 0).map(([k]) => k), // R57-002: the head read from a rig's own head mesh
+    measuredFromSilhouetteOnly: Object.entries(perFigure).filter(([, v]) => v.headRegistered === 0 && v.headRig === 0).map(([k]) => k),
+    rigs: rigCoverage({ figs, poses, swaps }),
     posesWithAnchors: anchors.filter(Boolean).length, posesTotal: poses.length, staleRegistrationRecords: anchors.filter((a) => a?.stale).length,
     // r40 instrument edit (a): who was followed by their centroid, and so whose jerks are not "feet" readings
     tracking: trackingMode,

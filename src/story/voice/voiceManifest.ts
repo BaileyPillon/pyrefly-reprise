@@ -44,6 +44,8 @@ export interface ChapterVoiceManifest {
 
 /** Where a chapter's manifest sits, relative to `public/audio/`. */
 export const chapterManifestPath = (chapter: string): string => `${VOICE_AUDIO_DIR}/${chapter}.json`;
+/** Where the list of voiced chapters sits, relative to `public/audio/` (written by `tools/audio/voice-ship.mjs` beside the manifests). */
+export const VOICE_INDEX_PATH = `${VOICE_AUDIO_DIR}/index.json`;
 /** Where a recording sits, relative to `public/audio/`. */
 export const voiceFilePath = (file: string): string => `${VOICE_AUDIO_DIR}/${file}`;
 
@@ -86,6 +88,17 @@ export function parseChapterVoiceManifest(raw: unknown, expectChapter?: string):
     lines[key] = { id, file, ms: Math.round(ms), who };
   }
   return Object.keys(lines).length > 0 ? { version: 1, chapter, game, lines } : null;
+}
+
+/**
+ * The chapters that have a manifest, from `voice/index.json`; `null` when the index is absent, malformed or an HTML fallback page
+ * (the caller then asks for the manifest as it always did, so a missing index never silences a voiced chapter).
+ */
+export function parseVoiceIndexChapters(raw: unknown): ReadonlySet<string> | null {
+  if (!isRecord(raw) || raw['version'] !== 1) return null;
+  const chapters = raw['chapters'];
+  if (!isRecord(chapters)) return null;
+  return new Set(Object.keys(chapters));
 }
 
 /** Which part of a script an entry belongs to, from its id (`<chapter>.<part>.<NNN>`): `mid` and `quip` lines are warmed with the chapter. */

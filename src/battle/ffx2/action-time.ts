@@ -1,8 +1,9 @@
 /**
  * **Action time (method check E4): an actor's own gauge waits for its action to play out.**
  * **FFX-2 only** [AGENTS.md rule 14]: FFX is CTB and has no gauge to hold
- * (`research/ffx-vs-ffx2-presentation.md` §4.3). **OFF everywhere but Chapter XIII's two links and Chapter XI's three**
- * (3 s there, Bailey's picks).
+ * (`research/ffx-vs-ffx2-presentation.md` §4.3). **Since r56 the per-command span ({@link ACTION_TIME_PER_COMMAND}) is ON for every FFX-2 battle**
+ * (a provisional reading, the release driver's delegated pick of 2026-10-19 under Bailey's advance yes; he may veto it). The flat times below are what it
+ * replaces, and what a measurement run or `withActionSpanKnobs({ perCommand: false })` still gets.
  *
  * The rule is sourced, the length is not (`research/ffx2-trema.md` §12.4):
  *
@@ -38,7 +39,8 @@
  *    (`src/data/ffx2/enemies/fallen-aeons-road.ts`): ON, 3 s (`ROAD_ACTION_TIME_SECONDS`, the same
  *    `[estimate]`, Bailey's option A on 2026-09-25). Chapter XVI's one Djose link reads `DJOSE_ACTION_TIME_ON`
  *    (`src/data/ffx2/enemies/ixion-djose.ts`): ON, 3 s (the same `[estimate]`, Bailey's pick on 2026-09-27,
- *    D-269). No other formation carries one.
+ *    D-269). No other formation carries one. **With the per-command switch ON (r56) these flat 3 s are superseded** by the span
+ *    (D-187 / D-197, D-151, D-269, D-846 and D-857; `action-span.ts`).
  * 3. {@link ACTION_TIME_ALL_FFX2} — every FFX-2 battle (Chapters 4, 5, 6, XI and XIII).
  *
  * Deterministic and DOM-free: no RNG draw, so a replay moves only through the time it adds.
@@ -56,6 +58,17 @@ export const ACTION_TIME_ESTIMATE_SECONDS = 1.5;
 
 /** **The global switch: OFF.** `true` gives every FFX-2 battle action time of the estimate's length. */
 export const ACTION_TIME_ALL_FFX2 = false;
+
+/**
+ * **The per-command switch: ON** (r56, 2026-10-19; re-parity X2-A, row XA6 slice A; a provisional reading, the release driver's delegated pick under Bailey's
+ * advance yes, which he may veto). `true` replaces the flat estimate (and a formation's flat 3 s) with a span per command: the idle break, run-up and attack clip of a
+ * physical command, the effect length of a cast, skill, item or special, each from the actor's own body and the command row's class (`action-span.ts`,
+ * `kernel/action-span.ts`, `data/ffx2/action-frames.ts`). Fire (75 steps), items (80) and Darkness (83) are measured in the real game and the first-hit frames are
+ * read from the game's files; Cure, a Hasted Fire, Angra Mainyu's Full-Life and Tawrich's Punch are still estimates (`docs/handoff/re-parity-r56-re.md`). It
+ * supersedes six of Bailey's 3-second picks (D-187/D-197, D-151, D-269, D-846, D-857). With it `false` nothing of that is read and every FFX-2 battle is byte for byte what
+ * it was (r55). FFX-2 only.
+ */
+export const ACTION_TIME_PER_COMMAND = true;
 
 /** The battle flag `setup.ts` copies from `EnemyGroupDef.actionTimeSeconds`. */
 export const ACTION_TIME_FLAG = 'actionTimeSeconds';

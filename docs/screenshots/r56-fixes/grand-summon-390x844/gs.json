@@ -1,0 +1,124 @@
+{
+ "size": "390x844",
+ "touch": true,
+ "injected": [
+  "setSeed(1)",
+  "valefor hp=0 alive=false reviveCountdown=8, yuna overdrive gauge=100 via the live engine"
+ ],
+ "problems": [],
+ "steps": [],
+ "reach": "cutscene",
+ "inject": {
+  "ok": true
+ },
+ "actor": "yuna",
+ "walk": true,
+ "helpAtOverdrive": "A B ▲ SPECIAL ×2 WHITE MAGIC ×14 ITEMS ×15 OVERDRIVE READY SUMMON ×5 ESCAPE ▼ Q △ DEFEND Tidus 6492 140 Yuna 5130 320 Auron 4281 100 Protect → Tidus White Magic BRASKA'S FINAL AEON3RD IN QUEUE Braska's Final Aeon hesitatesSCRIPTED YUNAOpen the Overdrive menu. GUIDE PAUSE",
+ "helpOk": true,
+ "opened": true,
+ "geom": {
+  "rows": [
+   {
+    "x": 30,
+    "y": 174,
+    "w": 288,
+    "h": 44,
+    "fs": "14px",
+    "pe": "auto"
+   },
+   {
+    "x": 30,
+    "y": 218,
+    "w": 288,
+    "h": 44,
+    "fs": "14px",
+    "pe": "auto"
+   },
+   {
+    "x": 30,
+    "y": 262,
+    "w": 288,
+    "h": 44,
+    "fs": "14px",
+    "pe": "auto"
+   },
+   {
+    "x": 30,
+    "y": 306,
+    "w": 288,
+    "h": 44,
+    "fs": "14px",
+    "pe": "auto"
+   },
+   {
+    "x": 30,
+    "y": 350,
+    "w": 288,
+    "h": 44,
+    "fs": "14px",
+    "pe": "auto"
+   }
+  ],
+  "title": {
+   "x": 63,
+   "y": 66,
+   "w": 98,
+   "h": 44,
+   "fs": "16.89px",
+   "pe": "auto"
+  },
+  "subtitle": {
+   "x": 63,
+   "y": 114,
+   "w": 288,
+   "h": 53,
+   "fs": "14px",
+   "pe": "none",
+   "text": "GRAND SUMMON · AEON ARRIVES WITH A FULL OVERDRIVE · TAP THE TITLE TO GO BACK"
+  },
+  "list": {
+   "x": 30,
+   "y": 174,
+   "w": 288,
+   "h": 198,
+   "fs": "16px",
+   "pe": "auto"
+  },
+  "vp": {
+   "w": 390,
+   "h": 844
+  }
+ },
+ "tapValefor": true,
+ "shakeAfterTap": true,
+ "afterValefor": {
+  "stillOpen": true,
+  "actor": "yuna",
+  "gauge": 100,
+  "newEvents": [],
+  "valeforSelected": "Valefor"
+ },
+ "tapTitle": true,
+ "afterTitle": {
+  "pickerGone": true,
+  "gauge": 100,
+  "actor": "yuna",
+  "rowSelected": "Attack"
+ },
+ "reopened": true,
+ "tapIfrit": true,
+ "afterIfrit": {
+  "gauge": 0,
+  "events": [
+   "yuna-grand-summon",
+   null,
+   null,
+   null,
+   null,
+   null
+  ]
+ },
+ "errors": [],
+ "notFound": [],
+ "pass": true
+}

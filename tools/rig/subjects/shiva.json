@@ -1,0 +1,1668 @@
+{
+  "_lane": "Shiva (FFX aeon; the ice queen; the possessed Shiva of Chapter III link 5 and a summon in ten more chapters): the idle's gown is the costume; cast and hurt are the same gown bent (painted keys), attack, KO and Overdrive are other drawings (ribbons and a crown, a figure lying flat, a floating figure in white), so those three are AUTHORED. Cut by polygons and the underlaps (no SAM): the dreadlock hair with its ice spears, the far leg, the gown's skirt and train, the far arm, the body (torso and neck base), the near leg, the raised arm and the head. The attack key is posed by hand from the cast key (a forward lean and an arm swing, marks at the idle's head and feet): every fit of it against the ribbon-and-crown drawing failed the planted-feet check (feet 0.034 to 0.040 off). Game case: FFX only (an FFX aeon's painting set); the rig stays OFF.",
+  "subject": "shiva",
+  "scale": 2,
+  "costume": {
+    "pose": "idle"
+  },
+  "hooks": "shiva_hooks.py",
+  "cut": {
+    "polys": {
+      "head_zone": [
+        [
+          150,
+          100
+        ],
+        [
+          190,
+          50
+        ],
+        [
+          260,
+          35
+        ],
+        [
+          300,
+          60
+        ],
+        [
+          305,
+          120
+        ],
+        [
+          296,
+          190
+        ],
+        [
+          272,
+          236
+        ],
+        [
+          236,
+          244
+        ],
+        [
+          196,
+          236
+        ],
+        [
+          168,
+          200
+        ],
+        [
+          152,
+          150
+        ]
+      ],
+      "hair_zone": [
+        [
+          225,
+          70
+        ],
+        [
+          300,
+          38
+        ],
+        [
+          430,
+          28
+        ],
+        [
+          545,
+          70
+        ],
+        [
+          568,
+          190
+        ],
+        [
+          580,
+          400
+        ],
+        [
+          566,
+          600
+        ],
+        [
+          545,
+          745
+        ],
+        [
+          440,
+          790
+        ],
+        [
+          380,
+          790
+        ],
+        [
+          335,
+          700
+        ],
+        [
+          318,
+          520
+        ],
+        [
+          305,
+          340
+        ],
+        [
+          268,
+          250
+        ],
+        [
+          262,
+          150
+        ]
+      ],
+      "armU_zone": [
+        [
+          8,
+          112
+        ],
+        [
+          112,
+          102
+        ],
+        [
+          124,
+          150
+        ],
+        [
+          92,
+          200
+        ],
+        [
+          104,
+          252
+        ],
+        [
+          156,
+          272
+        ],
+        [
+          158,
+          312
+        ],
+        [
+          64,
+          318
+        ],
+        [
+          22,
+          324
+        ],
+        [
+          12,
+          252
+        ],
+        [
+          22,
+          180
+        ]
+      ],
+      "armD_zone": [
+        [
+          192,
+          318
+        ],
+        [
+          270,
+          328
+        ],
+        [
+          302,
+          400
+        ],
+        [
+          304,
+          460
+        ],
+        [
+          294,
+          520
+        ],
+        [
+          298,
+          604
+        ],
+        [
+          288,
+          630
+        ],
+        [
+          254,
+          628
+        ],
+        [
+          254,
+          560
+        ],
+        [
+          240,
+          470
+        ],
+        [
+          206,
+          402
+        ],
+        [
+          190,
+          352
+        ]
+      ],
+      "body_zone": [
+        [
+          78,
+          212
+        ],
+        [
+          150,
+          212
+        ],
+        [
+          240,
+          226
+        ],
+        [
+          262,
+          300
+        ],
+        [
+          236,
+          332
+        ],
+        [
+          208,
+          362
+        ],
+        [
+          218,
+          420
+        ],
+        [
+          230,
+          456
+        ],
+        [
+          122,
+          456
+        ],
+        [
+          88,
+          444
+        ],
+        [
+          86,
+          352
+        ],
+        [
+          92,
+          262
+        ]
+      ],
+      "legF_zone": [
+        [
+          28,
+          440
+        ],
+        [
+          232,
+          440
+        ],
+        [
+          218,
+          560
+        ],
+        [
+          204,
+          700
+        ],
+        [
+          194,
+          900
+        ],
+        [
+          184,
+          1010
+        ],
+        [
+          172,
+          1032
+        ],
+        [
+          194,
+          1092
+        ],
+        [
+          164,
+          1124
+        ],
+        [
+          66,
+          1122
+        ],
+        [
+          72,
+          1100
+        ],
+        [
+          128,
+          1050
+        ],
+        [
+          128,
+          1000
+        ],
+        [
+          98,
+          900
+        ],
+        [
+          92,
+          780
+        ],
+        [
+          52,
+          720
+        ],
+        [
+          32,
+          650
+        ],
+        [
+          38,
+          560
+        ]
+      ],
+      "legB_zone": [
+        [
+          172,
+          748
+        ],
+        [
+          244,
+          748
+        ],
+        [
+          254,
+          900
+        ],
+        [
+          246,
+          1000
+        ],
+        [
+          264,
+          1040
+        ],
+        [
+          258,
+          1108
+        ],
+        [
+          148,
+          1104
+        ],
+        [
+          152,
+          1000
+        ],
+        [
+          168,
+          900
+        ]
+      ],
+      "train_zone": [
+        [
+          128,
+          440
+        ],
+        [
+          216,
+          440
+        ],
+        [
+          292,
+          452
+        ],
+        [
+          312,
+          560
+        ],
+        [
+          322,
+          700
+        ],
+        [
+          342,
+          742
+        ],
+        [
+          422,
+          802
+        ],
+        [
+          502,
+          902
+        ],
+        [
+          542,
+          952
+        ],
+        [
+          556,
+          1010
+        ],
+        [
+          578,
+          1062
+        ],
+        [
+          566,
+          1134
+        ],
+        [
+          470,
+          1124
+        ],
+        [
+          380,
+          1052
+        ],
+        [
+          330,
+          982
+        ],
+        [
+          282,
+          902
+        ],
+        [
+          262,
+          802
+        ],
+        [
+          232,
+          702
+        ],
+        [
+          212,
+          602
+        ],
+        [
+          150,
+          502
+        ]
+      ]
+    },
+    "order": [
+      "hair",
+      "legB",
+      "train",
+      "armD",
+      "body",
+      "legF",
+      "armU",
+      "head"
+    ],
+    "priority": [
+      "head",
+      "armU",
+      "legF",
+      "body",
+      "armD",
+      "train",
+      "legB",
+      "hair"
+    ],
+    "parts": {
+      "head": {
+        "include": [
+          {
+            "poly": "head_zone"
+          }
+        ]
+      },
+      "armU": {
+        "include": [
+          {
+            "poly": "armU_zone"
+          }
+        ]
+      },
+      "legF": {
+        "include": [
+          {
+            "poly": "legF_zone"
+          }
+        ]
+      },
+      "body": {
+        "include": [
+          {
+            "poly": "body_zone"
+          }
+        ]
+      },
+      "armD": {
+        "include": [
+          {
+            "poly": "armD_zone"
+          }
+        ]
+      },
+      "train": {
+        "include": [
+          {
+            "poly": "train_zone"
+          }
+        ]
+      },
+      "legB": {
+        "include": [
+          {
+            "poly": "legB_zone"
+          }
+        ]
+      },
+      "hair": {
+        "include": [
+          {
+            "poly": "hair_zone"
+          }
+        ]
+      }
+    },
+    "nearest": {
+      "maxdist": 40
+    },
+    "clean": {
+      "min_island": 150,
+      "close": 2
+    },
+    "ops": [
+      {
+        "op": "skirt",
+        "back": "hair",
+        "front": "head",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "hair",
+        "front": "body",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "hair",
+        "front": "armD",
+        "px": 25
+      },
+      {
+        "op": "skirt",
+        "back": "legB",
+        "front": "train",
+        "px": 25
+      },
+      {
+        "op": "skirt",
+        "back": "legB",
+        "front": "legF",
+        "px": 25
+      },
+      {
+        "op": "skirt",
+        "back": "train",
+        "front": "body",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "train",
+        "front": "legF",
+        "px": 30
+      },
+      {
+        "op": "skirt",
+        "back": "armD",
+        "front": "body",
+        "px": 30
+      },
+      {
+        "op": "skirt",
+        "back": "body",
+        "front": "head",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "body",
+        "front": "armU",
+        "px": 30
+      },
+      {
+        "op": "skirt",
+        "back": "legF",
+        "front": "body",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "armU",
+        "front": "head",
+        "px": 20
+      }
+    ]
+  },
+  "build": {
+    "bones": [
+      [
+        "root",
+        null,
+        [
+          115,
+          1131
+        ]
+      ],
+      [
+        "pelvis",
+        "root",
+        [
+          150,
+          480
+        ]
+      ],
+      [
+        "chest",
+        "pelvis",
+        [
+          150,
+          340
+        ]
+      ],
+      [
+        "head",
+        "chest",
+        [
+          205,
+          220
+        ]
+      ],
+      [
+        "hair0",
+        "head",
+        [
+          250,
+          100
+        ]
+      ],
+      [
+        "hair1",
+        "hair0",
+        [
+          330,
+          260
+        ]
+      ],
+      [
+        "hair2",
+        "hair1",
+        [
+          350,
+          450
+        ]
+      ],
+      [
+        "hair3",
+        "hair2",
+        [
+          355,
+          640
+        ]
+      ],
+      [
+        "armU0",
+        "chest",
+        [
+          110,
+          285
+        ]
+      ],
+      [
+        "armU1",
+        "armU0",
+        [
+          35,
+          295
+        ]
+      ],
+      [
+        "armU2",
+        "armU1",
+        [
+          50,
+          175
+        ]
+      ],
+      [
+        "armD0",
+        "chest",
+        [
+          225,
+          310
+        ]
+      ],
+      [
+        "armD1",
+        "armD0",
+        [
+          255,
+          415
+        ]
+      ],
+      [
+        "armD2",
+        "armD1",
+        [
+          270,
+          520
+        ]
+      ],
+      [
+        "thighF",
+        "pelvis",
+        [
+          150,
+          500
+        ]
+      ],
+      [
+        "shinF",
+        "thighF",
+        [
+          55,
+          670
+        ]
+      ],
+      [
+        "footF",
+        "shinF",
+        [
+          105,
+          1020
+        ]
+      ],
+      [
+        "thighB",
+        "pelvis",
+        [
+          190,
+          510
+        ]
+      ],
+      [
+        "shinB",
+        "thighB",
+        [
+          210,
+          760
+        ]
+      ],
+      [
+        "footB",
+        "shinB",
+        [
+          205,
+          990
+        ]
+      ],
+      [
+        "train0",
+        "pelvis",
+        [
+          185,
+          440
+        ]
+      ],
+      [
+        "train1",
+        "train0",
+        [
+          260,
+          620
+        ]
+      ],
+      [
+        "train2",
+        "train1",
+        [
+          340,
+          760
+        ]
+      ],
+      [
+        "train3",
+        "train2",
+        [
+          440,
+          900
+        ]
+      ]
+    ],
+    "skin": {
+      "body": {
+        "type": "chain",
+        "bones": [
+          "pelvis",
+          "chest"
+        ],
+        "joints": [
+          [
+            150,
+            480
+          ],
+          [
+            150,
+            340
+          ],
+          [
+            205,
+            225
+          ]
+        ],
+        "ramps": [
+          60
+        ],
+        "mesh": {
+          "edge": 22,
+          "inner": 44,
+          "grow": 10
+        }
+      },
+      "head": {
+        "type": "rigid",
+        "bone": "head",
+        "mesh": {
+          "edge": 16,
+          "inner": 30,
+          "grow": 8
+        }
+      },
+      "hair": {
+        "type": "chain",
+        "bones": [
+          "hair0",
+          "hair1",
+          "hair2",
+          "hair3"
+        ],
+        "joints": [
+          [
+            250,
+            100
+          ],
+          [
+            330,
+            260
+          ],
+          [
+            350,
+            450
+          ],
+          [
+            355,
+            640
+          ],
+          [
+            415,
+            755
+          ]
+        ],
+        "ramps": [
+          60,
+          60,
+          60
+        ],
+        "mesh": {
+          "edge": 26,
+          "inner": 52,
+          "grow": 10
+        }
+      },
+      "armU": {
+        "type": "chain",
+        "bones": [
+          "armU0",
+          "armU1",
+          "armU2"
+        ],
+        "joints": [
+          [
+            110,
+            285
+          ],
+          [
+            35,
+            295
+          ],
+          [
+            50,
+            175
+          ],
+          [
+            60,
+            130
+          ]
+        ],
+        "ramps": [
+          25,
+          25
+        ],
+        "mesh": {
+          "edge": 14,
+          "inner": 26,
+          "grow": 8
+        }
+      },
+      "armD": {
+        "type": "chain",
+        "bones": [
+          "armD0",
+          "armD1",
+          "armD2"
+        ],
+        "joints": [
+          [
+            225,
+            310
+          ],
+          [
+            255,
+            415
+          ],
+          [
+            270,
+            520
+          ],
+          [
+            272,
+            618
+          ]
+        ],
+        "ramps": [
+          25,
+          25
+        ],
+        "mesh": {
+          "edge": 14,
+          "inner": 26,
+          "grow": 8
+        }
+      },
+      "legF": {
+        "type": "chain",
+        "bones": [
+          "thighF",
+          "shinF",
+          "footF"
+        ],
+        "joints": [
+          [
+            150,
+            500
+          ],
+          [
+            55,
+            670
+          ],
+          [
+            105,
+            1020
+          ],
+          [
+            68,
+            1105
+          ]
+        ],
+        "ramps": [
+          40,
+          40
+        ],
+        "mesh": {
+          "edge": 20,
+          "inner": 38,
+          "grow": 8
+        }
+      },
+      "legB": {
+        "type": "chain",
+        "bones": [
+          "thighB",
+          "shinB",
+          "footB"
+        ],
+        "joints": [
+          [
+            190,
+            510
+          ],
+          [
+            210,
+            760
+          ],
+          [
+            205,
+            990
+          ],
+          [
+            212,
+            1090
+          ]
+        ],
+        "ramps": [
+          30,
+          30
+        ],
+        "mesh": {
+          "edge": 16,
+          "inner": 30,
+          "grow": 8
+        }
+      },
+      "train": {
+        "type": "chain",
+        "bones": [
+          "train0",
+          "train1",
+          "train2",
+          "train3"
+        ],
+        "joints": [
+          [
+            185,
+            440
+          ],
+          [
+            260,
+            620
+          ],
+          [
+            340,
+            760
+          ],
+          [
+            440,
+            900
+          ],
+          [
+            555,
+            1085
+          ]
+        ],
+        "ramps": [
+          50,
+          50,
+          50
+        ],
+        "mesh": {
+          "edge": 26,
+          "inner": 52,
+          "grow": 10
+        }
+      }
+    },
+    "landmarks": {
+      "head": [
+        "head",
+        [
+          203,
+          152
+        ]
+      ],
+      "handU": [
+        "armU2",
+        [
+          65,
+          138
+        ]
+      ],
+      "handD": [
+        "armD2",
+        [
+          272,
+          618
+        ]
+      ],
+      "toeN": [
+        "footF",
+        [
+          68,
+          1105
+        ]
+      ],
+      "toeF": [
+        "footB",
+        [
+          212,
+          1090
+        ]
+      ],
+      "hairTip": [
+        "hair3",
+        [
+          415,
+          755
+        ]
+      ],
+      "trainTip": [
+        "train3",
+        [
+          555,
+          1085
+        ]
+      ],
+      "bodyCenter": [
+        "chest",
+        [
+          150,
+          345
+        ]
+      ],
+      "feet": [
+        "root",
+        [
+          115,
+          1131
+        ]
+      ]
+    }
+  },
+  "fit": {
+    "min_iou": 0.0,
+    "default_limit": 110,
+    "chain_limit": 40,
+    "restarts": 4,
+    "evals": 1500,
+    "mark_free": 0.025,
+    "mark_soft": 0.015,
+    "mark_w": 2,
+    "band_w": 1,
+    "feet_x_w": 10,
+    "dfoot_w": 12,
+    "offsets": [
+      "pelvis"
+    ],
+    "offset_limit": {
+      "pelvis": [
+        0.15,
+        0.15
+      ]
+    },
+    "scales": {
+      "thighF": [
+        0.9,
+        1.15
+      ],
+      "thighB": [
+        0.9,
+        1.15
+      ],
+      "shinF": [
+        0.9,
+        1.15
+      ],
+      "shinB": [
+        0.9,
+        1.15
+      ]
+    },
+    "limits": {
+      "pelvis": [
+        -25,
+        25
+      ],
+      "chest": [
+        -30,
+        30
+      ],
+      "head": [
+        -50,
+        50
+      ],
+      "armU0": [
+        -90,
+        90
+      ],
+      "armU1": [
+        -110,
+        110
+      ],
+      "armU2": [
+        -80,
+        80
+      ],
+      "armD0": [
+        -70,
+        70
+      ],
+      "armD1": [
+        -90,
+        90
+      ],
+      "armD2": [
+        -60,
+        60
+      ],
+      "thighF": [
+        -60,
+        60
+      ],
+      "shinF": [
+        -70,
+        70
+      ],
+      "footF": [
+        -45,
+        45
+      ],
+      "thighB": [
+        -60,
+        60
+      ],
+      "shinB": [
+        -70,
+        70
+      ],
+      "footB": [
+        -45,
+        45
+      ],
+      "hair0": [
+        -40,
+        40
+      ],
+      "hair1": [
+        -40,
+        40
+      ],
+      "hair2": [
+        -40,
+        40
+      ],
+      "hair3": [
+        -40,
+        40
+      ],
+      "train0": [
+        -35,
+        35
+      ],
+      "train1": [
+        -35,
+        35
+      ],
+      "train2": [
+        -35,
+        35
+      ],
+      "train3": [
+        -35,
+        35
+      ]
+    },
+    "mirror": [],
+    "keys": {
+      "ko": {
+        "planted": false,
+        "root_rot": [
+          -100,
+          100
+        ],
+        "root_dx": [
+          -450,
+          450
+        ],
+        "limits": {
+          "head": [
+            -60,
+            60
+          ],
+          "chest": [
+            -45,
+            45
+          ],
+          "pelvis": [
+            -40,
+            40
+          ],
+          "armU0": [
+            -120,
+            120
+          ],
+          "armD0": [
+            -100,
+            100
+          ],
+          "thighF": [
+            -80,
+            80
+          ],
+          "thighB": [
+            -80,
+            80
+          ]
+        },
+        "init": {
+          "pelvis": -38.9,
+          "chest": -18.7,
+          "head": -60.0,
+          "hair0": 15.5,
+          "hair1": 11.8,
+          "hair2": 13.7,
+          "hair3": 3.7,
+          "armU0": 120.0,
+          "armU1": -3.7,
+          "armU2": -77.7,
+          "armD0": -100.0,
+          "armD1": -60.7,
+          "armD2": -1.2,
+          "thighF": -40.6,
+          "shinF": 36.2,
+          "footF": 45.0,
+          "thighB": -38.4,
+          "shinB": 70.0,
+          "footB": -18.5,
+          "train0": 1.2,
+          "train1": 32.3,
+          "train2": 32.2,
+          "train3": -35.0,
+          "pelvis.dx": 117.2,
+          "pelvis.dy": 344.1,
+          "thighF.s": 1.15,
+          "thighB.s": 1.017,
+          "shinF.s": 0.9,
+          "shinB.s": 1.132,
+          "root.dx": 368.6
+        }
+      },
+      "overdrive": {
+        "planted": false,
+        "root_rot": [
+          -30,
+          30
+        ],
+        "root_dx": [
+          -300,
+          300
+        ],
+        "limits": {
+          "head": [
+            -50,
+            50
+          ],
+          "chest": [
+            -40,
+            40
+          ],
+          "pelvis": [
+            -35,
+            35
+          ]
+        },
+        "init": {
+          "pelvis": -12.8,
+          "chest": -23.5,
+          "head": 18.2,
+          "hair0": 3.7,
+          "hair1": 16.7,
+          "hair2": -15.4,
+          "hair3": 13.4,
+          "armU0": -35.3,
+          "armU1": -38.3,
+          "armU2": -5.8,
+          "armD0": 5.2,
+          "armD1": 0.5,
+          "armD2": -8.0,
+          "thighF": -12.7,
+          "shinF": 5.3,
+          "footF": 5.7,
+          "thighB": -1.3,
+          "shinB": 4.4,
+          "footB": 10.3,
+          "train0": -1.0,
+          "train1": -1.9,
+          "train2": -18.7,
+          "train3": -9.8,
+          "pelvis.dx": 119.9,
+          "pelvis.dy": -115.2,
+          "thighF.s": 0.921,
+          "thighB.s": 0.929,
+          "shinF.s": 1.041,
+          "shinB.s": 1.15,
+          "root.dx": -48.5
+        }
+      },
+      "cast": {
+        "init": {
+          "pelvis": 1.3,
+          "chest": 1.1,
+          "head": 4.0,
+          "hair0": 4.7,
+          "hair1": -4.8,
+          "hair2": -16.2,
+          "hair3": 1.8,
+          "armU0": -4.3,
+          "armU1": 2.3,
+          "armU2": 8.2,
+          "armD0": -2.1,
+          "armD1": -3.0,
+          "armD2": -0.2,
+          "thighF": -5.7,
+          "shinF": 4.1,
+          "footF": 4.8,
+          "thighB": 3.4,
+          "shinB": -6.9,
+          "footB": -14.8,
+          "train0": -12.5,
+          "train1": 8.8,
+          "train2": 13.3,
+          "train3": -9.7,
+          "pelvis.dx": 157.2,
+          "pelvis.dy": -7.6,
+          "thighF.s": 0.96,
+          "thighB.s": 1.044,
+          "shinF.s": 1.059,
+          "shinB.s": 0.947,
+          "root.dx": -183.7
+        }
+      },
+      "hurt": {
+        "init": {
+          "pelvis": 3.0,
+          "chest": -2.3,
+          "head": -11.3,
+          "hair0": 5.2,
+          "hair1": 12.2,
+          "hair2": 7.0,
+          "hair3": -10.0,
+          "armU0": 6.9,
+          "armU1": -4.4,
+          "armU2": -8.3,
+          "armD0": -11.8,
+          "armD1": 38.1,
+          "armD2": 12.3,
+          "thighF": 3.5,
+          "shinF": 3.4,
+          "footF": -12.4,
+          "thighB": 6.5,
+          "shinB": 9.8,
+          "footB": -10.7,
+          "train0": -14.1,
+          "train1": -1.1,
+          "train2": -6.3,
+          "train3": 5.5,
+          "pelvis.dx": 132.0,
+          "pelvis.dy": 36.3,
+          "thighF.s": 1.036,
+          "thighB.s": 1.026,
+          "shinF.s": 0.962,
+          "shinB.s": 0.975,
+          "root.dx": 34.3
+        },
+        "limits": {
+          "head": [
+            -70,
+            70
+          ],
+          "chest": [
+            -45,
+            45
+          ],
+          "pelvis": [
+            -40,
+            40
+          ],
+          "armU0": [
+            -110,
+            110
+          ],
+          "armU1": [
+            -120,
+            120
+          ],
+          "thighF": [
+            -70,
+            70
+          ],
+          "thighB": [
+            -70,
+            70
+          ],
+          "shinF": [
+            -80,
+            80
+          ]
+        }
+      }
+    }
+  },
+  "landmarks": {
+    "attack": {
+      "head": [
+        203,
+        152
+      ],
+      "toeN": [
+        68,
+        1105
+      ],
+      "toeF": [
+        212,
+        1090
+      ]
+    },
+    "cast": {
+      "head": [
+        203,
+        152
+      ],
+      "handU": [
+        65,
+        138
+      ],
+      "handD": [
+        272,
+        618
+      ],
+      "toeN": [
+        68,
+        1105
+      ],
+      "toeF": [
+        212,
+        1090
+      ],
+      "hairTip": [
+        415,
+        755
+      ],
+      "trainTip": [
+        555,
+        1085
+      ]
+    },
+    "hurt": {
+      "head": [
+        260,
+        90
+      ],
+      "handU": [
+        135,
+        40
+      ],
+      "handD": [
+        250,
+        488
+      ],
+      "toeN": [
+        50,
+        1003
+      ],
+      "toeF": [
+        135,
+        985
+      ],
+      "hairTip": [
+        405,
+        650
+      ]
+    },
+    "ko": {
+      "head": [
+        118,
+        372
+      ],
+      "toeN": [
+        1032,
+        525
+      ],
+      "toeF": [
+        865,
+        490
+      ]
+    },
+    "overdrive": {
+      "head": [
+        265,
+        245
+      ],
+      "handU": [
+        42,
+        508
+      ],
+      "toeN": [
+        360,
+        1195
+      ]
+    }
+  },
+  "authored": [
+    "attack",
+    "ko",
+    "overdrive"
+  ],
+  "motion": {
+    "idle": {
+      "hz": 0.5,
+      "bones": {
+        "chest": {
+          "rot": 0.4,
+          "phase": -0.8
+        },
+        "head": {
+          "rot": 0.5,
+          "phase": -1.6
+        },
+        "hair0": {
+          "rot": 0.6,
+          "phase": -1.4
+        },
+        "hair1": {
+          "rot": 0.9,
+          "phase": -2.2
+        },
+        "hair2": {
+          "rot": 1.2,
+          "phase": -3.0
+        },
+        "hair3": {
+          "rot": 1.6,
+          "phase": -3.8
+        },
+        "armD1": {
+          "rot": 0.5,
+          "phase": -1.0
+        },
+        "armD2": {
+          "rot": 0.7,
+          "phase": -1.8
+        },
+        "train1": {
+          "rot": 0.5,
+          "phase": -1.6
+        },
+        "train2": {
+          "rot": 0.8,
+          "phase": -2.4
+        },
+        "train3": {
+          "rot": 1.2,
+          "phase": -3.2
+        }
+      }
+    }
+  }
+}

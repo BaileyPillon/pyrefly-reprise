@@ -1,0 +1,2343 @@
+{
+ "_lane": "scaffolded by `lane.py new` (preset humanoid-side). Mechanical parts are filled in; the part cut (polys, capsules, seams), the skin, the marks and the authored poses are the lane's judgment. See tools/rig/lane/README.md.",
+ "subject": "rikku-dark-knight",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "hooks": "rikku-dark-knight_hooks.py",
+ "cut": {
+  "polys": {
+   "grip_zone": [
+    [
+     625,
+     45
+    ],
+    [
+     740,
+     45
+    ],
+    [
+     740,
+     166
+    ],
+    [
+     700,
+     170
+    ],
+    [
+     662,
+     168
+    ],
+    [
+     628,
+     142
+    ]
+   ],
+   "skirt_zone": [
+    [
+     0,
+     440
+    ],
+    [
+     408,
+     440
+    ],
+    [
+     408,
+     700
+    ],
+    [
+     345,
+     745
+    ],
+    [
+     255,
+     800
+    ],
+    [
+     0,
+     860
+    ]
+   ],
+   "train_zone": [
+    [
+     0,
+     540
+    ],
+    [
+     100,
+     540
+    ],
+    [
+     127,
+     600
+    ],
+    [
+     172,
+     700
+    ],
+    [
+     199,
+     760
+    ],
+    [
+     217,
+     800
+    ],
+    [
+     240,
+     860
+    ],
+    [
+     0,
+     860
+    ]
+   ],
+   "shoulderR_zone": [
+    [
+     330,
+     215
+    ],
+    [
+     440,
+     215
+    ],
+    [
+     440,
+     330
+    ],
+    [
+     330,
+     330
+    ]
+   ],
+   "sword_grip_fill": [
+    [
+     600,
+     150
+    ],
+    [
+     710,
+     150
+    ],
+    [
+     700,
+     260
+    ],
+    [
+     585,
+     260
+    ]
+   ],
+   "sword_boot_fill": [
+    [
+     370,
+     1060
+    ],
+    [
+     485,
+     1060
+    ],
+    [
+     485,
+     1178
+    ],
+    [
+     370,
+     1178
+    ]
+   ],
+   "neck_zone": [
+    [
+     240,
+     200
+    ],
+    [
+     385,
+     200
+    ],
+    [
+     385,
+     320
+    ],
+    [
+     240,
+     320
+    ]
+   ]
+  },
+  "order": [
+   "sword",
+   "train",
+   "trainCap",
+   "legR",
+   "kneeR",
+   "hipR",
+   "legL",
+   "kneeL",
+   "hipL",
+   "skirt",
+   "torso",
+   "armR",
+   "handCap",
+   "braid",
+   "head"
+  ],
+  "priority": [
+   "braid",
+   "head",
+   "armR",
+   "torso",
+   "legR",
+   "legL",
+   "sword",
+   "train",
+   "skirt",
+   "kneeR",
+   "hipR",
+   "kneeL",
+   "hipL",
+   "trainCap",
+   "handCap"
+  ],
+  "parts": {
+   "head": {
+    "include": [
+     {
+      "sam": "head"
+     }
+    ]
+   },
+   "braid": {
+    "include": [
+     {
+      "sam": "braid"
+     }
+    ]
+   },
+   "armR": {
+    "include": [
+     {
+      "sam": "armR"
+     }
+    ],
+    "exclude": [
+     {
+      "poly": "grip_zone"
+     }
+    ]
+   },
+   "torso": {
+    "include": [
+     {
+      "sam": "torso"
+     }
+    ]
+   },
+   "legR": {
+    "include": [
+     {
+      "sam": "legR"
+     }
+    ]
+   },
+   "legL": {
+    "include": [
+     {
+      "sam": "legL"
+     }
+    ]
+   },
+   "sword": {
+    "include": [
+     {
+      "sam": "sword"
+     },
+     {
+      "all": [
+       {
+        "poly": "grip_zone"
+       },
+       {
+        "opaque": true
+       }
+      ]
+     }
+    ]
+   },
+   "train": {
+    "include": [
+     {
+      "all": [
+       {
+        "poly": "train_zone"
+       },
+       {
+        "poly": "skirt_zone"
+       }
+      ]
+     }
+    ]
+   },
+   "skirt": {
+    "include": [
+     {
+      "poly": "skirt_zone"
+     }
+    ]
+   },
+   "kneeR": {
+    "include": [
+     {
+      "x_lt": -1
+     }
+    ]
+   },
+   "kneeL": {
+    "include": [
+     {
+      "x_lt": -1
+     }
+    ]
+   },
+   "hipR": {
+    "include": [
+     {
+      "x_lt": -1
+     }
+    ]
+   },
+   "hipL": {
+    "include": [
+     {
+      "x_lt": -1
+     }
+    ]
+   },
+   "trainCap": {
+    "include": [
+     {
+      "x_lt": -1
+     }
+    ]
+   },
+   "handCap": {
+    "include": [
+     {
+      "x_lt": -1
+     }
+    ]
+   }
+  },
+  "nearest": {
+   "maxdist": 40
+  },
+  "clean": {
+   "min_island": 60,
+   "close": 2,
+   "torso": false,
+   "armR": false,
+   "skirt": false,
+   "train": false,
+   "sword": false,
+   "legR": false,
+   "legL": false,
+   "kneeR": false,
+   "kneeL": false,
+   "hipR": false,
+   "hipL": false,
+   "trainCap": false,
+   "handCap": false
+  },
+  "ops": [
+   {
+    "op": "skirt",
+    "back": "train",
+    "front": "skirt",
+    "px": 70
+   },
+   {
+    "op": "skirt",
+    "back": "skirt",
+    "front": "torso",
+    "px": 60
+   },
+   {
+    "op": "skirt",
+    "back": "legL",
+    "front": "skirt",
+    "px": 60
+   },
+   {
+    "op": "skirt",
+    "back": "legR",
+    "front": "skirt",
+    "px": 60
+   },
+   {
+    "op": "skirt",
+    "back": "armR",
+    "front": "torso",
+    "px": 36
+   },
+   {
+    "op": "skirt",
+    "back": "torso",
+    "front": "armR",
+    "px": 20
+   },
+   {
+    "op": "extend",
+    "part": "sword",
+    "zone": {
+     "poly": "sword_grip_fill"
+    }
+   },
+   {
+    "op": "extend",
+    "part": "sword",
+    "zone": {
+     "poly": "sword_boot_fill"
+    }
+   },
+   {
+    "op": "extend",
+    "part": "torso",
+    "zone": {
+     "poly": "neck_zone"
+    }
+   }
+  ]
+ },
+ "build": {
+  "bones": [
+   [
+    "root",
+    null,
+    [
+     260,
+     1189
+    ]
+   ],
+   [
+    "pelvis",
+    "root",
+    [
+     285,
+     620
+    ]
+   ],
+   [
+    "skirtL",
+    "pelvis",
+    [
+     285,
+     620
+    ]
+   ],
+   [
+    "train",
+    "skirtL",
+    [
+     200,
+     700
+    ]
+   ],
+   [
+    "skirtR",
+    "pelvis",
+    [
+     285,
+     620
+    ]
+   ],
+   [
+    "spine",
+    "pelvis",
+    [
+     290,
+     520
+    ]
+   ],
+   [
+    "chest",
+    "spine",
+    [
+     295,
+     380
+    ]
+   ],
+   [
+    "head",
+    "chest",
+    [
+     325,
+     240
+    ]
+   ],
+   [
+    "upperarm",
+    "chest",
+    [
+     350,
+     265
+    ]
+   ],
+   [
+    "forearm",
+    "upperarm",
+    [
+     460,
+     236
+    ]
+   ],
+   [
+    "hand",
+    "forearm",
+    [
+     610,
+     200
+    ]
+   ],
+   [
+    "sword",
+    "hand",
+    [
+     695,
+     45
+    ]
+   ],
+   [
+    "thighL",
+    "pelvis",
+    [
+     275,
+     730
+    ]
+   ],
+   [
+    "shinL",
+    "thighL",
+    [
+     215,
+     865
+    ]
+   ],
+   [
+    "footL",
+    "shinL",
+    [
+     150,
+     1075
+    ]
+   ],
+   [
+    "thighR",
+    "pelvis",
+    [
+     350,
+     730
+    ]
+   ],
+   [
+    "shinR",
+    "thighR",
+    [
+     322,
+     870
+    ]
+   ],
+   [
+    "footR",
+    "shinR",
+    [
+     335,
+     1085
+    ]
+   ]
+  ],
+  "chains": {
+   "braid": {
+    "part": "braid",
+    "start": [
+     212,
+     262
+    ],
+    "n": 3,
+    "parent": "head"
+   }
+  },
+  "skin": {
+   "sword": {
+    "type": "rigid",
+    "bone": "sword",
+    "mesh": {
+     "edge": 26,
+     "inner": 52,
+     "grow": 10
+    }
+   },
+   "train": {
+    "type": "hook",
+    "name": "train",
+    "mesh": {
+     "edge": 22,
+     "inner": 44,
+     "grow": 10
+    }
+   },
+   "skirt": {
+    "type": "hook",
+    "name": "skirt",
+    "mesh": {
+     "edge": 26,
+     "inner": 48,
+     "grow": 10
+    }
+   },
+   "legR": {
+    "type": "chain",
+    "bones": [
+     "thighR",
+     "shinR",
+     "footR"
+    ],
+    "joints": [
+     [
+      350,
+      730
+     ],
+     [
+      322,
+      870
+     ],
+     [
+      335,
+      1085
+     ],
+     [
+      470,
+      1160
+     ]
+    ],
+    "ramps": [
+     48,
+     40
+    ],
+    "mesh": {
+     "edge": 20,
+     "inner": 38,
+     "grow": 10
+    }
+   },
+   "legL": {
+    "type": "chain",
+    "bones": [
+     "thighL",
+     "shinL",
+     "footL"
+    ],
+    "joints": [
+     [
+      275,
+      730
+     ],
+     [
+      215,
+      865
+     ],
+     [
+      150,
+      1075
+     ],
+     [
+      236,
+      1182
+     ]
+    ],
+    "ramps": [
+     48,
+     40
+    ],
+    "mesh": {
+     "edge": 20,
+     "inner": 38,
+     "grow": 10
+    }
+   },
+   "torso": {
+    "type": "chain",
+    "bones": [
+     "pelvis",
+     "spine",
+     "chest"
+    ],
+    "joints": [
+     [
+      285,
+      620
+     ],
+     [
+      290,
+      520
+     ],
+     [
+      295,
+      380
+     ],
+     [
+      325,
+      240
+     ]
+    ],
+    "ramps": [
+     40,
+     40
+    ],
+    "mesh": {
+     "edge": 22,
+     "inner": 40,
+     "grow": 10
+    }
+   },
+   "armR": {
+    "type": "chain",
+    "bones": [
+     "upperarm",
+     "forearm",
+     "hand"
+    ],
+    "joints": [
+     [
+      350,
+      265
+     ],
+     [
+      460,
+      236
+     ],
+     [
+      610,
+      200
+     ],
+     [
+      700,
+      170
+     ]
+    ],
+    "ramps": [
+     28,
+     24
+    ],
+    "mesh": {
+     "edge": 20,
+     "inner": 36,
+     "grow": 10
+    }
+   },
+   "braid": {
+    "type": "auto",
+    "chain": "braid",
+    "ramps": [
+     14
+    ],
+    "mesh": {
+     "edge": 16,
+     "inner": 30,
+     "grow": 10
+    }
+   },
+   "head": {
+    "type": "rigid",
+    "bone": "head",
+    "mesh": {
+     "edge": 18,
+     "inner": 34,
+     "grow": 10
+    }
+   },
+   "kneeR": {
+    "type": "rigid",
+    "bone": "shinR",
+    "mesh": {
+     "edge": 16,
+     "inner": 30,
+     "grow": 8
+    }
+   },
+   "kneeL": {
+    "type": "rigid",
+    "bone": "shinL",
+    "mesh": {
+     "edge": 16,
+     "inner": 30,
+     "grow": 8
+    }
+   },
+   "hipR": {
+    "type": "rigid",
+    "bone": "thighR",
+    "mesh": {
+     "edge": 16,
+     "inner": 30,
+     "grow": 8
+    }
+   },
+   "hipL": {
+    "type": "rigid",
+    "bone": "thighL",
+    "mesh": {
+     "edge": 16,
+     "inner": 30,
+     "grow": 8
+    }
+   },
+   "trainCap": {
+    "type": "rigid",
+    "bone": "train",
+    "mesh": {
+     "edge": 16,
+     "inner": 30,
+     "grow": 8
+    }
+   },
+   "handCap": {
+    "type": "rigid",
+    "bone": "hand",
+    "mesh": {
+     "edge": 14,
+     "inner": 26,
+     "grow": 8
+    }
+   }
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    [
+     330,
+     170
+    ]
+   ],
+   "headCenter": [
+    "head",
+    [
+     330,
+     170
+    ]
+   ],
+   "pelvisCenter": [
+    "pelvis",
+    [
+     285,
+     620
+    ]
+   ],
+   "fist": [
+    "hand",
+    [
+     655,
+     185
+    ]
+   ],
+   "tip": [
+    "sword",
+    [
+     470,
+     1160
+    ]
+   ],
+   "soleL": [
+    "footL",
+    [
+     212,
+     1187
+    ]
+   ],
+   "soleR": [
+    "footR",
+    [
+     440,
+     1162
+    ]
+   ],
+   "pommel": [
+    "sword",
+    [
+     693,
+     78
+    ]
+   ]
+  }
+ },
+ "fit": {
+  "min_iou": 0.0,
+  "default_limit": 110,
+  "chain_limit": 40,
+  "offsets": [
+   "pelvis",
+   "sword"
+  ],
+  "mark_free": 0.025,
+  "mark_soft": 0.015,
+  "mark_w": 2.0,
+  "restarts": 3,
+  "evals": 900,
+  "band_w": 1.0,
+  "feet_x_w": 3.0,
+  "dfoot_w": 2.0,
+  "offset_limit": {
+   "pelvis": [
+    0.2,
+    0.16
+   ],
+   "sword": [
+    0.45,
+    0.35
+   ]
+  },
+  "scales": {
+   "skirtL": [
+    0.45,
+    1.1
+   ],
+   "skirtR": [
+    0.45,
+    1.1
+   ],
+   "train": [
+    0.3,
+    1.0
+   ],
+   "sword": [
+    0.25,
+    2.2
+   ],
+   "upperarm": [
+    0.92,
+    1.3
+   ],
+   "forearm": [
+    0.92,
+    1.3
+   ],
+   "thighL": [
+    0.9,
+    1.3
+   ],
+   "thighR": [
+    0.9,
+    1.3
+   ],
+   "shinL": [
+    0.85,
+    1.25
+   ],
+   "shinR": [
+    0.85,
+    1.25
+   ]
+  },
+  "limits": {
+   "pelvis": [
+    -20,
+    20
+   ],
+   "spine": [
+    -25,
+    25
+   ],
+   "chest": [
+    -25,
+    25
+   ],
+   "head": [
+    -30,
+    30
+   ],
+   "upperarm": [
+    -170,
+    120
+   ],
+   "forearm": [
+    -150,
+    10
+   ],
+   "hand": [
+    -45,
+    45
+   ],
+   "sword": [
+    -180,
+    180
+   ],
+   "thighL": [
+    -110,
+    70
+   ],
+   "shinL": [
+    -8,
+    150
+   ],
+   "footL": [
+    -45,
+    45
+   ],
+   "thighR": [
+    -110,
+    70
+   ],
+   "shinR": [
+    -8,
+    150
+   ],
+   "footR": [
+    -45,
+    45
+   ],
+   "skirtL": [
+    -40,
+    40
+   ],
+   "skirtR": [
+    -40,
+    30
+   ],
+   "train": [
+    -12,
+    12
+   ]
+  },
+  "mirror": [
+   "ready"
+  ],
+  "keys": {
+   "ko": {
+    "planted": false,
+    "root_rot": [
+     70,
+     100
+    ],
+    "root_dx": [
+     -1800,
+     500
+    ],
+    "root_dy": [
+     -700,
+     700
+    ],
+    "limits": {
+     "spine": [
+      -40,
+      40
+     ],
+     "chest": [
+      -40,
+      40
+     ],
+     "head": [
+      -40,
+      40
+     ],
+     "pelvis": [
+      -30,
+      30
+     ],
+     "shinL": [
+      -8,
+      110
+     ],
+     "shinR": [
+      -8,
+      110
+     ]
+    },
+    "init": {
+     "pelvis": -5.7,
+     "skirtL": -33.3,
+     "train": 2.1,
+     "skirtR": -34.4,
+     "spine": -38.2,
+     "chest": 19.5,
+     "head": -23.0,
+     "upperarm": 51.3,
+     "forearm": -33.2,
+     "hand": -9.2,
+     "sword": 19.0,
+     "thighL": 55.8,
+     "shinL": 56.8,
+     "footL": -10.6,
+     "thighR": 45.1,
+     "shinR": 33.4,
+     "footR": -28.1,
+     "braid0": 23.0,
+     "braid1": -30.1,
+     "braid2": 26.4,
+     "pelvis.dx": -179.9,
+     "pelvis.dy": 281.3,
+     "sword.dx": -394.1,
+     "sword.dy": 336.2,
+     "skirtL.s": 0.574,
+     "skirtR.s": 0.596,
+     "train.s": 0.638,
+     "sword.s": 0.712,
+     "upperarm.s": 0.903,
+     "forearm.s": 0.851,
+     "thighL.s": 1.033,
+     "thighR.s": 0.966,
+     "shinL.s": 1.017,
+     "shinR.s": 0.982,
+     "root.dx": -968.1
+    }
+   },
+   "critical": {
+    "limits": {
+     "pelvis": [
+      -50,
+      50
+     ],
+     "spine": [
+      -55,
+      55
+     ],
+     "chest": [
+      -45,
+      60
+     ],
+     "head": [
+      -50,
+      50
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.22,
+      0.2
+     ],
+     "sword": [
+      0.5,
+      0.4
+     ]
+    },
+    "root_dx": [
+     -100,
+     100
+    ],
+    "feet_x_w": 6.0,
+    "init": {
+     "pelvis": 29.1,
+     "skirtL": -20.1,
+     "train": 6.7,
+     "skirtR": -23.5,
+     "spine": -0.1,
+     "chest": 8.2,
+     "head": 4.3,
+     "upperarm": -28.3,
+     "forearm": -69.6,
+     "hand": 11.0,
+     "sword": 32.9,
+     "thighL": -18.0,
+     "shinL": 55.2,
+     "footL": -36.8,
+     "thighR": 52.5,
+     "shinR": 66.2,
+     "footR": -27.8,
+     "braid0": -29.9,
+     "braid1": 12.1,
+     "braid2": 14.9,
+     "pelvis.dx": -346.3,
+     "pelvis.dy": 242.1,
+     "sword.dx": 455.9,
+     "sword.dy": -255.4,
+     "skirtL.s": 1.01,
+     "skirtR.s": 1.064,
+     "train.s": 0.498,
+     "sword.s": 1.104,
+     "upperarm.s": 0.934,
+     "forearm.s": 0.934,
+     "thighL.s": 1.184,
+     "thighR.s": 1.192,
+     "shinL.s": 1.167,
+     "shinR.s": 1.051,
+     "root.dx": -6.0
+    }
+   },
+   "sleep": {
+    "limits": {
+     "pelvis": [
+      -70,
+      70
+     ],
+     "spine": [
+      -90,
+      90
+     ],
+     "chest": [
+      -80,
+      80
+     ],
+     "head": [
+      -80,
+      80
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.25,
+      0.22
+     ],
+     "sword": [
+      0.5,
+      0.45
+     ]
+    },
+    "root_dx": [
+     -100,
+     100
+    ],
+    "init": {
+     "pelvis": 62.7,
+     "skirtL": -10.3,
+     "train": 7.5,
+     "skirtR": -1.8,
+     "spine": -9.2,
+     "chest": -63.4,
+     "head": 55.5,
+     "upperarm": 60.8,
+     "forearm": -40.9,
+     "hand": -11.1,
+     "sword": -9.6,
+     "thighL": 25.1,
+     "shinL": 34.6,
+     "footL": 25.5,
+     "thighR": -39.7,
+     "shinR": 41.7,
+     "footR": 40.7,
+     "braid0": 14.4,
+     "braid1": -16.5,
+     "braid2": 9.7,
+     "pelvis.dx": -159.4,
+     "pelvis.dy": 201.5,
+     "sword.dx": -748.9,
+     "sword.dy": -801.8,
+     "skirtL.s": 0.846,
+     "skirtR.s": 0.768,
+     "train.s": 0.491,
+     "sword.s": 0.914,
+     "upperarm.s": 1.109,
+     "forearm.s": 1.13,
+     "thighL.s": 0.957,
+     "thighR.s": 1.187,
+     "shinL.s": 0.905,
+     "shinR.s": 0.993,
+     "root.dx": 3.0
+    }
+   },
+   "hurt": {
+    "limits": {
+     "chest": [
+      -35,
+      35
+     ],
+     "spine": [
+      -30,
+      30
+     ],
+     "pelvis": [
+      -20,
+      20
+     ],
+     "head": [
+      -35,
+      35
+     ],
+     "thighL": [
+      -35,
+      35
+     ],
+     "thighR": [
+      -35,
+      35
+     ],
+     "shinL": [
+      -8,
+      40
+     ],
+     "shinR": [
+      -8,
+      40
+     ]
+    },
+    "root_dx": [
+     -100,
+     100
+    ],
+    "offset_limit": {
+     "pelvis": [
+      0.22,
+      0.2
+     ],
+     "sword": [
+      0.5,
+      0.4
+     ]
+    },
+    "dfoot_w": 8.0,
+    "init": {
+     "pelvis": -18.4,
+     "skirtL": -15.4,
+     "train": 4.9,
+     "skirtR": 13.2,
+     "spine": -21.6,
+     "chest": 32.3,
+     "head": -11.0,
+     "upperarm": 70.0,
+     "forearm": -77.7,
+     "hand": -4.3,
+     "sword": 4.4,
+     "thighL": 8.5,
+     "shinL": 37.3,
+     "footL": 40.5,
+     "thighR": -11.0,
+     "shinR": 25.9,
+     "footR": 22.8,
+     "braid0": 30.0,
+     "braid1": -9.7,
+     "braid2": 40.0,
+     "pelvis.dx": -335.2,
+     "pelvis.dy": -17.8,
+     "sword.dx": -85.4,
+     "sword.dy": 99.3,
+     "skirtL.s": 0.495,
+     "skirtR.s": 0.613,
+     "train.s": 0.537,
+     "sword.s": 0.831,
+     "upperarm.s": 1.131,
+     "forearm.s": 0.923,
+     "thighL.s": 1.165,
+     "thighR.s": 0.95,
+     "shinL.s": 1.01,
+     "shinR.s": 0.976,
+     "root.dx": -22.6
+    },
+    "feet_x_w": 6.0
+   },
+   "follow": {
+    "limits": {
+     "pelvis": [
+      -40,
+      40
+     ],
+     "spine": [
+      -55,
+      55
+     ],
+     "chest": [
+      -55,
+      55
+     ],
+     "head": [
+      -45,
+      45
+     ]
+    },
+    "root_dx": [
+     -100,
+     100
+    ],
+    "offset_limit": {
+     "pelvis": [
+      0.25,
+      0.2
+     ],
+     "sword": [
+      0.5,
+      0.45
+     ]
+    },
+    "init": {
+     "pelvis": -7.1,
+     "skirtL": 18.5,
+     "train": -2.9,
+     "skirtR": -39.0,
+     "spine": -21.9,
+     "chest": 25.5,
+     "head": 21.1,
+     "upperarm": 41.4,
+     "forearm": -5.6,
+     "hand": 4.1,
+     "sword": 117.4,
+     "thighL": -5.4,
+     "shinL": 66.9,
+     "footL": 8.6,
+     "thighR": 12.0,
+     "shinR": -7.2,
+     "footR": 10.7,
+     "braid0": -24.4,
+     "braid1": -28.4,
+     "braid2": -37.9,
+     "pelvis.dx": -195.0,
+     "pelvis.dy": 155.0,
+     "sword.dx": 720.4,
+     "sword.dy": 1084.5,
+     "skirtL.s": 1.027,
+     "skirtR.s": 0.987,
+     "train.s": 0.856,
+     "sword.s": 1.345,
+     "upperarm.s": 1.075,
+     "forearm.s": 0.993,
+     "thighL.s": 0.942,
+     "thighR.s": 0.82,
+     "shinL.s": 1.145,
+     "shinR.s": 1.044,
+     "root.dx": -0.0
+    },
+    "feet_x_w": 6.0
+   },
+   "attack": {
+    "root_dx": [
+     -100,
+     100
+    ],
+    "offset_limit": {
+     "pelvis": [
+      0.22,
+      0.2
+     ],
+     "sword": [
+      0.5,
+      0.4
+     ]
+    },
+    "limits": {
+     "pelvis": [
+      -45,
+      45
+     ],
+     "spine": [
+      -50,
+      50
+     ],
+     "chest": [
+      -50,
+      50
+     ],
+     "head": [
+      -45,
+      45
+     ]
+    },
+    "init": {
+     "pelvis": 10.2,
+     "skirtL": -9.6,
+     "train": 4.7,
+     "skirtR": 30.0,
+     "spine": 16.9,
+     "chest": -0.0,
+     "head": -9.2,
+     "upperarm": -29.7,
+     "forearm": -32.8,
+     "hand": 35.8,
+     "sword": 98.1,
+     "thighL": -40.1,
+     "shinL": 70.0,
+     "footL": -41.2,
+     "thighR": -37.9,
+     "shinR": -7.0,
+     "footR": -7.1,
+     "braid0": -0.4,
+     "braid1": 11.0,
+     "braid2": -31.0,
+     "pelvis.dx": 301.7,
+     "pelvis.dy": -58.8,
+     "sword.dx": 585.3,
+     "sword.dy": 602.3,
+     "skirtL.s": 0.691,
+     "skirtR.s": 0.768,
+     "train.s": 0.736,
+     "sword.s": 1.088,
+     "upperarm.s": 1.02,
+     "forearm.s": 0.877,
+     "thighL.s": 1.258,
+     "thighR.s": 1.137,
+     "shinL.s": 1.057,
+     "shinR.s": 1.019,
+     "root.dx": 69.4
+    }
+   },
+   "cast": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "init": {
+     "pelvis": -19.2,
+     "skirtL": 15.5,
+     "train": -7.3,
+     "skirtR": -17.3,
+     "spine": 1.9,
+     "chest": -23.9,
+     "head": 17.3,
+     "upperarm": -133.4,
+     "forearm": -150.0,
+     "hand": 17.2,
+     "sword": 114.1,
+     "thighL": 36.4,
+     "shinL": 20.3,
+     "footL": -45.0,
+     "thighR": -5.5,
+     "shinR": 6.3,
+     "footR": 37.3,
+     "braid0": 36.9,
+     "braid1": -5.6,
+     "braid2": 14.4,
+     "pelvis.dx": 285.0,
+     "pelvis.dy": 2.2,
+     "sword.dx": 263.0,
+     "sword.dy": 388.4,
+     "skirtL.s": 0.947,
+     "skirtR.s": 0.989,
+     "train.s": 0.958,
+     "sword.s": 0.705,
+     "upperarm.s": 0.92,
+     "forearm.s": 0.928,
+     "thighL.s": 1.168,
+     "thighR.s": 1.22,
+     "shinL.s": 0.883,
+     "shinR.s": 0.85,
+     "root.dx": -16.9
+    },
+    "feet_x_w": 6.0,
+    "limits": {
+     "thighL": [
+      -60,
+      60
+     ],
+     "thighR": [
+      -60,
+      60
+     ],
+     "shinL": [
+      -8,
+      80
+     ],
+     "shinR": [
+      -8,
+      80
+     ]
+    }
+   },
+   "ready": {
+    "root_dx": [
+     -100,
+     100
+    ],
+    "offset_limit": {
+     "pelvis": [
+      0.22,
+      0.2
+     ],
+     "sword": [
+      0.5,
+      0.4
+     ]
+    },
+    "limits": {
+     "chest": [
+      -35,
+      35
+     ],
+     "spine": [
+      -30,
+      30
+     ],
+     "head": [
+      -35,
+      35
+     ]
+    },
+    "feet_x_w": 6.0,
+    "init": {
+     "pelvis": -3.5,
+     "skirtL": 18.1,
+     "train": 7.0,
+     "skirtR": 15.9,
+     "spine": 3.6,
+     "chest": 9.1,
+     "head": 33.3,
+     "upperarm": -51.5,
+     "forearm": -7.7,
+     "hand": 15.3,
+     "sword": 60.1,
+     "thighL": 41.9,
+     "shinL": 21.4,
+     "footL": 16.6,
+     "thighR": 1.7,
+     "shinR": 31.3,
+     "footR": -33.5,
+     "braid0": 24.0,
+     "braid1": -30.5,
+     "braid2": 0.8,
+     "pelvis.dx": -82.2,
+     "pelvis.dy": 32.8,
+     "sword.dx": 204.8,
+     "sword.dy": 212.2,
+     "skirtL.s": 1.082,
+     "skirtR.s": 0.653,
+     "train.s": 0.915,
+     "sword.s": 0.977,
+     "upperarm.s": 1.015,
+     "forearm.s": 0.868,
+     "thighL.s": 1.18,
+     "thighR.s": 1.085,
+     "shinL.s": 0.871,
+     "shinR.s": 1.025,
+     "root.dx": -72.4
+    }
+   },
+   "item": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "hide": [
+     "sword"
+    ],
+    "limits": {
+     "thighL": [
+      -35,
+      35
+     ],
+     "thighR": [
+      -35,
+      35
+     ],
+     "shinL": [
+      -8,
+      40
+     ],
+     "shinR": [
+      -8,
+      40
+     ]
+    },
+    "init": {
+     "pelvis": -10.9,
+     "skirtL": -1.8,
+     "train": -10.0,
+     "skirtR": 12.2,
+     "spine": 9.2,
+     "chest": 18.9,
+     "head": -6.9,
+     "upperarm": 34.4,
+     "forearm": -36.9,
+     "hand": -30.6,
+     "sword": 23.4,
+     "thighL": -16.9,
+     "shinL": 35.4,
+     "footL": -31.6,
+     "thighR": 17.7,
+     "shinR": -6.7,
+     "footR": -33.7,
+     "braid0": 7.1,
+     "braid1": -24.4,
+     "braid2": 26.6,
+     "pelvis.dx": -265.2,
+     "pelvis.dy": 173.6,
+     "sword.dx": -217.2,
+     "sword.dy": 583.3,
+     "skirtL.s": 0.951,
+     "skirtR.s": 0.801,
+     "train.s": 0.499,
+     "sword.s": 0.359,
+     "upperarm.s": 1.092,
+     "forearm.s": 1.041,
+     "thighL.s": 0.948,
+     "thighR.s": 1.091,
+     "shinL.s": 0.878,
+     "shinR.s": 0.921,
+     "root.dx": 28.2
+    }
+   },
+   "victory": {
+    "root_dx": [
+     -45,
+     45
+    ],
+    "feet_x_w": 6.0,
+    "limits": {
+     "pelvis": [
+      -35,
+      35
+     ],
+     "spine": [
+      -40,
+      40
+     ],
+     "chest": [
+      -40,
+      40
+     ],
+     "head": [
+      -40,
+      40
+     ],
+     "thighL": [
+      -35,
+      35
+     ],
+     "thighR": [
+      -35,
+      35
+     ],
+     "shinL": [
+      -8,
+      40
+     ],
+     "shinR": [
+      -8,
+      40
+     ]
+    },
+    "offset_limit": {
+     "pelvis": [
+      0.15,
+      0.1
+     ],
+     "sword": [
+      0.5,
+      0.45
+     ]
+    },
+    "init": {
+     "pelvis": -0.9,
+     "skirtL": 25.3,
+     "train": 6.5,
+     "skirtR": -37.5,
+     "spine": -11.5,
+     "chest": 38.2,
+     "head": 26.1,
+     "upperarm": 60.3,
+     "forearm": -21.8,
+     "hand": -45.0,
+     "sword": -31.7,
+     "thighL": -17.2,
+     "shinL": 25.5,
+     "footL": -33.8,
+     "thighR": 5.3,
+     "shinR": -7.6,
+     "footR": 23.6,
+     "braid0": 2.1,
+     "braid1": -11.1,
+     "braid2": -24.8,
+     "pelvis.dx": -219.4,
+     "pelvis.dy": -50.7,
+     "sword.dx": -783.5,
+     "sword.dy": -1022.2,
+     "skirtL.s": 0.936,
+     "skirtR.s": 1.1,
+     "train.s": 0.789,
+     "sword.s": 1.194,
+     "upperarm.s": 1.083,
+     "forearm.s": 0.956,
+     "thighL.s": 1.105,
+     "thighR.s": 0.951,
+     "shinL.s": 0.85,
+     "shinR.s": 1.139,
+     "root.dx": -40.4
+    }
+   }
+  }
+ },
+ "landmarks": {
+  "attack": {
+   "headCenter": [
+    450,
+    295
+   ],
+   "fist": [
+    705,
+    228
+   ],
+   "tip": [
+    20,
+    45
+   ],
+   "soleL": [
+    125,
+    1162
+   ],
+   "soleR": [
+    625,
+    1030
+   ],
+   "pommel": [
+    908,
+    362
+   ]
+  },
+  "cast": {
+   "headCenter": [
+    175,
+    355
+   ],
+   "fist": [
+    300,
+    470
+   ],
+   "tip": [
+    322,
+    22
+   ],
+   "pommel": [
+    321,
+    598
+   ]
+  },
+  "critical": {
+   "headCenter": [
+    385,
+    320
+   ],
+   "fist": [
+    470,
+    255
+   ],
+   "tip": [
+    545,
+    865
+   ],
+   "pommel": [
+    480,
+    28
+   ]
+  },
+  "follow": {
+   "headCenter": [
+    275,
+    585
+   ],
+   "fist": [
+    470,
+    660
+   ],
+   "tip": [
+    225,
+    15
+   ],
+   "pommel": [
+    516,
+    1130
+   ],
+   "soleL": [
+    50,
+    1160
+   ],
+   "soleR": [
+    340,
+    1185
+   ]
+  },
+  "hurt": {
+   "headCenter": [
+    145,
+    120
+   ],
+   "fist": [
+    410,
+    185
+   ],
+   "tip": [
+    440,
+    1020
+   ],
+   "pommel": [
+    405,
+    120
+   ]
+  },
+  "item": {
+   "headCenter": [
+    125,
+    125
+   ],
+   "fist": [
+    360,
+    245
+   ],
+   "soleL": [
+    80,
+    832
+   ],
+   "soleR": [
+    200,
+    835
+   ]
+  },
+  "ko": {
+   "headCenter": [
+    790,
+    260
+   ],
+   "tip": [
+    5,
+    415
+   ],
+   "pommel": [
+    708,
+    505
+   ]
+  },
+  "ready": {
+   "headCenter": [
+    200,
+    190
+   ],
+   "fist": [
+    125,
+    85
+   ],
+   "tip": [
+    500,
+    595
+   ],
+   "pommel": [
+    55,
+    25
+   ]
+  },
+  "sleep": {
+   "headCenter": [
+    330,
+    500
+   ],
+   "tip": [
+    215,
+    1150
+   ],
+   "pommel": [
+    272,
+    30
+   ]
+  },
+  "victory": {
+   "headCenter": [
+    185,
+    385
+   ],
+   "fist": [
+    270,
+    580
+   ],
+   "tip": [
+    205,
+    1085
+   ],
+   "soleL": [
+    85,
+    1078
+   ],
+   "soleR": [
+    195,
+    1075
+   ],
+   "pommel": [
+    198,
+    50
+   ]
+  }
+ },
+ "authored": [
+  "attack",
+  "cast",
+  "critical",
+  "follow",
+  "hurt",
+  "item",
+  "ko",
+  "ready",
+  "sleep",
+  "victory"
+ ],
+ "motion": {
+  "idle": {
+   "hz": 0.5,
+   "bones": {
+    "pelvis": {
+     "rot": 0.3,
+     "phase": 0.4
+    },
+    "spine": {
+     "rot": 0.5,
+     "phase": -0.9
+    },
+    "chest": {
+     "rot": 1.0,
+     "phase": -1.2
+    },
+    "head": {
+     "rot": 0.7,
+     "phase": -1.8
+    },
+    "upperarm": {
+     "rot": 0.4,
+     "phase": -1.6
+    },
+    "forearm": {
+     "rot": 0.3,
+     "phase": -2.0
+    }
+   }
+  },
+  "chains": [
+   {
+    "bones": [
+     "braid0",
+     "braid1",
+     "braid2"
+    ],
+    "follow": "head",
+    "f": 2.4,
+    "z": 0.42,
+    "fFalloff": 0.86,
+    "hang": 0.3,
+    "limit": 55,
+    "drag": [
+     3.0,
+     4.2,
+     5.4
+    ]
+   }
+  ]
+ },
+ "art": "D:/pyrefly-art-r50",
+ "sam": {
+  "parts": {
+   "sword": {
+    "pos": [
+     [
+      560,
+      700
+     ],
+     [
+      430,
+      950
+     ],
+     [
+      640,
+      300
+     ],
+     [
+      690,
+      110
+     ],
+     [
+      600,
+      420
+     ],
+     [
+      470,
+      1120
+     ]
+    ],
+    "neg": [
+     [
+      270,
+      150
+     ],
+     [
+      180,
+      950
+     ],
+     [
+      200,
+      600
+     ],
+     [
+      300,
+      380
+     ],
+     [
+      500,
+      235
+     ],
+     [
+      350,
+      950
+     ]
+    ],
+    "box": [
+     330,
+     40,
+     787,
+     1175
+    ]
+   },
+   "legR": {
+    "pos": [
+     [
+      350,
+      950
+     ],
+     [
+      330,
+      1100
+     ],
+     [
+      375,
+      800
+     ]
+    ],
+    "neg": [
+     [
+      430,
+      900
+     ],
+     [
+      180,
+      950
+     ],
+     [
+      200,
+      600
+     ],
+     [
+      400,
+      1000
+     ]
+    ],
+    "box": [
+     270,
+     730,
+     480,
+     1175
+    ]
+   },
+   "legL": {
+    "pos": [
+     [
+      180,
+      950
+     ],
+     [
+      150,
+      1100
+     ],
+     [
+      240,
+      840
+     ]
+    ],
+    "neg": [
+     [
+      340,
+      950
+     ],
+     [
+      200,
+      600
+     ],
+     [
+      300,
+      1100
+     ],
+     [
+      60,
+      820
+     ]
+    ],
+    "box": [
+     40,
+     760,
+     330,
+     1195
+    ]
+   },
+   "head": {
+    "pos": [
+     [
+      310,
+      170
+     ],
+     [
+      220,
+      100
+     ],
+     [
+      150,
+      250
+     ]
+    ],
+    "neg": [
+     [
+      300,
+      280
+     ],
+     [
+      215,
+      330
+     ],
+     [
+      400,
+      230
+     ]
+    ],
+    "box": [
+     90,
+     10,
+     380,
+     335
+    ]
+   },
+   "braid": {
+    "pos": [
+     [
+      215,
+      300
+     ],
+     [
+      215,
+      380
+     ],
+     [
+      210,
+      440
+     ]
+    ],
+    "neg": [
+     [
+      260,
+      200
+     ],
+     [
+      300,
+      350
+     ],
+     [
+      160,
+      300
+     ]
+    ],
+    "box": [
+     190,
+     250,
+     250,
+     470
+    ]
+   },
+   "armR": {
+    "pos": [
+     [
+      480,
+      240
+     ],
+     [
+      560,
+      220
+     ],
+     [
+      640,
+      185
+     ]
+    ],
+    "neg": [
+     [
+      560,
+      350
+     ],
+     [
+      700,
+      300
+     ],
+     [
+      300,
+      380
+     ]
+    ],
+    "box": [
+     400,
+     150,
+     700,
+     310
+    ]
+   },
+   "torso": {
+    "pos": [
+     [
+      300,
+      380
+     ],
+     [
+      270,
+      270
+     ],
+     [
+      330,
+      440
+     ]
+    ],
+    "neg": [
+     [
+      480,
+      240
+     ],
+     [
+      250,
+      560
+     ],
+     [
+      300,
+      170
+     ]
+    ],
+    "box": [
+     190,
+     215,
+     420,
+     470
+    ]
+   },
+   "skirt": {
+    "pos": [
+     [
+      250,
+      560
+     ],
+     [
+      200,
+      700
+     ],
+     [
+      330,
+      640
+     ]
+    ],
+    "neg": [
+     [
+      300,
+      380
+     ],
+     [
+      340,
+      950
+     ],
+     [
+      180,
+      950
+     ],
+     [
+      560,
+      700
+     ]
+    ],
+    "box": [
+     0,
+     470,
+     420,
+     850
+    ]
+   }
+  }
+ }
+}

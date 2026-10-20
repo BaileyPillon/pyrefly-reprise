@@ -35,7 +35,7 @@ export const TREMA_CHAPTER_CHAIN_ORDER = [CLOISTER_PARAGON, CLOISTER_TREMA] as c
  * action takes before its actor's gauge refills (`src/battle/ffx2/action-time.ts`): the rule is
  * sourced `[verified: 2 sources]`, the length is not (research §12.4). No other FFX-2 chapter moves:
  * `ACTION_TIME_ALL_FFX2` stays false, and the global `ACTION_TIME_ESTIMATE_SECONDS` (1.5 s) is not
- * read here. `CLOISTER_ACTION_TIME_ON = false` turns it off again.
+ * read here. `CLOISTER_ACTION_TIME_ON = false` turns it off again. **Superseded by the per-command span since r56 (2026-10-19, `ACTION_TIME_PER_COMMAND`, `action-span.ts`; the release driver's delegated pick under Bailey's advance yes): D-151's 3 s stays in the code, unused while the span is on.**
  */
 export const CLOISTER_ACTION_TIME_ON: boolean = true;
 /**

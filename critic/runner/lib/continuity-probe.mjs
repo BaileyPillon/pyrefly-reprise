@@ -9,6 +9,9 @@
 // `actor.slots` (the two textured planes: `pose`, `fade`, `meta`, `mesh`, `painted.url`), `actor.active`, `actor._alpha`,
 // `actor.poseUrls`; the stage's `opts.camera` and `opts.canvas`; and `window.__pyrefly.battleState().log`.
 //
+// A RIGGED figure (R57-002) draws no plane, so it is read by `env.rig` (continuity-rig-probe.mjs, stringified into the page beside this probe): its key is its pose, a change of
+// key is a swap (`swaps[].rig`), its box is its one plane, and each frame carries `rg` (head, feet and centroid on the screen and in the idle plane's own coordinates, mesh areas).
+//
 // One more thing is read, from the page and not from the engine: the opacity of the Save Sphere's wash (`cfg.washSelector`), an HTML veil in front of the canvas that
 // the frame ring cannot copy (r43, docs/handoff/r41-aeonjump.md). It is recorded as `w` on the frame record while the card is up, and its background alpha once in
 // `meta.wash`, so the node side can tell a jerk the player sees from one that happens under the veil (continuity-wash.mjs). A policy selector of null reads nothing.
@@ -189,6 +192,73 @@ export function createProbe(cfg, env) {
     }
   };
 
+  // ------------------------------------------------------------------ what a painted and a rigged figure share
+  const figOf = (id, st) => {
+    let fi = S.figIdx.get(id);
+    if (fi === undefined) { fi = S.figs.length; S.figs.push({ id, side: st.side || null, kind: st.kind || null, artId: st.artId || null }); S.figIdx.set(id, fi); }
+    return fi;
+  };
+  // how far the camera alone moved this figure's world point since the last frame
+  const cameraShift = (fs, a, vp, rect) => {
+    const me = a.matrixWorld && a.matrixWorld.elements;
+    let g = [0, 0];
+    if (me) {
+      const w = [me[12], me[13], me[14]];
+      if (fs.w && S.vpPrev) {
+        const p1 = project(vp, rect, fs.w[0], fs.w[1], fs.w[2]), p0 = project(S.vpPrev, rect, fs.w[0], fs.w[1], fs.w[2]);
+        g = [R1(p1[0] - p0[0]), R1(p1[1] - p0[1])];
+      }
+      fs.w = w;
+    }
+    return g;
+  };
+  // a cheap candidate test for jerks (the node side judges them again with the real feet): the step of the active plane's bottom (a rigged figure's: its painted box's)
+  const jerkCandidate = (fi, fs, n, sa, g) => {
+    if (sa && fs.bottom && n - fs.lastFlip > 1) {
+      const b = [(sa[7] + sa[9]) / 2, (sa[8] + sa[10]) / 2];
+      const d = Math.hypot(b[0] - fs.bottom[0] - g[0], b[1] - fs.bottom[1] - g[1]);
+      const hist = fs.steps.slice(-cfg.candidateWindow).sort((x, y) => x - y);
+      const med = hist.length ? hist[hist.length >> 1] : 0;
+      if (d >= cfg.jerkCandidatePx && d >= cfg.jerkCandidateRatio * Math.max(2, med) && Math.hypot(g[0], g[1]) < cfg.cutPx) startJob('jerk', fi, n, { meta: { px: R1(d) } });
+      fs.steps.push(d);
+      if (fs.steps.length > 24) fs.steps.shift();
+    } else if (sa) fs.steps = [];
+    if (sa) fs.bottom = [(sa[7] + sa[9]) / 2, (sa[8] + sa[10]) / 2];
+  };
+
+  // ------------------------------------------------------------------ a rigged figure (R57-002)
+  // Its pose is the rig's KEY (`actor.pose`), keyed like a painting's pose by the figure, the name AND the rig it belongs to, and a change of key is a swap in the same sense as a change of
+  // painting: the frame in which the pose the figure is drawn in changes. Nothing fades: the move between two keys is read frame by frame from `rg` (the head, the feet and the centroid as
+  // drawn, and the same in the idle plane's own coordinates), and the figure's one "plane" is the painted box of the key, so the strips and the jerk candidates have something to follow.
+  const rr = env.rig || null;
+  const rigKey = (fi, key, name) => {
+    const id = keyId(fi, key, `rig:${name}`);
+    let k = S.poseIdx.get(id);
+    if (k === undefined) { k = S.poses.length; S.poses.push({ fig: fi, pose: key, url: null, w: 0, h: 0, rig: name }); S.poseIdx.set(id, k); }
+    return k;
+  };
+  const sampleRig = (id, st, a, c) => {
+    const rec = rr.sample(a, (p) => project(c.vp, c.rect, p[0], p[1], p[2]), c.camMoved ? (p) => project(S.vpPrev, c.rect, p[0], p[1], p[2]) : null);
+    if (!rec) return;
+    const fi = figOf(id, st);
+    S.figs[fi].rig = rec.name;
+    const fs = figState(fi);
+    const alpha = typeof a._alpha === 'number' ? a._alpha : 1;
+    const showing = a.visible !== false && a.showFigure !== false && alpha > 0.02;
+    const k = rigKey(fi, rec.key, rec.name);
+    if (fs.shown !== -1 && k !== fs.shown) {
+      fs.lastFlip = c.n;
+      S.swaps.push({ n: c.n, t: c.t, i: fi, from: fs.shown, to: k, a: R3(alpha), rig: 1 });
+      if (showing && alpha >= 0.9) startJob('swap', fi, c.n, { meta: { from: fs.shown, to: k } });
+    }
+    fs.shown = k;
+    if (!showing || !rec.q) { fs.w = null; fs.bottom = null; fs.steps = []; return; }
+    const g = cameraShift(fs, a, c.vp, c.rect);
+    const sa = [k, 1, 1, ...rec.q];
+    jerkCandidate(fi, fs, c.n, sa, g);
+    c.figs.push({ i: fi, a: R3(alpha), act: 0, s: [sa, 0], g, rg: rec.rg });
+  };
+
   // ------------------------------------------------------------------ one frame
   const sample = () => {
     const now = perf.now(), n = S.frames++;
@@ -213,8 +283,9 @@ export function createProbe(cfg, env) {
     for (const [id, st] of stage.actors.entries()) {
       const a = st && st.actor;
       if (!a || st.anchor || !a.slots || a.slots.length !== 2) continue;
-      let fi = S.figIdx.get(id);
-      if (fi === undefined) { fi = S.figs.length; S.figs.push({ id, side: st.side || null, kind: st.kind || null, artId: st.artId || null }); S.figIdx.set(id, fi); }
+      // a RIGGED figure draws no plane: its key is its pose and its landmarks are its head, feet and centroid (continuity-rig-probe.mjs, R57-002)
+      if (rr && rr.is(a)) { sampleRig(id, st, a, { vp, rect, camMoved, n, t, figs }); continue; }
+      const fi = figOf(id, st);
       const fs = figState(fi);
       const alpha = typeof a._alpha === 'number' ? a._alpha : 1;
       const showing = a.visible !== false && a.showFigure !== false && alpha > 0.02;
@@ -263,29 +334,8 @@ export function createProbe(cfg, env) {
       if (kBest >= 0 && (fs.shown === -1 || flip || bestF >= 0.5)) fs.shown = kBest;
       if (!showing) { fs.w = null; fs.bottom = null; fs.steps = []; continue; }
 
-      // how far the camera alone moved this figure's world point since the last frame
-      const me = a.matrixWorld && a.matrixWorld.elements;
-      let g = [0, 0];
-      if (me) {
-        const w = [me[12], me[13], me[14]];
-        if (fs.w && S.vpPrev) {
-          const p1 = project(vp, rect, fs.w[0], fs.w[1], fs.w[2]), p0 = project(S.vpPrev, rect, fs.w[0], fs.w[1], fs.w[2]);
-          g = [R1(p1[0] - p0[0]), R1(p1[1] - p0[1])];
-        }
-        fs.w = w;
-      }
-      // a cheap candidate test for jerks (the node side judges them again with the real feet): the step of the active plane's bottom
-      const sa = slots[bestI >= 0 ? bestI : act];
-      if (sa && fs.bottom && n - fs.lastFlip > 1) {
-        const b = [(sa[7] + sa[9]) / 2, (sa[8] + sa[10]) / 2];
-        const d = Math.hypot(b[0] - fs.bottom[0] - g[0], b[1] - fs.bottom[1] - g[1]);
-        const hist = fs.steps.slice(-cfg.candidateWindow).sort((x, y) => x - y);
-        const med = hist.length ? hist[hist.length >> 1] : 0;
-        if (d >= cfg.jerkCandidatePx && d >= cfg.jerkCandidateRatio * Math.max(2, med) && Math.hypot(g[0], g[1]) < cfg.cutPx) startJob('jerk', fi, n, { meta: { px: R1(d) } });
-        fs.steps.push(d);
-        if (fs.steps.length > 24) fs.steps.shift();
-      } else if (sa) fs.steps = [];
-      if (sa) fs.bottom = [(sa[7] + sa[9]) / 2, (sa[8] + sa[10]) / 2];
+      const g = cameraShift(fs, a, vp, rect);
+      jerkCandidate(fi, fs, n, slots[bestI >= 0 ? bestI : act], g);
       figs.push({ i: fi, a: R3(alpha), act, s: slots, g });
     }
     S.vpPrev = vp;

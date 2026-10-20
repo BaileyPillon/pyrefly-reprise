@@ -1,0 +1,203 @@
+{
+ "size": "390x844",
+ "touch": true,
+ "injected": [
+  "setSeed(1)"
+ ],
+ "problems": [],
+ "reach": "cutscene",
+ "actor": "yuna",
+ "yunaRows": [
+  {
+   "label": "Talk",
+   "sel": true,
+   "off": false
+  },
+  {
+   "label": "Attack",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Special",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "White Magic",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Items",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Summon",
+   "sel": false,
+   "off": false
+  }
+ ],
+ "openSummon": true,
+ "aeonRows": [
+  {
+   "label": "Valefor",
+   "sel": true,
+   "off": false
+  },
+  {
+   "label": "Ifrit",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Ixion",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Shiva",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Bahamut",
+   "sel": false,
+   "off": false
+  }
+ ],
+ "pickValefor": true,
+ "actor2": "valefor",
+ "rigs": {
+  "switch": {
+   "on": true,
+   "reason": "default"
+  },
+  "figures": [
+   {
+    "subject": "kimahri",
+    "on": true,
+    "reason": "gate ok, 15 parts, 32 bones, 13 keys, 1x maps",
+    "ids": [
+     "kimahri"
+    ],
+    "info": {
+     "name": "kimahri",
+     "key": "ko",
+     "keys": [
+      "idle",
+      "ready",
+      "attack",
+      "follow",
+      "cast",
+      "item",
+      "defend",
+      "hurt",
+      "critical",
+      "ko",
+      "victory",
+      "jump",
+      "sleep"
+     ],
+     "parts": 15,
+     "vertices": 3624,
+     "bones": 32,
+     "chains": 5,
+     "idle": true,
+     "textures": {
+      "map": 1,
+      "rim": 1
+     },
+     "textureMB": 12
+    }
+   },
+   {
+    "subject": "mortiorchis",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "seymour-flux-body",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "tidus",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "valefor",
+    "on": true,
+    "reason": "gate ok, 8 parts, 24 bones, 6 keys, 1x maps",
+    "ids": [
+     "valefor"
+    ],
+    "info": {
+     "name": "valefor",
+     "key": "idle",
+     "keys": [
+      "idle",
+      "attack",
+      "cast",
+      "hurt",
+      "ko",
+      "overdrive"
+     ],
+     "parts": 8,
+     "vertices": 2638,
+     "bones": 24,
+     "chains": 0,
+     "idle": true,
+     "textures": {
+      "map": 1,
+      "rim": 1
+     },
+     "textureMB": 13.9
+    }
+   },
+   {
+    "subject": "yuna",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   }
+  ]
+ },
+ "vRows": [
+  {
+   "label": "Attack",
+   "sel": true,
+   "off": false
+  },
+  {
+   "label": "Overdrive",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Aeon",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Dismiss",
+   "sel": false,
+   "off": false
+  }
+ ],
+ "errors": [],
+ "bad": [],
+ "rigLogs": [
+  "[rig] tidus off (no rig listed in the art manifest)",
+  "[rig] yuna off (no rig listed in the art manifest)",
+  "[rig] seymour-flux-body off (no rig listed in the art manifest)",
+  "[rig] mortiorchis off (no rig listed in the art manifest)",
+  "[rig] kimahri on (gate ok, 15 parts, 32 bones, 13 keys, 1x maps)",
+  "[rig] valefor on (gate ok, 8 parts, 24 bones, 6 keys, 1x maps)"
+ ]
+}

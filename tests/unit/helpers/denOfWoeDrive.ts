@@ -18,6 +18,7 @@ import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
 import { DEN_OF_WOE_CHAIN_ORDER } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
+import { DRINK_FROM } from '../../../src/engine/tactics/ffx2-den-of-woe.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { ffx2Options } from './ffx2ChapterDrive.ts';
 
@@ -46,12 +47,12 @@ export interface LineOptions {
   dkRevive: boolean;
   /**
    * GP6 b (shipped since Bailey's pick of 2026-09-26): a girl who would not survive Lightfall drinks a
-   * Hero Drink (Invincible, 10.6 s) once Nooj is at 4,500 HP or less and Lightfall is still to come.
+   * Hero Drink (Invincible, 10.6 s) once Nooj is at the shipped tactic's window ({@link DRINK_FROM}, 12,000 HP since r56) or less and Lightfall is still to come.
    * The bag must carry them ({@link withHeroDrinks}, or the shipped `denOfWoeKit`); the Chapter V bag
    * alone has none.
    */
   heroDrink?: boolean;
-  /** Nooj's HP at or below which a girl drinks (default 4,500, the first what-if's window). Our line, not game data. */
+  /** Nooj's HP at or below which a girl drinks (default: the shipped tactic's own constant, `DRINK_FROM`, 12,000 since r56; it was 4,500, the first what-if's window). Our line, not game data. */
   heroDrinkAt?: number;
 }
 
@@ -100,7 +101,7 @@ const DK_FLOOR = 5000;
 /** GP6 b what-if: drink before Lightfall (see {@link LineOptions.heroDrink}). */
 function heroDrink(d: Input, engine: FFX2Engine, line: LineOptions, self: Unit | undefined): Command | null {
   const n = nooj(engine);
-  if (!line.heroDrink || !self || !n || n.hp > (line.heroDrinkAt ?? 4500) || n.aiMemory?.['lightfallFired'] || self.statuses['invincible']) return null;
+  if (!line.heroDrink || !self || !n || n.hp > (line.heroDrinkAt ?? DRINK_FROM) || n.aiMemory?.['lightfallFired'] || self.statuses['invincible']) return null;
   if (self.id !== 'yuna' && self.hp > DK_FLOOR) return null;
   return use(d, 'item', 'x2-hero-drink', [self.id]);
 }

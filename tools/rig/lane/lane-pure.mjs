@@ -18,8 +18,8 @@ export function parseArgs(argv) {
   return out;
 }
 
-/** The modes `play.mjs` knows. `poses` and `fight` need no menu choices; `cast` needs `castKeys`. */
-export const MODES = Object.freeze(['poses', 'cast', 'hurtko', 'fight']);
+/** The modes `play.mjs` knows. `poses`, `fight` and `ko` need no menu choices; `cast` needs `castKeys`. */
+export const MODES = Object.freeze(['poses', 'cast', 'hurtko', 'fight', 'ko']);
 
 /** The fields a subject entry of `lane-subjects.json` must have, and what each means. */
 export const SUBJECT_FIELDS = Object.freeze({
@@ -35,7 +35,8 @@ export function validateSubject(id, spec) {
   const bad = (m) => out.push(`${id}: ${m}`);
   if (!spec || typeof spec !== 'object') return [`${id}: not an object`];
   if (typeof spec.actor !== 'string' || !spec.actor) bad('no actor');
-  if (!spec.chapter || typeof spec.chapter.door !== 'string' || !/^[a-z0-9]+$/.test(spec.chapter.door) || typeof spec.chapter.id !== 'string') bad('chapter needs a door word (lowercase letters and digits: it is typed key by key) and the chapter id');
+  if (!spec.chapter || typeof spec.chapter.id !== 'string' || (spec.chapter.door !== undefined && (typeof spec.chapter.door !== 'string' || !/^[a-z0-9]+$/.test(spec.chapter.door)))) bad('chapter needs the chapter id, and a door word (lowercase letters and digits: it is typed key by key) unless it is a listed chapter');
+  if (spec.reach !== undefined && (typeof spec.reach !== 'object' || spec.reach === null || (spec.reach.auto !== undefined && typeof spec.reach.auto !== 'boolean'))) bad('reach must be { auto: true } (fight the earlier links with the intended strategy at skip speed until the actor is on the field)');
   if (!Array.isArray(spec.poses) || !spec.poses.length || spec.poses.some((p) => !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(p))) bad('poses must be a list of pose names');
   const t = spec.track;
   if (!t || typeof t.head !== 'string' || typeof t.centroid !== 'string' || !(typeof t.feet === 'string' || (Array.isArray(t.feet) && t.feet.length))) bad('track needs head, feet and centroid landmark names');
@@ -107,7 +108,7 @@ export function guards(exists, dir = GUARD_DIR) {
 
 /** The files a run of `mode` must leave in its output folder to count as done (the recorder retries a run that did not). */
 export function expectedOutputs(mode) {
-  return { poses: ['poses-info.json'], cast: ['window-log.json', 'jerks.json'], hurtko: ['window-log.json', 'jerks.json'], fight: ['jerks.json'] }[mode] ?? [];
+  return { poses: ['poses-info.json'], cast: ['window-log.json', 'jerks.json'], hurtko: ['window-log.json', 'jerks.json'], fight: ['jerks.json'], ko: ['ko.json', 'jerks.json'] }[mode] ?? [];
 }
 
 /** The virtual-clock step pattern that makes 60 Hz out of whole milliseconds: 16, 17, 17 repeating (50 ms per 3 frames). */

@@ -19,17 +19,19 @@ $PY -I tools/rig/lane/lane.py new <name> --preset humanoid-side|creature-quadrup
 $PY -I tools/rig/rig.py cut --subject <name>   ;   $PY -I tools/rig/rig.py build --subject <name>
 
 # 2. fit: the sweep, the selection, the merge
+$PY -I tools/rig/lane/lane_marks.py --subject <name> --pose <pose> [--restarts 400]   # MARKS FIRST (2026-10-18, Rikku Dark Knight): a minute a pose, no silhouette; its init goes under fit.keys.<pose>.init before the fit
 $PY -I tools/rig/lane/lane.py fit    --subject <name> [--poses all|a,b] [--seeds 3] [--procs 8] [--tag T] [--dry]
 $PY -I tools/rig/lane/lane.py select --subject <name> --tag T [--write]          # a rig per candidate, gated; the best a pose; claims = the gate's readings; the table
 $PY -I tools/rig/lane/lane.py eval   --subject <name> --keys K.json [--full]     # export one keys file and gate it
 
 # 3. record the real game (headless, the real GPU, an exact 60 Hz on a virtual clock)
-PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject <id> --out <dir> --modes poses,cast,hurtko [--poses a,b] [--off] [--alias <id>=<rig folder>] [--repo <tree>]
+PYREFLY_BROWSER=gpu node tools/rig/lane/record.mjs --subject <id> --out <dir> --modes poses,cast,hurtko,fight,ko [--poses a,b] [--off] [--alias <id>=<rig folder>] [--repo <tree>]
 
 # 4. clips, sheets, tables
 $PY -I tools/rig/lane/lane.py keytable --gate gate.json --rig <rig folder>/rig.json --out key-table.txt
-$PY -I tools/rig/lane/lane.py clips    --subject <id> --gate gate.json --on <dir>/poses --off <dir>/poses-off --out <clips dir>
+$PY -I tools/rig/lane/lane.py clips    --subject <id> --gate gate.json --on <dir>/poses --off <dir>/poses-off --out <clips dir> [--last ko=70:36] [--crop attack=545,262,760,450] [--painting-file overdrive=<png>]
 $PY -I tools/rig/lane/lane.py sheets   --subject <id> --clips <clips dir> --out <sheets dir> [--before <old clips dir>]
+$PY -I tools/rig/lane/lane.py hurtko   --on <dir>/poses --off <dir>/poses-off --out <sheets dir>/<id>-rig-3-before-after.png --crop x0,y0,x1,y1 [--hurt 70] [--ko 70:60] [--texts a b c d] [--foot TEXT]
 $PY -I tools/rig/lane/lane.py report   --subject <name> --gate gate.json --rig <rig>/rig.json       # the handoff skeleton
 
 # 5. twins and proofs
@@ -46,6 +48,7 @@ $PY -I tools/rig/lane/lane.py framediff --a <recording A>/poses --b <recording B
 | `record.mjs`, `play.mjs`, `play-modes.mjs`, `play-common.mjs`, `track.mjs`, `lane-subjects.json` | `record.sh`, `lulu-moment.mjs`, `fight-virtual-lulu.mjs`, `trk-lulu.mjs`, `hurtko-real.mjs`, `strike-frames.mjs`, `poses-clip.mjs`, `warm.mjs` |
 | `lane.py fit / select / eval`, `lane_fit.py`, `lane_common.py` (fit slots) | `fitbatch.sh`, `select_best.py`, `claims.py`, `mergekeys.py`, `evalrig.sh`, `gaterun.sh` |
 | `lane.py keytable / clips / sheets`, `lane_sheets.py` | `keytable.py`, `authored_clips.py`, `build_sheets.py` (the same labels and layout as Lulu's pass-2 sheets) |
+| `lane_marks.py` | nothing (a marks-only search that gives the fit a start inside the marks: see its docstring) |
 | `lane.py new`, `lane_new.py`, `lane-pose-table.mjs` | the hand-made `lulu.json` skeleton |
 | `lane.py twin`, `lane_twin.py` | nothing (the T class of the plan: 23 silhouette twins) |
 | `lane.py framediff`, `lane_diff.py` | nothing (the proof that an engine change leaves a rig drawing the same) |
@@ -80,6 +83,19 @@ $PY -I tools/rig/lane/lane.py sheets --subject rikku-dark-knight --clips .../cli
 ```
 
 A silhouette twin is one command after its base is gated: `lane.py twin grothia --of ifrit --subject grothia --run` (`cut`, `build`, the base keys with their claims dropped, `export`; the gate re-measures).
+**It registers the twin's canvas first** (rig-aeons lane, 2026-10-19): Pterya's paintings are Valefor's with 60 px more margin on every side, so the copied cut landed every polygon 60 px off (405,272 pixels of the
+rest composite wrong, against 9,732). The command finds each pose's integer translation by cross-correlating the alpha-128 masks (refused under IoU 0.97), moves every coordinate of the config (cut polygons and
+predicates, bones, skin joints, build landmarks, each pose's marks) and records it as `_twin_shift`; it names what it could not move (`NOT MOVED`). `--no-register` keeps the old copy-as-is. A twin's painted
+keys are renamed to its own paintings (`characters/<twin>/<pose>`).
+
+## Reaching an actor that is not on the field at the first menu, and the KO measure (rig-aeons lane)
+
+A registry entry with no door word in `chapter` is a LISTED chapter: the recorder picks its card with the board's own `select:<id>` beat. `reach: { "auto": true }` then fights the earlier links with the game's
+`intended` strategy at SKIP speed (the clock is still the real one: nothing is recorded yet), wrapped so that at the first decision of the engine whose state holds the actor alive it hands the fight back
+(`setAutoPlay(null)`, speed normal) and waits for the first human menu. Pterya (Chapter XIV link 2: 1 s), Ifrit (Chapter III link 3, the possessed Ifrit: about 45 s) and Shiva (link 5) are reached that way.
+The `ko` mode then plays the fight on the exact clock to the actor's KO swap (once it is under half its HP every frame is grabbed into a ring; the ring and `--tail` frames after the KO are kept) and records, a frame,
+the pose, life, HP, projected box and a rig's part meshes with the area of each. `--off` records the painting set the same way: the head area of the rig (hurt against KO) against the painting set's box and the
+continuity probe's head reading is the KO jump, rig on and off. The probe is vacuous for a rig; the part areas are the measure. `node tools/rig/lane/ko-summary.mjs --on <rec>/ko [--off <rec>/ko-off]` reads both runs into one table: the swap frame, the projected box before and after, the head and whole-figure mesh area hurt against KO (rig), the probe's own row for the KO swap (painting set) and the worst one-frame step of the head, centroid and feet through the camera. For a figure whose KO lies down (Shiva) the rig's own lie-down transition has a large one-frame step too: read it against the painting set's, not against zero.
 
 ## Format v2 (parts a key shows, hides or swaps)
 

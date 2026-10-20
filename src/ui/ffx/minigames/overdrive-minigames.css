@@ -139,6 +139,31 @@ html[data-phone-battle='ffx'] .ffx-mg .ig-minigame__subtitle {
 /* The selected row is the gold accent, and the ×2 chip was gold-on-paper on it (1.6:1): ink there. */
 .ffx-mg-list__row--selected .ffx-mg-list__qty { color: var(--ig-ink); }
 
+/*
+ * Grand Summon's picker takes a finger or a click on a row and on its title (LV55-2, PR-0467; FFX only; `YunaGrandSummon.ts`).
+ * `.ffxhud` is `pointer-events: none` and the slab inherits it, so only the list (which also lets a finger scroll it) and the
+ * title ask for events; the rest of the slab keeps the layer's `none`. A refused (greyed) row shakes the list, as the command stack does.
+ */
+.ffx-mg--pick .ffx-mg-list { pointer-events: auto; touch-action: pan-y; }
+.ffx-mg--pick .ffx-mg-list__row { pointer-events: auto; }
+.ffx-mg--pick [data-role="title"] { pointer-events: auto; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.ffx-mg--pick .ffx-mg-list__row, .ffx-mg--pick [data-role="title"] { user-select: none; -webkit-user-select: none; }
+/* PR-0467: the caption took the title's own line and ran to the slab's slanted right edge, where it was cut (1600x900: "...FULL OVERDRIV"); it now takes its own line under the title and wraps inside the slab, as the phone's already did. */
+.ffx-mg--pick .ig-minigame__head { flex-wrap: wrap; row-gap: 2px; }
+.ffx-mg--pick .ig-minigame__subtitle { order: 3; flex: 1 1 100%; min-width: 0; white-space: normal; }
+.ffx-mg-list--shake { animation: ffx-mg-list-shake 0.2s linear; }
+@keyframes ffx-mg-list-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+/* A touch screen: every aeon row and the title are real targets, at least 44 screen px tall (the upright phone pins `--lb-scale` to 1). */
+@media (pointer: coarse) {
+  .ffx-mg--pick .ffx-mg-list__row { min-height: calc(44px / var(--lb-scale, 1)); box-sizing: border-box; font-size: calc(14px / var(--lb-scale, 1)); }
+  .ffx-mg--pick [data-role="title"] { min-height: calc(44px / var(--lb-scale, 1)); display: flex; align-items: center; }
+  html[data-phone-battle='ffx'] .ffx-mg--pick .ffx-mg-list { max-height: calc(44px * 4.5); }
+}
+
 /* --------------------------------------------- tap targets (PR-0360, PR-0361; FFX only) */
 
 /*

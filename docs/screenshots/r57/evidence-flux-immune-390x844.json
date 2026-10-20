@@ -1,0 +1,116 @@
+{
+ "size": "390x844",
+ "touch": true,
+ "injected": [
+  "setSeed(1)"
+ ],
+ "problems": [],
+ "reach": "cutscene",
+ "actor": "tidus",
+ "menu0": [
+  {
+   "label": "Attack",
+   "sel": true,
+   "off": false
+  },
+  {
+   "label": "Special",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "White Magic",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Items",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Flee",
+   "sel": false,
+   "off": true
+  },
+  {
+   "label": "Escape",
+   "sel": false,
+   "off": true
+  }
+ ],
+ "openWM": true,
+ "wmRows": [
+  {
+   "label": "Haste",
+   "sel": true,
+   "off": false
+  },
+  {
+   "label": "Hastega",
+   "sel": false,
+   "off": false
+  },
+  {
+   "label": "Slow",
+   "sel": false,
+   "off": false
+  }
+ ],
+ "slowRow": {
+  "label": "Slow",
+  "sel": false,
+  "off": false
+ },
+ "walkSlow": true,
+ "mpBefore": 115,
+ "targetSel": {
+  "ids": [
+   "seymour-flux"
+  ],
+  "mode": "single",
+  "side": null,
+  "accent": "enemy"
+ },
+ "log": [
+  {
+   "type": "mp-damage",
+   "target": "tidus",
+   "source": "tidus"
+  },
+  {
+   "type": "action-start"
+  },
+  {
+   "type": "miss",
+   "reason": "immune",
+   "target": "seymour-flux",
+   "source": "tidus"
+  },
+  {
+   "type": "action-end"
+  },
+  {
+   "type": "turn-start"
+  }
+ ],
+ "numerals": [
+  {
+   "text": "12",
+   "cls": "dnum--mp",
+   "target": "tidus",
+   "t": 198065
+  },
+  {
+   "text": "IMMUNE",
+   "cls": "dnum--immune",
+   "target": "seymour-flux",
+   "t": 199484
+  }
+ ],
+ "statusOnFlux": [],
+ "immuneNumerals": 1,
+ "missNumerals": 0,
+ "errors": [],
+ "bad": []
+}

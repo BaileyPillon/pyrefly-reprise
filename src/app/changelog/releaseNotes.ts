@@ -69,11 +69,40 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 55 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 58 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '58',
+    date: '2026-10-19',
+    lines: [
+      { tag: 'FFX', text: 'Ifrit now animates as one jointed figure, in Braska’s last fight and wherever you summon him.' },
+      { tag: 'FFX', text: 'Pterya, Isaaru’s aeon in Chapter XIV, is drawn the same way.' },
+      { tag: 'FFX', text: 'Neither shrinks when knocked out any more.' },
+    ],
+  },
+  {
+    release: '57',
+    date: '2026-10-19',
+    lines: [
+      { tag: 'Both', text: 'Valefor now animates as one jointed figure and no longer shrinks when knocked out.' },
+      { tag: 'FFX', text: 'IMMUNE now shows when a status move is resisted completely, as with Slow on Seymour Flux or Shell on a Yu Pagoda.' },
+      { tag: 'FFX', text: 'Releases 55 and 56 said this already worked; it showed MISS until now.' },
+    ],
+  },
+  {
+    release: '56',
+    date: '2026-10-19',
+    lines: [
+      { tag: 'FFX-2', text: 'Actions now take the time their own animation takes, so bosses act less often between your turns and several fights, Trema and Angra Mainyu among them, get easier.' },
+      { tag: 'FFX-2', text: 'The Den of Woe guide and tip now have you start the Hero Drinks once Nooj is down to about half his health, so a girl is Invincible when his Lightfall lands.' },
+      { tag: 'FFX', text: 'Yuna’s Grand Summon works with a finger on a phone: tap an aeon to choose it, tap the title to go back, and a greyed aeon shakes.' },
+      { tag: 'FFX', text: 'An aeon’s Defend no longer prints IMMUNE over your own aeon; a status move a foe resists completely still says IMMUNE.' },
+      { tag: 'FFX', text: 'Yuna’s Overdrive row now reads “Open the Overdrive menu.” where it used to say “Timed input”.' },
+    ],
+  },
   {
     release: '55',
     date: '2026-10-18',

@@ -35,6 +35,8 @@ import { HELD_MIN_FRAMES } from './continuity-held.mjs';
 import { composeStrip } from './continuity-strips.mjs';
 import { continuityReportLine, verdicts } from './continuity-pure.mjs';
 import { washPolicy } from './continuity-wash.mjs';
+import { createRigReader } from './continuity-rig-probe.mjs';
+import { rigProbeConfig } from './continuity-rig.mjs';
 import { CONTINUITY_BUDGET_MS, continuityBudgetFor } from './route-pure.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -71,7 +73,10 @@ const safe = (s) => String(s ?? 'x').replace(/[^a-z0-9._-]+/gi, '-').slice(0, 40
 export async function attachProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath = null, cfg = continuityConfig(), log = console.log }) {
   // r43: `washSelector` has the probe record the Save Sphere wash's opacity on the frames it is up (continuity-wash.mjs); a policy selector of null reads nothing
   const probeCfg = { ...cfg.probe, beforeFrames: cfg.strips.beforeFrames, afterFrames: cfg.strips.afterFrames, cutPx: cfg.motion.cutPx, washSelector: washPolicy(cfg).selector };
-  await page.evaluate(`(${createProbe})(${JSON.stringify(probeCfg)}, { window, document, performance })`);
+  // R57-002: the page-side reader of a RIGGED figure (a rig draws no plane, so the probe cannot read it as a painting); `continuity.rig: false` in the policy leaves it out
+  const rig = rigProbeConfig(cfg);
+  const rigReader = rig ? `, rig: (${createRigReader})(${JSON.stringify(rig)})` : '';
+  await page.evaluate(`(${createProbe})(${JSON.stringify(probeCfg)}, { window, document, performance${rigReader} })`);
   await page.evaluate(() => window.__cont.start());
   let done = null;
   return {
@@ -234,7 +239,7 @@ export function aggregate(results, cfg) {
   const size = {
     judged: sum((s) => s.size.judged ?? s.counted), costumeSwaps: sum((s) => s.size.costumeSwaps ?? 0), sameArtSwaps: sum((s) => s.size.sameArtSwaps ?? 0), costumeWorstHeadPct: max((s) => s.size.costumeWorstHeadPct ?? 0), costumeWorstFeetPx: max((s) => s.size.costumeWorstFeetPx ?? 0),
     maxHeadJumpPct: max((s) => s.size.maxHeadJumpPct), maxHeadJumpPctRegistration: max((s) => s.size.maxHeadJumpPctRegistration), headOverTolerance: sum((s) => s.size.headOverTolerance),
-    maxFeetShiftPx: max((s) => s.size.maxFeetShiftPx), feetOverTolerance: sum((s) => s.size.feetOverTolerance), headMeasured: sum((s) => s.size.headMeasured), headRegistration: sum((s) => s.size.headRegistration), headSilhouette: sum((s) => s.size.headSilhouette), headUnmeasured: sum((s) => s.size.headUnmeasured),
+    maxFeetShiftPx: max((s) => s.size.maxFeetShiftPx), feetOverTolerance: sum((s) => s.size.feetOverTolerance), headMeasured: sum((s) => s.size.headMeasured), headRegistration: sum((s) => s.size.headRegistration), headRig: sum((s) => s.size.headRig ?? 0), rigSwaps: sum((s) => s.size.rigSwaps ?? 0), headSilhouette: sum((s) => s.size.headSilhouette), headUnmeasured: sum((s) => s.size.headUnmeasured),
   };
   const motion = {
     snaps: sum((s) => s.motion.snaps), snapsPerMinute: per(sum((s) => s.motion.snaps)), hardCuts: sum((s) => s.motion.hardCuts), hardCutsPerMinute: per(sum((s) => s.motion.hardCuts)),

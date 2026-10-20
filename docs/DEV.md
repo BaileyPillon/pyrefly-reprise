@@ -250,7 +250,7 @@ from a live build, open `assets/index-<hash>.js.map` from that commit's folder
 **The painted art ships as lossless WebP where that changes no pixel on any decoder (release 38,
 "r38-bytes"; Bailey 2026-10-03; both games, shared build plumbing; handoff `docs/handoff/r38-bytes.md`).**
 `public/art/**.png` stays the approved masters (hashes, backups and `verify-approved` unchanged). Every
-production build, by any route (`npm run build`, the deploy, a critic's `vite build --outDir dist-gate`),
+production build, by any route (`npm run build`, the deploy, a critic's `node tools/candidate-build.mjs --out dist-gate`, which stamps the release name of the newest player note exactly as the deploy does, so the reviewed bundle is the deployed one),
 decides by the pixels of each master (the default, `exact`): a master that is opaque, or whose alpha is only 0
 and 255 with no colour left under alpha 0, ships as a lossless WebP (premultiplying such a picture is the
 identity, so a lossless WebP and its PNG are the same on every path in every engine); every other master, the 2x

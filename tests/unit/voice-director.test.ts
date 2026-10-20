@@ -109,7 +109,8 @@ describe('which chapters ask for voice at all', () => {
     r.director.beginChapter('seymour-flux', 'ffx');
     await r.settle();
     await r.settle();
-    expect(r.requests.filter((p) => p.endsWith('.json'))).toEqual(['voice/seymour-flux.json']);
+    // the chapter list is asked for once (here it answers with a manifest, which is no list, so the chapter's own file is asked for too)
+    expect(r.requests.filter((p) => p.endsWith('.json'))).toEqual(['voice/index.json', 'voice/seymour-flux.json']);
     const warmed = r.requests.filter((p) => p.endsWith('.mp3')).sort();
     expect(warmed).toEqual(['voice/seymour-flux/seymour-flux.mid-first-zombie.001.mp3', 'voice/seymour-flux/seymour-flux.quip-yuna.001.mp3']);
     expect(r.bank.stats().pinned).toBe(2);

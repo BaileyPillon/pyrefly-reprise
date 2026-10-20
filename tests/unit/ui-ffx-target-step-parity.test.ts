@@ -17,7 +17,7 @@ import { CommandMenu } from '../../src/ui/ffx/CommandMenu.ts';
 import { buildTopRows } from '../../src/ui/ffx/CommandMenuLogic.ts';
 import { groupHelp } from '../../src/ui/ffx/commandMenuRows.ts';
 import { ffxTargetMode } from '../../src/ui/ffx/loneTarget.ts';
-import { opensList } from '../../src/ui/ffx/targetStepUi.ts';
+import { opensList, opensPicker } from '../../src/ui/ffx/targetStepUi.ts';
 import type { CursorSelection } from '../../src/ui/ffx/TargetCursor.ts';
 import { actor, engineFor, menuOf } from './helpers/menuParityDrive.ts';
 
@@ -352,6 +352,36 @@ describe('t6 openerOne, check B1 (2026-10-18): the Overdrive group is a list ope
       await h.flush();
       expect(h.result(), who).toMatchObject({ kind: 'overdrive' });
     }
+  });
+
+  it("LV55-4: Yuna's Overdrive row (Grand Summon) and Rikku's (Mix) say they open a menu, as every one-entry opener does, not \"Timed input\"; off or skipped, as before", async () => {
+    const engine = await engineFor('seymour-anima-macalania');
+    const helpOf = (who: string): string => {
+      const group = buildTopRows(withGauge(engine, who)).find((r) => r.kind === 'group' && r.category === 'overdrive');
+      if (group?.kind !== 'group') throw new Error(`no Overdrive group for ${who}`);
+      return groupHelp(group, who);
+    };
+    const before = { yuna: helpOf('yuna'), rikku: helpOf('rikku') };
+    expect(before.yuna).toMatch(/timed input/i); // the entry's own derived line: the picker is untimed, so this was wrong
+    on();
+    expect(helpOf('yuna')).toBe('Open the Overdrive menu.');
+    expect(helpOf('rikku')).toBe('Open the Overdrive menu.');
+    on(['openerOne']);
+    expect(helpOf('yuna')).toBe(before.yuna);
+    expect(helpOf('rikku')).toBe(before.rikku);
+    restore?.();
+    restore = setTargetStepParity(false);
+    expect(helpOf('yuna')).toBe(before.yuna);
+  });
+
+  it("LV55-4: a one-entry Overdrive that is not a picker keeps its own help (Tidus's list says it opens; an aeon's direct command keeps its line)", async () => {
+    const engine = await engineFor('seymour-flux');
+    on();
+    const tidus = buildTopRows(withGauge(engine, 'tidus')).find((r) => r.kind === 'group' && r.category === 'overdrive');
+    if (tidus?.kind !== 'group') throw new Error('no group');
+    expect(opensPicker(tidus)).toBe(false);
+    expect(groupHelp(tidus, 'tidus')).toBe('Open the Overdrive menu.'); // t6: the list opens
+    expect(groupHelp(tidus, 'valefor')).not.toBe('Open the Overdrive menu.'); // an aeon's Overdrive is a direct command
   });
 
   it("real engine rows: an aeon's Overdrive (Valefor's Energy Ray) is a direct command: the target step opens at once, no list", async () => {

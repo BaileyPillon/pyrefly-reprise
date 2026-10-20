@@ -1,0 +1,78 @@
+{
+ "size": "1600x900",
+ "injected": [
+  "setSeed(1)",
+  "autoBattle('intended')",
+  "trigger('battle:fast')"
+ ],
+ "problems": [],
+ "chapter": "ffx2-valefor-besaid",
+ "rigs": {
+  "switch": {
+   "on": true,
+   "reason": "default"
+  },
+  "figures": [
+   {
+    "subject": "paine-warrior",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "rikku-dark-knight",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "valefor",
+    "on": true,
+    "reason": "gate ok, 8 parts, 24 bones, 6 keys, 1x maps",
+    "ids": [
+     "x2-valefor"
+    ],
+    "info": {
+     "name": "valefor",
+     "key": "idle",
+     "keys": [
+      "idle",
+      "attack",
+      "cast",
+      "hurt",
+      "ko",
+      "overdrive"
+     ],
+     "parts": 8,
+     "vertices": 2638,
+     "bones": 24,
+     "chains": 0,
+     "idle": true,
+     "textures": {
+      "map": 1,
+      "rim": 1
+     },
+     "textureMB": 13.9
+    }
+   },
+   {
+    "subject": "yuna-white-mage",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   }
+  ]
+ },
+ "ko": true,
+ "lastHp": 0,
+ "frames": 8,
+ "seconds": 66,
+ "errors": [],
+ "bad": [],
+ "rigLogs": [
+  "[rig] yuna-white-mage off (no rig listed in the art manifest)",
+  "[rig] rikku-dark-knight off (no rig listed in the art manifest)",
+  "[rig] paine-warrior off (no rig listed in the art manifest)",
+  "[rig] valefor on (gate ok, 8 parts, 24 bones, 6 keys, 1x maps)"
+ ]
+}

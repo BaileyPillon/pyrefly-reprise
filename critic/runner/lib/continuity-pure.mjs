@@ -23,6 +23,7 @@ import { cameraShiftAt } from './continuity-camera.mjs';
 import { applyH, invertH, polygonArea, unitSquareToQuad } from './continuity-geometry.mjs';
 import { heldPlateau } from './continuity-held.mjs';
 import { poseReadings } from './continuity-readings.mjs';
+import { rigTrack } from './continuity-rig.mjs';
 import { stagedStepOf } from './continuity-staged.mjs';
 
 export { applyH, invertH, polygonArea, unitSquareToQuad };
@@ -117,6 +118,7 @@ export function planesOf(fig) {
  * `feet` and `head` are null and `centroid` is the weighted point; otherwise `centroid` is null.
  */
 export function figureTrack(fig, anchors, byCentroid = false) {
+  if (fig.rg) return rigTrack(fig.rg); // a RIGGED figure (R57-002) draws no plane: where its head, feet and centroid are is in its record (continuity-rig.mjs)
   let wf = 0, fx = 0, fy = 0, wh = 0, hx = 0, hy = 0, wc = 0, cx = 0, cy = 0, headOk = true, seen = 0;
   // the camera's own shift of each tracked point, weighted like the point (continuity-camera.mjs): a head is moved by the camera far more than the origin is
   const cf = [0, 0], ch = [0, 0], cc = [0, 0];

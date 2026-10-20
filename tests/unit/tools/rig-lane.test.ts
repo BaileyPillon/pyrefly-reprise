@@ -37,6 +37,15 @@ describe('the subject registry', () => {
     expect(subjectSpec(registry, 'lulu')).toBe(spec);
   });
 
+  it('takes a LISTED chapter (no door word: its card is picked on the board) and a `reach` flag, and refuses a door word that cannot be typed', () => {
+    expect(validateSubject('x', { ...spec, chapter: { id: 'isaaru-via-purifico' }, reach: { auto: true } })).toEqual([]);
+    expect(validateSubject('x', { ...spec, chapter: { id: 'c' } })).toEqual([]);
+    expect(validateSubject('x', { ...spec, chapter: { door: 'Two Words', id: 'c' } })).toHaveLength(1);
+    expect(validateSubject('x', { ...spec, chapter: { door: 'ok' } })).toHaveLength(1);
+    expect(validateSubject('x', { ...spec, reach: { auto: 'yes' } })).toHaveLength(1);
+    expect(validateSubject('x', { ...spec, reach: 5 })).toHaveLength(1);
+  });
+
   it('resolves the poses to play: all, a list, or refuses a pose the entry does not list', () => {
     expect(resolvePoses(spec, undefined)).toEqual(spec.poses);
     expect(resolvePoses(spec, 'all')).toEqual(spec.poses);
@@ -76,9 +85,10 @@ describe('the scratch Vite config, the lock and the guards', () => {
   });
 
   it('knows each mode and the files it must leave (the recorder retries a mode that left none)', () => {
-    expect(MODES).toEqual(['poses', 'cast', 'hurtko', 'fight']);
+    expect(MODES).toEqual(['poses', 'cast', 'hurtko', 'fight', 'ko']);
     for (const m of MODES) expect(expectedOutputs(m).length, m).toBeGreaterThan(0);
     expect(expectedOutputs('poses')).toEqual(['poses-info.json']);
+    expect(expectedOutputs('ko')).toEqual(['ko.json', 'jerks.json']);
     expect(expectedOutputs('nothing')).toEqual([]);
   });
 

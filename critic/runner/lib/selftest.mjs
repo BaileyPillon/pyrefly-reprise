@@ -36,6 +36,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { currentChromiumArgs } from '../../../tools/browser-mode.mjs';
+import { candidateBuildEnv, candidateViteArgs, newestReleaseOf } from '../../../tools/candidate-build.mjs';
 import { assertScreen, assertMenuRows, waitFor } from './lib.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -79,7 +80,8 @@ try {
   // build`) keeps this off a shell wrapper, so the later preview server's
   // PID is the real process — stoppable by its own PID per the shared-tree
   // rule, not a `.cmd` wrapper that leaves the port held after `.kill()`.
-  const build = spawnSync(process.execPath, [VITE_BIN, 'build', '--outDir', OUT_DIR, '--emptyOutDir'], { cwd: ROOT, encoding: 'utf8' });
+  // The candidate is built as the deploy builds it: stamped with the newest player note's release name (`tools/candidate-build.mjs`).
+  const build = spawnSync(process.execPath, [VITE_BIN, ...candidateViteArgs(OUT_DIR)], { cwd: ROOT, encoding: 'utf8', env: candidateBuildEnv(await newestReleaseOf(ROOT)) });
   if (build.status !== 0) {
     throw new Error(`ASSERT-FAIL build failed (exit ${build.status})\n${(build.stdout || '') + (build.stderr || '')}`.slice(0, 4000));
   }

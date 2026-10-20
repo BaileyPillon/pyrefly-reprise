@@ -47,7 +47,9 @@ interface Battle {
 function battle(over: { agis?: number[]; condition?: 'normal' | 'scripted' | 'preemptive' | 'ambush'; seed?: number; level?: number; options?: Ffx2EngineOptions } = {}): Battle {
   const agis = over.agis ?? [60];
   const enemies = agis.map((agi, i) => enemy(`m${i}`, `M${i}`, 'zz-hand-quiet', { agi, hp: 9_999_999, maxHp: 9_999_999 }, { slot: i, immunityFlags: [], flags: {} }));
-  const engine = new FFX2Engine({ abilities: registry, minigames: false, ...over.options });
+  // r56: `actionTimeSeconds: 0` is an explicit "no action time" (the engine option wins over the formation and the per-command span, `action-span.ts`): these blocks measure the gauge
+  // and the clocks by hand, and the command's span (proved by `ffx2-action-span.test.ts`) would hold the actor EXECUTING while they read it. A test that wants action time passes its own.
+  const engine = new FFX2Engine({ abilities: registry, minigames: false, actionTimeSeconds: 0, ...over.options });
   engine.init({ ...setup(group('zz-hand', enemies), { seed: over.seed ?? 1, level: over.level ?? 24 }), condition: over.condition ?? 'scripted' });
   const state = engine.state();
   return { engine, u: (id) => (state.combatants as Record<string, Ffx2Unit>)[id] as Ffx2Unit };

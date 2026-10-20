@@ -90,12 +90,12 @@ const SHARED_IMMUNE: StatusImmunities = {
 export const COMPANION_IMMUNITY: { readonly zarich: StatusId; readonly tawrich: StatusId } = { zarich: 'null-physical', tawrich: 'null-magic' };
 
 /**
- * **Action time, ON at 3 s: kept by precedent (D-151 Cloister, D-187 and D-197 Road, D-269 Ixion), awaiting Bailey's pick for this chapter** (those picks were his for those chapters, not for this one; the rule is
+ * **Action time, ON at 3 s: kept by precedent (D-151 Cloister, D-187 and D-197 Road, D-269 Ixion), then confirmed for this chapter by Bailey, D-857 (2026-10-15); SUPERSEDED by the per-command span since r56 (2026-10-19, `ACTION_TIME_PER_COMMAND`, `action-span.ts`; the release driver's delegated pick under Bailey's advance yes).** (The rule is
  * sourced `[verified: 2 sources]`, its length is not, `research/ffx2-trema.md` §12.4). One named constant; `false` turns it off; no boss number moves either way. `tests/unit/chapters/angra-mainyu-bench.test.ts`
  * measures the fight with and without it (the numbers are in the handoff).
  */
 export const ANGRA_MAINYU_ACTION_TIME_ON: boolean = true;
-/** **`[estimate]`**: the length the precedent chapters ship, awaiting Bailey's pick here. Unsourced (research `ffx2-trema.md` §12.4). */
+/** **`[estimate]`**: the length the precedent chapters ship (D-857); the flat window is superseded by the span since r56 (D-857's 3 s stays in the code, unused while the span is on). Unsourced (research `ffx2-trema.md` §12.4). */
 export const ANGRA_MAINYU_ACTION_TIME_SECONDS = 3;
 const actionTime = ANGRA_MAINYU_ACTION_TIME_ON ? { actionTimeSeconds: ANGRA_MAINYU_ACTION_TIME_SECONDS } : {};
 
@@ -239,7 +239,7 @@ export const angraMainyuGroup: EnemyGroupDef = {
   parts: [x2Tawrich, x2Zarich],
   canEscape: false,
   musicCues: AEON_CUE,
-  ...actionTime, // ANGRA_MAINYU_ACTION_TIME_ON: on, 3 s, kept by precedent (D-151, D-187/D-197, D-269), awaiting Bailey's pick
+  ...actionTime, // ANGRA_MAINYU_ACTION_TIME_ON: on, 3 s, kept by precedent (D-151, D-187/D-197, D-269), confirmed D-857 (2026-10-15); superseded by the per-command span since r56 (2026-10-19)
 };
 
 export const angraMainyuGroups: readonly EnemyGroupDef[] = [angraMainyuGroup];

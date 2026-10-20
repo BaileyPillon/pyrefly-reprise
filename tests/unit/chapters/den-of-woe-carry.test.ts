@@ -27,6 +27,7 @@ import { checkpointAt } from '../../../src/app/screens/BattleChainCheckpoint.ts'
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { chainLogHash } from '../helpers/ffx2ChainLogs.ts';
 import { driveDen, LINES } from '../helpers/denOfWoeDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 /** The grid's node count as the engine reads it (clamped 2-6). */
 const nodesOf = (m: { garmentGrid: { id: string } }) =>
@@ -245,12 +246,13 @@ describe('the flag is the only way in: every other chain carries what it always 
     sisters: ['3143237f4bb44982', 'e3c5ff00dd446e97', 'ada333a7d40034d7', 'a0f04b97b82cac16', 'b0bd3deea1b16efa', '9d24bf9dbe7aed2a', 'ff342fd893c83cc6', 'b2f35d32e78d3913'],
   };
 
-  it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => withActionSpanKnobs({ perCommand: false }, () => {
     for (let seed = 1; seed <= 8; seed++) {
       expect(chainLogHash(VEGNAGUN_CHAIN_ORDER[0]!, farplaneBuild, seed).hash, `ch5 ${seed}`).toBe(BASE.ch5[seed - 1]);
       expect(chainLogHash(LEBLANC_CHAIN_ORDER[0]!, chateauBuild, seed).hash, `ch6 ${seed}`).toBe(BASE.ch6[seed - 1]);
       expect(chainLogHash(FALLEN_AEONS_CHAIN_ORDER[0], farplaneBuild, seed).hash, `ch11 ${seed}`).toBe(BASE.ch11[seed - 1]);
       expect(chainLogHash(FALLEN_AEONS_CHAIN_ORDER[1], farplaneBuild, seed).hash, `sisters ${seed}`).toBe(BASE.sisters[seed - 1]);
     }
-  }, 120_000);
+  }), 120_000);
 });

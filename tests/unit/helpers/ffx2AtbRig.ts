@@ -275,7 +275,9 @@ export function engineRun(sc: Scenario, observe?: (engine: FFX2Engine, step: num
     atbSpeed: sc.speed,
     minigames: false,
     ...(sc.roll ? { rollFirstAttack: true } : {}),
-    ...(sc.actionSeconds > 0 ? { actionTimeSeconds: sc.actionSeconds } : {}),
+    // r56: the scenario owns its action time (the oracle models exactly `sc.actionSeconds`, 0 = none), so it is always passed: an explicit option is how a run opts out of the
+    // production per-command span (`action-span.ts`), which the oracle does not model (the clocks are proved here, the span by `ffx2-action-span.test.ts`).
+    actionTimeSeconds: sc.actionSeconds,
   });
   engine.init(battle);
   const state = engine.state();

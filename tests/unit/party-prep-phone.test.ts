@@ -168,12 +168,13 @@ describe('the phone stylesheets cannot touch a desktop size', () => {
     const allowed = outside.replace(/\.prep__phone-[a-z]+,?\s*/g, '').replace(/\{\s*display:\s*none;\s*\}/, '').trim();
     expect(allowed).toBe('');
     expect(text.slice(at).match(/@media/g)).toHaveLength(1);
-    // And each rule inside it is scoped to the CHAPTER tab's page.
+    // And each rule inside it is scoped to the CHAPTER tab's page (and, since release 56, the hidden Pilgrimage's RUN tab, which takes the same recipe: PR-0465).
     const inner = text.slice(text.indexOf('{', at) + 1);
     const selectors = [...inner.matchAll(/([^{}]+)\{[^{}]*\}/g)].map((m) => m[1]!.trim()).filter(Boolean);
     expect(selectors.length).toBeGreaterThan(5);
+    const SCOPE = ".prep:is([data-tab='chapter'], [data-tab='pilgrim-run'])";
     for (const s of selectors) {
-      for (const part of s.split(',')) expect(part.trim()).toMatch(/^\.prep\[data-tab='chapter'\]/);
+      for (const part of s.split(SCOPE).join(".prep[data-tab='chapter']").split(',')) expect(part.trim()).toMatch(/^\.prep\[data-tab='chapter'\]/);
     }
   });
 

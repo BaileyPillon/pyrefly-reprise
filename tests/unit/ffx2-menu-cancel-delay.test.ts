@@ -30,6 +30,7 @@ import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_CHAIN_ORDER } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { driveChapter4, driveChapter5, driveChapter6, ffx2Options, logHash } from './helpers/ffx2ChapterDrive.ts';
 import { ActingAbilities, carriesMenuCancel } from './helpers/ffx2MenuCancel.ts';
+import { withActionSpanKnobs } from '../../src/battle/ffx2/action-span.ts';
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
@@ -92,14 +93,15 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 
-  it('Chapters IV, V and VI at human pace replay the pinned logs, byte for byte', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('Chapters IV, V and VI at human pace replay the pinned logs, byte for byte', () => withActionSpanKnobs({ perCommand: false }, () => {
     for (const [name, drive] of Object.entries(DRIVES)) {
       for (let seed = 1; seed <= 3; seed++) {
         expect(logHash(drive(seed, 1500, { atbMode: 'active' })), `${name} active ${seed}`).toBe(ON[`${name}|active|${seed}`]);
         expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true }, undefined, 500)), `${name} split ${seed}`).toBe(ON[`${name}|split|${seed}`]);
       }
     }
-  }, 120_000);
+  }), 120_000);
 });
 
 /** A fresh engine on `group` with `party`, stopped at its first open menu. */

@@ -40,7 +40,7 @@ sheet as Bailey read it, with the re-check's four wording minors corrected.
 - **Sources:** Invincible is the sources' answer to Lightfall (research §5: the wiki and GamerGuides, who
   reach it with an Alchemist's Dark Matter mix). The preset has no Alchemist, and a Hero Drink gives the
   same status to one girl. **The count of 3 is an `[estimate]`.** Drinking at Nooj 4,500 HP or less is
-  our own line, not game data.
+  our own line, not game data. *(Superseded 2026-10-19: the shipped line drinks at 12,000 HP since r56, with the per-command action time on; see `docs/handoff/re-parity-r56-re.md`. The 4,500 above is the history.)*
 - **Measured:** first try 28/200 without the prep and 18/200 with it. Nooj fought fresh: 86/200.
 
 ### GP5 b: +8 levels, 54 / 56 / 58 (`DEN_OF_WOE_LEVEL_BONUS`)
@@ -159,7 +159,7 @@ drop the prep". **FFX-2 only** (Chapter XV). Built on `chapter-gippal-ship-0925`
 
 | Switch | Value | What it means |
 |---|---|---|
-| `DEN_OF_WOE_HERO_DRINKS` | **3** `[estimate]` | 3 Hero Drinks in the Chapter XV bag. Near the end of Nooj (4,500 HP or less, our own line) a girl Lightfall would kill drinks one: Invincible, the sources' answer, reached with a Hero Drink because the preset has no Alchemist |
+| `DEN_OF_WOE_HERO_DRINKS` | **3** `[estimate]` | 3 Hero Drinks in the Chapter XV bag. Near the end of Nooj (4,500 HP or less, our own line; *superseded 2026-10-19: 12,000 HP since r56*) a girl Lightfall would kill drinks one: Invincible, the sources' answer, reached with a Hero Drink because the preset has no Alchemist |
 | `DEN_OF_WOE_LEVEL_BONUS` | **8** `[estimate]`, in Bailey's name | Yuna 54, Rikku 56, Paine 58 (max HP 2,824 / 6,456 / 6,654) |
 | `DEN_OF_WOE_LIGHTFALL_PREP` | **false** | no Curaga or plain-swing hint on Nooj; the Dark Knights stay on Darkness |
 | `DEN_OF_WOE_RETRY_FROM_LINK` | **false** (not picked) | a loss retries from Baralai, as the game does |

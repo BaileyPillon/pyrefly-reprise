@@ -1,0 +1,1174 @@
+{
+ "size": "390x844",
+ "touch": true,
+ "injected": [
+  "setSeed(7) before the first key",
+  "autoBattle('intended') for the stop-1 fight at skip speed"
+ ],
+ "pages": {
+  "1-route": {
+   "small": [
+    {
+     "t": "Pilgrimage · prototype",
+     "fs": 13,
+     "cls": "pgx-eyebrow"
+    },
+    {
+     "t": "Fight 1 / 4",
+     "fs": 12,
+     "cls": "pgx-chip"
+    },
+    {
+     "t": "/ 4",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Boons 0 kept",
+     "fs": 12,
+     "cls": "pgx-chip"
+    },
+    {
+     "t": "kept",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Four stops · two forksPrototype · ",
+     "fs": 12,
+     "cls": "pgx-h"
+    },
+    {
+     "t": "Prototype · FFX only",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Stop 1",
+     "fs": 12,
+     "cls": "pgx-tier__label"
+    },
+    {
+     "t": "VII",
+     "fs": 11.8,
+     "cls": "pgx-node__no"
+    },
+    {
+     "t": "Start",
+     "fs": 12.1,
+     "cls": "pgx-tag pgx-tag--new"
+    },
+    {
+     "t": "Macalania Temple",
+     "fs": 11,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Stop 2 · a fork",
+     "fs": 12,
+     "cls": "pgx-tier__label"
+    },
+    {
+     "t": "VIII",
+     "fs": 11.8,
+     "cls": "pgx-node__no"
+    },
+    {
+     "t": "The deck of the Fahrenheit",
+     "fs": 11,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "IX",
+     "fs": 11.8,
+     "cls": "pgx-node__no"
+    },
+    {
+     "t": "Cavern of the Stolen Fayth",
+     "fs": 11,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Stop 3 · a fork",
+     "fs": 12,
+     "cls": "pgx-tier__label"
+    },
+    {
+     "t": "X",
+     "fs": 11.8,
+     "cls": "pgx-node__no"
+    },
+    {
+     "t": "Highbridge of Bevelle",
+     "fs": 11,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "XXVII",
+     "fs": 11.8,
+     "cls": "pgx-node__no"
+    },
+    {
+     "t": "Elite · Dark Mirror",
+     "fs": 12.1,
+     "cls": "pgx-tag pgx-tag--elite"
+    },
+    {
+     "t": "Mushroom Rock Road",
+     "fs": 11,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "Stop 4 · the finale",
+     "fs": 12,
+     "cls": "pgx-tier__label"
+    },
+    {
+     "t": "III",
+     "fs": 11.8,
+     "cls": "pgx-node__no"
+    },
+    {
+     "t": "Finale",
+     "fs": 12.1,
+     "cls": "pgx-tag pgx-tag--gold"
+    },
+    {
+     "t": "Dream's End",
+     "fs": 11,
+     "cls": "pgx-node__sub"
+    },
+    {
+     "t": "No run yet",
+     "fs": 12,
+     "cls": "pgx-fine"
+    }
+   ],
+   "smallCount": 27,
+   "truncated": [
+    {
+     "t": "The deck of the Fahrenheit",
+     "sw": 208,
+     "cw": 155
+    },
+    {
+     "t": "Cavern of the Stolen Fayth",
+     "sw": 209,
+     "cw": 155
+    },
+    {
+     "t": "Highbridge of Bevelle",
+     "sw": 169,
+     "cw": 155
+    },
+    {
+     "t": "Mushroom Rock Road",
+     "sw": 160,
+     "cw": 155
+    }
+   ],
+   "tagsOut": [
+    {
+     "t": "Elite · Dark Mirror",
+     "over": 10
+    }
+   ],
+   "targets": [],
+   "clipped": [],
+   "beginInView": false,
+   "beginRect": {
+    "y": 987,
+    "h": 52
+   },
+   "scrollH": 1067,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "2-prep-run-tab": {
+   "small": [
+    {
+     "t": "PARTY PREP",
+     "fs": 4.3,
+     "cls": "prep__eyebrow-label"
+    },
+    {
+     "t": "VII · SEYMOUR AND ANIMA — MACALANI",
+     "fs": 3.5,
+     "cls": "prep__where"
+    },
+    {
+     "t": "T",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Tidus",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 18",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "Y",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Yuna",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 18",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "R",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Rikku",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 40",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "W",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Wakka",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 18",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "A",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Auron",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 18",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "L",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Lulu",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 18",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "K",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Kimahri",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 18",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "RUN",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "CHAPTER",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "STATS",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "SPHERE GRID",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "EQUIPMENT",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "ITEMS",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "OVERDRIVE",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "Pilgrimage · fight 1 of 4",
+     "fs": 3.2,
+     "cls": "pgx-run__k"
+    },
+    {
+     "t": "Boons for Seymour and Anima",
+     "fs": 9,
+     "cls": "pgx-run__t"
+    },
+    {
+     "t": "NONE",
+     "fs": 2.9,
+     "cls": "pgx-prow__kind"
+    },
+    {
+     "t": "No boon for this fight",
+     "fs": 6.4,
+     "cls": "pgx-prow__name"
+    },
+    {
+     "t": "The first stop is the chapter as i",
+     "fs": 3.9,
+     "cls": "pgx-prow__fx"
+    },
+    {
+     "t": "The rest is faithful",
+     "fs": 3.2,
+     "cls": "pgx-run__k"
+    },
+    {
+     "t": "Chapter VII’s own party at its own",
+     "fs": 3.9,
+     "cls": ""
+    },
+    {
+     "t": "A boon lasts this fight only. Esc ",
+     "fs": 4,
+     "cls": ""
+    },
+    {
+     "t": "0 in the pack · 0 used",
+     "fs": 3.2,
+     "cls": "pgx-run__k pgx-run__k--gold"
+    },
+    {
+     "t": "▲ ▼ PARTY  ·  ◀ ▶ TABS\n         · ",
+     "fs": 3,
+     "cls": "prep__hint"
+    }
+   ],
+   "smallCount": 62,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "T\n            Tidus\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "Y\n            Yuna\n         ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "R\n            Rikku\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "W\n            Wakka\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "A\n            Auron\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "L\n            Lulu\n         ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "K\n            Kimahri\n      ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "RUN",
+     "w": 11,
+     "h": 9
+    },
+    {
+     "t": "CHAPTER",
+     "w": 25,
+     "h": 9
+    },
+    {
+     "t": "STATS",
+     "w": 16,
+     "h": 9
+    },
+    {
+     "t": "SPHERE GRID",
+     "w": 36,
+     "h": 9
+    },
+    {
+     "t": "EQUIPMENT",
+     "w": 31,
+     "h": 9
+    },
+    {
+     "t": "ITEMS",
+     "w": 16,
+     "h": 9
+    },
+    {
+     "t": "OVERDRIVE",
+     "w": 30,
+     "h": 9
+    },
+    {
+     "t": "ENTER BEGINS THE BATTLE",
+     "w": 52,
+     "h": 4
+    },
+    {
+     "t": "ESC BACK",
+     "w": 19,
+     "h": 4
+    },
+    {
+     "t": "START BATTLE",
+     "w": 75,
+     "h": 15
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 442,
+    "h": 4
+   },
+   "scrollH": 844,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "3-boons": {
+   "small": [
+    {
+     "t": "Pilgrimage · after fight 1 of 4",
+     "fs": 13,
+     "cls": "pgx-eyebrow"
+    },
+    {
+     "t": "Fight 1 / 4 done",
+     "fs": 12,
+     "cls": "pgx-chip"
+    },
+    {
+     "t": "/ 4 done",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Boons 0 in the pack",
+     "fs": 12,
+     "cls": "pgx-chip"
+    },
+    {
+     "t": "in the pack",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Chapter VII · cleared",
+     "fs": 12,
+     "cls": "k"
+    },
+    {
+     "t": "No gil to count",
+     "fs": 12,
+     "cls": "row"
+    },
+    {
+     "t": "One pick, then the road. A boon la",
+     "fs": 12,
+     "cls": "src"
+    },
+    {
+     "t": "Your road so far",
+     "fs": 12,
+     "cls": "pgx-h pgx-h--flat"
+    },
+    {
+     "t": "Road",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Take one boonfor the next fight on",
+     "fs": 12,
+     "cls": "pgx-h"
+    },
+    {
+     "t": "for the next fight only",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "ITEMNext fight",
+     "fs": 12.1,
+     "cls": "pgx-card__kind"
+    },
+    {
+     "t": "Next fight",
+     "fs": 12.1,
+     "cls": "pgx-tag pgx-tag--gold"
+    },
+    {
+     "t": "Two Healing Springs in your pack: ",
+     "fs": 13.8,
+     "cls": "pgx-card__fx"
+    },
+    {
+     "t": "Goes in the pack",
+     "fs": 12.2,
+     "cls": "pgx-card__who"
+    },
+    {
+     "t": "FFX item",
+     "fs": 12,
+     "cls": "pgx-card__src"
+    },
+    {
+     "t": "ITEMNext fight",
+     "fs": 12.1,
+     "cls": "pgx-card__kind"
+    },
+    {
+     "t": "Next fight",
+     "fs": 12.1,
+     "cls": "pgx-tag pgx-tag--gold"
+    },
+    {
+     "t": "Two Lunar Curtains in your pack: S",
+     "fs": 13.8,
+     "cls": "pgx-card__fx"
+    },
+    {
+     "t": "Goes in the pack",
+     "fs": 12.2,
+     "cls": "pgx-card__who"
+    },
+    {
+     "t": "FFX item",
+     "fs": 12,
+     "cls": "pgx-card__src"
+    },
+    {
+     "t": "ARMOURNext fight",
+     "fs": 12.1,
+     "cls": "pgx-card__kind"
+    },
+    {
+     "t": "Next fight",
+     "fs": 12.1,
+     "cls": "pgx-tag pgx-tag--gold"
+    },
+    {
+     "t": "Infinite Regen for the wearer, and",
+     "fs": 13.8,
+     "cls": "pgx-card__fx"
+    },
+    {
+     "t": "Wearer: the first of Kimahri, Tidu",
+     "fs": 12.1,
+     "cls": "pgx-card__who"
+    },
+    {
+     "t": "FFX armour ability",
+     "fs": 12,
+     "cls": "pgx-card__src"
+    },
+    {
+     "t": "Then choose the road",
+     "fs": 12,
+     "cls": "pgx-h"
+    },
+    {
+     "t": "VIII · The deck of the Fahrenheit",
+     "fs": 12,
+     "cls": "l"
+    },
+    {
+     "t": "IX · Cavern of the Stolen Fayth",
+     "fs": 12,
+     "cls": "l"
+    }
+   ],
+   "smallCount": 30,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [],
+   "beginInView": false,
+   "beginRect": {
+    "y": 1304,
+    "h": 52
+   },
+   "scrollH": 1384,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "4-road": {
+   "small": [
+    {
+     "t": "Pilgrimage · after fight 1 of 4",
+     "fs": 13,
+     "cls": "pgx-eyebrow"
+    },
+    {
+     "t": "Fight 1 / 4 done",
+     "fs": 12,
+     "cls": "pgx-chip"
+    },
+    {
+     "t": "/ 4 done",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Boons 1 in the pack",
+     "fs": 12,
+     "cls": "pgx-chip"
+    },
+    {
+     "t": "in the pack",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Chapter VII · cleared",
+     "fs": 12,
+     "cls": "k"
+    },
+    {
+     "t": "No gil to count",
+     "fs": 12,
+     "cls": "row"
+    },
+    {
+     "t": "One pick, then the road. A boon la",
+     "fs": 12,
+     "cls": "src"
+    },
+    {
+     "t": "Your road so far",
+     "fs": 12,
+     "cls": "pgx-h pgx-h--flat"
+    },
+    {
+     "t": "Road",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Your boons are chosenfor the next ",
+     "fs": 12,
+     "cls": "pgx-h"
+    },
+    {
+     "t": "for the next fight only",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "ITEMNext fight",
+     "fs": 12.1,
+     "cls": "pgx-card__kind"
+    },
+    {
+     "t": "Next fight",
+     "fs": 12.1,
+     "cls": "pgx-tag pgx-tag--gold"
+    },
+    {
+     "t": "Two Healing Springs in your pack: ",
+     "fs": 13.8,
+     "cls": "pgx-card__fx"
+    },
+    {
+     "t": "Goes in the pack",
+     "fs": 12.2,
+     "cls": "pgx-card__who"
+    },
+    {
+     "t": "FFX item",
+     "fs": 12,
+     "cls": "pgx-card__src"
+    },
+    {
+     "t": "Then choose the road",
+     "fs": 12,
+     "cls": "pgx-h"
+    },
+    {
+     "t": "VIII · The deck of the Fahrenheit",
+     "fs": 12,
+     "cls": "l"
+    },
+    {
+     "t": "IX · Cavern of the Stolen Fayth",
+     "fs": 12,
+     "cls": "l"
+    }
+   ],
+   "smallCount": 20,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [],
+   "beginInView": false,
+   "beginRect": {
+    "y": 932,
+    "h": 52
+   },
+   "scrollH": 1012,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "5-stop-2-prep": {
+   "small": [
+    {
+     "t": "PARTY PREP",
+     "fs": 4.3,
+     "cls": "prep__eyebrow-label"
+    },
+    {
+     "t": "VIII · EVRAE — DECK OF THE FAHRENH",
+     "fs": 3.5,
+     "cls": "prep__where"
+    },
+    {
+     "t": "T",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Tidus",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 24",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "W",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Wakka",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 24",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "R",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Rikku",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 41",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "L",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Lulu",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 24",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "A",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Auron",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 26",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "K",
+     "fs": 5.4,
+     "cls": ""
+    },
+    {
+     "t": "Kimahri",
+     "fs": 6.5,
+     "cls": "prep__member-name"
+    },
+    {
+     "t": "S.LV 22",
+     "fs": 4.1,
+     "cls": "prep__member-lv"
+    },
+    {
+     "t": "RUN",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "CHAPTER",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "STATS",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "SPHERE GRID",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "EQUIPMENT",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "ITEMS",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "OVERDRIVE",
+     "fs": 4.2,
+     "cls": "prep__tab"
+    },
+    {
+     "t": "Pilgrimage · fight 2 of 4",
+     "fs": 3.2,
+     "cls": "pgx-run__k"
+    },
+    {
+     "t": "Boons for Evrae",
+     "fs": 9,
+     "cls": "pgx-run__t"
+    },
+    {
+     "t": "ITEM",
+     "fs": 2.9,
+     "cls": "pgx-prow__kind"
+    },
+    {
+     "t": "Healing Spring ×2",
+     "fs": 6.4,
+     "cls": "pgx-prow__name"
+    },
+    {
+     "t": "Healing Spring ×2 is in the pack.",
+     "fs": 3.9,
+     "cls": "pgx-prow__fx"
+    },
+    {
+     "t": "The rest is faithful",
+     "fs": 3.2,
+     "cls": "pgx-run__k"
+    },
+    {
+     "t": "Chapter VIII’s own party at its ow",
+     "fs": 3.9,
+     "cls": ""
+    },
+    {
+     "t": "A boon lasts this fight only. Esc ",
+     "fs": 4,
+     "cls": ""
+    },
+    {
+     "t": "1 in the pack · 0 used",
+     "fs": 3.2,
+     "cls": "pgx-run__k pgx-run__k--gold"
+    },
+    {
+     "t": "▲ ▼ PARTY  ·  ◀ ▶ TABS\n         · ",
+     "fs": 3,
+     "cls": "prep__hint"
+    },
+    {
+     "t": "▲ ▼",
+     "fs": 3,
+     "cls": ""
+    },
+    {
+     "t": "◀ ▶",
+     "fs": 3,
+     "cls": ""
+    },
+    {
+     "t": "ENTER BEGINS THE BATTLE",
+     "fs": 3,
+     "cls": "prep__hint-act"
+    }
+   ],
+   "smallCount": 60,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [
+    {
+     "t": "T\n            Tidus\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "W\n            Wakka\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "R\n            Rikku\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "L\n            Lulu\n         ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "A\n            Auron\n        ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "K\n            Kimahri\n      ",
+     "w": 85,
+     "h": 17
+    },
+    {
+     "t": "RUN",
+     "w": 11,
+     "h": 9
+    },
+    {
+     "t": "CHAPTER",
+     "w": 25,
+     "h": 9
+    },
+    {
+     "t": "STATS",
+     "w": 16,
+     "h": 9
+    },
+    {
+     "t": "SPHERE GRID",
+     "w": 36,
+     "h": 9
+    },
+    {
+     "t": "EQUIPMENT",
+     "w": 31,
+     "h": 9
+    },
+    {
+     "t": "ITEMS",
+     "w": 16,
+     "h": 9
+    },
+    {
+     "t": "OVERDRIVE",
+     "w": 30,
+     "h": 9
+    },
+    {
+     "t": "ENTER BEGINS THE BATTLE",
+     "w": 52,
+     "h": 4
+    },
+    {
+     "t": "ESC BACK",
+     "w": 19,
+     "h": 4
+    },
+    {
+     "t": "START BATTLE",
+     "w": 75,
+     "h": 15
+    }
+   ],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 442,
+    "h": 4
+   },
+   "scrollH": 844,
+   "clientH": 844,
+   "hscroll": false
+  },
+  "6-over": {
+   "small": [
+    {
+     "t": "Run over · 0:20",
+     "fs": 12.1,
+     "cls": "pgx-over__chip"
+    },
+    {
+     "t": "Reached",
+     "fs": 12,
+     "cls": "k"
+    },
+    {
+     "t": "New best",
+     "fs": 12,
+     "cls": "d"
+    },
+    {
+     "t": "Time",
+     "fs": 12,
+     "cls": "k"
+    },
+    {
+     "t": "a run ends on a loss",
+     "fs": 12,
+     "cls": "d"
+    },
+    {
+     "t": "Boons",
+     "fs": 12,
+     "cls": "k"
+    },
+    {
+     "t": "each lasted one fight",
+     "fs": 12,
+     "cls": "d"
+    },
+    {
+     "t": "1 won, then left the road",
+     "fs": 12,
+     "cls": ""
+    },
+    {
+     "t": "Boons used",
+     "fs": 12,
+     "cls": "pgx-over__lbl"
+    }
+   ],
+   "smallCount": 9,
+   "truncated": [],
+   "tagsOut": [],
+   "targets": [],
+   "clipped": [],
+   "beginInView": true,
+   "beginRect": {
+    "y": 390,
+    "h": 52
+   },
+   "scrollH": 844,
+   "clientH": 844,
+   "hscroll": false
+  }
+ },
+ "problems": [],
+ "prep1": {
+  "chapter": "seymour-anima-macalania",
+  "game": "ffx",
+  "tabs": [
+   "pilgrim-run",
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "pilgrim-run",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 7
+ },
+ "prep2": {
+  "chapter": "evrae-airship",
+  "game": "ffx",
+  "tabs": [
+   "pilgrim-run",
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "pilgrim-run",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 7
+ },
+ "afterEscapes": "pilgrim-over",
+ "errors": [],
+ "notFound": [],
+ "pass": true
+}

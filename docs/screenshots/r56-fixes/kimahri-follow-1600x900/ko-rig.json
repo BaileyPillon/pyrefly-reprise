@@ -1,0 +1,343 @@
+{
+ "size": "1600x900",
+ "tag": "rig",
+ "base": "http://127.0.0.1:5196/",
+ "injected": [
+  "setSeed(1)",
+  "kimahri actor.setPose('ko') at the first menu"
+ ],
+ "steps": [],
+ "reach": "cutscene",
+ "probe": {
+  "stageKeys": [
+   "camera",
+   "vfx",
+   "highlight",
+   "opts",
+   "actors",
+   "hits",
+   "scratch",
+   "ground",
+   "paintScratch",
+   "quad",
+   "panels",
+   "flashEl",
+   "lastState",
+   "arrivals",
+   "arrivalCleanups",
+   "partRings",
+   "spellFx",
+   "unhookSpellFx",
+   "motion",
+   "pyreflies",
+   "entrances",
+   "staging",
+   "lighting",
+   "groundLuma",
+   "art",
+   "fx"
+  ],
+  "hasKim": true,
+  "actorKeys": [
+   "actor",
+   "side",
+   "slot",
+   "artId",
+   "kind",
+   "painted"
+  ],
+  "act": [
+   "isObject3D",
+   "uuid",
+   "name",
+   "type",
+   "parent",
+   "children",
+   "up",
+   "position",
+   "rotation",
+   "quaternion",
+   "scale",
+   "matrix",
+   "matrixWorld",
+   "matrixAutoUpdate",
+   "matrixWorldAutoUpdate",
+   "matrixWorldNeedsUpdate",
+   "layers",
+   "visible",
+   "castShadow",
+   "receiveShadow",
+   "frustumCulled",
+   "renderOrder",
+   "animations",
+   "customDepthMaterial",
+   "customDistanceMaterial",
+   "static",
+   "userData",
+   "pivot",
+   "isGroup",
+   "tweens",
+   "shadow",
+   "subject",
+   "inner",
+   "slots",
+   "active",
+   "blend",
+   "swapPolicyLast",
+   "poses",
+   "poseUrls",
+   "owned",
+   "worldHeight",
+   "crossfadeMs",
+   "poseShiftPx",
+   "placeholderFactory",
+   "placeholderBaseline",
+   "matte",
+   "fitBaseline",
+   "hoverHeight",
+   "accentHalo",
+   "hoverBobAmp",
+   "hoverBobSpeed",
+   "shadowBaseRadius",
+   "shadowBaseOpacity",
+   "shadowSquash",
+   "reference",
+   "referenceUpp",
+   "referencePose",
+   "sizeFromReference",
+   "extents",
+   "headRef"
+  ],
+  "rig": true
+ },
+ "partList": [
+  {
+   "name": "spear_shaft",
+   "type": "Mesh",
+   "op": 1,
+   "n": 116
+  },
+  {
+   "name": "spear_head",
+   "type": "Mesh",
+   "op": 1,
+   "n": 28
+  },
+  {
+   "name": "mane_back",
+   "type": "Mesh",
+   "op": 1,
+   "n": 239
+  },
+  {
+   "name": "tail",
+   "type": "Mesh",
+   "op": 1,
+   "n": 318
+  },
+  {
+   "name": "mane_cap",
+   "type": "Mesh",
+   "op": 1,
+   "n": 117
+  },
+  {
+   "name": "hair_cap",
+   "type": "Mesh",
+   "op": 1,
+   "n": 101
+  },
+  {
+   "name": "hip_cap",
+   "type": "Mesh",
+   "op": 1,
+   "n": 151
+  },
+  {
+   "name": "leg_far",
+   "type": "Mesh",
+   "op": 1,
+   "n": 369
+  },
+  {
+   "name": "leg_near",
+   "type": "Mesh",
+   "op": 1,
+   "n": 275
+  },
+  {
+   "name": "arm_far",
+   "type": "Mesh",
+   "op": 1,
+   "n": 369
+  },
+  {
+   "name": "body",
+   "type": "Mesh",
+   "op": 1,
+   "n": 445
+  },
+  {
+   "name": "sash_tail",
+   "type": "Mesh",
+   "op": 1,
+   "n": 134
+  },
+  {
+   "name": "arm",
+   "type": "Mesh",
+   "op": 1,
+   "n": 369
+  },
+  {
+   "name": "beard",
+   "type": "Mesh",
+   "op": 1,
+   "n": 153
+  },
+  {
+   "name": "head",
+   "type": "Mesh",
+   "op": 1,
+   "n": 440
+  },
+  {
+   "name": "contact-shadow",
+   "type": "Mesh",
+   "op": 0.48,
+   "n": 42
+  },
+  {
+   "name": "foot-occlusion",
+   "type": "Mesh",
+   "op": 0.432,
+   "n": 42
+  },
+  {
+   "name": "turn-ring",
+   "type": "Mesh",
+   "op": 0.8422925037453677,
+   "n": 50
+  }
+ ],
+ "before": {
+  "tidus": {
+   "x0": -2.179,
+   "x1": -0.444,
+   "y0": -0.223,
+   "y1": 0.668,
+   "pos": [
+    -1.31,
+    0,
+    1.55
+   ]
+  },
+  "yuna": {
+   "x0": -0.328,
+   "x1": 0.939,
+   "y0": -0.028,
+   "y1": 1.662,
+   "pos": [
+    0.3,
+    0,
+    1
+   ]
+  },
+  "seymour-flux": {
+   "x0": 1.654,
+   "x1": 5.474,
+   "y0": -0.086,
+   "y1": 6.032,
+   "pos": [
+    3.54,
+    0,
+    -7.6
+   ]
+  },
+  "mortiorchis": {
+   "x0": -2.783,
+   "x1": 2.52,
+   "y0": 0.747,
+   "y1": 4.802,
+   "pos": [
+    -0.143,
+    1.482,
+    -7.82
+   ]
+  },
+  "kimahri": {
+   "x0": -1.436,
+   "x1": 0.621,
+   "y0": -0.058,
+   "y1": 2.28,
+   "pos": [
+    -0.61,
+    0,
+    -1.05
+   ]
+  }
+ },
+ "camKeys": [
+  "inner",
+  "held"
+ ],
+ "after": {
+  "tidus": {
+   "x0": -2.177,
+   "x1": -0.447,
+   "y0": -0.222,
+   "y1": 0.666,
+   "pos": [
+    -1.31,
+    0,
+    1.55
+   ]
+  },
+  "yuna": {
+   "x0": -0.342,
+   "x1": 0.928,
+   "y0": -0.029,
+   "y1": 1.663,
+   "pos": [
+    0.3,
+    0,
+    1
+   ]
+  },
+  "seymour-flux": {
+   "x0": 1.616,
+   "x1": 5.425,
+   "y0": -0.083,
+   "y1": 6.029,
+   "pos": [
+    3.54,
+    0,
+    -7.6
+   ]
+  },
+  "mortiorchis": {
+   "x0": -2.783,
+   "x1": 2.52,
+   "y0": 0.747,
+   "y1": 4.802,
+   "pos": [
+    -0.143,
+    1.482,
+    -7.82
+   ]
+  },
+  "kimahri": {
+   "x0": -1.473,
+   "x1": 0.906,
+   "y0": -0.022,
+   "y1": 3.034,
+   "pos": [
+    -0.61,
+    0,
+    -1.05
+   ]
+  }
+ },
+ "errors": [],
+ "notFound": []
+}

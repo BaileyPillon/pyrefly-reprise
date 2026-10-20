@@ -32,6 +32,7 @@ import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_CHAIN_ORDER } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { driveChapter4, driveChapter5, driveChapter6, ffx2Options, logHash } from './helpers/ffx2ChapterDrive.ts';
 import { ActingAbilities, carriesMenuCancel } from './helpers/ffx2MenuCancel.ts';
+import { withActionSpanKnobs } from '../../src/battle/ffx2/action-span.ts';
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
@@ -248,7 +249,8 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
     ['f088d67c48d6cc10', '3a74b5193adc4161', 'aeca4110de447dc4'],
     ['eb0956532a9a6edd', '7900cad6eaeb5c12', '06350f07dfd4fd6a'],
   ];
-  it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => withActionSpanKnobs({ perCommand: false }, () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {
       for (let seed = 1; seed <= 3; seed++) {
         const r = drive(seed, 0, { atbMode: 'wait', waitSplit: true });
@@ -256,5 +258,5 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
         expect(logHash(r)).toBe(PINNED[c]![seed - 1]);
       }
     });
-  }, 120_000);
+  }), 120_000);
 });

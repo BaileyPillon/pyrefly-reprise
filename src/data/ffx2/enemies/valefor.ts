@@ -56,12 +56,12 @@ const VALEFOR_IMMUNE: StatusImmunities = {
 };
 
 /**
- * **Action time, ON at 3 s: kept by precedent (D-151 Cloister, D-187 and D-197 Road, D-269 Ixion), awaiting Bailey's pick for this chapter** (those picks were his for those chapters, not for this one; the rule is
+ * **Action time, ON at 3 s: kept by precedent (D-151 Cloister, D-187 and D-197 Road, D-269 Ixion), then confirmed for this chapter by Bailey, D-846 (2026-10-14); SUPERSEDED by the per-command span since r56 (2026-10-19, `ACTION_TIME_PER_COMMAND`, `action-span.ts`; the release driver's delegated pick under Bailey's advance yes).** (The rule is
  * sourced `[verified: 2 sources]`, its length is not, `research/ffx2-trema.md` §12.4). One named constant; `false` turns it off; no boss number moves either way. `tests/unit/chapters/besaid-valefor-bench.test.ts`
  * measures the fight with and without it (the numbers are in the handoff).
  */
 export const VALEFOR_ACTION_TIME_ON: boolean = true;
-/** **`[estimate]`**: the length the precedent chapters ship, awaiting Bailey's pick here. Unsourced (research `ffx2-trema.md` §12.4). */
+/** **`[estimate]`**: the length the precedent chapters ship (D-846); the flat window is superseded by the span since r56 (D-846's 3 s stays in the code, unused while the span is on). Unsourced (research `ffx2-trema.md` §12.4). */
 export const VALEFOR_ACTION_TIME_SECONDS = 3;
 const actionTime = VALEFOR_ACTION_TIME_ON ? { actionTimeSeconds: VALEFOR_ACTION_TIME_SECONDS } : {};
 
@@ -127,7 +127,7 @@ export const besaidValeforGroup: EnemyGroupDef = {
   enemies: [x2Valefor],
   canEscape: false,
   musicCues: AEON_CUE,
-  ...actionTime, // VALEFOR_ACTION_TIME_ON: on, 3 s, kept by precedent (D-151, D-187/D-197, D-269), awaiting Bailey's pick
+  ...actionTime, // VALEFOR_ACTION_TIME_ON: on, 3 s, kept by precedent (D-151, D-187/D-197, D-269), confirmed D-846 (2026-10-14); superseded by the per-command span since r56 (2026-10-19)
 };
 
 export const valeforGroups: readonly EnemyGroupDef[] = [besaidValeforGroup];

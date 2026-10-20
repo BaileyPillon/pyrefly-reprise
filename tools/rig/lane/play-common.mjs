@@ -52,7 +52,9 @@ export async function openGame({ repo, base, rig = 'on', log = console.log, load
   return g;
 }
 
-/** From the title to the chapter's first command menu, by real key presses: Enter through the briefs, the door word on the board, Enter through the cutscene. Throws if the door opens another chapter. */
+/** From the title to the chapter's first command menu, by real key presses: Enter through the briefs, the door word on the board (or, for a LISTED chapter with no door word, its card picked with the board's
+ *  own `select:<id>` beat, then the same Enter), Enter through the cutscene. Throws if the board opens another chapter. A subject whose entry says `reach: { auto: true }` (an aeon that only stands on the
+ *  field in a later link: Ifrit and Shiva in Chapter III, Pterya in Chapter XIV) is then fought to by `fightToActor`. */
 export async function reachFirstMenu(g, spec) {
   const { input, page } = g;
   await page.evaluate(() => window.__pyrefly.setSeed(1));
@@ -62,7 +64,8 @@ export async function reachFirstMenu(g, spec) {
   for (let i = 0; i < 60 && !(await g.brief()) && (await g.scr()) !== 'chapter-select'; i++) await page.waitForTimeout(80);
   for (let i = 0; i < 24 && (await g.scr()) !== 'chapter-select'; i++) { await input.press('Enter'); await page.waitForTimeout(500); }
   if (!(await g.want('chapter-select', 10000))) throw new Error('the chapter board was not reached');
-  for (const ch of spec.chapter.door) { await input.press(ch); await page.waitForTimeout(120); }
+  if (spec.chapter.door) for (const ch of spec.chapter.door) { await input.press(ch); await page.waitForTimeout(120); }
+  else await page.evaluate((id) => window.__pyrefly.trigger(`select:${id}`), spec.chapter.id);
   await page.waitForTimeout(2200);
   const chap = (await g.ss())?.chapter;
   if (chap !== spec.chapter.id) throw new Error(`the door word opened ${chap}, not ${spec.chapter.id}`);
@@ -73,9 +76,48 @@ export async function reachFirstMenu(g, spec) {
   for (let i = 0; i < 300 && !(await g.awaitingMenu()); i++) await page.waitForTimeout(150);
   if (!(await g.awaitingMenu())) throw new Error('no first menu');
   await page.waitForTimeout(2500);
+  if (spec.reach?.auto && !(await page.evaluate((id) => Boolean(window.__pyrefly.battle().stage.actor(id)), spec.actor))) await fightToActor(g, spec.actor);
   const rigs = await page.evaluate(() => window.__pyrefly.rigs?.() ?? null);
   g.log('first menu is up; rigs():', JSON.stringify(rigs).slice(0, 400));
   return rigs;
+}
+
+/**
+ * Fight the earlier links of a chained chapter to the one that stands `who` on the field: the game's own `intended` strategy at SKIP speed (every animation wait collapses; the clock is still the real one, the
+ * recording has not begun), wrapped so that at the first decision of the engine whose state holds `who` alive it hands the fight back (`setAutoPlay(null)`, speed normal) after that one decision. Then waits for
+ * the first human menu. Throws when the chain ends first (the party lost, or the actor never stood). Written for Ifrit (Chapter III link 3), Shiva (link 5) and Pterya (Chapter XIV link 2).
+ */
+export async function fightToActor(g, who, { maxMs = 480000 } = {}) {
+  const { page } = g;
+  g.log(`fighting the earlier links to ${who} (intended, skip speed)`);
+  await page.evaluate((id) => {
+    const api = window.__pyrefly;
+    const pres = api.battle().battlePresenter;
+    api.autoBattle('intended');
+    const inner = pres.auto;
+    window.__reach = { reached: false, decisions: 0 };
+    pres.setAutoPlay((actorId, cmds, eng) => {
+      const s = eng.state();
+      const list = Array.isArray(s.combatants) ? s.combatants : Object.values(s.combatants);
+      window.__reach.decisions++;
+      const pick = inner(actorId, cmds, eng);
+      if (list.some((c) => c.id === id && c.hp > 0)) { window.__reach.reached = true; pres.setAutoPlay(null); pres.setSpeed('normal'); }
+      return pick;
+    });
+    api.setBattleSpeed('skip');
+  }, who);
+  const t0 = Date.now();
+  for (;;) {
+    await page.waitForTimeout(250);
+    const r = await page.evaluate(() => window.__reach);
+    if (r.reached) break;
+    if ((await g.scr()) !== 'battle') throw new Error(`the chain ended (screen ${await g.scr()}) before ${who} stood on the field`);
+    if (Date.now() - t0 > maxMs) throw new Error(`${who} never stood on the field within ${maxMs / 1000} s (${r.decisions} decisions)`);
+  }
+  g.log(`${who} is on the field after ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  for (let i = 0; i < 400 && !(await g.awaitingMenu()); i++) await page.waitForTimeout(150);
+  if (!(await g.awaitingMenu())) throw new Error('no menu after the hand-back');
+  await page.waitForTimeout(1500);
 }
 
 /** Pause the page's clock (retrying while Playwright says the time is in the past); from here the game moves only when `step` runs it. */

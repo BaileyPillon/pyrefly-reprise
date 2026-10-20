@@ -22,6 +22,7 @@ from PIL import Image  # noqa: E402
 
 import lane_common  # noqa: E402
 import lane_fit  # noqa: E402
+import lane_marks  # noqa: E402
 import lane_new  # noqa: E402
 import lane_sheets  # noqa: E402
 import lane_twin  # noqa: E402
@@ -170,6 +171,52 @@ class Twin(unittest.TestCase):
         self.assertNotIn("fit", k["attack"])
         self.assertEqual(k["attack"]["bones"], {"a": {"rot": 0.1}})
         self.assertIn("fit", keys["attack"])
+        k2 = lane_twin.twin_keys({"attack": {"source": "characters/ifrit/attack", "bones": {}}, "ko": {"source": "authored"}}, "ifrit", "grothia")
+        self.assertEqual((k2["attack"]["source"], k2["ko"]["source"]), ("characters/grothia/attack", "authored"))  # the label names the twin's own painting
+
+
+class TwinRegistration(unittest.TestCase):
+    """Pterya's paintings are Valefor's with 60 px more margin: the config's coordinates must move with the canvas (rig-aeons lane, 2026-10-19)."""
+
+    def test_register_shift_finds_the_translation_and_refuses_another_silhouette(self):
+        a = np.zeros((60, 90), bool)
+        a[10:40, 20:50] = True
+        a[25:55, 45:70] = True
+        b = np.zeros((120, 150), bool)
+        b[a.nonzero()[0] + 30, a.nonzero()[1] + 25] = True
+        dx, dy, iou = lane_twin.register_shift(a, b)
+        self.assertEqual((dx, dy), (25, 30))
+        self.assertGreater(iou, 0.99)
+        other = np.zeros((120, 150), bool)
+        other[5:20, 100:140] = True
+        self.assertIsNone(lane_twin.register_shift(a, other))
+
+    def test_shift_pred_moves_half_planes_segments_and_nested_predicates_only(self):
+        p = {"all": [{"poly": "z"}, {"x_ge": 860}], "not": {"seg": {"p0": [1, 2], "p1": [3, 4], "r": 9}}, "grown": {"of": {"y_lt": 100, "colour": {"r_lt": 0.4}}, "px": 8}}
+        q = lane_twin.shift_pred(p, 60, 50)
+        self.assertEqual(q["all"], [{"poly": "z"}, {"x_ge": 920}])
+        self.assertEqual(q["not"]["seg"], {"p0": [61, 52], "p1": [63, 54], "r": 9})
+        self.assertEqual(q["grown"]["of"], {"y_lt": 150, "colour": {"r_lt": 0.4}})
+        self.assertEqual(p["all"][1], {"x_ge": 860})  # the input is untouched
+
+    def test_shift_config_moves_the_cut_the_bones_the_joints_and_each_poses_marks(self):
+        cfg = {"cut": {"polys": {"h": [[0, 0], [10, 0]]}, "parts": {"head": {"include": [{"poly": "h"}, {"x_ge": 5}]}}, "ops": [{"op": "skirt", "back": "a", "front": "b", "px": 4, "zone": {"y_ge": 7}}], "order": ["head"]},
+               "build": {"bones": [["root", None, [10, 20]], ["head", "root", [11, 5]]], "skin": {"head": {"type": "chain", "bones": ["head"], "joints": [[1, 2], [3, 4]], "ramps": [10]}}, "landmarks": {"head": ["head", [8, 9]]}},
+               "landmarks": {"attack": {"head": [100, 200]}, "ko": {"head": [1, 1]}}, "fit": {"keys": {"ko": {"init": {"pelvis.dx": -12.5}}}}}
+        out, skipped = lane_twin.shift_config(cfg, {"idle": (60, 60), "attack": (60, 61)})
+        self.assertEqual(out["cut"]["polys"]["h"], [[60, 60], [70, 60]])
+        self.assertEqual(out["cut"]["parts"]["head"]["include"][1], {"x_ge": 65})
+        self.assertEqual(out["cut"]["ops"][0]["zone"], {"y_ge": 67})
+        self.assertEqual(out["build"]["bones"][1][2], [71, 65])
+        self.assertEqual(out["build"]["skin"]["head"]["joints"], [[61, 62], [63, 64]])
+        self.assertEqual(out["build"]["landmarks"]["head"], ["head", [68, 69]])
+        self.assertEqual(out["landmarks"]["attack"]["head"], [160, 261])  # its own pose's shift
+        self.assertEqual(out["landmarks"]["ko"]["head"], [61, 61])  # a pose with no shift of its own takes the idle's
+        self.assertEqual(out["fit"], cfg["fit"])  # offsets and angles are relative: they stay
+        self.assertEqual(skipped, [])
+        self.assertEqual(cfg["cut"]["polys"]["h"], [[0, 0], [10, 0]])  # the base is untouched
+        _o, skip2 = lane_twin.shift_config({"cut": {"polys": {}, "circles": []}, "sam": {"parts": {"a": {}}}}, {"idle": (1, 1)})
+        self.assertEqual(skip2, ["cut.circles", "sam"])  # what it cannot move it names
 
 
 class Sheets(unittest.TestCase):
@@ -238,6 +285,24 @@ class DryFit(unittest.TestCase):
             self.assertFalse(sub.work.exists())
             with self.assertRaises(SystemExit):
                 lane_fit.target_poses(sub)  # no targets yet: it says how to make them
+
+
+class TestMarksFirst(unittest.TestCase):
+    def test_loss_is_light_inside_the_aim_and_heavy_past_it(self):
+        self.assertAlmostEqual(lane_marks.mark_loss([0.0, 0.0]), 0.0)
+        inside = lane_marks.mark_loss([0.02, 0.02])
+        outside = lane_marks.mark_loss([0.05, 0.05])
+        self.assertLess(inside, 0.1)
+        self.assertGreater(outside, 5.0)  # the hinge is what pulls a far mark in
+
+    def test_init_dict_has_the_shape_the_fitter_reads(self):
+        x = np.array([0.5, 0.25, 10.0, -20.0, 1.5, 33.0, 7.0, 0.0])  # rot of bones 1 and 2, one offset bone (dx, dy), one scale, root dx dy rot
+        init = lane_marks.init_dict(["root", "a", "b"], [1, 2], ["a"], ["b"], x, 2)
+        self.assertEqual(init["a"], round(0.5 * 180 / 3.141592653589793, 1))
+        self.assertEqual(init["a.dx"], 10.0)
+        self.assertEqual(init["a.dy"], -20.0)
+        self.assertEqual(init["b.s"], 1.5)
+        self.assertEqual(init["root.dx"], 33.0)
 
 
 if __name__ == "__main__":

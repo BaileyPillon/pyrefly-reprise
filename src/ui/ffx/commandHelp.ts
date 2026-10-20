@@ -82,6 +82,16 @@ function defFor(cmd: AvailableCommand): AbilityDef | null {
 }
 
 /**
+ * Is this Overdrive the opener of a picker list rather than a timed input or a move with a target? Yuna's Grand Summon (the aeon list) and Rikku's Mix
+ * (the ingredient list) are: Enter on the row opens the picker at once (`MinigameKind`, `minigames/YunaGrandSummon.ts`, `RikkuMix.ts`).
+ */
+export function opensPickerList(cmd: AvailableCommand): boolean {
+  if (cmd.command.kind !== 'overdrive') return false;
+  const kind = defFor(cmd)?.minigame;
+  return kind === 'yuna-grand-summon' || kind === 'rikku-mix';
+}
+
+/**
  * One line on the row, or `''` when nothing can honestly be said.
  *
  * `describeAbility` already writes the four command kinds that resolve to no

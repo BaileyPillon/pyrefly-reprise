@@ -21,6 +21,7 @@ import { ABILITIES } from '../../../src/data/ffx2/index.ts';
 import { ANGRA_MAINYU_ACTION_TIME_SECONDS } from '../../../src/data/ffx2/enemies/angra-mainyu.ts';
 import { X2_ANGRA_MAINYU_ID as BODY } from '../../../src/data/angra-mainyu-ids.ts';
 import { commandOf, driveAngra, logOf, nextInput, openAngra, playAngra, startsOf, topUp, type AngraEv, type AngraInput } from '../helpers/angraMainyuDrive.ts';
+import { withActionSpanKnobs } from '../../../src/battle/ffx2/action-span.ts';
 
 const GIRLS = ['yuna', 'rikku', 'paine'];
 const SPELLS: string[] = [A.firaga, A.waterga, A.thundaga, A.blizzaga];
@@ -337,7 +338,8 @@ describe('the cadence in the real engine: steps from one turn\'s start to the ne
     }
   });
 
-  it('with the 3 s window (kept by precedent, awaiting Bailey\'s pick) every turn is exactly 90 steps longer', () => {
+  // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
+  it('with the 3 s window (kept by precedent, awaiting Bailey\'s pick) every turn is exactly 90 steps longer', () => withActionSpanKnobs({ perCommand: false }, () => {
     const window = ANGRA_MAINYU_ACTION_TIME_SECONDS * STEPS_PER_SECOND;
     expect(window).toBe(90);
     const by = cadence(true);
@@ -345,7 +347,7 @@ describe('the cadence in the real engine: steps from one turn\'s start to the ne
       expect(by[ability]?.length ?? 0, ability).toBeGreaterThanOrEqual(2);
       expect(new Set(by[ability]), ability).toEqual(new Set([steps + window]));
     }
-  });
+  }));
 });
 
 void nextInput;
