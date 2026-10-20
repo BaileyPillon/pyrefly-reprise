@@ -1191,7 +1191,8 @@
        "edge": 16,
        "inner": 30,
        "grow": 8
-      }
+      },
+      "scaleArea": 1.018
      }
     },
     "attack": {
@@ -1206,7 +1207,8 @@
        "inner": 30,
        "grow": 8
       },
-      "tex": 0.68
+      "tex": 0.68,
+      "scaleArea": 1.114
      }
     }
    },
