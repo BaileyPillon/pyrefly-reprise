@@ -67,6 +67,7 @@ import { BLEND_MS_MAX, demoBlend } from './motion/DemoBlend.ts';
 import { demoIdleParams, nextIdlePhase, swayClockStart } from './motion/DemoIdle.ts';
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
+import { bindRelight } from './look/relight/FigureRelight.ts'; // demo looks (dev flag `?look=`): light on the paintings, from their normal maps
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -1238,6 +1239,7 @@ export class PaintedActor extends Group {
     slot.painted = tex;
     slot.meta = tex.meta;
     slot.material.uniforms['map']!.value = tex.texture;
+    bindRelight(slot.material, tex.url, tex.scale, tex.placeholder); // demo looks (dev flag `?look=`): the figure's normal map; a no-op without the flag
     (slot.material.uniforms['texel']!.value as Vector2).set(
       1 / Math.max(1, tex.meta.width),
       1 / Math.max(1, tex.meta.height),

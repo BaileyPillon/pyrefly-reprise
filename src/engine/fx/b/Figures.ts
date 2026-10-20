@@ -10,7 +10,7 @@ import {
   type Object3D,
   type Scene,
 } from 'three';
-import { paintedVertexShader } from '../../shaders/PaintedShader.ts';
+import { RELIGHT_VARYINGS, RELIGHT_VERTEX, paintedVertexShader } from '../../shaders/PaintedShader.ts';
 
 /**
  * Option B "Living Paintings": what B adds to the painted figures, found by walking the scene
@@ -42,6 +42,7 @@ export interface ShadowSpec {
 const SWAY_VERT = /* glsl */ `
   uniform vec4 fxSway;
   varying vec2 vUv;
+  ${RELIGHT_VARYINGS}
   void main() {
     vUv = uv;
     vec3 p = position;
@@ -49,6 +50,7 @@ const SWAY_VERT = /* glsl */ `
     float t = fxSway.w * fxSway.y * 6.2831853 + fxSway.z;
     p.x += fxSway.x * w * w * (sin(t - uv.y * 1.3) + 0.35 * sin(t * 2.3 + 1.7 - uv.y * 2.4));
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+    ${RELIGHT_VERTEX}
   }
 `;
 
