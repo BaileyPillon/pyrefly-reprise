@@ -4,11 +4,13 @@
  * the rig. Both games.
  */
 import type { GradeRecipe } from './LookGrades.ts';
-import { LOOK_QUALITIES, nextLook, nextQuality, parseLook, type LookDebug, type LookName, type LookQuality, type LookStrength } from './LookConfig.ts';
+import { LOOK_QUALITIES, chapterLook, nextLook, nextQuality, parseLook, type LookDebug, type LookName, type LookQuality, type LookStrength } from './LookConfig.ts';
 
 export interface LookStateShape {
-  /** The address carried a `look` key: the rig exists and the live keys are armed. */
+  /** The address carried a `look` key: the rig exists and the live keys are armed. (Release 60: also true while an automatic chapter look is on, so the figures bind their maps.) */
   armed: boolean;
+  /** Release 60: no `look` key in the address and nobody has set a look by hand since: each chapter plays its own default look ({@link applyChapterLook}). */
+  auto: boolean;
   name: LookName | null;
   quality: LookQuality;
   debug: LookDebug;
@@ -28,7 +30,7 @@ export interface LookStateShape {
 
 export const lookState: LookStateShape = (() => {
   const r = parseLook(typeof location === 'undefined' ? '' : location.search);
-  return { armed: r.armed, name: r.name, quality: r.quality, debug: r.debug, strength: r.strength, drift: r.drift, commandOpen: false, recipe: null, version: 1, tweaks: {} };
+  return { armed: r.armed, auto: r.auto, name: r.name, quality: r.quality, debug: r.debug, strength: r.strength, drift: r.drift, commandOpen: false, recipe: null, version: 1, tweaks: {} };
 })();
 
 /** True when the renderer should build the rig now: the address armed it, or a look was switched on later. */
@@ -39,6 +41,25 @@ export function lookWanted(): boolean {
 export function setLookName(name: LookName | null): void {
   lookState.name = name;
   lookState.armed = true;
+  lookState.auto = false; // a look set by hand (the console, a key) is the player's word for the rest of the page
+  lookState.version++;
+}
+
+/**
+ * Release 60: the battle screen tells the look which chapter it is about to draw, before the figures load. With no `look` key in the address (and nothing set by hand) a chapter that has a default
+ * ({@link chapterLook}: hd2d at bold strength in Chapters I and IV) turns it on, and every other chapter turns it off, so only those two chapters change. With a `look` key the address already chose and
+ * this does nothing. Not armed means no relight define and no rig work: a chapter without a default draws as it did.
+ */
+export function applyChapterLook(chapterId: string | undefined): void {
+  if (!lookState.auto) return;
+  const d = chapterLook(chapterId);
+  const name = d?.name ?? null;
+  const strength = d?.strength ?? 'subtle';
+  const armed = d !== null;
+  if (lookState.name === name && lookState.strength === strength && lookState.armed === armed) return;
+  lookState.name = name;
+  lookState.strength = strength;
+  lookState.armed = armed;
   lookState.version++;
 }
 
@@ -49,6 +70,7 @@ export function setLookQuality(q: LookQuality): void {
 }
 
 export function setLookStrength(s: LookStrength): void {
+  lookState.auto = false;
   lookState.strength = s === 'bold' ? 'bold' : 'subtle';
   lookState.version++;
 }

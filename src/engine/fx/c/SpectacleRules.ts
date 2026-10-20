@@ -189,7 +189,7 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
   let freezeMs = 0;
   const facts = { crit: hit.crit, heavy: hit.heavy, big: hit.big, hitIndex: hit.hitIndex, hitCount: hit.hitCount, last, power: hit.power };
   if (normal && !f.reduceMotion) {
-    if (f.demo) freezeMs = demoStopMs(facts);
+    if (f.demo) freezeMs = demoStopMs(facts, t.freezeLightMs); // never lighter than today's own light hold (FFX 40 ms, FFX-2 28 ms)
     else if (holdsHeavy || (hit.big && last)) freezeMs = t.freezeHeavyMs;
     else if (first) freezeMs = t.freezeLightMs;
     freezeMs = Math.round(freezeMs * f.dial('hitstop'));

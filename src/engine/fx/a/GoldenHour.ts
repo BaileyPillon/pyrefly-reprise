@@ -41,6 +41,8 @@ import { bloomUnderCombat, fxShared } from '../fxShared.ts';
 /** What the battle screen hands over when a chapter's diorama is up. */
 export interface FxSceneInfo {
   key: string;
+  /** The chapter on the board (release 60: the demo looks are keyed by chapter, not by painting; absent in a stub). */
+  chapter?: string;
   game: string;
   scene: Scene;
   palette: { key: number; sky: number } | null;

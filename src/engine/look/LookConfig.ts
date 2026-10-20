@@ -24,9 +24,26 @@ export type LookDebug = 'mask' | null;
 /** `?lookstrength=bold`: the conference strength of hd2d and cinematic (`LookBoldConfig.ts`); the default is the first pass's values, untouched. */
 export type LookStrength = 'subtle' | 'bold';
 
+/**
+ * RELEASE 60 (the conference demo build; Bailey, 2026-10-20 ~11:00 EDT, "HD-2D bold (Recommended)"): with NO `look` key in the address, hd2d at bold strength is ON in the two chapters authored for it, Chapter I
+ * (`seymour-flux`, FFX, Gagazet) and Chapter IV (`ffx2-bahamut`, FFX-2, the Bevelle underground), and every other chapter keeps today's frame. The rooms are keyed by CHAPTER, not by scene: three other
+ * chapters borrow those two paintings as placeholders and are not authored for the look. `?look=off` turns it off everywhere; `?look=hd2d&lookstrength=bold` (or any `?look=`) forces the address's choice everywhere.
+ */
+export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: LookStrength }>> = {
+  'seymour-flux': { name: 'hd2d', strength: 'bold' },
+  'ffx2-bahamut': { name: 'hd2d', strength: 'bold' },
+};
+
+/** The look a chapter plays with no `look` key in the address, or null (today's frame). */
+export function chapterLook(chapterId: string | undefined): { name: LookName; strength: LookStrength } | null {
+  return chapterId !== undefined && Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId) ? CHAPTER_LOOKS[chapterId]! : null;
+}
+
 export interface LookRequest {
   /** True when the address carries a `look` key at all (even `off`): the live hotkeys and the API are armed. */
   armed: boolean;
+  /** True when the address has no `look` key: each chapter plays its own default ({@link CHAPTER_LOOKS}); a `look` key (even `off`) is the address's word everywhere. */
+  auto: boolean;
   name: LookName | null;
   quality: LookQuality;
   debug: LookDebug;
@@ -41,7 +58,7 @@ export function parseLook(search: string): LookRequest {
   try {
     p = new URLSearchParams(search);
   } catch {
-    return { armed: false, name: null, quality: 'high', debug: null, strength: 'subtle', drift: false };
+    return { armed: false, auto: true, name: null, quality: 'high', debug: null, strength: 'subtle', drift: false };
   }
   const raw = p.get('look');
   const v = (raw ?? '').trim().toLowerCase();
@@ -49,7 +66,7 @@ export function parseLook(search: string): LookRequest {
   const q = (p.get('lookq') ?? '').trim().toLowerCase();
   const quality = (LOOK_QUALITIES as readonly string[]).includes(q) ? (q as LookQuality) : 'high';
   const strength: LookStrength = (p.get('lookstrength') ?? '').trim().toLowerCase() === 'bold' ? 'bold' : 'subtle';
-  return { armed: raw !== null, name, quality, debug: p.get('lookdebug') === 'mask' ? 'mask' : null, strength, drift: p.get('lookdrift') === '1' };
+  return { armed: raw !== null, auto: raw === null, name, quality, debug: p.get('lookdebug') === 'mask' ? 'mask' : null, strength, drift: p.get('lookdrift') === '1' };
 }
 
 /** The next look in the F6 cycle: off, hd2d, cinematic, anime, off. */

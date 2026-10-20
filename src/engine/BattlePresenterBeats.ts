@@ -171,7 +171,7 @@ export async function damage(
 
   const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });
-  if (flashes) blowFlash(target, event); // `?motion=demo`: 0.08 s white; else warm 200 ms, white 260 ms on a crit (`motion/DemoHitBeat.ts`)
+  if (flashes) blowFlash(target, event, ctx.moments?.reducedFlashes === true); // `?motion=demo`: 0.08 s white; else warm 200 ms, white 260 ms on a crit (`motion/DemoHitBeat.ts`)
   target?.shake(event.crit ? 0.16 : 0.1, 340);
   void target?.recoil(360, event.crit ? 0.34 : 0.22);
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });

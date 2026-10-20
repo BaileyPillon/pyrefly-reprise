@@ -11,7 +11,7 @@ import type { EventCtx } from '../../../src/engine/BattlePresenterEvents.ts';
 import { planHit, type HitInfo, type SpectacleFlags } from '../../../src/engine/fx/c/SpectacleRules.ts';
 import { HitStop } from '../../../src/engine/fx/c/Trauma.ts';
 import { fxHit, type FxStagePort } from '../../../src/engine/fx/c/presenterHooks.ts';
-import { DEMO_FLASH_MS, STOP_FINISHER, STOP_STRONG, STOP_WEAK_MAX, STOP_WEAK_MIN, blowClass, demoShakeAmplitude, demoStopMs, demoTrauma, hitPower, isMiddleHit, type BlowFacts } from '../../../src/engine/motion/DemoHit.ts';
+import { DEMO_FLASH_MS, FLASH_AREA_BIG, FLASH_AREA_FULL, FLASH_PEAK_MIN, STOP_FINISHER, STOP_STRONG, STOP_WEAK_MAX, STOP_WEAK_MIN, TODAY_LIGHT_HOLD_MS, blowClass, demoFlashPeak, demoShakeAmplitude, demoStopMs, demoTrauma, hitPower, isMiddleHit, type BlowFacts } from '../../../src/engine/motion/DemoHit.ts';
 import { blowFlash, holdBlow } from '../../../src/engine/motion/DemoHitBeat.ts';
 import { setDemoMotion } from '../../../src/engine/motion/DemoMotion.ts';
 
@@ -119,7 +119,8 @@ describe('option C\'s plan with the demo flag', () => {
       const weak = planHit(game, hit({ power: 0.1 }), flags({ demo: true }));
       const strong = planHit(game, hit({ power: 0.5 }), flags({ demo: true }));
       const fin = planHit(game, hit({ power: 1, crit: true, heavy: true }), flags({ demo: true }));
-      expect(weak.freezeMs).toBeLessThanOrEqual(30);
+      expect(weak.freezeMs).toBe(TODAY_LIGHT_HOLD_MS[game]); // release 60: never lighter than the game's own light hold today (FFX 40, FFX-2 28)
+      expect(weak.freezeMs).toBeLessThan(strong.freezeMs);
       expect(strong.freezeMs).toBeGreaterThanOrEqual(50);
       expect(strong.freezeMs).toBeLessThanOrEqual(80);
       expect(fin.freezeMs).toBeGreaterThanOrEqual(100);
@@ -148,6 +149,89 @@ describe('option C\'s plan with the demo flag', () => {
     expect(rm.freezeMs).toBe(0);
     expect(rm.trauma).toBe(0);
     expect(planHit('ffx', hit({ power: 1, crit: true, heavy: true }), flags({ demo: true, dial: (n) => (n === 'hitstop' ? 0 : 1) })).freezeMs).toBe(0);
+  });
+});
+
+describe('release 60: an ordinary hit holds at least what the shipped game holds', () => {
+  it('the floors are option C own light holds, FFX 40 ms and FFX-2 28 ms', () => {
+    expect(TODAY_LIGHT_HOLD_MS).toEqual({ ffx: 40, ffx2: 28 });
+    expect(planHit('ffx', hit({ power: 0 }), flags({ demo: false })).freezeMs).toBe(TODAY_LIGHT_HOLD_MS.ffx);
+    expect(planHit('ffx2', hit({ power: 0 }), flags({ demo: false })).freezeMs).toBe(TODAY_LIGHT_HOLD_MS.ffx2);
+  });
+
+  it('across the whole range of power no demo blow of either game holds less than the shipped first light hit does', () => {
+    for (const game of ['ffx', 'ffx2'] as const) {
+      const today = planHit(game, hit({ power: 0 }), flags({ demo: false })).freezeMs;
+      for (let p = 0; p <= 1.5; p += 0.02) {
+        const demo = planHit(game, hit({ power: p }), flags({ demo: true })).freezeMs;
+        expect(demo).toBeGreaterThanOrEqual(today);
+      }
+      // a heavy blow today holds 85 (FFX) / crit-only 55 (FFX-2); the demo's finisher holds longer than either
+      for (const crit of [true]) expect(planHit(game, hit({ power: 0.2, crit, heavy: crit }), flags({ demo: true })).freezeMs).toBeGreaterThanOrEqual(planHit(game, hit({ power: 0.2, crit, heavy: crit }), flags({ demo: false })).freezeMs);
+    }
+  });
+
+  it('the demoStopMs floor lifts the weak class only: a strong blow, a finisher and the middle of a flurry are as they were', () => {
+    expect(demoStopMs(facts({ power: 0 }), 40)).toBe(40);
+    expect(demoStopMs(facts({ power: 0.29 }), 40)).toBe(40);
+    expect(demoStopMs(facts({ power: 0 }), 28)).toBe(28);
+    expect(demoStopMs(facts({ power: 0.28 }), 28)).toBe(29);
+    expect(demoStopMs(facts({ power: 0.5 }), 40)).toBe(demoStopMs(facts({ power: 0.5 })));
+    expect(demoStopMs(facts({ power: 1, crit: true }), 40)).toBe(demoStopMs(facts({ power: 1, crit: true })));
+    expect(demoStopMs(facts({ hitIndex: 1, hitCount: 4, last: false }), 40)).toBe(0);
+  });
+
+  it('with BATTLE SPECTACLE off the beat sleeps at least the lower light hold on an ordinary blow (today it held nothing)', async () => {
+    setDemoMotion(true);
+    const sleeps: number[] = [];
+    const ctx = { stage: { camera: { shake: () => undefined } }, sleep: async (ms: number) => void sleeps.push(ms), speed: () => 'normal', moments: { reducedMotion: false }, hpMaxOf: () => 90000 } as unknown as EventCtx;
+    await holdBlow(ctx, { type: 'damage', seq: 1, targetId: 'm', sourceId: 't', amount: 148, element: 'none', crit: false, hitIndex: 0, hitCount: 1 } as never, false, null);
+    expect(sleeps).toEqual([TODAY_LIGHT_HOLD_MS.ffx2]);
+  });
+});
+
+describe('release 60: the white flash on a big figure, and REDUCE FLASHES', () => {
+  it('is full strength on a party-sized figure, falls in a straight line, and is capped on a boss', () => {
+    expect(demoFlashPeak(undefined)).toBe(1);
+    expect(demoFlashPeak(2)).toBe(1);
+    expect(demoFlashPeak(FLASH_AREA_FULL)).toBe(1);
+    expect(demoFlashPeak(FLASH_AREA_BIG)).toBeCloseTo(FLASH_PEAK_MIN, 9);
+    expect(demoFlashPeak(40)).toBeCloseTo(FLASH_PEAK_MIN, 9);
+    let prev = 1;
+    for (let a = 0; a <= 20; a += 0.25) {
+      const p = demoFlashPeak(a);
+      expect(p).toBeLessThanOrEqual(prev + 1e-12);
+      expect(p).toBeGreaterThanOrEqual(FLASH_PEAK_MIN);
+      prev = p;
+    }
+    expect(demoFlashPeak((FLASH_AREA_FULL + FLASH_AREA_BIG) / 2)).toBeCloseTo((1 + FLASH_PEAK_MIN) / 2, 9);
+  });
+
+  it('the beat flashes a big figure less than a small one, never more than before', () => {
+    setDemoMotion(true);
+    const flash = vi.fn();
+    const event = { type: 'damage', seq: 1, targetId: 'b', sourceId: 't', amount: 900, element: 'none', crit: false, hitIndex: 0, hitCount: 1 } as never;
+    blowFlash({ flash, poseSize: [1.2, 1.75] }, event); // a party figure: 2.1
+    expect(flash).toHaveBeenLastCalledWith(0xffffff, DEMO_FLASH_MS, 1);
+    blowFlash({ flash, poseSize: [4.5, 3.5] }, event); // Bahamut-sized: 15.75
+    const [, , big] = flash.mock.calls[flash.mock.calls.length - 1]!;
+    expect(big).toBeCloseTo(FLASH_PEAK_MIN, 9);
+    expect(big).toBeLessThan(1);
+    blowFlash({ flash, poseSize: [-4.5, 3.5] }, event); // a mirrored plane has a negative width: the same size
+    expect(flash.mock.calls[flash.mock.calls.length - 1]![2]).toBeCloseTo(FLASH_PEAK_MIN, 9);
+  });
+
+  it('REDUCE FLASHES skips the white flash altogether under the demo motion; without the demo motion it is the warm flash of the shipped game either way', () => {
+    const flash = vi.fn();
+    const event = { type: 'damage', seq: 1, targetId: 'b', sourceId: 't', amount: 900, element: 'none', crit: true, hitIndex: 0, hitCount: 1 } as never;
+    setDemoMotion(true);
+    blowFlash({ flash }, event, true);
+    expect(flash).not.toHaveBeenCalled();
+    blowFlash({ flash }, event, false);
+    expect(flash).toHaveBeenCalledTimes(1);
+    setDemoMotion(false);
+    blowFlash({ flash }, event, true); // today's path (the actor softens it itself)
+    expect(flash).toHaveBeenLastCalledWith(0xffffff, 260, 1);
   });
 });
 
