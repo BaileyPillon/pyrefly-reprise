@@ -57,6 +57,10 @@ let bound: FxSceneInfo | null = null;
 export function bindEyeCandyScene(info: FxSceneInfo | null): void {
   bound = info;
 }
+/** The scene the battle screen last bound (demo looks, `engine/look/`): null on every other screen. */
+export function boundEyeCandyScene(): FxSceneInfo | null {
+  return bound;
+}
 
 const d = (name: Parameters<typeof eyeCandy.dial>[0]): number => eyeCandy.dial(name);
 

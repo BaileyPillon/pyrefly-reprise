@@ -15,6 +15,7 @@ import { installFxEnv } from './app/fxEnv.ts';
 import { installFxDebug } from './debug/fxApi.ts';
 import { installArtDebug } from './debug/artApi.ts';
 import { installCrispDebug } from './debug/crispApi.ts';
+import { installLookDebug } from './debug/lookApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installRigDebug } from './debug/rigApi.ts';
@@ -148,6 +149,7 @@ async function boot(): Promise<void> {
   installFxDebug(debugApi, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
   installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
   installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
+  installLookDebug(debugApi, app); // demo looks (dev flag `?look=`): `__pyrefly.look`, and F6 / F7 while the flag is in the address
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
