@@ -8,6 +8,8 @@ for that key are CUT from the pose's own painting and registered to the key's bo
   build.variants.<part>.<name>.from_painting = {
       "pose": "attack",                  the painting `characters/<id>/<pose>@Nx.png` the piece is cut from
       "poly": [[x, y], ...],             the cut, in master px of the IDLE frame (the frame a key of that pose is drawn in: the painting registered as the gate registers it; `tools/rig/lane` gridview shows it)
+      "mask": "<png>", "mask_pad": 600,  INSTEAD of "poly": an 8-bit mask image (a partition made by a tool: the label of each painting pixel, dilated into its neighbours for the underlap) in master px of the idle frame
+                                         with `mask_pad` px of margin on every side (the idle frame's top-left corner is at (mask_pad, mask_pad)); the painting's alpha is kept where the mask is set, the cut has no feather
       "cutline": [[[x, y], ...], ...],   the stretches of the polygon's edge that run THROUGH the figure: alpha fades to nothing toward them over `feather` px (the part under shows through the seam)
       "feather": 14,
       "register": "attack",              the fitted key whose pose of the part's bone places the cut where the painting has it (a key that shows the variant must keep that pose)
@@ -16,7 +18,7 @@ for that key are CUT from the pose's own painting and registered to the key's bo
       "bone": "wingRA",                  the bone the piece is rigid on (default: the part's own rigid bone) ...
       "skin": "chain",                   ... or skinned along the part's own chain (`build.skin.<part>`, weights from the rest positions): a wing's variant bends at its joints as the part does
       "tex": 0.5,                        the PNG's resolution as a fraction of the master (a big sheet fits the texel budget at half); the mesh is still in master px
-      "fill_joints": 40,                 (or {bone: radius}) for a chain-skinned piece: fill discs of this radius (master px) at the posed places of the chain's bone joints under the register key (what the joints' hole test watches),
+      "fill_joints": 40,                 (or {bone: radius}): fill discs of this radius (master px) at the posed places of the chain's bone joints (a rigid piece: its bone's pivot) under the register key (what the joints' hole test watches),
                                          added to "fill": a limb whose joint the painting draws at the edge of the limb, or a shoulder the cut leaves open
       "fill": [[x, y, r], ...]           discs (master px of the idle frame) whose transparent pixels the cut fills with the painting's own colours around them, classically extended (`rig_geom.extend_fill`): where
                                          the painting has a gap (the sky inside a neck loop) that a joint's hole test needs solid, because the part it used to cover is now the variant
@@ -132,45 +134,73 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
         rgba = np.clip(small, 0, 255).astype(np.uint8)
     ox, oy = int(round(bx)), int(round(by))  # master px = painting px + (ox, oy) (a fraction of a px is dropped)
     to_p = lambda pts: [(x - ox, y - oy) for x, y in pts]  # noqa: E731
-    a_cut = cut_alpha(rgba[..., 3], to_p(spec["poly"]), [to_p(c) for c in spec.get("cutline", [])], float(spec.get("feather", 14)))
-    img = rgba.copy()
-    fills = [list(f) for f in spec.get("fill", [])]
+    if spec.get("mask"):
+        mk = np.asarray(Image.open(sub.rel(spec["mask"])).convert("L"), np.float32) / 255.0
+        pad = int(spec.get("mask_pad", 0))
+        h0, w0 = rgba.shape[:2]
+        yy, xx = np.mgrid[0:h0, 0:w0]
+        my, mx = yy + oy + pad, xx + ox + pad
+        ok = (my >= 0) & (my < mk.shape[0]) & (mx >= 0) & (mx < mk.shape[1])
+        inside = np.where(ok, mk[np.clip(my, 0, mk.shape[0] - 1), np.clip(mx, 0, mk.shape[1] - 1)], 0.0)
+        a_cut = rgba[..., 3].astype(np.float32) * inside
+    else:
+        a_cut = cut_alpha(rgba[..., 3], to_p(spec["poly"]), [to_p(c) for c in spec.get("cutline", [])], float(spec.get("feather", 14)))
+    joint_q: list = []  # (post-scale target centre, radius) of the fill_joints discs: where the hole test looks, under the key's pose, AFTER the piece is scaled
     if spec.get("fill_joints"):
-        if spec.get("skin") != "chain":
-            raise SystemExit("rig variants: fill_joints needs a chain-skinned piece (\"skin\": \"chain\")")
-        names, joints, _ = chain_spec(sub, part, build)
-        model.pose(**key_pose_args(keys[spec["register"]]))
         fj = spec["fill_joints"]
+        model.pose(**key_pose_args(keys[spec["register"]]))
+        if spec.get("skin") == "chain":
+            names, joints, _ = chain_spec(sub, part, build)
+        else:  # a rigid piece: the joint the hole test watches is its bone's own pivot
+            bone = spec.get("bone") or part.get("bone")
+            if not isinstance(bone, str):
+                raise SystemExit("rig variants: fill_joints on a piece that is neither chain-skinned nor rigid on one bone")
+            at = {b["name"]: (b["x"], b["y"]) for b in build["bones"]}
+            names, joints = [bone], [list(at[bone])]
         for nm, jt in zip(names, joints):
             rr = float(fj.get(nm, 0) if isinstance(fj, dict) else fj)
             if rr <= 0:
                 continue
             q = bone_matrix(model, nm) @ np.array([jt[0], jt[1], 1.0])
-            fills.append([float(q[0]), float(q[1]), rr])
+            joint_q.append((float(q[0]), float(q[1]), rr))
             say(f"    fill_joints: {nm} at ({q[0]:.0f}, {q[1]:.0f}) r {rr:.0f}")
-    if fills:
-        yy, xx = np.mgrid[0:a_cut.shape[0], 0:a_cut.shape[1]]
-        zone = np.zeros(a_cut.shape, bool)
-        for fx, fy, fr in fills:
-            zone |= (xx + ox - fx) ** 2 + (yy + oy - fy) ** 2 <= fr * fr
-        known = a_cut >= 128
-        need = zone & ~known
-        img[..., :3] = np.where(need[..., None], np.clip(R.extend_fill(rgba[..., :3], known, zone), 0, 255), rgba[..., :3]).astype(np.uint8)
-        a_cut = np.where(need, 255.0, a_cut)
-    ys, xs = np.nonzero(a_cut > 8)
-    x0, x1, y0, y1 = max(0, xs.min() - 4), xs.max() + 5, max(0, ys.min() - 4), ys.max() + 5
-    img[..., 3] = np.clip(a_cut, 0, 255).astype(np.uint8)
-    crop = R.dilate_rgb(img[y0:y1, x0:x1], 8)
-    rim = (R.outer_edge_mask(rgba[..., 3])[y0:y1, x0:x1] * (crop[..., 3] > 8) * 255).astype(np.uint8)
-    mc = spec.get("mesh", {"edge": 18, "inner": 34, "grow": 10})
-    P, tris = R.build_mesh(crop[..., 3] > 8, edge_step=mc.get("edge", 18.0), inner_step=mc.get("inner", 34.0), domain_grow=mc.get("grow", 10), seed=1)
-    M = P + np.array([x0 + ox, y0 + oy], np.float64)  # the piece in master px of the idle frame, as the painting has it
-    cl = [p for c in spec.get("cutline", []) for p in c] or [tuple(M.mean(0))]
-    anchor = np.array(spec.get("anchor") or np.mean(cl, 0), np.float64)
     part_area = mesh_area(np.array(part["verts"], np.float64).reshape(-1, 2), np.array(part["triangles"]).reshape(-1, 3))
+    mc = spec.get("mesh", {"edge": 18, "inner": 34, "grow": 10})
     m = float(spec.get("scale", 1.0))
-    if "scaleArea" in spec:
-        m = math.sqrt(spec["scaleArea"] * part_area / mesh_area(M, tris))
+    anchor = np.array(spec["anchor"], np.float64) if spec.get("anchor") else (np.mean([p for c in spec.get("cutline", []) for p in c], 0) if spec.get("cutline") else None)
+    for _pass in range(6):  # the piece is scaled about its anchor AFTER it is cut and filled, and a scaleArea piece's scale depends on what the fill added: the discs are placed in the painting's frame (before the scale) from the post-scale targets, and the scale re-measured until it settles
+        img = rgba.copy()
+        a_pass = a_cut
+        fills = [list(f) for f in spec.get("fill", [])]
+        for qx, qy, rr in joint_q:
+            if anchor is not None and m != 1.0:
+                fills.append([anchor[0] + (qx - anchor[0]) / m, anchor[1] + (qy - anchor[1]) / m, rr / m])
+            else:
+                fills.append([qx, qy, rr])
+        if fills:
+            yy, xx = np.mgrid[0:a_cut.shape[0], 0:a_cut.shape[1]]
+            zone = np.zeros(a_cut.shape, bool)
+            for fx, fy, fr in fills:
+                zone |= (xx + ox - fx) ** 2 + (yy + oy - fy) ** 2 <= fr * fr
+            known = a_cut >= 128
+            need = zone & ~known
+            img[..., :3] = np.where(need[..., None], np.clip(R.extend_fill(rgba[..., :3], known, zone), 0, 255), rgba[..., :3]).astype(np.uint8)
+            a_pass = np.where(need, 255.0, a_cut)
+        ys, xs = np.nonzero(a_pass > 8)
+        x0, x1, y0, y1 = max(0, xs.min() - 4), xs.max() + 5, max(0, ys.min() - 4), ys.max() + 5
+        img[..., 3] = np.clip(a_pass, 0, 255).astype(np.uint8)
+        crop = R.dilate_rgb(img[y0:y1, x0:x1], 8)
+        rim = (R.outer_edge_mask(rgba[..., 3])[y0:y1, x0:x1] * (crop[..., 3] > 8) * 255).astype(np.uint8)
+        P, tris = R.build_mesh(crop[..., 3] > 8, edge_step=mc.get("edge", 18.0), inner_step=mc.get("inner", 34.0), domain_grow=mc.get("grow", 10), seed=1)
+        M = P + np.array([x0 + ox, y0 + oy], np.float64)  # the piece in master px of the idle frame, as the painting has it
+        anchor_used = anchor if anchor is not None else np.mean(M, 0)
+        m_new = math.sqrt(spec["scaleArea"] * part_area / mesh_area(M, tris)) if "scaleArea" in spec else m
+        settled = abs(m_new - m) < 5e-4 and (anchor is not None or _pass > 0)
+        m = m_new
+        if anchor is None:
+            anchor = anchor_used
+        if settled or not (joint_q and "scaleArea" in spec):
+            break
     M = anchor + m * (M - anchor)
     model.pose(**key_pose_args(keys[spec["register"]]))
     skin: dict = {}
@@ -198,7 +228,7 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
         tw, th = max(1, round(w * f)), max(1, round(h * f))
         pm = crop.astype(np.float32)
         pm[..., :3] *= pm[..., 3:4] / 255.0  # premultiplied while resampling, so a transparent neighbour's colour never bleeds in
-        small = np.asarray(Image.fromarray(pm.astype(np.uint8), "RGBA").resize((tw, th), Image.LANCZOS), np.float32)
+        small = np.asarray(Image.fromarray(pm.astype(np.uint8), "RGBA").resize((tw, th), Image.HAMMING if spec.get("filter", "hamming") == "hamming" else Image.LANCZOS), np.float32)  # HAMMING: Lanczos rings at a mask's hard edge and the un-premultiply turns it into a pale line (Shiva-x)
         small[..., :3] = np.where(small[..., 3:4] > 0, small[..., :3] * 255.0 / np.maximum(small[..., 3:4], 1.0), 0)
         crop = R.dilate_rgb(np.clip(small, 0, 255).astype(np.uint8), 4)
         rim = np.asarray(Image.fromarray(rim, "L").resize((tw, th), Image.BOX))
