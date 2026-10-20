@@ -21,9 +21,9 @@
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *
- * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too.
+ * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`yrp`** (FFX-2, the hidden 3D Bahamut, `./yrpDoor.ts`: R is `r1`; Y and P are unbound; three letters, the shortest word on the table).
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor` and `angra`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo` and `summon`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo` and `summon`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -40,6 +40,7 @@ import { ANGRA_DOOR_CHAPTER, ANGRA_DOOR_WORD } from './angraDoor.ts';
 import { YOJIMBO_DOOR_CHAPTER, YOJIMBO_DOOR_WORD } from './yojimboDoor.ts';
 import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
 import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
+import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -69,6 +70,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: ANGRA_DOOR_WORD, chapter: ANGRA_DOOR_CHAPTER },
   { word: YOJIMBO_DOOR_WORD, chapter: YOJIMBO_DOOR_CHAPTER },
   { word: SUMMON_DOOR_WORD, chapter: SUMMON_DOOR_CHAPTER },
+  { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER },
 ];
 
 /**

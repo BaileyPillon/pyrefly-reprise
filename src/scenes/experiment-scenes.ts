@@ -9,7 +9,8 @@
  * - the hidden Tourist Trap chapter's cavern (FFX-2 only): the Cavern of the Stolen Fayth under the FFX-2 camera, on Chapter IX's approved plate (`./tourist-trap-cavern.ts`);
  * - the hidden Biran and Yenke chapter's Mountain Gate (FFX only): Chapter I's Mt. Gagazet scene with this fight's staging (`./gagazet-ronso.ts`);
  * - the hidden Angra Mainyu chapter's desert (FFX-2 only): the Bikanel Desert under the FFX-2 camera, on a provisional new plate (`./angra-mainyu-desert.ts`);
- * - the hidden Last Summoning chapter's Dream's End (FFX only): Chapter III's scene with the staging of the aeons Chapter III never fields (`./last-summoning.ts`).
+ * - the hidden Last Summoning chapter's Dream's End (FFX only): Chapter III's scene with the staging of the aeons Chapter III never fields (`./last-summoning.ts`);
+ * - the hidden 3D Bahamut chapter's chamber (FFX-2 only): Chapter IV's Bevelle underground under frame A's camera, with toon models on the actors (`./exp-yrp-3d-stage.ts`).
  *
  * Each row is real (the factory wins); `build` is the unreachable demo diorama, as for every scene with a factory of its own. Moved here unchanged from `./index.ts`, except Fayth's, which is new.
  * Game case: each row is its own chapter's game's, as tagged; the table is shared plumbing.
@@ -36,6 +37,8 @@ import { buildMirrorAeonsScene, MIRROR_SLOTS } from './mirror-aeons.ts'; // Mirr
 import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 import { buildLastSummoningScene, LAST_SUMMONING_SLOTS } from './last-summoning.ts'; // the Last Summoning's Dream's End (FFX only, hidden chapter): Chapter III's scene with Yojimbo, the Sisters and Anima staged
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
+import { buildExpYrp3dStageScene, EXP_YRP_SCENE_ENTRY } from './exp-yrp-3d-stage.ts'; // the 3D Bahamut's chamber (FFX-2 only, hidden chapter): Chapter IV's room under frame A, toon models on its actors
+import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -57,6 +60,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: MIRROR_AEONS_SCENE, title: 'Mushroom Rock Road and the Cavern of the Stolen Fayth — Mirror Aeons', build: buildDemoScene, slots: MIRROR_SLOTS, placeholder: false },
   // The Last Summoning (FFX only, hidden chapter): Dream's End as Chapter III builds it, with the full roster's possessed aeons staged.
   { key: LAST_SUMMONING_SCENE, title: "Dream's End — the Last Summoning", build: buildDemoScene, slots: LAST_SUMMONING_SLOTS, placeholder: false },
+  // The 3D Bahamut (FFX-2 only, hidden chapter): Chapter IV's chamber under frame A's camera, with toon-shaded models on the actors.
+  EXP_YRP_SCENE_ENTRY,
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -70,4 +75,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [ANGRA_MAINYU_SCENE]: buildAngraMainyuDesertScene, // the hidden Angra Mainyu chapter (FFX-2 only)
   [MIRROR_AEONS_SCENE]: buildMirrorAeonsScene, // the hidden Mirror Aeons chapter (FFX only)
   [LAST_SUMMONING_SCENE]: buildLastSummoningScene, // the hidden Last Summoning chapter (FFX only)
+  [EXP_YRP_SCENE]: buildExpYrp3dStageScene, // the hidden 3D Bahamut chapter (FFX-2 only)
 };

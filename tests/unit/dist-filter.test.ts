@@ -32,6 +32,8 @@ describe('what never ships', () => {
     for (const p of [
       'audio/candidates/evrae-near.mp3',
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
+      'models-exp/yrp/yuna.glb', // the hidden 3D Bahamut's local-only models (branch exp-yrp-3d)
+      'models-exp/yrp/bahamut.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',
