@@ -246,12 +246,66 @@ export function fitBox(box: BoxData, height: number): Fit {
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
- * The URL a figure's model is loaded from: `<base><dir>/<id>.glb` (`yuna.glb`, `rikku.glb`, `paine.glb`, `bahamut.glb`). `base` is the page's base (`import.meta.env.BASE_URL`) and `dir` the models folder
- * (`YRP_MODEL_DIR`, `data/yrp-ids.ts`). A slot whose file is missing stands on the neutral capsule figure (`./capsule.ts`); there is no other stand-in.
+ * The URL a figure's model is loaded from: `<base><dir>/<id>.glb` (`yuna.glb`, `rikku.glb`, `paine.glb`, `bahamut.glb`), its clips from `<base><dir>/<id>-anims.glb` and the clip map from `<base><dir>/clipmap.json`.
+ * `base` is the page's base (`import.meta.env.BASE_URL`) and `dir` a models folder (`YRP_MODEL_DIRS`, `data/yrp-ids.ts`). A slot whose file is missing stands on the neutral capsule figure (`./capsule.ts`); there is no other stand-in.
  */
 export function modelUrl(base: string, dir: string, id: YrpId): string {
-  return `${base.endsWith('/') ? base : `${base}/`}${dir}/${id}.glb`;
+  return `${folderUrl(base, dir)}${id}.glb`;
 }
+
+/** `<base><dir>/`, with exactly one slash between. */
+export function folderUrl(base: string, dir: string): string {
+  return `${base.endsWith('/') ? base : `${base}/`}${dir}/`;
+}
+
+/** The URL of a figure's clips file: the model's own skeleton with every motion of the game's battle bank on it. */
+export const animsUrl = (base: string, dir: string, id: YrpId): string => `${folderUrl(base, dir)}${id}-anims.glb`;
+
+/** The URL of a named file in a models folder. */
+export const fileUrl = (base: string, dir: string, file: string): string => `${folderUrl(base, dir)}${file}`;
+
+/** The two looks a model is shaded in (`./shade.ts`): the real humans' diffuse look, and the AI boss's own physically based material. */
+export type Look = 'diffuse' | 'pbr';
+
+/**
+ * Which Bahamut the chapter fights, and how he moves (Bailey, 2026-10-20): **by default the AI-made Bahamut** (`bahamut-ai.glb`: Meshy, unrigged, with the wing flap and breath of this chapter's first branch, shaded in his own
+ * physically based material), the real Yuna, Rikku and Paine standing before him. `?boss=real` fights the game's own Bahamut (`bahamut.glb`, his real clips, 4x: the comparison). `?bossrig=clips` (AI boss only) moves the
+ * game's Bahamut clips onto the AI mesh when that rigged file is on disk (`bahamut-ai-rigged.glb`, `bahamut-ai-anims.glb`: another agent's work, not played by default because Bailey judges rigs in motion first).
+ */
+export interface BossChoice {
+  readonly boss: 'ai' | 'real';
+  readonly rig: boolean;
+}
+
+/** The boss a page asks for: `?boss=real` is the game's, anything else the AI one; `?bossrig=clips` asks for the moved clips (only the AI boss has any to ask for). */
+export function bossChoice(search: string): BossChoice {
+  const q = new URLSearchParams(search);
+  const boss = q.get('boss') === 'real' ? 'real' : 'ai';
+  return { boss, rig: boss === 'ai' && q.get('bossrig') === 'clips' };
+}
+
+/** What a figure is loaded from: its model file, the file its clips are in (null for none), and the look it is shaded in. */
+export interface FigurePlan {
+  readonly mesh: string;
+  readonly anims: string | null;
+  readonly look: Look;
+}
+
+/** The AI boss's files: the unrigged mesh, and the rigged one with its clips file (only when the page asks). */
+export const AI_BOSS_FILES = { mesh: 'bahamut-ai.glb', rigged: 'bahamut-ai-rigged.glb', anims: 'bahamut-ai-anims.glb' } as const;
+
+/**
+ * The files of a figure in the order they are tried: the real girls and the game's own Bahamut are `<id>.glb` and `<id>-anims.glb` in the diffuse look; the AI boss is `bahamut-ai.glb` with no clips in the `pbr` look, or, with
+ * `rig` set, the rigged file and its clips first and the plain mesh after it (so a page that asks for clips the disk does not have gets the procedural boss, not a hole).
+ */
+export function figurePlans(id: YrpId, choice: BossChoice): readonly FigurePlan[] {
+  if (id !== YRP_BOSS_ID || choice.boss === 'real') return [{ mesh: `${id}.glb`, anims: `${id}-anims.glb`, look: 'diffuse' }];
+  const plain: FigurePlan = { mesh: AI_BOSS_FILES.mesh, anims: null, look: 'pbr' };
+  return choice.rig ? [{ mesh: AI_BOSS_FILES.rigged, anims: AI_BOSS_FILES.anims, look: 'pbr' }, plain] : [plain];
+}
+
+/** The URL of the clip map (`clipmap.json`): which of the clips is which pose, per figure. */
+export const clipMapUrl = (base: string, dir: string): string => `${folderUrl(base, dir)}clipmap.json`;
 
 /** Is this a binary glTF? A dev server answers an unknown path under `public/` with its index page and status 200, so a fetched body is judged by its first four bytes ("glTF") and never by the status alone. */
 export function looksLikeGlb(bytes: ArrayBuffer | Uint8Array): boolean {
@@ -260,35 +314,33 @@ export function looksLikeGlb(bytes: ArrayBuffer | Uint8Array): boolean {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-// Toon shading and ink
+// Shading and light
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
- * The painted-toon look (Bailey's pick, "Painted toon"): two to three soft colour bands and an ink outline. `bands` are the lit values the ramp steps through (shadow, mid, light), `softness` how wide each
- * step is blended (0 is a hard cel, 0.2 a brush edge), `ink` the outline's colour and `inkWorld` its thickness in world units (the model's own units are told by the fit's scale).
+ * The look of the real models: **soft and faithful, not toon** (Bailey found the painted-toon look "plastic"). The game's HD textures are almost all diffuse, so a model keeps its own base colour map under a plain
+ * diffuse material: `roughness` high and `metalness` none, so no specular gloss appears anywhere, no ink outline, no ramp. `envMapIntensity` 0 keeps any environment the scene carries out of the figures (it would add a sheen).
  */
-export const TOON = {
-  bands: [0.34, 0.68, 1.0] as readonly number[],
-  edges: [0.34, 0.66] as readonly number[],
-  softness: 0.09,
-  ink: 0x0b0e17,
-  inkWorld: 0.028,
-} as const;
+export const SHADE = { roughness: 0.8, metalness: 0, envMapIntensity: 0, anisotropy: 8 } as const;
+
+/** One light of the figures' rig: a colour, an intensity and, for a directional light, where it stands and what it looks at. */
+export interface LightData {
+  readonly colour: number;
+  readonly intensity: number;
+  readonly position?: V3;
+  readonly target?: V3;
+}
 
 /**
- * The value of the ramp at `t` (0 facing away from the light, 1 facing it): `bands` stepped at `edges`, each step blended over `softness`. The ramp texture is this sampled at its width; a test pins its shape
- * (monotone, the three plateaus, soft rather than hard).
+ * The figures' light, three lights beside the chamber's own (which light all real geometry too): **a warm key** from the front left and above (the lamps' glow warmed toward white), **a soft fill** (a hemisphere:
+ * the vault's cool sky over a dim warm floor, no direction, so no shadow side goes black) and **a cool rim** from behind and to the right that edges each figure against the dark. None casts a shadow (the chamber's
+ * key casts the models' shadows on the deck). Staging, ours; the numbers are tuned by eye against the game's own battle frames (`research/ffx-vs-ffx2-presentation.md`).
  */
-export function rampAt(t: number, tone: { bands: readonly number[]; edges: readonly number[]; softness: number } = TOON): number {
-  const smooth = (x: number): number => x * x * (3 - 2 * x);
-  let v = tone.bands[0]!;
-  for (let i = 0; i < tone.edges.length; i++) {
-    const e = tone.edges[i]!;
-    const k = tone.softness <= 0 ? (t >= e ? 1 : 0) : smooth(Math.min(1, Math.max(0, (t - (e - tone.softness / 2)) / tone.softness)));
-    v += (tone.bands[i + 1]! - tone.bands[i]!) * k;
-  }
-  return v;
-}
+export const LIGHTS: Readonly<Record<'key' | 'fill' | 'rim', LightData & { ground?: number }>> = {
+  key: { colour: 0xffe3c6, intensity: 2.6, position: [-4.5, 8.5, 11.5], target: [0, 1.2, -1.5] },
+  fill: { colour: 0xb9c4e6, intensity: 1.15, ground: 0x4a3f4c },
+  rim: { colour: 0x8db2ff, intensity: 2.2, position: [5.5, 6.5, -12], target: [0.5, 1.4, -1.5] },
+};
 
 /** The cast glow's strength over time: a swell while a figure holds a `cast` pose (seconds since it began), breathing between 0.35 and 0.75 of the peak. */
 export function castGlow(seconds: number): number {

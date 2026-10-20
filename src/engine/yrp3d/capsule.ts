@@ -1,7 +1,7 @@
 /**
  * **The neutral stand-in figure** (the hidden 3D Bahamut chapter, FFX-2 only): what stands in a slot whose model file is missing from `public/models-exp/yrp/`. A capsule body with a head and a small nose on the front (so the
  * facing reads), in a plain colour of its own per figure; Bahamut's is wider, with a tail and two wings spread, so frame A's layout (a giant over three girls, the wings over the left half) can be judged before a single
- * real model is on disk. Built in code: no file, no download, nothing to commit, and nothing of any game's character in it. Toon-shaded and outlined like a real model (`./toon.ts` turns every mesh under it toon).
+ * real model is on disk. Built in code: no file, no download, nothing to commit, and nothing of any game's character in it. Softly shaded like a real model (`./shade.ts` covers every mesh under it).
  *
  * Units are arbitrary (the fit scales the figure's box to the figure's world height); the figure faces +Z and stands on y 0, as a model file must (`./model.ts`). Needs three.js only.
  */

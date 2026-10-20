@@ -1,30 +1,33 @@
 /**
- * **A loaded model, made toon and fitted to a figure** (the hidden 3D Bahamut chapter; FFX-2 only): `yuna.glb`, `rikku.glb`, `paine.glb` and `bahamut.glb` from `public/models-exp/yrp/`. The files are **local only**:
- * gitignored, never committed (the repo is public and the files are large) and never shipped (`tools/dist-filter.mjs`). A slot whose file is missing stands on the neutral toon capsule (`./capsule.ts`), so the
- * chapter always plays in frame A with something on every mark.
+ * **A real model, softly shaded and fitted to a figure** (the hidden 3D Bahamut chapter, the real-models branch `exp-yrp-real`; FFX-2 only): `yuna.glb`, `rikku.glb`, `paine.glb` and `bahamut.glb`, Bailey's own Steam
+ * FFX-2 HD models converted locally (`./load.ts` finds the files in `public/models-exp/yrp-hd/` and `yrp/`). The files are **local only**: gitignored, never committed (the repo is public and the files are large) and never
+ * shipped (`tools/dist-filter.mjs`). A slot whose file is missing stands on the neutral capsule (`./capsule.ts`), so the chapter always plays in frame A with something on every mark.
  *
- * ## What a file must be (the contract the real models are made to)
+ * ## What a file is (the contract the extracted models keep)
  *
- * A binary glTF (`.glb`), **Y up, facing +Z, the feet on y 0** (their centre does not matter: the fit centres the footprint), in any scale (the fit scales the box's height to the figure's world height, so a
- * model of 2.3 units and one of 180 both stand 1.9 tall). Skinned or not; if it carries animation clips they are named for what they are (`idle`, `attack`, `hit`, `cast`, `victory`; `./clips.ts`): the idle loops under the procedural motion and the others play on the battle's events. Draco and Meshopt are not decoded. Its base colour map is
- * what the toon look uses (`./toon.ts`).
+ * A binary glTF (`.glb`), **Y up, facing +Z, the feet on y 0** (their centre does not matter: the fit centres the footprint), in the game's own units (a girl is about 16.5 tall; the fit scales the box's height to the
+ * figure's world height, so a model of 2.3 units and one of 180 both stand 1.9 tall), skinned on `SkeletonNode_<n>` bones. The scene's extras carry the **`.chr` scale** the game draws the model at (`ffx2.runtimeScale`:
+ * 1 for the girls and 4 for Bahamut, "applied to the loaded scene root"): it is applied here, so a model's measured box is its size in the game and the ratio between two figures' boxes is the game's (`trueHeight`).
+ * Its clips come from `<id>-anims.glb`, named as the developers' `btlmot.ath` names them, and are played in the order of the clip map (`./clipMap.ts`, `./clips.ts`). Draco and Meshopt are not decoded.
+ *
+ * The AI-made Bahamut (`bahamut-ai.glb`, Meshy, one rigid mesh) is a different file with no clips: it keeps the wing flap and breath of this chapter's first branch (`./flap.ts`) and is shaded in its own physically based look.
  *
  * ## Layers
  *
- * `root` (parent it to the actor's motion group) holds `lie` (a KO tips the body about the feet), which holds `yaw` (the way the figure is turned), which holds `fit` (the scale and the offset that stand the model on
- * the floor), which holds the file's scene. Everything the stage does to the actor (lunge, recoil, hop, squash, shake) moves `root`'s parent, so the model rides it.
+ * `root` (parent it to the actor's motion group) holds `lie` (a body with no fall clip tips about the feet), which holds `yaw` (the way the figure is turned), which holds `rear` (Bahamut's Mega Flare), which holds
+ * `fit` (the scale and the offset that stand the model on the floor), which holds the file's scene. Everything the stage does to the actor (lunge, recoil, hop, squash, shake) moves `root`'s parent, so the model rides it.
  *
- * Needs three.js (and the glTF loader, imported on use); no DOM beyond `fetch`. Game case: FFX-2 only.
+ * Needs three.js (and the glTF loader, imported on use by `./load.ts`); no DOM. The look is `./shade.ts`'s.
  */
 
-import { Box3, Color, Group, Vector3, type AnimationClip, type Object3D } from 'three';
-import { ClipRig, roleClips } from './clips.ts';
+import { Box3, Color, Group, type AnimationClip, type Mesh, type Object3D } from 'three';
+import { ClipRig } from './clips.ts';
+import { plansFor, type PlanTable } from './clipMap.ts';
 import { attachProps, type Attached } from './props.ts';
-import { flapSpecOf, makeFlap, setFlap, type FlapUniforms } from './toon.ts';
-import { capsuleFigure } from './capsule.ts';
-import { fitBox, looksLikeGlb, modelUrl, TOON, YRP_BOSS_ID, YRP_CAST, type BoxData, type YrpId } from './layout.ts';
+import { disposeShade, drive, shadeify, type ShadeSet } from './shade.ts';
+import { flapSpecOf, makeFlap, setFlap, type FlapUniforms } from './flap.ts';
+import { fitBox, YRP_BOSS_ID, type BoxData, type Look, type YrpId } from './layout.ts';
 import { Orb } from './orb.ts';
-import { disposeToon, drive, setInkThickness, toonify, toonRamp, type ToonSet } from './toon.ts';
 
 /** Where a model came from: its own file, or the neutral capsule that stands in for a missing one. */
 export type ModelSource = 'own' | 'capsule';
@@ -37,7 +40,7 @@ export interface Channels {
   opacity: number;
 }
 
-/** How far a rigid winged model's wingtips swing at rest, and the most they add when it acts, as shares of the half-span; and the flap's speed at rest and the most it adds, radians a second. */
+/** How far a rigid winged model's wingtips swing at rest, and the most they add when it acts, as shares of the half-span; and the flap's speed at rest and the most it adds, radians a second (the AI Bahamut's procedural motion). */
 export const FLAP = { rest: 0.03, active: 0.11, rate: 1.6, rateActive: 3.4 } as const;
 
 /** How far a model rears back at full strength (radians about its feet, top toward the back) and how much it swells: Bahamut's Mega Flare. */
@@ -46,6 +49,32 @@ export const REAR = { tilt: 0.3, swell: 0.04 } as const;
 /** How far a body lying down is lifted off the floor so it rests on it instead of sinking through (a share of the figure's height). */
 const LIE_LIFT = 0.12;
 
+/** What the loader knows of a file that the model needs. */
+export interface ModelOptions {
+  /** The pose plans (`./clipMap.ts`), when the clip map file was read; else they are built from the clip names. */
+  plans?: PlanTable;
+  /** The `.chr` scale from the file's extras (`chrScaleOf`, `./load.ts`); 1 when there is none. */
+  chrScale?: number;
+  /** The look it is shaded in (`./shade.ts`): the real humans' diffuse look (the default), or the AI boss's own physically based material. */
+  look?: Look;
+}
+
+/** Remove the meshes that are not part of the figure: in a scene with a skinned mesh, a mesh with no skin and no bone above it (Bahamut's file carries an unskinned ring that no animation moves; the extraction notes say leave it hidden). */
+export function removeStrays(scene: Object3D): number {
+  let skinned = false;
+  scene.traverse((o) => {
+    if ((o as { isSkinnedMesh?: boolean }).isSkinnedMesh) skinned = true;
+  });
+  if (!skinned) return 0;
+  const strays: Object3D[] = [];
+  scene.traverse((o) => {
+    if (!(o as Mesh).isMesh || (o as { isSkinnedMesh?: boolean }).isSkinnedMesh) return;
+    for (let p = o.parent; p; p = p.parent) if ((p as { isBone?: boolean }).isBone) return;
+    strays.push(o);
+  });
+  for (const o of strays) o.removeFromParent();
+  return strays.length;
+}
 
 export class YrpModel {
   readonly id: YrpId;
@@ -57,37 +86,43 @@ export class YrpModel {
   /** Between the yaw and the fit: the body rears back about its feet (`setRear`). */
   private readonly rear = new Group();
   private readonly fit = new Group();
-  private readonly set: ToonSet;
+  private readonly set: ShadeSet;
   private readonly natural: BoxData;
-  /** The model's clips driven by the battle (`./clips.ts`), or null for a model with no idle clip (Bahamut is unrigged; a capsule has none): it stays procedural. */
+  /** The model's clips driven by the battle (`./clips.ts`), or null for a model with no idle clip (a capsule has none): it stays procedural. */
   private readonly rig: ClipRig | null;
-  /** The weapons parented to the hand bones (`./props.ts`), or none. */
+  /** The weapons parented to the hands (`./props.ts`), or none. */
   private readonly props: Attached;
   /** Bahamut's gathering orb (his Mega Flare's windup); the girls have none. */
   private readonly orb: Orb | null;
-  /** The wing flap of a rigid model with wings (Bahamut's), or null: the cells every material and the ink hull read, and the half-span in the file's units. */
+  /** The wing flap of a rigid model with wings and no clips (the AI Bahamut's): the cells every material reads, and the half-span in the file's units. Null for a model with clips (the game's own motion) and for the girls. */
   private readonly flap: { cells: FlapUniforms; halfSpan: number } | null;
   private flapClock = 0;
   private activity = 0;
-  /** Seconds left of the pulse a model with no clips (Bahamut) takes from an attack or cast opening: his wings beat harder for it. */
+  /** Seconds left of the pulse a model with no clips takes from an attack or cast opening: its wings beat harder for it. */
   private pulse = 0;
   private figureHeight: number;
   private lieAmount = 0;
+  /** The `.chr` scale applied to the file's scene. */
+  readonly chrScale: number;
 
-  /** `scene` is the file's scene (or a clone of it), `clips` its animations. The model measures it first, then adds the toon hulls. */
-  constructor(id: YrpId, scene: Object3D, clips: readonly AnimationClip[], height: number, source: ModelSource = 'own') {
+  /** `scene` is the file's scene (or a clone of it), `clips` its animations. The model applies the `.chr` scale, measures it, hands the girls their weapons and then softens every material. */
+  constructor(id: YrpId, scene: Object3D, clips: readonly AnimationClip[], height: number, source: ModelSource = 'own', opts: ModelOptions = {}) {
     this.id = id;
     this.source = source;
     this.figureHeight = height;
+    this.chrScale = opts.chrScale && opts.chrScale > 0 ? opts.chrScale : 1;
+    removeStrays(scene);
+    scene.scale.multiplyScalar(this.chrScale); // the game draws the model at its .chr scale: the measured box is the size in the game
     scene.updateMatrixWorld(true);
     const box = new Box3().setFromObject(scene);
     this.natural = { min: [box.min.x, box.min.y, box.min.z], max: [box.max.x, box.max.y, box.max.z] };
-    this.props = attachProps(id, scene, this.natural.max[1] - this.natural.min[1]); // after the box is measured (a sword must not change the fit), before the toon pass (so it becomes toon too)
-    const fit = fitBox(this.natural, height);
-    const byRole = roleClips(clips);
-    const spec = id === YRP_BOSS_ID && !byRole.has('idle') ? flapSpecOf(scene) : null; // a rigid winged model (Bahamut's): the wings flap in the vertex shader
+    this.props = attachProps(id, scene, (this.natural.max[1] - this.natural.min[1]) / this.chrScale); // after the box is measured (a sword must not change the fit), before the soft pass (so it is covered too)
+    const names = clips.map((c) => c.name);
+    const plans = opts.plans ?? plansFor(id, null, names);
+    const rigged = !!plans.idle?.hold && names.includes(plans.idle.hold);
+    const spec = id === YRP_BOSS_ID && !rigged ? flapSpecOf(scene) : null; // a rigid winged model (the AI Bahamut): the wings flap in the vertex shader
     this.flap = spec ? { cells: makeFlap(spec), halfSpan: spec.halfSpan } : null;
-    this.set = toonify(scene, TOON.inkWorld / fit.scale, toonRamp(), this.flap?.cells ?? null);
+    this.set = shadeify(scene, { look: opts.look ?? 'diffuse', flap: this.flap?.cells ?? null });
     this.root.name = `yrp-${id}`;
     this.fit.add(scene);
     this.rear.add(this.fit);
@@ -97,7 +132,7 @@ export class YrpModel {
     this.orb = id === YRP_BOSS_ID ? new Orb() : null;
     if (this.orb) this.rear.add(this.orb.sprite); // the orb rears with the chest it hangs at
     this.place();
-    this.rig = byRole.has('idle') ? new ClipRig(scene, byRole, id) : null;
+    this.rig = rigged ? new ClipRig(scene, clips, plans, id) : null;
   }
 
   /** The figure's height now, world units. */
@@ -105,17 +140,27 @@ export class YrpModel {
     return this.figureHeight;
   }
 
+  /** The model's height in the game's units (the `.chr` scale applied), from its box: the ratio of two figures' is the game's. */
+  get trueHeight(): number {
+    return this.natural.max[1] - this.natural.min[1];
+  }
+
   /** The model's footprint over its height, from its box (the camera and the lunge's reach read it). */
   get widthOverHeight(): number {
     return fitBox(this.natural, this.figureHeight).widthOverHeight;
   }
 
-  /** True when the file has an idle clip playing (and so the battle's clips: `noteOpen`, `noteImpact`, `notePose`). */
+  /** True when the file has an idle clip playing (and so the battle's clips: `noteOpen`, `noteImpact`, `noteClose`, `notePose`). */
   get animated(): boolean {
     return this.rig !== null;
   }
 
-  /** Refit to a figure of another height (the stage re-sizes a boss): the scale, the offset and the ink's thickness in the file's units follow. */
+  /** True when the model plays its own fall (the real KO clip): the skin then does not tip the body over as well. */
+  get playsKo(): boolean {
+    return this.rig?.playsKo ?? false;
+  }
+
+  /** Refit to a figure of another height (the stage re-sizes a boss). */
   fitTo(height: number): void {
     if (!(height > 0) || Math.abs(height - this.figureHeight) < 1e-4) return;
     this.figureHeight = height;
@@ -127,7 +172,6 @@ export class YrpModel {
     const f = fitBox(this.natural, this.figureHeight);
     this.fit.scale.setScalar(f.scale);
     this.fit.position.set(f.offset[0], f.offset[1], f.offset[2]);
-    setInkThickness(this.set.hullMaterial, TOON.inkWorld / f.scale);
     this.orb?.place(this.figureHeight);
   }
 
@@ -141,16 +185,21 @@ export class YrpModel {
     this.activity = Math.min(1, Math.max(0, activity));
   }
 
+  /** The flap's amplitude now in the file's units, or 0 for a model with no flap (a test's read). */
+  get flapAmplitude(): number {
+    return this.flap ? (FLAP.rest + FLAP.active * this.acting) * this.flap.halfSpan : 0;
+  }
+
+  /** True when the model moves by the wing flap (a rigid winged model with no clips). */
+  get flaps(): boolean {
+    return this.flap !== null;
+  }
+
   /** Rear back about the feet, 0 standing to 1 at full (`REAR`): Bahamut's Mega Flare. */
   setRear(amount: number): void {
     const a = Math.min(1, Math.max(0, amount));
     this.rear.rotation.x = -REAR.tilt * a;
     this.rear.scale.setScalar(1 + REAR.swell * a);
-  }
-
-  /** The flap's amplitude now in the file's units, or 0 for a model with no flap (a test's read). */
-  get flapAmplitude(): number {
-    return this.flap ? (FLAP.rest + FLAP.active * this.acting) * this.flap.halfSpan : 0;
   }
 
   /** The orb's strength, 0..1 (the cast glow); a no-op for a figure with no orb. */
@@ -165,7 +214,7 @@ export class YrpModel {
 
   private lieFacing: 1 | -1 = 1;
 
-  /** Tip the body onto its back, 0 standing to 1 lying: it falls away from the way it faces (`facing`, +1 toward +x), about its feet, and rests a little off the floor. */
+  /** Tip the body onto its back, 0 standing to 1 lying: it falls away from the way it faces (`facing`, +1 toward +x), about its feet, and rests a little off the floor. Only a body with no fall clip of its own is tipped. */
   setLie(amount: number, facing: 1 | -1): void {
     this.lieAmount = amount;
     this.lieFacing = facing;
@@ -173,179 +222,67 @@ export class YrpModel {
     this.lie.position.y = amount * LIE_LIFT * this.figureHeight;
   }
 
-  /** The figure's colour, glow and opacity (the toon set's channels). */
+  /** The figure's colour, glow and opacity (the shade set's channels). */
   setChannels(c: Channels): void {
     drive(this.set, c);
   }
 
-  /** The visible toon meshes and hulls, for a test and the debug view. */
+  /** The visible meshes, for a test and the debug view. */
   get meshCount(): number {
-    return this.set.hulls.length;
+    return this.set.meshes.length;
   }
 
-  /** The clip role playing now, or null for a model with no rig. */
+  /** The materials, for a test and the debug view. */
+  get materials(): ShadeSet['materials'] {
+    return this.set.materials;
+  }
+
+  /** The pose playing now (`idle`, `attack` ...), or null for a model with no rig. */
   get playing(): string | null {
     return this.rig?.current ?? null;
   }
 
-  /** An action by this figure opened (`attack` or `cast` start their clips), the blow lands `lead` seconds on; `paceRate` is the pacing option's rate for one-shots. A model with no rig has no clips to start and takes a pulse on its wings instead. */
+  /** The clip playing now, by the game's name, or null for a model with no rig. */
+  get playingClip(): string | null {
+    return this.rig?.clip ?? null;
+  }
+
+  /** An action by this figure opened (`attack`, `cast` and `item` start their poses), the blow lands `lead` seconds on; `paceRate` is the pacing option's rate for one-shots. A model with no rig has no clips to start. */
   noteOpen(kind: string, lead: number | undefined, paceRate = 1): void {
     if (this.rig) this.rig.open(kind, lead, paceRate);
     else if (kind === 'attack' || kind === 'cast') this.pulse = 1.4; // no clips: the wings beat harder for a moment
   }
 
   /** The blow landed. */
-  noteImpact(paceRate = 1): void {
-    this.rig?.impact(paceRate);
+  noteImpact(): void {
+    this.rig?.impact();
   }
 
-  /** The pose the actor shows and whether it is down, once a frame (a hit and a victory start their clips). */
-  notePose(pose: string, down: boolean, paceRate = 1): void {
-    this.rig?.pose(pose, down, paceRate);
+  /** The action is over. */
+  noteClose(): void {
+    this.rig?.close();
   }
 
-  /** Advance the clips by `dt` seconds; `frozen` (a body that is down, REDUCE MOTION) holds the pose. */
+  /** The pose the actor shows, whether it is down and whether its HP is low, once a frame (a hit, a victory, a fall and the kneel start their poses). */
+  notePose(pose: string, down: boolean, low: boolean, paceRate = 1): void {
+    this.rig?.pose(pose, down, low, paceRate);
+  }
+
+  /** Advance the clips by `dt` seconds; `frozen` (REDUCE MOTION) holds the pose but lets a fall or a celebration run to its end. */
   update(dt: number, frozen = false): void {
     this.rig?.update(dt, frozen);
     if (this.pulse > 0) this.pulse = Math.max(0, this.pulse - dt);
     if (this.flap) {
       if (!frozen) this.flapClock += dt * (FLAP.rate + FLAP.rateActive * this.acting);
-      setFlap(this.set, this.flapClock, this.flapAmplitude);
+      setFlap(this.flap.cells, this.flapClock, this.flapAmplitude);
     }
   }
 
   dispose(): void {
     this.rig?.dispose();
     this.props.dispose();
-    disposeToon(this.set, this.source === 'capsule'); // a capsule's geometry is its own; a file's is shared with the clones of it and freed with the loader
+    disposeShade(this.set, this.source === 'capsule'); // a capsule's geometry is its own; a file's is shared with the clones of it and freed with the loader
     this.orb?.dispose();
     this.root.removeFromParent();
   }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-// Loading
-// ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-/** A parsed file: its scene (never drawn itself; each model draws a clone) and its clips. */
-export interface Parsed {
-  scene: Object3D;
-  animations: AnimationClip[];
-}
-
-/** How bytes arrive and become a scene. The defaults are `fetch` and the glTF loader; a test hands its own. */
-export interface LoaderIO {
-  fetchBytes(url: string): Promise<ArrayBuffer | null>;
-  parse(bytes: ArrayBuffer): Promise<Parsed>;
-  /** Clone a parsed scene for one model (skeletons rebound); default `SkeletonUtils.clone`. */
-  clone(scene: Object3D): Promise<Object3D>;
-}
-
-/** The bytes at `url`, or null when there is no such file: a missing file, a failed fetch, or a body that is not a binary glTF (a dev server answers an unknown path with its index page). */
-export async function fetchGlb(url: string, fetcher: typeof fetch = fetch): Promise<ArrayBuffer | null> {
-  try {
-    const res = await fetcher(url);
-    if (!res.ok) return null;
-    const bytes = await res.arrayBuffer();
-    return looksLikeGlb(bytes) ? bytes : null;
-  } catch {
-    return null;
-  }
-}
-
-/** The default IO: `fetch`, three's glTF loader (imported here, on use, so a build that never plays this chapter carries none of it) and `SkeletonUtils.clone`. */
-export function defaultIO(): LoaderIO {
-  return {
-    fetchBytes: (url) => fetchGlb(url),
-    async parse(bytes) {
-      const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
-      const gltf = await new GLTFLoader().parseAsync(bytes, '');
-      return { scene: gltf.scene, animations: gltf.animations };
-    },
-    async clone(scene) {
-      const { clone } = await import('three/addons/utils/SkeletonUtils.js');
-      return clone(scene);
-    },
-  };
-}
-
-export interface LoadOptions {
-  /** The page's base (`import.meta.env.BASE_URL`). */
-  base: string;
-  /** The folder under it (`YRP_MODEL_DIR`). */
-  dir: string;
-  /** The figure's world height per id, from the actors the stage staged (the skin refits when the stage disagrees later). */
-  heights: Readonly<Record<YrpId, number>>;
-  io?: LoaderIO;
-  /** Said once per problem, for the log. */
-  warn?: (message: string) => void;
-}
-
-/** The models that loaded, by id, and what to free. */
-export interface YrpModels {
-  readonly models: ReadonlyMap<YrpId, YrpModel>;
-  /** Ids whose own file was missing and that stand on the neutral capsule. */
-  readonly capsules: readonly YrpId[];
-  dispose(): void;
-}
-
-/** Load the four models, each from its own file; a figure whose file is missing (or does not parse) stands on the neutral capsule. Every id has an entry. */
-export async function loadYrpModels(opts: LoadOptions): Promise<YrpModels> {
-  const io = opts.io ?? defaultIO();
-  const parsed = new Map<string, Promise<Parsed | null>>();
-  const parseOnce = (url: string): Promise<Parsed | null> => {
-    let p = parsed.get(url);
-    if (!p) {
-      p = (async () => {
-        const bytes = await io.fetchBytes(url);
-        if (!bytes) return null;
-        try {
-          return await io.parse(bytes);
-        } catch (e) {
-          opts.warn?.(`[yrp3d] ${url} did not parse: ${e instanceof Error ? e.message : String(e)}`);
-          return null;
-        }
-      })();
-      parsed.set(url, p);
-    }
-    return p;
-  };
-  const models = new Map<YrpId, YrpModel>();
-  const capsules: YrpId[] = [];
-  await Promise.all(
-    YRP_CAST.map(async (id) => {
-      const file = await parseOnce(modelUrl(opts.base, opts.dir, id));
-      if (file) {
-        models.set(id, new YrpModel(id, await io.clone(file.scene), file.animations, opts.heights[id], 'own'));
-      } else {
-        models.set(id, new YrpModel(id, capsuleFigure(id), [], opts.heights[id], 'capsule'));
-        capsules.push(id);
-      }
-    }),
-  );
-  return {
-    models,
-    capsules,
-    dispose(): void {
-      for (const m of models.values()) m.dispose();
-      models.clear();
-      void Promise.all(parsed.values()).then((files) => {
-        for (const f of files) f?.scene.traverse((o) => {
-          const mesh = o as { isMesh?: boolean; geometry?: { dispose(): void }; material?: unknown };
-          if (!mesh.isMesh) return;
-          mesh.geometry?.dispose();
-          for (const m of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
-            const mat = m as { map?: { dispose(): void } | null; dispose?(): void } | undefined;
-            mat?.map?.dispose();
-            mat?.dispose?.();
-          }
-        });
-      });
-    },
-  };
-}
-
-/** The size a model measures, in its own units (for the log and the tests). */
-export function sizeOf(object: Object3D): Vector3 {
-  return new Box3().setFromObject(object).getSize(new Vector3());
 }

@@ -1,6 +1,6 @@
 /**
  * **Frame A's layout and camera maths** (`src/engine/yrp3d/layout.ts`; the hidden 3D Bahamut chapter, FFX-2 only), held without a renderer: where the four figures stand on the screen at 16:9 and at the window shapes either
- * side of it, that the painting's plane fills the frame behind them, how a model is fitted to a figure, where the model files are looked for and the toon ramp's shape.
+ * side of it, that the painting's plane fills the frame behind them, how a model is fitted to a figure, where the model files are looked for, and the soft shading and light rig of the real-models branch.
  *
  * The target is Bailey's picked end-state frame A (the art room's picture, "classic, now in 3D"): Bahamut on the left with his wings over the left half, the trio in a loose diagonal on the right (Paine at the back,
  * Rikku in the middle, Yuna at the front), calm floor along the bottom. These tests are that picture's limits as numbers; they do not look at pixels (the browser pass does).
@@ -8,6 +8,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  AI_BOSS_FILES,
   BOSS_HEIGHT,
   BOSS_SPOT,
   BOSS_YAW,
@@ -17,19 +18,25 @@ import {
   PARTY_HEIGHT,
   PARTY_SLOTS,
   PARTY_YAW,
+  LIGHTS,
   RIGS,
-  TOON,
+  SHADE,
+  animsUrl,
+  bossChoice,
   boxOf,
   castGlow,
+  clipMapUrl,
   figureBoxes,
+  figurePlans,
+  fileUrl,
   fitBox,
+  folderUrl,
   isYrpId,
   looksLikeGlb,
   modelUrl,
   overlapOf,
   planeMiss,
   project,
-  rampAt,
   yawFor,
   YRP_BOSS_ID,
   YRP_CAST,
@@ -277,18 +284,26 @@ describe('where the model files are', () => {
   });
 });
 
-describe('the toon ramp and the cast glow', () => {
-  it('steps through three plateaus, rises monotonely, and blends each step over a brush\'s width, not a hard edge', () => {
-    expect(TOON.bands).toHaveLength(3);
-    const samples = Array.from({ length: 101 }, (_, i) => rampAt(i / 100));
-    for (let i = 1; i < samples.length; i++) expect(samples[i]!, `at ${i}`).toBeGreaterThanOrEqual(samples[i - 1]! - 1e-12);
-    expect(samples[0]).toBeCloseTo(TOON.bands[0]!, 6);
-    expect(samples[100]).toBeCloseTo(TOON.bands[2]!, 6);
-    expect(rampAt(0.5)).toBeCloseTo(TOON.bands[1]!, 2); // the middle plateau
-    expect(new Set(samples.map((v) => Math.round(v * 100))).size).toBeGreaterThan(6); // soft: values between the plateaus exist
-    expect(rampAt(0.33)).toBeLessThan(rampAt(0.35)); // and it passes through an edge
-    const hard = { bands: TOON.bands, edges: TOON.edges, softness: 0 };
-    expect(new Set(Array.from({ length: 101 }, (_, i) => rampAt(i / 100, hard))).size).toBe(3); // softness 0 is a cel: exactly the three
+describe('the soft shading, the light rig and the cast glow', () => {
+  it('shades the real models with no specular gloss: a high roughness, no metal, no environment, and no ink or ramp (the toon look of the AI-model branch is gone)', () => {
+    expect(SHADE.roughness).toBeGreaterThanOrEqual(0.75);
+    expect(SHADE.roughness).toBeLessThanOrEqual(0.9);
+    expect(SHADE.metalness).toBe(0);
+    expect(SHADE.envMapIntensity).toBe(0);
+    expect(SHADE.anisotropy).toBeGreaterThan(1);
+  });
+
+  it('lights the figures with a warm key from the front left, a soft fill with no direction and a cool rim from behind', () => {
+    const warmth = (c: number): number => ((c >> 16) & 255) - (c & 255); // red minus blue
+    expect(warmth(LIGHTS.key.colour)).toBeGreaterThan(20); // warm
+    expect(warmth(LIGHTS.rim.colour)).toBeLessThan(-40); // cool
+    expect(LIGHTS.key.position![0]).toBeLessThan(0); // left of the stage's axis
+    expect(LIGHTS.key.position![2]).toBeGreaterThan(5); // in front, toward the lens
+    expect(LIGHTS.rim.position![2]).toBeLessThan(-5); // behind the figures
+    expect(LIGHTS.rim.position![1]).toBeGreaterThan(3); // and above
+    expect(LIGHTS.fill.position).toBeUndefined(); // a hemisphere: no direction
+    expect(LIGHTS.fill.intensity).toBeGreaterThan(0.3);
+    expect(LIGHTS.key.intensity).toBeGreaterThan(LIGHTS.fill.intensity); // the key leads; the fill only lifts the shade
   });
 
   it('swells the cast glow from 0.35 to a steady breathing, and never leaves 0..0.76', () => {
@@ -298,5 +313,42 @@ describe('the toon ramp and the cast glow', () => {
       expect(castGlow(t)).toBeLessThanOrEqual(0.76);
     }
     expect(castGlow(3)).toBeGreaterThan(0.34);
+  });
+});
+
+describe('where the clips and the clip map are', () => {
+  it('puts the clips of a figure beside its model as <id>-anims.glb and the map as clipmap.json, whichever folder', () => {
+    expect(folderUrl('/', 'models-exp/yrp-hd')).toBe('/models-exp/yrp-hd/');
+    expect(folderUrl('/x', 'models-exp/yrp')).toBe('/x/models-exp/yrp/');
+    expect(animsUrl('/', 'models-exp/yrp', 'rikku')).toBe('/models-exp/yrp/rikku-anims.glb');
+    expect(clipMapUrl('/pyrefly-reprise', 'models-exp/yrp-hd')).toBe('/pyrefly-reprise/models-exp/yrp-hd/clipmap.json');
+  });
+});
+
+describe('which Bahamut and which files', () => {
+  it('fights the AI-made Bahamut by default, the game\'s own for ?boss=real, and asks for the moved clips only with ?bossrig=clips on the AI one', () => {
+    expect(bossChoice('')).toEqual({ boss: 'ai', rig: false });
+    expect(bossChoice('?boss=real')).toEqual({ boss: 'real', rig: false });
+    expect(bossChoice('?bossrig=clips')).toEqual({ boss: 'ai', rig: true });
+    expect(bossChoice('?boss=real&bossrig=clips')).toEqual({ boss: 'real', rig: false }); // the game's Bahamut has his own clips: nothing to move
+    expect(bossChoice('?boss=ai&bossrig=nonsense')).toEqual({ boss: 'ai', rig: false });
+    expect(bossChoice('?models=base&boss=nonsense')).toEqual({ boss: 'ai', rig: false });
+  });
+
+  it('loads the real girls from <id>.glb and <id>-anims.glb in the diffuse look, whichever boss', () => {
+    for (const choice of [bossChoice(''), bossChoice('?boss=real'), bossChoice('?bossrig=clips')]) {
+      for (const id of YRP_PARTY_IDS) expect(figurePlans(id, choice)).toEqual([{ mesh: `${id}.glb`, anims: `${id}-anims.glb`, look: 'diffuse' }]);
+    }
+  });
+
+  it('gives the AI boss bahamut-ai.glb with no clips in the pbr look, the rigged file and its clips first when they are asked for, and the game\'s Bahamut his own files in the diffuse look', () => {
+    expect(figurePlans('bahamut', bossChoice(''))).toEqual([{ mesh: AI_BOSS_FILES.mesh, anims: null, look: 'pbr' }]);
+    expect(figurePlans('bahamut', bossChoice('?bossrig=clips'))).toEqual([
+      { mesh: AI_BOSS_FILES.rigged, anims: AI_BOSS_FILES.anims, look: 'pbr' },
+      { mesh: AI_BOSS_FILES.mesh, anims: null, look: 'pbr' },
+    ]);
+    expect(figurePlans('bahamut', bossChoice('?boss=real'))).toEqual([{ mesh: 'bahamut.glb', anims: 'bahamut-anims.glb', look: 'diffuse' }]);
+    expect(AI_BOSS_FILES).toEqual({ mesh: 'bahamut-ai.glb', rigged: 'bahamut-ai-rigged.glb', anims: 'bahamut-ai-anims.glb' });
+    expect(fileUrl('/', 'models-exp/yrp', AI_BOSS_FILES.mesh)).toBe('/models-exp/yrp/bahamut-ai.glb');
   });
 });

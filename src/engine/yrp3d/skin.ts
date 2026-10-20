@@ -1,7 +1,7 @@
 /**
- * **The toon models on the battle's actors** (the hidden 3D Bahamut chapter; FFX-2 only): the stage (`PaintedStage`) owns the actors and plays every `BattleEvent` onto them through the presenter, exactly as it does
+ * **The real models on the battle's actors** (the hidden 3D Bahamut chapter, the real-models branch `exp-yrp-real`; FFX-2 only): the stage (`PaintedStage`) owns the actors and plays every `BattleEvent` onto them through the presenter, exactly as it does
  * in Chapter IV; this skin finds them where the stage puts them and carries a model on each, with the painted planes switched off. It is the house habit of `engine/ffx3d/ffxSkin.ts` (the hidden Fayth chapter's
- * models), for a toon-shaded model and a lying body of its own.
+ * models), for a softly shaded model whose own motions play.
  *
  * ## How a model rides an actor
  *
@@ -12,9 +12,11 @@
  *
  * - **Facing.** The model is turned to the three-quarter yaw of `./layout.ts` (the actor's interim yaw is off: that turn is for flat paintings).
  * - **Flash.** The actor's own flash (a hit's white, a heal's green, a revive's blue: `PaintedActor.flash`) is read off its uniform cells and drives the model's emissive.
+ * - **Motions.** The beats (`./beats.ts`) and the pose the actor shows start the game's own clips (`./clips.ts`): an attack, a cast or an item as it opens and ends, the blow landing, a hit, a fall and a rise, the victory, and the
+ *   low-HP kneel when the rest pose is `critical` (the battle screen's `restPoses`, below a third of the HP in FFX-2). A model with a fall clip of its own is not tipped over as well.
  * - **Cast glow.** While the actor holds the `cast` pose a glow swells on the model (`castGlow`): warm for the girls, Bahamut's violet for him.
  * - **Tint and stone.** The actor's hurt tint and brightness multiply the model's colour; a petrified figure goes grey.
- * - **KO.** A downed figure (`lifeState` 'down') tips onto its back about its feet and stays; a revive stands it up.
+ * - **KO.** A downed figure (`lifeState` 'down') plays its fall and stays down; a revive plays the rise. A model with no fall clip (a capsule, the AI Bahamut) tips onto its back about its feet instead.
  * - **Fade.** The actor's alpha and dissolve (a sent fiend comes apart) fade the model and its ink.
  * - **Size.** The model is fitted to the actor's world height, which the stage solves from the scene's heights; if the stage re-sizes the figure, the model is refitted.
  *
@@ -26,7 +28,8 @@ import { Color, Group, type Object3D } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
 import { castGlow, yawFor, YRP_BOSS_ID, YRP_CAST, type YrpId } from './layout.ts';
 import type { BeatListener } from './beats.ts';
-import type { YrpModel, YrpModels } from './model.ts';
+import type { YrpModels } from './load.ts';
+import type { YrpModel } from './model.ts';
 import { paceRate } from '../pace.ts';
 
 /** What a `PaintedActor` keeps private and the skin needs: the switch of its painted figure, its plane meshes, its motion group and its uniform cells. */
@@ -41,6 +44,12 @@ export interface PaintedInternals {
     brightness: { value: number };
     desaturate: { value: number };
   };
+}
+
+/** The pose `actor` was last asked for (`PaintedActor.requested`, private): `critical` for a figure at low HP, even when it has no painting for it and shows the idle. */
+export function requestedPose(actor: PaintedActor): string {
+  const r = (actor as unknown as { requested?: unknown }).requested;
+  return typeof r === 'string' ? r : '';
 }
 
 /** The private parts of `actor`, or null when `PaintedActor` no longer has them (the skin then leaves that actor painted). */
@@ -71,7 +80,7 @@ export function hidePaintedFigure(actor: PaintedActor): boolean {
 
 /** A hit's flash is white, the girls' cast glow warm, Bahamut's his possession violet (the stage's boss pool, `scenes/bevelle-underground.ts`). */
 const GLOW_COLOUR: Readonly<Record<'party' | 'boss', number>> = { party: 0xffe2a6, boss: 0xb468ff };
-/** The share of full emissive the flash and the glow reach (the toon ramp's lit side is 1, so full emissive would flatten the figure to a silhouette). */
+/** The share of full emissive the flash and the glow reach (full emissive would flatten the figure to a flat shape). */
 const FLASH_GAIN = 0.85;
 const GLOW_GAIN = 0.5;
 /** Seconds a downed body takes to tip, and a glow to fade. */
@@ -91,7 +100,7 @@ interface Bound {
   lie: number;
   glow: number;
   castAt: number | null;
-  /** How much the figure is acting, for a model that flaps (Bahamut's wings). */
+  /** How much the figure is acting, for a model that flaps (the AI Bahamut's wings). */
   act: number;
   /** A cast is open (the beat), so the glow holds whatever painting the actor shows. */
   castHold: boolean;
@@ -123,10 +132,12 @@ export class YrpSkin {
       b.castHold = kind === 'cast'; // the glow follows the cast the beat announced, whatever painting the actor shows
       b.model.noteOpen(kind, lead, paceRate('action'));
     },
-    impact: (actorId) => this.bound.get(actorId as YrpId)?.model.noteImpact(paceRate('action')),
+    impact: (actorId) => this.bound.get(actorId as YrpId)?.model.noteImpact(),
     close: (actorId) => {
       const b = this.bound.get(actorId as YrpId);
-      if (b) b.castHold = false;
+      if (!b) return;
+      b.castHold = false;
+      b.model.noteClose();
     },
   };
 
@@ -170,7 +181,7 @@ export class YrpSkin {
     model.setYaw(yawFor(id));
     model.fitTo(actor.height);
     parts.inner.add(model.root);
-    this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' ? 1 : 0, glow: 0, castAt: null, act: 0, castHold: false });
+    this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' && !model.playsKo ? 1 : 0, glow: 0, castAt: null, act: 0, castHold: false });
   }
 
   private follow(b: Bound, dt: number): void {
@@ -182,8 +193,8 @@ export class YrpSkin {
     const alpha = actor.visible ? actor.alpha * (1 - dissolve) : 0;
     model.root.visible = alpha > 0.002;
 
-    // KO: a downed body tips onto its back and stays; a revive stands it up
-    b.lie = approach(b.lie, actor.lifeState === 'down' ? 1 : 0, LIE_TAU, dt);
+    // KO: a model with no fall of its own tips onto its back and stays; a revive stands it up (a model with a fall clip plays it instead: `notePose` below)
+    b.lie = approach(b.lie, actor.lifeState === 'down' && !model.playsKo ? 1 : 0, LIE_TAU, dt);
     if (b.lie < 0.002) b.lie = 0;
     model.setLie(b.lie, actor.facingDir);
 
@@ -217,15 +228,16 @@ export class YrpSkin {
     }
     model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha });
     model.setOrb(b.glow);
-    // a rigid winged model flaps harder as it acts, and rears back as its glow swells (Bahamut's Mega Flare)
+    // a rigid winged model (the AI Bahamut) flaps harder as it acts; Bahamut rears back as his glow swells (his Mega Flare)
     b.act = approach(b.act, pose === 'attack' || casting ? 1 : pose === 'hurt' ? 0.5 : 0, ACT_TAU, dt);
     model.setActivity(b.act);
     if (b.id === YRP_BOSS_ID) model.setRear(Math.min(1, b.glow / 0.5));
 
     const still = (actor as unknown as { still?: () => boolean }).still?.() === true; // REDUCE MOTION stills the idle
     const down = actor.lifeState === 'down';
-    model.notePose(pose, down, paceRate('action')); // a rise to hurt or victory starts that clip
-    model.update(dt, still || down); // a body that is down holds its pose while the actor tips it over
+    const low = !down && (requestedPose(actor) === 'critical' || actor.pose === 'critical'); // the low-HP rest pose: the kneel (a painting for it shows 'critical'; the chain critical -> idle shows the idle and only the request says so)
+    model.notePose(pose, down, low, paceRate('action')); // a rise to hurt or victory starts that pose; a fall, a rise and the kneel follow the body's state
+    model.update(dt, still || (down && !model.playsKo)); // a fall, a rise and a celebration run to their end even when the idle is stilled; a body that is tipped by the actor holds its pose (the flap stops)
   }
 
   dispose(): void {

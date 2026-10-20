@@ -1,24 +1,24 @@
 // @vitest-environment jsdom
 /**
- * **The hidden 3D Bahamut chapter's scene, built for real** (`src/scenes/exp-yrp-3d-stage.ts`; FFX-2 only): Chapter IV's chamber restaged under frame A, with the toon skin on its actors.
+ * **The hidden 3D Bahamut chapter's scene, built for real** (`src/scenes/exp-yrp-3d-stage.ts`; FFX-2 only): Chapter IV's chamber restaged under frame A, with the skin of real models on its actors (the real-models branch).
  *
  * `loadScene` runs the real `SceneFactory` and the real `fromSceneBuild` under jsdom (a no-op 2D context, an art manifest that lists no backdrops so the loader goes straight to the placeholder plate, and a `fetch` that
  * answers 404 so every model file is missing and each slot stands on its neutral capsule), and the test reads what the battle stage is handed. What it pins:
  *
  * 1. **The staging reaches the stage**: the party's slots and Bahamut's pin are frame A's, the heights, the facing (party toward -x, Bahamut toward +x), `holdParty`, and the shot director that takes Mega Flare.
  * 2. **The rigs**: every name the presenter and the scripts ask for, plus the overdrive; the battle opens on `idle`.
- * 3. **It is Chapter IV's room otherwise**: the same palette and the same plate; the light pools stand at the new spots; two toon lights are added and cast no shadow; Chapter IV's own scene is untouched.
+ * 3. **It is Chapter IV's room otherwise**: the same palette and the same plate; the light pools stand at the new spots; the three lights of the figures are added and cast no shadow; Chapter IV's own scene is untouched.
  * 4. **The skin**: with no model file every slot is a capsule (the chapter always plays in frame A); `?yrp=painted` keeps the figures painted and builds no skin; `dispose` frees the skin and the debug handle.
  *
  * What the scene looks like is not under test here (the browser pass is).
  */
-import { DirectionalLight, PerspectiveCamera, type Object3D } from 'three';
+import { DirectionalLight, HemisphereLight, PerspectiveCamera, type Object3D } from 'three';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { YRP_SHOT_DIRECTOR } from '../../../src/engine/yrp3d/director.ts';
-import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_CAST } from '../../../src/engine/yrp3d/layout.ts';
-import { paintedForced } from '../../../src/scenes/exp-yrp-3d-stage.ts';
+import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, LIGHTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_CAST } from '../../../src/engine/yrp3d/layout.ts';
+import { figureLights, paintedForced } from '../../../src/scenes/exp-yrp-3d-stage.ts';
 import { loadScene, type LoadedScene } from '../../../src/scenes/index.ts';
 
 const loaded: LoadedScene[] = [];
@@ -135,20 +135,34 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     expect(yrp.scene.getObjectByName('enemy-reflection')!.position.z).toBeCloseTo(BOSS_SPOT[2] + 2.6, 6);
   }, 60_000);
 
-  it('adds two toon lights, a key from the front left and a warm rim from behind, and neither casts a shadow', async () => {
+  it('adds the light of the figures: a warm key from the front left, a soft fill that has no direction and a cool rim from behind; none casts a shadow', async () => {
     const scene = await stage('exp-yrp-3d-stage');
-    const key = scene.scene.getObjectByName('yrp-toon-key') as DirectionalLight;
-    const rim = scene.scene.getObjectByName('yrp-warm-rim') as DirectionalLight;
+    const key = scene.scene.getObjectByName('yrp-key') as DirectionalLight;
+    const rim = scene.scene.getObjectByName('yrp-rim') as DirectionalLight;
+    const fill = scene.scene.getObjectByName('yrp-fill') as HemisphereLight;
     for (const light of [key, rim]) {
       expect(light).toBeInstanceOf(DirectionalLight);
       expect(light.castShadow).toBe(false);
     }
+    expect(fill).toBeInstanceOf(HemisphereLight);
     expect([key.position.x < 0, key.position.z > 0, key.position.y > 0]).toEqual([true, true, true]); // front left, above
+    expect(key.color.r).toBeGreaterThan(key.color.b); // warm
     expect(rim.position.z).toBeLessThan(-5); // behind the figures
-    expect(rim.color.r).toBeGreaterThan(rim.color.b); // the lamps' orange
+    expect(rim.color.b).toBeGreaterThan(rim.color.r); // cool
+    expect(fill.intensity).toBeGreaterThan(0.3);
+    expect(scene.scene.getObjectByName('yrp-warm-rim')).toBeUndefined(); // the toon rig is gone
+    expect(scene.scene.getObjectByName('yrp-toon-key')).toBeUndefined();
     const chamberKey = scene.scene.getObjectByName('key') as DirectionalLight;
     expect(chamberKey.castShadow).toBe(true); // the chamber's own key still casts the models' shadows
   }, 60_000);
+
+  it('builds the figure lights from the layout data alone, three of them, with the targets the directional ones aim at', () => {
+    const lights = figureLights();
+    expect(lights.map((l) => l.name).sort()).toEqual(['yrp-fill', 'yrp-key', 'yrp-rim']);
+    for (const l of lights) expect(l.intensity).toBe(LIGHTS[l.name.replace('yrp-', '') as 'key' | 'fill' | 'rim'].intensity);
+    const key = lights.find((l) => l.name === 'yrp-key') as DirectionalLight;
+    expect(key.target.position.toArray()).toEqual([...LIGHTS.key.target!]);
+  });
 
   it('with no model file on disk every slot stands on its neutral capsule, so the chapter always plays in frame A; dispose frees the skin and the debug handle', async () => {
     const scene = await stage('exp-yrp-3d-stage');

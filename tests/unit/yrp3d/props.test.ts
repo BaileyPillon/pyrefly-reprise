@@ -1,30 +1,60 @@
 /**
- * **The girls' weapons** (`src/engine/yrp3d/props.ts`; the hidden 3D Bahamut chapter, FFX-2 only): small low-poly props built in code and parented to the models' hand bones. What it pins, on made-up skeletons (a
- * bone named `RightHand` and one named `LeftHand`, with the local axes the real files' hands have: +Y along the arm, +Z toward the thumb):
+ * **The girls' weapons** (`src/engine/yrp3d/props.ts`; the hidden 3D Bahamut chapter, the real-models branch, FFX-2 only): small low-poly props built in code and parented to the real models' hands. What it pins, on a made-up
+ * skeleton built the way the real ones are (nodes that are only offsets, named `SkeletonNode_<n>`, arms out and down, a palm with finger chains under it, the thumb toward +Z; the arm numbers differ per figure, so a hand is
+ * found by its shape, never by its name):
  *
- * 1. **Who holds what**: Yuna two pistols (one a hand), Rikku two daggers, Paine one sword in the right hand; Bahamut and a figure with no such bone hold nothing.
- * 2. **How they sit in the hand**: the prop's barrel or blade (its +Z) is the hand's +Y, its sight or edge (+Y) the hand's +Z, placed `PALM` along the hand, scaled by the figure's height; Paine's sword is tilted up a little.
- * 3. **What they are**: a pistol with a slide, a barrel, a sight and a grip; a dagger with a curved blade that bends up and tapers; a sword with a long dark blade, a point, a red guard, grip and pommel. About the sizes they should be.
- * 4. **Through the model**: the props become toon with the figure (hull and all), do not change the figure's fit, and are freed with it.
+ * 1. **Finding the hands**: the palm is the node with three or more finger chains standing farthest out on each side, the wrist its parent; the shoulder (three children too, but near the axis) is not a hand; a figure with
+ *    its arms in, a capsule and an empty scene have none.
+ * 2. **Who holds what**: Yuna two pistols, Rikku two daggers, Paine one sword in the right hand (the figure's right, -X when it faces +Z); Bahamut and a figure with no hands hold nothing.
+ * 3. **How they sit in the hand**: the barrel or blade (the prop's +Z) lies along the arm, the sight or edge (+Y) toward the thumb, a proper rotation, the grip in the middle of the palm, scaled by the figure's height; the
+ *    barrel keeps following the forearm when the arm is turned (the motion); Paine's sword is tilted up a little.
+ * 4. **What they are**: a pistol, a dagger, a sword, about the sizes they should be.
+ * 5. **Through the model**: the props are covered with the soft material with the figure, do not change its fit, and are freed with it.
  */
-import { Box3, Bone, BoxGeometry, Group, Matrix4, Mesh, MeshStandardMaterial, MeshToonMaterial, Object3D, Quaternion, Vector3 } from 'three';
+import { Box3, BoxGeometry, Group, Matrix4, Mesh, MeshStandardMaterial, Object3D, Quaternion, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 
 import { YrpModel } from '../../../src/engine/yrp3d/model.ts';
-import { PALM, PROP_COLOUR, PROP_TO_HAND, REFERENCE_HEIGHT, attachProps, dagger, pistol, sword } from '../../../src/engine/yrp3d/props.ts';
-import { PARTY_HEIGHT, YRP_CAST, type YrpId } from '../../../src/engine/yrp3d/layout.ts';
+import { GRIP_BACK, HAND_REACH, PROP_COLOUR, REFERENCE_HEIGHT, attachProps, dagger, findHands, gripPosition, gripRotation, pistol, sword } from '../../../src/engine/yrp3d/props.ts';
+import { PARTY_HEIGHT, type YrpId } from '../../../src/engine/yrp3d/layout.ts';
 
-/** A skeleton with two hand bones (at the wrists, in a 1.6 m figure) and a body; the bones have no rotation, so the hand's axes are the scene's. */
-function skeleton(): { root: Group; right: Bone; left: Bone } {
+interface Arm {
+  shoulder: Object3D;
+  wrist: Object3D;
+  palm: Object3D;
+}
+
+/** An arm on side `s` (+1 the figure's left, +X): shoulder, elbow, wrist, palm and three finger chains, with the offsets of a real 16-tall girl (the arm runs out and down, 45 degrees). */
+function arm(s: 1 | -1, base: number): Arm {
+  const node = (name: string, x: number, y: number, z: number, parent?: Object3D): Object3D => {
+    const o = new Object3D();
+    o.name = name;
+    o.position.set(s * x, y, z);
+    parent?.add(o);
+    return o;
+  };
+  const shoulder = node(`SkeletonNode_${base}`, 1.3, 13.5, -0.4);
+  const elbow = node(`SkeletonNode_${base + 1}`, 1.8, -1.8, -0.1, shoulder);
+  const wrist = node(`SkeletonNode_${base + 2}`, 1.7, -1.8, 0, elbow);
+  const palm = node(`SkeletonNode_${base + 3}`, 0.6, -0.6, 0, wrist);
+  node(`SkeletonNode_${base + 4}`, 0.2, -0.1, -0.3, palm);
+  node(`SkeletonNode_${base + 5}`, 0.25, -0.15, 0, palm);
+  node(`SkeletonNode_${base + 6}`, 0.15, -0.2, 0.3, palm);
+  node(`SkeletonNode_${base + 7}`, 0.4, 0.2, 0.5, shoulder); // a node of the shoulder's own (the shoulder has 2 children: the elbow and this)
+  node(`SkeletonNode_${base + 8}`, 0.1, 0.2, 0.2, shoulder); // and a third: the shoulder has three children too, but stands near the axis
+  return { shoulder, wrist, palm };
+}
+
+/** A 16-tall figure with a body, arms out and down, facing +Z: the left arm (+X) numbered 28 and up, the right (-X) 56 and up, as in Yuna's file. */
+function skeleton(): { root: Group; left: Arm; right: Arm } {
   const root = new Group();
-  const right = new Bone();
-  right.name = 'RightHand';
-  right.position.set(-0.4, 0.9, 0);
-  const left = new Bone();
-  left.name = 'LeftHand';
-  left.position.set(0.4, 0.9, 0);
-  root.add(right, left);
-  return { root, right, left };
+  const body = new Mesh(new BoxGeometry(2, 16, 1), new MeshStandardMaterial({ color: 0x889988 }));
+  body.position.y = 8;
+  const left = arm(1, 28);
+  const right = arm(-1, 56);
+  root.add(body, left.shoulder, right.shoulder);
+  root.updateMatrixWorld(true);
+  return { root, left, right };
 }
 
 const size = (o: Object3D): Vector3 => new Box3().setFromObject(o).getSize(new Vector3());
@@ -33,85 +63,118 @@ const meshes = (o: Object3D): Mesh[] => {
   o.traverse((c) => (c as Mesh).isMesh && out.push(c as Mesh));
   return out;
 };
+const world = (o: Object3D): Vector3 => o.getWorldPosition(new Vector3());
 
-describe('the hand frame', () => {
-  it('turns a prop\'s +Z (barrel, blade) into the hand\'s +Y (along the arm) and its +Y (sight, edge) into the hand\'s +Z (toward the thumb), a proper rotation', () => {
-    const z = new Vector3(0, 0, 1).applyQuaternion(PROP_TO_HAND);
-    const y = new Vector3(0, 1, 0).applyQuaternion(PROP_TO_HAND);
-    const x = new Vector3(1, 0, 0).applyQuaternion(PROP_TO_HAND);
-    expect(z.toArray().map((v) => Math.round(v * 1e6) / 1e6 + 0)).toEqual([0, 1, 0]);
-    expect(y.toArray().map((v) => Math.round(v * 1e6) / 1e6 + 0)).toEqual([0, 0, 1]);
-    expect(x.toArray().map((v) => Math.round(v * 1e6) / 1e6 + 0)).toEqual([-1, 0, 0]);
-    expect(new Matrix4().makeRotationFromQuaternion(PROP_TO_HAND).determinant()).toBeCloseTo(1, 9); // not a mirror
+describe('finding the hands', () => {
+  it('finds the palm of each side by its finger chains and takes its parent for the wrist, whatever the nodes are called', () => {
+    const { root, left, right } = skeleton();
+    const hands = findHands(root);
+    expect(hands.map((h) => h.side).sort()).toEqual(['left', 'right']);
+    const l = hands.find((h) => h.side === 'left')!;
+    const r = hands.find((h) => h.side === 'right')!;
+    expect([l.palm, l.wrist]).toEqual([left.palm, left.wrist]);
+    expect([r.palm, r.wrist]).toEqual([right.palm, right.wrist]);
+    expect(world(l.palm).x).toBeGreaterThan(0); // the figure's left is +X when it faces +Z
+    expect(world(r.palm).x).toBeLessThan(0);
+  });
+
+  it('is not fooled by a shoulder with three children (it stands within the reach of the axis), and finds none when the arms are in, in a capsule or in nothing', () => {
+    const { root } = skeleton();
+    const palms = findHands(root).map((h) => world(h.palm).x);
+    for (const x of palms) expect(Math.abs(x)).toBeGreaterThan(16 * HAND_REACH);
+    const armsIn = skeleton();
+    armsIn.left.shoulder.position.x = 0.1;
+    armsIn.left.shoulder.children[0]!.position.set(0.1, -1.8, 0); // the elbow and everything under it hang straight down by the body
+    armsIn.left.shoulder.children[0]!.children[0]!.position.set(0, -1.8, 0);
+    armsIn.left.palm.position.set(0.05, -0.6, 0);
+    armsIn.root.updateMatrixWorld(true);
+    expect(findHands(armsIn.root).map((h) => h.side)).toEqual(['right']); // only the arm that is out
+    expect(findHands(new Group())).toEqual([]);
   });
 });
 
 describe('who holds what', () => {
-  it('gives Yuna two pistols, Rikku two daggers and Paine one sword in the right hand, each parented to its hand bone', () => {
+  it('gives Yuna two pistols, Rikku two daggers and Paine one sword in the right hand, each parented to its palm', () => {
     const y = skeleton();
     const yuna = attachProps('yuna', y.root, REFERENCE_HEIGHT);
-    expect(yuna.props.map((p) => [p.bone, p.prop.object.name])).toEqual([['RightHand', 'prop-yuna-RightHand'], ['LeftHand', 'prop-yuna-LeftHand']]);
-    expect(y.right.children).toHaveLength(1);
-    expect(y.left.children).toHaveLength(1);
-    expect(meshes(y.right).map((m) => m.name)).toContain('barrel');
+    expect(yuna.props.map((p) => [p.side, p.prop.object.name])).toEqual([['right', 'prop-yuna-right'], ['left', 'prop-yuna-left']]);
+    expect(y.right.palm.getObjectByName('prop-yuna-right')).toBeDefined();
+    expect(y.left.palm.getObjectByName('prop-yuna-left')).toBeDefined();
+    expect(meshes(y.right.palm).map((m) => m.name)).toContain('barrel');
     const r = skeleton();
-    expect(attachProps('rikku', r.root, REFERENCE_HEIGHT).props.map((p) => p.bone)).toEqual(['RightHand', 'LeftHand']);
-    expect(meshes(r.right).map((m) => m.name)).toContain('blade-0');
+    expect(attachProps('rikku', r.root, REFERENCE_HEIGHT).props.map((p) => p.side)).toEqual(['right', 'left']);
+    expect(meshes(r.right.palm).map((m) => m.name)).toContain('blade-0');
     const p = skeleton();
-    const paine = attachProps('paine', p.root, REFERENCE_HEIGHT);
-    expect(paine.props.map((q) => q.bone)).toEqual(['RightHand']);
-    expect(p.left.children).toHaveLength(0);
-    expect(meshes(p.right).map((m) => m.name)).toEqual(expect.arrayContaining(['blade', 'guard', 'grip', 'pommel', 'point']));
+    expect(attachProps('paine', p.root, REFERENCE_HEIGHT).props.map((q) => q.side)).toEqual(['right']);
+    expect(meshes(p.left.palm)).toHaveLength(0);
+    expect(meshes(p.right.palm).map((m) => m.name)).toEqual(expect.arrayContaining(['blade', 'guard', 'grip', 'pommel', 'point']));
   });
 
-  it('gives Bahamut nothing, and a scene with no such bone (a capsule) nothing, without an error', () => {
+  it('gives Bahamut nothing, and a scene with no hands (a capsule) nothing, without an error', () => {
     const b = skeleton();
     expect(attachProps('bahamut', b.root, 7).props).toEqual([]);
-    expect(b.right.children).toHaveLength(0);
+    expect(meshes(b.right.palm)).toHaveLength(0);
     for (const id of ['yuna', 'rikku', 'paine'] as YrpId[]) expect(attachProps(id, new Group(), 1.6).props).toEqual([]);
-    const half = new Group();
-    const lone = new Bone();
-    lone.name = 'RightHand';
-    half.add(lone);
-    expect(attachProps('yuna', half, 1.6).props.map((q) => q.bone)).toEqual(['RightHand']); // only the bone that exists
   });
 });
 
 describe('how they sit in the hand', () => {
-  it('points the barrel or blade along the arm (the hand\'s +Y) from PALM beyond the wrist, scaled by the figure\'s height', () => {
-    for (const [id, height] of [['yuna', 1.6], ['yuna', 1.6 * 1.25], ['rikku', 1.55]] as const) {
-      const { root, right } = skeleton();
-      const kit = attachProps(id, root, height);
-      const unit = height / REFERENCE_HEIGHT;
-      const object = kit.props[0]!.prop.object;
-      expect(object.position.toArray()).toEqual([0, PALM * unit, 0]);
-      const barrel = object.getObjectByName(id === 'yuna' ? 'barrel' : 'blade-4')!;
-      root.updateMatrixWorld(true);
-      const tip = barrel.getWorldPosition(new Vector3());
-      const wrist = right.getWorldPosition(new Vector3());
-      const along = tip.sub(wrist);
-      expect(along.y, id).toBeGreaterThan(PALM * unit); // out along the hand's +Y beyond the grip
-      expect(Math.abs(along.x) + Math.abs(along.z), id).toBeLessThan(along.y * 0.5); // and nearly straight along it
+  /** Where the +Z and +Y of a prop point in the world. */
+  const axes = (o: Object3D): { z: Vector3; y: Vector3 } => {
+    o.updateWorldMatrix(true, false);
+    const q = o.getWorldQuaternion(new Quaternion());
+    return { z: new Vector3(0, 0, 1).applyQuaternion(q), y: new Vector3(0, 1, 0).applyQuaternion(q) };
+  };
+
+  it('lies the barrel along the arm (wrist to palm) and the sight toward the thumb (+Z, forward), a proper rotation', () => {
+    const { root, left, right } = skeleton();
+    const kit = attachProps('yuna', root, REFERENCE_HEIGHT);
+    for (const [side, a] of [['left', left], ['right', right]] as const) {
+      const object = kit.props.find((p) => p.side === side)!.prop.object;
+      const { z, y } = axes(object);
+      const along = world(a.palm).sub(world(a.wrist)).normalize();
+      expect(z.dot(along), side).toBeGreaterThan(0.999); // the barrel along the arm
+      expect(y.dot(new Vector3(0, 0, 1)), side).toBeGreaterThan(0.999); // the sight toward the thumb: forward
     }
+    const q = gripRotation(findHands(root)[0]!);
+    expect(new Matrix4().makeRotationFromQuaternion(q).determinant()).toBeCloseTo(1, 9); // not a mirror
   });
 
-  it('puts the sight and the edge toward the thumb (the hand\'s +Z), and tilts Paine\'s sword up toward it', () => {
-    const { root } = skeleton();
+  it('keeps the barrel along the forearm when the arm is turned (the game\'s motion): raise the shoulder\'s arm forward and the barrel follows', () => {
+    const { root, right } = skeleton();
     const kit = attachProps('yuna', root, REFERENCE_HEIGHT);
+    const object = kit.props.find((p) => p.side === 'right')!.prop.object;
+    right.shoulder.rotation.x = -Math.PI / 2; // swing the arm up and forward (about the figure's x axis)
     root.updateMatrixWorld(true);
-    const grip = kit.props[0]!.prop.object.getObjectByName('grip')!.getWorldPosition(new Vector3());
-    const sight = kit.props[0]!.prop.object.getObjectByName('sight')!.getWorldPosition(new Vector3());
-    expect(sight.z).toBeGreaterThan(grip.z); // the sight is toward the thumb of the grip
+    const { z } = axes(object);
+    const along = world(right.palm).sub(world(right.wrist)).normalize();
+    expect(z.dot(along)).toBeGreaterThan(0.999);
+    expect(along.z).toBeGreaterThan(0.5); // and the arm really did swing forward
+  });
+
+  it('puts the grip in the middle of the palm (GRIP_BACK of the way from the palm node toward the wrist), scaled to the figure: a taller one holds a longer pistol', () => {
+    const { root, right } = skeleton();
+    const kit = attachProps('yuna', root, REFERENCE_HEIGHT);
+    const object = kit.props.find((p) => p.side === 'right')!.prop.object;
+    const hand = findHands(root).find((h) => h.side === 'right')!;
+    const mid = world(hand.palm).lerp(world(hand.wrist), GRIP_BACK);
+    expect(world(object).distanceTo(mid)).toBeLessThan(1e-6);
+    expect(gripPosition(hand).length()).toBeGreaterThan(0.1); // not on the palm node itself
+    expect(right.palm.children).toContain(object);
+    const small = size(attachProps('yuna', skeleton().root, 1.6).props[0]!.prop.object);
+    const big = size(attachProps('yuna', skeleton().root, 3.2).props[0]!.prop.object);
+    expect(big.z).toBeCloseTo(small.z * 2, 4);
+  });
+
+  it('tilts Paine\'s sword up toward the thumb by 0.2 radians, and leaves the pistols and the daggers straight', () => {
     const s = skeleton();
     const p = attachProps('paine', s.root, REFERENCE_HEIGHT);
-    s.root.updateMatrixWorld(true);
-    const blade = p.props[0]!.prop.object.getObjectByName('blade')!.getWorldPosition(new Vector3());
-    const wrist = s.right.getWorldPosition(new Vector3());
-    expect(blade.z - wrist.z).toBeGreaterThan(0.05); // raised toward the thumb side by the tilt
-    expect(blade.y - wrist.y).toBeGreaterThan(0.4);
-    const tilted = new Quaternion().copy(p.props[0]!.prop.object.quaternion);
-    expect(tilted.angleTo(PROP_TO_HAND)).toBeCloseTo(0.2, 6);
-    expect(new Quaternion().copy(kit.props[0]!.prop.object.quaternion).angleTo(PROP_TO_HAND)).toBeCloseTo(0, 9); // the pistols are not tilted
+    const hand = findHands(s.root).find((h) => h.side === 'right')!;
+    const straight = gripRotation(hand);
+    expect(p.props[0]!.prop.object.quaternion.angleTo(straight)).toBeCloseTo(0.2, 6);
+    expect(axes(p.props[0]!.prop.object).z.z).toBeGreaterThan(Math.sin(0.1)); // the blade's point rises toward +Z (the thumb)
+    const y = attachProps('yuna', skeleton().root, REFERENCE_HEIGHT);
+    expect(y.props[0]!.prop.object.quaternion.angleTo(straight)).toBeCloseTo(0, 6);
   });
 });
 
@@ -150,7 +213,7 @@ describe('what they are', () => {
     expect(size(sword(2).object).z).toBeCloseTo(size(object).z * 2, 4); // scales with the unit
   });
 
-  it('frees what it made: the parts leave the bone and every geometry is disposed', () => {
+  it('frees what it made: the parts leave the palm and every geometry is disposed', () => {
     const { root, right } = skeleton();
     const kit = attachProps('yuna', root, REFERENCE_HEIGHT);
     let disposed = 0;
@@ -158,35 +221,24 @@ describe('what they are', () => {
     const made = kit.props.reduce((n, p) => n + p.prop.geometries.length, 0);
     kit.dispose();
     expect(disposed).toBe(made);
-    expect(right.children).toHaveLength(0);
+    expect(meshes(right.palm)).toHaveLength(0);
   });
 });
 
 describe('through the model', () => {
-  it('turns the props toon with the figure, hull and all, and does not change the figure\'s fit (the box is measured before they are added)', () => {
-    const make = (): Group => {
-      const g = new Group();
-      const body = new Mesh(new BoxGeometry(0.5, 1.6, 0.3), new MeshStandardMaterial({ color: 0x889988 }));
-      body.position.y = 0.8;
-      const right = new Bone();
-      right.name = 'RightHand';
-      right.position.set(-0.4, 0.9, 0);
-      g.add(body, right);
-      return g;
-    };
-    const withSword = new YrpModel('paine', make(), [], PARTY_HEIGHT);
+  it('covers the props with the soft material with the figure, and does not change the figure\'s fit (the box is measured before they are added)', () => {
+    const { root } = skeleton();
+    const withSword = new YrpModel('paine', root, [], PARTY_HEIGHT);
     const box = new Box3().setFromObject(withSword.root);
     expect(box.max.y - box.min.y).toBeGreaterThan(PARTY_HEIGHT - 1e-6); // at least the body: the sword reaches further out and down, but the body alone sets the scale
     const swordMeshes = meshes(withSword.root).filter((m) => ['blade', 'guard', 'grip', 'pommel', 'point'].includes(m.name));
     expect(swordMeshes).toHaveLength(5);
-    for (const m of swordMeshes) expect(m.material, m.name).toBeInstanceOf(MeshToonMaterial);
-    const hulls = meshes(withSword.root).filter((m) => m.userData['yrpHull'] === true && m.parent === swordMeshes[0]!.parent);
-    expect(hulls).toHaveLength(5); // an ink hull beside each part
+    for (const m of swordMeshes) expect(withSword.materials, m.name).toContain(m.material as MeshStandardMaterial); // driven with the figure
+    expect(meshes(withSword.root).filter((m) => m.name.endsWith('-ink'))).toHaveLength(0); // no ink hull
     expect(withSword.height).toBe(PARTY_HEIGHT);
-    const none = new YrpModel('bahamut', make(), [], PARTY_HEIGHT);
+    const none = new YrpModel('bahamut', skeleton().root, [], PARTY_HEIGHT);
     expect(meshes(none.root).filter((m) => m.name === 'blade')).toHaveLength(0);
     withSword.dispose();
     expect(meshes(withSword.root).filter((m) => m.name === 'blade')).toHaveLength(0);
-    expect(YRP_CAST).toContain('paine');
   });
 });

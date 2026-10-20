@@ -1,20 +1,21 @@
 // @vitest-environment jsdom
 /**
- * **The toon models on the battle's actors** (`src/engine/yrp3d/skin.ts`; the hidden 3D Bahamut chapter, FFX-2 only), driven with real `PaintedActor`s (a no-op 2D context stands in for the canvas, as in
+ * **The real models on the battle's actors** (`src/engine/yrp3d/skin.ts`; the hidden 3D Bahamut chapter, the real-models branch, FFX-2 only), driven with real `PaintedActor`s (a no-op 2D context stands in for the canvas, as in
  * `exp-fayth-skin.test.ts`) and the neutral capsule models. What it pins:
  *
  * 1. **The private parts are still there**: `PaintedActor` keeps its figure switch, its plane meshes, its motion group and its uniform cells private and the skin reaches them (the house habit of `ffx-skin`), so a rename
  *    in `PaintedActor.ts` fails here instead of drawing nothing. An actor that lacks them is left painted.
  * 2. **Attaching**: the painted planes go off for good, the interim yaw is zeroed, the model stands in the actor's motion group at the figure's yaw and the actor's height, and a replaced actor takes the model afresh.
- * 3. **Following**: a flash, a cast glow (and Bahamut's orb), the hurt tint, stone, the fade and dissolve, a KO that tips the body and a revive that stands it, a re-sized figure, a hidden actor, REDUCE MOTION.
+ * 3. **Following**: a flash, a cast glow (and Bahamut's orb), the hurt tint, stone, the fade and dissolve, a KO that tips a model with no fall of its own and a revive that stands it (a model with the fall clip is not tipped), the low-HP
+ *    kneel read off the requested pose, a re-sized figure, a hidden actor, REDUCE MOTION.
  */
-import { Color, Group, Mesh, MeshToonMaterial, Object3D, Scene, Sprite } from 'three';
+import { AnimationClip, Color, Group, Object3D, Scene, Sprite, VectorKeyframeTrack, type MeshStandardMaterial } from 'three';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { PARTY_YAW, BOSS_YAW, PARTY_HEIGHT, BOSS_HEIGHT, YRP_CAST, type YrpId } from '../../../src/engine/yrp3d/layout.ts';
-import { loadYrpModels, type LoaderIO, type YrpModels } from '../../../src/engine/yrp3d/model.ts';
-import { YrpSkin, hidePaintedFigure, internalsOf } from '../../../src/engine/yrp3d/skin.ts';
+import { loadYrpModels, type LoaderIO, type YrpModels } from '../../../src/engine/yrp3d/load.ts';
+import { YrpSkin, hidePaintedFigure, internalsOf, requestedPose } from '../../../src/engine/yrp3d/skin.ts';
 
 /** A 2D context that accepts every call (an actor paints a placeholder canvas; jsdom has no canvas). */
 function noopContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
@@ -46,7 +47,7 @@ afterAll(() => vi.restoreAllMocks());
 /** The placeholder painting an actor shows before any art loads: a blank canvas (the real one is drawn with `Path2D`, which jsdom lacks). */
 const blank = (): HTMLCanvasElement => document.createElement('canvas');
 
-const NO_FILES: LoaderIO = { fetchBytes: async () => null, parse: async () => ({ scene: new Group(), animations: [] }), clone: async (s) => s.clone(true) };
+const NO_FILES: LoaderIO = { fetchBytes: async () => null, fetchJson: async () => null, parse: async () => ({ scene: new Group(), animations: [] }), clone: async (s) => s.clone(true) };
 const HEIGHTS = { yuna: PARTY_HEIGHT, rikku: PARTY_HEIGHT, paine: PARTY_HEIGHT, bahamut: BOSS_HEIGHT };
 
 interface Rig {
@@ -66,8 +67,8 @@ afterEach(() => {
 });
 
 /** The skin over capsule models, a scene with the host group, and a real actor per id as the stage names and adds them. */
-async function rig(ids: readonly YrpId[] = YRP_CAST): Promise<Rig> {
-  const models = await loadYrpModels({ base: '/', dir: 'models-exp/yrp', heights: HEIGHTS, io: NO_FILES });
+async function rig(ids: readonly YrpId[] = YRP_CAST, io: LoaderIO = NO_FILES): Promise<Rig> {
+  const models = await loadYrpModels({ base: '/', dirs: ['models-exp/yrp'], heights: HEIGHTS, io });
   const scene = new Scene();
   const host = new Group();
   scene.add(host);
@@ -83,14 +84,22 @@ async function rig(ids: readonly YrpId[] = YRP_CAST): Promise<Rig> {
   return r;
 }
 
-const toonMaterials = (root: Object3D): MeshToonMaterial[] => {
-  const out = new Set<MeshToonMaterial>();
-  root.traverse((o) => {
-    const m = (o as Mesh).material as MeshToonMaterial | undefined;
-    if (m?.isMeshToonMaterial) out.add(m);
-  });
-  return [...out];
+/** A loader whose every file is a small scene with the idle and the fall clips of the game's names (so the models carry rigs and play their own fall). */
+const WITH_CLIPS: LoaderIO = {
+  fetchBytes: async (url) => (url.endsWith('.glb') ? new Uint8Array([0x67, 0x6c, 0x54, 0x46, 0, 0, 0, 0]).buffer : null),
+  fetchJson: async () => null,
+  parse: async () => {
+    const scene = new Group();
+    const body = new Object3D();
+    body.name = 'body';
+    scene.add(body);
+    const clip = (name: string): AnimationClip => new AnimationClip(name, 1, [new VectorKeyframeTrack('body.position', [0, 1], [0, 0, 0, 0, 0.1, 0])]);
+    return { scene, animations: ['APPEAR_00', 'DMG1', 'DEAD_00', 'DEAD_01', 'DEAD_02'].map(clip) };
+  },
+  clone: async (s) => s.clone(true),
 };
+
+const materialsOf = (m: { materials: MeshStandardMaterial[] }): MeshStandardMaterial[] => m.materials;
 const modelOf = (r: Rig, id: YrpId) => r.skin.get(id)!.model;
 const run = (r: Rig, seconds: number, dt = 0.05): void => {
   for (let t = 0; t < seconds; t += dt) {
@@ -112,6 +121,16 @@ describe('the private parts of a PaintedActor the skin reaches', () => {
     expect(parts.u.flashColor.value).toBeInstanceOf(Color);
     expect(parts.u.tint.value).toBeInstanceOf(Color);
     expect([parts.u.brightness.value, parts.u.desaturate.value]).toEqual([1, 0]);
+    actor.dispose();
+  });
+
+  it("read the pose an actor was last asked for (its private requested), which is how the low-HP rest pose is told even when no painting shows it", () => {
+    const actor = new PaintedActor({ name: "yuna", placeholder: blank });
+    expect("requested" in actor).toBe(true); // the private field is still there: a rename in PaintedActor.ts fails here
+    expect(requestedPose(actor)).toBe("");
+    (actor as unknown as { requested: string }).requested = "critical"; // what setPose("critical") stores once a painting resolves it (the idle's, by the chain critical -> idle)
+    expect(requestedPose(actor)).toBe("critical");
+    expect(requestedPose({} as PaintedActor)).toBe("");
     actor.dispose();
   });
 
@@ -161,7 +180,7 @@ describe('attaching', () => {
   });
 
   it('does nothing before the host is in a scene, and for an actor of the cast that is not on the field', async () => {
-    const models = await loadYrpModels({ base: '/', dir: 'x', heights: HEIGHTS, io: NO_FILES });
+    const models = await loadYrpModels({ base: '/', dirs: ['x'], heights: HEIGHTS, io: NO_FILES });
     const skin = new YrpSkin({ host: new Group(), models }); // no parent
     expect(() => skin.update(0.016)).not.toThrow();
     expect(skin.carrying).toEqual({});
@@ -197,6 +216,9 @@ describe('the beats and the clips', () => {
     r.skin.listener.impact!('yuna');
     expect(open).toHaveBeenCalledWith('attack', 0.3, expect.any(Number));
     expect(impact).toHaveBeenCalledTimes(1);
+    const close = vi.spyOn(modelOf(r, 'yuna'), 'noteClose');
+    r.skin.listener.close!('yuna');
+    expect(close).toHaveBeenCalledTimes(1); // the action is over: a held cast or attack goes to its finish
     expect(() => r.skin.listener.open!('tidus', 'attack', 0.3)).not.toThrow(); // no such figure
     expect(() => r.skin.listener.impact!('rikku')).not.toThrow(); // not on the field
   });
@@ -209,7 +231,7 @@ describe('the beats and the clips', () => {
     const update = vi.spyOn(model, 'update');
     r.actors['paine']!.setPose('hurt'); // no painting is loaded, so the shown pose stays; the requested one is the life layer's
     run(r, 0.1);
-    expect(pose).toHaveBeenCalledWith('hurt', false, expect.any(Number));
+    expect(pose).toHaveBeenCalledWith('hurt', false, false, expect.any(Number));
     expect(update.mock.calls.at(-1)![1]).toBe(false);
     r.actors['paine']!.setPose('ko');
     run(r, 0.5);
@@ -247,7 +269,7 @@ describe('following', () => {
   it('lights the model with the actor\'s flash and lets it go as the flash decays', async () => {
     const r = await rig(['yuna']);
     run(r, 0.1);
-    const mats = toonMaterials(modelOf(r, 'yuna').root);
+    const mats = materialsOf(modelOf(r, 'yuna'));
     expect(mats.length).toBeGreaterThan(0);
     expect(mats.every((m) => m.emissive.getHex() === 0)).toBe(true);
     r.actors['yuna']!.flash(0x66ff88, 400, 1);
@@ -262,8 +284,8 @@ describe('following', () => {
   it('swells a cast glow while the actor holds the cast pose (warm for a girl) and lets it go after; Bahamut\'s is violet and brings up the orb', async () => {
     const r = await rig(['yuna', 'bahamut']);
     run(r, 0.1);
-    const girl = toonMaterials(modelOf(r, 'yuna').root)[0]!;
-    const boss = toonMaterials(modelOf(r, 'bahamut').root)[0]!;
+    const girl = materialsOf(modelOf(r, 'yuna'))[0]!;
+    const boss = materialsOf(modelOf(r, 'bahamut'))[0]!;
     const orb = modelOf(r, 'bahamut').root.getObjectByName('yrp-orb') as Sprite;
     expect([girl.emissive.getHex(), boss.emissive.getHex(), orb.visible]).toEqual([0, 0, false]);
     for (const id of ['yuna', 'bahamut']) r.skin.listener.open!(id, 'cast', 0.3); // the beat holds the glow whatever painting the actor shows
@@ -282,8 +304,8 @@ describe('following', () => {
     const r = await rig(['paine']);
     run(r, 0.1);
     const model = modelOf(r, 'paine');
-    const mat = toonMaterials(model.root)[0]!;
-    const base = (mat.userData['toonBase'] as { color: Color }).color;
+    const mat = materialsOf(model)[0]!;
+    const base = (mat.userData['shadeBase'] as { color: Color }).color;
     expect(mat.color.toArray()).toEqual(base.toArray());
     const actor = r.actors['paine']!;
     actor.setTint(0xff8080);
@@ -326,6 +348,41 @@ describe('following', () => {
     r.actors['rikku']!.setPose('idle');
     run(r, 2);
     expect(lie.rotation.z).toBe(0);
+  });
+
+  it("a model with the game's fall clip plays it and is not tipped as well; the revive plays the rise", async () => {
+    const r = await rig(['rikku'], WITH_CLIPS);
+    run(r, 0.1);
+    const model = modelOf(r, 'rikku');
+    expect([model.animated, model.playsKo, model.playing]).toEqual([true, true, 'idle']);
+    const lie = model.root.children[0]!;
+    r.actors['rikku']!.setPose('ko');
+    run(r, 1.5);
+    expect(lie.rotation.z).toBe(0); // no procedural tip: the clip is the fall
+    expect(model.playing).toBe('ko');
+    expect(model.playingClip).toBe('DEAD_01'); // the fall played and the hold took over
+    r.actors['rikku']!.setPose('idle');
+    run(r, 3);
+    expect(model.playing).toBe('idle');
+  });
+
+  it('tells the model the figure is at low HP while its requested pose is critical (the kneel), and not once it is back to idle or down', async () => {
+    const r = await rig(['yuna']);
+    run(r, 0.1);
+    const pose = vi.spyOn(modelOf(r, 'yuna'), 'notePose');
+    const requested = (v: string): void => {
+      (r.actors['yuna'] as unknown as { requested: string }).requested = v; // the rest pose the battle screen asks for below a third of the HP; a painting that resolves it stores it (this actor has no art)
+    };
+    requested('critical');
+    run(r, 0.1);
+    expect(pose.mock.calls.at(-1)!.slice(0, 3)).toEqual(['placeholder', false, true]);
+    requested('idle');
+    run(r, 0.1);
+    expect(pose.mock.calls.at(-1)![2]).toBe(false);
+    requested('critical');
+    r.actors['yuna']!.setPose('ko');
+    run(r, 0.2);
+    expect(pose.mock.calls.at(-1)![2]).toBe(false); // down: never kneeling
   });
 
   it('a figure staged already down stands down from the first frame (no topple on frame one)', async () => {

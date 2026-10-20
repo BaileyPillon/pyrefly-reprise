@@ -11,7 +11,7 @@
  * What differs is the picture and the label:
  *
  * - `sceneKey` is `exp-yrp-3d-stage` (`../scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber under frame A's camera ("classic, now in 3D": a high three-quarter view, the trio in a loose row on the right, Bahamut filling
- *   the left half), with toon-shaded GLB models on the stage's actors (`public/models-exp/yrp/<id>.glb`, `../engine/yrp3d/`); a slot whose file is missing stands on a neutral toon capsule;
+ *   the left half), with the real FFX-2 models on the stage's actors (`public/models-exp/yrp/<id>.glb`, `../engine/yrp3d/`); a slot whose file is missing stands on a neutral capsule (the real-models branch: Yuna, Rikku and Paine are the real FFX-2 models, Bahamut the AI-made one, `?boss=real` the game's own);
  * - the title is the working title below (no source and no decision gives one; AGENTS.md rule 9).
  *
  * **It is an experiment, not a listed chapter.** `experimental: true` sends its attempts, clears and play time to the experiments' own store, never to the save, so it is out of the board's "N of 18", the veteran
