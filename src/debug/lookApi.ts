@@ -13,7 +13,7 @@
  */
 import type { App } from '../app/App.ts';
 import { LOOK_NAMES, LOOKS, QUALITY_COST, type LookDebug, type LookName, type LookQuality } from '../engine/look/LookConfig.ts';
-import { installLookKeys, lookState, setLookDebug, setLookName, setLookQuality, setLookStrength, setLookTweak } from '../engine/look/LookState.ts';
+import { installLookKeys, lookState, setLookDebug, setLookName, setLookQuality, setLookRecipe, setLookStrength, setLookTweak } from '../engine/look/LookState.ts';
 
 export function installLookDebug(api: Record<string, unknown>, app: App): void {
   installLookKeys(window);
@@ -39,6 +39,8 @@ export function installLookDebug(api: Record<string, unknown>, app: App): void {
       return lookState.quality;
     },
     param: (path: string, v: number | null) => setLookTweak(path, v),
+    /** A live override of the grade recipe (exposure, gamma, contrast, pivot, shoulder, shadowSplit, highlightSplit, shadowHue, highlightHue, midSat, sat, hues ...); null clears it. */
+    recipe: (p: Record<string, unknown> | null) => setLookRecipe(p as never),
     clear: () => {
       for (const k of Object.keys(lookState.tweaks)) setLookTweak(k, null);
     },
