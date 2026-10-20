@@ -106,6 +106,7 @@ async function main() {
         if (a.poses) args.push('--poses', String(a.poses));
         if (a['any-pose']) args.push('--any-pose');
         if (a.still === true) args.push('--still', '--settle', String(a.settle ?? 1800));
+        if (a['keep-sway'] === true) args.push('--keep-sway');
         if (a.registry) args.push('--registry', String(a.registry));
         fs.mkdirSync(dir, { recursive: true });
         const logFd = fs.openSync(path.join(dir, 'play.log'), 'w');
