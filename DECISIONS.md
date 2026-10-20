@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1570 decisions in all: 1060 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 1047 of the written decisions record a blanket yes.
+1591 decisions in all: 1081 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 1063 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1470 |
+| adopted | 1491 |
 | proposed | 7 |
 | deferred | 7 |
 | rejected | 14 |
 | superseded | 72 |
-| **All** | **1570** |
+| **All** | **1591** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 148 |
-| art | 329 |
+| art | 344 |
 | visuals | 90 |
 | camera | 66 |
 | audio | 133 |
-| ui | 179 |
+| ui | 180 |
 | story | 17 |
 | chapters | 231 |
 | guide | 34 |
 | release | 69 |
 | hosting | 18 |
-| process | 162 |
-| critic | 38 |
+| process | 165 |
+| critic | 40 |
 | data | 17 |
 | tech | 20 |
 | site | 19 |
-| **All** | **1570** |
+| **All** | **1591** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 755 |
-| FFX only | 461 |
-| FFX-2 only | 336 |
+| both games | 762 |
+| FFX only | 474 |
+| FFX-2 only | 337 |
 | FF7 hidden experiment | 18 |
-| **All** | **1570** |
+| **All** | **1591** |
 
 ## Standing rules in force
 
@@ -114,6 +114,7 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **The coordination board and the collaboration with Codex are paused until further notice; everything is reported to him in the game chat**: No coordination board, no coordination files and no Codex tasks until he lifts the pause; everything goes to him in the game chat. Decision [D-956](#d-956) (2026-10-17, both games).
 - **The rule of no retail Square Enix assets and no imitating real people is lifted; AGENTS.md hard rule 8 is rewritten to say so (both games; process)**: Retail Square Enix assets and cloned voices of the original cast may be used, with Bailey's word that he holds the cast's and Square Enix's permission (AGENTS.md hard rule 8); public/art never goes to main. Decision [D-1009](#d-1009) (2026-10-18, both games).
 - **A standing ADVANCE yes for the driver's recommendations while he is at work, extending the 2026-10-17 standing yes: each pick made under it is recorded as its own DELEGATED row and reported to him (both games; process)**: While Bailey is away the driver acts on its own recommendations, records each as a DELEGATED row, and never deletes files, spends beyond approved caps, makes irreversible repo or account changes, or builds unshown new gameplay. Decision [D-1023](#d-1023) (2026-10-18, both games).
+- **Bailey reset his weekly usage and the driver stays on this account: no account switch, not even at 97 percent, until he says otherwise; near the limit again the driver tells him and asks (process; replaces D-1063’s trigger for now)**: The driver does not run the account switch, not even at weekly 97 percent, until Bailey says otherwise; if usage nears the limit again it tells him and asks. Decision [D-1068](#d-1068) (2026-10-19, both games).
 
 ## Waiting on Bailey's yes
 
@@ -7303,15 +7304,120 @@ Sunday · 98 decisions
 
 ### 2026-10-19
 
-Monday · 2 decisions
+Monday · 23 decisions
 
 - <a id="d-1059"></a>**D-1059** — DELEGATED: release 55 went live on its deep review (round 26, SHIP) but critic-clear could not settle the build with it, because the review built the candidate without the release stamp; from the next release the review's candidate build uses the same --release name as the deploy (both games; process)
   - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
   - What changed: Item 134. The deploy stamps PYREFLY_RELEASE=55 into the bundle (Cokaxk4X); round 26 reviewed a candidate built without it (bundle DyWSjMya). No report was re-stamped or rewritten: the deep and focused obligations stay pending on b24614c05, and the live check settled `live`. From r56 on, critic/runner and the driver's review briefs build the candidate with the same --release name as the deploy.
-  - area critic · both games · adopted · delivery in progress · at ~01:33 EDT · see [D-931](#d-931)
+  - area critic · both games · adopted · delivery implemented · at ~01:33 EDT · see [D-931](#d-931)
   - Source: The driver's decision of 2026-10-19 01:33 EDT under Bailey's standing yes of 2026-10-17 14:00 EDT, verbatim: “deploy every release as soon as its …
 - <a id="d-1060"></a>**D-1060** — DELEGATED: FFX-2 action time per command goes ON in the next release (origin/re-parity-rc10-x2-action-time 1318aeb2d, rerun with the measured Potion 80, Fire 75 and Darkness 83 steps and 53 read hit frames), together with the Den of Woe line's Hero Drink moved from 4,500 to 12,000 HP, so switch ON equals OFF there (FFX-2 only)
   - Bailey: “in advance i will go with all your recommendations. im going to work now. i trust you.” (blanket yes)
   - What changed: Item 135. His 108k pick was C, 'measure first'; the measuring is done. Wins of 500 (Wait / Active / bench) with action time on: V 463 to 490 / 417 to 459 / 482 to 489; VI 500 / 472 to 497 / 500; X 288 to 357 / 167 to 302 / 336 to 363; XII 498 to 376 / 452 to 483 / 499 to 384, the drop fixed by the trigger; XIV 423 to 481 / 339 to 460 / 464 to 484; XVI 383 to 491 / 24 to 348 / 447 to 500. Still estimated and owed live: Cure, a Hasted Fire, Full-Life, Punch. Reported to him in the morning; he may veto before it ships (the RE session builds origin/re-parity-r56-re on r55).
-  - area combat · FFX-2 · adopted · delivery in progress · at ~02:29 EDT · see [D-995](#d-995) · refines [D-994](#d-994)
+  - area combat · FFX-2 · adopted · delivery implemented · at ~02:29 EDT · see [D-995](#d-995) · refines [D-994](#d-994)
   - Source: The driver's pick of 2026-10-19 02:29 EDT under Bailey's advance yes of 2026-10-18 14:18 EDT, verbatim: “in advance i will go with all your …
+- <a id="d-1061"></a>**D-1061** — DELEGATED: Valefor’s rig (origin/rig-valefor 2af625c95; gate OK 6/6, attack, cast and hurt painted, knocked-out and Overdrive authored) is recommended ON in the next rig release in both games’ chapters that use its painting set, because it removes the Chapter III knockout size jump (both games)
+  - Bailey: “in advance i will go with all your recommendations. im going to work now. i trust you.” (blanket yes)
+  - What changed: Item 136. With the paintings the knocked-out Valefor loses 25.8 percent of its head size and takes a 97 px one-frame step; with the rig the head holds at 0 percent and a frame never moves more than 26 px, and the 40 px jerks go from 1 to 0. Shown to him first on the before and after sheets (D:/Tools/pyrefly-scratch/2026-10-19/rig-valefor/for-bailey/); he approved it as D-1062. The twin Pterya and the other Chapter III aeons follow under the single-costume-first order (D-1050, D-1064 to D-1066, D-1069). Live in release 57.
+  - area art · both games · adopted · delivery implemented · at ~10:00 EDT · refines [D-1050](#d-1050)
+  - Source: The driver’s pick of 2026-10-19 10:00 EDT (DRIVER-STATE.md: the Valefor rig lane finished and the driver viewed the before and after) under Bailey’s …
+- <a id="d-1062"></a>**D-1062** — Valefor’s rig goes ON in the next release, in both games’ chapters that use its painting set; the twin Pterya and the other Chapter III aeons follow the same way (both games)
+  - Bailey: “ok looks good”
+  - What changed: Item 136a. Said about the Valefor rig sheets. Live in release 57 (ed5cf5224, bundle IvYB9JEE, deployed 2026-10-19 15:41 EDT) through the art mirror D:/pyrefly-art-r57: the focused review measured the knockout head jump at 0.2 percent against live’s 25.8 and the live check saw the rig on through the knockout in the hidden Besaid chapter (FFX-2) and in Yuna’s summon in Seymour Flux (FFX).
+  - area art · both games · adopted · delivery implemented · at ~10:19 EDT · refines [D-1061](#d-1061)
+  - Source: Bailey, 2026-10-19 10:19 EDT (the DRIVER-STATE line, “BAILEY approved Valefor”; the queue’s hand-typed 08:10 ran early), in the Claude Code chat, …
+- <a id="d-1063"></a>**D-1063** — The account-switch trigger rises from weekly 95 percent to 97 percent; work continues at full pace and the reverse-engineering session’s own 85 percent pause is lifted by the same words (process)
+  - Bailey: “keep going please i have plenty of usage on other accounts. instead of stopping at 95% make it 97% please.”
+  - What changed: Item 137. His global instructions, the account-switch skill and the driver’s memory were updated to 97 percent; the reverse-engineering session was told to resume its queue. Partly replaced for now by D-1068 (he reset his weekly usage and asked the driver to stay on this account).
+  - area process · both games · adopted · delivery implemented · at ~10:28 EDT · partly replaced by [D-1068](#d-1068)
+  - Source: Bailey, 2026-10-19 10:28 EDT (the DRIVER-STATE line; the queue’s hand-typed 08:20 ran early), in the Claude Code chat, verbatim: “keep going please i …
+- <a id="d-1064"></a>**D-1064** — DELEGATED: Ifrit’s rig goes ON in the next rig release (gate OK 6/6, attack, cast and hurt painted; the knocked-out head cut of 18.5 percent and a 125 px one-frame step in the painting set become 1.0000 and 25 px) (FFX only)
+  - Bailey: “in advance i will go with all your recommendations. im going to work now. i trust you.” (blanket yes)
+  - What changed: Item 138a. Shown to him with the sheets (origin/rig-aeons 399c0b013; sheets in D:/Tools/pyrefly-scratch/2026-10-19/rig-aeons/*/for-bailey); he may veto, and later said yes to it in D-1071. Live in release 58 (2a1777281, bundle CEDFXO0J, deployed 2026-10-19 18:56 EDT) through the art mirror D:/pyrefly-art-r58: the focused review measured Ifrit’s hurt-to-knockout box at 514 to 517 px with the rig where live’s painting set jumps 28 percent, and the live check saw the rig on through Yuna’s summon in Chapter II. Chapter III’s possessed Ifrit was not reached by the live check.
+  - area art · FFX · adopted · delivery implemented · at ~14:36 EDT · refines [D-1050](#d-1050)
+  - Source: The driver’s pick of 2026-10-19 14:36 EDT (DRIVER-STATE.md: the driver viewed the rig-aeons sheets) under Bailey’s advance yes of 2026-10-18 14:18 …
+- <a id="d-1065"></a>**D-1065** — DELEGATED: Pterya’s rig goes ON with Ifrit’s (Valefor’s twin, re-registered; the knocked-out head cut of 24.5 percent becomes 1.0000, the one-frame step 85 px becomes 28 px) (FFX only)
+  - Bailey: “in advance i will go with all your recommendations. im going to work now. i trust you.” (blanket yes)
+  - What changed: Item 138b. Pterya is Isaaru’s Valefor in Chapter XIV (origin/rig-aeons 399c0b013; sheets in D:/Tools/pyrefly-scratch/2026-10-19/rig-aeons/*/for-bailey). Live in release 58: the focused review measured Pterya’s box at 418 px with the rig where live jumps 11 percent, and the live check saw the rig on in Chapter XIV by real keys (8 parts, 24 bones, 6 keys). A 7 to 9 percent box step from a camera move after the knockout beat is disclosed as polish (R58-C1).
+  - area art · FFX · adopted · delivery implemented · at ~14:36 EDT · refines [D-1050](#d-1050)
+  - Source: The driver’s pick of 2026-10-19 14:36 EDT (DRIVER-STATE.md) under Bailey’s advance yes of 2026-10-18 14:18 EDT, verbatim: “in advance i will go with …
+- <a id="d-1066"></a>**D-1066** — DELEGATED: Shiva’s rig stays OFF in the refine queue with Auron and Rikku Dark Knight: her attack, knockout and Overdrive paintings are other drawings, so the rig’s attack is a lean and its hurt loses the painting’s head-thrown-back drama (FFX only)
+  - Bailey: “in advance i will go with all your recommendations. im going to work now. i trust you.” (blanket yes)
+  - What changed: Item 138c. His own words behind it are 2026-10-18 “some of the poses look too stiff still” (D-1051). She returns after the animation track’s clips and hair springs and the expressive-keys method (D-1069, D-1072). The owed rig-off knockout measurement was taken in the rig-aeons-2 lane: with the paintings her knockout cuts the head by a 230 px step, with the rig the fall peaks at 125 px.
+  - area art · FFX · adopted · delivery not scheduled · at ~14:36 EDT · refines [D-1050](#d-1050)
+  - Source: The driver’s pick of 2026-10-19 14:36 EDT (DRIVER-STATE.md: “Shiva NOT” after the sheets) under Bailey’s advance yes of 2026-10-18 14:18 EDT, …
+- <a id="d-1067"></a>**D-1067** — DELEGATED: animation pass 2 (a prototype behind a dev flag, nothing ships) goes ahead on the driver’s pass-1 recommendation: style B’s look on style A’s clock, FFX’s real clip structure (start, looping hold, release), the item drawn as FFX does it (glow particles on self, a green glowing orb tossed overhand to an ally; no item model), a real gather, channel and release cast, knees in hurt and knockout with the planted foot pinned (FFX Lulu; clip plumbing shared)
+  - Bailey: “Ok that’s fine I’ll go with all of your recommendations. Whatever helps.” (blanket yes)
+  - What changed: Item 139. Built as origin/anim-proto-2 8525ae459 (dev flag ?anim=proto&style=P2, 45 new tests, tsc clean): the item is the orb and the self glow with no vial, the cast gathers, channels and releases with a glow, the knees are a pelvis sink (the rig has no leg bones), a fixed close camera, hit-stop 30 and 80 ms, clips on RE frames (project research note re-ffx-party-motion-timing). The driver’s look at the contact sheets: the item is fixed and matches the game, the cast reads better but the window is 6.0 s against 2.9 s today (the game’s own timing; pacing is Bailey’s call), the knockout knees are barely visible and still read as a rigid tilt, the attack contact is disconnected from the lunge. Sent to him as compare-item, compare-cast, compare-hurt-ko and compare-attack videos before anything ships; his reaction is D-1070. Not in any release.
+  - area art · FFX · adopted · delivery implemented · at ~15:11 EDT · refines [D-1051](#d-1051)
+  - Source: The driver’s pick of 2026-10-19 15:11 EDT (DRIVER-STATE.md: the pass-2 lane launched; the pass-2 videos were done at 17:34) under Bailey’s 2026-10-18 …
+- <a id="d-1068"></a>**D-1068** — Bailey reset his weekly usage and the driver stays on this account: no account switch, not even at 97 percent, until he says otherwise; near the limit again the driver tells him and asks (process; replaces D-1063’s trigger for now)
+  - Bailey: “I just reset my usage so we're all good now. I used my free reset! Don't switch accounts stay on this one please.”
+  - What changed: Item 140. Weekly usage went to 0 percent and the 5-hour window to 0 percent (the week resets 2026-10-23 16:00 EDT). The usage mode is NORMAL again. The driver’s memory was updated; the account-switch trigger of D-1063 is not run.
+  - area process · both games · adopted · delivery implemented · at ~16:19 EDT · refines [D-1063](#d-1063)
+  - Source: Bailey, 2026-10-19 16:19 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “I just reset my usage so we're all good now. I used my free …
+- <a id="d-1069"></a>**D-1069** — DELEGATED: Bahamut, its twin Spathi and Grothia (Ifrit’s twin) stay OFF; an EXPRESSIVE-KEYS pilot on Bahamut (format v2 painted head, neck and wing variants in its attack and hurt keys, at the idle’s size) decides the method before more rigs are fitted (FFX only)
+  - Bailey: “in advance i will go with all your recommendations. im going to work now. i trust you.” (blanket yes)
+  - What changed: Item 141. Source origin/rig-aeons-2 870c3890f. Bahamut’s rig fixes the Chapter III knockout shrink (head x0.843 and a 42.6 px one-frame step with the paintings; x1.0000 and 2.3 px with the rig) but its attack and hurt keys are flatter than the paintings (the lunging neck and the thrown-back head become a lean); Grothia showed no hurt-to-knockout swap in its chapter. The pilot (branch rig-expressive, launched 18:28 EDT, new rig bahamut-x) is compared on one sheet with today’s rig and the painting; if it reads as the painting with no size jump, the method goes to Ifrit, Pterya, Shiva and the next aeons before more rigs are fitted. The lane kit’s lessons (feet are the lowest thick part, glow skirts stack, premultiplied composite counts) go into its README.
+  - area art · FFX · adopted · delivery in progress · at ~18:27 EDT · refines [D-1050](#d-1050)
+  - Source: The driver’s pick of 2026-10-19 18:27 EDT (DRIVER-STATE.md: the driver viewed the Bahamut sheets) under Bailey’s advance yes of 2026-10-18 14:18 EDT, …
+- <a id="d-1070"></a>**D-1070** — The animation prototype’s item use is liked as drawn: a green glowing orb formed over the raised hand and tossed overhand to an ally (a glow on the user for self-use), no flask; the animation track keeps going (FFX only; his reaction to the pass-2 videos)
+  - Bailey: “I like the orb toss, keep going”
+  - What changed: Item 142. Liked: the item on an ally drawn as FFX does it, an orb formed over the raised hand, tossed overhand, sparkles on the target, no flask. Must remain: no item model. Undecided (he did not comment): the cast’s length at the game’s own timing, the hurt and knockout knees, the attack. The driver’s follow-through under his advance yes: the orb toss and the self-use glow ship for every FFX party member’s item use in the next release (D-1074), and animation pass 3 on Lulu works on a connected attack, a knockout that folds and the cast kept on the game’s timing (D-1075).
+  - area art · FFX · adopted · delivery in progress · at ~19:00 EDT · refines [D-1067](#d-1067)
+  - Source: Bailey, 2026-10-19 19:00 EDT (the DRIVER-STATE line, logged with the release 58 live announcement; the queue’s hand-typed 19:00 matches), in the …
+- <a id="d-1071"></a>**D-1071** — Ifrit’s and Pterya’s rigs are on, as recommended (live in release 58) (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 143a. Accepts D-1064 and D-1065 as shipped: release 58 (2a1777281, deployed 2026-10-19 18:56 EDT) draws Ifrit and Pterya by their rigs through the art mirror D:/pyrefly-art-r58; the focused review is SHIP and the live check PASS.
+  - area art · FFX · adopted · delivery implemented · at ~19:01 EDT · see [D-1065](#d-1065) · refines [D-1064](#d-1064)
+  - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
+- <a id="d-1072"></a>**D-1072** — Shiva’s rig stays OFF until the animation track and the expressive-keys method can give her attack and hurt the paintings’ drama; R57-001 (her feet in Braska’s fight) waits for that rig instead of hand stances that would move her in every FFX fight (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 143b. Hand stances in tools/posescale/overrides.json would move Shiva everywhere, so the release 58 note only diagnoses R57-001 (docs/handoff/r57-001-shiva-feet.md). The same feet slide is disclosed in release 58’s focused review as R58-S1 (11 swaps over tolerance in Chapter XIV against 10 on live).
+  - area art · FFX · adopted · delivery not scheduled · at ~19:01 EDT · refines [D-1066](#d-1066)
+  - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
+- <a id="d-1073"></a>**D-1073** — Bahamut, Spathi and Grothia stay OFF; the expressive-keys pilot on Bahamut decides the method for every aeon before more are fitted (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 143c. Accepts D-1069 as recommended; the pilot (branch rig-expressive) was running when this pass was recorded. The Grothia and Spathi sheets in the rig-aeons-2 folder are stale and are re-recorded after the release 58 review.
+  - area art · FFX · adopted · delivery in progress · at ~19:01 EDT · refines [D-1069](#d-1069)
+  - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
+- <a id="d-1074"></a>**D-1074** — The orb toss and the self-use glow ship for every FFX party member’s item use, rigged or painted, in the next release; FFX-2’s item gesture is sourced first from a live session (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 143d. The lane (launched 19:01 EDT, branch anim-orb-ship from the release 58 line, in D:/pyrefly-anim-proto) draws the orb and the glow for every FFX party member; FFX-2 is left unchanged until its own gesture is sourced, which live session 7 then did (D-1081).
+  - area art · FFX · adopted · delivery in progress · at ~19:01 EDT · refines [D-1070](#d-1070)
+  - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
+- <a id="d-1075"></a>**D-1075** — Animation pass 3 on Lulu: a connected attack (the strike lands where the body goes), a knockout that folds, and the cast kept on FFX’s own timing (the longer cast is the game’s; no faster variant); then the method goes to Kimahri (FFX Lulu; clip plumbing shared)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 143e. The lane (launched 19:01 EDT, branch anim-proto-3, in D:/pyrefly-anim-proto) also fixes the cast’s grey frame and may use a lulu-v3 rig if the fold needs legs. The FFX-2 item variant of D-1081 was added to it at 19:34 EDT.
+  - area art · FFX · adopted · delivery in progress · at ~19:01 EDT · refines [D-1070](#d-1070)
+  - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
+- <a id="d-1076"></a>**D-1076** — The deep review owed by releases 57 and 58 runs once, on the live release 58 build (both games; process)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 143f. The deep obligation moved from r56 to r57 to r58 as each build was replaced and now sits on 2a1777281 (critic:status: live PASS, focused FAIL on the disclosed R58-T1, R58-F1 and R58-S1, deep PENDING, carried from 68 earlier builds). It was deferred until the animation and expressive-keys lanes finish, because the PC had about 2 GB of RAM free.
+  - area critic · both games · adopted · delivery in progress · at ~19:01 EDT
+  - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
+- <a id="d-1077"></a>**D-1077** — Grothia’s slightly brighter leg glow is accepted for now and fixed by a glow-aware skirt in the rig kit when the aeons are redone with the expressive method; wing scaling in attack keys stays a per-subject choice (Bahamut 0.9 to 1.1), not a uniform rule (FFX only; rig kit)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 143g. Nothing changes in the game now; the kit work waits for the pilot’s result (D-1073).
+  - area art · FFX · adopted · delivery not scheduled · at ~19:01 EDT · refines [D-1069](#d-1069)
+  - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
+- <a id="d-1078"></a>**D-1078** — Live session 7 on the real FFX and FFX-2 (Steam) runs now, with Bailey away from the PC: the owed checks run, the FFX-2 item gesture first because it decides whether the orb toss reaches FFX-2 (both games)
+  - Bailey: “Now, I'm away from the PC”
+  - What changed: Item 144, a pick on the driver’s question card. The reverse-engineering session ran the session from 19:08 to 19:32 EDT (about 24 minutes) with saves restored (112 and 0), the ini original and the Steam autocloud unchanged. Settled: FFX-2’s item gesture (D-1081); the Potion cursor opens on the caster; Hayate hasted takes 71 steps against 77 (the throw wait only, the effect is not scaled). Not reached: the multi-foe t3b case, t3a with two knocked out, the grey palette index. He made the same pick at 12:31 EDT for session 6, which the queue never numbered; session 6 is recorded as an action, not as a row.
+  - area process · both games · adopted · delivery implemented · at ~19:08 EDT · see [D-1007](#d-1007)
+  - Source: Bailey, 2026-10-19 19:08 EDT (the DRIVER-STATE line; the queue’s hand-typed 19:15 ran late), picked “Now, I'm away from the PC” on the driver’s …
+- <a id="d-1079"></a>**D-1079** — DELEGATED: the move advisor must not recommend a losing line: in FFX Chapter XIV the card follows the chapter’s tactic line, as FFX-2 Chapter XIII’s already does, and a sweep of every chapter on the engine checks that following the card wins at least as often as the tactic (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 145. Found by the release 58 review route: in Chapter XIV the card is a simulated ranking that loses link 3 on 40 of 40 engine seeds when followed, while the chapter’s own tactic wins 35 of 40. The fix works as FFX-2 Chapter XIII’s advisor-line.ts already does (the FFX card reads the tactic where one exists); the review route keeps reading the card, so CHK-022 keeps its meaning: the advice a player sees wins. Rejected: making the harness read the guide’s NEXT line. The lane launched at 19:34 EDT on the r59-fixes line. A separate route bug, the Doublecast card text that turned 84 of 368 picks into Attack in Chapter III, was already fixed on origin/r59-fixes 029618774 (route-doublecast.mjs, FFX only).
+  - area ui · FFX · adopted · delivery in progress · at ~19:16 EDT
+  - Source: The driver’s pick of 2026-10-19 19:16 EDT (DRIVER-STATE.md: items 145 and 146 recorded) under Bailey’s “i'll go with all of your recommendations” of …
+- <a id="d-1080"></a>**D-1080** — DELEGATED: the continuity check’s head measure compares a rig’s head mesh only between keys that show the SAME head part; a key that swaps to another head (Lulu’s front-view variant) is judged by the on-screen head height against its class band (both games; review tooling)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 146. Without it the next review would flag Kimahri’s and Lulu’s front-view keys, whose head meshes sit 16 and 25 percent off the idle’s. Kimahri’s follow key (1.29 of the idle height, PR-0462, spear bone scale 1.327) is a real rig defect and its refit is owed. The release 58 rig-reader fix itself (R58-T1: RigActor builds its PaintedActor with figure:false, so the probe saw “not showing”; Ifrit’s knockout run counted 4 swaps where it counted 0) is on origin/r59-fixes 029618774.
+  - area critic · both games · adopted · delivery in progress · at ~19:16 EDT
+  - Source: The driver’s pick of 2026-10-19 19:16 EDT (DRIVER-STATE.md) under Bailey’s “i'll go with all of your recommendations” of 2026-10-19 19:01 EDT (D-1071 …
+- <a id="d-1081"></a>**D-1081** — DELEGATED: FFX-2’s item use stays distinct from FFX’s: a wide camera, a short gesture by the user toward the target (a quick small toss on an ally, a quick self gesture on herself) and a white-blue sparkle burst on the target, NOT FFX’s green orb (FFX-2 only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 147, on the reverse-engineering session’s recommendation from live session 7 (measured, tag [M]). FFX’s own gesture is by target, not by character: self is an arm raised overhead with a glow, an ally gets the glowing green orb tossed overhand, as pass 2 draws it; FFX’s close-up camera waits for the camera-lab test (the camera grammar rule). Haste does not shorten an action’s effect animation in FFX-2, only the throw wait, as the action-time model assumes. The animation lane was told at 19:34 EDT to add the FFX-2 variant.
+  - area art · FFX-2 · adopted · delivery in progress · at ~19:33 EDT · refines [D-1074](#d-1074)
+  - Source: The driver’s pick of 2026-10-19 19:33 EDT (DRIVER-STATE.md: live session 7 done) under Bailey’s “i'll go with all of your recommendations” of …
