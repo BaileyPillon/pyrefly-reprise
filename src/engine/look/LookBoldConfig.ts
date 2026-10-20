@@ -27,7 +27,7 @@ export const BOLD_LOOKS: Readonly<Record<'hd2d' | 'cinematic', LookParams>> = {
     // the backdrop clearly soft (20 px at 900p, up from 10), the fighters untouched by it (the blur is mask-aware)
     blur: { far: 20, near: 12, focus: 0.38, band: 0.18, falloff: 1.45, bokeh: 2.6 },
     // shafts you can see from across the room: 2.6 times the gain, a lower threshold so more of the painting throws light, beamier
-    shaft: { gain: 1.3, reach: 1.0, threshold: 0.4, decay: 0.968, rays: 0.8 },
+    shaft: { gain: 2.0, reach: 1.0, threshold: 0.35, decay: 0.968, rays: 0.85 },
     motes: { gain: 1.1, size: 4.6, speed: 1, glow: 0.35, density: 0.45 },
     rim: NO_RIM, // the bold pass draws the rim
     figure: { gain: [1.05, 1.02, 0.95], lift: [0, 0, 0], contrast: 0.12 },
@@ -37,7 +37,7 @@ export const BOLD_LOOKS: Readonly<Record<'hd2d' | 'cinematic', LookParams>> = {
   cinematic: {
     ...LOOKS.cinematic,
     blur: { far: 9, near: 5.5, focus: 0.4, band: 0.24, falloff: 1.6, bokeh: 1.2 },
-    shaft: { gain: 1.0, reach: 1.0, threshold: 0.42, decay: 0.966, rays: 0.85 },
+    shaft: { gain: 1.5, reach: 1.0, threshold: 0.38, decay: 0.966, rays: 0.9 },
     motes: { gain: 0.8, size: 4.0, speed: 0.8, glow: 0.35, density: 0.45 },
     // fog stays behind the figures: a trace at their feet, none over a face
     fog: { density: 0.55, speed: 1, height: 0.78, onFigures: 0.1 },
@@ -87,7 +87,7 @@ export interface BoldFx {
 
 export const BOLD_FX: Readonly<Record<'hd2d' | 'cinematic', BoldFx>> = {
   hd2d: {
-    shadow: { strength: 0.78, core: 0.6 },
+    shadow: { strength: 1.0, core: 0.6 },
     reflect: { amount: 0.8, length: 0.6, blur: 4, squash: 0.85 },
     depthFog: { density: 0.5, start: 0.25 },
     heightFog: { density: 0.55, height: 0.36, feet: 0.2 },
@@ -96,7 +96,7 @@ export const BOLD_FX: Readonly<Record<'hd2d' | 'cinematic', BoldFx>> = {
     embers: { gain: 1.0, size: 3.2, rate: 0.16 },
   },
   cinematic: {
-    shadow: { strength: 0.85, core: 0.65 },
+    shadow: { strength: 1.0, core: 0.65 },
     reflect: { amount: 0.75, length: 0.55, blur: 4.5, squash: 0.85 },
     depthFog: { density: 0.6, start: 0.25 },
     heightFog: { density: 0.6, height: 0.4, feet: 0.15 },
