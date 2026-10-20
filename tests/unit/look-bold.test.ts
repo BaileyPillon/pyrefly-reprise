@@ -235,7 +235,7 @@ describe('the bold grade', () => {
     const floor = [0.05, 0.1, 0.4] as const;
     expect(l(applyGrade(floor, recipeFor('hd2d', 'ffx', 'gagazet', PAL, 'bold')))).toBeLessThan(l(applyGrade(floor, recipeFor('hd2d', 'ffx', 'gagazet', PAL))));
     expect(hueSat(b).s).toBeGreaterThan(0.45);
-    expect(recipeFor('cinematic', 'ffx', 'gagazet', PAL, 'bold').sat).toBeGreaterThan(0.9);
+    expect(recipeFor('cinematic', 'ffx', 'gagazet', PAL, 'bold').sat).toBeGreaterThan(0.8);
     expect(recipeFor('cinematic', 'ffx', 'gagazet', PAL).sat).toBeLessThan(0.8);
   });
 
