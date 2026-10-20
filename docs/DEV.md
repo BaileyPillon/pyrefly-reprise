@@ -346,6 +346,27 @@ non-finite samples, peak ≥ 0.95 or an over-budget file. Nothing ships as an
 audio asset — the game synthesises every sound at runtime; these WAVs are
 previews only. See [AUDIO-GUIDE.md](AUDIO-GUIDE.md).
 
+## The conference demo build's switches (release 60)
+
+Bailey's picks of 2026-10-20 (decision 157; "I demo my game in a week at a huge gaming conference"). Presentation and seed choice only: no engine, no rule, no game number changes, and the three goldens
+do not move. Every switch below is read once from the address; the page needs no flag to play the demo as designed.
+
+| What | Default | How to change it | Game case |
+|------|---------|------------------|-----------|
+| **HD-2D look at BOLD strength** (`src/engine/look/`: the tilt-shift backdrop, light shafts, motes, the grade, the normal-map light on the figures, contact shadows, the floor reflection) | **ON in Chapter I (`seymour-flux`) and Chapter IV (`ffx2-bahamut`) only**, every other chapter plays today's frame | `?look=off` turns it off everywhere; any `?look=hd2d\|cinematic\|anime` is the address's word everywhere (`?look=hd2d&lookstrength=bold` forces it in any chapter); `?lookq=high\|medium\|low` is the quality | Chapter I FFX only, Chapter IV FFX-2 only (the rooms are keyed by chapter id: three other chapters borrow those paintings as placeholders and are not authored for the look) |
+| **Demo motion** (smoother pose blends, breathing, hit feel: `src/engine/motion/Demo*.ts`) | **ON** in a page | `?motion=off` (or `?motion=classic`) turns it off | both games |
+| **Hit feel, two release-60 rules** | an ordinary hit holds at least the shipped game's light hold (FFX 40 ms, FFX-2 28 ms); the 0.08 s white flash is scaled down on big figures (full to a plane area of 3.5, 0.4 from 9, measured: party 1.2 to 2.6, Mortiorchis 16, Bahamut 17, Seymour Flux 23) and **REDUCE FLASHES skips it** | with the demo motion off the game plays the shipped hit | both games |
+| **Demo mode** (`src/app/demoMode.ts`) | OFF | `?demo=1` (kept in `sessionStorage` for the tab; `?demo=0` clears it); `__pyrefly.demoMode(on?)` | Chapter I FFX only, Chapter IV FFX-2 only |
+
+**Demo mode** changes one thing: which seed a fresh attempt of a demo chapter fights on (the seed only picks which of the fight's own rolls come up, as the ordinary fresh draw does, `src/app/runSeed.ts`).
+Chapter I takes the next of seeds **7, 10, 12** (the RE audit's, each proved on the FFX engine in `tests/unit/demo-mode.test.ts`: the party's first command menu, Tidus's, comes after three log
+events and before any enemy act, nobody down; the shipped line wins all three; seed 7 loses no one for the whole fight), counted per tab so every fresh attempt rotates, and a retry inside the run takes the one
+after instead of `+ 1000`. Chapter IV (FFX-2) takes seed **56**, picked on the engine at Wait from sixty seeds: a win at 98.1 s of engine time with no girl down and one Mega Flare, so a person at Wait lands in a
+two-to-three-minute slot. A seed the caller names (`gotoChapter`'s `seed`) or pins (`setSeed`) wins over demo mode; without `?demo=1` the seeds are exactly what they were.
+
+The figures' light and the backdrop's depth fog read the maps lane's PNGs (`<painting>.normal.png`, `<painting>@2x.normal.png`, `backdrops/<room>.depth.png`; `D:/pyrefly-art-maps`, `MAPS-README.txt` there). A
+build whose art folder lacks them still plays the look (the figures are unlit, the fog is the height fog) and each missing map is one 404 in the console; the dev server of the demo harness serves them from the mirror.
+
 ## Controls (demo scene)
 
 | Key | Pad | Action |
@@ -377,6 +398,7 @@ frames have rendered.
 | `frame()` / `frames(n)` | resolve after 1 / n rendered frames |
 | `snapshotState()` | screen name, frame count, per-screen snapshot, seed, flow step, and — in a battle — the **full ordered event log** |
 | `setSeed(n)` / `seed()` | RNG seed for the **next** battle started (engines are seeded per battle via `BattleSetup.seed`): `gotoChapter`'s default, and it also **pins every run started from real keys** to `n`. Without a `setSeed`, a run the player starts draws a fresh first seed (PR-0008, both games; `src/app/runSeed.ts`); a retry still adds 1000 per attempt. A capture or spec that walks in from the title and needs a fixed fight calls `setSeed(1)` after `waitReady()`, before its first key. `battleState().seed` reads the seed a live battle is on |
+| `demoMode(on?)` | release 60: whether demo mode (`?demo=1`, the conference demo's seeds: see "The conference demo build's switches") is on; `demoMode(true\|false)` flips it for the runs that start from now on. `demoMotion(on?)` does the same for the demo motion |
 | `waitReady()` | resolves after the first rendered frame |
 | `audioDebug()` | mixer state, tracks and all 28 SFX with cached flags |
 | `playMusic(name, fade?)` | `'title' \| 'battle-ffx' \| 'boss-dread'` |

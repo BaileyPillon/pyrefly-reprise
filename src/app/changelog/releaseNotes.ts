@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 59 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 60 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '60',
+    date: '2026-10-20',
+    lines: [
+      { tag: 'FFX', text: 'Chapter I has a new look: a soft backdrop with shafts of light and drifting motes, and fighters lit and grounded by the room.' },
+      { tag: 'FFX-2', text: 'Chapter IV has the same look, with a gleaming floor that reflects the fighters and embers rising from the lamps.' },
+      { tag: 'Both', text: 'Poses blend more smoothly, figures breathe while they wait, and every hit holds and shakes the harder it lands.' },
+      { tag: 'FFX-2', text: 'Bahamut is now drawn as a jointed figure, and a skill aimed at a foe who falls first now picks another foe, never one of the girls.' },
+      { tag: 'FFX', text: 'Seymour Flux is now drawn as a jointed figure, and in Chapter XIV the move advisor follows the chapter’s own plan.' },
+    ],
+  },
   {
     release: '59',
     date: '2026-10-19',

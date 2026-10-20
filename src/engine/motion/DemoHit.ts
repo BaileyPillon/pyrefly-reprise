@@ -105,7 +105,7 @@ export function demoTrauma(f: BlowFacts): number {
 }
 
 /**
- * The white flash's strength on a figure of this size: the plane's world area (width times height, `PaintedActor.poseSize`; a party figure is 2 to 3, Seymour Flux about 7, Bahamut about 17). Full
+ * The white flash's strength on a figure of this size: the plane's world area (width times height, `PaintedActor.poseSize`; measured in the real fights: a party figure 1.2 to 2.6 (Kimahri 3.7), Mortiorchis 16, Bahamut 17, Seymour Flux 23). Full
  * strength up to {@link FLASH_AREA_FULL}, falling in a straight line to {@link FLASH_PEAK_MIN} at {@link FLASH_AREA_BIG} and beyond: option C's impact bloom already lights a big figure, and a full
  * white flash on top of it read as one white blob on Bahamut (release 60). An unknown size (a stub, a part) is full strength.
  */
