@@ -7,7 +7,7 @@
  * sub-effects the look replaces (A's depth of field, shafts, streaks, look LUT, rim) are switched off for as long as it is on and put back when it goes. The HUD is DOM
  * above the canvas, so none of this can touch it.
  */
-import { Vector2, Vector3, type Camera, type Scene } from 'three';
+import { Vector2, Vector3, Vector4, type Camera, type Scene } from 'three';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import type { Renderer } from '../Renderer.ts';
 import { applyFigureTrue, figureTrueOf } from '../figureTrue.ts';
@@ -81,7 +81,8 @@ export class LookRig {
     if (!this.blurH || !this.blurV) {
       const taps = Math.max(3, QUALITY_COST[lookState.quality].blurTaps);
       const mk = (dir: [number, number]): ShaderPass => {
-        const p = new ShaderPass({ ...LookBlurShader, defines: { BLUR_TAPS: taps } } as never);
+        const p = new ShaderPass({ ...LookBlurShader, defines: { BLUR_TAPS: taps, MAX_BOX: 8 } } as never);
+        p.uniforms['uBox']!.value = Array.from({ length: 8 }, () => new Vector4());
         (p.uniforms['direction']!.value as Vector2).set(dir[0], dir[1]);
         p.enabled = false;
         return p;
@@ -103,7 +104,7 @@ export class LookRig {
     }
     for (const p of [this.blurH, this.blurV]) {
       if (!p) continue;
-      p.material.defines = { BLUR_TAPS: Math.max(3, QUALITY_COST[lookState.quality].blurTaps) };
+      p.material.defines = { BLUR_TAPS: Math.max(3, QUALITY_COST[lookState.quality].blurTaps), MAX_BOX: 8 };
       p.material.needsUpdate = true;
     }
   }
@@ -224,6 +225,10 @@ export class LookRig {
         u['farPx']!.value = far;
         u['nearPx']!.value = near;
         u['bokeh']!.value = v('blur.bokeh');
+        // bold: every actor's box stays sharp, whatever the band and whatever a flash did to its alpha (last frame's boxes: they move a hair per frame)
+        const bx = bold && this.bold ? this.bold : null;
+        u['boxN']!.value = bx ? bx.boxCount : 0;
+        if (bx) u['uBox']!.value = bx.boxes;
       }
     } else if (this.blurH && this.blurV) this.blurH.enabled = this.blurV.enabled = false;
 

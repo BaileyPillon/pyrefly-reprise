@@ -87,3 +87,32 @@ The rAF interval is 16.7 / 16.7 to 16.8 / 16.8 in every cell (locked 60 fps); on
 - The coloured point lights reach the shader (`__pyrefly.look.stats().relight.lights`): a cure on Tidus puts a green light at his position at strength 0.8, fire an orange one, ice a cyan one; the light starts when the blow lands in the drawn effect and follows its envelope (`RelightConfig.POINT_KINDS`).
 - Default off: with no `look` key in the address `lookState.armed` is false, `Renderer` never builds the rig, `bindRelight` returns at once (no `PAINTED_RELIGHT` define, so every figure program is the one it was) and the shader strings are unchanged except for the two `#ifdef` blocks. A pixel comparison against the pre-change build was not possible on the scratch harness (a flag-free run differs from another by the opening camera's real-time easing).
 - The three goldens (`ff7-golden`, `ffx-engine-golden`, `ffx2-atb-golden`) and 114 related unit files (1399 tests) pass; `tsc --noEmit` is clean.
+
+## Bold strength (2026-10-20): `?lookstrength=bold`
+
+**Game case: BOTH games (shared plumbing); dev flag only; nothing ships.** Driver, 2026-10-20: pass 1's looks read as "a slight grade" on a conference floor and the normal-map light was nearly invisible, so hd2d and cinematic get a second, bolder table. The default is still pass 1, byte for byte (`lookParams(name, 'subtle')` returns pass 1's own object; `tests/unit/look-bold.test.ts` pins it). Anime is unchanged. `F8` flips subtle / bold live; `__pyrefly.look.strength('bold')`; `?lookdrift=1` adds the backdrop drift (its own flag: the battle camera's grammar is a separate approved test).
+
+What bold changes (the numbers are `LookBoldConfig.ts`, the grades `LookGradesBold.ts`):
+
+| Item | Bold |
+|---|---|
+| Light on the paintings | relight gain band 0.45 to 1.7 (pass 1: 0.6 to 1.4), key 1.35 / 1.45 (0.9 / 1.0), coloured spell and orb lights at 1.8 with a reach of 0.34 (0.9, 0.24); a bright rim along each figure's **back edge** in the room's key colour (post pass, only edges that face the light; Ch I icy cyan-white, Ch IV cyan); a coloured **pool of light on the floor** under the target of every spell and the orb (screen-space ellipse at the target's feet, sized to the effect: fire orange, ice cyan, cure green) |
+| Grounding | a soft **contact shadow** under every figure: an ellipse from the figure's own base width (read once per painting from its alpha), darker core under the feet, leaning away from the light, fading when it hops or hovers; a **floor reflection** (the figure flipped about its foot line, blurred more with distance, faded and cut off at half a figure's height, never over another figure) only where the floor is glossy: Chapter IV yes (gloss 0.8), Chapter I no |
+| Atmosphere | shafts 2.2x gain (broad beams, fewer, from the room's own light; cinematic gets them too), a **stage light** (the fight lifted, the room round it darkened, light sources spared), **far fog from the backdrop's depth map** (`D:/pyrefly-art-maps/backdrops/<room>.depth.png`, through a frame-to-painting homography) and a height fog that thickens toward the floor, a trace of mist at the feet and nothing over a face; larger, glowing motes (size 4.6 px, glow, more of them); **embers** rising from Chapter IV's four lamps |
+| Depth | far blur 20 px at 900p (10) for hd2d, 9 px (3.4) for cinematic, bokeh on bright points; **every actor's screen box stays razor sharp** (the blur skips each actor's box, party and foes, and never gathers from it, so a boss whose alpha a hit flash raised does not blur or ghost); `?lookdrift=1`: the painting and its parallax layers drift by up to 3 px on a 24 s sine, the nearer layers a touch more, **still while a command menu is open** |
+| Grade | per-room recipes with hue pulls (`LookGradesBold.ts`): Chapter I's blues pulled toward cyan so the ice stays luminous, the floor deep rather than flat; Chapter IV: shadows violet, lamps pulled toward amber, the skylight toward cyan |
+
+Files: `LookBoldConfig.ts` (tables, rooms, pure maths: homography, base extents, stage ellipse, drift), `LookBoldShader.ts` + `LookBold.ts` (the extra pass and its per-frame work), `LookDrift.ts`, `LookGradesBold.ts`, `look/relight/RelightLights.ts` (floor pools), `LookBlurShader.ts` (actor boxes), `LookMainShader.ts` (cinematic shafts and motes, mote glow, beam frequency: all off at pass 1's values). Console: `__pyrefly.look.param('bold.fog' | 'bold.pool' | 'bold.rim' | 'bold.gloss' | 'bold.embers' | 'bold.shadow' | 'bold.stage', k)` scales one effect; `__pyrefly.look.recipe({...})` overrides the grade live; `stats().bold` lists the figures the pass found.
+
+A finding about pass 1: the grade LUT has no tone map of its own, so a recipe's exposure of 1.0 to 1.1 lifts Gagazet's floor blue from about 150 to 240 (clipped, flat electric blue, painted detail lost). Bold's recipes are exposed lower (Chapter I hd2d 0.7, cinematic 0.54) so the floor lands near today's and the cave glow stays bright. Pass 1's values were left alone.
+
+Frame cost (RTX 5070 Ti, headless GPU, release 59 candidate, `perf.mjs`; render ms is the post chain plus the scene draw, 240 frames with a GPU sync; rAF is p50 / p95 / p99 over about 480 frames):
+
+| | 1600x900 off | hd2d bold | cinematic bold | 2560x1440 off | hd2d bold | cinematic bold |
+|---|---|---|---|---|---|---|
+| Ch I Seymour Flux | 0.73 | 1.21 | 1.31 | 1.25 | 3.22 | 3.16 |
+| Ch IV Bahamut | 1.54 | 1.59 | 1.63 | 1.54 | 3.44 | 3.43 |
+
+rAF 16.7 / 16.7 to 16.8 / 16.8 in every cell but one (Chapter IV "off" at 1440p showed one 33 ms frame at p99, in today's own look): locked 60 fps. Bold costs about 2 ms more than today at 1440p.
+
+Limits: the depth fog and the reflection need `<room>.depth.png` and a gloss entry (`ROOM_BOLD`); a room with neither gets the height fog and no reflection (only Chapters I and IV are authored). The contact shadow and box tracking cover painted figures, not rigs' part textures (they still have the box, from their plane). The floor pool is a screen-space ellipse at the target's feet, not a 3D decal, so it ignores the floor's perspective beyond the fixed squash. The drift moves the painting's plates by a few pixels; a painting's own edge (Chapter IV's right edge) shows a hair more on one side. Captured and tuned for 16:9; the stills and clips are in `D:/Tools/pyrefly-scratch/2026-10-20/demo-looks-bold/`.

@@ -49,6 +49,9 @@ export class LookBold {
   private quality: LookQuality | null = null;
   private readonly homo = new Matrix3();
   private stage: { cx: number; cy: number; rx: number; ry: number } | null = null;
+  /** Every visible actor's screen box (x0, y0, x1, y1 in frame uv), padded: the blur keeps them sharp (`LookBlurShader`). */
+  readonly boxes: Vector4[] = Array.from({ length: MAX_FIG }, () => new Vector4());
+  boxCount = 0;
   /** For the debug API and the captures. */
   readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
 
@@ -174,10 +177,26 @@ export class LookBold {
       q.set(c.x + y.x * (topV - 0.5), c.y + y.y * (topV - 0.5), c.z + y.z * (topV - 0.5)).project(cam);
       const heightV = Math.max(0.02, q.y * 0.5 + 0.5 - gv);
       const lift = Math.max(0, f.y);
+      // the figure's box on the screen: its opaque painting's four corners, padded a little
+      let bx0 = 9;
+      let by0 = 9;
+      let bx1 = -9;
+      let by1 = -9;
+      for (const [cu, cv] of [[ex.left, 1 - ex.bottom], [ex.right, 1 - ex.bottom], [ex.right, 1 - ex.top], [ex.left, 1 - ex.top]] as const) {
+        q.set(c.x + x.x * (cu - 0.5) + y.x * (cv - 0.5), c.y + x.y * (cu - 0.5) + y.y * (cv - 0.5), c.z + x.z * (cu - 0.5) + y.z * (cv - 0.5)).project(cam);
+        bx0 = Math.min(bx0, q.x * 0.5 + 0.5);
+        bx1 = Math.max(bx1, q.x * 0.5 + 0.5);
+        by0 = Math.min(by0, q.y * 0.5 + 0.5);
+        by1 = Math.max(by1, q.y * 0.5 + 0.5);
+      }
+      const bpx = (bx1 - bx0) * 0.06;
+      const bpy = (by1 - by0) * 0.05;
+      this.boxes[n]!.set(bx0 - bpx, by0 - bpy, bx1 + bpx, by1 + bpy);
       A[n]!.set(gu, gv, Math.max(rx, 0.01), Math.max(ry, 0.004));
       B[n]!.set(shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
       n++;
     }
+    this.boxCount = n;
     for (let i = n; i < MAX_FIG; i++) {
       A[i]!.set(0, 0, 1, 1);
       B[i]!.set(0, 0, 0, 0);
