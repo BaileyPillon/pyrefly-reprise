@@ -239,11 +239,12 @@ describe('the flag is the only way in: every other chain carries what it always 
    * ablation on the merged tree (all nine): with `GRID_AUTO_STATUS = false` (src/battle/ffx2/constants.ts, run through a module mock) all thirty-two logs give the pins above this paragraph again, hash for hash.
    * The old hashes are in git at c9467574d, the commit before this merge.
    */
+  // **Re-pinned 2026-10-20 for the retarget of a skill whose foe has fallen** (re-parity lane x2-retarget, FFX-2 only; reason "game-code parity", `research/re-ffx2-ai-leblanc-den-ixion.md` section 1.12; `docs/handoff/re-parity-x2-retarget-fix.md`): all eight Chapter 6 (Leblanc) hashes and the Road Sisters' seed 4; Chapters 5 and XI and the other seven Sisters seeds did not move. Chapter 6 seeds 1 to 3 equal ffx2-hit-closes-menu's Chapter VI row again. In the Chapter 6 logs the first event that differs is Paine's Armor Break landing on Yuna or on herself after its foe had fallen; the Sisters' seed 4 hash was not event-diffed (it returns exactly under the old targeting). With only `src/battle/ffx2/targeting.ts` put back to r59 (6db09ac86) as an in-process overlay, the previous pins return exactly. The old hashes are in git at 6db09ac86.
   const BASE = {
     ch5: ['f088d67c48d6cc10', '3a74b5193adc4161', 'aeca4110de447dc4', '9d515113ea9a9092', '1dd5bc74fe420ad8', 'e563354e0f016d58', '701eb9b3d45999b7', '95d2d4057334651c'],
-    ch6: ['eb0956532a9a6edd', '7900cad6eaeb5c12', '06350f07dfd4fd6a', 'b385184ac92f3ad8', 'bc1eae198e9039a2', 'd81e3009fa1544d4', '0aa5a5b1cb5dacab', 'ba2b58339bdcef64'],
+    ch6: ['81c30a85d9c13a52', '8b01db1752a60d3a', '7be644017e81983c', '0a1748b48ccab68e', '1765c17a91a4a393', '625683fa3cc603fa', 'df30833b1741f20f', '091f5b04ebd1b1ea'],
     ch11: ['4ab82301c611caeb', '3bd0f3efab8e6adf', '03982e844150ccc9', '443c4b1c7012a824', '2e118d063fe18d83', '0646e5f2952a3650', 'a9fc882ab3097d87', '66d9793939e77626'],
-    sisters: ['3143237f4bb44982', 'e3c5ff00dd446e97', 'ada333a7d40034d7', 'a0f04b97b82cac16', 'b0bd3deea1b16efa', '9d24bf9dbe7aed2a', 'ff342fd893c83cc6', 'b2f35d32e78d3913'],
+    sisters: ['3143237f4bb44982', 'e3c5ff00dd446e97', 'ada333a7d40034d7', 'ce1cc131231b0d18', 'b0bd3deea1b16efa', '9d24bf9dbe7aed2a', 'ff342fd893c83cc6', 'b2f35d32e78d3913'],
   };
 
   // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.

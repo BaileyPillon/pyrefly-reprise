@@ -80,16 +80,17 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
   // differing event is the opening gauge snapshot of Act II (link 2) in all six runs, all still victories. With `separateBattleGauges: false` passed as an option on the merged tree the six old hashes (the
   // r52-rc pins above: 1135b38b, a7917cc4, 552525db, bde33d49, a6475afe, 0baa4501) return exactly. Chapters IV and V did not move. The old hashes are in git at 3c92b60cc (r52-rc).
   // **Re-pinned once for the hit reaction, stacked on r52-rc and the Chapter VI link opening** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", the checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`): the eighteen logs of Chapters IV to VI at human pace (Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the top list), seeds 1 to 3. Cause, found by ablation (the switch `CHAIN_WINDOW_PER_BODY` forced off): X2-A per-body windows, on top of the link opening. The chain window, the span of the halved tick and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, Bahamut 52 and 82) where they were 60 and 90 steps and 15. The old hashes are the base 35aa31e77 (r52-rc 3c92b60cc plus the Chapter VI link opening)'s, the six Chapter VI ones being the link-opening row above. Proof on the merged tree (branch `re-parity-rc9-x2-hit-reaction-r52`, 2026-10-17): with `CHAIN_WINDOW_PER_BODY` forced off for the whole run through a module mock (a vitest setup file; `withReactionKnobs(OLD_REACTION)` is the same switch inside the process), these eighteen pins: 18 of 18 of the base's hashes come back exactly, and with it on all 18 move.
+  // **Re-pinned 2026-10-20 for the retarget of a skill whose foe has fallen** (re-parity lane x2-retarget, FFX-2 only; reason "game-code parity", `research/re-ffx2-ai-leblanc-den-ixion.md` section 1.12; `docs/handoff/re-parity-x2-retarget-fix.md`): eight of the eighteen rows (Chapter IV split 1, active 3, split 3; Chapter VI active 1, 2, 3 and split 2, 3); Chapter V and the others did not move. In each, the first event that differs is Paine's Armor Break (or Mental Break) landing on Yuna or on herself after its foe had fallen; in Chapter VI the fights then diverge (a girl is knocked out in split 3). With only `src/battle/ffx2/targeting.ts` put back to r59 (6db09ac86) as an in-process overlay, the previous pins return exactly. The old hashes are in git at 6db09ac86.
   const ON: Record<string, string> = {
-    'IV|active|1': '5385f128d0bbe00a', 'IV|split|1': 'b24d44c5d0c66291',
+    'IV|active|1': '5385f128d0bbe00a', 'IV|split|1': '493b57e0883b4e8c',
     'IV|active|2': '878b4ca5279f18f1', 'IV|split|2': '96e98b1c96cf0327',
-    'IV|active|3': 'ba024bdd4db15f3f', 'IV|split|3': '62141f29d511d76d',
+    'IV|active|3': '214a827b527bdc86', 'IV|split|3': 'aab4968960519c85',
     'V|active|1': 'c568c06af2d32d4a', 'V|split|1': '1dddc6c69afc6440',
     'V|active|2': '70c9b63427a29c45', 'V|split|2': '8e2804953639b4cd',
     'V|active|3': '08d0977e0d1536cb', 'V|split|3': 'eeed11d89e64f1ad',
-    'VI|active|1': '1343541dd9a41b91', 'VI|split|1': 'd36c552702cfb9d1',
-    'VI|active|2': '54b3e83d36657ff5', 'VI|split|2': 'fce586323e03384e',
-    'VI|active|3': '03fa0366b5f66ae4', 'VI|split|3': 'aa64389eb1c1a467',
+    'VI|active|1': 'a67af9a2a4bad8e9', 'VI|split|1': 'd36c552702cfb9d1',
+    'VI|active|2': 'b57f102a8873966a', 'VI|split|2': 'a154e6dc86275707',
+    'VI|active|3': 'b9513ff11c788bbc', 'VI|split|3': 'd25cfbdb0f031372',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 

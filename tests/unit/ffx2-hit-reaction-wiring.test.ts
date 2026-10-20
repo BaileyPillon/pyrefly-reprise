@@ -162,7 +162,8 @@ describe('bumpChain, the chain events and the forced hit', () => {
 describe('the switch off is the engine of the base (r52-rc plus the Chapter VI link opening), byte for byte', () => {
   // The first seeds of the golden arrays as pinned on the base 35aa31e77 (r52-rc 3c92b60cc plus the Chapter VI link opening; the Chapter IV and V rows equal r51-rc d6dc0bdd7's: release 50.1 plus the rewards,
   // stat-setter, confusion, Mix and grids lanes), before this lane: Chapter IV at zero decision time, seeds 1 to 5, and Chapter V, seeds 1 to 3. (On release 50, 6b638df95, they were 6baeab06549072aa ... and bc16d06c2b310e63 ...)
-  const OLD_CH4_D0 = ['45734a8be5dd203c', '70e64552622c11e3', '52b166f112447102', 'ca9ad0689e657475', 'fdc102f04be24914'];
+  // **Re-pinned 2026-10-20 for the retarget of a skill whose foe has fallen** (re-parity lane x2-retarget, FFX-2 only; reason "game-code parity", `research/re-ffx2-ai-leblanc-den-ixion.md` section 1.12; `docs/handoff/re-parity-x2-retarget-fix.md`): Chapter IV seeds 2 to 5 (seed 1 and Chapter V did not move): the first event that differs is Paine's Armor Break landing on Yuna or Rikku after Bahamut had fallen, three or four events that the new engine does not play. With only `src/battle/ffx2/targeting.ts` put back to r59 (6db09ac86) as an in-process overlay, the previous pins return exactly. The old hashes are in git at 6db09ac86.
+  const OLD_CH4_D0 = ['45734a8be5dd203c', 'b4b0fc46ffe55721', '10d173542860e9b3', '1e869290b6c64f5e', '51334a4c69f893eb'];
   const OLD_CH5_D0 = ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5'];
 
   // OLD timeline (r55): this test pins the flat 3 s / no-action-time world, so it runs with the per-command span put back off; the rest of the file runs on production.
