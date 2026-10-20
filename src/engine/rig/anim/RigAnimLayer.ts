@@ -197,7 +197,7 @@ export class RigAnimLayer {
     const level = this.anim.charge;
     const isItem = kind === 'item' || kind === 'itemSelf';
     const cf = this.castFx;
-    if (hand && (kind === 'cast' || isItem) && level > 0.02) fx.gather(hand, level * (self ? 0.45 : 1), isItem && !self ? 0.05 + 0.09 * Math.min(1, Math.max(0, (level - 0.1) / 0.9)) : 0, isItem ? 'item' : 'cast', cf && kind === 'cast' ? 1.55 : 1); // P3: the cast's own glow is half as big again
+    if (hand && (kind === 'cast' || isItem) && level > 0.02) fx.gather(hand, level * (self ? 0.45 : 1), isItem && !self ? 0.05 + 0.09 * Math.min(1, Math.max(0, (level - 0.1) / 0.9)) : 0, isItem ? 'item' : 'cast', cf && kind === 'cast' ? 1.3 : 1); // P3: the cast's own glow is a third bigger (1.55 hid the doll in the white)
     else fx.rest();
     if (cf) {
       if (hand && kind === 'cast' && level > 0.02) cf.gather(hand, level, pos, h, h / 1.8);

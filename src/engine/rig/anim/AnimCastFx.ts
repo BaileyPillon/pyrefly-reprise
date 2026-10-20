@@ -95,12 +95,12 @@ export class CastFx {
     // two glyphs turning against each other behind the doll
     for (let i = 0; i < RUNES; i++) {
       const r = this.runes[i]!;
-      const size = (i ? 0.95 : 0.7 + 0.1 * Math.sin(this.clock * 2)) * (0.8 + 0.7 * Math.min(1.3, L)) * u * (i ? 1.0 : 1.0);
+      const size = (i ? 0.8 : 0.6 + 0.08 * Math.sin(this.clock * 2)) * (0.7 + 0.5 * Math.min(1.3, L)) * u;
       r.visible = true;
       r.position.set(a.x, a.y, a.z - 0.01);
       r.scale.set(size, size, 1);
       r.material.rotation = (i ? -1 : 1) * this.clock * (0.9 + 0.3 * i) + i * 0.7;
-      r.material.opacity = (i ? 0.3 : 0.42) * k;
+      r.material.opacity = (i ? 0.2 : 0.28) * k; // under the glow, so the doll can still be seen in it
     }
     // motes spiral in from a wide ring
     for (let i = 0; i < MOTES; i++) {
@@ -110,7 +110,7 @@ export class CastFx {
       const ang = i * 2.4 + this.clock * 1.4 + (1 - p) * 3.2;
       m.visible = true;
       m.position.set(a.x + Math.cos(ang) * r, a.y + Math.sin(ang) * r * 0.85, a.z + 0.02);
-      const s = (0.045 + 0.05 * p) * u;
+      const s = (0.055 + 0.055 * p) * u;
       m.scale.set(s, s, 1);
       m.material.opacity = Math.sin(Math.PI * p) * 0.9 * k;
     }
