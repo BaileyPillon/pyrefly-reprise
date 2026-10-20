@@ -16,6 +16,8 @@ for that key are CUT from the pose's own painting and registered to the key's bo
       "bone": "wingRA",                  the bone the piece is rigid on (default: the part's own rigid bone) ...
       "skin": "chain",                   ... or skinned along the part's own chain (`build.skin.<part>`, weights from the rest positions): a wing's variant bends at its joints as the part does
       "tex": 0.5,                        the PNG's resolution as a fraction of the master (a big sheet fits the texel budget at half); the mesh is still in master px
+      "fill_joints": 40,                 (or {bone: radius}) for a chain-skinned piece: fill discs of this radius (master px) at the posed places of the chain's bone joints under the register key (what the joints' hole test watches),
+                                         added to "fill": a limb whose joint the painting draws at the edge of the limb, or a shoulder the cut leaves open
       "fill": [[x, y, r], ...]           discs (master px of the idle frame) whose transparent pixels the cut fills with the painting's own colours around them, classically extended (`rig_geom.extend_fill`): where
                                          the painting has a gap (the sky inside a neck loop) that a joint's hole test needs solid, because the part it used to cover is now the variant
       "mesh": {"edge": 18, "inner": 34, "grow": 10}}
@@ -132,10 +134,24 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
     to_p = lambda pts: [(x - ox, y - oy) for x, y in pts]  # noqa: E731
     a_cut = cut_alpha(rgba[..., 3], to_p(spec["poly"]), [to_p(c) for c in spec.get("cutline", [])], float(spec.get("feather", 14)))
     img = rgba.copy()
-    if spec.get("fill"):
+    fills = [list(f) for f in spec.get("fill", [])]
+    if spec.get("fill_joints"):
+        if spec.get("skin") != "chain":
+            raise SystemExit("rig variants: fill_joints needs a chain-skinned piece (\"skin\": \"chain\")")
+        names, joints, _ = chain_spec(sub, part, build)
+        model.pose(**key_pose_args(keys[spec["register"]]))
+        fj = spec["fill_joints"]
+        for nm, jt in zip(names, joints):
+            rr = float(fj.get(nm, 0) if isinstance(fj, dict) else fj)
+            if rr <= 0:
+                continue
+            q = bone_matrix(model, nm) @ np.array([jt[0], jt[1], 1.0])
+            fills.append([float(q[0]), float(q[1]), rr])
+            say(f"    fill_joints: {nm} at ({q[0]:.0f}, {q[1]:.0f}) r {rr:.0f}")
+    if fills:
         yy, xx = np.mgrid[0:a_cut.shape[0], 0:a_cut.shape[1]]
         zone = np.zeros(a_cut.shape, bool)
-        for fx, fy, fr in spec["fill"]:
+        for fx, fy, fr in fills:
             zone |= (xx + ox - fx) ** 2 + (yy + oy - fy) ** 2 <= fr * fr
         known = a_cut >= 128
         need = zone & ~known
