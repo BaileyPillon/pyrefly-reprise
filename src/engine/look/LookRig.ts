@@ -131,6 +131,20 @@ export class LookRig {
     this.prevDials = {};
   }
 
+  /**
+   * Release 60 (the look is on by default in two chapters): build the passes the look is about to need BEFORE its first frame, so the battle screen's shader warm-up compiles them behind the
+   * battle-start card instead of inside the first battle frame (measured: a 1.1 s frame at the start of Chapter I). Builds what `frame()` would build for the wanted look at the current quality and
+   * strength, and nothing else; a no-op when no look is wanted. Safe to call again.
+   */
+  prepare(): void {
+    const name = lookState.name;
+    if (name === null) return;
+    this.mainPass(name);
+    const p = lookParams(name, lookState.strength);
+    if (QUALITY_COST[lookState.quality].blurTaps > 0 && (p.blur.far > 0 || p.blur.near > 0)) this.blurPasses();
+    if (lookState.strength === 'bold' && name !== 'anime') (this.bold ??= new LookBold(this.r)).prepare(lookState.quality);
+  }
+
   // ----------------------------------------------------------------- per frame
 
   /** Every frame, after the eye-candy options have written theirs and before the composer runs. */

@@ -256,6 +256,7 @@ export class BattleScreen extends Screen {
     this.scene.hideOwnActors();
     this.syncPixelScale();
     this.offSceneScale = onSceneScale(() => this.syncPixelScale()); // a supersampled scene (`crisp/CrispRig.ts`) changes the point sprites' pixel grid
+    (this.app.renderer as { prepareLook?: () => void }).prepareLook?.(); // release 60: the demo look's passes (Chapters I and IV by default) join the post chain now, so the warm-up below compiles them
     void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load
 
     // --- field -------------------------------------------------------------

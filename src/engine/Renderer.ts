@@ -246,6 +246,12 @@ export class Renderer {
   private fxA: GoldenHour | null = null;
   private look: LookRig | null = null;
 
+  /** Release 60: build the look's passes (when one is wanted) ahead of the first frame, so the shader warm-up compiles them (`LookRig.prepare`). A no-op with no look wanted. */
+  prepareLook(): void {
+    if (this.disposed || !lookWanted()) return;
+    (this.look ??= new LookRig(this)).prepare();
+  }
+
   /** Demo looks: what the last frame did (`__pyrefly.look.stats`), or null when no look was ever asked for. */
   get lookStats(): LookRig['stats'] | null {
     return this.look?.stats ?? null;

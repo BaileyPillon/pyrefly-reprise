@@ -127,11 +127,11 @@ function compileWith(
   }
 }
 
-/** Renderers whose post chain has already been compiled. */
-const postWarmed = new WeakSet<object>();
+/** Passes of the post chain that have already been compiled (a pass the demo look adds after the first battle is compiled the first time a battle wants it). */
+const warmedPasses = new WeakSet<object>();
 
 /**
- * The composer's own passes (bloom, tilt-shift, grade), once per renderer.
+ * The composer's own passes (bloom, tilt-shift, grade, and the demo look's when a look is on), each once.
  *
  * Nothing draws through the composer before the first battle (the title, the
  * board and prep are DOM), so its dozen programs used to compile inside the
@@ -140,9 +140,9 @@ const postWarmed = new WeakSet<object>();
  * the composer's buffer, or the screen for the last pass.
  */
 function postChainOnce(r: WarmupRenderer): Promise<unknown>[] {
-  const passes = r.composer.passes;
-  if (!passes?.length || postWarmed.has(r.renderer)) return [];
-  postWarmed.add(r.renderer);
+  const passes = (r.composer.passes ?? []).filter((p) => !warmedPasses.has(p));
+  if (!passes.length) return [];
+  for (const p of passes) warmedPasses.add(p);
   const offscreen = new Scene();
   const onscreen = new Scene();
   // The same attributes as three's `FullScreenQuad` (position and uv, no

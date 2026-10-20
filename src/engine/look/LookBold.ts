@@ -62,6 +62,11 @@ export class LookBold {
     return { MAX_FIG, MAX_POOL, MAX_EMB, EMBER_PARTS: EMBER_PARTS[q], FOG_OCTAVES: Math.max(2, c.fogOctaves), EDGE_TAPS: c.edgeTaps };
   }
 
+  /** Build the pass now (the battle screen's warm-up compiles it before the first frame); `update` finds it there. */
+  prepare(q: LookQuality): void {
+    this.ensure(q);
+  }
+
   private ensure(q: LookQuality): ShaderPass {
     if (!this.pass) {
       const p = new ShaderPass({ ...LookBoldShader, defines: this.defines(q) } as never);
