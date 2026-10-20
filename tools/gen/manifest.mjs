@@ -75,6 +75,16 @@ const VARIANT = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.(.+)\.png$/;
 const HI_RES = /^([A-Za-z0-9][A-Za-z0-9_-]*)@([2-4])x\.png$/;
 
 /**
+ * `<state>.normal.png` and `<state>@2x.normal.png` — a figure's surface-normal map, the lighting maps the HD-2D look reads (release 60, `engine/look/relight/`). Only a CHOSEN state's
+ * (a stem with no dot: `attack.1.normal.png` is a candidate's, never listed). Listed in `lightMaps.normal` so the game asks for exactly the maps the build ships and a figure with
+ * none is never requested one (a 404 per pose is a console error).
+ */
+const NORMAL_MAP = /^([A-Za-z0-9][A-Za-z0-9_-]*)(?:@([2-4])x)?\.normal\.png$/;
+
+/** `<key>.depth.png` — a backdrop's depth map (the look's far fog), beside the painting `<key>.png`. Listed in `lightMaps.depth`. */
+const DEPTH_MAP = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.depth\.png$/;
+
+/**
  * A sidecar's `facing` is copied through as a trimmed, lower-cased string and
  * *interpreted* at runtime by `parseArtFacing` in `BattlePresenterActors.ts`,
  * which owns the alias table (`none`/`straight`/`camera` all mean `front`).
@@ -150,6 +160,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
 
   const charRoot = join(artRoot, 'characters');
   const subjects = {};
+  const normalMaps = {};
 
   const subjectDirs = listDir(charRoot)
     .filter((e) => e.isDirectory() && !e.name.startsWith('_') && !e.name.startsWith('.'))
@@ -161,6 +172,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     const states = [];
     const variants = new Set();
     const hi = [];
+    const normal = [];
 
     for (const entry of listDir(dir)) {
       if (!entry.isFile()) continue;
@@ -176,6 +188,11 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
       const master = HI_RES.exec(entry.name);
       if (master) {
         hi.push([master[1], Number(master[2])]);
+        continue;
+      }
+      const nm = NORMAL_MAP.exec(entry.name);
+      if (nm) {
+        normal.push([nm[1], nm[2] ? Number(nm[2]) : 1]);
         continue;
       }
       const variant = VARIANT.exec(entry.name);
@@ -216,6 +233,10 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     for (const state of Object.keys(tiers)) tiers[state].sort((a, b) => a - b);
     const tierStates = Object.keys(tiers).sort();
     const states2x = tierStates.filter((state) => tiers[state].includes(2));
+    // the figure's normal maps (release 60): `{ idle: [1, 2] }` — 1 is `<state>.normal.png`, 2 is `<state>@2x.normal.png`; a map of a state that is not chosen is never listed
+    const maps = {};
+    for (const [state, scale] of normal) if (states.includes(state)) (maps[state] ??= []).push(scale);
+    if (Object.keys(maps).length) normalMaps[id] = Object.fromEntries(Object.keys(maps).sort().map((state) => [state, maps[state].sort((x, y) => x - y)]));
     subjects[id] = {
       states,
       portrait,
@@ -234,6 +255,11 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     if (m && backdrops.includes(m[1])) (backdropTiers[m[1]] ??= []).push(Number(m[2]));
   }
   for (const key of Object.keys(backdropTiers)) backdropTiers[key].sort((a, b) => a - b);
+  // the backdrops' depth maps (release 60): `<key>.depth.png` beside a chosen backdrop `<key>.png`
+  const depthMaps = listDir(join(artRoot, 'backdrops')).flatMap((e) => (e.isFile() && DEPTH_MAP.exec(e.name) ? [DEPTH_MAP.exec(e.name)[1]] : [])).filter((k) => backdrops.includes(k)).sort();
+  // `lightMaps` (release 60): the lighting maps this tree ships, written only when it holds any, so a tree with none writes the manifest it always wrote. Once it is there it is the whole list:
+  // the game asks for a map it names and for no other (`engine/ArtManifestMaps.ts`); without it the game probes, as before.
+  const lightMaps = Object.keys(normalMaps).length || depthMaps.length ? { normal: Object.fromEntries(Object.keys(normalMaps).sort().map((k) => [k, normalMaps[k]])), depth: depthMaps } : null;
   // the rig (2026-10-17): the subjects with a `rigs/<id>/rig.json`; listed only when there are any, so a tree with no rig writes the manifest it always wrote
   const rigs = listDir(join(artRoot, 'rigs')).filter((e) => e.isDirectory() && existsSync(join(artRoot, 'rigs', e.name, 'rig.json'))).map((e) => e.name).sort();
   // the rigs that also ship their half-size textures (`<id>/1x/<every part PNG and rim mask>`, `tools/rig/rig-tiers.mjs`): a phone picks them (`engine/rig/RigTier.ts`). Listed only when the folder is complete.
@@ -256,6 +282,7 @@ export function buildManifest(artRoot = DEFAULT_ART_ROOT, opts = {}) {
     title2x: retinaStems(join(artRoot, 'title'), title),
     ...(rigs.length ? { rigs } : {}),
     ...(Object.keys(rigTiers).length ? { rigTiers } : {}),
+    ...(lightMaps ? { lightMaps } : {}),
     ...(Object.keys(backdropTiers).length ? { backdropTiers: Object.fromEntries(Object.keys(backdropTiers).sort().map((k) => [k, backdropTiers[k]])) } : {}),
   };
 

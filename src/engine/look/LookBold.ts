@@ -8,6 +8,8 @@
 import { Matrix3, Texture, TextureLoader, LinearFilter, NoColorSpace, Vector3, Vector4, type Camera, type Mesh, type Object3D, type PlaneGeometry, type Scene, type ShaderMaterial } from 'three';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { artUrl } from '../PaintedArt.ts';
+import { artManifest } from '../ArtManifest.ts';
+import { depthMapListed } from '../ArtManifestMaps.ts';
 import type { Renderer } from '../Renderer.ts';
 import { QUALITY_COST, type LookName, type LookQuality } from './LookConfig.ts';
 import { BOLD_FX, baseExtents, easeStage, invert3, reflectAmount, roomBold, shadowAmount, squareToQuad, stageEllipse, type Extents } from './LookBoldConfig.ts';
@@ -212,6 +214,11 @@ export class LookBold {
   // ----------------------------------------------------------------- the painting: depth map, homography, lamps
 
   private loadDepth(key: string): void {
+    // release 60: the art manifest names the depth maps the build ships; a room with none is not asked for one (no 404). No lightMaps in it: ask, as before.
+    if (depthMapListed(artManifest(), key) === false) {
+      this.depth = 'missing';
+      return;
+    }
     this.depth = 'loading';
     const url = artUrl(`art/backdrops/${key}.depth.png`);
     new TextureLoader().load(

@@ -37,6 +37,11 @@ export interface ArtManifestFile {
   pause2x: string[];
   /** Backdrops that also ship `<key>@2x.png`: `{ gagazet: [2] }` (release 39). Absent when none does. */
   backdropTiers?: Record<string, number[]>;
+  /**
+   * The lighting maps the tree ships (release 60; `engine/ArtManifestMaps.ts` reads it). `normal`: `{ tidus: { idle: [1, 2] } }`, 1 = `<state>.normal.png`, 2 = `<state>@2x.normal.png`;
+   * `depth`: the backdrops with a `<key>.depth.png`. Absent when the tree holds no lighting map (and then the game probes); present, it is the whole list.
+   */
+  lightMaps?: { normal: Record<string, Record<string, number[]>>; depth: string[] };
 }
 
 export interface BuildManifestOptions {

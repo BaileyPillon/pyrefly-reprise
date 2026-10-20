@@ -8,6 +8,8 @@
  */
 import { DataTexture, LinearFilter, LinearMipmapLinearFilter, NoColorSpace, RGBAFormat, Texture, TextureLoader, Vector3, Vector4, type ShaderMaterial } from 'three';
 import { logicalArtUrl, shippedArtUrl } from '../../ArtShipped.ts';
+import { artManifest } from '../../ArtManifest.ts';
+import { normalMapScaleFor } from '../../ArtManifestMaps.ts';
 import { lookState } from '../LookState.ts';
 import { MAX_POINT_LIGHTS, normalMapUrl } from './RelightConfig.ts';
 
@@ -106,7 +108,10 @@ export function bindRelight(material: ShaderMaterial, paintingUrl: string | unde
     material.needsUpdate = true;
     relightStats.bound++;
   }
-  const mapUrl = !paintingUrl || placeholder ? null : normalMapUrl(logicalArtUrl(paintingUrl), scale ?? 1);
+  const logical = !paintingUrl || placeholder ? null : logicalArtUrl(paintingUrl);
+  // release 60: the art manifest names the maps the build ships; ask for one of those, and for none when the figure has none (no 404). No lightMaps in it: ask for the scale the painting wants, as before.
+  const pick = logical === null ? null : normalMapScaleFor(artManifest(), logical, scale ?? 1);
+  const mapUrl = logical === null || pick === null ? null : normalMapUrl(logical, pick ?? scale ?? 1);
   const url = mapUrl ? shippedArtUrl(mapUrl) : null;
   material.userData['relightUrl'] = url;
   if (!url) {
