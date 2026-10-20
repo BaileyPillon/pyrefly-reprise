@@ -8,60 +8,54 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `b24614c05` (Release 55 (r55)) |
-| Bundle | `Cokaxk4X` |
-| Deployed | 2026-10-19T05:28:20.801Z (2026-10-19 01:28 EDT) |
-| Deploy log | `docs/deploys.log` line 72: cloudflare, 4630 art files, owner override |
-| Artifact (SHA-256) | `6b3c6c9202d4ca746e2a96c894f17fabf9542b18a06fbe80f87e2faebf87cb81` |
-| The deploy's own byte check | PASS (397 files compared with the build) |
-| Marker | `critic/pending/b24614c05.json` (pending) |
+| Commit | `2a1777281` (Release 58 (r58)) |
+| Bundle | `CEDFXO0J` |
+| Deployed | 2026-10-19T22:56:45.559Z (2026-10-19 18:56 EDT) |
+| Deploy log | `docs/deploys.log` line 75: cloudflare, 4630 art files, owner override |
+| Artifact (SHA-256) | `84002367112e21f3da17a6d8d75dfe459eb1b3624d216dc1fb7db7c2809c6af0` |
+| The deploy's own byte check | PASS (117 files compared with the build) |
+| Marker | `critic/pending/2a1777281.json` (pending) |
 | Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
-| CHANGELOG entry | 2026-10-18 · Release 55 (r55): Release 54 and Release 39.5 together, the Fish Audio voices, the Kimahri and Lulu rigs, the FFX command menu and Chapter III rules of the reverse-engineering stack switched on, and three small fixes |
-| Focused review | no focused report; the deep round before the deploy, critic/rounds/round-26.json: ship SHIP, changed area FAIL |
-| Live check | critic/reviews/b24614c05-live.json: deployment PASS |
+| CHANGELOG entry | 2026-10-19 · Release 58 (r58): Ifrit and Pterya drawn as jointed figures (FFX only), the continuity harness reads a rigged figure's pose changes (both games, R57-002) and the diagnosis of Shiva's feet (FFX, R57-001) |
+| Focused review | critic/reviews/2a1777281-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/2a1777281-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor b24614c05 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 2a1777281 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `b24614c05` | focused | acceptance of the changed area |
-| `b24614c05` | deep (carries 65 earlier builds) | deep review of every affected chapter and system |
+| `2a1777281` | deep (carries 68 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 65 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 68 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
-## Majors disclosed by the deep review of this build
+## Majors disclosed by the focused review of this build
 
-From `critic/rounds/round-26.json` (the deep round that reviewed the candidate; this build had no focused report) (a major that is not a regression is disclosed and carried into the next batch):
+From `critic/reviews/2a1777281-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
 | Issue | Severity | Introduced by this build | Regression against the previous live build | What |
 |---|---|---|---|---|
-| PR-0380 | major | no | no | PR-0380 (carried, CHK-027 FAIL; merges the jerk issues and the fan breakers about teleports, pops and see-through entrances): figures and some bosses jump 40 px or more in one frame at pose swaps and entrances |
-| PR-0379 | major | no | no | PR-0379 (carried, raised to major by the fan lens; merges the fan's half-motion breakers): every pose change is a dissolve, for 3 to 8 frames two poses of one figure are drawn at once |
-| PR-0459 | major | not recorded | not recorded | PR-0459 (merges PR-0457; CHK-026 FAIL, the owner's "characters change size across poses"): the continuity harness finds a painted figure moving its own stance or drawing outside its height band at pose swaps in several chapters |
-| PR-0460 | major | yes | no | PR-0460 (FFX only; confirmed by a second run): Chapter III possession links 3 to 6 draw every remaining aeon as a greyed Summon row, and Enter on one does nothing |
-| PR-0295 | major | no | no | PR-0295 (carried, still major; partly re-observed on the candidate): heavy party-prep tabs are a desktop frame shrunk onto a 390x844 phone, text about 3 px |
-| PR-0148 | major | no | no | PR-0148 (carried, ninth review): no numeric owner listening score for the shipped mix, and now none for the two chapter-select alternates or the 222 voice lines |
-| PR-0099 | major | no | no | PR-0099 (carried): eleven chapters still play borrowed or stand-in scene beds or battle cues |
-| PR-0461 | major | no | no | PR-0461 (carried class, FOC54-007 and PR-0227; same on live r54): four chapters have no real-key victory in this review, so the milestone gate CHK-022 stays open |
-| PR-0421 | major | not recorded | not recorded | PR-0421 (carried, NOT re-observed, UNVERIFIED): the Ch IV wide camera pull may show the backdrop plate edge |
+| R58-T1 | major | yes | no | The continuity harness's new rig reader counts no rig swap in a real run (tooling) |
+| R58-F1 | major | no | no | Chapter III: more pose-swap jerks and double images than live in one run (painted figures) |
+| R58-S1 | major | no | no | Shiva ready/attack/idle feet slide in Chapter XIV (painting set, unchanged, same on live) |
 
-## Branches in flight (as of 2026-10-19 03:30 EDT, the r55 records pass)
+## Branches in flight (as of 2026-10-19 20:15 EDT, the r58 records pass)
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
 | Branch | Tip | Game case | What it holds |
 |---|---|---|---|
-| `r56-fixes` | `b24614c05` | both (each fix says which game) | NOT PUSHED YET (started from r55-rc, tip shown is its base): the r55 live findings and the review tooling: LV55-1 the voice 404s of four hidden FFX chapters, LV55-2 phone taps on the Grand Summon picker, PR-0467 the greyed refusal cue, PR-0383 IMMUNE on Defend, PR-0462 and PR-0463 Kimahri's follow key and KO, LV55-4 the Overdrive help line, PR-0465 and PR-0466 the Pilgrimage on a phone and its music, and decision 134 (a review's candidate build uses the deploy's release stamp) |
-| `re-parity-r56-re` | `b24614c05` | FFX-2 only for action time, FFX for the rest | NOT PUSHED YET (the RE session builds it on r55-rc, tip shown is its base): FFX-2 action time per command ON with the Den of Woe Hero Drink trigger at 12,000 HP (item 135), the FFX-2 pins re-derived with switch-off proofs, the FFX and FF7 results identical |
-| `re-parity-rc10-x2-action-time` | `1318aeb2d` | FFX-2 only | the measured rerun of FFX-2 action time (Potion 80, Fire 75, Darkness 83 steps, 53 read hit frames), switch OFF; goes into re-parity-r56-re |
+| `r59-fixes` | `029618774` | both for the review tooling, FFX only for the route and the advisor | review-tool fixes on the r58 line: R58-T1 (the harness's rig reader counted 0 swaps because RigActor builds its PaintedActor with figure:false; Ifrit's knockout run now counts 4 of 4), the Chapter III route bug (the Doublecast card text turned 84 of 368 picks into Attack); a second lane is adding the FFX advisor fix (the Chapter XIV card follows the chapter's tactic, with an all-chapter sweep) and the head measure that compares only the same head part; not merged, not in a release |
+| `rig-expressive` | `7d15ed226` | FFX only | the expressive-keys pilot on Bahamut (rig bahamut-x, format v2 painted head, neck and wing variants in the attack and hurt keys), in progress; its result decides the method for Ifrit, Pterya, Shiva and the next aeons |
+| `rig-aeons-2` | `870c3890f` | FFX only | Bahamut, Grothia and Spathi rigs, gated OK and OFF by his pick (attack and hurt keys flatter than the paintings); Shiva's rig-off knockout measured |
+| `anim-proto-2` | `8525ae459` | FFX (Lulu); clip plumbing both games | animation pass 2 behind the dev flag ?anim=proto&style=P2: the orb toss, a gather, channel and release cast, knees, hit-stop on the game's own clip frames; he liked the orb toss (D-1070); nothing ships from it yet. Pass 1 is branch anim-proto (cfff4367d) |
+| `anim-orb-ship` | `2a1777281` | FFX only | NOT PUSHED YET (started from r58-rc, tip shown is its base): the orb toss and the self-use glow for every FFX party member's item use, FFX-2 unchanged until its own gesture lands (D-1081); the next release if it passes review |
+| `anim-proto-3` | `8525ae459` | FFX (Lulu); clip plumbing both games | NOT PUSHED YET (started from anim-proto-2, tip shown is its base): animation pass 3 on Lulu: a connected attack, a knockout that folds, the cast grey-frame fix, the FFX-2 item variant (white-blue sparkle) |
 | `rig` | `db2caa6d9` | both (shared plumbing; the subjects are FFX first) | the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off |
-| `rig-auron2` | `72528aa3b` | FFX only | Auron's rig pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); gated OK 11 of 11 and OFF in the refine queue by his pick; sheets recorded in game on 2026-10-19 |
-| `rig-rikku-dk` | `a956811b9` | FFX-2 only | Rikku Dark Knight's rig (version 2, all poses authored), gated OK and OFF in the refine queue; in-game sheets recorded on 2026-10-19 |
-| `rig-valefor` | `2af625c95` | FFX only | Valefor's rig, the first single-costume boss or aeon (the Chapter III aeons' hurt-to-KO size jump of about 25 percent first); in progress, nothing switched on |
-| `anim-proto` | `cfff4367d` | both (animation; FFX first on Lulu's approved rig) | the animation prototype: clips, springs, an idle that breathes, the item and cast actions rebuilt, shown as three labelled style videos for his pick; nothing ships from it yet |
-| `re-parity-new-chapters-1018` | `40aaa301e` | FFX only so far | research only: the Spectral Keeper data and AI extraction (research/re-ffx-spectral-keeper.md); the Fallen Maesters extraction (FFX-2) comes after r56; no engine build |
+| `rig-auron2` | `72528aa3b` | FFX only | Auron's rig pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); gated OK 11 of 11 and OFF in the refine queue by his pick |
+| `rig-rikku-dk` | `a956811b9` | FFX-2 only | Rikku Dark Knight's rig (version 2, all poses authored), gated OK and OFF in the refine queue; r57 took only its lane tools and subject config |
+| `re-parity-new-chapters-1018` | `5f7b6ffbc` | FFX (Spectral Keeper) and FFX-2 (Fallen Maesters) | research only: the Spectral Keeper and the Fallen Maesters data and AI extractions (the notes themselves went into r58 as plain files); no engine build, the chapter decisions SK1 to SK11 and FM1 to FM11 wait for Bailey |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -69,9 +63,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-10-19T22:56:45.559Z | `2a1777281` | `CEDFXO0J` | 75 |
+| 2026-10-19T19:41:57.666Z | `ed5cf5224` | `IvYB9JEE` | 74 |
+| 2026-10-19T11:57:04.679Z | `5fae4e2bd` | `nuEMlU1w` | 73 |
 | 2026-10-19T05:28:20.801Z | `b24614c05` | `Cokaxk4X` | 72 |
 | 2026-10-18T19:14:59.845Z | `4f4dc77bc` | `CLLPzAAR` | 71 |
 | 2026-10-18T07:43:48.482Z | `9c91a8c3a` | `D9wTDH4W` | 70 |
-| 2026-10-17T23:46:00.524Z | `3c92b60cc` | `NmzXqL9o` | 69 |
-| 2026-10-17T16:41:34.402Z | `d6dc0bdd7` | `zpfxlH3Y` | 68 |
-| 2026-10-17T00:44:01.323Z | `6b638df95` | `B_bQDjUG` | 67 |
