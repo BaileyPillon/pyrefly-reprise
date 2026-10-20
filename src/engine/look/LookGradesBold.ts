@@ -73,14 +73,14 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
     gagazet: {
       shadow: [0.1, 0.2, 0.66],
       highlight: [0.82, 0.96, 1.0],
-      recipe: { exposure: 0.9, gamma: 0.98, contrast: 0.76, pivot: 0.44, shoulder: 0.84, shadowSplit: 0.3, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.25, midSat: 0.25, sat: 0.96, hues: [{ hue: 195, width: 45, sat: 1.12, lum: 1.05 }] },
+      recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.4, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.3, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.25, midSat: 0.3, sat: 1.0, hues: [{ hue: 228, width: 45, sat: 0.97, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.45 }, { hue: 200, width: 40, sat: 1.1, lum: 1.06 }] },
       focus: 0.36,
     },
     // Chapter IV: violet shadows, amber lamps against the cyan skylight (each hue lifted and pulled toward itself).
     'bevelle-underground': {
       shadow: [0.2, 0.12, 0.52],
       highlight: [1.0, 0.82, 0.58],
-      recipe: { exposure: 1.0, gamma: 1.0, contrast: 0.62, pivot: 0.38, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.35, sat: 1.08, hues: [{ hue: 26, width: 32, sat: 1.25, lum: 1.12, toward: [1, 0.68, 0.26], shift: 0.3 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
+      recipe: { exposure: 0.95, gamma: 1.0, contrast: 0.5, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.35, sat: 1.08, hues: [{ hue: 26, width: 32, sat: 1.25, lum: 1.12, toward: [1, 0.68, 0.26], shift: 0.3 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
       focus: 0.4,
     },
   },
@@ -89,14 +89,14 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
     gagazet: {
       shadow: [0.03, 0.1, 0.38],
       highlight: [0.84, 0.95, 1.0],
-      recipe: { exposure: 0.86, gamma: 1.0, contrast: 0.88, pivot: 0.46, shoulder: 0.78, shadowSplit: 0.62, highlightSplit: 0.4, topBias: [1, 0.92, 0.8], topBiasAmount: 0.06, midSat: 0.2, sat: 0.85, hues: [{ hue: 195, width: 45, sat: 1.15, lum: 1.05 }] },
+      recipe: { exposure: 0.54, gamma: 1.0, contrast: 0.6, pivot: 0.32, shoulder: 0.8, shadowSplit: 0.6, highlightSplit: 0.4, topBias: [1, 0.92, 0.8], topBiasAmount: 0.06, midSat: 0.25, sat: 0.88, hues: [{ hue: 228, width: 45, sat: 0.92, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.4 }, { hue: 200, width: 40, sat: 1.1, lum: 1.05 }] },
       fog: [0.46, 0.64, 0.92],
     },
     // Chapter IV: violet-black shadows, amber lamps, cyan skylight, a cool violet fog.
     'bevelle-underground': {
       shadow: [0.1, 0.05, 0.32],
       highlight: [1.0, 0.76, 0.48],
-      recipe: { exposure: 0.94, gamma: 1.0, contrast: 0.74, pivot: 0.4, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 26, width: 32, sat: 1.3, lum: 1.15, toward: [1, 0.66, 0.24], shift: 0.35 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
+      recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 26, width: 32, sat: 1.3, lum: 1.15, toward: [1, 0.66, 0.24], shift: 0.35 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
       fog: [0.24, 0.28, 0.56],
     },
   },

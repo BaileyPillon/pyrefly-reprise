@@ -233,7 +233,9 @@ export const LookBoldShader = {
       {
         vec2 sd = vec2((uv.x - stage.x) * aspect, uv.y - stage.y) / stage.zw;
         float sm = mix(1.0 - stageAmt.x, 1.0 + stageAmt.y, exp(-dot(sd, sd) * 1.15));
-        col *= mix(sm, mix(1.0, sm, 0.5), fig);
+        // a light source keeps its light: the darkening fades out on bright pixels (the moon, the skylight, a lamp)
+        float keep = smoothstep(0.25, 0.9, lum0) * 0.9;
+        col *= mix(mix(sm, mix(1.0, sm, 0.5), fig), 1.0, keep);
       }
 
       // ---- 5. a bright rim along the back edge of each figure, in the key colour, inside the silhouette (no halo)
@@ -247,7 +249,7 @@ export const LookBoldShader = {
           float a = 6.2831853 * (float(k) + 0.5) / float(EDGE_TAPS);
           vec2 d = vec2(cos(a), sin(a));
           float bg = 1.0 - figAt(uv + d * px * ((k % 2 == 0) ? 1.0 : 0.55));
-          float w = max(0.0, dot(d, dirL)) + 0.05;
+          float w = pow(max(0.0, dot(d, dirL)), 2.2) + 0.02; // only the edges that face the light: its back edge, not an outline all round
           lit += bg * w;
           wl += w;
           sumBg += bg;
