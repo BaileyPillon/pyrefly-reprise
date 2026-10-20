@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-20 — The art manifest lists the lighting maps a build ships: `lightMaps` (release 60, branch `r60-art`; plumbing for BOTH games; additive; a manifest without it reads exactly as before)
+
+No contract file changes (none of the files above, and no type in `src/battle/common/types.ts`). Bailey, 2026-10-20: look "HD-2D bold (Recommended)", boss rigs "Yes, both (Recommended)"; "Yes, use the GPU (Recommended)" for the depth and surface-shape maps (decisions 150d, 157).
+
+- **`ArtManifest.lightMaps?: { normal: { <subject>: { <state>: [1, 2] } }, depth: [<backdrop>] }`** (`tools/gen/manifest.mjs` writes it, `src/engine/ArtManifestMaps.ts` reads it). `normal`: per subject, per CHOSEN state, the map scales a tree holds (1 = `<state>.normal.png`, 2 = `<state>@2x.normal.png`); `depth`: the backdrops with a `<key>.depth.png`. Written only when the tree holds a lighting map, so every tree without one writes the manifest it always wrote; a numbered candidate's map (`attack.1.normal.png`) and a map of an unchosen state are never listed.
+- **Absent means "probe", present means "this is the whole list".** `bindRelight` (`look/relight/FigureRelight.ts`) and `LookBold.loadDepth` ask for a map the manifest names and for none it does not (no 404 for a figure the maps lane did not cover); a painting drawn from a 2x or larger master takes the largest map listed that it wants, else the smallest listed, so a build that ships the base map only serves every tier from it. With no `lightMaps` they ask as they did (the dev server, whose maps come from outside `public/art`).
+- **The mirror tool:** `tools/art-mirror-add-maps.mjs` (`art-maps-mirror.mjs`) makes a release art mirror that carries the maps (hard links, like `art-mirror-add-rigs.mjs`).
+
+Tests: `tests/unit/art-manifest-maps.test.ts`, `art-maps-mirror.test.ts`; `art-manifest-build.test.ts` and `art-manifest-loader.test.ts` unchanged and passing.
+
 ## 2026-10-20 — The rig, format v2.1: `RigKey.fadeMs`, and the conference demo's motion switch `?motion=demo` (branch `demo-motion`; plumbing for BOTH games; additive; the switch defaults OFF)
 
 Bailey, 2026-10-19 ~21:50 EDT: "I need a way to quickly improve the graphical fidelity of the game as well as the motion, animation, visual style. I demo my game in a week at a huge gaming conference." (driver decisions 150 and 153a, "i'll go with all of your recommendations"). `src/data/art/rigTypes.ts` is not one of the five contract files but declares itself the contract between three lanes, and v1 and v2 have their own entries.
