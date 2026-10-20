@@ -28,6 +28,8 @@ import { applyIdle, RigChains } from './RigDynamics.ts';
 import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { compileStates, partStateAt } from './RigPartState.ts';
+import { fadeMsOf, fadeStart } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`)
+import { demoMotionOn } from '../motion/DemoMotion.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
 import { RIG_SHARE, rigLedger, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
@@ -80,6 +82,8 @@ export class RigActor extends PaintedActor {
   private appliedState: Int16Array;
   private stateFrom: Int16Array;
   private stateTo: Int16Array;
+  /** The length of the move into the key being shown, ms (0 for a snap): where the cross-fade of a part change is centred. */
+  private moveMs = 0;
   private readonly crossMs: number;
   private readonly rigBloomMasked: boolean;
   private rigClock: number;
@@ -192,6 +196,7 @@ export class RigActor extends PaintedActor {
     this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
     this.stateTo = this.states.get(key)!;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
+    this.moveMs = ms;
     this.trans.retarget(target, ms);
     this.layersDue = true;
     if (ms <= 0) this.pose0();
@@ -217,21 +222,24 @@ export class RigActor extends PaintedActor {
     if (!this.ready) return;
     this.trans.step(dt * paceRate('action'));
     this.rigClock += dt;
-    this.compose(dt);
+    this.compose(dt, realDt);
     this.maybeRaise();
   }
 
   /** The key's pose (mid-move or settled) plus the idle plus the chains, solved and skinned, the parts put where the plane is and drawn as opaque as the actor. */
-  private compose(dt: number): void {
+  private compose(dt: number, realDt: number = dt): void {
     if (this.layersDue && this.trans.progress >= 0.5) {
       this.layersDue = false;
       this.rig.setLayers(this.data.keys.get(this.key)?.layers ?? null);
     }
-    const shown = partStateAt(this.stateFrom, this.stateTo, this.trans.progress); // format v2: which parts show, with which image
+    // format v2: which parts show, with which image. `?motion=demo`: the change cross-fades over the key's `fadeMs`, centred on the half-way point (`RigFade.ts`); a snap (no move) stays a flip.
+    const fadeMs = demoMotionOn() && this.moveMs > 0 ? fadeMsOf(this.data.keys.get(this.key)) : 0;
+    const shown = partStateAt(this.stateFrom, this.stateTo, this.trans.progress, fadeMs > 0 ? fadeStart(this.moveMs, fadeMs) : undefined);
     if (shown !== this.appliedState) {
-      this.rig.setPartState(shown);
+      this.rig.setPartState(shown, fadeMs);
       this.appliedState = shown;
     }
+    this.rig.advanceFades(realDt * 1000); // on the real clock: a hit-stop that holds the field never freezes a half-mixed pair of images
     this.work.set(this.trans.current);
 
     const down = this.lifeState === 'down';

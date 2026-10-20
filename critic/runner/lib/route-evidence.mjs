@@ -110,14 +110,17 @@ export async function openRoute({ base, width, height, touch = false, gamepad = 
     if (/\.(png|jpg|jpeg|webp|mp3|ogg|wav)(\?|$)/i.test(r.url()) && ct.includes('text/html')) htmlImages.push({ url: r.url(), ct });
   });
   page.on('request', (r) => { if (/\.(png|jpg|jpeg|webp|mp3|ogg|wav|m4a)(\?|$)/i.test(r.url())) net.push(r.url().replace(base, '')); });
+  // PYREFLY_QUERY="?motion=demo" (or "?a=1&b=2"): the address the page is opened at gets this query, to measure a switch on a build (the demo motion's A/B in the continuity harness); it is recorded in `contexts.query`
+  const start = process.env.PYREFLY_QUERY ? `${base}${process.env.PYREFLY_QUERY.startsWith('?') ? '' : '?'}${process.env.PYREFLY_QUERY}` : base;
   if (fresh) {
-    await page.goto(base, { waitUntil: 'domcontentloaded' });
+    await page.goto(start, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => { try { localStorage.clear(); } catch { /* blocked storage */ } });
   }
-  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await page.goto(start, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 120000 });
   const contexts = {
     viewport: `${width}x${height}`,
+    query: process.env.PYREFLY_QUERY ?? null,
     touch: touch ? { hasTouch: true, isMobile: true, taps: 0, tapped: [], keyboardFallbacks: 0 } : null,
     gamepad: gamepad
       ? { shim: 'navigator.getGamepads init script, one standard-mapping pad', presses: 0, byButton: {}, keyboardFallbacks: {}, padSeenByPage: await page.evaluate(() => (navigator.getGamepads?.() ?? []).filter(Boolean).length) }

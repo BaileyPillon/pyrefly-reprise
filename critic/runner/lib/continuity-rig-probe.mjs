@@ -103,7 +103,7 @@ export function createRigReader(cfg) {
       const kids = a.figure.plane.children;
       let sum = 0, any = false;
       for (const m of kids) {
-        if (!m.visible) continue;
+        if (!m.visible || String(m.name).endsWith('~ghost')) continue; // a part's ghost (the look going out of a `?motion=demo` cross-fade, RigGhost.ts) is the same part, not another one
         const ar = areaOf(m);
         if (ar === null) continue;
         sum += ar; any = true;

@@ -35,6 +35,7 @@ import {
 import { syncPaintedBloom } from '../BloomMask.ts';
 import type { RigData, RigPartData, RigVariantData } from './RigData.ts';
 import { HIDDEN, OWN, restState } from './RigPartState.ts';
+import { advanceFades, applyOpacity, beginFade, endFade, pointGhost, type GhostEnv, type Look, type PartRt } from './RigGhost.ts'; // `?motion=demo`: a part's image swap cross-fades instead of flipping (format v2.1 `fadeMs`)
 import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
 import { RigSkeleton } from './RigSkeleton.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
@@ -42,25 +43,6 @@ import { rigFileUrl, type RigScale, type RigTextures } from './RigTier.ts';
 
 /** World-z step between draw-order layers: far below anything that reorders two actors, far above double precision's sort noise. */
 export const LAYER_DZ = 0.002;
-
-/** One image of a part with its mesh: the part's own (index 0) or a variant's. */
-interface Look {
-  src: RigPartData | RigVariantData;
-  geo: BufferGeometry;
-  pos: Float32Array;
-  map: Texture;
-  rim: Texture | null;
-}
-
-interface PartRt {
-  data: RigPartData;
-  mesh: Mesh;
-  material: ShaderMaterial;
-  /** `looks[0]` is the part's own, `looks[i + 1]` is `data.variants[i]`. */
-  looks: Look[];
-  /** The part's state: `HIDDEN`, `OWN`, or the index of the variant shown. */
-  state: number;
-}
 
 const configure = (t: Texture, mips: boolean): Texture => {
   t.colorSpace = SRGBColorSpace;
@@ -88,6 +70,7 @@ export class RigFigure {
   private constructor(readonly data: RigData, private readonly carrier: CarrierInternals) {
     this.skeleton = new RigSkeleton(data);
     this.plane.name = `rig-${data.name}`;
+    this.ghostEnv = { carrier, plane: this.plane, white: () => this.whiteMask(), texel: () => this.texelSeen };
   }
 
   /**
@@ -147,6 +130,7 @@ export class RigFigure {
         old.dispose();
       });
       p.material.uniforms['map']!.value = this.lookOf(p).map;
+      if (p.ghost && p.fade?.from) p.ghost.material.uniforms['map']!.value = p.fade.from.map;
     });
     this.scales = { ...this.scales, map: scale };
   }
@@ -211,7 +195,7 @@ export class RigFigure {
       }
       mesh.visible = rest[layer] !== HIDDEN;
       this.plane.add(mesh);
-      this.parts.push({ data: p, mesh, material, looks, state: rest[layer]! });
+      this.parts.push({ data: p, mesh, material, looks, state: rest[layer]!, fade: null, ghost: null, kIn: 1, kOut: 0 });
     });
     this.carrier.inner.add(this.plane);
     this.sync();
@@ -226,12 +210,18 @@ export class RigFigure {
   /**
    * Show, hide and swap parts to the state `s` (`RigPartState.ts`, one number a part in `data.parts` order). Cheap when nothing changed; a change is a few assignments, once. The caller skins after it
    * (`RigActor.compose` does), because a part that was hidden has not been skinned since it went.
+   *
+   * `fadeMs` over 0 (`?motion=demo`, `RigFade.ts`): the change CROSS-FADES instead of flipping. The look that goes out stays on the part's ghost mesh while the new one comes up on its own, and
+   * {@link advanceFades} runs it; 0 (the default) is the flip, exactly as v2.0.
    */
-  setPartState(s: Int16Array): void {
+  setPartState(s: Int16Array, fadeMs = 0): void {
     this.parts.forEach((p, i) => {
       const v = s[i] ?? OWN;
       if (v === p.state) return;
+      const was = p.state === HIDDEN ? null : this.lookOf(p);
       p.state = v;
+      if (fadeMs > 0) beginFade(this.ghostEnv, p, was, fadeMs);
+      else endFade(p);
       if (v === HIDDEN) {
         p.mesh.visible = false;
         return;
@@ -246,6 +236,19 @@ export class RigFigure {
       setPartTexel(p.material, this.texelSeen, l.src.box[2], l.src.box[3]);
       p.mesh.visible = this.plane.visible;
     });
+  }
+
+  /** Move every running cross-fade on by `ms` of REAL time (a hit-stop never freezes a half-mixed pair of images). Call it before {@link setOpacity}. */
+  advanceFades(ms: number): void {
+    advanceFades(this.parts, ms);
+  }
+
+  /** What the ghost meshes need of this figure. */
+  private readonly ghostEnv: GhostEnv;
+
+  /** True while any part is cross-fading (for the tests and `rigInfo`). */
+  get fading(): boolean {
+    return this.parts.some((p) => p.fade !== null);
   }
 
   /** The state the parts are in now (a copy), for the tests and `rigInfo`. */
@@ -272,6 +275,7 @@ export class RigFigure {
       for (const p of this.parts) {
         const box = this.lookOf(p).src.box;
         setPartTexel(p.material, k, box[2], box[3]);
+        if (p.ghost && p.fade?.from) pointGhost(this.ghostEnv, p.ghost, p.fade.from);
       }
     }
   }
@@ -284,6 +288,11 @@ export class RigFigure {
   /** Move the vertices of every part that is drawn through the skeleton's current pose (a hidden part costs nothing). */
   skin(): void {
     for (const p of this.parts) {
+      const out = p.fade?.from;
+      if (out && (p.state === HIDDEN || out.geo !== this.lookOf(p).geo)) {
+        this.skeleton.skin(out.src, out.pos); // the look going out is posed too (its own mesh, when it has one)
+        (out.geo.getAttribute('position') as BufferAttribute).needsUpdate = true;
+      }
       if (p.state === HIDDEN) continue;
       const l = this.lookOf(p);
       this.skeleton.skin(l.src, l.pos);
@@ -294,16 +303,16 @@ export class RigFigure {
   /** The actor's alpha onto every part (the shader multiplies it into the painting's own). */
   setOpacity(alpha: number, visible: boolean): void {
     const on = visible && alpha > 0.001;
-    for (const p of this.parts) {
-      p.material.uniforms['opacity']!.value = alpha;
-      p.mesh.visible = on && p.state !== HIDDEN;
-    }
+    applyOpacity(this.parts, alpha, on);
     this.plane.visible = on;
   }
 
   /** The parts' blending follows the actor's (`BloomMask.syncPaintedBloom`): the bloom mask while whole, plain blending while dissolving or when the scene does not mask the figure. */
   syncBloom(dissolving: boolean, masked: boolean): void {
-    for (const p of this.parts) syncPaintedBloom(p.material, dissolving, masked);
+    for (const p of this.parts) {
+      syncPaintedBloom(p.material, dissolving, masked);
+      if (p.ghost) syncPaintedBloom(p.ghost.material, dissolving, masked);
+    }
   }
 
   /** The parts' materials in draw order (the tests read the shared cells through them). */
@@ -323,6 +332,7 @@ export class RigFigure {
     for (const p of this.parts) {
       for (const geo of new Set(p.looks.map((l) => l.geo))) geo.dispose();
       p.material.dispose();
+      p.ghost?.material.dispose();
       for (const l of p.looks) {
         l.map.dispose();
         l.rim?.dispose();

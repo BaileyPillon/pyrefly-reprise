@@ -33,6 +33,8 @@
  */
 
 import { koCross } from './PoseBlend.ts';
+import { DEMO_KO_CROSS_MS } from './motion/DemoBlend.ts';
+import { demoMotionOn } from './motion/DemoMotion.ts';
 
 export type KoGame = 'ffx' | 'ffx2';
 
@@ -49,6 +51,8 @@ export const PUFF_FALL = 1;
 export const PUFF_REVIVE = 0.6;
 /** What a revive takes in all: the cross and the rise. Must stay under `TIMING.revive` (520) so the menu is never delayed. */
 export const REVIVE_MS = KO_CROSS_MS + RISE_MS;
+/** The cross a KO or a revive plays now: `KO_CROSS_MS`, or the demo's slightly longer one under `?motion=demo` (`motion/DemoBlend.ts`; 100 ms, still inside the landing squash and `TIMING.revive`). */
+export const koCrossMs = (): number => (demoMotionOn() ? DEMO_KO_CROSS_MS : KO_CROSS_MS);
 
 /** Figures built for size: a buckle and a cross suit them, a topple would swing a plane the size of the screen. Same list `living.ts` breathes slowly by. */
 export const KO_GIANTS = /^(braskas-final-aeon|seymour-natus|yojimbo|anima|x2-anima|seymour-omnis|ixion|x2-ixion|bahamut|ffx2-bahamut|evrae)/;
@@ -265,17 +269,17 @@ export function fallRun(mode: KoMode, game: KoGame): KoRun | null {
     case 'flip':
       return new KoRun({ kind: 'fall', holdMs: hold, crossMs: 0, riseMs: 0, travel: false, buckle: true, puff: 0 });
     case 'cross':
-      return new KoRun({ kind: 'fall', holdMs: 0, crossMs: KO_CROSS_MS, riseMs: 0, travel: false, buckle: false, puff: 0 });
+      return new KoRun({ kind: 'fall', holdMs: 0, crossMs: koCrossMs(), riseMs: 0, travel: false, buckle: false, puff: 0 });
     case 'buckle-cross':
-      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: KO_CROSS_MS, riseMs: 0, travel: false, buckle: true, puff: 0 });
+      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: koCrossMs(), riseMs: 0, travel: false, buckle: true, puff: 0 });
     default:
-      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: KO_CROSS_MS, riseMs: 0, travel: true, buckle: true, puff: PUFF_FALL });
+      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: koCrossMs(), riseMs: 0, travel: true, buckle: true, puff: PUFF_FALL });
   }
 }
 
 /** The revive's run: with `travel` the lying body crosses to the toppled figure and stands up (FA-3); without, only the short cross (figures that never topple). REDUCE MOTION plays no run at all: the actor's own blend, as before FA-3. */
 export function reviveRun(travel: boolean): KoRun {
-  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: KO_CROSS_MS, riseMs: travel ? RISE_MS : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0 });
+  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: koCrossMs(), riseMs: travel ? RISE_MS : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0 });
 }
 
 // ------------------------------------------------------------------------- the dust puff
