@@ -132,6 +132,8 @@ interface PointRt extends PointSpring {
   sy: Spring1;
   bx: number;
   by: number;
+  /** Pass 3: held, the spring follows its target exactly and adds nothing (a doll that is thrown lands where it is aimed). */
+  held?: boolean;
 }
 interface ChainRt {
   chain: VerletChain;
@@ -187,6 +189,11 @@ export class SecondaryLayer {
 
   get size(): number {
     return this.rots.length + this.points.length + this.chains.length;
+  }
+
+  /** Pass 3: hold (or let go) the point spring on `bone`: held, it follows its target exactly and adds nothing, and on the step it is let go it starts at rest on the target (no jump). */
+  holdPoint(bone: number, on: boolean): void {
+    for (const p of this.points) if (p.i === bone) p.held = on;
   }
 
   /** The next step starts every spring and chain at rest on its target (a figure placed or snapped to a pose does not swing to it). */
@@ -247,7 +254,7 @@ export class SecondaryLayer {
     for (const q of this.points) {
       q.bx = work[q.i * ch + 1]!;
       q.by = work[q.i * ch + 2]!;
-      if (init) {
+      if (init || q.held) {
         q.sx.reset(q.bx - (q.drag ?? 0) * fwd);
         q.sy.reset(q.by);
       } else {
@@ -267,6 +274,7 @@ export class SecondaryLayer {
     const ch = this.ch;
     for (const r of this.rots) work[r.i * ch] = work[r.i * ch]! + gm * r.gain * clamp(r.s.y - r.base, -r.limit * DEG, r.limit * DEG);
     for (const q of this.points) {
+      if (q.held) continue;
       work[q.i * ch + 1] = work[q.i * ch + 1]! + gm * q.gain * clamp(q.sx.y - q.bx, -q.limit, q.limit);
       work[q.i * ch + 2] = work[q.i * ch + 2]! + gm * q.gain * clamp(q.sy.y - q.by, -q.limit, q.limit);
     }

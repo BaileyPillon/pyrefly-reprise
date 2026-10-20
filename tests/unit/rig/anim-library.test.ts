@@ -31,7 +31,7 @@ function bare(): ClipRig {
 
 describe('the three styles', () => {
   it('are three different parameter sets over the same shape, and A is the quickest to move and C the slowest', () => {
-    expect(Object.keys(STYLES)).toEqual(['A', 'B', 'C', 'P2']); // P2 is pass 2 (`anim-pass2.test.ts`)
+    expect(Object.keys(STYLES)).toEqual(['A', 'B', 'C', 'P2', 'P3']); // P2 is pass 2 (`anim-pass2.test.ts`)
     expect(STYLE_A.attack.anticipation).toBeLessThan(STYLE_B.attack.anticipation);
     expect(STYLE_B.attack.anticipation).toBeLessThan(STYLE_C.attack.anticipation);
     expect(STYLE_A.attack.action).toBeLessThan(STYLE_B.attack.action);

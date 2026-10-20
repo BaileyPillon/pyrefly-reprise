@@ -17,15 +17,21 @@ import { LULU } from './LuluAnim.ts';
 import { animFromQuery, type AnimStyle } from './AnimStyles.ts';
 import { VialProp } from './AnimProp.ts';
 import { AnimFx } from './AnimFx.ts';
+import type { BendSpec } from './AnimBend.ts';
+
+/** The name of the pseudo-bone whose `rot` is the knee's bend (pass 3): one more than the rig's last bone. */
+export const BEND_BONE = '@bend';
 
 /** What the layer needs of the actor: where it stands, the scene it is in, a landmark of the posed rig (local world units). */
 export interface AnimHost {
   readonly position: { x: number; y: number; z: number };
   readonly parent: Object3D | null;
   landmark(name: string): { x: number; y: number } | null;
+  /** Pass 3: where a world point is in the figure's painting (px), as the camera shows it (`RigPaint.ts`); null before it is drawn. */
+  paintOf?(p: { x: number; y: number; z: number }): { x: number; y: number } | null;
   /** The rig's plane, whose scale is the figure's size in world units. */
   flash(colour?: number | string, ms?: number, peak?: number): void;
-  readonly figure: { plane: { scale: { y: number } }; setSmear(names: readonly string[], dx: number, dy: number, on: boolean): boolean };
+  readonly figure: { plane: { scale: { y: number } }; setSmear(names: readonly string[], dx: number, dy: number, on: boolean): boolean; setBend(spec: BendSpec | null): void };
 }
 
 /** The prototype is a dev tool: a production bundle replaces `import.meta.env.DEV` with false and never reads the query. */
@@ -69,8 +75,10 @@ export class RigAnimLayer {
 
   private constructor(host: AnimHost, data: RigData, compiled: ReadonlyMap<string, Float64Array>, style: AnimStyle, subject: Subject, pxPerUnit: number) {
     this.host = host;
-    const channels = data.bones.length * 5;
-    this.anim = new RigAnimator({ boneIndex: data.boneIndex, roots: data.roots, keys: compiled, channels, bones: data.bones, skeleton: new RigSkeleton(data) }, style, subject, pxPerUnit);
+    const channels = compiled.get('idle')!.length; // pass 3: one pseudo-bone longer than the rig's own
+    const boneIndex = channels > data.bones.length * 5 ? new Map([...data.boneIndex, [BEND_BONE, data.bones.length]]) : data.boneIndex;
+    this.anim = new RigAnimator({ boneIndex, roots: data.roots, keys: compiled, channels, bones: data.bones, skeleton: new RigSkeleton(data) }, style, subject, pxPerUnit);
+    if (style.p3 && subject.bend) host.figure.setBend(subject.bend);
     this.vel = new Float64Array(channels);
     this.imageH = data.image.h;
     if (style.p2) this.fx = new AnimFx();
@@ -109,6 +117,7 @@ export class RigAnimLayer {
   /** One frame: the clip's pose into `work` (and into `trans`, so a request that is not a clip moves on from here), the living layer, the secondary motion; solves `sk` twice. */
   compose(work: Float64Array, trans: RigTransition, sk: RigSkeleton, f: AnimFrame): void {
     this.rate = f.rate;
+    if (this.anim.throwsDoll) this.anim.setAim(this.targets[0] && this.host.paintOf ? this.host.paintOf(this.targets[0]) : null); // pass 3: the doll is thrown where the target is on screen now
     if (this.anim.step(f, work, this.vel)) trans.drive(work, this.vel);
     this.anim.idle(work, f);
     sk.solve(work);

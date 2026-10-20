@@ -20,6 +20,7 @@ import { compileClip, compilePose, sampleClip, unwrapTargets } from '../../../sr
 import { STYLES } from '../../../src/engine/rig/anim/AnimStyles.ts';
 import { clipRigOf } from './anim-rig.mjs';
 import { LULU, LULU_ACCENTS } from '../../../src/engine/rig/anim/LuluAnim.ts';
+import { LULU_KNEE } from '../../../src/engine/rig/anim/LuluAnim3.ts';
 import { Carry } from '../../../src/engine/rig/anim/AnimCarry.ts';
 
 const args = Object.fromEntries(process.argv.slice(2).reduce((acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1] && !all[i + 1].startsWith('--') ? all[i + 1] : true]] : acc), []));
@@ -29,7 +30,8 @@ async function main() {
   const { rt, problems } = normaliseRig(raw, { dir });
   if (!rt) throw new Error(problems.map((p) => p.message).join('; '));
   await loadTextures(rt, dir);
-  const rig = clipRigOf(rt);
+  if (args.bend) rt.bendSpec = LULU_KNEE; // pass 3: the knee of a skirt with no legs (`--bend`: the pseudo-bone `@bend` carries it)
+  const rig = clipRigOf(rt, Boolean(args.bend));
   const scale = Number(args.scale ?? 0.26);
   const frame = { W: Math.round(rt.image.w * 2.1 * scale), H: Math.round(rt.image.h * scale), sx: scale, sy: scale, ox: rt.image.w * 0.45 * scale, oy: 0 };
   const cells = [];
@@ -45,7 +47,7 @@ async function main() {
     for (const name of String(args.keys).split(',')) cells.push({ label: name, ch: rig.keys.get(name) });
   } else {
     const style = STYLES[String(args.style ?? 'A').toUpperCase()];
-    const lib = libraryFor(style, args.subject === 'lulu' ? LULU_ACCENTS : {}, args.subject === 'lulu' ? LULU.p2 : undefined);
+    const lib = libraryFor(style, args.subject === 'lulu' ? LULU_ACCENTS : {}, args.subject === 'lulu' ? LULU.p2 : undefined, undefined, args.subject === 'lulu' ? LULU.p3 : undefined);
     const defs = { ready: lib.ready, windup: lib.windup, strike: lib.strike, follow: lib.follow, cast: lib.cast, item: lib.item, hurt: lib.hurt, ko: lib.ko, victory: lib.victory, ...(lib.itemSelf ? { itemSelf: lib.itemSelf } : {}), ...(lib.extra ?? {}), ...(args.defs ? (await import(pathToFileURL(String(args.defs)).href)).default : {}) };
     const name = String(args.clip);
     const def = name.startsWith('recover:') ? lib.recover(name.slice(8)) : defs[name];
@@ -74,7 +76,7 @@ async function main() {
   const rows = Math.ceil(cells.length / per);
   const comps = [];
   for (let i = 0; i < cells.length; i++) {
-    const buf = render(rt, toGatePose(cells[i].ch), frame);
+    const buf = render(rt, toGatePose(cells[i].ch, rt.bones.length), frame);
     const png = await sharp(buf, { raw: { width: frame.W, height: frame.H, channels: 4 } }).png().toBuffer();
     const x = (i % per) * frame.W, y = Math.floor(i / per) * (frame.H + 24);
     comps.push({ input: png, left: x, top: y + 24 });

@@ -5,8 +5,31 @@
 import { join } from 'node:path';
 import sharp from 'sharp';
 import { solve, skinPart, through } from '../rig-pose.mjs';
+import { PartBend } from '../../../src/engine/rig/anim/AnimBend.ts';
 
-export const toGatePose = (ch) => ({ bones: Float64Array.from(ch), root: [0, 0, 0] });
+/** A channel array as the gate's pose; with `nb` (the rig's bone count) and a longer array, the pseudo-bone after the bones carries the knee's bend (pass 3). */
+export const toGatePose = (ch, nb) => ({ bones: Float64Array.from(ch), root: [0, 0, 0], bend: nb !== undefined && ch.length > nb * 5 ? ch[nb * 5] : 0 });
+
+/** The knees of a rig (`rt.bendSpec`, set by the caller): a PartBend a part named in the spec, made once. */
+export function bendsOf(rt) {
+  if (!rt.bendSpec) return null;
+  if (!rt.bends) {
+    const c = rt.bones.findIndex((b) => b.name === rt.bendSpec.carrier);
+    rt.bends = new Map(rt.parts.filter((p) => rt.bendSpec.parts.includes(p.name) && c >= 0).map((p) => [p.name, new PartBend(p.verts, rt.bendSpec, c)]));
+  }
+  return rt.bends;
+}
+
+/** Skin `part` into `out` (px pairs) and bend it by `pose.bend` where the rig has a knee for it. */
+export function skinBent(rt, part, k, pose, out) {
+  skinPart(part, k, out);
+  const pb = pose.bend ? bendsOf(rt)?.get(part.name) : undefined;
+  if (!pb) return;
+  pb.prepare(k, pose.bend);
+  if (!pb.active) return;
+  const o = { x: 0, y: 0 };
+  for (let i = 0; i < out.length / 2; i++) { pb.at(i, out[i * 2], out[i * 2 + 1], o); out[i * 2] = o.x; out[i * 2 + 1] = o.y; }
+}
 
 /** The rig-pose maths as the carry's skeleton: world matrices from the skin matrices' linear part and the joints. */
 export function carrySkeleton(rt) {
@@ -53,7 +76,7 @@ export function render(rt, pose, frame) {
     if (part.hidden) continue;
     const n = part.verts.length / 2;
     const posed = new Float64Array(n * 2);
-    skinPart(part, k, posed);
+    skinBent(rt, part, k, pose, posed);
     const X = new Float64Array(n), Y = new Float64Array(n), U = new Float64Array(n), V = new Float64Array(n);
     for (let i = 0; i < n; i++) { X[i] = posed[i * 2] * sx + ox; Y[i] = posed[i * 2 + 1] * sy + oy; U[i] = part.tuv[i * 2] * part.tex.w; V[i] = part.tuv[i * 2 + 1] * part.tex.h; }
     const layer = new Float32Array(W * H * 4);

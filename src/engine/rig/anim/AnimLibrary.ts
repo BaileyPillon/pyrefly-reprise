@@ -17,6 +17,8 @@ import type { IdleSpec } from './AnimIdle.ts';
 import type { SecondarySpec } from './AnimSecondary.ts';
 import type { AnimStyle } from './AnimStyles.ts';
 import type { P2Poses } from './AnimLibrary2.ts';
+import type { P3Poses } from './AnimLibrary3.ts';
+import type { BendSpec } from './AnimBend.ts';
 
 export type Deltas = Readonly<Record<string, BoneDelta>>;
 
@@ -53,6 +55,9 @@ export interface Subject {
   smear?: { parts: readonly string[]; dx: number; dy: number };
   /** Pass 2 (`P2`): the poses authored for this subject (cast, item, hurt, KO); any absent pose is derived from the keys. */
   p2?: P2Poses;
+  /** Pass 3: the knee (a skirt that has no legs under it, `AnimBend.ts`) and the poses authored with it (`p3`: the KO that folds). */
+  bend?: BendSpec;
+  p3?: P3Poses;
 }
 
 /** How long the presenter should wait after the action starts before its main beat, as a mark and an offset: `marks[mark] + offsetMs`. */

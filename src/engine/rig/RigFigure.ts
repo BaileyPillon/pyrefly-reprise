@@ -38,6 +38,7 @@ import { HIDDEN, OWN, restState } from './RigPartState.ts';
 import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
 import { makeSmear } from './RigSmear.ts';
 import { RigSkeleton } from './RigSkeleton.ts';
+import { PartBend, type BendSpec } from './anim/AnimBend.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
 import { rigFileUrl, type RigScale, type RigTextures } from './RigTier.ts';
 
@@ -86,6 +87,7 @@ export class RigFigure {
   private seen: { camera: PerspectiveCamera; height: number } | null = null;
   private readonly bufferSize = new Vector2();
   private readonly smears = new Map<string, Texture>(); // the animation prototype's smear frames, drawn on first use (`RigSmear.ts`)
+  private readonly bends = new Map<string, PartBend>(); // pass 3: the parts a knee bends (`anim/AnimBend.ts`); empty unless the prototype asks
 
   private constructor(readonly data: RigData, private readonly carrier: CarrierInternals) {
     this.skeleton = new RigSkeleton(data);
@@ -302,12 +304,21 @@ export class RigFigure {
     for (const p of this.parts) p.mesh.position.z = (layers?.[p.data.name] ?? p.data.order) * LAYER_DZ;
   }
 
-  /** Move the vertices of every part that is drawn through the skeleton's current pose (a hidden part costs nothing). */
-  skin(): void {
+  /** Pass 3: the parts `spec` names get a knee (`bend` of `skin` turns it on); null removes it. */
+  setBend(spec: BendSpec | null): void {
+    this.bends.clear();
+    const c = spec ? this.skeleton.data.boneIndex.get(spec.carrier) : undefined;
+    if (spec && c !== undefined) for (const p of this.parts) if (spec.parts.includes(p.data.name)) this.bends.set(p.data.name, new PartBend(p.looks[0]!.src.verts, spec, c));
+  }
+
+  /** Move the vertices of every part that is drawn through the skeleton's current pose (a hidden part costs nothing). `bend`: radians of knee (pass 3), 0 for none. */
+  skin(bend = 0): void {
     for (const p of this.parts) {
       if (p.state === HIDDEN) continue;
       const l = this.lookOf(p);
-      this.skeleton.skin(l.src, l.pos);
+      const b = l === p.looks[0] ? this.bends.get(p.data.name) : undefined;
+      b?.prepare(this.skeleton.k, bend);
+      this.skeleton.skin(l.src, l.pos, b?.active ? b : undefined);
       (l.geo.getAttribute('position') as BufferAttribute).needsUpdate = true;
     }
   }

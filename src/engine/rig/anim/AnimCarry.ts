@@ -66,9 +66,9 @@ export class Carry {
 
   /**
    * Put the bone at its landmark plus the offset blended `e` of the way from `from` (two numbers) to segment `seg` of `offsets`: `pose` is the clip's pose for that moment and gets the bone's `dx`
-   * and `dy`. (`e` is the move's eased progress and may leave 0..1.)
+   * and `dy`. (`e` is the move's eased progress and may leave 0..1.) `move` (pass 3: the doll's throw) may put the joint somewhere else, in painting px of the master: it is given where the hand carries it.
    */
-  place(pose: Float64Array, offsets: Float64Array, from: Float64Array, seg: number, e: number): void {
+  place(pose: Float64Array, offsets: Float64Array, from: Float64Array, seg: number, e: number, move?: (x: number, y: number) => { x: number; y: number } | null): void {
     const px = seg === 0 ? from[0]! : offsets[2 * (seg - 1)]!;
     const py = seg === 0 ? from[1]! : offsets[2 * (seg - 1) + 1]!;
     const sk = this.sk;
@@ -76,8 +76,15 @@ export class Carry {
     const f = sk.landmark(this.landmark, this.pt);
     if (!f) return;
     const q = this.parent * 6;
-    const wx = f.x + px + (offsets[2 * seg]! - px) * e - sk.m[q + 4]!;
-    const wy = f.y + py + (offsets[2 * seg + 1]! - py) * e - sk.m[q + 5]!;
+    let jx = f.x + px + (offsets[2 * seg]! - px) * e;
+    let jy = f.y + py + (offsets[2 * seg + 1]! - py) * e;
+    const moved = move?.(jx, jy);
+    if (moved) {
+      jx = moved.x;
+      jy = moved.y;
+    }
+    const wx = jx - sk.m[q + 4]!;
+    const wy = jy - sk.m[q + 5]!;
     const m0 = sk.m[q]!, m1 = sk.m[q + 1]!, m2 = sk.m[q + 2]!, m3 = sk.m[q + 3]!;
     const det = m0 * m3 - m1 * m2;
     if (Math.abs(det) < 1e-9) return;

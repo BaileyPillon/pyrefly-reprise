@@ -4,17 +4,20 @@
  */
 import { CH } from '../../../src/engine/rig/anim/AnimClip.ts';
 
-export function clipRigOf(rt) {
+/** `bend` (pass 3): one pseudo-bone `@bend` after the real ones, whose `rot` is the knee's bend, as `RigAnimLayer` does for a figure the prototype's P3 style is on. */
+export function clipRigOf(rt, bend = false) {
   const boneIndex = new Map(rt.bones.map((b, i) => [b.name, i]));
+  if (bend) boneIndex.set('@bend', rt.bones.length);
   const roots = rt.bones.flatMap((b, i) => (b.parent < 0 ? [i] : []));
   const keys = new Map();
+  const total = rt.bones.length + (bend ? 1 : 0);
   for (const [name, k] of Object.entries(rt.keys)) {
-    const a = new Float64Array(rt.bones.length * CH);
-    for (let i = 0; i < rt.bones.length; i++) { a[i * CH + 3] = 1; a[i * CH + 4] = 1; }
+    const a = new Float64Array(total * CH);
+    for (let i = 0; i < total; i++) { a[i * CH + 3] = 1; a[i * CH + 4] = 1; }
     for (const [bn, c] of Object.entries(k.bones)) a.set([c.rot, c.dx, c.dy, c.sx, c.sy], boneIndex.get(bn) * CH);
     for (const r of roots) { a[r * CH] += k.root.rot; a[r * CH + 1] += k.root.dx; a[r * CH + 2] += k.root.dy; }
     keys.set(name, a);
   }
-  return { boneIndex, roots, keys, channels: rt.bones.length * CH, bones: rt.bones };
+  return { boneIndex, roots, keys, channels: total * CH, bones: rt.bones };
 }
 

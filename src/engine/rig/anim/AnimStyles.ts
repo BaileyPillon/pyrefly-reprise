@@ -7,9 +7,10 @@
  * option stretches it; the animator's clock is scaled the same way).
  */
 import type { EaseSpec } from './AnimEase.ts';
+import type { DollSpec } from './AnimDoll.ts';
 import type { SecondaryTune } from './AnimSecondary.ts';
 
-export type StyleId = 'A' | 'B' | 'C' | 'P2';
+export type StyleId = 'A' | 'B' | 'C' | 'P2' | 'P3';
 
 export interface IdleStyle {
   /** Breaths a second. */
@@ -41,6 +42,12 @@ export interface P2Spec {
   selfWait: number;
   /** The presenter waits for the clip's end signal (the game's attack, cast and item clips end with one) before it lets the actor go home. */
   lockToEnd: boolean;
+}
+
+/** Pass 3 (`P3`): what P2 did not do. The attack is a doll thrown at the target (no lunge); the KO folds at the knees and hips (`AnimBend.ts`); the cast's channel is drawn bigger (`AnimFx.ts`). */
+export interface P3Spec {
+  /** Lulu's doll throw (`AnimDoll.ts`); absent: the attack is the strike clip alone. */
+  doll: DollSpec;
 }
 
 export interface AnimStyle {
@@ -77,6 +84,8 @@ export interface AnimStyle {
   glow: number;
   /** Pass 2 only: the clock is the game's (`AnimRE.ts`), the clips come from `AnimLibrary2.ts`. */
   p2?: P2Spec;
+  /** Pass 3 only (`p2` is carried too: pass 3 is pass 2's clock and clips with these on top). */
+  p3?: P3Spec;
 }
 
 /** A "Faithful FFX": the researcher's SNAPPY profile. Readable, hard ease-out into contact, a short hit-stop, modest overshoot. */
@@ -177,7 +186,20 @@ export const STYLE_P2: AnimStyle = {
   p2: { castDwell: 800, itemDwell: 330, castType: 1, hitStopWeak: 30, hitStopStrong: 80, orbFlight: 420, selfWait: 160, lockToEnd: true },
 };
 
-export const STYLES: Readonly<Record<StyleId, AnimStyle>> = { A: STYLE_A, B: STYLE_B, C: STYLE_C, P2: STYLE_P2 };
+/**
+ * P3, pass 3 (Bailey, 2026-10-19: "I like the orb toss, keep going", "i'll go with all of your recommendations"): pass 2 with a CONNECTED attack (the doll flies to the target and lands on the game's contact frame; Lulu
+ * does not lunge), a KO that FOLDS (the knees give, the skirt below the knee lies back on the floor, the torso folds, then the body tips onto the key), a cast whose channel is drawn bigger, and the item exactly as pass 2.
+ * Times and poses of every other clip are pass 2's.
+ */
+export const STYLE_P3: AnimStyle = {
+  ...STYLE_P2,
+  id: 'P3',
+  label: 'Pass 3',
+  blurb: "Pass 2 with a doll that is thrown and lands on the target at the game's frame 20, a KO that folds at the knees, a cast whose channel reads on screen; the orb toss unchanged.",
+  p3: { doll: { departMs: 40, returnMs: 640, arc: 0.16, rebound: 0.3, turns: 1 } },
+};
+
+export const STYLES: Readonly<Record<StyleId, AnimStyle>> = { A: STYLE_A, B: STYLE_B, C: STYLE_C, P2: STYLE_P2, P3: STYLE_P3 };
 
 /** `?anim=proto&style=B` from a query string (style A by default; null when the prototype is not asked for). */
 export function animFromQuery(search: string): AnimStyle | null {

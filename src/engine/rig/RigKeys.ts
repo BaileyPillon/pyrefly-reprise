@@ -71,10 +71,13 @@ export function compileKey(data: RigData, key: RigKey, into?: Float64Array): Flo
   return out;
 }
 
-/** Every key of the rig, compiled once. */
-export function compileKeys(data: RigData): Map<string, Float64Array> {
+/**
+ * Every key of the rig, compiled once. `extra` (pass 3): that many pseudo-bones of identity channels after the real ones, so a pose can carry a number the skeleton does not read (the knee's bend,
+ * `anim/AnimBend.ts`); every array a pose lives in then has the same longer length.
+ */
+export function compileKeys(data: RigData, extra = 0): Map<string, Float64Array> {
   const out = new Map<string, Float64Array>();
-  for (const [name, key] of data.keys) out.set(name, compileKey(data, key));
+  for (const [name, key] of data.keys) out.set(name, compileKey(data, key, bindPose(data.bones.length + extra)));
   return out;
 }
 

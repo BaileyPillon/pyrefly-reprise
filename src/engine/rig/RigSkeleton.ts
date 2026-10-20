@@ -18,6 +18,8 @@ export const C_SY = 4;
 
 export const DEG = Math.PI / 180;
 
+const BENT = { x: 0, y: 0 };
+
 /** A pose channel array at bind: every bone at rest. */
 export function bindPose(boneCount: number, into?: Float64Array): Float64Array {
   const out = into ?? new Float64Array(boneCount * CH);
@@ -50,7 +52,7 @@ export class RigSkeleton {
 
   /** World and skin matrices from `pose` (parents come before children). The pose is copied into {@link RigSkeleton.pose}. */
   solve(pose: Float64Array): void {
-    if (pose !== this.pose) this.pose.set(pose);
+    if (pose !== this.pose) this.pose.set(pose.length > this.pose.length ? pose.subarray(0, this.pose.length) : pose); // a pose may carry pseudo-bones after the real ones (pass 3's knee): the skeleton reads only its own
     const { m, k, data } = this;
     for (let i = 0; i < this.count; i++) {
       const b = data.bones[i]!;
@@ -93,7 +95,7 @@ export class RigSkeleton {
    * origin and one unit wide and tall: x = px / W - 0.5, y = 0.5 - py / H. This is the idle plane's own space, so the mesh just sits under a group that carries the
    * plane's scale and place.
    */
-  skin(part: RigMeshData, out: Float32Array): void {
+  skin(part: RigMeshData, out: Float32Array, bend?: { at(i: number, x: number, y: number, out: { x: number; y: number }): void }): void {
     const { k } = this;
     const { verts, boneA, boneB, wA, wB } = part;
     const iw = 1 / this.data.image.w;
@@ -112,6 +114,11 @@ export class RigSkeleton {
         const wb = wB[i]!;
         X += wb * (k[b]! * x + k[b + 2]! * y + k[b + 4]!);
         Y += wb * (k[b + 1]! * x + k[b + 3]! * y + k[b + 5]!);
+      }
+      if (bend) { // pass 3: a knee for a skirt with no legs (`anim/AnimBend.ts`); undefined for every figure the prototype is not on
+        bend.at(i, X, Y, BENT);
+        X = BENT.x;
+        Y = BENT.y;
       }
       out[i * 3] = X * iw - 0.5;
       out[i * 3 + 1] = 0.5 - Y * ih;

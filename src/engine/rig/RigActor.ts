@@ -28,6 +28,7 @@ import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { compileStates, partStateAt } from './RigPartState.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
+import { paintPointOf } from './RigPaint.ts';
 import { pageAnimStyle, RigAnimLayer } from './anim/RigAnimLayer.ts';
 import { RIG_SHARE, rigLedger, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
 import { Vector3, type Texture } from 'three';
@@ -87,12 +88,12 @@ export class RigActor extends PaintedActor {
     });
     this.data = asset.data;
     this.dressphere = asset.dressphere === true;
-    this.compiled = compileKeys(this.data);
+    this.compiled = compileKeys(this.data, (asset.anim !== undefined ? asset.anim : pageAnimStyle())?.p3 ? 1 : 0); // pass 3: one pseudo-bone after the real ones carries the knee's bend
     this.states = compileStates(this.data);
     this.appliedState = this.stateFrom = this.stateTo = this.states.get('idle')!;
     this.rigKeys = new Set(this.compiled.keys());
-    this.trans = new RigTransition(this.data.bones.length * CH, this.compiled.get('idle')!);
-    this.work = new Float64Array(this.data.bones.length * CH);
+    this.trans = new RigTransition(this.compiled.get('idle')!.length, this.compiled.get('idle')!);
+    this.work = new Float64Array(this.compiled.get('idle')!.length);
     this.crossMs = opts.crossfadeMs ?? 120;
     this.rigBloomMasked = opts.bloomMask !== false;
     this.rigClock = hashUnit(this.name) * 8;
@@ -236,7 +237,7 @@ export class RigActor extends PaintedActor {
       sk.solve(this.work);
       if (this.chains) { this.chains.update(this.work, dt, this.trackSpeed(dt)); sk.solve(this.work); }
     }
-    this.rig.skin();
+    this.rig.skin(this.work.length > this.data.bones.length * CH ? this.work[this.data.bones.length * CH]! : 0);
     this.rig.sync();
     this.rig.setOpacity(this.alpha, this.visible);
     this.rig.syncBloom((this.carrier.u['dissolve']!.value as number) > 0, this.rigBloomMasked);
@@ -259,17 +260,16 @@ export class RigActor extends PaintedActor {
 
   override lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }, house?: number): Promise<void> {
     this.anim?.lunge(ms ?? 320); // the strike clip's contact lands on the lunge's apex
-    return super.lunge(distance, ms, contact, house);
+    const stays = this.anim?.anim.throwsDoll === true; // pass 3: she throws the doll and stays where she is (the apex and the hold are the presenter's, as ever)
+    return super.lunge(stays ? 0 : distance, ms, contact, stays ? 0 : house);
   }
-
   /** The presenter's action start: begin the clip for `pose`, aimed at `targets` (world points). */
-  animBegin(pose: string, targets: ReadonlyArray<{ x: number; y: number; z: number }>): void {
-    this.anim?.begin(pose, targets, this.trans);
-  }
-
+  animBegin(pose: string, targets: ReadonlyArray<{ x: number; y: number; z: number }>): void { this.anim?.begin(pose, targets, this.trans); }
   /** Base ms the presenter should still wait for `pose`'s clip to reach its beat (0: it has; -1: no clip plays, wait as ever). */
-  animLead(pose: string): number {
-    return this.anim?.lead(pose) ?? -1;
+  animLead(pose: string): number { return this.anim?.lead(pose) ?? -1; }
+  /** Pass 3: where a world point is in this figure's painting (px), as the camera shows it (`RigPaint.ts`): the doll is aimed with it. */
+  paintOf(at: { x: number; y: number; z: number }): { x: number; y: number } | null {
+    return paintPointOf(at, { position: this.position, plane: this.rig.plane, inner: this.carrier.inner, image: this.data.image, camera: this.rig.view?.camera ?? null });
   }
 
   /** A blow landed: the hit-stop and the springs' impulse happen here; the camera punch the style asks for (a fraction, its length in ms) is answered. */

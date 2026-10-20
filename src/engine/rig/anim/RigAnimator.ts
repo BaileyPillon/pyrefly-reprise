@@ -13,6 +13,7 @@
  *   `beat('contact')`  at each blow: a hit-stop on the attacker for the first and the last hit of a strike, an impulse in the springs, and the camera punch the style asks for.
  */
 import { Carry, type CarrySkeleton } from './AnimCarry.ts';
+import { DollThrow, type P2, type ThrowAt } from './AnimDoll.ts';
 import { applyIdleLayer, type IdleSpec } from './AnimIdle.ts';
 import { compileClip, sampleClip, unwrapTargets, type ClipDef, type ClipLive, type ClipRig, type CompiledClip } from './AnimClip.ts';
 import type { Library, Subject } from './AnimLibrary.ts';
@@ -83,15 +84,22 @@ export class RigAnimator {
   private chargeV = 0;
   /** The item in flight is used on the user (a glow around the user, no orb). */
   private selfUse = false;
+  /** Pass 3: the doll's throw (the strike thrown at the aim instead of a lunge), the doll's bone, and the throw's last answer. */
+  private readonly doll: DollThrow | null;
+  private readonly dollBone: number;
+  private thrown = false;
+  private readonly throwAt: ThrowAt = { x: 0, y: 0, rot: 0 };
 
   constructor(rig: AnimRigData, style: AnimStyle, subject: Subject, pxPerUnit: number) {
     this.rig = rig;
     this.style = style;
-    this.lib = libraryFor(style, subject.accents, subject.p2);
+    this.lib = libraryFor(style, subject.accents, subject.p2, undefined, subject.p3);
     this.idleSpec = subject.idle;
     this.hand = subject.hand;
     this.smearSpec = subject.smear;
     this.att = subject.attach ? Carry.create(rig.bones, rig.boneIndex, subject.attach, rig.skeleton) : null;
+    this.dollBone = subject.attach ? (rig.boneIndex.get(subject.attach.bone) ?? -1) : -1;
+    this.doll = style.p3 && this.att && this.dollBone >= 0 ? new DollThrow(style.p3.doll) : null;
     for (const c of [this.lib.ready, this.lib.windup, this.lib.strike, this.lib.follow, this.lib.cast, this.lib.item, this.lib.hurt, this.lib.ko, this.lib.victory, ...(this.lib.itemSelf ? [this.lib.itemSelf] : [])]) this.clips.set(c.name, compileClip(rig, c));
     this.secondary = new SecondaryLayer(rig.bones, rig.boneIndex, subject.secondary(style), style.secondary, pxPerUnit);
     this.from = new Float64Array(rig.channels);
@@ -104,6 +112,16 @@ export class RigAnimator {
   get smearing(): NonNullable<Subject['smear']> | null {
     return this.smearSpec && this.clock < this.smearUntil ? this.smearSpec : null;
   }
+
+  /** Pass 3: the attack is a doll thrown at the aim (`RigActor.lunge` then carries nobody); `setAim`: where the target is in painting px now (null: none, no throw). */
+  get throwsDoll(): boolean { return this.doll !== null; }
+  setAim(at: P2 | null): void { if (this.doll) this.doll.aim = at; }
+  /** The carry's hook: the doll away from the hand (the strike's flight and return), or null while it rides the hand. */
+  private readonly throwMove = (x: number, y: number): { x: number; y: number } | null => {
+    const contact = this.clip?.name === 'strike' ? this.clip.marks['contact'] : undefined;
+    this.thrown = this.doll !== null && contact !== undefined && this.doll.at({ x, y }, this.t, contact, this.throwAt);
+    return this.thrown ? this.throwAt : null;
+  };
 
   /** The landmark the held prop follows. */
   get handLandmark(): string {
@@ -135,6 +153,7 @@ export class RigAnimator {
   }
 
   private start(c: CompiledClip, cur: Float64Array, vel: Float64Array): void {
+    if (this.doll) this.secondary.holdPoint(this.dollBone, false); // a new clip: the doll is the hand's again (the strike's step holds it while it is away)
     this.from.set(cur);
     this.v0.set(vel);
     this.clip = c;
@@ -183,6 +202,7 @@ export class RigAnimator {
 
   /** Stop playing a clip (a snapped pose, a pose the clips do not play): the ordinary move has the figure. */
   cancel(): void {
+    if (this.doll) this.secondary.holdPoint(this.dollBone, false);
     this.clip = null;
     this.kindName = '';
     this.strikeAt = -1;
@@ -316,7 +336,11 @@ export class RigAnimator {
     sampleClip(this.clip, this.t, this.from, this.scratch, this.v0, this.targets, this.live);
     if (this.clip.sustain) this.hold.apply(this.clip, this.t, this.scratch); // the loop's swing, and its fading residual after the release
     this.stepCharge(this.clip.sustain || this.clip.charge.some((c) => c > 0) ? this.hold.charge(this.clip, this.live.seg) : 0, f.dt);
-    if (this.att) this.att.place(this.scratch, this.offsetsOf(this.clip), this.fromOff, this.live.seg, this.live.e); // the doll rides the hand
+    if (this.att) this.att.place(this.scratch, this.offsetsOf(this.clip), this.fromOff, this.live.seg, this.live.e, this.doll ? this.throwMove : undefined); // the doll rides the hand (or is thrown, pass 3)
+    if (this.doll) { // the doll's own bob must not blur where it lands: held while it is away
+      if (this.thrown) this.scratch[this.dollBone * 5] = (this.scratch[this.dollBone * 5] ?? 0) + this.throwAt.rot;
+      this.secondary.holdPoint(this.dollBone, this.thrown);
+    }
     this.fire(this.t);
     for (let i = 0; i < out.length; i++) {
       out[i] = this.scratch[i]!;

@@ -11,6 +11,7 @@ import type { IdleSpec } from './AnimIdle.ts';
 import type { AnimStyle } from './AnimStyles.ts';
 import type { SecondarySpec } from './AnimSecondary.ts';
 import { LULU_P2 } from './LuluAnim2.ts';
+import { LULU_KNEE, LULU_P3 } from './LuluAnim3.ts';
 
 export const LULU_ACCENTS: Accents = {
   groups: { armN: ['upperarm', 'forearm', 'hand'], armF: ['upperarmF', 'forearmF', 'handF'] },
@@ -85,4 +86,4 @@ export function luluSecondary(style: AnimStyle): SecondarySpec {
   };
 }
 
-export const LULU: Subject = { accents: LULU_ACCENTS, idle: LULU_IDLE, secondary: luluSecondary, hand: 'fist', attach: { bone: 'doll', landmark: 'fist' }, smear: { parts: ['armB'], dx: 0.22, dy: 0 }, p2: LULU_P2 };
+export const LULU: Subject = { accents: LULU_ACCENTS, idle: LULU_IDLE, secondary: luluSecondary, hand: 'fist', attach: { bone: 'doll', landmark: 'fist' }, smear: { parts: ['armB'], dx: 0.22, dy: 0 }, p2: LULU_P2, bend: LULU_KNEE, p3: LULU_P3 };

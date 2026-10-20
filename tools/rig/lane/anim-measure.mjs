@@ -9,15 +9,16 @@
  */
 import { normaliseRig, readRigFile } from '../rig-format.mjs';
 import { skinPart, solve, through } from '../rig-pose.mjs';
-import { carrySkeleton, toGatePose } from './anim-draw.mjs';
+import { carrySkeleton, skinBent, toGatePose } from './anim-draw.mjs';
 import { clipRigOf } from './anim-rig.mjs';
 
 /** A measurer of one rig: `pose(ch)` reads a channel array, `rig` is the clip rig, `rt` the normalised rig, `baselineY` the floor. */
-export async function measurer(rigDir) {
+export async function measurer(rigDir, bendSpec = null) {
   const { raw, dir } = readRigFile(rigDir);
   const { rt, problems } = normaliseRig(raw, { dir });
   if (!rt) throw new Error(problems.map((p) => p.message).join('; '));
-  const rig = clipRigOf(rt);
+  if (bendSpec) rt.bendSpec = bendSpec;
+  const rig = clipRigOf(rt, bendSpec !== null);
   const sk = carrySkeleton(rt);
   const parts = rt.parts.filter((p) => !p.hidden);
   const scratch = parts.map((p) => new Float64Array(p.verts.length));
@@ -26,10 +27,11 @@ export async function measurer(rigDir) {
     rig,
     baselineY: rt.baselineY,
     pose(ch) {
-      const { k } = solve(rt, toGatePose(ch));
+      const gp = toGatePose(ch, rt.bones.length);
+      const { k } = solve(rt, gp);
       let low = -Infinity, left = Infinity, right = -Infinity, top = Infinity;
       parts.forEach((p, i) => {
-        skinPart(p, k, scratch[i]);
+        skinBent(rt, p, k, gp, scratch[i]);
         const a = scratch[i];
         for (let j = 0; j < a.length; j += 2) {
           if (a[j] < left) left = a[j];

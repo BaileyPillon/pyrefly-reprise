@@ -16,6 +16,7 @@ import { scaleDeltas, type Accents, type Library } from './AnimLibrary.ts';
 import { buildLibrary } from './AnimLibrary.ts';
 import { frameMs, LULU_ATTACK, LULU_CAST, LULU_ITEM, LULU_REACT, type CastRE } from './AnimRE.ts';
 import type { AnimStyle } from './AnimStyles.ts';
+import { koClip3, type P3Poses } from './AnimLibrary3.ts';
 
 /** The run-up of the strike to its contact, ms: the lunge's apex (`LUNGE_MS` 440 x `ATTACK_IMPACT` 0.58 = 255 ms; a test pins it to the presenter's). The wind-up is the rest of the game's 20 frames. */
 export const STRIKE_RUN_MS = 255;
@@ -60,9 +61,11 @@ export interface RETable {
 
 export const LULU_RE: RETable = { attack: LULU_ATTACK, cast: LULU_CAST, item: LULU_ITEM, react: LULU_REACT };
 
-/** The library of a style for a subject: pass 2's for a style that carries `p2`, pass 1's otherwise. */
-export function libraryFor(style: AnimStyle, acc: Accents, poses?: P2Poses, re: RETable = LULU_RE): Library {
-  return style.p2 ? buildLibrary2(style, acc, poses ?? {}, re) : buildLibrary(style, acc);
+/** The library of a style for a subject: pass 2's for a style that carries `p2`, pass 1's otherwise; pass 3's (`p3`) keeps all of pass 2's and replaces its KO with the one that folds. */
+export function libraryFor(style: AnimStyle, acc: Accents, poses?: P2Poses, re: RETable = LULU_RE, p3?: P3Poses): Library {
+  if (!style.p2) return buildLibrary(style, acc);
+  const lib = buildLibrary2(style, acc, poses ?? {}, re);
+  return style.p3 && p3?.ko ? { ...lib, ko: koClip3(style, p3.ko, re.react) } : lib;
 }
 
 export function buildLibrary2(style: AnimStyle, acc: Accents = {}, poses: P2Poses = {}, re: RETable = LULU_RE): Library {
