@@ -69,11 +69,21 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 58 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 59 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '59',
+    date: '2026-10-19',
+    lines: [
+      { tag: 'FFX', text: 'Kimahri is back to his hand-painted poses while we rework his animation.' },
+      { tag: 'FFX', text: 'Using an item on an ally now tosses a glowing green orb to them, and on yourself shows a green glow, as the game draws it.' },
+      { tag: 'FFX-2', text: 'Items now show a quick white-blue sparkle.' },
+      { tag: 'Both', text: 'The other jointed figures are unchanged: Lulu, Ifrit and Pterya in FFX, and Valefor in both games.' },
+    ],
+  },
   {
     release: '58',
     date: '2026-10-19',
