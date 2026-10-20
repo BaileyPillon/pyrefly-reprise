@@ -39,7 +39,7 @@ export interface CoreDeps {
   nextLink: NextLink;
 }
 
-/** The options the FFX HUD's card is computed with (it passes none). */
+/** The options the FFX HUD's card is computed with, bar the engine handle (`cardOptions`): v3's ranking reads nothing else. */
 const FFX_CARD_OPTIONS: AdvisorOptions = {};
 /** Pause at least this often, in ms of work. */
 const SLICE_MS = 12;
@@ -85,7 +85,9 @@ export class V4Core {
     const state = engine.state();
     const key = boardKey(state, decision.actorId, decision.commands);
     const card = { actorId: decision.actorId, commands: decision.commands };
-    const v3 = buildAdvisorView(state, card, FFX_CARD_OPTIONS);
+    // The HUD hands the card the live engine for a chapter whose card follows its line (`AdvisorOptions.lineEngine`, release 59); the worker's restored copy is the same board.
+    const cardOptions: AdvisorOptions = { ...FFX_CARD_OPTIONS, lineEngine: () => engine };
+    const v3 = buildAdvisorView(state, card, cardOptions);
     const tV3 = deps.now();
     const setup = msg.snapshot.setup;
     const chain = setup ? { setup, next: await deps.chainAfter(setup), nextLink: deps.nextLink } : null;
@@ -110,7 +112,7 @@ export class V4Core {
     let switched = false;
     let unliftable = false;
     if (result.switched && result.command) {
-      const lifted = buildAdvisorView(state, card, { ...FFX_CARD_OPTIONS, lift: result.command });
+      const lifted = buildAdvisorView(state, card, { ...cardOptions, lift: result.command });
       const top = lifted?.suggestions[0]?.command;
       if (top && JSON.stringify(top) === JSON.stringify(result.command)) {
         view = lifted;

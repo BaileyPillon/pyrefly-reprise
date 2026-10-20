@@ -46,14 +46,15 @@ async function firstContext(id: string): Promise<DecisionContext> {
 }
 
 describe('DIFF-B: where the rule applies', () => {
-  it('is on by default, and only Chapter XIII\'s board takes it: every other listed chapter, FFX or FFX-2, keeps its card', async () => {
+  // Release 59 (decision 145, FFX only) added two FFX chapters whose card lost to the line (`advisor-line-first-ffx.test.ts`); every other listed chapter, FFX or FFX-2, still keeps its card.
+  it('is on by default, and only Chapter XIII\'s board takes it among the FFX-2 chapters: every other listed chapter, but the two FFX ones release 59 added, keeps its card', async () => {
     expect(ADVISOR_LINE_FIRST).toBe(true);
     const on: string[] = [];
     for (const chapter of listedChapters()) {
       const ctx = await firstContext(chapter.id);
       if (lineFirstOn(ctx.state, ctx.advisorOptions)) on.push(chapter.id);
     }
-    expect(on).toEqual([TREMA]);
+    expect(on).toEqual([TREMA, 'isaaru-via-purifico', 'mirror-aeons']);
   }, 120_000);
 
   it('can be switched off for one call, and an explicit look-ahead pick (advisor v4) is left on top', async () => {

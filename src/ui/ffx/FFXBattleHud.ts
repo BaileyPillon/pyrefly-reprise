@@ -4,6 +4,7 @@ import './ffx-hud.css';
 import { grownFromTopLeft } from '../common/hudTextSize.ts';
 import type {
   AtbSnapshot, AvailableCommand,
+  BattleEngine,
   BattleEvent,
   BattleState,
   Command,
@@ -756,6 +757,14 @@ export class FFXBattleHud implements HudPort {
   startGuideFolded(): void {
     this.guideStartsFolded = true;
     this.guide.startFolded();
+  }
+
+  /**
+   * Hand the card the live engine, read-only (release 59, decision 145; FFX only): it reads the chapter's line through it on the boards where the card puts the line first
+   * (`AdvisorOptions.lineEngine`, `engine/tactics/advisor-line.ts`), and for nothing else. Called once, before the first menu, by `createHud`; a HUD without it reads the line off the state.
+   */
+  setLineEngine(engine: BattleEngine | null): void {
+    this.advisor.setAdvisorOptions(engine ? () => ({ lineEngine: () => engine }) : undefined);
   }
 
   /** The move-advisor card, for tests and the debug snapshot. */

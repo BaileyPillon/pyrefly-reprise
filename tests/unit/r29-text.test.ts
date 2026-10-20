@@ -53,7 +53,7 @@ describe('PR-0234: the first card says why and does not say "always hits" on a n
   for (const [chapter, label] of [
     ['seymour-natus', 'Talk'],
     ['evrae-airship', 'Pull back'],
-    ['isaaru-via-purifico', 'Grand Summon'],
+    ['isaaru-via-purifico', 'Grand Summon: Shiva'], // release 59: Chapter XIV's card names the aeon of the line's Grand Summon
   ] as const) {
     it(`${chapter}: ${label}`, async () => {
       const view = await firstCard(chapter);

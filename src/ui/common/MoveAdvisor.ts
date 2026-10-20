@@ -320,6 +320,12 @@ export class MoveAdvisor {
   }
 
   /** Attach (or detach) advisor v4's background search (`src/app/advisorV4/wiring.ts`). */
+  /** The options the card is built with (`MoveAdvisorOptions.advisor`), set after construction: the FFX HUD hands over the live engine this way (`FFXBattleHud.setLineEngine`). `undefined`: none, as at construction. */
+  setAdvisorOptions(advisor: (() => AdvisorOptions) | undefined): void {
+    if (advisor) this.opts.advisor = advisor;
+    else delete this.opts.advisor;
+  }
+
   setLookAhead(source: MoveAdvisorLookAhead | null): void {
     this.lookAhead = source;
   }

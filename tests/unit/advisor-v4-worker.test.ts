@@ -160,4 +160,26 @@ describe('advisor v4 worker protocol (FFX)', () => {
     expect(host.cardFor(e.state(), d)).toBeNull();
     expect(host.stats.jobs).toBe(0);
   });
+
+  // Release 59, decision 145 (FFX only): in a chapter whose card puts the chapter's line first the worker reads the line through its restored copy of the engine (`AdvisorOptions.lineEngine`), as the
+  // HUD does through the live one, so the card it answers with names the aeon of the line's Grand Summon and carries it, `Grand Summon: Shiva` in Chapter XIV, where the state alone gave `Grand Summon`.
+  it('line first: the worker\'s card for Chapter XIV names the aeon of the line\'s Grand Summon and carries it', async () => {
+    const e = await engineAt('isaaru-via-purifico', 1);
+    const w = new InProcWorker();
+    const host = hostWith(w);
+    host.bind(e);
+    host.boardFixed();
+    await w.idle();
+    const d = toMenu(e);
+    const card = host.cardFor(e.state(), d);
+    expect(card).not.toBeNull();
+    const answer = w.sent.find((m) => m.type === 'result');
+    if (answer?.type === 'result' && answer.switched) return; // a look-ahead pick on top is the explicit exception; the line's own card is what is pinned here
+    const top = card!.suggestions[0]!;
+    expect(top.label).toBe('Grand Summon: Shiva');
+    expect(top.command).toMatchObject({ kind: 'overdrive', id: 'grand-summon', extra: { kind: 'yuna-grand-summon', grandSummon: { aeonId: 'shiva' } } });
+    // the HUD's own card on the same board (it hands the advisor the live engine) is the same card
+    const hud = buildAdvisorView(e.state(), d, { lineEngine: () => e });
+    expect(hud!.suggestions[0]!.command).toEqual(top.command);
+  }, 120_000);
 });

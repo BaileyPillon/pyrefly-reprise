@@ -306,8 +306,13 @@ function fill(text: string, actorName: string, targetName: string | null): strin
 export function recommendedCommand(
   state: Readonly<BattleState>,
   decision: GuideDecision,
+  /**
+   * A read-only handle on the live engine, FFX only (release 59, decision 145; `AdvisorOptions.lineEngine`): a tactic that reads the CTB forecast (`predictTurnOrder`, Chapter XIV's Shield timing)
+   * sees it here and sees nothing on the state-only engine, which gives the line the auto-battler does NOT play. Absent: the state alone, as the guide always read it.
+   */
+  engine?: BattleEngine,
 ): Command | null {
-  return intendedStrategy(decision.actorId, decision.commands, stateOnlyEngine(state));
+  return intendedStrategy(decision.actorId, decision.commands, engine ?? stateOnlyEngine(state));
 }
 
 /**

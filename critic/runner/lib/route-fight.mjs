@@ -23,7 +23,7 @@ import path from 'node:path';
 
 import { playDoublecast } from './route-doublecast.mjs';
 import { playMinigame } from './route-minigame.mjs';
-import { deriveOutcome } from './route-pure.mjs';
+import { deriveOutcome, rowLabelOf } from './route-pure.mjs';
 import { battleSeedRead, isAllDisabledOverlay, measureCardVsRows, readAdvice, readRows, targetsUp } from './route-ui.mjs';
 
 /**
@@ -225,7 +225,7 @@ export async function playFight(r) {
         rec.picks.push({ ...pick, took: `${adv.label} (one-item group, direct)`, target: c });
         await page.waitForTimeout(700); turns++; continue;
       }
-      const w = (adv.label ?? '').toLowerCase();
+      const w = rowLabelOf(adv.label).toLowerCase(); // "Grand Summon: Shiva" is the row "Grand Summon"; the aeon is picked in its list above
       took = w ? await chooser.choose((l) => l.toLowerCase() === w || l.toLowerCase().includes(w)) : null;
       if (took && /^orders$/i.test(opened ?? '')) rec.orders.push({ turn: turns, order: took, why: 'advisor' });
       if (!took && opened) { rec.misses.push({ turn: turns, want: adv, subRows: await readRows(page) }); await input.press('Escape'); await page.waitForTimeout(350); }

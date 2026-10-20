@@ -113,7 +113,8 @@ export function chapterById(id: string): Chapter {
 export function liveAdvisorOptions(game: 'ffx' | 'ffx2', engine?: BattleEngine): AdvisorOptions {
   const v3 = process.env['SCORECARD_V3'];
   const flag: AdvisorOptions = v3 === '1' ? { v3: true } : v3 === '0' ? { v3: false } : {};
-  if (game === 'ffx') return flag;
+  // FFX: the live HUD hands the card the engine to read a chapter's line through (`AdvisorOptions.lineEngine`, release 59, `FFXBattleHud`); it reaches only the chapters whose card puts the line first.
+  if (game === 'ffx') return engine ? { ...flag, lineEngine: () => engine } : flag;
   const o = ffx2EngineOptions();
   // Since advisor v3 the live HUD also hands over the engine (read and forked, never driven).
   const live = engine instanceof FFX2Engine ? { engine: () => engine } : {};

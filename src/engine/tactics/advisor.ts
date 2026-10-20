@@ -80,6 +80,7 @@ import type {
   AbilityDef,
   AnyCombatant,
   AvailableCommand,
+  BattleEngine,
   BattleState,
   Command,
   CombatantId,
@@ -314,11 +315,18 @@ export interface AdvisorOptions {
   /** Measurement only (tests, scorecard ablations): one v3 rule off. The HUD never passes it. */
   v3Rules?: { onItsWay?: boolean; provedSave?: boolean; covered?: boolean };
   /**
-   * **DIFF-B** (FFX-2 only, Chapter XIII only; `./advisor-line.ts`): the card's top row is the
-   * chapter's own line. On or off for this call; the default is `ADVISOR_LINE_FIRST`. Measurement
-   * and tests only: the HUD never passes it, and a board of any other chapter ignores it.
+   * **DIFF-B and release 59** (FFX-2 Chapter XIII, FFX Chapter XIV and Mirror Aeons: `LINE_FIRST_CHAPTERS`, `./advisor-line.ts`): the card's top row is the chapter's own line. On or off
+   * for this call; the default is `ADVISOR_LINE_FIRST`. Measurement and tests only: the HUD never passes it, and a board of any other chapter ignores it.
    */
   lineFirst?: boolean;
+  /**
+   * **FFX only, release 59 (decision 145)**: a read-only handle on the live engine, used for ONE thing, reading the chapter's line for a chapter whose card puts the line first
+   * (`./advisor-line.ts`). A line may read what `BattleState` does not carry: Chapter XIV's Shield timing asks the engine's CTB forecast (`predictTurnOrder`), and on the state-only
+   * engine the card would print a degraded line (13 of 40 seeds won against the live line's 35). The engine is read, never driven, and only when its state is the board the card is
+   * for (same event counter); otherwise, or when absent, the line is read off the state as before. The FFX HUD hands it over (`createHud`) and so does the advisor v4 worker (its restored
+   * copy of the engine). It reaches no other part of the card: scoring, the sentence and every chapter outside `LINE_FIRST_CHAPTERS` are exactly what they were.
+   */
+  lineEngine?: () => BattleEngine | null;
   /**
    * **Advisor v4** (`./advisor-v4/`, FFX only in the game): the look-ahead's pick, put on top of
    * the card when it is one of the rows this card priced; the row keeps its own numbers and
@@ -522,6 +530,21 @@ export function wrappedLabel(
   const ids = command.casts ? command.casts.map((c) => c.id) : command.wrappedId === undefined ? [] : [command.wrappedId, command.wrappedId];
   const names = ids.map((id) => commands.find((c) => c.category === row.wrapsCategory && c.command.kind === 'ability' && c.command.id === id)?.label);
   return names.length > 0 && names.every((n) => n !== undefined) ? `${row.label}: ${names.join(' + ')}` : null;
+}
+
+/**
+ * The card's label for the line's **named Grand Summon**, `"Grand Summon: Shiva"`, or `null` when `command` is not one. A tactic that spends Yuna's full gauge names the aeon in the command's `extra`
+ * (`{ kind: 'yuna-grand-summon', grandSummon: { aeonId } }`); the row the menu offers is only "Grand Summon", whose picker lists every aeon she holds and opens on the first, so a card that did not
+ * name the aeon sent the player (and the review route, which picks the row the card's text names) to that default: in Chapter XIV the card summoned Valefor where the line spends the gauge on
+ * Shiva. FFX only (Grand Summon is Yuna's FFX Overdrive); used on the boards `./advisor-line.ts` puts the line first on.
+ */
+export function grandSummonLabel(commands: readonly AvailableCommand[], row: AvailableCommand, command: Command): string | null {
+  if (command.kind !== 'overdrive') return null;
+  const extra = command.extra as { kind?: string; grandSummon?: { aeonId?: string } } | undefined;
+  const aeonId = extra?.kind === 'yuna-grand-summon' ? extra.grandSummon?.aeonId : undefined;
+  if (!aeonId) return null;
+  const aeon = commands.find((c) => c.command.kind === 'summon' && c.command.id === aeonId)?.label;
+  return aeon ? `${row.label}: ${aeon}` : null;
 }
 
 /** The gate a tactic's own pick is held to: the strict row, or a meta row. */
@@ -1381,7 +1404,7 @@ export function buildAdvisorView(
   // card and the strategy panel are never teaching different fights.
   // DIFF-B reads the line off the live board, as the measured player did; every other chapter's line
   // is read off the board the card is ranked on, as it always was.
-  const tactic = tacticSuggestion(state, decision, candidates, sim, intent, planner, lineFirst ? board : state);
+  const tactic = tacticSuggestion(state, decision, candidates, sim, intent, planner, lineFirst ? board : state, lineFirst ? liveLineEngine(board, given) : undefined, lineFirst);
   if (tactic) cover(tactic);
   if (tactic && planner) {
     const ev = evaluate(
@@ -1863,6 +1886,22 @@ function handOff(
 }
 
 /**
+ * The live engine the chapter's line may be read through, or `undefined`: only when the HUD (or the v4 worker) handed one over (`AdvisorOptions.lineEngine`) AND its state is the board this card is for
+ * (the same event counter, the same game). A stale snapshot never reads a newer engine: the line is then read off the state, as before.
+ */
+function liveLineEngine(board: Readonly<BattleState>, given: AdvisorOptions): BattleEngine | undefined {
+  if (!given.lineEngine) return undefined;
+  try {
+    const engine = given.lineEngine();
+    if (!engine) return undefined;
+    const live = engine.state();
+    return live.nextSeq === board.nextSeq && live.game === board.game ? engine : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
  * The shipped tactic's choice, dressed as a suggestion.
  *
  * Runs the same `intendedStrategy` the auto-battler and the strategy guide run,
@@ -1881,10 +1920,14 @@ function tacticSuggestion(
   planner: boolean,
   /** The board the line is read off: the card's own, unless DIFF-B reads the live board (`./advisor-line.ts`). */
   lineBoard: Readonly<BattleState> = state,
+  /** The live engine the line is read through (`AdvisorOptions.lineEngine`, FFX, a line-first chapter only); the state alone when absent. */
+  lineEngine?: BattleEngine,
+  /** A line-first board (`./advisor-line.ts`): the card carries the line's named Grand Summon as the tactic composed it ({@link grandSummonLabel}). */
+  named = false,
 ): Candidate | null {
   let command: Command | null = null;
   try {
-    command = recommendedCommand(lineBoard, decision);
+    command = recommendedCommand(lineBoard, decision, lineEngine);
   } catch {
     return null;
   }
@@ -1905,6 +1948,7 @@ function tacticSuggestion(
   // where it goes are the whole of it, so it is simulated, carried and
   // printed exactly as the tactic composed it [PR-0125].
   const wrapped = wrappedLabel(decision.commands, row, command);
+  const grand = named ? grandSummonLabel(decision.commands, row, command) : null;
   let candidate = wrapped ? null : (candidates.find((c) => sameCommand(c.suggestion.command, command!)) ?? null);
   if (!candidate) {
     candidate =
@@ -1941,6 +1985,8 @@ function tacticSuggestion(
     suggestion: {
       ...candidate.suggestion,
       ...(wrapped ? { label: wrapped } : {}),
+      // A named Grand Summon is the line's whole move: the card says which aeon and carries it, so a player (and the review route) who follows the card picks it from the list.
+      ...(grand ? { label: grand, command } : {}),
       cite,
       source: 'tactic',
       ...(unexplained ? { reason: guideReason || 'The chapter’s own line for this turn' } : {}),
