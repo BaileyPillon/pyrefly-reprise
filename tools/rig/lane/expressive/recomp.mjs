@@ -2,7 +2,7 @@
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
-const sharp = createRequire('D:/pyrefly-rig-valefor/package.json')('sharp');
+const sharp = createRequire('D:/pyrefly-rig-rikkudk/package.json')('sharp');
 const dir = process.argv[2];
 const write = process.argv.includes('--write');
 let before = 0, after = 0, bad = 0;

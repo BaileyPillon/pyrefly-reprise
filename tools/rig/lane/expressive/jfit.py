@@ -20,7 +20,7 @@ rig, T, model = load_model(rigdir)
 keys = json.load(open(work / 'fit' / 'keys.json'))
 J = json.load(open(work / 'joints.json'))
 sx = J['frame']['sx']
-_hidden = set((json.load(open(f'D:/pyrefly-rig-valefor/tools/rig/subjects/{name}.json', encoding='utf8'))['fit']['keys'].get(pose, {}).get('hide') or []))
+_hidden = set((json.load(open(f'D:/pyrefly-rig-rikkudk/tools/rig/subjects/{name}.json', encoding='utf8'))['fit']['keys'].get(pose, {}).get('hide') or []))
 _only = set(g('--only', '').split(',')) - {''}
 joints = {j['name']: j['r'] / sx for j in J['joints'] if not all(m in _hidden for m in j['meet']) and (not _only or j['name'] in _only)}  # master px; a joint none of whose parts the key shows is not watched
 build = json.load(open(work / 'build' / 'build.json'))
@@ -52,7 +52,7 @@ def sdist(p, jn=None):
     return float(ndi.map_coordinates(m, [[p[1] + PAD], [p[0] + PAD]], order=1, mode='nearest')[0])
 
 
-cfg = json.load(open(f'D:/pyrefly-rig-valefor/tools/rig/subjects/{name}.json', encoding='utf8'))
+cfg = json.load(open(f'D:/pyrefly-rig-rikkudk/tools/rig/subjects/{name}.json', encoding='utf8'))
 lm_bind = {n: (v[0], v[1]) for n, v in (cfg['build'].get('landmarks') or {}).items()}  # name -> (bone, rest 1x px)
 marks = {n: v for n, v in (cfg.get('landmarks') or {}).get(pose, {}).items() if n in lm_bind and (not g('--marks', '') or n in g('--marks', '').split(','))}
 _ax, _bx, _ay, _by = maps(T, pose)

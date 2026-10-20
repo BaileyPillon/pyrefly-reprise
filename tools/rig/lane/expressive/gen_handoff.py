@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 X = pathlib.Path('D:/Tools/pyrefly-scratch/2026-10-19/rig-expressive-2')
-REPO = 'D:/pyrefly-rig-valefor'
+REPO = 'D:/pyrefly-rig-rikkudk'
 PROSE = json.load(open(''+str(__import__("pathlib").Path(__file__).resolve().parent / "prose.json")+'', encoding='utf8'))
 
 
@@ -48,8 +48,8 @@ def fmt_ko(sub):
 for sub, p in PROSE.items():
     n = f'{sub}-x'
     d = X / sub
-    gate = sh(['node', 'tools/rig-gate.mjs', '--rig', f'D:/pyrefly-art-rigs/{n}', '--art', 'D:/pyrefly-art-r55'])
-    verify = sh(['node', 'tools/rig-gate.mjs', '--rig', f'D:/pyrefly-art-rigs-work/{n}/verify-copy/{p["id"]}', '--verify', '--art', 'D:/pyrefly-art-r55'])
+    gate = sh(['node', 'tools/rig-gate.mjs', '--rig', f'D:/pyrefly-art-rigs/{n}', '--art', 'D:/pyrefly-art-r59'])
+    verify = sh(['node', 'tools/rig-gate.mjs', '--rig', f'D:/pyrefly-art-rigs-work/{n}/verify-copy/{p["id"]}', '--verify', '--art', 'D:/pyrefly-art-r59'])
     (d / f'{n}-gate-output.txt').write_text(gate + '\n', encoding='utf8')
     (d / f'{n}-verify-output.txt').write_text(verify + '\n', encoding='utf8')
     head = (d / f'{n}-head-area.txt').read_text(encoding='utf8') if (d / f'{n}-head-area.txt').exists() else ''
@@ -68,7 +68,7 @@ Method: the Bahamut pilot's expressive keys (`tools/rig/rig_vcut.py`, `rig.py va
 
 {p['cut']}
 
-## The gate, verbatim (`node tools/rig-gate.mjs --rig D:/pyrefly-art-rigs/{n} --art D:/pyrefly-art-r55`, then `--verify` on a copy named `{p['id']}`)
+## The gate, verbatim (`node tools/rig-gate.mjs --rig D:/pyrefly-art-rigs/{n} --art D:/pyrefly-art-r59`, then `--verify` on a copy named `{p['id']}`)
 
 ```
 {gate}

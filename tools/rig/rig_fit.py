@@ -326,13 +326,13 @@ def run(sub: Subject, poses=None, retarget=False, seed=1) -> None:
     fitter = Fitter(model, T, fit_cfg, build, chains)
     rng = np.random.default_rng(seed)
     names = [p for p in T["poses"] if (not poses or p in poses) and (not fit_cfg.get("only") or p in fit_cfg["only"]) and p not in fit_cfg.get("skip", [])]
-    if not any(T["poses"][p]["class"] in ("standing", "low", "ko", "idle") for p in names):
+    if not any(T["poses"][p]["class"] in ("standing", "low", "ko", "idle", *fit_cfg.get("fit_classes", [])) for p in names):
         raise SystemExit("rig fit-keys: no registered pose to fit")
     keys, report = {}, {}
     min_iou = fit_cfg.get("min_iou", 0.78)
     for pose in names:
         info = T["poses"][pose]
-        if info["class"] in ("part", "staged", "wide"):
+        if info["class"] in ("part", "staged", "wide") and info["class"] not in fit_cfg.get("fit_classes", []):  # fit.fit_classes: ["part"] fits the keys of a figure the pose model calls a part (Seymour Flux's body: its paintings are a whole drawn figure; demo-bosses lane, 2026-10-20)
             report[pose] = {"kept": False, "why": f"class {info['class']}: a rig does not serve it"}
             continue
         target = np.ascontiguousarray(targets[pose][model.win[1]:model.win[3], model.win[0]:model.win[2]])
@@ -341,7 +341,9 @@ def run(sub: Subject, poses=None, retarget=False, seed=1) -> None:
         model.set_state(rig_v2.state_of(build["parts"], rig_v2.key_parts(pcfg)))  # format v2: the pose's own part state (the rest state when it names none): a pose that hides a part is fitted without it
         t0 = time.time()
         if pose == T["costume"]["pose"] or info["class"] == "idle":
-            x = np.zeros(len(fitter.free) + 3)
+            x = np.zeros(len(fitter.bounds(pcfg)[0]))  # rest: zero angles and offsets, unit scales (a config with `fit.scales` has more parameters than free bones + 3)
+            o_ = fitter.nr + 2 * len(fitter.off_idx)
+            x[o_:o_ + len(fitter.scl_names)] = 1.0
             L = 0.0
         else:
             x, L = fitter.fit_pose(pose, info, target, pcfg, rng, fit_cfg.get("restarts", 2), marks)

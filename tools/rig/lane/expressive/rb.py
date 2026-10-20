@@ -4,14 +4,14 @@ import json
 import subprocess
 import sys
 
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig')
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig/lane')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig/lane')
 import lane_fit
 
-REPO = 'D:/pyrefly-rig-valefor'
+REPO = 'D:/pyrefly-rig-rikkudk'
 PY = 'D:/Tools/ComfyUI/python_embeded/python.exe'
 name = sys.argv[1]
-ART = sys.argv[sys.argv.index('--art') + 1] if '--art' in sys.argv else 'D:/pyrefly-art-r55'
+ART = sys.argv[sys.argv.index('--art') + 1] if '--art' in sys.argv else 'D:/pyrefly-art-r59'
 RIG = f'D:/pyrefly-art-rigs/{name}'
 WORK = f'D:/pyrefly-art-rigs-work/{name}'
 

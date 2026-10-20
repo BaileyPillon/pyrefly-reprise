@@ -132,6 +132,34 @@
         ["spathi-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
         ["spathi-rig-2-ko-overdrive", ["ko", "overdrive"]]
       ]
+    },
+    "ffx2-bahamut": {
+      "actor": "bahamut",
+      "game": "ffx2",
+      "chapter": { "id": "ffx2-bahamut" },
+      "reach": { "auto": true },
+      "poses": ["attack", "cast", "hurt", "ko", "telegraph"],
+      "track": { "head": "head", "feet": ["soleLoop"], "centroid": "bodyCenter", "tip": "wingLTip" },
+      "beforeAfter": "ffx2-bahamut-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "telegraph": "MEGA FLARE (TELEGRAPH)" },
+      "sheets": [
+        ["ffx2-bahamut-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["ffx2-bahamut-rig-2-ko-telegraph", ["ko", "telegraph"]]
+      ]
+    },
+    "seymour-flux": {
+      "actor": "seymour-flux",
+      "game": "ffx",
+      "chapter": { "id": "seymour-flux" },
+      "reach": { "auto": true },
+      "poses": ["attack", "cast", "hurt", "ko", "telegraph"],
+      "track": { "head": "head", "feet": ["soleBoot"], "centroid": "bodyCenter", "hand": "hand", "tip": "hairTip" },
+      "beforeAfter": "seymour-flux-rig-3-before-after",
+      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "telegraph": "TELEGRAPH" },
+      "sheets": [
+        ["seymour-flux-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
+        ["seymour-flux-rig-2-ko-telegraph", ["ko", "telegraph"]]
+      ]
     }
   }
 }

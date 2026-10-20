@@ -6,15 +6,15 @@ import shutil
 import subprocess
 import sys
 
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig')
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig/lane')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig/lane')
 import lane_twin
 from rig_common import SUBJECTS, WORK_ROOT, Subject
 
 name, of, twin_id = sys.argv[1:4]
 tfrom = sys.argv[sys.argv.index('--targets-from') + 1] if '--targets-from' in sys.argv else None
 PY = 'D:/Tools/ComfyUI/python_embeded/python.exe'
-REPO = 'D:/pyrefly-rig-valefor'
+REPO = 'D:/pyrefly-rig-rikkudk'
 base_path = SUBJECTS / f'{of}.json'
 base = json.loads(base_path.read_text(encoding='utf8'))
 cfg = lane_twin.twin_config(base, twin_id, of, None)

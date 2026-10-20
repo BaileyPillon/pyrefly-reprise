@@ -1,5 +1,5 @@
 """Scratch library of the expressive-keys lane (rig-expressive-2, 2026-10-19): the painting -> idle-master mapping (as rig_vcut does it, incl. the resize of a slightly rescaled pose), a posed rig model, renders, overlays.
-Env: XID = the art id (ifrit), XWORK = the work folder name under D:/pyrefly-art-rigs-work (ifrit-x), XART = art dir (D:/pyrefly-art-r55).
+Env: XID = the art id (ifrit), XWORK = the work folder name under D:/pyrefly-art-rigs-work (ifrit-x), XART = art dir (D:/pyrefly-art-r59).
 Everything here reads; it writes only into the paths it is given."""
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ import os
 import pathlib
 import sys
 
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig')
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig/lane')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig/lane')
 import numpy as np
 from PIL import Image, ImageDraw
 
@@ -20,7 +20,7 @@ import rig_vcut
 
 XID = os.environ.get('XID', 'ifrit')
 XWORK = os.environ.get('XWORK', 'ifrit-x')
-ART = pathlib.Path(os.environ.get('XART', 'D:/pyrefly-art-r55')) / 'characters' / XID
+ART = pathlib.Path(os.environ.get('XART', 'D:/pyrefly-art-r59')) / 'characters' / XID
 WORKDIR = pathlib.Path('D:/pyrefly-art-rigs-work') / XWORK
 BG = (110, 124, 148)
 S = 2

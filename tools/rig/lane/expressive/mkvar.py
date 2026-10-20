@@ -1,4 +1,4 @@
-"""mkvar.py <config.json> <pose> <maskdir> [--parts a,b,..] [--tex 0.75] [--texpart hair=0.6,..] [--fill name=r,..] [--pad 600] : writes build.variants.<part>.<pose>.from_painting (a mask spec) for each part (chain-skinned
+"""mkvar.py <config.json> <pose> <maskdir> [--parts a,b,..] [--tex 0.75] [--texpart hair=0.6,..] [--fill name=r,..] [--pad 600] [--meshk 1.6] : writes build.variants.<part>.<pose>.from_painting (a mask spec) for each part (chain-skinned
 when the part's build.skin is a chain, rigid otherwise) and fit.keys.<pose>.image.<part> = <pose> into the subject config. Replaces an existing <pose> variant of those parts."""
 import json
 import sys
@@ -17,7 +17,8 @@ v = cfg['build'].setdefault('variants', {})
 for part in parts:
     sk = skin[part]
     spec = {'pose': pose, 'mask': f'{maskdir}/{pose}.{part}.png', 'mask_pad': pad, 'register': pose, 'scale': 1.0, 'mesh': dict(sk.get('mesh', {'edge': 18, 'inner': 34, 'grow': 10}))}
-    spec['mesh'] = {k: (m * 2 if False else m) for k, m in spec['mesh'].items()}
+    meshk = float(g('--meshk', '1.0'))  # a coarser mesh for a piece (vertex budget: a boss with a piece of every part of five poses); 1.6 gives about 0.4 of the vertices
+    spec['mesh'] = {k: (round(m * meshk) if meshk != 1.0 else m) for k, m in spec['mesh'].items()}
     if sk.get('type') == 'chain':
         spec['skin'] = 'chain'
     t = texpart.get(part, tex)

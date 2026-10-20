@@ -9,8 +9,8 @@ import json
 import pathlib
 import sys
 
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig/lane')
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig/lane')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig')
 from PIL import Image, ImageDraw, ImageFont
 
 import lane_sheets as L

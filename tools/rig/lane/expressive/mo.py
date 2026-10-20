@@ -11,7 +11,7 @@ import subprocess
 import sys
 import tempfile
 
-sys.path.insert(0, 'D:/pyrefly-rig-valefor/tools/rig/lane')
+sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig/lane')
 from PIL import Image, ImageDraw, ImageFont
 
 import lane_sheets as L
