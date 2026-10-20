@@ -10,7 +10,7 @@
  * - **power** ({@link hitPower}): the blow's damage against the target's HP (40 percent of its maximum is 1.0) or against 4,000 (the heavy end of both games' normal hits), whichever is more, so a
  *   boss with a 60,000 HP pool is still hit hard by a 4,000 and a girl with 1,100 HP is hit hard by a 450;
  * - **the stop** ({@link demoStopMs}): a finisher (a crit, an overkill, a capped blow, or the last blow of an Overdrive or Special) 100 to 150 ms by power; a strong blow (power 0.3 and over) 50 to
- *   80; a weak one 0 to 30; a multi-hit action stops on its first and last blow only. REDUCE MOTION and any playback speed but normal stop nothing (the caller's rule, unchanged);
+ *   80; a weak one 17 to 30 (a frame at least: the brief's 0 to 30, floored so that an ordinary hit is not a 4 ms stop that no frame shows); a multi-hit action stops on its first and last blow only. REDUCE MOTION and any playback speed but normal stop nothing (the caller's rule, unchanged);
  * - **the shake** ({@link demoTrauma}): trauma (`fx/c/Trauma.ts`: offset = max * trauma squared) from 0.14 up by the square root of power, a crit and an Overdrive's last blow more, the middle of a
  *   flurry half; the CAMERA moves, the HUD (a DOM tree) never does;
  * - **the flash** ({@link DEMO_FLASH_MS}): 0.08 s, white, full strength, on the struck figure for every damaging blow (REDUCE FLASHES: the caller's existing rule, the first blow of an action only,
@@ -34,6 +34,8 @@ export const STRONG_AT = 0.3;
 /** Power over which a strong blow's stop climbs from 50 to 80 ms. */
 export const STRONG_SPAN = 0.4;
 
+/** A weak blow holds at least one frame at 60 Hz (a stop shorter than that is no stop: the first clips, 2026-10-20, showed a 4 ms stop on an ordinary 148-damage hit, which is nothing) and at most 30 ms. */
+export const STOP_WEAK_MIN = 17;
 export const STOP_WEAK_MAX = 30;
 export const STOP_STRONG = { min: 50, max: 80 } as const;
 export const STOP_FINISHER = { min: 100, max: 150 } as const;
@@ -73,7 +75,7 @@ export function demoStopMs(f: BlowFacts): number {
   const p = power(f);
   if (isFinisher(f)) return STOP_FINISHER.min + Math.round((STOP_FINISHER.max - STOP_FINISHER.min) * clamp01(p));
   if (p >= STRONG_AT) return STOP_STRONG.min + Math.round((STOP_STRONG.max - STOP_STRONG.min) * clamp01((p - STRONG_AT) / STRONG_SPAN));
-  return Math.round(STOP_WEAK_MAX * clamp01(p / STRONG_AT));
+  return Math.round(STOP_WEAK_MIN + (STOP_WEAK_MAX - STOP_WEAK_MIN) * clamp01(p / STRONG_AT));
 }
 
 /** Which of the three the blow is, for the notes. */

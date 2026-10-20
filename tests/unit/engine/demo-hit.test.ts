@@ -11,7 +11,7 @@ import type { EventCtx } from '../../../src/engine/BattlePresenterEvents.ts';
 import { planHit, type HitInfo, type SpectacleFlags } from '../../../src/engine/fx/c/SpectacleRules.ts';
 import { HitStop } from '../../../src/engine/fx/c/Trauma.ts';
 import { fxHit, type FxStagePort } from '../../../src/engine/fx/c/presenterHooks.ts';
-import { DEMO_FLASH_MS, STOP_FINISHER, STOP_STRONG, STOP_WEAK_MAX, blowClass, demoShakeAmplitude, demoStopMs, demoTrauma, hitPower, isMiddleHit, type BlowFacts } from '../../../src/engine/motion/DemoHit.ts';
+import { DEMO_FLASH_MS, STOP_FINISHER, STOP_STRONG, STOP_WEAK_MAX, STOP_WEAK_MIN, blowClass, demoShakeAmplitude, demoStopMs, demoTrauma, hitPower, isMiddleHit, type BlowFacts } from '../../../src/engine/motion/DemoHit.ts';
 import { blowFlash, holdBlow } from '../../../src/engine/motion/DemoHitBeat.ts';
 import { setDemoMotion } from '../../../src/engine/motion/DemoMotion.ts';
 
@@ -32,12 +32,12 @@ describe('power: how hard a blow is', () => {
 });
 
 describe('the stop', () => {
-  it('weak 0 to 30 ms, strong 50 to 80, finisher 100 to 150, across the whole range of power', () => {
+  it('weak 17 to 30 ms (inside the 0 to 30 of the brief), strong 50 to 80, finisher 100 to 150, across the whole range of power', () => {
     for (let p = 0; p <= 1.5; p += 0.02) {
       const w = demoStopMs(facts({ power: p }));
       const cls = blowClass(facts({ power: p }));
       if (cls === 'weak') {
-        expect(w).toBeGreaterThanOrEqual(0);
+        expect(w).toBeGreaterThanOrEqual(STOP_WEAK_MIN);
         expect(w).toBeLessThanOrEqual(STOP_WEAK_MAX);
       } else {
         expect(cls).toBe('strong');
@@ -49,7 +49,8 @@ describe('the stop', () => {
       expect(f).toBeGreaterThanOrEqual(STOP_FINISHER.min);
       expect(f).toBeLessThanOrEqual(STOP_FINISHER.max);
     }
-    expect(demoStopMs(facts({ power: 0 }))).toBe(0);
+    expect(demoStopMs(facts({ power: 0 }))).toBe(17); // a weak blow holds a frame at least
+    expect(demoStopMs(facts({ power: 0.3 - 1e-9 }))).toBe(30);
     expect(demoStopMs(facts({ power: 0.3 }))).toBe(50);
     expect(demoStopMs(facts({ power: 0.7 }))).toBe(80);
     expect(demoStopMs(facts({ power: 1.5, crit: true }))).toBe(150);

@@ -7,12 +7,13 @@
  *
  * **The blend is chosen from the pair.** `difference` (0 for an overlap of 0.6 or more, 1 for 0.15 or less, 0.5 when the overlap is unknown) sets
  *
- * - the length: 110 ms (party) or 120 ms (foes) for a pair that agrees, up to 160 ms for one that does not; a KO, an Overdrive or a victory swap is 40 ms longer (200 at most);
- * - the shape, {@link cappedCross}: the outgoing painting leaves as `(1 - u) ** k`, the incoming one comes in as `u`, with `k = 1 + difference` (1 is a plain linear blend, 2 is the capped
- *   cross). At `k = 2` the two paintings never both show more than 0.382 (`1 - u = u * u` at its crossing), so a double image of two different outlines is at most 0.382 of the figure for a
- *   few frames, under the harness's 0.4, whatever the frame rate; the new painting comes in promptly (it is the action) and the old one is gone first. The body thins to 0.76 at the crossing for
- *   a pair that shares nothing, and not at all for one that shares everything. The fade-weighted head (`to / (from + to)`) then moves at most 0.182 of the gap a frame at 8 frames against
- *   0.258 for the quad curve at 7.2, because the weighting itself is smoother.
+ * - the length: 110 ms (party) or 120 ms (foes) for a pair that agrees, up to 140 or 150 ms for one that does not (a longer blend smooths the head further but keeps the double image on screen longer; at 60 fps and the
+ *   capped cross, 140 ms reads the head at 0.258 of the gap a frame where today's 120 ms quad dissolve reads 0.252, shows the lesser painting above the harness's 0.15 for 46 ms where today's shows it for 54, and its
+ *   peak is 0.33 where today's is 0.43); a KO, an Overdrive or a victory swap is 40 ms longer (200 at most);
+ * - the shape, {@link cappedCross}: the outgoing painting leaves as `(1 - s) ** k`, the incoming one comes in as `s` (`s` is `u` eased, {@link easeMap}), with `k = 1 + difference` (1 is a plain blend, 2 is the capped
+ *   cross). At `k = 2` the two paintings never both show more than 0.382 (`1 - s = s * s` at its crossing), so a double image of two different outlines is at most 0.382 of the figure for a few frames, under the harness's
+ *   0.4, whatever the frame rate; the new painting comes in promptly (it is the action) and the old one is gone first. The body thins to 0.76 at the crossing for a pair that shares nothing, and not at all for one that shares
+ *   everything. A pair that agrees (k = 1) reads the head at 0.215 a frame at 120 ms against 0.252. (Numbers, and what the harness read of both chapters: `docs/handoff/demo-motion.md`.)
  *
  * Pure: no `three`, no DOM, no clock. `PaintedActor.beginBlend` reads the overlap of the two planes it has just placed (the same reading the aligned dissolve takes, `PoseAlign.footprintOverlap`)
  * and hands it in; `PoseBlend.retune` puts the result on the blend it has just started. Every number is `[ours]`.
@@ -26,7 +27,7 @@ export const AGREE_OVERLAP = 0.6;
 export const DISAGREE_OVERLAP = 0.15;
 /** The length of a pair that agrees, ms, per side; a pair that does not adds {@link LENGTH_SPREAD}. */
 export const AGREE_MS = { party: 110, foe: 120 } as const;
-export const LENGTH_SPREAD = { party: 50, foe: 40 } as const;
+export const LENGTH_SPREAD = { party: 30, foe: 30 } as const;
 /** A KO, an Overdrive, a special or a victory swap runs this much longer, and never past {@link LONG_MS_MAX}. */
 export const LONG_EXTRA_MS = 40;
 export const LONG_MS_MAX = 200;
@@ -40,6 +41,14 @@ export function difference(overlap: number | null): number {
   if (overlap === null || !Number.isFinite(overlap)) return 0.5;
   return clamp01((AGREE_OVERLAP - overlap) / (AGREE_OVERLAP - DISAGREE_OVERLAP));
 }
+
+/**
+ * The time map of the blend: a cosine ease, `(1 - cos(pi u)) / 2`. A purely linear blend starts at once (the first frame of 120 ms is 14 percent of the way: 0.087 of the gap against 0.018 for today's quad ease-in), and the
+ * harness reads that first step as a jerk on a figure whose two paintings' stance readings are far apart (Bahamut idle to attack: two 100 px feet "jerks" in the first run of this switch, none today; a mix of linear and
+ * smoothstep still read 0.05 of the gap in the first frame). The cosine starts as softly as the quad does (curvature 4.9 against 4; 0.022 of the gap in the first frame) with a gentler middle (peak slope 1.57 against 2). The
+ * paintings' shares are the same bijection of time, so the cap below does not move.
+ */
+export const easeMap = (u: number): number => (1 - Math.cos(Math.PI * clamp01(u))) / 2;
 
 /** Where `(1 - u) ** k = u`: the most either painting shows when both do (0.5 at k = 1, 0.382 at k = 2). Bisection; pure. */
 export function cappedPeak(k: number): number {
@@ -55,12 +64,12 @@ export function cappedPeak(k: number): number {
 }
 
 /**
- * The capped cross of exponent `k` (1 to 2): the outgoing painting's share is `(1 - u) ** k`, the incoming one's `u`, and `cap` is where they meet. `PoseBlend` reads `cap` for a blend that
+ * The capped cross of exponent `k` (1 to 2): the outgoing painting's share is `(1 - s) ** k`, the incoming one's `s`, with `s = easeMap(u)`, and `cap` is where they meet. `PoseBlend` reads `cap` for a blend that
  * starts with both paintings already up (a request that turns a running blend round), and holds the lesser one under it.
  */
 export function cappedCross(k: number): BlendCurves {
   const e = Math.min(2, Math.max(1, k));
-  return { out: (u) => Math.pow(1 - clamp01(u), e), inn: (u) => clamp01(u), cap: cappedPeak(e) };
+  return { out: (u) => Math.pow(1 - easeMap(u), e), inn: (u) => easeMap(u), cap: cappedPeak(e) };
 }
 
 export interface DemoBlendInput {
