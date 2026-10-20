@@ -2,6 +2,7 @@
 (inside a part's posed silhouette -> that part, the front-most wins; outside every part -> the nearest), smooth the labels, dilate each label by k px into its neighbours (the underlap) and write
 <outdir>/<pose>.<part>.png (8-bit masks in master px of the idle frame with `pad` px of margin: rig_vcut's `mask`). Also <outdir>/<pose>.labels.png (a colour picture of the partition). Env XID, XWORK."""
 import colorsys
+import json
 import sys
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
 from scipy import ndimage as ndi
@@ -13,6 +14,7 @@ g = lambda n, d: type(d)(a[a.index(n) + 1]) if n in a else d  # noqa: E731
 PAD = g('--pad', 600)
 K = g('--k', 16)
 SIG = g('--sigma', 6.0)
+SEEDS = json.load(open(a[a.index('--seeds') + 1])) if '--seeds' in a else {}  # parts named here are placed by hand-drawn seed shapes (as autoseed.py reads them) instead of by the baseline key's silhouette
 kpart = {}
 if '--kpart' in a:
     for kv in a[a.index('--kpart') + 1].split(','):
@@ -28,6 +30,21 @@ PA = np.asarray(painting_in_master(pose, pad=PAD).split()[3])
 F = PA > 8
 dist = []
 for n in names:
+    if n in SEEDS:
+        h_, w_ = F.shape
+        im_ = Image.new('L', (w_, h_), 0)
+        d_ = ImageDraw.Draw(im_)
+        for sd_ in SEEDS[n]:
+            if 'poly' in sd_:
+                d_.polygon([(x + PAD, y + PAD) for x, y in sd_['poly']], fill=255)
+            elif 'line' in sd_:
+                d_.line([(x + PAD, y + PAD) for x, y in sd_['line']], fill=255, width=int(sd_.get('w', 30)), joint='curve')
+                for x, y in sd_['line']:
+                    r_ = sd_.get('w', 30) / 2
+                    d_.ellipse((x + PAD - r_, y + PAD - r_, x + PAD + r_, y + PAD + r_), fill=255)
+        m_ = np.asarray(im_) > 0
+        dist.append(ndi.distance_transform_edt(~m_) if m_.any() else np.full(F.shape, 1e6))
+        continue
     st = {m: {'shown': m == n, 'image': None} for m in base}
     pose_key(model, rig, key)
     model.set_state(st)

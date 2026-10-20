@@ -1,5 +1,5 @@
 {
- "_lane": "Pterya (FFX: Isaaru's Valefor, Chapter XIV; the silhouette twin of Valefor, `lane.py twin pterya --of valefor`): the same cut, bones, marks and keys as valefor.json, moved onto Pterya's own paintings (its canvases are Valefor's with 60 px more margin on every side: registration (60, 60), silhouettes equal to 0.999 at alpha 128; `_twin_shift` has each pose's). One costume across idle, attack, cast, hurt and KO (a re-colouring of Valefor's with a soft outer glow). Game case: FFX only (Pterya is an FFX enemy, chapter 14 link 2); the rig stays OFF.",
+ "_lane": "Pterya (FFX: Isaaru's Valefor, Chapter XIV; the silhouette twin of Valefor, `lane.py twin pterya --of valefor`): the same cut, bones, marks and keys as valefor.json, moved onto Pterya's own paintings (its canvases are Valefor's with 60 px more margin on every side: registration (60, 60), silhouettes equal to 0.999 at alpha 128; `_twin_shift` has each pose's). One costume across idle, attack, cast, hurt and KO (a re-colouring of Valefor's with a soft outer glow). Game case: FFX only (Pterya is an FFX enemy, chapter 14 link 2); the rig stays OFF. EXPRESSIVE KEYS (rig-expressive-2 lane, 2026-10-19): the attack and hurt keys show the HEAD, the NECK and the BODY as pieces cut from those paintings (masks in pterya-x.masks: the painting partitioned among all parts, head and neck by hand-drawn seeds, the rest by the baseline keys: autopart.py with --seeds); the body piece carries the shoulder fur and the armour the idle body cannot bend into.",
  "subject": "pterya",
  "scale": 2,
  "costume": {
@@ -1183,7 +1183,7 @@
       "tex": 0.75,
       "fill_joints": {
        "neck0": 120,
-       "neck1": 72
+       "neck1": 85
       }
      }
     },
@@ -1204,6 +1204,46 @@
       "fill_joints": {
        "neck0": 120,
        "neck1": 85
+      }
+     }
+    }
+   },
+   "body": {
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "tools/rig/subjects/pterya-x.masks/attack.body.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "mesh": {
+       "edge": 24,
+       "inner": 48,
+       "grow": 10
+      },
+      "skin": "chain",
+      "tex": 0.5,
+      "fill_joints": {
+       "chest": 120
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "tools/rig/subjects/pterya-x.masks/hurt.body.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "mesh": {
+       "edge": 24,
+       "inner": 48,
+       "grow": 10
+      },
+      "skin": "chain",
+      "tex": 0.5,
+      "fill_joints": {
+       "chest": 120
       }
      }
     }
@@ -1530,7 +1570,8 @@
     },
     "image": {
      "head": "attack",
-     "neck": "attack"
+     "neck": "attack",
+     "body": "attack"
     }
    },
    "hurt": {
@@ -1568,7 +1609,8 @@
     },
     "image": {
      "head": "hurt",
-     "neck": "hurt"
+     "neck": "hurt",
+     "body": "hurt"
     }
    }
   }
