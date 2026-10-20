@@ -190,8 +190,12 @@ describe('tools/deploy-pages.mjs is wired to it', () => {
   });
 
   it('hands the build the name in PYREFLY_RELEASE, explicitly, every time', () => {
-    expect(src).toMatch(/import \{ RELEASE_ENV \} from '\.\/build-stamp\.mjs';/);
-    expect(src).toMatch(/\[RELEASE_ENV\]: RELEASE/);
+    // since release 61 the build's environment is made by tools/release-build.mjs (the function a review's candidate also uses): the deploy passes it the name,
+    // and that function sets PYREFLY_RELEASE over whatever the shell carries
+    expect(src).toMatch(/releaseBuildEnv\(\{ release: RELEASE, host: HOST, sourceMapDir \}\)/);
+    const shared = read('tools/release-build.mjs');
+    expect(shared).toMatch(/import \{ RELEASE_ENV \} from '\.\/build-stamp\.mjs';/);
+    expect(shared).toMatch(/\[RELEASE_ENV\]: release/);
   });
 
   it('writes the release into every record it makes: the log, the preview log and the legacy log', () => {

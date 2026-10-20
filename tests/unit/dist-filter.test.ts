@@ -265,7 +265,10 @@ describe('the production build makes and ships no source map', () => {
 
   it('is wired to the deploy: it names the folder by commit and refuses a build that still points at a map', () => {
     const deploy = readFileSync(join(__dirname, '..', '..', 'tools', 'deploy-pages.mjs'), 'utf8');
-    expect(deploy).toContain('SOURCEMAP_DIR_ENV');
+    // since release 61 the variable is set by tools/release-build.mjs, which the deploy hands the commit's folder
+    const shared = readFileSync(join(__dirname, '..', '..', 'tools', 'release-build.mjs'), 'utf8');
+    expect(shared).toContain('[SOURCEMAP_DIR_ENV] = sourceMapDir');
+    expect(deploy).toMatch(/releaseBuildEnv\(\{ release: RELEASE, host: HOST, sourceMapDir \}\)/);
     expect(deploy).toContain('findSourceMapReferences(DIST)');
     expect(deploy).toMatch(/join\(SOURCEMAP_HOME, mainSha\)/);
   });

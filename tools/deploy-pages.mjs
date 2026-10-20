@@ -105,7 +105,6 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-import { RELEASE_ENV } from './build-stamp.mjs';
 import { formatLoadReport, verifyArtLoads } from './art-browser-load.mjs';
 import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
@@ -121,12 +120,12 @@ import {
   describeHostPlan,
   formatLegacyLogLine,
   formatPreviewLogLine,
-  hostBuildEnv,
   parseHostArgs,
 } from './deploy-host.mjs';
 import { resolveWranglerBin } from './deploy-wrangler.mjs';
+import { releaseBuildEnv } from './release-build.mjs';
 import { checkReleaseForDeploy } from './release-notes.mjs';
-import { SOURCEMAP_DIR_ENV, findSourceMapReferences, findUnshipped } from './dist-filter.mjs';
+import { findSourceMapReferences, findUnshipped } from './dist-filter.mjs';
 import { formatLocalPathReport, scanBuildForLocalPaths } from './dist-local-paths.mjs';
 import {
   archiveMarker,
@@ -713,11 +712,11 @@ async function main() {
   // PR-0328 / D-335: no source map ships. The build keeps its maps, keyed by this commit, outside dist-release.
   const sourceMapDir = join(SOURCEMAP_HOME, mainSha);
   // Every host builds with its own base set explicitly: Cloudflare serves from the root (BASE_PATH=/), GitHub Pages from
-  // /pyrefly-reprise/. A BASE_PATH left in the shell by an earlier run can no longer decide it.
-  const hostEnv = hostBuildEnv(HOST);
+  // /pyrefly-reprise/. A BASE_PATH left in the shell by an earlier run can no longer decide it. PYREFLY_RELEASE is set explicitly for every build,
+  // so a value left in the shell cannot decide the title's build number. Both come from `releaseBuildEnv` (tools/release-build.mjs), the one function a
+  // review's candidate (tools/candidate-build.mjs) also builds with, so the reviewed bundle is this bundle (release 60: it was not; the candidate had no base).
   log(`building: npx vite build --outDir dist-release --emptyOutDir with BASE_PATH=${HOST.base} (source maps are kept in ${sourceMapDir}, none ship)`);
-  // PYREFLY_RELEASE is set explicitly for every build, so a value left in the shell cannot decide the title's build number.
-  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: { ...process.env, ...hostEnv, [RELEASE_ENV]: RELEASE, [SOURCEMAP_DIR_ENV]: sourceMapDir } }).status !== 0) {
+  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: releaseBuildEnv({ release: RELEASE, host: HOST, sourceMapDir }) }).status !== 0) {
     fail('vite build failed — see output above');
   }
 
