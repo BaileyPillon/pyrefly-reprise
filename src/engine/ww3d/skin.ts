@@ -94,6 +94,8 @@ const GLOW_GAIN = 0.5;
 const LIE_TAU = 0.2;
 const GLOW_TAU = 0.18;
 const ACT_TAU = 0.2;
+/** Seconds a girl's cast glow may last: a cast's own length (the beat and the clip are about two seconds). */
+const CAST_GLOW_MAX = 2.4;
 const STONE = new Color(0.6, 0.6, 0.64);
 /** How close to its slot a girl stands before her weapons are aimed (metres), and the height of the girls' chests that her effects aim at. */
 const AT_SLOT = 0.35;
@@ -150,6 +152,7 @@ export class WwSkin {
       const b = this.bound.get(actorId as WwId);
       if (!b) return;
       b.castHold = kind === 'cast';
+      if (b.castHold) b.castAt = null; // a new cast swells afresh, even where the last one never closed
       b.model.noteOpen(kind, lead, paceRate('action'));
       if (b.id !== WW_BOSS_ID) return;
       b.busy = true; // every Valefor action flaps her wings harder, until it closes
@@ -245,10 +248,13 @@ export class WwSkin {
     const pose = life === 'hurt' || life === 'victory' ? life : actor.pose;
     const casting = pose === 'cast' || b.castHold;
 
-    // glow: a cast swells one; anything else lets it go
+    // glow: a cast swells one; anything else lets it go. A girl's beat that never closes (under the ATB a second action can be open when hers ends, so the presenter puts the wrong figure's pose back and her
+    // pose and cast hold stay, phase 2: Yuna stood cream and see-through for the rest of the fight) lets the glow go after a cast's length. Valefor's charge is as long as her action, so hers is not capped.
     if (casting) {
       b.castAt ??= this.clock;
-      b.glow = approach(b.glow, Math.max(0, Math.min(1, castGlow(this.clock - b.castAt))), GLOW_TAU, dt);
+      const age = this.clock - b.castAt;
+      const stuck = b.id !== WW_BOSS_ID && age > CAST_GLOW_MAX;
+      b.glow = approach(b.glow, stuck ? 0 : Math.max(0, Math.min(1, castGlow(age))), GLOW_TAU, dt);
     } else {
       b.castAt = null;
       b.glow = approach(b.glow, 0, GLOW_TAU, dt);

@@ -338,6 +338,22 @@ describe('following', () => {
     expect(girlMat.emissiveIntensity).toBeLessThan(0.02);
   });
 
+  it("lets a girl's cast glow go after a cast's length when her beat never closes, swells afresh on the next cast, and does not cap Valefor's charge", async () => {
+    const r = await rig(['yuna', WW_BOSS_ID]);
+    run(r, 0.1);
+    const girlMat = modelOf(r, 'yuna').materials[0]!.material;
+    const bossMat = modelOf(r, WW_BOSS_ID).materials[0]!.material;
+    for (const id of ['yuna', WW_BOSS_ID]) r.skin.listener.open!(id, 'cast', 0.3, { targetIds: [] }); // and no close: the ATB left the beat open (phase 2: the cream Yuna)
+    run(r, 1.2);
+    expect(girlMat.emissiveIntensity).toBeGreaterThan(0.1);
+    run(r, 4);
+    expect(girlMat.emissiveIntensity).toBeLessThan(0.02); // a cast's length, then the glow is gone
+    expect(bossMat.emissiveIntensity).toBeGreaterThan(0.1); // her charge is as long as her action
+    r.skin.listener.open!('yuna', 'cast', 0.3, { targetIds: [] }); // the next cast, with the pose still held
+    run(r, 1.2);
+    expect(girlMat.emissiveIntensity).toBeGreaterThan(0.1);
+  });
+
   it('multiplies the colour by the actor\'s tint and brightness, greys a petrified figure, and fades the figure with its alpha and dissolve', async () => {
     const r = await rig(['paine']);
     run(r, 0.1);
