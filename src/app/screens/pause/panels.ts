@@ -107,8 +107,10 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
   }));
   if (ctx.game === 'ff7') {
     // FF7 draws no eye candy (`EyeCandy.ts` callers check the game), so its EYE CANDY page would switch nothing.
-    const at = settings.findIndex((s) => s.id === 'eyeCandy');
-    if (at >= 0) settings.splice(at, 1);
+    for (const id of ['eyeCandy', 'visualStyle']) { // VISUAL STYLE switches the demo look, which FF7 never draws (release 61)
+      const at = settings.findIndex((s) => s.id === id);
+      if (at >= 0) settings.splice(at, 1);
+    }
   }
   if (!gameHasVoice(ctx.game ?? 'ffx')) { // no game context reads as FFX, as `optionRows` does
     // The recorded voice-over is FFX's alone for now (Bailey picked the FFX voices); FFX-2 and FF7 have none, so their VOICE rows would switch nothing (rule 14).

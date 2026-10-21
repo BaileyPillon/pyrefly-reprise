@@ -91,7 +91,7 @@ describe.each(FIXTURES)('a %s save upgrades with every look ON', (file, release)
     // two settings (PR-0032, `saveAccess.ts`), both OFF.
     // (and, since 39.5, the two front-end choices at their defaults: `saveFrontend.ts`)
     // ...and the recorded voice-over's two settings (`voiceOn` ON, `voiceVolume` 0.9: a save older than the setting reads the defaults, Bailey 2026-10-07).
-    expect(added).toEqual([...FX_PARTS.map((p) => p.field), 'fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize', 'reduceFlashes', 'colourVision', 'titleArt', 'chapterSelectMusic', 'voiceOn', 'voiceVolume'].sort());
+    expect(added).toEqual([...FX_PARTS.map((p) => p.field), 'fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize', 'reduceFlashes', 'colourVision', 'titleArt', 'chapterSelectMusic', 'voiceOn', 'voiceVolume', 'titleArtPicked', 'visualStyle'].sort()); // release 61 added the last two
     for (const f of LOOKS) expect(after.settings[f], f).toBe(true);
     for (const p of FX_PARTS) expect(after.settings[p.field], p.field).toBe(true);
   });

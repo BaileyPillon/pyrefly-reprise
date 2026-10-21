@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
-import { castHtml, titleMarkup, titlePlateSizes, upgradeTitlePlanes } from '../../src/app/screens/frontend/titleMarkup.ts';
+import { castHtml, titleMarkup, upgradeTitlePlanes } from '../../src/app/screens/frontend/titleMarkup.ts';
 import { TITLE_PLACEHOLDER, revealTitleWhenDecoded, titleLayers } from '../../src/app/screens/frontend/titleReveal.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -131,20 +131,21 @@ describe('no aborted keyart request', () => {
     }
   });
 
-  it('index.html preloads the plate with the same candidates and sizes the planes offer', () => {
+  it('index.html preloads the DEFAULT title plate, The Echo (release 61), by the very URL its plane draws; the Farplane painting is not preloaded any more', () => {
     // The page names its art through Vite's BASE_URL variable, which a build fills in from the base the site is served under (a
     // root-absolute name stays at the server root when Vite does not find the file in public/: tests/unit/art-url-base.test.ts).
     // Filled in with this run's base, the preload must be exactly what the planes carry.
-    setArtManifest({ version: 1, generatedAt: '', subjects: {}, portraits: [], backdrops: [], pause: [], pause2x: [], title: ['keyart'], title2x: ['keyart'] });
+    setArtManifest({ version: 1, generatedAt: '', subjects: {}, portraits: [], backdrops: [], pause: [], pause2x: [], title: ['echo', 'keyart'], title2x: ['keyart'] });
     const html = read('index.html');
     const preload = /<link rel="preload" as="image"[^>]*>/.exec(html)?.[0] ?? '';
-    expect(preload).toContain('href="%BASE_URL%art/title/keyart.png"');
-    expect(preload).toContain('imagesrcset="%BASE_URL%art/title/keyart.png 1344w, %BASE_URL%art/title/keyart.2x.webp 2688w"');
+    expect(preload).toContain('href="%BASE_URL%art/title/echo.png"');
+    expect(preload).not.toContain('keyart');
+    expect(preload, 'The Echo has no 2x master, so there is no candidate list to match').not.toContain('imagesrcset');
     const filled = preload.replaceAll('%BASE_URL%', import.meta.env.BASE_URL);
-    const plane = mount().querySelector('.fe-title__plane img');
+    const host = document.createElement('div');
+    host.innerHTML = titleMarkup({ briefingChip: false, art: 'echo' });
+    const plane = host.querySelector('.fe-title__plane img');
     expect(filled).toContain(`href="${plane?.getAttribute('src')}"`);
-    expect(filled).toContain(`imagesrcset="${plane?.getAttribute('srcset')}"`);
-    expect(filled).toContain(`imagesizes="${plane?.getAttribute('sizes')}"`);
-    expect(html).toContain(`imagesizes="${titlePlateSizes()}"`);
+    expect(plane?.hasAttribute('srcset')).toBe(false);
   });
 });

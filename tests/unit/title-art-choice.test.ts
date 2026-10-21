@@ -4,8 +4,10 @@
  * selected it hides echoes of spira since it's already in the image itself. it will look neater that way. current title
  * screen is still the default."
  *
- * `Settings.titleArt` is `'farplane'` (today's Gullwings painting; the default) or `'echo'` (The Echo, Yuna in still water,
- * `public/art/title/echo.png`, with its own painted lettering). This pins what the choice changes on screen and what it does
+ * `Settings.titleArt` is `'echo'` (The Echo, Yuna in still water, `public/art/title/echo.png`, with its own painted lettering; THE DEFAULT
+ * since release 61, Bailey 2026-10-21) or `'farplane'` (the Gullwings painting; the default of 39.5 to 60, now the selectable one, kept only
+ * for a player who picked it: `titleArtPicked`). The markup function itself still draws the Farplane screen when it is not told which
+ * (`titleMarkup({ briefingChip })`); the SCREEN reads the setting. This pins what the choice changes on screen and what it does
  * not: the Farplane markup is exactly what it was; The Echo draws its own plate as one plane, never offers it a 2x master
  * it does not have, leaves the HTML wordmark out and says the words in the picture's `alt`; the screen reads the setting
  * every time it is shown; the chrome that stays (eyebrow, chip, strap, hint row, tap target) stays; and the layout rules
@@ -20,7 +22,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { App } from '../../src/app/App.ts';
 import { SAVE_KEY, SaveStore } from '../../src/app/SaveData.ts';
-import { TITLE_ART_PLATES } from '../../src/app/saveFrontend.ts';
+import { TITLE_ART_PLATES, titleArtPick } from '../../src/app/saveFrontend.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
 import { TITLE_PLATE, titleMarkup } from '../../src/app/screens/frontend/titleMarkup.ts';
 import { TITLE_PLACEHOLDER, TITLE_PLACEHOLDERS, TITLE_PLACEHOLDER_ECHO } from '../../src/app/screens/frontend/titleReveal.ts';
@@ -55,7 +57,7 @@ afterEach(() => {
 });
 
 describe('the Farplane screen is what it was', () => {
-  it('is the default of the markup, with its wordmark, its two planes and its scrim', () => {
+  it('is what the markup draws when it is not told which (the screen always tells it), with its wordmark, its two planes and its scrim', () => {
     const plain = parse(titleMarkup({ briefingChip: false }));
     const farplane = parse(titleMarkup({ briefingChip: false, art: 'farplane' }));
     expect(farplane.innerHTML).toBe(plain.innerHTML);
@@ -136,9 +138,9 @@ describe('The Echo', () => {
 class FakeApp {
   readonly uiRoot = document.body.appendChild(document.createElement('div'));
   readonly save: SaveStore;
-  constructor(art?: string) {
+  constructor(art?: string, picked?: boolean) {
     const slot = new Map<string, string>();
-    if (art !== undefined) slot.set(SAVE_KEY, JSON.stringify({ version: 1, updatedAt: 1, chapters: {}, unlocked: [], settings: { titleArt: art, reduceMotion: true }, seenCoach: [], flags: {} }));
+    if (art !== undefined) slot.set(SAVE_KEY, JSON.stringify({ version: 1, updatedAt: 1, chapters: {}, unlocked: [], settings: { titleArt: art, ...(picked === undefined ? {} : { titleArtPicked: picked }), reduceMotion: true }, seenCoach: [], flags: {} }));
     else slot.set(SAVE_KEY, JSON.stringify({ version: 1, updatedAt: 1, chapters: {}, unlocked: [], settings: { reduceMotion: true }, seenCoach: [], flags: {} }));
     this.save = new SaveStore(SAVE_KEY, { getItem: (k) => slot.get(k) ?? null, setItem: (k, v) => void slot.set(k, v), removeItem: (k) => void slot.delete(k) });
   }
@@ -147,8 +149,8 @@ class FakeApp {
   }
 }
 
-async function showTitle(art?: string): Promise<{ screen: TitleScreen; root: HTMLElement }> {
-  const app = new FakeApp(art);
+async function showTitle(art?: string, picked?: boolean): Promise<{ screen: TitleScreen; root: HTMLElement }> {
+  const app = new FakeApp(art, picked);
   const screen = new TitleScreen();
   screen.app = app as unknown as App;
   screen.root = document.body.appendChild(document.createElement('div'));
@@ -157,15 +159,24 @@ async function showTitle(art?: string): Promise<{ screen: TitleScreen; root: HTM
 }
 
 describe('TitleScreen reads Settings.titleArt every time it is shown', () => {
-  it('draws the Farplane screen for a save with no choice (an older save), and for a bad value', async () => {
-    for (const art of [undefined, 'nonsense', 'Echo']) {
-      const { screen, root } = await showTitle(art);
-      expect(root.classList.contains('fe-title--echo'), String(art)).toBe(false);
-      expect(root.querySelectorAll('.fe-title__name')).toHaveLength(2);
-      expect(root.querySelectorAll('.fe-title__plane')).toHaveLength(2);
-      expect(screen.snapshot()['art']).toBe('farplane');
+  it('draws The Echo for a save with no choice (a new player, an older save), for a bad value, and for a stored Farplane that was never picked (release 61)', async () => {
+    for (const [art, picked] of [[undefined, undefined], ['nonsense', undefined], ['Echo', undefined], ['farplane', undefined], ['farplane', false], ['farplane', 'x']] as const) {
+      const { screen, root } = await showTitle(art, picked as boolean | undefined);
+      expect(root.classList.contains('fe-title--echo'), `${String(art)} ${String(picked)}`).toBe(true);
+      expect(root.querySelectorAll('.fe-title__name')).toHaveLength(0);
+      expect(root.querySelectorAll('.fe-title__plane')).toHaveLength(1);
+      expect(screen.snapshot()['art']).toBe('echo');
       screen.exit();
     }
+  });
+
+  it('draws the Farplane screen for a player who picked it: its wordmark, its two planes, no echo class', async () => {
+    const { screen, root } = await showTitle('farplane', true);
+    expect(root.classList.contains('fe-title--echo')).toBe(false);
+    expect([...root.querySelectorAll('.fe-title__name')].map((n) => n.textContent)).toEqual(['Echoes', 'of Spira']);
+    expect(root.querySelectorAll('.fe-title__plane')).toHaveLength(2);
+    expect(screen.snapshot()['art']).toBe('farplane');
+    screen.exit();
   });
 
   it('draws The Echo when it is chosen: its class on the root, one plane, no wordmark', async () => {
@@ -180,7 +191,7 @@ describe('TitleScreen reads Settings.titleArt every time it is shown', () => {
     screen.exit();
   });
 
-  it('draws the Farplane screen again when the choice goes back (a second enter on the same screen object)', async () => {
+  it('draws the Farplane screen again when the choice goes to it (a second enter on the same screen object)', async () => {
     const app = new FakeApp('echo');
     const screen = new TitleScreen();
     screen.app = app as unknown as App;
@@ -188,7 +199,7 @@ describe('TitleScreen reads Settings.titleArt every time it is shown', () => {
     await screen.enter();
     expect(screen.root.classList.contains('fe-title--echo')).toBe(true);
     screen.exit();
-    app.save.setSettings({ titleArt: 'farplane' });
+    app.save.setSettings(titleArtPick('farplane'));
     await screen.enter();
     expect(screen.root.classList.contains('fe-title--echo')).toBe(false);
     expect(screen.root.querySelectorAll('.fe-title__name')).toHaveLength(2);

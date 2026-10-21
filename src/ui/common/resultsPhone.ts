@@ -154,7 +154,7 @@ function chipsHtml(m: ResultsPageModel): string {
         ? `<div class="rresp__gains"><span class="rresp__gain">+${formatNumber(Math.round(row.award * p))} <small>${row.awardUnit}</small></span>${up}</div>${why}`
         : `<div class="rresp__lv">${escapeHtml(row.standing)}</div>`;
       return `<div class="rresp__chip-member">
-          <div class="rresp__face">${memberFaceHtml(row)}</div>
+          <div class="rresp__face">${memberFaceHtml(row, m.bodyFaces?.includes(row.id) === true)}</div>
           <div class="rresp__name">${escapeHtml(row.name)}</div>
           ${lines}
         </div>`;

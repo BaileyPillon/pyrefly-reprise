@@ -2,11 +2,13 @@
 /**
  * Release 39.5 (Bailey, 2026-10-07): two selectable front-end choices, both stored in `Settings`.
  *
- *   titleArt           'farplane' (today's Gullwings painting, the DEFAULT) | 'echo' (the new one, "The Echo")
+ *   titleArt           'echo' (The Echo, the DEFAULT since release 61) | 'farplane' (the Gullwings painting; the default of 39.5 to 60)
  *   chapterSelectMusic 'b' (the take live since 39.4, the DEFAULT) | 'a' | 'c'
  *
- * Bailey: "current title screen is still the default"; "B as the default", "C as a selectable alternate", "and A as a
- * selectable alternate as well". Both fields are ADDITIVE (`SAVE_VERSION` does not change), so this pins the save half:
+ * Bailey (39.5): "current title screen is still the default"; "B as the default", "C as a selectable alternate", "and A as a
+ * selectable alternate as well". RELEASE 61 REVERSED the first (2026-10-21: "incorporate the new title screen picture as the default ...
+ * make the current one selectable"): the default is The Echo, and `titleArtPicked` keeps a player's own choice apart from it
+ * (`tests/unit/r61-title-art.test.ts` pins that half). Both fields are ADDITIVE (`SAVE_VERSION` does not change), so this pins the save half:
  * the defaults, every release's real save fixture loading with all it had and gaining the two defaults, a value that
  * is not on the list reading as the default (CHK-024), a choice surviving a save and a reload, and the OPTIONS rows
  * that change them stepping through the lists (Left, Right and Confirm, wrapping).
@@ -35,6 +37,7 @@ import {
   isTitleArt,
   presentationSummary,
   titleArtOf,
+  titleArtPick,
 } from '../../src/app/saveFrontend.ts';
 import { optionRows } from '../../src/app/screens/PauseScreenPanels.ts';
 import { optionsColumns } from '../../src/app/screens/pause/panels.ts';
@@ -70,17 +73,19 @@ const fixtures = readdirSync(FIXTURES)
   .map((f) => [f, JSON.parse(readFileSync(resolve(FIXTURES, f), 'utf8')) as Fixture] as const);
 
 describe('the two choices, as data', () => {
-  it('lists the title screens with today’s painting first, and the board tracks with B first', () => {
-    expect([...TITLE_ARTS]).toEqual(['farplane', 'echo']);
-    expect(DEFAULT_TITLE_ART).toBe('farplane');
+  it('lists the title screens with The Echo first (release 61), and the board tracks with B first', () => {
+    expect([...TITLE_ARTS]).toEqual(['echo', 'farplane']);
+    expect(DEFAULT_TITLE_ART).toBe('echo');
     expect([...CHAPTER_SELECT_MUSICS]).toEqual(['b', 'a', 'c']);
     expect(DEFAULT_CHAPTER_SELECT_MUSIC).toBe('b');
   });
 
   it('is what a new save holds', () => {
-    expect(defaultSettings().titleArt).toBe('farplane');
+    expect(defaultSettings().titleArt).toBe('echo');
+    expect(defaultSettings().titleArtPicked).toBe(false);
+    expect(defaultSettings().visualStyle).toBe('hd2d');
     expect(defaultSettings().chapterSelectMusic).toBe('b');
-    expect(defaultSave().settings.titleArt).toBe('farplane');
+    expect(defaultSave().settings.titleArt).toBe('echo');
     expect(defaultSave().settings.chapterSelectMusic).toBe('b');
   });
 
@@ -97,17 +102,18 @@ describe('the two choices, as data', () => {
       expect(chapterSelectMusicOf(bad)).toBe('b');
       expect(isChapterSelectMusic(bad)).toBe(false);
     }
-    for (const bad of [undefined, null, '', 'Echo', 'ECHO', 'gullwings', 0, true, {}, [], 'b']) {
-      expect(titleArtOf(bad), String(bad)).toBe('farplane');
+    for (const bad of [undefined, null, '', 'Echo', 'ECHO', 'Farplane', 'gullwings', 0, true, {}, [], 'b']) {
+      expect(titleArtOf(bad), String(bad)).toBe('echo');
       expect(isTitleArt(bad)).toBe(false);
     }
     expect(titleArtOf('echo')).toBe('echo');
+    expect(titleArtOf('farplane')).toBe('farplane');
   });
 
   it('steps through a list and wraps, from either side, and an unknown value counts as the first', () => {
-    expect(cycle(TITLE_ARTS, 'farplane', 1)).toBe('echo');
     expect(cycle(TITLE_ARTS, 'echo', 1)).toBe('farplane');
-    expect(cycle(TITLE_ARTS, 'farplane', -1)).toBe('echo');
+    expect(cycle(TITLE_ARTS, 'farplane', 1)).toBe('echo');
+    expect(cycle(TITLE_ARTS, 'echo', -1)).toBe('farplane');
     expect(cycle(CHAPTER_SELECT_MUSICS, 'b', 1)).toBe('a');
     expect(cycle(CHAPTER_SELECT_MUSICS, 'a', 1)).toBe('c');
     expect(cycle(CHAPTER_SELECT_MUSICS, 'c', 1)).toBe('b');
@@ -116,7 +122,7 @@ describe('the two choices, as data', () => {
   });
 });
 
-describe('every real save from every release loads unchanged and gains the two defaults', () => {
+describe('every real save from every release loads unchanged and gains the new defaults (The Echo, not picked, HD-2D, track B)', () => {
   it('has fixtures to read', () => {
     expect(fixtures.length).toBeGreaterThanOrEqual(10);
   });
@@ -132,7 +138,9 @@ describe('every real save from every release loads unchanged and gains the two d
     const slot = slotWith(raw);
     const store = new SaveStore(SAVE_KEY, slot);
     const s = store.settings;
-    expect(s.titleArt).toBe('farplane');
+    expect(s.titleArt, 'a save from before release 61 never picked: it gets The Echo').toBe('echo');
+    expect(s.titleArtPicked).toBe(false);
+    expect(s.visualStyle).toBe('hd2d');
     expect(s.chapterSelectMusic).toBe('b');
 
     // Everything that was saved is still there: every chapter record, every clear and time, the coach marks, the unlocks.
@@ -145,15 +153,19 @@ describe('every real save from every release loads unchanged and gains the two d
     expect(loaded.version).toBe(SAVE_VERSION);
     for (const [k, v] of Object.entries(fixture.expect?.settings ?? {})) expect((s as unknown as Record<string, unknown>)[k], k).toEqual(v);
 
-    // And the two defaults are the ONLY fields it gained that were not already a default of the older build.
+    // And the defaults are the ONLY fields it gained that were not already a default of the older build.
     const gained = Object.keys(s).filter((k) => !(k in stored.settings));
     expect(gained).toContain('titleArt');
+    expect(gained).toContain('titleArtPicked');
+    expect(gained).toContain('visualStyle');
     expect(gained).toContain('chapterSelectMusic');
 
-    // A save and a reload keeps them, with the choice made.
-    store.setSettings({ titleArt: 'echo', chapterSelectMusic: 'c' });
+    // A save and a reload keeps them, with the choice made: the Farplane painting, the old default, is kept once it is a pick.
+    store.setSettings({ ...titleArtPick('farplane'), chapterSelectMusic: 'c', visualStyle: 'classic' });
     const again = new SaveStore(SAVE_KEY, slot);
-    expect(again.settings.titleArt).toBe('echo');
+    expect(again.settings.titleArt).toBe('farplane');
+    expect(again.settings.titleArtPicked).toBe(true);
+    expect(again.settings.visualStyle).toBe('classic');
     expect(again.settings.chapterSelectMusic).toBe('c');
   });
 });
@@ -163,8 +175,10 @@ describe('a value that is not on the list never reaches the title screen or the 
 
   it('reads as the default, and leaves every other setting as it was', () => {
     for (const bad of ['ECHO', 'gullwings', 7, null, true, {}, ['echo']]) {
-      const s = new SaveStore(SAVE_KEY, slotWith(blobWith({ titleArt: bad, chapterSelectMusic: bad, masterVolume: 0.25 }))).settings;
-      expect(s.titleArt, `titleArt ${JSON.stringify(bad)}`).toBe('farplane');
+      const s = new SaveStore(SAVE_KEY, slotWith(blobWith({ titleArt: bad, chapterSelectMusic: bad, visualStyle: bad, masterVolume: 0.25 }))).settings;
+      expect(s.titleArt, `titleArt ${JSON.stringify(bad)}`).toBe('echo');
+      expect(s.titleArtPicked, `titleArtPicked ${JSON.stringify(bad)}`).toBe(false);
+      expect(s.visualStyle, `visualStyle ${JSON.stringify(bad)}`).toBe('hd2d');
       expect(s.chapterSelectMusic, `chapterSelectMusic ${JSON.stringify(bad)}`).toBe('b');
       expect(s.masterVolume).toBe(0.25);
     }
@@ -182,7 +196,7 @@ describe('a value that is not on the list never reaches the title screen or the 
   it('survives a blob that is not a save at all', () => {
     for (const junk of ['', '{', 'null', '[]', '"echo"']) {
       const s = new SaveStore(SAVE_KEY, slotWith(junk)).settings;
-      expect(s.titleArt).toBe('farplane');
+      expect(s.titleArt).toBe('echo');
       expect(s.chapterSelectMusic).toBe('b');
     }
   });
@@ -194,7 +208,7 @@ describe('the OPTIONS rows', () => {
   it('show ONE PRESENTATION row that reads both choices, for every game (Bailey, 2026-10-08, "go with C")', () => {
     for (const game of ['ffx', 'ffx2', 'ff7'] as const) {
       const rows = optionRows(defaultSettings(), game);
-      expect(rows.find((r) => r.id === 'presentation'), game).toMatchObject({ label: 'PRESENTATION', value: 'FARPLANE · B', ratio: null });
+      expect(rows.find((r) => r.id === 'presentation'), game).toMatchObject({ label: 'PRESENTATION', value: 'THE ECHO · B', ratio: null });
       // the two choices live on the page the row opens (`pause/presentationPage.ts`), not on the list
       expect(rows.map((r) => r.id), game).not.toContain('titleArt');
       expect(rows.map((r) => r.id), game).not.toContain('chapterSelectMusic');
@@ -208,33 +222,35 @@ describe('the OPTIONS rows', () => {
     }
   });
 
-  it('the list is ten rows in both games (thirteen on the 39.5 base: TEXT SIZE, REDUCE MOTION and LOW EFFECTS moved to the ACCESSIBILITY tab), so every row fits without scrolling at 1600x900 (measured on the 13-row list: docs/screenshots/r395-int/options-c)', () => {
+  it('the list is eleven rows in both games (ten before release 61 added VISUAL STYLE; thirteen on the 39.5 base: TEXT SIZE, REDUCE MOTION and LOW EFFECTS moved to the ACCESSIBILITY tab), so every row fits without scrolling at 1600x900 (measured on the 13-row list: docs/screenshots/r395-int/options-c)', () => {
     const count = (game: 'ffx' | 'ffx2'): number =>
       optionsColumns({ settings: defaultSettings(), battleHelpOn: true, canRestart: true, canChapterSelect: true, canQuit: true, extraRows: [], game }).find((c) => c.id === 'settings')!.rows.length;
-    expect(count('ffx')).toBe(10); // VOICE and VOICE-OVER are FFX's (the recordings are FFX only, rule 14)
-    expect(count('ffx2')).toBe(10); // X-2 BATTLE and ATB SPEED are FFX-2's
+    expect(count('ffx')).toBe(11); // VOICE and VOICE-OVER are FFX's (the recordings are FFX only, rule 14)
+    expect(count('ffx2')).toBe(11); // X-2 BATTLE and ATB SPEED are FFX-2's
   });
 
   it('read the choice of whatever is stored', () => {
     expect(presentationSummary({ titleArt: 'echo', chapterSelectMusic: 'a' })).toBe('THE ECHO · A');
-    expect(optionRows({ ...defaultSettings(), titleArt: 'echo' }).find((r) => r.id === 'presentation')?.value).toBe(`${TITLE_ART_LABELS.echo} · B`);
+    expect(optionRows({ ...defaultSettings(), titleArt: 'farplane', titleArtPicked: true }).find((r) => r.id === 'presentation')?.value).toBe(`${TITLE_ART_LABELS.farplane} · B`);
     for (const m of CHAPTER_SELECT_MUSICS) {
       const value = optionRows({ ...defaultSettings(), chapterSelectMusic: m }).find((r) => r.id === 'presentation')?.value;
-      expect(value).toBe(`FARPLANE · ${m.toUpperCase()}`);
+      expect(value).toBe(`THE ECHO · ${m.toUpperCase()}`);
       expect(CHAPTER_SELECT_LABELS[m].startsWith(m.toUpperCase())).toBe(true); // the letter is the page's label's first letter
     }
     // a bad stored value prints the default, as it plays the default
-    expect(presentationSummary({ titleArt: 'x' as never, chapterSelectMusic: 'y' as never })).toBe('FARPLANE · B');
+    expect(presentationSummary({ titleArt: 'x' as never, chapterSelectMusic: 'y' as never })).toBe('THE ECHO · B');
   });
 
   it('step through the lists on Right, Left and Confirm, and write the choice to the save', () => {
     const st = store();
+    expect(st.settings.titleArtPicked).toBe(false);
     expect(adjustSetting(st, 'titleArt', 1)).toBe(true);
-    expect(st.settings.titleArt).toBe('echo');
-    expect(adjustSetting(st, 'titleArt', 1, true)).toBe(true); // Confirm / a tap: wraps back
     expect(st.settings.titleArt).toBe('farplane');
-    adjustSetting(st, 'titleArt', -1);
+    expect(st.settings.titleArtPicked, 'a step is a pick').toBe(true);
+    expect(adjustSetting(st, 'titleArt', 1, true)).toBe(true); // Confirm / a tap: wraps back
     expect(st.settings.titleArt).toBe('echo');
+    adjustSetting(st, 'titleArt', -1);
+    expect(st.settings.titleArt).toBe('farplane');
 
     const seen: string[] = [];
     for (let i = 0; i < 3; i++) {
@@ -252,10 +268,10 @@ describe('the OPTIONS rows', () => {
     adjustSetting(st, 'titleArt', 1);
     adjustSetting(st, 'chapterSelectMusic', 1);
     const after = { ...st.settings };
-    delete (before as Record<string, unknown>).titleArt;
-    delete (before as Record<string, unknown>).chapterSelectMusic;
-    delete (after as Record<string, unknown>).titleArt;
-    delete (after as Record<string, unknown>).chapterSelectMusic;
+    for (const k of ['titleArt', 'titleArtPicked', 'chapterSelectMusic']) {
+      delete (before as Record<string, unknown>)[k];
+      delete (after as Record<string, unknown>)[k];
+    }
     expect(after).toEqual(before);
   });
 });

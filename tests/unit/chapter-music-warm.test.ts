@@ -37,15 +37,15 @@ const FFX_ONLY = [
 ];
 
 describe('chapterWarmCues: the scene, the first fight, the victory and the defeat, in that order', () => {
-  it('names the four cues of the first chapter, and the four of the fourth (its victory cue is the quiet resolve since 2026-10-12)', () => {
+  it('names the four cues of the first chapter, and the four of the fourth (its results cue is the quieter `pause` since release 61; it was the quiet resolve `victory-bahamut` from 2026-10-12)', () => {
     expect(chapterWarmCues(getChapter('seymour-flux')!)).toEqual(['scene-gagazet', 'boss-seymour', 'victory-ffx', 'defeat-ffx']);
-    expect(chapterWarmCues(getChapter('ffx2-bahamut')!)).toEqual(['scene-bevelle-underground', 'boss-bahamut', 'victory-bahamut', 'defeat-ffx2']);
+    expect(chapterWarmCues(getChapter('ffx2-bahamut')!)).toEqual(['scene-bevelle-underground', 'boss-bahamut', 'pause', 'defeat-ffx2']);
   });
 
   it("is the scene cue first, then what scores the first formation, then the victory cue, then the defeat cue of the chapter's game", () => {
     for (const chapter of ALL) {
       const fight = cueForGroup(chapter, chapter.enemyGroupRef, 'first').track;
-      const expected = [chapter.music.scene, fight, chapter.music.victory, resultsCueFor(chapter, 'defeat')?.cue].filter((c): c is string => typeof c === 'string');
+      const expected = [chapter.music.scene, fight, resultsCueFor(chapter, 'victory')?.cue, resultsCueFor(chapter, 'defeat')?.cue].filter((c): c is string => typeof c === 'string'); // the win's cue is the results screen's own (release 61)
       expect(chapterWarmCues(chapter), chapter.id).toEqual([...new Set(expected)]);
       if (chapter.music.scene) expect(chapterWarmCues(chapter)[0], `${chapter.id} starts with its scene bed`).toBe(chapter.music.scene);
     }
@@ -71,7 +71,7 @@ describe('chapterWarmCues: the scene, the first fight, the victory and the defea
 
   it('warms nothing the chapter\'s own record does not name', () => {
     for (const chapter of ALL) {
-      const own = new Set<string>([chapter.music.scene, chapter.music.battle, chapter.music.phase2, chapter.music.victory, chapter.music.post, resultsCueFor(chapter, 'defeat')?.cue, ...(chapter.enemyGroupRef.musicCues ?? []).map((c) => c.track)].filter((c): c is string => typeof c === 'string'));
+      const own = new Set<string>([chapter.music.scene, chapter.music.battle, chapter.music.phase2, chapter.music.victory, chapter.music.post, resultsCueFor(chapter, 'victory')?.cue, resultsCueFor(chapter, 'defeat')?.cue, ...(chapter.enemyGroupRef.musicCues ?? []).map((c) => c.track)].filter((c): c is string => typeof c === 'string'));
       for (const cue of chapterWarmCues(chapter)) expect(own.has(cue), `${chapter.id}: ${cue}`).toBe(true);
     }
   });
@@ -223,6 +223,6 @@ describe('GameFlow.runChapter asks for the cues before prep, the scene and the f
     const warm = vi.spyOn(audio, 'warmMusic').mockReturnValue(() => undefined);
     await app.flow.runChapter('ffx2-bahamut', { seed: 1, skipPrep: true, skipResults: true });
     expect(warm).toHaveBeenCalledTimes(1);
-    expect(warm).toHaveBeenCalledWith(['scene-bevelle-underground', 'boss-bahamut', 'victory-bahamut', 'defeat-ffx2']);
+    expect(warm).toHaveBeenCalledWith(['scene-bevelle-underground', 'boss-bahamut', 'pause', 'defeat-ffx2']); // release 61: the quiet results cue, the one the screen plays
   });
 });

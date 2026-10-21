@@ -68,14 +68,14 @@ class FakeAudio implements ResultsMusicPort {
 }
 
 describe('which cue the results screen plays (resultsCueFor)', () => {
-  it('plays the chapter\'s own victory cue on a win: the fanfare of its game, and Chapter IV\'s quiet resolve', () => {
+  it('plays the chapter\'s own victory cue on a win: the fanfare of its game, and (release 61) Chapter IV\'s quieter `pause` in place of its quiet resolve `victory-bahamut` (r61-quiet-results.test.ts)', () => {
     for (const c of everyChapter()) {
       const cue = resultsCueFor(c, 'victory');
       if (c.game === 'ff7') {
         expect(cue, c.id).toBeNull();
         continue;
       }
-      expect(cue?.cue, c.id).toBe(c.id === 'ffx2-bahamut' ? 'victory-bahamut' : c.game === 'ffx' ? 'victory-ffx' : 'victory-ffx2');
+      expect(cue?.cue, c.id).toBe(c.id === 'ffx2-bahamut' ? 'pause' : c.game === 'ffx' ? 'victory-ffx' : 'victory-ffx2');
       expect(cue?.kind).toBe('victory');
       expect(cue?.fade).toBe(VICTORY_FADE_S);
     }
@@ -99,7 +99,7 @@ describe('which cue the results screen plays (resultsCueFor)', () => {
       for (const outcome of ['victory', 'defeat']) {
         const cue = resultsCueFor(c, outcome)?.cue ?? '';
         if (c.game === 'ffx') expect(cue, `${c.id} ${outcome}`).toMatch(/-ffx$/);
-        else expect(cue, `${c.id} ${outcome}`).toMatch(/-ffx2$|^victory-bahamut$/);
+        else expect(cue, `${c.id} ${outcome}`).toMatch(/-ffx2$|^pause$/); // `pause` is Chapter IV's quiet results cue (release 61), a cue both games share
       }
     }
   });
@@ -113,7 +113,7 @@ describe('which cue the results screen plays (resultsCueFor)', () => {
 
   it('keeps the Chapter IV results screen silent whatever it plays, and no other listed chapter\'s', () => {
     expect(resultsScreenSilent(chapter('ffx2-bahamut'))).toBe(true);
-    expect(resultsCueFor(chapter('ffx2-bahamut'), 'victory')?.cue).toBe('victory-bahamut');
+    expect(resultsCueFor(chapter('ffx2-bahamut'), 'victory')?.cue).toBe('pause');
     expect(CHAPTERS.filter((c) => resultsScreenSilent(c)).map((c) => c.id)).toEqual(['ffx2-bahamut']);
     expect(resultsScreenSilent(chapter('ff7-guard-scorpion'))).toBe(true); // no victory cue at all
     expect(resultsScreenSilent({ ...chapter('ffx2-bahamut'), music: { scene: null, battle: null } } as Chapter)).toBe(true);
@@ -273,7 +273,7 @@ describe('the chapter run warms the loss\'s cue with the others (chapterWarmCues
     for (const c of CHAPTERS) {
       const cues = chapterWarmCues(c);
       expect(cues[cues.length - 1], c.id).toBe(c.game === 'ffx' ? 'defeat-ffx' : 'defeat-ffx2');
-      expect(cues, c.id).toContain(c.music.victory);
+      expect(cues, c.id).toContain(resultsCueFor(c, 'victory')?.cue);
       const otherGame = c.game === 'ffx' ? /-ffx2$/ : /^(defeat|victory)-ffx$/;
       for (const cue of cues) expect(cue, `${c.id} warms another game's cue`).not.toMatch(otherGame);
     }

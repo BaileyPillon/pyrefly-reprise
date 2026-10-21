@@ -9,15 +9,20 @@ import { onboardingLive } from '../../ui/coach/coachState.ts';
 import { ParallaxField, normalisePointer } from './frontend/parallax.ts';
 import { MoteField } from './frontend/motes.ts';
 import { titleMarkup, upgradeTitlePlanes } from './frontend/titleMarkup.ts';
-import { TITLE_PLACEHOLDERS, revealTitleWhenDecoded } from './frontend/titleReveal.ts';
+import { TITLE_PLACEHOLDERS, decodeTitleLayers, revealTitleWhenDecoded } from './frontend/titleReveal.ts';
 import './frontend/title-echo.css';
 import { readSetting } from '../SaveData.ts';
-import { titleArtOf, type TitleArt } from '../saveFrontend.ts';
+import { DEFAULT_TITLE_ART, TITLE_ARTS, cycle, titleArtOf, titleArtPick, type TitleArt } from '../saveFrontend.ts';
 import { beginFrontEndWarm, holdForNextScreen, prefetchModeFrom, startFrontEndWarm } from './frontendWarm.ts';
 import { briefingDue } from './raiseBriefing.ts';
 import { BTS_KEY, BTS_LIVE } from '../changelog/behindTheScenes.ts';
 import { TitleInfo } from './frontend/titleInfo.ts';
-import { BTS_ACTION, CHANGELOG_ACTION, CHANGELOG_KEY } from './frontend/titleInfoHtml.ts';
+import { BTS_ACTION, CHANGELOG_ACTION, CHANGELOG_KEY, TITLE_ART_ACTION, TITLE_ART_KEY } from './frontend/titleInfoHtml.ts';
+
+/** The cross-fade between two title pictures (release 61): the old screen leaves over this long. About 300 ms (Bailey's pick: "A key in the bottom row", with a cross-fade). */
+export const TITLE_CROSSFADE_MS = 300;
+/** The longest the T key waits for the next picture to decode before it fades anyway (it is normally cached or a local file: a few ms). */
+const TITLE_SWAP_DECODE_CAP_MS = 1500;
 
 /**
  * The title card, in the approved "Ink & Gold" presentation and now moving.
@@ -58,9 +63,16 @@ import { BTS_ACTION, CHANGELOG_ACTION, CHANGELOG_KEY } from './frontend/titleInf
  */
 export class TitleScreen extends Screen {
   readonly name = 'title';
-  /** Which title screen is up: read from the save on every `enter` (`Settings.titleArt`, `saveFrontend.ts`). */
-  private art: TitleArt = 'farplane';
+  /**
+   * Which title screen is up: read from the save on every `enter` (`Settings.titleArt`, `saveFrontend.ts`); since release 61 The Echo unless the player picked the Farplane painting,
+   * and the T key changes it live.
+   */
+  private art: TitleArt = DEFAULT_TITLE_ART;
   private advancing = false;
+  /** A T-key cross-fade is running (a second press waits for it). */
+  private swapping = false;
+  /** The screen that is leaving during a cross-fade: the old picture's own nodes, over the new one, fading out. */
+  private ghost: HTMLElement | null = null;
   private stage: HTMLElement | null = null;
   private parallax: ParallaxField | null = null;
   private motes: MoteField | null = null;
@@ -102,6 +114,11 @@ export class TitleScreen extends Screen {
       if (!e.repeat) this.info?.open('bts');
       return;
     }
+    // `T` cycles the title pictures (release 61). It is the BEHIND THE SCENES letter too, so that entry wins above while its switch is on (a test pins that the two never coexist).
+    if (e.code === TITLE_ART_KEY) {
+      if (!e.repeat) this.cycleArt();
+      return;
+    }
     // Dark launch: no chip, no key (`ui/coach/coachState.ts` ONBOARDING_LIVE).
     if (e.code === 'KeyB' && onboardingLive()) void this.replayBriefing();
   };
@@ -110,21 +127,50 @@ export class TitleScreen extends Screen {
     installInkGoldStyles();
     this.reduceMotion = prefersReducedMotion() || readSetting('reduceMotion') === true;
 
-    // 39.5 (Bailey, 2026-10-07): the player's choice of title screen. The default is today's Farplane painting; The Echo
-    // is one plane with its lettering painted in, so the markup leaves the HTML wordmark out (`titleMarkup`'s `art`).
-    this.art = titleArtOf(readSetting('titleArt'));
-    this.root.className = `screen fe fe-title ig${this.art === 'echo' ? ' fe-title--echo' : ''}`;
-    this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive(), art: this.art });
-    this.stage = this.root;
+    // 39.5 (Bailey, 2026-10-07): the player's choice of title screen; release 61 (2026-10-21): The Echo is the default and the Farplane painting the selectable one.
+    // The Echo is one plane with its lettering painted in, so the markup leaves the HTML wordmark out (`titleMarkup`'s `art`).
+    this.mountArt(titleArtOf(readSetting('titleArt')), false);
     this.info = new TitleInfo(this.root, this.app, () => this.reduceMotion, () => this.advancing);
-    // A-16: the placeholder first, every layer in once decoded (`frontend/titleReveal.ts`).
-    void revealTitleWhenDecoded(this.root, { placeholder: TITLE_PLACEHOLDERS[this.art] });
+    // The briefing's and the board's paintings (PR-0065) start at the player's first key or pointer input, not when the title appears (PR-0405, `?prefetch=`).
+    beginFrontEndWarm(this.app, () => briefingDue(this.app), prefetchModeFrom(window.location.search));
+
+    window.addEventListener('resize', this.onResize, { passive: true });
+    window.addEventListener('keydown', this.onKey);
+    if (!this.reduceMotion) {
+      this.root.addEventListener('pointermove', this.onPointerMove, { passive: true });
+    }
+    this.layout();
+
+    void audio.playMusic('title', { fade: 1.6 }).catch(() => {
+      /* audio stays locked until the first gesture; AudioManager queues it */
+    });
+    void this.app.fade('clear', 700);
+  }
+
+  /**
+   * Draw the title for `art` into the root: its markup, its reveal, its motes and its parallax. `enter` calls it with the saved choice; the T key calls it again for the next
+   * picture (`swapArt`), with `swapped` true: that picture is drawn at once (the layers are not held back for a decode and the placeholder is not shown), because the screen
+   * that is leaving covers it until it has decoded.
+   */
+  private mountArt(art: TitleArt, swapped: boolean): void {
+    this.art = art;
+    this.motes?.dispose();
+    this.motes = null;
+    this.root.className = `screen fe fe-title ig${art === 'echo' ? ' fe-title--echo' : ''}`;
+    this.root.innerHTML = titleMarkup({ briefingChip: onboardingLive(), art });
+    this.stage = this.root;
+    if (swapped) {
+      this.root.style.setProperty('--fe-title-ph', `url("${TITLE_PLACEHOLDERS[art]}")`);
+      this.root.classList.add('fe-title--decoded');
+      this.root.dataset['titleReveal'] = 'swapped';
+    } else {
+      // A-16: the placeholder first, every layer in once decoded (`frontend/titleReveal.ts`).
+      void revealTitleWhenDecoded(this.root, { placeholder: TITLE_PLACEHOLDERS[art] });
+    }
     // The 2688px master, once the manifest says it is on disk. Never awaited:
     // the 1x plate is already decoding and the screen is correct without it.
     // The Echo has no 2x master (its markup is never offered one), so there is nothing to upgrade.
-    if (this.art === 'farplane') void upgradeTitlePlanes(this.root);
-    // The briefing's and the board's paintings (PR-0065) start at the player's first key or pointer input, not when the title appears (PR-0405, `?prefetch=`).
-    beginFrontEndWarm(this.app, () => briefingDue(this.app), prefetchModeFrom(window.location.search));
+    if (art === 'farplane') void upgradeTitlePlanes(this.root);
 
     const motes = this.root.querySelector('.fe-title__motes');
     if (motes instanceof HTMLElement) {
@@ -149,23 +195,79 @@ export class TitleScreen extends Screen {
     ].filter((l): l is { el: HTMLElement; depth: number; scale: number } => l !== null);
     // The Echo's picture is black at its edges and the ground behind it is the same black, so its one plane needs no
     // overscan to hide the drift: it is held at scale 1, which keeps the painted lettering where the picture put it.
-    if (this.art === 'echo') for (const layer of layers) layer.scale = 1;
+    if (art === 'echo') for (const layer of layers) layer.scale = 1;
     this.parallax = new ParallaxField({ layers, reduceMotion: this.reduceMotion });
-
-    window.addEventListener('resize', this.onResize, { passive: true });
-    window.addEventListener('keydown', this.onKey);
-    if (!this.reduceMotion) {
-      this.root.addEventListener('pointermove', this.onPointerMove, { passive: true });
-    }
     this.layout();
+  }
 
-    void audio.playMusic('title', { fade: 1.6 }).catch(() => {
-      /* audio stays locked until the first gesture; AudioManager queues it */
-    });
-    void this.app.fade('clear', 700);
+  /**
+   * The T key (or a click or a tap on the TITLE ART entry): the next title picture, saved as the player's pick. Nothing happens while the screen is leaving, a panel is open, or
+   * the last cross-fade has not finished. Both games: the title is the front door of FFX and FFX-2 alike.
+   */
+  private cycleArt(): void {
+    if (this.advancing || this.swapping || this.info?.openKind) return;
+    if (this.briefing && !this.briefing.finished) return;
+    void this.swapArt(cycle(TITLE_ARTS, this.art, 1));
+  }
+
+  /**
+   * Change to `next` with a short cross-fade (`TITLE_CROSSFADE_MS`; none under REDUCE MOTION). The pick is saved first, in the setting the OPTIONS row writes
+   * (`titleArtPick`), so a reload in the middle of the fade keeps it. The leaving screen's own nodes move into a ghost laid over the new screen, the new picture is
+   * mounted under it and decoded, and the ghost fades out: no frame shows an empty or half-loaded picture.
+   */
+  private async swapArt(next: TitleArt): Promise<void> {
+    this.swapping = true;
+    try {
+      this.app.save.setSettings(titleArtPick(next));
+      const ghost = this.takeGhost();
+      this.mountArt(next, true);
+      await decodeTitleLayers(this.root, TITLE_SWAP_DECODE_CAP_MS);
+      await this.fadeGhost(ghost);
+    } finally {
+      this.swapping = false;
+    }
+  }
+
+  /** Move the title that is up into a ghost over the root (same classes and variables, `pointer-events: none`), so it can fade out above what replaces it. Null with no parent to lay it in. */
+  private takeGhost(): HTMLElement | null {
+    const parent = this.root.parentElement;
+    if (!parent) return null;
+    this.ghost?.remove();
+    const ghost = document.createElement('div');
+    ghost.className = this.root.className.replace(/(^|\s)screen(?=\s|$)/, '$1fe-title__ghost');
+    ghost.style.cssText = this.root.style.cssText;
+    ghost.style.pointerEvents = 'none';
+    ghost.setAttribute('aria-hidden', 'true');
+    while (this.root.firstChild) ghost.appendChild(this.root.firstChild);
+    parent.appendChild(ghost);
+    this.ghost = ghost;
+    return ghost;
+  }
+
+  private fadeGhost(ghost: HTMLElement | null): Promise<void> {
+    if (!ghost) return Promise.resolve();
+    const done = (): void => {
+      ghost.remove();
+      if (this.ghost === ghost) this.ghost = null;
+    };
+    if (this.reduceMotion) {
+      done();
+      return Promise.resolve();
+    }
+    ghost.style.transition = `opacity ${TITLE_CROSSFADE_MS}ms ease`;
+    void ghost.offsetWidth; // the opacity is 1 for one frame, so the change below is a transition and not a jump
+    ghost.style.opacity = '0';
+    return new Promise<void>((resolve) =>
+      window.setTimeout(() => {
+        done();
+        resolve();
+      }, TITLE_CROSSFADE_MS + 40),
+    );
   }
 
   override exit(): void {
+    this.ghost?.remove();
+    this.ghost = null;
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('keydown', this.onKey);
     this.root.removeEventListener('pointermove', this.onPointerMove);
@@ -218,6 +320,10 @@ export class TitleScreen extends Screen {
     // The hint row's entries (a click or a tap on one resolves to its own action, never to the plate's confirm).
     if (!this.advancing && input.actions.includes(CHANGELOG_ACTION)) return void this.info?.open('changelog');
     if (BTS_LIVE && !this.advancing && input.actions.includes(BTS_ACTION)) return void this.info?.open('bts');
+    // The TITLE ART entry (release 61): a click or a tap on it, never the plate's confirm.
+    if (!this.advancing && input.actions.includes(TITLE_ART_ACTION)) return void this.cycleArt();
+    // A pad's Y does what T does (release 61, decision 169: every demo action by pad; the hint row names it). Only from a pad: Shift, Tab and Q are `triangle` on a keyboard too.
+    if (!this.advancing && input.lastDevice === 'gamepad' && input.justPressed('triangle')) return void this.cycleArt();
     if (this.advancing) return;
     if (input.justPressed('confirm') || input.justPressed('start')) return void this.advance();
     if (input.actions.includes('confirm')) void this.advance();

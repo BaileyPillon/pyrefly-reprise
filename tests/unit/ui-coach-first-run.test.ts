@@ -65,7 +65,7 @@ describe('the words are the approved mockup\'s (option.html, O2)', () => {
 
   it('step 3 wears Auron\'s approved first-command line unchanged, with the mockup\'s two lines under it', () => {
     const approved = marksFor('ffx').find((m) => m.id === 'ffx-turn-order')!.body;
-    expect(approved).toBe('“He moves after you. Not before. Use it.”');
+    expect(approved).toBe('“He strikes first. Weather it, then hit back.”');
     const html = slabHtml(FIRST_RUN_STEPS[2], approved);
     const el = document.createElement('div');
     el.innerHTML = html;
@@ -151,7 +151,7 @@ describe('step 3 is FFX\'s line in the guide\'s dress, and never blocks ATTACK',
     const { line } = mountLine();
     void line.show();
     expect(line.el.dataset['guide']).toBe('3');
-    expect(line.el.querySelector('.frg__quote')!.textContent).toBe('“He moves after you. Not before. Use it.”');
+    expect(line.el.querySelector('.frg__quote')!.textContent).toBe('“He strikes first. Weather it, then hit back.”');
   });
 
   it('a bare Enter with the cursor on the ringed ATTACK only takes the card down: the press dies with it (PR-0362; it used to reach the menu, O2)', async () => {
