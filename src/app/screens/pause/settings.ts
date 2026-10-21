@@ -21,7 +21,8 @@ import { isFxLookField } from '../../fxLooks.ts';
 import { fxLookOnPatch, isFxSwitchField } from '../../fxParts.ts';
 import { stepColourVision } from '../../saveAccess.ts';
 import { stepTextSize, wrapTextSize } from '../../saveComfort.ts';
-import { CHAPTER_SELECT_MUSICS, TITLE_ARTS, cycle } from '../../saveFrontend.ts';
+import { CHAPTER_SELECT_MUSICS, TITLE_ARTS, cycle, titleArtPick } from '../../saveFrontend.ts';
+import { flipVisualStyle } from '../../saveVisualStyle.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
 /** FFX-2's Config ATB speeds, slowest first (`research/ffx2-combat-core.md` §1.2). */
@@ -120,7 +121,12 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = 
       return true;
     case 'titleArt':
       // 39.5: the title screens in a list; Left, Right and Confirm step and wrap. It shows the next time the title is drawn.
-      save.setSettings({ titleArt: cycle(TITLE_ARTS, settings.titleArt, dir) });
+      // Release 61: a pick is saved as one (`titleArtPick`), the same write the title's T key makes, so the two stay one setting.
+      save.setSettings(titleArtPick(cycle(TITLE_ARTS, settings.titleArt, dir)));
+      return true;
+    case 'visualStyle':
+      // Release 61 (the conference demo): HD-2D or CLASSIC, a two-way toggle (Left, Right, Confirm and a tap all flip it). Read when a chapter starts.
+      save.setSettings({ visualStyle: flipVisualStyle(settings.visualStyle) });
       return true;
     case 'chapterSelectMusic':
       // 39.5: B, A, C in a list, B first (the default); steps and wraps. The board plays it the next time it opens.

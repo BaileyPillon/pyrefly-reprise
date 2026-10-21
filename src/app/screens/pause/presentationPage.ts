@@ -48,7 +48,7 @@ export const PRESENTATION_ROWS: readonly PresentationRow[] = [
   {
     id: 'titleArt',
     label: 'TITLE SCREEN',
-    help: 'FARPLANE is the title painting you know: the airship over the Farplane shore. THE ECHO is Yuna kneeling in still water, with its own lettering. It shows the next time the title is drawn.',
+    help: 'THE ECHO is Yuna kneeling in still water, with its own lettering: the title screen you start on. FARPLANE is the Gullwings in the Farplane field. T on the title screen switches them too. It shows the next time the title is drawn.',
     value: (s) => TITLE_ART_LABELS[titleArtOf(s.titleArt)],
   },
   {

@@ -49,10 +49,13 @@ export function setLookName(name: LookName | null): void {
  * Release 60: the battle screen tells the look which chapter it is about to draw, before the figures load. With no `look` key in the address (and nothing set by hand) a chapter that has a default
  * ({@link chapterLook}: hd2d at bold strength in Chapters I and IV) turns it on, and every other chapter turns it off, so only those two chapters change. With a `look` key the address already chose and
  * this does nothing. Not armed means no relight define and no rig work: a chapter without a default draws as it did.
+ *
+ * Release 61 (Bailey, 2026-10-21; the OPTIONS row VISUAL STYLE, `app/saveVisualStyle.ts`): `style` is the player's choice. `'classic'` takes the chapters' defaults away, so every chapter draws today's frame, as `?look=off`
+ * does; `'hd2d'` (the default) is release 60's behaviour. An address `look` key still wins: it makes `lookState.auto` false, and this returns before it reads `style`. Both games.
  */
-export function applyChapterLook(chapterId: string | undefined): void {
+export function applyChapterLook(chapterId: string | undefined, style: 'hd2d' | 'classic' = 'hd2d'): void {
   if (!lookState.auto) return;
-  const d = chapterLook(chapterId);
+  const d = style === 'classic' ? null : chapterLook(chapterId);
   const name = d?.name ?? null;
   const strength = d?.strength ?? 'subtle';
   const armed = d !== null;

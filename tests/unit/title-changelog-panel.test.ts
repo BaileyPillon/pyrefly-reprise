@@ -22,7 +22,7 @@ import { Input } from '../../src/app/Input.ts';
 import { SAVE_KEY, SaveStore } from '../../src/app/SaveData.ts';
 import { RELEASE_NOTES } from '../../src/app/changelog/releaseNotes.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
-import { CHANGELOG_ACTION, changelogEntryHtml, changelogPanelHtml, infoEntriesHtml } from '../../src/app/screens/frontend/titleInfoHtml.ts';
+import { CHANGELOG_ACTION, changelogEntryHtml, changelogPanelHtml, infoEntriesHtml, titleArtEntryHtml } from '../../src/app/screens/frontend/titleInfoHtml.ts';
 import { TitleInfo } from '../../src/app/screens/frontend/titleInfo.ts';
 import { titleMarkup } from '../../src/app/screens/frontend/titleMarkup.ts';
 
@@ -80,12 +80,12 @@ const overlay = (root: HTMLElement): HTMLElement | null => root.querySelector<HT
 const snap = (screen: TitleScreen): { open: string | null; claimed: boolean } => screen.snapshot()['info'] as { open: string | null; claimed: boolean };
 
 describe('the entry in the hint row', () => {
-  it('is the third word of the key hints: after "B Briefing", behind a hairline, as a button the tap resolves to its own action', () => {
+  it('is the third word of the key hints: after "B Briefing", behind a hairline, as a button the tap resolves to its own action (TITLE ART follows it, release 61)', () => {
     const root = document.createElement('div');
     root.innerHTML = titleMarkup({ briefingChip: true });
     const hint = root.querySelector('.fe-hint')!;
     const children = [...hint.children].map((c) => c.className || c.getAttribute('data-action'));
-    expect(children.slice(-3)).toEqual(['title:briefing', 'fe-hint__sep', 'fe-hint__entry']);
+    expect(children.slice(-4)).toEqual(['title:briefing', 'fe-hint__sep', 'fe-hint__entry', 'fe-hint__entry']);
     const entry = hint.querySelector<HTMLElement>('.fe-hint__entry')!;
     expect(entry.getAttribute('data-action')).toBe(CHANGELOG_ACTION);
     expect(entry.getAttribute('role')).toBe('button');
@@ -104,7 +104,7 @@ describe('the entry in the hint row', () => {
       expect(html.match(/class="fe-hint__key"/g) ?? []).toHaveLength(3);
       expect(html.match(/data-action="title:changelog"/g) ?? []).toHaveLength(1);
     }
-    expect(infoEntriesHtml()).toBe(changelogEntryHtml());
+    expect(infoEntriesHtml()).toBe(changelogEntryHtml() + titleArtEntryHtml());
   });
 });
 

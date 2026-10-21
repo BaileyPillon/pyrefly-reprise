@@ -103,7 +103,7 @@ describe.each([
     // The nine parts, and the ACCESSIBILITY tab's two settings (PR-0032, `saveAccess.ts`; both OFF).
     // (the release-33 to 35 saves predate the 39.5 front-end choices too: they arrive at their defaults, `saveFrontend.ts`)
     // ...plus the recorded voice-over's two settings, which every save older than them gains at their defaults (ON, 0.9).
-    expect(added).toEqual([...PART_FIELDS, 'reduceFlashes', 'colourVision', 'titleArt', 'chapterSelectMusic', 'voiceOn', 'voiceVolume'].sort());
+    expect(added).toEqual([...PART_FIELDS, 'reduceFlashes', 'colourVision', 'titleArt', 'chapterSelectMusic', 'voiceOn', 'voiceVolume', 'titleArtPicked', 'visualStyle'].sort()); // release 61 added the last two
   });
 
   it('the parts of a look it had OFF come up OFF, every other part ON', () => {

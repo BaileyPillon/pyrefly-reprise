@@ -6,18 +6,18 @@
     <meta name="color-scheme" content="dark" />
     <meta name="description" content="Echoes of Spira - an unofficial HD-2D fan tribute to Final Fantasy X and X-2." />
     <title>Echoes of Spira</title>
-    <!-- A-16: the title plate, fetched before any script runs. The same candidates and sizes the
-         title's planes offer (src/app/screens/frontend/titleMarkup.ts), so the browser picks the
-         same file and the plane reuses this request. Each URL below starts with Vite's base
+    <!-- A-16: the title plate, fetched before any script runs. Since release 61 it is The Echo, the default title
+         screen (Bailey, 2026-10-21: "incorporate the new title screen picture as the default"); it was the Farplane
+         painting (keyart) from 39.5 to 60, and a player who picked that one draws it as before, only without this
+         head start. The Echo is drawn from its 1x plate alone (src/app/screens/frontend/titleMarkup.ts offers it no
+         2x master), so the same file is named here and the plane reuses this request. Each URL below starts with Vite's base
          variable (the word BASE_URL between two percent signs), which the build fills in from the
          base the site is served under: the GitHub Pages folder, the Cloudflare root, or the dev
          root. A root-absolute art name is never written in this page: Vite puts the base on one
          only when it finds that file in public/ while it builds, and a candidate it misses (the
          2x master, a half-installed art tree) stays at the server root and is a 404 under the
          GitHub Pages folder (tests/unit/art-url-base.test.ts). -->
-    <link rel="preload" as="image" fetchpriority="high" href="%BASE_URL%art/title/keyart.png"
-      imagesrcset="%BASE_URL%art/title/keyart.png 1344w, %BASE_URL%art/title/keyart.2x.webp 2688w"
-      imagesizes="calc(1.11 * max(100vw, 1.750 * 100vh))" />
+    <link rel="preload" as="image" fetchpriority="high" href="%BASE_URL%art/title/echo.png" />
     <style>
       /* ---- font stack ------------------------------------------------------
          Self-hosted OFL webfonts (see research/assets-and-tech.md §1). The
