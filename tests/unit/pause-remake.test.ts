@@ -568,22 +568,25 @@ describe('every function of the old pause screen is still reachable', () => {
       h.screen.trigger('pause:tab:options');
       // D-285 (A2) put TEXT SIZE, REDUCE MOTION and LOW EFFECTS under TEXT SPEED; the ACCESSIBILITY tab took them (PR-0032, OPT-B).
       // Since D-317 one EYE CANDY row follows TEXT SPEED where eye-candy D's three look rows were (pause-fx-looks-rows.test.ts).
+      // Since release 61 VISUAL STYLE (HD-2D / CLASSIC) follows EYE CANDY, the other look switch (r61-visual-style.test.ts).
       expect(rowIds(h).slice(0, 8)).toEqual([
         'masterVolume',
         'musicVolume',
         'sfxVolume',
         'textSpeed',
         'eyeCandy',
+        'visualStyle',
         'ffx2Atb',
         'ffx2AtbSpeed',
-        'guideVisible',
       ]);
       calls.length = 0;
       h.screen.handleInput(snapshot(['down'])); // tabs -> body, row 1
-      for (let i = 0; i < 5; i++) h.screen.handleInput(snapshot(['down'])); // rows 2..6: ffx2Atb
-      expect(calls.at(-1)?.row, 'the 6th row, clipped by the five-row rule').toBe('ffx2Atb');
+      for (let i = 0; i < 5; i++) h.screen.handleInput(snapshot(['down'])); // rows 2..6: visualStyle
+      expect(calls.at(-1)?.row, 'the 6th row, clipped by the five-row rule').toBe('visualStyle');
       expect(calls.at(-1)?.opts).toMatchObject({ block: 'nearest', behavior: 'smooth' });
-      h.screen.handleInput(snapshot(['down'])); // row 7: ffx2AtbSpeed
+      h.screen.handleInput(snapshot(['down'])); // row 7: ffx2Atb
+      expect(calls.at(-1)?.row).toBe('ffx2Atb');
+      h.screen.handleInput(snapshot(['down'])); // row 8: ffx2AtbSpeed
       expect(calls.at(-1)?.row).toBe('ffx2AtbSpeed');
     } finally {
       Element.prototype.scrollIntoView = original;

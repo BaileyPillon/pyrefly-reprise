@@ -26,6 +26,7 @@ import {
 import { DEFEAT_ACTIONS, desktopPageHtml, pageHeading, resultsCaptionHtml, type LedgerLine, type ResultsChoice, type ResultsPageModel } from '../../ui/common/resultsPage.ts';
 import { isPhoneResults, phoneHeroFigure, phoneHeroHtml, phonePageHtml, phoneShellHtml, RESULTS_PHONE_QUERY } from '../../ui/common/resultsPhone.ts';
 import { victoryLine, victoryTurn, wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from '../../ui/common/victoryLine.ts';
+import { quietResultsOf } from '../../ui/common/quietResults.ts'; // release 61: FFX-2 Chapter IV's quieter results
 
 export type { ResultsChoice } from '../../ui/common/resultsPage.ts';
 
@@ -407,6 +408,7 @@ export class ResultsScreen extends Screen {
       tags.push(`OVERKILL ×${this.opts.result.overkilled.length}`);
     }
     if (this.wasNewBest && !this.ff7) tags.push('NEW BEST');
+    const quiet = quietResultsOf(this.opts.chapterId); // release 61: the one fight whose results show a calmer face for Rikku
 
     const model: ResultsPageModel = {
       victory: this.victory,
@@ -420,6 +422,7 @@ export class ResultsScreen extends Screen {
       rows: this.rows,
       progress: this.countProgress(),
       actionIndex: this.actionIndex,
+      ...(quiet ? { bodyFaces: quiet.bodyFaces } : {}),
     };
     page.innerHTML = this.phone ? phonePageHtml(model, this.caption) : desktopPageHtml(model);
     this.stage.el.classList.add('rres--visible');

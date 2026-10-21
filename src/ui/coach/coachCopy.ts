@@ -262,7 +262,7 @@ export const FFX_MARKS: readonly CoachMark[] = [
     id: 'ffx-turn-order',
     game: 'ffx',
     speaker: 'Auron',
-    body: '“He moves after you. Not before. Use it.”',
+    body: '“He strikes first. Weather it, then hit back.”',
     holds: true,
     fadeMs: 0,
   },

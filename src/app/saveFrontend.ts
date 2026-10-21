@@ -11,6 +11,12 @@
  * `art/title/echo.png`), which carries its own painted lettering, so the HTML "Echoes of Spira" is not drawn
  * over it (`frontend/titleMarkup.ts`).
  *
+ * RELEASE 61 REVERSES THE DEFAULT (Bailey, 2026-10-21 ~00:15 EDT: "you need to incorporate the new title screen picture as the default the
+ * echoes of spira concept art looking one but make the current one selectable at the title menu itself also please."): `'echo'` is the
+ * default and `'farplane'` is the selectable one, from the OPTIONS row and from a T TITLE ART entry in the title's own hint row
+ * (`TitleScreen.ts`; both write {@link titleArtPick}, so they are one setting). The new field `titleArtPicked` keeps a player's own choice
+ * apart from the default (see {@link migrateFrontend}).
+ *
  * Chapter-select music: "I'll go with B", "but C as a selectable alternate", "and A as a selectable alternate as
  * well", "B as the default". So `chapterSelectMusic` is `'b'` (the cue `chapter-select`, live since 39.4), `'a'`
  * (`chapter-select-a`) or `'c'` (`chapter-select-c`); the two alternates are new cues that play the ElevenLabs
@@ -31,12 +37,18 @@ import type { Settings } from './SaveData.ts';
 
 // ------------------------------------------------------------------ title art
 
-/** The title screens, in the order the TITLE SCREEN row steps through them. The first is the default. */
-export const TITLE_ARTS = ['farplane', 'echo'] as const;
+/**
+ * The title screens, in the order the TITLE SCREEN row and the title's T key step through them. The first is the default.
+ *
+ * Since release 61 (Bailey, 2026-10-21 ~00:15 EDT, verbatim: "you need to incorporate the new title screen picture as the default the
+ * echoes of spira concept art looking one but make the current one selectable at the title menu itself also please"): The Echo is the
+ * default and the Farplane painting (the Gullwings) is the selectable one. Before release 61 the order was the other way round.
+ */
+export const TITLE_ARTS = ['echo', 'farplane'] as const;
 export type TitleArt = (typeof TITLE_ARTS)[number];
 
-/** Today's painting; what every save without the field, and every invalid value, reads as. */
-export const DEFAULT_TITLE_ART: TitleArt = 'farplane';
+/** The Echo (Yuna kneeling in still water, with her painted lettering): what a player who never picked a title screen sees (release 61). */
+export const DEFAULT_TITLE_ART: TitleArt = 'echo';
 
 /** The painting each variant draws, relative to `public/art` (built into a URL with `artUrl`). */
 export const TITLE_ART_PLATES: Readonly<Record<TitleArt, string>> = {
@@ -58,6 +70,28 @@ export function isTitleArt(v: unknown): v is TitleArt {
 /** `v` when it names a title screen, the default otherwise. */
 export function titleArtOf(v: unknown): TitleArt {
   return isTitleArt(v) ? v : DEFAULT_TITLE_ART;
+}
+
+/**
+ * What a pick writes (release 61): the title screen AND the fact that the player chose it. The OPTIONS row and the title's T key both
+ * write exactly this, so they stay one setting. `titleArtPicked` is what tells a player who chose from a player who never did: an unpicked
+ * save follows the default whatever the default is (`migrateFrontend`), a picked one keeps its choice, the Farplane painting included.
+ */
+export function titleArtPick(art: TitleArt): Pick<Settings, 'titleArt' | 'titleArtPicked'> {
+  return { titleArt: art, titleArtPicked: true };
+}
+
+/** The slice of the save store a pick needs, so the title screen and the OPTIONS row share one writer. */
+export interface TitleArtStore {
+  readonly settings: Readonly<Pick<Settings, 'titleArt'>>;
+  setSettings(patch: Partial<Settings>): void;
+}
+
+/** Step to the next title screen (wrapping; `dir` -1 steps back) and save it as the player's pick. Returns the screen now chosen. */
+export function stepTitleArt(store: TitleArtStore, dir: 1 | -1 = 1): TitleArt {
+  const next = cycle(TITLE_ARTS, store.settings.titleArt, dir);
+  store.setSettings(titleArtPick(next));
+  return next;
 }
 
 // ------------------------------------------------------- chapter-select music
@@ -127,7 +161,42 @@ export function cycle<T extends string>(list: readonly T[], current: unknown, di
  * Apply the rule to `settings` (already merged over the defaults), in place: a value that is not one of the listed
  * ones reads as the default. Nothing else is touched, so an old save loads exactly as it was and gains the two defaults.
  */
-export function migrateFrontend(settings: Settings): void {
-  if (!isTitleArt(settings.titleArt)) settings.titleArt = DEFAULT_TITLE_ART;
+export function migrateFrontend(settings: Settings, stored?: Partial<Settings>): void {
+  migrateTitleArt(settings, stored);
   if (!isChapterSelectMusic(settings.chapterSelectMusic)) settings.chapterSelectMusic = DEFAULT_CHAPTER_SELECT_MUSIC;
+}
+
+/**
+ * Release 61 (Bailey, 2026-10-21, "incorporate the new title screen picture as the default ... make the current one selectable"): The Echo
+ * is the default title screen, and a player who never chose one gets it. A save cannot say that by `titleArt` alone: release 39.5 stored
+ * `titleArt: 'farplane'` for every player who ever saved, chosen or not. So the new field `titleArtPicked` says it, and this is the one
+ * place that decides, from the blob as it was STORED (`stored`, before the defaults were merged under it):
+ *
+ *  - `titleArtPicked` is stored as a boolean: it is this build's own field, believed (a hand-edited or invalid `titleArt` reads as the default
+ *    and as not picked). An unpicked save is held at the default, so it follows the default if the default ever moves again.
+ *  - `titleArtPicked` is absent (a save from before release 61): a stored `'echo'` was a deliberate pick, because the default then was the
+ *    Farplane painting, so it is kept and marked picked; anything else (`'farplane'` was the shipped default, written for everyone; absent or
+ *    invalid) reads as never picked and becomes the default. A player who had chosen the Farplane painting on purpose cannot be told from one
+ *    who never touched the row (the same stored value), and starts on The Echo once: one press of T on the title, or the OPTIONS row, gives it back and keeps it.
+ *
+ * Additive: `SAVE_VERSION` does not change, nothing already stored is rewritten except `titleArt` of a save that never picked.
+ */
+function migrateTitleArt(settings: Settings, stored: Partial<Settings> | undefined): void {
+  const picked = stored?.titleArtPicked;
+  if (typeof picked === 'boolean') {
+    if (!picked || !isTitleArt(settings.titleArt)) {
+      settings.titleArt = DEFAULT_TITLE_ART;
+      settings.titleArtPicked = false;
+    } else {
+      settings.titleArtPicked = true;
+    }
+    return;
+  }
+  if (stored?.titleArt === 'echo') {
+    settings.titleArt = 'echo';
+    settings.titleArtPicked = true;
+    return;
+  }
+  settings.titleArt = DEFAULT_TITLE_ART;
+  settings.titleArtPicked = false;
 }

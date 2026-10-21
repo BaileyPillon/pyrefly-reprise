@@ -56,12 +56,12 @@ describe('with the switch off, on the real title screen', () => {
     const { screen, root } = await showTitle();
     expect(root.querySelector('[data-action="title:bts"]')).toBeNull();
     expect(root.innerHTML).not.toMatch(/behind the scenes/i);
-    expect(root.querySelectorAll('.fe-hint__entry')).toHaveLength(1);
-    expect(root.querySelector('.fe-hint__entry')?.getAttribute('data-action')).toBe('title:changelog');
+    // two entries since release 61: CHANGELOG, then TITLE ART (T)
+    expect([...root.querySelectorAll('.fe-hint__entry')].map((e) => e.getAttribute('data-action'))).toEqual(['title:changelog', 'title:art']);
     screen.exit();
   });
 
-  it('does nothing on T, with or without a modifier: nothing opens, nothing is claimed, the title carries on', async () => {
+  it('opens nothing on T, with or without a modifier (T is the TITLE ART key since release 61): no panel, nothing claimed, the title carries on', async () => {
     const { input, screen, root } = await showTitle();
     press('KeyT');
     press('KeyT', { shiftKey: true });

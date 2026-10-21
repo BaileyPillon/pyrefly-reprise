@@ -12,7 +12,11 @@
  * board read them the way they always did.
  *
  * Game case: both games. Run on Chapter I (FFX) and Chapter IV (FFX-2): the page, its two rows and its text are
- * the same in both; the list around the row differs (VOICE rows, X-2 BATTLE and ATB SPEED) and is 13 rows in each.
+ * the same in both; the list around the row differs (VOICE rows, X-2 BATTLE and ATB SPEED) and is 11 rows in each.
+ *
+ * Release 61 (Bailey, 2026-10-21): The Echo is the DEFAULT title screen (the first value of the row) and the Farplane painting the
+ * selectable one, so the first step of TITLE SCREEN now lands on FARPLANE; every step is a pick (`titleArtPicked`). The list gained
+ * VISUAL STYLE (HD-2D / CLASSIC), a row of its own on the list, not on this page.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -141,16 +145,18 @@ describe.each([
   ['FFX', 'seymour-flux'],
   ['FFX-2', 'ffx2-bahamut'],
 ] as const)('the PRESENTATION page, %s', (_game, chapterId) => {
-  it('the list has 10 rows, PRESENTATION last, reading both choices; TITLE SCREEN and CHAPTER MUSIC are not on it', () => {
+  it('the list has 11 rows, PRESENTATION last, reading both choices; TITLE SCREEN and CHAPTER MUSIC are not on it; VISUAL STYLE is (release 61)', () => {
     const h = mount(chapterId);
     h.screen.trigger('pause:tab:options');
     const ids = listIds(h);
-    // 13 on the 39.5 base; TEXT SIZE, REDUCE MOTION and LOW EFFECTS moved to the ACCESSIBILITY tab on this line (PR-0032), so the list is shorter in both games.
-    expect(ids).toHaveLength(10);
+    // 13 on the 39.5 base; TEXT SIZE, REDUCE MOTION and LOW EFFECTS moved to the ACCESSIBILITY tab on this line (PR-0032), so the list was shorter in both games; VISUAL STYLE (release 61) makes it 11.
+    expect(ids).toHaveLength(11);
     expect(ids[ids.length - 1]).toBe('presentation');
     expect(ids).not.toContain('titleArt');
     expect(ids).not.toContain('chapterSelectMusic');
-    expect(listValue(h, 'presentation')).toBe('FARPLANE \u00b7 B');
+    expect(ids[ids.indexOf('eyeCandy') + 1], 'VISUAL STYLE sits under EYE CANDY, the other look switch').toBe('visualStyle');
+    expect(listValue(h, 'visualStyle')).toBe('HD-2D');
+    expect(listValue(h, 'presentation')).toBe('THE ECHO \u00b7 B');
     expect(h.root.querySelector('.pause__col[data-col="settings"] [data-row="presentation"] .pause__k')?.textContent).toBe('PRESENTATION');
   });
 
@@ -161,7 +167,7 @@ describe.each([
     expect([...page(h)!.querySelectorAll<HTMLElement>('.pause__ec-row')].map((r) => r.dataset['row'])).toEqual(['titleArt', 'chapterSelectMusic']);
     expect(cursor(h)).toBe('titleArt');
     expect((document.activeElement as HTMLElement | null)?.dataset['row']).toBe('titleArt');
-    expect(pageValue(h, 'titleArt')).toBe('FARPLANE');
+    expect(pageValue(h, 'titleArt')).toBe('THE ECHO');
     expect(pageValue(h, 'chapterSelectMusic')).toBe('B  PIANO');
     expect(page(h)!.querySelector('.pause__ec-h')?.textContent).toMatch(/^Presentation/);
     expect(s(h)['presentation']).toMatchObject({ open: true, row: 'titleArt' });
@@ -190,15 +196,18 @@ describe.each([
   it('Left and Right step each value through its list and wrap; Enter steps forward; the stored settings follow', () => {
     const h = mount(chapterId);
     openByKeys(h);
+    expect(h.store.settings.titleArtPicked).toBe(false);
     key(h, 'ArrowRight');
-    expect(pageValue(h, 'titleArt')).toBe('THE ECHO');
-    expect(h.store.settings.titleArt).toBe('echo');
-    key(h, 'ArrowRight');
-    expect(pageValue(h, 'titleArt'), 'wraps back').toBe('FARPLANE');
-    key(h, 'ArrowLeft');
-    expect(h.store.settings.titleArt, 'Left wraps the other way').toBe('echo');
-    key(h, 'Enter');
+    expect(pageValue(h, 'titleArt')).toBe('FARPLANE');
     expect(h.store.settings.titleArt).toBe('farplane');
+    expect(h.store.settings.titleArtPicked, 'a step is a pick').toBe(true);
+    key(h, 'ArrowRight');
+    expect(pageValue(h, 'titleArt'), 'wraps back').toBe('THE ECHO');
+    key(h, 'ArrowLeft');
+    expect(h.store.settings.titleArt, 'Left wraps the other way').toBe('farplane');
+    key(h, 'Enter');
+    expect(h.store.settings.titleArt).toBe('echo');
+    expect(h.store.settings.titleArtPicked, 'choosing The Echo back is still a pick').toBe(true);
     key(h, 'ArrowDown');
     const seen: string[] = [];
     for (let i = 0; i < 3; i++) {
@@ -221,13 +230,13 @@ describe.each([
     key(h, 'ArrowRight');
     key(h, 'ArrowDown');
     key(h, 'ArrowRight');
-    expect(h.store.settings).toMatchObject({ titleArt: 'echo', chapterSelectMusic: 'a' });
+    expect(h.store.settings).toMatchObject({ titleArt: 'farplane', chapterSelectMusic: 'a' });
     key(h, 'Escape');
     expect(page(h)).toBeNull();
     expect(h.resumed, 'Esc backs out of the page, it does not resume the fight').toBe(0);
     expect(s(h)['row']).toBe('presentation');
     expect((document.activeElement as HTMLElement | null)?.dataset['row']).toBe('presentation');
-    expect(listValue(h, 'presentation')).toBe('THE ECHO \u00b7 A');
+    expect(listValue(h, 'presentation')).toBe('FARPLANE \u00b7 A');
     expect(s(h)['presentation']).toBeNull();
     // the list is back: Up walks it and Enter on another row does not open the page
     key(h, 'ArrowUp');
@@ -265,7 +274,7 @@ describe.each([
     for (let i = 0; i < 20 && s(h)['row'] !== 'presentation'; i++) key(h, 'ArrowDown');
     key(h, 'ArrowRight');
     expect(page(h)).not.toBeNull();
-    expect(h.store.settings).toMatchObject({ titleArt: 'farplane', chapterSelectMusic: 'b' });
+    expect(h.store.settings).toMatchObject({ titleArt: 'echo', titleArtPicked: false, chapterSelectMusic: 'b' });
   });
 
   it('taps: the row opens the page, a tap steps a row and puts the cursor on it, the Esc BACK prompt goes back', () => {
@@ -279,12 +288,12 @@ describe.each([
     expect(pageValue(h, 'chapterSelectMusic')).toBe('A  WALTZ');
     tap(h, '.pause__ec [data-row="titleArt"]');
     expect(cursor(h)).toBe('titleArt');
-    expect(h.store.settings.titleArt).toBe('echo');
+    expect(h.store.settings.titleArt).toBe('farplane');
     expect(h.root.querySelector(`[data-action="${PRESENTATION_CLOSE_ACTION}"]`)).not.toBeNull();
     tap(h, `[data-action="${PRESENTATION_CLOSE_ACTION}"]`);
     expect(page(h)).toBeNull();
     expect(s(h)['row']).toBe('presentation');
-    expect(listValue(h, 'presentation')).toBe('THE ECHO \u00b7 A');
+    expect(listValue(h, 'presentation')).toBe('FARPLANE \u00b7 A');
   });
 
   it('the page is built from the EYE CANDY page\u2019s classes, so it takes that page\u2019s look', () => {
@@ -311,13 +320,13 @@ describe.each([
     key(h, 'ArrowDown');
     key(h, 'ArrowRight');
     key(h, 'ArrowRight'); // B -> A -> C
-    expect(h.store.settings).toMatchObject({ titleArt: 'echo', chapterSelectMusic: 'c' });
+    expect(h.store.settings).toMatchObject({ titleArt: 'farplane', titleArtPicked: true, chapterSelectMusic: 'c' });
     const raw = JSON.parse(h.storage.map.get(SAVE_KEY)!) as { settings: Record<string, unknown> };
-    expect(raw.settings).toMatchObject({ titleArt: 'echo', chapterSelectMusic: 'c' });
-    // a new session on the same storage
+    expect(raw.settings).toMatchObject({ titleArt: 'farplane', titleArtPicked: true, chapterSelectMusic: 'c' });
+    // a new session on the same storage: the Farplane pick is a pick, so it is kept (release 61)
     const reloaded = new SaveStore(SAVE_KEY, h.storage);
-    expect(reloaded.settings).toMatchObject({ titleArt: 'echo', chapterSelectMusic: 'c' });
-    expect(TITLE_ART_PLATES[titleArtOf(reloaded.settings.titleArt)]).toBe('art/title/echo.png');
+    expect(reloaded.settings).toMatchObject({ titleArt: 'farplane', titleArtPicked: true, chapterSelectMusic: 'c' });
+    expect(TITLE_ART_PLATES[titleArtOf(reloaded.settings.titleArt)]).toBe('art/title/keyart.png');
     expect(chapterSelectCue(reloaded.settings.chapterSelectMusic)).toBe('chapter-select-c');
     // and the pause of that session reads them back on the row
     h.dispose();
@@ -325,7 +334,7 @@ describe.each([
     document.body.innerHTML = '';
     const again = mount(chapterId, h.storage);
     again.screen.trigger('pause:tab:options');
-    expect(listValue(again, 'presentation')).toBe('THE ECHO \u00b7 C');
+    expect(listValue(again, 'presentation')).toBe('FARPLANE \u00b7 C');
   });
 });
 
@@ -343,9 +352,9 @@ describe('the PRESENTATION page, either game', () => {
     storage.setItem(SAVE_KEY, JSON.stringify({ version: 1, settings: { titleArt: 'nonsense', chapterSelectMusic: 9 } }));
     const h = mount('seymour-flux', storage);
     h.screen.trigger('pause:tab:options');
-    expect(listValue(h, 'presentation')).toBe('FARPLANE \u00b7 B');
+    expect(listValue(h, 'presentation')).toBe('THE ECHO \u00b7 B');
     openByKeys(h);
-    expect(pageValue(h, 'titleArt')).toBe('FARPLANE');
+    expect(pageValue(h, 'titleArt')).toBe('THE ECHO');
     expect(pageValue(h, 'chapterSelectMusic')).toBe('B  PIANO');
   });
 });
