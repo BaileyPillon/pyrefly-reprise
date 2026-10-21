@@ -1,17 +1,20 @@
 // @vitest-environment jsdom
 /**
  * R61 booth fix 3 (Bailey, 2026-10-20, the conference demo, `?demo=1`): the demo does not teach a visitor, and a win goes back to the board fast.
+ * **Merged into r61-rc (2026-10-21):** r61-booth and r61-flow each built "a win goes straight back"; the kept implementation is r61-flow's (`app/demo/demoFlow.ts`, `demoBoard.ts`), so claim 2 below
+ * is pinned against it: a demo fight runs with no story scene before or after, and the picker's cursor opens on the other fight.
  *
  * Three claims, each against the real code and not a copy of it:
  *  1. **No first-run teaching card in demo mode** (both games): `shouldShow` answers false for every surface, the guided first run never arms, and the first-use line a battle would raise is not
  *     raised. Nothing is marked seen, so the save is untouched; with the switch off every one of them is exactly what it was.
- *  2. **A win goes back to the board** (both games): in demo mode the part of the post scene AFTER the results panel is not played, and the board opens on the OTHER demo chapter, once. A loss, a retry,
- *     a chapter that is not a demo chapter and a Pilgrimage fight are untouched.
+ *  2. **A win goes back to the picker** (both games): in demo mode a demo fight plays no story scene before or after (so nothing follows the results panel) and the picker opens on the OTHER demo fight.
+ *     A chapter that is not a demo fight and a Pilgrimage fight are untouched.
  *  3. The rules are not touched: the switch is the one `demoMode.ts` has always been; no engine is imported here.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { App } from '../../src/app/App.ts';
-import { DEMO_CHAPTERS, demoBoardTarget, noteDemoWin, setDemoMode, takeDemoBoardFocus } from '../../src/app/demoMode.ts';
+import { setDemoMode } from '../../src/app/demoMode.ts';
+import { demoStartIndex } from '../../src/app/demo/demoBoard.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { Screen } from '../../src/app/Screen.ts';
 import { forgetBoardChapter, initialBoardIndex, lastBoardChapter, rememberBoardChapter } from '../../src/app/screens/frontend/boardFocus.ts';
@@ -124,45 +127,21 @@ describe('1. no first-run teaching card in demo mode', () => {
   });
 });
 
-describe('2. a win goes back to the board fast', () => {
-  it('the board opens on the other demo chapter: Chapter I -> Chapter IV -> Chapter I; anything else gives nothing', () => {
-    expect(DEMO_CHAPTERS).toEqual(['seymour-flux', 'ffx2-bahamut']);
-    expect(demoBoardTarget('seymour-flux')).toBe('ffx2-bahamut');
-    expect(demoBoardTarget('ffx2-bahamut')).toBe('seymour-flux');
-    expect(demoBoardTarget('yunalesca')).toBeNull();
-    expect(demoBoardTarget(null)).toBeNull();
-  });
-
-  it('noteDemoWin + takeDemoBoardFocus: once, and only for a demo chapter in demo mode', () => {
-    noteDemoWin('seymour-flux'); // demo mode off
-    setDemoMode(true);
-    expect(takeDemoBoardFocus()).toBeNull();
-    noteDemoWin('yunalesca'); // not a demo chapter
-    expect(takeDemoBoardFocus()).toBeNull();
-    noteDemoWin('seymour-flux');
-    expect(takeDemoBoardFocus()).toBe('ffx2-bahamut');
-    expect(takeDemoBoardFocus(), 'taken once').toBeNull();
-    noteDemoWin('ffx2-bahamut');
-    setDemoMode(false);
-    expect(takeDemoBoardFocus(), 'demo mode off: the board is the game\'s own').toBeNull();
-  });
-
+describe('2. a win goes back to the picker fast', () => {
   const tiles = [
     { id: 'seymour-flux', playable: true },
     { id: 'yunalesca', playable: true },
     { id: 'ffx2-bahamut', playable: true },
   ];
 
-  it('the board\'s first cursor after a demo win is the other demo chapter, remembered; a rebuild (a prep Esc) stays there; an explicit index wins', () => {
+  it('the picker\'s first cursor after a demo fight is the other demo fight (r61-flow\'s one implementation); the game\'s own board is not moved by it', () => {
     setDemoMode(true);
     rememberBoardChapter('seymour-flux');
-    noteDemoWin('seymour-flux');
-    expect(initialBoardIndex(tiles, undefined)).toBe(2);
-    expect(lastBoardChapter()).toBe('ffx2-bahamut');
-    expect(initialBoardIndex(tiles, undefined), 'the next build is the remembered chapter, as ever').toBe(2);
-    noteDemoWin('ffx2-bahamut');
+    expect(demoStartIndex()).toBe(1);
+    rememberBoardChapter('ffx2-bahamut');
+    expect(demoStartIndex()).toBe(0);
+    expect(initialBoardIndex(tiles, undefined), 'the game\'s board is the remembered chapter, as ever').toBe(2);
     expect(initialBoardIndex(tiles, 1), 'an explicit initialIndex is untouched').toBe(1);
-    expect(initialBoardIndex(tiles, undefined), 'and the win is still waiting for the next plain build').toBe(0);
   });
 
   it('without a win the board is exactly what it was (the remembered chapter, else the first playable)', () => {
@@ -273,33 +252,31 @@ describe('2. a win goes back to the board fast', () => {
     ['seymour-flux', 'FFX'],
     ['ffx2-bahamut', 'FFX-2'],
   ] as const) {
-    it(`${game} ${chapter}: the story after the panel is not played in demo mode (post, results, done); outside it, it is`, async () => {
+    it(`${game} ${chapter}: a demo fight plays no story before or after it (battle, results, done); outside demo mode it is the whole run`, async () => {
       setDemoMode(true);
       await app.flow.runChapter(chapter, { skipPrep: true, seed: 1 });
-      expect(played).toEqual(['pre', 'battle', 'post', 'results']);
-      expect(takeDemoBoardFocus(), 'and the board will open on the other demo chapter').toBe(chapter === 'seymour-flux' ? 'ffx2-bahamut' : 'seymour-flux');
+      expect(played).toEqual(['battle', 'results']);
+      rememberBoardChapter(chapter); // the picker does this when the visitor confirms the card
+      expect(demoStartIndex(), 'and the picker will open on the other demo fight').toBe(chapter === 'seymour-flux' ? 1 : 0);
 
       played.length = 0;
       setDemoMode(false);
       await app.flow.runChapter(chapter, { skipPrep: true, seed: 1 });
       expect(played).toEqual(['pre', 'battle', 'post', 'results', expect.stringMatching(/^post@\d+$/)]);
-      expect(takeDemoBoardFocus()).toBeNull();
     });
   }
 
-  it('any other chapter a visitor reaches also goes straight back, and the board only moves for a demo chapter', async () => {
+  it('a chapter that is not a demo fight keeps its story in demo mode (the picker offers only the two fights)', async () => {
     setDemoMode(true);
     await app.flow.runChapter('yunalesca', { skipPrep: true, seed: 1 });
-    expect(played).toEqual(['pre', 'battle', 'post', 'results']);
-    expect(takeDemoBoardFocus()).toBeNull();
+    expect(played).toEqual(['pre', 'battle', 'post', 'results', expect.stringMatching(/^post@\d+$/)]);
   });
 
-  it('a Pilgrimage fight keeps its rules and its story: no quick way back, no board move', async () => {
+  it('a Pilgrimage fight keeps its rules and its story: no quick way back', async () => {
     setDemoMode(true);
     const progress = { recordAttempt: () => undefined, chapter: () => ({ bestTimeMs: null }), recordClear: () => undefined };
     const pilgrim = { chapter: (c: unknown) => c, progress } as unknown as NonNullable<Parameters<GameFlow['runChapter']>[1]['pilgrim']>;
     await app.flow.runChapter('seymour-flux', { skipPrep: true, seed: 1, pilgrim });
     expect(played.filter((p) => p.startsWith('post')).length).toBe(2);
-    expect(takeDemoBoardFocus()).toBeNull();
   });
 });

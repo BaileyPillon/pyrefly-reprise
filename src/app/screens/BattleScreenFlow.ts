@@ -46,7 +46,7 @@ import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
 import { warmBattleStage } from '../../engine/StageWarm.ts'; // R61 (PR-0481): a first battle's once-per-page costs are paid behind the party prep
-import { attemptSeed, demoModeOn, noteDemoWin } from '../demoMode.ts'; // release 60: `?demo=1`, the conference demo's seeds; R61: and its quick way back to the board
+import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conference demo's seeds
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
@@ -437,10 +437,8 @@ export class GameFlow {
         let resumeAt: number | null = null;
         if (!opts.skipCutscenes) resumeAt = await this.playCutscene(chapter, 'post');
         if (!opts.skipResults) await this.showResults(chapter, outcome, previousBestMs);
-        // R61 (the conference demo, both games): in demo mode a win goes straight back to the board, on the other demo chapter; the story after the panel is not played (`demoMode.ts`).
-        const quickBack = demoModeOn() && !opts.pilgrim;
-        if (quickBack) noteDemoWin(id);
-        if (!opts.skipCutscenes && resumeAt !== null && !quickBack) await this.playCutscene(chapter, 'post', resumeAt);
+        // R61 (the conference demo, both games): a demo fight is run with `skipCutscenes` (`demoRunDefaults`, first line of this method), so the story after the panel is not played and the win goes back to the picker (`demo/demoBoard.ts` puts the cursor on the other fight).
+        if (!opts.skipCutscenes && resumeAt !== null) await this.playCutscene(chapter, 'post', resumeAt);
         this.step = 'idle';
         return outcome;
       }

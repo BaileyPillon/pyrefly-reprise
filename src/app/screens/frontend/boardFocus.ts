@@ -16,12 +16,8 @@
  * save schema. Every storage access is guarded: a private window or blocked
  * storage simply forgets.
  *
- * R61 (the conference demo, `?demo=1`, both games): after a WIN of a demo chapter the board opens on the other demo chapter, once (`demoMode.ts`, `takeDemoBoardFocus`).
- *
  * Game case: both (the board is shared plumbing, CHK-020).
  */
-
-import { takeDemoBoardFocus } from '../../demoMode.ts';
 
 const KEY = 'pyrefly.board.lastChapter';
 
@@ -81,15 +77,6 @@ export function initialBoardIndex(
   initialIndex: number | undefined,
 ): number {
   let wanted = initialIndex ?? -1;
-  if (wanted < 0) {
-    // R61: demo mode, a demo chapter just won: the other demo chapter, remembered as if the visitor had chosen it.
-    const demo = takeDemoBoardFocus();
-    const at = demo === null ? -1 : tiles.findIndex((t) => t.id === demo && t.playable);
-    if (at >= 0) {
-      rememberBoardChapter(demo!);
-      return at;
-    }
-  }
   if (wanted < 0) {
     const last = lastBoardChapter();
     wanted = last ? tiles.findIndex((t) => t.id === last) : -1;
