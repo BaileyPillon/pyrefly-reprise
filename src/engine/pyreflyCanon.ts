@@ -22,6 +22,7 @@ import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
 import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
+import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
 
 /**
  * People, who die as people: the presentation plan's A-5 row ("Humans
@@ -146,6 +147,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [MIRROR_AEONS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-mirror-aeons.md section 2 and 3: the guides name no ambient particles on the road or in the cavern; the fiends are summoned aeons and leave as the stage dissolves them' },
   // The Last Summoning (the hidden chapter, FFX only): Dream's End as Chapter III builds it, so Dream's End's row.
   [LAST_SUMMONING_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Dream's End [verified: 2 sources]` },
+  // Valefor at Besaid in Wind Waker style (the hidden chapter, FFX-2 only; `scenes/exp-windwaker-stage.ts`): hidden chapter 24's fight, so its row (the Djose chamber's stand-in for Besaid's); the temple is a stand-in.
+  [EXP_WINDWAKER_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: "research/ffx2-ixion-djose.md §6.1 (the chamber the chapter 24 fight stands in): the arena rows name no particles; no source describes Besaid's chamber" },
   // Angra Mainyu (the hidden chapter, FFX-2 only): the Bikanel Desert.
   [ANGRA_MAINYU_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-angra-mainyu.md §1: no source names particles in the desert fight' },
   // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.

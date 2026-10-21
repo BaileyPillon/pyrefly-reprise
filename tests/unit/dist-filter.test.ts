@@ -32,6 +32,9 @@ describe('what never ships', () => {
     for (const p of [
       'audio/candidates/evrae-near.mp3',
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
+      'models-exp/windwaker/yuna.glb', // the hidden Wind Waker chapter's local-only models (branch exp-windwaker)
+      'models-exp/windwaker/props/pistol.glb',
+      'models-exp/windwaker/temple/wall.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',
@@ -52,6 +55,7 @@ describe('what never ships', () => {
       'art/characters/evrae/idle-far.png',
       'art/backdrops/ch1-2.png', // a digit inside the stem is not a take number
       'art/portraits/tidus-v2.png',
+      'models-expansion/readme.txt', // only the models-exp folder itself is left out, not a name that merely begins with it
       'assets/index-4f2a.js',
       'index.html',
     ]) {

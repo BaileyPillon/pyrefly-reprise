@@ -277,6 +277,7 @@ export const DOOR_WORDS = Object.freeze({
   'ffx2-angra-mainyu': 'angra',
   'mirror-aeons': 'yojimbo',
   'last-summoning': 'summon',
+  'exp-windwaker': 'waker', // the hidden Wind Waker chapter (FFX-2, placeholder word, 2026-10-20)
 });
 
 /** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */
