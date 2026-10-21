@@ -4,7 +4,7 @@
  *
  * ## The target
  *
- * `idle` is the look lab's TARGET-C shot (`look-lab/js/shots.mjs`, run 3): **a low camera** (37 cm up) at (1.0, 0.37, 3.2), tipped 15.6 degrees upward, a 49 degree vertical lens. Low and tipped up is the Wind Waker
+ * `idle` is the look lab's TARGET-C shot (`look-lab/js/shots.mjs`, run 3): **a low camera** (37 cm up) at (1.0, 0.37, 3.2), tipped 16.8 degrees upward (the lab's 15.6, see `TARGET_PITCH_DEG`), a 49 degree vertical lens. Low and tipped up is the Wind Waker
  * look (the horizon sits at 0.80 of the frame's height, the sky and the roof opening above the party), and the lens is wide: nothing in the frame is close enough to make a flat face read as a mask. The girls stand low on
  * the left, Valefor fills the right half, and the bottom fifth of the frame is floor, calm for the HUD.
  *
@@ -29,7 +29,12 @@ export function pitchedLook(pos: V3, pitchDeg: number, dist = 10): V3 {
 
 /** The target shot: position, pitch and lens (the lab's `TARGET_POS`, `TARGET_PITCH`, fov 49). */
 export const TARGET_POSITION: V3 = [1.0, 0.37, 3.2];
-export const TARGET_PITCH_DEG = 15.6;
+/**
+ * The lab's pitch was 15.6; **16.8 here (polish 1)**. In the game the girls' heads stood about 0.05 of the frame higher than in the lab's still (Yuna's hair top 0.29 against the lab's 0.34 and TARGET-C's 0.33: the
+ * game's model is not crouched as the lab's was by the same stance) and the floor took 19 percent of the frame against TARGET-C's 13. Tipping the lens 1.2 degrees further up moves every figure down by
+ * about 0.025 of the frame: Yuna's top .31, Rikku's .47, Paine's .55 (TARGET-C .33, .47, .55), Valefor's claws .74 (.72), the floor to about 17 percent, with the horizon still at 0.83.
+ */
+export const TARGET_PITCH_DEG = 16.8;
 export const TARGET_FOV = 49;
 
 /** The sun, from the lab: a warm key from the front right, high. */

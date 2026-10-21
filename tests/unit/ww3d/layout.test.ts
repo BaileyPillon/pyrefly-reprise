@@ -187,14 +187,14 @@ describe('the target shot (TARGET-C) as the look lab framed it', () => {
   const idle = RIGS['idle']!;
   const boxes = figureBoxes(idle, ASPECT, BOSS_HOVER);
 
-  it('is a low camera at (1.0, 0.37, 3.2), pitched 15.6 degrees, a 49 degree lens, the horizon at about 0.80 of the frame', () => {
+  it('is a low camera at (1.0, 0.37, 3.2), pitched 16.8 degrees (the lab pitch of 15.6 plus the 1.2 that lowers the party onto the TARGET-C boxes), a 49 degree lens, the horizon at about 0.83 of the frame', () => {
     expect(TARGET_POSITION).toEqual([1.0, 0.37, 3.2]);
     expect(idle.position).toEqual(TARGET_POSITION);
     expect(idle.fov).toBe(TARGET_FOV);
     expect(TARGET_FOV).toBe(49);
     expect(pitchOf(idle)).toBeCloseTo(TARGET_PITCH_DEG, 5);
-    expect(horizonY(idle)).toBeGreaterThan(0.77);
-    expect(horizonY(idle)).toBeLessThan(0.84);
+    expect(horizonY(idle)).toBeGreaterThan(0.80);
+    expect(horizonY(idle)).toBeLessThan(0.86);
     expect(pitchedLook([1, 0.37, 3.2], 0)).toEqual([1, 0.37, -6.8]);
   });
 
@@ -213,6 +213,17 @@ describe('the target shot (TARGET-C) as the look lab framed it', () => {
       expect(b.bottom, `${id} bottom`).toBeGreaterThan(bt - 0.06);
       expect(b.bottom, `${id} bottom`).toBeLessThan(bt + 0.06);
     }
+  });
+
+  it("puts every figure's top within 0.03 of TARGET-C's own boxes (measured off the picture: Yuna .33, Rikku .47, Paine .55, Valefor's claws .72) after the 1.2 degree tilt of polish 1", () => {
+    const target = { yuna: 0.33, rikku: 0.47, paine: 0.55 } as const;
+    for (const id of WW_PARTY_IDS) expect(Math.abs(boxes[id].top - target[id]), `${id} top ${boxes[id].top.toFixed(3)}`).toBeLessThan(0.03);
+    expect(Math.abs(boxes[WW_BOSS_ID].bottom - 0.72), `Valefor's claws ${boxes[WW_BOSS_ID].bottom.toFixed(3)}`).toBeLessThan(0.03);
+    // her wings are not cut by the top of the frame as they were at the lab's pitch (TARGET-C has them just inside)
+    expect(boxes[WW_BOSS_ID].top).toBeGreaterThan(0.05);
+    // the floor's far edge (the wall's foot, 12 m off) sits lower in the frame than at the lab's pitch: less of the frame is floor
+    expect(horizonY(idle)).toBeGreaterThan(0.82);
+    expect(horizonY(idle)).toBeLessThan(0.86);
   });
 
   it('fills the right half with Valefor, her body whole and above the HUD, with the girls on the left and none hidden behind another', () => {
