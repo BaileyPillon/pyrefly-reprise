@@ -28,7 +28,7 @@ import { applyIdle, RigChains } from './RigDynamics.ts';
 import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { compileStates, partStateAt } from './RigPartState.ts';
-import { fadeMsOf, fadeStart } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`)
+import { fadeMsFor, fadeStart } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`; shorter the larger the share of the figure that changes)
 import { demoMotionOn } from '../motion/DemoMotion.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
@@ -83,8 +83,8 @@ export class RigActor extends PaintedActor {
   private appliedState: Int16Array;
   private stateFrom: Int16Array;
   private stateTo: Int16Array;
-  /** The length of the move into the key being shown, ms (0 for a snap): where the cross-fade of a part change is centred. */
-  private moveMs = 0;
+  /** The cross-fade of the move into the key being shown (`RigFade.fadeMsFor`, 0 for a snap or a build without the demo switch) and the progress at which the state flips, centred on half way. */
+  private fade: { ms: number; flipAt: number | undefined } = { ms: 0, flipAt: undefined };
   private readonly crossMs: number;
   private readonly rigBloomMasked: boolean;
   private rigClock: number;
@@ -199,7 +199,8 @@ export class RigActor extends PaintedActor {
     this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
     this.stateTo = this.states.get(key)!;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
-    this.moveMs = ms;
+    const fadeMs = demoMotionOn() && ms > 0 ? fadeMsFor(this.data, this.data.keys.get(key), this.stateFrom, this.stateTo) : 0;
+    this.fade = { ms: fadeMs, flipAt: fadeMs > 0 ? fadeStart(ms, fadeMs) : undefined };
     this.trans.retarget(target, ms);
     this.layersDue = true;
     if (ms <= 0) this.pose0();
@@ -235,11 +236,10 @@ export class RigActor extends PaintedActor {
       this.layersDue = false;
       this.rig.setLayers(this.data.keys.get(this.key)?.layers ?? null);
     }
-    // format v2: which parts show, with which image. `?motion=demo`: the change cross-fades over the key's `fadeMs`, centred on the half-way point (`RigFade.ts`); a snap (no move) stays a flip.
-    const fadeMs = demoMotionOn() && this.moveMs > 0 ? fadeMsOf(this.data.keys.get(this.key)) : 0;
-    const shown = partStateAt(this.stateFrom, this.stateTo, this.trans.progress, fadeMs > 0 ? fadeStart(this.moveMs, fadeMs) : undefined);
+    // format v2: which parts show, with which image. `?motion=demo`: the change cross-fades, centred on the half-way point (`RigFade.ts`); a snap (no move) stays a flip.
+    const shown = partStateAt(this.stateFrom, this.stateTo, this.trans.progress, this.fade.flipAt);
     if (shown !== this.appliedState) {
-      this.rig.setPartState(shown, fadeMs);
+      this.rig.setPartState(shown, this.fade.ms);
       this.appliedState = shown;
     }
     this.rig.advanceFades(realDt * 1000); // on the real clock: a hit-stop that holds the field never freezes a half-mixed pair of images
