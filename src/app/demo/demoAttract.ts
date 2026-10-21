@@ -3,8 +3,9 @@
  * returns to the title"; both games, demo mode only; Seymour Flux is Chapter I, FFX, Bahamut is Chapter IV, FFX-2).
  *
  * What plays: the real game. Each segment is an ordinary `BattleScreen` fought on the demo seed (`demoMode.ts`: Seymour 7, Bahamut 56) by the chapter's own line (`intendedStrategy`, which asks `tacticFor`
- * first), at normal speed, under the same look, with the music lowered and a "Press any button" banner. Seymour, then Bahamut, then Seymour again, for as long as no one is there. The two segments are cut at
- * their time caps with a fade to black between them; a fight that ends sooner moves on sooner.
+ * first), under the same look, with the music lowered and a "Press any button" banner. Seymour, then Bahamut, then Seymour again, for as long as no one is there. Seymour plays at normal speed; Bahamut's long middle
+ * is run at the presenter's skip and fast speeds so the segment reaches the Mega Flare in under a minute (`attractPlan`). The segments are cut at their time caps or at the end of their highlight with a fade to black
+ * between them; a fight that ends sooner moves on sooner.
  *
  * What it never does (Bailey: "never write a save, never count as a run, never leave the game in a strange state"):
  *  - **No save.** The segment is a `BattleScreen` with `attract: true`, which skips the one write a battle makes while it runs (play time). The loop never goes through `GameFlow`, so there is no `recordAttempt`,
