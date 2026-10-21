@@ -518,8 +518,11 @@ export class GameFlow {
     const silent = resultsScreenSilent(chapter);
     // The music of the screen (`resultsMusic.ts`, music batch 2): a win's cue starts now, as it always did (its battle screen is gone already: the post scene replaced it). A loss's cue waits
     // for the swap below, because the battle screen's exit stops the music and would cut a cue asked for before it; it ends when the player chooses, so it never plays over a RETRY.
+    // Release 62 (PR-0504, both games): the same wait for a win whose battle screen is still up when the panel is asked for, that is, when no post scene replaced it (a demo fight skips the story,
+    // `demoRunDefaults`; the hidden experiment has none): its `exit` stopped the cue asked for before the swap and the panel came up in silence.
     const cue = resultsCueFor(chapter, outcome.outcome);
-    let music: ResultsMusicHandle | null = cue?.kind === 'victory' ? startResultsMusic(audio, cue) : null;
+    const battleUp = this.owned !== null && 'finished' in this.owned; // only the battle screen resolves `finished` (a story scene or the board resolves `done`)
+    let music: ResultsMusicHandle | null = cue?.kind === 'victory' && !battleUp ? startResultsMusic(audio, cue) : null;
     let choice: ResultsChoice = 'continue';
     const opts: ResultsScreenOptions = {
       chapter,
@@ -538,7 +541,11 @@ export class GameFlow {
     // mirrored for FFX-2 chapters. The swap happens under the cover half.
     let swapped: Promise<boolean> = Promise.resolve(true);
     await playResultsWipe(this.app.uiRoot, chapter.game, () => {
-      swapped = this.show(screen);
+      swapped = this.show(screen).then((shown) => {
+        // PR-0504: a win that waited for the battle screen asks for its cue the moment that screen has gone (its exit has run), under the wipe's cover, as the early start was.
+        if (shown && battleUp && cue?.kind === 'victory' && music === null) music = startResultsMusic(audio, cue);
+        return shown;
+      });
     });
     if (!(await swapped)) return choice;
     if (cue?.kind === 'defeat') music = startResultsMusic(audio, cue);
