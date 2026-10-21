@@ -224,7 +224,7 @@ async function status() {
   const state = readJson(STATE);
   if (!state) {
     say('The kit is not running (no state file).');
-    return 1;
+    return 0;
   }
   const h = await health(state.port);
   say(`server:  ${h ? `up, ${h.served} files served, ${h.notFound} not found` : 'NOT answering'}  (${state.url})`);

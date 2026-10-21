@@ -5,4 +5,5 @@ REM docs/DEMO-KIT.md
 where node >nul 2>nul
 if errorlevel 1 (echo Node.js was not found on this PC. Install it from nodejs.org, then run this again. & pause & exit /b 1)
 node "%~dp0fetch-site.mjs" %*
-if errorlevel 1 (echo. & echo That did not finish cleanly: read the message above. & pause)
+if errorlevel 1 (echo. & echo That did not finish cleanly: read the message above. & pause & exit /b 1)
+pause

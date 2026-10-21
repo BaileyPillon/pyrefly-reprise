@@ -20,7 +20,7 @@ The kit lives in `tools/demo-kit/`. It needs only Node (on this PC already) and 
 
 ```
 fetch-site.cmd --dry-run            # says how many files, how many bytes, how much room there is. Writes nothing.
-fetch-site.cmd                      # the whole copy: 10.2 GiB, a quarter of an hour on a fast line
+fetch-site.cmd                      # the whole copy: 10.2 GiB. Plan on 15 to 30 minutes on a good line.
 fetch-site.cmd --max-tier 2         # leaves out the 3x and 4x figures: 3.0 GiB. See the note below.
 fetch-site.cmd --verify-only        # no internet: re-checks every file in the folder against the manifest
 ```
@@ -30,7 +30,7 @@ fetch-site.cmd --verify-only        # no internet: re-checks every file in the f
 - **It checks the room first** and refuses a copy that does not fit (`--force-space` overrides).
 - **`--max-tier 2` is a trade.** The game loads a figure's 3x or 4x master only when the figure is drawn bigger than the screen can show at 2x (a 4K screen, a close camera), and falls back one size when a master is missing (`src/engine/ArtTier.ts`). On a 1080p or 1440p screen the picture is the same. On a 4K booth screen you may see a soft figure now and then. If the booth screen is 4K, take the whole copy.
 - A copy with fewer files than the manifest is marked **partial** (`.demo-kit-site.json` in the folder), and `start-demo.cmd` warns about it.
-- Run `fetch-site.cmd --verify-only` the evening before you leave. It reads 10 GB from the disk and takes about half a minute.
+- Run `fetch-site.cmd --verify-only` the evening before you leave. It reads every file from the disk and takes a minute or two.
 
 ## 2. Start the demo
 
@@ -54,7 +54,7 @@ It starts a small server for the folder on **127.0.0.1 only** (port 5173, or the
 | What you see | Do this |
 |---|---|
 | A fight looks stuck or wrong | F5. It reloads on the title with the demo setting kept. That fight is lost; nothing else is. |
-| The picture is frozen or black | Alt+F4, then `reset-demo.cmd`. |
+| The picture is frozen or black | F5 first (the game does not recover a lost graphics context by itself, a reload does). Still stuck: Alt+F4, then `reset-demo.cmd`. |
 | The keyboard does nothing | Ctrl+Alt+Del, Task Manager, end the browser. Then `reset-demo.cmd`. |
 | `reset-demo.cmd` says it could not delete the profile | A browser process still holds it. Close the browser window (Alt+F4) and run it again, or run `stop-demo.cmd --wipe` and then `start-demo.cmd`. |
 | `start-demo.cmd` says there is no copy of the site | `fetch-site.cmd` has not run, or the folder is somewhere else: add `--dir <folder>`. |

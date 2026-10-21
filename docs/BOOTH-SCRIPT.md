@@ -38,7 +38,7 @@ It is a hidden prototype. On the chapter board, type `pilgrim`. Nothing appears 
 
 - **A fight looks wrong or stuck:** press F5. The page reloads on the title with the demo setting kept. That fight is gone. Nothing else is lost.
 - **Still wrong:** show the other fight. Chapter I and Chapter IV do not depend on each other.
-- **The screen is frozen or black:** press Alt+F4. Double-click `reset-demo.cmd`. It takes about five seconds. The game opens fresh on the title.
+- **The screen is frozen or black:** try F5 first. Still stuck: press Alt+F4, then double-click `reset-demo.cmd`. It takes about five seconds. The game opens fresh on the title.
 - **The keyboard does nothing:** press Ctrl+Alt+Del, open Task Manager, end the browser. Double-click `reset-demo.cmd`.
 - **A visitor loses:** the results panel offers RETRY. Take it. The retry is a different roll of the same fight.
 
