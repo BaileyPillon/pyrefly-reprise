@@ -1,4 +1,5 @@
 import { artManifest } from '../../ArtManifest.ts';
+import { afterGpuSettled } from '../../GpuSettle.ts';
 import { artUrl } from '../../PaintedArt.ts';
 import { liveGates, partOn, type MixGame } from './gates.ts';
 
@@ -92,6 +93,7 @@ export function prepareMixSplash(art: string, game: MixGame): void {
       img.decoding = 'async';
       img.src = artUrl(`art/characters/${src.id}/${src.state}.png`);
       await img.decode();
+      await afterGpuSettled(); // R61 (PR-0481): the crop's `toBlob` is a GPU readback; at a battle's start it waited 1.1 s for the scene's shaders, and nothing needs it before the first menu (`engine/GpuSettle.ts`)
       const box = opaqueBox(img);
       if (!box) return void crops.set(key, null);
       const r = cropRect(box, src.box);
