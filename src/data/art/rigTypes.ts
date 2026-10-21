@@ -79,6 +79,13 @@ export interface RigPart {
    * draws a seam. **Absent (and no `rimEverywhere`) = no rim light on this part.**
    */
   rim?: string;
+  /**
+   * v2.2 (2026-10-21, additive; the HD-2D look): the part's NORMAL piece, a PNG beside rig.json cut from the painting's normal map (`D:/pyrefly-art-maps`) by the same window as `png` is cut from the painting: opaque
+   * RGB, tangent space of the painting, OpenGL (R = +X image right, G = +Y image up, B = +Z toward the viewer, decode `n = rgb * 2 - 1`). It is read with the part's own `uvs`, so it may be any size (the pipeline writes
+   * it at the master's half, or the colour's own scale when that is smaller). Read ONLY while a look is armed (`?look=`, or a chapter's default look): the part is then lit with the key light, the rim and the
+   * spells' point lights like a painted figure (`engine/look/relight/RigRelight.ts`). Absent: the part is not lit, exactly as before. A reader that does not know the field ignores it; not a new `version`.
+   */
+  normal?: string;
   /** True for a part whose every edge is the painting's own outline (a spear shaft, a tail tip): it takes the rim light along its whole alpha edge with no mask. The prototype's `noRim`. */
   rimEverywhere?: boolean;
   /** `[x, y, w, h]` of `png` in the master (painting px). `png` is a bare file name beside `rig.json`. */
@@ -105,6 +112,8 @@ export interface RigPartVariant {
   /** The variant's PNG, beside rig.json (and its 1x twin, like a part's). */
   png: string;
   rim?: string;
+  /** v2.2: the variant's normal piece (see `RigPart.normal`). A variant with none is not lit while it is shown. */
+  normal?: string;
   rimEverywhere?: boolean;
   box?: [number, number, number, number];
   verts?: number[];
@@ -253,7 +262,7 @@ export interface RigGate {
   /** Each key's posed silhouette, for the HUD's brackets and the strike's reach (`engine/rig/RigSilhouette.ts`). */
   silhouettes?: Record<string, RigSilhouette>;
   /** The size of every part's PNG and rim mask as the files are, `[w, h]` (a v2 variant is listed as `<part>:<variant>`) (a part's PNG is not always its box: a ribbon-mapped spear shaft is a thin strip). The engine budgets texture memory from it. */
-  textures?: Record<string, { map: [number, number]; rim: [number, number] | null }>;
+  textures?: Record<string, { map: [number, number]; rim: [number, number] | null; normal?: [number, number] }>;
   rules?: string;
   seal?: string;
 }

@@ -15,6 +15,11 @@ for that key are CUT from the pose's own painting and registered to the key's bo
       "register": "attack",              the fitted key whose pose of the part's bone places the cut where the painting has it (a key that shows the variant must keep that pose)
       "scale": 1.0                       the piece is drawn `scale` times the painting's size about `anchor` (default: the middle of the cutline) ...
       "scaleArea": 1.0                   ... or the scale that makes the piece's mesh area this fraction of the part's own (the head's size never jumps between keys)
+      "opaqueArea": 1.0                  ... or the scale that makes the piece's OPAQUE pixels (alpha > 127) this fraction of the part's own opaque pixels: the size the player sees. The gate's head reading (CHK-026,
+                                         `critic/runner/lib/continuity-rig.mjs`) is the MESH area, which is the opaque pixels plus a margin of transparent mesh whose width depends on the piece's shape; with `meshArea` as well
+                                         the margin is chosen (the mesh's `grow`, searched) so that the mesh area is also this fraction of the part's mesh area: both readings of the head are then one number
+      "meshArea": 1.0                    (with "opaqueArea") the mesh area, as a fraction of the part's own, to reach by choosing the mesh's grow (whole px, 0 to "growMax" 80); the smallest grow that reaches it, or the nearer of
+                                         the two either side. The piece's pixels are not touched, only the transparent margin the mesh keeps round them
       "bone": "wingRA",                  the bone the piece is rigid on (default: the part's own rigid bone) ...
       "skin": "chain",                   ... or skinned along the part's own chain (`build.skin.<part>`, weights from the rest positions): a wing's variant bends at its joints as the part does
       "tex": 0.5,                        the PNG's resolution as a fraction of the master (a big sheet fits the texel budget at half); the mesh is still in master px
@@ -23,6 +28,8 @@ for that key are CUT from the pose's own painting and registered to the key's bo
       "fill": [[x, y, r], ...]           discs (master px of the idle frame) whose transparent pixels the cut fills with the painting's own colours around them, classically extended (`rig_geom.extend_fill`): where
                                          the painting has a gap (the sky inside a neck loop) that a joint's hole test needs solid, because the part it used to cover is now the variant
       "mesh": {"edge": 18, "inner": 34, "grow": 10}}
+
+  build.normals = {"dir": "D:/pyrefly-art-maps", "scale": 0.5}   (the build's, `rig_normals.py`): every variant also writes `<part>.<name>.normal.png`, the same window of the pose painting's normal map, and names it `normal`
 
 The record written into build.json is the part's variant record of format v2 with its own mesh: `png`, `rim`, `box`, `verts` (REST px: the registered cut mapped back through the key's bone), `uvs`, `triangles`;
 it is rigid on a bone or skinned along the part's chain (the box only says the PNG's size and sits inside the image: the mesh and uvs place it). Re-run this step after any refit of the key's bones (the registration reads them). `fit.keys.<pose>.image: {part: name}` makes the key show it (rig_v2.py).
@@ -36,6 +43,7 @@ from PIL import Image, ImageDraw
 from scipy import ndimage as ndi
 
 import rig_geom as R
+import rig_normals
 import rig_v2
 from rig_common import Subject, load_rgba, read_json, say, write_json
 
@@ -65,6 +73,23 @@ def bone_matrix(model, bone: str) -> np.ndarray:
 def mesh_area(verts: np.ndarray, tris: np.ndarray) -> float:
     a, b, c = verts[tris[:, 0]], verts[tris[:, 1]], verts[tris[:, 2]]
     return float(np.abs((b[:, 0] - a[:, 0]) * (c[:, 1] - a[:, 1]) - (c[:, 0] - a[:, 0]) * (b[:, 1] - a[:, 1])).sum() / 2)
+
+
+def fit_grow(mesh_at, want: float, hi: int = 80) -> int:
+    """The whole-px mesh margin whose mesh area (`mesh_at(g)[2]`, never smaller for a bigger `g`) is nearest `want`: the smallest margin that reaches it, or the nearer of that one and the one below it. 0 when a margin
+    of 0 is already over `want` (the margin cannot be negative); `hi` when `hi` is not enough."""
+    lo = 0
+    if mesh_at(lo)[2] >= want:
+        return lo
+    if mesh_at(hi)[2] < want:
+        return hi
+    while hi - lo > 1:
+        mid = (lo + hi) // 2
+        if mesh_at(mid)[2] < want:
+            lo = mid
+        else:
+            hi = mid
+    return hi if abs(mesh_at(hi)[2] - want) <= abs(mesh_at(lo)[2] - want) else lo
 
 
 def chain_spec(sub: Subject, part: dict, build: dict) -> tuple[list, list, list]:
@@ -121,6 +146,7 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
     S = sub.scale
     src = sub.dir_chars / f"{spec['pose']}@{S}x.png"
     rgba = R.defringe_alpha(load_rgba(src))
+    painting_wh = (rgba.shape[1], rgba.shape[0])
     ax, bx, ay, by = painting_map(T, spec["pose"], S)
     if ax < 0 or ay < 0:
         raise SystemExit(f"rig variants: {spec['pose']} is registered turned about its stance (mirror); a variant of a turned painting is not built yet")
@@ -133,6 +159,8 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
         small[..., :3] = np.where(small[..., 3:4] > 0, small[..., :3] * 255.0 / np.maximum(small[..., 3:4], 1.0), 0)
         rgba = np.clip(small, 0, 255).astype(np.uint8)
     ox, oy = int(round(bx)), int(round(by))  # master px = painting px + (ox, oy) (a fraction of a px is dropped)
+    ncfg = rig_normals.settings(sub)
+    nrm = rig_normals.register(rig_normals.load_map(sub, ncfg, spec["pose"], painting_wh), ax, ay) if ncfg else None
     to_p = lambda pts: [(x - ox, y - oy) for x, y in pts]  # noqa: E731
     if spec.get("mask"):
         mk = np.asarray(Image.open(sub.rel(spec["mask"])).convert("L"), np.float32) / 255.0
@@ -165,6 +193,13 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
             joint_q.append((float(q[0]), float(q[1]), rr))
             say(f"    fill_joints: {nm} at ({q[0]:.0f}, {q[1]:.0f}) r {rr:.0f}")
     part_area = mesh_area(np.array(part["verts"], np.float64).reshape(-1, 2), np.array(part["triangles"]).reshape(-1, 3))
+    part_opaque = None  # opaqueArea: the part's own opaque pixels (alpha > 127 of its PNG, the idle's piece at the master's scale): what the player sees of it
+    if "opaqueArea" in spec:
+        part_opaque = float((np.asarray(Image.open(build_dir / part["png"]).convert("RGBA"))[..., 3] > 127).sum())
+        if "scaleArea" in spec:
+            raise SystemExit(f"rig variants: {part['name']}:{name} names both scaleArea and opaqueArea")
+    if "meshArea" in spec and part_opaque is None:
+        raise SystemExit(f"rig variants: {part['name']}:{name} names meshArea without opaqueArea")
     mc = spec.get("mesh", {"edge": 18, "inner": 34, "grow": 10})
     m = float(spec.get("scale", 1.0))
     anchor = np.array(spec["anchor"], np.float64) if spec.get("anchor") else (np.mean([p for c in spec.get("cutline", []) for p in c], 0) if spec.get("cutline") else None)
@@ -194,13 +229,33 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
         P, tris = R.build_mesh(crop[..., 3] > 8, edge_step=mc.get("edge", 18.0), inner_step=mc.get("inner", 34.0), domain_grow=mc.get("grow", 10), seed=1)
         M = P + np.array([x0 + ox, y0 + oy], np.float64)  # the piece in master px of the idle frame, as the painting has it
         anchor_used = anchor if anchor is not None else np.mean(M, 0)
-        m_new = math.sqrt(spec["scaleArea"] * part_area / mesh_area(M, tris)) if "scaleArea" in spec else m
+        if part_opaque is not None:
+            m_new = math.sqrt(spec["opaqueArea"] * part_opaque / max(1.0, float((crop[..., 3] > 127).sum())))
+        else:
+            m_new = math.sqrt(spec["scaleArea"] * part_area / mesh_area(M, tris)) if "scaleArea" in spec else m
         settled = abs(m_new - m) < 5e-4 and (anchor is not None or _pass > 0)
         m = m_new
         if anchor is None:
             anchor = anchor_used
-        if settled or not (joint_q and "scaleArea" in spec):
+        if settled or not (joint_q and ("scaleArea" in spec or part_opaque is not None)):
             break
+    grown = None
+    if "meshArea" in spec:  # the mesh's margin, chosen so that the MESH area (the gate's head reading) is also the wanted fraction of the part's, at the scale the opaque pixels asked for
+        want = spec["meshArea"] * part_area / (m * m)
+        dom = crop[..., 3] > 8
+        cache: dict = {}
+
+        def mesh_at(g: int):
+            if g not in cache:
+                P_, T_ = R.build_mesh(dom, edge_step=mc.get("edge", 18.0), inner_step=mc.get("inner", 34.0), domain_grow=g, seed=1)
+                cache[g] = (P_, T_, mesh_area(P_, T_))
+            return cache[g]
+
+        g = fit_grow(mesh_at, want, int(spec.get("growMax", 80)))
+        P, tris, a_g = mesh_at(g)
+        M = P + np.array([x0 + ox, y0 + oy], np.float64)
+        grown = g
+        say(f"    meshArea {spec['meshArea']}: grow {g} gives {a_g * m * m / part_area:.4f} of the part's mesh (opaque scale {m:.4f})")
     M = anchor + m * (M - anchor)
     model.pose(**key_pose_args(keys[spec["register"]]))
     skin: dict = {}
@@ -234,9 +289,14 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
         rim = np.asarray(Image.fromarray(rim, "L").resize((tw, th), Image.BOX))
     Image.fromarray(crop, "RGBA").save(build_dir / f"{fn}.png")
     Image.fromarray(rim, "L").save(build_dir / f"{fn}.rim.png")
+    normal = {}
+    if nrm is not None:  # the same window of the pose painting's normal map (no rotation or flip anywhere in the cut), opaque RGB at the master's half or the colour's own scale when smaller
+        nw = rig_normals.window(nrm, y0, y1, x0, x1)
+        rig_normals.save_piece(build_dir / f"{fn}.normal.png", nw, rig_normals.piece_size((w, h), ncfg, f))
+        normal = {"normal": f"{fn}.normal.png"}
     bw, bh = crop.shape[1], crop.shape[0]
-    say(f"  variant {part['name']}:{name}: cut of {spec['pose']} {w}x{h} (png {bw}x{bh}), {len(P)} verts, scale {m:.3f} (mesh area {mesh_area(M, tris) / part_area:.3f} of the part's), registered to the {spec['register']} key's {bone}")
-    return {"png": f"{fn}.png", "rim": f"{fn}.rim.png", "box": [int(min(max(0, rest[:, 0].min()), max(0, build["image"]["w"] - bw))), int(min(max(0, rest[:, 1].min()), max(0, build["image"]["h"] - bh))), int(bw), int(bh)], **skin,
+    say(f"  variant {part['name']}:{name}: cut of {spec['pose']} {w}x{h} (png {bw}x{bh}), {len(P)} verts, scale {m:.3f} (mesh area {mesh_area(M, tris) / part_area:.3f} of the part's{f', mesh grow {grown}' if grown is not None else ''}), registered to the {spec['register']} key's {bone}")
+    return {"png": f"{fn}.png", "rim": f"{fn}.rim.png", **normal, "box": [int(min(max(0, rest[:, 0].min()), max(0, build["image"]["w"] - bw))), int(min(max(0, rest[:, 1].min()), max(0, build["image"]["h"] - bh))), int(bw), int(bh)], **skin,
             "verts": [round(float(v), 2) for v in rest.reshape(-1)], "uvs": [round(float(v), 5) for v in (P / np.array([w, h])).reshape(-1)], "triangles": [int(t) for t in tris.reshape(-1)]}
 
 

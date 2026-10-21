@@ -32,7 +32,7 @@ import { fadeMsOf, fadeStart } from './RigFade.ts'; // `?motion=demo`: part chan
 import { demoMotionOn } from '../motion/DemoMotion.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
-import { RIG_SHARE, rigLedger, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
+import { RIG_SHARE, rigLedger, rigNormalMB, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
 import { Vector3, type Texture } from 'three';
 import type { PaintedTexture } from '../PaintedArt.ts';
 
@@ -53,6 +53,7 @@ export interface RigAsset {
   tiers?: readonly number[];
   /** Gives back the texture memory this figure reserved in `rigLedger`; called once, when the figure goes (or fails to build). */
   release?: () => void;
+  normals?: boolean; // the HD-2D look (release 61): load the normal pieces the file carries and light the parts with them (`RigLoad.chooseRig` says yes when a look is armed and the budget has room); default off
 }
 
 /** The idle plays in over this long when a figure stands up from a KO or a guard (seconds, the approach's time constant). */
@@ -101,6 +102,7 @@ export class RigActor extends PaintedActor {
   private readonly tiers: readonly number[] | undefined;
   private releaseTextures: (() => void) | null;
   private textureMB = 0;
+  private readonly normalMB: number; // the normal pieces' share of textureMB (the HD-2D look): one size, whatever the tier
   private raising = false;
   private raiseBlocked = false;
   private raiseTick = 0;
@@ -128,7 +130,8 @@ export class RigActor extends PaintedActor {
     this.textures = asset.textures ?? { map: 2, rim: 2 };
     this.tiers = asset.tiers;
     this.releaseTextures = asset.release ?? null;
-    this.textureMB = rigTextureMB(tierPartsOf(this.data), this.textures);
+    this.normalMB = asset.normals === true ? rigNormalMB(tierPartsOf(this.data)) : 0;
+    this.textureMB = rigTextureMB(tierPartsOf(this.data), this.textures) + this.normalMB;
   }
 
   /**
@@ -151,7 +154,7 @@ export class RigActor extends PaintedActor {
         throw new Error(`the idle painting is ${meta.width}x${meta.height}, the rig was cut from ${asset.data.image.w}x${asset.data.image.h}`);
       }
       actor.carrier = carrier;
-      actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture, actor.textures);
+      actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture, actor.textures, asset.normals === true);
       actor.chains = asset.data.motion?.chains?.length ? new RigChains(actor.rig.skeleton, asset.data.motion.chains) : null;
       actor.ready = true;
       actor.trans.snap(actor.compiled.get('idle')!);
@@ -284,7 +287,7 @@ export class RigActor extends PaintedActor {
   }
 
   /** For `window.__pyrefly.rigs()` and the tests: the rig as it stands. */
-  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; textures: RigTextures; textureMB: number } {
+  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; textures: RigTextures; textureMB: number; relight: { lit: boolean; pieces: number } } {
     return {
       name: this.data.name,
       key: this.key,
@@ -295,7 +298,7 @@ export class RigActor extends PaintedActor {
       chains: this.chains?.size ?? 0,
       idle: this.data.motion?.idle !== undefined,
       textures: { ...this.textures },
-      textureMB: Math.round(this.textureMB * 10) / 10,
+      textureMB: Math.round(this.textureMB * 10) / 10, relight: this.rig.relightInfo,
     };
   }
 
@@ -316,7 +319,7 @@ export class RigActor extends PaintedActor {
     this.raising = true;
     try {
       const next: RigTextures = { map: 2, rim: this.textures.rim };
-      const mb = rigTextureMB(tierPartsOf(this.data), next);
+      const mb = rigTextureMB(tierPartsOf(this.data), next) + this.normalMB;
       if (rigLedger.usedMB - this.textureMB + mb > artBudget().textureMB * RIG_SHARE) {
         this.raiseBlocked = true;
         return;

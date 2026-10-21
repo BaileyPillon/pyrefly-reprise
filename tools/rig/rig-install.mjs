@@ -26,9 +26,9 @@ function hardLinked(dir) {
   return readdirSync(dir).filter((n) => { const st = statSync(join(dir, n)); return st.isFile() && st.nlink > 1; }).map((n) => ({ name: n, nlink: statSync(join(dir, n)).nlink }));
 }
 
-/** The files a rig folder must hold: rig.json and every PNG and rim mask it names. */
+/** The files a rig folder must hold: rig.json and every PNG, rim mask and normal piece it names. */
 export function rigFiles(raw) {
-  return ['rig.json', ...new Set(partImages(raw).flatMap((p) => [p.png, p.rim]).filter(Boolean))];
+  return ['rig.json', ...new Set(partImages(raw).flatMap((p) => [p.png, p.rim, p.normal]).filter(Boolean))];
 }
 
 /**

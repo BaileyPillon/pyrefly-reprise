@@ -27,7 +27,8 @@ import { artBudget } from '../ArtDevice.ts';
 import { costumeMatches, gateProblem, readRig, type RigData } from './RigData.ts';
 import type { RigActor, RigAsset } from './RigActor.ts';
 import { validateFeet } from './RigValidate.ts';
-import { planRigTextures, rigLedger, tierPartsOf } from './RigTier.ts';
+import { RIG_SHARE, planRigTextures, rigLedger, rigNormalMB, tierPartsOf } from './RigTier.ts';
+import { rigRelightWanted } from '../look/relight/RigRelight.ts'; // the HD-2D look: a rig's normal pieces load only while a look is armed
 
 export interface RigChoice {
   subject: string;
@@ -161,14 +162,18 @@ export async function chooseRig(subject: string, idleUrl: string | undefined, sw
     usedMB: rigLedger.usedMB,
   });
   if (!plan.ok) return done({ subject, on: false, reason: plan.reason });
-  const release = rigLedger.reserve(plan.mb); // given back when the figure goes (RigActor.dispose), or when it fails to build (RigStage)
+  // release 61: the HD-2D look lights a rig with the normal pieces its file carries. They are extra texture memory, so they load only when a look is armed AND the rigs' share of the budget has room for them
+  // after the colour textures; a rig that cannot afford them is still a rig, just unlit (never the painting set because of them).
+  const normalMB = rigRelightWanted() ? rigNormalMB(tierPartsOf(data)) : 0;
+  const normals = normalMB > 0 && rigLedger.usedMB + plan.mb + normalMB <= (ctx.budgetMB ?? artBudget().textureMB) * RIG_SHARE;
+  const release = rigLedger.reserve(plan.mb + (normals ? normalMB : 0)); // given back when the figure goes (RigActor.dispose), or when it fails to build (RigStage)
   const warnings = validateFeet(data).map((i) => i.message);
   const maps = plan.textures.map === 1 ? ', 1x maps' : '';
   return done({
     subject,
     on: true,
-    reason: `gate ok, ${data.parts.length} parts, ${data.bones.length} bones, ${data.keys.size} keys${maps}${warnings.length ? `, ${warnings.length} feet warning(s)` : ''}`,
-    asset: { data, base: rigBaseUrl(subject), ...(dressphere ? { dressphere: true } : {}), textures: plan.textures, ...(tiers ? { tiers } : {}), release },
+    reason: `gate ok, ${data.parts.length} parts, ${data.bones.length} bones, ${data.keys.size} keys${maps}${normals ? ', lit' : ''}${warnings.length ? `, ${warnings.length} feet warning(s)` : ''}`,
+    asset: { data, base: rigBaseUrl(subject), ...(dressphere ? { dressphere: true } : {}), textures: plan.textures, ...(tiers ? { tiers } : {}), ...(normals ? { normals: true } : {}), release },
     ...(warnings.length ? { warnings } : {}),
   });
 }
