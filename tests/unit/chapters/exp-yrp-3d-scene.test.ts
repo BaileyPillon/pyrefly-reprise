@@ -7,18 +7,23 @@
  *
  * 1. **The staging reaches the stage**: the party's slots and Bahamut's pin are frame A's, the heights, the facing (party toward -x, Bahamut toward +x), `holdParty`, and the shot director that takes Mega Flare.
  * 2. **The rigs**: every name the presenter and the scripts ask for, plus the overdrive; the battle opens on `idle`.
- * 3. **It is Chapter IV's room otherwise**: the same palette and the same plate; the light pools stand at the new spots; the three lights of the figures are added and cast no shadow; Chapter IV's own scene is untouched.
- * 4. **The skin**: with no model file every slot is a capsule (the chapter always plays in frame A); `?yrp=painted` keeps the figures painted and builds no skin; `dispose` frees the skin and the debug handle.
+ * 3. **It is Chapter IV's room otherwise**: the light pools stand at the new spots; Chapter IV's own scene is untouched, its grade, deck and lights included.
+ * 4. **The look**: the studio's lights (three suns and an ambient, on the figure layer) are added and none casts a shadow; the chamber's own key, fill, rim and ambient are down to the table's share; the wet floor replaces the deck,
+ *    a contact shadow stands under each figure, the backdrop is on its layer, and the grade is the chapter's own, neutral and encoding.
+ * 5. **The skin**: with no model file every slot is a capsule (the chapter always plays in frame A); `?yrp=painted` keeps the figures painted in Chapter IV's own room, lights and grade, and builds no skin; `dispose` frees the skin,
+ *    the look, the lights and the debug handle.
  *
  * What the scene looks like is not under test here (the browser pass is).
  */
-import { DirectionalLight, HemisphereLight, PerspectiveCamera, type Object3D } from 'three';
+import { AmbientLight, DirectionalLight, PerspectiveCamera, type Light, type Mesh, type Object3D } from 'three';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { YRP_SHOT_DIRECTOR } from '../../../src/engine/yrp3d/director.ts';
-import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, LIGHTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_CAST } from '../../../src/engine/yrp3d/layout.ts';
-import { figureLights, paintedForced } from '../../../src/scenes/exp-yrp-3d-stage.ts';
+import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_CAST } from '../../../src/engine/yrp3d/layout.ts';
+import { LAYER, LOOK, frameALights } from '../../../src/engine/yrp3d/look.ts';
+import { HIDDEN_DECK, YRP_PALETTE } from '../../../src/engine/yrp3d/stageLook.ts';
+import { paintedForced } from '../../../src/scenes/exp-yrp-3d-stage.ts';
 import { loadScene, type LoadedScene } from '../../../src/scenes/index.ts';
 
 const loaded: LoadedScene[] = [];
@@ -109,15 +114,21 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     expect(scene.battleCamera.rigName).toBe('idle');
     const cam = scene.battleCamera.camera;
     scene.update(0.016);
-    expect(cam.position.x).toBeCloseTo(RIGS['idle']!.position[0], 1);
-    expect(cam.position.y).toBeCloseTo(RIGS['idle']!.position[1], 1);
-    expect(cam.position.z).toBeCloseTo(RIGS['idle']!.position[2], 1);
+    // within the idle sway (0.055 m at a random phase: BattleCamera's `swayClock`), which a tolerance of 0.05 did not allow for (it failed about one run in ten)
+    expect(Math.abs(cam.position.x - RIGS['idle']!.position[0])).toBeLessThan(0.1);
+    expect(Math.abs(cam.position.y - RIGS['idle']!.position[1])).toBeLessThan(0.1);
+    expect(Math.abs(cam.position.z - RIGS['idle']!.position[2])).toBeLessThan(0.1);
   }, 60_000);
 
-  it('is Chapter IV\'s room otherwise: the same palette and plate, Chapter IV\'s own scene untouched, and the light pools stand at the new spots', async () => {
+  it('is Chapter IV\'s room otherwise: Chapter IV\'s own scene untouched (its grade, deck and lights included), and the light pools stand at the new spots', async () => {
     const yrp = await stage('exp-yrp-3d-stage');
     const four = await stage('bevelle-underground');
-    expect(yrp.palette).toEqual(four.palette);
+    expect(yrp.palette).not.toEqual(four.palette); // the look's own grade (below)
+    expect(four.palette.name).toBe('bevelle-underground');
+    expect(four.palette.exposure).toBe(1.26);
+    expect(four.scene.getObjectByName('machina-deck')!.visible).toBe(true); // Chapter IV keeps its deck
+    expect((four.scene.getObjectByName('key') as DirectionalLight).intensity).toBeGreaterThan(2); // and its own lights, at full
+    expect(four.scene.getObjectByName('yrp-key')).toBeUndefined();
     expect(four.slots.sideFacing).toBeUndefined();
     expect(four.slots.shotDirector).toBeUndefined();
     expect('enemySpots' in four.slots).toBe(false);
@@ -135,34 +146,82 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     expect(yrp.scene.getObjectByName('enemy-reflection')!.position.z).toBeCloseTo(BOSS_SPOT[2] + 2.6, 6);
   }, 60_000);
 
-  it('adds the light of the figures: a warm key from the front left, a soft fill that has no direction and a cool rim from behind; none casts a shadow', async () => {
+  it('adds the studio\'s light for the figures: three suns and a grey world, none casting a shadow, along the directions fixed from frame A and on the figure layer too', async () => {
     const scene = await stage('exp-yrp-3d-stage');
-    const key = scene.scene.getObjectByName('yrp-key') as DirectionalLight;
-    const rim = scene.scene.getObjectByName('yrp-rim') as DirectionalLight;
-    const fill = scene.scene.getObjectByName('yrp-fill') as HemisphereLight;
-    for (const light of [key, rim]) {
-      expect(light).toBeInstanceOf(DirectionalLight);
-      expect(light.castShadow).toBe(false);
+    const dir = frameALights().dir;
+    for (const name of ['key', 'fill', 'rim'] as const) {
+      const sun = scene.scene.getObjectByName(`yrp-${name}`) as DirectionalLight;
+      expect(sun, name).toBeInstanceOf(DirectionalLight);
+      expect(sun.castShadow).toBe(false);
+      expect(sun.intensity).toBe(LOOK.rig[name].intensity);
+      expect(sun.layers.isEnabled(LAYER.figure)).toBe(true);
+      const toward = sun.position.clone().sub(sun.target.position).normalize();
+      expect(toward.x).toBeCloseTo(dir[name][0], 9);
+      expect(toward.z).toBeCloseTo(dir[name][2], 9);
     }
-    expect(fill).toBeInstanceOf(HemisphereLight);
-    expect([key.position.x < 0, key.position.z > 0, key.position.y > 0]).toEqual([true, true, true]); // front left, above
-    expect(key.color.r).toBeGreaterThan(key.color.b); // warm
-    expect(rim.position.z).toBeLessThan(-5); // behind the figures
-    expect(rim.color.b).toBeGreaterThan(rim.color.r); // cool
-    expect(fill.intensity).toBeGreaterThan(0.3);
-    expect(scene.scene.getObjectByName('yrp-warm-rim')).toBeUndefined(); // the toon rig is gone
-    expect(scene.scene.getObjectByName('yrp-toon-key')).toBeUndefined();
-    const chamberKey = scene.scene.getObjectByName('key') as DirectionalLight;
-    expect(chamberKey.castShadow).toBe(true); // the chamber's own key still casts the models' shadows
+    const ambient = scene.scene.getObjectByName('yrp-ambient') as AmbientLight;
+    expect(ambient).toBeInstanceOf(AmbientLight);
+    expect(ambient.intensity).toBeCloseTo(LOOK.rig.ambient.intensity, 9);
+    for (const old of ['yrp-warm-rim', 'yrp-toon-key']) expect(scene.scene.getObjectByName(old), old).toBeUndefined();
   }, 60_000);
 
-  it('builds the figure lights from the layout data alone, three of them, with the targets the directional ones aim at', () => {
-    const lights = figureLights();
-    expect(lights.map((l) => l.name).sort()).toEqual(['yrp-fill', 'yrp-key', 'yrp-rim']);
-    for (const l of lights) expect(l.intensity).toBe(LIGHTS[l.name.replace('yrp-', '') as 'key' | 'fill' | 'rim'].intensity);
-    const key = lights.find((l) => l.name === 'yrp-key') as DirectionalLight;
-    expect(key.target.position.toArray()).toEqual([...LIGHTS.key.target!]);
-  });
+  it('takes the chamber\'s own key, fill, rim and ambient down to the table\'s share, so the cyan and the cold no longer swamp the figures, and the key casts no shadow map', async () => {
+    const scene = await stage('exp-yrp-3d-stage');
+    const four = await stage('bevelle-underground');
+    const own = (s: LoadedScene, name: string): Light => s.scene.getObjectByName(name) as Light;
+    const names = ['key', 'fill', 'rim'] as const;
+    const shares = [LOOK.room.key, LOOK.room.fill, LOOK.room.rim];
+    names.forEach((n, i) => {
+      expect(own(four, n).intensity, `Chapter IV's ${n}`).toBeGreaterThan(0.8);
+      expect(own(scene, n).intensity, n).toBeCloseTo(own(four, n).intensity * shares[i]!, 9);
+    });
+    expect((own(scene, 'key') as DirectionalLight).castShadow).toBe(false); // the deck that received it is hidden
+    expect((own(four, 'key') as DirectionalLight).castShadow).toBe(true);
+    // the lamps keep their flicker, at the table's share
+    scene.update(0.016);
+    four.update(0.016);
+    const lamps = (s: LoadedScene): number[] => {
+      const out: number[] = [];
+      s.scene.traverse((o) => o.name === 'practical-rust' && out.push((o as Light).intensity));
+      return out;
+    };
+    const mine = lamps(scene);
+    const theirs = lamps(four);
+    expect(mine).toHaveLength(4);
+    mine.forEach((v, i) => expect(v / theirs[i]!, `lamp ${i}`).toBeCloseTo(LOOK.room.practicals, 1));
+  }, 60_000);
+
+  it('gives the stage the look: the wet floor in place of the deck, a contact shadow under each figure, the backdrop on its layer', async () => {
+    const scene = await stage('exp-yrp-3d-stage');
+    const floor = scene.scene.getObjectByName('yrp-wet-floor') as Mesh;
+    expect(floor).toBeDefined();
+    expect(floor.renderOrder).toBe(-50); // where the deck drew
+    for (const name of HIDDEN_DECK) expect(scene.scene.getObjectByName(name)!.visible, name).toBe(false);
+    for (const id of YRP_CAST) expect(scene.scene.getObjectByName(`yrp-contact-${id}`), id).toBeDefined();
+    expect(scene.scene.getObjectByName('yrp-ink')).toBeUndefined(); // the toon ink is not part of this branch
+    const backdrop = scene.scene.getObjectByName('backdrop')!;
+    let meshes = 0;
+    backdrop.traverse((o) => {
+      if ((o as Mesh).isMesh) {
+        meshes++;
+        expect(o.layers.isEnabled(LAYER.backdrop), `${o.name || 'backdrop mesh'} is on the backdrop layer`).toBe(true);
+        expect(o.layers.isEnabled(0)).toBe(true);
+      }
+    });
+    expect(meshes).toBeGreaterThan(0);
+    expect(floor.layers.isEnabled(LAYER.backdrop)).toBe(false); // the floor is not part of its own streaks
+  }, 60_000);
+
+  it('grades with the chapter\'s own palette: neutral and encoding (gamma 2.2), no lift, no split tone, no tilt-shift, a faint bloom', async () => {
+    const scene = await stage('exp-yrp-3d-stage');
+    expect(scene.palette).toEqual(YRP_PALETTE);
+    expect(YRP_PALETTE.gamma).toEqual([2.2, 2.2, 2.2]);
+    expect(YRP_PALETTE.lift).toEqual([0, 0, 0]);
+    expect(YRP_PALETTE.gain).toEqual([1, 1, 1]);
+    expect([YRP_PALETTE.saturation, YRP_PALETTE.shadowTintAmount, YRP_PALETTE.tiltMaxBlur]).toEqual([1, 0, 0]);
+    expect(YRP_PALETTE.bloomStrength!).toBeLessThan(0.3);
+    expect(YRP_PALETTE.vignette!).toBeLessThan(0.2);
+  }, 60_000);
 
   it('with no model file on disk every slot stands on its neutral capsule, so the chapter always plays in frame A; dispose frees the skin and the debug handle', async () => {
     const scene = await stage('exp-yrp-3d-stage');
@@ -170,9 +229,11 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     expect(h).toBeDefined();
     expect([...h.models.models.keys()].sort()).toEqual([...YRP_CAST].sort());
     expect([...h.models.capsules].sort()).toEqual([...YRP_CAST].sort());
+    const group = scene.scene;
     scene.dispose();
     loaded.pop();
     expect(handle()).toBeUndefined();
+    for (const name of ['yrp-wet-floor', 'yrp-contact-yuna', 'yrp-key', 'yrp-fill', 'yrp-rim', 'yrp-ambient']) expect(group.getObjectByName(name), name).toBeUndefined(); // the look left with the scene
   }, 60_000);
 
   it('?yrp=painted keeps every figure a painted billboard: no skin, no handle', async () => {
@@ -182,6 +243,11 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     expect(handle()).toBeUndefined();
     expect(scene.slots.shotDirector).toBe(YRP_SHOT_DIRECTOR); // no skin to tell the beats to: the plain director
     expect(scene.slots.sideFacing).toEqual({ party: -1, enemy: 1 }); // the staging and the camera are still frame A's
+    expect(scene.palette.name).toBe('bevelle-underground'); // Chapter IV's own room, grade and all
+    expect(scene.scene.getObjectByName('machina-deck')!.visible).toBe(true);
+    expect(scene.scene.getObjectByName('yrp-wet-floor')).toBeUndefined();
+    expect(scene.scene.getObjectByName('yrp-key')).toBeUndefined(); // no studio light for a painted billboard
+    expect((scene.scene.getObjectByName('key') as DirectionalLight).intensity).toBeGreaterThan(2); // the chamber's own lights, at full
     expect(() => scene.update(0.016)).not.toThrow();
   }, 60_000);
 

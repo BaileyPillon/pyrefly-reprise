@@ -85,21 +85,48 @@ export const yawFor = (id: YrpId): number => (id === YRP_BOSS_ID ? BOSS_YAW : PA
 // The camera
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+/** The vertical field of view of the close shots, degrees: a long lens (the look lab's `close` and `medium` cameras were 22; frame A's own is 32). A long lens flattens a face and keeps the figure large in the frame from further back. */
+export const CLOSE_FOV = 22;
+
+/**
+ * The least a shot may show of the world, vertically, at the point it looks at, in metres: **waist-up** on a party figure (from the waist, 0.56 of {@link PARTY_HEIGHT}, to a hand above the head: 0.96 m). No rig is tighter
+ * than this, whatever its lens: a close shot that cropped a figure to a face is not one this look supports.
+ */
+export const MIN_SHOT_SPAN = 0.96;
+
+/** The vertical extent a rig shows at its look-at point, metres: twice the distance to it times the tangent of half the field of view. */
+export function shotSpan(rig: RigData): number {
+  const d = Math.hypot(rig.lookAt[0] - rig.position[0], rig.lookAt[1] - rig.position[1], rig.lookAt[2] - rig.position[2]);
+  return 2 * d * Math.tan((rig.fov * Math.PI) / 360);
+}
+
+/**
+ * The same framing through a longer lens: the camera backs away along its own line of sight until the span at the look-at point is what it was (to two decimals), and the field of view narrows to `fov`. The figures keep
+ * their size in the frame; the perspective between them flattens. Written without the projection helpers below (this runs while the table is being built).
+ */
+export function longLens(rig: RigData, fov: number = CLOSE_FOV): RigData {
+  const k = Math.tan((rig.fov * Math.PI) / 360) / Math.tan((fov * Math.PI) / 360);
+  const at = (i: 0 | 1 | 2): number => Math.round((rig.lookAt[i] + (rig.position[i] - rig.lookAt[i]) * k) * 100) / 100;
+  return { ...rig, fov, position: [at(0), at(1), at(2)] };
+}
+
 /**
  * The rigs. `idle` is frame A: high (a pitch of about 15 degrees, against the 8 of Chapter IV's `idle`; higher would cut the painted vault off the top of the frame), three-quarter (the lens stands right of the
  * stage's axis, about 8 degrees of yaw, so the row and Bahamut both turn a little to it), the girls low and right, Bahamut tall and left, the bottom fifth of the frame floor. `intro` is the establishing shot: higher and further back, Bahamut alone in the left half and the row small (the presenter pushes in from it to `idle`).
  * `action` is the attack beat's low, closer, wider view (end-state frame B's: the camera down among the girls, Bahamut across them); `party`, `enemy` and `victory` are pushes toward who is being looked at;
- * `bahamut` is the boss shot Chapter IV's scene publishes as well. `overdrive` is end-state frame C's: the camera behind and above the trio, wide, the girls low in the frame and Bahamut rearing over them; `./director.ts`
+ * `bahamut` is the boss shot Chapter IV's scene publishes as well. **The close shots** (`party`, `enemy`, `bahamut`, `victory`) are seen through a long lens ({@link CLOSE_FOV}) from further back, framed as they were; none
+ * shows less than {@link MIN_SHOT_SPAN} (waist-up) at its look-at point. `overdrive` is end-state frame C's: the camera behind and above the trio, wide, the girls low in the frame and Bahamut rearing over them; `./director.ts`
  * takes it for Bahamut's Mega Flare. It looks along the party's axis (toward -x), where the painting's plane is seen at a glancing angle: the frame's left side is the dark of the room, not the plate (`planeMiss`).
  */
 export const RIGS: Readonly<Record<string, RigData>> = {
   intro: { position: [3.0, 8.4, 17.6], lookAt: [0.2, 2.4, -2.6], fov: 32, sway: 1.4 },
   idle: { position: [2.2, 4.9, 10.4], lookAt: [0.6, 1.95, -0.8], fov: 32 },
   action: { position: [5.0, 3.0, 7.4], lookAt: [-0.4, 1.9, -2.2], fov: 36, sway: 0.7 },
-  party: { position: [6.8, 3.2, 5.0], lookAt: [3.4, 1.2, -1.0], fov: 34, sway: 0.7 },
-  enemy: { position: [1.0, 3.6, 7.6], lookAt: [-3.2, 2.6, -3.2], fov: 34, sway: 0.7 },
-  bahamut: { position: [-0.8, 2.2, 7.2], lookAt: [-3.2, 1.9, -3.2], fov: 30, sway: 0.5 },
-  victory: { position: [6.2, 3.0, 4.6], lookAt: [3.2, 1.3, -1.0], fov: 32, sway: 1.2 },
+  // the close shots (pushes toward who is being looked at) take the long lens: the same framing from further back (`longLens`)
+  party: longLens({ position: [6.8, 3.2, 5.0], lookAt: [3.4, 1.2, -1.0], fov: 34, sway: 0.7 }),
+  enemy: longLens({ position: [1.0, 3.6, 7.6], lookAt: [-3.2, 2.6, -3.2], fov: 34, sway: 0.7 }),
+  bahamut: longLens({ position: [-0.8, 2.2, 7.2], lookAt: [-3.2, 1.9, -3.2], fov: 30, sway: 0.5 }),
+  victory: longLens({ position: [6.2, 3.0, 4.6], lookAt: [3.2, 1.3, -1.0], fov: 32, sway: 1.2 }),
   overdrive: { position: [9.4, 4.4, 0.6], lookAt: [-1.0, 2.2, -2.6], fov: 50, sway: 0.6 },
 };
 
@@ -314,7 +341,7 @@ export function looksLikeGlb(bytes: ArrayBuffer | Uint8Array): boolean {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-// Shading and light
+// Shading and the cast glow
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -322,25 +349,6 @@ export function looksLikeGlb(bytes: ArrayBuffer | Uint8Array): boolean {
  * diffuse material: `roughness` high and `metalness` none, so no specular gloss appears anywhere, no ink outline, no ramp. `envMapIntensity` 0 keeps any environment the scene carries out of the figures (it would add a sheen).
  */
 export const SHADE = { roughness: 0.8, metalness: 0, envMapIntensity: 0, anisotropy: 8 } as const;
-
-/** One light of the figures' rig: a colour, an intensity and, for a directional light, where it stands and what it looks at. */
-export interface LightData {
-  readonly colour: number;
-  readonly intensity: number;
-  readonly position?: V3;
-  readonly target?: V3;
-}
-
-/**
- * The figures' light, three lights beside the chamber's own (which light all real geometry too): **a warm key** from the front left and above (the lamps' glow warmed toward white), **a soft fill** (a hemisphere:
- * the vault's cool sky over a dim warm floor, no direction, so no shadow side goes black) and **a cool rim** from behind and to the right that edges each figure against the dark. None casts a shadow (the chamber's
- * key casts the models' shadows on the deck). Staging, ours; the numbers are tuned by eye on frozen frames of the live scene (the white trim of the girls blooms above about 1.7 times the old values) against the game's own battle frames (`research/ffx-vs-ffx2-presentation.md`).
- */
-export const LIGHTS: Readonly<Record<'key' | 'fill' | 'rim', LightData & { ground?: number }>> = {
-  key: { colour: 0xffe3c6, intensity: 3.6, position: [-4.5, 8.5, 11.5], target: [0, 1.2, -1.5] },
-  fill: { colour: 0xb9c4e6, intensity: 1.6, ground: 0x4a3f4c },
-  rim: { colour: 0x8db2ff, intensity: 3.0, position: [5.5, 6.5, -12], target: [0.5, 1.4, -1.5] },
-};
 
 /** The cast glow's strength over time: a swell while a figure holds a `cast` pose (seconds since it began), breathing between 0.35 and 0.75 of the peak. */
 export function castGlow(seconds: number): number {

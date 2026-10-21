@@ -2,7 +2,7 @@
  * **The soft, faithful look for a loaded model** (the hidden 3D Bahamut chapter, the real-models branch `exp-yrp-real`; FFX-2 only). It replaces the painted-toon pass of the AI-model branch (a stepped ramp and an ink
  * hull), which Bailey found "plastic": the real FFX-2 HD models carry their look in their own base colour maps, and the game lights them with plain diffuse light, so each material here keeps the file's colour map
  * and colour under a high-roughness, non-metal standard material (`SHADE`, `./layout.ts`): **no specular gloss, no ramp, no outline**. The warm key, the soft fill and the cool rim that light it are the scene's
- * (`LIGHTS`, `../../scenes/exp-yrp-3d-stage.ts`).
+ * (`LOOK.rig`, `./look.ts`; built by `./rig.ts`).
  *
  * - **Two looks.** `diffuse` is the real FFX-2 humans' (and the game's own Bahamut's): the base colour map only, `SHADE`'s roughness, no gloss. `pbr` is the AI-made Bahamut's (Meshy; the look of the turntable Bailey picked): the
  *   file's own material kept whole, so whatever maps it carries (base colour, normal, roughness, metallic) and its own roughness and metalness stay, under the same lights and with no outline.
@@ -10,7 +10,8 @@
  *   normal, metal-rough and emissive maps and the vertex data a scan or a converter ships are left unused, so a highlight never comes back.
  * - **Channels.** The materials' colour and emissive are what the figure's tint, flash and cast glow drive (`./skin.ts`): `drive`. A fading figure goes transparent only while it is fading (a solid one keeps its alpha test and
  *   depth writes, so the hair's cut-outs sort right).
- * - **Meshes** are never frustum-culled (a skinned mesh's bounds are the bind pose's, and an arm swung out would pop), and cast but do not receive shadows (a figure shadowing itself shows acne on soft light).
+ * - **Meshes** are never frustum-culled (a skinned mesh's bounds are the bind pose's, and an arm swung out would pop), cast but do not receive shadows (a figure shadowing itself shows acne on soft light) and are on the figure
+ *   layer as well as the default one (`LAYER.figure`: the wet floor's mirror draws that layer alone). **Fog** does not reach them (`LOOK.figure.fog`): a figure takes its colour from the light, not from the distance.
  *
  * Needs three.js only; no DOM. Game case: FFX-2 only.
  */
@@ -18,6 +19,7 @@
 import { Color, MeshStandardMaterial, SRGBColorSpace, type BufferGeometry, type Material, type Mesh, type Object3D, type Texture } from 'three';
 import { patchFlap, type FlapUniforms } from './flap.ts';
 import { SHADE, type Look } from './layout.ts';
+import { LAYER, LOOK } from './look.ts';
 
 /** What a material remembers of the file's own, so the figure's colour channels can multiply it later. */
 export interface ShadeBase {
@@ -40,6 +42,7 @@ function pbrMaterialOf(src: Material): MeshStandardMaterial {
   m.envMapIntensity = SHADE.envMapIntensity;
   m.transparent = false;
   m.opacity = 1;
+  m.fog = LOOK.figure.fog;
   for (const t of [m.map, m.normalMap, m.roughnessMap, m.metalnessMap, m.aoMap]) if (t) t.anisotropy = SHADE.anisotropy;
   if (m.map) m.map.colorSpace = SRGBColorSpace;
   m.userData['shadeBase'] = { color: m.color.clone() } satisfies ShadeBase;
@@ -66,6 +69,7 @@ export function shadeMaterialOf(src: Material, look: Look = 'diffuse'): MeshStan
     side: base.side,
     transparent: false,
     opacity: 1,
+    fog: LOOK.figure.fog,
   });
   m.userData['shadeBase'] = { color: base.color.clone() } satisfies ShadeBase;
   return m;
@@ -109,6 +113,7 @@ export function shadeify(root: Object3D, opts: ShadeOptions = {}): ShadeSet {
     mesh.castShadow = true;
     mesh.receiveShadow = false;
     mesh.frustumCulled = false;
+    mesh.layers.enable(LAYER.figure);
     set.geometries.add(mesh.geometry);
     set.meshes.push(mesh);
   });

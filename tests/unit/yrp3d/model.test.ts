@@ -215,6 +215,9 @@ describe('the layers and the extras', () => {
     const mesh = model.root.getObjectByProperty('isMesh', true) as Mesh;
     expect((mesh.material as MeshStandardMaterial).opacity).toBe(0.5);
     expect((mesh.material as MeshStandardMaterial).emissive.toArray()).toEqual([0.5, 0.5, 0.5]);
+    expect(model.opacity).toBe(0.5); // what the contact shadow under the figure fades with
+    model.setChannels({ colour: new Color(1, 1, 1), emissive: new Color(0, 0, 0), amount: 0, opacity: 1 });
+    expect(model.opacity).toBe(1);
   });
 
   it('frees what it made: the orb and the root', () => {

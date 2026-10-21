@@ -4,7 +4,8 @@
  * 1. **The diffuse look** (the real humans and the game's Bahamut): the file's colour map and colour kept, the alpha test and sidedness kept (the hair and the cloth are cut-outs, the cloth double-sided), `SHADE`'s high
  *    roughness, no metal, no environment, and none of the normal, roughness, metalness or emissive maps (no gloss comes back); an emissive of black to be driven.
  * 2. **The pbr look** (the AI boss): the file's own material kept whole: every map and its roughness and metalness; the emissive ours.
- * 3. **Sharing and channels**: one material per source material however many meshes share it; the figure's colour, glow and opacity drive them (transparent only while fading); meshes never culled, cast but do not receive shadows.
+ * 3. **Sharing and channels**: one material per source material however many meshes share it; the figure's colour, glow and opacity drive them (transparent only while fading); meshes never culled, cast but do not receive shadows,
+ *    are on the figure layer as well as the default one (the wet floor's mirror draws that layer alone), and no fog reaches the figures' materials (`LOOK.figure.fog`).
  * 4. **The flap**: patched into every material of a model by one set of cells, with the displacement past the shoulder only; the uniform cells are shared by reference.
  */
 import { BoxGeometry, Color, DataTexture, DoubleSide, FrontSide, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, SRGBColorSpace } from 'three';
@@ -12,6 +13,7 @@ import { describe, expect, it } from 'vitest';
 
 import { flapSpecOf, makeFlap, patchFlap, setFlap, withFlap, SHOULDER_SHARE } from '../../../src/engine/yrp3d/flap.ts';
 import { SHADE } from '../../../src/engine/yrp3d/layout.ts';
+import { LAYER, LOOK } from '../../../src/engine/yrp3d/look.ts';
 import { disposeShade, drive, shadeMaterialOf, shadeify } from '../../../src/engine/yrp3d/shade.ts';
 
 const tex = (): DataTexture => new DataTexture(new Uint8Array([255, 255, 255, 255]), 1, 1);
@@ -92,6 +94,23 @@ describe('sharing, channels and meshes', () => {
     expect(set.meshes).toEqual([a, b, c]);
     for (const m of [a, b, c]) expect([m.castShadow, m.receiveShadow, m.frustumCulled]).toEqual([true, false, false]);
     expect(set.geometries.size).toBe(3);
+  });
+
+  it('puts every mesh on the figure layer as well as the default one, and keeps fog off the figures materials in both looks', () => {
+    const root = new Object3D();
+    const a = new Mesh(new BoxGeometry(), new MeshStandardMaterial());
+    const nested = new Object3D();
+    const b = new Mesh(new BoxGeometry(), new MeshStandardMaterial());
+    nested.add(b);
+    root.add(a, nested);
+    for (const look of ['diffuse', 'pbr'] as const) {
+      const set = shadeify(root.clone(true), { look });
+      for (const m of set.meshes) expect([m.layers.isEnabled(0), m.layers.isEnabled(LAYER.figure), m.layers.isEnabled(LAYER.backdrop)], look).toEqual([true, true, false]);
+      for (const m of set.materials) expect(m.fog, look).toBe(LOOK.figure.fog);
+    }
+    expect(LOOK.figure.fog).toBe(false);
+    expect(shadeMaterialOf(new MeshBasicMaterial({ color: 0x336699 })).fog).toBe(false);
+    expect(shadeMaterialOf(new MeshBasicMaterial({ color: 0x336699 }), 'pbr').fog).toBe(false);
   });
 
   it('drives colour, glow and opacity on every material, going transparent only while fading', () => {

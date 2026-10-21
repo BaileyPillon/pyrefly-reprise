@@ -4,16 +4,20 @@
  * back, Rikku in the middle, Yuna at the front), Bahamut filling the left half with his wings spread, calm floor along the bottom for the HUD. Frame B's low, close view is the `action` rig, and frame C's (behind and
  * above the trio as Bahamut rears with his orb) the `overdrive` rig the shot director takes for Mega Flare (`../engine/yrp3d/director.ts`). The numbers are `../engine/yrp3d/layout.ts`'s (pure, and pinned by `tests/unit/yrp3d/layout.test.ts` without a browser).
  *
- * Game case: FFX-2 only [AGENTS.md rule 14; research/ffx2-bahamut.md]. It is Chapter IV's room (`./bevelle-underground.ts`, built by that factory and not touched), so the painting, the lamps, the deck and the grade are
- * Chapter IV's; what this scene changes is the staging and the camera, and what it adds is the figures' light and the skin that carries the real models:
+ * Game case: FFX-2 only [AGENTS.md rule 14; research/ffx2-bahamut.md]. It is Chapter IV's room (`./bevelle-underground.ts`, built by that factory and not touched), so the painting, the lamps and the set pieces are
+ * Chapter IV's; what this scene changes is the staging, the camera and **the look** (the girls must read clearly in the arena: Bailey found the first in-game shots too dark, too blue and too small), and what it adds is the figures'
+ * light and the skin that carries the real models:
  *
  * - **Staging.** The party's three slots, Bahamut's spot and the reserve spots are frame A's; the girls stand at 1.9 and Bahamut at 5.0 (`PARTY_HEIGHT`, `BOSS_HEIGHT`); bodies face each other along x (the party toward -x,
  *   Bahamut toward +x: `SceneStaging.sideFacing`, the switch FF7's reactor and the hidden Fayth chapter use); `holdParty` keeps the stage's relaxation off the row. The light pools under the figures move with them.
- * - **The camera.** `idle`, `intro`, `action`, `party`, `enemy`, `bahamut` and `victory` are `RIGS` (the names Chapter IV's presenter and script ask for). The painting's parallax stack is aligned for the new `idle`
- *   (`SceneBuildOptions.cameraRef`), so the bands register at rest.
- * - **Light.** The scene's own key, fill, rim and practicals light the models (they light all real geometry); three lights are added for the soft, faithful look (`LIGHTS`, `../engine/yrp3d/layout.ts`) and none casts a shadow
- *   (the chamber's key casts the models' shadows on the deck): **a warm key** from the front left and above so a face turned to the lens is lit, **a soft fill** (a hemisphere, no direction) so no side goes black, and **a cool
- *   rim** from behind that edges every figure against the dark.
+ * - **The camera.** `idle`, `intro`, `action`, `party`, `enemy`, `bahamut` and `victory` are `RIGS` (the names Chapter IV's presenter and script ask for); the close shots take a long lens from further back and none is tighter
+ *   than waist-up. The painting's parallax stack is aligned for the new `idle` (`SceneBuildOptions.cameraRef`), so the bands register at rest.
+ * - **Light.** The soft studio of the turntable sheets Bailey liked, as one table (`LOOK`, `../engine/yrp3d/look.ts`; built by `rig.ts`): a neutral-warm key from the front left and above, a cool-neutral fill, a soft rim from behind and
+ *   a grey world (an ambient light), none casting a shadow, fixed in the world from frame A's camera and on the figure layer too (the floor's mirror). Chapter IV's own cyan key, cold fill, rust rim and dark-blue ambient, which
+ *   light every real surface, are taken down to `LOOK.room`'s share (none: with the deck hidden the figures are the only lit things in the room), so nothing of the arena's blue swamps them; the lamps and the hit-and-cast flash
+ *   stay. Fog does not reach the figures.
+ * - **The stage's look** (`../engine/yrp3d/stageLook.ts`, brought over from the look lab's branch without its toon material, ink or stepped motion): the wet tile floor with the lantern streaks and the figures reflected in place
+ *   of the deck, a soft contact shadow under each figure, and a neutral grade that encodes (Bailey called the first in-game stage "very dark with heavy post-processing"). `?yrp=painted` keeps Chapter IV's room, lights and grade.
  * - **The models.** `../engine/yrp3d/` (loaded on use, so no other chapter carries it): the real FFX-2 Yuna, Rikku and Paine, `public/models-exp/yrp-hd/` (4x textures, one subdivision level) when their file is there and
  *   `public/models-exp/yrp/` when not, with their own battle motions, on the stage's actors, with the painted planes switched off. `?models=base` takes the base folder alone (the comparison between the two). **The boss is the
  *   AI-made Bahamut** (`bahamut-ai.glb`: his own physically based look, the procedural wing flap and breath, frame A's size and place); `?boss=real` fights the game's own (`bahamut.glb`, his real clips at 4x) and
@@ -23,14 +27,18 @@
  * The upright phone is not staged (Chapter IV's phone rig and slice fit are for its own layout); this chapter is a desktop experiment.
  */
 
-import { DirectionalLight, HemisphereLight, Vector3, type Light, type Object3D } from 'three';
+import { Vector3, type DirectionalLight, type Light, type Object3D } from 'three';
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import { tapDirector } from '../engine/yrp3d/beats.ts';
 import { YRP_SHOT_DIRECTOR } from '../engine/yrp3d/director.ts';
-import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, LIGHTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_BOSS_ID, bossChoice, type LightData, type RigData, type V3 } from '../engine/yrp3d/layout.ts';
+import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_BOSS_ID, YRP_CAST, bossChoice, type RigData, type V3 } from '../engine/yrp3d/layout.ts';
+import { LOOK, mergeRig, type Rig, type RigPatch } from '../engine/yrp3d/look.ts';
+import type { RoomDim } from '../engine/yrp3d/rig.ts';
+import type { YrpModels } from '../engine/yrp3d/load.ts';
 import { EXP_YRP_SCENE, YRP_MODEL_DIRS } from '../data/yrp-ids.ts';
 import { buildDemoScene } from './demo.ts';
 import { buildBevelleUndergroundScene } from './bevelle-underground.ts';
+import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneEntry, SceneSlots } from './index.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneStaging } from './types.ts';
 
@@ -78,46 +86,45 @@ function movePools(group: Object3D): void {
   group.getObjectByName('enemy-reflection')?.position.set(BOSS_SPOT[0], 0.016, BOSS_SPOT[2] + 2.6);
 }
 
-/** A directional light of the figures' rig from its data: no shadow of its own. */
-function directional(name: string, d: LightData): DirectionalLight {
-  const light = new DirectionalLight(d.colour, d.intensity);
-  light.name = name;
-  light.position.set(...(d.position ?? [0, 8, 8]));
-  light.target.position.set(...(d.target ?? [0, 1.2, -1.5]));
-  light.castShadow = false;
-  return light;
-}
-
 /**
- * The figures' light (`LIGHTS`): the warm key (the lamps' glow warmed toward white, from the front left and above: the chamber's own key stands left and behind and leaves a face turned to the lens in shade), the soft fill
- * (a hemisphere: the vault's cool sky over a dim warm floor) and the cool rim (from behind and to the right: it edges each figure against the dark, as the game's own battle frames do).
- */
-export function figureLights(): Light[] {
-  const fill = new HemisphereLight(LIGHTS.fill.colour, LIGHTS.fill.ground ?? 0x40384a, LIGHTS.fill.intensity);
-  fill.name = 'yrp-fill';
-  return [directional('yrp-key', LIGHTS.key), directional('yrp-rim', LIGHTS.rim), fill];
-}
-
-/**
- * The scene: Chapter IV's chamber (`./bevelle-underground.ts`, aligned to the new `idle`), restaged and re-lit, with the skin of real models on its actors where the models are on disk. The models load before the scene is
- * handed back (a fight does not open on a half-loaded figure), in parallel; a file that is not there is replaced by the neutral capsule.
+ * The scene: Chapter IV's chamber (`./bevelle-underground.ts`, aligned to the new `idle`), restaged, with the skin of real models on its actors where the models are on disk and the stage's look and the figures' light around
+ * them (`../engine/yrp3d/look.ts`, `rig.ts`, `stageLook.ts`). The models load before the scene is handed back (a fight does not open on a half-loaded figure), in parallel; a file that is not there is replaced by the neutral
+ * capsule. `?yrp=painted` leaves Chapter IV's room, lights and grade exactly as they were.
  */
 export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOptions = {}) => {
   const base = await buildBevelleUndergroundScene({ ...opts, cameraRef: RIGS['idle']!.position as [number, number, number] });
   movePools(base.group);
-  for (const light of figureLights()) base.group.add(light, ...((light as DirectionalLight).target ? [(light as DirectionalLight).target] : []));
 
   const search = typeof location === 'undefined' ? '' : location.search;
   let skin: { update(dt: number): void; dispose(): void } | null = null;
+  let look: { follow(models: YrpModels['models']): void; dispose(): void; palette: ScenePalette } | null = null;
+  let room: RoomDim | null = null;
+  let followed: YrpModels['models'] | null = null;
+  let figureLights: Light[] = [];
   let directed: SceneStaging['shotDirector'] = YRP_SHOT_DIRECTOR;
   if (!paintedForced(search)) {
-    const [{ YrpSkin }, { loadYrpModels, modelDirs }] = await Promise.all([import('../engine/yrp3d/skin.ts'), import('../engine/yrp3d/load.ts')]);
+    const [{ YrpSkin }, { loadYrpModels, modelDirs }, { applyStage }, rig] = await Promise.all([
+      import('../engine/yrp3d/skin.ts'),
+      import('../engine/yrp3d/load.ts'),
+      import('../engine/yrp3d/stageLook.ts'),
+      import('../engine/yrp3d/rig.ts'),
+    ]);
     const heights = { yuna: PARTY_HEIGHT, rikku: PARTY_HEIGHT, paine: PARTY_HEIGHT, bahamut: BOSS_HEIGHT };
     const models = await loadYrpModels({ base: import.meta.env.BASE_URL, dirs: modelDirs(search, YRP_MODEL_DIRS), choice: bossChoice(search), heights, warn: (m) => console.warn(m) });
     const made = new YrpSkin({ host: base.group, models });
     skin = made;
+    followed = models.models;
+    figureLights = rig.figureLights();
+    for (const light of figureLights) base.group.add(light, ...((light as DirectionalLight).target ? [(light as DirectionalLight).target] : [])); // the studio's three suns and its grey world (`LOOK.rig`)
+    room = rig.dimRoom(base.group, base.lights); // the chamber's own cyan, cold and rust light no longer swamps them (`LOOK.room`)
+    const stage = applyStage(base.group, base.backdrop.group, YRP_CAST);
+    look = stage;
     directed = tapDirector(YRP_SHOT_DIRECTOR, made.listener); // the beats also start the models' clips (attack and cast), and put the strike on the blow
-    if (import.meta.env.DEV) (globalThis as { __yrp3d?: unknown }).__yrp3d = { skin: made, models }; // the debug handle (a dev server only)
+    if (import.meta.env.DEV) {
+      let current: Rig = LOOK.rig;
+      const tune = (patch: RigPatch): Rig => (rig.setRig(figureLights, (current = mergeRig(current, patch))), current); // `__yrp3d.tune({ key: { intensity: 2.4 } })`: the light, live
+      (globalThis as { __yrp3d?: unknown }).__yrp3d = { skin: made, models, stage, tune, look: LOOK }; // the debug handle (a dev server only)
+    }
   }
 
   return derive(base, {
@@ -128,13 +135,23 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
     enemyHeight: BOSS_HEIGHT,
     ...STAGING,
     ...(directed ? { shotDirector: directed } : {}),
+    ...(look ? { palette: look.palette } : {}), // the stage's own grade; the painted comparison keeps Chapter IV's
     update(dt: number): void {
       base.update(dt);
+      room?.apply(); // after the scene set its lamps' flicker for this frame
       skin?.update(dt);
+      if (followed) look?.follow(followed); // after the skin: the discs go under the figures where the presenter put them this frame
     },
     dispose(): void {
       const g = globalThis as { __yrp3d?: { skin?: unknown } };
       if (skin && g.__yrp3d?.skin === skin) delete g.__yrp3d; // not a newer scene's handle
+      look?.dispose();
+      room?.restore();
+      for (const light of figureLights) {
+        (light as DirectionalLight).target?.removeFromParent();
+        light.removeFromParent();
+        light.dispose();
+      }
       skin?.dispose();
       base.dispose();
     },

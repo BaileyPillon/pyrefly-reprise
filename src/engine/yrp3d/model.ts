@@ -101,6 +101,7 @@ export class YrpModel {
   /** Seconds left of the pulse a model with no clips takes from an attack or cast opening: its wings beat harder for it. */
   private pulse = 0;
   private figureHeight: number;
+  private opacityNow = 1;
   private lieAmount = 0;
   /** The `.chr` scale applied to the file's scene. */
   readonly chrScale: number;
@@ -224,7 +225,13 @@ export class YrpModel {
 
   /** The figure's colour, glow and opacity (the shade set's channels). */
   setChannels(c: Channels): void {
+    this.opacityNow = c.opacity;
     drive(this.set, c);
+  }
+
+  /** How opaque the figure is now, 0..1 (a figure that fades takes its contact shadow with it). */
+  get opacity(): number {
+    return this.opacityNow;
   }
 
   /** The visible meshes, for a test and the debug view. */

@@ -1,6 +1,6 @@
 /**
  * **Frame A's layout and camera maths** (`src/engine/yrp3d/layout.ts`; the hidden 3D Bahamut chapter, FFX-2 only), held without a renderer: where the four figures stand on the screen at 16:9 and at the window shapes either
- * side of it, that the painting's plane fills the frame behind them, how a model is fitted to a figure, where the model files are looked for, and the soft shading and light rig of the real-models branch.
+ * side of it, that the painting's plane fills the frame behind them, how a model is fitted to a figure, where the model files are looked for, and the soft shading of the real-models branch (its light is `look.test.ts`'s).
  *
  * The target is Bailey's picked end-state frame A (the art room's picture, "classic, now in 3D"): Bahamut on the left with his wings over the left half, the trio in a loose diagonal on the right (Paine at the back,
  * Rikku in the middle, Yuna at the front), calm floor along the bottom. These tests are that picture's limits as numbers; they do not look at pixels (the browser pass does).
@@ -12,13 +12,14 @@ import {
   BOSS_HEIGHT,
   BOSS_SPOT,
   BOSS_YAW,
+  CLOSE_FOV,
   ENEMY_SLOTS,
   FRAME_A_BOXES,
   HALF_WIDTH,
+  MIN_SHOT_SPAN,
   PARTY_HEIGHT,
   PARTY_SLOTS,
   PARTY_YAW,
-  LIGHTS,
   RIGS,
   SHADE,
   animsUrl,
@@ -32,11 +33,13 @@ import {
   fitBox,
   folderUrl,
   isYrpId,
+  longLens,
   looksLikeGlb,
   modelUrl,
   overlapOf,
   planeMiss,
   project,
+  shotSpan,
   yawFor,
   YRP_BOSS_ID,
   YRP_CAST,
@@ -139,10 +142,10 @@ describe('frame A at the default camera', () => {
 describe('the other rigs', () => {
   it('publish every name the presenter, the scripts and the moments ask for, plus the overdrive', () => {
     expect(Object.keys(RIGS).sort()).toEqual(['action', 'bahamut', 'enemy', 'idle', 'intro', 'overdrive', 'party', 'victory']);
-    for (const rig of Object.values(RIGS)) {
-      expect(rig.fov).toBeGreaterThan(25);
-      expect(rig.fov).toBeLessThan(60);
-      expect(rig.position[1]).toBeGreaterThan(0.5);
+    for (const [name, rig] of Object.entries(RIGS)) {
+      expect(rig.fov, name).toBeGreaterThanOrEqual(CLOSE_FOV);
+      expect(rig.fov, name).toBeLessThan(60);
+      expect(rig.position[1], name).toBeGreaterThan(0.5);
     }
   });
 
@@ -191,6 +194,78 @@ describe('the other rigs', () => {
       expect(b.left, name).toBeLessThan(0.95);
     }
     expect(idle.sway).toBeUndefined(); // the idle sways at the house default
+  });
+});
+
+describe('the close shots: the D1 look\'s long lens, and nothing tighter than waist-up', () => {
+  const CLOSE = ['party', 'enemy', 'bahamut', 'victory'] as const;
+  const WIDE = ['intro', 'idle', 'action', 'overdrive'] as const;
+
+  it('puts the four close shots (the pushes toward who is being looked at) on the long lens (22 degrees) and leaves the wide ones and frame A on theirs', () => {
+    expect(CLOSE_FOV).toBe(22);
+    for (const name of CLOSE) expect(RIGS[name]!.fov, name).toBe(CLOSE_FOV);
+    expect(RIGS['idle']!.fov).toBe(32); // frame A unchanged
+    expect(RIGS['idle']!.position).toEqual([2.2, 4.9, 10.4]);
+    expect(RIGS['idle']!.lookAt).toEqual([0.6, 1.95, -0.8]);
+    expect(RIGS['intro']!.fov).toBe(32);
+    expect(RIGS['action']!.fov).toBe(36);
+    expect(RIGS['overdrive']!.fov).toBe(50);
+    for (const name of WIDE) expect(RIGS[name]!.fov, name).toBeGreaterThan(CLOSE_FOV);
+  });
+
+  it('shows no shot tighter than waist-up: every rig\'s span at its look-at point is at least 0.96 m (the waist to a hand above the head of a party figure)', () => {
+    expect(MIN_SHOT_SPAN).toBeCloseTo(PARTY_HEIGHT * (1 - 0.56) + 0.12, 1);
+    for (const [name, rig] of Object.entries(RIGS)) expect(shotSpan(rig), name).toBeGreaterThanOrEqual(MIN_SHOT_SPAN);
+  });
+
+  it('keeps each close shot\'s framing: the span at the look-at point is what the wider lens gave, to a percent, the look-at and the sway are kept, and the camera is further back along the same line of sight', () => {
+    const was = {
+      party: { position: [6.8, 3.2, 5.0], lookAt: [3.4, 1.2, -1.0], fov: 34, sway: 0.7 },
+      enemy: { position: [1.0, 3.6, 7.6], lookAt: [-3.2, 2.6, -3.2], fov: 34, sway: 0.7 },
+      bahamut: { position: [-0.8, 2.2, 7.2], lookAt: [-3.2, 1.9, -3.2], fov: 30, sway: 0.5 },
+      victory: { position: [6.2, 3.0, 4.6], lookAt: [3.2, 1.3, -1.0], fov: 32, sway: 1.2 },
+    } as const;
+    for (const name of CLOSE) {
+      const before = was[name];
+      const now = RIGS[name]!;
+      expect(shotSpan(now) / shotSpan({ position: before.position, lookAt: before.lookAt, fov: before.fov }), name).toBeCloseTo(1, 2);
+      expect(now.lookAt, name).toEqual(before.lookAt);
+      expect(now.sway, name).toBe(before.sway);
+      // the same line of sight: the offset from the look-at point is the old one, scaled
+      const k = (now.position[0] - before.lookAt[0]) / (before.position[0] - before.lookAt[0]);
+      expect(k, name).toBeGreaterThan(1.2); // further back
+      expect((now.position[1] - before.lookAt[1]) / (before.position[1] - before.lookAt[1]), name).toBeCloseTo(k, 1);
+      expect((now.position[2] - before.lookAt[2]) / (before.position[2] - before.lookAt[2]), name).toBeCloseTo(k, 1);
+    }
+  });
+
+  it('longLens is the same framing through another lens: the span at the look-at point is preserved, a longer lens backs the camera away and a shorter one brings it in, along the line of sight', () => {
+    const rig = { position: [0, 2, 10] as const, lookAt: [0, 2, 0] as const, fov: 40, sway: 1 };
+    const long = longLens(rig, 20);
+    expect(long.fov).toBe(20);
+    expect(long.sway).toBe(1);
+    expect(long.position[0]).toBe(0);
+    expect(long.position[1]).toBe(2);
+    expect(long.position[2]).toBeGreaterThan(10); // further back
+    expect(shotSpan(long) / shotSpan(rig)).toBeCloseTo(1, 2);
+    const wide = longLens(rig, 60);
+    expect(wide.position[2]).toBeLessThan(10);
+    expect(shotSpan(wide) / shotSpan(rig)).toBeCloseTo(1, 2);
+    expect(longLens(rig, 40).position).toEqual([0, 2, 10]); // the same lens: nowhere to go
+    expect(longLens(rig).fov).toBe(CLOSE_FOV);
+  });
+
+  it('measures a span as twice the distance to the look-at point times the tangent of half the field of view', () => {
+    expect(shotSpan({ position: [0, 0, 10], lookAt: [0, 0, 0], fov: 90 })).toBeCloseTo(20, 9);
+    expect(shotSpan({ position: [0, 0, 5], lookAt: [0, 0, 0], fov: 90 })).toBeCloseTo(10, 9);
+    expect(shotSpan({ position: [3, 4, 0], lookAt: [0, 0, 0], fov: 90 })).toBeCloseTo(10, 9);
+  });
+
+  it('keeps every close shot inside the room: the camera stays in front of the painting and no further back than the establishing shot', () => {
+    for (const name of CLOSE) {
+      expect(RIGS[name]!.position[2], name).toBeLessThan(RIGS['intro']!.position[2]);
+      expect(RIGS[name]!.position[1], name).toBeGreaterThan(0.5);
+    }
   });
 });
 
@@ -284,26 +359,13 @@ describe('where the model files are', () => {
   });
 });
 
-describe('the soft shading, the light rig and the cast glow', () => {
+describe('the soft shading and the cast glow', () => {
   it('shades the real models with no specular gloss: a high roughness, no metal, no environment, and no ink or ramp (the toon look of the AI-model branch is gone)', () => {
     expect(SHADE.roughness).toBeGreaterThanOrEqual(0.75);
     expect(SHADE.roughness).toBeLessThanOrEqual(0.9);
     expect(SHADE.metalness).toBe(0);
     expect(SHADE.envMapIntensity).toBe(0);
     expect(SHADE.anisotropy).toBeGreaterThan(1);
-  });
-
-  it('lights the figures with a warm key from the front left, a soft fill with no direction and a cool rim from behind', () => {
-    const warmth = (c: number): number => ((c >> 16) & 255) - (c & 255); // red minus blue
-    expect(warmth(LIGHTS.key.colour)).toBeGreaterThan(20); // warm
-    expect(warmth(LIGHTS.rim.colour)).toBeLessThan(-40); // cool
-    expect(LIGHTS.key.position![0]).toBeLessThan(0); // left of the stage's axis
-    expect(LIGHTS.key.position![2]).toBeGreaterThan(5); // in front, toward the lens
-    expect(LIGHTS.rim.position![2]).toBeLessThan(-5); // behind the figures
-    expect(LIGHTS.rim.position![1]).toBeGreaterThan(3); // and above
-    expect(LIGHTS.fill.position).toBeUndefined(); // a hemisphere: no direction
-    expect(LIGHTS.fill.intensity).toBeGreaterThan(0.3);
-    expect(LIGHTS.key.intensity).toBeGreaterThan(LIGHTS.fill.intensity); // the key leads; the fill only lifts the shade
   });
 
   it('swells the cast glow from 0.35 to a steady breathing, and never leaves 0..0.76', () => {
