@@ -1,0 +1,158 @@
+/*
+ * The booth flow's chrome (release 61, the conference demo; Bailey, 2026-10-21, decision 169; both games, demo mode only: every rule here hangs on an element only demo mode creates, or on `.fe-cselect--demo` /
+ * `.demo-hud`). Ink & Gold, the interface's own tokens (`ui/inkgold/tokens.css`) and the front end's 1440x810 grid (`--fe-k`, `app/screens/frontend/frontend.css`).
+ */
+
+/* ------------------------------------------------------------------ the reset ring (over everything) */
+
+.demo-reset {
+  position: fixed;
+  z-index: 100000;
+  top: 3vmin;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 1.4vmin;
+  padding: 1vmin 2.2vmin 1vmin 1.2vmin;
+  background: rgba(11, 10, 18, 0.88);
+  border-left: 0.5vmin solid #e3b94a;
+  font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  font-size: max(14px, 1.9vmin);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f4f1e8;
+  pointer-events: none;
+  user-select: none;
+}
+.demo-reset[hidden] {
+  display: none;
+}
+.demo-reset svg {
+  width: 6.2vmin;
+  height: 6.2vmin;
+  flex: none;
+}
+.demo-reset__track {
+  fill: none;
+  stroke: rgba(244, 241, 232, 0.22);
+  stroke-width: 4;
+}
+.demo-reset__arc {
+  fill: none;
+  stroke: #e3b94a;
+  stroke-width: 4;
+  stroke-linecap: butt;
+}
+
+/* ------------------------------------------------------------------ the QR plate (title corner, picker corner) */
+
+.demo-qr {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: calc(6 * var(--fe-k, 1px));
+  width: calc(128 * var(--fe-k, 1px));
+  padding: calc(8 * var(--fe-k, 1px)) calc(8 * var(--fe-k, 1px)) calc(7 * var(--fe-k, 1px));
+  background: var(--ig-paper, #f4f1e8);
+  border-top: calc(3 * var(--fe-k, 1px)) solid var(--ig-gold, #e3b94a);
+  box-shadow: 0 calc(6 * var(--fe-k, 1px)) calc(22 * var(--fe-k, 1px)) rgba(0, 0, 0, 0.55);
+  color: var(--ig-ink, #0b0a12);
+  pointer-events: none;
+  user-select: none;
+}
+.demo-qr__code svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.demo-qr__cap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+  font-family: var(--ig-font-display, 'Chakra Petch', 'Segoe UI', sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.demo-qr__cap b {
+  font-size: max(12px, calc(10 * var(--fe-k, 1px)));
+  font-weight: 700;
+  color: var(--ig-accent-text-on-paper, #7f5c0a);
+}
+.demo-qr__cap span {
+  font-size: max(12px, calc(10 * var(--fe-k, 1px)));
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-weight: 600;
+}
+/* the title: the top right corner, clear of the key row and the build chip along the bottom and of the strap down the right edge (it starts below the middle) */
+.demo-qr--title {
+  right: calc(46 * var(--fe-k, 1px));
+  top: calc(30 * var(--fe-k, 1px));
+}
+/* the picker: under the dossier, in the corner the board leaves empty */
+.demo-qr--picker {
+  right: calc(46 * var(--fe-k, 1px));
+  bottom: calc(48 * var(--fe-k, 1px));
+}
+
+/* ------------------------------------------------------------------ the picker (the chapter board with two cards) */
+
+/* the progress strip counts "N of M beaten": meaningless on two cards and a reset visitor's board */
+.fe-cselect--demo .cs-strip {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ the attract loop */
+
+.demo-attract {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+.demo-attract__banner {
+  position: absolute;
+  left: 50%;
+  bottom: calc(34 * var(--fe-k, 1px));
+  transform: translateX(-50%);
+  padding: calc(10 * var(--fe-k, 1px)) calc(30 * var(--fe-k, 1px));
+  background: rgba(11, 10, 18, 0.78);
+  border-top: calc(3 * var(--fe-k, 1px)) solid var(--ig-gold, #e3b94a);
+  font-family: var(--ig-font-display, 'Chakra Petch', 'Segoe UI', sans-serif);
+  font-size: max(var(--fe-fs-floor, 14px), calc(17 * var(--fe-k, 1px)));
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ig-paper, #f4f1e8);
+  white-space: nowrap;
+  animation: demo-attract-pulse 2.4s ease-in-out infinite;
+}
+.demo-attract__title {
+  position: absolute;
+  top: calc(28 * var(--fe-k, 1px));
+  right: calc(46 * var(--fe-k, 1px));
+  font-family: var(--ig-font-display, 'Chakra Petch', 'Segoe UI', sans-serif);
+  font-size: max(var(--fe-fs-floor, 14px), calc(13 * var(--fe-k, 1px)));
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 232, 0.7);
+  text-shadow: 0 0 calc(10 * var(--fe-k, 1px)) rgba(0, 0, 0, 0.8);
+}
+/* the reel is looked at, not played: no pause chip, no key chips (the banner says what a press does) */
+.demo-attract-mode .battle-pause-chip,
+.demo-attract-mode .sgd__toggle,
+.demo-attract-mode .sgd__keys,
+.demo-attract-mode .eint__toggle,
+.demo-attract-mode .mad__toggle {
+  display: none !important;
+}
+@keyframes demo-attract-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-attract__banner { animation: none; opacity: 0.9; }
+}

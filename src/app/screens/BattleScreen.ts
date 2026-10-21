@@ -51,6 +51,7 @@ import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScree
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
 import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
+import { markDemoHud } from '../demo/demoHud.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
 import { attachAdvisorV4 } from '../advisorV4/wiring.ts';
@@ -106,6 +107,8 @@ export interface BattleScreenOptions {
   resumeAt?: ChainCheckpoint;
   /** The player skipped the pre-scene: the first opening runs hurried (PR-0061, `openingHurry.ts`). */
   openingHurry?: boolean;
+  /** R61 (conference demo, `demo/demoAttract.ts`, demo mode only): this fight is the attract loop's highlight reel, played on no one's behalf. It writes nothing to the save (no play time). */
+  attract?: boolean;
 }
 
 /** How the encounter ended, for the flow in `App.ts`. */
@@ -224,6 +227,7 @@ export class BattleScreen extends Screen {
     const chapter = this.opts.chapter;
     this.startedAt = performance.now();
     this.root.className = 'screen battle-screen';
+    markDemoHud(this.root); // R61: `demo-hud` on the root in demo mode (the advisor's one line, `demo/demo.css`)
     this.markRecorder = startMarkRecorder({
       chapter: chapter.id,
       game: chapter.game,
@@ -785,7 +789,7 @@ export class BattleScreen extends Screen {
     // time spent playing. `SaveStore.addPlayTime` buffers the writes.
     // A hidden experiment (FF7) keeps its time in its own store, never the save (BattleScreenExperiment.ts).
     if (!this.preview && this.opts.chapter.experimental) addExperimentPlayTime(this.opts.chapter.id, dt * 1000);
-    else if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
+    else if (!this.preview && !this.opts.attract) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000); // R61: the attract reel is no one's play time
 
     const fieldDt = this.spectacle?.stageDt(animDt) ?? animDt; // option C's hit-stop holds the field, never the engine or the HUD
     this.scene?.update(fieldDt);

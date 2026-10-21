@@ -1,6 +1,8 @@
 import '../../ui/common/results.css';
 import '../../ui/common/results-fit.css';
 import { Screen } from '../Screen.ts';
+import { mountDemoResultsHint } from '../demo/demoHints.ts'; // R61: the conference demo's pad/keyboard strip (`?demo=1` only)
+import type { ControlsHint } from '../../ui/common/ControlsHint.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { NO_FLOW, startFlow, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
@@ -94,6 +96,7 @@ export class ResultsScreen extends Screen {
   private caption = '';
   private readonly silent: boolean;
   private readonly victory: boolean;
+  private demoHint: ControlsHint | null = null; // R61: demo mode only
   private readonly rows: ResultsMemberRow[];
   /** Filled in by `enter()`, from the record as it stood before this clear. */
   private wasNewBest = false;
@@ -174,6 +177,7 @@ export class ResultsScreen extends Screen {
     if (!this.victory) this.revealMs = COUNT_UP_MS;
 
     this.refresh();
+    this.demoHint = mountDemoResultsHint(this.root, this.victory); // R61: null outside demo mode
     audio.playSfx(this.victory && !this.silent ? 'menu-open' : 'menu-close');
     if (this.victory && !this.silent) this.tally = startFlow(audio, this.gameId, 'results-count'); // SFX parity: the loop while the numbers count (a recorded original only)
     void this.app.fade('clear', 400);
@@ -189,6 +193,7 @@ export class ResultsScreen extends Screen {
   }
 
   override exit(): void {
+    this.demoHint?.unmount();
     this.endTally(false);
     voice.stop();
     this.stage?.destroy();
@@ -252,6 +257,7 @@ export class ResultsScreen extends Screen {
   }
 
   override handleInput(input: InputSnapshot): void {
+    this.demoHint?.handleInput(input);
     if (this.dismissed) return;
 
     if (this.victory) {
