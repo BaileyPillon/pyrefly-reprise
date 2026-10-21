@@ -145,11 +145,8 @@ export interface Fit {
   offset: V3;
 }
 
-/** Valefor's anchor in her file (x, z): the measured centre of her body, not of her wings' box (the lab's holder offset), so turning her turns her about herself. */
-export const BOSS_ANCHOR: readonly [number, number] = [0.1, -0.5];
-
 /**
- * Fit a model of box `box` to a figure `height` tall: scaled so the box's height is `height`, shifted so the anchor (the centre of the footprint unless `anchor` says where) is the origin and the lowest point is the
+ * Fit a model of box `box` to a figure `height` tall: scaled so the box's height is `height`, shifted so the anchor (the centre of the footprint unless `anchor` says where; Valefor's second file, `valefor-v2`, has even wings, so the centre of her footprint is the centre of her body and she needs none) is the origin and the lowest point is the
  * floor (`groundY`, the lowest point of the standing pose, when the bind pose's box is not where the feet are). A box with no height (an empty or flat file) is fitted at scale 1 so a bad file shows as a bad model, not
  * as a division by zero.
  */

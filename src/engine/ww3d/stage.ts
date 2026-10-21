@@ -6,8 +6,8 @@
  * Camera-facing parts are placed by azimuth: 0 = the far wall straight ahead (-z), positive toward +x (the right of the frame). **A hidden occluder**: a roof ring behind the camera that only casts the sun's shadow
  * (colour writes off), so the floor has TARGET-C's big blue-violet shadows with the party inside a lit patch. Only the floor receives the sun's shadow; the wall stays lit (TARGET-C's wall is lit blue).
  *
- * **Swappable pieces.** `temple/wall.glb` replaces the round wall with its cornice and its relief panels, and `pillar`, `door` and `brazier` replace their procedural parts (`./stageParts.ts`, conventions in
- * `./swaps.ts`). `built.used` names the swapped pieces that were placed.
+ * **Swappable pieces.** `temple/wall.glb` is tiled round the chamber in place of the round wall with its cornice and its relief panels, and `pillar`, `door` and `brazier` replace their procedural parts
+ * (`./stageParts.ts` has the kit's placement, `./swaps.ts` the conventions). `built.used` names the swapped pieces that were placed.
  *
  * **The light** is the lab's: one warm sun (a directional light with a 4096 px shadow map over a 29 m frustum that covers the whole arena, 2048 on a weak GPU) and a soft hemisphere fill. The toon material adds them
  * (`./toon.ts`). The scene hides the engine's own light rig so nothing else lights the models.
@@ -43,7 +43,7 @@ import {
 } from 'three';
 import { SUN_DIRECTION } from './camera.ts';
 import type { TempleName } from './layout.ts';
-import { addBays, addDoor, addTorches, addVines, addWaterfalls, polarPos, placeSwap, type Flame, type StageCtx } from './stageParts.ts';
+import { addBays, addDoor, addTorches, addVines, addWaterfalls, polarPos, tileWall, type Flame, type StageCtx } from './stageParts.ts';
 import { canvasTextures, type StageTextures } from './stageTextureSet.ts';
 import { withUniforms, makeToonMaterial, type ToonOptions, type ToonUniforms } from './toon.ts';
 
@@ -121,17 +121,19 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
     return m;
   };
   const swaps = opts.swaps ?? {};
-  const ctx: StageCtx = { group, R, H, tex, uniforms: stageU, swaps, used: new Set<TempleName>(), toon, add };
+  const ctx: StageCtx = { group, R, H, tex, uniforms: stageU, swaps, used: new Set<TempleName>(), templates: new Map(), toon, add };
 
   add(new CircleGeometry(R + 0.5, 64).rotateX(-Math.PI / 2), toon({ map: tex.sand(7, [2.8, 2.8]) }, floorU), { receive: true });
-  const wallSwapped = placeSwap(ctx, 'wall', new Vector3(0, 0, 0), H) !== null;
+  const swappedFace = tileWall(ctx, STAGE.doorAz); // the radius of the tiled wall's inner face, or null with no wall file
+  const wallSwapped = swappedFace !== null;
+  const face = swappedFace ?? R;
   if (!wallSwapped) {
     add(new CylinderGeometry(R, R, H, 72, 1, true), toon({ map: tex.blockWall(11, [14, 2.6]), side: BackSide }), { at: new Vector3(0, H / 2, 0) });
     // a lighter cornice band running round the wall at the height of the spouts
     add(new CylinderGeometry(R - 0.32, R - 0.32, 0.7, 72, 1, true), toon({ color: 0x7f9ad0, side: BackSide }), { at: new Vector3(0, H - 2.0, 0) });
   }
-  addBays(ctx, wallSwapped);
-  addDoor(ctx, STAGE.doorAz);
+  addBays(ctx, face, wallSwapped);
+  addDoor(ctx, STAGE.doorAz, face);
   const scrolls = addWaterfalls(ctx, [[-38, H - 2.2], [-7, H - 2.2], [46, H - 2.2]]);
   const flames = addTorches(ctx, [19, 41, -62], [[-33, 3.4], [-52, 6.6]]);
   addVines(ctx, [[-47, H - 1.7, 5.2], [-42, H - 1.7, 3.6], [-36, H - 1.7, 4.4], [-28, H - 1.7, 3.0], [-4, H - 1.7, 4.0], [14, H - 1.7, 3.4], [19, H - 1.7, 5.0], [33, H - 1.7, 3.0], [43, H - 1.7, 4.2]]);
@@ -238,6 +240,12 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
     dispose(): void {
       sun.shadow.map?.dispose();
       for (const o of owned) o.dispose();
+      for (const t of ctx.templates.values()) {
+        t.traverse((o) => {
+          const m = (o as Mesh).material as { dispose(): void } | Array<{ dispose(): void }> | undefined; // the kit pieces' toon materials; their geometry and maps belong to the file and are freed with its cache
+          if (m) for (const x of Array.isArray(m) ? m : [m]) x.dispose();
+        });
+      }
       for (const t of made) t.dispose();
       group.removeFromParent();
     },

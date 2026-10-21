@@ -7,7 +7,6 @@ import { describe, expect, it } from 'vitest';
 import { RIGS, TARGET_FOV, TARGET_PITCH_DEG, TARGET_POSITION, boxOf, figureBoxes, horizonY, overlapOf, pitchOf, pitchedLook, project } from '../../../src/engine/ww3d/camera.ts';
 import {
   BODY_OFF_DEG,
-  BOSS_ANCHOR,
   BOSS_HEIGHT,
   BOSS_HOVER,
   BOSS_SPOT,
@@ -125,12 +124,15 @@ describe('fitting a model to a figure', () => {
     expect(f.offset[2]).toBeCloseTo(0, 10);
   });
 
-  it('uses the anchor when one is given (Valefor\'s body centre, not her wings\' box) and the standing pose\'s lowest point when it is', () => {
-    const wide = { min: [-3.846, 0, -3.518] as const, max: [2.94, 3.5, 1.007] as const };
-    const f = fitBox(wide, BOSS_HEIGHT, { anchor: BOSS_ANCHOR });
+  it('fits Valefor (even wings) about the centre of her footprint, uses an anchor when one is given, and the standing pose\'s lowest point when it is', () => {
+    const wide = { min: [-3.28, 0, -1.34] as const, max: [3.341, 3.5, 0.687] as const }; // valefor-v2.glb
+    const f = fitBox(wide, BOSS_HEIGHT);
     expect(f.scale).toBeCloseTo(BOSS_HEIGHT / 3.5, 10);
-    expect(f.offset[0]).toBeCloseTo(-0.1 * f.scale, 10);
-    expect(f.offset[2]).toBeCloseTo(0.5 * f.scale, 10);
+    expect(f.offset[0]).toBeCloseTo(-0.0305 * f.scale, 10);
+    expect(f.offset[2]).toBeCloseTo(0.3265 * f.scale, 10);
+    const anchored = fitBox(wide, BOSS_HEIGHT, { anchor: [0.1, -0.5] });
+    expect(anchored.offset[0]).toBeCloseTo(-0.1 * f.scale, 10);
+    expect(anchored.offset[2]).toBeCloseTo(0.5 * f.scale, 10);
     const crouch = fitBox(box, 1.5, { groundY: 0.25 });
     expect(crouch.offset[1]).toBeCloseTo(-0.25 * 1.25, 10);
   });

@@ -22,7 +22,6 @@ import { ClipRig, roleClips, windowsOfClips } from './clips.ts';
 import { FileCache, defaultIO, type LoaderIO } from './io.ts';
 import {
   BODY_OFF_DEG,
-  BOSS_ANCHOR,
   BOSS_BOB,
   BOSS_HEIGHT,
   BOSS_HOVER,
@@ -49,9 +48,12 @@ export type { Channels };
 /** Where a model came from: its own file or the neutral capsule that stands in for a missing one. */
 export type ModelSource = 'own' | 'capsule';
 
-/** Valefor's mouth and chest in her file's own units (measured off `valefor.glb`: the beak's tip at about (-0.1, 2.4, 1.0), the chest front below the neck): where her beams and her orb start. */
-export const MOUTH_LOCAL: V3 = [-0.1, 2.5, 1.0];
-export const CHEST_LOCAL: V3 = [0.1, 1.9, 0.4];
+/**
+ * Valefor's mouth and chest in her file's own units (measured off `valefor-v2.glb`, 2026-10-21: the beak's tip at (0.04, 2.58, 0.69), the front of the chest below the neck at about (0.03, 1.9, 0.5)): where her beams and her orb
+ * start. The file's origin is between her claws, facing +Z, even about x = 0.03.
+ */
+export const MOUTH_LOCAL: V3 = [0.04, 2.55, 0.7];
+export const CHEST_LOCAL: V3 = [0.03, 1.9, 0.5];
 
 /** How far a body lying down is lifted off the floor so it rests on it instead of sinking through (a share of the figure's height). */
 const LIE_LIFT = 0.12;
@@ -201,8 +203,7 @@ export class WwModel {
   }
 
   private place(): void {
-    const boss = this.id === WW_BOSS_ID;
-    const f = fitBox(this.natural, this.figureHeight, { ...(boss ? { anchor: BOSS_ANCHOR } : {}), ...(this.groundY !== null ? { groundY: this.groundY } : {}) });
+    const f = fitBox(this.natural, this.figureHeight, this.groundY !== null ? { groundY: this.groundY } : {});
     this.fitGroup.scale.setScalar(f.scale);
     this.fitGroup.position.set(f.offset[0], f.offset[1], f.offset[2]);
   }

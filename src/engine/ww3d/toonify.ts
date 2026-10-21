@@ -34,6 +34,8 @@ export interface ToonifyOptions {
   onVertex?: (shader: ShaderLike) => void;
   /** A depth material for the shadow pass (Valefor's wings flap in their shadow too). */
   depthMaterial?: Material;
+  /** Keep three's frustum culling (default false: a skinned mesh's bounds are its bind pose's, and a bent wing leaves them; a static temple piece keeps its culling, which is what lets a wall of many tiles draw only the ones in view). */
+  cull?: boolean;
 }
 
 type MapKey = 'normalMap' | 'roughnessMap' | 'metalnessMap' | 'aoMap' | 'emissiveMap' | 'bumpMap' | 'displacementMap';
@@ -65,7 +67,7 @@ export function toonify(root: Object3D, uniforms: Record<string, IUniform>, opts
     meshes.push(mesh);
     mesh.castShadow = cast;
     mesh.receiveShadow = receive;
-    mesh.frustumCulled = false;
+    mesh.frustumCulled = opts.cull === true;
     if (opts.depthMaterial) mesh.customDepthMaterial = opts.depthMaterial;
     const list = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     const out = list.map((src) => {

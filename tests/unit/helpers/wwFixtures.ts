@@ -42,11 +42,11 @@ export function girl(): { scene: Object3D; animations: AnimationClip[] } {
   return { scene, animations: [idle, attack, hit] };
 }
 
-/** Valefor: one static mesh, 3.5 tall and 6.8 wide, no skeleton, no clips; her wings reach out along x. */
+/** Valefor as `valefor-v2.glb` is: one static mesh, 3.5 tall and 6.6 wide, even wings about x 0.03, origin between the claws, no skeleton, no clips. */
 export function valefor(): { scene: Object3D; animations: AnimationClip[] } {
   const scene = new Group();
-  const m = new Mesh(new BoxGeometry(6.8, 3.5, 2.5), new MeshStandardMaterial({ color: 0x17b8a6 }));
-  m.position.set(-0.45, 1.75, -1.25);
+  const m = new Mesh(new BoxGeometry(6.62, 3.5, 2.03), new MeshStandardMaterial({ color: 0x17b8a6 }));
+  m.position.set(0.03, 1.75, -0.33);
   scene.add(m);
   return { scene, animations: [] };
 }

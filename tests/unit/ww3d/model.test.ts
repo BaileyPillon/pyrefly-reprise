@@ -217,10 +217,10 @@ describe('Valefor\'s file', () => {
     expect(mesh.customDepthMaterial).toBeDefined(); // her cast shadow flaps too
     expect(mesh.receiveShadow).toBe(false);
     expect(mesh.castShadow).toBe(true);
-    // the anchor: the measured body centre (0.1, -0.5) is on the origin
+    // the centre of her footprint (x 0.03, z -0.33 in the file) is on the origin: the even wings make it the centre of her body
     v.root.updateMatrixWorld(true);
-    expect(v.worldPointOf([0.1, 0, -0.5]).x).toBeCloseTo(0, 5);
-    expect(v.worldPointOf([0.1, 0, -0.5]).z).toBeCloseTo(0, 5);
+    expect(v.worldPointOf([0.03, 0, -0.33]).x).toBeCloseTo(0, 5);
+    expect(v.worldPointOf([0.03, 0, -0.33]).z).toBeCloseTo(0, 5);
     // she faces the party: a fixed turn
     expect(v.root.children[0]!.children[0]!.rotation.y).toBeCloseTo(rad(BOSS_YAW_DEG), 10);
     // her mouth is high and in front, her chest below it

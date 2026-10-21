@@ -1,11 +1,12 @@
 /**
  * **Swappable props and temple pieces** (the hidden Wind Waker chapter; FFX-2 only). The chapter's weapons (`./props.ts`) and temple (`./stage.ts`) are procedural stand-ins; a better piece is dropped in as a file and used
- * in place of the stand-in of the same name, with no code change:
+ * in place of the stand-in of the same name, with no code change. The first real set arrived 2026-10-21 (Meshy models cleaned in Blender: static, standing, one mesh each, a 2048 px base-colour map):
  *
- * - `public/models-exp/windwaker/props/<pistol|dagger|sword>.glb`: origin at the grip, +Z along the blade or barrel, +Y up, authored in metres for a girl of her native height (about 1.2 m), used at scale 1;
- * - `public/models-exp/windwaker/temple/<wall|door|brazier|pillar>.glb`: `wall` is the whole round wall (origin at the arena's centre, inner radius 12 m, 10.5 m high, feet on y 0) and replaces the wall, its cornice, its
- *   relief panels and the procedural pilasters (a `pillar` file is still placed); `door` has its origin on the floor in front of the door with its front toward +Z, about 4.6 m wide and 6.9 m high, and replaces the door frame, leaf and step; `brazier` has its origin on the
- *   floor, about 1.7 m high with the bowl at the top, and replaces a floor torch's pedestal and bowl (the flame stays on top); `pillar` has its origin on the floor at its centre, 10.5 m high, and replaces each pilaster.
+ * - `public/models-exp/windwaker/props/<pistol|dagger|sword>.glb`: **origin at the grip centre, tip along +Z, +Y up**, in metres for a girl of her native height (about 1.2 m), used at the model's own scale (1): the pistol
+ *   0.22 m long, the dagger 0.28, the sword 0.85. They are made for one hand: Yuna's pistols and Rikku's daggers use the file as it is in the right hand and **mirrored** (`scale.x = -1`) in the left (`PropSpec.mirrorSwapped`).
+ * - `public/models-exp/windwaker/temple/<wall|door|brazier|pillar>.glb`: each **stands on y 0, centred in x and z, its front toward +Z**, and is placed by its own measured size (`./stageParts.ts` has the placement):
+ *   `wall` is a tile (3 x 3 m, 0.45 deep) tiled round the chamber circle in rows and replaces the wall, its cornice, its relief panels and the procedural pilasters; `door` (3.35 x 3.5, 0.81 deep) stands at the door's azimuth
+ *   with its back on the wall; `brazier` (1.1 m high) replaces a floor torch's pedestal and bowl, and a wall bowl on its bracket; `pillar` (1 x 4 m) stands at the lab's pilaster azimuths, stacked in the wall's rows.
  *
  * A file that is missing, will not parse, or is not a binary glTF counts as no file: that name keeps its procedural piece. Nothing here is required, shipped or committed (`tools/dist-filter.mjs`, `.gitignore`).
  */

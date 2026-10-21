@@ -7,7 +7,7 @@
  * - the angle is `side * weight * amplitude * sin(phase)`: both wings rise and fall together;
  * - the slow body bob is a group offset in the model (`./model.ts`), not in the shader.
  *
- * Model units are the file's (metres as exported: 3.5 tall, 6.8 span, facing +Z, base at y 0; the measured body centre line is x 0.1). **A faster flap for every Valefor action** (Bailey's brief): the phase advances
+ * Model units are the file's (metres as exported: 3.5 tall, 6.6 span, facing +Z, base at y 0, origin between the claws; the body centre line is x 0.03). **A faster flap for every Valefor action** (Bailey's brief): the phase advances
  * `RATE_ACTIVE` times faster and the amplitude grows by `AMP_ACTIVE` as her activity rises, 0 at rest to 1 in an action.
  *
  * {@link wingBend} is the same maths in JS (a test reads it). Needs three.js only. Game case: FFX-2 only.
@@ -16,8 +16,12 @@
 import { MathUtils, MeshDepthMaterial, RGBADepthPacking, Vector4, type IUniform } from 'three';
 import type { ShaderLike } from './toon.ts';
 
-/** The measured shape of the file (look lab). */
-export const WING = { cx: 0.1, start: 0.6, full: 2.2, yLo: 1.0, pivotY: 1.9, ampDeg: 25, hz: 0.6 } as const;
+/**
+ * The measured shape of the file, `valefor-v2.glb` (2026-10-21; the look lab's numbers were measured on the first file, whose wings were uneven): even wings about the body line x = 0.03; the body is under 0.7 m
+ * from that line at every height; the wings begin at y 1.25, are widest (x -3.28 to 3.34) at y 2.25 and are gone by y 3.0, where the head and its crest (|x| under 0.35) stand to y 3.5. The shoulder pivot is at the wings' mid
+ * height, 2.1.
+ */
+export const WING = { cx: 0.03, start: 0.6, full: 2.2, yLo: 1.0, pivotY: 2.1, ampDeg: 25, hz: 0.6 } as const;
 
 /** How much faster and how much wider the flap goes at full activity (an action of hers), as multiples of the rest values. */
 export const RATE_ACTIVE = 2.4;

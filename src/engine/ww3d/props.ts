@@ -5,7 +5,7 @@
  * ## Swappable
  *
  * The procedural props are stand-ins. If `public/models-exp/windwaker/props/<pistol|dagger|sword>.glb` exists (`./swaps.ts`), that file is used in its place: **origin at the grip, +Z along the blade or barrel, +Y up**
- * (the convention below), authored in metres for a girl of her native height (about 1.2 m, so a pistol about 0.2 m long), used at scale 1. A name with no file keeps its procedural prop, and a missing folder
+ * (the convention below), authored in metres for a girl of her native height (about 1.2 m, so a pistol 0.22 m long), used at scale 1 and mirrored in the left hand (the files are made for the right: `PropSpec.mirrorSwapped`). A name with no file keeps its procedural prop, and a missing folder
  * changes nothing ({@link chooseProp}).
  *
  * ## The grip frame
@@ -123,18 +123,20 @@ export interface PropSpec {
   readonly grip: number;
   /** Where the weapon points in the combat stance: degrees above the horizon, and the most the wrist may bend away from the forearm line. */
   readonly aim: { readonly elev: number; readonly turn: number };
+  /** A swapped file is made for one hand: in the other (the left) it is used mirrored across the plane the barrel or blade lies in (`scale.x = -1`; three flips the winding of a mirrored mesh). The procedural props are not mirrored. */
+  readonly mirrorSwapped: boolean;
 }
 
 export const PROP_SPECS: Readonly<Record<'yuna' | 'rikku' | 'paine', readonly PropSpec[]>> = {
   yuna: [
-    { hand: 'LeftHand', name: 'pistol', scale: 0.62, tilt: 0, grip: 0.07, aim: { elev: 22, turn: 85 } },
-    { hand: 'RightHand', name: 'pistol', scale: 0.62, tilt: 0, grip: 0.07, aim: { elev: 8, turn: 85 } },
+    { hand: 'LeftHand', name: 'pistol', scale: 0.62, tilt: 0, grip: 0.07, aim: { elev: 22, turn: 85 }, mirrorSwapped: true },
+    { hand: 'RightHand', name: 'pistol', scale: 0.62, tilt: 0, grip: 0.07, aim: { elev: 8, turn: 85 }, mirrorSwapped: false },
   ],
   rikku: [
-    { hand: 'LeftHand', name: 'dagger', scale: 0.78, tilt: 0, grip: 0.06, aim: { elev: -25, turn: 70 } },
-    { hand: 'RightHand', name: 'dagger', scale: 0.78, tilt: 0, grip: 0.06, aim: { elev: -15, turn: 70 } },
+    { hand: 'LeftHand', name: 'dagger', scale: 0.78, tilt: 0, grip: 0.06, aim: { elev: -25, turn: 70 }, mirrorSwapped: true },
+    { hand: 'RightHand', name: 'dagger', scale: 0.78, tilt: 0, grip: 0.06, aim: { elev: -15, turn: 70 }, mirrorSwapped: false },
   ],
-  paine: [{ hand: 'RightHand', name: 'sword', scale: 0.65, tilt: 0, grip: 0.07, aim: { elev: 25, turn: 80 } }],
+  paine: [{ hand: 'RightHand', name: 'sword', scale: 0.65, tilt: 0, grip: 0.07, aim: { elev: 25, turn: 80 }, mirrorSwapped: false }],
 };
 
 const MAKERS: Readonly<Record<PropName, (u: Uniforms) => Group>> = { pistol: makePistol, dagger: makeDagger, sword: makeSword };
@@ -193,7 +195,8 @@ export function attachProps(model: Object3D, who: string, uniforms: Uniforms, sw
     if (chosen.swapped) swapped++;
     const tilt = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -MathUtils.degToRad(spec.tilt));
     prop.quaternion.copy(f.quat).multiply(tilt);
-    prop.scale.setScalar(chosen.swapped ? 1 : spec.scale);
+    if (chosen.swapped) prop.scale.set(spec.mirrorSwapped ? -1 : 1, 1, 1);
+    else prop.scale.setScalar(spec.scale);
     prop.position.copy(new Vector3(0, 0, spec.grip).applyQuaternion(f.quat));
     prop.userData['spec'] = spec;
     f.hand.add(prop);

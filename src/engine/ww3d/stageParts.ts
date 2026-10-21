@@ -2,17 +2,32 @@
  * **Parts of the temple chamber** (the hidden Wind Waker chapter; FFX-2 only), after TARGET-C: wall relief panels, pilasters, the carved arched door, thin waterfalls, torches and wall bowls with Wind Waker flames, hanging
  * vines. Ported from the look lab's `js/stageParts.mjs`. Each builder takes a {@link StageCtx} from `./stage.ts`. Flat colours only.
  *
- * **Swappable.** A pilaster, the door and a floor torch's pedestal and bowl each have a file they can be replaced by (`temple/pillar.glb`, `door.glb`, `brazier.glb`; the conventions are in `./swaps.ts`): {@link placeSwap}
- * clones the file, makes it toon, stands it where the procedural piece stood, turned to face the arena's centre, and records the name in `ctx.used`; a builder whose piece was swapped skips its procedural geometry. A name
- * with no file builds the stand-in as before.
+ * ## Swappable: the temple kit
+ *
+ * A wall, a pillar, the door and a brazier each have a file they can be replaced by (`temple/<wall|pillar|door|brazier>.glb`; the conventions are in `./swaps.ts`). Each file stands on y 0, centred in x and z, its front
+ * toward +Z; a placed piece is turned to face the arena's axis. The first kit (2026-10-21) is: **wall** 3 x 3 x 0.45 m (a tile), **pillar** 1 x 4 x 1 m, **door** 3.35 x 3.5 x 0.8 m, **brazier** 1.07 x 1.1 x 1.06 m. The
+ * placement is by the file's own measured size, so a better file of other proportions still fits:
+ *
+ * - **The wall** ({@link tileWall}) is tiled round the chamber circle: as many tiles as fit the circumference (25 for a 3 m tile at R 12, each stretched a hair in x so the ring closes), in `rows` rows (the wall's height over
+ *   a 4 m module, rounded: 3 for the lab's 10.5 m, each row 3.5 m, so a 3 m tile is stretched 1.16 times in y). The tiles meet at the corners of a regular polygon whose corners lie on the chamber's circle, so their inner
+ *   faces are flat chords and the procedural parts that stand against the wall (waterfalls, vines, bowls) clear it. One tile is centred on the door's azimuth. The returned **inner face** radius is where the door and the pillars
+ *   stand against.
+ * - **The pillars** stand at the lab's six pilaster azimuths, stacked in the same rows, each module scaled evenly to the row's height (0.875 for 3.5 m).
+ * - **The door** stands at the lab's door azimuth, its back against the wall's inner face.
+ * - **The braziers** replace the floor torches' pedestal and bowl where the torches stood (the flame sits on the brazier's top), and each wall bowl's bowl on its bracket (at 0.8 of the size).
+ *
+ * A piece is made toon once and its placements are clones that share its geometry and materials, so 75 wall tiles are one geometry, one material and 75 draw calls the frustum culls. A name with no file builds the stand-in.
  */
 
 import {
+  Box3,
   BoxGeometry,
   CatmullRomCurve3,
   CircleGeometry,
+  Color,
   CylinderGeometry,
   DoubleSide,
+  Euler,
   InstancedMesh,
   MathUtils,
   Matrix4,
@@ -20,13 +35,10 @@ import {
   MeshBasicMaterial,
   PlaneGeometry,
   Quaternion,
-  Euler,
-  Color,
-  SpriteMaterial,
   Sprite,
+  SpriteMaterial,
   TubeGeometry,
   Vector3,
-  Box3,
   type BufferGeometry,
   type Group,
   type IUniform,
@@ -50,6 +62,8 @@ export interface StageCtx {
   readonly swaps: Readonly<Partial<Record<TempleName, Object3D>>>;
   /** The names of the swapped pieces that were placed (a test's read). */
   readonly used: Set<TempleName>;
+  /** The toon template of each swapped piece, made once (`templateOf`). */
+  readonly templates: Map<TempleName, Object3D>;
   toon(opts: ToonOptions, uniforms?: Record<string, IUniform>): MeshToonMaterial;
   add(geo: BufferGeometry, mat: MeshToonMaterial | MeshBasicMaterial, o?: { cast?: boolean; receive?: boolean; at?: Vector3 }): Mesh;
 }
@@ -60,21 +74,43 @@ export const polarPos = (deg: number, r: number, y: number): Vector3 => new Vect
 /** Turn a flat part so its front faces the arena's axis at its own height. */
 const faceCentre = (m: Object3D): void => m.lookAt(0, m.position.y, 0);
 
-/**
- * Place the swapped piece `name`, if there is a file for it: a toon clone at `at`, facing the centre, scaled so its height is `height` when one is given. Returns the object, or null when the piece has no file (the caller
- * builds its stand-in).
- */
-export function placeSwap(ctx: StageCtx, name: TempleName, at: Vector3, height?: number): Object3D | null {
+/** The height of one module of the kit's wall and pillars, metres: the wall's height is cut into this many (rounded) equal rows. */
+export const WALL_MODULE_HEIGHT = 4;
+
+/** How many rows of the kit's wall and pillars make a wall `H` high. */
+export const rowsOf = (H: number): number => Math.max(1, Math.round(H / WALL_MODULE_HEIGHT));
+
+/** The toon template of the swapped piece `name`, made once (geometry and materials are then shared by every placement), or null when there is no file. A wall does not cast the sun's shadow (TARGET-C's wall is lit). */
+export function templateOf(ctx: StageCtx, name: TempleName): Object3D | null {
   const file = ctx.swaps[name];
   if (!file) return null;
-  const piece = file.clone(true);
-  piece.name = `temple:${name}`;
-  toonify(piece, ctx.uniforms, { cast: true, receive: false });
-  piece.position.copy(at);
-  if (height !== undefined) {
-    const h = new Box3().setFromObject(piece).getSize(new Vector3()).y;
-    if (h > 1e-6) piece.scale.setScalar(height / h);
+  let t = ctx.templates.get(name);
+  if (!t) {
+    t = file.clone(true);
+    t.name = `temple:${name}`;
+    toonify(t, ctx.uniforms, { cast: name !== 'wall', receive: false, cull: true });
+    ctx.templates.set(name, t);
   }
+  return t;
+}
+
+/** The size of a swapped piece's box in its file's units, or null when there is no file. */
+export function swapSize(ctx: StageCtx, name: TempleName): Vector3 | null {
+  const t = templateOf(ctx, name);
+  return t ? new Box3().setFromObject(t).getSize(new Vector3()) : null;
+}
+
+/**
+ * Place the swapped piece `name` at `at` (its base centre), turned to face the arena's axis, scaled by `scale` (one number, or x, y, z): a clone of the template, so it shares its geometry and materials. Returns the
+ * object, or null when the piece has no file (the caller builds its stand-in).
+ */
+export function placeSwap(ctx: StageCtx, name: TempleName, at: Vector3, scale: number | readonly [number, number, number] = 1): Object3D | null {
+  const t = templateOf(ctx, name);
+  if (!t) return null;
+  const piece = t.clone(true);
+  piece.position.copy(at);
+  if (typeof scale === 'number') piece.scale.setScalar(scale);
+  else piece.scale.set(scale[0], scale[1], scale[2]);
   faceCentre(piece);
   ctx.group.add(piece);
   ctx.used.add(name);
@@ -82,16 +118,44 @@ export function placeSwap(ctx: StageCtx, name: TempleName, at: Vector3, height?:
 }
 
 /**
- * Pilasters between the bays (full height, blue blocks, a lighter cap and plinth) and the carved panels in the bays. `wallSwapped`: a wall file stands in for the wall, so the procedural pilasters and panels are
- * not built (a swapped `pillar` file is still placed).
+ * Tile the wall file round the chamber (see the header): the tiles' inner faces form a regular polygon inscribed in the circle of radius R, one tile centred on the azimuth `doorAz`. Returns the radius of the
+ * polygon's inner faces (their distance from the axis), or null when there is no wall file.
  */
-export function addBays(ctx: StageCtx, wallSwapped = false): void {
+export function tileWall(ctx: StageCtx, doorAz: number): number | null {
+  const size = swapSize(ctx, 'wall');
+  if (!size || size.x < 1e-6 || size.y < 1e-6) return null;
+  const { R, H } = ctx;
+  const n = Math.max(3, Math.round((2 * Math.PI * R) / size.x));
+  const rows = rowsOf(H);
+  const rowH = H / rows;
+  const apothem = R * Math.cos(Math.PI / n);
+  const scale: [number, number, number] = [(2 * R * Math.sin(Math.PI / n)) / size.x, rowH / size.y, 1];
+  for (let k = 0; k < n; k++) {
+    const az = doorAz + (k * 360) / n;
+    for (let r = 0; r < rows; r++) placeSwap(ctx, 'wall', polarPos(az, apothem + size.z / 2, r * rowH), scale);
+  }
+  return apothem;
+}
+
+/**
+ * Pilasters between the bays (full height, blue blocks, a lighter cap and plinth) and the carved panels in the bays. `face` is the radius of the wall's inner face; `wallSwapped`: a wall file stands in for the wall, so
+ * the procedural pilasters and panels are not built (a swapped `pillar` file is still placed, stacked in the wall's rows).
+ */
+export function addBays(ctx: StageCtx, face: number = ctx.R, wallSwapped = false): void {
   const { R, H, toon, add, tex } = ctx;
   const pil = toon({ map: tex.blockWall(5, [1, 4], [66, 98, 162], 4) });
   const cap = toon({ color: 0x7f9ad0 });
   const pilAz = [-52, -33, -13, 11, 35, 54];
+  const size = swapSize(ctx, 'pillar');
+  const rows = rowsOf(H);
   for (const az of pilAz) {
-    if (placeSwap(ctx, 'pillar', polarPos(az, R - 0.55, 0), H) || wallSwapped) continue;
+    if (size && size.y > 1e-6) {
+      const rowH = H / rows;
+      const k = rowH / size.y;
+      for (let r = 0; r < rows; r++) placeSwap(ctx, 'pillar', polarPos(az, face - (size.z * k) / 2, r * rowH), k);
+      continue;
+    }
+    if (wallSwapped) continue;
     const p = add(new BoxGeometry(1.7, H, 1.2), pil, { cast: true, at: polarPos(az, R - 0.55, H / 2) });
     faceCentre(p);
     for (const [y, h] of [[0.3, 0.6], [H * 0.55, 0.45], [H - 0.3, 0.6]] as const) {
@@ -107,9 +171,9 @@ export function addBays(ctx: StageCtx, wallSwapped = false): void {
     const mid = (a + b) / 2;
     const w = MathUtils.degToRad(b - a) * R * 0.62;
     const panels: Array<[number, number, 'spiral' | 'meander' | 'gold']> = [[3.6, Math.min(w, 3.1), kinds[i]!], [7.4, Math.min(w, 2.4), kinds[i + 1]!]];
-    for (const [y, size, kind] of panels) {
+    for (const [y, panelSize, kind] of panels) {
       if (!mats.has(kind)) mats.set(kind, toon({ map: tex.panel(kind) }));
-      const m = add(new PlaneGeometry(size, size), mats.get(kind)!, { at: polarPos(mid, R - 0.07, y) });
+      const m = add(new PlaneGeometry(panelSize, panelSize), mats.get(kind)!, { at: polarPos(mid, R - 0.07, y) });
       faceCentre(m);
     }
   });
@@ -118,10 +182,14 @@ export function addBays(ctx: StageCtx, wallSwapped = false): void {
   faceCentre(big);
 }
 
-/** The carved arched door with its golden wheel, set in a stone frame, at azimuth `az`. */
-export function addDoor(ctx: StageCtx, az: number): void {
+/** The carved arched door with its golden wheel, set in a stone frame, at azimuth `az`. `face` is the radius of the wall's inner face: a swapped door file stands with its back against it. */
+export function addDoor(ctx: StageCtx, az: number, face: number = ctx.R): void {
   const { R, toon, add, tex } = ctx;
-  if (placeSwap(ctx, 'door', polarPos(az, R - 0.38, 0))) return;
+  const size = swapSize(ctx, 'door');
+  if (size) {
+    placeSwap(ctx, 'door', polarPos(az, face - size.z / 2, 0));
+    return;
+  }
   const frame = add(new BoxGeometry(4.6, 6.9, 0.7), toon({ color: 0x6f8bc4 }), { cast: true, at: polarPos(az, R - 0.38, 3.45) });
   faceCentre(frame);
   const leaf = add(new PlaneGeometry(3.7, 5.55), toon({ map: tex.door(), alphaTest: 0 }), { at: polarPos(az, R - 0.76, 2.78) });
@@ -159,7 +227,14 @@ export interface Flame {
   readonly phase: number;
 }
 
-/** Torches: stone pedestal + bowl + flame sprite. `floorAz` stand on the floor, `wall` = [az, y] bowls on brackets. A swapped `brazier` replaces a floor torch's pedestal and bowl; the flame sits on its top. */
+/** How big a swapped brazier is on a wall bracket against the floor's, and how far above a piece's top the flame rests. */
+const WALL_BRAZIER_SCALE = 0.8;
+const FLAME_LIFT = 0.1;
+
+/**
+ * Torches: stone pedestal + bowl + flame sprite. `floorAz` stand on the floor, `wall` = [az, y] bowls on brackets. A swapped `brazier` replaces a floor torch's pedestal and bowl, and a wall bowl on its bracket (at
+ * {@link WALL_BRAZIER_SCALE}); the flame sits just above its top.
+ */
 export function addTorches(ctx: StageCtx, floorAz: readonly number[], wall: ReadonlyArray<readonly [number, number]>): Flame[] {
   const { R, toon, add, group, tex } = ctx;
   const stone = toon({ color: 0x8aa2d8 });
@@ -174,12 +249,11 @@ export function addTorches(ctx: StageCtx, floorAz: readonly number[], wall: Read
     group.add(s);
     flames.push({ sprite: s, base: pos.clone(), phase: i * 1.7 });
   };
+  const brazier = swapSize(ctx, 'brazier');
   floorAz.forEach((az, i) => {
     const base = polarPos(az, R - 1.9, 0);
-    const swapped = placeSwap(ctx, 'brazier', base);
-    if (swapped) {
-      const top = new Box3().setFromObject(swapped).max.y;
-      flame(base.clone().setY(top + 0.1), i);
+    if (brazier && placeSwap(ctx, 'brazier', base)) {
+      flame(base.clone().setY(brazier.y + FLAME_LIFT), i);
       return;
     }
     add(new CylinderGeometry(0.3, 0.42, 1.25, 12), stone, { cast: true, at: base.clone().setY(0.62) });
@@ -190,6 +264,12 @@ export function addTorches(ctx: StageCtx, floorAz: readonly number[], wall: Read
     const base = polarPos(az, R - 1.7, y);
     const br = add(new BoxGeometry(0.5, 0.35, 1.0), stone, { at: polarPos(az, R - 1.3, y - 0.45) });
     faceCentre(br);
+    if (brazier) {
+      const seat = base.clone().setY(y - 0.16); // where the bowl's bottom was
+      placeSwap(ctx, 'brazier', seat, WALL_BRAZIER_SCALE);
+      flame(seat.clone().setY(seat.y + brazier.y * WALL_BRAZIER_SCALE + FLAME_LIFT), i + 10);
+      return;
+    }
     add(new CylinderGeometry(0.5, 0.3, 0.32, 14), stone, { cast: true, at: base.clone() });
     flame(base.clone().setY(y + 0.75), i + 10);
   });

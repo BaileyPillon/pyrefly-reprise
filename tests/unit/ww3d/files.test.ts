@@ -7,41 +7,18 @@
  * - the heights are the ones `layout.ts` takes as native.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { BOSS_ANCHOR, MODEL_FILE, NATIVE_HEIGHT, WW_BOSS_ID, WW_PARTY_IDS, looksLikeGlb, type WwId } from '../../../src/engine/ww3d/layout.ts';
+import { MODEL_FILE, NATIVE_HEIGHT, WW_BOSS_ID, WW_PARTY_IDS, type WwId } from '../../../src/engine/ww3d/layout.ts';
 import { PROP_SPECS } from '../../../src/engine/ww3d/props.ts';
 import { ROLE_PATTERNS, STANCE_CLIP, UNUSED_CLIPS, roleClips } from '../../../src/engine/ww3d/clips.ts';
 import { AnimationClip } from 'three';
+import { MOUTH_LOCAL, CHEST_LOCAL } from '../../../src/engine/ww3d/model.ts';
+import { WING } from '../../../src/engine/ww3d/wing.ts';
+import { boxOf, modelsDir, readGltf, stripImages, trianglesOf } from '../helpers/wwRealFiles.ts';
 
-const dir = fileURLToPath(new URL('../../../public/models-exp/windwaker/', import.meta.url));
-const path = (id: WwId): string => join(dir, `${MODEL_FILE[id]}.glb`);
-
-interface Gltf {
-  nodes: Array<{ name?: string; skin?: number; mesh?: number }>;
-  skins?: Array<{ joints: number[] }>;
-  meshes: Array<{ primitives: Array<{ attributes: Record<string, number>; material?: number }> }>;
-  accessors: Array<{ min?: number[]; max?: number[]; count: number }>;
-  materials?: Array<{ pbrMetallicRoughness?: { baseColorTexture?: unknown } }>;
-  animations?: Array<{ name?: string }>;
-}
-
-/** The JSON chunk of a binary glTF. */
-function readGltf(file: string): Gltf {
-  const bytes = readFileSync(file);
-  expect(looksLikeGlb(bytes)).toBe(true);
-  const length = bytes.readUInt32LE(12);
-  expect(bytes.toString('ascii', 16, 20)).toBe('JSON');
-  return JSON.parse(bytes.toString('utf8', 20, 20 + length)) as Gltf;
-}
-
-/** The position box of the first primitive of mesh 0 (its accessor's min and max). */
-function boxOf(g: Gltf): { min: number[]; max: number[] } {
-  const acc = g.accessors[g.meshes[0]!.primitives[0]!.attributes['POSITION']!]!;
-  return { min: acc.min!, max: acc.max! };
-}
+const path = (id: WwId): string => join(modelsDir, `${MODEL_FILE[id]}.glb`);
 
 const have = (id: WwId): boolean => existsSync(path(id));
 
@@ -88,49 +65,33 @@ describe.skipIf(!WW_PARTY_IDS.every(have))('the three girls\' files', () => {
 });
 
 describe.skipIf(!have(WW_BOSS_ID))('Valefor\'s file', () => {
-  it('is one static mesh with a map, no skeleton and no clips, 3.5 m tall, with her body centre inside the box the fit anchors on', () => {
+  it('is one static mesh with a map, no skeleton and no clips, 3.5 m tall, with even wings about the line the flap bends from, and her mouth and chest where the effects start', () => {
     const g = readGltf(path(WW_BOSS_ID));
     expect(g.skins ?? []).toHaveLength(0);
     expect(g.animations ?? []).toHaveLength(0);
     expect(g.nodes.filter((n) => n.mesh !== undefined)).toHaveLength(1);
     expect(g.materials?.[0]?.pbrMetallicRoughness?.baseColorTexture).toBeDefined();
+    expect(trianglesOf(g), 'valefor-v2 is 39,999 triangles').toBe(39_999);
     const box = boxOf(g);
     expect(box.max[1]! - box.min[1]!).toBeCloseTo(NATIVE_HEIGHT[WW_BOSS_ID], 1);
     expect(box.min[1]!).toBeCloseTo(0, 2);
     expect(box.max[0]! - box.min[0]!).toBeGreaterThan(6); // the wings spread
-    // the anchor (x, z) is inside the footprint, not at the wings' box centre (which is where a plain fit would have put her)
-    expect(BOSS_ANCHOR[0]).toBeGreaterThan(box.min[0]!);
-    expect(BOSS_ANCHOR[0]).toBeLessThan(box.max[0]!);
-    expect(BOSS_ANCHOR[1]).toBeGreaterThan(box.min[2]!);
-    expect(BOSS_ANCHOR[1]).toBeLessThan(box.max[2]!);
-    expect(Math.abs(BOSS_ANCHOR[0] - (box.min[0]! + box.max[0]!) / 2)).toBeGreaterThan(0.3);
+    // even wings: the centre of the span is the body line the flap bends from (so the fit needs no anchor), and the origin is between the claws, inside the footprint
+    expect(Math.abs((box.min[0]! + box.max[0]!) / 2 - WING.cx)).toBeLessThan(0.05);
+    expect(box.min[2]!).toBeLessThan(0);
+    expect(box.max[2]!).toBeGreaterThan(0);
+    // the beak is the file's front: the mouth the effects start from is at its tip, above the chest
+    expect(MOUTH_LOCAL[2]).toBeCloseTo(box.max[2]!, 1);
+    expect(MOUTH_LOCAL[1]).toBeLessThan(box.max[1]!);
+    expect(CHEST_LOCAL[1]).toBeLessThan(MOUTH_LOCAL[1]);
+    expect(MOUTH_LOCAL[0]).toBeGreaterThan(box.min[0]!);
+    expect(MOUTH_LOCAL[0]).toBeLessThan(box.max[0]!);
   });
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 // The real files through the real code
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-/** The file with its pictures taken out of the JSON (no decoder in Node): the geometry, the skeleton and the clips are the real ones. */
-function stripImages(bytes: Buffer): ArrayBuffer {
-  const jsonLength = bytes.readUInt32LE(12);
-  const json = JSON.parse(bytes.toString('utf8', 20, 20 + jsonLength)) as Record<string, unknown> & { materials?: Array<{ pbrMetallicRoughness?: Record<string, unknown> }> };
-  delete json['images'];
-  delete json['textures'];
-  delete json['samplers'];
-  for (const m of json.materials ?? []) if (m.pbrMetallicRoughness) delete m.pbrMetallicRoughness['baseColorTexture'];
-  const text = Buffer.from(JSON.stringify(json), 'utf8');
-  const padded = Buffer.concat([text, Buffer.alloc((4 - (text.length % 4)) % 4, 0x20)]);
-  const rest = bytes.subarray(20 + jsonLength); // the BIN chunk, untouched
-  const header = Buffer.alloc(20);
-  header.write('glTF', 0, 'ascii');
-  header.writeUInt32LE(2, 4);
-  header.writeUInt32LE(20 + padded.length + rest.length, 8);
-  header.writeUInt32LE(padded.length, 12);
-  header.write('JSON', 16, 'ascii');
-  const out = Buffer.concat([header, padded, rest]);
-  return out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength);
-}
 
 describe.skipIf(!([...WW_PARTY_IDS, WW_BOSS_ID] as WwId[]).every(have))('the real cast through the real model code', () => {
   it('fits, measures, attaches the weapons, finds the strike of each attack and the clips\' pelvis corrections, with no warnings', async () => {
@@ -151,7 +112,7 @@ describe.skipIf(!([...WW_PARTY_IDS, WW_BOSS_ID] as WwId[]).every(have))('the rea
       warn: (m) => warnings.push(m),
       io: {
         fetchBytes: async (url) => {
-          const file = join(dir, url.split('/').pop()!);
+          const file = join(modelsDir, url.split('/').pop()!);
           return existsSync(file) ? stripImages(readFileSync(file)) : null;
         },
         parse: async (bytes) => {

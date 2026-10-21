@@ -269,44 +269,58 @@ describe('the temple', () => {
     expect(STAGE.doorAz).toBeGreaterThan(0);
   });
 
-  it('uses a swapped pillar, door, brazier and wall in place of the stand-ins, scaled and turned to the centre, and says which', () => {
+  it('uses a swapped pillar, door, brazier and wall in place of the stand-ins: the wall tiled round the circle in rows, the others by their measured sizes, all turned to the centre, and says which', () => {
     const procedural = buildStage(u, { textures: blank });
     const everything = {
-      wall: piece(5, 'wall'),
-      door: piece(6.9, 'door'),
-      brazier: piece(1.7, 'brazier'),
+      wall: piece(3, 'wall'),
+      door: piece(3.5, 'door'),
+      brazier: piece(1.1, 'brazier'),
       pillar: piece(4, 'pillar'),
     };
     const swapped = buildStage(u, { textures: blank, swaps: everything });
     expect([...swapped.used].sort()).toEqual(['brazier', 'door', 'pillar', 'wall']);
-    expect(meshesOf(swapped.group)).toBeLessThan(meshesOf(procedural.group));
-    // a swapped wall replaces the wall and its cornice, its relief panels and its procedural pilasters; the swapped pillar is still placed
     const pieces = swapped.group.children.filter((c) => c.name.startsWith('temple:'));
-    expect(pieces.filter((c) => c.name === 'temple:wall')).toHaveLength(1);
-    expect(pieces.filter((c) => c.name === 'temple:pillar')).toHaveLength(6);
-    expect(pieces.filter((c) => c.name === 'temple:brazier')).toHaveLength(3); // one per floor torch
-    expect(pieces.filter((c) => c.name === 'temple:door')).toHaveLength(1);
-    // the wall file is scaled to the stage's height, standing on the floor
-    const wall = pieces.find((c) => c.name === 'temple:wall')!;
-    expect(new Box3().setFromObject(wall).getSize(new Vector3()).y).toBeCloseTo(STAGE.H, 5);
-    // a floor torch's flame sits on top of the brazier file
-    expect(swapped.flames[0]!.base.y).toBeCloseTo(1.7 + 0.1, 5);
+    const count = (name: string): number => pieces.filter((c) => c.name === `temple:${name}`).length;
+    // a 1 m tile round a 12 m circle: 75 of them, in the 3 rows a 10.5 m wall is cut into (the wall replaces the wall, its cornice, its relief panels and its procedural pilasters)
+    expect(count('wall')).toBe(Math.round((2 * Math.PI * STAGE.R) / 1) * 3);
+    expect(count('pillar')).toBe(6 * 3); // the swapped pillar is still placed, stacked in the same rows
+    expect(count('brazier')).toBe(5); // three on the floor, two on the wall brackets
+    expect(count('door')).toBe(1);
+    // the three rows stack to the wall's height, the procedural pilaster boxes are gone, and the flames sit on the braziers' tops
+    const top = Math.max(...pieces.filter((c) => c.name === 'temple:wall').map((c) => new Box3().setFromObject(c).max.y));
+    expect(top).toBeCloseTo(STAGE.H, 5);
+    expect(swapped.flames[0]!.base.y).toBeCloseTo(1.1 + 0.1, 5);
     expect(procedural.flames[0]!.base.y).toBe(2.15);
+    expect(swapped.group.children.length).toBeGreaterThan(procedural.group.children.length); // many more objects (the tiles), each sharing one geometry
     procedural.dispose();
     swapped.dispose();
   });
 
-  it('swaps one piece at a time and leaves the rest procedural: a pillar alone replaces the six pilasters and their caps, not the door', () => {
+  it('swaps one piece at a time and leaves the rest procedural: a pillar alone stacks the six columns in the wall\'s rows and drops the pilasters\' caps, a door alone changes only the door', () => {
     const procedural = buildStage(u, { textures: blank });
     const onlyPillar = buildStage(u, { textures: blank, swaps: { pillar: piece(3, 'pillar') } });
     expect([...onlyPillar.used]).toEqual(['pillar']);
-    expect(onlyPillar.group.children.filter((c) => c.name === 'temple:pillar')).toHaveLength(6);
-    expect(meshesOf(onlyPillar.group)).toBeLessThan(meshesOf(procedural.group));
+    expect(onlyPillar.group.children.filter((c) => c.name === 'temple:pillar')).toHaveLength(6 * 3);
+    expect(meshesOf(onlyPillar.group)).toBeGreaterThan(0);
     const onlyDoor = buildStage(u, { textures: blank, swaps: { door: piece(7) } });
     expect([...onlyDoor.used]).toEqual(['door']);
+    expect(onlyDoor.group.children.filter((c) => c.name === 'temple:door')).toHaveLength(1);
+    // the door's neighbours are untouched: the same number of procedural parts, less the door's frame, leaf and step
+    expect(meshesOf(procedural.group) - meshesOf(onlyDoor.group)).toBe(3 - 1);
     procedural.dispose();
     onlyPillar.dispose();
     onlyDoor.dispose();
+  });
+
+  it('keeps the pieces\' geometry and materials shared between their placements, and frees nothing a placement still draws when the stage is disposed', () => {
+    const swapped = buildStage(u, { textures: blank, swaps: { wall: piece(3, 'wall') } });
+    const tiles = swapped.group.children.filter((c) => c.name === 'temple:wall');
+    const meshes = tiles.map((t) => t.getObjectByProperty('isMesh', true) as Mesh);
+    expect(new Set(meshes.map((m) => m.geometry)).size).toBe(1);
+    expect(new Set(meshes.map((m) => m.material)).size).toBe(1);
+    expect(meshes.every((m) => m.frustumCulled)).toBe(true); // a wall of many tiles draws the ones in view
+    expect(meshes[0]!.castShadow).toBe(false);
+    expect(() => swapped.dispose()).not.toThrow();
   });
 
   it('moves the flames, the clouds and the waterfalls with time and leaves the geometry alone', () => {
