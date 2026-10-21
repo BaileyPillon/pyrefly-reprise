@@ -49,6 +49,7 @@ import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conf
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
+import { demoRunDefaults } from '../demo/demoFlow.ts'; // R61 (conference demo, `?demo=1`): a demo fight goes straight in, without party prep or story scenes
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -321,6 +322,7 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
+    opts = demoRunDefaults(id, opts); // R61 (demo mode only, both games): a demo fight skips party prep and the story scenes unless the caller says otherwise
     const armed = this.pilgrimArmed;
     this.pilgrimArmed = null; // spent by whatever chapter runs next, so a door that opened and never ran cannot hijack a later one
     if (armed === id && opts.pilgrim === undefined) {

@@ -2,6 +2,7 @@ import './frontend/frontend.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
+import { enterDemoTitle, type DemoTitle } from '../demo/demoTitle.ts'; // R61: the conference demo's QR corner and its 60-second attract loop (`?demo=1` only)
 import { installInkGoldStyles, playWipe, prefersReducedMotion } from '../../ui/inkgold/index.ts';
 import type { Briefing } from '../../ui/coach/Briefing.ts';
 import { makeBriefing } from './raiseBriefing.ts';
@@ -81,6 +82,9 @@ export class TitleScreen extends Screen {
   private briefing: Briefing | null = null;
   /** The CHANGELOG panel (and, behind its switch, BEHIND THE SCENES) over the title. */
   private info: TitleInfo | null = null;
+  /** The booth's additions to the title, in demo mode only (`demo/demoTitle.ts`): made on the first frame, so it is independent of how `enter` draws the picture. */
+  private demo: DemoTitle | null = null;
+  private demoChecked = false;
 
   private readonly onResize = (): void => this.layout();
 
@@ -278,6 +282,8 @@ export class TitleScreen extends Screen {
     this.briefing = null;
     this.info?.dispose();
     this.info = null;
+    this.demo?.dispose();
+    this.demo = null;
     this.stage = null;
   }
 
@@ -304,6 +310,8 @@ export class TitleScreen extends Screen {
   }
 
   override update(dt: number): void {
+    if (!this.demoChecked) [this.demoChecked, this.demo] = [true, enterDemoTitle(this.app)]; // R61: null outside demo mode
+    this.demo?.update(this.advancing || this.briefing !== null);
     if (this.reduceMotion) return;
     this.parallax?.update(dt);
     this.motes?.update(dt);
@@ -366,6 +374,7 @@ export class TitleScreen extends Screen {
       motes: this.motes?.size ?? 0,
       parallax: this.parallax?.offset() ?? null,
       info: this.info?.snapshot() ?? null,
+      demo: this.demo ? { idleSeconds: this.demo.idleSeconds() } : null,
     };
   }
 }

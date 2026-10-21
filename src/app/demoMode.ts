@@ -88,7 +88,9 @@ export function demoModeOn(): boolean {
   }
   const r = readDemoFlag(globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''), stored);
   try {
-    if (r.remember === '1') s?.setItem(KEY_ON, '1');
+    if (r.remember === '1') {
+      if (stored !== '1') s?.setItem(KEY_ON, '1'); // once: a per-frame caller (the battle HUD asks every frame) must not write the tab's store 60 times a second
+    }
     else if (r.remember === null) s?.removeItem(KEY_ON);
   } catch {
     /* a blocked store: demo mode just does not outlive the page */

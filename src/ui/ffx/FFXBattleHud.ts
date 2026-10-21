@@ -68,6 +68,7 @@ import { advisorZone } from './advisorStrip.ts';
 import { NChipMeter } from './advisorChipSizes.ts';
 import { underTheChipRow } from './advisorFolded.ts';
 import { TIP_BADGE } from './advisorTip.ts';
+import { demoAdvisorOneLine, demoPanelStart } from '../../app/demo/demoHud.ts'; // R61: the conference demo's cleaner HUD (`?demo=1` only)
 import { intentChipDockAt } from './intentChipDock.ts';
 import { readColourVision } from '../../app/accessFlags.ts';
 import { cvdColour, hexToInt } from '../common/colourVision.ts';
@@ -206,6 +207,7 @@ export class FFXBattleHud implements HudPort {
       top: 44,
       bottom: STAGE.height - (CMD_INFO_TOP - GAP),
     },
+    ...demoPanelStart('guide'), // R61: folded at the start of a demo fight, not persisted
   });
   /**
    * The optional move advisor (`src/ui/common/MoveAdvisor.ts`), a card in the
@@ -226,8 +228,11 @@ export class FFXBattleHud implements HudPort {
       right: 414,
       bottom: 26,
     },
+    ...demoPanelStart('advisor'), // R61: the one-line card, not persisted
   });
   private readonly cmdAreaEl: HTMLElement;
+  /** R61: this is a demo fight's HUD (`?demo=1`): the advisor card is the one-row tip. Read once, when the HUD is built. */
+  private readonly demoOneLine = demoAdvisorOneLine();
   /**
    * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
    *
@@ -1448,7 +1453,7 @@ export class FFXBattleHud implements HudPort {
       guideChip,
       chipSize: guideChip && nChip ? nChip.full : null,
       badgeSize: guideChip && nChip ? nChip.badge : null,
-      foldedFallback: guideChip !== null && this.foldedClipped === this.advisorDecisionSeq,
+      foldedFallback: guideChip !== null && (this.foldedClipped === this.advisorDecisionSeq || this.demoOneLine), // R61: a demo fight's card is always the one-row tip (FFX Chapters I and III, where the guide is folded)
     };
     const key = [
       this.advisorDecisionSeq,

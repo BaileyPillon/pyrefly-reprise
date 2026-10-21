@@ -20,6 +20,7 @@ import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
+import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
@@ -61,6 +62,7 @@ async function boot(): Promise<void> {
   // Browsers only allow an AudioContext from a user gesture; this arms the
   // first pointerdown/keydown to create it. Anything asked for before then is
   // queued by the AudioManager.
+  installDemoReset(app); // R61: its key listeners go in before the game's own (capture phase, first registered, first heard)
   audio.installUnlockListeners();
   // A pad press is user activation in Chromium too, but raises no DOM event (PR-0220).
   installPadUnlock(audio);
