@@ -16,7 +16,7 @@ Live r60, fresh profile, Chapter I: with Auron's first-command card up, the firs
 ## 2. Demo mode (`?demo=1`)
 
 - **No teaching cards.** `coachState.shouldShow` answers false for every surface in demo mode and the guide never arms. Nothing is marked seen, so the save is untouched. Chosen over "once per session" because the demo runs in one tab all day (once would give the cards to the first visitor and take them from the rest) and FFX's card holds the fight until a key.
-- **A win goes back to the board fast, on the other demo chapter.** The story after the results panel is not played (not for a Pilgrimage fight); the board opens on Chapter IV after Chapter I and the reverse, once.
+- **A win goes back to the board fast, on the other demo chapter.** The story after the results panel is not played (not for a Pilgrimage fight); the board opens on Chapter IV after Chapter I and the reverse, once. **Superseded in `r61-rc` (2026-10-21):** r61-flow built the same thing for its two-card picker (no story scene before or after a demo fight, the cursor on the other fight after any fight); the merge kept r61-flow's and removed this lane's `quickBack` / `noteDemoWin` / `takeDemoBoardFocus` (the tests in `r61-booth-demo-polish.test.ts` pin the kept behaviour).
 - **Real keys:** 22 of 22 checks (title -> board without a briefing -> Chapter I, seed 7, no card, nothing seen -> win -> Enter on the results -> board in 508 ms on Chapter IV -> Chapter IV, seed 56, no card -> win -> board in 477 ms on Chapter I), 0 console errors, 0 404s. The two wins are the engine's own auto-play at skip speed (disclosed; the keys are real everywhere else). `tests/unit/r61-booth-demo-polish.test.ts` (14).
 
 ## 3. The battle-start stall (PR-0481)
