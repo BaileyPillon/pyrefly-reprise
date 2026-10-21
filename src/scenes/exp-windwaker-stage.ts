@@ -36,8 +36,9 @@ const toVec = (v: V3): Vector3 => new Vector3(v[0], v[1], v[2]);
 const toSpot = (v: V3): [number, number, number] => [v[0], v[1], v[2]];
 
 /** The staging switches and spots the scene publishes (also the scene-table row's slots). */
-const STAGING: Pick<SceneStaging, 'holdParty' | 'noRigs' | 'enemySpots' | 'figureHeights'> = {
+const STAGING: Pick<SceneStaging, 'holdParty' | 'noRigs' | 'enemySpots' | 'figureHeights' | 'guideFolded'> = {
   holdParty: true,
+  guideFolded: true, // the strategy guide starts folded to its chip (G opens it): at the target shot the girls' heads stand under the sheet's least height, so an open sheet covered Yuna's hair (polish 1)
   noRigs: true, // Valefor has a painted rig on a machine with the rigs dir: its parts are not planes, so the skin could not hide them (the boss stood twice)
   enemySpots: { [WW_BOSS_ID]: toSpot(BOSS_SPOT) },
   figureHeights: { [WW_BOSS_ID]: BOSS_HEIGHT },

@@ -159,8 +159,9 @@ export function createHud(game: GameId, field?: () => (OversoulField & StatusFie
     ? withDoublecastHud(withSinHud(withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud))), engine instanceof FFXEngine ? (actorId, firstId) => engine.doublecastPicks(actorId, firstId) : null) // Doublecast's two rounds: the engine's picker (FFX only)
     : withPhoneLayout(new FFX2BattleHud(ffx2Options), installFfx2PhoneHud); // advisor v3
   // `guideFolded`: the scene starts its fights with the strategy guide folded to its chip (`SceneStaging.guideFolded`; FFX Chapters I and III), unset everywhere else. The wrappers above patch the HUD
-  // they are given and hand the same object back, so it is the FFX HUD itself; the FFX-2 HUD has no such start and ignores the argument.
+  // they are given and hand the same object back, so it is the FFX HUD itself. The FFX-2 HUD starts its sheet folded through the guide itself (`strategyGuide.startFolded`, the same starting state): only the hidden Wind Waker chapter asks, whose girls' heads stand under the sheet's least height (polish 1; FFX-2 only).
   if (guideFolded && hud instanceof FFXBattleHud) hud.startGuideFolded();
+  else if (guideFolded && hud instanceof FFX2BattleHud) hud.strategyGuide.startFolded();
   // The FFX card reads a chapter's line through the live engine where it puts the line first (`AdvisorOptions.lineEngine`, release 59, decision 145); read-only, and nothing else of the card changes.
   if (hud instanceof FFXBattleHud && engine instanceof FFXEngine) hud.setLineEngine(engine);
   // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
