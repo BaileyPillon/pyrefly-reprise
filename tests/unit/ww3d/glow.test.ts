@@ -14,7 +14,7 @@ const lum = (c: readonly [number, number, number]): number => 0.2126 * c[0] + 0.
 
 describe('the parameters', () => {
   it('keeps almost none of phase 2\'s emissive fill (it was 0.5): the fill under the rim cannot hide a face or a costume', () => {
-    expect(GLOW_FILL).toBeLessThanOrEqual(0.1);
+    expect(GLOW_FILL).toBeLessThanOrEqual(0.03); // 0.08 still washed Valefor's teal pale through a whole cast
     expect(fillAmount(1)).toBeCloseTo(GLOW_FILL, 12);
     expect(fillAmount(0)).toBe(0);
     expect(fillAmount(-3)).toBe(0);

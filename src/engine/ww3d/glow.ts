@@ -22,7 +22,7 @@ export const toLinear = (v: number): number => Math.min(1, Math.max(0, v <= 0.04
 const lin = (r: number, g: number, b: number): Rgb => [toLinear(r), toLinear(g), toLinear(b)];
 
 /** How much of the old emissive fill is kept, a share of the glow (0.5 in phase 2: the girls turned cream). */
-export const GLOW_FILL = 0.08;
+export const GLOW_FILL = 0.02;
 /** The rim's strength is this share of its colour at the pulse's low, 1 at the top. */
 export const PULSE_LOW = 0.55;
 /** Pulses per second. */
