@@ -337,7 +337,7 @@ describe('the wiring', () => {
     frames(3000);
     await Promise.resolve();
     expect(calls).toEqual([]);
-    expect(document.querySelector<HTMLElement>('.demo-reset')!.hidden).toBe(true);
+    expect(document.querySelector('.demo-reset')).toBeNull(); // no hold, no ring element at all
     wired.dispose();
   });
 });

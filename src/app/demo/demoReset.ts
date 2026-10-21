@@ -251,7 +251,8 @@ export class ResetController {
 
 export interface InstalledReset {
   controller: ResetController;
-  ring: ResetRing;
+  /** The ring, once a hold has shown it (made on the first one, so a page that never holds the key has no element for it). */
+  ring(): ResetRing | null;
   dispose(): void;
 }
 
@@ -283,14 +284,15 @@ export function installDemoReset(app: App): InstalledReset {
   window.addEventListener('keyup', onKeyUp, true);
   window.addEventListener('blur', onBlur);
 
-  const ring = new ResetRing();
+  let ring: ResetRing | null = null;
+  const ringView = { set: (p: number): void => (p > 0 ? (ring ??= new ResetRing()).set(p) : ring?.set(0)) };
   const controller = new ResetController(
     {
       now: () => performance.now(),
       keyHeld: () => keyDown && isOn(),
       padHeld: () => isOn() && padResetHeld(navigator.getGamepads?.() ?? null),
     },
-    ring,
+    ringView,
     () => void resetRunningGame(app),
   );
   let raf = 0;
@@ -301,13 +303,13 @@ export function installDemoReset(app: App): InstalledReset {
   raf = requestAnimationFrame(loop);
   return {
     controller,
-    ring,
+    ring: () => ring,
     dispose: () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('keydown', onKeyDown, true);
       window.removeEventListener('keyup', onKeyUp, true);
       window.removeEventListener('blur', onBlur);
-      ring.dispose();
+      ring?.dispose();
     },
   };
 }

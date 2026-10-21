@@ -24,6 +24,7 @@ import type { App } from '../App.ts';
 import { BUTTONS, type InputSnapshot } from '../Input.ts';
 import type { Screen } from '../Screen.ts';
 import { BattleScreen } from '../screens/BattleScreen.ts';
+import { preloadBattle } from '../screens/battlePreload.ts';
 import { padActive, POINTER_ACTIVE_PX } from './demoIdle.ts';
 import { DEMO_FIGHTS } from './demoFlow.ts';
 import { demoSeedAt } from '../demoMode.ts';
@@ -36,25 +37,45 @@ export interface AttractSegment {
   readonly maxMs: number;
   readonly speed: PlaybackSpeed;
   /**
-   * Run the middle of a long fight with the presenter's own fast speed: from `afterMs` of the segment on, play fast until the engine flag `untilFlag` reaches `atValue`, then at `speed` again. Bahamut's Mega Flare
-   * ends a 25 second count on the engine's own clock, which fast does not shorten (measured: the fight's first minute takes 48 s at fast instead of about 95 at normal; the count takes its 25 s either way); the reel
-   * shows the opening, runs through the middle and plays the count and the cast in real time.
+   * Speed phases, in order, over a long fight: each plays at its `speed` from `afterMs` into the segment (the first) or from the end of the one before (the rest) until `until` is true of the engine's flags, then the next
+   * begins; after the last, and before the first, the segment's own `speed`. Bahamut's Mega Flare ends a count that opens about a minute into the fight, and the presenter's clock at normal speed takes about two minutes
+   * to get there (measured: log events 51 to 882 take 10 s at skip, 48 s at fast and well over a minute at normal; the count takes about 28 s at fast): the reel plays the opening, jumps (skip) to where the count opens, runs the count
+   * fast and plays the cast at normal speed. Skip stops on the frame the flag appears (at most 35 events a frame; measured, no overshoot).
    */
-  readonly fastForward?: { readonly afterMs: number; readonly untilFlag: string; readonly atValue: number };
+  readonly phases?: ReadonlyArray<AttractPhase>;
   /** End the segment this long after `abilityId` starts (the cast itself, and a few seconds of what it does). */
   readonly endAfter?: { readonly abilityId: string; readonly afterMs: number };
 }
 
+export interface AttractPhase {
+  readonly speed: PlaybackSpeed;
+  /** Not before this many ms into the segment (only the first phase waits on it). */
+  readonly afterMs: number;
+  /** True of the engine's flags when the phase is over. */
+  readonly until: (flags: Readonly<Record<string, number | string | boolean>>) => boolean;
+}
+
 /**
  * The reel: Seymour Flux (FFX), then Bahamut (FFX-2), round again. The seeds are the demo's own (`demoSeedAt(id, 0)`).
- * Seymour plays at normal speed for 40 seconds. Bahamut plays its first 12 seconds at normal speed, runs fast until the count opens (the engine's `bahamutCountdown` flag reads 5), plays the count 5, 4, 3, 2, 1 and the
- * Mega Flare at normal speed and ends 7 seconds after the cast starts, inside a 110 second cap: about 95 seconds in all, 55 seconds of them the fight's first minute run fast. The two lengths are these constants.
+ * Seymour plays at normal speed for 40 seconds. Bahamut plays its first 12 seconds at normal speed, jumps at the presenter's skip speed to where the count opens (the engine's `bahamutCountdown` flag leaves 0: about 10
+ * seconds), runs the count 5, 4, 3, 2, 1 fast (about 28 seconds) until the cast (the flag reads 1), plays the Mega Flare at normal speed and ends 7 seconds after it starts, inside an 80 second cap: about 60 seconds in all.
  */
 export function attractPlan(): AttractSegment[] {
   return DEMO_FIGHTS.map((f) => {
     const seed = demoSeedAt(f.id, 0) ?? 1;
     if (f.id === 'ffx2-bahamut') {
-      return { chapterId: f.id, seed, maxMs: 110_000, speed: 'normal' as const, fastForward: { afterMs: 12_000, untilFlag: 'bahamutCountdown', atValue: 5 }, endAfter: { abilityId: 'mega-flare', afterMs: 7_000 } };
+      const count = (flags: Readonly<Record<string, number | string | boolean>>): number => Number(flags['bahamutCountdown'] ?? 0);
+      return {
+        chapterId: f.id,
+        seed,
+        maxMs: 80_000,
+        speed: 'normal' as const,
+        phases: [
+          { speed: 'skip' as const, afterMs: 12_000, until: (flags) => count(flags) > 0 }, // the count has opened
+          { speed: 'fast' as const, afterMs: 0, until: (flags) => count(flags) === 1 }, // the cast
+        ],
+        endAfter: { abilityId: 'mega-flare', afterMs: 7_000 },
+      };
     }
     return { chapterId: f.id, seed, maxMs: 40_000, speed: 'normal' as const };
   });
@@ -126,7 +147,7 @@ export class AttractWake {
 export class AttractBattle extends BattleScreen {
   private banner: HTMLElement | null = null;
   private visibleMs = 0;
-  private fastDone = false;
+  private phaseIx = 0;
   private logSeen = 0;
   private castAtMs: number | null = null;
   private resolveHighlight: () => void = () => undefined;
@@ -160,15 +181,22 @@ export class AttractBattle extends BattleScreen {
     this.pace();
   }
 
-  /** The fast-forward and the end of the highlight, read from the live engine (the reel only watches it). */
+  /** The speed phases and the end of the highlight, read from the live engine (the reel only watches it). */
   private pace(): void {
     const engine = this.battleEngine;
     const presenter = this.battlePresenter;
-    const { fastForward: ff, endAfter } = this.segment;
-    if (!engine || !presenter || (!ff && !endAfter)) return;
+    const { phases, endAfter } = this.segment;
+    if (!engine || !presenter || (!phases && !endAfter)) return;
     const state = engine.state();
-    if (ff && !this.fastDone && state.flags[ff.untilFlag] === ff.atValue) this.fastDone = true;
-    const want: PlaybackSpeed = ff && !this.fastDone && this.visibleMs >= ff.afterMs ? 'fast' : this.segment.speed;
+    let want: PlaybackSpeed = this.segment.speed;
+    for (let phase = phases?.[this.phaseIx]; phase; phase = phases?.[this.phaseIx]) {
+      if (phase.until(state.flags)) {
+        this.phaseIx++;
+        continue;
+      }
+      if (this.visibleMs >= phase.afterMs) want = phase.speed;
+      break;
+    }
     if (presenter.playbackSpeed !== want) presenter.setSpeed(want);
     if (endAfter) {
       for (; this.logSeen < state.log.length; this.logSeen++) {
@@ -196,6 +224,8 @@ export interface AttractReport {
   segments: number;
   woken: boolean;
   error: string | null;
+  /** The title was left (faded out and replaced): then the title is shown again at the end. False when a press came while the art was still loading, and the title never went. */
+  left: boolean;
 }
 
 let running = false;
@@ -206,15 +236,18 @@ export function attractRunning(): boolean {
 }
 
 /**
- * Play the reel until something wakes it, then return to the title. Resolves after the title is up. Never rejects. `make` builds a segment's screen (the tests hand in a stand-in).
+ * Play the reel until something wakes it, then return to the title. Resolves after the title is up. Never rejects. `make` builds a segment's screen and `preload` warms a chapter's art (the tests hand in stand-ins).
+ *
+ * The first segment's art loads while the title is still up and nothing has faded, so a press in those seconds (about ten on the dev server) is answered at once: the title never went. Each later segment's art loads behind the one that is playing.
  */
 export async function runAttract(
   app: App,
   plan: readonly AttractSegment[] = attractPlan(),
   wake = new AttractWake(),
   make: (chapter: Chapter, seg: AttractSegment, wake: AttractWake) => Screen & { finished: Promise<unknown>; highlightDone?: Promise<void> } = (c, s, w) => new AttractBattle(c, s, w),
+  preload: (chapter: Chapter, seed: number) => Promise<unknown> = preloadBattle,
 ): Promise<AttractReport> {
-  const report: AttractReport = { segments: 0, woken: false, error: null };
+  const report: AttractReport = { segments: 0, woken: false, error: null, left: false };
   if (running || plan.length === 0) return report;
   running = true;
   wake.arm();
@@ -226,6 +259,11 @@ export async function runAttract(
       const seg = plan[i % plan.length]!;
       const chapter = getChapter(seg.chapterId);
       if (!chapter) throw new Error(`attract: no chapter ${seg.chapterId}`);
+      if (i === 0) {
+        await Promise.race([preload(chapter, seg.seed).catch(() => undefined), wake.woken]); // the title stays up while the first segment's art loads
+        if (wake.isWoken) break;
+      }
+      report.left = true;
       await app.fade('opaque', i === 0 ? FADE_BETWEEN_MS : 0);
       if (wake.isWoken) break;
       const screen = make(chapter, seg, wake);
@@ -234,6 +272,8 @@ export async function runAttract(
       const startedAt = performance.now();
       void app.fade('clear', FADE_BETWEEN_MS);
       report.segments++;
+      const next = getChapter(plan[(i + 1) % plan.length]!.chapterId);
+      if (next) void preload(next, plan[(i + 1) % plan.length]!.seed).catch(() => undefined); // the next segment's art, behind this one
       await Promise.race([screen.finished, sleep(seg.maxMs), wake.woken, screen.highlightDone ?? new Promise<never>(() => undefined)]);
       if (wake.isWoken) break;
       shortRun = performance.now() - startedAt < TOO_SHORT_MS ? shortRun + 1 : 0;
@@ -246,8 +286,10 @@ export async function runAttract(
     report.woken = wake.isWoken;
     wake.release();
     audio.applySettings(app.save.settings); // the music back to what the settings say, whatever ended the reel
-    await app.fade('opaque', FADE_OUT_MS);
-    await app.goto('title');
+    if (report.left) {
+      await app.fade('opaque', FADE_OUT_MS);
+      await app.goto('title');
+    }
     running = false;
   }
   return report;

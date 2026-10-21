@@ -130,13 +130,13 @@ describe('the plan', () => {
     }
   });
 
-  it('Seymour is 40 seconds at normal speed and nothing else; Bahamut runs fast to the Mega Flare and ends 7 seconds after the cast', () => {
+  it('Seymour is 40 seconds at normal speed and nothing else; Bahamut skips to the count, runs it fast, and ends 7 seconds after the Mega Flare starts', () => {
     const [seymour, bahamut] = attractPlan();
     expect(seymour!.maxMs).toBe(40_000);
-    expect(seymour!.fastForward).toBeUndefined();
+    expect(seymour!.phases).toBeUndefined();
     expect(seymour!.endAfter).toBeUndefined();
-    expect(bahamut!.fastForward).toEqual({ afterMs: 12_000, untilFlag: 'bahamutCountdown', atValue: 5 });
-    expect(bahamut!.maxMs).toBe(110_000);
+    expect(bahamut!.phases!.map((p) => [p.speed, p.afterMs])).toEqual([['skip', 12_000], ['fast', 0]]);
+    expect(bahamut!.maxMs).toBe(80_000);
     expect(bahamut!.endAfter).toEqual({ abilityId: 'mega-flare', afterMs: 7_000 });
   });
 });
@@ -164,30 +164,43 @@ describe('the pacing of a segment (the reel only watches the engine)', () => {
   }
   const bahamut = (): AttractSegment => attractPlan()[1]!;
 
-  it('Bahamut: normal for 12 seconds, fast until the count opens (the flag is 5), then normal for good', () => {
+  it('Bahamut: normal for 12 seconds, skip until the count opens (the flag leaves 0), fast until the cast (the flag is 1), then normal for good', () => {
     const { screen, speeds, flags } = rig(bahamut());
     screen.visibleMs = 5000;
     screen.pace();
-    expect(speeds).toEqual([]); // still normal, nothing to set
+    expect(speeds).toEqual([]); // the opening plays at normal speed: nothing to set
     screen.visibleMs = 12_000;
     screen.pace();
-    expect(speeds).toEqual(['fast']);
+    expect(speeds).toEqual(['skip']);
     flags['bahamutCountdown'] = 0; // the window is out: the flag reads 0 until the count opens
-    screen.visibleMs = 30_000;
+    screen.visibleMs = 20_000;
     screen.pace();
     screen.pace();
-    expect(speeds).toEqual(['fast']); // one change, not one per frame
-    flags['bahamutCountdown'] = 5; // the count opens
-    screen.visibleMs = 60_000;
+    expect(speeds).toEqual(['skip']); // one change, not one per frame
+    flags['bahamutCountdown'] = 5; // the count opens: the jump ends on that frame
+    screen.visibleMs = 22_000;
     screen.pace();
-    expect(speeds).toEqual(['fast', 'normal']);
-    flags['bahamutCountdown'] = 2;
+    expect(speeds).toEqual(['skip', 'fast']);
+    flags['bahamutCountdown'] = 3;
+    screen.visibleMs = 40_000;
+    screen.pace();
+    expect(speeds).toEqual(['skip', 'fast']);
+    flags['bahamutCountdown'] = 1; // the cast
+    screen.visibleMs = 50_000;
+    screen.pace();
+    expect(speeds).toEqual(['skip', 'fast', 'normal']);
+    flags['bahamutCountdown'] = 0; // the next cycle's reset must not send it back
     screen.visibleMs = 70_000;
     screen.pace();
-    flags['bahamutCountdown'] = 0; // the next cycle's reset must not send it back to fast
-    screen.visibleMs = 90_000;
+    expect(speeds).toEqual(['skip', 'fast', 'normal']);
+  });
+
+  it('the jump does not start before 12 seconds, whatever the flag says', () => {
+    const { screen, speeds, flags } = rig(bahamut());
+    flags['bahamutCountdown'] = 0;
+    screen.visibleMs = 11_999;
     screen.pace();
-    expect(speeds).toEqual(['fast', 'normal']);
+    expect(speeds).toEqual([]);
   });
 
   it('the highlight ends 7 seconds after the Mega Flare starts, and not before', async () => {
@@ -347,6 +360,50 @@ describe('the reel', () => {
     expect(f.calls[f.calls.length - 1]).toBe('goto:title');
     expect(f.volumes.length).toBe(1);
     expect(f.calls).toContain('applySettings');
+  });
+
+  it('a press while the first segment art is still loading is answered at once: the title never went', async () => {
+    const f = fakeApp();
+    const wake = new AttractWake();
+    const asked: string[] = [];
+    const done = runAttract(f.app, attractPlan(), wake, standIn(10 * 60_000, []), (chapter) => {
+      asked.push(chapter.id);
+      return new Promise(() => undefined); // never finishes loading
+    });
+    await vi.advanceTimersByTimeAsync(3000);
+    expect(f.calls).toEqual([]); // nothing faded, nothing replaced: the title is still up
+    wake.wake();
+    await vi.advanceTimersByTimeAsync(10);
+    const report = await done;
+    expect(asked).toEqual(['seymour-flux']);
+    expect(report).toMatchObject({ woken: true, left: false, segments: 0, error: null });
+    expect(f.calls).toEqual(['applySettings']); // the music back, and no fade, no goto: the title stands
+    expect(attractRunning()).toBe(false);
+  });
+
+  it('loads the first segment before it fades, and each next one behind the one that is playing', async () => {
+    const f = fakeApp();
+    const wake = new AttractWake();
+    const events: string[] = [];
+    const done = runAttract(
+      f.app,
+      attractPlan(),
+      wake,
+      ((chapter: { id: string }) => {
+        events.push(`make:${chapter.id}`);
+        return { name: 'x', finished: new Promise<void>((r) => window.setTimeout(r, 10 * 60_000)) };
+      }) as never,
+      (chapter) => {
+        events.push(`preload:${chapter.id}`);
+        return Promise.resolve();
+      },
+    );
+    await vi.advanceTimersByTimeAsync(2000);
+    wake.wake();
+    await vi.advanceTimersByTimeAsync(2000);
+    const report = await done;
+    expect(report.left).toBe(true);
+    expect(events).toEqual(['preload:seymour-flux', 'make:seymour-flux', 'preload:ffx2-bahamut']);
   });
 
   it('does not start a second reel while one runs', async () => {

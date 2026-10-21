@@ -39,7 +39,11 @@ export function enterDemoTitle(app: App, afterMs = ATTRACT_AFTER_MS): DemoTitle 
       }
       if (!clock.expired(now(), afterMs)) return;
       started = true;
-      void runAttract(app);
+      void runAttract(app).then((r) => {
+        // A press while the art was still loading: the title never went, so it counts the idle seconds again from now.
+        if (!r.left) started = false;
+        clock.touch(now());
+      });
     },
     idleSeconds: () => Math.round(clock.idleMs(now()) / 100) / 10,
     dispose() {
