@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 60 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 61 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '61',
+    date: '2026-10-21',
+    lines: [
+      { tag: 'Both', text: 'The title screen opens on The Echo, and T (or Y on a pad) switches to the Farplane painting; your choice is kept.' },
+      { tag: 'Both', text: 'OPTIONS has a Visual Style row: HD-2D for the new look in Chapters I and IV, or Classic for the plain paintings.' },
+      { tag: 'Both', text: 'Gamepad play is smoother: menus step one way at a time, and the key hints show your own pad’s buttons.' },
+      { tag: 'FFX', text: 'Chapter I’s mountain has gusts of wind, moonlight glittering on the ice and low mist; Seymour Flux is lit by the room, and Auron’s first tip is corrected.' },
+      { tag: 'FFX-2', text: 'Bahamut is lit by the room too, and the results after his fight are calmer.' },
+    ],
+  },
   {
     release: '60',
     date: '2026-10-20',

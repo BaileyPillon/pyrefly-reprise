@@ -17,7 +17,7 @@ import { setDemoMode } from '../../src/app/demoMode.ts';
 import { demoStartIndex } from '../../src/app/demo/demoBoard.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { Screen } from '../../src/app/Screen.ts';
-import { forgetBoardChapter, initialBoardIndex, lastBoardChapter, rememberBoardChapter } from '../../src/app/screens/frontend/boardFocus.ts';
+import { forgetBoardChapter, initialBoardIndex, rememberBoardChapter } from '../../src/app/screens/frontend/boardFocus.ts';
 import {
   GameFlow,
   registerFlowScreens,
