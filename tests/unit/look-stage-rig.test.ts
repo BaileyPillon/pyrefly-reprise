@@ -121,6 +121,10 @@ describe('depth stage: the object', () => {
     expect(kept.position.z).toBeGreaterThan(0);
     stage.update(frame(scene, 'gagazet', 5, 'high', { 'stage.mist': 0 }));
     expect(visible()).toBe(0);
+    eyeCandy.setTier('low'); // LOW EFFECTS: option B has no haze there, and neither has the stage
+    stage.update(frame(scene, 'gagazet', 5, 'high'));
+    expect(visible()).toBe(0);
+    eyeCandy.setTier(null);
     stage.update(frame(scene, 'gagazet', 5, 'high'));
     expect(visible()).toBe(2);
     stage.off();

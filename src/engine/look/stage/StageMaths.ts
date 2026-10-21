@@ -3,8 +3,8 @@
  * (`StageGlintShader.ts`) mirror it line for line. Both games (shared plumbing): a room names its own wind, its moon and its ice in `StageConfig.ts`.
  *
  * Three small pieces:
- *  - the wind: one gust envelope for the whole room, so the snow, the streaks and the mist all lean into the same breath of wind at the same moment (a gust is slow to rise, quick to fall, and
- *    never the same twice in a row), and the warped clock the weather runs on while it blows;
+ *  - the wind: one gust envelope for the whole room, so the snow, the streaks and the mist all lean into the same breath of wind at the same moment (a gust leans in and eases out, and never the
+ *    same twice in a row), and the warped clock the weather runs on while it blows;
  *  - the moon's glitter on the ice: for a point on the floor, the camera and the moon, how much of the moon a tiny ice facet throws back at the eye;
  *  - the layers' sway: how far, in pixels, the painting's depth layers move against each other when the camera is still (used by the debug read-out and the tests).
  */

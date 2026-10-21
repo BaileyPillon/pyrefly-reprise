@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { GAGAZET } from '../../src/engine/fx/b/ambient/gagazet.ts';
+import { DRIFT_FFX } from '../../src/engine/fx/b/CameraDrift.ts';
 import { NO_STAGE, ROOM_STAGE, STAGE_QUALITY, stageRecipe, stageWanted } from '../../src/engine/look/stage/StageConfig.ts';
 import { NO_WIND, facetGlint, glintFresnel, glintReach, gustAt, gustShaft, gustThicken, hash21, layerSlidePx, windClock, type GlintView } from '../../src/engine/look/stage/StageMaths.ts';
 import { calmStageWind, setStageWind, stageWind } from '../../src/engine/look/stage/StageWind.ts';
@@ -195,6 +197,32 @@ describe('depth stage: the layers', () => {
     const px = layerSlidePx(0.42, 11.25 + 12, 11.25 + 48, 32, 16 / 9, 1600);
     expect(px).toBeGreaterThan(3);
     expect(px).toBeLessThan(60);
+  });
+});
+
+describe('depth stage: the layers option B already cuts for Chapter I', () => {
+  // the four plates of the live Mt. Gagazet (the painting plane and three nearer ones), the idle camera's z, and B's arcing drift at its extreme (the second harmonic adds 18 percent)
+  const zs = [-48, ...GAGAZET.plates.z];
+  const camZ = 11.25;
+  const peak = DRIFT_FFX.lateral * 1.18;
+
+  it('four plates, each nearer than the last', () => {
+    expect(zs).toHaveLength(4);
+    for (let i = 1; i < zs.length; i++) expect(zs[i]!).toBeGreaterThan(zs[i - 1]!);
+  });
+
+  it('each plate slides against the far one by more than the plate behind it: a few pixels, up to about fifteen for the nearest, at 1600 wide', () => {
+    const slides = zs.slice(1).map((z) => layerSlidePx(peak, camZ - z, camZ - zs[0]!, 32, 16 / 9, 1600));
+    for (let i = 1; i < slides.length; i++) expect(slides[i]!).toBeGreaterThan(slides[i - 1]!);
+    expect(slides[0]!).toBeGreaterThan(1.5);
+    expect(slides[2]!).toBeGreaterThan(10);
+    expect(slides[2]!).toBeLessThan(20);
+  });
+
+  it('at 2560 wide the same drift is 1.6 times as many pixels, and the same share of the frame', () => {
+    const a = layerSlidePx(peak, camZ - zs[3]!, camZ - zs[0]!, 32, 16 / 9, 1600);
+    const b = layerSlidePx(peak, camZ - zs[3]!, camZ - zs[0]!, 32, 16 / 9, 2560);
+    expect(b / a).toBeCloseTo(1.6, 9);
   });
 });
 

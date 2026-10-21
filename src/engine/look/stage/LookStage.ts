@@ -15,7 +15,7 @@ import type { LookRoom } from '../LookRoom.ts';
 import { srgbDecode } from '../../figureTrue.ts';
 import { STAGE_QUALITY, stageRecipe, type StageRecipe } from './StageConfig.ts';
 import { glintMaterial, type GlintUniforms } from './StageGlintShader.ts';
-import { gustAt, gustShaft, gustThicken, type WindSpec } from './StageMaths.ts';
+import { gustAt, gustShaft, gustThicken, windClock, type WindSpec } from './StageMaths.ts';
 import { calmStageWind, setStageWind, stageWind } from './StageWind.ts';
 
 /** Under the figures (they draw at 0), over the lit ground (-48 the icy sheen, -47 the drifts). */
@@ -127,30 +127,30 @@ export class LookStage {
     this.stats.t = Math.round(t * 100) / 100;
     const q = STAGE_QUALITY[f.quality];
     const lowFx = eyeCandy.tier === 'low';
-    this.wind(recipe, f, t, q.wind, q.density);
     const dt = Number.isFinite(this.lastTime) ? Math.min(0.1, Math.max(0, f.time - this.lastTime)) : 0;
     this.lastTime = f.time;
-    this.wclock += dt * stageWind.speed;
-    this.mistFrame(f, q.density);
+    this.wind(recipe, f, t, dt, q.wind, q.density);
+    this.mistFrame(f, q.density, lowFx);
     this.glintFrame(recipe, f, t, lowFx ? 0 : q.glint);
     return true;
   }
 
-  private wind(recipe: StageRecipe, f: StageFrame, t: number, k: number, density: number): void {
+  private wind(recipe: StageRecipe, f: StageFrame, t: number, dt: number, k: number, density: number): void {
     const s = f.tweak('stage.wind', 1) * k;
     const w: WindSpec = { ...recipe.wind, speedUp: recipe.wind.speedUp * s, thicken: recipe.wind.thicken * s, shaft: (recipe.wind.shaft ?? 0) * s };
     // REDUCE MOTION holds the weather still (the look's clock stops), so the gust stands still with it: no surge of speed
     const g = eyeCandy.reduceMotion ? 0 : gustAt(t, w);
     const speed = eyeCandy.reduceMotion ? 1 : 1 + w.speedUp * g;
+    this.wclock = windClock(this.wclock, dt, g, w); // the clock the mist banks scroll on: real time, run faster while a gust blows
     setStageWind(g, speed, eyeCandy.reduceMotion ? 1 : gustThicken(g, w), eyeCandy.reduceMotion ? 1 : gustShaft(g, w), f.tweak('stage.density', density));
     this.stats.gust = Math.round(g * 1000) / 1000;
     this.stats.speed = Math.round(speed * 1000) / 1000;
   }
 
   /** The mist banks scroll on the gust-run clock and thicken with the gust; the quality tier keeps the nearer banks and drops the far ones first. */
-  private mistFrame(f: StageFrame, density: number): void {
+  private mistFrame(f: StageFrame, density: number, lowFx: boolean): void {
     const keep = Math.max(1, Math.ceil(this.mist.length * f.tweak('stage.density', density)));
-    const gain = f.tweak('stage.mist', 1) * stageWind.thicken * (eyeCandy.dial('weather') > 0 ? 1 : 0);
+    const gain = lowFx || eyeCandy.dial('weather') <= 0 ? 0 : f.tweak('stage.mist', 1) * stageWind.thicken; // LOW EFFECTS (option B has no haze there either) and a weather dial of 0 take the banks away
     this.mist.forEach((h, i) => {
       h.mesh.visible = gain > 0.001 && i >= this.mist.length - keep;
       h.update(this.wclock, gain);
