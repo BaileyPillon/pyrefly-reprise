@@ -35,6 +35,7 @@ import { figureTrueOf, rimQuiet } from '../../figureTrue.ts';
 import { isBigSpell, LensFlare } from './LensFlare.ts';
 import { buildLookLut, FFX2_RECIPE, FFX_RECIPE, LUT_SIZE } from './LookLut.ts';
 import { OverlayGlow } from './OverlayGlow.ts';
+import { optionAGame } from './ownGrade.ts';
 import { hex3, sceneLookA, type SceneLookA } from './sceneLooks.ts';
 import { bloomUnderCombat, fxShared } from '../fxShared.ts';
 
@@ -108,13 +109,12 @@ export class GoldenHour {
     const dt = this.lastNow ? Math.min(0.1, now - this.lastNow) : 0;
     this.lastNow = now;
     const info = bound;
-    const game = info?.game === 'ffx' || info?.game === 'ffx2' ? info.game : null;
-    const want = eyeCandy.enabled('a') && !!info && info.scene === scene && game !== null;
-    if (!want) {
+    const game = optionAGame(eyeCandy.enabled('a'), info, scene); // null for a scene that owns its grade (the 3D Wind Waker stage keeps its own palette)
+    if (game === null) {
       if (this.active) this.deactivate();
       return;
     }
-    if (!this.active || this.activeScene !== scene) this.activate(info!, game!);
+    if (!this.active || this.activeScene !== scene) this.activate(info!, game);
     const fdt = eyeCandy.frozen ? 0 : dt;
     this.clock += fdt;
     this.dramaT += fdt;

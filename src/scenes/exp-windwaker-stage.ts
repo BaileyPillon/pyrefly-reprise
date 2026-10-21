@@ -36,8 +36,9 @@ const toVec = (v: V3): Vector3 => new Vector3(v[0], v[1], v[2]);
 const toSpot = (v: V3): [number, number, number] => [v[0], v[1], v[2]];
 
 /** The staging switches and spots the scene publishes (also the scene-table row's slots). */
-const STAGING: Pick<SceneStaging, 'holdParty' | 'enemySpots' | 'figureHeights'> = {
+const STAGING: Pick<SceneStaging, 'holdParty' | 'noRigs' | 'enemySpots' | 'figureHeights'> = {
   holdParty: true,
+  noRigs: true, // Valefor has a painted rig on a machine with the rigs dir: its parts are not planes, so the skin could not hide them (the boss stood twice)
   enemySpots: { [WW_BOSS_ID]: toSpot(BOSS_SPOT) },
   figureHeights: { [WW_BOSS_ID]: BOSS_HEIGHT },
 };
@@ -143,6 +144,7 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
     ...STAGING,
     shotDirector: directed,
     palette: paletteFor(variantName),
+    ownGrade: true, // the palette above is the whole grade: the painted chapters' eye-candy post (option A) blew this stage out to white (phase 2)
     update(dt: number): void {
       clock += dt;
       lights.update(dt);
