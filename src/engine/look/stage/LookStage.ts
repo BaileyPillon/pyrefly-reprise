@@ -82,6 +82,7 @@ export class LookStage {
       const u: GlintUniforms = {
         uMoon: { value: new Vector3() },
         uColor: { value: new Color(srgbDecode(g.color[0]), srgbDecode(g.color[1]), srgbDecode(g.color[2])) },
+        uSheenColor: { value: new Color(srgbDecode(g.sheenColor[0]), srgbDecode(g.sheenColor[1]), srgbDecode(g.sheenColor[2])) },
         uTime: { value: 0 },
         uGain: { value: g.gain },
         uCell: { value: g.cell },

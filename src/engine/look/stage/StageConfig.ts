@@ -18,8 +18,10 @@ export type Rgb = [number, number, number];
 export interface GlintSpec {
   /** Where the moon is, as a point on the painting (u from the left, v from the top, 0..1): the room's own light, read once. */
   moon: readonly [number, number];
-  /** The light's colour, sRGB 0..1. */
+  /** The sparkles' colour, sRGB 0..1: the moon's own cold white. */
   color: Rgb;
+  /** The broad sheen's colour under the sparkles, sRGB 0..1: a saturated blue (a pale one reads as a grey veil on a deep blue floor). */
+  sheenColor: Rgb;
   /** Brightness of the sparkles (linear, additive; 1 = a sparkle at the peak lifts a dark floor by about the moon's own value). */
   gain: number;
   /** Size of one ice facet on the floor, metres. */
@@ -47,7 +49,7 @@ export interface MistSpec {
   opacity: number;
   color: Rgb;
   flow: readonly [number, number];
-  /** 0 = in front of the figures (they are in it, up to their knees), 1 = behind them (renderOrder under the figures). */
+  /** True: behind the fighters (it draws over the ground and under them); false: in front of them (it crosses their feet and draws over them, up to their knees). */
   behind: boolean;
   /** Noise cells across and down, and the cover threshold (higher = thinner wisps). */
   scale: readonly [number, number];
@@ -81,16 +83,17 @@ export const NO_STAGE: StageRecipe = { game: 'ffx', wind: NO_WIND, glint: null, 
 
 /**
  * Chapter I (FFX), Mt. Gagazet at night. The wind comes in gusts about every 11 seconds. The moon is the painting's own (u 0.226, v 0.154, found by `LookLight`); its glitter lies on the
- * ice as a road of facets whose colour is the painting's own cold white. The mist is two low banks (one behind the fighters, one that crosses their feet) in the ice's own pale blue.
+ * ice as a road of tilted facets in the painting's own cold white over a broad blue sheen that brightens toward the horizon. The mist is two low banks (one behind the fighters, one that
+ * crosses their feet) in the ice's own pale blue.
  */
 export const ROOM_STAGE: Readonly<Record<string, StageRecipe>> = {
   gagazet: {
     game: 'ffx',
     wind: { every: 11, length: 4.2, speedUp: 1.6, thicken: 0.9, shaft: 0.35, phase: 3 },
-    glint: { moon: [0.226, 0.154], color: [0.78, 0.9, 1.0], gain: 1.6, cell: 0.07, rough: 0.42, width: 0.05, speed: 2.1, center: [-3, -4], radius: 17, sheen: 0.1 },
+    glint: { moon: [0.226, 0.154], color: [0.78, 0.9, 1.0], sheenColor: [0.3, 0.56, 1.0], gain: 1.6, cell: 0.07, rough: 0.32, width: 0.05, speed: 2.1, center: [-3, -4], radius: 17, sheen: 0.6 },
     mist: [
-      { y: 0.55, z: -9, w: 44, h: 3.2, opacity: 0.5, color: [0.66, 0.8, 1.0], flow: [0.06, 0.004], behind: true, scale: [3.2, 1.1], cover: 0.36 },
-      { y: 0.3, z: 2.2, w: 34, h: 1.5, opacity: 0.26, color: [0.72, 0.84, 1.0], flow: [0.1, 0.006], behind: false, scale: [4.6, 1.0], cover: 0.42 },
+      { y: 0.55, z: -9, w: 44, h: 3.2, opacity: 0.5, color: [0.58, 0.74, 1.0], flow: [0.06, 0.004], behind: true, scale: [3.2, 1.1], cover: 0.36 },
+      { y: 0.3, z: 2.2, w: 34, h: 1.5, opacity: 0.26, color: [0.64, 0.78, 1.0], flow: [0.1, 0.006], behind: false, scale: [4.6, 1.0], cover: 0.42 },
     ],
   },
 };

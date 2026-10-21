@@ -20,6 +20,7 @@ export const GLINT_VERT = /* glsl */ `
 export const GLINT_FRAG = /* glsl */ `
   uniform vec3 uMoon;
   uniform vec3 uColor;
+  uniform vec3 uSheenColor;
   uniform float uTime;
   uniform float uGain;
   uniform float uCell;
@@ -71,8 +72,9 @@ export const GLINT_FRAG = /* glsl */ `
     float dist = length(cameraPosition - P);
     float fade = 1.0 - smoothstep(uRadius * 0.55, uRadius, length(P.xz - uCenter));
     fade *= 1.0 - smoothstep(26.0, 48.0, dist);
-    float k = (sparkle * uGain + road * uSheen) * fade * uAmount;
-    gl_FragColor = vec4(uColor * k, 1.0);
+    // the sparkles are the moon's own cold white; the broad sheen under them is a saturated blue, so on a deep blue floor it reads as luminous ice and not as a grey veil
+    vec3 col = (uColor * (sparkle * uGain) + uSheenColor * (road * uSheen)) * (fade * uAmount);
+    gl_FragColor = vec4(col, 1.0);
     #include <colorspace_fragment>
   }
 `;
@@ -81,6 +83,7 @@ export interface GlintUniforms {
   [uniform: string]: { value: unknown };
   uMoon: { value: Vector3 };
   uColor: { value: Color };
+  uSheenColor: { value: Color };
   uTime: { value: number };
   uGain: { value: number };
   uCell: { value: number };
