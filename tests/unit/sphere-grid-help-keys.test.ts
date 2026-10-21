@@ -9,6 +9,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { Button, InputSnapshot } from '../../src/app/Input.ts';
+import { noteInputDevice, resetInputDeviceForTests } from '../../src/app/inputDevice.ts';
 import { gagazetBuild } from '../../src/data/ffx/builds/gagazet.ts';
 import { resetCoach } from '../../src/ui/coach/coachState.ts';
 import { SphereGridHelp } from '../../src/ui/ffx/party-prep/sphereGridHelp.ts';
@@ -94,16 +95,18 @@ describe('AUTO-LEARN and ? have a key route', () => {
     expect(help.pending).toBeNull(); // modal: SELECT does nothing under the card
   });
 
-  it('the desktop buttons carry their key, and the pad button name while a pad is connected', () => {
+  it('the desktop buttons carry their key, and the pad button name while the player\'s last press was a pad (release 61: A / B / X / Y or the symbols, by the pad in hand)', () => {
+    resetInputDeviceForTests();
     const help = rig();
     const labels = (): string[] => [...document.querySelectorAll('.ffxprep-sg__key')].map((e) => e.textContent ?? '');
     expect(labels()).toEqual(['M', 'H']);
-    (navigator as unknown as { getGamepads: () => unknown[] }).getGamepads = () => [{ connected: true, buttons: [] }];
+    noteInputDevice('gamepad', 'Xbox Wireless Controller (STANDARD GAMEPAD Vendor: 045e Product: 0b13)');
     help.handleInput(input());
-    expect(labels()).toEqual(['SELECT', 'X']);
-    (navigator as unknown as { getGamepads: () => unknown[] }).getGamepads = () => [];
+    expect(labels()).toEqual(['Back', 'X']);
+    noteInputDevice('keyboard');
     help.handleInput(input());
     expect(labels()).toEqual(['M', 'H']);
+    resetInputDeviceForTests();
   });
 });
 

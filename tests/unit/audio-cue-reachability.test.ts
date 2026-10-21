@@ -199,7 +199,7 @@ describe('the victory fanfares are wired per game', () => {
   it("keeps chapter 4's results screen silent, and only chapter 4's: a quiet cue of its own since 2026-10-12 (batch 2), but no pose, no tally flourish, no quips", () => {
     expect(CHAPTERS.filter((c) => c.music.victory === undefined).map((c) => c.id)).toEqual([]);
     expect(CHAPTERS.filter((c) => resultsScreenSilent(c)).map((c) => c.id)).toEqual(['ffx2-bahamut']);
-    expect(resultsCueFor(CHAPTERS.find((c) => c.id === 'ffx2-bahamut')!, 'victory')?.cue).toBe('victory-bahamut');
+    expect(resultsCueFor(CHAPTERS.find((c) => c.id === 'ffx2-bahamut')!, 'victory')?.cue).toBe('pause'); // release 61 (`ui/common/quietResults.ts`, decision 168d): the sparse `pause` cue plays under Chapter IV's results; its data still names victory-bahamut (checked above)
   });
 
   it('plays the FFX ending where the FFX story ends, as chapter 5 does for FFX-2', () => {

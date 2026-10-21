@@ -17,18 +17,18 @@ import { controlsColumns } from '../../src/app/screens/pause/panels.ts';
 describe('PR-0028: the H legends say what H does', () => {
   it('the pause prompt says the painting stays and nothing else does', () => {
     const html = backHtml();
-    expect(html).toMatch(/H&nbsp;&nbsp;painting only/);
+    expect(html).toMatch(/<span class="kh-k">H<\/span><span class="kh-p">.*?<\/span>&nbsp;&nbsp;painting only/); // the key, and the pad's Y beside it (release 61, `padGlyphs.ts`)
     expect(html).not.toMatch(/hide panels/i);
   });
 
   it('the one line that survives H brings the panels back', () => {
-    expect(baselineHtml()).toMatch(/<b[^>]*>H<\/b> show panels/);
+    expect(baselineHtml()).toMatch(/<b[^>]*><span class="kh-k">H<\/span><span class="kh-p">.*?<\/span><\/b> show panels/);
   });
 
   it('the CONTROLS row names the pause as where H works, and nothing on the tab calls it a battle key', () => {
     const rows = controlsColumns().flatMap((c) => c.rows);
     const hide = rows.find((r) => r.id === 'hide')!;
-    expect(hide.value).toBe('H  /  Triangle');
+    expect(hide.value).toBe('H  /  Y'); // release 61: the pad's button by the pad in hand (Y on an Xbox pad, the triangle on a PlayStation one; `pause-controls-pad.test.ts`)
     expect(hide.label).toBe('In pause, the painting alone');
     for (const r of rows) {
       if (r.id !== 'hide') expect(r.value, r.id).not.toMatch(/(^|\s)H(\s|$)/);

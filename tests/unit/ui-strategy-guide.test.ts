@@ -241,7 +241,9 @@ describe('turning it off', () => {
 
     plugInPad();
     const pad = mountGuide();
-    expect(toggleOf(pad.stage).textContent).toContain(GUIDE_HINT_ITEM.gamepad);
+    // release 61 (`ui/common/padGlyphs.ts`): the chip holds the key and the pad's button; `html[data-input]` shows the one the player used last
+    expect(toggleOf(pad.stage).querySelector('.kh-k')?.textContent).toBe(GUIDE_HINT_ITEM.keyboard);
+    expect(toggleOf(pad.stage).querySelector('.kh-p .pg[data-pg="square"]')).not.toBeNull();
   });
 
   it('ignores G as a modifier chord and as an auto-repeat, so typing elsewhere cannot flip it', () => {

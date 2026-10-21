@@ -85,8 +85,9 @@ describe('the title\u2019s markup with the switch off', () => {
         expect(html, `${art}/${briefingChip}`).not.toContain(BTS_ACTION);
         expect(html).not.toMatch(/behind the scenes|behind the screens|title:bts|data-action="title:bts"/i);
         // The letter T is on the row since release 61, as the TITLE ART entry and nothing else: one T, and it belongs to title:art.
-        expect(html.match(/<b>T<\/b>/g) ?? [], `${art}/${briefingChip}`).toHaveLength(1);
-        expect(html).toContain('<b>T</b> Title Art');
+        // (the chip carries the key and the pad's Y, `ui/common/padGlyphs.ts` keyHint: the key half is `<span class="kh-k">T</span>`)
+        expect(html.match(/<span class="kh-k">T<\/span>/g) ?? [], `${art}/${briefingChip}`).toHaveLength(1);
+        expect(html).toMatch(/<b><span class="kh-k">T<\/span><span class="kh-p">.*?<\/span><\/b> Title Art/);
         expect(html).toContain('data-action="title:changelog"');
       }
     }
