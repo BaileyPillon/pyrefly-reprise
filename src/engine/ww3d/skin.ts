@@ -30,7 +30,7 @@ import { Color, Group, Vector3, type Object3D } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
 import { paceRate } from '../pace.ts';
 import type { BeatListener } from './beats.ts';
-import { BOSS_RIM, DEFAULT_RIM, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, fillAmount, glowLevel, rimStrength, spellRim, type Rgb } from './glow.ts';
+import { BOSS_RIM, DEFAULT_RIM, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, fillAmount, flashStrength, glowLevel, rimStrength, spellRim, type Rgb } from './glow.ts';
 import {
   BOSS_HOVER,
   BOSS_SPOT,
@@ -44,7 +44,7 @@ import {
 } from './layout.ts';
 import { MOUTH_LOCAL, CHEST_LOCAL, type ModelSource, type WwModel, type WwModels } from './model.ts';
 import type { MoveFx } from './moveFx.ts';
-import { moveKindOf } from './moves.ts';
+import { defaultTargets, moveKindOf } from './moves.ts';
 
 /** What a `PaintedActor` keeps private and the skin needs: the switch of its painted figure, its plane meshes, its motion group and its uniform cells. */
 export interface PaintedInternals {
@@ -88,8 +88,6 @@ export function hidePaintedFigure(actor: PaintedActor): boolean {
 
 /** The faint fill under the aura is warm (a girl's) or a golden white (Valefor's). */
 const GLOW_COLOUR: Readonly<Record<'party' | 'boss', number>> = { party: 0xffe2a6, boss: 0xfff0b0 };
-/** The share of full flash a hit reaches (the flash is added on top of the lit figure: 0.85 in phase 2 made the whole body a white silhouette, stills 59 and 69; at 0.6 the costume's colours still read through it). */
-const FLASH_GAIN = 0.6;
 /** Seconds a downed body takes to tip, a glow to fade, and an action's flap to rise. */
 const LIE_TAU = 0.2;
 const GLOW_TAU = 0.18;
@@ -167,7 +165,8 @@ export class WwSkin {
       b.busy = true; // every Valefor action flaps her wings harder, until it closes
       const move = moveKindOf(info.abilityId);
       if (!move) return;
-      const targets = info.targetIds.map((t) => this.chestOf(t)).filter((p): p is Vector3 => p !== null);
+      const named = info.targetIds.length > 0 ? info.targetIds : defaultTargets(move); // the party-wide moves open with nobody named
+      const targets = named.map((t) => this.chestOf(t)).filter((p): p is Vector3 => p !== null);
       if (targets.length === 0 && move !== 'blast') return;
       const from = b.model.worldPointOf(move === 'blast' ? CHEST_LOCAL : MOUTH_LOCAL);
       this.opts.fx.start(move, from, targets, lead);
@@ -274,7 +273,7 @@ export class WwSkin {
     const u = parts.u;
     this.colour.copy(u.tint.value).multiplyScalar(u.brightness.value);
     if (u.desaturate.value > 0.001) this.colour.lerp(STONE, Math.min(1, u.desaturate.value));
-    const flash = Math.min(1, Math.max(0, u.flashAmount.value)) * FLASH_GAIN;
+    const flash = flashStrength(u.flashAmount.value); // a power curve: the game's small charge pulses stay invisible, a hit is a near silhouette for a moment (`./glow.ts`)
     const fill = fillAmount(b.glow);
     let amount = 0;
     if (flash >= fill) {

@@ -90,3 +90,14 @@ export const RISE_SECONDS = 0.25;
 export function glowLevel(seconds: number): number {
   return Math.max(0, Math.min(1, seconds / RISE_SECONDS));
 }
+
+/**
+ * The hit flash's strength on a toon model, from the actor's own flash amount (0..1): a power curve. The game's charge pulses and a spell's small flashes (a flash of 0.3 pulses on Valefor through her whole
+ * cast) added white emissive over her flat teal and washed it pale (the second polish-1 capture: she looked see-through), while a real hit (1.0) is meant to be a near silhouette for a moment. At `FLASH_GAIN` 0.5 and a
+ * power of 1.6, a flash of 0.3 adds 0.07 (nothing you would name), 0.5 adds 0.165 and a hit adds 0.5, so the costume still reads through it.
+ */
+export const FLASH_GAIN = 0.5;
+export const FLASH_POWER = 1.6;
+export function flashStrength(amount: number): number {
+  return FLASH_GAIN * Math.pow(Math.max(0, Math.min(1, amount)), FLASH_POWER);
+}

@@ -30,6 +30,15 @@ export function moveKindOf(abilityId: string | undefined): MoveKind | null {
   }
 }
 
+/**
+ * Who a move is aimed at when the shot director's beat names nobody. The party-wide moves arrive with `targetIds: []` in a real fight (the engine resolves "all girls" when the blow lands, so the open beat of the Energy Ray
+ * and the Energy Blast carries none: in the first polish-1 capture no beam was drawn and the orb hung on her chest), so the Ray and the Blast are aimed at every girl, and Sonic Wings, which hits one, at the girl who
+ * stands farthest from her (Yuna), as the header says.
+ */
+export function defaultTargets(move: MoveKind): readonly string[] {
+  return move === 'wings' ? ['yuna'] : ['yuna', 'rikku', 'paine'];
+}
+
 /** The abilities whose effects are the flap alone (every other Valefor action gets the flap too, whatever its id). */
 export const FLAP_ONLY_IDS: readonly string[] = [VALEFOR_ATTACK_ID];
 

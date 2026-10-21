@@ -6,7 +6,7 @@
 import { Color, Mesh, MeshBasicMaterial, SphereGeometry, Vector4 } from 'three';
 import { describe, expect, it } from 'vitest';
 
-import { BOSS_RIM, DEFAULT_RIM, GLOW_FILL, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, PULSE_HZ, PULSE_LOW, RIM_GAIN, RISE_SECONDS, fillAmount, glowLevel, rimPulse, rimStrength, spellRim } from '../../../src/engine/ww3d/glow.ts';
+import { BOSS_RIM, DEFAULT_RIM, FLASH_GAIN, GLOW_FILL, flashStrength, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, PULSE_HZ, PULSE_LOW, RIM_GAIN, RISE_SECONDS, fillAmount, glowLevel, rimPulse, rimStrength, spellRim } from '../../../src/engine/ww3d/glow.ts';
 import { TOON_PARS, createToonUniforms, makeToonMaterial } from '../../../src/engine/ww3d/toon.ts';
 import { driveToon, toonify } from '../../../src/engine/ww3d/toonify.ts';
 
@@ -44,6 +44,24 @@ describe('the parameters', () => {
     expect(rimStrength(1, 0.25)).toBeCloseTo(rimPulse(0.25) * RIM_GAIN, 12);
     expect(rimStrength(0, 3)).toBe(0);
     expect(rimStrength(0.5, 3)).toBeCloseTo(0.5 * rimPulse(3) * RIM_GAIN, 12);
+  });
+});
+
+describe('the hit flash', () => {
+  it("keeps small charge pulses (0.3) near nothing and a hit (1.0) a strong flash that still lets the costume read through it", () => {
+    expect(flashStrength(0)).toBe(0);
+    expect(flashStrength(0.3)).toBeLessThan(0.08); // phase 2 and the first capture added 0.18 to 0.25 here and washed Valefor pale for a whole cast
+    expect(flashStrength(0.5)).toBeGreaterThan(0.1);
+    expect(flashStrength(0.5)).toBeLessThan(0.2);
+    expect(flashStrength(1)).toBeCloseTo(FLASH_GAIN, 12);
+    expect(FLASH_GAIN).toBeLessThanOrEqual(0.5); // phase 2's was 0.85: a full white silhouette
+    expect(flashStrength(2)).toBeCloseTo(FLASH_GAIN, 12); // clamped
+    expect(flashStrength(-1)).toBe(0);
+    let last = -1;
+    for (let a2 = 0; a2 <= 1.0001; a2 += 0.05) {
+      expect(flashStrength(a2)).toBeGreaterThanOrEqual(last); // monotonic
+      last = flashStrength(a2);
+    }
   });
 });
 

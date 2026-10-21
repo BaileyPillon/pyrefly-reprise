@@ -17,6 +17,7 @@ import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { SWAY } from '../../../src/engine/ww3d/bossMotion.ts';
 import { BOSS_RIM, GLOW_FILL, PULSE_LOW, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, spellRim } from '../../../src/engine/ww3d/glow.ts';
 import { MoveFx } from '../../../src/engine/ww3d/moveFx.ts';
+import { ORB, defaultTargets } from '../../../src/engine/ww3d/moves.ts';
 import {
   BODY_OFF_DEG,
   BOSS_HEIGHT,
@@ -32,7 +33,7 @@ import {
   type WwId,
 } from '../../../src/engine/ww3d/layout.ts';
 import { TARGET_POSITION } from '../../../src/engine/ww3d/camera.ts';
-import { loadWwModels, type WwModel, type WwModels } from '../../../src/engine/ww3d/model.ts';
+import { CHEST_LOCAL, loadWwModels, type WwModel, type WwModels } from '../../../src/engine/ww3d/model.ts';
 import { WwSkin, hidePaintedFigure, internalsOf } from '../../../src/engine/ww3d/skin.ts';
 import { createToonUniforms } from '../../../src/engine/ww3d/toon.ts';
 import { VALEFOR_ENERGY_BLAST_ID, VALEFOR_ENERGY_RAY_ID, VALEFOR_SONIC_WINGS_ID } from '../../../src/data/ffx2/enemies/valefor-abilities.ts';
@@ -261,6 +262,24 @@ describe('Valefor\'s moves', () => {
     expect(r.fx.kinds).toEqual(['ray', 'blast', 'wings']);
     run(r, 4);
     expect(r.fx.active).toBe(0); // they run their course and are freed
+  });
+
+  it("aims the party-wide moves at the party when the open beat names nobody (a real fight opens the Ray and the Blast with targetIds [])", async () => {
+    const r = await rig();
+    r.skin.update(0.02);
+    expect(defaultTargets('ray')).toEqual(['yuna', 'rikku', 'paine']);
+    expect(defaultTargets('blast')).toEqual(['yuna', 'rikku', 'paine']);
+    expect(defaultTargets('wings')).toEqual(['yuna']);
+    r.skin.listener.open!(WW_BOSS_ID, 'cast', 0.3, info(VALEFOR_ENERGY_RAY_ID, []));
+    expect(r.fx.kinds).toEqual(['ray']);
+    expect(r.fx.group.children, 'a beam (sleeve and core) to each of the three girls, and the muzzle').toHaveLength(1 + 2 * 3);
+    r.skin.listener.open!(WW_BOSS_ID, 'overdrive', 1.5, info(VALEFOR_ENERGY_BLAST_ID, []));
+    const orb = r.fx.group.children[7]!; // the Blast's orb: after the Ray's seven
+    const chest = r.skin.get(WW_BOSS_ID)!.model.worldPointOf(CHEST_LOCAL);
+    expect(orb.position.distanceTo(chest), 'hung out in front of her chest toward the girls, not on it').toBeCloseTo(ORB.ahead, 3);
+    r.skin.listener.open!(WW_BOSS_ID, 'cast', 0.6, info(VALEFOR_SONIC_WINGS_ID, []));
+    expect(r.fx.kinds).toEqual(['ray', 'blast', 'wings']);
+    expect(r.fx.group.children).toHaveLength(7 + 2 + 3); // three trails for the one girl
   });
 
   it('aims the beam at the girls\' chests where they stand, not at the floor and not at the boss', async () => {
