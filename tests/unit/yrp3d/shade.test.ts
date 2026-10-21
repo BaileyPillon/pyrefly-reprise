@@ -173,7 +173,7 @@ describe('the wing flap', () => {
     expect(set.materials).toHaveLength(2);
     for (const m of set.materials) {
       expect(m.customProgramCacheKey()).toContain('yrp-flap');
-      const shader = { uniforms: {} as Record<string, unknown>, vertexShader: '#include <common>\n#include <begin_vertex>' };
+      const shader = { uniforms: {} as Record<string, unknown>, vertexShader: '#include <common>\n#include <begin_vertex>', fragmentShader: '#include <emissivemap_fragment>' };
       m.onBeforeCompile(shader as never, undefined as never);
       expect(shader.uniforms['uFlapTime']).toBe(flap.uFlapTime); // the cell itself: one write moves every material
       expect(shader.vertexShader).toContain('yrpFlap');

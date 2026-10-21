@@ -11,7 +11,7 @@
  * did with a pose name and a shader, done to a model:
  *
  * - **Facing.** The model is turned to the three-quarter yaw of `./layout.ts` (the actor's interim yaw is off: that turn is for flat paintings).
- * - **Flash.** The actor's own flash (a hit's white, a heal's green, a revive's blue: `PaintedActor.flash`) is read off its uniform cells and drives the model's emissive.
+ * - **Flash.** The actor's own flash (a hit's white, a heal's green, a revive's blue: `PaintedActor.flash`) is read off its uniform cells and drives the model's emissive, as a capped rim accent (`./rim.ts`), never a flat tint of the body.
  * - **Motions.** The beats (`./beats.ts`) and the pose the actor shows start the game's own clips (`./clips.ts`): an attack, a cast or an item as it opens and ends, the blow landing, a hit, a fall and a rise, the victory, and the
  *   low-HP kneel when the rest pose is `critical` (the battle screen's `restPoses`, below a third of the HP in FFX-2). A model with a fall clip of its own is not tipped over as well.
  * - **Cast glow.** While the actor holds the `cast` pose a glow swells on the model (`castGlow`): warm for the girls, Bahamut's violet for him.
@@ -31,6 +31,7 @@ import type { BeatListener } from './beats.ts';
 import type { YrpModels } from './load.ts';
 import type { YrpModel } from './model.ts';
 import { paceRate } from '../pace.ts';
+import { ACCENT } from './rim.ts';
 
 /** What a `PaintedActor` keeps private and the skin needs: the switch of its painted figure, its plane meshes, its motion group and its uniform cells. */
 export interface PaintedInternals {
@@ -80,9 +81,7 @@ export function hidePaintedFigure(actor: PaintedActor): boolean {
 
 /** A hit's flash is white, the girls' cast glow warm, Bahamut's his possession violet (the stage's boss pool, `scenes/bevelle-underground.ts`). */
 const GLOW_COLOUR: Readonly<Record<'party' | 'boss', number>> = { party: 0xffe2a6, boss: 0xb468ff };
-/** The share of full emissive the flash and the glow reach: higher turned a hit on a soft-shaded figure into a flat white or pink silhouette (0.85 and 0.5 on the first branch's toon look, where the ramp's lit side was 1). */
-const FLASH_GAIN = 0.42;
-const GLOW_GAIN = 0.3;
+/** The share of full emissive the flash and the glow reach is `ACCENT` (`./rim.ts`): a rim accent, capped low, so a hit or a cast reads without turning the boss into a flat salmon silhouette or the girls to white. */
 /** Seconds a downed body takes to tip, and a glow to fade. */
 const LIE_TAU = 0.2;
 const GLOW_TAU = 0.18;
@@ -216,14 +215,15 @@ export class YrpSkin {
     const u = parts.u;
     this.colour.copy(u.tint.value).multiplyScalar(u.brightness.value);
     if (u.desaturate.value > 0.001) this.colour.lerp(STONE, Math.min(1, u.desaturate.value));
-    const flash = Math.min(1, Math.max(0, u.flashAmount.value)) * FLASH_GAIN;
-    const glow = b.glow * GLOW_GAIN;
+    const who = b.id === YRP_BOSS_ID ? 'boss' : 'party';
+    const flash = Math.min(1, Math.max(0, u.flashAmount.value)) * ACCENT.flash[who];
+    const glow = b.glow * ACCENT.glow[who];
     let amount = 0;
     if (flash >= glow) {
       this.emissive.copy(u.flashColor.value);
       amount = flash;
     } else {
-      this.emissive.setHex(GLOW_COLOUR[b.id === YRP_BOSS_ID ? 'boss' : 'party']);
+      this.emissive.setHex(GLOW_COLOUR[who]);
       amount = glow;
     }
     model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha });

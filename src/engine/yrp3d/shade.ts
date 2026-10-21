@@ -8,7 +8,7 @@
  *   file's own material kept whole, so whatever maps it carries (base colour, normal, roughness, metallic) and its own roughness and metalness stay, under the same lights and with no outline.
  * - **What is kept** of the file's material in the diffuse look: the base colour map and colour, the alpha test (a glTF `MASK` material, which the hair, the cloth and the wings use), and the sidedness (double-sided cloth and wings). The
  *   normal, metal-rough and emissive maps and the vertex data a scan or a converter ships are left unused, so a highlight never comes back.
- * - **Channels.** The materials' colour and emissive are what the figure's tint, flash and cast glow drive (`./skin.ts`): `drive`. A fading figure goes transparent only while it is fading (a solid one keeps its alpha test and
+ * - **Channels.** The materials' colour and emissive are what the figure's tint, flash and cast glow drive (`./skin.ts`): `drive`; the emissive reaches the surface as a rim accent (`./rim.ts`). A fading figure goes transparent only while it is fading (a solid one keeps its alpha test and
  *   depth writes, so the hair's cut-outs sort right).
  * - **Meshes** are never frustum-culled (a skinned mesh's bounds are the bind pose's, and an arm swung out would pop), cast but do not receive shadows (a figure shadowing itself shows acne on soft light) and are on the figure
  *   layer as well as the default one (`LAYER.figure`: the wet floor's mirror draws that layer alone). **Fog** does not reach them (`LOOK.figure.fog`): a figure takes its colour from the light, not from the distance.
@@ -20,6 +20,7 @@ import { Color, MeshStandardMaterial, SRGBColorSpace, type BufferGeometry, type 
 import { patchFlap, type FlapUniforms } from './flap.ts';
 import { SHADE, type Look } from './layout.ts';
 import { LAYER, LOOK } from './look.ts';
+import { patchRim } from './rim.ts';
 
 /** What a material remembers of the file's own, so the figure's colour channels can multiply it later. */
 export interface ShadeBase {
@@ -103,6 +104,7 @@ export function shadeify(root: Object3D, opts: ShadeOptions = {}): ShadeSet {
       if (!t) {
         t = shadeMaterialOf(m, opts.look);
         if (opts.flap) patchFlap(t, opts.flap);
+        patchRim(t); // the flash and the glow are a rim accent, never a flat tint of the whole body (`./rim.ts`)
         made.set(m, t);
         set.materials.push(t);
         if (t.map) set.textures.add(t.map);

@@ -15,6 +15,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { PARTY_YAW, BOSS_YAW, PARTY_HEIGHT, BOSS_HEIGHT, YRP_CAST, type YrpId } from '../../../src/engine/yrp3d/layout.ts';
 import { loadYrpModels, type LoaderIO, type YrpModels } from '../../../src/engine/yrp3d/load.ts';
+import { ACCENT } from '../../../src/engine/yrp3d/rim.ts';
 import { YrpSkin, hidePaintedFigure, internalsOf, requestedPose } from '../../../src/engine/yrp3d/skin.ts';
 
 /** A 2D context that accepts every call (an actor paints a placeholder canvas; jsdom has no canvas). */
@@ -275,10 +276,27 @@ describe('following', () => {
     r.actors['yuna']!.flash(0x66ff88, 400, 1);
     run(r, 0.05);
     const lit = mats[0]!.emissive.clone();
-    expect(lit.g).toBeGreaterThan(0.3);
+    expect(lit.g).toBeGreaterThan(0.1);
+    expect(lit.g).toBeLessThanOrEqual(ACCENT.flash.party + 1e-9); // a capped accent, never the old whole-body 0.42
     expect(lit.g).toBeGreaterThan(lit.r); // the flash's own colour
     run(r, 1.5);
     expect(mats[0]!.emissive.g).toBeLessThan(0.02);
+  });
+
+  it("caps the boss's hit flash well under the old whole-body flat (the salmon silhouette), and the girls' too", async () => {
+    const r = await rig(['yuna', 'bahamut']);
+    run(r, 0.1);
+    const girl = materialsOf(modelOf(r, 'yuna'))[0]!;
+    const boss = materialsOf(modelOf(r, 'bahamut'))[0]!;
+    for (const id of ['yuna', 'bahamut']) r.actors[id]!.flash(0xffffff, 400, 1); // the strongest flash the presenter makes (a crit's white)
+    run(r, 0.016);
+    const peak = (m: MeshStandardMaterial): number => Math.max(m.emissive.r, m.emissive.g, m.emissive.b);
+    expect(peak(boss)).toBeGreaterThan(0.12); // it reads
+    expect(peak(boss)).toBeLessThanOrEqual(ACCENT.flash.boss + 1e-9);
+    expect(peak(boss)).toBeLessThan(0.42 * 0.8); // the old hit (0xffd0c0 at 0.8 of the old 0.42) was a flat 0.34 across the whole body
+    expect(peak(girl)).toBeLessThanOrEqual(ACCENT.flash.party + 1e-9);
+    run(r, 1.5); // the flash is long gone
+    expect(peak(boss)).toBeLessThan(0.02);
   });
 
   it('swells a cast glow while the actor holds the cast pose (warm for a girl) and lets it go after; Bahamut\'s is violet and brings up the orb', async () => {
@@ -291,7 +309,10 @@ describe('following', () => {
     for (const id of ['yuna', 'bahamut']) r.skin.listener.open!(id, 'cast', 0.3); // the beat holds the glow whatever painting the actor shows
     run(r, 1.2);
     expect(girl.emissive.r).toBeGreaterThan(girl.emissive.b); // warm
-    expect(girl.emissive.r + girl.emissive.g + girl.emissive.b).toBeGreaterThan(0.2);
+    const peakOf = (m: MeshStandardMaterial): number => Math.max(m.emissive.r, m.emissive.g, m.emissive.b);
+    expect(peakOf(girl)).toBeGreaterThan(0.05); // it reads
+    expect(peakOf(girl)).toBeLessThanOrEqual(ACCENT.glow.party + 1e-9); // and never blows the girl out to white
+    expect(peakOf(boss)).toBeLessThanOrEqual(ACCENT.glow.boss + 1e-9);
     expect(boss.emissive.b).toBeGreaterThan(boss.emissive.g); // violet
     expect([orb.visible, orb.scale.x > 0.5]).toEqual([true, true]);
     for (const id of ['yuna', 'bahamut']) r.skin.listener.close!(id);
