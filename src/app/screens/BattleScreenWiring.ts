@@ -145,7 +145,7 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null, artNamespace?: string, advisorCap?: number, intentRoof?: boolean, guideFolded?: boolean): HudPort {
+export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null, artNamespace?: string, advisorCap?: number, intentRoof?: boolean, guideFolded?: boolean, chapterId?: string): HudPort {
   // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
   // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
   // The Item list's counts come from the engine's bag (the HUD holds no numbers of its own).
@@ -174,7 +174,7 @@ export function createHud(game: GameId, field?: () => (OversoulField & StatusFie
   const facts = abilityFactsFor(game);
   const looks = !field ? hud : withStatusLooks(hud, game, field, (id) => isPhysicalAction(facts(id)));
   const tapped = !field ? looks : game === 'ffx2' ? withOversoulLook(looks, field) : withOmnisGlow(withOmnisDiscs(looks, field), field);
-  return withCoach(game, tapped);
+  return withCoach(game, tapped, chapterId !== undefined ? { chapterId } : {}); // release 62 (PR-0487): Auron's first-command line is keyed by chapter
 }
 
 // --------------------------------------------------------- cutscene runner

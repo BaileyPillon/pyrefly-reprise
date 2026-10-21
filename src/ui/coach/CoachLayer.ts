@@ -64,6 +64,7 @@ import type { ActingSignal, HudPort, LayoutProjector, TargetingPort } from '../.
 import { readSetting } from '../../app/SaveData.ts';
 import { CoachMark } from './CoachMark.ts';
 import { ffx2GaugeBody, marksFor, type CoachMark as CoachMarkDef, type CoachMarkId } from './coachCopy.ts';
+import { turnOrderBodyFor } from './turnOrderLine.ts';
 import { BeatHold, beatUp } from './coachHold.ts';
 import { ActorRects, keepMarkClear } from './coachActorAvoid.ts';
 import { ffx2CoachClock, markSeen, shouldShow } from './coachState.ts';
@@ -97,6 +98,11 @@ export interface CoachLayerOptions {
    * `activeSave()` stays null throughout.
    */
   ffx2AtbMode?: 'active' | 'wait' | 'hold';
+  /**
+   * The chapter being fought (release 62, PR-0487, FFX only): Auron's first-command line is keyed by chapter (`turnOrderLine.ts`), a chapter without a line shows none.
+   * Unset (a unit test, a harness): the line as `coachCopy.ts` has it, whatever the chapter.
+   */
+  chapterId?: string;
 }
 
 /**
@@ -105,18 +111,23 @@ export interface CoachLayerOptions {
  * Pure so it can be asserted without a DOM: hand it a game, the rows the engine
  * offered and a "has this been seen?" predicate, and it answers with the one
  * line to show — or null. The order inside a game is the deck's order, so the
- * most basic lesson always wins a tie.
+ * most basic lesson always wins a tie. FFX: with `chapterId` given, a chapter that has no first-command line shows none (`turnOrderLine.ts`).
  */
 export function markForMenu(
   game: GameId,
   commands: readonly AvailableCommand[],
   seen: (id: CoachMarkId) => boolean,
+  chapterId?: string,
 ): CoachMarkDef | null {
   const offers = (kind: Command['kind']): boolean =>
     commands.some((c) => c.enabled && c.command.kind === kind);
   for (const mark of marksFor(game)) {
     if (seen(mark.id)) continue;
-    if (mark.id === 'ffx-turn-order' || mark.id === 'ffx2-gauge') return mark;
+    if (mark.id === 'ffx-turn-order') {
+      if (chapterId !== undefined && turnOrderBodyFor(chapterId) === null) continue; // PR-0487: no true line for this chapter's first menu
+      return mark;
+    }
+    if (mark.id === 'ffx2-gauge') return mark;
     if (mark.id === 'ffx-overdrive' && offers('overdrive')) return mark;
     if (mark.id === 'ffx-aeon' && offers('summon')) return mark;
   }
@@ -307,7 +318,7 @@ class CoachedHud implements HudPort {
     commands: AvailableCommand[],
     previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot,
   ): Promise<Command> {
-    const mark = this.due(markForMenu(this.game, commands, (id) => !shouldShow(id)));
+    const mark = this.due(markForMenu(this.game, commands, (id) => !shouldShow(id), this.opts.chapterId));
     if (mark) {
       markSeen(mark.id);
       void this.raise(this.withResolvedBody(mark));
@@ -325,6 +336,10 @@ class CoachedHud implements HudPort {
    * Wait draft, D-029 follow-up 4) and is marked seen the first time it is shown, in either.
    */
   private withResolvedBody(mark: CoachMarkDef): CoachMarkDef {
+    if (mark.id === 'ffx-turn-order' && this.opts.chapterId !== undefined) {
+      const body = turnOrderBodyFor(this.opts.chapterId); // PR-0487 (FFX only): the line true at this chapter's first menu
+      return body === null ? mark : { ...mark, body };
+    }
     if (mark.id !== 'ffx2-gauge') return mark;
     return { ...mark, body: ffx2GaugeBody(this.opts.ffx2AtbMode ?? ffx2CoachClock()) };
   }
