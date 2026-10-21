@@ -240,7 +240,7 @@ class Living {
     const keepHaze = Math.max(1, Math.ceil(this.haze.length * stageWind.density)); // the quality tier drops the far sheets first and keeps the ones at the fighters' feet
     this.haze.forEach((h, i) => {
       h.mesh.visible = weather > 0 && i >= this.haze.length - keepHaze;
-      h.update(this.weatherT, weather * stageWind.thicken); // ... and the mist
+      h.update(this.weatherT, weather * (this.room.haze[i]!.y <= 1.5 ? stageWind.thicken : 1)); // ... and the mist at the ground (the far veils over the moon and the ridges stay as painted)
     });
     const lampGain = eyeCandy.dial('lamps');
     const flicker = rm ? 0 : low ? 0.5 : 1;

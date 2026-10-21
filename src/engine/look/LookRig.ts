@@ -27,7 +27,6 @@ import { relightCells, relightStats } from './relight/FigureRelight.ts';
 import { keyDirection, rimDirection } from './relight/RelightConfig.ts';
 import { RelightLights } from './relight/RelightLights.ts';
 import { lookState } from './LookState.ts';
-import { stageSwitchedOff, stageWanted } from './stage/StageConfig.ts';
 import { LookStage } from './stage/LookStage.ts';
 import { stageWind } from './stage/StageWind.ts';
 
@@ -47,7 +46,6 @@ export class LookRig {
   private readonly drift = new LookDrift();
   /** Release 61: the depth stage (the room's wind and the moon's glitter on the ice), inside the bold look; Chapter I's Gagazet only (`stage/StageConfig.ts`). */
   private readonly stage = new LookStage();
-  private readonly stageOff = stageSwitchedOff(typeof location === 'undefined' ? '' : location.search);
   private version = -1;
   private quality: LookQuality = lookState.quality;
   private prevSub: string[] = [];
@@ -150,7 +148,7 @@ export class LookRig {
     if (QUALITY_COST[lookState.quality].blurTaps > 0 && (p.blur.far > 0 || p.blur.near > 0)) this.blurPasses();
     if (lookState.strength === 'bold' && name !== 'anime') (this.bold ??= new LookBold(this.r)).prepare(lookState.quality);
     const info = boundEyeCandyScene();
-    if (info && !this.stageOff && stageWanted(name, lookState.strength, info.key)) this.stage.prepare(info.scene, info.key); // the glitter's program compiles with the diorama's, behind the battle-start card
+    if (info && this.stage.wanted(name, lookState.strength, info.key, lookState.tweaks)) this.stage.prepare(info.scene, info.key); // the glitter's program compiles with the diorama's, behind the battle-start card
   }
 
   // ----------------------------------------------------------------- per frame
@@ -283,9 +281,12 @@ export class LookRig {
     u['aspect']!.value = W / Math.max(1, H);
     u['debugMask']!.value = lookState.debug === 'mask' ? 1 : 0;
     this.room.projectLight(camera, u['uLight']!.value as Vector2);
+    const moon = this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks) ? this.stage.moonLight(this.room.key) : null; // release 61: the shafts start at the painted moon, faint
+    if (moon) this.room.projectLight(camera, u['shaftL']!.value as Vector2, moon);
+    else (u['shaftL']!.value as Vector2).copy(u['uLight']!.value as Vector2);
     const lc = lin(lightColour(this.room.light.color));
     (u['lightColor']!.value as Vector3).set(...lc);
-    (u['shaft']!.value as Vector3).set(v('shaft.gain') * stageWind.shaft, v('shaft.reach'), v('shaft.threshold')); // the depth stage's gusts brighten the moon's shafts (1 with the stage off)
+    (u['shaft']!.value as Vector3).set(v('shaft.gain') * stageWind.shaft * (moon ? (lookState.tweaks['stage.shaft'] ?? 0.075) : 1), v('shaft.reach'), v('shaft.threshold')); // the depth stage's gusts brighten the moon's shafts (1 with the stage off)
     u['shaftDecay']!.value = p.shaft.decay;
     u['shaftRays']!.value = v('shaft.rays');
     u['shaftFreq']!.value = p.shaft.freq ?? 6;
@@ -312,7 +313,7 @@ export class LookRig {
     } else this.bold?.off();
     if (lookState.drift) this.drift.update(this.room.scene!, camera, this.room.painting, roomBold(this.room.key).driftPx ?? 3, dt, W, scale, lookState.commandOpen);
     else this.drift.release();
-    if (!this.stageOff && !lookState.tweaks['stage.off'] && stageWanted(name, lookState.strength, this.room.key)) this.stage.update({ scene: this.room.scene!, room: this.room, quality: lookState.quality, time: eyeCandy.frozen ? 0.5 : this.clock, tweak: (k, d) => lookState.tweaks[k] ?? d });
+    if (this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks)) this.stage.update({ scene: this.room.scene!, room: this.room, quality: lookState.quality, time: eyeCandy.frozen ? 0.5 : this.clock, tweak: (k, d) => lookState.tweaks[k] ?? d });
     else this.stage.off();
     this.stats.strength = bold ? 'bold' : 'subtle';
     this.stats.bold = bold ? (this.bold?.stats ?? null) : null;

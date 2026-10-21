@@ -27,6 +27,8 @@ export const LookMainShader = {
     aspect: { value: 16 / 9 },
     // --- the room's light (uv, 0..1 from the bottom-left of the frame) and its colour
     uLight: { value: new Vector2(0.5, 0.9) },
+    /** Where the shafts start (frame uv): the room's light, unless a room names another (release 61: Mt. Gagazet's moon, with the depth stage). */
+    shaftL: { value: new Vector2(0.5, 0.9) },
     lightColor: { value: new Vector3(1, 0.9, 0.7) },
     /** hd2d shafts: gain, reach (0..1 of the way to the light), threshold. */
     shaft: { value: new Vector3(0.5, 0.9, 0.5) },
@@ -76,6 +78,7 @@ export const LookMainShader = {
     uniform float pxScale;
     uniform float aspect;
     uniform vec2 uLight;
+    uniform vec2 shaftL;
     uniform vec3 lightColor;
     uniform vec3 shaft;
     uniform float shaftDecay;
@@ -168,7 +171,7 @@ export const LookMainShader = {
 
       #if defined(LOOK_HD2D) || defined(LOOK_CINE)
       {
-        vec2 toL = uLight - uv;
+        vec2 toL = shaftL - uv;
         vec2 toLa = toL * vec2(aspect, 1.0);
         float dist = length(toLa);
         // light shafts: march from this pixel toward the light, gathering light from the bright backdrop pixels on the way (a figure blocks it)

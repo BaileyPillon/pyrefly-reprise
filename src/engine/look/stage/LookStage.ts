@@ -13,7 +13,7 @@ import { Haze } from '../../fx/b/Haze.ts';
 import type { LookQuality } from '../LookConfig.ts';
 import type { LookRoom } from '../LookRoom.ts';
 import { srgbDecode } from '../../figureTrue.ts';
-import { STAGE_QUALITY, stageRecipe, type StageRecipe } from './StageConfig.ts';
+import { STAGE_QUALITY, stageRecipe, stageSwitchedOff, stageWanted, type StageRecipe } from './StageConfig.ts';
 import { glintMaterial, type GlintUniforms } from './StageGlintShader.ts';
 import { gustAt, gustShaft, gustThicken, windClock, type WindSpec } from './StageMaths.ts';
 import { calmStageWind, setStageWind, stageWind } from './StageWind.ts';
@@ -50,8 +50,21 @@ export class LookStage {
   private lastT0 = Number.NaN;
   private readonly moonLocal = new Vector3();
   private readonly moonWorld = new Vector3();
+  /** `?stage=off` (read once): the look runs as release 60 had it. */
+  private readonly disabled = stageSwitchedOff(typeof location === 'undefined' ? '' : location.search);
   /** For the debug API and the captures. */
   readonly stats = { on: false, room: '', t: 0, gust: 0, speed: 1, glint: false, amount: 0, mist: 0, moon: [0, 0, 0] as number[] };
+
+  /** Does the stage run for this look in this room right now? (The look and strength, a recipe for the room, and neither `?stage=off` nor the live tweak `stage.off`.) */
+  wanted(look: string | null, strength: string, key: string, tweaks: Readonly<Record<string, number>>): boolean {
+    return !this.disabled && !tweaks['stage.off'] && stageWanted(look, strength, key);
+  }
+
+  /** The room's light as the recipe names it (the moon, on the painting): the shafts, the rim and the figures' key light follow it. Null for a room with no glitter recipe. */
+  moonLight(key: string): { u: number; v: number; color: [number, number, number] } | null {
+    const g = stageRecipe(key)?.glint;
+    return g ? { u: g.moon[0], v: g.moon[1], color: g.color } : null;
+  }
 
   /** Build what the room's recipe needs now (the battle screen's shader warm-up compiles it before the first frame). A no-op for a room with no recipe. Safe to call again. */
   prepare(scene: Scene, key: string): void {
