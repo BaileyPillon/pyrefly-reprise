@@ -53,6 +53,8 @@ import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.t
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { markDemoHud } from '../demo/demoHud.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
+import { holdGpuSync, releaseGpuSync } from '../../engine/GpuSettle.ts';
+import { coachCardUp } from '../../ui/coach/cardPress.ts'; // R61: a first-use card is up: Esc closes it, the next Esc pauses
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
 import { attachAdvisorV4 } from '../advisorV4/wiring.ts';
 import { PauseScreen } from './PauseScreen.ts';
@@ -253,6 +255,7 @@ export class BattleScreen extends Screen {
     else delete this.root.dataset['artNamespace'];
     if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
+    holdGpuSync(); // R61 (PR-0481): optional readbacks (the figures' breathing, the splash crop) wait until the field's first draw has built its programs (`engine/GpuSettle.ts`)
     applyChapterLook(chapter.id, visualStyleOf(readSetting('visualStyle'))); // release 60: hd2d at bold strength by default in Chapters I and IV, before the figures bind their maps (`engine/look/LookState.ts`); release 61: unless OPTIONS > VISUAL STYLE says CLASSIC (a `?look=` address still wins)
     bindEyeCandyScene({ key: scene.key, chapter: chapter.id, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
@@ -395,6 +398,7 @@ export class BattleScreen extends Screen {
     // one that keeps playing instead of being crossfaded out to the generic
     // `battle-ffx` (critic round 02 #02). Nothing plays music here.
     await warmShaders(this.app.renderer, this.scene.scene, { draw: true }); // the figures' too; first frame under the swirl
+    releaseGpuSync(); // the GPU has built the field: the readbacks are cheap now
     if (this.exited) return this.releaseParts();
     this.fieldShown = true;
     void this.app.fade('clear', 600);
@@ -638,6 +642,9 @@ export class BattleScreen extends Screen {
    */
   private get canPauseOnCancel(): boolean {
     if (!this.canPause) return false;
+    // R61 (booth, both games): a first-use card is up, so Back belongs to the card (it takes itself down on the same press and absorbs it, `cardPress.ts`).
+    // This is the one-frame case the card's own absorb cannot reach: the pad's edge read here before the card's poll has run.
+    if (coachCardUp()) return false;
     if (this.presenter?.snapshot()['awaitingMenu'] !== true) return true;
     return !menuOwnsCancel();
   }

@@ -24,6 +24,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CoachMark } from '../../src/ui/coach/CoachMark.ts';
+import { setCardPressAbsorber } from '../../src/ui/coach/cardPress.ts';
 import { marksFor } from '../../src/ui/coach/coachCopy.ts';
 import { hasSeen, markAllSeen, markSeen, resetCoach } from '../../src/ui/coach/coachState.ts';
 import { buildChapterTiles } from '../../src/app/screens/frontend/chapterGrid.ts';
@@ -174,14 +175,23 @@ describe('step 3 is FFX\'s line in the guide\'s dress, and never blocks ATTACK',
     await expect(settled).resolves.toBe('confirmed');
   });
 
-  it('the player\'s own Esc skips the whole guide and leaves the press to the game, so the pause opens on it (FR-34-01)', async () => {
-    const { line } = mountLine();
-    const settled = line.show();
-    window.dispatchEvent(key('Escape'));
-    await expect(settled).resolves.toBe('cancelled');
-    for (const id of FIRST_RUN_IDS) expect(hasSeen(id)).toBe(true);
-    expect(absorbed).toBe(0);
-    expect(firstRunActive()).toBe(false);
+  it('the player\'s own Esc skips the whole guide and the card keeps the press: the pause does NOT open on it (R61, the booth; it did under FR-34-01), the next Esc is the game\'s', async () => {
+    let cardAbsorbed = 0;
+    setCardPressAbsorber(() => void (cardAbsorbed += 1)); // `App` hands this in: the card drops the press from `Input` itself
+    try {
+      const { line } = mountLine();
+      const settled = line.show();
+      const esc = key('Escape');
+      window.dispatchEvent(esc);
+      await expect(settled).resolves.toBe('cancelled');
+      for (const id of FIRST_RUN_IDS) expect(hasSeen(id)).toBe(true);
+      expect(esc.defaultPrevented).toBe(true);
+      expect(cardAbsorbed).toBe(1);
+      expect(absorbed).toBe(0); // the guide host's own absorb is for the board and prep; in battle the card does it, once
+      expect(firstRunActive()).toBe(false);
+    } finally {
+      setCardPressAbsorber(null);
+    }
   });
 
   it('a line the layer takes down itself (a beat, auto-play) is not a skip: step 3 stays due', async () => {

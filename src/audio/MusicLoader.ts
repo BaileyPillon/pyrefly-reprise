@@ -127,7 +127,9 @@ export class MusicLoader {
     if (!entry) return null;
     if (typeof fetch !== 'function') return null;
     try {
-      const response = await fetch(resolveAudioUrl(this.baseUrl, entry.file));
+      // R61 (PR-0495, round 27: on a 400 KB/s link the scene's bed arrived 37 s late or never, because the art behind the party prep shared the line with it): a music cue is a few MB the scene and the fight are
+      // waiting on, and the paintings around it are not on screen yet, so it asks the browser for the front of the queue (`fetch` priority; a browser that does not know the option ignores it). Both games.
+      const response = await fetch(resolveAudioUrl(this.baseUrl, entry.file), { priority: 'high' } as RequestInit);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const bytes = await response.arrayBuffer();
       const buffer = await ctx.decodeAudioData(bytes);
