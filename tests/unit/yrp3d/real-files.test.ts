@@ -32,7 +32,13 @@ function stripImages(buf: Buffer): ArrayBuffer {
   delete json.images;
   delete json.textures;
   delete json.samplers;
-  for (const m of json.materials ?? []) if (m.pbrMetallicRoughness) delete m.pbrMetallicRoughness['baseColorTexture'];
+  // every texture reference goes with the textures: the HD boss (`bahamut-4k.glb`, 2026-10-21) also carries normal, roughness-metal, emissive and occlusion maps, some of them KTX2 (the basisu extension reads `textures[i]`)
+  for (const m of (json.materials ?? []) as Array<Record<string, unknown> & { pbrMetallicRoughness?: Record<string, unknown> }>) {
+    if (m.pbrMetallicRoughness) for (const k of ['baseColorTexture', 'metallicRoughnessTexture']) delete m.pbrMetallicRoughness[k];
+    for (const k of ['normalTexture', 'occlusionTexture', 'emissiveTexture']) delete m[k];
+    delete m['extensions'];
+  }
+  delete (json as Record<string, unknown>)['extensionsRequired'];
   let js = Buffer.from(JSON.stringify(json), 'utf8');
   js = Buffer.concat([js, Buffer.alloc((4 - (js.length % 4)) % 4, 0x20)]);
   const rest = buf.subarray(20 + len);
@@ -212,7 +218,7 @@ describe.skipIf(!have)('the real files through the real loader', () => {
     boss.root.updateMatrixWorld(true);
     const box = new Box3().setFromObject(boss.root);
     expect(box.max.y - box.min.y).toBeCloseTo(5, 3);
-    expect(boss.materials[0]!.roughness).toBeCloseTo(0.85, 2); // the file's own
+    expect(boss.materials[0]!.roughness).toBeCloseTo(1, 2); // the file's own factor (the HD boss, `bahamut-4k.glb`, 2026-10-21: roughness 1 and metalness 1, each scaled by its metallic-roughness map, which this test strips; the first AI file's was 0.85)
     boss.setActivity(1);
     boss.update(1);
     expect(boss.flapAmplitude).toBeGreaterThan(0);
