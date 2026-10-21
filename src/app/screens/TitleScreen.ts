@@ -2,6 +2,7 @@ import './frontend/frontend.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
+import { enterDemoTitle, type DemoTitle } from '../demo/demoTitle.ts'; // R61: the conference demo's QR corner and its 60-second attract loop (`?demo=1` only)
 import { installInkGoldStyles, playWipe, prefersReducedMotion } from '../../ui/inkgold/index.ts';
 import type { Briefing } from '../../ui/coach/Briefing.ts';
 import { makeBriefing } from './raiseBriefing.ts';
@@ -18,7 +19,6 @@ import { briefingDue } from './raiseBriefing.ts';
 import { BTS_KEY, BTS_LIVE } from '../changelog/behindTheScenes.ts';
 import { TitleInfo } from './frontend/titleInfo.ts';
 import { BTS_ACTION, CHANGELOG_ACTION, CHANGELOG_KEY } from './frontend/titleInfoHtml.ts';
-import { enterDemoTitle, type DemoTitle } from '../demo/demoTitle.ts'; // R61: the conference demo's QR corner and its 60-second attract loop (`?demo=1` only)
 
 /**
  * The title card, in the approved "Ink & Gold" presentation and now moving.
@@ -70,8 +70,9 @@ export class TitleScreen extends Screen {
   private briefing: Briefing | null = null;
   /** The CHANGELOG panel (and, behind its switch, BEHIND THE SCENES) over the title. */
   private info: TitleInfo | null = null;
-  /** The booth's additions to the title, in demo mode only (`demo/demoTitle.ts`). */
+  /** The booth's additions to the title, in demo mode only (`demo/demoTitle.ts`): made on the first frame, so it is independent of how `enter` draws the picture. */
   private demo: DemoTitle | null = null;
+  private demoChecked = false;
 
   private readonly onResize = (): void => this.layout();
 
@@ -161,7 +162,6 @@ export class TitleScreen extends Screen {
       this.root.addEventListener('pointermove', this.onPointerMove, { passive: true });
     }
     this.layout();
-    this.demo = enterDemoTitle(this.app); // R61: null outside demo mode
 
     void audio.playMusic('title', { fade: 1.6 }).catch(() => {
       /* audio stays locked until the first gesture; AudioManager queues it */
@@ -208,6 +208,7 @@ export class TitleScreen extends Screen {
   }
 
   override update(dt: number): void {
+    if (!this.demoChecked) [this.demoChecked, this.demo] = [true, enterDemoTitle(this.app)]; // R61: null outside demo mode
     this.demo?.update(this.advancing || this.briefing !== null);
     if (this.reduceMotion) return;
     this.parallax?.update(dt);
