@@ -27,6 +27,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { noiseCanvas, radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
+import { stageWind } from '../engine/look/stage/StageWind.ts';
 import { GAGAZET_STAGING } from './gagazet-giants.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 
@@ -839,6 +840,7 @@ export const buildGagazetScene: SceneFactory = async (
 
   // -------------------------------------------------------------------- loop
   let clock = 0;
+  let snowDensity = 1;
   const build: SceneBuild = {
     group,
     get backdrop(): Backdrop {
@@ -855,7 +857,15 @@ export const buildGagazetScene: SceneFactory = async (
       clock += dt;
       backdrop.update(dt);
       lights.update(dt);
-      for (const p of particles) p.update(dt);
+      // Release 61 (FFX only, Chapter I): the depth stage's wind (`engine/look/stage`) drives the three snow bands and the spindrift together, so a gust is one breath; the cell is 1 with the HD-2D bold look off, and `dt * 1` is `dt`.
+      const densityChanged = stageWind.density !== snowDensity;
+      snowDensity = stageWind.density;
+      for (const p of particles) {
+        const sky = p !== pyreflies && p !== glitter; // the snow bands and the spindrift ride the wind; the pyreflies and the ice glitter do not
+        p.update(sky ? dt * stageWind.speed : dt);
+        // the stage's quality tier keeps this share of the flakes (1 = all); written only when the share changes, so with the stage off nothing is touched
+        if (sky && densityChanged) p.geometry.setDrawRange(0, Math.max(1, Math.round(p.geometry.getAttribute('position').count * snowDensity)));
+      }
       // The blizzard drags the ice glint across the ledge, so the ground is
       // never a static highlight, and the enemy pool breathes so the bloom
       // always has something living in it.
