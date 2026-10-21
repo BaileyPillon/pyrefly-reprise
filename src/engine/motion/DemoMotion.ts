@@ -13,7 +13,7 @@
  *    comes in, so the two never share more than 0.382 of the screen (the double image) and the fade-weighted head moves the same distance every frame. 110 to 160 ms; a KO or an
  *    Overdrive swap a little longer.
  * 2. **Rig variant cross-fade** (`rig/RigFade.ts`, `RigFigure.ts`; format v2.1 `RigKey.fadeMs`): a rig key that swaps a part to another image, or shows or hides a part, cross-fades over
- *    `fadeMs` (default 110 ms) instead of flipping at 0.5 of the move.
+ *    `fadeMs` (default 110 ms, shortened to 40 ms as the share of the figure whose image changes grows to all of it: release 61, PR-0478) instead of flipping at 0.5 of the move.
  * 3. **Breathing idle** (`DemoIdle.ts`; `PaintedActor`'s constructor, `fx/mix/living.ts`): a 3 to 4 s breath of 0.6 to 1.2 percent about the feet, a slight sway, and a phase of its own for
  *    every figure that is dealt out by the golden ratio, so a party never breathes in step (the page's random phase could put two figures together). A rig that has its own idle keeps it.
  * 4. **Hit feel** (`DemoHit.ts`, `DemoHitBeat.ts`; `fx/c/SpectacleRules.planHit`): a hit-stop that grows with the blow (weak 0 to 30 ms, strong 50 to 80, a crit, an overkill or a

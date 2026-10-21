@@ -15,6 +15,7 @@ sys.path.insert(0, pathlib.Path(__file__).resolve().parent.as_posix())
 
 import numpy as np  # noqa: E402
 
+import rig_normals  # noqa: E402
 import rig_vcut  # noqa: E402
 
 
@@ -75,6 +76,72 @@ class VariantCut(unittest.TestCase):
         t = np.array([[0, 1, 2], [0, 2, 3]])
         self.assertAlmostEqual(rig_vcut.mesh_area(v, t), 100.0)
         self.assertAlmostEqual(rig_vcut.mesh_area(v * 1.5, t), 225.0)
+
+
+class HeadSizeAndNormals(unittest.TestCase):
+    """The head's two readings (r61-rigs): the opaque pixels the player sees and the mesh area the gate reads agree when the mesh margin is chosen for it; and the normal pieces are windows of the map."""
+
+    def test_fit_grow_picks_the_margin_whose_mesh_area_is_nearest_and_never_below_zero(self):
+        mesh = lambda g: (None, None, 1000.0 + 100.0 * g)  # noqa: E731
+        self.assertEqual(rig_vcut.fit_grow(mesh, 1300.0), 3)  # exactly reached
+        self.assertEqual(rig_vcut.fit_grow(mesh, 1340.0), 3)  # nearer 3 (1300) than 4 (1400)
+        self.assertEqual(rig_vcut.fit_grow(mesh, 1360.0), 4)  # nearer 4
+        self.assertEqual(rig_vcut.fit_grow(mesh, 900.0), 0)  # already over at 0: the margin is not negative
+        self.assertEqual(rig_vcut.fit_grow(mesh, 1e9, hi=40), 40)  # not enough
+        self.assertEqual(rig_vcut.fit_grow(mesh, 1000.0), 0)
+
+    def test_fit_grow_finds_a_step_function_s_smallest_margin_that_reaches_it(self):
+        mesh = lambda g: (None, None, [100, 100, 100, 250, 250, 600][min(g, 5)] * 1.0)  # noqa: E731
+        self.assertEqual(rig_vcut.fit_grow(mesh, 240.0), 3)
+        self.assertEqual(rig_vcut.fit_grow(mesh, 600.0, hi=5), 5)
+
+    def test_a_normal_piece_is_the_same_window_of_the_map_flat_where_the_window_leaves_it(self):
+        nrm = np.zeros((40, 60, 3), np.uint8)
+        nrm[..., 0] = np.arange(60, dtype=np.uint8)[None, :]
+        w = rig_normals.window(nrm, 5, 15, 10, 30)
+        self.assertEqual(w.shape, (10, 20, 3))
+        self.assertEqual(int(w[0, 0, 0]), 10)
+        self.assertEqual(int(w[0, 19, 0]), 29)
+        off = rig_normals.window(nrm, -3, 5, 55, 65)  # runs off the top and the right edge
+        self.assertEqual(tuple(off[0, 0]), rig_normals.FLAT)  # above the map
+        self.assertEqual(tuple(off[0, 9]), rig_normals.FLAT)  # right of the map
+        self.assertEqual(int(off[3, 0, 0]), 55)  # inside the map
+
+    def test_a_piece_is_the_configs_scale_or_the_colours_when_that_is_smaller(self):
+        cfg = {"scale": 0.3}
+        self.assertEqual(rig_normals.piece_size((400, 200), cfg), (120, 60))
+        self.assertEqual(rig_normals.piece_size((400, 200), cfg, 0.2), (80, 40))  # a variant at tex 0.2 has a piece at 0.2
+        self.assertEqual(rig_normals.piece_size((400, 200), cfg, 0.55), (120, 60))
+        self.assertEqual(rig_normals.piece_size((3, 3), cfg), (1, 1))  # never empty
+
+    def test_the_resize_of_a_pose_registered_at_another_scale_is_the_paintings(self):
+        nrm = np.full((100, 200, 3), 77, np.uint8)
+        self.assertIs(rig_normals.register(nrm, 1.0, 1.0), nrm)
+        r = rig_normals.register(nrm, 1.011, 1.011)
+        self.assertEqual(r.shape, (round(100 * 1.011), round(200 * 1.011), 3))
+        self.assertTrue((r == 77).all())
+
+    def test_a_piece_is_written_opaque_rgb_and_the_normal_pieces_are_off_without_the_config(self):
+        import tempfile
+
+        nrm = np.zeros((8, 8, 3), np.uint8)
+        nrm[..., 2] = 255
+        with tempfile.TemporaryDirectory() as d:
+            out = pathlib.Path(d) / "p.normal.png"
+            size = rig_normals.save_piece(out, nrm, (4, 4))
+            self.assertEqual(size, (4, 4))
+            from PIL import Image
+
+            with Image.open(out) as im:
+                im.load()
+                self.assertEqual((im.mode, im.size), ("RGB", (4, 4)))
+
+        class Sub:
+            cfg = {"build": {}}
+
+        self.assertIsNone(rig_normals.settings(Sub))
+        Sub.cfg = {"build": {"normals": "D:/maps"}}
+        self.assertEqual(rig_normals.settings(Sub), {"dir": "D:/maps", "scale": 0.3})
 
 
 if __name__ == "__main__":

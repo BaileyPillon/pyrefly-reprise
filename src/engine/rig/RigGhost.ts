@@ -12,6 +12,7 @@ import { fadePair } from './RigFade.ts';
 import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
 import { HIDDEN } from './RigPartState.ts';
+import { setPartNormal } from '../look/relight/RigRelight.ts'; // the HD-2D look: the look going out keeps its own normal piece
 
 /** One image of a part with its mesh: the part's own (index 0) or a variant's. */
 export interface Look {
@@ -20,6 +21,8 @@ export interface Look {
   pos: Float32Array;
   map: Texture;
   rim: Texture | null;
+  /** The look's normal piece for the HD-2D light (format v2.2), null where the file gives none or the look is off. */
+  normal: Texture | null;
 }
 
 export interface PartRt {
@@ -63,6 +66,7 @@ function makeGhost(env: GhostEnv, p: PartRt): { mesh: Mesh; material: ShaderMate
     boxW: p.data.box[2],
     boxH: p.data.box[3],
     rimTexelK: env.texel(),
+    relight: p.material.defines?.['PAINTED_RELIGHT'] !== undefined, // lit exactly when the part is
   });
   const mesh = new Mesh(own.geo, material);
   mesh.name = `${p.data.name}~ghost`;
@@ -81,6 +85,7 @@ export function pointGhost(env: GhostEnv, g: { mesh: Mesh; material: ShaderMater
   u['rimMask']!.value = from.rim ?? env.white();
   u['rimOn']!.value = from.src.rimMode === 'mask' ? 1 : 0;
   u['rimGain']!.value = from.src.rimMode === 'off' ? 0 : 1;
+  setPartNormal(g.material, from.normal);
   setPartTexel(g.material, env.texel(), from.src.box[2], from.src.box[3]);
 }
 

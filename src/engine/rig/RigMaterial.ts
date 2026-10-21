@@ -14,7 +14,8 @@
  */
 import { DoubleSide, ShaderMaterial, Vector2, type Texture } from 'three';
 import { PAINTED_BLENDING } from '../BloomMask.ts';
-import { paintedFragmentShader } from '../shaders/PaintedShader.ts';
+import { RELIGHT_VARYINGS, RELIGHT_VERTEX, paintedFragmentShader } from '../shaders/PaintedShader.ts';
+import { RELIGHT_DEFINES, relightUniforms } from '../look/relight/RigRelight.ts'; // the HD-2D look: a part lit with its normal piece (release 61)
 
 export type SharedUniforms = Record<string, { value: unknown }>;
 
@@ -22,11 +23,13 @@ const VERT = /* glsl */ `
   varying vec2 vUv;
   varying float vH;
   varying vec2 vFig;
+  ${RELIGHT_VARYINGS}
   void main() {
     vUv = uv;
     vH = position.y + 0.5;
     vFig = vec2(position.x + 0.5, vH);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    ${RELIGHT_VERTEX}
   }
 `;
 
@@ -66,6 +69,8 @@ export interface PartMaterialOptions {
   boxW: number;
   boxH: number;
   rimTexelK: number;
+  /** The HD-2D look (release 61): the material is built lit (the painted shader's relight block compiles in, the light cells are shared); a normal piece is bound per look with `setPartNormal`. Default off. */
+  relight?: boolean;
 }
 
 export function makePartMaterial(o: PartMaterialOptions): ShaderMaterial {
@@ -84,7 +89,9 @@ export function makePartMaterial(o: PartMaterialOptions): ShaderMaterial {
       edgeFadeBase: { value: 1 },
       edgeJag: { value: 0 },
       erode: { value: 0 },
+      ...(o.relight ? relightUniforms() : {}),
     },
+    ...(o.relight ? { defines: { ...RELIGHT_DEFINES } } : {}),
     vertexShader: VERT,
     fragmentShader: fragment(),
     transparent: true,

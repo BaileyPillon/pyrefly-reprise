@@ -10,7 +10,7 @@ import { Texture } from 'three';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RigFile } from '../../../src/data/art/rigTypes.ts';
 import { setDemoMotion } from '../../../src/engine/motion/DemoMotion.ts';
-import { DEFAULT_FADE_MS, FADE_MS_MAX, fadeCover, fadeMsOf, fadePair, fadeStart } from '../../../src/engine/rig/RigFade.ts';
+import { DEFAULT_FADE_MS, FADE_MS_MAX, LARGE_FADE_MS, fadeCover, fadeMsFor, fadeMsOf, fadePair, fadeStart, meshAreaOf, swapShare } from '../../../src/engine/rig/RigFade.ts';
 import { makeRigFileV2 } from './rig-v2-fixture.ts';
 
 vi.mock('../../../src/engine/ProceduralArt.ts', () => {
@@ -86,6 +86,48 @@ describe('the reader', () => {
     expect(r.ok).toBe(true);
     if (r.ok) expect(r.data.keys.get('attack')!.fadeMs).toBeUndefined();
   });
+});
+
+describe('how long the fade of a move is: shorter the larger the share of the figure that changes image (release 61, PR-0478)', () => {
+  const quad = (n: number): { verts: Float32Array; triangles: Uint16Array } => ({ verts: Float32Array.from([0, 0, n, 0, n, n, 0, n]), triangles: Uint16Array.from([0, 1, 2, 0, 2, 3]) });
+  /** A rig of parts of the given sides (area = side squared). */
+  const rig = (...sides: number[]): { parts: Array<{ verts: Float32Array; triangles: Uint16Array }> } => ({ parts: sides.map(quad) });
+  const st = (...v: number[]): Int16Array => Int16Array.from(v);
+
+  it('measures a mesh and the share of the drawn figure whose state differs (hidden in both states is not drawn)', () => {
+    expect(meshAreaOf(quad(10).verts, quad(10).triangles)).toBe(100);
+    expect(swapShare([100, 100, 100, 100], st(-1, -1, -1, -1), st(0, 0, 0, 0))).toBe(1);
+    expect(swapShare([100, 100, 100, 100], st(-1, -1, -1, -1), st(-1, -1, -1, 2))).toBe(0.25);
+    expect(swapShare([300, 100], st(-1, -1), st(-1, -1))).toBe(0);
+    expect(swapShare([100, 100, 800], st(-1, -2, -2), st(0, -2, -2))).toBe(1); // the two hidden parts are not part of the figure
+    expect(swapShare([100, 100], st(-2, -1), st(-1, -1))).toBe(0.5); // a part shown from hidden counts as changed
+    expect(swapShare([], st(), st())).toBe(0);
+  });
+
+  it('a key that says fadeMs is believed (0 is a cut) whatever changes', () => {
+    const r = rig(10, 10, 10);
+    expect(fadeMsFor(r, { fadeMs: 90 }, st(-1, -1, -1), st(0, 0, 0))).toBe(90);
+    expect(fadeMsFor(r, { fadeMs: 0 }, st(-1, -1, -1), st(0, 0, 0))).toBe(0);
+  });
+
+  it('a small change keeps the default 110, a change of the whole figure is LARGE_FADE_MS (40), and in between it shortens steadily', () => {
+    const r = rig(10, 10, 10, 10, 10, 10, 10, 10); // eight equal parts
+    const ms = (n: number): number => fadeMsFor(r, {}, st(...Array<number>(8).fill(-1)), st(...Array.from({ length: 8 }, (_, i) => (i < n ? 0 : -1))));
+    expect(LARGE_FADE_MS).toBe(40);
+    expect(ms(0)).toBe(DEFAULT_FADE_MS); // nothing changes
+    expect(ms(1)).toBe(DEFAULT_FADE_MS); // a mouth: 12.5 percent
+    expect(ms(2)).toBe(DEFAULT_FADE_MS); // a quarter
+    expect(ms(8)).toBe(LARGE_FADE_MS); // every part's image
+    expect(ms(6)).toBe(LARGE_FADE_MS); // three quarters
+    let last = ms(2);
+    for (const n of [3, 4, 5, 6]) {
+      expect(ms(n), `${n} of 8`).toBeLessThanOrEqual(last);
+      last = ms(n);
+    }
+    expect(ms(4)).toBeGreaterThan(LARGE_FADE_MS);
+    expect(ms(4)).toBeLessThan(DEFAULT_FADE_MS);
+  });
+
 });
 
 // ------------------------------------------------------------------ the engine
@@ -288,5 +330,48 @@ describe('RigActor without the switch', () => {
     }
     expect(ghosts(a).length).toBe(0);
     expect(a.figure.fading).toBe(false);
+  });
+});
+
+describe('a move that swaps the image of every part (the demo bosses keys), through the real RigActor (release 61, PR-0478)', () => {
+  /** The v2 fixture with a variant `alt` on EVERY part, and the attack key naming all of them. */
+  function swapAll(fadeMs?: number): RigFile {
+    const f = makeRigFileV2();
+    const parts = f.parts.map((p) => ({ ...p, variants: { ...(p.variants ?? {}), alt: { png: `${p.name}.alt.png` } } }));
+    const named = Object.fromEntries(parts.map((p) => [p.name, { image: 'alt' }]));
+    return { ...f, parts, keys: { ...f.keys, attack: { ...f.keys['attack']!, parts: named, ...(fadeMs === undefined ? {} : { fadeMs }) } } };
+  }
+  /** How many frames at 60 Hz some part is cross-fading for, after a move into attack. */
+  async function fadingFrames(file: RigFile): Promise<number> {
+    setDemoMotion(true);
+    const a = await rigged(file);
+    a.setPose('attack');
+    let n = 0;
+    for (let i = 0; i < 60; i++) {
+      a.update(1 / 60);
+      if (a.figure.fading) n++;
+    }
+    return n;
+  }
+
+  it('fades for about 40 ms (two or three frames) where the key says nothing, and for as long as it asks where it says: the old default of 110 ms is the word of a key now', async () => {
+    const dflt = await fadingFrames(swapAll());
+    const said = await fadingFrames(swapAll(110));
+    expect(dflt).toBeGreaterThanOrEqual(2);
+    expect(dflt).toBeLessThanOrEqual(4);
+    expect(said).toBeGreaterThanOrEqual(6);
+    expect(said).toBeLessThanOrEqual(8);
+  });
+
+  it('a change of one small part keeps the longer fade: the fixture attack key swaps the head and hides the arm (a minority of the figure)', async () => {
+    setDemoMotion(true);
+    const a = await rigged(makeRigFileV2());
+    a.setPose('attack'); // the head and a scar: a small share
+    let n = 0;
+    for (let i = 0; i < 60; i++) {
+      a.update(1 / 60);
+      if (a.figure.fading) n++;
+    }
+    expect(n).toBeGreaterThanOrEqual(4);
   });
 });

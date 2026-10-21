@@ -29,9 +29,14 @@ export const TIER_RULE = 'rig-tier/1';
 /** The folder beside `rig.json` that holds the half-size twins, under the same names. */
 export const TIER_DIR = '1x';
 
-/** The image files a rig names (each part's PNG and rim mask, and, format v2, each variant's), once, in order. */
+/** The image files a rig names (each part's PNG and rim mask, and, format v2, each variant's), once, in order. These are the files that have a 1x twin. */
 export function rigImageNames(raw) {
   return [...new Set(partImages(raw).flatMap((p) => [p.png, p.rim]).filter((f) => typeof f === 'string' && f))];
+}
+
+/** Every file a rig ships besides rig.json: `rigImageNames` and the HD-2D look's normal pieces (format v2 `normal`, no 1x twin). */
+export function rigShippedNames(raw) {
+  return [...new Set([...rigImageNames(raw), ...partImages(raw).map((p) => p.normal).filter((f) => typeof f === 'string' && f)])];
 }
 
 /** Width and height from a PNG's header, or null when the file is not a PNG. */
@@ -70,7 +75,8 @@ export function textureSizes(raw, dir) {
   for (const p of partImages(raw)) {
     const m = existsSync(join(dir, p.png)) ? pngSize(join(dir, p.png)) : null;
     const r = p.rim && existsSync(join(dir, p.rim)) ? pngSize(join(dir, p.rim)) : null;
-    if (m) out[p.variant === null ? p.part : `${p.part}:${p.variant}`] = { map: [m.width, m.height], rim: r ? [r.width, r.height] : null }; // a format v2 variant is listed as <part>:<variant>
+    const nr = p.normal && existsSync(join(dir, p.normal)) ? pngSize(join(dir, p.normal)) : null; // the HD-2D look's normal piece: one size, no 1x twin (it is already the master's half or less)
+    if (m) out[p.variant === null ? p.part : `${p.part}:${p.variant}`] = { map: [m.width, m.height], rim: r ? [r.width, r.height] : null, ...(nr ? { normal: [nr.width, nr.height] } : {}) }; // a format v2 variant is listed as <part>:<variant>
   }
   return out;
 }

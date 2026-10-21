@@ -28,11 +28,11 @@ import { applyIdle, RigChains } from './RigDynamics.ts';
 import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { compileStates, partStateAt } from './RigPartState.ts';
-import { fadeMsOf, fadeStart } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`)
+import { fadeMsFor, fadeStart } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`; shorter the larger the share of the figure that changes)
 import { demoMotionOn } from '../motion/DemoMotion.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
-import { RIG_SHARE, rigLedger, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
+import { RIG_SHARE, rigLedger, rigNormalMB, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
 import { Vector3, type Texture } from 'three';
 import type { PaintedTexture } from '../PaintedArt.ts';
 
@@ -53,6 +53,7 @@ export interface RigAsset {
   tiers?: readonly number[];
   /** Gives back the texture memory this figure reserved in `rigLedger`; called once, when the figure goes (or fails to build). */
   release?: () => void;
+  normals?: boolean; // the HD-2D look (release 61): load the normal pieces the file carries and light the parts with them (`RigLoad.chooseRig` says yes when a look is armed and the budget has room); default off
 }
 
 /** The idle plays in over this long when a figure stands up from a KO or a guard (seconds, the approach's time constant). */
@@ -82,8 +83,8 @@ export class RigActor extends PaintedActor {
   private appliedState: Int16Array;
   private stateFrom: Int16Array;
   private stateTo: Int16Array;
-  /** The length of the move into the key being shown, ms (0 for a snap): where the cross-fade of a part change is centred. */
-  private moveMs = 0;
+  /** The cross-fade of the move into the key being shown (`RigFade.fadeMsFor`, 0 for a snap or a build without the demo switch) and the progress at which the state flips, centred on half way. */
+  private fade: { ms: number; flipAt: number | undefined } = { ms: 0, flipAt: undefined };
   private readonly crossMs: number;
   private readonly rigBloomMasked: boolean;
   private rigClock: number;
@@ -101,6 +102,7 @@ export class RigActor extends PaintedActor {
   private readonly tiers: readonly number[] | undefined;
   private releaseTextures: (() => void) | null;
   private textureMB = 0;
+  private readonly normalMB: number; // the normal pieces' share of textureMB (the HD-2D look): one size, whatever the tier
   private raising = false;
   private raiseBlocked = false;
   private raiseTick = 0;
@@ -128,7 +130,8 @@ export class RigActor extends PaintedActor {
     this.textures = asset.textures ?? { map: 2, rim: 2 };
     this.tiers = asset.tiers;
     this.releaseTextures = asset.release ?? null;
-    this.textureMB = rigTextureMB(tierPartsOf(this.data), this.textures);
+    this.normalMB = asset.normals === true ? rigNormalMB(tierPartsOf(this.data)) : 0;
+    this.textureMB = rigTextureMB(tierPartsOf(this.data), this.textures) + this.normalMB;
   }
 
   /**
@@ -151,7 +154,7 @@ export class RigActor extends PaintedActor {
         throw new Error(`the idle painting is ${meta.width}x${meta.height}, the rig was cut from ${asset.data.image.w}x${asset.data.image.h}`);
       }
       actor.carrier = carrier;
-      actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture, actor.textures);
+      actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture, actor.textures, asset.normals === true);
       actor.chains = asset.data.motion?.chains?.length ? new RigChains(actor.rig.skeleton, asset.data.motion.chains) : null;
       actor.ready = true;
       actor.trans.snap(actor.compiled.get('idle')!);
@@ -196,7 +199,8 @@ export class RigActor extends PaintedActor {
     this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
     this.stateTo = this.states.get(key)!;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
-    this.moveMs = ms;
+    const fadeMs = demoMotionOn() && ms > 0 ? fadeMsFor(this.data, this.data.keys.get(key), this.stateFrom, this.stateTo) : 0;
+    this.fade = { ms: fadeMs, flipAt: fadeMs > 0 ? fadeStart(ms, fadeMs) : undefined };
     this.trans.retarget(target, ms);
     this.layersDue = true;
     if (ms <= 0) this.pose0();
@@ -232,11 +236,10 @@ export class RigActor extends PaintedActor {
       this.layersDue = false;
       this.rig.setLayers(this.data.keys.get(this.key)?.layers ?? null);
     }
-    // format v2: which parts show, with which image. `?motion=demo`: the change cross-fades over the key's `fadeMs`, centred on the half-way point (`RigFade.ts`); a snap (no move) stays a flip.
-    const fadeMs = demoMotionOn() && this.moveMs > 0 ? fadeMsOf(this.data.keys.get(this.key)) : 0;
-    const shown = partStateAt(this.stateFrom, this.stateTo, this.trans.progress, fadeMs > 0 ? fadeStart(this.moveMs, fadeMs) : undefined);
+    // format v2: which parts show, with which image. `?motion=demo`: the change cross-fades, centred on the half-way point (`RigFade.ts`); a snap (no move) stays a flip.
+    const shown = partStateAt(this.stateFrom, this.stateTo, this.trans.progress, this.fade.flipAt);
     if (shown !== this.appliedState) {
-      this.rig.setPartState(shown, fadeMs);
+      this.rig.setPartState(shown, this.fade.ms);
       this.appliedState = shown;
     }
     this.rig.advanceFades(realDt * 1000); // on the real clock: a hit-stop that holds the field never freezes a half-mixed pair of images
@@ -284,7 +287,7 @@ export class RigActor extends PaintedActor {
   }
 
   /** For `window.__pyrefly.rigs()` and the tests: the rig as it stands. */
-  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; textures: RigTextures; textureMB: number } {
+  rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; textures: RigTextures; textureMB: number; relight: { lit: boolean; pieces: number } } {
     return {
       name: this.data.name,
       key: this.key,
@@ -295,7 +298,7 @@ export class RigActor extends PaintedActor {
       chains: this.chains?.size ?? 0,
       idle: this.data.motion?.idle !== undefined,
       textures: { ...this.textures },
-      textureMB: Math.round(this.textureMB * 10) / 10,
+      textureMB: Math.round(this.textureMB * 10) / 10, relight: this.rig.relightInfo,
     };
   }
 
@@ -316,7 +319,7 @@ export class RigActor extends PaintedActor {
     this.raising = true;
     try {
       const next: RigTextures = { map: 2, rim: this.textures.rim };
-      const mb = rigTextureMB(tierPartsOf(this.data), next);
+      const mb = rigTextureMB(tierPartsOf(this.data), next) + this.normalMB;
       if (rigLedger.usedMB - this.textureMB + mb > artBudget().textureMB * RIG_SHARE) {
         this.raiseBlocked = true;
         return;

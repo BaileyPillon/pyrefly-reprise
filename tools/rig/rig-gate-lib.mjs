@@ -94,7 +94,7 @@ export function costumeSha(costume, scale, artDir, subject, pose) {
 /** Paintings the engine never draws as the actor's pose: `splash` is Bahamut's Mega Flare cut-in, a full-screen picture the spectacle shows (`src/app/screens/battleSpectacle.ts#splashArtFor`), so a rig is not held to a key for it (it is listed under `exempt`). */
 const NOT_AN_ACTOR_POSE = new Set(['splash']);
 
-export const BUDGET = Object.freeze({ parts: 24, bones: 48, verts: 8000, tris: 14000, texels: 9_000_000, bytes: 9_000_000 });
+export const BUDGET = Object.freeze({ parts: 24, bones: 48, verts: 8000, tris: 14000, texels: 9_000_000, bytes: 9_000_000, normalTexels: 4_000_000, normalBytes: 4_000_000 });
 /** The texel and byte budget of an aeon or a boss (the driver's decision 153, 2026-10-20: a boss is one figure on the field, and its expressive keys carry a piece of every part of every pose): 12 Mpx and 12 MB; parts, bones, vertices and triangles unchanged. */
 export const BUDGET_BOSS = Object.freeze({ ...BUDGET, texels: 12_000_000, bytes: 12_000_000 });
 /** The budget a subject is held to: the party and the dresspheres keep 9 Mpx / 9 MB; an aeon, a dark aeon, a boss and a part of one get the boss budget. */
@@ -154,6 +154,8 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   over('tris', sz.tris, BUD.tris, 'triangles');
   over('texels', sz.texels, BUD.texels, 'texels');
   over('bytes', sz.bytes, BUD.bytes, 'bytes of PNG (variants included)');
+  over('normal-texels', sz.normalTexels ?? 0, BUD.normalTexels, 'texels of normal pieces (the HD-2D look, counted apart from the colour)');
+  over('normal-bytes', sz.normalBytes ?? 0, BUD.normalBytes, 'bytes of normal pieces');
   if (failures.some((f) => f.code.startsWith('rig-'))) return result;
   for (const v of variantRules(rt)) fail(v.code, v.message);
   // ---- the costume painting

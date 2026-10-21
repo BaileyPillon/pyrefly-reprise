@@ -121,11 +121,11 @@ def uses_v2(rig: dict) -> bool:
 
 
 def image_files(parts: list[dict]) -> list[str]:
-    """Every PNG and rim mask the parts name, variants included, once, in order."""
+    """Every PNG, rim mask and normal piece (`normal`, `rig_normals.py`) the parts name, variants included, once, in order."""
     out: list[str] = []
     for p in parts:
         for rec in [p, *(p.get("variants") or {}).values()]:
-            for f in (rec.get("png"), rec.get("rim")):
+            for f in (rec.get("png"), rec.get("rim"), rec.get("normal")):
                 if f and f not in out:
                     out.append(f)
     return out

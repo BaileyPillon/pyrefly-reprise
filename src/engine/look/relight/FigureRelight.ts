@@ -32,8 +32,8 @@ export const relightCells = {
 };
 
 let flat: DataTexture | null = null;
-/** A flat normal (straight at the viewer) for a material that has no map yet: the sampler is always bound. */
-function flatNormal(): DataTexture {
+/** A flat normal (straight at the viewer) for a material that has no map yet: the sampler is always bound. Shared with the rigged figures (`RigRelight.ts`). */
+export function flatNormal(): DataTexture {
   if (!flat) {
     flat = new DataTexture(new Uint8Array([128, 128, 255, 255]), 1, 1, RGBAFormat);
     flat.needsUpdate = true;
