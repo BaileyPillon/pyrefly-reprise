@@ -330,6 +330,8 @@ export class TitleScreen extends Screen {
     if (BTS_LIVE && !this.advancing && input.actions.includes(BTS_ACTION)) return void this.info?.open('bts');
     // The TITLE ART entry (release 61): a click or a tap on it, never the plate's confirm.
     if (!this.advancing && input.actions.includes(TITLE_ART_ACTION)) return void this.cycleArt();
+    // A pad's Y does what T does (release 61, decision 169: every demo action by pad; the hint row names it). Only from a pad: Shift, Tab and Q are `triangle` on a keyboard too.
+    if (!this.advancing && input.lastDevice === 'gamepad' && input.justPressed('triangle')) return void this.cycleArt();
     if (this.advancing) return;
     if (input.justPressed('confirm') || input.justPressed('start')) return void this.advance();
     if (input.actions.includes('confirm')) void this.advance();

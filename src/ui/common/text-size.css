@@ -83,7 +83,7 @@ html[data-text-size]:not([data-text-size='100']) .dbox__choice-prompt { font-siz
 html[data-text-size]:not([data-text-size='100']) .dbox__choice-row { font-size: calc(max(11px, 1.25vw) * var(--pyr-ts)); }
 html[data-text-size]:not([data-text-size='100']) .cutscene__eyebrow-label { font-size: calc(max(9px, 1.04vw) * var(--pyr-ts)); }
 html[data-text-size]:not([data-text-size='100']) .cutscene .chint,
-html[data-text-size]:not([data-text-size='100']) .chint--cutscene { font-size: calc(12px * var(--pyr-ts)); }
+html[data-text-size]:not([data-text-size='100']) .chint--cutscene { font-size: calc(max(12px, 0.78vw) * var(--pyr-ts)); }
 
 @media (max-width: 560px) {
   html[data-text-size]:not([data-text-size='100']) .dbox__speaker { font-size: calc(15px * var(--pyr-ts)); }

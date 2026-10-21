@@ -7,6 +7,7 @@
  */
 
 import { escapeHtml } from './html.ts';
+import { padGlyph } from './padGlyphs.ts';
 import { partyFaceHtml } from './partyFace.ts';
 import {
   formatNumber,
@@ -152,7 +153,8 @@ function membersHtml(m: ResultsPageModel): string {
 }
 
 function confirmHtml(): string {
-  return `<div class="rres__confirm" data-action="confirm"><span>CONFIRM ▸</span></div>`;
+  // A pad player sees the bottom face button before the word (release 61); a keyboard or mouse player sees what the page always said.
+  return `<div class="rres__confirm" data-action="confirm"><span><span class="kh-p">${padGlyph('cross')}</span>CONFIRM ▸</span></div>`;
 }
 
 function actionsHtml(actionIndex: number): string {

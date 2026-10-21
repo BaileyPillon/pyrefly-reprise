@@ -1,5 +1,6 @@
 import './enemy-intent-overflow.css';
 import { escapeHtml } from './html.ts';
+import { keyHint } from './padGlyphs.ts';
 
 /**
  * The enemy-intent panel's MORE affordance (round 09 PR-0010).
@@ -160,7 +161,7 @@ export class EnemyIntentOverflow {
    * `Infinity`), so the reported count answers "how much is hidden right
    * now, if you let go" even while the key is held.
    */
-  sync(bodyEl: HTMLElement, cap: number, overflowing: boolean, gamepad: boolean): void {
+  sync(bodyEl: HTMLElement, cap: number, overflowing: boolean, _gamepad: boolean): void {
     this.el.classList.toggle('eint__more--expanded', this.expanded);
     if (!overflowing) {
       this.el.hidden = true;
@@ -168,8 +169,8 @@ export class EnemyIntentOverflow {
     }
     this.el.hidden = false;
     const hidden = countHiddenRows(bodyEl, cap);
-    const key = gamepad ? OVERFLOW_PAD_LABEL : OVERFLOW_KEY_LABEL;
     const verb = this.expanded ? 'showing all' : `+${hidden} more`;
-    this.el.innerHTML = `<b>${escapeHtml(key)}</b><span> hold &middot; ${escapeHtml(verb)}</span>`;
+    // Both halves are in the chip: the key, and the left trigger drawn as the pad's own LT / L2 (`padGlyphs.keyHint`, shown by the player's last input; release 61). `_gamepad` is kept for the callers.
+    this.el.innerHTML = `<b>${keyHint(OVERFLOW_KEY_LABEL, OVERFLOW_PAD_LABEL)}</b><span> hold &middot; ${escapeHtml(verb)}</span>`;
   }
 }

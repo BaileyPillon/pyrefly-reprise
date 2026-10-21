@@ -1,3 +1,4 @@
+import { PAD } from '../../app/padMap.ts';
 import '../common/cmd-od-selected.css';
 import '../common/hud-floor.css';
 import './ffx-hud.css';
@@ -438,10 +439,11 @@ export class FFXBattleHud implements HudPort {
       // 2026-09-19: a change true of one game is not applied to the other.
       density: 'brief',
       // The pad's Triangle is Defend at the command menu (release 39: the original's input, named on the tab under the
-      // window, `defendControl.ts`), so the slab's pad toggle moves to Select, standard button 8: nothing in a fight
-      // reads it (`Input.ts` maps it to the music toggle of the demo scene only). FFX only: FFX-2's menu lists Defend as
-      // a row, Triangle is free there, and its chip keeps saying Triangle (it passes nothing).
-      padToggle: { index: 8, label: 'Select' },
+      // window, `defendControl.ts`), so the slab's pad toggle is not on Y. It was on Back / Select (button 8) until
+      // release 61: the conference booth resets the demo with Back + Start held (decision 169), and a Back press must not
+      // also flip a setting the next visitor inherits. It is the right stick's press now (button 11, R3; `app/padMap.ts`): the
+      // left trigger is the slab's own hold-for-more (`enemy-intent-overflow.ts`), the bumpers are the party swap, and nothing else in a fight reads R3. FFX only: FFX-2's menu lists Defend as a row, Y is free there, and its chip keeps saying Y (it passes nothing).
+      padToggle: { index: PAD.RS, label: 'R3' },
     });
     this.openingHold.start();
     this.layout();

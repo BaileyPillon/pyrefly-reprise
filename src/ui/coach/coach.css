@@ -396,3 +396,8 @@
     color: rgba(244, 241, 232, 0.86);
   }
 }
+
+/* Release 61: a pad player is not shown the key-only line (N, never show this again): no pad button reaches it. */
+html[data-input='gamepad'] [data-action='briefing:never'] {
+  display: none;
+}

@@ -8,6 +8,8 @@ import { GameFlow, flowReport, type RunChapterOptions } from './screens/BattleSc
 import type { BattleScreenResult } from './screens/BattleScreen.ts';
 import type { ChapterId } from '../data/encounters.ts';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
+import { installInputDevice } from './inputDevice.ts';
+import { demoModeOn } from './demoMode.ts';
 import { setCardPressAbsorber } from '../ui/coach/cardPress.ts'; // R61: the Back that closes a first-use card is not also the pause's
 
 export interface AppOptions {
@@ -69,6 +71,8 @@ export class App {
     this.maxDelta = opts.maxDeltaSec ?? 1 / 20; // every timer in the game counts this frame; the battle field's animation clock clamps it further (`battleFrameClocks`, PoseSwap.ts)
 
     this.renderer = new Renderer({ container: gameRoot, fov: 34 });
+    // Which input the player used last, for the key and pad-button hints (`inputDevice.ts`); a booth (`?demo=1`) starts on the pad's words.
+    installInputDevice({ assumePad: demoModeOn() });
     this.input = new Input({ pointerRoot: this.uiRoot });
     setCardPressAbsorber(() => this.input.claimKeyboard(() => undefined, { exclusive: true })()); // the same drop `raiseBriefing`'s guide host uses
     this.save = new SaveStore();

@@ -15,6 +15,7 @@
 import { BTS_KEY_LABEL, BTS_LIVE, BTS_TITLE } from '../../changelog/behindTheScenes.ts';
 import { RELEASE_NOTES, type ReleaseNote } from '../../changelog/releaseNotes.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
+import { keyHint } from '../../../ui/common/padGlyphs.ts';
 
 /** The `data-action` values the entries carry (`Input.onClick` resolves a tap to the closest one). */
 export const CHANGELOG_ACTION = 'title:changelog';
@@ -33,9 +34,16 @@ export const TITLE_ART_ACTION = 'title:art';
 export const TITLE_ART_KEY = 'KeyT';
 export const TITLE_ART_KEY_LABEL = 'T';
 export const TITLE_ART_LABEL = 'Title Art';
+/** The pad button that does the same (release 61, decision 169): Y (Triangle), which nothing on the title reads. `TitleScreen.handleInput` takes its press. */
+export const TITLE_ART_PAD = 'Triangle';
 
-function entryHtml(action: string, key: string, label: string): string {
-  return `<span class="fe-hint__entry" data-action="${action}" role="button" tabindex="0"><b>${key}</b> ${escapeHtml(label)}</span>`;
+/**
+ * One entry of the hint row. `pad` is the pad button that does the same (a `padGlyphs` token such as `'Triangle'`): the entry then shows it, instead of its key, while the player's last
+ * press was a pad. An entry with no pad button is hidden for a pad player (`frontend.css`): a key and a click are the only ways to it.
+ */
+function entryHtml(action: string, key: string, label: string, pad?: string): string {
+  const face = pad ? keyHint(key, pad) : key;
+  return `<span class="fe-hint__entry" data-action="${action}" role="button" tabindex="0"${pad ? ' data-has-pad' : ''}><b>${face}</b> ${escapeHtml(label)}</span>`;
 }
 
 /** The BEHIND THE SCENES entry on its own: what `BTS_LIVE` adds to the row. Nothing in the build draws it while the switch is off. */
@@ -50,7 +58,7 @@ export function changelogEntryHtml(): string {
 
 /** The TITLE ART entry, in the hint row's own style, after CHANGELOG (release 61; both games: the title is the front door of FFX and FFX-2 alike). */
 export function titleArtEntryHtml(): string {
-  return entryHtml(TITLE_ART_ACTION, TITLE_ART_KEY_LABEL, TITLE_ART_LABEL);
+  return entryHtml(TITLE_ART_ACTION, TITLE_ART_KEY_LABEL, TITLE_ART_LABEL, TITLE_ART_PAD);
 }
 
 /** The entries that go after the briefing chip in the hint row: a hairline, CHANGELOG, TITLE ART, and BEHIND THE SCENES only while its switch is on. */

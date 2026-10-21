@@ -49,6 +49,7 @@
 import './coach.css';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { escapeHtml } from '../common/html.ts';
+import { keyHint } from '../common/padGlyphs.ts';
 import { RawInputWatcher } from '../ffx/rawInput.ts';
 import { BRIEFING_MS, BRIEFING_SPEAKER, briefingLines } from './coachCopy.ts';
 import { ffx2CoachClock, markSeen, setBattleHelp } from './coachState.ts';
@@ -165,7 +166,7 @@ export class Briefing {
       </div>
       <div class="coach-brief__timer"><i data-role="coach-brief-fill"></i></div>
       <div class="coach-brief__foot">
-        <span data-action="briefing:skip" role="button" tabindex="0"><b class="coach-brief__key">Enter / Esc</b><b class="coach-brief__tap">Tap</b> Skip &mdash; ${seconds} seconds, once</span>
+        <span data-action="briefing:skip" role="button" tabindex="0"><b class="coach-brief__key">${keyHint('Enter / Esc', 'Cross')}</b><b class="coach-brief__tap">Tap</b> Skip &mdash; ${seconds} seconds, once</span>
         <span data-action="briefing:never" role="button" tabindex="0"><b class="coach-brief__key">${NEVER_KEY_LABEL}</b><b class="coach-brief__tap">Tap here</b> Never show this again</span>
       </div>
     `;

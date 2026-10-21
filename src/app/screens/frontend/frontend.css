@@ -455,6 +455,13 @@
 .fe-hint span {
   white-space: nowrap;
 }
+/* Release 61: on a pad the row names the pad's buttons (the chips above carry both halves, `ui/common/padGlyphs.ts`). The entries after them
+ * (B Briefing, L Changelog, T Behind the Scenes) are keys and clicks with no pad button, so a pad player is not shown them. */
+html[data-input='gamepad'] .fe-hint__entry:not([data-has-pad]),
+html[data-input='gamepad'] .fe-hint__sep,
+html[data-input='gamepad'] .fe-hint [data-action='title:briefing'] {
+  display: none;
+}
 /* FE-002: same swap as the chip — the title's own hint row named three keys
  * and nothing a touch player has. */
 .fe-hint__tap {

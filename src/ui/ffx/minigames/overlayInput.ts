@@ -1,4 +1,7 @@
 import { isCoarsePointer } from '../../common/ControlsHint.ts';
+import { padActive } from '../../../app/inputDevice.ts';
+import { padGlyph, padLabel } from '../../common/padGlyphs.ts';
+import type { PadToken } from '../../../app/padMap.ts';
 import { lastPlayerDevice, type PlayerDevice, type UiButton } from '../rawInput.ts';
 
 /**
@@ -48,7 +51,7 @@ export function guessDevice(): DeviceState {
   const seen = lastPlayerDevice();
   if (seen) return { device: seen.device, pointerKind: seen.pointerKind || 'mouse' };
   if (isCoarsePointer()) return { device: 'pointer', pointerKind: 'touch' };
-  return { device: padConnected() ? 'gamepad' : 'keyboard', pointerKind: 'mouse' };
+  return { device: padConnected() || padActive() ? 'gamepad' : 'keyboard', pointerKind: 'mouse' };
 }
 
 /** Follows the input in use and says when the words must change. */
@@ -155,9 +158,20 @@ export function chipFace(token: string, d: DeviceState): ChipFace {
   return { main: cap, sub: isArrow ? '' : glyph, aria: isArrow ? name : `${name}, key ${cap}` };
 }
 
-/** The word for the control a press is made with, as `TriggerHappy.keyWord` has it: KEY, CLICK, TAP, button. */
+/**
+ * The drawn button a pad player presses for `token` (an A disc, an LB plate; `ui/common/padGlyphs.ts`), or null when the chip is not a pad button (the arrows) or the
+ * device is not the pad. Release 61: the chips used to print the PlayStation symbols as text whatever the pad in hand.
+ */
+export function chipGlyph(token: string, d: DeviceState): string | null {
+  if (d.device !== 'gamepad') return null;
+  const names: Readonly<Record<string, PadToken>> = { confirm: 'cross', cancel: 'circle', triangle: 'triangle', square: 'square', l1: 'l1', r1: 'r1' };
+  const name = names[token];
+  return name ? padGlyph(name) : null;
+}
+
+/** The word for the control a press is made with, as `TriggerHappy.keyWord` has it: KEY, CLICK, TAP, button (the A on an Xbox pad, the cross on a PlayStation one). */
 export function pressWord(d: DeviceState): string {
-  if (d.device === 'gamepad') return 'cross';
+  if (d.device === 'gamepad') return padLabel('cross').toLowerCase();
   if (d.device === 'pointer') return d.pointerKind === 'mouse' ? 'click' : 'tap';
   return 'enter';
 }

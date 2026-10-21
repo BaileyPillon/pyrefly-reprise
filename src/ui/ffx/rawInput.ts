@@ -9,6 +9,9 @@
  * Every menu and minigame overlay in `src/ui/ffx/` uses this one watcher so
  * keyboard, gamepad and mouse all reach the same handler.
  */
+import { noteInputDevice, resetInputDeviceForTests } from '../../app/inputDevice.ts';
+import { PAD, PAD_REPEAT_DELAY_MS, PAD_REPEAT_INTERVAL_MS, stickDirection, type PadDirection } from '../../app/padMap.ts';
+
 export type UiButton = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'cancel' | 'triangle' | 'square' | 'l1' | 'r1';
 
 /** Where a press came from: the keyboard is evented, the pad is polled. */
@@ -44,22 +47,22 @@ const KEY_MAP: Record<string, UiButton> = {
   PageDown: 'r1',
 };
 
+/** The pad, as the HUD's menus read it (the same standard-mapping numbers as `app/Input.ts`, from `app/padMap.ts`; X is the one extra: Bushido's Square). */
 const PAD_BUTTON_MAP: Record<number, UiButton> = {
-  0: 'confirm',
-  1: 'cancel',
-  2: 'square',
-  3: 'triangle',
-  4: 'l1',
-  5: 'r1',
-  12: 'up',
-  13: 'down',
-  14: 'left',
-  15: 'right',
+  [PAD.A]: 'confirm',
+  [PAD.B]: 'cancel',
+  [PAD.X]: 'square',
+  [PAD.Y]: 'triangle',
+  [PAD.LB]: 'l1',
+  [PAD.RB]: 'r1',
+  [PAD.UP]: 'up',
+  [PAD.DOWN]: 'down',
+  [PAD.LEFT]: 'left',
+  [PAD.RIGHT]: 'right',
 };
 
-const AXIS_DEADZONE = 0.5;
-const REPEAT_DELAY_MS = 320;
-const REPEAT_INTERVAL_MS = 120;
+const REPEAT_DELAY_MS = PAD_REPEAT_DELAY_MS;
+const REPEAT_INTERVAL_MS = PAD_REPEAT_INTERVAL_MS;
 const DIRECTIONS = new Set<UiButton>(['up', 'down', 'left', 'right']);
 
 /**
@@ -142,6 +145,7 @@ export function lastPlayerDevice(): SeenDevice | null {
 /** Forget it (a unit test, or a fresh page). */
 export function forgetPlayerDevice(): void {
   seenDevice = null;
+  resetInputDeviceForTests(); // the page-wide fact (`app/inputDevice.ts`) goes back to a fresh page's too
 }
 
 /** One capture listener for the whole page, added by the first watcher that attaches. */
@@ -217,6 +221,8 @@ export class RawInputWatcher {
   private attached = false;
   private rafId = 0;
   private readonly padHeld = new Set<UiButton>();
+  /** The direction each pad's left stick is holding, with `padMap.stickDirection`'s hysteresis: the same stick feel as `app/Input.ts`. */
+  private readonly stickHeld = new Map<number, PadDirection | null>();
   private readonly repeatAt = new Map<UiButton, number>();
   private readonly ignoreSuspend: boolean;
   private readonly keyboard: boolean;
@@ -262,6 +268,7 @@ export class RawInputWatcher {
     cancelAnimationFrame(this.rafId);
     this.padHeld.clear();
     this.repeatAt.clear();
+    this.stickHeld.clear();
   }
 
   private readonly onKeyDown = (e: KeyboardEvent): void => {
@@ -283,15 +290,21 @@ export class RawInputWatcher {
     if (this.muted) return;
     const pads = navigator.getGamepads?.() ?? [];
     const next = new Set<UiButton>();
+    let padId: string | undefined;
     for (const pad of pads) {
       if (!pad) continue;
       for (const [indexStr, button] of Object.entries(PAD_BUTTON_MAP)) {
-        if (pad.buttons[Number(indexStr)]?.pressed) next.add(button);
+        if (pad.buttons[Number(indexStr)]?.pressed) {
+          next.add(button);
+          padId = pad.id;
+        }
       }
-      const x = pad.axes[0] ?? 0;
-      const y = pad.axes[1] ?? 0;
-      if (Math.abs(x) > AXIS_DEADZONE) next.add(x < 0 ? 'left' : 'right');
-      if (Math.abs(y) > AXIS_DEADZONE) next.add(y < 0 ? 'up' : 'down');
+      const dir = stickDirection(pad.axes[0] ?? 0, pad.axes[1] ?? 0, this.stickHeld.get(pad.index) ?? null);
+      this.stickHeld.set(pad.index, dir);
+      if (dir) {
+        next.add(dir);
+        padId = pad.id;
+      }
     }
 
     for (const button of padClaims) if (!next.has(button)) padClaims.delete(button); // let go: the claim ends with the press
@@ -301,6 +314,7 @@ export class RawInputWatcher {
       if (!this.hearsPad(button)) continue;
       if (!wasHeld) {
         noteDevice('gamepad');
+        noteInputDevice('gamepad', padId);
         this.onButton(button, 'gamepad');
         this.repeatAt.set(button, now + REPEAT_DELAY_MS);
       } else if (DIRECTIONS.has(button) && !this.edgeOnly) {

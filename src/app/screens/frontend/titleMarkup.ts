@@ -34,6 +34,7 @@ import { artUrl } from '../../../engine/PaintedArt.ts';
 import { artManifest, loadArtManifest, title2xUrlFor } from '../../../engine/ArtManifest.ts';
 import { logicalArtUrl } from '../../../engine/ArtShipped.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
+import { keyHint } from '../../../ui/common/padGlyphs.ts';
 import { movedNoticeHtml } from './movedNotice.ts';
 import { TITLE_ART_PLATES, type TitleArt } from '../../saveFrontend.ts';
 import { buildTagHtml, type BuildInfo } from '../../changelog/buildInfo.ts';
@@ -202,7 +203,7 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
       ${wordmark}
       <div class="fe-title__rule"></div>
       <span class="fe-title__chip" data-action="confirm" role="button" tabindex="0"><i></i
-        ><span class="fe-title__chip-label fe-title__chip-label--key">Press Enter</span
+        ><span class="fe-title__chip-label fe-title__chip-label--key">Press ${keyHint('Enter', 'Cross')}</span
         ><span class="fe-title__chip-label fe-title__chip-label--tap">Tap to begin</span></span>
     </div>
 
@@ -210,7 +211,7 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
     <div class="fe-title__strap">Final Fantasy X and X-2</div>
 
     <div class="fe-hint">
-      <span class="fe-hint__key"><b>Arrows / WASD</b> move</span><span class="fe-hint__key"><b>Enter</b> confirm</span><span class="fe-hint__key"><b>Esc</b> cancel</span><span class="fe-hint__tap"><b>Tap</b> begin</span>${briefing}${infoEntriesHtml()}
+      <span class="fe-hint__key"><b>${keyHint('Arrows / WASD', 'D-pad')}</b> move</span><span class="fe-hint__key"><b>${keyHint('Enter', 'Cross')}</b> confirm</span><span class="fe-hint__key"><b>${keyHint('Esc', 'Circle')}</b> cancel</span><span class="fe-hint__tap"><b>Tap</b> begin</span>${briefing}${infoEntriesHtml()}
     </div>
     ${buildTagHtml(opts.build)}
     </div>

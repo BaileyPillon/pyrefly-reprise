@@ -3,7 +3,7 @@ import { type BushidoFrame, Pad, bushidoFrame, bushidoStart } from '../../../bat
 import { RawInputWatcher } from '../rawInput.ts';
 import { FrameDriver } from './frameDriver.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
-import { DeviceTracker, chipFace, markTappable, sequenceInstruction } from './overlayInput.ts';
+import { DeviceTracker, chipFace, chipGlyph, markTappable, sequenceInstruction } from './overlayInput.ts';
 import { arr, escapeHtml, num, str } from './params.ts';
 
 /** How long the missed chip keeps the wrong colour after a reset (the overlay's own 240 ms flash length). */
@@ -81,10 +81,11 @@ export function openAuronSequence(root: HTMLElement, params: Record<string, unkn
         if (wrongIndex !== null && i === wrongIndex) cls.push('ffx-mg-key--wrong');
         else if (i < state.index) cls.push('ig-minigame__key--done');
         const face = chipFace(token, device.current);
+        const glyph = chipGlyph(token, device.current);
         const sub = face.sub ? `<i class="ffx-mg-key__sub">${escapeHtml(face.sub)}</i>` : '';
         return (
           `<div class="${cls.join(' ')}" data-chip="${i}" data-btn="${escapeHtml(token)}" role="button" aria-label="${escapeHtml(face.aria)}">` +
-          `<b class="ffx-mg-key__main">${escapeHtml(face.main)}</b>${sub}</div>`
+          `<b class="ffx-mg-key__main">${glyph ?? escapeHtml(face.main)}</b>${sub}</div>`
         );
       })
       .join('');

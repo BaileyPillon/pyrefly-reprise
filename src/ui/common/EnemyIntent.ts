@@ -3,6 +3,7 @@ import type { CombatantId, GameId } from '../../battle/common/types.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { INTENT_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
+import { keyHint } from './padGlyphs.ts';
 import { EnemyIntentOverflow } from './enemy-intent-overflow.ts';
 import { briefStatusChip } from './enemy-intent-brief-status.ts';
 import { anyLethalRow, damageHtml } from './enemy-intent-damage.ts';
@@ -398,9 +399,8 @@ export class EnemyIntentPanel {
   private applyVisible(): void {
     this.panelEl.hidden = !this.visible;
     this.el.classList.toggle('eint--off', !this.visible);
-    const keys = this.padConnected() ? this.padToggle.label : INTENT_HINT_ITEM.keyboard;
     this.toggleEl.innerHTML =
-      `<b>${escapeHtml(keys)}</b><span>${escapeHtml(this.visible ? 'hide' : 'enemy move')}</span>`;
+      `<b>${keyHint(INTENT_HINT_ITEM.keyboard, this.padToggle.label)}</b><span>${escapeHtml(this.visible ? 'hide' : 'enemy move')}</span>`;
     this.toggleEl.setAttribute('aria-pressed', String(this.visible));
     this.toggleEl.title = this.visible ? 'Hide the enemy move read-out' : 'Show the enemy move read-out';
   }

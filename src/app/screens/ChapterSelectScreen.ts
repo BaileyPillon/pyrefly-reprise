@@ -33,8 +33,8 @@ export interface ChapterSelectScreenOptions {
  * so, which is what made it read as a dead click.
  */
 const HINTS = [
-  { keyboard: 'Left/Right', gamepad: 'D-pad', pointer: 'Click a card', label: 'choose' },
-  { keyboard: 'Up/Down', gamepad: 'D-pad', label: 'game' },
+  { keyboard: 'Left/Right', gamepad: 'dpad-h', pointer: 'Click a card', label: 'choose' },
+  { keyboard: 'Up/Down', gamepad: 'dpad-v', label: 'game' },
   { keyboard: 'Enter', gamepad: 'Cross', pointer: 'Click the plate', label: 'begin', action: 'confirm' },
   { keyboard: 'Esc', gamepad: 'Circle', pointer: 'Esc', label: 'back', action: 'cancel' },
 ];
