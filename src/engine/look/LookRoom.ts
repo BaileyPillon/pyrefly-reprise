@@ -107,16 +107,16 @@ export class LookRoom {
   }
 
   /** The room's light on the painting, projected through the camera to the frame (uv, 0 bottom-left). */
-  projectLight(camera: Camera, out: Vector2): void {
+  projectLight(camera: Camera, out: Vector2, at: { u: number; v: number } = this.light): void {
     const mesh = this.painting;
     const geo = mesh?.geometry as PlaneGeometry | undefined;
     const W = geo?.parameters?.width ?? 0;
     const H = geo?.parameters?.height ?? 0;
     if (mesh && W > 0) {
       mesh.updateWorldMatrix(true, false);
-      this.tmp.set((this.light.u - 0.5) * W, (0.5 - this.light.v) * H, 0).applyMatrix4(mesh.matrixWorld).project(camera);
+      this.tmp.set((at.u - 0.5) * W, (0.5 - at.v) * H, 0).applyMatrix4(mesh.matrixWorld).project(camera);
       out.set(this.tmp.x * 0.5 + 0.5, this.tmp.y * 0.5 + 0.5);
-    } else out.set(this.light.u, 1 - this.light.v);
+    } else out.set(at.u, 1 - at.v);
   }
 
   dispose(): void {

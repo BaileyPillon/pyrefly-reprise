@@ -27,6 +27,8 @@ import { relightCells, relightStats } from './relight/FigureRelight.ts';
 import { keyDirection, rimDirection } from './relight/RelightConfig.ts';
 import { RelightLights } from './relight/RelightLights.ts';
 import { lookState } from './LookState.ts';
+import { LookStage } from './stage/LookStage.ts';
+import { stageWind } from './stage/StageWind.ts';
 
 export { lookWanted } from './LookState.ts';
 
@@ -42,6 +44,8 @@ export class LookRig {
   /** Bold strength (`?lookstrength=bold`): the extra pass; built the first time it is wanted. */
   private bold: LookBold | null = null;
   private readonly drift = new LookDrift();
+  /** Release 61: the depth stage (the room's wind and the moon's glitter on the ice), inside the bold look; Chapter I's Gagazet only (`stage/StageConfig.ts`). */
+  private readonly stage = new LookStage();
   private version = -1;
   private quality: LookQuality = lookState.quality;
   private prevSub: string[] = [];
@@ -52,7 +56,7 @@ export class LookRig {
   private lastNow = 0;
   private readonly buf = new Vector2();
   /** For the debug API and the captures. */
-  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> }, strength: 'subtle' as string, bold: null as LookBold['stats'] | null, drift: null as LookDrift['stats'] | null };
+  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> }, strength: 'subtle' as string, bold: null as LookBold['stats'] | null, drift: null as LookDrift['stats'] | null, stage: null as LookStage['stats'] | null };
 
   constructor(private readonly r: Renderer) {}
 
@@ -143,6 +147,8 @@ export class LookRig {
     const p = lookParams(name, lookState.strength);
     if (QUALITY_COST[lookState.quality].blurTaps > 0 && (p.blur.far > 0 || p.blur.near > 0)) this.blurPasses();
     if (lookState.strength === 'bold' && name !== 'anime') (this.bold ??= new LookBold(this.r)).prepare(lookState.quality);
+    const info = boundEyeCandyScene();
+    if (info && this.stage.wanted(name, lookState.strength, info.key, lookState.tweaks)) this.stage.prepare(info.scene, info.key); // the glitter's program compiles with the diorama's, behind the battle-start card
   }
 
   // ----------------------------------------------------------------- per frame
@@ -154,6 +160,7 @@ export class LookRig {
     const onBattle = wantName !== null && info !== null && info.scene === scene;
     if (!onBattle) {
       if (this.active) this.deactivate();
+      this.stage.off(); // a stage prepared for a look that was switched off before its first frame (CLASSIC)
       this.lastNow = 0;
       return;
     }
@@ -274,9 +281,13 @@ export class LookRig {
     u['aspect']!.value = W / Math.max(1, H);
     u['debugMask']!.value = lookState.debug === 'mask' ? 1 : 0;
     this.room.projectLight(camera, u['uLight']!.value as Vector2);
+    const moon = this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks) ? this.stage.moonLight(this.room.key) : null; // release 61: the shafts start at the painted moon, faint
+    u['shaftCont']!.value = moon ? 1 : 0;
+    if (moon) this.room.projectLight(camera, u['shaftL']!.value as Vector2, moon);
+    else (u['shaftL']!.value as Vector2).copy(u['uLight']!.value as Vector2);
     const lc = lin(lightColour(this.room.light.color));
     (u['lightColor']!.value as Vector3).set(...lc);
-    (u['shaft']!.value as Vector3).set(v('shaft.gain'), v('shaft.reach'), v('shaft.threshold'));
+    (u['shaft']!.value as Vector3).set(v('shaft.gain') * stageWind.shaft * (moon ? (lookState.tweaks['stage.shaft'] ?? 0.075) : 1), v('shaft.reach'), v('shaft.threshold')); // the depth stage's gusts brighten the moon's shafts (1 with the stage off)
     u['shaftDecay']!.value = p.shaft.decay;
     u['shaftRays']!.value = v('shaft.rays');
     u['shaftFreq']!.value = p.shaft.freq ?? 6;
@@ -303,9 +314,11 @@ export class LookRig {
     } else this.bold?.off();
     if (lookState.drift) this.drift.update(this.room.scene!, camera, this.room.painting, roomBold(this.room.key).driftPx ?? 3, dt, W, scale, lookState.commandOpen);
     else this.drift.release();
+    if (this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks)) this.stage.update({ scene: this.room.scene!, room: this.room, quality: lookState.quality, time: eyeCandy.frozen ? 0.5 : this.clock, tweak: (k, d) => lookState.tweaks[k] ?? d });
+    else this.stage.off();
     this.stats.strength = bold ? 'bold' : 'subtle';
     this.stats.bold = bold ? (this.bold?.stats ?? null) : null;
-    this.stats.drift = lookState.drift ? this.drift.stats : null;
+    this.stats.drift = lookState.drift ? this.drift.stats : null; this.stats.stage = this.stage.stats.on ? this.stage.stats : null;
     this.stats.look = name;
     this.stats.quality = lookState.quality;
     this.stats.relight = { any: relightCells.relightAny.value > 0, bound: relightStats.bound, loaded: relightStats.loaded, missing: relightStats.missing, lights: this.lights.stats.lights };
@@ -345,6 +358,7 @@ export class LookRig {
     this.lights.remove();
     this.bold?.off();
     this.drift.release();
+    this.stage.off();
     for (const mp of this.main.values()) mp.enabled = false;
     if (this.blurH && this.blurV) this.blurH.enabled = this.blurV.enabled = false;
     this.restorePolicy();
@@ -378,6 +392,7 @@ export class LookRig {
       b.dispose();
     }
     this.bold?.dispose();
+    this.stage.dispose();
     this.room.dispose();
     this.main.clear();
   }

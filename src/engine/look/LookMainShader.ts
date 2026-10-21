@@ -27,6 +27,10 @@ export const LookMainShader = {
     aspect: { value: 16 / 9 },
     // --- the room's light (uv, 0..1 from the bottom-left of the frame) and its colour
     uLight: { value: new Vector2(0.5, 0.9) },
+    /** Where the shafts start (frame uv): the room's light, unless a room names another (release 61: Mt. Gagazet's moon, with the depth stage). */
+    shaftL: { value: new Vector2(0.5, 0.9) },
+    /** 1: the beams' noise runs on the direction itself, with no cut where the angle wraps (needed when the source is inside the frame: Gagazet's moon, release 61); 0: release 60's. */
+    shaftCont: { value: 0 },
     lightColor: { value: new Vector3(1, 0.9, 0.7) },
     /** hd2d shafts: gain, reach (0..1 of the way to the light), threshold. */
     shaft: { value: new Vector3(0.5, 0.9, 0.5) },
@@ -76,6 +80,8 @@ export const LookMainShader = {
     uniform float pxScale;
     uniform float aspect;
     uniform vec2 uLight;
+    uniform vec2 shaftL;
+    uniform float shaftCont;
     uniform vec3 lightColor;
     uniform vec3 shaft;
     uniform float shaftDecay;
@@ -168,7 +174,7 @@ export const LookMainShader = {
 
       #if defined(LOOK_HD2D) || defined(LOOK_CINE)
       {
-        vec2 toL = uLight - uv;
+        vec2 toL = shaftL - uv;
         vec2 toLa = toL * vec2(aspect, 1.0);
         float dist = length(toLa);
         // light shafts: march from this pixel toward the light, gathering light from the bright backdrop pixels on the way (a figure blocks it)
@@ -187,7 +193,10 @@ export const LookMainShader = {
         }
         acc /= float(SHAFT_SAMPLES) * 0.28;
         vec2 dirL = toLa / max(dist, 1e-4);
-        float beams = mix(1.0, 0.25 + 1.5 * vnoise(vec2(atan(dirL.y, dirL.x) * shaftFreq + time * 0.04, 3.7) * 0.9 + dirL * 3.0), shaftRays);
+        // the beams: noise over the direction to the light. Release 60's runs on the angle, which jumps where it wraps (a straight seam through the source: out of the frame for a source below it,
+        // in it for the moon); with shaftCont the same noise runs on the unit direction, which has no seam
+        vec2 bn = shaftCont > 0.5 ? dirL * (shaftFreq * 0.9 + 3.0) + vec2(time * 0.04 * 0.9, 3.7 * 0.9) : vec2(atan(dirL.y, dirL.x) * shaftFreq + time * 0.04, 3.7) * 0.9 + dirL * 3.0;
+        float beams = mix(1.0, 0.25 + 1.5 * vnoise(bn), shaftRays);
         float atSrc = 1.0 - smoothstep(0.02, 0.1, dist);
         float reach = 1.0 - smoothstep(0.35, 1.25, dist);
         vec3 sh = acc * lightColor * shaft.x * beams * reach * (0.4 + 0.6 * (1.0 - atSrc));

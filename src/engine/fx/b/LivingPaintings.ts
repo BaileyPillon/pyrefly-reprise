@@ -17,6 +17,7 @@ import { roomPlays } from './ambient/room.ts';
 import type { RoomSpec } from './ambient/room.ts';
 import { bindMaxMix, releaseMaxMix, updateMaxMix } from '../mix/MaxMix.ts'; // the MAX mix (D-316), every FFX and FFX-2 battle
 import { menuCalm } from '../mix/menuCalm.ts';
+import { stageWind } from '../../look/stage/StageWind.ts'; // release 61: the depth stage's wind (1 and 1 unless the HD-2D bold look runs a room that has a recipe)
 
 /**
  * Option B "Living Paintings" (eye-candy options round, 2026-09-29): the paintings breathe in 3D.
@@ -229,16 +230,18 @@ class Living {
 
     // REDUCE MOTION keeps the room's weather on screen, held still (D, 2026-09-29: "keep light and
     // weather still"); the drift, the sway, the arcs' crackle and the lightning flash stop.
-    if (!rm) this.weatherT += dt;
+    if (!rm) this.weatherT += dt * stageWind.speed;
     const weather = eyeCandy.dial('weather');
     for (const f of this.fields) {
       f.mesh.visible = weather > 0;
-      f.update(this.weatherT, weather);
+      f.setDensity(stageWind.density); // the stage's quality tier keeps this share of the flakes and streaks (1 = all)
+      f.update(this.weatherT, f.spec.shape === 'streak' ? weather * stageWind.thicken : weather); // a gust thickens the wind streaks (stage wind; 1 = as authored)
     }
-    for (const h of this.haze) {
-      h.mesh.visible = weather > 0;
-      h.update(this.weatherT, weather);
-    }
+    const keepHaze = Math.max(1, Math.ceil(this.haze.length * stageWind.density)); // the quality tier drops the far sheets first and keeps the ones at the fighters' feet
+    this.haze.forEach((h, i) => {
+      h.mesh.visible = weather > 0 && i >= this.haze.length - keepHaze;
+      h.update(this.weatherT, weather * (this.room.haze[i]!.y <= 1.5 ? stageWind.thicken : 1)); // ... and the mist at the ground (the far veils over the moon and the ridges stay as painted)
+    });
     const lampGain = eyeCandy.dial('lamps');
     const flicker = rm ? 0 : low ? 0.5 : 1;
     // Reduce motion: the halos stay, but the clock under the flicker and caustics stops.
