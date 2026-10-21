@@ -352,7 +352,9 @@ describe('the cross-fade', () => {
 describe('the entry in the hint row', () => {
   it('is "T Title Art" in the hint row\'s own style, after CHANGELOG, in the same markup shape (a hint-row entry, a button, its own action)', () => {
     const html = titleArtEntryHtml();
-    expect(html).toBe(`<span class="fe-hint__entry" data-action="title:art" role="button" tabindex="0"><b>T</b> Title Art</span>`);
+    // the key, and (release 61, decision 169) the pad's Y beside it, shown by html[data-input]: both halves in the one <b>
+    expect(html.startsWith('<span class="fe-hint__entry" data-action="title:art" role="button" tabindex="0" data-has-pad><b><span class="kh-k">T</span><span class="kh-p"><kbd class="pg" data-pg="triangle"')).toBe(true);
+    expect(html.endsWith('</b> Title Art</span>')).toBe(true);
     expect(infoEntriesHtml().indexOf('title:changelog')).toBeLessThan(infoEntriesHtml().indexOf('title:art'));
     const row = document.createElement('div');
     row.innerHTML = infoEntriesHtml();

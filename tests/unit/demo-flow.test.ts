@@ -135,7 +135,8 @@ describe('the results hint strip', () => {
     expect(root.querySelector('.chint')!.textContent).toContain('Enter');
     expect(root.querySelector('.chint')!.textContent).toContain('continue');
     hint.handleInput({ lastDevice: 'gamepad' } as never);
-    expect(root.querySelector('.chint')!.textContent).toContain('Cross');
+    expect(root.querySelector('.chint .pg[data-pg="cross"]')).not.toBeNull(); // the bottom face button, drawn (A on an Xbox pad)
+    expect(root.querySelector('.chint')!.textContent).toContain('continue');
     hint.unmount();
     expect(root.querySelector('.chint')).toBeNull();
   });

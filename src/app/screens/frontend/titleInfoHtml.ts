@@ -43,7 +43,7 @@ export const TITLE_ART_PAD = 'Triangle';
  */
 function entryHtml(action: string, key: string, label: string, pad?: string): string {
   const face = pad ? keyHint(key, pad) : key;
-  return `<span class="fe-hint__entry"${pad ? ' data-has-pad' : ''} data-action="${action}" role="button" tabindex="0"><b>${face}</b> ${escapeHtml(label)}</span>`;
+  return `<span class="fe-hint__entry" data-action="${action}" role="button" tabindex="0"${pad ? ' data-has-pad' : ''}><b>${face}</b> ${escapeHtml(label)}</span>`;
 }
 
 /** The BEHIND THE SCENES entry on its own: what `BTS_LIVE` adds to the row. Nothing in the build draws it while the switch is off. */
