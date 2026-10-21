@@ -200,6 +200,12 @@ export function patchToonShader(shader: ShaderLike, uniforms: Record<string, IUn
   };
   swap('#include <lights_toon_pars_fragment>', TOON_PARS);
   swap('#include <lights_toon_fragment>', TOON_FRAG);
+  // the whole lit colour, the emissive flash and the cast rim included, stays under the ceiling: a hit's white added to a white dress used to push it past the bloom's threshold and the game's whole-colour bloom
+  // turned the girl into a glowing blob (the first polish-1 capture, the Blast's hit)
+  const OUT = 'vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + totalEmissiveRadiance;';
+  if (!f.includes(OUT)) problems.push('outgoingLight line of meshtoon_frag not found');
+  else f = f.replace(OUT, () => `${OUT}
+	outgoingLight = min( outgoingLight, vec3( uToonCeil ) );`);
   const begin = patchLightsBegin(ShaderChunk['lights_fragment_begin']);
   if (!begin) problems.push('directional shadow line of lights_fragment_begin not found');
   else swap('#include <lights_fragment_begin>', begin);

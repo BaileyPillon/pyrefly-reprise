@@ -34,6 +34,7 @@ describe('the fragment patch against three\'s own chunks', () => {
     const r = patchToonShader(shader, u);
     expect(r).toEqual({ ok: true, problems: [] });
     expect(shader.fragmentShader).toContain('RE_Direct_Toon');
+    expect(shader.fragmentShader, 'the whole outgoing colour, flash and rim included, is held at the ceiling').toContain('outgoingLight = min( outgoingLight, vec3( uToonCeil ) );');
     expect(shader.fragmentShader).toContain('gToonShadow = ( directLight.visible && receiveShadow ) ? toonShadowBand( getShadow(');
     expect(shader.fragmentShader).not.toContain('#include <lights_toon_pars_fragment>');
     expect(Object.keys(shader.uniforms).sort()).toEqual(Object.keys(u).sort());
