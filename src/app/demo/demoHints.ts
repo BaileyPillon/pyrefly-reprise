@@ -21,6 +21,7 @@ export const DEMO_RESULTS_LOSS_HINTS: ControlHintItem[] = [
 export function mountDemoResultsHint(root: HTMLElement, victory: boolean): ControlsHint | null {
   if (!demoModeOn()) return null;
   const hint = new ControlsHint({ root, items: victory ? DEMO_RESULTS_WIN_HINTS : DEMO_RESULTS_LOSS_HINTS });
+  hint.el.classList.add('chint--demo'); // the strip's own sizes are device pixels (12 px type): `demo.css` scales it to the window, as the picker's is
   hint.mount();
   return hint;
 }

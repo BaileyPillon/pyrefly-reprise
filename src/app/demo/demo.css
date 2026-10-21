@@ -106,6 +106,17 @@
   display: none;
 }
 
+/* ------------------------------------------------------------------ the results panel's strip */
+
+/* `ControlsHint` sizes itself in device pixels (12 px type) for screens with a fixed layout; the results panel is a scaled stage, so on a 1440p booth monitor it needs the window's own scale */
+.chint--demo {
+  font-size: max(14px, 1.3vmin);
+  gap: 1.4vmin;
+  padding: 0.8vmin 1.8vmin;
+  bottom: 2.4vmin;
+  border-left-width: 0.3vmin;
+}
+
 /* ------------------------------------------------------------------ the attract loop */
 
 .demo-attract {

@@ -131,6 +131,7 @@ describe('the results hint strip', () => {
     expect(root.querySelector('.chint')).toBeNull();
     setDemoMode(true);
     const hint = mountDemoResultsHint(root, true)!;
+    expect(root.querySelector('.chint--demo')).not.toBeNull(); // scaled to the window by demo.css
     expect(root.querySelector('.chint')!.textContent).toContain('Enter');
     expect(root.querySelector('.chint')!.textContent).toContain('continue');
     hint.handleInput({ lastDevice: 'gamepad' } as never);
