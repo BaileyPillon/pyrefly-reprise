@@ -4,10 +4,10 @@ import { Screen } from '../Screen.ts';
 import { BUTTONS, type InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { ChapterId } from '../../data/encounters.ts';
-import { ControlsHint, isCoarsePointer } from '../../ui/common/ControlsHint.ts';
+import { ControlsHint, isCoarsePointer, type ControlHintItem } from '../../ui/common/ControlsHint.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
-import { buildChapterTiles, groupChapterTiles, stepGroup, stepSelection, type ChapterTile } from './frontend/chapterGrid.ts';
+import { buildChapterTiles, groupChapterTiles, stepGroup, stepSelection, type ChapterTile, type ClearedLookup } from './frontend/chapterGrid.ts';
 import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
@@ -23,6 +23,7 @@ export interface ChapterSelectScreenOptions {
   /** Called on cancel (defaults to nothing — some flows have nowhere to go back to). */
   onCancel?: () => void;
   initialIndex?: number;
+  tiles?: (save: ClearedLookup) => ChapterTile[]; hints?: ControlHintItem[]; // R61 (conference demo, `demo/demoBoard.ts`): the cards to show instead of the whole board, and the strip under them
 }
 
 /**
@@ -85,11 +86,11 @@ export class ChapterSelectScreen extends Screen {
   private settled = false;
 
   private hint: ControlsHint | null = null;
-  private tiles: ChapterTile[] = [];
+  protected tiles: ChapterTile[] = [];
   private selected = 0;
   private confirming = false;
   /** The board's doors (`frontend/chapterDoors.ts`): FF7's secret door (Bailey's approved option A: its word, taps and pad buttons) and the typed word of each hidden chapter; they show nothing. */
-  private doors = new BoardDoors();
+  protected doors = new BoardDoors();
   private wordKey = false; // a later letter of a word was just typed: the board leaves this frame's presses alone (the A of "leblanc" and "fayth" is `left`, the S of "mushroom" is `down`)
   private opening: ChapterId | null = null; // its last letter was just typed: the door opens on the next frame, which can take that press (C is START; see `handleInput`)
   private eyebrow: HTMLElement | null = null;
@@ -108,7 +109,7 @@ export class ChapterSelectScreen extends Screen {
 
   override enter(): void {
     installInkGoldStyles();
-    this.tiles = buildChapterTiles(this.app.save);
+    this.tiles = this.opts.tiles?.(this.app.save) ?? buildChapterTiles(this.app.save);
     // PR-0109: back on the chapter the player last chose (prep Esc, results CONFIRM, reload).
     this.selected = initialBoardIndex(this.tiles, this.opts.initialIndex);
 
@@ -125,7 +126,7 @@ export class ChapterSelectScreen extends Screen {
         <div class="fe-aside"></div>
       </div>
     `;
-    this.hint = new ControlsHint({ root: this.root, items: isCoarsePointer() ? TOUCH_HINTS : HINTS });
+    this.hint = new ControlsHint({ root: this.root, items: this.opts.hints ?? (isCoarsePointer() ? TOUCH_HINTS : HINTS) });
     this.hint.mount();
     this.armDoor();
     // The list is drawn once: after this only its selected mark moves.
@@ -287,7 +288,7 @@ export class ChapterSelectScreen extends Screen {
    * "Chapter select" label, which `chapter-select-c.css` makes tappable with no
    * pointer, hover, press state or tap highlight. Nothing visible changes.
    */
-  private armDoor(): void {
+  protected armDoor(): void {
     this.doors = new BoardDoors();
     window.addEventListener('keydown', this.onDoorKey);
     this.eyebrow = this.root.querySelector<HTMLElement>('.fe-cselect__eyebrow');

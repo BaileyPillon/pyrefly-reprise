@@ -20,6 +20,8 @@ import type { BattleResult } from '../../battle/common/types.ts';
 import { ChapterSelectScreen } from '../../app/screens/ChapterSelectScreen.ts';
 import { CutsceneScreen } from '../../app/screens/CutsceneScreen.ts';
 import { ResultsScreen } from '../../app/screens/ResultsScreen.ts';
+import { DemoBoardScreen } from '../../app/demo/demoBoard.ts'; // R61: the conference demo's two-card board (`?demo=1` only)
+import { demoModeOn } from '../../app/demoMode.ts';
 
 /** A `BattleResult` stand-in for `showResults(chapter, outcome)` calls where `outcome.result` is null (e.g. an early defeat). */
 function emptyResult(outcome: string): BattleResult {
@@ -39,7 +41,7 @@ function emptyResult(outcome: string): BattleResult {
 }
 
 registerFlowScreens({
-  chapterSelect: () => new ChapterSelectScreen(),
+  chapterSelect: () => (demoModeOn() ? new DemoBoardScreen() : new ChapterSelectScreen()), // R61: in demo mode the board is the two-card fight picker
 
   cutscene: (opts) =>
     new CutsceneScreen({

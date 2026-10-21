@@ -1,0 +1,14 @@
+import type { QrCode } from '../src/ui/demo/qr.ts';
+export const CARD_W: number;
+export const CARD_H: number;
+export const PAGE_W_PT: number;
+export const PAGE_H_PT: number;
+export const CARD_TITLE: string;
+export const CARD_LINES: string[];
+export const CARD_HOST: string;
+export const MODULE_PX: number;
+export function qrBox(): { x: number; y: number; size: number; modules: number; quiet: number; code: QrCode };
+export function cardSvg(variant?: 'paper' | 'ink'): string;
+export function cardPng(variant?: 'paper' | 'ink'): Promise<Buffer>;
+export function pdfOf(rgb: Buffer, width: number, height: number): Buffer;
+export function writeCards(outDir: string): Promise<Record<string, number>>;

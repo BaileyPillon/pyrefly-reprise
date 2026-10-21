@@ -65,6 +65,7 @@ import { fightEnding } from '../../battle/ffx2/end-flag.ts';
 import { EndHold } from './endHold.ts'; // the party's bars while the fight is ending: nothing counts toward a turn that cannot come
 import { displayNameOf } from './displayName.ts';
 import { IntentOpeningHold } from './intentOpeningHold.ts';
+import { demoAdvisorOneLine, demoPanelStart } from '../../app/demo/demoHud.ts'; // R61: the conference demo's cleaner HUD (`?demo=1` only)
 
 /**
  * PR-0012 (round 09 built the description logic, round 10 gated the slab off
@@ -236,6 +237,7 @@ export class FFX2BattleHud implements HudPort {
       top: 44,
       bottom: 104,
     },
+    ...demoPanelStart('guide'), // R61: folded at the start of a demo fight
   });
   /**
    * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
@@ -246,7 +248,7 @@ export class FFX2BattleHud implements HudPort {
    * next" claim is read against, and the party rows are where the damage
    * figures land.
    */
-  private readonly intent = new EnemyIntentPanel({ game: 'ffx2' });
+  private readonly intent = new EnemyIntentPanel({ game: 'ffx2', ...demoPanelStart('intent') }); // R61: folded at the start of a demo fight
   /** A-15 (PR-0157, FFX-2): advisory cards step back from an action on screen (ctionFade.ts). */
   private readonly actionFade = new ActionFade({
     // The cards themselves: `.mad` and `.sgd` are full-stage layers (inset 0).
@@ -306,9 +308,12 @@ export class FFX2BattleHud implements HudPort {
         ...(this.inFlight ? { engine: () => this.inFlight } : {}),
       };
     },
+    ...demoPanelStart('advisor'), // R61: the one-line card, not persisted
   });
   /** The live engine for the advisor's projected board; `null` on a mock screen. */
   private readonly inFlight: InFlightSource | null;
+  /** R61: this is a demo fight's HUD (`?demo=1`): the advisor card is the one-row tip. Read once, when the HUD is built. */
+  private readonly demoOneLine = demoAdvisorOneLine();
 
   /** The scene's art namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`): the party rows' heads come from its paintings. */
   private readonly artNamespace: string | undefined;
@@ -760,6 +765,7 @@ export class FFX2BattleHud implements HudPort {
     right.style.left = `${Math.max(0, Math.min(639, lane.after)).toFixed(2)}px`;
     this.applyAdvisorCap(lane.maxHeight, card);
     this.advisor.el.dataset['lane'] = lane.mode;
+    if (card && this.demoOneLine) card.dataset['zone'] = 'tip'; // R61 (demo mode only): the card is the one-row tip, as FFX's folded-guide fallback draws it (`ffx/advisorTip.ts`, `move-advisor-tip.css`)
     this.foldAdvisor(card, lane.mode);
   }
 
