@@ -41,7 +41,8 @@ describe('depth stage: the object', () => {
     // the moon: left of centre and above the floor, on the painting's plane
     const moon = new Vector3(...(stage.stats.moon as [number, number, number]));
     expect(moon.z).toBeCloseTo(-48, 0);
-    expect(moon.x).toBeLessThan(-15);
+    expect(moon.x).toBeLessThan(-8); // the road points left of the middle (the recipe bends it from the moon toward the fighters: u 0.335)
+    expect(moon.x).toBeCloseTo((0.335 - 0.5) * 82, 0);
     expect(moon.y).toBeGreaterThan(3);
     expect(stage.stats.glint).toBe(true);
     // the wind is on the shared cell for the weather to read

@@ -91,7 +91,8 @@ export class LookStage {
       const geo = this.painting.geometry as PlaneGeometry;
       const W = geo.parameters.width;
       const H = geo.parameters.height;
-      this.moonLocal.set((g.moon[0] - 0.5) * W, (0.5 - g.moon[1]) * H, 0);
+      const at = g.road ?? g.moon; // where the road points (the moon, unless the recipe bends it toward the fighters)
+      this.moonLocal.set((at[0] - 0.5) * W, (0.5 - at[1]) * H, 0);
       const u: GlintUniforms = {
         uMoon: { value: new Vector3() },
         uColor: { value: new Color(srgbDecode(g.color[0]), srgbDecode(g.color[1]), srgbDecode(g.color[2])) },

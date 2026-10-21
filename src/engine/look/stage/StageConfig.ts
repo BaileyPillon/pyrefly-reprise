@@ -18,6 +18,11 @@ export type Rgb = [number, number, number];
 export interface GlintSpec {
   /** Where the moon is, as a point on the painting (u from the left, v from the top, 0..1): the room's own light, read once. */
   moon: readonly [number, number];
+  /**
+   * Where the glitter's road points on the painting, when that is not the moon (u, v): the road follows the direction the eye-to-moon half vector asks for, and the moon at the far left puts it under the
+   * command menu; a point part of the way to the middle of the frame (about 6 degrees of azimuth) puts it round the fighters, where it is seen. Unset: the moon.
+   */
+  road?: readonly [number, number];
   /** The sparkles' colour, sRGB 0..1: the moon's own cold white. */
   color: Rgb;
   /** The broad sheen's colour under the sparkles, sRGB 0..1: a saturated blue (a pale one reads as a grey veil on a deep blue floor). */
@@ -90,7 +95,7 @@ export const ROOM_STAGE: Readonly<Record<string, StageRecipe>> = {
   gagazet: {
     game: 'ffx',
     wind: { every: 11, length: 4.2, speedUp: 1.6, thicken: 0.6, shaft: 0.2, phase: 3 },
-    glint: { moon: [0.226, 0.154], color: [0.78, 0.9, 1.0], sheenColor: [0.3, 0.56, 1.0], gain: 1.6, cell: 0.07, rough: 0.32, width: 0.05, speed: 2.1, center: [-3, -4], radius: 17, sheen: 0.6 },
+    glint: { moon: [0.226, 0.154], road: [0.335, 0.154], color: [0.78, 0.9, 1.0], sheenColor: [0.3, 0.56, 1.0], gain: 1.6, cell: 0.07, rough: 0.32, width: 0.05, speed: 2.1, center: [-3, -4], radius: 17, sheen: 0.6 },
     mist: [
       { y: 0.55, z: -9, w: 44, h: 3.2, opacity: 0.26, color: [0.58, 0.74, 1.0], flow: [0.06, 0.004], behind: true, scale: [3.2, 1.1], cover: 0.36 },
       { y: 0.3, z: 2.2, w: 34, h: 1.5, opacity: 0.2, color: [0.64, 0.78, 1.0], flow: [0.1, 0.006], behind: false, scale: [4.6, 1.0], cover: 0.42 },
