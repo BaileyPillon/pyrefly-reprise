@@ -23,8 +23,7 @@ export interface ChapterSelectScreenOptions {
   /** Called on cancel (defaults to nothing — some flows have nowhere to go back to). */
   onCancel?: () => void;
   initialIndex?: number;
-  /** R61 (conference demo, `demo/demoBoard.ts`): the cards to show instead of the whole board, and the strip under them. */
-  tiles?: (save: ClearedLookup) => ChapterTile[]; hints?: ControlHintItem[];
+  tiles?: (save: ClearedLookup) => ChapterTile[]; hints?: ControlHintItem[]; // R61 (conference demo, `demo/demoBoard.ts`): the cards to show instead of the whole board, and the strip under them
 }
 
 /**

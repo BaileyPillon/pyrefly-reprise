@@ -21,6 +21,8 @@ import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
+import { setAttractRunner } from './app/demo/attractHook.ts'; // R61: the title starts the attract reel through this door; main hands the reel in (the title does not import it)
+import { runAttract } from './app/demo/demoAttract.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
@@ -63,6 +65,7 @@ async function boot(): Promise<void> {
   // first pointerdown/keydown to create it. Anything asked for before then is
   // queued by the AudioManager.
   installDemoReset(app); // R61: its key listeners go in before the game's own (capture phase, first registered, first heard)
+  setAttractRunner(runAttract); // R61: the reel itself starts only in demo mode, from the title's idle count
   audio.installUnlockListeners();
   // A pad press is user activation in Chromium too, but raises no DOM event (PR-0220).
   installPadUnlock(audio);

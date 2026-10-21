@@ -9,7 +9,7 @@
 import type { App } from '../App.ts';
 import { demoModeOn } from '../demoMode.ts';
 import { ATTRACT_AFTER_MS, IdleClock, padActive, watchActivity } from './demoIdle.ts';
-import { runAttract } from './demoAttract.ts';
+import { attractRunner } from './attractHook.ts';
 import { mountQrPlate } from './demoQr.ts';
 
 export interface DemoTitle {
@@ -38,12 +38,19 @@ export function enterDemoTitle(app: App, afterMs = ATTRACT_AFTER_MS): DemoTitle 
         return;
       }
       if (!clock.expired(now(), afterMs)) return;
+      const run = attractRunner(); // handed in by main.ts: the title does not import the reel (`attractHook.ts`)
+      if (!run) return;
       started = true;
-      void runAttract(app).then((r) => {
-        // A press while the art was still loading: the title never went, so it counts the idle seconds again from now.
-        if (!r.left) started = false;
-        clock.touch(now());
-      });
+      void run(app)
+        .then((r) => {
+          // A press while the art was still loading: the title never went, so it counts the idle seconds again from now.
+          if (!r.left) started = false;
+          clock.touch(now());
+        })
+        .catch(() => {
+          started = false; // the reel failed to start: the title stays, and counts again
+          clock.touch(now());
+        });
     },
     idleSeconds: () => Math.round(clock.idleMs(now()) / 100) / 10,
     dispose() {
