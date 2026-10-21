@@ -106,6 +106,11 @@ export class HeadTurn {
     this.front = model.getObjectByName('headfront') ?? null;
   }
 
+  /** The head bone's world position into `out`, or null when the model has no `Head` bone. */
+  headWorld(out: Vector3): Vector3 | null {
+    return this.head ? this.head.getWorldPosition(out) : null;
+  }
+
   /** True when the model has the two bones the turn reads. */
   get available(): boolean {
     return this.head !== null && this.front !== null && this.head.parent !== null;

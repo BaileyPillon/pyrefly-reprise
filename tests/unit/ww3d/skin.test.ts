@@ -510,6 +510,34 @@ describe('the weapons', () => {
     expect(weapons.map((w) => w.userData['aimed'])).toEqual(first); // once
   });
 
+  it("pin the HUD's head point to the top of the girl's real head once she stands in her stance, and a clip's movement never moves it", async () => {
+    const r = await rig(['yuna'], { 'yuna.glb': girl });
+    const actor = r.actors['yuna']!;
+    actor.position.set(-8, 0, 0.89); // still walking on: the actor's own 0.92 of its height
+    r.skin.update(0.02); // binds the model
+    const model = modelOf(r, 'yuna');
+    run(r, 0.3);
+    const own = actor.headPoint(new Vector3());
+    expect(own.y - actor.position.y, 'under the top of her head').toBeLessThan(actor.height);
+    actor.position.set(PARTY_SLOTS[0]![0], 0, PARTY_SLOTS[0]![2]);
+    run(r, 0.3);
+    const top = model.headTopWorld(new Vector3())!;
+    const pinned = actor.headPoint(new Vector3());
+    // the top of the head: the head bone plus the fixture's hair above it (1.2 m file, bone at 1.05: 0.15 m, scaled to the girl)
+    const k = model.height / 1.2;
+    expect(pinned.y - actor.position.y).toBeCloseTo(top.y - actor.position.y, 5);
+    expect(pinned.y - actor.position.y, 'the top of the whole figure, its hair included').toBeCloseTo(model.height, 3);
+    expect(model.headTopWorld(new Vector3())!.y).toBeCloseTo(actor.position.y + (1.05 + 0.15) * k, 3);
+    // an attack clip bends the spine and moves the head bone; the pinned point does not move with it, and it follows the actor
+    r.skin.listener.open!('yuna', 'attack', 0.8, { targetIds: [] });
+    run(r, 1.0);
+    expect(model.playing).toBe('attack');
+    const during = actor.headPoint(new Vector3());
+    expect(during.toArray().map((v) => Number(v.toFixed(6)))).toEqual(pinned.toArray().map((v) => Number(v.toFixed(6))));
+    actor.position.x += 0.5;
+    expect(actor.headPoint(new Vector3()).x).toBeCloseTo(pinned.x + 0.5, 6);
+  });
+
   it('are not waited for by a model that holds none (a capsule, Valefor)', async () => {
     const r = await rig();
     run(r, 0.2);

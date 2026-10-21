@@ -87,6 +87,8 @@ export class WwModel {
   private readonly rig: ClipRig | null;
   private readonly props: Attached;
   private readonly head: HeadTurn | null;
+  /** How far the file's top stands above its head bone in the bind pose, in the file's units (0 for a figure with no head bone). */
+  private headRise = 0;
   private readonly wing: { uniforms: WingUniforms } | null;
   private readonly camera: V3;
   private figureHeight: number;
@@ -115,6 +117,8 @@ export class WwModel {
     scene.updateMatrixWorld(true);
     const box = new Box3().setFromObject(scene);
     this.natural = { min: [box.min.x, box.min.y, box.min.z], max: [box.max.x, box.max.y, box.max.z] };
+    const headBone = !boss && source === 'own' ? scene.getObjectByName('Head') : null;
+    if (headBone) this.headRise = Math.max(0, box.max.y - headBone.getWorldPosition(new Vector3()).y); // the bind pose, before the fit: the file's top above its head bone, in the file's units
     this.stanceYaw = stanceFacing(scene, idle);
     this.groundY = idle ? readAt(scene, idle, 0, () => new Box3().setFromObject(scene, true).min.y) : null;
 
@@ -154,6 +158,19 @@ export class WwModel {
     this.baseYaw = boss ? rad(BOSS_YAW_DEG) : 0;
     this.applyYaw();
     this.applyHover();
+  }
+
+  /**
+   * The top of the figure's head in world space, from the head bone and how far the file's top (its hair, its ahoge) stands above that bone (`headRise`, measured in the bind pose, in the file's units, times the
+   * fit's scale), or null for a model with no head bone. The HUD fences the guide and the advisor off the girls' heads (`PaintedActor.headPoint`); the painted figure's fixed 0.92 of its height was under the
+   * real head of a chibi model that leans toward the lens in her stance, and the guide card clipped Yuna's hair (polish 1).
+   */
+  headTopWorld(into: Vector3 = new Vector3()): Vector3 | null {
+    if (!this.head?.available) return null;
+    this.root.updateMatrixWorld(true);
+    const at = this.head.headWorld(into);
+    if (!at) return null;
+    return at.setY(at.y + this.headRise * this.fitGroup.scale.y);
   }
 
   /** The figure's height now, world units. */

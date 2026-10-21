@@ -309,6 +309,20 @@ export class WwSkin {
     b.actor.updateWorldMatrix(true, true);
     b.model.aimWeapons(this.chest);
     b.aimed = true;
+    this.pinHead(b);
+  }
+
+  /**
+   * The HUD fences the strategy guide and the advisor card off the girls' heads, through `PaintedActor.headPoint` (the actor's position plus 0.92 of its height). A chibi model in her stance leans toward the lens, and
+   * the camera looks up from below, so her real head projects above that point and the guide card clipped Yuna's hair (polish 1). Once a girl stands on her slot in her stance, her actor's head point is the top of her
+   * real head as it is then (the head bone plus how far her hair stands above it), kept as an offset from the actor so a clip's crouch or jump never moves the fence (the guide would fold and unfold with it).
+   */
+  private pinHead(b: Bound): void {
+    if (b.id === WW_BOSS_ID) return;
+    const top = b.model.headTopWorld(new Vector3());
+    if (!top) return;
+    const rest = top.sub(b.actor.position).clone();
+    b.actor.headPoint = (out = new Vector3()): Vector3 => out.set(b.actor.position.x + rest.x, b.actor.position.y + rest.y, b.actor.position.z + rest.z);
   }
 
   dispose(): void {
