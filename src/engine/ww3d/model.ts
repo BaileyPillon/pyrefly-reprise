@@ -10,8 +10,8 @@
  *
  * ## Layers
  *
- * `root` (parent it to the actor's motion group) holds `lie` (a KO tips the body about the feet), which holds `yaw` (the way the figure is turned), which holds `sway` (Valefor's pitch and roll about her middle and her
- * lunge, `./bossMotion.ts`; identity for the girls), which holds `hover` (Valefor floats and bobs; the girls stand), which holds `fit` (the scale and the offset that stand the model on the floor), which holds the file's scene. Everything the stage does to the actor (lunge, recoil, hop, squash, shake) moves `root`'s parent, so the model rides it.
+ * `root` (parent it to the actor's motion group) holds `lie` (a KO tips the body about the feet), `yaw` (the way the figure is turned), `sway` (Valefor's pitch, roll and lunge, `./bossMotion.ts`; identity for the girls), `hover`
+ * (Valefor floats and bobs; the girls stand) and `fit` (the scale and offset that stand the model on the floor), which holds the file's scene. Everything the stage does to the actor (lunge, recoil, hop, squash, shake) moves `root`'s parent, so the model rides it.
  *
  * Needs three.js (the glTF loader is imported on use); no DOM beyond `fetch`. Game case: FFX-2 only.
  */
@@ -22,20 +22,8 @@ import { capsuleFigure } from './capsule.ts';
 import { ClipRig, roleClips, windowsOfClips } from './clips.ts';
 import { FileCache, defaultIO, type LoaderIO } from './io.ts';
 import {
-  BODY_OFF_DEG,
-  BOSS_HEIGHT,
-  BOSS_HOVER,
-  BOSS_YAW_DEG,
-  FACE_OFF_DEG,
-  WW_BOSS_ID,
-  WW_CAST,
-  bodyYaw,
-  fitBox,
-  modelUrl,
-  rad,
-  type BoxData,
-  type V3,
-  type WwId,
+  BODY_OFF_DEG, BOSS_HEIGHT, BOSS_HOVER, BOSS_YAW_DEG, FACE_OFF_DEG, WW_BOSS_ID, WW_CAST, bodyYaw, fitBox, modelUrl, rad,
+  type BoxData, type V3, type WwId,
 } from './layout.ts';
 import { HeadTurn, readAt, stanceFacing, yawOffsetsOf } from './pose.ts';
 import { aimProps, attachProps, disposeProps, type Attached, type PropSwaps } from './props.ts';
@@ -160,11 +148,7 @@ export class WwModel {
     this.applyHover();
   }
 
-  /**
-   * The top of the figure's head in world space, from the head bone and how far the file's top (its hair, its ahoge) stands above that bone (`headRise`, measured in the bind pose, in the file's units, times the
-   * fit's scale), or null for a model with no head bone. The HUD fences the guide and the advisor off the girls' heads (`PaintedActor.headPoint`); the painted figure's fixed 0.92 of its height was under the
-   * real head of a chibi model that leans toward the lens in her stance, and the guide card clipped Yuna's hair (polish 1).
-   */
+  /** The top of the figure's head in world space (the head bone plus how far the file's hair stands above it, `headRise`), or null with no head bone: the HUD fences the guide off the girls' heads through it (`./skin.ts`). */
   headTopWorld(into: Vector3 = new Vector3()): Vector3 | null {
     if (!this.head?.available) return null;
     this.root.updateMatrixWorld(true);
@@ -270,12 +254,12 @@ export class WwModel {
     driveToon(this.set, c);
   }
 
-  /** The cast aura's cell as drawn now (rgb the rim colour, w the strength; a test's and the debug view's read). */
+  /** The cast aura's cell as drawn now (rgb the rim colour, w the strength). */
   get aura(): Vector4 {
     return this.set.glow.value;
   }
 
-  /** Where the aura's two steps end on N.V as drawn now (a test's and the debug view's read). */
+  /** Where the aura's two steps end on N.V as drawn now. */
   get auraShape(): Vector2 {
     return this.set.glowShape.value;
   }
@@ -325,14 +309,14 @@ export class WwModel {
     this.applyHover();
   }
 
-  /** Valefor floats about a metre off the floor and falls to the ground when she is down; the girls stand. On top of the hover she bobs, pitches and rolls about her middle and lunges at her blows (`./bossMotion.ts`). */
+  /** Valefor floats about a metre up, bobs, pitches and rolls about her middle and lunges at her blows (`./bossMotion.ts`), and falls to the ground when she is down; the girls stand. */
   private applyHover(): void {
     if (this.id !== WW_BOSS_ID) return;
     const k = this.figureHeight / BOSS_HEIGHT;
     const alive = this.aliveShare();
     const { pose } = this;
     this.hoverGroup.position.y = (BOSS_HOVER * k + pose.bob) * alive;
-    // the sway group turns about her middle (half her height, plus the hover): its position is the pivot minus the rotated pivot, then the lunge along her own facing
+    // the sway group turns about her middle (half her height plus the hover), then the lunge goes along her facing
     this.swayGroup.rotation.set(pose.pitch * alive, 0, pose.roll * alive);
     this.pivot.set(0, BOSS_HOVER * k * alive + 0.5 * this.figureHeight, 0);
     this.swayGroup.position.copy(this.pivot).sub(this.pivot.clone().applyEuler(this.swayGroup.rotation));
@@ -377,10 +361,7 @@ export interface WwModels {
   dispose(): void;
 }
 
-/**
- * Start fetching and parsing the four model files now (the cache keeps the promises): the scene asks for the swappable pieces first and the models after, and the models are the biggest files (2048 px maps), so
- * without this they only began once the pieces were done. `loadWwModels` then finds them already under way. Returns the promises (a test's read); a failure is the cache's null, never a throw.
- */
+/** Start fetching and parsing the four model files now, beside the swappable pieces (the cache keeps the promises; `loadWwModels` then finds them under way). A failure is the cache's null, never a throw. */
 export function prefetchModels(files: FileCache, base: string, dir: string): Promise<unknown>[] {
   return WW_CAST.map((id) => files.get(modelUrl(base, dir, id)));
 }
