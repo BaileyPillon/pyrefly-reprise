@@ -79,7 +79,10 @@ Scratch: `D:/Tools/pyrefly-scratch/2026-10-21/r61-rigs/cap/` (`tools/` the harne
 - `tsc --noEmit` (`node "D:/Final Fantasy/node_modules/typescript/bin/tsc" --noEmit -p .`): clean.
 - Rig, tools, look and golden tests: `tests/unit/rig/**` 190, `tests/unit/tools/**` (rig gate, ship, mirror, v2 gate, normals, the x2 configs), `look-*`, `critic-continuity-*`, `ffx-engine-golden` (18), `ffx2-atb-golden` (6), `ff7-golden` (3): all green; `tools/rig/test_rig_vcut.py` 11, `test_rig_v2.py` 10, `test_rig_pipeline.py` 12.
 - `node tools/rig-gate.mjs --rig <six> --verify --art D:/pyrefly-art-r61` against the new mirror: PASS for ffx2-bahamut, seymour-flux-body, valefor, ifrit, lulu, pterya. `node tools/art-mirror-add-rigs.mjs --from D:/pyrefly-art-r60 --rigs <stage> --to D:/pyrefly-art-r61 --subjects ffx2-bahamut,seymour-flux-body,valefor,ifrit`: PROVED, 6,091 files, 5,681 linked, 409 copied.
+- **The full `npm test` was NOT completed.** I started it at below-normal priority on 4 workers while other lanes were recording and stopped it after about 40 of the test files (advisor-floor "27. Mirror Aeons" had already timed out under that load: the known load-sensitive one, 15 s cap; it passes alone); the driver runs it before the release. What I ran green: the groups above, and the three goldens.
 - No production build was made (D: was at 7 to 13 GB); the art-derive, `art-browser-load` and deploy checks for the new rig files are the driver's (the pieces are plain opaque PNGs beside the rig's other PNGs).
+
+- **Reproducible from the committed tooling:** re-running `rig.py build` and `variants` for both bosses from the committed configs into scratch work folders gives 90 and 108 PNGs whose pixels equal the built rigs' (the rigs' are losslessly recompressed), and the same meshes, skins and `normal` names (`repro-compare.log`).
 
 ## The gate, verbatim
 
@@ -115,7 +118,13 @@ rig-gate: PASS
 
 (Against the first build: Bahamut 7,809 to 7,832 vertices, `attack` iou 0.984 to 0.983, 11.76 MB the same; Seymour 7,927 to 7,916 vertices, 10.49 MB the same.) The 12 MB colour budget and the 8,000 vertex budget hold; the normal pieces are 2.78 MB (Bahamut, 30 pieces) and about 2.7 MB (Seymour, 36), against their own 4 MB / 4 Mpx.
 
-CONTINUITY_PLACEHOLDER
+### CHK-026 on the two rigs, through the continuity harness's own judge
+
+`critic/runner/lib/continuity-rig.mjs#analyzeRigSwap` (the policy's 3 percent head tolerance) fed the head part's posed mesh area per key (what `continuity-rig-probe.mjs` reads as `rg.ha`: the skinned triangles of the mesh the key shows), on every ordered pair of the six keys (`D:/Tools/pyrefly-scratch/2026-10-21/r61-rigs/tools/head_gate_reading.mjs`, output `head-gate-reading.txt`): r60 Bahamut 24 of 30 changes fail, worst 18.03 percent (idle to attack); r60 Seymour 15 of 30, worst 8.03 percent (idle to telegraph) (the review's 18 and 8, reproduced); **r61 Bahamut 0 of 30, worst 0.67 percent; r61 Seymour 0 of 30, worst 0.52 percent**.
+
+**Not run: the real-game pass of the harness** (`node critic/runner/lib/continuity.mjs --base=<dev server on D:/pyrefly-art-r61> --chapters=seymour-flux,ffx2-bahamut`, the fights played by real keys on the GPU, minutes a chapter). It waited for RIG-RECORD from 01:44 to 02:47 behind other lanes' recordings (the yrp lane chained `.next` for itself the whole time, as the driver's rule asks me to respect), and I cancelled it rather than hold a window the demo's other lanes needed. The script is ready: `bash D:/Tools/pyrefly-scratch/2026-10-21/r61-rigs/cap/tools/cont1.sh B seymour-flux` and `... B ffx2-bahamut` (B = the r61 art, A = r60 for the before reading; one chapter each, under RIG-RECORD, honouring `RIG-RECORD.next`). What the real-game recordings did measure (paused 60 Hz clock, no timing involved): both bosses, every key change, 2 frames of cross-fade (section C), 0 console errors and 0 responses of 400 or more once the harness served the pieces, the rigs `on ... lit` with 36 (Seymour) and 30 (Bahamut) pieces bound (`window.__pyrefly.rigs()`).
+
+**Frame-timing captures.** None of mine measure frame time (every capture is a stepped, paused page clock), so the render window the driver named needs no redo from me.
 
 ## For the driver
 
