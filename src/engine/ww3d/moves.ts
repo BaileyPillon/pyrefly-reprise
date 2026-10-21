@@ -36,7 +36,7 @@ export const FLAP_ONLY_IDS: readonly string[] = [VALEFOR_ATTACK_ID];
 /** The seconds each effect lives after the blow (the hold, then the fade). */
 export const MOVE_TIMING: Readonly<Record<MoveKind, { readonly hold: number; readonly fade: number }>> = {
   ray: { hold: 0.35, fade: 0.25 },
-  blast: { hold: 0.05, fade: 0.45 },
+  blast: { hold: 0.3, fade: 0.4 }, // the burst is held a third of a second, solid, so it is seen at its full size before it goes (phase 2's was 0.05)
   wings: { hold: 0.25, fade: 0.3 },
 };
 
@@ -64,9 +64,36 @@ export function movePhase(kind: MoveKind, age: number, lead: number): MovePhase 
   return { charge, fire, fade, done: sinceBlow > t.hold + t.fade };
 }
 
-/** The orb of the blast: radius over its life (metres at Valefor's world size), swelling through the charge and bursting to `burst` times at the blow. */
-export const ORB = { radius: 1.3, burst: 2.1 } as const;
+/**
+ * The orb of the blast: radius over its life (metres at Valefor's world size), swelling through the charge and bursting to `burst` times at the blow (2.0 m at its peak), and how far in front of her chest, toward the
+ * girls, it hangs (`ahead`, metres), so she stays readable behind it. Phase 2's orb was 2.7 m, additive and bloomed: it whited out the right two thirds of the frame (stills 62 to 64).
+ */
+export const ORB = { radius: 1.25, burst: 1.6, ahead: 1.3 } as const;
 
+/** The most of the frame's area the orb may cover at its peak, by its disc (Bailey's check: about a quarter to 30 percent; the cap keeps it at a quarter on the axis, a little more at the edge of the frame). */
+export const ORB_MAX_SHARE = 0.25;
+
+const tanHalf = (fovDeg: number): number => Math.tan((fovDeg * Math.PI) / 360);
+
+/** The share of a frame `aspect` wide (width over height), seen through a lens of vertical field of view `fovDeg`, that a sphere of radius `radius` covers when its centre is `distance` metres away on the axis. */
+export function orbFrameShare(radius: number, distance: number, fovDeg: number, aspect: number): number {
+  if (!(distance > radius) || !(aspect > 0)) return 1;
+  const tanA = radius / Math.sqrt(distance * distance - radius * radius); // the sphere's angular radius
+  return (Math.PI * tanA * tanA) / (4 * tanHalf(fovDeg) ** 2 * aspect);
+}
+
+/** The largest radius a sphere `distance` metres away may have and cover no more than `share` of the frame (the inverse of {@link orbFrameShare}). */
+export function orbCapRadius(distance: number, fovDeg: number, aspect: number, share: number = ORB_MAX_SHARE): number {
+  const q = Math.sqrt((share * 4 * tanHalf(fovDeg) ** 2 * aspect) / Math.PI); // tan of the angular radius
+  return (distance * q) / Math.sqrt(1 + q * q);
+}
+
+/** The orb's bands, on the surface's N.V (1 at the middle of the disc, 0 at its edge): a white core above `core`, a yellow band down to `mid`, an orange rim down to `line`, a thin deep-orange outline below. Flat colours, no gradient. */
+export const ORB_BANDS = { core: 0.82, mid: 0.5, line: 0.14 } as const;
+/** The bands' colours, as display (sRGB) hex: core, mid, rim, outline. Every one is under 1.0 in luminance, so nothing of the orb is above the bloom's threshold. */
+export const ORB_COLOURS = { core: '#fff6d6', mid: '#ffd23c', rim: '#ff8a1c', line: '#d94a0c' } as const;
+
+/** The orb's radius `phase` of the way through its life, metres, before the frame cap ({@link orbCapRadius}). */
 export function orbRadius(phase: MovePhase): number {
   const swell = ORB.radius * (0.15 + 0.85 * phase.charge);
   const burst = phase.charge >= 1 ? ORB.burst : 1;

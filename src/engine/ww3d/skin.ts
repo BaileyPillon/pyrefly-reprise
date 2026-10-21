@@ -12,7 +12,8 @@
  * - **Facing.** A girl's body is turned `BODY_OFF_DEG` off the direction to the lens (the stance points at the boss; `./layout.ts` `bodyYaw`) and her head is turned toward the viewer every frame (`./pose.ts`); Valefor takes
  *   a fixed turn toward the party. The actor's interim yaw is off: that turn is for flat paintings.
  * - **Flash.** The actor's own flash (a hit's white, a heal's green, a revive's blue: `PaintedActor.flash`) is read off its uniform cells and drives the model's emissive.
- * - **Cast glow.** While the actor holds the `cast` pose a glow swells on the model (`castGlow`): warm for the girls, a golden white for Valefor.
+ * - **Cast aura.** While the actor holds the `cast` pose a thin toon rim glows on the model's silhouette (`./glow.ts`, the shader's `uToonGlow`), in the spell's colour for a girl and a warm gold for Valefor's charge, pulsing;
+ *   with a faint lift of the fill (`GLOW_FILL`) and never more: phase 2's emissive fill turned the girls into cream ghosts.
  * - **Tint and stone.** The actor's hurt tint and brightness multiply the model's colour; a petrified figure goes grey.
  * - **KO.** A downed figure (`lifeState` 'down') tips onto its back about its feet and stays (the files carry no knock-out clip); a revive stands it up. Valefor falls to the floor first.
  * - **Fade.** The actor's alpha and dissolve fade the model.
@@ -29,6 +30,7 @@ import { Color, Group, Vector3, type Object3D } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
 import { paceRate } from '../pace.ts';
 import type { BeatListener } from './beats.ts';
+import { BOSS_RIM, DEFAULT_RIM, fillAmount, glowLevel, rimStrength, spellRim, type Rgb } from './glow.ts';
 import {
   BOSS_HOVER,
   BOSS_SPOT,
@@ -36,7 +38,6 @@ import {
   WW_BOSS_ID,
   WW_CAST,
   WW_PARTY_IDS,
-  castGlow,
   heightFactor,
   type V3,
   type WwId,
@@ -85,11 +86,10 @@ export function hidePaintedFigure(actor: PaintedActor): boolean {
   return true;
 }
 
-/** A hit's flash is white, the girls' cast glow warm, Valefor's a golden white. */
+/** The faint fill under the aura is warm (a girl's) or a golden white (Valefor's). */
 const GLOW_COLOUR: Readonly<Record<'party' | 'boss', number>> = { party: 0xffe2a6, boss: 0xfff0b0 };
-/** The share of full glow the flash and the cast glow reach (the glow is added on top of the lit figure, so a full one would flatten it to a silhouette). */
-const FLASH_GAIN = 0.85;
-const GLOW_GAIN = 0.5;
+/** The share of full flash a hit reaches (the flash is added on top of the lit figure: 0.85 in phase 2 made the whole body a white silhouette, stills 59 and 69; at 0.6 the costume's colours still read through it). */
+const FLASH_GAIN = 0.6;
 /** Seconds a downed body takes to tip, a glow to fade, and an action's flap to rise. */
 const LIE_TAU = 0.2;
 const GLOW_TAU = 0.18;
@@ -113,7 +113,12 @@ interface Bound {
   readonly model: WwModel;
   readonly parts: PaintedInternals;
   lie: number;
+  /** The aura's level, 0 off to 1 held, smoothed. */
   glow: number;
+  /** Seconds the aura has been on, for its pulse (it keeps counting while it fades). */
+  glowAge: number;
+  /** The aura's colour: the spell's (a girl's, set when the cast opens), or Valefor's. */
+  rim: Rgb;
   castAt: number | null;
   /** How much the figure is acting, for a model that flaps (Valefor's wings). */
   act: number;
@@ -152,7 +157,11 @@ export class WwSkin {
       const b = this.bound.get(actorId as WwId);
       if (!b) return;
       b.castHold = kind === 'cast';
-      if (b.castHold) b.castAt = null; // a new cast swells afresh, even where the last one never closed
+      if (b.castHold) {
+        b.castAt = null; // a new cast swells afresh, even where the last one never closed
+        b.glowAge = 0;
+        if (b.id !== WW_BOSS_ID) b.rim = spellRim(info.abilityId); // the girl's rim takes the spell's colour
+      }
       b.model.noteOpen(kind, lead, paceRate('action'));
       if (b.id !== WW_BOSS_ID) return;
       b.busy = true; // every Valefor action flaps her wings harder, until it closes
@@ -225,7 +234,7 @@ export class WwSkin {
     if (girl >= 0) model.setYaw(model.bodyYawAt(PARTY_SLOTS[girl]!));
     model.fitTo(actor.height * heightFactor(id));
     parts.inner.add(model.root);
-    this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' ? 1 : 0, glow: 0, castAt: null, act: 0, castHold: false, busy: false, aimed: model.weapons.length === 0 });
+    this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' ? 1 : 0, glow: 0, glowAge: 0, rim: id === WW_BOSS_ID ? BOSS_RIM : DEFAULT_RIM, castAt: null, act: 0, castHold: false, busy: false, aimed: model.weapons.length === 0 });
   }
 
   private follow(b: Bound, dt: number): void {
@@ -248,13 +257,14 @@ export class WwSkin {
     const pose = life === 'hurt' || life === 'victory' ? life : actor.pose;
     const casting = pose === 'cast' || b.castHold;
 
-    // glow: a cast swells one; anything else lets it go. A girl's beat that never closes (under the ATB a second action can be open when hers ends, so the presenter puts the wrong figure's pose back and her
-    // pose and cast hold stay, phase 2: Yuna stood cream and see-through for the rest of the fight) lets the glow go after a cast's length. Valefor's charge is as long as her action, so hers is not capped.
+    // aura: a cast lights one; anything else lets it go. A girl's beat that never closes (under the ATB a second action can be open when hers ends, so the presenter puts the wrong figure's pose back and her
+    // pose and cast hold stay, phase 2: Yuna stood cream and see-through for the rest of the fight) lets the aura go after a cast's length. Valefor's charge is as long as her action, so hers is not capped.
+    b.glowAge += dt;
     if (casting) {
       b.castAt ??= this.clock;
       const age = this.clock - b.castAt;
       const stuck = b.id !== WW_BOSS_ID && age > CAST_GLOW_MAX;
-      b.glow = approach(b.glow, stuck ? 0 : Math.max(0, Math.min(1, castGlow(age))), GLOW_TAU, dt);
+      b.glow = approach(b.glow, stuck ? 0 : glowLevel(age), GLOW_TAU, dt);
     } else {
       b.castAt = null;
       b.glow = approach(b.glow, 0, GLOW_TAU, dt);
@@ -265,16 +275,16 @@ export class WwSkin {
     this.colour.copy(u.tint.value).multiplyScalar(u.brightness.value);
     if (u.desaturate.value > 0.001) this.colour.lerp(STONE, Math.min(1, u.desaturate.value));
     const flash = Math.min(1, Math.max(0, u.flashAmount.value)) * FLASH_GAIN;
-    const glow = b.glow * GLOW_GAIN;
+    const fill = fillAmount(b.glow);
     let amount = 0;
-    if (flash >= glow) {
+    if (flash >= fill) {
       this.emissive.copy(u.flashColor.value);
       amount = flash;
     } else {
       this.emissive.setHex(GLOW_COLOUR[b.id === WW_BOSS_ID ? 'boss' : 'party']);
-      amount = glow;
+      amount = fill;
     }
-    model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha });
+    model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha, ...(b.glow > 0.004 ? { rim: { colour: b.rim, strength: rimStrength(b.glow, b.glowAge) } } : {}) });
 
     // Valefor's wings flap harder as she acts, from the beat's opening to its close (or while a pose says so)
     b.act = approach(b.act, b.busy || pose === 'attack' || casting ? 1 : pose === 'hurt' ? 0.5 : 0, ACT_TAU, dt);

@@ -10,19 +10,19 @@
  *
  * ## Layers
  *
- * `root` (parent it to the actor's motion group) holds `lie` (a KO tips the body about the feet), which holds `yaw` (the way the figure is turned), which holds `hover` (Valefor floats and bobs; the girls stand), which
- * holds `fit` (the scale and the offset that stand the model on the floor), which holds the file's scene. Everything the stage does to the actor (lunge, recoil, hop, squash, shake) moves `root`'s parent, so the model rides it.
+ * `root` (parent it to the actor's motion group) holds `lie` (a KO tips the body about the feet), which holds `yaw` (the way the figure is turned), which holds `sway` (Valefor's pitch and roll about her middle and her
+ * lunge, `./bossMotion.ts`; identity for the girls), which holds `hover` (Valefor floats and bobs; the girls stand), which holds `fit` (the scale and the offset that stand the model on the floor), which holds the file's scene. Everything the stage does to the actor (lunge, recoil, hop, squash, shake) moves `root`'s parent, so the model rides it.
  *
  * Needs three.js (the glTF loader is imported on use); no DOM beyond `fetch`. Game case: FFX-2 only.
  */
 
-import { Box3, Group, Vector3, type AnimationClip, type IUniform, type Object3D } from 'three';
+import { Box3, Group, Vector3, type AnimationClip, type IUniform, type Object3D, type Vector4 } from 'three';
+import { BossMotion, type BossPose } from './bossMotion.ts';
 import { capsuleFigure } from './capsule.ts';
 import { ClipRig, roleClips, windowsOfClips } from './clips.ts';
 import { FileCache, defaultIO, type LoaderIO } from './io.ts';
 import {
   BODY_OFF_DEG,
-  BOSS_BOB,
   BOSS_HEIGHT,
   BOSS_HOVER,
   BOSS_YAW_DEG,
@@ -75,6 +75,7 @@ export class WwModel {
   readonly root = new Group();
   private readonly lie = new Group();
   private readonly yawGroup = new Group();
+  private readonly swayGroup = new Group();
   private readonly hoverGroup = new Group();
   private readonly fitGroup = new Group();
   private readonly scene: Object3D;
@@ -94,6 +95,10 @@ export class WwModel {
   private lieFacing: 1 | -1 = 1;
   private activity = 0;
   private clock = 0;
+  /** Valefor's whole-body life (the sway, the lunge), or null for a girl. */
+  private readonly motion: BossMotion | null;
+  private pose: BossPose = { pitch: 0, roll: 0, yaw: 0, bob: 0, forward: 0 };
+  private readonly pivot = new Vector3();
 
   /** `scene` is the file's scene (or a clone of it), `clips` its animations. The model measures it first, then makes it toon. */
   constructor(id: WwId, scene: Object3D, clips: readonly AnimationClip[], height: number, source: ModelSource, ctx: ModelContext) {
@@ -132,9 +137,11 @@ export class WwModel {
     this.props = boss || source === 'capsule' ? { props: [], swapped: 0 } : attachProps(scene, id, ctx.uniforms, ctx.swaps); // after the box is measured (a sword must not change the fit)
 
     this.root.name = `ww-${id}`;
+    this.motion = boss ? new BossMotion() : null;
     this.fitGroup.add(scene);
     this.hoverGroup.add(this.fitGroup);
-    this.yawGroup.add(this.hoverGroup);
+    this.swayGroup.add(this.hoverGroup);
+    this.yawGroup.add(this.swayGroup);
     this.lie.add(this.yawGroup);
     this.root.add(this.lie);
     this.place();
@@ -209,7 +216,12 @@ export class WwModel {
   }
 
   private applyYaw(): void {
-    this.yawGroup.rotation.y = this.baseYaw + (this.rig?.yawOffset ?? 0);
+    this.yawGroup.rotation.y = this.baseYaw + (this.rig?.yawOffset ?? 0) + this.pose.yaw * this.aliveShare();
+  }
+
+  /** 1 while the figure stands (or hovers), 0 once it lies down: Valefor's sway and lunge stop as she falls. */
+  private aliveShare(): number {
+    return 1 - Math.min(1, this.lieAmount * 2);
   }
 
   /** Turn the figure to `radians` about +Y (0 faces +Z). The clips' own pelvis correction is added on top. */
@@ -241,6 +253,11 @@ export class WwModel {
     driveToon(this.set, c);
   }
 
+  /** The cast aura's cell as drawn now (rgb the rim colour, w the strength; a test's and the debug view's read). */
+  get aura(): Vector4 {
+    return this.set.glow.value;
+  }
+
   /** The figure's opacity now (what the last `setChannels` said). */
   get opacity(): number {
     return this.set.opacity;
@@ -249,6 +266,7 @@ export class WwModel {
   /** How much the model is acting, 0..1 (an attack, a cast): Valefor's wings flap faster and wider. A no-op for a model with no flap. */
   setActivity(activity: number): void {
     this.activity = Math.min(1, Math.max(0, activity));
+    this.motion?.setActivity(this.activity);
   }
 
   /** Where a point of the file (in its own units) is in world space now (Valefor's mouth and chest). */
@@ -260,11 +278,13 @@ export class WwModel {
   /** An action by this figure opened (`attack` or `cast` start their clips), the blow lands `lead` seconds on; `paceRate` is the pacing option's rate for one-shots. */
   noteOpen(kind: string, lead: number | undefined, paceRate = 1): void {
     this.rig?.open(kind, lead, paceRate);
+    this.motion?.open(lead ?? 0.5); // Valefor draws back for the windup and thrusts at the blow
   }
 
   /** The blow landed. */
   noteImpact(paceRate = 1): void {
     this.rig?.impact(paceRate);
+    this.motion?.impact();
   }
 
   /** The pose the actor shows and whether it is down, once a frame (a hit and a victory start their clips). */
@@ -276,17 +296,25 @@ export class WwModel {
   update(dt: number, frozen = false): void {
     this.clock += frozen ? 0 : dt;
     this.rig?.update(dt, frozen);
+    if (this.motion) this.pose = this.motion.update(frozen ? 0 : dt, this.figureHeight / BOSS_HEIGHT);
     this.applyYaw();
     this.head?.apply(this.camera, FACE_OFF_DEG);
     if (this.wing) advanceFlap(this.wing.uniforms, frozen ? 0 : dt, this.activity);
     this.applyHover();
   }
 
-  /** Valefor floats a metre off the floor and bobs on it, and falls to the ground when she is down; the girls stand. */
+  /** Valefor floats about a metre off the floor and falls to the ground when she is down; the girls stand. On top of the hover she bobs, pitches and rolls about her middle and lunges at her blows (`./bossMotion.ts`). */
   private applyHover(): void {
     if (this.id !== WW_BOSS_ID) return;
     const k = this.figureHeight / BOSS_HEIGHT;
-    this.hoverGroup.position.y = (BOSS_HOVER + BOSS_BOB.amplitude * Math.sin(this.clock * Math.PI * 2 * BOSS_BOB.hz)) * k * (1 - Math.min(1, this.lieAmount * 2));
+    const alive = this.aliveShare();
+    const { pose } = this;
+    this.hoverGroup.position.y = (BOSS_HOVER * k + pose.bob) * alive;
+    // the sway group turns about her middle (half her height, plus the hover): its position is the pivot minus the rotated pivot, then the lunge along her own facing
+    this.swayGroup.rotation.set(pose.pitch * alive, 0, pose.roll * alive);
+    this.pivot.set(0, BOSS_HOVER * k * alive + 0.5 * this.figureHeight, 0);
+    this.swayGroup.position.copy(this.pivot).sub(this.pivot.clone().applyEuler(this.swayGroup.rotation));
+    this.swayGroup.position.z += pose.forward * alive;
   }
 
   dispose(): void {
@@ -325,6 +353,14 @@ export interface WwModels {
   /** Ids whose own file was missing and that stand on the neutral capsule. */
   readonly capsules: readonly WwId[];
   dispose(): void;
+}
+
+/**
+ * Start fetching and parsing the four model files now (the cache keeps the promises): the scene asks for the swappable pieces first and the models after, and the models are the biggest files (2048 px maps), so
+ * without this they only began once the pieces were done. `loadWwModels` then finds them already under way. Returns the promises (a test's read); a failure is the cache's null, never a throw.
+ */
+export function prefetchModels(files: FileCache, base: string, dir: string): Promise<unknown>[] {
+  return WW_CAST.map((id) => files.get(modelUrl(base, dir, id)));
 }
 
 /** Load the four models: each from its own file (`dir`), else the neutral capsule (a file that does not parse counts as missing). Every id has an entry; `capsules` says which are not their own, and each is said once to `log`. */

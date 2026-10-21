@@ -64,7 +64,7 @@ describe('the fragment patch against three\'s own chunks', () => {
     const u = createToonUniforms();
     const m = makeToonMaterial(u, { color: 0x336699, cacheKey: '-x' });
     expect(m.userData['ww']).toBe('toon');
-    expect(m.customProgramCacheKey()).toBe('ww-toon-v2-x');
+    expect(m.customProgramCacheKey()).toBe('ww-toon-v3-x');
     const shader = toonProgram();
     (m.onBeforeCompile as (s: unknown) => void)(shader);
     expect(shader.fragmentShader).toContain('RE_Direct_Toon');

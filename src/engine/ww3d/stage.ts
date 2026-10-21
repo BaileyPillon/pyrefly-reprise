@@ -61,6 +61,16 @@ export const STAGE = {
   shadow: { centre: [0.5, 0.0, -1.0] as const, half: 14.5, size: { high: 4096, low: 2048 } },
   /** The haze and the sky behind everything. */
   fog: { colour: 0xa9c7f0, near: 14, far: 60 },
+  /**
+   * The light, polish 1. The lab's sun 0.8 and fill 0.42 read 143 to 158 mean luma in the game against the lab's 131.85 (TARGET-C 119.3): the lit colours clamp at the toon ceiling, so the floor and the wall came out
+   * flat and bright. 0.7 and 0.37 bring a clean frame into the 125 to 138 band and keep the two bands and the saturated colours (the lit side is then the albedo times about 1.07, which is the colour as painted).
+   */
+  light: { sun: 0.7, fill: 0.37 },
+  /**
+   * The light shaft's additive cards. Their sum with the waterfall behind exceeds 1.0 in luminance, and the game's bloom keeps the WHOLE colour of a pixel above its threshold (the lab's kept only the excess), so at
+   * the lab's 0.34 the shaft alone added about 9 mean luma and a white-hot column. Opacity and its breathing.
+   */
+  shaft: { opacity: 0.22, wobble: 0.03 },
   background: '#8ec5ff',
 } as const;
 
@@ -180,7 +190,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
   const bottom = new Vector3(-1.2, 0, -2.4);
   const axis = top.clone().sub(bottom);
   const len = axis.length();
-  const shaftMat = new MeshBasicMaterial({ map: tex.shaft(), transparent: true, blending: AdditiveBlending, depthWrite: false, side: DoubleSide, fog: false, toneMapped: false, opacity: 0.34 });
+  const shaftMat = new MeshBasicMaterial({ map: tex.shaft(), transparent: true, blending: AdditiveBlending, depthWrite: false, side: DoubleSide, fog: false, toneMapped: false, opacity: STAGE.shaft.opacity });
   owned.push(shaftMat);
   for (let k = 0; k < 3; k++) {
     const card = new Mesh(new PlaneGeometry(5.0, len), shaftMat);
@@ -194,7 +204,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
 
   // the light: one warm sun with crisp shadows over a frustum that covers the arena, plus a soft sky fill
   const sc = new Vector3(...STAGE.shadow.centre);
-  const sun = new DirectionalLight(0xfff0d0, 0.8);
+  const sun = new DirectionalLight(0xfff0d0, STAGE.light.sun);
   sun.name = 'ww-sun';
   sun.position.copy(sc).addScaledVector(new Vector3(...SUN_DIRECTION).normalize(), 32);
   sun.target.position.copy(sc);
@@ -207,7 +217,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
   sun.shadow.bias = -0.0004;
   sun.shadow.normalBias = 0.02;
   sun.shadow.radius = 1;
-  const fill = new HemisphereLight(0xcfe6ff, 0xf0dcaa, 0.42);
+  const fill = new HemisphereLight(0xcfe6ff, 0xf0dcaa, STAGE.light.fill);
   fill.name = 'ww-fill';
   group.add(sun, sun.target, fill);
 
@@ -224,7 +234,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
     scrolls.forEach((tx, i) => {
       tx.offset.y = t * 0.42 + i * 0.37;
     });
-    shaftMat.opacity = 0.32 + 0.04 * Math.sin(t * 0.9);
+    shaftMat.opacity = STAGE.shaft.opacity - STAGE.shaft.wobble + 2 * STAGE.shaft.wobble * (0.5 + 0.5 * Math.sin(t * 0.9));
   }
   update(0);
 

@@ -13,6 +13,7 @@
  * - the shadow side is the albedo times a cool blue-violet tint, never toward grey or black;
  * - no specular, no environment: metalness and roughness do not exist in this model;
  * - an optional very thin highlight band and an optional thin warm rim on the lit edge;
+ * - **a cast aura** (`uToonGlow`, `./glow.ts`): a thin hard-edged band of the silhouette in the spell's colour, per figure, zero by default;
  * - **a ceiling** (`uToonCeil`): the lit colour is clamped just under 1.0, so an ordinary lit surface never reaches the bloom's threshold and only the glows (the flames, the light shaft, the sky's sun) do. The lab
  *   passed only the excess above 1.0 to its bloom; the game's bloom keeps the whole colour of a pixel above its threshold, and this ceiling is what makes the two the same picture.
  *
@@ -40,6 +41,8 @@ export interface ToonUniforms {
   uToonSat: IUniform<number>;
   /** The most a lit surface may reach (linear), just under the bloom's threshold. */
   uToonCeil: IUniform<number>;
+  /** The cast aura (`./glow.ts`): rgb the rim colour, a the strength (0 = none). A figure takes a copy of its own (`./toonify.ts`); the stage's is 0. */
+  uToonGlow: IUniform<Vector4>;
   [name: string]: IUniform;
 }
 
@@ -96,6 +99,7 @@ uniform vec4 uToonRim;         // rgb rim colour, a strength
 uniform vec2 uToonRimShape;    // x N.V where the rim starts to fade in, y its width
 uniform float uToonSat;        // albedo saturation (1 = as painted)
 uniform float uToonCeil;       // the most a lit surface may reach (linear)
+uniform vec4 uToonGlow;        // the cast aura: rgb the rim colour, a the strength (0 = none)
 
 float gToonShadow = 1.0;       // sun shadow band, written by the patched shadow line in lights_fragment_begin
 float gToonLit = 0.0;
@@ -141,7 +145,14 @@ void RE_IndirectDiffuse_Toon( const in vec3 irradiance, const in vec3 geometryPo
 	vec3 col = material.diffuseColor * fullLit * shade;
 	col *= 1.0 + uToonHi.y * gToonHi;
 	col += uToonRim.rgb * ( uToonRim.a * gToonRim ) * ( 0.35 + 0.65 * material.diffuseColor );
-	reflectedLight.indirectDiffuse += min( col, vec3( uToonCeil ) );
+	// the cast aura: two hard-edged toon steps of the silhouette (a strong inner band, a lighter outer one) where the surface turns away from the lens, mixed toward the spell's colour over the lit colour (an add would
+	// vanish on a light costume), and zero everywhere else: never a fill
+	float glowNdV = max( dot( geometryNormal, geometryViewDir ), 0.0 );
+	float glowW = max( 0.02, fwidth( glowNdV ) );
+	float glowInner = 1.0 - smoothstep( 0.38 - glowW, 0.38 + glowW, glowNdV );
+	float glowOuter = 1.0 - smoothstep( 0.58 - glowW, 0.58 + glowW, glowNdV );
+	float glowBand = max( glowInner, 0.4 * glowOuter );
+	reflectedLight.indirectDiffuse += mix( min( col, vec3( uToonCeil ) ), uToonGlow.rgb * 1.15, glowBand * uToonGlow.a );
 
 }
 
@@ -205,6 +216,7 @@ export function createToonUniforms(): ToonUniforms {
     uToonRimShape: { value: new Vector2(0.36, 0.24) },
     uToonSat: { value: 1 },
     uToonCeil: { value: TOON_CEILING },
+    uToonGlow: { value: new Vector4(1, 0.78, 0.3, 0) },
   };
 }
 
@@ -266,7 +278,7 @@ export function makeToonMaterial(uniforms: Record<string, IUniform>, opts: ToonO
     if (!r.ok) console.error(`[ww3d] toon patch failed: ${r.problems.join('; ')}`);
     opts.onVertex?.(shader as unknown as ShaderLike);
   };
-  m.customProgramCacheKey = (): string => `ww-toon-v2${opts.cacheKey ?? ''}`;
+  m.customProgramCacheKey = (): string => `ww-toon-v3${opts.cacheKey ?? ''}`;
   m.userData['ww'] = 'toon';
   m.userData['uniforms'] = uniforms;
   return m;

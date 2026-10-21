@@ -14,6 +14,8 @@ import { Color, Group, Scene, Vector3 } from 'three';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
+import { SWAY } from '../../../src/engine/ww3d/bossMotion.ts';
+import { BOSS_RIM, GLOW_FILL, PULSE_LOW, spellRim } from '../../../src/engine/ww3d/glow.ts';
 import { MoveFx } from '../../../src/engine/ww3d/moveFx.ts';
 import {
   BODY_OFF_DEG,
@@ -168,7 +170,7 @@ describe('attaching', () => {
     }
     // the yaw: a girl's body is turned BODY_OFF_DEG off the direction to the lens from her slot, Valefor takes a fixed turn toward the party
     ['yuna', 'rikku', 'paine'].forEach((id, i) => expect(yawOf(modelOf(r, id as WwId)), id).toBeCloseTo(bodyYaw(PARTY_SLOTS[i]!, TARGET_POSITION, 0, BODY_OFF_DEG), 9));
-    expect(yawOf(modelOf(r, WW_BOSS_ID))).toBeCloseTo(rad(BOSS_YAW_DEG), 9);
+    expect(Math.abs(yawOf(modelOf(r, WW_BOSS_ID)) - rad(BOSS_YAW_DEG))).toBeLessThanOrEqual(rad(SWAY.yawDeg * SWAY.activeGain) + 1e-9); // a fixed turn, and the sway's few degrees of drift on top
     expect(modelOf(r, 'rikku').height).toBeLessThan(modelOf(r, 'yuna').height);
     expect(modelOf(r, 'paine').height).toBeGreaterThan(modelOf(r, 'yuna').height);
   });
@@ -252,7 +254,7 @@ describe('Valefor\'s moves', () => {
     r.skin.update(0.02);
     r.skin.listener.open!(WW_BOSS_ID, 'cast', 0.6, info(VALEFOR_ENERGY_RAY_ID, ['yuna', 'rikku', 'paine']));
     expect(r.fx.kinds).toEqual(['ray']);
-    expect(r.fx.group.children).toHaveLength(1 + 3);
+    expect(r.fx.group.children).toHaveLength(1 + 2 * 3); // the muzzle orb, and a sleeve and a core for each girl's beam
     r.skin.listener.open!(WW_BOSS_ID, 'overdrive', 1.5, info(VALEFOR_ENERGY_BLAST_ID, ['yuna', 'rikku', 'paine']));
     expect(r.fx.kinds).toEqual(['ray', 'blast']);
     r.skin.listener.open!(WW_BOSS_ID, 'cast', 0.6, info(VALEFOR_SONIC_WINGS_ID, ['yuna']));
@@ -321,37 +323,46 @@ describe('following', () => {
     expect(toon.emissiveIntensity).toBeLessThan(0.02);
   });
 
-  it('swells a cast glow while the actor holds the cast pose (warm for a girl, a golden white for Valefor) and lets it go after', async () => {
+  it("lights a thin rim aura while the actor holds the cast pose (the spell's colour for a girl, a warm gold for Valefor), with only a faint fill under it, and lets it go after", async () => {
     const r = await rig(['yuna', WW_BOSS_ID]);
     run(r, 0.1);
-    const girlMat = modelOf(r, 'yuna').materials[0]!.material;
-    const bossMat = modelOf(r, WW_BOSS_ID).materials[0]!.material;
-    expect([girlMat.emissiveIntensity, bossMat.emissiveIntensity]).toEqual([0, 0]);
-    for (const id of ['yuna', WW_BOSS_ID]) r.skin.listener.open!(id, 'cast', 0.3, { targetIds: [] }); // the beat holds the glow whatever painting the actor shows
+    const girl = modelOf(r, 'yuna');
+    const boss = modelOf(r, WW_BOSS_ID);
+    const girlMat = girl.materials[0]!.material;
+    const bossMat = boss.materials[0]!.material;
+    expect([girl.aura.w, boss.aura.w]).toEqual([0, 0]);
+    r.skin.listener.open!('yuna', 'cast', 0.3, { abilityId: 'protect', targetIds: [] }); // the beat holds the aura whatever painting the actor shows
+    r.skin.listener.open!(WW_BOSS_ID, 'cast', 0.3, { targetIds: [] });
     run(r, 1.2);
-    expect(girlMat.emissiveIntensity).toBeGreaterThan(0.1);
+    expect(girl.aura.w).toBeGreaterThan(0.5 * PULSE_LOW); // the rim is lit (its strength breathes from the pulse's low to 1)
+    expect([girl.aura.x, girl.aura.y, girl.aura.z]).toEqual([...spellRim('protect')]); // the spell's colour: Protect is a gold
+    expect(boss.aura.w).toBeGreaterThan(0.5 * PULSE_LOW);
+    expect([boss.aura.x, boss.aura.y, boss.aura.z]).toEqual([...BOSS_RIM]);
+    // the fill under it is faint: phase 2's was 0.5 and the girls went cream
+    expect(girlMat.emissiveIntensity).toBeLessThanOrEqual(GLOW_FILL + 1e-9);
+    expect(bossMat.emissiveIntensity).toBeLessThanOrEqual(GLOW_FILL + 1e-9);
     expect(girlMat.emissive.r).toBeGreaterThan(girlMat.emissive.b); // warm
-    expect(bossMat.emissiveIntensity).toBeGreaterThan(0.1);
-    expect(bossMat.emissive.r).toBeGreaterThan(0.9);
     for (const id of ['yuna', WW_BOSS_ID]) r.skin.listener.close!(id);
     run(r, 2);
-    expect(girlMat.emissiveIntensity).toBeLessThan(0.02);
+    expect(girl.aura.w).toBe(0);
+    expect(girlMat.emissiveIntensity).toBeLessThan(0.01);
   });
 
-  it("lets a girl's cast glow go after a cast's length when her beat never closes, swells afresh on the next cast, and does not cap Valefor's charge", async () => {
+  it("lets a girl's aura go after a cast's length when her beat never closes, lights afresh on the next cast, and does not cap Valefor's charge", async () => {
     const r = await rig(['yuna', WW_BOSS_ID]);
     run(r, 0.1);
-    const girlMat = modelOf(r, 'yuna').materials[0]!.material;
-    const bossMat = modelOf(r, WW_BOSS_ID).materials[0]!.material;
+    const girl = modelOf(r, 'yuna');
+    const boss = modelOf(r, WW_BOSS_ID);
     for (const id of ['yuna', WW_BOSS_ID]) r.skin.listener.open!(id, 'cast', 0.3, { targetIds: [] }); // and no close: the ATB left the beat open (phase 2: the cream Yuna)
     run(r, 1.2);
-    expect(girlMat.emissiveIntensity).toBeGreaterThan(0.1);
+    expect(girl.aura.w).toBeGreaterThan(0.2);
     run(r, 4);
-    expect(girlMat.emissiveIntensity).toBeLessThan(0.02); // a cast's length, then the glow is gone
-    expect(bossMat.emissiveIntensity).toBeGreaterThan(0.1); // her charge is as long as her action
-    r.skin.listener.open!('yuna', 'cast', 0.3, { targetIds: [] }); // the next cast, with the pose still held
+    expect(girl.aura.w).toBe(0); // a cast's length, then the aura is gone
+    expect(boss.aura.w).toBeGreaterThan(0.2); // her charge is as long as her action
+    r.skin.listener.open!('yuna', 'cast', 0.3, { abilityId: 'fire', targetIds: [] }); // the next cast, with the pose still held
     run(r, 1.2);
-    expect(girlMat.emissiveIntensity).toBeGreaterThan(0.1);
+    expect(girl.aura.w).toBeGreaterThan(0.2);
+    expect(girl.aura.x).toBeCloseTo(spellRim('fire')[0], 6);
   });
 
   it('multiplies the colour by the actor\'s tint and brightness, greys a petrified figure, and fades the figure with its alpha and dissolve', async () => {

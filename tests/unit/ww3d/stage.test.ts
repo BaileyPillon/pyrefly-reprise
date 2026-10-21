@@ -9,7 +9,7 @@ import { FileCache, fetchGlb, type LoaderIO } from '../../../src/engine/ww3d/io.
 import { PROP_NAMES, TEMPLE_NAMES, swapUrl } from '../../../src/engine/ww3d/layout.ts';
 import { PROP_SPECS, aimProps, attachProps, chooseProp, disposeProps, gripFrame, makeDagger, makePistol, makeSword } from '../../../src/engine/ww3d/props.ts';
 import { STAGE, buildStage } from '../../../src/engine/ww3d/stage.ts';
-import { polarPos } from '../../../src/engine/ww3d/stageParts.ts';
+import { FLOOR_BRAZIER_SCALE, polarPos } from '../../../src/engine/ww3d/stageParts.ts';
 import type { StageTextures } from '../../../src/engine/ww3d/stageTextureSet.ts';
 import { NO_SWAPS, loadSwaps, swapNames } from '../../../src/engine/ww3d/swaps.ts';
 import { createToonUniforms } from '../../../src/engine/ww3d/toon.ts';
@@ -252,8 +252,15 @@ describe('the temple', () => {
     expect(high.sun.shadow.mapSize.x).toBe(STAGE.shadow.size.high);
     expect(STAGE.shadow.size.high).toBe(4096);
     expect(high.sun.shadow.camera.right).toBeGreaterThanOrEqual(STAGE.R + 2); // the whole arena floor is inside
-    expect(high.sun.intensity).toBe(0.8);
-    expect(high.fill.intensity).toBeCloseTo(0.42, 10);
+    expect(high.sun.intensity).toBe(STAGE.light.sun);
+    expect(high.fill.intensity).toBeCloseTo(STAGE.light.fill, 10);
+    // polish 1 (brightness): the lab's 0.8 + 0.42 read 143 to 158 mean luma in the game (lab 131.85, TARGET-C 119.3); the lit side is the albedo times about 1.07, the colour as painted, and the shaft's additive cards are
+    // dim enough that their sum with the waterfall behind stays near the bloom's threshold
+    expect(STAGE.light.sun + STAGE.light.fill).toBeGreaterThan(0.95);
+    expect(STAGE.light.sun + STAGE.light.fill).toBeLessThan(1.15);
+    expect(STAGE.shaft.opacity + STAGE.shaft.wobble).toBeLessThanOrEqual(0.26);
+    high.update(0);
+    expect(high.sun.intensity).toBe(STAGE.light.sun); // the stage's update never touches the light
     const low = buildStage(u, { textures: blank, quality: 'low' });
     expect(low.sun.shadow.mapSize.x).toBe(2048);
     high.dispose();
@@ -289,7 +296,7 @@ describe('the temple', () => {
     // the three rows stack to the wall's height, the procedural pilaster boxes are gone, and the flames sit on the braziers' tops
     const top = Math.max(...pieces.filter((c) => c.name === 'temple:wall').map((c) => new Box3().setFromObject(c).max.y));
     expect(top).toBeCloseTo(STAGE.H, 5);
-    expect(swapped.flames[0]!.base.y).toBeCloseTo(1.1 + 0.1, 5);
+    expect(swapped.flames[0]!.base.y).toBeCloseTo(1.1 * FLOOR_BRAZIER_SCALE + 0.1, 5); // on the (1.3 times larger) brazier's top
     expect(procedural.flames[0]!.base.y).toBe(2.15);
     expect(swapped.group.children.length).toBeGreaterThan(procedural.group.children.length); // many more objects (the tiles), each sharing one geometry
     procedural.dispose();

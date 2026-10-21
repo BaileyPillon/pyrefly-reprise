@@ -19,7 +19,7 @@ import { PROP_NAMES, TEMPLE_NAMES, WORLD_HEIGHT, type PropName, type TempleName 
 import { loadWwModels } from '../../../src/engine/ww3d/model.ts';
 import { PROP_SPECS } from '../../../src/engine/ww3d/props.ts';
 import { STAGE, buildStage } from '../../../src/engine/ww3d/stage.ts';
-import { WALL_MODULE_HEIGHT, rowsOf } from '../../../src/engine/ww3d/stageParts.ts';
+import { FLOOR_BRAZIER_SCALE, WALL_BRAZIER_SCALE, WALL_MODULE_HEIGHT, doorScale, pillarAzimuths, rowsOf } from '../../../src/engine/ww3d/stageParts.ts';
 import type { StageTextures } from '../../../src/engine/ww3d/stageTextureSet.ts';
 import { loadSwaps, swapNames } from '../../../src/engine/ww3d/swaps.ts';
 import { createToonUniforms } from '../../../src/engine/ww3d/toon.ts';
@@ -193,7 +193,12 @@ describe.skipIf(!haveAll)('the temple is built from the kit', () => {
     expect(azimuthOf(door!.position)).toBeCloseTo(STAGE.doorAz, 6);
     expect(door!.position.z, 'at the back: -z is away from the camera').toBeLessThan(-8);
     expect(door!.position.x, 'toward the right of the frame').toBeGreaterThan(0);
-    expect(radiusOf(door!.position)).toBeCloseTo(apothem - 0.814 / 2, 2); // its 0.81 m depth ends on the wall
+    const k = doorScale(H, 3.5);
+    expect(door!.scale.x).toBeCloseTo(k, 6);
+    expect(door!.scale.y).toBeCloseTo(k, 6);
+    expect(3.5 * k / H, "the door's top sits at about 0.45 to 0.5 of the wall's height, as in TARGET-C").toBeGreaterThan(0.45);
+    expect(3.5 * k / H).toBeLessThan(0.5);
+    expect(radiusOf(door!.position)).toBeCloseTo(apothem - (0.814 * k) / 2, 2); // its (scaled) depth ends on the wall
     expect(door!.position.y).toBe(0);
     expect(new Vector3(0, 0, 1).applyQuaternion(door!.quaternion).dot(new Vector3(-door!.position.x, 0, -door!.position.z).normalize())).toBeCloseTo(1, 6);
     stage.dispose();
@@ -203,11 +208,12 @@ describe.skipIf(!haveAll)('the temple is built from the kit', () => {
     const stage = await build();
     const pillars = piecesOf(stage, 'pillar');
     expect(pillars).toHaveLength(6 * 3);
-    const labAzimuths = [-52, -33, -13, 11, 35, 54];
+    const labAzimuths = pillarAzimuths((3.353 * doorScale(H, 3.5)) / 2, apothem); // the lab's six, the two beside the door moved out of the scaled door's way
+    expect(labAzimuths.filter((a, i) => a !== [-52, -33, -13, 11, 35, 54][i])).toHaveLength(2);
     const rowH = H / 3;
     const k = rowH / 4;
     for (const az of labAzimuths) {
-      const column = pillars.filter((p) => Math.abs(azimuthOf(p.position) - az) < 1e-6);
+      const column = pillars.filter((p) => Math.abs(azimuthOf(p.position) - az) < 0.01); // (the door's measured width is a hair more than the 3.353 typed here)
       expect(column.map((p) => p.position.y).sort((a, b) => a - b), `pillar at ${az}`).toEqual([0, rowH, 2 * rowH].map((y) => expect.closeTo(y, 6)));
       for (const p of column) {
         expect(p.scale.x).toBeCloseTo(k, 6);
@@ -223,8 +229,8 @@ describe.skipIf(!haveAll)('the temple is built from the kit', () => {
     const braziers = piecesOf(stage, 'brazier');
     expect(braziers).toHaveLength(5);
     expect(stage.flames).toHaveLength(5);
-    const floor = braziers.filter((b) => b.scale.x === 1);
-    const wall = braziers.filter((b) => b.scale.x !== 1);
+    const floor = braziers.filter((b) => Math.abs(b.scale.x - FLOOR_BRAZIER_SCALE) < 1e-9);
+    const wall = braziers.filter((b) => Math.abs(b.scale.x - FLOOR_BRAZIER_SCALE) >= 1e-9);
     expect(floor).toHaveLength(3);
     expect(wall).toHaveLength(2);
     expect(floor.map((b) => Math.round(azimuthOf(b.position))).sort((a, b) => a - b)).toEqual([-62, 19, 41]);
@@ -232,8 +238,9 @@ describe.skipIf(!haveAll)('the temple is built from the kit', () => {
       expect(b.position.y).toBe(0);
       expect(radiusOf(b.position)).toBeCloseTo(R - 1.9, 6);
     }
-    for (const b of wall) expect(b.scale.x).toBeCloseTo(0.8, 6);
-    // the flames rest just above each top: a floor brazier is 1.1 m, a wall one 0.88 on its bracket
+    for (const b of wall) expect(b.scale.x).toBeCloseTo(WALL_BRAZIER_SCALE, 6);
+    expect(FLOOR_BRAZIER_SCALE, 'the braziers read small beside TARGET-C: about 1.3 times').toBeCloseTo(1.3, 9);
+    // the flames rest just above each top: a floor brazier is 1.1 m times its scale, a wall one smaller on its bracket
     const flameYs = stage.flames.map((f) => f.base.y).sort((a, b) => a - b);
     const topOf = (b: (typeof braziers)[number]): number => b.position.y + 1.1 * b.scale.y;
     const expectedYs = braziers.map((b) => topOf(b) + 0.1).sort((a, b) => a - b);

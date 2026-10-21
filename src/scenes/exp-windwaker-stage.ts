@@ -77,7 +77,13 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
   const search = typeof location === 'undefined' ? '' : location.search;
   if (paintedForced(search)) return buildDjoseChamberScene(opts);
 
-  const [{ STAGE, buildStage }, { loadSwaps, swapNames }, { loadWwModels }, { WwSkin }, { MoveFx }, { tapDirector }, { FileCache, defaultIO }, { paletteFor }, toon] = await Promise.all([
+  // where the scene's own time goes (a dev server's debug handle reads it as `__ww3d.timings`, milliseconds since the factory was called; polish 1, the battle start held 11 to 18 s)
+  const t0 = typeof performance === 'undefined' ? 0 : performance.now();
+  const timings: Record<string, number> = {};
+  const mark = (name: string): void => {
+    if (typeof performance !== 'undefined') timings[name] = Math.round(performance.now() - t0);
+  };
+  const [{ STAGE, buildStage }, { loadSwaps, swapNames }, { loadWwModels, prefetchModels }, { WwSkin }, { MoveFx }, { tapDirector }, { FileCache, defaultIO }, { paletteFor }, toon] = await Promise.all([
     import('../engine/ww3d/stage.ts'),
     import('../engine/ww3d/swaps.ts'),
     import('../engine/ww3d/model.ts'),
@@ -89,6 +95,7 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
     import('../engine/ww3d/toon.ts'),
   ]);
 
+  mark('imports');
   const group = new Group();
   group.name = 'scene:exp-windwaker';
   const variantName = toon.variantFromSearch(search);
@@ -109,11 +116,14 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
   // the files: the swapped pieces first (the weapons are attached to the models, the temple pieces to the stage), then the four models
   const base = import.meta.env.BASE_URL;
   const files = new FileCache(defaultIO(), (m) => console.warn(m));
+  prefetchModels(files, base, WW_MODEL_DIR); // the big files start now, beside the pieces
   const swaps = await loadSwaps(files, base, WW_PROP_DIR, WW_TEMPLE_DIR);
+  mark('swaps');
   const found = swapNames(swaps);
   if (found.length > 0) console.info(`[ww3d] swapped in: ${found.join(', ')}`);
   const stage = buildStage(uniforms, { swaps: swaps.temple, ...(opts.quality ? { quality: opts.quality } : {}) });
   group.add(stage.group);
+  mark('stage');
   const models = await loadWwModels({
     base,
     dir: WW_MODEL_DIR,
@@ -124,12 +134,14 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
     log: (m) => console.info(m),
   });
 
+  mark('models');
   const fx = new MoveFx();
   group.add(fx.group);
   const skin = new WwSkin({ host: group, models, fx });
   const directed = tapDirector(undefined, skin.listener); // the beats start the models' clips (attack and cast), the move effects and the wings' flap
-  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, fx, uniforms, variant: variantName, swaps }; // the debug handle (a dev server only)
+  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, fx, uniforms, variant: variantName, swaps, timings }; // the debug handle (a dev server only)
 
+  mark('ready');
   let clock = 0;
   const build: SceneBuild = {
     group,

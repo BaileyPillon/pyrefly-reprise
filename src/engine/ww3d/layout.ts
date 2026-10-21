@@ -97,7 +97,12 @@ export const BODY_OFF_DEG = 62;
 export const FACE_OFF_DEG = 46;
 /** The most the procedural head turn may move the head away from what the clip does, degrees. */
 export const HEAD_TURN_MAX_DEG = 55;
-export const BOSS_YAW_DEG = -28;
+/**
+ * Valefor's yaw about +Y (0 faces +Z, the lens side), degrees. The direction from her spot to the target shot's lens (1.0, 0.37, 3.2) is -24.8 degrees; she is turned a further `BOSS_OFF_DEG` toward the party (the left of the
+ * frame), to -75: three-quarter, as in TARGET-C. The look lab had her at -28, which is almost square to the lens: a front-on cutout (phase 2, stills 21, 23, 24). `tests/unit/ww3d/bossMotion.test.ts` derives the number.
+ */
+export const BOSS_OFF_DEG = 50;
+export const BOSS_YAW_DEG = -75;
 
 export const rad = (deg: number): number => (deg * Math.PI) / 180;
 

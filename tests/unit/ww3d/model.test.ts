@@ -20,6 +20,7 @@ import {
   type V3,
   type WwId,
 } from '../../../src/engine/ww3d/layout.ts';
+import { SWAY } from '../../../src/engine/ww3d/bossMotion.ts';
 import { loadWwModels, MOUTH_LOCAL, CHEST_LOCAL, WwModel, type ModelContext } from '../../../src/engine/ww3d/model.ts';
 import { createToonUniforms } from '../../../src/engine/ww3d/toon.ts';
 import { RATE_ACTIVE } from '../../../src/engine/ww3d/wing.ts';
@@ -213,7 +214,7 @@ describe('Valefor\'s file', () => {
     expect(v.height).toBeCloseTo(BOSS_HEIGHT, 10);
     const mesh = v.root.getObjectByProperty('isMesh', true) as Mesh;
     const material = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as { customProgramCacheKey(): string };
-    expect(material.customProgramCacheKey()).toBe('ww-toon-v2-wing'); // the vertex patch is part of the program
+    expect(material.customProgramCacheKey()).toBe('ww-toon-v3-wing'); // the vertex patch is part of the program
     expect(mesh.customDepthMaterial).toBeDefined(); // her cast shadow flaps too
     expect(mesh.receiveShadow).toBe(false);
     expect(mesh.castShadow).toBe(true);
@@ -221,7 +222,7 @@ describe('Valefor\'s file', () => {
     v.root.updateMatrixWorld(true);
     expect(v.worldPointOf([0.03, 0, -0.33]).x).toBeCloseTo(0, 5);
     expect(v.worldPointOf([0.03, 0, -0.33]).z).toBeCloseTo(0, 5);
-    // she faces the party: a fixed turn
+    // she faces the party: three-quarter to the lens, a fixed turn (the sway adds a few degrees of drift on top once she is updated, `bossMotion.ts`)
     expect(v.root.children[0]!.children[0]!.rotation.y).toBeCloseTo(rad(BOSS_YAW_DEG), 10);
     // her mouth is high and in front, her chest below it
     const mouth = v.worldPointOf(MOUTH_LOCAL);
@@ -233,7 +234,7 @@ describe('Valefor\'s file', () => {
   it('hovers a metre off the floor and bobs, flaps faster as her activity rises, and falls to the ground when she is down', async () => {
     const models = await load();
     const v = models.models.get(WW_BOSS_ID)!;
-    const hover = v.root.children[0]!.children[0]!.children[0]!;
+    const hover = v.root.children[0]!.children[0]!.children[0]!.children[0]!; // root > lie > yaw > sway > hover
     v.update(0.0);
     expect(hover.position.y).toBeCloseTo(BOSS_HOVER, 5);
     const ys = new Set<number>();
@@ -241,8 +242,9 @@ describe('Valefor\'s file', () => {
       v.update(0.1);
       ys.add(Math.round(hover.position.y * 1000));
     }
-    expect(Math.max(...ys) / 1000).toBeLessThanOrEqual(BOSS_HOVER + BOSS_BOB.amplitude + 1e-3);
-    expect(Math.min(...ys) / 1000).toBeGreaterThanOrEqual(BOSS_HOVER - BOSS_BOB.amplitude - 1e-3);
+    const reach = BOSS_BOB.amplitude + SWAY.bobExtra; // the slow bob and the quicker small one
+    expect(Math.max(...ys) / 1000).toBeLessThanOrEqual(BOSS_HOVER + reach + 1e-3);
+    expect(Math.min(...ys) / 1000).toBeGreaterThanOrEqual(BOSS_HOVER - reach - 1e-3);
     expect(ys.size).toBeGreaterThan(10);
     // the flap
     const wu = v.flap!;

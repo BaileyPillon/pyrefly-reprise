@@ -2,14 +2,16 @@
  * **Valefor's stand-in moves** (`src/engine/ww3d/moves.ts`, `moveFx.ts`, `beats.ts`; FFX-2 only): which of her four actions (chapter 24's own ability ids) gets which toon beat, how long each lives, the shapes, and the
  * objects that draw them (made and freed, in Node, with no GPU); and the tap that carries the shot director's beats to the skin with the ability id and the targets.
  */
-import { Vector3 } from 'three';
+import { Color, Mesh, PerspectiveCamera, Vector3 } from 'three';
 import { describe, expect, it, vi } from 'vitest';
 
 import { x2ValeforAbilities, VALEFOR_ATTACK_ID, VALEFOR_ENERGY_BLAST_ID, VALEFOR_ENERGY_RAY_ID, VALEFOR_SONIC_WINGS_ID } from '../../../src/data/ffx2/enemies/valefor-abilities.ts';
 import { x2Valefor } from '../../../src/data/ffx2/enemies/valefor.ts';
 import { LUNGE_MS, OVERDRIVE_LEAD_MS, tapDirector, type BeatListener } from '../../../src/engine/ww3d/beats.ts';
 import { MoveFx } from '../../../src/engine/ww3d/moveFx.ts';
-import { MIN_LEAD, MOVE_TIMING, ORB, curlPoints, moveKindOf, movePhase, orbRadius } from '../../../src/engine/ww3d/moves.ts';
+import { TARGET_FOV, TARGET_POSITION } from '../../../src/engine/ww3d/camera.ts';
+import { BOSS_SPOT } from '../../../src/engine/ww3d/layout.ts';
+import { MIN_LEAD, MOVE_TIMING, ORB, ORB_BANDS, ORB_COLOURS, ORB_MAX_SHARE, curlPoints, moveKindOf, movePhase, orbCapRadius, orbFrameShare, orbRadius } from '../../../src/engine/ww3d/moves.ts';
 import { ATTACK_IMPACT } from '../../../src/engine/BattlePresenterActors.ts';
 import type { ActionShot, ImpactShot, ShotCtx } from '../../../src/engine/ShotDirector.ts';
 
@@ -81,11 +83,11 @@ describe('the objects that draw them', () => {
   it('makes a beam to each girl and a muzzle orb for the Ray, a big orb and a ring for the Blast, three trails per girl for Sonic Wings, and frees them all', () => {
     const fx = new MoveFx();
     fx.start('ray', mouth, girls, 0.6);
-    expect(fx.group.children).toHaveLength(1 + 3); // the muzzle and one beam each
+    expect(fx.group.children).toHaveLength(1 + 2 * 3); // the muzzle, and a sleeve and a core for each girl's beam
     fx.start('blast', mouth, [], 1.2);
-    expect(fx.group.children).toHaveLength(4 + 2);
+    expect(fx.group.children).toHaveLength(7 + 2);
     fx.start('wings', mouth, [girls[0]!], 0.6);
-    expect(fx.group.children).toHaveLength(6 + 3);
+    expect(fx.group.children).toHaveLength(9 + 3);
     expect(fx.kinds).toEqual(['ray', 'blast', 'wings']);
     expect(fx.active).toBe(3);
     for (let i = 0; i < 200; i++) fx.update(0.016);
@@ -97,7 +99,7 @@ describe('the objects that draw them', () => {
   it('keeps the beam shut through the charge, opens it at the blow, and aims it from the mouth at the girl', () => {
     const fx = new MoveFx();
     fx.start('ray', mouth, [girls[0]!], 1.0);
-    const [muzzle, beam] = fx.group.children as [import('three').Mesh, import('three').Mesh];
+    const [muzzle, beam] = fx.group.children as [import('three').Mesh, import('three').Mesh]; // the muzzle, then the beam's sleeve (its core is the third)
     fx.update(0.5);
     expect(beam.visible).toBe(false);
     expect(muzzle.scale.x).toBeGreaterThan(0.1);
@@ -122,6 +124,121 @@ describe('the objects that draw them', () => {
     const early = trail.geometry.drawRange.count;
     fx.update(0.3);
     expect(trail.geometry.drawRange.count).toBeGreaterThan(early);
+    fx.dispose();
+  });
+});
+
+describe('the Energy Blast orb: a toon orb, never more than a quarter of the frame, never bloomed', () => {
+  const lumOf = (hex: string): number => {
+    const c = new Color(hex); // linear
+    return 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
+  };
+  const chest = new Vector3(BOSS_SPOT[0], 0.9 + 1.3, BOSS_SPOT[2]);
+  const girls = [new Vector3(-0.34, 0.8, 0.89), new Vector3(-0.05, 0.7, -0.16), new Vector3(0.69, 0.8, -1.28)];
+  const lens = (aspect: number): PerspectiveCamera => {
+    const cam = new PerspectiveCamera(TARGET_FOV, aspect, 0.1, 400);
+    cam.position.set(...TARGET_POSITION);
+    return cam;
+  };
+  /** What the renderer does for the orb's mesh each frame: call its hook with the live camera. */
+  const draw = (mesh: Mesh, cam: PerspectiveCamera): number => {
+    (mesh.onBeforeRender as (...a: unknown[]) => void)(undefined, undefined, cam);
+    return mesh.scale.x;
+  };
+
+  it('peaks at 2.0 m, in four flat bands of colour, none of them above the bloom threshold in luminance', () => {
+    expect(ORB.radius * ORB.burst).toBeCloseTo(2.0, 6); // phase 2's was 2.73 m
+    expect(ORB_BANDS.core).toBeGreaterThan(ORB_BANDS.mid);
+    expect(ORB_BANDS.mid).toBeGreaterThan(ORB_BANDS.line);
+    for (const hex of Object.values(ORB_COLOURS)) expect(lumOf(hex), hex).toBeLessThan(1); // the palette's bloom threshold is 1.0 and its high pass keeps the whole colour of a pixel above it
+    expect(lumOf(ORB_COLOURS.core)).toBeGreaterThan(lumOf(ORB_COLOURS.mid)); // the core is the lightest, the outline the darkest
+    expect(lumOf(ORB_COLOURS.mid)).toBeGreaterThan(lumOf(ORB_COLOURS.rim));
+    expect(lumOf(ORB_COLOURS.rim)).toBeGreaterThan(lumOf(ORB_COLOURS.line));
+  });
+
+  it('has a frame-share maths whose cap inverts it: a radius at the cap covers exactly the share, on any window shape', () => {
+    for (const aspect of [4 / 3, 16 / 10, 16 / 9, 21 / 9]) {
+      for (const d of [5, 7.4, 10]) {
+        const cap = orbCapRadius(d, TARGET_FOV, aspect);
+        expect(orbFrameShare(cap, d, TARGET_FOV, aspect), `aspect ${aspect}, ${d} m`).toBeCloseTo(ORB_MAX_SHARE, 6);
+        expect(orbFrameShare(cap * 0.5, d, TARGET_FOV, aspect)).toBeLessThan(ORB_MAX_SHARE);
+        expect(orbFrameShare(cap * 1.2, d, TARGET_FOV, aspect)).toBeGreaterThan(ORB_MAX_SHARE);
+      }
+    }
+    expect(ORB_MAX_SHARE).toBeLessThanOrEqual(0.3); // "at most about 25 to 30 percent of the frame"
+    expect(orbFrameShare(5, 3, 49, 16 / 9)).toBe(1); // a lens inside the sphere sees all of it
+  });
+
+  it('at its peak in the target shot, at every window shape, covers well under 30 percent of the frame, and the wide window covers less', () => {
+    const fx = new MoveFx();
+    fx.start('blast', chest, girls, 1.5);
+    const orb = fx.group.children[0] as Mesh;
+    fx.update(1.5); // the blow: the peak
+    expect(fx.orbRadii!.wanted).toBeCloseTo(ORB.radius * ORB.burst, 6);
+    const shares: number[] = [];
+    for (const aspect of [4 / 3, 16 / 10, 16 / 9, 21 / 9]) {
+      const cam = lens(aspect);
+      const r = draw(orb, cam);
+      const d = cam.position.distanceTo(orb.position);
+      shares.push(orbFrameShare(r, d, cam.fov, aspect));
+      expect(shares.at(-1), `aspect ${aspect}`).toBeLessThanOrEqual(0.3);
+    }
+    // the wide window shows the whole 2 m orb at about a fifth; the 4:3 one would have 29+ percent and is capped
+    expect(shares[2]).toBeLessThan(0.25);
+    expect(shares[2]).toBeGreaterThan(0.1);
+    expect(shares[2]).toBeLessThan(shares[0]! + 1e-9);
+    fx.dispose();
+  });
+
+  it('is capped by the live camera when the camera is close: a lens that would be filled by it draws it smaller, and a far lens draws it as asked', () => {
+    const fx = new MoveFx();
+    fx.start('blast', chest, girls, 1.0);
+    const orb = fx.group.children[0] as Mesh;
+    fx.update(1.0);
+    const asked = fx.orbRadii!.wanted;
+    const near = lens(16 / 9);
+    near.position.set(chest.x - 3, chest.y, chest.z + 4); // 5 m from the orb
+    near.lookAt(orb.position);
+    const rNear = draw(orb, near);
+    expect(rNear).toBeLessThan(asked);
+    expect(rNear).toBeCloseTo(orbCapRadius(near.position.distanceTo(orb.position), near.fov, near.aspect), 6);
+    const far = lens(16 / 9);
+    far.position.set(chest.x, chest.y, chest.z + 40);
+    expect(draw(orb, far)).toBeCloseTo(asked, 9);
+    expect(fx.orbRadii!.drawn).toBeCloseTo(asked, 9);
+    fx.dispose();
+  });
+
+  it('hangs in front of her chest toward the girls, so she stays readable behind it, and does not write depth', () => {
+    const fx = new MoveFx();
+    fx.start('blast', chest, girls, 1.5);
+    const orb = fx.group.children[0] as Mesh;
+    const toGirls = girls.reduce((a, g) => a.add(g), new Vector3()).multiplyScalar(1 / 3).sub(chest).setY(0).normalize();
+    const moved = orb.position.clone().sub(chest);
+    expect(moved.length()).toBeCloseTo(ORB.ahead, 6);
+    expect(moved.clone().normalize().dot(toGirls)).toBeCloseTo(1, 6);
+    expect((orb.material as { depthWrite: boolean }).depthWrite).toBe(false);
+    fx.dispose();
+    // with no girl to aim at the orb stays on her chest
+    const fx2 = new MoveFx();
+    fx2.start('blast', chest, [], 1.5);
+    expect((fx2.group.children[0] as Mesh).position.distanceTo(chest)).toBeLessThan(1e-9);
+    fx2.dispose();
+  });
+});
+
+describe('the beam and the wind are flat and under the bloom', () => {
+  const lumOf = (c: Color): number => 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
+  it('every flat material of the Ray and Sonic Wings is below the threshold in luminance and not additive', () => {
+    const fx = new MoveFx();
+    const mouth = new Vector3(4, 3.4, -2.6);
+    fx.start('ray', mouth, [new Vector3(0, 0.8, 0)], 0.6);
+    fx.start('wings', mouth, [new Vector3(0, 0.8, 0)], 0.6);
+    for (const m of fx.group.children as Mesh[]) {
+      const mat = m.material as { color?: Color; blending?: number };
+      if (mat.color) expect(lumOf(mat.color), m.name).toBeLessThan(1);
+      expect(mat.blending ?? 1, 'normal blending (an additive 2.4 was the bloom)').toBe(1);
+    }
     fx.dispose();
   });
 });

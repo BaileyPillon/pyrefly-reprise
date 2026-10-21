@@ -77,6 +77,19 @@ const faceCentre = (m: Object3D): void => m.lookAt(0, m.position.y, 0);
 /** The height of one module of the kit's wall and pillars, metres: the wall's height is cut into this many (rounded) equal rows. */
 export const WALL_MODULE_HEIGHT = 4;
 
+/**
+ * Polish 1 (the kit read small and grey beside TARGET-C): the door is scaled evenly so its top is {@link DOOR_TOP_SHARE} of the wall's height (TARGET-C: about 0.45 to 0.5; the 3.5 m file was a third), the floor braziers
+ * 1.3 times (the wall ones keep their 0.8 against the floor ones), and the wall and the pillars are multiplied toward TARGET-C's blue stone (its wall stone median is (60, 102, 142) in display colour, the phase-2 build's
+ * was (91, 125, 132): grey, busier). The tint is a multiply in the toon material, linear, never an edit of the file.
+ */
+export const DOOR_TOP_SHARE = 0.476;
+export const FLOOR_BRAZIER_SCALE = 1.3;
+export const WALL_BRAZIER_SCALE = 0.8 * FLOOR_BRAZIER_SCALE;
+export const TEMPLE_TINT: Readonly<Partial<Record<TempleName, readonly [number, number, number]>>> = {
+  wall: [0.46, 0.72, 1.08],
+  pillar: [0.52, 0.76, 1.06],
+};
+
 /** How many rows of the kit's wall and pillars make a wall `H` high. */
 export const rowsOf = (H: number): number => Math.max(1, Math.round(H / WALL_MODULE_HEIGHT));
 
@@ -88,7 +101,9 @@ export function templateOf(ctx: StageCtx, name: TempleName): Object3D | null {
   if (!t) {
     t = file.clone(true);
     t.name = `temple:${name}`;
-    toonify(t, ctx.uniforms, { cast: name !== 'wall', receive: false, cull: true });
+    const set = toonify(t, ctx.uniforms, { cast: name !== 'wall', receive: false, cull: true });
+    const tint = TEMPLE_TINT[name];
+    if (tint) for (const { material } of set.entries) material.color.multiply(new Color().setRGB(tint[0], tint[1], tint[2])); // linear, toward TARGET-C's blue stone
     ctx.templates.set(name, t);
   }
   return t;
@@ -137,6 +152,19 @@ export function tileWall(ctx: StageCtx, doorAz: number): number | null {
   return apothem;
 }
 
+/** The six pilaster azimuths of the lab's chamber, and the two beside the door's bay (11 and 35 degrees on either side of the door at 23). */
+export const PILASTER_AZ: readonly number[] = [-52, -33, -13, 11, 35, 54];
+const DOOR_AZ_DEG = 23;
+/** The azimuth gap kept between a scaled door's edge and the pillar beside it (degrees), a pillar's half width included. */
+const DOOR_PILLAR_GAP_DEG = 3.2;
+
+/** The pilaster azimuths with the two beside the door moved out of its way when a swapped door of half width `doorHalf` metres stands against a wall face of radius `face` (the lab's 11 and 35 are the stand-in door's edges). */
+export function pillarAzimuths(doorHalf: number, face: number): number[] {
+  if (doorHalf <= 0) return [...PILASTER_AZ];
+  const half = (Math.asin(Math.min(1, doorHalf / face)) * 180) / Math.PI + DOOR_PILLAR_GAP_DEG;
+  return PILASTER_AZ.map((a) => (a > DOOR_AZ_DEG - 12.5 && a < DOOR_AZ_DEG ? Math.min(a, DOOR_AZ_DEG - half) : a > DOOR_AZ_DEG && a < DOOR_AZ_DEG + 12.5 ? Math.max(a, DOOR_AZ_DEG + half) : a));
+}
+
 /**
  * Pilasters between the bays (full height, blue blocks, a lighter cap and plinth) and the carved panels in the bays. `face` is the radius of the wall's inner face; `wallSwapped`: a wall file stands in for the wall, so
  * the procedural pilasters and panels are not built (a swapped `pillar` file is still placed, stacked in the wall's rows).
@@ -145,7 +173,8 @@ export function addBays(ctx: StageCtx, face: number = ctx.R, wallSwapped = false
   const { R, H, toon, add, tex } = ctx;
   const pil = toon({ map: tex.blockWall(5, [1, 4], [66, 98, 162], 4) });
   const cap = toon({ color: 0x7f9ad0 });
-  const pilAz = [-52, -33, -13, 11, 35, 54];
+  const door = swapSize(ctx, 'door');
+  const pilAz = pillarAzimuths(door ? (door.x * doorScale(H, door.y)) / 2 : 0, face);
   const size = swapSize(ctx, 'pillar');
   const rows = rowsOf(H);
   for (const az of pilAz) {
@@ -182,12 +211,16 @@ export function addBays(ctx: StageCtx, face: number = ctx.R, wallSwapped = false
   faceCentre(big);
 }
 
+/** The even scale that puts the door's top at {@link DOOR_TOP_SHARE} of the wall's height `H`, for a door file `height` tall. */
+export const doorScale = (H: number, height: number): number => (height > 1e-6 ? (DOOR_TOP_SHARE * H) / height : 1);
+
 /** The carved arched door with its golden wheel, set in a stone frame, at azimuth `az`. `face` is the radius of the wall's inner face: a swapped door file stands with its back against it. */
 export function addDoor(ctx: StageCtx, az: number, face: number = ctx.R): void {
   const { R, toon, add, tex } = ctx;
   const size = swapSize(ctx, 'door');
   if (size) {
-    placeSwap(ctx, 'door', polarPos(az, face - size.z / 2, 0));
+    const k = doorScale(ctx.H, size.y);
+    placeSwap(ctx, 'door', polarPos(az, face - (size.z * k) / 2, 0), k); // its back (scaled depth) still ends on the wall
     return;
   }
   const frame = add(new BoxGeometry(4.6, 6.9, 0.7), toon({ color: 0x6f8bc4 }), { cast: true, at: polarPos(az, R - 0.38, 3.45) });
@@ -227,8 +260,7 @@ export interface Flame {
   readonly phase: number;
 }
 
-/** How big a swapped brazier is on a wall bracket against the floor's, and how far above a piece's top the flame rests. */
-const WALL_BRAZIER_SCALE = 0.8;
+/** How far above a piece's top the flame rests. */
 const FLAME_LIFT = 0.1;
 
 /**
@@ -252,8 +284,8 @@ export function addTorches(ctx: StageCtx, floorAz: readonly number[], wall: Read
   const brazier = swapSize(ctx, 'brazier');
   floorAz.forEach((az, i) => {
     const base = polarPos(az, R - 1.9, 0);
-    if (brazier && placeSwap(ctx, 'brazier', base)) {
-      flame(base.clone().setY(brazier.y + FLAME_LIFT), i);
+    if (brazier && placeSwap(ctx, 'brazier', base, FLOOR_BRAZIER_SCALE)) {
+      flame(base.clone().setY(brazier.y * FLOOR_BRAZIER_SCALE + FLAME_LIFT), i);
       return;
     }
     add(new CylinderGeometry(0.3, 0.42, 1.25, 12), stone, { cast: true, at: base.clone().setY(0.62) });
