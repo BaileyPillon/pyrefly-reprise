@@ -2,8 +2,8 @@
 /**
  * The booth's one command (R61; docs/DEMO-KIT.md): serve the offline copy of the site, open it full screen, stop it, or put a fresh visitor in front of a fresh save.
  *
- *   node tools/demo-kit/demo-kit.mjs start  [--dir <folder>] [--port 5173] [--browser chrome|edge] [--no-kiosk] [--no-browser] [--keep-profile]
- *   node tools/demo-kit/demo-kit.mjs reset  [--browser chrome|edge] [--no-kiosk]        (close the browser, wipe its profile = the save, open it again; the server keeps running)
+ *   node tools/demo-kit/demo-kit.mjs start  [--dir <folder>] [--port 5173] [--browser chrome|edge] [--no-kiosk] [--no-browser] [--keep-profile] [--cold]
+ *   node tools/demo-kit/demo-kit.mjs reset  [--browser chrome|edge] [--no-kiosk]        (close the browser, wipe its save and per-tab memory, keep its caches, open it again; the server keeps running)
  *   node tools/demo-kit/demo-kit.mjs stop   [--wipe]                                     (close the browser, stop the server; --wipe also deletes the browser profile)
  *   node tools/demo-kit/demo-kit.mjs status
  *
@@ -20,7 +20,7 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { DEFAULT_PORT, browserArgs, defaultSiteDir, demoUrl, findBrowser, kitHome } from './demo-kit-lib.mjs';
+import { DEFAULT_PORT, SAVE_PATHS, browserArgs, defaultSiteDir, demoUrl, findBrowser, kitHome } from './demo-kit-lib.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SERVER = join(HERE, 'serve-offline.mjs');
@@ -122,6 +122,25 @@ async function wipeProfile() {
   return !existsSync(PROFILE);
 }
 
+/** A fresh visitor: delete the game's save and the browser's per-tab memory, keep the caches (the compiled shaders make the next first fight smooth). The browser must be closed. */
+async function wipeSave() {
+  for (let i = 0; i < 20; i++) {
+    let left = false;
+    for (const rel of SAVE_PATHS) {
+      const p = join(PROFILE, ...rel.split('/'));
+      try {
+        rmSync(p, { recursive: true, force: true });
+      } catch {
+        /* a browser process still letting go of a file */
+      }
+      if (existsSync(p)) left = true;
+    }
+    if (!left) return true;
+    await sleep(300);
+  }
+  return false;
+}
+
 async function start(opt, flag) {
   const old = readJson(STATE);
   if (old?.port && (await health(old.port))) {
@@ -141,7 +160,8 @@ async function start(opt, flag) {
   if (!mark) say('note: this folder has no .demo-kit-site.json (not made by fetch-site); serving it as it is.');
   else if (!mark.complete) say(`WARNING: this copy is partial (${mark.selected} of ${mark.of} files). Some art or sound will be missing. Run fetch-site again.`);
 
-  if (!flag('--keep-profile')) await wipeProfile();
+  if (flag('--cold')) await wipeProfile();
+  else if (!flag('--keep-profile')) await wipeSave();
   const server = await startServer(dir, Number(opt('--port', String(DEFAULT_PORT))));
   const url = demoUrl(server.port);
   say(`Serving ${dir}\n  at http://127.0.0.1:${server.port}/  (nothing leaves this machine)`);
@@ -171,8 +191,8 @@ async function reset(opt, flag) {
   const what = stopBrowser(state);
   if (what === 'not-ours') say(`note: process ${state.browserPid} is no longer the kit's browser; not touching it.`);
   await sleep(500);
-  if (!(await wipeProfile())) {
-    console.error(`Could not delete ${PROFILE}: a browser process is still holding it. Close the browser window (Alt+F4) and run reset again.`);
+  if (!(await wipeSave())) {
+    console.error(`Could not delete the save in ${PROFILE}: a browser process is still holding it. Close the browser window (Alt+F4) and run reset again.`);
     return 3;
   }
   const prefer = opt('--browser') ?? state.browser;
@@ -182,7 +202,7 @@ async function reset(opt, flag) {
     return 5;
   }
   writeFileSync(STATE, JSON.stringify({ ...state, browserPid: b.pid, browser: b.name, resetAt: new Date().toISOString() }, null, 1));
-  say(`Fresh visitor: the save and the browser's memory are gone, ${b.name} is open again at ${state.url}`);
+  say(`Fresh visitor: the save and the browser's memory are gone (its caches are kept), ${b.name} is open again at ${state.url}`);
   return 0;
 }
 

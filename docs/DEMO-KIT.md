@@ -8,7 +8,7 @@ The kit lives in `tools/demo-kit/`. It needs only Node (on this PC already) and 
 |---|---|
 | `fetch-site.cmd` | Makes the offline copy: downloads the live site's own files and checks every one against release 60's manifest. **Needs internet. Do it at home.** |
 | `start-demo.cmd` | Serves the copy on this PC only and opens it full screen (kiosk) at `?demo=1`. |
-| `reset-demo.cmd` | A fresh visitor: closes the browser, wipes its save, opens it again. About five seconds. |
+| `reset-demo.cmd` | A fresh visitor: closes the browser, wipes its save, opens it again. About five seconds. It keeps the browser's caches, so the next first fight starts warm. |
 | `stop-demo.cmd` | Closes the browser and stops the server. |
 | `status-demo.cmd` | Says whether the server and the browser are running. |
 
@@ -28,7 +28,7 @@ fetch-site.cmd --verify-only        # no internet: re-checks every file in the f
 - **Every file is checked.** A file is kept only if its bytes hash to the manifest's sha256. A file that is already there and right is kept, so running it again after a dropped line fetches only what is missing. A wrong file is deleted, never kept.
 - **It checks which build is live first.** If the live site is not release 60 (a later deploy), it stops and says so. `--manifest live` copies whatever is live now; `--allow-newer` tries the old manifest anyway and fails the files that changed.
 - **It checks the room first** and refuses a copy that does not fit (`--force-space` overrides).
-- **`--max-tier 2` is a trade.** The game loads a figure's 3x or 4x master only when the figure is drawn bigger than the screen can show at 2x (a 4K screen, a close camera), and falls back one size when a master is missing (`src/engine/ArtTier.ts`). On a 1080p or 1440p screen the picture is the same. On a 4K booth screen you may see a soft figure now and then. If the booth screen is 4K, take the whole copy.
+- **`--max-tier 2` is a trade.** The game loads a figure's 3x or 4x master only when the figure is drawn bigger than the screen can show at 2x (a 4K screen, a close camera), and falls back one size when a master is missing (`src/engine/ArtTier.ts`). On a 1080p screen the picture is the same. At 1440p (the booth monitor) the engine already loads the 2x masters for the backdrop and the opening poses, and asks for 3x and 4x on close shots, so take the whole copy: it fits on C:. `--max-tier 2` is for a PC that is short of room.
 - A copy with fewer files than the manifest is marked **partial** (`.demo-kit-site.json` in the folder), and `start-demo.cmd` warns about it.
 - Run `fetch-site.cmd --verify-only` the evening before you leave. It reads every file from the disk and takes a minute or two.
 
@@ -45,8 +45,9 @@ It starts a small server for the folder on **127.0.0.1 only** (port 5173, or the
 
 ## 3. Between visitors and at the end of the day
 
-- **Next visitor, empty save:** Alt+F4, then `reset-demo.cmd`. It closes the kiosk browser, deletes its profile (the save, and the demo's own memory of which fight comes next), and opens it again on the title. The first fight after a reset is the cleanest seed (see "What demo mode does").
-- **End of day:** `stop-demo.cmd`. `stop-demo.cmd --wipe` also deletes the browser profile.
+- **Next visitor, empty save:** Alt+F4, then `reset-demo.cmd`. It closes the kiosk browser, deletes the game's save and the browser's per-tab memory (which holds the demo's own count of which fight comes next), and opens it again on the title. **It keeps the browser's caches** (the graphics driver's compiled shaders and the HTTP cache). A cold browser stalls the first fight for about 2 seconds while the driver builds its shaders; a reset must not make the next visitor meet that. The first fight after a reset is the cleanest seed (see "What demo mode does").
+- **End of day:** `stop-demo.cmd`. `stop-demo.cmd --wipe` also deletes the whole browser profile, caches included; `start-demo.cmd --cold` does the same at the start.
+- **Warm-up before the doors open:** play the first 20 seconds of both fights once. That fills the shader cache; nothing else does.
 - Nothing is stopped by name. The kit remembers the PIDs it started and checks each is still the same program before it closes it, so a leftover note from before a reboot can never close something else.
 
 ## 4. If something goes wrong
@@ -56,7 +57,8 @@ It starts a small server for the folder on **127.0.0.1 only** (port 5173, or the
 | A fight looks stuck or wrong | F5. It reloads on the title with the demo setting kept. That fight is lost; nothing else is. |
 | The picture is frozen or black | F5 first (the game does not recover a lost graphics context by itself, a reload does). Still stuck: Alt+F4, then `reset-demo.cmd`. |
 | The keyboard does nothing | Ctrl+Alt+Del, Task Manager, end the browser. Then `reset-demo.cmd`. |
-| `reset-demo.cmd` says it could not delete the profile | A browser process still holds it. Close the browser window (Alt+F4) and run it again, or run `stop-demo.cmd --wipe` and then `start-demo.cmd`. |
+| `reset-demo.cmd` says it could not delete the save | A browser process still holds it. Close the browser window (Alt+F4) and run it again, or run `stop-demo.cmd --wipe` and then `start-demo.cmd`. |
+| The pad does nothing | The browser only sees a pad after a button press while the page has focus. Press any pad button once; if it still does nothing, click once on the screen and press again. Check the pad is plugged in before the browser starts. |
 | `start-demo.cmd` says there is no copy of the site | `fetch-site.cmd` has not run, or the folder is somewhere else: add `--dir <folder>`. |
 | It says "No Chrome or Edge found" | The server is already up. Open the address it prints in any browser and press F11. |
 | 5173 is busy | The kit takes the next free port by itself and prints the address. |
@@ -77,6 +79,7 @@ The address `?demo=1` is the whole switch (`src/app/demoMode.ts`). The tab keeps
 
 ## How it was checked (R61)
 
-- `tests/unit/demo-kit.test.ts` (28 tests): the server on a real loopback port (types, cache rules, 304, Range, every way out of the folder refused, a busy port, the stop request), the downloader fetching from a stand-in "live" server (verify, keep, re-fetch, delete the wrong file, partial copies, `@` sent as `%40`), and `stopPid` leaving a process that is not the kit's alone.
+- `tests/unit/demo-kit.test.ts` (29 tests): the server on a real loopback port (types, cache rules, 304, Range, every way out of the folder refused, a busy port, the stop request), the downloader fetching from a stand-in "live" server (verify, keep, re-fetch, delete the wrong file, partial copies, `@` sent as `%40`), and `stopPid` leaving a process that is not the kit's alone.
 - The downloader was run against the real site on 32 files (8.5 MB: the page, the bundle, the fonts, the manifests, a track, two `@2x` files): all hashes matched the manifest, a second run kept all 32, `--verify-only` agreed. The full 10.2 GiB was **not** downloaded (there is not the room on D:).
-- The server and the start / status / stop commands ran against that 32-file folder (`--no-browser`). The kiosk window itself is not covered by a test: see the report for what was run on a screen.
+- The server and the start / status / stop commands ran against that 32-file folder (`--no-browser`), and the launcher ran with the real Chrome, windowed (13 of 13 checks: the browser asked the server for the page in the kit's own profile at `?demo=1`; `reset` closed it by PID, opened a new one and kept the caches; `stop` closed the browser and the server and left no state file).
+- **Not run:** the kiosk (full-screen) window itself, and a gamepad in it. On the booth PC, before the day: `start-demo.cmd`, press a pad button, check the pad moves the cursor and the picture fills the 1440p monitor.

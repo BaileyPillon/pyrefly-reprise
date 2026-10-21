@@ -133,6 +133,13 @@ export function browserArgs({ url, profileDir, kiosk = true }) {
   return args;
 }
 
+/**
+ * What a fresh visitor's reset deletes from the browser profile: the game's save (`localStorage`), its per-tab memory (`sessionStorage`, which holds the demo's seed counters), IndexedDB and any restored session,
+ * under the profile's `Default` folder. **Not** the caches: the GPU's compiled-shader cache and the HTTP cache stay, so the next visitor's first fight starts warm (a cold first fight stalls the page for about
+ * 2 s while the graphics driver builds the scene's shaders: `docs/handoff/r61-booth.md`). `stop --wipe` and `start --cold` delete the whole profile.
+ */
+export const SAVE_PATHS = Object.freeze(['Default/Local Storage', 'Default/Session Storage', 'Default/IndexedDB', 'Default/Sessions', 'Default/Service Worker', 'Default/Sync Data']);
+
 /** Where a browser may live, in the order the kit prefers: Chrome, then Edge. Pure on the environment it is given. */
 export function browserCandidates(env = process.env) {
   const pf = env['ProgramFiles'] ?? 'C:\\Program Files';

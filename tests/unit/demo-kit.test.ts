@@ -17,6 +17,7 @@ import { stopPid } from '../../tools/demo-kit/demo-kit.mjs';
 import {
   DEMO_QUERY,
   HOST_READ_FILES,
+  SAVE_PATHS,
   browserArgs,
   cacheControlOf,
   contentTypeOf,
@@ -152,6 +153,15 @@ describe('the pure parts', () => {
     const windowed = browserArgs({ url: 'u', profileDir: 'p', kiosk: false });
     expect(windowed).not.toContain('--kiosk');
     expect(windowed.some((a) => a.startsWith('--window-size='))).toBe(true);
+  });
+
+  it('a fresh visitor deletes the save and the per-tab memory, and never the caches (the compiled shaders make the next first fight smooth)', () => {
+    expect(SAVE_PATHS).toContain('Default/Local Storage');
+    expect(SAVE_PATHS).toContain('Default/Session Storage');
+    for (const p of SAVE_PATHS) {
+      expect(p.startsWith('Default/')).toBe(true);
+      expect(p).not.toMatch(/cache|shader|gpu/i);
+    }
   });
 
   it('findBrowser prefers Chrome, falls back to Edge, and honours a choice', () => {

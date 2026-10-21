@@ -8,6 +8,7 @@ export function safeJoin(root: string, urlPath: string): string | null;
 export function parseRange(header: string | undefined | null, size: number): { start: number; end: number } | 'unsatisfiable' | null;
 export function demoUrl(port: number, extra?: string): string;
 export function browserArgs(opts: { url: string; profileDir: string; kiosk?: boolean }): string[];
+export const SAVE_PATHS: readonly string[];
 export function browserCandidates(env?: Record<string, string | undefined>): Array<{ name: 'chrome' | 'edge'; path: string }>;
 export function findBrowser(
   exists: (path: string) => boolean,
