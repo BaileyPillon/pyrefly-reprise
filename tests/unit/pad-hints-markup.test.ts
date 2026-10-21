@@ -9,6 +9,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { titleMarkup } from '../../src/app/screens/frontend/titleMarkup.ts';
 import { changelogEntryHtml } from '../../src/app/screens/frontend/titleInfoHtml.ts';
+import { backHtml, baselineHtml } from '../../src/app/screens/pause/markup.ts';
 
 function dom(html: string): HTMLElement {
   const el = document.createElement('div');
@@ -39,6 +40,24 @@ describe('the title', () => {
     const entry = dom(changelogEntryHtml()).querySelector('.fe-hint__entry')!;
     expect(entry.hasAttribute('data-has-pad')).toBe(false);
     expect(read('../../src/app/screens/frontend/frontend.css')).toMatch(/html\[data-input='gamepad'\] \.fe-hint__entry:not\(\[data-has-pad\]\)/);
+  });
+});
+
+describe('the pause legend', () => {
+  it('H (the painting alone) carries its pad button, Y, and the one line that survives H carries the pad twins of both its keys', () => {
+    const back = dom(backHtml());
+    expect(back.querySelector('.pause__hide .kh-k')?.textContent).toBe('H');
+    expect(back.querySelector('.pause__hide .kh-p .pg')?.getAttribute('data-pg')).toBe('triangle');
+    const base = dom(baselineHtml());
+    expect([...base.querySelectorAll('.kh-p .pg')].map((e) => e.getAttribute('data-pg'))).toEqual(['triangle', 'circle']);
+  });
+
+  it('the boxed Esc key and the Q / E bumpers are drawn as the pad buttons by CSS alone while the last press was a pad', () => {
+    const css = read('../../src/ui/common/pad-glyphs.css');
+    expect(css).toMatch(/html\[data-input='gamepad'\] \.pause__key::after\s*\{\s*content:\s*'B'/);
+    expect(css).toMatch(/\.pause__bump--l b::after\s*\{\s*content:\s*'LB'/);
+    expect(css).toMatch(/\.pause__bump--r b::after\s*\{\s*content:\s*'RB'/);
+    expect(css).toMatch(/html\[data-input='gamepad'\] \.pause__bump i\s*\{\s*display:\s*none/);
   });
 });
 

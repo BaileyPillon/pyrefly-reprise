@@ -50,7 +50,7 @@ html[data-input='gamepad'] .kh-p {
   text-transform: none;
   text-shadow: none;
   text-decoration: none;
-  vertical-align: -0.32em;
+  vertical-align: middle;
   white-space: nowrap;
 }
 .pg svg {
@@ -254,4 +254,10 @@ html[data-input='gamepad'][data-pad='nintendo'] .pause__bump--l b::after {
 }
 html[data-input='gamepad'][data-pad='nintendo'] .pause__bump--r b::after {
   content: 'R';
+}
+
+/* The results page's CONFIRM slab: the bottom face button in front of the word, for a pad. */
+.rres__confirm .kh-p {
+  margin-right: 0.7em;
+  letter-spacing: 0;
 }
