@@ -2,7 +2,7 @@
  * **The Wind Waker toon material and the wing flap** (`src/engine/ww3d/toon.ts`, `wing.ts`, `toonify.ts`, `post.ts`; FFX-2 only), pinned without a GPU: the fragment patch is run against three's own shader chunks (so a three
  * upgrade that moves a line the patch needs fails here and not in the browser), the variants are the lab's numbers, the default is the approved `hd`, and the wing maths is the lab's.
  */
-import { Color, Group, Mesh, MeshStandardMaterial, ShaderChunk, ShaderLib, SphereGeometry } from 'three';
+import { Color, Group, Mesh, MeshStandardMaterial, ShaderChunk, ShaderLib, SphereGeometry, Texture } from 'three';
 import { describe, expect, it, vi } from 'vitest';
 
 import { paletteFor } from '../../../src/engine/ww3d/post.ts';
@@ -21,7 +21,7 @@ import {
   withUniforms,
   type ShaderLike,
 } from '../../../src/engine/ww3d/toon.ts';
-import { disposeToon, driveToon, toonify } from '../../../src/engine/ww3d/toonify.ts';
+import { disposeToon, driveToon, sourceMaterialOf, toonify } from '../../../src/engine/ww3d/toonify.ts';
 import { AMP_ACTIVE, RATE_ACTIVE, WING, advanceFlap, createWingUniforms, makeWingDepthMaterial, patchWingVertex, wingBend } from '../../../src/engine/ww3d/wing.ts';
 
 /** A program as three hands it to `onBeforeCompile`: the real toon material's source. */
@@ -142,7 +142,24 @@ describe('making a model toon', () => {
     expect(a.castShadow && a.receiveShadow).toBe(true);
     expect(a.frustumCulled).toBe(false);
     expect((a.material as MeshStandardMaterial).color.getHex()).toBe(0x884422);
-    expect(a.userData['srcMaterial']).toBeDefined();
+    expect(sourceMaterialOf(a)).toBeDefined();
+    expect(a.userData['srcMaterial'], 'never on userData: Object3D.copy would serialise it').toBeUndefined();
+  });
+
+  it("cloning a made-toon piece never serialises the file's materials and textures (userData is JSON-cloned by Object3D.copy: 75 wall tiles cost 8 seconds of toDataURL before polish 1)", () => {
+    const u = createToonUniforms();
+    const tex = new Texture();
+    const src = new MeshStandardMaterial({ map: tex });
+    const toJSON = vi.spyOn(MeshStandardMaterial.prototype, 'toJSON');
+    const texJSON = vi.spyOn(Texture.prototype, 'toJSON');
+    const root = new Group();
+    root.add(new Mesh(new SphereGeometry(1), src));
+    toonify(root, u, {});
+    for (let i = 0; i < 5; i++) root.clone(true);
+    expect(toJSON).not.toHaveBeenCalled();
+    expect(texJSON).not.toHaveBeenCalled();
+    toJSON.mockRestore();
+    texJSON.mockRestore();
   });
 
   it('drives the colour, the glow and the opacity, solid as an opaque material and faded as a transparent one', () => {

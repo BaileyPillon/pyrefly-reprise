@@ -56,6 +56,17 @@ function releaseUnread(src: Material): void {
   }
 }
 
+/**
+ * The material each mesh had before it was made toon. Kept in a WeakMap and NOT on `mesh.userData`: three's `Object3D.copy` clones `userData` with `JSON.parse(JSON.stringify(...))`, which serialises a material and
+ * every texture it holds (`toDataURL` of each 2048 px map, about 100 ms each), and a temple piece is cloned 75 times (polish 1 measured it at 8 of the 9 seconds the BATTLE START card held).
+ */
+const SOURCE_MATERIALS = new WeakMap<Mesh, Material | Material[]>();
+
+/** The material `mesh` had before {@link toonify} replaced it, or undefined. */
+export function sourceMaterialOf(mesh: Mesh): Material | Material[] | undefined {
+  return SOURCE_MATERIALS.get(mesh);
+}
+
 /** Replace every material under `root` with a toon one over `uniforms`; returns the set. */
 export function toonify(root: Object3D, shared: Record<string, IUniform>, opts: ToonifyOptions = {}): ToonSet {
   // the figure's own cast-aura cell: the other cells stay shared, so one `applyVariant` still moves them all
@@ -85,7 +96,7 @@ export function toonify(root: Object3D, shared: Record<string, IUniform>, opts: 
       }
       return toon;
     });
-    mesh.userData['srcMaterial'] = mesh.material;
+    SOURCE_MATERIALS.set(mesh, mesh.material);
     mesh.material = Array.isArray(mesh.material) ? out : out[0]!;
   });
   return { entries, meshes, opacity: 1, glow };

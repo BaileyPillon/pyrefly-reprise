@@ -84,6 +84,8 @@ export interface BuiltStage {
   readonly occluder: Mesh;
   /** The swapped temple pieces that were placed. */
   readonly used: ReadonlySet<TempleName>;
+  /** Milliseconds spent drawing each kind of procedural texture, by name (`sand`, `blockWall`, `cloud`, ...), summed over its calls. */
+  readonly timings: Readonly<Record<string, number>>;
   /** Advance the flames, the clouds, the waterfalls and the shaft to absolute time `t` seconds. */
   update(t: number): void;
   dispose(): void;
@@ -101,13 +103,23 @@ export interface StageOptions {
 /** Build the chamber over the shared toon `uniforms`. */
 export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): BuiltStage {
   const { R, H } = STAGE;
+  const now = (): number => (typeof performance === 'undefined' ? 0 : performance.now());
+  const timings: Record<string, number> = {}; // milliseconds spent drawing each kind of procedural texture, and `block:<part>` for each part of the build (the debug handle's `stage.timings`; polish 1 measured the battle start)
+  let lapAt = now();
+  const lap = (part: string): void => {
+    const t = now();
+    timings[`block:${part}`] = t - lapAt;
+    lapAt = t;
+  };
   const source = opts.textures ?? canvasTextures;
   const made: Texture[] = []; // every texture the stage draws, freed with it (a canvas texture owns its bitmap)
   const tex = Object.fromEntries(
     Object.entries(source).map(([k, make]) => [
       k,
       (...args: unknown[]): Texture => {
+        const t0 = now();
         const t = (make as (...a: unknown[]) => Texture)(...args);
+        timings[k] = (timings[k] ?? 0) + (now() - t0);
         made.push(t);
         return t;
       },
@@ -134,6 +146,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
   const ctx: StageCtx = { group, R, H, tex, uniforms: stageU, swaps, used: new Set<TempleName>(), templates: new Map(), toon, add };
 
   add(new CircleGeometry(R + 0.5, 64).rotateX(-Math.PI / 2), toon({ map: tex.sand(7, [2.8, 2.8]) }, floorU), { receive: true });
+  lap('floor');
   const swappedFace = tileWall(ctx, STAGE.doorAz); // the radius of the tiled wall's inner face, or null with no wall file
   const wallSwapped = swappedFace !== null;
   const face = swappedFace ?? R;
@@ -142,12 +155,18 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
     // a lighter cornice band running round the wall at the height of the spouts
     add(new CylinderGeometry(R - 0.32, R - 0.32, 0.7, 72, 1, true), toon({ color: 0x7f9ad0, side: BackSide }), { at: new Vector3(0, H - 2.0, 0) });
   }
+  lap('wall');
   addBays(ctx, face, wallSwapped);
+  lap('bays');
   addDoor(ctx, STAGE.doorAz, face);
+  lap('door');
   const scrolls = addWaterfalls(ctx, [[-38, H - 2.2], [-7, H - 2.2], [46, H - 2.2]]);
+  lap('waterfalls');
   const flames = addTorches(ctx, [19, 41, -62], [[-33, 3.4], [-52, 6.6]]);
+  lap('torches');
   addVines(ctx, [[-47, H - 1.7, 5.2], [-42, H - 1.7, 3.6], [-36, H - 1.7, 4.4], [-28, H - 1.7, 3.0], [-4, H - 1.7, 4.0], [14, H - 1.7, 3.4], [19, H - 1.7, 5.0], [33, H - 1.7, 3.0], [43, H - 1.7, 4.2]]);
 
+  lap('vines');
   // the stone roof: a flat ring at the wall top, seen from underneath, with a round opening onto the sky
   const hole = STAGE.hole;
   add(new RingGeometry(hole.r, 40, 64).rotateX(Math.PI / 2), toon({ map: tex.blockWall(3, [12, 12], [52, 72, 120], 4), side: DoubleSide }), { at: new Vector3(hole.x, H, hole.z) });
@@ -162,6 +181,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
   group.add(occluder);
   owned.push(occluder.geometry, occluder.material as MeshBasicMaterial);
 
+  lap('roof');
   // sky dome and spiral clouds (unlit, no fog)
   const sky = new Mesh(new SphereGeometry(90, 32, 16), new MeshBasicMaterial({ map: tex.sky(), side: BackSide, fog: false, depthWrite: false, toneMapped: false }));
   sky.renderOrder = -10;
@@ -184,6 +204,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
     clouds.push({ sprite: s, deg, el, speed: 0.12 + (i % 3) * 0.05 });
   });
 
+  lap('sky');
   // light shaft: crossed cards, additive, from the roof opening down toward the party side
   const shaft = new Group();
   const top = new Vector3(hole.x - 1.5, H - 1.6, hole.z + 1.5);
@@ -202,6 +223,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
   shaft.position.copy(bottom).addScaledVector(axis, 0.5);
   group.add(shaft);
 
+  lap('shaft');
   // the light: one warm sun with crisp shadows over a frustum that covers the arena, plus a soft sky fill
   const sc = new Vector3(...STAGE.shadow.centre);
   const sun = new DirectionalLight(0xfff0d0, STAGE.light.sun);
@@ -221,6 +243,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
   fill.name = 'ww-fill';
   group.add(sun, sun.target, fill);
 
+  lap('light');
   function update(t: number): void {
     for (const f of flames) {
       const k = 1 + 0.12 * Math.sin(t * 13 + f.phase) + 0.07 * Math.sin(t * 7.3 + f.phase * 2);
@@ -246,6 +269,7 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
     clouds,
     occluder,
     used: ctx.used,
+    timings,
     update,
     dispose(): void {
       sun.shadow.map?.dispose();
