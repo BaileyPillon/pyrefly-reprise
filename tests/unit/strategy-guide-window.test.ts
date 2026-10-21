@@ -204,12 +204,13 @@ describe('the sheet says it scrolls', () => {
     guide.update(0.016);
   });
 
-  it('says R-Stick for a pad, as the toggle says its button', () => {
+  it('names the right stick for a pad (drawn as its own glyph beside the key), as the toggle names its button', () => {
     Object.defineProperty(navigator, 'getGamepads', { configurable: true, writable: true, value: () => [{ connected: true, buttons: [], axes: [] }] });
     try {
       const { keys, guide } = mount(90);
       guide.update(0.016);
-      expect(keys.textContent).toContain('R-Stick');
+      expect(keys.querySelector('.kh-p .pg')?.getAttribute('data-pg')).toBe('rstick'); // the pad half of the chip; html[data-input] shows it once the last press was a pad
+      expect(keys.querySelector('.kh-k')?.textContent).toBe('[ ]');
     } finally {
       Object.defineProperty(navigator, 'getGamepads', { configurable: true, writable: true, value: () => [] });
     }

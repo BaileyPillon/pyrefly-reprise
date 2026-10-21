@@ -311,7 +311,7 @@ export class PauseView {
       case 'accessibility':
         return accessColumns({ settings: this.deps.save.settings, game: this.game });
       case 'controls':
-        return controlsColumns();
+        return controlsColumns(this.game);
       case 'guide':
         return guideColumns(this.deps.meta, this.deps.save.settings.guideVisible);
       default:

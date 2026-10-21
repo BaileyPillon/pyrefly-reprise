@@ -2,6 +2,7 @@ import './defend-control.css';
 import type { AvailableCommand } from '../../battle/common/types.ts';
 import { commandHelpText } from './commandHelp.ts';
 import { namesKeys, type DeviceState } from './minigames/overlayInput.ts';
+import { padGlyph, padSpoken } from '../common/padGlyphs.ts';
 
 /**
  * FFX's Defend control: the original game's own button, named on the screen (release 39; **FFX only**).
@@ -146,8 +147,11 @@ export class DefendTag {
   private render(): void {
     const f = defendFace(this.device);
     this.el.dataset['input'] = this.device.device;
-    this.el.setAttribute('aria-label', f.aria);
-    this.keyEl.textContent = f.key;
+    // A pad player sees the button drawn (Y on an Xbox pad, the triangle on a PlayStation one; `ui/common/padGlyphs.ts`), not the word.
+    const onPad = this.device.device === 'gamepad';
+    this.el.setAttribute('aria-label', onPad ? `Defend, ${padSpoken('triangle')}` : f.aria);
+    if (onPad) this.keyEl.innerHTML = padGlyph('triangle');
+    else this.keyEl.textContent = f.key;
     this.keyEl.hidden = !f.key;
     this.symEl.textContent = f.sym;
     this.symEl.hidden = !f.sym;

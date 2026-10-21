@@ -50,7 +50,9 @@ describe('the scene strip for a mouse (CHK-015)', () => {
     const h = strip(CUTSCENE_HINTS);
     expect(text(h)).toBe('Enter advance·Hold Enter skip·Esc menu');
     h.handleInput({ lastDevice: 'gamepad' } as Parameters<ControlsHint['handleInput']>[0]);
-    expect(text(h)).toMatch(/Hold Cross skip/);
+    // A pad player reads the button drawn (release 61): "Hold" then the Cross-position glyph (A on an Xbox pad), not the word.
+    expect(text(h)).toMatch(/Hold skip/);
+    expect(h.el.querySelector('.chint__item .pg[data-pg="cross"]')).not.toBeNull();
   });
 
   it('an entry with `pointer: null` is left off for a mouse only', () => {

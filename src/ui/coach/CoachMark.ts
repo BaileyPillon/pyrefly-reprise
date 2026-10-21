@@ -27,6 +27,7 @@
 
 import './coach.css';
 import { escapeHtml } from '../common/html.ts';
+import { keyHint } from '../common/padGlyphs.ts';
 import { RawInputWatcher, claimHeldPad, reservePad } from '../ffx/rawInput.ts';
 import { CHAPTER_PANEL_SELECTORS, INTENT_AVOID_SELECTORS, rectsOf } from '../ffx/hudAvoidSelectors.ts';
 import { bandClearOf, clearOfPanels, slideClearOf } from './coachAvoid.ts';
@@ -154,7 +155,7 @@ export class CoachMark {
         ? `<div class="coach-mark__running">${coachRunningBadge(ffx2CoachClock())}</div>`
         : '';
     const foot = mark.holds
-      ? '<span><b class="coach-mark__key">Enter</b><b class="coach-mark__tap">Tap</b> continue</span><span>First time only</span>'
+      ? `<span><b class="coach-mark__key">${keyHint('Enter', 'Cross')}</b><b class="coach-mark__tap">Tap</b> continue</span><span>First time only</span>`
       : '<span>Fades on its own</span><span>First time only</span>';
     return (
       running +

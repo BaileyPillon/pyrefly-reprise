@@ -40,6 +40,8 @@ import type { FFXPartyBuild } from '../../../battle/common/types.ts';
 import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrepScreen.ts';
 import type { InputSnapshot } from '../../../app/Input.ts';
 import { audio } from '../../../audio/index.ts';
+import { padActive } from '../../../app/inputDevice.ts';
+import { padLabel } from '../../common/padGlyphs.ts';
 import { SphereGridHelp } from './sphereGridHelp.ts';
 import { SphereGridView } from './SphereGridView.ts';
 import { SphereGridModel } from './sphereGridModel.ts';
@@ -58,6 +60,17 @@ const CARD_NOTE = 'Enter or click again does the same.';
 const WALK_HINT_ON = 'WALKING — DIRECTIONS STEP  ·  ENTER ACTS  ·  ESC RELEASES';
 const WALK_HINT_OFF = 'WHEEL ZOOM  ·  DRAG PAN  ·  CLICK A NODE  ·  SHIFT WALKS';
 
+/**
+ * The strip's words for the input the player last used (it is drawn on a canvas, so it cannot carry the glyph markup the other hints do; release 61, decision 169).
+ * A pad walks the grid with Y, steps with the d-pad, acts with A, leaves with B, zooms with the bumpers and asks for the help card with X.
+ */
+function walkHint(on: boolean): string {
+  if (!padActive()) return on ? WALK_HINT_ON : WALK_HINT_OFF;
+  return on
+    ? `WALKING — D-PAD STEPS  ·  ${padLabel('cross')} ACTS  ·  ${padLabel('circle')} RELEASES`
+    : `${padLabel('l1')} ${padLabel('r1')} ZOOM  ·  ${padLabel('triangle')} WALKS  ·  ${padLabel('square')} HELP`;
+}
+
 export function makeSphereGridPanel(): PrepPanel {
   let view: SphereGridView | null = null;
   let model: SphereGridModel | null = null;
@@ -65,6 +78,7 @@ export function makeSphereGridPanel(): PrepPanel {
   let build: FFXPartyBuild | null = null;
   let memberId = '';
   let walking = false;
+  let hintPad = false; // which words the strip last drew (`walkHint`)
   let caption = '';
 
   let root: HTMLElement | null = null;
@@ -182,7 +196,7 @@ export function makeSphereGridPanel(): PrepPanel {
 
   const setWalking = (on: boolean): void => {
     walking = on;
-    if (view) view.hint = on ? WALK_HINT_ON : WALK_HINT_OFF;
+    if (view) view.hint = walkHint(on);
     renderHeader();
     view?.render();
   };
@@ -202,7 +216,7 @@ export function makeSphereGridPanel(): PrepPanel {
       container.innerHTML = sphereGridMarkup();
 
       view = new SphereGridView();
-      view.hint = WALK_HINT_OFF;
+      view.hint = walkHint(false);
       container.querySelector('.ffxprep-sg__slot')?.appendChild(view.el);
       view.setHandlers({
         onSelect: () => {
@@ -267,6 +281,11 @@ export function makeSphereGridPanel(): PrepPanel {
 
     handleInput(input: InputSnapshot): boolean {
       if (!view) return false;
+      if (padActive() !== hintPad) {
+        hintPad = padActive();
+        view.hint = walkHint(walking); // the player picked up (or put down) the pad: the strip's words follow
+        view.render();
+      }
       // An open card (A) takes every key; an open result (C) takes the ones it answers to.
       if (help?.handleInput(input)) return true;
 

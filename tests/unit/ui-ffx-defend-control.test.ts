@@ -180,8 +180,9 @@ describe('every input can Defend: the engine\'s own defend command comes out', (
     Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [pad] });
     const o = open();
     expect(o.tag().dataset['input']).toBe('gamepad'); // a connected pad is the best guess before any press
-    expect(o.words()).toBe('△Defend');
-    expect(o.tag().getAttribute('aria-label')).toBe('Defend, Triangle');
+    expect(o.words()).toBe('Defend'); // the button is drawn (Y on an Xbox pad), not written
+    expect(o.tag().querySelector('.pg[data-pg="triangle"]')).not.toBeNull();
+    expect(o.tag().getAttribute('aria-label')).toBe('Defend, Y');
     await tapPad(set, 3);
     expect(await o.decided()).toEqual({ kind: 'defend', targets: [] });
   });
@@ -207,7 +208,8 @@ describe('every input can Defend: the engine\'s own defend command comes out', (
     expect(o.words()).toBe('Q△Defend');
     Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [pad] });
     await tapPad(set, 13); // d-pad down: moves the cursor, and the player is on the pad now
-    expect(o.words()).toBe('△Defend');
+    expect(o.words()).toBe('Defend'); // the button is drawn (Y on an Xbox pad), not written
+    expect(o.tag().querySelector('.pg[data-pg="triangle"]')).not.toBeNull();
     o.menu.stackEl.dispatchEvent(new PointerEvent('pointerdown', { pointerType: 'touch', bubbles: true }));
     expect(o.words()).toBe('Defend');
     o.menu.stackEl.dispatchEvent(new PointerEvent('pointerdown', { pointerType: 'mouse', bubbles: true }));

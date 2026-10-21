@@ -35,7 +35,7 @@ describe('ControlsHint pointer actions', () => {
     const hint = mount();
     hint.handleInput({ lastDevice: 'gamepad' } as Parameters<ControlsHint['handleInput']>[0]);
     const back = [...hint.el.querySelectorAll<HTMLElement>('.chint__item')][2]!;
-    expect(back.textContent).toContain('Circle');
+    expect(back.querySelector('.pg[data-pg="circle"]')).not.toBeNull(); // the back button, drawn (B on an Xbox pad)
     expect(back.dataset['action']).toBe('cancel');
   });
 });

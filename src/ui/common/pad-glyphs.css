@@ -1,0 +1,257 @@
+/* Pad button glyphs and key/pad hint chips (release 61, the conference demo; both games).
+
+   Two things live here:
+
+   1. `.kh-k` / `.kh-p`: a chip written once as `<b><span class="kh-k">G</span><span class="kh-p"><i class="pg">..</i></span></b>`
+      (`padGlyphs.keyHint`). `html[data-input]` (app/inputDevice.ts) says whether the player's last press was a pad; the
+      chip shows its key until it was. It switches on the press itself, nothing re-renders.
+
+   2. `.pg`: the button, drawn. Face buttons are discs (Xbox: the four colours; PlayStation: an ink disc ringed in the
+      symbol's colour; Switch: ivory), bumpers and triggers are plates, Start / Back are the pad's own two small icons,
+      the d-pad is its cross. Sizes are `em`, so a glyph is as large as the hint it sits in. `html[data-pad]` picks the
+      names (A B X Y / cross circle square triangle / B A Y X) from the `data-x`, `data-p`, `data-n` the markup carries.
+      Not a retail glyph: discs and letters. */
+
+.kh-p {
+  display: none;
+}
+html[data-input='gamepad'] .kh-k {
+  display: none;
+}
+html[data-input='gamepad'] .kh-p {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.pg {
+  --pg-disc: #f4f1e8;
+  --pg-ink: #0b0a12;
+  --pg-ring: rgba(244, 241, 232, 0.9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: none;
+  min-width: 1.5em;
+  height: 1.5em;
+  padding: 0 0.34em;
+  margin: 0 0.1em;
+  border-radius: 999px;
+  background: var(--pg-disc);
+  color: var(--pg-ink);
+  box-shadow: 0 0 0 0.07em rgba(11, 10, 18, 0.7);
+  font-family: var(--ig-font-display, 'Chakra Petch', 'Bahnschrift', 'Segoe UI Symbol', 'Segoe UI', sans-serif);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.84em;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  text-shadow: none;
+  text-decoration: none;
+  vertical-align: -0.32em;
+  white-space: nowrap;
+}
+.pg svg {
+  display: block;
+  width: 1.1em;
+  height: auto;
+}
+
+/* The label: from the markup, by the pad family in use. */
+html[data-pad='xbox'] .pg::before,
+html:not([data-pad]) .pg::before {
+  content: attr(data-x);
+}
+html[data-pad='playstation'] .pg::before {
+  content: attr(data-p);
+}
+html[data-pad='nintendo'] .pg::before {
+  content: attr(data-n);
+}
+
+/* Face buttons: discs. */
+.pg[data-pg='cross'],
+.pg[data-pg='circle'],
+.pg[data-pg='square'],
+.pg[data-pg='triangle'] {
+  width: 1.5em;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 0.9em;
+}
+/* Xbox: A green, B red, X blue, Y yellow, as on the pad. */
+html:not([data-pad='playstation']):not([data-pad='nintendo']) .pg[data-pg='cross'] {
+  --pg-disc: #78c96f;
+}
+html:not([data-pad='playstation']):not([data-pad='nintendo']) .pg[data-pg='circle'] {
+  --pg-disc: #ec6e63;
+}
+html:not([data-pad='playstation']):not([data-pad='nintendo']) .pg[data-pg='square'] {
+  --pg-disc: #67a3ee;
+}
+html:not([data-pad='playstation']):not([data-pad='nintendo']) .pg[data-pg='triangle'] {
+  --pg-disc: #efc84f;
+}
+/* PlayStation: an ink disc, the symbol in its own colour (cross blue, circle red, square pink, triangle green). */
+html[data-pad='playstation'] .pg[data-pg='cross'],
+html[data-pad='playstation'] .pg[data-pg='circle'],
+html[data-pad='playstation'] .pg[data-pg='square'],
+html[data-pad='playstation'] .pg[data-pg='triangle'] {
+  --pg-disc: #14131f;
+  box-shadow: 0 0 0 0.1em var(--pg-ink);
+  font-family: 'Segoe UI Symbol', 'Arial Unicode MS', 'Noto Sans Symbols 2', sans-serif;
+  font-size: 0.95em;
+}
+html[data-pad='playstation'] .pg[data-pg='cross'] {
+  --pg-ink: #86b2f2;
+}
+html[data-pad='playstation'] .pg[data-pg='circle'] {
+  --pg-ink: #f07f75;
+}
+html[data-pad='playstation'] .pg[data-pg='square'] {
+  --pg-ink: #eba6cc;
+}
+html[data-pad='playstation'] .pg[data-pg='triangle'] {
+  --pg-ink: #7bd8aa;
+}
+
+/* Bumpers and triggers: plates. Bumpers ink with an ivory edge, triggers ivory. */
+.pg[data-pg='l1'],
+.pg[data-pg='r1'],
+.pg[data-pg='l2'],
+.pg[data-pg='r2'] {
+  border-radius: 0.5em;
+  min-width: 1.9em;
+  font-size: 0.78em;
+  letter-spacing: 0.02em;
+}
+.pg[data-pg='l1'],
+.pg[data-pg='r1'] {
+  --pg-disc: #14131f;
+  --pg-ink: #f4f1e8;
+  box-shadow: 0 0 0 0.09em var(--pg-ring);
+}
+.pg[data-pg='l2'],
+.pg[data-pg='r2'] {
+  --pg-disc: #f4f1e8;
+  --pg-ink: #0b0a12;
+}
+
+/* Start / Back: the pad's two small icons in a pill. */
+.pg[data-pg='start'],
+.pg[data-pg='select'] {
+  --pg-disc: #14131f;
+  --pg-ink: #f4f1e8;
+  min-width: 1.9em;
+  box-shadow: 0 0 0 0.09em var(--pg-ring);
+}
+.pg[data-pg='start'] svg,
+.pg[data-pg='select'] svg {
+  width: 0.95em;
+}
+
+/* The d-pad: just its cross. */
+.pg[data-pg^='dpad'] {
+  --pg-disc: transparent;
+  --pg-ink: currentColor;
+  box-shadow: none;
+  min-width: 1.4em;
+  padding: 0;
+  color: #f4f1e8;
+}
+.pg[data-pg^='dpad'] svg {
+  width: 1.3em;
+}
+
+/* Sticks: a ring with the side's letter; a stick press (L3, R3) is the same ring with its name. */
+.pg[data-pg='lstick'],
+.pg[data-pg='rstick'],
+.pg[data-pg='l3'],
+.pg[data-pg='r3'] {
+  --pg-disc: #14131f;
+  --pg-ink: #f4f1e8;
+  width: 1.5em;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.09em var(--pg-ring);
+}
+.pg[data-pg='l3'],
+.pg[data-pg='r3'] {
+  width: 1.75em;
+  height: 1.75em;
+  font-size: 0.76em;
+}
+
+/* The pause menu's own legend (Q / E bumpers, the boxed Esc key): drawn as the pad's buttons while the last press was a pad, from CSS alone, so every page that uses
+   `.pause__key` (the credits, eye-candy and presentation pages as well as the menu) follows without its markup changing. The key cap is B (Circle): the pad's way back. */
+html[data-input='gamepad'] .pause__key {
+  font-size: 0;
+  min-width: 0;
+  width: calc(var(--pu-fs, 13px) * 1.5);
+  height: calc(var(--pu-fs, 13px) * 1.5);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ec6e63;
+  color: #0b0a12;
+}
+html[data-input='gamepad'] .pause__key::after {
+  content: 'B';
+  font-size: var(--pu-fs, 13px);
+  font-weight: 700;
+  line-height: 1;
+}
+html[data-input='gamepad'][data-pad='playstation'] .pause__key {
+  background: #14131f;
+  box-shadow: 0 0 0 0.12em #f07f75;
+  color: #f07f75;
+}
+html[data-input='gamepad'][data-pad='playstation'] .pause__key::after {
+  content: '○';
+}
+html[data-input='gamepad'][data-pad='nintendo'] .pause__key {
+  background: #f4f1e8;
+}
+html[data-input='gamepad'][data-pad='nintendo'] .pause__key::after {
+  content: 'A';
+}
+html[data-input='gamepad'] .pause__bump i {
+  display: none;
+}
+html[data-input='gamepad'] .pause__bump b {
+  font-size: 0;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border: 0;
+}
+html[data-input='gamepad'] .pause__bump b::after {
+  font-size: calc(var(--pu-fs, 13px) * 0.85);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.32em 0.7em;
+  border-radius: 0.5em;
+  background: #14131f;
+  box-shadow: 0 0 0 0.09em rgba(244, 241, 232, 0.9);
+  color: #f4f1e8;
+}
+html[data-input='gamepad'] .pause__bump--l b::after {
+  content: 'LB';
+}
+html[data-input='gamepad'] .pause__bump--r b::after {
+  content: 'RB';
+}
+html[data-input='gamepad'][data-pad='playstation'] .pause__bump--l b::after {
+  content: 'L1';
+}
+html[data-input='gamepad'][data-pad='playstation'] .pause__bump--r b::after {
+  content: 'R1';
+}
+html[data-input='gamepad'][data-pad='nintendo'] .pause__bump--l b::after {
+  content: 'L';
+}
+html[data-input='gamepad'][data-pad='nintendo'] .pause__bump--r b::after {
+  content: 'R';
+}

@@ -4,7 +4,14 @@
  *
  * The game never listens to raw events. Once per frame {@link Input.update} is
  * called, and screens receive the resulting {@link InputSnapshot}.
+ *
+ * The pad's button numbers, stick dead zone and repeat times live in
+ * `padMap.ts`; the "which device did the player use last" answer the key
+ * hints follow lives in `inputDevice.ts`. This class writes both (release 61).
  */
+
+import { inputDevice, noteInputDevice } from './inputDevice.ts';
+import { PAD, PAD_REPEAT_DELAY_MS, PAD_REPEAT_INTERVAL_MS, stickDirection, type PadDirection } from './padMap.ts';
 
 export type Button =
   | 'up'
@@ -72,27 +79,45 @@ const KEY_MAP: Record<string, Button> = {
   PageUp: 'l1',
 };
 
-/** Standard-gamepad button index -> abstract button. */
+/**
+ * Standard-gamepad button index -> abstract button (the layout and who uses what: `padMap.ts`).
+ * X (2), the triggers (6, 7) and the stick presses are not abstract buttons: the battle's optional panels poll
+ * them themselves (`ui/common/StrategyGuide.ts`, `MoveAdvisor.ts`, `EnemyIntent.ts`), exactly as their keys are not here either.
+ */
 const PAD_MAP: Record<number, Button> = {
-  0: 'confirm', // cross / A
-  1: 'cancel', // circle / B
-  3: 'triangle', // triangle / Y
-  4: 'l1',
-  5: 'r1',
-  8: 'select', // select / back / share
-  9: 'start',
-  12: 'up',
-  13: 'down',
-  14: 'left',
-  15: 'right',
+  [PAD.A]: 'confirm', // cross / A
+  [PAD.B]: 'cancel', // circle / B
+  [PAD.Y]: 'triangle', // triangle / Y
+  [PAD.LB]: 'l1',
+  [PAD.RB]: 'r1',
+  [PAD.BACK]: 'select', // select / back / share
+  [PAD.START]: 'start',
+  [PAD.UP]: 'up',
+  [PAD.DOWN]: 'down',
+  [PAD.LEFT]: 'left',
+  [PAD.RIGHT]: 'right',
 };
+
+/** Keys that on their own say nothing about which device the player chose. */
+const MODIFIER_CODES: ReadonlySet<string> = new Set([
+  'ShiftLeft',
+  'ShiftRight',
+  'ControlLeft',
+  'ControlRight',
+  'AltLeft',
+  'AltRight',
+  'MetaLeft',
+  'MetaRight',
+  'CapsLock',
+  'NumLock',
+  'ContextMenu',
+]);
 
 /** Shared empty list, so the blind `actions` getter allocates nothing. */
 const EMPTY_ACTIONS: readonly string[] = [];
 
-const AXIS_DEADZONE = 0.45;
-const REPEAT_DELAY_MS = 360;
-const REPEAT_INTERVAL_MS = 110;
+const REPEAT_DELAY_MS = PAD_REPEAT_DELAY_MS;
+const REPEAT_INTERVAL_MS = PAD_REPEAT_INTERVAL_MS;
 
 /** Read-only view of this frame's input, handed to `Screen.handleInput`. */
 export interface InputSnapshot {
@@ -183,6 +208,7 @@ export class Input implements InputSnapshot {
     this.pointerRoot =
       opts.pointerRoot ?? (document.getElementById('ui') as HTMLElement | null) ?? document.body;
     this.keyboardTarget = opts.keyboardTarget ?? window;
+    this._lastDevice = inputDevice(); // a booth (`?demo=1`) starts on the pad's words (`installInputDevice`)
     for (const b of BUTTONS) {
       this.state.set(b, {
         down: false,
@@ -237,6 +263,12 @@ export class Input implements InputSnapshot {
       claim.onKey(e);
     }
 
+    // Any real key (not only the ones the map knows: G, N, H, K, T, B all carry a hint) puts the hints back on the keyboard's words. A synthetic one is a tap
+    // on the phone HUD's buttons (`phoneBattleText.sendKey`), not a key; a modifier alone is not a choice of device.
+    if (e.isTrusted !== false && !e.ctrlKey && !e.metaKey && !e.altKey && !MODIFIER_CODES.has(e.code)) {
+      this._lastDevice = 'keyboard';
+      noteInputDevice('keyboard');
+    }
     const button = KEY_MAP[e.code];
     if (!button) return;
     // Tab and the arrows would otherwise scroll or move focus out of the game.
@@ -306,30 +338,48 @@ export class Input implements InputSnapshot {
     return Array.from(pads).filter((p): p is Gamepad => p !== null && p.connected);
   }
 
+  /** The direction each pad's left stick is holding (`padMap.stickDirection`'s hysteresis), by `Gamepad.index`. */
+  private readonly stickHeld = new Map<number, PadDirection | null>();
+  /** Every pad control that is down, mapped to a button here or not (`<pad index>:<button index>`, `<pad index>:stick`): a press of X or a trigger also means "the player is on the pad". */
+  private rawDown = new Set<string>();
+
   private pollGamepads(): void {
     const pads = this.readPads();
     this._gamepadConnected = pads.length > 0;
     const next = new Set<Button>();
+    const rawNext = new Set<string>();
+    let fresh: Gamepad | null = null;
     let ax = 0;
     let ay = 0;
 
     for (const pad of pads) {
-      for (const [indexStr, button] of Object.entries(PAD_MAP)) {
-        if (pad.buttons[Number(indexStr)]?.pressed) next.add(button);
+      for (let i = 0; i < pad.buttons.length; i++) {
+        if (!pad.buttons[i]?.pressed) continue;
+        const key = `${pad.index}:${i}`;
+        rawNext.add(key);
+        if (!this.rawDown.has(key)) fresh = pad;
+        const mapped = PAD_MAP[i];
+        if (mapped) next.add(mapped);
       }
       const x = pad.axes[0] ?? 0;
       const y = pad.axes[1] ?? 0;
-      if (Math.abs(x) > AXIS_DEADZONE) {
-        next.add(x < 0 ? 'left' : 'right');
+      const dir = stickDirection(x, y, this.stickHeld.get(pad.index) ?? null);
+      this.stickHeld.set(pad.index, dir);
+      if (dir) {
+        next.add(dir);
         ax = x;
-      }
-      if (Math.abs(y) > AXIS_DEADZONE) {
-        next.add(y < 0 ? 'up' : 'down');
         ay = -y;
+        const key = `${pad.index}:stick`;
+        rawNext.add(key);
+        if (!this.rawDown.has(key)) fresh = pad;
       }
     }
+    this.rawDown = rawNext;
 
-    if (next.size > 0 && this.padDown.size === 0) this._lastDevice = 'gamepad';
+    if (fresh) {
+      this._lastDevice = 'gamepad';
+      noteInputDevice('gamepad', fresh.id);
+    }
 
     for (const b of next) if (!this.padDown.has(b)) this.press(b);
     for (const b of this.padDown) {

@@ -17,6 +17,7 @@
 
 import './first-run.css';
 import { escapeHtml } from '../common/html.ts';
+import { keyHint } from '../common/padGlyphs.ts';
 import { FIRST_RUN_SKIP, FIRST_RUN_STEPS, firstRunEyebrow, type FirstRunStep } from './firstRunCopy.ts';
 
 export interface Box {
@@ -45,7 +46,7 @@ export function slabHtml(step: FirstRunStep, quote: string | null = step.quote):
   const act = step.act ? `<div class="frg__act">${both(step.act)}</div>` : '';
   const skip =
     `<span class="frg__skip" data-role="firstrun-skip" role="button" tabindex="-1">` +
-    `<b class="frg__pointer">${FIRST_RUN_SKIP.pointer}</b><b class="frg__touch">${FIRST_RUN_SKIP.touch}</b> ${FIRST_RUN_SKIP.rest}</span>`;
+    `<b class="frg__pointer">${keyHint(FIRST_RUN_SKIP.pointer, 'Circle')}</b><b class="frg__touch">${FIRST_RUN_SKIP.touch}</b> ${FIRST_RUN_SKIP.rest}</span>`;
   return (
     `<div class="frg__in">` +
     `<div class="frg__eyebrow">${escapeHtml(firstRunEyebrow(step.n))}</div>` +

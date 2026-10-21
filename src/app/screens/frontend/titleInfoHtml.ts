@@ -15,6 +15,7 @@
 import { BTS_KEY_LABEL, BTS_LIVE, BTS_TITLE } from '../../changelog/behindTheScenes.ts';
 import { RELEASE_NOTES, type ReleaseNote } from '../../changelog/releaseNotes.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
+import { keyHint } from '../../../ui/common/padGlyphs.ts';
 
 /** The `data-action` values the entries carry (`Input.onClick` resolves a tap to the closest one). */
 export const CHANGELOG_ACTION = 'title:changelog';
@@ -24,8 +25,13 @@ export const BTS_ACTION = 'title:bts';
 export const CHANGELOG_KEY = 'KeyL';
 export const CHANGELOG_KEY_LABEL = 'L';
 
-function entryHtml(action: string, key: string, label: string): string {
-  return `<span class="fe-hint__entry" data-action="${action}" role="button" tabindex="0"><b>${key}</b> ${escapeHtml(label)}</span>`;
+/**
+ * One entry of the hint row. `pad` is the pad button that does the same (a `padGlyphs` token such as `'Triangle'`): the entry then shows it, instead of its key, while the player's last
+ * press was a pad. An entry with no pad button is hidden for a pad player (`frontend.css`): a key and a click are the only ways to it.
+ */
+function entryHtml(action: string, key: string, label: string, pad?: string): string {
+  const face = pad ? keyHint(key, pad) : key;
+  return `<span class="fe-hint__entry"${pad ? ' data-has-pad' : ''} data-action="${action}" role="button" tabindex="0"><b>${face}</b> ${escapeHtml(label)}</span>`;
 }
 
 /** The BEHIND THE SCENES entry on its own: what `BTS_LIVE` adds to the row. Nothing in the build draws it while the switch is off. */

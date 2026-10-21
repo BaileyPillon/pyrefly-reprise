@@ -536,13 +536,15 @@ describe('optional means optional', () => {
     expect(store.settings.intentVisible).toBe(true);
   });
 
-  it('words the chip for whichever device is plugged in', () => {
+  it('carries both halves of the chip: the key, and the pad button drawn beside it (shown by the last input used, not by what is plugged in)', () => {
     const { overlay } = mountPanel();
-    expect(toggleEl(overlay).textContent).toContain(INTENT_HINT_ITEM.keyboard);
+    expect(toggleEl(overlay).querySelector('.kh-k')?.textContent).toBe(INTENT_HINT_ITEM.keyboard);
+    expect(toggleEl(overlay).querySelector('.kh-p .pg')?.getAttribute('data-pg')).toBe('triangle'); // standard button 3, Y / Triangle: what a panel with no option keeps (FFX-2)
 
     padPluggedIn = true;
     const withPad = mountPanel();
-    expect(toggleEl(withPad.overlay).textContent).toContain(INTENT_HINT_ITEM.gamepad);
+    expect(toggleEl(withPad.overlay).querySelector('.kh-k')?.textContent).toBe(INTENT_HINT_ITEM.keyboard); // a plugged-in pad no longer rewords it
+    expect(toggleEl(withPad.overlay).querySelector('.kh-p .pg')?.getAttribute('data-pg')).toBe('triangle');
   });
 });
 

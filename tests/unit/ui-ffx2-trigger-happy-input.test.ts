@@ -127,11 +127,11 @@ describe('Trigger Happy: every input can press (FOC37-02)', () => {
   // ------------------------------------------------------------------ gamepad
 
   describe('gamepad', () => {
-    it('R1 (standard button 5) presses once per press, three give three, and the words say R1', async () => {
+    it('R1 (standard button 5) presses once per press, three give three, and the words say RB (the right bumper, named for the pad in hand: R1 on a PlayStation pad)', async () => {
       const { pad, set } = makePad();
       stubPads([pad]);
       const h = createTriggerHappy(container, { windowMs: 1500 });
-      expect(subtitleOf(h)).toBe('MASH R1'); // a connected pad is the best guess before the first press
+      expect(subtitleOf(h)).toBe('MASH RB'); // a connected pad is the best guess before the first press
       for (let i = 0; i < 3; i++) await tapPad(set, 5);
       expect(hitsOf(h)).toBe(3);
       expect(h.el.dataset['input']).toBe('gamepad');
@@ -301,14 +301,14 @@ describe('Trigger Happy: every input can press (FOC37-02)', () => {
       h.cancel();
     });
 
-    it('a pad player on a keyboard machine is told R1 once R1 has pressed', async () => {
+    it('a pad player on a keyboard machine is told RB once RB has pressed', async () => {
       const { pad, set } = makePad();
       stubPads([pad]);
       const h = createTriggerHappy(container, { windowMs: 1500 });
       keydown('KeyR');
       expect(subtitleOf(h)).toBe('MASH R');
       await tapPad(set, 5);
-      expect(subtitleOf(h)).toBe('MASH R1');
+      expect(subtitleOf(h)).toBe('MASH RB');
       h.cancel();
     });
   });

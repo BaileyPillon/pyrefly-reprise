@@ -17,6 +17,7 @@ import { fxSummary } from '../fxParts.ts';
 import { TEXT_SIZES, textSizeLabel } from '../saveComfort.ts';
 import { colourVisionLabel } from '../saveAccess.ts';
 import { presentationSummary } from '../saveFrontend.ts';
+import { keyHint } from '../../ui/common/padGlyphs.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 
 // ------------------------------------------------------------------ options
@@ -130,5 +131,5 @@ export function optionsTabHtml(settings: Readonly<Settings>, selected: number): 
     .join('');
   return `<div class="pause__head"><span class="pause__head-label">OPTIONS</span></div>
     <div class="pause__opts">${rows}</div>
-    <div class="pause__opt-hint"><b>&#9664; &#9654;</b> ADJUST &nbsp;&middot;&nbsp; <b>ESC</b> BACK TO MENU</div>`;
+    <div class="pause__opt-hint"><b>${keyHint('\u25c0 \u25b6', 'dpad-h')}</b> ADJUST &nbsp;&middot;&nbsp; <b>${keyHint('ESC', 'Circle')}</b> BACK TO MENU</div>`;
 }
