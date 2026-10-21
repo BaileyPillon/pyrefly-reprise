@@ -282,6 +282,7 @@ export class LookRig {
     u['debugMask']!.value = lookState.debug === 'mask' ? 1 : 0;
     this.room.projectLight(camera, u['uLight']!.value as Vector2);
     const moon = this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks) ? this.stage.moonLight(this.room.key) : null; // release 61: the shafts start at the painted moon, faint
+    u['shaftCont']!.value = moon ? 1 : 0;
     if (moon) this.room.projectLight(camera, u['shaftL']!.value as Vector2, moon);
     else (u['shaftL']!.value as Vector2).copy(u['uLight']!.value as Vector2);
     const lc = lin(lightColour(this.room.light.color));
@@ -317,8 +318,7 @@ export class LookRig {
     else this.stage.off();
     this.stats.strength = bold ? 'bold' : 'subtle';
     this.stats.bold = bold ? (this.bold?.stats ?? null) : null;
-    this.stats.drift = lookState.drift ? this.drift.stats : null;
-    this.stats.stage = this.stage.stats.on ? this.stage.stats : null;
+    this.stats.drift = lookState.drift ? this.drift.stats : null; this.stats.stage = this.stage.stats.on ? this.stage.stats : null;
     this.stats.look = name;
     this.stats.quality = lookState.quality;
     this.stats.relight = { any: relightCells.relightAny.value > 0, bound: relightStats.bound, loaded: relightStats.loaded, missing: relightStats.missing, lights: this.lights.stats.lights };

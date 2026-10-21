@@ -94,10 +94,10 @@ export const NO_STAGE: StageRecipe = { game: 'ffx', wind: NO_WIND, glint: null, 
 export const ROOM_STAGE: Readonly<Record<string, StageRecipe>> = {
   gagazet: {
     game: 'ffx',
-    wind: { every: 11, length: 4.2, speedUp: 1.6, thicken: 0.6, shaft: 0.2, phase: 3 },
-    glint: { moon: [0.226, 0.154], road: [0.335, 0.154], color: [0.78, 0.9, 1.0], sheenColor: [0.3, 0.56, 1.0], gain: 1.6, cell: 0.07, rough: 0.32, width: 0.05, speed: 2.1, center: [-3, -4], radius: 17, sheen: 0.6 },
+    wind: { every: 11, length: 4.2, speedUp: 2.2, thicken: 0.8, shaft: 0.2, phase: 3 },
+    glint: { moon: [0.226, 0.154], road: [0.335, 0.154], color: [0.78, 0.9, 1.0], sheenColor: [0.3, 0.56, 1.0], gain: 2.2, cell: 0.085, rough: 0.32, width: 0.05, speed: 2.1, center: [-3, -4], radius: 17, sheen: 0.8 },
     mist: [
-      { y: 0.55, z: -9, w: 44, h: 3.2, opacity: 0.26, color: [0.58, 0.74, 1.0], flow: [0.06, 0.004], behind: true, scale: [3.2, 1.1], cover: 0.36 },
+      { y: 0.55, z: -9, w: 44, h: 3.2, opacity: 0.22, color: [0.58, 0.74, 1.0], flow: [0.06, 0.004], behind: true, scale: [2.0, 1.6], cover: 0.4 },
       { y: 0.3, z: 2.2, w: 34, h: 1.5, opacity: 0.2, color: [0.64, 0.78, 1.0], flow: [0.1, 0.006], behind: false, scale: [4.6, 1.0], cover: 0.42 },
     ],
   },
