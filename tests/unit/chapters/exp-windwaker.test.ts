@@ -1,0 +1,192 @@
+/**
+ * **The hidden Wind Waker chapter** (`exp-windwaker`, placeholder number 30; branch `exp-windwaker`; **FFX-2 only**, AGENTS.md rule 14): hidden chapter 24's Valefor fight, opened by the typed word `waker` and drawn in the
+ * style of Wind Waker HD.
+ *
+ * What this file pins:
+ *
+ * 1. **It is a hidden experiment, not a chapter**: registered with the experiments (`chapters-experiments.ts`), in neither `CHAPTERS` nor `CHAPTER_IDS` (every count stays nineteen), number 30 (a placeholder),
+ *    `experimental` (its attempts, clears and time go to the experiments' store, never the save), pause metadata in `UNLISTED_CHAPTER_META` with the EXP numeral, FFX-2 in the tactics' game table.
+ * 2. **It is chapter 24's encounter, by reference**: the same party build, formation, scripts, music, Sensor line and card words; only the id, the number, the scene key and the title are its own. **No battle data of its
+ *    own** (AGENTS.md rule 6). Chapter 24's own record is untouched.
+ * 3. **The determinism proof**: the seeded FFX-2 engine, played through the app's own path with the shipped autopilot line, makes exactly chapter 24's event log on every seed tried.
+ * 4. **Its scene**: a real scene row, a canon row (FFX-2), the backdrop file chapter 24's plate (so the board, the prep wash and the cutscenes find a picture), the side table with its row.
+ * 5. **The models stay out of builds**: `public/models-exp/` is gitignored and `tools/dist-filter.mjs` leaves it out.
+ */
+import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+
+import { setupForChapter } from '../../../src/app/screens/BattleScreenSetup.ts';
+import { backdropFileOf } from '../../../src/data/art/artNamespace.ts';
+import { EXP_WINDWAKER, EXP_WINDWAKER_TEXT } from '../../../src/data/chapter-exp-windwaker.ts';
+import { EXP_WINDWAKER_META } from '../../../src/data/chapter-meta-exp-windwaker.ts';
+import { CHAPTER_META, UNLISTED_CHAPTER_META, getChapterMeta } from '../../../src/data/chapter-meta.ts';
+import { CHAPTERS, CHAPTER_IDS, EXPERIMENT_CHAPTERS, getChapter } from '../../../src/data/encounters.ts';
+import { FFX2_VALEFOR_BESAID } from '../../../src/data/chapter-ffx2-valefor-besaid.ts';
+import { DJOSE_CHAMBER_PLATE } from '../../../src/data/ixion-plates.ts';
+import { EXP_WINDWAKER_ID, EXP_WINDWAKER_SCENE, WW_MODEL_DIR, WW_PROP_DIR, WW_TEMPLE_DIR } from '../../../src/data/windwaker-ids.ts';
+import { PYREFLY_CANON, pyreflyCanonFor } from '../../../src/engine/pyreflyCanon.ts';
+import { CHAPTER_GAME } from '../../../src/engine/tactics/lookup.ts';
+import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, WW_BOSS_ID, WW_PARTY_IDS } from '../../../src/engine/ww3d/layout.ts';
+import { EXPERIMENT_SCENE_ENTRIES, EXPERIMENT_SCENE_FACTORIES } from '../../../src/scenes/experiment-scenes.ts';
+import { EXP_WINDWAKER_SCENE_ENTRY, EXP_WINDWAKER_SLOTS, paintedForced } from '../../../src/scenes/exp-windwaker-stage.ts';
+import { SCENE_FACTORIES, getScene, isPlaceholderScene, sceneKeys } from '../../../src/scenes/index.ts';
+import { isUnshippedPublicFile } from '../../../tools/dist-filter.mjs';
+import { playChain } from '../helpers/ffx2ChainPlay.ts';
+
+const chapter = getChapter(EXP_WINDWAKER_ID)!;
+const base = FFX2_VALEFOR_BESAID;
+
+describe('the chapter is a hidden experiment: no card, no count, no save', () => {
+  it('is registered with the experiments and not with the nineteen: number 30, FFX-2, experimental, on its own scene', () => {
+    expect(chapter).toBeDefined();
+    expect(chapter).toBe(EXP_WINDWAKER);
+    expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain('exp-windwaker');
+    expect(CHAPTERS.map((c) => c.id as string)).not.toContain('exp-windwaker');
+    expect((CHAPTER_IDS as readonly string[]).includes('exp-windwaker')).toBe(false);
+    expect(CHAPTER_IDS).toHaveLength(19);
+    expect([chapter.id, chapter.number, chapter.game, chapter.experimental, chapter.sceneKey]).toEqual(['exp-windwaker', 30, 'ffx2', true, 'exp-windwaker-stage']);
+    expect([EXP_WINDWAKER_ID, EXP_WINDWAKER_SCENE]).toEqual(['exp-windwaker', 'exp-windwaker-stage']); // the no-import ids module says what the record says
+    expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length); // every number is its own
+  });
+
+  it('wears the working title, labelled as one, awaiting Bailey\'s pick', () => {
+    expect(chapter.title).toBe('Valefor at Besaid (Wind Waker)');
+    expect(EXP_WINDWAKER_TEXT.title).toBe(chapter.title);
+    expect(chapter.title).not.toBe(base.title);
+  });
+
+  it('its pause metadata is the hidden one: EXP, chapter 24\'s objectives, tip, quote and snapshots, found by id and not among the listed nineteen', () => {
+    const meta = getChapterMeta('exp-windwaker')!;
+    const parent = getChapterMeta('ffx2-valefor-besaid')!;
+    expect(UNLISTED_CHAPTER_META.find((m) => m.id === 'exp-windwaker')).toBe(meta);
+    expect(meta).toBe(EXP_WINDWAKER_META);
+    expect(CHAPTER_META.map((m) => m.id as string)).not.toContain('exp-windwaker');
+    expect([meta.numeral, meta.title, meta.gameLabel]).toEqual(['EXP', chapter.title, 'FFX-2']);
+    for (const key of ['subtitle', 'location', 'blurb', 'heroArt', 'heroArtFallback', 'quote', 'handwritten', 'objectives', 'tip', 'snapshots', 'focalCharacterId', 'musicKeys'] as const) {
+      expect(meta[key], key).toBe(parent[key]);
+    }
+  });
+
+  it('is FFX-2 in the tactics\' game table (so the advisor and the guide never read it as FFX)', () => {
+    expect(CHAPTER_GAME['exp-windwaker']).toBe('ffx2');
+    expect(CHAPTER_GAME['ffx2-valefor-besaid']).toBe('ffx2');
+  });
+});
+
+describe('it is chapter 24\'s encounter, by reference', () => {
+  it('shares the build, the formation, the scripts, the music, the Sensor lines and the card words with chapter 24', () => {
+    for (const key of ['game', 'buildRef', 'enemyGroupRef', 'scriptsRef', 'music', 'sensorTexts', 'subtitle', 'location', 'blurb', 'thumbnailKey'] as const) {
+      expect(chapter[key], key).toBe(base[key]);
+    }
+    const mine = setupForChapter(chapter, 3);
+    const theirs = setupForChapter(base, 3);
+    expect(mine.party).toBe(theirs.party);
+    expect(mine.enemies).toBe(theirs.enemies);
+    expect(mine.triggers).toEqual(theirs.triggers);
+    expect(mine).toEqual(theirs);
+  });
+
+  it('keeps the existing party and boss: Yuna, Rikku and Paine in chapter 24\'s dresspheres against Valefor, no data of its own', () => {
+    const members = (chapter.buildRef as { members: Array<{ id: string; currentDressphere: string }> }).members;
+    expect(members.map((m) => [m.id, m.currentDressphere])).toEqual([['yuna', 'white-mage'], ['rikku', 'dark-knight'], ['paine', 'warrior']]);
+    expect(members.map((m) => m.id)).toEqual([...WW_PARTY_IDS]); // the model files are named for them
+    expect(chapter.enemyGroupRef.enemies.map((e) => e.id)).toEqual(['x2-valefor']);
+    expect(chapter.enemyGroupRef.enemies[0]!.id).toBe(WW_BOSS_ID);
+  });
+
+  it('leaves chapter 24 as it was: its id, number 24, its own scene, hidden, not this chapter', () => {
+    expect([base.id, base.number, base.sceneKey, base.title, base.experimental]).toEqual(['ffx2-valefor-besaid', 24, DJOSE_CHAMBER_PLATE, 'Valefor', true]);
+    expect(getChapter('ffx2-valefor-besaid')).toBe(base);
+    expect(getChapterMeta('ffx2-valefor-besaid')!.title).toBe('Valefor');
+  });
+});
+
+// ---------------------------------------------------------- the determinism proof
+
+/** Each fight is played once: the proof and its control share the logs. */
+const played = new Map<string, ReturnType<typeof playChain>>();
+const play = (c: typeof chapter, seed: number): ReturnType<typeof playChain> => {
+  const key = `${c.id}:${seed}`;
+  if (!played.has(key)) played.set(key, playChain(c, seed, 'bench'));
+  return played.get(key)!;
+};
+
+describe('the determinism proof: exp-windwaker plays to exactly the event log of ffx2-valefor-besaid', () => {
+  for (const seed of [1, 2]) {
+    it(`seed ${seed}: the same outcome, the same engine turns and the same event log (one digest), through the app's own path`, async () => {
+      const mine = await play(chapter, seed);
+      const theirs = await play(base, seed);
+      expect(mine.engineTurns, 'a whole fight was played').toBeGreaterThan(5);
+      expect(mine).toEqual(theirs);
+    }, 240_000);
+  }
+
+  it('is a proof that can fail: a different seed is a different log', async () => {
+    expect((await play(chapter, 1)).digest).not.toBe((await play(chapter, 2)).digest);
+  }, 240_000);
+});
+
+// -------------------------------------------------------------------- its scene
+
+describe('its scene', () => {
+  it('is a real scene: a factory of its own, a row with the published slots, not a placeholder, and chapter 24\'s plate behind the board', () => {
+    const entry = getScene('exp-windwaker-stage')!;
+    expect(entry).toBe(EXP_WINDWAKER_SCENE_ENTRY);
+    expect(entry).toMatchObject({ key: 'exp-windwaker-stage', placeholder: false });
+    expect(entry.slots).toBe(EXP_WINDWAKER_SLOTS);
+    expect(isPlaceholderScene('exp-windwaker-stage')).toBe(false);
+    expect(SCENE_FACTORIES['exp-windwaker-stage']).toBeTypeOf('function');
+    expect(SCENE_FACTORIES['exp-windwaker-stage']).not.toBe(SCENE_FACTORIES[DJOSE_CHAMBER_PLATE]);
+    expect(sceneKeys()).toContain('exp-windwaker-stage');
+    expect(backdropFileOf('exp-windwaker-stage')).toBe(DJOSE_CHAMBER_PLATE);
+    expect(backdropFileOf(DJOSE_CHAMBER_PLATE)).toBe(DJOSE_CHAMBER_PLATE);
+  });
+
+  it('publishes the lab\'s staging: the party\'s three slots and Valefor\'s spot, held, with the heights', () => {
+    expect(EXP_WINDWAKER_SLOTS.party).toEqual(PARTY_SLOTS.slice(0, 3).map((s) => [...s]));
+    expect(EXP_WINDWAKER_SLOTS.enemy).toEqual(ENEMY_SLOTS.map((s) => [...s]));
+    expect(EXP_WINDWAKER_SLOTS.enemy[0]).toEqual([...BOSS_SPOT]);
+    expect(EXP_WINDWAKER_SLOTS).toMatchObject({ partyHeight: PARTY_HEIGHT, enemyHeight: BOSS_HEIGHT, holdParty: true });
+    expect(EXP_WINDWAKER_SLOTS.enemySpots).toEqual({ [WW_BOSS_ID]: [...BOSS_SPOT] });
+    expect(EXP_WINDWAKER_SLOTS.figureHeights).toEqual({ [WW_BOSS_ID]: BOSS_HEIGHT });
+  });
+
+  it('has a pyrefly canon row (FFX-2, unattested: no source describes the room or names particles in it)', () => {
+    const row = pyreflyCanonFor('exp-windwaker-stage')!;
+    expect(row).toMatchObject({ game: 'ffx2', verdict: 'unattested' });
+    expect(row.cite).toBe(PYREFLY_CANON['exp-windwaker-stage']!.cite);
+    expect(row.cite).toMatch(/no source describes Besaid/);
+  });
+
+  it('is the last row of the hidden chapters\' side table, which keeps every other row in order', () => {
+    expect(EXPERIMENT_SCENE_ENTRIES.at(-1)).toBe(EXP_WINDWAKER_SCENE_ENTRY);
+    expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-windwaker-stage');
+  });
+
+  it('plays chapter 24\'s own scene for the comparison with `?ww=painted`, and the 3D one for anything else', () => {
+    expect(paintedForced('?ww=painted')).toBe(true);
+    expect(paintedForced('')).toBe(false);
+    expect(paintedForced('?ww=classic')).toBe(false);
+    expect(paintedForced('?ww=hd')).toBe(false);
+  });
+});
+
+// ------------------------------------------------- the models stay out of builds
+
+describe('the models are local only', () => {
+  const root = fileURLToPath(new URL('../../../', import.meta.url));
+
+  it('keeps the model, prop and temple folders under public/models-exp/ and out of every build', () => {
+    for (const dir of [WW_MODEL_DIR, WW_PROP_DIR, WW_TEMPLE_DIR]) expect(dir.startsWith('models-exp/windwaker')).toBe(true);
+    for (const rel of ['yuna', 'rikku', 'paine', 'valefor'].map((n) => `${WW_MODEL_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(true);
+    for (const rel of ['pistol', 'dagger', 'sword'].map((n) => `${WW_PROP_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(true);
+    for (const rel of ['wall', 'door', 'brazier', 'pillar'].map((n) => `${WW_TEMPLE_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(true);
+  });
+
+  it('is gitignored: the repo is public and the files are large', () => {
+    const ignore = readFileSync(join(root, '.gitignore'), 'utf8').split(/\r?\n/);
+    expect(ignore).toContain('public/models-exp/');
+  });
+});

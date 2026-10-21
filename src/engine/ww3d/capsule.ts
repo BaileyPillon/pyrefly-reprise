@@ -33,15 +33,16 @@ export function capsuleFigure(id: WwId): Group {
     part(g, new BoxGeometry(0.06, 0.06, 0.08), 0x2a2a30, [0, 0.96, 0.21], 'nose'); // the way it faces
     return g;
   }
-  part(g, new CapsuleGeometry(0.6, 1.0, 6, 16), colour, [0, 1.6, 0], 'body');
-  part(g, new CapsuleGeometry(0.22, 0.8, 4, 10), colour, [0, 2.6, 0.5], 'neck', [0.35, 0, 0]);
-  part(g, new SphereGeometry(0.42, 18, 12), colour, [0, 3.1, 0.9], 'head');
-  part(g, new BoxGeometry(0.2, 0.18, 0.4), 0xd9b43c, [0, 3.0, 1.3], 'beak');
-  const tail = part(g, new ConeGeometry(0.4, 2.4, 12), colour, [0, 1.0, -1.7], 'tail', [-Math.PI / 2 - 0.25, 0, 0]);
+  part(g, new CapsuleGeometry(0.6, 1.0, 6, 16), colour, [0, 1.3, 0], 'body');
+  for (const x of [-0.3, 0.3]) part(g, new BoxGeometry(0.2, 0.5, 0.2), 0xd9b43c, [x, 0.25, 0.2], x < 0 ? 'talon-left' : 'talon-right'); // she stands on the floor
+  part(g, new CapsuleGeometry(0.22, 0.8, 4, 10), colour, [0, 2.45, 0.5], 'neck', [0.35, 0, 0]);
+  part(g, new SphereGeometry(0.42, 18, 12), colour, [0, 3.08, 0.9], 'head');
+  part(g, new BoxGeometry(0.2, 0.18, 0.4), 0xd9b43c, [0, 2.98, 1.3], 'beak');
+  const tail = part(g, new ConeGeometry(0.4, 2.4, 12), colour, [0, 0.9, -1.7], 'tail', [-Math.PI / 2 - 0.25, 0, 0]);
   tail.scale.set(1, 1, 0.6);
   // the wings: two flat panels, spread to either side and raised, each pivoting at the shoulder
   for (const side of [-1, 1]) {
-    const wing = part(g, new BoxGeometry(2.4, 0.06, 1.5), 0x1d4fb0, [side * 1.9, 2.1, -0.2], side < 0 ? 'wing-left' : 'wing-right', [0, side * 0.2, side * 0.32]);
+    const wing = part(g, new BoxGeometry(2.4, 0.06, 1.5), 0x1d4fb0, [side * 1.9, 2.0, -0.2], side < 0 ? 'wing-left' : 'wing-right', [0, side * 0.2, side * 0.32]);
     wing.castShadow = true;
   }
   return g;

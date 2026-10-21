@@ -144,6 +144,7 @@ export class WwModel {
     this.head = !boss && source === 'own' ? new HeadTurn(scene) : null;
     this.baseYaw = boss ? rad(BOSS_YAW_DEG) : 0;
     this.applyYaw();
+    this.applyHover();
   }
 
   /** The figure's height now, world units. */
@@ -277,11 +278,14 @@ export class WwModel {
     this.applyYaw();
     this.head?.apply(this.camera, FACE_OFF_DEG);
     if (this.wing) advanceFlap(this.wing.uniforms, frozen ? 0 : dt, this.activity);
-    if (this.id === WW_BOSS_ID) {
-      const k = this.figureHeight / BOSS_HEIGHT;
-      const up = (BOSS_HOVER + BOSS_BOB.amplitude * Math.sin(this.clock * Math.PI * 2 * BOSS_BOB.hz)) * k * (1 - Math.min(1, this.lieAmount * 2));
-      this.hoverGroup.position.y = up; // she falls to the ground when she is down
-    }
+    this.applyHover();
+  }
+
+  /** Valefor floats a metre off the floor and bobs on it, and falls to the ground when she is down; the girls stand. */
+  private applyHover(): void {
+    if (this.id !== WW_BOSS_ID) return;
+    const k = this.figureHeight / BOSS_HEIGHT;
+    this.hoverGroup.position.y = (BOSS_HOVER + BOSS_BOB.amplitude * Math.sin(this.clock * Math.PI * 2 * BOSS_BOB.hz)) * k * (1 - Math.min(1, this.lieAmount * 2));
   }
 
   dispose(): void {
