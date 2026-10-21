@@ -31,6 +31,7 @@ import { anchorsForPoses, analyzeRun } from './continuity-analyze.mjs';
 import { createProbe } from './continuity-probe.mjs';
 import { loadPoseMeasure } from './continuity-silhouette.mjs';
 import { loadPoseWaivers } from './continuity-waivers.mjs';
+import { candidateTableAt, judgeTable, parseBuildTag, resolvePoseMeasure, tableRootOf } from './continuity-table.mjs'; // PR-0512: which table, and is it the candidate's
 import { HELD_MIN_FRAMES } from './continuity-held.mjs';
 import { composeStrip } from './continuity-strips.mjs';
 import { continuityReportLine, verdicts } from './continuity-pure.mjs';
@@ -70,7 +71,7 @@ const safe = (s) => String(s ?? 'x').replace(/[^a-z0-9._-]+/gi, '-').slice(0, 40
  * Attach the probe to a page the game is already running in and start it. `finish()` stops it, reads everything back and
  * returns the chapter's result (it is safe to call twice: the second call returns the first's answer).
  */
-export async function attachProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath = null, cfg = continuityConfig(), log = console.log }) {
+export async function attachProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath = null, poseSource = null, allowStaleTable = false, cfg = continuityConfig(), log = console.log }) {
   // r43: `washSelector` has the probe record the Save Sphere wash's opacity on the frames it is up (continuity-wash.mjs); a policy selector of null reads nothing
   const probeCfg = { ...cfg.probe, beforeFrames: cfg.strips.beforeFrames, afterFrames: cfg.strips.afterFrames, cutPx: cfg.motion.cutPx, washSelector: washPolicy(cfg).selector };
   // R57-002: the page-side reader of a RIGGED figure (a rig draws no plane, so the probe cannot read it as a painting); `continuity.rig: false` in the policy leaves it out
@@ -78,10 +79,18 @@ export async function attachProbe({ page, outDir, chapter, game, base, mode, pos
   const rigReader = rig ? `, rig: (${createRigReader})(${JSON.stringify(rig)})` : '';
   await page.evaluate(`(${createProbe})(${JSON.stringify(probeCfg)}, { window, document, performance${rigReader} })`);
   await page.evaluate(() => window.__cont.start());
+  // PR-0512: the build says which commit it is made from (the title's tag, `Release 61 · 660c19bb`); read in the background while the route plays, answered at the end
+  const buildTag = (async () => {
+    for (let i = 0; i < 60; i++) {
+      try { const t = await page.evaluate(() => document.querySelector('[data-build-tag]')?.textContent ?? null); if (t) return t; } catch { return null; }
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    return null;
+  })();
   let done = null;
   return {
     started: true,
-    finish: () => (done ??= finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath, cfg, log }).catch((e) => ({ chapter, game, error: String(e && e.stack ? e.stack : e), checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] }, 'CHK-027': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] } } }))),
+    finish: () => (done ??= finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath, poseSource, allowStaleTable, buildTag, cfg, log }).catch((e) => ({ chapter, game, error: String(e && e.stack ? e.stack : e), checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] }, 'CHK-027': { result: 'UNVERIFIED', reasons: [`the harness failed: ${String(e).slice(0, 200)}`] } } }))),
   };
 }
 
@@ -97,7 +106,7 @@ export function waiverPathFor({ poseMeasurePath, poseWaiversPath, cfg, root = RO
   return beside && fs.existsSync(beside) ? beside : fs.existsSync(own) ? own : null;
 }
 
-async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath, cfg, log }) {
+async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, poseWaiversPath, poseSource = null, allowStaleTable = false, buildTag = Promise.resolve(null), cfg, log }) {
   const dir = path.join(outDir, 'continuity');
   fs.mkdirSync(path.join(dir, 'strips'), { recursive: true });
   if (!(await page.evaluate(() => Boolean(window.__cont)))) throw new Error('the probe is gone from the page (a reload?)');
@@ -116,6 +125,11 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     fs.writeFileSync(path.join(process.env.CONT_RAW_DIR, `${safe(chapter)}.json.gz`), zlib.gzipSync(JSON.stringify({ meta, records })));
   }
   const measure = loadPoseMeasure(poseMeasurePath);
+  // PR-0512: the table this run reads against the candidate's own (the file as the build's commit has it); a table that is not the candidate's makes CHK-026 UNVERIFIED, loudly
+  const build = parseBuildTag(await Promise.race([buildTag, new Promise((r) => setTimeout(() => r(null), 2000))]));
+  const candidate = candidateTableAt(tableRootOf(poseMeasurePath ?? ''), build.sha);
+  const judged = judgeTable({ loaded: measure ? { path: measure.path, sha256: measure.sha256, count: measure.count } : null, candidate, buildSha: build.sha, source: poseSource ?? 'unknown', allowStale: allowStaleTable });
+  log(`[continuity] ${chapter}: pose-measure ${measure ? `${measure.path} (${measure.count} subjects, sha256 ${measure.sha256.slice(0, 12)}, source ${poseSource ?? 'unknown'})` : 'none'}; build ${build.sha ?? 'unknown'}; ${judged.stale ? 'NOT THE CANDIDATE\'S TABLE' : judged.checked ? 'the candidate\'s own table' : 'not checked'}${judged.reason ? `: ${judged.reason}` : ''}`);
   const waivers = loadPoseWaivers(waiverPathFor({ poseMeasurePath, poseWaiversPath, cfg }));
   const pageUrl = page.url();
   const fetchImage = async (url) => {
@@ -167,11 +181,13 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
   }
 
   const checks = res.summary.checks;
+  if (judged.fail && checks['CHK-026']) checks['CHK-026'] = { result: 'UNVERIFIED', reasons: [judged.reason], readAgainstTheWrongTable: { result: checks['CHK-026'].result, reasons: checks['CHK-026'].reasons ?? [] } };
   const out = {
     schema: 'continuity/1', chapter, game, base, mode, date: new Date().toISOString(),
     dedicated: process.env.CONT_DEDICATED === '1', // PR-0450 (d): only the dedicated harness's numbers are scored; the chapter row of the summary shows the frame rate it ran at
     view: meta.view, probe: { ...meta.stats, errors: meta.errors.slice(0, 5), eventSource: 'the engine state read from window.__pyrefly (plane fades and corners per frame); no engine hook' },
-    poseMeasure: measure ? { path: measure.path, sha256: measure.sha256, subjects: measure.count } : null,
+    poseMeasure: measure ? { path: measure.path, sha256: measure.sha256, subjects: measure.count, source: poseSource ?? 'unknown', buildSha: build.sha, candidate: candidate ? { sha256: candidate.sha256, subjects: candidate.count } : null, isCandidate: judged.checked ? !judged.stale : null, note: judged.reason } : null,
+    staleTable: judged.fail, // PR-0512: the whole chapter is left out of the run's totals (aggregate); its numbers were read against another tree's registrations
     poseWaivers: waivers ? (waivers.error ? { path: waivers.path, error: waivers.error } : { path: waivers.path, rows: waivers.count }) : null,
     anchorNotes: notes, coverage: res.coverage, perFigure: res.perFigure, summary: res.summary, checks,
     worst: res.worst, strips,
@@ -188,12 +204,14 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
 
 // ---------------------------------------------------------------------------------------------------- the CLI
 
-function runRoute({ chapter, goal, base, evidence, size, budget, seed, tag, poseMeasure, poseWaivers }) {
+function runRoute({ chapter, goal, base, evidence, size, budget, seed, tag, poseMeasure, poseWaivers, poseSource = null, allowStaleTable = false }) {
   return new Promise((resolve) => {
     const a = [path.join(HERE, 'route.mjs'), chapter, goal, `--base=${base}`, `--evidence=${evidence}`, `--size=${size}`, `--budget=${budget}`, `--seed=${seed}`, '--continuity'];
     if (tag) a.push(`--tag=${tag}`);
     if (poseMeasure) a.push(`--pose-measure=${poseMeasure}`);
     if (poseWaivers) a.push(`--pose-waivers=${poseWaivers}`);
+    if (poseSource) a.push(`--pose-source=${poseSource}`);
+    if (allowStaleTable) a.push('--allow-stale-pose-table');
     // CONT_DEDICATED=1 is what lets route.mjs accept --continuity (PR-0450 d): the probe runs only under this harness, which passes the registration and plays alone
     const child = spawn(process.execPath, a, { stdio: 'inherit', env: { ...process.env, CONT_DEDICATED: '1' } });
     child.on('exit', (code) => resolve(code));
@@ -209,17 +227,25 @@ export async function runContinuity(argv) {
   const chapters = String(args.chapters ?? '').split(',').map((s) => s.trim()).filter(Boolean);
   if (!base || !args.evidence && !process.env.PYREFLY_EVIDENCE || !chapters.length) throw new Error('usage: continuity.mjs --base=<url> --evidence=<dir> --chapters=a,b,c [--goal=win] [--size=1600x900] [--budget=1800000] [--seed=1] [--tag=x] [--pose-measure=<path>] [--pose-measure-from=<repo root>] [--pose-waivers=<path>]');
   const goal = args.goal ?? 'win';
-  const poseMeasure = args['pose-measure'] ?? (args['pose-measure-from'] ? path.join(args['pose-measure-from'], 'docs', 'target', 'pose-measure.json') : fs.existsSync(path.join(ROOT, 'docs', 'target', 'pose-measure.json')) ? path.join(ROOT, 'docs', 'target', 'pose-measure.json') : null);
+  const table = resolvePoseMeasure({ args, root: ROOT, exists: (f) => fs.existsSync(f) }); // PR-0512: --pose-measure, else --candidate-root (--pose-measure-from), else this tree's own; the source is recorded
+  const poseMeasure = table.path;
+  const allowStaleTable = Boolean(args['allow-stale-pose-table']);
+  const loadedTable = loadPoseMeasure(poseMeasure);
+  console.log(`[continuity] pose-measure table: ${poseMeasure ?? 'none'} (source ${table.source}; ${loadedTable ? `${loadedTable.count} subjects, sha256 ${loadedTable.sha256.slice(0, 12)}` : 'not readable'})${table.source === 'harness-tree' ? '; this is the tree the harness was started from: pass --candidate-root=<the candidate\'s tree> when the candidate is another tree' : ''}`);
+  if (poseMeasure && !loadedTable) console.error(`[continuity] WARNING: the pose-measure table ${poseMeasure} cannot be read: every pose is judged by its silhouette alone and CHK-026 is not the registered reading`);
   const cfg = continuityConfig();
   const results = [];
   for (const chapter of chapters) {
-    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: continuityBudgetFor(chapter, args.budget), seed: args.seed ?? 1, tag: args.tag, poseMeasure, poseWaivers: args['pose-waivers'] ?? null });
+    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: continuityBudgetFor(chapter, args.budget), seed: args.seed ?? 1, tag: args.tag, poseMeasure, poseWaivers: args['pose-waivers'] ?? null, poseSource: table.source, allowStaleTable });
     const dir = [chapter, goal, args.tag].filter(Boolean).join('-');
     const file = path.join(evidence, dir, 'continuity', 'continuity.json');
     results.push(fs.existsSync(file) ? { ...JSON.parse(fs.readFileSync(file, 'utf8')), dir } : { chapter, error: 'the route wrote no continuity.json', checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] }, 'CHK-027': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] } } });
   }
   const summary = aggregate(results, cfg);
   summary.base = base; summary.date = new Date().toISOString();
+  // PR-0512: which table the whole run read, and the chapters whose table was not the candidate's (left out of the totals, CHK-026 UNVERIFIED)
+  summary.poseMeasure = { path: poseMeasure, source: table.source, subjects: loadedTable?.count ?? null, sha256: loadedTable?.sha256 ?? null, staleChapters: results.filter((r) => r.staleTable).map((r) => r.chapter) };
+  if (summary.poseMeasure.staleChapters.length) console.error(`[continuity] STALE POSE TABLE in: ${summary.poseMeasure.staleChapters.join(', ')}. CHK-026 is UNVERIFIED for them; run again with --candidate-root=<the candidate's tree> (PR-0512)`);
   fs.mkdirSync(evidence, { recursive: true });
   // PR-0398: a retry of one chapter used to overwrite the whole review's summary with its own; `--summary=<file>` names the file (a run that is not the whole review should not use the default)
   fs.writeFileSync(path.join(evidence, args.summary ?? 'continuity-summary.json'), JSON.stringify(summary, null, 1));
@@ -230,7 +256,7 @@ export async function runContinuity(argv) {
 
 /** Every chapter's numbers as one: the worst of each, snaps per minute over all the battle seconds, and the two checks. */
 export function aggregate(results, cfg) {
-  const ok = results.filter((r) => r.summary);
+  const ok = results.filter((r) => r.summary && !r.staleTable); // PR-0512: a chapter read against a table that is not the candidate's is not counted
   const sum = (f) => ok.reduce((n, r) => n + f(r.summary), 0);
   const max = (f) => ok.reduce((m, r) => Math.max(m, f(r.summary)), 0);
   const battleSeconds = sum((s) => s.battleSeconds);
