@@ -30,7 +30,7 @@ import { resultsCueFor } from './screens/resultsMusic.ts';
  */
 export function chapterWarmCues(chapter: Chapter): string[] {
   const opening = cueForGroup(chapter, chapter.enemyGroupRef, 'first').track;
-  const wanted = [chapter.music.scene, opening, chapter.music.victory, resultsCueFor(chapter, 'defeat')?.cue];
+  const wanted = [chapter.music.scene, opening, resultsCueFor(chapter, 'victory')?.cue, resultsCueFor(chapter, 'defeat')?.cue]; // the win's cue is the results screen's own (release 61: Chapter IV's is the quiet one)
   return [...new Set(wanted.filter((cue): cue is string => typeof cue === 'string' && cue.length > 0))];
 }
 
