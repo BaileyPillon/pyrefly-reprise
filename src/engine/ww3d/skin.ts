@@ -30,7 +30,7 @@ import { Color, Group, Vector3, type Object3D } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
 import { paceRate } from '../pace.ts';
 import type { BeatListener } from './beats.ts';
-import { BOSS_RIM, DEFAULT_RIM, fillAmount, glowLevel, rimStrength, spellRim, type Rgb } from './glow.ts';
+import { BOSS_RIM, DEFAULT_RIM, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, fillAmount, glowLevel, rimStrength, spellRim, type Rgb } from './glow.ts';
 import {
   BOSS_HOVER,
   BOSS_SPOT,
@@ -284,7 +284,7 @@ export class WwSkin {
       this.emissive.setHex(GLOW_COLOUR[b.id === WW_BOSS_ID ? 'boss' : 'party']);
       amount = fill;
     }
-    model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha, ...(b.glow > 0.004 ? { rim: { colour: b.rim, strength: rimStrength(b.glow, b.glowAge) } } : {}) });
+    model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha, ...(b.glow > 0.004 ? { rim: { colour: b.rim, strength: rimStrength(b.glow, b.glowAge), shape: b.id === WW_BOSS_ID ? RIM_SHAPE_BOSS : RIM_SHAPE_GIRL } } : {}) });
 
     // Valefor's wings flap harder as she acts, from the beat's opening to its close (or while a pose says so)
     b.act = approach(b.act, b.busy || pose === 'attack' || casting ? 1 : pose === 'hurt' ? 0.5 : 0, ACT_TAU, dt);

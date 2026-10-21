@@ -6,7 +6,7 @@
  * {@link driveToon} then moves the set's colour, glow and opacity once a frame: the hit flash, the cast glow, the hurt tint, the stone grey and the fade, the channels the painted actor carries (`./skin.ts`).
  */
 
-import { Color, Vector4, type IUniform, type Material, type Mesh, type MeshToonMaterial, type Object3D, type Texture } from 'three';
+import { Color, Vector2, Vector4, type IUniform, type Material, type Mesh, type MeshToonMaterial, type Object3D, type Texture } from 'three';
 import { toonFrom, withUniforms, type ShaderLike, type ToonUniforms } from './toon.ts';
 
 /** One toon material and the colour it started with. */
@@ -23,6 +23,8 @@ export interface ToonSet {
   opacity: number;
   /** This set's own cast-aura cell (`uToonGlow`, `./glow.ts`): rgb the rim colour, a the strength. Every material of the set reads it; the other figures' are separate. */
   readonly glow: IUniform<Vector4>;
+  /** The figure's own aura shape cell (`uToonGlowShape`): where the two steps of the rim end on N.V. */
+  readonly glowShape: IUniform<Vector2>;
 }
 
 export interface ToonifyOptions {
@@ -71,7 +73,8 @@ export function sourceMaterialOf(mesh: Mesh): Material | Material[] | undefined 
 export function toonify(root: Object3D, shared: Record<string, IUniform>, opts: ToonifyOptions = {}): ToonSet {
   // the figure's own cast-aura cell: the other cells stay shared, so one `applyVariant` still moves them all
   const glow: IUniform<Vector4> = { value: new Vector4(1, 0.78, 0.3, 0) };
-  const uniforms = withUniforms(shared as ToonUniforms, { uToonGlow: glow });
+  const glowShape: IUniform<Vector2> = { value: new Vector2(0.34, 0.5) };
+  const uniforms = withUniforms(shared as ToonUniforms, { uToonGlow: glow, uToonGlowShape: glowShape });
   const entries: ToonEntry[] = [];
   const meshes: Mesh[] = [];
   const cast = opts.cast ?? true;
@@ -99,7 +102,7 @@ export function toonify(root: Object3D, shared: Record<string, IUniform>, opts: 
     SOURCE_MATERIALS.set(mesh, mesh.material);
     mesh.material = Array.isArray(mesh.material) ? out : out[0]!;
   });
-  return { entries, meshes, opacity: 1, glow };
+  return { entries, meshes, opacity: 1, glow, glowShape };
 }
 
 /** The channels a figure drives on its materials. */
@@ -112,7 +115,7 @@ export interface Channels {
   /** 0 (gone) to 1 (solid). */
   opacity: number;
   /** The cast aura: a thin rim of `colour` at `strength` (0 none). Optional: left out, the rim is off. */
-  rim?: { colour: readonly [number, number, number]; strength: number };
+  rim?: { colour: readonly [number, number, number]; strength: number; /** Where the two steps end on N.V (default the girl's). */ shape?: readonly [number, number] };
 }
 
 const BLEND_ON = 0.999;
@@ -120,7 +123,10 @@ const BLEND_ON = 0.999;
 /** Drive the set's materials: colour times the base, the emissive glow, and the opacity (a material is transparent only while it is not solid, so a standing figure sorts as an opaque one). */
 export function driveToon(set: ToonSet, c: Channels): void {
   set.opacity = c.opacity;
-  if (c.rim) set.glow.value.set(c.rim.colour[0], c.rim.colour[1], c.rim.colour[2], c.rim.strength);
+  if (c.rim) {
+    set.glow.value.set(c.rim.colour[0], c.rim.colour[1], c.rim.colour[2], c.rim.strength);
+    if (c.rim.shape) set.glowShape.value.set(c.rim.shape[0], c.rim.shape[1]);
+  }
   else set.glow.value.w = 0;
   const fading = c.opacity < BLEND_ON;
   for (const { material, base } of set.entries) {

@@ -65,10 +65,10 @@ export function movePhase(kind: MoveKind, age: number, lead: number): MovePhase 
 }
 
 /**
- * The orb of the blast: radius over its life (metres at Valefor's world size), swelling through the charge and bursting to `burst` times at the blow (2.0 m at its peak), and how far in front of her chest, toward the
- * girls, it hangs (`ahead`, metres), so she stays readable behind it. Phase 2's orb was 2.7 m, additive and bloomed: it whited out the right two thirds of the frame (stills 62 to 64).
+ * The orb of the blast: radius over its life (metres at Valefor's world size), swelling through the charge and bursting to `burst` times at the blow (1.8 m at its peak), and how far in front of her chest, along the line
+ * to the girls, it hangs (`ahead`, metres), so she stays readable behind it. Phase 2's orb was 2.7 m, additive and bloomed: it whited out the right two thirds of the frame (stills 62 to 64).
  */
-export const ORB = { radius: 1.25, burst: 1.6, ahead: 1.3 } as const;
+export const ORB = { radius: 1.1, burst: 1.65, ahead: 2.0 } as const;
 
 /** The most of the frame's area the orb may cover at its peak, by its disc (Bailey's check: about a quarter to 30 percent; the cap keeps it at a quarter on the axis, a little more at the edge of the frame). */
 export const ORB_MAX_SHARE = 0.25;

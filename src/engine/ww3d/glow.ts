@@ -30,6 +30,13 @@ export const PULSE_HZ = 1.9;
 /** The strength of the rim at full glow (a full rim replaces the lit colour in its band; it is thin, so the face and the costume keep their flat colours). */
 export const RIM_GAIN = 1.0;
 
+/**
+ * Where the rim's two steps end on N.V (the cosine between the surface and the lens: 0 on the silhouette, 1 facing it): a girl's, and Valefor's, whose wings and thin legs stand edge-on over much of her body so
+ * the girls' width washed her teal to olive (the first polish-1 capture); hers are half as wide.
+ */
+export const RIM_SHAPE_GIRL: readonly [number, number] = [0.34, 0.5];
+export const RIM_SHAPE_BOSS: readonly [number, number] = [0.15, 0.27];
+
 /** Valefor's charge: a warm gold. */
 export const BOSS_RIM: Rgb = lin(1.0, 0.78, 0.25);
 /** A girl's rim when the spell is unknown. */

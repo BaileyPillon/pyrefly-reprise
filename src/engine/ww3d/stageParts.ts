@@ -86,8 +86,8 @@ export const DOOR_TOP_SHARE = 0.476;
 export const FLOOR_BRAZIER_SCALE = 1.3;
 export const WALL_BRAZIER_SCALE = 0.8 * FLOOR_BRAZIER_SCALE;
 export const TEMPLE_TINT: Readonly<Partial<Record<TempleName, readonly [number, number, number]>>> = {
-  wall: [0.46, 0.72, 1.08],
-  pillar: [0.52, 0.76, 1.06],
+  wall: [0.36, 0.6, 1.2],
+  pillar: [0.42, 0.66, 1.15],
 };
 
 /** How many rows of the kit's wall and pillars make a wall `H` high. */

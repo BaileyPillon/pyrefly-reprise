@@ -6,7 +6,7 @@
 import { Color, Mesh, MeshBasicMaterial, SphereGeometry, Vector4 } from 'three';
 import { describe, expect, it } from 'vitest';
 
-import { BOSS_RIM, DEFAULT_RIM, GLOW_FILL, PULSE_HZ, PULSE_LOW, RIM_GAIN, RISE_SECONDS, fillAmount, glowLevel, rimPulse, rimStrength, spellRim } from '../../../src/engine/ww3d/glow.ts';
+import { BOSS_RIM, DEFAULT_RIM, GLOW_FILL, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, PULSE_HZ, PULSE_LOW, RIM_GAIN, RISE_SECONDS, fillAmount, glowLevel, rimPulse, rimStrength, spellRim } from '../../../src/engine/ww3d/glow.ts';
 import { TOON_PARS, createToonUniforms, makeToonMaterial } from '../../../src/engine/ww3d/toon.ts';
 import { driveToon, toonify } from '../../../src/engine/ww3d/toonify.ts';
 
@@ -115,6 +115,22 @@ describe('the shader and the cells', () => {
     // every material of the figure shares that cell, so one write lights them all
     const mat = a.material as unknown as { userData: { uniforms: Record<string, { value: unknown }> } };
     expect(mat.userData.uniforms['uToonGlow']).toBe(sa.glow);
+  });
+
+  it("gives Valefor steps half as wide as a girl's: her wings and thin legs stand edge-on over much of her body, and the first capture washed her teal to olive", () => {
+    expect(RIM_SHAPE_BOSS[1]).toBeLessThan(RIM_SHAPE_GIRL[0]); // even her lighter outer step is thinner than a girl's strong band
+    expect(RIM_SHAPE_BOSS[0]).toBeLessThan(RIM_SHAPE_BOSS[1]);
+    expect(RIM_SHAPE_GIRL[0]).toBeLessThan(RIM_SHAPE_GIRL[1]);
+    expect(RIM_SHAPE_GIRL[1]).toBeLessThanOrEqual(0.6); // a thin rim, never the surface
+    expect(TOON_PARS).toContain('uniform vec2 uToonGlowShape;');
+    expect(TOON_PARS).toContain('smoothstep( uToonGlowShape.x - glowW');
+    const u = createToonUniforms();
+    const sa = toonify(new Mesh(new SphereGeometry(1, 4, 3), new MeshBasicMaterial()), u);
+    const sb = toonify(new Mesh(new SphereGeometry(1, 4, 3), new MeshBasicMaterial()), u);
+    expect(sa.glowShape).not.toBe(sb.glowShape);
+    driveToon(sa, { colour: new Color(1, 1, 1), emissive: new Color(0, 0, 0), amount: 0, opacity: 1, rim: { colour: [1, 1, 1], strength: 1, shape: RIM_SHAPE_BOSS } });
+    expect(sa.glowShape.value.toArray()).toEqual([...RIM_SHAPE_BOSS]);
+    expect(sb.glowShape.value.toArray()).toEqual([...RIM_SHAPE_GIRL]); // another figure's cell is untouched
   });
 
   it('a material made for the stage reads the shared cell, which stays off', () => {

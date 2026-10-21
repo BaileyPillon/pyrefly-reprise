@@ -222,7 +222,7 @@ export class MoveFx {
     const centre = from.clone();
     if (targets.length > 0) {
       const mid = targets.reduce((a, t) => a.add(t), new Vector3()).multiplyScalar(1 / targets.length);
-      const toward = mid.sub(from).setY(0);
+      const toward = mid.sub(from); // along the line to the girls, so it also hangs lower than her chest
       if (toward.lengthSq() > 1e-6) centre.addScaledVector(toward.normalize(), ORB.ahead);
     }
     const { mesh: orb, material: orbMat } = this.orbMesh(r);

@@ -16,7 +16,7 @@
  * Needs three.js (the glTF loader is imported on use); no DOM beyond `fetch`. Game case: FFX-2 only.
  */
 
-import { Box3, Group, Vector3, type AnimationClip, type IUniform, type Object3D, type Vector4 } from 'three';
+import { Box3, Group, Vector3, type AnimationClip, type IUniform, type Object3D, type Vector2, type Vector4 } from 'three';
 import { BossMotion, type BossPose } from './bossMotion.ts';
 import { capsuleFigure } from './capsule.ts';
 import { ClipRig, roleClips, windowsOfClips } from './clips.ts';
@@ -256,6 +256,11 @@ export class WwModel {
   /** The cast aura's cell as drawn now (rgb the rim colour, w the strength; a test's and the debug view's read). */
   get aura(): Vector4 {
     return this.set.glow.value;
+  }
+
+  /** Where the aura's two steps end on N.V as drawn now (a test's and the debug view's read). */
+  get auraShape(): Vector2 {
+    return this.set.glowShape.value;
   }
 
   /** The figure's opacity now (what the last `setChannels` said). */

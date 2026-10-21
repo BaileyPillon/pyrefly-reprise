@@ -9,7 +9,7 @@ import { FileCache, fetchGlb, type LoaderIO } from '../../../src/engine/ww3d/io.
 import { PROP_NAMES, TEMPLE_NAMES, swapUrl } from '../../../src/engine/ww3d/layout.ts';
 import { PROP_SPECS, aimProps, attachProps, chooseProp, disposeProps, gripFrame, makeDagger, makePistol, makeSword } from '../../../src/engine/ww3d/props.ts';
 import { STAGE, buildStage } from '../../../src/engine/ww3d/stage.ts';
-import { FLOOR_BRAZIER_SCALE, polarPos } from '../../../src/engine/ww3d/stageParts.ts';
+import { FLOOR_BRAZIER_SCALE, TEMPLE_TINT, polarPos } from '../../../src/engine/ww3d/stageParts.ts';
 import type { StageTextures } from '../../../src/engine/ww3d/stageTextureSet.ts';
 import { NO_SWAPS, loadSwaps, swapNames } from '../../../src/engine/ww3d/swaps.ts';
 import { createToonUniforms } from '../../../src/engine/ww3d/toon.ts';
@@ -300,6 +300,28 @@ describe('the temple', () => {
     expect(procedural.flames[0]!.base.y).toBe(2.15);
     expect(swapped.group.children.length).toBeGreaterThan(procedural.group.children.length); // many more objects (the tiles), each sharing one geometry
     procedural.dispose();
+    swapped.dispose();
+  });
+
+  it("tints the swapped wall and pillar toward TARGET-C's blue stone (a multiply in the material, never an edit of the file), and the door and the braziers not at all", () => {
+    const swapped = buildStage(createToonUniforms(), { textures: blank, swaps: { wall: piece(1), pillar: piece(4), door: piece(3.5), brazier: piece(1.1) } });
+    const colourOf = (name: string): [number, number, number] => {
+      const mesh = swapped.group.children.find((c) => c.name === `temple:${name}`)!.getObjectByProperty('isMesh', true) as Mesh;
+      const c = (mesh.material as MeshStandardMaterial).color;
+      return [c.r, c.g, c.b];
+    };
+    const base = new MeshStandardMaterial({ color: 0x336699 }).color; // what the fake files carry
+    for (const name of ['wall', 'pillar'] as const) {
+      const tint = TEMPLE_TINT[name]!;
+      const c = colourOf(name);
+      expect(c[0], name).toBeCloseTo(base.r * tint[0], 6);
+      expect(c[1], name).toBeCloseTo(base.g * tint[1], 6);
+      expect(c[2], name).toBeCloseTo(base.b * tint[2], 6);
+      expect(tint[2], 'blue is kept or raised, red cut hardest').toBeGreaterThanOrEqual(1);
+      expect(tint[0]).toBeLessThan(tint[1]);
+      expect(tint[1]).toBeLessThan(tint[2]);
+    }
+    for (const name of ['door', 'brazier'] as const) expect(colourOf(name), name).toEqual([base.r, base.g, base.b]);
     swapped.dispose();
   });
 

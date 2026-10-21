@@ -146,8 +146,8 @@ describe('the Energy Blast orb: a toon orb, never more than a quarter of the fra
     return mesh.scale.x;
   };
 
-  it('peaks at 2.0 m, in four flat bands of colour, none of them above the bloom threshold in luminance', () => {
-    expect(ORB.radius * ORB.burst).toBeCloseTo(2.0, 6); // phase 2's was 2.73 m
+  it('peaks at 1.8 m, in four flat bands of colour, none of them above the bloom threshold in luminance', () => {
+    expect(ORB.radius * ORB.burst).toBeCloseTo(1.815, 6); // phase 2's was 2.73 m
     expect(ORB_BANDS.core).toBeGreaterThan(ORB_BANDS.mid);
     expect(ORB_BANDS.mid).toBeGreaterThan(ORB_BANDS.line);
     for (const hex of Object.values(ORB_COLOURS)) expect(lumOf(hex), hex).toBeLessThan(1); // the palette's bloom threshold is 1.0 and its high pass keeps the whole colour of a pixel above it
@@ -183,9 +183,9 @@ describe('the Energy Blast orb: a toon orb, never more than a quarter of the fra
       shares.push(orbFrameShare(r, d, cam.fov, aspect));
       expect(shares.at(-1), `aspect ${aspect}`).toBeLessThanOrEqual(0.3);
     }
-    // the wide window shows the whole 2 m orb at about a fifth; the 4:3 one would have 29+ percent and is capped
+    // the wide window shows the whole 1.8 m orb at about 15 percent; a narrow window is capped
     expect(shares[2]).toBeLessThan(0.25);
-    expect(shares[2]).toBeGreaterThan(0.1);
+    expect(shares[2]).toBeGreaterThan(0.08);
     expect(shares[2]).toBeLessThan(shares[0]! + 1e-9);
     fx.dispose();
   });
@@ -213,10 +213,11 @@ describe('the Energy Blast orb: a toon orb, never more than a quarter of the fra
     const fx = new MoveFx();
     fx.start('blast', chest, girls, 1.5);
     const orb = fx.group.children[0] as Mesh;
-    const toGirls = girls.reduce((a, g) => a.add(g), new Vector3()).multiplyScalar(1 / 3).sub(chest).setY(0).normalize();
+    const toGirls = girls.reduce((a, g) => a.add(g), new Vector3()).multiplyScalar(1 / 3).sub(chest).normalize(); // along the line to the girls: it also hangs lower than her chest
     const moved = orb.position.clone().sub(chest);
     expect(moved.length()).toBeCloseTo(ORB.ahead, 6);
     expect(moved.clone().normalize().dot(toGirls)).toBeCloseTo(1, 6);
+    expect(orb.position.y, 'lower than her chest, nearer the girls').toBeLessThan(chest.y);
     expect((orb.material as { depthWrite: boolean }).depthWrite).toBe(false);
     fx.dispose();
     // with no girl to aim at the orb stays on her chest

@@ -15,7 +15,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { SWAY } from '../../../src/engine/ww3d/bossMotion.ts';
-import { BOSS_RIM, GLOW_FILL, PULSE_LOW, spellRim } from '../../../src/engine/ww3d/glow.ts';
+import { BOSS_RIM, GLOW_FILL, PULSE_LOW, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, spellRim } from '../../../src/engine/ww3d/glow.ts';
 import { MoveFx } from '../../../src/engine/ww3d/moveFx.ts';
 import {
   BODY_OFF_DEG,
@@ -338,6 +338,8 @@ describe('following', () => {
     expect([girl.aura.x, girl.aura.y, girl.aura.z]).toEqual([...spellRim('protect')]); // the spell's colour: Protect is a gold
     expect(boss.aura.w).toBeGreaterThan(0.5 * PULSE_LOW);
     expect([boss.aura.x, boss.aura.y, boss.aura.z]).toEqual([...BOSS_RIM]);
+    expect(boss.auraShape.toArray()).toEqual([...RIM_SHAPE_BOSS]); // Valefor's steps are thinner than a girl's
+    expect(girl.auraShape.toArray()).toEqual([...RIM_SHAPE_GIRL]);
     // the fill under it is faint: phase 2's was 0.5 and the girls went cream
     expect(girlMat.emissiveIntensity).toBeLessThanOrEqual(GLOW_FILL + 1e-9);
     expect(bossMat.emissiveIntensity).toBeLessThanOrEqual(GLOW_FILL + 1e-9);
