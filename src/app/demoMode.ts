@@ -11,6 +11,13 @@
  * - **Chapter IV, Bahamut (FFX-2 only): a clean win in about two minutes.** Seed 56, picked on the engine at Wait with the shipped line: a win at 98.1 s of engine time, no girl falls, and
  *   the least damage taken of the fastest seeds (5,466 in all), with Bahamut's one Mega Flare in it. A person playing at Wait adds menu time, which lands the fight in the 2 to 3 minutes of a demo slot.
  *
+ * **The booth's polish (R61, Bailey, 2026-10-20, "I demo my game in a week at a huge gaming conference"; both games, presentation only, no rule or number moves):**
+ * - **No first-run teaching cards.** In demo mode `coachState.shouldShow` answers false for every surface (Auron's briefing, the guided first run's three cards, every first-use line, the Sphere Grid explainer) and the guide never arms.
+ *   Skipped, not "once per session": the demo runs in one tab for a whole day, so "once" would hand the card to the first visitor and take it from the other hundred, and a holding FFX card is a dead screen
+ *   until a press. Bailey stands beside the visitor and is the guide (`docs/BOOTH-SCRIPT.md`). Nothing is written to the save for a card that was not shown, so the save stays as clean as it began.
+ * - **A win goes back to the board fast.** The part of the post scene after the results panel (Chapter I's two story scenes, Chapter IV's talk on the way to the ship) is not played; the panel itself and the scene before it are.
+ *   The board then opens on the OTHER demo chapter ({@link demoBoardTarget}), so the next visitor's first press starts the other fight. A visitor who backs out of prep still lands where they were.
+ *
  * `window.__pyrefly.demoMode()` reads and sets the switch. A seed the caller names (`RunChapterOptions.seed`, the debug API's `gotoChapter`) or pins (`setSeed`) always wins over this.
  * Pure but for the address and the tab's storage, both read through try/catch (a blocked store is a demo mode that does not persist, nothing more); no `three`.
  */
@@ -23,6 +30,18 @@ export const DEMO_SEEDS: Readonly<Record<string, readonly number[]>> = {
 
 const KEY_ON = 'pyrefly.demo';
 const KEY_RUNS = 'pyrefly.demo.runs.';
+const KEY_WON = 'pyrefly.demo.won';
+
+/** The demo chapters, in the order the booth shows them (the table's own order: Chapter I, then Chapter IV). */
+export const DEMO_CHAPTERS: readonly string[] = Object.keys(DEMO_SEEDS);
+
+/**
+ * The demo chapter the board should open on after a win of `won`: the one after it in {@link DEMO_CHAPTERS}, wrapping round; null when `won` is not a demo chapter. Pure.
+ */
+export function demoBoardTarget(won: string | null | undefined): string | null {
+  const at = won === null || won === undefined ? -1 : DEMO_CHAPTERS.indexOf(won);
+  return at < 0 ? null : DEMO_CHAPTERS[(at + 1) % DEMO_CHAPTERS.length]!;
+}
 
 /** The seeds of a demo chapter, or null for any other chapter. */
 export function demoSeedsOf(chapterId: string): readonly number[] | null {
@@ -111,4 +130,40 @@ export function nextDemoRunSeed(chapterId: string): number | null {
     n = 0;
   }
   return demoSeedAt(chapterId, n);
+}
+
+let wonLast: string | null = null;
+
+/** A demo chapter was beaten (demo mode only): the board opens on the other one, once. Any other chapter, or demo mode off, changes nothing. */
+export function noteDemoWin(chapterId: string): void {
+  if (!demoModeOn() || demoSeedsOf(chapterId) === null) return;
+  wonLast = chapterId;
+  try {
+    store()?.setItem(KEY_WON, chapterId);
+  } catch {
+    /* a blocked store: the module keeps it for this page */
+  }
+}
+
+/**
+ * The demo chapter the board should open on, taken once: the one after the demo chapter last beaten ({@link demoBoardTarget}), then forgotten, so a later board (a prep Esc, a reload) is the
+ * board's own again. Null when demo mode is off or nothing was won.
+ */
+export function takeDemoBoardFocus(): string | null {
+  if (!demoModeOn()) return null;
+  let won = wonLast;
+  if (won === null) {
+    try {
+      won = store()?.getItem(KEY_WON) ?? null;
+    } catch {
+      won = null;
+    }
+  }
+  wonLast = null;
+  try {
+    store()?.removeItem(KEY_WON);
+  } catch {
+    /* nothing to forget */
+  }
+  return demoBoardTarget(won);
 }

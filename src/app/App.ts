@@ -8,6 +8,7 @@ import { GameFlow, flowReport, type RunChapterOptions } from './screens/BattleSc
 import type { BattleScreenResult } from './screens/BattleScreen.ts';
 import type { ChapterId } from '../data/encounters.ts';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
+import { setCardPressAbsorber } from '../ui/coach/cardPress.ts'; // R61: the Back that closes a first-use card is not also the pause's
 
 export interface AppOptions {
   /** Container for the WebGL canvas. Defaults to #game. */
@@ -69,6 +70,7 @@ export class App {
 
     this.renderer = new Renderer({ container: gameRoot, fov: 34 });
     this.input = new Input({ pointerRoot: this.uiRoot });
+    setCardPressAbsorber(() => this.input.claimKeyboard(() => undefined, { exclusive: true })()); // the same drop `raiseBriefing`'s guide host uses
     this.save = new SaveStore();
     this.flow = new GameFlow(this);
     // ffx2 UI agent: live-driven HUD/spherechange demo screen, `?screen=hud2-mock`.

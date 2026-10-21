@@ -22,6 +22,8 @@ import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
+import { demoModeOn } from './app/demoMode.ts';
+import { warmBattleStage } from './engine/StageWarm.ts';
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
 import './ui/ffx/party-prep/index.ts';
 // Side-effect only: registers ChapterSelectScreen/CutsceneScreen/ResultsScreen
@@ -161,6 +163,8 @@ async function boot(): Promise<void> {
   await app.nextFrame();
   await app.nextFrame();
   markReady();
+  // R61 (PR-0481, the conference demo): in demo mode the title stands a long time, so the once-per-page costs of a first battle are paid there, a few seconds after boot (`engine/StageWarm.ts`).
+  if (demoModeOn()) setTimeout(warmBattleStage, 4000);
 }
 
 if (document.readyState === 'loading') {

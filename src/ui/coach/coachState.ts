@@ -30,6 +30,7 @@
 import { activeSave, readSetting } from '../../app/SaveData.ts';
 import { experimentRunActive } from '../../app/experiments/experimentRun.ts';
 import { waitSplitInForce } from '../../app/waitSplitSwitch.ts';
+import { demoModeOn } from '../../app/demoMode.ts';
 import { ALL_COACH_IDS, type CoachMarkId, type Ffx2CoachClock } from './coachCopy.ts';
 import { FIRST_RUN_IDS } from './firstRunCopy.ts';
 
@@ -205,8 +206,12 @@ export function markSeen(id: CoachMarkId | string): void {
  * Should this surface be shown right now?
  *
  * One call, so no caller can get the order of the three checks wrong.
+ *
+ * R61 (the conference demo, both games): **never in demo mode** (`?demo=1`, `app/demoMode.ts`). A booth visitor is not met by Auron's briefing, the guided first run's cards, a first-use line or the
+ * Sphere Grid explainer; none of them is marked seen, so nothing is written to the save and a visit without `?demo=1` teaches as it always did.
  */
 export function shouldShow(id: CoachMarkId | string): boolean {
+  if (demoModeOn()) return false;
   return coachingAllowed() && !hasSeen(id);
 }
 

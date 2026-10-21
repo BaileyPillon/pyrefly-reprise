@@ -1,4 +1,5 @@
 import { DataTexture, LinearFilter, RGBAFormat, UnsignedByteType, type Texture } from 'three';
+import { gpuSyncHeld } from '../../GpuSettle.ts';
 
 /**
  * The MAX mix (D-316), BREATHING's rig for one painting (LIVING PAINTINGS; both games), ported from option
@@ -114,34 +115,74 @@ function readAlpha(img: CanvasImageSource): Float32Array | null {
 }
 
 const cache = new Map<string, BreathRig>();
+/** Textures whose alpha is being read off the main thread now (R61): the flat rig stands in until it lands. */
+const pending = new Set<string>();
+/** Bumped when a battle ends, so a read that lands after it is dropped. */
+let epoch = 0;
 
-/** The rig for a painted texture (cached by the texture's uuid); the flat rig when it cannot be read. */
+/**
+ * R61 (PR-0481, the conference demo): the same 32 x 48 alpha field, read without stopping the page. The synchronous `readAlpha` draws a painting's 512 x 1024 canvas down to
+ * 32 x 48 and reads it back, and for a canvas the GPU holds that readback waits for the whole GPU queue: 0.45 to 0.63 s per painting on a quiet GPU at a battle's start (the shader
+ * links and uploads of the entry are in that queue), up to 2.2 s on a busy one (CPU profile of the frame gap, `docs/handoff/r61-booth.md`). `createImageBitmap` with a resize does the
+ * downscale where the pixels already are, off the main thread, and what is read back is a 32 x 48 thumbnail. Until it lands (a few frames, under the entry's swirl at a battle's start) the
+ * flat rig stands in, the same stand-in the code always used for a texture not yet decoded. A browser without `createImageBitmap` takes the synchronous read, as before.
+ */
+async function readAlphaAsync(img: CanvasImageSource): Promise<Float32Array | null> {
+  try {
+    const bmp = await createImageBitmap(img, { resizeWidth: GW, resizeHeight: GH, resizeQuality: 'medium' });
+    try {
+      return readAlpha(bmp);
+    } finally {
+      bmp.close();
+    }
+  } catch {
+    return null;
+  }
+}
+
+/** The rig for an alpha field (flat when there is none or no figure in it). */
+function makeRig(alpha: Float32Array | null): BreathRig {
+  const r = alpha ? chestRig(alpha) : null;
+  if (!r) return flatBreathRig();
+  const data = new Uint8Array(GW * GH * 4);
+  for (let k = 0; k < GW * GH; k++) {
+    data[k * 4] = Math.round(Math.min(1, r.weights[k]!) * 255);
+    data[k * 4 + 3] = 255;
+  }
+  const map = new DataTexture(data, GW, GH, RGBAFormat, UnsignedByteType);
+  map.minFilter = LinearFilter;
+  map.magFilter = LinearFilter;
+  map.needsUpdate = true;
+  return { map, land: r.land, source: 'runtime' };
+}
+
+/** The rig for a painted texture (cached by the texture's uuid); the flat rig when it cannot be read (or has not been read yet: ask again next frame). */
 export function breathRigFor(tex: Texture): BreathRig {
   const hit = cache.get(tex.uuid);
   if (hit) return hit;
   const img = tex.image as (CanvasImageSource & { width?: number }) | null | undefined;
   if (!img || !img.width) return flatBreathRig(); // not decoded yet: ask again next frame
-  const alpha = readAlpha(img);
-  const r = alpha ? chestRig(alpha) : null;
-  let rig = flatBreathRig();
-  if (r) {
-    const data = new Uint8Array(GW * GH * 4);
-    for (let k = 0; k < GW * GH; k++) {
-      data[k * 4] = Math.round(Math.min(1, r.weights[k]!) * 255);
-      data[k * 4 + 3] = 255;
-    }
-    const map = new DataTexture(data, GW, GH, RGBAFormat, UnsignedByteType);
-    map.minFilter = LinearFilter;
-    map.magFilter = LinearFilter;
-    map.needsUpdate = true;
-    rig = { map, land: r.land, source: 'runtime' };
+  if (pending.has(tex.uuid) || gpuSyncHeld()) return flatBreathRig(); // while the GPU is still building the field (`GpuSettle.ts`) a readback would stop the page until it is done: ask again next frame
+  if (typeof createImageBitmap === 'function') {
+    const id = tex.uuid;
+    const mine = epoch;
+    pending.add(id);
+    void readAlphaAsync(img).then((alpha) => {
+      pending.delete(id);
+      if (mine !== epoch) return; // the battle ended while it was being read
+      cache.set(id, makeRig(alpha));
+    });
+    return flatBreathRig();
   }
+  const rig = makeRig(readAlpha(img));
   cache.set(tex.uuid, rig);
   return rig;
 }
 
 /** Forget the cache (a battle ended; the rig textures go with it). */
 export function releaseBreathRigs(): void {
+  epoch++;
+  pending.clear();
   for (const r of cache.values()) if (r.source === 'runtime') r.map.dispose();
   cache.clear();
 }
