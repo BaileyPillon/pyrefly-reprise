@@ -143,7 +143,7 @@ describe('the results hint strip', () => {
 
   it('a loss says choose and pick', () => {
     expect(DEMO_RESULTS_WIN_HINTS.map((h) => h.label)).toEqual(['continue']);
-    expect(DEMO_RESULTS_LOSS_HINTS.map((h) => h.label)).toEqual(['choose', 'pick']);
+    expect(DEMO_RESULTS_LOSS_HINTS.map((h) => h.label)).toEqual(['choose', 'pick', 'picker']); // release 62: Back leaves for the picker (TRY AGAIN / OTHER FIGHT are the two slabs)
     for (const h of [...DEMO_RESULTS_WIN_HINTS, ...DEMO_RESULTS_LOSS_HINTS]) expect(h.gamepad).toBeTruthy();
   });
 });
