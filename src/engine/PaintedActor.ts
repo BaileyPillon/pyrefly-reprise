@@ -1470,7 +1470,7 @@ export class PaintedActor extends Group {
    * target (`motion/StrikeReach.ts`) moves the rest on the eased step.
    */
   lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }, house = distance): Promise<void> {
-    motionBeat({ kind: 'lunge', strength: distance / 2.4, heft: heftOfHeight(this.worldHeight), atMs: ms * 0.13, ms }); // the step's fastest frame is at 0.13 of the move (`attackOffset`)
+    motionBeat({ kind: 'lunge', strength: distance / 2.4, heft: heftOfHeight(this.worldHeight), atMs: ms * 0.19, ms }); // the step's fastest frame is at 0.19 of the move (measured in the real game, Chapter I, stepped at 60 Hz: +84 ms of a 440 ms move; the smooth `reachOffset` house step, not the classic `attackOffset`'s 0.13)
     const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
     const houseStep = motionSmooth() ? reachOffset : attackOffset; // W5 (on by default; `?motion=classic` restores cubic-out): the house part's step starts on the velocity-continuous curve, not cubic-out's 28 percent first frame; same distance, same beats
     const extra = Math.max(0, distance - house); // the distance beyond the house lunge rides the eased step (`reachOffset`); the house part is `attackOffset` to the frame

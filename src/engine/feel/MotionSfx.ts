@@ -17,7 +17,7 @@
  * set; `sfxV2/motionCues.ts` says why).
  */
 
-import { MOTION_CUES, motionCue, type MotionBeatKind } from '../../audio/sfxV2/motionCues.ts';
+import { motionCue, type MotionBeatKind } from '../../audio/sfxV2/motionCues.ts';
 import type { MotionBeat } from './MotionBeats.ts';
 
 export interface MotionGate {
@@ -137,9 +137,4 @@ export function planMotionSfx(beat: MotionBeat, gate: MotionGate, memory: Motion
   memory.last[kind] = gate.now;
   memory.recent.push(gate.now);
   return { ok: true, plan: { kind, key: base.key, volume: Math.round(volume * 1000) / 1000, pitch: Math.round(pitch * 1000) / 1000, delay: Math.round(delay * 1000) / 1000, trimMs: trim, fadeMs, ducked } };
-}
-
-/** The neutral base volume of a beat (the audition page and the tests read it). */
-export function baseVolume(kind: MotionBeatKind): number {
-  return MOTION_CUES[kind].volume;
 }

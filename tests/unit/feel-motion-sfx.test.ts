@@ -492,7 +492,7 @@ describe('the real PaintedActor reports its own beats', () => {
     expect(beats[0]!.kind).toBe('lunge');
     expect(beats[0]!.strength).toBeCloseTo(1.4 / 2.4, 9);
     expect(beats[0]!.heft).toBe(0);
-    expect(beats[0]!.atMs).toBeCloseTo(440 * 0.13, 9);
+    expect(beats[0]!.atMs).toBeCloseTo(440 * 0.19, 9);
     expect(beats[0]!.ms).toBe(440);
   });
 
