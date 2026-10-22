@@ -268,22 +268,24 @@ describe('victory: FFX cheers (Chapter I)', () => {
     expect(inner(a).position.y).toBeLessThan(0.03); // home again (the victory posture stands a hair taller: its own crouch is -0.01)
   });
 
-  it('with the smear on, the swap is a planned cut inside the spring (logged), and no frame shows both paintings', () => {
+  it.each([['120 Hz', FRAME120], ['60 Hz', FRAME60]] as const)('with the smear on, the swap is a planned cut inside the spring (logged), and no frame shows both paintings, at %s', (_hz, frame) => {
     setCurvesChapter('seymour-flux');
     setMomentsMode('new');
     setSmearStyle('paint');
     const a = tidus();
+    for (let i = 0; i < 20; i++) a.update(frame / 1000, frame / 1000); // the display's frame time is known by the time the fight is won
     a.setPose('victory');
     const [p, q] = slotsOf(a);
     let both = 0;
     let peak = 0;
-    run(a, 700, FRAME120, () => {
+    run(a, 700, frame, () => {
       if (p.fade > 1e-6 && q.fade > 1e-6) both++;
       peak = Math.max(peak, cellsOf(a).smearAmt.value);
     });
     const log = smearLog();
     expect(log).toHaveLength(1);
     expect(log[0]).toMatchObject({ actor: 'tidus', from: 'idle', to: 'victory', kind: 'plane' });
+    expect(log[0]!.speed).toBeGreaterThan(0.45); // moving fast enough to hide a cut (the planner's own gate)
     expect(both).toBe(0);
     expect(peak).toBeGreaterThan(0.2);
     expect(cellsOf(a).smearAmt.value).toBe(0); // the window closed
@@ -504,5 +506,44 @@ describe('the knock-out', () => {
     expect(log).toHaveLength(1);
     expect(log[0]!.style).toBe('blur');
     expect(log[0]!.cutMs).toBeGreaterThanOrEqual(2 * FRAME60);
+  });
+});
+
+// ------------------------------------------------------------------------------- the presenter's victory beat
+
+describe('the presenter\'s victory beat', () => {
+  async function win(victoryPose: 'pose' | 'hold') {
+    const { BattlePresenter } = await import('../../../src/engine/BattlePresenter.ts');
+    const { FakeAudio, FakeStage, noSleep } = await import('../helpers/FakeStage.ts');
+    const stage = new FakeStage(['tidus', 'yuna'], ['seymour-flux']);
+    const stood: string[] = [];
+    for (const id of ['tidus', 'yuna', 'seymour-flux']) (stage.actors.get(id) as unknown as { standDown: () => void }).standDown = () => void stood.push(id);
+    const audio = new FakeAudio();
+    const presenter = new BattlePresenter({ stage, audio, sleep: noSleep, victoryPose });
+    await presenter.play([{ type: 'victory', seq: 0, result: { outcome: 'victory' } } as never]);
+    return { stage, stood };
+  }
+
+  it('a chapter whose sources withhold the pose stands the party down (and no pose is struck) when the moments are on', async () => {
+    setCurvesChapter('ffx2-bahamut');
+    setMomentsMode('new');
+    const { stage, stood } = await win('hold');
+    expect(stood).toEqual(['tidus', 'yuna']);
+    expect(stage.calls.some((c) => c.startsWith('pose=victory'))).toBe(false);
+  });
+
+  it('with the moments off the held stance is exactly today\'s: nobody stands down', async () => {
+    setCurvesChapter('ffx2-bahamut');
+    setMomentsMode('today');
+    const { stood } = await win('hold');
+    expect(stood).toEqual([]);
+  });
+
+  it('a chapter that poses asks for the victory painting as before (the actor cheers on its own cue) and nobody stands down', async () => {
+    setCurvesChapter('seymour-flux');
+    setMomentsMode('new');
+    const { stage, stood } = await win('pose');
+    expect(stage.calls).toContain('pose=victory:tidus');
+    expect(stood).toEqual([]);
   });
 });
