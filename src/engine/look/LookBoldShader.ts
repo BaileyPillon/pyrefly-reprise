@@ -1,4 +1,5 @@
 import { Matrix3, Vector2, Vector3, Vector4 } from 'three';
+import { LIVING_GLSL_DECL, LIVING_GLSL_END, LIVING_GLSL_FUNCS, LIVING_GLSL_TOP, LIVING_UNIFORMS } from './living/LivingShader.ts';
 
 /**
  * Demo looks, BOLD strength (`?lookstrength=bold`; dev flag only): the one extra pass that carries what the first pass's compound pass cannot. It runs right after it,
@@ -12,6 +13,7 @@ import { Matrix3, Vector2, Vector3, Vector4 } from 'three';
  *   4b. stage light the fight lifted, the room round it darkened (a lit diorama in a dark room).
  *   5. rim          a bright rim along each figure's back edge, in the room's key colour (an edge ring over the mask, weighted toward the light's side), inside the silhouette.
  *   6. embers       sparks rising from the room's lamps (`uEmber`).
+ *   6b. the living cathedral (release 62, FFX-2: `look/living/`): the lamps' flames flicker, a ring crosses the floor's reflection, dust drifts in the skylight's beam.
  *   7. Mega Flare   (release 62, FFX-2) the blast's light floods the whole room and the frame whites out for a beat (`uFlood`, `uWhite`; `look/flare/`).
  * Constants: `MAX_FIG`, `MAX_POOL`, `MAX_EMB`, `EMBER_PARTS`, `FOG_OCTAVES`, `EDGE_TAPS`. Both games.
  */
@@ -61,6 +63,8 @@ export const LookBoldShader = {
     uFlood: { value: new Vector4(0.5, 0.3, 0, 1.4) },
     uFloodCol: { value: new Vector3(0.72, 0.82, 1.0) },
     uWhite: { value: 0 },
+    /** The living cathedral (release 62, FFX-2's Bevelle underground; `look/living/`): the beam's dust, the lamps' flames, the floor's rings. `uLiv.x` zero: the frame is what it was. */
+    ...LIVING_UNIFORMS,
   },
 
   vertexShader: /* glsl */ `
@@ -105,7 +109,7 @@ export const LookBoldShader = {
     uniform vec4 uFlood;
     uniform vec3 uFloodCol;
     uniform float uWhite;
-    varying vec2 vUv;
+${LIVING_GLSL_DECL}    varying vec2 vUv;
 
     float luma3(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }
     float hash21(vec2 p) {
@@ -130,11 +134,11 @@ export const LookBoldShader = {
       return s;
     }
     float figAt(vec2 uv) { return 1.0 - clamp(texelAt(uv).a, 0.0, 1.0); }
-
+${LIVING_GLSL_FUNCS}
     void main() {
       vec2 uv = vUv;
       vec4 src = texelAt(uv);
-      float fig = 1.0 - clamp(src.a, 0.0, 1.0);
+${LIVING_GLSL_TOP}      float fig = 1.0 - clamp(src.a, 0.0, 1.0);
       vec3 col = src.rgb;
       float lum0 = luma3(col);
 
@@ -200,9 +204,9 @@ export const LookBoldShader = {
             float ex = abs(dx) / max(hw, 1e-4);
             if (ex < 1.2) {
               float k = dy / len;
-              float srcY = fa.y + dy / refl.w;
+              float srcY = fa.y + dy / refl.w + ro.y * 2.0; // a ring passing over the floor bends the reflection (release 62)
               vec2 bp = resolution * refl.z * pxScale * (0.3 + 1.5 * k);
-              float wob = sin(dy * 90.0 + time * 1.3) * 0.0016;
+              float wob = sin(dy * 90.0 + time * 1.3) * 0.0016 + ro.x * 2.5;
               vec3 acc = vec3(0.0);
               float cov = 0.0;
               for (int t = 0; t < 5; t++) {
@@ -293,6 +297,7 @@ export const LookBoldShader = {
         col += emberColor * em * ember.x * (1.0 - 0.9 * fig);
       }
 
+${LIVING_GLSL_END}
       // ---- 7. Mega Flare (FFX-2): the blast's light floods the room, then the frame goes white for a beat. Zero strength skips both blocks.
       if (uFlood.z > 0.002) {
         vec2 fd = vec2((uv.x - uFlood.x) * aspect, uv.y - uFlood.y);

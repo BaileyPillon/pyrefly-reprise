@@ -56,7 +56,7 @@ export class LookRig {
   private lastNow = 0;
   private readonly buf = new Vector2();
   /** For the debug API and the captures. */
-  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> }, strength: 'subtle' as string, bold: null as LookBold['stats'] | null, drift: null as LookDrift['stats'] | null, stage: null as LookStage['stats'] | null };
+  readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> }, strength: 'subtle' as string, bold: null as LookBold['stats'] | null, drift: null as LookDrift['stats'] | null, stage: null as LookStage['stats'] | null, living: null as LookBold['living']['stats'] | null, flare: null as LookBold['flare']['stats'] | null };
 
   constructor(private readonly r: Renderer) {}
 
@@ -318,7 +318,7 @@ export class LookRig {
     else this.stage.off();
     this.stats.strength = bold ? 'bold' : 'subtle';
     this.stats.bold = bold ? (this.bold?.stats ?? null) : null;
-    this.stats.drift = lookState.drift ? this.drift.stats : null; this.stats.stage = this.stage.stats.on ? this.stage.stats : null;
+    this.stats.drift = lookState.drift ? this.drift.stats : null; this.stats.stage = this.stage.stats.on ? this.stage.stats : null; this.stats.living = bold && this.bold?.living.stats.on ? this.bold.living.stats : null; this.stats.flare = bold ? (this.bold?.flare.stats ?? null) : null;
     this.stats.look = name;
     this.stats.quality = lookState.quality;
     this.stats.relight = { any: relightCells.relightAny.value > 0, bound: relightStats.bound, loaded: relightStats.loaded, missing: relightStats.missing, lights: this.lights.stats.lights };
