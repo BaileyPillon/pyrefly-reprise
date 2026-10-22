@@ -8,6 +8,8 @@ import { PaintedActor, painting, reset, slotsOf, type Actor } from './head-lock-
 import { setPace, setPaceGame } from '../../../src/engine/pace.ts';
 import { setCurvesChapter, setCurvesMode } from '../../../src/engine/motion/CurvesSwitch.ts';
 import { setSmearStyle } from '../../../src/engine/motion/SmearSwitch.ts';
+import { setMenuHold } from '../../../src/engine/motion/MenuHold.ts';
+import { setMomentsMode } from '../../../src/engine/motion/MomentsSwitch.ts';
 import { resetSmearLog, smearLog } from '../../../src/engine/motion/SmearLog.ts';
 import { CUT_MS_MAX, CUT_MS_MIN } from '../../../src/engine/motion/SmearPlan.ts';
 import { followThrough, idleAtEnd, impactAtApex, settleSwap } from '../../../src/engine/KeyPoses.ts';
@@ -21,6 +23,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   setSmearStyle(null);
+  setMomentsMode(null);
   setCurvesChapter(undefined);
   setCurvesMode(null);
   setDemoMotion(null);
@@ -420,5 +423,45 @@ describe('the way out of a strike is swapped on the settlePeak mark and the end 
     expect(followThrough(c, 'tidus' as never)).toBe(180);
     idleAtEnd(c, { setPose: (p: string) => poses.push(p) }, 'tidus' as never);
     expect(poses).toEqual(['attack', 'follow', 'idle']);
+  });
+});
+
+// ---------------------------------------------------------------------------- review MAJOR-3 (D-357): nothing new plays over an open FFX-2 command menu
+describe('an open FFX-2 command menu keeps today\'s blend (review MAJOR-3, D-357)', () => {
+  afterEach(() => setMenuHold(null));
+
+  it('a big change on a moving figure starts no cut, no streak, no flash and no log while the menu is open; the same change a moment later, with the menu shut, is the cut', () => {
+    setSmearStyle('paint');
+    setCurvesChapter('ffx2-bahamut');
+    let menu = true;
+    setMenuHold(() => menu);
+    const a = yuna(LEFT, RIGHT);
+    moving(a);
+    const open = playSwap(a, 'attack');
+    expect(smearLog()).toHaveLength(0);
+    expect(Math.max(...open.map((x) => x.amt))).toBe(0);
+    expect(flashOf(a)).toBe(0);
+    expect(both(open)).toBeGreaterThan(5); // today's blend: the two paintings share frames
+    // the menu closes; the next big change on a figure still moving is a planned smear again
+    menu = false;
+    const b = yuna(LEFT, RIGHT);
+    moving(b);
+    const shut = playSwap(b, 'attack');
+    expect(smearLog()).toHaveLength(1);
+    expect(both(shut)).toBe(0);
+  });
+
+  it('the knock-out keeps its plain cross while the menu is open (the cut window is asked for at the start of the fall)', () => {
+    setSmearStyle('paint');
+    setCurvesChapter('ffx2-bahamut');
+    setMomentsMode('new');
+    const a = yuna(LEFT, RIGHT);
+    expect(a.koCutWindow()).toBeGreaterThan(0);
+    setMenuHold(() => true);
+    expect(a.koCutWindow()).toBeUndefined();
+    setMenuHold(() => {
+      throw new Error('a probe that fails holds nothing');
+    });
+    expect(a.koCutWindow()).toBeGreaterThan(0);
   });
 });

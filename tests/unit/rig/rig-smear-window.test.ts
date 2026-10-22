@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { makeRigFile } from './rig-fixture.ts';
 import { setCurvesChapter } from '../../../src/engine/motion/CurvesSwitch.ts';
 import { setSmearStyle } from '../../../src/engine/motion/SmearSwitch.ts';
+import { setMenuHold } from '../../../src/engine/motion/MenuHold.ts';
 import { resetSmearLog, smearLog } from '../../../src/engine/motion/SmearLog.ts';
 import { setDemoMotion } from '../../../src/engine/motion/DemoMotion.ts';
 
@@ -176,5 +177,28 @@ describe('a rig\'s whole-figure image change under the smear', () => {
     }
     expect(peak).toBe(0);
     expect(smearLog().at(-1)!.to).toBe('attack');
+  });
+});
+
+describe('an open FFX-2 command menu (review MAJOR-3, D-357)', () => {
+  afterEach(() => setMenuHold(null));
+  it('keeps the rig\'s cross-fade: no window, no cut, no log, no flash; with the menu shut the same key move is the cut', async () => {
+    setSmearStyle('paint');
+    setCurvesChapter('ffx2-bahamut');
+    let menu = true;
+    setMenuHold(() => menu);
+    let a = await boss('bahamut');
+    for (let i = 0; i < 12; i++) a.update(1 / 120);
+    const open = play(a, 'attack');
+    expect(smearLog()).toHaveLength(0);
+    expect(Math.max(...open.map((x) => x.amt))).toBe(0);
+    const flipOpen = open.findIndex((x, i) => i > 0 && x.p !== open[i - 1]!.p);
+    menu = false;
+    a = await boss('bahamut');
+    for (let i = 0; i < 12; i++) a.update(1 / 120);
+    const shut = play(a, 'attack');
+    expect(smearLog()).toHaveLength(1);
+    expect(Math.max(...shut.map((x) => x.amt))).toBeGreaterThan(0.2);
+    expect(shut.findIndex((x, i) => i > 0 && x.p !== shut[i - 1]!.p)).toBe(flipOpen); // the flip is where it always was; the window only covers it
   });
 });

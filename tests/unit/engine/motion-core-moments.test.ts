@@ -14,6 +14,7 @@ import { setCurvesChapter, setCurvesMode } from '../../../src/engine/motion/Curv
 import { momentsModeFromSearch, momentsOn, setMomentsMode } from '../../../src/engine/motion/MomentsSwitch.ts';
 import { KO_CUT_STRENGTH, cheerShape, koCutMs, koSettleShape, standDownShape, victoryKind } from '../../../src/engine/motion/MomentsPlan.ts';
 import { setSmearStyle } from '../../../src/engine/motion/SmearSwitch.ts';
+import { setMenuHold } from '../../../src/engine/motion/MenuHold.ts';
 import { resetSmearLog, smearLog } from '../../../src/engine/motion/SmearLog.ts';
 import { CUT_MS_MAX, CUT_MS_MIN, FRAMES_MIN, WINDOW_CAP_MS } from '../../../src/engine/motion/SmearPlan.ts';
 import { CurveDriver } from '../../../src/engine/motion/CurveDriver.ts';
@@ -27,6 +28,7 @@ beforeEach(() => {
   setPace('steady');
 });
 afterEach(() => {
+  setMenuHold(null);
   setMomentsMode(null);
   setSmearStyle(null);
   setCurvesMode(null);
@@ -524,6 +526,25 @@ describe('the knock-out', () => {
       expect(r.sy).toBeGreaterThan(1 - 0.1);
       expect(r.sy).toBeLessThan(1 + 0.1);
     }
+  });
+
+  it('over an open FFX-2 command menu (D-357) the KO is today\'s: the plain cross and no rebound, whatever the moments and the smear say', () => {
+    setCurvesChapter('ffx2-bahamut');
+    setMomentsMode('new');
+    setSmearStyle('paint');
+    setMenuHold(() => true);
+    const held = koRows(220, FRAME, {}, true);
+    expect(smearLog()).toHaveLength(0);
+    expect(held.rows.some((r) => r.idle > 0.02 && r.ko > 0.02)).toBe(true); // the plain cross: both paintings up for a few frames
+    expect(Math.max(...held.rows.map((r) => r.amt))).toBe(0);
+    setMenuHold(null);
+    const free = koRows(220, FRAME, {}, true); // the same KO with the menu shut: the cut and the rebound
+    setMomentsMode('today');
+    setSmearStyle('off');
+    const today = koRows(220, FRAME, {}, true);
+    const top = (r: { rows: Array<{ y: number }> }): number => Math.max(...r.rows.slice(30).map((x) => x.y));
+    expect(top(held) - top(today)).toBeLessThan(0.005); // no rebound added (the fall's own tumble varies run to run by about 0.003)
+    expect(top(free) - top(held)).toBeGreaterThan(0.008); // and with the menu shut the rebound is there
   });
 
   it('REDUCE MOTION keeps a KO a cut (no run, no streak); the rebound is the figure\'s own movement and still plays', () => {

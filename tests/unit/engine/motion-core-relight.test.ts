@@ -41,18 +41,19 @@ describe('prefetch and pin', () => {
   it('fetches a staged pose\'s map once, pins it, and answers the same URL the figure will bind', () => {
     lookState.armed = true;
     const before = relightStats.requested;
-    const url = prefetchRelight(painting('tidus', 'follow'), 1)!;
+    const held = new Set<string>(); // the figure's own record of what it pinned: a map it holds is counted once
+    const url = prefetchRelight(painting('tidus', 'follow'), 1, false, held)!;
     expect(url).toContain('follow');
     expect(url).toContain('normal');
     expect(relightStats.requested).toBe(before + 1);
-    expect(prefetchRelight(painting('tidus', 'follow'), 1)).toBe(url);
+    expect(prefetchRelight(painting('tidus', 'follow'), 1, false, held)).toBe(url);
     expect(relightStats.requested).toBe(before + 1); // not fetched twice
     // the figure binding the same pose later finds the map there: lit at once, no wait
     const m = mat();
     bindRelight(m, painting('tidus', 'follow'), 1);
     expect(m.uniforms['relightOn']!.value).toBe(1);
     expect(relightStats.requested).toBe(before + 1);
-    unpinRelight([url]);
+    unpinRelight(held);
   });
 
   it('a placeholder, or a painting with no URL, has no map to fetch', () => {
@@ -63,27 +64,28 @@ describe('prefetch and pin', () => {
 
   it('a pinned map survives the cache filling past its cap; an unpinned one does not; unpinning lets it go', () => {
     lookState.armed = true;
-    const keep = prefetchRelight(painting('kimahri', 'ready'), 1)!;
+    const held = new Set<string>();
+    const keep = prefetchRelight(painting('kimahri', 'ready'), 1, false, held)!;
     const requested = relightStats.requested;
     for (let i = 0; i < 140; i++) bindRelight(mat(), painting(`filler${i}`, 'idle'), 1); // 140 other figures' maps through the cache
     expect(relightStats.requested).toBe(requested + 140);
-    expect(prefetchRelight(painting('kimahri', 'ready'), 1)).toBe(keep);
+    expect(prefetchRelight(painting('kimahri', 'ready'), 1, false, held)).toBe(keep);
     expect(relightStats.requested).toBe(requested + 140); // still cached: not fetched again
     bindRelight(mat(), painting('filler0', 'idle'), 1);
     expect(relightStats.requested).toBe(requested + 141); // the oldest unpinned one went
     const pinned = pinnedRelightCount();
-    unpinRelight([keep]);
+    unpinRelight(held);
     expect(pinnedRelightCount()).toBe(pinned - 1);
   });
 
   it('the cap leaves room for two chapters\' staged maps (56 for Chapter IV, 50 for Chapter I)', () => {
     lookState.armed = true;
     const requested = relightStats.requested;
-    const urls: string[] = [];
-    for (let i = 0; i < 106; i++) urls.push(prefetchRelight(painting(`staged${i % 9}`, `pose${i}`), 1)!);
+    const held = new Set<string>();
+    for (let i = 0; i < 106; i++) prefetchRelight(painting(`staged${i % 9}`, `pose${i}`), 1, false, held);
     expect(relightStats.requested).toBe(requested + 106);
-    for (let i = 0; i < 106; i++) prefetchRelight(painting(`staged${i % 9}`, `pose${i}`), 1);
+    for (let i = 0; i < 106; i++) prefetchRelight(painting(`staged${i % 9}`, `pose${i}`), 1, false, held);
     expect(relightStats.requested).toBe(requested + 106); // all still there
-    unpinRelight(urls);
+    unpinRelight(held);
   });
 });
