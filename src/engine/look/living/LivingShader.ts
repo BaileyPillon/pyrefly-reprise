@@ -153,7 +153,7 @@ export const LIVING_GLSL_END = /* glsl */ `
             }
           }
           col *= 1.0 + mulK * uLamp.z * warm;
-          col += spill * uLamp.x * (0.08 + 0.7 * lum0) * (1.0 - 0.6 * fig);
+          col += spill * uLamp.x * (0.04 + 0.8 * lum0) * (1.0 - 0.6 * fig);
         }
         col += vec3(0.55, 0.78, 1.0) * rg * uRipG * (1.0 - fig);
         if (uLiv.y > 0.5 && fig < 0.5) {
