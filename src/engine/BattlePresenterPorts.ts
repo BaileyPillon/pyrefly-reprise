@@ -73,6 +73,8 @@ export interface ActorHandle {
   liftRelease?(ms?: number): void;
   /** Optional (same): an arc with a take-off crouch, an airborne stretch and a landing squash (FFX-2's run-in). */
   leap?(height: number, ms: number, options?: import('./motion/CurveDriver.ts').LeapOptions): Promise<void>;
+  /** Optional (motion pass, step 3; only with `motion/MomentsSwitch.momentsOn()`): a chapter whose sources withhold the victory pose keeps the stance and stands down: one slow breath out. */
+  standDown?(): void;
   centerPoint(): Point3;
   headPoint(): Point3;
 }

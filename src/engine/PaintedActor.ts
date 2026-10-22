@@ -64,6 +64,10 @@ import { heftOf, squashPair, startStrike } from './motion/ActorCurves.ts';
 import { newPushMs, newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
 import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
 import type { StrikePlan } from './motion/StrikePlan.ts';
+import { momentsGame, momentsOn } from './motion/MomentsSwitch.ts'; // motion pass (lane "core", step 3): the per-game moments (victory, KO settle); default OFF
+import { startCheer, startKoSettle, startStandDown, type MomentsHost } from './motion/ActorMoments.ts';
+import { koCutMs } from './motion/MomentsPlan.ts';
+import { smearOn } from './motion/SmearSwitch.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
@@ -597,6 +601,10 @@ export class PaintedActor extends Group {
   private readonly squashScratch = { x: 1, y: 1 };
   private readonly lightPins = new Set<string>(); // the normal maps this figure pinned (`prefetchLights`)
   protected readonly smear: SmearDirector; // `RigActor` plays its own window on the same state
+  /** Motion pass, step 3: the victory cheer. `cheerDue` is set by the victory cue inside `enterLife`; `cheerWait` holds the victory painting back until the spring's fastest frame. */
+  private cheerDue = false;
+  private cheering = false;
+  private cheerWait: { name: string; opts?: { immediate?: boolean; force?: boolean } } | null = null;
   private shakeAmp = 0;
   private shakeLeftMs = 0;
   private shakeTotalMs = 1;
@@ -1112,10 +1120,15 @@ export class PaintedActor extends Group {
       const want = lifeStateForPose(name);
       if (nextLifeState(life.state, want) !== want) return;
     }
+    if (this.cheerWait && !this.cheering) {
+      if (name === this.cheerWait.name) return; // the cheer is already on its way to this painting
+      this.cheerWait = null; // anything else the presenter asks for ends the wait (the cheer still lands, without its swap)
+    }
     // A forced pose is the caller's word: a pending flinch may not hand it back.
     if (opts?.force) this.flinchToken++;
     const resolved = this.resolveDrawable(name);
     this.enterLife(name, opts?.immediate === true);
+    if (this.cheerDue && this.beginCheer(name, opts, resolved)) return; // the victory painting waits for the spring's fastest frame
     if (!resolved) return;
     const next = this.poses.get(resolved);
     if (!next) return;
@@ -1139,6 +1152,59 @@ export class PaintedActor extends Group {
     const plan = this.blend.request(resolved, this.crossfadeMs, from === 0 ? 0 : 1);
     if (plan.same) return; // also a request PoseBlend rule 2 holds (`plan.deferred`): the blend takes it up in `update` once it can without dropping a painting that still shows
     this.beginBlend(resolved, next, plan);
+  }
+
+  /**
+   * Motion pass, step 3 (`motion/ActorMoments.ts`): the victory cue fired inside `enterLife`, so the cheer starts (after the fighter's own stagger, as the hop always did). True when the victory
+   * painting is held back until the spring's fastest frame, where the actor's smear can cut to it; false when it can swap now (it is showing, has no other painting, or the fade is a cut).
+   */
+  private beginCheer(name: string, opts: { immediate?: boolean; force?: boolean } | undefined, resolved: string | null): boolean {
+    this.cheerDue = false;
+    const swap = resolved !== null && resolved !== this.pose && !opts?.immediate && this.crossfadeMs > 0;
+    if (swap) this.cheerWait = { name, opts };
+    this.after(this.beatOffset * 240, () => void startCheer(this.momentsHost(), momentsGame(), swap ? () => this.landCheer() : null));
+    return swap;
+  }
+
+  /** What the moments' helpers (`motion/ActorMoments.ts`) need of this actor. */
+  private momentsHost(): MomentsHost {
+    return { worldHeight: this.worldHeight, leap: (h, ms, o) => this.leap(h, ms, o) };
+  }
+
+  /** The cheer's spring is at its fastest: make the pose request the cheer held back (it is a cut inside a smear when the smear is on, else the usual blend). */
+  private landCheer(): void {
+    const w = this.cheerWait;
+    this.cheerWait = null;
+    if (!w) return;
+    this.cheering = true;
+    try {
+      this.setPose(w.name, w.opts);
+    } finally {
+      this.cheering = false;
+    }
+  }
+
+  /** Motion pass, step 3: a chapter whose sources withhold the victory pose (FFX-2 Chapter IV) keeps the stance and stands down: one slow breath out, no leap, no swap. */
+  standDown(): void {
+    this.after(this.beatOffset * 240, () => void startStandDown(this.momentsHost(), momentsGame()));
+  }
+
+  /** The window of the knock-out's cut in real ms, or undefined when the KO keeps its plain cross (`fx/mix/living.ts` asks as it starts a fall): the moments and the smear both on. */
+  koCutWindow(): number | undefined {
+    return momentsOn() && smearOn() ? koCutMs(this.smear.state.frameMs) : undefined;
+  }
+
+  /** The KO's cut window opens, runs (`u` 0 to 1) and closes (`motion/SmearDirector.ts`): the streak and the planned-smear record of a fall's cross. */
+  koCutBegin(info: { from: string; to: string; cutMs: number; dirX: number }): void {
+    this.smear.beginManual(info);
+  }
+
+  koCutStep(u: number): void {
+    this.smear.stepManual(u);
+  }
+
+  koCutEnd(): void {
+    this.smear.endManual();
   }
 
   /** Point the plane a blend is bringing in at its painting (when it was re-pointed) and make it the active one: the tail of a pose change, whether it began now or was held. */
@@ -1887,6 +1953,10 @@ export class PaintedActor extends Group {
         this.rise();
         return;
       case 'hop':
+        if (momentsOn()) {
+          this.cheerDue = true; // the cheer (`beginCheer`, called by `setPose` right after this): a crouch, a spring with the victory painting cut in on the take-off, a landing
+          return;
+        }
         // Victory, staggered per fighter so a party does not cheer like a chorus line.
         this.after(this.beatOffset * 240, () => {
           void this.hop(this.worldHeight * 0.13, 460);
@@ -1908,6 +1978,7 @@ export class PaintedActor extends Group {
         // Landing: a short slap of squash and a small ground shake, then the
         // extra tilt relaxes into the `down` posture.
         void this.squash(280, 0.5);
+        if (momentsOn()) void startKoSettle(this.momentsHost()); // motion pass, step 3: the landing rebounds a little (a boss less)
         this.shake(this.worldHeight * 0.018, 200);
         this.tweens.to(1, 0, {
           durationMs: 420,
@@ -2527,6 +2598,7 @@ export class PaintedActor extends Group {
   override dispose(): void {
     this.tweens.killAll();
     unpinRelight(this.lightPins);
+    this.cheerWait = null;
     this.curves.dispose();
     this.blend.cancel();
     for (const slot of this.slots) {

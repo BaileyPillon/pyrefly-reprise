@@ -93,6 +93,8 @@ export interface LeapOptions {
   /** Length of the landing squash after the flight ends, paced ms. */
   landMs?: number;
   apex?: number;
+  /** Things to do on the frame the leap's time (the crouch and the flight, 0 to 1 of the whole `ms`) first reaches `u`: the victory cheer swaps its painting on the take-off (motion pass, step 3). */
+  marks?: ReadonlyArray<{ u: number; fn: () => void }>;
 }
 
 /** One arc: crouch, take off, stretch in the air, land, ring the landing. The flight is `ms` long; the landing squash plays on after it. */
@@ -101,10 +103,13 @@ export class LeapRun {
   sy = 1;
   private t = 0;
   private flightDone = false;
-  private readonly o: Required<LeapOptions>;
+  private readonly o: Required<Omit<LeapOptions, 'marks'>>;
+  private readonly pending: Array<{ u: number; fn: () => void }>;
 
   constructor(private readonly height: number, private readonly ms: number, resolve: () => void, options: LeapOptions = {}) {
-    this.o = { anticipation: 0.12, crouch: 0.03, stretch: 0.04, land: 0.04, landMs: 140, apex: 0.45, ...options };
+    const { marks, ...shape } = options;
+    this.pending = marks ? marks.map((m) => ({ u: m.u, fn: m.fn })).sort((a, b) => a.u - b.u) : [];
+    this.o = { anticipation: 0.12, crouch: 0.03, stretch: 0.04, land: 0.04, landMs: 140, apex: 0.45, ...shape };
     this.o.crouch = Math.min(SQUASH_CAP, this.o.crouch);
     this.o.stretch = Math.min(SQUASH_CAP, this.o.stretch);
     this.o.land = Math.min(SQUASH_CAP, this.o.land);
@@ -120,6 +125,7 @@ export class LeapRun {
     this.t += ms;
     const o = this.o;
     const u = clamp01(this.t / this.ms);
+    while (this.pending.length && this.pending[0]!.u <= u) this.pending.shift()!.fn();
     if (u < o.anticipation) {
       this.lift = 0;
       this.sy = 1 - o.crouch * smooth(u / o.anticipation);
@@ -141,8 +147,9 @@ export class LeapRun {
     }
   }
 
-  /** Stop and settle the promise (the actor was disposed). */
+  /** Stop and settle the promise (the actor was disposed, or three leaps were already running). A mark not reached yet is run now, so a swap that waits on it still happens. */
   finish(): void {
+    while (this.pending.length) this.pending.shift()!.fn();
     if (!this.flightDone) {
       this.flightDone = true;
       this.resolve();

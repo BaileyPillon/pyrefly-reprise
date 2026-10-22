@@ -16,7 +16,8 @@ import { ActorSmear, type SmearFrame } from './ActorSmear.ts';
 import { applySmear, type SmearCells, type SmearPlane } from './SmearApply.ts';
 import { pairFacts } from './SmearFacts.ts';
 import { noteSmear } from './SmearLog.ts';
-import { CUT, FLASH_PEAK, MIN_SPEED, smearPlan } from './SmearPlan.ts';
+import { KO_CUT_STRENGTH } from './MomentsPlan.ts';
+import { CUT, FLASH_PEAK, LENGTH, MIN_SPEED, smearPlan } from './SmearPlan.ts';
 import { smearStyleNow } from './SmearSwitch.ts';
 
 /** What the director needs of the actor that owns it. */
@@ -50,6 +51,7 @@ export class SmearDirector {
   private readonly frame: SmearFrame = { amount: 0, dirX: 1, dirY: 0, style: 'paint', length: 0 };
   private readonly dir = { x: 1, y: 0 };
   private written = false;
+  private manual = false;
 
   constructor(private readonly host: SmearHost) {}
 
@@ -69,6 +71,7 @@ export class SmearDirector {
    */
   swap(to: 0 | 1, resolved: string): boolean {
     this.state.end();
+    this.manual = false; // a window the caller was running (the KO's cut) gives way to this change
     const style = smearStyleNow();
     if (style === 'off' || !this.host.canCut()) return false;
     const out: 0 | 1 = to === 0 ? 1 : 0;
@@ -88,8 +91,40 @@ export class SmearDirector {
     return true;
   }
 
+  /**
+   * A WINDOW THAT THE CALLER RUNS (motion pass, step 3: the knock-out's cut, `fx/mix/living.ts`): the fall's cross is played plane by plane there, not by the pose blend, so the caller opens the
+   * window ({@link beginManual}: it is logged as a planned smear, the harness excuses the swap by it), gives the progress each frame ({@link stepManual}, 0 to 1) and closes it
+   * ({@link endManual}). The direction is along the stage (the way the body falls) and a little down. No style (the smear off): nothing is drawn or logged.
+   */
+  beginManual(info: { from: string; to: string; cutMs: number; dirX: number }): void {
+    const style = smearStyleNow();
+    if (style === 'off') return;
+    this.state.end();
+    const len = Math.hypot(info.dirX, 0.25);
+    this.state.begin({ cutMs: info.cutMs, style, strength: KO_CUT_STRENGTH, length: LENGTH[style], flash: false, difference: 1 }, info.dirX / len, -0.25 / len);
+    this.manual = true;
+    noteSmear({ at: now(), actor: this.host.name(), from: info.from, to: info.to, style, cutMs: info.cutMs, overlap: null, anchorDistance: null, speed: 0, strength: KO_CUT_STRENGTH, flash: false, kind: 'plane' });
+  }
+
+  stepManual(u: number): void {
+    if (!this.manual) return;
+    this.state.sample(u, this.frame);
+    applySmear(this.frame, this.host.planes, this.host.cells, this.host.showing());
+    this.written = true;
+  }
+
+  endManual(): void {
+    if (!this.manual) return;
+    this.manual = false;
+    this.state.end();
+    this.frame.amount = 0;
+    applySmear(this.frame, this.host.planes, this.host.cells, this.host.showing());
+    this.written = false;
+  }
+
   /** Every frame, after the blend has advanced: the window's amount onto the planes (and off again when it is over). */
   step(): void {
+    if (this.manual) return; // the caller runs this window
     if (!this.host.canCut()) return; // a rig plays its own window on this state (`rig/RigSmearWindow.ts`); a cut crossfade has none
     const s = this.state;
     if (s.active && !this.host.blend.blending) s.end();

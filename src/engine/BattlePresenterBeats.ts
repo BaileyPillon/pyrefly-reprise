@@ -17,6 +17,7 @@ import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
+import { standDownParty } from './motion/MomentBeats.ts'; // motion pass (lane "core", step 3): the victory moment each chapter's sources allow (a cheer, or a quiet stand-down where the pose is withheld)
 import { liftCaster, releaseCastLift, startAttackMove } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the sampled strike, the cast lift; today's lunge unless switched on (`motion/CurvesSwitch.ts`)
 import { blowPose, idleAtEnd, impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
@@ -330,6 +331,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
   // A-4: where the sources withhold the celebration ('hold'), the figures keep
   // their battle stance and the fanfare stays quiet; the rig still settles.
   if (victoryPoseOf(ctx.deps) === 'hold') {
+    standDownParty(ctx); // motion pass, step 3 (the moments, default OFF): the held stance gets a quiet settle, no pose, no hop
     void ctx.moments.victory();
     await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold')));
     return;
