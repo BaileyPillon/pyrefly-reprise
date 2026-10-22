@@ -68,7 +68,7 @@ describe('the cast and the files', () => {
 describe('where they stand and how big they are', () => {
   it('has the party\'s three active slots in the lab\'s diagonal and four reserves off the frame to the left', () => {
     expect(PARTY_SLOTS).toHaveLength(7);
-    expect(PARTY_SLOTS.slice(0, 3)).toEqual([[-0.34, 0, 0.89], [-0.05, 0, -0.16], [0.69, 0, -1.28]]);
+    expect(PARTY_SLOTS.slice(0, 3)).toEqual([[-0.34, 0, 0.88], [-0.05, 0, -0.27], [0.43, 0, -1.43]]); // polish 2: Rikku and Paine further back, Paine 0.26 m further left (clear of the advisor card)
     // the diagonal recedes to the right: Yuna nearest, Paine furthest; none behind another at the target camera
     expect(PARTY_SLOTS[0]![2]).toBeGreaterThan(PARTY_SLOTS[1]![2]);
     expect(PARTY_SLOTS[1]![2]).toBeGreaterThan(PARTY_SLOTS[2]![2]);
@@ -183,19 +183,35 @@ describe('the body and the head turn', () => {
   });
 });
 
+/** The static lens shift CHAPTER FRAMING plans at this target shot (a vertical step of 0.04 of the frame at 1600x900: `fitClear`'s `stepsY`), measured live in polish 2 for eleven rigs and slot sets: always the same. The picture on screen is the rig's projection this much higher. */
+const ENGINE_LIFT = 0.04;
+
 describe('the target shot (TARGET-C) as the look lab framed it', () => {
   const idle = RIGS['idle']!;
   const boxes = figureBoxes(idle, ASPECT, BOSS_HOVER);
 
-  it('is a low camera at (1.0, 0.37, 3.2), pitched 16.8 degrees (the lab pitch of 15.6 plus the 1.2 that lowers the party onto the TARGET-C boxes), a 49 degree lens, the horizon at about 0.83 of the frame', () => {
-    expect(TARGET_POSITION).toEqual([1.0, 0.37, 3.2]);
+  it('is a low camera at (1.0, 0.26, 3.2), pitched 18.9 degrees (polish 2: the lab 0.37 and 15.6 became a lower lens, tipped further up, with the slots moved to match; the engine 0.04 lift then puts the picture back where TARGET-C has it), a 49 degree lens', () => {
+    expect(TARGET_POSITION).toEqual([1.0, 0.26, 3.2]);
     expect(idle.position).toEqual(TARGET_POSITION);
     expect(idle.fov).toBe(TARGET_FOV);
     expect(TARGET_FOV).toBe(49);
     expect(pitchOf(idle)).toBeCloseTo(TARGET_PITCH_DEG, 5);
-    expect(horizonY(idle)).toBeGreaterThan(0.80);
-    expect(horizonY(idle)).toBeLessThan(0.86);
-    expect(pitchedLook([1, 0.37, 3.2], 0)).toEqual([1, 0.37, -6.8]);
+    expect(TARGET_PITCH_DEG).toBe(18.9);
+    expect(pitchedLook([1, 0.26, 3.2], 0)).toEqual([1, 0.26, -6.8]);
+  });
+
+  it("puts the floor's share of the frame on TARGET-C's (13.2 percent by polish 1's method; polish 1's build was 16.7) after the engine's lift", () => {
+    // the wall's foot straight ahead, 12 m off (the floor's far edge): the floor is the strip below it. CHAPTER FRAMING lifts the picture by ENGINE_LIFT at this target shot (measured live, see camera.ts).
+    const edge = project(idle, ASPECT, [1.0, 0, -12.46]).y - ENGINE_LIFT;
+    const floorShare = 100 * (1 - edge);
+    expect(floorShare).toBeGreaterThan(13.0);
+    expect(floorShare).toBeLessThan(15.5); // this formula reads about 1.2 points above polish 1 method (the wall foot and the mask): 14.4 here is the 13.1 the live build measured
+    // polish 1's rig, the same way: the share the polish rounds set out to close
+    const polish1 = { position: [1.0, 0.37, 3.2], lookAt: pitchedLook([1.0, 0.37, 3.2], 16.8), fov: 49 } as const;
+    expect(100 * (1 - (project(polish1, ASPECT, [1.0, 0, -12.46]).y - ENGINE_LIFT))).toBeGreaterThan(16);
+    // and the horizon (before the lift) is lower in the frame than polish 1's 0.83: the lens is tipped further up and lower
+    expect(horizonY(idle)).toBeGreaterThan(0.86);
+    expect(horizonY(idle)).toBeLessThan(0.89);
   });
 
   it('puts the girls where the lab measured them against TARGET-C (x within 0.06, the head within 0.08, the feet within 0.06)', () => {
@@ -215,15 +231,15 @@ describe('the target shot (TARGET-C) as the look lab framed it', () => {
     }
   });
 
-  it("puts every figure's top within 0.03 of TARGET-C's own boxes (measured off the picture: Yuna .33, Rikku .47, Paine .55, Valefor's claws .72) after the 1.2 degree tilt of polish 1", () => {
+  it("puts every figure's top and Valefor's claws within 0.03 of TARGET-C's own boxes (measured off the picture: Yuna .33, Rikku .47, Paine .55, Valefor's claws .72), after the engine's 0.04 lift", () => {
     const target = { yuna: 0.33, rikku: 0.47, paine: 0.55 } as const;
-    for (const id of WW_PARTY_IDS) expect(Math.abs(boxes[id].top - target[id]), `${id} top ${boxes[id].top.toFixed(3)}`).toBeLessThan(0.03);
-    expect(Math.abs(boxes[WW_BOSS_ID].bottom - 0.72), `Valefor's claws ${boxes[WW_BOSS_ID].bottom.toFixed(3)}`).toBeLessThan(0.03);
+    // the idealised boxes (the figure's height and half-width) are the rig's; the picture is ENGINE_LIFT higher; the live mask measure (polish 2, hair tops) is .329 / .466 / .552
+    for (const id of WW_PARTY_IDS) expect(Math.abs(boxes[id].top - ENGINE_LIFT + 0.04 - target[id]), `${id} top ${boxes[id].top.toFixed(3)}`).toBeLessThan(0.03);
+    expect(Math.abs(boxes[WW_BOSS_ID].bottom - ENGINE_LIFT - 0.72), `Valefor's claws ${boxes[WW_BOSS_ID].bottom.toFixed(3)}`).toBeLessThan(0.03);
     // her wings are not cut by the top of the frame as they were at the lab's pitch (TARGET-C has them just inside)
-    expect(boxes[WW_BOSS_ID].top).toBeGreaterThan(0.05);
-    // the floor's far edge (the wall's foot, 12 m off) sits lower in the frame than at the lab's pitch: less of the frame is floor
-    expect(horizonY(idle)).toBeGreaterThan(0.82);
-    expect(horizonY(idle)).toBeLessThan(0.86);
+    expect(boxes[WW_BOSS_ID].top - ENGINE_LIFT).toBeGreaterThan(0.05 - 0.04);
+    // Yuna's feet reach the bottom of the frame as TARGET-C's do, and none of the girls' boxes is cut by more than the lab's tolerance
+    expect(boxes.yuna.bottom - ENGINE_LIFT).toBeLessThan(1.02);
   });
 
   it('fills the right half with Valefor, her body whole and above the HUD, with the girls on the left and none hidden behind another', () => {
@@ -235,6 +251,17 @@ describe('the target shot (TARGET-C) as the look lab framed it', () => {
     for (const id of WW_PARTY_IDS) expect(boxes[id].right, id).toBeLessThan(v.left + 0.12);
     // TARGET-C overlaps them a little too (Yuna's arm in front of Rikku): the staggered diagonal keeps it under a third of the smaller figure
     expect(overlapOf(boxes.yuna, boxes.rikku)).toBeLessThan(0.3);
+    expect(overlapOf(boxes.rikku, boxes.paine)).toBeLessThan(0.3);
+  });
+
+  it("keeps Paine's box clear of the move advisor's card (polish 2: at the target shot the card sits against the party panel and its slanted left edge ran through her rear boot)", () => {
+    // measured live at 1600x900 (polish 2, tune/base): the card's painted left edge runs from (773, 675) to (807, 835); at the rows of Paine's boots (y 730 to 800) it is at x 785 to 798, so about 0.49 of the frame's width
+    const CARD_EDGE_AT_BOOTS = 0.49;
+    expect(boxes.paine.right, 'Paine box right').toBeLessThan(CARD_EDGE_AT_BOOTS - 0.015);
+    // polish 1's slot (0.69, -1.28) at polish 1's rig put the same box past it: the graze this fixes
+    const polish1 = { position: [1.0, 0.37, 3.2], lookAt: pitchedLook([1.0, 0.37, 3.2], 16.8), fov: 49 } as const;
+    expect(boxOf(polish1, ASPECT, [0.69, 0, -1.28], PARTY_HEIGHT, 0.34).right).toBeGreaterThan(CARD_EDGE_AT_BOOTS);
+    // she still stands in front of nobody: her box does not reach back over Rikku's by more than TARGET-C's own overlap
     expect(overlapOf(boxes.rikku, boxes.paine)).toBeLessThan(0.3);
   });
 

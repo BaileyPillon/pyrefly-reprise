@@ -4,8 +4,8 @@
  *
  * ## The target
  *
- * `idle` is the look lab's TARGET-C shot (`look-lab/js/shots.mjs`, run 3): **a low camera** (37 cm up) at (1.0, 0.37, 3.2), tipped 16.8 degrees upward (the lab's 15.6, see `TARGET_PITCH_DEG`), a 49 degree vertical lens. Low and tipped up is the Wind Waker
- * look (the horizon sits at 0.80 of the frame's height, the sky and the roof opening above the party), and the lens is wide: nothing in the frame is close enough to make a flat face read as a mask. The girls stand low on
+ * `idle` is the look lab's TARGET-C shot (`look-lab/js/shots.mjs`, run 3): **a low camera** (26 cm up since polish 2; the lab's was 37) at (1.0, 0.26, 3.2), tipped 18.9 degrees upward (the lab's 15.6, see `TARGET_PITCH_DEG`), a 49 degree vertical lens. Low and tipped up is the Wind Waker
+ * look (the horizon sits at 0.87 of the frame's height before the engine's lift below, the sky and the roof opening above the party), and the lens is wide: nothing in the frame is close enough to make a flat face read as a mask. The girls stand low on
  * the left, Valefor fills the right half, and the bottom fifth of the frame is floor, calm for the HUD.
  *
  * The other rigs are pushes toward who is being looked at, all from the same low height: `intro` is the lab's wide start of the push-in, `action` a push toward the middle of the fight, `party` and `victory` the girls,
@@ -27,14 +27,19 @@ export function pitchedLook(pos: V3, pitchDeg: number, dist = 10): V3 {
   return [pos[0], pos[1] + dist * Math.tan((pitchDeg * Math.PI) / 180), pos[2] - dist];
 }
 
-/** The target shot: position, pitch and lens (the lab's `TARGET_POS`, `TARGET_PITCH`, fov 49). */
-export const TARGET_POSITION: V3 = [1.0, 0.37, 3.2];
 /**
- * The lab's pitch was 15.6; **16.8 here (polish 1)**. In the game the girls' heads stood about 0.05 of the frame higher than in the lab's still (Yuna's hair top 0.29 against the lab's 0.34 and TARGET-C's 0.33: the
- * game's model is not crouched as the lab's was by the same stance) and the floor took 19 percent of the frame against TARGET-C's 13. Tipping the lens 1.2 degrees further up moves every figure down by
- * about 0.025 of the frame: Yuna's top .31, Rikku's .47, Paine's .55 (TARGET-C .33, .47, .55), Valefor's claws .74 (.72), the floor to about 17 percent, with the horizon still at 0.83.
+ * The target shot: position, pitch and lens (the lab's `TARGET_POS`, `TARGET_PITCH`, fov 49). **The height is 0.26 since polish 2** (it was the lab's 0.37): the floor is the strip of frame between the girls' feet and the wall, and the lower the lens the
+ * thinner it is at the same figure size. The camera the screen shows is not this rig alone: CHAPTER FRAMING (`engine/fx/mix/framing.ts`) plans a static lens shift for the menu clearance, and at this target shot it is always (0, 36 px at 1600x900),
+ * the picture lifted by 0.04 of the frame (the discrete step of `fitClear`; measured in polish 2 on the live build for eight rigs and slot sets, always the same). The numbers below are the rig's and the frame is 0.04 higher: the figures' `raw` tops
+ * and feet in `tests/unit/ww3d/layout.test.ts` carry it.
  */
-export const TARGET_PITCH_DEG = 16.8;
+export const TARGET_POSITION: V3 = [1.0, 0.26, 3.2];
+/**
+ * The lab's pitch was 15.6; 16.8 in polish 1; **18.9 here (polish 2)**, with the lens lowered to 0.26 and the three slots moved to match (`layout.ts`). Measured on the live build (1600x900, camera sway off, each girl alone on a flat ground, the floor alone in
+ * red): the girls' hair tops at .329 / .466 / .552 of the frame (TARGET-C .33 / .47 / .55), Yuna's boots .988 (clear of the frame's bottom edge, where polish 1's touched it), the floor 13.1 percent by polish 1's method (TARGET-C 13.2; polish 1's build 16.7).
+ * Solved by `D:\Tools\pyrefly-scratch\2026-10-20\windwaker\polish2\solve4.mjs` and verified on candidates in `tune/fc2` and `tune/fc3`.
+ */
+export const TARGET_PITCH_DEG = 18.9;
 export const TARGET_FOV = 49;
 
 /** The sun, from the lab: a warm key from the front right, high. */

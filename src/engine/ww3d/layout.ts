@@ -35,11 +35,15 @@ export const MODEL_FILE: Readonly<Record<WwId, string>> = { yuna: 'yuna', rikku:
  * The party's three active slots in slot order (Yuna, Rikku, Paine), then four reserve spots parked off the frame to the left (`SceneBuild.partySlots` holds seven: a character switched in walks from one). The lab's
  * diagonal: Yuna at the front left, Rikku in the middle, Paine at the back right, none behind another at the target camera. The reserves stand on the arena's far left, about nine metres from the lens's axis: outside the
  * frame at every rig (the left edge of the target shot is at about x -5.5 at the girls' depth).
+ *
+ * **Polish 2.** The lab's slots were (-0.34, 0.89), (-0.05, -0.16) and (0.69, -1.28). Rikku and Paine stand 0.11 and 0.15 m further back (with the lens lowered to 0.26, `camera.ts`, that puts the three hair tops on TARGET-C's .33 / .47 / .55 and Rikku, who was
+ * bigger than TARGET-C's, at its size), and **Paine stands 0.26 m further left** (x 0.43): at the target shot the move advisor's card slid left over Paine's rear boot (the card's lane is `squeezed` against the party panel: it sits at a fixed place, and the
+ * girl's boot reached 36 px into it, measured on a mask of her alone), and now it clears the card's slanted edge by about 30 px. The advisor lane solver is the shared HUD's and is not touched.
  */
 export const PARTY_SLOTS: readonly V3[] = [
-  [-0.34, 0, 0.89],
-  [-0.05, 0, -0.16],
-  [0.69, 0, -1.28],
+  [-0.34, 0, 0.88],
+  [-0.05, 0, -0.27],
+  [0.43, 0, -1.43],
   [-9.0, 0, 1.0],
   [-9.9, 0, 0.2],
   [-10.8, 0, -0.6],
