@@ -81,7 +81,8 @@ Everything marked [ours] above and in the reference. The Cure column's numbers (
 3. One switch for the whole set, or one per piece (`?fx=cure,hit,...`)? Bailey picks Thursday; splitting is a table lookup in `SpellFxFresh.ts`.
 4. The five buffs and the weapon sparks are [ours] designs: rule 9 says show Bailey options first; this branch is the first round (captures below), not a decision.
 5. The guard's scale step needs a supersampled rung: on the A2 rung or a phone there is nothing to lower and it only thins.
-6. Steam capture of the gaps (reference open question 1) would let the buffs and Fire/Blizzard/Thunder become faithful instead of neutral.
+6. **Review class.** `node tools/critic-plan.mjs --paths <the changed files>` says DEEP (after the deploy, the build owes it), and names two additive lines as the only reason: `BattlePresenterPorts.ts` (the optional `item` flag on `VfxPort.land`) and `BattlePresenterSpellFx.ts` (passing it). If a deep review owed is a problem for the Thursday build, drop those two lines: the only loss is the small item form of the Cure column (a Potion would land the full column).
+7. Steam capture of the gaps (reference open question 1) would let the buffs and Fire/Blizzard/Thunder become faithful instead of neutral.
 
 ## Evidence and downloads
 
