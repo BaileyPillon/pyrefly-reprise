@@ -107,6 +107,8 @@ export async function motion(g, spec, o) {
     for (let i = 0; i < 2400 && ended < 0; i++) {
       await step();
       if (i % 5 === 4 && (await played()) >= playedBefore + 5 && (await playedEnd())) ended = st.frame;
+      // FFX-2 holds the ATB while ANY member's command menu is open (wait=hold), and a charged skill needs the clock: the other members take their turns (plain attack) while the actor's action plays out
+      if (ended < 0 && i % 20 === 19 && (await g.awaitingMenu()) && (await g.curActor()) !== who) { for (const key of spec.motion.others ?? ['KeyQ']) { await input.press(key); await step(14); } }
     }
     if (ended < 0) throw new Error(`the ${turn.name} never finished playing`);
     await step(70);

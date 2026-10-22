@@ -759,7 +759,8 @@
         "others": [
           "Enter",
           "Enter"
-        ]
+        ],
+        "victory": false
       },
       "labels": {
         "attack": "ATTACK",
