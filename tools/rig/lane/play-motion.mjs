@@ -33,7 +33,9 @@ export async function motion(g, spec, o) {
   const rects = [];
   const mark = (name, extra = {}) => { marks.push({ n: st.frame, name, ...extra }); g.log(`mark ${name} at frame ${st.frame}`); };
   const rectNow = () => page.evaluate((id) => { try { const r = window.__pyrefly.battle().stage.projectRect(id); return r ? { x: r.x, y: r.y, w: r.w, h: r.h } : null; } catch { return null; } }, who);
-  const step = async (n = 1) => { for (let i = 0; i < n; i++) { await st.step(); if (st.frame % 2 === 0) { const r = await rectNow(); if (r) rects.push({ n: st.frame - 1, ...r }); } } };
+  const t0 = Date.now();
+  const budgetMs = Number(process.env.MOTION_BUDGET_MS ?? spec.motion.budgetMs ?? 500000); // the hold on the shared recording slot is 10 minutes: stop by ourselves and still write the timeline
+  const step = async (n = 1) => { for (let i = 0; i < n; i++) { if (Date.now() - t0 > budgetMs) throw new Error('the time budget of the hold is used'); await st.step(); if (st.frame % 2 === 0) { const r = await rectNow(); if (r) rects.push({ n: st.frame - 1, ...r }); } } };
   const playing = () => page.evaluate(() => Boolean(window.__pyrefly.battle()?.battlePresenter?.playing));
   const idleMenu = async () => (await g.awaitingMenu()) && !(await playing());
   const waitMenu = async (max = 4000) => { for (let i = 0; i < max; i++) { if (await idleMenu()) return true; if (i % 200 === 199 && (await g.scr()) !== 'battle') return false; await step(); } return false; };
@@ -59,7 +61,7 @@ export async function motion(g, spec, o) {
     for (let k = 0; k < 12 && (await g.curActor()) !== who; k++) {
       if (!(await waitMenu())) throw new Error('the battle ended before the actor got a turn');
       if ((await g.curActor()) === who) break;
-      for (const k of spec.motion.others ?? ['KeyQ']) { await input.press(k); await step(14); } // the other members: DEFEND (FFX), or a plain attack (FFX-2 has no defend row)
+      for (const key of spec.motion.others ?? ['KeyQ']) { await input.press(key); await step(14); } // the other members: DEFEND (FFX), or a plain attack (FFX-2 has no defend row)
       await step(20);
       for (let i = 0; i < 3000 && !(await idleMenu()); i++) await step();
       await step(20);
@@ -86,14 +88,17 @@ export async function motion(g, spec, o) {
       await step(14);
     }
     for (let t = 0; t < (spec.motion.targets ?? 1); t++) { await input.press('Enter'); await step(14); }
+    const started = async () => (await actionEvents()).slice(logBefore).some((e) => e.type === 'action-start' && e.actorId === who);
+    for (let k = 0; k < 10 && !(await started()); k++) { await input.press('Enter'); await step(14); } // as the cast mode does: confirm until the action has begun
+    if (!(await started())) throw new Error(`the ${turn.name} was never confirmed`);
     mark(`${turn.name}-go`);
+    const played = () => page.evaluate(() => window.__pyrefly.snapshotState()?.screenState?.playback?.played ?? 0);
+    const playedEnd = () => page.evaluate(() => (window.__pyrefly.snapshotState()?.screenState?.playback?.lastEvents ?? []).some((e) => (e.type ?? e) === 'action-end'));
+    const playedBefore = await played();
     let ended = -1;
     for (let i = 0; i < 2400 && ended < 0; i++) {
       await step();
-      if (i % 6 === 5) {
-        const ev = (await actionEvents()).slice(logBefore);
-        if (ev.some((e) => e.type === 'action-end') && !(await playing())) ended = st.frame;
-      }
+      if (i % 5 === 4 && (await played()) >= playedBefore + 5 && (await playedEnd())) ended = st.frame;
     }
     if (ended < 0) throw new Error(`the ${turn.name} never finished playing`);
     await step(70);
