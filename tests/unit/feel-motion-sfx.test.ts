@@ -183,10 +183,13 @@ describe('planMotionSfx: the gates', () => {
     expect(planMotionSfx({ kind: 'dash' }, gate({ now: 2000 + 400 }), m).ok).toBe(true); // the window slid on
   });
 
-  it('a landing smaller than a tenth of a hop is not a landing', () => {
+  it('a landing smaller than a fifth of a hop is not a landing: the turn-start weight shift (a hop of 3.5 percent of the figure) is silent, a dodge, a victory hop and the run home are heard', () => {
     const m = newMotionMemory();
     expect(planMotionSfx({ kind: 'land', strength: MIN_LAND_STRENGTH - 0.01 }, gate(), m)).toEqual({ ok: false, why: 'small' });
     expect(planMotionSfx({ kind: 'land', strength: MIN_LAND_STRENGTH }, gate({ now: 5000 }), m).ok).toBe(true);
+    const third = (height: number): number => height / (1.8 * 0.33); // PaintedActor's strength for a hop of `height` on a 1.8 unit figure
+    const verdicts = [1.8 * 0.035, 0.18, 1.8 * 0.13, 0.2, 0.42].map((h, i) => planMotionSfx({ kind: 'land', strength: third(h) }, gate({ now: 9000 + i * 1000 }), newMotionMemory()).ok);
+    expect(verdicts).toEqual([false, true, true, true, true]);
   });
 });
 

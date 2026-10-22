@@ -67,8 +67,11 @@ export const BUSY_WINDOW_MS = 300;
 /** A smear this close after a lunge or a dash is one movement with it: its sound is multiplied by {@link DUCK}. */
 export const DUCK_WINDOW_MS = 90;
 export const DUCK = 0.5;
-/** A landing smaller than this share of a hop is not a landing (a few pixels of a dodge). */
-export const MIN_LAND_STRENGTH = 0.1;
+/**
+ * A landing smaller than this share of a hop is not a landing: the turn-start weight shift is a hop of 3.5 percent of the figure (`PaintedActor.playCue('step')`, a strength of 0.106 at any size),
+ * found by playing Chapter IV, where it made a thud at every turn start. The smallest real landing (a dodge of 0.18 on a 1.8 figure) is 0.30.
+ */
+export const MIN_LAND_STRENGTH = 0.2;
 
 const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, v));
 const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
