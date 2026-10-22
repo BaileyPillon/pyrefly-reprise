@@ -4196,7 +4196,7 @@
      },
      "scale": 1.22,
      "scaleSrc": "ruled",
-     "sha": "ef0c9c9f5c48566e98abc95baacd9db1128bf3e1c91f769a87854e8df6c3ae15",
+     "sha": "a961b7d74864e19ef1e636abc3330e44a349b244fd71f3e6b3582ff3b9f1f8a5",
      "size": [
       832,
       974
@@ -4258,42 +4258,42 @@
       225.0,
       300.0
      ],
-     "baseline": 1191.0,
+     "baseline": 1192.0,
      "current": 1.0,
      "head": [
-      140.1,
-      250,
-      309.9,
-      350
+      140.2,
+      250.1,
+      309.8,
+      349.9
      ],
      "prone": false,
      "reading": 1.0,
      "ruled": {
       "basis": "body",
       "head": 1,
-      "headRatio": 1.031,
-      "height": 1.06216,
+      "headRatio": 1.032,
+      "height": 1.06442,
       "lift": null,
-      "mean": 1.031,
+      "mean": 1.032,
       "rule": "geomean/1",
-      "stature": 0.971
+      "stature": 0.97
      },
-     "scale": 1.031,
+     "scale": 1.032,
      "scaleSrc": "ruled",
-     "sha": "838063011501720211430b8ec54fbe59d755af0642df1878641118c07c358abd",
+     "sha": "a8e51cdc87c9a64ad7f71b3e6e0571fbafb42eec6c9f79027695418dbc35f9f3",
      "size": [
       533,
       1207
      ],
      "stance": {
-      "row": 1190.0,
+      "row": 1188.0,
       "src": "silhouette",
-      "x": 204.0,
+      "x": 202.5,
       "x0": 20.0,
-      "x1": 388.0
+      "x1": 385.0
      },
      "standing": true,
-     "stature": 0.971
+     "stature": 0.97
     }
    }
   },

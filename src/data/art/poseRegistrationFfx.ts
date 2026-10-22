@@ -35,9 +35,9 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
     item: { scale: 1.022, stanceX: 456.0, head: [0.2785, 0.0463, 0.5117, 0.1319], status: 'ok', class: 'standing', stature: 0.979, headReal: 1.022, iou: 0.518, sha: 'd9fef03b0f208171' },
     jump: { scale: 1.053, stanceX: 328.5, feetRow: 1064.0, head: [0.466, 0.045, 0.6959, 0.1348], status: 'ok', class: 'standing', stature: 0.949, headReal: 1.053, iou: 0.268, sha: '22ef7ecfaf938d93' },
     ko: { scale: 0.593, head: [0.6259, 0.4333, 0.8741, 0.6556], status: 'ok', class: 'ko', stature: 0.384, headReal: 1, lengthRatio: 0.598, iou: 0.16, sha: 'ec7b98ea8409ca1f' },
-    ready: { scale: 1.22, stanceX: 335.0, head: [0.3669, 0.1086, 0.5393, 0.1953], status: 'ok', class: 'standing', stature: 0.983, headReal: 1.017, iou: 0.174, sha: 'ef0c9c9f5c48566e' },
+    ready: { scale: 1.22, stanceX: 335.0, head: [0.3669, 0.1086, 0.5393, 0.1953], status: 'ok', class: 'standing', stature: 0.983, headReal: 1.017, iou: 0.174, sha: 'a961b7d74864e19e' },
     sleep: { scale: 1.002, stanceX: 488.0, head: [0.6629, 0.1432, 0.8864, 0.2296], status: 'ok', class: 'low', stature: 0.998, headReal: 1.002, iou: 0.751, sha: '9046b5785bfa02dc' },
-    victory: { scale: 1.031, stanceX: 204.0, head: [0.2629, 0.2071, 0.5814, 0.29], status: 'ok', class: 'standing', stature: 1.037, headReal: 1.03, iou: 0.137, sha: '8380630115017202' },
+    victory: { scale: 1.032, stanceX: 202.5, feetRow: 1188.0, head: [0.263, 0.2072, 0.5812, 0.2899], status: 'ok', class: 'standing', stature: 1.037, headReal: 1.032, iou: 0.125, sha: 'a8e51cdc87c9a64a' },
   },
   lulu: {
     attack: { scale: 1.015, stanceX: 353.5, head: [0.439, 0.1236, 0.5567, 0.17], status: 'ok', class: 'standing', stature: 0.986, headReal: 1.016, iou: 0.439, sha: 'aa8675eaa9cf2e73' },
