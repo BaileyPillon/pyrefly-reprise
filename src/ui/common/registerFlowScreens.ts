@@ -22,6 +22,7 @@ import { CutsceneScreen } from '../../app/screens/CutsceneScreen.ts';
 import { ResultsScreen } from '../../app/screens/ResultsScreen.ts';
 import { DemoBoardScreen } from '../../app/demo/demoBoard.ts'; // R61: the conference demo's two-card board (`?demo=1` only)
 import { demoModeOn } from '../../app/demoMode.ts';
+import { DemoThanksScreen } from '../../app/demo/demoThanks.ts'; // R62: the thanks card after a won demo fight (`?demo=1` only)
 
 /** A `BattleResult` stand-in for `showResults(chapter, outcome)` calls where `outcome.result` is null (e.g. an early defeat). */
 function emptyResult(outcome: string): BattleResult {
@@ -42,6 +43,11 @@ function emptyResult(outcome: string): BattleResult {
 
 registerFlowScreens({
   chapterSelect: () => (demoModeOn() ? new DemoBoardScreen() : new ChapterSelectScreen()), // R61: in demo mode the board is the two-card fight picker
+
+  demoThanks: (opts) => new DemoThanksScreen({ chapterId: opts.chapter.id }), // R62: only asked for in demo mode, after a win of one of the two demo fights
+
+  // R62 (decision 173f): the demo's short voiced intro is the game's own story scene on a trimmed script; asked for only in demo mode, before Chapter I's fight
+  demoIntro: (opts) => new CutsceneScreen({ chapterId: opts.chapter.id, script: opts.script, startSkipped: opts.skip ?? false }),
 
   cutscene: (opts) =>
     new CutsceneScreen({

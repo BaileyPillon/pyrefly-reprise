@@ -2,6 +2,7 @@ import '../../ui/common/results.css';
 import '../../ui/common/results-fit.css';
 import { Screen } from '../Screen.ts';
 import { mountDemoResultsHint } from '../demo/demoHints.ts'; // R61: the conference demo's pad/keyboard strip (`?demo=1` only)
+import { demoDefeatPanel } from '../demo/demoDefeat.ts'; // R62: a demo fight's defeat panel offers TRY AGAIN and OTHER FIGHT
 import type { ControlsHint } from '../../ui/common/ControlsHint.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
@@ -25,7 +26,7 @@ import {
   victoryHeroHtml,
   type ResultsMemberRow,
 } from '../../ui/common/resultsMath.ts';
-import { DEFEAT_ACTIONS, desktopPageHtml, pageHeading, resultsCaptionHtml, type LedgerLine, type ResultsChoice, type ResultsPageModel } from '../../ui/common/resultsPage.ts';
+import { DEFEAT_ACTIONS, DEMO_DEFEAT_ACTIONS, desktopPageHtml, pageHeading, resultsCaptionHtml, type LedgerLine, type ResultsChoice, type ResultsPageModel } from '../../ui/common/resultsPage.ts';
 import { isPhoneResults, phoneHeroFigure, phoneHeroHtml, phonePageHtml, phoneShellHtml, RESULTS_PHONE_QUERY } from '../../ui/common/resultsPhone.ts';
 import { victoryLine, victoryTurn, wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from '../../ui/common/victoryLine.ts';
 import { quietResultsOf } from '../../ui/common/quietResults.ts'; // release 61: FFX-2 Chapter IV's quieter results
@@ -119,6 +120,8 @@ export class ResultsScreen extends Screen {
   private dismissed = false;
   private actionIndex = 0;
   private choice: ResultsChoice = 'continue';
+  /** The defeat panel's slabs: RETRY and CHAPTER SELECT, or in a demo fight TRY AGAIN and OTHER FIGHT (release 62, decision 173g). */
+  private readonly actions: ReadonlyArray<{ choice: ResultsChoice; label: string }>;
 
   constructor(private readonly opts: ResultsScreenOptions) {
     super();
@@ -128,6 +131,7 @@ export class ResultsScreen extends Screen {
     const chapter = getChapter(opts.chapterId);
     this.silent = opts.silent ?? isSilentResultsChapter(opts.chapterId);
     this.victory = opts.result.outcome === 'victory';
+    this.actions = demoDefeatPanel(opts.chapterId) ? DEMO_DEFEAT_ACTIONS : DEFEAT_ACTIONS;
 
     const game = chapter?.buildRef.game ?? 'ffx'; // FF7 pays EXP (and AP to Materia), like FFX-2's EXP ledger
     this.gameId = game;
@@ -271,18 +275,18 @@ export class ResultsScreen extends Screen {
       (input.consume('right') || input.consume('down') ? 1 : 0) -
       (input.consume('left') || input.consume('up') ? 1 : 0);
     if (delta !== 0) {
-      this.actionIndex = (this.actionIndex + delta + DEFEAT_ACTIONS.length) % DEFEAT_ACTIONS.length;
+      this.actionIndex = (this.actionIndex + delta + this.actions.length) % this.actions.length;
       audio.playSfx('cursor-move');
       this.refresh();
     }
-    for (const action of DEFEAT_ACTIONS) {
+    for (const action of this.actions) {
       if (input.actions.includes(`results:${action.choice}`)) {
         this.pick(action.choice);
         return;
       }
     }
-    if (input.consume('confirm')) this.pick(DEFEAT_ACTIONS[this.actionIndex]!.choice);
-    else if (input.consume('cancel')) this.pick('chapter-select');
+    if (input.consume('confirm')) this.pick(this.actions[this.actionIndex]!.choice);
+    else if (input.consume('cancel') || input.actions.includes('cancel')) this.pick('chapter-select'); // `cancel` by click: the demo strip's BACK chip (R62)
   }
 
   override update(dt: number): void {
@@ -302,8 +306,8 @@ export class ResultsScreen extends Screen {
       this.pick('continue');
       return true;
     }
-    if (name === 'results:retry' || name === 'results:chapter-select') {
-      this.pick(name === 'results:retry' ? 'retry' : 'chapter-select');
+    if (name === 'results:retry' || name === 'results:chapter-select' || name === 'results:other-fight') {
+      this.pick(name === 'results:retry' ? 'retry' : name === 'results:other-fight' ? 'other-fight' : 'chapter-select');
       return true;
     }
     return false;
@@ -428,6 +432,7 @@ export class ResultsScreen extends Screen {
       rows: this.rows,
       progress: this.countProgress(),
       actionIndex: this.actionIndex,
+      ...(this.actions === DEFEAT_ACTIONS ? {} : { actions: this.actions }),
       ...(quiet ? { bodyFaces: quiet.bodyFaces } : {}),
     };
     page.innerHTML = this.phone ? phonePageHtml(model, this.caption) : desktopPageHtml(model);

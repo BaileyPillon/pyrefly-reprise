@@ -32,6 +32,7 @@ import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
 import { lastSummoningGroup } from '../../data/ffx/enemies/last-summoning-chain.ts'; // the hidden Last Summoning's formations, resolved on demand from their ids (FFX only)
 import { carryFfx2Full, carryWornDresspheres, FFX2_DRESSPHERE_CARRIES } from './BattleScreenCarry.ts';
+import { demoStartGauges } from '../demo/demoGauge.ts'; // R62 (demo mode only): half-full Overdrive gauges at a demo fight's start
 
 /** What a chain seam carries beyond the defaults: PR-0124's measurement override. */
 export interface SeamOptions {
@@ -75,7 +76,7 @@ export function setupForChapter(chapter: Chapter, seed: number): BattleSetup {
   }
   return {
     game: chapter.game,
-    party: chapter.buildRef,
+    party: demoStartGauges(chapter.id, chapter.buildRef), // R62 (demo mode only; FFX): a demo fight's party starts on half-full Overdrive gauges (`demo/demoGauge.ts`)
     enemies: chapter.enemyGroupRef,
     triggers,
     seed,

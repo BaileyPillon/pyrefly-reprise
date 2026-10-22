@@ -5,8 +5,8 @@
  * Claims:
  *  1. The hold is 1.5 s and only a hold: a tap, a brush, a stalled frame or letting go before the end fires nothing; holding past the end fires exactly once; letting go re-arms it.
  *  2. Select and Start together are the pad's input (either alone is not).
- *  3. A reset clears the visitor's run (the save's chapter records, flags, unlocks, onboarding memory; the demo's seed rotation; the board's memory) and KEEPS the settings, the title-art pick among them, and
- *     the switch that says demo mode is on.
+ *  3. A reset clears the visitor's run (the save's chapter records, flags, unlocks, onboarding memory; the demo's seed rotation; the board's memory) and, since release 62 (decision 173i), puts every setting
+ *     back to the demo's defaults (volumes, the look, the title art, all of them); it keeps the switch that says demo mode is on.
  *  4. The sequence is: wipe, fade the sound, fade the picture, halt, reload, in that order.
  *  5. The ring shows nothing for a tap, fills while held and goes away; the wiring does nothing outside demo mode.
  */
@@ -125,8 +125,10 @@ describe('clearing the visitor', () => {
     return { save, storage };
   }
 
-  it('drops the run and keeps the settings, the title-art pick among them', () => {
+  it('drops the run and puts the settings back to the demo defaults, the title-art pick, the volumes and the look among them (release 62, 173i)', () => {
     const { save, storage } = playedStore();
+    save.setSettings({ visualStyle: 'classic', masterVolume: 0.2, sfxVolume: 0.9, voiceOn: false, titleArt: 'farplane', titleArtPicked: true });
+    expect(save.settings.titleArt).toBe('farplane');
     expect(save.isCleared('seymour-flux')).toBe(true);
     clearVisitorState(save, null);
     expect(save.isCleared('seymour-flux')).toBe(false);
@@ -134,22 +136,45 @@ describe('clearing the visitor', () => {
     expect(save.snapshot().unlocked).toEqual([]);
     expect(save.snapshot().flags).toEqual({});
     expect(save.seenCoach).toEqual([]);
-    expect(save.settings.titleArt).toBe('echo');
-    expect(save.settings.musicVolume).toBeCloseTo(0.33, 5);
-    expect(save.settings.textSize).toBeCloseTo(1.15, 5);
+    const d = defaultSettings();
+    expect(save.settings.titleArt).toBe(d.titleArt);
+    expect(save.settings.titleArt).toBe('echo'); // The Echo, release 61's default
+    expect(save.settings.titleArtPicked).toBe(false);
+    expect(save.settings.visualStyle).toBe('hd2d');
+    expect(save.settings.musicVolume).toBeCloseTo(d.musicVolume, 5);
+    expect(save.settings.masterVolume).toBeCloseTo(d.masterVolume, 5);
+    expect(save.settings.sfxVolume).toBeCloseTo(d.sfxVolume, 5);
+    expect(save.settings.voiceOn).toBe(true);
+    expect(save.settings.textSize).toBeCloseTo(d.textSize, 5);
     // and what is on disk says the same (a reload reads it back)
     const reread = new SaveStore('test-save', storage);
     expect(Object.keys(reread.snapshot().chapters)).toEqual([]);
     expect(reread.settings.titleArt).toBe('echo');
-    expect(reread.settings.musicVolume).toBeCloseTo(0.33, 5);
+    expect(reread.settings.visualStyle).toBe('hd2d');
+    expect(reread.settings.musicVolume).toBeCloseTo(d.musicVolume, 5);
+    expect(reread.settings.masterVolume).toBeCloseTo(d.masterVolume, 5);
   });
 
-  it('every setting survives, not only the ones named above', () => {
+  it('every setting goes back, not only the ones named above: the whole settings object is the defaults again', () => {
     const { save } = playedStore();
+    save.setSettings({ ffx2Atb: 'active', textSpeed: 2, reduceFlashes: true, lowEffects: true, chapterSelectMusic: 'c', voiceVolume: 0.1 });
     const before = save.snapshot().settings;
+    expect(before).not.toEqual(defaultSettings());
     clearVisitorState(save, null);
-    expect(save.snapshot().settings).toEqual(before);
-    expect(Object.keys(before).length).toBe(Object.keys(defaultSettings()).length);
+    expect(save.snapshot().settings).toEqual(defaultSettings());
+    expect(Object.keys(save.snapshot().settings).length).toBe(Object.keys(defaultSettings()).length);
+  });
+
+  it('the mixer is not touched by the wipe (the sound is fading and the page reloads: no burst at the booth); only the reload applies the defaults', () => {
+    const { save } = playedStore();
+    let applied = 0;
+    const real = save.setSettings.bind(save);
+    save.setSettings = (patch) => {
+      applied += 1;
+      real(patch);
+    };
+    clearVisitorState(save, null);
+    expect(applied).toBe(0);
   });
 
   it("forgets the tab's seed rotation and the board's memory, and not the switch that says demo mode is on", () => {
@@ -184,7 +209,7 @@ describe('clearing the visitor', () => {
 describe('the reset sequence', () => {
   it('wipes, fades the sound, fades the picture, halts, reloads: in that order, and only then', async () => {
     const calls: string[] = [];
-    const save = { snapshot: vi.fn(() => ({ settings: defaultSettings() })), reset: vi.fn(() => calls.push('reset')), setSettings: vi.fn(() => calls.push('settings')) };
+    const save = { reset: vi.fn(() => calls.push('reset')) };
     const deps: ResetDeps = {
       save: save as unknown as ResetDeps['save'],
       tab: null,
@@ -196,7 +221,7 @@ describe('the reset sequence', () => {
       reload: () => calls.push('reload'),
     };
     await performDemoReset(deps);
-    expect(calls).toEqual(['reset', 'settings', 'audio', 'screen', 'halt', 'reload']);
+    expect(calls).toEqual(['reset', 'audio', 'screen', 'halt', 'reload']);
   });
 });
 

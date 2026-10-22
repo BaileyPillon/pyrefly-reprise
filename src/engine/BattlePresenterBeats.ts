@@ -10,7 +10,7 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
-import { awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
+import { actionOfBlow, awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -23,6 +23,7 @@ import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, te
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
 import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SPECTACLE's two motion looks share one gate
 import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL (both games); a no-op without a shot
+import { MEGA_FLARE_SHAKE, megaFlareBlow } from './MegaFlareImpact.ts'; // release 62 (FFX-2 only): Mega Flare's heavier camera shake
 import { lungePlan } from './motion/StrikeReach.ts'; // r391-reach: the house lunge, solved against its target where the game's rules let it
 import { partyOffStage } from './SummonStaging.ts';
 import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
@@ -174,6 +175,7 @@ export async function damage(
   if (flashes) blowFlash(target, event, ctx.moments?.reducedFlashes === true); // `?motion=demo`: 0.08 s white; else warm 200 ms, white 260 ms on a crit (`motion/DemoHitBeat.ts`)
   target?.shake(event.crit ? 0.16 : 0.1, 340);
   void target?.recoil(360, event.crit ? 0.34 : 0.22);
+  if (megaFlareBlow(actionOfBlow(ctx, event.sourceId)?.abilityId, ctx.deps.game)) ctx.stage.camera.shake(MEGA_FLARE_SHAKE.amplitude, MEGA_FLARE_SHAKE.ms); // release 62 (173b, FFX-2 only): Mega Flare lands harder
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });
 
   await revealBlow(ctx, event); // SKILL TRAVEL: the HUD's numeral and the HP row, with the spell's landing and not before it
