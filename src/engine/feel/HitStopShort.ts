@@ -11,8 +11,9 @@
  *
  * **Boss big attacks** ({@link isBossBigMove}) are a short list of headline moves per demo boss, `[ours]`: the sources give a move no weight class, and the repo's own marker of a
  * headline move (`TelegraphHold.ts`) names only Lance of Atrophy. The list is the damaging moves the demo's two bosses lead their fights with: Seymour Flux's Lance of Atrophy, Cross
- * Cleave and Total Annihilation, Bahamut's Impulse and Mega Flare (`data/ffx/enemies/seymour-flux-abilities.ts`, `data/ffx2/enemies/bahamut-abilities.ts`). REDUCE MOTION stops no
- * stop (the caller's rule in `planHit`, unchanged).
+ * Cleave and Total Annihilation, Bahamut's Impulse and Mega Flare (`data/ffx/enemies/seymour-flux-abilities.ts`; Bahamut's are the ids the ENGINE emits, `battle/ffx2/abilities-core.ts`
+ * and `ai/bahamut.ts`: `impulse` and `mega-flare`, not the `x2-bahamut-*` ids of the enemy data file, which no event carries: the first browser run of the real fight showed Impulse
+ * getting no stop under the pack). REDUCE MOTION stops no stop (the caller's rule in `planHit`, unchanged).
  *
  * Pure: no `three`, no DOM.
  */
@@ -30,8 +31,8 @@ export const BOSS_BIG_MOVES: ReadonlySet<string> = new Set([
   'lance-of-atrophy', // Seymour Flux, Chapter I (FFX)
   'cross-cleave',
   'total-annihilation',
-  'x2-bahamut-impulse', // Bahamut, Chapter IV (FFX-2)
-  'x2-bahamut-mega-flare',
+  'impulse', // Bahamut, Chapter IV (FFX-2): the ids the engine's action-start events carry
+  'mega-flare',
 ]);
 
 /** Is this ability one of a boss's headline moves? (The caller adds the "a foe uses it" half.) */

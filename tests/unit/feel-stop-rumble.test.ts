@@ -46,8 +46,8 @@ describe('the short hit-stop', () => {
   });
 
   it('boss headline moves are the demo bosses\' damaging leads, by ability id', () => {
-    for (const id of ['lance-of-atrophy', 'cross-cleave', 'total-annihilation', 'x2-bahamut-impulse', 'x2-bahamut-mega-flare']) expect(isBossBigMove(id), id).toBe(true);
-    expect(isBossBigMove('x2-bahamut-attack')).toBe(false);
+    for (const id of ['lance-of-atrophy', 'cross-cleave', 'total-annihilation', 'impulse', 'mega-flare']) expect(isBossBigMove(id), id).toBe(true);
+    for (const id of ['attack', 'bahamut-curse', 'x2-bahamut-impulse']) expect(isBossBigMove(id), id).toBe(false); // an ordinary swing, Curse, and an id no event carries
     expect(isBossBigMove('banish')).toBe(false);
     expect(isBossBigMove(undefined)).toBe(false);
     expect(BOSS_BIG_MOVES.size).toBe(5);
@@ -207,10 +207,10 @@ describe('the boss headline flag through the presenter hooks', () => {
     (c.stage as unknown as { fx: unknown }).fx = { enabled: () => true, hit: (o: { bossBig?: boolean; big: boolean; menuOpen?: boolean }) => (seen.push(o), { freezeMs: 0, shook: false }) };
     const start = (actorId: string, abilityId: string): Extract<BattleEvent, { type: 'action-start' }> =>
       ({ type: 'action-start', actorId, abilityId, command: { kind: 'ability' } }) as unknown as Extract<BattleEvent, { type: 'action-start' }>;
-    await fxActionOpen(c, start('bahamut', 'x2-bahamut-impulse'));
+    await fxActionOpen(c, start('bahamut', 'impulse'));
     fxHit(c, dmg({ sourceId: 'bahamut', targetId: 'tidus' }), false);
     fxHit(c, dmg({ sourceId: 'rikku' }), false);
-    await fxActionOpen(c, start('bahamut', 'x2-bahamut-attack')); // an ordinary swing of the same boss
+    await fxActionOpen(c, start('bahamut', 'attack')); // an ordinary swing of the same boss
     fxHit(c, dmg({ sourceId: 'bahamut', targetId: 'tidus' }), false);
     await fxActionOpen(c, start('tidus', 'lance-of-atrophy')); // a headline NAME used by a party member is not a boss move
     fxHit(c, dmg({ sourceId: 'tidus' }), false);
