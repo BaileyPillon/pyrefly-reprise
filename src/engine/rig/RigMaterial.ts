@@ -33,12 +33,12 @@ const VERT = /* glsl */ `
     vFig = vec2(position.x + 0.5, vH);
     vec3 p = position;
     // The smear (motion pass, step 2): a part is a mesh cut to its own outline, so a streak drawn by the fragment shader cannot leave it. The figure's TRAILING side is stretched back along the
-    // travel instead (the classic smear frame): a vertex moves back by up to the streak's length (blur 0.45, paint 0.8 of it), the more the further behind the figure's middle it lies; the leading side stays.
+    // travel instead (the classic smear frame): a vertex moves back by up to the streak's length (blur 0.6, paint 1.0 of it), the more the further behind the figure's middle it lies; the leading side stays.
     if (smearAmt > 0.0) {
       float len = length(smearVec);
       vec2 d = smearVec / max(len, 1e-5);
       float t = clamp((0.12 - dot(position.xy, d)) / 0.6, 0.0, 1.0);
-      p.xy -= d * (len * smearAmt * mix(0.45, 0.8, smearStyle)) * t * t;
+      p.xy -= d * (len * smearAmt * mix(0.6, 1.0, smearStyle)) * pow(t, 1.5);
     }
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
     ${RELIGHT_VERTEX}

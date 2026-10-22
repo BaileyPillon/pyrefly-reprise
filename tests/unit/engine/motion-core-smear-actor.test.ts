@@ -380,7 +380,7 @@ describe('the way out of a strike is swapped on the settlePeak mark and the end 
     expect(poses).toEqual([]);
   });
   it('the end mark does not put an idle over a pose the figure has taken since (a menu\'s ready, a new action)', () => {
-    const live = { pose: 'follow', setPose: (p: string) => { live.pose = p; poses.push(p); } };
+    const live = { pose: 'attack', setPose: (p: string) => { live.pose = p; poses.push(p); } };
     const c = ctx({ stage: { actor: () => live, paints: (_id: string, p: string) => p === 'follow' || p === 'ready' } });
     const { marks } = marksOf(c);
     marks.settlePeak();
@@ -388,6 +388,27 @@ describe('the way out of a strike is swapped on the settlePeak mark and the end 
     live.pose = 'ready';
     marks.end();
     expect(poses).toEqual(['follow']);
+  });
+  it('FFX-2: a girl who ran in keeps her follow-through at the blow (the run home is hers: its idle comes before the strike settlePeak); only the impact painting moves to its mark', () => {
+    const c = ctx({ deps: { actionMotion: { lungeFor: () => ({}) } } });
+    const { contact, marks } = marksOf(c);
+    expect(contact.settle).toBeUndefined();
+    expect(Object.keys(marks)).toEqual(['travelPeak']);
+    marks.travelPeak();
+    expect(poses).toEqual(['attack']);
+    expect(followThrough(c, 'tidus' as never)).toBe(180); // the blow puts the follow-through up, as today
+    expect(poses).toEqual(['attack', 'follow']);
+    idleAtEnd(c, { setPose: (p: string) => poses.push(p) }, 'tidus' as never); // and actionEnd's idle is the immediate one
+    expect(poses).toEqual(['attack', 'follow', 'idle']);
+  });
+  it('the settle swap leaves a figure alone that has taken another painting since (a hurt, an idle another motion put up)', () => {
+    const live = { pose: 'idle', setPose: (p: string) => { live.pose = p; poses.push(p); } };
+    const c = ctx({ stage: { actor: () => live, paints: (_id: string, p: string) => p === 'follow' || p === 'ready' } });
+    const { marks } = marksOf(c);
+    marks.settlePeak();
+    expect(poses).toEqual([]);
+    marks.end();
+    expect(poses).toEqual([]);
   });
   it('with the new curves off nothing changes: the apex puts the impact painting up, the blow the follow-through, actionEnd the idle at once', () => {
     setCurvesMode('today');

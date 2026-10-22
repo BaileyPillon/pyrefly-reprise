@@ -58,6 +58,9 @@ export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: Lunge
   // the same frame and never be seen. It goes up on the strike's `travelPeak` mark instead (the fastest frame, where a swap is hidden best), and `reached` only marks the contact. Step 2: the
   // way out is a swap on a mark too: the impact painting is held through the blow and the 0.2 s hold, and goes to the follow-through (or the idle) on the `settlePeak` mark, the fastest frame home.
   if (curvesOn()) {
+    // FFX-2 (Chapter IV): a girl who has run in runs home herself, and `BattleScreenRunIn.close` puts the idle up as she sets off, before the strike's `settlePeak` (seen on the real 120 Hz
+    // recording: attack, idle, then a follow-through painted over the run home). Her follow-through stays at the blow, as in the live game; only the impact painting moves to its mark.
+    if (ctx.deps?.actionMotion?.lungeFor?.(actorId) !== undefined) return { hold: contact.hold, reached: contact.reached, impact };
     const token = ++armed;
     marksSwaps(ctx).set(actorId, { token, followed: false });
     return { hold: contact.hold, reached: contact.reached, impact, settle: () => settleSwap(ctx, actorId, token), done: () => settleDone(ctx, actorId, token) };
@@ -111,8 +114,9 @@ export const MARKS_NET_MS = 900;
 export function settleSwap(ctx: EventCtx, actorId: CombatantId, token?: number): void {
   const owed = marksSwaps(ctx).get(actorId);
   if (!owed || owed.followed || (token !== undefined && owed.token !== token)) return;
-  const actor = ctx.stage.actor(actorId);
-  if (odKeyHolds(ctx, actorId)) {
+  const actor = ctx.stage.actor(actorId) as { setPose(n: string): void; pose?: string } | undefined;
+  // not over a painting the figure has taken since (a hurt, an idle another motion put up): only the strike's own painting is swapped
+  if (odKeyHolds(ctx, actorId) || (actor?.pose !== undefined && actor.pose !== 'attack' && actor.pose !== 'ready')) {
     marksSwaps(ctx).delete(actorId);
     return;
   }
