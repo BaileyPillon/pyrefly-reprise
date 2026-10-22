@@ -1,0 +1,228 @@
+{
+ "steps": [
+  {
+   "k": "version",
+   "v": "0.1.0"
+  },
+  {
+   "k": "screen",
+   "v": "battle"
+  },
+  {
+   "k": "rigs",
+   "v": [
+    {
+     "s": "kimahri",
+     "on": false,
+     "r": "no rig listed in the art manifest",
+     "ids": []
+    },
+    {
+     "s": "mortiorchis",
+     "on": false,
+     "r": "no rig listed in the art manifest",
+     "ids": []
+    },
+    {
+     "s": "seymour-flux-body",
+     "on": false,
+     "r": "no rig listed in the art manifest",
+     "ids": []
+    },
+    {
+     "s": "tidus",
+     "on": false,
+     "r": "no rig listed in the art manifest",
+     "ids": []
+    },
+    {
+     "s": "yuna",
+     "on": false,
+     "r": "no rig listed in the art manifest",
+     "ids": []
+    }
+   ]
+  },
+  {
+   "k": "actors",
+   "v": [
+    "tidus:tidus:ready",
+    "yuna:yuna:idle",
+    "kimahri:kimahri:ko",
+    "seymour-flux:seymour-flux-body:idle",
+    "mortiorchis:mortiorchis:idle"
+   ]
+  },
+  {
+   "k": "audio",
+   "v": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":8,\"started\":8,\"current\":null,\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":15,\"decodedBytes\":5892488,\"pinned\":7,\"failed\":0,\"requests\":17},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":27243,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":36032,\"heard\":true,\"why\":\"ended\"},{\"id\":\"seymour-flux.pre.014\",\"at\":39415,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.017\",\"at\":44512,\"heard\":true,\"why\":\"ended\"},{\"id\":\"seymour-flux.pre.018\",\"at\":48509,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.019\",\"at\":50025,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.024\",\"at\":59142,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.026\",\"at\":62175,\"heard\":true,\"why\":\"stopped\"}]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"boss-seymour\",\"gain\":1},\"fading\":[],\"held\":[\"victory-ffx\",\"defeat-ffx\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\",\"ffx2-core\",\"ffx-lady\",\"ffx2-bahamut\",\"ffx2-machina\",\"ffx2-shuyin\",\"ffx-flux\",\"ffx-final-aeon\",\"ffx2-aeons\"],\"active\":[\"ffx-flux\",\"ffx-core\"],\"decoded\":[\"ffx-flux\",\"ffx-core\"]}},\"tracks\":[{\"name\":\"title\",\"about\":\"\\\"Tide, Remembered\\\" — "
+  },
+  {
+   "k": "ally.target",
+   "v": {
+    "actor": "tidus",
+    "wanted": "yuna",
+    "at": "yuna",
+    "ids": [
+     {
+      "id": "tidus",
+      "dim": true
+     },
+     {
+      "id": "yuna",
+      "dim": false
+     }
+    ]
+   }
+  },
+  {
+   "k": "ally.fx",
+   "v": [
+    "112:play:action-start:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "219:play:action-start:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "864:play:damage:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:4",
+    "969:play:damage:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:8",
+    "1076:play:damage:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:10",
+    "1770:play:action-end:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:66",
+    "1902:play:turn-start:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:77",
+    "2040:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:91",
+    "2154:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:105",
+    "2856:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:46",
+    "2965:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:37",
+    "3072:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:22",
+    "3185:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:13",
+    "3288:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:2",
+    "3395:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4098:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4208:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4320:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4423:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4532:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4636:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4752:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4871:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4976:command:yuna:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0"
+   ]
+  },
+  {
+   "k": "next actor",
+   "v": "yuna"
+  },
+  {
+   "k": "self.target",
+   "v": {
+    "actor": "yuna",
+    "wanted": "yuna",
+    "at": "yuna",
+    "ids": [
+     {
+      "id": "tidus",
+      "dim": true
+     },
+     {
+      "id": "yuna",
+      "dim": false
+     }
+    ]
+   }
+  },
+  {
+   "k": "self.fx",
+   "v": [
+    "105:play:action-start:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "231:play:action-start:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "910:play:damage:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:10",
+    "1026:play:damage:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:20",
+    "1139:play:damage:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:26",
+    "1985:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:103",
+    "2107:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:104",
+    "2225:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:87",
+    "2333:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:78",
+    "3009:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:14",
+    "3116:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:1:4",
+    "3225:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "3333:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "3440:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "3548:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4408:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4512:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4624:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4731:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4838:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "4945:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "5058:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "5162:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0",
+    "5270:command:tidus:{\"launched\":0,\"landed\":0,\"live\":0,\"lastLaunchAt\":0,\"lastLandAt\":0}:0:0"
+   ]
+  },
+  {
+   "k": "Esc ->",
+   "v": "pause"
+  },
+  {
+   "k": "H pressed: visible pause els",
+   "v": 11
+  },
+  {
+   "k": "H again: visible pause els",
+   "v": 78
+  },
+  {
+   "k": "Esc back ->",
+   "v": "battle"
+  },
+  {
+   "k": "P ->",
+   "v": "pause"
+  },
+  {
+   "k": "P back ->",
+   "v": "battle"
+  },
+  {
+   "k": "net audio",
+   "v": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-flux.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+    "https://echoesofspira.com/audio/music/boss-seymour.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.008.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.013.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.014.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.017.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.018.mp3"
+   ]
+  },
+  {
+   "k": "audioDebug after",
+   "v": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":8,\"started\":8,\"current\":null,\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":15,\"decodedBytes\":5892488,\"pinned\":7,\"failed\":0,\"requests\":17},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":27243,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":36032,\"heard\":true,\"why\":\"ended\"},{\"id\":\"seymour-flux.pre.014\",\"at\":39415,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.017\",\"at\":44512,\"heard\":true,\"why\":\"ended\"},{\"id\":\"seymour-flux.pre.018\",\"at\":48509,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.019\",\"at\":50025,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.024\",\"at\":59142,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.026\",\"at\":62175,\"heard\":true,\"why\":\"stopped\"}]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"boss-seymour\",\"gain\":0.005854636896401644},\"fading\":[{\"name\":\"pause\",\"gain\":0.017080478370189667}],\"held\":[\"victory-ffx\",\"defeat-ffx\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\",\"ffx2-core\",\"ffx-lady\",\"ffx2-bahamut\",\"ffx2-machina\",\"ffx2-shuyin\",\"ffx-flux\",\"ffx-final-aeon\",\"ffx2-aeons\"],\"active\":[\"ffx-flux\",\"ffx-core\"],\"decoded\":[\"ffx-flux\",\"ffx-core\"]}},\"tracks\":[{\"name\":\"title\",\"about\":\"\\\"Tide, Remembered\\\" — FAREWELL bars 1-8 only on solo piano, the phrase never finishing, with HYMN_HEAD on flute at the very top; a story that is already over, being told anyway. A minor, 58 bpm.\",\"cached\":false,\"source\":null},{\"name\":\"battle-ffx\",\"about\":\"\\\"H"
+  },
+  {
+   "k": "console",
+   "v": []
+  },
+  {
+   "k": "404",
+   "v": []
+  },
+  {
+   "k": "htmlImages",
+   "v": []
+  }
+ ],
+ "version": "0.1.0",
+ "audio": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":8,\"started\":8,\"current\":null,\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":15,\"decodedBytes\":5892488,\"pinned\":7,\"failed\":0,\"requests\":17},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":27243,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":36032,\"heard\":true,\"why\":\"ended\"},{\"id\":\"seymour-flux.pre.014\",\"at\":39415,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.017\",\"at\":44512,\"heard\":true,\"why\":\"ended\"},{\"id\":\"seymour-flux.pre.018\",\"at\":48509,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.019\",\"at\":50025,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.024\",\"at\":59142,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.026\",\"at\":62175,\"heard\":true,\"why\":\"stopped\"}]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"boss-seymour\",\"gain\":1},\"fading\":[],\"held\":[\"victory-ffx\",\"defeat-ffx\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\",\"ffx2-core\",\"ffx-lady\",\"ffx2-bahamut\",\"ffx2-machina\",\"ffx2-shuyin\",\"ffx-flux\",\"ffx-final-aeon\",\"ffx2-aeons\"],\"active\":[\"ffx-flux\",\"ffx-core\"],\"decoded\":[\"ffx-flux\",\"ffx-core\"]}},\"tracks\":[{\"name\":\"title\",\"about\":\"\\\"Tide, Remembered\\\" — ",
+ "consoleErrors": [],
+ "notFound": []
+}

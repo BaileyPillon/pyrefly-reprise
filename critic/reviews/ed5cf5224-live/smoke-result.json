@@ -1,0 +1,347 @@
+{
+ "mode": "gpu",
+ "url": "https://echoesofspira.com/?livesmoke=1792442487091",
+ "consoleErrors": [],
+ "notFound": [],
+ "badStatus": [],
+ "steps": [
+  {
+   "step": "boot: __pyreflyReady",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "boot: title screen",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "served bundle names IvYB9JEE",
+   "ok": true,
+   "detail": "https://echoesofspira.com/assets/index-IvYB9JEE.js"
+  },
+  {
+   "step": "title -> chapter-select (real Enter)",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "board lists seymour-flux",
+   "ok": true,
+   "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+  },
+  {
+   "step": "cursor on seymour-flux",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "seymour-flux: confirm -> party-prep",
+   "ok": true,
+   "detail": "screen=party-prep"
+  },
+  {
+   "step": "seymour-flux: prep + cutscene skip -> battle",
+   "ok": true,
+   "detail": "screen=battle"
+  },
+  {
+   "step": "seymour-flux: player turn reached",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "FFX battle screen is battle, FFX HUD present",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "command menu rows",
+   "ok": true,
+   "detail": "[\"Attack\",\"Special▸×4\",\"White Magic▸×3\",\"Items▸×27\",\"Flee\",\"Escape\"]"
+  },
+  {
+   "step": "White Magic submenu opened",
+   "ok": true,
+   "detail": "[\"Haste8MP\",\"Hastega30MP\",\"Slow12MP\"]"
+  },
+  {
+   "step": "cancel path: Escape returns to top command menu",
+   "ok": true,
+   "detail": "[\"Attack\",\"Special▸×4\",\"White Magic▸×3\",\"Items▸×27\",\"Flee\",\"Escape\"]"
+  },
+  {
+   "step": "Slow chosen, targeting up",
+   "ok": true,
+   "detail": "{\"ids\":[\"mortiorchis\"],\"mode\":\"single\",\"side\":null,\"accent\":\"enemy\"}"
+  },
+  {
+   "step": "final Slow target selection",
+   "ok": true,
+   "detail": "{\"ids\":[\"seymour-flux\"],\"mode\":\"single\",\"side\":null,\"accent\":\"enemy\"}"
+  },
+  {
+   "step": "Slow on Seymour Flux: engine says miss/immune",
+   "ok": true,
+   "detail": "[{\"type\":\"script-trigger\",\"name\":\"seymour-lance\",\"payload\":{\"script\":\"seymour-lance\"},\"seq\":8},{\"type\":\"turn-start\",\"actorId\":\"tidus\",\"turn\":2,\"elapsedTicks\":1,\"seq\":9},{\"type\":\"mp-damage\",\"targetId\":\"tidus\",\"amount\":12,\"sourceId\":\"tidus\",\"seq\":10},{\"type\":\"action-start\",\"actorId\":\"tidus\",\"command\":{\"kind\":\"ability\",\"id\":\"slow\",\"targets\":[\"seymour-flux\"]},\"abilityId\":\"slow\",\"abilityName\":\"Slow\",\"targets\":[\"seymour-flux\"],\"seq\":11},{\"type\":\"miss\",\"targetId\":\"seymour-flux\",\"sourceId\":\"tidus\",\"reason\":\"immune\",\"seq\":12},{\"type\":\"action-end\",\"actorId\":\"tidus\",\"seq\":13},{\"type\":\"turn-start\",\"actorId\":\"mortiorchis\",\"turn\":3,\"elapsedTicks\":0,\"seq\":14},{\"type\":\"action-start\",\"actorId\":\"mortiorchis\",\"command\":{\"kind\":\"ability\",\"id\":\"full-life\",\"targets\":[\"tidus\"]},\"abilityId\":\"full-life\",\"abilityName\":\"Full-Life\",\"targets\":[\"tidus\"],\"seq\":15},{\"type\":\"status-remove\",\"targetId\":\"tidus\",\"status\":\"zombie\",\"reason\":\"ko\",\"seq\":16},{\"type\":\"ko\",\"targetId\":\"tidus\",\"sourceId\":\"mortiorchis\",\"seq\":17},{\"type\":\"action-end\",\"actorId\":\"mortiorchis\",\"seq\":18},{\"type\":\"turn-start\",\"actorId\":\"kimahri\",\"turn\":4,\"elapsedTicks\":11,\"seq\":19}]"
+  },
+  {
+   "step": "Slow on Seymour Flux: HUD shows IMMUNE, not MISS",
+   "ok": true,
+   "detail": "IMMUNE=1 MISS=0 seen=[{\"text\":\"12\",\"cls\":\"dnum dnum--mp\"},{\"text\":\"IMMUNE\",\"cls\":\"dnum dnum--immune\"}]"
+  },
+  {
+   "step": "prerendered music requested (network)",
+   "ok": true,
+   "detail": "n=25 first=https://echoesofspira.com/audio/music/title.mp3"
+  },
+  {
+   "step": "P opens pause",
+   "ok": true,
+   "detail": "screen=pause"
+  },
+  {
+   "step": "H hides then restores pause panels",
+   "ok": true,
+   "detail": "before=block/bare=false hidden=none/bare=true after=block/bare=false"
+  },
+  {
+   "step": "MASTER VOLUME lowered with real ArrowLeft",
+   "ok": true,
+   "detail": "80 -> 60"
+  },
+  {
+   "step": "Escape closes pause (back to battle)",
+   "ok": true,
+   "detail": "screen=battle"
+  },
+  {
+   "step": "pre-reload save holds lowered masterVolume",
+   "ok": true,
+   "detail": "{\"masterVolume\":0.6}"
+  },
+  {
+   "step": "reload: re-boots; masterVolume survives",
+   "ok": true,
+   "detail": "{\"masterVolume\":0.6}"
+  },
+  {
+   "step": "reload: save progress keys preserved",
+   "ok": true,
+   "detail": "[\"version\",\"updatedAt\",\"chapters\",\"unlocked\",\"settings\",\"seenCoach\",\"flags\"]"
+  },
+  {
+   "step": "reload: title -> chapter-select",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "board snapshot after door word",
+   "ok": true,
+   "detail": "{\"chapter\":\"ffx2-valefor-besaid\",\"game\":\"ffx2\",\"tabs\":[\"chapter\",\"dresspheres\",\"stats\",\"accessories\",\"items\"],\"tab\":\"chapter\",\"member\":\"yuna\",\"outcome\":null,\"panelsRegistered\":5} screen=party-prep"
+  },
+  {
+   "step": "typed door word valefor opens ffx2-valefor-besaid (party prep)",
+   "ok": true,
+   "detail": "chapter=ffx2-valefor-besaid selected=undefined"
+  },
+  {
+   "step": "valefor-besaid: confirm -> party-prep",
+   "ok": true,
+   "detail": "screen=party-prep"
+  },
+  {
+   "step": "valefor-besaid: prep + cutscene skip -> battle",
+   "ok": true,
+   "detail": "screen=battle"
+  },
+  {
+   "step": "valefor-besaid: player turn reached",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "rigs: switch on",
+   "ok": true,
+   "detail": "{\"on\":true,\"reason\":\"default\"}"
+  },
+  {
+   "step": "rigs: valefor rig ON in the Besaid chapter",
+   "ok": true,
+   "detail": "{\"subject\":\"valefor\",\"on\":true,\"reason\":\"gate ok, 8 parts, 24 bones, 6 keys, 1x maps\",\"ids\":[\"x2-valefor\"],\"info\":{\"name\":\"valefor\",\"key\":\"idle\",\"keys\":[\"idle\",\"attack\",\"cast\",\"hurt\",\"ko\",\"overdrive\"],\"parts\":8,\"vertices\":2638,\"bones\":24,\"chains\":0,\"idle\":true,\"textures\":{\"map\":1,\"rim\":1},\"textureMB\":13.9}}"
+  },
+  {
+   "step": "FFX-2 HUD present",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "Besaid mid-fight (real keys): P opens pause, Escape resumes",
+   "ok": true,
+   "detail": "pauseScreen=pause backScreen=battle"
+  },
+  {
+   "step": "after 60s of real-key Attack turns, injected autoBattle(intended)+battle:fast to reach the KO (declared injection)",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "step": "screen at KO detection",
+   "ok": true,
+   "detail": "screen=battle pausedFlag=false"
+  },
+  {
+   "step": "Valefor fought with real keys through its KO",
+   "ok": true,
+   "detail": "turns=12 endScreen=null elapsed=97s"
+  },
+  {
+   "step": "state after KO",
+   "ok": true,
+   "detail": "{\"canPause\":true,\"paused\":false,\"exitIntent\":null,\"pauseStage\":false,\"pauseLabel\":null}"
+  },
+  {
+   "step": "screen 1.5s after KO",
+   "ok": true,
+   "detail": "screen=battle"
+  },
+  {
+   "step": "Besaid battle after KO (autoBattle injected): P pause + Escape resume",
+   "ok": false,
+   "detail": "on=true back=false screen=results"
+  },
+  {
+   "step": "prerendered music fetched",
+   "ok": true,
+   "detail": "n=39 https://echoesofspira.com/audio/music/title.mp3 | https://echoesofspira.com/audio/sfx/sprite.mp3 | https://echoesofspira.com/audio/sfx/sprite-v2.mp3 | https://echoesofspira.com/audio/music/chapter-select.mp3"
+  }
+ ],
+ "audio": [
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx-flux.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+  "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.008.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.013.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.014.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.017.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.018.mp3",
+  "https://echoesofspira.com/audio/music/boss-seymour.mp3",
+  "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+  "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.019.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.024.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.026.mp3",
+  "https://echoesofspira.com/audio/music/pause.mp3",
+  "https://echoesofspira.com/audio/music/boss-seymour.mp3",
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+  "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3",
+  "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3",
+  "https://echoesofspira.com/audio/music/victory-ffx2.mp3",
+  "https://echoesofspira.com/audio/music/defeat-ffx2.mp3",
+  "https://echoesofspira.com/audio/music/pause.mp3",
+  "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3",
+  "https://echoesofspira.com/audio/music/pause.mp3"
+ ],
+ "rigLogs": [
+  "[rig] tidus off (no rig listed in the art manifest)",
+  "[rig] yuna off (no rig listed in the art manifest)",
+  "[rig] seymour-flux-body off (no rig listed in the art manifest)",
+  "[rig] mortiorchis off (no rig listed in the art manifest)",
+  "[rig] kimahri on (gate ok, 15 parts, 32 bones, 13 keys, 1x maps)",
+  "[rig] yuna-white-mage off (no rig listed in the art manifest)",
+  "[rig] rikku-dark-knight off (no rig listed in the art manifest)",
+  "[rig] paine-warrior off (no rig listed in the art manifest)",
+  "[rig] valefor on (gate ok, 8 parts, 24 bones, 6 keys, 1x maps)"
+ ],
+ "numerals": [
+  {
+   "text": "12",
+   "cls": "dnum dnum--mp"
+  },
+  {
+   "text": "IMMUNE",
+   "cls": "dnum dnum--immune"
+  }
+ ],
+ "audioDebug": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":9,\"started\":9,\"current\":null,\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":15,\"decodedBytes\":5892488,\"pinned\":7,\"failed\":0,\"requests\":17},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":15236,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":19853,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.014\",\"at\":21252,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.017\",\"at\":24052,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.018\",\"at\":25436,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.019\",\"at\":26368,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.024\",\"at\":30534,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.026\",\"at\":32401,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.mid-first-zombie.002.fb1\",\"at\":49934,\"heard\":true,\"why\":\"stopped\"}]},\"sfxMix\":{\"option\":\"b\",\"trim\":1,\"busGain\":0.7},\"music\":{\"current\":{\"name\":\"boss-seymour\",\"gain\":1},\"fading\":[],\"held\":[\"victory-ffx\",\"defeat-ffx\"]},\"prerendered\":{\"manifest\":true,\"cues\":43,\"sprite\":true,\"spriteDecoded\":true,\"v2\":{\"cues\":92,\"decoded\":true,\"game\":\"ffx\",\"retired\":8},\"parity\":{\"packs\":[\"ffx-core\",\"ffx2-core\",\"ffx-lady\",\"ffx2-bahamut\",\"ffx2-machina\",\"ffx2-shuyin\",\"ffx-flux\",\"ffx-final-aeon\",\"ffx2-aeons\"],\"active\":[\"ffx-flux\",\"ffx-core\"],\"de",
+ "rigs": {
+  "switch": {
+   "on": true,
+   "reason": "default"
+  },
+  "figures": [
+   {
+    "subject": "paine-warrior",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "rikku-dark-knight",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "valefor",
+    "on": true,
+    "reason": "gate ok, 8 parts, 24 bones, 6 keys, 1x maps",
+    "ids": [
+     "x2-valefor"
+    ],
+    "info": {
+     "name": "valefor",
+     "key": "idle",
+     "keys": [
+      "idle",
+      "attack",
+      "cast",
+      "hurt",
+      "ko",
+      "overdrive"
+     ],
+     "parts": 8,
+     "vertices": 2638,
+     "bones": 24,
+     "chains": 0,
+     "idle": true,
+     "textures": {
+      "map": 1,
+      "rim": 1
+     },
+     "textureMB": 13.9
+    }
+   },
+   {
+    "subject": "yuna-white-mage",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   }
+  ]
+ },
+ "rigsAtKo": {
+  "subject": "valefor",
+  "on": true,
+  "reason": "gate ok, 8 parts, 24 bones, 6 keys, 1x maps",
+  "ids": [
+   "x2-valefor"
+  ]
+ },
+ "elapsedMin": 3.2
+}

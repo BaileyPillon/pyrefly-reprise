@@ -1,0 +1,231 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-19T06:47:00Z",
+  "build": {
+    "mainSha": "b24614c05",
+    "bundle": "Cokaxk4X",
+    "artifactHash": "6b3c6c9202d4ca746e2a96c894f17fabf9542b18a06fbe80f87e2faebf87cb81"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/b24614c05.json --url https://echoesofspira.com/ --changed-from critic/artifacts/4f4dc77bc.json --full --out critic/reviews/b24614c05-live/verify-live.json (about 36 min, 05:32Z to 06:08Z) -> {result: PASS, artifactHash: 6b3c6c9202d4ca746e2a96c894f17fabf9542b18a06fbe80f87e2faebf87cb81, liveManifest: match, checked: 5656, mismatched: [], missing: [], wrongType: [], errors: []}. The manifest lists 5657 files (10,830,753,655 bytes); _headers is read by Cloudflare and never served, so it is the one not downloaded; index.html as a browser asks for it is identical to the artifact once Cloudflare's Web Analytics beacon (366 bytes and the line feed after it) is cut out. Diff from r54 (4f4dc77bc): 352 added (235 voice recordings and manifests under audio/voice, 104 rig files for Kimahri and Lulu, 2 chapter-select cues, 11 bundle chunks), 5 removed (their predecessor bundle chunks), 4 changed (art/derived.json, art/manifest.json, audio/manifest.json, index.html); no painting moved. The manifest's two problems lines (art/portrait-parts/paine/1x and 2x eyeR-catch.png decode to a flat colour) are the intentionalFlatImages entries r53 and r54 carried. window.__pyrefly.build() read {sha: b24614c0, bundle: index-Cokaxk4X.js} in all 29 smoke contexts and the harness context. Across the 29 smoke contexts and the continuity harness context: 0 image or audio responses served as text/html, and 5 responses of status 404 with a 'Failed to load resource' console error each, all one kind: the voice manifest of a hidden FFX chapter that has no recordings (audio/voice/biran-yenke.json twice, audio/voice/sinspawn-gui.json three times; a probe of the other doors found exp-fayth.json and last-summoning.json the same, and mirror-aeons.json 200). Chapter I, Chapter III, FFX-2 Chapter IV, the Pilgrimage's first stop, the title and the 14 save runs read 0 console errors and 0 responses of 400 or more.",
+      "reason": "Every compared file is byte-identical to the stored manifest with the right content type and the live manifest names this artifact; the live smoke matches the artifact's intended behaviour. The zero-console-error and zero-4xx line of CHK-017's smoke has ONE exception, LV55-1 (a handled 404 for a voice manifest that does not exist, in four hidden FFX chapters), disclosed as a minor issue in the way LIVE-R34-01's stray 404 was; it does not change what is deployed."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright launched from node scripts with PYREFLY_BROWSER=gpu (ANGLE, D3D11; never SwiftShader, never the Chrome extension or the browser pane, no headed window), a fresh browser context per run (cold HTTP cache, empty storage unless a save fixture was seeded on purpose), a ?livesmoke=<ms> cache-busting URL, 1600x900 and 390x844 (touch), real key presses, a real mouse click, real touch taps and, for the continuity harness, critic/runner/lib/continuity.mjs (real keys from the title to the fight's end, GPU). Every state was asserted before it was read: screen name via window.__pyrefly.screen(), pending menu actor, the menu rows with their greyed flags and reason text, the help line, the picker rows (.ffx-mg-list__row with --selected and --disabled), the build tag, the CHANGELOG panel, the title's data-title-art and HTML wordmark count, the pause snapshot (tab, row, presentation page), the voice director's own block (window.__pyrefly.audioDebug().voice: enabled, contextState, asked, started, plays with heard and why), rigs() and poseTrust(). Runs (29 smoke contexts, 229 steps, 0 failed in the final runs): title and CHANGELOG and The Echo and VOICE-OVER on Chapter I x2 (desktop, phone); Kimahri in Biran and Yenke (door gagazet) x2; Lulu in Sinspawn Gui (door mushroom) x2; the Pilgrimage (door pilgrim) x2; FFX Chapter III picker and menus x2 and the second link x3 (desktop, desktop with the aeons stood up, phone with the aeons stood up); 14 older-save fixtures (12 repo fixtures on desktop, 2 on the phone); FFX-2 Chapter IV (Bahamut) x2 as a regression smoke; plus the continuity harness on Sinspawn Gui. Debug API use: build(), screen(), audioDebug(), rigs(), poseTrust(), targeting(), battleState() (read; edited only where the disclosed shortcuts say), battleLog(), snapshotState(), setBattleSpeed('skip') and autoBattle('intended') for the Chapter III second-link route (disclosed). Evidence: critic/reviews/b24614c05-live/ (run/ result JSONs and logs, summary.json, frames as .json.gz, screenshots as JPEG; scripts/; continuity/; verify-live.json and .log; run/superseded/ holds the runs whose pass test or helper was the harness's mistake).",
+      "reason": "Every reading names the screen, chapter and menu it was taken on. My first desktop title run failed on my own helper (the pause needs two Escapes to resume from a page), the first phone title run failed to close the changelog by tapping the scrim's centre (under the panel; the CLOSE button is the tap target), the first Chapter III walks failed on a Summon-list confirm that landed on Shiva because the keys' cursor skips a greyed row (a real click is what lands on one) and on the Overdrive row being the Grand Summon command itself, and one FFX-2 phone run failed a 'menu closed' check because an ATB's next actor's menu opened at once; all are kept in run/superseded/ and the final runs are the evidence."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "tests/fixtures/saves release-20, 25-main, 28-main, 29, 30, 30-sfx-b, 31a, 31a-sfx-b, 33, 34, 35 and 37.1 (each exported from that build's own localStorage) seeded once before boot in a fresh context of the live site at 1600x900, and release-20 and release-37.1 at 390x844 (touch), then the title, the board by real Enter presses and a reload (critic/reviews/b24614c05-live/scripts/save.mjs, run/save-fixtures-*-result.json): each loads on the live build, every cleared chapter is cleared on the board, every chapter record, unlock, coach flag, flag and old setting equals the file (the one-time D-293 SFX migration is by design), version stays 1, the four 39.5 settings read voiceOn true, voiceVolume 0.9, titleArt farplane, chapterSelectMusic b in the running game, the stored blob is not rewritten until the next save, a reload reaches the title with chapters and settings equal; 0 console errors and 0 responses of 400 or more in the 14 contexts. The live save key of every other run stayed well-formed (version 1, seven keys) and never lost a key; the title run switched VOICE-OVER and TITLE SCREEN in the pause and both choices persisted through a reload and back.",
+      "reason": "A smaller matrix than the deep review's (no garbage, truncated or blocked storage, no second tab on the live build); it is the live build loading real older saves."
+    },
+    {
+      "id": "CHK-026",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "node critic/runner/lib/continuity.mjs --base=https://echoesofspira.com/ --evidence=critic/reviews/b24614c05-live/continuity --chapters=sinspawn-gui --tag=live-r55: Sinspawn Gui won by real keys from the title (93 turns, 382.7 s of battle, GPU, 1600x900, seed 1), 464 swaps judged: maximum head jump 14.7 percent by mass for 158 silhouette-read swaps (tolerance 30), 0.2 percent by registration for 306 registered swaps (tolerance 3; a control), stature 0.783 to 1.065 with 0 swaps out of band, feet from the pixels 0 over (worst 3 px), feet by registration worst 0.7 px, 0 swaps unregistered. Scope: this chapter only. The painted figures are measured (Tidus, Auron, Yuna, Seymour, Gui and its parts); Lulu, who is a rig here and acted 16 times, has no entry among the 9 figures the harness recorded swaps for, so her rig is outside this probe.",
+      "reason": "PASS for Sinspawn Gui on the live artifact, as on the candidate (15.4 percent, 0 over) and on live r54 (14.7 percent, 0 over); the other chapters' CHK-026 readings are the deep review's."
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "mandatory": false,
+      "evidence": "The same run: 52 swap jerks counted, 3 of 40 px or more in one frame at a pose swap (worst 195.5 px, Auron's feet at 356.6 s on a 232 ms frame; 2 of the 3 on steady frames), 0 double images of severity 0.4 or more (worst 0.345), 8 mid-move dashes of 40 px or more reported, not gated (worst 48.5 px), 0 snaps and 0 teleports; frame time 59.8 fps, p99 23.8 ms, 34 of 22,879 frames over 34 ms (0.1 percent), the longest 1079.9 ms. Candidate (round 26): 51 swap jerks, 3 of 40 px or more (worst 194.4 px), p99 23.3 ms. Live r54: 63 swap jerks, 6 of 40 px or more (worst 151 px), p99 24.8 ms.",
+      "reason": "FAIL on measured evidence, the same condition the candidate and live r54 read in this chapter (the disclosed continuity majors, PR-0380 and PR-0459); not a regression (3 against r54's 6); the rig is outside the probe so this reads the painted figures only."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact: 5656 downloadable files of the 5657-file manifest byte-compared with the live site (--full), content types, live manifest match, index.html with and without the Web Analytics beacon",
+      "title screen, desktop and phone: build number Release 55 · b24614c0, the CHANGELOG panel (key L; a tap on the CHANGELOG entry on the phone) with Release 55 first and its six lines, closing it; pause > OPTIONS > PRESENTATION > TITLE SCREEN to THE ECHO, resume, reload: The Echo plate with no HTML lettering (0 .fe-title__name; the picture carries its own lettering), then set back to FARPLANE and reloaded (the HTML lettering back)",
+      "FFX voice-over in Chapter I, desktop and phone: the opening scene asked for, started and finished 8 recorded lines (seymour-flux.pre.008, 013, 014, 017, 018, 019, 024, 026; Tidus, Yuna, Auron) on a running AudioContext, every plays entry heard true and ended; VOICE-OVER switched OFF in the pause (saved setting false, director enabled false), then the same opening scene asked 0 and started 0 lines; set back ON",
+      "rigs: Kimahri in the hidden Biran and Yenke chapter (door gagazet) and Lulu in Sinspawn Gui (door mushroom), desktop (real keys) and phone (real taps): rigs() reports on ('gate ok, 15 parts, 32 bones, 13 keys, 1x maps' and 'gate ok, 11 parts, 25 bones, 13 keys, 1x maps'), 3 real turns of Kimahri, 6 turns with 2 of Lulu's each, still a rig after the turns, poseTrust() empty before and after",
+      "the Pilgrimage, desktop and phone: the typed word pilgrim (the phone: a long press on the Chapter select label, then the word field), the road with six stops, one START and one Elite, Begin, the first stop's Party Prep with the RUN tab first and 'No boon for this fight'; the Pilgrimage's own storage keys, nothing of the run in the save",
+      "FFX Chapter III, desktop and phone: Flee/Escape greyed with no reason text; one-entry and multi-entry openers' help ('Open the Special menu.', White Magic, Items, Summon); link 1's Summon list with all five aeons live; with Valefor knocked out (edit) the Summon list draws it greyed, a click or tap and Enter on it resolve nothing; the Grand Summon picker greys Valefor, opens on Ifrit, Enter on the greyed entry does nothing, Esc backs out with the gauge kept, Enter on the live entry summons it; the second link's Summon list has no Valefor (and with the aeons stood up (edit) shows Ifrit, Ixion, Shiva, Bahamut live); on the phone a tap on a picker row does nothing",
+      "14 older-save fixtures on the live build (12 desktop, 2 phone), each with the title, the board and a reload",
+      "FFX-2 Chapter IV (Bahamut) cold loads, hurried opening, 3 real-key turns (desktop) and 3 turns (2 tapped) on the phone, 0 voice requests, as a regression smoke; poseTrust() empty before and after",
+      "poseTrust() empty (withheld [] and unregistered []) in all 13 battle contexts (at the first menu in all 13, and again after the turns or the run in 11)",
+      "the continuity harness on Sinspawn Gui on the live artifact: won by real keys, CHK-026 PASS, CHK-027 FAIL (3 swap jerks of 40 px or more, worst 195.5 px); a probe of the five hidden doors' voice manifests (LV55-1)"
+    ],
+    "reused": [
+      {
+        "what": "code-level findings of the changed area and the disclosed majors (PR-0380, PR-0379, PR-0459, PR-0460, PR-0295, PR-0148, PR-0099, PR-0461, PR-0421, PR-0467), the candidate's continuity numbers for the other chapters, the save-class matrix on the candidate (garbage, truncated and blocked storage, two tabs)",
+        "from": "critic/rounds/round-26.json",
+        "why": "the deep review ran on the production candidate; this review proved the live artifact byte-identical to its manifest (the bundle differs from the candidate's only by the release stamp)"
+      }
+    ],
+    "notTested": [
+      "the sound of any voice recording, the Echo's chapter-select tracks A and C, and the Fish takes' mix (agents cannot hear); mid-battle and victory voice lines and the VOICE level slider; voice in any chapter but Chapter I",
+      "a Chapter III aeon knocked out by play (the knock-out is an edit), the third to seventh links' rosters (PR-0460's links 3 to 6), and the Last Summoning's menus beyond party prep; a full Chapter III fight to a win by real keys on the live artifact (continuity harness not run on it)",
+      "the Pilgrimage beyond the first stop's Party Prep: its fights, the boon pick, the road's second stop, the run-over page and Again; the rigs' motion beyond three to six real turns, and Auron's rig (not in this build)",
+      "the continuity harness on any chapter but Sinspawn Gui (Biran and Yenke, Chapter I, Chapter III, the FFX-2 chapters); the rig's own motion (outside the probe)",
+      "whether the phone's Grand Summon picker can be backed out by the PAUSE button or a system back gesture (a tap on a row does nothing, and I saw no on-screen back control)",
+      "any FFX-2 chapter beyond Chapter IV; sizes other than 1600x900 and 390x844; the cold-load time (critic/runner/lib/coldload.mjs was not run); the gamepad; Firefox, Safari, a real phone; a quiet machine (total CPU read 44 to 46 percent during the harness run; the smoke runs overlapped the --full download)",
+      "the save class beyond the 14 fixtures (garbage, truncated or blocked storage, a second tab, reset) on the live build"
+    ]
+  },
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "run": "node critic/runner/lib/continuity.mjs --base=https://echoesofspira.com/ --evidence=critic/reviews/b24614c05-live/continuity --chapters=sinspawn-gui --tag=live-r55",
+    "chapter": {
+      "chapter": "sinspawn-gui",
+      "game": "ffx",
+      "checks": {
+        "CHK-026": "PASS",
+        "CHK-027": "FAIL"
+      },
+      "battleSeconds": 382.7,
+      "swaps": 567,
+      "snapsPerMinute": 0,
+      "maxHeadJumpPct": 14.7,
+      "maxFeetShiftPx": 0.7,
+      "worstJerkPx": 195.5,
+      "minStature": 0.783,
+      "heightOverBand": 0,
+      "feetSilOver": 0,
+      "swapJerksWorstPx": 195.5,
+      "dashesWorstPx": 48.5,
+      "frameP99Ms": 23.8,
+      "jerksCovered": 0,
+      "fps": 59.8,
+      "dedicated": true,
+      "strips": 20,
+      "worstSwapStrips": [
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-535-yuna-hurt-critical.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-030-sinspawn-gui-arm-left-hurt-ko.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-092-tidus-ready-attack.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-122-tidus-attack-follow.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-408-tidus-attack-critical.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-487-yuna-hurt-idle.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-558-yuna-idle-hurt.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-059-sinspawn-gui-arm-right-hurt-ko.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-435-tidus-follow-critical.jpg",
+        "sinspawn-gui-win-live-r55/continuity/strips/swap-439-tidus-critical-victory.jpg"
+      ],
+      "unverified": null
+    },
+    "size": {
+      "judged": 464,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 103,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "headMeasured": 464,
+      "headRegistration": 306,
+      "headSilhouette": 158,
+      "headUnmeasured": 0,
+      "maxHeadJumpPct": 14.7,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 0,
+      "feetMeasured": 462,
+      "maxFeetShiftPx": 0.7,
+      "feetOverTolerance": 0,
+      "heightMeasured": 464,
+      "heightOverBand": 0,
+      "heightWaived": 1,
+      "minStature": 0.783,
+      "maxStature": 1.065,
+      "koLengthMeasured": 0,
+      "minKoLength": null,
+      "koLengthReported": 0,
+      "feetSilMeasured": 462,
+      "feetSilOver": 0,
+      "feetSilWaived": 0,
+      "maxFeetSilPx": 3,
+      "holdSwaps": 306,
+      "worstRealHeadPct": 38.1,
+      "realHeadOutsideBand": 0,
+      "realHeadWaived": 0,
+      "unregisteredSwaps": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "snapsByToPose": {},
+      "lowestIou": 0.128,
+      "maxCentroidShiftPx": 128.5,
+      "ghostSwaps": 412,
+      "ghostFrames": 1648,
+      "worstGhostSeverity": 0.345,
+      "ghostOverFail": 0,
+      "jerks": 60,
+      "jerksMidMove": 8,
+      "worstJerkPx": 195.5,
+      "jerksOverFail": 11,
+      "swapJerks": 52,
+      "swapJerksWorstPx": 195.5,
+      "swapJerksOverFail": 3,
+      "teleports": 0,
+      "teleportsWorstPx": 0,
+      "dashes": 8,
+      "dashesWorstPx": 48.5,
+      "dashesOverFail": 8,
+      "jerksLongFrame": 3,
+      "swapJerksLongFrame": 1,
+      "swapJerksSteadyOverFail": 2,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 0,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0
+    },
+    "frameTime": {
+      "frames": 22879,
+      "longFrames": 34,
+      "longFramePct": 0.1,
+      "worstP99Ms": 23.8,
+      "maxMs": 1079.9,
+      "longMs": 34
+    },
+    "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 382.7 s of battle, 59.8 to 59.8 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (3 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 195.5 px))"
+  },
+  "issues": [
+    {
+      "id": "LV55-1",
+      "severity": "minor",
+      "category": "delivery",
+      "title": "Four hidden FFX chapters ask the host for a voice manifest that does not exist: a 404 and a console error each time one starts",
+      "detail": "voice.beginChapter fetches audio/voice/<chapter>.json for every FFX chapter; the 12 board chapters have one (200), the hidden biran-yenke (word gagazet), sinspawn-gui (mushroom), exp-fayth (fayth) and last-summoning (summon) do not, and Cloudflare answers 404 (the browser logs 'Failed to load resource ... 404'). The miss is handled (the chapter plays text-only, nothing a player sees changes). Seen live in 4 smoke contexts and the harness context, and by a probe of all five doors. A local server that answers an unknown path with index.html would read 200 and hide it, which is what CHK-017 exists for.",
+      "status": "open",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": true,
+      "game": "FFX only (the voice is FFX only; FFX-2 asks for nothing: 0 voice requests in the Bahamut runs)",
+      "suggestion": "have the director consult the chapter list already in audio/voice/index.json before asking, or ship empty manifests for the four hidden chapters; not applied (a live review changes nothing)"
+    }
+  ],
+  "disclosedShortcuts": [
+    "Chapter III edits through battleState(): Yuna's Overdrive gauge set to 100 before her menu is built; Valefor's HP set to 0 with a recovery count of 3 (a natural knock-out needs a long fight); in the second-link run with --heal, Ifrit, Ixion, Shiva and Bahamut set to full HP with no recovery count so the roster removal can be told from the knocked-out rule (the unedited second-link run is kept beside it)",
+    "Chapter III second link: the debug autopilot (setBattleSpeed skip + autoBattle intended) from the first menu to the second link (about 26 to 30 s); from there real keys or taps",
+    "the phone's door word: a long press with the mouse held 900 ms on the Chapter select label (a held pointer, not a finger) and the word typed in the field; the phone's title entry, board and opening scenes are key presses on the touch context (as r54's phone runs were); the phone's CHANGELOG, pause, OPTIONS, PRESENTATION and Chapter III rows are real taps",
+    "the Grand Summon picker is keys on both viewports (its watcher reads keys and pad buttons, never a tap); the one phone tap run is recorded, not relied on"
+  ],
+  "consoleErrors": 5,
+  "notFound": 5,
+  "elapsedMinutes": 75,
+  "notes": "Deployment PASS with one minor finding. LV55-1: four hidden FFX chapters (Biran and Yenke, Sinspawn Gui, the fayth chapter, the Last Summoning) 404 on audio/voice/<chapter>.json and log a console error each (5 times in this review); handled, nothing visible; r55's voice plumbing. Everything under test works live at 1600x900 and 390x844: the build number and the CHANGELOG panel, The Echo and its set-back, the voice-over by the director's own log (8 lines started in Chapter I, 0 with VOICE-OVER OFF), both rigs drawn and played, the Pilgrimage's road to the first stop's RUN tab, Chapter III's greyed Summon row and Grand Summon picker for a knocked-out aeon and the second link's roster without Valefor, 14 older saves loading with the four defaults, FFX-2 Chapter IV unchanged. Continuity on Sinspawn Gui (rig on): CHK-026 PASS, CHK-027 FAIL with 3 swap jerks of 40 px or more (worst 195.5 px on a 232 ms frame), the candidate's and live r54's condition (3 and 6); Lulu's rig is outside the probe. Observations: LV55-2 a tap on a Grand Summon picker row does nothing on the phone (keys and pad only; pre-existing, not r55's); LV55-3 PR-0460 reads live as the review described when the aeons fell in link 1 (all four rows greyed with recovery counts), and as a clean roster when they stand; LV55-4 Yuna's Overdrive row reads 'Timed input' (it is the Grand Summon command itself). The marker's deep and focused obligations stay owed; this pass settles only live."
+}

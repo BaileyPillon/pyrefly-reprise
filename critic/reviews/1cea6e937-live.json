@@ -1,0 +1,91 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-20T21:50:00.000Z",
+  "build": {
+    "mainSha": "1cea6e937",
+    "bundle": "DwCdr0nf",
+    "artifactHash": "b436c6d54de8096ea2e94675325c8d5fa02a9696fac30420d1ff7b332c0a09d3"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/1cea6e937.json --url https://echoesofspira.com/ --changed-from critic/artifacts/6db09ac86.json --full: result PASS, liveManifest match, 6160 files checked (manifest lists 6161; _headers is host-read and not served), 0 mismatched, 0 missing, 0 wrongType, 0 errors; index.html identical once the Web Analytics beacon is cut; the served script is index-DwCdr0nf.js. Zero responses >= 400 and zero image responses with content-type text/html across three real-browser runs.",
+      "reason": "Full compare run because the planned review is deep.",
+      "game": "both",
+      "environment": "headless Chromium, PYREFLY_BROWSER=gpu (real GPU, no black canvas), 1600x900, fresh contexts, ?livesmoke=<ts> cache-buster",
+      "automated": true
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Every capture was preceded by an assertion on the screen name and board state through window.__pyrefly: title, chapter-select (cursor on the intended chapter id), party-prep, battle with awaitingMenu. Chapter I (FFX, seymour-flux, ?demo=1): lookStats look=hd2d strength=bold room=gagazet, relight bound 10 / loaded 6 / missing 0, seed 7, rigs() seymour-flux-body on; first Attack opened targeting().selectedIds=['seymour-flux'] and the HUD read TARGET Seymour Flux (shots/04-ch1-attack-cursor.png); Escape returned to the command menu; the second Attack confirmed and the battle kept running. Chapter IV (FFX-2, ffx2-bahamut, ?demo=1): look hd2d bold room bevelle-underground, relight bound 8 / loaded 5 / missing 0, seed 56, rigs() ffx2-bahamut on; Item > Potion > target Yuna, Escape back to the item list (cancel path), then confirm: the POTION tag, a bright burst on Yuna and the light on the floor (shots/13-ch4-potion-f0.png). Yunalesca (a different FFX chapter): look null, no relight, no passes, as r59. Escape and P opened the pause and Escape resumed it, H hid and restored the pause panels (block, none/bare, block).",
+      "reason": "",
+      "game": "both",
+      "environment": "headless Chromium gpu mode, real key presses and clicks only",
+      "automated": true
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke: MASTER VOLUME lowered 80 to 60 with real ArrowLeft presses in the pause OPTIONS tab and the first Attack played; after a page reload the page re-booted and the save key pyrefly-reprise:save:v1 held settings.masterVolume 0.6 both before and after (the whole save JSON was byte-identical before and after the reload), and the title returned to chapter select with a real Enter.",
+      "reason": "",
+      "environment": "headless Chromium gpu mode",
+      "automated": true
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 146,
+      "paintings": 1106,
+      "pass": 829,
+      "waived": 79,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": { "idle": 146, "standing": 565, "ko": 90, "low": 71, "wide": 4, "staged": 176, "part": 54 },
+      "byGame": { "FFX-2": 777, "FFX": 307, "FF7": 22 },
+      "byRowStatus": { "ok": 746, "held": 83, "waived": 79, "none": 198 },
+      "note": "Data, not a verdict. File: critic/reviews/1cea6e937-live/static/pose-census.json"
+    }
+  },
+  "coverage": {
+    "tested": [
+      "Exact artifact: full manifest compare against the live origin (6160 files)",
+      "Chapter I (FFX) with ?demo=1 by real keys: title, chapter select, party prep, battle, first menu, seed 7, HD-2D bold look on, Seymour Flux rig on, first Attack cursor on Seymour Flux, cancel, confirm",
+      "Chapter IV (FFX-2) with ?demo=1 by real keys: first menu, seed 56, look on, Bahamut rig on, Item > Potion, cancel, confirm, white-blue spark with the POTION tag on Yuna",
+      "Yunalesca (FFX) shows no look, as r59",
+      "Pause: Escape and P open it, Escape resumes, H hides and restores the panels; a setting changed by real keys",
+      "Reload: setting and save survive",
+      "Prerendered music fetched over the network (title.mp3, sfx/sprite.mp3: 27 to 29 audio requests per run); the audio debug surface returned nothing, so playing versus procedural fallback is inferred from the fetches",
+      "Console errors and 404s counted over every run: 0 and 0",
+      "Pose census (static)"
+    ],
+    "reused": [],
+    "notTested": [
+      "The full save-upgrade matrix of CHK-024 (previous-build save migrating forward, truncated storage, reset flow); only the lightweight reload smoke ran",
+      "Chapters other than I, IV and Yunalesca on the live build; no full five-chapter playthrough or victory run",
+      "Cold-load timing (coldload.mjs)",
+      "Touch and phone layout; the look is tuned for 16:9 and was seen at 1600x900 only",
+      "Subjective quality of the look, the motion and the rigs: not judged by this review (a deep review of the presenter and renderer is still owed)",
+      "The battle-start 0.8 s frame gap in Chapter I that the changelog discloses was not measured",
+      "Audio by ear"
+    ],
+    "requiredNotTested": []
+  },
+  "observations": [
+    "Chapter I opens with a tutorial guide card in a fresh profile (Auron, 3 of 3, 'ESC skip the guide'). The first Escape pressed while it is up opened the pause screen (battle, guide still up, then pause, then battle with no guide after the second Escape). It may be intended, since Escape is also the pause key; recorded as an observation, not an issue, and not caused by this release as far as is known."
+  ],
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 52
+}

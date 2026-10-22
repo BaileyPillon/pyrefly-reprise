@@ -1,0 +1,727 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-18T07:10:40.175Z",
+ "build": {
+  "mainSha": "9c91a8c3a"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect and no regression at critical or major severity against live r52; the one major (FOC53-001, CHK-027 swap jerks) is on live too (introducedByCandidate false, regressionVsLive false) and is 1.5 to 8 times rarer here.",
+  "CHK-026 flips FAIL to PASS in live-vs-candidate runs of Sinspawn Gui and Seymour Flux, and holds PASS in Ixion/Djose, Dark Aeons and Bahamut at 1600x900 and in two chapters at 390x844; poseTrust withheld and unregistered are empty (Ch 28).",
+  "Chapter IV (cold load, real keys) opens fitted and is won; Gui (FOC52-003) now routes by its door word and is won; the Ch 28 target caption no longer overlaps the CTB strip (FOC52-002); no console errors or 4xx on any run."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Chapter IV first menu, card and Ch 28 target select at 1600x900 and the 390x844 first menu own the window; no stage-sized overlay.",
+   "where": "both; FFX-2 Ch IV, FFX Ch 28",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/route/ffx2-bahamut-win-r53/10-first-menu-coach.png",
+    "critic/reviews/9c91a8c3a-focused/cardhold/ffx2-bahamut-390x844-c-menu.jpg",
+    "critic/reviews/9c91a8c3a-focused/ch28-target-select.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-003",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-007",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-009",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-010",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-012",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "reason": "Pose census 1106 paintings: 829 pass / 79 waived / 198 exempt / 0 fail; approved and judge-locked hashes on this tree 916 ok, 0 mismatched, 0 missing (ROOT=M:/pyrefly-ch-angra-mainyu).",
+   "where": "both; static",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/static/pose-census.json",
+    "critic/reviews/9c91a8c3a-focused/static/verify-approved.txt"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Seed pinned to 1 by the labelled setup hook on every route and harness run; run.json records the engine seed.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/route/ffx2-bahamut-win-r53/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserted its screen first (route.mjs want and assertScreen; cardhold.mjs reads the screen); no failed wait was photographed.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/route/index.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Live verification of the exact artifact is a separate obligation after the deploy.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-018",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-019",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised in this focused pass beyond what the routes below incidentally showed; left to the deep review on the live build.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Shared plumbing (frame clocks, opening gate, lunge, pose rule) was run in FFX (Seymour Flux, Dark Aeons, Sinspawn Gui) and FFX-2 (Ixion/Djose, Bahamut, Fallen Aeons); both play to a result.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Presence and absence by game. BOTH: pose rule, lunge, animation clock, opening gate (measured in FFX Ch I, Gui, Dark Aeons and FFX-2 Ch IV, XVI). FFX-2 ONLY: Garment Grid statuses: tests parity-ffx2-grid-status-engine, -plates and ffx2-grid-status-measure pass; the FFX routes show nothing of that kind and play unchanged in outcome. The Ch XI buff itself was not reached by real keys (the route changes Yuna white-mage to warrior with no gate crossed).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/vitest-targeted.log",
+    "critic/reviews/9c91a8c3a-focused/route/ffx2-fallen-aeons-win-r53/battle-log.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "tsc --noEmit clean; 9 targeted vitest files 192 passed, 1 skipped; orphans 24 (voice presets, sprites, ui: existing classes).",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/vitest-targeted.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-023",
+   "result": "UNVERIFIED",
+   "reason": "The Garment Grid and minigame values were not re-derived from research/ here; the lane tests that pin them to the checked notes pass. Reused, not re-audited.",
+   "where": "FFX-2",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/vitest-targeted.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "reason": "Continuity harness, candidate vs live r52: Gui and Seymour Flux FAIL live (head over tolerance 279 and 101, height out of band 102 and 55) and PASS here (0 and 0); Ixion/Djose, Dark Aeons, Bahamut PASS; five chapters at 1600x900 PASS (min stature 0.752, feet worst 0.9 px), two at 390x844 PASS. Sinspawn Gui is now measured (r52 UNVERIFIED).",
+   "where": "both; FFX Ch I, Gui, Dark Aeons; FFX-2 Ch IV, XVI",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/continuity/continuity-summary.json",
+    "critic/reviews/9c91a8c3a-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/9c91a8c3a-focused/continuity-phone/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 70,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Swap jerks of 40 px or more still occur in all five chapters but fewer per minute than live: Ixion/Djose 3.86 to 1.23, Dark Aeons 3.77 to 1.92, Bahamut 4.84 to 0.56 (r52 baseline), Gui 1.66 to 0.96 and Seymour Flux 1.62 to 1.08 (live run today); worst swap jerk 177.8 to 141.3 px. Seven swaps now show a double image of severity 0.401 to 0.413 where live had none over 0.4 (worst 0.379). Phone: 2 jerks, worst 96.3 px.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/continuity/continuity-summary.json",
+    "critic/reviews/9c91a8c3a-focused/continuity/seymour-flux-win-9c91a8c3a/continuity/strips/ghost-315-yuna-idle-hurt.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 70,
+   "artifact": "9c91a8c3a dist-release",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate M:/pyrefly-ch-angra-mainyu 9c91a8c3a, fresh dist-release built 01:26 (vite build, 4m52s), vite preview 127.0.0.1:5421 (/pyrefly-reprise/); headless Playwright Chromium, PYREFLY_BROWSER=gpu"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ffx2-ixion-djose",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 146,
+    "swaps": 240,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 18.8,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 70.7,
+    "minStature": 0.876,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 70.7,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 29.4,
+    "jerksCovered": 0,
+    "fps": 59.6,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-165-yuna-attack-follow.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-035-yuna-ready-attack.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-128-rikku-critical-cast.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-147-rikku-cast-critical.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-067-paine-ready-critical.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-240-paine-critical-victory.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-140-yuna-idle-item.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-095-rikku-hurt-cast.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-178-rikku-cast-hurt.jpg",
+     "ffx2-ixion-djose-win-9c91a8c3a/continuity/strips/swap-042-rikku-idle-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "mirror-aeons",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1092.4,
+    "swaps": 1040,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 7.9,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 127.7,
+    "minStature": 0.752,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 127.7,
+    "dashesWorstPx": 91.9,
+    "frameP99Ms": 137,
+    "jerksCovered": 0,
+    "fps": 51.4,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-078-lulu-idle-ko.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-303-yuna-hurt-ko.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-299-lulu-ko-critical.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-534-dark-sandy-hurt-ko.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-566-tidus-ko-critical.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-263-yuna-hurt-critical.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-306-tidus-attack-item.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-1041-yuna-critical-hurt.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-385-lulu-hurt-ko.jpg",
+     "mirror-aeons-win-9c91a8c3a/continuity/strips/swap-326-yuna-item-critical.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "sinspawn-gui",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 437.1,
+    "swaps": 664,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 14.7,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 141.3,
+    "minStature": 0.752,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 141.3,
+    "dashesWorstPx": 48.5,
+    "frameP99Ms": 163.1,
+    "jerksCovered": 0,
+    "fps": 49.9,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-226-lulu-idle-ko.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-230-lulu-ko-critical.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-637-yuna-hurt-critical.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-038-sinspawn-gui-arm-left-hurt-ko.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-152-tidus-ready-attack.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-116-tidus-attack-follow.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-536-tidus-follow-attack.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-538-tidus-attack-critical.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-589-yuna-hurt-idle.jpg",
+     "sinspawn-gui-win-9c91a8c3a/continuity/strips/swap-612-yuna-idle-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 387.3,
+    "swaps": 345,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 77.2,
+    "minStature": 0.782,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 77.2,
+    "dashesWorstPx": 36.4,
+    "frameP99Ms": 58.4,
+    "jerksCovered": 0,
+    "fps": 55.2,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-007-kimahri-idle-ko.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-003-kimahri-hurt-idle.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-024-yuna-hurt-critical.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-023-yuna-critical-hurt.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-027-kimahri-idle-ready.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-071-kimahri-ready-idle.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-013-yuna-ready-item.jpg",
+     "seymour-flux-win-9c91a8c3a/continuity/strips/swap-191-yuna-idle-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 320.2,
+    "swaps": 395,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 9.4,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 57.3,
+    "minStature": 0.898,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 57.3,
+    "dashesWorstPx": 32.1,
+    "frameP99Ms": 37.9,
+    "jerksCovered": 0,
+    "fps": 59.5,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-165-paine-attack-follow.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-244-rikku-ready-attack.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-306-paine-ready-attack.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-380-paine-follow-idle.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-222-rikku-attack-follow.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-044-paine-hurt-cast.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-041-paine-cast-hurt.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-276-paine-idle-hurt.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-278-paine-hurt-idle.jpg",
+     "ffx2-bahamut-win-9c91a8c3a/continuity/strips/swap-009-paine-ready-idle.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 2383,
+  "counted": 2684,
+  "swaps": 2728,
+  "size": {
+   "judged": 2573,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 111,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 18.8,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 0.9,
+   "feetOverTolerance": 0,
+   "headMeasured": 2573,
+   "headRegistration": 2076,
+   "headSilhouette": 497,
+   "headUnmeasured": 0,
+   "heightMeasured": 2573,
+   "heightOverBand": 0,
+   "heightWaived": 1,
+   "minStature": 0.752,
+   "maxStature": 1.109,
+   "koLengthMeasured": 20,
+   "minKoLength": 0.413,
+   "koLengthReported": 15,
+   "feetSilMeasured": 2494,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 6.1,
+   "holdSwaps": 2056,
+   "worstRealHeadPct": 45.1,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 2484,
+   "ghostFrames": 9608,
+   "worstGhostSeverity": 0.413,
+   "ghostOverFail": 7,
+   "jerks": 351,
+   "worstJerkPx": 141.3,
+   "jerksOverFail": 101,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 158.4,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "swapJerks": 239,
+   "swapJerksWorstPx": 141.3,
+   "swapJerksOverFail": 55,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 112,
+   "dashesWorstPx": 91.9,
+   "dashesOverFail": 46,
+   "jerksLongFrame": 93,
+   "swapJerksLongFrame": 53,
+   "swapJerksSteadyOverFail": 31
+  },
+  "frameTime": {
+   "frames": 127049,
+   "longFrames": 3208,
+   "longFramePct": 2.5,
+   "worstP99Ms": 163.1,
+   "maxMs": 44410.9,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "2076 of 2573 measured swaps had a registered head (tolerance 3 percent); 497 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 2573 swap(s) (stature 0.752 to 1.109, 1 out of band but waived), the silhouette's own feet 2494 swap(s) (worst 6.1 px, 0 waived), 2056 swap(s) across a recorded hold (real head worst 45.1 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "55 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 141.3 px)",
+     "7 swap(s) show a double image of severity 0.4 or more (worst 0.413)"
+    ],
+    "note": "46 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 91.9 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 93 of 351 jerk(s) fell on a frame of more than 34 ms (53 of the 239 at a swap; 31 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 5 chapter(s), 2383 s of battle, 49.9 to 59.6 fps, 5 of 5 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (55 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 141.3 px); 7 swap(s) show a double image of severity 0.4 or more (worst 0.413))",
+  "base": "http://127.0.0.1:5421/pyrefly-reprise/",
+  "date": "2026-10-18T06:29:44.290Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "FOC53-001",
+   "severity": "major",
+   "title": "Pose swaps still jerk 40 px or more (about 1 to 2 per minute); 1.5 to 8 times rarer than live",
+   "game": "both",
+   "chapter": "ffx2-ixion-djose, mirror-aeons, sinspawn-gui, seymour-flux, ffx2-bahamut",
+   "expected": "No swap jerk of 40 px or more (CHK-027).",
+   "observed": "55 swap jerks over 40 px across 2383 battle seconds on the candidate, worst 141.3 px (Sinspawn Gui); live r52 in the r52 run: 125 in four chapters, worst 177.8 px.",
+   "repro": "node critic/runner/lib/continuity.mjs --chapters=sinspawn-gui,seymour-flux,ffx2-ixion-djose,mirror-aeons,ffx2-bahamut at 1600x900 seed 1.",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/continuity/continuity-summary.json",
+    "critic/reviews/9c91a8c3a-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027",
+   "where": "pose swap and lunge",
+   "fix": "Gate a move dash and ship the aligned dissolve (both already open in the CHANGELOG).",
+   "acceptanceCheck": "CHK-027 PASS on the five chapters.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC53-002",
+   "severity": "polish",
+   "title": "Double-image severity worst 0.413 where live peaked 0.379 (7 swaps over the 0.4 line)",
+   "game": "both",
+   "chapter": "seymour-flux, sinspawn-gui, ffx2-bahamut, mirror-aeons",
+   "expected": "No swap with a double image of 0.4 or more.",
+   "observed": "7 swaps at 0.401 to 0.413 beside a spell flash (Yuna idle to hurt, Seymour Flux); live: 0 over 0.4.",
+   "repro": "continuity harness, seymour-flux seed 1.",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/continuity/seymour-flux-win-9c91a8c3a/continuity/strips/ghost-315-yuna-idle-hurt.jpg"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-027",
+   "where": "pose blend",
+   "fix": "Check whether the gentler lunge lengthens the blend frames.",
+   "acceptanceCheck": "ghostOverFail 0 on the same runs.",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC53-003",
+   "severity": "polish",
+   "title": "The held start card was only seen for 0.45 to 1.05 s on a warm local server; press-dismiss and the slow-load wait were not exercised",
+   "game": "both",
+   "chapter": "ffx2-bahamut, seymour-flux",
+   "expected": "Card holds until the plan lands and a press dismisses it.",
+   "observed": "Card up 453, 831 and 1051 ms, gone before the first menu in all three; a press was never made because the card left first.",
+   "repro": "cardhold.mjs",
+   "evidence": [
+    "critic/reviews/9c91a8c3a-focused/cardhold/"
+   ],
+   "confidence": "medium",
+   "requirement": "release 53 disclosure",
+   "where": "BattleStartBanner until()",
+   "fix": "Add a throttled-CPU cold load to the deep review.",
+   "acceptanceCheck": "card measured under 4x CPU throttle.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "tsc",
+   "9 vitest files",
+   "pose census",
+   "approved hashes",
+   "Ch IV cold load x3 and full route by keys",
+   "Ch XI route (won)",
+   "continuity on 5 chapters at 1600x900 and 2 at 390x844",
+   "live r52 baseline for Gui and Seymour Flux",
+   "Ch 28 target select by keys",
+   "poseTrust"
+  ],
+  "reused": [
+   {
+    "what": "live r52 baselines for Ixion/Djose, Dark Aeons, Bahamut",
+    "from": "critic/reviews/3c92b60cc-focused/continuity",
+    "why": "the r52 candidate is the live build"
+   }
+  ],
+  "notTested": [
+   "Chapter XI buff by real keys (route did not cross the red gate)",
+   "held card under slow-load throttle and press-dismiss",
+   "CHK-003 to CHK-013, CHK-018, CHK-019, CHK-023",
+   "13 of 19 plan chapters",
+   "2000x1012 layout"
+  ]
+ },
+ "regressions": [
+  "Double-image severity peaks 0.413 against 0.379 live (polish, FOC53-002)"
+ ],
+ "nextReview": "live verification of this build after deploy, then the deep review owed (deepAfterDeploy).",
+ "elapsedMinutes": 215
+}

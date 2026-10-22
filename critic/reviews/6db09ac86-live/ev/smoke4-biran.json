@@ -1,0 +1,49 @@
+{
+ "which": "biran",
+ "steps": [
+  {
+   "k": "screen",
+   "v": "battle"
+  },
+  {
+   "k": "chapter",
+   "v": "biran-yenke"
+  },
+  {
+   "k": "rigs",
+   "v": [
+    "biran-ronso:off:no rig listed in the art manifest",
+    "kimahri:off:no rig listed in the art manifest",
+    "yenke-ronso:off:no rig listed in the art manifest"
+   ]
+  },
+  {
+   "k": "actors",
+   "v": [
+    "kimahri:kimahri:ready:ready",
+    "biran-ronso:biran-ronso:idle:idle",
+    "yenke-ronso:yenke-ronso:idle:idle"
+   ]
+  },
+  {
+   "k": "rows",
+   "v": [
+    "Attack",
+    "Special",
+    "Items",
+    "Escape",
+    "Switch"
+   ]
+  },
+  {
+   "k": "console",
+   "v": []
+  },
+  {
+   "k": "404",
+   "v": []
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

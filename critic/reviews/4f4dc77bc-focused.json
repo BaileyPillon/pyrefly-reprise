@@ -1,0 +1,704 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-18T18:36:57.120707+00:00",
+ "build": {
+  "mainSha": "4f4dc77bc"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect introduced or reachable by the change: Doublecast two-pick, Sensor and Scan on Yu Yevon and the Pagodas, Slow on Flux, Doom on Evrae and Isaaru's locked duel behave as the notes say through real input.",
+  "No regression against live r53: the continuity failures (CHK-026 Chapter III, CHK-027 swap jerks) read the same on live in the same session.",
+  "Majors FOC54-001 and FOC54-002 are carried and disclosed; the rest is polish."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "NOT APPLICABLE",
+   "reason": "No full-screen layer was added or changed; the Doublecast chrome and the phone step strip sit inside the stage.",
+   "where": "FFX Ch III",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Type floors read off the page: every new Doublecast text 16 px or more at 1600x900 (lock chip label 14.5), 14 px on the 390x844 phone; reason line and step strip legible in the screenshots.",
+   "where": "FFX Ch III, 1600x900 / 2000x1012 / 390x844",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-edit.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-dead.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-natural.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-bfirst.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-edit.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-dead.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-natural.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-bfirst.log",
+    "critic/reviews/4f4dc77bc-focused/dc-wide-edit.log",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-1600x900-edit-3-list2.png",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-390x844-edit-3-list2.png",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-2000x1012-edit-3-list2.png"
+   ]
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The advisor card names both casts (\"Doublecast: Firaga + Firaga\", \"IN SPECIAL\") and a player can do exactly that with real keys: Special, Doublecast, spell, target, second spell, target (Firaga twice verified).",
+   "where": "FFX Ch III, Lulu",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/continuity/braskas-final-aeon-win-4f4dc77bc/25-doublecast.png",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-natural.log"
+   ]
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "reason": "The advisor was not tested on a broken board (silenced or no-MP Lulu) in this pass.",
+   "where": "FFX Ch III",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "The folded Sensor chip and the lock chip die with their step: Esc from a target clears the chip, list 1 has no lock chip, a commit clears both (sensor null and lock null in every log).",
+   "where": "FFX Ch III",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-edit.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-edit.log"
+   ]
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No raw ids or debug text in the captured Doublecast, Sensor, Scan and Isaaru frames.",
+   "where": "FFX Ch III, XIV, 28",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/r54-isaaru2-1600x900-0-yuna.png",
+    "critic/reviews/4f4dc77bc-focused/r54-scan-yevon3-1600x900-3-sensor-expanded-0-yu-yevon.png"
+   ]
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "The lock chip stands clear of the boss and the turn list with cast 1 on Yu Pagoda A and on B; the slab and chips clear the painted actors at 1600x900 and 2000x1012.",
+   "where": "FFX Ch III",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-bfirst.log",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-2000x1012-edit-3-list2.png"
+   ]
+  },
+  {
+   "id": "CHK-009",
+   "result": "UNVERIFIED",
+   "reason": "Names and wording were read only on the changed screens, not swept across the game.",
+   "where": "FFX",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Target reticles and names (Yu Pagoda A/B, Yu Yevon, Seymour Flux, Evrae) read correctly by real keys; no deviation from the approved design on the changed steps.",
+   "where": "FFX Ch III, 28, V, VIII",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/r54-scan-yevon3-1600x900-2-scan-target.png"
+   ]
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real keys (Enter, Esc, arrows, I, Q), a mouse click and a phone tap, positive and cancel paths: the Doublecast Back chain target 2, list 2, target 1, list 1, Special; a greyed pick shakes and commits nothing (desktop and phone). No gamepad was available: a pad is UNVERIFIED.",
+   "where": "FFX Ch III, XIV",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 40,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-edit.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-dead.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-natural.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-bfirst.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-edit.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-dead.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-natural.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-bfirst.log",
+    "critic/reviews/4f4dc77bc-focused/dc-wide-edit.log",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-1600x900-edit-3-list2.png",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-390x844-edit-3-list2.png",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-2000x1012-edit-3-list2.png",
+    "critic/reviews/4f4dc77bc-focused/isaaru-desktop.log",
+    "critic/reviews/4f4dc77bc-focused/isaaru-phone.log"
+   ]
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture was taken after reading the screen, the actor, the menu crumb and the target ids; a failed wait threw and none fell through.",
+   "where": "FFX",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-edit.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-dead.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-natural.log",
+    "critic/reviews/4f4dc77bc-focused/dc-desktop-bfirst.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-edit.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-dead.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-natural.log",
+    "critic/reviews/4f4dc77bc-focused/dc-phone-bfirst.log",
+    "critic/reviews/4f4dc77bc-focused/dc-wide-edit.log",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-1600x900-edit-3-list2.png",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-390x844-edit-3-list2.png",
+    "critic/reviews/4f4dc77bc-focused/r54-dc-2000x1012-edit-3-list2.png"
+   ]
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Focused review of the pre-deploy candidate; live verification of the exact artifact is the next obligation.",
+   "where": "-",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "FFX content verified in FFX and its absence checked in FFX-2.",
+   "where": "both",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/ffx2-absence.log",
+    "critic/reviews/4f4dc77bc-focused/r54-ffx2-absence-390x844.png"
+   ]
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Game case FFX only (Doublecast, Sensor and Scan on FFX bosses, Isaaru aeon duels are FFX). Present in FFX Ch III, XIV and 28; absent in FFX-2 Chapter IV desktop and phone: 0 Doublecast nodes, 0 reason lines, the phone step strip hidden and empty, the FFX-2 HUD unchanged.",
+   "where": "both",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/ffx2-absence.log",
+    "critic/reviews/4f4dc77bc-focused/r54-ffx2-absence-390x844.png"
+   ]
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "The intended line wins Chapters III, XIV, V, VIII and I (seed 1, debug API on the real presenter); the harness run of Chapter III reached its results and the retry battle. A full real-key win of Chapter III on the candidate was not obtained (harness gap, FOC54-007).",
+   "where": "FFX",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/continuity/braskas-final-aeon-win-4f4dc77bc/31-results.png",
+    "critic/reviews/4f4dc77bc-focused/continuity/braskas-final-aeon-win-4f4dc77bc/33-retry-battle.png"
+   ]
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Scan, Sensor, Slow, Doom and Doublecast were invoked through the real command menu and presenter; forceCommand only set up a gauge, MP or a first Switch in early runs.",
+   "where": "FFX",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/scan-pagoda-desktop.log",
+    "critic/reviews/4f4dc77bc-focused/cast-slow-flux.log",
+    "critic/reviews/4f4dc77bc-focused/cast-doom-evrae.log"
+   ]
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Chapter III: head jump 23.5 percent and one feet-from-silhouette excess (aeon hurt to KO swaps), the same on live r53 (23.6 percent, feet 35.9 px). Seymour Flux and FFX-2 Bahamut PASS. Not introduced by this candidate (no pose, stage or scene code touched).",
+   "where": "FFX Ch III; FFX Seymour Flux; FFX-2 Bahamut",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 95,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/continuity/continuity-summary.json",
+    "critic/reviews/4f4dc77bc-focused/continuity-live.log",
+    "critic/reviews/4f4dc77bc-focused/continuity.log"
+   ]
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Swap jerks of 40 px or more remain: Ch III 161.2 px (live 159.9), Seymour Flux 85.4 (r53 77.2), FFX-2 Bahamut 47.8 on the clean rerun (live same session 42.4; the first run read 115 px at 39.9 fps under machine load). No snaps. Same as live; FOC53-001 carries.",
+   "where": "FFX Ch III; FFX Seymour Flux; FFX-2 Bahamut",
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 95,
+   "artifact": "4f4dc77bc dist-release (rebuilt 11:32)",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/continuity/continuity-summary.json",
+    "critic/reviews/4f4dc77bc-focused/continuity-live.log",
+    "critic/reviews/4f4dc77bc-focused/continuity-rerun.log"
+   ]
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 424.4,
+    "swaps": 342,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 85.4,
+    "minStature": 0.782,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 85.4,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 206,
+    "jerksCovered": 0,
+    "fps": 46.1,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-006-kimahri-idle-ko.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-004-kimahri-hurt-idle.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-129-yuna-hurt-critical.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-317-yuna-critical-hurt.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-027-kimahri-idle-ready.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-071-kimahri-ready-idle.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-112-yuna-ready-item.jpg",
+     "seymour-flux-win-4f4dc77bc/continuity/strips/swap-190-yuna-hurt-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 428.9,
+    "swaps": 424,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 9.6,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 115,
+    "minStature": 0.898,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 115,
+    "dashesWorstPx": 59.3,
+    "frameP99Ms": 215.1,
+    "jerksCovered": 0,
+    "fps": 39.9,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-325-paine-attack-follow.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-287-rikku-ready-attack.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-236-paine-ready-follow.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-168-paine-ready-attack.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-284-paine-follow-idle.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-289-rikku-attack-follow.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-143-paine-cast-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-147-paine-od-x2-warrior-armor-break-ready.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-013-paine-cast-hurt.jpg",
+     "ffx2-bahamut-win-4f4dc77bc/continuity/strips/swap-015-paine-hurt-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "braskas-final-aeon",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1883.2,
+    "swaps": 2413,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 23.5,
+    "maxFeetShiftPx": 1.5,
+    "worstJerkPx": 161.2,
+    "minStature": 0.747,
+    "heightOverBand": 0,
+    "feetSilOver": 1,
+    "swapJerksWorstPx": 161.2,
+    "dashesWorstPx": 44,
+    "frameP99Ms": 162,
+    "jerksCovered": 0,
+    "fps": 47,
+    "dedicated": true,
+    "strips": 12,
+    "worstSwapStrips": [
+     "braskas-final-aeon-win-4f4dc77bc/continuity/strips/swap-246-shiva-hurt-ko.jpg",
+     "braskas-final-aeon-win-4f4dc77bc/continuity/strips/swap-328-valefor-hurt-ko.jpg",
+     "braskas-final-aeon-win-4f4dc77bc/continuity/strips/swap-172-ixion-hurt-ko.jpg",
+     "braskas-final-aeon-win-4f4dc77bc/continuity/strips/swap-123-ifrit-hurt-ko.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 2736.5,
+  "counted": 3179,
+  "swaps": 3258,
+  "size": {
+   "judged": 3162,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 17,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 23.5,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.5,
+   "feetOverTolerance": 0,
+   "headMeasured": 3162,
+   "headRegistration": 1991,
+   "headSilhouette": 1171,
+   "headUnmeasured": 0,
+   "heightMeasured": 3162,
+   "heightOverBand": 0,
+   "heightWaived": 6,
+   "minStature": 0.747,
+   "maxStature": 1.121,
+   "koLengthMeasured": 7,
+   "minKoLength": 0.417,
+   "koLengthReported": 7,
+   "feetSilMeasured": 3117,
+   "feetSilOver": 1,
+   "feetSilWaived": 4,
+   "maxFeetSilPx": 22,
+   "holdSwaps": 1984,
+   "worstRealHeadPct": 38.1,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 3035,
+   "ghostFrames": 11078,
+   "worstGhostSeverity": 0.44,
+   "ghostOverFail": 20,
+   "jerks": 359,
+   "worstJerkPx": 161.2,
+   "jerksOverFail": 50,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 439.3,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 4,
+   "swapJerks": 332,
+   "swapJerksWorstPx": 161.2,
+   "swapJerksOverFail": 47,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 27,
+   "dashesWorstPx": 59.3,
+   "dashesOverFail": 3,
+   "jerksLongFrame": 130,
+   "swapJerksLongFrame": 109,
+   "swapJerksSteadyOverFail": 25
+  },
+  "frameTime": {
+   "frames": 125163,
+   "longFrames": 8696,
+   "longFramePct": 6.9,
+   "worstP99Ms": 215.1,
+   "maxMs": 3230.1,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 22 px at 1600 wide), whatever stance the registration claims"
+    ],
+    "note": "1991 of 3162 measured swaps had a registered head (tolerance 3 percent); 1171 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 3162 swap(s) (stature 0.747 to 1.121, 6 out of band but waived), the silhouette's own feet 3117 swap(s) (worst 22 px, 4 waived), 1984 swap(s) across a recorded hold (real head worst 38.1 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "47 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 161.2 px)",
+     "20 swap(s) show a double image of severity 0.4 or more (worst 0.44)"
+    ],
+    "note": "3 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 59.3 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 130 of 359 jerk(s) fell on a frame of more than 34 ms (109 of the 332 at a swap; 25 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 3 chapter(s), 2736.5 s of battle, 39.9 to 47 fps, 3 of 3 run by the dedicated harness; CHK-026 FAIL (1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 22 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (47 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 161.2 px); 20 swap(s) show a double image of severity 0.4 or more (worst 0.44))",
+  "base": "http://127.0.0.1:5400/pyrefly-reprise/",
+  "date": "2026-10-18T17:46:40.055Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "FOC54-001",
+   "severity": "major",
+   "title": "Chapter III: aeon hurt-to-KO swaps change the figure by 23.5 percent at the head (CHK-026 FAIL), the same as live",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon",
+   "expected": "A pose swap changes the head by at most 3 percent",
+   "observed": "Max head jump 23.5 percent, one feet excess from the silhouette; live r53 23.6 percent",
+   "repro": "node critic/runner/lib/continuity.mjs on Chapter III, seed 1",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/continuity/braskas-final-aeon-win-4f4dc77bc/continuity/strips/swap-246-shiva-hurt-ko.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026",
+   "where": "pose registrations of the aeon KO paintings (suspected)",
+   "fix": "Register or rescale the aeon KO poses",
+   "acceptanceCheck": "CHK-026 PASS on Chapter III",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC54-002",
+   "severity": "major",
+   "title": "Pose swaps still jerk 40 px or more (CHK-027), live too: FOC53-001 carries",
+   "game": "both",
+   "chapter": "braskas-final-aeon, seymour-flux, ffx2-bahamut",
+   "expected": "No jerk of 40 px at a swap",
+   "observed": "Ch III 161.2 px, Flux 85.4, Bahamut 47.8 (live 159.9, r53 77.2, 42.4); no snaps",
+   "repro": "Continuity harness at 1600x900, PYREFLY_BROWSER=gpu",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/continuity/continuity-summary.json",
+    "critic/reviews/4f4dc77bc-focused/continuity-live.log",
+    "critic/reviews/4f4dc77bc-focused/continuity-rerun.log"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027",
+   "where": "swap blending (suspected)",
+   "fix": "Carry FOC53-001",
+   "acceptanceCheck": "CHK-027 PASS",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC54-003",
+   "severity": "polish",
+   "title": "Slow on Seymour Flux lands nothing and shows nothing: no miss, no immune message",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "A status the target is immune to reads as an immune miss, as Scan on a Yu Pagoda does",
+   "observed": "The cast logs mp-damage, action-start and action-end only; live adds status-add",
+   "repro": "Seymour Flux, Tidus, White Magic, Slow, Flux",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/cast-slow-flux.log",
+    "critic/reviews/4f4dc77bc-focused/cast-slow-flux-live.log"
+   ],
+   "confidence": "high",
+   "requirement": "consistent immune feedback",
+   "where": "status immunity path in src/battle/ffx (suspected)",
+   "fix": "Emit the same immune miss",
+   "acceptanceCheck": "Slow on Flux logs a miss with reason immune",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC54-004",
+   "severity": "polish",
+   "title": "Chapter XIV: Lulu says \"Guard first\" at Grothia while Defend is switched off for the duel",
+   "game": "FFX",
+   "chapter": "isaaru-via-purifico",
+   "expected": "A hint names only what the duel allows",
+   "observed": "The line \"His aeon is ready. Guard first.\" plays over a menu with no Defend",
+   "repro": "Chapter XIV, first menu",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/r54-isaaru2-1600x900-0-yuna.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-004 spirit",
+   "where": "src/story/scripts/ffx-isaaru.ts:129",
+   "fix": "Reword the line",
+   "acceptanceCheck": "The line does not name Guard",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC54-005",
+   "severity": "polish",
+   "title": "Sensor on Yu Yevon: HP reads \"99999 / 99999\" with no separator, a reticle corner clips the last digit, and the plate shows no MP although the announcement says MP 1",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon, last-summoning",
+   "expected": "HP 99,999 readable; the CHANGELOG matches the plate",
+   "observed": "Plate shows HP only; the sensor event carries MP 1; a bracket draws over the last digit",
+   "repro": "Chapter III last link or Chapter 28, Kimahri, Special, Scan, aim at Yu Yevon, press I",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/r54-scan-yevon3-1600x900-3-sensor-expanded-0-yu-yevon.png",
+    "critic/reviews/4f4dc77bc-focused/zoom-yevon-hp.png",
+    "critic/reviews/4f4dc77bc-focused/scan-yevon3-phone.log"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-003 and CHK-008",
+   "where": "src/ui/ffx/SensorPanel.ts",
+   "fix": "Group the digits, widen the plate; say HP only in the notes",
+   "acceptanceCheck": "The last digit is clear; the notes match",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC54-006",
+   "severity": "polish",
+   "title": "The research note for Yu Yevon still says Scan and Sensor immune and the Pagodas take Shell and Protect",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon",
+   "expected": "The sourced note and the data agree",
+   "observed": "research/ffx-bfa-yu-yevon.md (section 3.2, line 84) predates the record reading the boss-data lane used",
+   "repro": "Read the note against boss-data-corrections.ts",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/cast-slow-flux.log"
+   ],
+   "confidence": "medium",
+   "requirement": "AGENTS rule 6",
+   "where": "research/ffx-bfa-yu-yevon.md",
+   "fix": "Add the record reading and the conflict row",
+   "acceptanceCheck": "The note lists both sources",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC54-007",
+   "severity": "suggestion",
+   "title": "Critic harness: route-fight.mjs cannot parse \"Doublecast: A + B\" or drive the two-pick menu, so Chapter III plays 84 Lulu turns as Attack and is lost; the candidate also now advises Doublecast in Chapter III where live never did",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon",
+   "expected": "The harness plays the advisor card as written",
+   "observed": "spell parses as \"firaga + firaga\", never found; dcFail 2, then Attack; outcome defeat after 370 turns with 0 seams",
+   "repro": "Continuity run on Chapter III, seed 1",
+   "evidence": [
+    "critic/reviews/4f4dc77bc-focused/continuity/braskas-final-aeon-win-4f4dc77bc/run.json",
+    "critic/reviews/4f4dc77bc-focused/continuity/braskas-final-aeon-win-4f4dc77bc/turn-log.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-016 spirit",
+   "where": "critic/runner/lib/route-fight.mjs:160",
+   "fix": "Split the label on the plus sign and press Enter on list 2",
+   "acceptanceCheck": "Chapter III wins by the harness",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Doublecast two-pick (edit, natural, dead end, cast 1 on B) at 1600x900 and 390x844, edit at 2000x1012",
+   "Scan on a Yu Pagoda and Sensor on Yu Yevon: Ch III last link (desktop and phone) and Ch 28 via the word summon and eight offerings",
+   "Isaaru's duels: greyed rows, a greyed pick shakes, Defend absent, cursor on Overdrive, desktop and phone",
+   "Slow on Seymour Flux (candidate and live), Doom on Evrae (Kimahri's Doom unlocked and the gauge filled by a debug edit)",
+   "FFX-2 absence on Chapter IV desktop and phone",
+   "Continuity: Seymour Flux, FFX-2 Bahamut (candidate, live, rerun), Chapter III (candidate, live)",
+   "Intended-line outcomes of five chapters",
+   "Data audit against the record notes (Slow 255, Doom landable, Pagoda and Yu Yevon bits, Zanmato 4)"
+  ],
+  "reused": [
+   {
+    "what": "live r53 continuity for Seymour Flux",
+    "from": "critic/reviews/9c91a8c3a-focused/continuity",
+    "why": "pose, stage and scene code are untouched"
+   }
+  ],
+  "notTested": [
+   "Gamepad",
+   "poseTrust read directly (the continuity runs show no pose errors)",
+   "Shell, Protect, Reflect and Nuls on a Pagoda by keys (Scan taken as the sample)",
+   "Network responses of 400 or more outside the harness runs (the harness runs show none)",
+   "A full real-key win of Chapter III on the candidate",
+   "The 14 other chapters of the plan beyond the intended-line smoke",
+   "The advisor on a broken board"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "live verification of the exact artifact, then the deep review on the live build (deepAfterDeploy)",
+ "elapsedMinutes": 190
+}

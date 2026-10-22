@@ -1,0 +1,132 @@
+{
+  "mode": "gpu",
+  "part": "ch4",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-bahamut.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3",
+    "https://echoesofspira.com/audio/music/boss-bahamut.mp3",
+    "https://echoesofspira.com/audio/music/victory-bahamut.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-bahamut.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": "&demo=1"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached ffx2-bahamut",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "ffx2-bahamut: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "ffx2-bahamut: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "ffx2-bahamut: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV look on, seed 56, bahamut rig on",
+      "ok": true,
+      "detail": "{\"look\":\"hd2d\",\"strength\":\"bold\",\"room\":\"bevelle-underground\",\"passes\":[\"0:gr(off)\",\"1:Rie(off)\",\"2:Ooe\",\"3:e\",\"4:aae(off)\",\"5:vr\",\"6:vr\",\"7:vr\",\"8:vr\",\"9:doe\",\"10:vr\",\"11:vr\",\"12:vr\",\"13:fyn(off)\"],\"relight\":{\"any\":true,\"bound\":8,\"loaded\":5,\"missing\":0,\"lights\":[]},\"rigs\":[\"ffx2-bahamut:on\",\"paine-warrior:off\",\"rikku-dark-knight:off\",\"yuna-white-mage:off\"],\"seed\":56,\"demo\":true}"
+    },
+    {
+      "step": "Ch IV cursor on Item",
+      "ok": true,
+      "detail": "Item◂"
+    },
+    {
+      "step": "Ch IV Potion target cursor opens",
+      "ok": true,
+      "detail": "{\"sel\":[\"yuna\"],\"k\":[\"selection\",\"selectedIds\",\"rects\"]}"
+    },
+    {
+      "step": "Ch IV cancel from target returns to item list",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV Potion confirmed, battle running",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV Escape resumes",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "ch4": {
+      "look": "hd2d",
+      "strength": "bold",
+      "room": "bevelle-underground",
+      "passes": [
+        "0:gr(off)",
+        "1:Rie(off)",
+        "2:Ooe",
+        "3:e",
+        "4:aae(off)",
+        "5:vr",
+        "6:vr",
+        "7:vr",
+        "8:vr",
+        "9:doe",
+        "10:vr",
+        "11:vr",
+        "12:vr",
+        "13:fyn(off)"
+      ],
+      "relight": {
+        "any": true,
+        "bound": 8,
+        "loaded": 5,
+        "missing": 0,
+        "lights": []
+      },
+      "rigs": [
+        "ffx2-bahamut:on",
+        "paine-warrior:off",
+        "rikku-dark-knight:off",
+        "yuna-white-mage:off"
+      ],
+      "seed": 56,
+      "demo": true
+    },
+    "ch4guide": false,
+    "ch4target": "{\"sel\":[\"yuna\"],\"k\":[\"selection\",\"selectedIds\",\"rects\"]}",
+    "ch4log": "[\"action-end\",\"atb\",\"atb\",\"turn-start\",\"action-start\",\"miss\",\"action-end\",\"atb\"]"
+  },
+  "elapsedMin": "0.9"
+}

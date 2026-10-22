@@ -1,0 +1,845 @@
+[
+ {
+  "file": "ch1/01-first-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12578,
+  "state": {},
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:39:03.833Z"
+ },
+ {
+  "file": "ch1/02-items.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12050,
+  "state": {
+   "asserted": "items submenu"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:40:40.615Z"
+ },
+ {
+  "file": "ch1/03-target.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12050,
+  "state": {
+   "asserted": "target cursor"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:40:42.170Z"
+ },
+ {
+  "file": "ch1/04-fx-2.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12050,
+  "state": {
+   "asserted": "item fx in flight"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:40:43.318Z"
+ },
+ {
+  "file": "ch1/04-fx-5.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12050,
+  "state": {
+   "asserted": "item fx in flight"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:40:44.369Z"
+ },
+ {
+  "file": "ch1/03-target.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13822,
+  "state": {
+   "asserted": "target cursor"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:42:28.192Z"
+ },
+ {
+  "file": "ch1/03-target.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12487,
+  "state": {
+   "asserted": "target cursor"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:44:02.946Z"
+ },
+ {
+  "file": "ch1/05-cancelled.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12610,
+  "state": {
+   "asserted": "back at command menu after cancel"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:45:49.780Z"
+ },
+ {
+  "file": "ch1/10-ch1-first-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "screen=battle, awaitingMenu true, chapter seymour-flux"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:28.315Z"
+ },
+ {
+  "file": "ch1/11-ally-target.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "target cursor on yuna, actor tidus"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:33.206Z"
+ },
+ {
+  "file": "ch1/12-ally-fx1.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 1, phase play:action-start"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:34.042Z"
+ },
+ {
+  "file": "ch1/12-ally-fx4.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 4, phase play:damage"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:34.923Z"
+ },
+ {
+  "file": "ch1/12-ally-fx8.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 8, phase command:yuna"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:36.035Z"
+ },
+ {
+  "file": "ch1/12-ally-fx14.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 14, phase command:yuna"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:37.272Z"
+ },
+ {
+  "file": "ch1/11-self-target.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "target cursor on yuna, actor yuna"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:41.499Z"
+ },
+ {
+  "file": "ch1/12-self-fx1.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 1, phase play:action-start"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:42.305Z"
+ },
+ {
+  "file": "ch1/12-self-fx4.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 4, phase play:damage"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:43.345Z"
+ },
+ {
+  "file": "ch1/12-self-fx8.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 8, phase command:tidus"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:44.400Z"
+ },
+ {
+  "file": "ch1/12-self-fx14.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "item fx sample 14, phase command:tidus"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:45.800Z"
+ },
+ {
+  "file": "ch1/13-pause-esc.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "screen=pause"
+  },
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:48.446Z"
+ },
+ {
+  "file": "ch1/14-pause-h-hidden.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "pause screen, H pressed"
+  },
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:49.828Z"
+ },
+ {
+  "file": "ch1/15-pause-p.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13631,
+  "state": {
+   "asserted": "screen=pause"
+  },
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:47:52.670Z"
+ },
+ {
+  "file": "chbiran/20-first-menu.png",
+  "game": "ffx",
+  "chapter": "biran-yenke",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13129,
+  "state": {
+   "asserted": "screen=battle awaitingMenu, chapter biran-yenke"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:49:12.955Z"
+ },
+ {
+  "file": "chvalefor/20-first-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-valefor-besaid",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10473,
+  "state": {
+   "asserted": "screen=battle awaitingMenu, chapter ffx2-valefor-besaid"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:49:57.713Z"
+ },
+ {
+  "file": "chvalefor/21-ffx2-target.png",
+  "game": "ffx2",
+  "chapter": "ffx2-valefor-besaid",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10473,
+  "state": {
+   "asserted": "item target cursor"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:50:00.783Z"
+ },
+ {
+  "file": "chvalefor/22-ffx2-fx1.png",
+  "game": "ffx2",
+  "chapter": "ffx2-valefor-besaid",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10473,
+  "state": {
+   "asserted": "ffx2 item fx 1"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:50:08.191Z"
+ },
+ {
+  "file": "chvalefor/22-ffx2-fx3.png",
+  "game": "ffx2",
+  "chapter": "ffx2-valefor-besaid",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10473,
+  "state": {
+   "asserted": "ffx2 item fx 3"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:50:08.872Z"
+ },
+ {
+  "file": "chvalefor/22-ffx2-fx5.png",
+  "game": "ffx2",
+  "chapter": "ffx2-valefor-besaid",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10473,
+  "state": {
+   "asserted": "ffx2 item fx 5"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:50:09.638Z"
+ },
+ {
+  "file": "chvalefor/22-ffx2-fx8.png",
+  "game": "ffx2",
+  "chapter": "ffx2-valefor-besaid",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10473,
+  "state": {
+   "asserted": "ffx2 item fx 8"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:50:10.399Z"
+ },
+ {
+  "file": "chvalefor/22-ffx2-fx12.png",
+  "game": "ffx2",
+  "chapter": "ffx2-valefor-besaid",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10473,
+  "state": {
+   "asserted": "ffx2 item fx 12"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:50:11.370Z"
+ },
+ {
+  "file": "chisaaru/20-first-menu.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 9315,
+  "state": {
+   "asserted": "screen=battle awaitingMenu, chapter isaaru-via-purifico"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:51:32.942Z"
+ },
+ {
+  "file": "chmirror/20-first-menu.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10428,
+  "state": {
+   "asserted": "screen=battle awaitingMenu, chapter mirror-aeons"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:52:14.287Z"
+ },
+ {
+  "file": "chyunalesca/20-first-menu.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10168,
+  "state": {
+   "asserted": "screen=battle awaitingMenu, chapter yunalesca"
+  },
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:53:42.805Z"
+ },
+ {
+  "file": "chreload/40-options.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13555,
+  "state": {
+   "asserted": "pause options tab"
+  },
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:56:11.726Z"
+ },
+ {
+  "file": "chreload/41-options-changed.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13555,
+  "state": {
+   "asserted": "music volume lowered"
+  },
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-20T04:56:13.365Z"
+ }
+]

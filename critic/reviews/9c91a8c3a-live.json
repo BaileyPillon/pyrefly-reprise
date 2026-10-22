@@ -1,0 +1,61 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-18T08:51:32Z",
+  "build": {
+    "mainSha": "9c91a8c3a",
+    "bundle": "D9wTDH4W",
+    "artifactHash": "da1532d0d685806394c073631a3c0413b779ab1a4983201b2f3484e830bb25c4"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/9c91a8c3a.json --url https://echoesofspira.com/ --changed-from critic/artifacts/3c92b60cc.json --full --out critic/reviews/9c91a8c3a-live/verify-live.json (about 30 min, 07:50:43Z to about 08:20Z) -> {result: PASS, artifactHash: da1532d0d685806394c073631a3c0413b779ab1a4983201b2f3484e830bb25c4, liveManifest: match, checked: 5309, mismatched: [], missing: [], wrongType: [], errors: []}. The manifest lists 5310 files (10.81 GB); _headers is host-read and never served, so not downloaded; index.html as a browser asks for it is identical to the artifact once Cloudflare's Web Analytics beacon (366 bytes and the line feed) is cut out. Diff from r52 (3c92b60cc): 3 added (assets/index-D9wTDH4W.js, assets/exp-fayth-table-DXqeoCsQ.js, assets/worker-CJzw-Koi.js), 3 removed (their predecessors), 1 changed (index.html); no painting, audio, data or style file moved. The two manifest problems (art/portrait-parts/paine/1x and 2x eyeR-catch.png decode to a flat colour) are the intentionalFlatImages entries r52 carried. window.__pyrefly.build() read {sha: 9c91a8c3, bundle: index-D9wTDH4W.js} in all 15 live smoke contexts. Across 15 smoke contexts and 2 continuity-harness contexts: 0 console errors, 0 page errors, 0 responses with status >= 400 (0 404s), 0 image or audio responses served as text/html.",
+      "reason": "Every compared file is byte-identical to the stored manifest with the right content type and the live manifest names this artifact; the zero-4xx criterion is met with no exception."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright launched from node scripts with PYREFLY_BROWSER=gpu (ANGLE, NVIDIA GeForce RTX 5070 Ti, Direct3D11; never SwiftShader, never the Chrome extension or the browser pane, no headed window), a fresh browser context per run (cold HTTP cache, empty storage), a ?livesmoke=<ms> cache-busting URL, 1600x900 and 390x844 (touch), real key presses (a held Enter through the pre-scene for the hurried openings), real touch taps on the phone, and, for the continuity harness, critic/runner/lib/continuity.mjs (real keys from the title to a win, GPU). Every state was asserted before it was read: screen name via window.__pyrefly.screen(), board selectedId, the pending menu actor, the menu rows, the start card (.bstart) and its opacity per animation frame, stage.planSettled and entranceSnapshot per frame, every staged figure's projected box and world position per frame (stage.projectRect and actor.position), the dressphere, gate and maxima of Yuna (battleState) and the party strip's own rows. Runs (15 live smoke contexts): FFX-2 Chapter IV Bahamut x5 (3 hurried, 1 card pressed once, 1 phone), FFX Chapter I Seymour Flux x5 (4 desktop, 1 phone), hidden Sinspawn Gui (word mushroom) x2 (desktop, phone), FFX-2 Chapter XI Yuna Change x3 (Gunner desktop and phone, Lady Luck control desktop); plus the continuity harness x2 on ffx2-ixion-djose; plus a same-machine comparison on a local copy of the r52 build (7 runs) and the exact r53 dist-release (6 runs), both served by a static server of my own and stopped by PID. poseTrust() read withheld [] and unregistered [] at the first menu and after the turns in every chapter context. Debug API use: build(), screen(), poseTrust(), targeting(), battleState() (read-only), stage.projectRect, stage.actors, stage.planSettled, stage.entranceSnapshot; no pose forced, no debug shortcut taken. Evidence: critic/reviews/9c91a8c3a-live/ (run/ result JSONs, per-run analysis, summary.json, frames as .json.gz, screenshots as JPEG; scripts/; continuity/; verify-live.json; run/superseded/ holds two Chapter XI runs whose pass test was the harness's mistake).",
+      "reason": "Every reading names the screen, chapter and menu it was taken on. My first two Chapter XI runs reported \"maximum MP not doubled\" because the test compared the new maximum with the White Mage's 206 instead of with the destination dress base (Gunner 85, doubled 170); the engine state and the party strip were right, the test was wrong; the final runs compare against dressphereStats() and are the evidence."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact: all 5309 downloadable files of the 5310-file manifest byte-compared with the live site (--full), content types, live manifest match, index.html with and without the Web Analytics beacon",
+      "window.__pyrefly.poseTrust() empty (withheld [] and unregistered []) in FFX-2 Chapter IV Bahamut, FFX Seymour Flux, hidden Sinspawn Gui and FFX-2 Chapter XI, desktop and phone, at the first menu and after the turns",
+      "FFX-2 Chapter IV (ffx2-bahamut) cold loads in fresh profiles: 3 hurried at 1600x900 (card 3.87, 6.18, 4.53 s; boss 414 to 419 px under the opaque card, 575.6, 575.5, 577.9 px at the first menu, within 1.6 percent of its settled size), 1 with the card pressed once (card left at once; first menu 6.4 s later, boss 579.6 px), 1 phone 390x844 (card 3.87 s, boss 253 to 258 px throughout): the first menu opened with the camera fitted in 5 of 5; the same protocol on a local copy of r52 (card 0.73 s, 3 of 3 fitted) and of r53 (card 0.90 to 1.61 s)",
+      "lunges, every animation frame of every figure, r53 live against r52 on the same machine: FFX-2 Bahamut and the girls, FFX Seymour Flux and Tidus, Yuna, Kimahri; the first moving frame covers at most 4.9 percent of the reach on r53 (the figure moving at most 11.5 px) against up to 28.5 percent (74.6 px) for Bahamut and 42.2 percent (115.8 px) for FFX party members on r52",
+      "hidden Sinspawn Gui by the word mushroom (desktop and phone): party prep, pre-scene, card 2.1 s, first menu (Tidus, Auron, Lulu against Gui and three parts), two Attack turns by key and by tap, save key byte-identical, reload to the title",
+      "FFX-2 Chapter XI (ffx2-fallen-aeons): Yuna Change list Gunner, Warrior, Lady Luck with the row \"GRANTS: RED\"; Change to Gunner by real keys: passedGates [red], maxMp 170 = 2 x Gunner base 85, maxHp 3416 = 2 x 1708 (no Double HP), the party strip prints 85/170 (Shiva had halved HP and MP) on desktop and 170 on the phone; control Change to Lady Luck: no gate, maxMp 177, maxHp 2826",
+      "the continuity harness on the live artifact twice (Ixion at Djose, 170.1 s and 187.7 s, 271 and 276 swaps): max feet shift 0.8 and 0.7 px by registration (2.4 and 3.3 px by pixels); CHK-026 FAIL on 1 swap (run a: Yuna idle to hurt, stature 0.884 against 0.90) and PASS (run b); CHK-027 FAIL with 4 and 4 swap jerks of 40 px or more (1.41 and 1.28 per minute, worst 70.9 and 58.4 px, frame p99 32 and 49 ms) against r52 live 20 in 192.2 s (6.24 per minute, worst 224 px, p99 339 ms under load)",
+      "console, network and save: 15 smoke contexts and 2 harness contexts: 0 console errors, 0 page errors, 0 responses >= 400, 0 media served as HTML; 225 requestfailed in the smoke contexts (30 sampled: all net::ERR_ABORTED prewarm cancellations); pyrefly-reprise:save:v1 byte-identical in the hidden-chapter runs and changed only by the chapter's own first-attempt rows, seenCoach and updatedAt on listed chapters (identical paths on r52); a reload after each of 12 runs reached the title with the key byte-identical"
+    ],
+    "reused": [
+      {
+        "what": "code-level findings of the changed area (the ruler, the lunge, the opening gate, the hit order, the chain windows, the grids)",
+        "from": "critic/reviews/9c91a8c3a-focused.json",
+        "why": "the focused review ran on the production candidate; this review proved the live artifact byte-identical to it"
+      }
+    ],
+    "notTested": [
+      "r53 content changes not exercised on live: the FFX hit order of a multi-target action, the FFX-2 per-body chain windows, Chapter VI Acts II and III fresh-battle openings, Trigger Happy and Lady Luck minigames, the intent slab Berserk and Confuse lines, Yojimbo starting values, any Overdrive",
+      "a full Chapter XI fight (only Yuna's first Change); Double HP (green gate), Highroad Winds and Downtrodder (not worn in a shipped chapter)",
+      "the held start card under a deliberately throttled CPU or network and the bounded retire fallback (only the natural cold-load spread was seen; the longest hold was 6.2 s)",
+      "the lunge by a person's eye (measured per frame, not watched); FFX-2 girls' lunge at phone width beyond 4 stretches",
+      "the hidden Chapter 28 and the other hidden chapters (Gui excepted), sizes other than 1600x900 and 390x844, the full CHK-024 upgrade matrix (one reload smoke per run only), a quiet machine (other sessions ran vitest and screenshot jobs throughout), listening to any audio, a real phone, Safari, a gamepad"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 65,
+  "notes": "No new issue. Observations: LV53-1 CHK-026 FAIL on 1 of 271 swaps in Ixion harness run a (Yuna idle to hurt, stature 0.8843 against the 0.90 floor with a tolerance near 0.885; her hurt painting reads 0.884 to 0.894 in run a and 0.886 to 0.892 in run b, which passed; the focused candidate passed); LV53-2 CHK-027 FAIL on the live build, the disclosed FOC53-001, 4 swap jerks of 40 px or more in each run (r52 live 20 in 192 s under load; the focused review read 3.86 to 1.23 per minute on a quiet machine); LV53-3 the held start card lasts 2.4 to 6.2 s on cold live loads of Chapter IV (r52 0.73 s, r53 from local disk 0.90 to 1.61 s): the changelog's disclosed cost, measured, closes FOC53-003; the animation clock advanced 1.1 to 3.0 s in those holds and the bounded fallback was never reached; LV53-4 the FFX first menu can open while the camera is still easing in (Seymour Flux: boss 544 to 485 px in 2 s; r52 local 2 of 4, r53 local 2 of 3, r53 live 3 of 4), pre-existing and not the framing plan; LV53-5 the first-time coach card can swallow the first Enter on the Change list; LV53-6 225 net::ERR_ABORTED prewarm cancellations in the smoke contexts. The camera cut when the start card is removed (every figure 82 to 86 px in one frame) is identical on r52 and r53. FOC53-003 is closed on live; FOC53-001 reads smaller than on r52."
+}

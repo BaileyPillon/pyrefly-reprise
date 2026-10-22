@@ -1,0 +1,20 @@
+import { open, waitBattleMenu } from 'file:///D:/pyrefly-release55/critic/runner/lib/lib.mjs';
+import sharp from 'file:///D:/pyrefly-release55/node_modules/sharp/dist/index.mjs';
+const [base,chapter,tag]=process.argv.slice(2);
+const { browser, page, consoleErrors } = await open({ base, width:1600, height:900 });
+await page.evaluate((c)=>{window.__pyrefly.gotoChapter(c,{skipCutscenes:true,skipPrep:true,seed:1});return 1},chapter);
+await waitBattleMenu(page,120000);
+await page.waitForTimeout(1500);
+const row=page.locator(".ig-cmd",{hasText:/item/i}).first();
+console.log('rows', await page.locator('.ig-cmd').allInnerTexts());
+await row.click(); await page.waitForTimeout(500);
+await page.keyboard.press('Enter'); await page.waitForTimeout(500);
+console.log('state after item pick', JSON.stringify(await page.evaluate(()=>window.__pyrefly.targeting?.()?.selectedIds)));
+await page.keyboard.press('Enter');
+const fr=[];const t0=Date.now();
+while(Date.now()-t0<3500){fr.push(await page.screenshot({type:'jpeg',quality:70}));}
+const pick=[];for(let i=0;i<8;i++)pick.push(fr[Math.floor(i*fr.length/8)]);
+const tiles=await Promise.all(pick.map(b=>sharp(b).resize(600).toBuffer()));
+await sharp({create:{width:1200,height:1350,channels:3,background:'#000'}}).composite(tiles.map((t,i)=>({input:t,left:(i%2)*600,top:Math.floor(i/2)*338}))).jpeg({quality:85}).toFile(`potion-${tag}.jpg`);
+console.log(tag,fr.length,'ce',consoleErrors.length);
+await browser.close();

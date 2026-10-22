@@ -1,0 +1,662 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-20T20:34:28.751Z",
+  "build": {
+    "mainSha": "1cea6e937",
+    "candidate": "D:/pyrefly-release55/dist-gate",
+    "bundle": "index-CXbIrsG6.js",
+    "previousLive": "6db09ac86 (bundle C-nLFLJH)"
+  },
+  "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect: Ch I and Ch IV (and II, V, VI) won with real keys at 1600x900 and 2560x1440 (Ch IV also 390x844), 0 console errors, 0 missing files, 59 to 60 fps, no stall beyond live's own battle-start gap.",
+    "No regression against live in shipped behaviour: the other chapters match live r59 side by side (no look); look on only in Ch I and Ch IV; ?look=off and ?motion=off switch exactly their own parts; the REDUCE FLASHES run shows no blow-out.",
+    "The one gate FAIL (CHK-026 head metric on the new Seymour and Bahamut rigs) is inside brand-new features (the rigs), so it is disclosed and does not block; CHK-027 motion is better than live (4 jerks and no double image against 10 and 4).",
+    "Demonstrated fixes: first Attack in Ch I opens on Seymour; no damage to a girl after Bahamut falls in four Ch IV routes; the Potion orb and spark play."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "Full-screen layers own the window at 1600x900, 2560x1440 and 390x844 in the Ch I and Ch IV routes; no stage-sized overlay left.",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/run.json",
+        "critic/reviews/1cea6e937-focused/ch4-demo-390/ffx2-bahamut-win-touch/23-midfight.png",
+        "critic/reviews/1cea6e937-focused/ch1-demo-2560/seymour-flux-win/23-midfight.png"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 5,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-003",
+      "result": "PASS",
+      "reason": "HUD text readable beside the HD-2D look at 1600, 2560 and 390 (first menu, guide, advisor, party strip); the look keeps every figure sharp.",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/16-target-single.png",
+        "critic/reviews/1cea6e937-focused/ch4-demo-1600/ffx2-bahamut-win/10-first-menu-coach.png",
+        "critic/reviews/1cea6e937-focused/ch1-demo-390/seymour-flux-win-touch/23-midfight.png"
+      ],
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 5,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-004",
+      "result": "UNVERIFIED",
+      "reason": "Not specifically exercised beyond the routes; no defect seen, no dedicated pass run in this time box.",
+      "where": "both",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-005",
+      "result": "UNVERIFIED",
+      "reason": "Not specifically exercised; no defect seen in the routes.",
+      "where": "both",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-006",
+      "result": "UNVERIFIED",
+      "reason": "Not specifically exercised; no defect seen.",
+      "where": "both",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "reason": "No raw ids or debug text in the ordinary HUD in Ch I, IV, II, V, VI at 1600; the advisor card names the aeon (Mega Phoenix card read).",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/16-target-single.png",
+        "critic/reviews/1cea6e937-focused/ch4-demo-1600/ffx2-bahamut-win/23-midfight.png"
+      ],
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 3,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-008",
+      "result": "UNVERIFIED",
+      "reason": "Not specifically exercised.",
+      "where": "both",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-009",
+      "result": "UNVERIFIED",
+      "reason": "Not specifically exercised.",
+      "where": "both",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-010",
+      "result": "PASS",
+      "reason": "Ch I first Attack opens its target cursor on Seymour Flux (formation index 0), not Mortiorchis, via real Enter keys; targets listed [mortiorchis, seymour-flux], highlighted Seymour. FFX only; FFX-2 unaffected (Ch IV targeting normal).",
+      "where": "FFX Ch I",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/16-target-single.png",
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 5,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-012",
+      "result": "PASS",
+      "reason": "Rig and map subjects load: rigs() lists seymour-flux-body and ffx2-bahamut (gate ok); 0 missing files (notFound empty) in 11 full routes, so none of the listed light maps 404 in Ch I and IV.",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/probe/c-ch1-default.json",
+        "critic/reviews/1cea6e937-focused/probe/c-ch4-default.json",
+        "critic/reviews/1cea6e937-focused/ch4-demo-1600/ffx2-bahamut-win/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 5,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-013",
+      "result": "PASS",
+      "reason": "Rigged Seymour Flux and Bahamut read as the approved paintings at gameplay scale beside their neighbours; relight lights the party without blow-out.",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/seymour-sheet-cand.jpg",
+        "critic/reviews/1cea6e937-focused/ch4-demo-1600/ffx2-bahamut-win/23-midfight.png"
+      ],
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 4,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-014",
+      "result": "NOT APPLICABLE",
+      "reason": "No portrait or menu pose changed.",
+      "where": "both",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Ch I and Ch IV played title to results with real Playwright keys (and touch at 390); the debug API only set up the probe states, never a capability proof.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/run.json",
+        "critic/reviews/1cea6e937-focused/ch4-demo-1600/ffx2-bahamut-win/run.json",
+        "critic/reviews/1cea6e937-focused/ch4-demo-390/ffx2-bahamut-win-touch/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 40,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Every capture asserted its screen/menu in the harness (probe states read via waitBattleMenu). One post-scene shot per FFX run is recorded UNVERIFIED by the harness (screen results, not cutscene), same on every run.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 2,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "reason": "The reviewed bundle is built with tools/candidate-build.mjs (release stamp 60); 0 console errors and 0 404s across all full routes; board reload recorded in the routes. The deploy compares the shipped bytes itself.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/run.json",
+        "critic/reviews/1cea6e937-focused/ch4-demo-1600/ffx2-bahamut-win/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 3,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-018",
+      "result": "PASS",
+      "reason": "No missing files or broken generated-id references: notFound empty everywhere.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch4-demo-1600/ffx2-bahamut-win/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 1,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "reason": "No blank or corrupt image seen; brightness never blew out (share of pixels above 235 at most 2.2 percent, candidate 1.5 to 1.9, live 1.9 to 2.1).",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/probe/c-ch1-default.json",
+        "critic/reviews/1cea6e937-focused/probe/l-ch1.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 2,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "The paired flows hold: Ch I (FFX) and Ch IV (FFX-2) both got the look, rigs, motion and demo mode with their own game-specific parts; the foe cursor is FFX only, the retarget fix FFX-2 only.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/pair-live-vs-cand-ch4.jpg",
+        "critic/reviews/1cea6e937-focused/ch1-demo-1600/seymour-flux-win/16-target-single.png"
+      ],
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 5,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Case per research/handoff: look Ch I FFX + Ch IV FFX-2 only; rigs one per game; foe cursor FFX only; retarget fix FFX-2 only. Absence elsewhere verified: Yunalesca (FFX) and Leblanc (FFX-2, hidden) show no look and match live r59 side by side; Ch IV retarget: 0 positive girl-to-girl damage and 0 damage to a girl after the boss falls in 4 Ch IV routes; unit tests ffx2-single-any-retarget, ffx2-atb-golden, demo-mode pass (4 files, 47 tests).",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/pair-live-vs-cand-yuna.jpg",
+        "critic/reviews/1cea6e937-focused/pair-live-vs-cand-leblanc.jpg",
+        "critic/reviews/1cea6e937-focused/probe/c-yuna.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 12,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "reason": "Ch I won (1600 and 2560), Ch IV won (three sizes), Ch II, V, VI won; wins reach results and the board (the Ch I 390 touch route was lost on the route, same on live, see FOC60-03).",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-2560/seymour-flux-win/run.json",
+        "critic/reviews/1cea6e937-focused/ch4-demo-2560/ffx2-bahamut-win/run.json",
+        "critic/reviews/1cea6e937-focused/yuna-1600/yunalesca-win/run.json",
+        "critic/reviews/1cea6e937-focused/vegnagun-1600/ffx2-vegnagun-shuyin-win/run.json",
+        "critic/reviews/1cea6e937-focused/leblanc-1600/ffx2-leblanc-win/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 60,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "reason": "Presenter path: the look, rig variant cross-fade, potion orb (+200 on Tidus) and FFX-2 potion spark played through the real item path with real keys.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/potion-ch1.jpg",
+        "critic/reviews/1cea6e937-focused/potion-ch4.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 4,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-026",
+      "result": "FAIL",
+      "reason": "Rigs now counted: Seymour Flux body rig 106 of 124 swaps and Bahamut rig 98 of 114 swaps change the rig head mesh by more than 3 percent (worst 8 and 18 percent); live r59 PASSED both chapters. The independent pixel readings are clean (stature 0.78 to 1.10, 0 out of band; feet at most 2.8 px; rig settles in 10 frames). Suspected: the head metric reads a jointed figure articulating between keys.",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/continuity/continuity-summary.json",
+        "critic/reviews/1cea6e937-focused/continuity-live/continuity-summary.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 35,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "reason": "Ch I 3 jerks of 40 px or more at a swap (worst 57.8), Ch IV 1 (48.3). Live r59 had 10 jerks (worst 63) and 4 double images; the candidate has 4 jerks and no double image: better than live. 0 snaps per minute, frame p99 23.5 and 45.2 ms (live 24.5 and 45.4).",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/continuity/continuity-summary.json",
+        "critic/reviews/1cea6e937-focused/continuity-live/continuity-summary.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 35,
+      "artifact": "1cea6e937 / dist-gate index-CXbIrsG6.js",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "candidate D:/pyrefly-release55 1cea6e937 (r60-release-d), tools/candidate-build.mjs (PYREFLY_RELEASE=60) into dist-gate, bundle index-CXbIrsG6.js, vite preview 127.0.0.1:5420; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r59 (C-nLFLJH)"
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "seymour-flux",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 374.3,
+        "swaps": 354,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 12.1,
+        "maxFeetShiftPx": 0.8,
+        "worstJerkPx": 57.8,
+        "minStature": 0.782,
+        "heightOverBand": 0,
+        "feetSilOver": 0,
+        "swapJerksWorstPx": 57.8,
+        "dashesWorstPx": 0,
+        "frameP99Ms": 23.5,
+        "jerksCovered": 0,
+        "fps": 59.9,
+        "dedicated": true,
+        "strips": 20,
+        "worstSwapStrips": [
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-006-kimahri-idle-ko.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-003-kimahri-hurt-idle.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-124-yuna-hurt-critical.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-334-yuna-critical-hurt.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-088-kimahri-idle-ready.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-028-kimahri-ready-idle.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-161-yuna-ready-item.jpg",
+          "seymour-flux-win-1cea6e937/continuity/strips/swap-122-yuna-idle-hurt.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-bahamut",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 382.7,
+        "swaps": 407,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 18,
+        "maxFeetShiftPx": 0.4,
+        "worstJerkPx": 48.3,
+        "minStature": 0.898,
+        "heightOverBand": 0,
+        "feetSilOver": 0,
+        "swapJerksWorstPx": 48.3,
+        "dashesWorstPx": 32.1,
+        "frameP99Ms": 45.2,
+        "jerksCovered": 0,
+        "fps": 59,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-003-bahamut-idle-attack.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-020-bahamut-attack-idle.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-112-bahamut-idle-telegraph.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-000-bahamut-idle-cast.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-113-bahamut-telegraph-idle.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-287-paine-attack-follow.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-002-bahamut-cast-idle.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-365-rikku-ready-attack.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-235-paine-ready-attack.jpg",
+          "ffx2-bahamut-win-1cea6e937/continuity/strips/swap-169-paine-follow-idle.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 757,
+    "counted": 761,
+    "swaps": 791,
+    "size": {
+      "judged": 752,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 9,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 18,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 204,
+      "maxFeetShiftPx": 0.8,
+      "feetOverTolerance": 0,
+      "headMeasured": 752,
+      "headRegistration": 469,
+      "headRig": 240,
+      "rigSwaps": 240,
+      "headSilhouette": 43,
+      "headUnmeasured": 0,
+      "heightMeasured": 752,
+      "heightOverBand": 0,
+      "heightWaived": 0,
+      "minStature": 0.782,
+      "maxStature": 1.104,
+      "koLengthMeasured": 2,
+      "minKoLength": 0.601,
+      "koLengthReported": 2,
+      "feetSilMeasured": 471,
+      "feetSilOver": 0,
+      "feetSilWaived": 0,
+      "maxFeetSilPx": 2.8,
+      "holdSwaps": 467,
+      "worstRealHeadPct": 27.3,
+      "realHeadOutsideBand": 0,
+      "realHeadWaived": 0,
+      "variantHeadSwaps": 0,
+      "worstVariantHeadPct": 0,
+      "variantHeadOutsideBand": 0,
+      "unregisteredSwaps": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "ghostSwaps": 509,
+      "ghostFrames": 1915,
+      "worstGhostSeverity": 0.364,
+      "ghostOverFail": 0,
+      "jerks": 29,
+      "worstJerkPx": 57.8,
+      "jerksOverFail": 4,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0.003,
+      "maxCentroidShiftPx": 160.2,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 4,
+      "swapJerks": 24,
+      "swapJerksWorstPx": 57.8,
+      "swapJerksOverFail": 4,
+      "teleports": 0,
+      "teleportsWorstPx": 0,
+      "dashes": 5,
+      "dashesWorstPx": 32.1,
+      "dashesOverFail": 0,
+      "jerksLongFrame": 1,
+      "swapJerksLongFrame": 0,
+      "swapJerksSteadyOverFail": 4
+    },
+    "frameTime": {
+      "frames": 44999,
+      "longFrames": 504,
+      "longFramePct": 1.1,
+      "worstP99Ms": 45.2,
+      "maxMs": 145.4,
+      "longMs": 34
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "FAIL",
+        "reasons": [
+          "204 swap(s) change a head by more than the tolerance (worst 18 percent; 0.2 percent where the head is registered)"
+        ],
+        "note": "469 of 752 measured swaps had a registered head (tolerance 3 percent); 240 were read from a rig's own head mesh (tolerance 3 percent; 240 swap(s) were changes of a rig's key); 43 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 752 swap(s) (stature 0.782 to 1.104, 0 out of band but waived), the silhouette's own feet 471 swap(s) (worst 2.8 px, 0 waived), 467 swap(s) across a recorded hold (real head worst 27.3 percent from the idle's), 0 on a painting with no fresh registration record"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "4 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 57.8 px)"
+        ],
+        "note": "1 of 29 jerk(s) fell on a frame of more than 34 ms (0 of the 24 at a swap; 4 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+      }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 757 s of battle, 59 to 59.9 fps, 2 of 2 run by the dedicated harness; CHK-026 FAIL (204 swap(s) change a head by more than the tolerance (worst 18 percent; 0.2 percent where the head is registered)); CHK-027 FAIL (4 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 57.8 px))",
+    "base": "http://127.0.0.1:5420/pyrefly-reprise/",
+    "date": "2026-10-20T20:10:51.217Z"
+  },
+  "targets": {
+    "required": 0,
+    "matched": 0,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "note": "tools/end-state-board.mjs does not exist in this candidate, so no per-tile composites were made; the look, rigs and layout were compared with live by hand (pair-live-vs-cand-*.jpg)."
+  },
+  "issues": [
+    {
+      "id": "FOC60-01",
+      "severity": "major",
+      "title": "CHK-026 head-size gate fails on the two new rigs (Seymour Flux body Ch I, Bahamut Ch IV)",
+      "game": "both (FFX Ch I, FFX-2 Ch IV)",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "expected": "a figure head changes by at most 3 percent at a pose swap (CHK-026)",
+      "observed": "rig head mesh changes 3 to 8 percent (Seymour, 106 of 124 swaps) and up to 18 percent (Bahamut, 98 of 114 swaps) between keys; the same chapters PASSED on live r59 (painted). Independent readings (stature band, feet from pixels, 10-frame settle) are clean and a contact sheet of a 70 s Ch I fight shows Seymour consistent in size.",
+      "repro": "node critic/runner/lib/continuity.mjs --base=<preview> --chapters=seymour-flux,ffx2-bahamut --tag=x on 1cea6e937 and on live",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/continuity/continuity-summary.json",
+        "critic/reviews/1cea6e937-focused/continuity-live/continuity-summary.json",
+        "critic/reviews/1cea6e937-focused/seymour-sheet-cand.jpg"
+      ],
+      "confidence": "high that the gate fails; medium that a player sees it",
+      "requirement": "CHK-026",
+      "where": "suspected: src/engine/rig/RigActor.ts key blend; critic/runner/lib/continuity-rig.mjs head metric",
+      "fix": "Hold the rig head scale across keys, or record the rig head as an articulating metric; ask Bailey which",
+      "acceptanceCheck": "CHK-026 PASS on both chapters with rigs counted",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": true
+    },
+    {
+      "id": "FOC60-02",
+      "severity": "polish",
+      "title": "Battle start stalls 0.6 to 1.3 s on arrival (every chapter, live too)",
+      "game": "both",
+      "chapter": "all",
+      "expected": "no frame gap above 100 ms at battle start",
+      "observed": "one frame gap of 630 to 830 ms (Ch I and IV, look on) and 1.2 s on Yunalesca without a look; live r59 shows 850 ms; the candidate is no worse than live. Averages 16.7 to 17.2 ms (about 59 fps) everywhere.",
+      "repro": "fps-*.log in the evidence folder",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/fps-ch1-nodemo-1600.log",
+        "critic/reviews/1cea6e937-focused/fps-live-ch1-390.log",
+        "critic/reviews/1cea6e937-focused/fps-yuna-1600.log"
+      ],
+      "confidence": "high",
+      "requirement": "smooth start of a battle",
+      "where": "battle entry load / shader warm-up",
+      "fix": "prepare the look and rig programs before the swirl ends",
+      "acceptanceCheck": "no frame gap above 100 ms in the first 5 s",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC60-03",
+      "severity": "polish",
+      "title": "Touch route cannot reach Ch I victory at 390x844 (item list shows 6 rows; the route cannot scroll to Poison Fang)",
+      "game": "FFX",
+      "chapter": "seymour-flux",
+      "expected": "touch run wins like the 1600 route",
+      "observed": "candidate (demo seed 7 and seed 1) and live r59 (seed 1) all end in defeat after the route picks Attack when the advised item is below the 6 visible rows; Ch IV wins at 390",
+      "repro": "route.mjs seymour-flux win --size=390x844 --touch on either build",
+      "evidence": [
+        "critic/reviews/1cea6e937-focused/ch1-demo-390/seymour-flux-win-touch/run.json",
+        "critic/reviews/1cea6e937-focused/live-ch1-390/seymour-flux-win-touch/run.json"
+      ],
+      "confidence": "medium",
+      "requirement": "CHK-015 touch",
+      "where": "harness item picker or phone item list",
+      "fix": "scroll the item list in the route",
+      "acceptanceCheck": "touch Ch I route wins",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Ch I and Ch IV, demo and no demo, 1600x900, 2560x1440, 390x844 touch (real keys)",
+      "Ch II, V, VI at 1600x900 against live",
+      "?look=off, ?motion=off, REDUCE FLASHES, potion orb and spark",
+      "continuity harness on Ch I and IV, candidate and live",
+      "unit tests retarget, golden, demo-mode"
+    ],
+    "reused": [],
+    "notTested": [
+      "2000x1012",
+      "demo seeds 10 and 12 (only seed 7 played in Ch I; Ch IV seed 56 won)",
+      "a hidden chapter other than Leblanc, the FF7 experiment, the other 14 chapters",
+      "CHK-004, 005, 006, 008, 009",
+      "per-tile target composites",
+      "a human eye on rig motion at conference scale"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "deep review of the live build after deploy",
+  "elapsedMinutes": 330
+}

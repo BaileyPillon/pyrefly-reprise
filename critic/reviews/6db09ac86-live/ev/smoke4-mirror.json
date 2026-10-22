@@ -1,0 +1,54 @@
+{
+ "which": "mirror",
+ "steps": [
+  {
+   "k": "screen",
+   "v": "battle"
+  },
+  {
+   "k": "chapter",
+   "v": "mirror-aeons"
+  },
+  {
+   "k": "rigs",
+   "v": [
+    "dark-mindy:off:no rig listed in the art manifest",
+    "dark-sandy:off:no rig listed in the art manifest",
+    "lulu:ON:gate ok, 11 parts, 25 bones, 13 keys, 1x maps",
+    "tidus:off:no rig listed in the art manifest",
+    "yuna:off:no rig listed in the art manifest"
+   ]
+  },
+  {
+   "k": "actors",
+   "v": [
+    "tidus:tidus:ready:ready",
+    "yuna:yuna:idle:idle",
+    "dark-mindy:dark-mindy:idle:idle",
+    "dark-sandy:dark-sandy:idle:idle",
+    "lulu:lulu:idle:idle"
+   ]
+  },
+  {
+   "k": "rows",
+   "v": [
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee",
+    "Escape"
+   ]
+  },
+  {
+   "k": "console",
+   "v": []
+  },
+  {
+   "k": "404",
+   "v": []
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

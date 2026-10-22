@@ -1,0 +1,10 @@
+ch1-nodemo-1600 done DONE seymour-flux-win outcome= victory seed= 1 pinned= 1 first-enemy= {"seq":3,"actor":"seymour-flux","ability":"Lance of Atrophy","targets":["kimahri"]} err= 0 fails= 1 min= 8.09
+ch4-nodemo-1600 done DONE ffx2-bahamut-win outcome= victory seed= 1 pinned= 1 first-enemy= {"seq":3,"actor":"bahamut","ability":"Curse","targets":["yuna"]} err= 0 fails= 0 min= 7.45
+yuna-1600 done DONE yunalesca-win outcome= victory seed= 1 pinned= 1 first-enemy= {"seq":1,"actor":"yunalesca","ability":"Dispelling Slap","targets":["auron"]} err= 0 fails= 1 min= 14.76
+vegnagun-1600 done DONE ffx2-vegnagun-shuyin-win outcome= victory seed= 1 pinned= 1 first-enemy= {"seq":7,"actor":"vegnagun-tail","ability":"Noli Me Tangere","targets":[]} err= 0 fails= 0 min= 15.14
+leblanc-1600 done DONE ffx2-leblanc-win outcome= victory seed= 1 pinned= 1 first-enemy= {"seq":3,"actor":"ormi-entrance","ability":"Shield Bash","targets":["yuna"]} err= 0 fails= 1 min= 11.59
+ch1-demo-2560 done DONE seymour-flux-win outcome= victory seed= 7 pinned= null first-enemy= {"seq":10,"actor":"seymour-flux","ability":"Lance of Atrophy","targets":["tidus"]} err= 0 fails= 1 min= 7.84
+ch4-demo-2560 done DONE ffx2-bahamut-win outcome= victory seed= 56 pinned= null first-enemy= {"seq":3,"actor":"bahamut","ability":"Curse","targets":["rikku"]} err= 0 fails= 0 min= 6.01
+ch1-demo-390 done DONE seymour-flux-win-touch outcome= defeat seed= 7 pinned= null first-enemy= {"seq":10,"actor":"seymour-flux","ability":"Lance of Atrophy","targets":["tidus"]} err= 0 fails= 0 min= 3.12
+ch4-demo-390 done DONE ffx2-bahamut-win-touch outcome= victory seed= 56 pinned= null first-enemy= {"seq":3,"actor":"bahamut","ability":"Curse","targets":["rikku"]} err= 0 fails= 0 min= 6.13
+ALLDONE

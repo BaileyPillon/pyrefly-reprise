@@ -1,0 +1,20 @@
+{
+ "result": "PASS",
+ "artifactHash": "6b3c6c9202d4ca746e2a96c894f17fabf9542b18a06fbe80f87e2faebf87cb81",
+ "liveManifest": "match",
+ "checked": 5656,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": [
+  "_headers is part of this artifact and was not downloaded (no address serves a host-read file); assets/PaintedActor-vL72ZnRY.js was served with Cache-Control \"public, max-age=31536000, immutable\""
+ ],
+ "browserPages": {
+  "index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)"
+ },
+ "assetCacheControl": {
+  "path": "assets/PaintedActor-vL72ZnRY.js",
+  "value": "public, max-age=31536000, immutable"
+ }
+}

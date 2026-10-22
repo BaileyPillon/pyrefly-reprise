@@ -1,0 +1,202 @@
+{
+  "rigLines": [
+    "[chapter-select] confirmed \"yunalesca\" — no onSelect wired; the presenter agent replaces this factory.",
+    "[painted] /art/characters/yunalesca-1/ko.png: the sidecar says 981x788 but the painting is 1216x832; using the painting's own size.",
+    "[painted] /art/characters/yunalesca-1/ko.png still had an opaque white studio background; cleaned it at load time. Regenerate the PNG with a proper alpha matte.",
+    "[rig] tidus off (no rig listed in the art manifest)",
+    "[rig] yuna off (no rig listed in the art manifest)",
+    "[rig] auron off (no rig listed in the art manifest)",
+    "[rig] yunalesca-1 off (no rig listed in the art manifest)",
+    "[rig] ifrit on (gate ok, 7 parts, 19 bones, 6 keys, 1x maps)"
+  ],
+  "mode": "gpu",
+  "url": "https://echoesofspira.com/?livesmoke=1792454151581",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "steps": [
+    {
+      "step": "boot: __pyreflyReady",
+      "ok": true,
+      "detail": "loadMs=814"
+    },
+    {
+      "step": "boot: title screen",
+      "ok": true,
+      "detail": "screen=title"
+    },
+    {
+      "step": "served bundle names CEDFXO0J",
+      "ok": true,
+      "detail": "https://echoesofspira.com/assets/index-CEDFXO0J.js"
+    },
+    {
+      "step": "title -> chapter-select (real Enter)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached yunalesca",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "yunalesca: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "yunalesca: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "yunalesca: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch XIV rigs(): pterya on",
+      "ok": false,
+      "detail": "auron:off(no rig listed in the art manifest) | ifrit:on(gate ok, 7 parts, 19 bones, 6 keys, 1x maps) | tidus:off(no rig listed in the art manifest) | yuna:off(no rig listed in the art manifest) | yunalesca-1:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch XIV console [rig] pterya on",
+      "ok": false,
+      "detail": "[chapter-select] confirmed \"yunalesca\" — no onSelect wired; the presenter agent replaces this factory. || [painted] /art/characters/yunalesca-1/ko.png: the sidecar says 981x788 but the painting is 1216x832; using the painting's own size. || [painted] /art/characters/yunalesca-1/ko.png still had an opaque white studio background; cleaned it at load time. Regenerate the PNG with a proper alpha matte. || [rig] tidus off (no rig listed in the art manifest) || [rig] yuna off (no rig listed in the art manifest) || [rig] auron off (no rig listed in the art manifest) || [rig] yunalesca-1 off (no rig listed in the art manifest) || [rig] ifrit on (gate ok, 7 parts, 19 bones, 6 keys, 1x maps)"
+    },
+    {
+      "step": "Ch XIV Kimahri/Lulu/Valefor not off",
+      "ok": true,
+      "detail": "auron:off(no rig listed in the art manifest) | ifrit:on(gate ok, 7 parts, 19 bones, 6 keys, 1x maps) | tidus:off(no rig listed in the art manifest) | yuna:off(no rig listed in the art manifest) | yunalesca-1:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch XIV: P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch XIV: Escape closes pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "prerendered audio fetched over network",
+      "ok": true,
+      "detail": "count=27 sample=https://echoesofspira.com/audio/music/title.mp3 | https://echoesofspira.com/audio/sfx/sprite.mp3 | https://echoesofspira.com/audio/sfx/sprite-v2.mp3 dbg=null"
+    }
+  ],
+  "errors": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-lady.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-zanarkand-dome.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-form-3.002.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.001.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.006.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.007.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.008.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.015.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.025.mp3",
+    "https://echoesofspira.com/audio/music/boss-challenge.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.030.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.031.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.017.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-challenge.mp3"
+  ],
+  "html404img": [],
+  "living": [],
+  "partReqs": [
+    "200 art/portrait-parts/manifest.json",
+    "200 art/portrait-parts/tidus/2x/lidL-closed.png",
+    "200 art/portrait-parts/tidus/2x/eyeR-socket.webp",
+    "200 art/portrait-parts/tidus/2x/eyeR-window.png",
+    "200 art/portrait-parts/tidus/2x/eyeL-socket.webp",
+    "200 art/portrait-parts/tidus/2x/lidR-closed.png",
+    "200 art/portrait-parts/tidus/2x/mouth-open-smile.png",
+    "200 art/portrait-parts/tidus/2x/eyeR-iris.webp",
+    "200 art/portrait-parts/tidus/2x/eyeL-iris.webp",
+    "200 art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+    "200 art/portrait-parts/tidus/2x/eyeL-catch.png",
+    "200 art/portrait-parts/tidus/2x/eyeL-window.png",
+    "200 art/portrait-parts/tidus/2x/eyeR-catch.png"
+  ],
+  "rigs": {
+    "ch14": {
+      "switch": {
+        "on": true,
+        "reason": "default"
+      },
+      "figures": [
+        {
+          "subject": "auron",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "ifrit",
+          "on": true,
+          "reason": "gate ok, 7 parts, 19 bones, 6 keys, 1x maps",
+          "ids": [
+            "ifrit"
+          ],
+          "info": {
+            "name": "ifrit",
+            "key": "idle",
+            "keys": [
+              "idle",
+              "attack",
+              "cast",
+              "hurt",
+              "ko",
+              "overdrive"
+            ],
+            "parts": 7,
+            "vertices": 3593,
+            "bones": 19,
+            "chains": 0,
+            "idle": true,
+            "textures": {
+              "map": 1,
+              "rim": 1
+            },
+            "textureMB": 12.5
+          }
+        },
+        {
+          "subject": "tidus",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "yuna",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "yunalesca-1",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        }
+      ]
+    }
+  },
+  "audioDebug": null,
+  "elapsedMin": "1.3"
+}

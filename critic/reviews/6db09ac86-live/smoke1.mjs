@@ -1,0 +1,12 @@
+import { bootChapter } from '../../runner/lib/gap-boot.mjs';
+const EV = 'D:/pyrefly-release55/critic/reviews/6db09ac86-live/ev';
+const base = 'https://echoesofspira.com/?cb=r59live' + Date.now();
+const b = await bootChapter({ base, evidence: EV, id: 'seymour-flux', dir: 'ch1', seed: 1 });
+const { page } = b;
+console.log('screen', await b.scr());
+console.log('rows', JSON.stringify(await b.readRows()));
+const rigs = await page.evaluate(() => window.__pyrefly.rigs().figures.map(f => ({s: f.subject, on: f.on, r: f.reason})));
+console.log('rigs', JSON.stringify(rigs));
+console.log('state', JSON.stringify(await b.ss()).slice(0,1200));
+await b.snap('01-first-menu.png', {});
+await b.browser.close();

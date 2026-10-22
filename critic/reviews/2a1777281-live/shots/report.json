@@ -1,0 +1,373 @@
+{
+  "rigLines": [
+    "[chapter-select] confirmed \"isaaru-via-purifico\" — no onSelect wired; the presenter agent replaces this factory.",
+    "[rig] yuna off (no rig listed in the art manifest)",
+    "[rig] isaaru off (no rig listed in the art manifest)",
+    "[rig] grothia off (no rig listed in the art manifest)",
+    "[entry] battle-start card over the ink after 1305 ms",
+    "[entry] loading card handed over after 527 ms"
+  ],
+  "mode": "gpu",
+  "url": "https://echoesofspira.com/?livesmoke=1792451721031",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "steps": [
+    {
+      "step": "boot: __pyreflyReady",
+      "ok": true,
+      "detail": "loadMs=1475"
+    },
+    {
+      "step": "boot: title screen",
+      "ok": true,
+      "detail": "screen=title"
+    },
+    {
+      "step": "served bundle names CEDFXO0J",
+      "ok": true,
+      "detail": "https://echoesofspira.com/assets/index-CEDFXO0J.js"
+    },
+    {
+      "step": "title -> chapter-select (real Enter)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached braskas-final-aeon",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "braskas-final-aeon: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "braskas-final-aeon: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "braskas-final-aeon: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch III real keys played until ifrit decided",
+      "ok": false,
+      "detail": "{\"gone\":\"results\"}"
+    },
+    {
+      "step": "Ch III rigs(): ifrit on",
+      "ok": false,
+      "detail": "auron:off(no rig listed in the art manifest) | braskas-final-aeon-1:off(no rig listed in the art manifest) | tidus:off(no rig listed in the art manifest) | yu-pagoda:off(no rig listed in the art manifest) | yuna:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch III console [rig] ifrit on",
+      "ok": false,
+      "detail": "[chapter-select] confirmed \"braskas-final-aeon\" — no onSelect wired; the presenter agent replaces this factory. || [painted] /art/characters/braskas-final-aeon-1/ko.png: the sidecar says 981x942 but the painting is 1216x772; using the painting's own size. || [rig] tidus off (no rig listed in the art manifest) || [rig] yuna off (no rig listed in the art manifest) || [rig] auron off (no rig listed in the art manifest) || [rig] braskas-final-aeon-1 off (no rig listed in the art manifest) || [rig] yu-pagoda off (no rig listed in the art manifest) || [entry] battle-start card over the ink after 2236 ms || [entry] loading card handed over after 918 ms || (snapshot after play) [[\"auron\",false,\"no rig listed in the art manifest\",null,null],[\"braskas-final-aeon-1\",false,\"no rig listed in the art manifest\",null,null],[\"tidus\",false,\"no rig listed in the art manifest\",null,null],[\"yu-pagoda\",false,\"no rig listed in the art manifest\",null,null],[\"yuna\",false,\"no rig listed in the art manifest\",null,null]]"
+    },
+    {
+      "step": "Ch III Kimahri/Lulu/Valefor not off",
+      "ok": true,
+      "detail": "auron:off(no rig listed in the art manifest) | braskas-final-aeon-1:off(no rig listed in the art manifest) | tidus:off(no rig listed in the art manifest) | yu-pagoda:off(no rig listed in the art manifest) | yuna:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch III cancel path: submenu then Escape returns to command menu",
+      "ok": false,
+      "detail": null
+    },
+    {
+      "step": "Ch III attack issued, battle still running",
+      "ok": false,
+      "detail": null
+    },
+    {
+      "step": "Ch III: P opens pause",
+      "ok": true,
+      "detail": "screen=pause"
+    },
+    {
+      "step": "H hides then restores pause panels",
+      "ok": true,
+      "detail": "before=block/bare=false hidden=none/bare=true after=block/bare=false"
+    },
+    {
+      "step": "MASTER VOLUME lowered with real ArrowLeft",
+      "ok": true,
+      "detail": "before=80 after=60"
+    },
+    {
+      "step": "Ch III: Escape closes the pause (back to battle)",
+      "ok": false,
+      "detail": "screen=cutscene"
+    },
+    {
+      "step": "pre-reload save holds lowered masterVolume",
+      "ok": true,
+      "detail": "{\"masterVolume\":0.6}"
+    },
+    {
+      "step": "reload: re-boots; masterVolume survives",
+      "ok": true,
+      "detail": "{\"masterVolume\":0.6}"
+    },
+    {
+      "step": "reload: title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached isaaru-via-purifico",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "isaaru-via-purifico: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "isaaru-via-purifico: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "isaaru-via-purifico: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch XIV real keys played until pterya decided",
+      "ok": false,
+      "detail": "null"
+    },
+    {
+      "step": "Ch XIV rigs(): pterya on",
+      "ok": false,
+      "detail": "grothia:off(no rig listed in the art manifest) | isaaru:off(no rig listed in the art manifest) | yuna:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch XIV console [rig] pterya on",
+      "ok": false,
+      "detail": "[chapter-select] confirmed \"isaaru-via-purifico\" — no onSelect wired; the presenter agent replaces this factory. || [rig] yuna off (no rig listed in the art manifest) || [rig] isaaru off (no rig listed in the art manifest) || [rig] grothia off (no rig listed in the art manifest) || [entry] battle-start card over the ink after 1305 ms || [entry] loading card handed over after 527 ms"
+    },
+    {
+      "step": "Ch XIV Kimahri/Lulu/Valefor not off",
+      "ok": true,
+      "detail": "grothia:off(no rig listed in the art manifest) | isaaru:off(no rig listed in the art manifest) | yuna:off(no rig listed in the art manifest)"
+    },
+    {
+      "step": "Ch XIV: P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch XIV: Escape closes pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "prerendered audio fetched over network",
+      "ok": true,
+      "detail": "count=68 sample=https://echoesofspira.com/audio/music/title.mp3 | https://echoesofspira.com/audio/sfx/sprite.mp3 | https://echoesofspira.com/audio/sfx/sprite-v2.mp3 dbg=null"
+    }
+  ],
+  "errors": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-final-aeon.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-dreams-end.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bfa-talk.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bfa-sword.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.005.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.008.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.010.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.011.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.001.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.003.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.004.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.006.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.008.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.009.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.010.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ifrit-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ifrit-enters.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ifrit-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ixion-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ixion-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-shiva-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-enters.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-falls.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.003.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.005.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.007.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.013.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.019.mp3",
+    "https://echoesofspira.com/audio/music/boss-jecht.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/music/scene-dreams-end.mp3",
+    "https://echoesofspira.com/audio/music/boss-jecht.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/scene-dreams-end.mp3",
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.mid-pterya-called.002.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.mid-spathi-called.002.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.mid-grothia-ready.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.quip-yuna.001.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.007.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.009.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.011.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.016.mp3",
+    "https://echoesofspira.com/audio/voice/isaaru-via-purifico/isaaru-via-purifico.pre.019.mp3",
+    "https://echoesofspira.com/audio/music/boss-isaaru.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-isaaru.mp3"
+  ],
+  "html404img": [],
+  "living": [],
+  "partReqs": [
+    "200 art/portrait-parts/manifest.json",
+    "200 art/portrait-parts/manifest.json",
+    "200 art/portrait-parts/yuna/2x/mouth-open-smile.png",
+    "200 art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+    "200 art/portrait-parts/yuna/2x/lidL-closed.png",
+    "200 art/portrait-parts/yuna/2x/eyeR-catch.png",
+    "200 art/portrait-parts/yuna/2x/lidR-closed.png",
+    "200 art/portrait-parts/yuna/2x/eyeR-socket.webp",
+    "200 art/portrait-parts/yuna/2x/eyeR-iris.webp",
+    "200 art/portrait-parts/yuna/2x/eyeL-socket.webp",
+    "200 art/portrait-parts/yuna/2x/eyeL-iris.webp",
+    "200 art/portrait-parts/yuna/2x/eyeR-window.png",
+    "200 art/portrait-parts/yuna/2x/eyeL-catch.png",
+    "200 art/portrait-parts/yuna/2x/eyeL-window.png"
+  ],
+  "rigs": {
+    "ch3": {
+      "switch": {
+        "on": true,
+        "reason": "default"
+      },
+      "figures": [
+        {
+          "subject": "auron",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "braskas-final-aeon-1",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "tidus",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "yu-pagoda",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "yuna",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        }
+      ]
+    },
+    "ch3-after": {
+      "switch": {
+        "on": true,
+        "reason": "default"
+      },
+      "figures": [
+        {
+          "subject": "auron",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "braskas-final-aeon-1",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "tidus",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "yu-pagoda",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "yuna",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        }
+      ]
+    },
+    "ch14": {
+      "switch": {
+        "on": true,
+        "reason": "default"
+      },
+      "figures": [
+        {
+          "subject": "grothia",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "isaaru",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        },
+        {
+          "subject": "yuna",
+          "on": false,
+          "reason": "no rig listed in the art manifest",
+          "ids": []
+        }
+      ]
+    }
+  },
+  "volAfter": "60",
+  "audioDebug": null,
+  "elapsedMin": "10.1"
+}

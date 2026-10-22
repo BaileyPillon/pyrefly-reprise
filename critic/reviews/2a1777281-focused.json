@@ -1,0 +1,492 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-19T22:31:15.367Z",
+ "build": {
+  "mainSha": "2a1777281"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "Ifrit and Pterya rigs are better than the live painting set: on the candidate build the hurt-to-KO box stays 514 to 517 px (Ifrit) and 418 to 418 px (Pterya) with the rig on, where live r57 jumps -28 percent and -11 percent; head mesh steady to 0.00 percent; the authored crouch plays and dissolves in the light pillar; 0 console errors, 0 responses >= 400.",
+  "No regression against live r57: the same routes on live give the same defeat at turn 42 in Chapter XIV and the same turn-370 stall in Chapter III; every continuity failure is on painted figures this release does not touch and is also on live; Valefor, Kimahri and Lulu rigs verify and stay on; Shiva stays the painting set; no product code changed beyond the release notes.",
+  "changedArea is FAIL only because the harness reader for rigs reported nothing (R58-T1, tooling) and CHK-026/027 FAIL on painted figures as on live; no critical defect found."
+ ],
+ "checks": [
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every route step asserts the screen/state through the harness (waitFor throws); the mobile smoke asserts screen=title then chapter-select; KO captures read pose and hp from the engine per frame.",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon, isaaru-via-purifico, seymour-flux",
+   "state": "title to battle",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/braskas-final-aeon-win-2a1777281/run.json",
+    "critic/reviews/2a1777281-focused/mobile/mobile.json",
+    "critic/reviews/2a1777281-focused/ko/ifrit-on/ko.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "Candidate built with candidate-build.mjs (stamp 58) into dist-gate; art-derive verify PASS (4015 masters, 0 problems) and audit PASS; rig-gate --verify PASS for kimahri, lulu, valefor, ifrit, pterya against D:/pyrefly-art-r58; dist-gate/art/rigs holds exactly those five, no shiva rig; 0 console errors and 0 responses >= 400 in all five routed runs and the mobile smoke; save key pyrefly-reprise:save:v1 present.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "production candidate",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/static/pose-census.json",
+    "critic/reviews/2a1777281-focused/mobile/mobile.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The change is FFX only (the possessed Ifrit, Yuna summon Ifrit and Pterya are FFX actors). FFX-2 paths unchanged: no src change except releaseNotes.ts; Valefor (shared with FFX-2 Besaid) was already rigged live.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "diff ed5cf5224..2a1777281",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Presence in FFX: Ifrit and Pterya rigs drawn in Chapter III, XIV and seymour-flux (coverage.rigs lists them with keys). Absence in FFX-2: nothing FFX-2 changed in src or art; Shiva is still the painting set (no shiva rig folder in dist-gate).",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon, isaaru-via-purifico",
+   "state": "route",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-022",
+   "result": "UNVERIFIED",
+   "reason": "The harness bot did not win Chapter III (turn cap 370, boss at half HP, same on live r57) nor Chapter XIV (defeat at turn 42, same on live r57); seymour-flux reached victory. No outcome regression against live was seen, but a winning route for III and XIV was not proved.",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon, isaaru-via-purifico",
+   "state": "fight outcome",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/braskas-final-aeon-win-2a1777281/run.json",
+    "critic/reviews/2a1777281-focused/continuity-live/braskas-final-aeon-win-live57/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Harness FAIL on Chapter XIV (11 Shiva ready/attack/idle swaps over the silhouette stance tolerance, worst 12.3 px; live r57 has 10) and PASS on Chapter III. Rig swaps were NOT read: every rig swap was excluded as notShowing, counted 0 (tooling issue R58-T1). Independent measure, lane ko mode on the candidate build: Ifrit box 514 to 517 px and Pterya 418 to 418 px across hurt to ko with the rig on (painting set: Ifrit 488 to 351 = -28 percent, Pterya 413 to 366 = -11 percent); head mesh area step 0.00 percent over 227 and 223 frames.",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon, isaaru-via-purifico, seymour-flux",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/continuity-summary.json",
+    "critic/reviews/2a1777281-focused/ko/ifrit-sheet.jpg",
+    "critic/reviews/2a1777281-focused/ko/pterya-sheet.jpg",
+    "critic/reviews/2a1777281-focused/ko/ifrit-on/ko.json",
+    "critic/reviews/2a1777281-focused/ko/ifrit-off/ko.json",
+    "critic/reviews/2a1777281-focused/ko/pterya-on/ko.json",
+    "critic/reviews/2a1777281-focused/ko/pterya-off/ko.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 80
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Harness FAIL: swap jerks of 40 px or more (Chapter III 17, live 11; Chapter XIV 1, live 4) and double images 7 vs 6 live, all on painted figures (Ixion, Shiva, Auron, Yuna, boss) whose art and code are unchanged. Rig-on tracker: Ifrit head max step 25.2 px per frame, 0 jerks (painting set 120.9 px, 1 jerk); Pterya 1 jerk at frame 21 (37 px, an opening move) vs the painting set 2 jerks.",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon, isaaru-via-purifico, seymour-flux",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/continuity-summary.json",
+    "critic/reviews/2a1777281-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/2a1777281-focused/ko/pterya-on/jerks.json",
+    "critic/reviews/2a1777281-focused/ko/ifrit-off/jerks.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "braskas-final-aeon",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1889.1,
+    "swaps": 1986,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 15.8,
+    "maxFeetShiftPx": 1.2,
+    "worstJerkPx": 136.8,
+    "minStature": 0.782,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 136.8,
+    "dashesWorstPx": 42.2,
+    "frameP99Ms": 71.2,
+    "jerksCovered": 0,
+    "fps": 54.7,
+    "dedicated": true,
+    "strips": 11,
+    "worstSwapStrips": [
+     "braskas-final-aeon-win-2a1777281/continuity/strips/swap-249-shiva-hurt-ko.jpg",
+     "braskas-final-aeon-win-2a1777281/continuity/strips/swap-174-ixion-hurt-ko.jpg",
+     "braskas-final-aeon-win-2a1777281/continuity/strips/swap-027-yuna-critical-hurt.jpg",
+     "braskas-final-aeon-win-2a1777281/continuity/strips/swap-854-yuna-ready-item.jpg",
+     "braskas-final-aeon-win-2a1777281/continuity/strips/swap-295-yuna-hurt-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "isaaru-via-purifico",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 282.2,
+    "swaps": 244,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 15.5,
+    "maxFeetShiftPx": 0.6,
+    "worstJerkPx": 41.8,
+    "minStature": 0.799,
+    "heightOverBand": 0,
+    "feetSilOver": 11,
+    "swapJerksWorstPx": 41.8,
+    "dashesWorstPx": 25,
+    "frameP99Ms": 35.8,
+    "jerksCovered": 0,
+    "fps": 57.1,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-328-shiva-hurt-ko.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-330-yuna-idle-ko.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-030-yuna-hurt-idle.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-028-yuna-idle-hurt.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-300-shiva-attack-idle.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-263-shiva-ready-attack.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-003-yuna-ready-cast.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-178-ixion-ready-attack.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-142-ixion-attack-idle.jpg",
+     "isaaru-via-purifico-win-2a1777281/continuity/strips/swap-031-yuna-idle-ready.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 371.3,
+    "swaps": 345,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 44.1,
+    "minStature": 0.782,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 44.1,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 26.7,
+    "jerksCovered": 0,
+    "fps": 59,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-flux-win-2a1777281/continuity/strips/swap-023-yuna-critical-hurt.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-328-yuna-hurt-critical.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-147-yuna-ready-item.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-192-yuna-hurt-idle.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-190-yuna-idle-hurt.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-154-yuna-item-idle.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-124-mortiorchis-idle-attack.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-130-mortiorchis-attack-idle.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-051-yuna-critical-idle.jpg",
+     "seymour-flux-win-2a1777281/continuity/strips/swap-022-yuna-idle-critical.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 2542.6,
+  "counted": 2575,
+  "swaps": 3225,
+  "size": {
+   "judged": 2529,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 46,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 15.8,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.2,
+   "feetOverTolerance": 0,
+   "headMeasured": 2529,
+   "headRegistration": 1253,
+   "headRig": 0,
+   "rigSwaps": 0,
+   "headSilhouette": 1276,
+   "headUnmeasured": 0,
+   "heightMeasured": 2529,
+   "heightOverBand": 0,
+   "heightWaived": 26,
+   "minStature": 0.782,
+   "maxStature": 1.121,
+   "koLengthMeasured": 6,
+   "minKoLength": 0.599,
+   "koLengthReported": 5,
+   "feetSilMeasured": 2480,
+   "feetSilOver": 11,
+   "feetSilWaived": 4,
+   "maxFeetSilPx": 22.6,
+   "holdSwaps": 1249,
+   "worstRealHeadPct": 38.1,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 2325,
+   "ghostFrames": 8791,
+   "worstGhostSeverity": 0.415,
+   "ghostOverFail": 7,
+   "jerks": 115,
+   "worstJerkPx": 136.8,
+   "jerksOverFail": 22,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0,
+   "maxCentroidShiftPx": 440.8,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "swapJerks": 103,
+   "swapJerksWorstPx": 136.8,
+   "swapJerksOverFail": 20,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 12,
+   "dashesWorstPx": 42.2,
+   "dashesOverFail": 2,
+   "jerksLongFrame": 20,
+   "swapJerksLongFrame": 17,
+   "swapJerksSteadyOverFail": 16
+  },
+  "frameTime": {
+   "frames": 141409,
+   "longFrames": 3842,
+   "longFramePct": 2.7,
+   "worstP99Ms": 71.2,
+   "maxMs": 10037.6,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "11 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 22.6 px at 1600 wide), whatever stance the registration claims"
+    ],
+    "note": "1253 of 2529 measured swaps had a registered head (tolerance 3 percent); 1276 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 2529 swap(s) (stature 0.782 to 1.121, 26 out of band but waived), the silhouette's own feet 2480 swap(s) (worst 22.6 px, 4 waived), 1249 swap(s) across a recorded hold (real head worst 38.1 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "20 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 136.8 px)",
+     "7 swap(s) show a double image of severity 0.4 or more (worst 0.415)"
+    ],
+    "note": "2 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 42.2 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 20 of 115 jerk(s) fell on a frame of more than 34 ms (17 of the 103 at a swap; 16 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 3 chapter(s), 2542.6 s of battle, 54.7 to 59 fps, 3 of 3 run by the dedicated harness; CHK-026 FAIL (11 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 22.6 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (20 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 136.8 px); 7 swap(s) show a double image of severity 0.4 or more (worst 0.415))",
+  "base": "http://localhost:5871/pyrefly-reprise/",
+  "date": "2026-10-19T21:42:19.643Z"
+ },
+ "staticChecks": {
+  "pose-census": {
+   "subjects": 146,
+   "paintings": 1106,
+   "pass": 829,
+   "waived": 79,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 198,
+   "byClass": {
+    "idle": 146,
+    "standing": 565,
+    "ko": 90,
+    "low": 71,
+    "wide": 4,
+    "staged": 176,
+    "part": 54
+   },
+   "byGame": {
+    "FFX-2": 777,
+    "FFX": 307,
+    "FF7": 22
+   },
+   "byRowStatus": {
+    "ok": 746,
+    "held": 83,
+    "waived": 79,
+    "none": 198
+   }
+  }
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R58-T1",
+   "severity": "major",
+   "title": "The continuity harness's new rig reader counts no rig swap in a real run (tooling)",
+   "game": "both",
+   "chapter": "braskas-final-aeon, isaaru-via-purifico, seymour-flux",
+   "expected": "R57-002: a rigged figure key changes are read as swaps with head, feet and height numbers (coverage.rigs counted above 0).",
+   "observed": "coverage.rigs lists Valefor, Ifrit, Pterya, Kimahri and Lulu with their keys and swap counts (ifrit 6, 18 and 2; pterya 34; lulu 495) but counted 0, settled 0, headMeasured 0, feetMeasured 0 for every one; every rig swap sits in swaps[] with notShowing true; summary.size.rigSwaps 0, headRig 0; measuredFromRig empty; perFigure has no rigged figure. CHK-026 and CHK-027 still measure nothing for a rig, as before R57-002.",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<candidate preview> --chapters=seymour-flux (about 6 minutes), then read coverage.rigs in continuity.json.",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/braskas-final-aeon-win-2a1777281/continuity/continuity.json",
+    "critic/reviews/2a1777281-focused/continuity/seymour-flux-win-2a1777281/continuity/continuity.json"
+   ],
+   "confidence": "high for the symptom; the cause is suspected: continuity-analyze.mjs drops the swap as notShowing when the figure has no frame record at the swap or sw.a is below 0.9, before the sw.rig branch; probably sampleRig stores no frame in the production build",
+   "requirement": "CHK-026 item 9, CHK-027 (R57-002)",
+   "where": "critic/runner/lib/continuity-analyze.mjs line 112 and continuity-probe.mjs sampleRig",
+   "fix": "Find why the rig frame is not recorded or its alpha is below 0.9, move the sw.rig branch ahead of the notShowing test, and rerun on a real chapter.",
+   "acceptanceCheck": "seymour-flux run: coverage.rigs counted above 0 for kimahri, valefor and ifrit; summary.size.rigSwaps above 0.",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "R58-F1",
+   "severity": "major",
+   "title": "Chapter III: more pose-swap jerks and double images than live in one run (painted figures)",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon",
+   "expected": "No more swap jerks than live r57.",
+   "observed": "17 swap jerks over 40 px (worst 136.8 px) and 7 over-threshold double images against live 11 and 6 on the same route; the fights ran 1889 s against 1745 s and frame p99 was 71 ms against 48 ms (my art-derive check shared the machine early on); 16 of the 85 swap jerks fell on frames over 34 ms. The swaps are Ixion, Shiva, Auron, Yuna and the boss, none touched by this release.",
+   "repro": "continuity.mjs --chapters=braskas-final-aeon on the candidate and on live",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/continuity-summary.json",
+    "critic/reviews/2a1777281-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/2a1777281-focused/continuity/braskas-final-aeon-win-2a1777281/continuity/strips/jerk-004-braskas-final-aeon.jpg"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-027",
+   "where": "existing painted pose swaps",
+   "fix": "Existing jerk work, not this release.",
+   "acceptanceCheck": "CHK-027 PASS",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R58-S1",
+   "severity": "major",
+   "title": "Shiva ready/attack/idle feet slide in Chapter XIV (painting set, unchanged, same on live)",
+   "game": "FFX",
+   "chapter": "isaaru-via-purifico",
+   "expected": "Standing feet within 9.7 px",
+   "observed": "11 swaps over tolerance (worst 12.3 px ground line, about 60 px sideways); live r57 has 10",
+   "repro": "continuity.mjs --chapters=isaaru-via-purifico",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/continuity/isaaru-via-purifico-win-2a1777281/continuity/continuity.json",
+    "critic/reviews/2a1777281-focused/continuity-live/isaaru-via-purifico-win-live57/continuity/continuity.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026",
+   "where": "Shiva painting set (R57-001 diagnosis; its rig is not in this build)",
+   "fix": "Shiva rig, not in this candidate.",
+   "acceptanceCheck": "CHK-026 PASS on Chapter XIV",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R58-C1",
+   "severity": "polish",
+   "title": "Pterya: 7 to 9 percent box step from a camera move after the KO beat",
+   "game": "FFX",
+   "chapter": "isaaru-via-purifico",
+   "expected": "n/a",
+   "observed": "rig on: 8.7 percent box step at frame 282 (camera depth change, 583 to 624 px wide); the painting set shows 11.4 percent at the KO; no size change at the key change itself",
+   "repro": "play.mjs --subject pterya --mode ko",
+   "evidence": [
+    "critic/reviews/2a1777281-focused/ko/pterya-on/ko.json"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-026",
+   "where": "camera",
+   "fix": "none",
+   "acceptanceCheck": "n/a",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Candidate build and artifact checks (art-derive verify and audit, rig-gate --verify for five rigs)",
+   "Real-key routes: Chapter III, XIV and seymour-flux at 1600x900 through the continuity harness, and live r57 for III and XIV",
+   "Lane ko mode on the candidate build, rig on and off, for the possessed Ifrit (Chapter III) and Pterya (Chapter XIV): frames, box, head mesh, tracker",
+   "390x844 smoke: title to board, no horizontal scroll, no errors, save key",
+   "Static pose census (0 fail)"
+  ],
+  "reused": [],
+  "notTested": [
+   "2000x1012 layout (no layout code changed)",
+   "Ifrit as Yuna summon in a second chapter beyond seymour-flux (idle and cast keys seen there)",
+   "A winning route for Chapters III and XIV with real keys (the bot cannot, on live either)",
+   "Rig swaps in the harness (R58-T1): CHK-026/027 for rigs rest on the lane ko mode, which reaches the KO with the debug autoBattle",
+   "Pterya overdrive key"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Deep review on the live build (owed); fix R58-T1 and rerun the harness.",
+ "elapsedMinutes": 230
+}

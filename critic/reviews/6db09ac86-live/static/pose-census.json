@@ -1,0 +1,2781 @@
+{
+ "schema": "pose-gate-report/1",
+ "tool": "tools/pose-gate.mjs",
+ "bands": {
+  "standing": {
+   "stature": [
+    0.9,
+    1.1
+   ],
+   "head": [
+    0.85,
+    1.15
+   ]
+  },
+  "low": {
+   "stature": [
+    0.75,
+    1.1
+   ],
+   "head": [
+    0.85,
+    1.15
+   ]
+  },
+  "ko": {
+   "head": [
+    0.85,
+    1.15
+   ],
+   "length": [
+    0.7,
+    1.3
+   ]
+  },
+  "heldHead": [
+   0.8,
+   1.45
+  ],
+  "feet": 0.02,
+  "feetRowGap": 0.02,
+  "ghost": {
+   "fail": 0.2,
+   "watch": 0.3
+  },
+  "mass": [
+   0.7,
+   1.3
+  ],
+  "massGate": [
+   0.5,
+   1.7
+  ],
+  "iouFail": 0.04,
+  "headBox": {
+   "cyMax": 0.62,
+   "coverageMin": 0.1
+  },
+  "solidityMax": 0.95,
+  "bodyOverStature": 0.5,
+  "heldHeadGap": 0.02
+ },
+ "totals": {
+  "subjects": 146,
+  "paintings": 1106,
+  "pass": 829,
+  "waived": 79,
+  "rigged": 0,
+  "fail": 0,
+  "exempt": 198,
+  "byClass": {
+   "idle": 146,
+   "standing": 565,
+   "ko": 90,
+   "low": 71,
+   "wide": 4,
+   "staged": 176,
+   "part": 54
+  },
+  "byGame": {
+   "FFX-2": 777,
+   "FFX": 307,
+   "FF7": 22
+  },
+  "byRowStatus": {
+   "ok": 746,
+   "held": 83,
+   "waived": 79,
+   "none": 198
+  }
+ },
+ "failuresByCode": {},
+ "failures": [],
+ "outOfBand": [
+  {
+   "key": "braskas-final-aeon-2/telegraph",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8769,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "dark-sandy/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 0.99,
+   "headReal": 1.0116,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "evrae/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-x"
+   ],
+   "stature": 0.9895,
+   "headReal": 1.011,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "exp-leblanc-ffx2-dr-goon/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-x"
+   ],
+   "stature": 0.9993,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-ffx2-fem-goon/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8368,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-leblanc/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8782,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-logos/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8918,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-logos/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8735,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-ormi/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.838,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-black-mage/victory",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.2369,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-gunner/victory",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.244,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-songstress/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.7698,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-warrior/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.5825,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-warrior/critical",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.6162,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-warrior/follow",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.6951,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-warrior/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.7855,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-warrior/od-x2-warrior-armor-break",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low",
+    "feet-x",
+    "feet-sunk"
+   ],
+   "stature": 0.5276,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-paine-warrior/od-x2-warrior-power-break",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.5138,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-black-mage/follow",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-sunk"
+   ],
+   "stature": 1.0979,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-gunner/ready",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.765,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-thief/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8472,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-thief/critical",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.6531,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-thief/follow",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8617,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-thief/item",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.1178,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-thief/ready",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.7704,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-rikku-thief/victory",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.3315,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-gunner/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8892,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-gunner/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.1978,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-gunner/critical",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.6104,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-gunner/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.89,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-gunner/item",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.1189,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-gunner/victory",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.3192,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-songstress/item",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-x"
+   ],
+   "stature": 0.9881,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "exp-leblanc-yuna-warrior/victory",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.3187,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "ffx2-bahamut/splash",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high",
+    "feet-y"
+   ],
+   "stature": 1.4573,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "grothia/overdrive",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 0.9919,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "ifrit/overdrive",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 0.9909,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "isaaru/kneel",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.6059,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "ixion/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.7958,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "ixion/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.106,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "leblanc/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.2506,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "logos/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.7741,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "mortibody/attack",
+   "class": "part",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 1.0242,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "overdrive-sin/stage-3",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-x"
+   ],
+   "stature": 1,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "paine-dark-knight/critical",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-sunk"
+   ],
+   "stature": 0.9149,
+   "headReal": 1.0896,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "paine-songstress/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low",
+    "head-big"
+   ],
+   "stature": 0.7691,
+   "headReal": 1.3033,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "paragon/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-high"
+   ],
+   "stature": 1.1051,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "rikku/follow",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low",
+    "head-big"
+   ],
+   "stature": 0.781,
+   "headReal": 1.278,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "rikku-berserker/critical",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-sunk"
+   ],
+   "stature": 0.7748,
+   "headReal": 1.288,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "rikku-berserker/ready",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low",
+    "head-big",
+    "feet-sunk"
+   ],
+   "stature": 0.7135,
+   "headReal": 1.4003,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "rikku-black-mage/follow",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-sunk"
+   ],
+   "stature": 1.0992,
+   "headReal": 0.9111,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "rikku-gunner/ready",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low",
+    "head-big"
+   ],
+   "stature": 0.7658,
+   "headReal": 1.3074,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "seymour-guest/victory",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8471,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "seymour-macalania/kneel",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.6035,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "shiva/overdrive",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 1.0664,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "shuyin/kneel",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.604,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "sin-right-fin/attack",
+   "class": "part",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-x"
+   ],
+   "stature": 0.8351,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "trema/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 1.0159,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "vegnagun-leg/hurt",
+   "class": "part",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 1.0018,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "vegnagun-leg/ko",
+   "class": "part",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 0.9606,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "x2-shiva/overdrive",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 1.0671,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "yojimbo-cavern/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.7761,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "yu-pagoda/attack",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 0.9628,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "yu-pagoda/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 0.9887,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "yu-yevon/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 1.0286,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "yu-yevon/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 1.0297,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "yuna-dark-knight/ready",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-sunk"
+   ],
+   "stature": 1.0371,
+   "headReal": 0.9617,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "yuna-songstress/item",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-x"
+   ],
+   "stature": 0.9872,
+   "headReal": 1.0111,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "yuna-thief/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "head-off"
+   ],
+   "stature": 1.0994,
+   "headReal": 0.8205,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "yuna-warrior/sleep",
+   "class": "low",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-sunk"
+   ],
+   "stature": 1.0104,
+   "headReal": 0.9902,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX-2"
+  },
+  {
+   "key": "yunalesca-1/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "feet-y"
+   ],
+   "stature": 0.9006,
+   "headReal": 1.1288,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "yunalesca-2/cast",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.8808,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  },
+  {
+   "key": "yunalesca-2/hurt",
+   "class": "standing",
+   "status": "waived",
+   "proposed": "waived",
+   "flags": [
+    "stature-low"
+   ],
+   "stature": 0.88,
+   "headReal": null,
+   "waived": true,
+   "legacy": true,
+   "game": "FFX"
+  }
+ ],
+ "reportOnly": {
+  "ghost-watch": [
+   "auron/critical",
+   "auron/follow",
+   "cindy/attack",
+   "dark-cindy/attack",
+   "dark-sandy/hurt",
+   "exp-leblanc-ffx2-dr-goon/attack",
+   "exp-leblanc-ffx2-fem-goon/attack",
+   "exp-leblanc-paine-gunner/attack",
+   "exp-leblanc-paine-gunner/item",
+   "exp-leblanc-paine-gunner/victory",
+   "exp-leblanc-paine-songstress/attack",
+   "exp-leblanc-paine-songstress/dance",
+   "exp-leblanc-paine-thief/attack",
+   "exp-leblanc-paine-thief/follow",
+   "exp-leblanc-paine-thief/hurt",
+   "exp-leblanc-paine-thief/ready",
+   "exp-leblanc-paine-warrior/critical",
+   "exp-leblanc-paine-warrior/hurt",
+   "exp-leblanc-rikku-alchemist/attack",
+   "exp-leblanc-rikku-gunner/ready",
+   "exp-leblanc-rikku-songstress/attack",
+   "exp-leblanc-rikku-songstress/dance",
+   "exp-leblanc-rikku-songstress/victory",
+   "exp-leblanc-rikku-thief/attack",
+   "exp-leblanc-yuna-gunner/critical",
+   "exp-leblanc-yuna-thief/follow",
+   "exp-leblanc-yuna-warrior/item",
+   "ffx2-fem-goon/hurt",
+   "jecht/victory",
+   "kimahri/jump",
+   "lulu/sleep",
+   "lulu/victory",
+   "overdrive-sin/stage-4",
+   "paine-gunner/attack",
+   "paine-gunner/follow",
+   "paine-gunner/item",
+   "paine-gunner/victory",
+   "paine-lady-luck/cast",
+   "paine-lady-luck/hurt",
+   "paine-lady-luck/od-x2-lady-luck-attack-reels",
+   "paine-lady-luck/od-x2-lady-luck-magic-reels",
+   "paine-lady-luck/victory",
+   "paine-songstress/attack",
+   "paine-songstress/critical",
+   "paine-songstress/dance",
+   "paine-thief/attack",
+   "paine-thief/critical",
+   "paine-thief/defend",
+   "paine-thief/follow",
+   "paine-thief/hurt",
+   "paine-thief/ready",
+   "paine-warrior/critical",
+   "paine-warrior/defend",
+   "paine-warrior/hurt",
+   "rikku/ready",
+   "rikku-alchemist/attack",
+   "rikku-berserker/critical",
+   "rikku-dark-knight/cast",
+   "rikku-dark-knight/hurt",
+   "rikku-gunner/defend",
+   "rikku-gunner/follow",
+   "rikku-gunner/ready",
+   "rikku-gunner/sleep",
+   "rikku-lady-luck/attack",
+   "rikku-lady-luck/hurt",
+   "rikku-lady-luck/od-x2-lady-luck-attack-reels",
+   "rikku-lady-luck/od-x2-lady-luck-magic-reels",
+   "rikku-songstress/attack",
+   "rikku-songstress/critical",
+   "rikku-songstress/dance",
+   "rikku-songstress/victory",
+   "rikku-thief/critical",
+   "rikku-thief/follow",
+   "rikku-white-mage/critical",
+   "sandy/hurt",
+   "shiva/overdrive",
+   "tidus/attack",
+   "tidus/follow",
+   "trema/hurt",
+   "x2-shiva/overdrive",
+   "yojimbo-cavern/hurt",
+   "yu-yevon/attack",
+   "yuna/critical",
+   "yuna/hurt",
+   "yuna/item",
+   "yuna-dark-knight/item",
+   "yuna-gunner/defend",
+   "yuna-gunner/hurt",
+   "yuna-lady-luck/attack",
+   "yuna-lady-luck/hurt",
+   "yuna-lady-luck/od-x2-lady-luck-attack-reels",
+   "yuna-lady-luck/od-x2-lady-luck-magic-reels",
+   "yuna-lady-luck/ready",
+   "yuna-lady-luck/victory",
+   "yuna-songstress/defend",
+   "yuna-songstress/follow",
+   "yuna-thief/follow",
+   "yuna-warrior/item"
+  ],
+  "ko-short": [
+   "auron/ko",
+   "kimahri/ko",
+   "lulu/ko",
+   "paine-gunner/ko",
+   "paine-samurai/ko",
+   "rikku/ko",
+   "rikku-lady-luck/ko",
+   "wakka/ko",
+   "yuna/ko",
+   "yuna-black-mage/ko",
+   "yuna-gunner/ko"
+  ],
+  "ko-long": [
+   "braskas-final-aeon-1/ko",
+   "exp-leblanc-yuna-thief/ko",
+   "ixion/ko",
+   "pterya/ko",
+   "sinspawn-gui/ko",
+   "sinspawn-gui-2/ko",
+   "valefor/ko",
+   "x2-ixion/ko",
+   "yuna-thief/ko",
+   "yunalesca-3/ko"
+  ],
+  "ghost-fail": [
+   "dark-yojimbo/cast",
+   "exp-leblanc-ffx2-dr-goon/hurt",
+   "exp-leblanc-leblanc/attack",
+   "exp-leblanc-paine-warrior/attack",
+   "exp-leblanc-paine-warrior/follow",
+   "exp-leblanc-paine-warrior/od-x2-warrior-armor-break",
+   "exp-leblanc-paine-warrior/od-x2-warrior-power-break",
+   "exp-leblanc-paine-warrior/ready",
+   "exp-leblanc-rikku-thief/critical",
+   "exp-leblanc-rikku-thief/follow",
+   "exp-leblanc-rikku-thief/ready",
+   "exp-leblanc-rikku-warrior/attack",
+   "exp-leblanc-rikku-white-mage/attack",
+   "exp-leblanc-yuna-black-mage/attack",
+   "exp-leblanc-yuna-gunner/ready",
+   "ffx2-fem-goon/attack",
+   "kimahri/hurt",
+   "kimahri/ready",
+   "kimahri/victory",
+   "paine-gunner/critical",
+   "paine-lady-luck/attack",
+   "paine-samurai/attack",
+   "paine-songstress/follow",
+   "paine-songstress/ready",
+   "paine-warrior/attack",
+   "paine-warrior/follow",
+   "paine-warrior/item",
+   "paine-warrior/od-x2-warrior-armor-break",
+   "paine-warrior/od-x2-warrior-power-break",
+   "paine-white-mage/ready",
+   "rikku/follow",
+   "rikku/victory",
+   "rikku-alchemist/follow",
+   "rikku-berserker/follow",
+   "rikku-dark-knight/attack",
+   "rikku-gunner/hurt",
+   "rikku-songstress/ready",
+   "rikku-warrior/attack",
+   "rikku-white-mage/attack",
+   "shuyin/kneel",
+   "wakka/hurt",
+   "yojimbo/overdrive",
+   "yuna-black-mage/attack",
+   "yuna-dark-knight/critical",
+   "yuna-dark-knight/follow",
+   "yuna-gunner/follow",
+   "yuna-warrior/attack"
+  ],
+  "mass": [
+   "exp-leblanc-paine-black-mage/attack",
+   "exp-leblanc-paine-black-mage/follow",
+   "exp-leblanc-yuna-songstress/attack",
+   "exp-leblanc-yuna-white-mage/attack",
+   "exp-leblanc-yuna-white-mage/hurt",
+   "ffx2-bahamut/splash"
+  ]
+ },
+ "ledger": {
+  "exists": true,
+  "rows": 79,
+  "legacy": 79,
+  "bailey": 0,
+  "problems": 0,
+  "stale": 0,
+  "base": "none"
+ },
+ "rigs": [],
+ "subjects": {
+  "angra-mainyu": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "angra-tawrich": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "angra-zarich": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "anima": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "auron": {
+   "game": "FFX",
+   "kind": "party-ffx",
+   "paintings": 11,
+   "pass": 11,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "bahamut": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "baralai-shade": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "biran-ronso": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "braskas-final-aeon-1": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "braskas-final-aeon-2": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 5,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "cindy": {
+   "game": "FFX-2",
+   "kind": "aeon",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "daigoro": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 2,
+   "pass": 2,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "dark-cindy": {
+   "game": "FFX",
+   "kind": "dark-aeon",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "dark-mindy": {
+   "game": "FFX",
+   "kind": "dark-aeon",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "dark-sandy": {
+   "game": "FFX",
+   "kind": "dark-aeon",
+   "paintings": 5,
+   "pass": 4,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "dark-yojimbo": {
+   "game": "FFX",
+   "kind": "dark-aeon",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "evrae": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 7,
+   "pass": 4,
+   "waived": 3,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "exp-leblanc-ffx2-dr-goon": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "exp-leblanc-ffx2-fem-goon": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "exp-leblanc-leblanc": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "exp-leblanc-logos": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 4,
+   "pass": 2,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "exp-leblanc-ormi": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "exp-leblanc-paine-black-mage": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 12,
+   "pass": 7,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-paine-gunner": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 10,
+   "pass": 4,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 5
+  },
+  "exp-leblanc-paine-songstress": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 12,
+   "pass": 7,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-paine-thief": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 13,
+   "pass": 9,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-paine-warrior": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 17,
+   "pass": 7,
+   "waived": 6,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-paine-white-mage": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 8,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-rikku-alchemist": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 11,
+   "pass": 7,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-rikku-black-mage": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 11,
+   "pass": 6,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-rikku-gunner": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 12,
+   "pass": 6,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 5
+  },
+  "exp-leblanc-rikku-songstress": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 12,
+   "pass": 8,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-rikku-thief": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 15,
+   "pass": 5,
+   "waived": 6,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-rikku-warrior": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 11,
+   "pass": 9,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 2
+  },
+  "exp-leblanc-rikku-white-mage": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 9,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 3
+  },
+  "exp-leblanc-yuna-black-mage": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 13,
+   "pass": 9,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-yuna-gunner": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 15,
+   "pass": 4,
+   "waived": 6,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 5
+  },
+  "exp-leblanc-yuna-songstress": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 11,
+   "pass": 6,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-yuna-thief": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 13,
+   "pass": 9,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-yuna-warrior": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 11,
+   "pass": 6,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "exp-leblanc-yuna-white-mage": {
+   "game": "FFX-2",
+   "kind": "exp-leblanc",
+   "paintings": 12,
+   "pass": 8,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "ff7-barret": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 1,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 1
+  },
+  "ff7-cloud": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 1,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 1
+  },
+  "ff7-film-barret": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 6,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 6
+  },
+  "ff7-film-cloud": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 8,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 8
+  },
+  "ff7-film-guard-scorpion": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 2,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 2
+  },
+  "ff7-film-guard-scorpion-tail-up": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 2,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 2
+  },
+  "ff7-guard-scorpion": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 1,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 1
+  },
+  "ff7-guard-scorpion-tail-up": {
+   "game": "FF7",
+   "kind": "ff7",
+   "paintings": 1,
+   "pass": 0,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 1
+  },
+  "ffx2-bahamut": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 7,
+   "pass": 6,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ffx2-dr-goon": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ffx2-experiment": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ffx2-experiment-proto": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ffx2-fem-goon": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ginnem": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "gippal-shade": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "grothia": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 6,
+   "pass": 5,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "guado-guardian": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ifrit": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 5,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "isaaru": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 2,
+   "pass": 1,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ixion": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 4,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "jecht": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "kimahri": {
+   "game": "FFX",
+   "kind": "party-ffx",
+   "paintings": 13,
+   "pass": 13,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "leblanc": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "lenne": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "logos": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "lulu": {
+   "game": "FFX",
+   "kind": "party-ffx",
+   "paintings": 13,
+   "pass": 13,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "mindy": {
+   "game": "FFX-2",
+   "kind": "aeon",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "mortibody": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "mortiorchis": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "mortiphasm": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "mortiphasm-facing": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "nooj-shade": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "ormi": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "overdrive-sin": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 6,
+   "pass": 5,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "paine-black-mage": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "paine-dark-knight": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 11,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "paine-gunner": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 17,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 5
+  },
+  "paine-lady-luck": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 15,
+   "pass": 11,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "paine-samurai": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 12,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "paine-songstress": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 17,
+   "pass": 12,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "paine-thief": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "paine-warrior": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 18,
+   "pass": 14,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "paine-white-mage": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "paragon": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "pterya": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "rikku": {
+   "game": "FFX",
+   "kind": "party-ffx",
+   "paintings": 12,
+   "pass": 11,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "rikku-alchemist": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "rikku-berserker": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 12,
+   "pass": 10,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "rikku-black-mage": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 11,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "rikku-dark-knight": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 15,
+   "pass": 11,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "rikku-gunner": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 17,
+   "pass": 11,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 5
+  },
+  "rikku-lady-luck": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 15,
+   "pass": 11,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "rikku-songstress": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 15,
+   "pass": 11,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "rikku-thief": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "rikku-warrior": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 14,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 2
+  },
+  "rikku-white-mage": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 15,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 3
+  },
+  "sandy": {
+   "game": "FFX-2",
+   "kind": "aeon",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "seymour-flux": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "seymour-flux-body": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "seymour-guest": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 7,
+   "pass": 6,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "seymour-macalania": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 5,
+   "pass": 4,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "seymour-natus": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "seymour-natus-ring": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "seymour-omnis": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "shiva": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 5,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "shuyin": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 6,
+   "pass": 5,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sin-core": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 2,
+   "pass": 2,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sin-left-fin": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 6,
+   "pass": 4,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sin-right-fin": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 6,
+   "pass": 3,
+   "waived": 3,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sinspawn-genais": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sinspawn-gui": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sinspawn-gui-2": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sinspawn-gui-arm-left": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sinspawn-gui-arm-right": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 2,
+   "pass": 2,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sinspawn-gui-head": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "sinspawn-gui-head-2": {
+   "game": "FFX",
+   "kind": "part",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "spathi": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "tidus": {
+   "game": "FFX",
+   "kind": "party-ffx",
+   "paintings": 14,
+   "pass": 14,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "trema": {
+   "game": "FFX-2",
+   "kind": "boss-foe",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "valefor": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "vegnagun-body": {
+   "game": "FFX-2",
+   "kind": "part",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "vegnagun-head": {
+   "game": "FFX-2",
+   "kind": "part",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "vegnagun-leg": {
+   "game": "FFX-2",
+   "kind": "part",
+   "paintings": 4,
+   "pass": 2,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "vegnagun-tail": {
+   "game": "FFX-2",
+   "kind": "part",
+   "paintings": 4,
+   "pass": 4,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "wakka": {
+   "game": "FFX",
+   "kind": "party-ffx",
+   "paintings": 12,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "x2-anima": {
+   "game": "FFX-2",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "x2-ixion": {
+   "game": "FFX-2",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 6,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "x2-shiva": {
+   "game": "FFX-2",
+   "kind": "aeon",
+   "paintings": 6,
+   "pass": 5,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yenke-ronso": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 1,
+   "pass": 1,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yojimbo": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 3,
+   "pass": 3,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yojimbo-cavern": {
+   "game": "FFX",
+   "kind": "aeon",
+   "paintings": 4,
+   "pass": 3,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yu-pagoda": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 5,
+   "pass": 3,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yu-yevon": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 5,
+   "pass": 3,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yuna": {
+   "game": "FFX",
+   "kind": "party-ffx",
+   "paintings": 12,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yuna-black-mage": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "yuna-dark-knight": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 11,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "yuna-gunner": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 17,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 5
+  },
+  "yuna-lady-luck": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 15,
+   "pass": 11,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "yuna-songstress": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 17,
+   "pass": 12,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "yuna-thief": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 11,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "yuna-warrior": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 11,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "yuna-white-mage": {
+   "game": "FFX-2",
+   "kind": "dressphere-ffx2",
+   "paintings": 16,
+   "pass": 12,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 4
+  },
+  "yunalesca-1": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 5,
+   "pass": 4,
+   "waived": 1,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yunalesca-2": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 5,
+   "pass": 3,
+   "waived": 2,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  },
+  "yunalesca-3": {
+   "game": "FFX",
+   "kind": "boss-foe",
+   "paintings": 5,
+   "pass": 5,
+   "waived": 0,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 0
+  }
+ }
+}

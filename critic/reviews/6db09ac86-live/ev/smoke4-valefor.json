@@ -1,0 +1,124 @@
+{
+ "which": "valefor",
+ "steps": [
+  {
+   "k": "screen",
+   "v": "battle"
+  },
+  {
+   "k": "chapter",
+   "v": "ffx2-valefor-besaid"
+  },
+  {
+   "k": "rigs",
+   "v": [
+    "paine-warrior:off:no rig listed in the art manifest",
+    "rikku-dark-knight:off:no rig listed in the art manifest",
+    "valefor:ON:gate ok, 8 parts, 24 bones, 6 keys, 1x maps",
+    "yuna-white-mage:off:no rig listed in the art manifest"
+   ]
+  },
+  {
+   "k": "actors",
+   "v": [
+    "yuna:yuna-white-mage:idle:idle",
+    "rikku:rikku-dark-knight:idle:idle",
+    "paine:paine-warrior:ready:ready",
+    "x2-valefor:valefor:idle:idle"
+   ]
+  },
+  {
+   "k": "rows",
+   "v": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "k": "actor",
+   "v": "paine"
+  },
+  {
+   "k": "target",
+   "v": {
+    "sel": {
+     "ids": [
+      "yuna"
+     ],
+     "mode": "single",
+     "side": null,
+     "accent": "ally"
+    },
+    "ids": [
+     {
+      "id": "rikku",
+      "dim": true
+     },
+     {
+      "id": "paine",
+      "dim": true
+     },
+     {
+      "id": "yuna",
+      "dim": false
+     }
+    ]
+   }
+  },
+  {
+   "k": "after cancel",
+   "v": {
+    "sel": null,
+    "rows": [
+     "Potion*",
+     "Hi-Potion",
+     "Phoenix Down",
+     "Ether",
+     "Remedy",
+     "Holy Water",
+     "Lunar Curtain",
+     "Light Curtain"
+    ]
+   }
+  },
+  {
+   "k": "fx",
+   "v": [
+    "play:action-start:0:0",
+    "play:action-start:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "command:yuna:0:0",
+    "play:damage:0:0",
+    "play:damage:0:0",
+    "play:action-end:0:0",
+    "play:action-end:0:0"
+   ]
+  },
+  {
+   "k": "console",
+   "v": []
+  },
+  {
+   "k": "404",
+   "v": []
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}
