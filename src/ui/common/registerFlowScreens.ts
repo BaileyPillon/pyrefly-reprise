@@ -46,6 +46,9 @@ registerFlowScreens({
 
   demoThanks: (opts) => new DemoThanksScreen({ chapterId: opts.chapter.id }), // R62: only asked for in demo mode, after a win of one of the two demo fights
 
+  // R62 (decision 173f): the demo's short voiced intro is the game's own story scene on a trimmed script; asked for only in demo mode, before Chapter I's fight
+  demoIntro: (opts) => new CutsceneScreen({ chapterId: opts.chapter.id, script: opts.script, startSkipped: opts.skip ?? false }),
+
   cutscene: (opts) =>
     new CutsceneScreen({
       chapterId: opts.chapter.id,

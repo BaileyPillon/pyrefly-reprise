@@ -45,6 +45,7 @@ import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
 import { demoThanksDue } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
+import { demoIntroFor } from '../demo/demoIntro.ts'; // R62 (demo mode only, FFX Chapter I): the short voiced intro
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
 import { warmBattleStage } from '../../engine/StageWarm.ts'; // R61 (PR-0481): a first battle's once-per-page costs are paid behind the party prep
@@ -126,6 +127,8 @@ export interface FlowScreenFactories {
   battle: (opts: BattleScreenOptions) => FlowScreen<BattleScreenResult>;
   /** R62 (the conference demo, demo mode only): the thanks card after a win (`app/demo/demoThanks.ts`). Optional: a flow with none registered goes straight on, as before. */
   demoThanks?: (opts: { chapter: Chapter }) => FlowScreen<void>;
+  /** R62 (the conference demo, demo mode only; FFX Chapter I): the short voiced intro before the fight (`app/demo/demoIntro.ts`), a story scene on a trimmed script. Optional, as `demoThanks` is. */
+  demoIntro?: (opts: CutsceneScreenOptions) => FlowScreen<void>;
 }
 
 const factories: Partial<FlowScreenFactories> = {};
@@ -391,6 +394,7 @@ export class GameFlow {
         await this.playCutscene(chapter, 'pre');
         openingHurry = this.lastSceneHurried; // PR-0061: a player who skipped the scene gets the hurried opening
       }
+      if (opts.skipCutscenes && attempt === 0 && (await this.playDemoIntro(chapter, opts))) openingHurry = this.lastSceneHurried; // R62 (demo mode only, FFX Chapter I): the demo skips the story, but not these three recorded lines
       if (this.handedOver) return null;
 
       this.step = 'battle';
@@ -468,6 +472,19 @@ export class GameFlow {
       this.step = 'idle';
       return closeRun(this, id, { carry, attempt, opts: { ...opts, seed } }, fought, outcome);
     }
+  }
+
+  /** R62 (demo mode only, FFX Chapter I): the short voiced intro. True when it played (a person started the run, the chapter has one, a factory is registered). */
+  private async playDemoIntro(chapter: Chapter, opts: RunChapterOptions): Promise<boolean> {
+    const script = demoIntroFor(chapter.id, opts);
+    const make = factories.demoIntro;
+    if (!script || !make) return false;
+    this.step = 'cutscene:pre';
+    const screen = make({ chapter, script, phase: 'pre' });
+    if (!(await this.show(screen))) return false;
+    await screen.done;
+    this.lastSceneHurried = (screen as { hurriedByPlayer?: boolean }).hurriedByPlayer === true;
+    return true;
   }
 
   /** R62 (demo mode only, both games): the thanks card after a won demo fight. A no-op outside demo mode, for any other chapter, and where no card is registered. */
