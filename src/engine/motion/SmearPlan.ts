@@ -40,7 +40,7 @@ export const WINDOW_CAP_MS = 70;
 /** Where in the window the cut falls (0 to 1). */
 export const CUT_AT = 0.5;
 /** The streak's length at full amount, a share of the plane's width: soft blur and painted streak. */
-export const LENGTH: Readonly<Record<'blur' | 'paint', number>> = { blur: 0.16, paint: 0.34 };
+export const LENGTH: Readonly<Record<'blur' | 'paint', number>> = { blur: 0.14, paint: 0.34 };
 /** The light flash: peak (a fraction of a full flash) and the paintings it is for. */
 export const FLASH_PEAK = 0.28;
 const FLASH_INTO = /^(attack|cast|item|special|summon|telegraph|overdrive|od|od-.+)$/;

@@ -142,7 +142,7 @@ export const paintedFragmentShader = /* glsl */ `
   // --- the smear (conference demo, motion pass, lane "core", step 2; engine/motion/SmearPlan.ts) ----------------------------------------------------
   // A big pose change is cut inside a 1 to 2 frame window; for that window the plane is drawn streaked along the figure's travel. smearAmt 0 is off (the
   // default, and every plane outside the demo chapters), so nothing below runs. smearVec is the streak at full amount in the plane's own coordinates
-  // (fractions of its width and height); smearStyle 0 is the soft motion blur (nine taps centred on the pixel), 1 the painted streak (the figure's own paint
+  // (fractions of its width and height); smearStyle 0 is the soft motion blur (thirteen taps centred on the pixel), 1 the painted streak (the figure's own paint
   // dragged behind it, in dry-brush bristles of different lengths).
   uniform float smearAmt;
   uniform float smearStyle;
@@ -154,12 +154,14 @@ export const paintedFragmentShader = /* glsl */ `
     vec4 c0 = texture2D(map, uv);
     vec2 v = smearUvVec(smearVec) * smearAmt;
     if (dot(v, v) < 1e-8) return c0;
+    // each pixel shifts its taps by a fraction of one step (a hash of its uv), so the stepping of a long streak is grain and not combs
+    float jit = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453) - 0.5;
     if (smearStyle < 0.5) {
       vec4 acc = vec4(0.0);
       float wsum = 0.0;
-      for (int i = 0; i < 9; i++) {
-        float t = (float(i) - 4.0) / 4.0;
-        float w = 1.0 - 0.75 * abs(t);
+      for (int i = 0; i < 13; i++) {
+        float t = (float(i) + jit - 6.0) / 6.0;
+        float w = max(0.1, 1.0 - 0.75 * abs(t));
         vec4 s = texture2D(map, uv + v * (t * 0.5));
         acc += vec4(s.rgb * s.a, s.a) * w;
         wsum += w;
@@ -174,8 +176,8 @@ export const paintedFragmentShader = /* glsl */ `
     float reach = mix(0.28, 1.0, smoothstep(0.22, 0.78, br));
     vec4 trail = vec4(0.0);
     float tw = 0.0;
-    for (int i = 1; i <= 10; i++) {
-      float s = float(i) / 10.0;
+    for (int i = 0; i < 12; i++) {
+      float s = (float(i) + 0.5 + jit) / 12.0;
       float k = step(s, reach) * pow(1.0 - s, 1.15);
       vec4 smp = texture2D(map, uv + v * s);
       trail += vec4(smp.rgb * smp.a, smp.a) * k;
