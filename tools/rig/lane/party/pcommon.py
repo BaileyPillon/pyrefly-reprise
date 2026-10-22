@@ -361,6 +361,13 @@ def add_joint_discs(party: Party, masks: dict, joints: dict, alpha: np.ndarray) 
 
 
 def rest_joints(party: Party) -> dict:
-    """{bone: rest joint} in master px (the idle's frame), from the skeleton."""
+    """{bone: rest pivot} in master px (the idle's frame): the skeleton's point, or, for a bone `pedge.py` moved to the outline of the idle figure (where the hole test stops watching a joint), that outline point
+    (<work>/rest_override.json, keyed by bone)."""
     rest = party.rest_points()
-    return {b: rest[pt] for b, _par, pt in party.party["skeleton"]}
+    out = {e[0]: rest[e[2]] for e in party.party["skeleton"]}
+    ov = party.work / "rest_override.json"
+    if ov.exists():
+        for k, v in json.loads(ov.read_text(encoding="utf8")).items():
+            if k in out:
+                out[k] = (float(v[0]), float(v[1]))
+    return out

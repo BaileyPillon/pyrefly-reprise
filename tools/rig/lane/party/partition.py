@@ -50,7 +50,7 @@ def run(name: str, only: list[str] | None = None) -> None:
             if present[part]:
                 masks[part] = P.dilate_mask(m, K) & alpha
         jm, _moved = P.marks_for(party, pose, T, size)
-        _bones, _rep, jpos = solve_pose(party, party.rest_points(), jm)
+        _bones, _rep, jpos = solve_pose(party, party.rest_points(), jm, P.rest_joints(party))
         P.add_joint_discs(party, masks, {b: (x + pad, y + pad) for b, (x, y) in jpos.items()}, alpha)
         for i, part in enumerate(party.order):
             if not present[part]:

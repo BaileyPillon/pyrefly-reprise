@@ -25,49 +25,70 @@ def rot2(a: float) -> np.ndarray:
     return np.array([[c, -s], [s, c]])
 
 
-def solve_pose(party: P.Party, rest: dict, marks: dict) -> tuple[dict, dict, dict]:
-    """Bones of one pose: `({bone: {rot, dx, dy, sx, sy}}, report, {bone: posed joint})`. `rest` and `marks` are in master px (the idle's frame)."""
+def solve_pose(party: P.Party, rest: dict, marks: dict, joints: dict | None = None) -> tuple[dict, dict, dict]:
+    """Bones of one pose: `({bone: {rot, dx, dy, sx, sy}}, report, {bone: posed pivot})`. `rest` (the skeleton's points) and `marks` are in master px (the idle's frame); `joints` {bone: pivot} are the rest pivots
+    where they differ from the skeleton's point (a pivot `pedge.py` moved to the outline of the idle figure). A bone with such a pivot is solved as if it turned about the point it stands for (the limb's real joint): its rotation
+    and scale come from the vector between the two points, then the pivot is carried with the bone, `e` away from that point."""
     pp = party.party
     skel = pp["skeleton"]
-    J = {}
-    parent = {}
-    for b, par, pt in skel:
-        J[b] = np.array(rest[pt], float)
+    J, C, parent = {}, {}, {}
+    for ent in skel:
+        b, par, pt = ent[:3]
+        C[b] = np.array(rest[pt], float)
+        J[b] = np.array((joints or {}).get(b, rest[pt]), float)
         parent[b] = par
+    pts = {e[0]: e[2] for e in skel}
     state = {}
     out, rep = {}, {}
     scales = pp.get("scales", {})
     noscale = set(pp.get("noscale", []))
-    for b, par, _pt in skel:
+    for ent in skel:
+        b, par = ent[0], ent[1]
         if par is None:
             state[b] = (J[b].copy(), np.eye(2))
             continue
         Pp, Lp = state[par]
         Lpi = np.linalg.inv(Lp)
-        place = pp.get("place", {}).get(b)
-        d = np.zeros(2)
-        if place and place in marks:
-            P0 = Pp + Lp @ (J[b] - J[par])
-            d = Lpi @ (np.array(marks[place]) - P0)
-        Pb = Pp + Lp @ ((J[b] - J[par]) + d)
-        r, s = 0.0, 1.0
+        pt = pts[b]
+        e = J[b] - C[b]
+        edge = bool(np.hypot(*e) > 0.5)
+        P0 = Pp + Lp @ (J[b] - J[par])
         aim = pp.get("aim", {}).get(b)
-        if aim and aim in marks and aim in rest:
-            v = np.array(rest[aim]) - J[b]
-            u = Lpi @ (np.array(marks[aim]) - Pb)
-            if np.hypot(*v) > 1e-6 and np.hypot(*u) > 1e-6:
-                r = P.wrap(math.atan2(u[1], u[0]) - math.atan2(v[1], v[0]))
-                s = float(np.hypot(*u) / np.hypot(*v))
-                lo, hi = scales.get(b, (0.5, 2.0))
-                if b in noscale:
-                    s = 1.0
-                s_c = min(max(s, lo), hi)
-                rep[b] = {"wantScale": round(s, 3), "scale": round(s_c, 3)}
-                s = s_c
-        Lb = Lp @ rot2(r) @ np.diag([s, s])
-        if b in pp.get("exact_aim", []) and aim and aim in marks and aim in rest:  # the aim point lands exactly (the joint slides along the axis by the length mismatch): the head bone puts the idle's head-box top on the pose's, which is what the gate's stature reads
-            v = np.array(rest[aim]) - J[b]
-            land = Pb + Lb @ v
+        has_aim = bool(aim and aim in marks and aim in rest)
+        r, s = 0.0, 1.0
+        d = np.zeros(2)
+        if edge and pt in marks:  # the pivot sits on the outline: solve about the real joint, carry the pivot along
+            if has_aim:
+                v = np.array(rest[aim]) - C[b]
+                u = Lpi @ (np.array(marks[aim]) - np.array(marks[pt]))
+                if np.hypot(*v) > 1e-6 and np.hypot(*u) > 1e-6:
+                    r = P.wrap(math.atan2(u[1], u[0]) - math.atan2(v[1], v[0]))
+                    s = float(np.hypot(*u) / np.hypot(*v))
+                    lo, hi = scales.get(b, (0.5, 2.0))
+                    s_c = 1.0 if b in noscale else min(max(s, lo), hi)
+                    rep[b] = {"wantScale": round(s, 3), "scale": round(s_c, 3)}
+                    s = s_c
+            Lb = Lp @ rot2(r) @ np.diag([s, s])
+            Pb = np.array(marks[pt]) + Lb @ e
+            d = Lpi @ (Pb - P0)
+        else:
+            place = pp.get("place", {}).get(b)
+            if place and place in marks:
+                d = Lpi @ (np.array(marks[place]) - P0)
+            Pb = Pp + Lp @ ((J[b] - J[par]) + d)
+            if has_aim:
+                v = np.array(rest[aim]) - J[b]
+                u = Lpi @ (np.array(marks[aim]) - Pb)
+                if np.hypot(*v) > 1e-6 and np.hypot(*u) > 1e-6:
+                    r = P.wrap(math.atan2(u[1], u[0]) - math.atan2(v[1], v[0]))
+                    s = float(np.hypot(*u) / np.hypot(*v))
+                    lo, hi = scales.get(b, (0.5, 2.0))
+                    s_c = 1.0 if b in noscale else min(max(s, lo), hi)
+                    rep[b] = {"wantScale": round(s, 3), "scale": round(s_c, 3)}
+                    s = s_c
+            Lb = Lp @ rot2(r) @ np.diag([s, s])
+        if b in pp.get("exact_aim", []) and has_aim:  # the aim point lands exactly (the pivot slides by the length mismatch): the head bone puts the idle's head-box top on the pose's, which is what the gate's stature reads
+            land = Pb + Lb @ (np.array(rest[aim]) - J[b])
             shift = np.array(marks[aim]) - land
             Pb = Pb + shift
             d = d + Lpi @ shift
@@ -81,8 +102,7 @@ def solve_pose(party: P.Party, rest: dict, marks: dict) -> tuple[dict, dict, dic
             rec["sx"] = rec["sy"] = round(s, 4)
         if rec:
             out[b] = rec
-        # how far the aim point lands from its mark (after a clamp)
-        if aim and aim in marks and aim in rest:
+        if has_aim:
             land = Pb + Lb @ (np.array(rest[aim]) - J[b])
             rep.setdefault(b, {})["miss"] = round(float(np.hypot(*(land - np.array(marks[aim])))), 1)
     return out, rep, {b: (float(v[0][0]), float(v[0][1])) for b, v in state.items()}
@@ -97,7 +117,7 @@ def run(name: str) -> None:
     keys, report = {}, {}
     for pose in party.poses:
         marks, moved = P.marks_for(party, pose, T, size)
-        bones, rep, _joints = solve_pose(party, rest, marks)
+        bones, rep, _joints = solve_pose(party, rest, marks, P.rest_joints(party))
         key = {"bones": bones, "source": f"characters/{party.id}/{pose}", "fit": {"iou": 0.9, "stature": 1.0, "feetPx": 0.0}}
         mk = party.party.get("key_motion", {}).get(pose) or {}
         if "ms" in mk:  # milliseconds to move INTO the key; a fast key (the strike, the flinch) moves in a few frames and cuts its parts on the fastest frame (fadeMs 0), a slow one cross-fades

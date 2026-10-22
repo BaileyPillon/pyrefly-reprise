@@ -24,7 +24,7 @@
   ],
   "swordPivotD": 80,
   "idle_hidden": [],
-  "underlap": 8,
+  "underlap": 12,
   "underlap_idle": 5,
   "margin": 15,
   "pad": 600,
@@ -309,57 +309,100 @@
    [
     "pelvis",
     "root",
-    "pelvis"
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
    ],
    [
     "chest",
     "pelvis",
-    "waist"
+    "waist",
+    [
+     "torso",
+     "hips"
+    ]
    ],
    [
     "head",
     "chest",
-    "neck"
+    "neck",
+    [
+     "head",
+     "torso"
+    ]
    ],
    [
     "upperarmA",
     "chest",
-    "shoulderA"
+    "shoulderA",
+    [
+     "armA",
+     "torso"
+    ]
    ],
    [
     "forearmA",
     "upperarmA",
-    "elbowA"
+    "elbowA",
+    [
+     "armA"
+    ]
    ],
    [
     "upperarmB",
     "chest",
-    "shoulderB"
+    "shoulderB",
+    [
+     "armB",
+     "torso"
+    ]
    ],
    [
     "forearmB",
     "upperarmB",
-    "elbowB"
+    "elbowB",
+    [
+     "armB"
+    ]
    ],
    [
     "thighA",
     "pelvis",
-    "pelvis"
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
    ],
    [
     "shinA",
     "thighA",
-    "kneeA"
+    "kneeA",
+    [
+     "legA"
+    ]
    ],
    [
     "thighB",
     "pelvis",
-    "pelvis"
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
    ],
    [
     "shinB",
     "thighB",
-    "kneeB"
+    "kneeB",
+    [
+     "legB"
+    ]
    ],
    [
     "sword",
@@ -384,6 +427,10 @@
   "place": {
    "pelvis": "pelvis",
    "chest": "waist",
+   "forearmA": "elbowA",
+   "forearmB": "elbowB",
+   "shinA": "kneeA",
+   "shinB": "kneeB",
    "upperarmA": "shoulderA",
    "upperarmB": "shoulderB",
    "head": "neck",
@@ -417,36 +464,36 @@
     1.4
    ],
    "upperarmA": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "forearmA": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "upperarmB": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "forearmB": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "thighA": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "shinA": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "thighB": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "shinB": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "sword": [
     0.3,
@@ -541,82 +588,8 @@
     "fadeMs": 0
    }
   },
-  "joint_discs": [
-   [
-    "head",
-    [
-     "head",
-     "torso"
-    ]
-   ],
-   [
-    "chest",
-    [
-     "torso",
-     "hips"
-    ]
-   ],
-   [
-    "upperarmA",
-    [
-     "armA",
-     "torso"
-    ]
-   ],
-   [
-    "upperarmB",
-    [
-     "armB",
-     "torso"
-    ]
-   ],
-   [
-    "forearmA",
-    [
-     "armA"
-    ]
-   ],
-   [
-    "forearmB",
-    [
-     "armB"
-    ]
-   ],
-   [
-    "thighA",
-    [
-     "hips",
-     "legA",
-     "legB"
-    ]
-   ],
-   [
-    "thighB",
-    [
-     "hips",
-     "legA",
-     "legB"
-    ]
-   ],
-   [
-    "shinA",
-    [
-     "legA"
-    ]
-   ],
-   [
-    "shinB",
-    [
-     "legB"
-    ]
-   ],
-   [
-    "pelvis",
-    [
-     "hips"
-    ]
-   ]
-  ],
+  "joint_discs": [],
+  "disc_margin": 14,
   "marks": [
    "pelvis",
    "handA",
@@ -681,32 +654,32 @@
     "pelvis",
     "root",
     [
-     440.0,
-     540.0
+     407.5,
+     473.0
     ]
    ],
    [
     "chest",
     "pelvis",
     [
-     423.8,
-     465.0
+     390.5,
+     450.0
     ]
    ],
    [
     "head",
     "chest",
     [
-     375.0,
-     240.0
+     349.0,
+     206.0
     ]
    ],
    [
     "upperarmA",
     "chest",
     [
-     480.0,
-     262.0
+     449.5,
+     273.5
     ]
    ],
    [
@@ -721,48 +694,48 @@
     "upperarmB",
     "chest",
     [
-     305.0,
-     290.0
+     314.5,
+     286.0
     ]
    ],
    [
     "forearmB",
     "upperarmB",
     [
-     285.0,
-     415.0
+     268.5,
+     420.0
     ]
    ],
    [
     "thighA",
     "pelvis",
     [
-     440.0,
-     540.0
+     407.5,
+     473.0
     ]
    ],
    [
     "shinA",
     "thighA",
     [
-     425.0,
-     780.0
+     458.0,
+     788.0
     ]
    ],
    [
     "thighB",
     "pelvis",
     [
-     440.0,
-     540.0
+     407.5,
+     473.0
     ]
    ],
    [
     "shinB",
     "thighB",
     [
-     290.0,
-     745.0
+     261.5,
+     729.5
     ]
    ],
    [
@@ -783,12 +756,12 @@
     ],
     "joints": [
      [
-      440.0,
-      540.0
+      407.5,
+      473.0
      ],
      [
-      290.0,
-      745.0
+      261.5,
+      729.5
      ],
      [
       285.0,
@@ -821,12 +794,12 @@
     ],
     "joints": [
      [
-      440.0,
-      540.0
+      407.5,
+      473.0
      ],
      [
-      425.0,
-      780.0
+      458.0,
+      788.0
      ],
      [
       495.0,
@@ -850,12 +823,12 @@
     ],
     "joints": [
      [
-      305.0,
-      290.0
+      314.5,
+      286.0
      ],
      [
-      285.0,
-      415.0
+      268.5,
+      420.0
      ],
      [
       305.0,
@@ -897,8 +870,8 @@
     ],
     "joints": [
      [
-      480.0,
-      262.0
+      449.5,
+      273.5
      ],
      [
       605.0,
@@ -1608,22 +1581,6 @@
       "mask": "D:/pyrefly-art-rigs-work/tidus-x/masks/defend.armB.png",
       "mask_pad": 600,
       "register": "defend",
-      "scale": 1.0,
-      "skin": "chain",
-      "tex": 0.4,
-      "mesh": {
-       "edge": 110,
-       "inner": 220,
-       "grow": 12
-      }
-     }
-    },
-    "od-slice-and-dice": {
-     "from_painting": {
-      "pose": "od-slice-and-dice",
-      "mask": "D:/pyrefly-art-rigs-work/tidus-x/masks/od-slice-and-dice.armB.png",
-      "mask_pad": 600,
-      "register": "od-slice-and-dice",
       "scale": 1.0,
       "skin": "chain",
       "tex": 0.4,
@@ -2834,13 +2791,14 @@
      "legB": "od-slice-and-dice",
      "hips": "od-slice-and-dice",
      "legA": "od-slice-and-dice",
-     "armB": "od-slice-and-dice",
      "torso": "od-slice-and-dice",
      "sword": "od-slice-and-dice",
      "armA": "od-slice-and-dice",
      "head": "od-slice-and-dice"
     },
-    "hide": []
+    "hide": [
+     "armB"
+    ]
    }
   }
  },

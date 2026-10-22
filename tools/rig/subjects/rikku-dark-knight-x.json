@@ -25,7 +25,7 @@
    "elbowB",
    "handB"
   ],
-  "underlap": 8,
+  "underlap": 12,
   "underlap_idle": 5,
   "margin": 15,
   "pad": 600,
@@ -324,57 +324,100 @@
    [
     "pelvis",
     "root",
-    "pelvis"
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
    ],
    [
     "chest",
     "pelvis",
-    "waist"
+    "waist",
+    [
+     "torso",
+     "hips"
+    ]
    ],
    [
     "head",
     "chest",
-    "neck"
+    "neck",
+    [
+     "head",
+     "torso"
+    ]
    ],
    [
     "upperarmA",
     "chest",
-    "shoulderA"
+    "shoulderA",
+    [
+     "armA",
+     "torso"
+    ]
    ],
    [
     "forearmA",
     "upperarmA",
-    "elbowA"
+    "elbowA",
+    [
+     "armA"
+    ]
    ],
    [
     "upperarmB",
     "chest",
-    "shoulderB"
+    "shoulderB",
+    [
+     "armB",
+     "torso"
+    ]
    ],
    [
     "forearmB",
     "upperarmB",
-    "elbowB"
+    "elbowB",
+    [
+     "armB"
+    ]
    ],
    [
     "thighA",
     "pelvis",
-    "pelvis"
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
    ],
    [
     "shinA",
     "thighA",
-    "kneeA"
+    "kneeA",
+    [
+     "legA"
+    ]
    ],
    [
     "thighB",
     "pelvis",
-    "pelvis"
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
    ],
    [
     "shinB",
     "thighB",
-    "kneeB"
+    "kneeB",
+    [
+     "legB"
+    ]
    ],
    [
     "sword",
@@ -399,6 +442,10 @@
   "place": {
    "pelvis": "pelvis",
    "chest": "waist",
+   "forearmA": "elbowA",
+   "forearmB": "elbowB",
+   "shinA": "kneeA",
+   "shinB": "kneeB",
    "upperarmA": "shoulderA",
    "upperarmB": "shoulderB",
    "head": "neck",
@@ -432,36 +479,36 @@
     1.4
    ],
    "upperarmA": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "forearmA": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "upperarmB": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "forearmB": [
-    0.7,
-    1.45
+    0.4,
+    2.2
    ],
    "thighA": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "shinA": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "thighB": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "shinB": [
-    0.7,
-    1.45
+    0.5,
+    1.9
    ],
    "sword": [
     0.3,
@@ -556,82 +603,8 @@
     "fadeMs": 0
    }
   },
-  "joint_discs": [
-   [
-    "head",
-    [
-     "head",
-     "torso"
-    ]
-   ],
-   [
-    "chest",
-    [
-     "torso",
-     "hips"
-    ]
-   ],
-   [
-    "upperarmA",
-    [
-     "armA",
-     "torso"
-    ]
-   ],
-   [
-    "upperarmB",
-    [
-     "armB",
-     "torso"
-    ]
-   ],
-   [
-    "forearmA",
-    [
-     "armA"
-    ]
-   ],
-   [
-    "forearmB",
-    [
-     "armB"
-    ]
-   ],
-   [
-    "thighA",
-    [
-     "hips",
-     "legA",
-     "legB"
-    ]
-   ],
-   [
-    "thighB",
-    [
-     "hips",
-     "legA",
-     "legB"
-    ]
-   ],
-   [
-    "shinA",
-    [
-     "legA"
-    ]
-   ],
-   [
-    "shinB",
-    [
-     "legB"
-    ]
-   ],
-   [
-    "pelvis",
-    [
-     "hips"
-    ]
-   ]
-  ],
+  "joint_discs": [],
+  "disc_margin": 14,
   "marks": [
    "pelvis",
    "handA",
@@ -692,23 +665,23 @@
     "pelvis",
     "root",
     [
-     300.0,
-     495.0
+     274.5,
+     450.0
     ]
    ],
    [
     "chest",
     "pelvis",
     [
-     296.2,
-     430.8
+     296.0,
+     430.5
     ]
    ],
    [
     "head",
     "chest",
     [
-     285.0,
+     336.0,
      238.0
     ]
    ],
@@ -716,23 +689,23 @@
     "upperarmA",
     "chest",
     [
-     365.0,
-     250.0
+     367.5,
+     238.0
     ]
    ],
    [
     "forearmA",
     "upperarmA",
     [
-     470.0,
-     225.0
+     442.5,
+     214.5
     ]
    ],
    [
     "upperarmB",
     "chest",
     [
-     255.0,
+     263.0,
      262.0
     ]
    ],
@@ -740,40 +713,40 @@
     "forearmB",
     "upperarmB",
     [
-     215.0,
-     400.0
+     249.5,
+     350.0
     ]
    ],
    [
     "thighA",
     "pelvis",
     [
-     300.0,
-     495.0
+     274.5,
+     450.0
     ]
    ],
    [
     "shinA",
     "thighA",
     [
-     330.0,
-     850.0
+     363.5,
+     871.5
     ]
    ],
    [
     "thighB",
     "pelvis",
     [
-     300.0,
-     495.0
+     274.5,
+     450.0
     ]
    ],
    [
     "shinB",
     "thighB",
     [
-     230.0,
-     835.0
+     187.0,
+     818.5
     ]
    ],
    [
@@ -794,12 +767,12 @@
     ],
     "joints": [
      [
-      300.0,
-      495.0
+      274.5,
+      450.0
      ],
      [
-      230.0,
-      835.0
+      187.0,
+      818.5
      ],
      [
       85.0,
@@ -832,12 +805,12 @@
     ],
     "joints": [
      [
-      300.0,
-      495.0
+      274.5,
+      450.0
      ],
      [
-      330.0,
-      850.0
+      363.5,
+      871.5
      ],
      [
       460.0,
@@ -861,12 +834,12 @@
     ],
     "joints": [
      [
-      255.0,
+      263.0,
       262.0
      ],
      [
-      215.0,
-      400.0
+      249.5,
+      350.0
      ],
      [
       235.0,
@@ -908,12 +881,12 @@
     ],
     "joints": [
      [
-      365.0,
-      250.0
+      367.5,
+      238.0
      ],
      [
-      470.0,
-      225.0
+      442.5,
+      214.5
      ],
      [
       650.0,
@@ -1809,38 +1782,6 @@
       }
      }
     },
-    "critical": {
-     "from_painting": {
-      "pose": "critical",
-      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.armA.png",
-      "mask_pad": 600,
-      "register": "critical",
-      "scale": 1.0,
-      "skin": "chain",
-      "tex": 0.4,
-      "mesh": {
-       "edge": 110,
-       "inner": 220,
-       "grow": 12
-      }
-     }
-    },
-    "sleep": {
-     "from_painting": {
-      "pose": "sleep",
-      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.armA.png",
-      "mask_pad": 600,
-      "register": "sleep",
-      "scale": 1.0,
-      "skin": "chain",
-      "tex": 0.4,
-      "mesh": {
-       "edge": 110,
-       "inner": 220,
-       "grow": 12
-      }
-     }
-    },
     "ko": {
      "from_painting": {
       "pose": "ko",
@@ -2047,22 +1988,6 @@
       "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.armB.png",
       "mask_pad": 600,
       "register": "attack",
-      "scale": 1.0,
-      "skin": "chain",
-      "tex": 0.4,
-      "mesh": {
-       "edge": 110,
-       "inner": 220,
-       "grow": 12
-      }
-     }
-    },
-    "victory": {
-     "from_painting": {
-      "pose": "victory",
-      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.armB.png",
-      "mask_pad": 600,
-      "register": "victory",
       "scale": 1.0,
       "skin": "chain",
       "tex": 0.4,
@@ -2332,13 +2257,14 @@
      "legB": "victory",
      "hips": "victory",
      "legA": "victory",
-     "armB": "victory",
      "torso": "victory",
      "sword": "victory",
      "armA": "victory",
      "head": "victory"
     },
-    "hide": []
+    "hide": [
+     "armB"
+    ]
    },
    "cast": {
     "image": {
@@ -2389,10 +2315,11 @@
      "armB": "critical",
      "torso": "critical",
      "sword": "critical",
-     "armA": "critical",
      "head": "critical"
     },
-    "hide": []
+    "hide": [
+     "armA"
+    ]
    },
    "sleep": {
     "image": {
@@ -2401,11 +2328,11 @@
      "legA": "sleep",
      "torso": "sleep",
      "sword": "sleep",
-     "armA": "sleep",
      "head": "sleep"
     },
     "hide": [
-     "armB"
+     "armB",
+     "armA"
     ]
    },
    "ko": {

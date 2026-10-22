@@ -10,7 +10,7 @@ cfg = {
  "party": {
   "keypoints": "tools/rig/subjects/rikku-dark-knight-x.keypoints.json",
   "poses": ["ready", "attack", "follow", "victory", "cast", "item", "hurt", "critical", "sleep", "ko"],
-  "swordPivotD": 120, "idle_hidden": ["shoulderB", "elbowB", "handB"], "underlap": 8, "underlap_idle": 5, "margin": 15, "pad": 600, "waistT": 0.25,
+  "swordPivotD": 120, "idle_hidden": ["shoulderB", "elbowB", "handB"], "underlap": 12, "underlap_idle": 5, "margin": 15, "pad": 600, "waistT": 0.25,
   "order": ["legB", "hips", "legA", "armB", "torso", "sword", "armA", "head"],
   "parts": {
    "head": {"caps": [["neck", "head", 55], ["head", "crown", 85], ["head", "hairTip", 42]], "bias": 30, "skin": {"type": "rigid", "bone": "head", "mesh": {"edge": 90, "inner": 180, "grow": 14}},
@@ -24,17 +24,17 @@ cfg = {
    "sword": {"caps": [["pommel", "tip", 85]], "bias": 28, "base_tex": 0.25, "skin": {"type": "rigid", "bone": "sword", "mesh": {"edge": 220, "inner": 440, "grow": 16}}, "variant": {"tex": 0.25, "mesh": {"quad": True}}},
   },
   "variant_defaults": {"tex": 0.4}, "base_tex": 0.4,
-  "skeleton": [["root", None, "ground"], ["pelvis", "root", "pelvis"], ["chest", "pelvis", "waist"], ["head", "chest", "neck"],
-               ["upperarmA", "chest", "shoulderA"], ["forearmA", "upperarmA", "elbowA"], ["upperarmB", "chest", "shoulderB"], ["forearmB", "upperarmB", "elbowB"],
-               ["thighA", "pelvis", "pelvis"], ["shinA", "thighA", "kneeA"], ["thighB", "pelvis", "pelvis"], ["shinB", "thighB", "kneeB"], ["sword", "root", "swordPivot"]],
+  "skeleton": [["root", None, "ground"], ["pelvis", "root", "pelvis", ["hips", "legA", "legB"]], ["chest", "pelvis", "waist", ["torso", "hips"]], ["head", "chest", "neck", ["head", "torso"]],
+               ["upperarmA", "chest", "shoulderA", ["armA", "torso"]], ["forearmA", "upperarmA", "elbowA", ["armA"]], ["upperarmB", "chest", "shoulderB", ["armB", "torso"]], ["forearmB", "upperarmB", "elbowB", ["armB"]],
+               ["thighA", "pelvis", "pelvis", ["hips", "legA", "legB"]], ["shinA", "thighA", "kneeA", ["legA"]], ["thighB", "pelvis", "pelvis", ["hips", "legA", "legB"]], ["shinB", "thighB", "kneeB", ["legB"]], ["sword", "root", "swordPivot"]],
   "aim": {"pelvis": "neck", "chest": "neck", "head": "headTop", "upperarmA": "elbowA", "forearmA": "handA", "upperarmB": "elbowB", "forearmB": "handB", "thighA": "kneeA", "shinA": "footA", "thighB": "kneeB", "shinB": "footB", "sword": "tip"},
-  "place": {"pelvis": "pelvis", "chest": "waist", "upperarmA": "shoulderA", "upperarmB": "shoulderB", "head": "neck", "sword": "swordPivot"},
+  "place": {"pelvis": "pelvis", "chest": "waist", "forearmA": "elbowA", "forearmB": "elbowB", "shinA": "kneeA", "shinB": "kneeB", "upperarmA": "shoulderA", "upperarmB": "shoulderB", "head": "neck", "sword": "swordPivot"},
   "noscale": ["head", "pelvis", "chest"], "exact_aim": ["head"],
   "joint_points": {"pelvis": "pelvis", "chest": "waist", "head": "neck", "upperarmA": "shoulderA", "forearmA": "elbowA", "upperarmB": "shoulderB", "forearmB": "elbowB", "thighA": "pelvis", "shinA": "kneeA", "thighB": "pelvis", "shinB": "kneeB", "sword": "swordPivot"},
-  "scales": {"chest": [0.7, 1.4], "upperarmA": [0.7, 1.45], "forearmA": [0.7, 1.45], "upperarmB": [0.7, 1.45], "forearmB": [0.7, 1.45], "thighA": [0.7, 1.45], "shinA": [0.7, 1.45], "thighB": [0.7, 1.45], "shinB": [0.7, 1.45], "sword": [0.3, 3.0]},
+  "scales": {"chest": [0.7, 1.4], "upperarmA": [0.4, 2.2], "forearmA": [0.4, 2.2], "upperarmB": [0.4, 2.2], "forearmB": [0.4, 2.2], "thighA": [0.5, 1.9], "shinA": [0.5, 1.9], "thighB": [0.5, 1.9], "shinB": [0.5, 1.9], "sword": [0.3, 3.0]},
   "landmarks": {"head": ["head", "head"], "crown": ["head", "crown"], "neck": ["head", "neck"], "pelvis": ["pelvis", "pelvis"], "handA": ["forearmA", "handA"], "handB": ["forearmB", "handB"], "pommel": ["sword", "pommel"], "tip": ["sword", "tip"]},
   "key_motion": {"ready": {"ms": 150, "fadeMs": 90}, "attack": {"ms": 70, "fadeMs": 0}, "follow": {"ms": 90, "fadeMs": 0}, "hurt": {"ms": 60, "fadeMs": 0}, "cast": {"ms": 150, "fadeMs": 70}, "item": {"ms": 140, "fadeMs": 70}, "defend": {"ms": 110, "fadeMs": 60}, "victory": {"ms": 220, "fadeMs": 110}, "critical": {"ms": 220, "fadeMs": 110}, "sleep": {"ms": 260, "fadeMs": 130}, "ko": {"ms": 420, "fadeMs": 160}, "od-energy-rain": {"ms": 120, "fadeMs": 60}, "od-slice-and-dice": {"ms": 80, "fadeMs": 0}},
-  "joint_discs": [["head", ["head", "torso"]], ["chest", ["torso", "hips"]], ["upperarmA", ["armA", "torso"]], ["upperarmB", ["armB", "torso"]], ["forearmA", ["armA"]], ["forearmB", ["armB"]], ["thighA", ["hips", "legA", "legB"]], ["thighB", ["hips", "legA", "legB"]], ["shinA", ["legA"]], ["shinB", ["legB"]], ["pelvis", ["hips"]]],
+  "joint_discs": [], "disc_margin": 14,
   "marks": ["pelvis", "handA", "pommel", "tip"],
   "motion": {"idle": {"hz": 0.5, "bones": {"pelvis": {"rot": 0.3, "phase": 0.4}, "chest": {"rot": 0.8, "phase": -0.9}, "head": {"rot": 1.0, "phase": -1.6}, "upperarmA": {"rot": 0.5, "phase": -1.4}, "forearmA": {"rot": 0.4, "phase": -2.0}}}}
  }

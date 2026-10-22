@@ -117,3 +117,46 @@ export async function motion(g, spec, o) {
   writeJson(path.join(o.out, 'console.json'), { consoleErrors: g.consoleErrors, notFound: g.notFound });
   g.log('motion run done:', st.frame, 'frames,', marks.length, 'marks; console errors', g.consoleErrors.length);
 }
+
+/**
+ * `menuprobe`: what the command menu of each member looks like (top rows, and the rows behind each group), so a `motion` script can name its rows. Reaches the first menu, then for each of the first turns writes the rows
+ * (and, for every row, what Enter opens, backed out with Escape), has the member DEFEND (Q) and goes on. Writes `menus.json`. No frames, no rig involved (use --rig off).
+ */
+export async function menuprobe(g, spec, o) {
+  const { st } = await prepare(g, spec, { ...o, shoot: false });
+  const { input, page } = g;
+  st.recording = false;
+  const idleMenu = async () => (await g.awaitingMenu()) && !(await page.evaluate(() => Boolean(window.__pyrefly.battle()?.battlePresenter?.playing)));
+  const out = [];
+  for (let turn = 0; turn < 7; turn++) {
+    for (let i = 0; i < 3000 && !(await idleMenu()); i++) await st.step(false);
+    await st.steps(30, false);
+    const who = await g.curActor();
+    const top = await menuRows(page);
+    const rec = { turn, who, top, groups: {} };
+    if (top) {
+      for (let r = 0; r < top.rows.length; r++) {
+        const m = await menuRows(page);
+        const sel = m?.selected ?? 0;
+        const press = r - sel;
+        for (let k = 0; k < Math.abs(press); k++) { await input.press(press > 0 ? 'ArrowDown' : 'ArrowUp'); await st.steps(6, false); }
+        await input.press('Enter');
+        await st.steps(16, false);
+        const sub = await menuRows(page);
+        const sameAsTop = sub && JSON.stringify(sub.rows) === JSON.stringify(top.rows);
+        rec.groups[top.rows[r]] = sameAsTop ? 'target or action (the list did not change)' : sub;
+        await input.press('Escape');
+        await st.steps(16, false);
+        for (let k = 0; k < 3; k++) { const mm = await menuRows(page); if (mm && JSON.stringify(mm.rows) === JSON.stringify(top.rows)) break; await input.press('Escape'); await st.steps(12, false); }
+      }
+    }
+    rec.dom = await page.evaluate(() => [...document.querySelectorAll('[class*="cmd"]')].slice(0, 12).map((e) => e.className));
+    out.push(rec);
+    g.log('turn', turn, who, JSON.stringify(rec.top));
+    await input.press('KeyQ');
+    await st.steps(40, false);
+    if ((await g.scr()) !== 'battle') break;
+  }
+  writeJson(path.join(o.out, 'menus.json'), out);
+  await page.clock.resume();
+}

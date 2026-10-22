@@ -12,9 +12,9 @@ import { fileURLToPath } from 'node:url';
 import { MODES, parseArgs, resolvePoses, subjectSpec } from './lane-pure.mjs';
 import { openGame, waitForGuards } from './play-common.mjs';
 import * as base from './play-modes.mjs';
-import { motion } from './play-motion.mjs';
+import { menuprobe, motion } from './play-motion.mjs';
 
-const modes = { ...base, motion };
+const modes = { ...base, motion, menuprobe };
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const a = parseArgs(process.argv.slice(2));

@@ -32,7 +32,8 @@ def run(name: str) -> None:
     alpha = rgba[..., 3] > 24
     cuts, full = {}, {}
     idle_masks = {n: P.dilate_mask(labels == i, K) & alpha for i, n in enumerate(party.order) if (labels == i).any()}
-    P.add_joint_discs(party, idle_masks, P.rest_joints(party), alpha)
+    if "--no-discs" not in sys.argv:
+        P.add_joint_discs(party, idle_masks, P.rest_joints(party), alpha)
     for i, n in enumerate(party.order):
         m = idle_masks.get(n, np.zeros((H, W), bool))
         if not m.any():  # a part the idle does not draw: a stub (hidden under the front parts) at its rest joint

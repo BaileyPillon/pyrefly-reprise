@@ -45,12 +45,15 @@ def main(name: str) -> int:
     S = party.S
     rest = party.rest_points()
     j = lambda pt: [round(rest[pt][0] / S, 1), round(rest[pt][1] / S, 1)]  # noqa: E731  (a rest point in 1x px, the unit of the config)
-    bones = [[b, par, j(pt)] for b, par, pt in pp["skeleton"]]
+    rj = P.rest_joints(party)
+    jb = lambda b: [round(rj[b][0] / S, 1), round(rj[b][1] / S, 1)]  # noqa: E731  (a bone's pivot in 1x px)
+    bones = [[e[0], e[1], jb(e[0])] for e in pp["skeleton"]]
+    centre_bone = {e[2]: e[0] for e in pp["skeleton"] if len(e) > 3}  # a point that is the centre of an outline-pivoted bone: the chain skin follows that bone's pivot
     skin = {}
     for n in party.order:
         sp = dict(pp["parts"][n]["skin"])
         if sp["type"] == "chain":
-            sp["joints"] = [j(p) if isinstance(p, str) else p for p in sp["joints"]]
+            sp["joints"] = [(jb(centre_bone[p]) if p in centre_bone else j(p)) if isinstance(p, str) else p for p in sp["joints"]]
         skin[n] = sp
     lms = {k: [b, j(pt)] for k, (b, pt) in pp["landmarks"].items()}
     lms["feet"] = ["root", j("ground")]
