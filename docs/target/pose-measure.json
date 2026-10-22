@@ -3805,7 +3805,7 @@
      },
      "scale": 1.031,
      "scaleSrc": "ruled",
-     "sha": "c834374bb5d9c699e0e047b56cc52d0631eb6fc2c2d195f5f9bbec0be20935e2",
+     "sha": "585ffbb1996994cdf80d7e5108010bddcd7b71e88ccdcd446bca8567b17b3357",
      "size": [
       832,
       1172
@@ -3847,7 +3847,7 @@
      },
      "scale": 0.99,
      "scaleSrc": "ruled",
-     "sha": "dc3b3f103eeb3afda7e8431c40ac0bda33ceb9f41f86d2357c413288566d6f4e",
+     "sha": "b21f868fe11c2912006ebe29a0ebf07a92d3685425f8836259873298c521d9b0",
      "size": [
       814,
       1212
@@ -4015,7 +4015,7 @@
      },
      "scale": 1.052,
      "scaleSrc": "ruled",
-     "sha": "134144f1430cfa84dbd9315cbb03954a8c48e6781e7f5f5dbd369715d19f5727",
+     "sha": "ed846ce7461f61d8ef42bfa392802e31d5e8013985850b709204d91a653c6c46",
      "size": [
       827,
       1173
@@ -4065,42 +4065,42 @@
       290.0,
       105.0
      ],
-     "baseline": 1162.0,
+     "baseline": 1163.0,
      "current": 1.0,
      "head": [
-      204.1,
-      54.5,
-      375.9,
-      155.5
+      204.4,
+      54.6,
+      375.6,
+      155.4
      ],
      "prone": false,
      "reading": 1.0,
      "ruled": {
       "basis": "box",
       "head": 1,
-      "headRatio": 1.019,
-      "height": 1.03829,
+      "headRatio": 1.022,
+      "height": 1.04387,
       "lift": null,
-      "mean": 1.019,
+      "mean": 1.022,
       "rule": "geomean/1",
-      "stature": 0.981
+      "stature": 0.979
      },
-     "scale": 1.019,
+     "scale": 1.022,
      "scaleSrc": "ruled",
-     "sha": "7a05ca6283c886892edbf95233bddf3a7d168e37c41b56cac8d1f01910f42c5c",
+     "sha": "d9fef03b0f2081711571bfc22550478e4a04c3b8a534e9a34a7c9b44273e1b37",
      "size": [
       734,
       1178
      ],
      "stance": {
-      "row": 1162.0,
+      "row": 1160.0,
       "src": "silhouette",
-      "x": 456.5,
-      "x0": 292.0,
-      "x1": 621.0
+      "x": 456.0,
+      "x0": 290.0,
+      "x1": 622.0
      },
      "standing": true,
-     "stature": 0.981
+     "stature": 0.979
     },
     "jump": {
      "anchor": [
@@ -21992,42 +21992,42 @@
       263.0,
       172.0
      ],
-     "baseline": 903.0,
+     "baseline": 902.0,
      "current": 1.2,
      "head": [
-      224.7,
-      145.4,
-      301.3,
-      198.6
+      224.6,
+      145.3,
+      301.4,
+      198.7
      ],
      "prone": false,
      "reading": 1.304,
      "ruled": {
       "basis": "box",
       "head": 1.304,
-      "headRatio": 0.951,
-      "height": 1.17946,
+      "headRatio": 0.949,
+      "height": 1.17284,
       "lift": null,
-      "mean": 1.24,
+      "mean": 1.237,
       "rule": "geomean/1",
-      "stature": 1.051
+      "stature": 1.055
      },
-     "scale": 1.24,
+     "scale": 1.237,
      "scaleSrc": "ruled",
-     "sha": "5d375a4562b0897be60672131114eab856eb939422e0027b3480ae734d4db500",
+     "sha": "d1aa869e1eff5f3eadab6084e030d50fe95cf56176662106e297cff651c0b24d",
      "size": [
       708,
       911
      ],
      "stance": {
-      "row": 904.0,
+      "row": 902.0,
       "src": "silhouette",
       "x": 287.0,
-      "x0": 123.0,
-      "x1": 451.0
+      "x0": 127.0,
+      "x1": 447.0
      },
      "standing": true,
-     "stature": 1.051
+     "stature": 1.055
     },
     "sleep": {
      "anchor": [
