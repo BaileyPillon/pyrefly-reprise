@@ -9,7 +9,7 @@
  *   party's poses share 14 to 50 percent of their outline), a landing, then the held pose and its loop (the victory posture's faster breath). The staggering per fighter is the one the hop always had.
  * - **FFX-2, Chapter IV (Bahamut): a quiet stand-down.** The sources withhold the pose: "the girls do not perform a victory pose at all after Bahamut" (`research/ffx-vs-ffx2-presentation.md` 2.2, FC-6a;
  *   `research/ffx2-bahamut.md` beat 9, "do not let the player celebrate"; `chapter-meta` `victoryPose: 'hold'`). What the sources do NOT say is what is shown instead (the same document, open
- *   question 11, `[absence]`): the girls keep their stance. The stand-down is `[ours]` and the smallest thing that still moves: one slow breath out, a settle of under 2 percent and a rebound.
+ *   question 11, `[absence]`): the girls keep their stance. The stand-down is `[ours]` and the smallest thing that still moves: one slow breath out, a settle of 3.5 percent and a small rise.
  *   No leap, no painting swap, no flash.
  *
  * **The knock-out's settle** (Bailey: "Rig collapse + settle": rigged figures collapse through the rig with a small landing bounce; painted ones get the closest equivalent, a smear cut into the KO pose
@@ -63,9 +63,9 @@ export interface StandDownShape {
   options: LeapOptions;
 }
 
-/** The quiet stand-down: a flight of height 0 (nothing leaves the floor), half of it spent settling 1.8 percent, then coming back up with a 0.6 percent overshoot. */
+/** The quiet stand-down: a flight of height 0 (nothing leaves the floor), half of it spent settling 3.5 percent (the idle's own chest breath is about 2: anything under that is lost in it), then coming back up with a 1.2 percent overshoot. */
 export function standDownShape(_game: CurveGame): StandDownShape {
-  return { ms: 900, options: { anticipation: 0.5, crouch: 0.018, stretch: 0.006, land: 0, landMs: 80, apex: 0.5 } };
+  return { ms: 1000, options: { anticipation: 0.5, crouch: 0.035, stretch: 0.012, land: 0, landMs: 80, apex: 0.5 } };
 }
 
 export interface KoSettleShape {

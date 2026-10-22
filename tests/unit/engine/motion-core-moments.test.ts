@@ -85,10 +85,11 @@ describe('the numbers', () => {
     expect(cheerShape('ffx2')).toEqual(s); // one shape for both: the sources give none for either
   });
 
-  it('the stand-down never leaves the floor and settles under 2 percent', () => {
+  it('the stand-down never leaves the floor, settles under the squash cap and by more than the idle\'s own 2 percent breath', () => {
     const s = standDownShape('ffx2');
-    expect(s.options.crouch!).toBeLessThanOrEqual(0.02);
-    expect(s.options.stretch!).toBeLessThan(0.01);
+    expect(s.options.crouch!).toBeLessThanOrEqual(SQUASH_CAP);
+    expect(s.options.crouch!).toBeGreaterThan(0.02);
+    expect(s.options.stretch!).toBeLessThan(0.02);
     expect(s.options.land).toBe(0);
   });
 
@@ -337,7 +338,7 @@ describe('victory: FFX cheers (Chapter I)', () => {
 });
 
 describe('victory: FFX-2 Chapter IV stands down (the sources withhold the pose)', () => {
-  it('standDown never changes the painting and never leaves the floor; the figure settles under 2 percent and comes back', () => {
+  it('standDown never changes the painting and never leaves the floor; the figure settles about 3.5 percent and comes back', () => {
     setPaceGame('ffx2');
     setCurvesChapter('ffx2-bahamut');
     setMomentsMode('new');
@@ -353,11 +354,11 @@ describe('victory: FFX-2 Chapter IV stands down (the sources withhold the pose)'
     });
     expect(a.pose).toBe('idle');
     expect(top).toBeCloseTo(0, 6);
-    expect(low).toBeLessThan(0.99);
-    expect(low).toBeGreaterThan(0.975);
+    expect(low).toBeLessThan(0.98);
+    expect(low).toBeGreaterThan(0.95);
     expect(inner(a).scale.y).toBeCloseTo(1, 3);
     expect(inner(a).scale.x * inner(a).scale.y).toBeCloseTo(1, 3);
-    expect(maxX).toBeLessThan(1.03);
+    expect(maxX).toBeLessThan(1.05); // volume-preserving: the figure widens as it settles (sx = 1 / sy)
   });
 
   it('a fallen figure stays where it lies: standDown does nothing to a body that is down', () => {
