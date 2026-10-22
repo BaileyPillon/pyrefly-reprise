@@ -4,7 +4,7 @@ import type { ContinuityConfig, Jerk } from './continuity-pure.mjs';
 export interface SmearPolicy { excuse: boolean; slackMs: number; maxJerkPx: number; bigOverlap: number; bigAnchor: number }
 /** One planned smear as the probe hands it over (`meta.smears`): the engine's log entry with `at` and `cutAt` in the probe's clock (ms). */
 export interface LoggedSmear {
-  actor: string; from: string; to: string; style?: 'paint' | 'blur'; kind?: 'plane' | 'rig'; at: number; cutAt?: number; cutMs: number;
+  actor: string; from: string; to: string; style?: 'paint' | 'blur'; kind?: 'plane' | 'rig'; at: number; cutAt?: number; cutMs: number; moveMs?: number;
   overlap?: number | null; anchorDistance?: number | null; speed?: number; strength?: number; flash?: boolean;
 }
 export interface SmearSwapLike { figure?: string; fromPose?: string; toPose?: string; tMs?: number; snap?: boolean; id?: number; smear?: unknown; snapSmear?: boolean }

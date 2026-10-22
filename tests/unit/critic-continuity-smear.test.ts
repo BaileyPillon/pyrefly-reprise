@@ -54,6 +54,15 @@ describe('matching a swap to a planned smear', () => {
     expect(matchSmear(swap({ tMs: 1030 + 12 + 2 * (1000 / 60) + 1 }), [entry()], ON)).toBeNull();
     expect(matchSmear(swap({ tMs: undefined }), [entry()], ON)).toBeNull();
   });
+  it('a rig key change is seen when the move BEGINS, so its window is the whole move, not the cut inside it', () => {
+    const rig = entry({ kind: 'rig', actor: 'boss', from: 'idle', to: 'attack', at: 1000, cutMs: 34, moveMs: 140, overlap: null, anchorDistance: null });
+    expect(matchSmear(swap({ figure: 'boss', tMs: 1008 }), [rig], ON)?.index).toBe(0); // the first frame of the move
+    expect(matchSmear(swap({ figure: 'boss', tMs: 1000 + 140 }), [rig], ON)).not.toBeNull();
+    expect(matchSmear(swap({ figure: 'boss', tMs: 1000 + 140 + 12 + 2 * (1000 / 60) + 1 }), [rig], ON)).toBeNull();
+    expect(matchSmear(swap({ figure: 'boss', tMs: 1008, toPose: 'cast' }), [rig], ON)).toBeNull(); // another key
+    // a painting set's entry has no such slack: its window is the cut's own
+    expect(matchSmear(swap({ tMs: 1000 + 34 + 12 + 2 * (1000 / 60) + 1 }), [entry({ cutMs: 34 })], ON)).toBeNull();
+  });
   it('only a BIG change the policy\'s own numbers call big', () => {
     expect(loggedAsBig(entry(), ON)).toBe(true);
     expect(loggedAsBig(entry({ overlap: 0.9, anchorDistance: 0.02 }), ON)).toBe(false);

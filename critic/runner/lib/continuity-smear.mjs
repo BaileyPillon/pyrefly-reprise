@@ -48,7 +48,9 @@ export function matchSmear(swap, smears, policy, frameMs = 1000 / 60, used = new
     if (e.actor !== swap.figure || e.from !== swap.fromPose || e.to !== swap.toPose) continue;
     if (!loggedAsBig(e, policy)) continue;
     if (!num(e.at) || !num(e.cutMs)) continue;
-    if (swap.tMs < e.at - policy.slackMs - frameMs || swap.tMs > e.at + e.cutMs + policy.slackMs + 2 * frameMs) continue;
+    // a painting set's swap is the cut itself, inside the window; a rig's is the change of key, which the harness sees when the move BEGINS (the flip and its window are halfway through it)
+    const span = e.kind === 'rig' && num(e.moveMs) ? e.moveMs : e.cutMs;
+    if (swap.tMs < e.at - policy.slackMs - frameMs || swap.tMs > e.at + span + policy.slackMs + 2 * frameMs) continue;
     used.add(i);
     return { index: i, entry: e };
   }

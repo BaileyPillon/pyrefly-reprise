@@ -20,6 +20,8 @@ export interface PlannedSmear {
   style: 'paint' | 'blur';
   /** The window's length, ms. */
   cutMs: number;
+  /** A rig only: the length of the key move the window sits in (the flip, and so the cut, is at half of it, and the harness sees the change of key when the move BEGINS, at `at`). */
+  moveMs?: number;
   /** The pair's outline overlap and head distance (a share of the figure's height) the plan was made from; null where unknown. */
   overlap: number | null;
   anchorDistance: number | null;
@@ -29,7 +31,7 @@ export interface PlannedSmear {
   /** Did the cut carry the light flash? */
   flash: boolean;
   kind: 'plane' | 'rig';
-  /** When the cut itself falls (`at` plus the window's cut point), ms. */
+  /** When the cut itself falls (`at` plus the window's cut point, or half the move of a rig), ms. */
   cutAt: number;
 }
 
@@ -38,7 +40,7 @@ const log: PlannedSmear[] = [];
 
 /** Write one planned smear (the cut's own time is filled in). */
 export function noteSmear(rec: Omit<PlannedSmear, 'cutAt'>): PlannedSmear {
-  const full: PlannedSmear = { ...rec, cutAt: rec.at + rec.cutMs * CUT_AT };
+  const full: PlannedSmear = { ...rec, cutAt: rec.at + (rec.moveMs ?? rec.cutMs) * CUT_AT };
   if (log.length >= CAP) log.shift();
   log.push(full);
   return full;
