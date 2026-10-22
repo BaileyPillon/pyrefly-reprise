@@ -19,6 +19,8 @@ const argv = process.argv.slice(2);
 const logFile = argv[0];
 const sep = argv.indexOf('--');
 const rec = argv.slice(sep + 1);
+const runs = []; // `++` separates several record.mjs runs under one hold; leading KEY=VALUE tokens are that run's environment
+for (const part of rec.join('').split('++').map((s) => s.split('').filter(Boolean))) { const env = {}; while (part.length && /^[A-Z_][A-Z0-9_]*=/.test(part[0])) { const [k, ...v] = part.shift().split('='); env[k] = v.join('='); } if (part.length) runs.push({ env, args: part }); }
 const maxMinutes = Number(process.env.PILOTS_MAX_MINUTES ?? 10);
 const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -59,12 +61,21 @@ fs.rmSync(LOCK, { force: true });
 fs.writeFileSync(LOCK, JSON.stringify({ who: 'rig pilots', pid: process.pid, what: `rig pilots: ${rec.slice(0, 6).join(' ')}`, at: new Date().toISOString(), maxMinutes }), { flag: 'w' });
 say('claimed the slot for', maxMinutes, 'minutes');
 const out = fs.openSync(logFile, 'w');
-const child = spawn(process.execPath, ['tools/rig/lane/record.mjs', ...rec], { cwd: process.cwd(), stdio: ['ignore', out, out], env: { ...process.env, PYREFLY_BROWSER: process.env.PYREFLY_BROWSER ?? 'gpu' }, windowsHide: true });
-const timer = setTimeout(() => { say('over the hold: stopping the recorder by PID', child.pid); spawnSync('taskkill', ['/PID', String(child.pid), '/T', '/F'], { stdio: 'ignore' }); }, maxMinutes * 60000);
-child.on('exit', (code) => {
-  clearTimeout(timer);
-  try { const h = read(LOCK); if (h?.pid === process.pid) fs.rmSync(LOCK, { force: true }); } catch { /* gone */ }
-  fs.writeFileSync(GAP, JSON.stringify({ at: new Date().toISOString() }));
-  say('record.mjs exit', code);
-  process.exit(code ?? 1);
-});
+let current = null;
+let stopped = false;
+const timer = setTimeout(() => { stopped = true; say('over the hold: stopping the recorder by PID', current?.pid); if (current) spawnSync('taskkill', ['/PID', String(current.pid), '/T', '/F'], { stdio: 'ignore' }); }, maxMinutes * 60000);
+let lastCode = 0;
+for (const run of runs) {
+  if (stopped) break;
+  say('run:', JSON.stringify(run.env), run.args.join(' '));
+  lastCode = await new Promise((resolve) => {
+    current = spawn(process.execPath, ['tools/rig/lane/record.mjs', ...run.args], { cwd: process.cwd(), stdio: ['ignore', out, out], env: { ...process.env, PYREFLY_BROWSER: process.env.PYREFLY_BROWSER ?? 'gpu', ...run.env }, windowsHide: true });
+    current.on('exit', (c) => resolve(c ?? 1));
+  });
+  say('record.mjs exit', lastCode);
+}
+clearTimeout(timer);
+try { const h = read(LOCK); if (h?.pid === process.pid) fs.rmSync(LOCK, { force: true }); } catch { /* gone */ }
+fs.writeFileSync(GAP, JSON.stringify({ at: new Date().toISOString() }));
+say('hold finished');
+process.exit(lastCode);

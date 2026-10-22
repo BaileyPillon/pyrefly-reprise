@@ -38,9 +38,11 @@ async function freePort(from = 5880) {
   throw new Error('no free port');
 }
 
+let parentLockText = null; // the hand-over lock of a queue waiter that is this process's parent: put back at the end (several recordings under one hold)
 function takeLock() {
   const st = lockStatus(fs.existsSync(LOCK) ? fs.readFileSync(LOCK, 'utf8') : null, alive);
   if (st.state === 'held' && st.by.pid !== process.ppid) throw new Error(`lane: another recording holds ${LOCK} (pid ${st.by.pid}, ${st.by.what ?? '?'}): one recording at a time`); // a lock held by THIS process's parent is a queue's hand-over (a waiter that claimed the free slot, then started the recorder)
+  if (st.state === 'held' && st.by.pid === process.ppid) parentLockText = fs.readFileSync(LOCK, 'utf8');
   fs.mkdirSync(path.dirname(LOCK), { recursive: true });
   fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, what: `${a.subject} ${a.modes ?? 'poses'}`, at: new Date().toISOString() }));
 }
@@ -83,7 +85,7 @@ async function main() {
     if (stopped) return;
     stopped = true;
     killTree(pid);
-    for (const f of [cfgFile, LOCK]) { try { if (f !== LOCK || JSON.parse(fs.readFileSync(LOCK, 'utf8')).pid === process.pid) fs.rmSync(f, { force: true }); } catch { /* gone */ } }
+    for (const f of [cfgFile, LOCK]) { try { if (f !== LOCK || JSON.parse(fs.readFileSync(LOCK, 'utf8')).pid === process.pid) { if (f === LOCK && parentLockText) fs.writeFileSync(LOCK, parentLockText); else fs.rmSync(f, { force: true }); } } catch { /* gone */ } }
     log(`vite (pid ${pid}) stopped`);
   };
   process.on('exit', stop);
