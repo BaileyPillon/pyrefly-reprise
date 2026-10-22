@@ -39,6 +39,7 @@ export function rumbleHit(
       special: mark?.kind === 'special',
       last,
       bossBig: mark?.bossBig === true,
+      first: (event.hitIndex ?? 0) === 0,
       taken: side === 'party' || side === 'aeon',
     }),
   );

@@ -87,7 +87,7 @@ describe('the short hit-stop', () => {
 });
 
 describe('the rumble patterns', () => {
-  const base = { crit: false, heavy: false, big: false, special: false, last: false, bossBig: false, taken: false };
+  const base = { crit: false, heavy: false, big: false, special: false, last: false, bossBig: false, first: true, taken: false };
 
   it('are light and short: nothing over 0.8, nothing over 600 ms; ordinary blows are silent', () => {
     const all: Array<RumblePattern | null> = [
@@ -111,6 +111,7 @@ describe('the rumble patterns', () => {
     }
     expect(rumbleForHit(base)).toBeNull();
     expect(rumbleForHit({ ...base, big: true, last: false })).toBeNull(); // the middle of an Overdrive's flurry
+    expect(rumbleForHit({ ...base, bossBig: true, first: false, taken: true })).toBeNull(); // a headline move that hits three targets rumbles once
     expect(rumbleForOpen('other')).toBeNull();
   });
 

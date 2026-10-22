@@ -49,6 +49,8 @@ export interface RumbleHitFacts {
   last: boolean;
   /** A foe's headline move. */
   bossBig: boolean;
+  /** The first blow of the action (a headline move that hits three targets rumbles once, as it stops and punches once: the first blow only). */
+  first: boolean;
   /** The blow lands on the player's side (taken) rather than on a foe (dealt). */
   taken: boolean;
 }
@@ -65,7 +67,7 @@ export function rumbleForHit(f: RumbleHitFacts): RumblePattern | null {
     if (!f.last) return null;
     return f.special ? [{ atMs: 0, ms: 420, weak: 0.5, strong: 0.8 }] : [{ atMs: 0, ms: 240, weak: 0.4, strong: 0.7 }];
   }
-  if (f.bossBig) return [{ atMs: 0, ms: f.taken ? 200 : 150, weak: 0.4, strong: f.taken ? 0.6 : 0.45 }];
+  if (f.bossBig) return f.first ? [{ atMs: 0, ms: f.taken ? 200 : 150, weak: 0.4, strong: f.taken ? 0.6 : 0.45 }] : null;
   if (f.crit || f.heavy) return f.taken ? [{ atMs: 0, ms: 160, weak: 0.3, strong: 0.5 }] : [{ atMs: 0, ms: 110, weak: 0.2, strong: 0.35 }];
   return null;
 }
