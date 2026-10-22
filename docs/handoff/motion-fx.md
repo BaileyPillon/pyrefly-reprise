@@ -10,6 +10,7 @@ Base: `origin/main` 3e520971e (release 61 + records). Tree `D:/pyrefly-rig-auron
 | 1 of 3 | Reference notes: shape, motion, colour, timing, layering and caster/target for every effect in scope, per game, from research and official videos | **DONE** (`docs/handoff/motion-fx-reference.md`; no code) |
 | 2 of 3 | The painted finish, the switch, the guard, and the party effects: Cure/Cura, Haste/Shell/Protect/Reflect/Dispel, hit sparks per weapon, items, Fire/Blizzard/Thunder | **DONE, default OFF** (this note; code, 4 test files, captures) |
 | 3 of 3 | Bosses' attacks, Overdrives and their openings, the FFX-2 name slab and dress change, Jump, Darkness, and the before-and-after clips | **DONE, default OFF** (the section "Step 3" below; code, 5 test files with 82 tests, 21 moves recorded today and new, frame times at 1440p) |
+| review | The adversarial review (2 majors, 7 minors, no critical): numeral hold, FFX-2 pace, and the minors | **FIXED, default OFF** (the section "After the review" at the end; 22 new tests) |
 
 ## Switch (read this first)
 
@@ -37,7 +38,7 @@ Every spark and ring travels on an eased path (`outQuart`, `outExpo`, a little g
 
 ### The numeral never waits longer than it did
 
-Every new mark is today's or earlier (Cure 0.45 against 0.5, hit 0.3 as today, the buffs 0.45 against today's bloom's none) and every hold cap is today's 900 ms (`SPELL_HOLD_CAP_MS`). A party-wide FFX Cure staggers its columns by 0.18 s a target (the footage shows about 1 s; 0.18 keeps the third target's mark, 0.45 + 0.36 s, inside the 900 ms wait). The presenter and the engines are untouched: `FX_SPECS` (pinned by `spellfx-effects.test.ts`) is unchanged and the new specs live in `SpellFxFresh.ts`. FFX-2's ATB never waits for an effect (research/re-ffx2-timing-measured.md); no new code path waits at all.
+Every new mark is today's or earlier (Cure 0.45 against 0.5, hit 0.3 as today, the buffs 0.45 against today's bloom's none) and every hold cap is today's 900 ms (`SPELL_HOLD_CAP_MS`). A party-wide FFX Cure staggers its columns by 0.18 s a target (the footage shows about 1 s; 0.18 keeps the third target's mark, 0.45 + 0.36 s, inside the 900 ms wait). The presenter and the engines are untouched: `FX_SPECS` (pinned by `spellfx-effects.test.ts`) is unchanged and the new specs live in `SpellFxFresh.ts`. ~~FFX-2's ATB never waits for an effect; no new code path waits at all.~~ **Wrong for this port** (the review's M2): the retail game never waits for an effect (research/re-ffx2-timing-measured.md), but this presenter does not tick the ATB while a burst plays (`BattlePresenterActive.runActivePump`, `battle/ffx2/engine.ts`), so every millisecond the presenter waits is paused ATB. See "After the review".
 
 ### The frame-time guard (Bailey: "Trim particles first")
 
@@ -118,7 +119,7 @@ Same switch as step 2 (`?fx=new` or `?pack=demo`, demo chapters only, default OF
 * **`LandOpts`** (and `VfxPort.land`'s options in `BattlePresenterPorts.ts`; not a listed contract file) gains four optional fields: `level`, `variant`, `status` (the call comes from a status event: only an effect no damage event starts is drawn) and `deco` (decoration: started, never waited for, covers no blow, throws no spell light).
 * **The presenter** (`BattlePresenterBossFx.ts`; each call is one line in `BattlePresenterArrivals`, `Events`, `Beats` and `SpellFx`): `statusFxLanding` (status-add and a dispelled status-remove), `curseDim`, `chargeFx`, `odOpening`, `dressFx`, `bigBlow`.
 * **The spell light** (the demo look's coloured point light on the figures near an effect) lit every unknown id as the warm white bloom: a white pool on the floor. Each new id is lit as the existing kind nearest to it (`BossFx.LIGHT_KIND`; the dark attacks as the short `hit` flash), and decoration asks for none. `look/relight/RelightConfig.ts` is not touched (r62-extra edits it).
-* **The wait.** A damaging move holds its numeral for its mark (0.26 to 1.02 s; every hold cap is the 900 ms every spell keeps); a status move waits 250 ms; FFX-2's ATB never waits for an effect. A move that drew the bare bloom waited for nothing before, so some of them are now longer: see the pace table.
+* **The wait.** A damaging move holds its numeral for its mark (0.26 to 1.02 s; every hold cap is the 900 ms every spell keeps); a status move waits 250 ms in FFX and **0 ms in FFX-2** (after the review: the ATB does not tick while the presenter plays). A move that drew the bare bloom waited for nothing before, so some of them are now longer: see the pace table, and "After the review" for FFX-2's pre-roll.
 
 ### The switches
 
@@ -225,7 +226,7 @@ The Overdrives are as long as before or shorter (the retail opening has no lette
 
 1. **Which pieces stay?** Five can be tried one at a time with `?fxoff=` (the boss effects, the openings, the banner, the slab, the status hook). The banner and the slab replace approved chrome (the Ink and Gold Overdrive slab with its letterbox; FFX-2's paper banner stays beside the slab): Bailey's yes is needed (rule 10).
 2. **FFX-2: should the name slab REPLACE the paper banner?** Both name the move today; the retail game has only the slab.
-3. **Pace.** A move that drew the bare bloom waited for nothing; the new ones wait for their own mark (at most 900 ms; Total Annihilation's five marks; Darkness 0.82 s every Rikku turn). The table of before and after is in `CLIPS.md`; FFX-2's ATB does not wait for effects. If it is too slow, shorten the marks (one number each in `SpellFxFreshBoss.ts`).
+3. **Pace.** A move that drew the bare bloom waited for nothing; the new ones wait for their own mark (at most 900 ms; Total Annihilation's five marks; Darkness 0.82 s every Rikku turn). The table of before and after is in `CLIPS.md`; FFX-2's ATB does not wait for effects. If it is too slow, shorten the marks (one number each in `SpellFxFreshBoss.ts`). **After the review:** FFX-2's long moves start with the cast and its status moves wait 0 ms, so only Darkness (+240 ms a cast) and Impulse (+420 ms) still add time there; the table in "After the review" has the new figures.
 4. **The Steam capture of the gaps** (notes open question 1): Seymour Flux's moves, Bahamut's and Mega Flare, the Warrior's Breaks, the White Mage's spells would make the [ours] shapes faithful; the recommendation of step 1 stands (accept [ours] for Thursday, capture for Friday if Bailey wants them faithful).
 5. **Curse's darkening** is `setBrightness(0.78)` through the port; the Departures and Recall code also set brightness and may reset it while a girl yields or is held. If Bailey likes it, a tint channel of its own is the next step.
 6. **The adapter at integration** (`setFxMotionHooks`): who registers it, and whether r62-extra's Mega Flare shake or the feel lane's rumble leads.
@@ -235,6 +236,62 @@ The Overdrives are as long as before or shorter (the retail opening has no lette
 
 `node tools/critic-plan.mjs --paths <the changed files>` says **DEEP, after the deploy** (the build owes it): the reason is the shared systems touched, the battle presenter (`BattlePresenterArrivals`, `Beats`, `Events`, `Ports`, `SpellFx`, one to five lines each) and global layout (`MomentOverlay`, a CSS file). If a deep review owed is a problem for the Thursday build, the presenter hooks can be dropped one line at a time: without them the new effects still draw for every move with a damage event, and only the status moves, the charge, the aura, the dress burst and the hooks to the other lanes are lost.
 Files shared with other lanes: `BattlePresenterBeats.ts` and `BattlePresenterPorts.ts` (r62-extra edits both; see above), `BattlePresenterEvents.ts`, `BattlePresenterArrivals.ts` and `BattlePresenterSpellFx.ts` (the other lanes' hooks go through the presenter too: re-read each after merging), `FFX2BattleHud.ts` (four lines), `MomentOverlay.ts`. `NOW.md`, `ACTIONS.md`, `DECISIONS.md`, `CHANGELOG.md` and `CONTRACT-CHANGES.md` are not touched (hot files; the driver adds the rows). For the CONTRACT-CHANGES reader: `VfxPort.land`'s options gain four optional fields (`level`, `variant`, `status`, `deco`; `BattlePresenterPorts.ts`, not a listed contract file).
+
+## After the review (lane fx; the adversarial review of 2026-10-22, 06:00 to 06:50 EDT)
+
+The review found **no critical defect** and proved that with the switch off the game is today's game (150 spell-layer scenarios drew identical items against an extract of `origin/main`, 12 scripted fights through the real presenter gave identical traces, every hook is gated by `fxNewOn()` or `fxPieceOn()`). It confirmed **two majors and seven minors**. All but the two that need Bailey's word are fixed in commits `c8c051ecc` (code and tests) and the note's own commit; every fix has a test in `tests/unit/fx-review-fixes.test.ts` (22 tests) that fails on the pre-fix tree (run against an extract of the previous head: 19 of the 22 fail there; the other three pin what must not change). The review's write-up and probes are in `D:/Tools/pyrefly-scratch/2026-10-22/motion/fx/review/`.
+
+Game case (rule 14) for the fixes: the numeral hold (M1) is **both games** (it holds Chapter I's FFX moves and Chapter IV's FFX-2 moves, each by its own table); the pre-roll and the status wait of 0 ms (M2) are **FFX-2 only**, because only this port's FFX-2 presenter pauses an ATB clock (FFX is turn-based, so a wait there costs no game time); everything else is shared plumbing or one game as the finding said. Everything is still **default OFF** behind `?fx=new` / `?pack=demo`, demo chapters only.
+
+| # | Finding | Verdict | What changed |
+|---|---|---|---|
+| **M1** | The new boss effects refuse the SKILL TRAVEL shot (`canTravelFx`), which also dropped the numeral hold: the number and the HP row came 0.3 to 1.0 s before the strike, or before the effect started (Chapter I always; Chapter IV when no command menu is open) | **Confirmed and fixed** | `BattlePresenterBossFx.freshBlowHeld`, asked first by `SkillTravel.blowHeld` (3 lines): a blow of a new-table boss move that has a striker is held until the effect's own clock reaches its mark, independent of any shot and of an open FFX-2 menu. A blow with no striker (Darkness's HP cost on Rikku) still shows at once. |
+| **M2** | In this port the ATB does not tick while the presenter plays, so the added waits (Darkness +792 ms every Rikku turn, Impulse +883, Curse +275, every buff +250) are paused ATB; the note's "FFX-2's ATB never waits for an effect" is true of retail, not of this presenter | **Confirmed and fixed (mostly); the rest is the faithful lead-in** | (a) `prerollFx`: Curse, Impulse and Darkness start their effect at the action start (`LandOpts.deco` with the action's number; `SpellFxLayer.decorate` now starts group effects too), so the cast pose's 380 ms runs inside the lead-in and the blows find the copy by the action. (b) `STATUS_WAIT_FFX2_MS = 0`: a status move waits for nothing in FFX-2 (FFX keeps 250 ms). Table below. |
+| m1 | The item toss's comet trail was 0.233 s at 60 and 120 Hz but 0.156 s at 90, 0.194 s at 144, 0.175 s at 240 | **Fixed** | `ItemOrbFlourish` keeps the orb's place each frame and reads the trail's 15 points at fixed ages (`TRAIL_STEP` 1/60 s). 0.233 s at 30, 60, 90, 120, 144 and 240 Hz (it was 0.467 s at 30). |
+| m2 | `curseDim` read `ctx.acting`, so a girl's action overlapping Bahamut's Curse skipped the dimming | **Fixed** | It finds the action by the status event's caster (`actionOfBlow(ctx, sourceId)`), as `statusFxLanding` does. |
+| m3 | REDUCE MOTION and LOW EFFECTS draw none of the new spell effects (the `low` tier), but Bailey's pick turns off only "shake, punch, freeze, rumble" | **Not changed: a decision for Bailey** | The rule is the pre-existing accessibility tier for every spell effect (today's too); the new effects follow it. The adapter does follow his pick (`fxBeat` passes `calm`; the hit-stop, punch and rumble hooks stay quiet, anticipate and smear still run). Question 8 below. |
+| m4 | With the switch off, FFX `haste` / `hastega` resolved to the bloom instead of the Cure motes; `statusAdded` took one extra microtask turn | **Fixed** | `resolveSpellFx` takes a `fresh` flag (the lookup passes `fxNewOn()`): the buffs' rows count only with the new effects on, so FFX Haste resolves as on main. `statusFxLanding` returns `undefined` when there is nothing to wait for and its callers await only a promise. Three existing tests that pinned the lane's own bloom for FFX Haste were corrected. |
+| m5 | Bahamut's plain Attack got a name slab; slabs of overlapping actions stack and can cover the guide panel's text | **Attack fixed; stacking not changed** | `isPlainAttack` (an `ability` command with the id `attack`). The overlap is the coach panel's placement under a slab that sits where the footage puts it (above the girl's head); hiding it needs Bailey's eye (question 9). |
+| m6 | A running copy's ring, band and decal bristle pattern jumped once when an earlier copy in the frame's list ended (seeds were list positions) | **Fixed** | `CopySeeds` (per layer): each copy gets a seed the first time it is drawn and keeps it for its life. The Cure's ring seeds stay 75.564 and 38.513 through a Haste's end (they became 79.206 and 42.155). |
+| m7 | (a) rumble numbers called "Bailey's picks"; (b) `CrispRig` `Math.max(1.05, ...)` moved `?ss=` overrides between 1.001 and 1.049; (c) the painted finish also applies to the approved Spiral Cut and Mega Flare when on; (d) three already-oversize files grew; (e) a victim drawn twice at the first frame of a boss hit | **(a), (b) fixed; (c) to Bailey; (d), (e) not changed** | (a) labelled [ours] (he named "light, big moments only" and no number). (b) the guard's cut is `max(min(ss, 1.05), ss * cut)`: it never raises a rung. (c) is question 10. (d) `BattlePresenterEvents.ts` is 450 lines as before (the new code went into `BattlePresenterBossFx.ts`, 164 lines), `BattlePresenterPorts.ts` and `FFX2BattleHud.ts` are untouched by the fixes. (e) is the pose crossfade of `hurt`, not this lane's code (for the pose lanes). |
+
+### Where the numeral lands now (the real presenter and layer on a virtual clock, `fix/hold.mts` and `fix/hold4.mts`)
+
+The effect clock when the HUD is shown the blow, in seconds (the strike is the effect's mark). Before the fix: 0.014 or "not started" for every row.
+
+| Chapter | Move | Mark | Before | After |
+|---|---|---|---|---|
+| I (FFX) | Lance of Atrophy | 0.32 | not started | 0.32 |
+| I (FFX) | Full-Life | 0.45 | not started | 0.45 |
+| I (FFX) | Flare | 0.50 | not started | 0.50 |
+| IV (FFX-2) | Darkness | 0.82 | not started | 0.82 |
+| IV (FFX-2) | Impulse, the three girls | 0.80 / 1.04 / 1.28 | not started, then 0.24 and 0.48 s after the first | 0.80 / 1.04 / 1.28 |
+
+The same holds with SKILL TRAVEL open and closed (an open FFX-2 command menu closes it), and in the browser at exact frame steps (below).
+
+### What the fixes do to the pace (presenter time, ms at normal speed, the Skill menu open as in the clips; `fix/pace.mts`)
+
+| Chapter | Move | Today | New before the fix | New now | Added over today, before to now |
+|---|---|---|---|---|---|
+| IV (FFX-2) | Darkness (with its HP-cost blow) | 1680 | 2300 | 1920 | +620 to **+240** |
+| IV (FFX-2) | Impulse (three girls) | 1720 | 2520 | 2140 | +800 to **+420** |
+| IV (FFX-2) | Curse | 1220 | 1470 | 1220 | +250 to **0** |
+| IV (FFX-2) | Haste, Shell (the White Mage buffs) | 1220 | 1470 | 1220 | +250 to **0** |
+| IV (FFX-2) | Bahamut's Attack | 1340 | 1340 | 1340 | 0 |
+| I (FFX) | Lance, Full-Life, Flare, Haste | 1340, 1740, 1240, 1220 | 1560, 1690, 1740, 1470 | 1560, 1690, 1740, 1470 | unchanged (turn-based; the wait costs no game time) |
+
+What is left in FFX-2 is the faithful lead-in: Darkness's bolt, ring and spheres run 0.82 s to the numeral and the cast pose covers 0.38 s of it; Impulse's streams 0.80 s. **[ours]**: the pre-roll itself, the 0 ms wait and the marks (`DARKNESS_MARK`, `IMPULSE_MARK`, `CURSE_MARK` in `effects-painted-bahamut.ts`). Bailey judges the feel on Thursday. If Darkness every Rikku turn is too slow, the lead-in has to be re-timed in that file (the mark is also where the draw puts its strike, so it is not a one-number change), a small job.
+
+### Evidence (after the fixes)
+
+The headless re-check in the browser (real keyboard play in both demo chapters with `?pack=demo`, and the stepped frame job at 60 and 144 Hz) is queued behind the other lanes on the shared browser lock; its result is added here when it has run. Offline evidence so far: the presenter and layer on a virtual clock (tables above), the 22 new tests, 63 related test files (737 tests) and 246 wider ones, `tsc` clean.
+
+### Open questions added by the review
+
+8. **REDUCE MOTION and LOW EFFECTS (m3).** They draw none of the new spell effects (the existing `low` tier: the bloom). Bailey's pick says REDUCE MOTION turns off "shake, punch, freeze, rumble" only. Should REDUCE MOTION keep the new effects (leaving them off for LOW EFFECTS only)? One condition in `SpellFxParams.resolveFxQuality` and its tests; a decision for Bailey (accessibility).
+9. **The name slab over the guide panel (m5).** In the first battle the coach panel's text sits where a slab over the left girl's head can cover it. Keep the slab where the footage puts it, or move or hide the coach panel while a slab is up?
+10. **The painted finish on D-233's Spiral Cut and Mega Flare (m7c).** When the new effects are on, the painted finish also draws on the approved specials (the note named Mega Flare; Spiral Cut too). Bailey's yes belongs on the Thursday list, per piece, or the specials can be excluded in one line (`SpellFxFreshLayer.configureList`).
+11. **How long should Darkness take every Rikku turn?** +240 ms a cast now (lead-in 0.82 s, the cast pose covers 0.38 s). The footage's own 1.5 s to the numeral is already run in 0.82 s.
 
 ## Evidence and downloads
 
