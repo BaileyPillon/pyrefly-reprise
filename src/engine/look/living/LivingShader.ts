@@ -104,7 +104,7 @@ export const LIVING_GLSL_FUNCS = /* glsl */ `
         vec2 dd = p - c;
         float sz = uBeamB.w * (0.55 + 0.9 * h2);
         float q = dot(dd, dd) / (sz * sz);
-        m += (exp(-q * 2.2) + 0.18 * exp(-q / 12.0)) * tw * life * prof;
+        m += (exp(-q * 2.2) + 0.1 * exp(-q / 12.0)) * tw * life * prof;
       }
       return vec2(m, shaft);
     }

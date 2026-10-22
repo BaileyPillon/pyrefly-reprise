@@ -87,10 +87,10 @@ export const LIVING_QUALITY: Readonly<Record<LookQuality, LivingQuality>> = {
 export const ROOM_LIVING: Readonly<Record<string, LivingRecipe>> = {
   'bevelle-underground': {
     game: 'ffx2',
-    beam: { top: [0.505, 0.03], bottom: [0.5, 0.66], halfTop: 0.06, halfBottom: 0.2, color: [0.55, 0.88, 1.0], gain: 2.8, size: 3.2, glow: 0.1 },
+    beam: { top: [0.505, 0.03], bottom: [0.5, 0.66], halfTop: 0.06, halfBottom: 0.2, color: [0.55, 0.88, 1.0], gain: 4.5, size: 2.6, glow: 0.14 },
     motes: 26,
-    lamps: { spill: 0.5, reach: 0.2, amp: 0.2, glass: 1.5, color: [1.0, 0.56, 0.2] },
-    ripple: { amp: 0.0085, speed: 0.32, decay: 1.5, floor: 0.34, glint: 0.4 },
+    lamps: { spill: 0.6, reach: 0.2, amp: 0.28, glass: 1.5, color: [1.0, 0.56, 0.2] },
+    ripple: { amp: 0.012, speed: 0.32, decay: 1.5, floor: 0.34, glint: 0.6 },
   },
 };
 
