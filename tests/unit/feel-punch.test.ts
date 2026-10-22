@@ -3,7 +3,10 @@
  * trauma kick it rides on, `planHit`'s switches (default = today exactly), REDUCE MOTION and FFX-2's open command menu.
  */
 import { PerspectiveCamera, Vector3 } from 'three';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { BattleMoments } from '../../src/engine/BattleMoments.ts';
+import { resetFeelForTests, setFeelChapter } from '../../src/engine/feel/FeelSwitch.ts';
+import { FakeStage, noSleep } from './helpers/FakeStage.ts';
 import {
   KICK_WORLD_TODAY,
   PUNCH_FRACTION,
@@ -145,6 +148,41 @@ describe('2 to 3 percent is 2 to 3 percent on screen', () => {
     u.kick(...kickArgs({ kick: 0.05, kickMode: 'today' }, c, at));
     u.update(0.09);
     expect(u.offset().dolly * u.dollyWorld).toBeCloseTo(0.05 * KICK_WORLD_TODAY, 9);
+  });
+});
+
+describe('the moment punch BattleMoments makes on a heavy blow', () => {
+  afterEach(() => resetFeelForTests());
+
+  /** The fractions the camera was punched by for one heavy blow's impact, in the given address and chapter, with the spectacle on or off. */
+  function punches(search: string, chapter: string | null, spectacleOn: boolean, heavy = true): number[] {
+    resetFeelForTests(search);
+    setFeelChapter(chapter);
+    const stage = new FakeStage(['tidus'], ['seymour-flux']);
+    (stage as unknown as { fx?: { enabled(): boolean } }).fx = { enabled: () => spectacleOn };
+    const fractions: number[] = [];
+    const orig = stage.camera.punch.bind(stage.camera);
+    vi.spyOn(stage.camera, 'punch').mockImplementation((f?: number, ms?: number) => (fractions.push(f ?? -1), orig(f, ms)));
+    const moments = new BattleMoments({ stage, sleep: noSleep, speed: () => 'normal' });
+    moments.impact('seymour-flux', { hitIndex: 0, heavy });
+    return fractions;
+  }
+
+  it('is 0.11 today, in every chapter, with the spectacle on or off', () => {
+    expect(punches('', 'seymour-flux', true)).toEqual([0.11]);
+    expect(punches('', null, false)).toEqual([0.11]);
+    expect(punches('?pack=demo', 'yunalesca', true)).toEqual([0.11]); // the pack does not reach Chapter II
+    expect(punches('?pack=demo&punch=today', 'ffx2-bahamut', true)).toEqual([0.11]);
+  });
+
+  it('?punch=new: none while the spectacle kick carries the punch, 0.025 without it; ?punch=off: none', () => {
+    expect(punches('?pack=demo', 'seymour-flux', true)).toEqual([]);
+    expect(punches('?pack=demo', 'ffx2-bahamut', false)).toEqual([0.025]);
+    expect(punches('?punch=off', 'seymour-flux', true)).toEqual([]);
+  });
+
+  it('a light blow never punches', () => {
+    expect(punches('', 'seymour-flux', true, false)).toEqual([]);
   });
 });
 
