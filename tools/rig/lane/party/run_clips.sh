@@ -1,6 +1,6 @@
 #!/bin/bash
-# run_clips.sh [first job index] : the real-game recordings of both party rigs, one polite hold of the shared RIG-RECORD slot at a time (waitslot.mjs: waits while the slot is held or reserved, takes a reservation written after
-# we began waiting, 90 s between our holds, 10 minutes a hold). Only the two pilot rigs are served (D:/pyrefly-art-rigs-pilots: copies of tidus-x and rikku-dark-knight-x), so no other rig is in the picture.
+# run_clips.sh [first job index] : the real-game recordings of both party rigs, one polite hold of the shared RIG-RECORD slot at a time (waitslot.mjs: waits while the slot is held or reserved (a reservation is never taken from its owner),
+# 90 s between our holds, 10 minutes a hold). Only the two pilot rigs are served (D:/pyrefly-art-rigs-pilots: copies of tidus-x and rikku-dark-knight-x), so no other rig is in the picture.
 # Output: D:/Tools/pyrefly-scratch/2026-10-22/motion/rigs/rec/<fig>/{motion,motion-off,hurtko,hurtko-off}; logs rec/<fig>/job-*.log. Then `clips.py` cuts the mp4s.
 cd /d/pyrefly-rig-rikkudk || exit 1
 R=D:/Tools/pyrefly-scratch/2026-10-22/motion/rigs/rec

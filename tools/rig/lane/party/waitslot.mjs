@@ -43,16 +43,13 @@ function blocked() {
   return null;
 }
 
-const waitStart = Date.parse(process.env.WAIT_SINCE ?? '') || Date.now(); // seniority: a reservation written after we began waiting (and not the demo retouch's) does not outrank ours
-const tookFrom = new Map();
+const waitStart = Date.parse(process.env.WAIT_SINCE ?? '') || Date.now(); // when we began waiting (written into our own reservation); another lane's reservation is never taken from it
 let why = null;
 let lastWhy = '';
 for (;;) {
   why = blocked();
   if (!why) break;
-  // the queue: when nobody has reserved the next slot, reserve it (the others do the same, and the file names who is next)
-  { const nx = read(NEXT); if (nx && !/retouch/i.test(String(nx.who ?? '')) && !(nx.who === 'rig pilots' && nx.pid === process.pid) && Date.parse(nx.at) > waitStart && !(tookFrom.get(nx.who) > Date.now() - 600000)) { tookFrom.set(nx.who, Date.now()); // one takeover per owner per ten minutes: an owner that writes its reservation again has it, no tug of war
-    try { fs.writeFileSync(NEXT, JSON.stringify({ who: 'rig pilots', pid: process.pid, at: new Date(waitStart).toISOString(), maxMinutes }), { flag: 'w' }); say('took the next slot from', nx.who, '(written after our wait began)'); } catch { /* raced */ } } }
+  // the queue: when nobody has reserved the next slot, reserve it (the others do the same, and the file names who is next). A reservation that is there stays with its owner.
   if (!fs.existsSync(NEXT) && fs.existsSync(LOCK)) { try { fs.writeFileSync(NEXT, JSON.stringify({ who: 'rig pilots', pid: process.pid, at: new Date(waitStart).toISOString(), maxMinutes }), { flag: 'wx' }); say('reserved the next slot'); } catch { /* someone else was first */ } }
   if (why !== lastWhy) { say('waiting:', why); lastWhy = why; }
   await sleep(8000);
