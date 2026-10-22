@@ -28,10 +28,27 @@ export function moveScale(ctx: EventCtx): number {
 export function startAttackMove(ctx: EventCtx, actor: ActorHandle | undefined, plan: { distance: number; house: number }, contact: LungeContact, ranIn: boolean, attackerId?: CombatantId): void {
   if (curvesOn() && actor?.strike) {
     const real = realProfileOf(ctx, attackerId); // `?curves=real` / `real-snappy`: this attacker's own profile from the real clips (none: the house profile)
-    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale: moveScale(ctx), arc: !ranIn, contact, ...(real ? { profile: real } : {}), ...(contact.impact ? { marks: { travelPeak: contact.impact, ...(contact.settle ? { settlePeak: contact.settle } : {}), ...(contact.done ? { end: contact.done } : {}) } } : {}) });
+    // A real FFX-2 strike after a run-in holds its chain for the real clip's time (Rikku 0.97 s): her run home waits for the hold's end (`strikeHoldOver`), else she would run off with the strike's lunge still on her.
+    const holdOver = real && ranIn && attackerId && actor ? holdOverFor(actor) : undefined;
+    const marks = { ...(contact.impact ? { travelPeak: contact.impact, ...(contact.settle ? { settlePeak: contact.settle } : {}), ...(contact.done ? { end: contact.done } : {}) } : {}), ...(holdOver ? { holdEnd: holdOver } : {}) };
+    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale: moveScale(ctx), arc: !ranIn, contact, ...(real ? { profile: real } : {}), ...(Object.keys(marks).length ? { marks } : {}) });
     return;
   }
   void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact, plan.house), actor?.squash(260, 0.45)]);
+}
+
+const holdOvers = new WeakMap<object, Promise<void>>();
+
+/** Arm a promise that settles when this actor's strike has served its hold (its `holdEnd` mark); returns the mark's resolver. A later strike of the same actor replaces it. */
+function holdOverFor(actor: object): () => void {
+  let done: () => void = () => {};
+  holdOvers.set(actor, new Promise<void>((resolve) => (done = resolve)));
+  return () => done();
+}
+
+/** The promise of an actor's real strike hold (FFX-2, after a run-in; real modes only), or undefined: the run home waits for it (`BattleScreenRunIn.close`, capped by the caller). */
+export function strikeHoldOver(actor: object): Promise<void> | undefined {
+  return holdOvers.get(actor);
 }
 
 /** A cast's lift as a share of the caster's height (`[ours]`; the sources do not describe one). */

@@ -20,6 +20,9 @@ import { SWITCHES, allNew, boardState, flipAll, switchOfCode } from '../../../sr
 import type { EventCtx } from '../../../src/engine/BattlePresenterEvents.ts';
 import { KO_BUCKLE_MS, fallRun } from '../../../src/engine/KoFall.ts';
 import { startCheer } from '../../../src/engine/motion/ActorMoments.ts';
+import { startAttackMove, strikeHoldOver } from '../../../src/engine/motion/CurveBeats.ts';
+import type { StrikePlan } from '../../../src/engine/motion/StrikePlan.ts';
+import type { ActorHandle } from '../../../src/engine/BattlePresenterPorts.ts';
 import { realBuckleMs, realCheerShape, realFallMs } from '../../../src/engine/motion/RealMoments.ts';
 
 beforeEach(() => {
@@ -499,5 +502,45 @@ describe('the real knock-out and victory', () => {
     expect(calls[1]!.h).toBeCloseTo(1.82 * 0.18, 3); // the house cheer
     expect(calls[2]!.h).toBeCloseTo(1.82 * 0.18, 3);
     expect(calls[0]!.ms).not.toBe(calls[1]!.ms);
+  });
+});
+
+describe('the real strike in Chapter IV: her run home waits for the hold', () => {
+  const contact = { hold: Promise.resolve(), reached: (): void => {} };
+  const actorOf = (plans: StrikePlan[]): ActorHandle => ({ strike: (p: StrikePlan): Promise<void> => (plans.push(p), Promise.resolve()) }) as unknown as ActorHandle;
+  it('arms the strike\'s holdEnd for a real strike after a run-in, hands the actor\'s promise to the run home and settles it on the mark', async () => {
+    setDemoChapter('ffx2-bahamut');
+    setCurvesMode('real');
+    const plans: StrikePlan[] = [];
+    const rikku = actorOf(plans);
+    startAttackMove(fakeCtx({ rikku: 'rikku-dark-knight' }), rikku, { distance: 1, house: 1 }, contact, true, 'rikku');
+    expect(plans[0]!.profile?.real).toBeDefined();
+    expect(plans[0]!.arc).toBe(false); // she ran in: the leap carried the lift
+    expect(plans[0]!.marks?.holdEnd).toBeTypeOf('function');
+    const held = strikeHoldOver(rikku)!;
+    let settled = false;
+    void held.then(() => (settled = true));
+    await Promise.resolve();
+    expect(settled).toBe(false);
+    plans[0]!.marks!.holdEnd!();
+    await held;
+    expect(settled).toBe(true);
+  });
+  it('arms nothing without a run-in, in the house curves, or for a figure the table does not cover', () => {
+    setDemoChapter('ffx2-bahamut');
+    const plans: StrikePlan[] = [];
+    setCurvesMode('real');
+    const noRun = actorOf(plans);
+    startAttackMove(fakeCtx({ rikku: 'rikku-dark-knight' }), noRun, { distance: 1, house: 1 }, contact, false, 'rikku');
+    expect(strikeHoldOver(noRun)).toBeUndefined();
+    const unknown = actorOf(plans);
+    startAttackMove(fakeCtx({ x: 'valefor' }), unknown, { distance: 1, house: 1 }, contact, true, 'x');
+    expect(strikeHoldOver(unknown)).toBeUndefined();
+    expect(plans[1]!.profile).toBeUndefined(); // no row: the house profile
+    setCurvesMode('new');
+    const house = actorOf(plans);
+    startAttackMove(fakeCtx({ rikku: 'rikku-dark-knight' }), house, { distance: 1, house: 1 }, contact, true, 'rikku');
+    expect(strikeHoldOver(house)).toBeUndefined();
+    expect(plans[2]!.profile).toBeUndefined();
   });
 });

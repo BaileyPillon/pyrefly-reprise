@@ -15,9 +15,10 @@
  * Game case: FFX only (Tidus); shared dev plumbing.
  */
 import { createReadStream, existsSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 
 export const TIDUS_PREFIX = '/art/characters/tidus/';
+export const TIDUS_RIG_PREFIX = '/art/rigs/tidus/';
 export const TIDUS_COOKIE = 'pyrefly_tidus';
 const CANDIDATES = ['D:/pyrefly-art-motion-t2/characters/tidus', 'D:/pyrefly-art-motion-t2-tidus-stash'];
 const TYPES = { '.png': 'image/png', '.json': 'application/json', '.webp': 'image/webp' };
@@ -33,6 +34,18 @@ export function t2Folder(env = process.env) {
     }
   }
   return null;
+}
+
+/** The T2 Tidus RIG's folder (`<T2 mirror>/rigs/tidus`, beside its `characters/tidus`), or null while the T2 mirror carries none (the stash holds paintings only). */
+export function t2RigFolder(env = process.env) {
+  const dir = t2Folder(env);
+  if (!dir) return null;
+  const rigs = join(dirname(dirname(dir)), 'rigs', 'tidus');
+  try {
+    return existsSync(join(rigs, 'rig.json')) ? rigs : null;
+  } catch {
+    return null;
+  }
 }
 
 /** `t1` or `t2` for a request: the page's `?tidus=` first (it also sets the cookie), then the cookie, else `t1`. */
@@ -55,12 +68,45 @@ export function tidusFile(pathname) {
   return /^[A-Za-z0-9_@.-]+$/.test(name) && !name.includes('..') ? name : null;
 }
 
+/**
+ * The path of a Tidus RIG request under `rigs/tidus/` (`rig.json`, a part PNG, or one under `1x/`), or null (anything else is not ours). Integration 2: the party rig pilot (`?partyrigs=on`) follows the
+ * T1/T2 choice, since a rig is cut from ONE idle painting (its costume) and the engine refuses a rig whose costume is not the painting it is served.
+ */
+export function tidusRigFile(pathname) {
+  if (!pathname.startsWith(TIDUS_RIG_PREFIX)) return null;
+  let name;
+  try {
+    name = decodeURIComponent(pathname.slice(TIDUS_RIG_PREFIX.length));
+  } catch {
+    return null;
+  }
+  return /^(1x\/)?[A-Za-z0-9_@.-]+$/.test(name) && !name.includes('..') ? name : null;
+}
+
+function sendFile(req, res, full, file, variantHeader) {
+  const ext = file.slice(file.lastIndexOf('.')).toLowerCase();
+  res.statusCode = 200;
+  res.setHeader('Content-Type', TYPES[ext] ?? 'application/octet-stream');
+  res.setHeader('Content-Length', String(statSync(full).size));
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Pyrefly-Tidus', variantHeader);
+  if (req.method === 'HEAD') return void res.end();
+  return void createReadStream(full).pipe(res);
+}
+
 export function pyreflyArtVariant() {
   const middleware = (req, res, next) => {
     try {
       if ((req.method !== 'GET' && req.method !== 'HEAD') || typeof req.url !== 'string') return next();
       const at = req.url.search(/[?#]/);
       const pathname = at < 0 ? req.url : req.url.slice(0, at);
+      const rigFile = tidusRigFile(pathname);
+      if (rigFile !== null) {
+        const rigDir = variantOf(req.url, req.headers['cookie']) === 't2' ? t2RigFolder() : null;
+        const rigFull = rigDir ? join(rigDir, rigFile) : null;
+        if (rigFull && existsSync(rigFull) && statSync(rigFull).isFile()) return sendFile(req, res, rigFull, rigFile, 't2');
+        return next();
+      }
       const file = tidusFile(pathname);
       if (file === null) {
         // a page request carrying ?tidus= keeps the choice in a cookie, for the art requests that follow

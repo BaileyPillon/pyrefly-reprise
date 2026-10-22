@@ -33,12 +33,15 @@ import type { ActionMotionPort, ActionStartEvent, MotionCtx } from '../../engine
 import { motionMs } from '../../engine/BattlePresenterMotion.ts';
 import type { Point3 } from '../../engine/BattlePresenterPorts.ts';
 import { realLeapBack } from '../../engine/motion/RealBeats.ts'; // `?curves=real` / `real-snappy`: the run home is the real back-jump (its length and its height)
-import { arcFor } from '../../engine/motion/CurveBeats.ts'; // motion pass (lane "core"): the run's arc is a leap with the new curves on, today's hop otherwise
+import { arcFor, strikeHoldOver } from '../../engine/motion/CurveBeats.ts'; // motion pass (lane "core"): the run's arc is a leap with the new curves on, today's hop otherwise
 import { ownPlace } from '../../engine/motion/PlaceOwner.ts';
 import { planRun, type RunWorld } from '../../engine/motion/StandOff.ts';
 import type { StageMotionPort } from '../../engine/motion/StageMotionPort.ts';
 import { motionBeat } from '../../engine/feel/MotionBeats.ts';
 import { actorHeft } from '../../engine/feel/MotionHooks.ts'; // `?motionsfx=` (demo chapters, off by default): the whoosh of the run
+
+/** The longest `close` waits for a real strike's hold to end (ms at normal speed): the real chain is under a second; a strike that was replaced never reports its end. */
+export const HOLD_WAIT_MAX_MS = 1600;
 
 /** The lunge that still follows the run: she has run in, so only the blow is left (today's house lunge is 1.4 from where she stands). */
 export const STRIKE_LUNGE = 0.6;
@@ -179,6 +182,8 @@ export class RunInMotion implements ActionMotionPort {
       const down = (actor as { pose?: string }).pose === 'ko';
       const back = ctx.still === true || down ? undefined : realLeapBack(ctx, actorId); // the real back-jump: its length and height, else the house run home
       const ms = ctx.still === true || down ? 1 : motionMs(back?.ms ?? runMs(Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z)).home, ctx.speed);
+      const held = ctx.still === true || down ? undefined : strikeHoldOver(actor); // `?curves=real`: she finishes the real clip's hold at the foe (the strike's `holdEnd`) before she leaps back; capped, a strike that was replaced never ends it
+      if (held) await Promise.race([held, ctx.sleep(HOLD_WAIT_MAX_MS)]);
       actor.setPose('idle');
       if (ms > 1) world?.smear(actorId, ms * 0.9, SMEAR.home);
       if (ms > 1) motionBeat({ kind: 'dash', strength: SMEAR.home, heft: actorHeft(actor), ms, atMs: ms * 0.3 }); // and the run home, lighter
