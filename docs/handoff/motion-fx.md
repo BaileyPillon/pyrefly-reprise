@@ -37,6 +37,12 @@ Everything marked [ours] in the reference: today's effect shapes (`spellfx/effec
 
 See section 6 of the reference. The ones that matter first: (1) a Steam capture to close the gaps, or [ours] shapes (recommended [ours] for Thursday); (2) replacing the approved option-B Cure (motes) with the retail column needs Bailey's yes; (3) the FFX Overdrive start vs the build's letterbox start needs a mockup first (rule 9); (4) aeons in Chapter I; (5) the painted-finish asset path (rule 8 against his 2026-10-18 lift).
 
+## Not done in step 1
+
+* Fine (0.5 s) frame reads for a second Cure in HD, Lulu's second spell, Thunder and the late FFX-2 clips (headless playback stalls late in a video; the machine's browser lock queue did not clear): they are read at the videos' 1 to 2 s storyboards instead, and the reference says so (section 6 item 8).
+* No code, so no tsc and no tests were run; nothing in src, tests, tools or art changed.
+* NOW.md, ACTIONS.md and DECISIONS.md are not touched (hot files shared by every lane); the driver adds the rows.
+
 ## Evidence and downloads
 
 Only YouTube storyboard JPEGs and in-memory frames of a headless browser were read; no video file, no account, no retail asset is stored. The tools (`yt-search.mjs`, `yt-sb.mjs`, `yt-frames2.mjs`, `rr-run.mjs`) and `downloads.log` are in the notes folder.
