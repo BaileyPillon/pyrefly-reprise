@@ -82,7 +82,11 @@ Real game, headless GPU Chromium, real keys, the game stepped at an EXACT 120 Hz
 - Chapter I, Seymour Flux (a RIG, `RigActor`): his strike is the same curve heavier and slower: travel about 300 ms, hold about 350 ms, return about 500 ms, lift 0.03 to 0.08 units.
 - Chapter IV, Paine (FFX-2): the run-in is a leap (take-off crouch 3.5 percent, lift 0.45 units, stretch 5.4 percent, landing squash 5.1 percent), then the strike (crouch, travel, `attack` painting at 658 ms on the travelPeak mark,
   `follow` at 800 ms), then the run home as a leap (lift 0.19 units, landing squash 5.8 percent). Her strike plays no arc of its own. Shadow gap 0.07 units (today 0.34).
-- Console errors: 0 in all four recordings.
+- Chapter I recapture after the impact-painting fix (`cap2/seymour-flux-new/`, `evidence/series-ch1-new-tidus-after-impact-fix.txt`): ready, then `attack` at 300 ms (the travelPeak mark), `follow` at 408 ms (the blow), `idle` at 733 ms:
+  the same key-pose sequence as today. (The first Chapter I recording skipped the `attack` painting: the blow landed on the contact and the follow-through replaced it in the same frame.)
+- Console errors: 0 in all five recordings.
+- Full unit suite (1549 files, `--maxWorkers=3`, 57 minutes): 1521 passed, 26 skipped, 2 failed; both are artifacts and pass alone on the final tree: `tourist-trap-bench` timed out at 15 s under load (an engine bench, not
+  presentation), and one new test of mine ran against a KeyPoses.ts that vitest had transformed before I edited it mid-run. The targeted set (178 files) is green on the final code with the switch OFF.
 
 ## Not done in step 1 (the brief's steps 2 and 3, and what step 1 leaves)
 
