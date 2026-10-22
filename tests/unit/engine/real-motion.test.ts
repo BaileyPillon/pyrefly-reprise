@@ -5,7 +5,9 @@
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { REAL_MOTION } from '../../../src/data/motion/realMotion.ts';
-import { setPace, setPaceGame } from '../../../src/engine/pace.ts';
+import { PaintedActor, painting, reset, type Actor } from './head-lock-fixture.ts';
+import { setMotionBeatSink, type MotionBeat } from '../../../src/engine/feel/MotionBeats.ts';
+import { paceFactor, setPace, setPaceGame } from '../../../src/engine/pace.ts';
 import { curvesModeFromSearch, curvesOn, realKind, setCurvesMode } from '../../../src/engine/motion/CurvesSwitch.ts';
 import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts';
 import { PARTY_RIG_SUBJECTS, partyRigAllowed, partyRigsModeFromSearch, setPartyRigsMode } from '../../../src/engine/motion/PartyRigsSwitch.ts';
@@ -542,5 +544,47 @@ describe('the real strike in Chapter IV: her run home waits for the hold', () =>
     startAttackMove(fakeCtx({ rikku: 'rikku-dark-knight' }), house, { distance: 1, house: 1 }, contact, true, 'rikku');
     expect(strikeHoldOver(house)).toBeUndefined();
     expect(plans[2]!.profile).toBeUndefined();
+  });
+});
+
+describe('the real strike on a real actor', () => {
+  const beats: MotionBeat[] = [];
+  beforeEach(() => {
+    beats.length = 0;
+    setMotionBeatSink((b) => void beats.push(b));
+  });
+  afterEach(() => {
+    setMotionBeatSink(null);
+    reset();
+  });
+  function tidus(): Actor {
+    const a = new PaintedActor({ name: 'tidus', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
+    a.adoptPoses({ idle: painting('auron', 'idle'), attack: painting('auron', 'attack') }, 'idle');
+    a.position.set(-2, 0, 0);
+    return a;
+  }
+  const step = (a: Actor, ms: number, frame = 1000 / 120): void => {
+    for (let i = 0; i < Math.round(ms / frame); i++) a.update(frame / 1000);
+  };
+  it('a leaping attack asks its whoosh at once, peaking at the approach\'s apex, and the leap lifts the actor off the floor then returns it', () => {
+    setDemoChapter('seymour-flux');
+    setCurvesMode('real');
+    const profile = realStrikeProfile('ffx', 'tidus', 'real')!;
+    const a = tidus();
+    void a.strike({ distance: 1.4, game: 'ffx', timeScale: 1, arc: true, profile });
+    const lunges = beats.filter((b) => b.kind === 'lunge');
+    expect(lunges).toHaveLength(1); // no waiting for a wind-up that is the run itself
+    const onScreen = paceFactor('action');
+    expect(lunges[0]!.atMs).toBeCloseTo(0.45 * contactMsOf(profile) * onScreen, 0); // contactMsOf rounds to a millisecond
+    step(a, 300);
+    expect(beats.filter((b) => b.kind === 'lunge')).toHaveLength(1); // exactly one
+    let top = 0;
+    for (let t = 0; t < 2600; t += 8) {
+      step(a, 8);
+      top = Math.max(top, (a as unknown as { curves: { out: { lift: number } } }).curves.out.lift);
+    }
+    expect(top).toBeGreaterThan(1.4); // the return flip, 0.86 of 1.82
+    expect((a as unknown as { curves: { out: { lift: number; x: number } } }).curves.out.lift).toBe(0); // and home again
+    expect((a as unknown as { curves: { out: { x: number } } }).curves.out.x).toBe(0);
   });
 });

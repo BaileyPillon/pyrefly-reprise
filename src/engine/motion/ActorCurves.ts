@@ -21,10 +21,16 @@ export function startStrike(driver: CurveDriver, plan: StrikePlan, worldHeight: 
   const contact = plan.contact;
   const { run, done } = driver.begin(shape, plan.distance, worldHeight, contact === undefined);
   // The lane "feel" motion sounds (`?motionsfx=`, off by default): the whoosh of the step, asked for as the travel begins so that its loudest moment is the fastest frame (`travelPeak`), in on-screen ms.
-  run.on('windupEnd', () => {
+  if (shape.real?.approach) {
+    // `?curves=real`: a leaping attack is one move from the first step, so the step's whoosh is asked for now and peaks at the approach's apex (45 percent of the way to the contact), not after a wind-up
     const onScreen = paceFactor('action');
-    motionBeat({ kind: 'lunge', strength: plan.distance / 2.4, heft: heftOfHeight(worldHeight), atMs: (run.marks.travelPeak - run.marks.windupEnd) * onScreen, ms: shape.travelMs * onScreen });
-  });
+    motionBeat({ kind: 'lunge', strength: plan.distance / 2.4, heft: heftOfHeight(worldHeight), atMs: 0.45 * run.marks.contact * onScreen, ms: run.marks.contact * onScreen });
+  } else {
+    run.on('windupEnd', () => {
+      const onScreen = paceFactor('action');
+      motionBeat({ kind: 'lunge', strength: plan.distance / 2.4, heft: heftOfHeight(worldHeight), atMs: (run.marks.travelPeak - run.marks.windupEnd) * onScreen, ms: shape.travelMs * onScreen });
+    });
+  }
   if (contact) {
     run.on('contact', () => contact.reached());
     void contact.hold.then(() => run.release(), () => run.release());
