@@ -324,3 +324,64 @@
   .demo-thanks__card,
   .demo-thanks__foot { animation: none; }
 }
+
+/* ------------------------------------------------------------------ the picker's controls card (release 62, decision 173d) */
+
+/* it replaces the strip under the cards: the same facts, once, larger, with the one line a first-timer needs */
+.fe-cselect--demo .chint {
+  display: none;
+}
+.demo-controls {
+  position: absolute;
+  z-index: 5;
+  left: calc(782 * var(--fe-k, 1px));
+  top: calc(706 * var(--fe-k, 1px));
+  width: calc(320 * var(--fe-k, 1px));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: calc(5 * var(--fe-k, 1px));
+  padding: calc(8 * var(--fe-k, 1px)) calc(14 * var(--fe-k, 1px)) calc(8 * var(--fe-k, 1px)) calc(16 * var(--fe-k, 1px));
+  background: rgba(11, 10, 18, 0.82);
+  border-left: calc(3 * var(--fe-k, 1px)) solid var(--ig-accent, #e3b94a);
+  box-shadow: 0 calc(6 * var(--fe-k, 1px)) calc(22 * var(--fe-k, 1px)) rgba(0, 0, 0, 0.5);
+  color: rgba(244, 241, 232, 0.88);
+  font-family: var(--ig-font-display, 'Chakra Petch', 'Segoe UI', sans-serif);
+  font-size: max(14px, calc(13 * var(--fe-k, 1px)));
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  pointer-events: none;
+  user-select: none;
+}
+.demo-controls__row {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.demo-controls__row b {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.45em;
+  font-weight: 700;
+  color: var(--ig-accent, #e3b94a);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.demo-controls__row i {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin: 0 0.75em;
+  background: rgba(244, 241, 232, 0.28);
+}
+.demo-controls__tip {
+  margin-top: calc(1 * var(--fe-k, 1px));
+  padding-top: calc(5 * var(--fe-k, 1px));
+  border-top: 1px solid rgba(244, 241, 232, 0.16);
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: max(16px, calc(17 * var(--fe-k, 1px)));
+  letter-spacing: 0.01em;
+  color: var(--ig-accent, #e3b94a);
+}

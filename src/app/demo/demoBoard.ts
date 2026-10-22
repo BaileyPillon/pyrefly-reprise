@@ -17,6 +17,7 @@ import { lastBoardChapter } from '../screens/frontend/boardFocus.ts';
 import { CHAPTERS } from '../../data/encounters.ts';
 import type { ControlHintItem } from '../../ui/common/ControlsHint.ts';
 import { DEMO_FIGHTS, otherDemoFight } from './demoFlow.ts';
+import { mountControlsCard } from './demoControls.ts';
 import { mountQrPlate } from './demoQr.ts';
 import './demo.css';
 
@@ -75,6 +76,7 @@ export class DemoBoardScreen extends ChapterSelectScreen {
     this.root.classList.add('fe-cselect--demo');
     const eyebrow = this.root.querySelector('.fe-cselect__eyebrow');
     if (eyebrow) eyebrow.innerHTML = '<i></i>Choose your fight';
+    mountControlsCard((this.root.querySelector('.fe-cselect__scroll') as HTMLElement | null) ?? this.root); // R62 (173d): three lines under the cards, with the pad's glyphs; the strip under them is hidden by `demo.css`
     mountQrPlate(this.root, 'picker');
   }
 }
