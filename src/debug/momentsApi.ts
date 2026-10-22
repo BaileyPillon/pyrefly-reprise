@@ -2,8 +2,8 @@
  * `window.__pyrefly.moments(mode?)`, `.momentsOn()`, `.cheer(id?)`, `.standDown(id?)` and `.koSettle(id?)`: the per-game moments' switch and triggers for captures and checks (motion pass, lane "core", step 3).
  *
  * `moments()` returns `'new'` or `'today'` (from `?moments=` / `?pack=demo`, default today); `moments('new' | 'today')` sets it for what starts from now on. The moments play only in the demo chapters
- * (Chapter I `seymour-flux`, Chapter IV `ffx2-bahamut`): `momentsOn()` is the answer for the running chapter. `cheer(id)` asks a party figure for its victory pose (the cheer) at once, `standDown(id)`
- * for the quiet stand-down; with no id every party figure (so a recorder can see the victory moment without winning the fight). Nothing here writes game state.
+ * (Chapter I `seymour-flux`, Chapter IV `ffx2-bahamut`): `momentsOn()` is the answer for the running chapter. `cheer(id)` asks a party figure for its victory pose (the cheer, or today's hop with the moments off) at once, `standDown(id)`
+ * for the quiet stand-down (nothing with the moments off, as in the presenter); with no id every party figure (so a recorder can see the victory moment without winning the fight). Nothing here writes game state.
  */
 import { momentsMode, momentsOn, setMomentsMode, type MomentsMode } from '../engine/motion/MomentsSwitch.ts';
 
@@ -32,6 +32,6 @@ export function installMomentsDebug(api: Record<string, unknown>): void {
     return n;
   };
   api['cheer'] = (id?: string): number => each(id, (a) => a.setPose('victory'));
-  api['standDown'] = (id?: string): number => each(id, (a) => a.standDown?.());
+  api['standDown'] = (id?: string): number => (momentsOn() ? each(id, (a) => a.standDown?.()) : 0); // the presenter's beat calls it only with the moments on, so an A/B recording must not play it with them off
   api['koSettle'] = (id?: string): number => each(id, (a) => a.setPose('ko'));
 }
