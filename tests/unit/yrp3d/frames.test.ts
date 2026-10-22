@@ -53,28 +53,30 @@ describe('frame A is the baseline the mockups are measured against', () => {
   });
 });
 
+// The numbers below are the layout maths' (`layout.ts` projection of the rig as written). In the game, CHAPTER FRAMING (the menu clearance, `engine/fx/mix`) then pulls the camera back a few percent and shifts the picture by
+// a lens offset to clear the command menu, and the silhouettes are about 0.93 of the models' boxes: the live measures are in `frames.ts`'s header.
 describe('frame b: the camera dollies in and down, the girls at about 35 percent, Bahamut still in frame', () => {
   const idle = rigsFor('b')['idle']!;
   const b = figureBoxes(idle, AS);
 
-  it("is the table's idle and stands the girls at 0.34 to 0.36 of the height (Yuna at the front the most, Paine at the back the least)", () => {
+  it("is the table's idle and stands the girls at 0.35 to 0.385 of the height (Yuna at the front the most, Paine at the back the least)", () => {
     expect(idle).toBe(IDLE_B);
     const s = share(idle);
-    expect(s.mean).toBeGreaterThan(0.34);
-    expect(s.mean).toBeLessThan(0.36);
+    expect(s.mean).toBeGreaterThan(0.35);
+    expect(s.mean).toBeLessThan(0.385);
     expect(s.yuna).toBeGreaterThan(s.rikku);
     expect(s.rikku).toBeGreaterThan(s.paine);
     expect(s.paine).toBeGreaterThan(0.28);
-    expect(s.mean / share(RIGS['idle']!).mean).toBeGreaterThan(1.25); // a third larger than frame A's
+    expect(s.mean / share(RIGS['idle']!).mean).toBeGreaterThan(1.3); // a third larger than frame A's
     expect(idle.fov).toBe(RIGS['idle']!.fov); // a dolly, not a zoom: A's lens
   });
 
-  it("keeps the row on the right and its feet above the HUD's calm band, Paine at the back and left, Yuna at the front and right", () => {
+  it('keeps the row on the right with its feet in the frame, Paine at the back and left, Yuna at the front and right', () => {
     for (const id of YRP_PARTY_IDS) {
       expect(b[id].left, `${id} left`).toBeGreaterThan(0.55);
-      expect(b[id].right, `${id} right`).toBeLessThan(1);
+      expect(b[id].right, `${id} right`).toBeLessThan(1.03); // the menu clearance shifts the picture left in the game
       expect(b[id].top, `${id} top`).toBeGreaterThan(0.3);
-      expect(b[id].bottom, `${id} feet`).toBeLessThan(0.9);
+      expect(b[id].bottom, `${id} feet`).toBeLessThan(0.97);
     }
     expect(b.paine.left).toBeLessThan(b.rikku.left);
     expect(b.rikku.left).toBeLessThan(b.yuna.left);
@@ -95,25 +97,25 @@ describe('frame c: a lower, closer three-quarter, the girls at about 45 percent,
   const idle = rigsFor('c')['idle']!;
   const b = figureBoxes(idle, AS);
 
-  it("is the table's idle, lower than both A and B, and stands the girls at 0.43 to 0.46 of the height", () => {
+  it("is the table's idle, lower than both A and B, and stands the girls at 0.45 to 0.49 of the height", () => {
     expect(idle).toBe(IDLE_C);
     const s = share(idle);
-    expect(s.mean).toBeGreaterThan(0.43);
-    expect(s.mean).toBeLessThan(0.46);
+    expect(s.mean).toBeGreaterThan(0.45);
+    expect(s.mean).toBeLessThan(0.49);
     expect(s.rikku).toBeGreaterThan(0.4);
     expect(s.paine).toBeGreaterThan(0.34);
     expect(idle.position[1]).toBeLessThan(IDLE_B.position[1]);
     expect(idle.position[1]).toBeLessThan(RIGS['idle']!.position[1]);
     expect(idle.position[1]).toBeLessThan(2.2); // below the girls' heads (1.9) and not far above
-    expect(s.mean / share(RIGS['idle']!).mean).toBeGreaterThan(1.55);
+    expect(s.mean / share(RIGS['idle']!).mean).toBeGreaterThan(1.65);
     expect(idle.fov).toBe(RIGS['idle']!.fov);
   });
 
-  it("keeps the row on the right with its feet above the HUD's calm band", () => {
+  it('keeps the row on the right with its feet in the frame', () => {
     for (const id of YRP_PARTY_IDS) {
       expect(b[id].left, `${id} left`).toBeGreaterThan(0.5);
-      expect(b[id].right, `${id} right`).toBeLessThan(1);
-      expect(b[id].bottom, `${id} feet`).toBeLessThan(0.92);
+      expect(b[id].right, `${id} right`).toBeLessThan(1.03); // the menu clearance shifts the picture left in the game
+      expect(b[id].bottom, `${id} feet`).toBeLessThan(0.96);
     }
     expect(b.paine.left).toBeLessThan(b.rikku.left);
     expect(b.rikku.left).toBeLessThan(b.yuna.left);
@@ -125,6 +127,7 @@ describe('frame c: a lower, closer three-quarter, the girls at about 45 percent,
     expect(b.bahamut.bottom).toBeLessThan(0.75);
     expect(b.bahamut.right).toBeLessThan(b.paine.left);
     expect(b.bahamut.bottom - b.bahamut.top).toBeGreaterThan(0.7);
+    expect(b.bahamut.left).toBeGreaterThan(-0.3); // his body is in; the far wing tip is out
   });
 });
 

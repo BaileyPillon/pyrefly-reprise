@@ -3,11 +3,15 @@
  * height, a face about 30 px at 1600x900). Frame A is the approved target and stays the default and the only view anyone gets without asking; `?frame=b` and `?frame=c` are two mockups of what a closer chapter would be, for
  * Bailey to look at and pick (AGENTS.md hard rule 9: show the options before building one). Nothing here is balance or game data (rule 6): it is where a camera stands.
  *
- * - **a** (the default, no query): `RIGS.idle` in `./layout.ts`, unchanged. The girls stand 24 to 30 percent of the frame's height (Paine at the back to Yuna at the front), Bahamut 61.
- * - **b** (`?frame=b`): the camera **dollies in and comes down** (pitch about 6 degrees against A's 15, yaw close to A's) so the girls stand about 35 percent of the height, Yuna 38 and Paine 31, while Bahamut stays
- *   in frame on the left from his feet to his horns, only his far wing tip leaving the left edge (as A's does). The feet stay above the calm band for the HUD.
- * - **c** (`?frame=c`): a **lower, closer three-quarter** from the right, a little below the girls' heads: they stand about 44 percent of the height (a face about 50 px) and Bahamut towers partly out of the top of the
- *   frame (horns and wing tips cropped, his body and feet in). The girls' feet reach about 0.9 of the height, the lowest this look takes.
+ * - **a** (the default, no query): `RIGS.idle` in `./layout.ts`, unchanged. Measured live at 1600x900 (silhouettes, head to feet): Yuna 29 percent of the frame's height, Rikku 24, Paine 22 (a face about 26 to 32 px); Bahamut 59.
+ * - **b** (`?frame=b`): the camera **dollies in and comes down** (to 2.9 m, a pitch of about 7 degrees against A's 15) so the girls stand about 36 percent of the height live (Yuna 44, Rikku 34, Paine 30; a face 34 to 50 px) while
+ *   Bahamut stays in frame on the left from his feet to his horns, only his far wing tip leaving the left edge (as A's does).
+ * - **c** (`?frame=c`): a **lower, closer three-quarter** from the right, a little above the girls' heads: about 43 percent live (Yuna 54, Rikku 40, Paine 34; a face 38 to 61 px) and Bahamut towers partly out of the top
+ *   of the frame (his head and a wing tip cropped, his body and feet in).
+ *
+ * **The live sizes are not the layout maths'** (`layout.ts`'s projection reads 0.37 for b and 0.47 for c): the game's CHAPTER FRAMING (`engine/fx/mix`, on by default) takes any resting rig as the chapter's master, pulls it back
+ * a few percent and shifts the picture by a lens offset (about 128 px left) to clear the command menu, and a silhouette is about 0.93 of a model's box. The rigs below were tuned against that, measured in the page. **The menu
+ * still covers the front girl in b and c** (the planner reports Yuna 80 to 90 percent under the command stack in b, 60 to 80 in c; 58 in A): the command stack stands in the right quarter, where the girls are.
  *
  * What a frame changes: the **resting** shots, `idle` (the view while a menu is up and between actions) and `intro` (the establishing shot, the same view pulled back). Every other rig is frame A's: the close shots
  * (`party`, `enemy`, `bahamut`, `victory`) already show the girls at 36 to 57 percent and are fitted to who they look at, `action` is not played by the presenter, and `overdrive` is end-state frame C's Mega Flare camera.
@@ -26,11 +30,11 @@ export function frameChoice(search: string): FrameName {
   return asked === 'b' || asked === 'c' ? asked : 'a';
 }
 
-/** Frame b's resting camera: in and down, the girls at 0.35 of the height (Yuna 0.38, Rikku 0.34, Paine 0.31), Bahamut's body and feet in frame. */
-export const IDLE_B: RigData = { position: [3.2, 2.75, 8.8], lookAt: [0.75, 1.6, -1.0], fov: 32 };
+/** Frame b's resting camera: in and down, the girls at 0.37 of the height by the layout maths (Yuna 0.43, Rikku 0.36, Paine 0.31; about 0.36 live), Bahamut's body and feet in frame. */
+export const IDLE_B: RigData = { position: [3.05, 2.88, 8.21], lookAt: [0.75, 1.8, -1.0], fov: 32 };
 
-/** Frame c's resting camera: low and close, the girls at 0.44 of the height (Yuna 0.48, Rikku 0.43, Paine 0.39), Bahamut's head and wing tips above the frame. */
-export const IDLE_C: RigData = { position: [4.2, 1.9, 6.8], lookAt: [1.0, 1.2, -2.5], fov: 32 };
+/** Frame c's resting camera: low and close, the girls at 0.47 of the height by the layout maths (Yuna 0.58, Rikku 0.46, Paine 0.38; about 0.43 live), Bahamut's head and a wing tip above the frame. */
+export const IDLE_C: RigData = { position: [4.04, 1.86, 6.34], lookAt: [1.0, 1.2, -2.5], fov: 32 };
 
 /**
  * The establishing shot of a frame: its resting camera pulled back along its own line of sight by `back` (A's `intro` stands 1.8 times as far from its look-at as `idle` does), lifted by `lift` metres and aimed a
