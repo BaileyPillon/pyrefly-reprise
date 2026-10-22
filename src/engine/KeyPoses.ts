@@ -55,8 +55,12 @@ export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: Lunge
     if (ctx.actingId === actorId && !odApex(ctx, actorId)) ctx.stage.actor(actorId)?.setPose('attack');
   };
   // Motion pass (lane "core"): the sampled strike reaches its contact with the blow already landing on it, so a painting put up AT the contact would be replaced by the follow-through in
-  // the same frame and never be seen. It goes up on the strike's `travelPeak` mark instead (the fastest frame, where a swap is hidden best), and `reached` only marks the contact.
-  if (curvesOn()) return { hold: contact.hold, reached: contact.reached, impact };
+  // the same frame and never be seen. It goes up on the strike's `travelPeak` mark instead (the fastest frame, where a swap is hidden best), and `reached` only marks the contact. Step 2: the
+  // way out is a swap on a mark too: the impact painting is held through the blow and the 0.2 s hold, and goes to the follow-through (or the idle) on the `settlePeak` mark, the fastest frame home.
+  if (curvesOn()) {
+    marksSwaps(ctx).add(actorId);
+    return { hold: contact.hold, reached: contact.reached, impact, settle: () => settleSwap(ctx, actorId) };
+  }
   return {
     hold: contact.hold,
     reached: () => {
@@ -71,8 +75,35 @@ export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: Lunge
  * should stay at full reach for it (0 when there is no painting or REDUCE MOTION is on).
  */
 export function followThrough(ctx: EventCtx, attackerId: CombatantId): number {
+  if (marksSwaps(ctx).has(attackerId)) return 0; // motion pass, step 2: the way out is swapped on the strike's `settlePeak` mark (below), not at the blow
   if (!keysOn(ctx) || ctx.stage?.paints?.(attackerId, 'follow') !== true) return 0;
   if (odKeyHolds(ctx, attackerId)) return 0; // r37 slot: the move's own key painting stays up
   ctx.stage.actor(attackerId)?.setPose('follow');
   return FOLLOW_BEAT_MS;
+}
+
+// ------------------------------------------------------------------ motion pass, step 2: the way out, swapped on a mark
+
+/** The attackers whose key poses are swapped on the strike's marks (the new curves are on and their wind-up painting led), per playback. */
+const onMarks = new WeakMap<EventCtx, Set<CombatantId>>();
+function marksSwaps(ctx: EventCtx): Set<CombatantId> {
+  let s = onMarks.get(ctx);
+  if (!s) onMarks.set(ctx, (s = new Set()));
+  return s;
+}
+
+/** An action is over: nothing is waiting on a mark any more (`actionEnd`). */
+export function clearMarksSwaps(ctx: EventCtx): void {
+  onMarks.get(ctx)?.clear();
+}
+
+/**
+ * The strike has turned for home (its `settlePeak` mark, the fastest frame of the way back): the impact painting goes to the follow-through when the figure has one (D-313), else to the
+ * idle. Only while the action is still on and the move's own key painting (an Overdrive's) is not what holds the figure; `actionEnd` still puts the idle up at the very end.
+ */
+export function settleSwap(ctx: EventCtx, actorId: CombatantId): void {
+  marksSwaps(ctx).delete(actorId);
+  if (ctx.actingId !== actorId || odKeyHolds(ctx, actorId)) return;
+  const actor = ctx.stage.actor(actorId);
+  actor?.setPose(keysOn(ctx) && ctx.stage?.paints?.(actorId, 'follow') === true ? 'follow' : 'idle');
 }

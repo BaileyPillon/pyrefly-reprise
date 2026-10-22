@@ -61,7 +61,8 @@ import { paceRate } from './pace.ts';
 import { CurveDriver, type LeapOptions } from './motion/CurveDriver.ts'; // motion pass (lane "core"): the new curves; idle unless the presenter starts one (default OFF, `motion/CurvesSwitch.ts`)
 import { curvesOn } from './motion/CurvesSwitch.ts';
 import { heftOf, squashPair, startStrike } from './motion/ActorCurves.ts';
-import { newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
+import { newPushMs, newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
+import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
 import type { StrikePlan } from './motion/StrikePlan.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
@@ -72,7 +73,7 @@ import { BLEND_MS_MAX, demoBlend } from './motion/DemoBlend.ts';
 import { demoIdleParams, nextIdlePhase, swayClockStart } from './motion/DemoIdle.ts';
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
-import { bindRelight } from './look/relight/FigureRelight.ts'; // demo looks (dev flag `?look=`): light on the paintings, from their normal maps
+import { bindRelight, prefetchRelight, unpinRelight } from './look/relight/FigureRelight.ts'; // demo looks (dev flag `?look=`): light on the paintings, from their normal maps
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -577,6 +578,7 @@ export class PaintedActor extends Group {
     edgeFadeBase: { value: number };
     edgeJag: { value: number };
     noiseMap: { value: Texture };
+    smearAmt: { value: number }; smearStyle: { value: number }; smearVec: { value: Vector2 }; // the smear window (`motion/SmearApply.ts`); amount 0 = off
   };
 
   // --- motion layers --------------------------------------------------------
@@ -593,6 +595,8 @@ export class PaintedActor extends Group {
   /** The new curves' channels (strike, cast lift, leap), summed; all at rest unless started. */
   private readonly curves = new CurveDriver();
   private readonly squashScratch = { x: 1, y: 1 };
+  private readonly lightPins = new Set<string>(); // the normal maps this figure pinned (`prefetchLights`)
+  protected readonly smear: SmearDirector; // `RigActor` plays its own window on the same state
   private shakeAmp = 0;
   private shakeLeftMs = 0;
   private shakeTotalMs = 1;
@@ -719,6 +723,7 @@ export class PaintedActor extends Group {
       edgeFadeBase: { value: opts.edgeFadeBase === false ? 0 : 1 },
       edgeJag: { value: opts.edgeJag ?? 0 },
       noiseMap: { value: noiseTexture() },
+      smearAmt: { value: 0 }, smearStyle: { value: 1 }, smearVec: { value: new Vector2() },
     };
 
     const renderOrder = opts.renderOrder ?? 10;
@@ -728,6 +733,7 @@ export class PaintedActor extends Group {
     this.bloomMasked = opts.bloomMask !== false;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
     this.blend = new PoseBlend(this.slots, poseBlendShape()); // the plain dissolve; FB-2's stepped one only behind `?poseblend=stepped` (off by default since 2026-10-11)
+    this.smear = this.makeSmear();
     for (const s of this.slots) this.inner.add(s.mesh);
     this.add(this.inner);
 
@@ -862,6 +868,7 @@ export class PaintedActor extends Group {
         // so its UV height depends on how tall this pose's plane ended up.
         contactBand: { value: 0.1 },
         ...this.u,
+        smearVec: { value: new Vector2() }, // per plane: its own size and mirror (a rig's parts share the actor's cell)
       },
       vertexShader: paintedVertexShader,
       fragmentShader: paintedFragmentShader,
@@ -950,6 +957,7 @@ export class PaintedActor extends Group {
     previous.forEach((p) => this.retire(p));
     this.pickReference();
     this.resize();
+    this.prefetchLights();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
     // `force`, because re-loading a pose set (a stand-in being swapped for the
     // real painting) keeps the same pose *name* with a different texture.
@@ -998,8 +1006,21 @@ export class PaintedActor extends Group {
     }
     this.pickReference();
     this.resize();
+    this.prefetchLights();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
     if (first) this.showPoseSet(first, opts?.blend === true);
+  }
+
+  /**
+   * Motion pass, step 2 (MAP fact 11): fetch and PIN the normal map of every pose this figure can draw as soon as its paintings are staged, so no pose is drawn unlit at first use (a pose
+   * is unlit until its map arrives, and the cache used to let a staged figure's map go). Nothing happens unless the HD-2D look is armed; the pins are let go in {@link dispose}.
+   */
+  private prefetchLights(): void {
+    if (!this.showFigure) return; // a rig's carrier plane is never drawn: its parts bring their own pieces
+    for (const p of this.poses.values()) {
+      const url = prefetchRelight(p.url, p.scale, p.placeholder);
+      if (url) this.lightPins.add(url);
+    }
   }
 
   /** Re-load one pose from disk; used by the dev hot-swap watcher. */
@@ -1125,7 +1146,7 @@ export class PaintedActor extends Group {
     if (!plan.reversed && next) this.applyPose(plan.to, resolved, next);
     this.active = plan.to;
     if (!plan.reversed && alignedSwapOn()) this.alignedSwap(plan.to); // W5: `?swap=aligned` only: the heads drift together
-    if (!plan.reversed && demoMotionOn()) this.demoRetune(plan.to, resolved);
+    if (!plan.reversed && !this.smear.swap(plan.to, resolved) && demoMotionOn()) this.demoRetune(plan.to, resolved); // a big change on a moving figure is cut inside a smear (`motion/SmearDirector.ts`); else the demo's blend
     this.syncOpacity();
   }
 
@@ -1169,6 +1190,33 @@ export class PaintedActor extends Group {
     }
     this.swapPolicyLast = policy;
     notePoseSwap(policy, [ao?.source ?? null, ai?.source ?? null], { actor: this.name, from: out.pose, to: inn.pose, overlap: facts.overlap, overlapAligned: facts.overlapAligned, distance: facts.anchorDistance });
+  }
+
+  /** The smear director's view of this actor (`motion/SmearDirector.ts`; motion pass, lane "core", step 2). */
+  private makeSmear(): SmearDirector {
+    return new SmearDirector({
+      name: () => this.name,
+      worldHeight: () => this.worldHeight,
+      planes: this.slots,
+      cells: this.u,
+      blend: this.blend,
+      showing: () => this.active,
+      poseOf: (i) => this.slots[i]!.pose,
+      footprintOf: (i) => this.footprintOf(this.slots[i]!),
+      canCut: () => this.smearsPlanes() && this.crossfadeMs > 0 && this.crossfadeMs <= BLEND_MS_MAX && !this.poseShiftPx,
+      flash: (c, ms, peak) => this.flash(c, ms, peak),
+      flashBlocked: () => this.softFlash?.() === true || this.flashTween !== null,
+    });
+  }
+
+  /** False for a figure whose planes are not what is drawn (a rig: its parts are, and `RigActor` runs its own smear). */
+  protected smearsPlanes(): boolean {
+    return true;
+  }
+
+  /** The figure's height in world units, for a subclass (a rig's smear). */
+  protected get bodyHeight(): number {
+    return this.worldHeight;
   }
 
   /** One plane as the aligned dissolve sees it: its unit square in the actor's frame without the drift it carries now, and its silhouette. A plane laid on the floor is not read. */
@@ -1516,6 +1564,8 @@ export class PaintedActor extends Group {
    * knock-back, the pose and the bruise.
    */
   recoil(ms = 340, distance = 0.28): Promise<void> {
+    const fresh = !recoilLegacy() && curvesOn();
+    this.smear.hintRecoil(this.facing, fresh ? recoilDistance(distance, heftOf(this.worldHeight)) : distance, fresh ? newPushMs(ms) : 80); // the push is fastest on its first frame, which is where the hurt swap is made
     this.flinch(ms);
     return this.knockBack(ms, distance);
   }
@@ -2330,6 +2380,7 @@ export class PaintedActor extends Group {
     const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
     if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan);
     if (alignedSwapOn()) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
+    this.smear.step(); // the smear window's amount, from the blend's progress
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
@@ -2371,6 +2422,8 @@ export class PaintedActor extends Group {
     let ox = (this.lungeOffset + this.recoilOffset + cv.x + lean * upright) * this.facing;
     let oy =
       this.hopHeight + cv.lift + hover - (crouch + this.fallDrop * this.fallGain * this.worldHeight * 0.05) * upright;
+
+    this.smear.track(ox, oy, dt, realDt); // how fast the figure moves, before the shake: the smear's planner reads it
 
     if (this.shakeLeftMs > 0) {
       this.shakeLeftMs -= dt * 1000;
@@ -2473,6 +2526,7 @@ export class PaintedActor extends Group {
 
   override dispose(): void {
     this.tweens.killAll();
+    unpinRelight(this.lightPins);
     this.curves.dispose();
     this.blend.cancel();
     for (const slot of this.slots) {

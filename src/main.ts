@@ -19,6 +19,7 @@ import { installLookDebug } from './debug/lookApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installCurvesDebug } from './debug/curvesApi.ts'; // motion pass (lane "core"): `__pyrefly.curves('new' | 'today')`
+import { installSmearDebug } from './debug/smearApi.ts'; // motion pass (lane "core", step 2): `__pyrefly.smear('paint' | 'blur' | 'off')`, `.smearLog()`
 import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
@@ -161,6 +162,7 @@ async function boot(): Promise<void> {
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
   installCurvesDebug(debugApi); // motion pass (lane "core"): the new curves' switch and marks, for captures
+  installSmearDebug(debugApi); // motion pass (lane "core", step 2): the smear's switch and its record, for captures and the continuity harness
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
 
   await app.push(new TitleScreen());

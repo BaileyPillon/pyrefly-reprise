@@ -42,6 +42,19 @@ export const SHADER_PATCHES: ReadonlyArray<readonly [from: string, to: string]> 
   ['float n = texture2D(noiseMap, uv * vec2(1.6, 2.4)).r;', 'float n = texture2D(noiseMap, vFig * vec2(1.6, 2.4)).r;'],
   ['float plain = clamp(n * 0.72 + (1.0 - vUv.y) * 0.34, 0.0, 1.0);', 'float plain = clamp(n * 0.72 + (1.0 - vH) * 0.34, 0.0, 1.0);'],
   ['float sweep = clamp(n * 0.56 + vUv.y * 0.44, 0.0, 1.0);', 'float sweep = clamp(n * 0.56 + vH * 0.44, 0.0, 1.0);'],
+  // the smear (motion pass, step 2): the streak is given in the FIGURE's coordinates (vFig); a part's uv is its own cut of the painting, and a limb is turned, so the streak is carried into the
+  // part's uv through the screen-space derivatives of the two coordinates (duv/dFig = [dUv/dx dUv/dy] * inverse([dFig/dx dFig/dy])).
+  [
+    'vec2 smearUvVec(vec2 v) { return v; }',
+    `vec2 smearUvVec(vec2 v) {
+    vec2 fx = dFdx(vFig);
+    vec2 fy = dFdy(vFig);
+    float det = fx.x * fy.y - fx.y * fy.x;
+    if (abs(det) < 1e-12) return v;
+    vec2 w = vec2(fy.y * v.x - fy.x * v.y, fx.x * v.y - fx.y * v.x) / det;
+    return dFdx(vUv) * w.x + dFdy(vUv) * w.y;
+  }`,
+  ],
 ];
 
 /** Apply the patches to `src`; throws when the game's shader no longer contains one of them (the stage then draws the painting set). */
