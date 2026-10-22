@@ -1,6 +1,6 @@
 /**
- * **The girls' weapons** (the hidden 3D Bahamut chapter, the real-models branch `exp-yrp-real`; FFX-2 only): the real models hold nothing (the Gunner model's own notes say "no pistols are in the model file"), and the real weapon
- * models are not extracted yet, so the weapons are small low-poly props built in code, original shapes (no one's asset), parented to the models' hands so they move with the game's own motion, and given the same soft material
+ * **The girls' weapons** (the hidden 3D Bahamut chapter, the real-models branch `exp-yrp-real`; FFX-2 only): the real models hold nothing (the Gunner model's own notes say "no pistols are in the model file"), and the game's own weapon
+ * models (`./weapons.ts`, parented under the game's weapon locators) are used when their files are on disk; **these small low-poly props built in code are the fallback** when a weapon file or a locator is not there: original shapes (no one's asset), parented to the models' hands so they move with the game's own motion, and given the same soft material
  * as the figure (the model's own pass, `./shade.ts`, covers every mesh under it; props are added to the scene before that pass).
  *
  * - **Yuna**: two pistols, one in each hand: a gunmetal blue-grey slide with a barrel and a small sight on top, a darker grip across the palm; the barrel runs on along the forearm.

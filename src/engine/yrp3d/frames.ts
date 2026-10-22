@@ -3,11 +3,11 @@
  * height, a face about 30 px at 1600x900). Frame A is the approved target and stays the default and the only view anyone gets without asking; `?frame=b` and `?frame=c` are two mockups of what a closer chapter would be, for
  * Bailey to look at and pick (AGENTS.md hard rule 9: show the options before building one). Nothing here is balance or game data (rule 6): it is where a camera stands.
  *
- * - **a** (the default, no query): `RIGS.idle` in `./layout.ts`, unchanged. Measured live at 1600x900 (silhouettes, head to feet): Yuna 29 percent of the frame's height, Rikku 24, Paine 22 (a face about 26 to 32 px); Bahamut 59.
- * - **b** (`?frame=b`): the camera **dollies in and comes down** (to 2.9 m, a pitch of about 7 degrees against A's 15) so the girls stand about 36 percent of the height live (Yuna 44, Rikku 34, Paine 30; a face 34 to 50 px) while
- *   Bahamut stays in frame on the left from his feet to his horns, only his far wing tip leaving the left edge (as A's does).
- * - **c** (`?frame=c`): a **lower, closer three-quarter** from the right, a little above the girls' heads: about 43 percent live (Yuna 54, Rikku 40, Paine 34; a face 38 to 61 px) and Bahamut towers partly out of the top
- *   of the frame (his head and a wing tip cropped, his body and feet in).
+ * - **a** (the default, no query): `RIGS.idle` in `./layout.ts`, unchanged. Measured live at 1600x900 (silhouettes, head to feet): Yuna 28 percent of the frame's height, Rikku 23 to 24, Paine 22 (a face about 25 to 32 px); Bahamut 77.
+ * - **b** (`?frame=b`): the camera **dollies in and comes down** (to 2.9 m, a pitch of about 7 degrees against A's 15) so the girls stand about 33 to 36 percent of the height live (Yuna 40 to 44, Rikku 31 to 34, Paine 28 to 30;
+ *   a face 32 to 50 px) while Bahamut stays in frame on the left from his feet to his horns, only his far wing tip leaving the left edge (as A's does).
+ * - **c** (`?frame=c`): a **lower, closer three-quarter** from the right, a little above the girls' heads: about 41 to 43 percent live (Yuna 52 to 54, Rikku 39 to 40, Paine 33 to 35; a face 37 to 61 px) and Bahamut towers
+ *   partly out of the top of the frame (his head and a wing tip cropped, his body and feet in). The range in each is the game's own camera planner, which settles a few points differently from one run to the next.
  *
  * **The live sizes are not the layout maths'** (`layout.ts`'s projection reads 0.37 for b and 0.47 for c): the game's CHAPTER FRAMING (`engine/fx/mix`, on by default) takes any resting rig as the chapter's master, pulls it back
  * a few percent and shifts the picture by a lens offset (about 128 px left) to clear the command menu, and a silhouette is about 0.93 of a model's box. The rigs below were tuned against that, measured in the page. **The menu

@@ -19,6 +19,7 @@ import { capsuleFigure } from './capsule.ts';
 import { plansFor } from './clipMap.ts';
 import { clipMapUrl, figurePlans, fileUrl, looksLikeGlb, YRP_CAST, type BossChoice, type FigurePlan, type Look, type YrpId } from './layout.ts';
 import { YrpModel } from './model.ts';
+import { weaponCount, weaponUrl } from './weapons.ts';
 
 /** A parsed file: its scene (never drawn itself; each model draws a clone), its clips and the scene's extras. */
 export interface Parsed {
@@ -111,6 +112,8 @@ export interface FigureSource {
   readonly clips: string | null;
   readonly file: string | null;
   readonly look: Look | null;
+  /** What a girl holds: the game's own weapons (`real`: her weapon file and every locator were there), the procedural props (`props`) or nothing; absent for Bahamut. */
+  readonly weapons?: 'real' | 'props' | 'none';
 }
 
 /** The models that loaded, by id, and what to free. */
@@ -175,6 +178,13 @@ export async function loadYrpModels(opts: LoadOptions): Promise<YrpModels> {
     }
     return null;
   };
+  /** A girl's weapon file, parsed once and cloned for each hand of her kit (`./weapons.ts`); null when the file is in no folder (she keeps the procedural props). */
+  const weaponScenes = async (id: YrpId): Promise<Object3D[] | null> => {
+    const url = weaponCount(id) ? (dir: string) => parseOnce(weaponUrl(opts.base, dir, id)!) : null;
+    const file = url ? await first(opts.dirs, url) : null;
+    if (!file) return null;
+    return Promise.all(Array.from({ length: weaponCount(id) }, () => io.clone(file.value.scene)));
+  };
   const models = new Map<YrpId, YrpModel>();
   const capsules: YrpId[] = [];
   const sources: Record<string, FigureSource> = {};
@@ -203,8 +213,10 @@ export async function loadYrpModels(opts: LoadOptions): Promise<YrpModels> {
       const map = await first(clipOrder, async (d) => (await mapOnce(clipMapUrl(opts.base, d))) ?? null);
       const plans = plansFor(id, map?.value ?? null, names);
       const scene = await io.clone(mesh.value.scene);
-      models.set(id, new YrpModel(id, scene, clips, opts.heights[id], 'own', { plans, chrScale: chrScaleOf(mesh.value.extras ?? anims?.value.extras), look: plan.look }));
-      sources[id] = { mesh: mesh.dir, clips: anims?.dir ?? null, file: plan.mesh, look: plan.look };
+      const weapons = await weaponScenes(id);
+      const model = new YrpModel(id, scene, clips, opts.heights[id], 'own', { plans, chrScale: chrScaleOf(mesh.value.extras ?? anims?.value.extras), look: plan.look, ...(weapons ? { weapons } : {}) });
+      models.set(id, model);
+      sources[id] = { mesh: mesh.dir, clips: anims?.dir ?? null, file: plan.mesh, look: plan.look, ...(weaponCount(id) ? { weapons: model.weaponKind } : {}) };
       if (anims && anims.value !== mesh.value) freeScene(anims.value.scene); // only its motions were wanted
     }),
   );

@@ -24,6 +24,7 @@ import { Box3, Color, Group, type AnimationClip, type Mesh, type Object3D } from
 import { ClipRig } from './clips.ts';
 import { plansFor, type PlanTable } from './clipMap.ts';
 import { attachProps, type Attached } from './props.ts';
+import { attachWeapons, type WeaponsAttached } from './weapons.ts';
 import { disposeShade, drive, shadeify, type ShadeSet } from './shade.ts';
 import { flapSpecOf, makeFlap, setFlap, type FlapUniforms } from './flap.ts';
 import { fitBox, YRP_BOSS_ID, type BoxData, type Look, type YrpId } from './layout.ts';
@@ -57,6 +58,8 @@ export interface ModelOptions {
   chrScale?: number;
   /** The look it is shaded in (`./shade.ts`): the real humans' diffuse look (the default), or the AI boss's own physically based material. */
   look?: Look;
+  /** The girl's real weapon scenes, one per hand of her kit (`./weapons.ts`), when the weapon file was read; with none, or when her skeleton lacks a locator, she holds the procedural props. */
+  weapons?: readonly Object3D[];
 }
 
 /** Remove the meshes that are not part of the figure: in a scene with a skinned mesh, a mesh with no skin and no bone above it (Bahamut's file carries an unskinned ring that no animation moves; the extraction notes say leave it hidden). */
@@ -90,8 +93,10 @@ export class YrpModel {
   private readonly natural: BoxData;
   /** The model's clips driven by the battle (`./clips.ts`), or null for a model with no idle clip (a capsule has none): it stays procedural. */
   private readonly rig: ClipRig | null;
-  /** The weapons parented to the hands (`./props.ts`), or none. */
+  /** The procedural weapons parented to the hands (`./props.ts`), or none (the real ones replaced them, or the figure holds nothing). */
   private readonly props: Attached;
+  /** The real FFX-2 weapons parented under the game's weapon locators (`./weapons.ts`), or null. */
+  private readonly realWeapons: WeaponsAttached | null;
   /** Bahamut's gathering orb (his Mega Flare's windup); the girls have none. */
   private readonly orb: Orb | null;
   /** The wing flap of a rigid model with wings and no clips (the AI Bahamut's): the cells every material reads, and the half-span in the file's units. Null for a model with clips (the game's own motion) and for the girls. */
@@ -117,7 +122,9 @@ export class YrpModel {
     scene.updateMatrixWorld(true);
     const box = new Box3().setFromObject(scene);
     this.natural = { min: [box.min.x, box.min.y, box.min.z], max: [box.max.x, box.max.y, box.max.z] };
-    this.props = attachProps(id, scene, (this.natural.max[1] - this.natural.min[1]) / this.chrScale); // after the box is measured (a sword must not change the fit), before the soft pass (so it is covered too)
+    // the weapons go on after the box is measured (a sword must not change the fit) and before the soft pass (so they are covered too): the game's own where their files and locators are there, else the procedural props
+    this.realWeapons = opts.weapons ? attachWeapons(id, scene, opts.weapons) : null;
+    this.props = this.realWeapons ? { props: [], dispose: () => undefined } : attachProps(id, scene, (this.natural.max[1] - this.natural.min[1]) / this.chrScale);
     const names = clips.map((c) => c.name);
     const plans = opts.plans ?? plansFor(id, null, names);
     const rigged = !!plans.idle?.hold && names.includes(plans.idle.hold);
@@ -149,6 +156,11 @@ export class YrpModel {
   /** The model's footprint over its height, from its box (the camera and the lunge's reach read it). */
   get widthOverHeight(): number {
     return fitBox(this.natural, this.figureHeight).widthOverHeight;
+  }
+
+  /** Which weapons the figure holds: the game's own (`real`), the procedural props (`props`), or none (Bahamut, a capsule). */
+  get weaponKind(): 'real' | 'props' | 'none' {
+    return this.realWeapons ? 'real' : this.props.props.length ? 'props' : 'none';
   }
 
   /** True when the file has an idle clip playing (and so the battle's clips: `noteOpen`, `noteImpact`, `noteClose`, `notePose`). */
@@ -288,6 +300,7 @@ export class YrpModel {
   dispose(): void {
     this.rig?.dispose();
     this.props.dispose();
+    this.realWeapons?.dispose();
     disposeShade(this.set, this.source === 'capsule'); // a capsule's geometry is its own; a file's is shared with the clones of it and freed with the loader
     this.orb?.dispose();
     this.root.removeFromParent();
