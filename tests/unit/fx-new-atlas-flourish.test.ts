@@ -6,7 +6,9 @@ import { ATLAS_SIZE, TILES, atlasPixels } from '../../src/engine/spellfx/FxAtlas
 import { OrbFlourish } from '../../src/engine/fx/ItemOrbFlourish.ts';
 import { fxShare } from '../../src/engine/spellfx/FxPerfGuard.ts';
 import type { FxTile } from '../../src/engine/spellfx/FxDrawList.ts';
-import { Scene, Sprite } from 'three';
+import { Object3D, Scene, Sprite, Vector3 } from 'three';
+import { ItemOrbStage, type OrbFigure } from '../../src/engine/ItemOrbStage.ts';
+import { setFxChapter, setFxMode } from '../../src/engine/spellfx/FxSwitch.ts';
 
 afterEach(() => {
   fxShare.particles = fxShare.trails = 1;
@@ -176,5 +178,57 @@ describe('the livelier item toss', () => {
       return out;
     };
     expect(run()).toBe(run());
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------- the stage hook
+
+function fig(artId: string, x: number): OrbFigure {
+  const actor = {
+    position: new Vector3(x, 0, 0),
+    height: 1.8,
+    paintPoint(u: number, t: number, out = new Vector3()): Vector3 {
+      return out.set(this.position.x + (u - 0.5) * 1.2, this.position.y + (1 - t) * 1.8, 0);
+    },
+    centerPoint(out = new Vector3()): Vector3 {
+      return out.set(this.position.x, 0.94, 0);
+    },
+  };
+  return { actor: actor as unknown as OrbFigure['actor'], artId };
+}
+
+describe('the item stage and the new effects switch', () => {
+  const run = (style?: 'spark'): { scene: Object3D; groups: () => number } => {
+    const scene = new Object3D();
+    const figs: Record<string, OrbFigure> = { yuna: fig('yuna', 1.5), tidus: fig('tidus', -1.2) };
+    const stage = new ItemOrbStage(scene, (id) => figs[id], () => 1);
+    stage.toss('yuna', ['tidus'], { formMs: 300, flightMs: 420, tone: 'heal', ...(style ? { style } : {}) });
+    for (let i = 0; i < 40; i++) stage.update(1 / 120); // 330 ms: the orb is in flight
+    const groups = (): number => scene.children.length;
+    for (let i = 0; i < 150; i++) stage.update(1 / 120); // into the burst
+    return { scene, groups };
+  };
+
+  it('adds the trail and burst only with the switch on in a demo chapter', () => {
+    setFxMode('today');
+    setFxChapter('seymour-flux');
+    const off = run();
+    expect(off.groups()).toBe(1); // the light only
+    setFxMode('new');
+    setFxChapter('seymour-flux');
+    const on = run();
+    expect(on.groups()).toBe(2); // the light and its flourish
+    setFxChapter('evrae');
+    expect(run().groups()).toBe(1);
+    setFxMode(null);
+    setFxChapter(undefined);
+  });
+
+  it('FFX-2\'s spark toss gets the burst too', () => {
+    setFxMode('new');
+    setFxChapter('ffx2-bahamut');
+    expect(run('spark').groups()).toBe(2);
+    setFxMode(null);
+    setFxChapter(undefined);
   });
 });
