@@ -471,6 +471,32 @@ describe('the knock-out', () => {
     expect(Math.abs(cutEnd - plainEnd) * FRAME).toBeLessThanOrEqual(CUT_MS_MAX + 2 * FRAME);
   });
 
+  it('a cut splits the difference between the toppled standing body and the lying one (middle to middle); a cross keeps aligning the heads', () => {
+    const bys = (cut: boolean): string[] => {
+      setCurvesChapter('seymour-flux');
+      setMomentsMode(cut ? 'new' : 'today');
+      setSmearStyle(cut ? 'paint' : 'off');
+      const a = new PaintedActor({ name: 'tidus', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
+      a.adoptPoses({ idle: painting('tidus', 'idle'), ko: painting('tidus', 'ko') }, 'idle');
+      a.position.set(-2, 0, 0);
+      a.setPose('idle', { immediate: true, force: true });
+      const seen: string[] = [];
+      const orig = a.tipSlot.bind(a);
+      a.tipSlot = ((slot: never, tip: { by: string } | null) => {
+        if (tip) seen.push(tip.by);
+        orig(slot, tip as never);
+      }) as typeof a.tipSlot;
+      const living = new LivingFigure(a);
+      step(a, living, 0);
+      for (let i = 0; i < 30; i++) step(a, living, FRAME);
+      a.setPose('ko');
+      for (let i = 0; i < 100; i++) step(a, living, FRAME);
+      return [...new Set(seen)];
+    };
+    expect(bys(false)).toEqual(['head']);
+    expect(bys(true)).toEqual(['middle']);
+  });
+
   it('moments on, smear OFF: the KO keeps its plain cross and only the rebound is added', () => {
     setCurvesChapter('seymour-flux');
     setMomentsMode('new');

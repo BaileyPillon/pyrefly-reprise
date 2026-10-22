@@ -262,6 +262,8 @@ export class LivingFigure {
   /** What the toppled body slides to: the lying painting's head when both paintings have a registered head (the point the eye follows), else its middle. */
   private meeting(p: Playing): { target: number; by: 'head' | 'middle' } {
     const k = p.lying;
+    // a CUT (motion pass, step 3) has no cross to hide the difference in length between the toppled standing body and the curled lying one: aligning the heads leaves all of it at the feet (115 to 141 px at 1600 wide in the harness), so a cut splits it, middle to middle
+    if (p.run.opts.cut) return { target: this.lyingCentre(p), by: 'middle' };
     const head = p.stand.meta.head ? headCentreX(k.meta.head, k.scale, k.mesh.scale.x < 0 ? -1 : 1, k.mesh.position, k.mesh.rotation.z) : undefined;
     return head !== undefined ? { target: head, by: 'head' } : { target: this.lyingCentre(p), by: 'middle' };
   }
