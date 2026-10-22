@@ -108,3 +108,115 @@ New: `src/engine/feel/{FeelSwitch,PunchCurve,HitStopShort,Rumble,FeelHooks,Conta
 5. **A live key for the A/B.** The playable A/B is two URLs (`?pack=demo` and `?pack=demo&punch=today`) or `__pyrefly.punchMode('today' | 'new')` from the console. A live key (e.g. F9) would make it instant on Thursday; it is a thing Bailey would see, so it waits for his word.
 6. **Rumble on real hardware.** The motors need a real pad in Bailey's hands (Xbox and DualSense pads give `dual-rumble` in Chrome and Edge; DualShock 4 and the Switch pad may differ).
 7. **Where is the rumble for the Mega Flare's opening?** The splash cut-in gets the soft 140 ms thud and the last blow the 420 ms swell; the 1.45 s between them is silent. A rising rumble under the effect is easy to add if wanted.
+
+---
+
+# Step 2: the motion sounds and the playable test
+
+Written 2026-10-22 overnight. Bailey, 2026-10-22: "Subtle synced sounds": a whoosh on a lunge and on a smear, a landing thud matched to the squash, a cloth rustle on a cast, from the existing sound library, mixed under the music (he judges by ear on `docs/audio/audition.html`; agents cannot hear, so this note gives measurements and never a verdict on how anything sounds). Also: a playable A/B of today's big-hit camera and the new punch, hit-stop on/off, rumble on/off and motion sounds on/off, and evidence clips of a big hit in each chapter.
+
+## Game case (AGENTS.md rule 14)
+
+**BOTH games, one neutral set, behind a switch; ON only in Chapter I (`seymour-flux`, FFX) and Chapter IV (`ffx2-bahamut`, FFX-2).** Why neutral: the library separates no whoosh, thud or cloth by game. The only game-tagged families it has are the weapon swings (`sfxV2/cues.ts`: FFX's sword, katana, spear, blitzball, staff, doll and claw; FFX-2's gun, daggers and greatsword) and the `-x2` spell twins (`magic-charge-x2`), and both already play on the attack and the cast. `research/*.md` and `research/ffx-vs-ffx2-presentation.md` describe no motion sound for either game (searched: whoosh, thud, rustle, footstep, cloth, foley). So no per-game difference is sourced; `MOTION_GAME_OVERRIDES` (`audio/sfxV2/motionCues.ts`) is where one goes, empty today, and `cueAllowedFor` refuses a v2 cue tagged for the other game (tested). One piece is FFX-2 only in effect: the **dash** (the whoosh of a girl's run in and run home), because only FFX-2 runs in (`research/ffx2-combat-core.md` section 1, D-354); the beat is reported by `BattleScreenRunIn`, which only an FFX-2 chapter has.
+
+## The switch
+
+`?motionsfx=on|off`, and the shared `?pack=demo` (which turns it on, with the other feel pieces, in the two demo chapters). OFF at compile time: no key, no pack, any other chapter, every unit test = silent here and every call a no-op. `?pack=demo&motionsfx=off` is the A/B. `__pyrefly.motionSfx(on?)`, `motionSfxLog(reset?)`, `motionBeat(kind, strength?, heft?, atMs?, ms?)` (plays one beat now), and for recorders `sfxTap()` / `sfxTapLog()` (every `playSfx` ask with the page's clock and what the mixer says it played) and `simNow()`. Gates in force even with the switch on: a chapter with a game voice (`sfxChapter` names it), playback speed `normal` (not fast, not skip), the same beat not inside its gap (lunge 160 ms, dash 200, smear 70, land 100, cast 250), at most three motion sounds in 300 ms (FFX-2's Active ATB overlaps three girls' actions). **REDUCE MOTION does not gate it**: Bailey's pick turns off "Shake, punch, freeze, rumble" only, and a sound is none of them.
+
+## What each sound is (nothing new ships as audio; every number is `[ours]`)
+
+Each beat names a cue of the shipped sprites and shapes it with the mixer's own parameters (`pitch`, `volume`, and the new additive `trimMs` and `fadeMs` of `sfxSource.ts` / `PlaySfxOptions`: a cue cut short must fade or the cut clicks). The pick was made by measuring each cue's shape (`D:/Tools/pyrefly-scratch/2026-10-22/motion/feel/sfx/analysis.txt` has all 273 slices: duration, attack, decay, spectral centroid and flatness), because no one on the team can hear:
+
+| Beat | Cue (first bank) | Shaping | Why it is the closest the library has |
+|---|---|---|---|
+| `lunge` | `whiff` | pitch 0.80, 360 ms, 120 ms fade, volume 0.42 | the synth design is "cloth and air": band-passed noise (flatness 0.06 to 0.15, centroid 1.7 to 3.8 kHz) that swells over 20 to 60 ms and has faded by 280 ms; 20 percent lower reads as a body, not a blade |
+| `dash` | `whiff` | pitch 0.72, 440 ms, 160 ms fade, volume 0.40, cut to the run's own length | the same air, longer, for the FFX-2 run (0.32 to 0.47 s) |
+| `smear` | `whiff` | pitch 1.45, 130 ms, 55 ms fade, volume 0.28 | the same air as a quick zip on the cut; halved within 90 ms of a lunge or a dash (one movement, one whoosh) |
+| `land` | `footstep` | pitch 1.0, 110 ms, 50 ms fade, volume 0.33 | "one boot on stone": a 110 Hz thump that is 20 dB down by 45 ms (the 338 ms slice is thump plus grit; trimmed to the thump) |
+| `cast` | `steal-success` | pitch 1.0, 105 ms, 40 ms fade, volume 1.5 | its first 105 ms are "a quick grab of cloth" (noise, centroid 2.7 to 4.2 kHz, 28 to 39 dB under the jingle that starts at 120 ms); cut before the jingle; the head is quiet, hence the 1.5 |
+
+Planner (`feel/MotionSfx.ts`, pure, tested): strength scales the volume (a lunge 60 to 100 percent over reaches of 0 to 2.4 world units; a landing 45 to 100 percent over hops of 0 to a third of the figure), a heavier body is lower and longer (a boss's lunge 22 percent lower, 10 percent louder and 30 percent longer; its landing 35 percent lower, 15 percent louder, 50 percent longer), and `atMs` ("ms to the visual peak") starts a cue early by its own peak time (measured per cue: 80, 90, 45, 5, 45 ms, scaled by the pitch ratio) but never before now.
+
+**Levels, measured** (ffmpeg EBU R128 and sample peak on the cue as the mixer plays it, SFX bus 0.7 x master 0.9, dry; the game adds a 0.22 hall send to every effect; `sfx/render-cues.mjs`, `sfx/out-planned/measure.json`):
+
+| | peak dBFS | momentary max LUFS (400 ms) | loudest 43 ms dBFS |
+|---|---|---|---|
+| hit-sword at 0.8 (a Chapter I hit) | -7.1 | -20.1 | -14.8 |
+| swing-sword at 0.8 (the attack cue) | -8.0 | -24.6 | -18.6 |
+| hit-greatsword at 0.8 (Chapter IV, the recorded original) | -11.6 | -19.9 | -22.3 |
+| battle theme (boss-seymour / boss-bahamut) | -7.4 / -6.4 | | -14.3 / -15.0 (average -22.5 / -21.7) |
+| **lunge** (strength 1, party) | -13.3 | -28.9 | -26.7 |
+| **dash** | -14.1 | -29.0 | -27.3 |
+| **smear** | -17.2 | -34.7 | -31.2 |
+| **land** | -15.2 | -32.6 | -23.7 |
+| **cast** | -19.5 | -36.3 | -32.4 |
+| a boss's lunge (heft 0.885) / landing | -12.8 / -14.2 | -27.7 / -31.3 | -26.0 / -21.6 |
+
+So each sits at least 5.7 dB under the hit-sword's peak and 7 dB under its momentary loudness, and its loudest 43 ms is 7 to 18 dB under the theme's. The short ones read low on a 400 ms meter; the peak and the 43 ms columns are the fairer ones for them. (In Chapter IV the recorded greatsword hit is itself quieter, peak -11.6, so the boss's lunge, -12.8, sits only 1.2 dB under it in peak though 8 dB under it in loudness: the first number to look at if the whoosh is too present there.) The levels are single numbers in `motionCues.ts`; a change is a minute.
+
+## Files
+
+New: `src/audio/sfxV2/motionCues.ts` (the table, the game rule, the measured levels), `src/engine/feel/MotionBeats.ts` (the seam, below), `src/engine/feel/MotionSfx.ts` (the planner), `src/engine/feel/MotionHooks.ts` (the presenter's cast beat, `actorHeft`), `src/app/motionSfxSink.ts` (the page side: planner to `audio.playSfx`, the log), `tests/unit/feel-motion-sfx.test.ts` (42). Changed (small): `audio/sfxSource.ts` (+`trimMs`, `fadeMs`, `shapedLength`; a cue with neither is exactly what it was, pinned by a test), `audio/AudioManager.ts` (two optional `PlaySfxOptions` fields), `engine/feel/FeelSwitch.ts` (+`motionsfx`), `engine/PaintedActor.ts` (+3 lines, now 2,475), `engine/BattlePresenterSfx.ts` (+2), `app/screens/BattleScreen.ts` (+3), `app/screens/BattleScreenRunIn.ts` (+4), `main.ts` (+2), `debug/feelApi.ts`, `tests/unit/feel-switch.test.ts`. `docs/audio/audition.html` gains the Motion sounds section (a jump link at the top; the section sits after the music options so the existing page test's order holds) and `docs/audio/candidates/motion-sfx/` holds its 24 clips (676 KB). None of these is a `docs/CONTRACTS.md` file, so no `CONTRACT-CHANGES.md` entry.
+
+## Where each beat comes from today (stable beats that exist in `origin/main`)
+
+| Beat | Reported by | When |
+|---|---|---|
+| `lunge` | `PaintedActor.lunge` (a rig is a `PaintedActor`, so the bosses too) | the move begins; `atMs` 0.19 of the move (the step's fastest frame: measured in the real game, Chapter I, stepped at 60 Hz, +84 ms of a 440 ms move; the smooth `reachOffset` step), `strength` reach / 2.4, `heft` from `worldHeight` |
+| `land` | `PaintedActor.hop`'s `onComplete` (a hop that is killed when the actor is disposed never lands; tested) | the hop comes down: FFX-2's run-in and run-home hops, a dodge, a revive; `strength` = height / (a third of the figure) |
+| `dash` | `BattleScreenRunIn.strike` and `.close`, next to `world.smear(...)` | the afterimage streak of the run begins |
+| `cast` | `BattlePresenterSfx.playCue` when the cue is `cast` (the one place `actionStart` asks for it) | a cast begins; `heft` from the caster's height |
+
+Not reported today, on purpose or because it does not exist: **contact** (the hit sound is there; a thud on top would only add mud), **the KO fall and lie-down landings** (`ko-fall` already plays and is a body falling), **the return home** (nothing lands), and **the planned smear** (this tree has none: its only smear is the run's afterimage, which is `dash`).
+
+## What to wire when motion-core merges (exactly)
+
+`origin/motion-core` replaces the lunge by a sampled strike and adds planned smears and leaps. Each is one `motionBeat(...)` call from `feel/MotionBeats.ts` (the adapter; its header carries the same table). Motion-core's `heftOf` is `clamp01((h - 1.82) / (4.1 - 1.82))`; mine is `(h - 1.8) / 2.6`; either will do, but use one.
+
+1. **Lunge.** `PaintedActor.strike()` does not call `lunge()`, so the lunge beat is lost under the curves. In `src/engine/motion/ActorCurves.ts` `startStrike` (line 16, next to the `run.on(...)` registrations at lines 21 and 24) add `run.on('windupEnd', () => motionBeat({ kind: 'lunge', strength: plan.distance / 2.4, heft: heftOf(worldHeight), atMs: marks.travelPeak - marks.windupEnd, ms: <the travel's ms> }))`, the marks being `strikeMarks(shape)` in on-screen ms (paced ms divided by `paceRate('action')`; `__pyrefly.strikeMarks(game)` prints both). The whoosh then peaks on the fastest frame before contact, where the smear's cut is.
+2. **Smear.** In `SmearLog.noteSmear` (`src/engine/motion/SmearLog.ts:44`) or in `SmearDirector.swap` right after it, add `motionBeat({ kind: 'smear', strength: plan.strength, heft, atMs: plan.cutMs * 0.5 })` (the cut is at half the window, `CUT_AT`). A smear within 90 ms of a lunge or a dash is halved by the planner, so nothing else needs coordinating.
+3. **Landings.** `arcFor` sends the FFX-2 run-in through `actor.leap` instead of `hop`, so the hop's landing beat is lost: add `motionBeat({ kind: 'land', strength: options.land / 0.06, heft })` where the leap's flight ends and its landing squash begins (`CurveDriver.LeapRun`, the `landMs` branch). Optional, recommended OFF: the strike's end-of-move landing squash (2 percent: strength 0.33) and the cast lift's release (`LiftChannel.release`, 2.5 percent); they are barely a thud.
+4. **Cast.** Unchanged: `playCue('cast')` is still the one call, and `liftCaster` rises at the same moment.
+5. **The attack cue's lead.** `BattlePresenterSfx` already reads `strikeBeatNow()` for the attack cue; the whoosh needs nothing from it.
+
+## Playable A/B
+
+`D:/Tools/pyrefly-scratch/2026-10-22/motion/feel/PLAYTEST.md`: the exact addresses and console calls to flip the camera (today / new / off), the hit-stop (today / short / off), the rumble, the shadow and the motion sounds, in Chapter I and Chapter IV; what to watch in each fight; REDUCE MOTION; what could not be checked. The URL keys are pinned by `feel-switch.test.ts`; the console setters are in `feelApi.ts`.
+
+## Tests and evidence
+
+**Unit tests:** `node node_modules/vitest/vitest.mjs run tests/unit/feel-motion-sfx.test.ts` (42; mutation-checked: removing the actor's lunge beat, the mixer's rate arithmetic or the speed gate fails 7 of them) and the rest of the feel files (`feel-switch`, `feel-punch`, `feel-shadow`, `feel-stop-rumble`, `feel-120hz`: 111 tests in all, green). They pin: the switch (default OFF, the demo chapters only, a key beside the pack wins); the cue table against the shipped manifest (every cue exists, its trim fits its slice, every cue fades, none is tagged for the other game); the planner (every gate, the strength and heft shaping, the beat-timing arithmetic, the smear's duck, bounds on every output); the sink (an ask reaches `playSfx` with its options, off = nothing is planned or kept, a throwing context is silence); the mixer (a cue with neither new option starts exactly as before, the trim and fade arithmetic, a looped source is never cut, the synthesised stand-in is shaped too); the REAL `PaintedActor` (a lunge reports itself with its reach, heft and the step's fastest frame; a hop reports its landing when it comes down and not when it is killed) and the presenter's cast hook. `npx tsc --noEmit` is clean for everything this lane touches (26 old `pause-living-portrait` errors remain, as in step 1). `node tools/orphans.mjs`: none of the new modules is an orphan.
+**Regression** (targeted, `--maxWorkers=2`; the full `npm test` was NOT run: 7.8 GB of RAM was free, under the 12 GB rule): `tests/unit/engine/`, `r38-*`, `r391-*`, `flash-*`, `fx-*`, `contact-shadow`, `chain-victory`, `audio-*` and the feel files, 205 files. Results: every engine, r38, r391, flash and fx file passes (119 files, 1,488 tests, with `docs/target/` checked out); the first run caught one real defect of mine (the run-in's `headPoint()` call threw on the test doubles of `r38-run-in-staging`; now `actorHeft`, which never throws), fixed and rerun. What failed at first was the sparse worktree, not the branch: this tree checks out only part of `docs/`. With `docs/target` and the `docs/audio` json and markdown checked out (a local sparse setting, not committed) `tests/unit/audio-*` is 828 passed and 2 failed, the two page tests that need mp3 sketches (`docs/audio/candidates/fb-0929`) this tree does not check out; `audio-manifest-io`'s two timing tests, which time out under load, passed on the rerun. None touches this lane's code.
+
+**The real game** (headless GPU Chromium, Vite on :5302 started and stopped by PID, one `RIG-RECORD` hold per job, 1280 x 720, real keys from the title through the chapter board, `?pack=demo`, the page clock stepped at an exact 60 Hz; every fight run twice per variant, the second time capturing, and the first headline blow fell on the same frame in both passes of all four runs; harness in `D:/Tools/pyrefly-scratch/2026-10-22/motion/feel/browser/job-clips.mjs` and `make-clips.mjs`, scratch, not committed):
+
+- **Clips**, `D:/Tools/pyrefly-scratch/2026-10-22/motion/feel/clips/` (9 MB): per chapter (`ch1` = Chapter I, `ch4` = Chapter IV) and window (`bighit` = the foe's first headline blow: Seymour Flux's Lance of Atrophy, Bahamut's Impulse; `party-attack` = the party's first Attack): `chN-<window>-today.mp4` and `chN-<window>-new.mp4` (1280 x 720, 60 fps, with the sound the game asked for in that window rendered offline from the shipped sprites over the chapter's battle theme, dry, at the game's mix; today = `?pack=demo&punch=today&hitstop=today&shadow=today&rumble=off&motionsfx=off`, new = `?pack=demo`), `chN-<window>-today-vs-new.mp4` (silent, today left, new right) and `...-quarter-speed.mp4`; `chN-timing.json` lists every sound with its time, every motion beat and the frame of the blow. Stills: `docs/screenshots/motion-feel/motion-sfx-ch{1,4}-{bighit,party-attack}-today-vs-new.jpg`; numbers: `docs/screenshots/motion-feel/motion-sfx-evidence.json`.
+- **The sounds fire on the beats.** Chapter I, Tidus: the swing at the lunge's first frame and the whoosh with it; the lunge's fastest approach frame is +84 ms (19 world units a second) and the whoosh's loudest moment is at +83 ms (1 ms apart). Seymour Flux's lunge: fastest at +66 ms, whoosh peak +103 ms (37 ms after: the cue is 22 percent lower for a boss, so its swell is longer than the wait, it starts at once and that is the limit). Chapter IV, Paine after her run in: fastest +68 ms, whoosh peak +83 ms. The first run read the fastest frame at 84 ms, not the 57 ms I had assumed from the classic curve (the smooth `reachOffset` step), so the code now says 0.19 of the move.
+- **Chapter IV in 27 s of the real fight** (ATB, three girls): 12 lunge whooshes, 17 dashes (the run in and the run home), 18 landing thuds, 7 cast rustles; never more than 2 motion sounds in 300 ms, none refused for being too close or too many. The first run (75 s) found that the life layer's turn-start weight shift (a hop of 3.5 percent of the figure) made a landing thud at every turn start; the threshold is now a fifth of a hop, and in the second run 23 of the 41 landing beats were that shift and all 23 were refused (`small`). (The commit message of that fix says 66 beats and 15 of them: the 15 were the beats the first run refused as too close together, not the turn-start ones; the numbers here are the right ones.)
+- **The party's attack in Chapter IV reads as one movement:** the run's whoosh at +88 ms, the landing thud and the greatsword swing and the strike's short whoosh together at +432 ms (as she arrives), the recorded hit at +784 ms, the run home's whoosh at +1,048 ms and its landing at +1,312 ms.
+- **0 console errors** in all four runs. Today's runs (`motionsfx=off`) planned and kept no motion beat at all (0 beats in 410 and 1,658 frames), which is the off switch working in the real game.
+- **Not seen in real play:** a smear (none exists in this tree), a critical or an Overdrive (the unit tests and the debug `punch()` cover those), Mega Flare.
+
+## What is [ours] and what is sourced
+
+Sourced: only the two chapters' ids and games (`data/encounters.ts`), that FFX-2 runs in and FFX does not (`research/ffx2-combat-core.md` section 1, D-354), the game tags of the library's cues (`sfxV2/cues.ts`), and the existing levels of the hits (`audio/sfxV2/parityTrims.ts`, the manifest). **Everything else is [ours]**: which cue stands for which beat, every pitch, volume, trim and fade, the strength and heft curves, the beat gaps (160, 200, 70, 100, 250 ms), the 3-in-300 ms cap, the 90 ms duck, the 0.2 landing threshold, `heftOfHeight`'s 1.8 and 4.4, the lunge's 0.19, the dash's 0.3 of its run, and the target levels (at least 6 dB under the hit's peak, 7 dB under its loudness, inside the music). No source describes a motion sound in either game.
+
+## What is NOT done
+
+- **The smear's whoosh is not wired**: this tree has no planned smear. The sound, the table and the planner exist and are tested through `motionBeat({kind:'smear'})`; the one call at integration is above.
+- **Under motion-core's curves the lunge and landing beats are lost until the calls above are added** (its strike and leap replace `lunge` and `hop`). Merging this branch alone loses nothing.
+- **Panning:** every sound is centred (the first-bank `whiff` carries its own left to right sweep). A pan from the figure's screen position is easy and not built.
+- **A thud on contact, on the KO fall or on the return home**: deliberately not added (see "Not reported today").
+- **A live key (F9) for the camera A/B**, **a per-game choice of sounds**, **the sounds' level in the booth's room**: his to say.
+- **The sounds themselves:** nobody here has heard them. The clips and `audition.html` are rendered without the game's hall send. No real pad, no 120 Hz monitor.
+- **The full `npm test`** (RAM) and **the critic's CHK-026 / CHK-027 and the audio checks** (`critic-plan --paths` says: DEEP review, a focused review of the candidate before the deploy and the deep review on the live build afterwards, because `AudioManager.ts`, `BattlePresenterSfx.ts`, `main.ts` and `motionSfxSink.ts` are shared systems; checks CHK-001, 002, 003, 006, 008, 009, 013, 015 to 017, 019 to 023, 026, 027 and B1). With every switch off the live game is unchanged, which is the argument for merging it dark.
+- **D: had 9.9 GB free when this step began (under the 12 GB rule) and 7.5 GB at the end**; this step added about 0.7 MB to the repo and removed its own work files (about 100 MB) as it went.
+
+## Open questions (for the driver, not for Bailey tonight)
+
+1. **Per-game sounds.** The library and the sources give no game difference for a whoosh, a thud or cloth, so both games share one set. Should FFX-2 (pink, quick) get a higher, shorter whoosh and FFX (gold, calm) a lower one? `MOTION_GAME_OVERRIDES` takes it as data.
+2. **Which A or B on the audition page.** The B candidates are the one other cue the library offers for each beat at the same measured level; his ear decides, and a pick is one table row.
+3. **Landing thuds on the victory hop.** `PaintedActor`'s victory hop (0.13 of the figure, staggered per fighter) makes a quiet thud under the fanfare for each of the three. Wanted? (Motion-core's own victory moments change that beat anyway.)
+4. **A thud at contact** (the planted foot of the strike's 5 percent contact squash, motion-core): left out so the hit sound is not muddied; say if he wants it.
+5. **The boss whoosh is 37 ms behind its fastest frame in Chapter I** (below the usual 45 ms audio-lead tolerance but the one place it is not on the frame); a smaller pitch drop for bosses (now 22 percent) would pull it in.
+6. **In Chapter IV's Active ATB a basic attack makes four or five motion sounds in a second** (the run, the landing, the strike's whoosh, the run home, its landing). They are 8 or more dB under the hits; if it is too busy, the first thing to cut is the run home's whoosh and landing.
