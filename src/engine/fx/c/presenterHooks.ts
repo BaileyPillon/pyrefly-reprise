@@ -15,7 +15,7 @@ import type { EventCtx } from '../../BattlePresenterEvents.ts';
 import { hitPower } from '../../motion/DemoHit.ts';
 import { demoMotionOn } from '../../motion/DemoMotion.ts';
 import { rumbleHit, rumbleOpen, rumbleWin } from '../../feel/FeelHooks.ts'; // the motion program's gamepad rumble (`?rumble=`): a no-op unless switched on in a demo chapter
-import { punchMode, stopMode } from '../../feel/FeelSwitch.ts';
+import { punchMode, rumbleOn, stopMode } from '../../feel/FeelSwitch.ts';
 import { isBossBigMove } from '../../feel/HitStopShort.ts';
 import { bigBlowClaimed } from '../../feel/BlowClaim.ts';
 import { isFfx2, menuBlocks } from '../../KeySlots.ts';
@@ -146,10 +146,13 @@ export function fxHit(
   heavy: boolean,
 ): { waitMs: number; shook: boolean } | null {
   const latest = marks.get(ctx);
-  // The action this blow belongs to: its source's own latest action, else the latest of all when that is the source's (or the blow names no source).
-  const mark = (event.sourceId !== undefined ? bySource.get(ctx)?.get(event.sourceId) : undefined) ?? (latest !== undefined && (event.sourceId === undefined || event.sourceId === latest.actorId) ? latest : undefined);
-  const bossBig = mark?.bossBig === true;
   const feel = punchMode() !== 'today' || stopMode() !== 'today'; // only under the motion program's switches does `big` follow the blow's own action; today it is the latest opened, as it always was
+  // A blow that names no source (a poison tick, an end-of-turn effect) belongs to no action: under the motion program's switches it takes none of the latest action's facts (integration review m1: a poison
+  // tick on Seymour after Lance of Atrophy was read as the Lance's blow and got a second stop and pulse). With every switch at today the latest action is read as it always was.
+  const ownerless = event.sourceId === undefined && (feel || rumbleOn());
+  // The action this blow belongs to: its source's own latest action, else the latest of all when that is the source's (or the blow names no source).
+  const mark = ownerless ? undefined : ((event.sourceId !== undefined ? bySource.get(ctx)?.get(event.sourceId) : undefined) ?? (latest !== undefined && (event.sourceId === undefined || event.sourceId === latest.actorId) ? latest : undefined));
+  const bossBig = mark?.bossBig === true;
   const bigMark = feel ? mark : latest;
   const fxBig = bigBlowClaimed(event); // the new effects' beat named this an Overdrive's opening blow or a boss's headline blow: it takes the finisher's pulse, stop and punch once (`feel/BlowClaim.ts`)
   rumbleHit(

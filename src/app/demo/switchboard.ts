@@ -42,7 +42,7 @@ export function tidusAsked(search: string, cookie: string): 't1' | 't2' {
 }
 
 const CSS = `
-.sb{position:fixed;left:8px;bottom:8px;z-index:998;pointer-events:none;max-width:min(96vw,1180px);padding:4px 9px 5px;border-radius:4px;
+.sb{position:fixed;right:8px;top:8px;z-index:998;pointer-events:none;max-width:min(46vw,760px);text-align:right;padding:4px 9px 5px;border-radius:4px;
 background:rgba(8,10,18,.66);color:#e9e6dc;font:clamp(11px,.95vh,15px)/1.45 ui-monospace,Consolas,'Cascadia Mono',monospace;white-space:normal;letter-spacing:.01em}
 .sb[hidden]{display:none}.sb b{color:#e3b94a;font-weight:600}.sb i{font-style:normal;opacity:.5}.sb span{white-space:nowrap}
 .sb .sb-new{color:#9fe2b0}.sb .sb-hit{background:#e3b94a;color:#10121a;border-radius:3px;padding:0 3px}.sb .sb-note{display:block;opacity:.7}
@@ -140,14 +140,18 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     flash(s.name);
   };
 
+  // In the CAPTURE phase and swallowed: the pause screen's keyboard claim stops a key before any bubble listener sees it (review m2: the keys did nothing under the pause screen), and a key the
+  // game never hears must not turn the pad's hints and rumble over to the keyboard (review m4: pressing 4 for the rumble then silenced it until the next pad press). The game uses none of these keys.
   const onKey = (e: KeyboardEvent): void => {
-    if (e.repeat || e.ctrlKey || e.altKey || e.metaKey) return;
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
     const t = e.target as HTMLElement | null;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
     const code = normaliseCode(e.code);
-    if (code === HIDE_CODE || code === MASTER_CODE || SWITCHES.some((s) => s.code === code)) press(code);
+    if (!(code === HIDE_CODE || code === MASTER_CODE || SWITCHES.some((s) => s.code === code))) return;
+    e.stopImmediatePropagation();
+    if (!e.repeat) press(code);
   };
-  window.addEventListener('keydown', onKey);
+  window.addEventListener('keydown', onKey, true);
   const tick = setInterval(render, 700); // the chapter note follows the fight
   render();
 
@@ -162,7 +166,7 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     text: () => el.textContent ?? '',
     press,
     dispose: () => {
-      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('keydown', onKey, true);
       clearInterval(tick);
       if (flashTimer) clearTimeout(flashTimer);
       el.remove();

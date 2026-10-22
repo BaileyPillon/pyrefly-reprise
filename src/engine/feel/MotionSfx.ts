@@ -69,7 +69,8 @@ export const DUCK_WINDOW_MS = 90;
 export const DUCK = 0.5;
 /**
  * A landing smaller than this share of a hop is not a landing: the turn-start weight shift is a hop of 3.5 percent of the figure (`PaintedActor.playCue('step')`, a strength of 0.106 at any size),
- * found by playing Chapter IV, where it made a thud at every turn start. The smallest real landing (a dodge of 0.18 on a 1.8 figure) is 0.30.
+ * found by playing Chapter IV, where it made a thud at every turn start. The smallest real landing (a dodge of 0.18 on a 1.8 figure) is 0.30. Under the curves the same weight shift is a small leap
+ * whose landing squash is 0.011 (`PaintedActor.playCue('step')`: a strength of 0.18, under this floor; the integration review found the thud back at 10 of 10 turn starts when it was 0.015, a strength of 0.25).
  */
 export const MIN_LAND_STRENGTH = 0.2;
 

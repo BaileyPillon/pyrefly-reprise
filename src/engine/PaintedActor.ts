@@ -1952,7 +1952,8 @@ export class PaintedActor extends Group {
       case 'step':
         // Their turn: the weight coming up on to the front foot. Motion pass (lane "core"): with the new curves it is a small leap (a settle and a landing squash); the docs are silent on
         // either game's turn-start, so it is the same neutral weight shift for both (an open question in the handoff).
-        void (curvesOn() ? this.leap(this.worldHeight * 0.03, 340, { anticipation: 0.1, crouch: 0.012, stretch: 0.012, land: 0.015, landMs: 160, apex: 0.5 }) : this.hop(this.worldHeight * 0.035, 300));
+        // The landing squash is 0.011, not 0.015: its sound strength (land / 0.06 = 0.18) must stay under `MotionSfx.MIN_LAND_STRENGTH` (0.2), or the weight shift thuds at every turn start (integration review M1).
+        void (curvesOn() ? this.leap(this.worldHeight * 0.03, 340, { anticipation: 0.1, crouch: 0.012, stretch: 0.012, land: 0.011, landMs: 160, apex: 0.5 }) : this.hop(this.worldHeight * 0.035, 300));
         return;
       case 'flinch':
         // Only when something set `hurt` directly; `recoil` brings its own knock-back.

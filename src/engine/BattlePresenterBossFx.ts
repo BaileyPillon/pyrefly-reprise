@@ -62,6 +62,14 @@ const BIG_BLOWS: Readonly<Record<string, 'first' | 'last'>> = Object.freeze({
 });
 
 /**
+ * Big blows whose stop, punch and pulse feel's OWN rules already give, once: Mega Flare is a Special (feel stops, punches and pulses its LAST blow, 67 ms and a 420 ms swell) and Total Annihilation is a headline
+ * move (feel stops and pulses its FIRST blow, 50 ms). The beat still fires for them (the fx lane's hooks see it) but does NOT claim the blow: a claim made the same move stop, punch and swell a second time (integration
+ * review M2: Mega Flare froze 67 ms on its first blow and again on its last, 484 ms apart, and the pad swelled twice). Cross Cleave is not a Special and feel stops its first blow at 50 ms, so its claim (67 ms,
+ * the finisher's pulse) is the one stop; an Overdrive's first blow stays claimed (disclosed, `docs/handoff/demo-motion-int.md`).
+ */
+const FEEL_STOPS_IT: ReadonlySet<string> = new Set(['total-annihilation', 'mega-flare', 'x2-bahamut-mega-flare']);
+
+/**
  * A status event of the action on screen: start its effect (if it is one no damage event starts) and wait for it to be seen starting (`STATUS_WAIT_MS`, no longer than its mark). `sourceId` is the event's own when the engine names it (FFX-2),
  * else the action on screen is used (FFX).
  */
@@ -137,6 +145,7 @@ export function bigBlow(ctx: EventCtx, event: Extract<BattleEvent, { type: 'dama
   if (lastBig.get(ctx) === key) return;
   lastBig.set(ctx, key);
   fxBeat(boss ? 'boss-big' : 'od-strike', a.actorId, { calm: calmFor(ctx) });
+  if (boss && a.abilityId !== undefined && FEEL_STOPS_IT.has(a.abilityId)) return; // feel's own rules stop and pulse this move once (`FEEL_STOPS_IT`): no claim, no second one
   claimBigBlow(event); // the stop, the punch and the pulse for this beat are the feel rules' (`feel/BlowClaim.ts`): this blow is read as the finisher of a big action, once
 }
 
