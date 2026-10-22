@@ -4,8 +4,8 @@
  * Hold **Home** (keyboard) or **Select and Start together** (gamepad) for 1.5 seconds, from any screen, and the game returns to the title for the next visitor. A small ring fills while it is held, so a
  * brush of the key does nothing and a visitor never meets it by accident: letting go at any moment before the ring closes cancels it.
  *
- * What a reset is: the visitor's run state is cleared (the save's chapter records, flags and unlocks, the demo's seed rotation, the board's memory of the last fight; **the settings stay, and with them the
- * title-art pick**), the music is faded, the screen goes to black, and the page reloads on the same address. A reload and not a soft jump to the title, on purpose: it is the one way that stops the fight, every
+ * What a reset is: the visitor's run state is cleared (the save's chapter records, flags and unlocks, the demo's seed rotation, the board's memory of the last fight) **and the settings go back to the
+ * demo's defaults** (release 62, decision 173i: volumes, the look (VISUAL STYLE), the title-art pick, and every other OPTIONS row: a visitor's change of any of them does not reach the next visitor; release 61 kept them), the music is faded, the screen goes to black, and the page reloads on the same address. A reload and not a soft jump to the title, on purpose: it is the one way that stops the fight, every
  * timer, the audio graph, a half-loaded battle, an open pause menu or a story scene all at once and leaves nothing behind, and a booth tab runs all day (a hundred visitors), so a reset that also hands back every
  * texture and shader program is worth the two seconds. `?demo=1` is kept in the tab's `sessionStorage` (`demoMode.ts`), so the reload comes back in demo mode, on the title.
  *
@@ -87,15 +87,14 @@ export interface KeyStore {
 }
 
 /**
- * Clear what one visitor left behind and nothing else. The save keeps its settings (volume, text size, the title-art pick, the HUD switches: all of `Settings`) and loses its chapter records, flags, unlocks
- * and onboarding memory; the tab's seed rotation and board memory are forgotten, so the next visitor's first Seymour fight is seed 7 again (the cleanest, `demoMode.ts`) and the picker opens on its first card.
+ * Clear what one visitor left behind. The save loses its chapter records, flags, unlocks and onboarding memory **and its settings** (release 62, decision 173i: "the hold-reset also restores the demo's default
+ * settings"): `SaveStore.reset()` is a fresh save, so every setting is `defaultSettings()` again (volumes 0.8 / 0.7 / the SFX default / voice 0.9 and on, VISUAL STYLE hd2d, TITLE ART The Echo and "not picked", FFX-2
+ * ATB Wait, text speed, REDUCE MOTION from the system's own preference, and the rest), on disk as in memory. Nothing is pushed to the mixer here on purpose: the sound is already fading out and the page reloads
+ * next, and a volume that jumped to its default under a fading track would be a burst at the booth; the reload reads the defaults and applies them as any start does. The tab's seed rotation and board memory are
+ * forgotten, so the next visitor's first Seymour fight is seed 7 again (the cleanest, `demoMode.ts`) and the picker opens on its first card.
  */
-export function clearVisitorState(save: Pick<SaveStore, 'snapshot' | 'reset' | 'setSettings'> | null, tab: KeyStore | null): void {
-  if (save) {
-    const settings = save.snapshot().settings;
-    save.reset();
-    save.setSettings(settings); // writes the kept settings onto a fresh save, through the store (applies them to the mixer and the comfort flags too)
-  }
+export function clearVisitorState(save: Pick<SaveStore, 'reset'> | null, tab: KeyStore | null): void {
+  save?.reset();
   if (tab) {
     try {
       const doomed: string[] = [];
@@ -114,7 +113,7 @@ export function clearVisitorState(save: Pick<SaveStore, 'snapshot' | 'reset' | '
 // ----------------------------------------------------------------- the reset
 
 export interface ResetDeps {
-  save: Pick<SaveStore, 'snapshot' | 'reset' | 'setSettings'> | null;
+  save: Pick<SaveStore, 'reset'> | null;
   tab: KeyStore | null;
   /** Fade the music out (ms). */
   fadeAudio(ms: number): void;
@@ -129,7 +128,7 @@ export interface ResetDeps {
 /** How long the fade to black takes before the page reloads. */
 export const RESET_FADE_MS = 280;
 
-/** The reset itself: clear the visitor's run, fade the sound and the picture, halt the game, reload. Resolves just before the reload. */
+/** The reset itself: clear the visitor's run and settings, fade the sound and the picture, halt the game, reload. Resolves just before the reload. */
 export async function performDemoReset(deps: ResetDeps): Promise<void> {
   clearVisitorState(deps.save, deps.tab);
   deps.fadeAudio(RESET_FADE_MS / 1000);
