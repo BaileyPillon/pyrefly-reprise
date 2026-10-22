@@ -265,7 +265,7 @@ describe('4. LookLiving', () => {
     expect(Number.isFinite(u.uBeamA.value.x)).toBe(true);
     expect(u.uBeamB.value.y).toBeGreaterThan(u.uBeamB.value.x);
     expect(u.uBeamB.value.z).toBeGreaterThan(0);
-    expect(u.uBeamB.value.w).toBeCloseTo(2.7 / 900, 6);
+    expect(u.uBeamB.value.w).toBeCloseTo(ROOM_LIVING['bevelle-underground']!.beam!.size / 900, 6);
     expect(u.uLamp.value.x).toBeGreaterThan(0);
     expect(u.uLiv.value.w).toBeCloseTo(ROOM_LIVING['bevelle-underground']!.lamps!.amp, 6); // the flicker's depth
     expect(L.stats.on).toBe(true);
