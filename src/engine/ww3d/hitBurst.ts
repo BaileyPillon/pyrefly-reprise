@@ -146,10 +146,10 @@ export function puffLayout(count: number, seed: number): Puff[] {
     const u = (k: number): number => unit(seed, i * 7 + k);
     const across = count > 1 ? i / (count - 1) - 0.5 : 0; // -0.5 .. 0.5
     out.push({
-      dx: across * 1.5 + (u(1) - 0.5) * 0.25,
+      dx: across * 1.3 + (u(1) - 0.5) * 0.25,
       dy: -0.3 + u(2) * 0.3,
       rise: 0.9 + u(3) * 0.6,
-      size: 0.34 + u(4) * 0.18,
+      size: 0.26 + u(4) * 0.14,
       delay: i * 0.03 + u(5) * 0.02,
       life: PUFF_LIFE.min + u(6) * (PUFF_LIFE.max - PUFF_LIFE.min),
       spin: (u(7) < 0.5 ? -1 : 1) * (1.2 + u(0) * 1.4),

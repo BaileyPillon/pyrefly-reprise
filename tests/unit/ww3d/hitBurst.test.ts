@@ -181,7 +181,7 @@ describe('the smoke', () => {
       expect(x.life).toBeGreaterThanOrEqual(PUFF_LIFE.min);
       expect(x.life).toBeLessThanOrEqual(PUFF_LIFE.max);
       expect(x.size).toBeGreaterThan(0.2);
-      expect(x.size).toBeLessThan(0.7);
+      expect(x.size).toBeLessThan(0.5);
       expect(x.rise).toBeGreaterThan(0.5);
       expect(Math.abs(x.spin)).toBeGreaterThan(0.5);
     }
