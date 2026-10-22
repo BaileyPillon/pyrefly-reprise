@@ -32,7 +32,7 @@ export function frameTimeOf(dts, longMs = 34) {
  * @param {number} battleSeconds seconds a battle was the screen being played (not paused)
  * @param {object} cfg   the policy's `continuity` block
  */
-export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg, frameTime = null }) {
+export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], smear = null, battleSeconds, cfg, frameTime = null }) {
   const counted = swaps.filter((s) => s.counted);
   const minutes = battleSeconds / 60;
   // CHK-026 judges a change of POSE: a swap between two dresspheres or two forms (`costume`) and a swap between two pose names that draw one painting
@@ -121,6 +121,9 @@ export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg,
       stagedChanges: new Set(stagedSwaps.map((s) => `${s.figure}|${s.staged.seq}`)).size, stagedSteps: stagedSwaps.length,
       stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length,
       jerksCovered: coveredJerks.length, worstCoveredJerkPx: round(coveredJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
+      // motion pass (lane "core", step 2): planned smears (continuity-smear.mjs). The cuts the engine logged, the swaps that matched one, the snaps and the swap jerks they excused; a chapter summarised before has none.
+      smearsPlanned: smear ? smear.planned : 0, smearSwaps: smear ? smear.matched : 0, smearSnapsExcused: smear ? smear.snapsExcused : 0,
+      jerksSmeared: smearedJerks.length, worstSmearedJerkPx: round(smearedJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
     },
   };
   // W4: the frame-time number, apart from the jerks: how the frame clock itself ran (percentiles of the time between drawn frames of the recording). It is the harness's own
@@ -165,6 +168,7 @@ export function verdicts(s, cfg, run = {}) {
   const motionNotes = why([
     hasSplit && !dashesFail && dashOver && `${dashOver} mid-move dash(es) of ${cfg.motion.jerkFailPx} px or more are REPORTED, not gated (worst ${s.motion.dashesWorstPx} px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them)`,
     hasSplit && (s.motion.swapJerksLongFrame || s.motion.jerksLongFrame) && `${s.motion.jerksLongFrame} of ${s.motion.jerks} jerk(s) fell on a frame of more than ${cfg.motion.longFrameMs ?? 34} ms (${s.motion.swapJerksLongFrame} of the ${s.motion.swapJerks} at a swap; ${s.motion.swapJerksSteadyOverFail} of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them`,
+    s.motion.smearSwaps && `${s.motion.smearSwaps} of ${s.motion.smearsPlanned} cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: ${s.motion.smearSnapsExcused} snap(s) not counted, ${s.motion.jerksSmeared} swap jerk(s) (worst ${s.motion.worstSmearedJerkPx} px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before`,
     s.motion.jerksCovered && `${s.motion.jerksCovered} jerk(s) (worst ${s.motion.worstCoveredJerkPx} px) happened under the Save Sphere's wash and are not counted (continuity.wash in the policy; they are listed in the report)`,
   ]);
   const result = (reasons) => (unverified.length ? 'UNVERIFIED' : reasons.length ? 'FAIL' : 'PASS');

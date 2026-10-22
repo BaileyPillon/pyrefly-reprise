@@ -251,6 +251,7 @@ export function aggregate(results, cfg) {
     heldSwaps: sum((s) => s.motion.heldSwaps ?? 0), longestHeldFrames: max((s) => s.motion.longestHeldFrames ?? 0),
     stagedChanges: sum((s) => s.motion.stagedChanges ?? 0), stagedSteps: sum((s) => s.motion.stagedSteps ?? 0),
     stagedSnapsExcused: sum((s) => s.motion.stagedSnapsExcused ?? 0), jerksAtStaged: sum((s) => s.motion.jerksAtStaged ?? 0),
+    smearsPlanned: sum((s) => s.motion.smearsPlanned ?? 0), smearSwaps: sum((s) => s.motion.smearSwaps ?? 0), smearSnapsExcused: sum((s) => s.motion.smearSnapsExcused ?? 0), jerksSmeared: sum((s) => s.motion.jerksSmeared ?? 0), worstSmearedJerkPx: max((s) => s.motion.worstSmearedJerkPx ?? 0), // motion pass, step 2: planned smears
   };
   // W4: the readings from the pixels, the CHK-027 split and the frame-time number. A chapter summarised before them has none of these (counted as 0, and a run of such chapters keeps the earlier verdicts).
   const defined = (f) => ok.some((r) => f(r.summary) !== undefined);

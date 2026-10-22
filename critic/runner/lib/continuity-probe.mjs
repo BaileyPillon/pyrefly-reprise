@@ -380,8 +380,17 @@ export function createProbe(cfg, env) {
   S.start = () => { if (S.running) return false; S.running = true; S.stopping = false; S.loopStarted = true; S.loopDone = false; loop(); return true; };
   S.finish = () => new Promise((resolve) => { if (S.loopDone || !S.loopStarted) return resolve(); S.idle = resolve; S.running = false; });
   S.drain = (max) => { const out = S.records.splice(0, max); return { records: out, left: S.records.length }; };
+  // Motion pass (lane "core", step 2): the cuts the engine planned as a smear (window.__pyrefly.smearLog(), engine/motion/SmearLog.ts), in this probe's clock. A build without the log has none.
+  // A failure here never voids the probe's verdicts (it is not in `errors`): the harness then excuses nothing.
+  const readSmears = () => {
+    try {
+      const f = win.__pyrefly && win.__pyrefly.smearLog;
+      if (typeof f !== 'function') return [];
+      return f().map((e) => ({ actor: e.actor, from: e.from, to: e.to, style: e.style, kind: e.kind, cutMs: e.cutMs, strength: e.strength, flash: e.flash, overlap: e.overlap, anchorDistance: e.anchorDistance, speed: e.speed, at: R1(e.at - S.t0), cutAt: R1(e.cutAt - S.t0) }));
+    } catch (e) { return []; }
+  };
   S.meta = () => ({
-    version: S.version, figs: S.figs, poses: S.poses, swaps: S.swaps, logEvents: S.logEvents, view: S.view, errors: S.errors,
+    version: S.version, figs: S.figs, poses: S.poses, swaps: S.swaps, logEvents: S.logEvents, view: S.view, errors: S.errors, smears: readSmears(),
     wash: S.wash ? { selector: S.wash.selector, alpha: S.wash.alpha, frames: S.wash.frames, maxOpacity: R3(S.wash.maxOpacity), error: S.wash.error } : null,
     stats: { frames: S.frames, battleFrames: S.battleFrames, battleSeconds: R3(S.battleMs / 1000), maxDtMs: R1(S.maxDt), slowFrames: S.slowFrames, fps: S.battleMs > 0 ? R1((S.battleFrames * 1000) / S.battleMs) : null, copyMsMean: S.copies ? R3(S.copyMs / S.copies) : null },
     strips: S.strips.map((s) => ({ id: s.id, kind: s.kind, fi: s.fi, n: s.n, first: s.first, crop: s.crop, ring: s.ring, cell: s.cell, view: s.view, meta: s.meta, todo: s.todo, have: s.frames.filter(Boolean).length, length: s.frames.length })),
