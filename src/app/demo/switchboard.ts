@@ -42,7 +42,7 @@ export function tidusAsked(search: string, cookie: string): 't1' | 't2' {
 }
 
 const CSS = `
-.sb{position:fixed;left:8px;bottom:8px;z-index:2147483000;pointer-events:none;max-width:min(96vw,1180px);padding:4px 9px 5px;border-radius:4px;
+.sb{position:fixed;left:8px;bottom:8px;z-index:998;pointer-events:none;max-width:min(96vw,1180px);padding:4px 9px 5px;border-radius:4px;
 background:rgba(8,10,18,.66);color:#e9e6dc;font:clamp(11px,.95vh,15px)/1.45 ui-monospace,Consolas,'Cascadia Mono',monospace;white-space:normal;letter-spacing:.01em}
 .sb[hidden]{display:none}.sb b{color:#e3b94a;font-weight:600}.sb i{font-style:normal;opacity:.5}.sb span{white-space:nowrap}
 .sb .sb-new{color:#9fe2b0}.sb .sb-hit{background:#e3b94a;color:#10121a;border-radius:3px;padding:0 3px}.sb .sb-note{display:block;opacity:.7}
