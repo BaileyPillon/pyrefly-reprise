@@ -1,6 +1,6 @@
 """clips.py : the motion clips of a party rig, from the recorder's REAL-battle frames: A the painting set the game draws today (rig off) | B the rig (rig on), each panel following its own figure, 60 fps mp4.
 
-    D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/lane/party/clips.py --label tidus --on <rec>/motion --off <rec>/motion-off [--hurt-on <rec>/hurtko --hurt-off <rec>/hurtko-off] --out <dir> [--only idle,attack,...] [--size 800,860]
+    D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/lane/party/clips.py --label tidus --on <rec>/motion --off <rec>/motion-off [--vic-on <rec>/motion] [--hurt-on <rec>/hurtko --hurt-off <rec>/hurtko-off] --out <dir> [--only idle,attack,...] [--size 800,860]
 
 Segments (from `motion/timeline.json` marks, `play-motion.mjs`): idle (idle-start to idle-end), attack / item / cast (its menu opening to the end of the action), victory (the pose and 200 frames on); from the `hurtko` window-log:
 hurt (60 frames before the first hit that lands to 110 after) and ko (90 before the KO beat to 150 after). Each recording is cut on ITS OWN marks, so a difference in timing between the two shows. A panel is centred on the actor's
@@ -154,11 +154,19 @@ def main():
     cut("idle", recs, both("idle-start", "idle-end"), H + "IDLE (breathing and sway as the game runs them), 60 fps")
     for turn in ("attack", "item", "cast"):
         cut(turn, recs, both(f"{turn}-menu", f"{turn}-end", 15, 0), H + f"{turn.upper()} from the menu, the real battle, 60 fps")
+    # the victory: from the full run's marks, or (--vic-on <rec dir>) from a victory-only run of the rig (MOTION_TURNS=none) when the full run's victory did not land
+    vrec = recs
     w = [None, None]
     for i, k in enumerate(("off", "on")):
         v = next((x["n"] for x in m(k) if x["name"] == "victory-pose"), None)
         w[i] = None if v is None else (v - 90, v + 220)
-    cut("victory", recs, w, H + "VICTORY (the last blow, then the pose), the real battle, 60 fps")
+    if opt("--vic-on"):
+        von = pathlib.Path(opt("--vic-on"))
+        vt = json.loads((von / "timeline.json").read_text())["marks"]
+        v = next((x["n"] for x in vt if x["name"] == "victory-pose"), None)
+        vrec = [recs[0], (titles[1], von / "frames", centre_track(von))]
+        w[1] = None if v is None else (v - 90, v + 220)
+    cut("victory", vrec, w, H + "VICTORY (the last blow, then the pose), the real battle, 60 fps")
     if opt("--hurt-on") and opt("--hurt-off"):
         hon, hoff = pathlib.Path(opt("--hurt-on")), pathlib.Path(opt("--hurt-off"))
         hr = [(titles[0], hoff / "frames", centre_track(hoff)), (titles[1], hon / "frames", centre_track(hon))]
