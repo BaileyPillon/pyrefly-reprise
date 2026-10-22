@@ -30,6 +30,7 @@
 import type { BattleEvent, CombatantId } from '../../battle/common/types.ts';
 import type { EventCtx } from '../BattlePresenterEvents.ts';
 import type { ActionStartEvent } from '../BattlePresenterMotion.ts';
+import { freshBlowHeld } from '../BattlePresenterBossFx.ts';
 import { actionOfBlow } from '../BattlePresenterSpellFx.ts';
 import { motionAllowed } from './MotionGate.ts';
 
@@ -114,6 +115,10 @@ function planOf(ctx: EventCtx, event: Blow): Plan | undefined {
  */
 export function blowHeld(ctx: EventCtx, event: BattleEvent): boolean {
   if (event.type !== 'damage' && event.type !== 'miss') return false;
+  if (freshBlowHeld(ctx, event)) { // the new effects' boss moves hold their numeral for their own mark, shot or no shot (lane "fx", review M1; inert with the new effects off)
+    held.add(event);
+    return true;
+  }
   const plan = planOf(ctx, event);
   if (!plan) return false;
   if (plan.state === 'planned') {

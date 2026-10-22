@@ -113,7 +113,7 @@ export class CrispRig {
     let supersampled = c.ss > 1.001;
     if (supersampled) {
       ss.setRing(c.ssRing);
-      ss.setScale(Math.max(1.05, c.ss * this.scaleCut), this.gl.capabilities.maxTextureSize);
+      ss.setScale(Math.max(Math.min(c.ss, 1.05), c.ss * this.scaleCut), this.gl.capabilities.maxTextureSize); // the guard's cut never takes a rung below 1.05 (an address override under that is kept as it is)
       if (ss.effective <= 1.001) {
         // The buffer is too big for a supersample worth drawing (an 8K window; a GPU with a small texture limit): draw today's frame, with its one AA pass,
         // rather than a frame that has neither the supersample nor an anti-aliasing pass (`aaPre` is off on the supersampled rungs).

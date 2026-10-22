@@ -23,7 +23,8 @@ const ORDER = 1000;
 const TRAIL = 14;
 const SPARKS = 18;
 const DABS = 6;
-const HIST_STEP = 0.011;
+/** The comet trail's points are this far apart in time at every frame rate (review m1): 14 gaps are 0.233 s of the orb's travel, the length the trail has at 60 Hz. */
+const TRAIL_STEP = 1 / 60;
 
 const COLORS: Readonly<Record<string, { halo: number; core: number; spark: number }>> = {
   heal: { halo: 0x3fe27a, core: 0xf2fff4, spark: 0xb8ffcc },
@@ -117,10 +118,12 @@ export class OrbFlourish {
   private readonly sparks: Spark[] = [];
   private readonly dabs: Sprite[] = [];
   private readonly hist: Vector3[] = [];
+  /** The orb's place at each frame of the flight (newest last), and the flight's clock in seconds: the trail's points are read off it at fixed ages. */
+  private readonly track: Array<{ t: number; v: Vector3 }> = [];
+  private clock = 0;
   private readonly burstAt = new Vector3();
   private readonly rand = lcg(0x7e57);
   private prev = 'rest';
-  private acc = 0;
   private burstT = -1;
   private tone = 'heal';
   private nSparks = SPARKS;
@@ -203,22 +206,47 @@ export class OrbFlourish {
     const ms = dt * 1000;
     // The comet trail: FFX's orb only (the spark has none, by its source).
     if (phase === 'flight' && tone !== 'spark') {
-      this.acc += dt;
-      if (this.acc >= HIST_STEP || this.hist.length === 0) {
-        this.acc = 0;
-        const at = fx.orbAt;
-        const v = this.hist.length >= TRAIL + 1 ? this.hist.pop()! : new Vector3();
-        this.hist.unshift(v.set(at.x, at.y, at.z));
-      }
+      this.clock += dt;
+      this.record(fx.orbAt);
+      this.layTrail();
       this.drawTrail(tone);
-    } else if (this.hist.length) {
+    } else if (this.hist.length || this.track.length) {
       this.hist.length = 0;
+      this.track.length = 0;
+      this.clock = 0;
       for (const s of this.trail) s.visible = false;
     }
     if ((this.prev === 'flight' || this.prev === 'sparkle') && phase === 'burst') this.beginBurst(new Vector3(fx.orbAt.x, fx.orbAt.y, fx.orbAt.z), tone);
     this.prev = phase;
     if (this.burstT >= 0) this.drawBurst(ms);
     this.group.visible = this.hist.length > 0 || this.burstT >= 0;
+  }
+
+  /** This frame's place of the orb (the oldest frame nothing reads any more is dropped and its slot reused). */
+  private record(at: { x: number; y: number; z: number }): void {
+    const old = this.track.length > 2 && this.track[1]!.t <= this.clock - TRAIL * TRAIL_STEP ? this.track.shift()! : { t: 0, v: new Vector3() };
+    old.t = this.clock;
+    old.v.set(at.x, at.y, at.z);
+    this.track.push(old);
+  }
+
+  /** The trail's points: the orb's place `i * TRAIL_STEP` seconds ago (between the two frames either side of that time), as far back as the flight has lasted. */
+  private layTrail(): void {
+    const tr = this.track;
+    let j = tr.length - 1;
+    let n = 0;
+    for (let i = 0; i <= TRAIL; i++) {
+      const t = this.clock - i * TRAIL_STEP;
+      if (t < tr[0]!.t) break;
+      while (j > 0 && tr[j]!.t > t) j--;
+      const a = tr[j]!;
+      const b = tr[j + 1];
+      const v = (this.hist[n] ??= new Vector3());
+      if (b && b.t > a.t) v.lerpVectors(a.v, b.v, (t - a.t) / (b.t - a.t));
+      else v.copy(a.v);
+      n++;
+    }
+    this.hist.length = n;
   }
 
   private drawTrail(tone: string): void {
@@ -283,6 +311,8 @@ export class OrbFlourish {
   hide(): void {
     this.burstT = -1;
     this.hist.length = 0;
+    this.track.length = 0;
+    this.clock = 0;
     this.prev = 'rest';
     this.group.visible = false;
     for (const o of this.group.children) o.visible = false;

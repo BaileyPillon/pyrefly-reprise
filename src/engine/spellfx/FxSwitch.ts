@@ -14,7 +14,7 @@
  * pass through it unnoticed, and a list (`?fx=new,b`) feeds both. Same reading as `motion/CurvesSwitch.ts` (lane "core") and `feel/FeelSwitch.ts` (lane "feel"): read once, A/B by the key
  * named beside the pack.
  *
- * Game case (AGENTS.md rule 14): the SWITCH is both games; WHICH look plays is the chapter's game (`fxGameOf`): FFX in Chapter I, FFX-2 in Chapter IV. Each effect says its own case.
+ * Game case (AGENTS.md rule 14): the SWITCH is both games; WHICH look plays is the chapter's game (`fxGame`): FFX in Chapter I, FFX-2 in Chapter IV. Each effect says its own case.
  *
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
@@ -69,6 +69,11 @@ export function fxChapter(): string | undefined {
 /** Is this chapter Chapter I or Chapter IV? */
 export function inFxDemoChapter(id: string | undefined): boolean {
   return id !== undefined && Object.prototype.hasOwnProperty.call(FX_DEMO_CHAPTERS, id);
+}
+
+/** The game of the running demo chapter (FFX in Chapter I, FFX-2 in Chapter IV), or undefined outside the demo chapters. */
+export function fxGame(): 'ffx' | 'ffx2' | undefined {
+  return inFxDemoChapter(chapter) ? FX_DEMO_CHAPTERS[chapter!] : undefined;
 }
 
 /** True when the new effects play now: switched on, in a demo chapter. */

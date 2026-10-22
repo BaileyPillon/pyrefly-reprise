@@ -17,7 +17,7 @@
  * });
  * ```
  *
- * The numbers per moment are this lane's DATA ({@link FX_BEATS}): they are Bailey's picks (the ranges above), not game data, and each hook is given only what its owner defines (a frame count, a
+ * The numbers per moment are this lane's DATA ({@link FX_BEATS}): the hit-stop frames and the punch fraction are inside Bailey's picks (the ranges above); the rumble strengths and lengths are [ours] (he picked "light, big moments only" and no number); none is game data, and each hook is given only what its owner defines (a frame count, a
  * fraction of the view, a strength 0 to 1). REDUCE MOTION turns off "shake, punch, freeze, rumble" and nothing else (Bailey's pick): {@link fxBeat} passes `calm` to the caller's own check and never
  * calls `hitStop`, `punch` or `rumble` when the flag is set, but still calls `anticipate` and `smear` (characters still move and smear).
  *
@@ -55,7 +55,7 @@ export interface FxBeatNumbers {
   rumbleMs: number;
 }
 
-/** Bailey's picks, as numbers: hit-stop 3 to 4 frames, punch 2 to 3 percent, rumble light. The Overdrive's opening moves the actor and rumbles lightly; its strike stops, punches and rumbles. */
+/** Bailey's picks, as numbers: hit-stop 3 to 4 frames, punch 2 to 3 percent, rumble "light, big moments only". The rumble strengths and lengths below are [ours] (he named no number). The Overdrive's opening moves the actor and rumbles lightly; its strike stops, punches and rumbles. */
 export const FX_BEATS: Readonly<Record<FxBeatKind, FxBeatNumbers>> = Object.freeze({
   'od-open': { move: true, hitStop: 0, punch: 0, rumble: 0.2, rumbleMs: 260 },
   'od-strike': { move: false, hitStop: 4, punch: 0.025, rumble: 0.5, rumbleMs: 320 },

@@ -78,6 +78,21 @@ export function tagCopy(r: RunningFx, o: CopyTagOpts, weaponOf: ((id: string) =>
   if (from && to) r.dir = from.x + from.w / 2 <= to.x + to.w / 2 ? 1 : -1;
 }
 
+/**
+ * A seed of each running copy's own, given the first time it is drawn and kept for its life (review m6): the painted finish's hand-drawn edges (rings, bands, decals) are seeded from it, so they do not
+ * change when another copy earlier in the frame's list ends. Per layer, so a run draws the same every time.
+ */
+export class CopySeeds {
+  private readonly seeds = new WeakMap<RunningFx, number>();
+  private next = 0;
+
+  of(r: RunningFx): number {
+    let s = this.seeds.get(r);
+    if (s === undefined) this.seeds.set(r, (s = ++this.next));
+    return s;
+  }
+}
+
 /** Configure the frame's list for one running copy: the painted finish, the guard's share of particles and trails (the phone tier's 0.6 on the trails), the copy's inputs and its seed. */
 export function configureList(out: FxDrawList, r: RunningFx, share: { particles: number; trails: number }, tier: number, seed: number): void {
   out.dens = r.fresh ? r.dens * share.particles : r.dens;

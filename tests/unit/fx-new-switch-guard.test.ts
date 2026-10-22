@@ -200,12 +200,28 @@ describe('which weapon a striker swings (for the hit sparks)', () => {
   });
 });
 
+describe('the buff spells\' ids with the switch off (review m4)', () => {
+  it('resolve exactly as they did before the buffs existed: FFX Haste is a heal (Cure), every other buff row is the bloom', () => {
+    setFxMode('today');
+    setFxChapter('seymour-flux');
+    expect(resolveAbilityFx('haste', 'ffx')).toBe('cure');
+    expect(resolveAbilityFx('hastega', 'ffx')).toBe('cure');
+    for (const id of ['shell', 'protect', 'reflect', 'dispel']) expect(resolveAbilityFx(id, 'ffx')).toBe('bloom');
+    for (const id of ['x2-shared-haste', 'x2-shared-hastega', 'x2-white-mage-shell', 'x2-white-mage-protect', 'x2-white-mage-reflect', 'x2-white-mage-dispel']) expect(resolveAbilityFx(id, 'ffx2')).toBe('bloom');
+    setFxMode('new'); // in a chapter that is not a demo chapter the switch is off too
+    setFxChapter('evrae');
+    expect(resolveAbilityFx('haste', 'ffx')).toBe('cure');
+  });
+});
+
 describe('the buff spells\' ids', () => {
   it('Haste, Shell, Protect, Reflect and Dispel have effect ids in both games and are new-only', () => {
     for (const id of BUFF_FX_IDS) {
       expect(SPELL_FX_IDS).toContain(id);
       expect(FRESH_ONLY_FX.has(id)).toBe(true);
     }
+    setFxMode('new');
+    setFxChapter('seymour-flux');
     expect(resolveAbilityFx('haste', 'ffx')).toBe('haste');
     expect(resolveAbilityFx('hastega', 'ffx')).toBe('haste');
     expect(resolveAbilityFx('shell', 'ffx')).toBe('shell');

@@ -43,8 +43,9 @@ describe('the layer with the new effects off', () => {
     setFxMode('today');
     setFxChapter('seymour-flux');
     const layer = makeLayer();
-    expect(layer.resolve({ abilityId: 'haste' })).toBe('bloom');
-    expect(layer.land('tidus', { abilityId: 'haste', action: 1, targets: ['tidus'] })).toBe(0);
+    expect(layer.resolve({ abilityId: 'shell' })).toBe('bloom');
+    expect(layer.resolve({ abilityId: 'haste' })).toBe('cure'); // FFX Haste is a heal-flagged ability: today it resolves to the Cure motes, as on main (review m4)
+    expect(layer.land('tidus', { abilityId: 'shell', action: 1, targets: ['tidus'] })).toBe(0);
     expect(layer.snapshot().running).toHaveLength(0);
     expect(layer.land('tidus', { abilityId: 'cure', action: 2, targets: ['tidus'], heal: true })).toBeGreaterThan(0);
     layer.update(0.3);

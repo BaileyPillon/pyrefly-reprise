@@ -122,10 +122,10 @@ const PHYSICAL_FORMULAS = new Set(['strength', 'piercing-strength']);
  * a Strength formula) draws the slash, whatever its element, because a sword
  * with fire on it is still a sword; then the element; then the bloom.
  */
-export function resolveSpellFx(ability: AbilityFxShape | undefined, element?: string, heal = false): SpellFxId {
+export function resolveSpellFx(ability: AbilityFxShape | undefined, element?: string, heal = false, fresh = true): SpellFxId {
   if (ability) {
     const byId = ABILITY_FX[ability.id];
-    if (byId) return byId;
+    if (byId && (fresh || !FRESH_ONLY_FX.has(byId))) return byId; // the buffs' rows are the new set's: without it an ability resolves exactly as it did before them (FFX Haste is a heal: the Cure motes)
     if (ability.heals) return 'cure';
     if (ability.damageType === 'physical' || PHYSICAL_FORMULAS.has(ability.formula ?? '')) return 'hit';
     for (const el of ability.element) {

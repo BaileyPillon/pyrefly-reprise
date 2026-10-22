@@ -4,7 +4,7 @@
  *
  * Sourced (`docs/handoff/motion-fx-reference.md` section 3.2, Square Enix JP's FFX-2 battle short, V4): the move's name sits in a small dark slab with a gold border above the acting girl's head and
  * the slab follows the girl while the effect plays; FFX's top banner is not used. What is [ours]: the colours, the type, how long it stays (it stays while the action does, at least `MIN_HOLD_MS`
- * and at most `MAX_HOLD_MS`; the footage shows it for the length of the effect, 1 to 2 s), and which commands it names (a plain attack, defend, an item and a dress change do not get one).
+ * and at most `MAX_HOLD_MS`; the footage shows it for the length of the effect, 1 to 2 s), and which commands it names (a plain attack, defend, an item and a dress change do not get one; Bahamut's plain Attack is an `ability` command with the id `attack` and gets none either).
  * The paper banner at the top right (`battleMessage.ts`, the approved tile) is left as it is; whether the slab should replace it is a question for Bailey.
  *
  * It lives on the HUD's unscaled overlay in viewport pixels, like the damage numerals and the chain counter, and takes its size from the letterbox scale. The timing is pure ({@link slabState}) so
@@ -20,6 +20,11 @@ export const OUT_MS = 240;
 
 /** Which commands get a slab. */
 export const SLAB_COMMANDS: ReadonlySet<string> = new Set(['ability', 'overdrive', 'summon', 'trigger']);
+
+/** The generic Attack, whichever way the engine names it (a foe's plain blow is an `ability` command with the id `attack`): it gets no slab (review m5). */
+export function isPlainAttack(event: Extract<BattleEvent, { type: 'action-start' }>): boolean {
+  return event.abilityId === 'attack' || (event.command as { id?: string }).id === 'attack';
+}
 
 export type SlabState = 'in' | 'hold' | 'out' | 'gone';
 
@@ -53,7 +58,7 @@ export class AbilityNameSlab {
 
   /** An `action-start` event: raise a slab over the girl when the command is one that gets it. */
   start(event: Extract<BattleEvent, { type: 'action-start' }>): void {
-    if (!fxPieceOn('slab') || !event.abilityName || !SLAB_COMMANDS.has(event.command.kind)) return;
+    if (!fxPieceOn('slab') || !event.abilityName || !SLAB_COMMANDS.has(event.command.kind) || isPlainAttack(event)) return;
     const overlay = this.deps.overlay();
     if (!overlay) return;
     for (const s of this.live) if (s.who === event.actorId) s.endedAt = s.age; // a new move of the same girl retires her last slab

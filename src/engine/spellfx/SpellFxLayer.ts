@@ -16,7 +16,7 @@ import type { WebGLRenderer } from 'three';
 import { FxBatch } from './FxBatch.ts';
 import { FxDrawList } from './FxDrawList.ts';
 import { ensureAtlasExtra } from './FxAtlas.ts';
-import { FreshWatch, StartClock, canTravelFx, configureList, resolveFx, shownFx, specForFx, tagCopy } from './SpellFxFreshLayer.ts';
+import { CopySeeds, FreshWatch, StartClock, canTravelFx, configureList, resolveFx, shownFx, specForFx, tagCopy } from './SpellFxFreshLayer.ts';
 import type { LandOpts } from './LandOpts.ts';
 export type { LandOpts } from './LandOpts.ts';
 import { fxChapter, fxNewOn, setFxChapter } from './FxSwitch.ts';
@@ -167,11 +167,17 @@ export class SpellFxLayer {
   }
 
   private decoSerial = -1000;
+  /** Each running copy's own painted-finish seed (stable for the copy's life, `SpellFxFreshLayer.CopySeeds`). */
+  private readonly seeds = new CopySeeds();
 
-  /** The new effects' decoration (`LandOpts.deco`): start the copy under a private action number; it covers no blow and nothing waits for it. */
+  /** The new effects' decoration (`LandOpts.deco`): start the copy, under a private action number unless the caller names the action (FFX-2's pre-rolled boss moves; the blows then find the copy); nothing waits for it. */
   private decorate(target: string, o: LandOpts): number {
     const fx = this.resolve(o);
-    if (fx !== 'bloom' && specForFx(fx)) this.landEach(fx as FreshFxId, target, o, o.action ?? --this.decoSerial);
+    const spec = fx === 'bloom' ? undefined : specForFx(fx);
+    if (!spec) return 0;
+    const action = o.action ?? --this.decoSerial;
+    if (spec.group) this.landGroup(fx as FreshFxId, target, o, action);
+    else this.landEach(fx as FreshFxId, target, o, action);
     return 0;
   }
 
@@ -314,10 +320,9 @@ export class SpellFxLayer {
     const out = new FxDrawList(this.opts.game, 1, flash);
     const budget = PEAK_BUDGET[this.quality === 'phone' ? 'phone' : 'full'];
     const share = this.watch.guard.share;
-    let seed = 0;
     for (const r of live) {
       if (out.count >= budget) break;
-      configureList(out, r, share, this.quality === 'phone' ? 0.6 : 1, ++seed);
+      configureList(out, r, share, this.quality === 'phone' ? 0.6 : 1, this.seeds.of(r));
       out.bloomScale = r.bloom;
       out.begin();
       r.spec.draw(out, r.t, r.target!);

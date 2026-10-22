@@ -113,8 +113,9 @@ export async function statusAdded(ctx: EventCtx, event: StatusAdd): Promise<void
     cue(ctx, 'status', { volume: 0.5 });
     return turnToStone(ctx, a);
   } else {
-    await statusFxLanding(ctx, event.targetId, event.sourceId); // the new effects only (Haste, Shell, Banish, Curse...): a move with no damage event lands its effect here
-    curseDim(ctx, event.status, event.targetId, true);
+    const landing = statusFxLanding(ctx, event.targetId, event.sourceId); // the new effects only (Haste, Shell, Banish, Curse...): a move with no damage event lands its effect here
+    if (landing) await landing;
+    curseDim(ctx, event.status, event.targetId, true, event.sourceId);
     a?.flash(0xc9a6ff, 260, 0.5);
   }
   cue(ctx, 'status', { volume: 0.5 });

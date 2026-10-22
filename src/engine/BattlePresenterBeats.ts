@@ -10,7 +10,7 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
-import { chargeFx, odOpening } from './BattlePresenterBossFx.ts';
+import { chargeFx, odOpening, prerollFx } from './BattlePresenterBossFx.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
@@ -100,6 +100,7 @@ export async function actionStart(
     if (item) startItemGesture(ctx, event, item);
   }
   planSkill(ctx, event, pose); // SKILL TRAVEL (both games, r38-motion): which shot this action would send; it leaves at the first blow, not here
+  prerollFx(ctx, event); // the new effects, FFX-2 only: a long boss move starts its effect with the cast (inert otherwise)
   await ctx.sleep(pose === 'attack' ? TIMING.windUp : (item?.waitMs ?? TIMING.actionStart)); // an FFX item use waits for its orb (form + flight); everything else as before
 }
 
