@@ -7,17 +7,27 @@
  * layer and routes `VfxPort.land` and `VfxPort.impact` through it; anything
  * that resolves to `bloom`, and everything at the `low` quality tier, keeps
  * today's `ImpactFlash` bloom.
+ *
+ * The NEW EFFECTS (motion pass, lane "fx"; `FxSwitch.ts`, off by default): in a demo chapter with them on, a copy started now is FRESH (`RunningFx.fresh`): it runs the spec of `SpellFxFresh.ts`
+ * where there is one, its quads take the painted finish, and the frame-time guard thins it when frames get long (`SpellFxFreshLayer.ts`). With the switch off nothing here differs.
  */
 
 import type { WebGLRenderer } from 'three';
 import { FxBatch } from './FxBatch.ts';
 import { FxDrawList } from './FxDrawList.ts';
+import { ensureAtlasExtra } from './FxAtlas.ts';
+import { CopySeeds, FreshWatch, StartClock, canTravelFx, configureList, resolveFx, shownFx, specForFx, tagCopy } from './SpellFxFreshLayer.ts';
+import type { LandOpts } from './LandOpts.ts';
+export type { LandOpts } from './LandOpts.ts';
+import { fxChapter, fxNewOn, setFxChapter } from './FxSwitch.ts';
 import { FLIGHT_LEAD_MS, FLIGHT_MIN_MS, FlightLayer, type FlightKind, type FlightStats } from './FlightFx.ts'; // SKILL TRAVEL (r38-motion): a spell, skill or shot crossing the field
-import { targetFromRect, type FxTarget } from './effects-shared.ts';
+import { drawnOnStatus, lightKindOf } from './BossFx.ts';
+import { groupTarget } from './SpellFxGroup.ts';
+import { targetFromRect } from './effects-shared.ts';
 import { DEFAULT_FLASH_PARAMS, PEAK_BUDGET, QUALITY_DENSITY, type FlashParams, type FxQuality } from './SpellFxParams.ts';
 import { resolveAbilityFx } from './SpellFxLookup.ts';
 import type { FxGame, SpellFxId } from './SpellFxRegistry.ts';
-import { FX_SPECS, RunningFx, type DrawnFxId } from './SpellFxTimeline.ts';
+import { RunningFx, specOf, type FreshFxId } from './SpellFxTimeline.ts';
 import { notifyLand, spellTaps } from '../fx/spellTaps.ts';
 
 export interface SpellFxLayerOptions {
@@ -47,22 +57,12 @@ export interface SpellFxLayerOptions {
    * FF7 only: its effects stay under the translucent message window, which stays on top as in FF7 (repair item 10).
    */
   clip?(): { x: number; y: number; w: number; h: number } | null;
-}
-
-/** What `VfxPort.land` passes down. */
-export interface LandOpts {
-  abilityId?: string;
-  element?: string;
-  heal?: boolean;
-  hitIndex?: number;
-  /** Everyone the action targets, so a multi-target spell starts on all of them at once. */
-  targets?: readonly string[];
-  /** The presenter's action counter. */
-  action?: number;
-  /** Whoever cast it: a group effect (Mega Flare) is drawn from them. */
-  sourceId?: string;
-  /** This hit is a critical: the bloom over the figure is 1.3x, as the impact bloom's was. */
-  crit?: boolean;
+  /** The new effects: the weapon a combatant swings (`SparkWeapon.ts`), for the hit sparks; unset or null = the generic hit. */
+  weaponOf?(id: string): string | null;
+  /** The new effects: the running chapter's id, named to `FxSwitch` while the layer lives (they play in Chapters I and IV only). */
+  chapterId?: string;
+  /** The new effects: the frame-time guard asks for the 3D scene a little smaller (0.9, then 0.8; 1 gives it back at the end). */
+  scaleCut?(factor: number): void;
 }
 
 /** The impact bloom's crit size (`BattlePresenterStage.impactAt`), kept where the drawn effect replaces it. */
@@ -76,8 +76,8 @@ export class SpellFxLayer {
   /** Targets whose next `impact` the effect already covers (no bloom on top). */
   private readonly covered = new Map<string, number>();
   private lastCount = 0;
-  /** Effects with a repeat rule that have already played in this battle (`FxSpec.repeatStartAt`). */
-  private readonly played = new Set<DrawnFxId>();
+  /** Where a new copy's clock starts (a special that has played this battle skips part of its lead-in). */
+  private readonly starts = new StartClock();
   /** CPU milliseconds the last frame's list and upload took, and a running mean. */
   private cpuMs = 0;
   private cpuMean = 0;
@@ -88,9 +88,12 @@ export class SpellFxLayer {
 
   /** The shots in the air (SKILL TRAVEL), drawn in this layer's batch after the effects. */
   private readonly flights: FlightLayer;
+  /** The new effects' frame-time guard (`FxPerfGuard.ts`), fed once per drawn frame from `render`. */
+  private readonly watch = new FreshWatch();
 
   constructor(opts: SpellFxLayerOptions) {
     this.opts = opts;
+    if (opts.chapterId !== undefined) setFxChapter(opts.chapterId);
     this.flights = new FlightLayer(opts.game, (id) => opts.rectOf(id));
   }
 
@@ -100,8 +103,7 @@ export class SpellFxLayer {
    */
   canFly(abilityId: string | undefined, from: string): boolean {
     if (this.quality === 'low' || this.opts.game === 'ff7') return false;
-    const fx = resolveAbilityFx(abilityId, this.opts.game, undefined, false, from);
-    return fx !== 'spiral' && fx !== 'megaflare';
+    return canTravelFx(abilityId, this.opts.game, from);
   }
 
   /**
@@ -114,8 +116,8 @@ export class SpellFxLayer {
   fly(from: string, to: string, o: { abilityId?: string; kind: FlightKind; ms: number }): { ms: number; landed: Promise<void> } {
     const none = { ms: 0, landed: Promise.resolve() };
     if (!this.canFly(o.abilityId, from) || !this.opts.rectOf(from) || !this.opts.rectOf(to)) return none;
-    const fx = resolveAbilityFx(o.abilityId, this.opts.game, undefined, false, from);
-    const spec = Object.hasOwn(FX_SPECS, fx) ? FX_SPECS[fx as DrawnFxId] : undefined;
+    const fx = shownFx(resolveAbilityFx(o.abilityId, this.opts.game, undefined, false, from));
+    const spec = specForFx(fx);
     const mark = spec ? ((spec.marks(this.opts.game)[0] ?? 0) - spec.startAt) * 1000 : 0; // how long the effect itself waits for its first blow
     // An effect with no mark to hide behind (the bare impact bloom: Drain, Demi, Flare) flies the shortest crossing that reads, and adds just that.
     const ms = Math.round(mark > 0 ? Math.max(Math.min(FLIGHT_MIN_MS[o.kind], o.ms), Math.min(o.ms, mark - FLIGHT_LEAD_MS)) : Math.min(FLIGHT_MIN_MS[o.kind], o.ms));
@@ -134,7 +136,7 @@ export class SpellFxLayer {
   /** Which effect this action draws here; `bloom` when the tier or the lookup says so. */
   resolve(o: LandOpts): SpellFxId {
     if (this.quality === 'low') return 'bloom';
-    return resolveAbilityFx(o.abilityId, this.opts.game, o.element, o.heal === true, o.sourceId);
+    return resolveFx(o, this.opts.game);
   }
 
   /**
@@ -144,22 +146,39 @@ export class SpellFxLayer {
    */
   land(target: string, o: LandOpts): number {
     const action = o.action ?? -1;
+    if (o.deco) return this.decorate(target, o); // a charge, an aura, a dress change: started, never waited for
     for (const [id, a] of this.covered) if (a !== action || id === target) this.covered.delete(id);
     const fx = this.resolve(o);
-    if (fx === 'bloom') return 0;
-    const spec = FX_SPECS[fx];
-    const run = spec.group ? this.landGroup(fx, target, o, action) : this.landEach(fx, target, o, action);
+    if (fx === 'bloom' || (o.status === true && !drawnOnStatus(fx))) return 0; // a status event starts only what no damage event starts
+    const spec = specForFx(fx);
+    if (!spec) return 0;
+    const run = spec.group ? this.landGroup(fx as FreshFxId, target, o, action) : this.landEach(fx as FreshFxId, target, o, action);
     if (!run) return 0;
     if (o.crit) run.bloom = CRIT_BLOOM;
     this.covered.set(target, action);
     this.lastMark.set(`${target}|${action}`, { run, k: o.hitIndex ?? 0 });
     const ms = run.msToMark(o.hitIndex ?? 0);
-    notifyLand({ fx, game: this.opts.game, abilityId: o.abilityId, ms, rect: this.opts.rectOf(target), view: this.opts.view() }); // eye-candy A8, and the demo looks' light
+    notifyLand({ fx: lightKindOf(fx) as SpellFxId, game: this.opts.game, abilityId: o.abilityId, ms, rect: this.opts.rectOf(target), view: this.opts.view() }); // eye-candy A8, and the demo looks' light
     // FF7: the landing is announced when the effect's own clock reaches the mark (`update`), so the hit flash and
     // the numeral land with the drawn strike even when frames run slow (repair item 6). Elsewhere, at once.
     if (this.opts.game === 'ff7' && ms > 0) this.lands.push({ run, k: o.hitIndex ?? 0, fx, target, o });
     else this.opts.onLand?.(fx, target, ms, o);
     return ms;
+  }
+
+  private decoSerial = -1000;
+  /** Each running copy's own painted-finish seed (stable for the copy's life, `SpellFxFreshLayer.CopySeeds`). */
+  private readonly seeds = new CopySeeds();
+
+  /** The new effects' decoration (`LandOpts.deco`): start the copy, under a private action number unless the caller names the action (FFX-2's pre-rolled boss moves; the blows then find the copy); nothing waits for it. */
+  private decorate(target: string, o: LandOpts): number {
+    const fx = this.resolve(o);
+    const spec = fx === 'bloom' ? undefined : specForFx(fx);
+    if (!spec) return 0;
+    const action = o.action ?? --this.decoSerial;
+    if (spec.group) this.landGroup(fx as FreshFxId, target, o, action);
+    else this.landEach(fx as FreshFxId, target, o, action);
+    return 0;
   }
 
   /** FF7's landings not yet drawn: fired from `update` when their effect's clock passes the mark. */
@@ -186,27 +205,28 @@ export class SpellFxLayer {
     return w ? Math.max(1, w.run.msToMark(w.k)) : 0;
   }
 
-  /** Where a new copy's clock starts: a special that has played this battle skips part of its lead-in. */
-  private startFor(fx: DrawnFxId): number {
-    const spec = FX_SPECS[fx];
-    if (spec.repeatStartAt === undefined) return spec.startAt;
-    if (this.played.has(fx)) return spec.repeatStartAt;
-    this.played.add(fx);
-    return spec.startAt;
+  /** Is the new set in force for a copy started now? (Its atlas tiles are drawn here too, in case the switch flipped after `prepare`.) */
+  private fresh(): boolean {
+    if (fxNewOn()) ensureAtlasExtra();
+    return fxNewOn();
   }
 
-  private landEach(fx: DrawnFxId, target: string, o: LandOpts, action: number): RunningFx | undefined {
-    const spec = FX_SPECS[fx];
+  private landEach(fx: FreshFxId, target: string, o: LandOpts, action: number): RunningFx | undefined {
+    const fresh = this.fresh();
+    const spec = specOf(fx, fresh);
     let run = spec.perHit ? undefined : this.running.find((r) => r.targetId === target && r.action === action && r.id === fx);
     if (run) return run;
     const all = !spec.perHit && o.targets?.includes(target) ? o.targets : [target];
     const onField = all.filter((id) => this.opts.rectOf(id));
     if (!onField.includes(target)) return undefined;
     const dens = QUALITY_DENSITY[this.quality] * Math.min(1, 1.7 / onField.length);
-    const startAt = this.startFor(fx);
+    const startAt = this.starts.startFor(fx, spec);
+    const stagger = fresh ? (spec.staggerFor?.(this.opts.game) ?? 0) : 0;
+    let n = 0;
     for (const id of onField) {
       if (id !== target && this.running.some((r) => r.targetId === id && r.action === action && r.id === fx)) continue;
-      const r = new RunningFx(fx, id, this.opts.game, dens, action, startAt);
+      const r = new RunningFx(fx, id, this.opts.game, dens, action, startAt - stagger * n++, fresh);
+      tagCopy(r, o, this.opts.weaponOf, this.opts.rectOf);
       this.running.push(r);
       if (id === target) run = r;
     }
@@ -214,17 +234,18 @@ export class SpellFxLayer {
   }
 
   /** One copy for the whole action, on the caster, landing on the targets' centre (Mega Flare). */
-  private landGroup(fx: DrawnFxId, target: string, o: LandOpts, action: number): RunningFx | undefined {
+  private landGroup(fx: FreshFxId, target: string, o: LandOpts, action: number): RunningFx | undefined {
     // One copy per action: a target the action-start did not list (a party-wide
     // spell whose targets resolve in the engine) joins the copy already playing.
     const found = this.running.find((r) => r.action === action && r.id === fx && r.groupIds.length > 0);
     if (found) {
-      if (!found.groupIds.includes(target) && this.opts.rectOf(target)) found.groupIds = [...found.groupIds, target];
+      if (!found.groupIds.includes(target) && target !== found.targetId && this.opts.rectOf(target)) found.groupIds = [...found.groupIds, target]; // never the caster itself (a move's HP cost lands on her)
       return found;
     }
     const group = (o.targets?.includes(target) ? o.targets : [target]).filter((id) => this.opts.rectOf(id));
     if (!group.length) return undefined;
-    const r = new RunningFx(fx, o.sourceId ?? '', this.opts.game, QUALITY_DENSITY[this.quality], action, this.startFor(fx));
+    const fresh = this.fresh();
+    const r = new RunningFx(fx, o.sourceId ?? '', this.opts.game, QUALITY_DENSITY[this.quality], action, this.starts.startFor(fx, specOf(fx, fresh)), fresh);
     r.groupIds = group;
     this.running.push(r);
     return r;
@@ -240,17 +261,19 @@ export class SpellFxLayer {
    * or hold it at local time `holdAt` (seconds) until {@link clear}. A group
    * effect (Mega Flare) takes its targets as `group`, drawn from `target`.
    */
-  play(id: string, target: string, holdAt?: number, group: readonly string[] = []): boolean {
-    if (!Object.hasOwn(FX_SPECS, id) || !this.opts.rectOf(target)) return false;
-    const r = new RunningFx(id as DrawnFxId, target, this.opts.game, QUALITY_DENSITY[this.quality === 'low' ? 'full' : this.quality], -2);
-    r.groupIds = group.filter((g) => this.opts.rectOf(g));
+  play(id: string, target: string, holdAt?: number, group: readonly string[] = [], variant = ''): boolean {
+    if (!specForFx(id as SpellFxId) || !this.opts.rectOf(target)) return false;
+    const r = new RunningFx(id as FreshFxId, target, this.opts.game, QUALITY_DENSITY[this.quality === 'low' ? 'full' : this.quality], -2, undefined, this.fresh());
+    r.variant = variant;
+    if (id === 'hit') tagCopy(r, { sourceId: group[0] }, () => variant || null, this.opts.rectOf); // the first of `group` is the striker: the way the blow goes
+    r.groupIds = id === 'hit' ? [] : group.filter((g) => this.opts.rectOf(g));
     if (holdAt !== undefined && Number.isFinite(holdAt)) {
       r.t = holdAt;
       r.held = true;
     }
     this.running.push(r);
-    // eye-candy A8: a previewed big effect flares like a landed one (debug trigger only)
-    notifyLand({ fx: id as SpellFxId, game: this.opts.game, abilityId: undefined, ms: r.msToMark(0), rect: this.opts.rectOf(target), view: this.opts.view() });
+    // eye-candy A8: a previewed big effect flares like a landed one (debug trigger only); decoration (the charge, the aura, the dress change) throws no light, as in a real fight
+    if (id !== 'gather' && id !== 'odaura' && id !== 'dress') notifyLand({ fx: lightKindOf(id) as SpellFxId, game: this.opts.game, abilityId: undefined, ms: r.msToMark(0), rect: this.opts.rectOf(target), view: this.opts.view() });
     return true;
   }
 
@@ -260,11 +283,6 @@ export class SpellFxLayer {
     this.covered.clear();
     this.lastMark.clear();
     this.flights.clear();
-  }
-
-  private targetOf(id: string, k: number): FxTarget | null {
-    const rect = this.opts.rectOf(id);
-    return rect ? targetFromRect(rect, k) : null;
   }
 
   /** The effect clock's rate this frame (the playback speed). */
@@ -280,7 +298,8 @@ export class SpellFxLayer {
     const step = dt * this.rate;
     for (const r of this.running) {
       r.advance(step);
-      const target = r.groupIds.length ? groupTarget(r, (id) => this.opts.rectOf(id), k) : this.targetOf(r.targetId, k);
+      const rect = r.groupIds.length ? null : this.opts.rectOf(r.targetId);
+      const target = r.groupIds.length ? groupTarget(r, (id) => this.opts.rectOf(id), k) : rect ? targetFromRect(rect, k) : null;
       if (target) r.target = target;
     }
     this.running = this.running.filter((r) => !r.done);
@@ -300,14 +319,15 @@ export class SpellFxLayer {
     const flash = this.flashOverride ?? this.opts.flash?.() ?? DEFAULT_FLASH_PARAMS;
     const out = new FxDrawList(this.opts.game, 1, flash);
     const budget = PEAK_BUDGET[this.quality === 'phone' ? 'phone' : 'full'];
+    const share = this.watch.guard.share;
     for (const r of live) {
       if (out.count >= budget) break;
-      out.dens = r.dens;
+      configureList(out, r, share, this.quality === 'phone' ? 0.6 : 1, this.seeds.of(r));
       out.bloomScale = r.bloom;
       out.begin();
       r.spec.draw(out, r.t, r.target!);
     }
-    out.dens = QUALITY_DENSITY[this.quality];
+    out.plain(QUALITY_DENSITY[this.quality], fxNewOn()); // the shots in flight take the finish too
     out.begin();
     this.flights.draw(out); // SKILL TRAVEL: the shots in the air, over the effects
     if (out.items.length > budget) out.items.length = budget;
@@ -320,6 +340,7 @@ export class SpellFxLayer {
    * first spell of a battle hitched by 150 ms (measured, `docs/screenshots/spellfx-b/`).
    */
   prepare(): void {
+    if (fxNewOn()) ensureAtlasExtra(); // the painted finish's four tiles, drawn now (about 20 ms) and not mid-fight
     this.batch ??= new FxBatch();
   }
 
@@ -332,6 +353,7 @@ export class SpellFxLayer {
     const t0 = performance.now();
     const list = this.drawList();
     this.lastCount = list?.count ?? 0;
+    this.watch.frame(t0, list !== null && this.running.some((r) => r.fresh && r.t >= 0), this.opts.scaleCut);
     if (!list && !this.batch) return;
     this.batch ??= new FxBatch();
     const view = this.opts.view();
@@ -351,10 +373,11 @@ export class SpellFxLayer {
   }
 
   /** For `__pyrefly` and the capture script. */
-  snapshot(): { quality: FxQuality; running: Array<{ id: string; target: string; t: number }>; quads: number; cpuMs: number; cpuMeanMs: number; flights: FlightStats } {
+  snapshot(): { quality: FxQuality; running: Array<{ id: string; target: string; t: number; fresh: boolean; variant: string }>; quads: number; cpuMs: number; cpuMeanMs: number; flights: FlightStats; fx: { new: boolean; guard: ReturnType<FreshWatch['guard']['stats']> } } {
     return {
+      fx: { new: fxNewOn(), guard: this.watch.guard.stats() },
       quality: this.quality,
-      running: this.running.map((r) => ({ id: r.id, target: r.targetId, t: Math.round(r.t * 1000) / 1000 })),
+      running: this.running.map((r) => ({ id: r.id, target: r.targetId, t: Math.round(r.t * 1000) / 1000, fresh: r.fresh, variant: r.variant })),
       quads: this.lastCount,
       cpuMs: Math.round(this.cpuMs * 1000) / 1000,
       cpuMeanMs: Math.round(this.cpuMean * 1000) / 1000,
@@ -363,6 +386,8 @@ export class SpellFxLayer {
   }
 
   dispose(): void {
+    this.watch.end(this.opts.scaleCut); // the scene's size goes back with the battle
+    if (this.opts.chapterId !== undefined && fxChapter() === this.opts.chapterId) setFxChapter(undefined);
     this.flights.clear();
     this.running = [];
     this.batch?.dispose();
@@ -370,23 +395,4 @@ export class SpellFxLayer {
   }
 }
 
-type Rect = { x: number; y: number; w: number; h: number };
-
-/**
- * A group effect's frame: the caster's rectangle with the targets' centre as
- * `party` (the middle of their rectangles, three quarters down, the mock's
- * party point). Without the caster on the field it is drawn from above the
- * targets, a boss's height up.
- */
-export function groupTarget(r: RunningFx, rectOf: (id: string) => Rect | null, k: number): FxTarget | null {
-  const rects = r.groupIds.map(rectOf).filter((x): x is Rect => x !== null);
-  if (!rects.length) return null;
-  const party = {
-    x: rects.reduce((s, q) => s + q.x + q.w / 2, 0) / rects.length,
-    y: rects.reduce((s, q) => s + q.y + q.h * 0.75, 0) / rects.length,
-  };
-  const src = r.targetId ? rectOf(r.targetId) : null;
-  const h = 560 * k;
-  const from = src ?? { x: party.x - h * 0.375, y: party.y - h * 1.6, w: h * 0.75, h };
-  return { ...targetFromRect(from, k), party, members: rects };
-}
+export { groupTarget } from './SpellFxGroup.ts';
