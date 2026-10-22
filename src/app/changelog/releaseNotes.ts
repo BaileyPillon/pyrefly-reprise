@@ -78,8 +78,8 @@ export const RELEASE_NOTES: readonly ReleaseNote[] = [
     release: '62',
     date: '2026-10-22',
     lines: [
-      { tag: 'Both', text: 'A gamepad’s A or Start now ends the opening camera sweep before a fight, the way Enter does.' },
-      { tag: 'Both', text: 'In the booth demo, both fights are prepared while you choose, so a fight starts sooner, and a win plays its music on the results screen.' },
+      { tag: 'Both', text: 'A gamepad’s A or Start now ends the opening camera sweep before a fight, the way Enter does; the booth demo prepares both fights while you choose.' },
+      { tag: 'FFX-2', text: 'In Chapter IV the Bevelle cathedral comes alive (drifting dust, flickering lamps, ripples on the floor when someone is hit) and Mega Flare lands harder.' },
       { tag: 'FFX', text: 'Auron’s first tip now matches the fight: Chapter I keeps its warning, the chapters where your party moves first say so, and the others show none.' },
     ],
   },
