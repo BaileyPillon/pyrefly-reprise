@@ -45,7 +45,8 @@ describe('1. the envelopes', () => {
     const w = FLARE.white;
     expect(whiteAt(0, w)).toBe(0);
     expect(whiteAt(w.rise, w)).toBeCloseTo(w.peak, 6);
-    expect(w.peak).toBeGreaterThanOrEqual(0.85);
+    expect(w.peak).toBeGreaterThanOrEqual(0.7);
+    expect(w.peak).toBeLessThan(0.9); // the drawn effect's own wash is under it
     expect(w.rise + w.decay).toBeLessThan(0.5);
     expect(whiteAt(w.rise + w.decay, w)).toBe(0);
     expect(whiteAt(0.7, w)).toBe(0);
@@ -148,6 +149,43 @@ describe('2. the listener', () => {
     f.update(21.4 + FLARE.flood.rise + 0.1, false, s.u);
     expect(f.stats.flares).toBe(1);
     expect(s.flood[0]).toBeCloseTo(350 / 1600, 6); // the mean of the three centres (150, 350, 550)
+    f.remove();
+  });
+
+  it('the girls\' blows land up to a second or so apart (the first take of this had three white-outs half a second apart, a strobe): taps up to 1.6 s apart are still one blast, one white-out', () => {
+    const f = new LookFlare();
+    f.install();
+    const s = spy();
+    f.update(25, false, s.u);
+    notifyLand(tap({ ms: 1400, rect: { x: 100, y: 500, w: 100, h: 200 } }));
+    notifyLand(tap({ ms: 2100, rect: { x: 300, y: 500, w: 100, h: 200 } }));
+    notifyLand(tap({ ms: 2900, rect: { x: 500, y: 500, w: 100, h: 200 } }));
+    f.update(25.01, false, s.u);
+    expect(f.stats.flares).toBe(1);
+    // the white-out comes once, at the first landing, and is over by the second girl's blow
+    let peaks = 0;
+    let was = 0;
+    for (let t = 25; t < 30; t += 1 / 60) {
+      f.update(t, false, s.u);
+      if (s.white() > 0.5 && was <= 0.5) peaks++;
+      was = s.white();
+    }
+    expect(peaks).toBe(1);
+    f.remove();
+  });
+
+  it('a Mega Flare ten seconds later is another blast', () => {
+    const f = new LookFlare();
+    f.install();
+    const s = spy();
+    f.update(40, false, s.u);
+    notifyLand(tap({ ms: 1400 }));
+    f.update(41, false, s.u);
+    f.update(50, false, s.u);
+    expect(f.stats.flares).toBe(0); // the first is long over
+    notifyLand(tap({ ms: 1400 }));
+    f.update(50.1, false, s.u);
+    expect(f.stats.flares).toBe(1);
     f.remove();
   });
 

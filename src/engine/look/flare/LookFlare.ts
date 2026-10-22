@@ -1,7 +1,7 @@
 /**
  * MEGA FLARE LANDS HARDER, the per-frame half (release 62, decision 173b; FFX-2 only; `FlareConfig.ts` says what it is). It listens for the spell layer's landing taps (`fx/spellTaps.ts`): a `megaflare` tap
  * (the special FFX-2's Bahamut draws; the tap names its target's rectangle and the milliseconds until the blast lands) starts a flare there, and each frame the strongest live flare writes the flood's and the
- * white-out's numbers into the bold pass's uniforms (`LookBoldShader`: `uFlood`, `uFloodCol`, `uWhite`). The group effect taps once per target a moment apart: taps landing within half a second of one
+ * white-out's numbers into the bold pass's uniforms (`LookBoldShader`: `uFlood`, `uFloodCol`, `uWhite`). The group effect taps once per target a moment apart: taps landing within 1.6 seconds of one
  * flare are the same blast and move its centre to the mean of its targets (the party's middle, where the beam lands).
  *
  * It runs only while the bold look is on (`LookRig` installs and removes it with the look), so CLASSIC and `?look=off` get none of it, and with no flare alive the uniforms hold zero and the shader's block is
@@ -18,8 +18,8 @@ interface Flare {
   n: number;
 }
 
-/** Taps this close together (seconds) are one blast. */
-const SAME_BLAST_S = 0.5;
+/** Taps this close together (seconds) are one blast: the group effect taps once per girl and the girls' blows land up to about a second apart, one white-out for the lot (the first recording of this took three, half a second apart: a strobe). */
+const SAME_BLAST_S = 1.6;
 const MAX_FLARES = 4;
 
 /** The uniforms this writes (the bold pass's). */

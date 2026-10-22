@@ -7,7 +7,7 @@
  *
  *  - **the flood**: the beam's light fills the room. From the moment the blast lands the whole frame is lit by it (the painted room's own lit surfaces gain most, a floor of light under the rest), brightest toward
  *    the blast and never less than 60 percent of that across the room, held a beat and then let go slowly: the room fades back (`floodAt`);
- *  - **the white-out**: at the landing the frame goes nearly white for about a third of a second, a brief and hard punctuation, then falls away into the flood (`whiteAt`);
+ *  - **the white-out**: at the landing the frame goes nearly white (with the drawn effect's own wash under it) for about a third of a second, a brief and hard punctuation, then falls away into the flood (`whiteAt`);
  *  - the girls are lit by the same light (the relight point lights: cool white, reach more than twice as wide, `relight/RelightConfig.ts#POINT_KINDS.megaflare`);
  *  - the camera shakes harder and longer (`engine/MegaFlareImpact.ts`, the presenter's landing beat).
  *
@@ -43,8 +43,8 @@ export interface FlareSpec {
 export const FLOOD_FAR = 0.6;
 
 export const FLARE: FlareSpec = {
-  flood: { rise: 0.09, hold: 0.32, decay: 1.7, peak: 1, reach: 1.4, color: [0.72, 0.82, 1.0] },
-  white: { peak: 0.9, rise: 0.035, decay: 0.34 },
+  flood: { rise: 0.09, hold: 0.3, decay: 1.5, peak: 0.85, reach: 1.4, color: [0.72, 0.82, 1.0] },
+  white: { peak: 0.75, rise: 0.035, decay: 0.3 },
 };
 
 /** REDUCE FLASHES: no white-out, the flood at 35 percent (`flashRules.FLASH_PEAK_CAP`) and a ramp of most of a second. */
