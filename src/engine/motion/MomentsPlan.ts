@@ -44,7 +44,7 @@ export interface CheerShape {
   options: LeapOptions;
 }
 
-const CHEER_OPTIONS: LeapOptions = { anticipation: 0.2, crouch: 0.04, stretch: 0.05, land: 0.04, landMs: 200, apex: 0.42 };
+const CHEER_OPTIONS: LeapOptions = { anticipation: 0.18, crouch: 0.04, stretch: 0.05, land: 0.04, landMs: 200, apex: 0.42 };
 
 /** Where the swap falls inside the cheer: the crouch, then a tenth of the flight (the rise of `skewBell` is steepest at the take-off). */
 const swapAt = (o: LeapOptions): number => (o.anticipation ?? 0.12) + 0.1 * (1 - (o.anticipation ?? 0.12));
@@ -54,7 +54,7 @@ const swapAt = (o: LeapOptions): number => (o.anticipation ?? 0.12) + 0.1 * (1 -
  * difference has one place to go, and today it changes nothing.
  */
 export function cheerShape(_game: CurveGame): CheerShape {
-  return { height: 0.15, ms: 520, swapU: swapAt(CHEER_OPTIONS), options: CHEER_OPTIONS };
+  return { height: 0.18, ms: 480, swapU: swapAt(CHEER_OPTIONS), options: CHEER_OPTIONS };
 }
 
 export interface StandDownShape {
