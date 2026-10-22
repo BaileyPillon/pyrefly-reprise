@@ -11,6 +11,9 @@
  *   - and `rigs/<subject>/` for each rig being added: REAL COPIES (`COPYFILE_EXCL`: a name that exists is an error, never an overwrite), each compared byte for byte with its source. A rig the
  *     source mirror already holds under that subject is not linked; the new copy takes its place in the new mirror and the source is untouched.
  *
+ * A release can also LEAVE OUT a rig the source mirror holds (`without`: release 59 takes Kimahri's rig off and ships his paintings again): that rig's folder is simply not linked into the new mirror, so
+ * the rebuilt manifest does not list it and the game draws the subject's painting set. Nothing is deleted; the source keeps its rig.
+ *
  * Before it writes anything it checks: the source is an art folder (`characters/`), the target does not exist and is not inside the source, both are on the same volume (a hard link cannot
  * cross one), and every rig verifies as a shipping rig against the SOURCE mirror's paintings (`rig-ship.mjs#verifyShippableRig`: full-coverage stamp, costume unchanged, every painted pose keyed).
  * Afterwards it proves the result from the files (`verifyMirror`): the target holds exactly the source's files plus the rigs', every linked file is the source's inode, every rig file has
@@ -46,14 +49,14 @@ const sameBytes = (a, b) => { try { return readFileSync(a).equals(readFileSync(b
 
 /**
  * Check everything and say what would be written; writes nothing.
- * @param {{from: string, rigsRoot: string, to: string, subjects?: string[], makeTiers?: boolean}} o
- * @returns {Promise<{ok: boolean, problems: string[], subjects: string[], links: string[], copies: Array<{subject: string, files: string[], replaces: boolean}>}>}
+ * @param {{from: string, rigsRoot: string, to: string, subjects?: string[], makeTiers?: boolean, without?: string[]}} o  `without`: rigs of the SOURCE mirror to leave out of the new one
+ * @returns {Promise<{ok: boolean, problems: string[], subjects: string[], without: string[], links: string[], copies: Array<{subject: string, files: string[], replaces: boolean}>}>}
  */
-export async function planMirror({ from, rigsRoot, to, subjects, makeTiers = false }) {
+export async function planMirror({ from, rigsRoot, to, subjects, makeTiers = false, without = [] }) {
   const problems = [];
   const src = resolve(from);
   const dst = resolve(to);
-  const plan = { ok: false, problems, subjects: [], links: [], copies: [] };
+  const plan = { ok: false, problems, subjects: [], without: [...without], links: [], copies: [] };
   if (!existsSync(join(src, 'characters'))) { problems.push(`${src} is not an art folder (no characters/ in it)`); return plan; }
   if (inside(dst, src) || inside(src, dst)) problems.push(`${dst} and ${src} are inside one another`);
   if (existsSync(dst)) problems.push(`${dst} exists: a mirror is made new, never filled in (choose a folder that is not there)`);
@@ -64,6 +67,11 @@ export async function planMirror({ from, rigsRoot, to, subjects, makeTiers = fal
   if (!existsSync(root)) { problems.push(`the rig root ${root} does not exist`); return plan; }
   const found = readdirSync(root, { withFileTypes: true }).filter((e) => e.isDirectory() && existsSync(join(root, e.name, RIG_FILE))).map((e) => e.name).sort();
   const want = subjects?.length ? subjects : found;
+  for (const s of without) {
+    if (!SUBJECT.test(s)) problems.push(`${s}: a subject is lowercase kebab`);
+    else if (!existsSync(join(src, 'rigs', s))) problems.push(`${s}: the source mirror holds no rig of that name to leave out`);
+    if (want.includes(s)) problems.push(`${s}: is both added and left out`);
+  }
   if (!want.length) problems.push(`no rig to add: ${root} holds no <subject>/rig.json`);
   for (const s of want) {
     if (!SUBJECT.test(s)) { problems.push(`${s}: a subject is lowercase kebab`); continue; }
@@ -74,7 +82,7 @@ export async function planMirror({ from, rigsRoot, to, subjects, makeTiers = fal
     plan.copies.push({ subject: s, files, replaces: existsSync(join(src, 'rigs', s)) });
   }
   plan.subjects = want;
-  const replaced = new Set(plan.copies.filter((c) => c.replaces).map((c) => c.subject));
+  const replaced = new Set([...plan.copies.filter((c) => c.replaces).map((c) => c.subject), ...without]);
   plan.links = existsSync(src)
     ? listFiles(src).filter((f) => f !== 'manifest.json' && !(f.startsWith('rigs/') && replaced.has(f.split('/')[1])))
     : [];
@@ -159,6 +167,10 @@ export async function verifyMirror({ from, rigsRoot, to, plan }) {
   const manifest = buildManifest(dst).manifest;
   const onDisk = JSON.parse(readFileSync(join(dst, 'manifest.json'), 'utf8'));
   if (JSON.stringify({ ...onDisk, generatedAt: 0 }) !== JSON.stringify({ ...manifest, generatedAt: 0 })) problems.push('manifest.json: is not what the tree in the mirror builds');
+  for (const s of plan.without ?? []) {
+    if ((onDisk.rigs ?? []).includes(s)) problems.push(`manifest.json still lists the rig ${s}, which was to be left out`);
+    if (existsSync(join(dst, 'rigs', s))) problems.push(`rigs/${s} is in the new mirror, which was to leave it out`);
+  }
   for (const c of plan.copies) {
     if (!(onDisk.rigs ?? []).includes(c.subject)) problems.push(`manifest.json does not list the rig ${c.subject}`);
     else if (!(onDisk.rigTiers?.[c.subject] ?? []).includes(1)) problems.push(`manifest.json does not list the 1x tier of ${c.subject}`);

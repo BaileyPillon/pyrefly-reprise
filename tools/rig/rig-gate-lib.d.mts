@@ -3,7 +3,11 @@ import type { ModelInputs } from '../posescale/pose-model.mjs';
 
 export const ROOT: string;
 export const RIG_BANDS: Readonly<{ iou: number; landmarkPct: number; restIou: number; baselinePx: number; sizePx: number; fitIou: number; fitStature: number }>;
-export const BUDGET: Readonly<{ parts: number; bones: number; verts: number; tris: number; texels: number; bytes: number }>;
+export const BUDGET: Readonly<{ parts: number; bones: number; verts: number; tris: number; texels: number; bytes: number; normalTexels: number; normalBytes: number }>;
+/** The budget of an aeon or a boss (12 Mpx, 12 MB; the rest as `BUDGET`). */
+export const BUDGET_BOSS: typeof BUDGET;
+/** The budget a subject (an art id) is held to: `BUDGET_BOSS` for an aeon, a dark aeon, a boss or a part, else `BUDGET`. */
+export function budgetOf(subject: string | null | undefined): typeof BUDGET;
 
 export interface RigGateFailure {
   code: string;
@@ -92,7 +96,7 @@ export interface RigGateStamp {
   exempt: string[];
   silhouettes: Record<string, RigSilhouette>;
   /** The size of every part's PNG and rim mask as the files are (`tools/rig/rig-tiers.mjs#textureSizes`): what the engine budgets texture memory from. */
-  textures: Record<string, { map: [number, number]; rim: [number, number] | null }>;
+  textures: Record<string, { map: [number, number]; rim: [number, number] | null; normal?: [number, number] }>;
   /** A fingerprint of the digest and the ship record (`sealOf`): a hand edit of `coverage`, `exempt`, `silhouettes` or `textures` breaks it. */
   seal: string;
 }

@@ -306,13 +306,13 @@ describe('t1 selfStep: a self-only command with the step bit opens a cursor on t
     expect(rowOf(rows, 'Dismiss').targetStep).toBeUndefined();
   });
 
-  it("on: Talk (0x3105, foe side first) opens a cursor on the foes, not on the user; with cursorStartFoe on it starts on formation index 0, with it off (as shipped) it carries no start", async () => {
+  it("on: Talk (0x3105, foe side first) opens a cursor on the foes, not on the user; with cursorStartFoe on (as shipped since r60) it starts on formation index 0, with it skipped it carries no start", async () => {
     const engine = await engineFor('seymour-natus');
-    on(); // every item, cursorStartFoe included
+    on(); // every item, cursorStartFoe included (the shipped state for this item since r60)
     const talk = rowOf(menuOf(engine, 'tidus'), 'Talk');
     expect(talk.targeting).toBe('self');
     expect(talk.targetStep).toEqual({ candidates: ['seymour-natus', 'mortibody'], start: 'seymour-natus' });
-    on(['cursorStartFoe']); // the shipped state for this item: the HUD opens where it does for every other foe command
+    on(['cursorStartFoe']); // the item skipped (the r55 state, the OFF path kept as a regression check): the HUD opens where it does for every other foe command
     const shipped = rowOf(menuOf(engine, 'tidus'), 'Talk').targetStep!;
     expect(shipped.candidates).toEqual(['seymour-natus', 'mortibody']);
     expect(shipped).not.toHaveProperty('start');
@@ -422,7 +422,7 @@ describe('t3 cursorStartFoe: a foe-first command opens on index 0 of the foe lis
     expect(row.targetStep?.start).toBe(ids.find((c) => row.validTargets.includes(c)));
   });
 
-  it('skipped: with cursorStartFoe off the foe start is left to the HUD', async () => {
+  it('skipped: with cursorStartFoe off (the r55 state, kept as the OFF-path check) the foe start is left to the HUD', async () => {
     const engine = await engineFor('seymour-anima-macalania');
     on(['cursorStartFoe']);
     expect(rowOf(menuOf(engine, 'tidus'), 'Attack').targetStep?.start).toBeUndefined();

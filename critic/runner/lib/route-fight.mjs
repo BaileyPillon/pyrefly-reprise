@@ -21,8 +21,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { playDoublecast } from './route-doublecast.mjs';
 import { playMinigame } from './route-minigame.mjs';
-import { deriveOutcome } from './route-pure.mjs';
+import { deriveOutcome, rowLabelOf } from './route-pure.mjs';
 import { battleSeedRead, isAllDisabledOverlay, measureCardVsRows, readAdvice, readRows, targetsUp } from './route-ui.mjs';
 
 /**
@@ -158,20 +159,9 @@ export async function playFight(r) {
     if (did.length) { rec.lastPartySeq = did[did.length - 1].seq; const prev = rec.picks[rec.picks.length - 1]; if (prev) prev.engineDid = did; }
     let took = null;
     if (goal === 'win' && adv && /^doublecast/i.test(adv.label ?? '') && (rec.dcFail ?? 0) < 2) { // Special > Doublecast > spell x2
-      const spell = (adv.label.split(':')[1] ?? '').trim().toLowerCase();
-      const dc = { turn: turns, actor: ph, want: adv, steps: [] };
-      if (await chooser.choose((l) => /^special$/i.test(l))) {
-        const h = await chooser.choose((l) => /^doublecast/i.test(l));
-        dc.steps.push({ found: h });
-        for (let k = 0; h && k < 2; k++) {
-          const sp = spell ? await chooser.choose((l) => l.toLowerCase().includes(spell)) : null;
-          dc.steps.push({ k, spell: sp });
-          if (!sp) break;
-          noteTarget(await chooser.confirmTarget(adv.target), adv); await page.waitForTimeout(700);
-          if (!(await pbk())?.awaitingMenu) break;
-        }
-      }
-      await page.waitForTimeout(2500);
+      // The card names both casts ("Doublecast: Firaga + Firaga"); the list's rows are the spell names alone, so each round looks for its own cast (route-doublecast.mjs; the whole label was
+      // searched for as one row before, found nowhere, and 84 of Chapter III's 368 picks became an Attack in the release 58 review).
+      const dc = await playDoublecast({ chooser, adv, confirmTarget: async (name) => noteTarget(await chooser.confirmTarget(name), adv), menuStillOpen: async () => Boolean((await pbk())?.awaitingMenu), wait: (ms) => page.waitForTimeout(ms), turn: turns, phase: ph });
       (rec.doublecast = rec.doublecast ?? []).push(dc);
       if (rec.doublecast.length === 1) await snap('25-doublecast.png', 'after a Doublecast chosen by real input', {});
       await escPause();
@@ -235,7 +225,7 @@ export async function playFight(r) {
         rec.picks.push({ ...pick, took: `${adv.label} (one-item group, direct)`, target: c });
         await page.waitForTimeout(700); turns++; continue;
       }
-      const w = (adv.label ?? '').toLowerCase();
+      const w = rowLabelOf(adv.label).toLowerCase(); // "Grand Summon: Shiva" is the row "Grand Summon"; the aeon is picked in its list above
       took = w ? await chooser.choose((l) => l.toLowerCase() === w || l.toLowerCase().includes(w)) : null;
       if (took && /^orders$/i.test(opened ?? '')) rec.orders.push({ turn: turns, order: took, why: 'advisor' });
       if (!took && opened) { rec.misses.push({ turn: turns, want: adv, subRows: await readRows(page) }); await input.press('Escape'); await page.waitForTimeout(350); }

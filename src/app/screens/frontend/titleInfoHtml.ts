@@ -15,6 +15,7 @@
 import { BTS_KEY_LABEL, BTS_LIVE, BTS_TITLE } from '../../changelog/behindTheScenes.ts';
 import { RELEASE_NOTES, type ReleaseNote } from '../../changelog/releaseNotes.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
+import { keyHint } from '../../../ui/common/padGlyphs.ts';
 
 /** The `data-action` values the entries carry (`Input.onClick` resolves a tap to the closest one). */
 export const CHANGELOG_ACTION = 'title:changelog';
@@ -24,8 +25,25 @@ export const BTS_ACTION = 'title:bts';
 export const CHANGELOG_KEY = 'KeyL';
 export const CHANGELOG_KEY_LABEL = 'L';
 
-function entryHtml(action: string, key: string, label: string): string {
-  return `<span class="fe-hint__entry" data-action="${action}" role="button" tabindex="0"><b>${key}</b> ${escapeHtml(label)}</span>`;
+/**
+ * The TITLE ART entry (release 61; Bailey, 2026-10-21, "A key in the bottom row (Recommended)"): the `data-action` it carries, the key (`KeyboardEvent.code`) and the letter printed beside it.
+ * T cycles the title pictures (The Echo, the Farplane painting) with a cross-fade and saves the pick (`TitleScreen.ts`). It shares the letter with BEHIND THE SCENES (`BTS_KEY`), which is off:
+ * `tests/unit/title-art-key.test.ts` fails if that switch is ever turned on without one of the two keys moving.
+ */
+export const TITLE_ART_ACTION = 'title:art';
+export const TITLE_ART_KEY = 'KeyT';
+export const TITLE_ART_KEY_LABEL = 'T';
+export const TITLE_ART_LABEL = 'Title Art';
+/** The pad button that does the same (release 61, decision 169): Y (Triangle), which nothing on the title reads. `TitleScreen.handleInput` takes its press. */
+export const TITLE_ART_PAD = 'Triangle';
+
+/**
+ * One entry of the hint row. `pad` is the pad button that does the same (a `padGlyphs` token such as `'Triangle'`): the entry then shows it, instead of its key, while the player's last
+ * press was a pad. An entry with no pad button is hidden for a pad player (`frontend.css`): a key and a click are the only ways to it.
+ */
+function entryHtml(action: string, key: string, label: string, pad?: string): string {
+  const face = pad ? keyHint(key, pad) : key;
+  return `<span class="fe-hint__entry" data-action="${action}" role="button" tabindex="0"${pad ? ' data-has-pad' : ''}><b>${face}</b> ${escapeHtml(label)}</span>`;
 }
 
 /** The BEHIND THE SCENES entry on its own: what `BTS_LIVE` adds to the row. Nothing in the build draws it while the switch is off. */
@@ -38,9 +56,14 @@ export function changelogEntryHtml(): string {
   return `<span class="fe-hint__sep" aria-hidden="true"></span>${entryHtml(CHANGELOG_ACTION, CHANGELOG_KEY_LABEL, 'Changelog')}`;
 }
 
-/** The entries that go after the briefing chip in the hint row: a hairline, CHANGELOG, and BEHIND THE SCENES only while its switch is on. */
+/** The TITLE ART entry, in the hint row's own style, after CHANGELOG (release 61; both games: the title is the front door of FFX and FFX-2 alike). */
+export function titleArtEntryHtml(): string {
+  return entryHtml(TITLE_ART_ACTION, TITLE_ART_KEY_LABEL, TITLE_ART_LABEL, TITLE_ART_PAD);
+}
+
+/** The entries that go after the briefing chip in the hint row: a hairline, CHANGELOG, TITLE ART, and BEHIND THE SCENES only while its switch is on. */
 export function infoEntriesHtml(): string {
-  return changelogEntryHtml() + (BTS_LIVE ? btsEntryHtml() : '');
+  return changelogEntryHtml() + titleArtEntryHtml() + (BTS_LIVE ? btsEntryHtml() : '');
 }
 
 function releaseHtml(note: ReleaseNote): string {

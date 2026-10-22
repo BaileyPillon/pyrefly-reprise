@@ -26,9 +26,11 @@
  * `pointer-events: none`, and the slab sits beside the target. Esc (or the skip
  * words) ends the guide for good; on the board and prep the Esc that did it is
  * taken back from the game's input (`FirstRunHost.absorbInput`), so it does not
- * also go BACK. In battle it is NOT taken back (FR-34-01, FFX only): the first
- * Esc at the first command menu skips the guide and opens the pause, as it does
- * everywhere else, instead of needing a second press.
+ * also go BACK. In battle it is taken back too, by the card itself (R61, the
+ * conference booth, both games: `cardPress.ts`): the first Esc at the first
+ * command menu closes the card and skips the guide, and only the next Esc opens
+ * the pause. FR-34-01 (release 34) had let that first Esc go on to open the
+ * pause; a booth visitor met a pause screen they never asked for.
  *
  * Game case: steps 1 and 2 **both**; step 3 **FFX only** (a first battle in FFX-2
  * ends the guide at its start, since nothing drew Rikku's version).
@@ -36,6 +38,7 @@
 
 import type { GameId } from '../../battle/common/types.ts';
 import type { CoachGuide, CoachMarkOutcome } from './CoachMark.ts';
+import { demoModeOn } from '../../app/demoMode.ts';
 import { hasSeen, markSeen, shouldShow } from './coachState.ts';
 import { FIRST_RUN_IDS, firstRunBoardQuote } from './firstRunCopy.ts';
 import { FirstRunLayer, STEP_BATTLE, STEP_BOARD, STEP_PREP, onScreen, phoneLayout, slabHtml, type Box } from './firstRunView.ts';
@@ -70,7 +73,7 @@ export function firstRunActive(): boolean {
 
 /** Start the guide (after a first-launch briefing). A finished guide never restarts. */
 export function armFirstRunGuide(h: FirstRunHost): void {
-  if (host || allDone()) return;
+  if (host || allDone() || demoModeOn()) return; // R61: a booth visitor is not guided (`demoMode.ts`)
   host = h;
   layer = new FirstRunLayer(skipFirstRun);
   h.root.appendChild(layer.el);
@@ -132,7 +135,8 @@ export function firstRunTurnGuide(): CoachGuide | null {
       });
     },
     ended(outcome: CoachMarkOutcome, skipped: boolean): void {
-      // FR-34-01 (FFX only): in battle the Esc that skips is not taken back, so the pause opens on it.
+      // R61: in battle the Esc that skips is taken back by the card itself (`CoachMark.finish`, `cardPress.ts`), so `absorb` is false here:
+      // the press is already gone, and the pause opens on the NEXT Esc (it opened on this one under FR-34-01).
       if (skipped) skipFirstRun(false);
       else if (outcome === 'confirmed') markSeen('firstrun-battle');
       // A line the layer took down itself (a beat's card, auto-play) is not an

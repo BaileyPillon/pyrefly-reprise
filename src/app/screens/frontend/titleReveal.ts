@@ -61,6 +61,23 @@ export interface TitleRevealOptions {
 }
 
 /**
+ * Resolve `'decoded'` once every layer of the title has decoded, or `'capped'` when `capMs` passes first. A layer whose image fails still counts as settled.
+ * Release 61: the T key's cross-fade (`TitleScreen.swapArt`) waits on this under the screen that is leaving, so the picture it fades to is never half-drawn.
+ */
+export async function decodeTitleLayers(
+  root: ParentNode,
+  capMs: number = TITLE_DECODE_CAP_MS,
+  wait: (ms: number) => Promise<void> = (ms: number) => new Promise<void>((r) => setTimeout(r, ms)),
+): Promise<'decoded' | 'capped'> {
+  const settle = (img: HTMLImageElement): Promise<void> =>
+    typeof img.decode === 'function' ? img.decode().catch(() => undefined) : Promise.resolve();
+  return Promise.race([
+    Promise.all(titleLayers(root).map(settle)).then(() => 'decoded' as const),
+    wait(capMs).then(() => 'capped' as const),
+  ]);
+}
+
+/**
  * Put the placeholder under the far plane, hold the layers, and reveal them
  * once all have decoded or the cap passes. Resolves `'decoded'` or `'capped'`.
  * A layer whose image fails still counts as settled: its plane falls back to
@@ -69,13 +86,7 @@ export interface TitleRevealOptions {
 export async function revealTitleWhenDecoded(root: HTMLElement, opts: TitleRevealOptions = {}): Promise<'decoded' | 'capped'> {
   root.style.setProperty('--fe-title-ph', `url("${opts.placeholder ?? TITLE_PLACEHOLDER}")`);
   root.classList.add('fe-title--decoding');
-  const wait = opts.wait ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
-  const settle = (img: HTMLImageElement): Promise<void> =>
-    typeof img.decode === 'function' ? img.decode().catch(() => undefined) : Promise.resolve();
-  const outcome = await Promise.race([
-    Promise.all(titleLayers(root).map(settle)).then(() => 'decoded' as const),
-    wait(opts.capMs ?? TITLE_DECODE_CAP_MS).then(() => 'capped' as const),
-  ]);
+  const outcome = await decodeTitleLayers(root, opts.capMs, opts.wait);
   root.classList.remove('fe-title--decoding');
   root.classList.add('fe-title--decoded');
   root.dataset['titleReveal'] = outcome;

@@ -24,6 +24,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CoachMark } from '../../src/ui/coach/CoachMark.ts';
+import { setCardPressAbsorber } from '../../src/ui/coach/cardPress.ts';
 import { marksFor } from '../../src/ui/coach/coachCopy.ts';
 import { hasSeen, markAllSeen, markSeen, resetCoach } from '../../src/ui/coach/coachState.ts';
 import { buildChapterTiles } from '../../src/app/screens/frontend/chapterGrid.ts';
@@ -65,7 +66,7 @@ describe('the words are the approved mockup\'s (option.html, O2)', () => {
 
   it('step 3 wears Auron\'s approved first-command line unchanged, with the mockup\'s two lines under it', () => {
     const approved = marksFor('ffx').find((m) => m.id === 'ffx-turn-order')!.body;
-    expect(approved).toBe('“He moves after you. Not before. Use it.”');
+    expect(approved).toBe('“He strikes first. Weather it, then hit back.”');
     const html = slabHtml(FIRST_RUN_STEPS[2], approved);
     const el = document.createElement('div');
     el.innerHTML = html;
@@ -151,7 +152,7 @@ describe('step 3 is FFX\'s line in the guide\'s dress, and never blocks ATTACK',
     const { line } = mountLine();
     void line.show();
     expect(line.el.dataset['guide']).toBe('3');
-    expect(line.el.querySelector('.frg__quote')!.textContent).toBe('“He moves after you. Not before. Use it.”');
+    expect(line.el.querySelector('.frg__quote')!.textContent).toBe('“He strikes first. Weather it, then hit back.”');
   });
 
   it('a bare Enter with the cursor on the ringed ATTACK only takes the card down: the press dies with it (PR-0362; it used to reach the menu, O2)', async () => {
@@ -174,14 +175,23 @@ describe('step 3 is FFX\'s line in the guide\'s dress, and never blocks ATTACK',
     await expect(settled).resolves.toBe('confirmed');
   });
 
-  it('the player\'s own Esc skips the whole guide and leaves the press to the game, so the pause opens on it (FR-34-01)', async () => {
-    const { line } = mountLine();
-    const settled = line.show();
-    window.dispatchEvent(key('Escape'));
-    await expect(settled).resolves.toBe('cancelled');
-    for (const id of FIRST_RUN_IDS) expect(hasSeen(id)).toBe(true);
-    expect(absorbed).toBe(0);
-    expect(firstRunActive()).toBe(false);
+  it('the player\'s own Esc skips the whole guide and the card keeps the press: the pause does NOT open on it (R61, the booth; it did under FR-34-01), the next Esc is the game\'s', async () => {
+    let cardAbsorbed = 0;
+    setCardPressAbsorber(() => void (cardAbsorbed += 1)); // `App` hands this in: the card drops the press from `Input` itself
+    try {
+      const { line } = mountLine();
+      const settled = line.show();
+      const esc = key('Escape');
+      window.dispatchEvent(esc);
+      await expect(settled).resolves.toBe('cancelled');
+      for (const id of FIRST_RUN_IDS) expect(hasSeen(id)).toBe(true);
+      expect(esc.defaultPrevented).toBe(true);
+      expect(cardAbsorbed).toBe(1);
+      expect(absorbed).toBe(0); // the guide host's own absorb is for the board and prep; in battle the card does it, once
+      expect(firstRunActive()).toBe(false);
+    } finally {
+      setCardPressAbsorber(null);
+    }
   });
 
   it('a line the layer takes down itself (a beat, auto-play) is not a skip: step 3 stays due', async () => {

@@ -23,6 +23,7 @@
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
 import { logicalArtUrl } from './ArtShipped.ts';
 import { masterListed, parseTiers, withStates2x } from './ArtManifestTiers.ts';
+import { lightMapsField, type LightMaps } from './ArtManifestMaps.ts';
 
 /** One subject's entry: what `public/art/characters/<id>/` actually holds. */
 export interface ArtManifestSubject {
@@ -83,6 +84,8 @@ export interface ArtManifest {
    * `2` the full-size files beside `rig.json`. A rig with no entry has only the full-size files. Which one a figure loads is `engine/rig/RigTier.ts`'s call.
    */
   readonly rigTiers?: Readonly<Record<string, readonly number[]>>;
+  /** The lighting maps the build ships (release 60, `ArtManifestMaps.ts`): present, it is the whole list and the game asks for no other; absent, the game probes. */
+  readonly lightMaps?: LightMaps;
 }
 
 /** Public path of the manifest, resolved against the Vite base path. */
@@ -166,6 +169,7 @@ export function parseArtManifest(raw: unknown): ArtManifest | null {
     backdropTiers: parseTiers(obj.backdropTiers, (key) => strings(obj.backdrops).includes(key)),
     ...(Array.isArray(obj.rigs) ? { rigs: strings(obj.rigs) } : {}),
     ...(obj.rigTiers && typeof obj.rigTiers === 'object' && !Array.isArray(obj.rigTiers) ? { rigTiers: parseRigTiers(obj.rigTiers as Record<string, unknown>) } : {}),
+    ...lightMapsField(obj.lightMaps),
   };
 }
 

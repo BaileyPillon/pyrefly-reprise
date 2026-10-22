@@ -22,6 +22,7 @@ import type { EncounterProgress, ObjectiveStatus } from '../../../ui/common/chap
 import { formatPlayTime } from '../../../ui/common/chapterObjectives.ts';
 import { gameHasVoice } from '../../../story/voice/voiceManifest.ts';
 import { accessRows, optionRows } from '../PauseScreenPanels.ts';
+import { padLabel } from '../../../ui/common/padGlyphs.ts';
 
 /** One row in a tab body. */
 export interface PanelRow {
@@ -106,8 +107,10 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
   }));
   if (ctx.game === 'ff7') {
     // FF7 draws no eye candy (`EyeCandy.ts` callers check the game), so its EYE CANDY page would switch nothing.
-    const at = settings.findIndex((s) => s.id === 'eyeCandy');
-    if (at >= 0) settings.splice(at, 1);
+    for (const id of ['eyeCandy', 'visualStyle']) { // VISUAL STYLE switches the demo look, which FF7 never draws (release 61)
+      const at = settings.findIndex((s) => s.id === id);
+      if (at >= 0) settings.splice(at, 1);
+    }
   }
   if (!gameHasVoice(ctx.game ?? 'ffx')) { // no game context reads as FFX, as `optionRows` does
     // The recorded voice-over is FFX's alone for now (Bailey picked the FFX voices); FFX-2 and FF7 have none, so their VOICE rows would switch nothing (rule 14).
@@ -181,21 +184,34 @@ export function accessColumns(ctx: { settings: Readonly<Settings>; game?: GameId
 /**
  * The CONTROLS tab — where the retired `ControlsHint` strip's chips went.
  *
- * Both games: `app/Input.ts` binds one key map for the whole product.
+ * Both games: `app/Input.ts` binds one key map for the whole product. The pad's names are the ones of the pad in the player's hands
+ * (`ui/common/padGlyphs.padLabel`: A B X Y LB RB LT RT on an Xbox pad, the cross, circle, square, triangle and L1 R1 on a PlayStation one; release 61,
+ * decision 169), and the fight's own keys are listed beside them (the strategy guide, the best-move card, the enemy-move slab, Defend), because the booth's visitors
+ * hold a pad and the pause menu is where they will look for it.
  */
-export function controlsColumns(): PanelColumn[] {
-  return [
+export function controlsColumns(game?: GameId): PanelColumn[] {
+  const A = padLabel('cross');
+  const B = padLabel('circle');
+  const X = padLabel('square');
+  const Y = padLabel('triangle');
+  const LB = padLabel('l1');
+  const RB = padLabel('r1');
+  const LT = padLabel('l2');
+  const RT = padLabel('r2');
+  const R3 = padLabel('r3');
+  const START = 'Menu';
+  const columns: PanelColumn[] = [
     {
       id: 'move',
       heading: 'Getting around',
       wide: true,
       rows: [
-        row('tab-prev', 'Previous tab', 'Q  /  L1  /  ←'),
-        row('tab-next', 'Next tab', 'E  /  R1  /  →'),
-        row('rows', 'Move down a menu', '↑  ↓  /  D-pad'),
-        row('adjust', 'Adjust a setting', '←  →  /  D-pad'),
-        row('confirm', 'Confirm', 'Enter  /  Z  /  Cross'),
-        row('back', 'Back', 'Esc  /  X  /  Circle'),
+        row('tab-prev', 'Previous tab', `Q  /  ${LB}  /  ←`),
+        row('tab-next', 'Next tab', `E  /  ${RB}  /  →`),
+        row('rows', 'Move down a menu', '↑  ↓  /  D-pad  /  stick'),
+        row('adjust', 'Adjust a setting', '←  →  /  D-pad  /  stick'),
+        row('confirm', 'Confirm', `Enter  /  Z  /  ${A}`),
+        row('back', 'Back', `Esc  /  X  /  ${B}`),
       ],
     },
     {
@@ -203,14 +219,30 @@ export function controlsColumns(): PanelColumn[] {
       heading: 'This screen',
       wide: true,
       rows: [
-        row('resume', 'Resume the fight', 'Esc  /  Start'),
+        row('resume', 'Resume the fight', `Esc  /  ${START}`),
         // PR-0028 / D-215: `H` is a pause key; battle has none, so the row says where it works.
-        row('hide', 'In pause, the painting alone', 'H  /  Triangle'),
+        row('hide', 'In pause, the painting alone', `H  /  ${Y}`),
         row('photo', 'Photo mode', 'F'),
-        row('pause', 'Open this menu', 'Esc  /  P  /  Start'),
+        row('pause', 'Open this menu', `Esc  /  P  /  ${START}`),
       ],
     },
   ];
+  if (game === 'ffx' || game === 'ffx2') {
+    columns.push({
+      id: 'fight',
+      heading: 'In a fight',
+      wide: true,
+      rows: [
+        row('guide', 'Strategy guide', `G  /  ${X}`),
+        row('best', 'Best move', `N  /  ${RT}`),
+        // FFX: Y is Defend at the command menu, so the slab sits on the right stick's press; FFX-2 lists Defend as a row and keeps Y.
+        row('enemy', 'Enemy move', game === 'ffx' ? `E  /  ${R3}` : `E  /  ${Y}`),
+        row('more', 'More of the enemy move (hold)', `J  /  ${LT}`),
+        ...(game === 'ffx' ? [row('defend', 'Defend', `Q  /  ${Y}`), row('swap', 'Swap a party member', `F  /  ${LB}`)] : []),
+      ],
+    });
+  }
+  return columns;
 }
 
 // -------------------------------------------------------------------- guide

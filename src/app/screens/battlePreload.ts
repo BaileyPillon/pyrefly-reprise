@@ -112,7 +112,8 @@ export interface PreloadOptions {
 
 /** Pull a file into the HTTP cache without holding on to it. */
 function prefetch(url: string, signal: AbortSignal): Promise<void> {
-  return fetch(url, { signal })
+  // R61 (PR-0495): these are the poses the battle draws later, and a `fetch` is high priority by default, the same as the scene's and the boss's music (`MusicLoader`): on a slow line they shared it.
+  return fetch(url, { signal, priority: 'low' } as RequestInit)
     .then((res) => (res.ok ? res.blob() : null))
     .then(
       () => undefined,

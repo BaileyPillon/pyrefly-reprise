@@ -36,7 +36,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { currentChromiumArgs } from '../../../tools/browser-mode.mjs';
-import { candidateBuildEnv, candidateViteArgs, newestReleaseOf } from '../../../tools/candidate-build.mjs';
+import { candidateBuildEnv, candidatePreviewArgs, candidatePreviewEnv, candidateUrl, candidateViteArgs, newestReleaseOf } from '../../../tools/candidate-build.mjs';
 import { assertScreen, assertMenuRows, waitFor } from './lib.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -45,7 +45,8 @@ const BUDGET_MS = 90000;
 // Pick a port unlikely to collide with another agent's dev server (5173,
 // 5190) or preview server (5400-5990) in this shared tree.
 const PORT = 6100 + (process.pid % 400);
-const BASE = `http://127.0.0.1:${PORT}/pyrefly-reprise/`;
+// The candidate is built for the live host's base (tools/candidate-build.mjs), so it is served on that base: the root, not the old GitHub Pages folder.
+const BASE = candidateUrl(PORT);
 const VITE_BIN = path.join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js');
 // Scratch build, outside the repo entirely — never critic's or the shared
 // tree's dist/, and cleaned up in `finally` regardless of outcome.
@@ -87,7 +88,7 @@ try {
   }
   log('built in', Date.now() - t0, 'ms');
 
-  preview = spawn(process.execPath, [VITE_BIN, 'preview', '--outDir', OUT_DIR, '--port', String(PORT), '--strictPort'], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+  preview = spawn(process.execPath, [VITE_BIN, ...candidatePreviewArgs(OUT_DIR, PORT)], { cwd: ROOT, env: candidatePreviewEnv(), stdio: ['ignore', 'pipe', 'pipe'] });
   let previewOut = '';
   preview.stdout.on('data', (d) => { previewOut += d.toString(); });
   preview.stderr.on('data', (d) => { previewOut += d.toString(); });

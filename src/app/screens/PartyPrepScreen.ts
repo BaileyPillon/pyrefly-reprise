@@ -28,7 +28,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import type { FlowScreen } from './BattleScreenFlow.ts';
 import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
-import { escapeHtml } from '../../ui/common/html.ts'; import { chapterNumeral } from '../../ui/common/roman.ts';
+import { escapeHtml } from '../../ui/common/html.ts'; import { keyHint } from '../../ui/common/padGlyphs.ts'; import { chapterNumeral } from '../../ui/common/roman.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { rosterHtml, slotsHtml, statSheetHtml } from './PartyPrepContent.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
@@ -77,7 +77,7 @@ export interface PrepPanel {
    * while one of its columns has more copy). Read after every input frame and
    * tab change; the line is rewritten only when the answer changes.
    */
-  hint?(): { keys: string; label: string } | null;
+  hint?(): { keys: string; label: string; pad?: string } | null;
   /** False hides the tab for this chapter (the hidden Pilgrimage's RUN tab shows only inside a run's fight, `app/pilgrim/pilgrimPrep.ts`). Omitted: always shown. */ visible?(chapter: Chapter): boolean;
 }
 
@@ -174,9 +174,9 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
       <div class="prep__tabs" data-role="tabs"></div>
       <div class="prep__sheet"><div class="prep__sheet-inner" data-role="body"></div></div>
       <div class="prep__hint">
-        <b>&#9650; &#9660;</b> PARTY &nbsp;&middot;&nbsp; <b>&#9664; &#9654;</b> TABS
-        &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:begin" role="button" tabindex="0"><b>ENTER</b> BEGINS THE BATTLE</span>
-        &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:back" role="button" tabindex="0"><b>ESC</b> BACK</span><span data-role="panel-hint"></span>
+        <b>${keyHint('▲ ▼', 'dpad-v')}</b> PARTY &nbsp;&middot;&nbsp; <b>${keyHint('◀ ▶', 'dpad-h')}</b> TABS
+        &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:begin" role="button" tabindex="0"><b>${keyHint('ENTER', 'Cross')}</b> BEGINS THE BATTLE</span>
+        &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:back" role="button" tabindex="0"><b>${keyHint('ESC', 'Circle')}</b> BACK</span><span data-role="panel-hint"></span>
       </div>
 
       <div class="prep__start" data-action="prep:begin">
@@ -199,7 +199,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
     const slot = this.root.querySelector<HTMLElement>('[data-role="panel-hint"]');
     if (!slot) return;
     const h = this.tabs[this.index]?.hint?.() ?? null;
-    const html = h ? ` &nbsp;&middot;&nbsp; <b>${escapeHtml(h.keys)}</b> ${escapeHtml(h.label)}` : '';
+    const html = h ? ` &nbsp;&middot;&nbsp; <b>${h.pad ? keyHint(h.keys, h.pad) : escapeHtml(h.keys)}</b> ${escapeHtml(h.label)}` : '';
     if (html === this.panelHintHtml) return;
     this.panelHintHtml = html;
     slot.innerHTML = html;

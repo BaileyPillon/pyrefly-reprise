@@ -10,6 +10,8 @@
  * only, pink streaks with four-point glints, pink foil (`research/ffx-vs-ffx2-presentation.md`).
  */
 
+import { demoStopMs, demoTrauma } from '../../motion/DemoHit.ts'; // `?motion=demo` (part 4): the stop and the shake grow with the blow
+
 export type SpectacleGame = 'ffx' | 'ffx2';
 export type SpectacleTier = 'full' | 'phone' | 'low';
 
@@ -36,6 +38,8 @@ export interface HitInfo {
    * were calculated, and its accent keeps the index rule).
    */
   lastShown?: boolean | undefined;
+  /** `?motion=demo` only (`motion/DemoHit.hitPower`): how hard the blow is, 0 to 1.5; absent reads as a middling blow. */
+  power?: number | undefined;
 }
 
 export interface SpectacleFlags {
@@ -44,6 +48,8 @@ export interface SpectacleFlags {
   reduceFlashes: boolean;
   /** Strength multipliers, 1 = as tuned (`?fxdial=`). */
   dial: (name: 'shake' | 'sparks' | 'impact' | 'spells' | 'hitstop') => number;
+  /** `?motion=demo` (`motion/DemoMotion.ts`): the stop and the shake are the demo's (`motion/DemoHit.ts`); absent or false: as tuned. */
+  demo?: boolean | undefined;
 }
 
 export interface HitPlan {
@@ -181,8 +187,10 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
   // FFX holds on every heavy blow; FFX-2 only on a crit, and never on chain hits 2 and later.
   const holdsHeavy = game === 'ffx' ? hit.heavy : hit.crit && first;
   let freezeMs = 0;
+  const facts = { crit: hit.crit, heavy: hit.heavy, big: hit.big, hitIndex: hit.hitIndex, hitCount: hit.hitCount, last, power: hit.power };
   if (normal && !f.reduceMotion) {
-    if (holdsHeavy || (hit.big && last)) freezeMs = t.freezeHeavyMs;
+    if (f.demo) freezeMs = demoStopMs(facts, t.freezeLightMs); // never lighter than today's own light hold (FFX 40 ms, FFX-2 28 ms)
+    else if (holdsHeavy || (hit.big && last)) freezeMs = t.freezeHeavyMs;
     else if (first) freezeMs = t.freezeLightMs;
     freezeMs = Math.round(freezeMs * f.dial('hitstop'));
   }
@@ -190,7 +198,7 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
   const impactFrame = !wantsFrame || f.reduceMotion || f.dial('impact') <= 0 ? null : f.reduceFlashes ? 'soft' : 'full';
   const trauma = f.reduceMotion
     ? 0
-    : Math.min(1, (hit.big && last ? t.traumaBig : hit.crit ? t.traumaCrit : hit.heavy ? t.traumaHeavy : first ? t.traumaLight : t.traumaLight * 0.5) * f.dial('shake'));
+    : Math.min(1, (f.demo ? demoTrauma(facts) : hit.big && last ? t.traumaBig : hit.crit ? t.traumaCrit : hit.heavy ? t.traumaHeavy : first ? t.traumaLight : t.traumaLight * 0.5) * f.dial('shake'));
   const density = TIER_DENSITY[f.tier] * f.dial('sparks');
   const streaks = Math.round((hit.crit || hit.heavy ? t.streaksCrit : t.streaksBase) * density * (hit.hitCount > 4 && !first ? 0.45 : 1));
   const spell = f.tier === 'low' || f.dial('spells') <= 0 ? null : (spellLayerOf(hit.element) ?? (hit.magic ? 'nova' : null));

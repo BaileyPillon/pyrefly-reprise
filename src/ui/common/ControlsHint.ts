@@ -1,6 +1,8 @@
 import './controls-hint.css';
 import type { InputSnapshot } from '../../app/Input.ts';
+import { inputDevice } from '../../app/inputDevice.ts';
 import { escapeHtml } from './html.ts';
+import { glyphize } from './padGlyphs.ts';
 
 /** One hint entry, worded per input device so a gamepad player never sees "Enter". */
 export interface ControlHintItem {
@@ -64,7 +66,7 @@ export class ControlsHint {
     this.el = document.createElement('div');
     this.el.className = 'chint';
     this.el.dataset['role'] = 'controls-hint';
-    this.render(this.device('keyboard'));
+    this.render(this.device(inputDevice()));
   }
 
   mount(): void {
@@ -84,7 +86,7 @@ export class ControlsHint {
   setItems(items: ControlHintItem[]): void {
     this.items = items;
     this.lastDevice = null; // force a re-render even if the device hasn't changed
-    this.render(this.device('keyboard'));
+    this.render(this.device(inputDevice()));
   }
 
   /** Call once per frame (or from `handleInput`) so wording follows whichever device the player last touched. */
@@ -115,7 +117,9 @@ export class ControlsHint {
         const keys = this.keysFor(item, device);
         if (keys === null) return [];
         const click = item.action ? ` data-action="${escapeHtml(item.action)}" role="button" tabindex="0"` : '';
-        return [`<span class="chint__item"${click}><b>${escapeHtml(keys)}</b> ${escapeHtml(item.label)}</span>`];
+        // A pad player reads the button drawn (A, B, LB ...), not the word; the glyph is named for the pad in use (`ui/common/padGlyphs.ts`).
+        const face = device === 'gamepad' ? glyphize(keys) : escapeHtml(keys);
+        return [`<span class="chint__item"${click}><b>${face}</b> ${escapeHtml(item.label)}</span>`];
       })
       .join('<span class="chint__sep">&middot;</span>');
     this.el.innerHTML = html;

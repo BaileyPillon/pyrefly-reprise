@@ -45,9 +45,12 @@ import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
+import { warmBattleStage } from '../../engine/StageWarm.ts'; // R61 (PR-0481): a first battle's once-per-page costs are paid behind the party prep
+import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conference demo's seeds
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
+import { demoRunDefaults } from '../demo/demoFlow.ts'; // R61 (conference demo, `?demo=1`): a demo fight goes straight in, without party prep or story scenes
 
 /** A screen the flow can await. */
 export interface FlowScreen<T> extends Screen {
@@ -320,12 +323,14 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
+    opts = demoRunDefaults(id, opts); // R61 (demo mode only, both games): a demo fight skips party prep and the story scenes unless the caller says otherwise
     const armed = this.pilgrimArmed;
     this.pilgrimArmed = null; // spent by whatever chapter runs next, so a door that opened and never ran cannot hijack a later one
     if (armed === id && opts.pilgrim === undefined) {
       const { runPilgrimage } = await import('../pilgrim/PilgrimFlow.ts'); // its screens and styles load only now: a player who never types the word never fetches them
       return runPilgrimage({ app: this.app, show: (s) => this.show(s), setStep: (s) => void (this.step = s), fight: (cid, o) => this.runChapter(cid, o), away: () => this.handedOver, claim: () => { if (!this.running) [this.owned, this.handedOver] = [null, false]; } });
     }
+    warmBattleStage(); // the browser's staged-upload verdict (a second WebGL2 context, 0.7 s) and the spell atlas (0.13 s), once per page, while the party prep is what is on screen
     const release = musicChapter(id, sfxChapter(id, voiceChapter(id, holdIdleLane()))); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep; the recorded voice-over (FFX only)
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)
     // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
@@ -385,8 +390,8 @@ export class GameFlow {
       this.step = 'battle';
       const battleOpts: BattleScreenOptions = {
         chapter,
-        // A retry reseeds, so the same losing fight does not replay verbatim.
-        seed: seed + attempt * 1000,
+        // A retry reseeds, so the same losing fight does not replay verbatim (demo mode: the next of the chapter's verified seeds, `demoMode.ts`).
+        seed: attemptSeed(id, seed, attempt),
         auto: opts.auto ?? null,
         ...(opts.speed ? { speed: opts.speed } : {}),
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
@@ -432,6 +437,7 @@ export class GameFlow {
         let resumeAt: number | null = null;
         if (!opts.skipCutscenes) resumeAt = await this.playCutscene(chapter, 'post');
         if (!opts.skipResults) await this.showResults(chapter, outcome, previousBestMs);
+        // R61 (the conference demo, both games): a demo fight is run with `skipCutscenes` (`demoRunDefaults`, first line of this method), so the story after the panel is not played and the win goes back to the picker (`demo/demoBoard.ts` puts the cursor on the other fight).
         if (!opts.skipCutscenes && resumeAt !== null) await this.playCutscene(chapter, 'post', resumeAt);
         this.step = 'idle';
         return outcome;

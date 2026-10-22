@@ -78,7 +78,12 @@ export function resolveTargets(
     case 'single-any':
     default: {
       if (named.length > 0) return [named[0] as Ffx2Unit];
-      const pool = units.filter((u) => isTargetable(u, allowDead));
+      // A target that was named and is gone (a skill queued before the last blow, the boss down when it lands) re-aims inside that target's own side, like the two
+      // rows above; with that side empty it falls to nothing, never onto the other side (re-parity x2-retarget: Armor Break aimed at Bahamut hit a girl after he fell).
+      // The game rebuilds the mask from the caster's opposing side and, with nobody left there, leaves it alone and plays the action with hits that do nothing
+      // (`research/re-ffx2-ai-leblanc-den-ixion.md` 1.12, [H] run on the live exe; `docs/handoff/re-parity-x2-retarget-fix.md`). An empty list stays the engine stand-in below.
+      const gone = requested.length > 0 ? units.find((u) => u.id === requested[0]) : undefined;
+      const pool = units.filter((u) => isTargetable(u, allowDead) && (gone === undefined || isFriendly(u.side, gone.side)));
       return pool.length > 0 ? [rng.aux.pick(pool)] : [];
     }
   }

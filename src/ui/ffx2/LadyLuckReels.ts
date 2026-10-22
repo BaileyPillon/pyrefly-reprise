@@ -4,6 +4,7 @@ import { installInkGoldStyles } from '../inkgold/index.ts';
 import type { InputSnapshot } from '../../app/Input.ts';
 import type { ReelResult } from '../../battle/common/types.ts';
 import { isCoarsePointer } from '../common/ControlsHint.ts';
+import { padLabel } from '../common/padGlyphs.ts';
 import { RawInputWatcher, rawInputSuspended } from '../ffx/rawInput.ts';
 import { symbolLabel, symbolSvg } from './ladyLuckSymbols.ts';
 import {
@@ -80,7 +81,7 @@ const KEY_CODES: readonly string[] = ['Enter', 'NumpadEnter', 'Space', 'KeyZ'];
 
 /** What the overlay tells each player to press. A mouse click is a click; a finger is a tap. */
 function promptWord(device: Device, pointerKind: string): string {
-  if (device === 'gamepad') return 'PRESS CROSS';
+  if (device === 'gamepad') return `PRESS ${padLabel('cross').toUpperCase()}`;
   if (device === 'pointer') return pointerKind === 'mouse' ? 'CLICK' : 'TAP';
   return 'PRESS ENTER';
 }

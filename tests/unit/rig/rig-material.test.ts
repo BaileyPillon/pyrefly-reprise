@@ -26,3 +26,39 @@ describe('the part shader is the game shader with seven patches', () => {
     expect(() => patchPaintedShader(paintedFragmentShader.replace('float edge = clamp(a - inward, 0.0, 1.0);', 'float edge = 0.0;'))).toThrow(/painted shader changed: cannot find float edge/);
   });
 });
+
+describe('the part material, lit (release 61, the HD-2D look: `relight`)', () => {
+  const base = async () => {
+    const { Texture } = await import('three');
+    const { makePartMaterial } = await import('../../../src/engine/rig/RigMaterial.ts');
+    const t = new Texture();
+    return { makePartMaterial, opts: { shared: {} as Record<string, { value: unknown }>, contactBand: { value: 0.1 }, map: t, rimMask: t, rimMode: 'off' as const, boxW: 10, boxH: 10, rimTexelK: 1 } };
+  };
+
+  it('is the game material, unchanged, unless it is asked to be lit: no define, no light uniform', async () => {
+    const { makePartMaterial, opts } = await base();
+    const m = makePartMaterial(opts);
+    expect(m.defines?.['PAINTED_RELIGHT']).toBeUndefined();
+    expect(m.uniforms['relightNormal']).toBeUndefined();
+    expect(m.uniforms['relightAny']).toBeUndefined();
+  });
+
+  it('compiles the painted shader\'s relight block in when asked, with the shared light cells and an unbound (flat, off) normal', async () => {
+    const { makePartMaterial, opts } = await base();
+    const { relightCells } = await import('../../../src/engine/look/relight/FigureRelight.ts');
+    const m = makePartMaterial({ ...opts, relight: true });
+    expect(m.defines?.['PAINTED_RELIGHT']).toBe('');
+    for (const k of Object.keys(relightCells)) expect(m.uniforms[k], k).toBe((relightCells as Record<string, unknown>)[k]);
+    expect(m.uniforms['relightOn']!.value).toBe(0);
+    expect(m.uniforms['relightNormal']!.value).toBeTruthy();
+  });
+
+  it('feeds the fragment block the varyings it reads: the plane\'s three axes in view space and the clip position, behind the same define', async () => {
+    const { makePartMaterial, opts } = await base();
+    const v = makePartMaterial(opts).vertexShader;
+    for (const s of ['#ifdef PAINTED_RELIGHT', 'varying vec3 vNR;', 'varying vec3 vNU;', 'varying vec3 vNF;', 'varying vec4 vClip;', 'vClip = gl_Position;']) expect(v, s).toContain(s);
+    expect(v.indexOf('vClip = gl_Position;')).toBeGreaterThan(v.indexOf('gl_Position = projectionMatrix')); // after the position it copies
+    const f = makePartMaterial(opts).fragmentShader;
+    expect(f).toContain('texture2D(relightNormal, uv)'); // the part's own uvs, the ones its colour is read with
+  });
+});

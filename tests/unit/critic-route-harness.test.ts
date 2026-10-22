@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 
 import { letterTagsOf } from '../../src/battle/ffx/letterTags.ts';
 import type { BattleState } from '../../src/battle/common/types.ts';
-import { BUSHIDO_KEYS, BUSHIDO_KEYS_BY_BUTTON, DEFAULT_BUDGET_MS, LONG_FIGHT_BUDGET_MS, NO_SCRIPTED_CHANGE, budgetFor, dboxStep, deriveOutcome, isAllDisabledOverlay, keysForChips, letterTagMap, minigameKindOf, resolveTargetId, scriptedChangeAllowed, slugOf, swordplayPressNow, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
+import { BUSHIDO_KEYS, BUSHIDO_KEYS_BY_BUTTON, DEFAULT_BUDGET_MS, LONG_FIGHT_BUDGET_MS, NO_SCRIPTED_CHANGE, budgetFor, dboxStep, deriveOutcome, isAllDisabledOverlay, keysForChips, letterTagMap, minigameKindOf, resolveTargetId, rowLabelOf, scriptedChangeAllowed, slugOf, swordplayPressNow, type DboxMem, type DboxSample } from '../../critic/runner/lib/route-pure.mjs';
 
 const stateOf = (defs: [string, string][]): BattleState =>
   ({ enemyIds: defs.map(([id]) => id), combatants: Object.fromEntries(defs.map(([id, name]) => [id, { id, name }])) }) as unknown as BattleState;
@@ -51,6 +51,17 @@ describe('a lettered target name is mapped to its data-target-id (issue 3)', () 
   it('keeps the old id-slug match for names the roster cannot settle (FFX-2 rows, party members)', () => {
     expect(resolveTargetId('Yuna', { enemyIds: [], names: {} }, ['yuna', 'rikku', 'paine'])).toBe('yuna');
     expect(resolveTargetId('', rosterOf(BFA), ['yu-yevon'])).toBeNull();
+  });
+});
+
+describe('the row a card\'s label points at (release 59, decision 145)', () => {
+  it('a line-first card names the aeon of a Grand Summon; the menu\'s row is "Grand Summon", and every other label is its own row', () => {
+    expect(rowLabelOf('Grand Summon: Shiva')).toBe('Grand Summon');
+    expect(rowLabelOf('grand summon: Valefor')).toBe('grand summon');
+    expect(rowLabelOf('Grand Summon')).toBe('Grand Summon');
+    expect(rowLabelOf('Doublecast: Firaga + Firaga')).toBe('Doublecast: Firaga + Firaga'); // Doublecast has its own route (route-doublecast.mjs)
+    expect(rowLabelOf('Hi-Potion')).toBe('Hi-Potion');
+    expect(rowLabelOf(null)).toBe('');
   });
 });
 

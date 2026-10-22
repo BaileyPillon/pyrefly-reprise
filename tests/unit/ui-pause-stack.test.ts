@@ -159,7 +159,7 @@ describe('the pause root sits above every other z-index in the codebase', () => 
 
   it('pauseZ beats every other explicit z-index in src/ and index.html', () => {
     const inventory = fullInventory().filter(
-      (h) => !(h.file.endsWith('src/ui/common/pause-screen.css') && h.value === pauseZ),
+      (h) => !(h.file.endsWith('src/ui/common/pause-screen.css') && h.value === pauseZ) && !(h.file.endsWith('src/app/demo/demo.css') && h.line <= 12), // release 61: the booth's reset ring (`.demo-reset`, demo mode only, pointer-events: none) is drawn over the pause on purpose: a hold of Home resets from any screen
     );
     const offenders = inventory
       .filter((h) => h.value >= pauseZ)

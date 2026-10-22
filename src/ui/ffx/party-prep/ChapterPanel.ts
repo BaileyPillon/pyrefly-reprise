@@ -229,7 +229,7 @@ export function makeChapterPanel(game: GameId): PrepPanel {
     },
     hint() {
       const visible = !!root && !root.hidden && root.isConnected;
-      return visible && scrollableCols(root).length ? { keys: 'PG UP / PG DN', label: 'SCROLL' } : null;
+      return visible && scrollableCols(root).length ? { keys: 'PG UP / PG DN', label: 'SCROLL', pad: 'L1 R1' } : null;
     },
   };
 }

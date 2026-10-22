@@ -1,9 +1,11 @@
+import { PAD } from '../../app/padMap.ts';
 import '../common/cmd-od-selected.css';
 import '../common/hud-floor.css';
 import './ffx-hud.css';
 import { grownFromTopLeft } from '../common/hudTextSize.ts';
 import type {
   AtbSnapshot, AvailableCommand,
+  BattleEngine,
   BattleEvent,
   BattleState,
   Command,
@@ -66,6 +68,7 @@ import { advisorZone } from './advisorStrip.ts';
 import { NChipMeter } from './advisorChipSizes.ts';
 import { underTheChipRow } from './advisorFolded.ts';
 import { TIP_BADGE } from './advisorTip.ts';
+import { demoAdvisorOneLine, demoPanelStart } from '../../app/demo/demoHud.ts'; // R61: the conference demo's cleaner HUD (`?demo=1` only)
 import { intentChipDockAt } from './intentChipDock.ts';
 import { readColourVision } from '../../app/accessFlags.ts';
 import { cvdColour, hexToInt } from '../common/colourVision.ts';
@@ -204,6 +207,7 @@ export class FFXBattleHud implements HudPort {
       top: 44,
       bottom: STAGE.height - (CMD_INFO_TOP - GAP),
     },
+    ...demoPanelStart('guide'), // R61: folded at the start of a demo fight, not persisted
   });
   /**
    * The optional move advisor (`src/ui/common/MoveAdvisor.ts`), a card in the
@@ -224,8 +228,11 @@ export class FFXBattleHud implements HudPort {
       right: 414,
       bottom: 26,
     },
+    ...demoPanelStart('advisor'), // R61: the one-line card, not persisted
   });
   private readonly cmdAreaEl: HTMLElement;
+  /** R61: this is a demo fight's HUD (`?demo=1`): the advisor card is the one-row tip. Read once, when the HUD is built. */
+  private readonly demoOneLine = demoAdvisorOneLine();
   /**
    * The enemy-intent slab (`src/ui/common/EnemyIntent.ts`).
    *
@@ -432,10 +439,11 @@ export class FFXBattleHud implements HudPort {
       // 2026-09-19: a change true of one game is not applied to the other.
       density: 'brief',
       // The pad's Triangle is Defend at the command menu (release 39: the original's input, named on the tab under the
-      // window, `defendControl.ts`), so the slab's pad toggle moves to Select, standard button 8: nothing in a fight
-      // reads it (`Input.ts` maps it to the music toggle of the demo scene only). FFX only: FFX-2's menu lists Defend as
-      // a row, Triangle is free there, and its chip keeps saying Triangle (it passes nothing).
-      padToggle: { index: 8, label: 'Select' },
+      // window, `defendControl.ts`), so the slab's pad toggle is not on Y. It was on Back / Select (button 8) until
+      // release 61: the conference booth resets the demo with Back + Start held (decision 169), and a Back press must not
+      // also flip a setting the next visitor inherits. It is the right stick's press now (button 11, R3; `app/padMap.ts`): the
+      // left trigger is the slab's own hold-for-more (`enemy-intent-overflow.ts`), the bumpers are the party swap, and nothing else in a fight reads R3. FFX only: FFX-2's menu lists Defend as a row, Y is free there, and its chip keeps saying Y (it passes nothing).
+      padToggle: { index: PAD.RS, label: 'R3' },
     });
     this.openingHold.start();
     this.layout();
@@ -756,6 +764,14 @@ export class FFXBattleHud implements HudPort {
   startGuideFolded(): void {
     this.guideStartsFolded = true;
     this.guide.startFolded();
+  }
+
+  /**
+   * Hand the card the live engine, read-only (release 59, decision 145; FFX only): it reads the chapter's line through it on the boards where the card puts the line first
+   * (`AdvisorOptions.lineEngine`, `engine/tactics/advisor-line.ts`), and for nothing else. Called once, before the first menu, by `createHud`; a HUD without it reads the line off the state.
+   */
+  setLineEngine(engine: BattleEngine | null): void {
+    this.advisor.setAdvisorOptions(engine ? () => ({ lineEngine: () => engine }) : undefined);
   }
 
   /** The move-advisor card, for tests and the debug snapshot. */
@@ -1437,7 +1453,7 @@ export class FFXBattleHud implements HudPort {
       guideChip,
       chipSize: guideChip && nChip ? nChip.full : null,
       badgeSize: guideChip && nChip ? nChip.badge : null,
-      foldedFallback: guideChip !== null && this.foldedClipped === this.advisorDecisionSeq,
+      foldedFallback: guideChip !== null && (this.foldedClipped === this.advisorDecisionSeq || this.demoOneLine), // R61: a demo fight's card is always the one-row tip (FFX Chapters I and III, where the guide is folded)
     };
     const key = [
       this.advisorDecisionSeq,

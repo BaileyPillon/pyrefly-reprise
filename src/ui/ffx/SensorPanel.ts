@@ -2,6 +2,9 @@ import type { AnyCombatant, CombatantId, ElementId } from '../../battle/common/t
 import { ELEMENT_IDS } from '../../battle/common/types.ts';
 import { isSensorImmune, sensorImmuneBodyHtml } from './sensorImmune.ts';
 import { longClass, plateNumber } from './sensorNumbers.ts';
+import { PAD } from '../../app/padMap.ts';
+import { keyHint } from '../common/padGlyphs.ts';
+import { rawInputSuspended } from './rawInput.ts';
 
 const ELEMENT_LABEL: Record<ElementId, string> = {
   fire: 'FIRE',
@@ -166,6 +169,19 @@ export class SensorPanel {
     this.hide();
   }
 
+  /** Release 61 (the conference booth: every action by pad): the left stick's press (L3, standard button 10) folds and reopens the plate, as `I` does. Edge only; not under the pause. */
+  private padWasDown = false;
+  private pollPad(): void {
+    let down = false;
+    try {
+      for (const pad of navigator.getGamepads?.() ?? []) if (pad?.connected && pad.buttons[PAD.LS]?.pressed) down = true;
+    } catch {
+      down = false;
+    }
+    if (down && !this.padWasDown && this.mounted && !this.el.hidden && !rawInputSuspended()) this.toggle();
+    this.padWasDown = down;
+  }
+
   private readonly onKeyDown = (e: KeyboardEvent): void => {
     if (e.code !== TOGGLE_KEY || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
     if (this.el.hidden) return;
@@ -250,6 +266,7 @@ export class SensorPanel {
    * `dt` is seconds, as everywhere else in the HUD.
    */
   update(dt: number): void {
+    this.pollPad();
     if (this.openMs <= 0 || this.folded || this.pinned) return;
     this.openMs -= Math.max(0, dt) * 1000;
     if (this.openMs > 0) return;
@@ -324,8 +341,8 @@ export class SensorPanel {
     this.el.classList.toggle('ffx-sensor--folded', this.folded);
     const name = this.current?.name ?? '';
     this.chipEl.innerHTML = this.folded
-      ? `<b>${TOGGLE_KEY_LABEL}</b><span>${escapeHtml(name)}</span>`
-      : `<b>${TOGGLE_KEY_LABEL}</b><span>hide</span>`;
+      ? `<b>${keyHint(TOGGLE_KEY_LABEL, 'L3')}</b><span>${escapeHtml(name)}</span>`
+      : `<b>${keyHint(TOGGLE_KEY_LABEL, 'L3')}</b><span>hide</span>`;
     this.chipEl.setAttribute('aria-pressed', String(!this.folded));
     this.chipEl.title = this.folded ? `Show what is known about ${name}` : 'Hide the enemy read-out';
   }

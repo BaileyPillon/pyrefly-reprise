@@ -15,12 +15,18 @@ import { installFxEnv } from './app/fxEnv.ts';
 import { installFxDebug } from './debug/fxApi.ts';
 import { installArtDebug } from './debug/artApi.ts';
 import { installCrispDebug } from './debug/crispApi.ts';
+import { installLookDebug } from './debug/lookApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
+import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
+import { setAttractRunner } from './app/demo/attractHook.ts'; // R61: the title starts the attract reel through this door; main hands the reel in (the title does not import it)
+import { runAttract } from './app/demo/demoAttract.ts';
 import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
+import { demoModeOn } from './app/demoMode.ts';
+import { warmBattleStage } from './engine/StageWarm.ts';
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
 import './ui/ffx/party-prep/index.ts';
 // Side-effect only: registers ChapterSelectScreen/CutsceneScreen/ResultsScreen
@@ -60,6 +66,8 @@ async function boot(): Promise<void> {
   // Browsers only allow an AudioContext from a user gesture; this arms the
   // first pointerdown/keydown to create it. Anything asked for before then is
   // queued by the AudioManager.
+  installDemoReset(app); // R61: its key listeners go in before the game's own (capture phase, first registered, first heard)
+  setAttractRunner(runAttract); // R61: the reel itself starts only in demo mode, from the title's idle count
   audio.installUnlockListeners();
   // A pad press is user activation in Chromium too, but raises no DOM event (PR-0220).
   installPadUnlock(audio);
@@ -148,6 +156,7 @@ async function boot(): Promise<void> {
   installFxDebug(debugApi, app); // eye-candy options round: `__pyrefly.fx` (kept out of `debug/api.ts`)
   installArtDebug(debugApi, app); // release 39: `__pyrefly.art`, the art tiers and the anti-aliasing
   installCrispDebug(debugApi, app); // release 39: `__pyrefly.crisp`, the sharpness ladder's switch for captures
+  installLookDebug(debugApi, app); // demo looks (dev flag `?look=`): `__pyrefly.look`, and F6 / F7 while the flag is in the address
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
@@ -159,6 +168,8 @@ async function boot(): Promise<void> {
   await app.nextFrame();
   await app.nextFrame();
   markReady();
+  // R61 (PR-0481, the conference demo): in demo mode the title stands a long time, so the once-per-page costs of a first battle are paid there, a few seconds after boot (`engine/StageWarm.ts`).
+  if (demoModeOn()) setTimeout(warmBattleStage, 4000);
 }
 
 if (document.readyState === 'loading') {

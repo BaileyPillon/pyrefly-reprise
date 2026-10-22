@@ -24,6 +24,7 @@ import { OverdriveSplashLayer } from '../../ui/common/transitions/OverdriveSplas
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { mixSplashArt, prepareMixSplash } from '../../engine/fx/mix/splash.ts'; // SPLASH ART (the MAX mix, D-316)
+import { demoMotionOn } from '../../engine/motion/DemoMotion.ts';
 import '../../ui/common/fx-c-foil.css';
 
 /**
@@ -80,6 +81,7 @@ export function attachSpectacle(o: {
       reduceMotion: eyeCandy.reduceMotion,
       reduceFlashes: eyeCandy.reduceFlashes,
       dial: (n) => eyeCandy.dial(n),
+      demo: demoMotionOn(), // `?motion=demo` (part 4): the stop and the shake grow with the blow
     };
   };
   const fx = new SpectacleFx({

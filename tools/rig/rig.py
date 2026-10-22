@@ -8,6 +8,7 @@ Every step is a command of this file, driven by a per-subject config, tools/rig/
     cut       --subject S [--sam] [--only a,b] [--cpu]    SAM masks from the config's prompts (--sam), the label map, the part images with their classical underlaps and fills   -> rig_cut.py
     build     --subject S                                 bones, triangle meshes, skin weights, landmarks, one PNG and rim mask per part                                          -> rig_build.py
     fit-keys  --subject S [--poses a,b] [--retarget]      for each pose the game draws the figure in: bone transforms that match the APPROVED painting of that pose (IoU)         -> rig_fit.py
+    variants  --subject S                                 format v2: parts' other images cut from other paintings of the figure and registered to the fitted keys' bones (build.variants.*.from_painting)   -> rig_vcut.py
     export    --subject S [--no-gate]                     rig.json + the PNGs into D:/pyrefly-art-rigs/<id>/ (never public/art), then the rig gate (tools/rig-gate.mjs)           -> rig_export.py
     sheet     --subject S                                 a contact sheet: each key beside its approved painting, with the gate's overlap, stature and feet                         -> rig_sheet.py
     all       --subject S [--sam]                         every step in order
@@ -34,7 +35,7 @@ from rig_common import Subject, say  # noqa: E402
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="rig.py", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["cut", "build", "fit-keys", "export", "sheet", "all"])
+    ap.add_argument("step", choices=["cut", "build", "fit-keys", "variants", "export", "sheet", "all"])
     ap.add_argument("--subject", required=True, help="the config's name (tools/rig/subjects/<name>.json)")
     ap.add_argument("--sam", action="store_true", help="cut: run SAM first")
     ap.add_argument("--only", default=None, help="cut --sam: only these SAM parts (comma separated)")
@@ -47,7 +48,7 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     sub = Subject(a.subject)
     code = 0
-    steps = ["cut", "build", "fit-keys", "export", "sheet"] if a.step == "all" else [a.step]
+    steps = ["cut", "build", "fit-keys", "variants", "export", "sheet"] if a.step == "all" else [a.step]
     for step in steps:
         say(f"== rig {step}: {sub.id} ({sub.name})")
         if step == "cut":
@@ -59,6 +60,9 @@ def main(argv=None) -> int:
         elif step == "fit-keys":
             import rig_fit
             rig_fit.run(sub, poses=a.poses.split(",") if a.poses else None, retarget=a.retarget, seed=a.seed)
+        elif step == "variants":
+            import rig_vcut
+            rig_vcut.run(sub)
         elif step == "export":
             import rig_export
             code = rig_export.run(sub, gate=not a.no_gate, out=a.out) or code

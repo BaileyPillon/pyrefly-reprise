@@ -62,8 +62,12 @@ import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
 import { alignedSwapOn, motionSmooth, notePoseSwap, swapPolicy } from './PoseSwap.ts'; // W5: `?swap=aligned` (off by default), and the lunge's first frame (on; `?motion=classic` restores cubic-out)
+import { demoMotionOn } from './motion/DemoMotion.ts'; // `?motion=demo` (conference demo; default off = exactly as before): the four hooks below
+import { BLEND_MS_MAX, demoBlend } from './motion/DemoBlend.ts';
+import { demoIdleParams, nextIdlePhase, swayClockStart } from './motion/DemoIdle.ts';
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
+import { bindRelight } from './look/relight/FigureRelight.ts'; // demo looks (dev flag `?look=`): light on the paintings, from their normal maps
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -637,6 +641,8 @@ export class PaintedActor extends Group {
   private breathPhase = Math.random();
   /** A stable per-name offset, so a party does not breathe (or cheer) in step. */
   private readonly beatOffset: number;
+  /** Which of the two pose-change lengths this figure had (`?motion=demo` re-times a swap per side, `motion/DemoBlend.ts`). */
+  private readonly blendSide: 'party' | 'foe';
 
   constructor(opts: PaintedActorOptions = {}) {
     super();
@@ -661,6 +667,8 @@ export class PaintedActor extends Group {
     const sway = opts.sway === false ? null : (opts.sway ?? {});
     this.swayAmp = sway ? (sway.amplitude ?? 0.012) : 0;
     this.swaySpeed = sway ? (sway.speed ?? 0.33) : 0;
+    this.blendSide = opts.side === 'enemy' ? 'foe' : 'party';
+    if (demoMotionOn() && (breathe || sway)) this.demoIdle(breathe !== null, sway !== null); // `?motion=demo`: a slow breath and a slight sway, each figure on a phase of its own (`motion/DemoIdle.ts`)
 
     const rim = opts.rim ?? {};
     this.rimDirBase.set(rim.dir?.[0] ?? -1, rim.dir?.[1] ?? 0.32);
@@ -817,6 +825,23 @@ export class PaintedActor extends Group {
     actor.adoptPoses(subject.poses, actorOpts.initialPose);
     actor.subject = subject;
     return actor;
+  }
+
+  /** `?motion=demo` (part 3, `motion/DemoIdle.ts`): this figure's breath and sway, from its name, on the next phase dealt. Rigs with an idle of their own turn the layer off before this runs. */
+  private demoIdle(breathes: boolean, sways: boolean): void {
+    const d = demoIdleParams(this.name);
+    const phase = nextIdlePhase();
+    if (breathes) {
+      this.breatheAmp = d.amplitude;
+      this.breatheSpeed = d.speed;
+      this.breathPhase = phase;
+    }
+    if (sways) {
+      this.swayAmp = d.swayAmplitude;
+      this.swaySpeed = d.swaySpeed;
+      this.clock = swayClockStart(phase, d.swaySpeed);
+    }
+    this.userData['idlePhase'] = phase; // LIVING PAINTINGS' chest breath starts on the same phase (`fx/mix/living.ts`)
   }
 
   private makeSlot(renderOrder: number): PlaneSlot {
@@ -1092,7 +1117,20 @@ export class PaintedActor extends Group {
     if (!plan.reversed && next) this.applyPose(plan.to, resolved, next);
     this.active = plan.to;
     if (!plan.reversed && alignedSwapOn()) this.alignedSwap(plan.to); // W5: `?swap=aligned` only: the heads drift together
+    if (!plan.reversed && demoMotionOn()) this.demoRetune(plan.to, resolved);
     this.syncOpacity();
+  }
+
+  /**
+   * `?motion=demo` (part 1, `motion/DemoBlend.ts`): the blend just started takes its length and shape from how well the two paintings, as placed, overlap. A cut (`crossfadeMs` 0, FF7's) stays a
+   * cut and so does a scene's own long dissolve (past the demo's longest).
+   */
+  private demoRetune(to: 0 | 1, resolved: string): void {
+    if (this.crossfadeMs <= 0 || this.crossfadeMs > BLEND_MS_MAX || this.poseShiftPx) return;
+    const inn = this.slots[to]!;
+    const out = this.slots[to === 0 ? 1 : 0]!;
+    const b = demoBlend({ side: this.blendSide, to: resolved, overlap: footprintOverlap(this.footprintOf(out), this.footprintOf(inn)) });
+    this.blend.retune(b.ms, b.shape);
   }
 
   /**
@@ -1201,6 +1239,7 @@ export class PaintedActor extends Group {
     slot.painted = tex;
     slot.meta = tex.meta;
     slot.material.uniforms['map']!.value = tex.texture;
+    bindRelight(slot.material, tex.url, tex.scale, tex.placeholder); // demo looks (dev flag `?look=`): the figure's normal map; a no-op without the flag
     (slot.material.uniforms['texel']!.value as Vector2).set(
       1 / Math.max(1, tex.meta.width),
       1 / Math.max(1, tex.meta.height),

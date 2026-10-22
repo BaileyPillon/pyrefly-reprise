@@ -63,7 +63,7 @@ export function openRun(flow: object, chapterId: string, opts: RunChapterOptions
   if (opts.restart === true && memo && memo.chapterId === chapterId && memo.carry.resumeAt) {
     return { carry: memo.carry, attempt: memo.attempt, opts: memo.opts };
   }
-  return { carry: FRESH_RUN, attempt: 0, opts: { ...opts, seed: opts.seed ?? drawRunSeed() } };
+  return { carry: FRESH_RUN, attempt: 0, opts: { ...opts, seed: opts.seed ?? drawRunSeed(Math.random, chapterId) } };
 }
 
 /**

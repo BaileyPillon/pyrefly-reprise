@@ -16,6 +16,7 @@ config["build"] (every coordinate is a 1x painting pixel; the build scales them 
   M =        { "edge": 22, "inner": 44, "grow": 16 } | { "grid": [nx, ny] }               mesh density (master px); `grid` = a plain quad grid (a rigid prop)
   "landmarks": { name: [bone, [x, y]] }              bind points: `head` (required: the bone that carries the head), `feet`, footN, hand, spearTip ...
   "rim":      true                                   write a rim mask per part (white along the painting's own outline only)
+  "normals":  { "dir": "D:/pyrefly-art-maps", "scale": 0.3 }   (HD-2D look, `rig_normals.py`) also write `<part>.normal.png`, the same window of the costume painting's normal map, and name it `normal`
   "hidden":   [part, ...]   and   "variants": { part: { name: {png, rim, ...} } }          format v2 (2026-10-18, rig_v2.py): parts hidden at rest, other images of a part a key may swap in
   hooks:      build(state) may add parts (state.parts.append(record)) and bones (state.add_bone)
 
@@ -29,6 +30,7 @@ import numpy as np
 from PIL import Image
 
 import rig_geom as R
+import rig_normals
 import rig_v2
 from rig_common import Subject, costume_anchor, load_rgba, say, write_json
 
@@ -60,6 +62,9 @@ def export_part(state, name, order, rgba_part, mesh_cfg, weights_fn, margin=4, r
     Image.fromarray(crop, "RGBA").save(out / f"{name}.png")
     rec = {"name": name, "order": order, "png": f"{name}.png", "box": [int(x0), int(y0), int(x1 - x0), int(y1 - y0)],
            "verts": [round(float(v), 2) for v in verts.reshape(-1)], "triangles": [int(t) for t in T.reshape(-1)]}
+    if getattr(state, "nrm", None) is not None:  # the same window of the costume painting's normal map, opaque RGB, no rotation or flip (rig_normals.py)
+        rig_normals.save_piece(out / f"{name}.normal.png", rig_normals.window(state.nrm, y0, y1, x0, x1), rig_normals.piece_size((x1 - x0, y1 - y0), state.ncfg))
+        rec["normal"] = f"{name}.normal.png"
     if rim and not rim_everywhere:
         r = (R.outer_edge_mask(state.painting_alpha)[y0:y1, x0:x1] * 255).astype(np.uint8)
         Image.fromarray(r, "L").save(out / f"{name}.rim.png")
@@ -90,6 +95,8 @@ def run(sub: Subject) -> None:
     H, W = master.shape[:2]
     state = types.SimpleNamespace(sub=sub, cfg=cfg, S=S, H=H, W=W, out=sub.sub("build"), order=order, R=R, parts=[], np=np)
     state.painting_alpha = R.defringe_alpha(master)[..., 3]
+    state.ncfg = rig_normals.settings(sub)
+    state.nrm = rig_normals.load_map(sub, state.ncfg, sub.costume_pose, (W, H)) if state.ncfg else None
     state.bones = [(n, p, tuple(float(c) * S for c in at)) for n, p, at in cfg["bones"]]
     state.BI = {b[0]: i for i, b in enumerate(state.bones)}
 

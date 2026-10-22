@@ -39,7 +39,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { bandVerdict } from '../posescale/pose-bands.mjs';
 import { listPoses, loadModelInputs } from '../posescale/pose-model.mjs';
-import { poseClassOf } from '../posescale/pose-kinds.mjs';
+import { poseClassOf, subjectKind } from '../posescale/pose-kinds.mjs';
 import { drawnMask, maskIou } from '../posescale/pose-pixels.mjs';
 import { GATE_BY, GATE_RULES, costumeParts, normaliseRig, partImages, readRigFile, rigDigest, rigSize } from './rig-format.mjs';
 import { scanHoles } from './rig-holes.mjs';
@@ -91,7 +91,14 @@ export function costumeSha(costume, scale, artDir, subject, pose) {
   return { ok: true, why: '' };
 }
 
-export const BUDGET = Object.freeze({ parts: 24, bones: 48, verts: 8000, tris: 14000, texels: 9_000_000, bytes: 9_000_000 });
+/** Paintings the engine never draws as the actor's pose: `splash` is Bahamut's Mega Flare cut-in, a full-screen picture the spectacle shows (`src/app/screens/battleSpectacle.ts#splashArtFor`), so a rig is not held to a key for it (it is listed under `exempt`). */
+const NOT_AN_ACTOR_POSE = new Set(['splash']);
+
+export const BUDGET = Object.freeze({ parts: 24, bones: 48, verts: 8000, tris: 14000, texels: 9_000_000, bytes: 9_000_000, normalTexels: 4_000_000, normalBytes: 4_000_000 });
+/** The texel and byte budget of an aeon or a boss (the driver's decision 153, 2026-10-20: a boss is one figure on the field, and its expressive keys carry a piece of every part of every pose): 12 Mpx and 12 MB; parts, bones, vertices and triangles unchanged. */
+export const BUDGET_BOSS = Object.freeze({ ...BUDGET, texels: 12_000_000, bytes: 12_000_000 });
+/** The budget a subject is held to: the party and the dresspheres keep 9 Mpx / 9 MB; an aeon, a dark aeon, a boss and a part of one get the boss budget. */
+export const budgetOf = (subject) => (['aeon', 'dark-aeon', 'boss-foe', 'part'].includes(subjectKind(String(subject ?? ''))) ? BUDGET_BOSS : BUDGET);
 
 const sha256File = (p) => createHash('sha256').update(readFileSync(p)).digest('hex');
 const f3 = (v) => (v === null || v === undefined || !Number.isFinite(v) ? 'n/a' : v.toFixed(3));
@@ -127,7 +134,7 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   const fail = (code, message, pose) => failures.push(pose ? { code, pose, message } : { code, message });
   const { raw, dir } = readRigFile(rig);
   const { problems, rt } = normaliseRig(raw, { dir });
-  const result = { subject: raw?.name ?? null, status: 'refused', failures, keys: [], rest: null, holes: null, uncovered: [], size: rigSize(raw ?? {}, dir), digest: rigDigest(raw ?? {}, dir), bands: RIG_BANDS, budget: BUDGET, rigDir: dir, authored: [], turned: [], acceptance: null };
+  const result = { subject: raw?.name ?? null, status: 'refused', failures, keys: [], rest: null, holes: null, uncovered: [], size: rigSize(raw ?? {}, dir), digest: rigDigest(raw ?? {}, dir), bands: RIG_BANDS, budget: budgetOf(raw?.name), rigDir: dir, authored: [], turned: [], acceptance: null };
   result.exempt = []; // painted poses with no key that the rig is not held to (staged or part paintings): stamped, so the runtime and the deploy can tell them from a pose painted after the gate ran
   result.variants = []; // format v2: each variant's palette distance from its base part (a report, never a refusal; `rig-variants.mjs`)
   result.silhouettes = {}; // each key's posed box, feet and painted front in the master's px (`rig-silhouette.mjs`), stamped for the HUD's brackets and the strike's reach
@@ -139,13 +146,16 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   result.acceptance = { iou: bar, landmarkPct: lmTol };
   // ---- budget
   const sz = result.size;
+  const BUD = result.budget;
   const over = (code, n, cap, what) => { if (n > cap) fail(`budget-${code}`, `${n.toLocaleString('en-US')} ${what}, over the budget of ${cap.toLocaleString('en-US')}`); };
-  over('parts', sz.parts, BUDGET.parts, 'parts');
-  over('bones', sz.bones, BUDGET.bones, 'bones');
-  over('verts', sz.verts, BUDGET.verts, 'vertices');
-  over('tris', sz.tris, BUDGET.tris, 'triangles');
-  over('texels', sz.texels, BUDGET.texels, 'texels');
-  over('bytes', sz.bytes, BUDGET.bytes, 'bytes of PNG (variants included)');
+  over('parts', sz.parts, BUD.parts, 'parts');
+  over('bones', sz.bones, BUD.bones, 'bones');
+  over('verts', sz.verts, BUD.verts, 'vertices');
+  over('tris', sz.tris, BUD.tris, 'triangles');
+  over('texels', sz.texels, BUD.texels, 'texels');
+  over('bytes', sz.bytes, BUD.bytes, 'bytes of PNG (variants included)');
+  over('normal-texels', sz.normalTexels ?? 0, BUD.normalTexels, 'texels of normal pieces (the HD-2D look, counted apart from the colour)');
+  over('normal-bytes', sz.normalBytes ?? 0, BUD.normalBytes, 'bytes of normal pieces');
   if (failures.some((f) => f.code.startsWith('rig-'))) return result;
   for (const v of variantRules(rt)) fail(v.code, v.message);
   // ---- the costume painting
@@ -240,7 +250,7 @@ export async function gateRig({ rig, root = ROOT, artDir, inputs, blends = true,
   // `required` are the painted poses the battle draws a figure in; `exempt` the painted poses with no key that the rig is not held to (a staged or part painting, or one the pose table has no row for):
   // the stamp records them, so the runtime and the deploy can tell a pose that was never required from one painted after the gate ran
   const painted = listPoses(inp, rt.name);
-  const required = painted.filter((p) => (inp.table[rt.name]?.[p] || p === ctx.R.refName) && !['staged', 'part'].includes(poseClassOf({ pose: p, isRef: false, prone: false, kind: ctx.R.kind })));
+  const required = painted.filter((p) => (inp.table[rt.name]?.[p] || p === ctx.R.refName) && !NOT_AN_ACTOR_POSE.has(p) && !['staged', 'part'].includes(poseClassOf({ pose: p, isRef: false, prone: false, kind: ctx.R.kind })));
   result.uncovered = required.filter((p) => !rt.keys[p]);
   result.exempt = painted.filter((p) => !rt.keys[p] && !required.includes(p));
   if (requireCoverage && result.uncovered.length) fail('coverage', `no key for ${result.uncovered.join(', ')}: a figure turns its rig on only with a key for every pose it is painted in, and those poses would draw as the nearest key down the pose chain, not as their paintings (--allow-partial is for a rig still being fitted, and the deploy refuses it)`);

@@ -51,7 +51,10 @@ import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScree
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
 import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
+import { markDemoHud } from '../demo/demoHud.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
+import { holdGpuSync, releaseGpuSync } from '../../engine/GpuSettle.ts';
+import { coachCardUp } from '../../ui/coach/cardPress.ts'; // R61: a first-use card is up: Esc closes it, the next Esc pauses
 import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
 import { attachAdvisorV4 } from '../advisorV4/wiring.ts';
 import { PauseScreen } from './PauseScreen.ts';
@@ -62,11 +65,13 @@ import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts'
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { StallWatch } from './BattleScreenStall.ts';
 import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/GoldenHour.ts';
+import { applyChapterLook } from '../../engine/look/LookState.ts'; // release 60: the conference demo's default look
 import { bindLivingScene, releaseLivingScene, updateLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
 import { framingArrivalOwed, framingPlanOwed, framingPlanSettled } from '../../engine/fx/mix/MaxMix.ts'; // FOC44A-05: the boss entrance waits for CHAPTER FRAMING's plan; the opening waits for it too (`openingGate.ts`)
 import { patchSideFogIn, setSideFogGame } from '../../engine/PlateSideFog.ts';
 import { startMarkRecorder, type MarkRecorder } from '../markRecorder.ts';
-import { defaultSettings } from '../SaveData.ts';
+import { defaultSettings, readSetting } from '../SaveData.ts';
+import { visualStyleOf } from '../saveVisualStyle.ts'; // release 61: OPTIONS > VISUAL STYLE
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { battleComfort } from './battleComfort.ts';
 import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
@@ -105,6 +110,8 @@ export interface BattleScreenOptions {
   resumeAt?: ChainCheckpoint;
   /** The player skipped the pre-scene: the first opening runs hurried (PR-0061, `openingHurry.ts`). */
   openingHurry?: boolean;
+  /** R61 (conference demo, `demo/demoAttract.ts`, demo mode only): this fight is the attract loop's highlight reel, played on no one's behalf. It writes nothing to the save (no play time). */
+  attract?: boolean;
 }
 
 /** How the encounter ended, for the flow in `App.ts`. */
@@ -223,6 +230,7 @@ export class BattleScreen extends Screen {
     const chapter = this.opts.chapter;
     this.startedAt = performance.now();
     this.root.className = 'screen battle-screen';
+    markDemoHud(this.root); // R61: `demo-hud` on the root in demo mode (the advisor's one line, `demo/demo.css`)
     this.markRecorder = startMarkRecorder({
       chapter: chapter.id,
       game: chapter.game,
@@ -247,13 +255,16 @@ export class BattleScreen extends Screen {
     else delete this.root.dataset['artNamespace'];
     if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
-    bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
+    holdGpuSync(); // R61 (PR-0481): optional readbacks (the figures' breathing, the splash crop) wait until the field's first draw has built its programs (`engine/GpuSettle.ts`)
+    applyChapterLook(chapter.id, visualStyleOf(readSetting('visualStyle'))); // release 60: hd2d at bold strength by default in Chapters I and IV, before the figures bind their maps (`engine/look/LookState.ts`); release 61: unless OPTIONS > VISUAL STYLE says CLASSIC (a `?look=` address still wins)
+    bindEyeCandyScene({ key: scene.key, chapter: chapter.id, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
     setSideFogGame(chapter.game); // release 39.1, B11 (FFX only): fogged plate edges where the plane ends inside an ultrawide frame (`engine/PlateSideFog.ts`)
     patchSideFogIn(scene.scene);
     this.scene.hideOwnActors();
     this.syncPixelScale();
     this.offSceneScale = onSceneScale(() => this.syncPixelScale()); // a supersampled scene (`crisp/CrispRig.ts`) changes the point sprites' pixel grid
+    (this.app.renderer as { prepareLook?: () => void }).prepareLook?.(); // release 60: the demo look's passes (Chapters I and IV by default) join the post chain now, so the warm-up below compiles them
     void warmShaders(this.app.renderer, scene.scene); // the diorama's programs compile while the figures load
 
     // --- field -------------------------------------------------------------
@@ -387,6 +398,7 @@ export class BattleScreen extends Screen {
     // one that keeps playing instead of being crossfaded out to the generic
     // `battle-ffx` (critic round 02 #02). Nothing plays music here.
     await warmShaders(this.app.renderer, this.scene.scene, { draw: true }); // the figures' too; first frame under the swirl
+    releaseGpuSync(); // the GPU has built the field: the readbacks are cheap now
     if (this.exited) return this.releaseParts();
     this.fieldShown = true;
     void this.app.fade('clear', 600);
@@ -630,6 +642,9 @@ export class BattleScreen extends Screen {
    */
   private get canPauseOnCancel(): boolean {
     if (!this.canPause) return false;
+    // R61 (booth, both games): a first-use card is up, so Back belongs to the card (it takes itself down on the same press and absorbs it, `cardPress.ts`).
+    // This is the one-frame case the card's own absorb cannot reach: the pad's edge read here before the card's poll has run.
+    if (coachCardUp()) return false;
     if (this.presenter?.snapshot()['awaitingMenu'] !== true) return true;
     return !menuOwnsCancel();
   }
@@ -782,7 +797,7 @@ export class BattleScreen extends Screen {
     // time spent playing. `SaveStore.addPlayTime` buffers the writes.
     // A hidden experiment (FF7) keeps its time in its own store, never the save (BattleScreenExperiment.ts).
     if (!this.preview && this.opts.chapter.experimental) addExperimentPlayTime(this.opts.chapter.id, dt * 1000);
-    else if (!this.preview) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000);
+    else if (!this.preview && !this.opts.attract) this.app.save.addPlayTime(this.opts.chapter.id, dt * 1000); // R61: the attract reel is no one's play time
 
     const fieldDt = this.spectacle?.stageDt(animDt) ?? animDt; // option C's hit-stop holds the field, never the engine or the HUD
     this.scene?.update(fieldDt);

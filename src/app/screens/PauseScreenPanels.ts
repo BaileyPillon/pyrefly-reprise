@@ -17,6 +17,8 @@ import { fxSummary } from '../fxParts.ts';
 import { TEXT_SIZES, textSizeLabel } from '../saveComfort.ts';
 import { colourVisionLabel } from '../saveAccess.ts';
 import { presentationSummary } from '../saveFrontend.ts';
+import { VISUAL_STYLE_LABELS, visualStyleOf } from '../saveVisualStyle.ts';
+import { keyHint } from '../../ui/common/padGlyphs.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 
 // ------------------------------------------------------------------ options
@@ -52,7 +54,7 @@ export const TEXT_SPEED_MAX: (typeof TEXT_SPEEDS)[5] = 2;
  * Volume, text speed, EYE CANDY (D-317, option A: Bailey, 2026-10-02, "all your recommendations,
  * godspeed"), where eye-candy D's three look rows were: one row that opens the EYE CANDY page
  * (`pause/eyeCandyPage.ts`) and reads ALL ON, ALL OFF or `n OF 11` for `game` (`fxParts.ts`); the
- * pause drops it in FF7, which draws no eye candy. Then the FFX-2 Active/Wait toggle, and whether
+ * pause drops it in FF7, which draws no eye candy. Then VISUAL STYLE (release 61: HD-2D or CLASSIC, the demo look's switch; also dropped in FF7), the FFX-2 Active/Wait toggle, and whether
  * the strategy guide starts visible. `skipSeenCutscenes` stays off the menu. Last, PRESENTATION (39.5, Bailey, 2026-10-08,
  * "go with C"): one row that opens the page (`pause/presentationPage.ts`) holding TITLE SCREEN and CHAPTER MUSIC, the two
  * front-end choices (`saveFrontend.ts`) he asked to be selectable; it reads both at a glance (`THE ECHO · A`).
@@ -77,6 +79,8 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
       ratio: (settings.textSpeed - TEXT_SPEED_MIN) / (TEXT_SPEED_MAX - TEXT_SPEED_MIN),
     },
     { id: 'eyeCandy', label: 'EYE CANDY', value: fxSummary(settings, game), ratio: null },
+    // Release 61 (Bailey, 2026-10-21, the conference demo; both games): HD-2D (release 60's bold look in Chapter I and Chapter IV) or CLASSIC (no look). Read when a chapter starts.
+    { id: 'visualStyle', label: 'VISUAL STYLE', value: VISUAL_STYLE_LABELS[visualStyleOf(settings.visualStyle)], ratio: null },
     { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
     { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },
     // 39.5 (Bailey, 2026-10-07 and 10-08; both games): opens the page for which title screen is drawn and which chapter-select track plays.
@@ -130,5 +134,5 @@ export function optionsTabHtml(settings: Readonly<Settings>, selected: number): 
     .join('');
   return `<div class="pause__head"><span class="pause__head-label">OPTIONS</span></div>
     <div class="pause__opts">${rows}</div>
-    <div class="pause__opt-hint"><b>&#9664; &#9654;</b> ADJUST &nbsp;&middot;&nbsp; <b>ESC</b> BACK TO MENU</div>`;
+    <div class="pause__opt-hint"><b>${keyHint('\u25c0 \u25b6', 'dpad-h')}</b> ADJUST &nbsp;&middot;&nbsp; <b>${keyHint('ESC', 'Circle')}</b> BACK TO MENU</div>`;
 }

@@ -78,6 +78,12 @@ export function resolveTargetId(name, roster, domIds) {
 }
 
 /** A visible command stack whose rows are all disabled: nothing a player can choose. */
+/**
+ * The command row a card's label points at. A line-first card names the aeon of a Grand Summon, "Grand Summon: Shiva" (release 59, decision 145; `grandSummonLabel` in `advisor.ts`), but the menu's row is
+ * "Grand Summon" and the aeon is chosen in the picker that row opens (the picker is read against the card's whole text, `route-fight.mjs`). Every other label is its own row.
+ */
+export const rowLabelOf = (label) => String(label ?? '').replace(/^(grand summon):\s+.+$/i, '$1');
+
 export const isAllDisabledOverlay = (rows) => rows.length > 0 && rows.every((r) => r.disabled);
 
 /**

@@ -263,6 +263,17 @@ export interface VfxPort {
   travel?(from: CombatantId, to: CombatantId, o: { abilityId?: string; kind: 'orb' | 'tracer' | 'beam'; ms: number }): { ms: number; landed: Promise<void> };
   /** Would `travel` draw a shot for this ability (and caster) now? Asked before a blow's numeral is held for it. Optional: absent reads as yes. */
   canTravel?(abilityId: string | undefined, from: CombatantId): boolean;
+  /**
+   * The FFX item gesture (`BattlePresenterItem.ts`; FFX chapters only): an orb of light forms over `from`'s hand over `o.formMs`, is tossed overhand, arcs to the middle of `to` over `o.flightMs` with a short trail and
+   * bursts into sparkles there; `o.tone` is green for an ally, amber for a foe. Both times are at the presenter's normal pace: the stage's effect clock scales them the way the presenter scales its sleeps.
+   * Optional and additive: a stage without it draws nothing.
+   */
+  itemToss?(from: CombatantId, to: readonly CombatantId[], o: { formMs: number; flightMs: number; tone: 'heal' | 'foe'; style?: 'orb' | 'spark' }): void;
+  /**
+   * The item gesture on the user (`itemToss`'s other half): a small glow forms at the hand over `o.formMs`, then green glow particles rise around the figure. `style: 'spark'` (FFX-2): nothing at the hand,
+   * only a white-blue burst on the figure after `o.formMs`; and for `itemToss` the same style is a small white-blue spark tossed with no trail and no held glow, `tone` ignored. Optional and additive.
+   */
+  itemGlow?(at: CombatantId, o: { formMs: number; style?: 'orb' | 'spark' }): void;
 }
 
 /** Rising damage/heal numerals. Supplied by `ui/common`, or the DOM fallback. */
@@ -417,6 +428,11 @@ export interface BattleStage {
    * enemy's physical ability on `cast`, as before.
    */
   paints?(id: CombatantId, pose: string): boolean;
+  /**
+   * The pose a figure holds while it uses an item in an FFX chapter (`BattlePresenterItem.ts`): one with no flask in it (a figure drawn from paintings takes its `idle`, Yuna her open-handed `item`; a rigged figure its rig's
+   * `item` key), where the hand of the orb is known; undefined for a figure the stage has no hand for, which then draws as before. Optional and additive.
+   */
+  itemStance?(id: CombatantId): string | undefined;
   /** RUN-IN's field: painted shapes, camera truck, smear (r38-motion, FFX-2 only; `motion/StageMotionPort.ts`). Optional and additive. */
   readonly motion?: import('./motion/StageMotionPort.ts').StageMotionPort;
   /** The scene's shot director, which `BattleMoments` asks before it moves the camera for a beat (`ShotDirector.ts`). Optional and additive: a stage without one plays every beat's own shot. */
@@ -477,6 +493,12 @@ export interface PresenterDeps {
   sfxVoice?: import('./BattlePresenterSfx.ts').SfxVoice | null;
   /** A game's own motion around each action (FF7's melee run, FFX-2's RUN-IN, `BattlePresenterMotion.ts`); none for FFX. */
   actionMotion?: import('./BattlePresenterMotion.ts').ActionMotionPort | null;
+  /**
+   * `'orb'`: an item use draws FFX's own gesture, an orb of light tossed to the ally (a glow around the user), and no flask (`BattlePresenterItem.ts`). Set for an FFX chapter only
+   * (`app/screens/BattleScreenGameDeps.ts`; research `re-ffx-party-motion-timing.md` section 6). `'spark'`: FFX-2's own, a quick small white-blue spark tossed to the ally (a burst on the user) and a white-blue sparkle burst on the target,
+   * no orb, the figure's pose and the presenter's waits as before; set for an FFX-2 chapter only. Absent or null: the item painting and the spell effect, as before (FF7).
+   */
+  itemGesture?: 'orb' | 'spark' | null;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */

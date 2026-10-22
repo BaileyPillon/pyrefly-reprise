@@ -27,9 +27,11 @@
 
 import './coach.css';
 import { escapeHtml } from '../common/html.ts';
+import { keyHint } from '../common/padGlyphs.ts';
 import { RawInputWatcher, claimHeldPad, reservePad } from '../ffx/rawInput.ts';
 import { CHAPTER_PANEL_SELECTORS, INTENT_AVOID_SELECTORS, rectsOf } from '../ffx/hudAvoidSelectors.ts';
 import { bandClearOf, clearOfPanels, slideClearOf } from './coachAvoid.ts';
+import { absorbCardPress, swallowCancelKey } from './cardPress.ts'; // R61: the press that takes a card down is the card's alone
 import { coachRunningBadge } from './coachCopy.ts';
 import { ffx2CoachClock } from './coachState.ts';
 import type { CoachMarkOptions, CoachMarkOutcome } from './coachTypes.ts';
@@ -107,8 +109,11 @@ export class CoachMark {
         // is `onConfirmCapture`. A press after the cursor was moved is an answer to the menu and goes through.
         if (source === 'gamepad' && opts.game === 'ffx' && !this.navigated) claimHeldPad('confirm');
         this.finish('confirmed');
-      } else if (button === 'cancel') this.finish('cancelled', true);
-      else {
+      } else if (button === 'cancel') {
+        // R61 (booth): Back closes the card and nothing else: not the menu behind it, not the pause. Both games (`cardPress.ts`).
+        if (source === 'gamepad') claimHeldPad('cancel');
+        this.finish('cancelled', true, true);
+      } else {
         this.navigated = true;
         this.releasePad?.(); // the confirm that follows answers the row they highlighted: the menu hears it too
         this.releasePad = null;
@@ -154,7 +159,7 @@ export class CoachMark {
         ? `<div class="coach-mark__running">${coachRunningBadge(ffx2CoachClock())}</div>`
         : '';
     const foot = mark.holds
-      ? '<span><b class="coach-mark__key">Enter</b><b class="coach-mark__tap">Tap</b> continue</span><span>First time only</span>'
+      ? `<span><b class="coach-mark__key">${keyHint('Enter', 'Cross')}</b><b class="coach-mark__tap">Tap</b> continue</span><span>First time only</span>`
       : '<span>Fades on its own</span><span>First time only</span>';
     return (
       running +
@@ -225,6 +230,12 @@ export class CoachMark {
     this.finish('confirmed');
   };
 
+  /** R61: a plain cancel key (Esc, X, Backspace) is taken whole, in the capture phase, before the menu behind the card or the pause can hear it (`cardPress.ts`). */
+  private readonly onCancelCapture = (e: KeyboardEvent): void => {
+    if (this.done || !this.el.isConnected || !swallowCancelKey(e)) return;
+    this.finish('cancelled', true, true);
+  };
+
   /**
    * Put the line up.
    *
@@ -257,6 +268,7 @@ export class CoachMark {
     // jsdom test) registration order gives the same answer the capture phase
     // gives in a browser (see `onConfirmCapture`'s own comment).
     window.addEventListener('keydown', this.onConfirmCapture, true);
+    window.addEventListener('keydown', this.onCancelCapture, true);
     window.addEventListener('pointerdown', this.onPointerCapture, true);
     this.watcher.attach();
     // PR-0362 (FFX only): the pad is polled, so no capture listener can take its Cross first. While this line is up
@@ -350,15 +362,17 @@ export class CoachMark {
     return this.done;
   }
 
-  private finish(outcome: CoachMarkOutcome, byPlayer = false): void {
+  private finish(outcome: CoachMarkOutcome, byPlayer = false, pressed = false): void {
     if (this.done) return;
     this.done = true;
+    const onScreen = this.el.isConnected; // a card whose HUD was torn down around it is not on screen, and takes no press (R61)
     if (this.timer) this.clearTimer(this.timer);
     this.timer = 0;
     this.watcher.detach();
     this.releasePad?.();
     this.releasePad = null;
     window.removeEventListener('keydown', this.onConfirmCapture, true);
+    window.removeEventListener('keydown', this.onCancelCapture, true);
     window.removeEventListener('pointerdown', this.onPointerCapture, true);
     this.el.removeEventListener('click', this.onClick);
     this.el.classList.remove('coach-mark--in');
@@ -369,6 +383,7 @@ export class CoachMark {
     } catch {
       /* see show() */
     }
+    if (pressed && onScreen) absorbCardPress(); // the Back that closed the card is not also the battle screen's pause (R61)
     this.opts.guide?.ended(outcome, byPlayer && outcome === 'cancelled');
     const settle = this.settle;
     this.settle = null;

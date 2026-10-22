@@ -31,9 +31,10 @@ export async function openGame({ repo, base, rig = 'on', log = console.log, load
   page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${String(e).slice(0, 400)}`));
   page.on('response', (r) => { if (r.status() >= 400) notFound.push({ url: r.url(), status: r.status() }); });
   await page.clock.install();
-  await page.goto(`${base}?rig=${rig}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
+  const extra = process.env.PYREFLY_LANE_QUERY ? `&${process.env.PYREFLY_LANE_QUERY}` : ''; // e.g. `wait=hold`: an FFX-2 fight's clock held by the open menu (the default Wait mode lets it run at the top-level list, so the boss acts during a `poses` recording)
+  await page.goto(`${base}?rig=${rig}${extra}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
   await page.evaluate(() => { try { localStorage.clear(); } catch { /* blocked */ } });
-  await page.goto(`${base}?rig=${rig}&crisp=a2`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
+  await page.goto(`${base}?rig=${rig}&crisp=a2${extra}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: loadTimeout });
   log('the game is ready');
   const input = {

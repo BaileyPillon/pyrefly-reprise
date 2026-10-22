@@ -378,11 +378,11 @@ describe('keyboard', () => {
 });
 
 describe('gamepad', () => {
-  it('Cross (standard button 0) stops a reel once per press, and the words say CROSS', async () => {
+  it('Cross (standard button 0) stops a reel once per press, and the words say A (an Xbox pad\'s bottom face button; release 61)', async () => {
     const { pad, set } = makePad();
     stubPads([pad]);
     const h = open();
-    expect(subtitleOf(h)).toBe('PRESS CROSS TO STOP'); // a connected pad is the best guess before the first press
+    expect(subtitleOf(h)).toBe('PRESS A TO STOP'); // a connected pad is the best guess before the first press
     t = 410;
     for (let i = 0; i < 3; i++) await tapPad(set, 0);
     expect(armed(h)).toBe('');
@@ -472,17 +472,17 @@ describe('pointer (touch and mouse)', () => {
 });
 
 describe('the words follow the input being used', () => {
-  it('a keyboard player who taps is told TAP, and Enter takes it back; a pad takes it to CROSS', async () => {
+  it('a keyboard player who taps is told TAP, and Enter takes it back; a pad takes it to A (release 61: the pad in hand names the button)', async () => {
     const { pad, set } = makePad();
     stubPads([pad]);
     const h = open({ phases: [0, 0, 0] });
-    expect(subtitleOf(h)).toBe('PRESS CROSS TO STOP');
+    expect(subtitleOf(h)).toBe('PRESS A TO STOP');
     keydown('Enter');
     expect(subtitleOf(h)).toBe('PRESS ENTER TO STOP');
     pointerdown(h.el, 'touch');
     expect(subtitleOf(h)).toBe('TAP TO STOP');
     await tapPad(set, 0);
-    expect(subtitleOf(h)).toBe('PRESS CROSS TO STOP');
+    expect(subtitleOf(h)).toBe('PRESS A TO STOP');
     expect(armed(h)).toBe('');
     await h.result;
   });

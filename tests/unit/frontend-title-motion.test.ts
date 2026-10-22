@@ -228,9 +228,10 @@ describe('titleMarkup', () => {
   });
 
   it('names the input it is actually talking to, for both the chip and the hint row', () => {
-    expect(html).toContain('fe-title__chip-label--key">Press Enter<');
+    expect(html).toContain('fe-title__chip-label--key">Press <span class="kh-k">Enter</span>'); // the key, with the pad's button beside it (release 61)
     expect(html).toContain('fe-title__chip-label--tap">Tap to begin<');
     expect(html).toContain('class="fe-hint__tap"><b>Tap</b> begin</span>');
+    expect(html).toContain('<span class="kh-p"><kbd class="pg" data-pg="cross"'); // and the bottom face button for a pad
     // Three keyboard hints (move / confirm / cancel), each tagged so CSS can
     // hide them on `pointer: coarse` without hiding the tap-only one too.
     expect(html.match(/class="fe-hint__key"/g) ?? []).toHaveLength(3);

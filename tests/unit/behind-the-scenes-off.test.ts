@@ -30,7 +30,7 @@ import { afterAll, describe, expect, it } from 'vitest';
 
 import { BTS_KEY, BTS_KEY_LABEL, BTS_LIVE, BTS_TITLE } from '../../src/app/changelog/behindTheScenes.ts';
 import { AI_TOOLS_GROUP, CREDIT_GROUPS, creditGroups } from '../../src/app/credits/creditsData.ts';
-import { BTS_ACTION, btsEntryHtml, changelogEntryHtml, infoEntriesHtml } from '../../src/app/screens/frontend/titleInfoHtml.ts';
+import { BTS_ACTION, btsEntryHtml, changelogEntryHtml, infoEntriesHtml, titleArtEntryHtml } from '../../src/app/screens/frontend/titleInfoHtml.ts';
 import { titleMarkup } from '../../src/app/screens/frontend/titleMarkup.ts';
 import { findUnshipped, isUnshippedPublicFile, pruneUnshipped } from '../../tools/dist-filter.mjs';
 import { IMAGE_FILES } from '../../src/app/behindTheScenes/content.ts';
@@ -83,14 +83,18 @@ describe('the title\u2019s markup with the switch off', () => {
       for (const briefingChip of [true, false]) {
         const html = titleMarkup({ briefingChip, art, build: { release: '39.4.2', sha: 'a021787a' } });
         expect(html, `${art}/${briefingChip}`).not.toContain(BTS_ACTION);
-        expect(html).not.toMatch(/behind the scenes|behind the screens|title:bts|data-action="title:bts"|>\s*T\s*<\/b>/i);
+        expect(html).not.toMatch(/behind the scenes|behind the screens|title:bts|data-action="title:bts"/i);
+        // The letter T is on the row since release 61, as the TITLE ART entry and nothing else: one T, and it belongs to title:art.
+        // (the chip carries the key and the pad's Y, `ui/common/padGlyphs.ts` keyHint: the key half is `<span class="kh-k">T</span>`)
+        expect(html.match(/<span class="kh-k">T<\/span>/g) ?? [], `${art}/${briefingChip}`).toHaveLength(1);
+        expect(html).toMatch(/<b><span class="kh-k">T<\/span><span class="kh-p">.*?<\/span><\/b> Title Art/);
         expect(html).toContain('data-action="title:changelog"');
       }
     }
   });
 
-  it('draws the hairline and CHANGELOG only: the row\u2019s entries are exactly the changelog\u2019s', () => {
-    expect(infoEntriesHtml()).toBe(changelogEntryHtml());
+  it('draws the hairline, CHANGELOG and TITLE ART only (release 61): the row\u2019s entries are exactly those two\u2019s', () => {
+    expect(infoEntriesHtml()).toBe(changelogEntryHtml() + titleArtEntryHtml());
     expect(infoEntriesHtml()).not.toContain('bts');
   });
 

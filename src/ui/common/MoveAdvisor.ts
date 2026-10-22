@@ -5,6 +5,7 @@ import { buildAdvisorView, type AdvisorOptions, type AdvisorView, type MoveSugge
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { ADVISOR_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
+import { keyHint } from './padGlyphs.ts';
 import { followCard } from './advisorChipFollow.ts';
 import { firstClause } from './advisorClause.ts';
 
@@ -247,9 +248,8 @@ export class MoveAdvisor {
     // as `StrategyGuide.applyVisible` does: an inline `left` outranks the
     // stylesheet, so the chip would otherwise freeze at the last card's edge.
     if (!this.visible) this.toggleEl.style.left = '';
-    const keys = padConnected() ? ADVISOR_HINT_ITEM.gamepad : ADVISOR_HINT_ITEM.keyboard;
     const word = this.visible ? 'hide moves' : 'best move';
-    this.toggleEl.innerHTML = `<b>${escapeHtml(keys)}</b><span>${escapeHtml(word)}</span>`;
+    this.toggleEl.innerHTML = `<b>${keyHint(ADVISOR_HINT_ITEM.keyboard, ADVISOR_HINT_ITEM.gamepad)}</b><span>${escapeHtml(word)}</span>`;
     this.toggleEl.setAttribute('aria-pressed', String(this.visible));
     this.toggleEl.title = this.visible ? 'Hide the move advisor' : 'Show the next best move';
     this.syncChip();
@@ -320,6 +320,12 @@ export class MoveAdvisor {
   }
 
   /** Attach (or detach) advisor v4's background search (`src/app/advisorV4/wiring.ts`). */
+  /** The options the card is built with (`MoveAdvisorOptions.advisor`), set after construction: the FFX HUD hands over the live engine this way (`FFXBattleHud.setLineEngine`). `undefined`: none, as at construction. */
+  setAdvisorOptions(advisor: (() => AdvisorOptions) | undefined): void {
+    if (advisor) this.opts.advisor = advisor;
+    else delete this.opts.advisor;
+  }
+
   setLookAhead(source: MoveAdvisorLookAhead | null): void {
     this.lookAhead = source;
   }
@@ -577,15 +583,6 @@ function fitTipRow(card: HTMLElement): void {
         if (wider(line)) cut(actor);
       }
     }
-  }
-}
-
-function padConnected(): boolean {
-  try {
-    const pads = navigator.getGamepads?.() ?? [];
-    return Array.from(pads).some((p) => p !== null && p.connected);
-  } catch {
-    return false;
   }
 }
 

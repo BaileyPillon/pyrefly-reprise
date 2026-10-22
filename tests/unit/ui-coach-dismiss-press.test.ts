@@ -197,13 +197,13 @@ describe('the pad: one Cross takes the card down and does nothing else (the pad 
     expect(heard).toEqual(['confirm']);
   });
 
-  it('Circle skips as before and leaves the next Cross to the menu', async () => {
+  it('Circle skips, and the card keeps that press (R61, the booth: it was the pause\'s too under FR-34-01); the next Cross is the menu\'s', async () => {
     const line = mountLine({ guide: true });
     await tapPad(padSet, 1);
     expect(line.finished).toBe(true);
-    expect(heard).toEqual(['cancel']); // the menu hears Circle too: the pause opens on it (FR-34-01)
+    expect(heard).toEqual([]); // the menu does not hear Circle: it closed the card, and nothing else (`r61-booth-card-esc.test.ts`)
     await tapPad(padSet, 0);
-    expect(heard).toEqual(['cancel', 'confirm']);
+    expect(heard).toEqual(['confirm']);
   });
 });
 

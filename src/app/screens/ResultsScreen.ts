@@ -1,6 +1,8 @@
 import '../../ui/common/results.css';
 import '../../ui/common/results-fit.css';
 import { Screen } from '../Screen.ts';
+import { mountDemoResultsHint } from '../demo/demoHints.ts'; // R61: the conference demo's pad/keyboard strip (`?demo=1` only)
+import type { ControlsHint } from '../../ui/common/ControlsHint.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { NO_FLOW, startFlow, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
@@ -26,6 +28,7 @@ import {
 import { DEFEAT_ACTIONS, desktopPageHtml, pageHeading, resultsCaptionHtml, type LedgerLine, type ResultsChoice, type ResultsPageModel } from '../../ui/common/resultsPage.ts';
 import { isPhoneResults, phoneHeroFigure, phoneHeroHtml, phonePageHtml, phoneShellHtml, RESULTS_PHONE_QUERY } from '../../ui/common/resultsPhone.ts';
 import { victoryLine, victoryTurn, wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from '../../ui/common/victoryLine.ts';
+import { quietResultsOf } from '../../ui/common/quietResults.ts'; // release 61: FFX-2 Chapter IV's quieter results
 
 export type { ResultsChoice } from '../../ui/common/resultsPage.ts';
 
@@ -94,6 +97,7 @@ export class ResultsScreen extends Screen {
   private caption = '';
   private readonly silent: boolean;
   private readonly victory: boolean;
+  private demoHint: ControlsHint | null = null; // R61: demo mode only
   private readonly rows: ResultsMemberRow[];
   /** Filled in by `enter()`, from the record as it stood before this clear. */
   private wasNewBest = false;
@@ -174,6 +178,7 @@ export class ResultsScreen extends Screen {
     if (!this.victory) this.revealMs = COUNT_UP_MS;
 
     this.refresh();
+    this.demoHint = mountDemoResultsHint(this.root, this.victory); // R61: null outside demo mode
     audio.playSfx(this.victory && !this.silent ? 'menu-open' : 'menu-close');
     if (this.victory && !this.silent) this.tally = startFlow(audio, this.gameId, 'results-count'); // SFX parity: the loop while the numbers count (a recorded original only)
     void this.app.fade('clear', 400);
@@ -189,6 +194,7 @@ export class ResultsScreen extends Screen {
   }
 
   override exit(): void {
+    this.demoHint?.unmount();
     this.endTally(false);
     voice.stop();
     this.stage?.destroy();
@@ -252,6 +258,7 @@ export class ResultsScreen extends Screen {
   }
 
   override handleInput(input: InputSnapshot): void {
+    this.demoHint?.handleInput(input);
     if (this.dismissed) return;
 
     if (this.victory) {
@@ -407,6 +414,7 @@ export class ResultsScreen extends Screen {
       tags.push(`OVERKILL ×${this.opts.result.overkilled.length}`);
     }
     if (this.wasNewBest && !this.ff7) tags.push('NEW BEST');
+    const quiet = quietResultsOf(this.opts.chapterId); // release 61: the one fight whose results show a calmer face for Rikku
 
     const model: ResultsPageModel = {
       victory: this.victory,
@@ -420,6 +428,7 @@ export class ResultsScreen extends Screen {
       rows: this.rows,
       progress: this.countProgress(),
       actionIndex: this.actionIndex,
+      ...(quiet ? { bodyFaces: quiet.bodyFaces } : {}),
     };
     page.innerHTML = this.phone ? phonePageHtml(model, this.caption) : desktopPageHtml(model);
     this.stage.el.classList.add('rres--visible');

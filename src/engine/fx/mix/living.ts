@@ -5,6 +5,7 @@ import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
 import { setMixPatch } from './patch.ts';
+import { demoMotionOn } from '../../motion/DemoMotion.ts'; // `?motion=demo`: the chest breath keeps the figure's own slow squash beside it, on the same period and phase
 
 export { patchLiving } from './livingShader.ts';
 
@@ -110,6 +111,8 @@ export class LivingFigure {
     this.saved = { breatheAmp: this.a.breatheAmp };
     this.colossus = COLOSSUS.test(this.a.name);
     this.still = STILL.test(this.a.name);
+    const dealt = demoMotionOn() ? (actor as { userData?: Record<string, unknown> }).userData?.['idlePhase'] : undefined;
+    if (typeof dealt === 'number') this.phase = dealt; // `?motion=demo`: the phase `PaintedActor` was dealt (`motion/DemoIdle.ts`), so the squash and the chest swell rise together
     const self = this;
     const prev = this.a.setPose;
     // Chained on the instance (another wrapper may sit under or over it: `restPoses.ts`); inert when off.
@@ -253,8 +256,9 @@ export class LivingFigure {
       this.states.clear();
     }
     // The actor's whole-figure breathing gives way to the chest breath while BREATHING plays.
-    a.breatheAmp = ctx.breath ? 0 : this.saved.breatheAmp;
-    const period = (this.colossus ? 5 : 1 / Math.max(0.05, a.breatheSpeed || 0.55)) * (ctx.game === 'ffx2' ? 0.8 : 1);
+    const demo = demoMotionOn(); // `?motion=demo` (part 3): the whole-figure squash stays beside the chest swell, and FFX-2 breathes on the same 3 to 4 s as FFX
+    a.breatheAmp = ctx.breath && !demo ? 0 : this.saved.breatheAmp;
+    const period = (this.colossus ? 5 : 1 / Math.max(0.05, a.breatheSpeed || 0.55)) * (ctx.game === 'ffx2' && !demo ? 0.8 : 1);
     const posture = a.life?.posture;
     const upright = 1 - a.lieRoll;
     if (ctx.breath) this.phase += (ctx.dt / period) * (posture?.tempo ?? 1);

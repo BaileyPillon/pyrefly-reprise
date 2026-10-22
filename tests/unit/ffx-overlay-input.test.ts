@@ -157,7 +157,7 @@ describe('the chip faces and the words follow the device (PR-0361)', () => {
 
   it('the words say ENTER, CROSS, CLICK or TAP, as Trigger Happy says R, R1, CLICK, TAP', () => {
     expect(pressWord(KEYS)).toBe('enter');
-    expect(pressWord(PAD)).toBe('cross');
+    expect(pressWord(PAD)).toBe('a'); // the bottom face button, named for the pad in use (A on an Xbox pad; a PlayStation pad reads its cross)
     expect(pressWord(MOUSE)).toBe('click');
     expect(pressWord(TOUCH)).toBe('tap');
     expect(pressWord({ device: 'pointer', pointerKind: 'pen' })).toBe('tap');
@@ -166,7 +166,7 @@ describe('the chip faces and the words follow the device (PR-0361)', () => {
     expect(sequenceInstruction(MOUSE)).toBe('click the sequence');
     expect(sequenceInstruction(TOUCH)).toBe('tap the sequence');
     expect(zoneInstruction(KEYS)).toBe('press enter in the gold zone');
-    expect(zoneInstruction(PAD)).toBe('press cross in the gold zone');
+    expect(zoneInstruction(PAD)).toBe('press a in the gold zone');
     expect(zoneInstruction(MOUSE)).toBe('click in the gold zone');
     expect(zoneInstruction(TOUCH)).toBe('tap in the gold zone');
   });
@@ -372,7 +372,9 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
     stubPads([pad]);
     const o = open();
     expect(o.slab.dataset['input']).toBe('gamepad');
-    expect(o.face()).toEqual(['△', '✕', '□', '○', '←', '→', '○']);
+    expect(o.face()).toEqual(['', '', '', '', '←', '→', '']); // the four face buttons are drawn (glyphs, no text); the arrows stay arrows
+    expect(o.slab.querySelectorAll('.ffx-mg-key__main .pg').length).toBe(5);
+    expect([...o.slab.querySelectorAll('.ffx-mg-key__main .pg')].map((g) => (g as HTMLElement).dataset['pg'])).toEqual(['triangle', 'cross', 'square', 'circle', 'circle']);
     for (const index of [3, 0, 2, 1, 14, 15, 1]) await tapPad(set, index); // triangle, cross, square, circle, left, right, circle
     await vi.advanceTimersByTimeAsync(1000);
     expect(o.result()).toMatchObject({ kind: 'auron-sequence', sequence: { success: true, correctInputs: 7 } });
@@ -450,11 +452,11 @@ describe('Swordplay: a tap or a click anywhere on the slab is the confirm press 
     return { root, slab, bar, cursor, subtitle, result: () => result };
   };
 
-  it('names the control in use: PRESS ENTER on a keyboard, PRESS CROSS on a pad, TAP on a finger, CLICK on a mouse', () => {
+  it('names the control in use: PRESS ENTER on a keyboard, PRESS A on a pad, TAP on a finger, CLICK on a mouse', () => {
     expect(open().subtitle()).toBe('SWORDPLAY · PRESS ENTER IN THE GOLD ZONE');
     document.body.innerHTML = '';
     stubPads([makePad().pad]);
-    expect(open().subtitle()).toBe('SWORDPLAY · PRESS CROSS IN THE GOLD ZONE');
+    expect(open().subtitle()).toBe('SWORDPLAY · PRESS A IN THE GOLD ZONE');
     document.body.innerHTML = '';
     delete (navigator as { getGamepads?: unknown }).getGamepads;
     stubCoarsePointer(true);

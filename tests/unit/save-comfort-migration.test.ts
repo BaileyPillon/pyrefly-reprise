@@ -83,7 +83,7 @@ describe('a release-29 save upgrades (CHK-024, D-285)', () => {
     // recorded voice-over's pair (ON, 0.9).
     expect(Object.keys(after.settings).filter((k) => !(k in before.settings)).sort()).toEqual([
       'chapterSelectMusic', 'colourVision', 'fxBreath', 'fxDof', 'fxEdges', 'fxFog', 'fxFraming', 'fxHero', 'fxKo', 'fxLight', 'fxLiving', 'fxSpectacle', 'fxSphere', 'fxSplash',
-      'reduceFlashes', 'sfxBalanceMigrated', 'textSize', 'titleArt', 'voiceOn', 'voiceVolume',
+      'reduceFlashes', 'sfxBalanceMigrated', 'textSize', 'titleArt', 'titleArtPicked', 'visualStyle', 'voiceOn', 'voiceVolume', // release 61: titleArtPicked and visualStyle
     ]);
     expect(after.settings.textSize).toBe(1);
     expect(after.settings.reduceFlashes).toBe(false);

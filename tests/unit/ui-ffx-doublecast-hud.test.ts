@@ -68,7 +68,10 @@ function toRoundTwo(): ReturnType<typeof rig> {
   key('Enter');
   walkTo('Fira');
   key('Enter');
-  key('Enter'); // the first target the cursor opens on
+  // t3b (r60, measured live in session 8, decision 158): Fira's target step opens on formation index 0, the boss, not on the leftmost fiend as it used to. These tests are about a cast aimed at
+  // Yu Pagoda A, so step to it on purpose (the boss's left neighbour on screen), as the player would.
+  for (let i = 0; i < 4 && !r.root.querySelector(`.ffx-target[data-target-id="${PAGODA_A}"]:not(.ffx-target--dim)`); i++) key('ArrowLeft');
+  key('Enter'); // cast 1 at Yu Pagoda A
   return r;
 }
 

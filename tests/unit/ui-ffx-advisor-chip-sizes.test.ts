@@ -82,7 +82,7 @@ describe('the two sizes', () => {
     const adv = new MoveAdvisor({ game: 'ffx', anchors: { left: 0, right: 640, bottom: 0 }, readVisible: () => visible, writeVisible: (v) => void (visible = v) });
     adv.mount(stage);
     const chip = adv.el.querySelector<HTMLElement>('[data-role="move-advisor-toggle"]')!;
-    const words = (): string => chip.querySelector('span')!.textContent ?? '';
+    const words = (): string => chip.querySelector(':scope > span')!.textContent ?? ''; // the key half of the chip is a <span> too since release 61 (padGlyphs keyHint), inside the <b>
     expect(words()).toBe(CHIP_WORDS[0]);
     adv.toggle();
     expect(words()).toBe(CHIP_WORDS[1]);

@@ -23,7 +23,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { costumeParts } from './rig-format.mjs';
 import { costumeSha, verifyStamp } from './rig-gate-lib.mjs';
-import { TIER_DIR, rigImageNames, textureSizes, verifyTiers } from './rig-tiers.mjs';
+import { TIER_DIR, rigShippedNames, textureSizes, verifyTiers } from './rig-tiers.mjs';
 
 /** A painting's bare name: the manifest's rule for a chosen pose (`tools/gen/manifest.mjs` CHOSEN). */
 const BARE_PNG = /^([A-Za-z0-9][A-Za-z0-9_-]*)\.png$/;
@@ -37,7 +37,7 @@ export function paintedPosesOf(artDir, subject) {
 
 /** What a rig folder may hold: rig.json, the files it names, and the 1x folder with their twins. `extra` is everything else (a path relative to the folder). */
 export function inventory(dir, raw) {
-  const names = new Set(['rig.json', ...rigImageNames(raw)]);
+  const names = new Set(['rig.json', ...rigShippedNames(raw)]);
   const extra = [];
   for (const f of readdirSync(dir, { withFileTypes: true })) {
     if (f.isDirectory()) {

@@ -41,6 +41,8 @@ import { bloomUnderCombat, fxShared } from '../fxShared.ts';
 /** What the battle screen hands over when a chapter's diorama is up. */
 export interface FxSceneInfo {
   key: string;
+  /** The chapter on the board (release 60: the demo looks are keyed by chapter, not by painting; absent in a stub). */
+  chapter?: string;
   game: string;
   scene: Scene;
   palette: { key: number; sky: number } | null;
@@ -56,6 +58,10 @@ let bound: FxSceneInfo | null = null;
 /** Called by the battle screen once the scene is loaded (cheap; nothing happens unless `?fx=a`). */
 export function bindEyeCandyScene(info: FxSceneInfo | null): void {
   bound = info;
+}
+/** The scene the battle screen last bound (demo looks, `engine/look/`): null on every other screen. */
+export function boundEyeCandyScene(): FxSceneInfo | null {
+  return bound;
 }
 
 const d = (name: Parameters<typeof eyeCandy.dial>[0]): number => eyeCandy.dial(name);

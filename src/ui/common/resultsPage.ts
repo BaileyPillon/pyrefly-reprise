@@ -7,6 +7,7 @@
  */
 
 import { escapeHtml } from './html.ts';
+import { padGlyph } from './padGlyphs.ts';
 import { partyFaceHtml } from './partyFace.ts';
 import {
   formatNumber,
@@ -54,6 +55,8 @@ export interface ResultsPageModel {
   progress: number;
   /** The defeat cursor. */
   actionIndex: number;
+  /** Release 61, quiet results (`quietResults.ts`; FFX-2 Chapter IV): build ids whose face tile is the head of their dressphere's painting, not their grinning portrait. Absent: every tile as it was. */
+  bodyFaces?: readonly string[];
 }
 
 /** A ledger value as printed at this point of the count-up. */
@@ -107,8 +110,8 @@ export function desktopPageHtml(m: ResultsPageModel): string {
     `;
 }
 
-/** A member's face: the initial under the painted layers (a 404 removes its own <img>). */
-export function memberFaceHtml(row: ResultsMemberRow): string {
+/** A member's face: the initial under the painted layers (a 404 removes its own <img>). `bodyFace`: the painting's head and no portrait (release 61, `quietResults.ts`). */
+export function memberFaceHtml(row: ResultsMemberRow, bodyFace = false): string {
   // `partyFaceHtml` is the same dressphere/`-x2`-aware ladder the pause
   // screen and battle HUD climb (LIVE-A2-1, docs/handoff/fix3-ffx2-hud-prep.md).
   return `<span>${escapeHtml(row.name.charAt(0).toUpperCase())}</span>${partyFaceHtml({
@@ -116,6 +119,7 @@ export function memberFaceHtml(row: ResultsMemberRow): string {
     name: row.name,
     dressphere: row.dressphere,
     ...(row.artNamespace ? { artNamespace: row.artNamespace } : {}),
+    ...(bodyFace ? { bodyOnly: true } : {}),
   })}`;
 }
 
@@ -123,7 +127,7 @@ function membersHtml(m: ResultsPageModel): string {
   const p = m.progress;
   return m.rows
     .map((row) => {
-      const face = memberFaceHtml(row);
+      const face = memberFaceHtml(row, m.bodyFaces?.includes(row.id) === true);
       const levelHtml =
         m.victory && row.levelDelta > 0 && p >= 1
           ? `<span class="rres__level-up">+${row.levelDelta} ${escapeHtml(row.levelUnit)}</span>`
@@ -149,7 +153,8 @@ function membersHtml(m: ResultsPageModel): string {
 }
 
 function confirmHtml(): string {
-  return `<div class="rres__confirm" data-action="confirm"><span>CONFIRM ▸</span></div>`;
+  // A pad player sees the bottom face button before the word (release 61); a keyboard or mouse player sees what the page always said.
+  return `<div class="rres__confirm" data-action="confirm"><span><span class="kh-p">${padGlyph('cross')}</span>CONFIRM ▸</span></div>`;
 }
 
 function actionsHtml(actionIndex: number): string {

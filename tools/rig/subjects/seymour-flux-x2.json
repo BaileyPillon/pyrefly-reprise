@@ -1,0 +1,1589 @@
+{
+  "_lane": "Seymour Flux (the Chapter I boss; the actor draws the seymour-flux-body paintings): base rig from the idle painting, expressive keys (pieces cut from the pose paintings). Demo-bosses lane, 2026-10-20. FFX only. The rig stays OFF. [x2, r61-rigs 2026-10-21: the head variants are held by OPAQUE area and MESH area (both the idle head), normal pieces for the HD-2D look (build.normals)]",
+  "subject": "seymour-flux-body",
+  "scale": 2,
+  "costume": {
+    "pose": "idle"
+  },
+  "hooks": "seymour-flux_hooks.py",
+  "cut": {
+    "polys": {
+      "head_zone": [
+        [
+          190,
+          300
+        ],
+        [
+          205,
+          230
+        ],
+        [
+          240,
+          150
+        ],
+        [
+          300,
+          80
+        ],
+        [
+          330,
+          40
+        ],
+        [
+          380,
+          70
+        ],
+        [
+          420,
+          60
+        ],
+        [
+          460,
+          130
+        ],
+        [
+          470,
+          190
+        ],
+        [
+          445,
+          260
+        ],
+        [
+          425,
+          330
+        ],
+        [
+          385,
+          352
+        ],
+        [
+          335,
+          345
+        ],
+        [
+          300,
+          385
+        ],
+        [
+          270,
+          420
+        ],
+        [
+          235,
+          415
+        ],
+        [
+          205,
+          360
+        ]
+      ],
+      "hairU_zone": [
+        [
+          395,
+          55
+        ],
+        [
+          440,
+          20
+        ],
+        [
+          505,
+          5
+        ],
+        [
+          560,
+          50
+        ],
+        [
+          660,
+          72
+        ],
+        [
+          745,
+          80
+        ],
+        [
+          745,
+          100
+        ],
+        [
+          700,
+          130
+        ],
+        [
+          640,
+          142
+        ],
+        [
+          560,
+          132
+        ],
+        [
+          480,
+          125
+        ],
+        [
+          430,
+          112
+        ],
+        [
+          400,
+          95
+        ]
+      ],
+      "hairM_zone": [
+        [
+          430,
+          120
+        ],
+        [
+          520,
+          125
+        ],
+        [
+          620,
+          150
+        ],
+        [
+          720,
+          190
+        ],
+        [
+          750,
+          250
+        ],
+        [
+          740,
+          320
+        ],
+        [
+          720,
+          345
+        ],
+        [
+          690,
+          330
+        ],
+        [
+          640,
+          300
+        ],
+        [
+          560,
+          290
+        ],
+        [
+          500,
+          270
+        ],
+        [
+          460,
+          250
+        ],
+        [
+          440,
+          190
+        ]
+      ],
+      "arm_zone": [
+        [
+          22,
+          500
+        ],
+        [
+          58,
+          478
+        ],
+        [
+          122,
+          478
+        ],
+        [
+          180,
+          505
+        ],
+        [
+          250,
+          530
+        ],
+        [
+          308,
+          545
+        ],
+        [
+          318,
+          600
+        ],
+        [
+          300,
+          618
+        ],
+        [
+          240,
+          602
+        ],
+        [
+          200,
+          592
+        ],
+        [
+          140,
+          592
+        ],
+        [
+          90,
+          562
+        ],
+        [
+          38,
+          548
+        ]
+      ],
+      "leg_zone": [
+        [
+          18,
+          545
+        ],
+        [
+          80,
+          540
+        ],
+        [
+          150,
+          560
+        ],
+        [
+          200,
+          640
+        ],
+        [
+          215,
+          720
+        ],
+        [
+          200,
+          800
+        ],
+        [
+          185,
+          900
+        ],
+        [
+          215,
+          980
+        ],
+        [
+          228,
+          1050
+        ],
+        [
+          218,
+          1130
+        ],
+        [
+          192,
+          1205
+        ],
+        [
+          150,
+          1205
+        ],
+        [
+          118,
+          1100
+        ],
+        [
+          95,
+          1000
+        ],
+        [
+          85,
+          900
+        ],
+        [
+          60,
+          800
+        ],
+        [
+          28,
+          720
+        ],
+        [
+          14,
+          640
+        ]
+      ],
+      "body_zone": [
+        [
+          0,
+          0
+        ],
+        [
+          750,
+          0
+        ],
+        [
+          750,
+          1215
+        ],
+        [
+          0,
+          1215
+        ]
+      ]
+    },
+    "order": [
+      "body",
+      "leg",
+      "arm",
+      "hairU",
+      "hairM",
+      "head"
+    ],
+    "priority": [
+      "head",
+      "hairM",
+      "hairU",
+      "arm",
+      "leg",
+      "body"
+    ],
+    "parts": {
+      "head": {
+        "include": [
+          {
+            "poly": "head_zone"
+          }
+        ]
+      },
+      "hairU": {
+        "include": [
+          {
+            "poly": "hairU_zone"
+          }
+        ]
+      },
+      "hairM": {
+        "include": [
+          {
+            "poly": "hairM_zone"
+          }
+        ]
+      },
+      "arm": {
+        "include": [
+          {
+            "poly": "arm_zone"
+          }
+        ]
+      },
+      "leg": {
+        "include": [
+          {
+            "poly": "leg_zone"
+          }
+        ]
+      },
+      "body": {
+        "include": [
+          {
+            "poly": "body_zone"
+          }
+        ]
+      }
+    },
+    "nearest": {
+      "maxdist": 40
+    },
+    "clean": {
+      "min_island": 150,
+      "close": 2
+    },
+    "ops": [
+      {
+        "op": "skirt",
+        "back": "body",
+        "front": "head",
+        "px": 50
+      },
+      {
+        "op": "skirt",
+        "back": "body",
+        "front": "arm",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "body",
+        "front": "leg",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "body",
+        "front": "hairM",
+        "px": 30
+      },
+      {
+        "op": "skirt",
+        "back": "hairM",
+        "front": "head",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "hairU",
+        "front": "head",
+        "px": 40
+      },
+      {
+        "op": "skirt",
+        "back": "hairU",
+        "front": "hairM",
+        "px": 30
+      },
+      {
+        "op": "skirt",
+        "back": "leg",
+        "front": "arm",
+        "px": 30
+      }
+    ]
+  },
+  "build": {
+    "bones": [
+      [
+        "root",
+        null,
+        [
+          330,
+          1200
+        ]
+      ],
+      [
+        "pelvis",
+        "root",
+        [
+          330,
+          950
+        ]
+      ],
+      [
+        "chest",
+        "pelvis",
+        [
+          420,
+          650
+        ]
+      ],
+      [
+        "head",
+        "chest",
+        [
+          345,
+          360
+        ]
+      ],
+      [
+        "hairU0",
+        "head",
+        [
+          430,
+          95
+        ]
+      ],
+      [
+        "hairU1",
+        "hairU0",
+        [
+          540,
+          70
+        ]
+      ],
+      [
+        "hairU2",
+        "hairU1",
+        [
+          650,
+          75
+        ]
+      ],
+      [
+        "hairM0",
+        "head",
+        [
+          440,
+          190
+        ]
+      ],
+      [
+        "hairM1",
+        "hairM0",
+        [
+          560,
+          195
+        ]
+      ],
+      [
+        "hairM2",
+        "hairM1",
+        [
+          665,
+          250
+        ]
+      ],
+      [
+        "arm0",
+        "chest",
+        [
+          300,
+          565
+        ]
+      ],
+      [
+        "leg0",
+        "pelvis",
+        [
+          110,
+          610
+        ]
+      ]
+    ],
+    "skin": {
+      "body": {
+        "type": "rigid",
+        "bone": "pelvis",
+        "mesh": {
+          "edge": 24,
+          "inner": 48,
+          "grow": 10
+        }
+      },
+      "head": {
+        "type": "rigid",
+        "bone": "head",
+        "mesh": {
+          "edge": 16,
+          "inner": 30,
+          "grow": 10
+        }
+      },
+      "hairU": {
+        "type": "chain",
+        "bones": [
+          "hairU0",
+          "hairU1",
+          "hairU2"
+        ],
+        "joints": [
+          [
+            430,
+            95
+          ],
+          [
+            540,
+            70
+          ],
+          [
+            650,
+            75
+          ],
+          [
+            745,
+            90
+          ]
+        ],
+        "ramps": [
+          40,
+          40
+        ],
+        "mesh": {
+          "edge": 16,
+          "inner": 30,
+          "grow": 8
+        }
+      },
+      "hairM": {
+        "type": "chain",
+        "bones": [
+          "hairM0",
+          "hairM1",
+          "hairM2"
+        ],
+        "joints": [
+          [
+            440,
+            190
+          ],
+          [
+            560,
+            195
+          ],
+          [
+            665,
+            250
+          ],
+          [
+            735,
+            335
+          ]
+        ],
+        "ramps": [
+          40,
+          40
+        ],
+        "mesh": {
+          "edge": 16,
+          "inner": 30,
+          "grow": 8
+        }
+      },
+      "arm": {
+        "type": "rigid",
+        "bone": "arm0",
+        "mesh": {
+          "edge": 16,
+          "inner": 30,
+          "grow": 8
+        }
+      },
+      "leg": {
+        "type": "rigid",
+        "bone": "leg0",
+        "mesh": {
+          "edge": 18,
+          "inner": 36,
+          "grow": 8
+        }
+      }
+    },
+    "landmarks": {
+      "head": [
+        "head",
+        [
+          364,
+          241
+        ]
+      ],
+      "feet": [
+        "root",
+        [
+          330,
+          1200
+        ]
+      ],
+      "soleBoot": [
+        "leg0",
+        [
+          190,
+          1190
+        ]
+      ],
+      "hand": [
+        "arm0",
+        [
+          80,
+          533
+        ]
+      ],
+      "hairTip": [
+        "hairM2",
+        [
+          713,
+          318
+        ]
+      ],
+      "bodyCenter": [
+        "chest",
+        [
+          420,
+          650
+        ]
+      ]
+    },
+    "variants": {
+      "body": {
+        "attack": {
+          "from_painting": {
+            "pose": "attack",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/attack.body.png",
+            "mask_pad": 600,
+            "register": "attack",
+            "scale": 1,
+            "mesh": {
+              "edge": 84,
+              "inner": 170,
+              "grow": 24
+            },
+            "tex": 0.4
+          }
+        },
+        "cast": {
+          "from_painting": {
+            "pose": "cast",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/cast.body.png",
+            "mask_pad": 600,
+            "register": "cast",
+            "scale": 1,
+            "mesh": {
+              "edge": 84,
+              "inner": 170,
+              "grow": 24
+            },
+            "tex": 0.4
+          }
+        },
+        "hurt": {
+          "from_painting": {
+            "pose": "hurt",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/hurt.body.png",
+            "mask_pad": 600,
+            "register": "hurt",
+            "scale": 1,
+            "mesh": {
+              "edge": 84,
+              "inner": 170,
+              "grow": 24
+            },
+            "tex": 0.4
+          }
+        },
+        "telegraph": {
+          "from_painting": {
+            "pose": "telegraph",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/telegraph.body.png",
+            "mask_pad": 600,
+            "register": "telegraph",
+            "scale": 1,
+            "mesh": {
+              "edge": 84,
+              "inner": 170,
+              "grow": 24
+            },
+            "tex": 0.4
+          }
+        },
+        "ko": {
+          "from_painting": {
+            "pose": "ko",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/ko.body.png",
+            "mask_pad": 600,
+            "register": "ko",
+            "scale": 1,
+            "mesh": {
+              "edge": 84,
+              "inner": 170,
+              "grow": 24
+            },
+            "tex": 0.4,
+            "fill_joints": {
+              "pelvis": 135
+            }
+          }
+        }
+      },
+      "head": {
+        "attack": {
+          "from_painting": {
+            "pose": "attack",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/attack.head.png",
+            "mask_pad": 600,
+            "register": "attack",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 20
+            },
+            "tex": 0.7,
+            "opaqueArea": 1,
+            "meshArea": 1
+          }
+        },
+        "cast": {
+          "from_painting": {
+            "pose": "cast",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/cast.head.png",
+            "mask_pad": 600,
+            "register": "cast",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 20
+            },
+            "tex": 0.7,
+            "opaqueArea": 1,
+            "meshArea": 1
+          }
+        },
+        "hurt": {
+          "from_painting": {
+            "pose": "hurt",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/hurt.head.png",
+            "mask_pad": 600,
+            "register": "hurt",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 20
+            },
+            "tex": 0.7,
+            "opaqueArea": 1,
+            "meshArea": 1
+          }
+        },
+        "telegraph": {
+          "from_painting": {
+            "pose": "telegraph",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/telegraph.head.png",
+            "mask_pad": 600,
+            "register": "telegraph",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 20
+            },
+            "tex": 0.7,
+            "opaqueArea": 1,
+            "meshArea": 1
+          }
+        },
+        "ko": {
+          "from_painting": {
+            "pose": "ko",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/ko.head.png",
+            "mask_pad": 600,
+            "register": "ko",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 20
+            },
+            "tex": 0.7,
+            "opaqueArea": 1,
+            "meshArea": 1
+          }
+        }
+      },
+      "hairU": {
+        "attack": {
+          "from_painting": {
+            "pose": "attack",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/attack.hairU.png",
+            "mask_pad": 600,
+            "register": "attack",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7,
+            "fill_joints": {
+              "hairU0": 48
+            }
+          }
+        },
+        "cast": {
+          "from_painting": {
+            "pose": "cast",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/cast.hairU.png",
+            "mask_pad": 600,
+            "register": "cast",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7,
+            "fill_joints": {
+              "hairU0": 48
+            }
+          }
+        },
+        "hurt": {
+          "from_painting": {
+            "pose": "hurt",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/hurt.hairU.png",
+            "mask_pad": 600,
+            "register": "hurt",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7,
+            "fill_joints": {
+              "hairU0": 48
+            }
+          }
+        },
+        "telegraph": {
+          "from_painting": {
+            "pose": "telegraph",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/telegraph.hairU.png",
+            "mask_pad": 600,
+            "register": "telegraph",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7
+          }
+        },
+        "ko": {
+          "from_painting": {
+            "pose": "ko",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/ko.hairU.png",
+            "mask_pad": 600,
+            "register": "ko",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7
+          }
+        }
+      },
+      "hairM": {
+        "attack": {
+          "from_painting": {
+            "pose": "attack",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/attack.hairM.png",
+            "mask_pad": 600,
+            "register": "attack",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7
+          }
+        },
+        "cast": {
+          "from_painting": {
+            "pose": "cast",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/cast.hairM.png",
+            "mask_pad": 600,
+            "register": "cast",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7
+          }
+        },
+        "hurt": {
+          "from_painting": {
+            "pose": "hurt",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/hurt.hairM.png",
+            "mask_pad": 600,
+            "register": "hurt",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7
+          }
+        },
+        "telegraph": {
+          "from_painting": {
+            "pose": "telegraph",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/telegraph.hairM.png",
+            "mask_pad": 600,
+            "register": "telegraph",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7
+          }
+        },
+        "ko": {
+          "from_painting": {
+            "pose": "ko",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/ko.hairM.png",
+            "mask_pad": 600,
+            "register": "ko",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "skin": "chain",
+            "tex": 0.7
+          }
+        }
+      },
+      "arm": {
+        "attack": {
+          "from_painting": {
+            "pose": "attack",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/attack.arm.png",
+            "mask_pad": 600,
+            "register": "attack",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        },
+        "cast": {
+          "from_painting": {
+            "pose": "cast",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/cast.arm.png",
+            "mask_pad": 600,
+            "register": "cast",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        },
+        "hurt": {
+          "from_painting": {
+            "pose": "hurt",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/hurt.arm.png",
+            "mask_pad": 600,
+            "register": "hurt",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        },
+        "telegraph": {
+          "from_painting": {
+            "pose": "telegraph",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/telegraph.arm.png",
+            "mask_pad": 600,
+            "register": "telegraph",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        },
+        "ko": {
+          "from_painting": {
+            "pose": "ko",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/ko.arm.png",
+            "mask_pad": 600,
+            "register": "ko",
+            "scale": 1,
+            "mesh": {
+              "edge": 32,
+              "inner": 60,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        }
+      },
+      "leg": {
+        "attack": {
+          "from_painting": {
+            "pose": "attack",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/attack.leg.png",
+            "mask_pad": 600,
+            "register": "attack",
+            "scale": 1,
+            "mesh": {
+              "edge": 36,
+              "inner": 72,
+              "grow": 16
+            },
+            "tex": 0.55,
+            "fill_joints": {
+              "leg0": 140
+            }
+          }
+        },
+        "cast": {
+          "from_painting": {
+            "pose": "cast",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/cast.leg.png",
+            "mask_pad": 600,
+            "register": "cast",
+            "scale": 1,
+            "mesh": {
+              "edge": 36,
+              "inner": 72,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        },
+        "hurt": {
+          "from_painting": {
+            "pose": "hurt",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/hurt.leg.png",
+            "mask_pad": 600,
+            "register": "hurt",
+            "scale": 1,
+            "mesh": {
+              "edge": 36,
+              "inner": 72,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        },
+        "telegraph": {
+          "from_painting": {
+            "pose": "telegraph",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/telegraph.leg.png",
+            "mask_pad": 600,
+            "register": "telegraph",
+            "scale": 1,
+            "mesh": {
+              "edge": 36,
+              "inner": 72,
+              "grow": 16
+            },
+            "tex": 0.55
+          }
+        },
+        "ko": {
+          "from_painting": {
+            "pose": "ko",
+            "mask": "tools/rig/subjects/seymour-flux-x.masks/ko.leg.png",
+            "mask_pad": 600,
+            "register": "ko",
+            "scale": 1,
+            "mesh": {
+              "edge": 36,
+              "inner": 72,
+              "grow": 16
+            },
+            "tex": 0.55,
+            "fill_joints": {
+              "leg0": 95
+            }
+          }
+        }
+      }
+    },
+    "normals": {
+      "dir": "D:/pyrefly-art-maps",
+      "scale": 0.3
+    }
+  },
+  "fit": {
+    "min_iou": 0,
+    "default_limit": 90,
+    "chain_limit": 40,
+    "restarts": 3,
+    "evals": 900,
+    "mark_free": 0.025,
+    "mark_soft": 0.015,
+    "mark_w": 2,
+    "band_w": 1,
+    "feet_x_w": 3,
+    "dfoot_w": 2,
+    "offsets": [
+      "pelvis"
+    ],
+    "offset_limit": {
+      "pelvis": [
+        0.15,
+        0.15
+      ]
+    },
+    "scales": {
+      "arm0": [
+        0.85,
+        1.25
+      ],
+      "leg0": [
+        0.85,
+        1.2
+      ]
+    },
+    "fit_classes": [
+      "part"
+    ],
+    "fixed": [
+      "chest"
+    ],
+    "limits": {
+      "pelvis": [
+        -25,
+        25
+      ],
+      "chest": [
+        -30,
+        30
+      ],
+      "head": [
+        -45,
+        45
+      ],
+      "hairU0": [
+        -45,
+        45
+      ],
+      "hairU1": [
+        -45,
+        45
+      ],
+      "hairU2": [
+        -45,
+        45
+      ],
+      "hairM0": [
+        -45,
+        45
+      ],
+      "hairM1": [
+        -45,
+        45
+      ],
+      "hairM2": [
+        -45,
+        45
+      ],
+      "arm0": [
+        -70,
+        70
+      ],
+      "leg0": [
+        -60,
+        60
+      ]
+    },
+    "mirror": [],
+    "keys": {
+      "ko": {
+        "planted": false,
+        "root_rot": [
+          -60,
+          60
+        ],
+        "root_dx": [
+          -250,
+          250
+        ],
+        "init": {
+          "pelvis": 1.8,
+          "head": -25.8,
+          "hairU0": -0.8,
+          "hairU1": 1.3,
+          "hairU2": -0.6,
+          "hairM0": -10.9,
+          "hairM1": -7.2,
+          "hairM2": -5.2,
+          "arm0": 27.9,
+          "leg0": -4.2,
+          "pelvis.dx": -9.7,
+          "pelvis.dy": 24.1,
+          "arm0.s": 0.945,
+          "leg0.s": 0.85,
+          "root.dx": -117
+        },
+        "image": {
+          "body": "ko",
+          "head": "ko",
+          "hairU": "ko",
+          "hairM": "ko",
+          "arm": "ko",
+          "leg": "ko"
+        }
+      },
+      "attack": {
+        "init": {
+          "pelvis": -3.9,
+          "head": -0.2,
+          "hairU0": -0.2,
+          "hairU1": 0.4,
+          "hairU2": 0.2,
+          "hairM0": -3.4,
+          "hairM1": -5.4,
+          "hairM2": -3.9,
+          "arm0": 10.4,
+          "leg0": -11.2,
+          "pelvis.dx": -55.2,
+          "pelvis.dy": -21.3,
+          "arm0.s": 0.966,
+          "leg0.s": 1.062,
+          "root.dx": -274.9
+        },
+        "image": {
+          "body": "attack",
+          "head": "attack",
+          "hairU": "attack",
+          "hairM": "attack",
+          "arm": "attack",
+          "leg": "attack"
+        }
+      },
+      "cast": {
+        "init": {
+          "pelvis": 4.1,
+          "head": -7.2,
+          "hairU0": -0.1,
+          "hairU1": 0,
+          "hairU2": 0.1,
+          "hairM0": 4,
+          "hairM1": 0.9,
+          "hairM2": -0.2,
+          "arm0": 33.3,
+          "leg0": -2.8,
+          "pelvis.dx": 82,
+          "pelvis.dy": -23.9,
+          "arm0.s": 0.912,
+          "leg0.s": 0.984,
+          "root.dx": -143.3
+        },
+        "image": {
+          "body": "cast",
+          "head": "cast",
+          "hairU": "cast",
+          "hairM": "cast",
+          "arm": "cast",
+          "leg": "cast"
+        }
+      },
+      "hurt": {
+        "init": {
+          "pelvis": 5.9,
+          "head": 3.1,
+          "hairU0": 0,
+          "hairU1": -0.1,
+          "hairU2": 0.1,
+          "hairM0": -0.2,
+          "hairM1": -1.6,
+          "hairM2": -1.2,
+          "arm0": -0.8,
+          "leg0": 2.7,
+          "pelvis.dx": -120,
+          "pelvis.dy": -10.9,
+          "arm0.s": 1.113,
+          "leg0.s": 0.927,
+          "root.dx": 182.9
+        },
+        "image": {
+          "body": "hurt",
+          "head": "hurt",
+          "hairU": "hurt",
+          "hairM": "hurt",
+          "arm": "hurt",
+          "leg": "hurt"
+        }
+      },
+      "telegraph": {
+        "init": {
+          "pelvis": 8.8,
+          "head": -10.6,
+          "hairU0": 0,
+          "hairU1": -0.2,
+          "hairU2": 0.2,
+          "hairM0": -7,
+          "hairM1": -5.4,
+          "hairM2": -2.8,
+          "arm0": 18.5,
+          "leg0": 2.6,
+          "pelvis.dx": -95.4,
+          "pelvis.dy": 122.7,
+          "arm0.s": 1.078,
+          "leg0.s": 0.912,
+          "root.dx": 219.5
+        },
+        "image": {
+          "body": "telegraph",
+          "head": "telegraph",
+          "hairU": "telegraph",
+          "hairM": "telegraph",
+          "arm": "telegraph",
+          "leg": "telegraph"
+        }
+      }
+    }
+  },
+  "landmarks": {
+    "attack": {
+      "head": [
+        327,
+        247
+      ],
+      "hand": [
+        67,
+        493
+      ],
+      "soleBoot": [
+        353,
+        1187
+      ],
+      "hairTip": [
+        707,
+        287
+      ]
+    },
+    "cast": {
+      "head": [
+        387,
+        226
+      ],
+      "hand": [
+        180,
+        360
+      ],
+      "soleBoot": [
+        160,
+        1147
+      ],
+      "hairTip": [
+        727,
+        340
+      ]
+    },
+    "hurt": {
+      "head": [
+        438,
+        170
+      ],
+      "hand": [
+        80,
+        407
+      ],
+      "soleBoot": [
+        100,
+        1053
+      ],
+      "hairTip": [
+        771,
+        317
+      ]
+    },
+    "telegraph": {
+      "head": [
+        603,
+        167
+      ],
+      "hand": [
+        313,
+        300
+      ],
+      "soleBoot": [
+        240,
+        1027
+      ],
+      "hairTip": [
+        980,
+        211
+      ]
+    },
+    "ko": {
+      "head": [
+        147,
+        380
+      ],
+      "hand": [
+        40,
+        587
+      ],
+      "soleBoot": [
+        173,
+        1147
+      ],
+      "hairTip": [
+        427,
+        100
+      ]
+    }
+  },
+  "authored": [
+    "ko"
+  ],
+  "motion": {
+    "idle": {
+      "hz": 0.5,
+      "bones": {
+        "pelvis": {
+          "rot": 0.4,
+          "phase": -0.4
+        },
+        "chest": {
+          "rot": 0.7,
+          "phase": -0.8
+        },
+        "head": {
+          "rot": 1.2,
+          "phase": -1.4
+        },
+        "hairU0": {
+          "rot": 1.8,
+          "phase": -0.4
+        },
+        "hairU1": {
+          "rot": 2.8,
+          "phase": -1
+        },
+        "hairU2": {
+          "rot": 4,
+          "phase": -1.8
+        },
+        "hairM0": {
+          "rot": 1.8,
+          "phase": -0.8
+        },
+        "hairM1": {
+          "rot": 3,
+          "phase": -1.4
+        },
+        "hairM2": {
+          "rot": 4.5,
+          "phase": -2.2
+        },
+        "arm0": {
+          "rot": 0.8,
+          "phase": -1
+        },
+        "leg0": {
+          "rot": 0.6,
+          "phase": -1.6
+        }
+      }
+    }
+  }
+}

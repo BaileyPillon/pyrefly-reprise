@@ -214,9 +214,9 @@ describe('no art URL starts at the server root in what ships (source)', () => {
     const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
     expect(offenders([join(ROOT, 'index.html')], ROOT, false, judge), HOW).toEqual([]);
     const link = /<link rel="preload"[^>]*>/.exec(withoutComments(html, 'html'))?.[0] ?? '';
-    expect(link, 'index.html still preloads the title plate').toContain('imagesrcset=');
-    expect(link).toContain('href="%BASE_URL%art/title/keyart.png"');
-    expect(link).toContain('imagesrcset="%BASE_URL%art/title/keyart.png 1344w, %BASE_URL%art/title/keyart.2x.webp 2688w"');
+    expect(link, 'index.html still preloads the title plate').toContain('href=');
+    // Release 61: the plate it names is The Echo, the default title screen (it was keyart, the Farplane painting, from 39.5 to 60); it has no 2x master, so no srcset.
+    expect(link).toContain('href="%BASE_URL%art/title/echo.png"');
   });
 
   it('src/: every script, sheet and page', () => {

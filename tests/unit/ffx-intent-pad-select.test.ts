@@ -1,14 +1,15 @@
 // @vitest-environment jsdom
 /**
- * Release 39, FFX only: the pad's Triangle is Defend at the FFX command menu, so the enemy-move slab's pad toggle moved
- * to Select.
+ * FFX only (release 39, moved release 61): the pad's Triangle is Defend at the FFX command menu, so the enemy-move slab's pad toggle is not on it.
  *
  * The original's Triangle at the command menu is Defend (`research/ffx-defend-input-2026-10-04.md`, four GameFAQs
- * sources), and the build now names it on a tab under the command window (`src/ui/ffx/defendControl.ts`). The slab
- * (`src/ui/common/EnemyIntent.ts`) toggled on the same standard button 3 and its chip told a pad player "Triangle", so
- * a press meant for the slab spent a turn and flipped the read-out, and the chip named the button that ends the turn.
- * Our extra yields to the original's input. FFX-2 lists Defend as a row, its Triangle is free, and it keeps the old
- * button and the old word.
+ * sources), and the build names it on a tab under the command window (`src/ui/ffx/defendControl.ts`). Release 39 put the
+ * slab on Back / Select (standard button 8). Release 61 (the conference booth, decision 169) took it off Back: the booth
+ * resets the demo with Back + Start held, and a Back press must not also flip a setting the next visitor inherits. It is
+ * the right stick's press now (standard button 11, R3): the left trigger (6) is the slab's own hold-for-more. FFX-2 lists Defend as a row, its Y is free, and it keeps Y.
+ *
+ * The chip is written once with both the key and the pad's button (`ui/common/padGlyphs.keyHint`); the stylesheet shows one
+ * by `html[data-input]`, so a test reads the glyph it carries, not text.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { EnemyIntentPanel } from '../../src/ui/common/EnemyIntent.ts';
@@ -18,6 +19,7 @@ import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 
 const TRIANGLE = 3;
 const SELECT = 8;
+const R3 = 11; // the right stick's press
 
 let pad: Array<{ pressed: boolean }> = [];
 let plugged = true;
@@ -47,9 +49,14 @@ function tap(panel: EnemyIntentPanel, index: number): void {
   panel.update(0.016);
 }
 
-/** The key word the chip prints (its `<b>`): `E`, `Triangle`, `Select`. */
+/** The key the chip prints (its `<b>`'s keyboard half): `E`. */
 function chip(root: ParentNode): string {
-  return (root.querySelector('[data-role="enemy-intent-toggle"] b')?.textContent ?? '').trim();
+  return (root.querySelector('[data-role="enemy-intent-toggle"] b .kh-k')?.textContent ?? '').trim();
+}
+
+/** The pad button the chip draws (its glyph's `data-pg`): `r3`, `triangle`. */
+function glyph(root: ParentNode): string {
+  return root.querySelector('[data-role="enemy-intent-toggle"] b .kh-p .pg')?.getAttribute('data-pg') ?? '';
 }
 
 function hudRoot<T extends { mount(root: HTMLElement): void; unmount(): void }>(hud: T): HTMLElement {
@@ -71,9 +78,10 @@ function bare(): { panel: EnemyIntentPanel; overlay: HTMLElement } {
 }
 
 describe('a panel mounted with no option keeps Triangle (what FFX-2 does)', () => {
-  it('button 3 toggles it, button 8 does not, and the chip says Triangle', () => {
+  it('button 3 toggles it, button 8 does not, and the chip draws Triangle (Y)', () => {
     const { panel, overlay } = bare();
-    expect(chip(overlay)).toBe(INTENT_HINT_ITEM.gamepad);
+    expect(chip(overlay)).toBe(INTENT_HINT_ITEM.keyboard);
+    expect(glyph(overlay)).toBe('triangle');
     tap(panel, SELECT);
     expect(panel.isVisible).toBe(false);
     tap(panel, TRIANGLE);
@@ -81,13 +89,13 @@ describe('a panel mounted with no option keeps Triangle (what FFX-2 does)', () =
   });
 });
 
-describe('FFX: the slab is on Select, and Triangle is left to Defend', () => {
+describe('FFX: the slab is on R3, Triangle is left to Defend, the left trigger is its hold-for-more, and Back is left alone', () => {
   function released(hud: FFXBattleHud): void {
     hud.setVisible(false); // the opening's take-down, then its hand-back: the slab is live (see ffx-intent-opening-hold)
     hud.setVisible(true);
   }
 
-  it('the pad\'s Triangle does not touch the slab; Select toggles it, one press once', () => {
+  it('Triangle and Back do not touch the slab; R3 toggles it, one press once', () => {
     const hud = new FFXBattleHud();
     hudRoot(hud);
     released(hud);
@@ -96,33 +104,38 @@ describe('FFX: the slab is on Select, and Triangle is left to Defend', () => {
     tap(panel, TRIANGLE);
     expect(panel.isVisible, 'Triangle must not flip the read-out').toBe(start);
     tap(panel, SELECT);
+    expect(panel.isVisible, 'Back is the booth reset: it must not flip the read-out').toBe(start);
+    tap(panel, R3);
     expect(panel.isVisible).toBe(!start);
-    tap(panel, SELECT);
+    tap(panel, R3);
     expect(panel.isVisible).toBe(start);
   });
 
-  it('the chip names Select for a pad player, and still E for a keyboard player', () => {
+  it('the chip carries E for the keyboard and R3 (r3) for the pad, in both states', () => {
     const hud = new FFXBattleHud();
     const root = hudRoot(hud);
     released(hud);
     hud.enemyIntent.setVisible(!hud.enemyIntent.isVisible); // any toggle re-prints the chip
     hud.enemyIntent.setVisible(!hud.enemyIntent.isVisible);
-    expect(chip(root)).toBe('Select');
+    expect(chip(root)).toBe('E');
+    expect(glyph(root)).toBe('r3');
 
-    plugged = false;
+    plugged = false; // the chip no longer depends on a pad being plugged in: the page's last input decides which half shows
     hud.enemyIntent.setVisible(!hud.enemyIntent.isVisible);
     hud.enemyIntent.setVisible(!hud.enemyIntent.isVisible);
     expect(chip(root)).toBe('E');
+    expect(glyph(root)).toBe('r3');
   });
 
-  it('the chip already says Select when the HUD mounts with a pad connected', () => {
+  it('the chip already carries the pad button when the HUD mounts', () => {
     const hud = new FFXBattleHud();
     const root = hudRoot(hud);
-    expect(chip(root)).toBe('Select');
+    expect(chip(root)).toBe('E');
+    expect(glyph(root)).toBe('r3');
   });
 });
 
-describe('FFX-2: unchanged (its menu lists Defend as a row; Triangle is free)', () => {
+describe('FFX-2: unchanged (its menu lists Defend as a row; Triangle is free) (its menu lists Defend as a row; Triangle is free)', () => {
   it('Triangle toggles the slab, Select does not, and the chip says Triangle', () => {
     const hud = new FFX2BattleHud();
     const root = hudRoot(hud);
@@ -132,7 +145,8 @@ describe('FFX-2: unchanged (its menu lists Defend as a row; Triangle is free)', 
     expect(panel.isVisible).toBe(start);
     tap(panel, TRIANGLE);
     expect(panel.isVisible).toBe(!start);
-    expect(chip(root)).toBe('Triangle');
+    expect(chip(root)).toBe('E');
+    expect(glyph(root)).toBe('triangle');
   });
 });
 
@@ -143,11 +157,11 @@ describe('a panel handed to another battle forgets the last HUD\'s button', () =
     let on = false;
     const panel = new EnemyIntentPanel({ game: 'ffx', readVisible: () => on, writeVisible: (v) => void (on = v) });
     const opts = { host: overlay, scale: () => 2.5, project: () => ({ x: 0, y: 0 }), avoid: () => [] };
-    panel.mount(overlay, { ...opts, padToggle: { index: SELECT, label: 'Select' } });
+    panel.mount(overlay, { ...opts, padToggle: { index: R3, label: 'R3' } });
     panel.unmount();
     panel.mount(overlay, opts);
     live.push(panel);
-    tap(panel, SELECT);
+    tap(panel, R3);
     expect(panel.isVisible).toBe(false);
     tap(panel, TRIANGLE);
     expect(panel.isVisible).toBe(true);

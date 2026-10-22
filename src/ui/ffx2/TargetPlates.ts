@@ -13,6 +13,7 @@ import {
   type PlateMode,
 } from './targetPlateGeometry.ts';
 import { displayNameOf } from './displayName.ts';
+import { keyHint } from '../common/padGlyphs.ts';
 
 /**
  * The three plates the approved Targeting s3 tile draws while an FFX-2 target
@@ -198,15 +199,16 @@ export class TargetPlates {
     const job = this.actor.querySelector<HTMLElement>('.ffx2-aplate__job')!;
     job.textContent = text.actor?.job ?? '';
     job.hidden = !text.actor?.job;
-    const keys: Array<[string, string]> = [['ENTER', 'CONFIRM']];
-    if (text.canStep) keys.push(['← →', 'CHANGE TARGET']);
-    keys.push(['ESC', 'BACK']);
+    // The pad's button beside each key (`ui/common/padGlyphs.ts`): shown instead of the key while the player's last press was a pad.
+    const keys: Array<[string, string, string]> = [['ENTER', 'CONFIRM', 'Cross']];
+    if (text.canStep) keys.push(['← →', 'CHANGE TARGET', 'dpad-h']);
+    keys.push(['ESC', 'BACK', 'Circle']);
     this.hint.replaceChildren(
-      ...keys.map(([k, what]) => {
+      ...keys.map(([k, what, pad]) => {
         const span = document.createElement('span');
         span.className = 'ffx2-ctlhint__key';
         const b = document.createElement('b');
-        b.textContent = k;
+        b.innerHTML = keyHint(k, pad);
         span.append(b, ` ${what}`);
         return span;
       }),

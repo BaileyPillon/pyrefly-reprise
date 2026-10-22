@@ -18,7 +18,17 @@
  *
  * A ceiling keeps a driver without the extension (or a very slow one) from
  * holding the battle: past it, the first frame compiles what is left, as
- * before. Game case: both (shared presentation plumbing).
+ * before.
+ *
+ * **R61 (PR-0481, the conference demo): the first draw is sliced.** Measured in headless GPU Chromium on a cold page (CPU profile of each frame gap,
+ * `docs/handoff/r61-booth.md`): the one first draw below stalls 0.8 to 1.0 s in Chapters I and IV, almost all of it `getProgramInfoLog` waiting for
+ * the scene's five or six biggest programs to finish building their GPU executables one after the other (a Phong with shadows alone is 210 to 240 ms, Chapter IV's
+ * plume 270 ms). It lands under the swirl, but it is one gap of nearly a second. {@link drawSliced} draws the scene once per program family (the other
+ * families hidden for that draw, the field not yet shown), a frame apart, so the same stalls land one at a time (the largest is one program, about 0.25 s)
+ * and the final complete draw finds every program built. Nothing is drawn that was not drawn before, nothing is left hidden (restored in a `finally`), and
+ * what a battle looks like from its first shown frame is the same.
+ *
+ * Game case: both (shared presentation plumbing).
  */
 
 import {
@@ -103,12 +113,85 @@ export async function warmShaders(
   if (timer !== undefined) clearTimeout(timer);
   if (opts.draw && scene instanceof Scene) {
     try {
-      r.render?.(scene, r.camera);
+      await drawSliced(r, scene);
     } catch {
       /* the loop's own first frame draws it instead */
     }
   }
   return { ms: Math.round(performance.now() - t0), finished };
+}
+
+/** Longest to wait for a frame between slices (a hidden page may never run `requestAnimationFrame`). */
+const SLICE_FRAME_MS = 120;
+/** At most this many slices; the final complete draw takes whatever is left. */
+const MAX_SLICES = 14;
+
+type Part = Object3D & { material?: Material | Material[] };
+
+function nextFrame(): Promise<void> {
+  return new Promise((resolve) => {
+    let done = false;
+    const go = (): void => {
+      if (!done) {
+        done = true;
+        resolve();
+      }
+    };
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(go);
+    setTimeout(go, SLICE_FRAME_MS);
+  });
+}
+
+/** The program family a drawable belongs to, as far as three keys one: the material's type and defines, the shadow flags and, for a custom shader, its source's size. */
+export function programFamily(o: Part): string {
+  const m = (Array.isArray(o.material) ? o.material[0] : o.material) as (Material & { defines?: Record<string, unknown>; fragmentShader?: string; vertexShader?: string }) | undefined;
+  if (!m) return '?';
+  const flags = o as Object3D & { receiveShadow?: boolean; castShadow?: boolean; isInstancedMesh?: boolean; isPoints?: boolean };
+  return [
+    m.type,
+    m.defines ? Object.keys(m.defines).sort().join(',') : '',
+    m.fragmentShader ? `${m.vertexShader?.length ?? 0}/${m.fragmentShader.length}` : '',
+    flags.receiveShadow ? 'rs' : '',
+    flags.castShadow ? 'cs' : '',
+    flags.isInstancedMesh ? 'im' : '',
+    flags.isPoints ? 'pt' : '',
+    m.transparent ? 'tr' : '',
+  ].join('|');
+}
+
+/**
+ * Draw the field once per program family, a frame apart, then once complete. The field is not shown yet (the caller sets `fieldShown` after), so hiding a drawable for
+ * one synchronous draw is invisible to the player and to every other piece of code (JavaScript does not interleave), and each slice puts the visibility back before it waits.
+ */
+export async function drawSliced(r: WarmupRenderer, scene: Scene): Promise<void> {
+  if (!r.render) return;
+  const parts: Part[] = [];
+  scene.traverse((o) => {
+    if (o.visible && (o as Part).material) parts.push(o as Part);
+  });
+  const families = new Map<string, Part[]>();
+  for (const o of parts) {
+    const key = programFamily(o);
+    const list = families.get(key);
+    if (list) list.push(o);
+    else families.set(key, [o]);
+  }
+  if (families.size > 1) {
+    let slices = 0;
+    for (const members of families.values()) {
+      if (slices++ >= MAX_SLICES) break;
+      const mine = new Set(members);
+      const hidden = parts.filter((o) => !mine.has(o));
+      for (const o of hidden) o.visible = false;
+      try {
+        r.render(scene, r.camera);
+      } finally {
+        for (const o of hidden) o.visible = true;
+      }
+      await nextFrame();
+    }
+  }
+  r.render(scene, r.camera);
 }
 
 /** Start compiling `obj` with `target` bound, as the pass that draws it will have it. */
@@ -127,11 +210,11 @@ function compileWith(
   }
 }
 
-/** Renderers whose post chain has already been compiled. */
-const postWarmed = new WeakSet<object>();
+/** Passes of the post chain that have already been compiled (a pass the demo look adds after the first battle is compiled the first time a battle wants it). */
+const warmedPasses = new WeakSet<object>();
 
 /**
- * The composer's own passes (bloom, tilt-shift, grade), once per renderer.
+ * The composer's own passes (bloom, tilt-shift, grade, and the demo look's when a look is on), each once.
  *
  * Nothing draws through the composer before the first battle (the title, the
  * board and prep are DOM), so its dozen programs used to compile inside the
@@ -140,9 +223,9 @@ const postWarmed = new WeakSet<object>();
  * the composer's buffer, or the screen for the last pass.
  */
 function postChainOnce(r: WarmupRenderer): Promise<unknown>[] {
-  const passes = r.composer.passes;
-  if (!passes?.length || postWarmed.has(r.renderer)) return [];
-  postWarmed.add(r.renderer);
+  const passes = (r.composer.passes ?? []).filter((p) => !warmedPasses.has(p));
+  if (!passes.length) return [];
+  for (const p of passes) warmedPasses.add(p);
   const offscreen = new Scene();
   const onscreen = new Scene();
   // The same attributes as three's `FullScreenQuad` (position and uv, no

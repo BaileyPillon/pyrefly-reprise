@@ -2,7 +2,7 @@
 import type { Anchors, Mask } from './continuity-pure.mjs';
 
 export interface DecodedMask extends Mask { srcW: number; srcH: number }
-export interface PoseMeasure { path: string; sha256: string; subjects: Record<string, { poses: Record<string, { head?: number[]; size?: number[]; stance?: { x: number; row: number }; prone?: boolean; standing?: boolean }> }>; count: number }
+export interface PoseMeasure { path: string; sha256: string; subjects: Record<string, { poses: Record<string, { head?: number[]; size?: number[]; stance?: { x: number; row: number }; prone?: boolean; standing?: boolean; held?: { headRatio?: number }; ruled?: { headRatio?: number } }> }>; count: number }
 export declare function decodeMask(buffer: Buffer, maxSide?: number): Promise<DecodedMask>;
 export declare function bboxRows(m: Mask): { top: number; bottom: number } | null;
 export declare function openMask(m: Mask, r: number): Mask;

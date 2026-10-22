@@ -3,6 +3,8 @@ export function letterTagMap(enemyIds: readonly string[], nameOf: (id: string) =
 export function slugOf(name: unknown): string;
 export interface Roster { enemyIds: readonly string[]; names: Record<string, string> }
 export function resolveTargetId(name: unknown, roster: Roster | null | undefined, domIds: readonly string[]): string | null;
+/** The command row a card's label points at: "Grand Summon: Shiva" is the row "Grand Summon" (the aeon is picked in the list it opens); any other label is its own row. */
+export declare const rowLabelOf: (label: string | null | undefined) => string;
 export function isAllDisabledOverlay(rows: readonly { disabled?: boolean }[]): boolean;
 export interface DboxSample { speaker: string; role: string; text: string; portrait: string | null; narrate: boolean }
 export interface DboxLine extends DboxSample { ms: number; lastMs: number; endMs?: number; screen: string | null; show: number }

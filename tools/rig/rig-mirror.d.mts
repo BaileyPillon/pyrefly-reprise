@@ -3,12 +3,14 @@ export interface MirrorPlan {
   ok: boolean;
   problems: string[];
   subjects: string[];
+  /** Rigs of the source mirror left out of the new one. */
+  without: string[];
   /** Files of the source mirror to hard-link (relative paths). */
   links: string[];
   copies: Array<{ subject: string; files: string[]; replaces: boolean }>;
 }
 export function listFiles(root: string): string[];
-export function planMirror(o: { from: string; rigsRoot: string; to: string; subjects?: string[]; makeTiers?: boolean }): Promise<MirrorPlan>;
+export function planMirror(o: { from: string; rigsRoot: string; to: string; subjects?: string[]; makeTiers?: boolean; without?: string[] }): Promise<MirrorPlan>;
 export function buildMirror(o: { from: string; rigsRoot: string; to: string; plan: MirrorPlan; makeTiers?: boolean; log?: (line: string) => void }): Promise<{
   linked: number;
   copied: number;

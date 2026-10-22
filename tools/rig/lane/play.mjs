@@ -24,7 +24,7 @@ async function main() {
   if (!MODES.includes(mode)) throw new Error(`lane: --mode is one of ${MODES.join(', ')}`);
   if (!a.base || !a.out) throw new Error('lane: --base <server url> and --out <dir> are required');
   const o = {
-    still: a.still === true, settle: Number(a.settle ?? 1800),
+    still: a.still === true, keepSway: a['keep-sway'] === true, settle: Number(a.settle ?? 1800),
     subject: a.subject, mode, base: a.base, out: path.resolve(a.out), rig: a.rig ?? 'on', quality: Number(a.quality ?? 92), tail: Number(a.tail ?? 150), cap: Number(a.cap ?? 40000),
     repo: path.resolve(a.repo ?? process.cwd()).replace(/\\/g, '/'), poses: resolvePoses(spec, a.poses, { any: a['any-pose'] === true }),
   };

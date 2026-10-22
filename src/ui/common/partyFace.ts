@@ -40,6 +40,11 @@ export interface PartyFaceMember {
    * painting's head. Absent: the base art, exactly as always.
    */
   artNamespace?: string;
+  /**
+   * FFX-2 only (release 61, quiet results: `ui/common/quietResults.ts`): leave out the portrait rungs, so the tile shows the head of her dressphere's idle painting
+   * (the body layer, `face-crops.json` `bodies`) and not her portrait. Needs `dressphere`; ignored without it, and for an art namespace (which has no portraits anyway).
+   */
+  bodyOnly?: boolean;
 }
 
 /**
@@ -62,7 +67,7 @@ export interface PartyFaceMember {
 export function partyFaceHtml(m: PartyFaceMember, opts: FaceOptions = {}): string {
   if (!m.dressphere) return faceImgHtml(m.id, m.name, opts);
   const { art, portraits } = faceLadder(m.id, m.dressphere, m.artNamespace);
-  return faceLayersHtml(portraits, art, m.name, opts);
+  return faceLayersHtml(m.bodyOnly ? [] : portraits, art, m.name, opts);
 }
 
 /**

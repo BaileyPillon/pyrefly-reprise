@@ -10,8 +10,9 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
-import { awaitSpellLanding, beginSpellAction, endSpellAction } from './BattlePresenterSpellFx.ts';
+import { awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
+import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
@@ -25,6 +26,7 @@ import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './m
 import { lungePlan } from './motion/StrikeReach.ts'; // r391-reach: the house lunge, solved against its target where the game's rules let it
 import { partyOffStage } from './SummonStaging.ts';
 import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
+import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
   banner,
@@ -61,8 +63,9 @@ export async function actionStart(
   );
   const od = armOdKey(ctx, event); // r37 slot: this move's own Overdrive / Special painting (null when it has none)
   const windUp = !odOpensAction(od) && !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose); // D-313: the wind-up painting, then the impact at the apex
+  const item = pose === 'item' ? itemGestureFor(ctx, event) : null; // FFX only: no flask (the stance), the orb or the glow (`BattlePresenterItem.ts`); null everywhere else
   if (odOpensAction(od)) showOdOnOpen(ctx, od); // FFX: the held shot and the strike are on the key painting
-  else actor?.setPose(windUp ? 'ready' : pose);
+  else actor?.setPose(item?.pose ?? (windUp ? 'ready' : pose));
   const motion = ctx.deps.actionMotion; // FF7: the melee run to the target (none for FFX and FFX-2)
   if (motion) await settled(ctx, motion.open(event, motionCtx(ctx)), MOTION_GUARD_MS);
 
@@ -93,9 +96,10 @@ export async function actionStart(
     actor?.flash(0x9fd8ff, 560, 0.45);
   } else if (pose === 'item') {
     cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
+    if (item) startItemGesture(ctx, event, item);
   }
   planSkill(ctx, event, pose); // SKILL TRAVEL (both games, r38-motion): which shot this action would send; it leaves at the first blow, not here
-  await ctx.sleep(pose === 'attack' ? TIMING.windUp : TIMING.actionStart);
+  await ctx.sleep(pose === 'attack' ? TIMING.windUp : (item?.waitMs ?? TIMING.actionStart)); // an FFX item use waits for its orb (form + flight); everything else as before
 }
 
 export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<void> {
@@ -133,7 +137,7 @@ export async function damage(
     await awaitSpellLanding(ctx, event, true);
     await shotLanded(ctx, event);
     odApex(ctx, event.sourceId ?? ctx.actingId); // r37 slot (FFX-2: the move's apex)
-    target?.flash(0x9dffc4, 320, 0.6);
+    target?.flash(sparkItem(ctx, event.sourceId) ? 0xcfe9ff : 0x9dffc4, 320, 0.6); // FFX-2's item burst is white-blue
     await revealBlow(ctx, event); // a held blow's numeral and HP row, now it has landed
     numeral(ctx, event.targetId, {
       kind: 'heal',
@@ -167,7 +171,7 @@ export async function damage(
 
   const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });
-  if (flashes) target?.flash(event.crit ? 0xffffff : 0xffd0c0, event.crit ? 260 : 200, event.crit ? 1 : 0.8);
+  if (flashes) blowFlash(target, event, ctx.moments?.reducedFlashes === true); // `?motion=demo`: 0.08 s white; else warm 200 ms, white 260 ms on a crit (`motion/DemoHitBeat.ts`)
   target?.shake(event.crit ? 0.16 : 0.1, 340);
   void target?.recoil(360, event.crit ? 0.34 : 0.22);
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });
@@ -184,12 +188,7 @@ export async function damage(
   // Hit-stop: the whole frame holds for a beat on a crit or a finishing blow.
   // (The punch that goes with it is part of the impact cut, above.)
   const fxc = fxHit(ctx, event, heavy); // option C: null = today's shake and hit-stop sleep
-  if (heavy) {
-    if (!fxc?.shook) ctx.stage.camera.shake(0.16, 340);
-    await ctx.sleep(Math.max(TIMING.hitStop, fxc?.waitMs ?? 0));
-  } else if (event.hitIndex === 0 && !fxc?.shook) {
-    ctx.stage.camera.shake(0.08, 220);
-  }
+  await holdBlow(ctx, event, heavy, fxc); // the shake and the hold: as before, or `?motion=demo`'s (`motion/DemoHitBeat.ts`)
 
   // Multi-hit actions run tight; a single blow gets room to land.
   await ctx.sleep(event.hitCount > 1 ? TIMING.perHit : TIMING.damage);

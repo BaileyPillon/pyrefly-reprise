@@ -159,10 +159,12 @@ export class QuadField {
   readonly spec: QuadFieldSpec;
   private readonly material: ShaderMaterial;
   private readonly baseOpacity: number;
+  private readonly count: number;
 
   constructor(spec: QuadFieldSpec, countScale = 1, seedSalt = 1) {
     this.spec = spec;
     const n = Math.max(1, Math.round(spec.count * countScale));
+    this.count = n;
     const geo = new InstancedBufferGeometry();
     geo.setAttribute('position', new Float32BufferAttribute([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0], 3));
     geo.setAttribute('corner', new Float32BufferAttribute([-1, -1, 1, -1, 1, 1, -1, 1], 2));
@@ -213,6 +215,13 @@ export class QuadField {
     this.mesh.frustumCulled = false;
     this.mesh.renderOrder = spec.renderOrder ?? -40;
     this.mesh.name = `fx-b-${spec.shape}`;
+  }
+
+  /** Release 61 (the depth stage's quality tiers): draw this share of the quads (1 = all; never fewer than one). */
+  setDensity(share: number): void {
+    const geo = this.mesh.geometry as InstancedBufferGeometry;
+    const n = Math.max(1, Math.round(this.count * Math.min(1, Math.max(0, share))));
+    if (geo.instanceCount !== n) geo.instanceCount = n;
   }
 
   /** @param time seconds on option B's own clock; `gain` is the dial times any flash envelope. */

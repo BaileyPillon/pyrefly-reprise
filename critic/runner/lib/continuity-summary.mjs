@@ -70,8 +70,10 @@ export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg,
   const heightFlagged = heights.filter((s) => s.height.flags.length);
   const feetSil = judged.filter((s) => s.feetSil && s.feetSil.standing);
   const feetSilOver = feetSil.filter((s) => s.feetSil.gatePx > s.feetSil.tolerancePx);
-  const holds = judged.filter((s) => s.headReal);
+  // a recorded hold's head, and (R59, decision 146) the head of a rig's front-view key, which swaps the head part: both are "the head the player really sees", judged in a band, and counted apart
+  const holds = judged.filter((s) => s.headReal && !s.headReal.variant);
   const holdOutside = holds.filter((s) => s.headReal.outsideBand);
+  const variantHeads = judged.filter((s) => s.headReal && s.headReal.variant);
   // r40 instrument edit (b): a step of the spherechange's twirl is a staged costume change, counted per CHANGE (its steps share `staged.seq`), not per step. The cuts it
   // excused from the snap count (`stagedSnapsExcused`) and the jerks that fall at one of its steps (`jerksAtStaged`) are shown; the jerks stay in `jerks` and in the verdict.
   const stagedSwaps = counted.filter((s) => s.staged);
@@ -97,8 +99,10 @@ export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg,
       feetSilMeasured: feetSil.length, feetSilOver: judged.filter((s) => s.failFeetSil).length, feetSilWaived: feetSilOver.filter((s) => !s.failFeetSil).length,
       maxFeetSilPx: round(feetSil.reduce((m, s) => Math.max(m, s.feetSil.gatePx), 0), 1),
       // W4: the head the player really sees across a recorded hold (the head reading is a CONTROL: a hold's registered box is a virtual one)
-      holdSwaps: holds.length, worstRealHeadPct: round(holds.reduce((m, s) => Math.max(m, Math.abs(s.headReal.ratio - 1)), 0) * 100, 1), realHeadOutsideBand: judged.filter((s) => s.failRealHead).length,
+      holdSwaps: holds.length, worstRealHeadPct: round(holds.reduce((m, s) => Math.max(m, Math.abs(s.headReal.ratio - 1)), 0) * 100, 1), realHeadOutsideBand: holds.filter((s) => s.failRealHead).length,
       realHeadWaived: holdOutside.filter((s) => !s.failRealHead).length,
+      // R59: a rig's change of key that swaps the head part (Lulu's front view): the head the registration gives the key, against its class band; the mesh ratio of the head part is not read for it
+      variantHeadSwaps: variantHeads.length, worstVariantHeadPct: round(variantHeads.reduce((m, s) => Math.max(m, Math.abs(s.headReal.ratio - 1)), 0) * 100, 1), variantHeadOutsideBand: variantHeads.filter((s) => s.failRealHead).length,
       // painting of a character subject with no fresh record (reported; the gate refuses it at install)
       unregisteredSwaps: judged.filter((s) => s.unregistered).length,
     },
@@ -143,6 +147,7 @@ export function verdicts(s, cfg, run = {}) {
     s.size.heightOverBand && `${s.size.heightOverBand} swap(s) draw a pose outside its height band against the idle, read from the pixels (stature ${s.size.minStature} to ${s.size.maxStature}; the bands are tools/posescale/pose-bands.mjs's)`,
     s.size.feetSilOver && `${s.size.feetSilOver} swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst ${s.size.maxFeetSilPx} px at 1600 wide), whatever stance the registration claims`,
     s.size.realHeadOutsideBand && `${s.size.realHeadOutsideBand} swap(s) show a recorded hold's real head outside the hold band (worst ${s.size.worstRealHeadPct} percent from the idle's)`,
+    s.size.variantHeadOutsideBand && `${s.size.variantHeadOutsideBand} rig swap(s) bring in another head (a front view) whose real head is outside its pose class's band (worst ${s.size.worstVariantHeadPct} percent from the idle's)`,
   ]);
   // W4 (CHK-027 split): the jerks AT a swap are gateable, the mid-move dashes are reported. A policy without a `jerks` block (an older one) gates every jerk, as before.
   const dashesFail = cfg.jerks ? cfg.jerks.dashesFail === true : true;

@@ -6,6 +6,7 @@ import { SeededRng } from '../../battle/common/rng.ts';
 import type { TriggerHappyResult } from '../../battle/common/types.ts';
 import { rollTriggerHappy } from '../../battle/ffx2/minigames.ts';
 import { isCoarsePointer } from '../common/ControlsHint.ts';
+import { padLabel } from '../common/padGlyphs.ts';
 import { RawInputWatcher, rawInputSuspended } from '../ffx/rawInput.ts';
 
 /**
@@ -68,7 +69,7 @@ const KEY_CODES: readonly string[] = ['KeyR', 'PageDown'];
 
 /** What the overlay tells each player to press. A mouse click is a click; a finger is a tap. */
 function keyWord(device: Device, pointerKind: string): string {
-  if (device === 'gamepad') return 'R1';
+  if (device === 'gamepad') return padLabel('r1').toUpperCase();
   if (device === 'pointer') return pointerKind === 'mouse' ? 'CLICK' : 'TAP';
   return 'R';
 }

@@ -53,9 +53,12 @@ export function compileStates(data: RigData): Map<string, Int16Array> {
   return out;
 }
 
-/** The state `progress` of the way through the move from the key whose state is `from` into the key whose state is `to`: `from` below 0.5, `to` from 0.5. Returns one of the two arrays, not a copy. */
-export function partStateAt(from: Int16Array, to: Int16Array, progress: number): Int16Array {
-  return progress >= STATE_FLIP ? to : from;
+/**
+ * The state `progress` of the way through the move from the key whose state is `from` into the key whose state is `to`: `from` below 0.5, `to` from 0.5. Returns one of the two arrays, not a copy.
+ * `flipAt` (default 0.5, where the gate and `layers` flip) is earlier under the demo's cross-fade, which starts the change a little before 0.5 and ends it a little after (`RigFade.fadeStart`).
+ */
+export function partStateAt(from: Int16Array, to: Int16Array, progress: number, flipAt: number = STATE_FLIP): Int16Array {
+  return progress >= flipAt ? to : from;
 }
 
 export function sameState(a: Int16Array, b: Int16Array): boolean {

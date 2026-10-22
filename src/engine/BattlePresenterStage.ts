@@ -54,6 +54,7 @@ import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 import { heldOffStage } from './SummonStaging.ts';
 import { paceRate } from './pace.ts';
+import { ItemOrbStage } from './ItemOrbStage.ts'; // FFX item gesture: the orb of light and the hand it leaves (`BattlePresenterItem.ts`)
 import { SOFT_BLOOM_CAP, softWash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { StageArt } from './StageArt.ts';
 import type { StageHost } from './TextureStager.ts';
@@ -188,6 +189,8 @@ export class PaintedStage implements BattleStage {
   private readonly groundLuma: number | null;
   /** Release 39: which master of each painting the figures draw from, measured against the camera that is looking at them (`StageArt.ts`). */
   readonly art: StageArt;
+  /** The FFX item gesture's light: an orb tossed from the user's hand, a glow around the user (`ItemOrbStage.ts`); idle unless an FFX chapter's item use asks for it. */
+  private readonly itemOrb: ItemOrbStage;
 
   /** The scene's shot director (`SceneStaging.shotDirector`), which `BattleMoments` asks before it moves the camera for a beat; absent for every scene but the hidden Fayth chapter's. */
   get shotDirector(): SceneSlots['shotDirector'] {
@@ -225,6 +228,14 @@ export class PaintedStage implements BattleStage {
       baseRim: { color: opts.rim?.color ?? 0xbfe0ff, strength: opts.rim ? 0.8 : 0.7 },
       ...(opts.reduceFlashes ? { reduceFlashes: opts.reduceFlashes } : {}),
     });
+    this.itemOrb = new ItemOrbStage(
+      opts.scene,
+      (id) => {
+        const staged = this.actors.get(id);
+        return staged ? { actor: staged.actor, artId: staged.artId } : undefined;
+      },
+      () => paceRate('action') * (opts.spellFx?.rate?.() ?? 1),
+    );
     this.vfx = this.makeVfxPort();
     this.art = new StageArt({
       actors: () => [...this.actors.values()].map((s) => s.actor),
@@ -462,6 +473,11 @@ export class PaintedStage implements BattleStage {
   paints(id: CombatantId, pose: string): boolean {
     const staged = this.actors.get(id);
     return !!staged && !staged.actor.isPlaceholder && staged.painted.has(pose);
+  }
+
+  /** The pose of an FFX item use, with no flask in it. See `BattleStage.itemStance`. */
+  itemStance(id: CombatantId): string | undefined {
+    return this.itemOrb.stance(id);
   }
 
   /** Which standing slot this combatant is on. See `BattleStage.slotOf`. */
@@ -873,6 +889,8 @@ export class PaintedStage implements BattleStage {
       markIn: (at, action) => this.spellFx.markIn(at, action), // r38-motion: a held numeral waits for the drawn strike
       travel: (from, to, o) => this.spellFx.fly(from, to, o), // r38-motion SKILL TRAVEL: drawn in the spell layer's batch; ms 0 where it draws nothing
       canTravel: (abilityId, from) => this.spellFx.canFly(abilityId, from),
+      itemToss: (from, to, o) => this.itemOrb.toss(from, to, o), // FFX item gesture: an orb from the user's hand to the ally
+      itemGlow: (at, o) => this.itemOrb.glow(at, o), // FFX item gesture: a glow rising around the user
     };
   }
 
@@ -984,6 +1002,7 @@ export class PaintedStage implements BattleStage {
     const paced = dt * paceRate('action'); // the pacing option (`pace.ts`): sparks and spell effects keep step with the actors
     this.hits.update(paced, this.opts.camera);
     this.spellFx.update(paced);
+    this.itemOrb.update(dt); // the item gesture's light, on the same clock (the pacing option and the playback speed are in its rate)
     this.entrances?.update(realDt); // E-PYRE: after the actors, before the motes: this frame's gather motes are in the emitter the next line moves
     this.pyreflies.update(dt, (id) => this.lastState?.combatants[id]?.alive !== false);
     // D-224: Evrae's range is a flag only its encounter sets (FFX, Ch VIII).
@@ -1036,6 +1055,7 @@ export class PaintedStage implements BattleStage {
     this.motion.dispose();
     this.partRings.dispose();
     this.hits.dispose();
+    this.itemOrb.dispose();
     this.unhookSpellFx();
     this.spellFx.dispose();
     this.entrances?.dispose();

@@ -26,6 +26,8 @@ export interface RigVariantData extends RigMeshData {
   png: string;
   rim: string | null;
   rimMode: 'mask' | 'all' | 'off';
+  /** v2.2: the normal piece's file name (the HD-2D look), or null. */
+  normal: string | null;
 }
 
 export interface RigPartData extends RigMeshData {
@@ -34,6 +36,8 @@ export interface RigPartData extends RigMeshData {
   png: string;
   /** The rim mask file, or null. */
   rim: string | null;
+  /** v2.2: the normal piece's file name (the HD-2D look), or null. */
+  normal: string | null;
   /** `mask`: the rim runs where the mask is white; `all`: along the whole alpha edge; `off`: no rim light on this part. */
   rimMode: 'mask' | 'all' | 'off';
   /** v2: hidden at rest (see `RigPartState.ts`). */
@@ -71,6 +75,9 @@ export type RigRead = { ok: true; data: RigData } | { ok: false; reason: string 
 const fail = (reason: string): RigRead => ({ ok: false, reason });
 const finite = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n);
 const isObj = (o: unknown): o is Record<string, unknown> => typeof o === 'object' && o !== null && !Array.isArray(o);
+
+/** The normal piece's file name of a part or variant (a plain file name beside rig.json), or null. */
+const normalOf = (p: Record<string, unknown>): string | null => (typeof p['normal'] === 'string' && p['normal'] && !/[\\/]|^\./.test(p['normal']) ? p['normal'] : null);
 
 /** The rim mask file and mode of a part or variant: `noRim` is the prototype's spelling of `rimEverywhere` (the mask is ignored). */
 function rimOf(p: Record<string, unknown>): { rim: string | null; rimMode: 'mask' | 'all' | 'off' } {
@@ -137,10 +144,10 @@ export function readRig(raw: unknown): RigRead {
           if (!r.ok) return fail(r.reason);
           vm = r.mesh;
         }
-        variants.push({ ...vm, name: vn, png: v.png, ...rimOf(v) });
+        variants.push({ ...vm, name: vn, png: v.png, ...rimOf(v), normal: normalOf(v) });
       }
     }
-    parts.push({ ...mesh.mesh, name: p.name, order: p.order, png: p.png, rim, rimMode, hidden: p.hidden === true, variants });
+    parts.push({ ...mesh.mesh, name: p.name, order: p.order, png: p.png, rim, normal: normalOf(p), rimMode, hidden: p.hidden === true, variants });
   }
   parts.sort((a, b) => a.order - b.order);
 
@@ -168,6 +175,7 @@ export function readRig(raw: unknown): RigRead {
     }
     if (k.root !== undefined && (!isObj(k.root) || Object.values(k.root).some((v) => !finite(v)) || Math.abs((k.root as { rot?: number }).rot ?? 0) > 2 * Math.PI)) return fail(`key ${name}: bad root`);
     if (k.ms !== undefined && (!finite(k.ms) || k.ms < 0)) return fail(`key ${name}: bad ms`);
+    if (k.fadeMs !== undefined && (!finite(k.fadeMs) || k.fadeMs < 0 || k.fadeMs > 2000)) return fail(`key ${name}: bad fadeMs`); // v2.1: 0 to 2000; the runtime plays at most 400
     if (k.layers !== undefined) {
       if (!isObj(k.layers)) return fail(`key ${name}: bad layers`);
       for (const [pn, v] of Object.entries(k.layers)) if (!seenParts.has(pn) || !finite(v)) return fail(`key ${name}: layers names a part that is not there or a non-number: ${pn}`);

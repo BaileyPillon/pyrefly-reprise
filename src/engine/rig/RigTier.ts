@@ -37,6 +37,8 @@ export const RIG_SHARE = 0.5;
 export interface TierPart {
   map: readonly [number, number];
   rim: readonly [number, number] | null;
+  /** The HD-2D look's normal piece (format v2.2), when the file has one: one size, no 1x twin. Absent or null: none. */
+  normal?: readonly [number, number] | null;
 }
 
 /** Is a rim mask bigger than half its map? Then its 1x twin is halved; otherwise the twin is the same file (`tools/rig/rig-tiers.mjs#rimNeedsHalving`, pinned equal by a test). */
@@ -56,11 +58,12 @@ const size = (v: unknown): [number, number] | null => (Array.isArray(v) && v.len
  */
 export function tierPartsOf(data: Pick<RigData, 'parts' | 'gate'>): TierPart[] {
   const stamped = data.gate?.textures;
-  const one = (key: string, m: { box: readonly number[]; rimMode: string; rim: string | null }): TierPart => {
+  const one = (key: string, m: { box: readonly number[]; rimMode: string; rim: string | null; normal?: string | null }): TierPart => {
     const t = stamped?.[key];
     const map = size(t?.map) ?? [m.box[2]!, m.box[3]!];
     const rim = m.rimMode === 'mask' && m.rim !== null ? (size(t?.rim) ?? map) : null;
-    return { map, rim };
+    const normal = typeof m.normal === 'string' && m.normal ? size(t?.normal) : null; // sized by the gate's stamp; a piece the stamp has no size for is not budgeted (and is not loaded)
+    return normal ? { map, rim, normal } : { map, rim };
   };
   return data.parts.flatMap((p) => [one(p.name, p), ...p.variants.map((v) => one(`${p.name}:${v.name}`, v))]);
 }
@@ -77,6 +80,13 @@ export function rigTextureMB(parts: readonly TierPart[], t: RigTextures): number
       mb += textureMB(r[0], r[1]);
     }
   }
+  return mb;
+}
+
+/** Megabytes of GPU memory (RGBA8 with mips) the normal pieces of a rig take if all of them are loaded: they have no 1x twin, so one size whatever the tier. 0 for a rig with none. */
+export function rigNormalMB(parts: readonly TierPart[]): number {
+  let mb = 0;
+  for (const p of parts) if (p.normal) mb += textureMB(p.normal[0], p.normal[1]);
   return mb;
 }
 

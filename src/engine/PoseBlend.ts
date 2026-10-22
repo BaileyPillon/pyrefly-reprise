@@ -188,8 +188,8 @@ interface Running {
   readonly to: 0 | 1;
   readonly fromStart: number;
   readonly toStart: number;
-  readonly duration: number;
-  readonly curves: BlendCurves;
+  duration: number;
+  curves: BlendCurves;
   elapsed: number;
 }
 
@@ -281,6 +281,17 @@ export class PoseBlend {
       elapsed: 0,
     };
     return { same: false, to: inn, repoint, reversed };
+  }
+
+  /**
+   * Re-tune the blend that has JUST started (`?motion=demo`, `motion/DemoBlend.ts`): its length and its shape, for a pair the caller could only judge once the incoming painting was placed. Does nothing
+   * when no blend runs or it has already moved, so a running blend is never bent in the middle.
+   */
+  retune(durationMs: number, shape: BlendShapeSpec): void {
+    const r = this.run;
+    if (!r || r.elapsed > 0) return;
+    r.duration = Math.max(1, durationMs);
+    r.curves = curvesOf(shape);
   }
 
   /**

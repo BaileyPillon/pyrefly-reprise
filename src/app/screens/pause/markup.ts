@@ -15,6 +15,7 @@
  */
 
 import { escapeHtml } from '../../../ui/common/html.ts';
+import { keyHint } from '../../../ui/common/padGlyphs.ts';
 import type { MeterColumn, MeterRow } from './meters.ts';
 import type { PanelColumn, PanelRow } from './panels.ts';
 import type { PauseTab } from './tabs.ts';
@@ -229,14 +230,14 @@ export function backHtml(): string {
     `<div class="pause__back" data-action="cancel" role="button" tabindex="0">` +
     `<span class="pause__key">Esc</span>Resume</div>` +
     `<div class="pause__hide" data-action="pause:panels" role="button" tabindex="0">` +
-    `H&nbsp;&nbsp;painting only</div>`
+    `${keyHint('H', 'Triangle')}&nbsp;&nbsp;painting only</div>`
   );
 }
 
 /** The one line that survives `H`. */
 export function baselineHtml(): string {
   return (
-    '<b data-action="pause:panels" role="button" tabindex="0">H</b> show panels' +
-    ' <span>&middot;</span> <b data-action="cancel" role="button" tabindex="0">Esc</b> resume'
+    `<b data-action="pause:panels" role="button" tabindex="0">${keyHint('H', 'Triangle')}</b> show panels` +
+    ` <span>&middot;</span> <b data-action="cancel" role="button" tabindex="0">${keyHint('Esc', 'Circle')}</b> resume`
   );
 }

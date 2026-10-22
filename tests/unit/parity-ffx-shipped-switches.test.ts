@@ -6,7 +6,7 @@
  * | Switch | Shipped | Left OFF |
  * |---|---|---|
  * | `MENU_DRAW_PARITY` | on: a `openers`, b `overdrive`, c `summon` (also Chapter 28's no-row rule), d `blocked`, e `talk` | f `cursor` (the resting cursor and the stand-in "no" cue), g `help` (Bailey's "H") |
- * | `TARGET_STEP_PARITY` | on: t1 `selfStep`, t2 `overdriveStep`, t3a `cursorStart`, t6 `openerOne` (a and b: the six lists and the five characters' Overdrive list), t7 `copycat` | t3b `cursorStartFoe`, t5 `sideSwitch` |
+ * | `TARGET_STEP_PARITY` | on: t1 `selfStep`, t2 `overdriveStep`, t3a `cursorStart`, t3b `cursorStartFoe` (r60: measured live, session 8, decision 158), t6 `openerOne` (a and b: the six lists and the five characters' Overdrive list), t7 `copycat` | t5 `sideSwitch` |
  * | `CH3_ROSTER_REMOVAL` | on | |
  * | `GRAND_SUMMON_KO_REFUSED` | on | |
  * | `SCRIPT_COMMAND_DISABLES` | off (moot: with the roster removal on it changes nothing, 0 differing logs) | |
@@ -49,10 +49,10 @@ describe('the shipped switches (module defaults, nothing set by the test)', () =
     for (const item of ['cursor', 'help'] as MenuParityItem[]) expect(menuParity(item), item).toBe(false);
   });
 
-  it('TARGET_STEP_PARITY: on, all but cursorStartFoe (t3b) and sideSwitch (t5)', () => {
-    expect(TARGET_STEP_PARITY).toEqual({ on: true, skip: ['cursorStartFoe', 'sideSwitch'] });
-    for (const item of ['selfStep', 'overdriveStep', 'cursorStart', 'openerOne', 'copycat'] as TargetStepItem[]) expect(targetStepParity(item), item).toBe(true);
-    for (const item of ['cursorStartFoe', 'sideSwitch'] as TargetStepItem[]) expect(targetStepParity(item), item).toBe(false);
+  it('TARGET_STEP_PARITY: on, all but sideSwitch (t5); cursorStartFoe (t3b) is on since r60', () => {
+    expect(TARGET_STEP_PARITY).toEqual({ on: true, skip: ['sideSwitch'] });
+    for (const item of ['selfStep', 'overdriveStep', 'cursorStart', 'cursorStartFoe', 'openerOne', 'copycat'] as TargetStepItem[]) expect(targetStepParity(item), item).toBe(true);
+    for (const item of ['sideSwitch'] as TargetStepItem[]) expect(targetStepParity(item), item).toBe(false);
   });
 
   it('the Chapter III roster removal and the Grand Summon refusal are on; the possessed copy\'s script lock stays off (moot with the removal on)', () => {
@@ -92,7 +92,7 @@ describe('Chapter I (Seymour Flux), shipped: Escape and Flee are greyed rows wit
     expect((again as Input).actorId).toBe('tidus');
   });
 
-  it('target steps: a cure opens on the caster; an Attack carries no switch to the other side and no foe start (t3b and t5 are off)', async () => {
+  it('target steps: a cure opens on the caster; an Attack opens on formation index 0 (Seymour Flux, not his mount; t3b on) and carries no switch to the other side (t5 is off)', async () => {
     const engine = await engineFor('seymour-flux');
     const yuna = menuOf(engine, 'yuna');
     const cure = yuna.find((r) => r.category === 'whitemagic' && r.targeting === 'single-ally' && r.enabled);
@@ -101,7 +101,10 @@ describe('Chapter I (Seymour Flux), shipped: Escape and Flee are greyed rows wit
     const attack = menuOf(engine, 'tidus').find((r) => r.command.kind === 'attack');
     expect(attack).toBeDefined();
     expect(attack!.targetStep?.switchTo).toBeUndefined();
-    expect(attack!.targetStep?.start).toBeUndefined();
+    // t3b, measured live (session 8, 2026-10-20, slot 57): the foe cursor opens on foe index 0 = formation index 0. Chapter I's formation is Seymour Flux first, then Mortiorchis, his mount.
+    expect(ctxOf(engine).state.enemyIds).toEqual(['seymour-flux', 'mortiorchis']);
+    expect(attack!.targetStep?.candidates).toEqual(['seymour-flux', 'mortiorchis']);
+    expect(attack!.targetStep?.start).toBe('seymour-flux');
   });
 });
 

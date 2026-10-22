@@ -27,6 +27,9 @@
 import type { InputSnapshot } from '../../../app/Input.ts';
 import { PHONE_PREP_QUERY } from '../../../app/screens/party-prep/phonePrep.ts';
 import { audio } from '../../../audio/index.ts';
+import { padActive } from '../../../app/inputDevice.ts';
+import { padTokenOf } from '../../../app/padMap.ts';
+import { padLabel } from '../../common/padGlyphs.ts';
 import { markSeen, shouldShow } from '../../coach/coachState.ts';
 import { autoLearn, restoreGrid, type AutoLearnResult } from './sphereGridAutoLearn.ts';
 import { dockHtml, explainerHtml, resultHtml } from './sphereGridHelpCards.ts';
@@ -236,20 +239,22 @@ export class SphereGridHelp {
    * (default KEEP) and Esc (KEEP) until it is settled. Returns true when the
    * shell must not see this frame at all.
    */
-  /** The two desktop buttons name their key, or their pad button while a pad is connected. */
+  /** The two desktop buttons name their key, or the pad's button (A / B / X / Y or the PlayStation symbols, by the pad in hand) while the player's last press was a pad. */
   private labelKeys(pad: boolean): void {
     if (this.padLabels === pad) return;
     this.padLabels = pad;
     for (const el of this.deps.container.querySelectorAll<HTMLElement>('.ffxprep-sg__key')) {
       el.dataset['key'] ??= el.textContent ?? '';
-      el.textContent = pad ? (el.dataset['pad'] ?? '') : el.dataset['key'];
+      const word = el.dataset['pad'] ?? '';
+      const token = padTokenOf(word);
+      el.textContent = pad ? (token ? padLabel(token) : word) : el.dataset['key'];
     }
   }
 
   /** True once per press of the `?` key or the pad's X / Square (button 2). */
   private takeHelpKey(): boolean {
     const pad = typeof navigator !== 'undefined' ? [...(navigator.getGamepads?.() ?? [])].find((g) => g?.connected) : undefined;
-    this.labelKeys(pad !== undefined);
+    this.labelKeys(padActive());
     const down = pad?.buttons[2]?.pressed === true;
     const edge = down && !this.padHelpDown;
     this.padHelpDown = down;

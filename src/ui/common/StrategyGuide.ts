@@ -3,6 +3,7 @@ import type { BattleState, GameId } from '../../battle/common/types.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
 import { GUIDE_HINT_ITEM, GUIDE_SCROLL_HINT_ITEM } from './ControlsHint.ts';
 import { escapeHtml } from './html.ts';
+import { keyHint } from './padGlyphs.ts';
 import { docForState, headingAt, startBlockIndex, type GuideDocView } from './guideDoc.ts';
 import { docHtml } from './guideDocHtml.ts';
 import { cleanWindow, measureLines, type LineBox } from './guideLines.ts';
@@ -299,19 +300,17 @@ export class StrategyGuide {
       this.stackEl.style.top = '';
       this.stackEl.style.maxHeight = '';
     }
-    const pad = this.padConnected();
-    this.padSeen = pad;
-    const keys = pad ? GUIDE_HINT_ITEM.gamepad : GUIDE_HINT_ITEM.keyboard;
+    this.padSeen = this.padConnected();
+    // The key and the pad's button are both in the chip; `html[data-input]` shows the one the player last used (`ui/common/padGlyphs.ts`).
     this.toggleEl.innerHTML =
-      `<b>${escapeHtml(keys)}</b><span>${escapeHtml(shown ? 'hide guide' : 'guide')}</span>`;
+      `<b>${keyHint(GUIDE_HINT_ITEM.keyboard, GUIDE_HINT_ITEM.gamepad)}</b><span>${escapeHtml(shown ? 'hide guide' : 'guide')}</span>`;
     this.toggleEl.setAttribute('aria-pressed', String(shown));
     this.toggleEl.title = shown
       ? 'Hide the strategy guide'
       : this.squeezed
         ? 'The strategy guide has no room above the girls at this text size: open it over the enemy strips'
         : 'Show the strategy guide';
-    const scrollKeys = pad ? GUIDE_SCROLL_HINT_ITEM.gamepad : GUIDE_SCROLL_HINT_ITEM.keyboard;
-    this.keysEl.innerHTML = `<b>${escapeHtml(scrollKeys)}</b><span>${escapeHtml(GUIDE_SCROLL_HINT_ITEM.label)}</span>`;
+    this.keysEl.innerHTML = `<b>${keyHint(GUIDE_SCROLL_HINT_ITEM.keyboard, GUIDE_SCROLL_HINT_ITEM.gamepad)}</b><span>${escapeHtml(GUIDE_SCROLL_HINT_ITEM.label)}</span>`;
     this.keysEl.title = 'Scroll the strategy guide: [ and ] page up and down, Home and End, the mouse wheel or the right stick';
     this.syncWindow();
   }
@@ -396,7 +395,8 @@ export class StrategyGuide {
       down = false;
       scroll = 0;
     }
-    if (down && !this.padWasDown) this.toggle();
+    // X is Bushido's Square (`ui/ffx/rawInput.ts`, Shooting Star asks for it): while an Overdrive overlay is up the press belongs to it, not to the guide (release 61).
+    if (down && !this.padWasDown && !document.querySelector('.ig-minigame')) this.toggle();
     this.padWasDown = down;
     this.padScroll = scroll;
     const pad = this.padConnected();

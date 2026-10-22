@@ -1,14 +1,4 @@
-import {
-  NoToneMapping,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  SRGBColorSpace,
-  Scene,
-  Vector2,
-  Vector3,
-  WebGLRenderer,
-  type Camera,
-} from 'three';
+import { NoToneMapping, PCFSoftShadowMap, PerspectiveCamera, SRGBColorSpace, Scene, Vector2, Vector3, WebGLRenderer, type Camera } from 'three';
 import { setPaintedAnisotropy } from './PaintedArt.ts';
 import { artBudget, setBufferWidth, setGpuInfo, setMaxTextureSize } from './ArtDevice.ts';
 import { MsaaRenderPass, parseAaOverride, type AaMode } from './PostAa.ts';
@@ -24,6 +14,7 @@ import { eyeCandy } from './fx/EyeCandy.ts';
 import { GoldenHour } from './fx/a/GoldenHour.ts';
 import { CrispRig } from './crisp/CrispRig.ts';
 import { applyFigureTrue, bloomMaskFor, figureTrueFromAddress, figureTrueOf } from './figureTrue.ts';
+import { LookRig, lookWanted } from './look/LookRig.ts'; // demo looks: `?look=` (dev flag only; nothing is built without it)
 
 export interface RendererOptions {
   /** Element the <canvas> is appended to. Defaults to #game. */
@@ -253,6 +244,18 @@ export class Renderer {
   // ------------------------------------------------ eye-candy options round (prototype)
   /** Option A's controller, built the first time `?fx=a` (or `__pyrefly.fx`) asks for it. */
   private fxA: GoldenHour | null = null;
+  private look: LookRig | null = null;
+
+  /** Release 60: build the look's passes (when one is wanted) ahead of the first frame, so the shader warm-up compiles them (`LookRig.prepare`). A no-op with no look wanted. */
+  prepareLook(): void {
+    if (this.disposed || !lookWanted()) return;
+    (this.look ??= new LookRig(this)).prepare();
+  }
+
+  /** Demo looks: what the last frame did (`__pyrefly.look.stats`), or null when no look was ever asked for. */
+  get lookStats(): LookRig['stats'] | null {
+    return this.look?.stats ?? null;
+  }
   /** A lower DPR ceiling for a named fx tier (option A's phone tier: 1.5); null = none. */
   private fxPixelCap: number | null = null;
 
@@ -371,6 +374,7 @@ export class Renderer {
     const t = this.gradePass.uniforms['time'];
     if (t) t.value = performance.now() / 1000;
     if (this.fxA || eyeCandy.on.a) (this.fxA ??= new GoldenHour(this)).update(scene, camera);
+    if (this.look || lookWanted()) (this.look ??= new LookRig(this)).update(scene, camera);
     this.composer.render();
     for (const draw of this.overlays) draw(this.renderer);
   }
@@ -389,6 +393,7 @@ export class Renderer {
     this.disposed = true;
     window.removeEventListener('resize', this.onWindowResize);
     this.fxA?.dispose();
+    this.look?.dispose();
     this.crisp.dispose();
     this.msaaPass.dispose();
     this.smaaPass?.dispose();

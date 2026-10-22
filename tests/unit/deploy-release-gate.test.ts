@@ -96,18 +96,18 @@ describe('decideRelease: what a deploy may carry', () => {
 });
 
 describe('checkReleaseForDeploy reads the real notes file', () => {
-  it('finds the notes where the tool says, and the newest is 58 today', async () => {
+  it('finds the notes where the tool says, and the newest is 61 today', async () => {
     expect(NOTES_FILE).toBe('src/app/changelog/releaseNotes.ts');
     const mod = await loadReleaseNotes(REPO);
-    expect(mod.newestRelease(mod.RELEASE_NOTES)).toBe('58');
+    expect(mod.newestRelease(mod.RELEASE_NOTES)).toBe('61');
     expect(mod.validateReleaseNotes(mod.RELEASE_NOTES)).toEqual([]);
   });
 
-  it('lets 58 go (its note is the newest) and refuses 59 until its note is written', async () => {
-    expect(await checkReleaseForDeploy({ root: REPO, requested: '58', preview: false })).toMatchObject({ ok: true, release: '58' });
-    const next = await checkReleaseForDeploy({ root: REPO, requested: '59', preview: false });
+  it('lets 61 go (its note is the newest) and refuses 62 until its note is written', async () => {
+    expect(await checkReleaseForDeploy({ root: REPO, requested: '61', preview: false })).toMatchObject({ ok: true, release: '61' });
+    const next = await checkReleaseForDeploy({ root: REPO, requested: '62', preview: false });
     expect(next.ok).toBe(false);
-    if (!next.ok) expect(next.error).toMatch(/Write the 59 note first/);
+    if (!next.ok) expect(next.error).toMatch(/Write the 62 note first/);
     expect((await checkReleaseForDeploy({ root: REPO, requested: undefined, preview: false })).ok).toBe(false);
     expect((await checkReleaseForDeploy({ root: REPO, requested: true, preview: false })).ok).toBe(false);
   });
@@ -190,8 +190,12 @@ describe('tools/deploy-pages.mjs is wired to it', () => {
   });
 
   it('hands the build the name in PYREFLY_RELEASE, explicitly, every time', () => {
-    expect(src).toMatch(/import \{ RELEASE_ENV \} from '\.\/build-stamp\.mjs';/);
-    expect(src).toMatch(/\[RELEASE_ENV\]: RELEASE/);
+    // since release 61 the build's environment is made by tools/release-build.mjs (the function a review's candidate also uses): the deploy passes it the name,
+    // and that function sets PYREFLY_RELEASE over whatever the shell carries
+    expect(src).toMatch(/releaseBuildEnv\(\{ release: RELEASE, host: HOST, sourceMapDir \}\)/);
+    const shared = read('tools/release-build.mjs');
+    expect(shared).toMatch(/import \{ RELEASE_ENV \} from '\.\/build-stamp\.mjs';/);
+    expect(shared).toMatch(/\[RELEASE_ENV\]: release/);
   });
 
   it('writes the release into every record it makes: the log, the preview log and the legacy log', () => {

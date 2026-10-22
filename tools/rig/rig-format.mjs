@@ -111,6 +111,8 @@ function meshOf(p, where, raw, bones, problems, dir) {
   if (!png) problems.push({ code: 'rig-part', message: `${where}: png ${JSON.stringify(p.png)} is not a file name beside rig.json` });
   else if (dir && !existsSync(join(dir, png))) problems.push({ code: 'rig-file', message: `${where}: ${png} does not exist beside rig.json` });
   if (typeof p.rim === 'string' && dir && !existsSync(join(dir, p.rim))) problems.push({ code: 'rig-file', message: `${where}: ${p.rim} does not exist beside rig.json` });
+  if (p.normal !== undefined && (typeof p.normal !== 'string' || /[\\/]|^\./.test(p.normal))) problems.push({ code: 'rig-part', message: `${where}: normal ${JSON.stringify(p.normal)} is not a file name beside rig.json` });
+  else if (typeof p.normal === 'string' && dir && !existsSync(join(dir, p.normal))) problems.push({ code: 'rig-file', message: `${where}: ${p.normal} does not exist beside rig.json` });
   const { b, w } = skinOf(p, n, bones, problems, where);
   // texture rows from the top: `uvs` run DOWN like the painting's px; the prototype's `uv` alias runs UP and is flipped
   const tuv = new Float32Array(n * 2);
@@ -118,15 +120,15 @@ function meshOf(p, where, raw, bones, problems, dir) {
     tuv[k * 2] = uvIn ? uvIn[k * 2] : (verts[k * 2] - bx) / bw;
     tuv[k * 2 + 1] = uvIn ? (uvUp ? 1 - uvIn[k * 2 + 1] : uvIn[k * 2 + 1]) : (verts[k * 2 + 1] - by) / bh;
   }
-  return { png, rim: p.rim ?? null, box: p.box, verts: Float32Array.from(verts), tris: Uint32Array.from(tri), tuv, b, w };
+  return { png, rim: p.rim ?? null, normal: typeof p.normal === 'string' ? p.normal : null, box: p.box, verts: Float32Array.from(verts), tris: Uint32Array.from(tri), tuv, b, w };
 }
 
-/** Every image file a rig names, with whose it is: `{part, variant: string|null, png, rim, box}`, parts first (in file order), each followed by its variants. A variant's box is its own or the part's. */
+/** Every image file a rig names, with whose it is: `{part, variant: string|null, png, rim, normal, box}`, parts first (in file order), each followed by its variants. A variant's box is its own or the part's. `normal` (the HD-2D look's normal piece, format v2 additive) is null where there is none. */
 export function partImages(raw) {
   const out = [];
   for (const p of raw.parts ?? []) {
-    out.push({ part: p.name, variant: null, png: p.png, rim: p.rim ?? null, box: p.box });
-    for (const [vn, v] of Object.entries(p.variants ?? {})) out.push({ part: p.name, variant: vn, png: v?.png, rim: v?.rim ?? null, box: v?.box ?? p.box });
+    out.push({ part: p.name, variant: null, png: p.png, rim: p.rim ?? null, normal: p.normal ?? null, box: p.box });
+    for (const [vn, v] of Object.entries(p.variants ?? {})) out.push({ part: p.name, variant: vn, png: v?.png, rim: v?.rim ?? null, normal: v?.normal ?? null, box: v?.box ?? p.box });
   }
   return out;
 }
@@ -182,7 +184,7 @@ export function normaliseRig(raw, { dir } = {}) {
     for (const [vn, v] of Object.entries(p.variants ?? {})) {
       const vw = `${where} variant ${vn}`;
       if (!VARIANT_NAME.test(vn) || !v || typeof v !== 'object') { bad('rig-part', `${vw}: the name is not a plain name or the record is not an object`); continue; }
-      let vm = { ...m, png: v.png, rim: v.rim ?? null };
+      let vm = { ...m, png: v.png, rim: v.rim ?? null, normal: null };
       if (OWN_MESH.some((k) => v[k] !== undefined)) {
         const skinned = v.bone !== undefined || v.weights !== undefined || v.bones !== undefined;
         vm = meshOf({ ...v, box: v.box ?? p.box, ...(skinned || p.bone === undefined ? {} : { bone: p.bone }) }, vw, raw, bones, problems, dir);
@@ -192,7 +194,8 @@ export function normaliseRig(raw, { dir } = {}) {
         if (!png) bad('rig-part', `${vw}: png ${JSON.stringify(v.png)} is not a file name beside rig.json`);
         else if (dir && !existsSync(join(dir, png))) bad('rig-file', `${vw}: ${png} does not exist beside rig.json`);
         if (typeof v.rim === 'string' && dir && !existsSync(join(dir, v.rim))) bad('rig-file', `${vw}: ${v.rim} does not exist beside rig.json`);
-        vm = { ...m, png, rim: v.rim ?? null };
+        if (typeof v.normal === 'string' && dir && !existsSync(join(dir, v.normal))) bad('rig-file', `${vw}: ${v.normal} does not exist beside rig.json`);
+        vm = { ...m, png, rim: v.rim ?? null, normal: typeof v.normal === 'string' ? v.normal : null };
       }
       variants[vn] = { ...vm, alpha: null };
     }
@@ -265,7 +268,7 @@ export function rigDigest(raw, dir) {
   h.update(canon(rest));
   // a v1 rig has no variants, so its list is the part files in part order, exactly as before; a v2 variant's files follow their part's
   for (const p of [...(raw.parts ?? [])].sort((a, b) => (a.name < b.name ? -1 : 1))) {
-    for (const f of [p.png, p.rim, ...Object.entries(p.variants ?? {}).sort(([x], [y]) => (x < y ? -1 : 1)).flatMap(([, v]) => [v?.png, v?.rim])]) {
+    for (const f of [p.png, p.rim, p.normal, ...Object.entries(p.variants ?? {}).sort(([x], [y]) => (x < y ? -1 : 1)).flatMap(([, v]) => [v?.png, v?.rim, v?.normal])]) {
       if (!f) continue;
       const file = join(dir, f);
       h.update(`\n${f}:`);
@@ -282,9 +285,20 @@ export function rigSize(raw, dir) {
   let verts = 0;
   let tris = 0;
   let variants = 0;
+  // the HD-2D look's normal pieces (format v2 `normal`, additive) are counted apart from the colour textures: their own bytes and texels, from the PNG headers
+  let normalBytes = 0;
+  let normalTexels = 0;
   const png = (name) => { const f = join(dir, name ?? ''); if (name && existsSync(f)) bytes += readFileSync(f).length; };
+  const normal = (name) => {
+    const f = join(dir, name ?? '');
+    if (!name || !existsSync(f)) return;
+    const b = readFileSync(f);
+    normalBytes += b.length;
+    if (b.length >= 24 && b.toString('latin1', 12, 16) === 'IHDR') normalTexels += b.readUInt32BE(16) * b.readUInt32BE(20);
+  };
   for (const p of raw.parts ?? []) {
     png(p.png);
+    normal(p.normal);
     texels += (p.box?.[2] ?? 0) * (p.box?.[3] ?? 0);
     verts += p.verts ? p.verts.length / 2 : 4;
     tris += ((p.triangles ?? p.tris)?.length ?? 6) / 3;
@@ -292,6 +306,7 @@ export function rigSize(raw, dir) {
     for (const v of Object.values(p.variants ?? {})) {
       variants++;
       png(v?.png);
+      normal(v?.normal);
       const box = v?.box ?? p.box;
       texels += (box?.[2] ?? 0) * (box?.[3] ?? 0);
       if (OWN_MESH.some((k) => v?.[k] !== undefined)) {
@@ -300,5 +315,5 @@ export function rigSize(raw, dir) {
       }
     }
   }
-  return { parts: (raw.parts ?? []).length, bones: (raw.bones ?? []).length, texels, bytes, verts, tris, variants };
+  return { parts: (raw.parts ?? []).length, bones: (raw.bones ?? []).length, texels, bytes, verts, tris, variants, normalBytes, normalTexels };
 }
