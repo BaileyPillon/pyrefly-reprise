@@ -217,6 +217,21 @@ describe('the boss headline flag through the presenter hooks', () => {
     expect(seen.map((o) => o.bossBig)).toEqual([true, false, false, false]);
     expect(seen.every((o) => o.menuOpen === false)).toBe(true);
   });
+
+  it('under the FFX-2 ATB overlap the boss blows still count after another actor action has opened (found in a browser run: Impulse landed after a girl attack began)', async () => {
+    const seen: Array<{ bossBig?: boolean; big: boolean }> = [];
+    const c = ctx();
+    (c.stage as unknown as { fx: unknown }).fx = { enabled: () => true, hit: (o: { bossBig?: boolean; big: boolean }) => (seen.push(o), { freezeMs: 0, shook: false }) };
+    const start = (actorId: string, abilityId: string): Extract<BattleEvent, { type: 'action-start' }> =>
+      ({ type: 'action-start', actorId, abilityId, command: { kind: 'ability' } }) as unknown as Extract<BattleEvent, { type: 'action-start' }>;
+    resetFeelForTests('?pack=demo');
+    setFeelChapter('ffx2-bahamut');
+    await fxActionOpen(c, start('bahamut', 'impulse'));
+    await fxActionOpen(c, start('rikku', 'attack')); // the next action opens before Impulse's blows land
+    fxHit(c, dmg({ sourceId: 'bahamut', targetId: 'tidus' }), false);
+    fxHit(c, dmg({ sourceId: 'rikku' }), false);
+    expect(seen.map((o) => o.bossBig)).toEqual([true, false]);
+  });
 });
 
 describe('the pad-side sink', () => {

@@ -15,6 +15,7 @@ import type { EventCtx } from '../../BattlePresenterEvents.ts';
 import { hitPower } from '../../motion/DemoHit.ts';
 import { demoMotionOn } from '../../motion/DemoMotion.ts';
 import { rumbleHit, rumbleOpen, rumbleWin } from '../../feel/FeelHooks.ts'; // the motion program's gamepad rumble (`?rumble=`): a no-op unless switched on in a demo chapter
+import { punchMode, stopMode } from '../../feel/FeelSwitch.ts';
 import { isBossBigMove } from '../../feel/HitStopShort.ts';
 import { isFfx2, menuBlocks } from '../../KeySlots.ts';
 
@@ -73,6 +74,8 @@ interface ActionMark {
 }
 
 const marks = new WeakMap<EventCtx, ActionMark>();
+/** Each actor's latest opened action: under FFX-2's Active ATB a blow can land after another actor's action has opened (Impulse's blows after a girl's attack began), so `marks` (the latest of all) names the wrong action. */
+const bySource = new WeakMap<EventCtx, Map<CombatantId, ActionMark>>();
 
 function port(ctx: EventCtx): FxStagePort | null {
   const fx = (ctx.stage as { fx?: FxStagePort }).fx;
@@ -86,7 +89,11 @@ export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { 
   const kind: ActionMark['kind'] =
     event.command.kind === 'overdrive' ? 'overdrive' : SPECIALS.has(name.trim().toLowerCase()) ? 'special' : 'other';
   const magic = event.abilityId ? ctx.deps.abilityFacts?.(event.abilityId)?.damageType === 'magical' : false;
-  marks.set(ctx, { kind, count: (prev?.count ?? 0) + 1, magic, actorId: event.actorId, bossBig: isBossBigMove(event.abilityId) && ctx.stage.sideOf?.(event.actorId) === 'enemy' });
+  const mark: ActionMark = { kind, count: (prev?.count ?? 0) + 1, magic, actorId: event.actorId, bossBig: isBossBigMove(event.abilityId) && ctx.stage.sideOf?.(event.actorId) === 'enemy' };
+  marks.set(ctx, mark);
+  let own = bySource.get(ctx);
+  if (!own) bySource.set(ctx, (own = new Map()));
+  own.set(event.actorId, mark);
   rumbleOpen(ctx, kind);
   const fx = port(ctx);
   if (!fx?.actionOpen || kind === 'other' || ctx.speed() === 'skip') return;
@@ -135,8 +142,12 @@ export function fxHit(
   event: Extract<BattleEvent, { type: 'damage' }>,
   heavy: boolean,
 ): { waitMs: number; shook: boolean } | null {
-  const mark = marks.get(ctx);
-  const bossBig = mark?.bossBig === true && (event.sourceId === undefined || event.sourceId === mark.actorId);
+  const latest = marks.get(ctx);
+  // The action this blow belongs to: its source's own latest action, else the latest of all when that is the source's (or the blow names no source).
+  const mark = (event.sourceId !== undefined ? bySource.get(ctx)?.get(event.sourceId) : undefined) ?? (latest !== undefined && (event.sourceId === undefined || event.sourceId === latest.actorId) ? latest : undefined);
+  const bossBig = mark?.bossBig === true;
+  const feel = punchMode() !== 'today' || stopMode() !== 'today'; // only under the motion program's switches does `big` follow the blow's own action; today it is the latest opened, as it always was
+  const bigMark = feel ? mark : latest;
   rumbleHit(ctx, event, heavy, mark === undefined ? undefined : { kind: mark.kind, bossBig }, isFfx2(ctx) ? lastByIndex(event) : (lastShownAt(ctx, event) ?? lastByIndex(event)));
   const fx = port(ctx);
   if (!fx?.hit) return null;
@@ -147,9 +158,9 @@ export function fxHit(
     heavy,
     hitIndex: event.hitIndex ?? 0,
     hitCount: event.hitCount ?? 1,
-    big: mark !== undefined && mark.kind !== 'other',
-    magic: mark?.magic === true,
-    action: mark?.count ?? -1,
+    big: bigMark !== undefined && bigMark.kind !== 'other',
+    magic: latest?.magic === true,
+    action: latest?.count ?? -1,
     speed: ctx.speed(),
     lastShown: lastShownAt(ctx, event),
     bossBig,
