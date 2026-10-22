@@ -30,17 +30,27 @@ export type FxBeatKind =
   | 'boss-big' // a boss's big attack lands (Total Annihilation's last hit, Cross Cleave, Mega Flare)
   | 'boss-charge'; // a boss's charge reaches its last step
 
+/**
+ * The slice of an actor the integrator's hooks may drive (the presenter's `ActorHandle`, structurally; kept here so this file imports nothing). Passed as the last-but-one argument of the movement
+ * hooks by the caller that has the stage (`BattlePresenterBossFx`); absent in a test that calls {@link fxBeat} directly.
+ */
+export interface FxBeatActor {
+  leap?(height: number, ms: number, options?: { anticipation?: number; crouch?: number; stretch?: number; land?: number; landMs?: number; apex?: number }): Promise<void>;
+  readonly position?: { readonly y: number };
+  headPoint?(): { readonly y: number };
+}
+
 export interface FxMotionHooks {
-  /** The actor winds up for `ms` (the aura's build). Owner: motion-core (anticipation). */
-  anticipate?(actorId: string, ms: number): void;
+  /** The actor winds up for `ms` (the aura's build). Owner: motion-core (anticipation). `actor` and `kind` are extra arguments the integrator may read. */
+  anticipate?(actorId: string, ms: number, actor?: FxBeatActor, kind?: FxBeatKind): void;
   /** A big pose change is coming (ready to strike): cut it on a smear. Owner: motion-core (the smear). */
-  smear?(actorId: string): void;
+  smear?(actorId: string, actor?: FxBeatActor, kind?: FxBeatKind): void;
   /** Hold the frame for `frames` frames. Owner: motion-feel (hit-stop). */
-  hitStop?(frames: number): void;
+  hitStop?(frames: number, kind?: FxBeatKind): void;
   /** Push the camera in by this fraction of the view and settle. Owner: motion-feel (the punch). */
-  punch?(amount: number): void;
+  punch?(amount: number, kind?: FxBeatKind): void;
   /** Rumble the pad, `strength` 0 to 1 for `ms`. Owner: motion-feel (rumble). */
-  rumble?(strength: number, ms: number): void;
+  rumble?(strength: number, ms: number, kind?: FxBeatKind): void;
 }
 
 export interface FxBeatNumbers {
@@ -84,28 +94,28 @@ export interface FxBeatLog {
  * One of this lane's big moments happens: call the registered hooks the beat's numbers ask for. `calm` is the caller's REDUCE MOTION answer: then only the movement hooks run. Returns what was
  * called (empty on this branch alone).
  */
-export function fxBeat(kind: FxBeatKind, actorId: string, o: { calm?: boolean; ms?: number } = {}): FxBeatLog {
+export function fxBeat(kind: FxBeatKind, actorId: string, o: { calm?: boolean; ms?: number; actor?: FxBeatActor } = {}): FxBeatLog {
   const n = FX_BEATS[kind];
   const called: string[] = [];
   if (n.move && hooks.anticipate) {
-    hooks.anticipate(actorId, o.ms ?? 1000);
+    hooks.anticipate(actorId, o.ms ?? 1000, o.actor, kind);
     called.push('anticipate');
   }
   if (n.move && hooks.smear) {
-    hooks.smear(actorId);
+    hooks.smear(actorId, o.actor, kind);
     called.push('smear');
   }
   if (o.calm !== true) {
     if (n.hitStop > 0 && hooks.hitStop) {
-      hooks.hitStop(n.hitStop);
+      hooks.hitStop(n.hitStop, kind);
       called.push('hitStop');
     }
     if (n.punch > 0 && hooks.punch) {
-      hooks.punch(n.punch);
+      hooks.punch(n.punch, kind);
       called.push('punch');
     }
     if (n.rumble > 0 && hooks.rumble) {
-      hooks.rumble(n.rumble, n.rumbleMs);
+      hooks.rumble(n.rumble, n.rumbleMs, kind);
       called.push('rumble');
     }
   }

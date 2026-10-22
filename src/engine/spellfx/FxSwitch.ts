@@ -18,32 +18,22 @@
  *
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
+import { DEMO_CHAPTERS, demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord, setDemoChapter } from '../motion/DemoGate.ts';
+import { menuHolds } from '../motion/MenuHold.ts';
 
-/** The two demo chapters and the game each one is (`src/data/encounters.ts` ids). */
-export const FX_DEMO_CHAPTERS: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object.freeze({
-  'seymour-flux': 'ffx',
-  'ffx2-bahamut': 'ffx2',
-});
+/** The two demo chapters and the game each one is (`src/data/encounters.ts` ids): the ONE table every lane's switch reads (`motion/DemoGate.ts`). */
+export const FX_DEMO_CHAPTERS: Readonly<Record<string, 'ffx' | 'ffx2'>> = DEMO_CHAPTERS;
 
 export type FxMode = 'new' | 'today';
 
 let mode: FxMode | null = null;
-let chapter: string | undefined;
 
 /** `?fx=new|today` (a word in a comma list) and `?pack=demo` from a search string (pure): `today` (the default) unless `new` is named, or `pack=demo` with no `today`. */
 export function fxModeFromSearch(search: string | undefined): FxMode {
   if (search === undefined) return 'today';
-  let words: string[] = [];
-  let pack = '';
-  try {
-    const p = new URLSearchParams(search);
-    words = (p.get('fx') ?? '').toLowerCase().split(',').map((w) => w.trim());
-    pack = (p.get('pack') ?? '').trim().toLowerCase();
-  } catch {
-    /* an unreadable address is no address: the default */
-  }
+  const words = queryWord(search, 'fx').split(',').map((w) => w.trim());
   if (words.includes('today')) return 'today';
-  return words.includes('new') || pack === 'demo' ? 'new' : 'today';
+  return words.includes('new') || packDemo(search) ? 'new' : 'today';
 }
 
 /** The switch as the page asked for it. Read once. */
@@ -59,26 +49,27 @@ export function setFxMode(value: FxMode | null): void {
 
 /** `BattleScreen` names the running chapter as the battle sets up (and `undefined` as it exits); the demo gate reads it. */
 export function setFxChapter(id: string | undefined): void {
-  chapter = id;
+  setDemoChapter(id);
 }
 
 export function fxChapter(): string | undefined {
-  return chapter;
+  return demoChapter();
 }
 
 /** Is this chapter Chapter I or Chapter IV? */
 export function inFxDemoChapter(id: string | undefined): boolean {
-  return id !== undefined && Object.prototype.hasOwnProperty.call(FX_DEMO_CHAPTERS, id);
+  return isDemoChapter(id);
 }
 
 /** The game of the running demo chapter (FFX in Chapter I, FFX-2 in Chapter IV), or undefined outside the demo chapters. */
 export function fxGame(): 'ffx' | 'ffx2' | undefined {
-  return inFxDemoChapter(chapter) ? FX_DEMO_CHAPTERS[chapter!] : undefined;
+  const c = demoChapter();
+  return isDemoChapter(c) ? demoGameOf(c) : undefined;
 }
 
 /** True when the new effects play now: switched on, in a demo chapter. */
 export function fxNewOn(): boolean {
-  return fxMode() === 'new' && inFxDemoChapter(chapter);
+  return fxMode() === 'new' && isDemoChapter(demoChapter());
 }
 
 /**
@@ -122,7 +113,11 @@ export function setFxPiece(piece: FxPiece | null, on = true): void {
   else offSet().add(piece);
 }
 
-/** Does this piece play now: the new effects are on in a demo chapter and the address did not turn the piece off. */
+/**
+ * Does this piece play now: the new effects are on in a demo chapter and the address did not turn the piece off. FFX-2 only in effect: while a command menu is open (`motion/MenuHold.ts`,
+ * D-357) none of these ADDED looks begins (the bosses' own effects, the charge, the name slab, the dress burst, a status move's effect); asked when a look begins, so one already in flight is
+ * not pulled down. The painted finish of the spells that play anyway (`fxNewOn`) is not held: a fight would change style with every menu that opens.
+ */
 export function fxPieceOn(piece: FxPiece): boolean {
-  return fxNewOn() && !offSet().has(piece);
+  return fxNewOn() && !offSet().has(piece) && !menuHolds();
 }

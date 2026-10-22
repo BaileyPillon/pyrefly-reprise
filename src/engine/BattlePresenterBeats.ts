@@ -30,16 +30,7 @@ import { partyOffStage } from './SummonStaging.ts';
 import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
 import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
-import {
-  banner,
-  cue,
-  elementCue,
-  numeral,
-  reasonText,
-  settled,
-  TIMING,
-  type EventCtx,
-} from './BattlePresenterEvents.ts';
+import { banner, cue, elementCue, numeral, reasonText, settled, TIMING, type EventCtx } from './BattlePresenterEvents.ts';
 
 // ----------------------------------------------------------------- handlers
 

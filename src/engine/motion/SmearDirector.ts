@@ -18,7 +18,8 @@ import { pairFacts } from './SmearFacts.ts';
 import { noteSmear } from './SmearLog.ts';
 import { menuHolds } from './MenuHold.ts';
 import { KO_CUT_STRENGTH } from './MomentsPlan.ts';
-import { CUT, FLASH_PEAK, LENGTH, MIN_SPEED, smearPlan } from './SmearPlan.ts';
+import { CUT, CUT_AT, FLASH_PEAK, LENGTH, MIN_SPEED, smearPlan } from './SmearPlan.ts';
+import { heftOfHeight, motionBeat } from '../feel/MotionBeats.ts';
 import { smearStyleNow } from './SmearSwitch.ts';
 
 /** What the director needs of the actor that owns it. */
@@ -88,6 +89,7 @@ export class SmearDirector {
     const d = this.state.direction(height, this.dir);
     this.state.begin(plan, d.x, d.y);
     noteSmear({ at: now(), actor: h.name(), from, to: resolved, style: plan.style, cutMs: plan.cutMs, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed, strength: plan.strength, flash: plan.flash, kind: 'plane' });
+    motionBeat({ kind: 'smear', strength: plan.strength, heft: heftOfHeight(height), atMs: plan.cutMs * CUT_AT }); // lane "feel", `?motionsfx=`: the whoosh of the cut, on the cut (a no-op unless the sink is on)
     if (plan.flash && !h.flashBlocked()) h.flash(SMEAR_FLASH_COLOUR, plan.cutMs * 1.5, FLASH_PEAK);
     return true;
   }

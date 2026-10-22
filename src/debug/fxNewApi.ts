@@ -11,6 +11,7 @@
  * battle events through the running battle's real presenter (the sequence numbers are filled in) and resolves when they have played: the capture's way to show a boss move or an Overdrive in the
  * real presentation without waiting for the AI to choose it. Neither changes a battle's state or the engine.
  */
+import { installFxWiring } from '../engine/motion/FxWiring.ts';
 import { FX_PIECES, fxChapter, fxMode, fxNewOn, fxPieceOn, setFxChapter, setFxMode, setFxPiece, type FxMode, type FxPiece } from '../engine/spellfx/FxSwitch.ts';
 import { FxPerfGuard } from '../engine/spellfx/FxPerfGuard.ts';
 import { setFxMotionHooks } from '../engine/spellfx/FxMotionAdapter.ts';
@@ -34,8 +35,9 @@ export function installFxNewDebug(api: Record<string, unknown>): void {
   };
   api['fxHooksProbe'] = (on = true): unknown[] => {
     const log: unknown[] = [];
-    const note = (hook: string) => (...a: unknown[]): void => void log.push([Math.round(performance.now()), hook, ...a]);
-    setFxMotionHooks(on ? { anticipate: note('anticipate'), smear: note('smear'), hitStop: note('hitStop'), punch: note('punch'), rumble: note('rumble') } : {});
+    const note = (hook: string) => (...a: unknown[]): void => void log.push([Math.round(performance.now()), hook, ...a.filter((x) => typeof x !== 'object')]); // the actor the integrator's hooks get is not logged
+    if (on) setFxMotionHooks({ anticipate: note('anticipate'), smear: note('smear'), hitStop: note('hitStop'), punch: note('punch'), rumble: note('rumble') });
+    else installFxWiring(); // off: the integrator's own hooks come back (`engine/motion/FxWiring.ts`)
     return log;
   };
   api['fxPlay'] = (events: unknown[]): Promise<unknown> | null => {

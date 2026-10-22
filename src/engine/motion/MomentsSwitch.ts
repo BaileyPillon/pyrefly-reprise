@@ -16,6 +16,7 @@
  * `research/ffx-vs-ffx2-presentation.md` 2.1 and 2.2) and the chapter's game. Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
 import { curvesChapter, curvesGame, inDemoChapter, type CurveGame } from './CurvesSwitch.ts';
+import { packDemo, queryWord } from './DemoGate.ts';
 
 export type MomentsMode = 'new' | 'today';
 
@@ -24,17 +25,9 @@ let mode: MomentsMode | null = null;
 /** `?moments=new|today` and `?pack=demo` from a search string (pure): `today` (the default) unless `moments=new`, or `pack=demo` with no `moments=today`. */
 export function momentsModeFromSearch(search: string | undefined): MomentsMode {
   if (search === undefined) return 'today';
-  let moments = '';
-  let pack = '';
-  try {
-    const p = new URLSearchParams(search);
-    moments = (p.get('moments') ?? '').trim().toLowerCase();
-    pack = (p.get('pack') ?? '').trim().toLowerCase();
-  } catch {
-    /* an unreadable address is no address: the default */
-  }
+  const moments = queryWord(search, 'moments');
   if (moments === 'today') return 'today';
-  return moments === 'new' || pack === 'demo' ? 'new' : 'today';
+  return moments === 'new' || packDemo(search) ? 'new' : 'today';
 }
 
 /** The switch as the page asked for it. Read once. */

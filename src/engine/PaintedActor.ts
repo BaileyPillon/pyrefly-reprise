@@ -1629,7 +1629,9 @@ export class PaintedActor extends Group {
 
   /** An arc with a take-off crouch, a stretch in the air and a landing squash (FFX-2's run-in; the turn-start weight shift). Resolves at the landing. */
   leap(height: number, ms: number, options?: LeapOptions): Promise<void> {
-    return this.curves.leap(height, ms, options);
+    // The lane "feel" landing thud (`?motionsfx=`): the hop reports its landing, so the leap that replaces it under the curves does too (strength is the landing squash over its 6 percent cap).
+    const land = options?.land ?? 0.04;
+    return this.curves.leap(height, ms, { ...options, onLand: () => motionBeat({ kind: 'land', strength: land / 0.06, heft: heftOfHeight(this.worldHeight) }) });
   }
 
   /**

@@ -17,6 +17,7 @@ import { demoMotionOn } from '../../motion/DemoMotion.ts';
 import { rumbleHit, rumbleOpen, rumbleWin } from '../../feel/FeelHooks.ts'; // the motion program's gamepad rumble (`?rumble=`): a no-op unless switched on in a demo chapter
 import { punchMode, stopMode } from '../../feel/FeelSwitch.ts';
 import { isBossBigMove } from '../../feel/HitStopShort.ts';
+import { bigBlowClaimed } from '../../feel/BlowClaim.ts';
 import { isFfx2, menuBlocks } from '../../KeySlots.ts';
 
 /** What the stage offers option C. Every method is optional; `enabled()` false = today's look. */
@@ -47,8 +48,10 @@ export interface FxStagePort {
     power?: number | undefined;
     /** A foe's headline move (`feel/HitStopShort.isBossBigMove`); read by `?hitstop=short` and `?punch=new`. */
     bossBig?: boolean | undefined;
-    /** FFX-2: a command menu is open right now; `?punch=new` plays no camera punch over it. */
+    /** FFX-2: a command menu is open right now; `?punch=new` plays no camera punch over it, `?hitstop=short` holds no frame. */
     menuOpen?: boolean | undefined;
+    /** The new effects' beat claimed this blow (`feel/BlowClaim.ts`): the feel rules treat it as the finisher of a big action. */
+    fxBig?: boolean | undefined;
   }): { freezeMs: number; shook: boolean };
   /** A fiend is sent (only where the departure is a dissolve, C8). */
   dissolve?(id: CombatantId): void;
@@ -148,7 +151,14 @@ export function fxHit(
   const bossBig = mark?.bossBig === true;
   const feel = punchMode() !== 'today' || stopMode() !== 'today'; // only under the motion program's switches does `big` follow the blow's own action; today it is the latest opened, as it always was
   const bigMark = feel ? mark : latest;
-  rumbleHit(ctx, event, heavy, mark === undefined ? undefined : { kind: mark.kind, bossBig }, isFfx2(ctx) ? lastByIndex(event) : (lastShownAt(ctx, event) ?? lastByIndex(event)));
+  const fxBig = bigBlowClaimed(event); // the new effects' beat named this an Overdrive's opening blow or a boss's headline blow: it takes the finisher's pulse, stop and punch once (`feel/BlowClaim.ts`)
+  rumbleHit(
+    ctx,
+    event,
+    heavy,
+    fxBig ? { kind: mark !== undefined && mark.kind !== 'other' ? mark.kind : 'overdrive', bossBig } : mark === undefined ? undefined : { kind: mark.kind, bossBig },
+    fxBig || (isFfx2(ctx) ? lastByIndex(event) : (lastShownAt(ctx, event) ?? lastByIndex(event))),
+  );
   const fx = port(ctx);
   if (!fx?.hit) return null;
   const r = fx.hit({
@@ -165,6 +175,7 @@ export function fxHit(
     lastShown: lastShownAt(ctx, event),
     bossBig,
     menuOpen: menuBlocks(ctx),
+    ...(fxBig ? { fxBig } : {}),
     ...(demoMotionOn() ? { power: hitPower(event.amount, ctx.hpMaxOf?.(event.targetId)) } : {}), // `?motion=demo`: the stop and the shake grow with the blow (`motion/DemoHit.ts`)
   });
   return { waitMs: heavy || demoMotionOn() ? r.freezeMs : 0, shook: r.shook }; // the demo waits out every stop it makes, so the next beat does not run ahead of a held field

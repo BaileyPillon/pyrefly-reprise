@@ -77,6 +77,11 @@ export function rumbleForOpen(kind: 'overdrive' | 'special' | 'other'): RumblePa
   return kind === 'other' ? null : [{ atMs: 0, ms: 140, weak: 0.15, strong: 0.3 }];
 }
 
+/** A boss's charge reaches its last step (the lane "fx" beat `boss-charge`: strength 0.3 for 300 ms): a light pulse. */
+export function rumbleForCharge(): RumblePattern {
+  return [{ atMs: 0, ms: 300, weak: 0.2, strong: 0.3 }];
+}
+
 /** The win: a short pulse and a longer swell under the fanfare's first notes. */
 export function rumbleForWin(): RumblePattern {
   return [

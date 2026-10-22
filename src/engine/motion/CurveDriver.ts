@@ -95,6 +95,8 @@ export interface LeapOptions {
   apex?: number;
   /** Things to do on the frame the leap's time (the crouch and the flight, 0 to 1 of the whole `ms`) first reaches `u`: the victory cheer swaps its painting on the take-off (motion pass, step 3). */
   marks?: ReadonlyArray<{ u: number; fn: () => void }>;
+  /** Called once, on the frame the flight ends and the landing squash begins (the lane "feel" landing thud, `?motionsfx=`). Never called when the leap is settled early (the actor was disposed). */
+  onLand?: () => void;
 }
 
 /** One arc: crouch, take off, stretch in the air, land, ring the landing. The flight is `ms` long; the landing squash plays on after it. */
@@ -103,11 +105,13 @@ export class LeapRun {
   sy = 1;
   private t = 0;
   private flightDone = false;
-  private readonly o: Required<Omit<LeapOptions, 'marks'>>;
+  private readonly o: Required<Omit<LeapOptions, 'marks' | 'onLand'>>;
+  private readonly onLand: (() => void) | undefined;
   private readonly pending: Array<{ u: number; fn: () => void }>;
 
   constructor(private readonly height: number, private readonly ms: number, resolve: () => void, options: LeapOptions = {}) {
-    const { marks, ...shape } = options;
+    const { marks, onLand, ...shape } = options;
+    this.onLand = onLand;
     this.pending = marks ? marks.map((m) => ({ u: m.u, fn: m.fn })).sort((a, b) => a.u - b.u) : [];
     this.o = { anticipation: 0.12, crouch: 0.03, stretch: 0.04, land: 0.04, landMs: 140, apex: 0.45, ...shape };
     this.o.crouch = Math.min(SQUASH_CAP, this.o.crouch);
@@ -139,6 +143,7 @@ export class LeapRun {
       if (!this.flightDone) {
         this.flightDone = true;
         this.resolve();
+        this.onLand?.();
       }
     }
     if (u >= 1 && !this.flightDone) {

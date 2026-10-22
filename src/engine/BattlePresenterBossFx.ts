@@ -18,6 +18,8 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { actionOfBlow, type ActingAction } from './BattlePresenterSpellFx.ts';
+import { claimBigBlow } from './feel/BlowClaim.ts';
+import { rumbleCharge } from './feel/FeelHooks.ts';
 import { OD_AURA_OF, PSEUDO_FX, bossFxFor, pieceOfFx } from './spellfx/BossFx.ts';
 import { fxBeat } from './spellfx/FxMotionAdapter.ts';
 import { fxGame, fxNewOn, fxPieceOn } from './spellfx/FxSwitch.ts';
@@ -135,6 +137,7 @@ export function bigBlow(ctx: EventCtx, event: Extract<BattleEvent, { type: 'dama
   if (lastBig.get(ctx) === key) return;
   lastBig.set(ctx, key);
   fxBeat(boss ? 'boss-big' : 'od-strike', a.actorId, { calm: calmFor(ctx) });
+  claimBigBlow(event); // the stop, the punch and the pulse for this beat are the feel rules' (`feel/BlowClaim.ts`): this blow is read as the finisher of a big action, once
 }
 
 /**
@@ -157,7 +160,10 @@ export function chargeFx(ctx: EventCtx, event: Extract<BattleEvent, { type: 'cha
   if (!fxPieceOn('openings')) return;
   const level = chargeLevel(event);
   ctx.stage.vfx.land?.(event.enemyId, { abilityId: PSEUDO_FX.gather, hitIndex: 0, level, deco: true });
-  if (event.turnsLeft <= 0) fxBeat('boss-charge', event.enemyId, { calm: calmFor(ctx) });
+  if (event.turnsLeft <= 0) {
+    fxBeat('boss-charge', event.enemyId, { calm: calmFor(ctx) });
+    rumbleCharge(ctx); // the light pulse of the beat, through the feel lane's gates (`?rumble=`, REDUCE MOTION, an open FFX-2 menu)
+  }
 }
 
 /**
@@ -169,7 +175,7 @@ export async function odOpening(ctx: EventCtx, event: Extract<BattleEvent, { typ
   const id = event.actorId;
   ctx.stage.vfx.land?.(id, { abilityId: PSEUDO_FX.odaura, hitIndex: 0, variant: OD_AURA_OF[id] ?? '', deco: true });
   if (ctx.acting) odSerial.set(ctx, ctx.acting.serial);
-  fxBeat('od-open', id, { calm: calmFor(ctx), ms: ODAURA_BUILD * 1000 });
+  fxBeat('od-open', id, { calm: calmFor(ctx), ms: ODAURA_BUILD * 1000, actor: ctx.stage.actor(id) });
   await open();
   await ctx.sleep(OD_CALM_MS);
 }

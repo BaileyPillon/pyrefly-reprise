@@ -14,7 +14,8 @@ import type { ActorSmear, SmearFrame } from '../motion/ActorSmear.ts';
 import { applySmear, type SmearCells, type SmearPlane } from '../motion/SmearApply.ts';
 import { menuHolds } from '../motion/MenuHold.ts';
 import { noteSmear } from '../motion/SmearLog.ts';
-import { FLASH_PEAK, MIN_SPEED, rigSmearPlan, type SmearPlan } from '../motion/SmearPlan.ts';
+import { CUT_AT, FLASH_PEAK, MIN_SPEED, rigSmearPlan, type SmearPlan } from '../motion/SmearPlan.ts';
+import { heftOfHeight, motionBeat } from '../feel/MotionBeats.ts';
 import { smearStyleNow } from '../motion/SmearSwitch.ts';
 
 const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
@@ -68,6 +69,7 @@ export class RigSmearWindow {
     this.moveMs = o.moveMs;
     this.flashed = false;
     noteSmear({ at: now(), moveMs: o.moveMs, actor: o.name, from: o.from, to: o.to, style: plan.style, cutMs: plan.cutMs, overlap: null, anchorDistance: null, speed: 0, strength: plan.strength, flash: plan.flash, kind: 'rig' });
+    motionBeat({ kind: 'smear', strength: plan.strength, heft: heftOfHeight(o.worldHeight), atMs: o.moveMs * CUT_AT }); // lane "feel", `?motionsfx=`: the whoosh of the flip, on the flip (a no-op unless the sink is on)
     return true;
   }
 

@@ -45,8 +45,10 @@ export interface HitInfo {
   power?: number | undefined;
   /** A foe's headline move (`feel/HitStopShort.isBossBigMove`): read by `?hitstop=short` and `?punch=new` only. */
   bossBig?: boolean | undefined;
-  /** FFX-2: a command menu is open (`KeySlots.menuBlocks`); `?punch=new` plays no camera punch over it (D-316, the target frame hold). */
+  /** FFX-2: a command menu is open (`KeySlots.menuBlocks`); `?punch=new` plays no camera punch over it (D-316, the target frame hold), and `?hitstop=short` holds no frame. */
   menuOpen?: boolean | undefined;
+  /** The new effects' beat claimed this blow as an Overdrive's opening blow or a boss's headline blow (`feel/BlowClaim.ts`): `?hitstop=short` and `?punch=new` treat it as the finisher of a big action. */
+  fxBig?: boolean | undefined;
 }
 
 export interface SpectacleFlags {
@@ -202,7 +204,7 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
   const stopMode = f.feel?.stop ?? 'today';
   const punchMode = f.feel?.punch ?? 'today';
   if (normal && !f.reduceMotion && stopMode !== 'off') {
-    if (stopMode === 'short') freezeMs = shortStopMs({ crit: hit.crit, big: hit.big, last, bossBig: hit.bossBig === true, hitIndex: hit.hitIndex, hitCount: hit.hitCount });
+    if (stopMode === 'short') freezeMs = hit.menuOpen === true ? 0 : shortStopMs({ crit: hit.crit, big: hit.big || hit.fxBig === true, last: last || hit.fxBig === true, bossBig: hit.bossBig === true, hitIndex: hit.hitIndex, hitCount: hit.hitCount }); // an open FFX-2 command menu holds no frame (D-357)
     else if (f.demo) freezeMs = demoStopMs(facts, t.freezeLightMs); // never lighter than today's own light hold (FFX 40 ms, FFX-2 28 ms)
     else if (holdsHeavy || (hit.big && last)) freezeMs = t.freezeHeavyMs;
     else if (first) freezeMs = t.freezeLightMs;
@@ -220,7 +222,7 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
     impactFrame,
     freezeMs,
     trauma,
-    kick: f.reduceMotion || punchMode === 'off' ? 0 : punchMode === 'new' ? (hit.menuOpen === true ? 0 : newPunchFraction({ crit: hit.crit, heavy: hit.heavy, big: hit.big, last, bossBig: hit.bossBig === true, first })) : hit.crit || (hit.big && last) ? 0.05 : hit.heavy ? 0.035 : 0,
+    kick: f.reduceMotion || punchMode === 'off' ? 0 : punchMode === 'new' ? (hit.menuOpen === true ? 0 : newPunchFraction({ crit: hit.crit, heavy: hit.heavy, big: hit.big || hit.fxBig === true, last: last || hit.fxBig === true, bossBig: hit.bossBig === true, first })) : hit.crit || (hit.big && last) ? 0.05 : hit.heavy ? 0.035 : 0,
     kickMode: punchMode === 'new' ? 'settle' : 'today',
     streaks,
     ring: density > 0 && (first || hit.heavy),

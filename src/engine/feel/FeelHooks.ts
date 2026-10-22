@@ -8,22 +8,23 @@
  * `skip`, the same rule as the hit-stop); REDUCE MOTION is off (Bailey: it turns off "Shake, punch, freeze, rumble"); and, in the page-side sink, the last thing the player pressed
  * was a pad ("never on keyboard play") and a pad with a `vibrationActuator` is connected.
  *
- * **FFX-2's "no motion over an open command menu" (D-357, `MotionGate`, `KeySlots.menuBlocks`) reaches the VISIBLE looks only** (review F7, 2026-10-22): the camera punch reads `HitInfo.menuOpen`
- * and is zero under a menu. The hit-stop does not: it holds the field clock and the presenter's waits (`ctx.sleep`), never the Active ATB pump (`pace.ts`) and never the menu, so nothing
- * on screen moves under it. The rumble does not either: it is felt, not seen, and tells the player a blow landed while they were choosing. The contact shadow is ground contact, not a
- * motion look. If Bailey wants the pad quiet under a menu too, it is one `menuBlocks` read in {@link allowed} (open question S3-3 in `docs/handoff/motion-feel.md`).
+ * **FFX-2's "no motion over an open command menu" (D-357, `MotionGate`, `KeySlots.menuBlocks`) covers the punch, the short hit-stop and the rumble** (integration, 2026-10-22; the lane's review F7
+ * had left the stop and the rumble out, on the reading that the stop holds only the field clock and the rumble is felt, not seen; the driver's rule is that no new piece plays over an open menu): the
+ * camera punch reads `HitInfo.menuOpen` and is zero under a menu, so does the short stop (`SpectacleRules.planHit`), and {@link allowed} reads `menuBlocks` for the pad. Asked when a blow lands, like
+ * the other looks. The contact shadow is ground contact, not a motion look.
  *
  * Ports only: no `three`, no DOM, no engine state, no RNG.
  */
 import type { BattleEvent } from '../../battle/common/types.ts';
 import type { EventCtx } from '../BattlePresenterEvents.ts';
+import { menuBlocks } from '../KeySlots.ts';
 import { rumbleOn } from './FeelSwitch.ts';
-import { rumbleForHit, rumbleForOpen, rumbleForWin, sendRumble } from './Rumble.ts';
+import { rumbleForCharge, rumbleForHit, rumbleForOpen, rumbleForWin, sendRumble } from './Rumble.ts';
 
 type Damage = Extract<BattleEvent, { type: 'damage' }>;
 
 function allowed(ctx: EventCtx): boolean {
-  return rumbleOn() && ctx.speed() === 'normal' && ctx.moments?.reducedMotion !== true;
+  return rumbleOn() && ctx.speed() === 'normal' && ctx.moments?.reducedMotion !== true && !menuBlocks(ctx); // FFX-2: nothing new plays over an open command menu (D-357; integration: the pad is held with the looks)
 }
 
 /** A blow lands. `mark` is the action's facts (`presenterHooks.ActionMark`); `last` is the blow the action shows last. */
@@ -53,6 +54,11 @@ export function rumbleHit(
 /** An Overdrive or Special opens. */
 export function rumbleOpen(ctx: EventCtx, kind: 'overdrive' | 'special' | 'other'): void {
   if (allowed(ctx)) sendRumble(rumbleForOpen(kind));
+}
+
+/** A boss's charge reaches its last step (`BattlePresenterBossFx.chargeFx`): a light pulse, with the same gates as every other (the lane "fx" beat does not rumble itself: `motion/FxWiring.ts`). */
+export function rumbleCharge(ctx: EventCtx): void {
+  if (allowed(ctx)) sendRumble(rumbleForCharge());
 }
 
 /**

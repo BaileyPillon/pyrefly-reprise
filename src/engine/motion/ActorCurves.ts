@@ -1,6 +1,8 @@
 /**
  * The small pure helpers `PaintedActor` calls for the new curves (motion pass, lane "core", step 1), kept out of that 2,468-line file. No `three`, no DOM.
  */
+import { heftOfHeight, motionBeat } from '../feel/MotionBeats.ts';
+import { paceFactor } from '../pace.ts';
 import type { CurveDriver } from './CurveDriver.ts';
 import { PROFILES, SQUASH_CAP, clamp01, resolveStrike } from './StrikeCurve.ts';
 import type { StrikePlan } from './StrikePlan.ts';
@@ -17,6 +19,11 @@ export function startStrike(driver: CurveDriver, plan: StrikePlan, worldHeight: 
   const shape = resolveStrike(PROFILES[plan.game], { distance: plan.distance, height: worldHeight, heft: heftOf(worldHeight), timeScale: plan.timeScale, arcGain: plan.arc ? 1 : 0 });
   const contact = plan.contact;
   const { run, done } = driver.begin(shape, plan.distance, worldHeight, contact === undefined);
+  // The lane "feel" motion sounds (`?motionsfx=`, off by default): the whoosh of the step, asked for as the travel begins so that its loudest moment is the fastest frame (`travelPeak`), in on-screen ms.
+  run.on('windupEnd', () => {
+    const onScreen = paceFactor('action');
+    motionBeat({ kind: 'lunge', strength: plan.distance / 2.4, heft: heftOfHeight(worldHeight), atMs: (run.marks.travelPeak - run.marks.windupEnd) * onScreen, ms: shape.travelMs * onScreen });
+  });
   if (contact) {
     run.on('contact', () => contact.reached());
     void contact.hold.then(() => run.release(), () => run.release());

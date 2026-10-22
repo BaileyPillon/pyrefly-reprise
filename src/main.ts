@@ -22,6 +22,8 @@ import { installCurvesDebug } from './debug/curvesApi.ts'; // motion pass (lane 
 import { installMomentsDebug } from './debug/momentsApi.ts'; // motion pass (lane "core", step 3): `__pyrefly.moments('new' | 'today')`, `.cheer()`, `.standDown()`, `.koSettle()`
 import { installSmearDebug } from './debug/smearApi.ts'; // motion pass (lane "core", step 2): `__pyrefly.smear('paint' | 'blur' | 'off')`, `.smearLog()`
 import { installFeelDebug } from './debug/feelApi.ts';
+import { installSwitchboard } from './app/demo/switchboard.ts'; // integration: the playtest switchboard (`?pack=demo&switchboard=1` only)
+import { installFxWiring } from './engine/motion/FxWiring.ts'; // integration: the fx lane's Overdrive opening gathers with the core lane's leap
 import { installGamepadRumble } from './app/gamepadRumble.ts';
 import { installMotionSfx } from './app/motionSfxSink.ts';
 import { installRigDebug } from './debug/rigApi.ts';
@@ -175,6 +177,8 @@ async function boot(): Promise<void> {
   installMotionSfx(audio); // the sink of `?motionsfx=on` (a demo chapter only; at normal speed; from the existing sound library)
   installGamepadRumble(); // the pad-side sink of `?rumble=on` (a demo chapter only; never on keyboard play, never under REDUCE MOTION)
   installFxNewDebug(debugApi); // motion pass (lane "fx"): the new spell effects' switch, for captures
+  installSwitchboard(debugApi); // the playtest keys 1 to 9, 0, -, = and the corner label; nothing is installed without `?pack=demo&switchboard=1`
+  installFxWiring(); // integration: the fx lane's big moments onto the core and feel lanes (`engine/motion/FxWiring.ts`)
 
   await app.push(new TitleScreen());
   app.start();

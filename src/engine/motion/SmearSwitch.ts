@@ -15,6 +15,7 @@
  * paintings decide. Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
 import { curvesChapter, inDemoChapter } from './CurvesSwitch.ts';
+import { packDemo, queryWord } from './DemoGate.ts';
 
 export type SmearStyle = 'off' | 'paint' | 'blur';
 
@@ -23,17 +24,9 @@ let style: SmearStyle | null = null;
 /** `?smear=` and `?pack=demo` from a search string (pure): `smear=paint|blur|off` wins; else `pack=demo` is `paint`; else `off`. */
 export function smearStyleFromSearch(search: string | undefined): SmearStyle {
   if (search === undefined) return 'off';
-  let smear = '';
-  let pack = '';
-  try {
-    const p = new URLSearchParams(search);
-    smear = (p.get('smear') ?? '').trim().toLowerCase();
-    pack = (p.get('pack') ?? '').trim().toLowerCase();
-  } catch {
-    /* an unreadable address is no address: the default */
-  }
+  const smear = queryWord(search, 'smear');
   if (smear === 'paint' || smear === 'blur' || smear === 'off') return smear;
-  return pack === 'demo' ? 'paint' : 'off';
+  return packDemo(search) ? 'paint' : 'off';
 }
 
 /** The style the page asked for. Read once. */

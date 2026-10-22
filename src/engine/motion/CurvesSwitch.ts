@@ -18,32 +18,22 @@
  * Pure: no `three`, no DOM but the address of the page (hard rule 1). Read once, like the other URL switches (`PoseSwap.ts`, `HitRecoil.recoilLegacy`).
  */
 
-/** The two demo chapters and the game each one is (`src/data/encounters.ts` ids). */
-export const DEMO_CHAPTER_GAMES: Readonly<Record<string, CurveGame>> = {
-  'seymour-flux': 'ffx',
-  'ffx2-bahamut': 'ffx2',
-};
+import { DEMO_CHAPTERS, demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord, setDemoChapter, type DemoGame } from './DemoGate.ts';
 
-export type CurveGame = 'ffx' | 'ffx2';
+/** The two demo chapters and the game each one is (`src/data/encounters.ts` ids): the ONE table every lane's switch reads (`DemoGate.ts`). */
+export const DEMO_CHAPTER_GAMES: Readonly<Record<string, CurveGame>> = DEMO_CHAPTERS;
+
+export type CurveGame = DemoGame;
 export type CurvesMode = 'new' | 'today';
 
 let mode: CurvesMode | null = null;
-let chapter: string | undefined;
 
 /** `?curves=new|today` and `?pack=demo` from a search string (pure): `today` (the default) unless `curves=new`, or `pack=demo` with no `curves=today`. */
 export function curvesModeFromSearch(search: string | undefined): CurvesMode {
   if (search === undefined) return 'today';
-  let curves = '';
-  let pack = '';
-  try {
-    const p = new URLSearchParams(search);
-    curves = (p.get('curves') ?? '').trim().toLowerCase();
-    pack = (p.get('pack') ?? '').trim().toLowerCase();
-  } catch {
-    /* an unreadable address is no address: the default */
-  }
+  const curves = queryWord(search, 'curves');
   if (curves === 'today') return 'today';
-  return curves === 'new' || pack === 'demo' ? 'new' : 'today';
+  return curves === 'new' || packDemo(search) ? 'new' : 'today';
 }
 
 /** The switch as the page asked for it. Read once. */
@@ -57,26 +47,26 @@ export function setCurvesMode(value: CurvesMode | null): void {
   mode = value;
 }
 
-/** `BattleScreen` names the running chapter as the battle sets up (and `undefined` as it exits); the demo gate reads it. */
+/** `BattleScreen` names the running chapter as the battle sets up (and `undefined` as it exits); the demo gate reads it. The variable is the ONE shared one (`DemoGate.setDemoChapter`). */
 export function setCurvesChapter(id: string | undefined): void {
-  chapter = id;
+  setDemoChapter(id);
 }
 
 export function curvesChapter(): string | undefined {
-  return chapter;
+  return demoChapter();
 }
 
 /** Is the running chapter Chapter I or Chapter IV? */
 export function inDemoChapter(id: string | undefined): boolean {
-  return id !== undefined && Object.prototype.hasOwnProperty.call(DEMO_CHAPTER_GAMES, id);
+  return isDemoChapter(id);
 }
 
 /** True when the new curves play now: switched on, in a demo chapter. */
 export function curvesOn(): boolean {
-  return curvesMode() === 'new' && inDemoChapter(chapter);
+  return curvesMode() === 'new' && isDemoChapter(demoChapter());
 }
 
 /** The game whose profile plays: the demo chapter's own. FFX when no demo chapter is running (never read then: {@link curvesOn} is false). */
-export function curvesGame(id: string | undefined = chapter): CurveGame {
-  return id !== undefined && Object.prototype.hasOwnProperty.call(DEMO_CHAPTER_GAMES, id) ? DEMO_CHAPTER_GAMES[id]! : 'ffx';
+export function curvesGame(id: string | undefined = demoChapter()): CurveGame {
+  return demoGameOf(id, 'ffx');
 }

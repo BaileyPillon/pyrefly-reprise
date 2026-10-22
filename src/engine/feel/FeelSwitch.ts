@@ -22,11 +22,13 @@
  * the per-game numbers live where they always did (`fx/c/SpectacleRules.SPECTACLE_TUNING`).
  */
 
+import { DEMO_CHAPTERS, demoChapter, isDemoChapter, setDemoChapter } from '../motion/DemoGate.ts';
+
 export type PunchMode = 'today' | 'new' | 'off';
 export type StopMode = 'today' | 'short' | 'off';
 
-/** The two demo chapters, by the ids in `data/encounters.ts`: Chapter I (FFX) and Chapter IV (FFX-2). */
-export const FEEL_CHAPTERS: ReadonlySet<string> = new Set(['seymour-flux', 'ffx2-bahamut']);
+/** The two demo chapters, by the ids in `data/encounters.ts`: Chapter I (FFX) and Chapter IV (FFX-2). The table is the shared one (`motion/DemoGate.ts`). */
+export const FEEL_CHAPTERS: ReadonlySet<string> = new Set(Object.keys(DEMO_CHAPTERS));
 
 /** What the address says (every field null = not named). */
 export interface FeelKeys {
@@ -69,7 +71,6 @@ export function parseFeelKeys(search: string | undefined): FeelKeys {
 }
 
 let keys: FeelKeys | null = null;
-let chapter: string | null = null;
 const forced: { -readonly [K in keyof FeelKeys]?: FeelKeys[K] } = {};
 
 function read(): FeelKeys {
@@ -77,19 +78,19 @@ function read(): FeelKeys {
   return keys;
 }
 
-/** The battle screen names the running chapter when it builds the field (`null` when it goes). */
+/** The battle screen names the running chapter when it builds the field (`null` when it goes). The variable is the ONE shared one (`motion/DemoGate.setDemoChapter`). */
 export function setFeelChapter(id: string | null): void {
-  chapter = id;
+  setDemoChapter(id ?? undefined);
 }
 
 /** The chapter id the battle screen last named, or null. */
 export function feelChapter(): string | null {
-  return chapter;
+  return demoChapter() ?? null;
 }
 
 /** True while the running chapter is Chapter I or Chapter IV: the only place any new piece can be on. */
 export function inFeelChapter(): boolean {
-  return chapter !== null && FEEL_CHAPTERS.has(chapter);
+  return isDemoChapter(demoChapter());
 }
 
 /** The pack (`?pack=demo`, or {@link setFeelPack}). */
@@ -133,6 +134,20 @@ export function timingByTime(): boolean {
   return forced.timing ?? read().timing ?? feelPack();
 }
 
+/** What every piece is set to by the address and the debug setters, WHATEVER the running chapter (the answers above are today's outside the demo chapters). The playtest switchboard shows these. */
+export function feelConfigured(): { punch: PunchMode; stop: StopMode; rumble: boolean; shadow: boolean; motionsfx: boolean; timing: boolean } {
+  const pack = feelPack();
+  const k = read();
+  return {
+    punch: forced.punch ?? k.punch ?? (pack ? 'new' : 'today'),
+    stop: forced.hitstop ?? k.hitstop ?? (pack ? 'short' : 'today'),
+    rumble: forced.rumble ?? k.rumble ?? pack,
+    shadow: forced.shadow ?? k.shadow ?? pack,
+    motionsfx: forced.motionsfx ?? k.motionsfx ?? pack,
+    timing: forced.timing ?? k.timing ?? pack,
+  };
+}
+
 /** The modes in one object, for the spectacle's flags (`SpectacleRules.SpectacleFlags.feel`). */
 export function feelFlags(): { punch: PunchMode; stop: StopMode } {
   return { punch: punchMode(), stop: stopMode() };
@@ -173,6 +188,6 @@ export function setFeelPack(value: boolean | undefined): void {
 /** Tests: forget the address, every forced value and the chapter. */
 export function resetFeelForTests(search?: string): void {
   keys = search === undefined ? null : parseFeelKeys(search);
-  chapter = null;
+  setDemoChapter(undefined);
   for (const k of Object.keys(forced) as Array<keyof FeelKeys>) delete forced[k];
 }
