@@ -7,9 +7,12 @@
  */
 
 import type { FxDrawList } from './FxDrawList.ts';
+import { bossFxFor } from './BossFx.ts';
 import { FxPerfGuard, fxShare } from './FxPerfGuard.ts';
 import { fxNewOn } from './FxSwitch.ts';
-import { FRESH_ONLY_FX, type SpellFxId } from './SpellFxRegistry.ts';
+import type { LandOpts } from './LandOpts.ts';
+import { resolveAbilityFx } from './SpellFxLookup.ts';
+import { FRESH_ONLY_FX, type FxGame, type SpellFxId } from './SpellFxRegistry.ts';
 import { FX_SPECS, specOf, type FreshFxId, type FxSpec, type RunningFx } from './SpellFxTimeline.ts';
 
 type Rect = { x: number; y: number; w: number; h: number };
@@ -17,6 +20,25 @@ type Rect = { x: number; y: number; w: number; h: number };
 /** An effect that exists only in the new set draws as the bloom it always did unless the new effects are on here and now. */
 export function shownFx(fx: SpellFxId): SpellFxId {
   return FRESH_ONLY_FX.has(fx) && !fxNewOn() ? 'bloom' : fx;
+}
+
+/**
+ * The effect a landing draws: the new set's table first (the bosses' attacks, the charge, the openings; `BossFx.ts`) when the new effects are on in a demo chapter, else the ordinary lookup
+ * exactly as it always was. `low` quality is the caller's (it draws the bloom).
+ */
+export function resolveFx(o: LandOpts, game: FxGame): SpellFxId {
+  const fresh = fxNewOn() ? bossFxFor(o.abilityId, game) : null;
+  return shownFx(fresh ?? resolveAbilityFx(o.abilityId, game, o.element, o.heal === true, o.sourceId));
+}
+
+/**
+ * Would SKILL TRAVEL draw a shot for this ability? Not for a special that draws its own effect (D-233: Spiral Cut, Mega Flare), and not for any effect of the new set's table: those draw their
+ * own approach (the lance, the wavefront, the streams), and a second shot on top of them would double it.
+ */
+export function canTravelFx(abilityId: string | undefined, game: FxGame, from: string): boolean {
+  if (fxNewOn() && bossFxFor(abilityId, game) !== null) return false;
+  const fx = resolveAbilityFx(abilityId, game, undefined, false, from);
+  return fx !== 'spiral' && fx !== 'megaflare';
 }
 
 /** The spec an effect would run on if started now (the new set's when the new effects are on), or undefined for the bloom and anything with no drawn effect. */
@@ -30,6 +52,8 @@ export interface CopyTagOpts {
   sourceId?: string | undefined;
   abilityId?: string | undefined;
   item?: boolean | undefined;
+  level?: number | undefined;
+  variant?: string | undefined;
 }
 
 /**
@@ -40,6 +64,8 @@ export function tagCopy(r: RunningFx, o: CopyTagOpts, weaponOf: ((id: string) =>
   if (!r.fresh) return;
   if (r.id === 'hit') r.variant = (o.sourceId ? weaponOf?.(o.sourceId) : null) ?? 'generic';
   else if (r.id === 'cure' && o.item === true) r.variant = /phoenix|(^|-)life$/.test(o.abilityId ?? '') ? 'phoenix' : 'potion';
+  else if (r.id === 'gather') r.variant = String(Math.max(1, Math.min(5, Math.round(o.level ?? 1)))); // the charge's level
+  else if (r.id === 'odaura' || r.id === 'dress') r.variant = o.variant ?? ''; // whose aura (tidus, auron), whose change (yuna, rikku, paine)
   const from = o.sourceId ? rectOf(o.sourceId) : null;
   const to = rectOf(r.targetId);
   if (from && to) r.dir = from.x + from.w / 2 <= to.x + to.w / 2 ? 1 : -1;

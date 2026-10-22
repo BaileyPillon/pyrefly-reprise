@@ -43,6 +43,7 @@ import { partyRowHtml } from './PartyRows.ts';
 import { enemyGaugesHtml, type ChargePip } from './BossGauges.ts';
 import { DamageLayer } from './DamageLayer.ts';
 import { playSpherechangeFlourish } from './SpherechangeFlourish.ts';
+import { AbilityNameSlab } from './NameSlab.ts';
 import { ChainCounter } from './ChainCounter.ts';
 import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
@@ -346,6 +347,8 @@ export class FFX2BattleHud implements HudPort {
       return r && r.width > 0 ? { width: r.width, height: r.height } : { width: window.innerWidth, height: window.innerHeight };
     },
   });
+  /** The new effects' ability name slab over the acting girl (`NameSlab.ts`; draws nothing unless they are on). */
+  private readonly nameSlab = new AbilityNameSlab({ overlay: () => this.overlay, scale: () => this.stageScale, head: (id) => this.project(id, 'head') });
   private telegraphHideTimer = 0;
   private damageFlashTimer = 0;
   /** Current `.ffx2hud__stage` letterbox scale, so overlay-space offsets (chain chip) stay proportional at any viewport size. */
@@ -458,6 +461,7 @@ export class FFX2BattleHud implements HudPort {
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
     this.chain.dispose();
+    this.nameSlab.dispose();
     this.queued.unmount();
     window.clearTimeout(this.telegraphHideTimer);
     window.clearTimeout(this.damageFlashTimer);
@@ -486,6 +490,7 @@ export class FFX2BattleHud implements HudPort {
     this.layoutPlates();
     this.nodeMarks.update();
     this.damage.update(dt);
+    this.nameSlab.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
     this.intent.update(dt);
@@ -1032,6 +1037,11 @@ export class FFX2BattleHud implements HudPort {
         }
         return;
       case 'action-start':
+        this.nameSlab.start(event); // the new effects (Chapter IV): the ability's name over the girl's head (`NameSlab.ts`)
+        return this.message.onEvent(event, this.lastState);
+      case 'action-end':
+        this.nameSlab.end(event.actorId);
+        return;
       case 'message':
         return this.message.onEvent(event, this.lastState);
       case 'ko': // A slab naming the enemy just KO'd (Paragon, as Trema's link seam starts) re-reads the engine: no dead enemy acts next.

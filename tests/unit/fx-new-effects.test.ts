@@ -3,6 +3,7 @@
  * (a numeral never waits longer than it did), the two game skins, the weapon variants, REDUCE FLASHES, the buff spells, the painted finish on the list, the thinning by the guard.
  */
 import { describe, expect, it } from 'vitest';
+import { BOSS_FX_IDS } from '../../src/engine/spellfx/BossFx.ts';
 import { FxDrawList } from '../../src/engine/spellfx/FxDrawList.ts';
 import { FRESH_SPECS } from '../../src/engine/spellfx/SpellFxFresh.ts';
 import { FX_SPECS, specOf, type FreshFxId, type FxTarget } from '../../src/engine/spellfx/SpellFxTimeline.ts';
@@ -51,7 +52,8 @@ const FRESH_IDS = Object.keys(FRESH_SPECS) as FreshFxId[];
 
 describe('new spell effects: the clocks', () => {
   it('has the effects the brief names: Cure, the five buffs, the hit per weapon, Fire, Blizzard and Thunder', () => {
-    expect(FRESH_IDS.sort()).toEqual(['cure', 'dispel', 'fire', 'haste', 'hit', 'ice', 'protect', 'reflect', 'shell', 'thunder']);
+    // step 2's ten, and step 3's fifteen (`fx-boss-effects.test.ts`): the bosses' attacks, the charge, the Overdrive aura, Jump, the dress change, Darkness
+    expect(FRESH_IDS.sort()).toEqual(['cure', 'dispel', 'fire', 'haste', 'hit', 'ice', 'protect', 'reflect', 'shell', 'thunder', ...BOSS_FX_IDS].sort());
     expect([...BUFF_FX_IDS].sort()).toEqual(['dispel', 'haste', 'protect', 'reflect', 'shell']);
   });
 

@@ -10,6 +10,7 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
+import { chargeFx, odOpening } from './BattlePresenterBossFx.ts';
 import { awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
@@ -76,7 +77,7 @@ export async function actionStart(
   // The shot. An Overdrive earns its own rig — letterbox, name slab, held
   // push-in — and everything else gets the ordinary punch-in on the attacker.
   if (event.command.kind === 'overdrive') {
-    await ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE', event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind });
+    await odOpening(ctx, event, () => ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE', event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind })); // the new effects add the aura under the banner and a calm beat after it
   } else {
     await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind });
   }
@@ -303,6 +304,7 @@ export async function charge(
 ): Promise<void> {
   const actor = ctx.stage.actor(event.enemyId);
   const imminent = event.stage === 2;
+  chargeFx(ctx, event); // the new effects: the boss's gather, climbing with the count (FFX-2) or the ladder (FFX)
   actor?.flash(imminent ? 0xff6b5a : 0xffc46b, 620, imminent ? 1 : 0.7);
   if (imminent) {
     ctx.stage.vfx.screenFlash('rgba(255,70,50,0.28)', 420);

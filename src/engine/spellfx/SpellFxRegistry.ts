@@ -10,6 +10,7 @@
  * `SpellFxLookup.ts`), so the rules can be tested on their own.
  */
 
+import { BOSS_FX_IDS, type BossFxId } from './BossFx.ts';
 import type { Ff7FxId } from './ff7/ff7FxSpecs.ts';
 
 /**
@@ -19,17 +20,17 @@ import type { Ff7FxId } from './ff7/ff7FxSpecs.ts';
 export type BuffFxId = 'haste' | 'shell' | 'protect' | 'reflect' | 'dispel';
 export const BUFF_FX_IDS: readonly BuffFxId[] = ['haste', 'shell', 'protect', 'reflect', 'dispel'];
 
-export type SpellFxId = 'fire' | 'ice' | 'thunder' | 'water' | 'holy' | 'cure' | 'hit' | 'spiral' | 'megaflare' | 'bloom' | BuffFxId | Ff7FxId; // FF7's own (ff7/ff7FxSpecs.ts)
+export type SpellFxId = 'fire' | 'ice' | 'thunder' | 'water' | 'holy' | 'cure' | 'hit' | 'spiral' | 'megaflare' | 'bloom' | BuffFxId | BossFxId | Ff7FxId; // FF7's own (ff7/ff7FxSpecs.ts)
 export type FxGame = 'ffx' | 'ffx2' | 'ff7'; // 'ff7': the hidden Guard Scorpion fight, its own effects only
 
 /**
  * Every effect id; `bloom` is today's tinted `ImpactFlash`. `spiral` and
  * `megaflare` are D-233's special moments, keyed by game (`SpellFxSpecials.ts`).
  */
-export const SPELL_FX_IDS: readonly SpellFxId[] = ['fire', 'ice', 'thunder', 'water', 'holy', 'cure', 'hit', 'spiral', 'megaflare', 'bloom', ...BUFF_FX_IDS];
+export const SPELL_FX_IDS: readonly SpellFxId[] = ['fire', 'ice', 'thunder', 'water', 'holy', 'cure', 'hit', 'spiral', 'megaflare', 'bloom', ...BUFF_FX_IDS, ...BOSS_FX_IDS];
 
 /** Effects that exist only in the new set: with the new effects off they resolve to the bloom, as before. */
-export const FRESH_ONLY_FX: ReadonlySet<SpellFxId> = new Set<SpellFxId>(BUFF_FX_IDS);
+export const FRESH_ONLY_FX: ReadonlySet<SpellFxId> = new Set<SpellFxId>([...BUFF_FX_IDS, ...BOSS_FX_IDS]);
 
 /** The fields of an `AbilityDef` the lookup reads. */
 export interface AbilityFxShape {

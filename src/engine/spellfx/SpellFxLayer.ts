@@ -16,9 +16,12 @@ import type { WebGLRenderer } from 'three';
 import { FxBatch } from './FxBatch.ts';
 import { FxDrawList } from './FxDrawList.ts';
 import { ensureAtlasExtra } from './FxAtlas.ts';
-import { FreshWatch, StartClock, configureList, shownFx, specForFx, tagCopy } from './SpellFxFreshLayer.ts';
+import { FreshWatch, StartClock, canTravelFx, configureList, resolveFx, shownFx, specForFx, tagCopy } from './SpellFxFreshLayer.ts';
+import type { LandOpts } from './LandOpts.ts';
+export type { LandOpts } from './LandOpts.ts';
 import { fxChapter, fxNewOn, setFxChapter } from './FxSwitch.ts';
 import { FLIGHT_LEAD_MS, FLIGHT_MIN_MS, FlightLayer, type FlightKind, type FlightStats } from './FlightFx.ts'; // SKILL TRAVEL (r38-motion): a spell, skill or shot crossing the field
+import { drawnOnStatus, lightKindOf } from './BossFx.ts';
 import { groupTarget } from './SpellFxGroup.ts';
 import { targetFromRect } from './effects-shared.ts';
 import { DEFAULT_FLASH_PARAMS, PEAK_BUDGET, QUALITY_DENSITY, type FlashParams, type FxQuality } from './SpellFxParams.ts';
@@ -62,24 +65,6 @@ export interface SpellFxLayerOptions {
   scaleCut?(factor: number): void;
 }
 
-/** What `VfxPort.land` passes down. */
-export interface LandOpts {
-  abilityId?: string;
-  element?: string;
-  heal?: boolean;
-  hitIndex?: number;
-  /** Everyone the action targets, so a multi-target spell starts on all of them at once. */
-  targets?: readonly string[];
-  /** The presenter's action counter. */
-  action?: number;
-  /** Whoever cast it: a group effect (Mega Flare) is drawn from them. */
-  sourceId?: string;
-  /** This hit is a critical: the bloom over the figure is 1.3x, as the impact bloom's was. */
-  crit?: boolean;
-  /** The blow belongs to an item use (the new Cure draws the item form of its column). */
-  item?: boolean;
-}
-
 /** The impact bloom's crit size (`BattlePresenterStage.impactAt`), kept where the drawn effect replaces it. */
 export const CRIT_BLOOM = 1.3;
 
@@ -118,8 +103,7 @@ export class SpellFxLayer {
    */
   canFly(abilityId: string | undefined, from: string): boolean {
     if (this.quality === 'low' || this.opts.game === 'ff7') return false;
-    const fx = resolveAbilityFx(abilityId, this.opts.game, undefined, false, from);
-    return fx !== 'spiral' && fx !== 'megaflare';
+    return canTravelFx(abilityId, this.opts.game, from);
   }
 
   /**
@@ -152,7 +136,7 @@ export class SpellFxLayer {
   /** Which effect this action draws here; `bloom` when the tier or the lookup says so. */
   resolve(o: LandOpts): SpellFxId {
     if (this.quality === 'low') return 'bloom';
-    return shownFx(resolveAbilityFx(o.abilityId, this.opts.game, o.element, o.heal === true, o.sourceId));
+    return resolveFx(o, this.opts.game);
   }
 
   /**
@@ -162,9 +146,10 @@ export class SpellFxLayer {
    */
   land(target: string, o: LandOpts): number {
     const action = o.action ?? -1;
+    if (o.deco) return this.decorate(target, o); // a charge, an aura, a dress change: started, never waited for
     for (const [id, a] of this.covered) if (a !== action || id === target) this.covered.delete(id);
     const fx = this.resolve(o);
-    if (fx === 'bloom') return 0;
+    if (fx === 'bloom' || (o.status === true && !drawnOnStatus(fx))) return 0; // a status event starts only what no damage event starts
     const spec = specForFx(fx);
     if (!spec) return 0;
     const run = spec.group ? this.landGroup(fx as FreshFxId, target, o, action) : this.landEach(fx as FreshFxId, target, o, action);
@@ -173,12 +158,21 @@ export class SpellFxLayer {
     this.covered.set(target, action);
     this.lastMark.set(`${target}|${action}`, { run, k: o.hitIndex ?? 0 });
     const ms = run.msToMark(o.hitIndex ?? 0);
-    notifyLand({ fx, game: this.opts.game, abilityId: o.abilityId, ms, rect: this.opts.rectOf(target), view: this.opts.view() }); // eye-candy A8, and the demo looks' light
+    notifyLand({ fx: lightKindOf(fx) as SpellFxId, game: this.opts.game, abilityId: o.abilityId, ms, rect: this.opts.rectOf(target), view: this.opts.view() }); // eye-candy A8, and the demo looks' light
     // FF7: the landing is announced when the effect's own clock reaches the mark (`update`), so the hit flash and
     // the numeral land with the drawn strike even when frames run slow (repair item 6). Elsewhere, at once.
     if (this.opts.game === 'ff7' && ms > 0) this.lands.push({ run, k: o.hitIndex ?? 0, fx, target, o });
     else this.opts.onLand?.(fx, target, ms, o);
     return ms;
+  }
+
+  private decoSerial = -1000;
+
+  /** The new effects' decoration (`LandOpts.deco`): start the copy under a private action number; it covers no blow and nothing waits for it. */
+  private decorate(target: string, o: LandOpts): number {
+    const fx = this.resolve(o);
+    if (fx !== 'bloom' && specForFx(fx)) this.landEach(fx as FreshFxId, target, o, o.action ?? --this.decoSerial);
+    return 0;
   }
 
   /** FF7's landings not yet drawn: fired from `update` when their effect's clock passes the mark. */
@@ -272,8 +266,8 @@ export class SpellFxLayer {
       r.held = true;
     }
     this.running.push(r);
-    // eye-candy A8: a previewed big effect flares like a landed one (debug trigger only)
-    notifyLand({ fx: id as SpellFxId, game: this.opts.game, abilityId: undefined, ms: r.msToMark(0), rect: this.opts.rectOf(target), view: this.opts.view() });
+    // eye-candy A8: a previewed big effect flares like a landed one (debug trigger only); decoration (the charge, the aura, the dress change) throws no light, as in a real fight
+    if (id !== 'gather' && id !== 'odaura' && id !== 'dress') notifyLand({ fx: lightKindOf(id) as SpellFxId, game: this.opts.game, abilityId: undefined, ms: r.msToMark(0), rect: this.opts.rectOf(target), view: this.opts.view() });
     return true;
   }
 

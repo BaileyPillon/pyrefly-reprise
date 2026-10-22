@@ -39,6 +39,7 @@
  *    (`BattlePresenterReturns.ts`; `docs/plans/natus-ship-review.md`).
  */
 
+import { curseDim, statusFxLanding } from './BattlePresenterBossFx.ts';
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle } from './BattlePresenterPorts.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
@@ -112,6 +113,8 @@ export async function statusAdded(ctx: EventCtx, event: StatusAdd): Promise<void
     cue(ctx, 'status', { volume: 0.5 });
     return turnToStone(ctx, a);
   } else {
+    await statusFxLanding(ctx, event.targetId, event.sourceId); // the new effects only (Haste, Shell, Banish, Curse...): a move with no damage event lands its effect here
+    curseDim(ctx, event.status, event.targetId, true);
     a?.flash(0xc9a6ff, 260, 0.5);
   }
   cue(ctx, 'status', { volume: 0.5 });

@@ -18,14 +18,15 @@ import { MEGAFLARE_MARK, SPECIAL_END, SPIRAL_MARK, megaflare, spiral } from './e
 import { SPECIAL_HOLD_CAP_MS, SPECIAL_REPEAT_START_S, SPELL_HOLD_CAP_MS } from './SpellFxSpecials.ts';
 import type { FxTarget } from './effects-shared.ts';
 import type { FxDrawList } from './FxDrawList.ts';
+import type { BossFxId } from './BossFx.ts';
 import type { BuffFxId, FxGame, SpellFxId } from './SpellFxRegistry.ts';
 import { FF7_FX_SPECS } from './ff7/ff7FxSpecs.ts';
 
 export type { FxTarget } from './effects-shared.ts';
 
-export type DrawnFxId = Exclude<SpellFxId, 'bloom' | BuffFxId>;
+export type DrawnFxId = Exclude<SpellFxId, 'bloom' | BuffFxId | BossFxId>;
 /** Every id a running effect can carry: today's drawn effects, and the buffs the new set adds (`SpellFxFresh.ts`). */
-export type FreshFxId = DrawnFxId | BuffFxId;
+export type FreshFxId = DrawnFxId | BuffFxId | BossFxId;
 
 export interface FxSpec {
   draw(o: FxDrawList, t: number, T: FxTarget): void;

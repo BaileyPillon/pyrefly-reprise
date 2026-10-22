@@ -15,6 +15,9 @@ import { clamp, inQuad, lerp, outCubic, outExpo, outQuart } from './fxMath.ts';
 
 export type Pt = readonly [number, number];
 
+/** The biggest scale an effect's local sizes follow: a boss is two or three times a girl's height, and a flash sized to it would white the whole frame out (the new boss effects clamp to this; today's effects are not changed). */
+export const SC_MAX = 1.5;
+
 /** A stroke from `a` to `b` whose head (the bright end) is at `b`; `thick` is its widest. Draws nothing below half a pixel. */
 export function stroke(o: FxDrawList, col: string, a: Pt, b: Pt, thick: number, alpha: number, tile: FxTile = 'streak'): void {
   const len = Math.hypot(b[0] - a[0], b[1] - a[1]);

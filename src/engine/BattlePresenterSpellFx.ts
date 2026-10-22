@@ -10,6 +10,7 @@
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
+import { bigBlow } from './BattlePresenterBossFx.ts';
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
 
 /** The action whose effects are playing. */
@@ -87,6 +88,7 @@ export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEven
   if (ms <= 0) return;
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex });
   await ctx.sleep(Math.min(ms, SPELL_WAIT_CAP_MS));
+  bigBlow(ctx, event, a); // the new effects: a boss's big blow or an Overdrive's first tells the other lanes' hit-stop, punch and rumble hooks (inert otherwise)
   // FF7: then until the effect's own frame clock has drawn the strike (a slow frame lags it; repair item 6).
   if (!vfx.pendingLand || !ours) return;
   for (let i = 0, left = vfx.pendingLand(event.targetId, a.serial); left > 0 && i < LAND_POLLS; i++) {

@@ -1,0 +1,37 @@
+/* FFX-2's ability name slab (motion pass, lane "fx", step 3): a small dark slab with a gold border above the acting girl's head, following her while the effect plays. Read from Square Enix's own
+   FFX-2 battle footage (docs/handoff/motion-fx-reference.md section 3.2); the colours and type are ours. Drawn only with the new effects on in Chapter IV (NameSlab.ts). */
+.ffx2ns {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 6;
+  pointer-events: none;
+  padding: calc(3px * var(--ns-scale, 1)) calc(11px * var(--ns-scale, 1)) calc(4px * var(--ns-scale, 1));
+  background: linear-gradient(180deg, rgba(20, 17, 34, 0.94), rgba(9, 8, 18, 0.94));
+  border: 1px solid #e3b94a;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 233, 160, 0.14);
+  color: #f6f0dc;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: calc(15px * var(--ns-scale, 1));
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -100%) translateY(calc(6px * var(--ns-scale, 1)));
+  transition: opacity 140ms ease, transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ffx2ns[data-state='in'],
+.ffx2ns[data-state='hold'] {
+  opacity: 1;
+  transform: translate(-50%, -100%);
+}
+.ffx2ns[data-state='out'] {
+  opacity: 0;
+  transform: translate(-50%, -100%) translateY(calc(-4px * var(--ns-scale, 1)));
+  transition-duration: 220ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ffx2ns { transition-duration: 1ms; }
+}

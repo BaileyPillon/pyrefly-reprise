@@ -18,6 +18,7 @@ import { COLUMN_STAGGER, CURE_END, CURE_MARK, cureColumn, cureWhiteMage } from '
 import { fireNew, iceNew, thunderNew } from './effects-painted-elements.ts';
 import { HIT_END, HIT_MARK, HIT_START, hitWeapon } from './effects-painted-hit.ts';
 import type { FxTarget } from './effects-shared.ts';
+import { BOSS_SPECS } from './SpellFxFreshBoss.ts';
 import { SPELL_HOLD_CAP_MS } from './SpellFxSpecials.ts';
 import type { FxSpec, FreshFxId } from './SpellFxTimeline.ts';
 import type { FxGame } from './SpellFxRegistry.ts';
@@ -49,4 +50,5 @@ export const FRESH_SPECS: Readonly<Partial<Record<FreshFxId, FxSpec>>> = Object.
   protect: buff(protect),
   reflect: buff(reflect),
   dispel: buff(dispel, DISPEL_MARK),
+  ...BOSS_SPECS, // step 3: the bosses' attacks, the charge, the Overdrive's aura, Jump, the dress change, Darkness (`SpellFxFreshBoss.ts`)
 });
