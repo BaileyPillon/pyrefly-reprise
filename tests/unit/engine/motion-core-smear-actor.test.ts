@@ -220,6 +220,43 @@ describe('a big change on a moving figure, in a demo chapter, with the smear on'
   });
 });
 
+describe('the strike marks are the fast frames: the smear fires on travelPeak and on settlePeak', () => {
+  for (const game of ['ffx', 'ffx2'] as const) {
+    for (const [label, height, hz] of [['a party figure', 1.82, 120], ['a party figure', 1.82, 60], ['a boss', 4.1, 120]] as const) {
+      it(`${game}, ${label}, ${hz} Hz: ready to attack on travelPeak and attack to idle on settlePeak are both planned cuts`, async () => {
+        setSmearStyle('paint');
+        setCurvesChapter(game === 'ffx' ? 'seymour-flux' : 'ffx2-bahamut');
+        setCurvesMode('new');
+        const a = new PaintedActor({ name: 'yuna', worldHeight: height, side: height > 3 ? 'enemy' : 'party', breathe: false, sway: false, shadow: false });
+        a.adoptPoses({ idle: painting('yuna', 'idle', { silhouette: LEFT }), attack: painting('yuna', 'attack', { silhouette: RIGHT }), hurt: painting('yuna', 'hurt', { silhouette: RIGHT }) }, 'idle');
+        a.position.set(-2, 0, 0);
+        const frame = 1000 / hz;
+        const at: Record<string, number> = {};
+        let t = 0;
+        void a.strike({
+          distance: 1.4,
+          game,
+          timeScale: 1,
+          arc: true,
+          contact: { hold: Promise.resolve(), reached: () => (at['contact'] = t) },
+          marks: { travelPeak: () => { at['travelPeak'] = t; a.setPose('attack'); }, settlePeak: () => { at['settlePeak'] = t; a.setPose('idle'); } },
+        });
+        for (let i = 0; i < Math.round(1800 / frame); i++) {
+          a.update(frame / 1000);
+          t = (i + 1) * frame;
+          await Promise.resolve(); // the contact's hold is a promise: the release runs between frames
+          await Promise.resolve();
+        }
+        const log = smearLog();
+        expect(log.map((e) => `${e.from}>${e.to}`)).toEqual(['idle>attack', 'attack>idle']);
+        expect(log[0]!.speed).toBeGreaterThan(0.9); // well over the 0.45 gate (a boss is 4.1 tall, so its body heights a second are fewer)
+        expect(log[1]!.speed).toBeGreaterThan(0.9);
+        expect(at['settlePeak']! - at['contact']!).toBeGreaterThan(200); // after the 0.2 s hold
+      });
+    }
+  }
+});
+
 describe('what stays a plain blend', () => {
   it('the same big change at rest', () => {
     setSmearStyle('paint');
