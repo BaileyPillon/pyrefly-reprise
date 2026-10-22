@@ -30,6 +30,7 @@
   "pad": 600,
   "waistT": 0.25,
   "order": [
+   "fx",
    "legB",
    "hips",
    "legA",
@@ -39,7 +40,123 @@
    "armA",
    "head"
   ],
+  "fx": {
+   "cast": {
+    "ring": {
+     "ellipse": [
+      265,
+      1047,
+      262,
+      72
+     ],
+     "keep": [
+      [
+       "kneeA",
+       "footA",
+       60
+      ],
+      [
+       "footA",
+       [
+        400,
+        975
+       ],
+       52
+      ],
+      [
+       "kneeB",
+       "footB",
+       58
+      ],
+      [
+       "footB",
+       [
+        178,
+        1032
+       ],
+       52
+      ],
+      [
+       "pommel",
+       "tip",
+       44
+      ]
+     ]
+    },
+    "swirl": {
+     "box": [
+      360,
+      0,
+      709,
+      560
+     ],
+     "keep": [
+      [
+       "head",
+       "crown",
+       105
+      ],
+      [
+       "neck",
+       "shoulderB",
+       64
+      ],
+      [
+       "shoulderB",
+       "elbowB",
+       52
+      ],
+      [
+       "elbowB",
+       "handB",
+       46
+      ],
+      [
+       "handB",
+       [
+        588,
+        188
+       ],
+       30
+      ],
+      [
+       "handB",
+       [
+        505,
+        192
+       ],
+       22
+      ],
+      [
+       "neck",
+       "pelvis",
+       66
+      ]
+     ]
+    }
+   }
+  },
   "parts": {
+   "fx": {
+    "fx": true,
+    "caps": [],
+    "stub": "pelvis",
+    "skin": {
+     "type": "rigid",
+     "bone": "root",
+     "mesh": {
+      "edge": 170,
+      "inner": 340,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "mesh": {
+      "quad": true
+     },
+     "tex": 0.4
+    }
+   },
    "head": {
     "caps": [
      [
@@ -541,7 +658,7 @@
   "key_motion": {
    "ready": {
     "ms": 150,
-    "fadeMs": 90
+    "fadeMs": 0
    },
    "attack": {
     "ms": 70,
@@ -557,40 +674,44 @@
    },
    "cast": {
     "ms": 150,
-    "fadeMs": 70
+    "fadeMs": 0
    },
    "item": {
     "ms": 140,
-    "fadeMs": 70
+    "fadeMs": 0
    },
    "defend": {
     "ms": 110,
-    "fadeMs": 60
+    "fadeMs": 0
    },
    "victory": {
     "ms": 220,
-    "fadeMs": 110
+    "fadeMs": 0
    },
    "critical": {
     "ms": 220,
-    "fadeMs": 110
+    "fadeMs": 0
    },
    "sleep": {
     "ms": 260,
-    "fadeMs": 130
+    "fadeMs": 0
    },
    "ko": {
     "ms": 420,
-    "fadeMs": 160
+    "fadeMs": 0
    },
    "od-energy-rain": {
     "ms": 120,
-    "fadeMs": 60
+    "fadeMs": 0
    },
    "od-slice-and-dice": {
     "ms": 80,
     "fadeMs": 0
    }
+  },
+  "idle_key": {
+   "ms": 120,
+   "fadeMs": 0
   },
   "joint_discs": [],
   "disc_margin": 14,
@@ -605,28 +726,33 @@
     "hz": 0.5,
     "bones": {
      "pelvis": {
-      "rot": 0.3,
-      "phase": 0.4
+      "rot": 0.4,
+      "dy": 3.0,
+      "phase": 0.2
      },
      "chest": {
-      "rot": 0.8,
-      "phase": -0.9
+      "rot": 1.2,
+      "phase": -0.8
      },
      "head": {
-      "rot": 1.0,
-      "phase": -1.6
+      "rot": 1.6,
+      "phase": -1.5
      },
      "upperarmA": {
-      "rot": 0.5,
+      "rot": 1.0,
       "phase": -1.4
      },
      "forearmA": {
-      "rot": 0.4,
+      "rot": 0.8,
       "phase": -2.0
      },
      "upperarmB": {
-      "rot": 0.5,
+      "rot": 0.8,
       "phase": -1.0
+     },
+     "sword": {
+      "rot": 0.5,
+      "phase": -1.2
      }
     }
    }
@@ -634,6 +760,7 @@
  },
  "cut": {
   "order": [
+   "fx",
    "legB",
    "hips",
    "legA",
@@ -752,6 +879,15 @@
    ]
   ],
   "skin": {
+   "fx": {
+    "type": "rigid",
+    "bone": "root",
+    "mesh": {
+     "edge": 170,
+     "inner": 340,
+     "grow": 16
+    }
+   },
    "legB": {
     "type": "chain",
     "bones": [
@@ -2383,6 +2519,21 @@
       }
      }
     }
+   },
+   "fx": {
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.fx.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
    }
   },
   "rim": true,
@@ -2641,7 +2792,9 @@
      "armA": "ready",
      "head": "ready"
     },
-    "hide": []
+    "hide": [
+     "fx"
+    ]
    },
    "attack": {
     "image": {
@@ -2654,7 +2807,9 @@
      "armA": "attack",
      "head": "attack"
     },
-    "hide": []
+    "hide": [
+     "fx"
+    ]
    },
    "follow": {
     "image": {
@@ -2667,6 +2822,7 @@
      "head": "follow"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2680,12 +2836,14 @@
      "head": "victory"
     },
     "hide": [
+     "fx",
      "legB",
      "armB"
     ]
    },
    "cast": {
     "image": {
+     "fx": "cast",
      "legB": "cast",
      "hips": "cast",
      "legA": "cast",
@@ -2707,6 +2865,7 @@
      "head": "item"
     },
     "hide": [
+     "fx",
      "legB",
      "armB"
     ]
@@ -2722,6 +2881,7 @@
      "head": "hurt"
     },
     "hide": [
+     "fx",
      "legB"
     ]
    },
@@ -2736,6 +2896,7 @@
      "head": "critical"
     },
     "hide": [
+     "fx",
      "legB"
     ]
    },
@@ -2750,7 +2911,9 @@
      "armA": "defend",
      "head": "defend"
     },
-    "hide": []
+    "hide": [
+     "fx"
+    ]
    },
    "sleep": {
     "image": {
@@ -2763,6 +2926,7 @@
      "head": "sleep"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2777,6 +2941,7 @@
      "head": "ko"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2791,6 +2956,7 @@
      "head": "od-energy-rain"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2805,39 +2971,49 @@
      "head": "od-slice-and-dice"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    }
   }
  },
  "authored": [],
+ "idle_key": {
+  "ms": 120,
+  "fadeMs": 0
+ },
  "motion": {
   "idle": {
    "hz": 0.5,
    "bones": {
     "pelvis": {
-     "rot": 0.3,
-     "phase": 0.4
+     "rot": 0.4,
+     "dy": 3.0,
+     "phase": 0.2
     },
     "chest": {
-     "rot": 0.8,
-     "phase": -0.9
+     "rot": 1.2,
+     "phase": -0.8
     },
     "head": {
-     "rot": 1.0,
-     "phase": -1.6
+     "rot": 1.6,
+     "phase": -1.5
     },
     "upperarmA": {
-     "rot": 0.5,
+     "rot": 1.0,
      "phase": -1.4
     },
     "forearmA": {
-     "rot": 0.4,
+     "rot": 0.8,
      "phase": -2.0
     },
     "upperarmB": {
-     "rot": 0.5,
+     "rot": 0.8,
      "phase": -1.0
+    },
+    "sword": {
+     "rot": 0.5,
+     "phase": -1.2
     }
    }
   }
