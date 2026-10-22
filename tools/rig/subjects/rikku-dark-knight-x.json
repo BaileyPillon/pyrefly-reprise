@@ -624,24 +624,29 @@
     "hz": 0.5,
     "bones": {
      "pelvis": {
-      "rot": 0.3,
-      "phase": 0.4
+      "rot": 0.4,
+      "dy": 3.0,
+      "phase": 0.2
      },
      "chest": {
-      "rot": 0.8,
-      "phase": -0.9
+      "rot": 1.2,
+      "phase": -0.8
      },
      "head": {
-      "rot": 1.0,
-      "phase": -1.6
+      "rot": 1.6,
+      "phase": -1.5
      },
      "upperarmA": {
-      "rot": 0.5,
+      "rot": 1.0,
       "phase": -1.4
      },
      "forearmA": {
-      "rot": 0.4,
+      "rot": 0.8,
       "phase": -2.0
+     },
+     "sword": {
+      "rot": 0.5,
+      "phase": -1.2
      }
     }
    }
@@ -2373,24 +2378,29 @@
    "hz": 0.5,
    "bones": {
     "pelvis": {
-     "rot": 0.3,
-     "phase": 0.4
+     "rot": 0.4,
+     "dy": 3.0,
+     "phase": 0.2
     },
     "chest": {
-     "rot": 0.8,
-     "phase": -0.9
+     "rot": 1.2,
+     "phase": -0.8
     },
     "head": {
-     "rot": 1.0,
-     "phase": -1.6
+     "rot": 1.6,
+     "phase": -1.5
     },
     "upperarmA": {
-     "rot": 0.5,
+     "rot": 1.0,
      "phase": -1.4
     },
     "forearmA": {
-     "rot": 0.4,
+     "rot": 0.8,
      "phase": -2.0
+    },
+    "sword": {
+     "rot": 0.5,
+     "phase": -1.2
     }
    }
   }

@@ -37,7 +37,7 @@ cfg = {
   "idle_key": {"ms": 120, "fadeMs": 0},
   "joint_discs": [], "disc_margin": 14,
   "marks": ["pelvis", "handA", "pommel", "tip"],
-  "motion": {"idle": {"hz": 0.5, "bones": {"pelvis": {"rot": 0.3, "phase": 0.4}, "chest": {"rot": 0.8, "phase": -0.9}, "head": {"rot": 1.0, "phase": -1.6}, "upperarmA": {"rot": 0.5, "phase": -1.4}, "forearmA": {"rot": 0.4, "phase": -2.0}, "upperarmB": {"rot": 0.5, "phase": -1.0}}}}
+  "motion": {"idle": {"hz": 0.5, "bones": {"pelvis": {"rot": 0.4, "dy": 3.0, "phase": 0.2}, "chest": {"rot": 1.2, "phase": -0.8}, "head": {"rot": 1.6, "phase": -1.5}, "upperarmA": {"rot": 1.0, "phase": -1.4}, "forearmA": {"rot": 0.8, "phase": -2.0}, "upperarmB": {"rot": 0.8, "phase": -1.0}, "sword": {"rot": 0.5, "phase": -1.2}}}}
  }
 }
 (REPO / "tools/rig/subjects/tidus-x.json").write_text(json.dumps(cfg, indent=1), encoding="utf8")
