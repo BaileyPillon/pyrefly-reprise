@@ -4,7 +4,7 @@ import type { BattleCamera } from '../../BattleCamera.ts';
 import { eyeCandy, type FxTier } from '../EyeCandy.ts';
 import { DriftRig } from './DriftRig.ts';
 import { PlateFocus, focusDial } from './PlateFocus.ts'; // A-7: the plates' defocus, aimed at the party's plate
-import { DepthPlates, paintPoint } from './DepthPlates.ts';
+import { DepthPlates, paintPoint, precutPlates, type PlateBuildOptions, type PlateLayout } from './DepthPlates.ts';
 import { Lamps } from './Lamps.ts';
 import { patchSideFogIn } from '../../PlateSideFog.ts';
 import { QuadField } from './QuadField.ts';
@@ -50,6 +50,11 @@ export interface LivingBind {
 }
 
 const TIER_PARTICLES: Record<FxTier, number> = { full: 1, phone: 0.55, low: 0.3 };
+
+/** What a room's plates are built from at a tier: the depth map's address, the layout and the options. One function for the build and for the demo's warm, so the cut made ahead is the cut the build asks for. */
+function platesRequest(room: RoomSpec, tier: FxTier, renderer: WebGLRenderer | null | undefined): { url: string; layout: PlateLayout; opts: PlateBuildOptions } {
+  return { url: artUrl(`fx/${room.key}/depth.png`), layout: tier === 'full' ? room.plates : room.phonePlates, opts: { renderer: renderer ?? null, native: tier === 'full' } };
+}
 
 class Living {
   private readonly a: LivingBind;
@@ -124,10 +129,10 @@ class Living {
     this.teardownParts();
     const room = this.room;
     const group = this.backdropGroup();
-    const layout = tier === 'full' ? room.plates : room.phonePlates;
+    const plates0 = platesRequest(room, tier, this.a.renderer);
     const t0 = performance.now();
     try {
-      this.plates = group ? await DepthPlates.build(group, artUrl(`fx/${room.key}/depth.png`), layout, { renderer: this.a.renderer ?? null, native: tier === 'full' }) : null;
+      this.plates = group ? await DepthPlates.build(group, plates0.url, plates0.layout, plates0.opts) : null;
     } catch (err) {
       console.warn('[fx-b] depth plates unavailable', err);
       this.plates = null;
@@ -333,6 +338,20 @@ export function bindLivingScene(a: LivingBind): void {
   };
   pending = { a, room, stop: eyeCandy.onChange(start) };
   start();
+}
+
+/**
+ * Release 62 (PR-0481, the conference demo): do the CPU half of this room's plate build NOW, behind the picker, and keep it for the battle's own build (`DepthPlates.precutPlates`). It asks for exactly what
+ * `Living.build` will ask for, under the same conditions (the room is one option B dresses, option B is on, this tier plays it), and does nothing otherwise. Binds nothing and touches no singleton: the
+ * scene it is given is the one the battle will take. True when a cut is held for the build.
+ */
+export async function warmLivingPlates(a: Pick<LivingBind, 'key' | 'scene' | 'renderer'>): Promise<boolean> {
+  const room = ROOMS[a.key];
+  if (!room || !roomPlays(room, eyeCandy.enabled('b'), eyeCandy.tier)) return false;
+  const group = a.scene.getObjectByName('backdrop') as Group | undefined;
+  if (!group) return false;
+  const { url, layout, opts } = platesRequest(room, eyeCandy.tier, a.renderer);
+  return precutPlates(group, url, layout, opts);
 }
 
 /** Every frame, after the rig has placed the camera and before the render. */

@@ -50,6 +50,7 @@ import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conf
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
+import { stopDemoWarm } from '../demo/demoWarm.ts'; // release 62 (PR-0481): the demo's stage warm stands down once a fight is picked
 import { demoRunDefaults } from '../demo/demoFlow.ts'; // R61 (conference demo, `?demo=1`): a demo fight goes straight in, without party prep or story scenes
 
 /** A screen the flow can await. */
@@ -330,6 +331,7 @@ export class GameFlow {
       const { runPilgrimage } = await import('../pilgrim/PilgrimFlow.ts'); // its screens and styles load only now: a player who never types the word never fetches them
       return runPilgrimage({ app: this.app, show: (s) => this.show(s), setStep: (s) => void (this.step = s), fight: (cid, o) => this.runChapter(cid, o), away: () => this.handedOver, claim: () => { if (!this.running) [this.owned, this.handedOver] = [null, false]; } });
     }
+    stopDemoWarm(); // release 62 (PR-0481, demo mode): the stage warm behind the picker takes no further step; the fight picked has the main thread
     warmBattleStage(); // the browser's staged-upload verdict (a second WebGL2 context, 0.7 s) and the spell atlas (0.13 s), once per page, while the party prep is what is on screen
     const release = musicChapter(id, sfxChapter(id, voiceChapter(id, holdIdleLane()))); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep; the recorded voice-over (FFX only)
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)

@@ -32,7 +32,8 @@ import { backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
-import { loadScene, type LoadedScene } from '../../scenes/index.ts';
+import { type LoadedScene } from '../../scenes/index.ts';
+import { takeScene } from '../../scenes/prebuilt.ts'; // release 62 (PR-0481): the demo's stage, built behind the picker, or a fresh `loadScene`
 import { markOpeningBegun, markOpeningHurried } from '../../scenes/openingMark.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
@@ -78,6 +79,7 @@ import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
+import { padEndsOpening } from './padOpeningSkip.ts'; // release 62 (PR-0481): a pad's A or Start ends the opening sweep as Enter does
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
 import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
@@ -247,7 +249,7 @@ export class BattleScreen extends Screen {
     });
 
     // --- diorama -----------------------------------------------------------
-    const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
+    const scene = await takeScene(chapter.sceneKey, this.app.renderer.camera);
     if (this.exited) return void scene.dispose();
     this.scene = scene;
     // The scene's art namespace on the root, for the one place chrome is keyed on it: the experimental Leblanc room is pale, and its HUD takes more ink (`ui/ffx2/ffx2-hud.css`).
@@ -864,6 +866,10 @@ export class BattleScreen extends Screen {
       if (pressed) this.battleStartBanner.dismiss();
       return;
     }
+
+    // Release 62 (PR-0481, the conference booth; both games): the opening sweep ends on the player's first Confirm, and its watch is the keyboard's (`ui/common/transitions/confirmPress.ts`).
+    // The pad is polled here, so a pad's A or Start ends the beat the same way, and the press is taken (Start must not also open the pause: the card above treats it the same). Keys are unchanged.
+    padEndsOpening(input, this.momentOverlay);
 
     // The offering screen (the hidden Last Summoning) takes the arrows and the confirm; the pause keys below still work, and Esc does not (a choice has no back).
     const offering = this.offering?.visible === true;

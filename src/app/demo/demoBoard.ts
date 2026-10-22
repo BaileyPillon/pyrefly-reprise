@@ -18,6 +18,7 @@ import { CHAPTERS } from '../../data/encounters.ts';
 import type { ControlHintItem } from '../../ui/common/ControlsHint.ts';
 import { DEMO_FIGHTS, otherDemoFight } from './demoFlow.ts';
 import { mountQrPlate } from './demoQr.ts';
+import { warmDemoFights } from './demoWarm.ts';
 import './demo.css';
 
 /** The two cards: the real chapters, in the board's order, no COMING rows and nothing locked. */
@@ -59,6 +60,9 @@ export class NoDoors extends BoardDoors {
   }
 }
 
+/** How long the picker stands before the stages are built behind it: the cards have painted, a visitor's first move is not an instant. */
+export const WARM_AFTER_MS = 1200;
+
 export class DemoBoardScreen extends ChapterSelectScreen {
   constructor(opts: ChapterSelectScreenOptions = {}) {
     super({ tiles: demoTiles, hints: DEMO_HINTS, initialIndex: demoStartIndex(), ...opts });
@@ -76,5 +80,15 @@ export class DemoBoardScreen extends ChapterSelectScreen {
     const eyebrow = this.root.querySelector('.fe-cselect__eyebrow');
     if (eyebrow) eyebrow.innerHTML = '<i></i>Choose your fight';
     mountQrPlate(this.root, 'picker');
+    // Release 62 (PR-0481): the fights' stages are built behind the picker (a stage the last fight used up is built again here), a moment after the cards have painted
+    this.warmTimer = setTimeout(() => void warmDemoFights(this.app), WARM_AFTER_MS);
   }
+
+  override exit(): void {
+    if (this.warmTimer !== null) clearTimeout(this.warmTimer);
+    this.warmTimer = null;
+    super.exit();
+  }
+
+  private warmTimer: ReturnType<typeof setTimeout> | null = null;
 }

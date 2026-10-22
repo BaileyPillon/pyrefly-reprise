@@ -17,7 +17,7 @@ import {
   type WebGLRenderer,
 } from 'three';
 import { followTransform } from './focusMaths.ts';
-import { cutPlates } from './plateMaths.ts';
+import { cutKey, dropCut, heldCut, holdCut, planCut, runCut } from './PlateCut.ts';
 import { PLATE_ANISOTROPY, composeHiPlates } from './PlateCompose.ts';
 
 /**
@@ -94,27 +94,6 @@ const FLOOR_FRAG = /* glsl */ `
   }
 `;
 
-/** Per painting row (top to bottom), 0..1: is that row's ray onto the ground nearer than `far`? */
-export function floorRows(g: PlateGeometry, h: number, far: number): Float32Array {
-  const rows = new Float32Array(h);
-  for (let y = 0; y < h; y++) {
-    const py = g.centreY + (0.5 - (y + 0.5) / h) * g.height;
-    if (py >= g.camRef.y - 1e-3) continue;
-    const t = g.camRef.y / (g.camRef.y - py);
-    const z = g.camRef.z + t * (g.distance - g.camRef.z);
-    const k = Math.min(1, Math.max(0, (z - far) / 6));
-    rows[y] = k * k * (3 - 2 * k);
-  }
-  return rows;
-}
-
-/**
- * The width the cut runs at when the plates are composed on the GPU: the derived depth maps are 1344x768 (`tools/fx/depth.py`), so
- * a cut at their own size loses nothing, costs a quarter of a cut at the painting's 2688 and half of the 2048 it used to run at,
- * and the colour comes from the painting's own pixels at their full size (`PlateCompose.ts`).
- */
-export const GPU_CUT_WIDTH = 1344;
-
 export interface PlateBuildOptions {
   /** The renderer the plates are composed on. Omitted (unit tests): the plates are CPU textures at the painting's approved width. */
   renderer?: WebGLRenderer | null;
@@ -129,24 +108,6 @@ export interface PlateGeometry {
   distance: number;
   /** The reference camera in the backdrop group's own space. */
   camRef: Vector3;
-}
-
-async function loadImage(url: string): Promise<HTMLImageElement> {
-  const img = new Image();
-  img.decoding = 'async';
-  img.src = url;
-  await img.decode();
-  return img;
-}
-
-function pixels(src: CanvasImageSource, w: number, h: number): Uint8ClampedArray {
-  const c = document.createElement('canvas');
-  c.width = w;
-  c.height = h;
-  const ctx = c.getContext('2d', { willReadFrequently: true })!;
-  ctx.imageSmoothingQuality = 'high'; // a master is drawn down 2 to 4 times: the default bilinear read would alias
-  ctx.drawImage(src, 0, 0, w, h);
-  return ctx.getImageData(0, 0, w, h).data;
 }
 
 /** The painting plane's placement, read back off the backdrop group (`Backdrop.create`). */
@@ -170,6 +131,34 @@ export function paintPoint(g: PlateGeometry, u: number, v: number, z = g.distanc
   const k = (g.camRef.z - z) / (g.camRef.z - g.distance);
   const p = new Vector3((u - 0.5) * g.width, g.centreY + (0.5 - v) * g.height, g.distance);
   return p.sub(g.camRef).multiplyScalar(k).add(g.camRef);
+}
+
+export { GPU_CUT_WIDTH, floorRows } from './PlateCut.ts'; // moved with the cut (release 62); still importable from here
+
+/**
+ * Do the CPU half of a build now and keep it for the build that asks for the same cut (release 62, PR-0481: the conference demo, behind the picker; `PlateCut.ts` has the what and the why). True when a cut
+ * was made or is already held; false when this group has no painting to cut or the cut failed (the build then does it itself, as before). One cut per key; a build takes it once.
+ */
+export async function precutPlates(group: Group, depthUrl: string, layout: PlateLayout, opts: PlateBuildOptions = {}): Promise<boolean> {
+  const plan = planCut(group, layout, opts, plateGeometry(group));
+  if (!plan) return false;
+  const key = cutKey(depthUrl, layout, plan);
+  if (heldCut(plan.image, key)) return true;
+  const made = runCut(depthUrl, layout, plan, true);
+  holdCut(plan.image, key, made);
+  try {
+    await made;
+    return true;
+  } catch {
+    dropCut(plan.image, key, made);
+    return false;
+  }
+}
+
+/** For tests: is a cut held for this group's painting and these inputs? */
+export function hasPrecut(group: Group, depthUrl: string, layout: PlateLayout, opts: PlateBuildOptions = {}): boolean {
+  const plan = planCut(group, layout, opts, plateGeometry(group));
+  return !!plan && !!heldCut(plan.image, cutKey(depthUrl, layout, plan));
 }
 
 export class DepthPlates {
@@ -222,46 +211,26 @@ export class DepthPlates {
   }
 
   static async build(group: Group, depthUrl: string, layout: PlateLayout, opts: PlateBuildOptions = {}): Promise<DepthPlates | null> {
-    const g = plateGeometry(group);
-    const main = group.getObjectByName('backdrop-painting') as Mesh | undefined;
-    const map = (main?.material as MeshBasicMaterial | undefined)?.map;
-    const image = map?.image as (CanvasImageSource & { naturalWidth?: number; width?: number }) | undefined;
-    if (!g || !image) return null;
-    const depthImg = await loadImage(depthUrl);
-    // The painting as loaded: the approved 2688 px, or its master (`artScale` 2: 5376 px). The full tier makes plates as wide as
-    // the painting that loaded, cutting at the depth map's own 1344 and laying the painting's pixels over that cut on the GPU; the
-    // phone tier keeps its own small cut. With no renderer (unit tests) the cut itself runs at the approved width on the CPU.
-    const loadedW = Number(image.naturalWidth || image.width || layout.width);
-    const loadedScale = Math.max(1, Math.round(Number(map?.userData['artScale'] ?? 1)));
-    const baseW = Math.round(loadedW / loadedScale);
-    const gpu = !!(opts.native && opts.renderer);
-    const w = opts.native ? (gpu ? Math.min(baseW, GPU_CUT_WIDTH) : baseW) : layout.width;
-    const h = Math.round((w * g.height) / g.width);
-    const blur = opts.native ? Math.max(1, Math.round((layout.blur * w) / layout.width)) : layout.blur;
-    const t0 = performance.now();
-    const paint = pixels(image, w, h);
-    const dBytes = pixels(depthImg, w, h);
-    const depth = new Float32Array(w * h);
-    for (let i = 0; i < depth.length; i++) depth[i] = dBytes[i * 4]! / 255;
-    const rows = layout.floor ? floorRows(g, h, layout.floor.far) : undefined;
-    const plates = cutPlates(paint, depth, w, h, { thresholds: layout.thresholds, soft: layout.soft, blur }, 0.999, rows);
+    const plan = planCut(group, layout, opts, plateGeometry(group));
+    if (!plan) return null;
+    const { g, main, image, loadedW, loadedScale, gpu, w, h } = plan;
+    // The cut made ahead of the battle (`precutPlates`), taken once; otherwise made now. A cut that failed ahead of time is made again here.
+    const key = cutKey(depthUrl, layout, plan);
+    const ahead = heldCut(image, key);
+    dropCut(image, key);
+    const cut = await (ahead ?? runCut(depthUrl, layout, plan, false)).catch(() => runCut(depthUrl, layout, plan, false));
     const zs = [g.distance, ...layout.z];
     const dp = new DepthPlates(group, g, zs, !!layout.floor);
     dp.keepBands = !!layout.keepBands;
-    dp.depth = depth;
+    dp.depth = cut.depth;
     dp.dw = w;
     dp.dh = h;
     dp.thresholds = layout.thresholds;
     dp.paint = main ?? null;
     dp.workWidth = w;
     dp.scale = gpu ? loadedScale : 1;
-    dp.cutMs = Math.round(performance.now() - t0);
-    // Rows bottom-up for the GL upload (a data texture is never flipped by the driver).
-    const flippedPlates = plates.map((plate) => {
-      const flipped = new Uint8Array(w * h * 4);
-      for (let y = 0; y < h; y++) flipped.set(plate.rgba.subarray(y * w * 4, (y + 1) * w * 4), (h - 1 - y) * w * 4);
-      return flipped;
-    });
+    dp.cutMs = cut.cutMs;
+    const flippedPlates = cut.flipped;
     let textures: Texture[];
     if (gpu) {
       const t1 = performance.now();
@@ -282,10 +251,10 @@ export class DepthPlates {
       });
       dp.pixelWidth = w;
     }
-    plates.forEach((plate, i) => {
+    flippedPlates.forEach((_plate, i) => {
       const tex = textures[i]!;
       tex.anisotropy = gpu ? PLATE_ANISOTROPY : 8; // a composed plate's render target was given the 16 when it was made (`PlateCompose.ts`); the CPU cut (the phone tier, the tests) keeps the 8 it always had
-      const onFloor = !!layout.floor && i === plates.length - 1;
+      const onFloor = !!layout.floor && i === flippedPlates.length - 1;
       const mesh = onFloor ? DepthPlates.floorMesh(g, tex, layout.floor!.far, group) : DepthPlates.uprightMesh(g, tex, zs[i]!, i > 0);
       dp.base.push(onFloor ? null : { k: mesh.scale.x, y: mesh.position.y });
       mesh.renderOrder = -90 + i * 3;
@@ -294,7 +263,7 @@ export class DepthPlates {
       group.add(mesh);
       dp.meshes.push(mesh);
       dp.textures.push(tex);
-      dp.coverage.push(Math.round(plate.coverage * 1000) / 1000);
+      dp.coverage.push(Math.round(cut.coverage[i]! * 1000) / 1000);
     });
     return dp;
   }

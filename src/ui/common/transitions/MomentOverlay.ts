@@ -52,6 +52,8 @@ export class MomentOverlay implements MomentsPort {
   /** The pending slab's resolver, so a cleared or replaced slab never strands its caller. */
   private slabDone: (() => void) | null = null;
   private disposed = false;
+  /** The openings' live Confirm watches (`confirmPress`), so a press that is not a key can end them. */
+  private readonly waiting = new Set<ConfirmPress>();
   /** The scene's art namespace (the experimental Leblanc chapter): the turn cut-in shows the portraits the namespace has repainted. */
   private readonly artNamespace: string | undefined;
 
@@ -148,7 +150,28 @@ export class MomentOverlay implements MomentsPort {
 
   /** The next Confirm press, for cutting the opening short (PR-0061). */
   confirmPress(): ConfirmPress {
-    return confirmPress(this.el.ownerDocument.defaultView ?? window);
+    const watch = confirmPress(this.el.ownerDocument.defaultView ?? window);
+    this.waiting.add(watch);
+    return {
+      pressed: watch.pressed,
+      press: () => watch.press(),
+      dispose: () => {
+        this.waiting.delete(watch);
+        watch.dispose();
+      },
+    };
+  }
+
+  /** Is an opening waiting for the player's Confirm press right now (release 62, PR-0481: the pad's A and Start reach it through {@link pressConfirm})? */
+  get confirmWaiting(): boolean {
+    return this.waiting.size > 0;
+  }
+
+  /** A Confirm press that was not a key (the pad's A or Start, read by `app/Input.ts`): ends the opening exactly as Enter does. True when an opening was waiting for it. */
+  pressConfirm(): boolean {
+    if (this.waiting.size === 0) return false;
+    for (const watch of [...this.waiting]) watch.press();
+    return true;
   }
 
   /** True once when the player skipped the pre-scene: the first opening is hurried (PR-0061). */
