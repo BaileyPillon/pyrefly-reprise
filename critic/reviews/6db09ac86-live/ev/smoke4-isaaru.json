@@ -1,0 +1,50 @@
+{
+ "which": "isaaru",
+ "steps": [
+  {
+   "k": "screen",
+   "v": "battle"
+  },
+  {
+   "k": "chapter",
+   "v": "isaaru-via-purifico"
+  },
+  {
+   "k": "rigs",
+   "v": [
+    "grothia:off:no rig listed in the art manifest",
+    "isaaru:off:no rig listed in the art manifest",
+    "yuna:off:no rig listed in the art manifest"
+   ]
+  },
+  {
+   "k": "actors",
+   "v": [
+    "yuna:yuna:ready:ready",
+    "isaaru:isaaru:idle:idle",
+    "grothia:grothia:idle:idle"
+   ]
+  },
+  {
+   "k": "rows",
+   "v": [
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Overdrive",
+    "Summon"
+   ]
+  },
+  {
+   "k": "console",
+   "v": []
+  },
+  {
+   "k": "404",
+   "v": []
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,85 @@
+{
+ "404": [],
+ "save before": {
+  "v": 1,
+  "music": 0.7,
+  "sfx": 0.7,
+  "chap": {
+   "id": "seymour-flux",
+   "cleared": false,
+   "bestTimeMs": null,
+   "bestTurns": null,
+   "attempts": 1,
+   "playTimeMs": 13599.300000000003
+  },
+  "keys": [
+   "pyrefly-reprise:save:v1"
+  ]
+ },
+ "tab": "Options",
+ "options text": "Tidus Yuna Seymour Flux Tidus Seymour Flux Mortiorchis ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 2420 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 0 /2310 130 /130 OD Mortiorchis HP 4,000 / 4,000 MP 512 / 512 FIRE ICE THUNDER WATER HOLY GRAV I HIDE G GUIDE NEXT BEST MOVE Tidus Mega Phoenix → the party IN ITEMS +2,310 NO MP CURES KO Revives all fallen allies at full HP. Stands Kimahri back up. Seymour Flux uses Lance of Atrophy before",
+ "options text after": "Tidus Yuna Seymour Flux Tidus Seymour Flux Mortiorchis ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 2420 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 0 /2310 130 /130 OD Mortiorchis HP 4,000 / 4,000 MP 512 / 512 FIRE ICE THUNDER WATER HOLY GRAV I HIDE G GUIDE NEXT BEST MOVE Tidus Mega Phoenix → the party IN ITEMS +2,310 NO MP CURES KO Revives all fallen allies at full HP. Stands Kimahri back up. Seymour Flux uses Lance of Atrophy before",
+ "save after change": {
+  "v": 1,
+  "music": 0.4,
+  "sfx": 0.7,
+  "chap": {
+   "id": "seymour-flux",
+   "cleared": false,
+   "bestTimeMs": null,
+   "bestTurns": null,
+   "attempts": 1,
+   "playTimeMs": 13699.300000000003
+  },
+  "keys": [
+   "pyrefly-reprise:save:v1"
+  ]
+ },
+ "screen": "battle",
+ "save after turn": {
+  "v": 1,
+  "music": 0.4,
+  "sfx": 0.7,
+  "chap": {
+   "id": "seymour-flux",
+   "cleared": false,
+   "bestTimeMs": null,
+   "bestTurns": null,
+   "attempts": 1,
+   "playTimeMs": 15032.600000000006
+  },
+  "keys": [
+   "pyrefly-reprise:save:v1"
+  ]
+ },
+ "screen after reload": "title",
+ "save after reload": {
+  "v": 1,
+  "music": 0.4,
+  "sfx": 0.7,
+  "chap": {
+   "id": "seymour-flux",
+   "cleared": false,
+   "bestTimeMs": null,
+   "bestTurns": null,
+   "attempts": 1,
+   "playTimeMs": 15032.600000000006
+  },
+  "keys": [
+   "pyrefly-reprise:save:v1"
+  ]
+ },
+ "applied volumes": {
+  "master": 0.8,
+  "music": 0.4,
+  "sfx": 0.7
+ },
+ "applied volumes after gesture": {
+  "master": 0.8,
+  "music": 0.4,
+  "sfx": 0.7
+ },
+ "console": [],
+ "consoleErrors": [],
+ "notFound": []
+}

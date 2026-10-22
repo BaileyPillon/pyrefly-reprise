@@ -1,0 +1,1409 @@
+{
+ "rubricVersion": 2,
+ "review": "deep",
+ "round": "28",
+ "date": "2026-10-21T19:40:00.000Z",
+ "build": {
+  "mainSha": "660c19bbd",
+  "bundle": "index-DwMQUoVh.js",
+  "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+  "note": "Candidate release 61 (branch r61-release-d = origin/r61-rc) built from D:/pyrefly-release55 into dist-gate with tools/candidate-build.mjs (BASE_PATH=/); 6,242 files; not deployed, so no critic/artifacts/660c19bbd.json exists yet. The hash is the dist-gate manifest's."
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "releaseManifest": {
+  "candidate": {
+   "mainSha": "660c19bbd",
+   "bundle": "index-DwMQUoVh.js",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "files": 6242,
+   "source": "candidate dist-gate from D:/pyrefly-release55; art D:/pyrefly-art-r61"
+  },
+  "previousVerifiedBuild": "live r60 1cea6e937 (bundle DwCdr0nf), deep round 27",
+  "chapters": [
+   "seymour-flux (I, FFX), ffx2-bahamut (IV, FFX-2): the two demo chapters",
+   "plus the carried deep obligation: the plan lists 19 chapters"
+  ],
+  "features": [
+   "[both] The Echo is the default title; T and pad Y cycle TITLE ART; OPTIONS VISUAL STYLE HD-2D / CLASSIC",
+   "[both] full gamepad (padMap, live glyphs Xbox, PS, Switch), FFX enemy-move slab on R3, 1440p hint strip",
+   "[both] Escape/B closes a first-use card before pausing",
+   "[both] demo mode ?demo=1: 2-card picker (Seymour Flux, Bahamut), no prep or story, results to the picker, hold Home or Select+Start resets, attract loop after 60 s, QR",
+   "[both] battle-start stall work (GpuSettle, StageWarm); rigs carry normal pieces (lit), head mesh fix, 40 ms whole-figure rig fade",
+   "[FFX only] Auron tip reworded; Chapter I stage gusts, moon glitter and mist (HD-2D bold)",
+   "[FFX-2 only] Chapter IV results calmer"
+  ],
+  "platforms": "keyboard, mouse, touch (390x844 emulated), simulated gamepad (Xbox, PlayStation, Switch families); Chromium only; 1600x900, 2000x1012, 2560x1440, 390x844",
+  "changed": "88 files added (81 art/rigs, 7 build chunks), 7 old chunks removed, 13 changed (10 art/rigs, art/manifest.json, art/derived.json, index.html) against live r60; no approved painting changed (917 ok).",
+  "knownDefects": "PR-0478, PR-0380, PR-0379, PR-0459 (visual and feel majors), PR-0504 (demo results silent), PR-0481 (demo battle start), PR-0148, PR-0099, PR-0295, PR-0461, PR-0460 (carried majors)"
+ },
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "verdictNotes": {
+  "deployment": "The candidate is not deployed; the deploy compares the live bytes with the build.",
+  "changedArea": "FAIL: CHK-027 fails (PR-0380, PR-0379), CHK-001 fails on the demo results cue (PR-0504), CHK-008 re-observed, CHK-026 UNVERIFIED for two of the four chapters; and the new rig and demo surfaces have disclosed majors.",
+  "ship": "SHIP: no critical defect; no confirmed regression against live r60; the new-feature majors do not block; the unknown-regression majors are disclosed (a major with an unknown tag does not hold by RUBRIC 3)."
+ },
+ "shipReasons": [
+  "No critical defect was found and none is introduced or left reachable: both demo chapters were won and lost-and-retried by real pad and keyboard input, every state read matched, 0 console errors, and the save-data class passed on 12 shipped release fixtures with nothing lost (CHK-024).",
+  "PR-0504 (demo wins have no results music, major) and PR-0481 (demo battle start of 12 to 14 s, major) are inside the brand-new demo mode, which does not exist live: by the owner's rule A they are disclosed and do not block.",
+  "PR-0478 and PR-0380 (major) carry regressionVsLive unknown: the independent 1600x900 runs on the candidate table show the swap jerks at live levels (Chapter I 4 against 2, Chapter IV 1 against 3) and Mortiorchis jerks only in 2 of 4 runs, so a regression is possible but unproven; a major with an unknown tag does not hold (only a critical does) and both are disclosed. If Bailey sees the Mortiorchis or Bahamut dissolve and dislikes it, the rigs can be left off for the demo.",
+  "PR-0379, PR-0459, PR-0148, PR-0099, PR-0295, PR-0461 and PR-0460 (major, carried) are neither introduced by this change nor regressions; they are disclosed and carried into the next batch.",
+  "Because this review is of a candidate that is not yet deployed, the exact-artifact comparison and the live verification remain the deploy's and the next review's; this candidate saves data differently (Settings gained titleArtPicked and visualStyle) and CHK-024 passed on it before going public."
+ ],
+ "disclosed": [
+  "PR-0478 (major): the two boss rigs' head-size fix is not independently proven and one two-body frame remains at the Bahamut idle-to-attack swap; the two harness trees disagree.",
+  "PR-0380 (major): swap jerks of 40 to 48 px on party figures and, in 2 of 4 runs, Mortiorchis dissolving with a 60 to 68 px shift.",
+  "PR-0379 (major): every pose change is a see-through dissolve with a double image for 2 to 4 frames.",
+  "PR-0459 (major): size continuity across poses is open on Yunalesca and Leblanc (not validly run on the candidate).",
+  "PR-0504 (major, new in the demo): demo wins play no results music.",
+  "PR-0481 (major): demo battle start takes 12 to 14 s to the first command, with frames up to 1 s (headless GPU; measure on the booth machine).",
+  "PR-0148, PR-0099, PR-0295, PR-0461, PR-0460 (major, carried): no owner listening score, stand-in audio in eleven chapters, phone party-prep layout, chapters without a real-key flow, Chapter III greyed Summon rows."
+ ],
+ "categories": [
+  {
+   "id": "combat",
+   "score": 9.5,
+   "status": "scored",
+   "evidence": "Combat auditor, round 28 on candidate 660c19bbd. No combat engine or game-data change: git diff 1cea6e937 660c19bbd touches nothing under src/battle, src/data (bar src/data/art/rigTypes.ts), research/ or BattlePresenter*. Full unit suite on the candidate tree with 180 s timeouts: 24,273 passed, 0 failed, 112 skipped (a first 15 s-timeout run under load had 41 timeouts and no assertion failures). Seeded benches with the shipped line: Chapter I 100/100 (seeds 1 to 100, avg 52 turns); other FFX chapters 31 to 40 of 40 (Mirror Aeons 31, Yunalesca 37, Braska 39, Anima 39, Evrae 39, Yojimbo 39, Natus 38, Omnis 38, Via Purifico 40, Sin core 40, Sin face 40); FFX-2 Bahamut 40/40 at Wait and 40/40 at Active; Vegnagun, Leblanc, Fallen Aeons, Den of Woe, Ixion 15/15; Trema 8/15. Wrong lines lose (Chapter I attack-only, defend-only, random 0/90). Demo logs agree with the sources (Seymour Flux 70,000 HP with Mortiorchis 4,000 and the Mortibsorption cycle; Lance of Atrophy then Full-Life; Bahamut Curse / Attack / Impulse / Mega Flare). Held at r27's 9.5: no engine change; deducted for the pad-driven Overdrive windows never being captured (CHK-023) and PR-0460 unchanged and UNVERIFIED."
+  },
+  {
+   "id": "encounter",
+   "score": 8.9,
+   "status": "scored",
+   "evidence": "Encounter data, AI scripts, phases and party builds are byte-identical to live r60. Demo seeds 7, 10 and 12 open with the party menu; the real-input demo win (seed 7, 55 turns) shows the sourced behaviour; Bahamut seed 56 won (42 turns); defeat and retry reach battle in both demo fights. Chapter I wrong lines 0/90. One new minor, PR-0487 (the Auron tip is false at the first menu of six FFX chapters). The auditor proposed 9.4; I hold r27's 8.9 because the reasons for 8.9 are unchanged and not re-tested (Trema about 60 percent and Den of Woe 95 percent at human pace, PR-0227 and PR-0498; hidden chapters that do not punish credible mistakes, PR-0447; and 16 of 19 chapters have no real-key flow on this candidate), and nothing in the candidate changes an encounter. No gain is claimed."
+  },
+  {
+   "id": "visual",
+   "score": 8.4,
+   "status": "scored",
+   "evidence": "Provisional 8.4 against r27's 8.5, from stills and the continuity strips of the candidate (bundle index-DwMQUoVh.js) at 2560x1440, 2000x1012, 1600x900 and 390x844. Credits: the Echo title is a clean composition; HD-2D reads as a deliberate lit stage and CLASSIC visibly differs; both demo bosses read as large recognisable painted figures with the party whole at booth size; results, pause and phone match their tiles. Debits: PR-0479, PR-0421, PR-0486 re-observed; PR-0507 (rim and shards; the rig lighting is barely perceptible); PR-0478 and PR-0459 still open (CHK-026 UNVERIFIED, the two harnesses disagree); one double-body frame remains at the Bahamut idle-to-attack swap. Static pose census (no browser): 1106 paintings, 829 pass, 79 waived, 0 fail, 198 exempt, 0 rigged (the rigs are outside it). verify-approved on the candidate tree: 917 ok, 0 mismatched, 0 missing."
+  },
+  {
+   "id": "feel",
+   "score": 8.2,
+   "status": "scored",
+   "evidence": "Build 660c19bbd, candidate, GPU headless Playwright, no black canvas. Candidate-table harness runs alone at 58.7 to 59.8 fps: 0 snaps per minute; Chapter I 4 swap jerks of 40 px or more (worst 47.6) against 2 on live; Chapter IV 1 (47.9) against 3; Mortiorchis jerks of 60 to 68 px in 2 of 4 runs (PR-0380); ghost severity worst 0.365, 0.326 (PR-0379); KO has no fall (PR-0473). The auditor proposed 8.2 and I keep it: the demo flow is responsive (title to first menu in 1.3 to 3.9 s of screen time, but 12 to 14 s to the first command, PR-0481), R3 opens the slab, the reset and attract behave as claimed, and the Escape/B card absorb works. No gain claimed on r27's 8.3 because the one headline motion fix (the 40 ms rig fade) trades one double image for a shorter dissolve that jerks on Mortiorchis in some runs."
+  },
+  {
+   "id": "narrative",
+   "score": 8.7,
+   "status": "scored",
+   "evidence": "Held at r27's 8.7. src/story is unchanged between 1cea6e937 and 660c19bbd (git diff --stat empty), so round 27's reading of the script text stands by that dependency. New this round: the demo skips the story by design, so no new aftermath was read; Chapter IV results are calm as in r27. Carried polish: the Chapter I and II quip, the smiling wedge and Rikku's grin on the sorrowful line (PR-0485). Not re-read this round: the other chapters' scenes."
+  },
+  {
+   "id": "audio",
+   "score": null,
+   "status": "UNVERIFIED",
+   "evidence": "No number: there is no numeric owner listening score for this mix (docs/audio/OWNER-VERDICT.md; PR-0148, CHK-B1) and agents cannot hear. Technical health passes (audio/qa.json 0 failures; 71.6 MB; the sample files are unchanged apart from MusicLoader.ts), and routing fails at one real moment: demo wins have no results music (PR-0504, CHK-001 FAIL). Nothing is averaged or zeroed."
+  },
+  {
+   "id": "interface",
+   "score": 8.2,
+   "status": "scored",
+   "evidence": "Held at r27's 8.2 with the new surface added. The pad glyphs, the R3 and Y slabs, the picker, the QR plate and the reset ring work by real input at 2560x1440. New polish: PR-0506 (two confirm prompts), PR-0511 (PRESENTATION value), PR-0508 (VISUAL STYLE scope is onboarding). No approved target exists for the picker, QR plate, reset ring or attract reel (PR-0505). Carried and re-observed: PR-0502, PR-0456, PR-0488. No critical or major interface defect found; PR-0295 (phone prep) is carried and was not re-observed."
+  },
+  {
+   "id": "onboarding",
+   "score": null,
+   "status": "UNVERIFIED",
+   "evidence": "No number: no frame of the pause ACCESSIBILITY tab, TEXT SIZE, REDUCE FLASHES, COLOUR VISION or CONTROLS remapping, and no written accessibility walk (PR-0503). Seen this round: the Escape/B card absorb works (esc-probe), VISUAL STYLE is flippable by pad and kept after reload (PR-0508 on its scope), PR-0487 on the Auron tip."
+  },
+  {
+   "id": "prep",
+   "score": null,
+   "status": "UNVERIFIED",
+   "evidence": "No number (ninth review with the same open half): the demo has no prep by design, the non-demo prep screens were captured but there is no written prep walk (PR-0503). New: the reset keeps settings (PR-0509)."
+  },
+  {
+   "id": "delivery",
+   "score": null,
+   "status": "UNVERIFIED",
+   "evidence": "No number: first-load time and frame stability were not measured on the booth machine; the demo battle start takes 12 to 14 s to the first command with 0.8 to 1.0 s frames in headless GPU mode (PR-0481), max frame 305 and 351 ms (PR-0480); no Firefox, WebKit-play, Safari or real-pad evidence. Identity and media: 6,242 files, 0 undecodable (CHK-018, CHK-019), save migration PASS (CHK-024), 0 console errors in the capture."
+  }
+ ],
+ "subScores": {
+  "owner": "Bailey's five visual sub-scores (provisional; not part of the weighted score). CHK-026 is UNVERIFIED, so no cap applies, and I do not lift the r27 numbers on the builder's own head measure; CHK-027 FAILS; snaps per minute are 0.",
+  "characterModels": 7.0,
+  "enemyModels": 7.8,
+  "animation": 7.0,
+  "fidelity": 8.6,
+  "camera": 7.5,
+  "previous": {
+   "source": "critic/rounds/round-27.json (live r60 1cea6e937)",
+   "characterModels": 7,
+   "enemyModels": 8.0,
+   "animation": 7,
+   "fidelity": 8.6,
+   "camera": 7.5
+  },
+  "note": "enemyModels 8.0 to 7.8: the rigs read as large, sharp, recognisable bosses, but Mortiorchis dissolves through a see-through frame with a 60 to 68 px shift in some runs and Bahamut keeps one two-body frame at idle-to-attack. characterModels and animation stay where they were (7.0) until the candidate-table run of the other chapters and an independent head measure exist; fidelity and camera are carried (PR-0421, PR-0479 minors)."
+ },
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "checks": {
+   "CHK-026": "UNVERIFIED",
+   "CHK-027": "FAIL"
+  },
+  "motion": {
+   "snapsPerMinute": 0,
+   "snaps": 0,
+   "worstGhostSeverity": 0.365,
+   "ghostOverFail": 0,
+   "swapJerksOverFail": 5,
+   "worstSwapJerkPx": 47.9,
+   "mortiorchisJerksOverFail": "8 in the capture owner run, 5 in the gap run, 0 in two confirming runs"
+  },
+  "size": {
+   "demoChaptersRigHeadWorstPct": {
+    "seymourFlux": 0.5,
+    "bahamut": 0.6
+   },
+   "rigSwapsJudged": {
+    "seymourFlux": 126,
+    "bahamut": 107
+   },
+   "headOverTolerance": 0,
+   "note": "rig head from the candidate harness mesh measure (builder authored); the review tree harness with its older table reads 24.2 and 39.1 percent (PR-0512)"
+  },
+  "officialSummary": "critic/rounds/round-28/continuity/continuity-summary.json",
+  "officialSummaryNote": "The official continuity folder holds one finished chapter (seymour-flux: CHK-026 PASS, CHK-027 FAIL on 61 swaps at ghost severity 0.4 or more, worst 0.468, 349 swaps, 59 fps); ffx2-bahamut, yunalesca and ffx2-leblanc are UNVERIFIED there because that run was cut short.",
+  "runs": [
+   {
+    "name": "confirm-cont (candidate table, alone, seed 1, 1600x900)",
+    "chapter": "seymour-flux",
+    "CHK026": "PASS",
+    "CHK027": "FAIL",
+    "jerksOver40": 4,
+    "worstJerkPx": 47.6,
+    "worstGhost": 0.364,
+    "fps": 59.8,
+    "summary": "critic/rounds/round-28/confirm/confirm-cont/continuity-summary.json"
+   },
+   {
+    "name": "confirm-cont2 (same)",
+    "chapter": "seymour-flux",
+    "CHK026": "PASS",
+    "CHK027": "FAIL",
+    "jerksOver40": 4,
+    "worstJerkPx": 47.1,
+    "worstGhost": 0.365,
+    "fps": 58.7,
+    "summary": "critic/rounds/round-28/confirm/confirm-cont2/continuity-summary.json"
+   },
+   {
+    "name": "confirm-cont3 (same)",
+    "chapter": "ffx2-bahamut",
+    "CHK026": "PASS",
+    "CHK027": "FAIL",
+    "swapJerksOver40": 1,
+    "worstSwapJerkPx": 47.9,
+    "worstGhost": 0.326,
+    "fps": 59.1,
+    "summary": "critic/rounds/round-28/confirm/confirm-cont3/continuity-summary.json"
+   },
+   {
+    "name": "capture owner cont2 (candidate table, alone)",
+    "chapter": "seymour-flux and ffx2-bahamut",
+    "CHK026": "PASS",
+    "CHK027": "FAIL",
+    "note": "Chapter I 14 jerks over 40 px of which 8 Mortiorchis (worst 68.2), Chapter IV 1 (48.1, Rikku)",
+    "summary": "critic/rounds/round-28/evidence/seymour-flux-win-cont2/continuity/continuity.json"
+   },
+   {
+    "name": "gap pass cont-a to cont-d (review tree table 78 subjects, two runs concurrent, NOT USED for the verdict)",
+    "CHK026": "FAIL",
+    "CHK027": "FAIL",
+    "note": "Seymour 24.2 percent head and 10 jerks (worst 73), Bahamut 39.1 and 4 (51.4), Yunalesca 32.6 and 56 (149.7), Leblanc 37.6 and 8 (162.2); zero snaps; ghost worst 0.307 to 0.356",
+    "summary": "critic/rounds/round-28/evidence/gaps/cont-a/continuity-summary.json"
+   }
+  ]
+ },
+ "staticChecks": {
+  "pose-census": {
+   "totals": {
+    "subjects": 146,
+    "paintings": 1106,
+    "waived": 79,
+    "fail": 0,
+    "exempt": 198,
+    "rigged": 0,
+    "pass": 829
+   },
+   "report": "critic/rounds/round-28/static/pose-census.json",
+   "note": "Static, no browser; does not cover the rigs and is not CHK-026."
+  },
+  "verify-approved": {
+   "root": "D:/pyrefly-release55",
+   "ok": 917,
+   "approved": 869,
+   "judgeLocked": 48,
+   "mismatched": 0,
+   "missing": 0,
+   "report": "critic/rounds/round-28/static/verify-approved-release55.txt",
+   "note": "The first run on the default root (D:/Final Fantasy) was the wrong tree and is not used."
+  },
+  "orphans": {
+   "modules": 1967,
+   "orphaned": 24,
+   "note": "all old; none of the release 61 modules"
+  }
+ },
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "FAIL",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Technical audio is valid (audio/qa.json: 0 failures, loop seams ok). Routing fails at one real moment: demo wins reach the results screen with no music (PR-0504, confirmed in a browser once and read in three runs). Defeats and non-demo wins route correctly. Nobody listened (CHK-B1 stays human).",
+   "evidence": [
+    "critic/rounds/round-28/audio/qa.json",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/audio-debug.jsonl",
+    "critic/rounds/round-28/confirm/confirm-audio.mjs"
+   ]
+  },
+  {
+   "id": "CHK-008",
+   "result": "FAIL",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "re-observed, carried",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Panels over painted actors re-observed at 2560x1440: the Mortiorchis info slab over Seymour's lower legs, the turn plate over the left 42 percent with the menu live (PR-0502), LS HIDE over Tidus's plate. Duration of the plate unmeasured.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/10-first-menu.png"
+   ]
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "verify-approved ROOT=D:/pyrefly-release55: 917 ok, 0 mismatched, 0 missing; every enemy in the sampled captures visible. The first run on the default root was the wrong tree and is not used.",
+   "evidence": [
+    "critic/rounds/round-28/static/verify-approved-release55.txt"
+   ]
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "No letter-tile or monogram fallback in any HUD, picker, results or phone capture; the demo title paints its art about 1.0 s after navigation (pre-paint fade, timed).",
+   "evidence": [
+    "critic/rounds/round-28/evidence/gaps/g1/g1.json",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/titleart/80-title-default.png"
+   ]
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Approved paintings render as their masters at 2560x1440, 2000x1012, 1600x900 and 390x844; minors read in context (PR-0479, PR-0421, PR-0486, PR-0507). Rendering only; no replacement proposed.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/23-midfight.png",
+    "critic/rounds/round-28/crops/bah-body.png"
+   ]
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Battle-facing rules applied to battle figures only; facing reads correctly in the demo chapters and the regression chapters.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/yunalesca-win/23-midfight.png",
+    "critic/rounds/round-28/evidence/isaaru-via-purifico-win/20-link-3.png"
+   ]
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "complete",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Every flow ran by Playwright keyboard, mouse, touch and a virtual standard-mapping pad on navigator.getGamepads. The only injections were setSeed(1) in the non-demo route and gotoChapter in the phone and Auron-pad probes; demo runs used none.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/index.json",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/run.json"
+   ]
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "complete",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Every capture asserts screen, awaitingMenu and targeting from a state read; 18 of 412 index entries are recorded UNVERIFIED with a cause and none is passed as evidence (14 Esc shots where the first Escape closes the Auron card by design, 3 stale first-attempt entries, 1 post-scene shot already past).",
+   "evidence": [
+    "critic/rounds/round-28/evidence/index.json",
+    "critic/rounds/round-28/evidence/esc-probe/esc-probe.json"
+   ]
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "candidate, not deployed",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "The candidate 660c19bbd is not deployed; the exact-artifact comparison is the deploy's. The build identity is recorded: bundle index-DwMQUoVh.js, artifactHash 6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c (6,242 files, 88 added, 7 removed, 13 changed against live r60; no approved painting changed)."
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "art-derive verify and audit PASS on dist-gate: 4,504 masters, 0 problems; every art name in the bundle is a shipped file or a derived master, 0 dangling.",
+   "evidence": [
+    "critic/rounds/round-28/static/art-derive-verify-audit-dist-gate.txt"
+   ]
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "The manifest decodes every shipped image; the two flat-colour findings (Paine eyeR-catch 1x and 2x) are listed in policy intentionalFlatImages.",
+   "evidence": [
+    "critic/rounds/round-28/static/dist-gate-manifest.json"
+   ]
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Shared plumbing (pad map, demo flow, Escape card absorb, results) applies to both games; no game-only change was applied to the wrong game.",
+   "evidence": [
+    "src/app/padMap.ts",
+    "src/app/demo/demoFlow.ts"
+   ]
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "checked",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Each changed combat-adjacent item holds its game case in code and captures: R3 enemy-move slab FFX only (FFX-2 slab chip stays Y), Auron tip in FFX_MARKS only (but see PR-0487), quiet results keyed to ffx2-bahamut only.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/12-enemy-slab-pad.png",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/ffx2-bahamut-win/12-enemy-slab-pad.png"
+   ]
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "complete for the two demo chapters, sampled for three others",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Both demo chapters ran by real input from title to results and back to the picker, win and lose with retry, in demo and default mode; Isaaru via Purifico won; Yunalesca lost on a route limit (PR-0397) and phone Chapter I was not completed (PR-0483): neither counted as a pass. The other 16 planned chapters were not run on this candidate (coverage.requiredNotTested).",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/run.json",
+    "critic/rounds/round-28/evidence/seymour-flux-win/run.json",
+    "critic/rounds/round-28/evidence/ffx2-bahamut-win/run.json",
+    "critic/rounds/round-28/evidence/isaaru-via-purifico-win/run.json"
+   ]
+  },
+  {
+   "id": "CHK-023",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "partial",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Kimahri Rage, Auron Shooting Star (Xbox pad, chips drawn as pad glyphs, 7/7 correct, damage followed), Spherechange and the R3 / Y slab toggle were exercised by real input. Not captured: the PlayStation glyph family, Dragon Fang by pad, and Tidus, Wakka, Lulu or Rikku Overdrive windows by pad (rawInput.ts and overlayInput.ts were rewritten for the pad this release).",
+   "evidence": [
+    "critic/rounds/round-28/evidence/gaps/nd-yunalesca-xbox/yunalesca-nd-win/28-bushido-overlay.png"
+   ]
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "complete",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Save-data class: 12 shipped fixtures (release 20 to 37.1) loaded into a fresh browser before boot, 0 console errors; every chapter record, unlock, flag, seenCoach and setting preserved (chapters 4/3/4/3/3/3/3/3/3/3/2/5 in and out); titleArt reads echo with titleArtPicked false and visualStyle hd2d. The one value that moved is sfxVolume 0.35 to 0.7 in release-31a-sfx-b, the earlier sfx-balance migration. Variants: farplane with no flag becomes echo/unpicked (by design), echo with no flag stays, farplane with picked true stays, a bogus titleArt or visualStyle falls back, classic is kept. Unit suites for save and demo pass.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/save-migration.json",
+    "critic/rounds/round-28/static/vitest-save-demo.log"
+   ]
+  },
+  {
+   "id": "CHK-026",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "demo chapters PASS on the candidate's table (builder's rig head measure); Yunalesca and Leblanc not validly run",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu; two harness trees disagree",
+   "reason": "Chapter I: 126 rig swaps worst 0.5 percent, 0 over tolerance, feet 0 to 0.8 px; Chapter IV: 107 rig swaps worst 0.6 percent, 0 over (confirm-cont, -cont2, -cont3, the capture owner's cont2). The rig head comes from the builder's mesh measure, so it passes by construction; the strips are the independent look (PR-0478). The review tree's harness with its older table FAILED all four chapters (24.2, 39.1, 32.6, 37.6 percent), which I do not use (PR-0512), and Yunalesca and Leblanc have no run on the candidate table, so the check cannot be passed for the chapters the plan lists. UNVERIFIED puts no cap on the sub-scores, but I do not lift them either.",
+   "minutes": 60
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "mandatory": true,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "complete on the two demo chapters",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu",
+   "reason": "Candidate table, run alone: Chapter I 4 swap jerks of 40 px or more (worst 47.6), Chapter IV 1 (47.9 px); Mortiorchis jerks of 60 to 68 px in 2 of 4 runs; ghost severity worst 0.365 (below 0.4) in three runs and 0.468 (61 swaps at or over 0.4) in the official partial run; 0 snaps per minute. Live r60: FAIL as well (PR-0380, PR-0379).",
+   "evidence": [
+    "critic/rounds/round-28/confirm/confirm-cont2/continuity-summary.json",
+    "critic/rounds/round-28/confirm/confirm-cont3/continuity-summary.json",
+    "critic/rounds/round-28/evidence/seymour-flux-win-cont2/continuity/strips/jerk-000-mortiorchis.jpg",
+    "critic/rounds/round-28/continuity/continuity-summary.json"
+   ],
+   "minutes": 60
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "human",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Bailey has recorded no listening score for this mix; agents read data and heard nothing."
+  },
+  {
+   "id": "CHK-B2",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "game": "both",
+   "build": "660c19bbd",
+   "artifactHash": "6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c",
+   "state": "human",
+   "environment": "headless Chromium via Playwright from node, PYREFLY_BROWSER=gpu (no black canvas, no fallback), candidate 660c19bbd served from D:/pyrefly-release55/dist-gate by tools/candidate-build.mjs (bundle index-DwMQUoVh.js, BASE_PATH=/), 2560x1440 demo with a simulated gamepad plus keyboard, 1600x900, 2000x1012, 390x844 touch; host Ryzen 7 7800X3D, RTX 5070 Ti",
+   "mode": "gpu (capture owner and auditors)",
+   "reason": "Bailey's play of the rig swaps, the demo flow and the battle-start wait is not recorded."
+  }
+ ],
+ "encounters": [
+  {
+   "id": "demo-seymour-flux-win",
+   "completedRealFlow": true,
+   "outcome": "victory",
+   "note": "demo=1, simulated Xbox pad plus keyboard, 2560x1440, seed 7: title, Start, 2-card picker, A, battle in 3 s with no prep or scene, victory in 55 turns, results, A, picker cursor on Bahamut. Evidence demo-full-pad-xbox/seymour-flux-win."
+  },
+  {
+   "id": "demo-ffx2-bahamut-win",
+   "completedRealFlow": true,
+   "outcome": "victory",
+   "note": "Same session, seed 56, victory in 42 turns, results, A, picker cursor back on Seymour Flux."
+  },
+  {
+   "id": "demo-seymour-flux-lose-retry",
+   "completedRealFlow": true,
+   "outcome": "defeat, retry reached battle",
+   "note": "PS-family pad. Defeat at 14 turns, A = RETRY goes straight to battle on the next demo seed (10)."
+  },
+  {
+   "id": "demo-ffx2-bahamut-lose-retry",
+   "completedRealFlow": true,
+   "outcome": "defeat, retry reached battle",
+   "note": "Switch-family pad. X-2 BATTLE flipped to ACTIVE by real input. Defeat at 23 turns, retry straight to battle (seed 56, the only seed). run.json labels the fight undecided because the route read the screen before results; the results text says Defeat."
+  },
+  {
+   "id": "demo-reset-attract-title-visualstyle-keyboard",
+   "completedRealFlow": true,
+   "outcome": "pass",
+   "note": "Home brush does nothing, Home held 2.4 s reloads to the title with demo on, saved chapters cleared, settings kept (PR-0509); Back+Start 2.2 s also resets. Attract starts at 64.6 s, plays Seymour then Bahamut, writes no storage key, swallows the waking press. T and pad Y cycle the title art. VISUAL STYLE CLASSIC by pad, kept after reload, stage visibly differs. Keyboard-only picker flow works; the typed-word door is shut."
+  },
+  {
+   "id": "seymour-flux",
+   "completedRealFlow": true,
+   "outcome": "victory (1600x900 three times incl. continuity, 2000x1012); defeat and retry; phone 390x844 touch not completed",
+   "note": "Non-demo, real keys, seed 1. Win in 53 turns, loss at 7 turns then retry reaches battle. Phone touch route lost on a harness limit (PR-0483), UNVERIFIED not a product fault."
+  },
+  {
+   "id": "ffx2-bahamut",
+   "completedRealFlow": true,
+   "outcome": "victory (1600x900 three times, 2000x1012, 390x844 touch); defeat and retry",
+   "note": "Non-demo, real keys, seed 1. Spherechange exercised, win in 60 turns, loss and retry reached battle."
+  },
+  {
+   "id": "isaaru-via-purifico",
+   "completedRealFlow": true,
+   "outcome": "victory",
+   "note": "Sample non-demo regression chapter, 6.1 minutes, real keys."
+  },
+  {
+   "id": "yunalesca",
+   "completedRealFlow": true,
+   "outcome": "defeat (218 turns, retry reached battle)",
+   "note": "Sample regression. Seed 1 stock route lost; known route limit (PR-0397), no changed file touches Chapter II. UNVERIFIED as a win, not a product finding."
+  }
+ ],
+ "targets": {
+  "build": "660c19bbd",
+  "required": 8,
+  "matched": 8,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 1,
+  "note": "Composites read from tools/end-state-board.mjs --pair in critic/rounds/round-28/targets: A-title (matched as a responsive adaptation; the painting is The Echo by Bailey's decision D-548/D-561), A-ink-and-gold-battle, A-ffx2-battle, A-results, pause-until-dawn (Chapter I and IV), seymour-flux-body (a model sheet, hash intact), phone-pr0001 and phone-pr0201. Waiting: the demo-only surfaces (picker, QR plate, reset ring, attract reel) have no tile in targets.json (PR-0505, hard rule 9). Audio and key-art tiles are not screenshot matches and are excluded."
+ },
+ "humanJudgments": [
+  {
+   "what": "Audio: Bailey's numeric listening score for the shipped mix (CHK-B1, PR-0148, PR-0099)",
+   "recorded": false
+  },
+  {
+   "what": "Visual and feel: are the two boss rigs acceptable in play for the demo (the Bahamut idle-to-attack frame, the Mortiorchis dissolve; PR-0478, PR-0380; CHK-B2)",
+   "recorded": false
+  },
+  {
+   "what": "Demo: approval of the picker, QR plate, reset ring and attract reel as surfaces (PR-0505), and whether the reset should restore default settings (PR-0509)",
+   "recorded": false
+  },
+  {
+   "what": "Narrative: the Chapter IV wedge and Rikku's grin (PR-0485)",
+   "recorded": false
+  },
+  {
+   "what": "Accessibility: COLOUR VISION and whether the HD-2D look needs a scope note or setting (PR-0508)",
+   "recorded": false
+  }
+ ],
+ "issues": [
+  {
+   "id": "PR-0478",
+   "severity": "major",
+   "category": "visual",
+   "title": "The two boss rigs (Seymour Flux, Bahamut): the head-size fix is applied but not independently proven, and a double-body frame remains at idle-to-attack swaps",
+   "game": "both (shared rig plumbing; Seymour Flux is FFX Chapter I, Bahamut is FFX-2 Chapter IV)",
+   "chapter": "seymour-flux, ffx2-bahamut; battle, rig pose swaps",
+   "observed": "Two harnesses disagree. With the candidate tree's own harness and pose-measure table (114 subjects), three runs alone on an idle host (confirm-cont, confirm-cont2, confirm-cont3, plus the capture owner's cont2) judge the rig swaps by mesh head: Seymour 126 rig swaps, worst 0.5 percent; Bahamut 107 rig swaps, worst 0.6 percent, CHK-026 PASS on both demo chapters (live r60 under the r27 harness: head 8 and 18 percent, FAIL). That measure is the builder's own (the rig mesh head), so it passes by construction (RUBRIC 6a). The independent evidence is the strips, and the Bahamut idle-to-attack strip (confirm-cont3 jerk-000-bahamut.jpg) still shows one frame at -1 with two half-faded bodies and then an 88.8 px head move, as the builder's own strip docs/screenshots/r61-rigs/ch4-idle-to-attack-fade-strip-A-F-B.jpg does. A third run on the review tree's harness with the review tree's older table (78 subjects) read the same rigs as FAIL (Seymour 24.2 percent, Bahamut 39.1 percent); I treat that run as a configuration error (see PR-0512), not as a product reading, but it shows the verdict depends on which table the harness reads.",
+   "expected": "CHK-026: a figure's head changes by at most 3 percent across a pose swap; CHK-027: a swap reads as one figure (RUBRIC 6a).",
+   "repro": "node critic/runner/lib/route.mjs seymour-flux win --continuity --pose-measure=D:/pyrefly-release55/docs/target/pose-measure.json against the candidate, seed 1, 1600x900, run alone; same for ffx2-bahamut. Strip: critic/rounds/round-28/confirm/confirm-cont3/ffx2-bahamut-win/continuity/strips/jerk-000-bahamut.jpg",
+   "evidence": [
+    "critic/rounds/round-28/confirm/confirm-cont/continuity-summary.json",
+    "critic/rounds/round-28/confirm/confirm-cont2/continuity-summary.json",
+    "critic/rounds/round-28/confirm/confirm-cont3/continuity-summary.json",
+    "critic/rounds/round-28/confirm/confirm-cont3/ffx2-bahamut-win/continuity/strips/jerk-000-bahamut.jpg",
+    "critic/rounds/round-28/evidence/gaps/cont-a/continuity-summary.json",
+    "critic/rounds/round-28/evidence/gaps/cont-b/continuity-summary.json"
+   ],
+   "confidence": "high that the two harnesses disagree; medium on the residual double-body frame (one strip plus the builder's strip)",
+   "requirement": "CHK-026, CHK-027, RUBRIC 6a; carried PR-0478 of rounds 26 and 27",
+   "fix": "Bailey looks at the Bahamut and Seymour idle-to-attack strips and decides for Monday (proposal 1). If the frame is not acceptable: give whole-figure swaps with a large silhouette change a longer or cut-based swap, and keep 40 ms only for near-identical variants.",
+   "acceptanceCheck": "Idle-to-attack strips show no frame with two bodies both above half opacity; the harness run with the candidate table passes CHK-026 and CHK-027 on both demo chapters and a second, independent head measure (silhouette, not the rig mesh) agrees within 3 percent.",
+   "status": "open",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown",
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0380",
+   "severity": "major",
+   "category": "feel",
+   "title": "Pose swaps still jump: party heads and feet at 40 to 48 px in Chapter I, Rikku's dressphase change in Chapter IV, and Mortiorchis dissolving through a see-through frame with a 60 to 68 px shift in some runs",
+   "game": "both (Mortiorchis is FFX Chapter I; Rikku is FFX-2 Chapter IV; the rest is shared)",
+   "chapter": "seymour-flux, ffx2-bahamut; battle, pose swaps",
+   "observed": "Candidate tree harness with the candidate table, run alone at 58.7 to 59.8 fps: Chapter I, 4 swap jerks of 40 px or more in each of two confirming runs (worst 47.6 and 47.1 px, Kimahri, Tidus; live r60: 2 over, worst 46.9); Chapter IV, 1 swap jerk over the line (47.9 px, Rikku's feet; live: 3). The capture owner's own run (seed 1, a different 244-swap path) additionally counted 8 Mortiorchis feet jerks of 60.4 to 68.2 px at idle, cast and attack swaps, and the gap pass (seed 7, 2560x1440) counted 5 (44.7 to 64.4 px); the strip jerk-000-mortiorchis.jpg shows the creature dissolving through a mostly transparent frame over about 5 frames while the silhouette moves (idle-to-cast is a 312 px feet shift by design). The two confirming runs (352 swaps each, 43 Mortiorchis swaps) had none, so this is path- or timing-dependent: seen in 2 of 4 candidate runs, 0 in the r27 live run. Rikku's costume change is a one-frame hard cut to a different dress, size and stance (fan; jerk-000-rikku). Snaps per minute are 0.",
+   "expected": "CHK-027: no one-frame jump of 40 px or more at a swap; a swap reads as one figure.",
+   "repro": "Chapter I seed 1 and seed 7 (demo), real keys, 1600x900 and 2560x1440, candidate harness with its pose-measure table; play to Mortiorchis's first cast (about 28 s) and its Full-Life cycles.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/seymour-flux-win-cont2/continuity/strips/jerk-000-mortiorchis.jpg",
+    "critic/rounds/round-28/evidence/gaps/cont-a/seymour-flux-win-g/continuity/continuity.json",
+    "critic/rounds/round-28/confirm/confirm-cont2/continuity-summary.json",
+    "critic/rounds/round-28/confirm/confirm-cont3/continuity-summary.json",
+    "critic/rounds/round-28/evidence/ffx2-bahamut-win-cont2/continuity/strips/jerk-000-rikku.jpg"
+   ],
+   "confidence": "medium: the measurement is firm in 2 runs, absent in 2; the cause (the 40 ms whole-figure fade of PR-0478, src/engine/rig/RigFade.ts) is suspected, not traced",
+   "requirement": "CHK-027, RUBRIC 6a; carried PR-0380",
+   "fix": "Hold the fade longer, or register the feet, for rig variants whose centroid moves more than about 100 px between poses; make Rikku's dressphase change a short blend with a held size.",
+   "acceptanceCheck": "Three consecutive candidate-table runs on Chapter I report 0 Mortiorchis jerks and no jerk of 40 px or more at a swap; Chapter IV at most 1; worst ghost severity under 0.4.",
+   "status": "open",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown",
+   "inNewFeature": false,
+   "where": "src/engine/rig/RigFade.ts (suspected, not traced)"
+  },
+  {
+   "id": "PR-0379",
+   "severity": "major",
+   "category": "feel",
+   "title": "Every pose change on a painted figure is a see-through cross-dissolve: two Kimahris, two Aurons, two Paines for 2 to 4 frames (first-time fan, 75 instances), with a one-frame negative flash on Paine",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, isaaru, yunalesca; battle, any pose swap",
+   "observed": "The fan reads ghost frames in every earlier strip set (ghost-042 Kimahri, ghost-045 Yuna, swap-158 Auron, ghost-271 Paine, jerk-000 Rikku, and a single inverted Paine frame in ghost-257). Measured in the confirming runs: worst ghost severity 0.364 and 0.365 in Chapter I and 0.326 in Chapter IV (below the 0.4 line, 0 swaps over); the capture owner's run reads 0.365 and 0.327. The official continuity run of this review (r28, 349 swaps, only Seymour Flux completed) reads 61 swaps at 0.4 or more (worst 0.468) with a different pose-measure, so the double-image measure is itself not stable between harness runs.",
+   "expected": "CHK-027: double-image frames per swap under the 0.4 severity line; a pose change reads as one figure.",
+   "repro": "Chapter I or IV, real keys, continuity harness; read strips ghost-*.jpg",
+   "evidence": [
+    "critic/rounds/round-28/continuity/continuity-summary.json",
+    "critic/rounds/round-28/confirm/confirm-cont3/ffx2-bahamut-win/continuity/strips/ghost-194-paine-hurt-idle.jpg",
+    "critic/rounds/round-28/evidence/seymour-flux-win-cont2/continuity/strips/ghost-042-kimahri-idle-ready.jpg",
+    "critic/rounds/round-28/evidence/ffx2-bahamut-win-cont2/continuity/strips/ghost-257-paine-ready-attack.jpg"
+   ],
+   "confidence": "high that the dissolve exists; medium on severity (the measure varies run to run)",
+   "requirement": "CHK-027; carried PR-0379 (raised to major by the fan lens in round 26)",
+   "fix": "Use a hold-then-cut for painted swaps whose overlap is low (the DemoMotion overlap rule), keep the blend only for near-identical paintings.",
+   "acceptanceCheck": "Ghost frames per swap at most 1 above 0.3 severity in three consecutive runs; fan strips show no second body.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0459",
+   "severity": "major",
+   "category": "visual",
+   "title": "Painted figures change size across pose swaps (Bailey's \"characters change size across poses\"): not re-measured validly on the candidate for Yunalesca and Leblanc, and carried open",
+   "game": "both",
+   "chapter": "yunalesca (FFX), ffx2-leblanc (FFX-2), plus the demo chapters' painted party",
+   "observed": "On the candidate table the demo chapters' painted heads judge 0 swaps over tolerance (Seymour 176 registered, Bahamut 284 registered). Yunalesca and Leblanc were run only by the gap pass on the review tree's stale table (78 subjects against the candidate's 114): FAIL with 708 and 454 swaps over tolerance (32.6 and 37.6 percent), which I do not accept as a reading of the candidate (PR-0512) and do not reuse as a pass either. Live r60 and the r55 candidate failed the same four chapters. The first-time fan lists size jumps (Kimahri shrinking, Auron hunching at critical, Yuna swelling, Paine shrinking) from the runs made without the candidate table.",
+   "expected": "CHK-026: at most 3 percent head change and 2 px feet change across a swap on registered figures.",
+   "repro": "critic/runner/lib/continuity.mjs with --pose-measure=D:/pyrefly-release55/docs/target/pose-measure.json on yunalesca and ffx2-leblanc at 1600x900.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/gaps/cont-c/continuity-summary.json",
+    "critic/rounds/round-28/evidence/gaps/cont-d/continuity-summary.json",
+    "critic/rounds/round-28/static/pose-census.json"
+   ],
+   "confidence": "high that it is open; unknown how far it has moved",
+   "requirement": "CHK-026; carried PR-0459",
+   "fix": "Rerun the two chapters with the candidate table before the deploy; if still over, the registration values for Kimahri, Auron, Yuna and Paine (FFX only per figure) need the next pose batch.",
+   "acceptanceCheck": "continuity-summary.json lists Yunalesca and Leblanc as run with the candidate table and CHK-026 PASS.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0504",
+   "severity": "major",
+   "category": "audio",
+   "title": "Demo (?demo=1) wins play no music on the results screen: the victory cue is started and then stopped by the battle screen's exit",
+   "game": "both (Chapter I victory-ffx, Chapter IV the quiet pause cue)",
+   "chapter": "demo Seymour Flux and demo Bahamut, results after a win",
+   "observed": "The AudioManager snapshot at the results screen reads playing=null, music.current=null, fading empty on both demo wins, although held earlier listed victory-ffx (Seymour) and pause (Bahamut). Two independent runs (the audio auditor and the gap pass at 250 ms for 7 s) agree, and the confirmer reproduced it on the Seymour demo win and traced it: BattleScreenFlow.showResults (about line 522) starts the cue before the swap on the assumption that the post scene has already replaced the battle screen; demo defaults skip the post scene, so the swap runs BattleScreen.exit(), whose audio.stopMusic(0.6) (BattleScreen.ts:1013) kills it. Defeat avoids this because its cue starts after the swap. Non-demo wins show the cue. A booth visitor wins and hears silence.",
+   "expected": "The results screen of a win loops the chapter's results cue (resultsMusic.ts), in demo mode as everywhere.",
+   "repro": "?demo=1, simulated pad, A on Seymour Flux (seed 7) or Bahamut (seed 56), win, read audioDebug when results is up.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/audio-debug.jsonl",
+    "critic/rounds/round-28/evidence/gaps/g-demo-win/audio-debug.jsonl",
+    "critic/rounds/round-28/evidence/gaps/g6/g6.json",
+    "critic/rounds/round-28/confirm/confirm-audio.mjs",
+    "critic/rounds/round-28/evidence/seymour-flux-win/audio-debug.jsonl"
+   ],
+   "confidence": "high that the cue is gone (three runs); medium-high on the cause (traced by reading, reproduced once in a browser). Nobody listened.",
+   "requirement": "CHK-001 / CHK-023: the right cue at each real moment; resultsMusic.ts contract",
+   "fix": "In showResults, start the victory cue after the swap when the post scene was skipped (opts.skipCutscenes); or have BattleScreen.exit not stop music when results is its successor.",
+   "acceptanceCheck": "Demo win of each fight: results snapshot shows playing victory-ffx (Chapter I) and pause (Chapter IV) for 5 s; defeat and non-demo wins unchanged; a unit test in tests/unit/results-music.test.ts.",
+   "status": "open",
+   "introducedByCandidate": true,
+   "regressionVsLive": "unknown",
+   "inNewFeature": true,
+   "where": "src/app/screens/BattleScreenFlow.ts showResults; src/app/screens/BattleScreen.ts exit() line 1013"
+  },
+  {
+   "id": "PR-0481",
+   "severity": "major",
+   "category": "delivery",
+   "title": "Demo battle start: 12 to 14 s from the picker A press to the first command, with frames of 0.8 to 1.0 s (PR-0481, raised from minor on the measurement)",
+   "game": "both",
+   "chapter": "demo Seymour Flux and demo Bahamut, 2560x1440",
+   "observed": "Idle machine: Chapter I 12.9 s cold and 12.2 s warm, Chapter IV 14.1 s and 13.0 s from A to the first command menu; the screen reads battle after 1.3 to 3.9 s, then about 4 s of idle phase and the boss name plate. In the first 5 s 7 to 13 frames exceed 100 ms (worst 0.82 to 1.0 s) and only 57 to 121 frames are drawn. Run-wide max frame time 305 and 351 ms (r27 live: 153 and 137). The in-game stall work (GpuSettle, probe moved behind prep) is not visibly effective here; headless gpu mode, not the booth monitor, and no live baseline for the demo flow.",
+   "expected": "A booth visitor reaches control in a few seconds with steady frames.",
+   "repro": "node critic/rounds/round-28/cap/gaps1.mjs and gaps7.mjs, PYREFLY_BROWSER=gpu, ?demo=1.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/gaps/g1/g1.json",
+    "critic/rounds/round-28/evidence/gaps/g7/",
+    "critic/rounds/round-28/evidence/seymour-flux-win-cont2/continuity/continuity.json"
+   ],
+   "confidence": "medium (headless GPU, not the booth hardware)",
+   "requirement": "PR-0481, feel and delivery: dead waiting at battle start",
+   "fix": "Measure on the booth machine; shorten the demo battle-start moment or warm the stage behind the picker.",
+   "acceptanceCheck": "A press to first menu under 6 s with no frame over 250 ms in the first 5 s, on the booth hardware.",
+   "status": "open",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown",
+   "inNewFeature": true
+  },
+  {
+   "id": "PR-0148",
+   "severity": "major",
+   "category": "audio",
+   "title": "No numeric owner listening score for the shipped mix (carried, eleventh review)",
+   "game": "both",
+   "chapter": "carried",
+   "observed": "docs/audio/OWNER-VERDICT.md has no scored entry; agents cannot hear. Audio files are unchanged except the loader tweak; technical gates pass (audio/qa.json: no failures). Not re-observed as a change.",
+   "expected": "See round-27.json for the requirement and expected behaviour.",
+   "repro": "See round-27.json",
+   "evidence": [
+    "critic/rounds/round-28/audio/qa.json"
+   ],
+   "confidence": "carried from round 27 (status unchanged, not re-tested here)",
+   "requirement": "carried",
+   "fix": "As in round-27.json",
+   "acceptanceCheck": "As in round-27.json",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0099",
+   "severity": "major",
+   "category": "audio",
+   "title": "Eleven chapters still play borrowed or stand-in scene beds or battle cues (carried)",
+   "game": "both",
+   "chapter": "carried",
+   "observed": "Unchanged since round 27: no new cue shipped in this candidate. Not re-observed as a change.",
+   "expected": "See round-27.json for the requirement and expected behaviour.",
+   "repro": "See round-27.json",
+   "evidence": [
+    "critic/rounds/round-28/audio/qa.json"
+   ],
+   "confidence": "carried from round 27 (status unchanged, not re-tested here)",
+   "requirement": "carried",
+   "fix": "As in round-27.json",
+   "acceptanceCheck": "As in round-27.json",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0295",
+   "severity": "major",
+   "category": "interface",
+   "title": "Heavy party-prep tabs are a desktop frame squeezed onto a phone (carried)",
+   "game": "both",
+   "chapter": "carried",
+   "observed": "Not re-observed this round (non-demo prep captured at 1600x900 only). Not re-observed as a change.",
+   "expected": "See round-27.json for the requirement and expected behaviour.",
+   "repro": "See round-27.json",
+   "evidence": [
+    "critic/rounds/round-28/evidence/seymour-flux-win/04-prep.png"
+   ],
+   "confidence": "carried from round 27 (status unchanged, not re-tested here)",
+   "requirement": "carried",
+   "fix": "As in round-27.json",
+   "acceptanceCheck": "As in round-27.json",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0461",
+   "severity": "major",
+   "category": "coverage",
+   "title": "Chapters and typed-word doors that no real-key flow reaches (carried class)",
+   "game": "both",
+   "chapter": "carried",
+   "observed": "This round sampled Yunalesca and Isaaru only for the non-demo set; 16 of the 19 planned chapters have no flow on this candidate. Not re-observed as a change.",
+   "expected": "See round-27.json for the requirement and expected behaviour.",
+   "repro": "See round-27.json",
+   "evidence": [
+    "critic/rounds/round-28/plan.json"
+   ],
+   "confidence": "carried from round 27 (status unchanged, not re-tested here)",
+   "requirement": "carried",
+   "fix": "As in round-27.json",
+   "acceptanceCheck": "As in round-27.json",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0460",
+   "severity": "major",
+   "category": "combat",
+   "title": "Chapter III possession links 3 to 6 draw inert greyed Summon rows (carried, FFX only, UNVERIFIED on this build)",
+   "game": "ffx",
+   "chapter": "carried",
+   "observed": "Not re-run in a browser; files unchanged since r55. Not re-observed as a change.",
+   "expected": "See round-27.json for the requirement and expected behaviour.",
+   "repro": "See round-27.json",
+   "evidence": [
+    "critic/rounds/round-28/plan.json"
+   ],
+   "confidence": "carried from round 27 (status unchanged, not re-tested here)",
+   "requirement": "carried",
+   "fix": "As in round-27.json",
+   "acceptanceCheck": "As in round-27.json",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "PR-0487",
+   "severity": "minor",
+   "category": "onboarding",
+   "title": "Auron's reworded first-run tip \"He strikes first\" is chapter-agnostic: true at the Chapter I first menu in 75 of 100 seeds, false at the first menu of several FFX chapters",
+   "game": "ffx",
+   "chapter": "seymour-flux (mostly right); evrae-airship, seymour-natus, seymour-omnis, sin-fins-core, mirror-aeons, yunalesca (wrong at the first menu)",
+   "observed": "src/ui/coach/coachCopy.ts:265 now reads \"He strikes first. Weather it, then hit back.\" It shows once, at the first command menu of the first FFX battle, whichever chapter. Engine, shipped line: an enemy acts before the first menu in 75 of 100 Chapter I seeds (first turn is an enemy's in 177 of 200, 88.5 percent); Braska 37/40; Anima, Yojimbo, Via Purifico, Sin Face 40/40; Yunalesca 13/40; Evrae, Natus, Omnis, Sin Fins core and Mirror Aeons 0/40, where the party opens and the old line was the true one. Whether a first-time player can reach those chapters first depends on the board, which was not exercised.",
+   "expected": "A tip that is true at the menu it appears at, or keyed to the chapter.",
+   "repro": "Engine bench critic/rounds/round-28/combat/ffx.bench.test.ts (IDS=<chapter>, STRATS=intended, N=40).",
+   "evidence": [
+    "critic/rounds/round-28/combat/ffx-others.json",
+    "critic/rounds/round-28/combat/c1-intended.json",
+    "critic/rounds/round-28/combat/first-out.json"
+   ],
+   "confidence": "medium",
+   "requirement": "Encounter authenticity; CHK-020/CHK-021",
+   "fix": "Reword to hold either way, or key by chapter (one string in coachCopy.ts).",
+   "acceptanceCheck": "In every FFX chapter the tip is true in all 40 seeds or not shown.",
+   "status": "open",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false,
+   "where": "src/ui/coach/coachCopy.ts:265"
+  },
+  {
+   "id": "PR-0479",
+   "severity": "minor",
+   "category": "visual",
+   "title": "Seymour Flux's hair crest touches or is cut by the top edge in mid-fight, and he rises off the frame on Lance of Atrophy (7 captures; carried, re-observed at 2560x1440 and in the attract reel)",
+   "game": "ffx",
+   "chapter": "seymour-flux",
+   "observed": "The crest is cropped by about half in the 2560x1440 mid-fight frame; the same at 1600x900 and 2000x1012; the Lance of Atrophy lunge loses his head and shoulders off the top (seq-transition-into-battle f05, seq-action-playing f08 and f09, attract f05).",
+   "expected": "Crest clear of the top edge in idle, hurt and attack.",
+   "repro": "?demo=1 at 2560x1440, three commands, screenshot.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/23-midfight.png",
+    "critic/rounds/round-28/crops/sey-crest.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-013 framing",
+   "fix": "Lower Seymour's stage anchor or the Chapter I framing by 4 to 6 percent of frame height.",
+   "acceptanceCheck": "Crest at least 10 px inside the top edge at three sizes.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0421",
+   "severity": "minor",
+   "category": "visual",
+   "title": "Chapter IV backdrop plate ends in a hard vertical edge about 130 px (5 percent) short of the right edge at 2560x1440 (carried, re-observed)",
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "observed": "Luminance falls from 28 to 14 over about 40 px at x of about 2430 in every Bahamut frame and the attract reel; Chapter I is full-bleed.",
+   "expected": "Plate fills the frame or fades into the vignette.",
+   "repro": "?demo=1 at 2560x1440, pick Bahamut, any battle frame.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/ffx2-bahamut-win/23-midfight.png",
+    "critic/rounds/round-28/crops/bah-right-edge.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-013",
+   "fix": "Extend or mirror the plate to the frame width for wide aspects.",
+   "acceptanceCheck": "No 30 px column darker than the vignette by more than 8 levels between x 2300 and 2560.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0486",
+   "severity": "minor",
+   "category": "visual",
+   "title": "Kimahri is mostly hidden behind Tidus at the Chapter I first menu and mid-fight (carried, re-observed)",
+   "game": "ffx",
+   "chapter": "seymour-flux",
+   "observed": "Only Kimahri's head and shoulders show at the 2560x1440 first menu; nearly covered at 2000x1012; a ghost overlap at 1600x900.",
+   "expected": "At least two thirds of his idle area visible.",
+   "repro": "Chapter I first menu or any Tidus attack.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-style/visual-style/90-hd2d-first-menu.png",
+    "critic/rounds/round-28/evidence/seymour-flux-win-s2000/23-midfight.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-014",
+   "fix": "Offset Kimahri's party slot about 0.25 body widths left and back.",
+   "acceptanceCheck": "Visible area at least two thirds at three sizes.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0509",
+   "severity": "minor",
+   "category": "prep",
+   "title": "The booth reset keeps the previous visitor's settings (volume, X-2 BATTLE ACTIVE, VISUAL STYLE CLASSIC)",
+   "game": "both",
+   "chapter": "demo reset",
+   "observed": "run.json resetKey.settingsAfter shows settings kept and saved chapters cleared; the captures flipped VISUAL STYLE to CLASSIC and X-2 BATTLE to ACTIVE and the style survived the reload. A visitor who sets volume to 0 leaves it for the next one, and the reset, the only recovery, does not undo it. Source reading plus stored values, not a played case.",
+   "expected": "A reset hands the next visitor the demo's default state.",
+   "repro": "Demo: set a setting, hold Home 1.5 s, read settings.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/run.json"
+   ],
+   "confidence": "medium",
+   "requirement": "Booth plan (decision 169c reads \"return to the title\")",
+   "fix": "A question for Bailey (proposal 4); if yes, the reset restores the demo defaults.",
+   "acceptanceCheck": "After a reset the settings equal the demo defaults.",
+   "status": "open",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true,
+   "where": "src/app/demo/demoReset.ts"
+  },
+  {
+   "id": "PR-0505",
+   "severity": "minor",
+   "category": "visual",
+   "title": "Demo picker: the Bahamut card is mostly black plate with only the dragon's head, next to a bright Seymour card, and no approved tile exists for the picker, QR plate, reset ring or attract reel (hard rule 9)",
+   "game": "both (the Chapter IV card FFX-2)",
+   "chapter": "demo picker, 2560x1440",
+   "observed": "The Chapter IV card reads unlit or unfinished beside the Chapter I card. Bailey's picks for these demo surfaces are words (r61-flow.md); targets.json has no tile for them, so the target gate counts them as waiting.",
+   "expected": "Both cards show a lit full-height boss; Bailey approves the surface from a faked screenshot.",
+   "repro": "?demo=1, title, Start, screenshot the picker.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/03-picker.png",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/ffx2-bahamut-win/34-picker-after.png"
+   ],
+   "confidence": "medium (a taste call)",
+   "requirement": "AGENTS.md hard rule 9",
+   "fix": "Show Bailey two framings of the Bahamut card as a faked screenshot (proposal 3).",
+   "acceptanceCheck": "Bailey picks; the pick is saved as a tile.",
+   "status": "open",
+   "introducedByCandidate": true,
+   "inNewFeature": true
+  },
+  {
+   "id": "PR-0494",
+   "severity": "minor",
+   "category": "prep",
+   "title": "Demo fights take 5 to 7.5 minutes by the scripted advisor line, longer than the \"2 to 3 minute\" booth claim",
+   "game": "both",
+   "chapter": "demo Seymour Flux and Bahamut",
+   "observed": "Seymour seed 7: 55 turns, 454 s; Bahamut seed 56: 42 turns, 302 s (results show 5:35 and 8:05). The route presses with 90 ms delays and menu waits, so a person may be faster; unproven either way.",
+   "expected": "The booth script's time claim matches play.",
+   "repro": "critic/rounds/round-28/cap/demo.mjs plan.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/run.json"
+   ],
+   "confidence": "low to medium",
+   "requirement": "Booth plan (decision 169)",
+   "fix": "Say 5 to 8 minutes in the booth script unless a human run is shorter.",
+   "acceptanceCheck": "Two human timings recorded.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0483",
+   "severity": "minor",
+   "category": "harness",
+   "title": "Phone Chapter I touch route cannot aim an ally (UNVERIFIED, no product fault found)",
+   "game": "ffx",
+   "chapter": "seymour-flux 390x844 touch",
+   "observed": "The route lost at turn 35 because its reticle resolver could not map the advisor's ally target \"Yuna\" (unresolved) and aimed Seymour; a separate probe shows Haste's ally reticles at 74 x 94 px, tappable.",
+   "expected": "A real-input win.",
+   "repro": "route.mjs seymour-flux win --size=390x844 --touch",
+   "evidence": [
+    "critic/rounds/round-28/evidence/seymour-flux-win-phone-touch/run.json",
+    "critic/rounds/round-28/evidence/esc-probe/heal-2-target-step.png"
+   ],
+   "confidence": "high that it is a harness limit",
+   "requirement": "CHK-022",
+   "fix": "Harness: resolve ally targets for touch.",
+   "acceptanceCheck": "A phone Chapter I win by touch.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0473",
+   "severity": "minor",
+   "category": "feel",
+   "title": "A knock-out has no fall and a revive has no rise (carried)",
+   "game": "both",
+   "chapter": "seymour-flux, Kimahri",
+   "observed": "Kimahri's KO is an idle dissolving to a heap and the revive a heap dissolving to a ghost of the standing pose, with nothing in between; unchanged.",
+   "expected": "A short fall and rise over at least 6 frames.",
+   "repro": "Chapter I seed 1, Mega Phoenix on the first menu.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/seymour-flux-win-cont2/continuity/strips/swap-003-kimahri-idle-ko.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027 reaction readability",
+   "fix": "A hold frame plus a translate (needs Bailey's yes).",
+   "acceptanceCheck": "KO and revive strips show movement across at least 6 frames.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0502",
+   "severity": "minor",
+   "category": "interface",
+   "title": "Turn-intro portrait wipe covers the left 42 percent of the screen at the first menu with the command list already live; \"LS HIDE\" overlaps Tidus's plate; the caption is under FLEE / ESCAPE (PR-0502, PR-0366 re-observed at 1440p)",
+   "game": "both",
+   "chapter": "Chapter I and IV first menu, demo 2560x1440",
+   "observed": "In both first-menu captures the plate covers two party members and the caption (\"YOUR TURN\") is cut by the rows or gold on cream. How long it stays is not measured: the capture of a Normal Attack showed no such plate and a steady frame of the same moment has none.",
+   "expected": "Caption legible; no actor hidden while the menu is live.",
+   "repro": "?demo=1, A on either card, first-menu frame.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/10-first-menu.png",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/ffx2-bahamut-win/10-first-menu.png",
+    "critic/rounds/round-28/evidence/gaps/g1/"
+   ],
+   "confidence": "medium (duration unmeasured)",
+   "requirement": "CHK-008, CHK-003",
+   "fix": "Time the plate; keep the caption on a dark plate on the portrait side or shorten the wipe once the menu is live.",
+   "acceptanceCheck": "Caption readable with no row over it at 2560x1440 and 1600x900.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0480",
+   "severity": "minor",
+   "category": "delivery",
+   "title": "Run-wide max frame time rose to 305 ms (Chapter I) and 351 ms (Chapter IV) from 153 and 137 ms (carried; Chapter IV 601 slow frames, 2.6 percent)",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "observed": "Probe maxDtMs 305.2 with 165 slow frames and 351 with 601. The start-of-battle record shows where part of it sits (PR-0481).",
+   "expected": "No frame over 250 ms in steady play.",
+   "repro": "Continuity harness runs.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/seymour-flux-win-cont2/continuity/continuity.json",
+    "critic/rounds/round-28/evidence/ffx2-bahamut-win-cont2/continuity/continuity.json"
+   ],
+   "confidence": "medium",
+   "requirement": "Stability and performance",
+   "fix": "Separate the start-of-battle frames from steady play, then trace.",
+   "acceptanceCheck": "No steady-play frame over 250 ms.",
+   "status": "open",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown"
+  },
+  {
+   "id": "PR-0512",
+   "severity": "minor",
+   "category": "harness",
+   "title": "Critic tooling: the gap pass's continuity runs read the review tree's pose-measure.json (78 subjects) instead of the candidate's (114) and failed CHK-026 on four chapters",
+   "game": "both",
+   "chapter": "critic harness",
+   "observed": "cont-a to cont-d record poseMeasure D:/pyrefly-r39-int/docs/target/pose-measure.json (sha f0f895...) against the candidate's f25cbb.... The same chapters pass the rig head check with the candidate table. The harness should take the table that ships with the candidate by default, and the review tree's harness lacks the rig head measure of the candidate's harness, so the two trees also judge differently.",
+   "expected": "The harness reads the candidate's table and records which.",
+   "repro": "critic/runner/lib/continuity.mjs without --pose-measure on a candidate.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/gaps/cont-a/seymour-flux-win-g/continuity/continuity.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026 evidence rules",
+   "fix": "Default --pose-measure to <candidate>/docs/target/pose-measure.json and print its subject count; merge the two harness trees.",
+   "acceptanceCheck": "The recorded table path is the candidate's.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0397",
+   "severity": "minor",
+   "category": "harness",
+   "title": "Yunalesca seed 1 stock route lost at 218 turns (carried route limit; UNVERIFIED as a win, not a product finding)",
+   "game": "ffx",
+   "chapter": "yunalesca",
+   "observed": "Lost four times in r26 and won once in r27 on the same route; no changed file touches Chapter II.",
+   "expected": "A real-input win.",
+   "repro": "route.mjs yunalesca win --budget=2700000",
+   "evidence": [
+    "critic/rounds/round-28/evidence/yunalesca-win/run.json"
+   ],
+   "confidence": "high that it is a route limit",
+   "requirement": "CHK-022",
+   "fix": "Route improvement.",
+   "acceptanceCheck": "Two consecutive wins.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0506",
+   "severity": "polish",
+   "category": "interface",
+   "title": "With a pad, the victory results screen shows the same action twice: \"A CONTINUE\" at the bottom and \"A CONFIRM\" on the panel button",
+   "game": "both",
+   "chapter": "demo results after a win, 2560x1440",
+   "observed": "Both prompts are bound to the same button; the non-demo keyboard frames at 1600x900 show only CONFIRM.",
+   "expected": "One prompt per action.",
+   "repro": "?demo=1, Xbox pad, win either fight.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/31-results.png",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/ffx2-bahamut-win/31-results.png"
+   ],
+   "confidence": "high that it is drawn twice; cause suspected",
+   "requirement": "Interface: no duplicate prompts",
+   "fix": "Draw the pad hint only where the panel has no button.",
+   "acceptanceCheck": "Exactly one confirm prompt with pad, keyboard and touch.",
+   "status": "open",
+   "introducedByCandidate": true,
+   "inNewFeature": true
+  },
+  {
+   "id": "PR-0507",
+   "severity": "polish",
+   "category": "visual",
+   "title": "Bahamut's wings carry a bright cyan rim, a torn right-wing edge and loose grey shards (carried class); the new rig lighting is barely perceptible",
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "observed": "The shapes are pixel-identical to the r27 live frame; the builder's before, stripped and after pairs differ by a faint contrast change, so \"Bahamut is lit by the room\" is hard to see. Approved art: judged as rendering only.",
+   "expected": "Rim at most 2 px, no detached fragment; lighting visible if it is a headline claim.",
+   "repro": "?demo=1 at 2560x1440, crop x 1500 to 2000, y 500 to 1000.",
+   "evidence": [
+    "critic/rounds/round-28/crops/bah-body.png",
+    "critic/rounds/round-28/crops/bah-r27-vs-r28-midfight.png"
+   ],
+   "confidence": "medium (cause suspected: rig mesh margin)",
+   "requirement": "CHK-013",
+   "fix": "Trim the transparent mesh margin; raise the lighting gain on wing and robe pieces a step. Do not repaint.",
+   "acceptanceCheck": "1:1 wing crop shows no fragment.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0508",
+   "severity": "polish",
+   "category": "onboarding",
+   "title": "The VISUAL STYLE row appears in every chapter's OPTIONS but only changes Chapters I and IV, and says nothing about what HD-2D or CLASSIC mean",
+   "game": "both (the look is Ch I FFX and Ch IV FFX-2)",
+   "chapter": "pause OPTIONS",
+   "observed": "By code the look applies only in Chapters I and IV (PauseScreenPanels.ts line 83; SaveData.ts line 192); the effect elsewhere is code reading, not a capture.",
+   "expected": "The row states its scope.",
+   "repro": "Pause, OPTIONS, flip the row in any other chapter.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-style/visual-style/92-options-style-flipped.png"
+   ],
+   "confidence": "medium",
+   "requirement": "Onboarding: usable settings",
+   "fix": "One help line under the row.",
+   "acceptanceCheck": "The row states its scope in Chapter II and Chapter I.",
+   "status": "open",
+   "introducedByCandidate": true,
+   "inNewFeature": true
+  },
+  {
+   "id": "PR-0511",
+   "severity": "polish",
+   "category": "interface",
+   "title": "The PRESENTATION row reads \"THE ECHO - B\"; the \"B\" (chapter-select music take) cannot be read without opening the page",
+   "game": "both",
+   "chapter": "pause OPTIONS",
+   "observed": "Value comes from saveFrontend.ts presentationSummary.",
+   "expected": "A value naming both halves.",
+   "repro": "Pause, OPTIONS.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/14b-pause-options.png"
+   ],
+   "confidence": "medium",
+   "requirement": "Readable values",
+   "fix": "Print \"THE ECHO / MUSIC B\".",
+   "acceptanceCheck": "Row text names both settings.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0456",
+   "severity": "polish",
+   "category": "interface",
+   "title": "Carried and re-observed: the FFX-2 target ring overprints the intent card (PR-0456); the Chapter I intent chip reads ZOMBIE 99 percent on the demo board and 50 percent on the default board (PR-0488)",
+   "game": "ffx2 (PR-0456); ffx (PR-0488)",
+   "chapter": "Chapter IV target step; Chapter I intent",
+   "observed": "Ring and nodes cross \"ACTS NEXT\"; the zombie odds differ by seed for the same attack and the chip does not say whose odds.",
+   "expected": "Ring clear of text; chip says whose odds.",
+   "repro": "Chapter IV ATTACK target step; Chapter I R3.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/ffx2-bahamut-win/16-target-single.png",
+    "critic/rounds/round-28/evidence/demo-full-pad-xbox/seymour-flux-win/12-enemy-slab-pad.png"
+   ],
+   "confidence": "high that both are drawn",
+   "requirement": "CHK-008",
+   "fix": "As listed under PR-0456 and PR-0488.",
+   "acceptanceCheck": "As before.",
+   "status": "open"
+  },
+  {
+   "id": "PR-0485",
+   "severity": "polish",
+   "category": "narrative",
+   "title": "A question for Bailey (carried): Yuna's smiling wedge on the silent Chapter IV results, Rikku's wide grin on \"...Yunie.\", and the Chapter I and II results quip \"...Okay. Next one.\"",
+   "game": "ffx2 (portraits); ffx (the quip)",
+   "chapter": "ffx2-bahamut, seymour-flux",
+   "observed": "Chapter IV results are calmer by design (cue pause, no quip, Rikku's calm tile); the wedge and the dialogue plate are not. Bailey's pick covered the tile only.",
+   "expected": "The right tone for each game.",
+   "repro": "Chapter IV non-demo win, Confirm.",
+   "evidence": [
+    "critic/rounds/round-28/evidence/ffx2-bahamut-win-cont2/33-after-confirm-scene.png"
+   ],
+   "confidence": "medium",
+   "requirement": "Narrative tone",
+   "fix": "Ask Bailey whether the wedge and plate use sombre variants.",
+   "acceptanceCheck": "Bailey's decision recorded.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "PR-0503",
+   "severity": "polish",
+   "category": "process",
+   "title": "Prep and onboarding have no number again (ninth review): there is no written prep or accessibility walk, and the demo skips prep by design",
+   "game": "both",
+   "chapter": "review process",
+   "observed": "No frame of the pause ACCESSIBILITY tab, TEXT SIZE, REDUCE FLASHES, COLOUR VISION or CONTROLS remapping in this capture; the non-demo prep screens were captured but not judged as a prep walk.",
+   "expected": "A number for each category.",
+   "repro": "n/a",
+   "evidence": [
+    "critic/rounds/round-28/plan.json"
+   ],
+   "confidence": "high",
+   "requirement": "RUBRIC 6",
+   "fix": "Schedule a written prep and accessibility walk.",
+   "acceptanceCheck": "Both categories scored.",
+   "status": "open",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Both demo chapters end to end by simulated Xbox, PlayStation and Switch pads plus keyboard at 2560x1440: picker, win, results, picker cursor, loss and retry, reset by Home and by Back+Start, attract loop and wake, title art cycle, OPTIONS VISUAL STYLE, keyboard-only flow.",
+   "Non-demo Chapter I and Chapter IV by real keys at 1600x900, 2000x1012 and (Chapter IV) 390x844 touch; Isaaru via Purifico; Yunalesca (lost on a route limit).",
+   "Save-data class: 12 shipped release fixtures and the titleArt and visualStyle variants (CHK-024).",
+   "Engine benches on the real engines for every FFX and FFX-2 chapter in the plan; the full unit suite; orphans (24, all old).",
+   "Static: artifact manifest (6,242 files), art-derive verify and audit, verify-approved, pose census.",
+   "Audio technical QA of every cue and SFX; routing of the results cue in demo and non-demo wins.",
+   "Continuity harness: Chapter I and IV with the candidate table (four runs), the review tree table (four chapters, not used), timed title, cut-in and battle-start sequences, Chapter I stage motion HD-2D versus CLASSIC versus reduce motion.",
+   "Target composites for 8 required tiles (A-title, A-ink-and-gold-battle, A-ffx2-battle, A-results, pause until dawn Ch I and IV, seymour-flux-body, phone tiles)."
+  ],
+  "reused": [
+   {
+    "what": "Round-27 captures of live r60",
+    "from": "critic/rounds/round-27",
+    "why": "Used only as a side-by-side baseline to decide that PR-0421, PR-0479 and the Bahamut wing shapes are carried and not regressions; not counted as evidence for this build."
+   },
+   {
+    "what": "Engine and data identity with r60",
+    "from": "git diff 1cea6e937 660c19bbd",
+    "why": "No diff under src/battle, src/data (bar rigTypes.ts), research/ or BattlePresenter*; all benches were nevertheless re-run in this round."
+   },
+   {
+    "what": "Story text",
+    "from": "critic/rounds/round-27.json narrative",
+    "why": "src/story has no diff between 1cea6e937 and 660c19bbd; the narrative score is held, labelled as reused."
+   }
+  ],
+  "notTested": [
+   "Phone 390x844 touch Chapter I win (harness limit, PR-0483).",
+   "PlayStation glyph family on the Overdrive windows, Dragon Fang and the Tidus, Wakka, Lulu and Rikku Overdrive windows by pad (CHK-023).",
+   "Pause ACCESSIBILITY tab, TEXT SIZE, REDUCE FLASHES, COLOUR VISION, CONTROLS remapping (onboarding).",
+   "First load time and frame stability on the booth machine; Firefox, WebKit play, Safari, a real controller and a real phone.",
+   "The 1440p hint strip on a real 1440p monitor was read from 2560x1440 headless frames only.",
+   "Carried r27 minors not re-read this round: PR-0430, PR-0357, PR-0366, PR-0356, PR-0372, PR-0386, PR-0387, PR-0388, PR-0324, PR-0453, PR-0454, PR-0468, PR-0469 and the other carried audio, combat and harness items in round-27.json; their status is unchanged."
+  ],
+  "requiredNotTested": [
+   "CHK-026 and CHK-027 for Yunalesca and Leblanc with the candidate's pose-measure table (the only runs used the stale table).",
+   "Real-key flows and continuity for 14 of the 19 planned chapters: braskas-final-aeon, ffx2-vegnagun-shuyin, seymour-anima-macalania, evrae-airship, yojimbo-cavern, seymour-natus, ffx2-fallen-aeons, seymour-omnis, ffx2-trema, ffx2-den-of-woe, ffx2-ixion-djose, sin-fins-core, sin-face, mirror-aeons (the plan lists 19; this review ran 5).",
+   "A listening verdict (CHK-B1) and Bailey's feel judgment of the rigs (CHK-B2).",
+   "A written prep and accessibility walk (prep and onboarding categories).",
+   "Live verification of the exact artifact (the candidate is not deployed)."
+  ]
+ },
+ "proposals": [
+  "Demo rigs for Monday (needs Bailey's yes): look at critic/rounds/round-28/confirm/confirm-cont3/ffx2-bahamut-win/continuity/strips/jerk-000-bahamut.jpg and evidence/seymour-flux-win-cont2/continuity/strips/jerk-000-mortiorchis.jpg and decide whether the rigs stay on; if not, run the demo with the painted figures (both games, one switch each).",
+  "Start the victory cue after the screen swap in showResults when the post scene is skipped (a fix for PR-0504; both games). Preview: audio snapshot at results reads playing victory-ffx.",
+  "Show Bailey two framings of the demo picker's Bahamut card (a lit full-height dragon and the current crop) as a faked screenshot before any change (hard rule 9; PR-0505).",
+  "Question for Bailey (PR-0509): should the booth reset also restore the demo's default settings (volume, X-2 BATTLE, VISUAL STYLE)? Fit: both games, demo only.",
+  "Warm the boss stage behind the picker and measure the A-to-first-menu time on the booth monitor before Monday (PR-0481; both games).",
+  "Key the Auron first-turn tip by chapter, or word it so it is true either way (PR-0487; FFX only).",
+  "Run the continuity harness for Yunalesca and Leblanc with the candidate's pose-measure table, and merge the two harness trees so the rig head measure and the table come from one place (PR-0512; both games, tooling)."
+ ],
+ "nextReview": "The deep obligation for this candidate stays open until the build is live: then the live review (exact artifact, CHK-017), the deep review on the live build with the other 14 chapters, and Bailey's listening and feel judgments. If any rig or fade change is made before the deploy, the continuity harness on both demo chapters runs again.",
+ "elapsedMinutes": 95,
+ "elapsedNote": "Chief critic consolidation about 40 minutes; auditors, the capture owner, the gap pass, the fan and the confirmer ran earlier; repeated work avoided: the capture owner's evidence and the confirmer's three continuity runs were reused by reference, not rerun.",
+ "serverHygiene": "The chief started no server and no browser. The capture owner, harness and confirmer servers (ports 5523 and 5871, pid 59352) were stopped by PID; a check of ports 5400 to 5990 at 15:36 local time found no listener.",
+ "scoreOutput": "score: PROVISIONAL — no verified score for audio, onboarding, prep, delivery (never averaged away, never zero)\nbelow the 9 floor: encounter, visual, feel, narrative, interface\nmilestone: not accepted\n  - a deep review cannot accept a milestone\n  - score is provisional: no verified score for audio, onboarding, prep, delivery\n  - category encounter is below the 9 floor\n  - category visual is below the 9 floor\n  - category feel is below the 9 floor\n  - category narrative is below the 9 floor\n  - category interface is below the 9 floor\n  - mandatory check CHK-001 is FAIL\n  - mandatory check CHK-008 is FAIL\n  - mandatory check CHK-026 is UNVERIFIED\n  - mandatory check CHK-027 is FAIL\n  - 11 critical or major issue(s) remain open\n  - 1 required target(s) waiting\n  - human judgment not recorded: Audio: Bailey's numeric listening score for the shipped mix (CHK-B1, PR-0148, PR-0099)\n  - human judgment not recorded: Visual and feel: are the two boss rigs acceptable in play for the demo (the Bahamut idle-to-attack frame, the Mortiorchis dissolve; PR-0478, PR-0380; CHK-B2)\n  - human judgment not recorded: Demo: approval of the picker, QR plate, reset ring and attract reel as surfaces (PR-0505), and whether the reset should restore default settings (PR-0509)\n  - human judgment not recorded: Narrative: the Chapter IV wedge and Rikku's grin (PR-0485)\n  - human judgment not recorded: Accessibility: COLOUR VISION and whether the HD-2D look needs a scope note or setting (PR-0508)\n  - live verification of the exact artifact is NOT APPLICABLE\nreport: valid evidence"
+}

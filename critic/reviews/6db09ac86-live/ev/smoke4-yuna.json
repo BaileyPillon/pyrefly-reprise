@@ -1,0 +1,52 @@
+{
+ "which": "yuna",
+ "steps": [
+  {
+   "k": "screen",
+   "v": "battle"
+  },
+  {
+   "k": "chapter",
+   "v": "yunalesca"
+  },
+  {
+   "k": "rigs",
+   "v": [
+    "auron:off:no rig listed in the art manifest",
+    "tidus:off:no rig listed in the art manifest",
+    "yuna:off:no rig listed in the art manifest",
+    "yunalesca-1:off:no rig listed in the art manifest"
+   ]
+  },
+  {
+   "k": "actors",
+   "v": [
+    "tidus:tidus:ready:ready",
+    "yuna:yuna:idle:idle",
+    "auron:auron:idle:idle",
+    "yunalesca:yunalesca-1:idle:idle"
+   ]
+  },
+  {
+   "k": "rows",
+   "v": [
+    "Attack",
+    "Special",
+    "White Magic",
+    "Items",
+    "Flee",
+    "Escape"
+   ]
+  },
+  {
+   "k": "console",
+   "v": []
+  },
+  {
+   "k": "404",
+   "v": []
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}
