@@ -33,6 +33,7 @@ LABEL = opt("--label", "subject")
 SIZE = tuple(int(v) for v in opt("--size", "800,840").split(","))
 CAP = 900 - SIZE[1]
 CRF = opt("--crf", "18")
+ZOOM = float(opt("--zoom", 1.8))  # the figure is about 130 x 190 px in a 1600 x 900 battle frame: crop a window 1/ZOOM of the panel and scale it up
 ONLY = set(opt("--only", "").split(",")) - {""}
 FONT = L.FONT
 
@@ -86,9 +87,10 @@ def smooth_centre(track: dict, frames: list[int]) -> dict:
 
 
 def crop_box(c):
-    x0 = int(max(0, min(1600 - SIZE[0], c[0] - SIZE[0] / 2)))
-    y0 = int(max(0, min(900 - SIZE[1], c[1] - SIZE[1] / 2)))
-    return (x0, y0, x0 + SIZE[0], y0 + SIZE[1])
+    w, h = int(SIZE[0] / ZOOM), int(SIZE[1] / ZOOM)
+    x0 = int(max(0, min(1600 - w, c[0] - w / 2)))
+    y0 = int(max(0, min(900 - h, c[1] - h / 2)))
+    return (x0, y0, x0 + w, y0 + h)
 
 
 def encode(panels_by_frame, titles, dest, header, marks=None):
@@ -136,7 +138,7 @@ def cut(name, recs, windows, header):
             if p is None:
                 ex = sorted(f.glob("f*.jpg"))
                 p = min(ex, key=lambda q: abs(int(q.stem[1:]) - fr))
-            row.append(Image.open(p).crop(crop_box(cs[fr])))
+            row.append(Image.open(p).crop(crop_box(cs[fr])).resize(SIZE, Image.LANCZOS))
         out.append(row)
     encode(out, [t for t, f, c in recs], OUT / f"{LABEL}-{name}.mp4", header)
 
