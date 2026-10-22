@@ -258,6 +258,30 @@ Written 2026-10-22 overnight, after the review of tip `be0be5aff` (`D:/Tools/pyr
 
 With none of them named, in any chapter, the game is `origin/main`'s: the post-fix differential is the proof for the camera and the impact frame; the reviewer's differentials for `planHit` (1.55M cases), `Trauma`, `fxHit`/`fxActionOpen` and the real `PaintedActor` still hold, because nothing on those paths changed in step 3 except `shortStopMs` (reached only with `?hitstop=short`).
 
+## Step 3 evidence
+
+**Unit tests:** `node node_modules/vitest/vitest.mjs run tests/unit/feel-*.test.ts`: 6 files, 123 tests, green (`feel-120hz` 16, `feel-stop-rumble` 28, `feel-switch` 8, `feel-punch` 19, `feel-shadow` 10, `feel-motion-sfx` 42). `npx tsc --noEmit` (run as `node node_modules/typescript/bin/tsc --noEmit -p .`): only the 26 old sparse-tree `pause-living-portrait` errors. `node tools/orphans.mjs`: no lane module is an orphan. Layering, 400 lines (`BattleCamera.ts` 399, `SpectacleFx.ts` 397), `.ts` imports, contracts and PII: as in the review. **Targeted regression** (457 test files that mention the camera, the spectacle, the actor, the presenter, the audio mixer or the battle screen, `--maxWorkers=2`): 436 pass, 20 skipped, 1 fails: `pause-remake.test.ts` (ENOENT on `docs/concepts/pause-until-dawn/options.json`, absent from this sparse tree, the same failure the reviewer saw). The full `npm test` was not run (11 GB of RAM free, under the 12 GB rule).
+
+**Post-fix differential against `origin/main` (the reviewer's harness, `D:/Tools/pyrefly-scratch/2026-10-22/motion/feel/review/tests/`, run on the fixed branch with every switch off):** `planHit` 1,555,200 cases divergent 0 (only the new `kickMode: 'today'` field); `Trauma` offset identical at every step; the real `PaintedActor` shadow and offsets identical to 0 at 60 and 144 Hz, party and hovering boss; `fxActionOpen`/`fxHit` identical arguments; **`BattleCamera` shake difference exactly 0 at exact 1/60, at 16/17/17 ms frames, with a 3-frame hold mid-shake, at 120 Hz, at 144 Hz and over 300 random frames with holds (F1 was 0.23 units and 0.10 units); `ImpactFrames` level and pending count identical to the `origin/main` list on 42,000 steps of 3,000 random frame sequences (30 to 240 Hz, holds)**. With the switch on, the 144 Hz camera differs from `origin/main` by 0.2346 units (the declared change).
+
+**The real game, headless** (GPU Chromium 1600 x 900, Vite :5302 started and stopped by PID, a scripted standard pad with a recording actuator, page clock stepped, one `RIG-RECORD` hold per job; numbers in `docs/screenshots/motion-feel/step3-evidence-summary.json`; 0 console errors and 0 404s in all runs):
+
+| Run | Result |
+|---|---|
+| Chapter I, `?pack=demo`, foes' HP written to 1 (a labelled debug write), one Attack, the win | the pad got **two calls 240 ms apart, both `startDelay` 0** (160 ms 0.25/0.35, then 360 ms 0.3/0.5): one effect at a time (F3). One actuator `reset` when the battle was left (F5) |
+| Chapter IV, same | the foes fell and the battle reached `victory`: **0 actuator calls, empty `rumbleLog`** (F2) |
+| Chapter I, the same win with the pause opened (`pause:open`) as soon as the first call was out | the pad was **reset 4 ms later and the second segment never went out** (F3, F5) |
+| Chapter II (`yunalesca`) and Chapter V (`ffx2-vegnagun-shuyin`) with `?pack=demo&timing=time&punch=new&hitstop=short&rumble=on&shadow=follow&motionsfx=on`, a pad, 8 s of play | `feel()` answers `today` / `false` for all six pieces including `timing`, `inDemoChapter: false`, 0 actuator calls |
+| **The two gated pieces, started by direct calls on the real spectacle and camera in the real app (`stage.fx.hit` of a heavy first blow, `battleCamera.shake(0.12, 340)`), the app stepped as whole frames at 60 and 144 Hz (`simStep`), Math.random seeded before the calls** | below |
+
+| Chapter, key | impact frame (drawn frames, ms) at 60 / 144 Hz | shake phase rate at 60 / 144 Hz | camera x at the 12 shared times, largest 60-vs-144 Hz difference |
+|---|---|---|---|
+| I, `?pack=demo` (timing on) | 2 = 33.3 ms / 5 = 34.7 ms | 54.0 / 53.8 rad/s | **0.0041 units (0.6 px at the battle camera's 148 px per unit)** |
+| I, `?pack=demo&timing=today` | 2 = 33.3 ms / 2 = 13.9 ms | 54.0 / 129.6 rad/s | 0.1365 units (20 px) |
+| II, `?pack=demo&timing=time` (a non-demo chapter: nothing changes) | 2 = 33.3 ms / 2 = 13.9 ms | 54.0 / 129.6 rad/s | 0.1598 units (24 px) |
+
+So the real-time pieces make a 144 Hz screen show what a 60 Hz one does, only in the demo chapters and only with the switch on; everywhere else the live game's per-frame counts are intact (and, at 144 Hz, 2.4 times too frantic, which is question S3-4). **Not seen in play:** a Mega Flare (covered by the planner tests), a real pad, a real 144 Hz display.
+
 ## Open questions after step 3 (for the driver; S3-1 and S3-2 are Bailey's)
 
 - **S3-1. Vibration setting.** FFX-2 had a Vibration entry in its Config menu. Before the rumble leaves the demo it needs a player setting (a `Settings` field: save-schema class, a deep review before the deploy). Until then the only off switches are REDUCE MOTION and the URL.
