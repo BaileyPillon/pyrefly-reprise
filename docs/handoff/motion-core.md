@@ -5,7 +5,7 @@ His picks for this lane (the full list is in the driver's brief): the full motio
 overshoot settle, eased, smooth at 120 Hz or more), "Snappy, about 1.1 s", each game's own path and return, the shadow that follows, REDUCE MOTION turning off "Shake, punch, freeze, rumble"
 only, demo chapters first.
 
-Branch `motion-core` (from `origin/main` 3e520971e, release 61 + records). Tree `D:/pyrefly-anim-proto`. Steps 1 (CURVES) and 2 (SWAP TIMING + SMEAR, below) of 3 are built here; step 3 is not.
+Branch `motion-core` (from `origin/main` 3e520971e, release 61 + records). Tree `D:/pyrefly-anim-proto`. All three steps are built here: 1 (CURVES), 2 (SWAP TIMING + SMEAR) and 3 (the per-game MOMENTS and the evidence clips, at the end).
 
 ## What step 1 is
 
@@ -199,6 +199,8 @@ recordings log one console message, the pre-existing `[fx-b] depth plates unavai
 
 ## Not done after step 2 (step 3 and what step 2 leaves)
 
+*Step 3 (the end of this file) built the knock-out's cut and settle and the per-game victory moments; the rest of this list stands.*
+
 - KO "rig collapse + settle" and victory "each game's own": the planner skips `ko`, `dead` and `twirl-*` on purpose (step 3 owns the KO cut and the settle); the fall itself and the victory hop are unchanged.
 - The smear on a swap at rest: the menu's idle to ready, `follow` to `idle` once the strike is home (FFX) or at the blow (FFX-2), a painting-set foe that does not move (Mortiorchis: its `idle` to `cast` and `attack` stay the plain 19-frame blend) keep their blend: a cut with a streak on a standing figure has nothing to hide behind.
 - Chapter IV: a girl's `follow` is shown at the blow over a figure at rest (a plain blend), and her `follow` to `idle` at the start of the run home is cut only gently (strength 0.24 to 0.34, the speed at that frame is low). A harder cut there is `BattleScreenRunIn.close` hinting the actor, which is not this lane's file.
@@ -219,3 +221,113 @@ recordings log one console message, the pre-existing `[fx-b] depth plates unavai
 6. **Rigs: every boss key change is "big"** (both bosses swap all parts' images per key), so every key move of Seymour and Bahamut (idle, telegraph, attack, hurt, cast) gets a cut and a stretch, KO excepted. If a quiet key (idle to cast) should keep its cross-fade, raise `RIG_BIG_SHARE` or give those keys `fadeMs`.
 7. **Harness cap 120 px.** A jerk at a planned cut over `maxJerkPx` stays a jerk. The recordings' excused jerks are at most about 104 px (a cut between two paintings whose heads are far apart: the registration is within 1 percent, the poses are not); the cap can come down if Bailey wants a smear to hide less.
 8. **The first-use hitch of a map:** the maps are pinned and fetched at staging but a Three texture uploads to the GPU on its first draw; if a first draw of a pose still hitches, `renderer.initTexture` at staging is the next step (not measured here: no 120 Hz frame in the recordings was slower than 9 ms at p99).
+
+## Step 3: the per-game moments (victory, the knock-out) and the evidence clips
+
+Bailey, 2026-10-22: victory "Each game's own" (each game's after-battle victory moment); KO "Rig collapse + settle" (rigged figures collapse through the rig with a small landing bounce; painted ones get the closest equivalent: a smear
+cut into the KO pose plus the settle); turn start and return to place "Each game's own way"; "Pose continuity needs to be tight."
+
+### What step 3 is
+
+| Piece | File | What it does |
+|---|---|---|
+| The switch | `src/engine/motion/MomentsSwitch.ts` | `?moments=new\|today`; `?pack=demo` alone is `new`; `?moments=today` wins over the pack (A/B). **Default off** (no key, every unit test). Plays only in Chapter I (`seymour-flux`) and Chapter IV (`ffx2-bahamut`), by the chapter `BattleScreen` names to `CurvesSwitch.setCurvesChapter`. REDUCE MOTION does not switch it off. |
+| The numbers | `motion/MomentsPlan.ts` (pure) | `victoryKind('hold'\|'pose')` (stand-down or cheer), `cheerShape`, `standDownShape`, `koSettleShape(height, heft)`, `koCutMs(frameMs)`. Every number `[ours]`. |
+| The helpers | `motion/ActorMoments.ts` | `startCheer` / `startStandDown` / `startKoSettle`: a leap on the actor's curve driver (step 1's `LeapRun`, which now takes `marks`: things to do on the frame the leap reaches a point of its time). |
+| The victory cheer (FFX, Chapter I) | `PaintedActor.setPose` + `playCue('hop')` + `beginCheer` / `landCheer` | The victory cue no longer hops: it starts a cheer (crouch 4 percent, spring 18 percent of the figure's height, landing 4 percent squash, 480 ms on screen at the default pace, after the fighter's own stagger of up to 240 ms) and HOLDS the victory painting back; `LeapRun` fires a mark a tenth of the way into the flight, where the spring is fastest, and the painting is asked for then: with the smear on that is a planned cut on a moving figure (step 2's director: no frame shows both paintings), else the usual blend. A second `setPose('victory')` while it waits is ignored; any other pose ends the wait. |
+| The stand-down (FFX-2, Chapter IV) | `motion/MomentBeats.ts` (`standDownParty`), `BattlePresenterBeats.victory` (one call in the `'hold'` branch), `PaintedActor.standDown`, port member `ActorHandle.standDown?` | The sources withhold the pose, so nothing is posed and nothing leaves the floor: one slow breath out (a settle of 3.5 percent over 500 ms, a 1.2 percent rise, 1 s on screen), staggered per fighter. A figure that is down stays where it lies. |
+| The knock-out's cut | `KoFall.fallRun(mode, game, cutMs)` + `KoRun.cut` / `crossU`, `fx/mix/living.ts` (`driveCut`; `meeting`), `SmearDirector.beginManual / stepManual / endManual`, `PaintedActor.koCutWindow / koCutBegin / koCutStep / koCutEnd` | A TOPPLE (a party figure falling to a lying painting) has its 75 ms (100 under `?motion=demo`) capped cross replaced by a CUT inside the smear's own window (24 to 34 ms, at least 2.25 display frames: 3 to 4 frames at 120 Hz, 3 at 60): the standing painting whole until half-way, the lying one from there, a streak the way the body falls and a little down. The hold before it is lengthened by what the cross gave up, so the fall takes the same time and the cut falls at the end of the topple, where the turn is fastest. A cut has no cross to hide the difference in length between the long standing body and the curled lying one, so it aligns them middle to middle (a cross keeps aligning the heads): the harness read the head-aligned cut as a 115 to 141 px step at the feet. Needs `?smear=` as well (the pack has both). Logged as a planned smear with `big: true`. |
+| The knock-out's settle | `PaintedActor.fall` (one line) | After the landing squash and shake the fall always had, the figure rebounds a little: 1.4 percent of its height over 190 ms, a 3 percent landing squash; a boss 0.4 times that height and 1.5 times as slow. Painted party figures and the rigged bosses (the carrier moves the rig) alike. |
+| CHK-027 | `critic/runner/lib/continuity-smear.mjs` (`loggedAsBig`: `e.big === true`), `continuity-probe.mjs` (`readSmears` passes `big`) | A knock-out's standing and lying bodies share no outline by construction and a plane laid on the floor has no footprint to read an overlap from, so the engine marks the pair big itself and the harness takes its word. One narrow clause, tested; the probe copied a fixed list of fields and dropped `big` until the first probe run over the KO recording found it. |
+| The debug API | `src/debug/momentsApi.ts` | `__pyrefly.moments('new'\|'today')`, `.momentsOn()`, `.cheer(id?)`, `.standDown(id?)`, `.koSettle(id?)` (the last three call the actor's own `setPose` / `standDown`: what the presenter calls). |
+
+Not rebuilt here, because step 1 already is it (and is on the recordings below): the return to place per game (FFX: the strike's 400 ms way home plus a 100 ms settle with a 4 percent overshoot; FFX-2: the girl's run home is a leap with a
+landing squash, `arcFor`) and the neutral turn-start weight shift.
+
+### Switches (all default OFF)
+
+- `?moments=new|today`, `?pack=demo` (new), only in Chapter I and Chapter IV; `window.__pyrefly.moments('new'|'today')` flips it live for the recorder (the A/B clips are one battle with the three switches flipped between actions: `curves`, `smear`, `moments`).
+  The knock-out's CUT needs `?smear=` too (the pack has both); `?moments=new&smear=off` keeps the plain cross and adds only the settle.
+- Recorder triggers: `__pyrefly.cheer()` / `.standDown()` / `.koSettle(id)` call what the presenter calls (`setPose('victory')`, `standDown()`, `setPose('ko')`), so a victory or a KO can be seen without winning or losing.
+- REDUCE MOTION: the moments play (Bailey: it turns off shake, punch, freeze and rumble only). Under it a KO stays the plain cut it always was (`KoFall.koMode`: `rm` is `cut`), so there is no smear to plan, and the settle is the figure's own movement.
+
+### Game case (AGENTS.md rule 14)
+
+| Change | Case | Why / source |
+|---|---|---|
+| The switch, the leap marks, the KO cut and settle, the log's `big`, the harness clause | **both** (shared plumbing) | one engine; the numbers are the same in both games |
+| The victory cheer | **FFX only (Chapter I)** | FFX poses the party to the fanfare (WIN_00 3.7 to 4.0 s, then a short loop): `research/re-ffx-party-motion-timing.md` sections 4, 5, 7; `research/ffx-vs-ffx2-presentation.md` 2.1. The cheer's shape is `[ours]` (a clip length and a loop, no path) |
+| The quiet stand-down | **FFX-2 only (Chapter IV; the same code serves any chapter whose `victoryPose` is `hold`)** | the sources withhold the pose after Bahamut (`research/ffx-vs-ffx2-presentation.md` 2.2 and FC-6a; `research/ffx2-bahamut.md` beat 9) and do NOT say what is shown instead (open question 11 there, `[absence]`): a held stance with a settle is `[ours]` |
+| The turn start | **both, neutral** (step 1's small weight shift, unchanged) | no source describes either game's turn start (searched `research/ffx-vs-ffx2-presentation.md`, `ffx2-combat-core.md`, `re-ffx-party-motion-timing.md`, `visual-bible.md`); listed as an open question |
+| The return to place | **FFX and FFX-2 each their own, from step 1** | FFX: the strike's 400 ms way home (the game plays ATTACK1_02 then _03 while it moves back, 14 + 11 frames: `re-ffx-party-motion-timing.md` section 5) and a 100 ms settle; FFX-2: the girl's run home (`RunInMotion.close`) is a leap with a landing squash. Bailey's "about 1.1 s" sets the FFX length, so it is shorter than the clips' 0.8 s |
+
+### The numbers (every one `[ours]`)
+
+- Cheer: spring 0.18 of the figure's height, 480 ms on screen at the default pace (crouch 0.18 of it, 4 percent; stretch 5 percent; landing 4 percent over 200 ms); the victory painting is asked for at 0.26 of the cheer (a tenth of the flight in). The stagger per fighter is the
+  one the hop always had (`beatOffset * 240` ms).
+- Stand-down: 1000 ms on screen, half of it a 3.5 percent settle, then a 1.2 percent rise; lift 0.
+- KO settle: 1.4 percent of the figure's height over 190 ms (a boss 0.4 times that height, 1.5 times as long), a 3 percent landing squash, a 1.2 percent stretch; the fall's own squash (5 percent with the curves on) and shake are unchanged.
+- KO cut: window `24 + 10 * 0.85` = 32.5 ms at least, at least 2.25 display frames, cap 70 ms (30 ms is 3.6 frames at 120 Hz; 37.5 ms is 2.25 frames at 60 Hz); strength 0.85; no flash; the streak runs the way the body falls and a little down.
+
+### How the other lanes hook in
+
+- The cheer, the stand-down and the KO settle are leaps on the actor's curve driver (`PaintedActor.leap`, step 1): a sound lane can ride the same moments (the landing thud on the cheer's landing squash and on the KO's rebound, a rustle on the stand-down) by hooking
+  `ActorMoments.startCheer` / `startKoSettle`, which return a promise that settles when the flight is over. The KO's cut and the cheer's cut are in `__pyrefly.smearLog()` like every planned smear (`kind: 'plane'`; the KO's carries `big: true`), so a whoosh or a flash on the smear can read them.
+- The camera lane's big-moment punch for a KO or a victory can ride `ctx.moments.victory()` (unchanged) and the log; the actor's own motion does not depend on the camera.
+- The KO cut needs the smear (`?smear=`); a lane that turns the smear off (`?smear=off`) gets the plain cross and the settle only.
+
+### CHK-027 (`critic/runner/lib/continuity-smear.mjs`, one clause; `continuity-probe.mjs`, one field)
+
+The harness excuses a fast swap only when the engine logged it as a planned smear on a BIG change. A knock-out's standing and lying paintings share almost no outline, but a plane laid on the floor has no footprint to read an overlap from, so the log had `overlap: null` and
+`loggedAsBig` said no. The engine now writes `big: true` for the KO cut (only a topple, a party figure falling to a lying painting), `loggedAsBig` accepts `e.big === true`, and the probe hands the flag over. Everything else about the excuse is unchanged (same figure, same pair,
+inside the window, one entry per swap, a jerk over 120 px still counts). Tested (`tests/unit/critic-continuity-smear.test.ts`).
+
+### Evidence (step 3)
+
+`D:/Tools/pyrefly-scratch/2026-10-22/motion/core/clips/` (one page in `CLIPS.md` there): for Chapter I and Chapter IV, one attack, one cast, one hit taken, one knock-out, the victory moment, and the real victory, each today against `?pack=demo`, recorded headless from the
+real game with real key presses on a virtual clock at an exact 60 Hz and at 120 Hz, as `.mp4` (a quarter-speed slow version of every 120 Hz pair), A/B side by side, full-frame stills, and a per-frame `.json` (pose, life, lift, scale, smear amount, blend, HP) beside each.
+The first recordings, with their faults (a menu cursor that was not where the script thought, a cast that was an item), are kept in `clips-round1/`. Probe recordings (the continuity harness riding the knock-out and victory sets): `clips-probe/`.
+
+What the recordings show (120 Hz unless said):
+
+- **The knock-out, today against the cut** (Chapter I, Yuna; Chapter IV, Rikku): today the standing painting and the lying one share the screen for 5 to 6 ghost frames (the harness's own count) in a 75 ms cross; the cut shows no frame with both, a 3 to 4 frame window (3 at
+  60 Hz), a streak peaking at 0.81 (0.84 at 60 Hz), the lying painting from the cut, then the landing squash and the 1.4 percent rebound. A real in-fight KO is on the recordings too: Tidus's in `ch1-hit-demo-*` (the boss's move and his fall) and Kimahri's in the Chapter I smear log.
+- **The victory cheer** (Chapter I): the victory painting arrives 133 ms after the cue for Tidus and 183 ms for Yuna (the stagger), a planned cut 4 frames long at the take-off (smear 0.36 and 0.31; the figure is already 0.17 units off the floor), a 0.34 unit spring, crouch and landing
+  squash 3.5 percent; today the painting is a plain blend at the cue and the figure hops 0.24 units.
+- **The stand-down** (Chapter IV): the figures keep their stance and painting; the settle takes a figure's height scale to 0.972 and back (today it only breathes, 0.992 to 1.008; with the moments 0.972 to 1.017); nothing leaves the floor. In the real victory clips (`ch4-victory-real-*`) the party holds its stance through the camera's victory framing and the screen goes on to the next scene.
+- **The real victory** (`ch1-victory-real-*`, `ch4-victory-real-*`): every foe at 1 HP and `autoBattle('intended')`: the boss's last blow, its rig collapse to the `ko` key, the sending, then the party's cheer (Chapter I) or hold (Chapter IV), to the next scene.
+- **CHK-027** (the harness riding a KO and a victory set at 120 Hz, `clips-probe/`): see the table.
+
+| the harness riding a recording at 120 Hz | planned smears logged | excused as planned | snaps | worst excused jerk | jerks over the 120 px cap |
+|---|---|---|---|---|---|
+| Chapter I: a KO (Yuna) and the victory (Tidus, Yuna), today then `?pack=demo` (`clips-probe/ch1-ko-120-*`) | 8 | 3: the KO cut and both cheers (the rest are the boss's rig keys, which have no planes for the probe to read, and Kimahri's moves before it attached) | 0 | 74 px (Yuna's KO, the feet landmark) | 0 |
+| Chapter IV: a KO (Rikku) and the stand-down, today then `?pack=demo` (`clips-probe/ch4-ko-120-*`) | 9 | 8 | 0 | 41 px | 1: Rikku's KO, the feet landmark, 134 px (Dark Knight, a long sword: the standing body is much longer than the curled lying painting) |
+
+Today's crosses show 5 to 8 ghost frames (both paintings over the harness's ghost threshold) at every KO and victory swap; the planned cuts show 0. CHK-026 and CHK-027 read UNVERIFIED because a 19 second recording is under the 60 seconds the policy asks for; the numbers above are the
+readings the full-length review would take. The first probe run found that the probe dropped the `big` flag (fixed, tested); the second, after the middle-to-middle alignment, took Chapter I's KO feet step from 115 to 74 px and left Rikku's at 134 (141 before): the harness's `feet` landmark compares a toppled standing body's
+feet with a lying painting's registered stance, which is about the middle of the body, so a hard cut at a topple carries about half a body length there whatever the alignment (a cross hides it by dissolving).
+
+### Not done after step 3
+
+- **Haste speeds the victory pose** (true of both games, `research/ffx-vs-ffx2-presentation.md` 2.1 and 2.2, FC-7): the presenter does not read a status at the victory beat; the cheer and the stand-down run at the default pace. Not built.
+- **The victory's length against the results.** The beat still waits `TIMING.victory` (900 ms, `fxVictory` can lengthen it) before the results flow, as it always did; the cheer is 480 ms plus a 200 ms landing, the stand-down 1000 ms. The sourced clip (3.7 to 4.0 s, then a 1.0 to 1.7 s loop)
+  is not matched in length: the victory painting is held, with the victory posture's faster breath, until the results take over. The WIN_01 loop has no movement of its own.
+- **One cheer shape for every fighter.** The game gives each character a different victory clip; our paintings carry the pose, the motion is shared (a stagger per fighter, the height a share of the figure's own).
+- **A boss's KO has no smear.** `rigSmearPlan` still skips `ko` (a rig key change to the rig's own `ko` key is a bone move; Seymour Flux and Bahamut both have one and it plays, then the rebound), and a boss that is sent (the demo's default, a dissolve) gets only the settle rebound.
+  The colossus modes (`buckle-cross`, `cross`) keep the capped cross.
+- **A real in-fight KO of a party member in Chapter IV was not recorded** (the clips use the presenter's own beat through `__pyrefly.koSettle`); a real one is on the Chapter I recordings.
+- **Turn start and return to place per game**: no new code (see the game-case table); the turn start stays the neutral weight shift of step 1.
+- **No sound, no camera, no flash on any of this** (other lanes). The KO cut and the cheer's cut carry no flash (`flashInto` does not list `ko` or `victory`).
+- **The cheer's cut is gentle** (a smear amount of about 0.3: the spring is 1.1 to 1.7 body heights a second, the planner's strength reads speed over 3): it reads as a clean cut at the take-off, not a streak.
+- **The stand-down is subtle** (3.5 percent, a little over the idle's own breath): on a 1440p screen about 15 px of a figure's height.
+
+### Open questions (step 3)
+
+1. **FFX-2, Chapter IV: what is shown when the pose is withheld?** The sources withhold the pose and do not say. Built: the stance held, one slow breath out (3.5 percent). Alternatives: the stance with nothing at all (today), a lowering of the weapon, a turn away. `[absence]`.
+2. **The cheer's height and weight** (18 percent of the figure's height, 480 ms): a bigger, slower leap, or two small ones (the WIN_00 / WIN_01 reading), is `CHEER_OPTIONS` and `cheerShape`.
+3. **Should the cheer's smear be stronger?** It is the planner's own (speed over 3): about 0.3. A minimum strength for a moment swap is one number in `SmearDirector.beginManual` / `smearPlan`.
+4. **The KO's cut and streak**: strength 0.85, window 30 to 38 ms, no flash, middle to middle; and whether a boss's collapse should also be cut (it is not today).
+5. **The KO rebound** (1.4 percent of the height, a boss 0.4 times that): is the little bounce wanted, or only the squash the fall always had? One constant (`koSettleShape`).
+6. **Turn start per game**: nothing in the sources; if Bailey wants them to differ, say how (FFX: the weight comes forward as the menu opens; FFX-2: a bounce when her gauge fills?).
+7. **REDUCE MOTION** leaves the cheer, the stand-down and the rebound on (his pick: it turns off shake, punch, freeze and rumble only); a KO under it stays the plain cut it always was (`koMode`: `rm` is `cut`).
+8. **The excused-jerk cap for a knock-out** (`continuity.smear.maxJerkPx` 120): a KO's feet step 74 px at the cut with the middle-to-middle alignment (141 with the heads aligned); a taller cap would let a head-aligned KO through, a lower one would not.
