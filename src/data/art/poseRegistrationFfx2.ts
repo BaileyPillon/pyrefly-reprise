@@ -112,7 +112,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     ko: { scale: 0.985, head: [0.7229, 0.283, 0.813, 0.447], status: 'ok', class: 'ko', stature: 0.315, headReal: 1, lengthRatio: 0.991, iou: 0.112, sha: '699da291e86a1e63' },
     'od-x2-warrior-armor-break': { scale: 1.286, stanceX: 437.5, feetRow: 822.0, head: [0.3813, 0.0602, 0.4736, 0.1203], status: 'held', class: 'standing', stature: 0.901, headReal: 1.268, iou: 0.17, sha: '7684b304d76eb730' },
     'od-x2-warrior-power-break': { scale: 1.286, stanceX: 437.5, feetRow: 822.0, head: [0.4487, 0.1125, 0.541, 0.1726], status: 'held', class: 'standing', stature: 0.901, headReal: 1.268, iou: 0.17, sha: '115787cb27036507' },
-    ready: { scale: 1.115, stanceX: 349.5, head: [0.401, 0.2649, 0.5222, 0.3179], status: 'ok', class: 'standing', stature: 1.037, headReal: 0.967, iou: 0.31, sha: '72feae65cd6f1065' },
+    ready: { scale: 1.115, stanceX: 349.5, head: [0.401, 0.2649, 0.5222, 0.3179], status: 'ok', class: 'standing', stature: 1.037, headReal: 0.967, iou: 0.31, sha: 'fbc8afbe5ff2fbd3' },
     sleep: { scale: 0.926, stanceX: 197.0, head: [0.3448, 0.299, 0.5969, 0.3576], status: 'ok', class: 'low', stature: 0.94, headReal: 1.064, iou: 0.313, sha: 'f1a1856e5c052a50' },
     victory: { scale: 1.057, stanceX: 346.5, head: [0.3953, 0.1956, 0.5723, 0.2466], status: 'ok', class: 'standing', stature: 1.08, headReal: 1.03, iou: 0.393, sha: '65cd93da432b175e' },
   },
