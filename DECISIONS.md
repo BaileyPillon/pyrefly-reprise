@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1591 decisions in all: 1081 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 1063 of the written decisions record a blanket yes.
+1679 decisions in all: 1166 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1099 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1491 |
+| adopted | 1564 |
 | proposed | 7 |
 | deferred | 7 |
-| rejected | 14 |
-| superseded | 72 |
-| **All** | **1591** |
+| rejected | 16 |
+| superseded | 85 |
+| **All** | **1679** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 148 |
-| art | 344 |
-| visuals | 90 |
+| combat | 152 |
+| art | 366 |
+| visuals | 99 |
 | camera | 66 |
-| audio | 133 |
-| ui | 180 |
+| audio | 134 |
+| ui | 186 |
 | story | 17 |
-| chapters | 231 |
+| chapters | 247 |
 | guide | 34 |
-| release | 69 |
+| release | 84 |
 | hosting | 18 |
-| process | 165 |
+| process | 178 |
 | critic | 40 |
 | data | 17 |
-| tech | 20 |
+| tech | 22 |
 | site | 19 |
-| **All** | **1591** |
+| **All** | **1679** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 762 |
-| FFX only | 474 |
-| FFX-2 only | 337 |
+| both games | 798 |
+| FFX only | 488 |
+| FFX-2 only | 375 |
 | FF7 hidden experiment | 18 |
-| **All** | **1591** |
+| **All** | **1679** |
 
 ## Standing rules in force
 
@@ -114,7 +114,9 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **The coordination board and the collaboration with Codex are paused until further notice; everything is reported to him in the game chat**: No coordination board, no coordination files and no Codex tasks until he lifts the pause; everything goes to him in the game chat. Decision [D-956](#d-956) (2026-10-17, both games).
 - **The rule of no retail Square Enix assets and no imitating real people is lifted; AGENTS.md hard rule 8 is rewritten to say so (both games; process)**: Retail Square Enix assets and cloned voices of the original cast may be used, with Bailey's word that he holds the cast's and Square Enix's permission (AGENTS.md hard rule 8); public/art never goes to main. Decision [D-1009](#d-1009) (2026-10-18, both games).
 - **A standing ADVANCE yes for the driver's recommendations while he is at work, extending the 2026-10-17 standing yes: each pick made under it is recorded as its own DELEGATED row and reported to him (both games; process)**: While Bailey is away the driver acts on its own recommendations, records each as a DELEGATED row, and never deletes files, spends beyond approved caps, makes irreversible repo or account changes, or builds unshown new gameplay. Decision [D-1023](#d-1023) (2026-10-18, both games).
-- **Bailey reset his weekly usage and the driver stays on this account: no account switch, not even at 97 percent, until he says otherwise; near the limit again the driver tells him and asks (process; replaces D-1063’s trigger for now)**: The driver does not run the account switch, not even at weekly 97 percent, until Bailey says otherwise; if usage nears the limit again it tells him and asks. Decision [D-1068](#d-1068) (2026-10-19, both games).
+- **DELEGATED: Kimahri’s rig returns only after a redo with the expressive-keys method (the pose paintings’ own parts), the spear bone fix (scale 1.327, PR-0462) and the knockout footprint, shown to him as MOTION clips, not stills, before it is switched on (FFX only)**: Every rig is shown to Bailey as motion clips before it replaces a painting set: authored keys that bend the idle costume read as paper puppets, so the expressive-keys method comes first. Decision [D-1086](#d-1086) (2026-10-19, FFX).
+- **DELEGATED: none of the five expressive-2 rigs replaces a live rig until Bailey has looked at its final recording in motion; Ifrit-x and Pterya-x would replace the live Ifrit and Pterya, Shiva-x would be her first (FFX only)**: No rig replaces a live one until Bailey has seen its final recording in motion. Decision [D-1097](#d-1097) (2026-10-19, FFX).
+- **If a boss rig’s double-image fix is not convincing by Thursday, that boss ships with its paintings**: A boss rig that is not convincing in motion by the Thursday playtest is turned off for the demo and the boss ships with its paintings. Decision [D-1147](#d-1147) (2026-10-20, both games).
 
 ## Waiting on Bailey's yes
 
@@ -131,7 +133,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21)
 
 ## Ledger
 
@@ -7304,7 +7306,7 @@ Sunday · 98 decisions
 
 ### 2026-10-19
 
-Monday · 23 decisions
+Monday · 51 decisions
 
 - <a id="d-1059"></a>**D-1059** — DELEGATED: release 55 went live on its deep review (round 26, SHIP) but critic-clear could not settle the build with it, because the review built the candidate without the release stamp; from the next release the review's candidate build uses the same --release name as the deploy (both games; process)
   - Bailey: “deploy every release as soon as its review says it can ship. for all other decisions i'll go with all your recommendations even for sound effects and music.” (blanket yes)
@@ -7353,13 +7355,13 @@ Monday · 23 decisions
   - Source: The driver’s pick of 2026-10-19 15:11 EDT (DRIVER-STATE.md: the pass-2 lane launched; the pass-2 videos were done at 17:34) under Bailey’s 2026-10-18 …
 - <a id="d-1068"></a>**D-1068** — Bailey reset his weekly usage and the driver stays on this account: no account switch, not even at 97 percent, until he says otherwise; near the limit again the driver tells him and asks (process; replaces D-1063’s trigger for now)
   - Bailey: “I just reset my usage so we're all good now. I used my free reset! Don't switch accounts stay on this one please.”
-  - What changed: Item 140. Weekly usage went to 0 percent and the 5-hour window to 0 percent (the week resets 2026-10-23 16:00 EDT). The usage mode is NORMAL again. The driver’s memory was updated; the account-switch trigger of D-1063 is not run.
-  - area process · both games · adopted · delivery implemented · at ~16:19 EDT · refines [D-1063](#d-1063)
+  - What changed: Item 140. Weekly usage went to 0 percent and the 5-hour window to 0 percent (the week resets 2026-10-23 16:00 EDT). The usage mode is NORMAL again. The driver’s memory was updated; the account-switch trigger of D-1063 is not run. Ended by D-1128 (item 165, 2026-10-20 about 17:55 EDT): he picked “Switch this whole account when it runs out”, so the account-switch routine runs again at weekly 97 percent for all sessions.
+  - area process · both games · superseded by [D-1128](#d-1128) · delivery implemented · at ~16:19 EDT · refines [D-1063](#d-1063)
   - Source: Bailey, 2026-10-19 16:19 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “I just reset my usage so we're all good now. I used my free …
 - <a id="d-1069"></a>**D-1069** — DELEGATED: Bahamut, its twin Spathi and Grothia (Ifrit’s twin) stay OFF; an EXPRESSIVE-KEYS pilot on Bahamut (format v2 painted head, neck and wing variants in its attack and hurt keys, at the idle’s size) decides the method before more rigs are fitted (FFX only)
   - Bailey: “in advance i will go with all your recommendations. im going to work now. i trust you.” (blanket yes)
-  - What changed: Item 141. Source origin/rig-aeons-2 870c3890f. Bahamut’s rig fixes the Chapter III knockout shrink (head x0.843 and a 42.6 px one-frame step with the paintings; x1.0000 and 2.3 px with the rig) but its attack and hurt keys are flatter than the paintings (the lunging neck and the thrown-back head become a lean); Grothia showed no hurt-to-knockout swap in its chapter. The pilot (branch rig-expressive, launched 18:28 EDT, new rig bahamut-x) is compared on one sheet with today’s rig and the painting; if it reads as the painting with no size jump, the method goes to Ifrit, Pterya, Shiva and the next aeons before more rigs are fitted. The lane kit’s lessons (feet are the lowest thick part, glow skirts stack, premultiplied composite counts) go into its README.
-  - area art · FFX · adopted · delivery in progress · at ~18:27 EDT · refines [D-1050](#d-1050)
+  - What changed: Item 141. Source origin/rig-aeons-2 870c3890f. Bahamut’s rig fixes the Chapter III knockout shrink (head x0.843 and a 42.6 px one-frame step with the paintings; x1.0000 and 2.3 px with the rig) but its attack and hurt keys are flatter than the paintings (the lunging neck and the thrown-back head become a lean); Grothia showed no hurt-to-knockout swap in its chapter. The pilot (branch rig-expressive, launched 18:28 EDT, new rig bahamut-x) is compared on one sheet with today’s rig and the painting; if it reads as the painting with no size jump, the method goes to Ifrit, Pterya, Shiva and the next aeons before more rigs are fitted. The lane kit’s lessons (feet are the lowest thick part, glow skirts stack, premultiplied composite counts) go into its README. The pilot finished on 2026-10-19 at 20:05 EDT (origin/rig-expressive 7d15ed226) and the driver’s follow-up picks are D-1082, D-1083 and D-1084; Bahamut’s rig itself did not go on (D-1087).
+  - area art · FFX · adopted · delivery implemented · at ~18:27 EDT · refines [D-1050](#d-1050)
   - Source: The driver’s pick of 2026-10-19 18:27 EDT (DRIVER-STATE.md: the driver viewed the Bahamut sheets) under Bailey’s advance yes of 2026-10-18 14:18 EDT, …
 - <a id="d-1070"></a>**D-1070** — The animation prototype’s item use is liked as drawn: a green glowing orb formed over the raised hand and tossed overhand to an ally (a glow on the user for self-use), no flask; the animation track keeps going (FFX only; his reaction to the pass-2 videos)
   - Bailey: “I like the orb toss, keep going”
@@ -7383,8 +7385,8 @@ Monday · 23 decisions
   - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
 - <a id="d-1074"></a>**D-1074** — The orb toss and the self-use glow ship for every FFX party member’s item use, rigged or painted, in the next release; FFX-2’s item gesture is sourced first from a live session (FFX only)
   - Bailey: “i'll go with all of your recommendations” (blanket yes)
-  - What changed: Item 143d. The lane (launched 19:01 EDT, branch anim-orb-ship from the release 58 line, in D:/pyrefly-anim-proto) draws the orb and the glow for every FFX party member; FFX-2 is left unchanged until its own gesture is sourced, which live session 7 then did (D-1081).
-  - area art · FFX · adopted · delivery in progress · at ~19:01 EDT · refines [D-1070](#d-1070)
+  - What changed: Item 143d. The lane (launched 19:01 EDT, branch anim-orb-ship from the release 58 line, in D:/pyrefly-anim-proto) draws the orb and the glow for every FFX party member; FFX-2 is left unchanged until its own gesture is sourced, which live session 7 then did (D-1081). Delivered in release 59 (6db09ac86, live 2026-10-20 00:15 EDT): the live check saw the orb from Tidus to Yuna with the heal numeral and the green glow on a self-use, and the focused review saw it for all seven FFX party members and for Phoenix Down on a knocked-out ally.
+  - area art · FFX · adopted · delivery implemented · at ~19:01 EDT · refines [D-1070](#d-1070)
   - Source: Bailey, 2026-10-19 19:01 EDT (the DRIVER-STATE line), in the Claude Code chat, verbatim: “i'll go with all of your recommendations”, after the …
 - <a id="d-1075"></a>**D-1075** — Animation pass 3 on Lulu: a connected attack (the strike lands where the body goes), a knockout that folds, and the cast kept on FFX’s own timing (the longer cast is the game’s; no faster variant); then the method goes to Kimahri (FFX Lulu; clip plumbing shared)
   - Bailey: “i'll go with all of your recommendations” (blanket yes)
@@ -7408,16 +7410,466 @@ Monday · 23 decisions
   - Source: Bailey, 2026-10-19 19:08 EDT (the DRIVER-STATE line; the queue’s hand-typed 19:15 ran late), picked “Now, I'm away from the PC” on the driver’s …
 - <a id="d-1079"></a>**D-1079** — DELEGATED: the move advisor must not recommend a losing line: in FFX Chapter XIV the card follows the chapter’s tactic line, as FFX-2 Chapter XIII’s already does, and a sweep of every chapter on the engine checks that following the card wins at least as often as the tactic (FFX only)
   - Bailey: “i'll go with all of your recommendations” (blanket yes)
-  - What changed: Item 145. Found by the release 58 review route: in Chapter XIV the card is a simulated ranking that loses link 3 on 40 of 40 engine seeds when followed, while the chapter’s own tactic wins 35 of 40. The fix works as FFX-2 Chapter XIII’s advisor-line.ts already does (the FFX card reads the tactic where one exists); the review route keeps reading the card, so CHK-022 keeps its meaning: the advice a player sees wins. Rejected: making the harness read the guide’s NEXT line. The lane launched at 19:34 EDT on the r59-fixes line. A separate route bug, the Doublecast card text that turned 84 of 368 picks into Attack in Chapter III, was already fixed on origin/r59-fixes 029618774 (route-doublecast.mjs, FFX only).
-  - area ui · FFX · adopted · delivery in progress · at ~19:16 EDT
+  - What changed: Item 145. Found by the release 58 review route: in Chapter XIV the card is a simulated ranking that loses link 3 on 40 of 40 engine seeds when followed, while the chapter’s own tactic wins 35 of 40. The fix works as FFX-2 Chapter XIII’s advisor-line.ts already does (the FFX card reads the tactic where one exists); the review route keeps reading the card, so CHK-022 keeps its meaning: the advice a player sees wins. Rejected: making the harness read the guide’s NEXT line. The lane launched at 19:34 EDT on the r59-fixes line. A separate route bug, the Doublecast card text that turned 84 of 368 picks into Attack in Chapter III, was already fixed on origin/r59-fixes 029618774 (route-doublecast.mjs, FFX only). Delivered in release 60 (origin/r59-fixes 0befa7935 merged; live 2026-10-20 17:06 EDT): the advisor follows the chapter’s own line in FFX Chapter XIV and the Mirror Aeons card. The all-chapter sweep over 40 seeds lifted the Chapter XIV card from 13 wins to 35 (the tactic wins 35) and the Mirror Aeons card from 3 to 9 (the tactic wins 24; the rest is the card’s silence on the Yojimbo and Magus menus, which waits on the payment-screen mockup and on Bailey).
+  - area ui · FFX · adopted · delivery implemented · at ~19:16 EDT
   - Source: The driver’s pick of 2026-10-19 19:16 EDT (DRIVER-STATE.md: items 145 and 146 recorded) under Bailey’s “i'll go with all of your recommendations” of …
 - <a id="d-1080"></a>**D-1080** — DELEGATED: the continuity check’s head measure compares a rig’s head mesh only between keys that show the SAME head part; a key that swaps to another head (Lulu’s front-view variant) is judged by the on-screen head height against its class band (both games; review tooling)
   - Bailey: “i'll go with all of your recommendations” (blanket yes)
-  - What changed: Item 146. Without it the next review would flag Kimahri’s and Lulu’s front-view keys, whose head meshes sit 16 and 25 percent off the idle’s. Kimahri’s follow key (1.29 of the idle height, PR-0462, spear bone scale 1.327) is a real rig defect and its refit is owed. The release 58 rig-reader fix itself (R58-T1: RigActor builds its PaintedActor with figure:false, so the probe saw “not showing”; Ifrit’s knockout run counted 4 swaps where it counted 0) is on origin/r59-fixes 029618774.
-  - area critic · both games · adopted · delivery in progress · at ~19:16 EDT
+  - What changed: Item 146. Without it the next review would flag Kimahri’s and Lulu’s front-view keys, whose head meshes sit 16 and 25 percent off the idle’s. Kimahri’s follow key (1.29 of the idle height, PR-0462, spear bone scale 1.327) is a real rig defect and its refit is owed. The release 58 rig-reader fix itself (R58-T1: RigActor builds its PaintedActor with figure:false, so the probe saw “not showing”; Ifrit’s knockout run counted 4 swaps where it counted 0) is on origin/r59-fixes 029618774. Delivered in release 60 with origin/r59-fixes 0befa7935: Lulu’s defend (0.959) and Overdrive fury (1.029) pass the head measure; Kimahri’s follow key (1.2885 of the idle height) still fails and his rig is off (D-1085).
+  - area critic · both games · adopted · delivery implemented · at ~19:16 EDT
   - Source: The driver’s pick of 2026-10-19 19:16 EDT (DRIVER-STATE.md) under Bailey’s “i'll go with all of your recommendations” of 2026-10-19 19:01 EDT (D-1071 …
 - <a id="d-1081"></a>**D-1081** — DELEGATED: FFX-2’s item use stays distinct from FFX’s: a wide camera, a short gesture by the user toward the target (a quick small toss on an ally, a quick self gesture on herself) and a white-blue sparkle burst on the target, NOT FFX’s green orb (FFX-2 only)
   - Bailey: “i'll go with all of your recommendations” (blanket yes)
-  - What changed: Item 147, on the reverse-engineering session’s recommendation from live session 7 (measured, tag [M]). FFX’s own gesture is by target, not by character: self is an arm raised overhead with a glow, an ally gets the glowing green orb tossed overhand, as pass 2 draws it; FFX’s close-up camera waits for the camera-lab test (the camera grammar rule). Haste does not shorten an action’s effect animation in FFX-2, only the throw wait, as the action-time model assumes. The animation lane was told at 19:34 EDT to add the FFX-2 variant.
-  - area art · FFX-2 · adopted · delivery in progress · at ~19:33 EDT · refines [D-1074](#d-1074)
+  - What changed: Item 147, on the reverse-engineering session’s recommendation from live session 7 (measured, tag [M]). FFX’s own gesture is by target, not by character: self is an arm raised overhead with a glow, an ally gets the glowing green orb tossed overhand, as pass 2 draws it; FFX’s close-up camera waits for the camera-lab test (the camera grammar rule). Haste does not shorten an action’s effect animation in FFX-2, only the throw wait, as the action-time model assumes. The animation lane was told at 19:34 EDT to add the FFX-2 variant. Delivered in release 59: a white-blue spark and burst on the target for Yuna, Rikku and Paine, with no green orb in FFX-2, seen in the focused review and in the live check.
+  - area art · FFX-2 · adopted · delivery implemented · at ~19:33 EDT · refines [D-1074](#d-1074)
   - Source: The driver’s pick of 2026-10-19 19:33 EDT (DRIVER-STATE.md: live session 7 done) under Bailey’s “i'll go with all of your recommendations” of …
+- <a id="d-1082"></a>**D-1082** — DELEGATED: Bahamut’s expressive rig (bahamut-x) goes ON in release 59, unless Bailey says otherwise on the sheet (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 148a. The pilot (origin/rig-expressive 7d15ed226, art D:/pyrefly-art-rigs/bahamut-x): attack and hurt draw the paintings’ own head, neck and wings as format v2 variants on the rig’s body at the idle’s size; gate attack 0.778 to 0.885, hurt 0.803 to 0.873; head area 1.018 of the idle; the knockout box x1.001 and 1.9 px against the painting set’s x0.811 and 42.6 px. The driver viewed the three-way sheet: clearly closer to the paintings. The recommendation lasted about an hour: his reaction to the Kimahri rig (D-1087) held Bahamut’s rig back, so nothing from this row went into release 59.
+  - area art · FFX · superseded by [D-1087](#d-1087) · nothing to build · at ~20:05 EDT · refines [D-1069](#d-1069)
+  - Source: The driver’s pick of 2026-10-19 20:05 EDT (the DRIVER-STATE line: expressive pilot done, item 148), shown to him with the three-way sheet at 20:06, …
+- <a id="d-1083"></a>**D-1083** — DELEGATED: the expressive-keys method is the standard for aeons and bosses from now on: Ifrit (with Grothia), Spathi (from bahamut-x), Shiva (ON only if it reads as her paintings), then Pterya, before any new subject is fitted (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 148b. Built by the expressive-2 lane (origin/rig-expressive-2 ab09a619f, launched 20:06 EDT, complete 02:24 EDT on 2026-10-20): ifrit-x 0.804 and 0.832, grothia-x 0.808 and 0.817, spathi-x 0.889 and 0.876, shiva-x 0.977 and 0.982, pterya-x 0.930 and 0.935 (attack and hurt gate), all gated OK and all OFF; none replaces a live rig before he has seen it in motion (D-1097). The same method built the two demo boss rigs (D-1111).
+  - area art · FFX · adopted · delivery implemented · at ~20:05 EDT · refines [D-1073](#d-1073)
+  - Source: The driver’s pick of 2026-10-19 20:05 EDT (the DRIVER-STATE line: expressive pilot done, item 148), shown to him with the three-way sheet at 20:06, …
+- <a id="d-1084"></a>**D-1084** — DELEGATED: the next pilot is an expressive KO key, the KO painting’s own shapes scaled to the idle’s size, because the authored KO crouch still reads as standing (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 148c. Done inside the expressive-2 lane and the boss rigs: Shiva-x’s knockout box x1.000 (a step of 131.9 against 155.9 today and 230.1 for the painting), Spathi’s x1.001 against the painting’s x0.82, the FFX-2 Bahamut rig’s x1.001 against the painting’s x1.079 and a 142 px jump. Only the two boss rigs are live (release 60).
+  - area art · FFX · adopted · delivery implemented · at ~20:05 EDT
+  - Source: The driver’s pick of 2026-10-19 20:05 EDT (the DRIVER-STATE line: expressive pilot done, item 148), shown to him with the three-way sheet at 20:06, …
+- <a id="d-1085"></a>**D-1085** — Kimahri’s rig goes OFF in the next release (release 59, cut at once): back to his paintings, which he had before release 55 (FFX only)
+  - Bailey: “how is this a good animation for kimahri? looks like crap...”
+  - What changed: Item 149. The driver agreed he is right. Live in release 59 (6db09ac86, 2026-10-20 00:15 EDT): the live check saw Kimahri painted in Chapter I and in Biran and Yenke (the rig list reports kimahri on:false) and the focused review saw him painted everywhere. Liked: nothing named. Disliked: the Kimahri rig as it moved (authored keys bending a costume). Must change: the animation. Undecided: when a redo is acceptable (D-1086).
+  - area art · FFX · adopted · delivery implemented · refines [D-971](#d-971)
+  - Source: Bailey, 2026-10-19 about 20:40 EDT (the queue’s time; the DRIVER-STATE line is 21:07 EDT), in the Claude Code chat, verbatim: “how is this a good …
+- <a id="d-1086"></a>**D-1086** — DELEGATED: Kimahri’s rig returns only after a redo with the expressive-keys method (the pose paintings’ own parts), the spear bone fix (scale 1.327, PR-0462) and the knockout footprint, shown to him as MOTION clips, not stills, before it is switched on (FFX only)
+  - Bailey: “how is this a good animation for kimahri? looks like crap...”
+  - What changed: Item 149. The driver’s follow-through on D-1085. For the conference demo Kimahri stays on his paintings (D-1148); the redo waits until after 2026-10-26.
+  - area art · FFX · adopted · delivery not scheduled · at ~21:07 EDT · refines [D-1085](#d-1085)
+  - Source: The driver’s pick of 2026-10-19 21:07 EDT (the DRIVER-STATE line) on his words above. Delegated: the pick is the driver’s recommendation. Item 149 of …
+- <a id="d-1087"></a>**D-1087** — DELEGATED: Bahamut’s expressive rig (D-1082) does NOT go on in release 59: it waits for his look at its motion clips too; Lulu’s rig, which he liked, stays on (FFX only)
+  - Bailey: “how is this a good animation for kimahri? looks like crap...”
+  - What changed: Item 149. Release 59 (live 2026-10-20) has Lulu’s rig on and no Bahamut rig; the live check saw Lulu and Valefor on. The FFX-2 Bahamut rig of the demo (D-1111) is a different subject, made later with the same method and shown to him in motion first.
+  - area art · FFX · adopted · delivery implemented · at ~21:07 EDT · refines [D-1069](#d-1069) · replaces [D-1082](#d-1082)
+  - Source: The driver’s pick of 2026-10-19 21:07 EDT (the DRIVER-STATE line) on his words above. Delegated: the pick is the driver’s recommendation. Item 149 of …
+- <a id="d-1088"></a>**D-1088** — The conference demo slice is one FFX chapter and one FFX-2 chapter, polished to the maximum, plus the title screen; the driver picks the two chapters that look strongest today (both games)
+  - Bailey: “One FFX + one FFX-2 chapter (Recommended)” (blanket yes)
+  - What changed: Item 150a. The driver picked Chapter I Seymour Flux (FFX) and Chapter IV Bahamut (FFX-2) in D-1109. Live in release 60 and refined in 61.
+  - area release · both games · adopted · delivery implemented · at ~21:44 EDT · see [D-1109](#d-1109)
+  - Source: Bailey, 2026-10-19 21:44 EDT (the DRIVER-STATE line; the queue’s hand-typed 21:50 ran late), in the Claude Code chat, verbatim: “I need a way to …
+- <a id="d-1089"></a>**D-1089** — Three distinct visual styles are rendered in the real game on the demo chapters, as stills and short clips, before the style is built (both games)
+  - Bailey: “Show me 3 looks in-game tomorrow (Recommended)” (blanket yes)
+  - What changed: Item 150b. Done by the looks lane: ?look=hd2d, cinematic and anime with a normal-map relight and spell lights at 60 fps (origin/demo-look 918963c89, 2026-10-20 02:44 EDT), compare sheets and clips in D:/Tools/pyrefly-scratch/2026-10-19/demo-looks/. The driver’s verdict was correct but too subtle for “amaze me”, so a BOLD pass followed (9a5bef47b, 10:49 EDT). His pick is D-1110.
+  - area visuals · both games · adopted · delivery implemented · at ~21:44 EDT
+  - Source: Bailey, 2026-10-19 21:44 EDT (the DRIVER-STATE line; the queue’s hand-typed 21:50 ran late), in the Claude Code chat, verbatim: “I need a way to …
+- <a id="d-1090"></a>**D-1090** — The demo runs on his own desktop PC: tune for its GPU, and keep an offline copy so the demo does not need the conference wifi (both games)
+  - Bailey: “This PC”
+  - What changed: Item 150c. The offline kit is tools/demo-kit (fetch-site, start, stop, reset and status commands and a small node server; a hash-verified download from the live site; the full copy is 10.2 GiB to a folder on C:, --max-tier 2 is 3.0 GiB), built by the r61-booth lane. Tested: the downloader on 32 files. Not run yet: kiosk mode, a gamepad run and the full download. It is due by 2026-10-25 (D-1093) and set up by the driver (D-1156).
+  - area release · both games · adopted · delivery in progress · at ~21:44 EDT
+  - Source: Bailey, 2026-10-19 21:44 EDT (the DRIVER-STATE line; the queue’s hand-typed 21:50 ran late), in the Claude Code chat, verbatim: “I need a way to …
+- <a id="d-1091"></a>**D-1091** — Depth and surface-shape (normal) maps are made from the existing paintings on the GPU, for light on the paintings, with no new art (both games)
+  - Bailey: “Yes, use the GPU (Recommended)” (blanket yes)
+  - What changed: Item 150d. Done: D:/pyrefly-art-maps holds 373 paintings and 5 backdrops mapped with MoGe-2’s normal head through ComfyUI’s own code in its embedded Python (no server, no download; finished 2026-10-19 23:20 EDT); the release art folder D:/pyrefly-art-r60 adds 202 lighting maps (+82 MB shipped) for the two demo chapters (origin/r60-art 1cea6e937, manifest lightMaps, tools/art-mirror-add-maps.mjs). Live in release 60. Broad light and rim work; faces are soft.
+  - area visuals · both games · adopted · delivery implemented · at ~21:44 EDT
+  - Source: Bailey, 2026-10-19 21:44 EDT (the DRIVER-STATE line; the queue’s hand-typed 21:50 ran late), in the Claude Code chat, verbatim: “I need a way to …
+- <a id="d-1092"></a>**D-1092** — DELEGATED: the driver’s plan for the week (recommended and taken): a finished global look (grade, glow, depth of field, light shafts), light on the paintings, motion for every figure without a rig, living backgrounds on the demo chapters, rigs only where proven; day 1 options, days 2 to 4 build, day 5 the reviewed demo build live, day 6 his playtest and the offline copy, day 7 spare (both games)
+  - Bailey: “I need a way to quickly improve the graphical fidelity of the game as well as the motion, animation, visual style. I demo my game in a week at a huge gaming conference.”
+  - What changed: Item 150. Plan file D:/Tools/pyrefly-scratch/2026-10-19/DEMO-PROGRAM.md. The timeline moved with his later answers: playtest Thursday evening 2026-10-22 and a freeze on Friday night 2026-10-23 (D-1153, D-1154).
+  - area process · both games · adopted · delivery in progress · at ~21:45 EDT
+  - Source: The driver’s plan of 2026-10-19 21:45 EDT (the DRIVER-STATE line: demo program started), on his request above. Delegated: the plan is the driver’s …
+- <a id="d-1093"></a>**D-1093** — The conference demo is on 2026-10-26: the demo build must be live and its offline copy ready by 2026-10-25 at the latest (day 5, 10-24, the reviewed build; day 6, 10-25, his playtest and the offline copy) (both games)
+  - Bailey: “Yes it's October 26th”
+  - What changed: Item 151. Answers the driver’s question of the date. The week’s dates were tightened by D-1153 and D-1154 (freeze Friday night 10-23, playtest Thursday 10-22).
+  - area process · both games · adopted · delivery in progress · at ~21:49 EDT
+  - Source: Bailey, 2026-10-19 21:49 EDT (the DRIVER-STATE line; the queue’s hand-typed 22:00 ran late), in the Claude Code chat, verbatim: “Yes it's October …
+- <a id="d-1094"></a>**D-1094** — The ComfyUI that the Codex desktop app had left running on port 8892 since 2026-10-17 01:57, and the app’s smoke-test window, are stopped (process)
+  - Bailey: “Yes please”
+  - What changed: Item 152. Done at 21:59 EDT: the driver stopped by PID the ComfyUI (31 GB committed, mostly paged out) and the Electron smoke-test window with its three children; the app’s small node server was left running, and it starts its ComfyUI again when its image feature is used. Free RAM went from 264 MB to 26.5 GB and the commit charge from 142 GB to 104 GB.
+  - area process · both games · adopted · delivery implemented · at ~21:59 EDT
+  - Source: Bailey, 2026-10-19 21:59 EDT (the DRIVER-STATE line; the queue’s hand-typed 22:10 ran late), in the Claude Code chat, verbatim: “Yes please”, to the …
+- <a id="d-1095"></a>**D-1095** — DELEGATED: the engine cross-fades a rig’s variant images, and the demo’s pose-painting swaps, over a short blend instead of switching them at the half-way point (rig format v2.1 fadeMs), because the half-way pop shows in motion (shared plumbing)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 153a. Built in the demo-motion lane (origin/demo-motion c9f4df395, 2026-10-20 03:33 EDT): a 110 ms variant cross-fade, a blend tuned by silhouette agreement, breathing squash of 0.6 to 1.2 percent, hit-stop of 17 to 150 ms with a damage shake and a 0.08 s flash; Chapter I swap jerks 22 to 13 and Chapter IV 21 to 15. Live in release 60. Release 61 shortens the fade to 40 ms when a move swaps the whole figure (5 to 6 frames of double image became 2; the PR-0478 finding stays open for one two-body frame at Bahamut’s idle to attack). docs/CONTRACT-CHANGES.md has the entry.
+  - area tech · both games · adopted · delivery implemented · at ~23:02 EDT
+  - Source: The driver’s picks of 2026-10-19 23:02 EDT (the DRIVER-STATE line: expressive-2 built, item 153) under Bailey’s “i'll go with all of your …
+- <a id="d-1096"></a>**D-1096** — DELEGATED: the rig budget for aeons and bosses rises from 9 MB / 9 Mpx to 12 MB / 12 Mpx so the borrowed wings and bodies stay sharp; party rigs keep 9
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 153b. tools/rig-gate.mjs reads 12 MB for bosses and aeons since origin/rig-demo-bosses 791f080a9 (the FFX-2 Bahamut rig is 11.76 MB).
+  - area tech · both games · adopted · delivery implemented · at ~23:02 EDT
+  - Source: The driver’s picks of 2026-10-19 23:02 EDT (the DRIVER-STATE line: expressive-2 built, item 153) under Bailey’s “i'll go with all of your …
+- <a id="d-1097"></a>**D-1097** — DELEGATED: none of the five expressive-2 rigs replaces a live rig until Bailey has looked at its final recording in motion; Ifrit-x and Pterya-x would replace the live Ifrit and Pterya, Shiva-x would be her first (FFX only)
+  - Bailey: “i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 153c. Recordings and motion clips of all five are in D:/Tools/pyrefly-scratch/2026-10-19/rig-expressive-2/&lt;name&gt;/for-bailey/; the demo took the week and he has not yet reacted to them. Release 61 lights the live Ifrit and Valefor rigs with normal pieces and replaces none with an expressive-2 rig.
+  - area art · FFX · adopted · delivery in progress · at ~23:02 EDT
+  - Source: The driver’s picks of 2026-10-19 23:02 EDT (the DRIVER-STATE line: expressive-2 built, item 153) under Bailey’s “i'll go with all of your …
+- <a id="d-1098"></a>**D-1098** — An experimental hidden 3D chapter is made after he saw Meshy’s 3D Kimahri, built from a Codex picture (30 credits) (FFX-2 only)
+  - Bailey: “I like it can we do an experimental 3d chapter that's hidden?”
+  - What changed: Item 154a. The pilot was his own instruction to that session (Kimahri A-pose through the Art Room and Codex, then Meshy, then Blender); nothing from it went into the game. The chapter became the hidden yrp chapter (D-1103); its models and look changed after D-1115 to D-1130 (see D-1131).
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-1131](#d-1131)
+  - Source: Bailey, 2026-10-19 about 23:00 EDT, to the D emergency session (the session that runs the Meshy pilot and the real-model extraction), relayed to the …
+- <a id="d-1099"></a>**D-1099** — The 3D chapter’s fight is “FFX-2 trio vs a boss” (not picked: Kimahri vs the Ronso, the FFX party vs a boss) (FFX-2 only)
+  - Bailey: “FFX-2 trio vs a boss”
+  - What changed: Item 154b. The trio is Yuna (Gunner), Rikku (Thief) and Paine (Warrior).
+  - area chapters · FFX-2 · adopted · delivery in progress
+  - Source: Bailey, 2026-10-19 about 23:00 EDT, to the D emergency session (the session that runs the Meshy pilot and the real-model extraction), relayed to the …
+- <a id="d-1100"></a>**D-1100** — The 3D chapter’s look is “Painted toon” (not picked: realistic like the preview, or both with a switch): cel bands and an ink outline matching the paintings (FFX-2 only)
+  - Bailey: “Painted toon (Recommended)” (blanket yes)
+  - What changed: Item 154c. Replaced in steps: the painterly options were rejected (D-1117), the “Toon v7 + flat face” target was approved and withdrawn (D-1129, D-1130), and the chapter now uses the real FFX-2 models (D-1131), which keeps the stage grade, wet floor, long lens and clip roles and drops the toon material, the ink line and the stepped motion.
+  - area visuals · FFX-2 · superseded by [D-1131](#d-1131) · nothing to build
+  - Source: Bailey, 2026-10-19 about 23:00 EDT, to the D emergency session (the session that runs the Meshy pilot and the real-model extraction), relayed to the …
+- <a id="d-1101"></a>**D-1101** — The 3D chapter’s boss is Bahamut (not picked: Ixion at Djose, Vegnagun) (FFX-2 only)
+  - Bailey: “Bahamut (Recommended)” (blanket yes)
+  - What changed: Item 154d. The plan: end-state frames painted first (three layouts, best of 7) for his pick (D-1104), then the models; the chapter’s code (secret word at chapter select, the 3D plumbing, the FFX-2 Bahamut battle data) on its own branch, kept out of the demo builds until after 2026-10-26 (D-1102).
+  - area chapters · FFX-2 · adopted · delivery in progress
+  - Source: Bailey, 2026-10-19 about 23:00 EDT, to the D emergency session (the session that runs the Meshy pilot and the real-model extraction), relayed to the …
+- <a id="d-1102"></a>**D-1102** — The D emergency session runs the hidden 3D chapter’s code lane in a sparse tree from origin/main, kept out of the demo builds until after 2026-10-26; the driver reviews it and folds it into the first release after the conference (FFX-2 only)
+  - Bailey: “Yes that's fine”
+  - What changed: Item 154e. The branch is local (exp-yrp-3d); nothing from it is in a release. It was handed back to the D emergency session when the track changed (D-1131).
+  - area chapters · FFX-2 · adopted · delivery in progress · refines [D-1098](#d-1098)
+  - Source: Bailey, 2026-10-19 about 23:10 EDT (the D emergency session’s time; relayed and logged by the driver at 23:54 EDT, the DRIVER-STATE line), to that …
+- <a id="d-1103"></a>**D-1103** — The 3D chapter’s secret word is “yrp”, checked against chapterDoors.ts on 48568a21f: no collision and no prefix clash (FFX-2 only)
+  - Bailey: “yrp”
+  - What changed: Item 154f. The word is typed on the chapter board like the other hidden chapters’ words; the final chapter number is assigned at merge, not by a branch.
+  - area chapters · FFX-2 · adopted · delivery in progress · refines [D-1098](#d-1098)
+  - Source: Bailey, 2026-10-19 about 23:10 EDT (the D emergency session’s time; relayed and logged by the driver at 23:54 EDT, the DRIVER-STATE line), to that …
+- <a id="d-1104"></a>**D-1104** — DELEGATED: the 3D chapter’s end-state target is frame A, “classic, now in 3D”; frames B and C stay as references for big moves (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!” (blanket yes)
+  - What changed: Item 155a. Picked by the D emergency session while he slept; he has not seen the target. See the target tile in docs/target/targets.json.
+  - area chapters · FFX-2 · adopted · delivery in progress · at ~23:58 EDT
+  - Source: Bailey, 2026-10-19 23:58 EDT (the DRIVER-STATE line; its label says 10-20 but it sits before 00:15 on 10-20), verbatim to the D emergency session, …
+- <a id="d-1105"></a>**D-1105** — DELEGATED: the 3D chapter’s models of Yuna (Gunner), Rikku (Thief), Paine (Warrior) and Bahamut come from Codex pictures (the Art Room, best of 7), then Meshy image-to-3D (about 30 credits each), then Codex cleanup in Blender (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!” (blanket yes)
+  - What changed: Item 155b. The models were made and shown, and he rejected them (“It looks like AI slop…”, D-1130); the chapter moved to the real FFX-2 models (D-1131).
+  - area art · FFX-2 · superseded by [D-1131](#d-1131) · delivery implemented · at ~23:58 EDT
+  - Source: Bailey, 2026-10-19 23:58 EDT (the DRIVER-STATE line; its label says 10-20 but it sits before 00:15 on 10-20), verbatim to the D emergency session, …
+- <a id="d-1106"></a>**D-1106** — DELEGATED: rigging: the trio with Meshy’s auto-rig (humanoid, about 5 credits each, walk and run clips), Bahamut animated procedurally in the game; Meshy cap 400 credits for the night (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!” (blanket yes)
+  - What changed: Item 155c. Overtaken with 155b by D-1130 and D-1131.
+  - area art · FFX-2 · superseded by [D-1131](#d-1131) · delivery implemented · at ~23:58 EDT
+  - Source: Bailey, 2026-10-19 23:58 EDT (the DRIVER-STATE line; its label says 10-20 but it sits before 00:15 on 10-20), verbatim to the D emergency session, …
+- <a id="d-1107"></a>**D-1107** — DELEGATED: the 3D chapter’s code lane is the branch exp-yrp-3d in a sparse tree (D:\pyrefly-yrp-3d) from 48568a21f, out of the demo builds until after 2026-10-26, for the driver’s review (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!” (blanket yes)
+  - What changed: Item 155d. The local branch was handed to the D emergency session for the real-models track (D-1131). Nothing is on main or in a release.
+  - area chapters · FFX-2 · adopted · delivery in progress · at ~23:58 EDT
+  - Source: Bailey, 2026-10-19 23:58 EDT (the DRIVER-STATE line; its label says 10-20 but it sits before 00:15 on 10-20), verbatim to the D emergency session, …
+- <a id="d-1108"></a>**D-1108** — DELEGATED: the four 16-bit depth maps (bevelle-underground, djose-chamber-provisional, gagazet, macalania-temple) are copied byte for byte into D:\Tools\pyrefly-art-backup\fx-16bit-originals-r38\ with a README (a backup)
+  - Bailey: “I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!” (blanket yes)
+  - What changed: Item 155e. A backup of the originals before anything rewrites them; no game change.
+  - area art · both games · adopted · delivery implemented · at ~23:58 EDT
+  - Source: Bailey, 2026-10-19 23:58 EDT (the DRIVER-STATE line; its label says 10-20 but it sits before 00:15 on 10-20), verbatim to the D emergency session, …
+- **Picture** (chapters) — Approved: Hidden yrp 3D chapter: target frame A, “classic, now in 3D” (FFX-2 only; the D emergency session’s pick, delegated)
+  - Bailey: “I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!” (blanket yes)
+  - Delivery: The chapter’s models changed after this pick: the AI-made cast was rejected (D-1130) and the chapter now uses the real FFX-2 models (D-1131). The code lane is the local branch exp-yrp-3d (not pushed, in no release, out of the conference builds), secret word yrp (D-1103). Whether frame A still describes the end state with the real models is open.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-1098](#d-1098), [D-1103](#d-1103), [D-1130](#d-1130), [D-1131](#d-1131)
+  - Source: docs/target/targets.json, group chapters, tile "Hidden yrp 3D chapter: target frame A, “classic, now in 3D” (FFX-2 only; the D emergency session’s …
+
+### 2026-10-20
+
+Tuesday · 57 decisions
+
+- <a id="d-1109"></a>**D-1109** — DELEGATED: the demo chapters are Chapter I Seymour Flux (FFX, Mt. Gagazet) and Chapter IV Bahamut (FFX-2, Bevelle Underground), plus the title screen (both games)
+  - Bailey: “One FFX + one FFX-2 chapter (Recommended)” (blanket yes)
+  - What changed: Item 156. Chosen from the contact sheet of 27 chapters (D:/Tools/pyrefly-scratch/2026-10-19/demo-looks/contact/contact-overview.png) and the reverse-engineering audits. Chapter I: one fight under 10 minutes, the biggest figures on screen, every figure and the backdrop have lighting maps. Chapter IV: the three girls under a dragon that fills the frame, one fight with the Mega Flare clock. Not picked: Chapter III (link 1 alone is 112 to 194 party turns), Chapter V (the girls small, two links), Chapters VII and XI (no maps yet). FFX-2 Bahamut is also the worst pose-swapper in the census (22 swaps a minute), so it got the motion work and a rig first. Live in release 60.
+  - area release · both games · adopted · delivery implemented · at ~00:49 EDT · refines [D-1088](#d-1088)
+  - Source: The driver’s pick of 2026-10-20 00:49 EDT (the DRIVER-STATE line) under Bailey’s 150a “One FFX + one FFX-2 chapter (Recommended)”, where the driver …
+- <a id="d-1110"></a>**D-1110** — The demo look is “HD-2D bold” for both demo chapters: light shafts, motes, a soft backdrop, figures lit and grounded; not picked: cinematic bold, a per-chapter mix, anime (both games)
+  - Bailey: “HD-2D bold (Recommended)” (blanket yes)
+  - What changed: Item 157a. Live in release 60 as the default in Chapters I and IV, keyed by chapter id; ?look=off and, from release 61, OPTIONS VISUAL STYLE: CLASSIC (D-1134) turn it off. Release 61 adds per-part normal pieces so the rigged bosses are lit (D-1166).
+  - area visuals · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-20 about 11:00 EDT (the queue’s time; the DRIVER-STATE line is 11:42 EDT), on the driver’s morning package (TODAY-vs-DEMO clips, two …
+- <a id="d-1111"></a>**D-1111** — The two boss rigs go ON in the demo build: the FFX-2 Bahamut rig (FFX-2 only) and the Seymour Flux body rig (FFX only); Mortiorchis stays painted
+  - Bailey: “Yes, both (Recommended)” (blanket yes)
+  - What changed: Item 157b. The rigs are ffx2-bahamut-x and seymour-flux-x from origin/rig-demo-bosses 791f080a9 (gate 0.98 to 0.99 at every key; Mortiorchis was a NO-GO: different drawings). Live in release 60 with the disclosed FOC60-01 (head size up to 8 percent on Seymour and 18 percent on Bahamut); release 61 brought them to 0.52 and 0.67 percent and kept them on (D-1166).
+  - area art · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-20 about 11:00 EDT (the queue’s time; the DRIVER-STATE line is 11:42 EDT), on the driver’s morning package (TODAY-vs-DEMO clips, two …
+- <a id="d-1112"></a>**D-1112** — Demo mode opens Chapter I with the party: a demo-build setting pins a fight where the party moves first (seeds 7, 10 or 12 per the reverse-engineering audit); the game’s rules do not change (FFX only, Chapter I)
+  - Bailey: “Demo mode: party moves first (Recommended)” (blanket yes)
+  - What changed: Item 157c. Live in release 60: ?demo=1 pins Chapter I seeds 7, 10 and 12 (party first, proved) and Chapter IV seed 56. The audit found Seymour acts first in 177 of 200 seeds and the party is knocked out at the first menu in 64 of 200.
+  - area release · FFX · adopted · delivery implemented
+  - Source: Bailey, 2026-10-20 about 11:00 EDT (the queue’s time; the DRIVER-STATE line is 11:42 EDT), on the driver’s morning package (TODAY-vs-DEMO clips, two …
+- <a id="d-1113"></a>**D-1113** — Live session 8 on the real FFX (Steam) runs now, with Bailey away from the PC: t3b with save 57 first, then t3a with two allies knocked out, then the grey palette index (FFX only)
+  - Bailey: “Now, I'm away from the PC”
+  - What changed: Item 157d. The reverse-engineering session ran to 11:49 EDT with the saves restored (112 and 0) and the ini original. Settled: t3b (D-1114). Not reached: t3a with two knocked out and the grey palette index, both still owed.
+  - area process · FFX · adopted · delivery implemented · see [D-1078](#d-1078)
+  - Source: Bailey, 2026-10-20 about 11:00 EDT (the queue’s time; the DRIVER-STATE line is 11:42 EDT), on the driver’s morning package (TODAY-vs-DEMO clips, two …
+- <a id="d-1114"></a>**D-1114** — DELEGATED: the foe-list cursor start (t3b, cursorStartFoe) goes ON in release 60: the first Attack in Chapter I opens on Seymour, as in the game (FFX only)
+  - Bailey: “measure first”
+  - What changed: Item 158. Bailey’s own t3b pick was “measure first” (D-999). Measured live in session 8 [M]: the first foe command opens on formation index 0, then slot order with wrap, which is exactly cursorStartFoe. The switch is on in src/battle/ffx/target-step-parity.ts (origin/re-parity-r60-t3b 1bfbe7768: one switch line, three re-pinned tests, a revert proof, goldens untouched). Live in release 60 (the live check saw the cursor open on Seymour Flux). Open after the demo: arrow stepping in slot order (the game) against screen order (ours). t3a with two allies knocked out and the grey palette index stay owed.
+  - area combat · FFX · adopted · delivery implemented · at ~11:49 EDT · refines [D-999](#d-999)
+  - Source: The driver’s pick of 2026-10-20 11:49 EDT (the DRIVER-STATE line: reverse-engineering session 8 done) on his “measure first”. Delegated: the pick is …
+- <a id="d-1115"></a>**D-1115** — The hidden yrp chapter gets a second track: GPT Images 2.5 pictures (Art Room, in the style of the approved paintings), then Meshy, then Blender, in the game’s painterly look (FFX-2 only; relayed)
+  - Bailey: “GPT generates image &gt; sends to Meshy via API &gt; gets model from Meshy and brings into Blender MCP for further optimization and cleanup. looks get an experimental chapter with yrp using this workflow please. i have artroom to collaborate gpt images 2.5. lets use our painterly look from our game.”
+  - What changed: Item 159. The first reading was that it supersedes his 12:40 pick “use the real FFX-2 models” for this chapter; his correction (D-1116) says it does not. A look-options round came first and the pilot’s Meshy cap was 80 credits. Lane: the painterly session, D:\pyrefly-yrp-3d, branch exp-yrp-3d at c74cecc15, scratch in D:\Tools\pyrefly-scratch\2026-10-20\yrp-painterly\; out of the demo builds. The track ended at D-1130 and D-1131.
+  - area chapters · FFX-2 · superseded by [D-1131](#d-1131) · nothing to build · at ~12:47 EDT
+  - Source: Bailey, 2026-10-20 12:47 EDT, verbatim to the “GPT to Meshy to Blender workflow” session, relayed: “GPT generates image &gt; sends to Meshy via API &gt; …
+- <a id="d-1116"></a>**D-1116** — CORRECTION: the AI-painterly yrp chapter and the real-FFX-2-models track are separate works and BOTH are kept, for him to compare (FFX-2 only; relayed)
+  - Bailey: “keep both so i can compare. this is separate work”
+  - What changed: Item 159a. Item 159 does NOT supersede his 12:40 pick. The comparison happened, and he chose the real models (D-1131).
+  - area chapters · FFX-2 · superseded by [D-1131](#d-1131) · nothing to build · refines [D-1115](#d-1115)
+  - Source: Bailey, 2026-10-20 about 12:55 EDT (the queue’s time, which the queue’s time-correction note keeps; the DRIVER-STATE line is 13:01 EDT), verbatim, …
+- <a id="d-1117"></a>**D-1117** — REJECTED: the yrp painterly look options A “Living painting”, B “Ink and paint” and C “Brushwork”: all three read as uncanny valley (FFX-2 only; relayed)
+  - Bailey: “they all look very uncanny valley”
+  - What changed: Item 160a. Liked: nothing named. Disliked: all three, as uncanny valley. Must change: the uncanny read. Undecided: the look. It was the second uncanny-valley rejection that day, so a method check was written (D:\Tools\pyrefly-scratch\2026-10-20\yrp-painterly\METHOD-CHECK.md) and a third round was rendered for him: D1 anime-proper 3D, D2 stylised hand-painted 3D, D3 painted girls in a 3D world.
+  - area art · FFX-2 · rejected · nothing to build
+  - Source: Bailey, 2026-10-20 about 13:55 EDT (the yrp session’s clock ran about 1 h 40 min late; its time correction of 14:40 EDT and the DRIVER-STATE line of …
+- <a id="d-1118"></a>**D-1118** — The Meshy credit cap for the rest of the yrp cast (Rikku, Paine, Bahamut) is 250 credits, held until a look passes (up to about 50 for the D2 Yuna test) (FFX-2 only; relayed)
+  - Bailey: “250 credits (Recommended)” (blanket yes)
+  - What changed: Item 160b. Lifted within minutes by D-1119.
+  - area process · FFX-2 · superseded by [D-1119](#d-1119) · nothing to build
+  - Source: Bailey, 2026-10-20 about 13:55 EDT (the yrp session’s clock ran about 1 h 40 min late; its time correction of 14:40 EDT and the DRIVER-STATE line of …
+- <a id="d-1119"></a>**D-1119** — The Meshy cap is lifted: the bar is “looks really good, no more uncanny valley”; the lane keeps a soft guard of 1,000 credits for the day and reports every spend (FFX-2 only; relayed)
+  - Bailey: “you can spend as many credits as you want honestly it just needs to look really good. no more uncanny valley please...”
+  - What changed: Item 160c. About 1,060 credits were spent that day (balance about 6,460) before the track stopped (D-1131).
+  - area process · FFX-2 · adopted · delivery implemented · replaces [D-1118](#d-1118)
+  - Source: Bailey, 2026-10-20 about 14:00 EDT (the yrp session’s corrected time; the DRIVER-STATE line is 13:53 EDT), verbatim, relayed. Item 160 of the …
+- <a id="d-1120"></a>**D-1120** — Four prototypes test whether Meshy models help the 2.5D game, on Chapter IV: poses painted from a posed Meshy model, a proxy-based relight of the billboards, proxy shadows and floor reflections, and full 3D bosses and Meshy props, with before and after screenshots; scratch only (FFX-2 test case; the techniques would be both games’ plumbing)
+  - Bailey: “do all the above i want to see the difference. send me plenty of screenshots as well please.”
+  - What changed: Item 161. It also covered the D1, D2 and D3 yrp round; soft credit guards were 600 (Meshy) and 60 (poses); integration after the demo with his pick was the plan. The AI-painterly track stopped at D-1131 with its outputs parked in D:\Tools\pyrefly-scratch\2026-10-20\yrp-painterly\; nothing was integrated.
+  - area visuals · FFX-2 · superseded by [D-1131](#d-1131) · nothing to build
+  - Source: Bailey, 2026-10-20 about 14:05 EDT (the yrp session’s corrected time; the DRIVER-STATE line is 13:58 EDT), verbatim, relayed, on “is meshy still …
+- <a id="d-1121"></a>**D-1121** — PAUSED, then retracted: the yrp painterly experiments and the 2.5D Meshy prototypes pause until after the conference, results parked; every session works the conference plan until 2026-10-26 unless a piece clearly improves the demo (a standing priority for every session; FFX-2 only for the paused work)
+  - Bailey: “those were just experiments. please focus. my deadline is monday for the game conference. we had a concrete plan in place already. unless this is going to improve our game somehow....”
+  - What changed: Item 162. The pause was applied for about ten minutes. Results were parked in D:\Tools\pyrefly-scratch\2026-10-20\yrp-painterly\ (Meshy spend 648 credits at that point). The retraction is D-1122.
+  - area process · FFX-2 · superseded by [D-1122](#d-1122) · nothing to build
+  - Source: Bailey, 2026-10-20 about 14:25 EDT (the yrp session’s corrected time; the DRIVER-STATE line is 14:23 EDT), verbatim to the yrp session, relayed. Item …
+- <a id="d-1122"></a>**D-1122** — RETRACTED: the pause of D-1121 is dropped for the yrp painterly lanes: they resume, obeying REVIEW-BROWSER and RIG-RECORD, with nothing into release 60 (FFX-2 only; relayed)
+  - Bailey: “no please keep going. i was in the wrong conversation sorry.”
+  - What changed: Item 162a. Which conversation his “please focus ... we had a concrete plan in place already” was meant for is not known; the demo plan stays the driver’s priority regardless. The driver told the D emergency session at 14:24 EDT that its own request to park the work was withdrawn.
+  - area process · FFX-2 · adopted · delivery implemented · replaces [D-1121](#d-1121)
+  - Source: Bailey, 2026-10-20 about 14:30 EDT (the yrp session’s corrected time; the DRIVER-STATE line is 14:24 EDT), verbatim, relayed. Item 162 of the …
+- <a id="d-1123"></a>**D-1123** — A new experimental hidden chapter in a Wind Waker HD look, separate from the fayth, yrp and painterly yrp chapters, using GPT image, then Meshy, then Blender; round 1 is four concept frames and nothing is built until he picks (game case follows his pick; it became FFX-2 only at D-1124)
+  - Bailey: “lets try a new experimental hidden chapter (separate from the ones we're working ) and make it like wind waker hd esque graphics for for our ffx/ffx-2 game”
+  - What changed: Item 163. Round 1 frames: A Evrae on the Fahrenheit deck (FFX), B Sinspawn Gui at Mushroom Rock (FFX), C YRP vs Valefor at Besaid (FFX-2, about 3 heads tall), D the same moment about 5 heads tall. No Meshy spend or code until he picks; later its own branch exp-windwaker, out of the 2026-10-26 builds. The chapter number and door word are settled at merge: the new-chapter preflights hold provisional XXIX Spectral Keeper and XXX Fallen Maesters and yrp’s branch uses 29, so numbers are assigned at merge, not by branches.
+  - area chapters · FFX-2 · adopted · delivery in progress
+  - Source: Bailey, 2026-10-20 about 14:15 EDT (the Wind Waker session’s time; the DRIVER-STATE line is 14:28 EDT), verbatim to the Wind Waker chapter session, …
+- <a id="d-1124"></a>**D-1124** — The Wind Waker chapter’s encounter is “C: YRP vs Valefor”, reusing hidden chapter 24’s encounter data (research/ffx2-fallen-aeons.md section 7.1) (FFX-2 only)
+  - Bailey: “C: YRP vs Valefor (Recommended)” (blanket yes)
+  - What changed: Item 164a. Target: D:\Tools\pyrefly-scratch\2026-10-20\windwaker\target\TARGET-C.png and TARGET.md (see the target tile). The Yuna Gunner pilot (GPT sheet, Meshy with enhancement on and PBR off, rig 1.2 m, 5 clips, Blender cleanup) started; no GPU or browser while REVIEW-BROWSER stood, and no code or repo writes.
+  - area chapters · FFX-2 · adopted · delivery in progress
+  - Source: Bailey, 2026-10-20 about 15:10 EDT (the DRIVER-STATE line is 15:15 EDT), relayed by the Wind Waker session, his picks on its question card. Item 164a …
+- <a id="d-1125"></a>**D-1125** — The Wind Waker chapter’s proportions are “Wind Waker short”, about 3 heads tall (FFX-2 only)
+  - Bailey: “Wind Waker short (Recommended)” (blanket yes)
+  - What changed: Item 164b. Built in the 3D models of D-1124 (Yuna, Paine and Rikku 1.20, 1.25 and 1.15 m).
+  - area art · FFX-2 · adopted · delivery in progress
+  - Source: Bailey, 2026-10-20 about 15:10 EDT (the DRIVER-STATE line is 15:15 EDT), relayed by the Wind Waker session, his picks on its question card. Item 164b …
+- <a id="d-1126"></a>**D-1126** — The Wind Waker chapter’s Meshy cap is 300 credits for the chapter’s models, the pilot up to 100 (FFX-2 only)
+  - Bailey: “300 credits (Recommended)” (blanket yes)
+  - What changed: Item 164c. 200 of the 300 were spent by 16:00 EDT; raised to 550 by D-1163.
+  - area process · FFX-2 · superseded by [D-1163](#d-1163) · nothing to build
+  - Source: Bailey, 2026-10-20 about 15:10 EDT (the DRIVER-STATE line is 15:15 EDT), relayed by the Wind Waker session, his picks on its question card. Item 164c …
+- <a id="d-1127"></a>**D-1127** — The Wind Waker chapter’s secret word is “waker”; the final word and the chapter number are assigned at merge (FFX-2 only)
+  - Bailey: “waker (Recommended)” (blanket yes)
+  - What changed: Item 164d. The branch uses the placeholder number 30 and the word waker.
+  - area chapters · FFX-2 · adopted · delivery in progress
+  - Source: Bailey, 2026-10-20 about 15:10 EDT (the DRIVER-STATE line is 15:15 EDT), relayed by the Wind Waker session, his picks on its question card. Item 164d …
+- <a id="d-1128"></a>**D-1128** — Switch this whole account when it runs out: every session continues as it is and the account-switch routine runs for ALL sessions at weekly 97 percent; this ends the hold of D-1068 (process; both games)
+  - Bailey: “Switch this whole account when it runs out”
+  - What changed: Item 165. His question card at weekly 48 percent about 26 hours after his reset (projected to run out Wednesday night; the reset Friday 16:00). Not picked: moving the experiments to another account, pausing the experiments, keeping everything with a warning at 85 percent. The switch ran on 2026-10-21 at 16:18 EDT, when weekly reached 96 percent and he asked the driver to look at all his instances and pick the next account: every conversation was imported into the next account and the artifacts were republished there (A-ledger, the account switch row).
+  - area process · both games · adopted · delivery implemented · refines [D-1063](#d-1063) · replaces [D-1068](#d-1068)
+  - Source: Bailey, 2026-10-20 about 17:55 EDT (the DRIVER-STATE line was written at 19:25 EDT; his time is the one in his standing rules), picked on the …
+- <a id="d-1129"></a>**D-1129** — APPROVED TARGET, then withdrawn: the hidden yrp 3D chapter’s look is “Toon v7 + flat face”: the Dragon Quest XI-style toon-3D Yuna shaded “D1” (ellipsoid face normals, a shadow-free face, two soft body bands, a thin silhouette ink line, 12 fps stepped motion, a long lens) (FFX-2 only; relayed)
+  - Bailey: “Toon v7 + flat face (Recommended)” (blanket yes)
+  - What changed: Item 166. Reaction: liked the toon v7 design with flat-face shading (his only named property); not picked: hand-painted v3, D3 painted billboards, the anime-3D variants, A, B and C; undecided: Rikku, Paine and Bahamut in this style, clips, weapons, stage. Images: look-lab-d\out\board-d2.png (row 1, D1 columns) and look-lab-d\out\d2\toon3d-v7\D1-*.png in the yrp scratch folder; the model is the Art Room proposal p_cafb54bb as a .glb. WITHDRAWN about four hours later by D-1130; the tile in docs/target/targets.json is recorded as withdrawn.
+  - area art · FFX-2 · superseded by [D-1130](#d-1130) · nothing to build
+  - Source: Bailey, 2026-10-20 about 17:30 EDT by the yrp session’s clock (which ran about 1 h 40 min late on items 160 to 162a, so the true time may be earlier; …
+- <a id="d-1130"></a>**D-1130** — REJECTED: the AI toon-3D cast (Yuna, Rikku, Paine and Bahamut made through the Art Room, Meshy and Blender); the “Toon v7 + flat face” target of D-1129 is withdrawn (FFX-2 only; relayed)
+  - Bailey: “It looks like AI slop…”
+  - What changed: Item 167a. His words were “It looks like AI slop…” and “The models look bad”. Liked: nothing named. Disliked: the Meshy models themselves. It was the fourth rejection of visibly AI-made 3D that day. Must change: do not offer AI-made 3D as final art.
+  - area art · FFX-2 · rejected · nothing to build · replaces [D-1129](#d-1129)
+  - Source: Bailey, 2026-10-20 about 21:40 EDT (the DRIVER-STATE line), verbatim, relayed by the yrp painterly session. Item 167a of the driver’s list (the …
+- <a id="d-1131"></a>**D-1131** — The hidden yrp chapter uses the real FFX-2 models (the D emergency session’s extraction track); the AI-painterly track is stopped and its outputs are parked (FFX-2 only; relayed)
+  - Bailey: “Real FFX-2 models (Recommended)” (blanket yes)
+  - What changed: Item 167b. The local branch exp-yrp-3d was handed to the D emergency session, keeping the stage grade, the wet floor, the long lens and the clip roles and dropping the toon D1 material, the ink line and the stepped motion. Outputs: D:\Tools\pyrefly-scratch\2026-10-20\yrp-painterly\. Meshy spend by that session that day about 1,060 credits (balance about 6,460).
+  - area chapters · FFX-2 · adopted · delivery in progress
+  - Source: Bailey, 2026-10-20 about 21:45 EDT (the DRIVER-STATE line is 21:40 EDT), picked on the session’s question card “what should the 3D yrp chapter use …
+- <a id="d-1132"></a>**D-1132** — The new title picture, The Echo (Yuna kneeling in still water, the painted “Echoes of Spira” lettering), becomes the DEFAULT title art; the current default (title/keyart, “Farplane Field, the Gullwings”) stays selectable from the title menu itself (both games)
+  - Bailey: “you need to incorporate the new title screen picture as the default the echoes of spira concept art looking one but make the current one selectable at the title menu itself also please.”
+  - What changed: Item 168. Live in release 61 (branch r61-ux 8d4906adc): TITLE_ARTS lists echo, then farplane; a player who never chose gets The Echo; the old “farplane” saves count as unpicked and now open on The Echo. SAVE-DATA CLASS: Settings gained titleArtPicked and visualStyle, migrated in SaveData.migrate, so the candidate got a deep review before the deploy (round 28: CHK-024 PASS on 12 fixtures).
+  - area ui · both games · adopted · delivery implemented · at ~23:34 EDT
+  - Source: Bailey, 2026-10-20 23:34 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:15 ran late), in the Claude Code chat, verbatim, after he …
+- <a id="d-1133"></a>**D-1133** — A “T TITLE ART” entry in the title’s bottom key row cycles the pictures with a cross-fade and remembers the pick (both games)
+  - Bailey: “A key in the bottom row (Recommended)” (blanket yes)
+  - What changed: Item 168a. Live in release 61: a click, a tap, the key T or, on a pad, Y (r61-pad) cycles The Echo and the Farplane painting with a 300 ms cross-fade, and the pick is saved.
+  - area ui · both games · adopted · delivery implemented · at ~23:34 EDT · refines [D-1132](#d-1132)
+  - Source: Bailey, 2026-10-20 23:34 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:15 ran late), picked on the driver’s question card. Item …
+- <a id="d-1134"></a>**D-1134** — OPTIONS gets a VISUAL STYLE row: HD-2D or CLASSIC, default HD-2D in the chapters that have the look (both games; review finding PR-0493)
+  - Bailey: “Yes, an Options toggle (Recommended)” (blanket yes)
+  - What changed: Item 168b. Live in release 61. CLASSIC draws no look anywhere, as ?look=off; a ?look= address still wins. The setting lives in SaveData (the save-data class).
+  - area ui · both games · adopted · delivery implemented · at ~23:34 EDT · refines [D-1110](#d-1110)
+  - Source: Bailey, 2026-10-20 23:34 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:15 ran late), picked on the driver’s question card. Item …
+- <a id="d-1135"></a>**D-1135** — Auron’s first-run tip in the first command menu of Chapter I becomes “He strikes first. Weather it, then hit back.” (it was “He moves after you. Not before.”, wrong in about 88 percent of seeds) (FFX only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 168c. His option label is not in the queue. Live in release 61 for Chapter I, but the deep review found the line false at the first menu of several other FFX chapters because the tip is keyed by mechanic (PR-0487); the release 62 fix keys it by chapter.
+  - area ui · FFX · adopted · delivery in progress · at ~23:34 EDT
+  - Source: Bailey, 2026-10-20 23:34 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:15 ran late), on the driver’s question card (his label is …
+- <a id="d-1136"></a>**D-1136** — Chapter IV’s results get a softer cue and a neutral or sombre Rikku portrait; everything else is unchanged (FFX-2 only; review findings PR-0482 and PR-0485)
+  - Bailey: “Quieter results for this fight (Recommended)” (blanket yes)
+  - What changed: Item 168d. Live in release 61: the win plays the sparse cue pause instead of victory-bahamut, and Rikku’s tile is drawn from her Dark Knight painting (no sombre plate exists); the “...Yunie.” dialogue portrait was left alone. Whether Rikku’s grin and Yuna’s smiling wedge stay is his open question (PR-0485).
+  - area ui · FFX-2 · adopted · delivery implemented · at ~23:34 EDT
+  - Source: research/ffx-vs-ffx2-presentation.md
+- <a id="d-1137"></a>**D-1137** — One visitor’s turn at the booth is about five minutes: one fight
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169a. The Chapter IV fight fits in five minutes (200 of 200 engine seeds win); Chapter I’s fight was audited at 10 to 15 minutes, which is why demo mode pins a party-first start and why PR-0481 (a 12 to 14 second wait before the first command in headless runs) is being fixed in release 62.
+  - area release · both games · adopted · delivery in progress · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1138"></a>**D-1138** — The visitor picks from a two-card menu: Seymour Flux (FFX) or Bahamut (FFX-2)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169b. Live in release 61 (origin/r61-flow 69513d948): a two-card picker with no party prep in demo mode.
+  - area release · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1139"></a>**D-1139** — The demo starts at the title screen (The Echo), Start, pick a fight; a reset key returns there
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169c. Live in release 61: holding Home or Select plus Start for 1.5 s resets (a reload); the booth’s ring shows the hold (z-index 100000, demo mode only).
+  - area release · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1140"></a>**D-1140** — The Pilgrimage is mentioned at the booth, not shown
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169d. Nothing was built: the demo contains only the two fights, so the Pilgrimage is simply absent; the spoken mention belongs to the booth.
+  - area release · both games · adopted · delivery not scheduled · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1141"></a>**D-1141** — Visitors play and Bailey guides: pick-up-in-seconds
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169e. Served by the cleaner demo HUD (D-1146), the advisor’s one-line tip and docs/BOOTH-SCRIPT.md (the pad flow and a warm-up of both fights before the doors open).
+  - area release · both games · adopted · delivery in progress · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1142"></a>**D-1142** — Input at the booth is a GAMEPAD: every demo screen fully works on a pad, with pad button hints
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169f. Built in release 61 (origin/r61-pad 61040d213): padMap.ts is one table, inputDevice.ts shows keyboard and pad glyphs live (Xbox, PlayStation and Switch drawn), the enemy-move slab moved to R3 (FFX) to free Back plus Start for the reset, and pad-only wins took 51 turns in Chapter I and 41 in Chapter IV. Still needs a real pad: stick feel, non-standard pads, the Bushido, Trigger Happy and Lady Luck prompts. A gamepad A or Start does not yet skip the authored opening (release 62).
+  - area release · both games · adopted · delivery in progress · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1143"></a>**D-1143** — The booth screen is a 1440p monitor
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169g. Live in release 61: the key-hint strip scales at 1440p, and the pad and keyboard smoke of the candidate ran at 2560x1440 through both fights, the reset, the attract reel and CLASSIC with 0 errors.
+  - area release · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1144"></a>**D-1144** — Audio at the booth is headphones for the player: the full mix with the cloned voices and a sane default volume
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169h. The audio defaults were measured and left as they are (no change) by the pad lane.
+  - area audio · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1145"></a>**D-1145** — Difficulty at the booth is faithful, with the advisor’s hints visible
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169i. No balance change; demo mode keeps the advisor’s one-line tip.
+  - area combat · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1146"></a>**D-1146** — A cleaner demo HUD: demo mode shows the command menu, the HP bars and the advisor’s one-line tip; the guide and intent panels start hidden, one key shows them
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169j. Live in release 61: the guide and the enemy-move panels start folded to their chips in demo mode.
+  - area ui · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1147"></a>**D-1147** — If a boss rig’s double-image fix is not convincing by Thursday, that boss ships with its paintings
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169k. Release 61 fixed the head size (Bahamut 18.03 to 0.67 percent, Seymour Flux 8.03 to 0.52) and shortened the whole-figure swap fade (double image 5 to 6 frames down to 2), but round 28 still sees one two-body frame at Bahamut’s idle to attack (PR-0478). His Thursday evening playtest decides; the fallback is the painting set per boss.
+  - area art · both games · adopted · delivery in progress · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1148"></a>**D-1148** — Kimahri stays on his paintings for the demo; the rig redo waits until after the conference
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169l. Kimahri has been painted since release 59 (D-1085).
+  - area art · FFX · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1149"></a>**D-1149** — The Seymour backdrop gets depth and life (parallax layers, drifting snow and mist, moonlight), shown as a before and after clip first
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169m. Shown as D:/Tools/pyrefly-scratch/2026-10-21/r61-gagazet/for-bailey/gagazet-before-after.mp4; his yes is D-1165. Live in release 61.
+  - area visuals · FFX · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1150"></a>**D-1150** — An attract loop: after 60 seconds idle on the title, a self-running highlight reel of both fights (real gameplay, auto-played); any button returns to the title
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169n. Live in release 61: a 44 s Seymour Flux reel and a roughly 55 s Bahamut reel with the Mega Flare in a time-lapse middle.
+  - area release · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1151"></a>**D-1151** — Take-away: a QR code to echoesofspira.com in the title’s corner in demo mode, and a printable card
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169o. Live in release 61: the game’s own QR encoder (checked with a decoder) and docs/booth/qr-card.png and .pdf.
+  - area release · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1152"></a>**D-1152** — The HD-2D look keeps the strength it has live
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169p. No change: the bold strength of release 60 stays.
+  - area visuals · both games · adopted · delivery implemented · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1153"></a>**D-1153** — The freeze is Friday night 2026-10-23: Thursday’s release is the candidate and Friday fixes only what his playtest finds
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169q. Release 62 (PR-0504 results music, PR-0487 Auron’s tip, PR-0481 warm-up and the pad skip, PR-0512) is the Thursday candidate.
+  - area process · both games · adopted · delivery in progress · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1154"></a>**D-1154** — His playtest is Thursday evening 2026-10-22
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169r. The live build for the playtest is release 61, or 62 if its review passes first.
+  - area process · both games · adopted · delivery in progress · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1155"></a>**D-1155** — The live site keeps updating during the conference; it is not frozen
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169s. Only the offline copy (D-1156) is frozen.
+  - area release · both games · adopted · delivery not scheduled · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1156"></a>**D-1156** — The offline copy runs on THIS PC, set up by the driver: one double-click, full screen, gamepad
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 169t. tools/demo-kit exists (D-1090); the full download, the kiosk and the pad run are still to be done before 2026-10-25.
+  - area release · both games · adopted · delivery in progress · at ~23:39 EDT
+  - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
+- <a id="d-1157"></a>**D-1157** — The Wind Waker verdict is “Build the chapter”: a real hidden chapter behind “waker” playing chapter 24’s Valefor fight with the Meshy models, on its own branch exp-windwaker (cut from origin/r60-art at the driver’s request), out of the conference builds until after 2026-10-26 (FFX-2 only)
+  - Bailey: “Build the chapter (Recommended)” (blanket yes)
+  - What changed: Item 170a. His rejection of the yrp AI toon cast (D-1130) concerned that cast; whether these Wind Waker models pass the same eye is open until he sees them in play. Phase 1 (item 170h of the queue, A-ledger): branch exp-windwaker in D:\pyrefly-ww from r60-art 1cea6e937, tip b7207bc37, src/engine/ww3d (27 files), scene exp-windwaker-stage with the placeholder number 30; phase 2 and polish 1 are in D-1164. Not pushed.
+  - area chapters · FFX-2 · adopted · delivery in progress · at ~23:40 EDT
+  - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170a of …
+- <a id="d-1158"></a>**D-1158** — The Wind Waker chapter’s shading is “HD”: the Wind Waker HD bloom and rim (FFX-2 only)
+  - Bailey: “HD (Recommended)” (blanket yes)
+  - What changed: Item 170b. Built in phase 1.
+  - area visuals · FFX-2 · adopted · delivery in progress · at ~23:40 EDT
+  - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170b of …
+- <a id="d-1159"></a>**D-1159** — Fix Rikku’s bandana patch in the Wind Waker models (FFX-2 only)
+  - Bailey: “Rikku's bandana patch”
+  - What changed: Item 170c. Part of the fix list he chose after the run-3 renders.
+  - area art · FFX-2 · adopted · delivery in progress · at ~23:40 EDT
+  - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170c of …
+- <a id="d-1160"></a>**D-1160** — Rebuild Valefor for the Wind Waker chapter (about 35 credits) (FFX-2 only)
+  - Bailey: “Rebuild Valefor”
+  - What changed: Item 170d. Inside the 550-credit cap of D-1163.
+  - area art · FFX-2 · adopted · delivery in progress · at ~23:40 EDT
+  - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170d of …
+- <a id="d-1161"></a>**D-1161** — Better weapons for the Wind Waker models (about 35 credits each) (FFX-2 only)
+  - Bailey: “Better weapons”
+  - What changed: Item 170e. Inside the 550-credit cap of D-1163.
+  - area art · FFX-2 · adopted · delivery in progress · at ~23:40 EDT
+  - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170e of …
+- <a id="d-1162"></a>**D-1162** — A better temple for the Wind Waker chapter’s stage (FFX-2 only)
+  - Bailey: “Better temple”
+  - What changed: Item 170f. The stage is scene exp-windwaker-stage.
+  - area art · FFX-2 · adopted · delivery in progress · at ~23:40 EDT
+  - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170f of …
+- <a id="d-1163"></a>**D-1163** — The Wind Waker chapter’s Meshy cap rises from 300 to 550 credits (212 spent) (FFX-2 only)
+  - Bailey: “550 (Recommended)” (blanket yes)
+  - What changed: Item 170g. Replaces D-1126.
+  - area process · FFX-2 · adopted · delivery in progress · at ~23:40 EDT · replaces [D-1126](#d-1126)
+  - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170g of …
+- **Picture** (chapters) — Approved: Hidden yrp 3D chapter look: “Toon v7 + flat face” (the Dragon Quest XI-style toon-3D Yuna shaded D1; FFX-2 only) - WITHDRAWN
+  - Bailey: “Toon v7 + flat face (Recommended)” (blanket yes)
+  - Delivery: Never built into the game. Withdrawn about four hours after the pick, when he saw the whole AI toon-3D cast: “It looks like AI slop…” and “The models look bad” (D-1130); the chapter moved to the real FFX-2 models (D-1131).
+  - area chapters · FFX-2 · superseded by "Rejected: the AI toon-3D cast (“It looks like AI slop…”), D-1130" · delivery not scheduled · see [D-1130](#d-1130), [D-1131](#d-1131)
+  - Source: docs/target/targets.json, group chapters, tile "Hidden yrp 3D chapter look: “Toon v7 + flat face” (the Dragon Quest XI-style toon-3D Yuna shaded D1; …
+- **Picture** (chapters) — Approved: Experimental hidden chapter, Wind Waker look: target frame C-3, Besaid toon 3-head, YRP vs Valefor (FFX-2 only)
+  - Bailey: “C: YRP vs Valefor (Recommended)” (blanket yes)
+  - Delivery: Built on the local branch exp-windwaker (D:\pyrefly-ww from r60-art 1cea6e937; phase 1 tip b7207bc37, then phase 2 and polish 1 at 90f544912; not pushed, in no release and out of the conference builds). The models are the Meshy ones (Yuna, Paine and Rikku about 30k triangles each, 24-joint rigs, 7 clips; Valefor static) and the chapter plays chapter 24’s Valefor fight (D-1157, D-1164). His fixes after the run-3 rende
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-1130](#d-1130), [D-1157](#d-1157), [D-1164](#d-1164), [D-1159](#d-1159), [D-1162](#d-1162)
+  - Source: docs/target/targets.json, group chapters, tile "Experimental hidden chapter, Wind Waker look: target frame C-3, Besaid toon 3-head, YRP vs Valefor …
+
+### 2026-10-21
+
+Wednesday · 3 decisions
+
+- <a id="d-1164"></a>**D-1164** — The Wind Waker chapter keeps the starting outfits: the 3D models stay Gunner, Thief and Warrior after a dressphere change and the HUD shows the current dressphere; no credits and no gameplay change; revisit after the conference (FFX-2 only)
+  - Bailey: “Keep starting outfits (Recommended)” (blanket yes)
+  - What changed: Item 171. Phase 2 (a real-key playtest from title to victory, 99 stills, 0 console errors) and polish 1 (75 stills, 4 clips) are done on exp-windwaker (tip 90f544912 on r60-art, not pushed; 18 files, 250 tests). Merge notes: BattleScreenWiring.ts one line (the FFX-2 guide starts folded when a scene declares it) and its test; scene flags ownGrade and noRigs. Known: the shared spell impact burst is white for 1 to 2 frames, and the advisor card grazes Paine’s boot.
+  - area chapters · FFX-2 · adopted · delivery in progress · refines [D-1157](#d-1157)
+  - Source: Bailey, 2026-10-21 about 04:20 EDT (the Wind Waker session’s time; the driver logged it at 09:43 EDT), picked on the session’s question card, …
+- <a id="d-1165"></a>**D-1165** — The Seymour backdrop of Chapter I gets moonbeams, a moon-glitter road on the ice, wind gusts and mist banks (origin/r61-gagazet) (FFX only)
+  - Bailey: “Yes, ship it (Recommended)” (blanket yes)
+  - What changed: Item 172a. origin/r61-gagazet 677741175 (parallax already shipped in release 60; this adds wind gusts, the moon glitter road and sheen, mist banks and the moon shaft origin, with quality tiers; about 0.4 ms, 60 fps). Live in release 61.
+  - area visuals · FFX · adopted · delivery implemented · at ~09:51 EDT · refines [D-1149](#d-1149)
+  - Source: Bailey, 2026-10-21 09:51 EDT (the DRIVER-STATE line; the queue’s hand-typed 10:00 ran late), picked on the driver’s morning question card. Item 172a …
+- <a id="d-1166"></a>**D-1166** — The boss rigs stay ON after the fixes (head size steady: Bahamut 18 to 0.7 percent, Seymour 8 to 0.5; double image about 2 frames; lit by the room; origin/r61-rigs) (FFX-2 Bahamut and FFX Seymour Flux)
+  - Bailey: “Keep both rigs on (Recommended)” (blanket yes)
+  - What changed: Item 172b. origin/r61-rigs a08267bf8: rig parts carry normal pieces (the relight reaches rigs: mean 7.6 and 8.3 levels), the head mesh fix (0 of 30 key changes fail on both rigs), fadeMsFor (110 ms for small changes, 40 ms for whole-figure swaps), new rigs ffx2-bahamut-x2, seymour-flux-x2, valefor-n1 and ifrit-n1, art mirror D:/pyrefly-art-r61. Not run in that lane: real-game continuity and the full suite; round 28 did the continuity and still sees the two-body frame (PR-0478). The fallback rule is D-1147.
+  - area art · both games · adopted · delivery implemented · at ~09:51 EDT · refines [D-1111](#d-1111)
+  - Source: Bailey, 2026-10-21 09:51 EDT (the DRIVER-STATE line; the queue’s hand-typed 10:00 ran late), picked on the driver’s morning question card. Item 172b …

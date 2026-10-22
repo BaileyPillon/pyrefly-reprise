@@ -1976,6 +1976,90 @@
               "the driver's delegated picks since the target (D-499, D-502, D-503, D-504 and D-512 to D-516): the arena plate and the five fiends' idles, the girls' idles, Leblanc's hurt, which surfaces and poses to paint, Brother's portrait version 7, Paine's pause plate p_98c6b3ac over its facing redo, Power Break kept at 8.0, Yuna's item redo, and the room graded toward mockup B with an experiment-only HUD ink rule; each is his to overturn"
             ]
           }
+        },
+        {
+          "label": "Hidden yrp 3D chapter: target frame A, “classic, now in 3D” (FFX-2 only; the D emergency session’s pick, delegated)",
+          "state": "approved",
+          "pill": "Approved: the session’s pick, delegated",
+          "approved": "Picked by the D emergency session under Bailey’s “I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!” on 2026-10-19 23:58 EDT (D-1104); Bailey has not seen it",
+          "build": "The end-state moment of the hidden 3D chapter: the Gullwings (Yuna Gunner, Rikku Thief, Paine Warrior) against Bahamut in the classic layout, in 3D. Frames B and C are kept as references for bigger moves. The three layouts were painted in the Art Room (best of 7); the pictures live in that session’s work folder and are not in the repo yet.",
+          "delivery": "in-progress",
+          "deliveryNote": "The chapter’s models changed after this pick: the AI-made cast was rejected (D-1130) and the chapter now uses the real FFX-2 models (D-1131). The code lane is the local branch exp-yrp-3d (not pushed, in no release, out of the conference builds), secret word yrp (D-1103). Whether frame A still describes the end state with the real models is open.",
+          "game": "ffx2",
+          "gameNote": "FFX-2 only: the cast is the three Gullwings and the boss is FFX-2’s Bahamut (D-1099, D-1101).",
+          "note": "Delegated to the session while he slept; nothing here is his word except the blanket yes and the picks of D-1098 to D-1103."
+        },
+        {
+          "label": "Hidden yrp 3D chapter look: “Toon v7 + flat face” (the Dragon Quest XI-style toon-3D Yuna shaded D1; FFX-2 only) - WITHDRAWN",
+          "state": "approved",
+          "pill": "Withdrawn",
+          "approved": "Bailey, 2026-10-20 ~17:30 EDT by the yrp session’s clock (the driver logged it at 19:26 EDT), picked on the session’s question card: “Toon v7 + flat face (Recommended)” (D-1129)",
+          "build": "The toon-3D Yuna v7 (the Art Room proposal p_cafb54bb, a .glb in the yrp scratch folder) shaded D1: ellipsoid face normals, a shadow-free face, two soft body bands, a thin silhouette ink line, 12 fps stepped motion, a long lens. Images: look-lab-d/out/board-d2.png (row 1, D1 columns) and look-lab-d/out/d2/toon3d-v7/D1-*.png in D:\\Tools\\pyrefly-scratch\\2026-10-20\\yrp-painterly\\; not in the repo.",
+          "delivery": "not-scheduled",
+          "deliveryNote": "Never built into the game. Withdrawn about four hours after the pick, when he saw the whole AI toon-3D cast: “It looks like AI slop…” and “The models look bad” (D-1130); the chapter moved to the real FFX-2 models (D-1131).",
+          "game": "ffx2",
+          "gameNote": "FFX-2 only: the hidden yrp chapter’s cast is the three Gullwings.",
+          "supersededBy": "Rejected: the AI toon-3D cast (“It looks like AI slop…”), D-1130",
+          "note": "Liked at the time: the toon v7 design with flat-face shading (his only named property). Not picked: hand-painted v3, D3 painted billboards, the anime-3D variants, A, B and C. Undecided then: Rikku, Paine and Bahamut in this style, clips, weapons, stage. Kept here so nobody proposes the Meshy toon cast again.",
+          "reaction": {
+            "date": "2026-10-20",
+            "words": "Toon v7 + flat face (Recommended)",
+            "how": "Bailey, 2026-10-20 ~17:30 EDT by the yrp session’s clock, on its question card (relayed); withdrawn at ~21:40 EDT (D-1130)",
+            "liked": [
+              "the toon v7 design with flat-face shading"
+            ],
+            "disliked": [
+              "later, the whole AI toon-3D cast: “It looks like AI slop…”, “The models look bad”"
+            ],
+            "mustRemain": [],
+            "mustChange": [
+              "do not offer AI-made 3D as final art"
+            ],
+            "undecided": [
+              "Rikku, Paine and Bahamut in this style",
+              "clips, weapons and stage"
+            ],
+            "inferred": [
+              "the pick approved the design and the flat-face shading only; the cast, the clips and the stage were not shown to him in this style"
+            ]
+          }
+        },
+        {
+          "label": "Experimental hidden chapter, Wind Waker look: target frame C-3, Besaid toon 3-head, YRP vs Valefor (FFX-2 only)",
+          "src": "docs/concepts/exp-windwaker/TARGET-C.jpg",
+          "state": "approved",
+          "approved": "Bailey, 2026-10-20 ~15:10 EDT, relayed by the Wind Waker session: “C: YRP vs Valefor (Recommended)”, with the proportions “Wind Waker short (Recommended)”, the Meshy cap “300 credits (Recommended)” and the secret word “waker (Recommended)” (D-1124 to D-1127)",
+          "build": "Frame C-3 rendered with ChatGPT Images 2.5 (codex exec), notes in docs/concepts/exp-windwaker/TARGET.md. The moment it targets: Yuna (Gunner), Rikku (Thief) and Paine (Warrior) at about 3 heads tall on the lower left against Valefor filling the right half, in a bright toon look with big flat-painted eyes, sun, bloom and Wind Waker spiral clouds through the opening above, the bottom fifth calm for the HUD.",
+          "delivery": "in-progress",
+          "deliveryNote": "Built on the local branch exp-windwaker (D:\\pyrefly-ww from r60-art 1cea6e937; phase 1 tip b7207bc37, then phase 2 and polish 1 at 90f544912; not pushed, in no release and out of the conference builds). The models are the Meshy ones (Yuna, Paine and Rikku about 30k triangles each, 24-joint rigs, 7 clips; Valefor static) and the chapter plays chapter 24’s Valefor fight (D-1157, D-1164). His fixes after the run-3 renders: Rikku’s bandana patch, a rebuilt Valefor, better weapons, a better temple (D-1159 to D-1162).",
+          "game": "ffx2",
+          "gameNote": "FFX-2 only: the fight is chapter 24’s Valefor at Besaid against the Gullwings (research/ffx2-fallen-aeons.md section 7.1); FFX is not touched (AGENTS.md rule 14).",
+          "note": "Picked on the Wind Waker session’s question card, all four options its recommended ones. Whether the Meshy models pass the eye that rejected the yrp AI toon cast (D-1130) is open until he sees them in play.",
+          "reaction": {
+            "date": "2026-10-20",
+            "words": "C: YRP vs Valefor (Recommended)",
+            "how": "Bailey, 2026-10-20 ~15:10 EDT, on the Wind Waker session’s question card (relayed), choosing the four recommended options (D-1124 to D-1127)",
+            "liked": [
+              "the C frame as a whole direction: the encounter, the party, Wind Waker short proportions and the bright toon look"
+            ],
+            "disliked": [],
+            "mustRemain": [
+              "Wind Waker short proportions",
+              "YRP vs Valefor",
+              "Valefor teal and gold as in our painting",
+              "each girl recognisable by costume and colour"
+            ],
+            "mustChange": [],
+            "undecided": [
+              "how flat the shading is (the frame is a little more modern-anime than 2003 Wind Waker)",
+              "the stage’s exact look (the frame’s temple chamber is the generator’s invention; our sources do not describe Besaid’s chamber)",
+              "the HUD and the camera"
+            ],
+            "inferred": [
+              "a flatter, truer Wind Waker read is better (the session’s reading, not his)",
+              "weapons are separate props on the hand bones (the session’s reading, not his)"
+            ]
+          }
         }
       ]
     },
