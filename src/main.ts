@@ -19,6 +19,7 @@ import { installLookDebug } from './debug/lookApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installRigDebug } from './debug/rigApi.ts';
+import { installFxNewDebug } from './debug/fxNewApi.ts'; // motion pass (lane "fx"): `__pyrefly.fxNew('new' | 'today')`
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
 import { setAttractRunner } from './app/demo/attractHook.ts'; // R61: the title starts the attract reel through this door; main hands the reel in (the title does not import it)
@@ -160,6 +161,7 @@ async function boot(): Promise<void> {
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
+  installFxNewDebug(debugApi); // motion pass (lane "fx"): the new spell effects' switch, for captures
 
   await app.push(new TitleScreen());
   app.start();

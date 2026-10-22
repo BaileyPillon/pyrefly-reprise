@@ -82,6 +82,7 @@ export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEven
     hitIndex: event.hitIndex,
     ...(ours ? { targets: a.targets, action: a.serial, sourceId: a.actorId } : {}),
     ...(event.crit ? { crit: true } : {}),
+    ...(ours && a.item === true ? { item: true } : {}), // the new effects' item form of a heal
   });
   if (ms <= 0) return;
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex });

@@ -19,8 +19,11 @@ const TILE = 128;
 const GRID = 4;
 export const ATLAS_SIZE = TILE * GRID;
 
-/** Where each tile sits (index = row * 4 + column) and whether it is baked. */
-export const TILES: Readonly<Record<FxTile, { index: number; baked: boolean }>> = Object.freeze({
+/**
+ * Where each tile sits (index = row * 4 + column) and whether it is baked. `extra` marks the painted finish's own tiles (lane "fx", the new spell effects): they are drawn
+ * only when a demo chapter runs with the new effects on (`ensureAtlasExtra`), so the live game's atlas costs what it always cost.
+ */
+export const TILES: Readonly<Record<FxTile, { index: number; baked: boolean; extra?: true }>> = Object.freeze({
   glow: { index: 0, baked: false },
   mote: { index: 1, baked: false },
   spark4: { index: 2, baked: false },
@@ -31,6 +34,10 @@ export const TILES: Readonly<Record<FxTile, { index: number; baked: boolean }>> 
   tri: { index: 7, baked: false },
   disc: { index: 8, baked: false },
   solid: { index: 9, baked: false },
+  streak: { index: 10, baked: false, extra: true },
+  facet: { index: 11, baked: false, extra: true },
+  dab: { index: 12, baked: false, extra: true },
+  dim: { index: 13, baked: false, extra: true },
 });
 
 /** [r, g, b, a], 0..1. */
@@ -74,6 +81,43 @@ const TRI: Array<[number, number]> = [
   [0.4, -0.6],
   [-0.4, -0.4],
 ];
+
+/**
+ * The painted finish's four tiles (procedural, deterministic, no file; all tinted: whiteness in R, coverage in A).
+ * - `streak`: a comet drawn with a loaded brush, a round bright head at +x and a tail that tapers to a point at -x (trails, spear thrusts, tracer sparks).
+ * - `facet`: a long crystal diamond pointing up, its right half lighter than its left (the Cure column's shards).
+ * - `dab`: a round dab of paint with an uneven edge and a lighter middle (debris, drops, blunt hits).
+ * - `dim`: clear in the middle, dark toward the edge (the dusk the Cure column draws round the target).
+ */
+const PAINT_FNS: Readonly<Record<'streak' | 'facet' | 'dab' | 'dim', TileFn>> = {
+  streak: (x, y) => {
+    const u = (x + 1) / 2; // 0 at the tail, 1 at the head
+    if (u > 0.96) return [0, 0, 0, 0];
+    const half = u < 0.82 ? 0.32 * Math.pow(u / 0.82, 1.5) : 0.32 * Math.sqrt(Math.max(0, 1 - Math.pow((u - 0.82) / 0.14, 2)));
+    const d = Math.abs(y);
+    if (half <= 0.005 || d > half) return [0, 0, 0, 0];
+    const across = sat(1 - Math.pow(d / half, 2.4));
+    const along = sat(Math.pow(u, 0.9) * 1.15);
+    return [sat(Math.pow(u, 3) * (1 - (0.5 * d) / half)), 0, 0, across * along];
+  },
+  facet: (x, y) => {
+    const v = (y + 1) / 2; // 0 at the foot, 1 at the tip
+    const hw = 0.4 * (v < 0.38 ? v / 0.38 : (1 - v) / 0.62);
+    const dx = Math.abs(x);
+    if (hw <= 0.004 || dx > hw) return [0, 0, 0, 0];
+    const edge = sat((hw - dx) / 0.06);
+    const white = x >= 0 ? 0.62 + 0.3 * (1 - dx / hw) : 0.14 + 0.2 * (1 - dx / hw);
+    return [sat(white), 0, 0, (0.78 + 0.22 * (1 - dx / hw)) * edge];
+  },
+  dab: (x, y) => {
+    const r = Math.hypot(x, y);
+    const th = Math.atan2(y, x);
+    const edge = 0.74 + 0.1 * Math.sin(3 * th + 1.1) + 0.06 * Math.sin(7 * th + 0.4) + 0.04 * Math.sin(13 * th + 2.3);
+    if (r > edge + 0.05) return [0, 0, 0, 0];
+    return [sat(0.55 * (1 - r / edge)), 0, 0, sat((edge + 0.05 - r) / 0.12) * (0.82 + 0.18 * (1 - r / edge))];
+  },
+  dim: (x, y) => [0, 0, 0, sat((Math.hypot(x, y) - 0.2) / 0.8) * 0.95],
+};
 
 const FNS: Readonly<Record<FxTile, TileFn>> = {
   glow: (x, y) => [0, 0, 0, ramp([[0, 1], [0.25, 0.55], [1, 0]], Math.hypot(x, y))],
@@ -121,12 +165,13 @@ const FNS: Readonly<Record<FxTile, TileFn>> = {
   tri: (x, y) => [0, 0, 0, inPolygon(x, y, TRI) ? 1 : 0],
   disc: (x, y) => [0, 0, 0, sat((1 - Math.hypot(x, y)) * 40)],
   solid: () => [0, 0, 0, 1],
+  ...PAINT_FNS,
 };
 
-/** The atlas pixels, RGBA8, bottom row first. Pure, so a test can read it. */
-export function atlasPixels(): Uint8Array {
-  const data = new Uint8Array(ATLAS_SIZE * ATLAS_SIZE * 4);
-  for (const [tile, { index }] of Object.entries(TILES) as Array<[FxTile, { index: number }]>) {
+/** Draw tiles into `data`: the live game's, plus the painted finish's when `extra` (and only the painted finish's when `only`). */
+function paintTiles(data: Uint8Array, extra: boolean, only: boolean): void {
+  for (const [tile, { index, extra: isExtra }] of Object.entries(TILES) as Array<[FxTile, { index: number; extra?: true }]>) {
+    if (isExtra ? !extra : only) continue;
     const fn = FNS[tile];
     const ox = (index % GRID) * TILE;
     const oy = Math.floor(index / GRID) * TILE;
@@ -145,10 +190,17 @@ export function atlasPixels(): Uint8Array {
       }
     }
   }
+}
+
+/** The atlas pixels, RGBA8, bottom row first. Pure, so a test can read it. `extra` adds the painted finish's tiles (the live game never asks for them). */
+export function atlasPixels(extra = false): Uint8Array {
+  const data = new Uint8Array(ATLAS_SIZE * ATLAS_SIZE * 4);
+  paintTiles(data, extra, false);
   return data;
 }
 
 let shared: DataTexture | null = null;
+let sharedExtra = false;
 
 /** The one atlas texture, built on first use and kept for the page's life (about 1 MB). */
 export function fxAtlasTexture(): DataTexture {
@@ -160,4 +212,16 @@ export function fxAtlasTexture(): DataTexture {
   tex.needsUpdate = true;
   shared = tex;
   return tex;
+}
+
+/**
+ * Draw the painted finish's four tiles into the shared atlas now (about 20 ms, once). Called at battle load by a demo chapter that runs the new effects (`SpellFxLayer.prepare`),
+ * never mid-fight; the live game does not call it, so its atlas is the one it always had.
+ */
+export function ensureAtlasExtra(): void {
+  const tex = fxAtlasTexture();
+  if (sharedExtra) return;
+  paintTiles(tex.image.data as unknown as Uint8Array, true, true);
+  tex.needsUpdate = true;
+  sharedExtra = true;
 }

@@ -238,6 +238,8 @@ export interface VfxPort {
       sourceId?: CombatantId;
       /** A critical hit: the drawn effect keeps the impact bloom's 1.3x crit size. */
       crit?: boolean;
+      /** The blow belongs to an item use (the new effects' Cure draws the item form of its column; motion pass, lane "fx"). Additive. */
+      item?: boolean;
     },
   ): number;
   /**

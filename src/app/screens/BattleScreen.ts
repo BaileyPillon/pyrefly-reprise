@@ -277,7 +277,7 @@ export class BattleScreen extends Screen {
       renderer: this.app.renderer.renderer, // release 39.1: masters are uploaded ahead of their swap (TextureStager.ts)
       overlayRoot: this.root,
       // FF7: its own effects, Spectacle on A3 plus (battleSpellFx answers 'ff7' with battleFf7Fx.ts)
-      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null), // FF7: its hit flash and shake
+      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null, chapter.id, () => this.engine?.state() ?? null), // FF7: its hit flash and shake; the new effects: the chapter gate, the weapon table
       sceneKey: this.scene.key,
       grade: this.app.renderer,
       comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)

@@ -101,7 +101,7 @@ export function ice(o: FxDrawList, t: number, T: FxTarget): void {
 }
 
 /** One jagged bolt from (x0, y0) to (x1, y1) with a few forks, as the mock's `bolt`. */
-function bolt(o: FxDrawList, T: FxTarget, x0: number, y0: number, x1: number, y1: number, seed: number, width: number, alpha: number): void {
+export function bolt(o: FxDrawList, T: FxTarget, x0: number, y0: number, x1: number, y1: number, seed: number, width: number, alpha: number): void {
   const r = rng(seed);
   const k = T.k;
   const pts: Array<[number, number]> = [[x0, y0]];
