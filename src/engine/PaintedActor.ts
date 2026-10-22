@@ -58,6 +58,11 @@ import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedSha
 import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { CurveDriver, type LeapOptions } from './motion/CurveDriver.ts'; // motion pass (lane "core"): the new curves; idle unless the presenter starts one (default OFF, `motion/CurvesSwitch.ts`)
+import { curvesOn } from './motion/CurvesSwitch.ts';
+import { heftOf, squashPair, startStrike } from './motion/ActorCurves.ts';
+import { newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
+import type { StrikePlan } from './motion/StrikePlan.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
@@ -585,6 +590,9 @@ export class PaintedActor extends Group {
   private recoilOffset = 0;
   private hopHeight = 0;
   private squashAmount = 0;
+  /** The new curves' channels (strike, cast lift, leap), summed; all at rest unless started. */
+  private readonly curves = new CurveDriver();
+  private readonly squashScratch = { x: 1, y: 1 };
   private shakeAmp = 0;
   private shakeLeftMs = 0;
   private shakeTotalMs = 1;
@@ -1477,6 +1485,29 @@ export class PaintedActor extends Group {
   }
 
   /**
+   * The new strike (motion pass, lane "core"): one sampled timeline of wind-up, arcing step, contact, hold, return and settle (`motion/StrikeCurve.ts`), walked on this actor's
+   * paced clock. Resolves when the move is over. Started by the presenter only when `curvesOn()`; `lunge` is untouched for everything else.
+   */
+  strike(plan: StrikePlan): Promise<void> {
+    return startStrike(this.curves, plan, this.worldHeight);
+  }
+
+  /** A cast's lift: rise `height` world units over `ms` and HOLD until {@link liftRelease}. */
+  liftTo(height: number, ms = 220): void {
+    this.curves.cast.rise(height, ms);
+  }
+
+  /** The cast is away: come down over `ms` and ring a small landing squash. */
+  liftRelease(ms = 260): void {
+    this.curves.cast.release(ms);
+  }
+
+  /** An arc with a take-off crouch, a stretch in the air and a landing squash (FFX-2's run-in; the turn-start weight shift). Resolves at the landing. */
+  leap(height: number, ms: number, options?: LeapOptions): Promise<void> {
+    return this.curves.leap(height, ms, options);
+  }
+
+  /**
    * Knocked back and springing home — and, when there is a `hurt` painting,
    * wearing it for the length of the flinch.
    *
@@ -1493,10 +1524,12 @@ export class PaintedActor extends Group {
     // r40-recoil (FC-1, `HitRecoil.ts`): an 80 ms eased push from where the figure is, then a spring home; progress 0 writes where it already is, so a hit-stop (dt 0) never teleports it.
     const legacy = recoilLegacy();
     const from = this.recoilOffset;
+    const fresh = !legacy && curvesOn(); // motion pass (lane "core"): a few px, then recover with one small overshoot (`motion/RecoilCurve.ts`)
+    const push = fresh ? recoilDistance(distance, heftOf(this.worldHeight)) : distance;
     return this.tweens.toAsync(legacy ? 1 : 0, legacy ? 0 : 1, {
       durationMs: Math.max(1, ms),
       easing: legacy ? 'elasticOut' : 'linear',
-      onUpdate: (v, p) => void (this.recoilOffset = legacy ? -v * distance : hitRecoilOffset(p, ms, distance, from)),
+      onUpdate: (v, p) => void (this.recoilOffset = legacy ? -v * distance : fresh ? newRecoilOffset(p, ms, push, from) : hitRecoilOffset(p, ms, distance, from)),
     });
   }
 
@@ -1787,8 +1820,9 @@ export class PaintedActor extends Group {
   private playCue(cue: LifeCue): void {
     switch (cue) {
       case 'step':
-        // Their turn: the weight coming up on to the front foot.
-        void this.hop(this.worldHeight * 0.035, 300);
+        // Their turn: the weight coming up on to the front foot. Motion pass (lane "core"): with the new curves it is a small leap (a settle and a landing squash); the docs are silent on
+        // either game's turn-start, so it is the same neutral weight shift for both (an open question in the handoff).
+        void (curvesOn() ? this.leap(this.worldHeight * 0.03, 340, { anticipation: 0.1, crouch: 0.012, stretch: 0.012, land: 0.015, landMs: 160, apex: 0.5 }) : this.hop(this.worldHeight * 0.035, 300));
         return;
       case 'flinch':
         // Only when something set `hurt` directly; `recoil` brings its own knock-back.
@@ -2290,7 +2324,9 @@ export class PaintedActor extends Group {
    */
   update(dt: number, realDt: number = dt): void {
     this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`): one-shot moves only, never the idle
-    if (this.blend.advance(realDt * 1000)) this.syncOpacity(); // FB-1: the pose blend, on the real clock
+    this.curves.advance(dt * 1000 * paceRate('action')); // motion pass (lane "core"): the new curves, sampled from accumulated PACED time (zero in a hit-stop, like the tweens)
+    const cv = this.curves.out;
+    if (this.blend.advance(realDt * 1000 * (curvesOn() ? paceRate('action') : 1))) this.syncOpacity(); // FB-1: the pose blend, on the real clock; with the new curves on the same pace as the moves it is scheduled from
     const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
     if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan);
     if (alignedSwapOn()) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
@@ -2320,10 +2356,9 @@ export class PaintedActor extends Group {
     const breathe = breatheAmp ? Math.sin(this.breathPhase * TAU) * 0.5 + 0.5 : 0;
     const breatheScale = 1 + breatheAmp * (breathe - 0.5) * 2;
 
-    const squashY = 1 - 0.18 * this.squashAmount;
-    const squashX = 1 + 0.14 * this.squashAmount;
+    const sq = squashPair(this.squashAmount, cv.sy, curvesOn(), this.squashScratch); // today's 18/14 percent, or the subtle volume-preserving family with the new curves on
 
-    this.inner.scale.set(squashX, breatheScale * squashY, 1);
+    this.inner.scale.set(sq.x, breatheScale * sq.y, 1);
 
     const hover =
       this.hoverHeight +
@@ -2333,9 +2368,9 @@ export class PaintedActor extends Group {
 
     // The lean rides with the lunge: both are "forward" for this fighter, and
     // forward is the body's facing, never the mirror.
-    let ox = (this.lungeOffset + this.recoilOffset + lean * upright) * this.facing;
+    let ox = (this.lungeOffset + this.recoilOffset + cv.x + lean * upright) * this.facing;
     let oy =
-      this.hopHeight + hover - (crouch + this.fallDrop * this.fallGain * this.worldHeight * 0.05) * upright;
+      this.hopHeight + cv.lift + hover - (crouch + this.fallDrop * this.fallGain * this.worldHeight * 0.05) * upright;
 
     if (this.shakeLeftMs > 0) {
       this.shakeLeftMs -= dt * 1000;
@@ -2356,7 +2391,7 @@ export class PaintedActor extends Group {
     const sway = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
     // Posture tilt is a *body* rotation (forward = the way the fighter is
     // turned, so it carries the facing), kept small and faded out with the pose.
-    const bodyTilt = (tilt + this.fallTilt * this.fallGain * 0.3) * upright * -this.facing;
+    const bodyTilt = (tilt + cv.lean + this.fallTilt * this.fallGain * 0.3) * upright * -this.facing;
     this.inner.rotation.z = sway + bodyTilt + lie;
     this.inner.rotation.x = -this.lieTilt * this.lieRoll;
 
@@ -2419,16 +2454,16 @@ export class PaintedActor extends Group {
 
     // --- contact shadow reacts to squash and hop ---------------------------
     if (this.shadow) {
-      const lift = Math.min(1, (this.hopHeight + hover) / Math.max(0.001, this.worldHeight * 0.6));
+      const lift = Math.min(1, (this.hopHeight + cv.lift + hover) / Math.max(0.001, this.worldHeight * 0.6));
       // Follow the pose's footprint: a body on the ground casts a long, flat
       // shadow under its whole length, not the standing figure's small disc.
       const base = Math.max(this.shadowBaseRadius, this.footprintRadius());
-      const r = base * (1 + this.squashAmount * 0.3) * (1 - lift * 0.42);
+      const r = base * (1 + this.squashAmount * 0.3 + Math.max(0, 1 / cv.sy - 1) * 5) * (1 - lift * 0.42); // the shadow spreads on a landing's squash
       // The wider the footprint, the flatter the blob, so a prone shadow does
       // not balloon into a circle the size of the body's length.
       const squash = this.shadowSquash * (this.shadowBaseRadius / Math.max(1e-4, base)) ** 0.5;
       this.shadow.scale.set(r, r * Math.min(this.shadowSquash, squash), 1);
-      this.shadow.position.x = ox * 0.55;
+      this.shadow.position.x = curvesOn() ? ox - 0.45 * lean * upright * this.facing : ox * 0.55; // the new curves: the shadow stays under the feet through the lunge
       const sm = this.shadow.material as MeshBasicMaterial;
       sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5);
     }
@@ -2438,6 +2473,7 @@ export class PaintedActor extends Group {
 
   override dispose(): void {
     this.tweens.killAll();
+    this.curves.dispose();
     this.blend.cancel();
     for (const slot of this.slots) {
       slot.mesh.geometry.dispose();

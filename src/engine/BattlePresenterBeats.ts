@@ -17,7 +17,7 @@ import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
-import { LUNGE_MS } from './StrikeBeat.ts';
+import { liftCaster, releaseCastLift, startAttackMove } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the sampled strike, the cast lift; today's lunge unless switched on (`motion/CurvesSwitch.ts`)
 import { blowPose, impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
@@ -89,11 +89,12 @@ export async function actionStart(
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
     if (!motion?.ownsWindUp?.(event)) {
       const plan = lungePlan(ctx, event, motion, blowPose(windUp), burst);
-      void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact(), plan.house), actor?.squash(260, 0.45)]); // FF7: its painted keys
+      startAttackMove(ctx, actor, plan, contact(), motion?.lungeFor?.(event.actorId) !== undefined); // today: lunge + squash(260, 0.45) (FF7: its painted keys); with the new curves: the sampled strike
     }
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
+    liftCaster(ctx, event.actorId); // new curves: the caster rises and holds until the spell lands
   } else if (pose === 'item') {
     cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
     if (item) startItemGesture(ctx, event, item);
@@ -110,6 +111,7 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
+  releaseCastLift(ctx, going); // the cast lift comes down with the action at the latest
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
   actor?.setPose('idle');
   ctx.actingId = null;

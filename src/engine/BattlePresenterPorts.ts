@@ -66,6 +66,13 @@ export interface ActorHandle {
   lieDown?(ms?: number, tilt?: number): Promise<void>;
   /** Optional: petrified, 0..1 — the painting drained to stone grey (`PaintedActor.setStone`). */
   setStone?(amount: number): void;
+  /** Optional (motion pass, lane "core"; only with `motion/CurvesSwitch.curvesOn()`): the sampled strike, in place of `lunge` + `squash`. */
+  strike?(plan: import('./motion/StrikePlan.ts').StrikePlan): Promise<void>;
+  /** Optional (same): a cast's lift, held from the cast's start until the spell lands (`liftRelease`). */
+  liftTo?(height: number, ms?: number): void;
+  liftRelease?(ms?: number): void;
+  /** Optional (same): an arc with a take-off crouch, an airborne stretch and a landing squash (FFX-2's run-in). */
+  leap?(height: number, ms: number, options?: import('./motion/CurveDriver.ts').LeapOptions): Promise<void>;
   centerPoint(): Point3;
   headPoint(): Point3;
 }

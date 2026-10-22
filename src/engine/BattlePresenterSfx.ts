@@ -22,7 +22,7 @@ import { DEPARTURE_KINDS } from './BattlePresenterDepartures.ts';
 import { LANDING_MOMENTS } from '../audio/sfxV2/eventCues.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
-import { STRIKE_BEAT_MS } from './StrikeBeat.ts';
+import { STRIKE_BEAT_MS, strikeBeatNow } from './StrikeBeat.ts';
 
 /** What the presenter tells the voice about one cue. */
 export interface SfxAsk {
@@ -232,7 +232,7 @@ function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced,
   }
   const covered = voiced.coveredBy?.filter((c) => action?.asked.has(c));
   if (covered && covered.length > 0) extra.coveredBy = covered;
-  const ahead = BEAT_AHEAD_MS[moment];
+  const ahead = moment === 'attack' ? strikeBeatNow() : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core")
   if (ahead !== undefined && voiced.events) extra.beatMs = scaled(ctx, ahead);
   return Object.keys(extra).length === 0 ? o : { ...o, ...extra };
 }

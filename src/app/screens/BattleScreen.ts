@@ -83,6 +83,7 @@ import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
+import { setCurvesChapter } from '../../engine/motion/CurvesSwitch.ts'; // motion pass (lane "core"): the new curves play only in Chapters I and IV
 import { battleFrameClocks } from '../../engine/PoseSwap.ts';
 import { onSceneScale, sceneScale } from '../../engine/crisp/sceneScale.ts';
 
@@ -256,6 +257,7 @@ export class BattleScreen extends Screen {
     if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
     holdGpuSync(); // R61 (PR-0481): optional readbacks (the figures' breathing, the splash crop) wait until the field's first draw has built its programs (`engine/GpuSettle.ts`)
+    setCurvesChapter(chapter.id); // motion pass (lane "core"): names the running chapter for the new curves' demo-chapter gate (`engine/motion/CurvesSwitch.ts`; default OFF)
     applyChapterLook(chapter.id, visualStyleOf(readSetting('visualStyle'))); // release 60: hd2d at bold strength by default in Chapters I and IV, before the figures bind their maps (`engine/look/LookState.ts`); release 61: unless OPTIONS > VISUAL STYLE says CLASSIC (a `?look=` address still wins)
     bindEyeCandyScene({ key: scene.key, chapter: chapter.id, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
@@ -986,6 +988,7 @@ export class BattleScreen extends Screen {
     this.offSceneScale?.();
     this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
+    setCurvesChapter(undefined);
     window.removeEventListener('keydown', this.onPauseKey);
     setSideFogGame(null);
     this.markRecorder?.stop();

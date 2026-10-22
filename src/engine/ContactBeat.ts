@@ -19,6 +19,7 @@
 import type { CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { followThrough } from './KeyPoses.ts';
+import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
 
 /** What a lunge is handed: hold at the apex until `hold` settles; call `reached` at the apex. */
 export interface LungeContact {
@@ -28,6 +29,8 @@ export interface LungeContact {
 
 /** The longest the attacker holds at the apex waiting for the blow, ms at timeScale 1. */
 export const CONTACT_HOLD_MAX_MS = 700;
+/** The new strike's extra run to its contact over today's apex (400 - 255 ms, rounded up), added to the hold cap while `curvesOn()`. */
+export const CURVES_CONTACT_EXTRA_MS = 150;
 /** The longest a hit waits for the attacker to reach the apex, ms at timeScale 1. */
 export const CONTACT_WAIT_MAX_MS = 400;
 
@@ -47,7 +50,8 @@ export function armContact(ctx: EventCtx, attacker: CombatantId): LungeContact {
   const held = new Promise<void>((r) => (release = r));
   const reached = new Promise<void>((r) => (reach = r));
   pending.set(ctx, { attacker, reached, release });
-  return { hold: Promise.race([held, ctx.sleep(CONTACT_HOLD_MAX_MS)]), reached: reach };
+  // The new strike reaches its contact later (wind-up and travel are 0.4 s, not 0.255 s): the cap counts from the lunge's start, so it is lengthened by the same difference.
+  return { hold: Promise.race([held, ctx.sleep(CONTACT_HOLD_MAX_MS + (curvesOn() ? CURVES_CONTACT_EXTRA_MS : 0))]), reached: reach };
 }
 
 /**
