@@ -18,7 +18,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 937, from 2026-09-15 to 2026-10-21 (ids A-0001 to A-0937), 689 of them linked to at least one decision (987 distinct decision ids).
+- **Rows:** 938, from 2026-09-15 to 2026-10-22 (ids A-0001 to A-0938), 690 of them linked to at least one decision (993 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
@@ -26,7 +26,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | art | 94 |
 | deploy | 88 |
 | review | 189 |
-| records | 49 |
+| records | 50 |
 | infrastructure | 29 |
 | account | 24 |
 | download | 14 |
@@ -36,18 +36,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 640 |
+| October 2026 | 641 |
 
-- **By game:** 663 both, 100 n/a, 97 FFX, 77 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 664 both, 100 n/a, 97 FFX, 77 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 88 deploy rows: 77 lines of docs/deploys.log (62 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to 660c19bbd, bundle DwMQUoVh, release 61 (2026-10-21).
 - **Reviews:** 189 rows: 53 focused reviews (51 SHIP, 1 HOLD, 1 no verdict), 58 live checks (55 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 22 deep rounds with a report (12 SHIP, 6 HOLD, 4 no verdict) and 56 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 69 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-21](#2026-10-21) (15) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-22](#2026-10-22) (1) · [10-21](#2026-10-21) (15) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
+
+### 2026-10-22
+
+- **A-0938** · `records` · both · **Recorded r59, r60 and r61 on main: D-1082 to D-1166 (items 148 to 172), A-0888 to A-0938, the deploy and review records, docs/LIVE.md for release 61, NOW.md; main fast-forwarded to e55e9d71b (records only)**
+  - What: The tenth records pass (a sub-agent for the release driver), in the full tree D:/pyrefly-rig-rikkudk on branch records-r61 from origin/main (48568a21f). It merged origin/r61-rc (660c19bbd, which holds r59 and r60 through r61-repro) with CHANGELOG.md the one conflict (the three new entries above main's r58 heading, now with their live addresses, r58's address updated to say r59 replaced it, and the entry count 84: r61-rc's own line said 82 although its file held 85 headings because it still carried the older unconsolidated entries); copied the deploy records of the three builds from the release tree D:/pyrefly-release55, read only (docs/deploys.log lines 76 to 78, the ledger, the manifests of 6db09ac86 and 660c19bbd, the markers so that critic/pending holds only 660c19bbd.json and critic/cleared gains 6db09ac86, 1cea6e937 and 2a1777281, the focused and live reports of r59 and r60 with their small text evidence, rounds 27 and 28); recorded items 148 to 172 of the decisions queue as 85 rows with the times from DRIVER-STATE.md and three target tiles (the Toon v7 target as withdrawn), and brought six earlier rows up to date; wrote these 51 actions; regenerated DECISIONS.md, ACTIONS.md and docs/LIVE.md (round 28's majors); rewrote docs/target/in-flight.json; wrote NOW.md (usage mode NORMAL). Skipped and left in the release tree: the evidence run folders of the two focused reviews and of round 28 (about 1.2 GB), the live reviews' 67 pictures (110 MB), two probe PNGs, four pair JPEGs and all .jsonl streams; no text file was over 5 MB. Checks: tsc clean, the three ledger checks, fourteen test files (365 tests), critic:status (live 660c19bbd, three obligations pending). origin/main was advanced by a fast-forward push and contains 660c19bbd.
+  - Who: records sub-agent for the release driver · Decisions: D-1082, D-1083, D-1084, D-1085, D-1086, D-1087, D-1088, D-1089, D-1090, D-1091, D-1092, D-1093, D-1094, D-1095, D-1096, D-1097, D-1098, D-1099, D-1100, D-1101, D-1102, D-1103, D-1104, D-1105, D-1106, D-1107, D-1108, D-1109, D-1110, D-1111, D-1112, D-1113, D-1114, D-1115, D-1116, D-1117, D-1118, D-1119, D-1120, D-1121, D-1122, D-1123, D-1124, D-1125, D-1126, D-1127, D-1128, D-1129, D-1130, D-1131, D-1132, D-1133, D-1134, D-1135, D-1136, D-1137, D-1138, D-1139, D-1140, D-1141, D-1142, D-1143, D-1144, D-1145, D-1146, D-1147, D-1148, D-1149, D-1150, D-1151, D-1152, D-1153, D-1154, D-1155, D-1156, D-1157, D-1158, D-1159, D-1160, D-1161, D-1162, D-1163, D-1164, D-1165, D-1166
+  - Result: done: pushed to origin/main as a fast-forward (e55e9d71b); the full unit suite was not run in this pass
+  - Evidence: `commits 3d02cdb3a, e2c29e4eb, 0ad3c813d, a1a570ca2, db0643939 and e55e9d71b on origin/main` · `docs/handoff/NOW.md (the 2026-10-22 banners and Log entry)` · `docs/LIVE.md` · `DECISIONS.md and ACTIONS.md`
+  - Reversible: yes, documentation, ledgers and records only; revert the records commits
 
 ### 2026-10-21
 
