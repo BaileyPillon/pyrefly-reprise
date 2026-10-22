@@ -9,7 +9,7 @@ Base: `origin/main` 3e520971e (release 61 + records). Tree `D:/pyrefly-rig-auron
 |---|---|---|
 | 1 of 3 | Reference notes: shape, motion, colour, timing, layering and caster/target for every effect in scope, per game, from research and official videos | **DONE** (`docs/handoff/motion-fx-reference.md`; no code) |
 | 2 of 3 | The painted finish, the switch, the guard, and the party effects: Cure/Cura, Haste/Shell/Protect/Reflect/Dispel, hit sparks per weapon, items, Fire/Blizzard/Thunder | **DONE, default OFF** (this note; code, 4 test files, captures) |
-| 3 of 3 | Bosses' attacks, Overdrives and their openings, the FFX-2 name slab and dress change, Jump, Darkness, and the before-and-after clips | **DONE, default OFF** (the section "Step 3" below; code, 5 test files with 81 tests, 21 moves recorded today and new, frame times at 1440p) |
+| 3 of 3 | Bosses' attacks, Overdrives and their openings, the FFX-2 name slab and dress change, Jump, Darkness, and the before-and-after clips | **DONE, default OFF** (the section "Step 3" below; code, 5 test files with 82 tests, 21 moves recorded today and new, frame times at 1440p) |
 
 ## Switch (read this first)
 
@@ -145,12 +145,12 @@ Same switch as step 2 (`?fx=new` or `?pack=demo`, demo chapters only, default OF
 
 ### What to merge with r62-extra (the Mega Flare's screen-filling light, `D:/pyrefly-pilgrim-proto`)
 
-`git -C D:/pyrefly-pilgrim-proto log --oneline origin/main..HEAD` shows r62-extra already changed Mega Flare (d1e811c0f: `look/flare/` floods and whites the frame, `engine/MegaFlareImpact.ts` shakes the camera 0.32 for 1,100 ms, the relight kind `megaflare` is the cold white-blue) and the living cathedral. This lane did NOT duplicate any of it: it draws no flood, no white-out and no shake for Mega Flare, keeps the `megaflare` id, its mark (1.45 s) and its `notifyLand` call (what r62-extra's flare listens for), and only adds step 2's painted finish to its quads and, before it, the countdown's gather. **Merge notes**: (1) the two branches touch the same two shared files, `BattlePresenterPorts.ts` (r62-extra +3 lines, this lane +5: take both) and `BattlePresenterBeats.ts` (r62-extra +4/-1, this lane +2 lines and one replaced line in `actionStart`: take both, re-check the Overdrive branch); (2) the Mega Flare's hit-stop and rumble belong to `boss-big` here (`mega-flare` and `x2-bahamut-mega-flare` are in `BIG_BLOWS`); r62-extra's camera shake and the feel lane's rumble can both fire: decide in the integration pass whether the shake or the new hooks lead; (3) the painted finish makes Mega Flare's quads brush-edged: look at it once beside r62-extra's flood.
+`git -C D:/pyrefly-pilgrim-proto log --oneline origin/main..HEAD` shows r62-extra already changed Mega Flare (d1e811c0f: `look/flare/` floods and whites the frame, `engine/MegaFlareImpact.ts` shakes the camera 0.32 for 1,100 ms, the relight kind `megaflare` is the cold white-blue) and the living cathedral. This lane did NOT duplicate any of it: it draws no flood, no white-out and no shake for Mega Flare, keeps the `megaflare` id, its mark (1.45 s) and its `notifyLand` call (what r62-extra's flare listens for), and only adds step 2's painted finish to its quads and, before it, the countdown's gather. **Merge notes**: (1) the two branches touch the same two shared files, `BattlePresenterPorts.ts` (r62-extra +3 lines, this lane +7 over step 2 and 3 together: take both) and `BattlePresenterBeats.ts` (r62-extra +4/-1, this lane +2 lines and one replaced line in `actionStart`, the Overdrive's `await`: take both and re-check the Overdrive branch); (2) the Mega Flare's hit-stop and rumble belong to `boss-big` here (`mega-flare` and `x2-bahamut-mega-flare` are in `BIG_BLOWS`); r62-extra's camera shake and the feel lane's rumble can both fire: decide in the integration pass whether the shake or the new hooks lead; (3) the painted finish makes Mega Flare's quads brush-edged: look at it once beside r62-extra's flood.
 
 ### Tests and checks (step 3)
 
 * `node node_modules/typescript/bin/tsc --noEmit -p .`: clean. `node tools/orphans.mjs`: no module of this lane is an orphan (the 24 it lists are older).
-* New, 81 tests in 5 files: `fx-boss-effects` (30: every new effect at both tiers, finite, painted, inside the 600/400 budget, the thinning, REDUCE FLASHES, determinism, direction, the charge's levels, the aura's and the dress's skins, Darkness's spheres, the five marks of Total Annihilation), `fx-boss-layer` (13: the tables per game, off is off, the gate, status landing, group effects, decoration, the low tier), `fx-boss-presenter` (12: the real presenter against the fake stage: status landing and its cap, Dispel, the charge ladder, the Overdrive's opening, calm beat and hooks, REDUCE MOTION, the dress change, Curse's darkening, the big-blow hooks once per action, the spell light's kinds), `fx-boss-adapter-dom` (18: every id against the game data (rule 6), the adapter and Bailey's numbers, the name slab's timing and DOM, the CSS), `fx-boss-pieces` (8: `?fxoff=` per piece). `fx-new-effects` pins the 25 ids.
+* New, 82 tests in 5 files: `fx-boss-effects` (30: every new effect at both tiers, finite, painted, inside the 600/400 budget, the thinning, REDUCE FLASHES, determinism, direction, the charge's levels, the aura's and the dress's skins, Darkness's spheres, the five marks of Total Annihilation), `fx-boss-layer` (13: the tables per game, off is off, the gate, status landing, group effects, decoration, the low tier), `fx-boss-presenter` (13: the real presenter against the fake stage: status landing and its cap, Dispel, the charge ladder, the Overdrive's opening, calm beat and hooks, REDUCE MOTION, the dress change, Curse's darkening, the big-blow hooks once per action, the spell light's kinds), `fx-boss-adapter-dom` (18: every id against the game data (rule 6), the adapter and Bailey's numbers, the name slab's timing and DOM, the CSS), `fx-boss-pieces` (8: `?fxoff=` per piece). `fx-new-effects` pins the 25 ids.
 * Regression, 79 existing files (presenter, moments, HUDs, spherechange, comfort, battle screen, flash rules, SKILL TRAVEL, FF7 effects, look presets), 1,051 tests: all green. **The full suite was NOT run**: the machine had 5.6 GB of RAM free (the brief asks for more than 12 GB), and D: had 9.8 GB free (below the 12 GB the brief asks to keep; this lane's scratch is about 0.4 GB).
 
 ### Evidence (what was run, what it showed)
@@ -184,22 +184,22 @@ Everything in the real game, headless Chromium on the real GPU, Vite on :5303 st
 | I (FFX) | Cross Cleave | 2008 | 2058 | +50 |
 | I (FFX) | Total Annihilation (with its two charge beats) | 7725 | 8908 | +1183 |
 | I (FFX) | Flare | 1750 | 2175 | +425 |
-| I (FFX) | Banish | 1458 | 2000 | +542 |
-| I (FFX) | Slowga | 1992 | 2467 | +475 |
+| I (FFX) | Banish | 1458 | 1758 | +300 |
+| I (FFX) | Slowga | 1992 | 2283 | +291 |
 | I (FFX) | Mortibsorption | 1550 | 2292 | +742 |
-| I (FFX) | Haste, Shell, Protect, Reflect (four casts) | 5850 | 8008 | +2158 |
-| I (FFX) | Dispel | 1508 | 1933 | +425 |
+| I (FFX) | Haste, Shell, Protect, Reflect (four casts) | 5850 | 7050 | +1200 |
+| I (FFX) | Dispel | 1508 | 1833 | +325 |
 | I (FFX) | Overdrive: Tidus, Spiral Cut | 7017 | 6500 | -517 |
 | I (FFX) | Overdrive: Kimahri, Jump | 5425 | 5100 | -325 |
 | I (FFX) | Overdrive: Kimahri, Mighty Guard | 6450 | 6475 | +25 |
-| IV (FFX-2) | Curse | 1333 | 1942 | +609 |
+| IV (FFX-2) | Curse | 1333 | 1608 | +275 |
 | IV (FFX-2) | Attack (step 2's hit) | 917 | 917 | +0 |
 | IV (FFX-2) | Impulse | 2150 | 3033 | +883 |
 | IV (FFX-2) | Countdown 5 to 1 and Mega Flare | 9008 | 9008 | +0 |
 | IV (FFX-2) | Darkness | 1558 | 2350 | +792 |
-| IV (FFX-2) | Dress change (Yuna) | 233 | 242 | +9 |
-| IV (FFX-2) | Dress change (Rikku) | 233 | 242 | +9 |
-| IV (FFX-2) | Dress change (Paine) | 242 | 242 | +0 |
+| IV (FFX-2) | Dress change (Yuna) | 233 | 233 | +0 |
+| IV (FFX-2) | Dress change (Rikku) | 242 | 242 | +0 |
+| IV (FFX-2) | Dress change (Paine) | 233 | 233 | +0 |
 
 The Overdrives are as long as before or shorter (the retail opening has no letterbox to slide, and the calm beat is 0.35 s); the moves that drew the bare bloom now wait for their own effect (at most 0.5 s for a status move: `STATUS_WAIT_MS` 250 ms; a damaging move waits for its mark). Total Annihilation's difference is nearly all the engine's own per-hit numeral beats lining up behind five marks.
 

@@ -236,6 +236,22 @@ describe('the presenter with the new effects on', () => {
     expect(calls).toEqual(['hitStop4', 'punch', 'rumble']);
   });
 
+  it("a late hit whose mark has already passed still tells the hooks: Total Annihilation's fifth blow lands after its effect's marks (the effect answers 0)", async () => {
+    demo('seymour-flux');
+    const calls: string[] = [];
+    setFxMotionHooks({ hitStop: (f) => calls.push(`hitStop${f}`), punch: () => calls.push('punch'), rumble: () => calls.push('rumble') });
+    const stage = new FakeStage(['tidus'], ['mortiorchis']);
+    stage.vfx.land = (_at, o) => (o.hitIndex === 4 ? 0 : 200); // the first four hits wait for their marks, the fifth finds its mark gone
+    const presenter = new BattlePresenter({ stage, damageNumbers: new FakeDamageNumbers(), messageBar: new FakeMessageBar(), sleep: () => Promise.resolve() });
+    const hit = (k: number): BattleEvent => ({ type: 'damage', targetId: 'tidus', sourceId: 'mortiorchis', amount: 600, element: 'none', crit: false, hitIndex: k, hitCount: 5, seq: 10 + k }) as BattleEvent;
+    await presenter.play([
+      { type: 'action-start', actorId: 'mortiorchis', command: { kind: 'ability' } as never, abilityId: 'total-annihilation', abilityName: 'Total Annihilation', targets: ['tidus'], seq: 0 },
+      ...[0, 1, 2, 3, 4].map(hit),
+      { type: 'action-end', actorId: 'mortiorchis', seq: 20 },
+    ] as BattleEvent[]);
+    expect(calls).toEqual(['hitStop4', 'punch', 'rumble']);
+  });
+
   it('an ordinary blow tells the hooks nothing, and nothing is told with the switch off', async () => {
     const calls: string[] = [];
     setFxMotionHooks({ hitStop: () => calls.push('h'), punch: () => calls.push('p'), rumble: () => calls.push('r') });
