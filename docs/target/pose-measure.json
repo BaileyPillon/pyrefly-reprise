@@ -21706,42 +21706,42 @@
       482.0,
       265.0
      ],
-     "baseline": 1196.0,
+     "baseline": 1194.0,
      "current": 1.0,
      "head": [
-      429.3,
-      228.4,
-      534.7,
-      301.6
+      429.5,
+      228.5,
+      534.5,
+      301.5
      ],
      "prone": false,
      "reading": 0.92,
      "ruled": {
       "basis": "box",
       "head": 0.92,
-      "headRatio": 0.98,
-      "height": 0.88484,
+      "headRatio": 0.983,
+      "height": 0.88785,
       "lift": null,
-      "mean": 0.902,
+      "mean": 0.904,
       "rule": "geomean/1",
-      "stature": 1.019
+      "stature": 1.018
      },
-     "scale": 0.902,
+     "scale": 0.904,
      "scaleSrc": "ruled",
-     "sha": "656808e5e9a97d644da6fd0a46834e9007a9cd2cd4454afb8625a8271102ab5a",
+     "sha": "7bed409d753136dc94ad245b2ddfaaea71238dc4c0ba0b2ee0a26c5e89ab4e42",
      "size": [
       815,
       1212
      ],
      "stance": {
-      "row": 1196.0,
+      "row": 1194.0,
       "src": "silhouette",
-      "x": 497.0,
-      "x0": 431.0,
-      "x1": 563.0
+      "x": 502.0,
+      "x0": 433.0,
+      "x1": 571.0
      },
      "standing": true,
-     "stature": 1.019
+     "stature": 1.018
     },
     "critical": {
      "anchor": [
@@ -21790,7 +21790,7 @@
       478.0,
       98.0
      ],
-     "baseline": 670.0,
+     "baseline": 669.0,
      "current": 1.35,
      "head": [
       445,
@@ -21819,7 +21819,7 @@
      },
      "scale": 1.441,
      "scaleSrc": "held",
-     "sha": "2add01579f3533a4050a521865eb04f32543ed8aa4d6a832a81ec736beb87705",
+     "sha": "6977963a51d57e34ddb60d3630cdefb424996e27dea21d36a6c84be77137e42b",
      "size": [
       815,
       673
@@ -21827,9 +21827,9 @@
      "stance": {
       "row": 670.0,
       "src": "silhouette",
-      "x": 344.5,
-      "x0": 119.0,
-      "x1": 570.0
+      "x": 345.0,
+      "x0": 117.0,
+      "x1": 573.0
      },
      "standing": true,
      "stature": 0.9
@@ -21839,49 +21839,49 @@
       286.0,
       140.0
      ],
-     "baseline": 1021.0,
+     "baseline": 1014.0,
      "current": 1.0,
      "head": [
-      235.3,
-      104.7,
-      336.7,
-      175.3
+      235.6,
+      105,
+      336.4,
+      175
      ],
      "held": {
       "by": "the W3 sizing rule (pick 89e, the release driver), under Bailey 2026-10-16: \"pose continuity is the strongest recurring issue we need a permanent fix for this please.\" and his standing \"I'll go with all of your recommendations\"",
-      "headRatio": 1.164,
+      "headRatio": 1.172,
       "reading": 0.804,
-      "readingStature": 0.773,
-      "stature": 0.9
+      "readingStature": 0.769,
+      "stature": 0.901
      },
      "prone": false,
      "reading": 0.804,
      "ruled": {
       "basis": "box",
       "head": 0.804,
-      "headRatio": 1.164,
-      "height": 1.0398,
+      "headRatio": 1.172,
+      "height": 1.04605,
       "lift": "floor",
-      "mean": 0.914,
+      "mean": 0.917,
       "rule": "geomean/1",
-      "stature": 0.9
+      "stature": 0.901
      },
-     "scale": 0.936,
+     "scale": 0.942,
      "scaleSrc": "held",
-     "sha": "197ea5a53dab8554c9219e3ba010ef3bf4c409d9ccc6b57c729a36b471ed3f8b",
+     "sha": "da0ad737452c8207a08772d6da4242bcb23e8ea41a22e3fdc4b25423384e9448",
      "size": [
       791,
       1037
      ],
      "stance": {
-      "row": 1022.0,
+      "row": 1014.0,
       "src": "silhouette",
-      "x": 221.0,
-      "x0": 48.0,
-      "x1": 394.0
+      "x": 226.5,
+      "x0": 50.0,
+      "x1": 403.0
      },
      "standing": true,
-     "stature": 0.9
+     "stature": 0.901
     },
     "idle": {
      "anchor": [
@@ -21918,49 +21918,49 @@
       319.0,
       146.0
      ],
-     "baseline": 1144.0,
+     "baseline": 1143.0,
      "current": 0.758,
      "head": [
-      262.5,
-      106.8,
-      375.5,
-      185.2
+      262,
+      106.4,
+      376,
+      185.6
      ],
      "held": {
       "by": "the W3 sizing rule (pick 89e, the release driver), under Bailey 2026-10-16: \"pose continuity is the strongest recurring issue we need a permanent fix for this please.\" and his standing \"I'll go with all of your recommendations\"",
-      "headRatio": 1.23,
+      "headRatio": 1.219,
       "reading": 0.684,
-      "readingStature": 0.732,
-      "stature": 0.901
+      "readingStature": 0.738,
+      "stature": 0.9
      },
      "prone": false,
      "reading": 0.684,
      "ruled": {
       "basis": "box",
       "head": 0.684,
-      "headRatio": 1.23,
-      "height": 0.93387,
+      "headRatio": 1.219,
+      "height": 0.92642,
       "lift": "floor",
-      "mean": 0.799,
+      "mean": 0.796,
       "rule": "geomean/1",
-      "stature": 0.901
+      "stature": 0.9
      },
-     "scale": 0.841,
+     "scale": 0.834,
      "scaleSrc": "held",
-     "sha": "c63726eb5c2b158d9b87953eb5a749d2517ff87f688a47dc907c1851f6e2e234",
+     "sha": "806b7a05d004db5bf9bc9187f9467830d65091ec698867b23975ea33709b2e23",
      "size": [
       832,
       1160
      ],
      "stance": {
-      "row": 1134.0,
+      "row": 1140.0,
       "src": "silhouette",
-      "x": 238.5,
-      "x0": 40.0,
-      "x1": 437.0
+      "x": 241.0,
+      "x0": 43.0,
+      "x1": 439.0
      },
      "standing": true,
-     "stature": 0.901
+     "stature": 0.9
     },
     "ko": {
      "anchor": [
@@ -22161,17 +22161,17 @@
      },
      "scale": 0.94,
      "scaleSrc": "held",
-     "sha": "0f3b487f90055931a3dfd2c13297bc1d9d1977956797fe74f659c8690bacccc2",
+     "sha": "603ab2ab4c26fc23e9e6e39645427090192f9d6c4d155f9a780abe531ce1008a",
      "size": [
       537,
       1195
      ],
      "stance": {
-      "row": 1180.0,
+      "row": 1178.0,
       "src": "silhouette",
-      "x": 241.0,
-      "x0": 78.0,
-      "x1": 404.0
+      "x": 242.0,
+      "x0": 79.0,
+      "x1": 405.0
      },
      "standing": true,
      "stature": 0.9
