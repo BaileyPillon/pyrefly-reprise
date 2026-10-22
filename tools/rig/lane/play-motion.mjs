@@ -36,9 +36,9 @@ export async function motion(g, spec, o) {
   const t0 = Date.now();
   const budgetMs = Number(process.env.MOTION_BUDGET_MS ?? spec.motion.budgetMs ?? 500000); // the hold on the shared recording slot is 10 minutes: stop by ourselves and still write the timeline
   const step = async (n = 1) => { for (let i = 0; i < n; i++) { if (Date.now() - t0 > budgetMs) throw new Error('the time budget of the hold is used'); await st.step(); if (st.frame % 2 === 0) { const r = await rectNow(); if (r) rects.push({ n: st.frame - 1, ...r }); } } };
-  const playing = () => page.evaluate(() => Boolean(window.__pyrefly.battle()?.battlePresenter?.playing));
-  const idleMenu = async () => (await g.awaitingMenu()) && !(await playing());
-  const waitMenu = async (max = 4000) => { for (let i = 0; i < max; i++) { if (await idleMenu()) return true; if (i % 200 === 199 && (await g.scr()) !== 'battle') return false; await step(); } return false; };
+  // a member's command menu is up exactly when the presenter has a pending menu (its queue is then idle). NOT `battlePresenter.playing`: that is a Promise field, and Boolean(Promise) is always true.
+  const idleMenu = () => g.awaitingMenu();
+  const waitMenu = async (max = 2400) => { for (let i = 0; i < max; i++) { if (await idleMenu()) return true; if (i % 200 === 199 && (await g.scr()) !== 'battle') return false; if (i === 600 || i === 1500) { const d = await page.evaluate(() => { const bs = window.__pyrefly.battle(); const pb = window.__pyrefly.snapshotState()?.screenState?.playback; return { screen: window.__pyrefly.snapshotState()?.screen ?? null, playback: pb ? { awaitingMenu: pb.awaitingMenu, played: pb.played } : null, pending: bs?.battlePresenter?.pendingMenu?.actorId ?? null, cur: bs?.battleEngine?.ctx?.rt?.currentActorId ?? null, overlays: [...document.querySelectorAll('[class*="dialog"],[class*="modal"],[class*="subtitle"],[class*="story"]')].filter((e) => e.offsetParent !== null).map((e) => e.className).slice(0, 4) }; }).catch((e) => String(e)); g.log('waitMenu: no menu after', i, 'steps:', JSON.stringify(d)); await input.press('Enter'); await step(6); } await step(); } return false; };
   const actionEvents = () => page.evaluate(() => window.__pyrefly.battleLog().map((e) => ({ type: e.type, actorId: e.actorId ?? null, targetId: e.targetId ?? null, abilityId: e.abilityId ?? null })));
 
   const finish = async () => {
@@ -107,22 +107,44 @@ export async function motion(g, spec, o) {
   }
 
   if (spec.motion.victory !== false) {
-    // the last blow: every enemy to 1 HP, the strongest plain strategy to finish at normal speed, frames kept to the victory pose and past it
-    await page.evaluate((id) => {
+    // the last blows: every enemy to 1 HP, then the party's own plain Attack (no summon, no strategy: the camera stays on the party); frames kept to the victory pose and past it
+    await page.evaluate(() => {
       const s = window.__pyrefly.battleState();
       const list = Array.isArray(s.combatants) ? s.combatants : Object.values(s.combatants);
       for (const c of list) if (c.side === 'enemy' || c.team === 'enemy' || c.isEnemy) c.hp = 1;
-      window.__pyrefly.autoBattle('intended');
-    }, who);
+    });
     mark('victory-start');
     let wonAt = -1;
-    for (let i = 0; i < 9000; i++) {
+    let left = 0;
+    for (let i = 0; i < 6000; i++) {
+      if (i % 4 === 0 && (await g.awaitingMenu())) {
+        try {
+          if ((await g.curActor()) === who) {
+            for (const rx of ['^attack']) {
+              for (let k = 0; k < 16; k++) {
+                const m = await menuRows(page);
+                if (!m) { await step(6); continue; }
+                const want = m.rows.findIndex((r) => new RegExp(rx, 'i').test(r));
+                if (want < 0 || want === m.selected) break;
+                await input.press(want > m.selected ? 'ArrowDown' : 'ArrowUp');
+                await step(8);
+              }
+              await input.press('Enter'); await step(14);
+            }
+            for (let tt = 0; tt < (spec.motion.targets ?? 1); tt++) { await input.press('Enter'); await step(14); }
+          } else {
+            for (const key of spec.motion.others ?? ['KeyQ']) { await input.press(key); await step(14); }
+          }
+          await step(20);
+        } catch (e) { errors.push({ turn: 'victory', at: st.frame, error: String(e).slice(0, 200) }); }
+      }
       await step();
       if (i % 30 === 29) {
-        const p = await poseInfo();
+        const p = await poseInfo().catch(() => ({ pose: null }));
         if (wonAt < 0 && p.pose === 'victory') { wonAt = st.frame; mark('victory-pose'); }
         if (wonAt >= 0 && st.frame - wonAt > 200) break;
-        if ((await g.scr()) !== 'battle') { mark('battle-left'); break; }
+        if (!left && (await g.scr()) !== 'battle') { left = st.frame; mark('battle-left'); }
+        if (left && st.frame - left > 300) break; // the victory pose may play under the results screen: keep the frames for 5 s after the screen changed
       }
     }
     mark('victory-end');
@@ -138,7 +160,7 @@ export async function menuprobe(g, spec, o) {
   const { st } = await prepare(g, spec, { ...o, shoot: false });
   const { input, page } = g;
   st.recording = false;
-  const idleMenu = async () => (await g.awaitingMenu()) && !(await page.evaluate(() => Boolean(window.__pyrefly.battle()?.battlePresenter?.playing)));
+  const idleMenu = () => g.awaitingMenu(); // the pending menu itself (see `motion`)
   const out = [];
   for (let turn = 0; turn < 7; turn++) {
     for (let i = 0; i < 3000 && !(await idleMenu()); i++) await st.step(false);

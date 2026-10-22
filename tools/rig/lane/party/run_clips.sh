@@ -6,9 +6,11 @@ cd /d/pyrefly-rig-rikkudk || exit 1
 R=D:/Tools/pyrefly-scratch/2026-10-22/motion/rigs/rec
 export PYREFLY_BROWSER=gpu PILOTS_MAX_MINUTES=10
 FIRST=${1:-1}
+SKIP=" ${SKIP:-} " # job numbers to leave out, e.g. SKIP="2" (a job already recorded)
 N=0
 job() { # name subject alias modes extra...
   N=$((N+1)); [ $N -lt $FIRST ] && return
+  case "$SKIP" in *" $N "*) return;; esac
   local name=$1 subj=$2 alias=$3 modes=$4; shift 4
   mkdir -p $R/$name
   node tools/rig/lane/party/waitslot.mjs $R/$name/job-$modes-$RANDOM.log -- --subject $subj --out $R/$name --modes $modes --alias $alias --rigs-dir D:/pyrefly-art-rigs-pilots --repo D:/pyrefly-rig-rikkudk "$@" > $R/$name/waiter-$modes-$RANDOM.log 2>&1
