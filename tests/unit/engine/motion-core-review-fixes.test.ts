@@ -239,6 +239,20 @@ describe('the strike\'s sound follows the blow of a heavy body (review MAJOR-2)'
     expect(asked[1]!.beatMs! - asked[0]!.beatMs!).toBeGreaterThan(100); // the 116 ms the review measured
   });
 
+  it('a context with no stage at all (a test double of the sound hookup) still gets its cue: the stage is only asked for the heft', () => {
+    setCurvesChapter('seymour-flux');
+    setCurvesMode('new');
+    const asked: Array<{ beatMs?: number }> = [];
+    const c = {
+      actingId: 'x',
+      speed: () => 'normal',
+      deps: { audio: { playSfx: (_k: string, o: { beatMs?: number }) => asked.push(o) }, sfxVoice: () => ({ key: 'swing', events: ['swing'] }) },
+    } as never;
+    expect(() => playCue(c, 'attack')).not.toThrow();
+    expect(asked).toHaveLength(1);
+    expect(asked[0]!.beatMs).toBeGreaterThan(0);
+  });
+
   it('an actor with no heft to report (a test double, FF7) asks for the party\'s beat', () => {
     setCurvesChapter('ffx2-bahamut');
     setCurvesMode('new');

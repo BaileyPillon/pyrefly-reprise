@@ -234,7 +234,7 @@ function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced,
   }
   const covered = voiced.coveredBy?.filter((c) => action?.asked.has(c));
   if (covered && covered.length > 0) extra.coveredBy = covered;
-  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage.actor(actorId)?.strikeHeft?.() : undefined) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
+  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
   if (ahead !== undefined && voiced.events) extra.beatMs = scaled(ctx, ahead);
   return Object.keys(extra).length === 0 ? o : { ...o, ...extra };
 }
