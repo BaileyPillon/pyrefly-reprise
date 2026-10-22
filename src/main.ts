@@ -20,6 +20,7 @@ import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installFeelDebug } from './debug/feelApi.ts';
 import { installGamepadRumble } from './app/gamepadRumble.ts';
+import { installMotionSfx } from './app/motionSfxSink.ts';
 import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
@@ -163,6 +164,7 @@ async function boot(): Promise<void> {
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
   installFeelDebug(debugApi, app); // motion program, lane "feel": `__pyrefly.punch(...)`, `punchMode()`, `hitStopMode()`, `rumble()`, `shadowFollow()`, `feelPack()`, `feel()`
+  installMotionSfx(audio); // the sink of `?motionsfx=on` (a demo chapter only; at normal speed; from the existing sound library)
   installGamepadRumble(); // the pad-side sink of `?rumble=on` (a demo chapter only; never on keyboard play, never under REDUCE MOTION)
 
   await app.push(new TitleScreen());

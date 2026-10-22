@@ -10,6 +10,7 @@ import {
   parseFeelKeys,
   punchMode,
   resetFeelForTests,
+  motionSfxOn,
   rumbleOn,
   setFeelChapter,
   setFeelPack,
@@ -25,10 +26,10 @@ afterEach(() => resetFeelForTests());
 
 describe('the keys', () => {
   it('reads each key, lowercases it, and ignores a value it does not know', () => {
-    expect(parseFeelKeys('?punch=NEW&hitstop=short&rumble=on&shadow=follow&pack=demo')).toEqual({ pack: true, punch: 'new', hitstop: 'short', rumble: true, shadow: true });
-    expect(parseFeelKeys('?punch=big&hitstop=long&rumble=maybe&shadow=down&pack=all')).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null });
-    expect(parseFeelKeys('?punch=today&hitstop=today&rumble=off&shadow=today')).toEqual({ pack: false, punch: 'today', hitstop: 'today', rumble: false, shadow: false });
-    expect(parseFeelKeys(undefined)).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null });
+    expect(parseFeelKeys('?punch=NEW&hitstop=short&rumble=on&shadow=follow&motionsfx=on&pack=demo')).toEqual({ pack: true, punch: 'new', hitstop: 'short', rumble: true, shadow: true, motionsfx: true });
+    expect(parseFeelKeys('?punch=big&hitstop=long&rumble=maybe&shadow=down&motionsfx=loud&pack=all')).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null });
+    expect(parseFeelKeys('?punch=today&hitstop=today&rumble=off&shadow=today&motionsfx=off')).toEqual({ pack: false, punch: 'today', hitstop: 'today', rumble: false, shadow: false, motionsfx: false });
+    expect(parseFeelKeys(undefined)).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null });
   });
 });
 
@@ -57,19 +58,19 @@ describe('the pack', () => {
     for (const id of ['seymour-flux', 'ffx2-bahamut']) {
       setFeelChapter(id);
       expect(inFeelChapter()).toBe(true);
-      expect([punchMode(), stopMode(), rumbleOn(), shadowFollows()]).toEqual(['new', 'short', true, true]);
+      expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), motionSfxOn()]).toEqual(['new', 'short', true, true, true]);
     }
     for (const id of ['yunalesca', 'braskas-final-aeon', 'ffx2-vegnagun-shuyin', 'ffx2-leblanc', 'ff7-anything', null]) {
       setFeelChapter(id);
       expect(inFeelChapter()).toBe(false);
-      expect([punchMode(), stopMode(), rumbleOn(), shadowFollows()], String(id)).toEqual(['today', 'today', false, false]);
+      expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), motionSfxOn()], String(id)).toEqual(['today', 'today', false, false, false]);
     }
   });
 
   it('a key named beside the pack wins for its piece (the A/B: the pack with today\'s camera)', () => {
-    resetFeelForTests('?pack=demo&punch=today&hitstop=off&shadow=today&rumble=off');
+    resetFeelForTests('?pack=demo&punch=today&hitstop=off&shadow=today&rumble=off&motionsfx=off');
     setFeelChapter('ffx2-bahamut');
-    expect([punchMode(), stopMode(), rumbleOn(), shadowFollows()]).toEqual(['today', 'off', false, false]);
+    expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), motionSfxOn()]).toEqual(['today', 'off', false, false, false]);
   });
 
   it('a key alone (no pack) turns on just its piece, in a demo chapter only', () => {

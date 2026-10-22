@@ -1,0 +1,366 @@
+[
+ {
+  "id": "lunge-A",
+  "kind": "single",
+  "title": "Lunge, A (chosen): first bank whiff, 20 percent lower, 360 ms",
+  "note": "cloth and air, a rising band-passed noise",
+  "ms": 360,
+  "momentaryMax": -28.9,
+  "samplePeakDb": -13.3,
+  "spec": {
+   "bank": "v1",
+   "name": "whiff",
+   "pitch": 0.8,
+   "volume": 0.42,
+   "trimMs": 360,
+   "fadeMs": 120
+  }
+ },
+ {
+  "id": "lunge-B",
+  "kind": "single",
+  "title": "Lunge, B: the recorded set's whiff, 18 percent lower",
+  "note": "level matched to A",
+  "ms": 270,
+  "momentaryMax": -28.9,
+  "samplePeakDb": -13.7,
+  "spec": {
+   "bank": "v2",
+   "name": "whiff",
+   "pitch": 0.82,
+   "trimMs": 270,
+   "fadeMs": 90,
+   "volume": 0.513
+  }
+ },
+ {
+  "id": "dash-A",
+  "kind": "single",
+  "title": "Dash (the FFX-2 run), A (chosen): whiff, 28 percent lower, 440 ms",
+  "note": "longer, lower, the run-in",
+  "ms": 440,
+  "momentaryMax": -29,
+  "samplePeakDb": -14.1,
+  "spec": {
+   "bank": "v1",
+   "name": "whiff",
+   "pitch": 0.72,
+   "volume": 0.4,
+   "trimMs": 440,
+   "fadeMs": 160
+  }
+ },
+ {
+  "id": "dash-B",
+  "kind": "single",
+  "title": "Dash, B: escape, 15 percent lower",
+  "note": "a falling whoosh with two boot thumps; level matched",
+  "ms": 420,
+  "momentaryMax": -29,
+  "samplePeakDb": -15.2,
+  "spec": {
+   "bank": "v1",
+   "name": "escape",
+   "pitch": 0.85,
+   "trimMs": 420,
+   "fadeMs": 150,
+   "volume": 0.452
+  }
+ },
+ {
+  "id": "smear-A",
+  "kind": "single",
+  "title": "Smear, A (chosen): whiff, 45 percent higher, 130 ms",
+  "note": "a zip on the cut",
+  "ms": 130,
+  "momentaryMax": -34.7,
+  "samplePeakDb": -17.2,
+  "spec": {
+   "bank": "v1",
+   "name": "whiff",
+   "pitch": 1.45,
+   "volume": 0.28,
+   "trimMs": 130,
+   "fadeMs": 55
+  }
+ },
+ {
+  "id": "smear-B",
+  "kind": "single",
+  "title": "Smear, B: the recorded set's whiff, 30 percent higher",
+  "note": "level matched",
+  "ms": 120,
+  "momentaryMax": -34.7,
+  "samplePeakDb": -17.6,
+  "spec": {
+   "bank": "v2",
+   "name": "whiff",
+   "pitch": 1.3,
+   "trimMs": 120,
+   "fadeMs": 50,
+   "volume": 0.331
+  }
+ },
+ {
+  "id": "land-A",
+  "kind": "single",
+  "title": "Landing, A (chosen): footstep, 110 ms",
+  "note": "one boot on stone: the thump alone",
+  "ms": 110,
+  "momentaryMax": -32.6,
+  "samplePeakDb": -15.2,
+  "spec": {
+   "bank": "v1",
+   "name": "footstep",
+   "pitch": 1,
+   "volume": 0.33,
+   "trimMs": 110,
+   "fadeMs": 50
+  }
+ },
+ {
+  "id": "land-B",
+  "kind": "single",
+  "title": "Landing, B: footstep, 22 percent lower and longer (140 ms)",
+  "note": "a heavier landing; level matched",
+  "ms": 140,
+  "momentaryMax": -32.6,
+  "samplePeakDb": -15.4,
+  "spec": {
+   "bank": "v1",
+   "name": "footstep",
+   "pitch": 0.78,
+   "trimMs": 140,
+   "fadeMs": 60,
+   "volume": 0.324
+  }
+ },
+ {
+  "id": "cast-A",
+  "kind": "single",
+  "title": "Cast, A (chosen): the first 105 ms of steal-success",
+  "note": "a quick grab of cloth, cut before the jingle",
+  "ms": 105,
+  "momentaryMax": -36.3,
+  "samplePeakDb": -19.5,
+  "spec": {
+   "bank": "v1",
+   "name": "steal-success",
+   "pitch": 1,
+   "volume": 1.5,
+   "trimMs": 105,
+   "fadeMs": 40
+  }
+ },
+ {
+  "id": "cast-B",
+  "kind": "single",
+  "title": "Cast, B: the head of whiff, 30 percent higher",
+  "note": "level matched",
+  "ms": 110,
+  "momentaryMax": -36.3,
+  "samplePeakDb": -17.3,
+  "spec": {
+   "bank": "v1",
+   "name": "whiff",
+   "pitch": 1.3,
+   "trimMs": 110,
+   "fadeMs": 50,
+   "volume": 0.266
+  }
+ },
+ {
+  "id": "ref-hit-sword",
+  "kind": "single",
+  "title": "Reference: hit-sword at 0.8 (FFX hit)",
+  "note": "what the motion sounds sit under",
+  "ms": 882,
+  "momentaryMax": -20.1,
+  "samplePeakDb": -7.1,
+  "spec": {
+   "bank": "v2",
+   "name": "hit-sword",
+   "volume": 0.8
+  }
+ },
+ {
+  "id": "ref-swing-sword",
+  "kind": "single",
+  "title": "Reference: swing-sword at 0.8 (FFX attack cue)",
+  "note": "the weapon swing the lunge whoosh goes under",
+  "ms": 343,
+  "momentaryMax": -24.6,
+  "samplePeakDb": -8,
+  "spec": {
+   "bank": "v2",
+   "name": "swing-sword",
+   "volume": 0.8
+  }
+ },
+ {
+  "id": "ref-hit-greatsword",
+  "kind": "single",
+  "title": "Reference: hit-greatsword at 0.8 (FFX-2 hit, recorded original)",
+  "note": "what the motion sounds sit under in Chapter IV",
+  "ms": 1076,
+  "momentaryMax": -19.9,
+  "samplePeakDb": -11.6,
+  "spec": {
+   "bank": "parity:ffx2-core",
+   "name": "hit-greatsword",
+   "volume": 0.8
+  }
+ },
+ {
+  "id": "scene-ch1-attack",
+  "kind": "scene",
+  "title": "Chapter I (FFX): Tidus lunges and hits",
+  "note": "the sword swing at the lunge, the hit 0.32 s later; new adds the body whoosh under the swing",
+  "seconds": 3.2,
+  "gain": 1,
+  "events": [
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": false,
+    "what": "v2:swing-sword p1 v0.8"
+   },
+   {
+    "at": 1.32,
+    "delay": 0,
+    "motion": false,
+    "what": "v2:hit-sword p1 v0.8"
+   },
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:whiff p0.8 v0.35"
+   }
+  ]
+ },
+ {
+  "id": "scene-ch1-boss",
+  "kind": "scene",
+  "title": "Chapter I (FFX): Seymour Flux lunges (a boss: heavier, lower)",
+  "note": "the recorded Flux swing, then the heavy hit; new adds the boss whoosh",
+  "seconds": 3.4,
+  "gain": 1,
+  "events": [
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": false,
+    "what": "parity:ffx-flux:swing-flux p1 v0.8"
+   },
+   {
+    "at": 1.4,
+    "delay": 0,
+    "motion": false,
+    "what": "v2:hit-heavy-enemy p1 v0.8"
+   },
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:whiff p0.644 v0.457"
+   }
+  ]
+ },
+ {
+  "id": "scene-ch4-run",
+  "kind": "scene",
+  "title": "Chapter IV (FFX-2): Paine runs in, strikes, runs home",
+  "note": "new adds the run's whoosh, the hop's landing thud, the strike's small whoosh and the run home",
+  "seconds": 3.8,
+  "gain": 1,
+  "events": [
+   {
+    "at": 0.8,
+    "delay": 0.4,
+    "motion": false,
+    "what": "v2:swing-greatsword p1 v0.8"
+   },
+   {
+    "at": 1.42,
+    "delay": 0,
+    "motion": false,
+    "what": "parity:ffx2-core:hit-greatsword p1 v0.8"
+   },
+   {
+    "at": 0.8,
+    "delay": 0.03,
+    "motion": true,
+    "what": "v1:whiff p0.72 v0.388"
+   },
+   {
+    "at": 1.2,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:footstep p1 v0.277"
+   },
+   {
+    "at": 1.2,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:whiff p0.8 v0.294"
+   },
+   {
+    "at": 2,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:whiff p0.72 v0.352"
+   },
+   {
+    "at": 2.3,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:footstep p1 v0.21"
+   }
+  ]
+ },
+ {
+  "id": "scene-ch1-cast",
+  "kind": "scene",
+  "title": "Chapter I (FFX): a cast begins",
+  "note": "the cast cue (magic-charge, 0.7); new adds the cloth rustle at its start",
+  "seconds": 3.2,
+  "gain": 1,
+  "events": [
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": false,
+    "what": "v2:magic-charge p1 v0.7"
+   },
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:steal-success p1 v1.5"
+   }
+  ]
+ },
+ {
+  "id": "scene-ch4-cast",
+  "kind": "scene",
+  "title": "Chapter IV (FFX-2): a cast begins",
+  "note": "the cast cue (magic-charge-x2, 0.7); new adds the cloth rustle",
+  "seconds": 3.2,
+  "gain": 1,
+  "events": [
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": false,
+    "what": "parity:ffx2-core:magic-charge-x2 p1 v0.7"
+   },
+   {
+    "at": 1,
+    "delay": 0,
+    "motion": true,
+    "what": "v1:steal-success p1 v1.5"
+   }
+  ]
+ }
+]

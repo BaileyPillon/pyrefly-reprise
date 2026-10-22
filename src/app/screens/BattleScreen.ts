@@ -74,6 +74,7 @@ import { defaultSettings, readSetting } from '../SaveData.ts';
 import { visualStyleOf } from '../saveVisualStyle.ts'; // release 61: OPTIONS > VISUAL STYLE
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { setFeelChapter } from '../../engine/feel/FeelSwitch.ts';
+import { setMotionSfxSpeed } from '../../engine/feel/MotionBeats.ts';
 import { battleComfort } from './battleComfort.ts';
 import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
@@ -306,6 +307,7 @@ export class BattleScreen extends Screen {
     if (this.exited) return this.releaseParts();
     this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
     if (this.exited) return this.releaseParts();
+    setMotionSfxSpeed(() => this.presenter?.playbackSpeed ?? 'normal'); // the motion sounds play at normal speed only (`engine/feel/MotionSfx.ts`)
     setFeelChapter(chapter.id); // the motion program's pieces (`?pack=demo`, `?punch=`, ...) are on in Chapter I and Chapter IV only (`engine/feel/FeelSwitch.ts`)
     this.spectacle = attachSpectacle({ game: chapter.game, renderer: this.app.renderer, scene: this.scene.scene, camera: this.app.renderer.camera, stage: this.stage, root: this.root });
 
@@ -1028,6 +1030,7 @@ export class BattleScreen extends Screen {
     this.spectacle?.dispose();
     this.spectacle = null;
     setFeelChapter(null);
+    setMotionSfxSpeed(null);
     this.stage?.dispose();
     this.stage = null;
     releaseLivingScene();

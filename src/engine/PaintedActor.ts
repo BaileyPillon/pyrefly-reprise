@@ -58,6 +58,7 @@ import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedSha
 import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { ShadowFollow, shadowX } from './feel/ContactShadow.ts'; // `?shadow=follow` (demo chapters, off by default): the contact shadow stays under the feet
 import { shadowFollows } from './feel/FeelSwitch.ts';
+import { heftOfHeight, motionBeat } from './feel/MotionBeats.ts'; // `?motionsfx=` (step 2; off by default): a figure tells the sound its lunge begins and its hop lands
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
@@ -1469,6 +1470,7 @@ export class PaintedActor extends Group {
    * target (`motion/StrikeReach.ts`) moves the rest on the eased step.
    */
   lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }, house = distance): Promise<void> {
+    motionBeat({ kind: 'lunge', strength: distance / 2.4, heft: heftOfHeight(this.worldHeight), atMs: ms * 0.13, ms }); // the step's fastest frame is at 0.13 of the move (`attackOffset`)
     const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
     const houseStep = motionSmooth() ? reachOffset : attackOffset; // W5 (on by default; `?motion=classic` restores cubic-out): the house part's step starts on the velocity-continuous curve, not cubic-out's 28 percent first frame; same distance, same beats
     const extra = Math.max(0, distance - house); // the distance beyond the house lunge rides the eased step (`reachOffset`); the house part is `attackOffset` to the frame
@@ -1931,6 +1933,7 @@ export class PaintedActor extends Group {
       onUpdate: (t) => {
         this.hopHeight = Math.sin(Math.PI * t) * height;
       },
+      onComplete: () => motionBeat({ kind: 'land', strength: height / (this.worldHeight * 0.33), heft: heftOfHeight(this.worldHeight) }), // the landing thud (`?motionsfx=`); a killed hop (the actor is disposed) never lands
     });
   }
 

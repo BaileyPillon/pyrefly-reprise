@@ -8,8 +8,9 @@
  * | `?hitstop=` | `today` (default), `short`, `off` | the hit-stop: today's, or 3 to 4 frames on criticals, Overdrive finishers and boss big attacks only |
  * | `?rumble=` | `off` (default), `on` | the gamepad's light rumble on big moments (never on keyboard play, never under REDUCE MOTION) |
  * | `?shadow=` | `today` (default), `follow` | the contact shadow stays under the feet through a lunge, shrinks and fades in the air, spreads on landing |
+ * | `?motionsfx=` | `off` (default), `on` | the subtle synced motion sounds: a whoosh on a lunge and on a planned smear, a landing thud, a cloth rustle on a cast (step 2; `feel/MotionSfx.ts`) |
  *
- * and the shared **`?pack=demo`**, which turns every piece above ON (`new`, `short`, `on`, `follow`) in the demo chapters. A key named beside `pack` wins for its piece
+ * and the shared **`?pack=demo`**, which turns every piece above ON (`new`, `short`, `on`, `follow`, `on`) in the demo chapters. A key named beside `pack` wins for its piece
  * (`?pack=demo&punch=today` is the demo pack with today's camera: the A/B).
  *
  * **Demo chapters only (Bailey: "Demo chapters first").** Chapter I is `seymour-flux` (FFX) and Chapter IV is `ffx2-bahamut` (FFX-2), the ids in `data/encounters.ts`. The battle
@@ -33,11 +34,12 @@ export interface FeelKeys {
   hitstop: StopMode | null;
   rumble: boolean | null;
   shadow: boolean | null;
+  motionsfx: boolean | null;
 }
 
-const NONE: FeelKeys = { pack: false, punch: null, hitstop: null, rumble: null, shadow: null };
+const NONE: FeelKeys = { pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null };
 
-/** Read the five keys from a search string (pure; `undefined` = no page). An unknown value is not named. */
+/** Read the six keys from a search string (pure; `undefined` = no page). An unknown value is not named. */
 export function parseFeelKeys(search: string | undefined): FeelKeys {
   if (search === undefined) return NONE;
   let q: URLSearchParams;
@@ -51,12 +53,14 @@ export function parseFeelKeys(search: string | undefined): FeelKeys {
   const stop = word('hitstop');
   const rumble = word('rumble');
   const shadow = word('shadow');
+  const motionsfx = word('motionsfx');
   return {
     pack: word('pack') === 'demo',
     punch: punch === 'today' || punch === 'new' || punch === 'off' ? punch : null,
     hitstop: stop === 'today' || stop === 'short' || stop === 'off' ? stop : null,
     rumble: rumble === 'on' ? true : rumble === 'off' ? false : null,
     shadow: shadow === 'follow' ? true : shadow === 'today' ? false : null,
+    motionsfx: motionsfx === 'on' ? true : motionsfx === 'off' ? false : null,
   };
 }
 
@@ -113,6 +117,12 @@ export function shadowFollows(): boolean {
   return forced.shadow ?? read().shadow ?? feelPack();
 }
 
+/** True when the motion sounds play (a whoosh on a lunge, a thud on a landing, a rustle on a cast). */
+export function motionSfxOn(): boolean {
+  if (!inFeelChapter()) return false;
+  return forced.motionsfx ?? read().motionsfx ?? feelPack();
+}
+
 /** The modes in one object, for the spectacle's flags (`SpectacleRules.SpectacleFlags.feel`). */
 export function feelFlags(): { punch: PunchMode; stop: StopMode } {
   return { punch: punchMode(), stop: stopMode() };
@@ -136,6 +146,10 @@ export function setRumbleOn(value: boolean | undefined): void {
 export function setShadowFollows(value: boolean | undefined): void {
   if (value === undefined) delete forced.shadow;
   else forced.shadow = value;
+}
+export function setMotionSfxOn(value: boolean | undefined): void {
+  if (value === undefined) delete forced.motionsfx;
+  else forced.motionsfx = value;
 }
 export function setFeelPack(value: boolean | undefined): void {
   if (value === undefined) delete forced.pack;

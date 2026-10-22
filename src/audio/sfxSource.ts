@@ -27,6 +27,21 @@ export interface SfxVoiceParams {
   pan?: number;
   /** Playback-rate multiplier. */
   pitch?: number;
+  /**
+   * Motion sounds (`sfxV2/motionCues.ts`): play only the first `trimMs` of the slice, in output time (after `pitch`). Absent: the whole slice, as every cue always played.
+   * A trimmed cue should also name a `fadeMs`, or its cut can click.
+   */
+  trimMs?: number;
+  /** Motion sounds: fade the sound to silence over its last `fadeMs` (of the slice, or of the trim). Absent: no fade. A looped source is never faded. */
+  fadeMs?: number;
+}
+
+/** A sound's length in output seconds, and the part of the buffer it plays (seconds of buffer), after a trim and the playback rate. */
+export function shapedLength(sliceSeconds: number, rate: number, trimMs: number | undefined): { out: number; buffer: number } {
+  const r = rate > 0 ? rate : 1;
+  const natural = sliceSeconds / r;
+  const out = typeof trimMs === 'number' && trimMs > 0 ? Math.min(natural, trimMs / 1000) : natural;
+  return { out, buffer: out * r };
 }
 
 export function startSfxSource(
@@ -41,7 +56,8 @@ export function startSfxSource(
 ): ParityVoice {
   const source = ctx.createBufferSource();
   source.buffer = buffer;
-  source.playbackRate.value = params.pitch ?? 1;
+  const rate = params.pitch ?? 1;
+  source.playbackRate.value = rate;
   const gain = ctx.createGain();
   gain.gain.value = level;
   const panner = ctx.createStereoPanner();
@@ -58,7 +74,14 @@ export function startSfxSource(
     source.loopStart = slice.cue.offset;
     source.loopEnd = slice.cue.offset + slice.cue.duration;
   }
-  if (slice) source.start(when, slice.cue.offset, loop ? undefined : slice.cue.duration);
+  const shaped = !loop && (params.trimMs !== undefined || params.fadeMs !== undefined) ? shapedLength(slice ? slice.cue.duration : buffer.duration, rate, params.trimMs) : null;
+  if (shaped && typeof params.fadeMs === 'number' && params.fadeMs > 0) {
+    const fade = Math.min(params.fadeMs / 1000, shaped.out);
+    gain.gain.setValueAtTime(level, when + shaped.out - fade);
+    gain.gain.linearRampToValueAtTime(0, when + shaped.out);
+  }
+  if (slice) source.start(when, slice.cue.offset, loop ? undefined : (shaped?.buffer ?? slice.cue.duration));
+  else if (shaped) source.start(when, 0, shaped.buffer); // the synthesised stand-in (the sprite has not decoded): the same shaping
   else source.start(when);
   source.onended = () => {
     source.disconnect();

@@ -35,6 +35,8 @@ import type { Point3 } from '../../engine/BattlePresenterPorts.ts';
 import { ownPlace } from '../../engine/motion/PlaceOwner.ts';
 import { planRun, type RunWorld } from '../../engine/motion/StandOff.ts';
 import type { StageMotionPort } from '../../engine/motion/StageMotionPort.ts';
+import { motionBeat } from '../../engine/feel/MotionBeats.ts';
+import { actorHeft } from '../../engine/feel/MotionHooks.ts'; // `?motionsfx=` (demo chapters, off by default): the whoosh of the run
 
 /** The lunge that still follows the run: she has run in, so only the blow is left (today's house lunge is 1.4 from where she stands). */
 export const STRIKE_LUNGE = 0.6;
@@ -158,6 +160,7 @@ export class RunInMotion implements ActionMotionPort {
     if (!readyKey) actor.setPose('idle');
     void world.truck(plan.truck.x, plan.truck.y, plan.truck.z, ms);
     world.smear(id, ms * 0.95, SMEAR.in);
+    motionBeat({ kind: 'dash', strength: SMEAR.in, heft: actorHeft(actor), ms, atMs: ms * 0.3 }); // the run in: the afterimage's streak has its whoosh
     await Promise.all([actor.moveTo(plan.spot, ms), actor.hop(0.42, ms)]);
     if (!readyKey) actor.setPose('attack');
   }
@@ -175,6 +178,7 @@ export class RunInMotion implements ActionMotionPort {
       const ms = ctx.still === true || down ? 1 : motionMs(runMs(Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z)).home, ctx.speed);
       actor.setPose('idle');
       if (ms > 1) world?.smear(actorId, ms * 0.9, SMEAR.home);
+      if (ms > 1) motionBeat({ kind: 'dash', strength: SMEAR.home, heft: actorHeft(actor), ms, atMs: ms * 0.3 }); // and the run home, lighter
       void world?.truck(0, 0, 0, ms);
       await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [actor.hop(0.2, ms)] : [])]);
       void world?.truck(0, 0, 0, 1); // never leave the frame off true

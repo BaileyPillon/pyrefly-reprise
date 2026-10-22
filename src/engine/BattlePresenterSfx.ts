@@ -23,6 +23,7 @@ import { LANDING_MOMENTS } from '../audio/sfxV2/eventCues.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
 import { STRIKE_BEAT_MS } from './StrikeBeat.ts';
+import { castBeat } from './feel/MotionHooks.ts'; // `?motionsfx=` (demo chapters, off by default): the cloth rustle when a cast begins
 
 /** What the presenter tells the voice about one cue. */
 export interface SfxAsk {
@@ -181,6 +182,7 @@ function scaled(ctx: EventCtx, ms: number): number {
 
 /** Play one presenter cue: the voice's answer, else the presenter's own cue with its fallbacks. */
 export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; delay?: number }): void {
+  if (name === 'cast') castBeat(ctx);
   const audio = ctx.deps.audio;
   if (!audio) return;
   let voiced: SfxVoiced | null = null;
