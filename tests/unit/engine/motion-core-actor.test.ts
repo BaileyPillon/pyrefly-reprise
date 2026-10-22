@@ -10,7 +10,8 @@ import { setCurvesChapter, setCurvesMode } from '../../../src/engine/motion/Curv
 import { startAttackMove, liftCaster, releaseCastLift, arcFor } from '../../../src/engine/motion/CurveBeats.ts';
 import { PROFILES, SQUASH_CAP, defaultPaceFactor, resolveStrike, strikeMarks } from '../../../src/engine/motion/StrikeCurve.ts';
 import { STRIKE_BEAT_MS, strikeBeatNow } from '../../../src/engine/StrikeBeat.ts';
-import { armContact, CONTACT_HOLD_MAX_MS, CURVES_CONTACT_EXTRA_MS } from '../../../src/engine/ContactBeat.ts';
+import { armContact, CONTACT_HOLD_MAX_MS, CURVES_CONTACT_EXTRA_MS, meetContact, releaseContact } from '../../../src/engine/ContactBeat.ts';
+import { paceFactor } from '../../../src/engine/pace.ts';
 
 const flush = async (): Promise<void> => {
   for (let i = 0; i < 6; i++) await Promise.resolve();
@@ -28,7 +29,7 @@ afterEach(() => {
 });
 
 function figure(side: 'party' | 'enemy' = 'party', shadow = false): Actor {
-  const a = new PaintedActor({ name: 'auron', worldHeight: side === 'party' ? 1.82 : 4.1, side, breathe: false, sway: false, shadow });
+  const a = new PaintedActor({ name: 'auron', worldHeight: side === 'party' ? 1.82 : 4.1, side, breathe: false, sway: false, shadow: shadow ? {} : false });
   const poses: Record<string, ReturnType<typeof painting>> = {};
   for (const p of ['idle', 'attack', 'follow']) poses[p] = painting('auron', p);
   a.adoptPoses(poses, 'idle');
@@ -359,5 +360,46 @@ describe('the presenter beats with the new curves on', () => {
     expect(sleeps).toEqual([CONTACT_HOLD_MAX_MS, CONTACT_HOLD_MAX_MS + CURVES_CONTACT_EXTRA_MS]);
     const nominal = strikeMarks(resolveStrike(PROFILES.ffx, { distance: 1.4, height: 1.82, timeScale: 1 }));
     expect(nominal.contact * defaultPaceFactor('ffx') - STRIKE_BEAT_MS * defaultPaceFactor('ffx')).toBeLessThanOrEqual(CURVES_CONTACT_EXTRA_MS * defaultPaceFactor('ffx'));
+  });
+});
+
+describe('the whole beat on the real actor: arm the contact, start the strike, a blow that arrives early waits for the contact, the hold lets go', () => {
+  it('contact at 0.4 s, the blow lands there, the strike is held 0.2 s, goes home, and is over at 1.1 s (FFX, default pace)', async () => {
+    setCurvesMode('new');
+    setCurvesChapter('seymour-flux');
+    const a = figure();
+    // a virtual presenter clock: sleep(ms) takes ms x pace of virtual time, like BattlePresenter.sleep at normal speed
+    let now = 0;
+    const timers: Array<{ at: number; done: () => void }> = [];
+    const ctx = { sleep: (ms: number) => new Promise<void>((r) => timers.push({ at: now + ms * paceFactor('action'), done: r })) } as never;
+    const log: Array<[string, number]> = [];
+    const contact = armContact(ctx, 'tidus' as never);
+    const plan = { distance: 1.4, house: 1.4 };
+    startAttackMove(ctx, { strike: (p: never) => a.strike(p), lunge: () => Promise.resolve(), squash: () => Promise.resolve() } as never, plan, { hold: contact.hold, reached: () => (log.push(['contact', now]), contact.reached()) }, false);
+    // the blow: the presenter's windUp sleep (220 ms x pace) then the damage event asks meetContact
+    void (async () => {
+      await (ctx as { sleep: (n: number) => Promise<void> }).sleep(220);
+      log.push(['blow asked', now]);
+      await meetContact(ctx, 'seymour-flux' as never);
+      log.push(['blow lands', now]);
+    })();
+    void contact.hold.then(() => log.push(['hold released', now]));
+    const frame = 1000 / 120;
+    let end = -1;
+    void a.strike; // (the plan above started it)
+    for (let i = 1; i <= 220; i++) {
+      a.update(frame / 1000, frame / 1000);
+      now += frame;
+      for (let k = timers.length - 1; k >= 0; k--) if (timers[k]!.at <= now) timers.splice(k, 1)[0]!.done();
+      await flush();
+      if (end < 0 && Math.abs(inner(a).position.x) < 1e-9 && now > 1000) end = now;
+    }
+    releaseContact(ctx);
+    const at = (name: string): number => log.find(([n]) => n === name)?.[1] ?? Number.NaN;
+    expect(Math.abs(at('blow asked') - 264)).toBeLessThan(10);
+    expect(Math.abs(at('contact') - 400)).toBeLessThan(10);
+    expect(Math.abs(at('blow lands') - at('contact'))).toBeLessThan(10); // the blow waited for the contact
+    expect(at('hold released') - at('contact')).toBeLessThan(40); // no follow-through painting: released at once; the profile's 0.2 s minimum hold still applies
+    expect(Math.abs(end - 1100)).toBeLessThan(30);
   });
 });

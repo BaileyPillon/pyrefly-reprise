@@ -167,11 +167,6 @@ export class CurveDriver {
     return this.run;
   }
 
-  /** True while any channel is off its rest value or still running: the actor may skip the work when this is false. */
-  get active(): boolean {
-    return this.run !== null || this.leaps.length > 0 || this.cast.value > 1e-6 || this.cast.landSy !== 1 || this.out.x !== 0 || this.out.lift !== 0 || this.out.sy !== 1 || this.out.lean !== 0;
-  }
-
   /**
    * Begin a strike. One in flight folds out over {@link import('./StrikeRun.ts').FOLD_MS}; its promise settles. The returned promise settles when the move is over (or replaced, or
    * the driver is {@link dispose}d). `autoRelease`: no contact will let the hold go.

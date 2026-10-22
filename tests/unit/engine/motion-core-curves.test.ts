@@ -22,6 +22,7 @@ import {
   type StrikeShape,
 } from '../../../src/engine/motion/StrikeCurve.ts';
 import { StrikeRun } from '../../../src/engine/motion/StrikeRun.ts';
+import { installCurvesDebug } from '../../../src/debug/curvesApi.ts';
 
 afterEach(() => {
   setCurvesMode(null);
@@ -450,5 +451,23 @@ describe('the recoil: a few px, then recover with one small overshoot', () => {
     expect(newRecoilOffset(70 / 360, 360, d)).toBeCloseTo(-d, 6);
     // a second hit mid-recoil starts from where the figure is
     expect(newRecoilOffset(0, 360, d, -0.04)).toBeCloseTo(-0.04, 12);
+  });
+});
+
+describe("window.__pyrefly.curves / curvesChapter / curvesOn / strikeMarks (the recorder's setters)", () => {
+  it('sets the mode and the chapter, answers curvesOn for the demo chapters only, and lines a capture up on the marks', () => {
+    const api: Record<string, (...a: unknown[]) => unknown> = {};
+    installCurvesDebug(api as Record<string, unknown>);
+    expect(api['curves']!()).toBe('today');
+    expect(api['curves']!('new')).toBe('new');
+    expect(api['curvesOn']!()).toBe(false);
+    expect(api['curvesChapter']!('ffx2-bahamut')).toBe('ffx2-bahamut');
+    expect(api['curvesOn']!()).toBe(true);
+    expect(api['curvesChapter']!('yunalesca')).toBe('yunalesca');
+    expect(api['curvesOn']!()).toBe(false);
+    const m = api['strikeMarks']!('ffx') as { paced: Record<string, number>; onScreenAtDefaultPace: Record<string, number> };
+    expect(m.onScreenAtDefaultPace['contact']).toBeCloseTo(400, 6);
+    expect(m.onScreenAtDefaultPace['end']).toBeCloseTo(1100, 6);
+    expect(m.paced['contact']! * defaultPaceFactor('ffx')).toBeCloseTo(400, 6);
   });
 });
