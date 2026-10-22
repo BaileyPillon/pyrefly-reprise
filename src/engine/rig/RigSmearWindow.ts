@@ -13,7 +13,7 @@
 import type { ActorSmear, SmearFrame } from '../motion/ActorSmear.ts';
 import { applySmear, type SmearCells, type SmearPlane } from '../motion/SmearApply.ts';
 import { noteSmear } from '../motion/SmearLog.ts';
-import { FLASH_PEAK, rigSmearPlan, type SmearPlan } from '../motion/SmearPlan.ts';
+import { FLASH_PEAK, MIN_SPEED, rigSmearPlan, type SmearPlan } from '../motion/SmearPlan.ts';
 import { smearStyleNow } from '../motion/SmearSwitch.ts';
 
 const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
@@ -35,6 +35,8 @@ export interface RigSmearBegin {
   moveMs: number;
   state: ActorSmear;
   worldHeight: number;
+  /** The way the figure faces (+1 or -1 along the stage): the streak's direction for a key move of a figure that is not travelling. */
+  facing: number;
 }
 
 export class RigSmearWindow {
@@ -54,12 +56,17 @@ export class RigSmearWindow {
     if (style === 'off') return false;
     const plan = rigSmearPlan({ from: o.from, to: o.to, share: o.share, frameMs: o.state.frameMs, style });
     if (!plan || !(o.moveMs > 0)) return false;
-    const d = o.state.direction(o.worldHeight, this.dir);
-    o.state.begin(plan, d.x, d.y);
+    // a figure that travels (a lunge, a recoil that was hinted) streaks along its travel; one that only changes key streaks the way it faces
+    if (o.state.hinted || o.state.speed(o.worldHeight) >= MIN_SPEED) o.state.direction(o.worldHeight, this.dir);
+    else {
+      this.dir.x = o.facing < 0 ? -1 : 1;
+      this.dir.y = 0;
+    }
+    o.state.begin(plan, this.dir.x, this.dir.y);
     this.plan = plan;
     this.moveMs = o.moveMs;
     this.flashed = false;
-    noteSmear({ at: now() + 0.5 * o.moveMs - plan.cutMs / 2, actor: o.name, from: o.from, to: o.to, style: plan.style, cutMs: plan.cutMs, overlap: null, anchorDistance: null, speed: 0, strength: plan.strength, flash: plan.flash, kind: 'rig' });
+    noteSmear({ at: now(), moveMs: o.moveMs, actor: o.name, from: o.from, to: o.to, style: plan.style, cutMs: plan.cutMs, overlap: null, anchorDistance: null, speed: 0, strength: plan.strength, flash: plan.flash, kind: 'rig' });
     return true;
   }
 

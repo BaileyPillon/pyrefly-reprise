@@ -32,6 +32,8 @@ export interface LungeContact {
   impact?: () => void;
   /** Optional (same, step 2): the way out. The sampled strike calls it on its `settlePeak` mark (the fastest frame of the way home): the impact painting goes to the follow-through or the idle there. */
   settle?: () => void;
+  /** Optional (same, step 2): the strike is home (its `end` mark): a figure that stood in the follow-through goes to the idle. */
+  done?: () => void;
 }
 
 /** The longest the attacker holds at the apex waiting for the blow, ms at timeScale 1. */

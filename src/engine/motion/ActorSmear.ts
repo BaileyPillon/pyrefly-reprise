@@ -75,6 +75,11 @@ export class ActorSmear {
     this.hintLeft = Math.max(0, ms);
   }
 
+  /** True while a hint stands (a move about to push the figure: the direction and speed it gave are the truth). */
+  get hinted(): boolean {
+    return this.hintLeft > 0;
+  }
+
   /** How fast the figure moves, body heights a second: the measured speed, or the hint's while it is the larger. */
   speed(worldHeight: number): number {
     const measured = Math.hypot(this.vx, this.vy) / Math.max(1e-6, worldHeight);

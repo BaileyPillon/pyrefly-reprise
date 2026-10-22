@@ -18,7 +18,7 @@ import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
 import { liftCaster, releaseCastLift, startAttackMove } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the sampled strike, the cast lift; today's lunge unless switched on (`motion/CurvesSwitch.ts`)
-import { blowPose, clearMarksSwaps, impactAtApex, windUpLeads } from './KeyPoses.ts';
+import { blowPose, idleAtEnd, impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
 import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SPECTACLE's two motion looks share one gate
@@ -108,13 +108,12 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   if (flying) await flying;
   endOdKey(ctx, ctx.actingId);
   releaseContact(ctx); // VP-1001-06: a strike still held at its apex goes home
-  clearMarksSwaps(ctx); // motion pass, step 2: nothing waits on a strike mark any more
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
   releaseCastLift(ctx, going); // the cast lift comes down with the action at the latest
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
-  actor?.setPose('idle');
+  idleAtEnd(ctx, actor, ctx.actingId); // the idle, or (new curves) the strike's own marks do it: follow on the fastest frame home, idle at home
   ctx.actingId = null;
   endSpellAction(ctx);
   // Whatever the shot was — Overdrive letterbox, telegraph zoom, a plain

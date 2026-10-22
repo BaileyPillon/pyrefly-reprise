@@ -102,6 +102,25 @@ describe('a rig\'s whole-figure image change under the smear', () => {
     expect(smearLog()[0]).toMatchObject({ style: 'blur', to: 'hurt', flash: false, kind: 'rig' });
   });
 
+  it('a figure that only changes key streaks the way it FACES (a foe to the left, a party member to the right), in the plane own coordinates', async () => {
+    setSmearStyle('paint');
+    setCurvesChapter('seymour-flux');
+    for (const [side, facing] of [['enemy', -1], ['party', 1]] as const) {
+      const r = readRig(bossFile());
+      if (!r.ok) throw new Error(r.reason);
+      const a = await RigActor.createRigged({ name: 'seymour', worldHeight: 4.1, side, shadow: false }, { data: r.data, base: '/art/rigs/testfig', idlePainting: idlePainting(), loadTexture: async () => new Texture() });
+      for (let i = 0; i < 12; i++) a.update(1 / 120);
+      a.setPose('attack');
+      let seen = 0;
+      for (let i = 0; i < 30 && !seen; i++) {
+        a.update(1 / 120);
+        if (cellsOf(a).smearAmt.value > 0.3) seen = (a as unknown as { u: { smearVec: { value: { x: number } } } }).u.smearVec.value.x;
+      }
+      const plane = (a as unknown as { slots: [{ mesh: { scale: { x: number } } }]; active: number }).slots[(a as unknown as { active: number }).active]!.mesh.scale.x;
+      expect(Math.sign(seen), side).toBe(facing * Math.sign(plane)); // a mirrored plane's coordinates run the other way
+    }
+  });
+
   it('a small change (one part), the switch off, another chapter and an immediate pose keep the cross-fade', async () => {
     setSmearStyle('paint');
     setCurvesChapter('seymour-flux');

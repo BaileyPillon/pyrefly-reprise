@@ -10,7 +10,7 @@ import { setCurvesChapter, setCurvesMode } from '../../../src/engine/motion/Curv
 import { setSmearStyle } from '../../../src/engine/motion/SmearSwitch.ts';
 import { resetSmearLog, smearLog } from '../../../src/engine/motion/SmearLog.ts';
 import { CUT_MS_MAX, CUT_MS_MIN } from '../../../src/engine/motion/SmearPlan.ts';
-import { clearMarksSwaps, impactAtApex, settleSwap } from '../../../src/engine/KeyPoses.ts';
+import { followThrough, idleAtEnd, impactAtApex, settleSwap } from '../../../src/engine/KeyPoses.ts';
 import { startAttackMove } from '../../../src/engine/motion/CurveBeats.ts';
 import { setDemoMotion } from '../../../src/engine/motion/DemoMotion.ts';
 import type { CoarseMask } from '../../../src/engine/PoseAlign.ts';
@@ -297,57 +297,107 @@ describe('what stays a plain blend', () => {
   });
 });
 
-describe('the way out of a strike is swapped on the settlePeak mark', () => {
+describe('the way out of a strike is swapped on the settlePeak mark and the end mark', () => {
   const poses: string[] = [];
+  let slept: Array<() => void> = [];
   const ctx = (over: Record<string, unknown> = {}): never =>
-    ({ actingId: 'tidus', moments: { reducedMotion: false }, stage: { actor: () => ({ setPose: (p: string) => poses.push(p) }), paints: (_id: string, p: string) => p === 'follow' || p === 'ready' }, ...over }) as never;
-  it('with the new curves on, the impact painting is held through the blow and goes to the follow-through on the mark; the blow no longer swaps it', async () => {
-    setCurvesMode('new');
-    setCurvesChapter('seymour-flux');
-    poses.length = 0;
-    const c = ctx();
+    ({ actingId: 'tidus', moments: { reducedMotion: false }, sleep: () => new Promise<void>((r) => slept.push(r)), stage: { actor: () => ({ setPose: (p: string) => poses.push(p) }), paints: (_id: string, p: string) => p === 'follow' || p === 'ready' }, ...over }) as never;
+  const marksOf = (c: never) => {
     const contact = impactAtApex(c, 'tidus' as never, { hold: Promise.resolve(), reached: () => poses.push('reached') });
-    expect(typeof contact.settle).toBe('function');
-    const { followThrough } = await import('../../../src/engine/KeyPoses.ts');
-    expect(followThrough(c, 'tidus' as never)).toBe(0); // the blow puts nothing up
-    expect(poses).toEqual([]);
     const plans: Array<Record<string, unknown>> = [];
     startAttackMove({ speed: () => 'normal', deps: {} } as never, { strike: (p: Record<string, unknown>) => (plans.push(p), Promise.resolve()) } as never, { distance: 1.4, house: 1.4 }, contact, false);
-    const marks = plans[0]!['marks'] as { travelPeak: () => void; settlePeak: () => void };
+    return { contact, marks: plans[0]!['marks'] as { travelPeak: () => void; settlePeak: () => void; end: () => void } };
+  };
+  const flush = async (): Promise<void> => {
+    for (let i = 0; i < 6; i++) await Promise.resolve();
+  };
+  beforeEach(() => {
+    poses.length = 0;
+    slept = [];
+    setCurvesMode('new');
+    setCurvesChapter('seymour-flux');
+  });
+
+  it('the impact painting is held through the blow, goes to the follow-through on the settlePeak mark and to the idle on the end mark; the blow swaps nothing', async () => {
+    const c = ctx();
+    const { contact, marks } = marksOf(c);
+    expect(typeof contact.settle).toBe('function');
+    expect(typeof contact.done).toBe('function');
+    expect(followThrough(c, 'tidus' as never)).toBe(0); // the blow puts nothing up
+    expect(poses).toEqual([]);
     marks.travelPeak();
     marks.settlePeak();
     expect(poses).toEqual(['attack', 'follow']);
+    marks.end();
+    expect(poses).toEqual(['attack', 'follow', 'idle']);
   });
-  it('a figure with no follow-through painting goes to the idle there; one whose action ended, or whose move has its own key painting, is left alone', () => {
-    setCurvesMode('new');
-    setCurvesChapter('seymour-flux');
-    poses.length = 0;
-    settleSwap(ctx({ stage: { actor: () => ({ setPose: (p: string) => poses.push(p) }), paints: () => false } }), 'tidus' as never);
-    expect(poses).toEqual(['idle']);
-    poses.length = 0;
-    settleSwap(ctx({ actingId: null }), 'tidus' as never);
-    expect(poses).toEqual([]);
-  });
-  it('actionEnd clears the pending marks, so the next attack\'s blow is today\'s', async () => {
-    setCurvesMode('new');
-    setCurvesChapter('seymour-flux');
-    const { followThrough } = await import('../../../src/engine/KeyPoses.ts');
-    poses.length = 0;
+  it('actionEnd comes BEFORE the fastest frame home (the measured case): its idle waits for the marks, so the follow-through is shown and the cut is on the fastest frame', async () => {
     const c = ctx();
-    impactAtApex(c, 'tidus' as never, { hold: Promise.resolve(), reached: () => {} });
-    clearMarksSwaps(c);
-    expect(followThrough(c, 'tidus' as never)).toBe(180);
+    const { marks } = marksOf(c);
+    marks.travelPeak();
+    idleAtEnd(c, { setPose: (p: string) => poses.push(p) }, 'tidus' as never); // the action ends first
+    expect(poses).toEqual(['attack']); // no idle yet
+    marks.settlePeak();
+    expect(poses).toEqual(['attack', 'follow']);
+    marks.end();
+    expect(poses).toEqual(['attack', 'follow', 'idle']);
+    for (const r of slept) r(); // the net's timer finally runs: nothing is left to do
+    await flush();
+    expect(poses).toEqual(['attack', 'follow', 'idle']);
+  });
+  it('the net: when the marks never come (a strike taken over by another) the idle goes up after MARKS_NET_MS', async () => {
+    const c = ctx();
+    const { marks } = marksOf(c);
+    marks.travelPeak();
+    idleAtEnd(c, { setPose: (p: string) => poses.push(p) }, 'tidus' as never);
+    expect(poses).toEqual(['attack']);
+    for (const r of slept) r();
+    await flush();
+    expect(poses).toEqual(['attack', 'idle']);
+    marks.settlePeak(); // a late mark does nothing more
+    expect(poses).toEqual(['attack', 'idle']);
+  });
+  it('a later attack by the same figure takes over from the net of an earlier one', async () => {
+    const c = ctx();
+    marksOf(c);
+    idleAtEnd(c, { setPose: (p: string) => poses.push(p) }, 'tidus' as never);
+    const second = marksOf(c); // a new attack arms again
+    for (const r of slept) r();
+    await flush();
+    expect(poses).toEqual([]); // the first net did not put an idle over the second attack
+    second.marks.settlePeak();
     expect(poses).toEqual(['follow']);
   });
-  it('with the new curves off, nothing changes: the apex puts the impact painting up and the blow the follow-through', async () => {
-    setCurvesChapter('seymour-flux');
+  it('a figure with no follow-through painting goes to the idle on the settlePeak mark, once; a move with its own key painting is left alone', () => {
+    const c = ctx({ stage: { actor: () => ({ setPose: (p: string) => poses.push(p) }), paints: () => false } });
+    const { marks } = marksOf(c);
+    marks.settlePeak();
+    expect(poses).toEqual(['idle']);
+    marks.end();
+    expect(poses).toEqual(['idle']);
     poses.length = 0;
+    settleSwap(ctx(), 'tidus' as never); // nothing armed: nothing owed
+    expect(poses).toEqual([]);
+  });
+  it('the end mark does not put an idle over a pose the figure has taken since (a menu\'s ready, a new action)', () => {
+    const live = { pose: 'follow', setPose: (p: string) => { live.pose = p; poses.push(p); } };
+    const c = ctx({ stage: { actor: () => live, paints: (_id: string, p: string) => p === 'follow' || p === 'ready' } });
+    const { marks } = marksOf(c);
+    marks.settlePeak();
+    expect(poses).toEqual(['follow']);
+    live.pose = 'ready';
+    marks.end();
+    expect(poses).toEqual(['follow']);
+  });
+  it('with the new curves off nothing changes: the apex puts the impact painting up, the blow the follow-through, actionEnd the idle at once', () => {
+    setCurvesMode('today');
     const c = ctx();
     const contact = impactAtApex(c, 'tidus' as never, { hold: Promise.resolve(), reached: () => {} });
     expect(contact.settle).toBeUndefined();
     contact.reached();
     expect(poses).toEqual(['attack']);
-    const { followThrough } = await import('../../../src/engine/KeyPoses.ts');
     expect(followThrough(c, 'tidus' as never)).toBe(180);
+    idleAtEnd(c, { setPose: (p: string) => poses.push(p) }, 'tidus' as never);
+    expect(poses).toEqual(['attack', 'follow', 'idle']);
   });
 });

@@ -204,7 +204,7 @@ export class RigActor extends PaintedActor {
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
     const fadeMs = demoMotionOn() && ms > 0 ? fadeMsFor(this.data, this.data.keys.get(key), this.stateFrom, this.stateTo) : 0;
     this.fade = { ms: fadeMs, flipAt: fadeMs > 0 ? fadeStart(ms, fadeMs) : undefined };
-    if (this.smearWin.begin({ name: this.name, from: leaving, to: key, share: swapShare(partAreas(this.data), this.stateFrom, this.stateTo), moveMs: ms, state: this.smear.state, worldHeight: this.bodyHeight })) this.fade = { ms: 0, flipAt: undefined }; // a whole-figure flip is a cut and the smear covers it
+    if (this.smearWin.begin({ name: this.name, from: leaving, to: key, share: swapShare(partAreas(this.data), this.stateFrom, this.stateTo), moveMs: ms, state: this.smear.state, worldHeight: this.bodyHeight, facing: this.facingDir })) this.fade = { ms: 0, flipAt: undefined }; // a whole-figure flip is a cut and the smear covers it
     this.trans.retarget(target, ms);
     this.layersDue = true;
     if (ms <= 0) this.pose0();

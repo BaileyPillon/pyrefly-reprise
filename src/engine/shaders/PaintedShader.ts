@@ -151,6 +151,10 @@ export const paintedFragmentShader = /* glsl */ `
   vec2 smearUvVec(vec2 v) { return v; }
 
   vec4 smearTexel(vec2 uv) {
+    // the taps below sit in loops, where an implicit mip level is undefined (the compiler warns): they sample with the pixel's own derivatives, taken first (before any return that
+    // could differ between the pixels of a quad)
+    vec2 gx = dFdx(uv);
+    vec2 gy = dFdy(uv);
     vec4 c0 = texture2D(map, uv);
     vec2 v = smearUvVec(smearVec) * smearAmt;
     if (dot(v, v) < 1e-8) return c0;
@@ -162,7 +166,7 @@ export const paintedFragmentShader = /* glsl */ `
       for (int i = 0; i < 13; i++) {
         float t = (float(i) + jit - 6.0) / 6.0;
         float w = max(0.1, 1.0 - 0.75 * abs(t));
-        vec4 s = texture2D(map, uv + v * (t * 0.5));
+        vec4 s = textureGrad(map, uv + v * (t * 0.5), gx, gy);
         acc += vec4(s.rgb * s.a, s.a) * w;
         wsum += w;
       }
@@ -179,13 +183,13 @@ export const paintedFragmentShader = /* glsl */ `
     for (int i = 0; i < 12; i++) {
       float s = (float(i) + 0.5 + jit) / 12.0;
       float k = step(s, reach) * pow(1.0 - s, 1.15);
-      vec4 smp = texture2D(map, uv + v * s);
+      vec4 smp = textureGrad(map, uv + v * s, gx, gy);
       trail += vec4(smp.rgb * smp.a, smp.a) * k;
       tw += k;
     }
     float edge = smoothstep(0.0, 0.045, min(min(uv.x, 1.0 - uv.x), min(uv.y, 1.0 - uv.y)));
     float ta = clamp(trail.a / max(tw, 1e-4) * 1.2, 0.0, 1.0) * 0.92 * edge;
-    vec3 trgb = trail.a > 1e-4 ? trail.rgb / trail.a : c0.rgb;
+    vec3 trgb = trail.a > 1e-4 ? clamp(trail.rgb / trail.a * 1.3 + vec3(0.05), 0.0, 1.0) : c0.rgb; // a little lighter than the figure: a streak of its own colours is lost against a backdrop of the same hue
     float oa = c0.a + ta * (1.0 - c0.a);
     return oa > 1e-4 ? vec4((c0.rgb * c0.a + trgb * ta * (1.0 - c0.a)) / oa, oa) : vec4(c0.rgb, 0.0);
   }
