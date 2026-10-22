@@ -270,10 +270,20 @@ describe('the tap on the shot director', () => {
     const director = tapDirector(inner as never, { impact, close, open: () => { throw new Error('listener'); } });
     expect(await director.actionOpen?.(open(undefined, 'attack'))).toBe(true);
     expect(director.impact?.({ ...ctx(), actor: { id: 'yuna', side: 'party' }, target: { id: 'x2-valefor', side: 'enemy' }, hitIndex: 0, heavy: false } as ImpactShot)).toBe(true);
-    expect(impact).toHaveBeenCalledWith('yuna');
+    expect(impact).toHaveBeenCalledWith('yuna', { targetId: 'x2-valefor', hitIndex: 0, heavy: false }); // the striker, and where the blow landed
     director.actionClose?.({ ...ctx(), actor: { id: 'yuna', side: 'party' } });
     expect(close).toHaveBeenCalledWith('yuna');
     expect(director.telegraph?.({ ...ctx(), enemy: { id: 'x2-valefor', side: 'enemy' }, stage: 1 })).toBe(false); // a beat nobody handles is the presenter's own
+  });
+
+  it('tells the listener where a blow landed (the target, the hit of a multi-hit action, whether it is heavy), and still tells it of a blow with no striker', () => {
+    const impact = vi.fn();
+    const director = tapDirector(undefined, { impact });
+    expect(director.impact?.({ ...ctx(), actor: { id: 'x2-valefor', side: 'enemy' }, target: { id: 'rikku', side: 'party' }, hitIndex: 2, heavy: true } as ImpactShot)).toBe(false);
+    expect(impact).toHaveBeenLastCalledWith('x2-valefor', { targetId: 'rikku', hitIndex: 2, heavy: true });
+    director.impact?.({ ...ctx(), actor: undefined, target: { id: 'paine', side: 'party' }, hitIndex: 0, heavy: false } as unknown as ImpactShot); // a counter or a status tick
+    expect(impact).toHaveBeenLastCalledWith(undefined, { targetId: 'paine', hitIndex: 0, heavy: false });
+    expect(impact).toHaveBeenCalledTimes(2);
   });
 
   it('still tells the listener when the inner director\'s handler throws, and passes the error on', () => {

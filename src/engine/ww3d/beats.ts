@@ -24,12 +24,19 @@ export interface OpenInfo {
   readonly targetIds: readonly string[];
 }
 
+/** Where a blow landed: on whom, which hit of a multi-hit action it was (0-based) and whether it was a critical, an overkill or a capped hit (the burst `./hitFx.ts` draws there). */
+export interface HitReport {
+  readonly targetId: string;
+  readonly hitIndex: number;
+  readonly heavy: boolean;
+}
+
 /** What a listener is told. */
 export interface BeatListener {
   /** An action opened by `actorId`: `kind` is the painted pose the presenter picked (`attack`, `cast`, `item`, `defend`) or `overdrive`, `lead` the seconds until the blow lands. */
   open?(actorId: string, kind: string, lead: number, info: OpenInfo): void;
-  /** A blow by `actorId` landed. */
-  impact?(actorId: string): void;
+  /** A blow landed: by `actorId` (none for a counter or a status tick), on `hit.targetId`. */
+  impact?(actorId: string | undefined, hit?: HitReport): void;
   /** The action of `actorId` is over. */
   close?(actorId: string): void;
 }
@@ -58,7 +65,7 @@ export function tapDirector(inner: ShotDirector | undefined, listener: BeatListe
       const handler = (inner as Record<string, ((c: ShotCtx) => ShotAnswer) | undefined> | undefined)?.[beat];
       if (beat === 'impact') {
         const c = ctx as ImpactShot;
-        if (c.actor) quietly(() => listener.impact?.(c.actor!.id));
+        if (c.actor || c.target) quietly(() => listener.impact?.(c.actor?.id, c.target ? { targetId: c.target.id, hitIndex: c.hitIndex ?? 0, heavy: c.heavy === true } : undefined)); // a blow with no striker (a counter, a status tick) still lands on someone
       }
       if (beat === 'actionClose') {
         const c = ctx as ActorShot;

@@ -10,18 +10,21 @@
  * 4. **The beats**: an attack or cast starts the figure's clip; Valefor's three special moves start their stand-in effects against the right targets and her wings flap harder until the action closes.
  * 5. **The weapons**: aimed at Valefor's chest once a girl stands on her slot, and not while she is still walking on.
  */
-import { Color, Group, Scene, Vector3 } from 'three';
+import { Color, Group, PerspectiveCamera, Scene, Vector3, type Mesh } from 'three';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { SWAY } from '../../../src/engine/ww3d/bossMotion.ts';
 import { BOSS_RIM, GLOW_FILL, PULSE_LOW, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, spellRim } from '../../../src/engine/ww3d/glow.ts';
+import { HitFx } from '../../../src/engine/ww3d/hitFx.ts';
 import { MoveFx } from '../../../src/engine/ww3d/moveFx.ts';
+import { hitPlan } from '../../../src/engine/ww3d/hitBurst.ts';
 import { ORB, defaultTargets } from '../../../src/engine/ww3d/moves.ts';
 import {
   BODY_OFF_DEG,
   BOSS_HEIGHT,
   BOSS_YAW_DEG,
+  NATIVE_HEIGHT,
   PARTY_HEIGHT,
   PARTY_SLOTS,
   WORLD_HEIGHT,
@@ -76,6 +79,7 @@ interface Rig {
   host: Group;
   models: WwModels;
   fx: MoveFx;
+  hits: HitFx;
   skin: WwSkin;
   actors: Record<string, PaintedActor>;
 }
@@ -85,6 +89,7 @@ afterEach(() => {
   for (const r of open.splice(0)) {
     r.skin.dispose();
     r.fx.dispose();
+    r.hits.dispose();
     for (const a of Object.values(r.actors)) a.dispose();
   }
 });
@@ -106,8 +111,10 @@ async function rig(ids: readonly WwId[] = WW_CAST, files: Parameters<typeof fake
   }
   const fx = new MoveFx();
   scene.add(fx.group);
-  const skin = new WwSkin({ host, models, fx });
-  const r = { scene, host, models, fx, skin, actors };
+  const hits = new HitFx();
+  scene.add(hits.group);
+  const skin = new WwSkin({ host, models, fx, hits });
+  const r = { scene, host, models, fx, hits, skin, actors };
   open.push(r);
   return r;
 }
@@ -118,6 +125,7 @@ const run = (r: Rig, seconds: number, dt = 0.05): void => {
     for (const a of Object.values(r.actors)) a.update(dt);
     r.skin.update(dt);
     r.fx.update(dt);
+    r.hits.update(dt);
   }
 };
 const yawOf = (m: WwModel): number => m.root.children[0]!.children[0]!.rotation.y;
@@ -244,6 +252,86 @@ describe('the beats and the clips', () => {
     run(r, 0.5);
     expect(pose.mock.calls.at(-1)![1]).toBe(true);
     expect(update.mock.calls.at(-1)![1]).toBe(true); // frozen while down
+  });
+});
+
+describe('a blow lands: the burst', () => {
+  /** The star's outline mesh of each burst, posed from `camera` the way the renderer does it in its own `onBeforeRender`. */
+  const outlines = (r: Rig, camera: PerspectiveCamera): Mesh[] => {
+    const found = r.hits.group.children.filter((c) => c.renderOrder === 20) as Mesh[];
+    for (const m of found) (m.onBeforeRender as (a: unknown, b: unknown, c: PerspectiveCamera) => void)({}, {}, camera);
+    return found;
+  };
+  const lens = (): PerspectiveCamera => {
+    const cam = new PerspectiveCamera(49, 16 / 9, 0.1, 200);
+    cam.position.set(1, 0.37, 3.2);
+    cam.lookAt(1, 1.5, -3);
+    cam.updateMatrixWorld(true);
+    return cam;
+  };
+
+  it('starts a star and its smoke on the figure that took the blow, sized to her, and none on a figure that carries no model', async () => {
+    const r = await rig(['yuna', 'rikku', WW_BOSS_ID]);
+    r.skin.update(0.02);
+    r.skin.listener.impact!('x2-valefor', { targetId: 'yuna', hitIndex: 0, heavy: false });
+    expect(r.hits.active).toBe(1);
+    const view = r.hits.bursts[0]!;
+    expect(view.points).toBe(5);
+    expect(view.radius).toBeCloseTo(hitPlan(PARTY_HEIGHT * heightFactor('yuna'), { heavy: false, hitIndex: 0 }).radius, 6);
+    r.skin.listener.impact!('yuna', { targetId: 'paine', hitIndex: 0, heavy: false }); // Paine is not on the field here
+    r.skin.listener.impact!('yuna', { targetId: 'nobody', hitIndex: 0, heavy: false });
+    expect(r.hits.active).toBe(1);
+    run(r, 1.5);
+    expect(r.hits.active).toBe(0); // it ends by itself
+  });
+
+  it('puts the burst at a girl\'s chest (a share of her model, not her feet or her head) and on the middle of Valefor\'s body, where their models are', async () => {
+    const r = await rig();
+    r.skin.update(0.02);
+    r.skin.listener.impact!('yuna', { targetId: 'rikku', hitIndex: 0, heavy: false });
+    r.skin.listener.impact!('yuna', { targetId: WW_BOSS_ID, hitIndex: 0, heavy: false });
+    expect(r.hits.active).toBe(2);
+    const rikku = modelOf(r, 'rikku').worldPointOf([0, NATIVE_HEIGHT.rikku * 0.58, 0]);
+    const boss = modelOf(r, WW_BOSS_ID).worldPointOf(CHEST_LOCAL);
+    const [first, second] = outlines(r, lens());
+    expect(first!.position.distanceTo(rikku)).toBeLessThan(1e-6);
+    expect(second!.position.distanceTo(boss)).toBeLessThan(1e-6);
+    expect(rikku.y).toBeGreaterThan(0.5);
+    expect(rikku.y).toBeLessThan(WORLD_HEIGHT.rikku * 0.8);
+    expect(boss.y).toBeGreaterThan(1.5);
+  });
+
+  it('draws a heavy blow with six points and five puffs, and a later hit of a multi-hit action with four and three', async () => {
+    const r = await rig(['yuna', 'rikku', WW_BOSS_ID]);
+    r.skin.update(0.02);
+    r.skin.listener.impact!('x2-valefor', { targetId: 'yuna', hitIndex: 0, heavy: true });
+    r.skin.listener.impact!('rikku', { targetId: WW_BOSS_ID, hitIndex: 2, heavy: false });
+    const [heavy, later] = r.hits.bursts;
+    expect([heavy!.points, heavy!.puffs]).toEqual([6, 5]);
+    expect([later!.points, later!.puffs]).toEqual([4, 3]);
+    expect(later!.radius).toBeGreaterThan(0);
+  });
+
+  it('still puts the strike on the striker\'s clip, and a blow with no striker (a counter, a status tick) still draws its burst', async () => {
+    const r = await rig(['yuna', 'rikku']);
+    r.skin.update(0.02);
+    const noteImpact = vi.spyOn(modelOf(r, 'yuna'), 'noteImpact');
+    r.skin.listener.impact!('yuna', { targetId: 'rikku', hitIndex: 0, heavy: false });
+    expect(noteImpact).toHaveBeenCalledTimes(1);
+    expect(r.hits.active).toBe(1);
+    r.skin.listener.impact!(undefined, { targetId: 'yuna', hitIndex: 0, heavy: false });
+    expect(noteImpact).toHaveBeenCalledTimes(1);
+    expect(r.hits.active).toBe(2);
+    r.skin.listener.impact!('yuna'); // a beat with no target says nothing to draw
+    expect(r.hits.active).toBe(2);
+  });
+
+  it('draws nothing of its own for a skin made without a hit effect, and does not throw', async () => {
+    const r = await rig(['yuna']);
+    const bare = new WwSkin({ host: r.host, models: r.models, fx: r.fx });
+    r.skin.update(0.02);
+    expect(() => bare.listener.impact!('yuna', { targetId: 'yuna', hitIndex: 0, heavy: false })).not.toThrow();
+    expect(r.hits.active).toBe(0);
   });
 });
 

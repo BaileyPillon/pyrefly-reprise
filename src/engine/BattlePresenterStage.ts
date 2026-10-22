@@ -56,6 +56,7 @@ import { heldOffStage } from './SummonStaging.ts';
 import { paceRate } from './pace.ts';
 import { ItemOrbStage } from './ItemOrbStage.ts'; // FFX item gesture: the orb of light and the hand it leaves (`BattlePresenterItem.ts`)
 import { SOFT_BLOOM_CAP, softWash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
+import { impactsOwned, withOwnImpacts } from './ownImpacts.ts'; // a scene that draws its own hits (`SceneStaging.ownImpacts`)
 import { StageArt } from './StageArt.ts';
 import type { StageHost } from './TextureStager.ts';
 
@@ -849,7 +850,12 @@ export class PaintedStage implements BattleStage {
 
   // ------------------------------------------------------------------ effects
 
+  /** The effects port: the stage's own, except in a scene that draws its own hits (`SceneStaging.ownImpacts`, `ownImpacts.ts`), where the shared impact effects are off. */
   private makeVfxPort(): VfxPort {
+    return withOwnImpacts(this.makeStageVfxPort(), impactsOwned(this.opts.slots));
+  }
+
+  private makeStageVfxPort(): VfxPort {
     const impactAt = async (
       at: CombatantId | 'screen',
       key: string,

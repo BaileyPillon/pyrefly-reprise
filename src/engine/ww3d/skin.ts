@@ -29,7 +29,7 @@
 import { Color, Group, Vector3, type Object3D } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
 import { paceRate } from '../pace.ts';
-import type { BeatListener } from './beats.ts';
+import type { BeatListener, HitReport } from './beats.ts';
 import { BOSS_RIM, DEFAULT_RIM, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, fillAmount, flashStrength, glowLevel, rimStrength, spellRim, type Rgb } from './glow.ts';
 import {
   BOSS_HOVER,
@@ -38,10 +38,12 @@ import {
   WW_BOSS_ID,
   WW_CAST,
   WW_PARTY_IDS,
+  NATIVE_HEIGHT,
   heightFactor,
   type V3,
   type WwId,
 } from './layout.ts';
+import type { HitFx } from './hitFx.ts';
 import { MOUTH_LOCAL, CHEST_LOCAL, type ModelSource, type WwModel, type WwModels } from './model.ts';
 import type { MoveFx } from './moveFx.ts';
 import { defaultTargets, moveKindOf } from './moves.ts';
@@ -98,6 +100,8 @@ const STONE = new Color(0.6, 0.6, 0.64);
 /** How close to its slot a girl stands before her weapons are aimed (metres), and the height of the girls' chests that her effects aim at. */
 const AT_SLOT = 0.35;
 const CHEST_SHARE = 0.55;
+/** Where a hit lands on a girl: this share of her model's own height (Yuna's 1.2 m gives 0.70 m, the chest the beams were aimed at in polish 1). Valefor's is `CHEST_LOCAL`. */
+const GIRL_CHEST = 0.58;
 
 /** Valefor's chest, the point the girls aim at: her spot at her hover plus 1.3 m (the lab's). */
 const BOSS_CHEST: V3 = [BOSS_SPOT[0], BOSS_HOVER + 1.3, BOSS_SPOT[2]];
@@ -135,6 +139,8 @@ export interface WwSkinOptions {
   readonly models: WwModels;
   /** Valefor's stand-in effects (the scene owns the object and advances it). */
   readonly fx: MoveFx;
+  /** The burst a blow draws where it lands (the scene owns the object and advances it; the stage's shared impact effects are off, `SceneStaging.ownImpacts`). Without it a blow draws nothing of its own. */
+  readonly hits?: HitFx;
 }
 
 export class WwSkin {
@@ -171,7 +177,10 @@ export class WwSkin {
       const from = b.model.worldPointOf(move === 'blast' ? CHEST_LOCAL : MOUTH_LOCAL);
       this.opts.fx.start(move, from, targets, lead);
     },
-    impact: (actorId) => this.bound.get(actorId as WwId)?.model.noteImpact(paceRate('action')),
+    impact: (actorId, hit) => {
+      if (actorId !== undefined) this.bound.get(actorId as WwId)?.model.noteImpact(paceRate('action'));
+      if (hit) this.burstAt(hit);
+    },
     close: (actorId) => {
       const b = this.bound.get(actorId as WwId);
       if (!b) return;
@@ -179,6 +188,14 @@ export class WwSkin {
       b.busy = false;
     },
   };
+
+  /** A blow landed: the burst of a hit where it lands, on the chest of whoever took it, sized to that figure (a figure with no model here is not drawn on). */
+  private burstAt(hit: HitReport): void {
+    const b = this.bound.get(hit.targetId as WwId);
+    if (!b || !this.opts.hits) return;
+    const at = b.id === WW_BOSS_ID ? b.model.worldPointOf(CHEST_LOCAL) : b.model.worldPointOf([0, NATIVE_HEIGHT[b.id] * GIRL_CHEST, 0]);
+    this.opts.hits.burst(at, { heavy: hit.heavy, hitIndex: hit.hitIndex }, b.actor.height * heightFactor(b.id));
+  }
 
   /** The ids that carry a model now, and whether it is the id's own file or the neutral capsule (the debug view's and the tests' read). */
   get carrying(): Record<string, ModelSource> {

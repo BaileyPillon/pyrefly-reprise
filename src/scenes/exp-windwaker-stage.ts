@@ -36,10 +36,11 @@ const toVec = (v: V3): Vector3 => new Vector3(v[0], v[1], v[2]);
 const toSpot = (v: V3): [number, number, number] => [v[0], v[1], v[2]];
 
 /** The staging switches and spots the scene publishes (also the scene-table row's slots). */
-const STAGING: Pick<SceneStaging, 'holdParty' | 'noRigs' | 'enemySpots' | 'figureHeights' | 'guideFolded'> = {
+const STAGING: Pick<SceneStaging, 'holdParty' | 'noRigs' | 'ownImpacts' | 'enemySpots' | 'figureHeights' | 'guideFolded'> = {
   holdParty: true,
   guideFolded: true, // the strategy guide starts folded to its chip (G opens it): at the target shot the girls' heads stand under the sheet's least height, so an open sheet covered Yuna's hair (polish 1)
   noRigs: true, // Valefor has a painted rig on a machine with the rigs dir: its parts are not planes, so the skin could not hide them (the boss stood twice)
+  ownImpacts: true, // the stage's shared impact bloom, sparks, slash, drawn spell effect and shot are off: a blow draws this chapter's star burst and smoke (`engine/ww3d/hitFx.ts`; polish 2, the shared bloom was a white blob over the girl it landed on)
   enemySpots: { [WW_BOSS_ID]: toSpot(BOSS_SPOT) },
   figureHeights: { [WW_BOSS_ID]: BOSS_HEIGHT },
 };
@@ -84,12 +85,13 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
   const mark = (name: string): void => {
     if (typeof performance !== 'undefined') timings[name] = Math.round(performance.now() - t0);
   };
-  const [{ STAGE, buildStage }, { loadSwaps, swapNames }, { loadWwModels, prefetchModels }, { WwSkin }, { MoveFx }, { tapDirector }, { FileCache, defaultIO }, { paletteFor }, toon] = await Promise.all([
+  const [{ STAGE, buildStage }, { loadSwaps, swapNames }, { loadWwModels, prefetchModels }, { WwSkin }, { MoveFx }, { HitFx }, { tapDirector }, { FileCache, defaultIO }, { paletteFor }, toon] = await Promise.all([
     import('../engine/ww3d/stage.ts'),
     import('../engine/ww3d/swaps.ts'),
     import('../engine/ww3d/model.ts'),
     import('../engine/ww3d/skin.ts'),
     import('../engine/ww3d/moveFx.ts'),
+    import('../engine/ww3d/hitFx.ts'),
     import('../engine/ww3d/beats.ts'),
     import('../engine/ww3d/io.ts'),
     import('../engine/ww3d/post.ts'),
@@ -138,9 +140,11 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
   mark('models');
   const fx = new MoveFx();
   group.add(fx.group);
-  const skin = new WwSkin({ host: group, models, fx });
+  const hits = new HitFx();
+  group.add(hits.group);
+  const skin = new WwSkin({ host: group, models, fx, hits });
   const directed = tapDirector(undefined, skin.listener); // the beats start the models' clips (attack and cast), the move effects and the wings' flap
-  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, fx, uniforms, variant: variantName, swaps, timings }; // the debug handle (a dev server only)
+  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, fx, hits, uniforms, variant: variantName, swaps, timings }; // the debug handle (a dev server only)
 
   mark('ready');
   let clock = 0;
@@ -164,11 +168,13 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
       stage.update(clock);
       skin.update(dt);
       fx.update(dt);
+      hits.update(dt);
     },
     dispose(): void {
       const g = globalThis as { __ww3d?: { skin?: unknown } };
       if (g.__ww3d?.skin === skin) delete g.__ww3d; // not a newer scene's handle
       fx.dispose();
+      hits.dispose();
       skin.dispose(); // frees the models
       files.dispose();
       stage.dispose();

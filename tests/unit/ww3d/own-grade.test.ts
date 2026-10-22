@@ -126,6 +126,14 @@ describe('the Wind Waker scene declares it (through loadScene, the path the game
     loaded.push(room);
     expect(room.slots.noRigs).toBeUndefined();
   }, 60_000);
+  it('publishes ownImpacts (the shared impact effects off: the scene draws its own star burst) on the stage slots the battle screen reads, and not on the Leblanc room', async () => {
+    const ww = await loadScene('exp-windwaker-stage', new PerspectiveCamera(40, 16 / 9, 0.1, 200));
+    loaded.push(ww);
+    expect(ww.slots.ownImpacts).toBe(true);
+    const room = await loadScene('leblanc-last-room', new PerspectiveCamera(40, 16 / 9, 0.1, 200));
+    loaded.push(room);
+    expect(room.slots.ownImpacts).toBeUndefined();
+  }, 60_000);
 });
 
 describe('noRigs — the scene switch of the painted rigs (the parts of a rig are not planes, so the skin cannot hide them)', () => {

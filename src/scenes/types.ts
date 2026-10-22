@@ -173,6 +173,11 @@ export interface SceneStaging {
    */
   readonly noRigs?: boolean;
   /**
+   * The scene draws its own hits (`engine/ownImpacts.ts`): the stage's shared impact bloom, sparks, slash, drawn spell effect and SKILL TRAVEL shot are not drawn for it. For a scene whose figures are toon models held under
+   * the bloom threshold, where the shared white bloom reads as a blob (the hidden Wind Waker chapter draws a flat star burst and smoke puffs from the shot director's `impact` beat). Omitted by every other scene, which reads exactly as before.
+   */
+  readonly ownImpacts?: boolean;
+  /**
    * A standing spot for a named enemy combatant, overriding its slot. The
    * formation solver and the relaxation leave it there. For a machine whose
    * parts are all figure-less, so it stands alone on a slot solved for a
@@ -300,6 +305,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.figureBloomMaskArt) out.figureBloomMaskArt = build.figureBloomMaskArt;
   if (build.holdParty) out.holdParty = true;
   if (build.noRigs === true) out.noRigs = true;
+  if (build.ownImpacts === true) out.ownImpacts = true;
   if (build.enemySpots) out.enemySpots = build.enemySpots;
   if (build.figureHeights) out.figureHeights = build.figureHeights;
   if (build.formHeights) out.formHeights = build.formHeights;
