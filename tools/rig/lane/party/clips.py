@@ -1,6 +1,6 @@
 """clips.py : the motion clips of a party rig, from the recorder's REAL-battle frames: A the painting set the game draws today (rig off) | B the rig (rig on), each panel following its own figure, 60 fps mp4.
 
-    D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/lane/party/clips.py --label tidus --on <rec>/motion --off <rec>/motion-off [--vic-on <rec>/motion] [--hurt-on <rec>/hurtko --hurt-off <rec>/hurtko-off] --out <dir> [--only idle,attack,...] [--size 800,860]
+    D:/Tools/ComfyUI/python_embeded/python.exe -I tools/rig/lane/party/clips.py --label tidus --on <rec>/motion --off <rec>/motion-off [--vic-on <rec>/motion] [--hurt-on <rec>/hurtko --hurt-off <rec>/hurtko-off] --out <dir> [--only idle,attack,...] [--win idle=a:b,hurt=a:b] [--size 800,860]
 
 Segments (from `motion/timeline.json` marks, `play-motion.mjs`): idle (idle-start to idle-end), attack / item / cast (its menu opening to the end of the action), victory (the pose and 200 frames on); from the `hurtko` window-log:
 hurt (60 frames before the first hit that lands to 110 after) and ko (90 before the KO beat to 150 after). Each recording is cut on ITS OWN marks, so a difference in timing between the two shows. A panel is centred on the actor's
@@ -120,10 +120,15 @@ def window(marks: list[dict], start: str, end: str, before=0, after=0):
     return None if s is None or e is None else (max(0, s - before), e + after)
 
 
+WIN = {k: tuple(int(x) for x in v.split(":")) for k, v in (e.split("=") for e in opt("--win", "").split(",") if "=" in e)}  # --win idle=283:520,hurt=400:560 : frame windows by hand for clips (the two runs of one script have the same frame numbers)
+
+
 def cut(name, recs, windows, header):
     """recs: [(title, frames dir, centre track)], windows: one (n0, n1) per rec."""
     if ONLY and name not in ONLY:
         return
+    if name in WIN and name != "victory":
+        windows = [WIN[name], WIN[name]]
     if any(w is None for w in windows):
         print(f"skip {name}: a mark is missing")
         return
@@ -151,7 +156,14 @@ def main():
     m = lambda k: tl[k]["marks"]  # noqa: E731
     both = lambda s, e, b=0, af=0: [window(m("off"), s, e, b, af), window(m("on"), s, e, b, af)]  # noqa: E731
     H = f"{LABEL.upper()}  "
-    cut("idle", recs, both("idle-start", "idle-end"), H + "IDLE (breathing and sway as the game runs them), 60 fps")
+    iw = both("idle-start", "idle-end")
+    if any(x is None for x in iw):  # the actor had the first menu: its idle is the stretch after its first action, while the others take their turns (up to 6 s, ending before its next menu opens)
+        def fallback(k):
+            e = next((x["n"] for x in m(k) if x["name"].endswith("-end")), None)
+            nxt = next((x["n"] for x in m(k) if x["name"].endswith("-menu") and e is not None and x["n"] > e), None)
+            return None if e is None else (e + 20, min(e + 20 + 360, (nxt - 20) if nxt else e + 380))
+        iw = [fallback("off"), fallback("on")]
+    cut("idle", recs, iw, H + "IDLE (breathing and sway as the game runs them), 60 fps")
     for turn in ("attack", "item", "cast"):
         cut(turn, recs, both(f"{turn}-menu", f"{turn}-end", 15, 0), H + f"{turn.upper()} from the menu, the real battle, 60 fps")
     # the victory: from the full run's marks, or (--vic-on <rec dir>) from a victory-only run of the rig (MOTION_TURNS=none) when the full run's victory did not land
@@ -167,6 +179,8 @@ def main():
         vrec = [recs[0], (titles[1], von / "frames", centre_track(von))]
         w[1] = None if v is None else (v - 90, v + 220)
     cut("victory", vrec, w, H + "VICTORY (the last blow, then the pose), the real battle, 60 fps")
+    if "hurt" in WIN and not opt("--hurt-on"):
+        cut("hurt", recs, [WIN["hurt"], WIN["hurt"]], H + "HIT TAKEN (from the motion run: the enemy's own attack), the real battle, 60 fps")
     if opt("--hurt-on") and opt("--hurt-off"):
         hon, hoff = pathlib.Path(opt("--hurt-on")), pathlib.Path(opt("--hurt-off"))
         hr = [(titles[0], hoff / "frames", centre_track(hoff)), (titles[1], hon / "frames", centre_track(hon))]
