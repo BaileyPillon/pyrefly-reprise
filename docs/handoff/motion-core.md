@@ -64,6 +64,26 @@ height over 340 ms. Recoil: 0.3 x (0.22 | 0.34 crit) = 0.066 | 0.10 units, 70 ms
 - `ContactBeat.armContact` lengthens the hold cap by `CURVES_CONTACT_EXTRA_MS` (150) while the curves are on, because the cap counts from the lunge's start and the contact is 145 ms later than the old apex.
 - CHK-027: a swap on a mark is not yet tagged as a planned smear (that is the smear lane's change to `critic/policy.json`).
 
+## Evidence
+
+Unit tests (all green; `node node_modules/vitest/vitest.mjs run tests/unit/engine/motion-core-curves.test.ts tests/unit/engine/motion-core-actor.test.ts`): the switch (default OFF, demo chapters only), the profiles (the brief's numbers),
+the sampled timeline (exact rest pose, continuity at 120 Hz, volume preservation, never over 6 percent, marks in order and on the fastest frames), the clock (60, 120, 240 Hz and an uneven train land on the same curve, leftover carried,
+the contact hold, the carry fold), the cast lift, the leap, the recoil, and the REAL `PaintedActor` (the whole beat: contact at 0.4 s, the blow waits for it, 0.2 s hold, rest at 1.1 s; boss heavier; shadow; lean signs;
+frame-rate independence; hit-stop holds the move; the blend on the paced clock). Targeted existing suites (172 files: engine, presenter, r38, r39, contact, item, fx-c, sfx, demo, battle-screen) pass with the switch OFF.
+`npx tsc --noEmit` clean; `node tools/orphans.mjs` shows none of the new modules.
+
+Real game, headless GPU Chromium, real keys, the game stepped at an EXACT 120 Hz (Playwright's fake clock for timers plus a manual `requestAnimationFrame` queue, one game frame per 1/120 s; `?coach=off`, seed 1), today
+(`?curves=today`) against `?pack=demo`, in `D:/Tools/pyrefly-scratch/2026-10-22/motion/core/` (scratch, not committed):
+
+- `cap/<chapter>-<today|new>/` : 120 Hz JPEG frames (`f*.jpg`), `timeline.json` (every actor's channels every frame), `sheet.png` (contact sheet), `clip120.mp4`; `cap/*-new/` for Chapter I (`seymour-flux`) and Chapter IV (`ffx2-bahamut`).
+- `evidence/curves-strike.png` (the two profiles against today's lunge), `evidence/analysis-120hz.json`, `evidence/series-*.txt` (the attacker's channels every 3 or 4 frames).
+- Chapter I, Tidus (FFX, default pace): the move starts 25 ms after Enter, contact at about 390 ms (today 300 ms), a 3-frame hit-stop at the blow (identical frames 400 to 425 ms), hold, return, rest; scale Y 0.9475 to 1.0389
+  (today 0.984 to 1.037 plus the 8.1 percent attack call), volume error under 1 percent (the idle breath), lift 0.095 units, lean -0.017 to +0.074 rad, **shadow gap to the figure 0.07 units (today up to 1.06: the shadow lagged)**.
+- Chapter I, Seymour Flux (a RIG, `RigActor`): his strike is the same curve heavier and slower: travel about 300 ms, hold about 350 ms, return about 500 ms, lift 0.03 to 0.08 units.
+- Chapter IV, Paine (FFX-2): the run-in is a leap (take-off crouch 3.5 percent, lift 0.45 units, stretch 5.4 percent, landing squash 5.1 percent), then the strike (crouch, travel, `attack` painting at 658 ms on the travelPeak mark,
+  `follow` at 800 ms), then the run home as a leap (lift 0.19 units, landing squash 5.8 percent). Her strike plays no arc of its own. Shadow gap 0.07 units (today 0.34).
+- Console errors: 0 in all four recordings.
+
 ## Not done in step 1 (the brief's steps 2 and 3, and what step 1 leaves)
 
 - The smear cut and its two styles, the camera A/B, hit-stop and rumble, motion SFX, spell effects (other lanes / later steps).
@@ -80,3 +100,8 @@ height over 340 ms. Recoil: 0.3 x (0.22 | 0.34 crit) = 0.066 | 0.10 units, 70 ms
 4. Turn-start is one neutral weight shift for both games (the docs are silent).
 5. The knock-back is 9 px (13 on a crit) at 1440p: "a few px" read literally; the white flash stays the existing 80 ms hit flash.
 6. The contact overshoot is capped at about 7 px so a solved reach does not bury the figure in its target.
+7. In FFX-2 the cast lift lasts the whole charge: the `cast` painting is already held through the CTIM charge, and the lift is held "until the spell lands" as picked, so in the Chapter IV capture Yuna floats for about 3.5 s
+   (rise 4.3 s, down at 8.1 s, 0.10 units up). FFX casts have no charge, so there it is the spell's own 0.5 to 1.5 s. A cap (for example release after 1.2 s of hold) is one constant if the long float reads wrong.
+8. The stretch axis: the stretch at the fastest travel frame and the squash at the contact are VERTICAL (a jump's stretch and a landing's squash, `sx = 1 / sy`), which suits the arc (FFX-2's especially); for FFX's low run-up
+   lunge a stretch along the line of travel is the other reading. A one-constant change in `StrikeCurve.sampleAt` (swap the sign of the travel stretch) if Bailey's Thursday look wants it.
+
