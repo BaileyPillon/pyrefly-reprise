@@ -96,14 +96,16 @@ export class SmearDirector {
    * window ({@link beginManual}: it is logged as a planned smear, the harness excuses the swap by it), gives the progress each frame ({@link stepManual}, 0 to 1) and closes it
    * ({@link endManual}). The direction is along the stage (the way the body falls) and a little down. No style (the smear off): nothing is drawn or logged.
    */
-  beginManual(info: { from: string; to: string; cutMs: number; dirX: number }): void {
+  beginManual(info: { from: string; to: string; toPlane: 0 | 1; cutMs: number; dirX: number }): void {
     const style = smearStyleNow();
     if (style === 'off') return;
     this.state.end();
+    const h = this.host;
+    const facts = pairFacts(h.footprintOf(info.toPlane === 0 ? 1 : 0), h.footprintOf(info.toPlane), h.worldHeight()); // the pair as placed: the harness excuses a swap only when the log says it was a BIG change
     const len = Math.hypot(info.dirX, 0.25);
     this.state.begin({ cutMs: info.cutMs, style, strength: KO_CUT_STRENGTH, length: LENGTH[style], flash: false, difference: 1 }, info.dirX / len, -0.25 / len);
     this.manual = true;
-    noteSmear({ at: now(), actor: this.host.name(), from: info.from, to: info.to, style, cutMs: info.cutMs, overlap: null, anchorDistance: null, speed: 0, strength: KO_CUT_STRENGTH, flash: false, kind: 'plane' });
+    noteSmear({ at: now(), actor: h.name(), from: info.from, to: info.to, style, cutMs: info.cutMs, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed: 0, strength: KO_CUT_STRENGTH, flash: false, kind: 'plane', big: true });
   }
 
   stepManual(u: number): void {

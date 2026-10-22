@@ -7,8 +7,8 @@
 // The excuse is narrow, and it is his: "Yes, only planned smears." The engine writes every cut it plans as a smear to a log (src/engine/motion/SmearLog.ts, read from the page as
 // window.__pyrefly.smearLog() by the probe: meta.smears, in the probe's clock). A swap is a planned smear when ALL of these hold:
 //   - the log has an entry for the SAME figure and the SAME pair of paintings (or rig keys), from and to;
-//   - the entry is a BIG change by the policy's own numbers (an outline overlap under `bigOverlap`, heads `bigAnchor` of the figure's height apart, or a rig key that swaps the figure's
-//     images), so a small change the engine somehow cut is not excused;
+//   - the entry is a BIG change by the policy's own numbers (an outline overlap under `bigOverlap`, heads `bigAnchor` of the figure's height apart, a rig key that swaps the figure's
+//     images, or a pair the engine itself marks `big` where it cannot read an outline: a knock-out's standing body and its lying one), so a small change the engine somehow cut is not excused;
 //   - the swap's flip fell inside the entry's window (its start less `slackMs` and a frame, to its end plus `slackMs` and two frames);
 //   - one entry excuses one swap.
 // What the excuse does, and no more: the swap is not counted as a SNAP (`snap` false; `snapSmear` keeps what it would have been, and `hardCut` stays true), and a jerk AT that swap of no
@@ -32,7 +32,7 @@ const num = (v) => typeof v === 'number' && Number.isFinite(v);
 
 /** Is the logged plan a big change by the policy's numbers? A rig key is (the engine only plans a rig smear for a whole-figure image swap). */
 export function loggedAsBig(e, policy) {
-  return e.kind === 'rig' || (num(e.overlap) && e.overlap < policy.bigOverlap) || (num(e.anchorDistance) && e.anchorDistance >= policy.bigAnchor);
+  return e.kind === 'rig' || e.big === true || (num(e.overlap) && e.overlap < policy.bigOverlap) || (num(e.anchorDistance) && e.anchorDistance >= policy.bigAnchor);
 }
 
 /**

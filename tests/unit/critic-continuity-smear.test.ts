@@ -69,6 +69,8 @@ describe('matching a swap to a planned smear', () => {
     expect(loggedAsBig(entry({ overlap: 0.9, anchorDistance: 0.2 }), ON)).toBe(true);
     expect(loggedAsBig(entry({ overlap: null, anchorDistance: null }), ON)).toBe(false);
     expect(loggedAsBig(entry({ kind: 'rig', overlap: null, anchorDistance: null }), ON)).toBe(true);
+    expect(loggedAsBig(entry({ overlap: null, anchorDistance: null, big: true }), ON)).toBe(true); // a knock-out's standing and lying bodies: no outline to read, the engine says it is big
+    expect(loggedAsBig(entry({ overlap: 0.9, anchorDistance: 0.02, big: false }), ON)).toBe(false);
     expect(matchSmear(swap(), [entry({ overlap: 0.9, anchorDistance: 0.02 })], ON)).toBeNull();
   });
   it('one entry excuses one swap', () => {

@@ -75,7 +75,7 @@ export interface Guts {
   tipSlot: (slot: Slot, tip: SlotTip | null) => void;
   /** Motion pass, step 3 (`PaintedActor`): the knock-out's cut. `koCutWindow` answers the window in ms, or undefined for the plain cross. */
   koCutWindow?: () => number | undefined;
-  koCutBegin?: (info: { from: string; to: string; cutMs: number; dirX: number }) => void;
+  koCutBegin?: (info: { from: string; to: string; toPlane: 0 | 1; cutMs: number; dirX: number }) => void;
   koCutStep?: (u: number) => void;
   koCutEnd?: () => void;
 }
@@ -244,7 +244,7 @@ export class LivingFigure {
     if (phase === 'cross') {
       if (!play.cutting) {
         play.cutting = true;
-        a.koCutBegin?.({ from: play.from.pose, to: play.to.pose, cutMs: play.run.opts.crossMs, dirX: play.side !== 0 ? play.side : a.facing >= 0 ? 1 : -1 });
+        a.koCutBegin?.({ from: play.from.pose, to: play.to.pose, toPlane: a.slots[0] === play.to ? 0 : 1, cutMs: play.run.opts.crossMs, dirX: play.side !== 0 ? play.side : a.facing >= 0 ? 1 : -1 });
       }
       a.koCutStep?.(play.run.crossU);
     } else if (play.cutting) {

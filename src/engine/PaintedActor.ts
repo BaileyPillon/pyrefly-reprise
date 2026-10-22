@@ -1195,7 +1195,7 @@ export class PaintedActor extends Group {
   }
 
   /** The KO's cut window opens, runs (`u` 0 to 1) and closes (`motion/SmearDirector.ts`): the streak and the planned-smear record of a fall's cross. */
-  koCutBegin(info: { from: string; to: string; cutMs: number; dirX: number }): void {
+  koCutBegin(info: { from: string; to: string; toPlane: 0 | 1; cutMs: number; dirX: number }): void {
     this.smear.beginManual(info);
   }
 

@@ -273,22 +273,23 @@ export class KoRun {
 
 /**
  * The run for a KO of this mode, at this game's tempo. `cut` plays nothing (null). `cutMs` (motion pass, step 3: the smear's window for the knock-out's cut, `motion/MomentsPlan.koCutMs`) makes the
- * cross a CUT of that length; the hold before it grows by what the cross gave up, so the fall takes the same time and the cut falls at its end, where the turn is fastest.
+ * cross of a TOPPLE (a party figure who falls to a lying painting) a CUT of that length; the hold before it grows by what the cross gave up, so the fall takes the same time and the cut falls at its
+ * end, where the turn is fastest. Every other mode (a colossus's buckle, a prone standing painting) keeps its capped cross: its pair is not always a big change.
  */
 export function fallRun(mode: KoMode, game: KoGame, cutMs?: number): KoRun | null {
   if (mode === 'cut') return null;
   const hold = KO_BUCKLE_MS[game];
   const cross = koCrossMs();
-  const cutting = cutMs !== undefined && cutMs > 0 && mode !== 'flip';
+  const cutting = cutMs !== undefined && cutMs > 0 && mode === 'topple'; // a party figure whose KO painting is a lying body: the standing painting and the lying one always share almost no outline
   const crossMs = cutting ? cutMs : cross;
   const lead = cutting ? Math.max(0, cross - cutMs) : 0;
   switch (mode) {
     case 'flip':
       return new KoRun({ kind: 'fall', holdMs: hold, crossMs: 0, riseMs: 0, travel: false, buckle: true, puff: 0 });
     case 'cross':
-      return new KoRun({ kind: 'fall', holdMs: lead, crossMs, riseMs: 0, travel: false, buckle: false, puff: 0, ...(cutting ? { cut: true } : {}) });
+      return new KoRun({ kind: 'fall', holdMs: 0, crossMs: cross, riseMs: 0, travel: false, buckle: false, puff: 0 });
     case 'buckle-cross':
-      return new KoRun({ kind: 'fall', holdMs: hold + lead, crossMs, riseMs: 0, travel: false, buckle: true, puff: 0, ...(cutting ? { cut: true } : {}) });
+      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: cross, riseMs: 0, travel: false, buckle: true, puff: 0 });
     default:
       return new KoRun({ kind: 'fall', holdMs: hold + lead, crossMs, riseMs: 0, travel: true, buckle: true, puff: PUFF_FALL, ...(cutting ? { cut: true } : {}) });
   }

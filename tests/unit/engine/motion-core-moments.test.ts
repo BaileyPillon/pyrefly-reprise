@@ -195,6 +195,8 @@ describe('KoRun as a cut', () => {
     expect(fallRun('topple', 'ffx')!.opts).toEqual({ kind: 'fall', holdMs: KO_BUCKLE_MS.ffx, crossMs: koCrossMs(), riseMs: 0, travel: true, buckle: true, puff: 1 });
     expect(fallRun('flip', 'ffx', 30)!.opts.cut).toBeUndefined();
     expect(fallRun('cut', 'ffx', 30)).toBeNull();
+    // only a topple (a party figure falling to a lying painting) is cut: a colossus's buckle and a prone standing painting keep the capped cross, whose pair is not always a big change
+    for (const mode of ['cross', 'buckle-cross'] as const) expect(fallRun(mode, 'ffx', 30)!.opts).toEqual(fallRun(mode, 'ffx')!.opts);
   });
 });
 
@@ -384,9 +386,9 @@ function step(a: Actor, living: LivingFigure, ms = FRAME, over: LivingCtx = {}):
 }
 
 /** Tidus, put under the mix, KO'd; the rows are what each frame shows. */
-function koRows(frames: number, frame = FRAME, over: LivingCtx = {}): { rows: Array<{ idle: number; ko: number; amt: number; y: number; sy: number }>; a: Actor; living: LivingFigure } {
+function koRows(frames: number, frame = FRAME, over: LivingCtx = {}, sil = false): { rows: Array<{ idle: number; ko: number; amt: number; y: number; sy: number }>; a: Actor; living: LivingFigure } {
   const a = new PaintedActor({ name: 'tidus', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
-  a.adoptPoses({ idle: painting('tidus', 'idle'), ko: painting('tidus', 'ko') }, 'idle');
+  a.adoptPoses(sil ? { idle: painting('tidus', 'idle', { silhouette: LEFT }), ko: painting('tidus', 'ko', { silhouette: RIGHT }) } : { idle: painting('tidus', 'idle'), ko: painting('tidus', 'ko') }, 'idle');
   a.position.set(-2, 0, 0);
   a.setPose('idle', { immediate: true, force: true });
   const living = new LivingFigure(a);
@@ -419,7 +421,7 @@ describe('the knock-out', () => {
     setCurvesChapter('seymour-flux');
     setMomentsMode('new');
     setSmearStyle('paint');
-    const { rows } = koRows(140);
+    const { rows } = koRows(140, FRAME, {}, true);
     expect(rows.filter((r) => r.idle > 1e-6 && r.ko > 1e-6)).toHaveLength(0);
     const first = rows.findIndex((r) => r.ko > 0);
     expect(first).toBeGreaterThan(20);
@@ -427,6 +429,7 @@ describe('the knock-out', () => {
     expect(log).toHaveLength(1);
     expect(log[0]).toMatchObject({ actor: 'tidus', from: 'idle', to: 'ko', kind: 'plane', style: 'paint', flash: false });
     expect(log[0]!.cutMs).toBeGreaterThanOrEqual(CUT_MS_MIN);
+    expect(log[0]!.big).toBe(true); // a plane laid on the floor has no footprint to read an overlap from: the engine says the pair is a big change, and the harness's `loggedAsBig` reads that
     // the streak: zero before the window, up to the strength at the cut, zero after
     const amts = rows.map((r) => r.amt);
     const peak = Math.max(...amts);

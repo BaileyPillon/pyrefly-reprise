@@ -30,6 +30,8 @@ export interface PlannedSmear {
   strength: number;
   /** Did the cut carry the light flash? */
   flash: boolean;
+  /** The engine KNOWS this pair is a big change though it could not read an outline for it (a standing body and the lying one of a knock-out: a plane laid on the floor has no footprint): the harness's `loggedAsBig` reads it. */
+  big?: boolean;
   kind: 'plane' | 'rig';
   /** When the cut itself falls (`at` plus the window's cut point, or half the move of a rig), ms. */
   cutAt: number;
