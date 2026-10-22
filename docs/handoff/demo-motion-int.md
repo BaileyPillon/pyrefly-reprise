@@ -84,7 +84,7 @@ Key `8` flips between them (rewrites `tidus=`, sets the cookie, reloads). A PROD
 ## Checks (on the pushed tip unless noted; scratch evidence under D:/Tools/pyrefly-scratch/2026-10-22/motion/int/)
 
 - `npx tsc --noEmit`: clean. `node tools/orphans.mjs`: the same 24 old orphans, none of the new modules. New files all under 400 lines (`BattlePresenterBeats.ts` is 395).
-- New test file `tests/unit/engine/demo-motion-int.test.ts` (23 tests): the shared gate, the lunge, smear and landing beats on the real actor, the claim, the menu rule on the short stop and the fx pieces, the gather, the switchboard model and key map (no key the game uses), the Tidus server's routing.
+- New test file `tests/unit/engine/demo-motion-int.test.ts` (25 tests): the shared gate, the lunge, smear and landing beats on the real actor, the claim (also through the real presenter), the menu rule on the short stop and the fx pieces, the gather, the switchboard model and key map (no key the game uses), the Tidus server's routing.
 - Targeted vitest (524 files: `tests/unit/engine`, `tests/unit/rig`, `feel-`, `fx-`, `spellfx`, `critic-continuity`, `demo`, `presenter`, `battle-screen`, `pose`, `rig-`, `smear`, `curves`): 511 pass. The lanes' own test files pass unchanged. The only failures are the art lane's old pins, see item 4 below. `vitest-targeted.txt`.
 - Full suite: see the last section.
 - Real-input smoke (headless Chromium on the real GPU, 1600 x 900, real keys from the title through the demo picker; Vite on :5320 started and stopped by PID; RIG-RECORD held per job; **0 console errors in every run**):

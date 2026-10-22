@@ -26,6 +26,9 @@ import { switchboardWanted, tidusAsked } from '../../../src/app/demo/switchboard
 import { feelConfigured } from '../../../src/engine/feel/FeelSwitch.ts';
 import { tidusFile, variantOf } from '../../../tools/vite-art-variant.mjs';
 import { readFileSync } from 'node:fs';
+import type { BattleEvent } from '../../../src/battle/common/types.ts';
+import { BattlePresenter } from '../../../src/engine/BattlePresenter.ts';
+import { FakeDamageNumbers, FakeMessageBar, FakeStage } from '../helpers/FakeStage.ts';
 
 beforeEach(() => {
   setPaceGame('ffx');
@@ -350,5 +353,52 @@ describe('the smear\'s whoosh is asked for on the cut', () => {
     setSmearStyle('off');
     swap(make(), true);
     expect(beats.filter((b) => b.kind === 'smear')).toHaveLength(0);
+  });
+});
+
+describe('the claim through the real presenter: the blow reaches the spectacle port marked, once', () => {
+  type Seq<T> = T extends unknown ? Omit<T, 'seq'> : never;
+  function rig(): { play: (e: Array<Seq<BattleEvent>>) => Promise<unknown>; seen: Array<Record<string, unknown>> } {
+    const stage = new FakeStage(['tidus', 'yuna', 'kimahri'], ['seymour-flux', 'mortiorchis']);
+    stage.vfx.land = (_at, o) => (o.deco ? 0 : 200);
+    const seen: Array<Record<string, unknown>> = [];
+    (stage as unknown as { fx: unknown }).fx = { enabled: () => true, hit: (o: Record<string, unknown>) => (seen.push({ ...o }), { freezeMs: 0, shook: false }) };
+    const presenter = new BattlePresenter({ stage, damageNumbers: new FakeDamageNumbers(), messageBar: new FakeMessageBar(), sleep: () => Promise.resolve() });
+    return { seen, play: (events) => presenter.play(events.map((e, i) => ({ ...e, seq: i }) as BattleEvent)) };
+  }
+  const dmg = (target: string, hit: number, count: number, source: string): Seq<BattleEvent> => ({ type: 'damage', targetId: target, sourceId: source, amount: 500, element: 'none', crit: false, hitIndex: hit, hitCount: count });
+  const od: Array<Seq<BattleEvent>> = [
+    { type: 'action-start', actorId: 'tidus', command: { kind: 'overdrive' } as never, abilityId: 'spiral-cut', abilityName: 'Spiral Cut', targets: ['seymour-flux'] },
+    dmg('seymour-flux', 0, 3, 'tidus'),
+    dmg('seymour-flux', 1, 3, 'tidus'),
+    dmg('seymour-flux', 2, 3, 'tidus'),
+    { type: 'action-end', actorId: 'tidus' },
+  ];
+
+  it('an Overdrive\'s first blow carries fxBig and no other blow does; a boss\'s headline move once per action', async () => {
+    setFxChapter('seymour-flux');
+    setFxMode('new');
+    const a = rig();
+    await a.play(od);
+    expect(a.seen.map((o) => o['fxBig'] === true)).toEqual([true, false, false]);
+    const b = rig();
+    const boss: Array<Seq<BattleEvent>> = [{ type: 'action-start', actorId: 'mortiorchis', command: { kind: 'ability' } as never, abilityId: 'cross-cleave', abilityName: 'Cross Cleave', targets: ['tidus', 'yuna', 'kimahri'] }];
+    for (const t of ['tidus', 'yuna', 'kimahri']) boss.push(dmg(t, 0, 1, 'mortiorchis'));
+    boss.push({ type: 'action-end', actorId: 'mortiorchis' });
+    await b.play(boss);
+    expect(b.seen.map((o) => o['fxBig'] === true)).toEqual([true, false, false]);
+  });
+  it('with the new effects off, or outside the demo chapters, no blow is claimed', async () => {
+    setFxChapter('seymour-flux');
+    setFxMode('today');
+    const a = rig();
+    await a.play(od);
+    expect(a.seen).toHaveLength(3);
+    expect(a.seen.every((o) => o['fxBig'] === undefined)).toBe(true);
+    setFxChapter('yunalesca');
+    setFxMode('new');
+    const b = rig();
+    await b.play(od);
+    expect(b.seen.every((o) => o['fxBig'] === undefined)).toBe(true);
   });
 });
