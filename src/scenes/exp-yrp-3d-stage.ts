@@ -4,6 +4,9 @@
  * back, Rikku in the middle, Yuna at the front), Bahamut filling the left half with his wings spread, calm floor along the bottom for the HUD. Frame B's low, close view is the `action` rig, and frame C's (behind and
  * above the trio as Bahamut rears with his orb) the `overdrive` rig the shot director takes for Mega Flare (`../engine/yrp3d/director.ts`). The numbers are `../engine/yrp3d/layout.ts`'s (pure, and pinned by `tests/unit/yrp3d/layout.test.ts` without a browser).
  *
+ * **Framing mockups** (opt-in, dev): `?frame=b` and `?frame=c` replace the resting shots (`idle`, `intro`) with two closer views, the girls at about 35 and 44 percent of the frame's height (`../engine/yrp3d/frames.ts`);
+ * no query is frame A, the approved layout, unchanged.
+ *
  * Game case: FFX-2 only [AGENTS.md rule 14; research/ffx2-bahamut.md]. It is Chapter IV's room (`./bevelle-underground.ts`, built by that factory and not touched), so the painting, the lamps and the set pieces are
  * Chapter IV's; what this scene changes is the staging, the camera and **the look** (the girls must read clearly in the arena: Bailey found the first in-game shots too dark, too blue and too small), and what it adds is the figures'
  * light and the skin that carries the real models:
@@ -31,7 +34,8 @@ import { Vector3, type DirectionalLight, type Light, type Object3D } from 'three
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import { tapDirector } from '../engine/yrp3d/beats.ts';
 import { YRP_SHOT_DIRECTOR } from '../engine/yrp3d/director.ts';
-import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_BOSS_ID, YRP_CAST, bossChoice, type RigData, type V3 } from '../engine/yrp3d/layout.ts';
+import { frameChoice, rigsFor } from '../engine/yrp3d/frames.ts';
+import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, YRP_BOSS_ID, YRP_CAST, bossChoice, type RigData, type V3 } from '../engine/yrp3d/layout.ts';
 import { LOOK, mergeRig, type Rig, type RigPatch } from '../engine/yrp3d/look.ts';
 import type { RoomDim } from '../engine/yrp3d/rig.ts';
 import type { YrpModels } from '../engine/yrp3d/load.ts';
@@ -52,7 +56,7 @@ function derive(build: SceneBuild, over: Partial<Mutable<SceneBuild>>): SceneBui
 }
 
 const toRig = (r: RigData): CameraRig => ({ position: [...r.position], lookAt: [...r.lookAt], fov: r.fov, ...(r.sway === undefined ? {} : { sway: r.sway }) });
-const toRigs = (): Record<string, CameraRig> => Object.fromEntries(Object.entries(RIGS).map(([k, v]) => [k, toRig(v)]));
+const toRigs = (table: Readonly<Record<string, RigData>>): Record<string, CameraRig> => Object.fromEntries(Object.entries(table).map(([k, v]) => [k, toRig(v)]));
 const toVec = (v: V3): Vector3 => new Vector3(v[0], v[1], v[2]);
 const toSpot = (v: V3): [number, number, number] => [v[0], v[1], v[2]];
 
@@ -92,10 +96,11 @@ function movePools(group: Object3D): void {
  * capsule. `?yrp=painted` leaves Chapter IV's room, lights and grade exactly as they were.
  */
 export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOptions = {}) => {
-  const base = await buildBevelleUndergroundScene({ ...opts, cameraRef: RIGS['idle']!.position as [number, number, number] });
+  const search = typeof location === 'undefined' ? '' : location.search;
+  const frameRigs = rigsFor(frameChoice(search)); // frame A's table unless the page asks for `?frame=b` or `?frame=c` (the framing mockups, `../engine/yrp3d/frames.ts`)
+  const base = await buildBevelleUndergroundScene({ ...opts, cameraRef: frameRigs['idle']!.position as [number, number, number] });
   movePools(base.group);
 
-  const search = typeof location === 'undefined' ? '' : location.search;
   let skin: { update(dt: number): void; dispose(): void } | null = null;
   let look: { follow(models: YrpModels['models']): void; dispose(): void; palette: ScenePalette } | null = null;
   let room: RoomDim | null = null;
@@ -128,7 +133,7 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
   }
 
   return derive(base, {
-    rigs: toRigs() as SceneBuild['rigs'],
+    rigs: toRigs(frameRigs) as SceneBuild['rigs'],
     partySlots: PARTY_SLOTS.map(toVec),
     enemySlots: ENEMY_SLOTS.map(toVec),
     partyHeight: PARTY_HEIGHT,
