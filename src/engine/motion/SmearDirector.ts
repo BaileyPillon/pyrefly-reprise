@@ -16,7 +16,7 @@ import { ActorSmear, type SmearFrame } from './ActorSmear.ts';
 import { applySmear, type SmearCells, type SmearPlane } from './SmearApply.ts';
 import { pairFacts } from './SmearFacts.ts';
 import { noteSmear } from './SmearLog.ts';
-import { CUT, FLASH_PEAK, smearPlan } from './SmearPlan.ts';
+import { CUT, FLASH_PEAK, MIN_SPEED, smearPlan } from './SmearPlan.ts';
 import { smearStyleNow } from './SmearSwitch.ts';
 
 /** What the director needs of the actor that owns it. */
@@ -74,8 +74,9 @@ export class SmearDirector {
     const out: 0 | 1 = to === 0 ? 1 : 0;
     const h = this.host;
     const height = h.worldHeight();
-    const facts = pairFacts(h.footprintOf(out), h.footprintOf(to), height);
     const speed = this.state.speed(height);
+    if (!(speed >= MIN_SPEED)) return false; // a figure at rest keeps its blend (and the overlap of the pair is not read for nothing)
+    const facts = pairFacts(h.footprintOf(out), h.footprintOf(to), height);
     const from = h.poseOf(out);
     const plan = smearPlan({ from, to: resolved, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed, frameMs: this.state.frameMs, style });
     if (!plan) return false;
