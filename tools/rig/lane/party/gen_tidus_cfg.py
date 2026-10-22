@@ -10,8 +10,12 @@ cfg = {
   "keypoints": "tools/rig/subjects/tidus-x.keypoints.json",
   "poses": ["ready", "attack", "follow", "victory", "cast", "item", "hurt", "critical", "defend", "sleep", "ko", "od-energy-rain", "od-slice-and-dice"],
   "swordPivotD": 80, "idle_hidden": [], "underlap": 12, "underlap_idle": 5, "margin": 15, "pad": 600, "waistT": 0.25,
-  "order": ["legB", "hips", "legA", "armB", "torso", "sword", "armA", "head"],
+  "order": ["fx", "legB", "hips", "legA", "armB", "torso", "sword", "armA", "head"],
+  "fx": {"cast": {
+      "ring": {"ellipse": [265, 1047, 262, 72], "keep": [["kneeA", "footA", 60], ["footA", [400, 975], 52], ["kneeB", "footB", 58], ["footB", [178, 1032], 52], ["pommel", "tip", 44]]},
+      "swirl": {"box": [360, 0, 709, 560], "keep": [["head", "crown", 105], ["neck", "shoulderB", 64], ["shoulderB", "elbowB", 52], ["elbowB", "handB", 46], ["handB", [588, 188], 30], ["handB", [505, 192], 22], ["neck", "pelvis", 66]]}}},
   "parts": {
+   "fx": {"fx": True, "caps": [], "stub": "pelvis", "skin": {"type": "rigid", "bone": "root", "mesh": RIGID}, "variant": {"mesh": {"quad": True}, "tex": 0.4}},
    "head": {"caps": [["neck", "head", 60], ["head", "crown", 92]], "bias": 30, "skin": {"type": "rigid", "bone": "head", "mesh": {"edge": 90, "inner": 180, "grow": 14}},
             "variant": {"opaqueArea": 1.0, "meshArea": 1.0, "tex": 0.6, "growMax": 60}},
    "torso": {"caps": [["neck", "waist", 88]], "skin": {"type": "rigid", "bone": "chest", "mesh": RIGID}, "variant": {"mesh": {"quad": True}}},

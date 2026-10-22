@@ -30,6 +30,10 @@ def pose_parts(party: P.Party, pose: str) -> list[str]:
     names |= {"waist"} if {"neck", "pelvis"} <= names else set()
     out = []
     for n in party.order:
+        if party.parts[n].get("fx"):  # the painted-in effects part: no capsule, shown where partition.py cut a mask for the pose
+            if masked and (party.work / "masks" / f"{pose}.{n}.png").exists():
+                out.append(n)
+            continue
         for c in party.parts[n].get("caps", []):
             if all(p in names for p in c[:-1]):
                 if not masked or (party.work / "masks" / f"{pose}.{n}.png").exists():

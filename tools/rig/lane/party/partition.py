@@ -16,6 +16,7 @@ import numpy as np  # noqa: E402
 from PIL import Image  # noqa: E402
 
 import pcommon as P  # noqa: E402
+from fxmask import fx_mask  # noqa: E402
 from retarget import solve_pose  # noqa: E402
 
 
@@ -40,7 +41,10 @@ def run(name: str, only: list[str] | None = None) -> None:
         img = P.painting_in_master(party, pose, T, pad, size)
         rgba = np.asarray(img)
         pts = {k: (x + pad, y + pad) for k, (x, y) in party.points(pose, T).items()}
-        labels, present = P.partition(rgba, pts, party.parts, party.order, S, margin=float(pp.get("margin", 15)) * S)
+        fx = fx_mask(party, pose, T, rgba, pad) if "fx" in party.order else None  # the painted-in effects (a ring, a swirl): their own root-bound part
+        seeds = {"fx": fx.astype(np.uint8)} if fx is not None and fx.any() else None
+        labels, present = P.partition(rgba, pts, party.parts, party.order, S, margin=float(pp.get("margin", 15)) * S, seeds=seeds)
+        fxm = (labels == party.order.index("fx")) if seeds else None
         vis = np.zeros(labels.shape + (3,), np.uint8)
         alpha = rgba[..., 3] > 8
         masks = {}
@@ -48,7 +52,9 @@ def run(name: str, only: list[str] | None = None) -> None:
             m = labels == i
             vis[m] = cols[i]
             if present[part]:
-                masks[part] = P.dilate_mask(m, K) & alpha
+                masks[part] = (m & alpha) if part == "fx" else P.dilate_mask(m, K) & alpha
+                if fxm is not None and part != "fx":
+                    masks[part] = masks[part] & ~fxm  # no underlap into the effect: a body piece carries none of it
         jm, _moved = P.marks_for(party, pose, T, size)
         _bones, _rep, jpos = solve_pose(party, party.rest_points(), jm, P.rest_joints(party))
         P.add_joint_discs(party, masks, {b: (x + pad, y + pad) for b, (x, y) in jpos.items()}, alpha)

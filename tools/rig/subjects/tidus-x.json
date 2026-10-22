@@ -30,6 +30,7 @@
   "pad": 600,
   "waistT": 0.25,
   "order": [
+   "fx",
    "legB",
    "hips",
    "legA",
@@ -39,7 +40,123 @@
    "armA",
    "head"
   ],
+  "fx": {
+   "cast": {
+    "ring": {
+     "ellipse": [
+      265,
+      1047,
+      262,
+      72
+     ],
+     "keep": [
+      [
+       "kneeA",
+       "footA",
+       60
+      ],
+      [
+       "footA",
+       [
+        400,
+        975
+       ],
+       52
+      ],
+      [
+       "kneeB",
+       "footB",
+       58
+      ],
+      [
+       "footB",
+       [
+        178,
+        1032
+       ],
+       52
+      ],
+      [
+       "pommel",
+       "tip",
+       44
+      ]
+     ]
+    },
+    "swirl": {
+     "box": [
+      360,
+      0,
+      709,
+      560
+     ],
+     "keep": [
+      [
+       "head",
+       "crown",
+       105
+      ],
+      [
+       "neck",
+       "shoulderB",
+       64
+      ],
+      [
+       "shoulderB",
+       "elbowB",
+       52
+      ],
+      [
+       "elbowB",
+       "handB",
+       46
+      ],
+      [
+       "handB",
+       [
+        588,
+        188
+       ],
+       30
+      ],
+      [
+       "handB",
+       [
+        505,
+        192
+       ],
+       22
+      ],
+      [
+       "neck",
+       "pelvis",
+       66
+      ]
+     ]
+    }
+   }
+  },
   "parts": {
+   "fx": {
+    "fx": true,
+    "caps": [],
+    "stub": "pelvis",
+    "skin": {
+     "type": "rigid",
+     "bone": "root",
+     "mesh": {
+      "edge": 170,
+      "inner": 340,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "mesh": {
+      "quad": true
+     },
+     "tex": 0.4
+    }
+   },
    "head": {
     "caps": [
      [
@@ -643,6 +760,7 @@
  },
  "cut": {
   "order": [
+   "fx",
    "legB",
    "hips",
    "legA",
@@ -761,6 +879,15 @@
    ]
   ],
   "skin": {
+   "fx": {
+    "type": "rigid",
+    "bone": "root",
+    "mesh": {
+     "edge": 170,
+     "inner": 340,
+     "grow": 16
+    }
+   },
    "legB": {
     "type": "chain",
     "bones": [
@@ -2392,6 +2519,21 @@
       }
      }
     }
+   },
+   "fx": {
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x/masks/cast.fx.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
    }
   },
   "rim": true,
@@ -2650,7 +2792,9 @@
      "armA": "ready",
      "head": "ready"
     },
-    "hide": []
+    "hide": [
+     "fx"
+    ]
    },
    "attack": {
     "image": {
@@ -2663,7 +2807,9 @@
      "armA": "attack",
      "head": "attack"
     },
-    "hide": []
+    "hide": [
+     "fx"
+    ]
    },
    "follow": {
     "image": {
@@ -2676,6 +2822,7 @@
      "head": "follow"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2689,12 +2836,14 @@
      "head": "victory"
     },
     "hide": [
+     "fx",
      "legB",
      "armB"
     ]
    },
    "cast": {
     "image": {
+     "fx": "cast",
      "legB": "cast",
      "hips": "cast",
      "legA": "cast",
@@ -2716,6 +2865,7 @@
      "head": "item"
     },
     "hide": [
+     "fx",
      "legB",
      "armB"
     ]
@@ -2731,6 +2881,7 @@
      "head": "hurt"
     },
     "hide": [
+     "fx",
      "legB"
     ]
    },
@@ -2745,6 +2896,7 @@
      "head": "critical"
     },
     "hide": [
+     "fx",
      "legB"
     ]
    },
@@ -2759,7 +2911,9 @@
      "armA": "defend",
      "head": "defend"
     },
-    "hide": []
+    "hide": [
+     "fx"
+    ]
    },
    "sleep": {
     "image": {
@@ -2772,6 +2926,7 @@
      "head": "sleep"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2786,6 +2941,7 @@
      "head": "ko"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2800,6 +2956,7 @@
      "head": "od-energy-rain"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    },
@@ -2814,6 +2971,7 @@
      "head": "od-slice-and-dice"
     },
     "hide": [
+     "fx",
      "armB"
     ]
    }

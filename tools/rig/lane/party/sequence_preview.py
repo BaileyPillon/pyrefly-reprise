@@ -130,7 +130,10 @@ def sway(t_ms):
     for i, b in enumerate(names):
         s = (IDLE.get("bones") or {}).get(b)
         if s:
-            out[i * 5] += math.radians(s.get("rot", 0)) * math.sin(2 * math.pi * hz * t_ms / 1000.0 + s.get("phase", 0))
+            v = math.sin(2 * math.pi * hz * t_ms / 1000.0 + s.get("phase", 0))
+            out[i * 5] += math.radians(s.get("rot", 0)) * v
+            out[i * 5 + 1] += s.get("dx", 0) * v
+            out[i * 5 + 2] += s.get("dy", 0) * v
     return out
 
 

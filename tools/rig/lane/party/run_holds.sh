@@ -20,3 +20,5 @@ hold A MOTION_TURNS=none $T --out $R/tidus-v --modes motion --only-off ++ $T --o
 hold B PYREFLY_LANE_QUERY=wait=hold $K --out $R/rikku --modes motion
 hold C PYREFLY_LANE_QUERY=wait=hold $K --out $R/rikku --modes motion --off
 hold D PYREFLY_LANE_QUERY=wait=hold $K --out $R/rikku --modes hurtko --off
+# E (after A to D): Rikku motion rig on AND off again (the cast fixed) and the Tidus cast alone, rig on and off (the fx part: the ring and the swirl no longer ride the legs). Run with `run_holds.sh E`.
+hold E PYREFLY_LANE_QUERY=wait=hold $K --out $R/rikku --modes motion --off ++ MOTION_TURNS=cast $T --out $R/tidus-c --modes motion --off

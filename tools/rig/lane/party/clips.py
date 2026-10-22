@@ -180,8 +180,8 @@ def main():
             vrec[idx] = (titles[idx], vr / "frames", centre_track(vr))
             w[idx] = None if v is None else (v - 90, v + 220)
     cut("victory", vrec, w, H + "VICTORY (the last blow, then the pose), the real battle, 60 fps")
-    if "hurt" in WIN and not opt("--hurt-on"):
-        cut("hurt", recs, [WIN["hurt"], WIN["hurt"]], H + "HIT TAKEN (from the motion run: the enemy's own attack), the real battle, 60 fps")
+    if "hurt-run" in WIN:
+        cut("hurt-run", recs, [WIN["hurt-run"], WIN["hurt-run"]], H + "HIT TAKEN (from the motion run: the enemy's own attack), the real battle, 60 fps")
     if opt("--hurt-on") and opt("--hurt-off"):
         hon, hoff = pathlib.Path(opt("--hurt-on")), pathlib.Path(opt("--hurt-off"))
         hr = [(titles[0], hoff / "frames", centre_track(hoff)), (titles[1], hon / "frames", centre_track(hon))]

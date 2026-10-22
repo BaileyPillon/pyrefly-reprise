@@ -211,7 +211,10 @@ def partition(rgba: np.ndarray, pts: dict, parts: dict, order: list, S: int, mar
     if seeds:
         for n, sm in seeds.items():
             if n in order:
-                out[(sm[y0:y1, x0:x1] > 0) & Fc] = order.index(n)
+                hit = (sm[y0:y1, x0:x1] > 0) & Fc
+                out[hit] = order.index(n)
+                if hit.any():
+                    present[n] = True  # a seeded part (the painted-in effects: `fx`) exists in this pose even with no capsule
     full = np.full((h, w), -1, np.int16)
     full[y0:y1, x0:x1] = out
     return full, present
