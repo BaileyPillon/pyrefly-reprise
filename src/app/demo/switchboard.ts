@@ -22,6 +22,7 @@
  * Home; `` ` `` is the mark key and F6 to F8 the look keys. Modified keys (Ctrl, Alt, Meta) and keys typed into a text field are left alone. A flip outside a fight is remembered and takes effect in
  * the next Chapter I or Chapter IV fight (`engine/motion/DemoGate.ts`).
  */
+import { artUrl } from '../../engine/PaintedArt.ts';
 import { demoChapter, isDemoChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
 import { HIDE_CODE, MASTER_CODE, TIDUS_CODE, SWITCHES, boardState, flipAll, normaliseCode, switchOfCode } from './switchboardModel.ts';
 
@@ -150,7 +151,7 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
   const tick = setInterval(render, 700); // the chapter note follows the fight
   render();
 
-  void fetch('/art/characters/tidus/idle.json', { method: 'HEAD', cache: 'no-store' })
+  void fetch(artUrl('art/characters/tidus/idle.png'), { method: 'HEAD', cache: 'no-store' })
     .then((r) => {
       artVariant = r.headers.get('x-pyrefly-tidus');
       render();
