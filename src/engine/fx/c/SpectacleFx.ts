@@ -21,6 +21,8 @@ import { FireColumns, IceBurst, ShockSpheres } from './SpellLayers.ts';
 import { bigMoment, castOnto, spellMoment, type MomentCtx } from './SpellMoments.ts';
 import { SpectaclePass } from './SpectaclePass.ts';
 import { HitStop, Trauma } from './Trauma.ts';
+import { ImpactFrames } from './SpectacleImpact.ts';
+import { kickArgs } from '../../feel/PunchCurve.ts';
 
 export interface SpectacleStage {
   actor(id: CombatantId): PaintedActor | undefined;
@@ -66,10 +68,10 @@ export class SpectacleFx implements FxStagePort {
   private readonly mctx: MomentCtx;
   /** Captures only: freeze the page on the next impact frame (`__pyrefly.fx.c.armImpact()`). */
   armImpact: (() => void) | null = null;
-  private readonly trauma: Trauma;
+  readonly trauma: Trauma;
   private readonly budget = new FlashBudget(3);
   private stageDtLast = 0;
-  private impactFrames: number[] = [];
+  private readonly impact = new ImpactFrames();
   private lift = 0;
   private haze = 0;
   private hazeAt = new Vector2(0.5, 0.5);
@@ -175,7 +177,7 @@ export class SpectacleFx implements FxStagePort {
       this.stats.freezes++;
     }
     if (plan.impactFrame && this.budget.take(performance.now(), o.action)) {
-      this.impactFrames = plan.impactFrame === 'soft' ? [1] : [1, 0.5];
+      this.impact.arm(plan.impactFrame === 'soft' ? [1] : [1, 0.5]);
       this.armImpact?.();
       this.armImpact = null;
       this.d.pass.uniforms['uSoft']!.value = plan.impactFrame === 'soft' ? 1 : 0;
@@ -184,7 +186,7 @@ export class SpectacleFx implements FxStagePort {
       this.stats.impactFrames++;
     }
     this.trauma.add(plan.trauma);
-    this.trauma.kick(plan.kick);
+    this.trauma.kick(...kickArgs(plan, this.d.camera, at));
     this.pools.px = this.d.view().dpr;
     hitBurst(this.pools, this.tune, at, h, { streaks: plan.streaks, ring: plan.ring, element: plan.spell ?? undefined, heavy: o.heavy || o.big, foot });
     if (plan.cast > 0) castOnto(this.mctx, o.targetId, at, plan.spell, plan.cast);
@@ -301,7 +303,7 @@ export class SpectacleFx implements FxStagePort {
       this.w.set(0, 1, 0).applyQuaternion(cam.quaternion);
       cam.position.addScaledVector(this.v, off.x).addScaledVector(this.w, off.y);
       this.v.set(0, 0, -1).applyQuaternion(cam.quaternion);
-      cam.position.addScaledVector(this.v, off.dolly * 9);
+      cam.position.addScaledVector(this.v, off.dolly * this.trauma.dollyWorld);
       cam.rotateZ(off.roll);
     }
     cam.updateMatrixWorld();
@@ -309,11 +311,7 @@ export class SpectacleFx implements FxStagePort {
 
   private updatePass(dt: number, v: { w: number; h: number; dpr: number }): void {
     const u = this.d.pass.uniforms;
-    let impact = 0;
-    if (this.impactFrames.length) {
-      impact = this.impactFrames[0]!;
-      if (dt > 0) this.impactFrames.shift();
-    }
+    const impact = this.impact.step(dt); // by time: a 120 Hz screen draws each level for as long as a 60 Hz one
     u['uImpact']!.value = impact;
     if (dt > 0) this.lift = Math.max(0, this.lift - dt * 9);
     u['uLift']!.value = this.lift;
@@ -366,7 +364,7 @@ export class SpectacleFx implements FxStagePort {
     this.stop.clear();
     this.trauma.reset();
     this.orbit = null;
-    this.impactFrames = [];
+    this.impact.clear();
     this.lift = 0;
     this.haze = 0;
     this.timers.length = 0;
@@ -380,7 +378,7 @@ export class SpectacleFx implements FxStagePort {
       clock: Number(this.clock.toFixed(3)),
       frozen: this.stop.frozen,
       trauma: Number(this.trauma.amount.toFixed(3)),
-      impact: this.impactFrames.length,
+      impact: this.impact.pending,
       fire: this.fire.live,
       ice: this.ice.live,
       orbit: this.orbit ? Number((this.orbit.t / this.orbit.ms).toFixed(2)) : null,

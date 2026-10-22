@@ -84,6 +84,10 @@ export interface PlaySfxOptions {
   pitch?: number;
   /** Seconds to wait before the cue fires. */
   delay?: number;
+  /** Motion sounds (`sfxV2/motionCues.ts`): play only the first `trimMs` of the cue, in output time. Absent: the whole cue. */
+  trimMs?: number;
+  /** Motion sounds: fade out over the last `fadeMs` of the cue (or of its trim). Absent: no fade. */
+  fadeMs?: number;
   /**
    * SFX parity, per event (`sfxV2/eventCues.ts`): the recorded originals to look up for this cue, in order, in the
    * running chapter's parity packs. Given (even empty), the packs are consulted for these names ONLY, so a stand-in

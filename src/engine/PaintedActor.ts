@@ -57,6 +57,9 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { noteImpact } from './look/living/StageImpacts.ts'; // release 62 (FFX-2's living cathedral): a landed blow starts a ring in the polished floor's reflection
 import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
+import { ShadowFollow, shadowX } from './feel/ContactShadow.ts'; // `?shadow=follow` (demo chapters, off by default): the contact shadow stays under the feet
+import { shadowFollows } from './feel/FeelSwitch.ts';
+import { heftOfHeight, motionBeat } from './feel/MotionBeats.ts'; // `?motionsfx=` (step 2; off by default): a figure tells the sound its lunge begins and its hop lands
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
 import { CurveDriver, type LeapOptions } from './motion/CurveDriver.ts'; // motion pass (lane "core"): the new curves; idle unless the presenter starts one (default OFF, `motion/CurvesSwitch.ts`)
@@ -514,6 +517,7 @@ export class PaintedActor extends Group {
   private readonly hoverBobSpeed: number;
   private shadowBaseRadius: number;
   private readonly shadowBaseOpacity: number;
+  private readonly shadowAir = new ShadowFollow();
   private readonly shadowSquash: number;
 
   /**
@@ -1589,6 +1593,7 @@ export class PaintedActor extends Group {
    * target (`motion/StrikeReach.ts`) moves the rest on the eased step.
    */
   lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }, house = distance): Promise<void> {
+    motionBeat({ kind: 'lunge', strength: distance / 2.4, heft: heftOfHeight(this.worldHeight), atMs: ms * 0.19, ms }); // the step's fastest frame is at 0.19 of the move (measured in the real game, Chapter I, stepped at 60 Hz: +84 ms of a 440 ms move; the smooth `reachOffset` house step, not the classic `attackOffset`'s 0.13)
     const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
     const houseStep = motionSmooth() ? reachOffset : attackOffset; // W5 (on by default; `?motion=classic` restores cubic-out): the house part's step starts on the velocity-continuous curve, not cubic-out's 28 percent first frame; same distance, same beats
     const extra = Math.max(0, distance - house); // the distance beyond the house lunge rides the eased step (`reachOffset`); the house part is `attackOffset` to the frame
@@ -2090,6 +2095,7 @@ export class PaintedActor extends Group {
       onUpdate: (t) => {
         this.hopHeight = Math.sin(Math.PI * t) * height;
       },
+      onComplete: () => motionBeat({ kind: 'land', strength: height / (this.worldHeight * 0.33), heft: heftOfHeight(this.worldHeight) }), // the landing thud (`?motionsfx=`); a killed hop (the actor is disposed) never lands
     });
   }
 
@@ -2589,14 +2595,20 @@ export class PaintedActor extends Group {
       // Follow the pose's footprint: a body on the ground casts a long, flat
       // shadow under its whole length, not the standing figure's small disc.
       const base = Math.max(this.shadowBaseRadius, this.footprintRadius());
-      const r = base * (1 + this.squashAmount * 0.3 + Math.max(0, 1 / cv.sy - 1) * 5) * (1 - lift * 0.42); // the shadow spreads on a landing's squash
+      const follow = shadowFollows();
+      // Off the ground by a hop OR (the curves) a cast lift, the strike's arc or an FFX-2 leap: the lane "feel" asked for the sum here (feel/ContactShadow.ts).
+      const air = follow ? this.shadowAir.step(dt, this.hopHeight + cv.lift, this.worldHeight) : null;
+      const r = base * (1 + this.squashAmount * 0.3 + Math.max(0, 1 / cv.sy - 1) * 5) * (1 - lift * 0.42) * (air?.radius ?? 1); // the shadow spreads on a landing's squash (curves)
       // The wider the footprint, the flatter the blob, so a prone shadow does
       // not balloon into a circle the size of the body's length.
       const squash = this.shadowSquash * (this.shadowBaseRadius / Math.max(1e-4, base)) ** 0.5;
       this.shadow.scale.set(r, r * Math.min(this.shadowSquash, squash), 1);
-      this.shadow.position.x = curvesOn() ? ox - 0.45 * lean * upright * this.facing : ox * 0.55; // the new curves: the shadow stays under the feet through the lunge
+      // Today 0.55 of the offset. The curves (lane "core") put the shadow under the feet through the lunge but leave the posture lean out; `?shadow=follow` (lane "feel") puts it
+      // under the boots with all of the offset but a lying body's swing about its feet. Either switch alone does what its lane built; both on subtract both.
+      const underFeet = curvesOn();
+      this.shadow.position.x = underFeet ? ox - 0.45 * lean * upright * this.facing - (follow ? 0.45 * lieDx : 0) : shadowX(ox, lieDx, follow);
       const sm = this.shadow.material as MeshBasicMaterial;
-      sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5);
+      sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5) * (air?.opacity ?? 1);
     }
   }
 

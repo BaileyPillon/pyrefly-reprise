@@ -1,6 +1,7 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
 import { LinkFits, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
+import { shakeStepByTime, shakeStepPerFrame } from './feel/TimeBased.ts'; // `?timing=time` (demo chapters): the shake runs on real time, today's is per drawn frame
 
 export interface CameraRig {
   /** Camera world position. */
@@ -349,7 +350,7 @@ export class BattleCamera {
   update(dt: number): void {
     this.tweens.update(dt);
     this.fx.update(dt);
-    if (this.shakeLeftMs > 0) this.shakeLeftMs -= dt * 1000;
+    if (this.shakeLeftMs > 0) { this.shakeLeftMs -= dt * 1000; this.shakePhase += shakeStepByTime(dt); }
     if (!this.tweening) {
       // Ease toward the rig target; lets offsetTarget() settle naturally.
       this.curPos.set(
@@ -383,7 +384,7 @@ export class BattleCamera {
     if (this.shakeLeftMs > 0) {
       const k = Math.max(0, this.shakeLeftMs / this.shakeTotalMs);
       const damp2 = k * k;
-      this.shakePhase += 0.9;
+      this.shakePhase += shakeStepPerFrame();
       ox += Math.sin(this.shakePhase * 2.7) * this.shakeAmp * damp2;
       oy += Math.sin(this.shakePhase * 3.9 + 1.7) * this.shakeAmp * damp2 * 0.8;
     }
