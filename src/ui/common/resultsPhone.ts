@@ -166,7 +166,7 @@ function dockHtml(m: ResultsPageModel): string {
   if (m.victory) {
     return `<div class="rresp__btn rresp__btn--lit" data-action="confirm" role="button" tabindex="0"><span>CONFIRM ▸</span></div>`;
   }
-  return DEFEAT_ACTIONS.map((action, i) => {
+  return (m.actions ?? DEFEAT_ACTIONS).map((action, i) => {
     const lit = i === m.actionIndex ? ' rresp__btn--lit' : ' rresp__btn--ghost';
     return `<div class="rresp__btn${lit}" data-action="results:${action.choice}" role="button" tabindex="0"><span>${action.label}</span></div>`;
   }).join('');

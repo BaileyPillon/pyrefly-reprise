@@ -45,14 +45,15 @@ export function demoSeedAt(chapterId: string, n: number): number | null {
 }
 
 /**
- * The seed of attempt number `attempt` (0 = the run's first) of a run whose first seed was `firstSeed`. In demo mode and on a demo chapter whose table holds `firstSeed`, a retry takes the next seed of
- * the table; anywhere else it is the game's `firstSeed + attempt * 1000`. Pure but for {@link demoModeOn}.
+ * The seed of attempt number `attempt` (0 = the run's first) of a run whose first seed was `firstSeed`. In demo mode and on a demo chapter whose table holds `firstSeed`, a retry is **the same seed**
+ * (release 62, decision 173g: the defeat panel's TRY AGAIN is "the same fight, fresh, same demo seed"; release 61 took the next seed of the table here); anywhere else it is the game's
+ * `firstSeed + attempt * 1000`. A fresh attempt from the picker still takes the next seed of the table ({@link nextDemoRunSeed}). Pure but for {@link demoModeOn}.
  */
 export function attemptSeed(chapterId: string, firstSeed: number, attempt: number): number {
   const seeds = demoModeOn() ? demoSeedsOf(chapterId) : null;
   const at = seeds ? seeds.indexOf(firstSeed) : -1;
   if (!seeds || at < 0) return firstSeed + attempt * 1000;
-  return seeds[(at + attempt) % seeds.length]!;
+  return firstSeed;
 }
 
 /** What the address and the tab's store say, pure: `on`, and what to write back (`'1'` to remember, `null` to forget, `undefined` to leave it). */

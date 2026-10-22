@@ -11,10 +11,11 @@ import { demoModeOn } from '../demoMode.ts';
 /** After a win: one button. */
 export const DEMO_RESULTS_WIN_HINTS: ControlHintItem[] = [{ keyboard: 'Enter', gamepad: 'Cross', pointer: 'Click CONFIRM', label: 'continue' }];
 
-/** After a loss: the two slabs (RETRY, CHAPTER SELECT) are chosen with the d-pad and taken with the confirm button. */
+/** After a loss: the two slabs (TRY AGAIN, OTHER FIGHT; release 62) are chosen with the d-pad and taken with the confirm button; Back leaves for the picker. */
 export const DEMO_RESULTS_LOSS_HINTS: ControlHintItem[] = [
   { keyboard: 'Left/Right', gamepad: 'D-pad', pointer: 'Click a slab', label: 'choose' },
   { keyboard: 'Enter', gamepad: 'Cross', pointer: 'Click a slab', label: 'pick' },
+  { keyboard: 'Esc', gamepad: 'Circle', pointer: 'Esc', label: 'picker', action: 'cancel' },
 ];
 
 /** The strip for a results panel, mounted into `root`; null outside demo mode. The caller feeds it `handleInput` each frame and unmounts it with the screen. */

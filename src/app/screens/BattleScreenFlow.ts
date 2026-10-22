@@ -43,6 +43,7 @@ import { boardWhenWarm } from './frontendWarm.ts';
 import { playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
+import { noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
 import { warmBattleStage } from '../../engine/StageWarm.ts'; // R61 (PR-0481): a first battle's once-per-page costs are paid behind the party prep
@@ -334,7 +335,9 @@ export class GameFlow {
     const release = musicChapter(id, sfxChapter(id, voiceChapter(id, holdIdleLane()))); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep; the recorded voice-over (FFX only)
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)
     // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
-    return runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(() => { release(); endRun(); });
+    const ran = await runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(() => { release(); endRun(); });
+    const next = takeDemoNextFight(); // R62 (demo mode only): OTHER FIGHT on the defeat panel starts the other demo fight at once
+    return next === null || this.handedOver ? ran : this.runChapter(next as ChapterId, {});
   }
 
   private async playChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
@@ -453,6 +456,7 @@ export class GameFlow {
         // and hands the outcome back to the caller. An automated run never
         // sees the panel (`skipResults`), so it keeps the old behaviour.
         const choice = opts.skipResults ? 'continue' : await this.showResults(chapter, outcome);
+        noteDemoDefeatChoice(id, choice); // R62 (demo mode only): a lost demo fight's OTHER FIGHT is remembered for `runChapter`
         carry = carryAfterDefeat(carry, fought);
         if (choice === 'retry' || (choice === 'continue' && !opts.skipPrep)) continue;
       }
