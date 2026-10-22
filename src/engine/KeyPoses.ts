@@ -20,6 +20,7 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import type { LungeContact } from './ContactBeat.ts';
 import { odApex, odKeyHolds } from './KeySlots.ts';
+import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
 
 /** How long the follow-through holds at full reach before the strike goes home, ms at timeScale 1. */
 export const FOLLOW_BEAT_MS = 180;
@@ -49,12 +50,18 @@ export function blowPose(windUp: boolean): string | undefined {
  * playback runs ahead (seen in Chapter IV under the ATB), and the figure must not stay on its impact.
  */
 export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: LungeContact): LungeContact {
+  const impact = (): void => {
+    // r37 slot (FFX-2): a move with its own key painting puts that up at the apex instead of the impact painting.
+    if (ctx.actingId === actorId && !odApex(ctx, actorId)) ctx.stage.actor(actorId)?.setPose('attack');
+  };
+  // Motion pass (lane "core"): the sampled strike reaches its contact with the blow already landing on it, so a painting put up AT the contact would be replaced by the follow-through in
+  // the same frame and never be seen. It goes up on the strike's `travelPeak` mark instead (the fastest frame, where a swap is hidden best), and `reached` only marks the contact.
+  if (curvesOn()) return { hold: contact.hold, reached: contact.reached, impact };
   return {
     hold: contact.hold,
     reached: () => {
       contact.reached();
-      // r37 slot (FFX-2): a move with its own key painting puts that up at the apex instead of the impact painting.
-      if (ctx.actingId === actorId && !odApex(ctx, actorId)) ctx.stage.actor(actorId)?.setPose('attack');
+      impact();
     },
   };
 }

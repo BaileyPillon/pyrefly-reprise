@@ -25,6 +25,11 @@ import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core"
 export interface LungeContact {
   hold: Promise<unknown>;
   reached: () => void;
+  /**
+   * Optional (motion pass, lane "core"; only with the new curves on): the impact painting's hook. The sampled strike calls it on its `travelPeak` mark (the fastest frame before
+   * contact), so the impact painting is up AT the blow and not after it; `reached` then only marks the contact. Absent: today's lunge, which puts the painting up at `reached`.
+   */
+  impact?: () => void;
 }
 
 /** The longest the attacker holds at the apex waiting for the blow, ms at timeScale 1. */

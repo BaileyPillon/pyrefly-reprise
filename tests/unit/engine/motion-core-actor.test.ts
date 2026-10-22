@@ -12,6 +12,7 @@ import { PROFILES, SQUASH_CAP, defaultPaceFactor, resolveStrike, strikeMarks } f
 import { STRIKE_BEAT_MS, strikeBeatNow } from '../../../src/engine/StrikeBeat.ts';
 import { armContact, CONTACT_HOLD_MAX_MS, CURVES_CONTACT_EXTRA_MS, meetContact, releaseContact } from '../../../src/engine/ContactBeat.ts';
 import { paceFactor } from '../../../src/engine/pace.ts';
+import { impactAtApex } from '../../../src/engine/KeyPoses.ts';
 
 const flush = async (): Promise<void> => {
   for (let i = 0; i < 6; i++) await Promise.resolve();
@@ -210,6 +211,23 @@ describe('switch ON in a demo chapter: the sampled strike on the real actor', ()
     expect(bossMax / 4.1).toBeLessThan(partyMax / 1.82); // less air, as a share of its height
   });
 
+  it('leans back in the wind-up and forward at the fastest travel frame, toward its own facing (party +x, foe -x)', () => {
+    on();
+    for (const [side, sign, k] of [['party', 1, 1], ['enemy', -1, 1.3]] as const) {
+      // a boss is x1.3 slower (heft), so its wind-up ends and its fastest frame comes x1.3 later
+      const a = figure(side);
+      void a.strike({ distance: 1.4, game: 'ffx', timeScale: 1, arc: true });
+      let backAt = 0;
+      let fwdAt = 0;
+      run(a, 306 * k + 5, 1000 / 120, (ms) => {
+        if (Math.abs(ms - 150 * k) < 4.2) backAt = inner(a).rotation.z;
+        if (Math.abs(ms - 306 * k) < 4.2) fwdAt = inner(a).rotation.z;
+      });
+      expect(backAt * sign, `${side} leaning back`).toBeGreaterThan(0.03); // the top of the figure goes away from the target: counter-clockwise for +x
+      expect(fwdAt * sign, `${side} leaning forward`).toBeLessThan(-0.02);
+    }
+  });
+
   it('the shadow stays under the feet through the lunge, and spreads on the landing squash', () => {
     on();
     const a = figure('party', true);
@@ -401,5 +419,44 @@ describe('the whole beat on the real actor: arm the contact, start the strike, a
     expect(Math.abs(at('blow lands') - at('contact'))).toBeLessThan(10); // the blow waited for the contact
     expect(at('hold released') - at('contact')).toBeLessThan(40); // no follow-through painting: released at once; the profile's 0.2 s minimum hold still applies
     expect(Math.abs(end - 1100)).toBeLessThan(30);
+  });
+});
+
+describe('the impact painting with the new curves: up on the fastest travel frame, not at the contact the blow lands on', () => {
+  const poses: string[] = [];
+  const ctx = (): never => ({ actingId: 'tidus', stage: { actor: () => ({ setPose: (p: string) => poses.push(p) }), paints: () => false } }) as never;
+  it('today: the contact puts the attack painting up', () => {
+    poses.length = 0;
+    const c = impactAtApex(ctx(), 'tidus' as never, { hold: Promise.resolve(), reached: () => poses.push('reached') });
+    expect(c.impact).toBeUndefined();
+    c.reached();
+    expect(poses).toEqual(['reached', 'attack']);
+  });
+  it('new curves: reached only marks the contact; the painting goes up on the travelPeak mark the strike is asked to call', () => {
+    setCurvesMode('new');
+    setCurvesChapter('seymour-flux');
+    poses.length = 0;
+    const c = impactAtApex(ctx(), 'tidus' as never, { hold: Promise.resolve(), reached: () => poses.push('reached') });
+    c.reached();
+    expect(poses).toEqual(['reached']);
+    const plans: Array<Record<string, unknown>> = [];
+    const fake = { strike: (p: Record<string, unknown>) => (plans.push(p), Promise.resolve()) };
+    startAttackMove({ speed: () => 'normal', deps: {} } as never, fake as never, { distance: 1.4, house: 1.4 }, c, false);
+    const marks = plans[0]!['marks'] as { travelPeak: () => void };
+    marks.travelPeak();
+    expect(poses).toEqual(['reached', 'attack']);
+  });
+  it('on the real actor the mark fires at the fastest frame, before the contact', () => {
+    setCurvesMode('new');
+    setCurvesChapter('seymour-flux');
+    const a = figure();
+    let peakAt = -1;
+    let contactAt = -1;
+    let t = 0;
+    void a.strike({ distance: 1.4, game: 'ffx', timeScale: 1, arc: true, contact: { hold: Promise.resolve(), reached: () => (contactAt = t) }, marks: { travelPeak: () => (peakAt = t) } });
+    run(a, 700, 1000 / 120, (ms) => (t = ms));
+    expect(peakAt).toBeGreaterThan(250);
+    expect(contactAt - peakAt).toBeGreaterThan(80); // the impact painting is up about 94 ms before the contact (as long as today's apex-to-blow gap)
+    expect(contactAt - peakAt).toBeLessThan(110);
   });
 });

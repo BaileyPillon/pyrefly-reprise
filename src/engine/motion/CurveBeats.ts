@@ -25,7 +25,7 @@ export function moveScale(ctx: EventCtx): number {
  */
 export function startAttackMove(ctx: EventCtx, actor: ActorHandle | undefined, plan: { distance: number; house: number }, contact: LungeContact, ranIn: boolean): void {
   if (curvesOn() && actor?.strike) {
-    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale: moveScale(ctx), arc: !ranIn, contact });
+    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale: moveScale(ctx), arc: !ranIn, contact, ...(contact.impact ? { marks: { travelPeak: contact.impact } } : {}) });
     return;
   }
   void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact, plan.house), actor?.squash(260, 0.45)]);
