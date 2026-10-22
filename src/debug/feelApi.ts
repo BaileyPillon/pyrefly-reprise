@@ -6,7 +6,7 @@
  * Each setter returns the mode now in force. A mode only takes effect in the two demo chapters (the answer outside them is always today's), so `feel()` also reports the
  * chapter the battle screen named and whether it counts. `punch(fraction, ms, which)` plays one camera punch on the real spectacle camera at once: `fraction` of the
  * struck figure's depth (default 0.025), over `ms` (default 370), `which` `'new'` (the settle, the default) or `'today'` (the 9-unit smoothstep kick); it returns the depth it
- * used and the fraction it plays, or null while BATTLE SPECTACLE is not attached.
+ * used and the fraction it plays, or null while BATTLE SPECTACLE is not attached; the optional `trauma` (0 to 1) and `stopMs` add a trauma shake and a hit-stop of real time on top (the 60 / 144 Hz comparison).
  */
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
 import {
@@ -92,8 +92,8 @@ export function installFeelDebug(api: Record<string, unknown>, app?: Steppable):
     shadow: shadowFollows(),
   });
   api['rumbleLog'] = (reset = false): RumbleRecord[] => rumbleLog(reset);
-  api['punch'] = (fraction?: number, ms?: number, which?: 'new' | 'today'): { depth: number; fraction: number } | null => {
-    const play = fxDebugHooks['c']?.api?.['punch'] as ((f?: number, m?: number, w?: 'new' | 'today') => { depth: number; fraction: number }) | undefined;
-    return play ? play(fraction, ms, which) : null;
+  api['punch'] = (fraction?: number, ms?: number, which?: 'new' | 'today', trauma?: number, stopMs?: number): { depth: number; fraction: number } | null => {
+    const play = fxDebugHooks['c']?.api?.['punch'] as ((f?: number, m?: number, w?: 'new' | 'today', t?: number, s?: number) => { depth: number; fraction: number }) | undefined;
+    return play ? play(fraction, ms, which, trauma, stopMs) : null;
   };
 }

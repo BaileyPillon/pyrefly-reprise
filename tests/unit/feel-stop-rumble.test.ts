@@ -200,6 +200,25 @@ describe('the rumble hooks (presenter side)', () => {
   });
 });
 
+describe('the boss headline flag through the presenter hooks', () => {
+  it('is set for a foe headline move and its own blows only: under the FFX-2 ATB another actor blow landing meanwhile is not the boss big attack', async () => {
+    const seen: Array<{ bossBig?: boolean; big: boolean; menuOpen?: boolean }> = [];
+    const c = ctx();
+    (c.stage as unknown as { fx: unknown }).fx = { enabled: () => true, hit: (o: { bossBig?: boolean; big: boolean; menuOpen?: boolean }) => (seen.push(o), { freezeMs: 0, shook: false }) };
+    const start = (actorId: string, abilityId: string): Extract<BattleEvent, { type: 'action-start' }> =>
+      ({ type: 'action-start', actorId, abilityId, command: { kind: 'ability' } }) as unknown as Extract<BattleEvent, { type: 'action-start' }>;
+    await fxActionOpen(c, start('bahamut', 'x2-bahamut-impulse'));
+    fxHit(c, dmg({ sourceId: 'bahamut', targetId: 'tidus' }), false);
+    fxHit(c, dmg({ sourceId: 'rikku' }), false);
+    await fxActionOpen(c, start('bahamut', 'x2-bahamut-attack')); // an ordinary swing of the same boss
+    fxHit(c, dmg({ sourceId: 'bahamut', targetId: 'tidus' }), false);
+    await fxActionOpen(c, start('tidus', 'lance-of-atrophy')); // a headline NAME used by a party member is not a boss move
+    fxHit(c, dmg({ sourceId: 'tidus' }), false);
+    expect(seen.map((o) => o.bossBig)).toEqual([true, false, false, false]);
+    expect(seen.every((o) => o.menuOpen === false)).toBe(true);
+  });
+});
+
 describe('the pad-side sink', () => {
   interface Call { type: string; startDelay: number; duration: number; weakMagnitude: number; strongMagnitude: number }
   function deps(o: { pad?: boolean; actuator?: boolean; padActive?: boolean; reduce?: boolean; now?: () => number; calls?: Call[]; reject?: boolean; throws?: boolean } = {}): RumbleDeps {

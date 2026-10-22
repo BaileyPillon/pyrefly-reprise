@@ -67,8 +67,9 @@ interface ActionMark {
   kind: 'overdrive' | 'special' | 'other';
   count: number;
   magic: boolean;
-  /** A foe is using one of its headline moves (`feel/HitStopShort.BOSS_BIG_MOVES`). */
+  /** A foe is using one of its headline moves (`feel/HitStopShort.BOSS_BIG_MOVES`), and who it is (under FFX-2's ATB another actor's blow can land while this action is the latest opened). */
   bossBig: boolean;
+  actorId: CombatantId;
 }
 
 const marks = new WeakMap<EventCtx, ActionMark>();
@@ -85,7 +86,7 @@ export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { 
   const kind: ActionMark['kind'] =
     event.command.kind === 'overdrive' ? 'overdrive' : SPECIALS.has(name.trim().toLowerCase()) ? 'special' : 'other';
   const magic = event.abilityId ? ctx.deps.abilityFacts?.(event.abilityId)?.damageType === 'magical' : false;
-  marks.set(ctx, { kind, count: (prev?.count ?? 0) + 1, magic, bossBig: isBossBigMove(event.abilityId) && ctx.stage.sideOf?.(event.actorId) === 'enemy' });
+  marks.set(ctx, { kind, count: (prev?.count ?? 0) + 1, magic, actorId: event.actorId, bossBig: isBossBigMove(event.abilityId) && ctx.stage.sideOf?.(event.actorId) === 'enemy' });
   rumbleOpen(ctx, kind);
   const fx = port(ctx);
   if (!fx?.actionOpen || kind === 'other' || ctx.speed() === 'skip') return;
@@ -135,7 +136,8 @@ export function fxHit(
   heavy: boolean,
 ): { waitMs: number; shook: boolean } | null {
   const mark = marks.get(ctx);
-  rumbleHit(ctx, event, heavy, mark, isFfx2(ctx) ? lastByIndex(event) : (lastShownAt(ctx, event) ?? lastByIndex(event)));
+  const bossBig = mark?.bossBig === true && (event.sourceId === undefined || event.sourceId === mark.actorId);
+  rumbleHit(ctx, event, heavy, mark === undefined ? undefined : { kind: mark.kind, bossBig }, isFfx2(ctx) ? lastByIndex(event) : (lastShownAt(ctx, event) ?? lastByIndex(event)));
   const fx = port(ctx);
   if (!fx?.hit) return null;
   const r = fx.hit({
@@ -150,7 +152,7 @@ export function fxHit(
     action: mark?.count ?? -1,
     speed: ctx.speed(),
     lastShown: lastShownAt(ctx, event),
-    bossBig: mark?.bossBig === true,
+    bossBig,
     menuOpen: menuBlocks(ctx),
     ...(demoMotionOn() ? { power: hitPower(event.amount, ctx.hpMaxOf?.(event.targetId)) } : {}), // `?motion=demo`: the stop and the shake grow with the blow (`motion/DemoHit.ts`)
   });
