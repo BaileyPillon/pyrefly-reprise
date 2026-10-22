@@ -103,7 +103,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
   'paine-warrior': {
     attack: { scale: 1.282, stanceX: 350.0, head: [0.4156, 0.1102, 0.5022, 0.1707], status: 'held', class: 'standing', stature: 0.899, headReal: 1.263, iou: 0.185, sha: 'b29ac1937a425a3e' },
     cast: { scale: 1.21, stanceX: 354.5, head: [0.4923, 0.2009, 0.6388, 0.2569], status: 'ok', class: 'standing', stature: 0.978, headReal: 1.02, iou: 0.451, sha: 'defbb3c0dfc1e498' },
-    critical: { scale: 1.036, stanceX: 352.0, head: [0.5019, 0.3486, 0.6451, 0.4112], status: 'ok', class: 'low', stature: 0.876, headReal: 1.141, iou: 0.276, sha: '0eca6475b7d90f43' },
+    critical: { scale: 1.036, stanceX: 353.5, head: [0.5019, 0.3486, 0.6451, 0.4112], status: 'ok', class: 'low', stature: 0.877, headReal: 1.141, iou: 0.272, sha: '50db07c13276f45a' },
     defend: { scale: 1.188, stanceX: 238.5, head: [0.3754, 0.2342, 0.5364, 0.2818], status: 'ok', class: 'standing', stature: 1.157, headReal: 1.009, iou: 0.247, sha: '9a72b1c08a352806' },
     follow: { scale: 0.976, stanceX: 272.5, head: [0.5912, 0.4112, 0.7674, 0.4682], status: 'ok', class: 'standing', stature: 0.97, headReal: 1.032, iou: 0.133, sha: '0c22d20b285bbc2e' },
     hurt: { scale: 1.247, stanceX: 312.0, head: [0.2638, 0.0937, 0.3759, 0.1542], status: 'ok', class: 'standing', stature: 0.901, headReal: 1.107, iou: 0.268, sha: '09b8668d39937bcd' },
@@ -113,7 +113,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     'od-x2-warrior-armor-break': { scale: 1.286, stanceX: 437.5, feetRow: 822.0, head: [0.3813, 0.0602, 0.4736, 0.1203], status: 'held', class: 'standing', stature: 0.901, headReal: 1.268, iou: 0.17, sha: '7684b304d76eb730' },
     'od-x2-warrior-power-break': { scale: 1.286, stanceX: 437.5, feetRow: 822.0, head: [0.4487, 0.1125, 0.541, 0.1726], status: 'held', class: 'standing', stature: 0.901, headReal: 1.268, iou: 0.17, sha: '115787cb27036507' },
     ready: { scale: 1.115, stanceX: 349.5, head: [0.401, 0.2649, 0.5222, 0.3179], status: 'ok', class: 'standing', stature: 1.037, headReal: 0.967, iou: 0.31, sha: 'fbc8afbe5ff2fbd3' },
-    sleep: { scale: 0.926, stanceX: 197.0, head: [0.3448, 0.299, 0.5969, 0.3576], status: 'ok', class: 'low', stature: 0.94, headReal: 1.064, iou: 0.313, sha: 'f1a1856e5c052a50' },
+    sleep: { scale: 0.924, stanceX: 200.0, head: [0.3446, 0.2989, 0.5971, 0.3577], status: 'ok', class: 'low', stature: 0.942, headReal: 1.062, iou: 0.296, sha: '2ed5c82b48d9020e' },
     victory: { scale: 1.057, stanceX: 346.5, head: [0.3953, 0.1956, 0.5723, 0.2466], status: 'ok', class: 'standing', stature: 1.08, headReal: 1.03, iou: 0.393, sha: '65cd93da432b175e' },
   },
   'paine-white-mage': {
@@ -175,7 +175,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
   'rikku-dark-knight': {
     attack: { scale: 0.954, stanceX: 133.0, head: [0.5279, 0.2774, 0.6456, 0.3294], status: 'ok', class: 'standing', stature: 0.942, headReal: 1.059, iou: 0.193, sha: '5440b14c761e24c3' },
     cast: { scale: 1.114, stanceX: 228.0, head: [0.2166, 0.3302, 0.4725, 0.3749], status: 'ok', class: 'standing', stature: 1.078, headReal: 0.928, iou: 0.277, sha: '301b650c5981e0d5' },
-    critical: { scale: 1.066, stanceX: 318.5, head: [0.6284, 0.3467, 0.7733, 0.402], status: 'ok', class: 'low', stature: 0.868, headReal: 1.151, iou: 0.313, sha: 'f2b2ed6d94ae0e41' },
+    critical: { scale: 1.066, stanceX: 317.5, head: [0.6284, 0.3467, 0.7733, 0.402], status: 'ok', class: 'low', stature: 0.869, headReal: 1.151, iou: 0.306, sha: '1a3484a15efcc691' },
     follow: { scale: 1.084, stanceX: 339.0, feetRow: 1190.0, head: [0.4148, 0.4475, 0.5607, 0.4916], status: 'held', class: 'standing', stature: 1.098, headReal: 0.902, iou: 0.374, sha: '4116db7b316258ba' },
     hurt: { scale: 1.106, stanceX: 388.5, head: [0.1939, 0.1175, 0.3238, 0.1669], status: 'ok', class: 'standing', stature: 0.951, headReal: 1.05, iou: 0.343, sha: '379721fa21ad518a' },
     idle: { stanceX: 302.5, feetRow: 1184.0, head: [0.2872, 0.1253, 0.4269, 0.1734], status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '3c40c2d7cb45f840' },
