@@ -52,7 +52,7 @@ for (;;) {
   // the queue: when nobody has reserved the next slot, reserve it (the others do the same, and the file names who is next). A reservation that is there stays with its owner.
   if (!fs.existsSync(NEXT) && fs.existsSync(LOCK)) { try { fs.writeFileSync(NEXT, JSON.stringify({ who: 'rig pilots', pid: process.pid, at: new Date(waitStart).toISOString(), maxMinutes }), { flag: 'wx' }); say('reserved the next slot'); } catch { /* someone else was first */ } }
   if (why !== lastWhy) { say('waiting:', why); lastWhy = why; }
-  await sleep(1500);
+  await sleep(40); // the driver's etiquette (2026-10-22): claim the next slot yourself the moment it is absent (exclusive create), polling fast; lanes re-reserve within seconds of a release
 }
 { const nx = read(NEXT); if (nx?.who === 'rig pilots' && nx.pid === process.pid) fs.rmSync(NEXT, { force: true }); }
 fs.rmSync(LOCK, { force: true });
