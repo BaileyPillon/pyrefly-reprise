@@ -1,0 +1,2455 @@
+{
+ "_party": "party rig (tools/rig/lane/party/README.md): the `party` block is the source; prep.py writes cut/build/landmarks/fit/motion from it. FFX-2 only (Chapter IV, the Dark Knight dressphere).",
+ "subject": "rikku-dark-knight",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "party": {
+  "keypoints": "tools/rig/subjects/rikku-dark-knight-x.keypoints.json",
+  "poses": [
+   "ready",
+   "attack",
+   "follow",
+   "victory",
+   "cast",
+   "item",
+   "hurt",
+   "critical",
+   "sleep",
+   "ko"
+  ],
+  "swordPivotD": 120,
+  "idle_hidden": [
+   "shoulderB",
+   "elbowB",
+   "handB"
+  ],
+  "underlap": 8,
+  "underlap_idle": 5,
+  "margin": 15,
+  "pad": 600,
+  "waistT": 0.25,
+  "order": [
+   "legB",
+   "hips",
+   "legA",
+   "armB",
+   "torso",
+   "sword",
+   "armA",
+   "head"
+  ],
+  "parts": {
+   "head": {
+    "caps": [
+     [
+      "neck",
+      "head",
+      55
+     ],
+     [
+      "head",
+      "crown",
+      85
+     ],
+     [
+      "head",
+      "hairTip",
+      42
+     ]
+    ],
+    "bias": 30,
+    "skin": {
+     "type": "rigid",
+     "bone": "head",
+     "mesh": {
+      "edge": 90,
+      "inner": 180,
+      "grow": 14
+     }
+    },
+    "variant": {
+     "opaqueArea": 1.0,
+     "meshArea": 1.0,
+     "tex": 0.6,
+     "growMax": 60
+    }
+   },
+   "torso": {
+    "caps": [
+     [
+      "neck",
+      "waist",
+      85
+     ]
+    ],
+    "skin": {
+     "type": "rigid",
+     "bone": "chest",
+     "mesh": {
+      "edge": 170,
+      "inner": 340,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "mesh": {
+      "quad": true
+     }
+    }
+   },
+   "hips": {
+    "caps": [
+     [
+      "waist",
+      "pelvis",
+      85
+     ],
+     [
+      "pelvis",
+      100
+     ],
+     [
+      "pelvis",
+      "hem",
+      55
+     ]
+    ],
+    "bias": 8,
+    "skin": {
+     "type": "rigid",
+     "bone": "pelvis",
+     "mesh": {
+      "edge": 170,
+      "inner": 340,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "mesh": {
+      "quad": true
+     }
+    }
+   },
+   "armA": {
+    "caps": [
+     [
+      "shoulderA",
+      "elbowA",
+      40
+     ],
+     [
+      "elbowA",
+      "handA",
+      38
+     ]
+    ],
+    "bias": 12,
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "upperarmA",
+      "forearmA"
+     ],
+     "joints": [
+      "shoulderA",
+      "elbowA",
+      "handA"
+     ],
+     "ramps": [
+      26
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "armB": {
+    "stub": [
+     250,
+     350
+    ],
+    "caps": [
+     [
+      "shoulderB",
+      "elbowB",
+      38
+     ],
+     [
+      "elbowB",
+      "handB",
+      36
+     ]
+    ],
+    "bias": 6,
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "upperarmB",
+      "forearmB"
+     ],
+     "joints": [
+      "shoulderB",
+      "elbowB",
+      "handB"
+     ],
+     "ramps": [
+      26
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "legA": {
+    "caps": [
+     [
+      "pelvis",
+      "kneeA",
+      52
+     ],
+     [
+      "kneeA",
+      "footA",
+      44
+     ],
+     [
+      "footA",
+      "toeA",
+      40
+     ]
+    ],
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "thighA",
+      "shinA"
+     ],
+     "joints": [
+      "pelvis",
+      "kneeA",
+      "toeA"
+     ],
+     "ramps": [
+      30
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "legB": {
+    "caps": [
+     [
+      "pelvis",
+      "kneeB",
+      52
+     ],
+     [
+      "kneeB",
+      "footB",
+      44
+     ],
+     [
+      "footB",
+      "toeB",
+      40
+     ]
+    ],
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "thighB",
+      "shinB"
+     ],
+     "joints": [
+      "pelvis",
+      "kneeB",
+      "toeB"
+     ],
+     "ramps": [
+      30
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "sword": {
+    "caps": [
+     [
+      "pommel",
+      "tip",
+      85
+     ]
+    ],
+    "bias": 28,
+    "base_tex": 0.25,
+    "skin": {
+     "type": "rigid",
+     "bone": "sword",
+     "mesh": {
+      "edge": 220,
+      "inner": 440,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "tex": 0.25,
+     "mesh": {
+      "quad": true
+     }
+    }
+   }
+  },
+  "variant_defaults": {
+   "tex": 0.4
+  },
+  "base_tex": 0.4,
+  "skeleton": [
+   [
+    "root",
+    null,
+    "ground"
+   ],
+   [
+    "pelvis",
+    "root",
+    "pelvis"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "waist"
+   ],
+   [
+    "head",
+    "chest",
+    "neck"
+   ],
+   [
+    "upperarmA",
+    "chest",
+    "shoulderA"
+   ],
+   [
+    "forearmA",
+    "upperarmA",
+    "elbowA"
+   ],
+   [
+    "upperarmB",
+    "chest",
+    "shoulderB"
+   ],
+   [
+    "forearmB",
+    "upperarmB",
+    "elbowB"
+   ],
+   [
+    "thighA",
+    "pelvis",
+    "pelvis"
+   ],
+   [
+    "shinA",
+    "thighA",
+    "kneeA"
+   ],
+   [
+    "thighB",
+    "pelvis",
+    "pelvis"
+   ],
+   [
+    "shinB",
+    "thighB",
+    "kneeB"
+   ],
+   [
+    "sword",
+    "root",
+    "swordPivot"
+   ]
+  ],
+  "aim": {
+   "pelvis": "neck",
+   "chest": "neck",
+   "head": "headTop",
+   "upperarmA": "elbowA",
+   "forearmA": "handA",
+   "upperarmB": "elbowB",
+   "forearmB": "handB",
+   "thighA": "kneeA",
+   "shinA": "footA",
+   "thighB": "kneeB",
+   "shinB": "footB",
+   "sword": "tip"
+  },
+  "place": {
+   "pelvis": "pelvis",
+   "chest": "waist",
+   "upperarmA": "shoulderA",
+   "upperarmB": "shoulderB",
+   "head": "neck",
+   "sword": "swordPivot"
+  },
+  "noscale": [
+   "head",
+   "pelvis",
+   "chest"
+  ],
+  "exact_aim": [
+   "head"
+  ],
+  "joint_points": {
+   "pelvis": "pelvis",
+   "chest": "waist",
+   "head": "neck",
+   "upperarmA": "shoulderA",
+   "forearmA": "elbowA",
+   "upperarmB": "shoulderB",
+   "forearmB": "elbowB",
+   "thighA": "pelvis",
+   "shinA": "kneeA",
+   "thighB": "pelvis",
+   "shinB": "kneeB",
+   "sword": "swordPivot"
+  },
+  "scales": {
+   "chest": [
+    0.7,
+    1.4
+   ],
+   "upperarmA": [
+    0.7,
+    1.45
+   ],
+   "forearmA": [
+    0.7,
+    1.45
+   ],
+   "upperarmB": [
+    0.7,
+    1.45
+   ],
+   "forearmB": [
+    0.7,
+    1.45
+   ],
+   "thighA": [
+    0.7,
+    1.45
+   ],
+   "shinA": [
+    0.7,
+    1.45
+   ],
+   "thighB": [
+    0.7,
+    1.45
+   ],
+   "shinB": [
+    0.7,
+    1.45
+   ],
+   "sword": [
+    0.3,
+    3.0
+   ]
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    "head"
+   ],
+   "crown": [
+    "head",
+    "crown"
+   ],
+   "neck": [
+    "head",
+    "neck"
+   ],
+   "pelvis": [
+    "pelvis",
+    "pelvis"
+   ],
+   "handA": [
+    "forearmA",
+    "handA"
+   ],
+   "handB": [
+    "forearmB",
+    "handB"
+   ],
+   "pommel": [
+    "sword",
+    "pommel"
+   ],
+   "tip": [
+    "sword",
+    "tip"
+   ]
+  },
+  "key_motion": {
+   "ready": {
+    "ms": 150,
+    "fadeMs": 90
+   },
+   "attack": {
+    "ms": 70,
+    "fadeMs": 0
+   },
+   "follow": {
+    "ms": 90,
+    "fadeMs": 0
+   },
+   "hurt": {
+    "ms": 60,
+    "fadeMs": 0
+   },
+   "cast": {
+    "ms": 150,
+    "fadeMs": 70
+   },
+   "item": {
+    "ms": 140,
+    "fadeMs": 70
+   },
+   "defend": {
+    "ms": 110,
+    "fadeMs": 60
+   },
+   "victory": {
+    "ms": 220,
+    "fadeMs": 110
+   },
+   "critical": {
+    "ms": 220,
+    "fadeMs": 110
+   },
+   "sleep": {
+    "ms": 260,
+    "fadeMs": 130
+   },
+   "ko": {
+    "ms": 420,
+    "fadeMs": 160
+   },
+   "od-energy-rain": {
+    "ms": 120,
+    "fadeMs": 60
+   },
+   "od-slice-and-dice": {
+    "ms": 80,
+    "fadeMs": 0
+   }
+  },
+  "joint_discs": [
+   [
+    "head",
+    [
+     "head",
+     "torso"
+    ]
+   ],
+   [
+    "chest",
+    [
+     "torso",
+     "hips"
+    ]
+   ],
+   [
+    "upperarmA",
+    [
+     "armA",
+     "torso"
+    ]
+   ],
+   [
+    "upperarmB",
+    [
+     "armB",
+     "torso"
+    ]
+   ],
+   [
+    "forearmA",
+    [
+     "armA"
+    ]
+   ],
+   [
+    "forearmB",
+    [
+     "armB"
+    ]
+   ],
+   [
+    "thighA",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
+   ],
+   [
+    "thighB",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
+   ],
+   [
+    "shinA",
+    [
+     "legA"
+    ]
+   ],
+   [
+    "shinB",
+    [
+     "legB"
+    ]
+   ],
+   [
+    "pelvis",
+    [
+     "hips"
+    ]
+   ]
+  ],
+  "marks": [
+   "pelvis",
+   "handA",
+   "pommel",
+   "tip"
+  ],
+  "motion": {
+   "idle": {
+    "hz": 0.5,
+    "bones": {
+     "pelvis": {
+      "rot": 0.3,
+      "phase": 0.4
+     },
+     "chest": {
+      "rot": 0.8,
+      "phase": -0.9
+     },
+     "head": {
+      "rot": 1.0,
+      "phase": -1.6
+     },
+     "upperarmA": {
+      "rot": 0.5,
+      "phase": -1.4
+     },
+     "forearmA": {
+      "rot": 0.4,
+      "phase": -2.0
+     }
+    }
+   }
+  }
+ },
+ "cut": {
+  "order": [
+   "legB",
+   "hips",
+   "legA",
+   "armB",
+   "torso",
+   "sword",
+   "armA",
+   "head"
+  ]
+ },
+ "build": {
+  "bones": [
+   [
+    "root",
+    null,
+    [
+     265.0,
+     1160.0
+    ]
+   ],
+   [
+    "pelvis",
+    "root",
+    [
+     300.0,
+     495.0
+    ]
+   ],
+   [
+    "chest",
+    "pelvis",
+    [
+     296.2,
+     430.8
+    ]
+   ],
+   [
+    "head",
+    "chest",
+    [
+     285.0,
+     238.0
+    ]
+   ],
+   [
+    "upperarmA",
+    "chest",
+    [
+     365.0,
+     250.0
+    ]
+   ],
+   [
+    "forearmA",
+    "upperarmA",
+    [
+     470.0,
+     225.0
+    ]
+   ],
+   [
+    "upperarmB",
+    "chest",
+    [
+     255.0,
+     262.0
+    ]
+   ],
+   [
+    "forearmB",
+    "upperarmB",
+    [
+     215.0,
+     400.0
+    ]
+   ],
+   [
+    "thighA",
+    "pelvis",
+    [
+     300.0,
+     495.0
+    ]
+   ],
+   [
+    "shinA",
+    "thighA",
+    [
+     330.0,
+     850.0
+    ]
+   ],
+   [
+    "thighB",
+    "pelvis",
+    [
+     300.0,
+     495.0
+    ]
+   ],
+   [
+    "shinB",
+    "thighB",
+    [
+     230.0,
+     835.0
+    ]
+   ],
+   [
+    "sword",
+    "root",
+    [
+     462.3,
+     587.4
+    ]
+   ]
+  ],
+  "skin": {
+   "legB": {
+    "type": "chain",
+    "bones": [
+     "thighB",
+     "shinB"
+    ],
+    "joints": [
+     [
+      300.0,
+      495.0
+     ],
+     [
+      230.0,
+      835.0
+     ],
+     [
+      85.0,
+      1118.0
+     ]
+    ],
+    "ramps": [
+     30
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "hips": {
+    "type": "rigid",
+    "bone": "pelvis",
+    "mesh": {
+     "edge": 170,
+     "inner": 340,
+     "grow": 16
+    }
+   },
+   "legA": {
+    "type": "chain",
+    "bones": [
+     "thighA",
+     "shinA"
+    ],
+    "joints": [
+     [
+      300.0,
+      495.0
+     ],
+     [
+      330.0,
+      850.0
+     ],
+     [
+      460.0,
+      1160.0
+     ]
+    ],
+    "ramps": [
+     30
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "armB": {
+    "type": "chain",
+    "bones": [
+     "upperarmB",
+     "forearmB"
+    ],
+    "joints": [
+     [
+      255.0,
+      262.0
+     ],
+     [
+      215.0,
+      400.0
+     ],
+     [
+      235.0,
+      520.0
+     ]
+    ],
+    "ramps": [
+     26
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "torso": {
+    "type": "rigid",
+    "bone": "chest",
+    "mesh": {
+     "edge": 170,
+     "inner": 340,
+     "grow": 16
+    }
+   },
+   "sword": {
+    "type": "rigid",
+    "bone": "sword",
+    "mesh": {
+     "edge": 220,
+     "inner": 440,
+     "grow": 16
+    }
+   },
+   "armA": {
+    "type": "chain",
+    "bones": [
+     "upperarmA",
+     "forearmA"
+    ],
+    "joints": [
+     [
+      365.0,
+      250.0
+     ],
+     [
+      470.0,
+      225.0
+     ],
+     [
+      650.0,
+      182.0
+     ]
+    ],
+    "ramps": [
+     26
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "head": {
+    "type": "rigid",
+    "bone": "head",
+    "mesh": {
+     "edge": 90,
+     "inner": 180,
+     "grow": 14
+    }
+   }
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    [
+     281.0,
+     180.0
+    ]
+   ],
+   "crown": [
+    "head",
+    [
+     250.0,
+     110.0
+    ]
+   ],
+   "neck": [
+    "head",
+    [
+     285.0,
+     238.0
+    ]
+   ],
+   "pelvis": [
+    "pelvis",
+    [
+     300.0,
+     495.0
+    ]
+   ],
+   "handA": [
+    "forearmA",
+    [
+     650.0,
+     182.0
+    ]
+   ],
+   "handB": [
+    "forearmB",
+    [
+     235.0,
+     520.0
+    ]
+   ],
+   "pommel": [
+    "sword",
+    [
+     690.0,
+     62.0
+    ]
+   ],
+   "tip": [
+    "sword",
+    [
+     470.0,
+     1160.0
+    ]
+   ],
+   "feet": [
+    "root",
+    [
+     265.0,
+     1160.0
+    ]
+   ]
+  },
+  "variants": {
+   "legB": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ready.legB.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.legB.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/follow.legB.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.legB.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/cast.legB.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/item.legB.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.legB.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.legB.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.legB.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   },
+   "hips": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ready.hips.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.hips.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/follow.hips.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.hips.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/cast.hips.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/item.hips.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.hips.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.hips.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.hips.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ko.hips.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
+   },
+   "legA": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ready.legA.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.legA.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/follow.legA.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.legA.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/cast.legA.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/item.legA.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.legA.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.legA.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.legA.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ko.legA.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   },
+   "torso": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ready.torso.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.torso.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/follow.torso.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.torso.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/cast.torso.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/item.torso.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.torso.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.torso.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.torso.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ko.torso.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
+   },
+   "sword": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ready.sword.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.sword.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/follow.sword.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.sword.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/cast.sword.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.sword.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.sword.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.sword.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ko.sword.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
+   },
+   "armA": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ready.armA.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.armA.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/follow.armA.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.armA.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/cast.armA.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/item.armA.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.armA.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.armA.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.armA.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ko.armA.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   },
+   "head": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ready.head.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.head.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/follow.head.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.head.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/cast.head.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/item.head.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.head.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.head.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/sleep.head.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/ko.head.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    }
+   },
+   "armB": {
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/attack.armB.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/victory.armB.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/hurt.armB.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/rikku-dark-knight-x/masks/critical.armB.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   }
+  },
+  "rim": true
+ },
+ "landmarks": {
+  "ready": {
+   "pelvis": [
+    270,
+    470
+   ],
+   "handA": [
+    165,
+    110
+   ],
+   "pommel": [
+    60,
+    25
+   ],
+   "tip": [
+    630,
+    598
+   ]
+  },
+  "attack": {
+   "pelvis": [
+    480,
+    660
+   ],
+   "handA": [
+    715,
+    262
+   ],
+   "pommel": [
+    960,
+    360
+   ],
+   "tip": [
+    20,
+    45
+   ]
+  },
+  "follow": {
+   "pelvis": [
+    280,
+    790
+   ],
+   "handA": [
+    560,
+    695
+   ],
+   "pommel": [
+    655,
+    1170
+   ],
+   "tip": [
+    244,
+    15
+   ]
+  },
+  "victory": {
+   "pelvis": [
+    190,
+    690
+   ],
+   "handA": [
+    345,
+    575
+   ],
+   "pommel": [
+    250,
+    25
+   ],
+   "tip": [
+    270,
+    1095
+   ]
+  },
+  "cast": {
+   "pelvis": [
+    215,
+    690
+   ],
+   "handA": [
+    240,
+    310
+   ],
+   "pommel": [
+    321,
+    625
+   ],
+   "tip": [
+    340,
+    22
+   ]
+  },
+  "item": {
+   "pelvis": [
+    160,
+    440
+   ],
+   "handA": [
+    385,
+    235
+   ]
+  },
+  "hurt": {
+   "pelvis": [
+    360,
+    470
+   ],
+   "handA": [
+    515,
+    235
+   ],
+   "pommel": [
+    505,
+    145
+   ],
+   "tip": [
+    540,
+    1035
+   ]
+  },
+  "critical": {
+   "pelvis": [
+    310,
+    620
+   ],
+   "handA": [
+    562,
+    292
+   ],
+   "pommel": [
+    595,
+    20
+   ],
+   "tip": [
+    590,
+    930
+   ]
+  },
+  "sleep": {
+   "pelvis": [
+    190,
+    570
+   ],
+   "handA": [
+    235,
+    775
+   ],
+   "pommel": [
+    336,
+    30
+   ],
+   "tip": [
+    272,
+    1170
+   ]
+  },
+  "ko": {
+   "pelvis": [
+    470,
+    290
+   ],
+   "handA": [
+    360,
+    480
+   ],
+   "pommel": [
+    880,
+    520
+   ],
+   "tip": [
+    10,
+    430
+   ]
+  }
+ },
+ "fit": {
+  "mirror": [],
+  "keys": {
+   "ready": {
+    "image": {
+     "legB": "ready",
+     "hips": "ready",
+     "legA": "ready",
+     "torso": "ready",
+     "sword": "ready",
+     "armA": "ready",
+     "head": "ready"
+    },
+    "hide": [
+     "armB"
+    ]
+   },
+   "attack": {
+    "image": {
+     "legB": "attack",
+     "hips": "attack",
+     "legA": "attack",
+     "armB": "attack",
+     "torso": "attack",
+     "sword": "attack",
+     "armA": "attack",
+     "head": "attack"
+    },
+    "hide": []
+   },
+   "follow": {
+    "image": {
+     "legB": "follow",
+     "hips": "follow",
+     "legA": "follow",
+     "torso": "follow",
+     "sword": "follow",
+     "armA": "follow",
+     "head": "follow"
+    },
+    "hide": [
+     "armB"
+    ]
+   },
+   "victory": {
+    "image": {
+     "legB": "victory",
+     "hips": "victory",
+     "legA": "victory",
+     "armB": "victory",
+     "torso": "victory",
+     "sword": "victory",
+     "armA": "victory",
+     "head": "victory"
+    },
+    "hide": []
+   },
+   "cast": {
+    "image": {
+     "legB": "cast",
+     "hips": "cast",
+     "legA": "cast",
+     "torso": "cast",
+     "sword": "cast",
+     "armA": "cast",
+     "head": "cast"
+    },
+    "hide": [
+     "armB"
+    ]
+   },
+   "item": {
+    "image": {
+     "legB": "item",
+     "hips": "item",
+     "legA": "item",
+     "torso": "item",
+     "armA": "item",
+     "head": "item"
+    },
+    "hide": [
+     "armB",
+     "sword"
+    ]
+   },
+   "hurt": {
+    "image": {
+     "legB": "hurt",
+     "hips": "hurt",
+     "legA": "hurt",
+     "armB": "hurt",
+     "torso": "hurt",
+     "sword": "hurt",
+     "armA": "hurt",
+     "head": "hurt"
+    },
+    "hide": []
+   },
+   "critical": {
+    "image": {
+     "legB": "critical",
+     "hips": "critical",
+     "legA": "critical",
+     "armB": "critical",
+     "torso": "critical",
+     "sword": "critical",
+     "armA": "critical",
+     "head": "critical"
+    },
+    "hide": []
+   },
+   "sleep": {
+    "image": {
+     "legB": "sleep",
+     "hips": "sleep",
+     "legA": "sleep",
+     "torso": "sleep",
+     "sword": "sleep",
+     "armA": "sleep",
+     "head": "sleep"
+    },
+    "hide": [
+     "armB"
+    ]
+   },
+   "ko": {
+    "image": {
+     "hips": "ko",
+     "legA": "ko",
+     "torso": "ko",
+     "sword": "ko",
+     "armA": "ko",
+     "head": "ko"
+    },
+    "hide": [
+     "legB",
+     "armB"
+    ]
+   }
+  }
+ },
+ "authored": [],
+ "motion": {
+  "idle": {
+   "hz": 0.5,
+   "bones": {
+    "pelvis": {
+     "rot": 0.3,
+     "phase": 0.4
+    },
+    "chest": {
+     "rot": 0.8,
+     "phase": -0.9
+    },
+    "head": {
+     "rot": 1.0,
+     "phase": -1.6
+    },
+    "upperarmA": {
+     "rot": 0.5,
+     "phase": -1.4
+    },
+    "forearmA": {
+     "rot": 0.4,
+     "phase": -2.0
+    }
+   }
+  }
+ }
+}
