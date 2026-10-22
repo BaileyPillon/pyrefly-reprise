@@ -6,11 +6,12 @@
  * withhold it (`victoryPose: 'hold'`: FFX-2 Chapter IV; `research/ffx-vs-ffx2-presentation.md` 2.2) the party keeps its stance and {@link standDownParty} gives it a quiet settle.
  */
 import type { EventCtx } from '../BattlePresenterEvents.ts';
+import { menuBlocks } from '../KeySlots.ts';
 import { momentsOn } from './MomentsSwitch.ts';
 
 /** The victory was withheld (the held stance): every figure on the party's side stands down. True when it did. */
 export function standDownParty(ctx: EventCtx): boolean {
-  if (!momentsOn()) return false;
+  if (!momentsOn() || menuBlocks(ctx)) return false; // FFX-2: nothing new plays over an open command menu (D-357)
   let any = false;
   for (const id of ctx.stage.staged()) {
     const side = ctx.stage.sideOf(id);

@@ -5,7 +5,6 @@
  * Split out of `BattlePresenterEvents.ts` so the dispatch switch there stays
  * readable at a glance. Same rules apply: no `three`, no DOM, ports only.
  */
-
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';

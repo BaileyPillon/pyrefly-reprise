@@ -147,18 +147,30 @@ export class LeapRun {
     }
   }
 
-  /** Stop and settle the promise (the actor was disposed, or three leaps were already running). A mark not reached yet is run now, so a swap that waits on it still happens. */
-  finish(): void {
+  /**
+   * Settle the promise and run every mark not reached yet (so a swap that waits on one still happens), and let the arc play on: it is the caller's word that nothing waits on this leap any
+   * more, not that it stops (review minor: stopping a leap that was mid-flight dropped its lift in one frame, a pop).
+   */
+  settle(): void {
     while (this.pending.length) this.pending.shift()!.fn();
     if (!this.flightDone) {
       this.flightDone = true;
       this.resolve();
     }
+  }
+
+  /** Stop and settle the promise (the actor was disposed, or too many leaps were running). A mark not reached yet is run now, so a swap that waits on it still happens. */
+  finish(): void {
+    this.settle();
     this.t = this.ms + this.o.landMs;
     this.lift = 0;
     this.sy = 1;
   }
 }
+
+/** How many leaps may be waited on at once, and how many may still be flying (a settled one keeps its arc). */
+export const MAX_LEAPS_SETTLED = 3;
+export const MAX_LEAPS_KEPT = 8;
 
 export class CurveDriver {
   readonly cast = new LiftChannel();
@@ -198,7 +210,10 @@ export class CurveDriver {
   /** An arc: resolves when the flight is over; the landing squash plays on. */
   leap(height: number, ms: number, options?: LeapOptions): Promise<void> {
     return new Promise<void>((resolve) => {
-      if (this.leaps.length >= 3) this.leaps.shift()?.finish();
+      // Past three concurrent leaps the older ones are SETTLED (their promises resolve and their marks run) but keep flying to their natural end, so no lift pops away mid-arc; only a runaway
+      // pile (eight) is cut, oldest first.
+      if (this.leaps.length >= MAX_LEAPS_SETTLED) for (const l of this.leaps.slice(0, this.leaps.length - (MAX_LEAPS_SETTLED - 1))) l.settle();
+      if (this.leaps.length >= MAX_LEAPS_KEPT) this.leaps.shift()?.finish();
       this.leaps.push(new LeapRun(height, Math.max(1, ms), resolve, options));
     });
   }

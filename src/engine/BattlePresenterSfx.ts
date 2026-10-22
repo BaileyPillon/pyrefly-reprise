@@ -186,11 +186,13 @@ export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; d
   let voiced: SfxVoiced | null = null;
   let moment = name;
   let action: Action | null = null;
+  let actorId: CombatantId | undefined;
   try {
     if (ctx.deps.sfxVoice) {
       const built = ask(ctx, name);
       moment = built.ask.moment;
       action = built.action;
+      actorId = built.ask.actorId ?? undefined;
       voiced = ctx.deps.sfxVoice(built.ask) ?? null;
     }
   } catch {
@@ -200,7 +202,7 @@ export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; d
   const key = voiced?.key ?? SFX_FALLBACKS[name] ?? name;
   const volume = voiced?.gain !== undefined ? (opts?.volume ?? 1) * voiced.gain : opts?.volume;
   let o: ParityOpts | undefined = volume === undefined ? opts : { ...opts, volume };
-  if (voiced) o = withParity(ctx, o, voiced, moment, action);
+  if (voiced) o = withParity(ctx, o, voiced, moment, action, actorId);
   // Unknown keys fall back to a generic cue rather than going silent, so a
   // boss's bespoke `sfxKey` never has to exist before the fight is playable.
   try {
@@ -223,7 +225,7 @@ type ParityOpts = { volume?: number; delay?: number; events?: readonly string[];
  * (only those this very action has asked for, so a move that never opened with its sample is not silenced), and the
  * beat the cue's peak belongs on. The mixer ignores all three unless a parity pack supplies the sound.
  */
-function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced, moment: string, action: Action | null): ParityOpts | undefined {
+function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced, moment: string, action: Action | null, actorId?: CombatantId): ParityOpts | undefined {
   const extra: ParityOpts = {};
   if (voiced.events) {
     extra.events = voiced.events;
@@ -232,7 +234,7 @@ function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced,
   }
   const covered = voiced.coveredBy?.filter((c) => action?.asked.has(c));
   if (covered && covered.length > 0) extra.coveredBy = covered;
-  const ahead = moment === 'attack' ? strikeBeatNow() : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core")
+  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage.actor(actorId)?.strikeHeft?.() : undefined) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
   if (ahead !== undefined && voiced.events) extra.beatMs = scaled(ctx, ahead);
   return Object.keys(extra).length === 0 ? o : { ...o, ...extra };
 }

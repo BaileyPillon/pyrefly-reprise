@@ -83,6 +83,7 @@ import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
+import { setMenuHold } from '../../engine/motion/MenuHold.ts';
 import { setCurvesChapter } from '../../engine/motion/CurvesSwitch.ts'; // motion pass (lane "core"): the new curves play only in Chapters I and IV
 import { battleFrameClocks } from '../../engine/PoseSwap.ts';
 import { onSceneScale, sceneScale } from '../../engine/crisp/sceneScale.ts';
@@ -989,6 +990,7 @@ export class BattleScreen extends Screen {
     this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
     setCurvesChapter(undefined);
+    setMenuHold(null);
     window.removeEventListener('keydown', this.onPauseKey);
     setSideFogGame(null);
     this.markRecorder?.stop();

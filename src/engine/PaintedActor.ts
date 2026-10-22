@@ -61,6 +61,8 @@ import { paceRate } from './pace.ts';
 import { CurveDriver, type LeapOptions } from './motion/CurveDriver.ts'; // motion pass (lane "core"): the new curves; idle unless the presenter starts one (default OFF, `motion/CurvesSwitch.ts`)
 import { curvesOn } from './motion/CurvesSwitch.ts';
 import { heftOf, squashPair, startStrike } from './motion/ActorCurves.ts';
+import { menuHolds } from './motion/MenuHold.ts';
+import { newMotionOn } from './motion/NewMotionGate.ts';
 import { newPushMs, newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
 import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
 import type { StrikePlan } from './motion/StrikePlan.ts';
@@ -1024,11 +1026,8 @@ export class PaintedActor extends Group {
    * is unlit until its map arrives, and the cache used to let a staged figure's map go). Nothing happens unless the HD-2D look is armed; the pins are let go in {@link dispose}.
    */
   private prefetchLights(): void {
-    if (!this.showFigure) return; // a rig's carrier plane is never drawn: its parts bring their own pieces
-    for (const p of this.poses.values()) {
-      const url = prefetchRelight(p.url, p.scale, p.placeholder);
-      if (url) this.lightPins.add(url);
-    }
+    if (!this.showFigure || !newMotionOn()) return; // a rig's carrier plane is never drawn: its parts bring their own pieces; with every new piece off (the default, and any chapter but I and IV) nothing is fetched early
+    for (const p of this.poses.values()) prefetchRelight(p.url, p.scale, p.placeholder, this.lightPins);
   }
 
   /** Re-load one pose from disk; used by the dev hot-swap watcher. */
@@ -1192,7 +1191,7 @@ export class PaintedActor extends Group {
 
   /** The window of the knock-out's cut in real ms, or undefined when the KO keeps its plain cross (`fx/mix/living.ts` asks as it starts a fall): the moments and the smear both on. */
   koCutWindow(): number | undefined {
-    return momentsOn() && smearOn() ? koCutMs(this.smear.state.frameMs) : undefined;
+    return momentsOn() && smearOn() && !menuHolds() ? koCutMs(this.smear.state.frameMs) : undefined; // an open FFX-2 menu keeps the plain cross (D-357)
   }
 
   /** The KO's cut window opens, runs (`u` 0 to 1) and closes (`motion/SmearDirector.ts`): the streak and the planned-smear record of a fall's cross. */
@@ -1607,6 +1606,11 @@ export class PaintedActor extends Group {
     return startStrike(this.curves, plan, this.worldHeight);
   }
 
+  /** 0 for a party-sized figure up to 1 for a default-size foe (`motion/ActorCurves.heftOf`): the strike's heft, which the strike's sound reads (`StrikeBeat.strikeBeatNow`). */
+  strikeHeft(): number {
+    return heftOf(this.worldHeight);
+  }
+
   /** A cast's lift: rise `height` world units over `ms` and HOLD until {@link liftRelease}. */
   liftTo(height: number, ms = 220): void {
     this.curves.cast.rise(height, ms);
@@ -1979,7 +1983,7 @@ export class PaintedActor extends Group {
         // Landing: a short slap of squash and a small ground shake, then the
         // extra tilt relaxes into the `down` posture.
         void this.squash(280, 0.5);
-        if (momentsOn()) void startKoSettle(this.momentsHost()); // motion pass, step 3: the landing rebounds a little (a boss less)
+        if (momentsOn() && !menuHolds()) void startKoSettle(this.momentsHost()); // motion pass, step 3: the landing rebounds a little (a boss less); not over an open FFX-2 menu (D-357)
         this.shake(this.worldHeight * 0.018, 200);
         this.tweens.to(1, 0, {
           durationMs: 420,
@@ -2599,6 +2603,7 @@ export class PaintedActor extends Group {
   override dispose(): void {
     this.tweens.killAll();
     unpinRelight(this.lightPins);
+    this.lightPins.clear();
     this.cheerWait = null;
     this.curves.dispose();
     this.blend.cancel();

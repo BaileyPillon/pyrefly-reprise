@@ -62,6 +62,8 @@ import { paceFactor } from './pace.ts';
 import { shotHoldMs } from './fx/shotHold.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 import { koWipedStatuses } from './BattlePresenterKoWipe.ts';
+import { menuBlocks } from './KeySlots.ts';
+import { setMenuHold } from './motion/MenuHold.ts'; // motion pass (lane "core"): the actor-side new looks ask whether an FFX-2 menu holds them back (D-357)
 import { blowHeld, revealBlow } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL: a blow whose shot is in flight shows its numeral and HP rows when it lands
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
@@ -141,6 +143,7 @@ export class BattlePresenter {
       () => this.speed,
     );
     this.ctx.menuOpen = () => this.pendingMenu !== null; // r37 slots: FFX-2 key paintings stand aside for a menu
+    setMenuHold(() => menuBlocks(this.ctx)); // the same question for the new smear and KO looks, which a figure decides in its own `setPose` (`motion/MenuHold.ts`; FFX-2 only in effect)
     this.ctx.hpMaxOf = (id) => this.vitals?.get(id)?.maxHp; // `?motion=demo`: a blow's power is its damage against the target's pool
     this.ctx.reveal = async (event) => { // SKILL TRAVEL: the late half of what `playBurst` does before an event (the HUD's look, then the HP rows)
       const was = this.phase;

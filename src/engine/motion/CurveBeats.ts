@@ -9,6 +9,7 @@ import type { EventCtx } from '../BattlePresenterEvents.ts';
 import type { ActorHandle } from '../BattlePresenterPorts.ts';
 import { SPEED_SCALE } from '../BattlePresenterUtil.ts';
 import type { LungeContact } from '../ContactBeat.ts';
+import { menuBlocks } from '../KeySlots.ts';
 import { LUNGE_MS } from '../StrikeBeat.ts';
 import { heftOf } from './ActorCurves.ts';
 import { curvesGame, curvesOn } from './CurvesSwitch.ts';
@@ -36,7 +37,7 @@ export const CAST_LIFT = { ffx: 0.05, ffx2: 0.06 } as const;
 
 /** The cast starts: the caster rises and holds (with the new curves on). A big body rises less. */
 export function liftCaster(ctx: EventCtx, id: CombatantId): void {
-  if (!curvesOn()) return;
+  if (!curvesOn() || menuBlocks(ctx)) return; // FFX-2: nothing new plays over an open command menu (D-357); asked when the cast begins, like the run-in and the skill travel
   const a = ctx.stage.actor(id);
   if (!a?.liftTo) return;
   const h = Math.max(0.5, a.headPoint().y - a.position.y);

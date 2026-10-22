@@ -12,6 +12,7 @@
  */
 import type { ActorSmear, SmearFrame } from '../motion/ActorSmear.ts';
 import { applySmear, type SmearCells, type SmearPlane } from '../motion/SmearApply.ts';
+import { menuHolds } from '../motion/MenuHold.ts';
 import { noteSmear } from '../motion/SmearLog.ts';
 import { FLASH_PEAK, MIN_SPEED, rigSmearPlan, type SmearPlan } from '../motion/SmearPlan.ts';
 import { smearStyleNow } from '../motion/SmearSwitch.ts';
@@ -53,7 +54,7 @@ export class RigSmearWindow {
   begin(o: RigSmearBegin): boolean {
     this.end(o.state);
     const style = smearStyleNow();
-    if (style === 'off') return false;
+    if (style === 'off' || menuHolds()) return false; // an open FFX-2 command menu keeps today's blend (D-357, `motion/MenuHold.ts`)
     const plan = rigSmearPlan({ from: o.from, to: o.to, share: o.share, frameMs: o.state.frameMs, style });
     if (!plan || !(o.moveMs > 0)) return false;
     // a figure that travels (a lunge, a recoil that was hinted) streaks along its travel; one that only changes key streaks the way it faces

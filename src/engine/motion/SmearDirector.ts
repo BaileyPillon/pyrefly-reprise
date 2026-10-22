@@ -16,6 +16,7 @@ import { ActorSmear, type SmearFrame } from './ActorSmear.ts';
 import { applySmear, type SmearCells, type SmearPlane } from './SmearApply.ts';
 import { pairFacts } from './SmearFacts.ts';
 import { noteSmear } from './SmearLog.ts';
+import { menuHolds } from './MenuHold.ts';
 import { KO_CUT_STRENGTH } from './MomentsPlan.ts';
 import { CUT, FLASH_PEAK, LENGTH, MIN_SPEED, smearPlan } from './SmearPlan.ts';
 import { smearStyleNow } from './SmearSwitch.ts';
@@ -73,7 +74,7 @@ export class SmearDirector {
     this.state.end();
     this.manual = false; // a window the caller was running (the KO's cut) gives way to this change
     const style = smearStyleNow();
-    if (style === 'off' || !this.host.canCut()) return false;
+    if (style === 'off' || !this.host.canCut() || menuHolds()) return false; // an open FFX-2 command menu keeps today's blend: no cut, no flash (D-357, `MenuHold.ts`)
     const out: 0 | 1 = to === 0 ? 1 : 0;
     const h = this.host;
     const height = h.worldHeight();
