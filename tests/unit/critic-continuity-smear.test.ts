@@ -227,6 +227,8 @@ describe('what the probe hands over', () => {
     const log = [{ actor: 'hero', from: 'idle', to: 'attack', style: 'blur', kind: 'plane', cutMs: 30, strength: 0.9, flash: true, overlap: 0.1, anchorDistance: 0.2, speed: 4, at: 5400, cutAt: 5415 }];
     const withLog = mk({ __pyrefly: { smearLog: () => log } }).meta();
     expect(withLog.smears).toEqual([{ actor: 'hero', from: 'idle', to: 'attack', style: 'blur', kind: 'plane', cutMs: 30, strength: 0.9, flash: true, overlap: 0.1, anchorDistance: 0.2, speed: 4, at: 400, cutAt: 415 }]);
+    // the engine's own word that a pair is a big change (a knock-out's standing and lying bodies) must reach the harness, or `loggedAsBig` never sees it
+    expect(mk({ __pyrefly: { smearLog: () => [{ ...log[0], overlap: null, anchorDistance: null, big: true }] } }).meta().smears?.[0]).toMatchObject({ big: true, overlap: null });
     expect(mk({ __pyrefly: {} }).meta().smears).toEqual([]);
     expect(mk({ __pyrefly: { smearLog: () => { throw new Error('x'); } } }).meta().smears).toEqual([]);
     expect(mk({ __pyrefly: { smearLog: () => log } }).meta().errors).toEqual([]);

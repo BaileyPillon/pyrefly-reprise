@@ -386,7 +386,7 @@ export function createProbe(cfg, env) {
     try {
       const f = win.__pyrefly && win.__pyrefly.smearLog;
       if (typeof f !== 'function') return [];
-      return f().map((e) => ({ actor: e.actor, from: e.from, to: e.to, style: e.style, kind: e.kind, cutMs: e.cutMs, moveMs: e.moveMs, strength: e.strength, flash: e.flash, overlap: e.overlap, anchorDistance: e.anchorDistance, speed: e.speed, at: R1(e.at - S.t0), cutAt: R1(e.cutAt - S.t0) }));
+      return f().map((e) => ({ actor: e.actor, from: e.from, to: e.to, style: e.style, kind: e.kind, cutMs: e.cutMs, moveMs: e.moveMs, strength: e.strength, flash: e.flash, overlap: e.overlap, anchorDistance: e.anchorDistance, speed: e.speed, big: e.big === true ? true : undefined, at: R1(e.at - S.t0), cutAt: R1(e.cutAt - S.t0) }));
     } catch (e) { return []; }
   };
   S.meta = () => ({
