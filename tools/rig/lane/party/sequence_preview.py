@@ -68,6 +68,9 @@ def slope(u):
 
 
 # ------------------------------------------------------------------ the timeline: for every frame, (channels, state A pose, state B pose, fade weight of B)
+MOVES = []
+
+
 def timeline():
     frames = []
     cur = chan_of("idle")
@@ -90,6 +93,7 @@ def timeline():
         frm, v0 = cur.copy(), vel.copy()
         d = ms / 1000.0
         n_move = max(1, int(round(ms / dt)))
+        MOVES.append({"pose": pose, "from": prev_pose, "start": len(frames), "end": len(frames) + n_move, "ms": ms, "fadeMs": fade})
         for i in range(1, n_move + 1):
             u = min(1.0, i / n_move)
             e = ease(u)
@@ -165,6 +169,11 @@ def render_frame(args):
 
 if __name__ == "__main__":
     frames = timeline()
+    if "--json-only" in a:  # the moves' frame numbers only (a clip already rendered)
+        o = pathlib.Path(opt("--out", f"D:/Tools/pyrefly-scratch/2026-10-22/motion/rigs/clips/{name}-{seq}-offline.mp4"))
+        o.with_suffix(".moves.json").write_text(json.dumps(MOVES))
+        print("wrote", o.with_suffix(".moves.json"))
+        sys.exit(0)
     # framing: the union of every key's painting box in this sequence
     poses = sorted({p for p, _ in SEQ})
     box = None
@@ -203,4 +212,5 @@ if __name__ == "__main__":
     subprocess.run([L.FFMPEG, "-y", "-loglevel", "error", "-framerate", "60", "-i", str(tmp / "f%04d.png"), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", str(out)], check=True)
     import shutil
     shutil.rmtree(tmp, ignore_errors=True)
+    out.with_suffix(".moves.json").write_text(json.dumps(MOVES))
     print("wrote", out, len(frames), "frames", flush=True)

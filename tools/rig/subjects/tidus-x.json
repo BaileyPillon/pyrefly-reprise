@@ -541,7 +541,7 @@
   "key_motion": {
    "ready": {
     "ms": 150,
-    "fadeMs": 90
+    "fadeMs": 0
    },
    "attack": {
     "ms": 70,
@@ -557,40 +557,44 @@
    },
    "cast": {
     "ms": 150,
-    "fadeMs": 70
+    "fadeMs": 0
    },
    "item": {
     "ms": 140,
-    "fadeMs": 70
+    "fadeMs": 0
    },
    "defend": {
     "ms": 110,
-    "fadeMs": 60
+    "fadeMs": 0
    },
    "victory": {
     "ms": 220,
-    "fadeMs": 110
+    "fadeMs": 0
    },
    "critical": {
     "ms": 220,
-    "fadeMs": 110
+    "fadeMs": 0
    },
    "sleep": {
     "ms": 260,
-    "fadeMs": 130
+    "fadeMs": 0
    },
    "ko": {
     "ms": 420,
-    "fadeMs": 160
+    "fadeMs": 0
    },
    "od-energy-rain": {
     "ms": 120,
-    "fadeMs": 60
+    "fadeMs": 0
    },
    "od-slice-and-dice": {
     "ms": 80,
     "fadeMs": 0
    }
+  },
+  "idle_key": {
+   "ms": 120,
+   "fadeMs": 0
   },
   "joint_discs": [],
   "disc_margin": 14,
@@ -2811,6 +2815,10 @@
   }
  },
  "authored": [],
+ "idle_key": {
+  "ms": 120,
+  "fadeMs": 0
+ },
  "motion": {
   "idle": {
    "hz": 0.5,

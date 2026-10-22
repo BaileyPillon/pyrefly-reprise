@@ -81,6 +81,8 @@ def main(name: str) -> int:
     cfg["landmarks"] = marks
     cfg["fit"] = {"mirror": [], "keys": keys_cfg}
     cfg["authored"] = list(pp.get("authored", []))
+    if pp.get("idle_key"):
+        cfg["idle_key"] = pp["idle_key"]
     cfg["motion"] = pp.get("motion", cfg.get("motion", {}))
     cfg.pop("art", None)
     party.sub.path.write_text(json.dumps(cfg, indent=1), encoding="utf8")
