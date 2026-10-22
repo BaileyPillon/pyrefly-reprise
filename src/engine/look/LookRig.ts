@@ -310,7 +310,7 @@ export class LookRig {
     const lightUv = u['uLight']!.value as Vector2;
     if (bold) {
       this.bold ??= new LookBold(r);
-      this.bold.update({ scene: this.room.scene!, camera, name, room: this.room, lights: this.lights, quality: lookState.quality, dt, time: eyeCandy.frozen ? 0.5 : this.clock, scale, W, H, aspect: W / Math.max(1, H), lightUv: [lightUv.x, lightUv.y], tweak: (k, d) => lookState.tweaks[k] ?? d });
+      this.bold.update({ scene: this.room.scene!, camera, name, room: this.room, lights: this.lights, quality: lookState.quality, dt, now, time: eyeCandy.frozen ? 0.5 : this.clock, scale, W, H, aspect: W / Math.max(1, H), lightUv: [lightUv.x, lightUv.y], tweak: (k, d) => lookState.tweaks[k] ?? d });
     } else this.bold?.off();
     if (lookState.drift) this.drift.update(this.room.scene!, camera, this.room.painting, roomBold(this.room.key).driftPx ?? 3, dt, W, scale, lookState.commandOpen);
     else this.drift.release();

@@ -45,6 +45,8 @@ export interface PointKind {
   decay: number;
   /** A flicker (0..1) on the strength: lightning. */
   flicker: number;
+  /** A multiplier on the look's point-light reach for this kind (absent: 1). Mega Flare's light fills the party, not one figure (release 62, decision 173b). */
+  reachMul?: number;
 }
 
 /** The colour of each spell effect's light (`SpellFxRegistry.SpellFxId`); the orb is green. */
@@ -57,7 +59,8 @@ export const POINT_KINDS: Readonly<Record<string, PointKind>> = {
   cure: { color: [0.55, 1.0, 0.72], peak: 0.85, rise: 0.2, hold: 0.55, decay: 0.65, flicker: 0 },
   hit: { color: [1.0, 0.92, 0.8], peak: 0.7, rise: 0.02, hold: 0.06, decay: 0.2, flicker: 0 },
   spiral: { color: [0.8, 0.7, 1.0], peak: 1.0, rise: 0.2, hold: 0.7, decay: 0.7, flicker: 0.2 },
-  megaflare: { color: [1.0, 0.62, 0.3], peak: 1.2, rise: 0.25, hold: 0.9, decay: 0.9, flicker: 0.3 },
+  // Release 62 (decision 173b, FFX-2 only: the special is FFX-2's): the beam's own cold white-blue (it was Fire's orange), twice as strong, over twice the reach, held through the flood and let go slowly with it (`look/flare/`)
+  megaflare: { color: [0.74, 0.86, 1.0], peak: 2.1, rise: 0.1, hold: 0.55, decay: 1.5, flicker: 0.2, reachMul: 2.4 },
   bloom: { color: [1.0, 0.95, 0.85], peak: 0.6, rise: 0.08, hold: 0.2, decay: 0.3, flicker: 0 },
 };
 

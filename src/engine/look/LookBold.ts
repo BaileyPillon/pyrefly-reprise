@@ -17,6 +17,8 @@ import { LookBoldShader } from './LookBoldShader.ts';
 import { lightColour } from './LookMaths.ts';
 import { lin, type LookRoom } from './LookRoom.ts';
 import type { RelightLights } from './relight/RelightLights.ts';
+import { eyeCandy } from '../fx/EyeCandy.ts';
+import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
 
 const MAX_FIG = 8;
 const MAX_POOL = 4;
@@ -55,6 +57,8 @@ export class LookBold {
   readonly boxes: Vector4[] = Array.from({ length: MAX_FIG }, () => new Vector4());
   boxCount = 0;
   /** For the debug API and the captures. */
+  /** Release 62 (decision 173b, FFX-2): Mega Flare's flood and white-out, fed from the spell layer's landing taps while this pass is on. */
+  readonly flare = new LookFlare();
   readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
 
   constructor(private readonly r: Renderer) {}
@@ -257,7 +261,7 @@ export class LookBold {
 
   // ----------------------------------------------------------------- per frame
 
-  update(o: { scene: Scene; camera: Camera; name: LookName; room: LookRoom; lights: RelightLights; quality: LookQuality; dt: number; time: number; scale: number; W: number; H: number; aspect: number; lightUv: [number, number]; tweak: (k: string, v: number) => number }): void {
+  update(o: { scene: Scene; camera: Camera; name: LookName; room: LookRoom; lights: RelightLights; quality: LookQuality; dt: number; time: number; now?: number; scale: number; W: number; H: number; aspect: number; lightUv: [number, number]; tweak: (k: string, v: number) => number }): void {
     const { scene, camera, room, lights } = o;
     const look = o.name === 'cinematic' ? 'cinematic' : 'hd2d';
     const fx = BOLD_FX[look];
@@ -340,6 +344,8 @@ export class LookBold {
       }
     }
     u['emberN']!.value = ne;
+    this.flare.install(); // release 62 (FFX-2): Mega Flare's flood and white-out; REDUCE FLASHES takes the white-out away and caps the flood (`flare/FlareConfig.ts`)
+    this.flare.update(o.now ?? performance.now() / 1000, eyeCandy.reduceFlashes, u as unknown as FlareUniforms, o.tweak('flare', 1));
     (u['ember']!.value as Vector3).set(fx.embers.gain * o.tweak('bold.embers', 1), (fx.embers.size * o.scale) / Math.max(1, o.H), fx.embers.rate);
     this.stats.on = true;
     this.stats.figures = n;
@@ -354,6 +360,7 @@ export class LookBold {
   }
 
   off(): void {
+    this.flare.off(this.pass ? (this.pass.uniforms as unknown as FlareUniforms) : undefined);
     if (this.pass) this.pass.enabled = false;
     this.stats.on = false;
   }

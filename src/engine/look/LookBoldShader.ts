@@ -12,6 +12,7 @@ import { Matrix3, Vector2, Vector3, Vector4 } from 'three';
  *   4b. stage light the fight lifted, the room round it darkened (a lit diorama in a dark room).
  *   5. rim          a bright rim along each figure's back edge, in the room's key colour (an edge ring over the mask, weighted toward the light's side), inside the silhouette.
  *   6. embers       sparks rising from the room's lamps (`uEmber`).
+ *   7. Mega Flare   (release 62, FFX-2) the blast's light floods the whole room and the frame whites out for a beat (`uFlood`, `uWhite`; `look/flare/`).
  * Constants: `MAX_FIG`, `MAX_POOL`, `MAX_EMB`, `EMBER_PARTS`, `FOG_OCTAVES`, `EDGE_TAPS`. Both games.
  */
 export const LookBoldShader = {
@@ -56,6 +57,10 @@ export const LookBoldShader = {
     emberN: { value: 0 },
     ember: { value: new Vector3(1, 0.003, 0.15) },
     emberColor: { value: new Vector3(1.0, 0.5, 0.14) },
+    /** Mega Flare (release 62, FFX-2): the blast's flood (xy where it lands, z its strength now, w its reach in frame heights), the light's colour and the white-out's share (`look/flare/`). Zero: the frame is what it was. */
+    uFlood: { value: new Vector4(0.5, 0.3, 0, 1.4) },
+    uFloodCol: { value: new Vector3(0.72, 0.82, 1.0) },
+    uWhite: { value: 0 },
   },
 
   vertexShader: /* glsl */ `
@@ -97,6 +102,9 @@ export const LookBoldShader = {
     uniform float emberN;
     uniform vec3 ember;
     uniform vec3 emberColor;
+    uniform vec4 uFlood;
+    uniform vec3 uFloodCol;
+    uniform float uWhite;
     varying vec2 vUv;
 
     float luma3(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }
@@ -284,6 +292,16 @@ export const LookBoldShader = {
         }
         col += emberColor * em * ember.x * (1.0 - 0.9 * fig);
       }
+
+      // ---- 7. Mega Flare (FFX-2): the blast's light floods the room, then the frame goes white for a beat. Zero strength skips both blocks.
+      if (uFlood.z > 0.002) {
+        vec2 fd = vec2((uv.x - uFlood.x) * aspect, uv.y - uFlood.y);
+        float fr = dot(fd, fd) / (uFlood.w * uFlood.w);
+        float fk = uFlood.z * (0.6 + 0.4 * exp(-fr * 1.2)) * (1.0 - 0.5 * fig); // 60 percent of it across the whole room, all of it at the blast; the figures take half of it (the relight lights are theirs)
+        // the room's own lit surfaces gain most (the painted detail stays), and the dark under them is lifted a little: a lit cathedral, not a white wash
+        col = col * (1.0 + 1.15 * fk) + uFloodCol * fk * (0.1 + 0.4 * lum0);
+      }
+      if (uWhite > 0.002) col = mix(col, vec3(1.2, 1.19, 1.2), clamp(uWhite, 0.0, 1.0));
 
       gl_FragColor = vec4(max(col, 0.0), src.a);
     }

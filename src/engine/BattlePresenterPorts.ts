@@ -22,6 +22,7 @@ import type {
   CombatantId,
   DamageType,
   FormulaKey,
+  GameId,
   MessageKind,
   VfxKey,
 } from '../battle/common/types.ts';
@@ -499,6 +500,8 @@ export interface PresenterDeps {
    * no orb, the figure's pose and the presenter's waits as before; set for an FFX-2 chapter only. Absent or null: the item painting and the spell effect, as before (FF7).
    */
   itemGesture?: 'orb' | 'spark' | null;
+  /** The chapter's game (`app/screens/BattleScreenGameDeps.ts`), for the few beats that are one game's own (release 62: FFX-2's Mega Flare shakes the camera harder, `MegaFlareImpact.ts`). Absent: no such beat. */
+  game?: GameId;
 }
 
 /** One line of the presenter's own trace, for the debug API and e2e. */
