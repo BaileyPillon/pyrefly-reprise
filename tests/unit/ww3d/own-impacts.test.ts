@@ -40,10 +40,12 @@ vi.mock('../../../src/engine/BattlePresenterArt.ts', async (orig) => ({
 
 const { PaintedStage } = await import('../../../src/engine/BattlePresenterStage.ts');
 const { BattleCamera } = await import('../../../src/engine/BattleCamera.ts');
-const { impactsOwned, withOwnImpacts } = await import('../../../src/engine/ownImpacts.ts');
+const { impactsOwned, withOwnImpacts, withOwnImpactsFx } = await import('../../../src/engine/ownImpacts.ts');
+const { fxHit } = await import('../../../src/engine/fx/c/presenterHooks.ts');
 const { stagingOf } = await import('../../../src/scenes/types.ts');
 const { EXP_WINDWAKER_SLOTS } = await import('../../../src/scenes/exp-windwaker-stage.ts');
 import type { VfxPort } from '../../../src/engine/BattlePresenterPorts.ts';
+import type { FxStagePort } from '../../../src/engine/fx/c/presenterHooks.ts';
 import type { SceneSlots } from '../../../src/scenes/index.ts';
 import type { SceneBuild } from '../../../src/scenes/types.ts';
 
@@ -112,6 +114,53 @@ describe('withOwnImpacts — the stage\'s own impact effects off for a scene tha
   });
 });
 
+describe('withOwnImpactsFx — BATTLE SPECTACLE (option C) keeps its splash and its arc, and loses its hit', () => {
+  /** An option-C port whose every method is a spy. */
+  function spyFx(on = true): { port: FxStagePort; calls: Record<string, ReturnType<typeof vi.fn>> } {
+    const calls = {
+      enabled: vi.fn(() => on),
+      actionOpen: vi.fn(async () => undefined),
+      hit: vi.fn(() => ({ freezeMs: 140, shook: true })),
+      dissolve: vi.fn(),
+      victory: vi.fn(() => 900),
+      opening: vi.fn(),
+    };
+    return { port: calls as unknown as FxStagePort, calls };
+  }
+  const ctxOf = (fx: FxStagePort | undefined): never => ({ stage: { fx }, speed: () => 'normal', burst: undefined }) as never;
+  const blow = { type: 'damage', targetId: 'yuna', amount: 295, hitIndex: 0, hitCount: 1 } as never;
+
+  it('is a port with no hit, so the presenter answers null and keeps its own shake and hit-stop; the same event on the raw port asks it', () => {
+    const { port, calls } = spyFx();
+    expect(fxHit(ctxOf(port), blow, true)).toEqual({ waitMs: 140, shook: true });
+    expect(calls['hit']).toHaveBeenCalledTimes(1);
+    const own = withOwnImpactsFx(port);
+    expect('hit' in own).toBe(false);
+    expect(fxHit(ctxOf(own), blow, true)).toBeNull();
+    expect(calls['hit']).toHaveBeenCalledTimes(1); // not asked again
+  });
+
+  it('forwards the Overdrive splash, the dissolve, the victory arc and the opening, and follows the option live', async () => {
+    const { port, calls } = spyFx();
+    const own = withOwnImpactsFx(port);
+    await own.actionOpen!({ actorId: 'x2-valefor', name: 'Energy Blast', kind: 'overdrive' });
+    expect(calls['actionOpen']).toHaveBeenCalledWith({ actorId: 'x2-valefor', name: 'Energy Blast', kind: 'overdrive' });
+    own.dissolve!('x2-valefor');
+    expect(calls['dissolve']).toHaveBeenCalledWith('x2-valefor');
+    expect(own.victory!('pose')).toBe(900);
+    own.opening!();
+    expect(calls['opening']).toHaveBeenCalled();
+    expect(own.enabled()).toBe(true);
+    const off = withOwnImpactsFx(spyFx(false).port);
+    expect(off.enabled()).toBe(false);
+  });
+
+  it('leaves out a method the option did not have', () => {
+    const bare = withOwnImpactsFx({ enabled: () => true });
+    expect(Object.keys(bare)).toEqual(['enabled']);
+  });
+});
+
 describe('stagingOf carries ownImpacts, only when it is true', () => {
   const base = { group: new Group() } as unknown as SceneBuild;
   it('copies it from a build that says true and from no other', () => {
@@ -154,6 +203,11 @@ describe('the real PaintedStage', () => {
     expect(played.sparks).toHaveBeenCalledTimes(1);
     expect(played.slash).toHaveBeenCalledTimes(1);
     expect(stage.vfx.canTravel?.('x2-valefor-energy-ray', 'x2-valefor')).not.toBe(false);
+  });
+
+  it('says whether its scene owns its hits (the getter app/screens/battleSpectacle.ts reads before it installs the Spectacle port)', () => {
+    expect(stageWith(slotsFor(true)).ownImpacts).toBe(true);
+    expect(stageWith(slotsFor(false)).ownImpacts).toBe(false);
   });
 
   it('plays none of it for a blow in a scene that owns its hits, nor a vfx key on a figure, nor a spell landing, and sends no shot', async () => {

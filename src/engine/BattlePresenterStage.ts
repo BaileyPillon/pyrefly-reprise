@@ -142,6 +142,10 @@ export class PaintedStage implements BattleStage {
   /** The battle camera behind the FFX-2 target-frame hold (`TargetFrameHold.ts`, PR-0150). */
   readonly camera: HoldableCamera;
   readonly vfx: VfxPort;
+  /** The scene draws its own hits (`SceneStaging.ownImpacts`, `ownImpacts.ts`): the Spectacle port installed on this stage keeps no `hit` (`app/screens/battleSpectacle.ts`). */
+  get ownImpacts(): boolean {
+    return impactsOwned(this.opts.slots);
+  }
   /**
    * The selection marks on the field — the accent pool and the quiet dim of
    * option B. The HUD drives it; the debug API reads it back.
