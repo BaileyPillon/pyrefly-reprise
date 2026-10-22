@@ -15,6 +15,7 @@ describe('173i: the Bahamut card is lifted, on its own layers only', () => {
 
   it('every lift rule is scoped to the demo picker and names Bahamut, so no other card, no other screen and no non-demo board moves', () => {
     expect(lift.length).toBeGreaterThanOrEqual(5);
+    for (const r of lift) expect(r.sel).not.toMatch(/\.fe-card--sel\[data-card='ffx2-bahamut'\] \.cs-art__boss/); // the selected card's dragon is the board's own
     for (const r of lift) {
       for (const part of r.sel.split(',')) {
         expect(part.trim(), part).toMatch(/^\.fe-cselect--demo /);
@@ -23,15 +24,16 @@ describe('173i: the Bahamut card is lifted, on its own layers only', () => {
     }
   });
 
-  it('the unselected card, the selected one and the big plate are all brighter than the board\'s own values (scene 0.62 / 0.95 / 0.8; boss 0.84)', () => {
+  it('the unselected card is brightened most (scene 0.62 to 1.4, boss 0.84 to 1.2); the selected card and the big plate, which were not dim, only a little (0.95 to 1.02, 0.8 to 0.9)', () => {
     const brightness = (sel: RegExp): number => {
       const r = lift.find((x) => sel.test(x.sel) && /brightness/.test(x.body))!;
       return Number(/brightness\(([\d.]+)\)/.exec(r.body)![1]);
     };
     expect(brightness(/\.fe-card\[data-card='ffx2-bahamut'\] \.cs-art__scene$/)).toBeGreaterThan(0.62 * 2);
+    expect(brightness(/\.fe-card\[data-card='ffx2-bahamut'\] \.cs-art__scene$/)).toBeLessThan(1.6); // a lift, not a wash
     expect(brightness(/\.fe-card--sel\[data-card='ffx2-bahamut'\] \.cs-art__scene$/)).toBeGreaterThan(0.95);
     expect(brightness(/\.fe-hero\[data-chapter='ffx2-bahamut'\] \.cs-art__scene$/)).toBeGreaterThan(0.8);
-    expect(brightness(/\.fe-card\[data-card='ffx2-bahamut'\] \.cs-art__boss$/)).toBeGreaterThan(0.84);
+    expect(brightness(/\.fe-card:not\(\.fe-card--sel\)\[data-card='ffx2-bahamut'\] \.cs-art__boss$/)).toBeGreaterThan(0.84);
   });
 
   it('a gradient lift sits over the card\'s art (a violet haze, screen-blended), not over the painting file', () => {
