@@ -47,7 +47,7 @@ export async function openGame({ repo, base, rig = 'on', log = console.log, load
     ss: () => page.evaluate(() => window.__pyrefly.snapshotState()?.screenState ?? null),
     awaitingMenu: async () => Boolean((await g.ss())?.playback?.awaitingMenu),
     brief: () => page.evaluate(() => Boolean(document.querySelector('.coach-brief'))),
-    curActor: () => page.evaluate(() => window.__pyrefly.battle()?.battleEngine?.ctx?.rt?.currentActorId ?? null),
+    curActor: () => page.evaluate(() => { const bs = window.__pyrefly.battle(); return bs?.battlePresenter?.pendingMenu?.actorId ?? bs?.battleEngine?.ctx?.rt?.currentActorId ?? null; }), // the member whose command menu is open (FFX-2's ATB has no CTB `currentActorId`), else the engine's current actor
     async want(name, ms = 60000) { const t0 = Date.now(); while (Date.now() - t0 < ms) { if ((await g.scr()) === name) return true; await page.waitForTimeout(100); } return false; },
   };
   return g;

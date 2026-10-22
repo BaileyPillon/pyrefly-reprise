@@ -675,7 +675,8 @@
           {
             "name": "item",
             "rows": [
-              "item|use"
+              "item|use",
+              "*"
             ]
           },
           {
@@ -742,7 +743,8 @@
           {
             "name": "item",
             "rows": [
-              "item|use"
+              "item|use",
+              "*"
             ]
           },
           {
@@ -753,7 +755,11 @@
             ]
           }
         ],
-        "targets": 1
+        "targets": 1,
+        "others": [
+          "Enter",
+          "Enter"
+        ]
       },
       "labels": {
         "attack": "ATTACK",

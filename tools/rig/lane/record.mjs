@@ -97,7 +97,8 @@ async function main() {
       try { const g = await openGame({ repo, base, rig: 'on', log, loadTimeout: 240000 }); await g.browser.close(); } catch (e) { log('warm-up failed (continuing):', String(e).slice(0, 200)); }
     }
     let failed = 0;
-    const runs = modeList.flatMap((m) => [{ mode: m, rig: 'on', dir: m }, ...(a.off === true && (m === 'poses' || m === 'cast' || m === 'fight' || m === 'ko' || m === 'motion' || m === 'hurtko') ? [{ mode: m, rig: 'off', dir: `${m}-off` }] : [])]);
+    const offOk = (m) => a.off === true && ['poses', 'cast', 'fight', 'ko', 'motion', 'hurtko'].includes(m);
+    const runs = modeList.flatMap((m) => (a['only-off'] === true ? [{ mode: m, rig: 'off', dir: `${m}-off` }] : [{ mode: m, rig: 'on', dir: m }, ...(offOk(m) ? [{ mode: m, rig: 'off', dir: `${m}-off` }] : [])]));
     for (const r of runs) {
       const dir = path.join(out, r.dir);
       let done = false;

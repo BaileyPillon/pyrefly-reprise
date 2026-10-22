@@ -39,16 +39,27 @@ export async function motion(g, spec, o) {
   const waitMenu = async (max = 4000) => { for (let i = 0; i < max; i++) { if (await idleMenu()) return true; if (i % 200 === 199 && (await g.scr()) !== 'battle') return false; await step(); } return false; };
   const actionEvents = () => page.evaluate(() => window.__pyrefly.battleLog().map((e) => ({ type: e.type, actorId: e.actorId ?? null, targetId: e.targetId ?? null, abilityId: e.abilityId ?? null })));
 
+  const finish = async () => {
+    try { await page.clock.resume(); } catch { /* done */ }
+    const events = await actionEvents().catch(() => []);
+    writeJson(path.join(o.out, 'timeline.json'), { actor: who, rig: o.rig, marks, rects, events, errors });
+    writeJson(path.join(o.out, 'window-log.json'), { ...meta, mode: 'motion', frames: st.frame, marks });
+    writeJson(path.join(o.out, 'console.json'), { consoleErrors: g.consoleErrors, notFound: g.notFound });
+    g.log('motion run done:', st.frame, 'frames,', marks.length, 'marks, errors', errors.length, '; console errors', g.consoleErrors.length);
+  };
+  const errors = [];
+  try {
   // the actor's idle: whoever has the menu first, if it is not the actor, the actor stands in its idle for a while
   await step(30);
   if ((await g.curActor()) !== who) { mark('idle-start'); await step(240); mark('idle-end'); }
 
   for (const turn of spec.motion.turns) {
+   try {
     // other members defend until the actor has the command menu
     for (let k = 0; k < 12 && (await g.curActor()) !== who; k++) {
       if (!(await waitMenu())) throw new Error('the battle ended before the actor got a turn');
       if ((await g.curActor()) === who) break;
-      await input.press('KeyQ');
+      for (const k of spec.motion.others ?? ['KeyQ']) { await input.press(k); await step(14); } // the other members: DEFEND (FFX), or a plain attack (FFX-2 has no defend row)
       await step(20);
       for (let i = 0; i < 3000 && !(await idleMenu()); i++) await step();
       await step(20);
@@ -87,6 +98,7 @@ export async function motion(g, spec, o) {
     if (ended < 0) throw new Error(`the ${turn.name} never finished playing`);
     await step(70);
     mark(`${turn.name}-end`);
+   } catch (e) { errors.push({ turn: turn.name, at: st.frame, error: String(e).slice(0, 300) }); g.log('turn failed', turn.name, String(e).slice(0, 200)); const m = await menuRows(page).catch(() => null); if (m) { await input.press('Escape'); await step(10); await input.press('Escape'); await step(10); } }
   }
 
   if (spec.motion.victory !== false) {
@@ -110,12 +122,7 @@ export async function motion(g, spec, o) {
     }
     mark('victory-end');
   }
-  await page.clock.resume();
-  const events = await actionEvents();
-  writeJson(path.join(o.out, 'timeline.json'), { actor: who, rig: o.rig, marks, rects, events });
-  writeJson(path.join(o.out, 'window-log.json'), { ...meta, mode: 'motion', frames: st.frame, marks });
-  writeJson(path.join(o.out, 'console.json'), { consoleErrors: g.consoleErrors, notFound: g.notFound });
-  g.log('motion run done:', st.frame, 'frames,', marks.length, 'marks; console errors', g.consoleErrors.length);
+  } catch (e) { errors.push({ at: st.frame, error: String(e).slice(0, 300) }); g.log('motion run failed', String(e).slice(0, 300)); } finally { await finish(); }
 }
 
 /**
@@ -153,8 +160,9 @@ export async function menuprobe(g, spec, o) {
     rec.dom = await page.evaluate(() => [...document.querySelectorAll('[class*="cmd"]')].slice(0, 12).map((e) => e.className));
     out.push(rec);
     g.log('turn', turn, who, JSON.stringify(rec.top));
-    await input.press('KeyQ');
+    for (const k of spec.motion?.others ?? ['KeyQ']) { await input.press(k); await st.steps(14, false); }
     await st.steps(40, false);
+    writeJson(path.join(o.out, 'menus.json'), out);
     if ((await g.scr()) !== 'battle') break;
   }
   writeJson(path.join(o.out, 'menus.json'), out);
