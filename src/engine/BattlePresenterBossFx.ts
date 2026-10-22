@@ -175,7 +175,7 @@ export async function odOpening(ctx: EventCtx, event: Extract<BattleEvent, { typ
   const id = event.actorId;
   ctx.stage.vfx.land?.(id, { abilityId: PSEUDO_FX.odaura, hitIndex: 0, variant: OD_AURA_OF[id] ?? '', deco: true });
   if (ctx.acting) odSerial.set(ctx, ctx.acting.serial);
-  fxBeat('od-open', id, { calm: calmFor(ctx), ms: ODAURA_BUILD * 1000, actor: ctx.stage.actor(id) });
+  fxBeat('od-open', id, { calm: calmFor(ctx), ms: ctx.speed() === 'normal' ? ODAURA_BUILD * 1000 : 0, actor: ctx.stage.actor(id) }); // 0 ms at a fast-forward: no gather over a build that is cut short
   await open();
   await ctx.sleep(OD_CALM_MS);
 }
