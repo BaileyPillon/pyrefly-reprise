@@ -328,7 +328,7 @@ export class SpellFxLayer {
       out.begin();
       r.spec.draw(out, r.t, r.target!);
     }
-    out.plain(QUALITY_DENSITY[this.quality]);
+    out.plain(QUALITY_DENSITY[this.quality], fxNewOn()); // the shots in flight take the finish too
     out.begin();
     this.flights.draw(out); // SKILL TRAVEL: the shots in the air, over the effects
     if (out.items.length > budget) out.items.length = budget;

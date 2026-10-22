@@ -35,7 +35,7 @@ export const CURE_END = 2.0;
  */
 export const COLUMN_STAGGER = 0.18;
 
-const MINT = '#B8FFD8';
+const MINT = '#8FF5C4';
 const WHITE = '#FFFFFF';
 const CYAN = '#8FF3FF';
 const GOLD = '#FFE9A8';
@@ -56,20 +56,20 @@ export function cureColumn(o: FxDrawList, t: number, T: FxTarget): void {
   if (!item) o.quad('dim', '#07101C', T.cx, T.cy, 2600 * k, 2600 * k, 0.3 * Math.min(1, o.dens) * env(t, 0.02, 1.75, 0.4, 0.55));
 
   o.add = true;
-  o.decal(T.fx, T.fy, 160 * sc, body, 0.5 * env(t, 0.1, 1.7, 0.2, 0.7));
+  o.decal(T.fx, T.fy, 120 * sc, body, 0.26 * env(t, 0.1, 1.7, 0.2, 0.7));
   shockRing(o, T.fx, T.fy, t, 0.1, 0.95, 36 * sc, 190 * sc * hs, 3.6 * k, body, 0.8);
   shockRing(o, T.fx, T.fy, t, 0.34, 0.8, 30 * sc, 130 * sc * hs, 2.6 * k, WHITE, 0.55);
 
   // The white splash at the base, popping and settling.
   const splash = pop(t, 0.1, 0.16, 0.34);
-  if (splash > 0) o.sprite('glow', WHITE, T.fx, T.fy - 14 * sc, 170 * sc * splash, o.actorCap(0.85) * Math.min(1, splash));
+  if (splash > 0) o.sprite('glow', WHITE, T.fx, T.fy - 14 * sc, 150 * sc * splash, o.actorCap(0.7) * Math.min(1, splash));
 
   // The column: a tall narrow glow growing from one character tall to two, narrowing as it thins, with a white core.
   const H = T.h * hs * (1 + (item ? 0.5 : 1) * outCubic((t - 0.12) / 0.5));
   const wcol = T.w * (item ? 0.36 : 0.46) * (1 - 0.42 * clamp((t - 0.5) / 1.0));
   if (intensity > 0) {
-    o.quad('glow', body, T.fx, T.fy - H / 2, wcol, H * 1.08, 0.5 * intensity);
-    o.quad('glow', WHITE, T.fx, T.fy - H * 0.5, wcol * 0.32, H, 0.6 * intensity);
+    o.quad('glow', body, T.fx, T.fy - H / 2, wcol * 1.15, H * 1.08, 0.62 * intensity);
+    o.quad('glow', WHITE, T.fx, T.fy - H * 0.5, wcol * 0.26, H, 0.4 * intensity);
     // Fine vertical streaks, like the lines in a beam.
     for (let i = 0; i < 7; i++) {
       const x = T.fx + (i / 6 - 0.5) * wcol * 0.9;
@@ -102,10 +102,10 @@ export function cureColumn(o: FxDrawList, t: number, T: FxTarget): void {
   parts(o.n(item ? 10 : 26), 82, 0.1, 0.75, t, (p, age) => {
     const u = age / 0.9;
     if (u > 1) return;
-    const hgt = (24 + 30 * p.c) * sc;
+    const hgt = (62 + 120 * p.c) * sc * (item ? 0.6 : 1);
     const x = T.fx + (p.a - 0.5) * wcol * 0.8;
     const y = T.fy - (0.05 + 0.3 * p.b) * T.h * hs - outQuad(u) * (0.5 + 0.8 * p.d) * T.h * hs;
-    o.quad('facet', p.i % 3 === 0 ? WHITE : p.i % 3 === 1 ? body : accent, x, y, hgt * 0.34, hgt, Math.pow(Math.sin(u * Math.PI), 0.7) * 0.95, (p.e - 0.5) * 0.25);
+    o.quad('facet', p.i % 3 === 0 ? WHITE : p.i % 3 === 1 ? body : accent, x, y, hgt * 0.24, hgt, Math.pow(Math.sin(u * Math.PI), 0.7) * 0.95, (p.e - 0.5) * 0.25);
   });
   o.add = true;
   if (warm) {
@@ -115,7 +115,7 @@ export function cureColumn(o: FxDrawList, t: number, T: FxTarget): void {
       o.sprite('dab', AMBER, T.fx + (p.a - 0.5) * T.w * 0.6, T.fy - (40 + 200 * outQuad(u)) * sc, 14 * sc, Math.sin(u * Math.PI) * 0.9);
     });
   }
-  o.bloom(warm ? '#FFF0C8' : '#C8FFE0', T.cx, T.cy, 340 * sc * hs, 0.38, env(t, 0.4, 1.4, 0.2, 0.5));
+  o.bloom(warm ? '#FFF0C8' : '#B4FFD8', T.cx, T.cy, 320 * sc * hs, 0.2, env(t, 0.4, 1.4, 0.2, 0.5));
   o.add = false;
 }
 

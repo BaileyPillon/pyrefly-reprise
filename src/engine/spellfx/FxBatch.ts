@@ -85,22 +85,34 @@ const fragment = /* glsl */ `
     return mix(mix(h21(i), h21(i + vec2(1.0, 0.0)), f.x), mix(h21(i + vec2(0.0, 1.0)), h21(i + vec2(1.0, 1.0)), f.x), f.y);
   }
 
-  // The painted finish. st = the quad's stroke space in CSS px (x along the stroke, y across it); span = the px width the stroke has to show a bristle in.
-  void paintFinish(inout float a, inout vec3 col, vec2 st, float span) {
-    float pl = vQ.x * smoothstep(9.0, 38.0, span);
-    if (pl <= 0.001) return;
-    vec2 sd = vec2(vQ.y * 0.73, vQ.y * 0.41);
-    float coarse = vn(vec2(st.x * 0.016, st.y * 0.17) + sd);
-    float fine = vn(vec2(st.x * 0.055, st.y * 0.5) + sd.yx);
-    float tooth = vn(st * 0.45 + sd * 2.0);
+  // The painted finish: noise fields in the quad's stroke space (st: CSS px, x along the stroke, y across it). Each shape wobbles its OWN edge with them (a tile's lookup, a ring's, bar's or
+  // band's distance), so a hard-edged shape gets a hand-drawn edge too; then the soft part of the shape is torn by bristle streaks and the body carries streaks of pigment.
+  vec2 sdv = vec2(0.0);
+  float plv = 0.0;
+
+  void paintBegin(float span) {
+    plv = vQ.x * smoothstep(9.0, 38.0, span);
+    sdv = vec2(vQ.y * 0.73, vQ.y * 0.41);
+  }
+
+  // 0..1, long streaks along the stroke: the wobble of an edge.
+  float edgeN(vec2 st) {
+    return 0.6 * vn(vec2(st.x * 0.022, st.y * 0.30) + sdv) + 0.4 * vn(vec2(st.x * 0.075, st.y * 0.85) + sdv.yx);
+  }
+
+  void paintBody(inout float a, inout vec3 col, vec2 st) {
+    float coarse = vn(vec2(st.x * 0.016, st.y * 0.17) + sdv);
+    float fine = vn(vec2(st.x * 0.055, st.y * 0.5) + sdv.yx);
+    float tooth = vn(st * 0.45 + sdv * 2.0);
     float cut = 0.58 * coarse + 0.30 * fine + 0.12 * tooth;
     // the soft part of the shape is torn by the bristles; the solid body stays
     float keep = smoothstep(cut * 0.85 - 0.12, cut * 0.85 + 0.12, a);
-    a = mix(a, a * keep, pl);
-    // streaks of lighter and darker pigment along the stroke
-    col *= 1.0 + (coarse - 0.5) * 0.45 * pl;
+    a = mix(a, a * keep, plv);
+    // bristle lines through the body, and streaks of lighter and darker pigment along the stroke
+    a *= 1.0 - 0.32 * plv * smoothstep(0.6, 0.92, fine);
+    col *= 1.0 + (coarse - 0.5) * 0.55 * plv;
     // paint has an edge: a little harder than the airbrushed falloff it started as
-    a = mix(a, smoothstep(0.04, 0.5, a) * min(1.0, a * 1.35), 0.35 * pl);
+    a = mix(a, smoothstep(0.04, 0.5, a) * min(1.0, a * 1.35), 0.35 * plv);
   }
 
   void main() {
@@ -108,35 +120,44 @@ const fragment = /* glsl */ `
     vec3 col = vC.rgb;
     float a = 0.0;
     vec2 st = vec2(0.0);
-    float pspan = 0.0;
+    bool paint = vQ.x > 0.0;
     if (shape < 0.5) {
+      vec2 uv = vUv;
+      if (paint) {
+        st = (vUv - 0.5) * vSize;
+        if (vSize.y > vSize.x * 1.3) st = st.yx; // a tall quad's bristles run up it
+        paintBegin(min(vSize.x, vSize.y));
+        // wobble the lookup: the shape's edge wanders by a few percent of the quad
+        uv = clamp(vUv + (vec2(vn(st * 0.045 + sdv), vn(st * 0.045 + sdv + 17.3)) - 0.5) * 0.12 * plv, 0.0, 1.0);
+      }
       vec2 cell = vec2(mod(vB.w, 4.0), floor(vB.w / 4.0));
-      vec4 tx = texture2D(uAtlas, (cell + 1.0 / 128.0 + vUv * (126.0 / 128.0)) / 4.0);
+      vec4 tx = texture2D(uAtlas, (cell + 1.0 / 128.0 + uv * (126.0 / 128.0)) / 4.0);
       col = vC.a > 0.5 ? tx.rgb * col : mix(col, vec3(1.0), tx.r);
       a = tx.a;
-      st = (vUv - 0.5) * vSize;
-      if (vSize.y > vSize.x * 1.3) st = st.yx; // a tall quad's bristles run up it
-      pspan = min(vSize.x, vSize.y);
     } else if (shape < 1.5) {
       // Ring: circle space, radius 1 = the quad's half width.
       vec2 p = vUv * 2.0 - 1.0;
       float r = length(p);
       float aa = fwidth(r);
+      float rel = mod(atan(-p.y, p.x) + TAU * 0.25, TAU);
       float d = abs(r - vP.x);
-      a = max(band(d, vP.y * 0.5, aa), 0.35 * band(d, vP.y * 1.5, aa));
-      if (vP.z < 0.999) {
-        float rel = mod(atan(-p.y, p.x) + TAU * 0.25, TAU);
-        if (rel > TAU * vP.z) a = 0.0;
+      if (paint) {
+        st = vec2(rel * vP.x * vSize.x * 0.5, (r - vP.x) * vSize.x * 0.5);
+        paintBegin(vSize.x * 0.45);
+        d += (edgeN(st) - 0.5) * vP.y * 1.1 * plv;
       }
-      st = vec2(mod(atan(-p.y, p.x) + TAU * 0.25, TAU) * vP.x * vSize.x * 0.5, (r - vP.x) * vSize.x * 0.5);
-      pspan = vSize.x * 0.45;
+      a = max(band(d, vP.y * 0.5, aa), 0.35 * band(d, vP.y * 1.5, aa));
+      if (vP.z < 0.999 && rel > TAU * vP.z) a = 0.0;
     } else if (shape < 2.5) {
       // Bar: a capsule, in pixels along and across the segment.
       vec2 p = (vUv - 0.5) * vSize;
       float d = length(vec2(max(abs(p.x) - vP.x * 0.5, 0.0), p.y));
+      if (paint) {
+        st = p;
+        paintBegin(vSize.y);
+        d += (edgeN(st) - 0.5) * vP.y * 0.7 * plv;
+      }
       a = band(d, vP.y * 0.5, 0.75);
-      st = p;
-      pspan = vSize.y;
     } else {
       // Slash band: an arc from vP.x to vP.y (radians, y down), radius vP.z,
       // thickness vP.w * sin(pi u) along it.
@@ -148,12 +169,16 @@ const fragment = /* glsl */ `
       float u = rel / span;
       if (u >= 0.0 && u <= 1.0) {
         float th = sin(u * 3.1415927) * vP.w;
-        a = band(abs(r - vP.z), th * 0.5, fwidth(r));
-        st = vec2(u * abs(span) * vP.z * vSize.x * 0.5, (r - vP.z) * vSize.x * 0.5);
-        pspan = th * vSize.x * 0.5;
+        float d = abs(r - vP.z);
+        if (paint) {
+          st = vec2(u * abs(span) * vP.z * vSize.x * 0.5, (r - vP.z) * vSize.x * 0.5);
+          paintBegin(th * vSize.x * 0.5);
+          d += (edgeN(st) - 0.5) * th * 1.0 * plv;
+        }
+        a = band(d, th * 0.5, fwidth(r));
       }
     }
-    if (vQ.x > 0.0) paintFinish(a, col, st, pspan);
+    if (paint && plv > 0.001) paintBody(a, col, st);
     a *= vB.y;
     if (a < 0.002) discard;
     gl_FragColor = vec4(col, a);

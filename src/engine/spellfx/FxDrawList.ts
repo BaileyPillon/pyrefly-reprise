@@ -97,10 +97,10 @@ export class FxDrawList {
     this.seq = 0;
   }
 
-  /** Back to today's plain settings for the quads that follow (the shots in flight): density `dens`, no painted finish, no trail share, no variant. */
-  plain(dens: number): void {
+  /** Back to today's plain settings for the quads that follow (the shots in flight): density `dens`, no trail share, no variant; the painted finish only when `paint` (the new effects are on). */
+  plain(dens: number, paint = false): void {
     this.dens = dens;
-    this.paint = 0;
+    this.paint = paint ? 1 : 0;
     this.trailK = 1;
     this.variant = '';
     this.dir = 1;

@@ -22,7 +22,7 @@ export const BUFF_END = 1.6;
 
 const HASTE = '#7BE87F';
 const PROTECT = '#6EA8FF';
-const SHELL = '#B58CFF';
+const SHELL = '#9A66FF';
 const REFLECT = '#F2D24A';
 const PALE = '#DDEBFF';
 const SLATE = '#9DB0C8';
@@ -111,9 +111,9 @@ export function shell(o: FxDrawList, t: number, T: FxTarget): void {
     const grow = outCubic((t - 0.1) / 0.3);
     for (let j = 0; j < 3; j++) {
       const a0 = spin * 1.3 + (j * Math.PI * 2) / 3;
-      o.arc(T.cx, T.cy, T.h * 0.6 * grow, a0, a0 + 1.15, 9 * k, '#E4D4FF', 0.9 * life, 1);
+      o.arc(T.cx, T.cy, T.h * 0.6 * grow, a0, a0 + 1.15, 12 * k, '#C9A8FF', 0.95 * life, 1);
       const b0 = -spin * 0.9 + (j * Math.PI * 2) / 3 + 0.5;
-      o.arc(T.cx, T.cy, T.h * 0.48 * grow, b0, b0 + 0.9, 7 * k, SHELL, 0.8 * life, 1);
+      o.arc(T.cx, T.cy, T.h * 0.48 * grow, b0, b0 + 0.9, 10 * k, SHELL, 0.9 * life, 1);
     }
     o.sprite('glow', SHELL, T.cx, T.cy, T.h * 1.5 * grow, 0.28 * life);
   }

@@ -54,7 +54,7 @@ function sparks(o: FxDrawList, T: FxTarget, x: number, y: number, t: number, n: 
   const base = o.dir > 0 ? 0 : Math.PI;
   parts(o.n(n), 71, HIT_MARK, HIT_MARK + 0.03, t, (p, age) => {
     const ang = base + (p.a - 0.5) * 2 * spread - 0.18;
-    spark(o, { ox: x, oy: y, ang, dist: (0.55 + 0.9 * p.b) * dist * T.sc, life: 0.3 + 0.26 * p.c, age, grav: grav * T.k, thick: thick * T.k * (0.7 + 0.6 * p.d), col: cols[p.i % cols.length]!, alpha: 0.98 });
+    spark(o, { ox: x, oy: y, ang, dist: (0.55 + 0.9 * p.b) * dist * 0.85 * T.sc, life: 0.3 + 0.26 * p.c, age, grav: grav * T.k, thick: thick * 1.5 * T.k * (0.7 + 0.6 * p.d), col: cols[p.i % cols.length]!, alpha: 0.98 });
     if (o.game === 'ffx2' && p.i % 3 === 0 && age < 0.42) o.sprite('spark4', cols[(p.i + 1) % cols.length]!, x + Math.cos(ang) * dist * T.sc * (0.5 + 0.7 * p.b) * outExpo(age / 0.4), y + Math.sin(ang) * dist * T.sc * (0.5 + 0.7 * p.b) * outExpo(age / 0.4), 20 * T.sc, 1 - age / 0.42);
   });
 }
@@ -65,8 +65,8 @@ function contact(o: FxDrawList, T: FxTarget, x: number, y: number, t: number, si
   if (f <= 0) return;
   const was = o.add;
   o.add = true;
-  o.sprite('spark4', '#FFFFFF', x, y, size * T.sc * f, Math.min(1, f));
-  o.bloom('#FFFFFF', x, y, size * 1.9 * T.sc * f, 0.7, 1);
+  o.sprite('spark4', '#FFFFFF', x, y, size * 0.8 * T.sc * f, Math.min(1, f));
+  o.bloom(col, x, y, size * 1.3 * T.sc * f, 0.5, 1);
   if (ring > 0) shockRing(o, x, y, t, HIT_MARK, 0.28, 8 * T.sc, ring * T.sc, 3.6 * T.k, col, 0.9, 1);
   o.add = was;
 }
