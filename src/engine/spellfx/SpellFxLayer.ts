@@ -239,7 +239,7 @@ export class SpellFxLayer {
     // spell whose targets resolve in the engine) joins the copy already playing.
     const found = this.running.find((r) => r.action === action && r.id === fx && r.groupIds.length > 0);
     if (found) {
-      if (!found.groupIds.includes(target) && this.opts.rectOf(target)) found.groupIds = [...found.groupIds, target];
+      if (!found.groupIds.includes(target) && target !== found.targetId && this.opts.rectOf(target)) found.groupIds = [...found.groupIds, target]; // never the caster itself (a move's HP cost lands on her)
       return found;
     }
     const group = (o.targets?.includes(target) ? o.targets : [target]).filter((id) => this.opts.rectOf(id));

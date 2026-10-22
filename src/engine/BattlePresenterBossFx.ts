@@ -90,6 +90,18 @@ export function freshBlowHeld(ctx: EventCtx, event: BattleEvent): boolean {
 }
 
 /**
+ * Is this blow the HP cost of a new-set boss move, paid by its own caster (Rikku's Darkness: a `damage` on her with no striker)? It does not wait for the move's effect: the effect lands with the blow on
+ * the foe, which waits for its mark alone. Before this the cost blow waited for the mark and the foe's numeral came 240 ms after the strike (browser frames at 60 and 144 Hz: Darkness at effect 1.065 against
+ * its mark of 0.82), and the move took that much longer in a port whose ATB stops while the presenter plays. Inert with the new effects off.
+ */
+export function costOfFreshMove(event: Extract<BattleEvent, { type: 'damage' }>, a: ActingAction | undefined): boolean {
+  if (!fxNewOn() || !a?.abilityId || event.sourceId !== undefined || event.targetId !== a.actorId) return false;
+  const game = fxGame();
+  const fx = game === undefined ? null : bossFxFor(a.abilityId, game);
+  return fx !== null && !DECORATION_FX.has(fx) && fxPieceOn(pieceOfFx(fx));
+}
+
+/**
  * FFX-2 only (review M2): a long boss move starts its effect when the cast starts, not at the first blow. The effect keeps its faithful lead-in (Darkness's bolt and ring, Impulse's streams, Curse's gathering) and
  * the cast pose's own 380 ms runs inside it, so the presenter waits for what is left of the lead-in at the blow (about 0.4 s for Darkness and Impulse) and not for all of it (0.8 s): in this port the ATB does
  * not tick while the presenter plays. The copy is decoration to the layer (`LandOpts.deco`): it covers no blow, and the blows find it by the action's number and wait for their own marks as before.

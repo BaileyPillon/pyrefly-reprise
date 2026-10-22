@@ -10,7 +10,7 @@
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
-import { bigBlow } from './BattlePresenterBossFx.ts';
+import { bigBlow, costOfFreshMove } from './BattlePresenterBossFx.ts';
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
 
 /** The action whose effects are playing. */
@@ -76,6 +76,7 @@ export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEven
   if (!vfx.land || sparkItem(ctx, event.sourceId)) return;
   const a = event.sourceId === undefined ? ctx.acting : byActor.get(ctx)?.get(event.sourceId);
   const ours = a !== undefined;
+  if (costOfFreshMove(event, a)) return; // Darkness's HP cost on its caster: the effect lands with the blow on the foe, not here (the new effects only)
   const ms = vfx.land(event.targetId, {
     ...(ours && a.abilityId ? { abilityId: a.abilityId } : {}),
     element: event.element,

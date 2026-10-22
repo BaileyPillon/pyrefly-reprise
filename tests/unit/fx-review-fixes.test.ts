@@ -135,6 +135,8 @@ describe('M1: a boss move\'s numeral waits for the new effect\'s mark, shot or n
       const dark = await run('ffx2', 'new', [act('rikku', 'x2-dark-knight-darkness', 'Darkness', ['bahamut']), dmg('rikku', undefined, 120), dmg('bahamut', 'rikku', 3912), end('rikku')], travel);
       expect(dark.hud).toHaveLength(1); // the HP cost on the caster has no striker and shows at once, as before
       expect(clockOf(dark, 0, 'darkness')).toBeGreaterThanOrEqual(DARKNESS_MARK - 0.02);
+      expect(clockOf(dark, 0, 'darkness')).toBeLessThan(DARKNESS_MARK + 0.06); // at the strike: the HP cost on Rikku does not make the foe's numeral wait 240 ms more (browser: 1.065 before)
+      expect(dark.lands.some((l) => l.at === 'rikku'), 'the cost blow does not land the effect').toBe(false);
       const imp = await run('ffx2', 'new', [act('bahamut', 'impulse', 'Impulse', []), ...P4.map((t) => dmg(t, 'bahamut', 520)), end('bahamut')], travel); // the engine's Impulse names no target at its start
       expect(imp.hud).toHaveLength(3);
       const clocks = imp.hud.map((_, i) => clockOf(imp, i, 'impulse'));
@@ -176,10 +178,10 @@ describe('M2: FFX-2 starts a long boss move with the cast and a status move wait
     }
   });
 
-  it('the presenter waits for what is left of the lead-in: Darkness adds at most 300 ms, Impulse 450 ms, over today (they added 620 and 800)', async () => {
+  it('the presenter waits for what is left of the lead-in: Darkness adds nothing, Impulse at most 450 ms, over today (they added 620 and 800)', async () => {
     const dToday = await run('ffx2', 'today', darkness);
     const dNew = await run('ffx2', 'new', darkness);
-    expect(dNew.total - dToday.total).toBeLessThanOrEqual(300);
+    expect(dNew.total - dToday.total).toBeLessThanOrEqual(50);
     const iToday = await run('ffx2', 'today', impulse);
     const iNew = await run('ffx2', 'new', impulse);
     expect(iNew.total - iToday.total).toBeLessThanOrEqual(450);
@@ -204,6 +206,20 @@ describe('M2: FFX-2 starts a long boss move with the cast and a status move wait
     expect(flare.lands.some((l) => l.deco)).toBe(false);
     const off = await run('ffx2', 'today', darkness);
     expect(off.lands.some((l) => l.deco)).toBe(false);
+  });
+});
+
+describe('a group effect never takes its caster into the group', () => {
+  it('a blow on the caster (the HP cost of a move) does not pull the effect centre toward her', () => {
+    setFxMode('new');
+    setFxChapter('ffx2-bahamut');
+    const layer = new SpellFxLayer({ game: 'ffx2', rectOf: (id) => RECTS[id] ?? null, view: () => ({ w: 1600, h: 900 }), quality: () => 'full' });
+    layer.land('bahamut', { abilityId: 'x2-dark-knight-darkness', action: 7, sourceId: 'rikku', targets: ['bahamut'], deco: true });
+    layer.land('rikku', { abilityId: 'x2-dark-knight-darkness', action: 7, sourceId: 'rikku', targets: ['bahamut'] });
+    layer.land('bahamut', { abilityId: 'x2-dark-knight-darkness', action: 7, sourceId: 'rikku', targets: ['bahamut'] });
+    const copies = (layer as unknown as { running: Array<{ id: string; groupIds: string[] }> }).running.filter((r) => r.id === 'darkness');
+    expect(copies).toHaveLength(1);
+    expect(copies[0]!.groupIds).toEqual(['bahamut']);
   });
 });
 
