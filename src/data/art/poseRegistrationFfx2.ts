@@ -377,6 +377,6 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     ko: { scale: 0.849, head: [0.7623, 0.2154, 0.8421, 0.4008], status: 'ok', class: 'ko', stature: 0.263, headReal: 1, lengthRatio: 0.771, iou: 0.105, sha: '59f2488a1b510229' },
     ready: { scale: 0.986, stanceX: 347.5, head: [0.4914, 0.1828, 0.5894, 0.2396], status: 'ok', class: 'standing', stature: 0.907, headReal: 1.104, iou: 0.433, sha: '9e3f041114ddf17b' },
     sleep: { scale: 1.257, stanceX: 295.0, head: [0.8042, 0.1825, 0.8909, 0.2403], status: 'ok', class: 'low', stature: 0.883, headReal: 1.13, iou: 0.389, sha: '4e0ea945fad3c164' },
-    victory: { scale: 1.327, stanceX: 405.0, head: [0.4253, 0.1756, 0.4932, 0.224], status: 'ok', class: 'standing', stature: 1.056, headReal: 1.032, iou: 0.477, sha: '9fb5ef64623a2836' },
+    victory: { scale: 1.327, stanceX: 405.5, head: [0.4253, 0.1756, 0.4932, 0.224], status: 'ok', class: 'standing', stature: 1.059, headReal: 1.032, iou: 0.465, sha: '7ce780a142d4335f' },
   },
 };
