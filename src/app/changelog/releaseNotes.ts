@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 61 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 62 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '62',
+    date: '2026-10-22',
+    lines: [
+      { tag: 'Both', text: 'A gamepad’s A or Start now ends the opening camera sweep before a fight, the way Enter does.' },
+      { tag: 'Both', text: 'In the booth demo, both fights are prepared while you choose, so a fight starts sooner, and a win plays its music on the results screen.' },
+      { tag: 'FFX', text: 'Auron’s first tip now matches the fight: Chapter I keeps its warning, the chapters where your party moves first say so, and the others show none.' },
+    ],
+  },
   {
     release: '61',
     date: '2026-10-21',

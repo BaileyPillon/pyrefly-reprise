@@ -50,6 +50,7 @@ import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conf
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
+import { stopDemoWarm } from '../demo/demoWarm.ts'; // release 62 (PR-0481): the demo's stage warm stands down once a fight is picked
 import { demoRunDefaults } from '../demo/demoFlow.ts'; // R61 (conference demo, `?demo=1`): a demo fight goes straight in, without party prep or story scenes
 
 /** A screen the flow can await. */
@@ -330,6 +331,7 @@ export class GameFlow {
       const { runPilgrimage } = await import('../pilgrim/PilgrimFlow.ts'); // its screens and styles load only now: a player who never types the word never fetches them
       return runPilgrimage({ app: this.app, show: (s) => this.show(s), setStep: (s) => void (this.step = s), fight: (cid, o) => this.runChapter(cid, o), away: () => this.handedOver, claim: () => { if (!this.running) [this.owned, this.handedOver] = [null, false]; } });
     }
+    stopDemoWarm(); // release 62 (PR-0481, demo mode): the stage warm behind the picker takes no further step; the fight picked has the main thread
     warmBattleStage(); // the browser's staged-upload verdict (a second WebGL2 context, 0.7 s) and the spell atlas (0.13 s), once per page, while the party prep is what is on screen
     const release = musicChapter(id, sfxChapter(id, voiceChapter(id, holdIdleLane()))); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep; the recorded voice-over (FFX only)
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)
@@ -518,8 +520,11 @@ export class GameFlow {
     const silent = resultsScreenSilent(chapter);
     // The music of the screen (`resultsMusic.ts`, music batch 2): a win's cue starts now, as it always did (its battle screen is gone already: the post scene replaced it). A loss's cue waits
     // for the swap below, because the battle screen's exit stops the music and would cut a cue asked for before it; it ends when the player chooses, so it never plays over a RETRY.
+    // Release 62 (PR-0504, both games): the same wait for a win whose battle screen is still up when the panel is asked for, that is, when no post scene replaced it (a demo fight skips the story,
+    // `demoRunDefaults`; the hidden experiment has none): its `exit` stopped the cue asked for before the swap and the panel came up in silence.
     const cue = resultsCueFor(chapter, outcome.outcome);
-    let music: ResultsMusicHandle | null = cue?.kind === 'victory' ? startResultsMusic(audio, cue) : null;
+    const battleUp = this.owned !== null && 'finished' in this.owned; // only the battle screen resolves `finished` (a story scene or the board resolves `done`)
+    let music: ResultsMusicHandle | null = cue?.kind === 'victory' && !battleUp ? startResultsMusic(audio, cue) : null;
     let choice: ResultsChoice = 'continue';
     const opts: ResultsScreenOptions = {
       chapter,
@@ -538,7 +543,11 @@ export class GameFlow {
     // mirrored for FFX-2 chapters. The swap happens under the cover half.
     let swapped: Promise<boolean> = Promise.resolve(true);
     await playResultsWipe(this.app.uiRoot, chapter.game, () => {
-      swapped = this.show(screen);
+      swapped = this.show(screen).then((shown) => {
+        // PR-0504: a win that waited for the battle screen asks for its cue the moment that screen has gone (its exit has run), under the wipe's cover, as the early start was.
+        if (shown && battleUp && cue?.kind === 'victory' && music === null) music = startResultsMusic(audio, cue);
+        return shown;
+      });
     });
     if (!(await swapped)) return choice;
     if (cue?.kind === 'defeat') music = startResultsMusic(audio, cue);

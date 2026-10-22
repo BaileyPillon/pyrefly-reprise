@@ -226,8 +226,15 @@ after a pose swap were rarely side by side, and no check followed a figure's siz
 ```
 node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=seymour-flux,ffx2-bahamut,evrae-airship
      [--goal=win|lose] [--size=1600x900] [--budget=1800000] [--seed=1] [--tag=x]
-     [--pose-measure=<pose-measure.json> | --pose-measure-from=<repo root>] [--only-aggregate] [--summary=<file>]
+     [--pose-measure=<pose-measure.json> | --candidate-root=<repo root> (older spelling --pose-measure-from)] [--allow-stale-pose-table] [--only-aggregate] [--summary=<file>]
 ```
+
+**Which pose-measure table CHK-026 is judged against (release 62, PR-0512; `continuity-table.mjs`).** Round 28's gap pass ran this harness from the review tree and read that tree's older table (78 subjects, the
+candidate had 114): four chapters failed CHK-026 falsely. The table is now resolved in one place and the run says which: `--pose-measure`, else `--candidate-root` (the candidate's tree), else the tree the harness was
+started from (the release runners start it in the candidate's tree). Start of run: a line with the path, the source, the subject count and the sha256. Each chapter: the build's commit is read from the title's build
+tag (`Release 61 · 660c19bb`) and the candidate's own table is read from that commit (`git show <commit>:docs/target/pose-measure.json`, any worktree of the repository can do it); when the table the run read is
+not that file, the chapter's CHK-026 is **UNVERIFIED** with the reason, its numbers are left out of the run's totals, and `continuity-summary.json` lists it under `poseMeasure.staleChapters`. A build that shows no
+commit, or one the repository does not know, cannot be checked: the line says "not checked" and the verdict stands. `--allow-stale-pose-table` keeps the verdict and records the mismatch.
 
 Run it with `PYREFLY_BROWSER=gpu` (in software the game draws at about 3 fps and two frames of one swap cannot be told
 apart; the harness says UNVERIFIED below 30 fps). One chapter after another, one browser at a time, headless Playwright from

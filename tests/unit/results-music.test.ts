@@ -241,15 +241,17 @@ describe('the flow asks for these cues at the right moments (BattleScreenFlow.sh
   const body = source.slice(source.indexOf('private async showResults('));
 
   it('starts a win\'s cue before the wipe, a loss\'s cue only after the results screen has replaced the battle screen, and ends it with the player\'s choice', () => {
-    const win = body.indexOf("cue?.kind === 'victory' ? startResultsMusic(audio, cue)");
+    const win = body.indexOf("cue?.kind === 'victory' && !battleUp ? startResultsMusic(audio, cue)"); // release 62 (PR-0504): when a story scene has replaced the battle screen
     const wipe = body.indexOf('await playResultsWipe(');
+    const lateWin = body.indexOf("if (shown && battleUp && cue?.kind === 'victory' && music === null) music = startResultsMusic(audio, cue);"); // ... and, when the battle screen is still up, at the swap
     const swap = body.indexOf('if (!(await swapped)) return choice;');
     const loss = body.indexOf("if (cue?.kind === 'defeat') music = startResultsMusic(audio, cue);");
     const done = body.indexOf('await screen.done;');
     const end = body.indexOf('music?.end();');
     expect(win).toBeGreaterThan(0);
     expect(win).toBeLessThan(wipe);
-    expect(wipe).toBeLessThan(swap);
+    expect(wipe).toBeLessThan(lateWin);
+    expect(lateWin).toBeLessThan(swap);
     expect(swap).toBeLessThan(loss); // the battle screen's exit (BattleScreen.exit stops the music) has run by then
     expect(loss).toBeLessThan(done);
     expect(done).toBeLessThan(end);
