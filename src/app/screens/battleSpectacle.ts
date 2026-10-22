@@ -25,6 +25,8 @@ import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { mixSplashArt, prepareMixSplash } from '../../engine/fx/mix/splash.ts'; // SPLASH ART (the MAX mix, D-316)
 import { demoMotionOn } from '../../engine/motion/DemoMotion.ts';
+import { feelFlags } from '../../engine/feel/FeelSwitch.ts'; // the motion program's `?punch=` and `?hitstop=` (demo chapters only)
+import { KICK_WORLD_TODAY, TODAY_KICK, punchDepth, settleKickOf } from '../../engine/feel/PunchCurve.ts';
 import '../../ui/common/fx-c-foil.css';
 
 /**
@@ -82,6 +84,7 @@ export function attachSpectacle(o: {
       reduceFlashes: eyeCandy.reduceFlashes,
       dial: (n) => eyeCandy.dial(n),
       demo: demoMotionOn(), // `?motion=demo` (part 4): the stop and the shake grow with the blow
+      feel: feelFlags(), // `?punch=` and `?hitstop=` (or `?pack=demo`) in Chapter I and Chapter IV; today's camera and stop everywhere else
     };
   };
   const fx = new SpectacleFx({
@@ -127,6 +130,18 @@ export function attachSpectacle(o: {
        */
       inject: (element: string, targetId: string, magic = true) =>
         fx.hit({ targetId, element, crit: false, heavy: false, hitIndex: 0, hitCount: 1, big: false, magic, action: -1, speed: 'normal' }),
+      /**
+       * Captures only: one camera punch now (`__pyrefly.punch(fraction, ms, which)`): `fraction` of the first foe's depth, `which` `new` (the settle) or `today` (the 9-unit kick).
+       * Returns the depth in world units and the fraction played.
+       */
+      punch: (fraction = 0.025, ms = 370, which: 'new' | 'today' = 'new') => {
+        const foe = o.stage.staged().find((id) => o.stage.sideOf(id) === 'enemy');
+        const at = foe ? o.stage.actor(foe)?.position : undefined;
+        const depth = at ? punchDepth(o.camera, at) : 9;
+        if (which === 'today') fx.trauma.kick(fraction, TODAY_KICK, KICK_WORLD_TODAY);
+        else fx.trauma.kick(fraction, settleKickOf(ms), depth);
+        return { depth, fraction };
+      },
       /** Captures only: freeze the page (field and presenter) on the next impact frame's first frame. */
       armImpact: () => {
         fx.armImpact = (): void => {

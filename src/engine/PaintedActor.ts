@@ -56,6 +56,8 @@ import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
+import { ShadowFollow, shadowX } from './feel/ContactShadow.ts'; // `?shadow=follow` (demo chapters, off by default): the contact shadow stays under the feet
+import { shadowFollows } from './feel/FeelSwitch.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
@@ -501,6 +503,7 @@ export class PaintedActor extends Group {
   private readonly hoverBobSpeed: number;
   private shadowBaseRadius: number;
   private readonly shadowBaseOpacity: number;
+  private readonly shadowAir = new ShadowFollow();
   private readonly shadowSquash: number;
 
   /**
@@ -2423,14 +2426,16 @@ export class PaintedActor extends Group {
       // Follow the pose's footprint: a body on the ground casts a long, flat
       // shadow under its whole length, not the standing figure's small disc.
       const base = Math.max(this.shadowBaseRadius, this.footprintRadius());
-      const r = base * (1 + this.squashAmount * 0.3) * (1 - lift * 0.42);
+      const follow = shadowFollows();
+      const air = follow ? this.shadowAir.step(dt, this.hopHeight, this.worldHeight) : null; // off the ground by a hop (and, later, the lunge's arc): shrink, fade, spread on landing (feel/ContactShadow.ts)
+      const r = base * (1 + this.squashAmount * 0.3) * (1 - lift * 0.42) * (air?.radius ?? 1);
       // The wider the footprint, the flatter the blob, so a prone shadow does
       // not balloon into a circle the size of the body's length.
       const squash = this.shadowSquash * (this.shadowBaseRadius / Math.max(1e-4, base)) ** 0.5;
       this.shadow.scale.set(r, r * Math.min(this.shadowSquash, squash), 1);
-      this.shadow.position.x = ox * 0.55;
+      this.shadow.position.x = shadowX(ox, lieDx, follow); // today 0.55 of the offset; `follow`: all of it, under the boots
       const sm = this.shadow.material as MeshBasicMaterial;
-      sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5);
+      sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5) * (air?.opacity ?? 1);
     }
   }
 

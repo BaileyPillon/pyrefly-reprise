@@ -14,6 +14,9 @@ import type { BattleEvent, CombatantId } from '../../../battle/common/types.ts';
 import type { EventCtx } from '../../BattlePresenterEvents.ts';
 import { hitPower } from '../../motion/DemoHit.ts';
 import { demoMotionOn } from '../../motion/DemoMotion.ts';
+import { rumbleHit, rumbleOpen, rumbleWin } from '../../feel/FeelHooks.ts'; // the motion program's gamepad rumble (`?rumble=`): a no-op unless switched on in a demo chapter
+import { isBossBigMove } from '../../feel/HitStopShort.ts';
+import { isFfx2, menuBlocks } from '../../KeySlots.ts';
 
 /** What the stage offers option C. Every method is optional; `enabled()` false = today's look. */
 export interface FxStagePort {
@@ -41,6 +44,10 @@ export interface FxStagePort {
     lastShown?: boolean | undefined;
     /** `?motion=demo` only (`motion/DemoHit.hitPower`): how hard the blow is. */
     power?: number | undefined;
+    /** A foe's headline move (`feel/HitStopShort.isBossBigMove`); read by `?hitstop=short` and `?punch=new`. */
+    bossBig?: boolean | undefined;
+    /** FFX-2: a command menu is open right now; `?punch=new` plays no camera punch over it. */
+    menuOpen?: boolean | undefined;
   }): { freezeMs: number; shook: boolean };
   /** A fiend is sent (only where the departure is a dissolve, C8). */
   dissolve?(id: CombatantId): void;
@@ -60,6 +67,8 @@ interface ActionMark {
   kind: 'overdrive' | 'special' | 'other';
   count: number;
   magic: boolean;
+  /** A foe is using one of its headline moves (`feel/HitStopShort.BOSS_BIG_MOVES`). */
+  bossBig: boolean;
 }
 
 const marks = new WeakMap<EventCtx, ActionMark>();
@@ -76,7 +85,8 @@ export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { 
   const kind: ActionMark['kind'] =
     event.command.kind === 'overdrive' ? 'overdrive' : SPECIALS.has(name.trim().toLowerCase()) ? 'special' : 'other';
   const magic = event.abilityId ? ctx.deps.abilityFacts?.(event.abilityId)?.damageType === 'magical' : false;
-  marks.set(ctx, { kind, count: (prev?.count ?? 0) + 1, magic });
+  marks.set(ctx, { kind, count: (prev?.count ?? 0) + 1, magic, bossBig: isBossBigMove(event.abilityId) && ctx.stage.sideOf?.(event.actorId) === 'enemy' });
+  rumbleOpen(ctx, kind);
   const fx = port(ctx);
   if (!fx?.actionOpen || kind === 'other' || ctx.speed() === 'skip') return;
   await fx.actionOpen({ actorId: event.actorId, name, kind });
@@ -113,6 +123,8 @@ function lastShownAt(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage'
   return isLastShownBlow(burst.events, burst.at);
 }
 
+const lastByIndex = (e: Extract<BattleEvent, { type: 'damage' }>): boolean => (e.hitIndex ?? 0) >= (e.hitCount ?? 1) - 1;
+
 /**
  * One blow. Returns null when C is off (the beat keeps today's shake and hit-stop), else the
  * ms the beat should wait on a heavy blow (0 on a light one) and whether C shook the camera.
@@ -122,9 +134,10 @@ export function fxHit(
   event: Extract<BattleEvent, { type: 'damage' }>,
   heavy: boolean,
 ): { waitMs: number; shook: boolean } | null {
+  const mark = marks.get(ctx);
+  rumbleHit(ctx, event, heavy, mark, isFfx2(ctx) ? lastByIndex(event) : (lastShownAt(ctx, event) ?? lastByIndex(event)));
   const fx = port(ctx);
   if (!fx?.hit) return null;
-  const mark = marks.get(ctx);
   const r = fx.hit({
     targetId: event.targetId,
     element: event.element,
@@ -137,6 +150,8 @@ export function fxHit(
     action: mark?.count ?? -1,
     speed: ctx.speed(),
     lastShown: lastShownAt(ctx, event),
+    bossBig: mark?.bossBig === true,
+    menuOpen: menuBlocks(ctx),
     ...(demoMotionOn() ? { power: hitPower(event.amount, ctx.hpMaxOf?.(event.targetId)) } : {}), // `?motion=demo`: the stop and the shake grow with the blow (`motion/DemoHit.ts`)
   });
   return { waitMs: heavy || demoMotionOn() ? r.freezeMs : 0, shook: r.shook }; // the demo waits out every stop it makes, so the next beat does not run ahead of a held field
@@ -149,6 +164,7 @@ export function fxDissolve(ctx: EventCtx, id: CombatantId): void {
 
 /** The victory camera (C9). Returns how long the beat should hold for it (0 without C). */
 export function fxVictory(ctx: EventCtx, kind: 'pose' | 'hold'): number {
+  rumbleWin(ctx);
   return ctx.speed() === 'normal' ? (port(ctx)?.victory?.(kind) ?? 0) : 0;
 }
 

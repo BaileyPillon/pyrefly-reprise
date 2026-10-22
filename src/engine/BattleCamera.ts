@@ -349,7 +349,7 @@ export class BattleCamera {
   update(dt: number): void {
     this.tweens.update(dt);
     this.fx.update(dt);
-    if (this.shakeLeftMs > 0) this.shakeLeftMs -= dt * 1000;
+    if (this.shakeLeftMs > 0) { this.shakeLeftMs -= dt * 1000; this.shakePhase += dt * 54; } // 54 rad/s = the old 0.9 per frame at 60 Hz, by time so 120 Hz+ shakes at the same speed
     if (!this.tweening) {
       // Ease toward the rig target; lets offsetTarget() settle naturally.
       this.curPos.set(
@@ -383,7 +383,6 @@ export class BattleCamera {
     if (this.shakeLeftMs > 0) {
       const k = Math.max(0, this.shakeLeftMs / this.shakeTotalMs);
       const damp2 = k * k;
-      this.shakePhase += 0.9;
       ox += Math.sin(this.shakePhase * 2.7) * this.shakeAmp * damp2;
       oy += Math.sin(this.shakePhase * 3.9 + 1.7) * this.shakeAmp * damp2 * 0.8;
     }

@@ -38,6 +38,8 @@ import { roarFor } from '../audio/sfxV2/weapons.ts';
 import { momentEvents } from '../audio/sfxV2/battleVoice.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
+import { punchMode } from './feel/FeelSwitch.ts'; // the motion program's `?punch=`: today's 0.11 moment punch, or the 2 to 3 percent settle (`feel/PunchCurve.ts`)
+import { momentPunch } from './feel/PunchCurve.ts';
 import { fittedPush } from './ShotFit.ts';
 import { ShotRules } from './ShotRules.ts';
 import type { ShotAction, ShotActionInfo, ShotAnswer, ShotCtx, ShotDirector, ShotSubject } from './ShotDirector.ts';
@@ -487,7 +489,8 @@ export class BattleMoments {
       this.cut(rig);
       this.onActionRig = true;
     }
-    if (opts.heavy) void this.cam.punch(0.11, this.ms(460));
+    const punch = momentPunch(punchMode(), this.deps.stage.fx?.enabled() === true); // today 0.11; `?punch=new` leaves it to the spectacle's kick while that is on
+    if (opts.heavy && punch > 0) void this.cam.punch(punch, this.ms(460));
     this.rollOnHit();
   }
 

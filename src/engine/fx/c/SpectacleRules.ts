@@ -11,6 +11,9 @@
  */
 
 import { demoStopMs, demoTrauma } from '../../motion/DemoHit.ts'; // `?motion=demo` (part 4): the stop and the shake grow with the blow
+import type { PunchMode, StopMode } from '../../feel/FeelSwitch.ts'; // the motion program's feel switches (`?punch=`, `?hitstop=`)
+import { shortStopMs } from '../../feel/HitStopShort.ts';
+import { newPunchFraction } from '../../feel/PunchCurve.ts';
 
 export type SpectacleGame = 'ffx' | 'ffx2';
 export type SpectacleTier = 'full' | 'phone' | 'low';
@@ -40,6 +43,10 @@ export interface HitInfo {
   lastShown?: boolean | undefined;
   /** `?motion=demo` only (`motion/DemoHit.hitPower`): how hard the blow is, 0 to 1.5; absent reads as a middling blow. */
   power?: number | undefined;
+  /** A foe's headline move (`feel/HitStopShort.isBossBigMove`): read by `?hitstop=short` and `?punch=new` only. */
+  bossBig?: boolean | undefined;
+  /** FFX-2: a command menu is open (`KeySlots.menuBlocks`); `?punch=new` plays no camera punch over it (D-316, the target frame hold). */
+  menuOpen?: boolean | undefined;
 }
 
 export interface SpectacleFlags {
@@ -50,6 +57,8 @@ export interface SpectacleFlags {
   dial: (name: 'shake' | 'sparks' | 'impact' | 'spells' | 'hitstop') => number;
   /** `?motion=demo` (`motion/DemoMotion.ts`): the stop and the shake are the demo's (`motion/DemoHit.ts`); absent or false: as tuned. */
   demo?: boolean | undefined;
+  /** The motion program's feel switches (`feel/FeelSwitch.feelFlags`, chapter-gated); absent = today's camera and stop. */
+  feel?: { punch: PunchMode; stop: StopMode } | undefined;
 }
 
 export interface HitPlan {
@@ -59,8 +68,10 @@ export interface HitPlan {
   freezeMs: number;
   /** C4: trauma added (0..1). */
   trauma: number;
-  /** C4: a quick dolly kick, as a fraction of the camera distance. */
+  /** C4: a quick dolly kick, as a fraction of the camera distance (`kickMode` `today`) or of the struck figure's depth (`settle`). */
   kick: number;
+  /** `today`: 90 ms in, 380 ms out, 9 world units per unit; `settle`: `?punch=new` (`feel/PunchCurve.ts`). */
+  kickMode: 'today' | 'settle';
   /** C3: streak count (0 = today's burst only). */
   streaks: number;
   /** C3: one shock ring. */
@@ -188,8 +199,11 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
   const holdsHeavy = game === 'ffx' ? hit.heavy : hit.crit && first;
   let freezeMs = 0;
   const facts = { crit: hit.crit, heavy: hit.heavy, big: hit.big, hitIndex: hit.hitIndex, hitCount: hit.hitCount, last, power: hit.power };
-  if (normal && !f.reduceMotion) {
-    if (f.demo) freezeMs = demoStopMs(facts, t.freezeLightMs); // never lighter than today's own light hold (FFX 40 ms, FFX-2 28 ms)
+  const stopMode = f.feel?.stop ?? 'today';
+  const punchMode = f.feel?.punch ?? 'today';
+  if (normal && !f.reduceMotion && stopMode !== 'off') {
+    if (stopMode === 'short') freezeMs = shortStopMs({ crit: hit.crit, big: hit.big, last, bossBig: hit.bossBig === true, hitIndex: hit.hitIndex, hitCount: hit.hitCount });
+    else if (f.demo) freezeMs = demoStopMs(facts, t.freezeLightMs); // never lighter than today's own light hold (FFX 40 ms, FFX-2 28 ms)
     else if (holdsHeavy || (hit.big && last)) freezeMs = t.freezeHeavyMs;
     else if (first) freezeMs = t.freezeLightMs;
     freezeMs = Math.round(freezeMs * f.dial('hitstop'));
@@ -206,7 +220,8 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
     impactFrame,
     freezeMs,
     trauma,
-    kick: f.reduceMotion ? 0 : hit.crit || (hit.big && last) ? 0.05 : hit.heavy ? 0.035 : 0,
+    kick: f.reduceMotion || punchMode === 'off' ? 0 : punchMode === 'new' ? (hit.menuOpen === true ? 0 : newPunchFraction({ crit: hit.crit, heavy: hit.heavy, big: hit.big, last, bossBig: hit.bossBig === true, first })) : hit.crit || (hit.big && last) ? 0.05 : hit.heavy ? 0.035 : 0,
+    kickMode: punchMode === 'new' ? 'settle' : 'today',
     streaks,
     ring: density > 0 && (first || hit.heavy),
     cast: f.tier === 'low' ? 0 : hit.heavy || hit.big ? 0.5 : 0.3,
