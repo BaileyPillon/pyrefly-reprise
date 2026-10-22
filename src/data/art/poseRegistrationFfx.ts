@@ -71,7 +71,7 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
   tidus: {
     attack: { scale: 0.974, stanceX: 558.0, head: [0.3536, 0.0727, 0.492, 0.1388], status: 'ok', class: 'standing', stature: 0.977, headReal: 1.023, iou: 0.216, sha: 'baff1d78816b2c15' },
     cast: { scale: 0.979, stanceX: 265.0, head: [0.3439, 0.1128, 0.5024, 0.1787], status: 'ok', class: 'standing', stature: 0.978, headReal: 1.023, iou: 0.407, sha: '6b8f6930b4e7c7fb' },
-    critical: { scale: 0.959, stanceX: 236.0, head: [0.5526, 0.1487, 0.7377, 0.2127], status: 'ok', class: 'low', stature: 1.007, headReal: 0.992, iou: 0.456, sha: 'e38a7c67ca83f779' },
+    critical: { scale: 0.959, stanceX: 236.0, head: [0.5526, 0.1487, 0.7377, 0.2127], status: 'ok', class: 'low', stature: 1.007, headReal: 0.992, iou: 0.456, sha: '03f7a0825856aa63' },
     defend: { scale: 0.996, stanceX: 397.0, head: [0.4422, 0.1391, 0.5818, 0.2022], status: 'ok', class: 'standing', stature: 1.02, headReal: 0.997, iou: 0.471, sha: '347c91cf7436dcc1' },
     follow: { scale: 1.517, stanceX: 325.5, upright: true, head: [0.4927, 0.0888, 0.584, 0.159], status: 'held', class: 'standing', stature: 0.9, headReal: 1.161, iou: 0.293, sha: 'e7518c97c028ca9a' },
     hurt: { scale: 0.932, stanceX: 376.0, head: [0.0829, 0.3132, 0.2642, 0.3776], status: 'ok', class: 'standing', stature: 1.011, headReal: 0.99, iou: 0.459, sha: '734a266f7df2a99d' },
