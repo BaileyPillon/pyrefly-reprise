@@ -135,7 +135,7 @@ describe('M1: a boss move\'s numeral waits for the new effect\'s mark, shot or n
       const dark = await run('ffx2', 'new', [act('rikku', 'x2-dark-knight-darkness', 'Darkness', ['bahamut']), dmg('rikku', undefined, 120), dmg('bahamut', 'rikku', 3912), end('rikku')], travel);
       expect(dark.hud).toHaveLength(1); // the HP cost on the caster has no striker and shows at once, as before
       expect(clockOf(dark, 0, 'darkness')).toBeGreaterThanOrEqual(DARKNESS_MARK - 0.02);
-      const imp = await run('ffx2', 'new', [act('bahamut', 'impulse', 'Impulse', P4), ...P4.map((t) => dmg(t, 'bahamut', 520)), end('bahamut')], travel);
+      const imp = await run('ffx2', 'new', [act('bahamut', 'impulse', 'Impulse', []), ...P4.map((t) => dmg(t, 'bahamut', 520)), end('bahamut')], travel); // the engine's Impulse names no target at its start
       expect(imp.hud).toHaveLength(3);
       const clocks = imp.hud.map((_, i) => clockOf(imp, i, 'impulse'));
       expect(clocks[0]!).toBeGreaterThanOrEqual(IMPULSE_MARK - 0.02);
@@ -163,7 +163,7 @@ describe('M1: a boss move\'s numeral waits for the new effect\'s mark, shot or n
 
 describe('M2: FFX-2 starts a long boss move with the cast and a status move waits for nothing', () => {
   const darkness: Ev[] = [act('rikku', 'x2-dark-knight-darkness', 'Darkness', ['bahamut']), dmg('rikku', undefined, 120), dmg('bahamut', 'rikku', 3912), end('rikku')];
-  const impulse: Ev[] = [act('bahamut', 'impulse', 'Impulse', P4), ...P4.map((t) => dmg(t, 'bahamut', 520)), end('bahamut')];
+  const impulse: Ev[] = [act('bahamut', 'impulse', 'Impulse', []), ...P4.map((t) => dmg(t, 'bahamut', 520)), end('bahamut')]; // the engine's Impulse (all-enemies) names no target at its start; the pre-roll takes the other team's figures
   const curse: Ev[] = [act('bahamut', 'bahamut-curse', 'Curse', ['paine']), status('paine', 'curse', 'bahamut'), end('bahamut')];
 
   it('Darkness, Impulse and Curse start their effect at the action start, as decoration under the action\'s own number', async () => {

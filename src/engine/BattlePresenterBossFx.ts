@@ -98,9 +98,14 @@ export function prerollFx(ctx: EventCtx, event: Extract<BattleEvent, { type: 'ac
   if (!fxNewOn() || fxGame() !== 'ffx2') return;
   const a = actionOfBlow(ctx, event.actorId);
   const fx = a?.abilityId ? bossFxFor(a.abilityId, 'ffx2') : null;
-  const first = a?.targets[0];
-  if (!a || fx === null || first === undefined || !PREROLL_FX.has(fx) || !fxPieceOn(pieceOfFx(fx))) return;
-  ctx.stage.vfx.land?.(first, { abilityId: a.abilityId, hitIndex: 0, targets: a.targets, action: a.serial, sourceId: a.actorId, deco: true });
+  if (!a || fx === null || !PREROLL_FX.has(fx) || !fxPieceOn(pieceOfFx(fx))) return;
+  // Bahamut's party-wide Impulse names no target when it starts (the engine resolves them in the action): the other team's figures on the field are who it will hit.
+  const side = ctx.stage.sideOf(a.actorId);
+  const foeSide = side === 'party' ? 'enemy' : 'party';
+  const targets = a.targets.length > 0 ? a.targets : side === undefined ? [] : ctx.stage.staged().filter((id) => ctx.stage.sideOf(id) === foeSide);
+  const first = targets[0];
+  if (first === undefined) return;
+  ctx.stage.vfx.land?.(first, { abilityId: a.abilityId, hitIndex: 0, targets, action: a.serial, sourceId: a.actorId, deco: true });
 }
 
 /**
