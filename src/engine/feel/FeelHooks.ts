@@ -8,6 +8,11 @@
  * `skip`, the same rule as the hit-stop); REDUCE MOTION is off (Bailey: it turns off "Shake, punch, freeze, rumble"); and, in the page-side sink, the last thing the player pressed
  * was a pad ("never on keyboard play") and a pad with a `vibrationActuator` is connected.
  *
+ * **FFX-2's "no motion over an open command menu" (D-357, `MotionGate`, `KeySlots.menuBlocks`) reaches the VISIBLE looks only** (review F7, 2026-10-22): the camera punch reads `HitInfo.menuOpen`
+ * and is zero under a menu. The hit-stop does not: it holds the field clock and the presenter's waits (`ctx.sleep`), never the Active ATB pump (`pace.ts`) and never the menu, so nothing
+ * on screen moves under it. The rumble does not either: it is felt, not seen, and tells the player a blow landed while they were choosing. The contact shadow is ground contact, not a
+ * motion look. If Bailey wants the pad quiet under a menu too, it is one `menuBlocks` read in {@link allowed} (open question S3-3 in `docs/handoff/motion-feel.md`).
+ *
  * Ports only: no `three`, no DOM, no engine state, no RNG.
  */
 import type { BattleEvent } from '../../battle/common/types.ts';
@@ -50,7 +55,11 @@ export function rumbleOpen(ctx: EventCtx, kind: 'overdrive' | 'special' | 'other
   if (allowed(ctx)) sendRumble(rumbleForOpen(kind));
 }
 
-/** The win. */
+/**
+ * The win. The caller sends it for a POSED win only (`presenterHooks.fxVictory`, `kind === 'pose'`): where the sources withhold the celebration (`VictoryPose`, `chapter-meta.victoryPose
+ * === 'hold'`: FFX-2 Chapter IV after Bahamut, `research/ffx-vs-ffx2-presentation.md` 2.2) the pad stays still too. Review fix F2; whether the withheld win should give a soft opening pulse
+ * is a question for Bailey (`docs/handoff/motion-feel.md`, open questions).
+ */
 export function rumbleWin(ctx: EventCtx): void {
   if (allowed(ctx)) sendRumble(rumbleForWin());
 }

@@ -8,11 +8,11 @@
  *
  * | beat | cue (first bank) | why it is the closest the library has |
  * |---|---|---|
- * | `lunge` | `whiff` | its synth design is "cloth and air": band-passed noise (flatness 0.06 to 0.15, centroid 1.7 to 3.8 kHz) swelling over 20 to 60 ms and fading by 280 ms: a body passing the listener. Played 20 percent lower so it reads as a body, not a blade. |
+ * | `lunge` | `whiff` | the library's own description of it is "cloth and air" (`sfx/weapons.ts` `about`; written, not heard, by us): band-passed noise (flatness 0.06 to 0.15, centroid 1.7 to 3.8 kHz) swelling over 20 to 60 ms and fading by 280 ms. Played 20 percent lower (a deeper pitch: the guess is that lower reads as heavier; nobody on the team has heard it, so that is Bailey's call by ear). |
  * | `dash` | `whiff` | the same air, 28 percent lower and longer: the FFX-2 run-in (0.32 to 0.47 s). |
  * | `smear` | `whiff` | the same air, 45 percent higher and cut to 130 ms: a quick zip on the cut, not a second whoosh. |
  * | `land` | `footstep` | "one boot on stone": a 110 Hz thump that is 20 dB down by 45 ms (the whole 338 ms slice is thump plus grit; trimmed to 110 ms). |
- * | `cast` | `steal-success` | its first 105 ms are "a quick grab of cloth" (a soft noise burst, centroid 2.7 to 4.2 kHz, 28 to 39 dB under the jingle that follows at 120 ms); trimmed before the jingle. |
+ * | `cast` | `steal-success` | the library's own description of the steal is "a quick grab of cloth and a bright little jingle" (`sfx/support.ts` `about`); measured, its first 105 ms are a soft noise burst (centroid 2.7 to 4.2 kHz, 28 to 39 dB under the jingle that follows at 120 ms); trimmed before the jingle. |
  *
  * Game case (AGENTS.md rule 14): **both, one neutral set.** The library does not separate these sounds by game: the only game-tagged families it has are the weapon swings (`sfxV2/cues.ts`:
  * FFX's sword, katana, spear..., FFX-2's gun, daggers, greatsword), which already play on the attack, and the `-x2` twins of the spells (`magic-charge-x2`), which already play on the cast; a

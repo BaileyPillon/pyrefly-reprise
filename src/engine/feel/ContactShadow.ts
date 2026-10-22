@@ -72,10 +72,4 @@ export class ShadowFollow {
       opacity: (1 - AIR_FADE * air) * (1 - 0.4 * (this.spread / LAND_SPREAD)), // a little thinner while it spreads
     };
   }
-
-  reset(): void {
-    this.prev = 0;
-    this.peak = 0;
-    this.spread = 0;
-  }
 }

@@ -1,7 +1,7 @@
 /**
  * `window.__pyrefly.punch(...)`, `punchMode()`, `hitStopMode()`, `rumble()`, `shadowFollow()`, `feelPack()`, `feel()`, `rumbleLog()`: the motion program's feel switches (lane "feel";
  * both games; captures and checks only, never a player path). A page normally just takes the switches in its address (`engine/feel/FeelSwitch.ts`): `?punch=`, `?hitstop=`,
- * `?rumble=`, `?shadow=`, `?motionsfx=` and the shared `?pack=demo`. Step 2 adds `motionSfx(on?)` (the subtle synced sounds), `motionSfxLog(reset?)` (every beat and what became of it) and
+ * `?rumble=`, `?shadow=`, `?motionsfx=`, `?timing=` and the shared `?pack=demo`. Step 2 adds `motionSfx(on?)` (the subtle synced sounds), `motionSfxLog(reset?)` (every beat and what became of it) and
  * `motionBeat(kind, strength?, heft?, atMs?, ms?)` (report one beat, as a figure would: `lunge`, `dash`, `smear`, `land` or `cast`); while `simStep` runs the planner's clock is the stepper's.
  *
  * Each setter returns the mode now in force. A mode only takes effect in the two demo chapters (the answer outside them is always today's), so `feel()` also reports the
@@ -25,6 +25,8 @@ import {
   setStopMode,
   shadowFollows,
   stopMode,
+  setTimingByTime,
+  timingByTime,
   type PunchMode,
   type StopMode,
 } from '../engine/feel/FeelSwitch.ts';
@@ -135,6 +137,10 @@ export function installFeelDebug(api: Record<string, unknown>, app?: Steppable):
     if (typeof on === 'boolean') setMotionSfxOn(on);
     return motionSfxOn();
   };
+  api['timing'] = (on?: boolean): boolean => {
+    if (typeof on === 'boolean') setTimingByTime(on);
+    return timingByTime();
+  };
   api['motionSfxLog'] = (reset = false): MotionSfxRecord[] => motionSfxLog(reset);
   api['motionBeat'] = (kind: MotionBeatKind, strength?: number, heft?: number, atMs?: number, ms?: number): void =>
     motionBeat({ kind, ...(strength !== undefined ? { strength } : {}), ...(heft !== undefined ? { heft } : {}), ...(atMs !== undefined ? { atMs } : {}), ...(ms !== undefined ? { ms } : {}) });
@@ -147,6 +153,7 @@ export function installFeelDebug(api: Record<string, unknown>, app?: Steppable):
     rumble: rumbleOn(),
     shadow: shadowFollows(),
     motionsfx: motionSfxOn(),
+    timing: timingByTime(),
   });
   api['rumbleLog'] = (reset = false): RumbleRecord[] => rumbleLog(reset);
   api['punch'] = (fraction?: number, ms?: number, which?: 'new' | 'today', trauma?: number, stopMs?: number): { depth: number; fraction: number } | null => {

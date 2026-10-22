@@ -18,9 +18,6 @@
  * Pure: no `three`, no DOM.
  */
 
-/** One frame at 60 Hz, ms. */
-export const FRAME_MS_60 = 1000 / 60;
-
 /** 3 frames at 60 Hz: a critical or a boss's headline move. */
 export const SHORT_STOP_CRIT_MS = 50;
 /** 4 frames at 60 Hz: the last blow of an Overdrive or Special. */
@@ -54,12 +51,12 @@ export interface StopFacts {
 }
 
 /**
- * How long the field holds on this blow, ms: 67 on the last blow of an Overdrive or Special, 50 on a boss's headline move (its first blow) and on a critical (the first or last
+ * How long the field holds on this blow, ms: 67 on the last blow of an Overdrive or Special (so a Mega Flare on three girls stops ONCE, 67 ms on its last blow), 50 on a boss's headline move that is not a Special (its first blow) and on a critical (the first or last
  * blow of a flurry, never the middle), 0 on everything else, including an ordinary heavy blow and an overkill.
  */
 export function shortStopMs(f: StopFacts): number {
   if (f.big && f.last) return SHORT_STOP_FINISHER_MS;
-  if (f.bossBig && f.hitIndex === 0) return SHORT_STOP_CRIT_MS;
+  if (f.bossBig && !f.big && f.hitIndex === 0) return SHORT_STOP_CRIT_MS; // a headline move that is also a Special (Mega Flare) stops once, on its last blow, not on its first as well (review fix F4)
   if (f.crit && (f.hitCount <= 1 || f.hitIndex === 0 || f.last)) return SHORT_STOP_CRIT_MS;
   return 0;
 }

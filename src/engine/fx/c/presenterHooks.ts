@@ -177,7 +177,7 @@ export function fxDissolve(ctx: EventCtx, id: CombatantId): void {
 
 /** The victory camera (C9). Returns how long the beat should hold for it (0 without C). */
 export function fxVictory(ctx: EventCtx, kind: 'pose' | 'hold'): number {
-  rumbleWin(ctx);
+  if (kind === 'pose') rumbleWin(ctx); // a 'hold' win (FFX-2 Chapter IV: the girls do not pose after Bahamut, research/ffx-vs-ffx2-presentation.md 2.2) is not celebrated, so no pulse either
   return ctx.speed() === 'normal' ? (port(ctx)?.victory?.(kind) ?? 0) : 0;
 }
 

@@ -6,6 +6,9 @@
  * - option C's 2-frame impact frame was a list that lost one entry per drawn frame (33 ms at 60 Hz, 17 at 120, 14 at 144).
  *
  * The comparison is made at the times the three rates share (k / 12 s: 5k frames at 60, 10k at 120, 12k at 144), where each rate has produced a frame exactly there.
+ *
+ * Review fix F1 (2026-10-22): both are behind `?timing=time` (`FeelSwitch.timingByTime`, on with `?pack=demo`, Chapter I and Chapter IV only). The first two suites run with the switch on in a
+ * demo chapter; the last suite pins that with the switch off (any other chapter, nothing named) both pieces are exactly the live game's: 0.9 radians per drawn frame, one impact level per drawn frame.
  */
 import { PerspectiveCamera, Vector3 } from 'three';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -13,13 +16,20 @@ import { BattleCamera } from '../../src/engine/BattleCamera.ts';
 import { IMPACT_FRAME_S, ImpactFrames } from '../../src/engine/fx/c/SpectacleImpact.ts';
 import { HitStop, Trauma } from '../../src/engine/fx/c/Trauma.ts';
 import { SETTLE_KICK } from '../../src/engine/feel/PunchCurve.ts';
+import { resetFeelForTests, setFeelChapter, setTimingByTime } from '../../src/engine/feel/FeelSwitch.ts';
+import { SHAKE_RAD_PER_FRAME, SHAKE_RAD_PER_S, shakeStepByTime, shakeStepPerFrame } from '../../src/engine/feel/TimeBased.ts';
 
 const RATES = [60, 120, 144] as const;
 
 beforeEach(() => {
   vi.spyOn(Math, 'random').mockReturnValue(0.5);
+  resetFeelForTests('?timing=time');
+  setFeelChapter('seymour-flux'); // a demo chapter with the switch named: time mode
 });
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+  vi.restoreAllMocks();
+  resetFeelForTests();
+});
 
 function rig(): BattleCamera {
   const cam = new PerspectiveCamera(34, 16 / 9, 0.1, 200);
@@ -164,5 +174,80 @@ describe('the impact frame', () => {
     expect(f.step(1 / 60)).toBe(1);
     expect(f.step(1 / 60)).toBe(0);
     expect(f.pending).toBe(0);
+  });
+});
+
+describe('the switch off is the live game (review fix F1)', () => {
+  /** The shake phase after `n` updates of `dt`, `hold` of them with dt 0 first (a hit-stop), read off the private field. */
+  function phaseAfter(n: number, dt: number, hold = 0): number {
+    const bc = rig();
+    for (let i = 0; i < 4; i++) bc.update(1 / 60);
+    bc.shake(0.12, 340);
+    const p0 = (bc as unknown as { shakePhase: number }).shakePhase;
+    for (let i = 0; i < hold; i++) bc.update(0);
+    for (let i = 0; i < n; i++) bc.update(dt);
+    return (bc as unknown as { shakePhase: number }).shakePhase - p0;
+  }
+
+  it('the helpers answer today\'s step with no switch, and the time step with it', () => {
+    resetFeelForTests(); // nothing named, no chapter
+    expect(shakeStepPerFrame()).toBe(SHAKE_RAD_PER_FRAME);
+    expect(shakeStepByTime(1 / 60)).toBe(0);
+    resetFeelForTests('?pack=demo');
+    expect(shakeStepPerFrame()).toBe(SHAKE_RAD_PER_FRAME); // the pack alone is not enough: no chapter yet
+    setFeelChapter('seymour-flux');
+    expect(shakeStepPerFrame()).toBe(0);
+    expect(shakeStepByTime(1 / 60)).toBeCloseTo(SHAKE_RAD_PER_FRAME, 12);
+    expect(SHAKE_RAD_PER_S / 60).toBeCloseTo(SHAKE_RAD_PER_FRAME, 12);
+  });
+
+  it('off, the shake phase advances 0.9 per drawn frame at any rate, and keeps going through a hold (dt 0), as release 61 does', () => {
+    resetFeelForTests();
+    for (const hz of RATES) expect(phaseAfter(10, 1 / hz), `${hz} Hz`).toBeCloseTo(9, 9);
+    expect(phaseAfter(10, 1 / 60, 3)).toBeCloseTo(0.9 * 13, 9); // three held frames still jitter
+  });
+
+  it('on in a demo chapter, it advances 54 rad/s: the same at every rate, still through a hold', () => {
+    for (const hz of RATES) expect(phaseAfter(hz / 6, 1 / hz), `${hz} Hz`).toBeCloseTo(9, 9); // 1/6 s
+    expect(phaseAfter(10, 1 / 60, 3)).toBeCloseTo(9, 9); // three held frames add nothing
+  });
+
+  it('a chapter that is not a demo chapter is today\'s even with the pack and the key named', () => {
+    resetFeelForTests('?pack=demo&timing=time');
+    setFeelChapter('yunalesca');
+    expect(phaseAfter(10, 1 / 144)).toBeCloseTo(9, 9);
+    setFeelChapter('ffx2-vegnagun-shuyin');
+    expect(phaseAfter(10, 1 / 144)).toBeCloseTo(9, 9);
+  });
+
+  it('off, a 144 Hz screen draws each impact level for one drawn frame (7 ms), as release 61 does; 60 Hz is unchanged', () => {
+    resetFeelForTests();
+    for (const [hz, frames] of [[60, 2], [120, 2], [144, 2]] as const) {
+      const f = new ImpactFrames();
+      f.arm([1, 0.5]);
+      const drawn: number[] = [];
+      for (let i = 0; i < 10; i++) {
+        const v = f.step(1 / hz);
+        if (v === 0) break;
+        drawn.push(v);
+      }
+      expect(drawn, `${hz} Hz`).toEqual([1, 0.5]);
+      expect(drawn.length).toBe(frames);
+    }
+    const held = new ImpactFrames();
+    held.arm([1, 0.5]);
+    for (let i = 0; i < 5; i++) expect(held.step(0)).toBe(1); // a capture that stopped the app still holds
+    expect(held.pending).toBe(2);
+  });
+
+  it('the switch is read when an impact frame starts: one already running keeps its mode', () => {
+    resetFeelForTests();
+    const f = new ImpactFrames();
+    f.arm([1, 0.5]); // off
+    setFeelChapter('seymour-flux');
+    setTimingByTime(true);
+    expect(f.step(1 / 144)).toBe(1);
+    expect(f.step(1 / 144)).toBe(0.5); // still one level per drawn frame
+    expect(f.step(1 / 144)).toBe(0);
   });
 });

@@ -44,11 +44,6 @@ export function setMotionBeatSink(fn: MotionBeatSink | null): void {
   sink = fn;
 }
 
-/** Is a sink installed (a test, the debug surface)? */
-export function hasMotionBeatSink(): boolean {
-  return sink !== null;
-}
-
 /** A figure or the presenter reports a beat. Never throws, never waits, does nothing without a sink. */
 export function motionBeat(beat: MotionBeat): void {
   if (sink === null) return;

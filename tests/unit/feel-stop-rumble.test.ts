@@ -11,7 +11,7 @@ import { RUMBLE_MAX_MS, rumbleForHit, rumbleForOpen, rumbleForWin, rumbleLength,
 import { rumbleHit, rumbleOpen, rumbleWin } from '../../src/engine/feel/FeelHooks.ts';
 import { resetFeelForTests, setFeelChapter, setFeelPack } from '../../src/engine/feel/FeelSwitch.ts';
 import { fxActionOpen, fxHit, fxVictory } from '../../src/engine/fx/c/presenterHooks.ts';
-import { playRumble, resetRumbleForTests, rumbleLog, type RumbleDeps } from '../../src/app/gamepadRumble.ts';
+import { playRumble, resetRumbleForTests, rumbleLog, stopRumble, type RumbleDeps } from '../../src/app/gamepadRumble.ts';
 import type { EventCtx } from '../../src/engine/BattlePresenterEvents.ts';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 
@@ -26,6 +26,15 @@ afterEach(() => {
 });
 
 describe('the short hit-stop', () => {
+  it('Mega Flare (a headline move that is also a Special) on three girls stops ONCE, 67 ms on its last blow; Impulse (a headline move, not a Special) stops once, 50 ms on its first (review fix F4)', () => {
+    const stops = (big: boolean, game: 'ffx' | 'ffx2' = 'ffx2'): number[] =>
+      [0, 1, 2].map((i) => planHit(game, hit({ hitIndex: i, hitCount: 3, big, bossBig: true, heavy: true, magic: true }), flags({ feel: SHORT })).freezeMs);
+    expect(stops(true)).toEqual([0, 0, 67]);
+    expect(stops(false)).toEqual([50, 0, 0]);
+    expect(stops(true, 'ffx').filter((ms) => ms > 0)).toHaveLength(1); // FFX Total Annihilation, the same rule
+    expect(shortStopMs({ crit: false, big: true, last: true, bossBig: true, hitIndex: 0, hitCount: 1 })).toBe(67); // a single-target Special still stops, on its one blow
+  });
+
   it('is 3 frames (50 ms) on a crit or a boss headline move and 4 frames (67 ms) on the last blow of an Overdrive or Special, at 60 Hz', () => {
     expect(SHORT_STOP_CRIT_MS).toBe(50);
     expect(SHORT_STOP_FINISHER_MS).toBe(67);
@@ -191,6 +200,13 @@ describe('the rumble hooks (presenter side)', () => {
       expect(sent).toEqual([]);
     });
 
+    it('a HELD win (FFX-2 Chapter IV: the girls do not pose after Bahamut) does not rumble; a posed win does (review fix F2)', () => {
+      expect(fxVictory(ctx(), 'hold')).toBe(0);
+      expect(sent).toEqual([]);
+      expect(fxVictory(ctx(), 'pose')).toBe(0);
+      expect(sent).toHaveLength(1);
+    });
+
     it('the presenter hooks reach it: fxVictory, fxActionOpen and fxHit each ask, and a stub with no port still returns what it did before', async () => {
       const c = ctx();
       expect(fxVictory(c, 'pose')).toBe(0);
@@ -237,7 +253,7 @@ describe('the boss headline flag through the presenter hooks', () => {
 
 describe('the pad-side sink', () => {
   interface Call { type: string; startDelay: number; duration: number; weakMagnitude: number; strongMagnitude: number }
-  function deps(o: { pad?: boolean; actuator?: boolean; padActive?: boolean; reduce?: boolean; now?: () => number; calls?: Call[]; reject?: boolean; throws?: boolean } = {}): RumbleDeps {
+  function deps(o: { pad?: boolean; actuator?: boolean; padActive?: boolean; reduce?: boolean; now?: () => number; calls?: Call[]; reject?: boolean; throws?: boolean; resets?: number[] } = {}): RumbleDeps {
     const calls = o.calls ?? [];
     const actuator = {
       playEffect: (type: string, p: Omit<Call, 'type'>): Promise<unknown> => {
@@ -245,20 +261,96 @@ describe('the pad-side sink', () => {
         calls.push({ type, ...p });
         return o.reject ? Promise.reject(new Error('gone')) : Promise.resolve('complete');
       },
-      reset: (): Promise<unknown> => Promise.resolve(),
+      reset: (): Promise<unknown> => (o.resets?.push(1), Promise.resolve()),
     };
     const pads = o.pad === false ? [null] : [{ connected: true, ...(o.actuator === false ? {} : { vibrationActuator: actuator }) }];
     return { pads: () => pads, padActive: () => o.padActive !== false, reduceMotion: () => o.reduce === true, now: o.now ?? (() => 1000) };
   }
   const pattern: RumblePattern = [{ atMs: 0, ms: 160, weak: 0.3, strong: 0.5 }, { atMs: 200, ms: 100, weak: 1.4, strong: -1 }];
 
-  it('plays dual-rumble on the connected pad with clamped magnitudes', () => {
+  /** A hand-cranked scheduler: run(ms) fires what is due by then, in order. */
+  function clock(): { later: NonNullable<RumbleDeps['later']>; run(ms: number): void; waiting(): number } {
+    const q: Array<{ at: number; fn: () => void; live: boolean }> = [];
+    let t = 0;
+    return {
+      later: (fn, ms) => {
+        const e = { at: t + ms, fn, live: true };
+        q.push(e);
+        return () => {
+          e.live = false;
+        };
+      },
+      run: (ms) => {
+        t += ms;
+        for (const e of q.filter((x) => x.live && x.at <= t).sort((a, b) => a.at - b.at)) {
+          e.live = false;
+          e.fn();
+        }
+      },
+      waiting: () => q.filter((x) => x.live).length,
+    };
+  }
+
+  it('plays dual-rumble on the connected pad with clamped magnitudes: the first segment now, the next when its moment comes (one on the pad at a time)', () => {
     const calls: Call[] = [];
-    expect(playRumble(pattern, deps({ calls }))).toBe('played');
+    const c = clock();
+    expect(playRumble(pattern, { ...deps({ calls }), later: c.later })).toBe('played');
+    expect(calls).toEqual([{ type: 'dual-rumble', startDelay: 0, duration: 160, weakMagnitude: 0.3, strongMagnitude: 0.5 }]); // NOT queued with a delay: that call would preempt this one
+    c.run(199);
+    expect(calls).toHaveLength(1);
+    c.run(1);
     expect(calls).toEqual([
       { type: 'dual-rumble', startDelay: 0, duration: 160, weakMagnitude: 0.3, strongMagnitude: 0.5 },
-      { type: 'dual-rumble', startDelay: 200, duration: 100, weakMagnitude: 1, strongMagnitude: 0 },
+      { type: 'dual-rumble', startDelay: 0, duration: 100, weakMagnitude: 1, strongMagnitude: 0 },
     ]);
+  });
+
+  it('the win is two calls in time order, never two at once (review fix F3: the second used to cut the first)', () => {
+    const calls: Array<Call & { at: number }> = [];
+    const c = clock();
+    let now = 0;
+    const d = deps({ now: () => now });
+    const act = (d.pads() as Array<{ vibrationActuator: { playEffect: (t: string, p: Omit<Call, 'type'>) => Promise<unknown> } }>)[0]!.vibrationActuator;
+    const inner = act.playEffect;
+    act.playEffect = (type, p) => (calls.push({ type, ...p, at: now }), inner(type, p));
+    playRumble(rumbleForWin(), { ...d, later: c.later });
+    expect(calls.map((x) => [x.at, x.startDelay, x.duration])).toEqual([[0, 0, 160]]);
+    now = 240;
+    c.run(240);
+    expect(calls.map((x) => [x.at, x.startDelay, x.duration])).toEqual([[0, 0, 160], [240, 0, 360]]);
+    expect(calls.every((x) => x.startDelay === 0)).toBe(true); // no call carries a delay that would preempt an effect still playing
+  });
+
+  it('stopRumble resets the pad only when a pattern has gone to it (a pause with the rumble off leaves the pad alone)', () => {
+    const resets: number[] = [];
+    const d = deps({ resets, now: () => 1000 });
+    stopRumble(d);
+    expect(resets).toEqual([]);
+    playRumble(pattern, d);
+    stopRumble(d);
+    expect(resets).toEqual([1]);
+    stopRumble(d);
+    expect(resets).toEqual([1]);
+  });
+
+  it('stopRumble cancels the segment that has not been sent and resets the pad; a new pattern cancels the old tail', () => {
+    const calls: Call[] = [];
+    const c = clock();
+    let now = 1000;
+    const d = { ...deps({ calls, now: () => now }), later: c.later };
+    playRumble(pattern, d);
+    expect(c.waiting()).toBe(1);
+    stopRumble(d);
+    expect(c.waiting()).toBe(0);
+    c.run(500);
+    expect(calls).toHaveLength(1); // the second segment never went out
+    now = 5000;
+    playRumble(pattern, d);
+    now = 6000;
+    playRumble([{ atMs: 0, ms: 50, weak: 0.1, strong: 0.1 }], d); // a later pattern preempts: the old tail must not come after it
+    expect(c.waiting()).toBe(0);
+    c.run(500);
+    expect(calls).toHaveLength(3); // one first segment per pattern played: the cancelled and the preempted tails never went out
   });
 
   it('never on keyboard play, whatever is plugged in', () => {

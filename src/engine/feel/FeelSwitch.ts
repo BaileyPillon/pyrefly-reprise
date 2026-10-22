@@ -9,8 +9,9 @@
  * | `?rumble=` | `off` (default), `on` | the gamepad's light rumble on big moments (never on keyboard play, never under REDUCE MOTION) |
  * | `?shadow=` | `today` (default), `follow` | the contact shadow stays under the feet through a lunge, shrinks and fades in the air, spreads on landing |
  * | `?motionsfx=` | `off` (default), `on` | the subtle synced motion sounds: a whoosh on a lunge and on a planned smear, a landing thud, a cloth rustle on a cast (step 2; `feel/MotionSfx.ts`) |
+ * | `?timing=` | `today` (default), `time` | the camera shake and the ink-and-paper impact frame counted in real time (120 Hz and above), not in drawn frames (`feel/TimeBased.ts`; review fix F1) |
  *
- * and the shared **`?pack=demo`**, which turns every piece above ON (`new`, `short`, `on`, `follow`, `on`) in the demo chapters. A key named beside `pack` wins for its piece
+ * and the shared **`?pack=demo`**, which turns every piece above ON (`new`, `short`, `on`, `follow`, `on`, `time`) in the demo chapters. A key named beside `pack` wins for its piece
  * (`?pack=demo&punch=today` is the demo pack with today's camera: the A/B).
  *
  * **Demo chapters only (Bailey: "Demo chapters first").** Chapter I is `seymour-flux` (FFX) and Chapter IV is `ffx2-bahamut` (FFX-2), the ids in `data/encounters.ts`. The battle
@@ -35,11 +36,12 @@ export interface FeelKeys {
   rumble: boolean | null;
   shadow: boolean | null;
   motionsfx: boolean | null;
+  timing: boolean | null;
 }
 
-const NONE: FeelKeys = { pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null };
+const NONE: FeelKeys = { pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null };
 
-/** Read the six keys from a search string (pure; `undefined` = no page). An unknown value is not named. */
+/** Read the seven keys from a search string (pure; `undefined` = no page). An unknown value is not named. */
 export function parseFeelKeys(search: string | undefined): FeelKeys {
   if (search === undefined) return NONE;
   let q: URLSearchParams;
@@ -54,6 +56,7 @@ export function parseFeelKeys(search: string | undefined): FeelKeys {
   const rumble = word('rumble');
   const shadow = word('shadow');
   const motionsfx = word('motionsfx');
+  const timing = word('timing');
   return {
     pack: word('pack') === 'demo',
     punch: punch === 'today' || punch === 'new' || punch === 'off' ? punch : null,
@@ -61,6 +64,7 @@ export function parseFeelKeys(search: string | undefined): FeelKeys {
     rumble: rumble === 'on' ? true : rumble === 'off' ? false : null,
     shadow: shadow === 'follow' ? true : shadow === 'today' ? false : null,
     motionsfx: motionsfx === 'on' ? true : motionsfx === 'off' ? false : null,
+    timing: timing === 'time' ? true : timing === 'today' ? false : null,
   };
 }
 
@@ -123,6 +127,12 @@ export function motionSfxOn(): boolean {
   return forced.motionsfx ?? read().motionsfx ?? feelPack();
 }
 
+/** True when the camera shake and the impact frame run on real time (120 Hz and above) rather than per drawn frame (today's). Off outside the demo chapters. */
+export function timingByTime(): boolean {
+  if (!inFeelChapter()) return false;
+  return forced.timing ?? read().timing ?? feelPack();
+}
+
 /** The modes in one object, for the spectacle's flags (`SpectacleRules.SpectacleFlags.feel`). */
 export function feelFlags(): { punch: PunchMode; stop: StopMode } {
   return { punch: punchMode(), stop: stopMode() };
@@ -150,6 +160,10 @@ export function setShadowFollows(value: boolean | undefined): void {
 export function setMotionSfxOn(value: boolean | undefined): void {
   if (value === undefined) delete forced.motionsfx;
   else forced.motionsfx = value;
+}
+export function setTimingByTime(value: boolean | undefined): void {
+  if (value === undefined) delete forced.timing;
+  else forced.timing = value;
 }
 export function setFeelPack(value: boolean | undefined): void {
   if (value === undefined) delete forced.pack;

@@ -75,6 +75,7 @@ import { visualStyleOf } from '../saveVisualStyle.ts'; // release 61: OPTIONS > 
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { setFeelChapter } from '../../engine/feel/FeelSwitch.ts';
 import { setMotionSfxSpeed } from '../../engine/feel/MotionBeats.ts';
+import { stopRumble } from '../gamepadRumble.ts'; // a pause or leaving the battle ends a pulse still running (`?rumble=on`; a no-op without a pad)
 import { battleComfort } from './battleComfort.ts';
 import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
@@ -586,7 +587,10 @@ export class BattleScreen extends Screen {
 
   private setPresenterPaused(paused: boolean): void {
     this.presenterPaused = paused;
-    if (paused) return;
+    if (paused) {
+      stopRumble();
+      return;
+    }
     const waiters = this.pauseWaiters;
     this.pauseWaiters = [];
     for (const resolve of waiters) resolve();
@@ -1031,6 +1035,7 @@ export class BattleScreen extends Screen {
     this.spectacle = null;
     setFeelChapter(null);
     setMotionSfxSpeed(null);
+    stopRumble();
     this.stage?.dispose();
     this.stage = null;
     releaseLivingScene();
