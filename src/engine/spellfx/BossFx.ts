@@ -73,6 +73,9 @@ export const BOSS_FX_TABLE: Readonly<Record<'ffx' | 'ffx2', Table>> = Object.fre
   }),
 });
 
+/** Which piece of step 3 an effect belongs to (`FxSwitch.fxPieceOn`): the charge, the aura and the dress change are the openings, every other new id is a boss's, Jump's or Darkness's. */
+export const pieceOfFx = (fx: string): 'openings' | 'bosses' => (fx === 'gather' || fx === 'odaura' || fx === 'dress' ? 'openings' : 'bosses');
+
 /** The new-only effect this ability draws in this game, or null (then the ordinary lookup decides). */
 export function bossFxFor(abilityId: string | undefined, game: FxGame): BossFxId | BuffFxId | null {
   if (!abilityId || (game !== 'ffx' && game !== 'ffx2')) return null;

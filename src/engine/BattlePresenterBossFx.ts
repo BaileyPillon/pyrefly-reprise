@@ -3,7 +3,7 @@
  * presenter's handlers call, each a no-op unless the new effects are on in a demo chapter.
  *
  * - {@link statusFxLanding}: a move that deals no damage (Haste, Shell, Protect, Reflect, Dispel, Banish, Slowga, Curse) emits no `damage` event, so the spell layer was never asked to draw it
- *   (`battle/ffx/hit-apply.ts`: a `formula: 'none'` row emits none). Its status events start the effect and wait for its mark, no longer than the 900 ms cap every spell keeps. **This also makes step
+ *   (`battle/ffx/hit-apply.ts`: a `formula: 'none'` row emits none). Its status events start the effect and wait 250 ms for it to be seen starting (there is no numeral to hold). **This also makes step
  *   2's five buffs reachable in a real fight; until now only the debug trigger drew them.**
  * - {@link curseDim}: Bahamut's Curse "darkens the cursed character's model" (`research/ffx2-bahamut.md` line 292, interpretive): the girl is drawn at 0.78 brightness until the status ends.
  * - {@link chargeFx}: a boss's `charge` event draws the gather (FFX-2's Bahamut counts 5, 4, 3, 2 before Mega Flare; FFX's Mortiorchis climbs the Total Annihilation ladder).
@@ -18,9 +18,14 @@ import type { EventCtx } from './BattlePresenterEvents.ts';
 import { actionOfBlow, type ActingAction } from './BattlePresenterSpellFx.ts';
 import { OD_AURA_OF, PSEUDO_FX } from './spellfx/BossFx.ts';
 import { fxBeat } from './spellfx/FxMotionAdapter.ts';
-import { fxNewOn } from './spellfx/FxSwitch.ts';
+import { fxNewOn, fxPieceOn } from './spellfx/FxSwitch.ts';
 import { ODAURA_BUILD } from './spellfx/effects-painted-od.ts';
-import { SPELL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
+
+/**
+ * How long a status event waits for its effect: a move with no damage has no numeral to hold, so the wait is only to let the effect be seen starting; the effect goes on drawing while the presenter moves
+ * on. 250 ms [ours] (the marks are 0.35 to 0.55 s: waiting for them cost every Haste about 0.45 s).
+ */
+export const STATUS_WAIT_MS = 250;
 
 /** How far a curse dims a girl (brightness, 1 = none). */
 export const CURSE_BRIGHTNESS = 0.78;
@@ -43,17 +48,17 @@ const BIG_BLOWS: Readonly<Record<string, 'first' | 'last'>> = Object.freeze({
 });
 
 /**
- * A status event of the action on screen: start its effect (if it is one no damage event starts) and wait for its mark. `sourceId` is the event's own when the engine names it (FFX-2),
+ * A status event of the action on screen: start its effect (if it is one no damage event starts) and wait for it to be seen starting (`STATUS_WAIT_MS`, no longer than its mark). `sourceId` is the event's own when the engine names it (FFX-2),
  * else the action on screen is used (FFX).
  */
 export async function statusFxLanding(ctx: EventCtx, targetId: CombatantId, sourceId?: CombatantId): Promise<void> {
-  if (!fxNewOn()) return;
+  if (!fxPieceOn('status')) return;
   const vfx = ctx.stage.vfx;
   if (!vfx.land) return;
   const a = actionOfBlow(ctx, sourceId);
   if (!a?.abilityId) return;
   const ms = vfx.land(targetId, { abilityId: a.abilityId, hitIndex: 0, targets: a.targets, action: a.serial, sourceId: a.actorId, status: true });
-  if (ms > 0) await ctx.sleep(Math.min(ms, SPELL_HOLD_CAP_MS));
+  if (ms > 0) await ctx.sleep(Math.min(ms, STATUS_WAIT_MS));
 }
 
 /**
@@ -75,7 +80,7 @@ export function bigBlow(ctx: EventCtx, event: Extract<BattleEvent, { type: 'dama
 
 /** Curse darkens the cursed girl (Bahamut's Curse only: the ability is named `...bahamut-curse`); it ends with the status. */
 export function curseDim(ctx: EventCtx, status: string, targetId: CombatantId, on: boolean): void {
-  if (!fxNewOn() || status !== 'curse' || ctx.stage.sideOf(targetId) !== 'party') return;
+  if (!fxPieceOn('bosses') || status !== 'curse' || ctx.stage.sideOf(targetId) !== 'party') return;
   if (on && !/bahamut-curse$/.test(ctx.acting?.abilityId ?? '')) return;
   ctx.stage.actor(targetId)?.setBrightness(on ? CURSE_BRIGHTNESS : 1);
 }
@@ -87,7 +92,7 @@ export function chargeLevel(event: Extract<BattleEvent, { type: 'charge' }>): nu
 }
 
 export function chargeFx(ctx: EventCtx, event: Extract<BattleEvent, { type: 'charge' }>): void {
-  if (!fxNewOn()) return;
+  if (!fxPieceOn('openings')) return;
   const level = chargeLevel(event);
   ctx.stage.vfx.land?.(event.enemyId, { abilityId: PSEUDO_FX.gather, hitIndex: 0, level, deco: true });
   if (event.turnsLeft <= 0) fxBeat('boss-charge', event.enemyId, { calm: calmFor(ctx) });
@@ -98,7 +103,7 @@ export function chargeFx(ctx: EventCtx, event: Extract<BattleEvent, { type: 'cha
  * and ring, `effects-painted-od.ts`), the other lanes' wind-up hooks are told (`FxMotionAdapter`), and a calm beat follows before the strike. With them off it is just `open()`.
  */
 export async function odOpening(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>, open: () => Promise<void>): Promise<void> {
-  if (!fxNewOn()) return open();
+  if (!fxPieceOn('openings')) return open();
   const id = event.actorId;
   ctx.stage.vfx.land?.(id, { abilityId: PSEUDO_FX.odaura, hitIndex: 0, variant: OD_AURA_OF[id] ?? '', deco: true });
   if (ctx.acting) odSerial.set(ctx, ctx.acting.serial);
@@ -109,6 +114,6 @@ export async function odOpening(ctx: EventCtx, event: Extract<BattleEvent, { typ
 
 /** A girl changes dress: the painted burst under the HUD's own flourish (Chapter IV only; the layer draws nothing for it in Chapter I). */
 export function dressFx(ctx: EventCtx, who: CombatantId): void {
-  if (!fxNewOn()) return;
+  if (!fxPieceOn('openings')) return;
   ctx.stage.vfx.land?.(who, { abilityId: PSEUDO_FX.dress, hitIndex: 0, variant: who, deco: true });
 }

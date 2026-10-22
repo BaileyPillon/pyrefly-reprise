@@ -5,7 +5,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
-import { chargeLevel, CURSE_BRIGHTNESS, OD_CALM_MS } from '../../src/engine/BattlePresenterBossFx.ts';
+import { chargeLevel, CURSE_BRIGHTNESS, OD_CALM_MS, STATUS_WAIT_MS } from '../../src/engine/BattlePresenterBossFx.ts';
 import { lightKindOf, PSEUDO_FX } from '../../src/engine/spellfx/BossFx.ts';
 import { landListeners } from '../../src/engine/fx/spellTaps.ts';
 import { setFxMotionHooks } from '../../src/engine/spellfx/FxMotionAdapter.ts';
@@ -92,15 +92,20 @@ describe('the presenter: off, nothing new is asked of the stage', () => {
 describe('the presenter with the new effects on', () => {
   it('a status event lands the move\'s effect and waits for its mark, no longer than the cap', async () => {
     demo('seymour-flux');
-    const { lands, sleeps, play } = setup(450);
+    const { lands, sleeps, play } = setup(200);
     await play(hasteCast);
     expect(lands).toHaveLength(1);
     expect(lands[0]).toMatchObject({ at: 'tidus', o: { abilityId: 'haste', status: true, hitIndex: 0, targets: ['tidus'] } });
-    expect(sleeps).toContain(450);
+    expect(sleeps).toContain(200); // the mark is soon: wait for it
+    const long = setup(450);
+    await long.play(hasteCast);
+    expect(long.sleeps).toContain(STATUS_WAIT_MS); // there is no numeral to hold: wait only to see it start
+    expect(long.sleeps).not.toContain(450);
     const capped = setup(5000);
     await capped.play(hasteCast);
-    expect(capped.sleeps).toContain(SPELL_HOLD_CAP_MS);
+    expect(capped.sleeps).toContain(STATUS_WAIT_MS);
     expect(capped.sleeps).not.toContain(5000);
+    expect(STATUS_WAIT_MS).toBeLessThanOrEqual(SPELL_HOLD_CAP_MS);
   });
 
   it('a Dispel (status removed, reason dispelled) lands its effect; an expiry does not', async () => {

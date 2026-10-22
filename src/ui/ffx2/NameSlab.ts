@@ -12,7 +12,7 @@
  */
 import './name-slab.css';
 import type { BattleEvent, CombatantId } from '../../battle/common/types.ts';
-import { fxNewOn } from '../../engine/spellfx/FxSwitch.ts';
+import { fxPieceOn } from '../../engine/spellfx/FxSwitch.ts';
 
 export const MIN_HOLD_MS = 1400;
 export const MAX_HOLD_MS = 3200;
@@ -53,7 +53,7 @@ export class AbilityNameSlab {
 
   /** An `action-start` event: raise a slab over the girl when the command is one that gets it. */
   start(event: Extract<BattleEvent, { type: 'action-start' }>): void {
-    if (!fxNewOn() || !event.abilityName || !SLAB_COMMANDS.has(event.command.kind)) return;
+    if (!fxPieceOn('slab') || !event.abilityName || !SLAB_COMMANDS.has(event.command.kind)) return;
     const overlay = this.deps.overlay();
     if (!overlay) return;
     for (const s of this.live) if (s.who === event.actorId) s.endedAt = s.age; // a new move of the same girl retires her last slab

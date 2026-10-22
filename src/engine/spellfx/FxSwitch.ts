@@ -75,3 +75,49 @@ export function inFxDemoChapter(id: string | undefined): boolean {
 export function fxNewOn(): boolean {
   return fxMode() === 'new' && inFxDemoChapter(chapter);
 }
+
+/**
+ * THE PIECES OF STEP 3, one by one (Bailey picks on Thursday which stay; the default of an approved piece is flipped on Friday): with the new effects on, each piece is on unless the address names it in
+ * `?fxoff=` (a comma list: `?pack=demo&fxoff=banner,slab`). Step 2's effects (Cure, the hit sparks, Fire, Blizzard, Thunder, the item toss) are one set and have no key here.
+ *
+ * - `bosses`: the bosses' attacks and Jump and Darkness (`spellfx/BossFx.ts`), Curse's darkening of the girl.
+ * - `openings`: the charge (a boss's gather), the Overdrive's ready aura and its calm beat, the dress change's burst.
+ * - `banner`: the retail Overdrive banner at the top, with no letterbox (FFX).
+ * - `slab`: the ability's name over the acting girl's head (FFX-2).
+ * - `status`: a move with no damage event starts its effect from its status event (the five buffs of step 2, Banish, Slowga, Curse).
+ */
+export type FxPiece = 'bosses' | 'openings' | 'banner' | 'slab' | 'status';
+export const FX_PIECES: readonly FxPiece[] = ['bosses', 'openings', 'banner', 'slab', 'status'];
+
+let off: Set<FxPiece> | null = null;
+
+/** The pieces `?fxoff=` names, from a search string (pure; unknown words are ignored). */
+export function fxOffFromSearch(search: string | undefined): FxPiece[] {
+  if (search === undefined) return [];
+  try {
+    const words = (new URLSearchParams(search).get('fxoff') ?? '').toLowerCase().split(',').map((w) => w.trim());
+    return FX_PIECES.filter((p) => words.includes(p));
+  } catch {
+    return [];
+  }
+}
+
+function offSet(): Set<FxPiece> {
+  if (off === null) off = new Set(fxOffFromSearch(globalThis.location === undefined ? undefined : (globalThis.location.search ?? '')));
+  return off;
+}
+
+/** Tests and `window.__pyrefly.fxPiece(...)`: turn one piece off or on for what starts from now on (`null` reads the address again). */
+export function setFxPiece(piece: FxPiece | null, on = true): void {
+  if (piece === null) {
+    off = null;
+    return;
+  }
+  if (on) offSet().delete(piece);
+  else offSet().add(piece);
+}
+
+/** Does this piece play now: the new effects are on in a demo chapter and the address did not turn the piece off. */
+export function fxPieceOn(piece: FxPiece): boolean {
+  return fxNewOn() && !offSet().has(piece);
+}

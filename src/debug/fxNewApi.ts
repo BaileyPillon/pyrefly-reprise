@@ -11,7 +11,7 @@
  * battle events through the running battle's real presenter (the sequence numbers are filled in) and resolves when they have played: the capture's way to show a boss move or an Overdrive in the
  * real presentation without waiting for the AI to choose it. Neither changes a battle's state or the engine.
  */
-import { fxChapter, fxMode, fxNewOn, setFxChapter, setFxMode, type FxMode } from '../engine/spellfx/FxSwitch.ts';
+import { FX_PIECES, fxChapter, fxMode, fxNewOn, fxPieceOn, setFxChapter, setFxMode, setFxPiece, type FxMode, type FxPiece } from '../engine/spellfx/FxSwitch.ts';
 import { FxPerfGuard } from '../engine/spellfx/FxPerfGuard.ts';
 import { setFxMotionHooks } from '../engine/spellfx/FxMotionAdapter.ts';
 
@@ -26,6 +26,11 @@ export function installFxNewDebug(api: Record<string, unknown>): void {
   api['fxNewChapter'] = (id?: string): string | undefined => {
     if (typeof id === 'string') setFxChapter(id);
     return fxChapter();
+  };
+  api['fxPiece'] = (piece: FxPiece, on?: boolean): boolean => {
+    if (!FX_PIECES.includes(piece)) return false;
+    if (typeof on === 'boolean') setFxPiece(piece, on);
+    return fxPieceOn(piece);
   };
   api['fxHooksProbe'] = (on = true): unknown[] => {
     const log: unknown[] = [];

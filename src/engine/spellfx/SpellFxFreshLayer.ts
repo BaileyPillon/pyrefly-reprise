@@ -7,9 +7,9 @@
  */
 
 import type { FxDrawList } from './FxDrawList.ts';
-import { bossFxFor } from './BossFx.ts';
+import { bossFxFor, pieceOfFx } from './BossFx.ts';
 import { FxPerfGuard, fxShare } from './FxPerfGuard.ts';
-import { fxNewOn } from './FxSwitch.ts';
+import { fxNewOn, fxPieceOn } from './FxSwitch.ts';
 import type { LandOpts } from './LandOpts.ts';
 import { resolveAbilityFx } from './SpellFxLookup.ts';
 import { FRESH_ONLY_FX, type FxGame, type SpellFxId } from './SpellFxRegistry.ts';
@@ -22,12 +22,19 @@ export function shownFx(fx: SpellFxId): SpellFxId {
   return FRESH_ONLY_FX.has(fx) && !fxNewOn() ? 'bloom' : fx;
 }
 
+/** The new set's effect for this ability when the new effects are on and the effect's piece is not turned off (`FxSwitch.fxPieceOn`), else null. */
+function gatedBossFx(abilityId: string | undefined, game: FxGame): ReturnType<typeof bossFxFor> {
+  if (!fxNewOn()) return null;
+  const fx = bossFxFor(abilityId, game);
+  return fx !== null && fxPieceOn(pieceOfFx(fx)) ? fx : null;
+}
+
 /**
  * The effect a landing draws: the new set's table first (the bosses' attacks, the charge, the openings; `BossFx.ts`) when the new effects are on in a demo chapter, else the ordinary lookup
  * exactly as it always was. `low` quality is the caller's (it draws the bloom).
  */
 export function resolveFx(o: LandOpts, game: FxGame): SpellFxId {
-  const fresh = fxNewOn() ? bossFxFor(o.abilityId, game) : null;
+  const fresh = gatedBossFx(o.abilityId, game);
   return shownFx(fresh ?? resolveAbilityFx(o.abilityId, game, o.element, o.heal === true, o.sourceId));
 }
 
@@ -36,7 +43,7 @@ export function resolveFx(o: LandOpts, game: FxGame): SpellFxId {
  * own approach (the lance, the wavefront, the streams), and a second shot on top of them would double it.
  */
 export function canTravelFx(abilityId: string | undefined, game: FxGame, from: string): boolean {
-  if (fxNewOn() && bossFxFor(abilityId, game) !== null) return false;
+  if (gatedBossFx(abilityId, game) !== null) return false;
   const fx = resolveAbilityFx(abilityId, game, undefined, false, from);
   return fx !== 'spiral' && fx !== 'megaflare';
 }
