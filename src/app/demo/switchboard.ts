@@ -11,7 +11,9 @@
  * | `4` | gamepad rumble | on, off |
  * | `5` | motion sounds | on, off |
  * | `6` | spell effects and the bosses' attacks (fx) | new, today |
- * | `7` | the curves (strike, cast lift, recoil, squash) | new, today |
+ * | `7` | the curves (strike, cast lift, recoil, squash) | new, today (in a real mode, key `,`, it reads real-snappy or real; this key then goes back to today) |
+ * | `,` | the curves driven by the REAL game's clips (integration 2) | off, snappy (the real proportions at the 1.1 s pick), real speed |
+ * | `.` | the two party rig pilots: Tidus in Chapter I, Rikku's Dark Knight in Chapter IV (integration 2; read when a fight starts) | on, off |
  * | `8` | Tidus T1 / T2 (the art; reloads the page, so press it between fights) | t1, t2 |
  * | `9` | the per-game moments (victory, knock-out) | new, today |
  * | `-` | the contact shadow | follow, today |
@@ -24,6 +26,7 @@
  */
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { demoChapter, isDemoChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
+import { partyRigsMode } from '../../engine/motion/PartyRigsSwitch.ts';
 import { HIDE_CODE, MASTER_CODE, TIDUS_CODE, SWITCHES, boardState, flipAll, normaliseCode, switchOfCode } from './switchboardModel.ts';
 
 /** The switchboard is wanted: `?pack=demo&switchboard=1`. */
@@ -81,13 +84,19 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     return artVariant.toUpperCase();
   };
 
+  let rigsAtFight: string | null = null; // what the party rigs said when this fight's figures were built: a flip since then plays in the NEXT fight (the stage asks once per figure)
+
   const render = (): void => {
     const live = isDemoChapter(demoChapter());
-    const parts = boardState().map((s) => {
+    if (!live) rigsAtFight = null;
+    else if (rigsAtFight === null) rigsAtFight = partyRigsMode();
+    const state = boardState();
+    const parts = state.map((s) => {
       const cls = [s.isNew ? 'sb-new' : '', flashed === s.name ? 'sb-hit' : ''].filter(Boolean).join(' ');
-      return `<span class="${cls}"><b>${s.key}</b> ${s.name} ${s.value}</span>`;
+      const later = s.name === 'party rigs' && live && rigsAtFight !== null && rigsAtFight !== s.value ? ' (next fight)' : '';
+      return `<span class="${cls}"><b>${s.key}</b> ${s.name} ${s.value}${later}</span>`;
     });
-    parts.splice(7, 0, `<span class="${flashed === 'Tidus' ? 'sb-hit' : ''}"><b>8</b> Tidus ${tidus()}</span>`);
+    parts.splice(Math.max(0, state.findIndex((s) => s.key === '9')), 0, `<span class="${flashed === 'Tidus' ? 'sb-hit' : ''}"><b>8</b> Tidus ${tidus()}</span>`);
     el.innerHTML =
       `${parts.join(' <i>|</i> ')} <i>|</i> <span><b>0</b> all</span> <i>|</i> <span><b>=</b> hide</span>` +
       `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}</span>`;

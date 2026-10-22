@@ -6,11 +6,14 @@ import type { LeapOptions } from './CurveDriver.ts';
 import type { CurveGame } from './CurvesSwitch.ts';
 import { heftOf } from './ActorCurves.ts';
 import { cheerShape, koSettleShape, standDownShape } from './MomentsPlan.ts';
+import { realCheerShape } from './RealMoments.ts';
 import { defaultPaceFactor } from './StrikeCurve.ts';
 
 /** What the helpers need of the actor: its height and the leap channel of its curve driver. */
 export interface MomentsHost {
   readonly worldHeight: number;
+  /** The combatant's id (its real-motion key under `?curves=real`, `RealMoments.ts`); absent: the house cheer. */
+  readonly name?: string;
   leap(height: number, ms: number, options?: LeapOptions): Promise<void>;
 }
 
@@ -19,7 +22,7 @@ export interface MomentsHost {
  * change of painting a cut on a moving figure. The profile's milliseconds are ON SCREEN at the game's default pace (the actor's clock counts paced ms), like the strike's.
  */
 export function startCheer(host: MomentsHost, game: CurveGame, swap: (() => void) | null): Promise<void> {
-  const s = cheerShape(game);
+  const s = (host.name ? realCheerShape(game, host.name) : undefined) ?? cheerShape(game); // `?curves=real`: the real victory clip's crouch and spring
   return host.leap(host.worldHeight * s.height, s.ms / defaultPaceFactor(game), { ...s.options, ...(swap ? { marks: [{ u: s.swapU, fn: swap }] } : {}) });
 }
 

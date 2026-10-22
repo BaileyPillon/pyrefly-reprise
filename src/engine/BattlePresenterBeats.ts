@@ -19,6 +19,7 @@ import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
 import { standDownParty } from './motion/MomentBeats.ts'; // motion pass (lane "core", step 3): the victory moment each chapter's sources allow (a cheer, or a quiet stand-down where the pose is withheld)
 import { liftCaster, releaseCastLift, startAttackMove } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the sampled strike, the cast lift; today's lunge unless switched on (`motion/CurvesSwitch.ts`)
+import { realRecoilMs } from './motion/RealBeats.ts'; // `?curves=real`: the real game's hit reaction length
 import { blowPose, idleAtEnd, impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
@@ -82,7 +83,7 @@ export async function actionStart(
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
     if (!motion?.ownsWindUp?.(event)) {
       const plan = lungePlan(ctx, event, motion, blowPose(windUp), burst);
-      startAttackMove(ctx, actor, plan, contact(), motion?.lungeFor?.(event.actorId) !== undefined); // today: lunge + squash(260, 0.45) (FF7: its painted keys); with the new curves: the sampled strike
+      startAttackMove(ctx, actor, plan, contact(), motion?.lungeFor?.(event.actorId) !== undefined, event.actorId); // today: lunge + squash(260, 0.45) (FF7: its painted keys); with the new curves: the sampled strike
     }
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
@@ -169,7 +170,7 @@ export async function damage(
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });
   if (flashes) blowFlash(target, event, ctx.moments?.reducedFlashes === true); // `?motion=demo`: 0.08 s white; else warm 200 ms, white 260 ms on a crit (`motion/DemoHitBeat.ts`)
   target?.shake(event.crit ? 0.16 : 0.1, 340);
-  void target?.recoil(360, event.crit ? 0.34 : 0.22);
+  void target?.recoil(realRecoilMs(ctx, event.targetId, 360), event.crit ? 0.34 : 0.22); // `?curves=real`: the real hit reaction's length
   if (megaFlareBlow(actionOfBlow(ctx, event.sourceId)?.abilityId, ctx.deps.game)) ctx.stage.camera.shake(MEGA_FLARE_SHAKE.amplitude, MEGA_FLARE_SHAKE.ms); // release 62 (173b, FFX-2 only): Mega Flare lands harder
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });
 

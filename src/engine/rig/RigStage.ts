@@ -8,6 +8,7 @@ import { characterUrl, isDresspherePainting } from '../BattlePresenterArt.ts';
 import { paintedPoses } from '../EnemyActionPose.ts';
 import type { RigActor, RigAsset } from './RigActor.ts';
 import { chooseRig, noteRigFailure, registerRigUse, rigSwitch, type ChooseContext } from './RigLoad.ts';
+import { partyRigAllowed } from '../motion/PartyRigsSwitch.ts';
 
 export interface FigureRequest {
   /** The combatant id (for the registry). */
@@ -42,8 +43,8 @@ export interface BuiltFigure {
  * before the figure exists, never after (the entrance census counts the ticks between a built figure and the presenter's first fade of it, `tests/unit/entrance-census.test.ts`).
  */
 export async function tryRigFigure(r: FigureRequest): Promise<BuiltFigure | null> {
-  // a figure-less part (Vegnagun's rings) has no painting to replace
-  if (r.opts.figure !== false) {
+  // a figure-less part (Vegnagun's rings) has no painting to replace; the two party pilots (Tidus, Rikku's Dark Knight) draw as a rig only behind `?partyrigs=on`, in their own chapter (`motion/PartyRigsSwitch.ts`)
+  if (r.opts.figure !== false && partyRigAllowed(r.artId)) {
     const choice = await chooseRig(r.artId, r.poses['idle'], rigSwitch(r.setting, r.search), isDresspherePainting(r.artId), r.listed, { painted: [...paintedPoses(r.artId, r.poses, characterUrl)], ...r.choose });
     if (choice.asset) {
       try {

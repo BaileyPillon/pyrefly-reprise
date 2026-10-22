@@ -26,8 +26,9 @@ export const STRIKE_BEAT_MS = Math.round(LUNGE_MS * ATTACK_IMPACT);
  * lead stays on the blow. `heft` (0 for a party-sized figure up to 1 for a default-size foe; `ActorHandle.strikeHeft`): a heavy body's wind-up and travel run longer (`heftFactors`), so a
  * boss's blow lands later than the party's and its sound must be asked for later too (review MAJOR-2: Seymour Flux's swing led his blow by 116 ms).
  */
-export function strikeBeatNow(heft = 0): number {
+export function strikeBeatNow(heft = 0, realContactMs?: number): number {
   if (!curvesOn()) return STRIKE_BEAT_MS;
+  if (realContactMs !== undefined) return realContactMs; // `?curves=real` / `real-snappy` (`motion/RealBeats.realContactMsOf`): the real clip's contact frame, with the table's own times (no heft stretch on a real boss)
   const p = PROFILES[curvesGame()];
   return Math.round(((p.windupMs + p.travelMs) * heftFactors(heft).time) / defaultPaceFactor(p.game));
 }

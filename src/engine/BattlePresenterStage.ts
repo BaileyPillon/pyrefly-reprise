@@ -469,6 +469,11 @@ export class PaintedStage implements BattleStage {
     return this.actors.get(id)?.side;
   }
 
+  /** The art id the combatant is drawn with (`BattleStage.artOf`; the real-motion table is keyed by it). */
+  artOf(id: CombatantId): string | undefined {
+    return this.actors.get(id)?.artId;
+  }
+
   /** Its own painting for `pose`, not a fallback or a stand-in. See `BattleStage.paints`. */
   paints(id: CombatantId, pose: string): boolean {
     const staged = this.actors.get(id);

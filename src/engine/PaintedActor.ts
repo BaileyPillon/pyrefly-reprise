@@ -72,6 +72,7 @@ import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane 
 import type { StrikePlan } from './motion/StrikePlan.ts';
 import { momentsGame, momentsOn } from './motion/MomentsSwitch.ts'; // motion pass (lane "core", step 3): the per-game moments (victory, KO settle); default OFF
 import { startCheer, startKoSettle, startStandDown, type MomentsHost } from './motion/ActorMoments.ts';
+import { realFallMs } from './motion/RealMoments.ts'; // `?curves=real` / `real-snappy`: the real clips' knock-out and victory timing
 import { koCutMs } from './motion/MomentsPlan.ts';
 import { smearOn } from './motion/SmearSwitch.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
@@ -1172,7 +1173,7 @@ export class PaintedActor extends Group {
 
   /** What the moments' helpers (`motion/ActorMoments.ts`) need of this actor. */
   private momentsHost(): MomentsHost {
-    return { worldHeight: this.worldHeight, leap: (h, ms, o) => this.leap(h, ms, o) };
+    return { worldHeight: this.worldHeight, name: this.name, leap: (h, ms, o) => this.leap(h, ms, o) };
   }
 
   /** The cheer's spring is at its fastest: make the pose request the cheer held back (it is a cut inside a smear when the smear is on, else the usual blend). */
@@ -1983,7 +1984,7 @@ export class PaintedActor extends Group {
   /** Tip over and hit the ground: the KO. */
   private fall(): void {
     this.tweens.to(0, 1, {
-      durationMs: FALL_MS,
+      durationMs: realFallMs(this.name) ?? FALL_MS, // `?curves=real` / `real-snappy` (integration 2): the body reaches the floor when the real clip's does (Tidus 1.0 s), else today's 300 ms
       easing: 'quadIn',
       onUpdate: (v) => {
         this.fallTilt = v;

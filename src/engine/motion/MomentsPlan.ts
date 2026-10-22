@@ -44,10 +44,10 @@ export interface CheerShape {
   options: LeapOptions;
 }
 
-const CHEER_OPTIONS: LeapOptions = { anticipation: 0.18, crouch: 0.04, stretch: 0.05, land: 0.04, landMs: 200, apex: 0.42 };
+export const CHEER_OPTIONS: LeapOptions = { anticipation: 0.18, crouch: 0.04, stretch: 0.05, land: 0.04, landMs: 200, apex: 0.42 };
 
 /** Where the swap falls inside the cheer: the crouch, then a tenth of the flight (the rise of `skewBell` is steepest at the take-off). */
-const swapAt = (o: LeapOptions): number => (o.anticipation ?? 0.12) + 0.1 * (1 - (o.anticipation ?? 0.12));
+export const swapAt = (o: LeapOptions): number => (o.anticipation ?? 0.12) + 0.1 * (1 - (o.anticipation ?? 0.12));
 
 /**
  * The FFX cheer. One shape for both games: the sources give no cheer shape for either, and FFX-2's poses depend on the dressphere (the painting carries that); `game` is accepted so a per-game

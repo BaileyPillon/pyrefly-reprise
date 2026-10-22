@@ -20,6 +20,7 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { followThrough } from './KeyPoses.ts';
 import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
+import { realContactMsOf } from './motion/RealBeats.ts'; // `?curves=real`: a real strike's contact is later than the house one (up to 1.5 s for a boss), so the waits below grow with it
 
 /** What a lunge is handed: hold at the apex until `hold` settles; call `reached` at the apex. */
 export interface LungeContact {
@@ -42,6 +43,8 @@ export const CONTACT_HOLD_MAX_MS = 700;
 export const CURVES_CONTACT_EXTRA_MS = 150;
 /** The longest a hit waits for the attacker to reach the apex, ms at timeScale 1. */
 export const CONTACT_WAIT_MAX_MS = 400;
+/** A real strike's hit waits for its contact plus this much (the real contact is 0.4 to 1.5 s; `?curves=real`). */
+export const CONTACT_REAL_SLACK_MS = 150;
 
 interface Pending {
   attacker: CombatantId;
@@ -60,7 +63,9 @@ export function armContact(ctx: EventCtx, attacker: CombatantId): LungeContact {
   const reached = new Promise<void>((r) => (reach = r));
   pending.set(ctx, { attacker, reached, release });
   // The new strike reaches its contact later (wind-up and travel are 0.4 s, not 0.255 s): the cap counts from the lunge's start, so it is lengthened by the same difference.
-  return { hold: Promise.race([held, ctx.sleep(CONTACT_HOLD_MAX_MS + (curvesOn() ? CURVES_CONTACT_EXTRA_MS : 0))]), reached: reach };
+  const real = realContactMsOf(ctx, attacker); // undefined unless a real mode is on and the table has the attacker
+  const cap = real === undefined ? CONTACT_HOLD_MAX_MS + (curvesOn() ? CURVES_CONTACT_EXTRA_MS : 0) : Math.max(CONTACT_HOLD_MAX_MS + CURVES_CONTACT_EXTRA_MS, real + CONTACT_HOLD_MAX_MS);
+  return { hold: Promise.race([held, ctx.sleep(cap)]), reached: reach };
 }
 
 /**
@@ -70,7 +75,8 @@ export function armContact(ctx: EventCtx, attacker: CombatantId): LungeContact {
 export async function meetContact(ctx: EventCtx, targetId: CombatantId): Promise<void> {
   const p = pending.get(ctx);
   if (!p || p.attacker === targetId) return;
-  await Promise.race([p.reached, ctx.sleep(CONTACT_WAIT_MAX_MS)]);
+  const real = realContactMsOf(ctx, p.attacker);
+  await Promise.race([p.reached, ctx.sleep(real === undefined ? CONTACT_WAIT_MAX_MS : Math.max(CONTACT_WAIT_MAX_MS, real + CONTACT_REAL_SLACK_MS))]);
   if (pending.get(ctx) !== p) return;
   // D-313: a painted follow-through goes up as the blow lands and holds at full reach for a beat.
   pending.delete(ctx);
