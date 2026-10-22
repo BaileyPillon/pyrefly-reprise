@@ -360,6 +360,20 @@ describe('victory: FFX-2 Chapter IV stands down (the sources withhold the pose)'
     expect(maxX).toBeLessThan(1.03);
   });
 
+  it('a fallen figure stays where it lies: standDown does nothing to a body that is down', () => {
+    setPaceGame('ffx2');
+    setCurvesChapter('ffx2-bahamut');
+    setMomentsMode('new');
+    const a = tidus('rikku');
+    a.setPose('ko');
+    run(a, 800, FRAME120);
+    const before = inner(a).scale.y;
+    a.standDown();
+    let moved = 0;
+    run(a, 1400, FRAME120, () => (moved = Math.max(moved, Math.abs(inner(a).scale.y - before))));
+    expect(moved).toBeLessThan(0.002);
+  });
+
   it('the presenter beat stands every party figure down, and only when the moments are on', () => {
     const made: string[] = [];
     const actor = (id: string): { standDown: () => void } => ({ standDown: () => void made.push(id) });

@@ -1186,6 +1186,7 @@ export class PaintedActor extends Group {
 
   /** Motion pass, step 3: a chapter whose sources withhold the victory pose (FFX-2 Chapter IV) keeps the stance and stands down: one slow breath out, no leap, no swap. */
   standDown(): void {
+    if (this.life?.state === 'down') return; // the fallen stay where they lie
     this.after(this.beatOffset * 240, () => void startStandDown(this.momentsHost(), momentsGame()));
   }
 
