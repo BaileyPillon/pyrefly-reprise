@@ -32,6 +32,7 @@ import { STANDARD_DRESSPHERES } from '../../data/ffx2/dresspheres/index.ts';
 import type { ActionMotionPort, ActionStartEvent, MotionCtx } from '../../engine/BattlePresenterMotion.ts';
 import { motionMs } from '../../engine/BattlePresenterMotion.ts';
 import type { Point3 } from '../../engine/BattlePresenterPorts.ts';
+import { realLeapBack } from '../../engine/motion/RealBeats.ts'; // `?curves=real` / `real-snappy`: the run home is the real back-jump (its length and its height)
 import { arcFor } from '../../engine/motion/CurveBeats.ts'; // motion pass (lane "core"): the run's arc is a leap with the new curves on, today's hop otherwise
 import { ownPlace } from '../../engine/motion/PlaceOwner.ts';
 import { planRun, type RunWorld } from '../../engine/motion/StandOff.ts';
@@ -176,12 +177,13 @@ export class RunInMotion implements ActionMotionPort {
       if (!actor) return;
       // Over a menu, under REDUCE MOTION, or if she was knocked out out there, she is simply home again: nothing plays.
       const down = (actor as { pose?: string }).pose === 'ko';
-      const ms = ctx.still === true || down ? 1 : motionMs(runMs(Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z)).home, ctx.speed);
+      const back = ctx.still === true || down ? undefined : realLeapBack(ctx, actorId); // the real back-jump: its length and height, else the house run home
+      const ms = ctx.still === true || down ? 1 : motionMs(back?.ms ?? runMs(Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z)).home, ctx.speed);
       actor.setPose('idle');
       if (ms > 1) world?.smear(actorId, ms * 0.9, SMEAR.home);
       if (ms > 1) motionBeat({ kind: 'dash', strength: SMEAR.home, heft: actorHeft(actor), ms, atMs: ms * 0.3 }); // and the run home, lighter
       void world?.truck(0, 0, 0, ms);
-      await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [arcFor(actor, 0.2, ms)] : [])]);
+      await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [arcFor(actor, back?.height ?? 0.2, ms)] : [])]);
       void world?.truck(0, 0, 0, 1); // never leave the frame off true
     } finally {
       ownPlace(run.figure, false); // home (or gone): the mix's staging has her again, at the place it left her

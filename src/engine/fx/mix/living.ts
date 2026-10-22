@@ -1,6 +1,7 @@
 import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type Object3D, type ShaderMaterial, type Texture } from 'three';
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
-import { KO_GIANTS, KO_MACHINES, canTopple, fallRun, koFallOff, koMode, reviveRun, type KoMode, type KoRun } from '../../KoFall.ts';
+import { KO_GIANTS, KO_MACHINES, canTopple, fallRun, koCrossMs, koFallOff, koMode, reviveRun, type KoMode, type KoRun } from '../../KoFall.ts';
+import { realBuckleMs } from '../../motion/RealMoments.ts'; // `?curves=real` / `real-snappy`: the buckle lasts until the real clip's floor impact
 import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
@@ -172,7 +173,7 @@ export class LivingFigure {
     }
     const to = a.slots[a.active]!;
     const mode = koMode({ rm: ctx.rm, samePlane: from === to, samePainting: from.pose === to.pose, fromProne: from.scale.prone === true, toProne: to.scale.prone === true, name: a.name, partySide, legacy: koFallOff() });
-    const run = fallRun(mode, ctx.game, a.koCutWindow?.()); // the smear's window when the moments and the smear are on: the cross is a cut inside it
+    const run = fallRun(mode, ctx.game, a.koCutWindow?.(), realBuckleMs(a.name, koCrossMs())); // the smear's window when the moments and the smear are on: the cross is a cut inside it; a real mode buckles until the real clip's floor impact
     if (!run) {
       this.last.cuts++;
       return;

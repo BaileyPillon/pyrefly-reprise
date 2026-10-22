@@ -17,7 +17,8 @@ import {
   setShadowFollows,
   setStopMode,
 } from '../../engine/feel/FeelSwitch.ts';
-import { curvesMode, setCurvesMode } from '../../engine/motion/CurvesSwitch.ts';
+import { curvesMode, setCurvesMode, type CurvesMode } from '../../engine/motion/CurvesSwitch.ts';
+import { partyRigsMode, setPartyRigsMode } from '../../engine/motion/PartyRigsSwitch.ts';
 import { momentsMode, setMomentsMode } from '../../engine/motion/MomentsSwitch.ts';
 import { smearStyle, setSmearStyle, type SmearStyle } from '../../engine/motion/SmearSwitch.ts';
 import { fxMode, setFxMode } from '../../engine/spellfx/FxSwitch.ts';
@@ -40,6 +41,11 @@ export interface SwitchDef {
 }
 
 const SMEAR_NEXT: Readonly<Record<SmearStyle, SmearStyle>> = { paint: 'blur', blur: 'off', off: 'paint' };
+
+/** The real-clips key: today and new go to snappy, snappy to real, real back to new (the house curves). What the label reads for each curves mode. */
+const REAL_NEXT: Readonly<Record<CurvesMode, CurvesMode>> = { today: 'real-snappy', new: 'real-snappy', 'real-snappy': 'real', real: 'new' };
+const REAL_READ: Readonly<Record<CurvesMode, string>> = { today: 'off', new: 'off', 'real-snappy': 'snappy (1.1 s)', real: 'real speed' };
+const isRealMode = (m: CurvesMode): boolean => m === 'real' || m === 'real-snappy';
 
 export const SWITCHES: readonly SwitchDef[] = [
   {
@@ -126,12 +132,38 @@ export const SWITCHES: readonly SwitchDef[] = [
     name: 'curves',
     read: () => curvesMode(),
     flip: () => {
-      const next = curvesMode() === 'new' ? 'today' : 'new';
+      const next: CurvesMode = curvesMode() === 'today' ? 'new' : 'today'; // a real mode (`,`) goes back to today's with this key
       setCurvesMode(next);
       return next;
     },
-    isNew: () => curvesMode() === 'new',
-    set: (on) => setCurvesMode(on ? 'new' : 'today'),
+    isNew: () => curvesMode() !== 'today',
+    set: (on) => setCurvesMode(on ? (isRealMode(curvesMode()) ? curvesMode() : 'new') : 'today'), // the master key keeps a real mode that is already chosen
+  },
+  // `,`: the curves driven by the real game's clips (integration 2): off (the house numbers, `new`), snappy (real proportions at the 1.1 s pick), real (the real speed). The label says it truthfully on key 7.
+  {
+    code: 'Comma',
+    key: ',',
+    name: 'real clips',
+    read: () => REAL_READ[curvesMode()],
+    flip: () => {
+      const next: CurvesMode = REAL_NEXT[curvesMode()];
+      setCurvesMode(next);
+      return REAL_READ[next];
+    },
+    isNew: () => isRealMode(curvesMode()),
+  },
+  // `.`: the two party rig pilots, Tidus in Chapter I and Rikku's Dark Knight in Chapter IV (integration 2). Asked when a fight starts: a flip in a fight takes effect in the next one.
+  {
+    code: 'Period',
+    key: '.',
+    name: 'party rigs',
+    read: () => partyRigsMode(),
+    flip: () => {
+      const next = partyRigsMode() === 'on' ? 'off' : 'on';
+      setPartyRigsMode(next);
+      return next;
+    },
+    isNew: () => partyRigsMode() === 'on',
   },
   // key 8: Tidus T1 or T2 (the page's: it reloads)
   { code: 'Digit8', key: '8', name: 'Tidus', read: () => 't1', isNew: () => false },

@@ -276,9 +276,9 @@ export class KoRun {
  * cross of a TOPPLE (a party figure who falls to a lying painting) a CUT of that length; the hold before it grows by what the cross gave up, so the fall takes the same time and the cut falls at its
  * end, where the turn is fastest. Every other mode (a colossus's buckle, a prone standing painting) keeps its capped cross: its pair is not always a big change.
  */
-export function fallRun(mode: KoMode, game: KoGame, cutMs?: number): KoRun | null {
+export function fallRun(mode: KoMode, game: KoGame, cutMs?: number, buckleMs?: number): KoRun | null {
   if (mode === 'cut') return null;
-  const hold = KO_BUCKLE_MS[game];
+  const hold = buckleMs ?? KO_BUCKLE_MS[game]; // `?curves=real` (integration 2): the real clip's floor impact less the cross (`motion/RealMoments.realBuckleMs`); absent: the house buckle
   const cross = koCrossMs();
   const cutting = cutMs !== undefined && cutMs > 0 && mode === 'topple'; // a party figure whose KO painting is a lying body: the standing painting and the lying one always share almost no outline
   const crossMs = cutting ? cutMs : cross;

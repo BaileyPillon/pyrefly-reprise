@@ -1,0 +1,147 @@
+/**
+ * THE REAL GAME'S NUMBERS, READ FOR THE ENGINE (conference demo, integration 2, 2026-10-22; Bailey's decision 179: "Timing + camera now, full later": by Sunday every demo action takes its
+ * wind-up, contact and recovery timing from the real game's clips). Pure: no `three`, no DOM, no clock. The table is `data/motion/realMotion.ts` (generated, FFX and FFX-2 each their own);
+ * this file answers, for a game and a figure's art id, "what does the real game do here", for the five things `?curves=real` and `?curves=real-snappy` change:
+ *
+ * - the ATTACK ({@link realStrikeProfile}): a `StrikeProfile` the house sampler plays (`StrikeCurve.resolveStrike`, `RealStrike.ts`), with the real phases (`real`) or the same phases scaled to
+ *   Bailey's "about 1.1 s" pick (`snappy`, the real proportions kept), the real arcs (Tidus leaps 21 percent of his height and returns in a flip; Yuna, Auron and Kimahri crouch, no leap) and
+ *   the leaping approach and return;
+ * - the CAST ({@link realCastOf}): the wind-up the caster rises over and the lift's height; the lift is HELD until the spell lands (`CurveDriver.LiftChannel`, as with the house curves);
+ * - the HIT ({@link realHitMs}): how long the hit reaction lasts;
+ * - the KNOCK-OUT ({@link realKoHoldMs}): when the body reaches the floor;
+ * - the VICTORY ({@link realVictoryOf}): how long the crouch and the spring take.
+ *
+ * `real` = the real speed (party attacks 1.5 to 2.9 s, bosses 4.2 to 4.7 s: no heft stretch on top); `snappy` = the same proportions at about 1.1 s (a boss's heft stretch stays: about 1.5 s).
+ * Casts, hits, knock-outs and victories have no 1.1 s pick (Bailey's pick covers attacks only): both modes read them real.
+ *
+ * Game cases (AGENTS.md rule 14): `ffx` is FFX only (Chapter I), `ffx2` FFX-2 only (Chapter IV); a figure the table has no row for answers undefined and the house curves (`?curves=new`) play it.
+ */
+import { REAL_MOTION, type RealAttackRow, type RealCastRow, type RealGame, type RealKoRow, type RealRow, type RealVictoryRow } from '../../data/motion/realMotion.ts';
+import type { CurveGame, RealKind } from './CurvesSwitch.ts';
+import { PROFILES, REAL_MIN_MS, defaultPaceFactor, heftFactors, type StrikeProfile } from './StrikeCurve.ts';
+
+/** An attack whose real approach lifts the hip this much of the figure's height or more leaps (Tidus .21, Wakka .26, Seymour .24, Bahamut .14); below it the figure crouches into the lunge. */
+export const APPROACH_LEAP_MIN = 0.1;
+/** A real return that lifts the hip this much or more is a leap back (Tidus .86, Yuna .54, Kimahri .49, Bahamut .37, Rikku .35, Paine .14); below it the house return plays. */
+export const RETURN_LEAP_MIN = 0.1;
+
+/** The real-motion key of a figure by its art id (`tidus`, `yuna-white-mage`, `seymour-flux`, `ffx2-bahamut`...), per game; undefined for a figure the table does not cover. */
+export function realKeyOf(artId: string | undefined, game: RealGame): string | undefined {
+  if (!artId) return undefined;
+  const id = artId.toLowerCase();
+  if (game === 'ffx') {
+    for (const k of ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu']) if (id === k || id.startsWith(`${k}-`)) return k;
+    return id.startsWith('seymour-flux') ? 'seymourFlux' : undefined;
+  }
+  for (const k of ['yuna', 'rikku', 'paine']) if (id === k || id.startsWith(`${k}-`)) return k;
+  return id === 'bahamut' || id.endsWith('-bahamut') || id.startsWith('bahamut') ? 'bahamut' : undefined;
+}
+
+/** The table's row for a figure (by art id) in a game, or undefined. */
+export function realRowOf(game: RealGame, artId: string | undefined): RealRow | undefined {
+  const key = realKeyOf(artId, game);
+  return key ? REAL_MOTION[game][key] : undefined;
+}
+
+/** The global gain on the real lifts (`?realarc=0..1.5`, default 1: the real arcs). A capture or the driver can dial a flip down without a rebuild. */
+export function realArcGainFromSearch(search: string | undefined): number {
+  if (search === undefined) return 1;
+  try {
+    const raw = new URLSearchParams(search).get('realarc');
+    if (raw === null || raw.trim() === '') return 1;
+    const v = Number(raw);
+    return Number.isFinite(v) && v >= 0 && v <= 1.5 ? v : 1;
+  } catch {
+    return 1;
+  }
+}
+
+let gain: number | null = null;
+/** The gain as the page asked for it; read once. */
+export function realArcGain(): number {
+  if (gain === null) gain = realArcGainFromSearch(globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
+  return gain;
+}
+/** Tests and `window.__pyrefly`: force the gain (`null` reads the address again). */
+export function setRealArcGain(v: number | null): void {
+  gain = v;
+}
+
+/** The strike profile of a real attack: the game's own house profile with the table's durations, arcs and shapes over it. `kind` picks the real speed or the 1.1 s scale. */
+export function profileOfRow(game: CurveGame, row: RealAttackRow, kind: RealKind): StrikeProfile {
+  const ph = kind === 'snappy' ? row.snappy : row.real;
+  const approach = row.arc >= APPROACH_LEAP_MIN;
+  const leapBack = row.returnArc >= RETURN_LEAP_MIN && row.returnProfile !== undefined;
+  return {
+    ...PROFILES[game],
+    windupMs: ph.windupMs,
+    travelMs: ph.travelMs,
+    holdMs: ph.holdMs,
+    returnMs: ph.returnMs,
+    settleMs: ph.settleMs,
+    arc: row.arc,
+    arcApex: row.arcApex,
+    returnArc: row.returnArc,
+    bias: row.bias,
+    real: {
+      approach,
+      ...(approach && row.approachProfile ? { approachProfile: row.approachProfile } : {}),
+      ...(approach && row.xApproach ? { xApproach: row.xApproach } : {}),
+      ...(leapBack && row.returnProfile ? { returnProfile: row.returnProfile } : {}),
+      ...(leapBack && row.xReturn ? { xReturn: row.xReturn } : {}),
+      exactTime: kind === 'real',
+    },
+  };
+}
+
+/** The real attack profile of a figure (by art id) in this game, or undefined when the table has none for it (the house curves play). */
+export function realStrikeProfile(game: CurveGame, artId: string | undefined, kind: RealKind): StrikeProfile | undefined {
+  const row = realRowOf(game, artId)?.attack;
+  return row ? profileOfRow(game, row, kind) : undefined;
+}
+
+/**
+ * The strike's contact, ms at timeScale 1 and pace 1 (what `StrikeBeat.strikeBeatNow` and the contact beat's caps are written in): wind-up plus travel of the profile, a heavy body's heft stretch
+ * only where the profile has not already got the real times, divided by the game's default pace (the profile's milliseconds are on screen at it).
+ */
+export function contactMsOf(profile: StrikeProfile, heft = 0): number {
+  const stretch = profile.real?.exactTime ? 1 : heftFactors(heft).time;
+  const floor = profile.real ? REAL_MIN_MS : 0;
+  return Math.round(((Math.max(floor, profile.windupMs * stretch) + Math.max(floor, profile.travelMs * stretch)) / defaultPaceFactor(profile.game)));
+}
+
+/** How long a strike of this profile holds at the contact at least, ms at timeScale 1 and pace 1 (the contact beat's hold cap grows by it). */
+export function holdMsOf(profile: StrikeProfile, heft = 0): number {
+  const stretch = profile.real?.exactTime ? 1 : heftFactors(heft).hold;
+  return Math.round((profile.holdMs * stretch) / defaultPaceFactor(profile.game));
+}
+
+/** The real cast of a figure: the wind-up, the hit's offset in the release clip, the lift's height (a share of the figure's height). */
+export function realCastOf(game: CurveGame, artId: string | undefined): RealCastRow | undefined {
+  return realRowOf(game, artId)?.cast;
+}
+
+/** How long the real hit reaction lasts (the recovery's end, else the whole clip), ms; undefined when the table has none. */
+export function realHitMs(game: CurveGame, artId: string | undefined): number | undefined {
+  const h = realRowOf(game, artId)?.hit;
+  return h?.recoveryEndMs ?? h?.totalMs;
+}
+
+/** The real knock-out of a figure. */
+export function realKoOf(game: CurveGame, artId: string | undefined): RealKoRow | undefined {
+  return realRowOf(game, artId)?.ko;
+}
+
+/**
+ * How long the standing figure buckles before the body reaches the floor, ms (the house buckle is 220 ms in FFX and 170 in FFX-2): the real floor impact, less the cross to the lying painting.
+ * Undefined when the table has no knock-out for the figure.
+ */
+export function realKoHoldMs(game: CurveGame, artId: string | undefined, crossMs: number): number | undefined {
+  const impact = realKoOf(game, artId)?.floorImpactMs;
+  return impact === undefined ? undefined : Math.max(0, impact - Math.max(0, crossMs));
+}
+
+/** The real victory pose of a figure (the crouch, then the spring to its highest). */
+export function realVictoryOf(game: CurveGame, artId: string | undefined): RealVictoryRow | undefined {
+  return realRowOf(game, artId)?.victory;
+}

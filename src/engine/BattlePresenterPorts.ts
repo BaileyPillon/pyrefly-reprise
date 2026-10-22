@@ -381,6 +381,8 @@ export interface BattleStage {
   readonly lighting?: LightingPort;
   /** Live actor for a combatant, or `undefined` if it has none (hidden parts). */
   actor(id: CombatantId): ActorHandle | undefined;
+  /** Optional and additive (integration 2, `?curves=real`): the art id a staged combatant is drawn with (`tidus`, `rikku-dark-knight`, `seymour-flux`...), which keys the real game's motion table. */
+  artOf?(id: CombatantId): string | undefined;
   /** Which team a staged combatant fights for. Drives KO and victory poses. */
   sideOf(id: CombatantId): 'party' | 'enemy' | 'aeon' | undefined;
   /** Ids currently on the field, party/aeon first. */

@@ -23,6 +23,7 @@ import { LANDING_MOMENTS } from '../audio/sfxV2/eventCues.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
 import { STRIKE_BEAT_MS, strikeBeatNow } from './StrikeBeat.ts';
+import { realContactMsOf } from './motion/RealBeats.ts'; // `?curves=real`: the sound's lead is the real clip's contact frame
 import { castBeat } from './feel/MotionHooks.ts'; // `?motionsfx=` (demo chapters, off by default): the cloth rustle when a cast begins
 
 /** What the presenter tells the voice about one cue. */
@@ -236,7 +237,7 @@ function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced,
   }
   const covered = voiced.coveredBy?.filter((c) => action?.asked.has(c));
   if (covered && covered.length > 0) extra.coveredBy = covered;
-  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
+  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined, realContactMsOf(ctx, actorId)) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
   if (ahead !== undefined && voiced.events) extra.beatMs = scaled(ctx, ahead);
   return Object.keys(extra).length === 0 ? o : { ...o, ...extra };
 }

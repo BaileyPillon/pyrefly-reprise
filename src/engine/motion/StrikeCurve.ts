@@ -28,6 +28,7 @@
  */
 import { DEFAULT_PACE, PACE_PRESETS } from '../pace.ts';
 import type { CurveGame } from './CurvesSwitch.ts';
+import { realPost, realPre, type RealShape } from './RealStrike.ts'; // `?curves=real`: the leaping approach and the leaping return of the real clips (absent on a house strike)
 
 export const clamp01 = (u: number): number => (u < 0 ? 0 : u > 1 ? 1 : u);
 export const smooth = (u: number): number => {
@@ -78,6 +79,19 @@ export interface StrikeProfile {
   readonly overMax: number;
   readonly homeOver: number;
   readonly homeOverMax: number;
+  /**
+   * `?curves=real` and `?curves=real-snappy` (`RealMotion.ts`): the table's extras for this actor's attack. The durations, arcs and bias above are then the real (or the 1.1 s scaled) ones; this
+   * says how the arcs are played and whether a heavy body's heft stretches the times (it does not: the real times are the move's). Absent for every house profile.
+   */
+  readonly real?: {
+    readonly approach: boolean;
+    readonly approachProfile?: readonly number[];
+    readonly xApproach?: readonly number[];
+    readonly returnProfile?: readonly number[];
+    readonly xReturn?: readonly number[];
+    /** The real times stand: no `heftFactors` stretch on the durations. */
+    readonly exactTime: boolean;
+  };
 }
 
 /** FFX in Chapter I (committed run-up lunge) and FFX-2 in Chapter IV (quick acrobatic strike). `[ours]` every number; the sourced part is in the header. */
@@ -99,6 +113,8 @@ export interface StrikeOptions {
   readonly timeScale?: number;
   /** 0..1: the share of the travel arc that plays (0 after an FFX-2 run-in, whose own leap already carries the lift: no double lift). */
   readonly arcGain?: number;
+  /** A real profile only (`?curves=real`): the global gain on its lifts (`RealMotion.realArcGain`, default 1; `?realarc=`). */
+  readonly realGain?: number;
 }
 
 /** A profile resolved for one strike: durations in paced ms (what the actor's clock counts), amounts as shares. */
@@ -122,6 +138,8 @@ export interface StrikeShape {
   readonly bias: number;
   readonly over: number;
   readonly homeOver: number;
+  /** Present for a real strike only (`RealStrike.ts`). */
+  readonly real?: RealShape;
 }
 
 /**
@@ -136,17 +154,21 @@ export function heftFactors(heft: number): { time: number; hold: number; ret: nu
 export function resolveStrike(profile: StrikeProfile, o: StrikeOptions): StrikeShape {
   const d = Math.max(0.05, o.distance);
   const f = heftFactors(o.heft ?? 0);
+  const rp = profile.real; // `?curves=real`: the real durations are the move's own (a boss's 4.2 s is not stretched again), and a phase is at least a frame long (a zero-length travel would divide by zero)
+  const t = rp?.exactTime ? { time: 1, hold: 1, ret: 1 } : f;
+  const floor = rp ? REAL_MIN_MS : 0;
   const k = Math.max(0.02, o.timeScale ?? 1) / defaultPaceFactor(profile.game);
   const arcGain = clamp01(o.arcGain ?? 1);
+  const liftGain = arcGain * f.arc * Math.max(0, o.realGain ?? 1);
   return {
     game: profile.game,
-    windupMs: profile.windupMs * k * f.time,
-    travelMs: profile.travelMs * k * f.time,
-    holdMs: profile.holdMs * k * f.hold,
-    returnMs: profile.returnMs * k * f.ret,
-    settleMs: profile.settleMs * k * f.ret,
+    windupMs: Math.max(floor, profile.windupMs * k * t.time),
+    travelMs: Math.max(floor, profile.travelMs * k * t.time),
+    holdMs: profile.holdMs * k * t.hold,
+    returnMs: profile.returnMs * k * t.ret,
+    settleMs: profile.settleMs * k * t.ret,
     snapMs: profile.snapMs * k,
-    pull: Math.min(profile.pullback, profile.pullbackMax / d) * f.pull,
+    pull: rp?.approach ? 0 : Math.min(profile.pullback, profile.pullbackMax / d) * f.pull,
     crouch: Math.min(SQUASH_CAP, profile.crouch * (2 - f.squash)),
     leanBack: profile.leanBack * (2 - f.squash),
     leanFwd: profile.leanFwd * f.squash,
@@ -158,8 +180,24 @@ export function resolveStrike(profile: StrikeProfile, o: StrikeOptions): StrikeS
     bias: profile.bias,
     over: Math.min(profile.over, profile.overMax / d) * f.over,
     homeOver: Math.min(profile.homeOver, profile.homeOverMax / d) * f.over,
+    ...(rp
+      ? {
+          real: {
+            approach: rp.approach,
+            ...(rp.approachProfile ? { approachProfile: rp.approachProfile } : {}),
+            ...(rp.xApproach ? { xApproach: rp.xApproach } : {}),
+            ...(rp.returnProfile ? { returnProfile: rp.returnProfile } : {}),
+            ...(rp.xReturn ? { xReturn: rp.xReturn } : {}),
+            approachGain: liftGain,
+            returnGain: liftGain,
+          },
+        }
+      : {}),
   };
 }
+
+/** A real strike's shortest wind-up or travel, paced ms (about two thirds of a frame at 30 fps: the real table has zero-length swings for a thrown doll). */
+export const REAL_MIN_MS = 20;
 
 /** One sample of the move. `x` is a share of the lunge distance (negative while winding up, a little above 1 at the snap), `lift` a share of the figure's height. */
 export interface StrikeSample {
@@ -234,6 +272,12 @@ export const strikeTotalMs = (s: StrikeShape): number => s.windupMs + s.travelMs
  * ms since the hold was let go, through the return and the settle. Writes into `out` (allocation-free).
  */
 export function sampleAt(s: StrikeShape, phase: StrikePhase, ms: number, out: StrikeSample = { x: 0, lift: 0, sy: 1, lean: 0 }): StrikeSample {
+  if (s.real && ((phase === 'pre' && s.real.approach && realPre(s, ms, out)) || (phase === 'post' && realPost(s, ms, out)))) {
+    out.x = out.x === 0 ? 0 : out.x; // never -0
+    out.sy = Math.min(1 + SQUASH_CAP, Math.max(1 - SQUASH_CAP, out.sy));
+    out.lean = out.lean === 0 ? 0 : out.lean;
+    return out;
+  }
   let x = 0;
   let lift = 0;
   let sy = 1;

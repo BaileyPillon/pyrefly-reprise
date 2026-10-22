@@ -3,9 +3,11 @@
  * Game case: both; `game` picks the profile (`StrikeCurve.PROFILES`).
  */
 import type { CurveGame } from './CurvesSwitch.ts';
-import type { MarkName } from './StrikeCurve.ts';
+import type { MarkName, StrikeProfile } from './StrikeCurve.ts';
 
 export interface StrikePlan {
+  /** `?curves=real` / `real-snappy` (`RealMotion.realStrikeProfile`): this figure's own profile from the real game's clips; absent: the game's house profile (`StrikeCurve.PROFILES`). */
+  profile?: StrikeProfile;
   /** The lunge distance, world units: the house lunge or the solved reach (`motion/StrikeReach.ts`). x = 1 of the curve is this far. */
   distance: number;
   /** Which game's profile plays. */
