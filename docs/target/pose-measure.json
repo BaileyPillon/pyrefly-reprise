@@ -10164,39 +10164,39 @@
      "baseline": 1181.0,
      "current": 0.9,
      "head": [
-      153.7,
-      357.8,
-      266.3,
-      428.2
+      154,
+      358,
+      266,
+      428
      ],
      "prone": false,
      "reading": 0.87,
      "ruled": {
       "basis": "box",
       "head": 0.87,
-      "headRatio": 1.062,
-      "height": 0.98036,
+      "headRatio": 1.067,
+      "height": 0.98966,
       "lift": null,
-      "mean": 0.924,
+      "mean": 0.928,
       "rule": "geomean/1",
-      "stature": 0.943
+      "stature": 0.938
      },
-     "scale": 0.924,
+     "scale": 0.928,
      "scaleSrc": "ruled",
-     "sha": "2ed5c82b48d9020e0d648f4a2d83dd3b7008b1ec059ee62ee4d2eb36dfd723dc",
+     "sha": "9bd6940b8a71852c755b121403ad9d5a942fba7fd54216d5743ff5551649f309",
      "size": [
       446,
       1197
      ],
      "stance": {
-      "row": 1178.0,
+      "row": 1176.0,
       "src": "silhouette",
-      "x": 200.0,
-      "x0": 39.0,
+      "x": 197.0,
+      "x0": 33.0,
       "x1": 361.0
      },
      "standing": true,
-     "stature": 0.943
+     "stature": 0.938
     },
     "twirl-end": {
      "baseline": 1172.0,
@@ -19154,7 +19154,7 @@
      },
      "scale": 0.996,
      "scaleSrc": "ruled",
-     "sha": "347c91cf7436dcc1a841eb1e6baa82386dd44b7eb79bd1f12ee885a08b2b704c",
+     "sha": "6bc63a94f007de888b934153d2c2465f7bb425476750e16b71c593e99411cee8",
      "size": [
       791,
       1160
@@ -19384,7 +19384,7 @@
      },
      "scale": 0.889,
      "scaleSrc": "ruled",
-     "sha": "362ec0f14ca593e152f03ce9a38f3e845a6103546a22ad466c6923d36226e2a2",
+     "sha": "42af097666554bc00c21d04c03a4c2b4942dad58a67e21014115afc9e0508289",
      "size": [
       692,
       1216
@@ -19433,7 +19433,7 @@
      },
      "scale": 1.219,
      "scaleSrc": "held",
-     "sha": "d70586998c21f5338cf2621bb6be4bb771abdfda93fe6ad3131e13dc0b6d563a",
+     "sha": "a53cb6ae5585c2fb4c961b9b186bf21f543f2d864168b2e0b75850fea8e10f70",
      "size": [
       780,
       847
