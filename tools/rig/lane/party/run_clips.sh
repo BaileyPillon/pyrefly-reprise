@@ -17,6 +17,7 @@ job() { # name subject alias modes extra...
 }
 job tidus tidus-x tidus=tidus-x motion
 job tidus tidus-x tidus=tidus-x motion --only-off
+MOTION_TURNS=none job tidus-v tidus-x tidus=tidus-x motion  # the victory alone, rig on (the full run's victory failed once: a lethal fight)
 export PYREFLY_LANE_QUERY=wait=hold
 job rikku rikku-dark-knight-x rikku-dark-knight=rikku-dark-knight-x motion
 job rikku rikku-dark-knight-x rikku-dark-knight=rikku-dark-knight-x motion --only-off

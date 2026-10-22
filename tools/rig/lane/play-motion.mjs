@@ -55,7 +55,9 @@ export async function motion(g, spec, o) {
   await step(30);
   if ((await g.curActor()) !== who) { mark('idle-start'); await step(240); mark('idle-end'); }
 
-  for (const turn of spec.motion.turns) {
+  const only = process.env.MOTION_TURNS; // e.g. MOTION_TURNS=none: only the idle and the victory (a short run for a clip the full run lacks); MOTION_TURNS=attack,cast
+  const turns = only === undefined ? spec.motion.turns : spec.motion.turns.filter((x) => only.split(',').includes(x.name));
+  for (const turn of turns) {
    try {
     // other members defend until the actor has the command menu
     for (let k = 0; k < 12 && (await g.curActor()) !== who; k++) {
@@ -76,6 +78,7 @@ export async function motion(g, spec, o) {
         for (let k = 0; k < 16 && !hit; k++) {
           const m = await menuRows(page);
           if (!m) { await step(6); continue; }
+          if (k === 0) g.log(`menu rows for ${turn.name} /${rx}/:`, JSON.stringify(m.rows), 'cursor', m.selected);
           const want = m.rows.findIndex((r) => new RegExp(rx, 'i').test(r));
           if (want < 0) throw new Error(`no row matching /${rx}/ among ${JSON.stringify(m.rows)}`);
           if (want === m.selected) { hit = true; break; }
@@ -111,11 +114,15 @@ export async function motion(g, spec, o) {
     await page.evaluate(() => {
       const s = window.__pyrefly.battleState();
       const list = Array.isArray(s.combatants) ? s.combatants : Object.values(s.combatants);
-      for (const c of list) if (c.side === 'enemy' || c.team === 'enemy' || c.isEnemy) c.hp = 1;
+      for (const c of list) {
+        if (c.side === 'enemy' || c.team === 'enemy' || c.isEnemy) c.hp = 1;
+        else if (c.hp > 0) { c.hp = c.stats?.maxHp ?? c.hp; c.mp = c.stats?.maxMp ?? c.mp; } // the party stands whole until its blows land
+      }
     });
     mark('victory-start');
     let wonAt = -1;
     let left = 0;
+    let lastPose = '';
     for (let i = 0; i < 6000; i++) {
       if (i % 4 === 0 && (await g.awaitingMenu())) {
         try {
@@ -139,9 +146,10 @@ export async function motion(g, spec, o) {
         } catch (e) { errors.push({ turn: 'victory', at: st.frame, error: String(e).slice(0, 200) }); }
       }
       await step();
-      if (i % 30 === 29) {
+      if (i % 10 === 9) {
         const p = await poseInfo().catch(() => ({ pose: null }));
-        if (wonAt < 0 && p.pose === 'victory') { wonAt = st.frame; mark('victory-pose'); }
+        if (p.pose !== lastPose) { lastPose = p.pose; mark('pose', { pose: p.pose, life: p.life ?? null, hp: p.hp ?? null }); }
+        if (wonAt < 0 && /victory/i.test(String(p.pose))) { wonAt = st.frame; mark('victory-pose'); }
         if (wonAt >= 0 && st.frame - wonAt > 200) break;
         if (!left && (await g.scr()) !== 'battle') { left = st.frame; mark('battle-left'); }
         if (left && st.frame - left > 300) break; // the victory pose may play under the results screen: keep the frames for 5 s after the screen changed
