@@ -5,7 +5,7 @@
  * noted, `StageImpacts.ts`).
  *
  * The recipe is per room and only the Bevelle underground has one; every other room gets a master of zero and the pass is what it was. Live tuning: `__pyrefly.look.param('living', 0)` takes all of it away
- * (the before / after captures), `living.beam`, `living.lamps` and `living.ripple` scale one part each.
+ * (the before / after captures), `living.beam`, `living.lamps` and `living.ripple` scale one part each, and `living.gain`, `.size`, `.glow` (the dust), `.spill`, `.amp` (the lamps), `.ramp`, `.glint` (the rings) scale one number each (a capture sweeps them in one session).
  */
 import { Vector3, type Camera, type Mesh, type PlaneGeometry } from 'three';
 import { eyeCandy } from '../../fx/EyeCandy.ts';
@@ -89,17 +89,17 @@ export class LookLiving {
       const Bs = at(beam.bottom[0] + beam.halfBottom, beam.bottom[1]);
       const col = lin3(beam.color);
       u.uBeamA.value.set(T[0], T[1], B[0], B[1]);
-      u.uBeamB.value.set(Math.hypot(Ts[0] - T[0], Ts[1] - T[1]), Math.hypot(Bs[0] - B[0], Bs[1] - B[1]), beam.gain * master, beam.size / 900);
+      u.uBeamB.value.set(Math.hypot(Ts[0] - T[0], Ts[1] - T[1]), Math.hypot(Bs[0] - B[0], Bs[1] - B[1]), beam.gain * master * f.tweak('living.gain', 1), (beam.size * f.tweak('living.size', 1)) / 900);
       u.uBeamC.value.set(col[0], col[1], col[2], beam.glow * f.tweak('living.glow', 1));
     }
     // ---- the lamps (the ones that throw embers; their positions are the pass's own `uEmber`)
     const lamps = recipe.lamps;
     const lampShare = lamps ? q.lamps * f.tweak('living.lamps', 1) * master : 0;
     // REDUCE MOTION holds the flames steady; REDUCE FLASHES makes the flicker a third as deep
-    const depth = lamps && !reduceMotion ? lamps.amp * lampShare * (eyeCandy.reduceFlashes ? 0.33 : 1) : 0;
+    const depth = lamps && !reduceMotion ? lamps.amp * lampShare * f.tweak('living.amp', 1) * (eyeCandy.reduceFlashes ? 0.33 : 1) : 0;
     if (lamps) {
       const c = lin3(lamps.color);
-      u.uLamp.value.set(lamps.spill * lampShare, lamps.reach, lamps.glass, 0);
+      u.uLamp.value.set(lamps.spill * lampShare * f.tweak('living.spill', 1), lamps.reach, lamps.glass, 0);
       u.uLampC.value.set(c[0], c[1], c[2]);
     }
     // ---- the rings
@@ -115,8 +115,8 @@ export class LookLiving {
       }
       const life = rippleLife(rp);
       this.rings = this.rings.filter((r) => f.time - r.t0 < life).slice(0, allowed);
-      u.uRipP.value.set(rp.amp, rp.speed, rp.decay, rp.floor);
-      u.uRipG.value = rp.glint;
+      u.uRipP.value.set(rp.amp * f.tweak('living.ramp', 1), rp.speed, rp.decay, rp.floor);
+      u.uRipG.value = rp.glint * f.tweak('living.glint', 1);
     } else this.rings = [];
     const R = u.uRip.value;
     for (let i = 0; i < MAX_RIPPLES; i++) {

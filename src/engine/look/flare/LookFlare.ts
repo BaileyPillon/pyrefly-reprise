@@ -68,7 +68,7 @@ export class LookFlare {
   }
 
   /** One frame: `now` is the rig's wall clock in seconds, `reduceFlashes` the setting. Writes the uniforms (zeros when nothing is alive). */
-  update(now: number, reduceFlashes: boolean, u: FlareUniforms, gain = 1): void {
+  update(now: number, reduceFlashes: boolean, u: FlareUniforms, gain = 1, floodGain = 1, whiteGain = 1): void {
     this.now = now;
     const spec = flareSpec(reduceFlashes);
     const life = flareLength(spec);
@@ -82,8 +82,8 @@ export class LookFlare {
       if (k > flood) [flood, at] = [k, f];
       white = Math.max(white, whiteAt(t, spec.white));
     }
-    flood *= gain;
-    white *= gain;
+    flood *= gain * floodGain;
+    white *= gain * whiteGain;
     u.uFlood.value.set(at?.u ?? 0.5, at?.v ?? 0.3, flood, spec.flood.reach);
     u.uFloodCol.value.set(spec.flood.color[0], spec.flood.color[1], spec.flood.color[2]);
     u.uWhite.value = white;

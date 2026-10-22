@@ -355,7 +355,7 @@ export class LookBold {
     u['emberN']!.value = ne;
     this.living.update({ u: u as unknown as LivingUniforms, key: room.key, mesh, camera, time: o.time, quality: o.quality, aspect: o.aspect, feet: this.feet, tweak: o.tweak }); // release 62 (FFX-2's Bevelle underground)
     this.flare.install(); // release 62 (FFX-2): Mega Flare's flood and white-out; REDUCE FLASHES takes the white-out away and caps the flood (`flare/FlareConfig.ts`)
-    this.flare.update(o.now ?? performance.now() / 1000, eyeCandy.reduceFlashes, u as unknown as FlareUniforms, o.tweak('flare', 1));
+    this.flare.update(o.now ?? performance.now() / 1000, eyeCandy.reduceFlashes, u as unknown as FlareUniforms, o.tweak('flare', 1), o.tweak('flare.flood', 1), o.tweak('flare.white', 1));
     (u['ember']!.value as Vector3).set(fx.embers.gain * o.tweak('bold.embers', 1), (fx.embers.size * o.scale) / Math.max(1, o.H), fx.embers.rate);
     this.stats.on = true;
     this.stats.figures = n;
