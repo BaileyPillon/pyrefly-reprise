@@ -44,6 +44,7 @@ import { playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
+import { demoThanksDue } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
 import { warmBattleStage } from '../../engine/StageWarm.ts'; // R61 (PR-0481): a first battle's once-per-page costs are paid behind the party prep
@@ -123,6 +124,8 @@ export interface FlowScreenFactories {
    * round 02 #01, #04, #32).
    */
   battle: (opts: BattleScreenOptions) => FlowScreen<BattleScreenResult>;
+  /** R62 (the conference demo, demo mode only): the thanks card after a win (`app/demo/demoThanks.ts`). Optional: a flow with none registered goes straight on, as before. */
+  demoThanks?: (opts: { chapter: Chapter }) => FlowScreen<void>;
 }
 
 const factories: Partial<FlowScreenFactories> = {};
@@ -440,6 +443,7 @@ export class GameFlow {
         let resumeAt: number | null = null;
         if (!opts.skipCutscenes) resumeAt = await this.playCutscene(chapter, 'post');
         if (!opts.skipResults) await this.showResults(chapter, outcome, previousBestMs);
+        if (!opts.skipResults && !opts.pilgrim) await this.showDemoThanks(chapter); // R62 (demo mode only): a won demo fight ends with the thanks card, then the picker
         // R61 (the conference demo, both games): a demo fight is run with `skipCutscenes` (`demoRunDefaults`, first line of this method), so the story after the panel is not played and the win goes back to the picker (`demo/demoBoard.ts` puts the cursor on the other fight).
         if (!opts.skipCutscenes && resumeAt !== null) await this.playCutscene(chapter, 'post', resumeAt);
         this.step = 'idle';
@@ -464,6 +468,16 @@ export class GameFlow {
       this.step = 'idle';
       return closeRun(this, id, { carry, attempt, opts: { ...opts, seed } }, fought, outcome);
     }
+  }
+
+  /** R62 (demo mode only, both games): the thanks card after a won demo fight. A no-op outside demo mode, for any other chapter, and where no card is registered. */
+  private async showDemoThanks(chapter: Chapter): Promise<void> {
+    const make = factories.demoThanks;
+    if (!make || !demoThanksDue(chapter.id)) return;
+    this.step = 'demo-thanks';
+    const screen = make({ chapter });
+    if (!(await this.show(screen))) return;
+    await screen.done;
   }
 
   /**
