@@ -19,6 +19,8 @@ export interface ProbeMeta {
   strips: ProbeStripMeta[];
   /** r43: what the probe read of the wash (null when the card never showed): its selector, its background alpha (null when unreadable), the frames it was up and its highest opacity. */
   wash?: { selector: string; alpha: number | null; frames: number; maxOpacity: number; error: string | null } | null;
+  /** Motion pass, step 2: the cuts the engine planned as a smear (`window.__pyrefly.smearLog()`), `at` and `cutAt` in the probe's clock; absent on a recording from before. */
+  smears?: import('./continuity-smear.mjs').LoggedSmear[];
 }
 export interface Probe {
   records: ProbeFrame[]; swaps: ProbeSwap[]; strips: unknown[]; errors: string[];

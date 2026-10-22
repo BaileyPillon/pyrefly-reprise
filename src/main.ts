@@ -18,6 +18,9 @@ import { installCrispDebug } from './debug/crispApi.ts';
 import { installLookDebug } from './debug/lookApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
+import { installCurvesDebug } from './debug/curvesApi.ts'; // motion pass (lane "core"): `__pyrefly.curves('new' | 'today')`
+import { installMomentsDebug } from './debug/momentsApi.ts'; // motion pass (lane "core", step 3): `__pyrefly.moments('new' | 'today')`, `.cheer()`, `.standDown()`, `.koSettle()`
+import { installSmearDebug } from './debug/smearApi.ts'; // motion pass (lane "core", step 2): `__pyrefly.smear('paint' | 'blur' | 'off')`, `.smearLog()`
 import { installRigDebug } from './debug/rigApi.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
@@ -160,6 +163,9 @@ async function boot(): Promise<void> {
   installLookDebug(debugApi, app); // demo looks (dev flag `?look=`): `__pyrefly.look`, and F6 / F7 while the flag is in the address
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
+  installCurvesDebug(debugApi); // motion pass (lane "core"): the new curves' switch and marks, for captures
+  installSmearDebug(debugApi); // motion pass (lane "core", step 2): the smear's switch and its record, for captures and the continuity harness
+  installMomentsDebug(debugApi); // motion pass (lane "core", step 3): the per-game moments' switch and triggers, for captures
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
 
   await app.push(new TitleScreen());

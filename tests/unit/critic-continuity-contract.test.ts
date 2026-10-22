@@ -76,6 +76,16 @@ describe('the engine fields the continuity probe reads', () => {
     expect(api, `__pyrefly.battleState: ${WHY}`).toMatch(/battleState\(\): Readonly<BattleState> \| null;/);
   });
 
+  it('the planned-smear log (motion pass, step 2): the debug api hands out `smearLog`, and an entry has the fields the harness matches on', () => {
+    expect(read('src/debug/smearApi.ts'), `__pyrefly.smearLog: ${WHY}`).toMatch(/api\['smearLog'\] = /);
+    expect(read('src/main.ts'), 'main.ts installs the smear debug api').toMatch(/installSmearDebug\(debugApi\)/);
+    expect(probe, 'the probe reads window.__pyrefly.smearLog').toMatch(/win\.__pyrefly\.smearLog/);
+    const entry = /export interface PlannedSmear \{([\s\S]*?)\n\}/.exec(read('src/engine/motion/SmearLog.ts'))?.[1] ?? '';
+    for (const field of ['at: number;', 'actor: string;', 'from: string;', 'to: string;', 'cutMs: number;', 'overlap: number | null;', 'anchorDistance: number | null;', "kind: 'plane' | 'rig';", 'cutAt: number;']) expect(entry, `PlannedSmear ${field} ${WHY}`).toContain(field);
+    // the entry's names are the harness's pose names: a painting set logs its planes' pose names (the slot's `pose`, which the probe records), a rig its key names
+    expect(read('src/engine/motion/SmearDirector.ts'), 'the plane log uses the plane pose names').toMatch(/poseOf\(out\)/);
+  });
+
   it('a rigged figure keeps the public surface the rig reader reads (R57-002): its key, its move, its landmarks, its feet, its box and its part meshes', () => {
     const rig = read('src/engine/rig/RigActor.ts');
     const figure = read('src/engine/rig/RigFigure.ts');

@@ -32,6 +32,7 @@ import { STANDARD_DRESSPHERES } from '../../data/ffx2/dresspheres/index.ts';
 import type { ActionMotionPort, ActionStartEvent, MotionCtx } from '../../engine/BattlePresenterMotion.ts';
 import { motionMs } from '../../engine/BattlePresenterMotion.ts';
 import type { Point3 } from '../../engine/BattlePresenterPorts.ts';
+import { arcFor } from '../../engine/motion/CurveBeats.ts'; // motion pass (lane "core"): the run's arc is a leap with the new curves on, today's hop otherwise
 import { ownPlace } from '../../engine/motion/PlaceOwner.ts';
 import { planRun, type RunWorld } from '../../engine/motion/StandOff.ts';
 import type { StageMotionPort } from '../../engine/motion/StageMotionPort.ts';
@@ -158,7 +159,7 @@ export class RunInMotion implements ActionMotionPort {
     if (!readyKey) actor.setPose('idle');
     void world.truck(plan.truck.x, plan.truck.y, plan.truck.z, ms);
     world.smear(id, ms * 0.95, SMEAR.in);
-    await Promise.all([actor.moveTo(plan.spot, ms), actor.hop(0.42, ms)]);
+    await Promise.all([actor.moveTo(plan.spot, ms), arcFor(actor, 0.42, ms)]);
     if (!readyKey) actor.setPose('attack');
   }
 
@@ -176,7 +177,7 @@ export class RunInMotion implements ActionMotionPort {
       actor.setPose('idle');
       if (ms > 1) world?.smear(actorId, ms * 0.9, SMEAR.home);
       void world?.truck(0, 0, 0, ms);
-      await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [actor.hop(0.2, ms)] : [])]);
+      await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [arcFor(actor, 0.2, ms)] : [])]);
       void world?.truck(0, 0, 0, 1); // never leave the frame off true
     } finally {
       ownPlace(run.figure, false); // home (or gone): the mix's staging has her again, at the place it left her

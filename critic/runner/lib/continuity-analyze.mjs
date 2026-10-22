@@ -9,6 +9,7 @@ import { anchorsFor, decodeMask } from './continuity-silhouette.mjs';
 import { waiverFor } from './continuity-waivers.mjs';
 import { STAGED_GAP_FRAMES, groupStaged, stagedStepOf } from './continuity-staged.mjs';
 import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
+import { smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
 import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 
 /**
@@ -144,6 +145,9 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   }
   // r40 instrument edit (b): the steps of one twirl are one staged change (chained through every swap, counted or not, so a step under a camera cut does not split it)
   groupStaged(swaps, cfg.staged?.gapFrames ?? STAGED_GAP_FRAMES);
+  // motion pass, step 2: a swap that matches a cut the engine logged as a planned smear on a big change is not a snap (continuity-smear.mjs); every other fast swap is judged as before
+  const smearP = smearPolicy(cfg);
+  const smearTally = tagSmears(swaps, meta.smears, smearP, FRAME_MS);
 
   // ---- jerks: every figure's feet and head (or centroid) on every frame
   const jerks = [];
@@ -160,7 +164,8 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
       // `kind` (W4, the CHK-027 split): a jerk AT a pose swap is gateable; a mid-move DASH (a lunge, a recoil, a hop) is reported; a mid-move step of `jerks.teleportPx` or more is a TELEPORT (no
       // lunge covers its whole reach in one frame) and is gated like a swap's. `longFrame`: it fell on a frame longer than `motion.longFrameMs`.
       const kind = atSwap ? 'swap' : cfg.jerks?.teleportPx && e.px >= cfg.jerks.teleportPx ? 'teleport' : 'dash';
-      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, kind, frameMs, longFrame: frameMs !== null && frameMs > longMs, ...(stagedAt ? { staged: { kind: stagedAt.staged.kind, seq: stagedAt.staged.seq } } : {}), cause: causeOf(meta.logEvents, e.n, 60) });
+      const smeared = atSwap ? smearedJerk(e, mine.find((s) => s.smear && near(s)), smearP) : null; // a jerk AT a planned smear's cut, no bigger than the policy's maxJerkPx
+      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, kind, frameMs, longFrame: frameMs !== null && frameMs > longMs, ...(stagedAt ? { staged: { kind: stagedAt.staged.kind, seq: stagedAt.staged.seq } } : {}), ...(smeared ? { smeared } : {}), cause: causeOf(meta.logEvents, e.n, 60) });
     }
   }
   jerks.sort((a, b) => b.px - a.px).forEach((j, id) => { j.id = id; });
@@ -168,10 +173,11 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   // report shows it) and is left out of the summary, the verdict and the worst-jerk strips, as a jerk under a camera cut never gets that far (continuity-wash.mjs).
   const wash = washPolicy(cfg);
   tagWash(jerks, { records, alpha: meta.wash?.alpha ?? null, policy: wash });
-  const visibleJerks = jerks.filter((j) => !j.covered), coveredJerks = jerks.filter((j) => j.covered);
+  const visibleJerks = jerks.filter((j) => !j.covered && !j.smeared), coveredJerks = jerks.filter((j) => j.covered), smearedJerks = jerks.filter((j) => j.smeared && !j.covered);
 
   const battleSeconds = meta.stats?.battleSeconds ?? 0;
-  const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, battleSeconds, cfg, frameTime });
+  const smear = smearReport({ tally: smearTally, jerks, policy: smearP, smears: meta.smears });
+  const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, smearedJerks, smear, battleSeconds, cfg, frameTime });
   const run = { fps: meta.stats?.fps ?? null, error: meta.errors?.length ? meta.errors[0] : null };
   summary.checks = verdicts(summary, cfg, run);
   summary.run = { fps: run.fps, maxDtMs: meta.stats?.maxDtMs ?? null, slowFrames: meta.stats?.slowFrames ?? null, frames: meta.stats?.battleFrames ?? null, probeErrors: meta.errors?.length ?? 0 };
@@ -217,5 +223,5 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   const taken = new Set(worst.swaps);
   const ghostly = swaps.filter((s) => s.counted && s.ghost.frames > 0 && !taken.has(s.id)).sort((a, b) => b.ghost.severity - a.ghost.severity);
   worst.ghosts = distinctFirst(ghostly, (s) => `${s.figure}|${s.fromPose}|${s.toPose}`, cfg.strips.worstGhosts).map((s) => s.id);
-  return { swaps, jerks, summary, perFigure, coverage, worst, frameMs: FRAME_MS, cameraCuts: [...cutFrames].sort((x, y) => x - y), wash: washReport({ records, meta, policy: wash, jerks }), access: { trackAt, planeAt, recordAt } };
+  return { swaps, jerks, summary, perFigure, coverage, worst, frameMs: FRAME_MS, cameraCuts: [...cutFrames].sort((x, y) => x - y), wash: washReport({ records, meta, policy: wash, jerks }), smear, access: { trackAt, planeAt, recordAt } };
 }

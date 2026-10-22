@@ -5,7 +5,6 @@
  * Split out of `BattlePresenterEvents.ts` so the dispatch switch there stays
  * readable at a glance. Same rules apply: no `three`, no DOM, ports only.
  */
-
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
@@ -17,8 +16,9 @@ import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
-import { LUNGE_MS } from './StrikeBeat.ts';
-import { blowPose, impactAtApex, windUpLeads } from './KeyPoses.ts';
+import { standDownParty } from './motion/MomentBeats.ts'; // motion pass (lane "core", step 3): the victory moment each chapter's sources allow (a cheer, or a quiet stand-down where the pose is withheld)
+import { liftCaster, releaseCastLift, startAttackMove } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the sampled strike, the cast lift; today's lunge unless switched on (`motion/CurvesSwitch.ts`)
+import { blowPose, idleAtEnd, impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
 import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SPECTACLE's two motion looks share one gate
@@ -90,11 +90,12 @@ export async function actionStart(
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
     if (!motion?.ownsWindUp?.(event)) {
       const plan = lungePlan(ctx, event, motion, blowPose(windUp), burst);
-      void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact(), plan.house), actor?.squash(260, 0.45)]); // FF7: its painted keys
+      startAttackMove(ctx, actor, plan, contact(), motion?.lungeFor?.(event.actorId) !== undefined); // today: lunge + squash(260, 0.45) (FF7: its painted keys); with the new curves: the sampled strike
     }
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });
     actor?.flash(0x9fd8ff, 560, 0.45);
+    liftCaster(ctx, event.actorId); // new curves: the caster rises and holds until the spell lands
   } else if (pose === 'item') {
     cue(ctx, 'item', { volume: 0.7 }); // D-302: the item-use sound (voiced chapters only)
     if (item) startItemGesture(ctx, event, item);
@@ -111,8 +112,9 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
+  releaseCastLift(ctx, going); // the cast lift comes down with the action at the latest
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
-  actor?.setPose('idle');
+  idleAtEnd(ctx, actor, ctx.actingId); // the idle, or (new curves) the strike's own marks do it: follow on the fastest frame home, idle at home
   ctx.actingId = null;
   endSpellAction(ctx);
   // Whatever the shot was — Overdrive letterbox, telegraph zoom, a plain
@@ -330,6 +332,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
   // A-4: where the sources withhold the celebration ('hold'), the figures keep
   // their battle stance and the fanfare stays quiet; the rig still settles.
   if (victoryPoseOf(ctx.deps) === 'hold') {
+    standDownParty(ctx); // motion pass, step 3 (the moments, default OFF): the held stance gets a quiet settle, no pose, no hop
     void ctx.moments.victory();
     await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold')));
     return;

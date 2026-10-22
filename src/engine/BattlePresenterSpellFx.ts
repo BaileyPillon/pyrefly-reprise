@@ -11,6 +11,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
+import { releaseCastLift } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the caster's lift comes down when the spell lands
 
 /** The action whose effects are playing. */
 export interface ActingAction {
@@ -71,6 +72,14 @@ export function sparkItem(ctx: EventCtx, sourceId: CombatantId | undefined): boo
  * combatant that has not acted (a counter) resolves by its element alone.
  */
 export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, heal: boolean): Promise<void> {
+  try {
+    await waitForLanding(ctx, event, heal);
+  } finally {
+    releaseCastLift(ctx, event.sourceId ?? ctx.actingId); // a no-op unless the new curves lifted the caster at the cast's start
+  }
+}
+
+async function waitForLanding(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, heal: boolean): Promise<void> {
   const vfx = ctx.stage.vfx;
   if (!vfx.land || sparkItem(ctx, event.sourceId)) return;
   const a = event.sourceId === undefined ? ctx.acting : byActor.get(ctx)?.get(event.sourceId);

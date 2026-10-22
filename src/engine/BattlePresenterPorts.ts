@@ -67,6 +67,17 @@ export interface ActorHandle {
   lieDown?(ms?: number, tilt?: number): Promise<void>;
   /** Optional: petrified, 0..1 — the painting drained to stone grey (`PaintedActor.setStone`). */
   setStone?(amount: number): void;
+  /** Optional (motion pass, lane "core"; only with `motion/CurvesSwitch.curvesOn()`): the sampled strike, in place of `lunge` + `squash`. */
+  strike?(plan: import('./motion/StrikePlan.ts').StrikePlan): Promise<void>;
+  /** Optional (same): the figure's heft, 0 (party-sized) to 1 (a default-size foe or bigger): how much longer its strike's wind-up and travel run, so the strike's sound can be asked for on its contact. */
+  strikeHeft?(): number;
+  /** Optional (same): a cast's lift, held from the cast's start until the spell lands (`liftRelease`). */
+  liftTo?(height: number, ms?: number): void;
+  liftRelease?(ms?: number): void;
+  /** Optional (same): an arc with a take-off crouch, an airborne stretch and a landing squash (FFX-2's run-in). */
+  leap?(height: number, ms: number, options?: import('./motion/CurveDriver.ts').LeapOptions): Promise<void>;
+  /** Optional (motion pass, step 3; only with `motion/MomentsSwitch.momentsOn()`): a chapter whose sources withhold the victory pose keeps the stance and stands down: one slow breath out. */
+  standDown?(): void;
   centerPoint(): Point3;
   headPoint(): Point3;
 }
