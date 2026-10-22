@@ -207,6 +207,7 @@ def partition(rgba: np.ndarray, pts: dict, parts: dict, order: list, S: int, mar
             ws = watershed(grad, markers, mask=Fc)
             res = np.where(ws > 0, ws - 1, -1).astype(np.int16)
             out = np.where(Fc, res, -1).astype(np.int16)
+    out = clean_islands(out, len(order))
     if seeds:
         for n, sm in seeds.items():
             if n in order:
@@ -214,6 +215,33 @@ def partition(rgba: np.ndarray, pts: dict, parts: dict, order: list, S: int, mar
     full = np.full((h, w), -1, np.int16)
     full[y0:y1, x0:x1] = out
     return full, present
+
+
+def clean_islands(lab: np.ndarray, n_parts: int, max_share: float = 0.08, max_px: int = 14000) -> np.ndarray:
+    """A part that is split into pieces keeps its biggest piece: a small island (under `max_share` of it and `max_px` px) goes to the label that surrounds it most. A bit of cloth or hair the partition cut off from its
+    part would otherwise ride its own bones and drift away from the figure in a move."""
+    from scipy import ndimage as ndi
+
+    out = lab.copy()
+    for i in range(n_parts):
+        m = out == i
+        if not m.any():
+            continue
+        comp, k = ndi.label(m)
+        if k <= 1:
+            continue
+        areas = ndi.sum(m, comp, range(1, k + 1))
+        big = int(np.argmax(areas)) + 1
+        for c in range(1, k + 1):
+            if c == big or areas[c - 1] > min(max_px, max_share * areas[big - 1]):
+                continue
+            cm = comp == c
+            ring = ndi.binary_dilation(cm, iterations=3) & ~cm
+            around = out[ring]
+            around = around[(around >= 0) & (around != i)]
+            if len(around):
+                out[cm] = int(np.bincount(around).argmax())
+    return out
 
 
 def dilate_mask(m: np.ndarray, px: int) -> np.ndarray:

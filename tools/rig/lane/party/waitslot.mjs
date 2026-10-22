@@ -34,7 +34,7 @@ function blocked() {
     if (!stale) return `held by ${holder.what ?? holder.who ?? '?'} (pid ${holder.pid})`;
   }
   const next = read(NEXT);
-  if (fs.existsSync(NEXT) && next?.who !== 'rig pilots') {
+  if (fs.existsSync(NEXT) && !(next?.who === 'rig pilots' && next.pid === process.pid)) {
     const ageMin = next?.at ? (Date.now() - Date.parse(next.at)) / 60000 : 0;
     if (!(next?.pid && !alive(next.pid)) && ageMin < (next?.maxMinutes ?? 10) + 15) return `reserved for ${next?.who ?? '?'}`;
   }
@@ -48,9 +48,12 @@ let lastWhy = '';
 for (;;) {
   why = blocked();
   if (!why) break;
+  // the queue: when nobody has reserved the next slot, reserve it (the others do the same, and the file names who is next)
+  if (!fs.existsSync(NEXT) && fs.existsSync(LOCK)) { try { fs.writeFileSync(NEXT, JSON.stringify({ who: 'rig pilots', pid: process.pid, at: new Date().toISOString(), maxMinutes }), { flag: 'wx' }); say('reserved the next slot'); } catch { /* someone else was first */ } }
   if (why !== lastWhy) { say('waiting:', why); lastWhy = why; }
   await sleep(8000);
 }
+{ const nx = read(NEXT); if (nx?.who === 'rig pilots' && nx.pid === process.pid) fs.rmSync(NEXT, { force: true }); }
 fs.rmSync(LOCK, { force: true });
 fs.writeFileSync(LOCK, JSON.stringify({ who: 'rig pilots', pid: process.pid, what: `rig pilots: ${rec.slice(0, 6).join(' ')}`, at: new Date().toISOString(), maxMinutes }), { flag: 'w' });
 say('claimed the slot for', maxMinutes, 'minutes');

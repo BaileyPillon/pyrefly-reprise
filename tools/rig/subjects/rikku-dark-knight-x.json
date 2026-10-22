@@ -311,6 +311,10 @@
     }
    }
   },
+  "normals": {
+   "dir": "D:/pyrefly-art-maps",
+   "scale": 0.26
+  },
   "variant_defaults": {
    "tex": 0.4
   },
@@ -2032,7 +2036,11 @@
     }
    }
   },
-  "rim": true
+  "rim": true,
+  "normals": {
+   "dir": "D:/pyrefly-art-maps",
+   "scale": 0.26
+  }
  },
  "landmarks": {
   "ready": {

@@ -108,6 +108,43 @@ def solve_pose(party: P.Party, rest: dict, marks: dict, joints: dict | None = No
     return out, rep, {b: (float(v[0][0]), float(v[0][1])) for b, v in state.items()}
 
 
+def unwrap_keys(keys: dict) -> dict:
+    """The engine moves a bone from one key to the next by plain interpolation of the angle, so two keys whose angles sit either side of pi (`3.09` and `-3.08`, the same direction) would spin the bone nearly a whole turn.
+    Per bone, every key's angle and the rest's (0) are put on the circle, cut at the largest empty arc, unwrapped along it and expressed relative to the rest: the smallest range that holds them all, the rest at 0.
+    Returns {bone: {pose: (old, new)}} for what changed."""
+    bones = sorted({b for k in keys.values() for b in k["bones"]})
+    changed: dict = {}
+    for b in bones:
+        ang = {p: float(k["bones"].get(b, {}).get("rot", 0.0)) for p, k in keys.items()}
+        pts = sorted([(P.wrap(a) % (2 * math.pi), p) for p, a in ang.items()] + [(0.0, "_rest")])
+        if len(pts) < 3:
+            continue
+        gaps = [((pts[(i + 1) % len(pts)][0] - pts[i][0]) % (2 * math.pi), i) for i in range(len(pts))]
+        if max(g for g, _ in gaps) < 1e-9:
+            continue  # every angle is the same one (a bone no key turns)
+        _g, gi = max(gaps)
+        start = (gi + 1) % len(pts)
+        order = pts[start:] + pts[:start]
+        un, prev = [], None
+        for a, p in order:
+            x = a if prev is None else a
+            if prev is not None and x < prev:
+                x += 2 * math.pi
+            while prev is not None and x < prev:
+                x += 2 * math.pi
+            un.append((x, p))
+            prev = x
+        x0 = next(x for x, p in un if p == "_rest")
+        for x, p in un:
+            if p == "_rest":
+                continue
+            new = x - x0
+            if abs(new - ang[p]) > 1e-6:
+                keys[p]["bones"].setdefault(b, {})["rot"] = round(new, 4)
+                changed.setdefault(b, {})[p] = (round(ang[p], 3), round(new, 3))
+    return changed
+
+
 def run(name: str) -> None:
     party = P.load(name)
     T = party.targets()
@@ -132,6 +169,8 @@ def run(name: str) -> None:
         clamped = [b for b, v in rep.items() if isinstance(v, dict) and "wantScale" in v and abs(v["wantScale"] - v["scale"]) > 1e-3]
         cl = ", ".join(f"{b} {rep[b]['wantScale']}->{rep[b]['scale']}" for b in clamped)
         print(f"retarget: {pose:9s} {len(bones):2d} bones, worst aim miss {worst:5.1f} master px" + (f", joints moved {moved}" if moved else "") + (f", scale clamped: {cl}" if clamped else ""))
+    for b, ch in unwrap_keys(keys).items():
+        print(f"retarget: {b} unwrapped " + ", ".join(f"{p} {o}->{n}" for p, (o, n) in ch.items()))
     (party.work / "fit").mkdir(parents=True, exist_ok=True)
     (party.work / "fit" / "keys.json").write_text(json.dumps(keys, separators=(",", ":")), encoding="utf8")
     (party.work / "fit" / "retarget.json").write_text(json.dumps(report, indent=1), encoding="utf8")

@@ -22,6 +22,7 @@ cfg = {
    "legB": {"caps": [["pelvis", "kneeB", 58], ["kneeB", "footB", 44], ["footB", "toeB", 40]], "skin": {"type": "chain", "bones": ["thighB", "shinB"], "joints": ["pelvis", "kneeB", "toeB"], "ramps": [30], "mesh": LIMB}},
    "sword": {"caps": [["pommel", "tip", 52]], "bias": 26, "base_tex": 0.25, "skin": {"type": "rigid", "bone": "sword", "mesh": {"edge": 220, "inner": 440, "grow": 16}}, "variant": {"tex": 0.25, "mesh": {"quad": True}}},
   },
+  "normals": {"dir": "D:/pyrefly-art-maps", "scale": 0.26},
   "variant_defaults": {"tex": 0.4}, "base_tex": 0.4,
   "skeleton": [["root", None, "ground"], ["pelvis", "root", "pelvis", ["hips", "legA", "legB"]], ["chest", "pelvis", "waist", ["torso", "hips"]], ["head", "chest", "neck", ["head", "torso"]],
                ["upperarmA", "chest", "shoulderA", ["armA", "torso"]], ["forearmA", "upperarmA", "elbowA", ["armA"]], ["upperarmB", "chest", "shoulderB", ["armB", "torso"]], ["forearmB", "upperarmB", "elbowB", ["armB"]],
