@@ -23,9 +23,9 @@
  *   of the deck, a soft contact shadow under each figure, and a neutral grade that encodes (Bailey called the first in-game stage "very dark with heavy post-processing"). `?yrp=painted` keeps Chapter IV's room, lights and grade.
  * - **The models.** `../engine/yrp3d/` (loaded on use, so no other chapter carries it): the real FFX-2 Yuna, Rikku and Paine, `public/models-exp/yrp-hd/` (4x textures, one subdivision level) when their file is there and
  *   `public/models-exp/yrp/` when not, with their own battle motions, on the stage's actors, with the painted planes switched off. `?models=base` takes the base folder alone (the comparison between the two). **The boss is the
- *   AI-made Bahamut** (`bahamut-ai.glb`: his own physically based look, the procedural wing flap and breath, frame A's size and place); `?boss=real` fights the game's own (`bahamut.glb`, his real clips at 4x) and
- *   `?bossrig=clips` moves those clips onto the AI mesh when the rigged files are on disk. A slot whose file is missing stands on a neutral capsule, so the chapter always plays in frame A. `?yrp=painted` keeps every
- *   figure a painted billboard (the comparison with the paintings).
+ *   AI-made Bahamut playing the game's own Bahamut clips** (the v2 rig, `bahamut-ai-rigged.glb` and `bahamut-ai-anims.glb`; his own physically based look; frame A's size and place); `?bossrig=simple`, or a disk without the
+ *   rigged files, keeps his first motion (`bahamut-ai.glb`, the procedural wing flap and breath); `?boss=real` fights the game's own (`bahamut.glb`, his real clips at 4x). A slot whose file is missing stands on a neutral capsule, so the
+ *   chapter always plays. `?yrp=painted` keeps every figure a painted billboard (the comparison with the paintings).
  *
  * The upright phone is not staged (Chapter IV's phone rig and slice fit are for its own layout); this chapter is a desktop experiment.
  */
@@ -34,8 +34,8 @@ import { Vector3, type DirectionalLight, type Light, type Object3D } from 'three
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import { tapDirector } from '../engine/yrp3d/beats.ts';
 import { YRP_SHOT_DIRECTOR } from '../engine/yrp3d/director.ts';
-import { frameChoice, rigsFor } from '../engine/yrp3d/frames.ts';
-import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, YRP_BOSS_ID, YRP_CAST, bossChoice, type RigData, type V3 } from '../engine/yrp3d/layout.ts';
+import { DEFAULT_FRAME, frameChoice, partySlotsFor, rigsFor, type FrameName } from '../engine/yrp3d/frames.ts';
+import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, YRP_BOSS_ID, YRP_CAST, bossChoice, type RigData, type V3 } from '../engine/yrp3d/layout.ts';
 import { LOOK, mergeRig, type Rig, type RigPatch } from '../engine/yrp3d/look.ts';
 import type { RoomDim } from '../engine/yrp3d/rig.ts';
 import type { YrpModels } from '../engine/yrp3d/load.ts';
@@ -70,7 +70,7 @@ const STAGING: Pick<SceneStaging, 'holdParty' | 'sideFacing' | 'enemySpots' | 'f
 };
 
 export const EXP_YRP_SLOTS: SceneSlots = {
-  party: PARTY_SLOTS.slice(0, 3).map(toSpot),
+  party: partySlotsFor(DEFAULT_FRAME).slice(0, 3).map(toSpot), // the default frame's (a page that asks for `?frame=a` or `c` gets its own, from the build below)
   enemy: ENEMY_SLOTS.map(toSpot),
   partyHeight: PARTY_HEIGHT,
   enemyHeight: BOSS_HEIGHT,
@@ -83,9 +83,9 @@ export function paintedForced(search: string): boolean {
 }
 
 /** Move the chamber's light pools (a faint additive disc under each standing spot) to the new spots, by the names the factory gave them. */
-function movePools(group: Object3D): void {
+function movePools(group: Object3D, slots: readonly V3[]): void {
   const pools = group.children.filter((c) => c.name === 'light-pool');
-  pools.slice(0, 3).forEach((p, i) => p.position.set(PARTY_SLOTS[i]![0], 0.02, PARTY_SLOTS[i]![2] - 0.55)); // behind the slot, as Chapter IV's are
+  pools.slice(0, 3).forEach((p, i) => p.position.set(slots[i]![0], 0.02, slots[i]![2] - 0.55)); // behind the slot, as Chapter IV's are
   group.getObjectByName('enemy-pool')?.position.set(BOSS_SPOT[0], 0.018, BOSS_SPOT[2]);
   group.getObjectByName('enemy-reflection')?.position.set(BOSS_SPOT[0], 0.016, BOSS_SPOT[2] + 2.6);
 }
@@ -97,9 +97,11 @@ function movePools(group: Object3D): void {
  */
 export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOptions = {}) => {
   const search = typeof location === 'undefined' ? '' : location.search;
-  const frameRigs = rigsFor(frameChoice(search)); // frame A's table unless the page asks for `?frame=b` or `?frame=c` (the framing mockups, `../engine/yrp3d/frames.ts`)
+  const frame: FrameName = frameChoice(search); // frame b unless the page asks for `?frame=a` (the old framing) or `?frame=c` (`../engine/yrp3d/frames.ts`)
+  const frameRigs = rigsFor(frame);
+  const frameSlots = partySlotsFor(frame);
   const base = await buildBevelleUndergroundScene({ ...opts, cameraRef: frameRigs['idle']!.position as [number, number, number] });
-  movePools(base.group);
+  movePools(base.group, frameSlots);
 
   let skin: { update(dt: number): void; dispose(): void } | null = null;
   let look: { follow(models: YrpModels['models']): void; dispose(): void; palette: ScenePalette } | null = null;
@@ -124,7 +126,7 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
     room = rig.dimRoom(base.group, base.lights); // the chamber's own cyan, cold and rust light no longer swamps them (`LOOK.room`)
     const stage = applyStage(base.group, base.backdrop.group, YRP_CAST);
     look = stage;
-    directed = tapDirector(YRP_SHOT_DIRECTOR, made.listener); // the beats also start the models' clips (attack and cast), and put the strike on the blow
+    directed = tapDirector(YRP_SHOT_DIRECTOR, made.listener, new Set([YRP_BOSS_ID])); // the beats also start the models' clips (attack and cast), and put the strike on the blow; Bahamut's attack waits for its rear-up (`beats.ts`)
     if (import.meta.env.DEV) {
       let current: Rig = LOOK.rig;
       const tune = (patch: RigPatch): Rig => (rig.setRig(figureLights, (current = mergeRig(current, patch))), current); // `__yrp3d.tune({ key: { intensity: 2.4 } })`: the light, live
@@ -134,7 +136,7 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
 
   return derive(base, {
     rigs: toRigs(frameRigs) as SceneBuild['rigs'],
-    partySlots: PARTY_SLOTS.map(toVec),
+    partySlots: frameSlots.map(toVec),
     enemySlots: ENEMY_SLOTS.map(toVec),
     partyHeight: PARTY_HEIGHT,
     enemyHeight: BOSS_HEIGHT,

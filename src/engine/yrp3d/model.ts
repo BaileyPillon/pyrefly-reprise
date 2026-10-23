@@ -272,6 +272,11 @@ export class YrpModel {
     else if (kind === 'attack' || kind === 'cast') this.pulse = 1.4; // no clips: the wings beat harder for a moment
   }
 
+  /** The seconds a blow would have to wait, beyond `lead`, for this model's attack to play from its first part; 0 for a model with no rig (it has no wind-up to wait for). */
+  windup(kind: string, lead: number | undefined): number {
+    return this.rig ? this.rig.windup(kind, lead) : 0;
+  }
+
   /** The blow landed. */
   noteImpact(): void {
     this.rig?.impact();

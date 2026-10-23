@@ -131,6 +131,7 @@ export class YrpSkin {
       b.castHold = kind === 'cast'; // the glow follows the cast the beat announced, whatever painting the actor shows
       b.model.noteOpen(kind, lead, paceRate('action'));
     },
+    windup: (actorId, kind, lead) => this.bound.get(actorId as YrpId)?.model.windup(kind, lead) ?? 0,
     impact: (actorId) => this.bound.get(actorId as YrpId)?.model.noteImpact(),
     close: (actorId) => {
       const b = this.bound.get(actorId as YrpId);

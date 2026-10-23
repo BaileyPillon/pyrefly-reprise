@@ -1,16 +1,16 @@
 // @vitest-environment jsdom
 /**
- * **The hidden 3D Bahamut chapter's scene, built for real** (`src/scenes/exp-yrp-3d-stage.ts`; FFX-2 only): Chapter IV's chamber restaged under frame A, with the skin of real models on its actors (the real-models branch).
+ * **The hidden 3D Bahamut chapter's scene, built for real** (`src/scenes/exp-yrp-3d-stage.ts`; FFX-2 only): Chapter IV's chamber restaged under the default frame (b since 2026-10-22; frame A behind `?frame=a`), with the skin of real models on its actors (the real-models branch).
  *
  * `loadScene` runs the real `SceneFactory` and the real `fromSceneBuild` under jsdom (a no-op 2D context, an art manifest that lists no backdrops so the loader goes straight to the placeholder plate, and a `fetch` that
  * answers 404 so every model file is missing and each slot stands on its neutral capsule), and the test reads what the battle stage is handed. What it pins:
  *
- * 1. **The staging reaches the stage**: the party's slots and Bahamut's pin are frame A's, the heights, the facing (party toward -x, Bahamut toward +x), `holdParty`, and the shot director that takes Mega Flare.
+ * 1. **The staging reaches the stage**: the party's slots are the default frame's (`?frame=a`: A's) and Bahamut's pin is frame A's, the heights, the facing (party toward -x, Bahamut toward +x), `holdParty`, and the shot director that takes Mega Flare.
  * 2. **The rigs**: every name the presenter and the scripts ask for, plus the overdrive; the battle opens on `idle`.
  * 3. **It is Chapter IV's room otherwise**: the light pools stand at the new spots; Chapter IV's own scene is untouched, its grade, deck and lights included.
  * 4. **The look**: the studio's lights (three suns and an ambient, on the figure layer) are added and none casts a shadow; the chamber's own key, fill, rim and ambient are down to the table's share; the wet floor replaces the deck,
  *    a contact shadow stands under each figure, the backdrop is on its layer, and the grade is the chapter's own, neutral and encoding.
- * 5. **The skin**: with no model file every slot is a capsule (the chapter always plays in frame A); `?yrp=painted` keeps the figures painted in Chapter IV's own room, lights and grade, and builds no skin; `dispose` frees the skin,
+ * 5. **The skin**: with no model file every slot is a capsule (the chapter always plays); `?yrp=painted` keeps the figures painted in Chapter IV's own room, lights and grade, and builds no skin; `dispose` frees the skin,
  *    the look, the lights and the debug handle.
  *
  * What the scene looks like is not under test here (the browser pass is).
@@ -20,6 +20,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { YRP_SHOT_DIRECTOR } from '../../../src/engine/yrp3d/director.ts';
+import { DEFAULT_FRAME, partySlotsFor, rigsFor } from '../../../src/engine/yrp3d/frames.ts';
 import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, RIGS, YRP_CAST } from '../../../src/engine/yrp3d/layout.ts';
 import { LAYER, LOOK, frameALights } from '../../../src/engine/yrp3d/look.ts';
 import { HIDDEN_DECK, YRP_PALETTE } from '../../../src/engine/yrp3d/stageLook.ts';
@@ -77,12 +78,12 @@ const handle = (): { skin: { carrying: Record<string, string> }; models: { capsu
   (globalThis as { __yrp3d?: never }).__yrp3d;
 
 describe('exp-yrp-3d-stage, built through loadScene', () => {
-  it('publishes frame A\'s staging to the stage: the slots, the boss\'s pin and height, the facing, the held party and the director', async () => {
+  it('publishes the default frame\'s staging to the stage: the slots, the boss\'s pin and height, the facing, the held party and the director', async () => {
     const scene = await stage('exp-yrp-3d-stage');
     expect(scene.key).toBe('exp-yrp-3d-stage');
     expect(scene.placeholder).toBe(false);
     const s = scene.slots;
-    expect(s.party).toEqual(PARTY_SLOTS.slice(0, 3).map((p) => [...p]));
+    expect(s.party).toEqual(partySlotsFor(DEFAULT_FRAME).slice(0, 3).map((p) => [...p]));
     expect(s.enemy).toEqual(ENEMY_SLOTS.map((p) => [...p]));
     expect([s.partyHeight, s.enemyHeight]).toEqual([PARTY_HEIGHT, BOSS_HEIGHT]);
     expect(s.sideFacing).toEqual({ party: -1, enemy: 1 });
@@ -112,13 +113,31 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     const scene = await stage('exp-yrp-3d-stage');
     expect([...scene.battleCamera.rigNames].sort()).toEqual(Object.keys(RIGS).sort());
     expect(scene.battleCamera.rigName).toBe('idle');
+    const idle = rigsFor(DEFAULT_FRAME)['idle']!;
     const cam = scene.battleCamera.camera;
     scene.update(0.016);
     // within the idle sway (0.055 m at a random phase: BattleCamera's `swayClock`), which a tolerance of 0.05 did not allow for (it failed about one run in ten)
-    expect(Math.abs(cam.position.x - RIGS['idle']!.position[0])).toBeLessThan(0.1);
-    expect(Math.abs(cam.position.y - RIGS['idle']!.position[1])).toBeLessThan(0.1);
-    expect(Math.abs(cam.position.z - RIGS['idle']!.position[2])).toBeLessThan(0.1);
+    expect(Math.abs(cam.position.x - idle.position[0])).toBeLessThan(0.1);
+    expect(Math.abs(cam.position.y - idle.position[1])).toBeLessThan(0.1);
+    expect(Math.abs(cam.position.z - idle.position[2])).toBeLessThan(0.1);
   }, 60_000);
+
+  it('?frame=a gives the old framing exactly (A\'s slots, A\'s idle, the pools under A\'s spots) and ?frame=c its own idle on A\'s slots; the default is b', async () => {
+    const dflt = await stage('exp-yrp-3d-stage');
+    expect(dflt.slots.party).toEqual(partySlotsFor('b').slice(0, 3).map((p) => [...p]));
+    expect(dflt.slots.party).not.toEqual(PARTY_SLOTS.slice(0, 3).map((p) => [...p])); // the girls stand where b put them, not where A did
+    window.history.replaceState({}, '', '/?frame=a');
+    const a = await stage('exp-yrp-3d-stage');
+    expect(a.slots.party).toEqual(PARTY_SLOTS.slice(0, 3).map((p) => [...p]));
+    a.scene.updateMatrixWorld(true);
+    expect([...a.battleCamera.rigNames].sort()).toEqual(Object.keys(RIGS).sort());
+    const aPools: Object3D[] = [];
+    a.scene.traverse((o) => o.name === 'light-pool' && aPools.push(o));
+    PARTY_SLOTS.slice(0, 3).forEach((p, i) => expect(aPools[i]!.position.x).toBeCloseTo(p[0], 6));
+    window.history.replaceState({}, '', '/?frame=c');
+    const c = await stage('exp-yrp-3d-stage');
+    expect(c.slots.party).toEqual(PARTY_SLOTS.slice(0, 3).map((p) => [...p]));
+  }, 120_000);
 
   it('is Chapter IV\'s room otherwise: Chapter IV\'s own scene untouched (its grade, deck and lights included), and the light pools stand at the new spots', async () => {
     const yrp = await stage('exp-yrp-3d-stage');
@@ -137,7 +156,7 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     const pools: Object3D[] = [];
     yrp.scene.traverse((o) => o.name === 'light-pool' && pools.push(o));
     expect(pools.length).toBeGreaterThanOrEqual(3);
-    PARTY_SLOTS.slice(0, 3).forEach((p, i) => {
+    partySlotsFor(DEFAULT_FRAME).slice(0, 3).forEach((p, i) => {
       expect(pools[i]!.position.x).toBeCloseTo(p[0], 6);
       expect(pools[i]!.position.z).toBeCloseTo(p[2] - 0.55, 6);
     });
@@ -223,7 +242,7 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     expect(YRP_PALETTE.vignette!).toBeLessThan(0.2);
   }, 60_000);
 
-  it('with no model file on disk every slot stands on its neutral capsule, so the chapter always plays in frame A; dispose frees the skin and the debug handle', async () => {
+  it('with no model file on disk every slot stands on its neutral capsule, so the chapter always plays; dispose frees the skin and the debug handle', async () => {
     const scene = await stage('exp-yrp-3d-stage');
     const h = handle()!;
     expect(h).toBeDefined();
@@ -242,7 +261,7 @@ describe('exp-yrp-3d-stage, built through loadScene', () => {
     const scene = await stage('exp-yrp-3d-stage');
     expect(handle()).toBeUndefined();
     expect(scene.slots.shotDirector).toBe(YRP_SHOT_DIRECTOR); // no skin to tell the beats to: the plain director
-    expect(scene.slots.sideFacing).toEqual({ party: -1, enemy: 1 }); // the staging and the camera are still frame A's
+    expect(scene.slots.sideFacing).toEqual({ party: -1, enemy: 1 }); // the staging and the camera are still the default frame's
     expect(scene.palette.name).toBe('bevelle-underground'); // Chapter IV's own room, grade and all
     expect(scene.scene.getObjectByName('machina-deck')!.visible).toBe(true);
     expect(scene.scene.getObjectByName('yrp-wet-floor')).toBeUndefined();

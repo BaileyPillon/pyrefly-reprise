@@ -180,12 +180,12 @@ describe("each figure's parts", () => {
 describe('which Bahamut', () => {
   const both = (): { io: LoaderIO; fetched: string[] } => fakeIO({ ...folder(BASE, true), [url(BASE, AI_BOSS_FILES.rigged)]: 1, [url(BASE, AI_BOSS_FILES.anims)]: 2 }, {}, { bahamut: 4 });
 
-  it("by default is the AI-made one: bahamut-ai.glb with no clips, in his own physically based look, flapping his wings, and the game's Bahamut's files are never fetched", async () => {
+  it("by default is the AI-made one playing the game's clips (2026-10-22): the rigged file, his clips, his own physically based look, no wing flap (the clips move the wings), and the game's Bahamut's files are never fetched", async () => {
     const t = both();
     const models = await loadYrpModels(opts(t.io, [BASE]));
-    expect(models.sources['bahamut']).toEqual({ mesh: BASE, clips: null, file: 'bahamut-ai.glb', look: 'pbr' });
+    expect(models.sources['bahamut']).toEqual({ mesh: BASE, clips: BASE, file: 'bahamut-ai-rigged.glb', look: 'pbr' });
     const boss = models.models.get('bahamut')!;
-    expect([boss.source, boss.animated, boss.flaps, boss.playsKo]).toEqual(['own', false, true, false]);
+    expect([boss.source, boss.animated, boss.flaps, boss.playsKo, boss.playingClip]).toEqual(['own', true, false, true, 'APPEAR_00']);
     expect(boss.chrScale).toBe(1); // the AI mesh is in its own units: no .chr scale
     expect(t.fetched.some((u) => u.endsWith('/bahamut.glb') || u.endsWith('/bahamut-anims.glb'))).toBe(false);
     expect(models.sources['yuna']).toMatchObject({ file: 'yuna.glb', look: 'diffuse' }); // the real girls are untouched
@@ -202,18 +202,19 @@ describe('which Bahamut', () => {
     models.dispose();
   });
 
-  it('with ?bossrig=clips moves the game\'s clips onto the AI mesh when the rigged files are on disk: the rigged mesh, his clips, the pbr look, no flap', async () => {
+  it('with ?bossrig=simple keeps the first motion: bahamut-ai.glb with no clips, in his own physically based look, flapping his wings; the rigged files are never fetched', async () => {
     const t = both();
-    const models = await loadYrpModels(opts(t.io, [BASE], undefined, { boss: 'ai', rig: true }));
-    expect(models.sources['bahamut']).toEqual({ mesh: BASE, clips: BASE, file: 'bahamut-ai-rigged.glb', look: 'pbr' });
+    const models = await loadYrpModels(opts(t.io, [BASE], undefined, { boss: 'ai', rig: false }));
+    expect(models.sources['bahamut']).toEqual({ mesh: BASE, clips: null, file: 'bahamut-ai.glb', look: 'pbr' });
     const boss = models.models.get('bahamut')!;
-    expect([boss.animated, boss.flaps, boss.playsKo, boss.playingClip]).toEqual([true, false, true, 'APPEAR_00']);
+    expect([boss.source, boss.animated, boss.flaps, boss.playsKo]).toEqual(['own', false, true, false]);
+    expect(t.fetched.some((u) => u.includes('bahamut-ai-rigged') || u.includes('bahamut-ai-anims'))).toBe(false);
     models.dispose();
   });
 
-  it('with ?bossrig=clips but no rigged files on disk plays the procedural AI boss, not a hole and not the game\'s Bahamut', async () => {
+  it('with no rigged files on disk (the default asks for them) plays the procedural AI boss, not a hole and not the game\'s Bahamut', async () => {
     const t = fakeIO(folder(BASE, true));
-    const models = await loadYrpModels(opts(t.io, [BASE], undefined, { boss: 'ai', rig: true }));
+    const models = await loadYrpModels(opts(t.io, [BASE]));
     expect(models.sources['bahamut']).toMatchObject({ file: 'bahamut-ai.glb', look: 'pbr', clips: null });
     expect([models.models.get('bahamut')!.animated, models.models.get('bahamut')!.flaps]).toEqual([false, true]);
     models.dispose();

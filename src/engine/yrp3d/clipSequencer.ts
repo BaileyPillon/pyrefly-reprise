@@ -28,6 +28,9 @@ export const FADE = { in: 0.12, out: 0.25, part: 0.05, base: 0.3 } as const;
 /** Seconds an attack has to land when no beat said (an unannounced attack). */
 export const DEFAULT_LEAD = 0.35;
 
+/** The fastest an attack's entry is played to put its end on the blow (the wind-up is cut to what fits when the entry is longer than `lead` times this). */
+export const ATTACK_SPEED_MAX = 2.2;
+
 /** The longest a held action waits for its release (seconds): an attack for its blow, a cast for its spell, an item for its use. Whatever releases it first wins. */
 export const MAX_HOLD = { attack: 0.6, cast: 6, item: 4 } as const;
 
@@ -189,7 +192,7 @@ export class ClipSequencer {
     let skip = 0;
     if (pose === 'attack') {
       const l = Math.max(0.05, lead ?? DEFAULT_LEAD);
-      speed = clamp(total / l, 1, 2.2);
+      speed = clamp(total / l, 1, ATTACK_SPEED_MAX);
       skip = Math.max(0, total - l * speed);
     } else if (pose === 'cast' || pose === 'item') speed = clamp(total / BUDGET.enter, 1, 2) * rate;
     else if (pose === 'hurt') speed = clamp(total / BUDGET.hurt, 1, 1.8) * rate;
@@ -259,6 +262,17 @@ export class ClipSequencer {
     }
     if (seg.stage === 'enter') return this.afterEnter(seg, plan);
     return this.toBase(seg.pose === 'ko' ? FADE.base : FADE.out);
+  }
+
+  /**
+   * The seconds more than `lead` a blow would have to wait for this model's attack to play **from its first part** (the wind-up) instead of being cut to the moment before the blow: the whole entry at the fastest
+   * speed it is played at ({@link ATTACK_SPEED_MAX}) takes `total / 2.2`, and the blow's `lead` is what the presenter's lunge gives it. 0 for a pose that is not an attack, a model with no attack plan, and an entry that
+   * already fits. Bahamut's two entry parts (the rear and the lunge, 2.6 s) need about 1.2 s against the lunge's 0.26, so about 0.94 s more.
+   */
+  windup(kind: string, lead: number | undefined): number {
+    const plan = this.plans.attack;
+    if (kind !== 'attack' || !plan || plan.enter.length === 0) return 0;
+    return Math.max(0, this.sum(plan.enter) / ATTACK_SPEED_MAX - Math.max(0.05, lead ?? DEFAULT_LEAD));
   }
 
   /** An action opens. `kind` is the painted pose the presenter picked for it (`attack`, `cast`, `item`, `defend`); `lead` the seconds until the blow lands, when there is a blow. */

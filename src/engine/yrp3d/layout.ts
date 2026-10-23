@@ -184,11 +184,11 @@ export function boxOf(rig: RigData, aspect: number, at: V3, height: number, half
   return { left: Math.min(...pts.map((q) => q.x)), right: Math.max(...pts.map((q) => q.x)), top: Math.min(...pts.map((q) => q.y)), bottom: Math.max(...pts.map((q) => q.y)) };
 }
 
-/** The boxes of the four figures at frame A's `idle` (or any rig), keyed by id. */
-export function figureBoxes(rig: RigData, aspect: number): Record<YrpId, ScreenBox> {
+/** The boxes of the four figures at frame A's `idle` (or any rig, and any party `slots`: a frame may stand the girls elsewhere, `./frames.ts`), keyed by id. */
+export function figureBoxes(rig: RigData, aspect: number, slots: readonly V3[] = PARTY_SLOTS): Record<YrpId, ScreenBox> {
   const out = {} as Record<YrpId, ScreenBox>;
   YRP_PARTY_IDS.forEach((id, i) => {
-    out[id] = boxOf(rig, aspect, PARTY_SLOTS[i]!, PARTY_HEIGHT, HALF_WIDTH[id]);
+    out[id] = boxOf(rig, aspect, slots[i]!, PARTY_HEIGHT, HALF_WIDTH[id]);
   });
   out[YRP_BOSS_ID] = boxOf(rig, aspect, BOSS_SPOT, BOSS_HEIGHT, HALF_WIDTH.bahamut);
   return out;
@@ -295,20 +295,22 @@ export const fileUrl = (base: string, dir: string, file: string): string => `${f
 export type Look = 'diffuse' | 'pbr';
 
 /**
- * Which Bahamut the chapter fights, and how he moves (Bailey, 2026-10-20): **by default the AI-made Bahamut** (`bahamut-ai.glb`: Meshy, unrigged, with the wing flap and breath of this chapter's first branch, shaded in his own
- * physically based material), the real Yuna, Rikku and Paine standing before him. `?boss=real` fights the game's own Bahamut (`bahamut.glb`, his real clips, 4x: the comparison). `?bossrig=clips` (AI boss only) moves the
- * game's Bahamut clips onto the AI mesh when that rigged file is on disk (`bahamut-ai-rigged.glb`, `bahamut-ai-anims.glb`: another agent's work, not played by default because Bailey judges rigs in motion first).
+ * Which Bahamut the chapter fights, and how he moves (Bailey, 2026-10-20 and 2026-10-22): **by default the AI-made Bahamut** (Meshy; shaded in his own physically based material) **playing the game's own Bahamut clips**
+ * (the v2 rig: `bahamut-ai-rigged.glb` and `bahamut-ai-anims.glb`, the game's battle motions moved onto the AI mesh), the real Yuna, Rikku and Paine standing before him. Bailey asked for exactly this on 2026-10-22
+ * ("apply the real game bahamut animations to the ai meshy model"). `?bossrig=simple` keeps the first branch's motion (the unrigged `bahamut-ai.glb` with the procedural wing flap and breath); the same motion is what a page gets
+ * **when the rigged files are not on disk** (the plain mesh is the next plan, never a hole). `?boss=real` fights the game's own Bahamut (`bahamut.glb`, his real clips, 4x: the comparison). `?bossrig=clips`, the old way to ask
+ * for the moved clips, is still read and means the default.
  */
 export interface BossChoice {
   readonly boss: 'ai' | 'real';
   readonly rig: boolean;
 }
 
-/** The boss a page asks for: `?boss=real` is the game's, anything else the AI one; `?bossrig=clips` asks for the moved clips (only the AI boss has any to ask for). */
+/** The boss a page asks for: `?boss=real` is the game's, anything else the AI one; the AI one plays the moved clips unless the page says `?bossrig=simple` (the real boss has his own clips: nothing to move). */
 export function bossChoice(search: string): BossChoice {
   const q = new URLSearchParams(search);
   const boss = q.get('boss') === 'real' ? 'real' : 'ai';
-  return { boss, rig: boss === 'ai' && q.get('bossrig') === 'clips' };
+  return { boss, rig: boss === 'ai' && q.get('bossrig') !== 'simple' };
 }
 
 /** What a figure is loaded from: its model file, the file its clips are in (null for none), and the look it is shaded in. */
@@ -322,8 +324,8 @@ export interface FigurePlan {
 export const AI_BOSS_FILES = { mesh: 'bahamut-ai.glb', rigged: 'bahamut-ai-rigged.glb', anims: 'bahamut-ai-anims.glb' } as const;
 
 /**
- * The files of a figure in the order they are tried: the real girls and the game's own Bahamut are `<id>.glb` and `<id>-anims.glb` in the diffuse look; the AI boss is `bahamut-ai.glb` with no clips in the `pbr` look, or, with
- * `rig` set, the rigged file and its clips first and the plain mesh after it (so a page that asks for clips the disk does not have gets the procedural boss, not a hole).
+ * The files of a figure in the order they are tried: the real girls and the game's own Bahamut are `<id>.glb` and `<id>-anims.glb` in the diffuse look; the AI boss is the rigged file and its clips first (the default) and
+ * the plain `bahamut-ai.glb` with no clips after it, both in the `pbr` look (so a disk without the rigged files gets the procedural boss, not a hole); with `rig` off (`?bossrig=simple`) only the plain mesh.
  */
 export function figurePlans(id: YrpId, choice: BossChoice): readonly FigurePlan[] {
   if (id !== YRP_BOSS_ID || choice.boss === 'real') return [{ mesh: `${id}.glb`, anims: `${id}-anims.glb`, look: 'diffuse' }];

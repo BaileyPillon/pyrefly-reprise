@@ -2,8 +2,8 @@
  * **Finding and loading the real models** (the hidden 3D Bahamut chapter, the real-models branch `exp-yrp-real`; FFX-2 only): each figure's model, its clips and the clip map are read from the models folders under
  * `public/` (`YRP_MODEL_DIRS`, `data/yrp-ids.ts`), in the order the page asks for them (`modelDirs`):
  *
- * - **Which Bahamut** (`BossChoice`): by default the AI-made one (`bahamut-ai.glb`, no clips, the procedural wing flap, his own physically based look); `?boss=real` the game's (`bahamut.glb` and his clips); `?bossrig=clips` the
- *   AI mesh with the game's clips moved onto it, when its rigged files are on disk. The files of each figure are `figurePlans`' (`./layout.ts`), tried in order.
+ * - **Which Bahamut** (`BossChoice`): by default the AI-made one with the game's own clips moved onto it (the v2 rig: `bahamut-ai-rigged.glb` and `bahamut-ai-anims.glb`, his own physically based look); with those files
+ *   missing, or with `?bossrig=simple`, the plain mesh (`bahamut-ai.glb`, no clips, the procedural wing flap); `?boss=real` the game's (`bahamut.glb` and his clips). The files of each figure are `figurePlans`' (`./layout.ts`), tried in order.
  * - **The model** is `<id>.glb` (the plan's file) from the first folder that has it. The HD folder (`yrp-hd/`: 4x textures, one level of subdivision) comes before the base one (`yrp/`), so **HD is the default whenever its file is there**,
  *   figure by figure; `?models=base` takes the base folder alone (the comparison). A figure whose file is in neither stands on the neutral capsule (`./capsule.ts`); its `<id>-anims.glb` alone is enough to show the
  *   mesh that file carries (the clips file is the same skeleton with the mesh and every motion).
@@ -99,7 +99,7 @@ export interface LoadOptions {
   dirs: readonly string[];
   /** The figure's world height per id, from the actors the stage staged (the skin refits when the stage disagrees later). */
   heights: Readonly<Record<YrpId, number>>;
-  /** Which Bahamut and whether the moved clips are asked for; the default is the AI boss with the procedural motion. */
+  /** Which Bahamut and whether the moved clips are asked for; the default is the AI boss with the game's clips moved onto him (the plain mesh when the rigged files are not there). */
   choice?: BossChoice;
   io?: LoaderIO;
   /** Said once per problem, for the log. */
@@ -143,7 +143,7 @@ function freeScene(scene: Object3D): void {
 /** Load the four models, each from its own files; a figure whose file is missing (or does not parse) stands on the neutral capsule. Every id has an entry. */
 export async function loadYrpModels(opts: LoadOptions): Promise<YrpModels> {
   const io = opts.io ?? defaultIO();
-  const choice = opts.choice ?? { boss: 'ai', rig: false };
+  const choice = opts.choice ?? { boss: 'ai', rig: true };
   const parsed = new Map<string, Promise<Parsed | null>>();
   const parseOnce = (url: string): Promise<Parsed | null> => {
     let p = parsed.get(url);

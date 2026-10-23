@@ -93,6 +93,11 @@ export class ClipRig {
     this.playing = next;
   }
 
+  /** The seconds a blow would have to wait, beyond `lead`, for an attack to play from its first part (`ClipSequencer.windup`). */
+  windup(kind: string, lead: number | undefined): number {
+    return this.sequencer.windup(kind, lead);
+  }
+
   /** An action opens (`attack`, `cast` and `item` start their poses). */
   open(kind: string, lead: number | undefined, rate = 1): void {
     this.run(this.sequencer.open(kind, lead, rate));

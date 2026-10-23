@@ -388,27 +388,31 @@ describe('where the clips and the clip map are', () => {
 });
 
 describe('which Bahamut and which files', () => {
-  it('fights the AI-made Bahamut by default, the game\'s own for ?boss=real, and asks for the moved clips only with ?bossrig=clips on the AI one', () => {
-    expect(bossChoice('')).toEqual({ boss: 'ai', rig: false });
+  it('fights the AI-made Bahamut playing the game\'s clips by default (2026-10-22), the simple wing-and-breath motion only for ?bossrig=simple, and the game\'s own Bahamut for ?boss=real', () => {
+    expect(bossChoice('')).toEqual({ boss: 'ai', rig: true });
+    expect(bossChoice('?bossrig=clips')).toEqual({ boss: 'ai', rig: true }); // the old way to ask: the same as the default
+    expect(bossChoice('?bossrig=simple')).toEqual({ boss: 'ai', rig: false });
+    expect(bossChoice('?bossrig=SIMPLE')).toEqual({ boss: 'ai', rig: true }); // exact, as every query switch here
     expect(bossChoice('?boss=real')).toEqual({ boss: 'real', rig: false });
-    expect(bossChoice('?bossrig=clips')).toEqual({ boss: 'ai', rig: true });
     expect(bossChoice('?boss=real&bossrig=clips')).toEqual({ boss: 'real', rig: false }); // the game's Bahamut has his own clips: nothing to move
-    expect(bossChoice('?boss=ai&bossrig=nonsense')).toEqual({ boss: 'ai', rig: false });
-    expect(bossChoice('?models=base&boss=nonsense')).toEqual({ boss: 'ai', rig: false });
+    expect(bossChoice('?boss=ai&bossrig=nonsense')).toEqual({ boss: 'ai', rig: true });
+    expect(bossChoice('?models=base&boss=nonsense')).toEqual({ boss: 'ai', rig: true });
+    expect(bossChoice('?frame=a&bossrig=simple')).toEqual({ boss: 'ai', rig: false }); // the frame query is another switch
   });
 
   it('loads the real girls from <id>.glb and <id>-anims.glb in the diffuse look, whichever boss', () => {
-    for (const choice of [bossChoice(''), bossChoice('?boss=real'), bossChoice('?bossrig=clips')]) {
+    for (const choice of [bossChoice(''), bossChoice('?boss=real'), bossChoice('?bossrig=simple')]) {
       for (const id of YRP_PARTY_IDS) expect(figurePlans(id, choice)).toEqual([{ mesh: `${id}.glb`, anims: `${id}-anims.glb`, look: 'diffuse' }]);
     }
   });
 
-  it('gives the AI boss bahamut-ai.glb with no clips in the pbr look, the rigged file and its clips first when they are asked for, and the game\'s Bahamut his own files in the diffuse look', () => {
-    expect(figurePlans('bahamut', bossChoice(''))).toEqual([{ mesh: AI_BOSS_FILES.mesh, anims: null, look: 'pbr' }]);
-    expect(figurePlans('bahamut', bossChoice('?bossrig=clips'))).toEqual([
+  it('gives the AI boss the rigged file and its clips first and bahamut-ai.glb with no clips after it (both in the pbr look), only the plain mesh for ?bossrig=simple, and the game\'s Bahamut his own files in the diffuse look', () => {
+    expect(figurePlans('bahamut', bossChoice(''))).toEqual([
       { mesh: AI_BOSS_FILES.rigged, anims: AI_BOSS_FILES.anims, look: 'pbr' },
       { mesh: AI_BOSS_FILES.mesh, anims: null, look: 'pbr' },
     ]);
+    expect(figurePlans('bahamut', bossChoice('?bossrig=clips'))).toEqual(figurePlans('bahamut', bossChoice('')));
+    expect(figurePlans('bahamut', bossChoice('?bossrig=simple'))).toEqual([{ mesh: AI_BOSS_FILES.mesh, anims: null, look: 'pbr' }]);
     expect(figurePlans('bahamut', bossChoice('?boss=real'))).toEqual([{ mesh: 'bahamut.glb', anims: 'bahamut-anims.glb', look: 'diffuse' }]);
     expect(AI_BOSS_FILES).toEqual({ mesh: 'bahamut-ai.glb', rigged: 'bahamut-ai-rigged.glb', anims: 'bahamut-ai-anims.glb' });
     expect(fileUrl('/', 'models-exp/yrp', AI_BOSS_FILES.mesh)).toBe('/models-exp/yrp/bahamut-ai.glb');
