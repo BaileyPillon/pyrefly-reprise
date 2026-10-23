@@ -142,18 +142,29 @@ describe('the held breath through the presenter', () => {
 
   it('FFX\'s ladder marks the move at "imminent" (stage 2), a turn ahead; stage 1 marks nothing', async () => {
     const r = rig();
-    await r.play([{ type: 'charge', enemyId: 'mortiorchis', name: 'Total Annihilation', stage: 1, turnsLeft: 2 } as never]);
+    await r.play([{ type: 'charge', enemyId: 'mortiorchis', name: 'Auto-Attack Mode', stage: 1, turnsLeft: 1 } as never]); // the engine's own captions (`seymour-flux-rules.ts#announceCharge`)
     expect(r.port.log).toEqual([]);
-    await r.play([{ type: 'charge', enemyId: 'mortiorchis', name: 'Total Annihilation', stage: 2, turnsLeft: 1 } as never]);
+    await r.play([{ type: 'charge', enemyId: 'mortiorchis', name: 'Ready To Annihilate', stage: 2, turnsLeft: 0 } as never]);
     expect(r.port.log).toEqual(['breath:mark']);
     // and the move itself, when it comes, does not mark twice
     await r.play(move('mortiorchis', 'total-annihilation', 'Total Annihilation', 1, ['tidus']));
     expect(r.port.log).toEqual(['breath:mark', 'breath:tell', 'breath:blow', 'breath:lift']);
   });
 
+  it('FFX-2: the countdown marks Mega Flare from the number 2 (stage 2); 5, 4 and 3 mark nothing', async () => {
+    setDemoChapter('ffx2-bahamut');
+    setPaceGame('ffx2');
+    const r = rig({ party: ['yuna', 'rikku', 'paine'], foes: ['bahamut'], chapter: 'ffx2-bahamut' });
+    await r.play([{ type: 'charge', enemyId: 'bahamut', name: '3', stage: 1, turnsLeft: 2 } as never]);
+    expect(r.port.log).toEqual([]);
+    await r.play([{ type: 'charge', enemyId: 'bahamut', name: '2', stage: 2, turnsLeft: 1 } as never]);
+    expect(r.port.log).toEqual(['breath:mark']);
+    expect(r.port.breaths[0]).toMatchObject({ move: 'mega-flare', game: 'ffx2', attacker: 'bahamut' });
+  });
+
   it('a boss that falls takes its marker with it', async () => {
     const r = rig();
-    await r.play([{ type: 'charge', enemyId: 'mortiorchis', name: 'Total Annihilation', stage: 2, turnsLeft: 1 } as never, { type: 'ko', targetId: 'mortiorchis' } as never]);
+    await r.play([{ type: 'charge', enemyId: 'mortiorchis', name: 'Ready To Annihilate', stage: 2, turnsLeft: 0 } as never, { type: 'ko', targetId: 'mortiorchis' } as never]);
     expect(r.port.log.slice(0, 2)).toEqual(['breath:mark', 'breath:lift']);
   });
 

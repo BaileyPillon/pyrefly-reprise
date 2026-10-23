@@ -183,6 +183,11 @@ describe('the held breath\'s plan', () => {
     expect(breathFrame(2150, marks({ menu: true })).core).toBeGreaterThan(0.9);
   });
 
+  it('REDUCE MOTION: the ring does not travel; it is at its final size from the first frame it shows', () => {
+    expect(breathFrame(1100, marks({ calm: true })).ringScale).toBe(1);
+    expect(breathFrame(1100, marks()).ringScale).toBeGreaterThan(1.2);
+  });
+
   it('a move whose end never arrives is let go; a marker that waits for its turn is not (for two minutes)', () => {
     expect(breathExpired(2200 + BREATH_GUARD_MS - 1, marks({ blowAt: 2200 }))).toBe(false);
     expect(breathExpired(2200 + BREATH_GUARD_MS + 1, marks({ blowAt: 2200 }))).toBe(true);

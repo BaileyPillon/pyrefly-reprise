@@ -85,9 +85,12 @@
   border-color: #fff;
   color: var(--pdf-ink);
 }
-.pdf__btn b {
-  display: inline-flex;
+.pdf__btn .pdf__key {
+  display: none;
   font-weight: 700;
+}
+.pdf__btn.is-focus .pdf__key {
+  display: inline-flex; /* the confirm key's chip rides the focused button: the one the press takes */
 }
 @keyframes pdf-in {
   from {

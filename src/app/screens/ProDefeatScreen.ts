@@ -35,9 +35,9 @@ export interface ProDefeatOptions {
 }
 
 /** TRY AGAIN and OTHER FIGHT, in cursor order (the demo defeat panel's own two slabs and words). */
-const ACTIONS: ReadonlyArray<{ choice: ResultsChoice; label: string; key: string; pad: string }> = [
-  { choice: 'retry', label: 'Try again', key: 'Enter', pad: 'Cross' },
-  { choice: 'other-fight', label: 'Other fight', key: 'Tab', pad: 'Square' },
+const ACTIONS: ReadonlyArray<{ choice: ResultsChoice; label: string }> = [
+  { choice: 'retry', label: 'Try again' },
+  { choice: 'other-fight', label: 'Other fight' },
 ];
 
 export class ProDefeatScreen extends Screen {
@@ -72,7 +72,7 @@ export class ProDefeatScreen extends Screen {
           <div class="pdf__row">
             ${ACTIONS.map(
               (a, i) =>
-                `<button type="button" class="pdf__btn${i === 0 ? ' pdf__btn--first' : ''}" data-action="results:${a.choice}" data-index="${i}"><b>${keyHint(a.key, a.pad)}</b><span>${escapeHtml(a.label)}</span></button>`,
+                `<button type="button" class="pdf__btn${i === 0 ? ' pdf__btn--first' : ''}" data-action="results:${a.choice}" data-index="${i}"><b class="pdf__key">${keyHint('Enter', 'Cross')}</b><span>${escapeHtml(a.label)}</span></button>`, // the confirm key's chip shows on the focused button only
             ).join('')}
           </div>
         </div>

@@ -115,6 +115,52 @@ describe('the layer', () => {
   });
 });
 
+describe('the layer canvas (a recording 2D context, jsdom has none)', () => {
+  const calls: string[] = [];
+  const ctx = new Proxy({} as Record<string, unknown>, {
+    get: (t, k: string) => {
+      if (k in t) return t[k];
+      if (k === 'createRadialGradient' || k === 'createLinearGradient') return (): { addColorStop(): void } => (calls.push(k), { addColorStop: () => undefined });
+      return (): void => void calls.push(k);
+    },
+    set: (t, k: string, v) => ((t[k] = v), true),
+  });
+  beforeEach(() => {
+    calls.length = 0;
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => ctx as never);
+  });
+  afterEach(() => vi.restoreAllMocks());
+
+  const draw = (game: 'ffx' | 'ffx2', move: 'total-annihilation' | 'mega-flare', t: number, lift?: number): { calls: string[]; gradients: number } => {
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    const rects: Record<string, { x: number; y: number; w: number; h: number }> = { tidus: { x: 100, y: 500, w: 200, h: 250 }, yuna: { x: 300, y: 520, w: 180, h: 230 }, boss: { x: 800, y: 60, w: 400, h: 480 }, seymour: { x: 1000, y: 40, w: 300, h: 400 } };
+    const layer = new ProStageLayer({ root, game, rectOf: (id) => rects[id] ?? null, pointOf: (id) => (rects[id] ? { x: rects[id]!.x + 50, y: rects[id]!.y + 100 } : null) });
+    layer.setCompanions(['seymour']);
+    calls.length = 0;
+    layer.scrubBreath({ game, move, name: 'X', attacker: 'boss', party: ['tidus', 'yuna'], companions: ['seymour'], t, tellMs: 1200, ...(lift === undefined ? {} : { lift }) });
+    const out = { calls: [...calls], gradients: calls.filter((c) => c === 'createRadialGradient').length };
+    layer.dispose();
+    return out;
+  };
+
+  it('draws nothing before the tell and clears when it is over (a marked move draws only its name and ring: DOM)', () => {
+    expect(draw('ffx', 'total-annihilation', -1).gradients).toBe(0);
+    expect(draw('ffx', 'total-annihilation', 3500, 900).calls).toContain('clearRect');
+  });
+  it('a tell cuts a window for each figure that keeps its colour (two girls, the attacker and its companion), then draws motes, the core and the rims', () => {
+    const f = draw('ffx', 'total-annihilation', 1100);
+    expect(f.calls).toContain('fillRect');
+    expect(f.gradients).toBeGreaterThanOrEqual(4 + 2 + 20); // four pools, two rims, the motes still in flight
+  });
+  it('Mega Flare blow opens the flood and draws the flash in both skins, and the attacker pool closes with it', () => {
+    const before = draw('ffx2', 'mega-flare', 1190);
+    const blow = draw('ffx2', 'mega-flare', 1300);
+    expect(blow.gradients).toBeGreaterThan(0);
+    expect(blow.gradients).toBeLessThan(before.gradients + 60);
+  });
+});
+
 describe('the boss card', () => {
   const card = (pro: boolean): HTMLElement => {
     const root = document.createElement('div');

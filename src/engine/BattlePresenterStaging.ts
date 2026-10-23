@@ -18,6 +18,7 @@ import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { menuBlocks } from './KeySlots.ts';
 import { stagingGame, stagingPieceOn } from './pro/staging/StagingSwitch.ts';
 import { bigMoveOf, type BigMove, type StageFacts, type StagingPort } from './pro/staging/StagingPort.ts';
+import type { DemoGame } from './motion/DemoGate.ts';
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
 import { realVictoryOf } from './motion/RealMotion.ts';
 import { FREEZE_HOLD_MS, STAND_DOWN_MIN_MS, cheerHoldMs } from './pro/staging/EndingPlan.ts';
@@ -59,12 +60,15 @@ const live = new WeakMap<EventCtx, { move: BigMove; attacker: CombatantId; name:
 /** A move's display name, as the layer sets it small under the boss. */
 const NAME_OF: Readonly<Record<BigMove, string>> = { 'total-annihilation': 'Total Annihilation', 'mega-flare': 'Mega Flare' };
 
-/** The ladder's own name for a move (`charge` events carry the name, not the id). */
-export function moveOfName(name: string | undefined): BigMove | null {
+/**
+ * The move a `charge` event's name announces, in this game. FFX's Mortiorchis announces Total Annihilation in two captions, `Auto-Attack Mode` (stage 1) and `Ready To Annihilate` (stage 2, the mount's last turn before it;
+ * `battle/ffx/ai/seymour-flux-rules.ts#announceCharge`); FFX-2's Bahamut counts `5`, `4`, `3`, `2`, `1` (stage 2 from `2`; `battle/ffx2/ai/bahamut.ts#countdownTurn`) before Mega Flare. Only the "imminent" captions name the move: the
+ * first FFX caption (`Auto-Attack Mode`) and the numbers above `2` do not.
+ */
+export function moveOfName(name: string | undefined, game: DemoGame = stagingGame()): BigMove | null {
   const n = (name ?? '').trim().toLowerCase();
-  if (n === 'total annihilation') return 'total-annihilation';
-  if (n === 'mega flare') return 'mega-flare';
-  return null;
+  if (game === 'ffx') return n === 'ready to annihilate' || n === 'total annihilation' ? 'total-annihilation' : null;
+  return n === '2' || n === '1' || n === 'mega flare' ? 'mega-flare' : null;
 }
 
 function begin(ctx: EventCtx, port: StagingPort, move: BigMove, attacker: CombatantId): void {

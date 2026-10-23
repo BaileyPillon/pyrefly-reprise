@@ -100,6 +100,7 @@ export class ProStageLayer implements StagingPort {
         this.marks.tellMs = tellLength(cue.msToBlow);
         this.marks.tame = cue.tame;
         this.marks.menu = cue.menu === true;
+        this.marks.calm = cue.calm;
         this.armLook(cue.move, true, cue.menu === true ? 'mark' : 'tell'); // a menu open: the rim only, Mega Flare's engine white-out stays as it was
         this.root().dataset['pst'] = '';
         return;
@@ -233,6 +234,18 @@ export class ProStageLayer implements StagingPort {
     this.update(0);
   }
 
+  /** Captures only (`__pyrefly.stagingAdvance`): hold the layer's clock and move it forward exactly `ms` (a recorder's frame step); `release()` lets it run again. */
+  advance(ms: number): void {
+    this.frozen = true;
+    this.clock += Math.max(0, ms);
+    this.step(0);
+  }
+
+  /** Captures only: let the clock run again after `advance` or `scrubBreath`. */
+  release(): void {
+    this.frozen = false;
+  }
+
   /** The camera's lean for a tell, as a fraction of the subject distance (the presenter applies it through the camera port). */
   lean(): number {
     return leanFraction(this.o.game);
@@ -325,6 +338,7 @@ export class ProStageLayer implements StagingPort {
   /** The HUD comes back to its own opacity. */
   private settle(): void {
     const r = this.root();
+    if (r.dataset['pst'] === undefined) return; // idle: nothing to give back, and no write to the DOM on a frame where nothing is staged
     delete r.dataset['pst'];
     r.style.removeProperty('--pst-hud');
   }

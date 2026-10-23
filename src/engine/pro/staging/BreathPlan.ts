@@ -28,6 +28,8 @@ export interface BreathMarks {
   tame: boolean;
   /** FFX-2: a command menu is open as the tell begins (D-357): no wash, no flood, no HUD sink; the name, the ring and the core still play. */
   menu?: boolean;
+  /** REDUCE MOTION: the ring does not travel (it fades in at its final size) and the motes do not drift (the view reads it); the light still changes. */
+  calm?: boolean;
 }
 
 /** One frame's strengths, every one 0 to 1 (ring `scale` is a multiple of its resting size). */
@@ -106,7 +108,7 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
 
   // the ring appears from 18 percent, gathers inward to its final size by the end of the tell, pulses wider at the blow and fades
   const ringIn = m.tellAt === null ? 0 : smooth((t - 0.18 * T) / (0.3 * T));
-  const ringScale = m.tellAt === null ? 1.9 : 1 + 0.9 * (1 - easeOut(t / T)) + (blown ? 0.45 * easeOut(sinceBlow / 360) : 0);
+  const ringScale = m.calm === true ? 1 : m.tellAt === null ? 1.9 : 1 + 0.9 * (1 - easeOut(t / T)) + (blown ? 0.45 * easeOut(sinceBlow / 360) : 0);
   const ring = ringIn * (blown ? 1 - 0.65 * smooth(sinceBlow / 500) : 1) * keep;
 
   // light flows into the boss for the whole tell; it stops at the blow

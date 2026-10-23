@@ -67,8 +67,8 @@
   left: 7.3%;
   right: auto;
   top: auto;
-  bottom: 13.5%;
-  max-width: 62%;
+  bottom: 12.5%;
+  max-width: 66%;
   color: var(--bs-name);
   animation: bstart-pro-rise 700ms 160ms cubic-bezier(0.2, 0.8, 0.25, 1) both;
 }
@@ -84,7 +84,7 @@
 }
 .bstart--pro .bstart__name {
   font-weight: 500;
-  font-size: clamp(40px, 8.6vw, 156px);
+  font-size: clamp(44px, 11.6vw, 210px); /* the book's lock-up: "Seymour Flux" runs 43 percent of the frame's width */
   line-height: 1;
   letter-spacing: -0.012em;
   color: var(--bs-name);
@@ -101,7 +101,7 @@
   margin: 0.4em 0 0.7em;
 }
 .bstart--pro .bstart__subline {
-  font-size: clamp(14px, 1.9vw, 30px);
+  font-size: clamp(14px, 2.15vw, 36px);
   color: var(--bs-name);
   opacity: 0.86;
 }

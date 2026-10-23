@@ -99,8 +99,9 @@
 [data-pst] .ffx2hud__stage,
 [data-pst] .ffx2hud__plates,
 [data-pst] .ffxhud .ig-surface,
-[data-pst] .ffx2hud .ig-surface {
-  opacity: var(--pst-hud, 1) !important;
+[data-pst] .ffx2hud .ig-surface,
+[data-pst] .eint {
+  opacity: var(--pst-hud, 1) !important; /* the enemy-intent slab and its E ENEMY MOVE chip go with the rest: the victory title sits where the chip parks */
 }
 
 /* ---- the ending (top layer): the freeze's flash and shock ring, the quiet VICTORY, the FFX-2 pull-back's bars, the defeat's dim and caption ---- */
@@ -108,10 +109,10 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  background: radial-gradient(ellipse at 50% 58%, rgba(10, 20, 64, 0.16) 0%, rgba(8, 14, 46, 0.5) 100%);
+  background: radial-gradient(ellipse at 50% 62%, rgba(14, 26, 84, 0.26) 0%, rgba(8, 14, 52, 0.62) 100%);
 }
 .pst-top[data-game='ffx2'] .pst__dim {
-  background: radial-gradient(ellipse at 50% 58%, rgba(44, 16, 66, 0.16) 0%, rgba(34, 12, 56, 0.5) 100%);
+  background: radial-gradient(ellipse at 50% 62%, rgba(56, 22, 84, 0.26) 0%, rgba(38, 12, 62, 0.62) 100%);
 }
 .pst__flash {
   position: absolute;
