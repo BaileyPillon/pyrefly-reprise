@@ -11,6 +11,8 @@
  * FFX-2 draws its own plates.
  */
 
+import { proMarkersOn } from '../common/proMarkers.ts'; // lane pro-look: the pro target flag on the field carries the name and the damage line, so this plate stands aside
+
 /** Plan §8 Q5, answered yes (D-249): ON. */
 export const FFX_TARGET_PLATE_ENABLED = true;
 
@@ -33,7 +35,7 @@ export class FfxTargetPlate {
 
   /** The live selection's names, or null when nothing is being aimed at. */
   show(names: readonly string[] | null): void {
-    if (!this.enabled || !names || names.length === 0) {
+    if (!this.enabled || !names || names.length === 0 || proMarkersOn()) {
       this.el.hidden = true;
       return;
     }

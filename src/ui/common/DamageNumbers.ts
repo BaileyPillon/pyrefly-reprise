@@ -30,6 +30,7 @@ import {
   type LaneInput,
   type NumeralRect,
 } from './damageLadder.ts';
+import { prefersReducedMotion } from './transitions/reduceMotion.ts';
 import { TICK_HOLD_MS, UsualBlows, glassText, maxHpOf, proLifetime, proNumbersOn, proOpacity, proPop, proRise, sizeFactor, tierOf, type NumberTier } from './proNumbers.ts';
 
 /**
@@ -223,6 +224,9 @@ export class DamageNumbers {
   private nowMs = 0;
   /** Lane pro-look: each attacker's usual blow so far, for the glass numbers' tiers. */
   private readonly usual = new UsualBlows();
+  /** Lane pro-look: REDUCE MOTION (the game's row or the OS), read at most twice a second while the glass numbers play; the glass numeral then neither pops nor rises (it fades in place). */
+  private proReducedMotion = false;
+  private proReducedAtMs = -1e9;
 
   constructor(private readonly opts: DamageNumbersOptions) {
     this.el = document.createElement('div');
@@ -606,6 +610,10 @@ export class DamageNumbers {
   update(dt: number): void {
     const dtMs = dt * 1000 * paceRate('numeral'); // the pacing option (`pace.ts`): a numeral held longer, 1 unless picked
     this.nowMs += dtMs;
+    if (this.active.some((n) => n.pro) && this.nowMs - this.proReducedAtMs > 500) {
+      this.proReducedMotion = prefersReducedMotion();
+      this.proReducedAtMs = this.nowMs;
+    }
     const survivors: ActiveNumber[] = [];
     // One layout read per frame, shared by every numeral: the layer's own box
     // turns the projector's viewport pixels into layer-local ones (they are
@@ -743,11 +751,11 @@ export class DamageNumbers {
         continue;
       }
 
-      const bounce = n.pro ? proRise(tMs, n.lifetimeMs) : bouncePosition(tMs, n.kind, n.vx); // the glass numbers rise, the old ones bounce
+      const bounce = n.pro ? (this.proReducedMotion ? { x: 0, y: 0 } : proRise(tMs, n.lifetimeMs)) : bouncePosition(tMs, n.kind, n.vx); // the glass numbers rise, the old ones bounce
       // The spawn pop is a transform about the glyph's own centre, so the
       // dodging/clamping has to use the popped extent or a numeral that lands
       // near an edge or a panel overhangs it for the first 0.12s.
-      const pop = n.pro ? proPop(tMs - n.pro.popAtMs, n.pro.tier, n.pro.tick) : scaleAt(tMs, n.kind);
+      const pop = n.pro ? (this.proReducedMotion ? 1 : proPop(tMs - n.pro.popAtMs, n.pro.tier, n.pro.tick)) : scaleAt(tMs, n.kind);
       const half = { w: n.halfW * pop, h: (fontSizeFor(n.kind) * n.sizeK * scale * pop) / 2 };
       const anchor = { x: base.x + (lanes.get(n.target) ?? 0), y: base.y };
       const offset = { x: ((n.offsetX ?? 0) + bounce.x) * scale, y: (n.offsetY + bounce.y) * scale };

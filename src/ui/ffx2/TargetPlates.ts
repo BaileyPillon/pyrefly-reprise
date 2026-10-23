@@ -14,6 +14,7 @@ import {
 } from './targetPlateGeometry.ts';
 import { displayNameOf } from './displayName.ts';
 import { keyHint } from '../common/padGlyphs.ts';
+import { proMarkersOn } from '../common/proMarkers.ts'; // lane pro-look
 
 /**
  * The three plates the approved Targeting s3 tile draws while an FFX-2 target
@@ -215,6 +216,7 @@ export class TargetPlates {
     );
     this.row.hidden = false;
     this.hint.hidden = false;
+    this.target.classList.toggle('ffx2-tplate--pro-off', proMarkersOn()); // lane pro-look: the field's flag names the target; the actor plate and the hint stay (the CSS only hides this one)
     this.measure();
   }
 

@@ -25,10 +25,13 @@ export interface Box {
   h: number;
 }
 
-/** The FFX glove's size: about five times today's 44 px at 1440p, growing with the window (`clamp(110, 9 percent of the width, 280)`), the 44:30 shape of the drawing. [ours] */
+/** The pro glove's drawing is 120 x 52 (`proMarkerArt.PRO_HAND_SVG`): the long pointing finger of the picked frame (T1-A), a 2.3:1 shape. */
+export const PRO_HAND_VIEW = { w: 120, h: 52 } as const;
+
+/** The FFX glove's size: about five times today's 44 px at 1440p, growing with the window (`clamp(110, 9 percent of the width, 280)`), in the shape of the pro glove's drawing. [ours] */
 export function proHandSize(viewW: number): { w: number; h: number } {
   const w = Math.min(280, Math.max(110, viewW * 0.09));
-  return { w, h: (w * 30) / 44 };
+  return { w, h: (w * PRO_HAND_VIEW.h) / PRO_HAND_VIEW.w };
 }
 
 /** FFX-2's ring for a target's silhouette: a quarter of the figure's height across, on the torso (46 percent down), never under 26 px of radius nor over a third of the shorter screen edge. [ours] */
@@ -61,6 +64,27 @@ export function rowMark(game: 'ffx' | 'ffx2', hp: number, maxHp: number, alive: 
 /** The class a row takes for its mark (with the leading space the row builders' class lists want, or ''). */
 export function rowMarkClass(mark: RowMark): string {
   return mark === 'low' ? ' ig-stat--pro-low' : mark === 'ko' ? ' ig-stat--pro-ko' : '';
+}
+
+/** How long one low-HP pulse lasts, ms (`pro-markers.css`'s `pro-low-pulse` runs 1.2 s). */
+export const PULSE_MS = 1200;
+
+/**
+ * The pulse's phase for a row built at `nowMs` (the page clock), as the custom property the CSS delays its animation by (with the leading semicolon that joins it to the row's own style). A party row is rebuilt as a whole (FFX-2's `partyEl.innerHTML` runs at
+ * 20 Hz while a menu is open), and a new element restarts its animation; a negative delay of `nowMs mod 1.2 s` makes every rebuilt row take up the glow where the last one stopped, so the pulse
+ * runs on one clock whatever redraws the row. A row that is not low carries nothing.
+ */
+export function rowMarkStyle(mark: RowMark, nowMs: number = typeof performance === 'undefined' ? 0 : performance.now()): string {
+  if (mark !== 'low') return '';
+  return `;--pro-phase:-${Math.round(((nowMs % PULSE_MS) + PULSE_MS) % PULSE_MS)}ms`; // joins the row's own style attribute, so a row that is not low keeps its attribute exactly as it was
+}
+
+/** The damage line on the target flag ("PHYSICAL DAMAGE"): the first clause of the command's help line, upper case, kept short; '' when there is none. */
+export function proHelpLine(help: string | undefined): string {
+  if (!help) return '';
+  const first = help.split(/\s[·•]\s|[.!?](?:\s|$)/)[0]!.trim();
+  const clipped = first.length > 30 ? `${first.slice(0, 29).trimEnd()}…` : first;
+  return clipped.toUpperCase();
 }
 
 /** The small mark inside the row's face tile: a warning triangle for low HP (so the state is not colour alone), a KO pill for a fallen member. */

@@ -129,9 +129,13 @@
   background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(255, 224, 244, 0.7) 18%, rgba(255, 160, 220, 0.28) 48%, rgba(255, 160, 220, 0) 100%);
 }
 
-/* REDUCE MOTION / LOW EFFECTS keep their numerals: the glass ones lose only the glint. */
+/* REDUCE MOTION / LOW EFFECTS / REDUCE FLASHES keep their numerals: the glass ones lose only the glint (and, under motion, the pop and the rise: `DamageNumbers` reads the same settings). The OS query and the game's own
+   rows (`html[data-reduce-motion]`, `data-low-effects`, `data-reduce-flashes`, set by `app/applyComfort.ts`) both reach it (pro-look review M4). */
 @media (prefers-reduced-motion: reduce) {
   .dnum-glint {
     display: none;
   }
+}
+html[data-reduce-motion] .dnum-glint, html[data-low-effects] .dnum-glint, html[data-reduce-flashes] .dnum-glint {
+  display: none;
 }

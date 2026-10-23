@@ -6,9 +6,22 @@
  * piece (arena, seam, hits, numbers, markers) and answers whether it plays now.
  */
 import { proTune } from '../engine/look/pro/ProGrade.ts';
-import { PRO_PIECES, proLookOn, proMode, proPieceOn, setProMode, setProPiece, type ProMode, type ProPiece } from '../engine/look/pro/ProSwitch.ts';
+import { PRO_PIECES, dangerPulseFromSearch, proLookOn, proMode, proPieceOn, setProMode, setProPiece, type ProMode, type ProPiece } from '../engine/look/pro/ProSwitch.ts';
+
+/** The Danger pulse's off switch on the page (`html[data-danger-pulse='off']`, read by `ui/common/pro-markers.css`): true while the low-HP row pulses. */
+function setDangerPulse(on: boolean): boolean {
+  const root = typeof document === 'undefined' ? null : document.documentElement;
+  if (root) {
+    if (on) delete root.dataset['dangerPulse'];
+    else root.dataset['dangerPulse'] = 'off';
+  }
+  return on;
+}
 
 export function installProDebug(api: Record<string, unknown>): void {
+  setDangerPulse(dangerPulseFromSearch(typeof location === 'undefined' ? undefined : location.search) === 'on'); // `?dangerpulse=off`
+  /** `__pyrefly.proDangerPulse(false)` stops the low-HP row's pulse (a steady ring stays), `(true)` brings it back; no argument reads it. */
+  api['proDangerPulse'] = (on?: boolean): boolean => (typeof on === 'boolean' ? setDangerPulse(on) : document.documentElement.dataset['dangerPulse'] !== 'off');
   api['pro'] = (mode?: ProMode): ProMode => {
     if (mode === 'pro' || mode === 'today') setProMode(mode);
     return proMode();

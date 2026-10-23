@@ -4,7 +4,7 @@ import type { BattleState } from '../../src/battle/common/types.ts';
 import { setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
 import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
 import { ProFieldMarks } from '../../src/ui/common/ProFieldMarks.ts';
-import { KO_FLOOR_MS, isLowRow, koPlan, proHandSize, proRing, proRingBox, rowMark, rowMarkClass, rowMarkHtml } from '../../src/ui/common/proMarkers.ts';
+import { KO_FLOOR_MS, PRO_HAND_VIEW, isLowRow, koPlan, proHandSize, proRing, proRingBox, rowMark, rowMarkClass, rowMarkHtml } from '../../src/ui/common/proMarkers.ts';
 import { TargetCursor, type TargetEntry } from '../../src/ui/ffx/TargetCursor.ts';
 import { PartyStatusWindow } from '../../src/ui/ffx/PartyStatusWindow.ts';
 import { dockPlate } from '../../src/ui/ffx/targetCursorParts.ts';
@@ -44,7 +44,7 @@ describe('the pure pieces', () => {
     expect(proHandSize(500).w).toBe(110);
     expect(proHandSize(9000).w).toBe(280);
     const s = proHandSize(1920);
-    expect(s.h / s.w).toBeCloseTo(30 / 44, 3); // the drawing's own shape
+    expect(s.h / s.w).toBeCloseTo(PRO_HAND_VIEW.h / PRO_HAND_VIEW.w, 3); // the pro glove drawing's own shape (a long pointing finger, 120 x 52)
   });
 
   it("the ring is a quarter of the figure's height across, on the torso, and bounded", () => {

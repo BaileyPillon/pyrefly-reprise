@@ -56,6 +56,11 @@ export function addressChoseLook(search: string | undefined): boolean {
   return look !== '' && look !== 'pro' && look !== 'today';
 }
 
+/** The Danger pulse's off switch from a search string (pure): `?dangerpulse=off` turns the low-HP row's pulse into a steady amber ring (the triangle stays); anything else leaves it on. A Settings row would set the same thing. */
+export function dangerPulseFromSearch(search: string | undefined): 'on' | 'off' {
+  return search !== undefined && queryWord(search, 'dangerpulse') === 'off' ? 'off' : 'on';
+}
+
 const here = (): string | undefined => (globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
 
 /** The switch as the page asked for it. Read once. */

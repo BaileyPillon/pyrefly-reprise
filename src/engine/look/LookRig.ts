@@ -15,7 +15,7 @@ import { setMaskEveryFigure } from '../BloomMask.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { boundEyeCandyScene } from '../fx/a/GoldenHour.ts';
 import { QUALITY_COST, type LookName, type LookParams, type LookQuality } from './LookConfig.ts';
-import { lookParams, relightParams, roomBold } from './LookBoldConfig.ts';
+import { lookParams, roomBold } from './LookBoldConfig.ts';
 import { LookBold } from './LookBold.ts';
 import { LookDrift } from './LookDrift.ts';
 import { ROOM_LOOKS } from './LookGrades.ts';
@@ -24,11 +24,12 @@ import { LookMainShader } from './LookMainShader.ts';
 import { lightColour } from './LookMaths.ts';
 import { LookRoom, lin, mixc } from './LookRoom.ts';
 import { relightCells, relightStats } from './relight/FigureRelight.ts';
-import { keyDirection, rimDirection } from './relight/RelightConfig.ts';
 import { RelightLights } from './relight/RelightLights.ts';
 import { lookState } from './LookState.ts';
 import { LookStage } from './stage/LookStage.ts';
+import { applyRelight } from './LookRelight.ts';
 import { proRoom, type ProRoom } from './pro/ProGrade.ts';
+import { applyProCone, applyProGrade } from './pro/ProRigTerms.ts';
 import { proSeam } from './pro/ProSeam.ts';
 import { proPieceOn } from './pro/ProSwitch.ts';
 import { stageWind } from './stage/StageWind.ts';
@@ -245,16 +246,7 @@ export class LookRig {
     g['grainFps']!.value = p.grade.grainFps;
     g['grainSize']!.value = p.grade.grainSize;
     g['grainHighlights']!.value = 0.5;
-    if (proR) {
-      // lane pro-look: the arena's haze veil, vignette and grain (the book's regrade terms; the grade pass carries them all already)
-      (g['hazeColor']!.value as Vector3).set(...proR.haze.colour);
-      (g['hazeAmount']!.value as Vector3).set(...proR.haze.amounts);
-      g['hazeSide']!.value = proR.haze.side;
-      g['vignette']!.value = lookState.tweaks['grade.vignetteAbs'] ?? proR.vignette.amount;
-      g['vignetteRadius']!.value = lookState.tweaks['grade.vignetteRadius'] ?? proR.vignette.radius;
-      (g['vignetteTint']!.value as Vector3).set(...proR.vignette.tint);
-      g['grain']!.value = lookState.tweaks['grade.grain'] ?? proR.grain;
-    }
+    if (proR) applyProGrade(g, proR, lookState.tweaks); // lane pro-look: the arena's haze veil, vignette and grain (`pro/ProRigTerms.ts`)
     g['saturation']!.value = (pal.saturation ?? 1.08) * (v('grade.saturation') / 1.0);
     if (Math.abs(figureTrueOf(r) - v('grade.figureTrue')) > 1e-3) applyFigureTrue(r, v('grade.figureTrue'));
 
@@ -336,13 +328,13 @@ export class LookRig {
     (u['figGain']!.value as Vector3).set(...p.figure.gain);
     (u['figLift']!.value as Vector3).set(...p.figure.lift);
     u['figContrast']!.value = v('figure.contrast');
-    this.relight(name, u['uLight']!.value as Vector2, W / Math.max(1, H), camera);
+    applyRelight({ room: this.room, lights: this.lights, clock: this.clock, tw: (p) => this.tw(p) }, name, u['uLight']!.value as Vector2, W / Math.max(1, H), camera);
     const lightUv = u['uLight']!.value as Vector2;
     if (bold) {
       this.bold ??= new LookBold(r);
       this.bold.update({ scene: this.room.scene!, camera, name, room: this.room, lights: this.lights, quality: lookState.quality, dt, now, time: eyeCandy.frozen ? 0.5 : this.clock, scale, W, H, aspect: W / Math.max(1, H), lightUv: [lightUv.x, lightUv.y], tweak: (k, d) => this.tw(k) ?? d, seam: proR && proPieceOn('seam') ? (proSeam(this.room.key) ?? null) : null });
     } else this.bold?.off();
-    this.proCone(proR, moon ? (u['shaftL']!.value as Vector2) : lightUv, W / Math.max(1, H), camera); // the cone follows the painted moon where the depth stage has one (Chapter I), else the room's found light
+    applyProCone(u, proR, { lightUv: moon ? (u['shaftL']!.value as Vector2) : lightUv, aspect: W / Math.max(1, H), time: eyeCandy.frozen ? 0.5 : this.clock, k: lookState.tweaks['cone'] ?? 1, camera, scratch: this.coneUv, project: (c, o, at) => this.room.projectLight(c, o, at) }); // the cone follows the painted moon where the depth stage has one (Chapter I), else the room's found light
     if (lookState.drift) this.drift.update(this.room.scene!, camera, this.room.painting, roomBold(this.room.key).driftPx ?? 3, dt, W, scale, lookState.commandOpen);
     else this.drift.release();
     if (this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks)) this.stage.update({ scene: this.room.scene!, room: this.room, quality: lookState.quality, time: eyeCandy.frozen ? 0.5 : this.clock, tweak: (k, d) => this.tw(k) ?? d });
@@ -354,52 +346,6 @@ export class LookRig {
     this.stats.quality = lookState.quality;
     this.stats.relight = { any: relightCells.relightAny.value > 0, bound: relightStats.bound, loaded: relightStats.loaded, missing: relightStats.missing, lights: this.lights.stats.lights };
     this.stats.passes = r.composer.passes.map((q, i) => `${i}:${q.constructor.name}${q.enabled ? '' : '(off)'}`);
-  }
-
-  /** Lane pro-look: the arena's cone of light into the bold pass (`LookBoldShader` term 4c): the room's light (or a fixed frame point), the colour times the strength, the drift's clock. */
-  private proCone(pr: ProRoom | undefined, lightUv: Vector2, aspect: number, camera: Camera): void {
-    const u = this.r.gradePass.uniforms;
-    const c = pr?.cone;
-    if (!c) {
-      (u['uConeCol']!.value as Vector4).w = 0;
-      return;
-    }
-    const k = lookState.tweaks['cone'] ?? 1;
-    let cu = c.follow ? lightUv.x : c.u;
-    let cv = c.follow ? lightUv.y : c.v;
-    if (c.paint) {
-      this.room.projectLight(camera, this.coneUv, c.paint); // anchored to the painting: it moves with the camera
-      cu = this.coneUv.x;
-      cv = this.coneUv.y;
-    }
-    (u['uCone']!.value as Vector4).set(cu, cv, c.spread, c.reach);
-    (u['uConeCol']!.value as Vector4).set(c.colour[0], c.colour[1], c.colour[2], c.strength * k);
-    (u['uConeP']!.value as Vector3).set(c.rays, eyeCandy.frozen ? 0.5 : this.clock, aspect);
-  }
-
-  /** Light on the paintings: the figures lit with their normal maps (hd2d and cinematic; anime stays flat): a key from the room's light, a rim from behind, coloured lights for spells and the orb. */
-  private relight(name: LookName, lightUv: Vector2, aspect: number, camera: Camera): void {
-    const rl = relightParams(name, lookState.strength);
-    const c = relightCells;
-    if (!rl) {
-      c.relightAny.value = 0;
-      this.lights.remove();
-      return;
-    }
-    const p = { ...rl, key: this.tw('relight.key') ?? rl.key, rim: this.tw('relight.rim') ?? rl.rim, point: this.tw('relight.point') ?? rl.point };
-    const tw = lookState.tweaks;
-    this.lights.install();
-    const from: [number, number] = [0.5, 0.34];
-    c.relightKeyDir.value.set(...keyDirection([lightUv.x, lightUv.y], from, aspect, p.keyZ));
-    c.relightRimDir.value.set(...rimDirection([lightUv.x, lightUv.y], from, aspect, p.rimZ));
-    c.relightKeyCol.value.set(...lin(lightColour(this.room.light.color)));
-    const bRim = lookState.strength === 'bold' ? roomBold(this.room.key).rim : undefined; // bold: the room's key colour, saturated
-    c.relightRimCol.value.set(...lin(bRim ?? lightColour(this.room.light.color, 0.12)));
-    c.relightKey.value.set(p.key, p.keyTint, p.gainMin, p.gainMax);
-    c.relightRimAmt.value = p.rim;
-    c.relightAspect.value = aspect;
-    c.relightAny.value = tw['relight.off'] ? 0 : 1;
-    this.lights.update(this.clock, camera, p);
   }
 
   private deactivate(): void {

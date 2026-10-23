@@ -19,7 +19,7 @@ import { captionHtml, ffx2RowTagsHtml } from '../common/statusRows.ts';
 import { faceLadder } from '../common/partyFace.ts';
 import { faceLayersHtml } from '../common/portrait.ts';
 import '../common/pro-markers.css';
-import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml, type RowMark } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
+import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml, rowMarkStyle, type RowMark } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
 
 /** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
 export const TICKS_PER_BAR = 24000;
@@ -142,7 +142,7 @@ export function partyRowHtml(
   // Status display O2/O3 (Bailey's pick, 2026-09-29): square tags in place of the text chips, and
   // a caption where a status takes the command away ("ASLEEP"). `ui/common/statusRows.ts`.
   const statuses = ffx2RowTagsHtml(c);
-  return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})">
+  return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})${rowMarkStyle(proMark)}">
     ${faceStackHtml(c, dressphere, monogram, opts.artNamespace, proMark)}
     <div class="ffx2stat__body">
       <div class="ffx2stat__top">

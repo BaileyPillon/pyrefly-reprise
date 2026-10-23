@@ -3,7 +3,7 @@ import { aeonChipHtml, portraitChipHtml, tintFor, wirePortraitFallbacks } from '
 import { captionHtml, ffxPlateIconsHtml } from '../common/statusRows.ts';
 import { zombieWarnOn } from './zombieWarnOptions.ts';
 import '../common/pro-markers.css';
-import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
+import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml, rowMarkStyle } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
 
 /**
  * FFX Critical (SOS): HP below half of max, where the digits turn yellow (research/ffx-combat-core.md V8 and
@@ -87,7 +87,7 @@ export class PartyStatusWindow {
 
     // The aeon's row while it is out (PR-0181) wears the turn list's aeon chip, not a letter (FOC24-02, CHK-012).
     const face = c.side === 'aeon' ? aeonChipHtml(c.spriteKey ?? id, c.name, c.portraitKey) : portraitChipHtml(c.portraitKey, c.name, tintFor('party'));
-    return `<div class="${rowCls}" style="margin-right:calc(var(--ig-stat-step) * ${i})" data-actor="${id}">
+    return `<div class="${rowCls}" style="margin-right:calc(var(--ig-stat-step) * ${i})${rowMarkStyle(proMark)}" data-actor="${id}">
       <span class="ig-stat__face">${face}${rowMarkHtml(proMark)}</span>
       <span class="ig-stat__name">${escapeHtml(c.name)}</span>
       <span class="${hpValueCls}">${c.hp}<small>/${maxHp}</small></span>

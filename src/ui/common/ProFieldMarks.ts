@@ -3,6 +3,10 @@
  * games, the same class), beside the damage numerals: for every party member who is down, a soft grey wash settles on the floor round the body from the floor impact of the real fall (`proMarkers.KO_FLOOR_MS`), and a
  * small red KO mark pops over it 120 ms later; both stay while the member is down and go the moment she is stood up. The member's row has its own KO pill (`proMarkers.rowMarkHtml`).
  *
+ * FFX-2's rule D-357 holds (pro-look review M1): nothing new plays over an open command menu (`engine/motion/MenuHold.ts`, the same question every other added look asks). A member who falls while a menu
+ * is open gets her wash and mark the moment the menu closes, settling over their own 450 ms from the floor impact instead of popping in; marks already up stay up when a menu opens. FFX has no such hold (its
+ * `menuHolds` is false). REDUCE MOTION (the game's own row or the OS) takes the mark's pop away (pro-look review M4); the wash only fades.
+ *
  * It reads the battle state through `sync(state)` (the HUD already hands its states to its other panels) and places itself from the HUD's own projector; it has no clock of its own but `update(dt)`, so it
  * freezes with the rest of the game. With the pro look's `markers` piece off (the default) it draws nothing and holds nothing.
  *
@@ -10,12 +14,16 @@
  */
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
 import './pro-markers.css';
-import { koPlan, proMarkersOn } from './proMarkers.ts';
+import { menuHolds } from '../../engine/motion/MenuHold.ts';
+import { prefersReducedMotion } from './transitions/reduceMotion.ts';
+import { KO_FLOOR_MS, koPlan, proMarkersOn } from './proMarkers.ts';
 
 export type FieldProjector = (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null;
 
 interface Down {
   sinceMs: number;
+  /** False while a command menu held the first appearance back (FFX-2); the timeline starts when it lets go. */
+  started: boolean;
   wash: HTMLElement;
   mark: HTMLElement;
 }
@@ -25,6 +33,9 @@ export class ProFieldMarks {
   private readonly down = new Map<CombatantId, Down>();
   private project: FieldProjector | null = null;
   private nowMs = 0;
+  /** REDUCE MOTION, read at most twice a second (the pause row or the OS preference). */
+  private reduced = false;
+  private reducedAtMs = -1e9;
 
   constructor(private readonly game: 'ffx' | 'ffx2') {
     this.el = document.createElement('div');
@@ -55,7 +66,7 @@ export class ProFieldMarks {
       mark.className = 'pro-ko-mark';
       mark.textContent = 'KO';
       this.el.append(wash, mark);
-      this.down.set(id, { sinceMs: this.nowMs, wash, mark });
+      this.down.set(id, { sinceMs: this.nowMs, started: false, wash, mark });
     }
     for (const [id, d] of [...this.down]) {
       if (live.has(id)) continue;
@@ -71,9 +82,24 @@ export class ProFieldMarks {
     if (!this.down.size) return;
     const layer = this.el.getBoundingClientRect();
     const wide = Math.max(140, (typeof window === 'undefined' ? 1600 : window.innerWidth) * 0.09);
+    if (this.nowMs - this.reducedAtMs > 500) {
+      this.reduced = prefersReducedMotion();
+      this.reducedAtMs = this.nowMs;
+    }
     for (const [id, d] of this.down) {
       const feet = this.project?.(id, 'feet') ?? null;
+      if (!d.started) {
+        if (menuHolds()) {
+          d.wash.style.opacity = '0';
+          d.mark.style.opacity = '0';
+          continue;
+        }
+        d.started = true;
+        // the fall played behind the menu: the wash settles over its own 450 ms from here, it does not pop in at full
+        if (this.nowMs - d.sinceMs > KO_FLOOR_MS[this.game]) d.sinceMs = this.nowMs - KO_FLOOR_MS[this.game];
+      }
       const plan = koPlan(this.game, this.nowMs - d.sinceMs);
+      if (this.reduced) plan.markScale = plan.mark > 0 ? 1 : 0; // no pop
       if (!feet) {
         d.wash.style.opacity = '0';
         d.mark.style.opacity = '0';
