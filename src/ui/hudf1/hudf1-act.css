@@ -80,3 +80,6 @@ html[data-reduce-motion] .hud-f1 .ig-stat { transition: opacity 0.2s ease; }
   .hud-f1.f1-ribbon-hides.f1-acting .f1-ribbon { transform: skewX(var(--ig-skew)); transition: opacity 140ms ease-in; }
   .hud-f1 .ig-stat { transition: opacity 0.2s ease; }
 }
+
+/* ------------------------------------------------------------------ the turn strip stays (today's FFX acting fade takes the CTB column to 16 percent; the mockup keeps the strip up while the action is read) */
+.ffxhud.hud-f1.ffxhud--acting .ig-ctb { opacity: 1; }

@@ -144,6 +144,23 @@ describe('on', () => {
     expect(stage.querySelector('.f1-cue')!.classList.contains('f1-cue--none')).toBe(true);
   });
 
+  it('a switch flipped off and on again brings the block of the open menu back at once', () => {
+    const f1 = new HudF1('ffx');
+    f1.mount(host('ffx'));
+    f1.setMenuActor('yuna');
+    stack.hidden = false;
+    f1.update(0.016);
+    expect(root.classList.contains(F1_CMD_OPEN)).toBe(true);
+    setHudF1Mode('today');
+    expect(root.classList.contains(F1_CMD_OPEN)).toBe(false);
+    expect(root.classList.contains(HUD_F1_CLASS)).toBe(false);
+    setHudF1Mode('f1');
+    f1.update(0.016);
+    expect(root.classList.contains(HUD_F1_CLASS)).toBe(true);
+    expect(root.classList.contains(F1_CMD_OPEN)).toBe(true);
+    expect(stage.querySelector('.f1-hero__name')!.textContent).toBe('Yuna');
+  });
+
   it('Intel is the strategy guide being shown', () => {
     const f1 = new HudF1('ffx');
     f1.mount(host('ffx'));

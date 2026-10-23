@@ -156,6 +156,8 @@ export class HudF1 {
       h.root.classList.toggle(HUD_F1_CLASS, want);
       this.layer.hidden = !want;
       if (want) {
+        this.cmdOpen = false; // a switch flipped back on re-reads the open menu (the class was taken off with the rest)
+        this.heroId = '';
         h.root.style.setProperty('--f1-floor', `${HUD_F1_TUNE.floorPx / 4}px`);
         h.root.classList.toggle('f1-finish', HUD_F1_TUNE.finish);
         h.root.classList.toggle('f1-edge-calm', HUD_F1_TUNE.edgeCalm);

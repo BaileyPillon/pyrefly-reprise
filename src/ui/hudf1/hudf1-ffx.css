@@ -88,3 +88,11 @@
 .ffxhud.hud-f1 .ig-stat__od i { border-radius: 1.5px; background: linear-gradient(90deg, #c99a2c, #f6dc84); }
 .ffxhud.hud-f1 .ffx-stat__od em { right: auto; left: -11.5px; bottom: -2.5px; font: 700 var(--f1-floor)/1 var(--ig-font-display); letter-spacing: 0.14em; color: rgba(244, 241, 232, 0.66); }
 .ffxhud.hud-f1 .ffx-stat__od--ready em { color: var(--ig-accent); }
+
+/* the status medallions (today's O3 icons) ride at the card's lower right: the bar gives them room, and in the slim card (no bar) the MP does */
+.ffxhud.hud-f1 .ig-stat:has(.sti-row) .ig-stat__od { margin-right: 52px; }
+.ffxhud.hud-f1.f1-acting .ig-stat:has(.sti-row) .ig-stat__value--mp { margin-right: 52px; }
+.ffxhud.hud-f1.f1-acting .ffx-stat__statuses.sti-row { top: 50%; bottom: auto; right: 3px; transform: translateY(-50%); }
+
+/* the action banner (today's paper slab for an enemy's move) was at the top left, where the boss ribbon is; it steps under the ribbon */
+.ffxhud.hud-f1 .ig-banner { top: 43px; }
