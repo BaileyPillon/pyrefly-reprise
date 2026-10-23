@@ -12,7 +12,7 @@
  *   from where the painting's bottom band lies in its content box (`BOSS_FEET`, measured from the clean idle masters), not at the actor's origin.
  *
  * **Switch** (default OFF, like every piece of the pro look): `?boss=clean`, or the shared `?pack=demo` (`?boss=today` wins over the pack, for A/B captures); only in Chapter I and Chapter IV
- * (`motion/DemoGate.ts`) and only for these two figures. Console: `__pyrefly.bossClean('clean' | 'today' | null)` (`debug/proApi.ts`). With the switch off nothing is patched and no number is written.
+ * (`motion/DemoGate.ts`) and only for these two figures. Console: `__pyrefly.bossClean('clean' | 'today' | null)` (`debug/proApi.ts`). With the switch off nothing is scanned, patched or written (a part is patched the first frame the switch is on).
  *
  * Game case (AGENTS.md rule 14): Bahamut is FFX-2 only, Seymour Flux FFX only; this plumbing is the same for both, so the shared code is "both" and each table row says its game.
  * Pure but for `three` (the meshes it patches) and the address of the page.
@@ -31,17 +31,51 @@ export const BOSS_CLEAN_ARTS: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object.
 /**
  * Where the figure's ground footprint lies in its painting, as fractions of the silhouette's width: `cx` the centre of the lowest band, `hw` its half width. [ours], measured from the CLEAN idle masters
  * (the bottom 300 px of Bahamut's 2048 px master: the tail coil lies there; the bottom 160 px of Seymour's 2422 px master: the boot and the hem), 5th to 95th percentile of the band's alpha.
- * `squash` is the shadow ellipse's depth against its width.
+ * `squash` is the shadow ellipse's depth against its width; `boost` multiplies the engine shadow's opacity (1 = the actor's own): the arena floor is dark and the camera low, so a boss that stands far from it
+ * (Bahamut: 6 world units wide at 80 px each, a shadow 18 px deep) needs a rounder and a darker shadow to read as standing on it (review major 4).
  */
 export interface BossFoot {
   cx: number;
   hw: number;
   squash: number;
+  boost: number;
 }
 export const BOSS_FEET: Readonly<Record<string, BossFoot>> = Object.freeze({
-  'ffx2-bahamut': { cx: 0.38, hw: 0.251, squash: 0.5 },
-  'seymour-flux-body': { cx: 0.443, hw: 0.227, squash: 0.5 },
+  'ffx2-bahamut': { cx: 0.385, hw: 0.251, squash: 1.0, boost: 1.9 }, // the coil is as deep as it is wide: a round pool, not a thin ellipse
+  'seymour-flux-body': { cx: 0.429, hw: 0.227, squash: 0.5, boost: 1 }, // his shadow already reads (a 0.5 ellipse under the boot)
 });
+
+/**
+ * The same footprint for each pose's own painting (review minor 1: the content box changes with the pose, so one fraction slid the shadow on every swap; Seymour's attack lunge has its boot at 0.577 of the
+ * box, not 0.429). [ours], measured from the re-cut 2x masters of each pose the way the idle row was (`feet.py`: the lowest 300 px / 160 px band of the silhouette at alpha 127, 5th to 95th percentile).
+ * A pose with no row (the KO's later frames, a name this table does not know) uses the idle's.
+ */
+export const BOSS_FEET_POSES: Readonly<Record<string, Readonly<Record<string, { cx: number; hw: number }>>>> = Object.freeze({
+  'ffx2-bahamut': {
+    idle: { cx: 0.385, hw: 0.251 },
+    attack: { cx: 0.427, hw: 0.235 },
+    cast: { cx: 0.406, hw: 0.271 },
+    hurt: { cx: 0.358, hw: 0.238 },
+    telegraph: { cx: 0.4, hw: 0.225 },
+    ko: { cx: 0.561, hw: 0.228 },
+  },
+  'seymour-flux-body': {
+    idle: { cx: 0.429, hw: 0.227 },
+    attack: { cx: 0.577, hw: 0.169 },
+    cast: { cx: 0.385, hw: 0.222 },
+    hurt: { cx: 0.305, hw: 0.215 },
+    telegraph: { cx: 0.385, hw: 0.17 },
+    ko: { cx: 0.455, hw: 0.245 },
+  },
+});
+
+/** The footprint row of a pose name (`'attack'`, `'ko.2'`, ...): its own row, else the idle's. Pure. */
+export function footForPose(artId: string, pose: string | undefined): BossFoot {
+  const base = BOSS_FEET[artId];
+  if (!base) throw new Error(`footForPose: ${artId} is not a re-cut boss`);
+  const row = pose === undefined ? undefined : BOSS_FEET_POSES[artId]?.[pose.split('.')[0]!];
+  return row ? { ...row, squash: base.squash, boost: base.boost } : base;
+}
 
 /** `?boss=clean|today` and `?pack=demo` (pure): `today` unless `boss=clean`, or `pack=demo` with no `boss=today`. */
 export function bossCleanFromSearch(search: string | undefined): BossCleanMode {
@@ -104,18 +138,39 @@ export interface FootActor extends Object3D {
   contentQuad(out?: [Vector3, Vector3, Vector3, Vector3]): [Vector3, Vector3, Vector3, Vector3];
 }
 
+/** What an actor may offer besides the shadow fit's needs: its current pose name, and the turn ring's base radius (`PaintedActor`: `pose`, a private `ringBaseRadius` the ring's own pulse is measured against). */
+interface PoseActor {
+  pose?: string;
+  ringBaseRadius?: number;
+}
+
+/** The turn ring's depth against its width: the actor's own (`PaintedActor`: 0.46) times the 0.92 the first round used. */
+const RING_SQUASH = 0.46 * 0.92;
+
+/** How fast the footprint eases between two poses' rows (seconds, time constant): a swap slides the shadow over about a tenth of a second instead of snapping it. */
+const FOOT_TAU = 0.09;
+
 /** One boss's controller, kept in the actor's `userData` by the stage. */
 export class BossClean {
   private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
   private readonly v = new Vector3();
+  /** The footprint now: the current pose's row, eased from the last one (`BossMask.ts#bossFigure` reads it for the bold pass's ellipse). */
+  readonly foot: BossFoot;
+  private lastT = -1;
+  private ringOwn = 1;
+  private ringWritten = -1;
+  private shadowWritten = -1;
 
-  constructor(readonly artId: string) {}
+  constructor(readonly artId: string) {
+    this.foot = { ...footForPose(artId, undefined) };
+  }
 
-  /** Called once per frame after the actor's own update: patch any part that has appeared, then fit the shadow and the ring. */
+  /** Called once per frame after the actor's own update: while the switch is on, patch any part that has appeared, then fit the shadow and the ring. With it off nothing is scanned, patched or written. */
   tick(actor: FootActor): void {
+    if (!bossCleanOn(this.artId)) return;
     // every frame: a rig builds a pose piece's mesh the first time a pose is asked for, and a piece drawn once unpatched shows its rim for that frame (about 60 objects, a few microseconds)
     actor.traverse((o) => this.patch(o as Patched));
-    if (bossCleanOn(this.artId)) this.fit(actor);
+    this.fit(actor);
   }
 
   private patch(m: Patched): void {
@@ -149,10 +204,30 @@ export class BossClean {
     };
   }
 
-  /** Put the contact shadow (and the turn ring) under the figure's footprint: the centre and the width from the content quad, the depth from the table. */
-  private fit(actor: FootActor): void {
-    const foot = BOSS_FEET[this.artId];
-    if (!foot) return;
+  /** Ease the footprint toward the pose's row (the first call snaps; `dt` is the seconds since the last one). */
+  private easeFoot(pose: string | undefined, now: number): void {
+    const to = footForPose(this.artId, pose);
+    const dt = this.lastT < 0 ? 1e9 : Math.max(0, Math.min(0.25, now - this.lastT));
+    this.lastT = now;
+    const k = 1 - Math.exp(-dt / FOOT_TAU);
+    this.foot.cx += (to.cx - this.foot.cx) * k;
+    this.foot.hw += (to.hw - this.foot.hw) * k;
+    this.foot.squash = to.squash;
+  }
+
+  /** The engine shadow's opacity times `boost`, once per write of the actor's own (the actor sets it every frame; a value this fit wrote and the actor has not rewritten is left as it is: nothing compounds). */
+  private boostShadow(shadow: Mesh, boost: number): void {
+    const m = shadow.material as { opacity?: number } | undefined;
+    if (!m || typeof m.opacity !== 'number' || boost === 1) return;
+    if (m.opacity === this.shadowWritten) return;
+    m.opacity = Math.min(0.92, m.opacity * boost);
+    this.shadowWritten = m.opacity;
+  }
+
+  /** Put the contact shadow (and the turn ring) under the figure's footprint: the centre and the width from the content quad and the pose's row, the depth from the table; the ring keeps its own pulse and ease-in. */
+  private fit(actor: FootActor & PoseActor): void {
+    this.easeFoot(actor.pose, (globalThis.performance?.now() ?? 0) / 1000);
+    const foot = this.foot;
     actor.updateWorldMatrix(true, false);
     const q = actor.contentQuad(this.quad);
     const fit = footFit(q[0].x, q[1].x, foot);
@@ -162,9 +237,16 @@ export class BossClean {
     for (const o of [actor.shadow, actor.getObjectByName('turn-ring') ?? null]) {
       if (!o) continue;
       const ring = o.name === 'turn-ring';
-      const rx = (fit.rx * (ring ? 1.12 : 1)) / sx;
+      // the actor's own ring factor (its ease-in 0.93..1 and the 2.5 percent pulse) is its scale over its base radius: kept, not written over. A scale this fit wrote last frame and the actor has not
+      // rewritten since (a hidden ring) is not the actor's: the last factor stands, so nothing feeds back.
+      if (ring) {
+        if (o.scale.x !== this.ringWritten) this.ringOwn = typeof actor.ringBaseRadius === 'number' && actor.ringBaseRadius > 1e-4 ? o.scale.x / actor.ringBaseRadius : 1;
+      }
+      const rx = (fit.rx * (ring ? 1.12 * this.ringOwn : 1)) / sx;
       o.position.x = (fit.cx - originX) / sx;
-      o.scale.set(rx, rx * foot.squash * (ring ? 0.92 : 1), 1);
+      o.scale.set(rx, rx * (ring ? RING_SQUASH : foot.squash), 1); // the turn ring stays the flat ellipse the actor draws, whatever depth the shadow takes
+      if (ring) this.ringWritten = o.scale.x;
+      else this.boostShadow(o as Mesh, foot.boost);
     }
   }
 }

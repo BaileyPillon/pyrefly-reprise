@@ -1,4 +1,4 @@
-import { Vector2, Vector3, Vector4 } from 'three';
+import { Vector2, Vector3 } from 'three';
 
 /**
  * Demo looks: the one compound pass that carries every look's spatial effects, built per look with `#define`s so each look compiles only what it uses.
@@ -50,11 +50,9 @@ export const LookMainShader = {
     /** cinematic rim: gain, width (device px), how far it follows the light. */
     rim: { value: new Vector3(1, 2, 0.7) },
     rimColor: { value: new Vector3(0.8, 0.9, 1) },
-    /** Lane boss-matte (`look/pro/BossRimOff.ts`): the re-cut bosses' screen boxes (no rim inside one, unless another figure's box also holds the pixel) and every other figure's box; counts 0 = today's rim. */
-    uRimBoss: { value: [] as Vector4[] },
-    uRimOther: { value: [] as Vector4[] },
-    rimBossN: { value: 0 },
-    rimOtherN: { value: 0 },
+    /** Lane boss-matte (`look/pro/BossMask.ts`): the figures' mask, R = 1 where a re-cut boss is the figure in front, A = 1 where any figure is (a half-size target, null until the first draw); `bossMaskOn` 0 = today's rim everywhere. */
+    tBossMask: { value: null as unknown },
+    bossMaskOn: { value: 0 },
     /** cinematic chromatic aberration: the shift per unit of distance from the centre (uv). */
     caShift: { value: 0 },
     /** anime outline: ring radius (device px), strength; the ink (linear). */
@@ -100,10 +98,8 @@ export const LookMainShader = {
     uniform vec3 fogColor;
     uniform vec3 rim;
     uniform vec3 rimColor;
-    uniform vec4 uRimBoss[2];
-    uniform vec4 uRimOther[8];
-    uniform float rimBossN;
-    uniform float rimOtherN;
+    uniform sampler2D tBossMask;
+    uniform float bossMaskOn;
     uniform float caShift;
     uniform vec2 outline;
     uniform vec3 ink;
@@ -115,6 +111,20 @@ export const LookMainShader = {
     varying vec2 vUv;
 
     float luma3(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }
+    // lane boss-matte (BossMask.ts): the share of what the figures' mask holds round this pixel (its own and eight taps 2.5 frame px away) that is a re-cut boss; 0 with nothing drawn there (today's rim)
+    float bossShare(vec2 uv) {
+      vec4 c = textureLod(tBossMask, uv, 0.0);
+      float b = c.r;
+      float o = c.a - c.r;
+      vec2 r = resolution * 2.5;
+      for (int k = 0; k < 8; k++) {
+        float a = 0.7853982 * float(k);
+        vec4 t = textureLod(tBossMask, uv + vec2(cos(a), sin(a)) * r, 0.0);
+        b += t.r;
+        o += t.a - t.r;
+      }
+      return b / max(b + o, 1e-3);
+    }
     float hash21(vec2 p) {
       p = fract(p * vec2(123.34, 456.21));
       p += dot(p, p + 45.32);
@@ -282,12 +292,7 @@ export const LookMainShader = {
           float edgeAll = sumBg / float(EDGE_TAPS);
           float e = fig * mix(edgeAll, edgeLit, rim.z);
           e = smoothstep(0.08, 0.7, e);
-          if (rimBossN > 0.5) { // a re-cut boss draws no rim: inside its box and no other figure's
-            float inBoss = 0.0;
-            for (int j = 0; j < 2; j++) { vec4 b = uRimBoss[j]; if (float(j) < rimBossN && uv.x > b.x && uv.x < b.z && uv.y > b.y && uv.y < b.w) inBoss = 1.0; }
-            for (int k = 0; k < 8; k++) { vec4 b = uRimOther[k]; if (float(k) < rimOtherN && uv.x > b.x && uv.x < b.z && uv.y > b.y && uv.y < b.w) inBoss = 0.0; }
-            e *= 1.0 - inBoss;
-          }
+          if (bossMaskOn > 0.5 && e > 0.001) e *= 1.0 - bossShare(uv); // a re-cut boss draws no rim (BossMask.ts); the party's and everyone else's stay
           col += rimColor * e * rim.x * (0.35 + 0.9 * luma3(col));
         }
       }

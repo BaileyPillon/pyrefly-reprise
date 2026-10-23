@@ -20,7 +20,7 @@ import type { RelightLights } from './relight/RelightLights.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
 import type { ProSeam } from './pro/ProSeam.ts';
-import { RimOffBoxes, bossFigure } from './pro/BossRimOff.ts'; // lane boss-matte: the re-cut bosses draw no bold-pass rim
+import { BossMask, bossFigure } from './pro/BossMask.ts'; // lane boss-matte: the re-cut bosses' own mask (no rim on them) and one contact ellipse each
 import { MAX_RIPPLES } from './living/LivingConfig.ts';
 import { LookLiving, type LivingUniforms } from './living/LookLiving.ts';
 
@@ -62,14 +62,14 @@ export class LookBold {
   /** Every visible actor's screen box (x0, y0, x1, y1 in frame uv), padded: the blur keeps them sharp (`LookBlurShader`). */
   readonly boxes: Vector4[] = Array.from({ length: MAX_FIG }, () => new Vector4());
   boxCount = 0;
-  readonly rimOff = new RimOffBoxes(); // lane boss-matte: where the re-cut bosses are on the frame (no rim there; the main look pass reads it too)
+  readonly bossMask = new BossMask(); // lane boss-matte: which figure is a re-cut boss, per pixel (both rims read it)
   /** Release 62 (decision 173b, FFX-2): Mega Flare's flood and white-out, fed from the spell layer's landing taps while this pass is on. */
   readonly flare = new LookFlare();
   /** Release 62 (decision 173a, FFX-2's Bevelle underground): the beam's dust, the lamps' flicker, the floor's rings (`look/living/`). */
   readonly living = new LookLiving();
   /** Each painted figure's feet on the frame this frame, by actor: where a hit's ring starts. */
   private readonly feet = new Map<object, readonly [number, number]>();
-  readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
+  /** For the debug API and the captures. */ readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
 
   constructor(private readonly r: Renderer) {}
 
@@ -218,8 +218,7 @@ export class LookBold {
       const bpy = (by1 - by0) * 0.05;
       this.boxes[n]!.set(bx0 - bpx, by0 - bpy, bx1 + bpx, by1 + bpy);
       A[n]!.set(gu, gv, Math.max(rx, 0.01), Math.max(ry, 0.004));
-      B[n]!.set(bf === 'skip' ? 0 : shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 && bf !== 'skip' ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
-      this.rimOff.actors[n++] = t.actor; // lane boss-matte: the actor behind each box
+      B[n++]!.set(bf === 'skip' ? 0 : shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 && bf !== 'skip' ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
     }
     this.boxCount = n;
     for (let i = n; i < MAX_FIG; i++) {
@@ -303,7 +302,7 @@ export class LookBold {
     const u = pass.uniforms;
     const gloss = rb.gloss * o.tweak('bold.gloss', 1);
     const n = this.figures(camera, o.aspect, { ...fx, shadow: { ...fx.shadow, strength: fx.shadow.strength * o.tweak('bold.shadow', 1) } }, gloss, u['uFigA']!.value as Vector4[], u['uFigB']!.value as Vector4[]);
-    this.rimOff.update(u, this.boxes, n, camera);
+    this.bossMask.frame(this.r.renderer, scene, camera, this.tracked.values(), o.W, o.H, u); // lane boss-matte
     // the stage light: an ellipse round the fight, eased so a figure arriving or leaving never makes it jump
     const FA0 = u['uFigA']!.value as Vector4[];
     const goal = stageEllipse(FA0.slice(0, n).map((a) => [a.x, a.y] as const), o.aspect);
@@ -384,7 +383,7 @@ export class LookBold {
     this.flare.off(this.pass ? (this.pass.uniforms as unknown as FlareUniforms) : undefined);
     this.living.off(this.pass ? (this.pass.uniforms as unknown as LivingUniforms) : undefined);
     if (this.pass) this.pass.enabled = false;
-    this.stats.on = false;
+    this.stats.on = this.bossMask.on = false;
   }
 
   dispose(): void {
@@ -395,6 +394,6 @@ export class LookBold {
     }
     if (this.depth instanceof Texture) this.depth.dispose();
     this.depth = null;
-    this.tracked.clear();
+    this.tracked.clear(); this.bossMask.dispose();
   }
 }
