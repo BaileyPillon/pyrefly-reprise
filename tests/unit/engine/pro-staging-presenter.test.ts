@@ -163,6 +163,17 @@ describe('the held breath through the presenter', () => {
     expect(r.port.breaths[0]).toMatchObject({ move: 'mega-flare', game: 'ffx2', attacker: 'bahamut' });
   });
 
+  it('FFX-2: the boss acts between the countdown numbers and the marker waits through those; only the staged move own end lifts it (the first browser run lifted at the first Impulse)', async () => {
+    setDemoChapter('ffx2-bahamut');
+    setPaceGame('ffx2');
+    const r = rig({ party: ['yuna', 'rikku', 'paine'], foes: ['bahamut'], chapter: 'ffx2-bahamut' });
+    await r.play([{ type: 'charge', enemyId: 'bahamut', name: '2', stage: 2, turnsLeft: 1 } as never]);
+    await r.play(move('bahamut', 'impulse', 'Impulse', 3, ['yuna', 'rikku', 'paine']));
+    expect(r.port.log).toEqual(['breath:mark']); // Impulse began and ended: no tell, no blow, no lift
+    await r.play(move('bahamut', 'mega-flare', 'Mega Flare', 3, ['yuna', 'rikku', 'paine']));
+    expect(r.port.log).toEqual(['breath:mark', 'breath:tell', 'breath:blow', 'breath:lift']);
+  });
+
   it('a boss that falls takes its marker with it', async () => {
     const r = rig();
     await r.play([{ type: 'charge', enemyId: 'mortiorchis', name: 'Ready To Annihilate', stage: 2, turnsLeft: 0 } as never, { type: 'ko', targetId: 'mortiorchis' } as never]);
@@ -221,6 +232,14 @@ describe('the ending through the presenter', () => {
     expect(r.port.endings[0]).toMatchObject({ kind: 'freeze', boss: 'seymour-flux', holdMs: FREEZE_HOLD_MS });
     expect(r.holds).toEqual([FREEZE_HOLD_MS]);
     expect(r.port.endings[1]).toMatchObject({ kind: 'title', boss: 'seymour-flux' });
+  });
+
+  it('the last foe is read from the field too: FFX-2 ATB emits the victory from a later tick, so the killing blow burst has none after it', async () => {
+    setDemoChapter('ffx2-bahamut');
+    setPaceGame('ffx2');
+    const r = rig({ party: ['yuna', 'rikku', 'paine'], foes: ['bahamut'], chapter: 'ffx2-bahamut' });
+    await r.play([dmg('bahamut', 0, 1, 'yuna', 9999), { type: 'ko', targetId: 'bahamut' } as never]); // no victory in this burst
+    expect(r.port.log).toEqual(['ending:freeze']);
   });
 
   it('a foe that is not the last holds nothing, and a chain that goes on holds nothing', async () => {

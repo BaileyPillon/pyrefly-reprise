@@ -13,7 +13,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import type { PlaybackSpeed } from './BattlePresenterPorts.ts';
-import type { ActingAction } from './BattlePresenterSpellFx.ts';
+import { actionOfBlow, type ActingAction } from './BattlePresenterSpellFx.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { menuBlocks } from './KeySlots.ts';
 import { stagingGame, stagingPieceOn } from './pro/staging/StagingSwitch.ts';
@@ -122,7 +122,7 @@ const blown = new WeakMap<EventCtx, string>();
 export function stageBlow(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, a: ActingAction | undefined): void {
   const port = stagingPort(ctx, 'breath');
   const l = live.get(ctx);
-  if (!port || a === undefined || l === undefined || l.attacker !== a.actorId) return;
+  if (!port || a === undefined || l === undefined || l.attacker !== a.actorId || bigMoveOf(a.abilityId, stagingGame()) !== l.move) return; // the attacker's other moves (Impulse between the countdown numbers) are not the blow
   const key = `${a.serial}`;
   if (blown.get(ctx) === key) return;
   blown.set(ctx, key);
@@ -130,10 +130,14 @@ export function stageBlow(ctx: EventCtx, event: Extract<BattleEvent, { type: 'da
   void event;
 }
 
-/** An action has ended: if it was the staged move's, the wash lifts. */
-export function stageLift(ctx: EventCtx, endedId: CombatantId | null | undefined): void {
+/**
+ * The wash lifts. `'action'`: an action of the attacker has ended; it lifts only if that action IS the staged move (FFX-2's Bahamut acts between the countdown numbers, and the marker waits through those:
+ * the first browser run of the real fight lifted at the first Impulse). `'ko'`: the attacker fell, whatever it was doing.
+ */
+export function stageLift(ctx: EventCtx, endedId: CombatantId | null | undefined, how: 'action' | 'ko' = 'ko'): void {
   const l = live.get(ctx);
   if (l === undefined || endedId === null || endedId === undefined || l.attacker !== endedId) return;
+  if (how === 'action' && bigMoveOf(actionOfBlow(ctx, endedId)?.abilityId, stagingGame()) !== l.move) return;
   live.delete(ctx);
   blown.delete(ctx);
   const port = ctx.deps?.staging ?? null;
@@ -170,8 +174,11 @@ export function noteFoeMove(ctx: EventCtx, event: Extract<BattleEvent, { type: '
 export function stageFreeze(ctx: EventCtx, id: CombatantId): Promise<void> | undefined {
   const port = stagingPort(ctx, 'ending');
   if (!port || ctx.moreLinks === true) return undefined;
+  // the last foe of the fight: a victory follows in this burst (FFX), or no other foe stands on the field (FFX-2's ATB emits the victory from a later tick, so the burst of the killing blow does not hold it)
   const b = ctx.burst;
-  if (!b || !b.events.slice(b.at + 1).some((e) => e.type === 'victory')) return undefined;
+  const victoryNext = b !== undefined && b.events.slice(b.at + 1).some((e) => e.type === 'victory');
+  const lastFoe = !ctx.stage.staged().some((other) => other !== id && ctx.stage.sideOf(other) === 'enemy');
+  if (!victoryNext && !lastFoe) return undefined;
   felled.set(ctx, id);
   if (frozen.has(ctx)) return undefined;
   const facts = stageFacts(ctx);

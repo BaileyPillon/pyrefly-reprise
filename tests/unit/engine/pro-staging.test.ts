@@ -219,6 +219,7 @@ describe('the ending plan', () => {
     expect(endFrame(DIM_MS + 100, m).dim).toBeCloseTo(1, 5);
     expect(endFrame(CAPTION_DELAY_MS + CAPTION_MS, m).caption).toBeCloseTo(1, 5);
     expect(endFrame(DIM_MS, m).hud).toBeCloseTo(0, 5); // the HUD goes with the light
+    expect(endFrame(TITLE_MS, { ...emptyEnd(), titleAt: 0 }).hud).toBeCloseTo(0, 5); // and a title with no freeze before it takes the HUD out too
   });
   it('the cheer holds for the longest real clip (Tidus 3,666.7 ms), at least the floor', () => {
     expect(cheerHoldMs([3666.7, 3200, undefined], 900)).toBe(3666.7);

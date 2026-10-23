@@ -109,7 +109,7 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
-  stageLift(ctx, going); // pro staging: a staged big move is over: the wash lifts
+  stageLift(ctx, going, 'action'); // pro staging: a staged big move is over: the wash lifts (only for the staged move's own action)
   releaseCastLift(ctx, going); // the cast lift comes down with the action at the latest
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
   idleAtEnd(ctx, actor, ctx.actingId); // the idle, or (new curves) the strike's own marks do it: follow on the fastest frame home, idle at home
