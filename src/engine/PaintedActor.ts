@@ -79,6 +79,7 @@ import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
 import { alignedSwapOn, motionSmooth, notePoseSwap, swapPolicy } from './PoseSwap.ts'; // W5: `?swap=aligned` (off by default), and the lunge's first frame (on; `?motion=classic` restores cubic-out)
+import { proCriticalBreath } from './look/pro/ProBreath.ts'; // lane pro-look: the critical stance's slower, deeper breath (markers piece; off by default)
 import { demoMotionOn } from './motion/DemoMotion.ts'; // `?motion=demo` (conference demo; default off = exactly as before): the four hooks below
 import { BLEND_MS_MAX, demoBlend } from './motion/DemoBlend.ts';
 import { demoIdleParams, nextIdlePhase, swayClockStart } from './motion/DemoIdle.ts';
@@ -2490,8 +2491,9 @@ export class PaintedActor extends Group {
     // Breathing runs on its own phase accumulator rather than off the clock, so
     // a fighter holding their breath to guard — and letting it go again — eases
     // between tempos instead of jumping a quarter-cycle.
-    this.breathPhase += dt * this.breatheSpeed * (p ? p.tempo : 1);
-    const breatheAmp = this.breatheAmp * upright * (p ? p.breathe : 1);
+    const critBreath = this.breatheAmp > 0 ? proCriticalBreath(this.pose) : null; // a figure that breathes at all, in the low-HP stance, under the pro markers
+    this.breathPhase += dt * (critBreath ? critBreath.speed : this.breatheSpeed) * (p ? p.tempo : 1);
+    const breatheAmp = (critBreath ? Math.max(this.breatheAmp, critBreath.amplitude) : this.breatheAmp) * upright * (p ? p.breathe : 1);
     const breathe = breatheAmp ? Math.sin(this.breathPhase * TAU) * 0.5 + 0.5 : 0;
     const breatheScale = 1 + breatheAmp * (breathe - 0.5) * 2;
 

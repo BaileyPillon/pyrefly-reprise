@@ -334,7 +334,7 @@ export class LookRig {
       this.bold ??= new LookBold(r);
       this.bold.update({ scene: this.room.scene!, camera, name, room: this.room, lights: this.lights, quality: lookState.quality, dt, now, time: eyeCandy.frozen ? 0.5 : this.clock, scale, W, H, aspect: W / Math.max(1, H), lightUv: [lightUv.x, lightUv.y], tweak: (k, d) => this.tw(k) ?? d, seam: proR && proPieceOn('seam') ? (proSeam(this.room.key) ?? null) : null });
     } else this.bold?.off();
-    applyProCone(u, proR, { lightUv: moon ? (u['shaftL']!.value as Vector2) : lightUv, aspect: W / Math.max(1, H), time: eyeCandy.frozen ? 0.5 : this.clock, k: lookState.tweaks['cone'] ?? 1, camera, scratch: this.coneUv, project: (c, o, at) => this.room.projectLight(c, o, at) }); // the cone follows the painted moon where the depth stage has one (Chapter I), else the room's found light
+    applyProCone(g, proR, { lightUv: moon ? (u['shaftL']!.value as Vector2) : lightUv, aspect: W / Math.max(1, H), time: eyeCandy.frozen ? 0.5 : this.clock, k: lookState.tweaks['cone'] ?? 1, camera, scratch: this.coneUv, project: (c, o, at) => this.room.projectLight(c, o, at) }); // the cone follows the painted moon where the depth stage has one (Chapter I), else the room's found light
     if (lookState.drift) this.drift.update(this.room.scene!, camera, this.room.painting, roomBold(this.room.key).driftPx ?? 3, dt, W, scale, lookState.commandOpen);
     else this.drift.release();
     if (this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks)) this.stage.update({ scene: this.room.scene!, room: this.room, quality: lookState.quality, time: eyeCandy.frozen ? 0.5 : this.clock, tweak: (k, d) => this.tw(k) ?? d });

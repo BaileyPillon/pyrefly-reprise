@@ -50,7 +50,8 @@
   background: linear-gradient(180deg, #f2fff8 0%, #b6f5d4 45%, #62d6a0 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  filter: drop-shadow(0 0 1.2px rgba(220, 255, 238, 0.95)) drop-shadow(0 0 7px rgba(86, 224, 162, 0.62)) drop-shadow(0 2px 3px rgba(4, 22, 16, 0.7));
+  /* a heal sits over whatever it lands on, a white robe included (review m6): a dark-green hairline and a tight dark halo first, so the mint reads on a light painting, then the glow */
+  filter: drop-shadow(0 0 1px rgba(2, 30, 20, 0.95)) drop-shadow(0 0 2.5px rgba(2, 30, 20, 0.8)) drop-shadow(0 0 7px rgba(86, 224, 162, 0.62)) drop-shadow(0 2px 3px rgba(4, 22, 16, 0.7));
 }
 :root .dnum.dnum--glass.dnum--glass.dnum--mp {
   background: linear-gradient(180deg, #f0f9ff 0%, #a4dcff 100%);
@@ -97,7 +98,8 @@
   background: linear-gradient(180deg, #f2fff8 0%, #b6f5d4 45%, #62d6a0 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  filter: drop-shadow(0 0 1.2px rgba(220, 255, 238, 0.95)) drop-shadow(0 0 7px rgba(86, 224, 162, 0.62)) drop-shadow(0 2px 3px rgba(4, 22, 16, 0.7));
+  /* a heal sits over whatever it lands on, a white robe included (review m6): a dark-green hairline and a tight dark halo first, so the mint reads on a light painting, then the glow */
+  filter: drop-shadow(0 0 1px rgba(2, 30, 20, 0.95)) drop-shadow(0 0 2.5px rgba(2, 30, 20, 0.8)) drop-shadow(0 0 7px rgba(86, 224, 162, 0.62)) drop-shadow(0 2px 3px rgba(4, 22, 16, 0.7));
 }
 :root .ffx2-numerals-layer .dnum.dnum--glass.dnum--glass.dnum--mp {
   background: linear-gradient(180deg, #f0f9ff 0%, #a4dcff 100%);
