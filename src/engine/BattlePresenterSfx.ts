@@ -76,6 +76,8 @@ interface Action {
   counts: Map<string, number>;
   /** The recorded originals this action has asked for so far (the first name of each chain): what `coveredBy` is checked against. */
   asked: Set<string>;
+  /** Its `action-end` has been played: a later blow is not this action's (the sound pass reads it, see {@link ask}). */
+  ended: boolean;
 }
 
 interface State {
@@ -99,12 +101,14 @@ export function noteSfxEvent(ctx: EventCtx, event: BattleEvent): void {
   s.event = event;
   if (event.type === 'action-start') {
     const command = event.command as { kind: string; id?: string };
-    const action: Action = { serial: ++s.serial, command: { kind: command.kind, ...(command.id ? { id: command.id } : {}) }, counts: new Map(), asked: new Set() };
+    const action: Action = { serial: ++s.serial, command: { kind: command.kind, ...(command.id ? { id: command.id } : {}) }, counts: new Map(), asked: new Set(), ended: false };
     if (event.abilityId) action.abilityId = event.abilityId;
     s.onScreen = action;
     s.byActor.set(event.actorId, action);
   } else if (event.type === 'action-end') {
     s.onScreen = null;
+    const own = s.byActor.get(event.actorId);
+    if (own) own.ended = true;
   }
 }
 
@@ -155,7 +159,14 @@ function ask(ctx: EventCtx, name: string): { ask: SfxAsk; action: Action | null 
   const moment = momentOf(event, name);
   const actorId = sourceOf(event) ?? ctx.actingId;
   // FFX-2's ATB overlaps actions: a blow resolves by its own striker's latest action (as the spell effects do).
-  const action = s.onScreen ? ((actorId && s.byActor.get(actorId)) || s.onScreen) : null;
+  let action = s.onScreen ? ((actorId && s.byActor.get(actorId)) || s.onScreen) : null;
+  // The sound pass (Chapter I and IV with `?audio=new`, see `audio/pass/passSwitch.ts`): the first `action-end` of an overlapped burst cleared `onScreen`, so the later blows of the other actors found no action
+  // and played a bare tick (34 of Chapter IV's 52 blows, measured). A blow whose own striker's action has not ended belongs to it. Off, nothing changes: this is today's sound.
+  if (!action && passGame()) {
+    const striker = sourceOf(event);
+    const own = striker ? s.byActor.get(striker) : undefined;
+    if (own && !own.ended) action = own;
+  }
   const nth = action ? (action.counts.get(moment) ?? 0) : 0;
   let landed = 0;
   if (action) {
@@ -232,12 +243,15 @@ type ParityOpts = { volume?: number; delay?: number; events?: readonly string[];
 
 /**
  * The sound pass's options of a voiced cue (Chapter I and IV with `?audio=new` or `?pack=demo`; `passGame()` is null otherwise): the plan the voice made (layers, a base that starts on its first audible
- * sample), and for a SPELL's landing how long the effect still has to the mark, which the mixer waits (`PassBeats.landingWaitMs`). A cue with no plan and no delay is returned untouched.
+ * sample), and for a SPELL's landing (any damage that is not a weapon's blow) the same start on the cue's first audible sample plus how long the effect still has to the mark, which the mixer waits
+ * (`PassBeats.landingWaitMs`). The presenter asks for the landing cue at the mark (`markIn` is 0 or a frame), so the cue's own lead-in (Fire's 77 ms, Ice's 49, Thunder's 104, Flare's 20 to 24, measured at
+ * -30 dB under the peak) was heard after the mark; starting it on its first audible sample puts the sound on the mark (audio-pass review M4). A cue with no plan and no delay is returned untouched.
  */
 function withPass(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced, moment: string, ask: SfxAsk): ParityOpts | undefined {
   const extra: ParityOpts = {};
-  const landing = moment === 'damage' && ask.action && !voiced.pass?.baseSkip && ask.event?.type === 'damage' && ask.event.amount > 0 ? landingWaitMs(ctx, ask.targetId, ask.actorId) : 0;
-  if (voiced.pass || landing > 0) extra.pass = { layers: [], ...voiced.pass, ...(landing > 0 ? { landingMs: landing } : {}) };
+  const isLanding = moment === 'damage' && ask.action !== null && !voiced.pass?.baseSkip && ask.event?.type === 'damage' && ask.event.amount > 0;
+  const landing = isLanding ? landingWaitMs(ctx, ask.targetId, ask.actorId) : 0;
+  if (voiced.pass || isLanding) extra.pass = { layers: [], ...voiced.pass, ...(isLanding ? { baseSkip: true as const } : {}), ...(landing > 0 ? { landingMs: landing } : {}) };
   // A spell that lands several times (Fire's five hits, 0.23 s apart, each a 1.64 s sample) piles its tails up: every hit after the first takes SPELL_STACK_DB off. Measured offline, five hits peak
   // -6.1 dBFS at the master and -8.7 with this; in a recorded fight the stack was the loudest thing in it.
   if (moment === 'damage' && ask.action && !voiced.pass?.baseSkip && ask.nth > 0) extra.volume = (o?.volume ?? 1) * 10 ** (SPELL_STACK_DB / 20);

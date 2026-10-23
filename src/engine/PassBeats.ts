@@ -15,11 +15,12 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import { bigKindOf, dipTimes } from '../audio/pass/passPlanner.ts';
 import { passLogPush, passNow } from '../audio/pass/passLog.ts';
+import { passVictoryCue } from '../audio/pass/passResults.ts';
 import { noteBlowAt, noteGather } from '../audio/pass/passMask.ts';
 import { DIPS } from '../audio/pass/passRecipes.ts';
 import { passGame } from '../audio/pass/passSwitch.ts';
 import type { BigKind } from '../audio/pass/passTypes.ts';
-import type { EventCtx } from './BattlePresenterEvents.ts';
+import { TIMING, type EventCtx } from './BattlePresenterEvents.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
 import { actionOfBlow, type ActingAction } from './BattlePresenterSpellFx.ts';
@@ -75,7 +76,9 @@ export function attackBeat(ctx: EventCtx, beatMs: number): void {
  */
 export function landingBeat(ctx: EventCtx, event: Damage, a: ActingAction | undefined, waitMs: number): void {
   if (!passGame() || waitMs <= 0) return;
-  noteBlowAt(passNow() + waitMs * sleepScale(ctx));
+  const blowAt = passNow() + waitMs * sleepScale(ctx);
+  noteBlowAt(blowAt);
+  noteNextHit(ctx, event, blowAt);
   const kind = bigKindOf({ crit: event.crit === true, abilityId: a?.abilityId ?? null, hitIndex: event.hitIndex ?? 0, hitCount: event.hitCount ?? 1, commandKind: null, actorSide: null });
   if (kind !== 'boss' && kind !== 'crit') return;
   // Timed on the presenter's own clock, not the page's: the wait runs scaled by the playback speed and the pace, so a dip timed from its unscaled length started 68 to 145 ms early on the two long waits measured
@@ -84,6 +87,39 @@ export function landingBeat(ctx: EventCtx, event: Damage, a: ActingAction | unde
   const f = sleepScale(ctx); // ms of the page's time one ms of the presenter's sleep takes
   if (waitMs <= lead / f) return dip(ctx, kind, waitMs * f, 'landing');
   void ctx.sleep(waitMs - lead / f).then(() => dip(ctx, kind, lead, 'landing'));
+}
+
+/**
+ * A blow lands NOW: the effect's mark had already passed when the presenter asked, so no `landingBeat` ran ahead of it (stepped at 60 Hz: 62 of Chapter I's 70 spell landings, and the second and third blow of a
+ * multi-target move). The motion sounds that fall on it (the smear zip is asked in the same frame, before the blow's own cue) are kept off it all the same (`pass/passMask.ts`); before this call they were not, and
+ * about half the zips on a blow stayed at full level (audio-pass review minor 1). Inert with the pass off.
+ */
+export function landedNow(ctx: EventCtx, event: Damage): void {
+  if (!passGame()) return;
+  const now = passNow();
+  noteBlowAt(now);
+  noteNextHit(ctx, event, now);
+}
+
+/**
+ * A multi-hit move's next blow comes one pacing step after this one (`TIMING.perHit`, scaled like the presenter's own waits: 228 ms measured for Fire's five hits at normal speed, 209 for Mega Flare's three
+ * girls), and the smear zip that goes with it is asked 12 to 49 ms AHEAD of it, before that blow can be noted: note it in advance, so the zips between the hits of a Fire are kept off them too. Whether another
+ * blow follows is read from the burst (the hits of one move do not arrive in index order: Fire's fifth hit lands on the second target before its second), not from the hit's index.
+ */
+function noteNextHit(ctx: EventCtx, event: Damage, blowAt: number): void {
+  if (moreBlowsAhead(ctx, event)) noteBlowAt(blowAt + TIMING.perHit * sleepScale(ctx));
+}
+
+/** Does the same striker have another damaging blow later in this action? With no burst to read (a test double), the hit count says. */
+function moreBlowsAhead(ctx: EventCtx, event: Damage): boolean {
+  const burst = ctx.burst;
+  if (!burst) return (event.hitCount ?? 1) > 1 && (event.hitIndex ?? 0) < (event.hitCount ?? 1) - 1;
+  for (let i = burst.at + 1; i < burst.events.length; i++) {
+    const e = burst.events[i]!;
+    if (e.type === 'action-end' && e.actorId === event.sourceId) return false;
+    if (e.type === 'damage' && e.sourceId === event.sourceId && e.amount > 0) return true;
+  }
+  return false;
 }
 
 /**
@@ -112,6 +148,18 @@ function sleepScale(ctx: EventCtx): number {
   const speed = typeof ctx.speed === 'function' ? ctx.speed() : 'normal';
   const f = SPEED_SCALE[speed] * (ctx.deps.timeScale ?? 1) * paceFactor('action');
   return Number.isFinite(f) && f > 0 ? f : 1;
+}
+
+/**
+ * Chapter I's last blow (the pass; `audio/pass/passResults.ts`): the chapter's results cue starts now, crossfading the battle theme out over `fadeS`, and the presenter drops its 3.4 s sting, so the win is one
+ * fanfare and not two. True when it started the cue (the caller then plays no sting); false with the pass off or when the chapter has no cue.
+ */
+export function passEarlyVictory(ctx: EventCtx, fadeS: number): boolean {
+  const early = passVictoryCue();
+  if (!early || !ctx.deps.audio) return false;
+  void Promise.resolve(ctx.deps.audio.playMusic(early, { fade: fadeS })).catch(() => undefined);
+  passLogPush({ kind: 'victory', cue: early });
+  return true;
 }
 
 /** An Overdrive's opening began: its gather's landing thud is left out (PC-18). */

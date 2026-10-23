@@ -509,8 +509,9 @@ async function main() {
   // them (tools/dist-filter.mjs, PR-0100), so they are not orphans of the game.
   const { isUnshippedPublicFile } = await import('../dist-filter.mjs');
   // The recorded voice-over has its own folder, manifests and budget line (audited below), so it is not an orphan of the music manifest.
+  // The sound pass's extra battle lines (`voice-pass/`, read only when the pass is asked for) are the same: their own folder, audited below.
   const disk = (await filesOnDisk(AUDIO_DIR)).filter(
-    (f) => f !== 'manifest.json' && !f.startsWith('voice/') && !isUnshippedPublicFile(`audio/${f}`),
+    (f) => f !== 'manifest.json' && !f.startsWith('voice/') && !f.startsWith('voice-pass/') && !isUnshippedPublicFile(`audio/${f}`),
   );
   const listed = new Set(Object.values(manifest.music).map((m) => m.file));
   for (const s of [manifest.sfx, manifest.sfxV2, ...Object.values(manifest.sfxParity?.packs ?? {})]) if (s) listed.add(s.file);
@@ -533,6 +534,10 @@ async function main() {
   const voiceAudit = auditVoiceDir(path.join(AUDIO_DIR, 'voice'));
   for (const p of voiceAudit.problems) report.manifest.problems.push(`voice: ${p}`);
   if (voiceAudit.present) log(`voice-over: ${voiceAudit.totals.files} recordings in ${voiceAudit.totals.chapters} chapter manifests, ${(voiceAudit.totals.bytes / 1e6).toFixed(2)} MB of the ${VOICE_BUDGET_BYTES / 1e6} MB voice budget`);
+  // The sound pass's extra lines: same manifests and checks as the shipped voice folder (no index.json), and they count against the same voice budget.
+  const passVoiceAudit = auditVoiceDir(path.join(AUDIO_DIR, 'voice-pass'), { requireIndex: false, budgetBytes: Math.max(0, VOICE_BUDGET_BYTES - voiceAudit.totals.bytes) });
+  for (const p of passVoiceAudit.problems) report.manifest.problems.push(`voice-pass: ${p}`);
+  if (passVoiceAudit.present) log(`voice-pass: ${passVoiceAudit.totals.files} recordings in ${passVoiceAudit.totals.chapters} chapter manifests, ${(passVoiceAudit.totals.bytes / 1e6).toFixed(2)} MB (the same voice budget)`);
   if (report.manifest.problems.length > 0) {
     log('');
     for (const p of report.manifest.problems) log(`manifest: ${p}`);

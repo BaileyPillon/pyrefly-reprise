@@ -12,7 +12,7 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { bigBlow, costOfFreshMove } from './BattlePresenterBossFx.ts';
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
-import { landingBeat } from './PassBeats.ts';
+import { landedNow, landingBeat } from './PassBeats.ts';
 import { releaseCastLift } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the caster's lift comes down when the spell lands
 
 /** The action whose effects are playing. */
@@ -96,7 +96,10 @@ async function waitForLanding(ctx: EventCtx, event: Extract<BattleEvent, { type:
     ...(event.crit ? { crit: true } : {}),
     ...(ours && a.item === true ? { item: true } : {}), // the new effects' item form of a heal
   });
-  if (ms <= 0) return void bigBlow(ctx, event, a); // a late hit's mark has passed, but the blow is still a big one
+  if (ms <= 0) {
+    if (!heal) landedNow(ctx, event); // the sound pass: no wait to dip for, but the motion sounds on this blow (and on the next hit of the move) are kept off it
+    return void bigBlow(ctx, event, a); // a late hit's mark has passed, but the blow is still a big one
+  }
   landingBeat(ctx, event, a, Math.min(ms, SPELL_WAIT_CAP_MS)); // the sound pass (`?audio=new`): the music dips before a headline blow lands
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex });
   await ctx.sleep(Math.min(ms, SPELL_WAIT_CAP_MS));

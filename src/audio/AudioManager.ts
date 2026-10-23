@@ -646,8 +646,8 @@ export class AudioManager {
     const onset = sliceOnsetMs(slice);
     const audibleS = Math.max(0, onset - skip) / 1000;
     const outs = { dry: this.sfxDry ?? this.sfxBus!, send: this.sfxSend };
-    // A spell's landing waits for the effect's mark (its own remaining wait less this cue's silence); a blow's contact is where it was asked.
-    delay += plan.landingMs ? landingDelayMs(plan.landingMs, onset) / 1000 : 0;
+    // A spell's landing waits for the effect's mark (its own remaining wait less the silence still in front of the sound once the skip is taken); a blow's contact is where it was asked.
+    delay += plan.landingMs ? landingDelayMs(plan.landingMs, Math.max(0, onset - skip)) / 1000 : 0;
     startSfxSource(ctx, outs, buffer, slice, level, skip > 0 ? { ...options, skipMs: skip } : options, delay, false);
     const played = playLayers(
       { ctx, dry: outs.dry, send: outs.send, slice: (key) => (key.startsWith('v2:') ? this.sprites.pick(this.manifest, key, null, false).slice : this.sprites.pick(this.manifest, key).slice) },

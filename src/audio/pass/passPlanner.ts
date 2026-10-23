@@ -9,7 +9,7 @@
  */
 
 import type { Weapon } from '../sfxV2/weapons.ts';
-import { CHARACTER_LAYERS, DIPS, ENEMY_RECIPE, HEADLINE_BLOWS, THUMPS, WEAPON_RECIPES } from './passRecipes.ts';
+import { CHARACTER_LAYERS, DIPS, ENEMY_RECIPES, HEADLINE_BLOWS, THUMPS, WEAPON_RECIPES } from './passRecipes.ts';
 import type { BigKind, DipPlan, LayerSpec, PassPlan, SfxLayer } from './passTypes.ts';
 
 export type PassGame = 'ffx' | 'ffx2';
@@ -67,7 +67,7 @@ export function planHit(f: HitFacts): PassPlan | null {
   // A critical plays the `critical` cue, not the weapon's hit: the recipes' levels are set against the weapon's hit, so on a critical (a quieter base) they come down {@link CRIT_LAYER_DB} to stay under it.
   const critTrim = f.crit ? db(CRIT_LAYER_DB) : 1;
   if (f.physical) {
-    const recipe = f.actorSide === 'party' && f.weapon ? WEAPON_RECIPES[f.weapon] : f.actorSide === 'enemy' ? ENEMY_RECIPE : undefined;
+    const recipe = f.actorSide === 'party' && f.weapon ? WEAPON_RECIPES[f.weapon] : f.actorSide === 'enemy' ? ENEMY_RECIPES[f.game] : undefined;
     if (recipe?.texture) layers.push(trimmed(layerOf(recipe.texture, 'texture'), critTrim));
     if (recipe?.body) layers.push(trimmed(layerOf(recipe.body, 'body'), critTrim));
     const accent = f.actorSide === 'party' && f.actorId ? CHARACTER_LAYERS[f.game][f.actorId] : undefined;

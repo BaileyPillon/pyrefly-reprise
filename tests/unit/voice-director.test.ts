@@ -10,6 +10,8 @@ import { VoiceDirector, VOICE_DUCK_ATTACK_S, VOICE_DUCK_GAIN, VOICE_DUCK_HOLD_MS
 import { ifFlag, narrate, parallel, say, wait } from '../../src/story/dsl.ts';
 import { lineKey } from '../../src/story/voice/voiceKey.ts';
 import { gatedVoice } from '../../src/story/voice/voicePort.ts';
+import { setPassAddress, setPassChapter } from '../../src/audio/pass/passSwitch.ts';
+import { VOICE_DUCK_DB, VOICE_DUCK_GAIN as PASS_DUCK_GAIN } from '../../src/audio/pass/passMix.ts';
 
 const KEYS = {
   hey: lineKey('tidus', 'Hey!'),
@@ -233,6 +235,22 @@ describe('ducking the music under a line', () => {
     expect(r.calls).toHaveLength(1);
     r.advance(1);
     expect(r.calls).toEqual([`duck:${VOICE_DUCK_GAIN}:${VOICE_DUCK_ATTACK_S}`, `unduck:${VOICE_DUCK_RELEASE_S}`]);
+  });
+
+  it("ducks to the sound pass's depth, not 3.5 dB, only while the pass is on (the pass's depth is the one that keeps every line 6 dB over the music in the speech band)", async () => {
+    setPassAddress('?pack=demo');
+    setPassChapter('seymour-flux');
+    try {
+      const r = await playing();
+      r.director.begin(req('tidus', 'Hey!'));
+      await r.settle();
+      expect(r.calls).toEqual([`duck:${PASS_DUCK_GAIN}:${VOICE_DUCK_ATTACK_S}`]);
+      expect(PASS_DUCK_GAIN).toBeCloseTo(10 ** (VOICE_DUCK_DB / 20), 6);
+      expect(PASS_DUCK_GAIN).toBeLessThan(VOICE_DUCK_GAIN);
+    } finally {
+      setPassAddress(undefined);
+      setPassChapter(undefined);
+    }
   });
 
   it('keeps the duck between the lines of one exchange (less than 600 ms apart): no pumping', async () => {

@@ -31,9 +31,7 @@ import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one f
 import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import { banner, cue, elementCue, numeral, reasonText, settled, TIMING, type EventCtx } from './BattlePresenterEvents.ts';
-import { passVictoryCue } from '../audio/pass/passResults.ts';
-import { passGather } from './PassBeats.ts'; // the sound pass (decision 184): one fanfare at the last blow
-import { passLogPush } from '../audio/pass/passLog.ts';
+import { passEarlyVictory, passGather } from './PassBeats.ts'; // the sound pass (decision 184): one fanfare at the last blow; the gather's landing thud left out
 
 // ----------------------------------------------------------------- handlers
 
@@ -338,11 +336,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
   // The fanfare is the end-of-fight sting. A formation that chains on (Chapter VI Acts I and II) is a seam: the battle theme carries on into the next link, and the
   // FFX fanfare (B major) laid over it (Bb minor) is a second tune a semitone off the first. The last link takes the theme out under the sting instead.
   if (!ctx.moreLinks) {
-    const early = passVictoryCue(); // the sound pass (`?audio=new`, Chapter I): the results cue starts now and the sting is dropped, so one fanfare, not two (`audio/pass/passResults.ts`)
-    if (early && ctx.deps.audio) {
-      void Promise.resolve(ctx.deps.audio.playMusic(early, { fade: VICTORY_THEME_OUT_S })).catch(() => undefined);
-      passLogPush({ kind: 'victory', cue: early });
-    } else {
+    if (!passEarlyVictory(ctx, VICTORY_THEME_OUT_S)) { // the sound pass (`?audio=new`, Chapter I) starts the results cue now and drops the sting: one fanfare, not two
       ctx.deps.audio?.stopMusic(VICTORY_THEME_OUT_S);
       cue(ctx, 'victory');
     }

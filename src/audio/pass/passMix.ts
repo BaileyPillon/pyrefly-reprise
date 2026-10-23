@@ -6,9 +6,12 @@
  *    `measure/`). The pass lifts the master by {@link MAKEUP_DB} before the limiter, which puts the short-term median at -15.6 and the 90th percentile at -13.3 with the true peak under -1 dBTP. The limiter
  *    (threshold -2 dBFS, 20:1, 3 ms) was already the ceiling: the loudest 100 ms of a fight sits at -2.0 dBFS.
  *  - **Voice over music.** A voice line must sit well over the music beneath it in the speech band, not only by K-weighted loudness (the boss loops carry 62 percent of their energy under 250 Hz, which
- *    K-weighting discounts and the ear does not mask with). Measured (`measure/speech-band.json`): at today's 3.5 dB duck the speech-band (300 to 3400 Hz) signal-to-music ratio is +7.2 dB over
- *    `boss-seymour` and only +2.9 dB over `scene-gagazet`, the bed under the first two lines of the Chapter I intro. {@link VOICE_DUCK_DB} of -9 gives +8.4 dB in the worst case and +13.2 over
- *    the battle theme, and a K-weighted gap of at least +7.9 LU. The pause menu's own duck is -9.1 dB, the same family.
+ *    K-weighting discounts and the ear does not mask with). The measure is the band's TRUE mean-square (300 to 3400 Hz, Parseval over the whole line and the whole slice of music it landed on; the first
+ *    figures, a Hann-windowed FFT divided by N squared, favoured a tonal voice over noise-like music by about 6 dB: audio-pass review minor 5), with every line of the recorded Chapter I fight at the track
+ *    position it fell on. At today's 3.5 dB duck the quietest lines are -2.9 dB (the Yuna Talk line over a loud passage of `boss-seymour`) and -2.4 dB (Tidus's victory quip over the `victory-ffx` fanfare):
+ *    below the music. At -9 dB they were +2.6 and +3.1, and four lines were under +6. The criterion is that EVERY line of the fight reads at least +6 dB over the music beneath it in the speech band
+ *    (the usual rule of thumb for speech in noise), in every recording of the fight: the track position a line falls on moves a little from run to run (the quip over the fanfare read 2.4 to 3.1 dB at -9 dB in two
+ *    recordings), so {@link VOICE_DUCK_DB} leaves a dB over it. The pause menu's own duck is -9.1 dB.
  *  - **Attract reel.** Music at the same share as in a fight, and the whole mix {@link ATTRACT_TRIM_DB} down on the master, so the reel's balance of music to hits is a fight's (it was effects-forward:
  *    the music 8 dB down and the effects at full level).
  *
@@ -18,8 +21,8 @@
 /** Master makeup the pass adds before the limiter, dB. */
 export const MAKEUP_DB = 4;
 
-/** The music's gain while a voice line sounds, dB (today: -3.5). */
-export const VOICE_DUCK_DB = -9;
+/** The music's gain while a voice line sounds, dB (today: -3.5; the pass's first pick was -9, which left two lines under +3.2 dB in the speech band: see above). */
+export const VOICE_DUCK_DB = -14;
 export const VOICE_DUCK_GAIN = 10 ** (VOICE_DUCK_DB / 20);
 
 /** The attract reel's whole-mix trim, dB, and the music's share of its usual volume (today: 0.4). */

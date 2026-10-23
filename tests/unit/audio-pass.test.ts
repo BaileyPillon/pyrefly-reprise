@@ -9,10 +9,11 @@ import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { parseAudioKey, passConfiguredBy, audioNewOn, setAudioNew, setPassAddress, setPassChapter, passGame } from '../../src/audio/pass/passSwitch.ts';
 import { bigKindOf, dipTimes, landingDelayMs, planHit, type HitFacts } from '../../src/audio/pass/passPlanner.ts';
-import { CHARACTER_LAYERS, DIPS, ENEMY_RECIPE, HEADLINE_BLOWS, THUMPS, UI_FAMILY, WEAPON_RECIPES, uiRowFor } from '../../src/audio/pass/passRecipes.ts';
+import { CHARACTER_LAYERS, DIPS, ENEMY_RECIPES, HEADLINE_BLOWS, THUMPS, UI_FAMILY, WEAPON_RECIPES, uiRowFor } from '../../src/audio/pass/passRecipes.ts';
 import { ATTRACT_TRIM_DB, MAKEUP_DB, VOICE_DUCK_DB, VOICE_DUCK_GAIN } from '../../src/audio/pass/passMix.ts';
 import { firstBigAhead } from '../../src/engine/PassBeats.ts';
 import { WEAPON_CUES } from '../../src/audio/sfxV2/weapons.ts';
+import { V2_CUES } from '../../src/audio/sfxV2/cues.ts';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 
 const AUDIO = new URL('../../public/audio/', import.meta.url);
@@ -63,7 +64,7 @@ describe('the tables', () => {
 
   const layers = [
     ...Object.entries(WEAPON_RECIPES).flatMap(([w, r]) => [r.texture, r.body].filter(Boolean).map((l) => [`weapon ${w}`, l!] as const)),
-    ...[ENEMY_RECIPE.texture!].map((l) => ['enemy', l] as const),
+    ...(['ffx', 'ffx2'] as const).map((g) => [`enemy ${g}`, ENEMY_RECIPES[g].texture!] as const),
     ...Object.entries(CHARACTER_LAYERS.ffx).map(([id, l]) => [`ffx ${id}`, l] as const),
     ...Object.entries(CHARACTER_LAYERS.ffx2).map(([id, l]) => [`ffx2 ${id}`, l] as const),
     ...Object.entries(THUMPS).map(([k, l]) => [`thump ${k}`, l] as const),
@@ -100,6 +101,33 @@ describe('the tables', () => {
     for (const w of Object.keys(WEAPON_RECIPES)) expect(w in WEAPON_CUES, w).toBe(true);
   });
 
+  it('lays only cues made for the game it plays in, or for both (rule 14, audio-pass review M3)', () => {
+    // A `v2:` key is tagged by `sfxV2/cues.ts`; a first-bank key by the games of the v2 cues it is the fallback of (the first bank is the base set, so a key no v2 cue falls back to is neutral).
+    const fallbackOwners = new Map<string, Set<string>>();
+    for (const c of Object.values(V2_CUES)) fallbackOwners.set(c.fallback, (fallbackOwners.get(c.fallback) ?? new Set()).add(c.game));
+    const playsIn = (game: 'ffx' | 'ffx2', key: string): boolean => {
+      if (key.startsWith('v2:')) {
+        const tag = V2_CUES[key.slice(3)]?.game;
+        return tag === game || tag === 'both';
+      }
+      const owners = fallbackOwners.get(key.replace(/^first:/, ''));
+      return !owners || owners.has(game) || owners.has('both');
+    };
+    const per: Record<'ffx' | 'ffx2', [string, string][]> = { ffx: [], ffx2: [] };
+    for (const [w, r] of Object.entries(WEAPON_RECIPES)) for (const l of [r.texture, r.body]) if (l) per[FFX_WEAPONS.includes(w) ? 'ffx' : 'ffx2'].push([`weapon ${w}`, l.key]);
+    for (const g of ['ffx', 'ffx2'] as const) {
+      for (const l of [ENEMY_RECIPES[g].texture, ENEMY_RECIPES[g].body]) if (l) per[g].push([`enemy ${g}`, l.key]);
+      for (const [id, l] of Object.entries(CHARACTER_LAYERS[g])) per[g].push([`${g} ${id}`, l.key]);
+      for (const [k, l] of Object.entries(THUMPS)) per[g].push([`thump ${k}`, l.key]);
+    }
+    for (const g of ['ffx', 'ffx2'] as const) for (const [who, key] of per[g]) expect(playsIn(g, key), `${g}: ${who} lays ${key}`).toBe(true);
+    // the check itself sees the slips it was written for
+    expect(playsIn('ffx2', 'v2:hit-sword')).toBe(false); // an FFX sword hit under Paine
+    expect(playsIn('ffx2', 'first:claw')).toBe(false); // the first bank's claw is the fallback of FFX's claws only
+    expect(playsIn('ffx', 'first:dagger-flurry')).toBe(false); // the fallback of FFX-2's `swing-dagger`
+    expect(playsIn('ffx', 'first:od-hit-zone')).toBe(true); // a neutral first-bank cue
+  });
+
   it('dips only the music, short and before the blow', () => {
     for (const [kind, d] of Object.entries(DIPS)) {
       expect(d.leadMs, kind).toBeGreaterThanOrEqual(60);
@@ -108,6 +136,12 @@ describe('the tables', () => {
       expect(d.holdMs, kind).toBeGreaterThan(0);
     }
     expect(Object.keys(HEADLINE_BLOWS).sort()).toEqual(['cross-cleave', 'mega-flare', 'total-annihilation', 'x2-bahamut-mega-flare']);
+  });
+
+  it("puts a headline move's big blow on its FIRST landing, the only one a dip can precede (and, for Total Annihilation, the frame feel stops)", () => {
+    // Stepped at 60 Hz, Mega Flare's three blows are asked at their marks (markIn 0, 209 ms apart): a dip on the last blow never fires, so the table keeps the explosion (the first landing).
+    // `engine/feel/HitStopShort.ts` stops Total Annihilation's first blow (the presenter's table says the fifth), so the pass follows feel there.
+    for (const move of ['mega-flare', 'x2-bahamut-mega-flare', 'total-annihilation', 'cross-cleave']) expect(HEADLINE_BLOWS[move], move).toBe('first');
   });
 
   it('has a menu row for every menu cue in both games, short and quiet', () => {
@@ -125,8 +159,8 @@ describe('the tables', () => {
   });
 
   it('holds the mix constants the notes quote', () => {
-    expect(VOICE_DUCK_DB).toBe(-9);
-    expect(VOICE_DUCK_GAIN).toBeCloseTo(0.355, 3);
+    expect(VOICE_DUCK_DB).toBe(-14);
+    expect(VOICE_DUCK_GAIN).toBeCloseTo(0.1995, 4);
     expect(MAKEUP_DB).toBeGreaterThan(0);
     expect(MAKEUP_DB).toBeLessThan(6);
     expect(ATTRACT_TRIM_DB).toBeLessThan(0);
@@ -171,6 +205,16 @@ describe('the planner', () => {
     expect(p.dip).toEqual(DIPS.crit);
     const e = planHit(facts({ actorSide: 'enemy', actorId: 'seymour-flux', weapon: null }))!;
     expect(e.layers.map((l) => l.role)).toEqual(['texture']);
+    expect(e.layers[0]!.key).toBe('claw'); // FFX's boss: the first bank's claw
+    const b = planHit(facts({ game: 'ffx2', actorSide: 'enemy', actorId: 'bahamut', weapon: null }))!;
+    expect(b.layers.map((l) => l.key)).toEqual(['v2:counter']); // FFX-2's boss: a both-game cue, never the FFX claw
+    expect(b.baseSkip).toBe(true);
+  });
+
+  it("gives Paine's greatsword a body that is not an FFX cue", () => {
+    const p = planHit(facts({ game: 'ffx2', actorId: 'paine', weapon: 'greatsword' }))!;
+    expect(p.layers.map((l) => l.key)).toEqual(['v2:hit-2', 'v2:guard']);
+    expect(p.layers[0]!.pitch).toBe(0.8);
   });
 
   it('adds nothing to a spell, a heal or an item unless the blow is big', () => {
@@ -183,9 +227,11 @@ describe('the planner', () => {
 
   it('reads the big blow of a headline move by its hit, and an Overdrive by its last', () => {
     const base = { crit: false, commandKind: 'attack', actorSide: null } as const;
-    expect(bigKindOf({ ...base, abilityId: 'total-annihilation', hitIndex: 4, hitCount: 5 })).toBe('boss');
-    expect(bigKindOf({ ...base, abilityId: 'total-annihilation', hitIndex: 0, hitCount: 5 })).toBeNull();
+    expect(bigKindOf({ ...base, abilityId: 'total-annihilation', hitIndex: 0, hitCount: 5 })).toBe('boss'); // the frame feel stops
+    expect(bigKindOf({ ...base, abilityId: 'total-annihilation', hitIndex: 4, hitCount: 5 })).toBeNull();
     expect(bigKindOf({ ...base, abilityId: 'mega-flare', hitIndex: 0, hitCount: 1 })).toBe('boss');
+    expect(bigKindOf({ ...base, abilityId: 'x2-bahamut-mega-flare', hitIndex: 0, hitCount: 3 })).toBe('boss'); // three girls: the explosion, the first landing
+    expect(bigKindOf({ ...base, abilityId: 'x2-bahamut-mega-flare', hitIndex: 2, hitCount: 3 })).toBeNull();
     expect(bigKindOf({ ...base, abilityId: null, hitIndex: 3, hitCount: 4, commandKind: 'overdrive' })).toBe('overdrive');
     expect(bigKindOf({ ...base, abilityId: null, hitIndex: 1, hitCount: 4, commandKind: 'overdrive' })).toBeNull();
     expect(bigKindOf({ ...base, abilityId: null, hitIndex: 0, hitCount: 1, crit: true })).toBe('crit');

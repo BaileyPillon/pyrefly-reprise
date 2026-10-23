@@ -136,6 +136,19 @@ describe('a plan with the pass on', () => {
     expect(starts[0]!.when).toBeCloseTo(1 + 0.2, 3); // 300 ms to the mark less the cue's own 100 ms of silence
   });
 
+  it("puts a spell landing's first audible sample on the effect's mark: the cue's lead-in is skipped and taken out of the wait", () => {
+    setPassAddress('?audio=new');
+    setPassChapter('ffx2-bahamut');
+    const { am, starts } = mixer('ffx2');
+    am.playSfx('v2:hit-gun', { volume: 0.8, pass: { baseSkip: true, layers: [], landingMs: 300 } });
+    expect(starts[0]!.offset).toBeCloseTo(1.099, 3); // the 100 ms of silence is not played (1 ms of lead-in kept)
+    expect(starts[0]!.when + 0.001).toBeCloseTo(1 + 0.3, 3); // the first audible sample sounds 300 ms after the ask, on the mark
+    am.playSfx('v2:hit-gun', { volume: 0.8, pass: { baseSkip: true, layers: [] } }); // the effect is already at its mark when the cue is asked
+    expect(starts[1]!.offset).toBeCloseTo(1.099, 3);
+    expect(starts[1]!.when + 0.001).toBeCloseTo(1.001, 3); // heard at the ask, not 100 ms after it
+    expect(passLogGet().filter((e) => e.kind === 'hit').map((e) => [e['onsetMs'], e['skipMs'], e['audibleMs']])).toEqual([[100, 99, 1], [100, 99, 1]]);
+  });
+
   it('plays a layer only if its slice has decoded', () => {
     setPassAddress('?audio=new');
     setPassChapter('ffx2-bahamut');

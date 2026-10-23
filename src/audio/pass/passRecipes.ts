@@ -8,8 +8,9 @@
  * of their energy under 500 Hz and 60 to 95 percent over 6 kHz). A hit with a crack and a body and a sub is the layering every action game uses; here each missing part is cut from a cue the library
  * already ships. No cue below is new audio.
  *
- * The rules the rows obey (checked by `tests/unit/audio-pass-recipes.test.ts` and, on the rendered sum, by `tools/audio/pass-render.mjs`):
- *  1. Only the party's and the bosses' blows of the two demo games get layers, each game its own weapons (rule 14: `Weapon` is game-tagged by `weapons.ts`).
+ * The rules the rows obey (checked by `tests/unit/audio-pass.test.ts` and, on the rendered sum, by `tools/audio/pass-render.mjs`):
+ *  1. Only the party's and the bosses' blows of the two demo games get layers, each game its own weapons AND its own cues (rule 14: `Weapon` is game-tagged by `weapons.ts`; a layer's cue is tagged for the
+ *     game it plays in or for both: a `v2:` key by `sfxV2/cues.ts` `game`, a first-bank key by the game of the v2 cues it is the fallback of; `audio-pass.test.ts` checks every layer of every table).
  *  2. A layer never leads its base (`lagMs >= 0`) and is cut from its slice at its own first audible sample (`skipMs`), so the layer's onset lands on the base's: onsets within 1 ms.
  *  3. A texture or character layer peaks at least 6 dB under its base, a body layer at least 4 dB: the base stays the loudest part of an ordinary blow ("nothing louder than the hit layer except
  *     big moments"). A thump may peak up to 3 dB under the base's peak, on a big moment only.
@@ -32,7 +33,8 @@ export interface WeaponRecipe {
  *
  * FFX rows add the crack: `v2:counter`'s first 70 ms (a steel-on-steel tick: 75 percent of its energy at 2 to 6 kHz, centroid 2.9 kHz, onset 0.2 ms) for the two blades, `first:pierce` for the spear
  * (77 percent at 500 to 2 kHz, 20 at 2 to 6), `first:od-hit-zone` for the blunt staff (99 percent at 500 to 2 kHz: a knock, not a ring), `first:claw` for the claw.
- * FFX-2 rows add the body: `v2:hit-2` (88 percent under 120 Hz, onset 2.2 ms) under the gun, `v2:hit-sword` pitched down under the greatsword, `v2:hit-2` pitched up under the daggers.
+ * FFX-2 rows add the body: `v2:hit-2` (a both-game cue: 88 percent under 120 Hz, onset 2.2 ms) under the gun, pitched down to 0.8 under the greatsword (measured: 99 percent under 500 Hz in its first 40 ms, centroid
+ * 132 Hz; the FFX-only `v2:hit-sword` it replaced was a rule 14 slip, audio-pass review M3) and pitched up under the daggers.
  */
 export const WEAPON_RECIPES: Readonly<Record<Weapon, WeaponRecipe>> = {
   sword: { texture: L('v2:counter', -2, 0.2, 70, 40) },
@@ -44,16 +46,24 @@ export const WEAPON_RECIPES: Readonly<Record<Weapon, WeaponRecipe>> = {
   claw: { texture: L('first:claw', -0.5, 0.5, 70, 40) },
   gun: { body: L('v2:hit-2', -8.5, 2.2, 240, 140) },
   dagger: { body: L('v2:hit-2', -12, 2.2, 190, 110, 1.35) },
-  greatsword: { body: L('v2:hit-sword', -9.5, 12.3, 280, 160, 0.8) },
+  greatsword: { body: L('v2:hit-2', -9.5, 2.2, 280, 160, 0.8) },
 };
 
-/** An enemy's blow (a boss's plain attack): the claw's crack, pitched down, over the heavy-enemy base. */
-export const ENEMY_RECIPE: WeaponRecipe = { texture: L('first:claw', -1.5, 0.5, 70, 40, 0.8) };
+/**
+ * An enemy's blow (a boss's plain attack): a crack, pitched down, over the heavy-enemy base, each game its own. FFX: the first bank's claw (a cue only FFX's claws fall back to). FFX-2 (Bahamut): the steel tick
+ * of `v2:counter` (a both-game cue: 75 percent of its energy at 2 to 6 kHz, onset 0.2 ms), pitched to 0.8; the claw was an FFX cue in Chapter IV (audio-pass review M3). Its level is the FFX-2 base's: the
+ * recorded FFX-2 heavy-enemy base peaks 3.9 dB under FFX's, so the layer sits 3.9 dB lower (`pass-render.mjs tune`).
+ */
+export const ENEMY_RECIPES: Readonly<Record<'ffx' | 'ffx2', WeaponRecipe>> = {
+  ffx: { texture: L('first:claw', -1.5, 0.5, 70, 40, 0.8) },
+  ffx2: { texture: L('v2:counter', -5, 0.2, 70, 40, 0.8) },
+};
 
 /**
  * The small per-character layer: a short accent (ornament, sleeve, bracer) so the party's blows are told apart by where their accent sits in the spectrum. Chosen by the accent cue's measured
  * centroid so that no two characters of one party share a slot: FFX Auron `v2:guard` (600 Hz), Kimahri `first:claw` pitched down (about 1.9 kHz), Tidus `first:chain-hit` (5.7 kHz), Yuna
  * `v2:status-applied` (4.4 kHz at +20 percent); FFX-2 Paine `v2:guard` pitched down, Rikku `first:dagger-flurry` (2.9 kHz), Yuna `first:chain-hit` (5.7 kHz). Level 14 to 20 dB under the base.
+ * FFX's Rikku (not in the demo party) takes the neutral `first:od-hit-zone` pitched up (a free slot) and not `dagger-flurry`, which is the first-bank fallback of FFX-2's `swing-dagger` (rule 14).
  */
 export const CHARACTER_LAYERS: Readonly<Record<'ffx' | 'ffx2', Readonly<Record<string, LayerSpec>>>> = {
   ffx: {
@@ -63,7 +73,7 @@ export const CHARACTER_LAYERS: Readonly<Record<'ffx' | 'ffx2', Readonly<Record<s
     yuna: L('v2:status-applied', 4.5, 9.2, 80, 50, 1.2, 4),
     lulu: L('first:chain-hit', 3.5, 1.2, 80, 50, 0.8, 5),
     wakka: L('v2:guard', -13, 12, 60, 35, 1.15, 2),
-    rikku: L('first:dagger-flurry', -5.5, 0.8, 70, 40, 1.2, 3),
+    rikku: L('first:od-hit-zone', -1.5, 0.9, 70, 40, 1.3, 3),
   },
   ffx2: {
     yuna: L('first:chain-hit', -2, 1.2, 90, 55, 1.2, 4),
@@ -85,6 +95,10 @@ export const THUMPS: Readonly<Record<BigKind, LayerSpec>> = {
 /**
  * The dip of the music before a big blow (decision 184: "a short duck/silence of 60-120 ms just before big impacts"): the music bus only, never the effects or the voice. The blow is `leadMs`
  * ahead when the dip starts, the music is `depthDb` down for `holdMs`, and it comes back over `releaseMs` from the blow on.
+ *
+ * Which dips are SCHEDULED (`engine/PassBeats.ts`): a critical's, from the swing (`attackBeat`), and a boss's headline blow's, from its landing wait (`landingBeat`), when the blow is still ahead of the effect's mark
+ * at the moment it is asked. Not scheduled, by design: a blow whose mark has already passed when the presenter asks (the dip has no lead to be before; the thump still plays), and an Overdrive's finisher (the
+ * last blow of a flurry whose timing nothing here knows: it gets its thump only). `overdrive` is therefore a plan the planner can name and no beat schedules; it is kept so the thump table and this one agree by kind.
  */
 export const DIPS: Readonly<Record<BigKind, DipPlan>> = {
   crit: { leadMs: 90, holdMs: 70, depthDb: -9, releaseMs: 240 },
@@ -92,9 +106,17 @@ export const DIPS: Readonly<Record<BigKind, DipPlan>> = {
   boss: { leadMs: 120, holdMs: 100, depthDb: -12, releaseMs: 420 },
 };
 
-/** The boss moves that are headline blows, and which of their hits is the big one (mirrors `engine/BattlePresenterBossFx.ts` `BIG_BLOWS`; Total Annihilation's is the fifth). */
+/**
+ * The boss moves that are headline blows, and which of their hits is the big one. Only a blow that is still AHEAD of its effect's mark when the presenter asks can have a dip before it, and in a multi-hit move that is
+ * the first blow alone: the later blows are asked at their marks (measured, stepped at 60 Hz: all three of Mega Flare's, `markIn` 0, 209 ms apart), so a dip on a later blow never fires.
+ *
+ * Cross Cleave: its first blow (the presenter's claim, `engine/BattlePresenterBossFx.ts` `BIG_BLOWS`). Total Annihilation: its FIRST blow, where feel's own rules stop and pulse it (50 ms, `engine/feel/HitStopShort.ts`;
+ * the presenter's table says the fifth, but it does not claim the move, `FEEL_STOPS_IT`), so sound and picture agree (the pass first put it on the fifth, with no dip: audio-pass review minor 3). Mega Flare: its FIRST
+ * landing, the explosion (`flare`), which is the moment the move is heard; feel stops and pulses its LAST blow, 0.42 s later on three girls, and nothing can dip the music before that blow, so the picture's stop
+ * follows the dip and the thump by the length of the move (disclosed; a second table entry for the last blow was tried and lost the dip).
+ */
 export const HEADLINE_BLOWS: Readonly<Record<string, 'first' | 'last'>> = {
-  'total-annihilation': 'last',
+  'total-annihilation': 'first',
   'cross-cleave': 'first',
   'mega-flare': 'first',
   'x2-bahamut-mega-flare': 'first',

@@ -17,6 +17,10 @@ import { audioNewConfigured, audioNewOn } from '../pass/passSwitch.ts'; // the s
 /** The sound pass's own voice folder and the file-name mark that sends a recording there (`pass/<chapter>/<id>.mp3` is `audio/voice-pass/<chapter>/<id>.mp3`). */
 export const PASS_VOICE_DIR = `${VOICE_AUDIO_DIR}-pass`;
 const PASS_MARK = 'pass/';
+/** The chapters that have a sound-pass manifest (`voice-pass/<chapter>.json`); no other chapter asks for one (a 404 apiece, and a chapter's own manifest waits for the answer). `audio-pass-voice.test.ts` checks it against the folder. */
+export const PASS_VOICE_CHAPTERS: readonly string[] = ['seymour-flux'];
+/** The longest a chapter's own manifest waits for its extras, ms: a request that never answers costs the pass's lines, never the chapter's voice. */
+export const PASS_EXTRAS_WAIT_MS = 3000;
 const fileUrl = (file: string): string => (file.startsWith(PASS_MARK) ? `${PASS_VOICE_DIR}/${file.slice(PASS_MARK.length)}` : voiceFilePath(file));
 
 /** The part of an `AudioBuffer` the cache reads. */
@@ -94,7 +98,7 @@ export class VoiceBank<B extends DecodedVoice> {
       })
       .catch(() => null)
       .then(async (manifest) => {
-        if (manifest && audioNewConfigured()) await this.loadExtras(chapter);
+        if (manifest && audioNewConfigured() && PASS_VOICE_CHAPTERS.includes(chapter)) await this.loadExtras(chapter);
         return manifest;
       })
       .then((manifest) => {
@@ -111,13 +115,19 @@ export class VoiceBank<B extends DecodedVoice> {
     if (this.extras.has(chapter)) return;
     const path = `${PASS_VOICE_DIR}/${chapter}.json`;
     this.requests.push(path);
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
-      const m = parseChapterVoiceManifest(await this.deps.fetchJson(path), chapter);
+      const wait = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('the pass voice manifest did not answer')), PASS_EXTRAS_WAIT_MS);
+      });
+      const m = parseChapterVoiceManifest(await Promise.race([this.deps.fetchJson(path), wait]), chapter);
       const lines: Record<string, VoiceLineEntry> = {};
       for (const [key, e] of Object.entries(m?.lines ?? {})) lines[key] = { ...e, file: `${PASS_MARK}${e.file}` };
       this.extras.set(chapter, lines);
     } catch {
       this.extras.set(chapter, {});
+    } finally {
+      clearTimeout(timer);
     }
   }
 

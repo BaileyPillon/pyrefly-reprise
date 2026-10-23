@@ -85,6 +85,7 @@ const scenarios = [
   { game: 'ffx', who: 'wakka', side: 'party', weapon: 'blitzball' },
   { game: 'ffx', who: 'rikku', side: 'party', weapon: 'claw' },
   { game: 'ffx', who: 'seymour-flux', side: 'enemy', weapon: null },
+  { game: 'ffx2', who: 'bahamut', side: 'enemy', weapon: null }, // FFX-2's boss: its own crack (a both-game cue), never FFX's claw
   { game: 'ffx2', who: 'yuna', side: 'party', weapon: 'gun' },
   { game: 'ffx2', who: 'rikku', side: 'party', weapon: 'dagger' },
   { game: 'ffx2', who: 'paine', side: 'party', weapon: 'greatsword' },
