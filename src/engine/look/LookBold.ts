@@ -20,6 +20,7 @@ import type { RelightLights } from './relight/RelightLights.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
 import type { ProSeam } from './pro/ProSeam.ts';
+import { RimOffBoxes } from './pro/BossRimOff.ts'; // lane boss-matte: the re-cut bosses draw no bold-pass rim
 import { MAX_RIPPLES } from './living/LivingConfig.ts';
 import { LookLiving, type LivingUniforms } from './living/LookLiving.ts';
 
@@ -61,7 +62,7 @@ export class LookBold {
   /** Every visible actor's screen box (x0, y0, x1, y1 in frame uv), padded: the blur keeps them sharp (`LookBlurShader`). */
   readonly boxes: Vector4[] = Array.from({ length: MAX_FIG }, () => new Vector4());
   boxCount = 0;
-  /** For the debug API and the captures. */
+  readonly rimOff = new RimOffBoxes(); // lane boss-matte: where the re-cut bosses are on the frame (no rim there; the main look pass reads it too)
   /** Release 62 (decision 173b, FFX-2): Mega Flare's flood and white-out, fed from the spell layer's landing taps while this pass is on. */
   readonly flare = new LookFlare();
   /** Release 62 (decision 173a, FFX-2's Bevelle underground): the beam's dust, the lamps' flicker, the floor's rings (`look/living/`). */
@@ -217,7 +218,7 @@ export class LookBold {
       this.boxes[n]!.set(bx0 - bpx, by0 - bpy, bx1 + bpx, by1 + bpy);
       A[n]!.set(gu, gv, Math.max(rx, 0.01), Math.max(ry, 0.004));
       B[n]!.set(shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
-      n++;
+      this.rimOff.actors[n++] = t.actor; // lane boss-matte: the actor behind each box
     }
     this.boxCount = n;
     for (let i = n; i < MAX_FIG; i++) {
@@ -301,6 +302,7 @@ export class LookBold {
     const u = pass.uniforms;
     const gloss = rb.gloss * o.tweak('bold.gloss', 1);
     const n = this.figures(camera, o.aspect, { ...fx, shadow: { ...fx.shadow, strength: fx.shadow.strength * o.tweak('bold.shadow', 1) } }, gloss, u['uFigA']!.value as Vector4[], u['uFigB']!.value as Vector4[]);
+    this.rimOff.update(u, this.boxes, n);
     // the stage light: an ellipse round the fight, eased so a figure arriving or leaving never makes it jump
     const FA0 = u['uFigA']!.value as Vector4[];
     const goal = stageEllipse(FA0.slice(0, n).map((a) => [a.x, a.y] as const), o.aspect);

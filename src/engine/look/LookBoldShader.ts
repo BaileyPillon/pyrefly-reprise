@@ -56,6 +56,11 @@ export const LookBoldShader = {
     poolGain: { value: 1 },
     /** The rim: gain, width (device px), how far it follows the light's side; its colour. */
     bRim: { value: new Vector3(1.7, 2.6, 0.85) },
+    /** Lane boss-matte (`look/pro/BossRimOff.ts`): the re-cut bosses' screen boxes (no rim inside one, unless another figure's box also holds the pixel) and every other figure's box; counts 0 = today's rim everywhere. */
+    uRimBoss: { value: [] as Vector4[] },
+    uRimOther: { value: [] as Vector4[] },
+    rimBossN: { value: 0 },
+    rimOtherN: { value: 0 },
     rimColor: { value: new Vector3(0.8, 0.9, 1) },
     /** Embers: the lamps (frame uv and a radius in frame heights), how many, then gain, size (frame heights), rise rate; the colour. */
     uEmber: { value: [] as Vector3[] },
@@ -106,6 +111,10 @@ export const LookBoldShader = {
     uniform vec4 uPoolC[MAX_POOL];
     uniform float poolGain;
     uniform vec3 bRim;
+    uniform vec4 uRimBoss[2];
+    uniform vec4 uRimOther[8];
+    uniform float rimBossN;
+    uniform float rimOtherN;
     uniform vec3 rimColor;
     uniform vec3 uEmber[MAX_EMB];
     uniform float emberN;
@@ -299,6 +308,12 @@ ${LIVING_GLSL_TOP}      float fig = 1.0 - clamp(src.a, 0.0, 1.0);
         }
         float e = fig * mix(sumBg / float(EDGE_TAPS), lit / wl, bRim.z);
         e = smoothstep(0.04, 0.85, e);
+        if (rimBossN > 0.5) { // a re-cut boss draws no bold-pass rim: inside its box and no other figure's
+          float inBoss = 0.0;
+          for (int j = 0; j < 2; j++) { vec4 b = uRimBoss[j]; if (float(j) < rimBossN && uv.x > b.x && uv.x < b.z && uv.y > b.y && uv.y < b.w) inBoss = 1.0; }
+          for (int k = 0; k < 8; k++) { vec4 b = uRimOther[k]; if (float(k) < rimOtherN && uv.x > b.x && uv.x < b.z && uv.y > b.y && uv.y < b.w) inBoss = 0.0; }
+          e *= 1.0 - inBoss;
+        }
         col += rimColor * e * bRim.x * (0.5 + 0.9 * luma3(col));
       }
 
