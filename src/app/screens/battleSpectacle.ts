@@ -17,6 +17,7 @@ import type { Renderer } from '../../engine/Renderer.ts';
 import { eyeCandy } from '../../engine/fx/EyeCandy.ts';
 import { fxDebugHooks } from '../../engine/fx/fxDebugHooks.ts';
 import { cEnergyBump, fxShared, stepCEnergy } from '../../engine/fx/fxShared.ts';
+import { govLive } from '../../engine/governor/GovernorLive.ts';
 import { SpectacleFx } from '../../engine/fx/c/SpectacleFx.ts';
 import { SpectaclePass } from '../../engine/fx/c/SpectaclePass.ts';
 import type { SpectacleFlags } from '../../engine/fx/c/SpectacleRules.ts';
@@ -82,7 +83,7 @@ export function attachSpectacle(o: {
       tier: t,
       reduceMotion: eyeCandy.reduceMotion,
       reduceFlashes: eyeCandy.reduceFlashes,
-      dial: (n) => eyeCandy.dial(n),
+      dial: (n) => (n === 'sparks' ? eyeCandy.dial(n) * govLive.particles : eyeCandy.dial(n)), // the frame-budget governor halves the hit sparks at its second level (1 at rest)
       demo: demoMotionOn(), // `?motion=demo` (part 4): the stop and the shake grow with the blow
       feel: feelFlags(), // `?punch=` and `?hitstop=` (or `?pack=demo`) in Chapter I and Chapter IV; today's camera and stop everywhere else
     };

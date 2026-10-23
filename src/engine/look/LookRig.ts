@@ -26,13 +26,17 @@ import { LookRoom, lin, mixc } from './LookRoom.ts';
 import { relightCells, relightStats } from './relight/FigureRelight.ts';
 import { RelightLights } from './relight/RelightLights.ts';
 import { lookState } from './LookState.ts';
-import { proSoftLook } from '../procam/ProBand.ts'; // `?camera=pro`: the directed shot's soft background, blended into the blur below
+import { proSoftLook, softScaled } from '../procam/ProBand.ts'; // `?camera=pro`: the directed shot's soft background, blended into the blur below
 import { LookStage } from './stage/LookStage.ts';
 import { applyRelight } from './LookRelight.ts';
+import { applyLookPost, restoreTilt } from './LookPost.ts';
 import { proRoom, type ProRoom } from './pro/ProGrade.ts';
 import { applyProCone, applyProGrade } from './pro/ProRigTerms.ts';
 import { proSeam } from './pro/ProSeam.ts';
 import { proPieceOn } from './pro/ProSwitch.ts';
+import { demoGovernor } from '../governor/DemoGovernor.ts'; // lane perf-trim: the frame-budget governor, ticked here once a frame inside a battle
+import { govLive } from '../governor/GovernorLive.ts';
+import { proCamOn } from '../procam/ProCamSwitch.ts';
 import { stageWind } from './stage/StageWind.ts';
 
 export { lookWanted } from './LookState.ts';
@@ -62,6 +66,8 @@ export class LookRig {
   /** Lane pro-look: the key of the pro room this rig last entered with ('' = none), so a live flip of the switch re-reads the room's light. */
   private proKey = '';
   private readonly coneUv = new Vector2();
+  /** The shot's band with the governor's lever in it (`softScaled`): one object, reused. */
+  private readonly softBand = { focus: 0, width: 0, blur: 0, weight: 0 };
   private readonly buf = new Vector2();
   /** For the debug API and the captures. */
   readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> }, strength: 'subtle' as string, bold: null as LookBold['stats'] | null, drift: null as LookDrift['stats'] | null, stage: null as LookStage['stats'] | null, living: null as LookBold['living']['stats'] | null, flare: null as LookBold['flare']['stats'] | null };
@@ -170,6 +176,7 @@ export class LookRig {
       if (this.active) this.deactivate();
       this.stage.off(); // a stage prepared for a look that was switched off before its first frame (CLASSIC)
       this.lastNow = 0;
+      if (demoGovernor.active) { demoGovernor.battleEnded(performance.now()); this.r.crisp.setGovernorCut(1); } // lane perf-trim: the levers go back to rest when the battle is left (the next scene draws as it always did)
       return;
     }
     if (lookState.version !== this.version) {
@@ -180,6 +187,8 @@ export class LookRig {
       }
       if (this.active && this.active !== wantName) this.deactivate();
     }
+    demoGovernor.tick(performance.now(), info.scene, lookState.pro || proCamOn()); // lane perf-trim: the frame-budget governor's levers for this frame (rest while a pro lane is off, outside the two demo chapters, or with ?govern=off)
+    this.r.crisp.setGovernorCut(govLive.heavy); // level 3: the supersample a fifth smaller (1 at rest)
     const proNow = this.proRoomNow(info.key);
     if (info.scene !== this.room.scene || this.active !== wantName || this.proKey !== (proNow ? info.key : '')) {
       this.proKey = proNow ? info.key : '';
@@ -252,7 +261,7 @@ export class LookRig {
     if (Math.abs(figureTrueOf(r) - v('grade.figureTrue')) > 1e-3) applyFigureTrue(r, v('grade.figureTrue'));
 
     // --- the mask-aware blur (its band also steers the sharpening ladder's fade, which reads the stock tilt-shift's band)
-    const sb = proSoftLook({ focus: room?.focus ?? v('blur.focus'), band: v('blur.band'), far: v('blur.far') * scale, near: v('blur.near') * scale }, r.proSoft); // unchanged with no directed shot (`?camera=pro`)
+    const sb = proSoftLook({ focus: room?.focus ?? v('blur.focus'), band: v('blur.band'), far: v('blur.far') * scale, near: v('blur.near') * scale }, softScaled(r.proSoft, govLive.soft, this.softBand)); // unchanged with no directed shot (`?camera=pro`); the governor's first level takes the soft background away (`govLive.soft`, 1 at rest)
     const { focus, far, near } = sb;
     const useBlur = cost.blurTaps > 0 && (far > 0.4 || near > 0.4);
     this.stats.blur = useBlur;
@@ -275,22 +284,8 @@ export class LookRig {
       }
     } else if (this.blurH && this.blurV) this.blurH.enabled = this.blurV.enabled = false;
 
-    // --- the bloom, and the stock tilt-shift: off while the mask-aware blur does its job, the palette's own when quality is too low for it
-    const bloom = r.bloomPass.materialHighPassFilter.uniforms;
-    bloom['selective']!.value = p.bloom.selective ? 1 : 0;
-    bloom['smoothWidth']!.value = p.bloom.selective ? 0.3 : 0.15;
-    bloom['whiteDamp']!.value = 0.3;
-    (bloom['bloomTint']!.value as Vector3).set(...p.bloom.tint);
-    (bloom['uTexel']!.value as Vector2).set(1 / Math.max(1, W), 1 / Math.max(1, H));
-    bloom['figureMask']!.value = 1;
-    const stock = !useBlur && (p.blur.far > 0 || p.blur.near > 0);
-    r.applyPost({
-      bloomThreshold: v('bloom.threshold'),
-      bloomStrength: v('bloom.strength'),
-      bloomRadius: v('bloom.radius'),
-      tiltMaxBlur: stock ? (pal.tiltMaxBlur ?? 6) : p.tiltMaxBlur,
-      ...(useBlur ? { tiltFocus: focus, tiltBandWidth: sb.band } : {}),
-    });
+    // --- the bloom, and the stock tilt-shift: off while the mask-aware blur does its job, the palette's own when quality is too low for it (`LookPost.ts`: and the stock passes are not run while they would only copy)
+    applyLookPost(r, { p, v, W, H, useBlur, focus, band: sb.band, paletteMaxBlur: pal.tiltMaxBlur });
 
     // --- the compound pass
     for (const [n, mp] of this.main) mp.enabled = n === name;
@@ -364,6 +359,7 @@ export class LookRig {
     this.prevFigureTrue = -1;
     if (this.prevTilt) this.r.applyPost({ tiltFocus: this.prevTilt.focus, tiltBandWidth: this.prevTilt.band });
     this.prevTilt = null;
+    restoreTilt(this.r); // the stock tilt-shift passes run again (they were skipped while they only copied: `LookPost.ts`)
     const bloom = this.r.bloomPass.materialHighPassFilter.uniforms;
     bloom['selective']!.value = 0;
     bloom['smoothWidth']!.value = 0.01;
