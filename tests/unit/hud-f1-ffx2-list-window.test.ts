@@ -15,9 +15,10 @@ describe('the F1 FFX-2 command window', () => {
     const top = /\.ffx2hud\.hud-f1 \.ffx2hud__command \{[^}]*max-height: (\d+)px/.exec(css);
     expect(top, 'the base window rule').not.toBeNull();
     expect(Number(top![1])).toBe(114);
-    const titled = /\.ffx2hud\.hud-f1 \.ffx2hud__command:has\(\.ffx2cmd__title\) \{ max-height: (\d+)px; \}/.exec(css);
+    const titled = /\.ffx2hud\.hud-f1 \.ffx2hud__command:has\(\.ffx2cmd__title\) \{ max-height: (\d+)px; scroll-padding-top: (\d+)px; \}/.exec(css);
     expect(titled, 'the titled-list rule').not.toBeNull();
     const h = Number(titled![1]);
+    expect(Number(titled![2]), 'rows come into view below the 52 px (13 grid) sticky title and its 6 px padding').toBeGreaterThanOrEqual(19);
     expect(h).toBeLessThan(114);
     expect(BOX_TOP + h).toBeLessThan(CARD_TOP); // the box (and everything it clips to) ends above the first party card
     // three rows (22 grid px, 3.5 gap) after the 6 px padding and the title's roughly 17.5 px still fit in it; a fourth does not start inside it
