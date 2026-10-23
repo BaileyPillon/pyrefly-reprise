@@ -106,7 +106,6 @@ export interface FootActor extends Object3D {
 
 /** One boss's controller, kept in the actor's `userData` by the stage. */
 export class BossClean {
-  private scan = 0;
   private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
   private readonly v = new Vector3();
 
@@ -114,10 +113,8 @@ export class BossClean {
 
   /** Called once per frame after the actor's own update: patch any part that has appeared, then fit the shadow and the ring. */
   tick(actor: FootActor): void {
-    if (--this.scan <= 0) {
-      this.scan = 20; // a rig's parts load after the actor exists
-      actor.traverse((o) => this.patch(o as Patched));
-    }
+    // every frame: a rig builds a pose piece's mesh the first time a pose is asked for, and a piece drawn once unpatched shows its rim for that frame (about 60 objects, a few microseconds)
+    actor.traverse((o) => this.patch(o as Patched));
     if (bossCleanOn(this.artId)) this.fit(actor);
   }
 
