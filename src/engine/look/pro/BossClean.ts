@@ -76,6 +76,11 @@ export function bossCleanOn(artId?: string): boolean {
   return artId === undefined ? true : isCleanBossArt(artId);
 }
 
+/** The boss card's cut-out: the switch is on and this is one of the two bosses (the card names its boss, so no chapter is asked: the two art ids are drawn only in their own chapters). */
+export function bossCleanCard(artKey: string | undefined): boolean {
+  return bossCleanMode() === 'clean' && isCleanBossArt(artKey);
+}
+
 /** The shadow's centre and half width in world x, from the content box's two painting-frame edges in world x (the quad's left and right corners): pure. */
 export function footFit(xLeft: number, xRight: number, foot: BossFoot): { cx: number; rx: number } {
   const w = xRight - xLeft; // negative when the figure is mirrored: the left edge of the painting is then the right one on screen, and the maths stays the same

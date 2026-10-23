@@ -11,6 +11,7 @@ import {
   BOSS_FEET,
   BossClean,
   attachBossClean,
+  bossCleanCard,
   bossCleanFromSearch,
   bossCleanOn,
   footFit,
@@ -86,6 +87,16 @@ describe('the switch', () => {
     setDemoChapter('seymour-flux');
     setBossClean('today');
     expect(bossCleanOn('seymour-flux-body')).toBe(false);
+  });
+
+  it('the boss card takes the clean cut-out for the two bosses whenever the switch is on', () => {
+    setBossClean('clean');
+    expect(bossCleanCard('ffx2-bahamut')).toBe(true);
+    expect(bossCleanCard('seymour-flux-body')).toBe(true);
+    expect(bossCleanCard('yunalesca-1')).toBe(false);
+    expect(bossCleanCard(undefined)).toBe(false);
+    setBossClean('today');
+    expect(bossCleanCard('ffx2-bahamut')).toBe(false);
   });
 
   it('names exactly the two bosses, each with its game and a footprint row', () => {
