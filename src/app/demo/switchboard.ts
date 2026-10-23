@@ -131,7 +131,7 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     el.classList.remove('sb-quiet');
     el.innerHTML =
       `<span class="sb-title">THE KEYS (green = the new version is showing) <i>|</i> press = again to hide</span>${rows.join('')}` +
-      `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}. Address words: ?pro=off starts with the look, camera and staging off; ?look=today, ?camera=off, ?staging=today flip one.</span>`;
+      `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}. Address words: ?pro=off starts with the look, camera and staging off; ?look=today, ?camera=off, ?staging=today flip one; ?hud=today, ?audio=today and ?boss=today put back today's HUD, sound and boss edges; ?partyrim=off starts with the party rim off.</span>`;
     el.hidden = false;
   };
 
