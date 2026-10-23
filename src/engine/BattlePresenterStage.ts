@@ -21,6 +21,7 @@ import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
 import { tryRigFigure, type BuiltFigure, type FigureRequest } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
 import { unregisterRigUse } from './rig/RigLoad.ts';
+import { tagRimFigure } from './look/pro/RimFigures.ts'; // r63-play: which figures the rim mask flags besides the bosses (the party with `?partyrim=off`, Mortiorchis)
 import { attachBossClean, tickBossClean } from './look/pro/BossClean.ts'; // lane boss-matte: the two re-cut bosses draw no rim light and cast their shadow under their footprint (`?boss=clean`, off by default)
 import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
@@ -447,6 +448,7 @@ export class PaintedStage implements BattleStage {
       else if (!painted.has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
     }
 
+    tagRimFigure(actor, c.id, c.side); // r63-play: the party (and aeons) and Seymour Flux's companion are known to the rim mask (`look/pro/RimFigures.ts`)
     attachBossClean(actor, artId, c.side); // lane boss-matte: a controller for Bahamut and Seymour Flux only (it acts only while `?boss=clean` / `?pack=demo` plays in Chapter I or IV)
     this.opts.scene.add(actor);
     actor.still = () => this.opts.comfort?.().reduceMotion === true;

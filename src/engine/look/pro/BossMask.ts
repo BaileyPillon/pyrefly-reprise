@@ -15,6 +15,8 @@
 import { Color, DoubleSide, LinearFilter, Mesh, MeshBasicMaterial, NoBlending, NoColorSpace, PerspectiveCamera, PlaneGeometry, RGBAFormat, Scene, ShaderMaterial, UnsignedByteType, Vector3, Vector4, WebGLRenderTarget, type Camera, type Object3D, type Texture, type WebGLRenderer } from 'three';
 import { lin } from '../LookRoom.ts';
 import { BossClean, bossCleanOn, footFit, isCleanBossArt, type FootActor } from './BossClean.ts';
+import { rimSkipOf } from './RimFigures.ts'; // r63-play: a boss's companion and, when the party rim is off, the party are flagged like the boss
+import { partyRimOff } from './PartyRimSwitch.ts';
 
 /** The camera layer the mask pass draws (no other code in the game uses layers). */
 export const MASK_LAYER = 6;
@@ -123,9 +125,9 @@ export class BossMask {
     this.flag.clear();
     this.stats.bosses = 0;
     this.on = false;
-    if (!bossCleanOn()) return; // the switch is off, or this is not Chapter I or IV: nothing is hooked, nothing is drawn
+    if (!bossCleanOn() && !partyRimOff()) return; // both switches are off, or this is not Chapter I or IV: nothing is hooked, nothing is drawn
     let bosses = 0;
-    const bossActors = new Set<Object3D>();
+    const bossActors = new Set<Object3D>(); // every figure that draws no rim: the re-cut bosses, a boss's companion (Mortiorchis), the party when the party rim is off (`RimFigures.ts`)
     const note = (slot: Mesh, boss: number): void => {
       const u = (slot.material as ShaderMaterial | undefined)?.uniforms;
       if (!u || !u['map']) return;
@@ -134,9 +136,7 @@ export class BossMask {
       if (!this.hooked.has(slot)) this.hook(slot);
     };
     for (const t of tracked) {
-      const art = (t.actor.userData['bossClean'] as { artId?: string } | undefined)?.artId;
-      const boss = art !== undefined && bossCleanOn(art) ? 1 : 0;
-      if (boss) bossActors.add(t.actor);
+      if (rimSkipOf(t.actor)) bossActors.add(t.actor);
       else note(t.slot, 0);
     }
     // a boss's own meshes are read from the actor, not from the pass's list (which is rescanned twice a second): a pose piece or a crossfade ghost built this frame is on the mask this frame
