@@ -1,0 +1,132 @@
+/*
+ * The glass damage numbers (conference demo, lane "pro-look"; Bailey 2026-10-22: "the clean glass damage numbers", options book N2 "Glass Sans"): a clean, slanted sans in white to ice with a luminous edge
+ * instead of an outline. The tiers (`dnum--tier-normal | big | critical`, from the share of the target's max HP and the attacker's usual blow, `proNumbers.ts`) grow in size and glow; the critical gets a colour
+ * fringe and a long glint (a sibling element, `.dnum-glint`: a child of a `background-clip: text` numeral would be clipped away). A heal is mint. FFX is ice-blue, FFX-2 pink and lilac (scoped by the HUD's own
+ * layer class). Everything below needs `.dnum--glass`, which `DamageNumbers.spawn` adds only while the pro look's `numbers` piece is on (off by default), so with it off none of this matches anything.
+ *
+ * Face: Exo 2 (already the game's UI face), upright, weight 800, asked for as italic so the browser slants it: a family with only an upright face and no italic one is slanted by synthesis, which is the
+ * clean oblique the book shows (the shipped Exo 2 italic is 400 only). Sizes are in `proNumbers.TIER_SIZE`; every colour here is [ours].
+ */
+@font-face {
+  font-family: 'Exo 2 Slant';
+  src: url('/fonts/exo2/Exo2-Variable-wght.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.dnum.dnum--glass {
+  font-family: 'Exo 2 Slant', 'Exo 2', 'Chakra Petch', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.015em;
+  z-index: 2;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f8ff 38%, #b4d9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* a luminous edge, not an outline: a hairline of near-white light, a halo of ice-blue, and a soft dark under it so the number reads on a bright painting */
+  filter: drop-shadow(0 0 1.2px rgba(214, 238, 255, 0.95)) drop-shadow(0 0 6px rgba(110, 184, 255, 0.6)) drop-shadow(0 2px 3px rgba(5, 10, 28, 0.72));
+}
+.dnum.dnum--glass.dnum--tier-big {
+  background: linear-gradient(180deg, #ffffff 0%, #e6f4ff 34%, #8fc6ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 1.4px rgba(224, 244, 255, 1)) drop-shadow(0 0 9px rgba(96, 176, 255, 0.78)) drop-shadow(0 3px 4px rgba(4, 9, 26, 0.75));
+}
+.dnum.dnum--glass.dnum--tier-critical {
+  background: linear-gradient(180deg, #ffffff 0%, #fff6dc 30%, #a9d4ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* the colour fringe: a rose edge on the left and a cyan one on the right, a hair apart, then the halo */
+  filter: drop-shadow(-1.6px 0 0 rgba(255, 82, 140, 0.8)) drop-shadow(1.6px 0 0 rgba(70, 214, 255, 0.85)) drop-shadow(0 0 10px rgba(130, 196, 255, 0.85)) drop-shadow(0 3px 5px rgba(4, 9, 26, 0.8));
+}
+.dnum.dnum--glass.dnum--heal {
+  background: linear-gradient(180deg, #f2fff8 0%, #b6f5d4 45%, #62d6a0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 1.2px rgba(220, 255, 238, 0.95)) drop-shadow(0 0 7px rgba(86, 224, 162, 0.62)) drop-shadow(0 2px 3px rgba(4, 22, 16, 0.7));
+}
+.dnum.dnum--glass.dnum--mp {
+  background: linear-gradient(180deg, #f0f9ff 0%, #a4dcff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.dnum.dnum--glass.dnum--miss,
+.dnum.dnum--glass.dnum--absorbed {
+  background: linear-gradient(180deg, #eef3fb 0%, #a9bad2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-style: italic;
+  font-weight: 700;
+  filter: drop-shadow(0 0 1px rgba(214, 226, 244, 0.8)) drop-shadow(0 2px 3px rgba(5, 10, 28, 0.7));
+}
+.dnum.dnum--glass.dnum--immune {
+  color: #a9bad2;
+  -webkit-text-fill-color: #a9bad2;
+  background: none;
+  font-weight: 700;
+  filter: drop-shadow(0 2px 3px rgba(5, 10, 28, 0.7));
+}
+
+/* FFX-2: pink and lilac on the same shapes. */
+.ffx2-numerals-layer .dnum.dnum--glass {
+  background: linear-gradient(180deg, #ffffff 0%, #ffeaf7 40%, #e0b8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 1.2px rgba(255, 226, 244, 0.95)) drop-shadow(0 0 6px rgba(255, 140, 214, 0.62)) drop-shadow(0 2px 3px rgba(26, 6, 24, 0.72));
+}
+.ffx2-numerals-layer .dnum.dnum--glass.dnum--tier-big {
+  background: linear-gradient(180deg, #ffffff 0%, #ffe1f4 36%, #d79bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 1.4px rgba(255, 232, 248, 1)) drop-shadow(0 0 9px rgba(255, 120, 208, 0.8)) drop-shadow(0 3px 4px rgba(24, 4, 22, 0.75));
+}
+.ffx2-numerals-layer .dnum.dnum--glass.dnum--tier-critical {
+  background: linear-gradient(180deg, #ffffff 0%, #fff0d8 30%, #f0b0ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(-1.6px 0 0 rgba(255, 70, 150, 0.85)) drop-shadow(1.6px 0 0 rgba(120, 190, 255, 0.85)) drop-shadow(0 0 10px rgba(255, 150, 224, 0.85)) drop-shadow(0 3px 5px rgba(24, 4, 22, 0.8));
+}
+.ffx2-numerals-layer .dnum.dnum--glass.dnum--heal {
+  background: linear-gradient(180deg, #f2fff8 0%, #b6f5d4 45%, #62d6a0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 1.2px rgba(220, 255, 238, 0.95)) drop-shadow(0 0 7px rgba(86, 224, 162, 0.62)) drop-shadow(0 2px 3px rgba(4, 22, 16, 0.7));
+}
+.ffx2-numerals-layer .dnum.dnum--glass.dnum--mp {
+  background: linear-gradient(180deg, #f0f9ff 0%, #a4dcff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.ffx2-numerals-layer .dnum.dnum--glass.dnum--miss,
+.ffx2-numerals-layer .dnum.dnum--glass.dnum--absorbed {
+  background: linear-gradient(180deg, #f7e9f4 0%, #c8a6c0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* A critical's long glint: a thin streak of light through the figure (with a hot core), a sibling of the numeral, moved with it. Never a flash: it is a still streak that scales in over 160 ms. */
+.dnum-glint {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4.6em;
+  height: 0.16em;
+  min-height: 2px;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(210, 236, 255, 0.7) 18%, rgba(140, 200, 255, 0.28) 48%, rgba(140, 200, 255, 0) 100%);
+  will-change: transform, opacity;
+}
+.ffx2-numerals-layer .dnum-glint {
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(255, 224, 244, 0.7) 18%, rgba(255, 160, 220, 0.28) 48%, rgba(255, 160, 220, 0) 100%);
+}
+
+/* REDUCE MOTION / LOW EFFECTS keep their numerals: the glass ones lose only the glint. */
+@media (prefers-reduced-motion: reduce) {
+  .dnum-glint {
+    display: none;
+  }
+}

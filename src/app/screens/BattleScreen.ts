@@ -89,6 +89,7 @@ import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
 import { setMenuHold } from '../../engine/motion/MenuHold.ts';
+import { setNumberFacts } from '../../ui/common/proNumbers.ts'; // lane pro-look: the glass numbers read a target's max HP for their tiers
 import { setCurvesChapter } from '../../engine/motion/CurvesSwitch.ts'; // motion pass (lane "core"): the new curves play only in Chapters I and IV
 import { battleFrameClocks } from '../../engine/PoseSwap.ts';
 import { onSceneScale, sceneScale } from '../../engine/crisp/sceneScale.ts';
@@ -322,6 +323,10 @@ export class BattleScreen extends Screen {
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
+      setNumberFacts((id) => {
+        const c = this.engine?.state().combatants[id];
+        return c ? { maxHp: c.stats.maxHp } : undefined;
+      }); // lane pro-look: only the glass numbers ask (off by default)
       this.hud.setLayoutProjector?.(battleLayoutProjector(() => this.stage, scene.battleCamera, battleCameraPreset(chapter.game))); // fb2-0929: panels hold still while the camera moves
       // The targeting surface: silhouette rectangles out to the HUD, the
       // accent pool and the quiet dim back in. This is what makes "which enemy
@@ -1004,6 +1009,7 @@ export class BattleScreen extends Screen {
     this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
     setCurvesChapter(undefined);
+    setNumberFacts(null);
     setMenuHold(null);
     window.removeEventListener('keydown', this.onPauseKey);
     setSideFogGame(null);
