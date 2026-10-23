@@ -20,6 +20,7 @@ import { CopySeeds, FreshWatch, StartClock, canTravelFx, configureList, resolveF
 import type { LandOpts } from './LandOpts.ts';
 export type { LandOpts } from './LandOpts.ts';
 import { fxChapter, fxNewOn, setFxChapter } from './FxSwitch.ts';
+import { proPieceOn } from '../look/pro/ProSwitch.ts'; // lane pro-look: the hit's "Ink and light"
 import { FLIGHT_LEAD_MS, FLIGHT_MIN_MS, FlightLayer, type FlightKind, type FlightStats } from './FlightFx.ts'; // SKILL TRAVEL (r38-motion): a spell, skill or shot crossing the field
 import { drawnOnStatus, lightKindOf } from './BossFx.ts';
 import { groupTarget } from './SpellFxGroup.ts';
@@ -207,12 +208,12 @@ export class SpellFxLayer {
 
   /** Is the new set in force for a copy started now? (Its atlas tiles are drawn here too, in case the switch flipped after `prepare`.) */
   private fresh(): boolean {
-    if (fxNewOn()) ensureAtlasExtra();
+    if (fxNewOn() || proPieceOn('hits')) ensureAtlasExtra();
     return fxNewOn();
   }
 
   private landEach(fx: FreshFxId, target: string, o: LandOpts, action: number): RunningFx | undefined {
-    const fresh = this.fresh();
+    const fresh = this.fresh() || (fx === 'hit' && proPieceOn('hits')); // lane pro-look: the pro hit is a fresh copy (the brush's finish, the weapon) even with the new spell effects off
     const spec = specOf(fx, fresh);
     let run = spec.perHit ? undefined : this.running.find((r) => r.targetId === target && r.action === action && r.id === fx);
     if (run) return run;
@@ -340,7 +341,7 @@ export class SpellFxLayer {
    * first spell of a battle hitched by 150 ms (measured, `docs/screenshots/spellfx-b/`).
    */
   prepare(): void {
-    if (fxNewOn()) ensureAtlasExtra(); // the painted finish's four tiles, drawn now (about 20 ms) and not mid-fight
+    if (fxNewOn() || proPieceOn('hits')) ensureAtlasExtra(); // the painted finish's four tiles, drawn now (about 20 ms) and not mid-fight
     this.batch ??= new FxBatch();
   }
 
