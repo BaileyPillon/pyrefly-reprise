@@ -86,12 +86,24 @@ function setCompanions(port: StagingPort, ids: readonly string[]): void {
   (port as { setCompanions?: (ids: readonly string[]) => void }).setCompanions?.(ids);
 }
 
-/** `action-start`: a boss's big move begins. */
+/**
+ * How long before Total Annihilation's first blow its tell begins, ms: the move's own start. Its effect says it lands only 0.26 s after the first damage event (`vfx.land`: the wind-up before that event is the presenter's own, about a second),
+ * so FFX's tell runs from the action's start, not from the effect's: the book's real frames measure the first hit about 1.26 s after the move starts (`boss-attack-intro/NOTES.md`), minus the action's opening. [ours] FFX-2's Mega Flare tells from the
+ * first blow, where the effect's own 1.45 s lead-in is the tell.
+ */
+export const FFX_TA_LEAD_MS = 1100;
+
+/** `action-start`: a boss's big move begins. FFX's Total Annihilation tells from here (see {@link FFX_TA_LEAD_MS}). */
 export function stageMark(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>): void {
   const port = stagingPort(ctx, 'breath');
   if (!port || ctx.stage.sideOf(event.actorId) !== 'enemy') return;
   const move = bigMoveOf(event.abilityId, stagingGame());
-  if (move !== null) begin(ctx, port, move, event.actorId);
+  if (move === null) return;
+  begin(ctx, port, move, event.actorId);
+  if (move === 'total-annihilation' && ctx.acting !== undefined && told.get(ctx) !== ctx.acting.serial) {
+    told.set(ctx, ctx.acting.serial);
+    port.breath({ ...stageFacts(ctx), kind: 'tell', move, name: NAME_OF[move], attacker: event.actorId, party: partyOf(ctx), msToBlow: FFX_TA_LEAD_MS * (SPEED_SCALE[ctx.speed()] || 1) });
+  }
 }
 
 /** `charge`: FFX's ladder reaches "imminent" (the move lands next turn): the marker goes on and stays while the party acts. FFX-2's countdown is marked at the action's own start. */

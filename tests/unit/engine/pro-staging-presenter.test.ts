@@ -90,7 +90,7 @@ describe('the held breath through the presenter', () => {
     const [mark, tell, blow] = r.port.breaths;
     expect(mark).toMatchObject({ kind: 'mark', move: 'total-annihilation', game: 'ffx', name: 'Total Annihilation', attacker: 'mortiorchis' });
     expect((mark as unknown as { party: string[] }).party).toEqual(['tidus', 'yuna', 'kimahri']);
-    expect(tell).toMatchObject({ kind: 'tell', msToBlow: 1200, attacker: 'mortiorchis' });
+    expect(tell).toMatchObject({ kind: 'tell', msToBlow: 1100, attacker: 'mortiorchis' }); // FFX tells from the move's own start (the effect says only 0.26 s after the first damage)
     expect(blow).toMatchObject({ kind: 'blow', move: 'total-annihilation' });
   });
 
@@ -218,7 +218,7 @@ describe('the held breath through the presenter', () => {
     await r.play(move('mortiorchis', 'total-annihilation', 'Total Annihilation', 1, ['tidus']));
     const tell = r.port.breaths.find((b) => b.kind === 'tell') as Extract<BreathCue, { kind: 'tell' }>;
     expect(tell.scale).toBeCloseTo(0.32, 5);
-    expect(tell.msToBlow).toBeCloseTo(1200 * 0.32, 5);
+    expect(tell.msToBlow).toBeCloseTo(1100 * 0.32, 5);
   });
 });
 
