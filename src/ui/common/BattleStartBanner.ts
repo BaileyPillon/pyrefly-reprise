@@ -26,6 +26,7 @@
  */
 
 import './battle-start-banner.css';
+import './proStage/proCard.css'; // lane "pro-staging": the card as a full-bleed painting, under `.bstart--pro` only
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from './html.ts';
 import { faceImgHtml, faceLayersHtml } from './portrait.ts';
@@ -76,6 +77,8 @@ export interface BattleStartBannerOptions {
   until?: () => Promise<unknown>;
   /** An experiment (the FFX-2 Leblanc preview): the eyebrow says EXPERIMENTAL, not a chapter numeral. */
   experimental?: true;
+  /** Lane "pro-staging" (the demo chapters with `?staging=pro`): the card is a full-bleed painting (`proStage/proCard.css`); the same content, a different layout. */
+  pro?: true;
 }
 
 /** Spec pace: the card is a beat, not a screen. */
@@ -115,7 +118,7 @@ export class BattleStartBanner {
     this.holdMs = opts.holdMs ?? BATTLE_START_HOLD_MS;
 
     const el = document.createElement('div');
-    el.className = opts.game === 'ffx2' ? 'bstart ig ig--ffx2' : 'bstart ig';
+    el.className = (opts.game === 'ffx2' ? 'bstart ig ig--ffx2' : 'bstart ig') + (opts.pro ? ' bstart--pro' : '');
     el.dataset['role'] = 'battle-start';
     el.setAttribute('role', 'status');
     el.setAttribute('aria-live', 'polite');

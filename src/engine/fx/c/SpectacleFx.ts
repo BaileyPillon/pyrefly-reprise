@@ -10,49 +10,21 @@
  * frozen frame ON and OFF. Game case: both, skins per game (`SpectacleRules.ts`).
  */
 
-import { Group, Quaternion, Vector2, Vector3, type PerspectiveCamera, type Scene } from 'three';
+import { Group, Quaternion, Vector2, Vector3 } from 'three';
 import type { CombatantId } from '../../../battle/common/types.ts';
 import type { PaintedActor } from '../../PaintedActor.ts';
 import { SegmentPool, SpritePool } from './FxPools.ts';
 import { hitBurst, iceGlints, poolsOf, sendOff, sparkleSweep, type Pools } from './HitDraw.ts';
 import type { FxStagePort } from './presenterHooks.ts';
-import { easeInOut, FlashBudget, planHit, planVictory, SPECTACLE_TUNING, splashMode, type OrbitPlan, type SpectacleFlags, type SpectacleGame } from './SpectacleRules.ts';
+import { easeInOut, FlashBudget, planHit, planVictory, SPECTACLE_TUNING, splashMode, type OrbitPlan } from './SpectacleRules.ts';
 import { FireColumns, IceBurst, ShockSpheres } from './SpellLayers.ts';
 import { bigMoment, castOnto, spellMoment, type MomentCtx } from './SpellMoments.ts';
-import { SpectaclePass } from './SpectaclePass.ts';
 import { HitStop, Trauma } from './Trauma.ts';
 import { ImpactFrames } from './SpectacleImpact.ts';
 import { kickArgs } from '../../feel/PunchCurve.ts';
 
-export interface SpectacleStage {
-  actor(id: CombatantId): PaintedActor | undefined;
-  staged(): CombatantId[];
-  sideOf(id: CombatantId): 'party' | 'enemy' | 'aeon' | undefined;
-  snapshot(): Array<{ id: string; art: string }>;
-}
-
-export interface SplashPort {
-  play(o: { art: string | null; name: string; at: { x: number; y: number } | null; mode: 'full' | 'repeat' | 'calm'; staticLines: boolean; holdMs: number; from: 'left' | 'right' }): Promise<void>;
-  stop(): void;
-}
-
-export interface SpectacleDeps {
-  game: SpectacleGame;
-  scene: Scene;
-  camera: PerspectiveCamera;
-  stage: SpectacleStage;
-  pass: SpectaclePass;
-  enabled(): boolean;
-  flags(): SpectacleFlags;
-  /** A strength dial (`?fxdial=`), 1 = as tuned. */
-  dial(name: 'orbit' | 'splash' | 'heat'): number;
-  sub(id: string): boolean;
-  splash: SplashPort | null;
-  /** The painting a splash shows for an actor, or null. */
-  splashArt(id: CombatantId, art: string, kind: 'overdrive' | 'special'): string | null;
-  /** CSS px per drawing-buffer px, and the canvas CSS size. */
-  view(): { w: number; h: number; dpr: number };
-}
+import type { SpectacleDeps } from './SpectacleTypes.ts';
+export type { SpectacleDeps, SpectacleStage, SplashPort } from './SpectacleTypes.ts'; // the shapes live in SpectacleTypes.ts; importers of this file keep working
 
 /** The victory arc starts once the rig move is under way. */
 const VICTORY_LEAD_S = 0.35;
@@ -159,6 +131,14 @@ export class SpectacleFx implements FxStagePort {
       holdMs: this.d.game === 'ffx' ? 700 : 500,
       from: side === 'enemy' ? 'right' : 'left',
     });
+  }
+
+  /** Hold the field for `ms` of real time on the hit-stop's own clock (lane "pro-staging": the freeze on a fight's last blow); honours the hit-stop's sub-switch. */
+  freeze(ms: number): void {
+    if (ms > 0 && this.d.sub('hitstop')) {
+      this.stop.freeze(ms);
+      this.stats.freezes++;
+    }
   }
 
   hit(o: Parameters<NonNullable<FxStagePort['hit']>>[0]): { freezeMs: number; shook: boolean } {

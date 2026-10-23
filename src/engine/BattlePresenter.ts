@@ -36,7 +36,7 @@ import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvent
 import { clockEngine, followMenuLevel, MenuWaker, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
-import { settleForMenu, settleOpening } from './BattlePresenterBeats.ts';
+import { settleForMenu, settleOpening } from './BattlePresenterSettle.ts';
 import { aeonMenuRows } from './PayRows.ts';
 import { playOpening } from './OpeningSkip.ts';
 import { playUnheld } from './TargetFrameHold.ts';

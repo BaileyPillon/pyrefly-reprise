@@ -19,6 +19,7 @@
  * | `-` | the contact shadow | follow, today |
  * | `/` | the pro look (lane "pro-look": arena grade, Chapter IV seam, ink hits, glass numbers, markers) | pro, today |
  * | `;` | the directed camera (lane "pro-camera": the real FFX shots re-staged, moves on plain attacks, FFX-2's auto camera) | pro, today |
+ * | `\` (backslash) | the pro staging (lane "pro-staging": held breath, boss card, victory freeze, defeat card, Overdrive opening, Change plate; a flip in a fight plays from the next beat) | pro, today |
  * | `0` | everything: if all are new, all go to today's; else all go to new | |
  * | `=` | hide or show the label | |
  *

@@ -6,11 +6,11 @@
  * readable at a glance. Same rules apply: no `three`, no DOM, ports only.
  */
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
-import { MOMENT_TIMING } from './BattleMoments.ts';
 import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { actionOfBlow, awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { chargeFx, odOpening, prerollFx } from './BattlePresenterBossFx.ts';
+import { stageCharge, stageFall, stageKo, stageLift, stageMark, stageVictory } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath, the freeze on the last blow, the openings (all no-ops unless `?staging=pro` in a demo chapter)
 import { poseForAction } from './EnemyActionPose.ts';
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -49,6 +49,7 @@ export async function actionStart(
   const burst = ctx.burst; // before the first await: an overlapping burst (FFX-2's ATB) would swap it (`motion/StrikeReach.ts`)
   ctx.actingId = event.actorId;
   beginSpellAction(ctx, event);
+  stageMark(ctx, event); // pro staging: a boss's big move begins: the small name and the rim (and its name, for the defeat card's cause line)
   await telegraphHold(ctx, event); // r38 keys: Flux's Lance of Atrophy, Braska's Ultimate Jecht Shot (950 ms, only with the painting; else nothing happens)
   const actor = ctx.stage.actor(event.actorId);
   // An enemy's physical ability draws its own attack painting (iter2
@@ -107,7 +108,7 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
-  releaseCastLift(ctx, going); // the cast lift comes down with the action at the latest
+  stageLift(ctx, going, 'action', actionOfBlow(ctx, going ?? undefined)); releaseCastLift(ctx, going); // pro staging: a staged big move is over, the wash lifts (only for the staged move's own action); the cast lift comes down with the action at the latest
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
   idleAtEnd(ctx, actor, ctx.actingId); // the idle, or (new curves) the strike's own marks do it: follow on the fastest frame home, idle at home
   ctx.actingId = null;
@@ -217,6 +218,7 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   const side = ctx.stage.sideOf(id);
   cue(ctx, 'ko');
   if (side === 'enemy') {
+    await stageKo(ctx, id); // pro staging: a boss that falls takes its marker with it; the last foe of the fight holds the frame on the killing blow before it is sent
     // Evrae falls out of the sky; Leblanc, Logos, Ormi and the Guado
     // Guardians yield; Seymour at Macalania falls and his body stays
     // (`BattlePresenterDepartures.ts`). Everyone else is sent.
@@ -302,7 +304,7 @@ export async function charge(
 ): Promise<void> {
   const actor = ctx.stage.actor(event.enemyId);
   const imminent = event.stage === 2;
-  chargeFx(ctx, event); // the new effects: the boss's gather, climbing with the count (FFX-2) or the ladder (FFX)
+  chargeFx(ctx, event); stageCharge(ctx, event); // the new effects: the boss's gather, climbing with the count (FFX-2) or the ladder (FFX); pro staging: FFX's ladder at "imminent" puts the marker on
   actor?.flash(imminent ? 0xff6b5a : 0xffc46b, 620, imminent ? 1 : 0.7);
   if (imminent) {
     ctx.stage.vfx.screenFlash('rgba(255,70,50,0.28)', 420);
@@ -330,7 +332,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
   if (victoryPoseOf(ctx.deps) === 'hold') {
     standDownParty(ctx); // motion pass, step 3 (the moments, default OFF): the held stance gets a quiet settle, no pose, no hop
     void ctx.moments.victory();
-    await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold')));
+    await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold'), stageVictory(ctx, 'hold', TIMING.victory))); // pro staging: the quiet title and the silent pull-back (0 when not staged)
     return;
   }
   // The fanfare is the end-of-fight sting. A formation that chains on (Chapter VI Acts I and II) is a seam: the battle theme carries on into the next link, and the
@@ -344,12 +346,12 @@ export async function victory(ctx: EventCtx): Promise<void> {
     if (side === 'party' || side === 'aeon') ctx.stage.actor(id)?.setPose('victory');
   }
   void ctx.moments.victory();
-  await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'pose')));
+  await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'pose'), stageVictory(ctx, 'pose', TIMING.victory))); // pro staging: the title, and the hold the real cheer needs (0 when not staged)
 }
 
 export async function defeat(ctx: EventCtx): Promise<void> {
   ctx.moments.clear();
-  ctx.stage.vfx.screenFlash('rgba(0,0,0,0.55)', 900);
+  if (!stageFall(ctx)) ctx.stage.vfx.screenFlash('rgba(0,0,0,0.55)', 900); // pro staging: the scene stays under a light dim and a caption, no black flash
   for (const id of ctx.stage.staged()) {
     if (ctx.stage.sideOf(id) !== 'party') continue;
     ctx.stage.actor(id)?.setPose('ko');
@@ -358,40 +360,4 @@ export async function defeat(ctx: EventCtx): Promise<void> {
   await ctx.sleep(TIMING.defeat);
   const own = ctx.deps.actionMotion?.defeat; // FF7: G1's pan up over the fallen party
   if (own) await settled(ctx, own.call(ctx.deps.actionMotion, motionCtx(ctx)), MOMENT_GUARD_MS);
-}
-
-/**
- * The opening's end, before the first decision is asked for (so before any command menu can open): CHAPTER FRAMING's first plan has landed on the figures, or been given up after a
- * bounded wait (`fx/mix/openingGate.ts`; both games). The plan is put on screen only while no menu is open, so a menu that opened first used to hold it back until the first confirm and
- * then re-size a boss on screen (Chapter IV, Bahamut 420 to 629 px). The battle-start card already waited for it (`BattleStartBanner` `until`); this covers the opening that has no card
- * left (hurried, skipped). A plan that landed after the opening's last camera move leaves the resting camera on the old rig, so the camera moves onto the master here, with the opening's
- * own motion (a cut under REDUCE MOTION), before anything is offered. The engine does not tick before its first decision, so FFX's CTB and FFX-2's Active and Wait clocks are not touched.
- * Nothing waits at `'skip'` speed (an automated run).
- */
-export async function settleOpening(ctx: EventCtx): Promise<void> {
-  if (ctx.speed() === 'skip') return;
-  await ctx.stage.planSettled?.();
-  const idle = ctx.moments.pick('idle');
-  if (idle && ctx.stage.planArrivalOwed?.()) await ctx.moments.moveToRig(idle, MOMENT_TIMING.returnOut);
-}
-
-/**
- * Before a command menu opens: if the shot is anywhere but `idle`, bring it
- * back (and let go of any held push) so the player chooses with the whole
- * field in frame.
- *
- * PR-0094: at the seam into chapter 5's link 5, `shuyin-appears` ends on
- * `camera('action')`, and Shuyin's first turn raises the Terror of Zanarkand
- * telegraph (held zoom on the `enemy` rig) and starts its cast; FFX-2's ATB
- * then opens Yuna's menu mid-cast, so the menu sat on a Shuyin close-up with
- * Yuna and Rikku off-frame and Paine cut at the edge. The telegraph's vignette
- * and the HUD's banner stay up; only the framing returns. Presenter plumbing,
- * so **both games** (CHK-020); FFX's CTB rarely opens a menu off `idle`, since
- * every action's close already returns there.
- */
-export async function settleForMenu(ctx: EventCtx): Promise<void> {
-  const idle = ctx.moments.pick('idle');
-  if (!idle || ctx.stage.camera.rigName === idle) return;
-  const ms = MOMENT_TIMING.returnOut;
-  await Promise.all([ctx.stage.camera.release?.(ctx.moments.ms(ms)), ctx.moments.moveToRig(idle, ms)]);
 }

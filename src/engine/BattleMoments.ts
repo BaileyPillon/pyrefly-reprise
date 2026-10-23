@@ -41,6 +41,10 @@ import { paceFactor } from './pace.ts';
 import { punchMode } from './feel/FeelSwitch.ts'; // the motion program's `?punch=`: today's 0.11 moment punch, or the 2 to 3 percent settle (`feel/PunchCurve.ts`)
 import { momentPunch } from './feel/PunchCurve.ts';
 import { fittedPush } from './ShotFit.ts';
+import { factsFor, moveOfName } from './BattlePresenterStaging.ts';
+import type { StagingPort } from './pro/staging/StagingPort.ts';
+import { OD_OPEN_HOLD_MS } from './pro/staging/OpeningPlan.ts'; // lane "pro-staging": a staged big move's small name replaces the telegraph's text slab
+import { stagingGame, stagingPieceOn } from './pro/staging/StagingSwitch.ts';
 import { ShotRules } from './ShotRules.ts';
 import type { ShotAction, ShotActionInfo, ShotAnswer, ShotCtx, ShotDirector, ShotSubject } from './ShotDirector.ts';
 import { ProDirector } from './procam/ProDirector.ts'; // `?camera=pro` (demo chapters only): the directed camera, asked when the scene publishes no director of its own
@@ -102,6 +106,8 @@ export const TELEGRAPH_BPM: Readonly<Record<1 | 2, number>> = { 1: 84, 2: 132 };
 export interface MomentDeps {
   stage: BattleStage;
   moments?: MomentsPort | null;
+  /** Lane "pro-staging": the staging's layer, which takes the Overdrive's opening (a small name, a light change) in place of the banner when its `opening` piece is on. */
+  staging?: StagingPort | null;
   audio?: AudioPort | null;
   /**
    * The battle HUD, for the *one* thing a moment does to it: the opening keeps
@@ -555,16 +561,22 @@ export class BattleMoments {
       return;
     }
     this.overdriveOpen = true;
+    const staged = this.deps.staging != null && !this.hurry && stagingPieceOn('opening') && stagingGame() === 'ffx'; // pro staging (FFX only: an Overdrive is FFX's): a small name, a push and a light change, no banner and no bars
     const game = sfxGame();
     const stinger = stingerFor(game);
     this.cue(stinger ?? 'overdrive-full', 1, game && stinger ? momentEvents(game, 'overdrive-start', actorId, this.deps.stage.sideOf(actorId) ?? null, stinger) : undefined); // D-302: the Overdrive / Special stinger; SFX parity: that character's own recorded opening, when a pack has it
-    const bars = this.deps.moments?.letterbox(true, this.ms(MOMENT_TIMING.odLetterbox));
+    const bars = staged ? undefined : this.deps.moments?.letterbox(true, this.ms(MOMENT_TIMING.odLetterbox));
     if (!directed) {
       const shot = this.shots.fit(rig, MOMENT_PUSH.overdrive);
       void this.move(shot.rig, MOMENT_TIMING.actionIn);
       void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.odPush));
     }
     await bars;
+    if (staged) {
+      this.deps.staging!.opening({ ...factsFor(this.deps.speed(), this.reducedMotion, this.reducedFlashes), kind: 'overdrive', actor: actorId, name });
+      await this.deps.sleep(OD_OPEN_HOLD_MS); // the presenter's own sleep: it scales with the playback speed and freezes under the pause
+      return;
+    }
     await this.deps.moments?.nameSlab({
       title: name,
       subtitle: 'OVERDRIVE',
@@ -614,7 +626,7 @@ export class BattleMoments {
       void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.telegraphZoom));
       await this.move(shot.rig, MOMENT_TIMING.telegraphZoom * 0.4);
     }
-    if (imminent && name) {
+    if (imminent && name && !(stagingPieceOn('breath') && moveOfName(name) !== null)) { // pro staging: "the text slab at the top is retired" for the two staged moves (the held breath names them small under the boss)
       await this.deps.moments?.nameSlab({
         title: name,
         kind: 'telegraph',

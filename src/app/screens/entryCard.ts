@@ -11,6 +11,7 @@ import type { Chapter } from '../../data/encounters.ts';
 import { loadingCardWait, type CoverWait } from '../../ui/common/transitions/loadingCard.ts';
 import { battleCardInfo } from './battlePreload.ts';
 import { backdropFileOf } from '../../data/art/artNamespace.ts';
+import { stagingPieceOnFor } from '../../engine/pro/staging/StagingSwitch.ts'; // lane "pro-staging": the loading card is the same full-bleed painting as the battle's own card, so the one card carries on
 
 export function entryCardWait(root: HTMLElement, chapter: Chapter): CoverWait {
   return loadingCardWait(root, () => {
@@ -19,6 +20,7 @@ export function entryCardWait(root: HTMLElement, chapter: Chapter): CoverWait {
     return {
       chapterNumber: chapter.number,
       ...(chapter.experimental ? { experimental: true as const } : {}),
+      ...(stagingPieceOnFor('card', chapter.id) ? { pro: true as const } : {}),
       location: chapter.location,
       bossName: info.bossName,
       subline: chapter.subtitle,
