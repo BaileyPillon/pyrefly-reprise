@@ -23,6 +23,8 @@ import { CHARACTERS as FFX_CHARACTERS } from '../../data/ffx/characters/index.ts
 import { ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
 import { ITEMS as FFX2_ITEMS } from '../../data/ffx2/index.ts';
 import { abilityRowsFor } from './battleAbilityFacts.ts';
+import { audioNewOn } from '../../audio/pass/passSwitch.ts'; // the sound pass (decision 184): off unless ?audio=new / ?pack=demo in Chapter I or IV
+import { planHit } from '../../audio/pass/passPlanner.ts';
 
 type Rows = (id: string) => AbilityDef | undefined;
 
@@ -69,13 +71,34 @@ function actionOf(game: VoiceGame, ask: SfxAsk, rows: Rows): VoiceAction | null 
   };
 }
 
+/**
+ * The facts of one blow for the sound pass's planner (`audio/pass/passPlanner.ts`): a weapon's blow is a physical one (an attack or a weapon skill: no item, no landing family, no element, not a magical
+ * formula), and then its weapon and its striker pick its layers. A spell, a heal or a tick is not.
+ */
+function blowFacts(ask: VoiceAsk, event: { hitIndex?: number; hitCount?: number } | null) {
+  const a = ask.action;
+  const physical = a !== null && !a.isItem && !a.family && !(ask.element && ask.element !== 'none') && a.damageType !== 'magical';
+  return {
+    game: ask.game,
+    actorSide: ask.actor?.side ?? null,
+    actorId: ask.actor?.id ?? null,
+    weapon: ask.actor?.weapon ?? null,
+    physical,
+    crit: ask.crit === true,
+    abilityId: a?.abilityId ?? null,
+    hitIndex: event?.hitIndex ?? 0,
+    hitCount: event?.hitCount ?? 1,
+    commandKind: a?.commandKind ?? null,
+  };
+}
+
 /** The voice a chapter of `game` hands its presenter, or `null` (FF7 and anything else: no voice). */
 export function sfxVoiceFor(game: GameId, state?: () => BattleState | null): SfxVoice | null {
   if (game !== 'ffx' && game !== 'ffx2') return null;
   const rows = abilityRowsFor(game) as Rows;
   return (ask) => {
     const s = state?.() ?? null;
-    const e = ask.event as (BattleEvent & { element?: string; crit?: boolean; status?: string; stage?: number; to?: string }) | null;
+    const e = ask.event as (BattleEvent & { element?: string; crit?: boolean; status?: string; stage?: number; to?: string; hitIndex?: number; hitCount?: number }) | null;
     const voiceAsk: VoiceAsk = {
       game,
       moment: ask.moment,
@@ -94,10 +117,13 @@ export function sfxVoiceFor(game: GameId, state?: () => BattleState | null): Sfx
     const voiced = voiceBattle(voiceAsk);
     const plan = voiceEvents(voiceAsk, voiced?.key ?? null); // SFX parity: the recorded originals to look up; never changes the stand-in
     if (!voiced && !plan) return null;
+    // The sound pass: the layers, the base's start and the big-moment thump of a blow (nothing is asked of the planner with the pass off).
+    const pass = voiced && voiceAsk.moment === 'damage' && audioNewOn() ? planHit(blowFacts(voiceAsk, e)) : null;
     return {
       ...(voiced ? { key: voiced.key } : {}),
       ...(voiced?.gain !== undefined ? { gain: voiced.gain } : {}),
       ...(plan ? { events: plan.events, ...(plan.coveredBy ? { coveredBy: plan.coveredBy } : {}) } : {}),
+      ...(pass ? { pass } : {}),
     };
   };
 }

@@ -45,6 +45,7 @@ Do not open it at the booth. Say: "There is also a hidden mode, the Pilgrimage. 
 - **Frozen or black picture:** F5 first. Still stuck: Alt+F4, then double-click `reset-demo.cmd`. About five seconds.
 - **No keyboard response:** Ctrl+Alt+Del, Task Manager, end the browser, then `reset-demo.cmd`.
 - **No sound:** check the headphones are the PC's output and the volume is up. Then F5.
+- **The title is silent after a start or a reset:** a browser lets a page make sound only after a key, click or touch, and a click or Enter also leaves the title. Press **T** once (it changes the title picture and stays on the title): the title music starts and the 60-second attract reel will have sound. Once at the start of the day, and once after each reset (audio pass, PC-05, 2026-10-22; measured: with no press at all the reel ran 70 s with no sound).
 - **A visitor loses:** RETRY on the results panel. It is a different roll of the same fight.
 
 **Between visitors:** `reset-demo.cmd` gives the next person an empty save and keeps the browser warm. **End of day:** `stop-demo.cmd`.

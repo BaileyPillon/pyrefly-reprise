@@ -1,0 +1,62 @@
+{
+ "version": 1,
+ "chapter": "seymour-flux",
+ "game": "ffx",
+ "about": "The sound pass (?audio=new): in-battle lines Chapter I does not voice today. Own folder; read only when the pass is asked for.",
+ "lines": {
+  "0d9b943c3031e8": {
+   "id": "seymour-flux.mid-seymour-half.001",
+   "file": "seymour-flux/seymour-flux.mid-seymour-half.001.mp3",
+   "ms": 1689,
+   "who": "seymour"
+  },
+  "1c8d69d9b1ac60": {
+   "id": "seymour-flux.mid-seymour-half.002",
+   "file": "seymour-flux/seymour-flux.mid-seymour-half.002.mp3",
+   "ms": 2344,
+   "who": "seymour"
+  },
+  "0f6cdfe077812e": {
+   "id": "seymour-flux.mid-seymour-lance.001",
+   "file": "seymour-flux/seymour-flux.mid-seymour-lance.001.mp3",
+   "ms": 884,
+   "who": "seymour"
+  },
+  "1691505a15fc7b": {
+   "id": "seymour-flux.mid-seymour-lance.002",
+   "file": "seymour-flux/seymour-flux.mid-seymour-lance.002.mp3",
+   "ms": 2037,
+   "who": "seymour"
+  },
+  "11693755257310": {
+   "id": "seymour-flux.mid-talk-yuna.001",
+   "file": "seymour-flux/seymour-flux.mid-talk-yuna.001.mp3",
+   "ms": 2668,
+   "who": "seymour"
+  },
+  "190ad7e38a9efb": {
+   "id": "seymour-flux.mid-talk-yuna.002",
+   "file": "seymour-flux/seymour-flux.mid-talk-yuna.002.mp3",
+   "ms": 1971,
+   "who": "seymour"
+  },
+  "064bbba01b40b7": {
+   "id": "seymour-flux.mid-talk-yuna.003",
+   "file": "seymour-flux/seymour-flux.mid-talk-yuna.003.mp3",
+   "ms": 2541,
+   "who": "yuna"
+  },
+  "0dca2796f90019": {
+   "id": "seymour-flux.mid-talk-kimahri.001",
+   "file": "seymour-flux/seymour-flux.mid-talk-kimahri.001.mp3",
+   "ms": 2653,
+   "who": "kimahri"
+  },
+  "11a744378076e0": {
+   "id": "seymour-flux.mid-talk-kimahri.002",
+   "file": "seymour-flux/seymour-flux.mid-talk-kimahri.002.mp3",
+   "ms": 3700,
+   "who": "kimahri"
+  }
+ }
+}

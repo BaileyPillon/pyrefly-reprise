@@ -11,6 +11,9 @@
 import { getChapter, type ChapterId } from '../data/encounters.ts';
 import { audio } from '../audio/index.ts';
 import { setSfxGame } from '../audio/sfxV2/voicing.ts';
+import { audioNewOn, setPassChapter } from '../audio/pass/passSwitch.ts'; // the sound pass (decision 184): follows the chapter run, so its results are part of it
+import { MAKEUP_DB } from '../audio/pass/passMix.ts';
+import { setPassVictoryCue } from '../audio/pass/passResults.ts';
 
 /**
  * Voice the effects for chapter `id` until the returned function runs (which also runs `release`).
@@ -22,9 +25,15 @@ import { setSfxGame } from '../audio/sfxV2/voicing.ts';
 export function sfxChapter(id: ChapterId, release: () => void): () => void {
   const game = getChapter(id)?.game ?? null;
   setSfxGame(game);
+  setPassChapter(id); // Chapter I and Chapter IV only act on it (`audio/pass/passSwitch.ts`); the master makeup follows the run
+  audio.setPassMakeup(audioNewOn() ? MAKEUP_DB : 0);
+  setPassVictoryCue(game === 'ffx' ? (getChapter(id)?.music.victory ?? null) : null); // FFX: the pass starts this cue at the last blow in place of the sting (`audio/pass/passResults.ts`)
   if (game === 'ffx' || game === 'ffx2') audio.loadParityPacks(game, id);
   return () => {
     setSfxGame(null);
+    setPassChapter(undefined);
+    setPassVictoryCue(null);
+    audio.setPassMakeup(0);
     audio.releaseParityPacks();
     release();
   };

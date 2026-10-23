@@ -12,6 +12,10 @@ import { sfxGame } from '../audio/sfxV2/voicing.ts';
 import { setMotionBeatSink, motionSfxSpeed, type MotionBeat } from '../engine/feel/MotionBeats.ts';
 import { motionSfxOn } from '../engine/feel/FeelSwitch.ts';
 import { newMotionMemory, planMotionSfx, type MotionMemory, type MotionPlan, type MotionRefusal } from '../engine/feel/MotionSfx.ts';
+import { audioNewOn } from '../audio/pass/passSwitch.ts'; // the sound pass (decision 184 (f)): a zip that lands on a blow is turned down
+import { blowNear, inGather, MASK_DB } from '../audio/pass/passMask.ts';
+import { dbToGain } from '../audio/pass/passMix.ts';
+import { passLogPush } from '../audio/pass/passLog.ts';
 
 /** What the sink plays through and reads; the tests replace them. */
 export interface MotionSfxDeps {
@@ -65,11 +69,21 @@ export function playMotionBeat(beat: MotionBeat, deps: MotionSfxDeps): MotionSfx
   let record: MotionSfxRecord;
   try {
     const answer = planMotionSfx(beat, { on: deps.on(), game: deps.game(), speed: deps.speed(), now: at }, memory);
+    // The sound pass (PC-18): the landing that ends an Overdrive's gather is left out (`pass/passMask.ts`).
+    if (answer.ok && beat.kind === 'land' && audioNewOn() && inGather(at)) {
+      passLogPush({ kind: 'motion-guard', beat: 'land', why: 'gather', atMs: Math.round(at) });
+      const refused: MotionSfxRecord = { at: Math.round(at), beat, result: 'gather' };
+      log.push(refused);
+      return refused.result;
+    }
     if (!answer.ok) {
       record = { at: Math.round(at), beat, result: answer.why };
     } else {
       const p = answer.plan;
-      deps.audio.playSfx(p.key, { volume: p.volume, pitch: p.pitch, delay: p.delay, trimMs: p.trimMs, fadeMs: p.fadeMs });
+      // The sound pass: a smear zip or a landing that falls on a blow would sit over the crack the pass lays on it; it takes MASK_DB off, the rest keep the lane's measured level.
+      const masked = audioNewOn() && (beat.kind === 'smear' || beat.kind === 'land') && blowNear(at + p.delay * 1000);
+      if (masked) passLogPush({ kind: 'motion-guard', beat: beat.kind, atMs: Math.round(at) });
+      deps.audio.playSfx(p.key, { volume: masked ? p.volume * dbToGain(MASK_DB) : p.volume, pitch: p.pitch, delay: p.delay, trimMs: p.trimMs, fadeMs: p.fadeMs });
       record = { at: Math.round(at), beat, result: 'played', plan: p };
     }
   } catch {

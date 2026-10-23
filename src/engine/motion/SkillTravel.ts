@@ -33,6 +33,7 @@ import type { ActionStartEvent } from '../BattlePresenterMotion.ts';
 import { freshBlowHeld } from '../BattlePresenterBossFx.ts';
 import { realContactPending } from '../ContactBeat.ts'; // `?curves=real`: a blow whose real strike has not landed yet holds its numeral
 import { actionOfBlow } from '../BattlePresenterSpellFx.ts';
+import { passRelease } from '../PassBeats.ts';
 import { motionAllowed } from './MotionGate.ts';
 
 export type FlightKind = 'orb' | 'tracer' | 'beam';
@@ -146,10 +147,15 @@ export function launchShot(ctx: EventCtx, event: Blow): void {
   if (!plan || plan.state !== 'go' || plan.flight) return;
   const vfx = ctx.stage.vfx;
   const sent: Array<Promise<void>> = [];
+  let flightMs = 0;
   for (const to of plan.foes) {
     const r = vfx.travel!.call(vfx, plan.actorId, to, { ...(plan.abilityId ? { abilityId: plan.abilityId } : {}), kind: plan.kind, ms: FLIGHT_MS[plan.kind] });
-    if (r.ms > 0) sent.push(r.landed);
+    if (r.ms > 0) {
+      sent.push(r.landed);
+      flightMs = Math.max(flightMs, r.ms);
+    }
   }
+  passRelease(ctx, plan.kind, flightMs); // the sound pass (`?audio=new`): the air of the shot leaving, cut to its flight
   const flight = { landed: sent.length === 0, done: Promise.all(sent).then(() => void (flight.landed = true)) };
   plan.flight = flight;
 }

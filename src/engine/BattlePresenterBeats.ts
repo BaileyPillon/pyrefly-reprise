@@ -34,6 +34,7 @@ import { actionKills } from './procam/ProBurst.ts'; // `?camera=pro`: whether th
 import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import { banner, cue, elementCue, numeral, reasonText, settled, TIMING, type EventCtx } from './BattlePresenterEvents.ts';
+import { passEarlyVictory, passGather } from './PassBeats.ts'; // the sound pass (decision 184): one fanfare at the last blow; the gather's landing thud left out
 
 // ----------------------------------------------------------------- handlers
 
@@ -73,6 +74,7 @@ export async function actionStart(
   // The shot. An Overdrive earns its own rig — letterbox, name slab, held
   // push-in — and everything else gets the ordinary punch-in on the attacker.
   if (event.command.kind === 'overdrive') {
+    passGather(ctx); // the sound pass: the landing thud that ends the gather is left out (PC-18)
     await odOpening(ctx, event, () => ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE', event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind })); // the new effects add the aura under the banner and a calm beat after it
   } else {
     await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind, lethal: actionKills(burst, (id) => ctx.stage.sideOf(id) === 'enemy') });
@@ -339,8 +341,10 @@ export async function victory(ctx: EventCtx): Promise<void> {
   // The fanfare is the end-of-fight sting. A formation that chains on (Chapter VI Acts I and II) is a seam: the battle theme carries on into the next link, and the
   // FFX fanfare (B major) laid over it (Bb minor) is a second tune a semitone off the first. The last link takes the theme out under the sting instead.
   if (!ctx.moreLinks) {
-    ctx.deps.audio?.stopMusic(VICTORY_THEME_OUT_S);
-    cue(ctx, 'victory');
+    if (!passEarlyVictory(ctx, VICTORY_THEME_OUT_S)) { // the sound pass (`?audio=new`, Chapter I) starts the results cue now and drops the sting: one fanfare, not two
+      ctx.deps.audio?.stopMusic(VICTORY_THEME_OUT_S);
+      cue(ctx, 'victory');
+    }
   }
   for (const id of ctx.stage.staged()) {
     const side = ctx.stage.sideOf(id);
