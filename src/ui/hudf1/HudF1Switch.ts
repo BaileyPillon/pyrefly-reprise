@@ -88,7 +88,7 @@ export const HUD_F1_TUNE: HudF1Tune = {
   /** 4. The slim party cards (during an action) drop the Overdrive bar and the /max numbers (`hudf1-act.css`; `false` is not wired to CSS yet: the bar's rule is one line there). */
   slimDropsOd: true,
   /** 5. The F1 "Brushed slab" finish (baked edge masks and paint textures, `hudf1-finish.css`). `false` leaves the flat slabs of the Clear Stage layout (the fallback if the booth's GPU minds the masks). */
-  finish: false,
+  finish: true,
   /** 6. Calm edges: the ends of the ivory rows eaten a few px instead of a finger deep (the risk the notes name: torn masking tape). */
   edgeCalm: false,
   /** The slide out at an action's start, ms (ease-in; the CSS transition in `hudf1-act.css` carries the same number). */
