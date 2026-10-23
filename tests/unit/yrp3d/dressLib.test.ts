@@ -256,7 +256,7 @@ describe('warming what a swap may ask for next', () => {
   const reach = (_girl: string, current: string): string[] => DRESSES.filter((d) => d !== current);
 
   it('warms at most WARM_MAX of the dresspheres she can reach, one parse each, and a swap to one is a clone', async () => {
-    expect(WARM_MAX).toBe(3);
+    expect(WARM_MAX).toBe(2);
     const spy = spyOf();
     const l = (await lib(spy, { reach }))!;
     l.wearing('yuna', 'white-mage');
@@ -267,6 +267,26 @@ describe('warming what a swap may ask for next', () => {
     const m = (await l.model('yuna', 'gunner'))!; // warm: no new parse
     expect(m).not.toBeNull();
     expect(spy.parsed).toHaveLength(before);
+    m.dispose();
+  });
+
+  it('fetches the clip map of each one it warms, so a swap does not wait on a small file', async () => {
+    const spy = spyOf();
+    const maps: string[] = [];
+    const io = fakeIO(spy);
+    const fetchJson = io.fetchJson.bind(io);
+    io.fetchJson = async (url) => {
+      if (url.endsWith('clipmap.json')) maps.push(url);
+      return fetchJson(url);
+    };
+    const l = (await openDressLibrary({ base: '/', modelsDir: 'models-exp/yrp', heights: HEIGHTS, io, warmDelayMs: 0, gapMs: 0, reach }))!;
+    l.wearing('yuna', 'white-mage');
+    await l.idle;
+    expect(maps.sort()).toHaveLength(WARM_MAX);
+    expect(maps.every((u) => u.includes('/dress/yuna-'))).toBe(true);
+    const before = maps.length;
+    const m = (await l.model('yuna', 'gunner'))!; // warm: its map is cached too
+    expect(maps).toHaveLength(before);
     m.dispose();
   });
 

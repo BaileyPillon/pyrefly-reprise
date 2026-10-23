@@ -22,8 +22,8 @@ import { chrScaleOf, defaultIO, freeScene, type FigureSource, type LoaderIO, typ
 import { YrpModel } from './model.ts';
 import type { YrpId } from './layout.ts';
 
-/** The most dresspheres warmed at once for one girl (each is up to 70 MB parsed): the ones she can change into next. */
-export const WARM_MAX = 3;
+/** The most dresspheres warmed at once for one girl (each is up to 70 MB parsed): the ones she can change into next. A ring Grid has two neighbours; three girls make six warm files beside the three she wears. */
+export const WARM_MAX = 2;
 
 export interface DressLibOptions {
   /** The page's base (`import.meta.env.BASE_URL`). */
@@ -230,6 +230,8 @@ export class DressLibrary implements DressPort {
           if (this.closed || !this.wanted.get(girl)?.has(url)) return;
           const h = this.fetchParsed(url);
           h.want = true;
+          const e = next.find((x) => this.urlsFor(x)[0] === url);
+          if (e) void this.mapOnce(dressFileUrl(this.opts.base, this.dir, dressFiles(e).clipmap)); // its clip map too: a swap does not wait on a small file
           await h.promise;
           if (!this.closed && !this.wanted.get(girl)?.has(url)) {
             h.want = false;
