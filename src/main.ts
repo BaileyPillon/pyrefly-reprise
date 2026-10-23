@@ -30,6 +30,8 @@ import { installMotionSfx } from './app/motionSfxSink.ts';
 import { installRigDebug } from './debug/rigApi.ts';
 import { installFxNewDebug } from './debug/fxNewApi.ts'; // motion pass (lane "fx"): `__pyrefly.fxNew('new' | 'today')`
 import { installProDebug } from './debug/proApi.ts'; // lane "pro-look": `__pyrefly.pro('pro' | 'today')`
+import { installGovernDebug } from './debug/governApi.ts'; // lane "perf-trim": `__pyrefly.govern()`, the frame-budget governor's state and a hand on its level
+import { installPerfDebug } from './debug/perfApi.ts'; // lane "perf-trim": `__pyrefly.perf`, the frame-cost profiler (GPU timer queries per pass, CPU per system); nothing wraps until `perf.start()`
 import { installStagingDebug } from './debug/stagingApi.ts'; // lane "pro-staging": `__pyrefly.staging('pro' | 'today')`, `.stagingState()`, `.stagingCue(...)`
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
@@ -182,6 +184,8 @@ async function boot(): Promise<void> {
   installFxNewDebug(debugApi); // motion pass (lane "fx"): the new spell effects' switch, for captures
   installProDebug(debugApi); // lane "pro-look": the pro-look switch, for captures
   installProCamDebug(debugApi); // lane "pro-camera": `__pyrefly.procam(on?)`
+  installGovernDebug(debugApi); // lane "perf-trim": the frame-budget governor's report and pin
+  installPerfDebug(debugApi, app); // lane "perf-trim": the profiler's API object (inert until `perf.start()`)
   installStagingDebug(debugApi); // lane "pro-staging": the staging's switch, state and cues, for captures
   installSwitchboard(debugApi); // the playtest keys 1 to 9, 0, -, = and the corner label; nothing is installed without `?pack=demo&switchboard=1`
   installFxWiring(); // integration: the fx lane's big moments onto the core and feel lanes (`engine/motion/FxWiring.ts`)
