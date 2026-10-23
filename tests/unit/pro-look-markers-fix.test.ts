@@ -274,7 +274,7 @@ describe("m1: the pro arena's rig terms write the grade pass's own uniform bag (
     const { GradeShader } = await import('../../src/engine/shaders/GradeShader.ts');
     const { PRO_ARENA } = await import('../../src/engine/look/pro/ProGrade.ts');
     const { applyProCone, applyProGrade } = await import('../../src/engine/look/pro/ProRigTerms.ts');
-    for (const [key, room] of Object.entries(PRO_ARENA)) {
+    for (const room of Object.values(PRO_ARENA)) {
       const g = UniformsUtils.clone(GradeShader.uniforms) as Record<string, { value: unknown }>;
       applyProGrade(g, room, {});
       expect(g['grain']!.value).toBe(room.grain);
@@ -282,7 +282,7 @@ describe("m1: the pro arena's rig terms write the grade pass's own uniform bag (
       const scratch = new Vector2();
       applyProCone(g, room, { lightUv: new Vector2(0.2, 0.7), aspect: 16 / 9, time: 0.5, k: 1, camera: {} as never, scratch, project: (_c, out, at) => out.set(at.u, 1 - at.v) });
       const col = g['uConeCol']!.value as { w: number };
-      expect(col.w).toBeCloseTo(room.cone!.strength, 6); // the cone is on, at the room's strength (${key})
+      expect(col.w).toBeCloseTo(room.cone!.strength, 6); // the cone is on, at the room's strength 
       applyProCone(g, undefined, { lightUv: scratch, aspect: 1, time: 0, k: 1, camera: {} as never, scratch, project: () => undefined });
       expect(col.w).toBe(0); // no pro room: the cone goes off
     }

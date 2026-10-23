@@ -137,10 +137,13 @@ describe('the chapter look under the pro arena', () => {
 });
 
 describe('the pro arena grade: the book regrade.colour() ported to the look LUT', () => {
-  // The B rows of tools/dirs.py as they were when the book's frames were made (the shipped table carries the tuned exposure).
+  // The B rows of tools/dirs.py as they were when the book's frames were made, written out whole: the shipped tables are tuned in the engine (and again after the 2026-10-23 review, against the book's
+  // stage frames: saturation, the gradient map, the hue pulls), so the pin is the book's own numbers, not the table's.
+  const BOOK_STOPS_I: Array<[number, [number, number, number]]> = [[0, [0.0, 0.02, 0.05]], [0.3, [0.04, 0.18, 0.3]], [0.6, [0.3, 0.55, 0.7]], [0.9, [0.85, 0.95, 1.0]], [1, [1, 1, 1]]];
+  const BOOK_STOPS_IV: Array<[number, [number, number, number]]> = [[0, [0.0, 0.01, 0.04]], [0.3, [0.05, 0.1, 0.24]], [0.6, [0.28, 0.46, 0.66]], [0.9, [0.84, 0.94, 1.0]], [1, [1, 1, 1]]];
   const BOOK: Record<string, ProColour> = {
-    gagazet: { ...(PRO_ARENA['gagazet']!.colour as ProColour), exposure: 0.74 },
-    'bevelle-underground': { ...(PRO_ARENA['bevelle-underground']!.colour as ProColour), exposure: 0.92, contrast: 0.32 },
+    gagazet: { exposure: 0.74, gamma: 1.0, contrast: 0.5, pivot: 0.3, sat: 0.6, pulls: [[228, 50, -8, 0.8, 0.9], [196, 36, -4, 0.9, 1.05]], gradmap: { amount: 0.52, stops: BOOK_STOPS_I }, shadow: [[0.015, 0.09, 0.2], 0.4], shadowTo: 0.45 },
+    'bevelle-underground': { exposure: 0.92, gamma: 1.0, contrast: 0.32, pivot: 0.3, sat: 0.82, pulls: [[26, 30, 0, 0.8, 0.55], [228, 50, -4, 0.9, 0.95], [192, 36, 0, 1.0, 1.05]], gradmap: { amount: 0.26, stops: BOOK_STOPS_IV }, shadow: [[0.04, 0.05, 0.18], 0.35], shadowTo: 0.45 },
   };
   const SAMPLES: ReadonlyArray<readonly [number, number, number]> = [[0.5, 0.5, 0.5], [0.1, 0.2, 0.6], [0.8, 0.4, 0.1], [0.02, 0.03, 0.08], [0.9, 0.95, 1.0], [0.3, 0.6, 0.7]];
   // Reference values from `regrade.colour(sample, dirs.FIN[ch]['B']['stage'])` (numpy), 2026-10-23.
