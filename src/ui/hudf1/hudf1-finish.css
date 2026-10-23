@@ -1,0 +1,152 @@
+/*
+ * THE F1 "BRUSHED SLAB" FINISH, baked (conference demo, lane "hud-f1"; Bailey 2026-10-23, item 193; step 4).
+ *
+ * Matte gouache on paper: the slabs keep today's shapes, slant and colours and are PAINTED. The mockup (`hud-inkgold/src/hud.html`, `.F1`) makes the dry-brush edge with an SVG `feTurbulence` filter
+ * per slab, which is right for a still and wrong for about 14 live elements in a WebGL page at 60 to 120 Hz. This file does the same with BAKED pieces (`tex/`, original procedural UI art made by
+ * `tools/gen-hudf1-textures.py`, not painted and not in public/art; about 70 KB all told): edge masks (alpha WebP: a left cap, a stretchable middle and a right cap per height class, two
+ * variants of each cap on the taller class, plus the stripe and the mat) applied with CSS `mask`, and two paint textures (paper tooth, bristle streaks and pigment mottle, as RGB tiles
+ * blended `multiply` over the ivory and gold and `screen` over the ink). The light is two or three variables per chapter: Chapter I's key light is the lens flare, top left;
+ * Chapter IV's is the shaft over the arena, top centre (the highlight edge and the cast shadow move with it). The cast shadow is `filter: drop-shadow` on the slab itself, which follows the masked edge.
+ *
+ * It is a class on the HUD root, `f1-finish` (`HUD_F1_TUNE.finish`), so the flat slabs of `hudf1-ffx*.css` are what shows with it off. Calm edges: the ivory rows must not read as torn masking tape,
+ * so the ragged zone is only the last few px of each end and the top and bottom edges are nearly straight.
+ */
+
+/* ------------------------------------------------------------------ the chapter's light (grid px: the mockup's 2560 x 1440 values / 4) */
+.ffxhud.hud-f1 {
+  --f1-lx: 0%; --f1-ly: -30%; --f1-hx: 0.75px; --f1-hy: 0.75px; --f1-sdx: 3.5px; --f1-sdy: 5px; --f1-sa: 158deg;
+  --f1-arena: 70, 110, 235; --f1-arena-shade: rgba(70, 100, 210, 0.3); --f1-arena-sh: 2, 8, 52;
+}
+.ffx2hud.hud-f1 {
+  --f1-lx: 42%; --f1-ly: -70%; --f1-hx: 0px; --f1-hy: 0.75px; --f1-sdx: 1.25px; --f1-sdy: 5.5px; --f1-sa: 178deg;
+  --f1-arena: 120, 84, 205; --f1-arena-shade: rgba(110, 80, 200, 0.3); --f1-arena-sh: 10, 4, 44;
+}
+.hud-f1.f1-finish {
+  --f1-paper-tex: url('./tex/paper-dark.webp');
+  --f1-ink-tex: url('./tex/ink-light.webp');
+  --f1-m-ml: url('./tex/edge-m-la.png'); --f1-m-mr: url('./tex/edge-m-ra.png'); --f1-m-mm: url('./tex/edge-m-mid.png');
+  --f1-s-ml: url('./tex/edge-s-la.png'); --f1-s-mr: url('./tex/edge-s-ra.png'); --f1-s-mm: url('./tex/edge-s-mid.png');
+  --f1-stripe-mask: url('./tex/edge-stripe.png');
+}
+/* the calm edges (`HUD_F1_TUNE.edgeCalm`): the same caps with a weaker bristle term, if the ivory rows read as torn masking tape */
+.hud-f1.f1-finish.f1-edge-calm {
+  --f1-m-ml: url('./tex/edge-m-lc.png'); --f1-m-mr: url('./tex/edge-m-rc.png'); --f1-m-mm: url('./tex/edge-mid-c.png');
+  --f1-s-ml: url('./tex/edge-s-lc.png'); --f1-s-mr: url('./tex/edge-s-rc.png'); --f1-s-mm: url('./tex/edge-mid-c.png');
+}
+
+/* ------------------------------------------------------------------ the painted layer: every slab gets one `::before` that carries the paint, the texture and the dry-brush edge */
+.hud-f1.f1-finish .ig-cmd,
+.hud-f1.f1-finish .ig-stat,
+.hud-f1.f1-finish .f1-slab {
+  --f1-h: 22px; --f1-capk: 1.32;
+  --f1-ml: var(--f1-m-ml); --f1-mr: var(--f1-m-mr); --f1-mm: var(--f1-m-mm);
+  background: none !important; border-image: none;
+  filter: drop-shadow(var(--f1-sdx) var(--f1-sdy) 4.5px rgba(var(--f1-arena-sh), 0.58)) drop-shadow(0.5px 1px 0.75px rgba(var(--f1-arena-sh), 0.42));
+}
+/* the verbs and the slabs carry their light on the paint layer; a party row's own box-shadow is the low-HP pulse (pro-look's `.ig-stat--pro-low`) and stays */
+.hud-f1.f1-finish .ig-cmd,
+.hud-f1.f1-finish .f1-slab { box-shadow: none !important; }
+/* a knocked-out row keeps its grey (today's `ffx-stat--ko`, pro-look's `ig-stat--pro-ko`) under the cast shadow */
+.hud-f1.f1-finish .ig-stat--pro-ko { filter: grayscale(0.7) drop-shadow(var(--f1-sdx) var(--f1-sdy) 4.5px rgba(var(--f1-arena-sh), 0.58)); }
+.hud-f1.f1-finish .ffx-stat--ko { filter: grayscale(1) drop-shadow(var(--f1-sdx) var(--f1-sdy) 4.5px rgba(var(--f1-arena-sh), 0.58)); }
+.hud-f1.f1-finish .ig-stat { --f1-h: 28px; }
+.hud-f1.f1-finish .f1-ribbon { --f1-h: 25px; }
+.hud-f1.f1-finish .f1-cue { --f1-h: 16px; --f1-capk: 2.06; --f1-ml: var(--f1-s-ml); --f1-mr: var(--f1-s-mr); --f1-mm: var(--f1-s-mm); }
+.hud-f1.f1-finish .f1-prompts { --f1-h: 16.5px; --f1-capk: 2.06; --f1-ml: var(--f1-s-ml); --f1-mr: var(--f1-s-mr); --f1-mm: var(--f1-s-mm); }
+.ffxhud.hud-f1.f1-finish .ig-cmd:nth-child(5):not(.ig-cmd--selected) { --f1-h: 15px; --f1-capk: 2.06; --f1-ml: var(--f1-s-ml); --f1-mr: var(--f1-s-mr); --f1-mm: var(--f1-s-mm); }
+.hud-f1.f1-finish .ig-cmd::before,
+.hud-f1.f1-finish .ig-stat::before,
+.hud-f1.f1-finish .f1-slab::before {
+  content: ''; position: absolute; inset: -0.5px -1.75px; z-index: -1; pointer-events: none;
+  -webkit-mask: var(--f1-ml) left center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mr) right center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mm) calc(var(--f1-h) * var(--f1-capk) - 1.5px) 0 / calc(100% - 2 * var(--f1-h) * var(--f1-capk) + 3px) 100% no-repeat;
+  mask: var(--f1-ml) left center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mr) right center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mm) calc(var(--f1-h) * var(--f1-capk) - 1.5px) 0 / calc(100% - 2 * var(--f1-h) * var(--f1-capk) + 3px) 100% no-repeat;
+}
+/* the middle runs 1.5 px under each cap: two abutting masks on a fractional pixel left a hairline seam (seen in the scrolled FFX-2 list) */
+/* the slab's content keeps painting above its paint (a transformed element is its own stacking context, so `z-index: -1` sits just over its own background) */
+
+/* ivory gouache: the verbs */
+.hud-f1.f1-finish .ig-cmd::before {
+  background:
+    var(--f1-paper-tex),
+    radial-gradient(150% 260% at var(--f1-lx) var(--f1-ly), rgba(255, 249, 226, 0.92), rgba(255, 249, 226, 0) 60%),
+    linear-gradient(var(--f1-sa), rgba(0, 0, 0, 0) 42%, var(--f1-arena-shade) 100%),
+    linear-gradient(180deg, #f9f6ed 0%, #f2eddf 58%, #e2dac3 100%);
+  background-blend-mode: multiply, normal, normal, normal;
+  background-size: 128px auto, auto, auto, auto;
+  box-shadow: inset var(--f1-hx) var(--f1-hy) 0 rgba(255, 255, 255, 0.7), inset 0 0 0 0.5px rgba(140, 108, 50, 0.2), inset 0 -2.25px 3.5px -1.75px rgba(96, 84, 60, 0.34), inset 0 0 6.5px rgba(120, 96, 50, 0.16);
+}
+/* the selected verb: gold gouache with the strokes showing (the texture twice, the second offset, so the bristles read) */
+.hud-f1.f1-finish .ig-cmd--selected::before {
+  background:
+    var(--f1-paper-tex), var(--f1-paper-tex),
+    radial-gradient(150% 260% at var(--f1-lx) var(--f1-ly), rgba(255, 247, 206, 0.85), rgba(255, 247, 206, 0) 58%),
+    linear-gradient(180deg, #f6dc84, var(--ig-accent) 55%, #cf9f30);
+  background-blend-mode: multiply, multiply, normal, normal;
+  background-size: 128px auto, 128px auto, auto, auto;
+  background-position: 0 0, 37px 11px, 0 0, 0 0;
+  box-shadow: inset var(--f1-hx) var(--f1-hy) 0 rgba(255, 255, 255, 0.62), inset 0 0 0 0.5px rgba(150, 100, 10, 0.22), inset 0 -2.5px 3.5px -1.75px rgba(140, 86, 10, 0.4);
+}
+.ffx2hud.hud-f1.f1-finish .ig-cmd--selected::before {
+  background:
+    var(--f1-paper-tex), var(--f1-paper-tex),
+    radial-gradient(150% 260% at var(--f1-lx) var(--f1-ly), rgba(255, 240, 248, 0.85), rgba(255, 240, 248, 0) 58%),
+    linear-gradient(180deg, #fde2f0, var(--ig-accent) 55%, #e48fbd);
+  background-blend-mode: multiply, multiply, normal, normal;
+  background-size: 128px auto, 128px auto, auto, auto;
+  background-position: 0 0, 37px 11px, 0 0, 0 0;
+}
+.hud-f1.f1-finish .ig-cmd--selected { filter: drop-shadow(var(--f1-sdx) var(--f1-sdy) 4.5px rgba(var(--f1-arena-sh), 0.58)) drop-shadow(0.5px 1px 0.75px rgba(var(--f1-arena-sh), 0.42)) drop-shadow(0 0 6.5px var(--ig-accent)); }
+
+/* ink gouache: the cards, the ribbon, the cue and the prompt bar */
+.hud-f1.f1-finish .ig-stat::before,
+.hud-f1.f1-finish .f1-ink::before {
+  background:
+    var(--f1-ink-tex),
+    radial-gradient(150% 260% at var(--f1-lx) var(--f1-ly), rgba(140, 170, 255, 0.34), rgba(140, 170, 255, 0) 62%),
+    linear-gradient(180deg, #161a3e 0%, #0d0f2c 55%, #080919 100%);
+  background-blend-mode: screen, normal, normal;
+  background-size: 128px auto, auto, auto;
+  opacity: 0.93;
+  box-shadow: inset var(--f1-hx) var(--f1-hy) 0 rgba(170, 195, 255, 0.34), inset 0 0 0 0.5px rgba(0, 0, 10, 0.45), inset 0 0 6.5px rgba(0, 0, 10, 0.4);
+}
+.hud-f1.f1-finish .ig-stat--acting::before {
+  background:
+    var(--f1-ink-tex),
+    radial-gradient(150% 260% at var(--f1-lx) var(--f1-ly), rgba(150, 178, 255, 0.42), rgba(150, 178, 255, 0) 62%),
+    linear-gradient(180deg, #1d2350 0%, #10143a 55%, #0a0b20 100%);
+  opacity: 0.97;
+}
+
+/* the stripe on a card: ivory, and the accent on the acting hero's card; its strokes run along its length (its own mask) */
+.hud-f1.f1-finish .ig-stat { border-left-width: 0 !important; border-right-width: 0 !important; }
+.hud-f1.f1-finish .ig-stat::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 2.5px; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, #faf7ee, #e6dfca);
+  -webkit-mask: var(--f1-stripe-mask) center / 100% 100% no-repeat; mask: var(--f1-stripe-mask) center / 100% 100% no-repeat;
+}
+.ig--ffx2.hud-f1.f1-finish .ig-stat::after { left: auto; right: 0; }
+.hud-f1.f1-finish .ig-stat--acting::after { background: linear-gradient(180deg, #f6dc84, var(--ig-accent) 55%, #cf9f30); }
+.ig--ffx2.hud-f1.f1-finish .ig-stat--acting::after { background: linear-gradient(180deg, #fde2f0, var(--ig-accent) 55%, #e48fbd); }
+.hud-f1.f1-finish .f1-stripe { filter: none; -webkit-mask: var(--f1-stripe-mask) center / 100% 100% no-repeat; mask: var(--f1-stripe-mask) center / 100% 100% no-repeat; z-index: 1; }
+
+/* ------------------------------------------------------------------ the face tiles get a painted mat (ivory; the accent on the hero and the NOW tile; blood on an enemy's) with a small ragged edge */
+.hud-f1.f1-finish {
+  --f1-mat-mask: url('./tex/edge-mat.png');
+  --f1-mat-ivory: linear-gradient(180deg, #fbf8ef, #e0d8c1);
+  --f1-mat-acc: linear-gradient(180deg, #f6dc84, var(--ig-accent) 55%, #cf9f30);
+  --f1-mat-blood: linear-gradient(180deg, #d4504a, #a8302c);
+}
+.hud-f1.f1-finish .ig-stat__face,
+.hud-f1.f1-finish .ffx2stat__face,
+.hud-f1.f1-finish .ig-ctb__tile,
+.hud-f1.f1-finish .f1-hero__tile {
+  box-sizing: border-box; border: 1.25px solid transparent; background: var(--f1-mat-ivory);
+  box-shadow: inset 0.25px 0.5px 0 rgba(255, 255, 255, 0.55);
+  -webkit-mask: var(--f1-mat-mask) center / 100% 100% no-repeat; mask: var(--f1-mat-mask) center / 100% 100% no-repeat;
+}
+.hud-f1.f1-finish .ig-stat--acting .ig-stat__face,
+.hud-f1.f1-finish .ig-stat--acting .ffx2stat__face,
+.hud-f1.f1-finish .ig-ctb__tile--now,
+.hud-f1.f1-finish .f1-hero__tile { background: var(--f1-mat-acc); }
+.hud-f1.f1-finish .ig-ctb__tile--enemy { background: var(--f1-mat-blood); }
+.hud-f1.f1-finish .f1-hero__face { box-shadow: none; background: none; }

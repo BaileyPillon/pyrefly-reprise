@@ -1,0 +1,99 @@
+/*
+ * THE F1 HUD, Chapter I (FFX, CTB): the command block on the left (hero, cue, four verbs and a faded tail), the three-slot turn strip top right, the party cards bottom right with the
+ * Overdrive bars, the boss ribbon top left and the prompt bar bottom left. Today's DOM under new rules; every selector is under `.ffxhud.hud-f1` (see `hudf1.css`).
+ * Sizes are the mockup's px at 2560 x 1440 divided by 4 (the HUD grid is 640 x 360).
+ */
+
+/* ------------------------------------------------------------------ the command block (verbs) */
+.ffxhud.hud-f1 .ffx-cmd-area {
+  left: 28px; top: 196.5px; bottom: auto; width: 170px;
+  flex-direction: column; align-items: flex-start; gap: 0;
+}
+.ffxhud.hud-f1 .ffx-cmd-area .ig-cmd-stack { gap: 3.5px; --ig-cascade-step: var(--f1-cmd-step); }
+.ffxhud.hud-f1 .ffx-cmd-area .ffx-cmd-breadcrumb { position: absolute; left: 0; top: -9px; font-size: var(--f1-floor); letter-spacing: 0.18em; }
+.ffxhud.hud-f1 .ig-cmd {
+  width: 162.5px; height: 22px; gap: 3.5px; padding: 0 7.5px 0 10px;
+  font: 700 12px/1 var(--ig-font-display); letter-spacing: 0.06em;
+  background: linear-gradient(180deg, var(--f1-ivory-a) 0%, var(--f1-ivory-b) 58%, var(--f1-ivory-c) 100%);
+  box-shadow: var(--f1-shadow), inset 0.75px 0.75px 0 rgba(255, 255, 255, 0.7), inset 0 -2px 3.5px -1.75px rgba(96, 84, 60, 0.34);
+  color: #14110a;
+}
+.ffxhud.hud-f1 .ig-cmd--selected {
+  background: linear-gradient(180deg, #f6dc84, var(--ig-accent) 55%, #cf9f30);
+  box-shadow: var(--f1-shadow), 0 0 6.5px rgba(227, 185, 74, 0.5), inset 0.75px 0.75px 0 rgba(255, 255, 255, 0.62), inset 0 -2.5px 3.5px -1.75px rgba(140, 86, 10, 0.4);
+}
+.ffxhud.hud-f1 .ig-cmd--disabled { background: linear-gradient(180deg, var(--f1-ivory-a) 0%, var(--f1-ivory-b) 58%, var(--f1-ivory-c) 100%); color: rgba(20, 17, 10, 0.72); }
+.ffxhud.hud-f1 .ig-cmd--disabled .ffx-cmd__label, .ffxhud.hud-f1 .ig-cmd--disabled.ffx-cmd--trigger > .ffx-cmd__label { color: rgba(20, 17, 10, 0.72); } /* today's disabled label is a light grey for its dark slab: one more class than that rule, since this sheet loads first */
+.ffxhud.hud-f1 .ig-cmd--overdrive { background: var(--f1-ink-b); color: var(--ig-accent); border: 0.5px solid var(--ig-accent); }
+.ffxhud.hud-f1 .ig-cmd__cursor, .ffxhud.hud-f1 .ffx-cmd__chev { display: none; }
+.ffxhud.hud-f1 .ffx-cmd__label { font-size: 12px; letter-spacing: 0.06em; color: inherit; flex: 0 1 auto; }
+.ffxhud.hud-f1 .ffx-cmd__badge { font: 700 8px/1 var(--ig-font-numeral); padding: 1.5px 3.25px 1.25px; border-radius: 0.75px; background: rgba(11, 10, 18, 0.88); }
+.ffxhud.hud-f1 .ffx-cmd__badge i { font-size: var(--f1-floor); }
+/* the selected verb says what it does, on its own row (the help slab is not drawn) */
+.ffxhud.hud-f1 .ig-cmd--selected[data-help]::after {
+  content: attr(data-help); margin-left: auto; transform: skewX(var(--ig-skew-inverse)); display: inline-block;
+  font: italic 700 9.5px/1 var(--ig-font-serif); letter-spacing: 0; text-transform: none; color: rgba(20, 17, 10, 0.82);
+  max-width: 78px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ffxhud.hud-f1 .ig-cmd--selected .ffx-cmd__badge { margin-left: 4px; }
+/* the fifth row is the faded tail: it says "there is more" */
+.ffxhud.hud-f1 .ig-cmd:nth-child(5):not(.ig-cmd--selected) { height: 15px; opacity: 0.5; }
+.ffxhud.hud-f1 .ffx-cmd-more { color: rgba(244, 241, 232, 0.65); font-size: 7px; top: calc(100% + 1px); }
+
+/* ------------------------------------------------------------------ the three-slot turn strip (top right) */
+.ffxhud.hud-f1 .ig-ctb {
+  right: auto; left: 465px; top: 22px; flex-direction: row; align-items: flex-start; gap: 0; --ig-ctb-step: 0px;
+}
+.ffxhud.hud-f1 .ig-ctb::before {
+  content: 'Turn order'; position: absolute; left: 9px; top: -14px; white-space: nowrap;
+  font: 700 var(--f1-floor)/1 var(--ig-font-display); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ig-accent); text-shadow: 0 0.5px 2px rgba(0, 0, 20, 0.9);
+}
+.ffxhud.hud-f1 .ig-ctb__row:nth-child(n + 4) { display: none; }
+.ffxhud.hud-f1 .ig-ctb__row {
+  position: relative; width: 53.5px; flex-direction: column-reverse; justify-content: flex-end; align-items: center; gap: 4.5px; transform: none !important;
+}
+.ffxhud.hud-f1 .ig-ctb__row:nth-child(n + 2)::before {
+  content: ''; position: absolute; left: -3px; top: 25px; width: 0; height: 0; border-left: 3.75px solid var(--ig-accent); border-top: 2.75px solid transparent; border-bottom: 2.75px solid transparent; opacity: 0.9;
+}
+.ffxhud.hud-f1 .ig-ctb__row .ig-ctb__name {
+  font: italic 700 9px/1 var(--ig-font-serif) !important; letter-spacing: 0; background: none; padding: 0; max-width: none; white-space: nowrap; text-align: center;
+  color: var(--f1-paper); text-shadow: 0 0.5px 2.5px rgba(0, 0, 20, 0.95), 0 0 0.75px rgba(0, 0, 20, 0.8);
+}
+.ffxhud.hud-f1 .ig-ctb__row:first-child .ig-ctb__name { color: var(--ig-accent); }
+.ffxhud.hud-f1 .ig-ctb__tile { width: 22.5px; height: 22.5px; margin-top: 4.5px; border-width: 0.75px; }
+.ffxhud.hud-f1 .ig-ctb__tile--now { width: 31px; height: 31px; margin-top: 0; border-width: 1.1px; }
+.ffxhud.hud-f1 .ig-ctb__row:first-child::after {
+  content: 'NOW'; position: absolute; left: 50%; top: -5.5px; z-index: 2; transform: translateX(-50%); background: var(--ig-accent); color: #14110a; padding: 1.25px 3px 1px; border-radius: 0.75px;
+  font: 700 var(--f1-floor)/1 var(--ig-font-display); letter-spacing: 0.14em; box-shadow: 0 0.75px 2px rgba(0, 0, 12, 0.4);
+}
+
+/* ------------------------------------------------------------------ the party cards (bottom right) */
+.ffxhud.hud-f1 .ig-stat-list {
+  right: auto; left: 415px; bottom: 18px; gap: 3.5px; align-items: flex-start; --ig-stat-step: 0px;
+}
+.ffxhud.hud-f1 .ig-stat {
+  width: 200px; height: 28px; padding: 0 7.5px 0 0; gap: 0 4px; border-left-width: 2.5px; border-right-width: 0;
+  display: grid; grid-template-columns: 30px 43px 66px 1fr; grid-template-rows: 15.5px 8px; align-content: center; align-items: baseline; justify-items: start;
+  background: linear-gradient(180deg, var(--f1-ink-a) 0%, var(--f1-ink-b) 55%, var(--f1-ink-c) 100%);
+}
+.ffxhud.hud-f1 .ig-stat--acting { margin-left: -7px; width: 207px; background: linear-gradient(180deg, #1d2350 0%, #10143a 55%, #0a0b20 100%); }
+.ffxhud.hud-f1 .ig-stat > * { transform: skewX(var(--ig-skew-inverse)); }
+.ffxhud.hud-f1 .ig-stat__face { grid-column: 1; grid-row: 1 / 3; align-self: center; width: 22.5px; height: 22.5px; margin-left: 7.5px; box-shadow: 0 0 0 0.75px var(--f1-paper), 0.5px 1px 2px rgba(0, 0, 0, 0.5); }
+.ffxhud.hud-f1 .ig-stat--acting .ig-stat__face { box-shadow: 0 0 0 0.75px var(--ig-accent), 0 0 3px rgba(227, 185, 74, 0.6); }
+.ffxhud.hud-f1 .ig-stat__name { grid-column: 2; grid-row: 1; width: 43px; font-size: 12.5px; line-height: 1; white-space: nowrap; overflow: visible; margin-left: 1px; }
+.ffxhud.hud-f1 .ig-stat__value { grid-column: 3; grid-row: 1; font: 700 16px/1 var(--ig-font-numeral); color: #fff; white-space: nowrap; gap: 1.25px; justify-self: start; }
+.ffxhud.hud-f1 .ig-stat__value small { font: 500 7.5px/1 var(--ig-font-numeral); color: rgba(244, 241, 232, 0.66); margin-left: 1.25px; }
+.ffxhud.hud-f1 .ig-stat__value--mp { grid-column: 4; justify-self: end; font-size: 11px; color: var(--ig-spira-sky); }
+.ffxhud.hud-f1 .ig-stat__value--mp small { font-size: var(--f1-floor); color: rgba(127, 198, 232, 0.7); }
+.ffxhud.hud-f1 .ig-stat__od { grid-column: 3 / 5; grid-row: 2; align-self: center; justify-self: stretch; width: auto; margin: 0 0 0 0; height: 3px; border-radius: 1.5px; background: rgba(0, 0, 12, 0.55); box-shadow: inset 0 0 0 0.25px rgba(255, 255, 255, 0.12); }
+.ffxhud.hud-f1 .ig-stat__od i { border-radius: 1.5px; background: linear-gradient(90deg, #c99a2c, #f6dc84); }
+.ffxhud.hud-f1 .ffx-stat__od em { right: auto; left: -11.5px; bottom: -2.5px; font: 700 var(--f1-floor)/1 var(--ig-font-display); letter-spacing: 0.14em; color: rgba(244, 241, 232, 0.66); }
+.ffxhud.hud-f1 .ffx-stat__od--ready em { color: var(--ig-accent); }
+
+/* the status medallions (today's O3 icons) ride at the card's lower right: the bar gives them room, and in the slim card (no bar) the MP does */
+.ffxhud.hud-f1 .ig-stat:has(.sti-row) .ig-stat__od { margin-right: 52px; }
+.ffxhud.hud-f1.f1-acting .ig-stat:has(.sti-row) .ig-stat__value--mp { margin-right: 52px; }
+.ffxhud.hud-f1.f1-acting .ffx-stat__statuses.sti-row { top: 50%; bottom: auto; right: 3px; transform: translateY(-50%); }
+
+/* the action banner (today's paper slab for an enemy's move) was at the top left, where the boss ribbon is; it steps under the ribbon */
+.ffxhud.hud-f1 .ig-banner { top: 43px; }

@@ -33,6 +33,7 @@ import { installProDebug } from './debug/proApi.ts'; // lane "pro-look": `__pyre
 import { installGovernDebug } from './debug/governApi.ts'; // lane "perf-trim": `__pyrefly.govern()`, the frame-budget governor's state and a hand on its level
 import { installPerfDebug } from './debug/perfApi.ts'; // lane "perf-trim": `__pyrefly.perf`, the frame-cost profiler (GPU timer queries per pass, CPU per system); nothing wraps until `perf.start()`
 import { installStagingDebug } from './debug/stagingApi.ts'; // lane "pro-staging": `__pyrefly.staging('pro' | 'today')`, `.stagingState()`, `.stagingCue(...)`
+import { installHudF1Debug } from './debug/hudF1Api.ts'; // lane "hud-f1": `__pyrefly.hudF1('f1' | 'today')`
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
 import { setAttractRunner } from './app/demo/attractHook.ts'; // R61: the title starts the attract reel through this door; main hands the reel in (the title does not import it)
@@ -187,6 +188,7 @@ async function boot(): Promise<void> {
   installGovernDebug(debugApi); // lane "perf-trim": the frame-budget governor's report and pin
   installPerfDebug(debugApi, app); // lane "perf-trim": the profiler's API object (inert until `perf.start()`)
   installStagingDebug(debugApi); // lane "pro-staging": the staging's switch, state and cues, for captures
+  installHudF1Debug(debugApi); // lane "hud-f1": the F1 HUD switch, for captures
   installSwitchboard(debugApi); // the playtest keys 1 to 9, 0, -, = and the corner label; nothing is installed without `?pack=demo&switchboard=1`
   installFxWiring(); // integration: the fx lane's big moments onto the core and feel lanes (`engine/motion/FxWiring.ts`)
 

@@ -1,0 +1,77 @@
+/*
+ * THE F1 HUD, Chapter IV (FFX-2, ATB): no turn strip, ATB bars on the party cards, a role chip, everything mirrored to the right with the slant flipped (`--ig-skew` is +12deg on `.ig--ffx2`)
+ * and the pink accent (`--ig-accent`). The boss ribbon (`HudF1.ts`) replaces the gauge strip; the command block is on the right with the hero, the cue and three to five verbs.
+ * Every selector is under `.ffx2hud.hud-f1`. Sizes are the mockup's px at 2560 x 1440 divided by 4.
+ */
+
+/* Intel (X): the advisor's one-row strip is placed by the HUD against today's party column and fell across Paine's card (review M4, Chapter IV); it takes the free band along the top, right of the boss ribbon,
+   with its chip under it. !important: the HUD writes left / bottom as inline styles every frame. */
+.ffx2hud.hud-f1.f1-intel .mad__card[data-zone='tip'] { left: 196px !important; top: 14px !important; bottom: auto !important; }
+.ffx2hud.hud-f1.f1-intel .mad:has(.mad__card[data-zone='tip']) .mad__toggle { left: 196px !important; top: 31px !important; bottom: auto !important; }
+
+/* the boss gauge strip gives way to the ribbon (its numerals and parts return behind Intel) */
+.ffx2hud.hud-f1:not(.f1-intel) .ffx2hud__enemies { opacity: 0; pointer-events: none; }
+.ffx2hud.hud-f1.f1-intel .ffx2hud__enemies { top: 44px; }
+
+/* ------------------------------------------------------------------ the hero, the cue and the verbs (right) */
+/* The whole right-hand block stands 8 grid px higher than the mockup draws it (hero 104.5, cue 137, verbs 154): a four-verb menu (Rikku, Paine) now shows its fourth verb whole, clear of the party cards, instead of cut in half (review m2) */
+.ffx2hud.hud-f1 .f1-hero { left: 467px; top: 96.5px; }
+.ffx2hud.hud-f1 .f1-cue { left: 455px; top: 129px; width: 157px; } /* the longest line seen ("Magic Break -> Bahamut . 4 MP") needs about 150 */
+.ffx2hud.hud-f1 .f1-prompts { width: 150px; }
+/* a long list (the White Magic list is eight rows, Paine's top level four) scrolls in a window of four rows (the fourth ends 0.5 grid px above the party cards), clear of the party cards (the native scroller of today's menu keeps the highlight in view);
+   the box is padded so the slabs' shadows and the cascade's left shift are not clipped by it */
+.ffx2hud.hud-f1 .ffx2hud__command {
+  right: 18px; bottom: auto; top: 146px; width: 177px; box-sizing: border-box; padding: 6px 10px 10px 22px; max-height: 114px; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; --ig-cascade-step: var(--f1-cmd-step);
+}
+.ffx2hud.hud-f1 .ffx2hud__command::-webkit-scrollbar { display: none; }
+.ffx2hud.hud-f1 .ffx2hud__command .ig-cmd-stack { gap: 3.5px; }
+.ffx2hud.hud-f1 .ig-cmd {
+  width: 145px; height: 22px; gap: 3.5px; padding: 0 10px 0 7.5px; margin-right: 0 !important; position: relative;
+  font: 700 12px/1 var(--ig-font-display); letter-spacing: 0.06em; color: #14110a;
+  background: linear-gradient(180deg, var(--f1-ivory-a) 0%, var(--f1-ivory-b) 58%, var(--f1-ivory-c) 100%);
+  box-shadow: var(--f1-shadow), inset -0.75px 0.75px 0 rgba(255, 255, 255, 0.7), inset 0 -2px 3.5px -1.75px rgba(96, 84, 60, 0.34);
+}
+.ffx2hud.hud-f1 .ig-cmd:nth-child(2) { left: -4px; }
+.ffx2hud.hud-f1 .ig-cmd:nth-child(3) { left: -8px; }
+.ffx2hud.hud-f1 .ig-cmd:nth-child(4) { left: -12px; }
+.ffx2hud.hud-f1 .ig-cmd:nth-child(5) { left: -16px; }
+.ffx2hud.hud-f1 .ig-cmd:nth-child(n + 6) { left: -20px; }
+.ffx2hud.hud-f1 .ig-cmd--selected {
+  background: linear-gradient(180deg, #fde2f0, var(--ig-accent) 55%, #e48fbd);
+  box-shadow: var(--f1-shadow), 0 0 6.5px rgba(247, 182, 217, 0.5), inset -0.75px 0.75px 0 rgba(255, 255, 255, 0.62), inset 0 -2.5px 3.5px -1.75px rgba(150, 60, 110, 0.4);
+}
+/* the Change row (today an ink slab with a pink rim) is ivory like the others in the Clear Stage mockup */
+.ffx2hud.hud-f1 .ig-cmd--overdrive { background: linear-gradient(180deg, var(--f1-ivory-a) 0%, var(--f1-ivory-b) 58%, var(--f1-ivory-c) 100%); color: #14110a; border: 0; }
+.ffx2hud.hud-f1 .ig-cmd--overdrive .ffx2cmd__label, .ffx2hud.hud-f1 .ig-cmd--overdrive .ffx2cmd__arrow { color: #14110a; }
+.ffx2hud.hud-f1 .ig-cmd--selected.ig-cmd--overdrive { background: linear-gradient(180deg, #fde2f0, var(--ig-accent) 55%, #e48fbd); }
+.ffx2hud.hud-f1 .ig-cmd--disabled { background: linear-gradient(180deg, var(--f1-ivory-a) 0%, var(--f1-ivory-b) 58%, var(--f1-ivory-c) 100%); color: rgba(20, 17, 10, 0.72); opacity: 0.62; }
+.ffx2hud.hud-f1 .ig-cmd--disabled .ffx2cmd__label, .ffx2hud.hud-f1 .ig-cmd--disabled .ffx2cmd__arrow { color: rgba(20, 17, 10, 0.72); }
+.ffx2hud.hud-f1 .ig-cmd--disabled .ffx2cmd__reason { color: rgba(20, 17, 10, 0.7); }
+.ffx2hud.hud-f1 .ig-cmd__cursor { display: none; }
+.ffx2hud.hud-f1 .ffx2cmd__label { font-size: 12px; letter-spacing: 0.06em; color: inherit; }
+.ffx2hud.hud-f1 .ffx2cmd__arrow { margin-left: auto; font-size: 8px; color: rgba(20, 17, 10, 0.75); }
+.ffx2hud.hud-f1 .ffx2cmd__mp { font: 700 8px/1 var(--ig-font-numeral); color: #174a76; } /* the MP cost: deep blue on the ivory and on the pink (the sky blue of today's HUD was for its ink rows; review m1) */
+
+/* ------------------------------------------------------------------ the party cards (bottom right) */
+.ffx2hud.hud-f1 .ig-stat-list { left: 417px; right: auto; bottom: 18px; gap: 3.5px; align-items: flex-start; --ig-stat-step: 0px; }
+/* 8 px wider than the mockup's 186 (the list grows leftwards, its right edge is where it was): at the 28 px floor the /max numerals and a status icon (Rikku, cursed, from the second turn) left "1839 /1839" touching her MP (review M1 follow-up) */
+.ffx2hud.hud-f1 .ig-stat {
+  width: 194px; height: 28px; padding: 0 9.5px 0 0; gap: 0 4px; border-left-width: 0; border-right-width: 2.5px; align-items: center;
+  background: linear-gradient(180deg, var(--f1-ink-a) 0%, var(--f1-ink-b) 55%, var(--f1-ink-c) 100%);
+}
+.ffx2hud.hud-f1 .ig-stat--acting { margin-left: -7px; width: 201px; background: linear-gradient(180deg, #1d2350 0%, #10143a 55%, #0a0b20 100%); }
+.ffx2hud.hud-f1 .ig-stat > * { transform: skewX(var(--ig-skew-inverse)); }
+.ffx2hud.hud-f1 .ffx2stat__face { width: 22.5px; height: 22.5px; margin-left: 7.5px; box-shadow: 0 0 0 0.75px var(--f1-paper), 0.5px 1px 2px rgba(0, 0, 0, 0.5); }
+.ffx2hud.hud-f1 .ig-stat--acting .ffx2stat__face { box-shadow: 0 0 0 0.75px var(--ig-accent), 0 0 3px rgba(247, 182, 217, 0.6); }
+.ffx2hud.hud-f1 .ffx2stat__job { font: 700 var(--f1-floor)/1 var(--ig-font-display); }
+.ffx2hud.hud-f1 .ffx2stat__body { display: grid; grid-template-columns: 24px 1fr; grid-template-rows: auto auto; gap: 1.5px 0; align-content: center; }
+.ffx2hud.hud-f1 .ffx2stat__body::before { content: 'ATB'; grid-row: 2; grid-column: 1; align-self: center; font: 700 var(--f1-floor)/1 var(--ig-font-display); letter-spacing: 0.14em; color: rgba(244, 241, 232, 0.66); }
+.ffx2hud.hud-f1 .ffx2stat__top { display: grid; grid-column: 1 / 3; grid-row: 1; grid-template-columns: 38px 62px 1fr auto; align-items: baseline; gap: 0 3px; }
+.ffx2hud.hud-f1 .ig-stat__name { width: auto; font-size: 12.5px; line-height: 1; white-space: nowrap; overflow: visible; }
+.ffx2hud.hud-f1 .ig-stat__value { font: 700 16px/1 var(--ig-font-numeral); color: #fff; white-space: nowrap; }
+.ffx2hud.hud-f1 .ig-stat__value small { font: 500 7.5px/1 var(--ig-font-numeral); color: rgba(244, 241, 232, 0.66); margin-left: 1.25px; }
+.ffx2hud.hud-f1 .ig-stat__value--mp { justify-self: end; font-size: 11px; color: var(--ig-spira-sky); }
+.ffx2hud.hud-f1 .ig-stat__value--mp small { font-size: var(--f1-floor); color: rgba(127, 198, 232, 0.7); }
+.ffx2hud.hud-f1 .ig-stat__od { grid-column: 2; grid-row: 2; justify-self: end; align-self: center; height: 3px; border-radius: 1.5px; max-width: 100%; background: rgba(0, 0, 12, 0.55); margin: 0; }
+/* the status tags (today's O3 icons) stay: they ride at the end of the top row, after the MP */
+.ffx2hud.hud-f1 .ffx2party__status { display: flex; grid-column: 4; margin: 0 0 0 2px; }
