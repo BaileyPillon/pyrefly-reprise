@@ -10,7 +10,7 @@ export interface GovLive {
   soft: number;
   /** The share of the particles to draw: the hit sparks, the ink drops, the spell effects' dust (1 = all). */
   particles: number;
-  /** The multiplier on the scene's supersample (1 = as the sharpness rung says; 0.8 at the governor's third level). */
+  /** The multiplier on the scene's supersample (1 = as the sharpness rung says; 0.8 from the governor's first level on). */
   heavy: number;
 }
 

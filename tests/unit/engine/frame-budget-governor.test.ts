@@ -1,6 +1,6 @@
 /**
  * The frame-budget governor of the conference demo's conditional extras (lane "perf-trim", 2026-10-23; both games, shared plumbing; pure). It watches the 95th percentile of the frame interval over about
- * two seconds against the display's budget, takes the extras away in Bailey's order (the camera's soft background, then half the particles, then the look's passes at half resolution) with fades
+ * two seconds against the display's budget, takes the extras away in the driver's r63-play order (the scene a fifth smaller first, then the camera's soft background, then half the particles) with fades
  * and never a pop, and gives them back by probing, with a doubling wait after a failed probe.
  */
 import { describe, expect, it } from 'vitest';
@@ -48,7 +48,7 @@ describe('a display that holds its refresh', () => {
 });
 
 describe('a display that misses its refresh', () => {
-  it('takes the soft background first, then the particles, then the look\'s resolution, one full window apart', () => {
+  it('takes the smaller scene first, then the soft background, then the particles, one full window apart', () => {
     const g = new FrameBudgetGovernor();
     const { plans } = stream(g, 1000, 14, 3, 20); // 15 % of the frames miss
     const firstAt = (level: number): number => plans.findIndex((p) => p.level >= level);
@@ -83,15 +83,29 @@ describe('a display that misses its refresh', () => {
     expect(plans.at(-1)!.particles).toBe(0.5);
   });
 
-  it('asks for the look\'s half resolution only after the other levers have settled', () => {
+  it('asks for the smaller scene at the first level, with the other levers still at rest, and keeps it for every level after', () => {
     const g = new FrameBudgetGovernor();
     const { plans } = stream(g, 1000, 16, 3, 20);
-    const at3 = plans.findIndex((p) => p.level === 3);
-    expect(at3).toBeGreaterThan(0);
+    const at1 = plans.findIndex((p) => p.level === 1);
+    expect(at1).toBeGreaterThan(0);
     const half = plans.findIndex((p) => p.heavy === 0.8);
-    expect(half).toBeGreaterThanOrEqual(at3);
-    expect(plans.slice(half).every((p) => p.heavy === 0.8 && !p.fading)).toBe(true);
+    expect(half).toBe(at1); // the same frame the level is reached
+    expect(plans[half]).toMatchObject({ level: 1, soft: 1, particles: 1, fading: false }); // nothing else moves with it
+    expect(plans.slice(half).every((p) => p.heavy === 0.8)).toBe(true); // levels 2 and 3 never give it back while they fade
     expect(plans.slice(0, half).every((p) => p.heavy === 1)).toBe(true);
+    // the soft background goes at level 2 and the particles at level 3, not before
+    expect(plans.filter((p) => p.level === 1).every((p) => p.soft === 1 && p.particles === 1)).toBe(true);
+    expect(plans.filter((p) => p.level === 2).every((p) => p.particles === 1)).toBe(true);
+    expect(plans.find((p) => p.level === 2 && p.fading)).toBeDefined();
+  });
+
+  it('the targets, level by level (the driver\'s order, 2026-10-23)', () => {
+    expect(LEVEL_TARGETS).toEqual([
+      { soft: 1, particles: 1, heavy: 1 },
+      { soft: 1, particles: 1, heavy: 0.8 },
+      { soft: 0, particles: 1, heavy: 0.8 },
+      { soft: 0, particles: 0.5, heavy: 0.8 },
+    ]);
   });
 });
 
@@ -212,7 +226,7 @@ describe('a level held by hand (captures, the cost harness)', () => {
       const r = stream(g, 1000, 6, 3, 20);
       return { plans: r.plans, t: r.t };
     })();
-    expect(plans.at(-1)).toMatchObject({ level: 2, soft: 0, particles: 0.5, heavy: 1 });
+    expect(plans.at(-1)).toMatchObject({ level: 2, soft: 0, particles: 1, heavy: 0.8 });
     expect(g.current).toBe(2); // slow frames, but pinned: no step to 3
     g.pin(null);
     stream(g, t, 8, 3, 20);

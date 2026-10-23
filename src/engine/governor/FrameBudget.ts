@@ -7,13 +7,14 @@
  * the display's own calm interval when it knows one). A display that waits for its refresh shows only whole intervals (8.3, then 16.7 ms), so "p95 over the budget" means one frame in twenty
  * or more missed the refresh, which is the stutter the player sees.
  *
- * What it does, in the order Bailey picked (the most expensive extra first, the look kept for last):
- *   level 1  the camera's soft background off      (`soft`: 1 -> 0)
- *   level 2  the particles halved                  (`particles`: 1 -> 0.5: ink drops, sparks, motes)
- *   level 3  the scene drawn a little smaller  (`heavy`: 1 -> 0.8, the supersample's multiplier: the biggest pass of the frame, `CrispRig.setGovernorCut`)
+ * What it does, in the order the driver set on 2026-10-23 (r63-play, Bailey: "motion above visuals", his yes to trimming the frame cost; the measured lever first, the look kept for last):
+ *   level 1  the scene drawn a fifth smaller   (`heavy`: 1 -> 0.8, the supersample's multiplier: the biggest pass of the frame, `CrispRig.setGovernorCut`; the only lever that measurably helps: -17 % GPU in Chapter I, -24 % in Chapter IV)
+ *   level 2  the camera's soft background off  (`soft`: 1 -> 0)
+ *   level 3  the particles halved              (`particles`: 1 -> 0.5: ink drops, sparks, motes)
+ * (perf-trim's own order was soft background, particles, supersample; the data said the last one is the one that pays, so it moved to the front.)
  * A step from rest happens when a full window is over budget; the next ones need half a window of fresh evidence each (the step itself must not be read as slowness: its own hitch is held out). Every lever MOVES toward its target at a bounded
  * rate (`fadeMs` for its whole range), so no step is a pop: the host reads the lever values, never the level. `heavy` is the exception that cannot fade (a render target's size is a size, one resize and no more): it is
- * given as its target and the host switches when the other two levers have settled.
+ * given as its target the moment its level is reached (it is the first level, so no other lever is moving yet) and stays until the level is given back.
  *
  * Recovery: when the window has been inside the budget (with a margin) for `recoverAfterMs`, one level is given back. A display that waits for its refresh cannot show headroom (a held 8.3 ms
  * looks the same whether the frame cost 3 ms or 8), so a recovery is a probe: if the governor steps down again within `probeMs`, the wait before the next probe doubles (up to `maxRecoverMs`),
@@ -65,8 +66,8 @@ export const JUDGE_EVERY_MS = 250;
 /** The share of each lever at each level: where the lever is heading. */
 export const LEVEL_TARGETS: ReadonlyArray<{ soft: number; particles: number; heavy: number }> = [
   { soft: 1, particles: 1, heavy: 1 },
-  { soft: 0, particles: 1, heavy: 1 },
-  { soft: 0, particles: 0.5, heavy: 1 },
+  { soft: 1, particles: 1, heavy: 0.8 },
+  { soft: 0, particles: 1, heavy: 0.8 },
   { soft: 0, particles: 0.5, heavy: 0.8 },
 ];
 
@@ -76,7 +77,7 @@ export interface GovernorPlan {
   soft: number;
   /** The share of the particles to draw (1 = all). */
   particles: number;
-  /** The multiplier on the scene's supersample (1 = as the sharpness rung says, 0.8 = a fifth smaller each way, about a third fewer pixels in the biggest pass). Switched by the host once `soft` and `particles` are at rest. */
+  /** The multiplier on the scene's supersample (1 = as the sharpness rung says, 0.8 = a fifth smaller each way, about a third fewer pixels in the biggest pass). Asked for from level 1 on (the first level). */
   heavy: 0.8 | 1;
   /** True while a lever is still moving. */
   fading: boolean;
@@ -273,8 +274,8 @@ export class FrameBudgetGovernor {
       level: this.level,
       soft: this.soft,
       particles: this.particles,
-      // half resolution is asked for only when the level wants it AND the other levers have arrived; full resolution comes back as soon as the level does
-      heavy: t.heavy < 1 && settled ? 0.8 : 1,
+      // the smaller scene is the first level, so it is asked for as soon as the level is reached (the other levers are still at rest, nothing fades into it) and stays while any level holds it; full size comes back with level 0
+      heavy: t.heavy < 1 ? 0.8 : 1,
       fading: !settled,
     };
   }
