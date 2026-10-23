@@ -4,7 +4,7 @@
  */
 import { Mesh, Object3D, Vector3, Vector4 } from 'three';
 import { afterEach, describe, expect, it } from 'vitest';
-import { RimOffBoxes } from '../../../src/engine/look/pro/BossRimOff.ts';
+import { RimOffBoxes, bossBase } from '../../../src/engine/look/pro/BossRimOff.ts';
 import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts';
 import {
   BOSS_CLEAN_ARTS,
@@ -248,5 +248,21 @@ describe('the bold pass rim is off inside a re-cut boss box, and only there', ()
     setDemoChapter('yunalesca');
     r.update(u, [box(0, 0, 1, 1)], 1);
     expect([u['rimBossN']!.value, u['rimOtherN']!.value]).toEqual([0, 0]);
+  });
+});
+
+describe('the bold pass base of a re-cut boss', () => {
+  it('is the footprint row while the switch plays, and nothing otherwise (the stage keeps the lowest rows base)', () => {
+    const boss = new Object3D();
+    attachBossClean(boss, 'seymour-flux-body', 'enemy');
+    setBossClean('clean');
+    setDemoChapter('seymour-flux');
+    expect(bossBase(boss)).toBe(BOSS_FEET['seymour-flux-body']);
+    setBossClean('today');
+    expect(bossBase(boss)).toBeNull();
+    setBossClean('clean');
+    expect(bossBase(new Object3D())).toBeNull(); // a party member has no controller
+    setDemoChapter('yunalesca');
+    expect(bossBase(boss)).toBeNull();
   });
 });

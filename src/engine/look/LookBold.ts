@@ -20,7 +20,7 @@ import type { RelightLights } from './relight/RelightLights.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
 import type { ProSeam } from './pro/ProSeam.ts';
-import { RimOffBoxes } from './pro/BossRimOff.ts'; // lane boss-matte: the re-cut bosses draw no bold-pass rim
+import { RimOffBoxes, bossBase } from './pro/BossRimOff.ts'; // lane boss-matte: the re-cut bosses draw no bold-pass rim
 import { MAX_RIPPLES } from './living/LivingConfig.ts';
 import { LookLiving, type LivingUniforms } from './living/LookLiving.ts';
 
@@ -178,8 +178,9 @@ export class LookBold {
       const ex = this.extentsOf(mat.uniforms['map']!.value as Texture | null);
       const topV = 1 - ex.top;
       const gap = Math.max(0, 1 - ex.bottom - foot);
-      const baseC = (ex.baseLeft + ex.baseRight) / 2;
-      const hwBase = Math.max(0.1, ((ex.baseRight - ex.baseLeft) / 2) * 1.2 + 0.03) * W;
+      const bf = bossBase(t.actor); // lane boss-matte: a re-cut boss's contact and reflection stand under its footprint, not under the columns of its lowest rows
+      const baseC = bf ? ex.left + bf.cx * (ex.right - ex.left) : (ex.baseLeft + ex.baseRight) / 2;
+      const hwBase = bf ? bf.hw * (ex.right - ex.left) * W : Math.max(0.1, ((ex.baseRight - ex.baseLeft) / 2) * 1.2 + 0.03) * W;
       const hwFull = ((ex.right - ex.left) / 2) * W;
       // the point on the floor under the figure's base
       g.set(c.x + x.x * (baseC - 0.5) + y.x * (foot - 0.5), 0.014, c.z + x.z * (baseC - 0.5) + y.z * (foot - 0.5));

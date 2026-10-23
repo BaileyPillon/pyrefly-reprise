@@ -10,7 +10,7 @@
  * Nothing is sent while the switch is off (`bossCleanOn`): the counts stay 0 and the shader draws today's rim. Both games (shared plumbing); only the two bosses of `BossClean.ts` are ever named.
  */
 import { Vector4, type Object3D } from 'three';
-import { bossCleanOn } from './BossClean.ts';
+import { BOSS_FEET, bossCleanOn, type BossFoot } from './BossClean.ts';
 
 export const RIM_OFF_BOSSES = 2;
 /** How many other figures' boxes a shader holds (the party of three, a second boss and the add-ons of Chapter I fit in eight). */
@@ -47,4 +47,14 @@ export class RimOffBoxes {
     c.rimBossN.value = nb;
     c.rimOtherN.value = nb > 0 ? no : 0;
   }
+}
+
+/**
+ * The bold pass's contact ellipse and reflection stand on the figure's BASE: the columns of the lowest 7 percent of its rows (`LookBoldConfig.baseExtents`). For a figure that is more than its feet
+ * (Seymour: a boot far left, a hem, a fringe) that base is not under the body; a re-cut boss takes the footprint of `BOSS_FEET` instead (centre and half width as fractions of the figure's content
+ * width), or null when this actor is not a re-cut boss now.
+ */
+export function bossBase(actor: Object3D): BossFoot | null {
+  const art = (actor.userData['bossClean'] as { artId?: string } | undefined)?.artId;
+  return art !== undefined && bossCleanOn(art) ? (BOSS_FEET[art] ?? null) : null;
 }
