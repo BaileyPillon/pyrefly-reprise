@@ -464,7 +464,7 @@ export class BattleMoments {
     this.shots.focus = this.shots.enemy(actorId) ?? targets.map((t) => this.shots.enemy(t)).find((t) => t !== null) ?? null;
     const action: ShotAction = { ...info, kind: pose };
     this.open = { actor: this.subject(actorId), action };
-    const asked = this.ask((d) => d.actionOpen?.({ ...this.shotCtx(), actor: this.subject(actorId), targets: targets.map((t) => this.subject(t)), action }));
+    const asked = this.ask((d) => d.actionOpen?.({ ...this.shotCtx(), actor: this.subject(actorId), targets: targets.map((t) => this.subject(t)), action, castHold: () => this.deps.sleep(MOMENT_TIMING.castHold) }));
     if (asked instanceof Promise ? await asked : asked === true) return; // the director has the push in on the attacker, and the cast's hold
     if (this.skipping) {
       this.cut(this.shots.fit(this.rigFor(actorId), 0).rig);

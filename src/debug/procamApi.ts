@@ -10,14 +10,14 @@ import { proDebug } from '../engine/procam/ProDirector.ts';
 import type { ProLayer } from '../engine/procam/ProLayer.ts';
 
 interface Battle {
-  scene?: { battleCamera?: { proLayer?: ProLayer | null; camera: { fov: number; position: { x: number; y: number; z: number } } } };
+  scene?: { battleCamera?: { proRig?: { current: ProLayer | null }; camera: { fov: number; position: { x: number; y: number; z: number } } } };
 }
 
 export function installProCamDebug(api: Record<string, unknown>): void {
   api['procam'] = (on?: boolean): Record<string, unknown> => {
     if (on !== undefined) setProCam(on);
     const bc = ((api as { battle?: () => Battle | null }).battle?.() ?? null)?.scene?.battleCamera;
-    const layer = bc?.proLayer ?? null;
+    const layer = bc?.proRig?.current ?? null;
     const d = proDebug.director;
     return {
       configured: proCamConfigured(),

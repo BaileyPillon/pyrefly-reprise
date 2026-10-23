@@ -75,6 +75,17 @@ export function laidShot(row: ProShotRow, live: LiveSpot, scaleMode: 'party' | '
 
 // ------------------------------------------------------------------------------ authored stand-ins (OURS)
 
+/**
+ * How far from its own aim a real launch sweep keeps its eye (OURS; review of 162c3fdbc, m3): Seymour's Flare, Banish and Full-Life launches stand 11 m up and 10 m back, so the party is 13 percent
+ * of the frame and the plate's edges show; each key's eye is brought this share of the way to the key's own aim (the direction of the view, the lens and the roll stay the real ones).
+ */
+export const LAUNCH_CLOSER = 0.5;
+
+/** The keys with every eye moved to `k` times its distance from its own aim, along the view. */
+export function closerKeys(keys: readonly Key[], k: number): Key[] {
+  return keys.map((key) => ({ ...key, pose: { ...key.pose, pos: add3(key.pose.look, mul3(sub3(key.pose.pos, key.pose.look), k)) } }));
+}
+
 /** The party's centre on the floor, from the feet. */
 export function centreOf(feet: readonly V3[]): V3 {
   const n = Math.max(1, feet.length);

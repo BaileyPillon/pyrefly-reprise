@@ -268,7 +268,7 @@ export class PaintedStage implements BattleStage {
         return s && !s.anchor ? profileOfActor(s.actor, pose) : undefined; // a figure-less part has no painting: its box stands in
       },
     });
-    opts.battleCamera.proBoxes((id) => this.proBox(id)); // `?camera=pro`: where each figure's painted box stands, for the directed camera's never-crop dolly (read only while a directed shot plays)
+    opts.battleCamera.proRig.setBoxes((id) => this.proBox(id)); // `?camera=pro`: where each figure's painted box stands, for the directed camera's never-crop dolly (read only while a directed shot plays)
   }
 
   /** A figure's painted box in world space (the directed camera's fit): the four corners of its alpha box, or of its anchored part. Null when it is not on the field. */

@@ -378,7 +378,8 @@ describe('the soft background', () => {
     expect(proSoftBackground(mixBand, null)).toBe(mixBand);
     const b = proSoftBackground(mixBand, { ...full, weight: 0.5 })!;
     expect(b.focus).toBeCloseTo((0.3 + full.focus) / 2, 6);
-    expect(b.blur).toBeCloseTo((6 + SHOT_BLUR) / 2, 6);
+    expect(b.blur).toBe(SHOT_BLUR); // the cinema mixes it in over the pass's real blur by `blurMix` (the shot's weight): no assumed 6 px start
+    expect(b.blurMix).toBeCloseTo(0.5, 6);
     l.stop();
     l.step(0.2, rest, 16 / 9);
     expect(l.band!.weight).toBeLessThan(0.6);

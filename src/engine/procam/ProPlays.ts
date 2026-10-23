@@ -10,7 +10,7 @@ import type { ActorHandle, BattleStage } from '../BattlePresenterPorts.ts';
 import type { ActionShot, ImpactShot } from '../ShotDirector.ts';
 import { ATTACK_FFX, ATTACK_FFX2, attackRun } from './ProAttack.ts';
 import { castShotChoice } from './ProCamSwitch.ts';
-import { centreOf, characterOf, finisherKeys, keyRun, laidShot, lowLaunchKeys, megaFlareRun, pickRow, rowsOf, specialRun } from './ProShots.ts';
+import { LAUNCH_CLOSER, centreOf, characterOf, closerKeys, finisherKeys, keyRun, laidShot, lowLaunchKeys, megaFlareRun, pickRow, rowsOf, specialRun } from './ProShots.ts';
 import type { Key, LiveSpot } from './ProTrack.ts';
 import type { ProRun, V3 } from './ProTypes.ts';
 
@@ -95,7 +95,7 @@ export function attackPlay(env: PlayEnv, ctx: ActionShot, kind: 'attack' | 'fini
     }
   }
   const params = game === 'ffx2' ? ATTACK_FFX2 : ATTACK_FFX;
-  const fit = target !== undefined ? [actor.id, env.fitId(target)] : [actor.id];
+  const fit = target !== undefined ? [env.fitId(actor.id), env.fitId(target)] : [env.fitId(actor.id)]; // a 5 m boss acting is fitted like a 5 m boss targeted: by `fitId`, never whole by id (M1: that fit alone popped the eye 1.4 to 3.2 m)
   const run = attackRun(`attack.${actor.id}`, a, tg, fit, params);
   return { run: { ...run, inMs: t.ms(params.inMs), outMs: t.ms(params.outMs), rate: t.rate, onEvent: run.onEvent }, kind: 'attack' };
 }
@@ -163,17 +163,34 @@ export function overdrivePlay(env: PlayEnv, ctx: ActionShot, t: Timing): Play | 
   const row = pickRow(rowsOf(group), castShotChoice(), env.dice());
   const spot = env.spot(actor.id, targets[0]?.id);
   if (!row || !spot) return null;
-  const run = keyRun(row.id, laidShot(row, spot, 'party', null), { inMs: t.ms(420), outMs: t.ms(700), fit: { ids: [actor.id], safe: { x: 0.92, y: 0.95 } }, breathe: 0.3, still: env.still, focus: env.fo([actor.id]) });
+  const tall = (env.stage.actor(actor.id) ? heightOf(env.stage.actor(actor.id)!) : 0) > 3; // an aeon (Bahamut, about 5 m) backs further than a hero
+  const ids = [tall ? actor.id : env.fitId(actor.id), ...(targets[0] !== undefined ? [env.fitId(targets[0].id)] : [])]; // an aeon whole, wings and head too; the foe by its body
+  const run = keyRun(row.id, laidShot(row, spot, 'party', null), { inMs: t.ms(420), outMs: t.ms(700), fit: { ids, safe: { x: 0.92, y: 0.95 }, maxK: tall ? 4 : undefined }, breathe: 0.3, still: env.still, focus: env.fo([actor.id]) });
   return { run: { ...run, rate: held(env, t) }, kind: 'cast' };
 }
 
-/** The victory (FFX): the real close-up of `id`, the last party member to act. */
+/**
+ * The victory frame keeps clear of the real HUD (the options book's mock-up was drawn with the HUD hidden): the party plates fill the lower right (x above 0.3, y below -0.43 of the frame, NDC) and
+ * the turn-order column the right edge (x above 0.72). The winning party's union stands at `VICTORY_AT` and fits inside `VICTORY_SAFE` half-extents about it: x from -0.88 to 0.32, y from
+ * -0.42 to 0.82. OURS.
+ */
+export const VICTORY_SAFE = { x: 0.6, y: 0.62 } as const;
+export const VICTORY_AT = { x: -0.28, y: 0.2 } as const;
+/** The party members who stand with the one the victory close-up is about: within this many metres of him (the whole party, as the pick keeps "both heroes whole"). */
+const VICTORY_COMPANY_M = 4.5;
+
+/** The victory (FFX): the real close-up of `id`, the last party member to act, with whoever stands beside him kept whole. */
 export function victoryPlay(env: PlayEnv, id: CombatantId, t: Timing): Play | null {
   const char = characterOf(env.stage.artOf?.(id), id);
   const row = pickRow(rowsOf(`victory.${char}`), castShotChoice() === 'random' ? 'random' : 0, env.dice());
   const spot = env.spot(id, env.bossOf(id));
   if (!row || !spot) return null;
-  const run = keyRun(row.id, laidShot(row, spot, 'party', null), { inMs: t.ms(700), outMs: t.ms(500), fit: { ids: [id], safe: { x: 0.88, y: 0.94 } }, breathe: 0.35, still: env.still, focus: env.fo([id]) });
+  const me = env.stage.actor(id);
+  const company = env.stage.staged().filter((o) => {
+    const a = env.stage.actor(o);
+    return o !== id && env.stage.sideOf(o) === 'party' && a !== undefined && me !== undefined && Math.hypot(a.position.x - me.position.x, a.position.z - me.position.z) <= VICTORY_COMPANY_M;
+  });
+  const run = keyRun(row.id, laidShot(row, spot, 'party', null), { inMs: t.ms(700), outMs: t.ms(500), fit: { ids: [id, ...company], safe: VICTORY_SAFE, to: VICTORY_AT, maxK: 4 }, breathe: 0.35, still: env.still, focus: env.fo([id, ...company]) });
   return { run: { ...run, rate: held(env, t) }, kind: 'cast' };
 }
 
@@ -211,7 +228,7 @@ export function landingPlay(env: PlayEnv, ctx: ImpactShot, t: Timing, finisherOw
     } else if (move.launch) {
       const row = pickRow(rowsOf(move.launch), 'random', env.dice());
       if (row) {
-        keys = laidShot(row, spot, 'live', SQUEEZE.launch);
+        keys = closerKeys(laidShot(row, spot, 'live', SQUEEZE.launch), LAUNCH_CLOSER); // the real sweep reads far and small on our stage: the party was 13 percent of the frame
         id = row.id;
       }
     }

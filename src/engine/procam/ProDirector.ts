@@ -14,12 +14,17 @@
  * | killing blow | the push along the run [ours], then the real tilted close shot at the blow | -- |
  * | special, Mega Flare | -- | a push on the special's pair; a low wide pull on Mega Flare [ours] |
  * | victory | the real close-up of the last actor | declined: the sources withhold the pose in Chapter IV; the follower hands the frame back |
- * | the rest (hit, KO, turn start, command accepted, opening, telegraph, form change) | declined: the game's own camera, as the real game | declined |
+ * | a hit | TAKEN: the run in flight owns the blow, so the game's own hit cut to the target and its A-13 horizon roll do not play while the camera is on (the real FFX leaves its default view alone on a hit; FFX-2 never cuts per action) | taken, the same |
+ * | the rest (KO, turn start, command accepted, opening, telegraph, form change) | declined: the game's own camera, as the real game | declined |
  *
  * Rules that hold everywhere: nothing plays over an open FFX-2 command menu (`camera.pro` is absent while the target frame is held, D-357); nothing plays at fast-forward 'skip'; the upright phone
  * keeps its slice rules (A-12); REDUCE MOTION plays every shot as a held frame (a cut in, a cut out) and the plain-attack move not at all; the `steady` and `originals` comfort presets decline everything
  * (the player asked for a camera that holds); a blend whose view changes a lot is a cut, a small one a glide (`ProLayer.comfortMs`). A beat the director takes returns true, so
- * `BattleMoments` makes none of its own camera moves for it; a beat it declines (false) plays as it does today.
+ * `BattleMoments` makes none of its own camera moves for it; a beat it declines (false) plays as it does today. A cast it takes it also gives the cast's wind-up hold back
+ * (`ActionShot.castHold`): `BattleMoments` returns before its own sleep, so without that the spell landed 0.5 s earlier than it does today.
+ *
+ * The switch is the layer's too (`ProCamPort.setGate(proCamOn)`, set at the first beat): flipped off in the middle of a shot, the run ends in 320 ms and the FFX-2 follower goes home in 320 ms,
+ * without waiting for another beat. An open FFX-2 command menu sends the follower home in the same 320 ms (D-357; `ProFollower.HOME_MS`).
  */
 import type { CombatantId } from '../../battle/common/types.ts';
 import type { BattleStage, CameraPort } from '../BattlePresenterPorts.ts';
@@ -90,9 +95,10 @@ export class ProDirector implements ShotDirector, PlayEnv {
     return proDofOn() ? ids : undefined;
   }
 
+  /** FFX: a tall foe is fitted by its body (the real shots frame the body and let the crown go). FFX-2: whole -- the pick is "nobody cropped", and Bahamut's head and wings are the picture. */
   fitId(id: CombatantId): string {
     const a = this.stage.actor(id);
-    return a && heightOf(a) > 3 ? `${id}@0-0.75` : id;
+    return a && heightOf(a) > 3 && this.game() !== 'ffx2' ? `${id}@0-0.75` : id;
   }
 
   bossOf(fallback: CombatantId): CombatantId {
@@ -130,8 +136,9 @@ export class ProDirector implements ShotDirector, PlayEnv {
     const preset = cameraPreset();
     if (preset === 'steady' || preset === 'originals') return null;
     const port = (ctx.camera as CameraPort).pro;
-    if (!port || port.aspect < 1) return null;
-    return port;
+    if (!port) return null;
+    port.setGate(proCamOn); // the layer asks the switch itself every frame: flipped off in the middle of a shot, the shot ends (the playtest key `;`)
+    return port.aspect < 1 ? null : port;
   }
 
   private timing(ctx: ShotCtx): Timing {
@@ -186,12 +193,12 @@ export class ProDirector implements ShotDirector, PlayEnv {
       }
       return out;
     };
-    const ids = (): string[] => stage.staged().filter((id) => stage.sideOf(id) !== undefined).map((id) => (stage.sideOf(id) === 'enemy' ? `${id}@0-0.8` : id));
+    const ids = (): string[] => stage.staged().filter((id) => stage.sideOf(id) !== undefined); // everyone whole: the girls and Bahamut, head and wings too (the pick, "nobody cropped")
     const fit: ProFit = { ids: [], safe: FOLLOW_SAFE };
     this.follower = new ProFollower(
       {
         members,
-        held: () => !proCamOn() || (stage.camera as CameraPort).holding === true,
+        held: () => !proCamOn() || port.aspect < 1 || (stage.camera as CameraPort).holding === true, // the switch off, an upright phone, or a command menu: home in 320 ms, then the rig's own
         still: () => this.stillNow,
         fitK: (pose) => port.fitK(pose, { ...fit, ids: ids() }),
       },
@@ -199,7 +206,7 @@ export class ProDirector implements ShotDirector, PlayEnv {
     );
     this.followerPort = port;
     const f = this.follower;
-    port.setAmbient((dt, base) => (proCamOn() ? f.step(dt, base) : base));
+    port.setAmbient((dt, base) => f.step(dt, base)); // always stepped: while held it is the way home and then the rig's own pose
     this.note('follower', 'installed');
   }
 
@@ -248,7 +255,8 @@ export class ProDirector implements ShotDirector, PlayEnv {
     }
     if (play) this.begin(port, play, actor.id);
     else if (this.still && action.kind === 'attack') this.note('actionOpen', 'attack held: reduce motion');
-    return true;
+    // taking the beat takes the cast's wind-up hold with it (`BattleMoments` returns before its own sleep): the director gives it back, so a spell lands when it always did
+    return action.kind === 'cast' && ctx.castHold ? ctx.castHold().then(() => true) : true;
   }
 
   impact(ctx: ImpactShot): boolean {

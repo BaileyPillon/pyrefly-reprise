@@ -198,7 +198,8 @@ class Mix {
     }
     this.cinema.fogUpdate(dt, parts.fog, rm);
     const shotBand = held && master ? dofBand(held.pose, this.shots!.subjectFigs(), W, H, 'hero') : null;
-    this.cinema.dof(parts.depthOfField ? proSoftBackground(shotBand ?? this.band, (this.b.battleCamera as { proBand?: ProBand | null } | undefined)?.proBand ?? null) : null); // a directed shot (`?camera=pro`) blends its own band in
+    const proBand = parts.depthOfField ? (this.b.battleCamera as { proRig?: { band: ProBand | null } } | undefined)?.proRig?.band ?? null : null; // a directed shot (`?camera=pro`): its soft background
+    this.cinema.dof(parts.depthOfField ? proSoftBackground(shotBand ?? this.band, proBand) : null, proBand); // blended into the stock tilt-shift here and into the look's blur (`Renderer.proSoft`)
     // SMOOTH EDGES: the post pass per tier, and the defringe on every painted figure.
     this.cinema.aa(parts.smoothEdges ? aaKind(tier, crispLive.aaPre) : null);
     this.defringe(actors, parts.smoothEdges);

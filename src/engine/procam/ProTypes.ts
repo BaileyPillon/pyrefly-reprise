@@ -55,6 +55,10 @@ export interface ProAutoCamera {
 export interface ProFit {
   readonly ids: readonly string[];
   readonly safe: { readonly x: number; readonly y: number };
+  /** The most the eye may back away (times the distance to the aim); default 1.8. A 5 m aeon's close shot asks for more. */
+  readonly maxK?: number | undefined;
+  /** Stand the middle of these figures here (NDC) and fit their union inside `safe` half-extents about it, not about the screen's centre: a frame that leaves the HUD's corner free (the victory). */
+  readonly to?: { readonly x: number; readonly y: number } | undefined;
 }
 
 /** What the camera does for a while. */
@@ -112,8 +116,13 @@ export interface CameraLayer {
 export interface ProCamPort {
   /** Start a run now (from where the camera is, blended by the run's `inMs`). Replaces the run in flight. */
   play(run: ProRun): void;
-  /** Blend back to the game's own camera over `outMs` (default the run's own). A cut when 0. */
-  stop(outMs?: number): void;
+  /**
+   * Blend back to the game's own camera over `outMs` (default the run's own). A cut when 0. The comfort rule may turn a big way home into a cut or stretch it to the speed cap; `exact` plays it
+   * as asked (the FFX-2 target frame settles in 320 ms whatever the shot was, D-357; so does the playtest key's flip-off).
+   */
+  stop(outMs?: number, exact?: boolean): void;
+  /** The switch the layer asks every frame: while it answers false a run in flight is stopped (the playtest key `;` flipped off mid-shot). Null: no gate. */
+  setGate(gate: (() => boolean) | null): void;
   /** Is a run playing or blending out? */
   readonly active: boolean;
   /** The frame's width over its height. */

@@ -13,8 +13,8 @@
  * Time is the run's own clock: `dt` times the run's rate; the blends run on the real clock. The layer never moves the game's rig, the HUD's resting projector or the cuts of the other camera
  * systems; with no run and no ambient it answers null and `BattleCamera` draws exactly as it does without this file.
  */
-import { clamp, dampK, ease, lerp, lerpPose, mul3, add3, sub3, len3, norm3, dot3 } from './ProMath.ts';
-import { fitDolly, bandOf, ndcRect, type Box } from './ProFit.ts';
+import { clamp, dampK, ease, lerp, lerpPose, sub3, len3, norm3, dot3 } from './ProMath.ts';
+import { dollied, fitCentred, fitDolly, placeAt, bandOf, ndcRect, type Box } from './ProFit.ts';
 import type { CameraLayer, EaseName, LayerOut, Pose, ProBand, ProCamPort, ProFit, ProRun } from './ProTypes.ts';
 
 /** The blur at the far edge of the frame while a shot keeps its figures sharp (the game's own is 6; device pixels). OURS. */
@@ -28,6 +28,9 @@ export const SHOT_BLUR = 9;
 export const CUT_TURN = 18;
 export const CUT_MOVE = 0.55;
 export const GLIDE_DEG_S = 28;
+
+/** The way home when the switch is flipped off in the middle of a shot, ms: the target frame's own settle (D-357). */
+export const FLIP_OFF_MS = 320;
 
 /** How different two poses are: the turn of the view in degrees, and the eye's travel as a fraction of the distance to the aim (at least 3 m). */
 export function difference(a: Pose, b: Pose): { turn: number; move: number } {
@@ -69,10 +72,12 @@ export class ProLayer implements CameraLayer, ProCamPort {
   /** The blend's real duration, decided on its first frame by the comfort rule (null: not yet). */
   private inMsEff: number | null = null;
   private outFresh = false;
+  private outExact = false;
+  private gate: (() => boolean) | null = null;
   private outEase: EaseName = 'cubic';
   private last: Pose | null = null;
   private ambient: ((dt: number, base: Pose) => Pose) | null = null;
-  private aspectNow = 16 / 9;
+  private aspectNow: number;
   private fitSmooth = 1;
   private boxes: BoxOf = () => null;
   private weight = 0;
@@ -80,6 +85,15 @@ export class ProLayer implements CameraLayer, ProCamPort {
   band: ProBand | null = null;
   /** Counters for the debug surface and the frame-cost check. */
   readonly stats = { frames: 0, runs: 0, fitted: 0, widest: 1 };
+
+  /** `aspect`: the frame's width over its height as the camera has it now, so a portrait phone is known from the first beat. */
+  constructor(aspect = 16 / 9) {
+    this.aspectNow = aspect;
+  }
+
+  setGate(gate: (() => boolean) | null): void {
+    this.gate = gate;
+  }
 
   /** The stage tells the layer where the figures stand (`PaintedStage`). */
   setBoxes(boxOf: BoxOf): void {
@@ -128,7 +142,7 @@ export class ProLayer implements CameraLayer, ProCamPort {
       const b = boxFor(this.boxes, id);
       if (b) boxes.push(b);
     }
-    return boxes.length === 0 ? 1 : fitDolly(pose, this.aspectNow, boxes, fit.safe).k;
+    return boxes.length === 0 ? 1 : fitDolly(pose, this.aspectNow, boxes, fit.safe, fit.maxK).k;
   }
 
   play(run: ProRun): void {
@@ -142,9 +156,10 @@ export class ProLayer implements CameraLayer, ProCamPort {
     this.stats.runs++;
   }
 
-  stop(outMs?: number): void {
+  stop(outMs?: number, exact = false): void {
     const r = this.run;
     if (!r || this.state === 'out') return;
+    this.outExact = exact;
     const ms = outMs ?? r.outMs;
     if (ms <= 0 || !this.last) {
       this.run = null;
@@ -161,6 +176,7 @@ export class ProLayer implements CameraLayer, ProCamPort {
 
   step(dt: number, base: Pose, aspect: number): LayerOut | null {
     this.aspectNow = aspect;
+    if (this.run && this.state === 'run' && this.gate && !this.gate()) this.stop(FLIP_OFF_MS, true); // the switch went off in the middle of a shot: it ends now, not whenever its last key lets go
     const amb = this.ambient ? this.ambient(dt, base) : base;
     const run = this.run;
     if (!run) {
@@ -184,7 +200,7 @@ export class ProLayer implements CameraLayer, ProCamPort {
     if (this.state === 'out') {
       if (this.outFresh) {
         this.outFresh = false;
-        this.outMs = comfortMs(this.outFrom ?? amb, amb, this.outMs); // a big way home is a cut, a small one a glide no faster than the cap
+        if (!this.outExact) this.outMs = comfortMs(this.outFrom ?? amb, amb, this.outMs); // a big way home is a cut, a small one a glide no faster than the cap
       }
       this.outT += ms;
       const u = this.outT / Math.max(1, this.outMs);
@@ -204,7 +220,7 @@ export class ProLayer implements CameraLayer, ProCamPort {
       const u = this.inMsEff <= 0 ? 1 : this.inT / this.inMsEff;
       w = u >= 1 ? 1 : ease(run.inEase, u);
       pose = u >= 1 ? raw : lerpPose(fromPose, raw, w);
-      if (run.fit) pose = this.fit(pose, run, dt);
+      if (run.fit) pose = this.fit(pose, run, dt, w);
       if (run.breathe) pose = { ...pose, fov: pose.fov + run.breathe * Math.sin((2 * Math.PI * this.t) / 4200), roll: pose.roll + 0.18 * Math.sin((2 * Math.PI * this.t) / 6300 + 1) };
     }
     this.weight = w;
@@ -230,8 +246,11 @@ export class ProLayer implements CameraLayer, ProCamPort {
     return { focus: mid, width: half, blur: SHOT_BLUR, weight };
   }
 
-  /** The never-crop dolly of the run's fit, widening at once and relaxing at a measured rate. */
-  private fit(pose: Pose, run: ProRun, dt: number): Pose {
+  /**
+   * The never-crop dolly of the run's fit, widening at once and relaxing at a measured rate -- but a dolly the camera did not have a frame ago comes in with the shot's blend (`w`, 0 on its first
+   * frame), so a fit never lands in one frame (the first frame of a boss's attack popped the eye 1.4 to 3.2 m). A cut (`w` 1 at once) is a cut.
+   */
+  private fit(pose: Pose, run: ProRun, dt: number, w: number): Pose {
     const fit = run.fit!;
     const boxes: Box[] = [];
     for (const id of fit.ids) {
@@ -239,11 +258,12 @@ export class ProLayer implements CameraLayer, ProCamPort {
       if (b) boxes.push(b);
     }
     if (boxes.length === 0) return pose;
-    const res = fitDolly(pose, this.aspectNow, boxes, fit.safe);
+    const res = fit.to ? fitCentred(pose, this.aspectNow, boxes, fit.safe, fit.to, fit.maxK) : fitDolly(pose, this.aspectNow, boxes, fit.safe, fit.maxK);
     this.fitSmooth = res.k >= this.fitSmooth ? res.k : this.fitSmooth + (res.k - this.fitSmooth) * dampK(2.5, dt);
     this.stats.fitted++;
     this.stats.widest = Math.max(this.stats.widest, this.fitSmooth);
-    const k = clamp(this.fitSmooth, 1, 3);
-    return k <= 1.0001 ? pose : { ...pose, pos: add3(pose.look, mul3(sub3(pose.pos, pose.look), k)) };
+    const k = 1 + (clamp(this.fitSmooth, 1, 4.5) - 1) * w;
+    const backed = dollied(pose, k);
+    return fit.to ? lerpPose(backed, placeAt(backed, this.aspectNow, boxes, fit.to), w) : backed; // a frame with a place for the figures comes in with the blend as well
   }
 }

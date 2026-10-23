@@ -66,7 +66,7 @@ export class DriftRig {
     }
     const bc = this.host.battleCamera;
     const rig = this.host.rigName();
-    const allowed = !rm && rig === 'idle' && bc.pushAmount === 0 && bc.rollDeg === 0 && !moving && !bc.proRunActive && eyeCandy.sub('b', 'drift'); // a directed shot (`?camera=pro`) owns the frame: the drift arcs about the rig's aim, not the shot's
+    const allowed = !rm && rig === 'idle' && bc.pushAmount === 0 && bc.rollDeg === 0 && !moving && !bc.proRig.active && eyeCandy.sub('b', 'drift'); // a directed shot (`?camera=pro`) owns the frame: the drift arcs about the rig's aim, not the shot's
     const w = easeWeight(this.env.update(dt, allowed)) * eyeCandy.dial('drift') * TIER_DRIFT[tier];
     this.now = w;
     this.offset = null;

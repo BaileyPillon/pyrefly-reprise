@@ -75,7 +75,7 @@ export class HoldableCamera implements CameraPort {
     if (on === this.held) return;
     this.held = on;
     if (!on) return;
-    if (proCamOn()) this.inner.pro?.stop(settleMs); // the directed camera hands the frame back to `idle` too (`?camera=pro`, demo chapters; FFX-2 only in effect)
+    if (proCamOn()) this.inner.pro?.stop(settleMs, true); // the directed camera hands the frame back to `idle` too, in the same settle whatever the shot was (`?camera=pro`, demo chapters; FFX-2 only in effect)
     if (!this.inner.rigNames.includes(TARGET_FRAME_RIG)) return;
     void this.inner.release?.(settleMs);
     if (this.inner.rigName !== TARGET_FRAME_RIG) {

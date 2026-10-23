@@ -15,9 +15,10 @@
  * - a re-pick glides to the next candidate, at most every {@link REPICK_EVERY} effect ends [ours: the real camera re-picks at each one], and on an idle timer drawn from the real range;
  * - the eye never moves faster than {@link MAX_EYE_SPEED} m/s (about 12 degrees a second at the resting distance: under the `calm` preset's 20 [D-291]);
  * - nobody is cropped: the glide's pose is dollied back until the girls and Bahamut's body sit inside the safe rectangle (`ProFit.ts`);
- * - while a command menu holds the target frame (D-357) or REDUCE MOTION is on, the camera glides back to the resting rig and stays there.
+ * - while a command menu holds the target frame (D-357) the camera is back on the resting rig in the hold's own 320 ms (a reticle is projected once, when the cursor opens, so a camera that keeps
+ *   gliding puts it off its target); while REDUCE MOTION is on it glides back and stays there.
  */
-import { lerpPose, lerp3, add3, sub3, mul3, dampK, clamp } from './ProMath.ts';
+import { lerpPose, lerp3, add3, sub3, mul3, dampK, clamp, ease } from './ProMath.ts';
 import { DampedV3, smoothDamp, type Damped } from './ProSmooth.ts';
 import type { Pose, ProAutoCamera, V3 } from './ProTypes.ts';
 
@@ -29,8 +30,10 @@ export const REPICK_EVERY = 2;
 export const MAX_EYE_SPEED = 2.2;
 /** The glide times, seconds: the eye, the look-at, the lens (the real follower's gains give about 0.3 s; OURS is slower, on a second-order glide). */
 export const GLIDE = { eye: 0.9, look: 0.55, fov: 0.9 } as const;
-/** The never-crop rectangle (NDC half extents) the girls and Bahamut's body are kept inside. */
+/** The never-crop rectangle (NDC half extents) the girls and Bahamut are kept inside. */
 export const FOLLOW_SAFE = { x: 0.84, y: 0.9 } as const;
+/** The way back to the resting rig when a command menu holds the target frame (or the switch goes off), ms: the hold's own settle, `TARGET_FRAME_SETTLE_MS` (D-357, PR-0150). */
+export const HOME_MS = 320;
 
 /** A member of the camera group, as the stage reports it. */
 export interface Member {
@@ -68,6 +71,8 @@ export class ProFollower {
   private effectEnds = 0;
   private idleT = 0;
   private fitK = 1;
+  private homeT = -1;
+  private homeFrom: Pose | null = null;
   private readonly dice: () => number;
   private nextIdle: number;
   /** The weight toward the candidate this frame (0..1), for the debug surface. */
@@ -117,10 +122,31 @@ export class ProFollower {
     return mul3(f, 1 / m.length);
   }
 
+  /** Held: the pose goes home in {@link HOME_MS} on one curve (from where it stood when the hold began to the rig's own, which is on its way to the same frame), then it is the rig's. */
+  private home(dt: number, base: Pose): Pose {
+    if (this.homeT < 0 || this.homeFrom === null) {
+      this.homeT = 0;
+      this.homeFrom = this.pose ?? base;
+    }
+    this.homeT += dt * 1000;
+    const pose = this.homeT >= HOME_MS ? base : lerpPose(this.homeFrom, base, ease('cubic', this.homeT / HOME_MS));
+    this.eye.set(pose.pos); // a release continues from here: no velocity left over, no jump
+    this.look.set(pose.look);
+    this.fov.value = pose.fov;
+    this.fov.velocity = 0;
+    this.weight = 0;
+    this.fitK = 1;
+    this.started = true;
+    this.pose = pose;
+    return pose;
+  }
+
   /** The pose the camera stands on this frame, given the game's own resting rig as `base`. */
   step(dt: number, base: Pose): Pose {
+    if (this.host.held()) return this.home(dt, base);
+    this.homeT = -1;
     const f = this.focus();
-    const calm = this.host.held() || this.host.still() || f === null;
+    const calm = this.host.still() || f === null;
     const wT = calm ? 0 : FOLLOW_BLEND;
     this.weight += (wT - this.weight) * dampK(2.2, dt);
     let target = base;

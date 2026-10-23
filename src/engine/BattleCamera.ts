@@ -2,8 +2,7 @@ import { PerspectiveCamera, Vector3 } from 'three';
 import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
 import { LinkFits, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
 import { shakeStepByTime, shakeStepPerFrame } from './feel/TimeBased.ts'; // `?timing=time` (demo chapters): the shake runs on real time, today's is per drawn frame
-import { ProLayer, type BoxOf } from './procam/ProLayer.ts'; // `?camera=pro` (demo chapters): the directed camera's layer; built on first use, so with the switch off nothing here runs
-import type { LayerOut, ProBand, ProCamPort } from './procam/ProTypes.ts';
+import { BattleCameraPro } from './BattleCameraPro.ts'; // `?camera=pro` (demo chapters): the directed camera's seat (`proRig`); its layer is built on first use, so with the switch off nothing runs
 
 export interface CameraRig {
   /** Camera world position. */
@@ -93,14 +92,8 @@ export class BattleCamera {
   readonly truck = new Vector3();
   /** The fraction a held {@link push} is easing to (0 with none, and from the moment it is released): what a plan for the shot reads (`restCamera(true)`). */
   private heldPush = 0;
-  /** `?camera=pro`: the directed camera's layer (null until a director asks for {@link pro}), what it answered this frame, and the rig's own lens while it draws another. */
-  private proLayer: ProLayer | null = null;
-  private proBoxOf: BoxOf | null = null;
-  private layerOut: LayerOut | null = null;
-  private fovBase = NaN;
-  private fovDrawn = false;
-  private readonly layerPos = new Vector3();
-  private readonly layerLook = new Vector3();
+  /** `?camera=pro`: the directed camera's seat (`BattleCameraPro.ts`): its layer, its soft background (`.band`), whether a shot is up (`.active`), the figures' boxes (`.setBoxes`). */
+  readonly proRig = new BattleCameraPro();
 
   constructor(camera: PerspectiveCamera, opts: BattleCameraOptions = {}) {
     this.camera = camera;
@@ -115,19 +108,7 @@ export class BattleCamera {
   get rigName(): string { return this.currentRig; }
 
   /** The directed camera's port (`procam/ProLayer.ts`), made on first use. Nothing runs, and `apply` draws as it always did, until a director plays a run on it. */
-  get pro(): ProCamPort {
-    if (!this.proLayer) { this.proLayer = new ProLayer(); if (this.proBoxOf) this.proLayer.setBoxes(this.proBoxOf); }
-    return this.proLayer;
-  }
-
-  /** A directed shot is playing or blending out (`procam/ProLayer.ts`): the idle drift stands aside (`fx/b/DriftRig.ts`). */
-  get proRunActive(): boolean { return this.proLayer?.active === true; }
-
-  /** The soft background of the directed shot on screen (`procam/ProLayer.ts`), read by the MAX mix's depth-of-field part; null with no shot. */
-  get proBand(): ProBand | null { return this.proLayer?.band ?? null; }
-
-  /** The stage tells the layer where each figure's painted box is (`PaintedStage`), so a directed shot can keep them whole. */
-  proBoxes(boxOf: BoxOf): void { this.proBoxOf = boxOf; this.proLayer?.setBoxes(boxOf); }
+  get pro(): ReturnType<BattleCameraPro['port']> { return this.proRig.port(this.camera.aspect); }
 
   get rigNames(): string[] { return [...this.rigs.keys()]; }
 
@@ -189,7 +170,7 @@ export class BattleCamera {
     this.swayScale = rig.sway;
     this.restFov = rig.fov ?? this.camera.fov;
     if (rig.fov !== undefined) {
-      this.camera.fov = this.fovBase = rig.fov;
+      this.camera.fov = this.proRig.fovBase = rig.fov;
       this.camera.updateProjectionMatrix();
     }
     this.apply(0);
@@ -216,7 +197,7 @@ export class BattleCamera {
     this.targetLook.copy(rig.lookAt);
     this.tweening = true;
 
-    const fromFov = this.layerOut ? this.fovBase : this.camera.fov; // the rig's own lens, not the one a directed shot is drawing
+    const fromFov = this.proRig.out ? this.proRig.fovBase : this.camera.fov; // the rig's own lens, not the one a directed shot is drawing
     const toFov = rig.fov ?? fromFov;
     this.restFov = toFov;
     const fromSway = this.swayScale;
@@ -229,7 +210,7 @@ export class BattleCamera {
         this.curLook.lerpVectors(this.tweenFromLook, this.targetLook, t);
         this.swayScale = fromSway + (rig.sway - fromSway) * t;
         if (toFov !== fromFov) {
-          this.fovBase = this.camera.fov = fromFov + (toFov - fromFov) * t;
+          this.proRig.fovBase = this.camera.fov = fromFov + (toFov - fromFov) * t;
           this.camera.updateProjectionMatrix();
         }
       },
@@ -286,17 +267,13 @@ export class BattleCamera {
     this.fx.to(this.punchAmount, fraction, {
       durationMs: inMs,
       easing: 'cubicOut',
-      onUpdate: (v) => {
-        this.punchAmount = v;
-      },
+      onUpdate: (v) => { this.punchAmount = v; },
     });
     return this.fx.toAsync(fraction, 0, {
       durationMs: ms - inMs,
       delayMs: inMs,
       easing: 'quadInOut',
-      onUpdate: (v) => {
-        this.punchAmount = v;
-      },
+      onUpdate: (v) => { this.punchAmount = v; },
     });
   }
 
@@ -309,9 +286,7 @@ export class BattleCamera {
     return this.fx.toAsync(this.punchAmount, fraction, {
       durationMs: Math.max(1, ms),
       easing: 'quadInOut',
-      onUpdate: (v) => {
-        this.punchAmount = v;
-      },
+      onUpdate: (v) => { this.punchAmount = v; },
     });
   }
 
@@ -324,9 +299,7 @@ export class BattleCamera {
     return this.fx.toAsync(this.punchAmount, 0, {
       durationMs: Math.max(1, ms),
       easing: 'quadInOut',
-      onUpdate: (v) => {
-        this.punchAmount = v;
-      },
+      onUpdate: (v) => { this.punchAmount = v; },
     });
   }
 
@@ -389,20 +362,14 @@ export class BattleCamera {
         damp(this.curLook.z, this.targetLook.z, 4.5, dt),
       );
     }
-    if (this.proLayer) { // the directed camera answers a pose to draw, or null (the rig's own)
-      if (!this.layerOut) this.fovBase = this.camera.fov;
-      this.layerOut = this.proLayer.step(dt, { pos: [this.curPos.x, this.curPos.y, this.curPos.z], look: [this.curLook.x, this.curLook.y, this.curLook.z], fov: this.fovBase, roll: 0 }, this.camera.aspect);
-    }
+    this.proRig.step(dt, this.curPos, this.curLook, this.camera); // the directed camera answers a pose to draw, or null (the rig's own)
     this.swayClock += dt;
     this.apply(this.swayClock);
   }
 
   private apply(clock: number): void {
-    const lo = this.layerOut;
-    if (lo) { this.layerPos.set(...lo.pose.pos); this.layerLook.set(...lo.pose.look); }
-    const P = lo ? this.layerPos : this.curPos;
-    const L = lo ? this.layerLook : this.curLook;
-    const a = this.swayOff() ? 0 : this.swayAmplitude * this.swayScale * (lo ? lo.sway : 1);
+    const P = this.proRig.eye(this.curPos), L = this.proRig.aim(this.curLook); // the directed shot's pose, else the rig's
+    const a = this.swayOff() ? 0 : this.swayAmplitude * this.swayScale * this.proRig.sway;
     const s = this.swaySpeed;
     let ox = Math.sin(clock * s) * a + Math.sin(clock * s * 0.37 + 1.1) * a * 0.4;
     let oy = Math.sin(clock * s * 0.73 + 2.2) * a * 0.55;
@@ -425,12 +392,8 @@ export class BattleCamera {
     const t = this.truck; // RUN-IN's truck, on top of the rig: the whole camera and its look-at slid together
     this.camera.position.set(P.x + ox + px + t.x, P.y + oy + py + t.y, P.z + oz + pz + t.z);
     this.camera.lookAt(L.x + ox * 0.18 + t.x, L.y + oy * 0.18 + t.y, L.z + t.z);
-    if (lo) { // the directed shot's lens; with the layer gone the rig's own comes back
-      if (this.camera.fov !== lo.pose.fov) { this.camera.fov = lo.pose.fov; this.camera.updateProjectionMatrix(); }
-    } else if (this.fovDrawn && this.camera.fov !== this.fovBase) { this.camera.fov = this.fovBase; this.camera.updateProjectionMatrix(); }
-    this.fovDrawn = lo !== null;
-    // Roll last: `lookAt` rebuilds the whole orientation from the up vector, so anything applied before it is thrown away.
-    const roll = this.rollRad + (lo ? (lo.pose.roll * Math.PI) / 180 : 0);
+    // Roll last: `lookAt` rebuilds the whole orientation from the up vector, so anything applied before it is thrown away (the directed shot's lens and roll come in here).
+    const roll = this.rollRad + this.proRig.draw(this.camera);
     if (roll !== 0) this.camera.rotateZ(roll);
   }
 }

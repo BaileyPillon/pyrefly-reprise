@@ -106,6 +106,11 @@ export interface ActionShot extends ShotCtx {
   readonly actor: ShotSubject;
   readonly targets: readonly ShotSubject[];
   readonly action: ShotAction;
+  /**
+   * Wait the cast's wind-up hold at the live speed: the pause `BattleMoments` awaits itself after its push in on a cast (`MOMENT_TIMING.castHold`). A director that takes `actionOpen` takes that hold
+   * with it, so a director that wants the spell to land when it always did awaits this before it answers (the pro camera does). Only `actionOpen` carries it. Additive.
+   */
+  castHold?(): Promise<void>;
 }
 
 /** A blow lands. Every hit asks, the later hits of a multi-hit action too (`BattleMoments` itself cuts only on the first). */
