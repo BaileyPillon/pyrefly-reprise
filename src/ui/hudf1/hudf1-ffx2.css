@@ -24,6 +24,9 @@
   right: 18px; bottom: auto; top: 146px; width: 177px; box-sizing: border-box; padding: 6px 10px 10px 22px; max-height: 114px; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; --ig-cascade-step: var(--f1-cmd-step);
 }
 .ffx2hud.hud-f1 .ffx2hud__command::-webkit-scrollbar { display: none; }
+/* r63-play: a list with its title (SKILL > White Magic, Items, ...) puts the sticky title above the rows, which shifts them down by about 17 grid px; the fixed window then let its fourth row run 9 grid px over the first party card (seen in the
+   real Chapter IV run at 2560 x 1440: "ESUNA" over Yuna's HP). With a title the window is three rows and ends above the cards (976 px at 2560 x 1440 against the card's 1004); the top level (no title) keeps four. */
+.ffx2hud.hud-f1 .ffx2hud__command:has(.ffx2cmd__title) { max-height: 98px; }
 .ffx2hud.hud-f1 .ffx2hud__command .ig-cmd-stack { gap: 3.5px; }
 .ffx2hud.hud-f1 .ig-cmd {
   width: 145px; height: 22px; gap: 3.5px; padding: 0 10px 0 7.5px; margin-right: 0 !important; position: relative;
