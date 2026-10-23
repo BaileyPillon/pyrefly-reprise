@@ -321,7 +321,7 @@ export class LookRig {
     (u['fogColor']!.value as Vector3).set(...this.room.fogRgb);
     (u['rim']!.value as Vector3).set(v('rim.gain'), v('rim.width') * scale, v('rim.lit'));
     (u['rimColor']!.value as Vector3).set(...lin(lightColour(this.room.light.color, 0.12)));
-    if (this.bold) this.bold.rimOff.update(u, this.bold.boxes, this.bold.boxCount); // lane boss-matte: no rim on the re-cut bosses (last frame's boxes)
+    this.bold?.rimOff.copyTo(u); // lane boss-matte: no rim on the re-cut bosses (the bold pass's boxes of the frame before)
     u['caShift']!.value = cost.ca ? (2 * v('ca') * scale) / Math.max(1, W) : 0;
     (u['outline']!.value as Vector2).set(v('outline.width') * scale, v('outline.strength'));
     (u['ink']!.value as Vector3).set(...p.outline.ink);

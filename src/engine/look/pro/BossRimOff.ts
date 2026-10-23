@@ -9,7 +9,7 @@
  *
  * Nothing is sent while the switch is off (`bossCleanOn`): the counts stay 0 and the shader draws today's rim. Both games (shared plumbing); only the two bosses of `BossClean.ts` are ever named.
  */
-import { Vector3, Vector4, type Object3D } from 'three';
+import { Box3, Vector3, Vector4, type Camera, type Object3D } from 'three';
 import { BOSS_FEET, bossCleanOn, footFit, type FootActor } from './BossClean.ts';
 
 export const RIM_OFF_BOSSES = 2;
@@ -24,41 +24,78 @@ interface RimOffUniforms {
   rimOtherN: Cell<number>;
 }
 
+const world = new Box3();
+const corner = new Vector3();
+
+/** A boss actor's POSED bounds as a padded screen box (frame uv: x0, y0, x1, y1), or null when it has none: a rigged boss bends its parts away from their rest boxes, which are all the bold pass's tracked boxes know. */
+function posedBox(actor: Object3D, camera: Camera, out: Vector4): Vector4 | null {
+  world.setFromObject(actor, true);
+  if (world.isEmpty()) return null;
+  let x0 = 9, y0 = 9, x1 = -9, y1 = -9;
+  for (let k = 0; k < 8; k++) {
+    corner.set(k & 1 ? world.max.x : world.min.x, k & 2 ? world.max.y : world.min.y, k & 4 ? world.max.z : world.min.z).project(camera);
+    x0 = Math.min(x0, corner.x * 0.5 + 0.5);
+    x1 = Math.max(x1, corner.x * 0.5 + 0.5);
+    y0 = Math.min(y0, corner.y * 0.5 + 0.5);
+    y1 = Math.max(y1, corner.y * 0.5 + 0.5);
+  }
+  const px = (x1 - x0) * 0.06;
+  const py = (y1 - y0) * 0.05;
+  return out.set(x0 - px, y0 - py, x1 + px, y1 + py);
+}
+
 export class RimOffBoxes {
   /** The actor behind each of `LookBold.boxes` (filled by the figure loop, in the same order). */
   readonly actors: Object3D[] = [];
+  private readonly bossBox: Vector4[] = Array.from({ length: RIM_OFF_BOSSES }, () => new Vector4());
+  private readonly otherBox: Vector4[] = Array.from({ length: RIM_OFF_OTHERS }, () => new Vector4());
+  private nb = 0;
+  private no = 0;
 
-  /** Split the figures' boxes into the bosses' and the others' (the bold pass: right after its figure loop; the main pass: from the bold pass's last frame). */
-  update(u: Record<string, { value: unknown }>, boxes: readonly Vector4[], n: number): void {
+  /**
+   * Split the figures' boxes into the bosses' and the others' and hand them to a pass's uniforms. With a `camera` (the bold pass, right after its figure loop) a boss's box is its POSED bounds projected
+   * on the frame; without one, the union of its parts' tracked boxes (what the tests and a pass with no camera have).
+   */
+  update(u: Record<string, { value: unknown }>, boxes: readonly Vector4[], n: number, camera?: Camera): void {
+    this.refresh(boxes, n, camera);
+    this.copyTo(u);
+    drawn.clear(); // `bossFigure` is asked once per part in the figure loop; the next frame starts again
+  }
+
+  /** The last split, into a pass's uniforms (the main look pass reads what the bold pass found a frame ago). */
+  copyTo(u: Record<string, { value: unknown }>): void {
     const c = u as unknown as RimOffUniforms;
     if (!Array.isArray(c.uRimBoss.value) || c.uRimBoss.value.length !== RIM_OFF_BOSSES) { // a ShaderPass shares array elements between clones, so each pass builds its own once
       c.uRimBoss.value = Array.from({ length: RIM_OFF_BOSSES }, () => new Vector4());
       c.uRimOther.value = Array.from({ length: RIM_OFF_OTHERS }, () => new Vector4());
     }
-    const boss = c.uRimBoss.value;
-    const other = c.uRimOther.value;
-    let nb = 0;
-    let no = 0;
-    const bossOf: Object3D[] = []; // a rigged boss is one tracked mesh per PART: one box for the whole boss, the union of its parts' boxes
+    for (let i = 0; i < this.nb; i++) c.uRimBoss.value[i]!.copy(this.bossBox[i]!);
+    for (let i = 0; i < this.no; i++) c.uRimOther.value[i]!.copy(this.otherBox[i]!);
+    c.rimBossN.value = this.nb;
+    c.rimOtherN.value = this.nb > 0 ? this.no : 0;
+  }
+
+  private refresh(boxes: readonly Vector4[], n: number, camera?: Camera): void {
+    const bossOf: Object3D[] = []; // a rigged boss is one tracked mesh per PART: one box for the whole boss
+    this.nb = 0;
+    this.no = 0;
     for (let i = 0; i < n; i++) {
       const actor = this.actors[i];
       const art = (actor?.userData['bossClean'] as { artId?: string } | undefined)?.artId;
       if (actor && art !== undefined && bossCleanOn(art)) {
         let k = bossOf.indexOf(actor);
-        if (k < 0 && nb < RIM_OFF_BOSSES) {
-          k = nb++;
+        if (k < 0 && this.nb < RIM_OFF_BOSSES) {
+          k = this.nb++;
           bossOf[k] = actor;
-          boss[k]!.copy(boxes[i]!);
+          this.bossBox[k]!.copy(boxes[i]!);
         } else if (k >= 0) {
-          const b = boss[k]!;
+          const b = this.bossBox[k]!;
           const x = boxes[i]!;
           b.set(Math.min(b.x, x.x), Math.min(b.y, x.y), Math.max(b.z, x.z), Math.max(b.w, x.w));
         }
-      } else if (no < other.length) other[no++]!.copy(boxes[i]!);
+      } else if (this.no < this.otherBox.length) this.otherBox[this.no++]!.copy(boxes[i]!);
     }
-    c.rimBossN.value = nb;
-    c.rimOtherN.value = nb > 0 ? no : 0;
-    drawn.clear(); // `bossFigure` is asked once per part in the figure loop; the next frame starts again
+    if (camera) for (let k = 0; k < this.nb; k++) posedBox(bossOf[k]!, camera, this.bossBox[k]!);
   }
 }
 

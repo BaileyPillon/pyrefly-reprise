@@ -2,7 +2,7 @@
  * Lane boss-matte (2026-10-23): the re-cut bosses' code half (`engine/look/pro/BossClean.ts`): the switch, the two art ids, the rim that is zero only while a boss part draws, the shadow fitted under the footprint.
  * Game case: Bahamut FFX-2 only, Seymour Flux FFX only; the plumbing is shared.
  */
-import { Mesh, Object3D, Vector3, Vector4 } from 'three';
+import { BoxGeometry, Mesh, Object3D, PerspectiveCamera, Vector3, Vector4 } from 'three';
 import { afterEach, describe, expect, it } from 'vitest';
 import { RimOffBoxes, bossFigure } from '../../../src/engine/look/pro/BossRimOff.ts';
 import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts';
@@ -248,6 +248,36 @@ describe('the bold pass rim is off inside a re-cut boss box, and only there', ()
     expect(u['rimOtherN']!.value).toBe(1);
     expect((u['uRimBoss']!.value as Vector4[])[0]!.toArray()).toEqual([0.5, 0.1, 0.9, 0.9]);
     expect((u['uRimOther']!.value as Vector4[])[0]!.toArray()).toEqual([0.1, 0.1, 0.3, 0.6]);
+  });
+
+  it('with a camera a boss box is its POSED bounds on the frame, not the rest boxes of its parts', () => {
+    setBossClean('clean');
+    setDemoChapter('ffx2-bahamut');
+    const boss = new Object3D();
+    const part = new Mesh(new BoxGeometry(2, 4, 0.1));
+    part.position.set(1.5, 2, 0); // a part bent away from where its rest box says
+    boss.add(part);
+    attachBossClean(boss, 'ffx2-bahamut', 'enemy');
+    const cam = new PerspectiveCamera(40, 16 / 9, 0.1, 100);
+    cam.position.set(0, 2, 10);
+    cam.lookAt(0, 2, 0);
+    cam.updateMatrixWorld(true);
+    const u = uniforms();
+    const r = new RimOffBoxes();
+    r.actors.push(boss);
+    const rest = box(0.05, 0.05, 0.1, 0.1); // the tracked rest box: nowhere near the posed part
+    r.update(u, [rest], 1, cam);
+    expect(u['rimBossN']!.value).toBe(1);
+    const b = (u['uRimBoss']!.value as Vector4[])[0]!;
+    expect(b.x).toBeGreaterThan(0.5); // the part sits right of the frame centre
+    expect(b.z).toBeGreaterThan(b.x);
+    expect(b.w).toBeGreaterThan(0.5);
+    expect(b.y).toBeLessThan(0.5);
+    // the main pass reads the same split with no camera and no recompute
+    const u2 = uniforms();
+    r.copyTo(u2);
+    expect((u2['uRimBoss']!.value as Vector4[])[0]!.toArray()).toEqual(b.toArray());
+    expect(u2['rimBossN']!.value).toBe(1);
   });
 
   it('sends nothing while the switch is off, or outside the two chapters', () => {

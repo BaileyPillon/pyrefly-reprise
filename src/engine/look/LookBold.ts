@@ -303,7 +303,7 @@ export class LookBold {
     const u = pass.uniforms;
     const gloss = rb.gloss * o.tweak('bold.gloss', 1);
     const n = this.figures(camera, o.aspect, { ...fx, shadow: { ...fx.shadow, strength: fx.shadow.strength * o.tweak('bold.shadow', 1) } }, gloss, u['uFigA']!.value as Vector4[], u['uFigB']!.value as Vector4[]);
-    this.rimOff.update(u, this.boxes, n);
+    this.rimOff.update(u, this.boxes, n, camera);
     // the stage light: an ellipse round the fight, eased so a figure arriving or leaving never makes it jump
     const FA0 = u['uFigA']!.value as Vector4[];
     const goal = stageEllipse(FA0.slice(0, n).map((a) => [a.x, a.y] as const), o.aspect);
