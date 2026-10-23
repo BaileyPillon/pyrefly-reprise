@@ -6,8 +6,8 @@
 
 /* Intel (X): the advisor's one-row strip is placed by the HUD against today's party column and fell across Paine's card (review M4, Chapter IV); it takes the free band along the top, right of the boss ribbon,
    with its chip under it. !important: the HUD writes left / bottom as inline styles every frame. */
-.ffx2hud.hud-f1.f1-intel .mad__card { left: 196px !important; top: 14px !important; bottom: auto !important; }
-.ffx2hud.hud-f1.f1-intel .mad__toggle { left: 196px !important; top: 31px !important; bottom: auto !important; }
+.ffx2hud.hud-f1.f1-intel .mad__card[data-zone='tip'] { left: 196px !important; top: 14px !important; bottom: auto !important; }
+.ffx2hud.hud-f1.f1-intel .mad:has(.mad__card[data-zone='tip']) .mad__toggle { left: 196px !important; top: 31px !important; bottom: auto !important; }
 
 /* the boss gauge strip gives way to the ribbon (its numerals and parts return behind Intel) */
 .ffx2hud.hud-f1:not(.f1-intel) .ffx2hud__enemies { opacity: 0; pointer-events: none; }
