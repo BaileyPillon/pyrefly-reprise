@@ -56,6 +56,9 @@ export const LookBoldShader = {
     poolGain: { value: 1 },
     /** The rim: gain, width (device px), how far it follows the light's side; its colour. */
     bRim: { value: new Vector3(1.7, 2.6, 0.85) },
+    /** Lane boss-matte (`look/pro/BossMask.ts`): the figures' mask, R = 1 where a re-cut boss is the figure in front, A = 1 where any figure is (a half-size target, null until the first draw); `bossMaskOn` 0 = today's rim everywhere. */
+    tBossMask: { value: null as unknown },
+    bossMaskOn: { value: 0 },
     rimColor: { value: new Vector3(0.8, 0.9, 1) },
     /** Embers: the lamps (frame uv and a radius in frame heights), how many, then gain, size (frame heights), rise rate; the colour. */
     uEmber: { value: [] as Vector3[] },
@@ -106,6 +109,8 @@ export const LookBoldShader = {
     uniform vec4 uPoolC[MAX_POOL];
     uniform float poolGain;
     uniform vec3 bRim;
+    uniform sampler2D tBossMask;
+    uniform float bossMaskOn;
     uniform vec3 rimColor;
     uniform vec3 uEmber[MAX_EMB];
     uniform float emberN;
@@ -139,6 +144,20 @@ ${LIVING_GLSL_DECL}    varying vec2 vUv;
       return s;
     }
     float figAt(vec2 uv) { return 1.0 - clamp(texelAt(uv).a, 0.0, 1.0); }
+    // lane boss-matte (BossMask.ts): the share of what the figures' mask holds round this pixel (its own and eight taps 2.5 frame px away) that is a re-cut boss; 0 with nothing drawn there (today's rim)
+    float bossShare(vec2 uv) {
+      vec4 c = textureLod(tBossMask, uv, 0.0);
+      float b = c.r;
+      float o = c.a - c.r;
+      vec2 r = resolution * 2.5;
+      for (int k = 0; k < 8; k++) {
+        float a = 0.7853982 * float(k);
+        vec4 t = textureLod(tBossMask, uv + vec2(cos(a), sin(a)) * r, 0.0);
+        b += t.r;
+        o += t.a - t.r;
+      }
+      return b / max(b + o, 1e-3);
+    }
 ${LIVING_GLSL_FUNCS}
     void main() {
       vec2 uv = vUv;
@@ -299,6 +318,7 @@ ${LIVING_GLSL_TOP}      float fig = 1.0 - clamp(src.a, 0.0, 1.0);
         }
         float e = fig * mix(sumBg / float(EDGE_TAPS), lit / wl, bRim.z);
         e = smoothstep(0.04, 0.85, e);
+        if (bossMaskOn > 0.5 && e > 0.001) e *= 1.0 - bossShare(uv); // a re-cut boss draws no bold-pass rim (BossMask.ts)
         col += rimColor * e * bRim.x * (0.5 + 0.9 * luma3(col));
       }
 

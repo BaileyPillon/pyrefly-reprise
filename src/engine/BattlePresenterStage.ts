@@ -21,6 +21,7 @@ import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
 import { tryRigFigure, type BuiltFigure, type FigureRequest } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
 import { unregisterRigUse } from './rig/RigLoad.ts';
+import { attachBossClean, tickBossClean } from './look/pro/BossClean.ts'; // lane boss-matte: the two re-cut bosses draw no rim light and cast their shadow under their footprint (`?boss=clean`, off by default)
 import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
@@ -446,6 +447,7 @@ export class PaintedStage implements BattleStage {
       else if (!painted.has('ko')) void actor.lieDown(0); // D-301: a painted fall lies by itself
     }
 
+    attachBossClean(actor, artId, c.side); // lane boss-matte: a controller for Bahamut and Seymour Flux only (it acts only while `?boss=clean` / `?pack=demo` plays in Chapter I or IV)
     this.opts.scene.add(actor);
     actor.still = () => this.opts.comfort?.().reduceMotion === true;
     actor.softFlash = () => this.opts.reduceFlashes?.() === true; // PR-0032: REDUCE FLASHES softens every flash on this figure
@@ -996,7 +998,7 @@ export class PaintedStage implements BattleStage {
    */
   update(dt: number, realDt: number = dt): void {
     for (const id of this.actors.keys()) this.placeAnchored(id);
-    for (const { actor } of this.actors.values()) actor.update(dt, realDt);
+    for (const { actor } of this.actors.values()) { actor.update(dt, realDt); tickBossClean(actor); } // boss-matte: after the actor's own update, so its shadow and ring fit is the last word
     this.motion.update(dt); // RUN-IN: the camera truck and the smear's afterimages
     this.partRings.update(
       dt,

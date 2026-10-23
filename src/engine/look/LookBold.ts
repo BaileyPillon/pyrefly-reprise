@@ -20,6 +20,7 @@ import type { RelightLights } from './relight/RelightLights.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
 import type { ProSeam } from './pro/ProSeam.ts';
+import { BossMask, bossFigure } from './pro/BossMask.ts'; // lane boss-matte: the re-cut bosses' own mask (no rim on them) and one contact ellipse each
 import { MAX_RIPPLES } from './living/LivingConfig.ts';
 import { LookLiving, type LivingUniforms } from './living/LookLiving.ts';
 
@@ -61,14 +62,14 @@ export class LookBold {
   /** Every visible actor's screen box (x0, y0, x1, y1 in frame uv), padded: the blur keeps them sharp (`LookBlurShader`). */
   readonly boxes: Vector4[] = Array.from({ length: MAX_FIG }, () => new Vector4());
   boxCount = 0;
-  /** For the debug API and the captures. */
+  readonly bossMask = new BossMask(); // lane boss-matte: which figure is a re-cut boss, per pixel (both rims read it)
   /** Release 62 (decision 173b, FFX-2): Mega Flare's flood and white-out, fed from the spell layer's landing taps while this pass is on. */
   readonly flare = new LookFlare();
   /** Release 62 (decision 173a, FFX-2's Bevelle underground): the beam's dust, the lamps' flicker, the floor's rings (`look/living/`). */
   readonly living = new LookLiving();
   /** Each painted figure's feet on the frame this frame, by actor: where a hit's ring starts. */
   private readonly feet = new Map<object, readonly [number, number]>();
-  readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
+  /** For the debug API and the captures. */ readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
 
   constructor(private readonly r: Renderer) {}
 
@@ -80,6 +81,7 @@ export class LookBold {
   /** Build the pass now (the battle screen's warm-up compiles it before the first frame); `update` finds it there. */
   prepare(q: LookQuality): void {
     this.ensure(q);
+    this.bossMask.warm(this.r.renderer); // lane boss-matte: the mask's program, compiled before the first frame
   }
 
   private ensure(q: LookQuality): ShaderPass {
@@ -177,14 +179,14 @@ export class LookBold {
       const ex = this.extentsOf(mat.uniforms['map']!.value as Texture | null);
       const topV = 1 - ex.top;
       const gap = Math.max(0, 1 - ex.bottom - foot);
+      const bf = bossFigure(t.actor); // lane boss-matte: a rigged boss is one mesh per part: ONE contact ellipse and reflection under its footprint, the other parts draw none
       const baseC = (ex.baseLeft + ex.baseRight) / 2;
-      const hwBase = Math.max(0.1, ((ex.baseRight - ex.baseLeft) / 2) * 1.2 + 0.03) * W;
+      const hwBase = bf && bf !== 'skip' ? bf.rx : Math.max(0.1, ((ex.baseRight - ex.baseLeft) / 2) * 1.2 + 0.03) * W;
       const hwFull = ((ex.right - ex.left) / 2) * W;
       // the point on the floor under the figure's base
-      g.set(c.x + x.x * (baseC - 0.5) + y.x * (foot - 0.5), 0.014, c.z + x.z * (baseC - 0.5) + y.z * (foot - 0.5));
+      g.set(bf && bf !== 'skip' ? bf.cx : c.x + x.x * (baseC - 0.5) + y.x * (foot - 0.5), 0.014, bf && bf !== 'skip' ? f.z : c.z + x.z * (baseC - 0.5) + y.z * (foot - 0.5));
       p.copy(g).project(cam);
-      const gu = p.x * 0.5 + 0.5;
-      const gv = p.y * 0.5 + 0.5;
+      const gu = p.x * 0.5 + 0.5, gv = p.y * 0.5 + 0.5;
       if (p.z > 1 || gu < -0.3 || gu > 1.3) continue;
       this.feet.set(t.actor, [gu, gv]);
       // the base's radii on the screen: along the floor's two axes
@@ -201,10 +203,7 @@ export class LookBold {
       const heightV = Math.max(0.02, q.y * 0.5 + 0.5 - gv);
       const lift = Math.max(0, f.y);
       // the figure's box on the screen: its opaque painting's four corners, padded a little
-      let bx0 = 9;
-      let by0 = 9;
-      let bx1 = -9;
-      let by1 = -9;
+      let bx0 = 9, by0 = 9, bx1 = -9, by1 = -9;
       for (const [cu, cv] of [[ex.left, 1 - ex.bottom], [ex.right, 1 - ex.bottom], [ex.right, 1 - ex.top], [ex.left, 1 - ex.top]] as const) {
         q.set(c.x + x.x * (cu - 0.5) + y.x * (cv - 0.5), c.y + x.y * (cu - 0.5) + y.y * (cv - 0.5), c.z + x.z * (cu - 0.5) + y.z * (cv - 0.5)).project(cam);
         bx0 = Math.min(bx0, q.x * 0.5 + 0.5);
@@ -215,9 +214,10 @@ export class LookBold {
       const bpx = (bx1 - bx0) * 0.06;
       const bpy = (by1 - by0) * 0.05;
       this.boxes[n]!.set(bx0 - bpx, by0 - bpy, bx1 + bpx, by1 + bpy);
-      A[n]!.set(gu, gv, Math.max(rx, 0.01), Math.max(ry, 0.004));
-      B[n]!.set(shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
-      n++;
+      const lowered = bf !== null && bf !== 'skip' && bf.drop > 0; // lane boss-matte: a boss's shadow is taller and sits lower on the frame, so its dark core is below the figure's lowest edge instead of behind it
+      A[n]!.set(gu, lowered ? gv - ry * bf.drop : gv, Math.max(rx, 0.01), Math.max(lowered ? ry * bf.tall : ry, 0.004));
+      if (lowered) this.bossMask.foot.copy(A[n]!); // lane boss-matte: the boss's ellipse on the frame, for its floor pool
+      B[n++]!.set(bf === 'skip' ? 0 : shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 && bf !== 'skip' && !lowered ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
     }
     this.boxCount = n;
     for (let i = n; i < MAX_FIG; i++) {
@@ -301,6 +301,7 @@ export class LookBold {
     const u = pass.uniforms;
     const gloss = rb.gloss * o.tweak('bold.gloss', 1);
     const n = this.figures(camera, o.aspect, { ...fx, shadow: { ...fx.shadow, strength: fx.shadow.strength * o.tweak('bold.shadow', 1) } }, gloss, u['uFigA']!.value as Vector4[], u['uFigB']!.value as Vector4[]);
+    this.bossMask.frame(this.r.renderer, scene, camera, this.tracked.values(), o.W, o.H, u); // lane boss-matte
     // the stage light: an ellipse round the fight, eased so a figure arriving or leaving never makes it jump
     const FA0 = u['uFigA']!.value as Vector4[];
     const goal = stageEllipse(FA0.slice(0, n).map((a) => [a.x, a.y] as const), o.aspect);
@@ -342,6 +343,7 @@ export class LookBold {
         PC[i]!.set(c[0], c[1], c[2], p.s);
       } else PC[i]!.w = 0;
     }
+    this.bossMask.pool(PA, PC, lights.pools.length, rb.rim ?? [0.35, 0.78, 1]); // lane boss-matte: a lit floor under a re-cut boss, so its contact shadow has something to read against
     u['poolGain']!.value = fx.pool.gain * o.tweak('bold.pool', 1);
     // rim, in the room's key colour
     (u['bRim']!.value as Vector3).set(fx.rim.gain * o.tweak('bold.rim', 1), fx.rim.width * o.scale, fx.rim.lit);
@@ -381,7 +383,7 @@ export class LookBold {
     this.flare.off(this.pass ? (this.pass.uniforms as unknown as FlareUniforms) : undefined);
     this.living.off(this.pass ? (this.pass.uniforms as unknown as LivingUniforms) : undefined);
     if (this.pass) this.pass.enabled = false;
-    this.stats.on = false;
+    this.stats.on = this.bossMask.on = false;
   }
 
   dispose(): void {
@@ -392,6 +394,6 @@ export class LookBold {
     }
     if (this.depth instanceof Texture) this.depth.dispose();
     this.depth = null;
-    this.tracked.clear();
+    this.tracked.clear(); this.bossMask.dispose();
   }
 }

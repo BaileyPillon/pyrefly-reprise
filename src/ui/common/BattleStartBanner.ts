@@ -32,6 +32,7 @@ import { escapeHtml } from './html.ts';
 import { faceImgHtml, faceLayersHtml } from './portrait.ts';
 import { chapterLabel } from './roman.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+import { bossCleanCard } from '../../engine/look/pro/BossClean.ts'; // lane boss-matte
 
 export interface BattleStartBannerMember {
   /** The character's own id — `tidus`, `yuna`, `paine`. */
@@ -192,6 +193,7 @@ export class BattleStartBanner {
       // The same painting the diorama stages (`BattlePresenterArt.artUrlFor`),
       // so the boss on the card is the boss on the field.
       if (art) art.style.backgroundImage = `url(${artUrl(`art/characters/${opts.artKey}/idle.png`)})`;
+      if (art && bossCleanCard(opts.artKey)) art.classList.add('bstart__art--clean'); // lane boss-matte: a re-cut boss is a clean cut-out, so the gold glow that read as a pale halo gives way to a tight ink edge and a floor shadow (`?boss=clean` / `?pack=demo`, Chapters I and IV)
     }
     if (opts.backdropKey) {
       const wash = el.querySelector('.bstart__wash') as HTMLElement | null;
