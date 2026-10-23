@@ -12,6 +12,7 @@ import { takeDefeatNote } from '../../../src/engine/pro/staging/DefeatNote.ts';
 import { FREEZE_HOLD_MS } from '../../../src/engine/pro/staging/EndingPlan.ts';
 import type { BreathCue, EndingCue, OpeningCue, StagingPort } from '../../../src/engine/pro/staging/StagingPort.ts';
 import { FakeDamageNumbers, FakeMessageBar, FakeStage } from '../helpers/FakeStage.ts';
+import { stageLift, stageTell, stagingPort } from '../../../src/engine/BattlePresenterStaging.ts';
 
 type Seq<T> = T extends unknown ? Omit<T, 'seq'> : never;
 
@@ -185,6 +186,13 @@ describe('the held breath through the presenter', () => {
     const skip = rig({ speed: 'skip' });
     await skip.play(events);
     expect(skip.port.log).toEqual([]);
+  });
+
+  it('a minimal context with no deps (the older presenter tests build one) stages nothing and does not throw', () => {
+    const bare = { stage: new FakeStage(), speed: () => 'normal' } as never;
+    expect(stagingPort(bare, 'breath')).toBeNull();
+    expect(() => stageLift(bare, 'mortiorchis')).not.toThrow();
+    expect(() => stageTell(bare, { type: 'damage', targetId: 'tidus', hitIndex: 0 } as never, { serial: 1, actorId: 'mortiorchis', abilityId: 'total-annihilation', targets: [] }, 900)).not.toThrow();
   });
 
   it('outside the two demo chapters nothing is staged', async () => {

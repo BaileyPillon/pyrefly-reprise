@@ -62,9 +62,11 @@ export class ProStageLayer implements StagingPort {
     this.under = doc.createElement('div');
     this.under.className = 'pst';
     this.under.dataset['game'] = o.game;
+    this.under.setAttribute('aria-hidden', 'true'); // pictures only: the words that matter (the HUD's, the defeat card's) are the screen's own
     this.top = doc.createElement('div');
     this.top.className = 'pst-top';
     this.top.dataset['game'] = o.game;
+    this.top.setAttribute('aria-hidden', 'true');
     o.root.prepend(this.under);
     o.root.appendChild(this.top);
     this.breathView = new BreathView(this.under);
@@ -277,10 +279,10 @@ export class ProStageLayer implements StagingPort {
     return this.o.root;
   }
 
-  /** The rectangles this frame, read at 12 Hz (the figures hardly move in a tell, and a rect costs a projection each). */
+  /** The rectangles, read every frame or so (a directed camera, `pro-camera`, may be moving during a tell and the pools must stay on the figures; a rect costs one projection each, a few microseconds). */
   private readGeom(over?: { attacker: string; party: readonly string[]; companions: readonly string[] }): BreathGeom {
     const kind = over === undefined ? 'breath' : 'opening';
-    if (this.geom && kind === this.geomKey && this.clock - this.rectAt < 80) return this.geom;
+    if (this.geom && kind === this.geomKey && this.clock - this.rectAt < 12) return this.geom;
     this.rectAt = this.clock;
     this.geomKey = kind;
     const s = over ?? this.subject;
@@ -344,7 +346,7 @@ export class ProStageLayer implements StagingPort {
   }
 }
 
-/** An Overdrive's opening on the held breath's canvas: the arena lightens toward ivory (half the breath's drain), the caster's chest glows, the strike's pop is the flash. */
+/** An Overdrive's opening on the held breath's canvas: the arena lightens toward ivory (60 percent of the breath's drain), the caster's chest glows, the strike's pop is the flash. */
 function odToBreath(f: OdFrame): ReturnType<typeof breathFrame> {
-  return { name: 0, drain: 0.5 * f.light, hud: 1 - (1 - 1 / 6) * f.light, ring: 0, ringScale: 1, inflow: 0, core: 0.55 * f.light, flash: f.flash, flood: 0, alive: f.alive };
+  return { name: 0, drain: 0.6 * f.light, hud: 1 - (1 - 1 / 6) * f.light, ring: 0, ringScale: 1, inflow: 0, core: 0.65 * f.light, flash: f.flash, flood: 0, alive: f.alive };
 }

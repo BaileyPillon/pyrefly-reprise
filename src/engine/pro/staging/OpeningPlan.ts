@@ -46,12 +46,13 @@ export function odFrame(now: number, m: OdMarks): OdFrame {
   if (m.at === null) return { light: 0, name: 0, glint: -1, flash: 0, alive: false };
   const t = now - m.at;
   const H = Math.max(1, m.holdMs);
-  const out = smooth((t - (H - 260)) / 360); // the light and the name leave over the last 260 ms and the 100 after it
+  const out = smooth((t - (H - 260)) / 360); // the light leaves over the last 260 ms and the 100 after it
+  const nameOut = smooth((t - (H - 40)) / 380); // the name stays into the strike's first moment, so two words can be read
   const light = smooth(t / 300) * (1 - out);
-  const name = smooth((t - 160) / 260) * (1 - out);
+  const name = smooth((t - 140) / 240) * (1 - nameOut);
   const g = (t - 0.62 * H) / (0.3 * H);
   const glint = g >= 0 && g <= 1 ? g : -1;
   const peak = m.tame ? 0.25 : 0.7;
   const flash = t >= H - 40 && t < H + 280 ? peak * (1 - smooth((t - (H - 40)) / 320)) : 0;
-  return { light, name, glint, flash, alive: t < H + 380 };
+  return { light, name, glint, flash, alive: t < H + 420 };
 }

@@ -233,8 +233,9 @@ describe('the ending plan', () => {
     expect(odFrame(500, m).name).toBeGreaterThan(0.95);
     expect(odFrame(0.77 * OD_OPEN_HOLD_MS, m).glint).toBeGreaterThanOrEqual(0);
     expect(odFrame(OD_OPEN_HOLD_MS, m).flash).toBeGreaterThan(0.4);
-    expect(odFrame(OD_OPEN_HOLD_MS + 400, m).alive).toBe(false);
+    expect(odFrame(OD_OPEN_HOLD_MS + 430, m).alive).toBe(false);
     expect(odFrame(OD_OPEN_HOLD_MS + 100, m).light).toBeLessThan(0.05);
+    expect(odFrame(OD_OPEN_HOLD_MS - 100, m).name).toBeGreaterThan(0.9); // still readable as the strike begins
   });
 });
 

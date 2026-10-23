@@ -198,10 +198,11 @@
 }
 
 /* ---- the Overdrive opening (FFX): a small name at the caster's side, and a glint along the blade ---- */
+/* the small name: where the command menu was, low on the left (the menu is closed during the opening and the HUD is sunk) */
 .pst__od {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: clamp(24px, 6.5vw, 140px);
+  bottom: 24vh;
   opacity: 0;
   white-space: nowrap;
   will-change: opacity, transform;
@@ -268,6 +269,7 @@
   box-shadow: 0 0 calc(4px * var(--sf-scale)) rgba(255, 170, 214, 0.9);
 }
 [data-pst-open] .ffx2sf__who {
+  text-transform: uppercase;
   font-size: calc(6.5px * var(--sf-scale));
   letter-spacing: 0.38em;
   color: #8d4aa6;
@@ -285,6 +287,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55em;
+  text-transform: uppercase;
   font-size: calc(6.5px * var(--sf-scale));
   letter-spacing: 0.2em;
   color: #4a1a66;

@@ -20,7 +20,7 @@ export class OpeningView {
   frame: OdFrame | null = null;
 
   constructor(
-    private readonly host: HTMLElement,
+    host: HTMLElement,
     private readonly o: ProStageOptions,
   ) {
     const doc = host.ownerDocument;
@@ -76,13 +76,11 @@ export class OpeningView {
       this.frame = null;
       return;
     }
+    // the small name sits where the command menu was (the left of the frame, the menu is closed and the HUD sunk): beside the caster it would stand on his neighbours in the party's formation
+    this.block.style.opacity = f.name.toFixed(3);
+    this.block.style.transform = `translateY(${((1 - f.name) * 8).toFixed(1)}px)`;
     const r = this.actor ? this.o.rectOf(this.actor) : null;
     if (!r) return;
-    const W = this.host.clientWidth || 1600;
-    const right = r.x + r.w / 2 < W * 0.55; // the name goes to the side of the caster with the room
-    this.block.style.opacity = f.name.toFixed(3);
-    this.block.style.transform = `translate(${(right ? r.x + r.w * 1.02 : r.x - r.w * 0.02).toFixed(0)}px, ${(r.y + r.h * 0.1).toFixed(0)}px) translate(${right ? 0 : -100}%, 0) translateY(${((1 - f.name) * 8).toFixed(1)}px)`;
-    this.block.style.textAlign = right ? 'left' : 'right';
     if (f.glint >= 0) {
       const x = r.x + r.w * (-0.1 + 1.2 * f.glint);
       this.glintEl.style.cssText = `opacity:${Math.sin(Math.PI * f.glint).toFixed(3)};width:${(r.w * 0.75).toFixed(0)}px;transform:translate(${x.toFixed(0)}px, ${(r.y + r.h * 0.58).toFixed(0)}px) rotate(-32deg);`;

@@ -26,7 +26,7 @@ import { setDefeatNote } from './pro/staging/DefeatNote.ts';
 
 /** The port, when the piece is on and a layer is mounted; null otherwise. */
 export function stagingPort(ctx: EventCtx, piece: 'breath' | 'ending' | 'opening'): StagingPort | null {
-  const port = ctx.deps.staging ?? null;
+  const port = ctx.deps?.staging ?? null;
   if (port === null || ctx.speed() === 'skip' || !stagingPieceOn(piece)) return null;
   return port;
 }
@@ -136,7 +136,7 @@ export function stageLift(ctx: EventCtx, endedId: CombatantId | null | undefined
   if (l === undefined || endedId === null || endedId === undefined || l.attacker !== endedId) return;
   live.delete(ctx);
   blown.delete(ctx);
-  const port = ctx.deps.staging ?? null;
+  const port = ctx.deps?.staging ?? null;
   port?.breath({ ...stageFacts(ctx), kind: 'lift' });
 }
 
