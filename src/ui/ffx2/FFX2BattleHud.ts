@@ -466,6 +466,7 @@ export class FFX2BattleHud implements HudPort {
       cmdStack: () => this.commandEl.querySelector<HTMLElement>('.ig-cmd-stack'), cmdBlock: () => this.commandEl,
       helpText: () => this.commandInfoEl.querySelector('[data-role="text"]')?.textContent ?? '',
       heroRow: (id) => this.partyEl.querySelector<HTMLElement>(id ? `.ig-stat[data-actor-id="${CSS.escape(id)}"]` : '.ig-stat--acting'),
+      hpKnown: () => true, // r63-play, FFX-2's rule: today's enemy strip (`BossGauges`) draws every enemy's bar from the first frame; only the numerals wait for Scan, and the ribbon prints none
     });
     window.addEventListener('resize', this.onResize, { passive: true });
   }

@@ -58,6 +58,12 @@ export interface HudF1Host {
   helpText: () => string;
   /** The party row of a hero by id (the one whose menu is open), or, with no id, the row marked acting; null when there is none. */
   heroRow: (id: string | null) => HTMLElement | null;
+  /**
+   * Does today's HUD of this game show this enemy's HP? The ribbon keeps the boss's name always, but its HP bar is drawn only while this says yes (r63-play, rule 14: the faithful core).
+   * FFX: Sensor has read the enemy (`SensorPanel.isScanned`; a Sensor-immune enemy never is). FFX-2: today's `BossGauges` draws the bar of every enemy from the first frame (only its
+   * numerals wait for Scan, and the ribbon prints none), so it answers yes. Left out: yes (a host that names no rule shows the bar, as the layer did before).
+   */
+  hpKnown?: (enemyId: string) => boolean;
 }
 
 const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg>';
@@ -72,6 +78,7 @@ export const f1Cost = { profile: false, samples: [] as number[] };
 
 export class HudF1 {
   private readonly layer = document.createElement('div');
+  private readonly ribbonEl: HTMLElement;
   private readonly ribbonName: HTMLElement;
   private readonly ribbonFill: HTMLElement;
   private readonly ribbonDrain: HTMLElement;
@@ -91,6 +98,9 @@ export class HudF1 {
   private textWatch: MutationObserver | null = null;
   /** The bar's last value, percent; -1 before the first sync (a fight joined mid-way draws its bar at once, with no bite). */
   private lastPct = -1;
+  /** The headline enemy the ribbon follows, and whether its bar is hidden because today's HUD would not show that enemy's HP (see {@link HudF1Host.hpKnown}). */
+  private bossId = '';
+  private blind = false;
   private heroId = '';
   /** Whose menu is open (`HudPort.chooseCommand`'s actor): the hero over the block is this one, whoever the party list marks as acting (a Switch changes the actor under the menu). */
   private menuActor: string | null = null;
@@ -114,6 +124,7 @@ export class HudF1 {
       </div></div>
       <div class="f1-prompts f1-slab f1-ink" data-zone="prompts"><div class="f1-in">${prompts}</div></div>`;
     const q = (s: string): HTMLElement => this.layer.querySelector<HTMLElement>(s)!;
+    this.ribbonEl = q('.f1-ribbon');
     this.ribbonName = q('.f1-ribbon__name');
     this.ribbonFill = q('.f1-ribbon__fill');
     this.ribbonDrain = q('.f1-ribbon__drain');
@@ -191,7 +202,9 @@ export class HudF1 {
     this.lastState = state;
     if (!this.applied && !this.refresh()) return;
     const boss = headlineEnemy(state);
-    this.layer.querySelector('.f1-ribbon')?.toggleAttribute('hidden', !boss);
+    this.ribbonEl.toggleAttribute('hidden', !boss);
+    this.bossId = boss ? boss.id : '';
+    this.syncBlind();
     if (!boss) return;
     if (this.ribbonName.textContent !== boss.name) this.ribbonName.textContent = boss.name;
     const pct = Math.max(0, Math.min(100, (boss.hp / Math.max(1, boss.stats.maxHp)) * 100));
@@ -206,6 +219,15 @@ export class HudF1 {
     this.ribbonFill.style.width = `${pct}%`;
     this.ribbonDrain.style.width = `${pct}%`;
     this.lastPct = pct;
+  }
+
+  /** The ribbon's bar follows today's rule for this game (see {@link HudF1Host.hpKnown}): hidden while the HP of the headline enemy is a secret, drawn in place (no pop, already current) once it is not. */
+  private syncBlind(): void {
+    const known = this.host?.hpKnown;
+    const blind = !!known && this.bossId !== '' && !known(this.bossId);
+    if (blind === this.blind) return;
+    this.blind = blind;
+    this.ribbonEl.classList.toggle('f1-ribbon--blind', blind);
   }
 
   /** `HudPort.chooseCommand`: a menu opens for this hero. */
@@ -237,6 +259,7 @@ export class HudF1 {
   private run(dt: number): void {
     const h = this.host;
     if (!h || (!this.applied && !this.refresh())) return;
+    this.syncBlind(); // a Sensor read lands between two state syncs
     const stack = h.cmdStack();
     const open = !!stack && !stack.hidden && !stack.closest('[hidden]') && !!stack.querySelector('.ig-cmd');
     if (open !== this.cmdOpen) {

@@ -54,6 +54,7 @@
 .f1-ribbon { left: 28px; top: 12.5px; width: 160px; height: 25px; }
 .f1-ribbon[hidden] { display: none; }
 .f1-ribbon__name { position: absolute; left: 10.5px; top: 1.2px; font-size: 13.5px; line-height: 1; color: var(--f1-paper); white-space: nowrap; }
+.f1-ribbon--blind .f1-ribbon__bar { visibility: hidden; } /* r63-play: the enemy's HP is a secret in today's HUD of this game (FFX before Sensor): the name stands alone, the bar appears in place when it is read */
 .f1-ribbon__bar { position: absolute; left: 10.5px; top: 17.5px; width: 140.5px; height: 3px; border-radius: 1.5px; background: rgba(0, 0, 12, 0.55); box-shadow: inset 0 0 0 0.25px rgba(255, 255, 255, 0.12); overflow: hidden; }
 .f1-ribbon__fill, .f1-ribbon__drain { position: absolute; left: 0; top: 0; bottom: 0; display: block; border-radius: 1.5px; }
 .f1-ribbon__fill { width: 100%; background: linear-gradient(90deg, #8e1f1f, #e0524a); z-index: 1; }

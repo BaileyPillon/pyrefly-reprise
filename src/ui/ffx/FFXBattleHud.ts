@@ -457,6 +457,7 @@ export class FFXBattleHud implements HudPort {
       game: 'ffx', root: this.el, stage: this.stage,
       cmdStack: () => this.commandMenu.stackEl, cmdBlock: () => this.cmdAreaEl, helpText: () => this.infoEl.textContent ?? '',
       heroRow: (id) => this.el.querySelector<HTMLElement>(id ? `.ig-stat[data-actor="${CSS.escape(id)}"]` : '.ig-stat--acting'),
+      hpKnown: (id) => this.sensorPanel.isScanned(id), // r63-play, FFX's rule: an enemy has no HP bar until Sensor has read it (`SensorPanel`, round 02 #28)
     });
     window.addEventListener('resize', this.onResize, { passive: true });
   }
