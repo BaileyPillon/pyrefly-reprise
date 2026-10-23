@@ -1,0 +1,105 @@
+/*
+ * THE F1 HUD, shared rules (conference demo, lane "hud-f1"; Bailey 2026-10-23, item 193: "F1 Brushed slab" on the "Clear Stage" layout).
+ * Target: D:/Tools/pyrefly-scratch/2026-10-23/hud-inkgold (`src/hud.html` is the one source of every size, colour and position; stills `stills/F1/*.jpg`).
+ *
+ * Every rule hangs from `.hud-f1`, a class `HudF1.ts` puts on the HUD root only when `?hud=f1` / `?pack=demo` is on in Chapter I or Chapter IV; with it off nothing here matches.
+ * The HUD is authored on a 640 x 360 grid scaled by the letterbox (4x at 2560 x 1440), so the mockup's px at 2560 x 1440 are divided by 4 here: verbs 48 -> 12, HP 64 -> 16, MP 44 -> 11,
+ * names 50 -> 12.5, the boss name 54 -> 13.5, prompts 30 -> 7.5, labels 28 -> 7 (the floor, `--f1-floor`). Two typefaces only: Cormorant Garamond Bold Italic (names, the spell in the cue,
+ * turn names, the boss name) and Chakra Petch Bold (verbs, labels, numerals, prompts), through the tokens.
+ *
+ * `hudf1-ffx.css` is Chapter I (FFX: left, three-slot strip), `hudf1-ffx2.css` is Chapter IV (FFX-2: right, no strip, pink); `hudf1-finish.css` is the brushed finish (step 4).
+ */
+
+.hud-f1 {
+  /* Two typefaces: today's numeral face (Rajdhani) and body face (Exo 2) are dropped inside this HUD. */
+  --ig-font-numeral: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  --ig-font-text: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  --ig-font-display: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  /* The text floor in grid px (set by HudF1.ts from `HUD_F1_TUNE.floorPx`, 28 at 2560 x 1440). */
+  --f1-floor: 7px;
+  --f1-cmd-step: 4px; /* the verbs' cascade, 16 px at 1440p */
+  --f1-ink-a: #181d46;
+  --f1-ink-b: #0d102d;
+  --f1-ink-c: #080a1a;
+  --f1-ivory-a: #f9f6ed;
+  --f1-ivory-b: #f2eddf;
+  --f1-ivory-c: #e2dac3;
+  --f1-paper: #f4f1e8;
+  --f1-shadow: 3.5px 5px 4.5px rgba(2, 8, 52, 0.5);
+  --f1-slide: 52px; /* how far a block slides along its own edge in a step-back, with the opacity going to 0 */
+}
+.hud-f1.ig--ffx2 {
+  --f1-cmd-step: 4px;
+}
+.f1-layer { position: absolute; inset: 0; pointer-events: none; font-family: var(--ig-font-text); font-weight: 700; }
+.f1-layer[hidden] { display: none !important; }
+.f1-layer .sr { font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; }
+
+/* ---------------------------------------------------------------- the slab primitive: the shape skews, the content counter-skews */
+.f1-slab { position: absolute; transform: skewX(var(--ig-skew)); box-shadow: var(--f1-shadow); }
+.f1-slab > .f1-in { position: absolute; inset: 0; transform: skewX(var(--ig-skew-inverse)); }
+.f1-ink {
+  background: linear-gradient(180deg, var(--f1-ink-a) 0%, var(--f1-ink-b) 55%, var(--f1-ink-c) 100%);
+  box-shadow: var(--f1-shadow), inset 0.75px 0.75px 0 rgba(170, 195, 255, 0.34), inset 0 0 0 0.5px rgba(0, 0, 10, 0.5);
+}
+.f1-stripe { position: absolute; top: 0; bottom: 0; width: 2.5px; left: 0; }
+.ig--ffx2 .f1-stripe { left: auto; right: 0; }
+.f1-stripe--iv { background: linear-gradient(180deg, #faf7ee, #e6dfca); }
+
+/* ---------------------------------------------------------------- the boss ribbon (top left; both games) */
+.f1-ribbon { left: 28px; top: 12.5px; width: 160px; height: 25px; }
+.f1-ribbon[hidden] { display: none; }
+.f1-ribbon__name { position: absolute; left: 10.5px; top: 1.2px; font-size: 13.5px; line-height: 1; color: var(--f1-paper); white-space: nowrap; }
+.f1-ribbon__bar { position: absolute; left: 10.5px; top: 17.5px; width: 140.5px; height: 3px; border-radius: 1.5px; background: rgba(0, 0, 12, 0.55); box-shadow: inset 0 0 0 0.25px rgba(255, 255, 255, 0.12); overflow: hidden; }
+.f1-ribbon__fill, .f1-ribbon__drain { position: absolute; left: 0; top: 0; bottom: 0; display: block; border-radius: 1.5px; }
+.f1-ribbon__fill { width: 100%; background: linear-gradient(90deg, #8e1f1f, #e0524a); z-index: 1; }
+.f1-ribbon__drain { width: 100%; background: #fff; opacity: 0.9; transition: width 0.45s ease-out 0.4s; }
+
+/* ---------------------------------------------------------------- the hero over the command block */
+.f1-hero { position: absolute; display: none; align-items: center; gap: 6px; height: 26px; left: 28px; top: 140px; }
+.hud-f1.f1-cmd-open .f1-hero, .f1-ghost .f1-hero { display: flex; }
+.f1-hero__face { position: relative; width: 26px; height: 26px; flex: none; box-shadow: 0 0 0 1px var(--ig-accent), 0 0 0 2px var(--ig-ink), 0 0 3px rgba(227, 185, 74, 0.6), 1px 2px 3px rgba(0, 0, 0, 0.55); background: #1a1526; }
+.f1-hero__tile { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; margin: 0 !important; overflow: hidden; transform: none !important; }
+.f1-hero__name { font-size: 19.5px; line-height: 1; color: var(--f1-paper); text-shadow: 0 0.75px 3.5px rgba(0, 0, 20, 0.85); white-space: nowrap; }
+.f1-hero__role { font: 700 var(--f1-floor)/1 var(--ig-font-display); letter-spacing: 0.12em; background: rgba(244, 241, 232, 0.18); color: var(--f1-paper); padding: 1.5px 2.75px 1.25px; border-radius: 0.75px; white-space: nowrap; }
+.f1-hero__role[hidden] { display: none; }
+
+/* ---------------------------------------------------------------- the cue: the advisor's lead move, once, under the hero */
+.f1-cue { display: none; left: 28px; top: 172.5px; width: 152.5px; height: 16px; }
+.hud-f1.f1-cmd-open .f1-cue:not(.f1-cue--none), .f1-ghost .f1-cue { display: block; }
+.f1-cue .f1-in { display: flex; align-items: center; gap: 3.5px; padding: 0 6.5px 0 7.5px; white-space: nowrap; }
+.f1-cue__star { display: inline-flex; width: 7px; height: 7px; flex: none; }
+.f1-cue__star svg { width: 100%; height: 100%; fill: var(--ig-accent); filter: drop-shadow(0 0 1.25px var(--ig-accent)); }
+.f1-cue__spell { font-size: 11.5px; line-height: 1; color: var(--ig-accent); overflow: hidden; text-overflow: ellipsis; max-width: 78px; }
+.f1-cue__arr, .f1-cue__dot { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: rgba(244, 241, 232, 0.66); }
+.f1-cue__target { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--f1-paper); overflow: hidden; text-overflow: ellipsis; max-width: 38px; }
+.f1-cue__mp { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--ig-spira-sky); }
+.f1-cue [hidden] { display: none; }
+
+/* ---------------------------------------------------------------- the prompt bar (bottom left) */
+.f1-prompts { left: 28px; top: 336.5px; width: 190px; height: 16.5px; }
+.f1-prompts .f1-in { display: flex; align-items: center; gap: 8.5px; padding-left: 9px; font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--f1-paper); white-space: nowrap; }
+.f1-pr { display: inline-flex; align-items: center; gap: 3px; }
+.f1-pr b { display: inline-flex; align-items: center; font: inherit; color: inherit; }
+.f1-prompts .kh-k { font: 700 var(--f1-floor)/1 var(--ig-font-display); color: var(--ig-accent); letter-spacing: 0.04em; }
+.f1-prompts .pg { font-size: 7px; height: 11.5px; min-width: 11.5px; padding: 0 2px; margin: 0; box-shadow: 0 0.5px 2px rgba(0, 0, 0, 0.5), inset 0 0 0 0.5px rgba(255, 255, 255, 0.25); }
+.f1-prompts .pg svg { width: 7px; }
+
+/* ---------------------------------------------------------------- what leaves the frame (today's cards that move behind X, Intel) */
+.hud-f1:not(.f1-intel) .sgd,
+.hud-f1:not(.f1-intel) .mad,
+.hud-f1:not(.f1-intel) .eint__toggle,
+.hud-f1:not(.f1-intel) .ffx-sensor { opacity: 0 !important; pointer-events: none !important; }
+.hud-f1.f1-intel .ffx-sensor { opacity: 1; }
+body:has(.hud-f1) .battle-pause-chip { display: none !important; }
+.hud-f1 .ffx-cmd-defend,
+.hud-f1 .ffx-cmd-info,
+.hud-f1 .ffx2-cmd-info,
+.hud-f1 .ffx2-atbmode { display: none !important; }
+
+/* ---------------------------------------------------------------- the ghost of the closed block (see HudF1StepBack.ts): slides out at an action's start */
+.f1-ghost { position: absolute; inset: 0; pointer-events: none; transition: transform 170ms cubic-bezier(0.5, 0, 0.9, 0.4), opacity 140ms ease-in 30ms; }
+.f1-ghost--out { transform: translateX(calc(var(--f1-slide) * -4)); opacity: 0; }
+.ig--ffx2 .f1-ghost--out { transform: translateX(calc(var(--f1-slide) * 4)); }
+.f1-ghost--fade { opacity: 0; transition: opacity 400ms ease-out; }
+.f1-ghost .ig-cmd-stack { pointer-events: none; }

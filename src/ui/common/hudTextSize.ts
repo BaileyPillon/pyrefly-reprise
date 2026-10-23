@@ -1,3 +1,8 @@
+import { hudF1On } from '../hudf1/HudF1Switch.ts';
+
+/** The F1 HUD's command window: four verbs and the faded tail (the mockup's Clear Stage). */
+export const F1_ROWS = 5;
+
 /**
  * TEXT SIZE's layout moves that CSS alone cannot make (OPTIONS accessibility A2,
  * D-285; target `docs/concepts/accessibility-2026-09-26/desk-hud-130.jpg`).
@@ -46,6 +51,7 @@ export function currentWideTextScale(root: HTMLElement | null = rootEl()): numbe
 /** Rows the FFX desktop command list shows at the current TEXT SIZE, given its 100 % count. */
 export function commandRowsCap(base: number, root: HTMLElement | null = rootEl()): number {
   if (!root || root.hasAttribute('data-phone-battle')) return base;
+  if (hudF1On()) return Math.min(base, F1_ROWS); // lane hud-f1: four verbs and a faded tail
   const scale = currentTextScale(root);
   if (scale >= 1.3) return Math.min(base, 4);
   if (scale >= 1.15) return Math.min(base, 5);
