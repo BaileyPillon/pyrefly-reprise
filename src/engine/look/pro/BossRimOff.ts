@@ -9,8 +9,8 @@
  *
  * Nothing is sent while the switch is off (`bossCleanOn`): the counts stay 0 and the shader draws today's rim. Both games (shared plumbing); only the two bosses of `BossClean.ts` are ever named.
  */
-import { Vector4, type Object3D } from 'three';
-import { BOSS_FEET, bossCleanOn, type BossFoot } from './BossClean.ts';
+import { Vector3, Vector4, type Object3D } from 'three';
+import { BOSS_FEET, bossCleanOn, footFit, type FootActor } from './BossClean.ts';
 
 export const RIM_OFF_BOSSES = 2;
 /** How many other figures' boxes a shader holds (the party of three, a second boss and the add-ons of Chapter I fit in eight). */
@@ -39,22 +39,43 @@ export class RimOffBoxes {
     const other = c.uRimOther.value;
     let nb = 0;
     let no = 0;
+    const bossOf: Object3D[] = []; // a rigged boss is one tracked mesh per PART: one box for the whole boss, the union of its parts' boxes
     for (let i = 0; i < n; i++) {
-      const art = (this.actors[i]?.userData['bossClean'] as { artId?: string } | undefined)?.artId;
-      if (art !== undefined && bossCleanOn(art) && nb < RIM_OFF_BOSSES) boss[nb++]!.copy(boxes[i]!);
-      else if (no < other.length) other[no++]!.copy(boxes[i]!);
+      const actor = this.actors[i];
+      const art = (actor?.userData['bossClean'] as { artId?: string } | undefined)?.artId;
+      if (actor && art !== undefined && bossCleanOn(art)) {
+        let k = bossOf.indexOf(actor);
+        if (k < 0 && nb < RIM_OFF_BOSSES) {
+          k = nb++;
+          bossOf[k] = actor;
+          boss[k]!.copy(boxes[i]!);
+        } else if (k >= 0) {
+          const b = boss[k]!;
+          const x = boxes[i]!;
+          b.set(Math.min(b.x, x.x), Math.min(b.y, x.y), Math.max(b.z, x.z), Math.max(b.w, x.w));
+        }
+      } else if (no < other.length) other[no++]!.copy(boxes[i]!);
     }
     c.rimBossN.value = nb;
     c.rimOtherN.value = nb > 0 ? no : 0;
+    drawn.clear(); // `bossFigure` is asked once per part in the figure loop; the next frame starts again
   }
 }
 
+const quad: [Vector3, Vector3, Vector3, Vector3] = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
+const drawn = new Set<Object3D>();
+
 /**
- * The bold pass's contact ellipse and reflection stand on the figure's BASE: the columns of the lowest 7 percent of its rows (`LookBoldConfig.baseExtents`). For a figure that is more than its feet
- * (Seymour: a boot far left, a hem, a fringe) that base is not under the body; a re-cut boss takes the footprint of `BOSS_FEET` instead (centre and half width as fractions of the figure's content
- * width), or null when this actor is not a re-cut boss now.
+ * The bold pass draws a contact ellipse and a reflection for every tracked painted mesh, and a rigged boss is one mesh per PART (Seymour six, Bahamut five), each standing on the columns of its own lowest
+ * rows. For a re-cut boss the pass asks here: `null` when this actor is not a re-cut boss now (today's code runs); `'skip'` for the second and later parts of a boss already drawn this frame (no contact, no
+ * reflection of their own); else the floor point under the WHOLE figure's footprint (`BOSS_FEET`, from the painting's content box in world x) and the ellipse's half width, in world units.
  */
-export function bossBase(actor: Object3D): BossFoot | null {
+export function bossFigure(actor: Object3D): 'skip' | { cx: number; rx: number } | null {
   const art = (actor.userData['bossClean'] as { artId?: string } | undefined)?.artId;
-  return art !== undefined && bossCleanOn(art) ? (BOSS_FEET[art] ?? null) : null;
+  const foot = art !== undefined && bossCleanOn(art) ? BOSS_FEET[art] : undefined;
+  if (!foot) return null;
+  if (drawn.has(actor)) return 'skip';
+  drawn.add(actor);
+  const q = (actor as FootActor).contentQuad(quad);
+  return footFit(q[0].x, q[1].x, foot);
 }

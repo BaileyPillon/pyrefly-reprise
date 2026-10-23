@@ -4,7 +4,7 @@
  */
 import { Mesh, Object3D, Vector3, Vector4 } from 'three';
 import { afterEach, describe, expect, it } from 'vitest';
-import { RimOffBoxes, bossBase } from '../../../src/engine/look/pro/BossRimOff.ts';
+import { RimOffBoxes, bossFigure } from '../../../src/engine/look/pro/BossRimOff.ts';
 import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts';
 import {
   BOSS_CLEAN_ARTS,
@@ -234,6 +234,22 @@ describe('the bold pass rim is off inside a re-cut boss box, and only there', ()
     expect((u['uRimOther']!.value as Vector4[])[1]!.toArray()).toEqual([0.1, 0, 0.4, 0.4]);
   });
 
+  it('a rigged boss is one tracked mesh per part: its boxes are one union box, never other figures', () => {
+    setBossClean('clean');
+    setDemoChapter('seymour-flux');
+    const boss = new Object3D();
+    attachBossClean(boss, 'seymour-flux-body', 'enemy');
+    const party = new Object3D();
+    const u = uniforms();
+    const r = new RimOffBoxes();
+    r.actors.push(boss, boss, party, boss);
+    r.update(u, [box(0.5, 0.2, 0.6, 0.4), box(0.55, 0.1, 0.8, 0.5), box(0.1, 0.1, 0.3, 0.6), box(0.7, 0.3, 0.9, 0.9)], 4);
+    expect(u['rimBossN']!.value).toBe(1);
+    expect(u['rimOtherN']!.value).toBe(1);
+    expect((u['uRimBoss']!.value as Vector4[])[0]!.toArray()).toEqual([0.5, 0.1, 0.9, 0.9]);
+    expect((u['uRimOther']!.value as Vector4[])[0]!.toArray()).toEqual([0.1, 0.1, 0.3, 0.6]);
+  });
+
   it('sends nothing while the switch is off, or outside the two chapters', () => {
     const boss = new Object3D();
     attachBossClean(boss, 'seymour-flux-body', 'enemy');
@@ -251,18 +267,33 @@ describe('the bold pass rim is off inside a re-cut boss box, and only there', ()
   });
 });
 
-describe('the bold pass base of a re-cut boss', () => {
-  it('is the footprint row while the switch plays, and nothing otherwise (the stage keeps the lowest rows base)', () => {
-    const boss = new Object3D();
-    attachBossClean(boss, 'seymour-flux-body', 'enemy');
+describe('the bold pass draws one contact ellipse for a rigged boss', () => {
+  it('gives the first part the footprint under the whole figure, the other parts nothing, and the party nothing special', () => {
     setBossClean('clean');
     setDemoChapter('seymour-flux');
-    expect(bossBase(boss)).toBe(BOSS_FEET['seymour-flux-body']);
+    const { actor } = bossActor('seymour-flux-body');
+    const foot = BOSS_FEET['seymour-flux-body']!;
+    const first = bossFigure(actor);
+    expect(first).not.toBeNull();
+    expect(first).not.toBe('skip');
+    if (first && first !== 'skip') {
+      expect(first.cx).toBeCloseTo(10 + foot.cx * 4, 6);
+      expect(first.rx).toBeCloseTo(foot.hw * 4, 6);
+    }
+    expect(bossFigure(actor)).toBe('skip'); // the second part of the same boss, the same frame
+    new RimOffBoxes().update({ uRimBoss: { value: [] }, uRimOther: { value: [] }, rimBossN: { value: 0 }, rimOtherN: { value: 0 } }, [], 0); // the frame ends: the next one starts again
+    expect(bossFigure(actor)).not.toBe('skip');
+    new RimOffBoxes().update({ uRimBoss: { value: [] }, uRimOther: { value: [] }, rimBossN: { value: 0 }, rimOtherN: { value: 0 } }, [], 0);
+    expect(bossFigure(new Object3D())).toBeNull(); // a party member: today's code
+  });
+
+  it('is the old code while the switch is off or outside the two chapters', () => {
+    const { actor } = bossActor('ffx2-bahamut');
     setBossClean('today');
-    expect(bossBase(boss)).toBeNull();
+    setDemoChapter('ffx2-bahamut');
+    expect(bossFigure(actor)).toBeNull();
     setBossClean('clean');
-    expect(bossBase(new Object3D())).toBeNull(); // a party member has no controller
     setDemoChapter('yunalesca');
-    expect(bossBase(boss)).toBeNull();
+    expect(bossFigure(actor)).toBeNull();
   });
 });

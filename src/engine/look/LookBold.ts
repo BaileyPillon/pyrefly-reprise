@@ -20,7 +20,7 @@ import type { RelightLights } from './relight/RelightLights.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
 import type { ProSeam } from './pro/ProSeam.ts';
-import { RimOffBoxes, bossBase } from './pro/BossRimOff.ts'; // lane boss-matte: the re-cut bosses draw no bold-pass rim
+import { RimOffBoxes, bossFigure } from './pro/BossRimOff.ts'; // lane boss-matte: the re-cut bosses draw no bold-pass rim
 import { MAX_RIPPLES } from './living/LivingConfig.ts';
 import { LookLiving, type LivingUniforms } from './living/LookLiving.ts';
 
@@ -178,12 +178,12 @@ export class LookBold {
       const ex = this.extentsOf(mat.uniforms['map']!.value as Texture | null);
       const topV = 1 - ex.top;
       const gap = Math.max(0, 1 - ex.bottom - foot);
-      const bf = bossBase(t.actor); // lane boss-matte: a re-cut boss's contact and reflection stand under its footprint, not under the columns of its lowest rows
-      const baseC = bf ? ex.left + bf.cx * (ex.right - ex.left) : (ex.baseLeft + ex.baseRight) / 2;
-      const hwBase = bf ? bf.hw * (ex.right - ex.left) * W : Math.max(0.1, ((ex.baseRight - ex.baseLeft) / 2) * 1.2 + 0.03) * W;
+      const bf = bossFigure(t.actor); // lane boss-matte: a rigged boss is one mesh per part: ONE contact ellipse and reflection under its footprint, the other parts draw none
+      const baseC = (ex.baseLeft + ex.baseRight) / 2;
+      const hwBase = bf && bf !== 'skip' ? bf.rx : Math.max(0.1, ((ex.baseRight - ex.baseLeft) / 2) * 1.2 + 0.03) * W;
       const hwFull = ((ex.right - ex.left) / 2) * W;
       // the point on the floor under the figure's base
-      g.set(c.x + x.x * (baseC - 0.5) + y.x * (foot - 0.5), 0.014, c.z + x.z * (baseC - 0.5) + y.z * (foot - 0.5));
+      g.set(bf && bf !== 'skip' ? bf.cx : c.x + x.x * (baseC - 0.5) + y.x * (foot - 0.5), 0.014, bf && bf !== 'skip' ? f.z : c.z + x.z * (baseC - 0.5) + y.z * (foot - 0.5));
       p.copy(g).project(cam);
       const gu = p.x * 0.5 + 0.5;
       const gv = p.y * 0.5 + 0.5;
@@ -218,7 +218,7 @@ export class LookBold {
       const bpy = (by1 - by0) * 0.05;
       this.boxes[n]!.set(bx0 - bpx, by0 - bpy, bx1 + bpx, by1 + bpy);
       A[n]!.set(gu, gv, Math.max(rx, 0.01), Math.max(ry, 0.004));
-      B[n]!.set(shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
+      B[n]!.set(bf === 'skip' ? 0 : shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 && bf !== 'skip' ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
       this.rimOff.actors[n++] = t.actor; // lane boss-matte: the actor behind each box
     }
     this.boxCount = n;
