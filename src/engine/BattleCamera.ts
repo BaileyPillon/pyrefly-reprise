@@ -3,7 +3,7 @@ import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
 import { LinkFits, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
 import { shakeStepByTime, shakeStepPerFrame } from './feel/TimeBased.ts'; // `?timing=time` (demo chapters): the shake runs on real time, today's is per drawn frame
 import { ProLayer, type BoxOf } from './procam/ProLayer.ts'; // `?camera=pro` (demo chapters): the directed camera's layer; built on first use, so with the switch off nothing here runs
-import type { LayerOut, ProCamPort } from './procam/ProTypes.ts';
+import type { LayerOut, ProBand, ProCamPort } from './procam/ProTypes.ts';
 
 export interface CameraRig {
   /** Camera world position. */
@@ -119,6 +119,12 @@ export class BattleCamera {
     if (!this.proLayer) { this.proLayer = new ProLayer(); if (this.proBoxOf) this.proLayer.setBoxes(this.proBoxOf); }
     return this.proLayer;
   }
+
+  /** A directed shot is playing or blending out (`procam/ProLayer.ts`): the idle drift stands aside (`fx/b/DriftRig.ts`). */
+  get proRunActive(): boolean { return this.proLayer?.active === true; }
+
+  /** The soft background of the directed shot on screen (`procam/ProLayer.ts`), read by the MAX mix's depth-of-field part; null with no shot. */
+  get proBand(): ProBand | null { return this.proLayer?.band ?? null; }
 
   /** The stage tells the layer where each figure's painted box is (`PaintedStage`), so a directed shot can keep them whole. */
   proBoxes(boxOf: BoxOf): void { this.proBoxOf = boxOf; this.proLayer?.setBoxes(boxOf); }

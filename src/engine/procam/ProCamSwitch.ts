@@ -5,7 +5,7 @@
  * | key | values | the piece |
  * |---|---|---|
  * | `?camera=` | `pro`, `off` / `today` | the directed camera: the real FFX shots re-staged on Chapter I, Expedition 33-style moves on plain attacks, FFX-2's auto camera on Chapter IV |
- * | `?camdof=` | `on`, `off` | the soft background behind the acting figures (one extra pass; off unless named) |
+ * | `?camdof=` | `on`, `off` | the soft background behind the acting figures (the tilt-shift band follows them; on with the camera, `off` to judge the camera alone) |
  * | `?castshot=` | `0` to `4`, `random` | which of the real game's five caster close shots plays (default 2, the low push that keeps both figures whole; `random` draws as the real game does) |
  *
  * and the shared **`?pack=demo`**, which turns the camera ON (`pro`) in the demo chapters. A key named beside `pack` wins (`?pack=demo&camera=off` is the demo pack with today's camera: the A/B).
@@ -69,9 +69,9 @@ export function proCamGame(): DemoGame | null {
   return isDemoChapter(id) ? demoGameOf(id) : null;
 }
 
-/** The soft background is wanted (named only: it is one more pass, judged on its own). */
+/** The soft background is wanted: on with the camera (it costs no pass, only the tilt-shift band's uniforms), off with `?camdof=off`. */
 export function proDofOn(): boolean {
-  return proCamOn() && (forced.dof ?? read().dof ?? false);
+  return proCamOn() && (forced.dof ?? read().dof ?? true);
 }
 
 /** Which caster close shot plays: a fixed variant (default 2) or `random`. */

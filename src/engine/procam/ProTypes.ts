@@ -85,6 +85,18 @@ export interface ProRun {
   onEvent?(name: 'impact' | 'kill'): void;
 }
 
+/**
+ * The soft background of a directed shot (`?camdof=`, on with the camera): the tilt-shift band aimed at the shot's focus figures, in the screen's own units (0 = bottom of the frame, 1 = top),
+ * and how much of it is up (0..1: the shot's blend in and out). The MAX mix's depth-of-field part (`fx/mix/MaxMix.ts`) blends its own band toward this one and draws it with the pass it already has.
+ */
+export interface ProBand {
+  readonly focus: number;
+  readonly width: number;
+  /** The blur radius at the frame's far edge, device pixels. */
+  readonly blur: number;
+  readonly weight: number;
+}
+
 /** What the layer hands `BattleCamera` each frame: the pose to draw and how much idle sway to keep. */
 export interface LayerOut {
   readonly pose: Pose;

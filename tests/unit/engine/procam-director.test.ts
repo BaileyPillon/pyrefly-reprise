@@ -382,6 +382,19 @@ describe('Chapter IV (FFX-2): the auto camera, with pushes only on specials and 
     open(w, d, 'bahamut', 'cast', ['yuna'], { abilityId: 'mega-flare', commandKind: 'ability' });
     expect(w.camera.layer.runId).toBe('mega-flare');
   });
+  it('which skills are specials: the skills of the non-mage dresspheres; a mage spell and an attack are not', () => {
+    const probe = (ability: string, kind: string): string | null => {
+      const w = world(BEVELLE);
+      const d = dir(w.stage);
+      open(w, d, 'rikku', kind, ['bahamut'], { abilityId: ability, commandKind: 'ability' });
+      return w.camera.layer.runId;
+    };
+    expect(probe('x2-warrior-power-break', 'cast')).toBe('special.rikku');
+    expect(probe('x2-dark-knight-charon', 'cast')).toBe('special.rikku');
+    expect(probe('x2-white-mage-cure', 'cast')).toBeNull();
+    expect(probe('x2-black-mage-fire', 'cast')).toBeNull();
+    expect(probe('x2-dark-knight-attack', 'attack')).toBe('attack.rikku');
+  });
   it('a spell or an item has no shot of its own: the follower frames it', () => {
     const w = world(BEVELLE);
     const d = dir(w.stage);

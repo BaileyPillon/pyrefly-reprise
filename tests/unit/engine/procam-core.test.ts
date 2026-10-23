@@ -227,7 +227,7 @@ describe('never crop', () => {
 
 describe('the layer', () => {
   const rest = P(0, 3, 9.5, 0, 1.4, -1, 32);
-  const far = P(6, 2, 4, 4, 1.4, -2, 40, 3);
+  const far = P(3, 2.6, 7.5, 1.5, 1.4, -1.5, 36, 3); // a moderate change of view: it glides (a bigger one is a cut: the comfort rule)
   const run = (over: Partial<ProRun> = {}): ProRun => ({ id: 't', inMs: 400, inEase: 'linear', outMs: 600, outEase: 'linear', sample: () => far, ...over });
 
   it('answers null with nothing to do: the game\'s own camera, untouched', () => {
@@ -240,15 +240,15 @@ describe('the layer', () => {
     l.step(0.016, rest, 16 / 9); // last = null (no run): the rig
     l.play(run());
     let out = l.step(0.2, rest, 16 / 9)!;
-    expect(out.pose.pos[0]).toBeGreaterThan(0.5);
-    expect(out.pose.pos[0]).toBeLessThan(5.5); // part way
+    expect(out.pose.pos[0]).toBeGreaterThan(0.3);
+    expect(out.pose.pos[0]).toBeLessThan(2.7); // part way
     out = l.step(0.3, rest, 16 / 9)!;
     expect(out.pose.pos).toEqual(far.pos);
     expect(l.runId).toBe('t');
     l.stop();
     out = l.step(0.3, rest, 16 / 9)!;
     expect(out.pose.pos[0]).toBeGreaterThan(0);
-    expect(out.pose.pos[0]).toBeLessThan(6);
+    expect(out.pose.pos[0]).toBeLessThan(3);
     expect(l.step(0.4, rest, 16 / 9)).toBeNull(); // out: the run is over, the rig is back
     expect(l.active).toBe(false);
   });
@@ -350,5 +350,88 @@ describe('samePose', () => {
   it('compares eye, aim, lens and roll', () => {
     expect(samePose(P(1, 2, 3), P(1, 2, 3))).toBe(true);
     expect(samePose(P(1, 2, 3), P(1, 2, 3.1))).toBe(false);
+  });
+});
+
+describe('the soft background', () => {
+  const rest = P(0, 3, 9.5, 0, 1.4, -1, 32);
+  const still: Pose = P(0, 2.4, 8, 0, 1.3, 0, 32);
+  it('aims the tilt-shift band at the focus figures under the shot\'s own pose, and blends in and out with the shot', async () => {
+    const { ProLayer, SHOT_BLUR } = await import('../../../src/engine/procam/ProLayer.ts');
+    const { proSoftBackground } = await import('../../../src/engine/procam/ProBand.ts');
+    const l = new ProLayer();
+    l.setBoxes((id) => (id === 'a' ? { x0: -0.5, x1: 0.5, y0: 0, y1: 1.8, z0: -0.2, z1: 0.2 } : null));
+    expect(l.band).toBeNull();
+    l.play({ id: 's', inMs: 400, inEase: 'linear', outMs: 400, outEase: 'linear', sample: () => still, focus: ['a'] });
+    l.step(0.2, rest, 16 / 9);
+    const half = l.band!;
+    expect(half.weight).toBeCloseTo(0.5, 1);
+    l.step(0.3, rest, 16 / 9);
+    const full = l.band!;
+    expect(full.weight).toBe(1);
+    expect(full.blur).toBe(SHOT_BLUR);
+    expect(full.focus).toBeGreaterThan(0.3);
+    expect(full.focus).toBeLessThan(0.7);
+    expect(full.width).toBeGreaterThanOrEqual(0.12);
+    // blended into the mix's band by the weight
+    const mixBand = { focus: 0.3, width: 0.2, blur: 6 };
+    expect(proSoftBackground(mixBand, null)).toBe(mixBand);
+    const b = proSoftBackground(mixBand, { ...full, weight: 0.5 })!;
+    expect(b.focus).toBeCloseTo((0.3 + full.focus) / 2, 6);
+    expect(b.blur).toBeCloseTo((6 + SHOT_BLUR) / 2, 6);
+    l.stop();
+    l.step(0.2, rest, 16 / 9);
+    expect(l.band!.weight).toBeLessThan(0.6);
+    l.step(0.3, rest, 16 / 9);
+    expect(l.band).toBeNull();
+  });
+  it('with no focus named there is no band', async () => {
+    const { ProLayer } = await import('../../../src/engine/procam/ProLayer.ts');
+    const l = new ProLayer();
+    l.play({ id: 's', inMs: 0, inEase: 'linear', outMs: 0, outEase: 'linear', sample: () => still });
+    l.step(0.1, rest, 16 / 9);
+    expect(l.band).toBeNull();
+  });
+});
+
+describe('the comfort rule: a big change of view is a cut, a small one a glide no faster than the cap', () => {
+  const rest = P(0, 3, 9.5, 0, 1.4, -1, 32);
+  it('measures the turn of the view and the eye travel against the distance to the aim', async () => {
+    const { difference } = await import('../../../src/engine/procam/ProLayer.ts');
+    const same = difference(rest, rest);
+    expect(same.turn).toBeCloseTo(0, 2);
+    expect(same.move).toBe(0);
+    const d = difference(rest, P(4, 3, 9.5, 4, 1.4, -1, 32)); // the eye and the aim slide together: no turn, a travel
+    expect(d.turn).toBeCloseTo(0, 2);
+    expect(d.move).toBeGreaterThan(0.3);
+    expect(difference(rest, P(0, 3, 9.5, 5, 1.4, -1, 32)).turn).toBeGreaterThan(20);
+  });
+  it('a glide lasts at least what its turn needs at the speed cap; a bigger change is 0 ms', async () => {
+    const { comfortMs, difference, CUT_TURN, GLIDE_DEG_S } = await import('../../../src/engine/procam/ProLayer.ts');
+    const small = P(0, 3, 9.5, 2, 1.4, -1, 32);
+    const turn = difference(rest, small).turn;
+    expect(turn).toBeGreaterThan(5);
+    expect(turn).toBeLessThan(CUT_TURN);
+    expect(comfortMs(rest, small, 100)).toBeCloseTo((turn / GLIDE_DEG_S) * 1000, 6);
+    expect(comfortMs(rest, small, 900)).toBe(900);
+    expect(comfortMs(rest, P(0, 3, 9.5, 9, 1.4, -1, 32), 400)).toBe(0);
+    expect(comfortMs(rest, P(9, 3, 9.5, 0, 1.4, -1, 32), 400)).toBe(0);
+    expect(comfortMs(rest, small, 0)).toBe(0);
+  });
+  it('the layer cuts into a shot whose first pose is far from where the camera was, and glides into a near one', async () => {
+    const { ProLayer } = await import('../../../src/engine/procam/ProLayer.ts');
+    const far = P(7, 1.6, 3, 6, 1.4, 0, 40);
+    const a = new ProLayer();
+    a.play({ id: 'far', inMs: 420, inEase: 'linear', outMs: 600, outEase: 'linear', sample: () => far });
+    expect(a.step(0.016, rest, 16 / 9)!.pose.pos).toEqual(far.pos);
+    a.stop();
+    a.step(0.016, rest, 16 / 9);
+    expect(a.step(0.016, rest, 16 / 9)).toBeNull();
+    const near = P(1, 2.9, 9, 0.3, 1.4, -1, 32);
+    const b = new ProLayer();
+    b.play({ id: 'near', inMs: 420, inEase: 'linear', outMs: 600, outEase: 'linear', sample: () => near });
+    const first = b.step(0.1, rest, 16 / 9)!.pose.pos;
+    expect(first[0]).toBeGreaterThan(0);
+    expect(first[0]).toBeLessThan(1);
   });
 });

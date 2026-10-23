@@ -46,6 +46,8 @@ const FOG_VERT = /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Positi
 export interface DofBand {
   focus: number;
   width: number;
+  /** The blur at the frame's far edge, device pixels; absent: the scene's own (a directed shot's soft background sets it, `procam/ProLayer.ts`). */
+  blur?: number;
 }
 
 /** The tilt-shift band aimed at the figures of a pose (0 = bottom of the screen), per master class. */
@@ -63,7 +65,7 @@ export class Cinema {
   private fogT = 0;
   private aaPass: Pass | null = null;
   private aaKind: 'smaa' | 'fxaa' | null = null;
-  private savedTilt: { focus: number; band: number } | null = null;
+  private savedTilt: { focus: number; band: number; blur: number } | null = null;
   private readonly sky: Color;
   readonly stats = { fogBands: 0, aa: 'none' as string, dof: null as DofBand | null };
 
@@ -127,10 +129,10 @@ export class Cinema {
     const u = r.tiltH.uniforms;
     this.stats.dof = band;
     if (band) {
-      this.savedTilt ??= { focus: u['focus']!.value as number, band: u['bandWidth']!.value as number };
-      r.applyPost({ tiltFocus: band.focus, tiltBandWidth: band.width });
+      this.savedTilt ??= { focus: u['focus']!.value as number, band: u['bandWidth']!.value as number, blur: u['maxBlur']!.value as number };
+      r.applyPost({ tiltFocus: band.focus, tiltBandWidth: band.width, tiltMaxBlur: band.blur ?? this.savedTilt.blur });
     } else if (this.savedTilt) {
-      r.applyPost({ tiltFocus: this.savedTilt.focus, tiltBandWidth: this.savedTilt.band });
+      r.applyPost({ tiltFocus: this.savedTilt.focus, tiltBandWidth: this.savedTilt.band, tiltMaxBlur: this.savedTilt.blur });
       this.savedTilt = null;
     }
   }

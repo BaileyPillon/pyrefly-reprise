@@ -5,6 +5,8 @@ import { setEyeCandyProvider, type EyeCandyKey } from '../eyeCandyFlags.ts';
 import { fxDebugHooks } from '../fxDebugHooks.ts';
 import { releaseBreathRigs } from './breathRig.ts';
 import { Cinema, dofBand, type DofBand } from './cinema.ts';
+import { proSoftBackground } from '../../procam/ProBand.ts';
+import type { ProBand } from '../../procam/ProTypes.ts';
 import { setProneAvoid } from '../../ProneLay.ts';
 import { setShotHold } from '../shotHold.ts';
 import { panelsNdc } from './downed.ts';
@@ -196,7 +198,7 @@ class Mix {
     }
     this.cinema.fogUpdate(dt, parts.fog, rm);
     const shotBand = held && master ? dofBand(held.pose, this.shots!.subjectFigs(), W, H, 'hero') : null;
-    this.cinema.dof(parts.depthOfField ? (shotBand ?? this.band) : null);
+    this.cinema.dof(parts.depthOfField ? proSoftBackground(shotBand ?? this.band, (this.b.battleCamera as { proBand?: ProBand | null } | undefined)?.proBand ?? null) : null); // a directed shot (`?camera=pro`) blends its own band in
     // SMOOTH EDGES: the post pass per tier, and the defringe on every painted figure.
     this.cinema.aa(parts.smoothEdges ? aaKind(tier, crispLive.aaPre) : null);
     this.defringe(actors, parts.smoothEdges);

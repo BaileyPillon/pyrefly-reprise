@@ -36,7 +36,7 @@ export interface AttackParams {
 }
 
 /** Chapter I (FFX): a visible lean. OURS (no source: the real game's attack camera is a hold). */
-export const ATTACK_FFX: AttackParams = { push: 0.13, aim: 0.5, followLook: 0.4, followEye: 0.22, inMs: 380, outMs: 720, creep: 0.018, creepMs: 2200, pulse: 0.03, pulseUpMs: 90, pulseDownMs: 380, safe: { x: 0.88, y: 0.92 } };
+export const ATTACK_FFX: AttackParams = { push: 0.16, aim: 0.5, followLook: 0.4, followEye: 0.22, inMs: 380, outMs: 720, creep: 0.02, creepMs: 2200, pulse: 0.035, pulseUpMs: 90, pulseDownMs: 380, safe: { x: 0.88, y: 0.92 } };
 /** Chapter IV (FFX-2): lighter, slower, no creep. OURS; the group follower and the run-in's truck already move the frame. */
 export const ATTACK_FFX2: AttackParams = { push: 0.055, aim: 0.3, followLook: 0.12, followEye: 0.08, inMs: 560, outMs: 850, creep: 0, creepMs: 1, pulse: 0.014, pulseUpMs: 110, pulseDownMs: 480, safe: { x: 0.86, y: 0.92 } };
 
