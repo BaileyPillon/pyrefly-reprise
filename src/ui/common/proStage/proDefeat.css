@@ -40,7 +40,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.24em;
-  font-size: clamp(11px, 1.05vw, 17px);
+  font-size: clamp(14px, 1.05vw, 18px); /* CHK-003: nothing under 14 px on a screen the player reads */
   color: var(--pdf-accent);
 }
 .pdf__meta {
@@ -49,8 +49,8 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  font-size: clamp(9px, 0.82vw, 13px);
-  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(14px, 0.9vw, 17px);
+  color: rgba(255, 255, 255, 0.78);
 }
 .pdf__meta i {
   font-style: normal;
@@ -59,6 +59,7 @@
 }
 .pdf__row {
   display: flex;
+  flex-wrap: wrap;
   gap: clamp(8px, 0.9vw, 16px);
   margin-top: clamp(12px, 1.7vh, 22px);
   pointer-events: auto;
@@ -77,7 +78,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  font-size: clamp(10px, 0.95vw, 15px);
+  font-size: clamp(14px, 0.95vw, 17px);
   cursor: pointer;
 }
 .pdf__btn.is-focus {

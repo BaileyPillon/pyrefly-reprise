@@ -13,6 +13,7 @@ import { paintSeed, rgb } from './fxMath.ts';
 import { paintLevel, seedOf } from './FxPaint.ts';
 import { capActor, filterWash, type FlashParams } from './SpellFxParams.ts';
 import type { FxGame } from './SpellFxRegistry.ts';
+import { blastTune } from '../pro/staging/BlastTune.ts'; // 1 unless the pro staging's held breath is playing a Mega Flare (the blooms on the girls are then lighter)
 
 /** Atlas tiles (`FxAtlas.ts`). */
 export type FxTile = 'glow' | 'mote' | 'spark4' | 'decal' | 'pillar' | 'shard' | 'orb' | 'tri' | 'disc' | 'solid' | 'streak' | 'facet' | 'dab' | 'dim'; // the last four: the painted finish's own (FxAtlas.ts)
@@ -134,7 +135,7 @@ export class FxDrawList {
    * times `k` (the effect's envelope), and widened on a crit.
    */
   bloom(col: string, x: number, y: number, size: number, peak: number, k = 1): void {
-    this.sprite('glow', col, x, y, size * this.bloomScale, this.actorCap(peak) * k);
+    this.sprite('glow', col, x, y, size * this.bloomScale, this.actorCap(peak) * k * blastTune.actorBloom);
   }
 
   /** A full-screen wash, after the REDUCE FLASHES rules. */

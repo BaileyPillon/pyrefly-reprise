@@ -4,6 +4,7 @@
  * full-bleed option, the defeat card's choices and words, the results dissolve, and the switchboard's key. The plan and the presenter's cues are in `pro-staging.test.ts` and `pro-staging-presenter.test.ts`.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { BattleStartBanner } from '../../../src/ui/common/BattleStartBanner.ts';
 import { ProStageLayer } from '../../../src/ui/common/proStage/ProStageLayer.ts';
 import { playResultsDissolve } from '../../../src/ui/common/proStage/resultsDissolve.ts';
@@ -61,6 +62,50 @@ describe('the layer', () => {
     expect(root.dataset['pst']).toBeUndefined();
     expect(root.style.getPropertyValue('--pst-hud')).toBe('');
     expect(layer.alive).toBe(false);
+  });
+
+  it('FFX-2 (D-357, D-441): a command menu open holds the wash and the HUD sink off, one that opens mid-breath gives the HUD back, one that closes lets the breath play on', () => {
+    const { root, layer } = make('ffx2');
+    let menu = true;
+    layer.setMenuProbe(() => menu);
+    const cue = { ...facts, game: 'ffx2' as const, move: 'mega-flare' as const, name: 'Mega Flare', attacker: 'boss', party: ['tidus'] };
+    layer.breath({ ...cue, kind: 'mark' });
+    layer.breath({ ...cue, kind: 'tell', msToBlow: 1400, menu: true });
+    for (let i = 0; i < 80; i++) layer.update(1 / 60);
+    expect(Number(root.style.getPropertyValue('--pst-hud') || 1)).toBeGreaterThan(0.99); // the menu was open from the first frame: the HUD never sank
+    expect(layer.snapshot().frame?.drain).toBe(0);
+    menu = false;
+    for (let i = 0; i < 40; i++) layer.update(1 / 60);
+    expect(layer.snapshot().frame?.drain).toBeGreaterThan(0.9); // the menu closed: the breath plays on
+    expect(Number(root.style.getPropertyValue('--pst-hud'))).toBeLessThan(0.3);
+    menu = true; // a girl's menu opens in the middle of it
+    for (let i = 0; i < 30; i++) layer.update(1 / 60);
+    expect(layer.snapshot().frame?.drain).toBeLessThan(0.02);
+    expect(root.dataset['pst'] === undefined || Number(root.style.getPropertyValue('--pst-hud')) > 0.98).toBe(true);
+  });
+
+  it('a probe that throws costs the check, never the frame', () => {
+    const { layer } = make('ffx2');
+    layer.setMenuProbe(() => {
+      throw new Error('boom');
+    });
+    layer.breath({ ...facts, game: 'ffx2', kind: 'tell', move: 'mega-flare', name: 'X', attacker: 'boss', party: ['tidus'], msToBlow: 900 });
+    expect(() => {
+      for (let i = 0; i < 40; i++) layer.update(1 / 60);
+    }).not.toThrow();
+    expect(layer.snapshot().frame?.drain).toBeGreaterThan(0.5);
+  });
+
+  it('an Overdrive opening lights and sinks the HUD even while a marked move waits for its turn (the Total Annihilation marker stays up while the party acts)', () => {
+    const { root, layer } = make();
+    layer.breath({ ...facts, kind: 'mark', move: 'total-annihilation', name: 'Total Annihilation', attacker: 'boss', party: ['tidus'] });
+    layer.opening({ ...facts, kind: 'overdrive', actor: 'tidus', name: 'Spiral Cut' });
+    for (let i = 0; i < 30; i++) layer.update(1 / 60);
+    expect(Number(root.style.getPropertyValue('--pst-hud'))).toBeLessThan(0.6);
+    expect(layer.alive).toBe(true); // the marker is still there
+    for (let i = 0; i < 90; i++) layer.update(1 / 60);
+    expect(layer.alive).toBe(true);
+    expect(root.dataset['pst']).toBeUndefined(); // the opening is over and gave the HUD back; the marker alone does not hold it
   });
 
   it('the pause freezes it: no update, no clock', () => {
@@ -161,6 +206,22 @@ describe('the layer canvas (a recording 2D context, jsdom has none)', () => {
   });
 });
 
+describe('the boss card and the comfort rows', () => {
+  const css = readFileSync('src/ui/common/proStage/proCard.css', 'utf8');
+  it('the white blink and the push honour REDUCE FLASHES and REDUCE MOTION (the rows, not only the OS query), and the loading card does not blink', () => {
+    expect(css).toContain('html[data-reduce-flashes] .bstart--pro::before');
+    expect(css).toContain('html[data-reduce-motion] .bstart--pro .bstart__wash');
+    expect(css.replace(/\s+/g, ' ')).toContain('.bstart--pro.bstart--loading::before { display: none; }');
+  });
+  it('the name is sized by the frame height as well as its width, and no text on the card, the defeat card or the staging sits under 14 px', () => {
+    expect(css).toContain('font-size: clamp(40px, min(11.6vw, 14.2vh), 320px)');
+    for (const f of ['proCard.css', 'proDefeat.css', 'proStage.css']) {
+      const text = readFileSync(`src/ui/common/proStage/${f}`, 'utf8');
+      for (const m of text.matchAll(/font-size:\s*clamp\((\d+(?:\.\d+)?)px/g)) expect(Number(m[1]), `${f}: ${m[0]}`).toBeGreaterThanOrEqual(14);
+    }
+  });
+});
+
 describe('the boss card', () => {
   const card = (pro: boolean): HTMLElement => {
     const root = document.createElement('div');
@@ -233,6 +294,19 @@ describe('the defeat card', () => {
 });
 
 describe('the results dissolve', () => {
+  const coverOf = (tame: boolean): HTMLElement => {
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    let el: HTMLElement | null = null;
+    const append = root.appendChild.bind(root);
+    root.appendChild = ((n: Node) => ((el = n as HTMLElement), append(n))) as typeof root.appendChild;
+    void playResultsDissolve(root, 'ffx', undefined, tame);
+    return el!;
+  };
+  it('REDUCE FLASHES: the cover is dim ivory at 35 percent brightness, never the near-white gradient', () => {
+    expect(coverOf(false).style.background).toContain('radial-gradient');
+    expect(coverOf(true).style.background).toContain('rgb(89, 84, 75)'); // flashRules.DIM_IVORY #59544B
+  });
   it('covers, swaps under the cover, and is gone; with no animation support the swap still happens', async () => {
     const root = document.createElement('div');
     document.body.appendChild(root);

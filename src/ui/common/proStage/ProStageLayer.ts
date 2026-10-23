@@ -9,11 +9,10 @@
  * Nothing here blocks the presenter and nothing here throws into it: every cue is wrapped, a layer that cannot draw costs the picture and never the fight.
  */
 import './proStage.css';
-import { breathExpired, breathFrame, leanFraction, tellLength, type BreathMarks, type Rect } from '../../../engine/pro/staging/BreathPlan.ts';
+import { breathExpired, breathFrame, MENU_EASE_MS, tellLength, type BreathMarks, type Rect } from '../../../engine/pro/staging/BreathPlan.ts';
 import type { BreathCue, EndingCue, OpeningCue, StagingPort } from '../../../engine/pro/staging/StagingPort.ts';
 import type { DemoGame } from '../../../engine/motion/DemoGate.ts';
-import { lookState, setLookTweak } from '../../../engine/look/LookState.ts';
-import { POINT_KINDS } from '../../../engine/look/relight/RelightConfig.ts';
+import { LookTuning } from './LookTuning.ts';
 import type { OdFrame } from '../../../engine/pro/staging/OpeningPlan.ts';
 import { BreathView, type BreathGeom } from './BreathView.ts';
 import { EndingView } from './EndingView.ts';
@@ -31,20 +30,6 @@ export interface ProStageOptions {
   pointOf(id: string, anchor: 'head' | 'chest' | 'feet'): { x: number; y: number } | null;
 }
 
-/** The look's tweaks the held breath turns while a staged move is alive (`engine/look/LookState.setLookTweak`; the previous value comes back with the lift). */
-const LOOK_TWEAKS: ReadonlyArray<{ name: string; mark?: number; tell: number; game?: DemoGame; move?: 'mega-flare' }> = [
-  { name: 'bold.rim', mark: 1.7, tell: 2.4 }, // the figures' rim light: the boss wears a rim from the wind-up, and the party and the boss are lit by the same light the wash is made of
-  { name: 'flare.white', tell: 0, game: 'ffx2', move: 'mega-flare' }, // Mega Flare's engine white-out would cover the party: the flood is this layer's, with a window around them
-  { name: 'flare.flood', tell: 0.3, game: 'ffx2', move: 'mega-flare' }, // ... and the engine's own room flood (the lit surfaces up to 2.7 times over) would overexpose the girls inside those windows: it steps back, this layer's flood is the picture
-];
-
-/**
- * The look's point-light kinds the held breath turns down while its move plays (`look/relight/RelightConfig.ts#POINT_KINDS`, read live each frame; the previous value comes back with the lift). Mega Flare's own light (release 62, decision
- * 173b: cool white, peak 2.1, over 2.4 times the reach) lights the three girls to white; inside the clear windows this layer cuts for them that read as three blank bubbles. At 0.9 they stay lit by the beam and stay people.
- * [ours]; if the look lane freezes or renames the table this is skipped and the girls keep the engine's light.
- */
-const POINT_TUNES: ReadonlyArray<{ kind: string; peak: number; game: DemoGame; move: 'mega-flare' }> = [{ kind: 'megaflare', peak: 0.9, game: 'ffx2', move: 'mega-flare' }];
-
 export class ProStageLayer implements StagingPort {
   /** Under the HUD (z 0) and over it (z 30). */
   readonly under: HTMLElement;
@@ -59,16 +44,19 @@ export class ProStageLayer implements StagingPort {
   private subject: { attacker: string; party: readonly string[]; move: string } | null = null;
   private drift = true;
   private disposed = false;
-  private saved = new Map<string, number | undefined>();
-  private savedPoints = new Map<string, number>();
-  private rectAt = 0;
-  private geom: BreathGeom | null = null;
+  private readonly look: LookTuning;
+  private readonly geoms = new Map<'breath' | 'opening', { at: number; geom: BreathGeom }>();
   private odDrawn = false;
+  /** FFX-2 (D-357): is a command menu open right now? Asked each frame; `menuHold` eases toward it so the wash, the HUD sink, the flood and the flash step aside for the menu and come back after it. */
+  private menuProbe: (() => boolean) | null = null;
+  private menuHold = 0;
+  private lastClock = 0;
   /** For checks and the debug API: what the last frame drew. */
   readonly stats = { frames: 0, cues: 0, drawn: 0, updateMs: 0, updateMaxMs: 0, lastFrame: null as ReturnType<typeof breathFrame> | null };
 
   constructor(private readonly o: ProStageOptions) {
     const doc = o.root.ownerDocument;
+    this.look = new LookTuning(o.game);
     this.under = doc.createElement('div');
     this.under.className = 'pst';
     this.under.dataset['game'] = o.game;
@@ -99,7 +87,7 @@ export class ProStageLayer implements StagingPort {
         this.marks = { markAt: this.clock, tellAt: null, tellMs: 1000, blowAt: null, liftAt: null, game: cue.game, flood: cue.move === 'mega-flare', tame: cue.tame };
         this.subject = { attacker: cue.attacker, party: cue.party, move: cue.move };
         this.breathView.setName(cue.name);
-        this.armLook(cue.move, true, 'mark');
+        this.look.arm(cue.move, true, 'mark');
         return;
       }
       if (cue.kind === 'tell') {
@@ -111,9 +99,9 @@ export class ProStageLayer implements StagingPort {
         this.marks.tellAt = this.clock;
         this.marks.tellMs = tellLength(cue.msToBlow);
         this.marks.tame = cue.tame;
-        this.marks.menu = cue.menu === true;
+        if (cue.menu === true) this.menuHold = 1; // a menu already open as the tell begins: the wash never starts
         this.marks.calm = cue.calm;
-        this.armLook(cue.move, true, 'tell');
+        this.look.arm(cue.move, true, 'tell');
         this.root().dataset['pst'] = '';
         return;
       }
@@ -154,7 +142,9 @@ export class ProStageLayer implements StagingPort {
   clear(): void {
     this.marks = null;
     this.subject = null;
-    this.armLook('mega-flare', false);
+    this.menuProbe = null;
+    this.menuHold = 0;
+    this.look.arm('mega-flare', false);
     this.settle();
     this.breathView.reset();
     this.endingView.clear();
@@ -176,6 +166,10 @@ export class ProStageLayer implements StagingPort {
   private step(dt: number): void {
     if (!this.frozen) this.clock += Math.max(0, dt) * 1000;
     this.stats.frames++;
+    const dMs = Math.max(0, this.clock - this.lastClock);
+    this.lastClock = this.clock;
+    const menuOpen = this.menuProbe !== null && this.safeMenu();
+    this.menuHold = Math.min(1, Math.max(0, this.menuHold + (menuOpen ? dMs : -dMs) / MENU_EASE_MS));
     this.endingView.update(this.clock);
     this.openingView.update(this.clock);
     const m = this.marks;
@@ -183,39 +177,42 @@ export class ProStageLayer implements StagingPort {
     if (m && breathExpired(this.clock, m)) {
       this.marks = null;
       this.subject = null;
-      this.armLook('mega-flare', false);
+      this.look.arm('mega-flare', false);
       this.breathView.reset();
     } else if (m) {
-      const f = breathFrame(this.clock, m);
+      const f = breathFrame(this.clock, m, this.menuHold);
       this.stats.lastFrame = f;
-      this.breathView.draw(f, this.readGeom(), this.o.game, this.drift);
+      this.breathView.draw(f, this.readGeom(), this.o.game, this.drift, { tame: m.tame });
       hud = Math.min(hud, f.hud);
       if (!f.alive) {
         this.marks = null;
-        this.armLook('mega-flare', false);
+        this.look.arm('mega-flare', false);
         this.breathView.reset();
       }
     }
-    // an Overdrive's opening (FFX): the same wash and windows, lighter, around the lit caster (never while a held breath has the canvas)
+    // an Overdrive's opening (FFX): the same wash and windows, lighter, around the lit caster (never while a held breath is telling: a marker that only waits for its move, name and ring, leaves the canvas free)
     const od = this.openingView.frame;
-    if (od?.alive && this.marks === null) {
+    if (od?.alive && (this.marks === null || this.marks.tellAt === null)) {
       const actor = this.openingView.actorId;
       if (actor) {
-        this.breathView.draw(odToBreath(od), this.readGeom({ attacker: actor, party: [], companions: [] }), this.o.game, false);
+        this.breathView.draw(odToBreath(od), this.readGeom({ attacker: actor, party: [], companions: [] }), this.o.game, false, { tame: this.openingView.tame, mark: false });
         hud = Math.min(hud, 1 - (1 - 1 / 6) * od.light);
         this.odDrawn = true;
       }
     } else if (this.odDrawn) {
       this.odDrawn = false;
       if (this.marks === null) this.breathView.reset();
+      else this.breathView.clearLight(); // a marker waits: keep its name and ring, give the canvas back
     }
     // the HUD's sink: the pieces ask for it, the lowest strength wins; with none the HUD is left to its own opacity
     if (hud < 0.999) {
       const r = this.root();
       r.dataset['pst'] = '';
       r.style.setProperty('--pst-hud', hud.toFixed(3));
-    } else if (this.marks === null) {
-      this.settle();
+    } else if (this.marks === null || this.marks.tellAt === null) {
+      this.settle(); // nothing wants the HUD sunk (a marker that only waits for its turn does not): give it back, never leave a stale partial value on it
+    } else if (this.root().dataset['pst'] !== undefined) {
+      this.root().style.setProperty('--pst-hud', '1.000'); // a tell is running but a menu holds the sink off: the HUD is at full strength, said plainly
     }
   }
 
@@ -240,9 +237,9 @@ export class ProStageLayer implements StagingPort {
       flood: o.move === 'mega-flare',
       tame: o.tame === true,
     };
-    this.armLook(o.move, true);
+    this.look.arm(o.move, true);
     this.root().dataset['pst'] = '';
-    this.geom = null;
+    this.geoms.clear();
     this.update(0);
   }
 
@@ -256,11 +253,6 @@ export class ProStageLayer implements StagingPort {
   /** Captures only: let the clock run again after `advance` or `scrubBreath`. */
   release(): void {
     this.frozen = false;
-  }
-
-  /** The camera's lean for a tell, as a fraction of the subject distance (the presenter applies it through the camera port). */
-  lean(): number {
-    return leanFraction(this.o.game);
   }
 
   /** Is a staged move alive (marked, telling, or not yet lifted)? */
@@ -292,9 +284,8 @@ export class ProStageLayer implements StagingPort {
   /** The rectangles, read every frame or so (a directed camera, `pro-camera`, may be moving during a tell and the pools must stay on the figures; a rect costs one projection each, a few microseconds). */
   private readGeom(over?: { attacker: string; party: readonly string[]; companions: readonly string[] }): BreathGeom {
     const kind = over === undefined ? 'breath' : 'opening';
-    if (this.geom && kind === this.geomKey && this.clock - this.rectAt < 12) return this.geom;
-    this.rectAt = this.clock;
-    this.geomKey = kind;
+    const hit = this.geoms.get(kind);
+    if (hit && this.clock - hit.at < 12) return hit.geom;
     const s = over ?? this.subject;
     const w = this.under.clientWidth || this.o.root.clientWidth || 1600;
     const h = this.under.clientHeight || this.o.root.clientHeight || 900;
@@ -312,8 +303,21 @@ export class ProStageLayer implements StagingPort {
     }
     const chest = s ? this.o.pointOf(s.attacker, 'chest') : null;
     const feet = s ? this.o.pointOf(s.attacker, 'feet') : null;
-    this.geom = { w, h, attacker, chest, feet, companions, party };
-    return this.geom;
+    const geom: BreathGeom = { w, h, attacker, chest, feet, companions, party };
+    this.geoms.set(kind, { at: this.clock, geom });
+    return geom;
+  }
+
+  setMenuProbe(probe: () => boolean): void {
+    this.menuProbe = probe;
+  }
+
+  private safeMenu(): boolean {
+    try {
+      return this.menuProbe?.() === true;
+    } catch {
+      return false; // a probe that throws costs the menu rule's check, never the frame
+    }
   }
 
   /** The foe-side figures that keep their colour with the attacker; set by the presenter's cue (`setCompanions`). */
@@ -321,51 +325,8 @@ export class ProStageLayer implements StagingPort {
   setCompanions(ids: readonly string[]): void {
     this.companions = ids;
   }
-  private geomKey: 'breath' | 'opening' = 'breath';
   private companionIds(): readonly string[] {
     return this.companions;
-  }
-
-  /** The look's tweaks for the move: on at the tell, back with the lift. */
-  private armLook(move: string, on: boolean, stage: 'mark' | 'tell' = 'tell'): void {
-    this.armPoints(move, on && stage === 'tell');
-    try {
-      for (const t of LOOK_TWEAKS) {
-        if (on) {
-          if (t.game !== undefined && t.game !== this.o.game) continue;
-          if (t.move !== undefined && t.move !== move) continue;
-          const value = stage === 'mark' ? t.mark : t.tell;
-          if (value === undefined) continue;
-          if (!this.saved.has(t.name)) this.saved.set(t.name, lookState.tweaks[t.name]);
-          setLookTweak(t.name, value);
-        } else if (this.saved.has(t.name)) {
-          setLookTweak(t.name, this.saved.get(t.name) ?? null);
-          this.saved.delete(t.name);
-        }
-      }
-    } catch {
-      /* the look is optional: a missing one costs the rim, never the move */
-    }
-  }
-
-  /** The look's point lights, turned down for the move's tell and given back with the lift. */
-  private armPoints(move: string, on: boolean): void {
-    try {
-      for (const t of POINT_TUNES) {
-        const kind = (POINT_KINDS as Record<string, { peak: number }>)[t.kind];
-        if (!kind) continue;
-        if (on) {
-          if (t.game !== this.o.game || t.move !== move || this.savedPoints.has(t.kind)) continue;
-          this.savedPoints.set(t.kind, kind.peak);
-          kind.peak = Math.min(kind.peak, t.peak);
-        } else if (this.savedPoints.has(t.kind)) {
-          kind.peak = this.savedPoints.get(t.kind)!;
-          this.savedPoints.delete(t.kind);
-        }
-      }
-    } catch {
-      /* a frozen or renamed table: the girls keep the engine's light */
-    }
   }
 
   /** The HUD comes back to its own opacity. */

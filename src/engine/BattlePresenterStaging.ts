@@ -13,7 +13,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import type { PlaybackSpeed } from './BattlePresenterPorts.ts';
-import { actionOfBlow, type ActingAction } from './BattlePresenterSpellFx.ts';
+import type { ActingAction } from './BattlePresenterSpellFx.ts'; // type only: no import cycle with the spell layer, which calls this module
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { menuBlocks } from './KeySlots.ts';
 import { stagingGame, stagingPieceOn } from './pro/staging/StagingSwitch.ts';
@@ -78,6 +78,7 @@ function begin(ctx: EventCtx, port: StagingPort, move: BigMove, attacker: Combat
   if (was?.move === move && was.attacker === attacker) return; // already marked
   live.set(ctx, { move, attacker, name: NAME_OF[move] });
   setCompanions(port, companionsOf(ctx, attacker));
+  port.setMenuProbe?.(() => menuBlocks(ctx)); // D-357: asked each frame, so a menu that opens mid-breath holds the wash off
   port.breath({ ...facts, kind: 'mark', move, name: NAME_OF[move], attacker, party: partyOf(ctx) });
 }
 
@@ -93,8 +94,9 @@ function setCompanions(port: StagingPort, ids: readonly string[]): void {
  */
 export const FFX_TA_LEAD_MS = 1100;
 
-/** `action-start`: a boss's big move begins. FFX's Total Annihilation tells from here (see {@link FFX_TA_LEAD_MS}). */
+/** `action-start`: a boss's big move begins (and its name is kept for the defeat card). FFX's Total Annihilation tells from here (see {@link FFX_TA_LEAD_MS}). */
 export function stageMark(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>): void {
+  noteFoeMove(ctx, event);
   const port = stagingPort(ctx, 'breath');
   if (!port || ctx.stage.sideOf(event.actorId) !== 'enemy') return;
   const move = bigMoveOf(event.abilityId, stagingGame());
@@ -146,10 +148,10 @@ export function stageBlow(ctx: EventCtx, event: Extract<BattleEvent, { type: 'da
  * The wash lifts. `'action'`: an action of the attacker has ended; it lifts only if that action IS the staged move (FFX-2's Bahamut acts between the countdown numbers, and the marker waits through those:
  * the first browser run of the real fight lifted at the first Impulse). `'ko'`: the attacker fell, whatever it was doing.
  */
-export function stageLift(ctx: EventCtx, endedId: CombatantId | null | undefined, how: 'action' | 'ko' = 'ko'): void {
+export function stageLift(ctx: EventCtx, endedId: CombatantId | null | undefined, how: 'action' | 'ko' = 'ko', ended?: ActingAction): void {
   const l = live.get(ctx);
   if (l === undefined || endedId === null || endedId === undefined || l.attacker !== endedId) return;
-  if (how === 'action' && bigMoveOf(actionOfBlow(ctx, endedId)?.abilityId, stagingGame()) !== l.move) return;
+  if (how === 'action' && bigMoveOf(ended?.abilityId, stagingGame()) !== l.move) return; // `ended`: the action that just ended (`actionOfBlow`, which the caller has)
   live.delete(ctx);
   blown.delete(ctx);
   const port = ctx.deps?.staging ?? null;
@@ -168,6 +170,12 @@ interface Freezable {
 const felled = new WeakMap<EventCtx, CombatantId>();
 /** One freeze per fight: the killing blow of a chain's last link. */
 const frozen = new WeakSet<EventCtx>();
+
+/** A foe is KO'd: a boss that falls takes its marker with it, and the last foe of the fight holds the frame on the killing blow (the caller awaits the answer before the foe is sent). */
+export function stageKo(ctx: EventCtx, id: CombatantId): Promise<void> | undefined {
+  stageLift(ctx, id);
+  return stageFreeze(ctx, id);
+}
 
 /** The foe's latest move, per presenter: the defeat card names it ("Felled by Total Annihilation"). */
 const foeMove = new WeakMap<EventCtx, string>();
@@ -222,6 +230,7 @@ export function stageVictory(ctx: EventCtx, kind: 'pose' | 'hold', floor: number
   port.ending({ ...facts, kind: 'title', boss: boss ?? '' });
   if (kind === 'pose') return cheerFloorMs(ctx, floor);
   const hold = Math.max(floor, STAND_DOWN_MIN_MS);
+  if (facts.calm) return hold; // REDUCE MOTION: no pull-back, no bars (the title and the quiet hold stay)
   const pullMs = 1200;
   void ctx.sleep(hold - pullMs - 150).then(() => {
     port.ending({ ...stageFacts(ctx), kind: 'pullback', ms: pullMs });

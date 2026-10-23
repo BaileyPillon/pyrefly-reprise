@@ -41,7 +41,7 @@ class Port implements StagingPort {
 const dmg = (target: string, hit: number, count: number, source?: string, amount = 500): Seq<BattleEvent> =>
   ({ type: 'damage', targetId: target, ...(source === undefined ? {} : { sourceId: source }), amount, element: 'none', crit: false, hitIndex: hit, hitCount: count }) as Seq<BattleEvent>;
 
-function rig(opts: { party?: string[]; foes?: string[]; chapter?: string; staging?: boolean; speed?: 'normal' | 'fast' | 'skip'; moreLinks?: boolean } = {}) {
+function rig(opts: { party?: string[]; foes?: string[]; chapter?: string; staging?: boolean; speed?: 'normal' | 'fast' | 'skip'; moreLinks?: boolean; reduceMotion?: boolean; menuOpen?: () => boolean } = {}) {
   const party = opts.party ?? ['tidus', 'yuna', 'kimahri'];
   const foes = opts.foes ?? ['seymour-flux', 'mortiorchis'];
   const stage = new FakeStage(party, foes);
@@ -55,7 +55,13 @@ function rig(opts: { party?: string[]; foes?: string[]; chapter?: string; stagin
     sleep: () => Promise.resolve(),
     ...(opts.staging === false ? {} : { staging: port }),
     ...(opts.chapter === 'ffx2-bahamut' ? { game: 'ffx2' as const, victoryPose: 'hold' as const } : {}),
+    ...(opts.reduceMotion ? { moments: { letterbox: async () => undefined, nameSlab: async () => undefined, vignette: () => undefined, clear: () => undefined, reduceMotion: () => true } as never } : {}),
   });
+  if (opts.menuOpen) {
+    const c = (presenter as unknown as { ctx: { menuOpen?: () => boolean; moments: { shots: { ffx2Framing: boolean } } } }).ctx;
+    c.menuOpen = opts.menuOpen;
+    c.moments.shots.ffx2Framing = true; // what the presenter sets when it is attached to FFX-2's ATB engine (`KeySlots.isFfx2`)
+  }
   (stage as unknown as { fx: unknown }).fx = { enabled: () => true, freeze: (ms: number) => holds.push(ms), hit: () => ({ freezeMs: 0, shook: false }) };
   if (opts.speed) presenter.setSpeed(opts.speed);
   if (opts.moreLinks) (presenter as unknown as { ctx: { moreLinks?: boolean } }).ctx.moreLinks = true;
@@ -108,6 +114,21 @@ describe('the held breath through the presenter', () => {
     await r.play(move('bahamut', 'mega-flare', 'Mega Flare', 3, ['yuna', 'rikku', 'paine']));
     expect(r.port.log).toEqual(['breath:mark', 'breath:tell', 'breath:blow', 'breath:lift']);
     expect(r.port.breaths[0]).toMatchObject({ move: 'mega-flare', game: 'ffx2', attacker: 'bahamut' });
+  });
+
+  it('FFX-2 (D-357): the held breath hands the layer a probe that answers whether a command menu is open NOW, following the presenter own flag', async () => {
+    setDemoChapter('ffx2-bahamut');
+    setPaceGame('ffx2');
+    let open = true;
+    const probes: Array<() => boolean> = [];
+    const r = rig({ party: ['yuna', 'rikku', 'paine'], foes: ['bahamut'], chapter: 'ffx2-bahamut', menuOpen: () => open });
+    (r.port as unknown as { setMenuProbe: (p: () => boolean) => void }).setMenuProbe = (p) => probes.push(p);
+    await r.play(move('bahamut', 'mega-flare', 'Mega Flare', 3, ['yuna', 'rikku', 'paine']));
+    expect(probes.length).toBeGreaterThan(0);
+    expect(probes[0]!()).toBe(true);
+    open = false;
+    expect(probes[0]!()).toBe(false);
+    expect(r.port.breaths.find((b) => b.kind === 'tell')).toMatchObject({ menu: true }); // asked as the tell began, with the menu open
   });
 
   it('a group move whose blows each count their own first hit (one per girl) still tells once, and blows once', async () => {
@@ -274,6 +295,20 @@ describe('the ending through the presenter', () => {
     expect(r.port.log[0]).toBe('ending:freeze');
     expect(r.port.log).toContain('ending:title');
     expect(r.port.endings[0]).toMatchObject({ game: 'ffx2' });
+  });
+
+  it('FFX-2 Chapter IV: the silent pull-back plays, and under REDUCE MOTION it does not (no camera push, no bars); the title and the quiet hold stay', async () => {
+    setDemoChapter('ffx2-bahamut');
+    const events = [dmg('bahamut', 0, 1, 'yuna', 9999), { type: 'ko', targetId: 'bahamut' } as never, { type: 'victory', result: {} as never } as never];
+    const normal = rig({ party: ['yuna', 'rikku', 'paine'], foes: ['bahamut'], chapter: 'ffx2-bahamut' });
+    await normal.play(events);
+    await new Promise((r) => setTimeout(r, 5));
+    expect(normal.port.log).toContain('ending:pullback');
+    const calm = rig({ party: ['yuna', 'rikku', 'paine'], foes: ['bahamut'], chapter: 'ffx2-bahamut', reduceMotion: true });
+    await calm.play(events);
+    await new Promise((r) => setTimeout(r, 5));
+    expect(calm.port.log).toContain('ending:title');
+    expect(calm.port.log).not.toContain('ending:pullback');
   });
 
   it('the last member falls: the dim and the caption, no black flash, and the foe\'s move named for the card', async () => {

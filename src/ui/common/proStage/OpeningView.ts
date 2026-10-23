@@ -51,6 +51,11 @@ export class OpeningView {
     this.title.textContent = c.name;
   }
 
+  /** REDUCE FLASHES is on for the opening in play: its pop is ivory, never white. */
+  get tame(): boolean {
+    return this.marks.tame;
+  }
+
   /** The caster's rectangle now, for the layer's windows. */
   get actorId(): string | null {
     return this.frame?.alive ? this.actor : null;

@@ -11,7 +11,7 @@ import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { actionOfBlow, awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { chargeFx, odOpening, prerollFx } from './BattlePresenterBossFx.ts';
-import { noteFoeMove, stageCharge, stageFall, stageFreeze, stageLift, stageMark, stageVictory } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath, the freeze on the last blow, the openings (all no-ops unless `?staging=pro` in a demo chapter)
+import { stageCharge, stageFall, stageKo, stageLift, stageMark, stageVictory } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath, the freeze on the last blow, the openings (all no-ops unless `?staging=pro` in a demo chapter)
 import { poseForAction } from './EnemyActionPose.ts';
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -49,8 +49,7 @@ export async function actionStart(
   const burst = ctx.burst; // before the first await: an overlapping burst (FFX-2's ATB) would swap it (`motion/StrikeReach.ts`)
   ctx.actingId = event.actorId;
   beginSpellAction(ctx, event);
-  stageMark(ctx, event); // pro staging: a boss's big move begins: the small name and the rim
-  noteFoeMove(ctx, event); // pro staging: the foe's latest move, for the defeat card's cause line
+  stageMark(ctx, event); // pro staging: a boss's big move begins: the small name and the rim (and its name, for the defeat card's cause line)
   await telegraphHold(ctx, event); // r38 keys: Flux's Lance of Atrophy, Braska's Ultimate Jecht Shot (950 ms, only with the painting; else nothing happens)
   const actor = ctx.stage.actor(event.actorId);
   // An enemy's physical ability draws its own attack painting (iter2
@@ -109,8 +108,7 @@ export async function actionEnd(ctx: EventCtx, endedId?: CombatantId): Promise<v
   const actor = ctx.actingId ? ctx.stage.actor(ctx.actingId) : undefined;
   const motion = ctx.deps.actionMotion; // FF7 and FFX-2: the run back home
   const going = endedId ?? ctx.actingId; // the figure whose action ended: under FFX-2's ATB a second action can be open, so `actingId` may be hers or not
-  stageLift(ctx, going, 'action'); // pro staging: a staged big move is over: the wash lifts (only for the staged move's own action)
-  releaseCastLift(ctx, going); // the cast lift comes down with the action at the latest
+  stageLift(ctx, going, 'action', actionOfBlow(ctx, going ?? undefined)); releaseCastLift(ctx, going); // pro staging: a staged big move is over, the wash lifts (only for the staged move's own action); the cast lift comes down with the action at the latest
   if (motion && going) await settled(ctx, motion.close(going, motionCtx(ctx)), MOTION_GUARD_MS);
   idleAtEnd(ctx, actor, ctx.actingId); // the idle, or (new curves) the strike's own marks do it: follow on the fastest frame home, idle at home
   ctx.actingId = null;
@@ -220,8 +218,7 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   const side = ctx.stage.sideOf(id);
   cue(ctx, 'ko');
   if (side === 'enemy') {
-    stageLift(ctx, id); // pro staging: a boss that falls takes its marker with it
-    await stageFreeze(ctx, id); // pro staging: the last foe of the fight: the frame holds on the killing blow before it is sent
+    await stageKo(ctx, id); // pro staging: a boss that falls takes its marker with it; the last foe of the fight holds the frame on the killing blow before it is sent
     // Evrae falls out of the sky; Leblanc, Logos, Ormi and the Guado
     // Guardians yield; Seymour at Macalania falls and his body stays
     // (`BattlePresenterDepartures.ts`). Everyone else is sent.
@@ -307,8 +304,7 @@ export async function charge(
 ): Promise<void> {
   const actor = ctx.stage.actor(event.enemyId);
   const imminent = event.stage === 2;
-  chargeFx(ctx, event); // the new effects: the boss's gather, climbing with the count (FFX-2) or the ladder (FFX)
-  stageCharge(ctx, event); // pro staging: FFX's ladder is at "imminent": the marker goes on
+  chargeFx(ctx, event); stageCharge(ctx, event); // the new effects: the boss's gather, climbing with the count (FFX-2) or the ladder (FFX); pro staging: FFX's ladder at "imminent" puts the marker on
   actor?.flash(imminent ? 0xff6b5a : 0xffc46b, 620, imminent ? 1 : 0.7);
   if (imminent) {
     ctx.stage.vfx.screenFlash('rgba(255,70,50,0.28)', 420);

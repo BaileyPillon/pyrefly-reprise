@@ -79,12 +79,14 @@
   border-radius: 999px;
   background: rgba(var(--bs-pill), 0.62);
   color: var(--bs-name);
-  font-size: clamp(9px, 0.94vw, 14px);
+  font-size: clamp(14px, 1.55vh, 22px); /* CHK-003: nothing under 14 px */
   letter-spacing: 0.4em;
 }
 .bstart--pro .bstart__name {
   font-weight: 500;
-  font-size: clamp(44px, 11.6vw, 210px); /* the book's lock-up: "Seymour Flux" runs 43 percent of the frame's width */
+  /* sized by the frame's HEIGHT as well as its width, because the boss painting is sized by height (`background-size: auto 104%`): at 16:9 this is 8 vw at every size (the 2560 look, where the name clears the painting), and the
+     width term only takes over on a narrower frame. The review found the old 11.6 vw name over Seymour's leg at 1600x900 and behind Bahamut's wing at 1920x1080. "Seymour Flux" then runs about 40 percent of the frame (the book's mock: 43). */
+  font-size: clamp(40px, min(11.6vw, 14.2vh), 320px);
   line-height: 1;
   letter-spacing: -0.012em;
   color: var(--bs-name);
@@ -101,7 +103,7 @@
   margin: 0.4em 0 0.7em;
 }
 .bstart--pro .bstart__subline {
-  font-size: clamp(14px, 2.15vw, 36px);
+  font-size: clamp(16px, 3.3vh, 36px);
   color: var(--bs-name);
   opacity: 0.86;
 }
@@ -116,7 +118,7 @@
   bottom: 0;
 }
 
-/* the blink: one frame of white into the card, gone in 160 ms */
+/* the blink: one frame of white into the card, gone in 160 ms. Only the battle's own card blinks: the loading card the entry transition shows first (`bstart--loading`) is the same painting and carried on without one (the review saw two white blinks 0.5 s apart: a stutter). */
 .bstart--pro::before {
   content: '';
   position: absolute;
@@ -144,6 +146,11 @@
   to { transform: none; opacity: 1; }
 }
 
+.bstart--pro.bstart--loading::before {
+  display: none;
+}
+
+/* the player's own rows, not only the OS query: REDUCE MOTION (the push, the rise, the blink) and REDUCE FLASHES (no white frame at all; `comfort.css` / `comfort-flashes.css` mirror the stylesheets they own, this one is its own) */
 @media (prefers-reduced-motion: reduce) {
   .bstart--pro .bstart__wash,
   .bstart--pro .bstart__art,
@@ -154,4 +161,14 @@
   .bstart--pro::before {
     display: none;
   }
+}
+html[data-reduce-motion] .bstart--pro .bstart__wash,
+html[data-reduce-motion] .bstart--pro .bstart__art,
+html[data-reduce-motion] .bstart--pro .bstart__panel,
+html[data-reduce-motion] .bstart--pro::before {
+  animation: none;
+}
+html[data-reduce-motion] .bstart--pro::before,
+html[data-reduce-flashes] .bstart--pro::before {
+  display: none;
 }

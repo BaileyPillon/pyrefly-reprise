@@ -48,6 +48,8 @@ export interface EndMarks {
   tame: boolean;
   /** REDUCE MOTION: the shock ring does not travel. */
   calm: boolean;
+  /** The playback speed's factor on the defeat's dim and caption (1 normal, 0.32 fast; the card is the flow's and comes when the presenter is done, so these keep up with it). */
+  scale: number;
 }
 
 export interface EndFrame {
@@ -74,7 +76,7 @@ const smooth = (x: number): number => {
   return t * t * (3 - 2 * t);
 };
 
-export const emptyEnd = (): EndMarks => ({ freezeAt: null, freezeMs: FREEZE_HOLD_MS, titleAt: null, pullAt: null, pullMs: 1200, fallAt: null, tame: false, calm: false });
+export const emptyEnd = (): EndMarks => ({ freezeAt: null, freezeMs: FREEZE_HOLD_MS, titleAt: null, pullAt: null, pullMs: 1200, fallAt: null, tame: false, calm: false, scale: 1 });
 
 export function endFrame(now: number, m: EndMarks): EndFrame {
   let flash = 0;
@@ -96,8 +98,9 @@ export function endFrame(now: number, m: EndMarks): EndFrame {
   }
   const title = m.titleAt === null ? 0 : smooth((now - m.titleAt) / TITLE_MS);
   const bars = m.pullAt === null ? 0 : smooth((now - m.pullAt) / Math.max(1, m.pullMs));
-  const dim = m.fallAt === null ? 0 : smooth((now - m.fallAt) / DIM_MS);
-  const caption = m.fallAt === null ? 0 : smooth((now - m.fallAt - CAPTION_DELAY_MS) / CAPTION_MS);
+  const sc = Math.max(0.05, m.scale);
+  const dim = m.fallAt === null ? 0 : smooth((now - m.fallAt) / (DIM_MS * sc));
+  const caption = m.fallAt === null ? 0 : smooth((now - m.fallAt - CAPTION_DELAY_MS * sc) / (CAPTION_MS * sc));
   if (m.titleAt !== null) hud = Math.min(hud, 1 - title); // the title comes with the HUD going out, whether or not a freeze opened the beat (a menu open at the last blow skips the freeze)
   if (m.fallAt !== null) hud = Math.min(hud, 1 - dim); // the party falls: the HUD goes out with the light, the card that follows is the flow's
   const alive = m.freezeAt !== null || m.titleAt !== null || m.pullAt !== null || m.fallAt !== null;

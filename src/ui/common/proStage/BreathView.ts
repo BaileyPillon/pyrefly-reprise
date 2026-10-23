@@ -45,6 +45,9 @@ const MOTES = (() => {
   return Array.from({ length: 34 }, () => ({ a: rnd() * Math.PI * 2, r: 0.38 + rnd() * 0.95, d: rnd() * 0.45, s: 0.6 + rnd() * 1.5 }));
 })();
 
+/** REDUCE FLASHES: the flash and the flood are warm ivory (`flashRules.IVORY`), never white. */
+const IVORY_RGB = '255,241,214';
+
 const ease = (x: number): number => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
 
 export class BreathView {
@@ -54,6 +57,8 @@ export class BreathView {
   private readonly ringO: HTMLElement;
   private readonly ringI: HTMLElement;
   private readonly name: HTMLElement;
+  /** The blow's flash is drawn here first and the party's windows are cut out of it, then it is laid on the main canvas (created at the first flash). */
+  private flashCv: HTMLCanvasElement | null = null;
   private cw = 0;
   private ch = 0;
   private dirty = false;
@@ -91,15 +96,17 @@ export class BreathView {
     }
   }
 
-  /** Draw one frame. `game` skins it. */
-  draw(f: BreathFrame, g: BreathGeom, game: 'ffx' | 'ffx2', drift: boolean): void {
+  /** Draw one frame. `game` skins it. `tame`: REDUCE FLASHES (ivory, never white). `mark` false leaves the ring and the name where they are (an Overdrive's light drawn while a marked move waits). */
+  draw(f: BreathFrame, g: BreathGeom, game: 'ffx' | 'ffx2', drift: boolean, opt: { tame?: boolean; mark?: boolean } = {}): void {
     const ctx = this.cx;
-    this.placeMark(f, g);
+    if (opt.mark !== false) this.placeMark(f, g, game);
     if (!ctx) return;
     this.fit(g.w, g.h);
     const sx = this.cw / Math.max(1, g.w);
     const sy = this.ch / Math.max(1, g.h);
-    const pal = PALETTE[game];
+    const base = PALETTE[game];
+    const pal = opt.tame === true ? { ...base, flood: IVORY_RGB, floodEdge: IVORY_RGB } : base;
+    const white = opt.tame === true ? IVORY_RGB : '255,255,255';
     const W = this.cw;
     const H = this.ch;
     const any = f.drain > 0.002 || f.core > 0.002 || f.flash > 0.002 || f.flood > 0.002 || (f.inflow > 0 && f.inflow < 1 && f.drain > 0.002);
@@ -133,7 +140,8 @@ export class BreathView {
     }
     // the windows: the figures that keep their colour (the attacker's closes as the flood takes it)
     const windows: ClearWindow[] = [];
-    for (const r of g.party) windows.push(windowOf(r));
+    const growParty = 1 + 0.3 * Math.min(1, f.flood * 1.4); // the girls' pools open wider as the flood rises: at the blow the party is the only colour
+    for (const r of g.party) windows.push(windowOf(r, growParty));
     const keep = 1 - Math.min(1, f.flood * 1.4);
     if (keep > 0.02) {
       if (g.attacker) windows.push(windowOf(g.attacker, keep));
@@ -194,17 +202,35 @@ export class BreathView {
       ctx.fillStyle = cg;
       ctx.fillRect(chest.x - R * 2.2, chest.y - R * 2.2, R * 4.4, R * 4.4);
     }
-    // the flash at the blow: a white pop from the chest, never over the party's clear windows for long
-    if (chest && f.flash > 0.004) {
-      const R = Math.hypot(W, H) * (0.3 + 0.3 * (1 - f.flash));
-      const fg = ctx.createRadialGradient(chest.x, chest.y, 0, chest.x, chest.y, R);
-      fg.addColorStop(0, `rgba(255,255,255,${Math.min(1, f.flash)})`);
-      fg.addColorStop(0.5, `rgba(${pal.core},${f.flash * 0.5})`);
-      fg.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = fg;
-      ctx.fillRect(0, 0, W, H);
-    }
+    // the flash at the blow: a white pop from the chest, with the party's windows cut out of it (the review's M4: it went over the girls)
+    if (chest && f.flash > 0.004) this.flash(ctx, f.flash, chest, { white, core: opt.tame === true ? IVORY_RGB : pal.core }, g.party, sx, sy, growParty);
     ctx.globalCompositeOperation = 'source-over';
+  }
+
+  /** The pop on a layer of its own, the party's pools cut out of it, then added to the frame. */
+  private flash(ctx: CanvasRenderingContext2D, k: number, chest: { x: number; y: number }, c: { white: string; core: string }, party: readonly Rect[], sx: number, sy: number, grow: number): void {
+    const doc = this.host.ownerDocument;
+    const cv = (this.flashCv ??= doc.createElement('canvas'));
+    if (cv.width !== this.cw || cv.height !== this.ch) {
+      cv.width = this.cw;
+      cv.height = this.ch;
+    }
+    const fx = cv.getContext('2d');
+    if (!fx) return;
+    const W = this.cw;
+    const H = this.ch;
+    fx.globalCompositeOperation = 'source-over';
+    fx.clearRect(0, 0, W, H);
+    const R = Math.hypot(W, H) * (0.3 + 0.3 * (1 - k));
+    const fg = fx.createRadialGradient(chest.x, chest.y, 0, chest.x, chest.y, R);
+    fg.addColorStop(0, `rgba(${c.white},${Math.min(1, k)})`);
+    fg.addColorStop(0.5, `rgba(${c.core},${k * 0.5})`);
+    fg.addColorStop(1, `rgba(${c.white},0)`);
+    fx.fillStyle = fg;
+    fx.fillRect(0, 0, W, H);
+    fx.globalCompositeOperation = 'destination-out';
+    for (const r of party) this.pool(fx, windowOf(r, grow), sx, sy, 0.5, 1);
+    ctx.drawImage(cv, 0, 0);
   }
 
   /** One window's pool: an ellipse, clear in the middle (`soft` of its radius), falling to nothing at the edge. */
@@ -225,8 +251,8 @@ export class BreathView {
     ctx.restore();
   }
 
-  /** The ring and the name, at the boss's feet. */
-  private placeMark(f: BreathFrame, g: BreathGeom): void {
+  /** The ring and the name, at the boss's feet: FFX-2's name sits above the ring, as the mock has it; FFX's mount floats, so above its feet is its own scythe and legs (the review's m-g): its name goes below the ring, on clear floor. */
+  private placeMark(f: BreathFrame, g: BreathGeom, game: 'ffx' | 'ffx2'): void {
     const m = this.mark;
     if (!g.feet || !g.attacker) {
       m.style.opacity = '0';
@@ -240,10 +266,17 @@ export class BreathView {
       r.style.width = `${(rx * 2).toFixed(0)}px`;
       r.style.height = `${(ry * 2).toFixed(0)}px`;
     }
-    this.name.style.top = `${(-ry * 1.2).toFixed(0)}px`;
+    this.name.style.top = `${(game === 'ffx' ? ry * 1.35 : -ry * 1.2).toFixed(0)}px`;
+    this.name.style.transform = game === 'ffx' ? 'translate(-50%, 0)' : '';
     this.host.style.setProperty('--pst-ring', f.ring.toFixed(3));
     this.host.style.setProperty('--pst-ringscale', f.ringScale.toFixed(3));
     this.host.style.setProperty('--pst-name', f.name.toFixed(3));
+  }
+
+  /** Clear the canvas only, the ring and the name stay (an Overdrive's light ends while a marked move still waits). */
+  clearLight(): void {
+    this.cx?.clearRect(0, 0, this.cw, this.ch);
+    this.dirty = false;
   }
 
   /** Clear everything now. */
@@ -256,5 +289,6 @@ export class BreathView {
   dispose(): void {
     this.cv.remove();
     this.mark.remove();
+    this.flashCv = null;
   }
 }

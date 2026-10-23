@@ -36,7 +36,7 @@ export function playResultsWipe(
   /** Lane "pro-staging" (the demo chapters with the staging on): the held victory scene dissolves into the panel in place of the diagonal wipe (`proStage/resultsDissolve.ts`). */
   opts?: { dissolve: 'soft' | 'calm' },
 ): Promise<void> {
-  if (opts?.dissolve) return playResultsDissolve(root, game, onCover, opts.dissolve === 'calm');
+  if (opts?.dissolve) return playResultsDissolve(root, game, onCover); // REDUCE FLASHES makes its cover dim ivory (the dissolve reads the setting); REDUCE MOTION does not shorten a fade
   const f = paceFactor('transition', paceGameOf(game)); // the pacing option (`src/engine/pace.ts`), 1 unless picked
   return playWipe(root, {
     direction: game === 'ffx2' ? 'rtl' : 'ltr',

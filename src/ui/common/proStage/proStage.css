@@ -80,7 +80,7 @@
   text-transform: uppercase;
   letter-spacing: 0.46em;
   padding-left: 0.46em; /* the tracking trails the last letter: balance it */
-  font-size: clamp(11px, 1.5vh, 22px);
+  font-size: clamp(14px, 1.7vh, 24px); /* CHK-003: nothing under 14 px */
   color: #ffffff;
   text-shadow: 0 0 2px rgba(14, 24, 84, 0.95), 0 0 6px rgba(14, 24, 84, 0.85), 0 0 16px rgba(24, 40, 120, 0.7); /* a dark halo: white type has to read on the ivory wash and on a pale painted boss alike */
   opacity: var(--pst-name, 0);
@@ -103,6 +103,10 @@
 [data-pst] .eint {
   opacity: var(--pst-hud, 1) !important; /* the enemy-intent slab and its E ENEMY MOVE chip go with the rest: the victory title sits where the chip parks */
 }
+/* FFX steps the slab back to 0.16 while an action plays (`ffx-hud.css`, `.ffxhud--acting`); the sink must not lift it to 1 for the tell and drop it again at the lift (the review saw it pop): it takes the lower of the two */
+[data-pst] .ffxhud--acting .eint {
+  opacity: min(var(--pst-hud, 1), 0.16) !important;
+}
 
 /* ---- the ending (top layer): the freeze's flash and shock ring, the quiet VICTORY, the FFX-2 pull-back's bars, the defeat's dim and caption ---- */
 .pst__dim {
@@ -122,6 +126,10 @@
 }
 .pst-top[data-game='ffx2'] .pst__flash {
   background: radial-gradient(ellipse at 56% 40%, #ffffff 0%, rgba(255, 250, 255, 0.94) 38%, rgba(250, 228, 250, 0.8) 100%);
+}
+/* REDUCE FLASHES: the pop is warm ivory (`flashRules.IVORY`), never white */
+.pst-top .pst__flash.pst__flash--tame {
+  background: radial-gradient(ellipse at 56% 40%, #fff1d6 0%, rgba(255, 241, 214, 0.94) 38%, rgba(255, 236, 200, 0.8) 100%);
 }
 .pst__shock {
   position: absolute;
@@ -154,6 +162,10 @@
   opacity: 0;
   will-change: opacity, transform;
 }
+/* FFX-2's pull-back closes letterbox bars of 8.5 percent of the frame (`EndingPlan.PULL_BAR_SHARE`) over the top of it: the title sits wholly below their edge, not astride it (the review's m-i) */
+.pst-top[data-game='ffx2'] .pst__title {
+  top: calc(8.5% + clamp(14px, 2.4vh, 30px));
+}
 .pst__title-word {
   font-family: var(--pst-serif);
   font-weight: 500;
@@ -173,7 +185,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.42em;
-  font-size: clamp(9px, 0.95vw, 15px);
+  font-size: clamp(14px, 1.5vh, 18px);
   color: var(--pst-gold);
   text-shadow: 0 1px 3px rgba(14, 22, 80, 0.8);
 }
@@ -192,7 +204,7 @@
   text-transform: uppercase;
   letter-spacing: 0.7em;
   padding-left: 0.7em;
-  font-size: clamp(12px, 1.35vw, 22px);
+  font-size: clamp(14px, 1.35vw, 22px);
   color: rgba(255, 255, 255, 0.92);
   text-shadow: 0 0 14px rgba(20, 30, 100, 0.8), 0 1px 3px rgba(10, 16, 70, 0.9);
 }
@@ -212,7 +224,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.4em;
-  font-size: clamp(9px, 0.95vw, 15px);
+  font-size: clamp(14px, 1.5vh, 18px);
   color: var(--pst-gold);
   text-shadow: 0 0 2px rgba(14, 24, 84, 0.95), 0 0 8px rgba(14, 24, 84, 0.8);
 }
@@ -270,7 +282,7 @@
 }
 [data-pst-open] .ffx2sf__who {
   text-transform: uppercase;
-  font-size: calc(6.5px * var(--sf-scale));
+  font-size: max(14px, calc(6.5px * var(--sf-scale))); /* CHK-003 */
   letter-spacing: 0.38em;
   color: #8d4aa6;
 }
@@ -288,7 +300,7 @@
   align-items: center;
   gap: 0.55em;
   text-transform: uppercase;
-  font-size: calc(6.5px * var(--sf-scale));
+  font-size: max(14px, calc(6.5px * var(--sf-scale)));
   letter-spacing: 0.2em;
   color: #4a1a66;
 }

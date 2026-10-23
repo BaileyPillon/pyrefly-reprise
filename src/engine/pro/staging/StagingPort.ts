@@ -33,7 +33,7 @@ export interface StageFacts {
   calm: boolean;
   /** REDUCE FLASHES is on: no white flash, and the flood is capped. */
   tame: boolean;
-  /** FFX-2 only: a command menu is open as the look begins (`KeySlots.menuBlocks`; D-357: "nothing plays over an open command menu"). The held breath then plays without its wash, flood and HUD sink: the name, the ring and the core only. */
+  /** FFX-2 only: a command menu is open as the look begins (`KeySlots.menuBlocks`; D-357: "nothing plays over an open command menu"). The held breath then plays without its wash, flood, flash and HUD sink: the name, the ring and the core only. */
   menu?: boolean;
 }
 
@@ -60,6 +60,8 @@ export interface StagingPort {
   breath(cue: BreathCue): void;
   ending(cue: EndingCue): void;
   opening(cue: OpeningCue): void;
+  /** Optional: the held breath asks this each frame whether an FFX-2 command menu is open NOW (D-357), so a menu that opens or closes mid-breath holds the wash off and gives it back. */
+  setMenuProbe?(probe: () => boolean): void;
   /** Drop every layer at once (the screen leaves, a fight restarts). */
   clear(): void;
 }

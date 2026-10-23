@@ -1,5 +1,5 @@
 /**
- * The pro staging (lane "pro-staging"; branch pro-staging from playtest-1022): the switch, the move table, the held breath's plan and the mask of its windows. Both games; Chapter I (FFX) and Chapter IV (FFX-2) only.
+ * The pro staging (lane "pro-staging"; branch pro-staging from playtest-1022): the switch, the move table, the held breath's plan and its windows. Both games; Chapter I (FFX) and Chapter IV (FFX-2) only.
  * The presenter's cues are in `pro-staging-presenter.test.ts`.
  */
 import { afterEach, describe, expect, it } from 'vitest';
@@ -14,18 +14,23 @@ import {
   stagingPieceOn,
 } from '../../../src/engine/pro/staging/StagingSwitch.ts';
 import { bigMoveOf } from '../../../src/engine/pro/staging/StagingPort.ts';
+import { STAGED_BLAST, blastTune } from '../../../src/engine/pro/staging/BlastTune.ts';
+import { FxDrawList } from '../../../src/engine/spellfx/FxDrawList.ts';
+import { DEFAULT_FLASH_PARAMS } from '../../../src/engine/spellfx/SpellFxParams.ts';
+import { megaflare } from '../../../src/engine/spellfx/effects-specials.ts';
+import { targetFromRect } from '../../../src/engine/spellfx/effects-shared.ts';
 import { CAPTION_DELAY_MS, CAPTION_MS, DIM_MS, HUD_OUT_MS, SHOCK_MS, TITLE_MS, cheerHoldMs, emptyEnd, endFrame } from '../../../src/engine/pro/staging/EndingPlan.ts';
 import { OD_OPEN_HOLD_MS, emptyOd, odFrame } from '../../../src/engine/pro/staging/OpeningPlan.ts';
 import {
   BREATH_GUARD_MS,
   HUD_SINK_TO,
   LIFT_MS,
+  TAME_WASH,
   TELL_MAX_MS,
   TELL_MIN_MS,
   breathExpired,
   breathFrame,
   tellLength,
-  washMask,
   windowOf,
   type BreathMarks,
 } from '../../../src/engine/pro/staging/BreathPlan.ts';
@@ -173,18 +178,38 @@ describe('the held breath\'s plan', () => {
     expect(done.alive).toBe(false);
   });
 
-  it('FFX-2 with a command menu open as the tell begins (D-357): it plays restrained so the menu stays readable (the wash at 60 percent, the HUD only to half, the flood capped); the ring, the name and the core play in full', () => {
-    const open = marks({ menu: true, game: 'ffx2', flood: true, blowAt: 2200 });
-    const f = breathFrame(2300, open);
-    expect(f.drain).toBeGreaterThan(0.4);
-    expect(f.drain).toBeLessThan(0.65);
-    expect(breathFrame(2200, marks({ menu: true })).hud).toBeCloseTo(0.5, 5);
-    expect(f.hud).toBeGreaterThan(0.45);
-    expect(f.flood).toBeGreaterThan(0.3);
-    expect(f.flood).toBeLessThanOrEqual(0.55);
-    expect(breathFrame(2150, marks({ menu: true })).ring).toBeGreaterThan(0.9);
-    expect(breathFrame(2150, marks({ menu: true })).name).toBeGreaterThan(0.9);
-    expect(breathFrame(2150, marks({ menu: true })).core).toBeGreaterThan(0.9);
+  it('FFX-2 with a command menu open (D-357, D-441: nothing plays over it): the wash, the HUD sink, the flood and the flash are held off completely; the ring, the name and the core still play', () => {
+    const m = marks({ game: 'ffx2', flood: true, blowAt: 2200 });
+    const at = (t: number, hold: number) => breathFrame(t, m, hold);
+    for (const t of [1500, 2100, 2210, 2300, 2600]) {
+      const shut = at(t, 1);
+      expect(shut.drain).toBe(0);
+      expect(shut.hud).toBe(1);
+      expect(shut.flood).toBe(0);
+      expect(shut.flash).toBe(0);
+    }
+    expect(at(2100, 1).ring).toBeGreaterThan(0.9);
+    expect(at(2100, 1).name).toBeGreaterThan(0.9);
+    expect(at(2100, 1).core).toBeGreaterThan(0.9);
+    // no menu: the same frame as before (the third argument defaults to 0), and a half-open menu is a half-strength wash
+    expect(at(2100, 0)).toEqual(breathFrame(2100, m));
+    expect(at(1900, 0.5).drain).toBeCloseTo(at(1900, 0).drain * 0.5, 6);
+    expect(at(1900, 0.5).hud).toBeCloseTo(1 - (1 - at(1900, 0).hud) * 0.5, 6);
+  });
+
+  it('REDUCE FLASHES: the wash peaks at 35 percent of its excursion (flashRules.FLASH_PEAK_CAP), the flash and the flood stay capped', () => {
+    const full = breathFrame(2150, marks());
+    const tame = breathFrame(2150, marks({ tame: true }));
+    expect(full.drain).toBeGreaterThan(0.95);
+    expect(tame.drain).toBeCloseTo(TAME_WASH, 6);
+    expect(tame.drain * 0.8).toBeLessThanOrEqual(0.35 + 1e-9); // the veil's own alpha is 0.8 at full drain
+    const blown = marks({ tame: true, flood: true, game: 'ffx2', blowAt: 2200 });
+    for (let t = 2200; t < 3200; t += 25) {
+      const f = breathFrame(t, blown);
+      expect(f.flash).toBeLessThanOrEqual(0.3 + 1e-9);
+      expect(f.flood).toBeLessThanOrEqual(0.35 + 1e-9);
+      expect(f.drain * 0.8).toBeLessThanOrEqual(0.35 + 1e-9);
+    }
   });
 
   it('REDUCE MOTION: the ring does not travel; it is at its final size from the first frame it shows', () => {
@@ -225,6 +250,14 @@ describe('the ending plan', () => {
     expect(endFrame(DIM_MS, m).hud).toBeCloseTo(0, 5); // the HUD goes with the light
     expect(endFrame(TITLE_MS, { ...emptyEnd(), titleAt: 0 }).hud).toBeCloseTo(0, 5); // and a title with no freeze before it takes the HUD out too
   });
+  it('the defeat dim and caption keep up with the playback speed (RB held: the card lands 0.43 s after the fall, so the dim and caption must be done by then)', () => {
+    const fast = { ...emptyEnd(), fallAt: 0, scale: 0.32 };
+    expect(endFrame(DIM_MS * 0.32 + 1, fast).dim).toBeCloseTo(1, 5);
+    expect(endFrame((CAPTION_DELAY_MS + CAPTION_MS) * 0.32 + 1, fast).caption).toBeCloseTo(1, 5);
+    expect(endFrame(430, fast).dim).toBeCloseTo(1, 5);
+    expect(endFrame(430, fast).caption).toBeCloseTo(1, 5);
+    expect(endFrame(430, { ...emptyEnd(), fallAt: 0 }).caption).toBeLessThan(0.5); // at normal speed (scale 1) the old timing still holds
+  });
   it('the cheer holds for the longest real clip (Tidus 3,666.7 ms), at least the floor', () => {
     expect(cheerHoldMs([3666.7, 3200, undefined], 900)).toBe(3666.7);
     expect(cheerHoldMs([undefined], 900)).toBe(900);
@@ -244,6 +277,50 @@ describe('the ending plan', () => {
   });
 });
 
+describe('the Mega Flare effect blast on the party (the review M4)', () => {
+  const drawAt = (t: number): { glow: number; wash: number } => {
+    const T = { ...targetFromRect({ x: 800, y: 60, w: 400, h: 480 }, 1), party: { x: 300, y: 600 } };
+    const o = new FxDrawList('ffx2', 1, DEFAULT_FLASH_PARAMS);
+    o.begin();
+    megaflare(o, t, T);
+    // the light laid on the party: every additive glow sprite whose centre is within 260 px of the party's centre
+    const glow = o.items.filter((i) => i.tile === 'glow' && Math.hypot(i.x - 300, i.y - 600) < 260).reduce((s, i) => s + i.a, 0);
+    return { glow, wash: o.washes.reduce((s, w) => s + w.a, 0) };
+  };
+  afterEach(() => {
+    blastTune.megaFlareParty = 1;
+    blastTune.megaFlareWash = 1;
+    blastTune.actorBloom = 1;
+  });
+  it('is the blast of today exactly with the knob at 1 (the staging off), and lighter with it at the staged value', () => {
+    expect(blastTune.megaFlareParty).toBe(1);
+    const today = drawAt(1.6);
+    expect(today.glow).toBeGreaterThan(1);
+    blastTune.megaFlareParty = STAGED_BLAST.megaFlareParty;
+    blastTune.megaFlareWash = STAGED_BLAST.megaFlareWash;
+    const staged = drawAt(1.6);
+    expect(staged.glow).toBeLessThan(today.glow * 0.4);
+    const washToday = (() => {
+      blastTune.megaFlareWash = 1;
+      return drawAt(1.45).wash;
+    })();
+    blastTune.megaFlareWash = STAGED_BLAST.megaFlareWash;
+    expect(drawAt(1.45).wash).toBeCloseTo(washToday * STAGED_BLAST.megaFlareWash, 6);
+  });
+  it('the glow laid over a figure (the hit contact bloom on each girl) is lighter with the staged knob, and exactly today with it at 1', () => {
+    const bloomAlpha = (): number => {
+      const o = new FxDrawList('ffx2', 1, DEFAULT_FLASH_PARAMS);
+      o.begin();
+      o.bloom('#FFFFFF', 100, 100, 200, 0.5, 1);
+      return o.items[0]!.a;
+    };
+    const today = bloomAlpha();
+    expect(today).toBeCloseTo(0.5, 6);
+    blastTune.actorBloom = STAGED_BLAST.actorBloom;
+    expect(bloomAlpha()).toBeCloseTo(0.5 * STAGED_BLAST.actorBloom, 6);
+  });
+});
+
 describe('the windows in the wash', () => {
   it('a window is an ellipse around the figure\'s middle, with a floor so a small figure still gets a pool', () => {
     const w = windowOf({ x: 100, y: 200, w: 200, h: 300 });
@@ -254,11 +331,5 @@ describe('the windows in the wash', () => {
     const small = windowOf({ x: 0, y: 0, w: 20, h: 20 });
     expect(small.rx).toBe(48);
     expect(small.ry).toBe(64);
-  });
-  it('the mask has one radial gradient per window, intersected, and a solid one for none', () => {
-    const m = washMask([windowOf({ x: 0, y: 0, w: 100, h: 100 }), windowOf({ x: 300, y: 0, w: 100, h: 100 })]);
-    expect(m.image.match(/radial-gradient/g)?.length).toBe(2);
-    expect(m.composite).toBe('intersect');
-    expect(washMask([]).image).not.toContain('radial');
   });
 });

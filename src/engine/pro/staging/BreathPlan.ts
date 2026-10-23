@@ -24,10 +24,8 @@ export interface BreathMarks {
   game: BreathGame;
   /** Mega Flare opens a flood at the blow; Total Annihilation does not. */
   flood: boolean;
-  /** REDUCE FLASHES: the flash is a glow at most and the flood is capped. */
+  /** REDUCE FLASHES: the wash is capped at 35 percent of its excursion, the flash is a glow at most and the flood is capped (the flash and the flood are ivory, never white: the view reads this). */
   tame: boolean;
-  /** FFX-2: a command menu is open as the tell begins (D-357, "nothing plays over an open command menu"): the held breath then plays RESTRAINED, so the menu stays readable and can be worked: the wash at 60 percent, the HUD sinking only to half, the flood capped at 55 percent. */
-  menu?: boolean;
   /** REDUCE MOTION: the ring does not travel (it fades in at its final size) and the motes do not drift (the view reads it); the light still changes. */
   calm?: boolean;
 }
@@ -63,10 +61,14 @@ const easeOut = (x: number): number => 1 - Math.pow(1 - clamp01(x), 3);
 
 /** How far the HUD sinks: to a sixth of its strength. */
 export const HUD_SINK_TO = 1 / 6;
-/** With an FFX-2 command menu open (D-357) the breath plays restrained: the wash, the HUD's floor and the flood's cap. [ours] */
-export const MENU_WASH = 0.6;
-export const MENU_HUD_SINK_TO = 0.5;
-export const MENU_FLOOD_CAP = 0.55;
+/**
+ * FFX-2, D-357 and D-441 ("nothing plays over an open command menu", `KeySlots.menuBlocks`): while a girl's menu is open the wash, the HUD's sink, the flood and the flash are held off completely (`menuHold` 1) and the
+ * name, the ring and the core still play; the layer eases `menuHold` in and out over {@link MENU_EASE_MS} each way so a menu that opens or closes in the middle of a breath does not pop. (An earlier build played a
+ * "restrained" breath over the menu: the review found it contradicted the rule, which stands until Bailey says otherwise.)
+ */
+export const MENU_EASE_MS = 260;
+/** REDUCE FLASHES: the wash peaks at 35 percent (`flashRules.FLASH_PEAK_CAP`) of the full veil's 0.8: 0.35 / 0.8. */
+export const TAME_WASH = 0.4375;
 /** The wash's strength at its fullest in a tell, and while the rounds land (the veil's own alpha is this times the colour's). */
 export const DRAIN_TELL = 1;
 export const DRAIN_HOLD = 0.92;
@@ -90,8 +92,9 @@ export function tellLength(msToBlow: number): number {
   return Math.max(TELL_MIN_MS, Math.min(TELL_MAX_MS, msToBlow));
 }
 
-/** The frame at `now`. Pure. */
-export function breathFrame(now: number, m: BreathMarks): BreathFrame {
+/** The frame at `now`. `menuHold` (0 to 1) is how far an open FFX-2 command menu holds the wash, the HUD sink, the flood and the flash off (see {@link MENU_EASE_MS}). Pure. */
+export function breathFrame(now: number, m: BreathMarks, menuHold = 0): BreathFrame {
+  const open = 1 - clamp01(menuHold); // 1 with no menu open, 0 with one fully open
   const lift = m.liftAt === null ? 0 : smooth((now - m.liftAt) / LIFT_MS);
   const keep = 1 - lift; // everything fades out with the lift
   const T = Math.max(1, m.tellMs);
@@ -104,11 +107,11 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
   // the wash: drains over the first 62 percent of the tell, holds a hair under full through the rounds
   const drainIn = m.tellAt === null ? 0 : smooth(t / (0.62 * T));
   const drainHold = blown ? DRAIN_TELL - (DRAIN_TELL - DRAIN_HOLD) * smooth(sinceBlow / 400) : DRAIN_TELL;
-  const drain = drainIn * drainHold * keep * (m.menu === true ? MENU_WASH : 1);
+  const drain = drainIn * drainHold * keep * (m.tame ? TAME_WASH : 1) * open;
 
   // the HUD sinks over the first 40 percent, comes back with the lift
   const sink = m.tellAt === null ? 0 : smooth(t / (0.4 * T));
-  const hud = 1 - (1 - (m.menu === true ? MENU_HUD_SINK_TO : HUD_SINK_TO)) * sink * keep;
+  const hud = 1 - (1 - HUD_SINK_TO) * sink * keep * open;
 
   // the ring appears from 18 percent, gathers inward to its final size by the end of the tell, pulses wider at the blow and fades
   const ringIn = m.tellAt === null ? 0 : smooth((t - 0.18 * T) / (0.3 * T));
@@ -122,12 +125,12 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
   const coreUp = m.tellAt === null ? 0 : smooth((t - 0.55 * T) / (0.45 * T));
   const core = (blown ? coreUp * (1 - smooth(sinceBlow / 520)) : coreUp) * keep;
   const flashPeak = m.tame ? 0.3 : 0.85;
-  const flash = blown ? flashPeak * (1 - smooth(sinceBlow / FLASH_MS)) * (sinceBlow < 12 ? sinceBlow / 12 : 1) : 0;
+  const flash = blown ? flashPeak * (1 - smooth(sinceBlow / FLASH_MS)) * (sinceBlow < 12 ? sinceBlow / 12 : 1) * open : 0;
 
   // Mega Flare's flood: opens at the blow from the chest, holds, then settles into the wash
   let flood = 0;
   if (m.flood && blown) {
-    const cap = Math.min(m.tame ? 0.35 : 1, m.menu === true ? MENU_FLOOD_CAP : 1);
+    const cap = (m.tame ? 0.35 : 1) * open;
     const rise = smooth(sinceBlow / FLOOD_RISE_MS);
     const fall = smooth((sinceBlow - FLOOD_RISE_MS - FLOOD_HOLD_MS) / FLOOD_FALL_MS);
     flood = cap * rise * (1 - 0.6 * fall) * keep;
@@ -135,11 +138,6 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
 
   const alive = (m.markAt !== null || m.tellAt !== null) && !(m.liftAt !== null && now - m.liftAt >= LIFT_MS);
   return { name, drain, hud, ring, ringScale, inflow, core, flash, flood, alive };
-}
-
-/** The camera's lean during a tell: 3 to 5 percent [ours] (the book's storyboard), toward the boss, in the tell's own time. FFX-2's hall is the wider room and takes the larger lean. */
-export function leanFraction(game: BreathGame): number {
-  return game === 'ffx2' ? 0.045 : 0.035;
 }
 
 /** A marker that waits for its move (the FFX ladder is marked a turn or more ahead) is let go after this long, ms. */
@@ -177,15 +175,3 @@ export function windowOf(r: Rect, grow = 1): ClearWindow {
   return { cx: r.x + r.w / 2, cy: r.y + r.h / 2, rx, ry };
 }
 
-/**
- * The CSS mask that cuts those windows out of a full-frame wash: one radial gradient per window (clear in the middle, opaque outside, soft between), intersected, so the wash is solid everywhere except inside any
- * window. `soft` is the share of the radius that is fully clear (0.52: the figure and a margin stay as they are, the colour falls away outside it).
- */
-export function washMask(windows: readonly ClearWindow[], soft = 0.52): { image: string; composite: string } {
-  if (windows.length === 0) return { image: 'linear-gradient(#000, #000)', composite: 'intersect' };
-  const pct = Math.round(soft * 100);
-  const image = windows
-    .map((w) => `radial-gradient(ellipse ${Math.round(w.rx)}px ${Math.round(w.ry)}px at ${Math.round(w.cx)}px ${Math.round(w.cy)}px, transparent ${pct}%, #000 100%)`)
-    .join(', ');
-  return { image, composite: 'intersect' };
-}

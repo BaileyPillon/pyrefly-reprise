@@ -64,6 +64,7 @@ export class EndingView {
       this.marks.pullMs = Math.max(1, c.ms);
     } else if (c.kind === 'fall') {
       this.marks.fallAt = now;
+      this.marks.scale = c.scale;
     }
   }
 
@@ -77,6 +78,7 @@ export class EndingView {
     const f = endFrame(now, m);
     this.last = f;
     this.hud = f.hud;
+    this.flash.classList.toggle('pst__flash--tame', m.tame); // REDUCE FLASHES: ivory, never white
     this.flash.style.opacity = f.flash.toFixed(3);
     if (f.shock >= 0 && this.chest) {
       const H = this.host.clientHeight || 900;
