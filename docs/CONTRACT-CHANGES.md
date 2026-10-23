@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-23 — The r63 integration of the three pro lanes: one switch map, the `?pro=` master word, the switchboard legend (branch `r63-int`; plumbing for BOTH games, Chapter I FFX and Chapter IV FFX-2 only, behind the switches; additive)
+
+No contract file changes (none of `src/sprites/format.ts`, `SpriteActor.ts`, `Input.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts`). What the merge of pro-look, pro-camera and pro-staging added on top of the lanes:
+
+- **`DemoGate.proLanes(search)`**: the master word of the three pro lanes. `?pro=off` (or `today`) takes the look, the camera and the staging back to today's at once, beating the pack and each lane's own key; `?pro=on` turns all three on without the pack, under each lane's own key. `ProSwitch.proModeFromSearch`, `ProCamSwitch.parseProCamKeys` and `StagingSwitch.stagingModeFromSearch` read it; the staging also reads `?staging=off` as today. No other reader.
+- **The playtest switchboard**: `SwitchDef.plain` (every key's line in plain words), `EXTRA_KEYS` and `legendRows()`; `=` shows the legend, then hides the label, then shows it again. The key map is `1234567,.89/-;\` (`/` the look, `;` the camera, `\` the staging), pinned by `demo-motion-int.test.ts` and `r63-int-switches.test.ts`.
+- **`BattlePresenterBeats.ts`** keeps its exports: `settleForMenu` and `settleOpening` moved to `BattlePresenterSettle.ts` and are re-exported from Beats (the file was 400 lines after the three merges). **`fx/c/SpectacleFx.ts`** keeps its exports: `SpectacleStage`, `SplashPort` and `SpectacleDeps` moved to `SpectacleTypes.ts` and are re-exported (the file was 405 lines).
+
+Game case: BOTH games (shared plumbing); the switches act in Chapter I (FFX) and Chapter IV (FFX-2) only. Tests: `tests/unit/engine/r63-int-switches.test.ts` (new).
+
 ## 2026-10-23 — `CameraPort.pro`, the shot director's context and the depth-of-field band: the directed camera (`?camera=pro`; lane "pro-camera"; plumbing for BOTH games, Chapter I FFX and Chapter IV FFX-2 only, behind the switch, default OFF; additive)
 
 No contract file changes (none of the files above, and no type in `src/battle/common/types.ts`). `BattlePresenterPorts.ts` and `ShotDirector.ts` are the presenter's shared ports; every member below is optional, and a caller, a fake or a director that does not know it reads and plays exactly as before.
