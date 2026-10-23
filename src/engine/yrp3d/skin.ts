@@ -19,14 +19,20 @@
  * - **KO.** A downed figure (`lifeState` 'down') plays its fall and stays down; a revive plays the rise. A model with no fall clip (a capsule, the AI Bahamut) tips onto its back about its feet instead.
  * - **Fade.** The actor's alpha and dissolve (a sent fiend comes apart) fade the model and its ink.
  * - **Size.** The model is fitted to the actor's world height, which the stage solves from the scene's heights; if the stage re-sizes the figure, the model is refitted.
+ * - **Dresspheres** (`./dress.ts`, `./dressSwap.ts`, FFX-2 only): a girl whose model is a dressphere's own (the game's armed model for it) wears the dressphere the battle says. The stage keeps the art id it staged her under on the
+ *   actor (`ART_KEY`: `yuna-white-mage`) and rewrites it when a `spherechange` event swaps her painting, so the skin reads the dressphere off it every frame; when it is not the model's, the figure lights toward white, the new
+ *   dressphere's model (from the `dress` port: `./dressLib.ts`) takes the old one's place at the peak, and the light falls off it. The new model starts in the cast the change is. A dressphere with no model leaves her as she is.
  *
  * Every figure of the cast carries a model (its own file, or the neutral capsule where the file is missing); an actor the skin cannot take (its private parts changed) is left as the stage made it. The painted planes' private switches are reached the way `ffxSkin.ts` reaches them, and
  * `tests/unit/yrp3d/skin.test.ts` pins that they are still there. Game case: FFX-2 only.
  */
 
 import { Color, Group, type Object3D } from 'three';
+import { ART_KEY } from '../BattlePresenterArt.ts';
 import { PaintedActor } from '../PaintedActor.ts';
 import { castGlow, yawFor, YRP_BOSS_ID, YRP_CAST, type YrpId } from './layout.ts';
+import { dressOfArt, isGirl } from './dress.ts';
+import { DressSwap, LIGHT, type DressPort } from './dressSwap.ts';
 import type { BeatListener } from './beats.ts';
 import type { YrpModels } from './load.ts';
 import type { YrpModel } from './model.ts';
@@ -90,11 +96,27 @@ const STONE = new Color(0.6, 0.6, 0.64);
 
 const approach = (from: number, to: number, tau: number, dt: number): number => from + (to - from) * (dt > 0 ? 1 - Math.exp(-dt / tau) : 1);
 
+/** The art id the stage staged an actor under (`BattlePresenterArt.ART_KEY`), or undefined. */
+export function artOf(actor: PaintedActor): string | undefined {
+  const a = actor.userData[ART_KEY];
+  return typeof a === 'string' ? a : undefined;
+}
+
 /** One model on one actor. */
 interface Bound {
   readonly id: YrpId;
   readonly actor: PaintedActor;
-  readonly model: YrpModel;
+  /** The model on the actor now: a dressphere change replaces it (`exchange`). */
+  model: YrpModel;
+  /** The dressphere that model shows, or null for a model that is not a dressphere's (it is never swapped). */
+  dress: string | null;
+  /** The dressphere being swapped to, the model once it is in hand, the clock of the swap and the light it casts now (0..1). */
+  to: string | null;
+  incoming: YrpModel | null;
+  readonly swap: DressSwap;
+  light: number;
+  /** A dressphere the port had no model for: not asked again until the battle names another. */
+  failed: string | null;
   readonly parts: PaintedInternals;
   lie: number;
   glow: number;
@@ -110,6 +132,8 @@ export interface YrpSkinOptions {
   readonly host: Object3D;
   /** The loaded models (by id; a missing id leaves that figure painted). */
   readonly models: YrpModels;
+  /** Where a girl's model in another dressphere comes from when her dressphere changes (`./dressLib.ts`); with none, a girl keeps the model she was loaded with. */
+  readonly dress?: DressPort;
 }
 
 export class YrpSkin {
@@ -181,10 +205,67 @@ export class YrpSkin {
     model.setYaw(yawFor(id));
     model.fitTo(actor.height);
     parts.inner.add(model.root);
-    this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' && !model.playsKo ? 1 : 0, glow: 0, castAt: null, act: 0, castHold: false });
+    const dress = model.dress;
+    this.bound.set(id, { id, actor, model, dress, to: null, incoming: null, swap: new DressSwap(), light: 0, failed: null, parts, lie: actor.lifeState === 'down' && !model.playsKo ? 1 : 0, glow: 0, castAt: null, act: 0, castHold: false });
+    if (dress !== null && isGirl(id)) this.opts.dress?.wearing(id, dress); // the dresspheres she can change into next are warmed once the fight is on
+  }
+
+  /**
+   * A girl in a dressphere model: the battle's word (the dressphere in the actor's art id) against the model's. A difference starts the swap (the light, the new model asked for); the swap's clock puts the new model in at
+   * the peak. `b.light` is the light the figure casts this frame.
+   */
+  private dressStep(b: Bound, dt: number): void {
+    const port = this.opts.dress;
+    const id = b.id;
+    if (port && isGirl(id) && b.dress !== null && !b.swap.active) {
+      const want = dressOfArt(id, artOf(b.actor));
+      if (want !== b.failed) b.failed = null;
+      if (want && want !== b.dress && want !== b.failed) {
+        b.to = want;
+        b.incoming = null;
+        b.swap.start();
+        port.model(id, want).then(
+          (m) => {
+            if (b.to !== want || this.bound.get(b.id) !== b) return void m?.dispose(); // she has moved on, or the skin is gone
+            b.incoming = m;
+            if (!m) b.failed = want;
+            b.swap.ready(m !== null);
+          },
+          () => {
+            b.failed = want;
+            if (b.to === want) b.swap.ready(false);
+          },
+        );
+      }
+    }
+    const { light, swap } = b.swap.update(dt);
+    if (swap) this.exchange(b);
+    const soft = (b.actor as unknown as { softFlash?: () => boolean }).softFlash?.() === true; // REDUCE FLASHES
+    b.light = light * (soft ? LIGHT.soft : 1);
+  }
+
+  /** Put the new dressphere's model where the old one stood, in the same motion layer, at the same yaw and height, in the cast the change is. */
+  private exchange(b: Bound): void {
+    const next = b.incoming;
+    const to = b.to;
+    if (!next || to === null || !isGirl(b.id)) return;
+    const old = b.model;
+    next.setYaw(yawFor(b.id));
+    next.fitTo(b.actor.height);
+    old.root.removeFromParent();
+    b.parts.inner.add(next.root);
+    if (b.castHold || b.actor.pose === 'cast') next.noteOpen('cast', undefined, paceRate('action')); // the change is a cast: the new model stands in its pose, under the light
+    b.model = next;
+    b.dress = to;
+    b.to = null;
+    b.incoming = null;
+    this.opts.models.replace(b.id, next);
+    old.dispose();
+    this.opts.dress?.wearing(b.id, to);
   }
 
   private follow(b: Bound, dt: number): void {
+    this.dressStep(b, dt);
     const { actor, model, parts } = b;
     model.fitTo(actor.height); // the stage may re-size a figure after it is staged
 
@@ -227,6 +308,13 @@ export class YrpSkin {
       this.emissive.setHex(GLOW_COLOUR[who]);
       amount = glow;
     }
+    if (b.light > 0) {
+      this.colour.multiplyScalar(1 + LIGHT.bleach * b.light); // a dressphere change: the whole figure goes toward white ...
+      if (b.light * LIGHT.peak > amount) {
+        this.emissive.setHex(0xffffff); // ... with an edge of light over any flash or glow
+        amount = b.light * LIGHT.peak;
+      }
+    }
     model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha });
     model.setOrb(b.glow);
     // a rigid winged model (the AI Bahamut) flaps harder as it acts; Bahamut rears back as his glow swells (his Mega Flare)
@@ -242,7 +330,10 @@ export class YrpSkin {
   }
 
   dispose(): void {
-    for (const b of this.bound.values()) b.model.root.removeFromParent();
+    for (const b of this.bound.values()) {
+      b.model.root.removeFromParent();
+      b.incoming?.dispose(); // a model that came and was never put on
+    }
     this.bound.clear();
     this.opts.models.dispose();
   }

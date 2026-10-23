@@ -32,6 +32,19 @@ describe('the words of the map', () => {
     expect(planFromPlay('fall,hold', ['D0', 'D1', 'D2', 'D3'])).toEqual({ enter: ['D0', 'D1', 'D2'], hold: 'D3', exit: [] });
   });
 
+  it("reads the generic three words over two or four clips as one combo: a dressphere's clip map lists every ATTACK1 clip it has under start,hold,finish", () => {
+    expect(planFromPlay('start,hold,finish', ['A_00', 'A_01'])).toEqual({ enter: ['A_00'], hold: null, exit: ['A_01'] }); // a staff: the raise, then the swing
+    expect(planFromPlay('start,hold,finish', ['A_00', 'A_01', 'A_02', 'A_03'])).toEqual({ enter: ['A_00', 'A_01'], hold: null, exit: ['A_02', 'A_03'] }); // a sword: the entry, then the recovery (Bahamut's four parts)
+    expect(planFromPlay('start,hold,finish', ['A_00', 'A_01', 'A_02', 'A_03', 'A_04'])).toEqual({ enter: ['A_00', 'A_01', 'A_02'], hold: null, exit: ['A_03', 'A_04'] });
+    expect(planFromPlay('fall,hold,rise', ['D_00', 'D_01', 'D_02', 'D_03'])).toEqual({ enter: ['D_00', 'D_01'], hold: null, exit: ['D_02', 'D_03'] });
+    expect(planFromPlay('enter,loop,exit', ['K_00'])).toEqual({ enter: [], hold: 'K_00', exit: [] }); // a lone clip with a hold word: looped
+    expect(planFromPlay('start,hold,finish', ['I_00'])).toEqual({ enter: [], hold: 'I_00', exit: [] });
+    expect(planFromPlay('start,hold,finish', ['A', 'B', 'C'])).toEqual({ enter: ['A'], hold: 'B', exit: ['C'] }); // three clips are still one word each
+    // only the generic triple: two words over three clips, or a word that is no part, is still refused
+    expect(planFromPlay('start,finish', ['A', 'B', 'C'])).toBeNull();
+    expect(planFromPlay('sing,hold,finish', ['A', 'B'])).toBeNull();
+  });
+
   it('refuses what it cannot read: no clips, an unknown word, a count that does not fit', () => {
     expect(planFromPlay('loop', [])).toBeNull();
     expect(planFromPlay('sing,hold', ['A', 'B'])).toBeNull();

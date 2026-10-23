@@ -10,7 +10,7 @@
 
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
-import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, summonArtId, worldHeightFor } from './BattlePresenterArt.ts';
+import { ART_KEY, artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, summonArtId, worldHeightFor } from './BattlePresenterArt.ts';
 import { figureHeight, formPlanScale, partyStature, sceneOwnHeight, STATURE_KEY } from './PartyStature.ts';
 import { backToShared, statureOf } from './SharedHeight.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
@@ -405,6 +405,7 @@ export class PaintedStage implements BattleStage {
     const actor = built.actor;
     const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, worldHeightFor(c, heights), worldHeight); // a figure at a scene's form height is planned at the shared one too
     if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
+    actor.userData[ART_KEY] = artId; // what the battle says this figure is: a model standing in for the painting reads it (`BattlePresenterArt.ART_KEY`)
 
     const spots = kind === 'party' ? this.opts.slots.party : this.opts.slots.enemy;
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
@@ -689,6 +690,7 @@ export class PaintedStage implements BattleStage {
     if (!staged || staged.artId === artId) return;
     const before = staged.artId;
     staged.artId = artId;
+    staged.actor.userData[ART_KEY] = artId; // at once, before the paintings load: a model that stands in for them swaps with the flash, not after the files
     const poses = await resolvePoseMap(artId, staged.kind);
     staged.painted = paintedPoses(artId, poses, characterUrl);
     this.fitFormHeight(id, staged, before, artId); // before the poses load, so their scale is solved at the new height

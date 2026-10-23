@@ -11,6 +11,9 @@
  *   and from the HD folder when the base has none.
  * - **The clip map** is `clipmap.json`, from the same folders in the same order; with none, the plans are built from the clip names (`./clipMap.ts`).
  *
+ * - **The dressphere models** (`./dress.ts`, `./dressLib.ts`): when the page hands a `preload`, each girl is first asked for the model of the dressphere her battle starts in (the game's own armed model for it, with its own
+ *   clip map); a girl it has no model for keeps the single model above, which is also what every figure stands on with no `dress/` folder. The skin swaps a girl's model later, when her dressphere changes (`YrpModels.replace`).
+ *
  * The files are fetched, parsed once each and cloned per figure. A body that is not a binary glTF is refused (a dev server answers an unknown path under `public/` with its index page and status 200). Game case: FFX-2 only.
  */
 
@@ -104,6 +107,11 @@ export interface LoadOptions {
   io?: LoaderIO;
   /** Said once per problem, for the log. */
   warn?: (message: string) => void;
+  /**
+   * A source of ready-made models, asked first for each girl (the dressphere models: `DressLibrary.starter`, `./dressLib.ts`); null for a figure it has none for, and that figure loads from the folders as ever.
+   * `dispose` is called when the loaded models are.
+   */
+  preload?: { starter(id: YrpId): Promise<{ model: YrpModel; source: FigureSource } | null>; dispose?(): void };
 }
 
 /** Where a figure's parts came from: the folder of its model and of its clips, null for none; the model file and the look it is shaded in. */
@@ -123,11 +131,13 @@ export interface YrpModels {
   readonly capsules: readonly YrpId[];
   /** Which folder each figure's parts came from (the debug view's and the tests' read). */
   readonly sources: Readonly<Record<string, FigureSource>>;
+  /** Put `model` in `id`'s place (a girl's dressphere changed: the skin swaps her model); the one it replaces is the caller's to dispose. */
+  replace(id: YrpId, model: YrpModel, source?: FigureSource): void;
   dispose(): void;
 }
 
 /** Free a parsed scene's geometry and textures. */
-function freeScene(scene: Object3D): void {
+export function freeScene(scene: Object3D): void {
   scene.traverse((o) => {
     const mesh = o as Mesh;
     if (!mesh.isMesh) return;
@@ -190,6 +200,12 @@ export async function loadYrpModels(opts: LoadOptions): Promise<YrpModels> {
   const sources: Record<string, FigureSource> = {};
   await Promise.all(
     YRP_CAST.map(async (id) => {
+      const made = await opts.preload?.starter(id).catch(() => null); // the dressphere model the girl's battle starts in, where there is one
+      if (made) {
+        models.set(id, made.model);
+        sources[id] = made.source;
+        return;
+      }
       const clipOrder = [...opts.dirs].reverse(); // the base folder's clips first: the same motions without the HD textures' weight
       let found: { plan: FigurePlan; mesh: { dir: string; value: Parsed }; anims: { dir: string; value: Parsed } | null } | null = null;
       for (const plan of figurePlans(id, choice)) {
@@ -224,9 +240,14 @@ export async function loadYrpModels(opts: LoadOptions): Promise<YrpModels> {
     models,
     capsules,
     sources,
+    replace(id, model, source): void {
+      models.set(id, model);
+      if (source) sources[id] = source;
+    },
     dispose(): void {
       for (const m of models.values()) m.dispose();
       models.clear();
+      opts.preload?.dispose?.();
       void Promise.all(parsed.values()).then((files) => {
         for (const f of files) if (f) freeScene(f.scene);
       });

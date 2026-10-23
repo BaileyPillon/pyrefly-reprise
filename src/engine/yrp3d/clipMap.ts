@@ -9,7 +9,8 @@
  *
  * - {@link plansFromClipMap} reads the map file (a figure's `poses`: `play` and `clips`). A `play` of `loop` holds its one clip; `once` plays its clips and ends; `parts` is a combo (the first half the entry, the rest the
  *   exit: Bahamut's four attack parts); otherwise one word per clip (`start`, `fall`, `pose`, `enter` open it; `hold`, `loop` hold it; `finish`, `rise`, `exit` close it), and a word list shorter than the clips that ends
- *   in `hold` holds the last clip and enters through the rest (Bahamut's four `DEAD` parts).
+ *   in `hold` holds the last clip and enters through the rest (Bahamut's four `DEAD` parts). A word list that opens and closes but does not line up with its clips (a dressphere's two or four `ATTACK1` clips under
+ *   `start,hold,finish`) is read as `parts`.
  * - {@link plansFromNames} is the same table built into the code, for the clip names a file has, when there is no map file to read (the names are the game's, so the two agree).
  * - {@link usable} drops every pose whose clips the file does not have.
  */
@@ -59,24 +60,51 @@ export function planFromPlay(play: string, clips: readonly string[]): Plan | nul
     return { enter, hold, exit };
   }
   if (HOLDS.has(words[words.length - 1]!)) return { enter: clips.slice(0, -1), hold: clips[clips.length - 1]!, exit: [] };
+  // A combo whose words are the generic three (`start,hold,finish`, `fall,hold,rise`, `enter,loop,exit`) over a number of clips that is not three: a dressphere's `clipmap.json` lists every `ATTACK1_xx` the model has under the
+  // one word list (two clips for a staff, four for a sword), so the words cannot line up with the clips. They are the game's parts of one combo, read as Bahamut's four attack parts are (`parts`): the first half is the entry
+  // and the rest the exit; a single clip is the whole pose (looped when the words have a hold: Floral Fallal's one-clip kneel).
+  if (words.length === 3 && OPENS.has(words[0]!) && HOLDS.has(words[1]!) && CLOSES.has(words[2]!)) {
+    if (clips.length === 1) return words.some((w) => HOLDS.has(w)) ? { enter: [], hold: clips[0]!, exit: [] } : { enter: clips, hold: null, exit: [] };
+    const k = Math.ceil(clips.length / 2);
+    return { enter: clips.slice(0, k), hold: null, exit: clips.slice(k) };
+  }
   return null;
 }
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/** The plans of a `poses` object (`{ pose: { play, clips } }`): a pose with a malformed entry is left out. */
+function plansFromPoses(poses: Record<string, unknown>): PlanTable {
+  const out: { -readonly [K in Pose]?: Plan } = {};
+  for (const pose of POSES) {
+    const entry = poses[pose];
+    if (!isRecord(entry) || typeof entry['play'] !== 'string' || !Array.isArray(entry['clips']) || !entry['clips'].every((c) => typeof c === 'string')) continue;
+    const plan = planFromPlay(entry['play'], entry['clips'] as string[]);
+    if (plan) out[pose] = plan;
+  }
+  return out;
+}
 
 /** The plans of figure `id` from the parsed `clipmap.json`, or null when the file has no such figure. A pose with a malformed entry is left out. */
 export function plansFromClipMap(json: unknown, id: string): PlanTable | null {
   if (!isRecord(json) || !isRecord(json['characters'])) return null;
   const figure = json['characters'][id];
   if (!isRecord(figure) || !isRecord(figure['poses'])) return null;
-  const out: { -readonly [K in Pose]?: Plan } = {};
-  for (const pose of POSES) {
-    const entry = figure['poses'][pose];
-    if (!isRecord(entry) || typeof entry['play'] !== 'string' || !Array.isArray(entry['clips']) || !entry['clips'].every((c) => typeof c === 'string')) continue;
-    const plan = planFromPlay(entry['play'], entry['clips'] as string[]);
-    if (plan) out[pose] = plan;
-  }
-  return out;
+  return plansFromPoses(figure['poses']);
+}
+
+/**
+ * The plans of a dressphere's own `clipmap.json` (`dress/<girl>-<dressphere>/clipmap.json`, `./dress.ts`): one model per file, so `poses` is at the top, with the same roles and `play` words as the figures' map above
+ * (`idle`, `idle2`, `critical`, `hurt`, `attack`, `cast`, `item`, `victory`, `ko`; it also names `hurt2`, `run` and `dodge`, which no battle pose asks for). Null when the file has no `poses`.
+ */
+export function plansFromDressClipMap(json: unknown): PlanTable | null {
+  if (!isRecord(json) || !isRecord(json['poses'])) return null;
+  return plansFromPoses(json['poses']);
+}
+
+/** The plans for a dressphere model from its parsed clip map when it has one, else from the names its clips carry; either way only what the clips can play. */
+export function dressPlansFor(json: unknown, names: readonly string[]): PlanTable {
+  return usable(plansFromDressClipMap(json) ?? plansFromNames(names), names);
 }
 
 const indexed = (stem: string, n: number): string[] => Array.from({ length: n }, (_, i) => `${stem}_0${i}`);

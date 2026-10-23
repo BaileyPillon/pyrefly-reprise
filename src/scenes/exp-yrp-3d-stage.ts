@@ -4,14 +4,17 @@
  * back, Rikku in the middle, Yuna at the front), Bahamut filling the left half with his wings spread, calm floor along the bottom for the HUD. Frame B's low, close view is the `action` rig, and frame C's (behind and
  * above the trio as Bahamut rears with his orb) the `overdrive` rig the shot director takes for Mega Flare (`../engine/yrp3d/director.ts`). The numbers are `../engine/yrp3d/layout.ts`'s (pure, and pinned by `tests/unit/yrp3d/layout.test.ts` without a browser).
  *
- * **Framing mockups** (opt-in, dev): `?frame=b` and `?frame=c` replace the resting shots (`idle`, `intro`) with two closer views, the girls at about 35 and 44 percent of the frame's height (`../engine/yrp3d/frames.ts`);
- * no query is frame A, the approved layout, unchanged.
+ * **Framing** (Bailey picked "b: dolly in", 2026-10-22): **frame b is the default**, the camera in and down and the party's three slots 1.9 m toward Bahamut, the girls at about a third of the frame's height and the menu clear of
+ * them (`../engine/yrp3d/frames.ts`); `?frame=a` is the old, approved layout unchanged and `?frame=c` the opt-in lower three-quarter.
+ *
+ * **Dresspheres** (Bailey picked "match + change live", 2026-10-22): each girl's model is the game's own for the dressphere her battle says (Yuna White Mage, Rikku Dark Knight, Paine Warrior at the opening, with the weapon the game
+ * gives it), and a change of dressphere mid-fight swaps her model at the moment the presenter swaps her painting (`../engine/yrp3d/dress.ts`, `dressLib.ts`, `skin.ts`); `?dress=off`, or no `dress/` folder, keeps the single model per girl.
  *
  * Game case: FFX-2 only [AGENTS.md rule 14; research/ffx2-bahamut.md]. It is Chapter IV's room (`./bevelle-underground.ts`, built by that factory and not touched), so the painting, the lamps and the set pieces are
  * Chapter IV's; what this scene changes is the staging, the camera and **the look** (the girls must read clearly in the arena: Bailey found the first in-game shots too dark, too blue and too small), and what it adds is the figures'
  * light and the skin that carries the real models:
  *
- * - **Staging.** The party's three slots, Bahamut's spot and the reserve spots are frame A's; the girls stand at 1.9 and Bahamut at 5.0 (`PARTY_HEIGHT`, `BOSS_HEIGHT`); bodies face each other along x (the party toward -x,
+ * - **Staging.** The party's three slots are the frame's (frame A's, moved 1.9 m toward Bahamut in the default frame b), Bahamut's spot and the reserve spots are frame A's; the girls stand at 1.9 and Bahamut at 5.0 (`PARTY_HEIGHT`, `BOSS_HEIGHT`); bodies face each other along x (the party toward -x,
  *   Bahamut toward +x: `SceneStaging.sideFacing`, the switch FF7's reactor and the hidden Fayth chapter use); `holdParty` keeps the stage's relaxation off the row. The light pools under the figures move with them.
  * - **The camera.** `idle`, `intro`, `action`, `party`, `enemy`, `bahamut` and `victory` are `RIGS` (the names Chapter IV's presenter and script ask for); the close shots take a long lens from further back and none is tighter
  *   than waist-up. The painting's parallax stack is aligned for the new `idle` (`SceneBuildOptions.cameraRef`), so the bands register at rest.
@@ -110,15 +113,22 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
   let figureLights: Light[] = [];
   let directed: SceneStaging['shotDirector'] = YRP_SHOT_DIRECTOR;
   if (!paintedForced(search)) {
-    const [{ YrpSkin }, { loadYrpModels, modelDirs }, { applyStage }, rig] = await Promise.all([
+    const [{ YrpSkin }, { loadYrpModels, modelDirs }, { applyStage }, rig, { openDressLibrary }, { reachFor }, { dressOff }, { bevelleBuild }] = await Promise.all([
       import('../engine/yrp3d/skin.ts'),
       import('../engine/yrp3d/load.ts'),
       import('../engine/yrp3d/stageLook.ts'),
       import('../engine/yrp3d/rig.ts'),
+      import('../engine/yrp3d/dressLib.ts'),
+      import('../engine/yrp3d/dressReach.ts'),
+      import('../engine/yrp3d/dress.ts'),
+      import('../data/ffx2/builds/bevelle.ts'),
     ]);
     const heights = { yuna: PARTY_HEIGHT, rikku: PARTY_HEIGHT, paine: PARTY_HEIGHT, bahamut: BOSS_HEIGHT };
-    const models = await loadYrpModels({ base: import.meta.env.BASE_URL, dirs: modelDirs(search, YRP_MODEL_DIRS), choice: bossChoice(search), heights, warn: (m) => console.warn(m) });
-    const made = new YrpSkin({ host: base.group, models });
+    const dirs = modelDirs(search, YRP_MODEL_DIRS);
+    // The girls' dressphere models (`dress/index.json` under the base folder; `?dress=off` or no folder: the single model per girl): each girl loads in the dressphere her battle starts in, and the skin swaps her model when it changes.
+    const dress = dressOff(search) ? null : await openDressLibrary({ base: import.meta.env.BASE_URL, modelsDir: YRP_MODEL_DIRS.base, preferHd: dirs.length > 1, heights, reach: reachFor(bevelleBuild.members), warn: (m) => console.warn(m) });
+    const models = await loadYrpModels({ base: import.meta.env.BASE_URL, dirs, choice: bossChoice(search), heights, ...(dress ? { preload: dress } : {}), warn: (m) => console.warn(m) });
+    const made = new YrpSkin({ host: base.group, models, ...(dress ? { dress } : {}) });
     skin = made;
     followed = models.models;
     figureLights = rig.figureLights();
@@ -130,7 +140,7 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
     if (import.meta.env.DEV) {
       let current: Rig = LOOK.rig;
       const tune = (patch: RigPatch): Rig => (rig.setRig(figureLights, (current = mergeRig(current, patch))), current); // `__yrp3d.tune({ key: { intensity: 2.4 } })`: the light, live
-      (globalThis as { __yrp3d?: unknown }).__yrp3d = { skin: made, models, stage, tune, look: LOOK }; // the debug handle (a dev server only)
+      (globalThis as { __yrp3d?: unknown }).__yrp3d = { skin: made, models, dress, stage, tune, look: LOOK }; // the debug handle (a dev server only)
     }
   }
 

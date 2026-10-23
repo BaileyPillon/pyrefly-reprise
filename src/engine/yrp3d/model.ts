@@ -60,6 +60,25 @@ export interface ModelOptions {
   look?: Look;
   /** The girl's real weapon scenes, one per hand of her kit (`./weapons.ts`), when the weapon file was read; with none, or when her skeleton lacks a locator, she holds the procedural props. */
   weapons?: readonly Object3D[];
+  /**
+   * Set for a **dressphere model** (`./dress.ts`): the file is the game's own armed model, so its weapons already sit under their locators (`weapons` of them: 0 for a dressphere that holds none) and neither the
+   * real weapon files nor the procedural props are attached, and its box, which the fit reads, is the body's alone (a long staff must not change how tall the girl stands).
+   */
+  dress?: { readonly name: string; readonly weapons: number };
+  /** Called once when the model is disposed: a library's lease on the parsed file this model was cloned from (`./dressLib.ts`). */
+  onDispose?: () => void;
+}
+
+/** The box of a scene's skinned bodies (the figure itself, weapons and props left out); the whole scene's box when it has none. */
+export function bodyBox(scene: Object3D): Box3 {
+  const box = new Box3();
+  let any = false;
+  scene.traverse((o) => {
+    if (!(o as { isSkinnedMesh?: boolean }).isSkinnedMesh) return;
+    box.expandByObject(o);
+    any = true;
+  });
+  return any ? box : new Box3().setFromObject(scene);
 }
 
 /** Remove the meshes that are not part of the figure: in a scene with a skinned mesh, a mesh with no skin and no bone above it (Bahamut's file carries an unskinned ring that no animation moves; the extraction notes say leave it hidden). */
@@ -106,10 +125,17 @@ export class YrpModel {
   /** Seconds left of the pulse a model with no clips takes from an attack or cast opening: its wings beat harder for it. */
   private pulse = 0;
   private figureHeight: number;
+  /** How many times the figure's height this model is drawn: 1, but a dressphere taller than the one the girl started in (a Mascot's hat, a special) stands taller by the game's own ratio (`setHeightScale`). */
+  private heightScale = 1;
   private opacityNow = 1;
   private lieAmount = 0;
   /** The `.chr` scale applied to the file's scene. */
   readonly chrScale: number;
+  /** The dressphere this model shows (`./dress.ts`), or null for a figure that is not one (the single model per girl, Bahamut, a capsule). */
+  readonly dress: string | null;
+  /** How many weapon models a dressphere model carries in its file (0 for any other model). */
+  private readonly dressWeapons: number;
+  private onDispose: (() => void) | null;
 
   /** `scene` is the file's scene (or a clone of it), `clips` its animations. The model applies the `.chr` scale, measures it, hands the girls their weapons and then softens every material. */
   constructor(id: YrpId, scene: Object3D, clips: readonly AnimationClip[], height: number, source: ModelSource = 'own', opts: ModelOptions = {}) {
@@ -117,14 +143,17 @@ export class YrpModel {
     this.source = source;
     this.figureHeight = height;
     this.chrScale = opts.chrScale && opts.chrScale > 0 ? opts.chrScale : 1;
+    this.dress = opts.dress?.name ?? null;
+    this.dressWeapons = opts.dress?.weapons ?? 0;
+    this.onDispose = opts.onDispose ?? null;
     removeStrays(scene);
     scene.scale.multiplyScalar(this.chrScale); // the game draws the model at its .chr scale: the measured box is the size in the game
     scene.updateMatrixWorld(true);
-    const box = new Box3().setFromObject(scene);
+    const box = opts.dress ? bodyBox(scene) : new Box3().setFromObject(scene);
     this.natural = { min: [box.min.x, box.min.y, box.min.z], max: [box.max.x, box.max.y, box.max.z] };
     // the weapons go on after the box is measured (a sword must not change the fit) and before the soft pass (so they are covered too): the game's own where their files and locators are there, else the procedural props
-    this.realWeapons = opts.weapons ? attachWeapons(id, scene, opts.weapons) : null;
-    this.props = this.realWeapons ? { props: [], dispose: () => undefined } : attachProps(id, scene, (this.natural.max[1] - this.natural.min[1]) / this.chrScale);
+    this.realWeapons = opts.weapons && !opts.dress ? attachWeapons(id, scene, opts.weapons) : null;
+    this.props = this.realWeapons || opts.dress ? { props: [], dispose: () => undefined } : attachProps(id, scene, (this.natural.max[1] - this.natural.min[1]) / this.chrScale); // a dressphere model is armed already
     const names = clips.map((c) => c.name);
     const plans = opts.plans ?? plansFor(id, null, names);
     const rigged = !!plans.idle?.hold && names.includes(plans.idle.hold);
@@ -160,6 +189,7 @@ export class YrpModel {
 
   /** Which weapons the figure holds: the game's own (`real`), the procedural props (`props`), or none (Bahamut, a capsule). */
   get weaponKind(): 'real' | 'props' | 'none' {
+    if (this.dress !== null) return this.dressWeapons > 0 ? 'real' : 'none'; // the weapons are in the file
     return this.realWeapons ? 'real' : this.props.props.length ? 'props' : 'none';
   }
 
@@ -173,6 +203,17 @@ export class YrpModel {
     return this.rig?.playsKo ?? false;
   }
 
+  /**
+   * Stand this model `k` times the figure's height: a girl's dressphere models share her scale (a swap does not change how big she is), so a model whose own box is taller than the dressphere she started in is drawn taller by the same
+   * ratio (the game's: its Mascot's hat, its special dresspheres). `./dressLib.ts` sets it from the starter's `trueHeight`; 1 for every other model.
+   */
+  setHeightScale(k: number): void {
+    if (!(k > 0) || Math.abs(k - this.heightScale) < 1e-6) return;
+    this.heightScale = k;
+    this.place();
+    this.setLie(this.lieAmount, this.lieFacing);
+  }
+
   /** Refit to a figure of another height (the stage re-sizes a boss). */
   fitTo(height: number): void {
     if (!(height > 0) || Math.abs(height - this.figureHeight) < 1e-4) return;
@@ -182,7 +223,7 @@ export class YrpModel {
   }
 
   private place(): void {
-    const f = fitBox(this.natural, this.figureHeight);
+    const f = fitBox(this.natural, this.figureHeight * this.heightScale);
     this.fit.scale.setScalar(f.scale);
     this.fit.position.set(f.offset[0], f.offset[1], f.offset[2]);
     this.orb?.place(this.figureHeight);
@@ -309,5 +350,8 @@ export class YrpModel {
     disposeShade(this.set, this.source === 'capsule'); // a capsule's geometry is its own; a file's is shared with the clones of it and freed with the loader
     this.orb?.dispose();
     this.root.removeFromParent();
+    const done = this.onDispose; // the lease on the parsed file goes last: nothing of this model draws from it any more
+    this.onDispose = null;
+    done?.();
   }
 }
