@@ -57,7 +57,8 @@ export class EndingView {
       this.chest = this.o.pointOf(c.boss, 'chest');
     } else if (c.kind === 'title') {
       this.marks.titleAt = now;
-      this.titleSub.textContent = c.name ? `${c.name} felled` : '';
+      const name = this.o.nameOf?.(c.boss);
+      this.titleSub.textContent = name ? `${name} felled` : '';
     } else if (c.kind === 'pullback') {
       this.marks.pullAt = now;
       this.marks.pullMs = Math.max(1, c.ms);

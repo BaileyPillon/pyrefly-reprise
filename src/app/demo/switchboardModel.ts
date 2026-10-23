@@ -22,6 +22,7 @@ import { partyRigsMode, setPartyRigsMode } from '../../engine/motion/PartyRigsSw
 import { momentsMode, setMomentsMode } from '../../engine/motion/MomentsSwitch.ts';
 import { smearStyle, setSmearStyle, type SmearStyle } from '../../engine/motion/SmearSwitch.ts';
 import { fxMode, setFxMode } from '../../engine/spellfx/FxSwitch.ts';
+import { setStagingMode, stagingMode } from '../../engine/pro/staging/StagingSwitch.ts'; // lane "pro-staging"
 
 export interface SwitchDef {
   /** `KeyboardEvent.code` (the number row; the numpad digits are the same keys). */
@@ -192,6 +193,20 @@ export const SWITCHES: readonly SwitchDef[] = [
     },
     isNew: () => feelConfigured().shadow,
     set: (on) => setShadowFollows(on),
+  },
+  // The backslash key: the pro staging (lane "pro-staging"): the boss big moves' held breath, the boss card as a painting, the victory freeze and the defeat card, the Overdrive opening and the Change's pearl plate. A flip in a fight plays from the next beat (the layer is built as a fight begins).
+  {
+    code: 'Backslash',
+    key: '\\',
+    name: 'staging',
+    read: () => stagingMode(),
+    flip: () => {
+      const next = stagingMode() === 'pro' ? 'today' : 'pro';
+      setStagingMode(next);
+      return next;
+    },
+    isNew: () => stagingMode() === 'pro',
+    set: (on) => setStagingMode(on ? 'pro' : 'today'),
   },
 ];
 

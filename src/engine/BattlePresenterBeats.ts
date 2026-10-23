@@ -11,7 +11,7 @@ import { depart } from './BattlePresenterDepartures.ts';
 import { MOMENT_GUARD_MS, MOTION_GUARD_MS, type MotionCtx } from './BattlePresenterMotion.ts';
 import { actionOfBlow, awaitSpellLanding, beginSpellAction, endSpellAction, sparkItem } from './BattlePresenterSpellFx.ts';
 import { chargeFx, odOpening, prerollFx } from './BattlePresenterBossFx.ts';
-import { stageCharge, stageLift, stageMark } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath, the freeze on the last blow, the openings (all no-ops unless `?staging=pro` in a demo chapter)
+import { noteFoeMove, stageCharge, stageFall, stageFreeze, stageLift, stageMark, stageVictory } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath, the freeze on the last blow, the openings (all no-ops unless `?staging=pro` in a demo chapter)
 import { poseForAction } from './EnemyActionPose.ts';
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -50,6 +50,7 @@ export async function actionStart(
   ctx.actingId = event.actorId;
   beginSpellAction(ctx, event);
   stageMark(ctx, event); // pro staging: a boss's big move begins: the small name and the rim
+  noteFoeMove(ctx, event); // pro staging: the foe's latest move, for the defeat card's cause line
   await telegraphHold(ctx, event); // r38 keys: Flux's Lance of Atrophy, Braska's Ultimate Jecht Shot (950 ms, only with the painting; else nothing happens)
   const actor = ctx.stage.actor(event.actorId);
   // An enemy's physical ability draws its own attack painting (iter2
@@ -220,6 +221,7 @@ export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
   cue(ctx, 'ko');
   if (side === 'enemy') {
     stageLift(ctx, id); // pro staging: a boss that falls takes its marker with it
+    await stageFreeze(ctx, id); // pro staging: the last foe of the fight: the frame holds on the killing blow before it is sent
     // Evrae falls out of the sky; Leblanc, Logos, Ormi and the Guado
     // Guardians yield; Seymour at Macalania falls and his body stays
     // (`BattlePresenterDepartures.ts`). Everyone else is sent.
@@ -334,7 +336,7 @@ export async function victory(ctx: EventCtx): Promise<void> {
   if (victoryPoseOf(ctx.deps) === 'hold') {
     standDownParty(ctx); // motion pass, step 3 (the moments, default OFF): the held stance gets a quiet settle, no pose, no hop
     void ctx.moments.victory();
-    await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold')));
+    await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold'), stageVictory(ctx, 'hold', TIMING.victory))); // pro staging: the quiet title and the silent pull-back (0 when not staged)
     return;
   }
   // The fanfare is the end-of-fight sting. A formation that chains on (Chapter VI Acts I and II) is a seam: the battle theme carries on into the next link, and the
@@ -348,12 +350,12 @@ export async function victory(ctx: EventCtx): Promise<void> {
     if (side === 'party' || side === 'aeon') ctx.stage.actor(id)?.setPose('victory');
   }
   void ctx.moments.victory();
-  await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'pose')));
+  await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'pose'), stageVictory(ctx, 'pose', TIMING.victory))); // pro staging: the title, and the hold the real cheer needs (0 when not staged)
 }
 
 export async function defeat(ctx: EventCtx): Promise<void> {
   ctx.moments.clear();
-  ctx.stage.vfx.screenFlash('rgba(0,0,0,0.55)', 900);
+  if (!stageFall(ctx)) ctx.stage.vfx.screenFlash('rgba(0,0,0,0.55)', 900); // pro staging: the scene stays under a light dim and a caption, no black flash
   for (const id of ctx.stage.staged()) {
     if (ctx.stage.sideOf(id) !== 'party') continue;
     ctx.stage.actor(id)?.setPose('ko');

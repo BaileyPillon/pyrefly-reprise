@@ -33,6 +33,8 @@ export interface StageFacts {
   calm: boolean;
   /** REDUCE FLASHES is on: no white flash, and the flood is capped. */
   tame: boolean;
+  /** FFX-2 only: a command menu is open as the look begins (`KeySlots.menuBlocks`; D-357: "nothing plays over an open command menu"). The held breath then plays without its wash, flood and HUD sink: the name, the ring and the core only. */
+  menu?: boolean;
 }
 
 /** The held breath: a boss's big blow in four beats. `attacker` and `party` are combatant ids; the layer asks the stage for their rectangles. */
@@ -45,14 +47,14 @@ export type BreathCue =
 /** The ending: the freeze on the last blow, the title, the pull-back into the results; the defeat caption. */
 export type EndingCue =
   | (StageFacts & { kind: 'freeze'; boss: string; holdMs: number })
-  | (StageFacts & { kind: 'title'; name: string })
+  | (StageFacts & { kind: 'title'; boss: string })
   | (StageFacts & { kind: 'pullback'; ms: number })
   | (StageFacts & { kind: 'fall'; party: readonly string[] });
 
 /** The openings: an Overdrive (FFX) and a dress change (FFX-2). */
 export type OpeningCue =
-  | (StageFacts & { kind: 'overdrive'; actor: string; name: string; actorName: string })
-  | (StageFacts & { kind: 'change'; actor: string; actorName: string; dress: string; gate?: string | undefined });
+  | (StageFacts & { kind: 'overdrive'; actor: string; name: string })
+  | (StageFacts & { kind: 'change'; actor: string; dress: string; gate?: string | undefined });
 
 export interface StagingPort {
   breath(cue: BreathCue): void;

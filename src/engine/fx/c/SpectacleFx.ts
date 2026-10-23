@@ -161,6 +161,14 @@ export class SpectacleFx implements FxStagePort {
     });
   }
 
+  /** Hold the field for `ms` of real time on the hit-stop's own clock (lane "pro-staging": the freeze on a fight's last blow); honours the hit-stop's sub-switch. */
+  freeze(ms: number): void {
+    if (ms > 0 && this.d.sub('hitstop')) {
+      this.stop.freeze(ms);
+      this.stats.freezes++;
+    }
+  }
+
   hit(o: Parameters<NonNullable<FxStagePort['hit']>>[0]): { freezeMs: number; shook: boolean } {
     const a = this.d.stage.actor(o.targetId);
     if (!a) return { freezeMs: 0, shook: false };

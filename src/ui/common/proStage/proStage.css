@@ -195,3 +195,122 @@
   color: rgba(255, 255, 255, 0.92);
   text-shadow: 0 0 14px rgba(20, 30, 100, 0.8), 0 1px 3px rgba(10, 16, 70, 0.9);
 }
+
+/* ---- the Overdrive opening (FFX): a small name at the caster's side, and a glint along the blade ---- */
+.pst__od {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+.pst__od-who {
+  font-family: var(--pst-face);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  font-size: clamp(9px, 0.95vw, 15px);
+  color: var(--pst-gold);
+  text-shadow: 0 0 2px rgba(14, 24, 84, 0.95), 0 0 8px rgba(14, 24, 84, 0.8);
+}
+.pst__od-name {
+  margin-top: 0.15em;
+  font-family: var(--pst-serif);
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(22px, 2.8vw, 50px);
+  line-height: 1.05;
+  color: #fff;
+  text-shadow: 0 0 2px rgba(14, 24, 84, 0.9), 0 0 10px rgba(14, 24, 84, 0.75), 0 0 26px rgba(30, 50, 140, 0.6);
+}
+.pst__od-rule {
+  margin-top: 0.5em;
+  height: 1.5px;
+  width: 78%;
+  background: linear-gradient(90deg, var(--pst-gold), transparent);
+}
+.pst__glint {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3px;
+  opacity: 0;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff 45%, rgba(255, 255, 255, 0));
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+}
+
+/* ---- the FFX-2 Change: the HUD's own flourish keeps its painted twirl and ribbons; only its name plate is made readable (a pearl plate, navy on white) while data-pst-open is on ---- */
+[data-pst-open] .ffx2sf__plate {
+  left: calc(var(--sf-x) + 26px * var(--sf-scale));
+  top: calc(var(--sf-head) - 22px * var(--sf-scale));
+  align-items: flex-start;
+  gap: calc(2px * var(--sf-scale));
+  padding: calc(6px * var(--sf-scale)) calc(15px * var(--sf-scale)) calc(7px * var(--sf-scale)) calc(11px * var(--sf-scale));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 234, 250, 0.95));
+  border-radius: calc(3px * var(--sf-scale));
+  box-shadow: 0 calc(5px * var(--sf-scale)) calc(18px * var(--sf-scale)) rgba(58, 20, 90, 0.38), 0 0 0 1px rgba(255, 170, 214, 0.85);
+  text-shadow: none;
+  text-align: left;
+  transform: translate(0, -100%);
+  animation: pst-plate calc(var(--sf-ms) + 1150ms) cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
+}
+[data-pst-open] .ffx2sf__plate::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 1px;
+  height: calc(14px * var(--sf-scale));
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 calc(4px * var(--sf-scale)) rgba(255, 170, 214, 0.9);
+}
+[data-pst-open] .ffx2sf__who {
+  font-size: calc(6.5px * var(--sf-scale));
+  letter-spacing: 0.38em;
+  color: #8d4aa6;
+}
+[data-pst-open] .ffx2sf__name {
+  font-family: var(--ig-font-display);
+  font-style: normal;
+  font-weight: 700;
+  font-size: calc(17px * var(--sf-scale));
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #4a1a66;
+}
+[data-pst-open] .ffx2sf__gate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: calc(6.5px * var(--sf-scale));
+  letter-spacing: 0.2em;
+  color: #4a1a66;
+}
+[data-pst-open] .ffx2sf__gate::before {
+  content: '';
+  width: 0.95em;
+  height: 0.95em;
+  border-radius: 50%;
+  background: var(--sf-gate);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 calc(3px * var(--sf-scale)) var(--sf-gate);
+}
+@keyframes pst-plate {
+  0% {
+    opacity: 0;
+    transform: translate(0, -70%);
+  }
+  22% {
+    opacity: 1;
+    transform: translate(0, -100%);
+  }
+  74% {
+    opacity: 1;
+    transform: translate(0, -100%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, -112%);
+  }
+}

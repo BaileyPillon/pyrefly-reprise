@@ -13,6 +13,7 @@ import { breathExpired, breathFrame, leanFraction, tellLength, type BreathMarks,
 import type { BreathCue, EndingCue, OpeningCue, StagingPort } from '../../../engine/pro/staging/StagingPort.ts';
 import type { DemoGame } from '../../../engine/motion/DemoGate.ts';
 import { lookState, setLookTweak } from '../../../engine/look/LookState.ts';
+import type { OdFrame } from '../../../engine/pro/staging/OpeningPlan.ts';
 import { BreathView, type BreathGeom } from './BreathView.ts';
 import { EndingView } from './EndingView.ts';
 import { OpeningView } from './OpeningView.ts';
@@ -23,6 +24,8 @@ export interface ProStageOptions {
   game: DemoGame;
   /** A combatant's rectangle on screen, CSS pixels in the root's frame (`PaintedStage.projectRect`). */
   rectOf(id: string): Rect | null;
+  /** A combatant's display name (the engine's), for the title and the openings. */
+  nameOf?(id: string): string | undefined;
   /** A point on a combatant, CSS pixels (`BattleStage.project`). */
   pointOf(id: string, anchor: 'head' | 'chest' | 'feet'): { x: number; y: number } | null;
 }
@@ -50,8 +53,9 @@ export class ProStageLayer implements StagingPort {
   private saved = new Map<string, number | undefined>();
   private rectAt = 0;
   private geom: BreathGeom | null = null;
+  private odDrawn = false;
   /** For checks and the debug API: what the last frame drew. */
-  readonly stats = { frames: 0, cues: 0, lastFrame: null as ReturnType<typeof breathFrame> | null };
+  readonly stats = { frames: 0, cues: 0, drawn: 0, updateMs: 0, updateMaxMs: 0, lastFrame: null as ReturnType<typeof breathFrame> | null };
 
   constructor(private readonly o: ProStageOptions) {
     const doc = o.root.ownerDocument;
@@ -95,7 +99,8 @@ export class ProStageLayer implements StagingPort {
         this.marks.tellAt = this.clock;
         this.marks.tellMs = tellLength(cue.msToBlow);
         this.marks.tame = cue.tame;
-        this.armLook(cue.move, true);
+        this.marks.menu = cue.menu === true;
+        this.armLook(cue.move, true, cue.menu === true ? 'mark' : 'tell'); // a menu open: the rim only, Mega Flare's engine white-out stays as it was
         this.root().dataset['pst'] = '';
         return;
       }
@@ -148,6 +153,14 @@ export class ProStageLayer implements StagingPort {
   /** One frame of the BATTLE SCREEN's clock (`dt` seconds, the real frame time: a hit-stop does not hold it). */
   update(dt: number): void {
     if (this.disposed) return;
+    const t0 = performance.now();
+    this.step(dt);
+    const ms = performance.now() - t0;
+    this.stats.updateMs = this.stats.updateMs * 0.9 + ms * 0.1; // the layer's own CPU cost per frame (an average over the last ten), for the cost report
+    this.stats.updateMaxMs = Math.max(this.stats.updateMaxMs * 0.995, ms);
+  }
+
+  private step(dt: number): void {
     if (!this.frozen) this.clock += Math.max(0, dt) * 1000;
     this.stats.frames++;
     this.endingView.update(this.clock);
@@ -170,7 +183,20 @@ export class ProStageLayer implements StagingPort {
         this.breathView.reset();
       }
     }
-    // the HUD's sink: both pieces ask for it, the lower strength wins; with neither the HUD is left to its own opacity
+    // an Overdrive's opening (FFX): the same wash and windows, lighter, around the lit caster (never while a held breath has the canvas)
+    const od = this.openingView.frame;
+    if (od?.alive && this.marks === null) {
+      const actor = this.openingView.actorId;
+      if (actor) {
+        this.breathView.draw(odToBreath(od), this.readGeom({ attacker: actor, party: [], companions: [] }), this.o.game, false);
+        hud = Math.min(hud, 1 - (1 - 1 / 6) * od.light);
+        this.odDrawn = true;
+      }
+    } else if (this.odDrawn) {
+      this.odDrawn = false;
+      if (this.marks === null) this.breathView.reset();
+    }
+    // the HUD's sink: the pieces ask for it, the lowest strength wins; with none the HUD is left to its own opacity
     if (hud < 0.999) {
       const r = this.root();
       r.dataset['pst'] = '';
@@ -239,10 +265,12 @@ export class ProStageLayer implements StagingPort {
   }
 
   /** The rectangles this frame, read at 12 Hz (the figures hardly move in a tell, and a rect costs a projection each). */
-  private readGeom(): BreathGeom {
-    if (this.geom && this.clock - this.rectAt < 80) return this.geom;
+  private readGeom(over?: { attacker: string; party: readonly string[]; companions: readonly string[] }): BreathGeom {
+    const kind = over === undefined ? 'breath' : 'opening';
+    if (this.geom && kind === this.geomKey && this.clock - this.rectAt < 80) return this.geom;
     this.rectAt = this.clock;
-    const s = this.subject;
+    this.geomKey = kind;
+    const s = over ?? this.subject;
     const w = this.under.clientWidth || this.o.root.clientWidth || 1600;
     const h = this.under.clientHeight || this.o.root.clientHeight || 900;
     const attacker = s ? this.o.rectOf(s.attacker) : null;
@@ -253,7 +281,7 @@ export class ProStageLayer implements StagingPort {
       const r = this.o.rectOf(id);
       if (r) party.push(r);
     }
-    for (const id of this.companionIds()) {
+    for (const id of over ? over.companions : this.companionIds()) {
       const r = this.o.rectOf(id);
       if (r) companions.push(r);
     }
@@ -268,6 +296,7 @@ export class ProStageLayer implements StagingPort {
   setCompanions(ids: readonly string[]): void {
     this.companions = ids;
   }
+  private geomKey: 'breath' | 'opening' = 'breath';
   private companionIds(): readonly string[] {
     return this.companions;
   }
@@ -299,4 +328,9 @@ export class ProStageLayer implements StagingPort {
     delete r.dataset['pst'];
     r.style.removeProperty('--pst-hud');
   }
+}
+
+/** An Overdrive's opening on the held breath's canvas: the arena lightens toward ivory (half the breath's drain), the caster's chest glows, the strike's pop is the flash. */
+function odToBreath(f: OdFrame): ReturnType<typeof breathFrame> {
+  return { name: 0, drain: 0.5 * f.light, hud: 1 - (1 - 1 / 6) * f.light, ring: 0, ringScale: 1, inflow: 0, core: 0.55 * f.light, flash: f.flash, flood: 0, alive: f.alive };
 }

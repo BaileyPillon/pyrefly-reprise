@@ -98,6 +98,7 @@ export function endFrame(now: number, m: EndMarks): EndFrame {
   const bars = m.pullAt === null ? 0 : smooth((now - m.pullAt) / Math.max(1, m.pullMs));
   const dim = m.fallAt === null ? 0 : smooth((now - m.fallAt) / DIM_MS);
   const caption = m.fallAt === null ? 0 : smooth((now - m.fallAt - CAPTION_DELAY_MS) / CAPTION_MS);
+  if (m.fallAt !== null) hud = Math.min(hud, 1 - dim); // the party falls: the HUD goes out with the light, the card that follows is the flow's
   const alive = m.freezeAt !== null || m.titleAt !== null || m.pullAt !== null || m.fallAt !== null;
   return { flash, shock, shockAlpha, hud, title, bars, dim, caption, alive };
 }

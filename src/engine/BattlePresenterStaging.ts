@@ -12,11 +12,16 @@
  */
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
+import type { PlaybackSpeed } from './BattlePresenterPorts.ts';
 import type { ActingAction } from './BattlePresenterSpellFx.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
+import { menuBlocks } from './KeySlots.ts';
 import { stagingGame, stagingPieceOn } from './pro/staging/StagingSwitch.ts';
 import { bigMoveOf, type BigMove, type StageFacts, type StagingPort } from './pro/staging/StagingPort.ts';
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
+import { realVictoryOf } from './motion/RealMotion.ts';
+import { FREEZE_HOLD_MS, STAND_DOWN_MIN_MS, cheerHoldMs } from './pro/staging/EndingPlan.ts';
+import { setDefeatNote } from './pro/staging/DefeatNote.ts';
 
 /** The port, when the piece is on and a layer is mounted; null otherwise. */
 export function stagingPort(ctx: EventCtx, piece: 'breath' | 'ending' | 'opening'): StagingPort | null {
@@ -27,7 +32,12 @@ export function stagingPort(ctx: EventCtx, piece: 'breath' | 'ending' | 'opening
 
 /** How the cue should play: the game, the speed's factor, REDUCE MOTION, REDUCE FLASHES. */
 export function stageFacts(ctx: EventCtx): StageFacts {
-  return { game: stagingGame(), scale: SPEED_SCALE[ctx.speed()] || 1, calm: ctx.moments?.reducedMotion === true, tame: ctx.moments?.reducedFlashes === true };
+  return factsFor(ctx.speed(), ctx.moments?.reducedMotion === true, ctx.moments?.reducedFlashes === true, menuBlocks(ctx)); // asked as the look begins, like every FFX-2 look (`motion/MenuHold.ts`)
+}
+
+/** The same from the three answers themselves (`BattleMoments` has no event context). */
+export function factsFor(speed: PlaybackSpeed, calm: boolean, tame: boolean, menu = false): StageFacts {
+  return { game: stagingGame(), scale: SPEED_SCALE[speed] || 1, calm, tame, ...(menu ? { menu: true } : {}) };
 }
 
 /** The party's ids on the field now (the aeon counts as the party). */
@@ -88,12 +98,16 @@ export function stageCharge(ctx: EventCtx, event: Extract<BattleEvent, { type: '
   if (move !== null) begin(ctx, port, move, event.enemyId);
 }
 
+/** The action serial each presenter has told once: a group move (Mega Flare on three girls) asks the effect once per target, but its tell is the first blow's alone. */
+const told = new WeakMap<EventCtx, number>();
+
 /** The first blow's effect begins and says it lands in `ms`: the tell. */
 export function stageTell(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, a: ActingAction | undefined, ms: number): void {
   const port = stagingPort(ctx, 'breath');
   if (!port || a === undefined || (event.hitIndex ?? 0) !== 0 || ms <= 0 || ctx.stage.sideOf(a.actorId) !== 'enemy') return;
   const move = bigMoveOf(a.abilityId, stagingGame());
-  if (move === null) return;
+  if (move === null || told.get(ctx) === a.serial) return;
+  told.set(ctx, a.serial);
   begin(ctx, port, move, a.actorId);
   const msToBlow = Math.min(ms, SPECIAL_HOLD_CAP_MS) * (SPEED_SCALE[ctx.speed()] || 1);
   port.breath({ ...stageFacts(ctx), kind: 'tell', move, name: NAME_OF[move], attacker: a.actorId, party: partyOf(ctx), msToBlow });
@@ -120,4 +134,104 @@ export function stageLift(ctx: EventCtx, endedId: CombatantId | null | undefined
   blown.delete(ctx);
   const port = ctx.deps.staging ?? null;
   port?.breath({ ...stageFacts(ctx), kind: 'lift' });
+}
+
+// ------------------------------------------------------------------ the ending
+
+/** What ended up held on the field for a freeze: option C's hit-stop clock (the feel lane's), when BATTLE SPECTACLE is on (`FxStagePort.freeze`). */
+interface Freezable {
+  enabled(): boolean;
+  freeze?(ms: number): void;
+}
+
+/** The foe the last blow felled, per presenter (the title names it). */
+const felled = new WeakMap<EventCtx, CombatantId>();
+/** One freeze per fight: the killing blow of a chain's last link. */
+const frozen = new WeakSet<EventCtx>();
+
+/** The foe's latest move, per presenter: the defeat card names it ("Felled by Total Annihilation"). */
+const foeMove = new WeakMap<EventCtx, string>();
+
+/** `action-start` by a foe: remember its move's name for the defeat card. */
+export function noteFoeMove(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>): void {
+  if (!stagingPort(ctx, 'ending') || ctx.stage.sideOf(event.actorId) !== 'enemy' || !event.abilityName) return;
+  foeMove.set(ctx, event.abilityName);
+}
+
+/**
+ * A foe is KO'd. If it is the last of the fight (a `victory` follows in this burst and no later link chains on), the frame HOLDS on the killing blow: the layer flashes, rings and takes the HUD out, the field's clock
+ * is stopped, the presenter waits. Returns the wait (a promise) or undefined; the caller awaits it before the foe is sent. REDUCE MOTION holds nothing (the freeze is one of the four things it turns off) but the
+ * flash, a glow, still opens the beat.
+ */
+export function stageFreeze(ctx: EventCtx, id: CombatantId): Promise<void> | undefined {
+  const port = stagingPort(ctx, 'ending');
+  if (!port || ctx.moreLinks === true) return undefined;
+  const b = ctx.burst;
+  if (!b || !b.events.slice(b.at + 1).some((e) => e.type === 'victory')) return undefined;
+  felled.set(ctx, id);
+  if (frozen.has(ctx)) return undefined;
+  const facts = stageFacts(ctx);
+  if (facts.menu === true) return undefined; // FFX-2: a command menu is open as the killing blow lands: nothing plays over it (D-357); the title still comes with the victory
+  frozen.add(ctx);
+  const hold = facts.calm ? 0 : FREEZE_HOLD_MS;
+  port.ending({ ...facts, kind: 'freeze', boss: id, holdMs: hold });
+  if (hold <= 0) return undefined;
+  const fx = (ctx.stage as { fx?: Freezable }).fx;
+  if (fx?.enabled() === true) fx.freeze?.(hold * facts.scale);
+  return ctx.sleep(hold);
+}
+
+/** The cheer's length for FFX: the longest real clip among the party (`data/motion/realMotion.ts` `poseMs`, PROVEN: Tidus 3,666.7 ms), at least `floor`. */
+function cheerFloorMs(ctx: EventCtx, floor: number): number {
+  const lengths = partyOf(ctx).map((id) => realVictoryOf('ffx', ctx.stage.artOf?.(id) ?? id)?.poseMs);
+  return cheerHoldMs(lengths, floor);
+}
+
+/**
+ * The victory beat: the quiet title, and the hold the cheer needs. `kind` is the chapter's own: `'pose'` (FFX: the party cheers; the hold is the real clip's) or `'hold'` (FFX-2 Chapter IV: the sources withhold the pose, the
+ * fanfare and the quip after Bahamut, so nothing is celebrated: the party stands, the title is quiet and the silent pull-back is the transition into the results). Returns the least ms the beat must hold (0 when not staged).
+ */
+export function stageVictory(ctx: EventCtx, kind: 'pose' | 'hold', floor: number): number {
+  const port = stagingPort(ctx, 'ending');
+  if (!port) return 0;
+  const facts = stageFacts(ctx);
+  const boss = felled.get(ctx);
+  port.ending({ ...facts, kind: 'title', boss: boss ?? '' });
+  if (kind === 'pose') return cheerFloorMs(ctx, floor);
+  const hold = Math.max(floor, STAND_DOWN_MIN_MS);
+  const pullMs = 1200;
+  void ctx.sleep(hold - pullMs - 150).then(() => {
+    port.ending({ ...stageFacts(ctx), kind: 'pullback', ms: pullMs });
+    ctx.stage.camera.push?.(-0.05, pullMs * facts.scale)?.catch(() => undefined); // a quiet draw back into the results: a transition, not a pose
+  });
+  return hold;
+}
+
+/** The last party member falls: the scene stays under a light dim and a caption drops in; the card is the flow's overlay. True when the staging took the defeat's grade (the caller then skips today's black flash). */
+export function stageFall(ctx: EventCtx): boolean {
+  const port = stagingPort(ctx, 'ending');
+  if (!port) return false;
+  const facts = stageFacts(ctx);
+  setDefeatNote({ ...(foeMove.has(ctx) ? { cause: foeMove.get(ctx)! } : {}) });
+  port.ending({ ...facts, kind: 'fall', party: partyOf(ctx) });
+  return true;
+}
+
+// ----------------------------------------------------------------- the openings
+
+/** `spherechange` (FFX-2 only): the HUD's flourish plays as it always did; its name plate is made readable (a pearl plate) for as long as it shows. */
+export function stageChange(ctx: EventCtx, event: Extract<BattleEvent, { type: 'spherechange' }>): void {
+  const port = stagingPort(ctx, 'opening');
+  if (!port || stagingGame() !== 'ffx2') return;
+  const gate = event.gatesCrossed[event.gatesCrossed.length - 1];
+  port.opening({ ...stageFacts(ctx), kind: 'change', actor: event.who, dress: event.to, gate });
+}
+
+/**
+ * Does the pro staging replace the splash cut-in (option C6: a sunburst and a cream ribbon with the name, the big banner of today's Overdrive opening and of Mega Flare's start) for this action? Only while the piece that
+ * replaces it is on and the layer is there: an FFX Overdrive with the `opening` piece, Total Annihilation or Mega Flare with the `breath` piece. With the staging off the splash plays as it always did.
+ */
+export function stagingTakesSplash(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>, kind: 'overdrive' | 'special' | 'other'): boolean {
+  if (kind === 'overdrive') return stagingPort(ctx, 'opening') !== null && stagingGame() === 'ffx';
+  return kind === 'special' && stagingPort(ctx, 'breath') !== null && ctx.stage.sideOf(event.actorId) === 'enemy' && bigMoveOf(event.abilityId, stagingGame()) !== null;
 }

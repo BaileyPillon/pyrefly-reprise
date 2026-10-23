@@ -17,6 +17,7 @@
  * | `8` | Tidus T1 / T2 (the art; reloads the page, so press it between fights) | t1, t2 |
  * | `9` | the per-game moments (victory, knock-out) | new, today |
  * | `-` | the contact shadow | follow, today |
+ * | `\` (backslash) | the pro staging (lane "pro-staging": held breath, boss card, victory freeze, defeat card, Overdrive opening, Change plate; a flip in a fight plays from the next beat) | pro, today |
  * | `0` | everything: if all are new, all go to today's; else all go to new | |
  * | `=` | hide or show the label | |
  *

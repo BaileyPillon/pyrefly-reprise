@@ -15,6 +15,7 @@
  */
 
 import './transitions.css';
+import { playResultsDissolve } from '../proStage/resultsDissolve.ts';
 import { DEFAULT_DURATION_MS, playWipe } from '../../inkgold/wipe.ts';
 import { paceFactor, paceGameOf } from '../../../engine/pace.ts';
 import type { GameId } from '../../../battle/common/types.ts';
@@ -32,7 +33,10 @@ export function playResultsWipe(
   root: HTMLElement,
   game: GameId,
   onCover?: () => void,
+  /** Lane "pro-staging" (the demo chapters with the staging on): the held victory scene dissolves into the panel in place of the diagonal wipe (`proStage/resultsDissolve.ts`). */
+  opts?: { dissolve: 'soft' | 'calm' },
 ): Promise<void> {
+  if (opts?.dissolve) return playResultsDissolve(root, game, onCover, opts.dissolve === 'calm');
   const f = paceFactor('transition', paceGameOf(game)); // the pacing option (`src/engine/pace.ts`), 1 unless picked
   return playWipe(root, {
     direction: game === 'ffx2' ? 'rtl' : 'ltr',

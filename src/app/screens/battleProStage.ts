@@ -11,7 +11,7 @@ import { stagingMode } from '../../engine/pro/staging/StagingSwitch.ts';
 import { ProStageLayer } from '../../ui/common/proStage/ProStageLayer.ts';
 import { switchboardWanted } from '../demo/switchboard.ts';
 
-export function attachProStage(o: { root: HTMLElement; chapterId: string; stage: PaintedStage }): ProStageLayer | null {
+export function attachProStage(o: { root: HTMLElement; chapterId: string; stage: PaintedStage; nameOf?: (id: string) => string | undefined }): ProStageLayer | null {
   if (!isDemoChapter(o.chapterId)) return null;
   const search = typeof location === 'undefined' ? '' : (location.search ?? '');
   if (stagingMode() !== 'pro' && !switchboardWanted(search)) return null;
@@ -23,5 +23,6 @@ export function attachProStage(o: { root: HTMLElement; chapterId: string; stage:
       return r ? { x: r.x, y: r.y, w: r.w, h: r.h } : null;
     },
     pointOf: (id, anchor) => o.stage.project(id, anchor),
+    ...(o.nameOf ? { nameOf: o.nameOf } : {}),
   });
 }

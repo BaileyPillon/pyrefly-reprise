@@ -374,7 +374,7 @@ export class BattleScreen extends Screen {
     });
 
     this.momentOverlay = createMomentOverlay(this.root, scene.slots.artNamespace); // the turn cut-in shows the experiment's own portraits
-    this.proStage = attachProStage({ root: this.root, chapterId: chapter.id, stage: this.stage }); // pro staging (demo chapters only; null elsewhere)
+    this.proStage = attachProStage({ root: this.root, chapterId: chapter.id, stage: this.stage, nameOf: (id) => this.engine?.state().combatants[id]?.name }); // pro staging (demo chapters only; null elsewhere)
     if (this.opts.openingHurry) this.momentOverlay.hurry.arm();
 
     const registered = uiPortsRegistered();

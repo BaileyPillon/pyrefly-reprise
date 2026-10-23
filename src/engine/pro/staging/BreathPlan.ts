@@ -26,6 +26,8 @@ export interface BreathMarks {
   flood: boolean;
   /** REDUCE FLASHES: the flash is a glow at most and the flood is capped. */
   tame: boolean;
+  /** FFX-2: a command menu is open as the tell begins (D-357): no wash, no flood, no HUD sink; the name, the ring and the core still play. */
+  menu?: boolean;
 }
 
 /** One frame's strengths, every one 0 to 1 (ring `scale` is a multiple of its resting size). */
@@ -96,11 +98,11 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
   // the wash: drains over the first 62 percent of the tell, holds a hair under full through the rounds
   const drainIn = m.tellAt === null ? 0 : smooth(t / (0.62 * T));
   const drainHold = blown ? DRAIN_TELL - (DRAIN_TELL - DRAIN_HOLD) * smooth(sinceBlow / 400) : DRAIN_TELL;
-  const drain = drainIn * drainHold * keep;
+  const drain = m.menu === true ? 0 : drainIn * drainHold * keep;
 
   // the HUD sinks over the first 40 percent, comes back with the lift
   const sink = m.tellAt === null ? 0 : smooth(t / (0.4 * T));
-  const hud = 1 - (1 - HUD_SINK_TO) * sink * keep;
+  const hud = m.menu === true ? 1 : 1 - (1 - HUD_SINK_TO) * sink * keep;
 
   // the ring appears from 18 percent, gathers inward to its final size by the end of the tell, pulses wider at the blow and fades
   const ringIn = m.tellAt === null ? 0 : smooth((t - 0.18 * T) / (0.3 * T));
@@ -118,7 +120,7 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
 
   // Mega Flare's flood: opens at the blow from the chest, holds, then settles into the wash
   let flood = 0;
-  if (m.flood && blown) {
+  if (m.flood && blown && m.menu !== true) {
     const cap = m.tame ? 0.35 : 1;
     const rise = smooth(sinceBlow / FLOOD_RISE_MS);
     const fall = smooth((sinceBlow - FLOOD_RISE_MS - FLOOD_HOLD_MS) / FLOOD_FALL_MS);

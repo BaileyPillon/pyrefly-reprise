@@ -80,6 +80,11 @@ export function stagingPieceOn(piece: StagingPiece): boolean {
   return stagingOn() && !stagingOffPieces().has(piece);
 }
 
+/** Does this piece play for this chapter id? For the flow, which asks after the battle screen has cleared the shared chapter (the results, the defeat card): the switch is on and the chapter is a demo chapter. */
+export function stagingPieceOnFor(piece: StagingPiece, chapterId: string | undefined): boolean {
+  return stagingMode() === 'pro' && isDemoChapter(chapterId) && !stagingOffPieces().has(piece);
+}
+
 /** The game whose staging plays: the demo chapter's own (FFX in Chapter I, FFX-2 in Chapter IV). */
 export function stagingGame(): DemoGame {
   return demoGameOf(demoChapter());

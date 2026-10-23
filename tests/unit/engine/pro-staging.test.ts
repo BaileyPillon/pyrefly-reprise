@@ -14,6 +14,8 @@ import {
   stagingPieceOn,
 } from '../../../src/engine/pro/staging/StagingSwitch.ts';
 import { bigMoveOf } from '../../../src/engine/pro/staging/StagingPort.ts';
+import { CAPTION_DELAY_MS, CAPTION_MS, DIM_MS, HUD_OUT_MS, SHOCK_MS, TITLE_MS, cheerHoldMs, emptyEnd, endFrame } from '../../../src/engine/pro/staging/EndingPlan.ts';
+import { OD_OPEN_HOLD_MS, emptyOd, odFrame } from '../../../src/engine/pro/staging/OpeningPlan.ts';
 import {
   BREATH_GUARD_MS,
   HUD_SINK_TO,
@@ -170,11 +172,64 @@ describe('the held breath\'s plan', () => {
     expect(done.alive).toBe(false);
   });
 
+  it('FFX-2 with a command menu open as the tell begins (D-357): no wash, no flood, no HUD sink; the ring, the name and the core still play', () => {
+    const open = marks({ menu: true, game: 'ffx2', flood: true, blowAt: 2200 });
+    const f = breathFrame(2300, open);
+    expect(f.drain).toBe(0);
+    expect(f.hud).toBe(1);
+    expect(f.flood).toBe(0);
+    expect(breathFrame(2150, marks({ menu: true })).ring).toBeGreaterThan(0.9);
+    expect(breathFrame(2150, marks({ menu: true })).name).toBeGreaterThan(0.9);
+    expect(breathFrame(2150, marks({ menu: true })).core).toBeGreaterThan(0.9);
+  });
+
   it('a move whose end never arrives is let go; a marker that waits for its turn is not (for two minutes)', () => {
     expect(breathExpired(2200 + BREATH_GUARD_MS - 1, marks({ blowAt: 2200 }))).toBe(false);
     expect(breathExpired(2200 + BREATH_GUARD_MS + 1, marks({ blowAt: 2200 }))).toBe(true);
     expect(breathExpired(60000, marks({ tellAt: null }))).toBe(false);
     expect(breathExpired(130000, marks({ tellAt: null }))).toBe(true);
+  });
+});
+
+describe('the ending plan', () => {
+  it('the last blow flashes, rings and takes the HUD out; REDUCE FLASHES makes the flash a glow, REDUCE MOTION stops the ring', () => {
+    const m = { ...emptyEnd(), freezeAt: 1000 };
+    const a = endFrame(1030, m);
+    expect(a.flash).toBeGreaterThan(0.5);
+    expect(a.shock).toBeGreaterThan(0);
+    expect(endFrame(1400, m).flash).toBeLessThan(a.flash);
+    expect(endFrame(1000 + HUD_OUT_MS, m).hud).toBeCloseTo(0, 5);
+    expect(endFrame(1030, { ...m, tame: true }).flash).toBeLessThanOrEqual(0.3);
+    expect(endFrame(1100, { ...m, calm: true }).shock).toBe(-1);
+    expect(endFrame(1000 + SHOCK_MS + 10, m).shock).toBe(-1);
+  });
+  it('the title fades in, the pull-back closes the letterbox, the defeat dims the scene and drops the caption after it', () => {
+    const m = { ...emptyEnd(), titleAt: 0, pullAt: 0, pullMs: 1000, fallAt: 0 };
+    expect(endFrame(0, m).title).toBe(0);
+    expect(endFrame(TITLE_MS, m).title).toBeCloseTo(1, 5);
+    expect(endFrame(1000, m).bars).toBeCloseTo(1, 5);
+    const early = endFrame(CAPTION_DELAY_MS / 2, m);
+    expect(early.caption).toBe(0);
+    expect(early.dim).toBeGreaterThan(0);
+    expect(endFrame(DIM_MS + 100, m).dim).toBeCloseTo(1, 5);
+    expect(endFrame(CAPTION_DELAY_MS + CAPTION_MS, m).caption).toBeCloseTo(1, 5);
+    expect(endFrame(DIM_MS, m).hud).toBeCloseTo(0, 5); // the HUD goes with the light
+  });
+  it('the cheer holds for the longest real clip (Tidus 3,666.7 ms), at least the floor', () => {
+    expect(cheerHoldMs([3666.7, 3200, undefined], 900)).toBe(3666.7);
+    expect(cheerHoldMs([undefined], 900)).toBe(900);
+    expect(cheerHoldMs([], 900)).toBe(900);
+  });
+  it('the Overdrive opening: the light and the small name rise, the glint crosses, the strike pops, then it is over', () => {
+    const m = { ...emptyOd(), at: 0 };
+    expect(odFrame(-1, emptyOd()).alive).toBe(false);
+    expect(odFrame(400, m).light).toBeGreaterThan(0.95);
+    expect(odFrame(100, m).name).toBe(0);
+    expect(odFrame(500, m).name).toBeGreaterThan(0.95);
+    expect(odFrame(0.77 * OD_OPEN_HOLD_MS, m).glint).toBeGreaterThanOrEqual(0);
+    expect(odFrame(OD_OPEN_HOLD_MS, m).flash).toBeGreaterThan(0.4);
+    expect(odFrame(OD_OPEN_HOLD_MS + 400, m).alive).toBe(false);
+    expect(odFrame(OD_OPEN_HOLD_MS + 100, m).light).toBeLessThan(0.05);
   });
 });
 

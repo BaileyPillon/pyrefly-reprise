@@ -1,11 +1,109 @@
+/**
+ * THE OVERDRIVE OPENING, THE DRAWING (lane "pro-staging"; the plan is `engine/pro/staging/OpeningPlan.ts`): the small name set at the caster's side and the glint along his blade, in the TOP layer. The light change (the arena
+ * lightening toward ivory around the lit caster, the HUD sinking) is drawn by the layer on the held breath's canvas (`ProStageLayer.update` asks for {@link OpeningView.light}), so there is one wash and one set of windows.
+ * FFX only: an Overdrive is FFX's. The FFX-2 Change's pearl plate is CSS on the HUD's own flourish (`proStage.css`, `data-pst-open`), toggled here for as long as the flourish plays.
+ */
+import { CHANGE_OPEN_MS, OD_OPEN_HOLD_MS, emptyOd, odFrame, type OdFrame, type OdMarks } from '../../../engine/pro/staging/OpeningPlan.ts';
 import type { OpeningCue } from '../../../engine/pro/staging/StagingPort.ts';
 import type { ProStageOptions } from './ProStageLayer.ts';
 
-/** The Overdrive opening and the Change plate (filled in by the opening step). */
 export class OpeningView {
-  constructor(readonly host: HTMLElement, readonly o: ProStageOptions) {}
-  cue(_cue: OpeningCue): void {}
-  update(_now: number): void {}
-  clear(): void {}
-  dispose(): void {}
+  private marks: OdMarks = emptyOd();
+  private actor: string | null = null;
+  private readonly block: HTMLElement;
+  private readonly who: HTMLElement;
+  private readonly title: HTMLElement;
+  private readonly glintEl: HTMLElement;
+  private now = 0;
+  private changeUntil = 0;
+  /** This frame's opening, or null when none is on. */
+  frame: OdFrame | null = null;
+
+  constructor(
+    private readonly host: HTMLElement,
+    private readonly o: ProStageOptions,
+  ) {
+    const doc = host.ownerDocument;
+    this.block = doc.createElement('div');
+    this.block.className = 'pst__od';
+    this.who = doc.createElement('div');
+    this.who.className = 'pst__od-who';
+    this.title = doc.createElement('div');
+    this.title.className = 'pst__od-name';
+    const rule = doc.createElement('div');
+    rule.className = 'pst__od-rule';
+    this.block.append(this.who, this.title, rule);
+    this.glintEl = doc.createElement('div');
+    this.glintEl.className = 'pst__glint';
+    host.append(this.block, this.glintEl);
+  }
+
+  cue(c: OpeningCue): void {
+    if (c.kind === 'change') {
+      // FFX-2: the HUD's own flourish plays; its name plate is restyled to a readable pearl one while this flag is up
+      this.o.root.dataset['pstOpen'] = '';
+      this.changeUntil = this.now + CHANGE_OPEN_MS;
+      return;
+    }
+    this.actor = c.actor;
+    this.marks = { at: this.now, holdMs: OD_OPEN_HOLD_MS * c.scale, tame: c.tame };
+    this.who.textContent = `${this.o.nameOf?.(c.actor) ?? ''} · Overdrive`.replace(/^ · /, '');
+    this.title.textContent = c.name;
+  }
+
+  /** The caster's rectangle now, for the layer's windows. */
+  get actorId(): string | null {
+    return this.frame?.alive ? this.actor : null;
+  }
+
+  update(now: number): void {
+    this.now = now;
+    if (this.changeUntil > 0 && now >= this.changeUntil) {
+      delete this.o.root.dataset['pstOpen'];
+      this.changeUntil = 0;
+    }
+    if (this.marks.at === null) {
+      this.frame = null;
+      return;
+    }
+    const f = odFrame(now, this.marks);
+    this.frame = f;
+    if (!f.alive) {
+      this.marks = emptyOd();
+      this.actor = null;
+      this.block.style.opacity = '0';
+      this.glintEl.style.opacity = '0';
+      this.frame = null;
+      return;
+    }
+    const r = this.actor ? this.o.rectOf(this.actor) : null;
+    if (!r) return;
+    const W = this.host.clientWidth || 1600;
+    const right = r.x + r.w / 2 < W * 0.55; // the name goes to the side of the caster with the room
+    this.block.style.opacity = f.name.toFixed(3);
+    this.block.style.transform = `translate(${(right ? r.x + r.w * 1.02 : r.x - r.w * 0.02).toFixed(0)}px, ${(r.y + r.h * 0.1).toFixed(0)}px) translate(${right ? 0 : -100}%, 0) translateY(${((1 - f.name) * 8).toFixed(1)}px)`;
+    this.block.style.textAlign = right ? 'left' : 'right';
+    if (f.glint >= 0) {
+      const x = r.x + r.w * (-0.1 + 1.2 * f.glint);
+      this.glintEl.style.cssText = `opacity:${Math.sin(Math.PI * f.glint).toFixed(3)};width:${(r.w * 0.75).toFixed(0)}px;transform:translate(${x.toFixed(0)}px, ${(r.y + r.h * 0.58).toFixed(0)}px) rotate(-32deg);`;
+    } else {
+      this.glintEl.style.opacity = '0';
+    }
+  }
+
+  clear(): void {
+    this.marks = emptyOd();
+    this.actor = null;
+    this.frame = null;
+    this.block.style.opacity = '0';
+    this.glintEl.style.opacity = '0';
+    delete this.o.root.dataset['pstOpen'];
+    this.changeUntil = 0;
+  }
+
+  dispose(): void {
+    this.block.remove();
+    this.glintEl.remove();
+    delete this.o.root.dataset['pstOpen'];
+  }
 }

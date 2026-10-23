@@ -19,6 +19,7 @@ import { punchMode, rumbleOn, stopMode } from '../../feel/FeelSwitch.ts';
 import { isBossBigMove } from '../../feel/HitStopShort.ts';
 import { bigBlowClaimed } from '../../feel/BlowClaim.ts';
 import { isFfx2, menuBlocks } from '../../KeySlots.ts';
+import { stagingTakesSplash } from '../../BattlePresenterStaging.ts';
 
 /** What the stage offers option C. Every method is optional; `enabled()` false = today's look. */
 export interface FxStagePort {
@@ -55,6 +56,8 @@ export interface FxStagePort {
   }): { freezeMs: number; shook: boolean };
   /** A fiend is sent (only where the departure is a dissolve, C8). */
   dissolve?(id: CombatantId): void;
+  /** Hold the field's clock for `ms` of real time (the hit-stop's own clock; lane "pro-staging": the freeze on a fight's last blow). Optional and additive. */
+  freeze?(ms: number): void;
   /** The victory: `pose` chapters orbit, `hold` ones only push in (C9). Returns the ms the beat should hold for it. */
   victory?(kind: 'pose' | 'hold'): number;
   /**
@@ -100,6 +103,7 @@ export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { 
   rumbleOpen(ctx, kind);
   const fx = port(ctx);
   if (!fx?.actionOpen || kind === 'other' || ctx.speed() === 'skip') return;
+  if (stagingTakesSplash(ctx, event, kind)) return; // lane "pro-staging": the staged opening or held breath replaces the splash cut-in (its big banner), only while it is on
   await fx.actionOpen({ actorId: event.actorId, name, kind });
 }
 

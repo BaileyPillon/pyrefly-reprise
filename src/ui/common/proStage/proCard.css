@@ -111,6 +111,11 @@
   bottom: clamp(10px, 2.4vh, 26px);
 }
 
+/* the loading card's hairline (`transitions/loadingCard.ts`) sat on the gold strip: with no strip it runs along the foot of the frame */
+.bstart--pro .bstart__load {
+  bottom: 0;
+}
+
 /* the blink: one frame of white into the card, gone in 160 ms */
 .bstart--pro::before {
   content: '';
