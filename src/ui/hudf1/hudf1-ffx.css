@@ -23,6 +23,7 @@
   box-shadow: var(--f1-shadow), 0 0 6.5px rgba(227, 185, 74, 0.5), inset 0.75px 0.75px 0 rgba(255, 255, 255, 0.62), inset 0 -2.5px 3.5px -1.75px rgba(140, 86, 10, 0.4);
 }
 .ffxhud.hud-f1 .ig-cmd--disabled { background: linear-gradient(180deg, var(--f1-ivory-a) 0%, var(--f1-ivory-b) 58%, var(--f1-ivory-c) 100%); color: rgba(20, 17, 10, 0.72); }
+.ffxhud.hud-f1 .ig-cmd--disabled .ffx-cmd__label, .ffxhud.hud-f1 .ig-cmd--disabled.ffx-cmd--trigger > .ffx-cmd__label { color: rgba(20, 17, 10, 0.72); } /* today's disabled label is a light grey for its dark slab: one more class than that rule, since this sheet loads first */
 .ffxhud.hud-f1 .ig-cmd--overdrive { background: var(--f1-ink-b); color: var(--ig-accent); border: 0.5px solid var(--ig-accent); }
 .ffxhud.hud-f1 .ig-cmd__cursor, .ffxhud.hud-f1 .ffx-cmd__chev { display: none; }
 .ffxhud.hud-f1 .ffx-cmd__label { font-size: 12px; letter-spacing: 0.06em; color: inherit; flex: 0 1 auto; }

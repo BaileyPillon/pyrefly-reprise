@@ -58,9 +58,10 @@
 .hud-f1.f1-finish .ig-stat::before,
 .hud-f1.f1-finish .f1-slab::before {
   content: ''; position: absolute; inset: -0.5px -1.75px; z-index: -1; pointer-events: none;
-  -webkit-mask: var(--f1-ml) left center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mr) right center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mm) calc(var(--f1-h) * var(--f1-capk)) 0 / calc(100% - 2 * var(--f1-h) * var(--f1-capk)) 100% no-repeat;
-  mask: var(--f1-ml) left center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mr) right center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mm) calc(var(--f1-h) * var(--f1-capk)) 0 / calc(100% - 2 * var(--f1-h) * var(--f1-capk)) 100% no-repeat;
+  -webkit-mask: var(--f1-ml) left center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mr) right center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mm) calc(var(--f1-h) * var(--f1-capk) - 1.5px) 0 / calc(100% - 2 * var(--f1-h) * var(--f1-capk) + 3px) 100% no-repeat;
+  mask: var(--f1-ml) left center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mr) right center / calc(var(--f1-h) * var(--f1-capk)) 100% no-repeat, var(--f1-mm) calc(var(--f1-h) * var(--f1-capk) - 1.5px) 0 / calc(100% - 2 * var(--f1-h) * var(--f1-capk) + 3px) 100% no-repeat;
 }
+/* the middle runs 1.5 px under each cap: two abutting masks on a fractional pixel left a hairline seam (seen in the scrolled FFX-2 list) */
 /* the slab's content keeps painting above its paint (a transformed element is its own stacking context, so `z-index: -1` sits just over its own background) */
 
 /* ivory gouache: the verbs */
