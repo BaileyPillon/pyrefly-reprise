@@ -17,7 +17,7 @@
  * Game case (AGENTS.md rule 14): Bahamut is FFX-2 only, Seymour Flux FFX only; this plumbing is the same for both, so the shared code is "both" and each table row says its game.
  * Pure but for `three` (the meshes it patches) and the address of the page.
  */
-import { Vector3, type Mesh, type Object3D } from 'three';
+import { CanvasTexture, Vector3, type Mesh, type MeshBasicMaterial, type Object3D, type Texture } from 'three';
 import { demoChapter, isDemoChapter, packDemo, queryWord } from '../../motion/DemoGate.ts';
 
 export type BossCleanMode = 'clean' | 'today';
@@ -39,10 +39,15 @@ export interface BossFoot {
   hw: number;
   squash: number;
   boost: number;
+  /** The bold pass's ellipse for this boss: its depth times `tall`, its centre `drop` of its original depth lower on the frame (a boss that stands far back on a low camera has a shadow that sits behind its own lowest edge). 1 and 0 = as it was. */
+  tall: number;
+  drop: number;
+  /** The engine shadow's centre moves toward the camera by this many half widths of itself (0 = under the figure's plane): a plane painted from the front hides the back half of a flat ellipse centred on its foot line. */
+  front: number;
 }
 export const BOSS_FEET: Readonly<Record<string, BossFoot>> = Object.freeze({
-  'ffx2-bahamut': { cx: 0.385, hw: 0.251, squash: 1.0, boost: 1.9 }, // the coil is as deep as it is wide: a round pool, not a thin ellipse
-  'seymour-flux-body': { cx: 0.429, hw: 0.227, squash: 0.5, boost: 1 }, // his shadow already reads (a 0.5 ellipse under the boot)
+  'ffx2-bahamut': { cx: 0.385, hw: 0.251, squash: 1.2, boost: 1.6, tall: 1.4, drop: 0.6, front: 1.0 }, // a pool deeper than the engine's 0.5 and 1.0 half widths toward the camera, so it lies under the tail's lowest edge and not behind it, on a plateau texture (measured: the engine's blob lit 40 percent of its ellipse, a flat ellipse on the foot line showed 18 px of itself, and the bold pass's contact shadow moved the floor by under 2 levels); the bold ellipse likewise 1.4 taller and 0.6 of its depth lower
+  'seymour-flux-body': { cx: 0.429, hw: 0.227, squash: 0.5, boost: 1, tall: 1, drop: 0, front: 0 }, // his shadow already reads (a 0.5 ellipse under the boot)
 });
 
 /**
@@ -74,7 +79,7 @@ export function footForPose(artId: string, pose: string | undefined): BossFoot {
   const base = BOSS_FEET[artId];
   if (!base) throw new Error(`footForPose: ${artId} is not a re-cut boss`);
   const row = pose === undefined ? undefined : BOSS_FEET_POSES[artId]?.[pose.split('.')[0]!];
-  return row ? { ...row, squash: base.squash, boost: base.boost } : base;
+  return row ? { ...row, squash: base.squash, boost: base.boost, tall: base.tall, drop: base.drop, front: base.front } : base;
 }
 
 /** `?boss=clean|today` and `?pack=demo` (pure): `today` unless `boss=clean`, or `pack=demo` with no `boss=today`. */
@@ -144,6 +149,32 @@ interface PoseActor {
   ringBaseRadius?: number;
 }
 
+/**
+ * The boss's shadow texture: the engine's own blob falls off fast (alpha 0.95 at the centre, 0.6 at 0.3 of the radius, 0.2 at 0.62), so only about 40 percent of the ellipse reads (measured: a white additive
+ * shadow lit 195 of its 503 px). A boss that stands far from the camera on a dark floor needs the dark to reach most of the ellipse: a plateau that stays dark to 0.45 of the radius and falls to nothing at the rim.
+ * Null where there is no canvas (tests): the engine's blob then stays.
+ */
+let plateau: Texture | null | undefined;
+function plateauBlob(): Texture | null {
+  if (plateau !== undefined) return plateau;
+  plateau = null;
+  if (typeof document === 'undefined') return null;
+  try {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const x = c.getContext('2d');
+    if (!x) return null;
+    const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+    for (const [at, a] of [[0, 0.95], [0.45, 0.9], [0.7, 0.5], [0.88, 0.14], [1, 0]] as const) g.addColorStop(at, `rgba(255,255,255,${a})`);
+    x.fillStyle = g;
+    x.fillRect(0, 0, 128, 128);
+    plateau = new CanvasTexture(c);
+  } catch {
+    plateau = null;
+  }
+  return plateau;
+}
+
 /** The turn ring's depth against its width: the actor's own (`PaintedActor`: 0.46) times the 0.92 the first round used. */
 const RING_SQUASH = 0.46 * 0.92;
 
@@ -160,6 +191,9 @@ export class BossClean {
   private ringOwn = 1;
   private ringWritten = -1;
   private shadowWritten = -1;
+  private origMap: Texture | null = null;
+  private swapped = false;
+  private shifted = false;
 
   constructor(readonly artId: string) {
     this.foot = { ...footForPose(artId, undefined) };
@@ -167,10 +201,23 @@ export class BossClean {
 
   /** Called once per frame after the actor's own update: while the switch is on, patch any part that has appeared, then fit the shadow and the ring. With it off nothing is scanned, patched or written. */
   tick(actor: FootActor): void {
-    if (!bossCleanOn(this.artId)) return;
+    if (!bossCleanOn(this.artId)) {
+      this.release(actor);
+      return;
+    }
     // every frame: a rig builds a pose piece's mesh the first time a pose is asked for, and a piece drawn once unpatched shows its rim for that frame (about 60 objects, a few microseconds)
     actor.traverse((o) => this.patch(o as Patched));
     this.fit(actor);
+  }
+
+  /** The switch went off after it was on: the shadow takes back its own texture and its place (the actor rewrites its x, scale and opacity every frame; its z and map it does not). */
+  private release(actor: FootActor): void {
+    const sh = actor.shadow;
+    if (!sh || !(this.swapped || this.shifted)) return;
+    const m = sh.material as MeshBasicMaterial;
+    if (this.origMap && m.map !== this.origMap) m.map = this.origMap;
+    sh.position.z = 0;
+    this.swapped = this.shifted = false;
   }
 
   private patch(m: Patched): void {
@@ -213,6 +260,19 @@ export class BossClean {
     this.foot.cx += (to.cx - this.foot.cx) * k;
     this.foot.hw += (to.hw - this.foot.hw) * k;
     this.foot.squash = to.squash;
+    this.foot.boost = to.boost;
+    this.foot.tall = to.tall;
+    this.foot.drop = to.drop;
+    this.foot.front = to.front;
+  }
+
+  private plateauShadow(shadow: Mesh): void {
+    const m = shadow.material as MeshBasicMaterial | undefined;
+    const p = plateauBlob();
+    if (!m || !m.map || !p) return;
+    this.origMap ??= m.map;
+    if (m.map !== p) m.map = p;
+    this.swapped = true;
   }
 
   /** The engine shadow's opacity times `boost`, once per write of the actor's own (the actor sets it every frame; a value this fit wrote and the actor has not rewritten is left as it is: nothing compounds). */
@@ -246,7 +306,12 @@ export class BossClean {
       o.position.x = (fit.cx - originX) / sx;
       o.scale.set(rx, rx * (ring ? RING_SQUASH : foot.squash), 1); // the turn ring stays the flat ellipse the actor draws, whatever depth the shadow takes
       if (ring) this.ringWritten = o.scale.x;
-      else this.boostShadow(o as Mesh, foot.boost);
+      else {
+        this.boostShadow(o as Mesh, foot.boost);
+        o.position.z = (fit.rx * foot.front) / sx;
+        this.shifted = true;
+        this.plateauShadow(o as Mesh);
+      }
     }
   }
 }

@@ -6,6 +6,7 @@ import { Color, Mesh, Object3D, PerspectiveCamera, PlaneGeometry, Scene, ShaderM
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { LookBoldShader } from '../../../src/engine/look/LookBoldShader.ts';
 import { LookMainShader } from '../../../src/engine/look/LookMainShader.ts';
+import { Vector4 } from 'three';
 import { BossMask, MASK_LAYER, bossFigure, bossShare } from '../../../src/engine/look/pro/BossMask.ts';
 import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts';
 import {
@@ -178,10 +179,10 @@ describe('the rim is zero only while a boss part draws', () => {
 
 describe('the shadow sits under the footprint', () => {
   it('footFit puts the centre at cx of the painting width and the half width at hw of it', () => {
-    const f = footFit(10, 14, { cx: 0.38, hw: 0.25, squash: 0.5, boost: 1 });
+    const f = footFit(10, 14, { cx: 0.38, hw: 0.25, squash: 0.5, boost: 1, tall: 1, drop: 0, front: 0 });
     expect(f.cx).toBeCloseTo(11.52, 6);
     expect(f.rx).toBeCloseTo(1, 6);
-    const m = footFit(14, 10, { cx: 0.38, hw: 0.25, squash: 0.5, boost: 1 }); // a mirrored figure: the painting's left edge is the right one
+    const m = footFit(14, 10, { cx: 0.38, hw: 0.25, squash: 0.5, boost: 1, tall: 1, drop: 0, front: 0 }); // a mirrored figure: the painting's left edge is the right one
     expect(m.cx).toBeCloseTo(12.48, 6);
     expect(m.rx).toBeCloseTo(1, 6);
   });
@@ -311,6 +312,18 @@ describe('the footprint follows the pose, and the ring keeps its own pulse', () 
     (sey.shadow.material as unknown as { opacity: number }).opacity = 0.4;
     tickBossClean(sey.actor);
     expect((sey.shadow.material as unknown as { opacity: number }).opacity).toBe(0.4);
+  });
+
+  it('the shadow stands forward of the figure while the switch plays and goes back where the actor keeps it when it stops', () => {
+    setBossClean('clean');
+    setDemoChapter('ffx2-bahamut');
+    const { actor, shadow } = bossActor('ffx2-bahamut');
+    const foot = BOSS_FEET['ffx2-bahamut']!;
+    tickBossClean(actor);
+    expect(shadow.position.z).toBeCloseTo((foot.hw * 4 * foot.front) / 1, 6); // the box is 4 wide, the group scale 1
+    setBossClean('today');
+    tickBossClean(actor);
+    expect(shadow.position.z).toBe(0);
   });
 
   it('a switch that is off scans and patches nothing', () => {
@@ -495,6 +508,84 @@ describe('the bosses own mask (review majors 1 and 3)', () => {
     }
   });
 
+  it('a draw that throws loses no frame: the settings are back, the shaders get a 0, and it warns once', () => {
+    setBossClean('clean');
+    setDemoChapter('ffx2-bahamut');
+    const boss = new Object3D();
+    attachBossClean(boss, 'ffx2-bahamut', 'enemy');
+    const mesh = figureMesh(new Texture());
+    boss.add(mesh);
+    const scene = new Scene();
+    scene.add(boss);
+    const cam = new PerspectiveCamera();
+    const before = cam.layers.mask;
+    const { r } = fakeRenderer([]);
+    (r as unknown as { render: () => void }).render = () => {
+      throw new Error('context lost');
+    };
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      const mask = new BossMask();
+      const u = { tBossMask: { value: null as unknown }, bossMaskOn: { value: 1 } };
+      expect(() => mask.frame(r, scene, cam, [{ slot: mesh, actor: boss }], 800, 600, u)).not.toThrow();
+      expect(u.bossMaskOn.value).toBe(0);
+      expect(cam.layers.mask).toBe(before);
+      expect(scene.overrideMaterial).toBeNull();
+      mask.frame(r, scene, cam, [{ slot: mesh, actor: boss }], 800, 600, u);
+      expect(warn).toHaveBeenCalledTimes(1);
+      mask.dispose();
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it('warm compiles the mask program once before the first frame, only with the switch on, and leaves the renderer as it was', () => {
+    const { r, calls } = fakeRenderer([]);
+    const mask = new BossMask();
+    setBossClean('today');
+    setDemoChapter('ffx2-bahamut');
+    mask.warm(r);
+    expect(calls).toEqual([]); // off: nothing
+    setBossClean('clean');
+    mask.warm(r);
+    expect(calls.filter((c) => c === 'render')).toHaveLength(1);
+    expect(r.autoClear).toBe(true);
+    expect(r.shadowMap.enabled).toBe(true);
+    mask.warm(r);
+    expect(calls.filter((c) => c === 'render')).toHaveLength(1); // once
+    mask.dispose();
+  });
+
+  it('puts a floor pool of the room colour under a lowered boss, after the effects, and nothing when the mask is off or the boss has no lowered ellipse', () => {
+    setBossClean('clean');
+    setDemoChapter('ffx2-bahamut');
+    const scene = new Scene();
+    const boss = new Object3D();
+    attachBossClean(boss, 'ffx2-bahamut', 'enemy');
+    const mesh = figureMesh(new Texture());
+    boss.add(mesh);
+    scene.add(boss);
+    const { r } = fakeRenderer([]);
+    const mask = new BossMask();
+    const PA = Array.from({ length: 4 }, () => new Vector4(0, 0, 0, 0));
+    const PC = Array.from({ length: 4 }, () => new Vector4(0, 0, 0, 0));
+    mask.pool(PA, PC, 1, [0.35, 0.78, 1]);
+    expect(PC.every((c) => c.w === 0)).toBe(true); // the mask is not on yet
+    mask.frame(r, scene, new PerspectiveCamera(), [{ slot: mesh, actor: boss }], 800, 600, {});
+    mask.pool(PA, PC, 1, [0.35, 0.78, 1]);
+    expect(PC.every((c) => c.w === 0)).toBe(true); // on, but the pass has set no lowered ellipse
+    mask.foot.set(0.47, 0.3, 0.2, 0.05);
+    mask.pool(PA, PC, 1, [0.35, 0.78, 1]);
+    expect(PC[1]!.w).toBeGreaterThan(0.1);
+    expect(PA[1]!.x).toBeCloseTo(0.47, 6);
+    expect(PA[1]!.z).toBeGreaterThan(0.2); // wider than the ellipse
+    expect(PA[1]!.w).toBeGreaterThan(0.05);
+    expect(PC[1]!.z).toBeGreaterThan(PC[1]!.x); // the cool key colour, linear
+    mask.pool(PA, PC, 4, [0.35, 0.78, 1]);
+    expect(PC[3]!.w).toBeGreaterThan(0.1); // all four slots taken by effects: the last is the boss's
+    mask.dispose();
+  });
+
   it('copyTo is safe on uniforms without the mask (the main look pass without the bold pass): no arrays, no throw', () => {
     const mask = new BossMask();
     expect(() => mask.copyTo({})).not.toThrow();
@@ -526,6 +617,24 @@ describe('the bold pass draws one contact ellipse for a rigged boss', () => {
     expect(bossFigure(actor)).not.toBe('skip');
     endFrame();
     expect(bossFigure(new Object3D())).toBeNull(); // a party member: today's code
+  });
+
+  it('hands the bold pass the boss ellipse shape: Bahamut taller and lower, Seymour as it was', () => {
+    setBossClean('clean');
+    setDemoChapter('ffx2-bahamut');
+    endFrame();
+    const bah = bossActor('ffx2-bahamut');
+    const f = bossFigure(bah.actor);
+    expect(f).not.toBeNull();
+    if (f && f !== 'skip') {
+      expect(f.tall).toBeGreaterThan(1.2);
+      expect(f.drop).toBeGreaterThan(0.4);
+    }
+    endFrame();
+    setDemoChapter('seymour-flux');
+    const sey = bossFigure(bossActor('seymour-flux-body').actor);
+    if (sey && sey !== 'skip') expect([sey.tall, sey.drop]).toEqual([1, 0]);
+    endFrame();
   });
 
   it('stands under the pose own footprint row', () => {

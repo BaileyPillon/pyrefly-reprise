@@ -12,7 +12,8 @@
  * Nothing is drawn while the switch is off or no boss is on screen (`on` false; the shaders' `bossMaskOn` is 0 and they draw today's rim). The mask is a normal texture uniform (null until the first draw), so the
  * main look pass without the bold pass (`?look=cinematic`, subtle strength) never sees an array to flatten (review major 3). Both games (shared plumbing); only the two bosses of `BossClean.ts` are ever flagged.
  */
-import { Color, DoubleSide, LinearFilter, NoBlending, NoColorSpace, RGBAFormat, ShaderMaterial, UnsignedByteType, Vector3, WebGLRenderTarget, type Camera, type Mesh, type Object3D, type Scene, type Texture, type WebGLRenderer } from 'three';
+import { Color, DoubleSide, LinearFilter, Mesh, MeshBasicMaterial, NoBlending, NoColorSpace, PerspectiveCamera, PlaneGeometry, RGBAFormat, Scene, ShaderMaterial, UnsignedByteType, Vector3, Vector4, WebGLRenderTarget, type Camera, type Object3D, type Texture, type WebGLRenderer } from 'three';
+import { lin } from '../LookRoom.ts';
 import { BossClean, bossCleanOn, footFit, isCleanBossArt, type FootActor } from './BossClean.ts';
 
 /** The camera layer the mask pass draws (no other code in the game uses layers). */
@@ -21,6 +22,9 @@ export const MASK_LAYER = 6;
 const ALPHA_CUT = 0.35;
 /** The mask's size against the frame (a half-size target: the shaders' taps read 2.5 frame px round a rim pixel). */
 const SIZE = 0.5;
+/** The boss's floor pool against its contact ellipse: how much wider and deeper, and how strong ([ours], tuned on the Chapter IV floor at 2560 x 1440). */
+const POOL_REACH = { x: 1.5, y: 2.2 };
+const POOL_GAIN = 0.95;
 
 interface Tracked {
   slot: Mesh;
@@ -66,6 +70,13 @@ export function bossShare(samples: ReadonlyArray<{ r: number; a: number }>): num
   return b / Math.max(b + o, 1e-3);
 }
 
+function makeTarget(w: number, h: number): WebGLRenderTarget {
+  const t = new WebGLRenderTarget(w, h, { format: RGBAFormat, type: UnsignedByteType, minFilter: LinearFilter, magFilter: LinearFilter, depthBuffer: false, stencilBuffer: false, generateMipmaps: false });
+  t.texture.colorSpace = NoColorSpace;
+  t.texture.name = 'bossMask';
+  return t;
+}
+
 const shownMesh = (o: Object3D): boolean => {
   for (let n: Object3D | null = o; n; n = n.parent) if (!n.visible) return false;
   return true;
@@ -86,9 +97,26 @@ export class BossMask {
     side: DoubleSide, // a plane may be mirrored
   });
   private active = false;
+  private failed = false;
+  private warmed = false;
   private readonly hooked = new WeakSet<Mesh>();
   private readonly flag = new Map<Mesh, number>();
   private readonly clear = new Color();
+  /** The re-cut boss's contact ellipse on the frame (centre, half width, half depth: the bold pass's `uFigA` row), set by the pass's figure loop while a lowered boss is drawn. */
+  readonly foot = new Vector4();
+
+  /**
+   * A pool of the room's key colour on the floor under the boss, in the pass's pool arrays (one past the effects' pools; the last slot when all are taken). The arena's grade lifts its blacks (the floor is 66
+   * of 255 and the darkest a shadow reaches is about 48), so a shadow alone moves the floor by under two levels on average (measured, frozen A/B); light round it gives the shadow something to read against.
+   * The pass's shader adds it at `pc.w * (0.16 + 2.4 * floor)`, not over a figure. Nothing with the mask off.
+   */
+  pool(PA: Vector4[], PC: Vector4[], taken: number, key: readonly [number, number, number]): void {
+    if (!this.on || this.foot.z <= 0) return;
+    const i = Math.min(taken, PA.length - 1);
+    const c = lin([key[0], key[1], key[2]]);
+    PA[i]!.set(this.foot.x, this.foot.y, this.foot.z * POOL_REACH.x, this.foot.w * POOL_REACH.y);
+    PC[i]!.set(c[0], c[1], c[2], POOL_GAIN);
+  }
 
   /** Draw the mask for this frame (or note that there is nothing to draw). Called by the bold pass after its figure loop, before the composer renders. */
   render(renderer: WebGLRenderer, scene: Scene, camera: Camera, tracked: Iterable<Tracked>, W: number, H: number): void {
@@ -119,13 +147,38 @@ export class BossMask {
     if (!this.on) return;
     const w = Math.max(2, Math.round(W * SIZE));
     const h = Math.max(2, Math.round(H * SIZE));
-    if (!this.target) {
-      this.target = new WebGLRenderTarget(w, h, { format: RGBAFormat, type: UnsignedByteType, minFilter: LinearFilter, magFilter: LinearFilter, depthBuffer: false, stencilBuffer: false, generateMipmaps: false });
-      this.target.texture.colorSpace = NoColorSpace;
-      this.target.texture.name = 'bossMask';
-    } else if (this.target.width !== w || this.target.height !== h) this.target.setSize(w, h);
+    if (!this.target) this.target = makeTarget(w, h);
+    else if (this.target.width !== w || this.target.height !== h) this.target.setSize(w, h);
     this.stats.w = w;
     this.stats.h = h;
+    this.draw(renderer, scene, camera, this.target);
+    this.stats.draws++;
+  }
+
+  /** Compile the flat material's program now (the battle screen's warm-up, before the first frame) so the first boss frame does not pay for it: one plane into a 2 x 2 target, same target options as the real one. Once, and only with the switch on. */
+  warm(renderer: WebGLRenderer): void {
+    if (this.warmed || !bossCleanOn()) return;
+    this.warmed = true;
+    try {
+      const scene = new Scene();
+      const cam = new PerspectiveCamera();
+      cam.layers.set(MASK_LAYER);
+      const plane = new Mesh(new PlaneGeometry(1, 1), new MeshBasicMaterial());
+      plane.layers.enable(MASK_LAYER);
+      plane.position.z = -2;
+      scene.add(plane);
+      const t = makeTarget(2, 2);
+      this.draw(renderer, scene, cam, t);
+      t.dispose();
+      plane.geometry.dispose();
+      (plane.material as MeshBasicMaterial).dispose();
+    } catch {
+      /* a failed warm-up costs the first frame its compile, nothing else */
+    }
+  }
+
+  /** One flat draw of the figures (the layer) into `target`, every renderer and scene setting put back. */
+  private draw(renderer: WebGLRenderer, scene: Scene, camera: Camera, target: WebGLRenderTarget): void {
     const prev = {
       target: renderer.getRenderTarget(),
       auto: renderer.autoClear,
@@ -137,7 +190,7 @@ export class BossMask {
       color: renderer.getClearColor(this.clear).getHex(),
     };
     try {
-      renderer.setRenderTarget(this.target);
+      renderer.setRenderTarget(target);
       renderer.setClearColor(0x000000, 0);
       renderer.autoClear = false;
       renderer.clear(true, false, false);
@@ -147,7 +200,6 @@ export class BossMask {
       camera.layers.set(MASK_LAYER);
       this.active = true;
       renderer.render(scene, camera);
-      this.stats.draws++;
     } finally {
       this.active = false;
       camera.layers.mask = prev.layers;
@@ -162,7 +214,13 @@ export class BossMask {
 
   /** The bold pass's one call per frame, after its figure loop: draw the mask, hand it to the pass's uniforms, and start the next frame's `bossFigure` asks again. */
   frame(renderer: WebGLRenderer, scene: Scene, camera: Camera, tracked: Iterable<Tracked>, W: number, H: number, u: Record<string, { value: unknown }>): void {
-    this.render(renderer, scene, camera, tracked, W, H);
+    try {
+      this.render(renderer, scene, camera, tracked, W, H);
+    } catch (e) {
+      this.on = false; // a failed mask draw is no reason to lose the frame: the rim comes back, the settings were restored in `render`'s finally
+      if (!this.failed) console.warn('boss mask: the draw failed, the rim stays on the boss', e);
+      this.failed = true;
+    }
     this.copyTo(u);
     drawn.clear();
   }
@@ -211,11 +269,11 @@ const quad: [Vector3, Vector3, Vector3, Vector3] = [new Vector3(), new Vector3()
  * rows. For a re-cut boss the pass asks here: `null` when this actor is not a re-cut boss now (today's code runs); `'skip'` for the second and later parts of a boss already drawn this frame (no contact, no
  * reflection of their own); else the floor point under the WHOLE figure's footprint (the controller's `foot`, the pose's row of `BOSS_FEET`, from the painting's content box in world x) and the ellipse's half width.
  */
-export function bossFigure(actor: Object3D): 'skip' | { cx: number; rx: number } | null {
+export function bossFigure(actor: Object3D): 'skip' | { cx: number; rx: number; tall: number; drop: number } | null {
   const c = actor.userData['bossClean'] as BossClean | undefined;
   if (!c || !isCleanBossArt(c.artId) || !bossCleanOn(c.artId)) return null;
   if (drawn.has(actor)) return 'skip';
   drawn.add(actor);
   const q = (actor as FootActor).contentQuad(quad);
-  return footFit(q[0].x, q[1].x, c.foot);
+  return { ...footFit(q[0].x, q[1].x, c.foot), tall: c.foot.tall, drop: c.foot.drop };
 }

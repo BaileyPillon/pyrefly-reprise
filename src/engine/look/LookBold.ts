@@ -81,6 +81,7 @@ export class LookBold {
   /** Build the pass now (the battle screen's warm-up compiles it before the first frame); `update` finds it there. */
   prepare(q: LookQuality): void {
     this.ensure(q);
+    this.bossMask.warm(this.r.renderer); // lane boss-matte: the mask's program, compiled before the first frame
   }
 
   private ensure(q: LookQuality): ShaderPass {
@@ -185,8 +186,7 @@ export class LookBold {
       // the point on the floor under the figure's base
       g.set(bf && bf !== 'skip' ? bf.cx : c.x + x.x * (baseC - 0.5) + y.x * (foot - 0.5), 0.014, bf && bf !== 'skip' ? f.z : c.z + x.z * (baseC - 0.5) + y.z * (foot - 0.5));
       p.copy(g).project(cam);
-      const gu = p.x * 0.5 + 0.5;
-      const gv = p.y * 0.5 + 0.5;
+      const gu = p.x * 0.5 + 0.5, gv = p.y * 0.5 + 0.5;
       if (p.z > 1 || gu < -0.3 || gu > 1.3) continue;
       this.feet.set(t.actor, [gu, gv]);
       // the base's radii on the screen: along the floor's two axes
@@ -203,10 +203,7 @@ export class LookBold {
       const heightV = Math.max(0.02, q.y * 0.5 + 0.5 - gv);
       const lift = Math.max(0, f.y);
       // the figure's box on the screen: its opaque painting's four corners, padded a little
-      let bx0 = 9;
-      let by0 = 9;
-      let bx1 = -9;
-      let by1 = -9;
+      let bx0 = 9, by0 = 9, bx1 = -9, by1 = -9;
       for (const [cu, cv] of [[ex.left, 1 - ex.bottom], [ex.right, 1 - ex.bottom], [ex.right, 1 - ex.top], [ex.left, 1 - ex.top]] as const) {
         q.set(c.x + x.x * (cu - 0.5) + y.x * (cv - 0.5), c.y + x.y * (cu - 0.5) + y.y * (cv - 0.5), c.z + x.z * (cu - 0.5) + y.z * (cv - 0.5)).project(cam);
         bx0 = Math.min(bx0, q.x * 0.5 + 0.5);
@@ -217,8 +214,10 @@ export class LookBold {
       const bpx = (bx1 - bx0) * 0.06;
       const bpy = (by1 - by0) * 0.05;
       this.boxes[n]!.set(bx0 - bpx, by0 - bpy, bx1 + bpx, by1 + bpy);
-      A[n]!.set(gu, gv, Math.max(rx, 0.01), Math.max(ry, 0.004));
-      B[n++]!.set(bf === 'skip' ? 0 : shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 && bf !== 'skip' ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
+      const lowered = bf !== null && bf !== 'skip' && bf.drop > 0; // lane boss-matte: a boss's shadow is taller and sits lower on the frame, so its dark core is below the figure's lowest edge instead of behind it
+      A[n]!.set(gu, lowered ? gv - ry * bf.drop : gv, Math.max(rx, 0.01), Math.max(lowered ? ry * bf.tall : ry, 0.004));
+      if (lowered) this.bossMask.foot.copy(A[n]!); // lane boss-matte: the boss's ellipse on the frame, for its floor pool
+      B[n++]!.set(bf === 'skip' ? 0 : shadowAmount(fx.shadow.strength, vis, lift, gap), gloss > 0 && bf !== 'skip' && !lowered ? reflectAmount(1, vis, lift, gap) : 0, halfW, heightV);
     }
     this.boxCount = n;
     for (let i = n; i < MAX_FIG; i++) {
@@ -344,6 +343,7 @@ export class LookBold {
         PC[i]!.set(c[0], c[1], c[2], p.s);
       } else PC[i]!.w = 0;
     }
+    this.bossMask.pool(PA, PC, lights.pools.length, rb.rim ?? [0.35, 0.78, 1]); // lane boss-matte: a lit floor under a re-cut boss, so its contact shadow has something to read against
     u['poolGain']!.value = fx.pool.gain * o.tweak('bold.pool', 1);
     // rim, in the room's key colour
     (u['bRim']!.value as Vector3).set(fx.rim.gain * o.tweak('bold.rim', 1), fx.rim.width * o.scale, fx.rim.lit);
