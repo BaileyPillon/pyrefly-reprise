@@ -100,13 +100,15 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     parts.splice(Math.max(0, state.findIndex((s) => s.key === '9')), 0, `<span class="${flashed === 'Tidus' ? 'sb-hit' : ''}"><b>8</b> Tidus ${tidus()}</span>`);
     el.innerHTML =
       `${parts.join(' <i>|</i> ')} <i>|</i> <span><b>0</b> all</span> <i>|</i> <span><b>=</b> hide</span>` +
-      `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}</span>`;
+      `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}</span>` +
+      (note ? `<span class="sb-note">${note}</span>` : '');
     el.hidden = hidden;
     // Playtest skeptic, 2026-10-22 (m5): the label sat over the Chapter IV countdown banner, the active-plate chips and the pause screen's RB chip. In a fight it now fades to a faint ghost and
     // comes back to full for a few seconds after any key of the board (the state is still there to read; the HUD below is not hidden by it).
     el.classList.toggle('sb-quiet', live && !loud);
   };
 
+  let note = ''; // a one-line answer under the label (key 8 on a build that cannot serve T2)
   let loud = false; // true for a few seconds after a board key in a fight
   let loudTimer: ReturnType<typeof setTimeout> | undefined;
   const wake = (): void => {
@@ -132,10 +134,15 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
   const flipTidus = (): void => {
     if (artVariant === null) { // m8: the production build cannot serve T2 (only the dev art server answers it); a reload would end the run and still draw T1
       flashed = 'Tidus';
+      note = '<b>8</b> Tidus T2 needs the dev link (port 5320); nothing changed';
       wake();
       render();
-      el.insertAdjacentHTML('beforeend', '<span class="sb-note"><b>8</b> Tidus T2 needs the dev link (port 5320); nothing changed</span>');
-      setTimeout(() => render(), 3000);
+      if (flashTimer) clearTimeout(flashTimer);
+      flashTimer = setTimeout(() => { // the note and the flash go together (the tick re-renders every 700 ms, so the note lives in the state, not in the element)
+        flashed = '';
+        note = '';
+        render();
+      }, 3000);
       return;
     }
     const next = tidusAsked(window.location.search, document.cookie) === 't1' ? 't2' : 't1';
