@@ -26,6 +26,8 @@ import { getChapter, type Chapter } from '../../data/encounters.ts';
 import { applyChapterLook } from '../../engine/look/LookState.ts';
 import { patchSideFogIn } from '../../engine/PlateSideFog.ts';
 import { warmLivingPlates } from '../../engine/fx/b/LivingPaintings.ts';
+import { prewarmBreathRig } from '../../engine/fx/mix/breathRig.ts';
+import { preparedPaintings } from '../../engine/PaintedArtCache.ts';
 import { hasPrebuilt, prebuildScene } from '../../scenes/prebuilt.ts';
 import { readSetting } from '../SaveData.ts';
 import { visualStyleOf } from '../saveVisualStyle.ts';
@@ -93,6 +95,13 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
         await idle();
       }
     }
+    // lane perf-trim: every painting's breathing field (the living paintings' alpha read) is read behind the title, one picture at a time, so that no pose's first sight in the fight stops the page for the read
+    for (const p of await preparedPaintings()) {
+      if (!calm()) return;
+      await prewarmBreathRig(p.source as CanvasImageSource & { width?: number });
+      await idle();
+    }
+    note('breath rigs read ahead');
   })()
     .catch((e) => note(`stopped: ${String(e).slice(0, 80)}`))
     .finally(() => {
