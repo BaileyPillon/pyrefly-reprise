@@ -20,7 +20,8 @@
  * | `/` | the pro look (lane "pro-look": arena grade, Chapter IV seam, ink hits, glass numbers, markers) | pro, today |
  * | `;` | the directed camera (lane "pro-camera": the real FFX shots re-staged, moves on plain attacks, FFX-2's auto camera) | pro, today |
  * | `\` (backslash) | the pro staging (lane "pro-staging": held breath, boss card, victory freeze, defeat card, Overdrive opening, Change plate; a flip in a fight plays from the next beat) | pro, today |
- * | `0` | everything: if all are new, all go to today's; else all go to new | |
+ * | `'` (apostrophe) | the party rim (r63-play: the pale key-coloured edge light on the party and the aeons; on is today's, off draws them like the bosses; not a "new" piece, so `0` leaves it alone) | on, off |
+ * | `0` | everything on the board that is a piece: if all are new, all go to today's; else all go to new (not the party rim) | |
  * | `=` | the legend (every key in plain words with its value), then hide the label, then the label again | |
  *
  * The numbers are free: `app/Input.ts` maps WASD, the arrows, Enter, Space, Z, X, Esc, Backspace, Shift, Tab, Q, E, C, M, V, R, F, PageUp and PageDown, and the other screens use P, H, B, L, T and

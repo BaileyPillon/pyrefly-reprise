@@ -7,6 +7,7 @@
  */
 import { proTune } from '../engine/look/pro/ProGrade.ts';
 import { bossCleanMode, bossCleanOn, setBossClean, type BossCleanMode } from '../engine/look/pro/BossClean.ts';
+import { partyRimMode, partyRimOff, setPartyRim, type PartyRimMode } from '../engine/look/pro/PartyRimSwitch.ts';
 import { PRO_PIECES, dangerPulseFromSearch, proLookOn, proMode, proPieceOn, setProMode, setProPiece, type ProMode, type ProPiece } from '../engine/look/pro/ProSwitch.ts';
 
 /** The Danger pulse's off switch on the page (`html[data-danger-pulse='off']`, read by `ui/common/pro-markers.css`): true while the low-HP row pulses. */
@@ -34,6 +35,12 @@ export function installProDebug(api: Record<string, unknown>): void {
     return bossCleanMode();
   };
   api['bossCleanOn'] = (): boolean => bossCleanOn();
+  /** r63-play: `partyRim()` reads the party rim switch (`'on'` = today's rim, `'off'` = the party draws no screen-space rim), `partyRim('on' | 'off' | null)` sets it live (`null` reads the address again); `partyRimOff()` says whether it plays now. */
+  api['partyRim'] = (m?: PartyRimMode | null): PartyRimMode => {
+    if (m === 'on' || m === 'off' || m === null) setPartyRim(m);
+    return partyRimMode();
+  };
+  api['partyRimOff'] = (): boolean => partyRimOff();
   /** Live tuning of one room's table for captures: `proTune('gagazet', { colour: { exposure: 0.8 } })`. */
   api['proTune'] = (room: string, patch: Record<string, unknown>): boolean => proTune(room, patch);
   api['proPiece'] = (piece: ProPiece, on?: boolean): boolean => {

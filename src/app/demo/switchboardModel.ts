@@ -25,6 +25,7 @@ import { fxMode, setFxMode } from '../../engine/spellfx/FxSwitch.ts';
 import { proMode, setProMode } from '../../engine/look/pro/ProSwitch.ts'; // lane pro-look
 import { proCamConfigured, setProCam } from '../../engine/procam/ProCamSwitch.ts';
 import { setStagingMode, stagingMode } from '../../engine/pro/staging/StagingSwitch.ts'; // lane "pro-staging"
+import { partyRimMode, setPartyRim } from '../../engine/look/pro/PartyRimSwitch.ts'; // r63-play: the party's screen-space rim, for Bailey's judgement
 
 export interface SwitchDef {
   /** `KeyboardEvent.code` (the number row; the numpad digits are the same keys). */
@@ -254,11 +255,25 @@ export const SWITCHES: readonly SwitchDef[] = [
     isNew: () => stagingMode() === 'pro',
     set: (on) => setStagingMode(on ? 'pro' : 'today'),
   },
+  // The apostrophe key (r63-play): the party's rim. Not a "new" piece: today's rim is the default and Bailey has not decided it, so the master key leaves it alone (no `set`) and the label does not count it as new.
+  {
+    code: 'Quote',
+    key: "'",
+    name: 'party rim',
+    plain: "Party rim: the pale key-coloured edge light on the party and the aeons (on is today's, off draws them like the bosses, with none)",
+    read: () => partyRimMode(),
+    flip: () => {
+      const next = partyRimMode() === 'on' ? 'off' : 'on';
+      setPartyRim(next);
+      return next;
+    },
+    isNew: () => false,
+  },
 ];
 
 /** The keys that are not a piece's own, with what they do in plain words (the legend names them after the pieces). */
 export const EXTRA_KEYS: ReadonlyArray<{ key: string; plain: string }> = [
-  { key: '0', plain: "Everything: if every piece is new, all go back to today's; otherwise all go to new" },
+  { key: '0', plain: "Everything: if every piece is new, all go back to today's; otherwise all go to new (not the party rim; the HUD, sound and boss edges are in the address)" },
   { key: '=', plain: 'This legend, then hide the label, then the label again' },
 ];
 
