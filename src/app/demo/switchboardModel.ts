@@ -33,6 +33,8 @@ export interface SwitchDef {
   key: string;
   /** The word on the label. */
   name: string;
+  /** What it does, in plain words (the legend that `=` shows). */
+  plain: string;
   /** What it is set to now. */
   read(): string;
   /** Flip to the next value and return it. The Tidus switch has no model flip: the page reloads (`flip` is absent). */
@@ -55,6 +57,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Digit1',
     key: '1',
     name: 'smear',
+    plain: 'Motion smear: a brush-stroke trail behind fast moves (paint, blur or off)',
     read: () => smearStyle(),
     flip: () => {
       const next = SMEAR_NEXT[smearStyle()];
@@ -68,6 +71,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Digit2',
     key: '2',
     name: 'punch',
+    plain: 'Camera punch: the small push-in the camera gives on a hit',
     read: () => feelConfigured().punch,
     flip: () => {
       const next = feelConfigured().punch === 'new' ? 'today' : 'new';
@@ -81,6 +85,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Digit3',
     key: '3',
     name: 'stop',
+    plain: 'Hit-stop: the short freeze of the field on a heavy hit',
     read: () => feelConfigured().stop,
     flip: () => {
       const next = feelConfigured().stop === 'short' ? 'today' : 'short';
@@ -94,6 +99,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Digit4',
     key: '4',
     name: 'rumble',
+    plain: 'Gamepad rumble on heavy hits',
     read: () => (feelConfigured().rumble ? 'on' : 'off'),
     flip: () => {
       const next = !feelConfigured().rumble;
@@ -107,6 +113,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Digit5',
     key: '5',
     name: 'sounds',
+    plain: 'Motion sounds: footsteps, whooshes and landings',
     read: () => (feelConfigured().motionsfx ? 'on' : 'off'),
     flip: () => {
       const next = !feelConfigured().motionsfx;
@@ -120,6 +127,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Digit6',
     key: '6',
     name: 'fx',
+    plain: "Spell effects and the bosses' attack effects",
     read: () => fxMode(),
     flip: () => {
       const next = fxMode() === 'new' ? 'today' : 'new';
@@ -133,6 +141,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Digit7',
     key: '7',
     name: 'curves',
+    plain: 'Animation curves: the strike, the cast lift, the recoil and the squash',
     read: () => curvesMode(),
     flip: () => {
       const next: CurvesMode = curvesMode() === 'today' ? 'new' : 'today'; // a real mode (`,`) goes back to today's with this key
@@ -147,6 +156,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Comma',
     key: ',',
     name: 'real clips',
+    plain: "Timing taken from the real game's clips (off, snappy or real speed)",
     read: () => REAL_READ[curvesMode()],
     flip: () => {
       const next: CurvesMode = REAL_NEXT[curvesMode()];
@@ -160,6 +170,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Period',
     key: '.',
     name: 'party rigs',
+    plain: 'The animated party figures, Tidus in Chapter I and Rikku in Chapter IV (a flip plays from the next fight)',
     read: () => partyRigsMode(),
     flip: () => {
       const next = partyRigsMode() === 'on' ? 'off' : 'on';
@@ -169,11 +180,12 @@ export const SWITCHES: readonly SwitchDef[] = [
     isNew: () => partyRigsMode() === 'on',
   },
   // key 8: Tidus T1 or T2 (the page's: it reloads)
-  { code: 'Digit8', key: '8', name: 'Tidus', read: () => 't1', isNew: () => false },
+  { code: 'Digit8', key: '8', name: 'Tidus', plain: "Tidus's art, T1 or T2 (reloads the page, so press it between fights)", read: () => 't1', isNew: () => false },
   {
     code: 'Digit9',
     key: '9',
     name: 'moments',
+    plain: 'The victory and knock-out moments',
     read: () => momentsMode(),
     flip: () => {
       const next = momentsMode() === 'new' ? 'today' : 'new';
@@ -188,6 +200,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Slash',
     key: '/',
     name: 'look',
+    plain: "Pro look: the arena's colour and light, the ink hits, the glass damage numbers, the target and low-HP markers",
     read: () => (proMode() === 'pro' ? 'pro' : 'today'),
     flip: () => {
       const next = proMode() === 'pro' ? 'today' : 'pro';
@@ -201,6 +214,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Minus',
     key: '-',
     name: 'shadow',
+    plain: 'The contact shadow that follows the feet',
     read: () => (feelConfigured().shadow ? 'follow' : 'today'),
     flip: () => {
       const next = !feelConfigured().shadow;
@@ -215,6 +229,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Semicolon',
     key: ';',
     name: 'camera',
+    plain: "Directed camera: the real game's shots, push-ins on attacks, the FFX-2 follow camera and the soft background",
     read: () => (proCamConfigured() ? 'pro' : 'today'),
     flip: () => {
       const next = !proCamConfigured();
@@ -229,6 +244,7 @@ export const SWITCHES: readonly SwitchDef[] = [
     code: 'Backslash',
     key: '\\',
     name: 'staging',
+    plain: 'Staging: the held breath before Total Annihilation and Mega Flare, the boss card, the victory freeze and the defeat card, the Overdrive opening and the Change plate',
     read: () => stagingMode(),
     flip: () => {
       const next = stagingMode() === 'pro' ? 'today' : 'pro';
@@ -238,6 +254,12 @@ export const SWITCHES: readonly SwitchDef[] = [
     isNew: () => stagingMode() === 'pro',
     set: (on) => setStagingMode(on ? 'pro' : 'today'),
   },
+];
+
+/** The keys that are not a piece's own, with what they do in plain words (the legend names them after the pieces). */
+export const EXTRA_KEYS: ReadonlyArray<{ key: string; plain: string }> = [
+  { key: '0', plain: "Everything: if every piece is new, all go back to today's; otherwise all go to new" },
+  { key: '=', plain: 'This legend, then hide the label, then the label again' },
 ];
 
 /** The master key, `0`. */
@@ -273,4 +295,10 @@ export function flipAll(): boolean {
 /** Every piece's name and value, for the label and `__pyrefly.switchboard()`. */
 export function boardState(): Array<{ key: string; name: string; value: string; isNew: boolean }> {
   return SWITCHES.filter((s) => s.code !== TIDUS_CODE).map((s) => ({ key: s.key, name: s.name, value: s.read(), isNew: s.isNew() }));
+}
+
+/** The legend `=` shows: every key in plain words with what it is set to now (the pieces in key order, then the keys that are not a piece's own). */
+export function legendRows(): Array<{ key: string; name: string; plain: string; value: string; isNew: boolean }> {
+  const rows = SWITCHES.map((s) => ({ key: s.key, name: s.name, plain: s.plain, value: s.read(), isNew: s.isNew() }));
+  return [...rows, ...EXTRA_KEYS.map((e) => ({ key: e.key, name: e.key === '0' ? 'all' : 'legend', plain: e.plain, value: '', isNew: false }))];
 }

@@ -16,7 +16,7 @@
  * Game case (AGENTS.md rule 14): the switch is both games (shared plumbing); WHICH look plays is read from the chapter's own game (`stagingGame`): FFX in Chapter I, FFX-2 in Chapter IV.
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
-import { demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord, type DemoGame } from '../../motion/DemoGate.ts';
+import { demoChapter, demoGameOf, isDemoChapter, packDemo, proLanes, queryWord, type DemoGame } from '../../motion/DemoGate.ts';
 
 export type StagingMode = 'pro' | 'today';
 export type StagingPiece = 'breath' | 'card' | 'ending' | 'opening';
@@ -29,8 +29,9 @@ let off: ReadonlySet<StagingPiece> | null = null;
 export function stagingModeFromSearch(search: string | undefined): StagingMode {
   if (search === undefined) return 'today';
   const staging = queryWord(search, 'staging');
-  if (staging === 'today') return 'today';
-  return staging === 'pro' || packDemo(search) ? 'pro' : 'today';
+  const lanes = proLanes(search); // the r63 master word: `?pro=off` takes this lane back to today's, `?pro=on` turns it on without the pack
+  if (staging === 'today' || staging === 'off' || lanes === 'off') return 'today';
+  return staging === 'pro' || lanes === 'on' || packDemo(search) ? 'pro' : 'today';
 }
 
 /** `?stagingoff=breath,card,...` from a search string (pure): the pieces taken back to today's. Unknown words are ignored. */

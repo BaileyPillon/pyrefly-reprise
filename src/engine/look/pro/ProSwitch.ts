@@ -24,7 +24,7 @@
  *
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
-import { demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord } from '../../motion/DemoGate.ts';
+import { demoChapter, demoGameOf, isDemoChapter, packDemo, proLanes, queryWord } from '../../motion/DemoGate.ts';
 
 export type ProMode = 'pro' | 'today';
 export type ProPiece = 'arena' | 'seam' | 'hits' | 'numbers' | 'markers';
@@ -38,8 +38,9 @@ const listeners = new Set<() => void>();
 export function proModeFromSearch(search: string | undefined): ProMode {
   if (search === undefined) return 'today';
   const look = queryWord(search, 'look');
-  if (look === 'today') return 'today';
-  return look === 'pro' || packDemo(search) ? 'pro' : 'today';
+  const lanes = proLanes(search); // the r63 master word: `?pro=off` takes this lane back to today's, `?pro=on` turns it on without the pack
+  if (look === 'today' || lanes === 'off') return 'today';
+  return look === 'pro' || lanes === 'on' || packDemo(search) ? 'pro' : 'today';
 }
 
 /** The pieces `?prooff=` names, from a search string (pure; unknown words are ignored). */

@@ -16,7 +16,7 @@
  * live game. Pure: no `three`, no DOM but the address of the page (the `FeelSwitch` pattern).
  */
 
-import { demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord, type DemoGame } from '../motion/DemoGate.ts';
+import { demoChapter, demoGameOf, isDemoChapter, packDemo, proLanes, queryWord, type DemoGame } from '../motion/DemoGate.ts';
 
 export interface ProCamKeys {
   /** `?camera=pro` true, `?camera=off|today` false, else null (not named). */
@@ -36,9 +36,10 @@ export function parseProCamKeys(search: string | undefined): ProCamKeys {
   const dof = queryWord(search, 'camdof');
   const shot = queryWord(search, 'castshot');
   const n = /^[0-4]$/.test(shot) ? Number(shot) : null;
+  const lanes = proLanes(search); // the r63 master word: `?pro=off` takes the camera back to today's, `?pro=on` turns it on without the pack
   return {
-    camera: camera === 'pro' ? true : camera === 'off' || camera === 'today' ? false : null,
-    pack: packDemo(search),
+    camera: lanes === 'off' ? false : camera === 'pro' ? true : camera === 'off' || camera === 'today' ? false : null,
+    pack: packDemo(search) || lanes === 'on',
     dof: dof === 'on' ? true : dof === 'off' ? false : null,
     castshot: shot === 'random' ? 'random' : n,
   };

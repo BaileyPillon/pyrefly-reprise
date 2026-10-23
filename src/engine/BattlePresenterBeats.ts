@@ -12,6 +12,7 @@ import { actionOfBlow, awaitSpellLanding, beginSpellAction, endSpellAction, spar
 import { chargeFx, odOpening, prerollFx } from './BattlePresenterBossFx.ts';
 import { stageCharge, stageFall, stageKo, stageLift, stageMark, stageVictory } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath, the freeze on the last blow, the openings (all no-ops unless `?staging=pro` in a demo chapter)
 import { poseForAction } from './EnemyActionPose.ts';
+export { settleForMenu, settleOpening } from './BattlePresenterSettle.ts'; // moved at the r63 integration to keep this file under 400 lines; the old import path still works
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';

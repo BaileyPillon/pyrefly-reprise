@@ -21,7 +21,7 @@
  * | `;` | the directed camera (lane "pro-camera": the real FFX shots re-staged, moves on plain attacks, FFX-2's auto camera) | pro, today |
  * | `\` (backslash) | the pro staging (lane "pro-staging": held breath, boss card, victory freeze, defeat card, Overdrive opening, Change plate; a flip in a fight plays from the next beat) | pro, today |
  * | `0` | everything: if all are new, all go to today's; else all go to new | |
- * | `=` | hide or show the label | |
+ * | `=` | the legend (every key in plain words with its value), then hide the label, then the label again | |
  *
  * The numbers are free: `app/Input.ts` maps WASD, the arrows, Enter, Space, Z, X, Esc, Backspace, Shift, Tab, Q, E, C, M, V, R, F, PageUp and PageDown, and the other screens use P, H, B, L, T and
  * Home; `` ` `` is the mark key and F6 to F8 the look keys. Modified keys (Ctrl, Alt, Meta) and keys typed into a text field are left alone. A flip outside a fight is remembered and takes effect in
@@ -30,7 +30,7 @@
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { demoChapter, isDemoChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
 import { partyRigsMode } from '../../engine/motion/PartyRigsSwitch.ts';
-import { HIDE_CODE, MASTER_CODE, TIDUS_CODE, SWITCHES, boardState, flipAll, normaliseCode, switchOfCode } from './switchboardModel.ts';
+import { HIDE_CODE, MASTER_CODE, TIDUS_CODE, SWITCHES, boardState, flipAll, legendRows, normaliseCode, switchOfCode } from './switchboardModel.ts';
 
 /** The switchboard is wanted: `?pack=demo&switchboard=1`. */
 export function switchboardWanted(search: string | undefined): boolean {
@@ -53,6 +53,9 @@ background:rgba(8,10,18,.66);color:#e9e6dc;font:clamp(11px,.95vh,15px)/1.45 ui-m
 .sb{transition:opacity .25s}.sb.sb-quiet{opacity:.2}
 .sb[hidden]{display:none}.sb b{color:#e3b94a;font-weight:600}.sb i{font-style:normal;opacity:.5}.sb span{white-space:nowrap}
 .sb .sb-new{color:#9fe2b0}.sb .sb-hit{background:#e3b94a;color:#10121a;border-radius:3px;padding:0 3px}.sb .sb-note{display:block;opacity:.7}
+.sb.sb-legend{text-align:left;max-width:min(62vw,900px);padding:8px 12px 9px;background:rgba(8,10,18,.86);opacity:1}
+.sb .sb-title{display:block;color:#e3b94a;margin-bottom:3px}.sb .sb-row{display:grid;grid-template-columns:1.6em 7.5em 8.5em 1fr;column-gap:.6em;align-items:baseline;padding:1px 0}
+.sb .sb-row .sb-pl{white-space:normal;opacity:.88}.sb .sb-row .sb-v{opacity:.95}.sb .sb-row .sb-nm{opacity:.95}
 `;
 
 export interface SwitchboardHandle {
@@ -80,7 +83,7 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
   let artVariant: string | null = null; // what the art server says it is serving (`X-Pyrefly-Tidus`); null: it does not know (plain `vite`, no variants)
   let flashed = '';
   let flashTimer: ReturnType<typeof setTimeout> | undefined;
-  let hidden = false;
+  let view: 'label' | 'legend' | 'hidden' = 'label'; // `=` walks label, legend, hidden
 
   const tidus = (): string => {
     const asked = tidusAsked(window.location.search, document.cookie);
@@ -94,6 +97,11 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     const live = isDemoChapter(demoChapter());
     if (!live) rigsAtFight = null;
     else if (rigsAtFight === null) rigsAtFight = partyRigsMode();
+    if (view === 'legend') {
+      renderLegend(live);
+      return;
+    }
+    el.classList.remove('sb-legend');
     const state = boardState();
     const parts = state.map((s) => {
       const cls = [s.isNew ? 'sb-new' : '', flashed === s.name ? 'sb-hit' : ''].filter(Boolean).join(' ');
@@ -102,13 +110,27 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     });
     parts.splice(Math.max(0, state.findIndex((s) => s.key === '9')), 0, `<span class="${flashed === 'Tidus' ? 'sb-hit' : ''}"><b>8</b> Tidus ${tidus()}</span>`);
     el.innerHTML =
-      `${parts.join(' <i>|</i> ')} <i>|</i> <span><b>0</b> all</span> <i>|</i> <span><b>=</b> hide</span>` +
+      `${parts.join(' <i>|</i> ')} <i>|</i> <span><b>0</b> all</span> <i>|</i> <span><b>=</b> legend</span>` +
       `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}</span>` +
       (note ? `<span class="sb-note">${note}</span>` : '');
-    el.hidden = hidden;
+    el.hidden = view === 'hidden';
     // Playtest skeptic, 2026-10-22 (m5): the label sat over the Chapter IV countdown banner, the active-plate chips and the pause screen's RB chip. In a fight it now fades to a faint ghost and
     // comes back to full for a few seconds after any key of the board (the state is still there to read; the HUD below is not hidden by it).
     el.classList.toggle('sb-quiet', live && !loud);
+  };
+
+  /** The legend `=` shows: every key in plain words with what it is set to now, the piece that is new in green. */
+  const renderLegend = (live: boolean): void => {
+    const rows = legendRows().map((r) => {
+      const value = r.key === '8' ? tidus() : r.value;
+      return `<div class="sb-row${r.isNew ? ' sb-new' : ''}"><b>${r.key}</b><span class="sb-nm">${r.name}</span><span class="sb-v">${value}</span><span class="sb-pl">${r.plain}</span></div>`;
+    });
+    el.classList.add('sb-legend');
+    el.classList.remove('sb-quiet');
+    el.innerHTML =
+      `<span class="sb-title">THE KEYS (green = the new version is showing) <i>|</i> press = again to hide</span>${rows.join('')}` +
+      `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}. Address words: ?pro=off starts with the look, camera and staging off; ?look=today, ?camera=off, ?staging=today flip one.</span>`;
+    el.hidden = false;
   };
 
   let note = ''; // a one-line answer under the label (key 8 on a build that cannot serve T2)
@@ -164,7 +186,7 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
   const press = (rawCode: string): void => {
     const code = normaliseCode(rawCode);
     if (code === HIDE_CODE) {
-      hidden = !hidden;
+      view = view === 'label' ? 'legend' : view === 'legend' ? 'hidden' : 'label';
       render();
       return;
     }

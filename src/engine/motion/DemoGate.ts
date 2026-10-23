@@ -54,3 +54,13 @@ export function queryWord(search: string | undefined, key: string): string {
 export function packDemo(search: string | undefined): boolean {
   return queryWord(search, 'pack') === 'demo';
 }
+
+/**
+ * The master word of the three "pro" lanes (the r63 integration, 2026-10-23; the look, the camera and the staging): `?pro=off` (or `today`) takes all three back to today's at once, beating each lane's
+ * own key and the pack; `?pro=on` turns all three on without the pack, under each lane's own key (`?look=today` still wins over it). '' when the address does not name it. Read by `ProSwitch`,
+ * `ProCamSwitch` and `StagingSwitch` and nothing else.
+ */
+export function proLanes(search: string | undefined): 'on' | 'off' | '' {
+  const w = queryWord(search, 'pro');
+  return w === 'off' || w === 'today' ? 'off' : w === 'on' || w === 'pro' ? 'on' : '';
+}
