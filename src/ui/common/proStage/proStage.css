@@ -1,0 +1,197 @@
+/*
+ * THE PRO STAGING (lane "pro-staging"; behind `?staging=pro` / `?pack=demo`, Chapters I and IV only; `engine/pro/staging/StagingSwitch.ts`). Two layers inside the battle screen's root:
+ *   .pst      under the HUD (z 0, the first child): the wash, the flood, the motes, the core, the ring and the move's name; the HUD sinks (below) and the damage numerals stay readable above it;
+ *   .pst-top  over the HUD and under the screen's own cut-ins (z 30, under .pf-mom at 36): the victory freeze's flash, ring, title and bars, the defeat caption and card, the Overdrive and Change openings.
+ * Game skins: FFX is ivory, ice-blue and gold; FFX-2 is pearl, lilac and pink (`data-game`). Nothing here styles a HUD panel (the HUD is being redesigned apart); the one thing it does to the HUD is the opacity
+ * the held breath sinks it by (`--pst-hud`), asked only while a staged move is alive (`data-pst`).
+ */
+
+.pst,
+.pst-top {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  --pst-ink: #14214f;
+  --pst-gold: #f1cd7a;
+  --pst-gold-deep: #b98a28;
+  --pst-glass: rgba(18, 30, 86, 0.72);
+  --pst-glass-edge: rgba(241, 205, 122, 0.7);
+  --pst-face: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  --pst-serif: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+}
+.pst[data-game='ffx2'],
+.pst-top[data-game='ffx2'] {
+  --pst-ink: #3d1850;
+  --pst-gold: #ff9fd0;
+  --pst-gold-deep: #c4568f;
+  --pst-glass: rgba(58, 24, 86, 0.72);
+  --pst-glass-edge: rgba(255, 190, 224, 0.75);
+}
+.pst {
+  z-index: 0;
+}
+.pst-top {
+  z-index: 30;
+}
+
+.pst__cv {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- the held breath: the ring and the name on the floor under the boss ---- */
+.pst__mark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  will-change: opacity;
+}
+.pst__ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(var(--pst-ringscale, 1));
+  opacity: var(--pst-ring, 0);
+}
+.pst__ring--o {
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.55), inset 0 0 14px rgba(255, 255, 255, 0.35);
+}
+.pst__ring--i {
+  border: 1.5px dashed var(--pst-gold);
+  transform: translate(-50%, -50%) scale(calc(var(--pst-ringscale, 1) * 0.78));
+  opacity: calc(var(--pst-ring, 0) * 0.9);
+}
+.pst__name {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  font-family: var(--pst-face);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.46em;
+  padding-left: 0.46em; /* the tracking trails the last letter: balance it */
+  font-size: clamp(11px, 1.5vh, 22px);
+  color: #ffffff;
+  text-shadow: 0 0 2px rgba(14, 24, 84, 0.95), 0 0 6px rgba(14, 24, 84, 0.85), 0 0 16px rgba(24, 40, 120, 0.7); /* a dark halo: white type has to read on the ivory wash and on a pale painted boss alike */
+  opacity: var(--pst-name, 0);
+}
+.pst__name::after {
+  content: '';
+  display: block;
+  height: 1.5px;
+  margin: 0.55em auto 0;
+  width: 78%;
+  background: linear-gradient(90deg, transparent, var(--pst-gold), transparent);
+}
+
+/* ---- the HUD sinks while a staged move is alive: panels and rails only, never the damage numerals (the HUD's own overlay) ---- */
+[data-pst] .ffxhud__stage,
+[data-pst] .ffx2hud__stage,
+[data-pst] .ffx2hud__plates,
+[data-pst] .ffxhud .ig-surface,
+[data-pst] .ffx2hud .ig-surface {
+  opacity: var(--pst-hud, 1) !important;
+}
+
+/* ---- the ending (top layer): the freeze's flash and shock ring, the quiet VICTORY, the FFX-2 pull-back's bars, the defeat's dim and caption ---- */
+.pst__dim {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 58%, rgba(10, 20, 64, 0.16) 0%, rgba(8, 14, 46, 0.5) 100%);
+}
+.pst-top[data-game='ffx2'] .pst__dim {
+  background: radial-gradient(ellipse at 50% 58%, rgba(44, 16, 66, 0.16) 0%, rgba(34, 12, 56, 0.5) 100%);
+}
+.pst__flash {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse at 56% 40%, #ffffff 0%, rgba(255, 255, 255, 0.94) 38%, rgba(232, 240, 255, 0.8) 100%);
+}
+.pst-top[data-game='ffx2'] .pst__flash {
+  background: radial-gradient(ellipse at 56% 40%, #ffffff 0%, rgba(255, 250, 255, 0.94) 38%, rgba(250, 228, 250, 0.8) 100%);
+}
+.pst__shock {
+  position: absolute;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.7), inset 0 0 26px rgba(255, 255, 255, 0.4);
+}
+.pst__bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: #0b0a12;
+}
+.pst__bar--top {
+  top: 0;
+  border-bottom: 1px solid var(--pst-gold);
+}
+.pst__bar--bottom {
+  bottom: 0;
+  border-top: 1px solid var(--pst-gold);
+}
+.pst__title {
+  position: absolute;
+  right: clamp(24px, 4.6vw, 92px);
+  top: clamp(22px, 5.4vh, 66px);
+  text-align: right;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+.pst__title-word {
+  font-family: var(--pst-serif);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  margin-right: -0.26em; /* the tracking trails the last letter: line the word's edge up with the rule under it */
+  font-size: clamp(26px, 3.5vw, 60px);
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 0 18px rgba(30, 44, 120, 0.6), 0 1px 3px rgba(14, 22, 80, 0.7);
+}
+.pst__title-sub {
+  margin-top: 0.85em;
+  padding-top: 0.7em;
+  border-top: 1px solid var(--pst-gold);
+  font-family: var(--pst-face);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.42em;
+  font-size: clamp(9px, 0.95vw, 15px);
+  color: var(--pst-gold);
+  text-shadow: 0 1px 3px rgba(14, 22, 80, 0.8);
+}
+.pst__title-sub:empty {
+  display: none;
+}
+.pst__caption {
+  position: absolute;
+  left: 50%;
+  top: clamp(26px, 6.4vh, 80px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  font-family: var(--pst-face);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.7em;
+  padding-left: 0.7em;
+  font-size: clamp(12px, 1.35vw, 22px);
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 0 14px rgba(20, 30, 100, 0.8), 0 1px 3px rgba(10, 16, 70, 0.9);
+}

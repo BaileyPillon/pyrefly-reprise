@@ -41,6 +41,8 @@ import { paceFactor } from './pace.ts';
 import { punchMode } from './feel/FeelSwitch.ts'; // the motion program's `?punch=`: today's 0.11 moment punch, or the 2 to 3 percent settle (`feel/PunchCurve.ts`)
 import { momentPunch } from './feel/PunchCurve.ts';
 import { fittedPush } from './ShotFit.ts';
+import { moveOfName } from './BattlePresenterStaging.ts'; // lane "pro-staging": a staged big move's small name replaces the telegraph's text slab
+import { stagingPieceOn } from './pro/staging/StagingSwitch.ts';
 import { ShotRules } from './ShotRules.ts';
 import type { ShotAction, ShotActionInfo, ShotAnswer, ShotCtx, ShotDirector, ShotSubject } from './ShotDirector.ts';
 
@@ -605,7 +607,7 @@ export class BattleMoments {
       void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.telegraphZoom));
       await this.move(shot.rig, MOMENT_TIMING.telegraphZoom * 0.4);
     }
-    if (imminent && name) {
+    if (imminent && name && !(stagingPieceOn('breath') && moveOfName(name) !== null)) { // pro staging: "the text slab at the top is retired" for the two staged moves (the held breath names them small under the boss)
       await this.deps.moments?.nameSlab({
         title: name,
         kind: 'telegraph',

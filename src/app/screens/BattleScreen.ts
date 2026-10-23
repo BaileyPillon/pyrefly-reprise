@@ -50,6 +50,9 @@ import { voice } from '../../audio/voice/index.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
+import { stagingPieceOn } from '../../engine/pro/staging/StagingSwitch.ts';
+import { attachProStage } from './battleProStage.ts'; // lane "pro-staging": the held breath, the freeze and the openings' layer (Chapters I and IV, `?staging=pro` / `?pack=demo`)
+import type { ProStageLayer } from '../../ui/common/proStage/ProStageLayer.ts';
 import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { markDemoHud } from '../demo/demoHud.ts';
@@ -156,6 +159,7 @@ export class BattleScreen extends Screen {
   private cutscenes: MidBattleCutscenes | null = null;
   /** Letterbox bars, name slab and heartbeat vignette (`BattleMoments`). */
   private momentOverlay: MomentOverlay | null = null;
+  private proStage: ProStageLayer | null = null;
   private setup: BattleSetup | null = null;
   private group: EnemyGroupDef | null = null;
   /** The hidden Last Summoning's offering screen while it is up (FFX only); the frame's input goes to it first (`handleInput`). */
@@ -370,6 +374,7 @@ export class BattleScreen extends Screen {
     });
 
     this.momentOverlay = createMomentOverlay(this.root, scene.slots.artNamespace); // the turn cut-in shows the experiment's own portraits
+    this.proStage = attachProStage({ root: this.root, chapterId: chapter.id, stage: this.stage }); // pro staging (demo chapters only; null elsewhere)
     if (this.opts.openingHurry) this.momentOverlay.hurry.arm();
 
     const registered = uiPortsRegistered();
@@ -393,6 +398,7 @@ export class BattleScreen extends Screen {
       // Letterbox / name slab / heartbeat vignette. `BattleMoments` raises
       // these; see `src/ui/common/transitions/`.
       moments: chapter.game === 'ff7' ? null : this.momentOverlay, // FF7: no Ink & Gold name slab or letterbox (FF7 HUD spec §8)
+      staging: this.proStage, // pro staging: the held breath, the freeze and the openings (null outside the demo chapters)
       midScripts: chapter.scriptsRef?.midScripts ?? {},
       // The chapter's own ability rows: an enemy's physical ability draws its
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
@@ -478,6 +484,7 @@ export class BattleScreen extends Screen {
       root: this.root,
       chapterNumber: chapter.number,
       ...(chapter.experimental ? { experimental: true as const } : {}),
+      ...(stagingPieceOn('card') ? { pro: true as const } : {}), // pro staging: the card is a full-bleed painting (demo chapters only)
       location: chapter.location,
       bossName: boss.name,
       subline: chapter.subtitle,
@@ -829,6 +836,7 @@ export class BattleScreen extends Screen {
     this.airship?.sync(this.engine?.state());
     this.stage?.update(fieldDt, animDt); // the pose blends run on the real frame time: a hit-stop holds the field, never a half-mixed crossfade (FB-1)
     this.spectacle?.update(animDt);
+    this.proStage?.update(frameDt); // pro staging: on the screen's own clock (a pause freezes it, a hit-stop does not)
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
     this.hud?.update?.(animDt);
@@ -961,6 +969,11 @@ export class BattleScreen extends Screen {
     return this.presenter;
   }
 
+  /** The pro staging's layer (Chapters I and IV with the switch on), for the debug API and the captures. */
+  get stagingLayer(): ProStageLayer | null {
+    return this.proStage;
+  }
+
   override snapshot(): Record<string, unknown> {
     const state = this.engine?.state();
     return {
@@ -1040,6 +1053,8 @@ export class BattleScreen extends Screen {
     this.cutscenes = null;
     this.momentOverlay?.dispose();
     this.momentOverlay = null;
+    this.proStage?.dispose();
+    this.proStage = null;
     this.airship?.dispose();
     this.airship = null;
     this.spectacle?.dispose();

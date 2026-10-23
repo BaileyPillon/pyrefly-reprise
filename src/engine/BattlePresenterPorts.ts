@@ -491,6 +491,8 @@ export interface PresenterDeps {
   audio?: AudioPort | null;
   /** Letterbox / name slab / vignette. Omitted in tests and headless runs. */
   moments?: MomentsPort | null;
+  /** The PRO STAGING's layer (lane "pro-staging", `pro/staging/StagingSwitch.ts`): present only with `?staging=pro` / `?pack=demo` in a demo chapter; absent everywhere else. */
+  staging?: import('./pro/staging/StagingPort.ts').StagingPort | null;
   /** Mid-battle scripts by `MidBattleTrigger.script`, from `ChapterScripts`. */
   midScripts?: Record<string, StoryScript>;
   /** Sleep hook. Tests pass a no-op so the loop runs instantly. */

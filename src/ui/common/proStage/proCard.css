@@ -1,0 +1,152 @@
+/*
+ * THE BOSS CARD AS A FULL-BLEED PAINTING (lane "pro-staging"; Bailey 2026-10-22: boss big moves "Held breath, full painting" - "the boss card becomes a full-bleed painting"; the options book's boss-attack-intro A
+ * "Full-bleed painting"). Under `.bstart--pro` only (`BattleStartBannerOptions.pro`, set by `BattleScreen.showBattleStart` when the pro staging's `card` piece is on in a demo chapter): the cream card's wedge, stripe and
+ * foot strip go, the chapter's own backdrop fills the frame lit high-key, the boss stands large on the right with a soft rim, and the name sits in the lower third in ink-navy serif italic over a gold rule with
+ * one italic line (the chapter's own subtitle). A one-frame white blink in, a slow push, a hard cut into the fight. Any press still dismisses it, as today.
+ *
+ * Game case (rule 14): both games, one layout; FFX is ice-blue, ivory and gold with an ink-navy name, FFX-2 is pearl and lilac with a plum name and a pink rule (`.ig--ffx2`, the card's own game class).
+ * Nothing about the card's content changes: the same eyebrow, boss name, subtitle and backdrop and boss paintings (the approved masters, untouched).
+ */
+
+.bstart--pro {
+  --bs-name: #1b2760;
+  --bs-rule: #e0b44a;
+  --bs-haze: 238, 243, 255;
+  --bs-pill: 255, 255, 255;
+  background: rgb(var(--bs-haze));
+  transition-duration: 140ms; /* a hard cut into the fight, not a fade */
+}
+.bstart--pro.ig--ffx2 {
+  --bs-name: #4a1f66;
+  --bs-rule: #ff8fc8;
+  --bs-haze: 247, 236, 250;
+}
+
+/* the room, full-bleed and lit high-key */
+.bstart--pro .bstart__wash {
+  inset: 0;
+  width: 100%;
+  opacity: 1;
+  filter: brightness(1.14) saturate(1.04);
+  transform-origin: 70% 55%;
+  animation: bstart-pro-push 2600ms cubic-bezier(0.25, 0.6, 0.35, 1) both;
+}
+/* the haze: ivory from the left (the type sits on it) and from the floor up, so the painting is lit and the name is read */
+.bstart--pro .bstart__wash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(var(--bs-haze), 0.78) 0%, rgba(var(--bs-haze), 0.42) 38%, rgba(var(--bs-haze), 0) 66%),
+    linear-gradient(0deg, rgba(var(--bs-haze), 0.62) 0%, rgba(var(--bs-haze), 0) 42%);
+}
+
+/* the boss: large, right, standing in the light with a soft rim */
+.bstart--pro .bstart__art {
+  inset: 0;
+  width: 100%;
+  background-position: 83% 100%;
+  background-size: auto 104%;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+  transform-origin: 80% 70%;
+  animation: bstart-pro-push-art 2600ms cubic-bezier(0.25, 0.6, 0.35, 1) both;
+}
+.bstart--pro .bstart__art::after {
+  display: none;
+}
+
+/* no wedge, no stripe, no foot strip: the painting is the card */
+.bstart--pro .bstart__wedge,
+.bstart--pro .bstart__stripe,
+.bstart--pro .bstart__strip {
+  display: none;
+}
+
+/* the lock-up: the pill, the name, the rule and the line, lower left */
+.bstart--pro .bstart__panel {
+  left: 7.3%;
+  right: auto;
+  top: auto;
+  bottom: 13.5%;
+  max-width: 62%;
+  color: var(--bs-name);
+  animation: bstart-pro-rise 700ms 160ms cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+.bstart--pro .bstart__eyebrow {
+  display: inline-block;
+  margin: 0 0 1.1em;
+  padding: 0.5em 1.4em 0.5em 1.2em;
+  border-radius: 999px;
+  background: rgba(var(--bs-pill), 0.62);
+  color: var(--bs-name);
+  font-size: clamp(9px, 0.94vw, 14px);
+  letter-spacing: 0.4em;
+}
+.bstart--pro .bstart__name {
+  font-weight: 500;
+  font-size: clamp(40px, 8.6vw, 156px);
+  line-height: 1;
+  letter-spacing: -0.012em;
+  color: var(--bs-name);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 24px rgba(var(--bs-pill), 0.55);
+}
+.bstart--pro .bstart__name span + span {
+  display: inline;
+  margin-left: 0.26em;
+}
+.bstart--pro .bstart__rule {
+  width: 62%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--bs-rule) 0%, var(--bs-rule) 55%, transparent 100%);
+  margin: 0.4em 0 0.7em;
+}
+.bstart--pro .bstart__subline {
+  font-size: clamp(14px, 1.9vw, 30px);
+  color: var(--bs-name);
+  opacity: 0.86;
+}
+.bstart--pro .bstart__skip {
+  color: rgba(27, 39, 96, 0.5);
+  top: auto;
+  bottom: clamp(10px, 2.4vh, 26px);
+}
+
+/* the blink: one frame of white into the card, gone in 160 ms */
+.bstart--pro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #fff;
+  pointer-events: none;
+  animation: bstart-pro-blink 180ms ease-out both;
+}
+
+@keyframes bstart-pro-blink {
+  from { opacity: 0.95; }
+  to { opacity: 0; }
+}
+@keyframes bstart-pro-push {
+  from { transform: scale(1); }
+  to { transform: scale(1.045); }
+}
+@keyframes bstart-pro-push-art {
+  from { transform: scale(1); }
+  to { transform: scale(1.03); }
+}
+@keyframes bstart-pro-rise {
+  from { transform: translateY(18px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bstart--pro .bstart__wash,
+  .bstart--pro .bstart__art,
+  .bstart--pro .bstart__panel,
+  .bstart--pro::before {
+    animation: none;
+  }
+  .bstart--pro::before {
+    display: none;
+  }
+}

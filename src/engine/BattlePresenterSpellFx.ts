@@ -11,6 +11,7 @@
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { bigBlow, costOfFreshMove } from './BattlePresenterBossFx.ts';
+import { stageBlow, stageTell } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath of a boss's big blow (no-ops unless `?staging=pro` in a demo chapter)
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
 import { releaseCastLift } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the caster's lift comes down when the spell lands
 
@@ -95,9 +96,11 @@ async function waitForLanding(ctx: EventCtx, event: Extract<BattleEvent, { type:
     ...(event.crit ? { crit: true } : {}),
     ...(ours && a.item === true ? { item: true } : {}), // the new effects' item form of a heal
   });
-  if (ms <= 0) return void bigBlow(ctx, event, a); // a late hit's mark has passed, but the blow is still a big one
+  if (ms <= 0) return void (stageBlow(ctx, event, a), bigBlow(ctx, event, a)); // a late hit's mark has passed, but the blow is still a big one
+  stageTell(ctx, event, a, ms); // pro staging: the arena drains over the effect's own lead-in
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex });
   await ctx.sleep(Math.min(ms, SPELL_WAIT_CAP_MS));
+  stageBlow(ctx, event, a); // pro staging: the blow lands on the same beat as feel's stop, punch and rumble
   bigBlow(ctx, event, a); // the new effects: a boss's big blow or an Overdrive's first tells the other lanes' hit-stop, punch and rumble hooks (inert otherwise)
   // FF7: then until the effect's own frame clock has drawn the strike (a slow frame lags it; repair item 6).
   if (!vfx.pendingLand || !ours) return;
