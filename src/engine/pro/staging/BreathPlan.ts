@@ -77,10 +77,10 @@ export const TELL_MAX_MS = 1500;
 export const LIFT_MS = 700;
 /** The flood: rise, and how long it holds before it settles to the wash, ms. */
 export const FLOOD_RISE_MS = 140;
-export const FLOOD_HOLD_MS = 520;
-export const FLOOD_FALL_MS = 1100;
+export const FLOOD_HOLD_MS = 380;
+export const FLOOD_FALL_MS = 900;
 /** The white flash at the blow. */
-export const FLASH_MS = 300;
+export const FLASH_MS = 230;
 /** A guard: a staged move that never lifts is let go this long after its blow, ms. */
 export const BREATH_GUARD_MS = 9000;
 
@@ -121,7 +121,7 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
   // the core heats from 55 percent to white-hot at the blow, then decays; the flash is the blow's own beat
   const coreUp = m.tellAt === null ? 0 : smooth((t - 0.55 * T) / (0.45 * T));
   const core = (blown ? coreUp * (1 - smooth(sinceBlow / 520)) : coreUp) * keep;
-  const flashPeak = m.tame ? 0.3 : 1;
+  const flashPeak = m.tame ? 0.3 : 0.85;
   const flash = blown ? flashPeak * (1 - smooth(sinceBlow / FLASH_MS)) * (sinceBlow < 12 ? sinceBlow / 12 : 1) : 0;
 
   // Mega Flare's flood: opens at the blow from the chest, holds, then settles into the wash

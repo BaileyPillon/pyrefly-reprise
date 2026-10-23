@@ -13,6 +13,7 @@ import { breathExpired, breathFrame, leanFraction, tellLength, type BreathMarks,
 import type { BreathCue, EndingCue, OpeningCue, StagingPort } from '../../../engine/pro/staging/StagingPort.ts';
 import type { DemoGame } from '../../../engine/motion/DemoGate.ts';
 import { lookState, setLookTweak } from '../../../engine/look/LookState.ts';
+import { POINT_KINDS } from '../../../engine/look/relight/RelightConfig.ts';
 import type { OdFrame } from '../../../engine/pro/staging/OpeningPlan.ts';
 import { BreathView, type BreathGeom } from './BreathView.ts';
 import { EndingView } from './EndingView.ts';
@@ -37,6 +38,13 @@ const LOOK_TWEAKS: ReadonlyArray<{ name: string; mark?: number; tell: number; ga
   { name: 'flare.flood', tell: 0.3, game: 'ffx2', move: 'mega-flare' }, // ... and the engine's own room flood (the lit surfaces up to 2.7 times over) would overexpose the girls inside those windows: it steps back, this layer's flood is the picture
 ];
 
+/**
+ * The look's point-light kinds the held breath turns down while its move plays (`look/relight/RelightConfig.ts#POINT_KINDS`, read live each frame; the previous value comes back with the lift). Mega Flare's own light (release 62, decision
+ * 173b: cool white, peak 2.1, over 2.4 times the reach) lights the three girls to white; inside the clear windows this layer cuts for them that read as three blank bubbles. At 0.9 they stay lit by the beam and stay people.
+ * [ours]; if the look lane freezes or renames the table this is skipped and the girls keep the engine's light.
+ */
+const POINT_TUNES: ReadonlyArray<{ kind: string; peak: number; game: DemoGame; move: 'mega-flare' }> = [{ kind: 'megaflare', peak: 0.9, game: 'ffx2', move: 'mega-flare' }];
+
 export class ProStageLayer implements StagingPort {
   /** Under the HUD (z 0) and over it (z 30). */
   readonly under: HTMLElement;
@@ -52,6 +60,7 @@ export class ProStageLayer implements StagingPort {
   private drift = true;
   private disposed = false;
   private saved = new Map<string, number | undefined>();
+  private savedPoints = new Map<string, number>();
   private rectAt = 0;
   private geom: BreathGeom | null = null;
   private odDrawn = false;
@@ -319,6 +328,7 @@ export class ProStageLayer implements StagingPort {
 
   /** The look's tweaks for the move: on at the tell, back with the lift. */
   private armLook(move: string, on: boolean, stage: 'mark' | 'tell' = 'tell'): void {
+    this.armPoints(move, on && stage === 'tell');
     try {
       for (const t of LOOK_TWEAKS) {
         if (on) {
@@ -335,6 +345,26 @@ export class ProStageLayer implements StagingPort {
       }
     } catch {
       /* the look is optional: a missing one costs the rim, never the move */
+    }
+  }
+
+  /** The look's point lights, turned down for the move's tell and given back with the lift. */
+  private armPoints(move: string, on: boolean): void {
+    try {
+      for (const t of POINT_TUNES) {
+        const kind = (POINT_KINDS as Record<string, { peak: number }>)[t.kind];
+        if (!kind) continue;
+        if (on) {
+          if (t.game !== this.o.game || t.move !== move || this.savedPoints.has(t.kind)) continue;
+          this.savedPoints.set(t.kind, kind.peak);
+          kind.peak = Math.min(kind.peak, t.peak);
+        } else if (this.savedPoints.has(t.kind)) {
+          kind.peak = this.savedPoints.get(t.kind)!;
+          this.savedPoints.delete(t.kind);
+        }
+      }
+    } catch {
+      /* a frozen or renamed table: the girls keep the engine's light */
     }
   }
 
