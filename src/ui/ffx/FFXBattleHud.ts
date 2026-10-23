@@ -456,7 +456,7 @@ export class FFXBattleHud implements HudPort {
     this.f1.mount({
       game: 'ffx', root: this.el, stage: this.stage,
       cmdStack: () => this.commandMenu.stackEl, cmdBlock: () => this.cmdAreaEl, helpText: () => this.infoEl.textContent ?? '',
-      heroRow: () => this.el.querySelector<HTMLElement>('.ig-stat--acting'),
+      heroRow: (id) => this.el.querySelector<HTMLElement>(id ? `.ig-stat[data-actor="${CSS.escape(id)}"]` : '.ig-stat--acting'),
     });
     window.addEventListener('resize', this.onResize, { passive: true });
   }
@@ -597,6 +597,7 @@ export class FFXBattleHud implements HudPort {
     // command after the previous one has been submitted and played out.
     this.clearTransientOverlays();
     this.openingHold.decision(); // PR-0146: the opening is over
+    this.f1.setMenuActor(actorId); // lane hud-f1: the hero over the command block is whoever's menu this is
 
     const triggerOnly = commands.length > 0 && commands.every((c) => c.command.kind === 'trigger');
     if (triggerOnly) return this.triggerPrompt.open(commands, combatants);

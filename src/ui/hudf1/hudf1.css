@@ -70,11 +70,21 @@
 .f1-cue .f1-in { display: flex; align-items: center; gap: 3.5px; padding: 0 6.5px 0 7.5px; white-space: nowrap; }
 .f1-cue__star { display: inline-flex; width: 7px; height: 7px; flex: none; }
 .f1-cue__star svg { width: 100%; height: 100%; fill: var(--ig-accent); filter: drop-shadow(0 0 1.25px var(--ig-accent)); }
-.f1-cue__spell { font-size: 11.5px; line-height: 1; color: var(--ig-accent); overflow: hidden; text-overflow: ellipsis; max-width: 78px; }
+.f1-cue__spell { font-size: 11.5px; line-height: 1; color: var(--ig-accent); overflow: hidden; text-overflow: ellipsis; max-width: 84px; }
 .f1-cue__arr, .f1-cue__dot { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: rgba(244, 241, 232, 0.66); }
-.f1-cue__target { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--f1-paper); overflow: hidden; text-overflow: ellipsis; max-width: 38px; }
+.f1-cue__target { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--f1-paper); overflow: hidden; text-overflow: ellipsis; max-width: 46px; }
 .f1-cue__mp { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--ig-spira-sky); }
 .f1-cue [hidden] { display: none; }
+
+/* the verb the cue's move lives in carries the star (the mockup's WHITE MAGIC, with its four-point star: drawn as a mask, no glyph from a fallback font) */
+.hud-f1 .ig-cmd.f1-rec .ffx-cmd__label::after,
+.hud-f1 .ig-cmd.f1-rec .ffx2cmd__label::after {
+  content: ''; display: inline-block; width: 7px; height: 7px; margin-left: 4px; background: var(--ig-accent-on-paper); vertical-align: 0.5px;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.hud-f1 .ig-cmd--selected.f1-rec .ffx-cmd__label::after,
+.hud-f1 .ig-cmd--selected.f1-rec .ffx2cmd__label::after { background: #14110a; }
 
 /* ---------------------------------------------------------------- the prompt bar (bottom left) */
 .f1-prompts { left: 28px; top: 336.5px; width: 190px; height: 16.5px; }
@@ -103,3 +113,9 @@ body:has(.hud-f1) .battle-pause-chip { display: none !important; }
 .ig--ffx2 .f1-ghost--out { transform: translateX(calc(var(--f1-slide) * 4)); }
 .f1-ghost--fade { opacity: 0; transition: opacity 400ms ease-out; }
 .f1-ghost .ig-cmd-stack { pointer-events: none; }
+
+/* ---------------------------------------------------------------- the HUD sits above the frame's vignette (FFX: the surface is the root's last child and darkened the party rows to about 55 percent of white at the foot) */
+.ffxhud.hud-f1 { isolation: isolate; }
+.ffxhud.hud-f1 > .ffxhud__stage { z-index: 1; }
+/* Intel: the guide's chips would sit on the ribbon's bar; they go under it */
+.hud-f1.f1-intel .sgd { transform: translateY(27px); }

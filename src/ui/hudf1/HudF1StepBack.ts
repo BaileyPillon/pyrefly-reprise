@@ -116,6 +116,8 @@ export class StepBack {
     // FFX-2: never while the player is choosing (D-357, D-441).
     if (h.game === 'ffx2' && this.menuUp) return;
     this.returnAt = 0;
+    // FFX signals the action's start a frame or two before the stack closes (the menu is still up): the ghost is made now, from the live block, so it has a block to slide.
+    if (!this.ghost && this.menuUp && !this.out) this.makeGhost();
     this.setOut(true);
     if (this.ghost) {
       void this.ghost.offsetWidth;

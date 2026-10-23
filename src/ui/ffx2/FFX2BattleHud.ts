@@ -465,7 +465,7 @@ export class FFX2BattleHud implements HudPort {
       game: 'ffx2', root: this.el, stage: this.stage,
       cmdStack: () => this.commandEl.querySelector<HTMLElement>('.ig-cmd-stack'), cmdBlock: () => this.commandEl,
       helpText: () => this.commandInfoEl.querySelector('[data-role="text"]')?.textContent ?? '',
-      heroRow: () => this.partyEl.querySelector<HTMLElement>('.ig-stat--acting'),
+      heroRow: (id) => this.partyEl.querySelector<HTMLElement>(id ? `.ig-stat[data-actor-id="${CSS.escape(id)}"]` : '.ig-stat--acting'),
     });
     window.addEventListener('resize', this.onResize, { passive: true });
   }
@@ -972,6 +972,7 @@ export class FFX2BattleHud implements HudPort {
       return { kind: 'defend', targets: [] };
     }
     this.openingHold.decision(); // PR-0146: the opening is over
+    this.f1.setMenuActor(actorId); // lane hud-f1: the hero over the command block is whoever's menu this is
     // PR-0175: a menu still open from an earlier decision (a link that ended
     // under it) is torn down before the next one opens. Overwriting its close
     // handle left its cursor in the overlay, still on arrow keys, projecting

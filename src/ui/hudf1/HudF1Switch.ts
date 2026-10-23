@@ -60,25 +60,43 @@ export function hudF1Game(): 'ffx' | 'ffx2' | undefined {
   return isDemoChapter(c) ? demoGameOf(c) : undefined;
 }
 
+/** The provisional choices and the motion numbers (mutable on purpose: `__pyrefly.hudF1Tune(key, value)` flips one live for a capture). */
+export interface HudF1Tune {
+  ribbonStaysInAction: boolean;
+  stepBackAt: 'action-start';
+  floorPx: number;
+  slimDropsOd: boolean;
+  finish: boolean;
+  edgeCalm: boolean;
+  slideOutMs: number;
+  slideBackMs: number;
+  backAfterEndMs: number;
+  backMaxWaitMs: number;
+}
+
 /**
  * THE PROVISIONAL CHOICES (the build draws them as the F1 mockup does; Bailey judges them on the test build, so each is ONE LINE here).
  * Listed in `docs/handoff/hud-f1.md`.
  */
-export const HUD_F1_TUNE = {
+export const HUD_F1_TUNE: HudF1Tune = {
   /** 1. The boss ribbon stays up during an action (the mockup keeps it, with the 1 percent bite showing). `false` slides it up and out with the rest. */
   ribbonStaysInAction: true,
   /** 2. The step-back starts at the action's start (after the target is confirmed, as the presenter signals it). */
-  stepBackAt: 'action-start' as 'action-start',
+  stepBackAt: 'action-start',
   /** 3. The text floor for the cue and the prompts, in px at 2560 x 1440 (the mockup: 28; the alternative the notes name for a 27-inch booth monitor: 32). */
   floorPx: 28,
-  /** 4. The slim party cards (during an action) drop the Overdrive bar and the /max numbers. `false` keeps the bar. */
+  /** 4. The slim party cards (during an action) drop the Overdrive bar and the /max numbers (`hudf1-act.css`; `false` is not wired to CSS yet: the bar's rule is one line there). */
   slimDropsOd: true,
-  /** The slide out at an action's start, ms (ease-in). */
+  /** 5. The F1 "Brushed slab" finish (baked edge masks and paint textures, `hudf1-finish.css`). `false` leaves the flat slabs of the Clear Stage layout (the fallback if the booth's GPU minds the masks). */
+  finish: false,
+  /** 6. Calm edges: the ends of the ivory rows eaten a few px instead of a finger deep (the risk the notes name: torn masking tape). */
+  edgeCalm: false,
+  /** The slide out at an action's start, ms (ease-in; the CSS transition in `hudf1-act.css` carries the same number). */
   slideOutMs: 170,
-  /** The slide back, ms (ease-out). */
+  /** The slide back, ms (ease-out; the CSS carries it). */
   slideBackMs: 220,
   /** The wait after an action's end before the block comes back, ms (and never before the damage numbers have gone). */
   backAfterEndMs: 220,
   /** The most the return may wait for a damage number to clear, ms. */
   backMaxWaitMs: 1500,
-} as const;
+};

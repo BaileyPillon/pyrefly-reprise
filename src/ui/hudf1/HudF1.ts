@@ -28,6 +28,8 @@ import { StepBack } from './HudF1StepBack.ts';
 import './hudf1.css';
 import './hudf1-ffx.css';
 import './hudf1-ffx2.css';
+import './hudf1-act.css';
+import './hudf1-finish.css';
 
 /** The root class every `hudf1*.css` rule hangs from. */
 export const HUD_F1_CLASS = 'hud-f1';
@@ -49,8 +51,8 @@ export interface HudF1Host {
   cmdBlock: () => HTMLElement | null;
   /** The text of the help slab for the selected row (printed on the row itself). */
   helpText: () => string;
-  /** The party row of the hero whose menu is open (`.ig-stat--acting`), or null. */
-  heroRow: () => HTMLElement | null;
+  /** The party row of a hero by id (the one whose menu is open), or, with no id, the row marked acting; null when there is none. */
+  heroRow: (id: string | null) => HTMLElement | null;
 }
 
 const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg>';
@@ -77,8 +79,11 @@ export class HudF1 {
   private host: HudF1Host | null = null;
   private applied = false;
   private offChange: (() => void) | null = null;
-  private lastPct = 100;
+  /** The bar's last value, percent; -1 before the first sync (a fight joined mid-way draws its bar at once, with no bite). */
+  private lastPct = -1;
   private heroId = '';
+  /** Whose menu is open (`HudPort.chooseCommand`'s actor): the hero over the block is this one, whoever the party list marks as acting (a Switch changes the actor under the menu). */
+  private menuActor: string | null = null;
   private cueClock = 0;
   private cmdOpen = false;
   private readonly step: StepBack;
@@ -127,7 +132,7 @@ export class HudF1 {
     this.offChange?.();
     this.offChange = null;
     this.step.clear();
-    this.host?.root.classList.remove(HUD_F1_CLASS, F1_CMD_OPEN, F1_INTEL);
+    this.host?.root.classList.remove(HUD_F1_CLASS, F1_CMD_OPEN, F1_INTEL, 'f1-finish', 'f1-ribbon-hides', 'f1-edge-calm');
     this.layer.remove();
     this.host = null;
     this.applied = false;
@@ -147,10 +152,14 @@ export class HudF1 {
       this.applied = want;
       h.root.classList.toggle(HUD_F1_CLASS, want);
       this.layer.hidden = !want;
-      if (want) h.root.style.setProperty('--f1-floor', `${HUD_F1_TUNE.floorPx / 4}px`);
-      else {
+      if (want) {
+        h.root.style.setProperty('--f1-floor', `${HUD_F1_TUNE.floorPx / 4}px`);
+        h.root.classList.toggle('f1-finish', HUD_F1_TUNE.finish);
+        h.root.classList.toggle('f1-edge-calm', HUD_F1_TUNE.edgeCalm);
+        h.root.classList.toggle('f1-ribbon-hides', !HUD_F1_TUNE.ribbonStaysInAction);
+      } else {
         h.root.style.removeProperty('--f1-floor');
-        h.root.classList.remove(F1_CMD_OPEN, F1_INTEL);
+        h.root.classList.remove(F1_CMD_OPEN, F1_INTEL, 'f1-finish', 'f1-ribbon-hides', 'f1-edge-calm');
         this.step.clear();
       }
       if (want && this.lastState) this.sync(this.lastState);
@@ -168,7 +177,7 @@ export class HudF1 {
     if (this.ribbonName.textContent !== boss.name) this.ribbonName.textContent = boss.name;
     const pct = Math.max(0, Math.min(100, (boss.hp / Math.max(1, boss.stats.maxHp)) * 100));
     if (pct === this.lastPct) return;
-    if (pct < this.lastPct) {
+    if (this.lastPct >= 0 && pct < this.lastPct) {
       // The bite: the white segment holds where the bar was, then eases down to it (CSS transition on the drain's width).
       this.ribbonDrain.style.transition = 'none';
       this.ribbonDrain.style.width = `${this.lastPct}%`;
@@ -178,6 +187,12 @@ export class HudF1 {
     this.ribbonFill.style.width = `${pct}%`;
     this.ribbonDrain.style.width = `${pct}%`;
     this.lastPct = pct;
+  }
+
+  /** `HudPort.chooseCommand`: a menu opens for this hero. */
+  setMenuActor(id: string): void {
+    this.menuActor = id;
+    this.heroId = '';
   }
 
   /** `HudPort.setActing`. */
@@ -216,7 +231,7 @@ export class HudF1 {
 
   /** The hero over the block: the face is the party row's own (cloned when the hero changes), the name its text. */
   private syncHero(h: HudF1Host): void {
-    const row = h.heroRow();
+    const row = h.heroRow(this.menuActor) ?? h.heroRow(null);
     const id = row ? (row.dataset['actorId'] ?? row.dataset['actor'] ?? row.querySelector('.ig-stat__name')?.textContent ?? '') : ''; // FFX rows say data-actor, FFX-2 rows data-actor-id
     if (!row || !id || id === this.heroId) return;
     this.heroId = id;
@@ -242,6 +257,15 @@ export class HudF1 {
     if (sel.dataset['help'] !== text) sel.dataset['help'] = text;
   }
 
+  /** The verb that holds the cue's move gets the star after its label (the mockup's `White Magic ✦`: where the move is, said on the row). */
+  private markRecommended(h: HudF1Host, where: string): void {
+    const rows = h.cmdStack()?.querySelectorAll<HTMLElement>('.ig-cmd') ?? [];
+    for (const row of rows) {
+      const label = row.querySelector('.ffx-cmd__label, .ffx2cmd__label')?.textContent?.trim().toLowerCase() ?? '';
+      row.classList.toggle('f1-rec', where !== '' && label === where);
+    }
+  }
+
   /** The cue: the advisor's lead move, as the card prints it. Hidden when the advisor has none (or is off). */
   private syncCue(h: HudF1Host): void {
     const card = h.stage.querySelector<HTMLElement>('.mad__card');
@@ -253,6 +277,8 @@ export class HudF1 {
     const target = card.querySelector('.mad__target')?.textContent?.trim() ?? '';
     const stats = [...card.querySelectorAll('.mad__stat')].map((e) => e.textContent?.trim() ?? '');
     const mp = stats.find((s) => /\bMP\b/i.test(s)) ?? '';
+    const where = card.querySelector('.mad__where')?.textContent?.trim().toLowerCase() ?? '';
+    this.markRecommended(h, where);
     const other = actor && actor !== this.heroName.textContent ? `${actor}: ` : '';
     this.cueSpell.textContent = `${other}${label}`;
     this.cueTarget.textContent = target;
