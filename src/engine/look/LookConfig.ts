@@ -60,8 +60,10 @@ export function parseLook(search: string): LookRequest {
   } catch {
     return { armed: false, auto: true, name: null, quality: 'high', debug: null, strength: 'subtle', drift: false };
   }
-  const raw = p.get('look');
-  const v = (raw ?? '').trim().toLowerCase();
+  const rawKey = p.get('look');
+  const v = (rawKey ?? '').trim().toLowerCase();
+  // pro-look lane: `?look=pro` and `?look=today` are the pro switch's words (`look/pro/ProSwitch.ts`), not a look named by hand: with them the chapter's own default look plays.
+  const raw = v === 'pro' || v === 'today' ? null : rawKey;
   const name = (LOOK_NAMES as readonly string[]).includes(v) ? (v as LookName) : null;
   const q = (p.get('lookq') ?? '').trim().toLowerCase();
   const quality = (LOOK_QUALITIES as readonly string[]).includes(q) ? (q as LookQuality) : 'high';

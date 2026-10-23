@@ -19,6 +19,7 @@ import { lin, type LookRoom } from './LookRoom.ts';
 import type { RelightLights } from './relight/RelightLights.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
 import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
+import type { ProSeam } from './pro/ProSeam.ts';
 import { MAX_RIPPLES } from './living/LivingConfig.ts';
 import { LookLiving, type LivingUniforms } from './living/LookLiving.ts';
 
@@ -54,6 +55,8 @@ export class LookBold {
   private canvas: HTMLCanvasElement | null = null;
   private quality: LookQuality | null = null;
   private readonly homo = new Matrix3();
+  /** The painting's map the other way (painting uv to frame uv): the plate-seam fix mirrors through it. */
+  private readonly homoInv = new Matrix3();
   private stage: { cx: number; cy: number; rx: number; ry: number } | null = null;
   /** Every visible actor's screen box (x0, y0, x1, y1 in frame uv), padded: the blur keeps them sharp (`LookBlurShader`). */
   readonly boxes: Vector4[] = Array.from({ length: MAX_FIG }, () => new Vector4());
@@ -263,14 +266,16 @@ export class LookBold {
       scratch.p.set((sx * W) / 2, (sy * H) / 2, 0).applyMatrix4(mesh.matrixWorld).project(cam);
       q.push(scratch.p.x * 0.5 + 0.5, scratch.p.y * 0.5 + 0.5);
     }
-    const inv = invert3(squareToQuad(q));
+    const fwd = squareToQuad(q);
+    const inv = invert3(fwd);
     this.homo.set(inv[0]!, inv[1]!, inv[2]!, inv[3]!, inv[4]!, inv[5]!, inv[6]!, inv[7]!, inv[8]!);
+    this.homoInv.set(fwd[0]!, fwd[1]!, fwd[2]!, fwd[3]!, fwd[4]!, fwd[5]!, fwd[6]!, fwd[7]!, fwd[8]!);
     return Math.abs(q[5]! - q[1]!);
   }
 
   // ----------------------------------------------------------------- per frame
 
-  update(o: { scene: Scene; camera: Camera; name: LookName; room: LookRoom; lights: RelightLights; quality: LookQuality; dt: number; time: number; now?: number; scale: number; W: number; H: number; aspect: number; lightUv: [number, number]; tweak: (k: string, v: number) => number }): void {
+  update(o: { scene: Scene; camera: Camera; name: LookName; room: LookRoom; lights: RelightLights; quality: LookQuality; dt: number; time: number; now?: number; scale: number; W: number; H: number; aspect: number; lightUv: [number, number]; tweak: (k: string, v: number) => number; /** Lane pro-look: the Chapter IV floor-step blur's numbers for this room, or null (none). */ seam?: ProSeam | null }): void {
     const { scene, camera, room, lights } = o;
     const look = o.name === 'cinematic' ? 'cinematic' : 'hd2d';
     const fx = BOLD_FX[look];
@@ -323,6 +328,9 @@ export class LookBold {
     u['uDepth']!.value = tex;
     u['depthOn']!.value = tex && mesh ? 1 : 0;
     (u['uHomo']!.value as Matrix3).copy(this.homo);
+    (u['uHomoInv']!.value as Matrix3).copy(this.homoInv);
+    const sm = o.seam && mesh ? o.seam : null;
+    (u['uSeamF']!.value as Vector4).set(sm?.floors[0] ?? 0, sm?.floors[1] ?? 0, sm?.floorHalf ?? 0.02, sm ? sm.floorAmount * o.tweak('seam.floor', 1) : 0);
     // pools: the same lights as the figures' own, at the targets' feet
     const PA = u['uPoolA']!.value as Vector4[];
     const PC = u['uPoolC']!.value as Vector4[];

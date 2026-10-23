@@ -22,6 +22,7 @@ import { partyRigsMode, setPartyRigsMode } from '../../engine/motion/PartyRigsSw
 import { momentsMode, setMomentsMode } from '../../engine/motion/MomentsSwitch.ts';
 import { smearStyle, setSmearStyle, type SmearStyle } from '../../engine/motion/SmearSwitch.ts';
 import { fxMode, setFxMode } from '../../engine/spellfx/FxSwitch.ts';
+import { proMode, setProMode } from '../../engine/look/pro/ProSwitch.ts'; // lane pro-look
 
 export interface SwitchDef {
   /** `KeyboardEvent.code` (the number row; the numpad digits are the same keys). */
@@ -179,6 +180,20 @@ export const SWITCHES: readonly SwitchDef[] = [
     },
     isNew: () => momentsMode() === 'new',
     set: (on) => setMomentsMode(on ? 'new' : 'today'),
+  },
+  // `/`: the pro look (lane "pro-look"): the arena's "Cinematic contrast" grade, the Chapter IV seam fix, "Ink and light" hits, the glass damage numbers and the markers, all at once. Today = release 62's look.
+  {
+    code: 'Slash',
+    key: '/',
+    name: 'look',
+    read: () => (proMode() === 'pro' ? 'pro' : 'today'),
+    flip: () => {
+      const next = proMode() === 'pro' ? 'today' : 'pro';
+      setProMode(next);
+      return next;
+    },
+    isNew: () => proMode() === 'pro',
+    set: (on) => setProMode(on ? 'pro' : 'today'),
   },
   {
     code: 'Minus',

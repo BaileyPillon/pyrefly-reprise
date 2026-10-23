@@ -28,6 +28,7 @@ import { installGamepadRumble } from './app/gamepadRumble.ts';
 import { installMotionSfx } from './app/motionSfxSink.ts';
 import { installRigDebug } from './debug/rigApi.ts';
 import { installFxNewDebug } from './debug/fxNewApi.ts'; // motion pass (lane "fx"): `__pyrefly.fxNew('new' | 'today')`
+import { installProDebug } from './debug/proApi.ts'; // lane "pro-look": `__pyrefly.pro('pro' | 'today')`
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
 import { setAttractRunner } from './app/demo/attractHook.ts'; // R61: the title starts the attract reel through this door; main hands the reel in (the title does not import it)
@@ -177,6 +178,7 @@ async function boot(): Promise<void> {
   installMotionSfx(audio); // the sink of `?motionsfx=on` (a demo chapter only; at normal speed; from the existing sound library)
   installGamepadRumble(); // the pad-side sink of `?rumble=on` (a demo chapter only; never on keyboard play, never under REDUCE MOTION)
   installFxNewDebug(debugApi); // motion pass (lane "fx"): the new spell effects' switch, for captures
+  installProDebug(debugApi); // lane "pro-look": the pro-look switch, for captures
   installSwitchboard(debugApi); // the playtest keys 1 to 9, 0, -, = and the corner label; nothing is installed without `?pack=demo&switchboard=1`
   installFxWiring(); // integration: the fx lane's big moments onto the core and feel lanes (`engine/motion/FxWiring.ts`)
 

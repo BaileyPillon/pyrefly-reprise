@@ -82,14 +82,14 @@ export class LookRoom {
   }
 
   /** The grade's LUT for `name` in this room (built once, kept for the last eight). */
-  lutFor(name: LookName, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null): Data3DTexture {
+  lutFor(name: LookName, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null, pro = false): Data3DTexture {
     const info = this.info!;
     const pal = info.palette ?? { key: 0xffe0b0, sky: 0x30405a };
-    const id = lutKey(name, this.game, info.key, pal, strength, patch);
+    const id = lutKey(name, this.game, info.key, pal, strength, patch, pro);
     if (this.lut && id === this.lutId) return this.lut;
     let t = this.luts.get(id);
     if (!t) {
-      t = new Data3DTexture(lutBytes(name, this.game, info.key, pal, strength, patch), LUT_SIZE, LUT_SIZE, LUT_SIZE);
+      t = new Data3DTexture(lutBytes(name, this.game, info.key, pal, strength, patch, pro), LUT_SIZE, LUT_SIZE, LUT_SIZE);
       t.minFilter = t.magFilter = LinearFilter;
       t.needsUpdate = true;
       this.luts.set(id, t);

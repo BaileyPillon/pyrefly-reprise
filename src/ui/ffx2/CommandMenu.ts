@@ -467,6 +467,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
       claimCancel();
       const entries = targetIds.map(entryFor);
       cursor.setPanels(deps.panels?.() ?? []);
+      cursor.setHelpLine(pending ? commandHelpText(pending) : ''); // lane pro-look: the pro target flag's damage line
       if (groupMode) cursor.showGroup(entries);
       // Opens on the engine's preferred side: most X-2 skills also list the girls.
       else cursor.showSingle(entries, 0, pending?.preferredTargets);

@@ -1,4 +1,5 @@
 import './damage-numbers.css';
+import './pro-numbers.css';
 import { paceRate } from '../../engine/pace.ts';
 import { readColourVision } from '../../app/accessFlags.ts';
 import {
@@ -29,6 +30,8 @@ import {
   type LaneInput,
   type NumeralRect,
 } from './damageLadder.ts';
+import { prefersReducedMotion } from './transitions/reduceMotion.ts';
+import { TICK_HOLD_MS, UsualBlows, glassText, maxHpOf, proLifetime, proNumbersOn, proOpacity, proPop, proRise, sizeFactor, tierOf, type NumberTier } from './proNumbers.ts';
 
 /**
  * Floating DOM damage/heal/miss numerals, per `research/visual-bible.md` §3.6.
@@ -119,6 +122,8 @@ export interface DamageSpawnInput extends DamageEventInput {
   hitIndex?: number;
   /** Total hits in this action. Carried through for callers/tests; the ladder math only needs `hitIndex`. */
   hitCount?: number;
+  /** Who struck (lane pro-look: the glass numbers' tiers read the attacker's usual blow). */
+  source?: string;
 }
 
 /** The subset of `BattleEvent` {@link DamageNumbers.spawnEvent} reads. */
@@ -131,6 +136,7 @@ export interface NumeralEventLike {
   hitIndex?: number;
   hitCount?: number;
   reason?: string;
+  sourceId?: string;
 }
 
 /**
@@ -167,6 +173,22 @@ interface ActiveNumber {
   measured: boolean;
   /** Last value written to `.dnum--over-hud`, so the class is only touched on a change. */
   overHud: boolean;
+  /** Font-size factor on the old numeral's size (1 = as it was; the glass numbers' tiers set it). */
+  sizeK: number;
+  /** The glass numeral's state (lane pro-look: `proNumbers.ts`); null = the old numeral. */
+  pro: ProState | null;
+}
+
+/** A glass numeral's own state: the running total of its action, its tier, how many hits it carries, when it last popped (its own ms), whether the pop is a tick, and its glint element (a critical's long streak). */
+interface ProState {
+  total: number;
+  tier: NumberTier;
+  hits: number;
+  popAtMs: number;
+  tick: boolean;
+  heal: boolean;
+  lastNowMs: number;
+  glint: HTMLElement | null;
 }
 
 export class DamageNumbers {
@@ -200,6 +222,11 @@ export class DamageNumbers {
   } | null = null;
   /** Layer clock, advanced by {@link update}; the queue is paced against it. */
   private nowMs = 0;
+  /** Lane pro-look: each attacker's usual blow so far, for the glass numbers' tiers. */
+  private readonly usual = new UsualBlows();
+  /** Lane pro-look: REDUCE MOTION (the game's row or the OS), read at most twice a second while the glass numbers play; the glass numeral then neither pops nor rises (it fades in place). */
+  private proReducedMotion = false;
+  private proReducedAtMs = -1e9;
 
   constructor(private readonly opts: DamageNumbersOptions) {
     this.el = document.createElement('div');
@@ -223,7 +250,8 @@ export class DamageNumbers {
 
   /** Remove every in-flight numeral immediately (screen teardown, chapter transition). */
   clear(): void {
-    for (const n of this.active) n.el.remove();
+    for (const n of this.active) this.drop(n);
+    this.usual.clear();
     this.active = [];
     this.bursts.clear();
     this.fans.clear();
@@ -254,6 +282,7 @@ export class DamageNumbers {
           crit: event.crit === true,
           hitIndex: event.hitIndex ?? 0,
           hitCount: event.hitCount ?? 1,
+          ...(event.sourceId !== undefined ? { source: event.sourceId } : {}),
         });
       case 'heal':
         return this.spawn({ target, amount: -Math.abs(event.amount ?? 0) });
@@ -283,6 +312,12 @@ export class DamageNumbers {
    */
   spawn(input: DamageSpawnInput): HTMLElement | null {
     const kind = classifyDamageEvent(input);
+    // Lane pro-look: the glass numbers (FFX and FFX-2, Chapter I and Chapter IV only, off by default). A later hit of a multi-hit action ticks the action's one numeral up instead of printing another.
+    const pro = proNumbersOn();
+    if (pro && (kind === 'damage' || kind === 'critical' || kind === 'heal') && (input.hitIndex ?? 0) > 0) {
+      const ticked = this.proTick(input, kind);
+      if (ticked) return ticked;
+    }
     const prev = this.bursts.get(input.target);
     // A new burst re-shapes the fan: the actor may have moved (or the HUD may
     // have opened) since the last one, and the frozen sequence is only meant to
@@ -313,7 +348,7 @@ export class DamageNumbers {
       for (let i = this.active.length - 1; i >= 0; i--) {
         const a = this.active[i]!;
         if (a.target !== input.target || a.column !== place.column) continue;
-        a.el.remove();
+        this.drop(a);
         this.active.splice(i, 1);
       }
     }
@@ -326,20 +361,36 @@ export class DamageNumbers {
     // a lane, and these two attributes say which without a debugger.
     el.dataset['target'] = input.target;
     el.dataset['slot'] = String(slot.index);
-    el.style.fontSize = `${(fontSizeFor(kind) * scale).toFixed(1)}px`;
+    let proState: ProState | null = null;
+    let sizeK = 1;
+    if (pro) {
+      const isHp = kind === 'damage' || kind === 'critical' || kind === 'heal';
+      const amount = input.amount ?? 0;
+      const tier: NumberTier = kind === 'damage' || kind === 'critical' ? tierOf(amount, kind === 'critical', maxHpOf(input.target), this.usual.of(input.source)) : 'normal';
+      if ((kind === 'damage' || kind === 'critical') && (input.hitIndex ?? 0) === 0) this.usual.note(input.source, amount);
+      sizeK = sizeFactor(kind, tier);
+      el.classList.add('dnum--glass', `dnum--tier-${tier}`);
+      const heal = kind === 'heal' || (kind === 'mp' && amount < 0);
+      proState = { total: isHp ? Math.abs(amount) : 0, tier, hits: isHp ? 1 : 0, popAtMs: 0, tick: false, heal, lastNowMs: this.nowMs, glint: null };
+      el.textContent = isHp ? glassText(amount, kind === 'heal') : textFor(kind, input.amount, readColourVision() !== 'off'); // MP, MISS, IMMUNE and ABSORBED keep their words, in the glass face
+      if (tier === 'critical') proState.glint = this.makeGlint();
+    } else el.textContent = textFor(kind, input.amount, readColourVision() !== 'off'); // PR-0032: COLOUR VISION adds "MP" to an MP numeral
+    el.style.fontSize = `${(fontSizeFor(kind) * sizeK * scale).toFixed(1)}px`;
     el.style.opacity = '0';
-    el.textContent = textFor(kind, input.amount, readColourVision() !== 'off'); // PR-0032: COLOUR VISION adds "MP" to an MP numeral
     this.el.appendChild(el);
 
     const max = this.opts.max ?? 48;
-    while (this.active.length >= max) this.active.shift()?.el.remove();
+    while (this.active.length >= max) {
+      const old = this.active.shift();
+      if (old) this.drop(old);
+    }
 
     this.active.push({
       el,
       target: input.target,
       kind,
       ageMs: 0,
-      lifetimeMs: lifetimeMsFor(kind),
+      lifetimeMs: pro ? proLifetime(kind) : lifetimeMsFor(kind),
       delayMs: slot.delayMs,
       slotIndex: slot.index,
       track: slot.track,
@@ -353,8 +404,57 @@ export class DamageNumbers {
       halfW: Math.max(8, el.offsetWidth / 2),
       measured: el.offsetWidth > 0,
       overHud: false,
+      sizeK,
+      pro: proState,
     });
     return el;
+  }
+
+  /** Lane pro-look: the long streak behind a critical glass numeral (a sibling element: the numeral's own text clip would swallow a child). */
+  private makeGlint(): HTMLElement {
+    const g = document.createElement('div');
+    g.className = 'dnum-glint';
+    g.style.opacity = '0';
+    this.el.appendChild(g);
+    return g;
+  }
+
+  /** Take a numeral off the layer, with its glint. */
+  private drop(n: ActiveNumber): void {
+    n.el.remove();
+    n.pro?.glint?.remove();
+  }
+
+  /**
+   * Lane pro-look: a later hit of a multi-hit action. The newest glass numeral on this target that is the same kind of figure (damage, or heal) and still within the burst's gap takes the hit's amount
+   * into its running total, pops 1.15x and holds a little longer, and its tier is read again from the new total (a long combo can climb to BIG or CRITICAL). Returns that numeral, or null when there is none to tick.
+   */
+  private proTick(input: DamageSpawnInput, kind: DamageKind): HTMLElement | null {
+    for (let i = this.active.length - 1; i >= 0; i--) {
+      const n = this.active[i]!;
+      const p = n.pro;
+      if (n.target !== input.target || !p || p.hits < 1) continue;
+      if ((kind === 'heal') !== p.heal) continue;
+      if (this.nowMs - p.lastNowMs > BURST_GAP_MS) return null;
+      const amount = Math.abs(input.amount ?? 0);
+      p.total += amount;
+      p.hits += 1;
+      p.lastNowMs = this.nowMs;
+      const own = Math.max(0, n.ageMs - n.delayMs);
+      p.popAtMs = own;
+      p.tick = true;
+      n.lifetimeMs = Math.max(n.lifetimeMs, own + TICK_HOLD_MS);
+      if (!p.heal) {
+        p.tier = tierOf(p.total, kind === 'critical' || p.tier === 'critical', maxHpOf(input.target), this.usual.of(input.source));
+        n.el.className = n.el.className.replace(/dnum--tier-\w+/, `dnum--tier-${p.tier}`);
+        n.sizeK = sizeFactor(n.kind, p.tier);
+        n.el.style.fontSize = `${(fontSizeFor(n.kind) * n.sizeK * this.scale()).toFixed(1)}px`;
+        if (p.tier === 'critical' && !p.glint) p.glint = this.makeGlint();
+      }
+      n.el.textContent = glassText(p.total, p.heal);
+      return n.el;
+    }
+    return null;
   }
 
   /**
@@ -510,6 +610,10 @@ export class DamageNumbers {
   update(dt: number): void {
     const dtMs = dt * 1000 * paceRate('numeral'); // the pacing option (`pace.ts`): a numeral held longer, 1 unless picked
     this.nowMs += dtMs;
+    if (this.active.some((n) => n.pro) && this.nowMs - this.proReducedAtMs > 500) {
+      this.proReducedMotion = prefersReducedMotion();
+      this.proReducedAtMs = this.nowMs;
+    }
     const survivors: ActiveNumber[] = [];
     // One layout read per frame, shared by every numeral: the layer's own box
     // turns the projector's viewport pixels into layer-local ones (they are
@@ -609,7 +713,7 @@ export class DamageNumbers {
       const seen = laneInputs.get(n.target);
       if (!seen) laneInputs.set(n.target, { id: n.target, x: p.x, halfWidth: want });
       else seen.halfWidth = Math.max(seen.halfWidth, want);
-      const tall = (fontSizeFor(n.kind) * scale) / 2 + Math.abs(n.offsetY) * scale;
+      const tall = (fontSizeFor(n.kind) * n.sizeK * scale) / 2 + Math.abs(n.offsetY) * scale;
       const box = groups.get(n.target);
       if (!box) groups.set(n.target, { w: want, h: tall });
       else {
@@ -636,7 +740,7 @@ export class DamageNumbers {
         continue;
       }
       if (tMs >= n.lifetimeMs) {
-        n.el.remove();
+        this.drop(n);
         continue;
       }
 
@@ -647,12 +751,12 @@ export class DamageNumbers {
         continue;
       }
 
-      const bounce = bouncePosition(tMs, n.kind, n.vx);
+      const bounce = n.pro ? (this.proReducedMotion ? { x: 0, y: 0 } : proRise(tMs, n.lifetimeMs)) : bouncePosition(tMs, n.kind, n.vx); // the glass numbers rise, the old ones bounce
       // The spawn pop is a transform about the glyph's own centre, so the
       // dodging/clamping has to use the popped extent or a numeral that lands
       // near an edge or a panel overhangs it for the first 0.12s.
-      const pop = scaleAt(tMs, n.kind);
-      const half = { w: n.halfW * pop, h: (fontSizeFor(n.kind) * scale * pop) / 2 };
+      const pop = n.pro ? (this.proReducedMotion ? 1 : proPop(tMs - n.pro.popAtMs, n.pro.tier, n.pro.tick)) : scaleAt(tMs, n.kind);
+      const half = { w: n.halfW * pop, h: (fontSizeFor(n.kind) * n.sizeK * scale * pop) / 2 };
       const anchor = { x: base.x + (lanes.get(n.target) ?? 0), y: base.y };
       const offset = { x: ((n.offsetX ?? 0) + bounce.x) * scale, y: (n.offsetY + bounce.y) * scale };
 
@@ -678,7 +782,14 @@ export class DamageNumbers {
         n.overHud = placed.overHud;
       }
       n.el.style.transform = `translate(-50%, -50%) translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) scale(${pop.toFixed(3)})`;
-      n.el.style.opacity = opacityAt(tMs, n.kind).toFixed(3);
+      const alpha = n.pro ? proOpacity(tMs, n.lifetimeMs) : opacityAt(tMs, n.kind);
+      n.el.style.opacity = alpha.toFixed(3);
+      const glint = n.pro?.glint;
+      if (glint) {
+        glint.style.fontSize = n.el.style.fontSize;
+        glint.style.transform = `translate(-50%, -50%) translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) scale(${(0.7 + 0.3 * Math.min(1, tMs / 160)).toFixed(3)})`;
+        glint.style.opacity = (alpha * 0.85).toFixed(3);
+      }
       survivors.push(n);
     }
 

@@ -2,6 +2,9 @@ import type { CombatantId } from '../../battle/common/types.ts';
 import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
 import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, handBox, noteHtml, px, type PlateDock } from './targetCursorParts.ts';
 import { pickTargetAt, sameSide } from './targetHitPick.ts';
+import '../common/pro-markers.css';
+import { proHandSize, proHelpLine, proMarkersOn, proRing, proRingBox } from '../common/proMarkers.ts'; // lane pro-look: the big glove, the quarter-height ring
+import { PRO_FLOWER_SVG, PRO_HAND_SVG } from '../common/proMarkerArt.ts';
 
 export type { PlateDock } from './targetCursorParts.ts';
 
@@ -123,6 +126,8 @@ export class TargetCursor {
   private panels: TargetRect[] = [];
   /** FFX only: the command help slab, so the group chip can clear it (PR-0019). */
   private cmdInfoEl: HTMLElement | null = null;
+  /** The pending command's help line ("Physical damage ..."), for the pro flag's third line (`setHelpLine`). Empty = none. */
+  private helpLine = '';
   /** FFX only: the menu row a group command was chosen from (PR-0019). */
   private groupAnchorRow: (() => HTMLElement | null) | null = null;
   private afterLayout: ((cursorEl: HTMLElement) => void) | null = null;
@@ -176,6 +181,13 @@ export class TargetCursor {
   setChrome(chrome: CursorChrome): void {
     this.chrome = chrome;
     this.el.classList.toggle('ffx-targeting--ffx2', chrome === 'ffx2');
+  }
+
+  /** Lane pro-look: the pending command's help text; the pro target flag prints its first clause under the name. Read at the next draw. */
+  setHelpLine(text: string): void {
+    if (text === this.helpLine) return;
+    this.helpLine = text;
+    if (this.entries.length && proMarkersOn()) this.reposition(); // the flag is already up (the help is set just after the cursor opens): draw it again with the line
   }
 
   setProjector(project: RectProjector): void {
@@ -356,6 +368,11 @@ export class TargetCursor {
     // any valid enemy, not only the keyboard-highlighted one.
     const clickable = !group;
     const handGap = this.handGap();
+    // Lane pro-look (markers "Classic, calm, clear"; off by default): FFX's glove about five times wider, FFX-2's ring a quarter of the figure's height with short corners round it and the name beside it.
+    const pro = proMarkersOn();
+    this.el.classList.toggle('ffx-targeting--pro', pro);
+    const viewMin = typeof window === 'undefined' ? 1080 : Math.min(window.innerWidth, window.innerHeight);
+    const proHand = pro && this.chrome === 'ffx' ? proHandSize(typeof window === 'undefined' ? 1600 : window.innerWidth) : null;
 
     // PR-0232: the side being aimed at is drawn last, the active target last of all,
     // so where brackets overlap the in-set one is on top for a tap.
@@ -388,10 +405,12 @@ export class TargetCursor {
       // 420 px aeon cannot wear the same 30 px bracket and both read as one
       // mark. Bounded so a tiny target still shows a bracket and a huge one
       // does not turn into a full box.
-      const corner = clamp(Math.min(rect.w, rect.h) * 0.26, 12, 54);
+      const proRingGeom = pro && this.chrome === 'ffx2' && active && !group ? proRing(rect, viewMin) : null;
+      const frame = proRingGeom ? proRingBox(proRingGeom) : rect; // pro FFX-2: the corners stand round the ring, not round the whole figure
+      const corner = clamp(Math.min(frame.w, frame.h) * 0.26, 12, 54);
       const idAttr = clickable ? ` data-target-id="${escapeHtml(entry.id)}"` : '';
       parts.push(
-        `<div class="${cls}"${idAttr} style="left:${px(rect.x)};top:${px(rect.y)};width:${px(rect.w)};height:${px(rect.h)};--ffx-corner:${px(corner)}">` +
+        `<div class="${cls}"${idAttr} style="left:${px(frame.x)};top:${px(frame.y)};width:${px(frame.w)};height:${px(frame.h)};--ffx-corner:${px(corner)}">` +
           '<span class="ffx-target__c ffx-target__c--tl"></span>' +
           '<span class="ffx-target__c ffx-target__c--tr"></span>' +
           '<span class="ffx-target__c ffx-target__c--bl"></span>' +
@@ -405,8 +424,9 @@ export class TargetCursor {
       // two fiends. FFX only: FFX-2 has no finger cursor, and the two chromes
       // must never be mixed [visual-bible 4.2, ffx-vs-ffx2-presentation 9].
       if (this.chrome === 'ffx') {
+        const size = proHand ? `;width:${px(proHand.w)};height:${px(proHand.h)}` : '';
         parts.push(
-          `<div class="ffx-target__hand" style="left:${px(rect.x - handGap)};top:${px(rect.y + rect.h * 0.55)}">${HAND_SVG}</div>`,
+          `<div class="ffx-target__hand" style="left:${px(rect.x - handGap)};top:${px(rect.y + rect.h * 0.55)}${size}">${proHand ? PRO_HAND_SVG : HAND_SVG}</div>`,
         );
       } else {
         // FFX-2's field reticle: a rotating six-petal flower wrapping the
@@ -422,15 +442,15 @@ export class TargetCursor {
         // marks, wholly inside the frame and touching nothing else, so the
         // ring follows the figure up to a third of the shorter screen edge and
         // no further. FFX-2 only — FFX docks the hand instead.
-        const viewMin =
-          typeof window === 'undefined' ? 1080 : Math.min(window.innerWidth, window.innerHeight);
-        const r = Math.min(Math.max(rect.w, rect.h) * 0.56, viewMin * 0.34);
+        const r = proRingGeom ? proRingGeom.r : Math.min(Math.max(rect.w, rect.h) * 0.56, viewMin * 0.34);
+        const fcx = proRingGeom ? proRingGeom.cx : rect.x + rect.w / 2;
+        const fcy = proRingGeom ? proRingGeom.cy : rect.y + rect.h / 2;
         parts.push(
-          `<div class="ffx-target__flower" style="left:${px(rect.x + rect.w / 2)};top:${px(rect.y + rect.h / 2)};width:${px(r * 2)};height:${px(r * 2)}">${FLOWER_SVG}</div>`,
+          `<div class="ffx-target__flower" style="left:${px(fcx)};top:${px(fcy)};width:${px(r * 2)};height:${px(r * 2)}">${proRingGeom ? PRO_FLOWER_SVG : FLOWER_SVG}</div>`,
         );
       }
 
-      parts.push(this.plateHtml(entry, rect));
+      parts.push(this.plateHtml(entry, proRingGeom ? proRingBox(proRingGeom) : rect, proHand, proRingGeom !== null));
     });
 
     const parts = chunks.sort((a, b) => a.rank - b.rank).flatMap((c) => c.html);
@@ -445,27 +465,46 @@ export class TargetCursor {
   }
 
   /** The ink name plate: name, letter tag, optional note, docked clear of the HUD. */
-  private plateHtml(entry: TargetEntry, rect: TargetRect): string {
+  private plateHtml(entry: TargetEntry, rect: TargetRect, proHand: { w: number; h: number } | null = null, ringed = false): string {
     const tag = entry.tag
       ? `<span class="ffx-target__tag">${escapeHtml(entry.tag)}</span>`
       : '';
     const note = noteHtml(entry.note); // status display O3: Zombie and Doom as red tags
-    const dock = this.dockFor(entry, rect);
+    // pro FFX: the name hangs off the glove (the plate docks under the glove's own box), not under the whole figure
+    const anchor = proHand ? handBox(rect, this.handGap(), proHand) : rect;
+    const dock = this.dockFor(entry, anchor, proHand, ringed);
+    // pro (both games): the flag reads "TARGET", the name, and the command's damage line under it; the top TARGET plates of both HUDs stand aside while the piece is on
+    const flag = proHand !== null || ringed;
+    const help = flag ? proHelpLine(this.helpLine) : '';
+    // pro FFX-2: the name rides beside the ring on a thin leader line (when it docks left or right of the ring)
+    const ringRight = rect.x + rect.w;
+    const leader =
+      ringed && dock.side === 'right'
+        ? `<div class="ffx-target__leader" style="left:${px(ringRight)};top:${px(rect.y + rect.h / 2)};width:${px(Math.max(8, dock.x + 6 - ringRight))}"></div>`
+        : ringed && dock.side === 'left'
+          ? `<div class="ffx-target__leader ffx-target__leader--left" style="left:${px(dock.x - 6)};top:${px(rect.y + rect.h / 2)};width:${px(Math.max(8, rect.x - (dock.x - 6)))}"></div>`
+          : '';
     return (
+      leader +
       `<div class="ffx-target__plate ffx-target__plate--${entry.kind} ffx-target__plate--${dock.side}" ` +
       `style="left:${px(dock.x)};top:${px(dock.y)}">` +
-      `<span class="ffx-target__name">${escapeHtml(entry.name)}</span>${tag}${note}` +
+      (flag
+        ? `<span class="ffx-target__lbl">TARGET</span><span class="ffx-target__line"><span class="ffx-target__name">${escapeHtml(entry.name)}</span>${tag}${note}</span>` + (help ? `<span class="ffx-target__help">${escapeHtml(help)}</span>` : '')
+        : `<span class="ffx-target__name">${escapeHtml(entry.name)}</span>${tag}${note}`) +
       '</div>'
     );
   }
 
   /** Where the plate docks, clear of the HUD's panels when a side allows (`dockPlate`). */
-  private dockFor(entry: TargetEntry, rect: TargetRect): { side: PlateDock; x: number; y: number } {
+  private dockFor(entry: TargetEntry, rect: TargetRect, proHand: { w: number; h: number } | null = null, ringed = false): { side: PlateDock; x: number; y: number } {
     // A rough plate box: ~10px per glyph plus the tag chip and the padding.
-    const w = Math.max(64, entry.name.length * 10 + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 6 : 0));
+    const flag = proHand !== null || ringed;
+    const glyph = flag ? clamp((typeof window === 'undefined' ? 1600 : window.innerWidth) * 0.0145, 22, 38) * 0.5 : 10; // the pro flag's name is set bigger (pro-markers.css)
+    const w = Math.max(flag ? 150 : 64, entry.name.length * glyph + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 6 : 0));
     // FFX's hand is a thing on the field too (r37-ui-floor): the plate docks off it as off any panel.
-    const hand = this.chrome === 'ffx' ? [handBox(rect, this.handGap())] : [];
-    return dockPlate(rect, w, 34, hand.length ? [...this.panels, ...hand] : this.panels);
+    const hand = this.chrome === 'ffx' ? [handBox(rect, this.handGap(), proHand ?? undefined)] : [];
+    const h = flag ? 78 : 34; // the pro flag is three lines tall (TARGET, the name, the damage line)
+    return dockPlate(rect, w, h, hand.length ? [...this.panels, ...hand] : this.panels, ringed ? ['right', 'left', 'below', 'above'] : undefined); // pro FFX-2: beside the ring first
   }
 
   /** How far the hand cursor is docked clear of the silhouette at this window width. */

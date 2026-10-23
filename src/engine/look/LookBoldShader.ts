@@ -41,6 +41,9 @@ export const LookBoldShader = {
     uDepth: { value: null as unknown },
     depthOn: { value: 0 },
     uHomo: { value: new Matrix3() },
+    /** The pro Chapter IV floor-step blur (lane pro-look, `look/pro/ProSeam.ts`): the painting's map the other way (painting uv to frame uv); x, y the two floor steps (painting v; 0 = none), z the blur's half width (frame uv), w its amount (0 = skipped). */
+    uHomoInv: { value: new Matrix3() },
+    uSeamF: { value: new Vector4(0, 0, 0.02, 0) },
     /** Far fog: density, where the far end starts. Height fog: density, how far it climbs, how much reaches a figure's feet. */
     depthFog: { value: new Vector2(0.5, 0.2) },
     heightFog: { value: new Vector3(0.5, 0.34, 0.25) },
@@ -92,6 +95,8 @@ export const LookBoldShader = {
     uniform sampler2D uDepth;
     uniform float depthOn;
     uniform mat3 uHomo;
+    uniform mat3 uHomoInv;
+    uniform vec4 uSeamF;
     uniform vec2 depthFog;
     uniform vec3 heightFog;
     uniform vec3 fogColor;
@@ -141,6 +146,32 @@ ${LIVING_GLSL_FUNCS}
 ${LIVING_GLSL_TOP}      float fig = 1.0 - clamp(src.a, 0.0, 1.0);
       vec3 col = src.rgb;
       float lum0 = luma3(col);
+
+      // ---- 0. the Chapter IV floor steps (lane pro-look, FFX-2's Bevelle plate only; look/pro/ProSeam.ts): the polished floor has two horizontal steps; a short vertical blur across each makes it read as one
+      //         surface. Their rows are the plate's own v, read through the painting's map (uHomo, uHomoInv), so they follow the camera. A figure stays sharp (the frame's alpha). Zero amount skips it.
+      if (uSeamF.w > 0.0 && fig < 0.5) {
+        vec3 hq = uHomo * vec3(uv, 1.0);
+        vec2 q = hq.xy / hq.z;
+        float dyl = 1e3;
+        if (uSeamF.x > 0.0) dyl = min(dyl, abs(q.y - uSeamF.x));
+        if (uSeamF.y > 0.0) dyl = min(dyl, abs(q.y - uSeamF.y));
+        vec3 hy = uHomoInv * vec3(q.x, q.y + 0.01, 1.0);
+        float wgt = clamp(1.0 - dyl * length(hy.xy / hy.z - uv) * 100.0 / uSeamF.z, 0.0, 1.0) * uSeamF.w;
+        if (wgt > 0.001) {
+          vec3 acc = col;
+          float n = 1.0;
+          for (int k = 1; k <= 4; k++) {
+            float o = float(k) * uSeamF.z * 0.42;
+            vec4 a1 = texelAt(uv + vec2(0.0, o));
+            vec4 a2 = texelAt(uv - vec2(0.0, o));
+            float w1 = a1.a > 0.5 ? 1.0 : 0.0;
+            float w2 = a2.a > 0.5 ? 1.0 : 0.0;
+            acc += a1.rgb * w1 + a2.rgb * w2;
+            n += w1 + w2;
+          }
+          col = mix(col, acc / n, wgt);
+        }
+      }
 
       // ---- 1. fog: far (from the depth map) and low (thickening toward the floor), over the backdrop; a trace of mist at a figure's feet
       {

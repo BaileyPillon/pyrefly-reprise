@@ -17,11 +17,19 @@ import { BUFF_END, BUFF_MARK, DISPEL_MARK, dispel, haste, protect, reflect, shel
 import { COLUMN_STAGGER, CURE_END, CURE_MARK, cureColumn, cureWhiteMage } from './effects-painted-cure.ts';
 import { fireNew, iceNew, thunderNew } from './effects-painted-elements.ts';
 import { HIT_END, HIT_MARK, HIT_START, hitWeapon } from './effects-painted-hit.ts';
+import { INK_HIT_END, hitInk } from './effects-pro-hit.ts';
+import { proPieceOn } from '../look/pro/ProSwitch.ts';
 import type { FxTarget } from './effects-shared.ts';
 import { BOSS_SPECS } from './SpellFxFreshBoss.ts';
 import { SPELL_HOLD_CAP_MS } from './SpellFxSpecials.ts';
 import type { FxSpec, FreshFxId } from './SpellFxTimeline.ts';
 import type { FxGame } from './SpellFxRegistry.ts';
+
+/** The physical hit: the fx lane's per-weapon sparks, or (lane pro-look, the pro look's `hits` piece on in a demo chapter) "Ink and light" (`effects-pro-hit.ts`). */
+function hitFresh(o: FxDrawList, t: number, T: FxTarget): void {
+  if (proPieceOn('hits')) hitInk(o, t, T);
+  else hitWeapon(o, t, T);
+}
 
 /** Cure: FFX's column (and its small item forms), FFX-2's neutral painted Cure. */
 function cureFresh(o: FxDrawList, t: number, T: FxTarget): void {
@@ -41,7 +49,17 @@ export const FRESH_SPECS: Readonly<Partial<Record<FreshFxId, FxSpec>>> = Object.
     holdCapMs: SPELL_HOLD_CAP_MS,
     staggerFor: (g: FxGame) => (g === 'ffx' ? COLUMN_STAGGER : 0),
   },
-  hit: { draw: hitWeapon, marks: () => [HIT_MARK], end: HIT_END, startAt: HIT_START, perHit: true, holdCapMs: SPELL_HOLD_CAP_MS },
+  hit: {
+    draw: hitFresh,
+    marks: () => [HIT_MARK],
+    // the ink lingers to 720 ms after contact; with the pro piece off the end is the fx lane's own
+    get end(): number {
+      return proPieceOn('hits') ? INK_HIT_END : HIT_END;
+    },
+    startAt: HIT_START,
+    perHit: true,
+    holdCapMs: SPELL_HOLD_CAP_MS,
+  },
   fire: { draw: fireNew, marks: () => [0.5], end: 2.35, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
   ice: { draw: iceNew, marks: () => [0.5], end: 2.8, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },
   thunder: { draw: thunderNew, marks: () => [0.42], end: 1.65, startAt: 0, perHit: false, holdCapMs: SPELL_HOLD_CAP_MS },

@@ -1,4 +1,5 @@
 import '../inkgold/index.ts';
+import { ProFieldMarks } from '../common/ProFieldMarks.ts'; // lane pro-look: the KO wash and mark on the field
 // `theme.css` defines every `--x2-*` token on `:root` and, until this line, was
 // imported by `PartyPrep.ts` **and nothing else** — so a battle entered with
 // `skipPrep` (every automated capture, and the chapter flow's own fast path)
@@ -204,6 +205,8 @@ export class FFX2BattleHud implements HudPort {
    */
   private readonly revealed = new Set<CombatantId>();
   private readonly damage = new DamageLayer();
+  /** Lane pro-look: the KO wash and mark on the field (`ui/common/ProFieldMarks.ts`); draws nothing unless the pro look's `markers` piece is on. */
+  private readonly proMarks = new ProFieldMarks('ffx2');
   /** PR-0150: the s3 tile's TARGET plate, actor plate and controls hint (`TargetPlates.ts`). FFX-2 only. */
   private readonly plates = new TargetPlates();
   /** D-044 Node C: Vegnagun's overhead Nodes marked at the top edge (`nodeEdgeMarkers.ts`). FFX-2 only. */
@@ -434,6 +437,7 @@ export class FFX2BattleHud implements HudPort {
     // Numerals live on the unscaled overlay, not the 640x360 stage: positions come from the presenter's projector
     // in real px, §3.6's grid glyph sizes multiplied back up by the letterbox scale `layout()` gives the stage.
     this.damage.mount(this.overlay, { host: this.el, scale: () => this.stageScale });
+    this.overlay.appendChild(this.proMarks.el);
     // Into the scaled stage: the rail letterboxes with the chrome, anchors on the same 640x360 grid.
     this.guide.mount(this.stage);
     this.advisor.mount(this.stage);
@@ -466,6 +470,8 @@ export class FFX2BattleHud implements HudPort {
     window.clearTimeout(this.telegraphHideTimer);
     window.clearTimeout(this.damageFlashTimer);
     this.damage.unmount();
+    this.proMarks.clear();
+    this.proMarks.el.remove();
     this.guide.unmount();
     this.advisor.unmount();
     this.intent.unmount();
@@ -490,6 +496,7 @@ export class FFX2BattleHud implements HudPort {
     this.layoutPlates();
     this.nodeMarks.update();
     this.damage.update(dt);
+    this.proMarks.update(dt);
     this.nameSlab.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
@@ -857,6 +864,7 @@ export class FFX2BattleHud implements HudPort {
     // ...and no command menu, reticle or banner either: `onEvent` swept at the last blow; an escape arrives only here.
     if (over) this.endOfFight();
     this.lastState = state;
+    this.proMarks.sync(state); // lane pro-look: who is down
     this.queued.sync(state);
     this.guide.sync(state);
     this.advisor.sync(state);
@@ -1095,6 +1103,7 @@ export class FFX2BattleHud implements HudPort {
   ): void {
     this.project = project;
     this.damage.setProjector(project);
+    this.proMarks.setProjector(project);
   }
 
   /** fb2-0929 camera comfort: the guide rail and the advisor lane are fenced where the girls rest, not mid-move. */
