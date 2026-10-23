@@ -91,7 +91,7 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     const g = sceneOf('seymour-flux');
     const b = sceneOf('ffx2-bahamut');
     expect(calls).toEqual([`paintings seymour-flux`, `build ${g}`, `hide ${g}`, 'look', `plates ${g}`, `compile ${g}`, `draw ${g}`, `paintings ffx2-bahamut`, `build ${b}`, `hide ${b}`, 'look', `plates ${b}`, `compile ${b}`, `draw ${b}`]);
-    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: depth plates cut ahead', 'seymour-flux: stage built, compiled and drawn offscreen', 'ffx2-bahamut: paintings', 'ffx2-bahamut: depth plates cut ahead', 'ffx2-bahamut: stage built, compiled and drawn offscreen']);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: depth plates cut ahead', 'seymour-flux: stage built, compiled and drawn offscreen', 'ffx2-bahamut: paintings', 'ffx2-bahamut: depth plates cut ahead', 'ffx2-bahamut: stage built, compiled and drawn offscreen', 'breath rigs read ahead']); // perf-trim: the last step reads every cached painting's breathing field (nothing is cached in this test: the note alone)
   });
 
   it('the plates are cut while the programs compile, and a cut that fails does not stop the stage (the battle then cuts them itself, as before)', async () => {
@@ -100,14 +100,14 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     await run(app('title'), ['seymour-flux']);
     const g = sceneOf('seymour-flux');
     expect(calls).toEqual([`paintings seymour-flux`, `build ${g}`, `hide ${g}`, 'look', `compile ${g}`, `draw ${g}`]);
-    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen']);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen', 'breath rigs read ahead']);
   });
 
   it('a room option B does not dress cuts nothing, and the stage is still built', async () => {
     const living = await import('../../src/engine/fx/b/LivingPaintings.ts');
     vi.mocked(living.warmLivingPlates).mockResolvedValueOnce(false);
     await run(app('title'), ['seymour-flux']);
-    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen']);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen', 'breath rigs read ahead']);
   });
 
   it('works behind the picker too, and behind nothing else', async () => {

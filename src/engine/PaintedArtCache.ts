@@ -113,6 +113,16 @@ export function cachedPainting(
   return made;
 }
 
+/** Every painting the cache holds, once it has loaded (a miss is skipped): for work that wants the decoded pictures ahead of the fight (`app/demo/demoWarm.ts`). */
+export async function preparedPaintings(): Promise<PreparedPainting[]> {
+  const out: PreparedPainting[] = [];
+  for (const held of [...cache.values()]) {
+    const p = await held;
+    if (p) out.push(p);
+  }
+  return out;
+}
+
 /** True when `key` has been asked for and not evicted (it may still be loading). */
 export function hasPainting(key: string): boolean {
   return cache.has(key);

@@ -42,3 +42,14 @@ export function proSoftLook(own: LookBlur, shot: ProBand | null): LookBlur {
   const k = 1 + (shot.blur / SCENE_BLUR - 1) * w;
   return { focus: lerp(own.focus, shot.focus, w), band: lerp(own.band, shot.width, w), far: own.far * k, near: own.near * k };
 }
+
+/** The shot's soft background scaled by the frame-budget governor's lever (`governor/FrameBudget.ts`, level 1 takes it away): the shot itself at 1 (the same object: nothing changes), none at 0, else the shot with its weight times `k`, written into `out`. */
+export function softScaled(shot: ProBand | null, k: number, out: { focus: number; width: number; blur: number; weight: number }): ProBand | null {
+  if (!shot || k >= 1) return shot;
+  if (k <= 0.001) return null;
+  out.focus = shot.focus;
+  out.width = shot.width;
+  out.blur = shot.blur;
+  out.weight = shot.weight * k;
+  return out;
+}

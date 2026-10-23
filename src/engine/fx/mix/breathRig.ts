@@ -115,6 +115,13 @@ function readAlpha(img: CanvasImageSource): Float32Array | null {
 }
 
 const cache = new Map<string, BreathRig>();
+/**
+ * Perf-trim (2026-10-23): the same rig by the PICTURE a texture was made from, not by the texture: a painting's alpha field is the same every battle, and each battle makes new textures from the
+ * cached pictures (`PaintedArtCache`), so a rig read once is found again for every texture of the picture, in this fight and the next, and the demo's warm-up (`prewarmBreathRig`) can read them all
+ * behind the title instead of at each pose's first sight in the fight (a readback of a GPU-held bitmap waits for the GPU queue: 45 to 100 ms of main-thread stop per new pose, measured with the
+ * pro lanes on). A rig's texture may be disposed with the battle (`releaseBreathRigs`); three uploads it again on its next use.
+ */
+const byImage = new WeakMap<object, BreathRig>();
 /** Textures whose alpha is being read off the main thread now (R61): the flat rig stands in until it lands. */
 const pending = new Set<string>();
 /** Bumped when a battle ends, so a read that lands after it is dropped. */
@@ -162,6 +169,11 @@ export function breathRigFor(tex: Texture): BreathRig {
   if (hit) return hit;
   const img = tex.image as (CanvasImageSource & { width?: number }) | null | undefined;
   if (!img || !img.width) return flatBreathRig(); // not decoded yet: ask again next frame
+  const known = byImage.get(img as object);
+  if (known) {
+    cache.set(tex.uuid, known); // the picture was read before (another battle, or the warm-up): no read
+    return known;
+  }
   if (pending.has(tex.uuid) || gpuSyncHeld()) return flatBreathRig(); // while the GPU is still building the field (`GpuSettle.ts`) a readback would stop the page until it is done: ask again next frame
   if (typeof createImageBitmap === 'function') {
     const id = tex.uuid;
@@ -170,13 +182,23 @@ export function breathRigFor(tex: Texture): BreathRig {
     void readAlphaAsync(img).then((alpha) => {
       pending.delete(id);
       if (mine !== epoch) return; // the battle ended while it was being read
-      cache.set(id, makeRig(alpha));
+      const rig = makeRig(alpha);
+      cache.set(id, rig);
+      byImage.set(img as object, rig);
     });
     return flatBreathRig();
   }
   const rig = makeRig(readAlpha(img));
   cache.set(tex.uuid, rig);
+  byImage.set(img as object, rig);
   return rig;
+}
+
+/** Read a picture's alpha field now, off the fight (the demo's warm-up, behind the title): the textures made from it find the rig ready. A browser without `createImageBitmap` takes the synchronous read. */
+export async function prewarmBreathRig(img: CanvasImageSource & { width?: number }): Promise<void> {
+  if (!img || !img.width || byImage.has(img as object)) return;
+  const alpha = typeof createImageBitmap === 'function' ? await readAlphaAsync(img) : readAlpha(img);
+  if (!byImage.has(img as object)) byImage.set(img as object, makeRig(alpha));
 }
 
 /** Forget the cache (a battle ended; the rig textures go with it). */
@@ -185,4 +207,9 @@ export function releaseBreathRigs(): void {
   pending.clear();
   for (const r of cache.values()) if (r.source === 'runtime') r.map.dispose();
   cache.clear();
+}
+
+/** Has the rig of this picture been read (for the checks: the warm-up's reach)? */
+export function hasBreathRig(img: object): boolean {
+  return byImage.has(img);
 }

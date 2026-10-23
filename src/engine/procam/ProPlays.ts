@@ -10,7 +10,7 @@ import type { ActorHandle, BattleStage } from '../BattlePresenterPorts.ts';
 import type { ActionShot, ImpactShot } from '../ShotDirector.ts';
 import { ATTACK_FFX, ATTACK_FFX2, attackRun } from './ProAttack.ts';
 import { castShotChoice } from './ProCamSwitch.ts';
-import { LAUNCH_CLOSER, centreOf, characterOf, closerKeys, finisherKeys, keyRun, laidShot, lowLaunchKeys, megaFlareRun, pickRow, rowsOf, specialRun } from './ProShots.ts';
+import { LAUNCH_CLOSER, aeonVictoryRun, centreOf, characterOf, closerKeys, finisherKeys, keyRun, laidShot, lowLaunchKeys, megaFlareRun, pickRow, rowsOf, specialRun } from './ProShots.ts';
 import type { Key, LiveSpot } from './ProTrack.ts';
 import type { ProRun, V3 } from './ProTypes.ts';
 
@@ -179,8 +179,21 @@ export const VICTORY_AT = { x: -0.28, y: 0.2 } as const;
 /** The party members who stand with the one the victory close-up is about: within this many metres of him (the whole party, as the pick keeps "both heroes whole"). */
 const VICTORY_COMPANY_M = 4.5;
 
-/** The victory (FFX): the real close-up of `id`, the last party member to act, with whoever stands beside him kept whole. */
-export function victoryPlay(env: PlayEnv, id: CombatantId, t: Timing): Play | null {
+/** An aeon's victory frame (OURS): the aeon whole, standing left of the middle so the title and the party plates stay clear: half-extents of the box it fits inside and where its middle stands (NDC). */
+export const AEON_VICTORY_SAFE = { x: 0.46, y: 0.78 } as const;
+export const AEON_VICTORY_AT = { x: -0.26, y: 0.02 } as const;
+
+/** The victory of an aeon that landed the last blow (FFX, Chapter I; OURS, labelled so in the log): see {@link aeonVictoryRun}. Null when the aeon is not on the stage. */
+export function aeonVictoryPlay(env: PlayEnv, id: CombatantId, t: Timing): Play | null {
+  const a = env.stage.actor(id);
+  if (!a) return null;
+  const run = aeonVictoryRun(`victory.aeon.${id}`, feet(a), heightOf(a), { still: env.still, fit: { ids: [id], safe: AEON_VICTORY_SAFE, to: AEON_VICTORY_AT, maxK: 3 }, focus: env.fo([id]) });
+  return { run: { ...run, rate: held(env, t) }, kind: 'cast', what: `${run.id} [ours: the sources give no aeon victory shot]` };
+}
+
+/** The victory (FFX): the real close-up of `id`, the last party member to act, with whoever stands beside him kept whole; an aeon that struck last is framed whole instead ({@link aeonVictoryPlay}). */
+export function victoryPlay(env: PlayEnv, id: CombatantId, t: Timing, aeon = false): Play | null {
+  if (aeon) return aeonVictoryPlay(env, id, t);
   const char = characterOf(env.stage.artOf?.(id), id);
   const row = pickRow(rowsOf(`victory.${char}`), castShotChoice() === 'random' ? 'random' : 0, env.dice());
   const spot = env.spot(id, env.bossOf(id));

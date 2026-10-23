@@ -9,6 +9,7 @@
 import type { FxDrawList } from './FxDrawList.ts';
 import { bossFxFor, pieceOfFx } from './BossFx.ts';
 import { FxPerfGuard, fxShare } from './FxPerfGuard.ts';
+import { govLive } from '../governor/GovernorLive.ts';
 import { fxNewOn, fxPieceOn } from './FxSwitch.ts';
 import type { LandOpts } from './LandOpts.ts';
 import { resolveAbilityFx } from './SpellFxLookup.ts';
@@ -95,7 +96,7 @@ export class CopySeeds {
 
 /** Configure the frame's list for one running copy: the painted finish, the guard's share of particles and trails (the phone tier's 0.6 on the trails), the copy's inputs and its seed. */
 export function configureList(out: FxDrawList, r: RunningFx, share: { particles: number; trails: number }, tier: number, seed: number): void {
-  out.dens = r.fresh ? r.dens * share.particles : r.dens;
+  out.dens = r.fresh ? r.dens * Math.min(share.particles, govLive.particles) : r.dens; // the frame-budget governor's second level halves the particles; the effects guard's own thinning does not stack with it (the lesser share wins; 1 at rest: the same number)
   out.paint = r.fresh ? 1 : 0;
   out.trailK = r.fresh ? tier * share.trails : 1;
   out.variant = r.variant;
@@ -127,7 +128,7 @@ export class FreshWatch {
     this.lastAt = now;
     if (dt <= 0) return;
     this.guard.frame(dt, busy);
-    fxShare.particles = this.guard.share.particles;
+    fxShare.particles = Math.min(this.guard.share.particles, govLive.particles);
     fxShare.trails = this.guard.share.trails;
     if (this.guard.scaleStep !== this.applied) {
       this.applied = this.guard.scaleStep;

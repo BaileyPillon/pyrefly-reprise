@@ -55,6 +55,8 @@ export class ProDirector implements ShotDirector, PlayEnv {
   /** The run the director started and still owns (it takes the blow's contact beat). */
   private curRun: ProRun | null = null;
   private lastParty: CombatantId | null = null;
+  /** The combatants that acted as an aeon this fight: the victory frames one that struck last whole (`aeonVictoryPlay`). */
+  private readonly aeons = new Set<CombatantId>();
   private launched = false;
   private follower: ProFollower | null = null;
   private followerPort: ProCamPort | null = null;
@@ -159,7 +161,8 @@ export class ProDirector implements ShotDirector, PlayEnv {
     this.ownerRank = rank;
     this.ownerKind = play.kind;
     this.runs++;
-    this.note('begin', `${play.run.id} (${play.kind}) for ${who}`);
+    const ours = play.what?.match(/\[ours[^\]]*\]/)?.[0]; // a shot the sources do not give says so in the log
+    this.note('begin', `${play.run.id} (${play.kind}) for ${who}${ours ? ` ${ours}` : ''}`);
   }
 
   /** The first blow's shot replaces whatever plays (a cut or a blend by its own `inMs`); the action stays the owner. */
@@ -218,6 +221,7 @@ export class ProDirector implements ShotDirector, PlayEnv {
     this.ownerRank = 0;
     this.launched = false;
     this.lastParty = null;
+    this.aeons.clear();
     return false; // the opening, the reveal and the name plate are the game's
   }
 
@@ -236,6 +240,7 @@ export class ProDirector implements ShotDirector, PlayEnv {
     this.ensureFollower(port);
     const { actor, targets, action } = ctx;
     if (actor.side === 'party' || actor.side === 'aeon') this.lastParty = actor.id;
+    if (actor.side === 'aeon') this.aeons.add(actor.id);
     this.launched = false;
     const t = this.timing(ctx);
     const ability = action.abilityId ?? '';
@@ -312,7 +317,7 @@ export class ProDirector implements ShotDirector, PlayEnv {
       return false;
     }
     const id = this.lastParty ?? this.stage.staged().find((i) => this.stage.sideOf(i) === 'party');
-    const play = id === undefined ? null : victoryPlay(this, id, this.timing(ctx));
+    const play = id === undefined ? null : victoryPlay(this, id, this.timing(ctx), this.aeons.has(id));
     if (!play || id === undefined) return false;
     this.end(port, undefined, 0);
     this.begin(port, play, id);

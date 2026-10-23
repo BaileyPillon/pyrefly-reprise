@@ -49,6 +49,8 @@ export class CrispRig {
   private simulated = 0;
   /** A multiplier on the rung's supersample, 1 = none (motion pass, lane "fx": the new spell effects' frame-time guard asks for 0.9, then 0.8, while they are heavy; `setScaleCut`). */
   private scaleCut = 1;
+  /** The frame-budget governor's own multiplier on the supersample (lane "perf-trim", `governor/FrameBudget.ts` level 3), 1 = none; it multiplies with the effects guard's cut, never replaces it. */
+  private govCut = 1;
   private lastScene: Scene | null = null;
   /** The renderer's own AA as the address or the budget left it: what a rung that does not name one gets. */
   private readonly baseAa: AaMode;
@@ -113,7 +115,7 @@ export class CrispRig {
     let supersampled = c.ss > 1.001;
     if (supersampled) {
       ss.setRing(c.ssRing);
-      ss.setScale(Math.max(Math.min(c.ss, 1.05), c.ss * this.scaleCut), this.gl.capabilities.maxTextureSize); // the guard's cut never takes a rung below 1.05 (an address override under that is kept as it is)
+      ss.setScale(Math.max(Math.min(c.ss, 1.05), c.ss * this.scaleCut * this.govCut), this.gl.capabilities.maxTextureSize); // the guard's cut never takes a rung below 1.05 (an address override under that is kept as it is)
       if (ss.effective <= 1.001) {
         // The buffer is too big for a supersample worth drawing (an 8K window; a GPU with a small texture limit): draw today's frame, with its one AA pass,
         // rather than a frame that has neither the supersample nor an anti-aliasing pass (`aaPre` is off on the supersampled rungs).
@@ -157,6 +159,12 @@ export class CrispRig {
    */
   setScaleCut(factor: number): void {
     this.scaleCut = Number.isFinite(factor) ? Math.min(1, Math.max(0.5, factor)) : 1;
+  }
+
+  /** The frame-budget governor's multiplier on the supersample: 0.8 at its third level, 1 otherwise. A change resizes two render targets once (a hitch), so the governor asks only on a level change, and it stays inside the 1.05 floor like the effects guard's cut. */
+  setGovernorCut(factor: number): void {
+    const f = Number.isFinite(factor) ? Math.min(1, Math.max(0.5, factor)) : 1;
+    if (f !== this.govCut) this.govCut = f;
   }
 
   /** The drawing buffer changed size: the class may have changed with the window, and the cost changed with the size, so the governor starts a fresh window. */
