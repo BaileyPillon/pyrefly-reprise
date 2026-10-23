@@ -158,6 +158,16 @@ describe('the pro arena grade: the book regrade.colour() ported to the look LUT'
     }
   });
 
+  it('each arena has its one light: Chapter I follows the painted moon, Chapter IV is anchored to the painted skylight (so it follows the camera)', () => {
+    expect(PRO_ARENA['gagazet']!.cone!.follow).toBe(true);
+    const sky = PRO_ARENA['bevelle-underground']!.cone!;
+    expect(sky.paint).toBeDefined();
+    expect(sky.paint!.u).toBeGreaterThan(0.4);
+    expect(sky.paint!.u).toBeLessThan(0.6);
+    expect(sky.paint!.v).toBeLessThan(0.15); // the top of the plate
+    for (const r of Object.values(PRO_ARENA)) expect(r.cone!.strength).toBeGreaterThan(0);
+  });
+
   it('both demo rooms have a pro table, other rooms do not', () => {
     expect(proRoom('gagazet')).toBeDefined();
     expect(proRoom('bevelle-underground')).toBeDefined();

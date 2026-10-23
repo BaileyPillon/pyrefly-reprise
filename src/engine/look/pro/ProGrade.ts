@@ -153,6 +153,8 @@ export interface ProCone {
   v: number;
   /** The cone follows the room's light (the painted moon or skylight, through the camera) instead of a fixed frame point. */
   follow: boolean;
+  /** A point of the PAINTING (u from the left, v from the top, 0..1) the cone is anchored to and follows through the camera (the Bevelle skylight); unset: `follow` or the fixed frame point. */
+  paint?: { u: number; v: number };
   colour: Rgb;
   strength: number;
   /** Half-angle in radians-ish (the exponent's width), reach in frame heights, how beam-like (0 smooth .. 1 beams). */
@@ -219,7 +221,8 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     haze: { colour: [0.2, 0.3, 0.55], amounts: [0.06, 0.05, 0.02], side: 0.1 },
     vignette: { amount: 0.5, radius: 0.42, tint: [0.0, 0.005, 0.03] },
     grain: 0.018,
-    cone: { u: 0.515, v: 0.98, follow: false, colour: [0.7, 0.88, 1.0], strength: 0.95, spread: 0.36, reach: 2.2, rays: 0.35 },
+    // the skylight, found on the painting (plate u 0.53, v 0.036 from the top) so the cone follows the camera; (u, v) is the frame point it started from (the first menu's)
+    cone: { u: 0.515, v: 0.98, follow: false, paint: { u: 0.53, v: 0.036 }, colour: [0.7, 0.88, 1.0], strength: 0.95, spread: 0.36, reach: 2.2, rays: 0.35 },
   },
 };
 

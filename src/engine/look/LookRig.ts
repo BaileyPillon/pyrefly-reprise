@@ -59,6 +59,7 @@ export class LookRig {
   private lastNow = 0;
   /** Lane pro-look: the key of the pro room this rig last entered with ('' = none), so a live flip of the switch re-reads the room's light. */
   private proKey = '';
+  private readonly coneUv = new Vector2();
   private readonly buf = new Vector2();
   /** For the debug API and the captures. */
   readonly stats = { look: null as LookName | null, quality: 'high' as LookQuality, room: '', light: [0, 0] as [number, number], lightFrom: 'default', blur: false, passes: [] as string[], relight: { any: false, bound: 0, loaded: 0, missing: 0, lights: [] as Array<{ u: number; v: number; s: number }> }, strength: 'subtle' as string, bold: null as LookBold['stats'] | null, drift: null as LookDrift['stats'] | null, stage: null as LookStage['stats'] | null, living: null as LookBold['living']['stats'] | null, flare: null as LookBold['flare']['stats'] | null };
@@ -341,7 +342,7 @@ export class LookRig {
       this.bold ??= new LookBold(r);
       this.bold.update({ scene: this.room.scene!, camera, name, room: this.room, lights: this.lights, quality: lookState.quality, dt, now, time: eyeCandy.frozen ? 0.5 : this.clock, scale, W, H, aspect: W / Math.max(1, H), lightUv: [lightUv.x, lightUv.y], tweak: (k, d) => this.tw(k) ?? d, seam: proR && proPieceOn('seam') ? (proSeam(this.room.key) ?? null) : null });
     } else this.bold?.off();
-    this.proCone(proR, moon ? (u['shaftL']!.value as Vector2) : lightUv, W / Math.max(1, H)); // the cone follows the painted moon where the depth stage has one (Chapter I), else the room's found light
+    this.proCone(proR, moon ? (u['shaftL']!.value as Vector2) : lightUv, W / Math.max(1, H), camera); // the cone follows the painted moon where the depth stage has one (Chapter I), else the room's found light
     if (lookState.drift) this.drift.update(this.room.scene!, camera, this.room.painting, roomBold(this.room.key).driftPx ?? 3, dt, W, scale, lookState.commandOpen);
     else this.drift.release();
     if (this.stage.wanted(name, lookState.strength, this.room.key, lookState.tweaks)) this.stage.update({ scene: this.room.scene!, room: this.room, quality: lookState.quality, time: eyeCandy.frozen ? 0.5 : this.clock, tweak: (k, d) => this.tw(k) ?? d });
@@ -356,7 +357,7 @@ export class LookRig {
   }
 
   /** Lane pro-look: the arena's cone of light into the bold pass (`LookBoldShader` term 4c): the room's light (or a fixed frame point), the colour times the strength, the drift's clock. */
-  private proCone(pr: ProRoom | undefined, lightUv: Vector2, aspect: number): void {
+  private proCone(pr: ProRoom | undefined, lightUv: Vector2, aspect: number, camera: Camera): void {
     const u = this.r.gradePass.uniforms;
     const c = pr?.cone;
     if (!c) {
@@ -364,7 +365,14 @@ export class LookRig {
       return;
     }
     const k = lookState.tweaks['cone'] ?? 1;
-    (u['uCone']!.value as Vector4).set(c.follow ? lightUv.x : c.u, c.follow ? lightUv.y : c.v, c.spread, c.reach);
+    let cu = c.follow ? lightUv.x : c.u;
+    let cv = c.follow ? lightUv.y : c.v;
+    if (c.paint) {
+      this.room.projectLight(camera, this.coneUv, c.paint); // anchored to the painting: it moves with the camera
+      cu = this.coneUv.x;
+      cv = this.coneUv.y;
+    }
+    (u['uCone']!.value as Vector4).set(cu, cv, c.spread, c.reach);
     (u['uConeCol']!.value as Vector4).set(c.colour[0], c.colour[1], c.colour[2], c.strength * k);
     (u['uConeP']!.value as Vector3).set(c.rays, eyeCandy.frozen ? 0.5 : this.clock, aspect);
   }
