@@ -105,7 +105,8 @@ describe('the held breath\'s plan', () => {
   const marks = (over: Partial<BreathMarks> = {}): BreathMarks => ({ markAt: 0, tellAt: 1000, tellMs: 1200, blowAt: null, liftAt: null, game: 'ffx', flood: false, tame: false, ...over });
 
   it('a tell is the effect\'s own lead-in, inside bounds', () => {
-    expect(tellLength(1450)).toBe(TELL_MAX_MS);
+    expect(tellLength(1450)).toBe(1450); // Mega Flare's real lead-in (the effect's own 1.45 s) is the tell, all of it
+    expect(tellLength(2400)).toBe(TELL_MAX_MS);
     expect(tellLength(200)).toBe(TELL_MIN_MS);
     expect(tellLength(900)).toBe(900);
     expect(tellLength(Number.NaN)).toBe(TELL_MAX_MS);
@@ -172,12 +173,15 @@ describe('the held breath\'s plan', () => {
     expect(done.alive).toBe(false);
   });
 
-  it('FFX-2 with a command menu open as the tell begins (D-357): no wash, no flood, no HUD sink; the ring, the name and the core still play', () => {
+  it('FFX-2 with a command menu open as the tell begins (D-357): it plays restrained so the menu stays readable (the wash at 60 percent, the HUD only to half, the flood capped); the ring, the name and the core play in full', () => {
     const open = marks({ menu: true, game: 'ffx2', flood: true, blowAt: 2200 });
     const f = breathFrame(2300, open);
-    expect(f.drain).toBe(0);
-    expect(f.hud).toBe(1);
-    expect(f.flood).toBe(0);
+    expect(f.drain).toBeGreaterThan(0.4);
+    expect(f.drain).toBeLessThan(0.65);
+    expect(breathFrame(2200, marks({ menu: true })).hud).toBeCloseTo(0.5, 5);
+    expect(f.hud).toBeGreaterThan(0.45);
+    expect(f.flood).toBeGreaterThan(0.3);
+    expect(f.flood).toBeLessThanOrEqual(0.55);
     expect(breathFrame(2150, marks({ menu: true })).ring).toBeGreaterThan(0.9);
     expect(breathFrame(2150, marks({ menu: true })).name).toBeGreaterThan(0.9);
     expect(breathFrame(2150, marks({ menu: true })).core).toBeGreaterThan(0.9);

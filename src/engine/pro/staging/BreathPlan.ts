@@ -26,7 +26,7 @@ export interface BreathMarks {
   flood: boolean;
   /** REDUCE FLASHES: the flash is a glow at most and the flood is capped. */
   tame: boolean;
-  /** FFX-2: a command menu is open as the tell begins (D-357): no wash, no flood, no HUD sink; the name, the ring and the core still play. */
+  /** FFX-2: a command menu is open as the tell begins (D-357, "nothing plays over an open command menu"): the held breath then plays RESTRAINED, so the menu stays readable and can be worked: the wash at 60 percent, the HUD sinking only to half, the flood capped at 55 percent. */
   menu?: boolean;
   /** REDUCE MOTION: the ring does not travel (it fades in at its final size) and the motes do not drift (the view reads it); the light still changes. */
   calm?: boolean;
@@ -63,12 +63,16 @@ const easeOut = (x: number): number => 1 - Math.pow(1 - clamp01(x), 3);
 
 /** How far the HUD sinks: to a sixth of its strength. */
 export const HUD_SINK_TO = 1 / 6;
+/** With an FFX-2 command menu open (D-357) the breath plays restrained: the wash, the HUD's floor and the flood's cap. [ours] */
+export const MENU_WASH = 0.6;
+export const MENU_HUD_SINK_TO = 0.5;
+export const MENU_FLOOD_CAP = 0.55;
 /** The wash's strength at its fullest in a tell, and while the rounds land (the veil's own alpha is this times the colour's). */
 export const DRAIN_TELL = 1;
 export const DRAIN_HOLD = 0.92;
 /** The longest and the shortest a tell is allowed to be, ms: the effect's lead-in decides within these. */
 export const TELL_MIN_MS = 450;
-export const TELL_MAX_MS = 1300;
+export const TELL_MAX_MS = 1500;
 /** How long the lift takes, ms; the HUD comes back over the same time. */
 export const LIFT_MS = 700;
 /** The flood: rise, and how long it holds before it settles to the wash, ms. */
@@ -100,11 +104,11 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
   // the wash: drains over the first 62 percent of the tell, holds a hair under full through the rounds
   const drainIn = m.tellAt === null ? 0 : smooth(t / (0.62 * T));
   const drainHold = blown ? DRAIN_TELL - (DRAIN_TELL - DRAIN_HOLD) * smooth(sinceBlow / 400) : DRAIN_TELL;
-  const drain = m.menu === true ? 0 : drainIn * drainHold * keep;
+  const drain = drainIn * drainHold * keep * (m.menu === true ? MENU_WASH : 1);
 
   // the HUD sinks over the first 40 percent, comes back with the lift
   const sink = m.tellAt === null ? 0 : smooth(t / (0.4 * T));
-  const hud = m.menu === true ? 1 : 1 - (1 - HUD_SINK_TO) * sink * keep;
+  const hud = 1 - (1 - (m.menu === true ? MENU_HUD_SINK_TO : HUD_SINK_TO)) * sink * keep;
 
   // the ring appears from 18 percent, gathers inward to its final size by the end of the tell, pulses wider at the blow and fades
   const ringIn = m.tellAt === null ? 0 : smooth((t - 0.18 * T) / (0.3 * T));
@@ -122,8 +126,8 @@ export function breathFrame(now: number, m: BreathMarks): BreathFrame {
 
   // Mega Flare's flood: opens at the blow from the chest, holds, then settles into the wash
   let flood = 0;
-  if (m.flood && blown && m.menu !== true) {
-    const cap = m.tame ? 0.35 : 1;
+  if (m.flood && blown) {
+    const cap = Math.min(m.tame ? 0.35 : 1, m.menu === true ? MENU_FLOOD_CAP : 1);
     const rise = smooth(sinceBlow / FLOOD_RISE_MS);
     const fall = smooth((sinceBlow - FLOOD_RISE_MS - FLOOD_HOLD_MS) / FLOOD_FALL_MS);
     flood = cap * rise * (1 - 0.6 * fall) * keep;

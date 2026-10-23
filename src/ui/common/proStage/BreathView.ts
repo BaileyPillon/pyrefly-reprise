@@ -125,9 +125,9 @@ export class BreathView {
     if (f.flood > 0.002 && chest) {
       const R = Math.hypot(W, H) * (0.18 + 0.95 * ease(f.flood * 1.2));
       const fg = ctx.createRadialGradient(chest.x, chest.y, 0, chest.x, chest.y, R);
-      fg.addColorStop(0, `rgba(${pal.flood},${Math.min(0.94, f.flood * 0.98)})`);
-      fg.addColorStop(0.55, `rgba(${pal.floodEdge},${Math.min(0.82, f.flood * 0.82)})`); // the boss stays a ghost in it, never gone
-      fg.addColorStop(1, `rgba(${pal.floodEdge},${f.flood * 0.5})`);
+      fg.addColorStop(0, `rgba(${pal.flood},${Math.min(0.8, f.flood * 0.82)})`);
+      fg.addColorStop(0.55, `rgba(${pal.floodEdge},${Math.min(0.62, f.flood * 0.62)})`); // the boss stays a ghost in it, never gone
+      fg.addColorStop(1, `rgba(${pal.floodEdge},${f.flood * 0.4})`);
       ctx.fillStyle = fg;
       ctx.fillRect(0, 0, W, H);
     }
@@ -143,7 +143,7 @@ export class BreathView {
     for (const w of windows) this.pool(ctx, w, sx, sy, 0.5, 1);
     ctx.globalCompositeOperation = 'lighter';
     // a rim of light at the edge of the party's pools while the flood or the wash is up: the figures are lit by it
-    const rim = Math.max(f.flood * 0.5, f.drain * 0.18);
+    const rim = Math.max(f.flood * 0.3, f.drain * 0.14);
     if (rim > 0.01) {
       for (const r of g.party) {
         const w = windowOf(r, 1.04);

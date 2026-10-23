@@ -34,6 +34,7 @@ export interface ProStageOptions {
 const LOOK_TWEAKS: ReadonlyArray<{ name: string; mark?: number; tell: number; game?: DemoGame; move?: 'mega-flare' }> = [
   { name: 'bold.rim', mark: 1.7, tell: 2.4 }, // the figures' rim light: the boss wears a rim from the wind-up, and the party and the boss are lit by the same light the wash is made of
   { name: 'flare.white', tell: 0, game: 'ffx2', move: 'mega-flare' }, // Mega Flare's engine white-out would cover the party: the flood is this layer's, with a window around them
+  { name: 'flare.flood', tell: 0.3, game: 'ffx2', move: 'mega-flare' }, // ... and the engine's own room flood (the lit surfaces up to 2.7 times over) would overexpose the girls inside those windows: it steps back, this layer's flood is the picture
 ];
 
 export class ProStageLayer implements StagingPort {
@@ -103,7 +104,7 @@ export class ProStageLayer implements StagingPort {
         this.marks.tame = cue.tame;
         this.marks.menu = cue.menu === true;
         this.marks.calm = cue.calm;
-        this.armLook(cue.move, true, cue.menu === true ? 'mark' : 'tell'); // a menu open: the rim only, Mega Flare's engine white-out stays as it was
+        this.armLook(cue.move, true, 'tell');
         this.root().dataset['pst'] = '';
         return;
       }
