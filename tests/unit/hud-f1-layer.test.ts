@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { BattleState } from '../../src/battle/common/types.ts';
 import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
-import { F1_CMD_OPEN, F1_INTEL, HUD_F1_CLASS, HudF1, type HudF1Host } from '../../src/ui/hudf1/HudF1.ts';
+import { F1_CMD_OPEN, F1_INTEL, F1_OVER, HUD_F1_CLASS, HudF1, type HudF1Host } from '../../src/ui/hudf1/HudF1.ts';
 import { setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
 
 /**
@@ -48,6 +48,37 @@ beforeEach(() => {
 afterEach(() => {
   setHudF1Mode(null);
   setDemoChapter(undefined);
+});
+
+describe('TEXT SIZE and the end of the battle (hud-f1 review M5 and m7)', () => {
+  const flush = (): Promise<void> => new Promise((r) => setTimeout(r, 0));
+  it('turns off live when TEXT SIZE goes to 115 or 130 under the battle, and back on at 100', async () => {
+    const f1 = new HudF1('ffx');
+    f1.mount(host('ffx'));
+    expect(f1.on).toBe(true);
+    document.documentElement.dataset['textSize'] = '130';
+    await flush();
+    expect(f1.on).toBe(false);
+    expect(root.classList.contains(HUD_F1_CLASS)).toBe(false);
+    expect(stage.querySelector<HTMLElement>('.f1-layer')!.hidden).toBe(true);
+    document.documentElement.dataset['textSize'] = '100';
+    await flush();
+    expect(f1.on).toBe(true);
+    expect(root.classList.contains(HUD_F1_CLASS)).toBe(true);
+    f1.unmount();
+    document.documentElement.removeAttribute('data-text-size');
+  });
+  it('marks the root over on victory and on defeat (the prompt bar leaves the freeze frame) and clears it with the class', () => {
+    for (const type of ['victory', 'defeat'] as const) {
+      const f1 = new HudF1('ffx');
+      f1.mount(host('ffx'));
+      expect(root.classList.contains(F1_OVER)).toBe(false);
+      f1.onEvent({ type } as never);
+      expect(root.classList.contains(F1_OVER), type).toBe(true);
+      f1.unmount();
+      expect(root.classList.contains(F1_OVER)).toBe(false);
+    }
+  });
 });
 
 describe('off: a HUD that is not in a demo chapter gets nothing', () => {

@@ -1,0 +1,34 @@
+/*
+ * THE F1 HUD'S TEXT FLOOR WINS (conference demo, lane "hud-f1"; hud-f1 review M1, 2026-10-23: the 28 px floor was not met at 2560 x 1440).
+ *
+ * `common/hud-floor.css` lifts the old HUD's small type to 14 px with rules written as `html:not([data-phone-battle]) .ffxhud .ig-stat__value small { font-size: max(6.6px, var(--hud-floor)) }`
+ * (specificity 0,3,2). The F1 sheets write the same elements as `.ffxhud.hud-f1 .ig-stat__value small` (0,3,1), one element short, so the OLD size won where the two met: at 2560 x 1440 the /max numerals drew
+ * 26.4 px (FFX) and 20 px (FFX-2), the count badges and MP chips 25.6, the OD label 19.6 and the FFX-2 role chip 22. Below 1440p `--hud-floor` is the larger term and hid it.
+ *
+ * Every rule here repeats the prefix of the rule it must beat and adds `.hud-f1`, so it outranks it by one class, and asks for `max(the F1 size, var(--hud-floor))`: the F1 size at 1440p and up, the 14 px
+ * floor below, as everywhere else. The sizes are the ones the F1 sheets author (the mockup's px / 4). `tests/unit/hud-f1-floor.test.ts` checks the specificity of each pair, and the browser check reads the
+ * computed sizes. Never moved here: Intel's own panels (the guide, the advisor strip, the Sensor card, the status hint), which keep today's sizes (14 px floor) behind the X toggle.
+ */
+
+/* ------------------------------------------------------------------ Chapter I (FFX) */
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ig-stat__value small { font-size: max(7.5px, var(--hud-floor)); } /* the /max numerals: 30 px */
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ig-stat__value--mp small { font-size: max(var(--f1-floor), var(--hud-floor)); } /* the MP unit: 28 px */
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-cmd__badge { font-size: max(8px, var(--hud-floor)); } /* x4, x3, x27: 32 px */
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-cmd__badge i { font-size: max(var(--f1-floor), var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-cmd__badge--ready { font-size: max(8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-cmd-more { font-size: max(var(--f1-floor), var(--hud-floor)); } /* the "more below" marker */
+/* the OD label: 28 px, and it ends where the bar begins (right-aligned against it, in the empty row under the name), so "OVERDRIVE" on a full gauge is no longer drawn under the bar (review M3);
+   today's rule anchors it with `right: 0` and F1's with `left: -11.5px`, which fitted two letters only */
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-stat__od em { font-size: max(var(--f1-floor), var(--hud-floor)); left: auto; right: calc(100% + 3.5px); }
+
+/* the action banner's chip ("Yuna: +10 Magic Defense"): the banner is today's paper slab, its chip read 24.9 px */
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ig-banner__chip { font-size: max(var(--f1-floor), var(--hud-floor)); }
+
+/* "OVERDRIVE" on a full gauge is 189 px at this size with today's 0.22em tracking and its F1 0.14em: 8 px over the face tile. Tracked 0.04em it is 164 px and clears the tile by 17 px at 2560 x 1440 */
+html:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-stat__od--ready em { letter-spacing: 0.04em; }
+
+/* ------------------------------------------------------------------ Chapter IV (FFX-2) */
+html:not([data-phone-battle]) .ffx2hud.hud-f1 .ig-banner__chip { font-size: max(var(--f1-floor), var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud.hud-f1 .ig-stat__value small { font-size: max(7.5px, var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud.hud-f1 .ig-stat__value--mp small { font-size: max(var(--f1-floor), var(--hud-floor)); }
+html:not([data-phone-battle]) .ffx2hud.hud-f1 .ffx2stat__job { font-size: max(var(--f1-floor), var(--hud-floor)); } /* the role chip on the face (WM, DK, WR): 28 px */

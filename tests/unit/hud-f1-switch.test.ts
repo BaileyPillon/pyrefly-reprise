@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
 import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
-import { HUD_F1_TUNE, hudF1Game, hudF1ModeFromSearch, hudF1On, onHudF1Change, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
+import { F1_DAMAGE_K, HUD_F1_TUNE, hudF1Game, hudF1ModeFromSearch, hudF1On, hudF1TextSizeOk, onHudF1Change, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
+import { HEAL_SIZE, SMALL_SIZE, sizeFactor, TIER_SIZE } from '../../src/ui/common/proNumbers.ts';
 import { F1_ROWS, commandRowsCap } from '../../src/ui/common/hudTextSize.ts';
 
 /**
@@ -12,6 +13,8 @@ afterEach(() => {
   setHudF1Mode(null);
   setDemoChapter(undefined);
   document.documentElement.removeAttribute('data-phone-battle');
+  document.documentElement.removeAttribute('data-text-size');
+  document.documentElement.removeAttribute('data-text-size-wide');
 });
 
 describe('the switch (pure address reader)', () => {
@@ -60,6 +63,48 @@ describe('where it plays', () => {
     off();
     setHudF1Mode('today');
     expect(n).toBe(1);
+  });
+});
+
+describe("TEXT SIZE other than 100 gives the player today's HUD (hud-f1 review M5: the layout is authored at one size)", () => {
+  it('is on at 100 (and with no attribute), off at 115 and 130, in both attributes', () => {
+    setHudF1Mode('f1');
+    setDemoChapter('seymour-flux');
+    expect(hudF1On()).toBe(true);
+    document.documentElement.dataset['textSize'] = '100';
+    document.documentElement.dataset['textSizeWide'] = '100';
+    expect(hudF1TextSizeOk()).toBe(true);
+    expect(hudF1On()).toBe(true);
+    for (const v of ['115', '130']) {
+      document.documentElement.dataset['textSize'] = v;
+      expect(hudF1On(), `data-text-size ${v}`).toBe(false);
+      document.documentElement.dataset['textSize'] = '100';
+      document.documentElement.dataset['textSizeWide'] = v;
+      expect(hudF1On(), `data-text-size-wide ${v}`).toBe(false);
+      document.documentElement.dataset['textSizeWide'] = '100';
+    }
+    expect(hudF1On()).toBe(true);
+  });
+  it("and the command window then keeps TEXT SIZE's own rows", () => {
+    setHudF1Mode('f1');
+    setDemoChapter('seymour-flux');
+    document.documentElement.dataset['textSize'] = '130';
+    expect(commandRowsCap(6)).toBe(4);
+  });
+});
+
+describe('the F1 damage numeral is drawn larger than the glass one, and only while F1 plays (review M6)', () => {
+  it('sizeFactor is the glass size times F1_DAMAGE_K for a damage figure and a heal, unchanged for the small words and with F1 off', () => {
+    setHudF1Mode('today');
+    setDemoChapter('seymour-flux');
+    expect(sizeFactor('damage', 'normal')).toBe(TIER_SIZE.normal);
+    setHudF1Mode('f1');
+    expect(sizeFactor('damage', 'normal')).toBeCloseTo(TIER_SIZE.normal * F1_DAMAGE_K, 6);
+    expect(sizeFactor('critical', 'critical')).toBeCloseTo(TIER_SIZE.critical * F1_DAMAGE_K, 6);
+    expect(sizeFactor('heal', 'normal')).toBeCloseTo(HEAL_SIZE * F1_DAMAGE_K, 6);
+    expect(sizeFactor('miss', 'normal')).toBe(SMALL_SIZE);
+    setHudF1Mode('today');
+    expect(sizeFactor('heal', 'normal')).toBe(HEAL_SIZE);
   });
 });
 

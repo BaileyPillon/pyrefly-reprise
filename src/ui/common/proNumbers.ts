@@ -12,6 +12,7 @@
  * whichever is larger: the share of the target's max HP (as asked), and how big the blow is against that attacker's own usual blow (the book's recommended rule, so bosses tier too).
  */
 import { proPieceOn } from '../../engine/look/pro/ProSwitch.ts';
+import { F1_DAMAGE_K, hudF1On } from '../hudf1/HudF1Switch.ts'; // lane hud-f1: the F1 numeral is drawn larger (Cormorant's figures are shorter)
 
 export type NumberTier = 'normal' | 'big' | 'critical';
 export const NUMBER_TIERS: readonly NumberTier[] = ['normal', 'big', 'critical'];
@@ -95,8 +96,8 @@ export function glassText(amount: number, heal: boolean): string {
 
 /** The font-size factor of a numeral of a classified kind and tier. */
 export function sizeFactor(kind: string, tier: NumberTier): number {
-  if (kind === 'damage' || kind === 'critical') return TIER_SIZE[tier];
-  if (kind === 'heal') return HEAL_SIZE;
+  if (kind === 'damage' || kind === 'critical') return TIER_SIZE[tier] * (hudF1On() ? F1_DAMAGE_K : 1);
+  if (kind === 'heal') return HEAL_SIZE * (hudF1On() ? F1_DAMAGE_K : 1);
   return SMALL_SIZE;
 }
 

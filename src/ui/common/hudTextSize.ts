@@ -1,8 +1,3 @@
-import { hudF1On } from '../hudf1/HudF1Switch.ts';
-
-/** The F1 HUD's command window: four verbs and the faded tail (the mockup's Clear Stage). */
-export const F1_ROWS = 5;
-
 /**
  * TEXT SIZE's layout moves that CSS alone cannot make (OPTIONS accessibility A2,
  * D-285; target `docs/concepts/accessibility-2026-09-26/desk-hud-130.jpg`).
@@ -18,6 +13,11 @@ export const F1_ROWS = 5;
  *
  * Game case: FFX only (the FFX command stack; FFX-2's menu is its own).
  */
+
+import { hudF1On } from '../hudf1/HudF1Switch.ts';
+
+/** The F1 HUD's command window: four verbs and the faded tail (the mockup's Clear Stage). */
+export const F1_ROWS = 5;
 
 /** The current TEXT SIZE as a fraction: 1, 1.15 or 1.3. 1 without a DOM. */
 export function currentTextScale(root: HTMLElement | null = rootEl()): number {

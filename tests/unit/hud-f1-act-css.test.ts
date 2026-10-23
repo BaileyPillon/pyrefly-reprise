@@ -32,6 +32,13 @@ describe('REDUCE MOTION fades instead of sliding', () => {
   });
 });
 
+describe('the slim cards have an off switch for their height transition (HUD_F1_TUNE.slimAnimates; review: the step-back frame cost is unproven)', () => {
+  it('f1-slim-snap drops every height transition on a card, and the tune defaults to animating', () => {
+    expect(HUD_F1_TUNE.slimAnimates).toBe(true);
+    expect(act).toMatch(/\.hud-f1\.f1-slim-snap \.ig-stat[^{]*\{ transition: opacity 0\.2s ease !important; \}/);
+  });
+});
+
 describe('what stays', () => {
   it('the ribbon moves only when the provisional choice says so, and the turn strip and the cards\' rows are never slid', () => {
     expect(act).toMatch(/\.f1-ribbon-hides\.f1-acting \.f1-ribbon/);

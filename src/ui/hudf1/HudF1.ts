@@ -16,7 +16,8 @@
  * Game case: BOTH. Chapter I (FFX, CTB): command block left, three-slot turn strip, Overdrive bars, Defend on Y. Chapter IV (FFX-2, ATB): no turn strip, ATB bars on the cards, a role chip,
  * everything mirrored right with the slant flipped and the pink accent (those flips are `--ig-skew` and `--ig-accent` on the HUD root, `.ig--ffx2`).
  *
- * With the switch off ({@link hudF1On}) this class does nothing: no element is added to the page and no class is put on the root.
+ * With the switch off ({@link hudF1On}) this class puts no class on the root and shows nothing: the layer's ~25 nodes are mounted but hidden (`display: none !important`), and no `hudf1` rule matches
+ * (every one hangs from `.hud-f1`). TEXT SIZE other than 100 turns it off too ({@link hudF1On}): the HUD is then today's, which TEXT SIZE lays out.
  */
 import type { BattleEvent, BattleState } from '../../battle/common/types.ts';
 import type { ActingSignal } from '../../engine/HudPort.ts';
@@ -30,6 +31,8 @@ import './hudf1-ffx.css';
 import './hudf1-ffx2.css';
 import './hudf1-act.css';
 import './hudf1-finish.css';
+import './hudf1-floor.css';
+import './hudf1-numbers.css';
 
 /** The root class every `hudf1*.css` rule hangs from. */
 export const HUD_F1_CLASS = 'hud-f1';
@@ -37,6 +40,8 @@ export const HUD_F1_CLASS = 'hud-f1';
 export const F1_CMD_OPEN = 'f1-cmd-open';
 /** Intel (X) is on: the cards that moved behind it show. */
 export const F1_INTEL = 'f1-intel';
+/** The battle is over (victory or defeat): the prompt bar, which has nothing left to prompt, is not drawn on the freeze frame. */
+export const F1_OVER = 'f1-over';
 
 /** What the layer needs from the HUD that owns it (its own DOM, by accessor, since both HUDs rebuild some of it). */
 export interface HudF1Host {
@@ -82,6 +87,8 @@ export class HudF1 {
   private host: HudF1Host | null = null;
   private applied = false;
   private offChange: (() => void) | null = null;
+  /** Watches TEXT SIZE on <html>: the layer turns off at 115 / 130 and back on at 100, live (the pause's OPTIONS can change it under a battle). */
+  private textWatch: MutationObserver | null = null;
   /** The bar's last value, percent; -1 before the first sync (a fight joined mid-way draws its bar at once, with no bite). */
   private lastPct = -1;
   private heroId = '';
@@ -128,14 +135,20 @@ export class HudF1 {
     host.stage.appendChild(this.layer);
     this.step.attach(host);
     this.offChange = onHudF1Change(() => this.refresh());
+    if (typeof MutationObserver !== 'undefined') {
+      this.textWatch = new MutationObserver(() => this.refresh());
+      this.textWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-text-size', 'data-text-size-wide'] });
+    }
     this.refresh();
   }
 
   unmount(): void {
     this.offChange?.();
     this.offChange = null;
+    this.textWatch?.disconnect();
+    this.textWatch = null;
     this.step.clear();
-    this.host?.root.classList.remove(HUD_F1_CLASS, F1_CMD_OPEN, F1_INTEL, 'f1-finish', 'f1-ribbon-hides', 'f1-edge-calm');
+    this.host?.root.classList.remove(HUD_F1_CLASS, F1_CMD_OPEN, F1_INTEL, F1_OVER, 'f1-finish', 'f1-ribbon-hides', 'f1-edge-calm', 'f1-slim-snap');
     this.layer.remove();
     this.host = null;
     this.applied = false;
@@ -161,10 +174,11 @@ export class HudF1 {
         h.root.style.setProperty('--f1-floor', `${HUD_F1_TUNE.floorPx / 4}px`);
         h.root.classList.toggle('f1-finish', HUD_F1_TUNE.finish);
         h.root.classList.toggle('f1-edge-calm', HUD_F1_TUNE.edgeCalm);
+        h.root.classList.toggle('f1-slim-snap', !HUD_F1_TUNE.slimAnimates);
         h.root.classList.toggle('f1-ribbon-hides', !HUD_F1_TUNE.ribbonStaysInAction);
       } else {
         h.root.style.removeProperty('--f1-floor');
-        h.root.classList.remove(F1_CMD_OPEN, F1_INTEL, 'f1-finish', 'f1-ribbon-hides', 'f1-edge-calm');
+        h.root.classList.remove(F1_CMD_OPEN, F1_INTEL, F1_OVER, 'f1-finish', 'f1-ribbon-hides', 'f1-edge-calm', 'f1-slim-snap');
         this.step.clear();
       }
       if (want && this.lastState) this.sync(this.lastState);
@@ -207,7 +221,9 @@ export class HudF1 {
 
   /** `HudPort.onEvent`. */
   onEvent(event: BattleEvent): void {
-    if (this.applied) this.step.observe(event);
+    if (!this.applied) return;
+    this.step.observe(event);
+    if (event.type === 'victory' || event.type === 'defeat') this.host?.root.classList.add(F1_OVER);
   }
 
   /** Once per frame (the HUD's `update`). */

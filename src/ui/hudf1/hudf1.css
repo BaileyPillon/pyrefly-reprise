@@ -31,6 +31,10 @@
 .hud-f1.ig--ffx2 {
   --f1-cmd-step: 4px;
 }
+/* The HUD root clips and CANNOT SCROLL. `overflow: hidden` is a scroll container: FFX-2's command menu calls `scrollIntoView` on its cursor (`CommandMenu.ts`), which scrolls every scrollable ancestor, and while the real block is
+   parked 832 px outside the stage (`f1-acting`, `hudf1-act.css`) that scrolled the whole HUD root 729 px left and back every time a menu opened during a step-back (hud-f1 review C1, 7 to 8 times a fight). `clip` paints the same and
+   has no scroll position. */
+.ffxhud.hud-f1, .ffx2hud.hud-f1 { overflow: clip; }
 .f1-layer { position: absolute; inset: 0; pointer-events: none; font-family: var(--ig-font-text); font-weight: 700; }
 .f1-layer[hidden] { display: none !important; }
 .f1-layer .sr { font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; }
@@ -65,15 +69,15 @@
 .f1-hero__role[hidden] { display: none; }
 
 /* ---------------------------------------------------------------- the cue: the advisor's lead move, once, under the hero */
-.f1-cue { display: none; left: 28px; top: 172.5px; width: 152.5px; height: 16px; }
+.f1-cue { display: none; left: 28px; top: 172.5px; width: 178px; height: 16px; } /* as wide as the verbs' cascade: the spell is never cut, only a long target gives (review M2) */
 .hud-f1.f1-cmd-open .f1-cue:not(.f1-cue--none), .f1-ghost .f1-cue { display: block; }
 .f1-cue .f1-in { display: flex; align-items: center; gap: 3.5px; padding: 0 6.5px 0 7.5px; white-space: nowrap; }
 .f1-cue__star { display: inline-flex; width: 7px; height: 7px; flex: none; }
 .f1-cue__star svg { width: 100%; height: 100%; fill: var(--ig-accent); filter: drop-shadow(0 0 1.25px var(--ig-accent)); }
-.f1-cue__spell { font-size: 11.5px; line-height: 1; color: var(--ig-accent); overflow: hidden; text-overflow: ellipsis; max-width: 84px; }
-.f1-cue__arr, .f1-cue__dot { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: rgba(244, 241, 232, 0.66); }
-.f1-cue__target { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--f1-paper); overflow: hidden; text-overflow: ellipsis; max-width: 46px; }
-.f1-cue__mp { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--ig-spira-sky); }
+.f1-cue__spell { font-size: 11.5px; line-height: 1; color: var(--ig-accent); flex: none; }
+.f1-cue__arr, .f1-cue__dot { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: rgba(244, 241, 232, 0.66); flex: none; }
+.f1-cue__target { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--f1-paper); flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.f1-cue__mp { font: 700 max(7.5px, var(--f1-floor))/1 var(--ig-font-text); color: var(--ig-spira-sky); flex: none; }
 .f1-cue [hidden] { display: none; }
 
 /* the verb the cue's move lives in carries the star (the mockup's WHITE MAGIC, with its four-point star: drawn as a mask, no glyph from a fallback font) */
@@ -99,6 +103,7 @@
 .hud-f1:not(.f1-intel) .sgd,
 .hud-f1:not(.f1-intel) .mad,
 .hud-f1:not(.f1-intel) .eint__toggle,
+.hud-f1:not(.f1-intel) .sthint,
 .hud-f1:not(.f1-intel) .ffx-sensor { opacity: 0 !important; pointer-events: none !important; }
 .hud-f1.f1-intel .ffx-sensor { opacity: 1; }
 body:has(.hud-f1) .battle-pause-chip { display: none !important; }
@@ -119,5 +124,7 @@ body:has(.hud-f1) .battle-pause-chip { display: none !important; }
 .ffxhud.hud-f1 > .ffxhud__stage { z-index: 1; }
 /* Intel: the guide's chips would sit on the ribbon's bar; they go under it */
 .hud-f1.f1-intel .sgd { transform: translateY(22px); }
-/* and the Sensor card, which is placed from today's layout, steps up off the party cards */
-.hud-f1.f1-intel .ffx-sensor { margin-top: -14px; }
+/* and the Sensor card, which is placed from today's layout, steps up off the party cards (14 left its foot 5 grid px over Tidus's HP numerals: review M4) */
+.hud-f1.f1-intel .ffx-sensor { margin-top: -22px; }
+/* the advisor's one-row tip (FFX, Seymour Flux: the only clear ground it finds is the band along the top of the stage, where the boss ribbon is) slides right, clear of the ribbon, up to the turn strip (review M4) */
+.ffxhud.hud-f1.f1-intel .mad__card[data-zone='tip'] { transform: translateX(166px) skewX(var(--ig-skew)); }

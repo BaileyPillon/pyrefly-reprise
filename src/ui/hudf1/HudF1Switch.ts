@@ -7,6 +7,8 @@
  * 1. the address carries `?hud=f1`, or the shared key `?pack=demo` (`?hud=today` wins over the pack, for A/B captures);
  * 2. the running chapter is one of the two DEMO CHAPTERS, Chapter I (`seymour-flux`, FFX) or Chapter IV (`ffx2-bahamut`, FFX-2), named by the battle screen as the battle sets up
  *    (`engine/motion/DemoGate.ts`). Every other chapter keeps today's HUD, whatever the address says.
+ * 3. TEXT SIZE is 100 percent (OPTIONS accessibility). The F1 layout is authored at one size (every box fixed on the 640 x 360 grid); at 115 or 130 the hero and the cue sat on the first verb and the HP
+ *    numerals ran past their cards (hud-f1 review M5), so a player who asked for bigger text gets today's HUD, which TEXT SIZE lays out. Read from the two attributes `app/applyComfort.ts` puts on <html>.
  *
  * Game case (AGENTS.md rule 14): BOTH games, presentation only (no number, ability, turn order or fight rule changes); WHICH layout plays is the chapter's game: FFX (CTB) has the turn strip and
  * the command block on the left, FFX-2 (ATB) has no turn strip, ATB bars on the cards and everything mirrored to the right with the slant flipped and the pink accent.
@@ -49,9 +51,16 @@ export function onHudF1Change(fn: () => void): () => void {
   return () => listeners.delete(fn);
 }
 
-/** True when the F1 HUD plays now: switched on, in a demo chapter. */
+/** TEXT SIZE is the default 100 percent (an absent attribute, as in a unit test, counts as 100). */
+export function hudF1TextSizeOk(): boolean {
+  if (typeof document === 'undefined') return true;
+  const d = document.documentElement.dataset;
+  return (d['textSize'] ?? '100') === '100' && (d['textSizeWide'] ?? '100') === '100';
+}
+
+/** True when the F1 HUD plays now: switched on, in a demo chapter, at TEXT SIZE 100. */
 export function hudF1On(): boolean {
-  return hudF1Mode() === 'f1' && isDemoChapter(demoChapter());
+  return hudF1Mode() === 'f1' && isDemoChapter(demoChapter()) && hudF1TextSizeOk();
 }
 
 /** The game of the running demo chapter, or undefined outside the demo chapters. */
@@ -59,6 +68,9 @@ export function hudF1Game(): 'ffx' | 'ffx2' | undefined {
   const c = demoChapter();
   return isDemoChapter(c) ? demoGameOf(c) : undefined;
 }
+
+/** The F1 damage numeral's size against the glass numeral's (`proNumbers.sizeFactor`; `hudf1-numbers.css`: Cormorant's figures are shorter than Exo 2's at one font-size, and the mockup draws it at 230 px). [ours] */
+export const F1_DAMAGE_K = 1.6;
 
 /** The provisional choices and the motion numbers (mutable on purpose: `__pyrefly.hudF1Tune(key, value)` flips one live for a capture). */
 export interface HudF1Tune {
@@ -68,6 +80,7 @@ export interface HudF1Tune {
   slimDropsOd: boolean;
   finish: boolean;
   edgeCalm: boolean;
+  slimAnimates: boolean;
   slideOutMs: number;
   slideBackMs: number;
   backAfterEndMs: number;
@@ -91,6 +104,8 @@ export const HUD_F1_TUNE: HudF1Tune = {
   finish: true,
   /** 6. Calm edges: the ends of the ivory rows eaten a few px instead of a finger deep (the risk the notes name: torn masking tape). */
   edgeCalm: false,
+  /** 7. The party cards ANIMATE their height into the slim form (220 ms, layout every frame for three masked cards). `false` snaps them (the content already swaps at once): one line to flip if the booth GPU hitches in a step-back (hud-f1 review: the frame cost of the step-back is unproven, +1 ms mean in the windows on a shared machine). */
+  slimAnimates: true,
   /** The slide out at an action's start, ms (ease-in; the CSS transition in `hudf1-act.css` carries the same number). */
   slideOutMs: 170,
   /** The slide back, ms (ease-out; the CSS carries it). */
