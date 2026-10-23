@@ -52,13 +52,13 @@ function strokeArc(o: FxDrawList, T: FxTarget, sk: Skin, t: number, cx: number, 
   const was = o.add;
   o.add = false;
   if (inkA > 0) {
-    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 2.5, sk.inkEdge, 0.6 * inkA);
-    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 1.8, sk.ink, 0.96 * inkA);
+    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 3.6, sk.inkEdge, 0.6 * inkA);
+    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 2.6, sk.ink, 0.96 * inkA);
   }
   o.add = true;
   if (coreA > 0) {
-    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 0.62, sk.core, 0.9 * coreA);
-    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 0.2, '#FFFFFF', coreA);
+    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 0.8, sk.core, 0.9 * coreA);
+    o.arc(cx, cy, R, flip(o, a0), flip(o, aEnd), th * 0.26, '#FFFFFF', coreA);
   }
   o.add = was;
 }
@@ -91,8 +91,8 @@ function glint(o: FxDrawList, T: FxTarget, sk: Skin, t: number, x: number, y: nu
   const was = o.add;
   o.add = true;
   const s = size * T.sc * f;
-  o.quad('spark4', '#FFFFFF', x, y, s * 3.6, s * 0.42, Math.min(1, f) * 0.95);
-  o.quad('spark4', sk.core, x, y, s * 0.42, s * 2.1, Math.min(1, f) * 0.85);
+  o.quad('spark4', '#FFFFFF', x, y, s * 2.5, s * 0.4, Math.min(1, f) * 0.95);
+  o.quad('spark4', sk.core, x, y, s * 0.4, s * 1.8, Math.min(1, f) * 0.85);
   o.sprite('glow', sk.core, x, y, s * 1.5, o.actorCap(0.55) * Math.min(1, f));
   o.sprite('mote', '#FFFFFF', x, y, s * 0.55, Math.min(1, f));
   o.add = was;
@@ -111,7 +111,7 @@ function drops(o: FxDrawList, T: FxTarget, sk: Skin, t: number, x: number, y: nu
     const d = (0.35 + 0.9 * p.b) * dist * T.sc;
     const px = x + Math.cos(ang) * d * e;
     const py = y + Math.sin(ang) * d * e + grav * T.k * age * age;
-    const s = size * T.sc * (0.55 + 0.7 * p.d) * (1 - 0.35 * u);
+    const s = size * 0.8 * T.sc * (0.55 + 0.7 * p.d) * (1 - 0.35 * u);
     const a = 1 - u * u;
     o.add = false;
     o.sprite('dab', sk.rim, px, py, s * 1.32, 0.95 * a);

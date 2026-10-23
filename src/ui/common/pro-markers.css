@@ -23,6 +23,10 @@
 .ffx-targeting--pro .ffx-target:not(.ffx-target--dim):not(.ffx-target--group) .ffx-target__c { display: none; }
 .ffx-targeting--pro .ffx-target--dim .ffx-target__c { opacity: 0.22; }
 
+/* The name is a little bigger beside the bigger marker (the plate's own 19 px is a 640x360 HUD size). */
+.ffx-targeting--pro .ffx-target__name { font-size: clamp(22px, 1.45vw, 38px); }
+.ffx-targeting--pro .ffx-target__tag { font-size: clamp(15px, 1vw, 24px); }
+
 /* FFX-2's ring: a quarter of the figure's height, 60 percent, thin petals, a slow turn, short corners round it, the name on a leader line. */
 .ffx-targeting--pro .ffx-target__flower {
   opacity: 0.6;
@@ -69,17 +73,18 @@
 /* the Danger pulse's off switch (a Settings row would set `data-danger-pulse="off"` on the page): the triangle stays, the motion goes */
 html[data-danger-pulse='off'] .ig-stat--pro-low, html[data-danger-pulse='off'] .ig-stat--pro-low .ig-stat__value { animation: none; }
 
-.pro-mark { position: absolute; display: block; font-style: normal; pointer-events: none; }
+.pro-mark { position: absolute; display: block; font-style: normal; pointer-events: none; z-index: 8; /* over the portrait chip's own layers */ }
 .pro-mark--low {
-  right: 0; top: 0; width: 0; height: 0;
-  border-left: 7px solid transparent; border-bottom: 7px solid #f28a2e;
-  filter: drop-shadow(0 0 2px rgba(11, 10, 18, 0.9));
+  right: 1px; top: 1px; width: 0; height: 0;
+  border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 11px solid #f28a2e;
+  filter: drop-shadow(0 0 1.5px rgba(11, 10, 18, 0.95));
 }
 .pro-mark--ko {
   left: 50%; bottom: 0; transform: translateX(-50%);
   padding: 0 3px; line-height: 1.25;
-  font: 700 7px/1.25 var(--ig-font-display, 'Chakra Petch', sans-serif); letter-spacing: 0.06em;
+  font: 700 8.5px/1.25 var(--ig-font-display, 'Chakra Petch', sans-serif); letter-spacing: 0.06em;
   color: #fff; background: #c7343c; border-radius: 1px;
+  box-shadow: 0 0 0 0.6px rgba(255, 255, 255, 0.6);
 }
 /* FFX-2's rows are not greyed by the game today: a fallen girl's row goes quiet (FFX's own `.ffx-stat--ko` already does) */
 .ig-stat--pro-ko:not(.ffx-stat--ko) { opacity: 0.72; filter: grayscale(0.7); }
@@ -97,7 +102,7 @@ html[data-danger-pulse='off'] .ig-stat--pro-low, html[data-danger-pulse='off'] .
   position: absolute; left: 0; top: 0;
   border-radius: 50%;
   opacity: 0;
-  background: radial-gradient(ellipse at center, rgba(128, 138, 158, 0.62) 0%, rgba(78, 88, 108, 0.36) 42%, rgba(60, 70, 90, 0) 72%);
+  background: radial-gradient(ellipse at center, rgba(150, 160, 180, 0.78) 0%, rgba(96, 106, 128, 0.46) 44%, rgba(70, 80, 100, 0) 74%);
   will-change: transform, opacity;
 }
 .ffx2hud .pro-ko-wash, .pro-field-marks--ffx2 .pro-ko-wash {

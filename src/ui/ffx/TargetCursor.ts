@@ -460,7 +460,9 @@ export class TargetCursor {
       ? `<span class="ffx-target__tag">${escapeHtml(entry.tag)}</span>`
       : '';
     const note = noteHtml(entry.note); // status display O3: Zombie and Doom as red tags
-    const dock = this.dockFor(entry, rect, proHand, ringed);
+    // pro FFX: the name hangs off the glove (the plate docks under the glove's own box), not under the whole figure
+    const anchor = proHand ? handBox(rect, this.handGap(), proHand) : rect;
+    const dock = this.dockFor(entry, anchor, proHand, ringed);
     // pro FFX-2: the name rides beside the ring on a thin leader line (when it docks left or right of the ring)
     const ringRight = rect.x + rect.w;
     const leader =

@@ -21,7 +21,7 @@ export const TIER_PCT = { big: 0.12, critical: 0.3 } as const;
 /** How many times the attacker's usual blow a hit must be to be BIG and CRITICAL (the usual blow is the mean of its earlier first hits; the first blow of a battle has none and is normal). [ours] */
 export const TIER_USUAL = { big: 1.7, critical: 2.6 } as const;
 /** The font-size factor of each tier on the old numeral's size (16 px base on the 640x360 grid, 24 for a crit). [ours] */
-export const TIER_SIZE: Readonly<Record<NumberTier, number>> = { normal: 1.3, big: 1.75, critical: 2.3 };
+export const TIER_SIZE: Readonly<Record<NumberTier, number>> = { normal: 1.5, big: 1.8, critical: 2.05 };
 /** The factor of a heal, and of the small numerals (MP, MISS, IMMUNE, ABSORBED). [ours] */
 export const HEAL_SIZE = 1.35;
 export const SMALL_SIZE = 1.15;
