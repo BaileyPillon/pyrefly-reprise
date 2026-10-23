@@ -31,12 +31,14 @@ Nothing here is game data. Sourced: the hit's clock (the mark stays 0.3 s as tod
 
 ## Frame cost (RTX 5070 Ti, headless GPU, 2560x1440, 120 back-to-back renders with a GPU sync; the card was shared with other lanes' jobs, so the absolute numbers run high; read the differences)
 
-| ms | Chapter I | Chapter IV |
+Measured twice, with the card quiet (the table) and shared with other lanes' jobs (about twice the numbers, the same differences: Chapter I today 14.7 / 15.1, pro 14.2 / 15.2; Chapter IV today 18.2 / 18.1, pro 18.4 / 18.4).
+
+| ms (quiet card) | Chapter I | Chapter IV |
 |---|---|---|
-| classic (no look) | 7.8 | 11.5 |
-| today (hd2d bold, release 62) | 14.7 / 15.1 | 18.2 / 18.1 |
-| cinematic bold | 14.6 | 17.9 |
-| **pro arena** | 14.2 / 15.2 | 18.4 / 18.4 |
+| classic (no look) | 4.03 | 5.67 |
+| today (hd2d bold, release 62) | 6.92 / 6.94 | 8.26 / 8.39 |
+| cinematic bold | 6.86 | 8.12 |
+| **pro arena** | **6.84 / 6.88** | **8.31 / 8.24** |
 
 The pro arena costs the same as today's look within the noise: the LUT is built once, the cone is a handful of ALU ops in the grade pass, the haze, vignette and grain are uniforms the pass already has. The seam's floor blur is eight texture reads only on the rows near the two floor steps. The hit adds about 40 quads while it plays (inside `PEAK_BUDGET`).
 
@@ -44,7 +46,8 @@ The pro arena costs the same as today's look within the noise: the LUT is built 
 
 - `tsc --noEmit` clean. New tests: `pro-look-arena`, `pro-look-numbers`, `pro-look-hits`, `pro-look-markers` (53 tests). Existing families that touch the changed files pass (`look-*`, `plate-wings`, `r41-ch4cam`, `fx-new-*`, the `ui-*` family, `demo-motion-int*`). One pinned test changed on purpose: the switchboard's key list gained `/` (`demo-motion-int.test.ts`).
 - Everything off (no key, or `?look=today`) is playtest-1022: the look state's pro flag stays false, `lutFor` takes the old path, the grade pass's cone strength stays 0, the hit spec's `end` is the fx lane's own, the numerals and the rows take their old paths (tests pin each).
-- Real-input headless checks of both chapters with `?pack=demo`: `evidence/` (see the lane's `progress.md` for the list).
+- Real-input headless checks (Chromium on the real GPU, 2560x1440, the simulated pad from the title through the picker, Vite on :5361 started and stopped by PID, RIG-RECORD held per job), both chapters, `?demo=1&pack=demo`, **0 console errors**: the real presenter plays the numbers (`__pyrefly.fxPlay`), the ink hit is held at contact (`trigger('spellfx:hit:...')`), the cursor opens from the real command menu, a member's HP set and the HUD synced for the low-HP row, a real KO (Chapter IV: Yuna fell in the fight). Off path with `?demo=1&pack=demo&look=today`: `pro()` is `today`, the look is hd2d bold, the numerals are the old classes and sizes (three numerals for a three-hit action), the cursor and rows carry no pro class; flipping with `__pyrefly.pro('pro')` turns the arena on at once.
+- Evidence: `D:/Tools/pyrefly-scratch/2026-10-23/pro-look/evidence/` (a1 = the arena, pro and today, stage only; c1 to c3 = the tuning frames; b2 and v4 = the seam; v1 = numbers; v2 = hits; v3 = target, low HP and KO; `crop-seam.jpg` = seam off against on).
 
 ## Not done / for the driver
 
