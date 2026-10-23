@@ -36,6 +36,8 @@ export class ProFieldMarks {
   /** REDUCE MOTION, read at most twice a second (the pause row or the OS preference). */
   private reduced = false;
   private reducedAtMs = -1e9;
+  /** An aeon is out (FFX): the party is held off the stage (`BattlePresenterStage`, PR-0181), so a downed member has no body on the field to mark; her actor's feet are where the aeon stands. */
+  private partyOffStage = false;
 
   constructor(private readonly game: 'ffx' | 'ffx2') {
     this.el = document.createElement('div');
@@ -54,6 +56,7 @@ export class ProFieldMarks {
       if (this.down.size) this.clear();
       return;
     }
+    this.partyOffStage = !!state.aeonId || (state.aeonIds?.length ?? 0) > 0;
     const live = new Set<CombatantId>();
     for (const id of state.activeIds) {
       const c = state.combatants[id];
@@ -87,6 +90,14 @@ export class ProFieldMarks {
       this.reducedAtMs = this.nowMs;
     }
     for (const [id, d] of this.down) {
+      if (this.partyOffStage) {
+        // r63-play (the KO chip found on the aeon's feet in a steered Chapter I fight): while an aeon is out the party's figures are not drawn, and a hidden actor still projects to its slot, which is
+        // where the aeon stands. The wash and the mark are not drawn, and are there again when the party is (a member still down gets her mark back, settling again).
+        d.wash.style.opacity = '0';
+        d.mark.style.opacity = '0';
+        d.started = false; // when the party returns the wash settles over its 450 ms again, it does not pop in
+        continue;
+      }
       const feet = this.project?.(id, 'feet') ?? null;
       if (!d.started) {
         if (menuHolds()) {

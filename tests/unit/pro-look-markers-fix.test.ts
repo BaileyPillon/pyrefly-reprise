@@ -291,3 +291,47 @@ describe("m1: the pro arena's rig terms write the grade pass's own uniform bag (
     expect(rig.split(/\r?\n/).length).toBeLessThanOrEqual(400); // house rule 7
   });
 });
+
+describe('r63-play: no KO mark on the aeon\'s feet (FFX; an aeon is out, the party is held off the stage)', () => {
+  const withAeon = (alive: Record<string, boolean>, aeon: boolean): BattleState => ({ ...state(alive), aeonId: aeon ? 'ifrit' : null }) as unknown as BattleState;
+  it('a downed member\'s wash and mark are not drawn while an aeon stands where her actor projects, and come back, settling, when the aeon leaves', () => {
+    setProMode('pro');
+    setDemoChapter('seymour-flux');
+    const m = new ProFieldMarks('ffx');
+    document.body.append(m.el);
+    m.setProjector(() => ({ x: 500, y: 800 }));
+    m.sync(withAeon({ tidus: true, kimahri: false }, false));
+    const wash = m.el.querySelector<HTMLElement>('.pro-ko-wash')!;
+    const mark = m.el.querySelector<HTMLElement>('.pro-ko-mark')!;
+    tick(m, 2500);
+    expect(Number(wash.style.opacity)).toBeGreaterThan(0.8); // down on the field: marked
+    expect(Number(mark.style.opacity)).toBe(1);
+    m.sync(withAeon({ tidus: true, kimahri: false }, true)); // Yuna summons Ifrit: the party leaves the field
+    tick(m, 100);
+    expect(Number(wash.style.opacity)).toBe(0);
+    expect(Number(mark.style.opacity)).toBe(0);
+    expect(m.count).toBe(1); // still tracked: she is still down
+    tick(m, 5000);
+    expect(Number(mark.style.opacity)).toBe(0); // however long the aeon stays
+    m.sync(withAeon({ tidus: true, kimahri: false }, false)); // the aeon leaves
+    tick(m, 30);
+    expect(Number(wash.style.opacity)).toBeLessThan(0.2); // it settles again, it does not pop in whole
+    tick(m, 1500);
+    expect(Number(wash.style.opacity)).toBeCloseTo(0.9, 1);
+    expect(Number(mark.style.opacity)).toBe(1);
+  });
+
+  it('several aeons out (aeonIds) hold it off too; a fight with no aeon is unchanged', () => {
+    setProMode('pro');
+    setDemoChapter('seymour-flux');
+    const m = new ProFieldMarks('ffx');
+    document.body.append(m.el);
+    m.setProjector(() => ({ x: 500, y: 800 }));
+    m.sync({ ...state({ tidus: false }), aeonId: 'cindy', aeonIds: ['cindy', 'sandy', 'mindy'] } as unknown as BattleState);
+    tick(m, 3000);
+    expect(Number(m.el.querySelector<HTMLElement>('.pro-ko-mark')!.style.opacity)).toBe(0);
+    m.sync({ ...state({ tidus: false }), aeonId: null } as unknown as BattleState);
+    tick(m, 3000);
+    expect(Number(m.el.querySelector<HTMLElement>('.pro-ko-mark')!.style.opacity)).toBe(1);
+  });
+});
