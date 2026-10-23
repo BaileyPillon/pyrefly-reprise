@@ -164,6 +164,36 @@ export function specialRun(id: string, actor: V3, actorH: number, target: V3, ta
   };
 }
 
+/**
+ * FFX Chapter I, an AEON that landed the last blow (OURS; no sourced shot): a slow low three-quarter push on the aeon, whole. The game's victory program (`system_01.w1.f31`) is decoded for the three
+ * heroes (the per-character close-ups of `victory.tidus`, `.yuna`, `.kimahri`); its blocks for other parties and for aeons were never read ("different parties and aeons get other blocks", `real-motion/camera/SHOTS.md`),
+ * and the heroes are off stage while an aeon fights, so the hero close-up framed an empty field with a small aeon on it (the integration's Chapter I run). The eye starts `push` times as far as the distance at
+ * which the aeon fills `share` of the frame's half height, eases in to it over 2.6 s from a three-quarter view on the foe's side, a little below the chest, then holds; the director's never-crop fit stands the aeon at its place.
+ */
+export function aeonVictoryRun(id: string, feet: V3, height: number, o: { still: boolean; fit: ProFit; focus?: readonly string[] | undefined; share?: number; push?: number }): ProRun {
+  const fov = 36;
+  const share = o.share ?? 0.72;
+  const push = o.push ?? 1.3;
+  const m: V3 = [feet[0], feet[1] + 0.52 * height, feet[2]];
+  const near = height / (2 * share * Math.tan((fov * DEG) / 2));
+  return {
+    id,
+    inMs: o.still ? 0 : 700,
+    inEase: 'cubic',
+    outMs: o.still ? 0 : 500,
+    outEase: 'cubic',
+    fit: o.fit,
+    breathe: o.still ? undefined : 0.3,
+    rate: o.still ? 0 : 1,
+    sway: 0.3,
+    focus: o.focus,
+    sample(t: number): Pose {
+      const u = ease('cosine', Math.min(1, Math.max(0, t / 2600)));
+      return { pos: eyeAt(m, near * (1 + (push - 1) * (1 - u)), 24 - 8 * u, -4 + 2 * u), look: lerp3(m, [m[0], m[1] + 0.04 * height, m[2]], u), fov, roll: 0 };
+    },
+  };
+}
+
 /** FFX-2 Mega Flare (Chapter IV; OURS): a low wide pull-back and hold on the whole group, an eased 1.1 s glide, then a slow settle. */
 export function megaFlareRun(id: string, focus: V3, still: boolean, fit: ProFit): ProRun {
   const aim: V3 = [focus[0], focus[1] + 0.9, focus[2]];

@@ -12,7 +12,7 @@ import { ProDirector } from '../../../src/engine/procam/ProDirector.ts';
 import { HOME_MS, ProFollower, type FollowerHost, type Member } from '../../../src/engine/procam/ProFollower.ts';
 import { FLIP_OFF_MS, ProLayer } from '../../../src/engine/procam/ProLayer.ts';
 import { SCENE_BLUR, proSoftBackground, proSoftLook } from '../../../src/engine/procam/ProBand.ts';
-import { VICTORY_SAFE } from '../../../src/engine/procam/ProPlays.ts';
+import { AEON_VICTORY_AT, AEON_VICTORY_SAFE, VICTORY_SAFE } from '../../../src/engine/procam/ProPlays.ts';
 import { setCameraPreset } from '../../../src/engine/CameraPreset.ts';
 import type { ActorHandle, BattleStage, CameraPort } from '../../../src/engine/BattlePresenterPorts.ts';
 import type { ActionShot, ShotCtx, ShotSubject } from '../../../src/engine/ShotDirector.ts';
@@ -282,6 +282,72 @@ describe('M6: the victory keeps the winning party whole and clear of the HUD', (
   });
 });
 
+describe('perf-trim: an aeon that landed the last blow is framed whole (OURS; the sources give no aeon victory shot)', () => {
+  const figs = (): Record<string, Fig> => ({ ...GAGAZET, ifrit: { side: 'aeon', x: -2, z: 0.6, h: 3.4 } });
+  const begin = (w: ReturnType<typeof world>, d: ProDirector, f: Record<string, Fig>): ShotCtx => {
+    const ctx = { camera: w.stage.camera, speed: 'normal', skipping: false, ms: (b: number) => b } as ShotCtx;
+    d.battleStart({ ...ctx, partyIds: [], boss: subj('seymour-flux', f) } as never);
+    return ctx;
+  };
+
+  it("the victory after an aeon's blow is the authored whole-aeon frame, not a hero close-up laid on its feet", () => {
+    const f = figs();
+    const w = world(f);
+    const d = new ProDirector(w.stage);
+    const ctx = begin(w, d, f);
+    open(w, d, 'ifrit', 'cast', ['seymour-flux'], { abilityId: 'meteor-strike' });
+    expect(d.victory!(ctx)).toBe(true);
+    const run = w.plays[w.plays.length - 1]!;
+    expect(run.id).toBe('victory.aeon.ifrit');
+    expect(run.fit!.ids).toEqual(['ifrit']); // only the aeon: no party stands on the field
+    expect(run.fit!.safe).toEqual(AEON_VICTORY_SAFE);
+    expect(run.fit!.to).toEqual(AEON_VICTORY_AT);
+    expect(d.log.some((l) => /\[ours/.test(l.what))).toBe(true);
+  });
+
+  it('stands the aeon left of the middle, clear of the title and the plates, and big (it fills most of the frame height)', () => {
+    expect(AEON_VICTORY_AT.x).toBeLessThan(0);
+    expect(AEON_VICTORY_SAFE.y).toBeGreaterThan(VICTORY_SAFE.y); // the hero frame's box was the small one
+    expect(AEON_VICTORY_SAFE.x).toBeLessThan(0.72); // the queue down the right edge stays free
+    expect(AEON_VICTORY_AT.x + AEON_VICTORY_SAFE.x).toBeLessThan(0.3); // and the party plates (x above 0.3)
+  });
+
+  it('a hero who struck last keeps the real close-up (the aeon rule is for aeons only)', () => {
+    const f = figs();
+    const w = world(f);
+    const d = new ProDirector(w.stage);
+    const ctx = begin(w, d, f);
+    open(w, d, 'ifrit', 'cast', ['seymour-flux'], { abilityId: 'meteor-strike' });
+    open(w, d, 'tidus', 'attack', ['seymour-flux']);
+    expect(d.victory!(ctx)).toBe(true);
+    expect(w.plays[w.plays.length - 1]!.id).toMatch(/^victory\.tidus#/);
+  });
+
+  it('a new battle forgets the aeons of the last one', () => {
+    const f = figs();
+    const w = world(f);
+    const d = new ProDirector(w.stage);
+    let ctx = begin(w, d, f);
+    open(w, d, 'ifrit', 'cast', ['seymour-flux']);
+    ctx = begin(w, d, f);
+    open(w, d, 'tidus', 'attack', ['seymour-flux']);
+    d.victory!(ctx);
+    expect(w.plays[w.plays.length - 1]!.id).toMatch(/^victory\.tidus#/);
+  });
+
+  it('under REDUCE MOTION the aeon frame is a held first pose, never a push', () => {
+    const f = figs();
+    const w = world(f);
+    const d = new ProDirector(w.stage);
+    const ctx = { ...begin(w, d, f), reducedMotion: true } as ShotCtx;
+    open(w, d, 'ifrit', 'cast', ['seymour-flux'], {}, { reducedMotion: true });
+    expect(d.victory!(ctx)).toBe(true);
+    const run = w.plays[w.plays.length - 1]!;
+    expect(run.rate).toBe(0);
+    expect(run.inMs).toBe(0);
+  });
+});
+
 describe('m2: an aeon\'s Overdrive start fits its target and may back further', () => {
   it('Bahamut as Yuna\'s aeon is fitted by body, with Seymour in the frame and a longer reach', () => {
     const figs: Record<string, Fig> = { ...GAGAZET, bahamut: { side: 'aeon', x: -2, z: 0.5, h: 5 } };
@@ -445,5 +511,32 @@ describe('M6: a frame with a place for the figures (the victory keeps the HUD\'s
     expect(Math.abs((r.x0 + r.x1) / 2 - at.x)).toBeLessThan(0.1);
     expect(r.x1).toBeLessThan(0.34);
     expect(r.y0).toBeGreaterThan(-0.46);
+  });
+});
+
+describe('perf-trim: the aeon victory frame, in numbers (the run\'s pose through the never-crop fit)', () => {
+  it('stands a 3.4 m aeon whole, left of the middle, filling most of the frame\'s height, at both ends of the push', async () => {
+    const { aeonVictoryRun } = await import('../../../src/engine/procam/ProShots.ts');
+    const { fitCentred, ndcRect } = await import('../../../src/engine/procam/ProFit.ts');
+    const box = { x0: -2.55, x1: -1.45, y0: 0, y1: 3.4, z0: 0.15, z1: 0.95 };
+    const run = aeonVictoryRun('victory.aeon.ifrit', [-2, 0, 0.6], 3.4, { still: false, fit: { ids: ['ifrit'], safe: AEON_VICTORY_SAFE, to: AEON_VICTORY_AT, maxK: 3 } });
+    const base: Pose = { pos: [0, 3, 9.5], look: [0.15, 1.35, -1.2], fov: 32, roll: 0 };
+    for (const t of [0, 1300, 2600, 5000]) {
+      const pose = run.sample(t, base);
+      const fit = fitCentred(pose, 16 / 9, [box], AEON_VICTORY_SAFE, AEON_VICTORY_AT, 3);
+      const r = ndcRect(box, fit.pose, 16 / 9)!;
+      const cx = (r.x0 + r.x1) / 2;
+      const cy = (r.y0 + r.y1) / 2;
+      expect(Math.abs(cx - AEON_VICTORY_AT.x)).toBeLessThan(0.02); // placed where the plates and the title leave room
+      expect(Math.abs(cy - AEON_VICTORY_AT.y)).toBeLessThan(0.02);
+      expect((r.y1 - r.y0) / 2).toBeLessThanOrEqual(AEON_VICTORY_SAFE.y + 0.01); // whole: inside the safe box
+      expect((r.x1 - r.x0) / 2).toBeLessThanOrEqual(AEON_VICTORY_SAFE.x + 0.01);
+      expect(r.y1 - r.y0).toBeGreaterThan(1.1); // big: more than 55 percent of the frame's height (the hero frame left it at about a half)
+      expect(pose.roll).toBe(0);
+    }
+    // the push comes in: the end is closer than the start
+    const d = (t: number): number => { const p = run.sample(t, base); return Math.hypot(p.pos[0] - p.look[0], p.pos[1] - p.look[1], p.pos[2] - p.look[2]); };
+    expect(d(2600)).toBeLessThan(d(0));
+    expect(d(5000)).toBeCloseTo(d(2600), 6); // then it holds
   });
 });
