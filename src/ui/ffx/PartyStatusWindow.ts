@@ -2,6 +2,8 @@ import type { AnyCombatant, CombatantId, FFXCombatant } from '../../battle/commo
 import { aeonChipHtml, portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { captionHtml, ffxPlateIconsHtml } from '../common/statusRows.ts';
 import { zombieWarnOn } from './zombieWarnOptions.ts';
+import '../common/pro-markers.css';
+import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
 
 /**
  * FFX Critical (SOS): HP below half of max, where the digits turn yellow (research/ffx-combat-core.md V8 and
@@ -70,9 +72,11 @@ export class PartyStatusWindow {
     const hpValueCls = ['ig-stat__value', !c.alive ? 'ffx-stat__value--ko' : hpFrac <= 0.125 ? 'ffx-stat__value--danger' : hpFrac < FFX_HP_YELLOW_BELOW ? 'ffx-stat__value--crit' : '']
       .filter(Boolean)
       .join(' ');
-    const rowCls = ['ig-stat', acting ? 'ig-stat--acting' : '', !c.alive ? 'ffx-stat--ko' : '', hurt ? 'ffx-stat--hurt' : '']
-      .filter(Boolean)
-      .join(' ');
+    const proMark = proMarkersOn() ? rowMark('ffx', c.hp, maxHp, c.alive) : null; // lane pro-look: null (nothing) with the piece off, the default
+    const rowCls =
+      ['ig-stat', acting ? 'ig-stat--acting' : '', !c.alive ? 'ffx-stat--ko' : '', hurt ? 'ffx-stat--hurt' : '']
+        .filter(Boolean)
+        .join(' ') + rowMarkClass(proMark);
 
     // Status display O2/O3 (Bailey's pick, 2026-09-29): round medallions under the Overdrive gauge,
     // most alarming first (the old single-colour pips are replaced), and a caption where a status
@@ -84,7 +88,7 @@ export class PartyStatusWindow {
     // The aeon's row while it is out (PR-0181) wears the turn list's aeon chip, not a letter (FOC24-02, CHK-012).
     const face = c.side === 'aeon' ? aeonChipHtml(c.spriteKey ?? id, c.name, c.portraitKey) : portraitChipHtml(c.portraitKey, c.name, tintFor('party'));
     return `<div class="${rowCls}" style="margin-right:calc(var(--ig-stat-step) * ${i})" data-actor="${id}">
-      <span class="ig-stat__face">${face}</span>
+      <span class="ig-stat__face">${face}${rowMarkHtml(proMark)}</span>
       <span class="ig-stat__name">${escapeHtml(c.name)}</span>
       <span class="${hpValueCls}">${c.hp}<small>/${maxHp}</small></span>
       <span class="ig-stat__value ig-stat__value--mp">${c.mp}<small>/${maxMp}</small></span>

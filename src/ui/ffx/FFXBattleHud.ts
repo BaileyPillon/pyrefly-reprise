@@ -1,4 +1,5 @@
 import { PAD } from '../../app/padMap.ts';
+import { ProFieldMarks } from '../common/ProFieldMarks.ts'; // lane pro-look: the KO wash and mark on the field
 import '../common/cmd-od-selected.css';
 import '../common/hud-floor.css';
 import './ffx-hud.css';
@@ -176,6 +177,8 @@ export class FFXBattleHud implements HudPort {
   /** PR-0186: this fight folds the Sensor card while aiming (Chapter III). */
   private aimFoldDy = false;
   private readonly damageNumbers = new DamageNumbers();
+  /** Lane pro-look: the KO wash and mark on the field (`ui/common/ProFieldMarks.ts`); draws nothing unless the pro look's `markers` piece is on. */
+  private readonly proMarks = new ProFieldMarks('ffx');
   private readonly triggerPrompt = new TriggerPrompt();
   private readonly airship = new AirshipOrders(); // Evrae (FFX) only; inert without the range flag
   private readonly zanmato = new ZanmatoGauge(); // Yojimbo (FFX, Chapter IX) only; hidden without his gauge
@@ -378,7 +381,7 @@ export class FFXBattleHud implements HudPort {
       this.telegraph.borderEl,
       this.actionHelp.el,
     );
-    this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el, this.targetPlate.el);
+    this.overlay.append(this.commandMenu.targetCursor.el, this.proMarks.el, this.damageNumbers.el, this.targetPlate.el);
     // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
     // the slab instead of painting over it — src/ui/ffx/targetChipClear.ts.
     this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl);
@@ -464,6 +467,7 @@ export class FFXBattleHud implements HudPort {
     this.intent.unmount();
     this.sensorPanel.unmount();
     this.damageNumbers.clear();
+    this.proMarks.clear();
     this.telegraph.dispose();
     // Ends any live selection, so no accent pool or quiet dim can outlive the
     // HUD that lit it (`CommandMenu.close`).
@@ -495,6 +499,7 @@ export class FFXBattleHud implements HudPort {
     this.lastState = state;
     this.zanmato.sync(state);
     this.damageNumbers.syncState(state); // Doom's counts, reconciled (and cleared once there is a result)
+    this.proMarks.sync(state); // lane pro-look: who is down
     if (Array.isArray(preview)) {
       // Kept so the field's name plate can print the same letter tag the queue
       // tile shows — the only mark that tells Yu Pagoda B from Yu Pagoda C.
@@ -715,6 +720,7 @@ export class FFXBattleHud implements HudPort {
   /** Frame tick from `BattleScreen`, forwarded to the only things here that animate themselves. */
   update(dt: number): void {
     this.damageNumbers.update(dt);
+    this.proMarks.update(dt);
     // Before the advisor, because folding the enemy plate gives the shelf its
     // height back and `placeAdvisor` should see that on the same frame.
     this.sensorPanel.update(dt);
@@ -808,6 +814,7 @@ export class FFXBattleHud implements HudPort {
       return pt ? { x: pt.x, y: pt.y, w: 0, h: 0 } : null;
     });
     this.damageNumbers.setProjector(p);
+    this.proMarks.setProjector(p);
     this.damageNumbers.setSideResolver((id) => {
       const side = this.lastState?.combatants[id]?.side;
       return side === 'party' || side === 'enemy' || side === 'aeon' ? side : null;

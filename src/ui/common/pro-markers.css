@@ -1,0 +1,114 @@
+/*
+ * The pro markers (conference demo, lane "pro-look"; Bailey 2026-10-22, markers "Classic, calm, clear"): the big FFX glove, the FFX-2 ring with the name beside it, the pulse on a low-HP party row, the KO wash
+ * and the KO mark. Every rule below needs a class that the code adds only while the pro look's `markers` piece is on (`.ffx-targeting--pro`, `.ig-stat--pro-low`, `.ig-stat--pro-ko`, `.pro-field-marks`'s children),
+ * so with the piece off (the default) none of it matches anything. The HUD's panels are not restyled: the rows get a glow, a tint and a small mark in their face tile, nothing else. All colours and sizes [ours].
+ */
+
+/* ---------------------------------------------------------------- the target marker */
+
+/* FFX's glove: about five times today's, a warm gold light round it, a soft shadow, a slow bob toward the figure. */
+.ffx-targeting--pro .ffx-target__hand {
+  --pro-hand-bob: 16px;
+  filter: drop-shadow(0 0 16px rgba(242, 194, 30, 0.5)) drop-shadow(0 8px 12px rgba(5, 8, 20, 0.7));
+  animation: pro-hand-bob 1.6s ease-in-out infinite;
+}
+@keyframes pro-hand-bob {
+  0%, 100% { transform: translate(-100%, -50%); }
+  50% { transform: translate(calc(-100% + var(--pro-hand-bob, 16px)), -50%); }
+}
+.ffx-targeting--pro .ffx-hand__palm,
+.ffx-targeting--pro .ffx-hand__cuff { stroke-width: 1.1; }
+
+/* The boxy brackets go from the aimed figure (the glove and the plate carry it); the others keep faint corners. */
+.ffx-targeting--pro .ffx-target:not(.ffx-target--dim):not(.ffx-target--group) .ffx-target__c { display: none; }
+.ffx-targeting--pro .ffx-target--dim .ffx-target__c { opacity: 0.22; }
+
+/* FFX-2's ring: a quarter of the figure's height, 60 percent, thin petals, a slow turn, short corners round it, the name on a leader line. */
+.ffx-targeting--pro .ffx-target__flower {
+  opacity: 0.6;
+  animation-duration: 16s;
+  filter: drop-shadow(0 0 5px rgba(244, 154, 200, 0.45)) drop-shadow(0 0 1px rgba(8, 4, 20, 0.9));
+}
+.ffx-targeting--pro .ffx-flower__ring { stroke: rgba(247, 232, 244, 0.7); stroke-width: 1; }
+.ffx-targeting--pro .ffx-flower__petal { fill: rgba(244, 154, 200, 0.3); stroke-width: 0.8; }
+.ffx-targeting--pro.ffx-targeting--ffx2 .ffx-target:not(.ffx-target--dim):not(.ffx-target--group) .ffx-target__c { display: block; opacity: 0.8; }
+.ffx-target__leader {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(247, 232, 244, 0.85), rgba(247, 232, 244, 0.35));
+  transform-origin: left center;
+  pointer-events: none;
+}
+.ffx-target__leader--left { transform-origin: right center; background: linear-gradient(270deg, rgba(247, 232, 244, 0.85), rgba(247, 232, 244, 0.35)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ffx-targeting--pro .ffx-target__hand { animation: none; }
+}
+
+/* ---------------------------------------------------------------- a row at the low-HP line */
+
+/* A slow 1 Hz amber glow on the row (never faster than 1 Hz, never full-screen), the HP numerals warming with it, and a warning triangle in the face tile so the state is not colour alone. */
+.ig-stat--pro-low {
+  animation: pro-low-pulse 1.2s ease-in-out infinite;
+}
+@keyframes pro-low-pulse {
+  0%, 100% { box-shadow: inset 0 0 0 1px rgba(242, 138, 46, 0.35), 0 0 0 rgba(242, 138, 46, 0); }
+  50% { box-shadow: inset 0 0 0 1.5px rgba(242, 138, 46, 0.95), 0 0 12px rgba(242, 138, 46, 0.55); }
+}
+.ig-stat--pro-low .ig-stat__value:not(.ig-stat__value--mp) {
+  animation: pro-low-num 1.2s ease-in-out infinite;
+}
+@keyframes pro-low-num {
+  0%, 100% { filter: none; }
+  50% { filter: drop-shadow(0 0 3px rgba(255, 168, 70, 0.9)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ig-stat--pro-low, .ig-stat--pro-low .ig-stat__value:not(.ig-stat__value--mp) { animation: none; }
+  .ig-stat--pro-low { box-shadow: inset 0 0 0 1.5px rgba(242, 138, 46, 0.9); }
+}
+/* the Danger pulse's off switch (a Settings row would set `data-danger-pulse="off"` on the page): the triangle stays, the motion goes */
+html[data-danger-pulse='off'] .ig-stat--pro-low, html[data-danger-pulse='off'] .ig-stat--pro-low .ig-stat__value { animation: none; }
+
+.pro-mark { position: absolute; display: block; font-style: normal; pointer-events: none; }
+.pro-mark--low {
+  right: 0; top: 0; width: 0; height: 0;
+  border-left: 7px solid transparent; border-bottom: 7px solid #f28a2e;
+  filter: drop-shadow(0 0 2px rgba(11, 10, 18, 0.9));
+}
+.pro-mark--ko {
+  left: 50%; bottom: 0; transform: translateX(-50%);
+  padding: 0 3px; line-height: 1.25;
+  font: 700 7px/1.25 var(--ig-font-display, 'Chakra Petch', sans-serif); letter-spacing: 0.06em;
+  color: #fff; background: #c7343c; border-radius: 1px;
+}
+/* FFX-2's rows are not greyed by the game today: a fallen girl's row goes quiet (FFX's own `.ffx-stat--ko` already does) */
+.ig-stat--pro-ko:not(.ffx-stat--ko) { opacity: 0.72; filter: grayscale(0.7); }
+
+/* ---------------------------------------------------------------- the field's KO marks */
+
+.pro-field-marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 5; /* under the numerals (6) */
+}
+.pro-ko-wash {
+  position: absolute; left: 0; top: 0;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(128, 138, 158, 0.62) 0%, rgba(78, 88, 108, 0.36) 42%, rgba(60, 70, 90, 0) 72%);
+  will-change: transform, opacity;
+}
+.ffx2hud .pro-ko-wash, .pro-field-marks--ffx2 .pro-ko-wash {
+  background: radial-gradient(ellipse at center, rgba(140, 126, 150, 0.62) 0%, rgba(92, 80, 104, 0.36) 42%, rgba(70, 60, 84, 0) 72%);
+}
+.pro-ko-mark {
+  position: absolute; left: 0; top: 0;
+  padding: 0.12em 0.5em 0.14em;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif); font-weight: 700; letter-spacing: 0.1em;
+  color: #fff; background: #c7343c; border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.55), 0 2px 8px rgba(11, 10, 18, 0.7);
+  opacity: 0;
+  will-change: transform, opacity;
+}

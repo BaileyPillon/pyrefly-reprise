@@ -2,6 +2,8 @@ import type { CombatantId } from '../../battle/common/types.ts';
 import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
 import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, handBox, noteHtml, px, type PlateDock } from './targetCursorParts.ts';
 import { pickTargetAt, sameSide } from './targetHitPick.ts';
+import '../common/pro-markers.css';
+import { proHandSize, proMarkersOn, proRing, proRingBox } from '../common/proMarkers.ts'; // lane pro-look: the big glove, the quarter-height ring
 
 export type { PlateDock } from './targetCursorParts.ts';
 
@@ -356,6 +358,11 @@ export class TargetCursor {
     // any valid enemy, not only the keyboard-highlighted one.
     const clickable = !group;
     const handGap = this.handGap();
+    // Lane pro-look (markers "Classic, calm, clear"; off by default): FFX's glove about five times wider, FFX-2's ring a quarter of the figure's height with short corners round it and the name beside it.
+    const pro = proMarkersOn();
+    this.el.classList.toggle('ffx-targeting--pro', pro);
+    const viewMin = typeof window === 'undefined' ? 1080 : Math.min(window.innerWidth, window.innerHeight);
+    const proHand = pro && this.chrome === 'ffx' ? proHandSize(typeof window === 'undefined' ? 1600 : window.innerWidth) : null;
 
     // PR-0232: the side being aimed at is drawn last, the active target last of all,
     // so where brackets overlap the in-set one is on top for a tap.
@@ -388,10 +395,12 @@ export class TargetCursor {
       // 420 px aeon cannot wear the same 30 px bracket and both read as one
       // mark. Bounded so a tiny target still shows a bracket and a huge one
       // does not turn into a full box.
-      const corner = clamp(Math.min(rect.w, rect.h) * 0.26, 12, 54);
+      const proRingGeom = pro && this.chrome === 'ffx2' && active && !group ? proRing(rect, viewMin) : null;
+      const frame = proRingGeom ? proRingBox(proRingGeom) : rect; // pro FFX-2: the corners stand round the ring, not round the whole figure
+      const corner = clamp(Math.min(frame.w, frame.h) * 0.26, 12, 54);
       const idAttr = clickable ? ` data-target-id="${escapeHtml(entry.id)}"` : '';
       parts.push(
-        `<div class="${cls}"${idAttr} style="left:${px(rect.x)};top:${px(rect.y)};width:${px(rect.w)};height:${px(rect.h)};--ffx-corner:${px(corner)}">` +
+        `<div class="${cls}"${idAttr} style="left:${px(frame.x)};top:${px(frame.y)};width:${px(frame.w)};height:${px(frame.h)};--ffx-corner:${px(corner)}">` +
           '<span class="ffx-target__c ffx-target__c--tl"></span>' +
           '<span class="ffx-target__c ffx-target__c--tr"></span>' +
           '<span class="ffx-target__c ffx-target__c--bl"></span>' +
@@ -405,8 +414,9 @@ export class TargetCursor {
       // two fiends. FFX only: FFX-2 has no finger cursor, and the two chromes
       // must never be mixed [visual-bible 4.2, ffx-vs-ffx2-presentation 9].
       if (this.chrome === 'ffx') {
+        const size = proHand ? `;width:${px(proHand.w)};height:${px(proHand.h)}` : '';
         parts.push(
-          `<div class="ffx-target__hand" style="left:${px(rect.x - handGap)};top:${px(rect.y + rect.h * 0.55)}">${HAND_SVG}</div>`,
+          `<div class="ffx-target__hand" style="left:${px(rect.x - handGap)};top:${px(rect.y + rect.h * 0.55)}${size}">${HAND_SVG}</div>`,
         );
       } else {
         // FFX-2's field reticle: a rotating six-petal flower wrapping the
@@ -422,15 +432,15 @@ export class TargetCursor {
         // marks, wholly inside the frame and touching nothing else, so the
         // ring follows the figure up to a third of the shorter screen edge and
         // no further. FFX-2 only — FFX docks the hand instead.
-        const viewMin =
-          typeof window === 'undefined' ? 1080 : Math.min(window.innerWidth, window.innerHeight);
-        const r = Math.min(Math.max(rect.w, rect.h) * 0.56, viewMin * 0.34);
+        const r = proRingGeom ? proRingGeom.r : Math.min(Math.max(rect.w, rect.h) * 0.56, viewMin * 0.34);
+        const fcx = proRingGeom ? proRingGeom.cx : rect.x + rect.w / 2;
+        const fcy = proRingGeom ? proRingGeom.cy : rect.y + rect.h / 2;
         parts.push(
-          `<div class="ffx-target__flower" style="left:${px(rect.x + rect.w / 2)};top:${px(rect.y + rect.h / 2)};width:${px(r * 2)};height:${px(r * 2)}">${FLOWER_SVG}</div>`,
+          `<div class="ffx-target__flower" style="left:${px(fcx)};top:${px(fcy)};width:${px(r * 2)};height:${px(r * 2)}">${FLOWER_SVG}</div>`,
         );
       }
 
-      parts.push(this.plateHtml(entry, rect));
+      parts.push(this.plateHtml(entry, proRingGeom ? proRingBox(proRingGeom) : rect, proHand, proRingGeom !== null));
     });
 
     const parts = chunks.sort((a, b) => a.rank - b.rank).flatMap((c) => c.html);
@@ -445,13 +455,22 @@ export class TargetCursor {
   }
 
   /** The ink name plate: name, letter tag, optional note, docked clear of the HUD. */
-  private plateHtml(entry: TargetEntry, rect: TargetRect): string {
+  private plateHtml(entry: TargetEntry, rect: TargetRect, proHand: { w: number; h: number } | null = null, ringed = false): string {
     const tag = entry.tag
       ? `<span class="ffx-target__tag">${escapeHtml(entry.tag)}</span>`
       : '';
     const note = noteHtml(entry.note); // status display O3: Zombie and Doom as red tags
-    const dock = this.dockFor(entry, rect);
+    const dock = this.dockFor(entry, rect, proHand, ringed);
+    // pro FFX-2: the name rides beside the ring on a thin leader line (when it docks left or right of the ring)
+    const ringRight = rect.x + rect.w;
+    const leader =
+      ringed && dock.side === 'right'
+        ? `<div class="ffx-target__leader" style="left:${px(ringRight)};top:${px(rect.y + rect.h / 2)};width:${px(Math.max(8, dock.x + 6 - ringRight))}"></div>`
+        : ringed && dock.side === 'left'
+          ? `<div class="ffx-target__leader ffx-target__leader--left" style="left:${px(dock.x - 6)};top:${px(rect.y + rect.h / 2)};width:${px(Math.max(8, rect.x - (dock.x - 6)))}"></div>`
+          : '';
     return (
+      leader +
       `<div class="ffx-target__plate ffx-target__plate--${entry.kind} ffx-target__plate--${dock.side}" ` +
       `style="left:${px(dock.x)};top:${px(dock.y)}">` +
       `<span class="ffx-target__name">${escapeHtml(entry.name)}</span>${tag}${note}` +
@@ -460,12 +479,12 @@ export class TargetCursor {
   }
 
   /** Where the plate docks, clear of the HUD's panels when a side allows (`dockPlate`). */
-  private dockFor(entry: TargetEntry, rect: TargetRect): { side: PlateDock; x: number; y: number } {
+  private dockFor(entry: TargetEntry, rect: TargetRect, proHand: { w: number; h: number } | null = null, ringed = false): { side: PlateDock; x: number; y: number } {
     // A rough plate box: ~10px per glyph plus the tag chip and the padding.
     const w = Math.max(64, entry.name.length * 10 + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 6 : 0));
     // FFX's hand is a thing on the field too (r37-ui-floor): the plate docks off it as off any panel.
-    const hand = this.chrome === 'ffx' ? [handBox(rect, this.handGap())] : [];
-    return dockPlate(rect, w, 34, hand.length ? [...this.panels, ...hand] : this.panels);
+    const hand = this.chrome === 'ffx' ? [handBox(rect, this.handGap(), proHand ?? undefined)] : [];
+    return dockPlate(rect, w, 34, hand.length ? [...this.panels, ...hand] : this.panels, ringed ? ['right', 'left', 'below', 'above'] : undefined); // pro FFX-2: beside the ring first
   }
 
   /** How far the hand cursor is docked clear of the silhouette at this window width. */
