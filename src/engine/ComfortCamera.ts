@@ -81,6 +81,11 @@ export class StillCamera implements CameraPort {
     return this.inner.blendRig?.(from, to, t) ?? null;
   }
 
+  /** The directed camera's port (REDUCE MOTION is the director's to apply: it plays a held, cut-in shot, never a move). */
+  get pro(): CameraPort['pro'] {
+    return this.inner.pro;
+  }
+
   get rigNames(): string[] {
     return this.inner.rigNames;
   }

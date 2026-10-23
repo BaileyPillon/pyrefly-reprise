@@ -144,6 +144,11 @@ export interface CameraPort {
    * keeps every girl whole (`ShotRules.reveal`). It moves nothing by itself.
    */
   blendRig?(from: string, to: string, t: number): string | null;
+  /**
+   * The directed camera's port (`?camera=pro`, conference demo; `procam/ProLayer.ts`): play a run of poses on top of the rig, stop it, install the FFX-2 follower. Optional and additive: a fake, a
+   * camera without the layer and a held camera (the FFX-2 target frame) answer undefined, and the director then plays nothing.
+   */
+  readonly pro?: import('./procam/ProTypes.ts').ProCamPort | undefined;
   readonly rigNames: string[];
   readonly rigName: string;
 }

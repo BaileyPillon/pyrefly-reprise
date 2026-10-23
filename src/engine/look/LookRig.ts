@@ -26,6 +26,7 @@ import { LookRoom, lin, mixc } from './LookRoom.ts';
 import { relightCells, relightStats } from './relight/FigureRelight.ts';
 import { RelightLights } from './relight/RelightLights.ts';
 import { lookState } from './LookState.ts';
+import { proSoftLook } from '../procam/ProBand.ts'; // `?camera=pro`: the directed shot's soft background, blended into the blur below
 import { LookStage } from './stage/LookStage.ts';
 import { applyRelight } from './LookRelight.ts';
 import { proRoom, type ProRoom } from './pro/ProGrade.ts';
@@ -251,10 +252,9 @@ export class LookRig {
     if (Math.abs(figureTrueOf(r) - v('grade.figureTrue')) > 1e-3) applyFigureTrue(r, v('grade.figureTrue'));
 
     // --- the mask-aware blur (its band also steers the sharpening ladder's fade, which reads the stock tilt-shift's band)
-    const far = v('blur.far') * scale;
-    const near = v('blur.near') * scale;
+    const sb = proSoftLook({ focus: room?.focus ?? v('blur.focus'), band: v('blur.band'), far: v('blur.far') * scale, near: v('blur.near') * scale }, r.proSoft); // unchanged with no directed shot (`?camera=pro`)
+    const { focus, far, near } = sb;
     const useBlur = cost.blurTaps > 0 && (far > 0.4 || near > 0.4);
-    const focus = room?.focus ?? v('blur.focus');
     this.stats.blur = useBlur;
     if (useBlur) {
       const [bh, bv] = this.blurPasses();
@@ -263,7 +263,7 @@ export class LookRig {
         const u = b.uniforms;
         (u['resolution']!.value as Vector2).set(1 / Math.max(1, W), 1 / Math.max(1, H));
         u['focus']!.value = focus;
-        u['band']!.value = v('blur.band');
+        u['band']!.value = sb.band;
         u['falloff']!.value = p.blur.falloff;
         u['farPx']!.value = far;
         u['nearPx']!.value = near;
@@ -289,7 +289,7 @@ export class LookRig {
       bloomStrength: v('bloom.strength'),
       bloomRadius: v('bloom.radius'),
       tiltMaxBlur: stock ? (pal.tiltMaxBlur ?? 6) : p.tiltMaxBlur,
-      ...(useBlur ? { tiltFocus: focus, tiltBandWidth: v('blur.band') } : {}),
+      ...(useBlur ? { tiltFocus: focus, tiltBandWidth: sb.band } : {}),
     });
 
     // --- the compound pass

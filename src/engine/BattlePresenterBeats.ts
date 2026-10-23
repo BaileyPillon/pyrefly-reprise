@@ -29,6 +29,7 @@ import { MEGA_FLARE_SHAKE, megaFlareBlow } from './MegaFlareImpact.ts'; // relea
 import { lungePlan } from './motion/StrikeReach.ts'; // r391-reach: the house lunge, solved against its target where the game's rules let it
 import { partyOffStage } from './SummonStaging.ts';
 import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
+import { actionKills } from './procam/ProBurst.ts'; // `?camera=pro`: whether the action's own events KO a foe (the killing-blow shot)
 import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import { banner, cue, elementCue, numeral, reasonText, settled, TIMING, type EventCtx } from './BattlePresenterEvents.ts';
@@ -72,7 +73,7 @@ export async function actionStart(
   if (event.command.kind === 'overdrive') {
     await odOpening(ctx, event, () => ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE', event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind })); // the new effects add the aura under the banner and a calm beat after it
   } else {
-    await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind });
+    await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind, lethal: actionKills(burst, (id) => ctx.stage.sideOf(id) === 'enemy') });
   }
   await fxActionOpen(ctx, event);
   // RUN-IN (FFX-2 only, r38-motion): the girl runs to her target before the blow; the lunge below then only carries the strike (`lungeFor`).
@@ -164,7 +165,7 @@ export async function damage(
   // The cut to the target, on the frame the hit lands. Only the first hit of a
   // multi-hit action moves the camera (see `BattleMoments.impact`).
   const heavy = event.crit || event.overkill === true || event.capped === true;
-  ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex, heavy });
+  ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex, heavy, element: event.element, lethal: ctx.stage.sideOf(event.targetId) === 'enemy' && actionKills(ctx.burst, () => false, event.targetId) });
 
   const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });

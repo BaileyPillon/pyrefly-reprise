@@ -245,6 +245,8 @@ export class Renderer {
   /** Option A's controller, built the first time `?fx=a` (or `__pyrefly.fx`) asks for it. */
   private fxA: GoldenHour | null = null;
   private look: LookRig | null = null;
+  /** The directed camera's soft background this frame (`?camera=pro`; set by the MAX mix's depth-of-field part, read by the look's blur), or null. */
+  proSoft: import('./procam/ProTypes.ts').ProBand | null = null;
 
   /** Release 60: build the look's passes (when one is wanted) ahead of the first frame, so the shader warm-up compiles them (`LookRig.prepare`). A no-op with no look wanted. */
   prepareLook(): void {

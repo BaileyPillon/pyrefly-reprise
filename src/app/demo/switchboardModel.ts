@@ -23,6 +23,7 @@ import { momentsMode, setMomentsMode } from '../../engine/motion/MomentsSwitch.t
 import { smearStyle, setSmearStyle, type SmearStyle } from '../../engine/motion/SmearSwitch.ts';
 import { fxMode, setFxMode } from '../../engine/spellfx/FxSwitch.ts';
 import { proMode, setProMode } from '../../engine/look/pro/ProSwitch.ts'; // lane pro-look
+import { proCamConfigured, setProCam } from '../../engine/procam/ProCamSwitch.ts';
 
 export interface SwitchDef {
   /** `KeyboardEvent.code` (the number row; the numpad digits are the same keys). */
@@ -207,6 +208,20 @@ export const SWITCHES: readonly SwitchDef[] = [
     },
     isNew: () => feelConfigured().shadow,
     set: (on) => setShadowFollows(on),
+  },
+  // `;`: the directed camera (lane "pro-camera"): the real FFX shots on Chapter I, moves on plain attacks, FFX-2's auto camera on Chapter IV. Read at each beat: a flip plays from the next action.
+  {
+    code: 'Semicolon',
+    key: ';',
+    name: 'camera',
+    read: () => (proCamConfigured() ? 'pro' : 'today'),
+    flip: () => {
+      const next = !proCamConfigured();
+      setProCam(next);
+      return next ? 'pro' : 'today';
+    },
+    isNew: () => proCamConfigured(),
+    set: (on) => setProCam(on),
   },
 ];
 

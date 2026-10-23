@@ -248,7 +248,7 @@ describe('the playtest switchboard', () => {
     expect(new Set(codes).size).toBe(codes.length);
     const input = readFileSync('src/app/Input.ts', 'utf8');
     for (const c of codes) expect(input).not.toContain(`${c}:`); // not in Input's KEY_MAP
-    expect(SWITCHES.map((s) => s.key).join('')).toBe('1234567' + ',.' + '89' + '/' + '-'); // integration 2 added `,` (the real clips) and `.` (the party rigs) after the curves; lane pro-look added `/` (the pro look) before the shadow key
+    expect(SWITCHES.map((s) => s.key).join('')).toBe('1234567' + ',.' + '89' + '/' + '-' + ';'); // integration 2 added `,` (the real clips) and `.` (the party rigs) after the curves; lane pro-look added `/` (the pro look) before the shadow key; the pro-camera lane added `;` (the directed camera) at the end
     expect(normaliseCode('Numpad3')).toBe('Digit3');
     expect(switchOfCode('Numpad1')?.name).toBe('smear');
     expect(switchOfCode('KeyZ')).toBeUndefined();

@@ -22,6 +22,7 @@ import { installCurvesDebug } from './debug/curvesApi.ts'; // motion pass (lane 
 import { installMomentsDebug } from './debug/momentsApi.ts'; // motion pass (lane "core", step 3): `__pyrefly.moments('new' | 'today')`, `.cheer()`, `.standDown()`, `.koSettle()`
 import { installSmearDebug } from './debug/smearApi.ts'; // motion pass (lane "core", step 2): `__pyrefly.smear('paint' | 'blur' | 'off')`, `.smearLog()`
 import { installFeelDebug } from './debug/feelApi.ts';
+import { installProCamDebug } from './debug/procamApi.ts'; // lane "pro-camera": `__pyrefly.procam(on?)`, the directed camera's switch and state
 import { installSwitchboard } from './app/demo/switchboard.ts'; // integration: the playtest switchboard (`?pack=demo&switchboard=1` only)
 import { installFxWiring } from './engine/motion/FxWiring.ts'; // integration: the fx lane's Overdrive opening gathers with the core lane's leap
 import { installGamepadRumble } from './app/gamepadRumble.ts';
@@ -179,6 +180,7 @@ async function boot(): Promise<void> {
   installGamepadRumble(); // the pad-side sink of `?rumble=on` (a demo chapter only; never on keyboard play, never under REDUCE MOTION)
   installFxNewDebug(debugApi); // motion pass (lane "fx"): the new spell effects' switch, for captures
   installProDebug(debugApi); // lane "pro-look": the pro-look switch, for captures
+  installProCamDebug(debugApi); // lane "pro-camera": `__pyrefly.procam(on?)`
   installSwitchboard(debugApi); // the playtest keys 1 to 9, 0, -, = and the corner label; nothing is installed without `?pack=demo&switchboard=1`
   installFxWiring(); // integration: the fx lane's big moments onto the core and feel lanes (`engine/motion/FxWiring.ts`)
 

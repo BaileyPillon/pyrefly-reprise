@@ -43,6 +43,8 @@ import { momentPunch } from './feel/PunchCurve.ts';
 import { fittedPush } from './ShotFit.ts';
 import { ShotRules } from './ShotRules.ts';
 import type { ShotAction, ShotActionInfo, ShotAnswer, ShotCtx, ShotDirector, ShotSubject } from './ShotDirector.ts';
+import { ProDirector } from './procam/ProDirector.ts'; // `?camera=pro` (demo chapters only): the directed camera, asked when the scene publishes no director of its own
+import { proCamOn } from './procam/ProCamSwitch.ts';
 
 /** Authored durations, in ms at `speed: 'normal'`. The one place to tune. */
 export const MOMENT_TIMING = {
@@ -233,7 +235,7 @@ export class BattleMoments {
    * beat: the beat plays as it always has and nothing is awaited. A handler that throws, or whose promise rejects, answers `false`: a broken director costs the shot, never the battle.
    */
   private ask(call: (director: ShotDirector) => ShotAnswer | undefined): ShotAnswer | undefined {
-    const director = this.deps.stage.shotDirector;
+    const director = this.deps.stage.shotDirector ?? this.proDirector();
     if (!director) return undefined;
     try {
       const answer = call(director);
@@ -243,9 +245,16 @@ export class BattleMoments {
     }
   }
 
+  /** `?camera=pro`: the directed camera for the two demo chapters (`procam/ProDirector.ts`), made at the first beat that asks; undefined whenever the switch is off, so every other chapter plays as it always has. */
+  private pro: ProDirector | null = null;
+  private proDirector(): ShotDirector | undefined {
+    if (!proCamOn()) return undefined;
+    return (this.pro ??= new ProDirector(this.deps.stage));
+  }
+
   /** What every beat's context carries. */
   private shotCtx(): ShotCtx {
-    return { camera: this.cam, speed: this.deps.speed(), skipping: this.skipping, ms: (base) => this.ms(base) };
+    return { camera: this.cam, speed: this.deps.speed(), skipping: this.skipping, ms: (base) => this.ms(base), ...(this.reducedMotion ? { reducedMotion: true } : {}) };
   }
 
   /** A combatant and its side, as the stage reports it. */
@@ -455,7 +464,7 @@ export class BattleMoments {
     this.shots.focus = this.shots.enemy(actorId) ?? targets.map((t) => this.shots.enemy(t)).find((t) => t !== null) ?? null;
     const action: ShotAction = { ...info, kind: pose };
     this.open = { actor: this.subject(actorId), action };
-    const asked = this.ask((d) => d.actionOpen?.({ ...this.shotCtx(), actor: this.subject(actorId), targets: targets.map((t) => this.subject(t)), action }));
+    const asked = this.ask((d) => d.actionOpen?.({ ...this.shotCtx(), actor: this.subject(actorId), targets: targets.map((t) => this.subject(t)), action, castHold: () => this.deps.sleep(MOMENT_TIMING.castHold) }));
     if (asked instanceof Promise ? await asked : asked === true) return; // the director has the push in on the attacker, and the cast's hold
     if (this.skipping) {
       this.cut(this.shots.fit(this.rigFor(actorId), 0).rig);
@@ -472,8 +481,8 @@ export class BattleMoments {
    * so this snaps, and only on the **first** hit of a multi-hit action, or the
    * frame would strobe through a twelve-hit Attack Reels.
    */
-  impact(targetId: CombatantId, opts: { hitIndex?: number; heavy?: boolean } = {}): void {
-    const taken = this.ask((d) => d.impact?.({ ...this.shotCtx(), actor: this.open?.actor, action: this.open?.action, target: this.subject(targetId), hitIndex: opts.hitIndex ?? 0, heavy: opts.heavy === true }));
+  impact(targetId: CombatantId, opts: { hitIndex?: number; heavy?: boolean; element?: string; lethal?: boolean } = {}): void {
+    const taken = this.ask((d) => d.impact?.({ ...this.shotCtx(), actor: this.open?.actor, action: this.open?.action, target: this.subject(targetId), hitIndex: opts.hitIndex ?? 0, heavy: opts.heavy === true, element: opts.element, lethal: opts.lethal }));
     if (taken === true) {
       this.rollOwed = false; // the roll is the hit's camera move, and the director took it
       return;

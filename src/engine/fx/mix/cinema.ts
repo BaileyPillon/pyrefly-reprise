@@ -5,6 +5,7 @@ import type { Pass } from 'three/addons/postprocessing/Pass.js';
 import type { Renderer } from '../../Renderer.ts';
 import { cameraAt, unionBox, type Fig, type Pose } from './geometry.ts';
 import type { MasterClass } from './masters.ts';
+import type { ProBand } from '../../procam/ProTypes.ts';
 
 /**
  * The MAX mix (D-316), CINEMA LIGHT's three new parts, ported from option C's prototype
@@ -46,6 +47,10 @@ const FOG_VERT = /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Positi
 export interface DofBand {
   focus: number;
   width: number;
+  /** The blur at the frame's far edge, device pixels, while a directed shot's soft background is up (`procam/ProBand.ts`); absent: the pass's own, untouched. */
+  blur?: number;
+  /** How much of {@link blur} is mixed in over the pass's own (0..1: the shot's weight); absent: all of it. */
+  blurMix?: number;
 }
 
 /** The tilt-shift band aimed at the figures of a pose (0 = bottom of the screen), per master class. */
@@ -63,7 +68,7 @@ export class Cinema {
   private fogT = 0;
   private aaPass: Pass | null = null;
   private aaKind: 'smaa' | 'fxaa' | null = null;
-  private savedTilt: { focus: number; band: number } | null = null;
+  private savedTilt: { focus: number; band: number; blur: number; wroteBlur: boolean } | null = null;
   private readonly sky: Color;
   readonly stats = { fogBands: 0, aa: 'none' as string, dof: null as DofBand | null };
 
@@ -120,17 +125,20 @@ export class Cinema {
     this.fog.length = 0;
   }
 
-  /** The depth-of-field band for the shot on screen, or null to give today's tilt-shift back. */
-  dof(band: DofBand | null): void {
+  /** The depth-of-field band for the shot on screen, or null to give today's tilt-shift back. `shot`: the directed camera's soft background (`?camera=pro`), handed to the look's own blur too (`Renderer.proSoft`). */
+  dof(band: DofBand | null, shot: ProBand | null = null): void {
     const r = this.renderer();
     if (!r?.tiltH) return;
+    r.proSoft = shot;
     const u = r.tiltH.uniforms;
     this.stats.dof = band;
     if (band) {
-      this.savedTilt ??= { focus: u['focus']!.value as number, band: u['bandWidth']!.value as number };
-      r.applyPost({ tiltFocus: band.focus, tiltBandWidth: band.width });
+      const saved = (this.savedTilt ??= { focus: u['focus']!.value as number, band: u['bandWidth']!.value as number, blur: u['maxBlur']!.value as number, wroteBlur: false });
+      const blur = band.blur === undefined ? {} : { tiltMaxBlur: saved.blur + (band.blur - saved.blur) * (band.blurMix ?? 1) }; // the blur is written only while a shot asks for it (m1)
+      if (band.blur !== undefined) saved.wroteBlur = true;
+      r.applyPost({ tiltFocus: band.focus, tiltBandWidth: band.width, ...blur });
     } else if (this.savedTilt) {
-      r.applyPost({ tiltFocus: this.savedTilt.focus, tiltBandWidth: this.savedTilt.band });
+      r.applyPost({ tiltFocus: this.savedTilt.focus, tiltBandWidth: this.savedTilt.band, ...(this.savedTilt.wroteBlur ? { tiltMaxBlur: this.savedTilt.blur } : {}) });
       this.savedTilt = null;
     }
   }
