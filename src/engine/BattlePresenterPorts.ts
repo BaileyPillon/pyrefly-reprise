@@ -351,8 +351,10 @@ export interface AudioPort {
    */
   playSfx(
     key: string,
-    opts?: { volume?: number; delay?: number; pan?: number; events?: readonly string[]; coveredBy?: readonly string[]; beatMs?: number },
+    opts?: { volume?: number; delay?: number; pan?: number; pitch?: number; trimMs?: number; fadeMs?: number; events?: readonly string[]; coveredBy?: readonly string[]; beatMs?: number; pass?: import('../audio/pass/passTypes.ts').PassPlan },
   ): void;
+  /** The sound pass (`audio/pass/`, `?audio=new`): dip the music for a blow `aheadMs` away. Optional: a mixer without it (a test fake, an older build) ignores the ask. */
+  musicDip?(aheadMs: number, plan: import('../audio/pass/passTypes.ts').DipPlan): void;
   playMusic(key: string, opts?: { fade?: number }): Promise<void> | void;
   stopMusic(fade?: number): void;
 }

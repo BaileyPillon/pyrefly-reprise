@@ -34,6 +34,8 @@ export interface SfxVoiceParams {
   trimMs?: number;
   /** Motion sounds: fade the sound to silence over its last `fadeMs` (of the slice, or of the trim). Absent: no fade. A looped source is never faded. */
   fadeMs?: number;
+  /** The audio pass (`audio/pass/`): start this many ms into the slice (its own leading silence, or a layer's chosen part), in slice time. Absent: from its first sample, as every cue always played. */
+  skipMs?: number;
 }
 
 /** A sound's length in output seconds, and the part of the buffer it plays (seconds of buffer), after a trim and the playback rate. */
@@ -74,13 +76,15 @@ export function startSfxSource(
     source.loopStart = slice.cue.offset;
     source.loopEnd = slice.cue.offset + slice.cue.duration;
   }
-  const shaped = !loop && (params.trimMs !== undefined || params.fadeMs !== undefined) ? shapedLength(slice ? slice.cue.duration : buffer.duration, rate, params.trimMs) : null;
+  // The pass's skip: begin `skipMs` into the slice, and count the trim and the fade from there.
+  const skip = !loop && slice && typeof params.skipMs === 'number' && params.skipMs > 0 ? Math.min(params.skipMs / 1000, Math.max(0, slice.cue.duration - 0.005)) : 0;
+  const shaped = !loop && (params.trimMs !== undefined || params.fadeMs !== undefined) ? shapedLength(slice ? slice.cue.duration - skip : buffer.duration, rate, params.trimMs) : null;
   if (shaped && typeof params.fadeMs === 'number' && params.fadeMs > 0) {
     const fade = Math.min(params.fadeMs / 1000, shaped.out);
     gain.gain.setValueAtTime(level, when + shaped.out - fade);
     gain.gain.linearRampToValueAtTime(0, when + shaped.out);
   }
-  if (slice) source.start(when, slice.cue.offset, loop ? undefined : (shaped?.buffer ?? slice.cue.duration));
+  if (slice) source.start(when, slice.cue.offset + skip, loop ? undefined : (shaped?.buffer ?? slice.cue.duration - skip));
   else if (shaped) source.start(when, 0, shaped.buffer); // the synthesised stand-in (the sprite has not decoded): the same shaping
   else source.start(when);
   source.onended = () => {

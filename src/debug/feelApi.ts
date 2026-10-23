@@ -34,6 +34,8 @@ import { audio } from '../audio/index.ts';
 import { rumbleLog, type RumbleRecord } from '../app/gamepadRumble.ts';
 import { motionSfxLog, setMotionSfxClock, type MotionSfxRecord } from '../app/motionSfxSink.ts';
 import { motionBeat, type MotionBeatKind } from '../engine/feel/MotionBeats.ts';
+import { audioNewConfigured, audioNewOn, passChapter, setAudioNew } from '../audio/pass/passSwitch.ts'; // the sound pass (decision 184): captures and checks read it here
+import { passLogGet, setPassClock, type PassLogEntry } from '../audio/pass/passLog.ts';
 
 /** The slice of `App` the stepper needs (`app/App.ts`). */
 interface Steppable {
@@ -97,6 +99,7 @@ export function installFeelDebug(api: Record<string, unknown>, app?: Steppable):
         paused = true;
         simNow = performance.now();
         setMotionSfxClock(() => simNow); // the motion sounds' rate limits and log follow the simulated time while the stepper runs
+        setPassClock(() => simNow); // so does the sound pass's log (`audio/pass/passLog.ts`)
       }
       const dt = 1 / Math.max(1, hz);
       for (let i = 0; i < frames; i++) {
@@ -110,6 +113,7 @@ export function installFeelDebug(api: Record<string, unknown>, app?: Steppable):
       const was = paused;
       paused = false;
       setMotionSfxClock(null);
+      setPassClock(null);
       return was;
     };
   }
@@ -156,6 +160,13 @@ export function installFeelDebug(api: Record<string, unknown>, app?: Steppable):
     timing: timingByTime(),
   });
   api['rumbleLog'] = (reset = false): RumbleRecord[] => rumbleLog(reset);
+  /** `audioNew(on?)`: the sound pass (`?audio=new`, `audio/pass/`) in force; `audioNew(true|false)` pins it, `audioNew(null)` goes back to the address. Only Chapter I and IV ever hear it. */
+  api['audioNew'] = (on?: boolean | null): boolean => {
+    if (on === true || on === false || on === null) setAudioNew(on);
+    return audioNewOn();
+  };
+  api['audioPass'] = (): Record<string, unknown> => ({ ...audio.passState(), configured: audioNewConfigured(), on: audioNewOn(), chapter: passChapter() ?? null });
+  api['audioPassLog'] = (reset = false): PassLogEntry[] => passLogGet(reset);
   api['punch'] = (fraction?: number, ms?: number, which?: 'new' | 'today', trauma?: number, stopMs?: number): { depth: number; fraction: number } | null => {
     const play = fxDebugHooks['c']?.api?.['punch'] as ((f?: number, m?: number, w?: 'new' | 'today', t?: number, s?: number) => { depth: number; fraction: number }) | undefined;
     return play ? play(fraction, ms, which, trauma, stopMs) : null;

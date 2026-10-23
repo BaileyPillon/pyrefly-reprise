@@ -11,7 +11,13 @@
  * Game case: both (shared plumbing); the manifests decide which chapters have voice.
  */
 
-import { chapterManifestPath, parseChapterVoiceManifest, parseVoiceIndexChapters, voiceFilePath, VOICE_INDEX_PATH, type ChapterVoiceManifest, type VoiceLineEntry } from '../../story/voice/voiceManifest.ts';
+import { chapterManifestPath, parseChapterVoiceManifest, parseVoiceIndexChapters, voiceFilePath, VOICE_AUDIO_DIR, VOICE_INDEX_PATH, type ChapterVoiceManifest, type VoiceLineEntry } from '../../story/voice/voiceManifest.ts';
+import { audioNewConfigured, audioNewOn } from '../pass/passSwitch.ts'; // the sound pass (decision 184): in-battle lines Chapter I does not voice today, in `voice-pass/`
+
+/** The sound pass's own voice folder and the file-name mark that sends a recording there (`pass/<chapter>/<id>.mp3` is `audio/voice-pass/<chapter>/<id>.mp3`). */
+export const PASS_VOICE_DIR = `${VOICE_AUDIO_DIR}-pass`;
+const PASS_MARK = 'pass/';
+const fileUrl = (file: string): string => (file.startsWith(PASS_MARK) ? `${PASS_VOICE_DIR}/${file.slice(PASS_MARK.length)}` : voiceFilePath(file));
 
 /** The part of an `AudioBuffer` the cache reads. */
 export interface DecodedVoice {
@@ -43,6 +49,8 @@ const bytesOf = (b: DecodedVoice): number => b.length * b.numberOfChannels * 4;
 export class VoiceBank<B extends DecodedVoice> {
   private readonly manifests = new Map<string, ChapterVoiceManifest | null>();
   private readonly manifestLoads = new Map<string, Promise<ChapterVoiceManifest | null>>();
+  /** The sound pass's extra lines per chapter (`voice-pass/<chapter>.json`), fetched only when the address asks for the pass and answered only while the pass is on. */
+  private readonly extras = new Map<string, Record<string, VoiceLineEntry>>();
   /** The chapters `voice/index.json` lists, fetched once; `null` inside when the index is unreadable (then every chapter is asked for as before). */
   private index: Promise<ReadonlySet<string> | null> | null = null;
   private readonly slots = new Map<string, Slot<B>>();
@@ -85,6 +93,10 @@ export class VoiceBank<B extends DecodedVoice> {
         return this.deps.fetchJson(path).then((raw) => parseChapterVoiceManifest(raw, chapter));
       })
       .catch(() => null)
+      .then(async (manifest) => {
+        if (manifest && audioNewConfigured()) await this.loadExtras(chapter);
+        return manifest;
+      })
       .then((manifest) => {
         this.manifests.set(chapter, manifest);
         this.manifestLoads.delete(chapter);
@@ -94,10 +106,32 @@ export class VoiceBank<B extends DecodedVoice> {
     return load;
   }
 
-  /** The entry for a key once the chapter's manifest has loaded; `null` before that, or when the line has no recording. */
+  /** The sound pass's extra lines of a chapter; a miss (no file, bad JSON) is an empty set. Never throws. */
+  private async loadExtras(chapter: string): Promise<void> {
+    if (this.extras.has(chapter)) return;
+    const path = `${PASS_VOICE_DIR}/${chapter}.json`;
+    this.requests.push(path);
+    try {
+      const m = parseChapterVoiceManifest(await this.deps.fetchJson(path), chapter);
+      const lines: Record<string, VoiceLineEntry> = {};
+      for (const [key, e] of Object.entries(m?.lines ?? {})) lines[key] = { ...e, file: `${PASS_MARK}${e.file}` };
+      this.extras.set(chapter, lines);
+    } catch {
+      this.extras.set(chapter, {});
+    }
+  }
+
+  /** The sound pass's extra recordings of a chapter while the pass is on (the director warms them with the chapter's own mid-battle lines); empty otherwise. */
+  extraLines(chapter: string | null): VoiceLineEntry[] {
+    return chapter && audioNewOn() ? Object.values(this.extras.get(chapter) ?? {}) : [];
+  }
+
+  /** The entry for a key once the chapter's manifest has loaded; `null` before that, or when the line has no recording. The pass's extra lines answer only while the pass is on. */
   entry(chapter: string | null, key: string): VoiceLineEntry | null {
     if (!chapter) return null;
-    return this.manifests.get(chapter)?.lines[key] ?? null;
+    const own = this.manifests.get(chapter)?.lines[key];
+    if (own) return own;
+    return audioNewOn() ? (this.extras.get(chapter)?.[key] ?? null) : null;
   }
 
   manifest(chapter: string): ChapterVoiceManifest | null {
@@ -121,9 +155,9 @@ export class VoiceBank<B extends DecodedVoice> {
     if (this.failed.has(file)) return Promise.resolve(null);
     const inflight = this.loading.get(file);
     if (inflight) return inflight;
-    this.requests.push(voiceFilePath(file));
+    this.requests.push(fileUrl(file));
     const load = this.deps
-      .fetchBytes(voiceFilePath(file))
+      .fetchBytes(fileUrl(file))
       // A file that would not come (offline, a 404) is tried again at the next line; one that came but would not decode is bad, and stays failed.
       .then(async (bytes) => (bytes ? { buffer: await this.deps.decode(bytes), bad: true } : { buffer: null, bad: false }))
       .catch(() => ({ buffer: null, bad: false }))
@@ -155,6 +189,7 @@ export class VoiceBank<B extends DecodedVoice> {
   clear(): void {
     this.manifests.clear();
     this.manifestLoads.clear();
+    this.extras.clear();
     this.slots.clear();
     this.loading.clear();
     this.failed.clear();

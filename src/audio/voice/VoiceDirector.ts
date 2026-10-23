@@ -17,6 +17,9 @@ import { keyFor, type VoiceLineRequest } from '../../story/voice/voiceKey.ts';
 import { gameHasVoice, partOfId, type ChapterVoiceManifest } from '../../story/voice/voiceManifest.ts';
 import { VOICE_ADVANCE_FADE_MS, VOICE_TAIL_MS, type VoicePlayback, type VoicePort } from '../../story/voice/voicePort.ts';
 import { VoiceBank } from './VoiceBank.ts';
+import { audioNewOn } from '../pass/passSwitch.ts'; // the sound pass (decision 184): a deeper duck under a voice line in Chapter I and IV with ?audio=new / ?pack=demo
+import { VOICE_DUCK_DB, VOICE_DUCK_GAIN as PASS_VOICE_DUCK_GAIN } from '../pass/passMix.ts';
+import { passLogPush } from '../pass/passLog.ts';
 import { VoiceRun, type RunHooks } from './VoiceRun.ts';
 
 /** What the director needs from the mixer (`AudioManager` satisfies it; a test supplies a fake). */
@@ -134,7 +137,7 @@ export class VoiceDirector implements VoicePort {
   /** Pin and decode the chapter's mid-battle and victory lines: a beat has to start with no latency. */
   private warmChapter(manifest: ChapterVoiceManifest): void {
     const files = new Set<string>();
-    for (const entry of Object.values(manifest.lines)) {
+    for (const entry of [...Object.values(manifest.lines), ...this.bank.extraLines(this.chapter)]) {
       const part = partOfId(entry.id);
       if (part === 'mid' || part === 'quip') files.add(entry.file);
     }
@@ -233,7 +236,9 @@ export class VoiceDirector implements VoicePort {
     this.cancelRelease();
     if (this.ducked) return;
     this.ducked = true;
-    this.host.duck(VOICE_DUCK_GAIN, VOICE_DUCK_ATTACK_S);
+    const pass = audioNewOn(); // measured: today's 3.5 dB leaves the speech band only +2.9 dB over the Chapter I scene bed (`audio/pass/passMix.ts`)
+    this.host.duck(pass ? PASS_VOICE_DUCK_GAIN : VOICE_DUCK_GAIN, VOICE_DUCK_ATTACK_S);
+    if (pass) passLogPush({ kind: 'voice-duck', depthDb: VOICE_DUCK_DB });
   }
 
   private releaseDuckSoon(): void {

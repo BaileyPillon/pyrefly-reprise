@@ -14,6 +14,7 @@
  * results screen shows in between.
  */
 
+import { passScriptsFor } from '../../story/scripts/seymour-flux-pass.ts';
 import type { Camera, Scene, Vector3 } from 'three';
 import type { BattleEngine, BattleResult, BattleSetup, CombatantId, EnemyGroupDef } from '../../battle/common/types.ts';
 import { ff7Standing } from './ff7Standing.ts';
@@ -393,7 +394,7 @@ export class BattleScreen extends Screen {
       // Letterbox / name slab / heartbeat vignette. `BattleMoments` raises
       // these; see `src/ui/common/transitions/`.
       moments: chapter.game === 'ff7' ? null : this.momentOverlay, // FF7: no Ink & Gold name slab or letterbox (FF7 HUD spec §8)
-      midScripts: chapter.scriptsRef?.midScripts ?? {},
+      midScripts: { ...(chapter.scriptsRef?.midScripts ?? {}), ...passScriptsFor(chapter.id) }, // the sound pass's Talk scripts (`story/scripts/seymour-flux-pass.ts`) join them while it is on
       // The chapter's own ability rows: an enemy's physical ability draws its
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
       ...presenterGameDeps(chapter.game, chapter.buildRef, () => this.engine?.state() ?? null),

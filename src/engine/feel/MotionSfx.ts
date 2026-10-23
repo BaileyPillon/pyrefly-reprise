@@ -56,7 +56,7 @@ export interface MotionPlan {
   ducked: boolean;
 }
 
-export type MotionRefusal = 'off' | 'no-game' | 'speed' | 'other-game' | 'too-soon' | 'busy' | 'small';
+export type MotionRefusal = 'off' | 'no-game' | 'speed' | 'other-game' | 'too-soon' | 'busy' | 'small' | 'gather';
 export type MotionAnswer = { ok: true; plan: MotionPlan } | { ok: false; why: MotionRefusal };
 
 /** The shortest gap between two sounds of one beat, ms. */
