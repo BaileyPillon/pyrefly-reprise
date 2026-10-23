@@ -49,12 +49,13 @@ afterEach(() => vi.restoreAllMocks());
 describe('FFX: the block slides out at the action start and the HUD returns 220 ms after the end', () => {
   it('goes out at action-start, not before, and comes back 220 ms after action-end', () => {
     const s = make('ffx');
-    advance(s, 300, true); // the menu is open: the snapshot is taken
-    s.menuEdge(false); // the command is confirmed: the stack closes, a ghost stands where the block was
-    stack.hidden = true;
+    advance(s, 300, true); // the menu is open
+    s.menuEdge(true);
+    expect(layer.querySelector('.f1-ghost')).toBeNull(); // nothing stands in for the block while it is the real one
+    s.signal({ phase: 'action-start', actorId: 'tidus', targets: ['seymour'] }); // FFX signals the start a frame before the stack closes: the ghost is made from the live block
     expect(layer.querySelector('.f1-ghost')).not.toBeNull();
-    expect(root.classList.contains(F1_ACTING)).toBe(false); // the target is confirmed but the action has not started
-    s.signal({ phase: 'action-start', actorId: 'tidus', targets: ['seymour'] });
+    s.menuEdge(false); // the stack closes
+    stack.hidden = true;
     expect(root.classList.contains(F1_ACTING)).toBe(true);
     expect(layer.querySelector('.f1-ghost')!.classList.contains('f1-ghost--out')).toBe(true);
     advance(s, 800);
@@ -99,11 +100,23 @@ describe('FFX: the block slides out at the action start and the HUD returns 220 
     expect(root.classList.contains(F1_ACTING)).toBe(false);
   });
 
-  it('a ghost nobody slides fades by itself', () => {
+  it('a menu that closes with no action (a Defend, a Switch, a pause) leaves nothing behind', () => {
     const s = make('ffx');
     advance(s, 300, true);
+    s.menuEdge(true);
     s.menuEdge(false);
-    advance(s, GHOST_WAIT_MS + 50);
+    expect(layer.querySelector('.f1-ghost')).toBeNull();
+    expect(root.classList.contains(F1_ACTING)).toBe(false);
+  });
+
+  it('a ghost fades and goes once the HUD is back', () => {
+    const s = make('ffx');
+    advance(s, 300, true);
+    s.signal({ phase: 'action-start', actorId: 'tidus', targets: [] });
+    s.menuEdge(false);
+    s.signal({ phase: 'action-end', actorId: 'tidus' });
+    advance(s, GHOST_WAIT_MS + 300);
+    expect(root.classList.contains(F1_ACTING)).toBe(false);
     expect(layer.querySelector('.f1-ghost')!.classList.contains('f1-ghost--fade')).toBe(true);
     advance(s, 500);
     expect(layer.querySelector('.f1-ghost')).toBeNull();
@@ -147,8 +160,8 @@ describe('clear', () => {
   it('leaves nothing out and no ghost', () => {
     const s = make('ffx');
     advance(s, 300, true);
-    s.menuEdge(false);
     s.signal({ phase: 'action-start', actorId: 'tidus', targets: [] });
+    s.menuEdge(false);
     s.clear();
     expect(root.classList.contains(F1_ACTING)).toBe(false);
     expect(layer.querySelector('.f1-ghost')).toBeNull();

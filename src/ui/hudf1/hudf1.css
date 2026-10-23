@@ -118,4 +118,6 @@ body:has(.hud-f1) .battle-pause-chip { display: none !important; }
 .ffxhud.hud-f1 { isolation: isolate; }
 .ffxhud.hud-f1 > .ffxhud__stage { z-index: 1; }
 /* Intel: the guide's chips would sit on the ribbon's bar; they go under it */
-.hud-f1.f1-intel .sgd { transform: translateY(27px); }
+.hud-f1.f1-intel .sgd { transform: translateY(22px); }
+/* and the Sensor card, which is placed from today's layout, steps up off the party cards */
+.hud-f1.f1-intel .ffx-sensor { margin-top: -14px; }
