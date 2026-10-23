@@ -46,6 +46,7 @@
 
 import type { CameraRigId } from '../battle/common/types.ts';
 import type { CameraPort } from './BattlePresenterPorts.ts';
+import { proCamOn } from './procam/ProCamSwitch.ts';
 
 /** How long the settle onto the target frame takes, in ms. Quick, but a move, not a cut. */
 export const TARGET_FRAME_SETTLE_MS = 320;
@@ -74,6 +75,7 @@ export class HoldableCamera implements CameraPort {
     if (on === this.held) return;
     this.held = on;
     if (!on) return;
+    if (proCamOn()) this.inner.pro?.stop(settleMs); // the directed camera hands the frame back to `idle` too (`?camera=pro`, demo chapters; FFX-2 only in effect)
     if (!this.inner.rigNames.includes(TARGET_FRAME_RIG)) return;
     void this.inner.release?.(settleMs);
     if (this.inner.rigName !== TARGET_FRAME_RIG) {
@@ -134,6 +136,11 @@ export class HoldableCamera implements CameraPort {
   /** Forwarded untouched: registering a blended rig moves nothing, held or not (B5). */
   blendRig(from: string, to: string, t: number): string | null {
     return this.inner.blendRig?.(from, to, t) ?? null;
+  }
+
+  /** The directed camera's port, none while the target frame is held: nothing new plays over an open command menu (D-357). */
+  get pro(): CameraPort['pro'] {
+    return this.held ? undefined : this.inner.pro;
   }
 
   get rigNames(): string[] {

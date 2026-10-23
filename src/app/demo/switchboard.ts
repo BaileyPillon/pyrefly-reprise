@@ -17,6 +17,7 @@
  * | `8` | Tidus T1 / T2 (the art; reloads the page, so press it between fights) | t1, t2 |
  * | `9` | the per-game moments (victory, knock-out) | new, today |
  * | `-` | the contact shadow | follow, today |
+ * | `;` | the directed camera (lane "pro-camera": the real FFX shots re-staged, moves on plain attacks, FFX-2's auto camera) | pro, today |
  * | `0` | everything: if all are new, all go to today's; else all go to new | |
  * | `=` | hide or show the label | |
  *

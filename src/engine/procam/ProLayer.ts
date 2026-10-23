@@ -1,0 +1,189 @@
+/**
+ * The PRO CAMERA's layer: plays one {@link ProRun} at a time on top of the game's own camera (`BattleCamera.layer`), and the optional ambient adjustment of the rig itself (FFX-2's follower).
+ * Pure: plain poses in, plain poses out, no `three`; `BattleCamera` applies what it answers.
+ *
+ * Each frame (`step`, from `BattleCamera.update`, after the rig's own damping and before it draws):
+ *
+ * 1. the pose the game's camera is settled on (`base`) goes through the ambient adjustment, if there is one (the follower), giving `amb`;
+ * 2. with no run, `amb` is the answer (null when there is no ambient either: the game's own camera, untouched);
+ * 3. with a run, its pose is `run.sample(t, amb)`, blended in from where the camera was (`inMs`), or blended out to `amb` after {@link stop} (`outMs`);
+ * 4. the run may ask for the never-crop dolly ({@link fitDolly} over the figures' boxes), which only ever widens at once and relaxes at a measured rate, so nothing pops;
+ * 5. lens breathing, and the idle sway the rig keeps (half of it by default).
+ *
+ * Time is the run's own clock: `dt` times the run's rate; the blends run on the real clock. The layer never moves the game's rig, the HUD's resting projector or the cuts of the other camera
+ * systems; with no run and no ambient it answers null and `BattleCamera` draws exactly as it does without this file.
+ */
+import { clamp, dampK, ease, lerp, lerpPose, mul3, add3, sub3 } from './ProMath.ts';
+import { fitDolly, bandOf, type Box } from './ProFit.ts';
+import type { CameraLayer, EaseName, LayerOut, Pose, ProCamPort, ProFit, ProRun } from './ProTypes.ts';
+
+/** Where the layer finds a figure's world box (the stage fills it in; unset: nobody is known and nothing is fitted). */
+export type BoxOf = (id: string) => Box | null;
+
+/** `bahamut@0-0.8` -> the box of `bahamut` limited to 0..0.8 of its height. */
+export function boxFor(boxOf: BoxOf, spec: string): Box | null {
+  const m = /^([^@]+)(?:@([0-9.]+)-([0-9.]+))?$/.exec(spec);
+  if (!m) return null;
+  const b = boxOf(m[1]!);
+  if (!b) return null;
+  return m[2] !== undefined ? bandOf(b, parseFloat(m[2]), parseFloat(m[3]!)) : b;
+}
+
+export class ProLayer implements CameraLayer, ProCamPort {
+  private run: ProRun | null = null;
+  private state: 'run' | 'out' = 'run';
+  private t = 0;
+  private inT = 0;
+  private from: Pose | null = null;
+  private outFrom: Pose | null = null;
+  private outT = 0;
+  private outMs = 0;
+  private outEase: EaseName = 'cubic';
+  private last: Pose | null = null;
+  private ambient: ((dt: number, base: Pose) => Pose) | null = null;
+  private aspectNow = 16 / 9;
+  private fitSmooth = 1;
+  private boxes: BoxOf = () => null;
+  private weight = 0;
+  /** Counters for the debug surface and the frame-cost check. */
+  readonly stats = { frames: 0, runs: 0, fitted: 0, widest: 1 };
+
+  /** The stage tells the layer where the figures stand (`PaintedStage`). */
+  setBoxes(boxOf: BoxOf): void {
+    this.boxes = boxOf;
+  }
+
+  get active(): boolean {
+    return this.run !== null;
+  }
+
+  get runId(): string | null {
+    return this.run?.id ?? null;
+  }
+
+  get aspect(): number {
+    return this.aspectNow;
+  }
+
+  /** The pose last answered, or null (tests, the debug surface). */
+  get pose(): Pose | null {
+    return this.last;
+  }
+
+  /** The run's clock in ms. */
+  get clock(): number {
+    return this.t;
+  }
+
+  /** The figures the soft background keeps sharp and how much of it is up (0..1), or null with no run. */
+  get focus(): { ids: readonly string[]; amount: number } | null {
+    const r = this.run;
+    return r?.focus && this.weight > 0.01 ? { ids: r.focus, amount: this.weight } : null;
+  }
+
+  setAmbient(fn: ((dt: number, base: Pose) => Pose) | null): void {
+    this.ambient = fn;
+  }
+
+  boxOf(id: string): Box | null {
+    return this.boxes(id);
+  }
+
+  fitK(pose: Pose, fit: ProFit): number {
+    const boxes: Box[] = [];
+    for (const id of fit.ids) {
+      const b = boxFor(this.boxes, id);
+      if (b) boxes.push(b);
+    }
+    return boxes.length === 0 ? 1 : fitDolly(pose, this.aspectNow, boxes, fit.safe).k;
+  }
+
+  play(run: ProRun): void {
+    this.from = this.last;
+    this.run = run;
+    this.state = 'run';
+    this.t = 0;
+    this.inT = 0;
+    this.fitSmooth = 1;
+    this.stats.runs++;
+  }
+
+  stop(outMs?: number): void {
+    const r = this.run;
+    if (!r || this.state === 'out') return;
+    const ms = outMs ?? r.outMs;
+    if (ms <= 0 || !this.last) {
+      this.run = null;
+      this.weight = 0;
+      return;
+    }
+    this.state = 'out';
+    this.outMs = ms;
+    this.outEase = r.outEase;
+    this.outFrom = this.last;
+    this.outT = 0;
+  }
+
+  step(dt: number, base: Pose, aspect: number): LayerOut | null {
+    this.aspectNow = aspect;
+    const amb = this.ambient ? this.ambient(dt, base) : base;
+    const run = this.run;
+    if (!run) {
+      this.weight = 0;
+      if (!this.ambient) {
+        this.last = null;
+        return null;
+      }
+      this.last = amb;
+      return { pose: amb, sway: 1 };
+    }
+    this.stats.frames++;
+    const ms = dt * 1000;
+    this.t += ms * (run.rate ?? 1);
+    this.inT += ms;
+    if (this.state === 'run' && run.maxMs !== undefined && this.t > run.maxMs) this.stop();
+
+    let pose: Pose;
+    let w = 1;
+    if (this.state === 'out') {
+      this.outT += ms;
+      const u = this.outT / Math.max(1, this.outMs);
+      if (u >= 1) {
+        this.run = null;
+        this.weight = 0;
+        this.last = this.ambient ? amb : null;
+        return this.ambient ? { pose: amb, sway: 1 } : null;
+      }
+      w = 1 - ease(this.outEase, u);
+      pose = lerpPose(this.outFrom ?? amb, amb, 1 - w);
+    } else {
+      const raw = run.sample(this.t, amb);
+      const u = run.inMs <= 0 ? 1 : this.inT / run.inMs;
+      const fromPose = this.from ?? amb;
+      w = u >= 1 ? 1 : ease(run.inEase, u);
+      pose = u >= 1 ? raw : lerpPose(fromPose, raw, w);
+      if (run.fit) pose = this.fit(pose, run, dt);
+      if (run.breathe) pose = { ...pose, fov: pose.fov + run.breathe * Math.sin((2 * Math.PI * this.t) / 4200), roll: pose.roll + 0.18 * Math.sin((2 * Math.PI * this.t) / 6300 + 1) };
+    }
+    this.weight = w;
+    this.last = pose;
+    return { pose, sway: lerp(1, run.sway ?? 0.5, w) };
+  }
+
+  /** The never-crop dolly of the run's fit, widening at once and relaxing at a measured rate. */
+  private fit(pose: Pose, run: ProRun, dt: number): Pose {
+    const fit = run.fit!;
+    const boxes: Box[] = [];
+    for (const id of fit.ids) {
+      const b = boxFor(this.boxes, id);
+      if (b) boxes.push(b);
+    }
+    if (boxes.length === 0) return pose;
+    const res = fitDolly(pose, this.aspectNow, boxes, fit.safe);
+    this.fitSmooth = res.k >= this.fitSmooth ? res.k : this.fitSmooth + (res.k - this.fitSmooth) * dampK(2.5, dt);
+    this.stats.fitted++;
+    this.stats.widest = Math.max(this.stats.widest, this.fitSmooth);
+    const k = clamp(this.fitSmooth, 1, 3);
+    return k <= 1.0001 ? pose : { ...pose, pos: add3(pose.look, mul3(sub3(pose.pos, pose.look), k)) };
+  }
+}

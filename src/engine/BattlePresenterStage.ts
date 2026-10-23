@@ -268,6 +268,21 @@ export class PaintedStage implements BattleStage {
         return s && !s.anchor ? profileOfActor(s.actor, pose) : undefined; // a figure-less part has no painting: its box stands in
       },
     });
+    opts.battleCamera.proBoxes((id) => this.proBox(id)); // `?camera=pro`: where each figure's painted box stands, for the directed camera's never-crop dolly (read only while a directed shot plays)
+  }
+
+  /** A figure's painted box in world space (the directed camera's fit): the four corners of its alpha box, or of its anchored part. Null when it is not on the field. */
+  private proBox(id: string): { x0: number; x1: number; y0: number; y1: number; z0: number; z1: number } | null {
+    const s = this.actors.get(id);
+    if (!s) return null;
+    const q = s.anchor ? this.anchoredQuad(s) : s.actor.contentQuad(this.quad);
+    const b = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity, z0: Infinity, z1: -Infinity };
+    for (const c of q) {
+      b.x0 = Math.min(b.x0, c.x); b.x1 = Math.max(b.x1, c.x);
+      b.y0 = Math.min(b.y0, c.y); b.y1 = Math.max(b.y1, c.y);
+      b.z0 = Math.min(b.z0, c.z); b.z1 = Math.max(b.z1, c.z);
+    }
+    return b;
   }
 
   /**
