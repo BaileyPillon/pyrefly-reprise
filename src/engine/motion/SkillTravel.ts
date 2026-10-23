@@ -31,6 +31,7 @@ import type { BattleEvent, CombatantId } from '../../battle/common/types.ts';
 import type { EventCtx } from '../BattlePresenterEvents.ts';
 import type { ActionStartEvent } from '../BattlePresenterMotion.ts';
 import { freshBlowHeld } from '../BattlePresenterBossFx.ts';
+import { realContactPending } from '../ContactBeat.ts'; // `?curves=real`: a blow whose real strike has not landed yet holds its numeral
 import { actionOfBlow } from '../BattlePresenterSpellFx.ts';
 import { motionAllowed } from './MotionGate.ts';
 
@@ -120,14 +121,19 @@ export function blowHeld(ctx: EventCtx, event: BattleEvent): boolean {
     return true;
   }
   const plan = planOf(ctx, event);
-  if (!plan) return false;
-  if (plan.state === 'planned') {
+  if (plan?.state === 'planned') {
     const vfx = ctx.stage.vfx;
     plan.state = ctx.reveal && vfx.travel && vfx.canTravel?.(plan.abilityId, plan.actorId) !== false && motionAllowed(ctx, 'skilltravel') ? 'go' : 'off';
   }
-  if (plan.state !== 'go' || !plan.foes.includes(event.targetId)) return false;
-  held.add(event);
-  return true;
+  if (plan?.state === 'go' && plan.foes.includes(event.targetId)) {
+    held.add(event);
+    return true;
+  }
+  if (ctx.reveal !== undefined && realContactPending(ctx, event.sourceId, event.targetId)) { // `?curves=real`: a real strike lands 0.15 to 0.4 s after the event is dispatched, so the number and the HP row wait for the contact (the beat reveals them)
+    held.add(event);
+    return true;
+  }
+  return false;
 }
 
 /**

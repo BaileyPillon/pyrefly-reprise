@@ -47,6 +47,7 @@ export function tidusAsked(search: string, cookie: string): 't1' | 't2' {
 const CSS = `
 .sb{position:fixed;right:8px;top:8px;z-index:998;pointer-events:none;max-width:min(46vw,760px);text-align:right;padding:4px 9px 5px;border-radius:4px;
 background:rgba(8,10,18,.66);color:#e9e6dc;font:clamp(11px,.95vh,15px)/1.45 ui-monospace,Consolas,'Cascadia Mono',monospace;white-space:normal;letter-spacing:.01em}
+.sb{transition:opacity .25s}.sb.sb-quiet{opacity:.2}
 .sb[hidden]{display:none}.sb b{color:#e3b94a;font-weight:600}.sb i{font-style:normal;opacity:.5}.sb span{white-space:nowrap}
 .sb .sb-new{color:#9fe2b0}.sb .sb-hit{background:#e3b94a;color:#10121a;border-radius:3px;padding:0 3px}.sb .sb-note{display:block;opacity:.7}
 `;
@@ -101,10 +102,25 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
       `${parts.join(' <i>|</i> ')} <i>|</i> <span><b>0</b> all</span> <i>|</i> <span><b>=</b> hide</span>` +
       `<span class="sb-note">${live ? 'live in this fight (Chapter I / IV)' : 'acts in the Chapter I and Chapter IV fights only'}</span>`;
     el.hidden = hidden;
+    // Playtest skeptic, 2026-10-22 (m5): the label sat over the Chapter IV countdown banner, the active-plate chips and the pause screen's RB chip. In a fight it now fades to a faint ghost and
+    // comes back to full for a few seconds after any key of the board (the state is still there to read; the HUD below is not hidden by it).
+    el.classList.toggle('sb-quiet', live && !loud);
+  };
+
+  let loud = false; // true for a few seconds after a board key in a fight
+  let loudTimer: ReturnType<typeof setTimeout> | undefined;
+  const wake = (): void => {
+    loud = true;
+    if (loudTimer) clearTimeout(loudTimer);
+    loudTimer = setTimeout(() => {
+      loud = false;
+      render();
+    }, 4000);
   };
 
   const flash = (name: string): void => {
     flashed = name;
+    wake();
     render();
     if (flashTimer) clearTimeout(flashTimer);
     flashTimer = setTimeout(() => {
@@ -114,6 +130,14 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
   };
 
   const flipTidus = (): void => {
+    if (artVariant === null) { // m8: the production build cannot serve T2 (only the dev art server answers it); a reload would end the run and still draw T1
+      flashed = 'Tidus';
+      wake();
+      render();
+      el.insertAdjacentHTML('beforeend', '<span class="sb-note"><b>8</b> Tidus T2 needs the dev link (port 5320); nothing changed</span>');
+      setTimeout(() => render(), 3000);
+      return;
+    }
     const next = tidusAsked(window.location.search, document.cookie) === 't1' ? 't2' : 't1';
     try {
       document.cookie = `${COOKIE}=${next}; Path=/; SameSite=Lax; Max-Age=86400`;

@@ -17,7 +17,8 @@ import { realCastLift, realContactMsOf, realLeapBack, realProfileOf, realRecoilM
 import { SQUASH_CAP, PROFILES, REAL_MIN_MS, defaultPaceFactor, resolveStrike, sampleAt, strikeMarks, type StrikeSample } from '../../../src/engine/motion/StrikeCurve.ts';
 import { StrikeRun } from '../../../src/engine/motion/StrikeRun.ts';
 import { strikeBeatNow } from '../../../src/engine/StrikeBeat.ts';
-import { armContact } from '../../../src/engine/ContactBeat.ts';
+import { armContact, realContactPending, releaseContact } from '../../../src/engine/ContactBeat.ts';
+import { blowHeld } from '../../../src/engine/motion/SkillTravel.ts';
 import { SWITCHES, allNew, boardState, flipAll, switchOfCode } from '../../../src/app/demo/switchboardModel.ts';
 import type { EventCtx } from '../../../src/engine/BattlePresenterEvents.ts';
 import { KO_BUCKLE_MS, fallRun } from '../../../src/engine/KoFall.ts';
@@ -301,6 +302,26 @@ describe('the strike in the two real modes', () => {
     const real = sleeps.pop()!;
     expect(real).toBeGreaterThan(house + 1000); // Seymour's contact is 1.47 s into the move
     expect(real).toBeGreaterThanOrEqual(holdMsOf(realProfileOf(ctx, 'boss')!, 1));
+  });
+  it('a blow\'s numeral waits for a real strike\'s contact (the HUD is told at the contact, not at the dispatch); nothing else is held', () => {
+    setDemoChapter('seymour-flux');
+    const ctx = fakeCtx({ tidus: 'tidus', boss: 'seymour-flux' }, 0);
+    (ctx as { reveal?: unknown }).reveal = async () => undefined;
+    const blow = { type: 'damage', seq: 1, sourceId: 'tidus', targetId: 'boss', amount: 700 } as unknown as Parameters<typeof blowHeld>[1];
+    setCurvesMode('real');
+    expect(realContactPending(ctx, 'tidus', 'boss')).toBe(false); // no contact armed yet
+    void armContact(ctx, 'tidus');
+    expect(realContactPending(ctx, 'tidus', 'boss')).toBe(true);
+    expect(blowHeld(ctx, blow)).toBe(true);
+    expect(realContactPending(ctx, 'tidus', 'tidus')).toBe(false); // the attacker's own events are not held
+    expect(realContactPending(ctx, 'boss', 'tidus')).toBe(false); // a blow from someone with no armed strike
+    for (const mode of ['new', 'today'] as const) { // the house curves and today's code tell the HUD at the dispatch, as before
+      setCurvesMode(mode);
+      expect(blowHeld(ctx, { ...blow, seq: 2 } as typeof blow)).toBe(false);
+    }
+    setCurvesMode('real');
+    releaseContact(ctx);
+    expect(blowHeld(ctx, { ...blow, seq: 3 } as typeof blow)).toBe(false); // the strike is over
   });
 });
 

@@ -85,6 +85,16 @@ export async function meetContact(ctx: EventCtx, targetId: CombatantId): Promise
   else p.release();
 }
 
+/**
+ * `?curves=real` / `real-snappy` only: is a real strike by `attacker` armed and still on its way to the contact, and is `targetId` someone else? The HUD shows a blow's numeral and moves its HP row
+ * when the event is dispatched, which is 0.15 to 0.4 s before a real leaping strike lands (playtest skeptic, 2026-10-22: in Chapter I the number came 0.4 s before the hit sound); the loop holds
+ * that blow's HUD until its beat has met the contact (`SkillTravel.blowHeld`). False in every other mode, so today's and the house curves' timing is untouched.
+ */
+export function realContactPending(ctx: EventCtx, attacker: CombatantId | undefined, targetId: CombatantId): boolean {
+  const p = pending.get(ctx);
+  return p !== undefined && attacker !== undefined && p.attacker === attacker && attacker !== targetId && realContactMsOf(ctx, attacker) !== undefined;
+}
+
 /** Let any held strike finish (`actionEnd`, and every new contact). */
 export function releaseContact(ctx: EventCtx): void {
   const p = pending.get(ctx);
