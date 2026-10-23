@@ -62,6 +62,9 @@ const PROMPTS: Record<'ffx' | 'ffx2', ReadonlyArray<readonly [key: string, pad: 
   ffx2: [['Enter', 'Cross', 'Select'], ['G', 'Square', 'Intel'], ['P', 'Start', 'Pause']],
 };
 
+/** The layer's own main-thread cost per frame, in ms, for `__pyrefly.hudF1Cost()` (recorded only while `profile` is on: off, `update` pays one boolean). */
+export const f1Cost = { profile: false, samples: [] as number[] };
+
 export class HudF1 {
   private readonly layer = document.createElement('div');
   private readonly ribbonName: HTMLElement;
@@ -207,6 +210,13 @@ export class HudF1 {
 
   /** Once per frame (the HUD's `update`). */
   update(dt: number): void {
+    if (!f1Cost.profile) return this.run(dt);
+    const t0 = performance.now();
+    this.run(dt);
+    f1Cost.samples.push(performance.now() - t0);
+  }
+
+  private run(dt: number): void {
     const h = this.host;
     if (!h || (!this.applied && !this.refresh())) return;
     const stack = h.cmdStack();

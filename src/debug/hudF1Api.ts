@@ -6,6 +6,7 @@
  * (`HUD_F1_TUNE`: `ribbonStaysInAction`, `floorPx`, `slimDropsOd`, `finish`) for captures; the HUD reads them when it next applies the switch (`hudF1('today')` then `hudF1('f1')`).
  */
 import { HUD_F1_TUNE, hudF1Mode, hudF1On, setHudF1Mode, type HudF1Mode } from '../ui/hudf1/HudF1Switch.ts';
+import { f1Cost } from '../ui/hudf1/HudF1.ts';
 
 export function installHudF1Debug(api: Record<string, unknown>): void {
   api['hudF1'] = (mode?: HudF1Mode): HudF1Mode => {
@@ -13,6 +14,13 @@ export function installHudF1Debug(api: Record<string, unknown>): void {
     return hudF1Mode();
   };
   api['hudF1On'] = (): boolean => hudF1On();
+  /** `hudF1Cost(true)` starts recording the layer's own per-frame main-thread cost, `hudF1Cost(false)` stops, and `hudF1Cost()` returns and clears the samples (ms). */
+  api['hudF1Cost'] = (on?: boolean): number[] => {
+    if (typeof on === 'boolean') f1Cost.profile = on;
+    const s = f1Cost.samples;
+    f1Cost.samples = [];
+    return s;
+  };
   api['hudF1Tune'] = (key: string, value?: unknown): unknown => {
     const t = HUD_F1_TUNE as unknown as Record<string, unknown>;
     if (!(key in t)) return undefined;
