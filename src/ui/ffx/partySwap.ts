@@ -90,11 +90,46 @@ export function playPartySwap(list: HTMLElement, ghost: HTMLElement | null, t: S
     setTimeout(dropGhost, Math.max(2000, t.outMs + 400)); // a page that never runs the animation (a hidden tab) does not keep the copy; 2 s so a slow-motion capture (a tenth of the speed) still sees it
     started++;
   }
-  const rows = list.querySelectorAll<HTMLElement>('.ig-stat');
-  rows.forEach((row, i) => {
+  started += arriveRows(list, t, 0);
+  return started;
+}
+
+/**
+ * The cards of `list` arrive: each slides in (or fades in) behind the one before it. `elapsedMs` is how long ago the swap began: 0 for the swap itself, more for a render that lands inside it (see
+ * `resumePartySwapIn`). A negative delay starts the animation part-way through, so a row born late arrives from where the row it replaced had got to, and a row whose arrival is over is left alone.
+ */
+function arriveRows(list: HTMLElement, t: SwapTiming, elapsedMs: number): number {
+  let started = 0;
+  list.querySelectorAll<HTMLElement>('.ig-stat').forEach((row, i) => {
+    const delay = PARTY_IN_DELAY_MS + i * PARTY_IN_STEP_MS - elapsedMs;
+    if (delay + t.inMs <= 0) return; // this card's arrival is over
     const from = t.reduce ? { opacity: 0 } : { opacity: 0, translate: `${t.slidePx}px 0` };
-    (row as Animatable).animate!([from, { opacity: 1, translate: '0 0' }], { duration: t.inMs, delay: PARTY_IN_DELAY_MS + i * PARTY_IN_STEP_MS, easing: 'cubic-bezier(0.16, 0.84, 0.3, 1)', fill: 'backwards' });
+    (row as Animatable).animate!([from, { opacity: 1, translate: '0 0' }], { duration: t.inMs, delay, easing: 'cubic-bezier(0.16, 0.84, 0.3, 1)', fill: 'backwards' });
     started++;
   });
   return started;
+}
+
+/** Is a swap that began `elapsedMs` ago still bringing cards in (the last of up to four cards, with the cascade)? */
+export function swapInFlight(t: SwapTiming, elapsedMs: number): boolean {
+  return elapsedMs < PARTY_IN_DELAY_MS + 3 * PARTY_IN_STEP_MS + t.inMs;
+}
+
+/**
+ * r64-fixes, the skeptic's F2: the game renders the party list again right after a swap (3 ms after a dismissal, 129 ms after a summon), and a render replaces every row, so the cards that were
+ * arriving were thrown away and the new ones cut in at full opacity. A render inside the swap's window gives the new rows the arrival the old ones had, at the same point in it (a part-way start), so the
+ * fade carries on without a break. Returns the number of animations started (0 where the browser has no `animate`).
+ */
+export function resumePartySwapIn(list: HTMLElement, t: SwapTiming, elapsedMs: number): number {
+  if (typeof (list as Animatable).animate !== 'function') return 0;
+  return arriveRows(list, t, Math.max(0, elapsedMs));
+}
+
+/** `?partyswap=off`: the original's one-frame swap of the party cards (this lane's ease is off). A comparison, or if the ease ever misbehaves at the booth. */
+export function partySwapOn(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+  try {
+    return new URLSearchParams(search).get('partyswap') !== 'off';
+  } catch {
+    return true;
+  }
 }
