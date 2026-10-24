@@ -3,11 +3,13 @@
  * THE PRESS PAGE'S PICTURES (conference demo, lane "booth"; Bailey, 2026-10-22, decision 188b: the press page leads with the game; both games). Turns real captures of the build into the web-size JPEGs that
  * `public/press/index.html` shows: resized to 1600 px wide, JPEG at the highest quality that keeps each file under 300 KB (the page's limit; a visitor on a phone downloads these), written to `public/press/frames/`.
  *
- * Re-run it after the build is locked (the frames in the repo are stand-ins from the playtest build r63-play; the HUD and the camera may change in the Saturday pass):
+ * The captures come from `tools/press-capture.mjs` (a real fight at the game's own stats with the interface hidden: the picked press mockup shows "three clean frames", no interface); a game frame must not be a HUD-on
+ * evidence frame or a scripted run (review round 1, finding M1; `tests/unit/booth-press-page.test.ts`). Re-run this after the build is locked (the frames in the repo are tonight's playtest build r63-play; the HUD and the camera may change in the Saturday pass):
  *   node tools/press-frames.mjs                      (reads tools/press-frames.json, writes public/press/frames/*.jpg and public/press/frames/frames.json)
  *   node tools/press-frames.mjs --config <file> --out <dir>
  *
- * The config is a list of { name, src, clean?, art? }: `src` is an absolute path to a 2560 x 1440 capture (a PNG or JPEG of our own build) or, with `art`, a path under `public/art/`. `clean: "switchboard"` takes the playtest
+ * The config is a list of { name, src, game, caption, note, art? }: `src` is an absolute path to a 2560 x 1440 capture (a PNG or JPEG of our own build) or, with `art`, a path under `public/art/`. The old `clean: "switchboard"` (not used by the
+ * current picks; the test refuses it for a game frame) takes the playtest
  * switchboard's corner label (the small key list at the top right that `?switchboard=1` draws over every playtest capture) out of the picture by taking the median of the picture over it: only for frames whose
  * top right is smooth dark ground (a capture of the label over a face or a bright light must be taken again without the label, not cleaned). Nothing else in the picture is touched.
  *

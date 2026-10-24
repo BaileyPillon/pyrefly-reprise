@@ -55,15 +55,15 @@
     "from": "tools/press-capture.mjs ch4, capture 124: Cure lights the party, no interface"
   },
   {
-    "name": "ffx2-darkness",
-    "file": "ffx2-darkness.jpg",
+    "name": "ffx2-mega-flare",
+    "file": "ffx2-mega-flare.jpg",
     "width": 1600,
     "height": 900,
-    "bytes": 188996,
+    "bytes": 176759,
     "quality": 86,
     "game": "ffx2",
-    "caption": "Final Fantasy X-2, Darkness",
-    "from": "tools/press-capture.mjs ch4, capture 216: a dark strike on Bahamut, no interface"
+    "caption": "Final Fantasy X-2, Mega Flare",
+    "from": "tools/press-capture.mjs ch4 --fx mega, capture 19: the presenter plays Mega Flare on a real Chapter IV battle at its real stats, no interface"
   },
   {
     "name": "keyart-farplane",
