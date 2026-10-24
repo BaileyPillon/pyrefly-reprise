@@ -20,7 +20,7 @@ import { lastBoardChapter } from '../screens/frontend/boardFocus.ts';
 import { CHAPTERS } from '../../data/encounters.ts';
 import type { ControlHintItem } from '../../ui/common/ControlsHint.ts';
 import { DEMO_FIGHTS, otherDemoFight } from './demoFlow.ts';
-import { IdleClock, PICKER_IDLE_MS, padActive, watchActivity } from './demoIdle.ts';
+import { IdleClock, PICKER_IDLE_MS, noteIdleReturn, padActive, watchActivity } from './demoIdle.ts';
 import { boothNewOn } from './boothSwitch.ts';
 import { mountControlsCard } from './demoControls.ts';
 import { mountQrPlate } from './demoQr.ts';
@@ -95,6 +95,7 @@ export class DemoBoardScreen extends ChapterSelectScreen {
     if (padActive(typeof navigator === 'undefined' ? null : (navigator.getGamepads?.() ?? null))) idle.touch(t);
     if (!idle.expired(t, PICKER_IDLE_MS)) return;
     this.stopIdle();
+    noteIdleReturn(t); // r63-rc (201c): the title that opens next starts its clock run out, so the attract card goes up at once
     this.settle(null);
   }
 

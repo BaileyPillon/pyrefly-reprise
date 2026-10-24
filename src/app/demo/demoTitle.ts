@@ -7,11 +7,12 @@
  *
  * With the booth screens on (`boothSwitch.ts`: `?booth=new`, or `?pack=demo`) the 60 s count puts the Echo attract card over the title instead (`boothAttract.ts`, lane "booth", decision 188b):
  * "Pick up the controller". The reel stays behind `?attract=reel`. While the card is up, and for a moment after the press that takes it away, the title ignores its own input ({@link DemoTitle.holding}).
+ * r63-rc (driver call 201c): a title reached because the fight picker sat idle for its own 60 s (`demoBoard.ts`) puts the card up at once, not a minute later (`demoIdle.noteIdleReturn`).
  */
 
 import type { App } from '../App.ts';
 import { demoModeOn } from '../demoMode.ts';
-import { ATTRACT_AFTER_MS, IdleClock, padActive, watchActivity } from './demoIdle.ts';
+import { ATTRACT_AFTER_MS, IdleClock, padActive, takeIdleReturn, watchActivity } from './demoIdle.ts';
 import { attractRunner } from './attractHook.ts';
 import { mountQrPlate } from './demoQr.ts';
 import { attractIsCard } from './boothSwitch.ts'; // the booth screens (lane "booth", decision 188b): the 60 s idle puts the Echo attract card over the title instead of starting the reel
@@ -31,7 +32,8 @@ export interface DemoTitle {
 export function enterDemoTitle(app: App, afterMs = ATTRACT_AFTER_MS): DemoTitle | null {
   if (!demoModeOn()) return null;
   const now = (): number => performance.now();
-  const clock = new IdleClock(now());
+  // r63-rc (201c): a title the fight picker's 60 s idle sent back to starts its clock as already run out (the picker's minute WAS the idle time), so the attract card is up on the first frame.
+  const clock = new IdleClock(takeIdleReturn(now()) ? now() - afterMs : now());
   const stop = watchActivity(() => clock.touch(now()));
   // On the page's UI layer, not inside the title's own root: the title rewrites its root when the player changes the title picture (release 61's T key, `TitleScreen.mountArt`), which would take the plate with it.
   const qr = mountQrPlate(app.uiRoot, 'title');
