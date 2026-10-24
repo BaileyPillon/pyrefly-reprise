@@ -1,5 +1,5 @@
 /**
- * THE ROOM'S DRESSING, BUILT BEHIND THE PICKER (r64-fixes; both games: Chapter I is FFX, Chapter IV is FFX-2; the conference demo only, `?pack=demo`, off with `?prebuild=off` or `?livingpre=off`).
+ * THE ROOM'S DRESSING, BUILT BEHIND THE PICKER (r64-fixes; both games: Chapter I is FFX, Chapter IV is FFX-2; the conference demo only, `?pack=demo`, on only with `?livingpre=on`, and then only where the fight prebuild is on).
  *
  * The fight prebuild (`prebuildFigures.ts`) left the room's dressing for the battle's bind: Option B "Living Paintings" builds its depth plates, the weather's fields, the haze, the lamps and the cast-shadow
  * quads there, and their programs link on the first draw (47 to 93 ms, four times, about 0.3 s and the 100 to 130 ms frames that were left, `docs/handoff/fight-prebuild.md` "What remains" 1). This builds the
@@ -14,10 +14,14 @@ import { parkLivingScene, type LivingBind } from '../../engine/fx/b/LivingPainti
 import type { WarmupRenderer } from '../screens/BattleScreenWarmup.ts';
 import { drawParts, type DrawStats } from './prebuildDraw.ts';
 
-/** `?livingpre=off` (or `today`): the room is built at the battle's bind, as r63-play does. For an A/B in one build, or if the adopted room ever misbehaves at the booth. */
+/**
+ * `?livingpre=on` (or `1`) builds the room behind the picker; with no word (the default) it is built at the battle's bind, as r63-play does. OFF BY DEFAULT: the room built early is the same room (frozen
+ * frames of the adopted room and of the same room rebuilt the normal way are identical, 0 of 3,686,400 pixels differ in both chapters) and the entry saves its 0.27 to 0.43 s plate build, but the booth A/B pairs on a
+ * shared GPU could not tell it from noise (one Chapter I run of eight lost 2.7 s) and a page that holds two parked rooms crashed twice when two pages shared the card; nothing goes on by default that Bailey has not picked.
+ */
 export function livingPrebuildFromSearch(search: string | undefined): boolean {
   const w = queryWord(search, 'livingpre');
-  return !(w === 'off' || w === 'today' || w === '0');
+  return w === 'on' || w === '1';
 }
 
 /** The bind `BattleScreen.enter` makes for `scene` (the same fields from the same objects), so the parked room is the battle's own. */

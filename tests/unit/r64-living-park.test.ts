@@ -63,13 +63,13 @@ describe('LivingPark: a room parked for a scene is adopted by the bind of that s
 });
 
 describe('the switch', () => {
-  it('?livingpre=off (or today, or 0) builds the room at the bind as r63-play does; nothing else turns it off', () => {
-    expect(livingPrebuildFromSearch('?demo=1&pack=demo')).toBe(true);
+  it('the room is built at the bind, as r63-play does, unless the address says ?livingpre=on (or 1): off by default', () => {
+    expect(livingPrebuildFromSearch('?demo=1&pack=demo')).toBe(false);
     expect(livingPrebuildFromSearch('?demo=1&pack=demo&livingpre=off')).toBe(false);
+    expect(livingPrebuildFromSearch('?demo=1&pack=demo&livingpre=on')).toBe(true);
+    expect(livingPrebuildFromSearch('?livingpre=1')).toBe(true);
     expect(livingPrebuildFromSearch('?livingpre=today')).toBe(false);
-    expect(livingPrebuildFromSearch('?livingpre=0')).toBe(false);
-    expect(livingPrebuildFromSearch('?prebuild=off')).toBe(true); // the figures' switch is the plan's own gate, not this one
-    expect(livingPrebuildFromSearch(undefined)).toBe(true);
+    expect(livingPrebuildFromSearch(undefined)).toBe(false);
   });
 });
 

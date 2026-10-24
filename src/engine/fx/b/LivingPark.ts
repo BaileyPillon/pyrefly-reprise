@@ -2,7 +2,7 @@ import type { Object3D, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 import type { BattleCamera } from '../../BattleCamera.ts';
 
 /**
- * A ROOM'S DRESSING BUILT BEHIND THE PICKER AND ADOPTED BY THE BATTLE (r64-fixes, the conference demo, `?pack=demo`; both games: Chapter I FFX, Chapter IV FFX-2; off with `?prebuild=off` or `?livingpre=off`).
+ * A ROOM'S DRESSING BUILT BEHIND THE PICKER AND ADOPTED BY THE BATTLE (r64-fixes, the conference demo, `?pack=demo`; both games: Chapter I FFX, Chapter IV FFX-2; on only with `?livingpre=on`, and then only where the fight prebuild is on).
  *
  * Option B "Living Paintings" dresses the room (the depth plates, the weather's fields, the haze, the lamps, the cast-shadow quads) when the battle binds it, and the programs of those materials link
  * on their first draw: `getProgramInfoLog` 47 to 93 ms, about four times, the 0.3 to 0.4 s and the 100 to 130 ms frames that the fight prebuild left over (`docs/handoff/fight-prebuild.md`, "What
