@@ -96,7 +96,7 @@ describe('r50.1\'s nine holds read honestly (their real head cost, not hidden be
    */
   const NINE: [string, string, number][] = [
     ['auron', 'attack', 1.284], ['auron', 'critical', 1.281], ['auron', 'hurt', 1.241], ['lulu', 'critical', 1.368], ['lulu', 'hurt', 1.345],
-    ['rikku', 'attack', 1.138], ['wakka', 'cast', 0.947], ['yuna', 'attack', 1.068], ['yuna', 'hurt', 1.164],
+    ['rikku', 'attack', 1.138], ['wakka', 'cast', 0.947], ['yuna', 'attack', 1.068], ['yuna', 'hurt', 1.163],
   ];
   const mask = { w: 8, h: 8, bits: new Uint8Array(64).fill(1), srcW: 200, srcH: 300 };
 
