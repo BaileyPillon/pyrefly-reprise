@@ -18,7 +18,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 982, from 2026-09-15 to 2026-10-23 (ids A-0001 to A-0982), 731 of them linked to at least one decision (1122 distinct decision ids).
+- **Rows:** 983, from 2026-09-15 to 2026-10-24 (ids A-0001 to A-0983), 732 of them linked to at least one decision (1144 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
@@ -26,7 +26,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | art | 102 |
 | deploy | 89 |
 | review | 194 |
-| records | 50 |
+| records | 51 |
 | infrastructure | 31 |
 | account | 25 |
 | download | 15 |
@@ -36,21 +36,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 685 |
+| October 2026 | 686 |
 
-- **By game:** 702 both, 105 n/a, 97 FFX, 78 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 703 both, 105 n/a, 97 FFX, 78 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 89 deploy rows: 78 lines of docs/deploys.log (63 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to c8ecbcb31, bundle C9xPmvqR, release 62 (2026-10-22).
 - **Reviews:** 194 rows: 54 focused reviews (52 SHIP, 1 HOLD, 1 no verdict), 59 live checks (56 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 22 deep rounds with a report (12 SHIP, 6 HOLD, 4 no verdict) and 59 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 70 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-24](#2026-10-24) (1) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-24](#2026-10-24) (2) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-24
 
+- **A-0983** · `records` · both · **Recorded r62 on main: D-1167 to D-1317 (items 173 to 197 of the decisions queue), A-0939 to A-0983, the deploy and review records, docs/LIVE.md for release 62, NOW.md; main fast-forwarded (records only)**
+  - What: The eleventh records pass (a sub-agent for the release driver), in the full tree D:/pyrefly-rig-rikkudk on branch records-r62 from origin/main (3e520971e). It merged origin/r62-rc (c8ecbcb31, the same commit as the release tree's local branch r62-release) with no conflict; copied the deploy records of release 62 from D:/pyrefly-release55, read only (docs/deploys.log line 79, the ledger, the manifest, the marker, the cleared copy of the r61 marker, the focused report re-keyed to c8ecbcb31 and the live report with their small evidence); recorded items 173 to 197 of the decisions queue as 151 rows with the times from DRIVER-STATE.md (19 delegated audio picks, the driver's calls kept apart from his words, the supersessions, and the Friday freeze and the Thursday playtest pointed at what replaced them); wrote 44 action rows from DRIVER-STATE.md and the lanes' handoff notes; regenerated DECISIONS.md and ACTIONS.md, wrote docs/LIVE.md for release 62 and rewrote docs/target/in-flight.json; gave the r62 and r61 CHANGELOG entries their live addresses; rewrote the NOW.md banners and Log. Redacted: no account names or ids, the workers.dev address is not written out and no artifact page addresses are recorded. One slip: the first deploy-records commit holds only the marker move because a git add aborted on a pathspec; the second commit has the rest and says so.
+  - Who: records sub-agent for the release driver · Decisions: D-1167, D-1168, D-1169, D-1170, D-1171, D-1172, D-1173, D-1174, D-1175, D-1176, D-1177, D-1178, D-1179, D-1180, D-1181, D-1182, D-1183, D-1184, D-1185, D-1186, D-1187, D-1188, D-1189, D-1190, D-1191, D-1192, D-1193, D-1194, D-1195, D-1196, D-1197, D-1198, D-1199, D-1200, D-1201, D-1202, D-1203, D-1204, D-1205, D-1206, D-1207, D-1208, D-1209, D-1210, D-1211, D-1212, D-1213, D-1214, D-1215, D-1216, D-1217, D-1218, D-1219, D-1220, D-1221, D-1222, D-1223, D-1224, D-1225, D-1226, D-1227, D-1228, D-1229, D-1230, D-1231, D-1232, D-1233, D-1234, D-1235, D-1236, D-1237, D-1238, D-1239, D-1240, D-1241, D-1242, D-1243, D-1244, D-1245, D-1246, D-1247, D-1248, D-1249, D-1250, D-1251, D-1252, D-1253, D-1254, D-1255, D-1256, D-1257, D-1258, D-1259, D-1260, D-1261, D-1262, D-1263, D-1264, D-1265, D-1266, D-1267, D-1268, D-1269, D-1270, D-1271, D-1272, D-1273, D-1274, D-1275, D-1276, D-1277, D-1278, D-1279, D-1280, D-1281, D-1282, D-1283, D-1284, D-1285, D-1286, D-1287, D-1288, D-1289, D-1290, D-1291, D-1292, D-1293, D-1294, D-1295, D-1296, D-1297, D-1298, D-1299, D-1300, D-1301, D-1302, D-1303, D-1304, D-1305, D-1306, D-1307, D-1308, D-1309, D-1310, D-1311, D-1312, D-1313, D-1314, D-1315, D-1316, D-1317
+  - Result: done: records-r62 pushed and origin/main advanced by a fast-forward push only; the full unit suite was not run in this pass
+  - Evidence: `commits c6dd74866, 014fd064f, 89e77b0e8, 1ff07fd7c, 9117fee31, af00430f4 and 86967c4ec on origin/main` · `docs/handoff/NOW.md (the 2026-10-24 banners and Log entry)` · `docs/LIVE.md` · `DECISIONS.md and ACTIONS.md`
+  - Reversible: yes, documentation, ledgers and records only; revert the records commits
 - **A-0981** · `process` · both · **The playtest build served and the GPU hold: an open question blocked the session from 18:30 to 00:00 EDT, so the 19:47 playtest-prep cron never fired and the link was not sent at 20:45**
   - What: r63-play was served on port 5410 at 18:25 EDT on 2026-10-23. Four Blender processes of a side session then held the GPU at 100 percent (around 17:57), which would stutter his playtest, so the driver asked him whether to hold that session's GPU jobs. The question stayed open until he answered at about 00:00 EDT on 2026-10-24 (yes), and an open question blocks the session's scheduled crons, so the playtest-prep delivery of 19:47 never fired and the link was not sent at 20:45. The side session was messaged twice and holds all new GPU jobs (its Kilika workflow was stopped at 00:06) until he is done. The hourly crons fired late (usage 5-hour 10 percent, weekly 39 percent; C: 89 GB, D: 46 GB). The previous night's playtest servers on ports 5400 and 5320 were stopped by process id. The rule written down: never leave a question open before a scheduled delivery; ask in the same message as the deliverable or not at all.
   - Who: release driver session; Bailey
