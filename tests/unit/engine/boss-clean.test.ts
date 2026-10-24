@@ -70,13 +70,16 @@ function bossActor(art: string): { actor: FootActor; part: Mesh; shadow: Mesh; r
 }
 
 describe('the switch', () => {
-  it('is off by default and on with ?boss=clean or ?pack=demo; ?boss=today wins over the pack', () => {
+  it('is on by default since r64 (item 200b) and with ?boss=clean or ?pack=demo; off with no page, ?pack=off or ?boss=today (which wins over the pack)', () => {
     expect(bossCleanFromSearch(undefined)).toBe('today');
-    expect(bossCleanFromSearch('')).toBe('today');
+    expect(bossCleanFromSearch('?pack=off')).toBe('today');
+    expect(bossCleanFromSearch('')).toBe('clean');
+    expect(bossCleanFromSearch('?boss=today')).toBe('today');
+    expect(bossCleanFromSearch('?pack=off&boss=clean')).toBe('clean');
     expect(bossCleanFromSearch('?boss=clean')).toBe('clean');
     expect(bossCleanFromSearch('?demo=1&pack=demo')).toBe('clean');
     expect(bossCleanFromSearch('?pack=demo&boss=today')).toBe('today');
-    expect(bossCleanFromSearch('?pack=other')).toBe('today');
+    expect(bossCleanFromSearch('?pack=other')).toBe('clean'); // an unknown pack word names nothing: the default decides
   });
 
   it('plays only in Chapter I and Chapter IV, and only for the two bosses', () => {

@@ -192,6 +192,7 @@ class FakeApp {
 describe('GameFlow.runChapter asks for the cues before prep, the scene and the fight, and gives them back at the end', () => {
   let app: FakeApp;
   beforeEach(() => {
+    window.history.replaceState(null, '', '/?pack=off'); // r64 (item 200b): the audio pass (default in the demo chapters) takes the quiet results cue away; the cue lists below are release 62's, which `?pack=off` keeps
     document.body.innerHTML = '';
     events.length = 0;
     battles.length = 0;
@@ -202,6 +203,7 @@ describe('GameFlow.runChapter asks for the cues before prep, the scene and the f
   afterEach(() => {
     resetFlowScreens();
     vi.restoreAllMocks();
+    window.history.replaceState(null, '', '/');
   });
 
   it('seymour-flux (FFX): the warm is the first thing the run does, and it is released once the run is over', async () => {

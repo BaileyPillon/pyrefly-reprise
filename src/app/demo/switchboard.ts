@@ -29,13 +29,16 @@
  * the next Chapter I or Chapter IV fight (`engine/motion/DemoGate.ts`).
  */
 import { artUrl } from '../../engine/PaintedArt.ts';
-import { demoChapter, isDemoChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
+import { demoChapter, isDemoChapter, queryWord } from '../../engine/motion/DemoGate.ts';
 import { partyRigsMode } from '../../engine/motion/PartyRigsSwitch.ts';
 import { HIDE_CODE, MASTER_CODE, TIDUS_CODE, SWITCHES, boardState, flipAll, legendRows, normaliseCode, switchOfCode } from './switchboardModel.ts';
 
-/** The switchboard is wanted: `?pack=demo&switchboard=1`. */
+/**
+ * The switchboard is wanted: `?pack=demo&switchboard=1`, both spelled out. r64 (item 200b): the conference pack is now the default, so `?switchboard=1` alone is NOT enough (the playtest keys are swallowed in the capture
+ * phase, and a public address that happens to carry the one word must not grow them); the playtest address is unchanged.
+ */
 export function switchboardWanted(search: string | undefined): boolean {
-  return packDemo(search) && queryWord(search, 'switchboard') === '1';
+  return queryWord(search, 'pack') === 'demo' && queryWord(search, 'switchboard') === '1';
 }
 
 const COOKIE = 'pyrefly_tidus';

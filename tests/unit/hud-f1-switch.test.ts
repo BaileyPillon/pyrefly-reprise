@@ -18,18 +18,23 @@ afterEach(() => {
 });
 
 describe('the switch (pure address reader)', () => {
-  it('is today by default and with unrelated keys', () => {
+  it('is today with no page and with ?pack=off, and f1 with unrelated keys (r64, item 200b: the conference pack is the default)', () => {
     expect(hudF1ModeFromSearch(undefined)).toBe('today');
-    expect(hudF1ModeFromSearch('')).toBe('today');
-    expect(hudF1ModeFromSearch('?demo=1')).toBe('today');
-    expect(hudF1ModeFromSearch('?look=pro')).toBe('today');
+    expect(hudF1ModeFromSearch('?pack=off')).toBe('today');
+    expect(hudF1ModeFromSearch('?demo=1&pack=off')).toBe('today');
+    expect(hudF1ModeFromSearch('')).toBe('f1');
+    expect(hudF1ModeFromSearch('?demo=1')).toBe('f1');
+    expect(hudF1ModeFromSearch('?look=pro')).toBe('f1');
   });
-  it('is on with ?hud=f1 and with ?pack=demo, and ?hud=today wins over the pack', () => {
+  it('is on with ?hud=f1 and with ?pack=demo, and ?hud=today wins over the pack and over the default', () => {
     expect(hudF1ModeFromSearch('?hud=f1')).toBe('f1');
     expect(hudF1ModeFromSearch('?hud=F1')).toBe('f1');
+    expect(hudF1ModeFromSearch('?pack=off&hud=f1')).toBe('f1');
     expect(hudF1ModeFromSearch('?demo=1&pack=demo')).toBe('f1');
     expect(hudF1ModeFromSearch('?pack=demo&hud=today')).toBe('today');
-    expect(hudF1ModeFromSearch('?hud=other')).toBe('today');
+    expect(hudF1ModeFromSearch('?hud=today')).toBe('today');
+    expect(hudF1ModeFromSearch('?hud=other')).toBe('f1'); // an unknown word names nothing: the default decides
+    expect(hudF1ModeFromSearch('?pack=off&hud=other')).toBe('today');
   });
 });
 
@@ -54,6 +59,7 @@ describe('where it plays', () => {
   });
   it('tells a listener when the mode flips, and only then', () => {
     let n = 0;
+    setHudF1Mode('today'); // r64: the page's own default is f1 now, so start from today's
     const off = onHudF1Change(() => (n += 1));
     setHudF1Mode('today');
     setHudF1Mode('today');

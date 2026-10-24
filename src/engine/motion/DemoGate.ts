@@ -7,6 +7,8 @@
  * switch keeps its own name, its own key and its own default, and only points at this module. What each switch DOES is unchanged: the table below is the two demo chapters
  * (`src/data/encounters.ts` ids) and the game each one is.
  *
+ * **r64 (Bailey 2026-10-24, item 200b): the pack is ON by default in those two chapters** ({@link PACK_DEFAULT_ON}); `?pack=off` and each lane's own off word keep the old behaviour reachable.
+ *
  * Game case (AGENTS.md rule 14): the gate is both games (shared plumbing); the chapter's game is read from the table (FFX Chapter I, FFX-2 Chapter IV).
  */
 
@@ -50,9 +52,33 @@ export function queryWord(search: string | undefined, key: string): string {
   }
 }
 
-/** Does the address carry the shared key `?pack=demo`? The one reader every lane's switch uses. */
+/**
+ * THE CONFERENCE DEFAULT (r64, Bailey 2026-10-24 ~13:40 EDT, item 200b: "you can make all the decisions for me, ill go with all your recommendations"; the driver's call under it, his to overturn):
+ * the pack is ON by default in Chapter I (`seymour-flux`, FFX) and Chapter IV (`ffx2-bahamut`, FFX-2), with no `?pack=demo` in the address, from the chapter board and the booth path alike. ONE line to flip:
+ * `false` puts every address back to release 62 / r63-play's (the pack only with `?pack=demo`).
+ *
+ * Every consumer already gates itself on the running chapter (`isDemoChapter(demoChapter())`, or demo mode for the booth's screens), so this changes nothing in any other chapter, screen or mode.
+ */
+export const PACK_DEFAULT_ON = true;
+
+/**
+ * Is the conference pack asked for by this address? The one reader every lane's switch uses.
+ *
+ * | address | answer |
+ * |---|---|
+ * | `?pack=demo` | on |
+ * | `?pack=off` (or `today`, `0`) | off: every piece back to release 62's, the old behaviour |
+ * | no `pack` word (r64) | {@link PACK_DEFAULT_ON} |
+ * | `undefined` (no page at all: a unit test, a tool) | off, as it always was |
+ *
+ * A lane's own word still beats the pack for its piece in both directions (`?pro=off`, `?hud=today`, `?audio=today`, `?boss=today`, `?prebuild=off`, `?punch=today`, ...).
+ */
 export function packDemo(search: string | undefined): boolean {
-  return queryWord(search, 'pack') === 'demo';
+  if (search === undefined) return false;
+  const w = queryWord(search, 'pack');
+  if (w === 'demo') return true;
+  if (w === 'off' || w === 'today' || w === '0') return false;
+  return PACK_DEFAULT_ON;
 }
 
 /**

@@ -116,6 +116,9 @@ describe('the press page: the words are the game\'s own', () => {
   it('carries the fan-work notice verbatim (README.md, the credits panel\'s FAN_NOTICE) and says "An unofficial fan tribute"', () => {
     const notice = /data-notice>([\s\S]*?)<\/p>/.exec(markup)?.[1];
     expect(decode(notice ?? '')).toBe(FAN_NOTICE);
+    expect(decode(notice ?? '')).not.toMatch(/are original/); // r64 (item 200h): the "All code, art, music, and writing here are original" sentence is gone from the game and the page together
+    expect(decode(notice ?? '')).toContain('property of Square Enix');
+    expect(decode(notice ?? '')).toContain('unaffiliated with Square Enix');
     expect(markup).toContain('An unofficial fan tribute');
   });
 

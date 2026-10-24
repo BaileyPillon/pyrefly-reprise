@@ -78,7 +78,7 @@ const plan = (over: Partial<PassPlan> = {}): PassPlan => ({ baseSkip: true, laye
 
 describe('a plan with the pass off', () => {
   it('is ignored: one source, from the start of the slice, as it always played', () => {
-    setPassAddress('');
+    setPassAddress('?pack=off');
     setPassChapter('ffx2-bahamut');
     const { am, starts } = mixer('ffx2');
     am.playSfx('v2:hit-gun', { volume: 0.8, pass: plan() });

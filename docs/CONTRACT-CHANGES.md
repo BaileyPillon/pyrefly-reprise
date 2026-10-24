@@ -6,6 +6,18 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-24 — The conference pack is the default in Chapter I and Chapter IV, the party's edge light is off, the booth's end-card hold and idle returns, the notice without the "original" sentence (branch `r64-defaults`, from `r63-play`; plumbing for BOTH games, Chapter I FFX and Chapter IV FFX-2 only; additive)
+
+No contract file changes (none of `src/sprites/format.ts`, `SpriteActor.ts`, `Input.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts`). Bailey, 2026-10-24 ~13:40 EDT: "you can make all the decisions for me, ill go with all your recommendations" (items 200b, 200e, 200h, 200i; the driver's calls under it, his to overturn).
+
+- **`DemoGate.packDemo(search)`** is the one pack reader every lane's switch asks, and its answer changed: `?pack=demo` is on, `?pack=off` (or `today`, `0`) is off, and an address with NO pack word takes `DemoGate.PACK_DEFAULT_ON` (new, `true`; one line to flip back). `undefined` (no page: every node-environment unit test) is still off. Every consumer already gated itself on the running chapter or on demo mode, so no other chapter, screen or mode moves. `FeelSwitch.parseFeelKeys` reads the pack through it now (it had its own `word('pack') === 'demo'`).
+- **`PartyRimSwitch.partyRimFromSearch`**: with no `?partyrim=` word the rim follows the pack, so it is OFF by default in the demo chapters and `?partyrim=on` (or `?pack=off`) brings today's back.
+- **`switchboard.switchboardWanted`** names `?pack=demo` itself (it asked `packDemo`): the playtest address is unchanged and `?switchboard=1` alone does not install the keys on a public address.
+- **Booth flow (demo mode with the booth screens on only):** `DemoThanksScreen.endedBy` (`'press' | 'timer' | 'left' | null`, new) and `ThanksEnd` (type); `BattleScreenFlow.registerFlowScreens({ demoThanks })` may return a screen with `endedBy`; the flow takes the visit to the title when the card ended by `'timer'` (`GameFlow.start`, one private flag); `boothCards.endCardMarkup({ afterFight })` carries the "Press any button" hint (`END_PRESS`, `.booth-end__press`); `DemoBoardScreen` leaves for the title after `demoIdle.PICKER_IDLE_MS` (60 s) of nobody, by `ChapterSelectScreen.settle(null)` (now `protected`, the cancel's own path).
+- **`FAN_NOTICE`** (`app/credits/creditsData.ts`), the README and `public/press/index.html` no longer carry the sentence "All code, art, music, and writing here are original."; the property line and the not-affiliated line stay.
+
+Game case: BOTH games (shared plumbing); the pack acts in Chapter I (FFX) and Chapter IV (FFX-2) only, the booth flow in demo mode (`?demo=1`) only. Tests: `tests/unit/r64-defaults.test.ts` (new, 40) and the 40 or so existing files that pinned the old default (listed in `docs/handoff/r64-defaults.md`).
+
 ## 2026-10-23 — The frame-budget governor, the profiler, a pass that only copied, and the aeon's victory frame (branch `perf-trim`; plumbing for BOTH games, Chapter I FFX and Chapter IV FFX-2 only, behind the pro lanes; additive)
 
 No contract file changes (none of `src/sprites/format.ts`, `SpriteActor.ts`, `Input.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts`). What the lane added; every consumer multiplies by a lever whose rest value is 1, so with the lanes off, outside the two demo chapters or with `?govern=off` the frame is r63-int's, bit for bit.

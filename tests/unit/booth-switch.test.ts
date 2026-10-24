@@ -2,7 +2,7 @@
 /**
  * THE BOOTH SCREENS' SWITCH (conference demo, lane "booth"; Bailey, 2026-10-22, decision 188b "Mixed read"; both games; `src/app/demo/boothSwitch.ts`).
  *
- * Claims: the new end card and attract card are OFF with no address word (today's thanks card and reel exactly), ON with `?booth=new` or the shared `?pack=demo`, OFF again with `?pack=demo&booth=today`;
+ * Claims: the new end card and attract card are ON with no address word since r64 (item 200b: the conference pack is the default), ON with `?booth=new` or the shared `?pack=demo`, OFF again with `?pack=off` or `?booth=today` (today's thanks card and reel exactly);
  * they need demo mode on top (a plain page with `?booth=new` shows nothing new); `?card=end|attract` names a standalone card and nothing else does; `?attract=reel` keeps release 61's reel behind the card.
  */
 import { afterEach, describe, expect, it } from 'vitest';
@@ -16,10 +16,14 @@ afterEach(() => {
 });
 
 describe('the booth screens switch: the address', () => {
-  it('is off with nothing in the address', () => {
-    expect(boothModeFromSearch('')).toBe('today');
+  it('is on with nothing in the address (r64, item 200b), off with no page and with ?pack=off or ?booth=today', () => {
+    expect(boothModeFromSearch('')).toBe('new');
+    expect(boothModeFromSearch('?demo=1')).toBe('new');
     expect(boothModeFromSearch(undefined)).toBe('today');
-    expect(boothModeFromSearch('?demo=1')).toBe('today');
+    expect(boothModeFromSearch('?pack=off')).toBe('today');
+    expect(boothModeFromSearch('?demo=1&pack=off')).toBe('today');
+    expect(boothModeFromSearch('?booth=today')).toBe('today');
+    expect(boothModeFromSearch('?pack=off&booth=new')).toBe('new'); // the lane's own word still wins
   });
 
   it('is on with ?booth=new and with the shared ?pack=demo', () => {
@@ -34,7 +38,8 @@ describe('the booth screens switch: the address', () => {
 
   it('reads the words case-insensitively and ignores a word it does not know', () => {
     expect(boothModeFromSearch('?booth=NEW')).toBe('new');
-    expect(boothModeFromSearch('?booth=maybe')).toBe('today');
+    expect(boothModeFromSearch('?booth=maybe')).toBe('new'); // an unknown word names nothing: the default decides
+    expect(boothModeFromSearch('?pack=off&booth=maybe')).toBe('today');
   });
 
   it('names a standalone card only for end or attract', () => {
@@ -64,11 +69,12 @@ describe('the booth screens switch: the page', () => {
   });
 
   it('reads the page address once and lets the debug setter override it', () => {
-    expect(boothMode()).toBe('today'); // the test page has no address word
-    setBoothMode('new');
-    expect(boothMode()).toBe('new');
-    setBoothMode(null);
+    expect(boothMode()).toBe('new'); // the test page has no address word: r64's default
+    setBoothMode('today');
     expect(boothMode()).toBe('today');
+    window.history.replaceState(null, '', '/?pack=off');
+    setBoothMode(null);
+    expect(boothMode()).toBe('today'); // the old behaviour, by the address
   });
 
   it('starts the card at idle, and the reel when the address keeps it', () => {

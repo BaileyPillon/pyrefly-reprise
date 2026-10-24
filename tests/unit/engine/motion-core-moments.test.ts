@@ -44,13 +44,16 @@ const FRAME60 = 1000 / 60;
 // ------------------------------------------------------------------------------- the switch
 
 describe('the switch', () => {
-  it('is OFF by default, turns on with ?moments=new or ?pack=demo, and ?moments=today wins over the pack', () => {
+  it('is ON by default since r64 (item 200b), OFF with no page or ?pack=off, turns on with ?moments=new or ?pack=demo, and ?moments=today wins over the pack', () => {
     expect(momentsModeFromSearch(undefined)).toBe('today');
-    expect(momentsModeFromSearch('')).toBe('today');
+    expect(momentsModeFromSearch('?pack=off')).toBe('today');
+    expect(momentsModeFromSearch('')).toBe('new');
     expect(momentsModeFromSearch('?moments=new')).toBe('new');
     expect(momentsModeFromSearch('?pack=demo')).toBe('new');
     expect(momentsModeFromSearch('?pack=demo&moments=today')).toBe('today');
-    expect(momentsModeFromSearch('?moments=bogus')).toBe('today');
+    expect(momentsModeFromSearch('?moments=today')).toBe('today');
+    expect(momentsModeFromSearch('?moments=bogus')).toBe('new');
+    expect(momentsModeFromSearch('?pack=off&moments=bogus')).toBe('today');
   });
 
   it('plays only in the two demo chapters', () => {

@@ -59,11 +59,20 @@ describe('the switch', () => {
     expect(parseFeelKeys(undefined).motionsfx).toBeNull();
   });
 
-  it('is OFF at compile time: no key, no pack, no chapter, or only a demo chapter, is silent', () => {
-    resetFeelForTests('');
+  it('is OFF with ?pack=off or no chapter, and ON in a demo chapter with nothing named (r64, item 200b)', () => {
+    resetFeelForTests('?pack=off');
     expect(motionSfxOn()).toBe(false);
     setFeelChapter('seymour-flux');
-    expect(motionSfxOn()).toBe(false); // a demo chapter with nothing named: today
+    expect(motionSfxOn()).toBe(false); // a demo chapter under ?pack=off: today
+    resetFeelForTests('');
+    expect(motionSfxOn()).toBe(false); // no chapter: silent
+    setFeelChapter('seymour-flux');
+    expect(motionSfxOn()).toBe(true); // a demo chapter with nothing named: the conference default
+    setFeelChapter('yunalesca');
+    expect(motionSfxOn()).toBe(false); // any other chapter: today
+    resetFeelForTests(undefined);
+    setFeelChapter('seymour-flux');
+    expect(motionSfxOn()).toBe(false); // no page at all (a unit test): today
   });
 
   it('?pack=demo turns it on in Chapter I and Chapter IV only; ?motionsfx= beside the pack wins; its own key works without the pack; no key leaves any other chapter silent', () => {
@@ -87,7 +96,7 @@ describe('the switch', () => {
   });
 
   it('the debug setter forces it and undefined hands the address back', () => {
-    resetFeelForTests('');
+    resetFeelForTests('?pack=off');
     setFeelChapter('seymour-flux');
     setMotionSfxOn(true);
     expect(motionSfxOn()).toBe(true);

@@ -10,6 +10,7 @@ import { readFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setDemoMode } from '../../src/app/demoMode.ts';
 import { attractRunner, setAttractRunner } from '../../src/app/demo/attractHook.ts';
+import { setBoothMode } from '../../src/app/demo/boothSwitch.ts';
 import { enterDemoTitle } from '../../src/app/demo/demoTitle.ts';
 import { ATTRACT_AFTER_MS } from '../../src/app/demo/demoIdle.ts';
 
@@ -20,10 +21,12 @@ const flush = async (): Promise<void> => {
 
 beforeEach(() => {
   now = 1000;
+  setBoothMode('today'); // r64 (item 200b): the booth screens are on by default; these claims are release 61's REEL, which is what `?pack=off` / `?booth=today` keep (the card is booth-attract.test.ts's)
   vi.spyOn(performance, 'now').mockImplementation(() => now);
   document.body.innerHTML = '<div id="ui"></div>';
 });
 afterEach(() => {
+  setBoothMode(null);
   setDemoMode(null);
   setAttractRunner(null);
   vi.restoreAllMocks();

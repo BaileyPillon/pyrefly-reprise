@@ -158,6 +158,19 @@
 .booth-end__left .booth-eyebrow {
   margin-bottom: calc(12 * var(--bk));
 }
+/* r64 (item 200i): the hint at the foot of the left column, in the card's own type (.booth-scan: 16 units, 28 px at 2560 x 1440) */
+.booth-end__press {
+  position: absolute;
+  left: calc(54 * var(--bk));
+  bottom: calc(24 * var(--bk));
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--bk));
+}
+.booth-end__press .booth-pad {
+  width: calc(44 * var(--bk));
+  height: calc(29 * var(--bk));
+}
 .booth-end__right {
   position: absolute;
   right: calc(54 * var(--bk));
@@ -307,6 +320,12 @@
     right: 5vw;
     width: auto;
     bottom: 34vh;
+  }
+  .booth-end__press {
+    left: 0;
+    right: 0;
+    bottom: calc(14 * var(--bk));
+    justify-content: center;
   }
   .booth-end__right {
     left: 5vw;

@@ -142,7 +142,7 @@ describe('on the real actor, through a lunge and a hop', () => {
 
   it('today the shadow trails the lunge at 0.55; with follow it is under the figure (x equal) at every frame, party', () => {
     for (const follow of [false, true]) {
-      resetFeelForTests(follow ? '?shadow=follow' : '');
+      resetFeelForTests(follow ? '?shadow=follow' : '?pack=off'); // r64: with no word at all the demo chapters follow
       setFeelChapter('seymour-flux');
       const a = figure();
       const sh = shadowOf(a);

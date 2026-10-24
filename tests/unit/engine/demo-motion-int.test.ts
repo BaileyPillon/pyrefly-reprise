@@ -73,11 +73,15 @@ describe('one chapter gate for every lane', () => {
       expect([isDemoChapter(id), curvesOn(), fxNewOn(), inFeelChapter()]).toEqual([on, on, on, on]);
     }
   });
-  it('the one pack reader: ?pack=demo, case and spaces tolerated, nothing else; an unreadable address is no address', () => {
+  it('the one pack reader: ?pack=demo, case and spaces tolerated; off with ?pack=off, today or 0; since r64 (item 200b) an address with no pack word takes the default (on), and no page is no address', () => {
     expect(packDemo('?pack=demo')).toBe(true);
     expect(packDemo('?a=1&pack= DEMO ')).toBe(true);
-    expect(packDemo('?pack=demos')).toBe(false);
-    expect(packDemo('')).toBe(false);
+    expect(packDemo('?pack=OFF')).toBe(false);
+    expect(packDemo('?pack=today')).toBe(false);
+    expect(packDemo('?pack=0')).toBe(false);
+    expect(packDemo('?pack=demos')).toBe(true); // an unknown word names nothing: the default decides
+    expect(packDemo('')).toBe(true);
+    expect(packDemo('?demo=1')).toBe(true);
     expect(packDemo(undefined)).toBe(false);
     expect(queryWord('?smear=Blur', 'smear')).toBe('blur');
   });
@@ -236,7 +240,7 @@ describe('the Overdrive opening gathers with the core lane\'s leap', () => {
 });
 
 describe('the playtest switchboard', () => {
-  it('is wanted only with ?pack=demo AND ?switchboard=1', () => {
+  it('is wanted only with ?pack=demo AND ?switchboard=1 (r64: the default pack alone does not count)', () => {
     expect(switchboardWanted('?demo=1&pack=demo&switchboard=1')).toBe(true);
     expect(switchboardWanted('?pack=demo')).toBe(false);
     expect(switchboardWanted('?switchboard=1')).toBe(false);

@@ -147,6 +147,7 @@ class FakeApp {
 let app: FakeApp;
 
 beforeEach(() => {
+  window.history.replaceState(null, '', '/?pack=off'); // r64 (item 200b): the conference pack (the audio pass's results cues, the pro defeat card) is the default now; this file pins release 62's flow, which `?pack=off` keeps
   asks.length = 0;
   playing = requested = null;
   request = 0;
@@ -167,6 +168,7 @@ afterEach(() => {
   vi.restoreAllMocks();
   resetFlowScreens();
   setDemoMode(null);
+  window.history.replaceState(null, '', '/');
 });
 
 const plays = (): Ask[] => asks.filter((a) => a.what.startsWith('play '));

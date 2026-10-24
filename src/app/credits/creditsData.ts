@@ -151,11 +151,14 @@ export function creditGroups(withAiTools: boolean): readonly CreditGroup[] {
 /** What the panel lists: the four groups of the approved frames, and the AI tools after them only while the switch is on. */
 export const CREDIT_GROUPS: readonly CreditGroup[] = BTS_LIVE ? [...BASE_CREDIT_GROUPS, AI_TOOLS_GROUP] : BASE_CREDIT_GROUPS;
 
-/** The README's own notice, verbatim (`README.md` line 7); the frames print it unchanged. */
+/**
+ * The README's own notice, verbatim (`README.md` line 7); the frames and the press page (`public/press/index.html`) print it unchanged. r64 (Bailey 2026-10-24, item 200h, the driver's call under "I'll go with all your
+ * recommendations"): the sentence "All code, art, music, and writing here are original." is gone, since it may no longer be accurate since 2026-10-18 (retail assets and cloned voices are allowed); the property line and the
+ * not-affiliated line stay.
+ */
 export const FAN_NOTICE =
   'Final Fantasy X and X-2, their characters, worlds, and names are the property of Square Enix. ' +
-  'This project is a non-commercial fan work, unaffiliated with Square Enix. ' +
-  'All code, art, music, and writing here are original.';
+  'This project is a non-commercial fan work, unaffiliated with Square Enix.';
 
 /**
  * The licences the REQUIRED lines are under, with their URIs: CC BY 4.0

@@ -15,7 +15,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { setProMode } from '../../src/engine/look/pro/ProSwitch.ts';
 
 import { SAVE_KEY, SAVE_VERSION, SaveStore, defaultSave, defaultSettings, migrate } from '../../src/app/SaveData.ts';
 import {
@@ -58,6 +59,9 @@ function resetLook(): void {
   lookState.version = 1;
 }
 afterEach(resetLook);
+// r64 (item 200b): the pro look (the arena's Cinematic grade) is the page's default in Chapter I and IV now; these claims are the PLAYER'S visual-style setting (HD-2D, Classic), release 60's, which `?pack=off` / `?look=today` keep.
+beforeEach(() => setProMode('today'));
+afterEach(() => setProMode(null));
 
 describe('the setting, as data', () => {
   it('has two values, HD-2D first and the default, with the words the row prints', () => {

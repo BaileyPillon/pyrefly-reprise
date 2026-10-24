@@ -36,10 +36,12 @@ afterEach(() => {
 });
 
 describe('the switch', () => {
-  it('is OFF with no address key and for an unreadable address', () => {
+  it('is OFF for no page and for ?pack=off, and the painted streak with no word at all since r64 (item 200b)', () => {
     expect(smearStyleFromSearch(undefined)).toBe('off');
-    expect(smearStyleFromSearch('')).toBe('off');
-    expect(smearStyleFromSearch('?curves=new')).toBe('off');
+    expect(smearStyleFromSearch('?pack=off')).toBe('off');
+    expect(smearStyleFromSearch('?pack=off&curves=new')).toBe('off');
+    expect(smearStyleFromSearch('')).toBe('paint');
+    expect(smearStyleFromSearch('?curves=new')).toBe('paint');
   });
   it('?smear= picks a style and wins over the pack; ?pack=demo alone is the painted streak', () => {
     expect(smearStyleFromSearch('?smear=blur')).toBe('blur');
@@ -47,8 +49,9 @@ describe('the switch', () => {
     expect(smearStyleFromSearch('?pack=demo')).toBe('paint');
     expect(smearStyleFromSearch('?pack=demo&smear=blur')).toBe('blur');
     expect(smearStyleFromSearch('?pack=demo&smear=off')).toBe('off');
-    expect(smearStyleFromSearch('?smear=banana')).toBe('off');
-    expect(smearStyleFromSearch('?SMEAR=Blur')).toBe('off'); // the key is lower case; the value is not case sensitive
+    expect(smearStyleFromSearch('?pack=off&smear=banana')).toBe('off');
+    expect(smearStyleFromSearch('?smear=banana')).toBe('paint'); // an unknown style names nothing: the default decides
+    expect(smearStyleFromSearch('?pack=off&SMEAR=Blur')).toBe('off'); // the key is lower case; the value is not case sensitive
     expect(smearStyleFromSearch('?smear=BLUR')).toBe('blur');
   });
   it('plays only in the two demo chapters', () => {

@@ -13,6 +13,11 @@
  * THE END CARD (lane "booth", Bailey 2026-10-22, decision 188b "Mixed read": the end card in the Echo painting look; both games): with the booth screens on (`boothSwitch.ts`, `?booth=new` or `?pack=demo`) this
  * same screen is drawn as the Echo end card instead of the cream plate (`boothCards.ts`): the painting held with a slow push, "Thanks for playing" and the picked frame's own words left, the QR and the address
  * right. Same flow, same ending (a press after the guard, a click, or {@link THANKS_MS}), same `done`; only the picture differs. The booth loop's own end card (`?card=end`) is `BoothCardScreen.ts`.
+ *
+ * BOOTH FLOW (r64, Bailey 2026-10-24 item 200i, the driver's call under "I'll go with all your recommendations"; both games): the Echo end card holds about 8 s ({@link THANKS_MS}) with a small "Press any button"
+ * hint in the card's own type (`boothCards.ts`, 16 grid units = 28 px at 2560 x 1440). A press (after the guard) goes to the picker at once, as it always did; the card that RUNS OUT its 8 s untouched means the
+ * visitor has gone, so the flow returns to the TITLE instead (`BattleScreenFlow.showDemoThanks`, which reads {@link DemoThanksScreen.endedBy}). With the booth screens off (`?booth=today`, `?pack=off`) nothing changes: the
+ * cream plate, and the picker after the timer.
  */
 
 import { Screen } from '../Screen.ts';
@@ -43,6 +48,9 @@ export function demoThanksDue(chapterId: string): boolean {
   return demoModeOn() && isDemoFight(chapterId);
 }
 
+/** How the card ended: a press or a click (`press`), the 8 s running out (`timer`), or the screen being taken away (`left`). */
+export type ThanksEnd = 'press' | 'timer' | 'left';
+
 export interface DemoThanksOptions {
   chapterId: string;
   /** Milliseconds before it ends by itself (tests). */
@@ -58,6 +66,8 @@ export class DemoThanksScreen extends Screen {
   private resolveDone!: () => void;
   private elapsedMs = 0;
   private over = false;
+  /** How it ended, or null while it stands (r64: the flow sends a card that ran out its time back to the title). */
+  endedBy: ThanksEnd | null = null;
   private bar: HTMLElement | null = null;
   private readonly holdMs: number;
   private readonly guardMs: number;
@@ -81,7 +91,7 @@ export class DemoThanksScreen extends Screen {
     root.dataset['action'] = 'thanks:end'; // a click or a tap anywhere on the card ends it
     root.style.setProperty('--fe-k', 'max(0.5px, min(100vw / 1440, 100vh / 810))'); // the front end's grid unit (`frontend.css`), for a screen that sits outside a `.fe` one
     if (boothNewOn()) {
-      // The Echo end card (decision 188b): the painting is the card; no timer bar and no hint (the card ends on a press or by itself, as it always did).
+      // The Echo end card (decision 188b): the painting is the card; no timer bar. r64 (item 200i): a small "Press any button" hint in the card's own type (`boothCards.ts`).
       root.classList.add('demo-thanks--booth');
       mountEndCard(root, { afterFight: true });
       void this.app.fade('clear', 300);
@@ -110,14 +120,14 @@ export class DemoThanksScreen extends Screen {
   }
 
   override exit(): void {
-    this.finish();
+    this.finish('left');
   }
 
   override update(dt: number): void {
     if (this.over) return;
     this.elapsedMs += dt * 1000;
     this.bar?.style.setProperty('transform', `scaleX(${Math.max(0, 1 - this.elapsedMs / this.holdMs)})`);
-    if (this.elapsedMs >= this.holdMs) this.finish();
+    if (this.elapsedMs >= this.holdMs) this.finish('timer');
   }
 
   override handleInput(input: InputSnapshot): void {
@@ -127,23 +137,24 @@ export class DemoThanksScreen extends Screen {
     }
     if (input.actions.length > 0 || BUTTONS.some((b) => input.justPressed(b))) {
       for (const b of BUTTONS) input.consume(b);
-      this.finish();
+      this.finish('press');
     }
   }
 
   override trigger(name: string): boolean {
     if (name !== 'thanks:end') return false;
-    this.finish();
+    this.finish('press');
     return true;
   }
 
   override snapshot(): Record<string, unknown> {
-    return { chapterId: this.opts.chapterId, over: this.over, elapsedMs: Math.round(this.elapsedMs) };
+    return { chapterId: this.opts.chapterId, over: this.over, endedBy: this.endedBy, elapsedMs: Math.round(this.elapsedMs) };
   }
 
-  private finish(): void {
+  private finish(by: ThanksEnd): void {
     if (this.over) return;
     this.over = true;
+    this.endedBy = by;
     this.resolveDone();
   }
 }

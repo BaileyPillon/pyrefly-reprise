@@ -46,7 +46,8 @@ import { ProDefeatScreen } from './ProDefeatScreen.ts'; // lane "pro-staging": t
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
-import { demoThanksDue } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
+import { demoThanksDue, type ThanksEnd } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
+import { boothNewOn } from '../demo/boothSwitch.ts'; // r64 (item 200i): with the booth screens on, a card that ran out its time sends the flow back to the title
 import { demoIntroFor } from '../demo/demoIntro.ts'; // R62 (demo mode only, FFX Chapter I): the short voiced intro
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
@@ -129,7 +130,7 @@ export interface FlowScreenFactories {
    */
   battle: (opts: BattleScreenOptions) => FlowScreen<BattleScreenResult>;
   /** R62 (the conference demo, demo mode only): the thanks card after a win (`app/demo/demoThanks.ts`). Optional: a flow with none registered goes straight on, as before. */
-  demoThanks?: (opts: { chapter: Chapter }) => FlowScreen<void>;
+  demoThanks?: (opts: { chapter: Chapter }) => FlowScreen<void> & { readonly endedBy?: ThanksEnd | null };
   /** R62 (the conference demo, demo mode only; FFX Chapter I): the short voiced intro before the fight (`app/demo/demoIntro.ts`), a story scene on a trimmed script. Optional, as `demoThanks` is. */
   demoIntro?: (opts: CutsceneScreenOptions) => FlowScreen<void>;
 }
@@ -252,6 +253,8 @@ export class GameFlow {
   private handedOver = false;
   /** The last cutscene the flow played was hurried by the player (PR-0061: the battle after it opens hurried). */
   private lastSceneHurried = false;
+  /** r64 (item 200i, demo mode with the booth screens on): the thanks card ran out its 8 s untouched, so `start()` takes the visit back to the title instead of the picker. */
+  private demoToTitle = false;
 
   /** Title -> chapter select -> a chapter -> back to chapter select. */
   async start(): Promise<void> {
@@ -275,6 +278,13 @@ export class GameFlow {
         }
         await this.runChapter(chapterId, {});
         if (this.handedOver) return;
+        if (this.demoToTitle) {
+          // r64 (item 200i, both games): nobody pressed anything on the end card, so the visitor has gone: the title (and its attract card after a minute), not the picker.
+          this.demoToTitle = false;
+          this.step = 'title';
+          await this.app.goto('title');
+          return;
+        }
         // Back to chapter select, including after the last chapter of an arc.
         // A designed ending/credits screen is a separate, owner-approved piece
         // of work (critic round 02 #32); until it exists the honest behaviour
@@ -333,6 +343,7 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
+    this.demoToTitle = false;
     opts = demoRunDefaults(id, opts); // R61 (demo mode only, both games): a demo fight skips party prep and the story scenes unless the caller says otherwise
     const armed = this.pilgrimArmed;
     this.pilgrimArmed = null; // spent by whatever chapter runs next, so a door that opened and never ran cannot hijack a later one
@@ -518,6 +529,7 @@ export class GameFlow {
     const screen = make({ chapter });
     if (!(await this.show(screen))) return;
     await screen.done;
+    if (screen.endedBy === 'timer' && boothNewOn()) this.demoToTitle = true; // r64 (item 200i): the card ran out its 8 s with no press
   }
 
   /**

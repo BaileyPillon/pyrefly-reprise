@@ -36,12 +36,15 @@ const shapeOf = (game: 'ffx' | 'ffx2', over: { distance?: number; heft?: number;
 describe('the switch: default OFF, the two demo chapters only', () => {
   it('reads ?curves= and ?pack=demo from a search string', () => {
     expect(curvesModeFromSearch(undefined)).toBe('today');
-    expect(curvesModeFromSearch('')).toBe('today');
+    expect(curvesModeFromSearch('?pack=off')).toBe('today');
+    expect(curvesModeFromSearch('')).toBe('new'); // r64 (item 200b): the conference pack is the default
     expect(curvesModeFromSearch('?curves=new')).toBe('new');
     expect(curvesModeFromSearch('?pack=demo')).toBe('new');
     expect(curvesModeFromSearch('?pack=demo&curves=today')).toBe('today');
-    expect(curvesModeFromSearch('?curves=bogus')).toBe('today');
-    expect(curvesModeFromSearch('?pack=other')).toBe('today');
+    expect(curvesModeFromSearch('?curves=today')).toBe('today');
+    expect(curvesModeFromSearch('?curves=bogus')).toBe('new'); // an unknown word names nothing: the default decides
+    expect(curvesModeFromSearch('?pack=off&curves=bogus')).toBe('today');
+    expect(curvesModeFromSearch('?pack=other')).toBe('new');
   });
   it('is off with no page and off in every chapter but Chapter I and Chapter IV', () => {
     expect(curvesOn()).toBe(false); // no location in this test: today

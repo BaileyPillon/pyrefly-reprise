@@ -74,6 +74,7 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     hold.clear();
     resetDemoWarm();
     setDemoMode(true);
+    window.history.replaceState(null, '', '/?prebuild=off'); // r64 (item 200b): the fight prebuild is the demo's default now (prebuild-figures.test.ts); this file pins the warm's own steps, which it adds one to
   });
   afterEach(() => {
     vi.useRealTimers();

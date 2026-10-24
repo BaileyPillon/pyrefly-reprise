@@ -36,8 +36,14 @@ export const ATTRACT_PROMPT = 'Pick up the controller';
 export const ATTRACT_PRESS = 'Press any button';
 export const ATTRACT_HOME = 'Or play at home';
 
+/**
+ * The end card's hint (r64, Bailey 2026-10-24 item 200i, the driver's call under "I'll go with all your recommendations"): the card after a fight holds about 8 s and says so in the card's own type, a small
+ * "Press any button" at the foot of the left column (`.booth-scan`, 16 grid units = 28 px at 2560 x 1440, the text floor). The booth loop's own card (`?card=end`, no `afterFight`) stands until a press and has no hint.
+ */
+export const END_PRESS = ATTRACT_PRESS;
+
 export interface EndCardOptions {
-  /** The card after a won fight: the thanks line, and a shorter build-up (the card ends on a press or in 8 s). False for the booth loop's own card. */
+  /** The card after a won fight: the thanks line, a shorter build-up, and the "Press any button" hint (the card ends on a press, or in 8 s back at the title). False for the booth loop's own card. */
   afterFight?: boolean;
 }
 
@@ -134,6 +140,7 @@ export function endCardMarkup(opts: EndCardOptions = {}): string {
     `<div class="booth-eyebrow booth-rise" style="--s:2100ms">${esc(END_EYEBROW)}</div>` +
     `<p class="booth-tagline booth-rise" style="--s:2300ms">${END_PITCH.map((l) => `<span>${esc(l)}</span>`).join('')}</p>` +
     `</div>` +
+    (after ? `<div class="booth-end__press booth-fade" style="--s:1700ms;--d:600ms">${padGlyphMarkup()}<span class="booth-scan">${esc(END_PRESS)}</span></div>` : '') +
     `<div class="booth-end__right">` +
     `<div class="booth-qr booth-fade" style="--s:2900ms;--d:700ms" role="img" aria-label="${esc(qrAria())}">${boothQrSvg()}</div>` +
     `<span class="booth-scan booth-rise" style="--s:3100ms">${esc(END_SCAN)}</span>` +

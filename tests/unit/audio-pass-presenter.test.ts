@@ -108,7 +108,7 @@ describe("overlapped actions (FFX-2's ATB): a blow resolves by its striker's own
   });
 
   it("is today's tick with the pass off: the same overlapped blow, nothing new", () => {
-    setPassAddress('');
+    setPassAddress('?pack=off');
     setPassChapter('ffx2-bahamut');
     const { ctx, played } = fakeCtx('ffx2', state);
     burst(ctx);
@@ -150,7 +150,7 @@ describe("a spell's landing", () => {
   });
 
   it('is the cue as it always played with the pass off', () => {
-    setPassAddress('');
+    setPassAddress('?pack=off');
     setPassChapter('seymour-flux');
     const { ctx, played } = fakeCtx('ffx', fireState, () => 240);
     cast(ctx);
@@ -208,7 +208,7 @@ describe("the dip before a big blow", () => {
 
 describe('the motion sounds on a blow that lands with no wait ahead of it', () => {
   it('keeps them off the blow with the pass on, and does nothing with it off', () => {
-    setPassAddress('');
+    setPassAddress('?pack=off');
     setPassChapter('seymour-flux');
     const f = fakeCtx('ffx', state);
     const hit = { type: 'damage', targetId: 'bahamut', sourceId: 'yuna', amount: 50, element: 'fire', crit: false, hitIndex: 1, hitCount: 5 } as Extract<BattleEvent, { type: 'damage' }>;
@@ -263,7 +263,7 @@ describe('the motion sounds on a blow that lands with no wait ahead of it', () =
 describe("Chapter I's one fanfare", () => {
   it('starts the results cue at the last blow and says the sting is dropped, only with the pass on', () => {
     setPassVictoryCue('victory-ffx');
-    setPassAddress('');
+    setPassAddress('?pack=off');
     setPassChapter('seymour-flux');
     const off = fakeCtx('ffx', state);
     expect(passEarlyVictory(off.ctx, 0.3)).toBe(false);

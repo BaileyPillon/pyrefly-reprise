@@ -2,6 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
 import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
+import { setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
 import { DamageNumbers } from '../../src/ui/common/DamageNumbers.ts';
 import {
   TIER_PCT,
@@ -38,6 +39,9 @@ const run = (n: DamageNumbers, ms: number): void => {
 };
 
 beforeEach(() => {
+  // r64 (item 200b): the pro look and the F1 HUD are the page's DEFAULT in the demo chapters now (the F1 damage numeral is 1.6 times the glass numeral's); these claims are the glass numeral's own, so each one names its mode.
+  setProMode('today');
+  setHudF1Mode('today');
   vi.spyOn(Math, 'random').mockReturnValue(0.5);
   Object.defineProperty(window.HTMLElement.prototype, 'offsetWidth', { configurable: true, get(this: HTMLElement) { return (this.textContent?.length ?? 0) * 9; } });
 });
@@ -46,6 +50,7 @@ afterEach(() => {
   vi.restoreAllMocks();
   document.body.innerHTML = '';
   setProMode(null);
+  setHudF1Mode(null);
   setProPiece(null);
   setDemoChapter(undefined);
   setNumberFacts(null);
@@ -115,7 +120,7 @@ describe('the tiers', () => {
 });
 
 describe('the numeral layer', () => {
-  it('with the piece off (the default) the numeral is the old one: no glass class, today\'s size, today\'s text', () => {
+  it('with the piece off (?pack=off / ?look=today) the numeral is the old one: no glass class, today\'s size, today\'s text', () => {
     setDemoChapter('seymour-flux'); // the chapter alone is not enough: the switch is off
     const n = layer();
     const el = n.spawnEvent({ type: 'damage', targetId: 'seymour', amount: 732, hitIndex: 0, hitCount: 1 })!;

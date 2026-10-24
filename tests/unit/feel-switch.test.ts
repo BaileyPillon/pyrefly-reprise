@@ -1,6 +1,6 @@
 /**
- * The feel lane's switches (motion program, 2026-10-22): every new piece is OFF at compile time and ON only in Chapter I (`seymour-flux`, FFX) and Chapter IV (`ffx2-bahamut`,
- * FFX-2), by its own key or by the shared `?pack=demo`. Nothing in any other chapter, and nothing before a chapter is named, ever leaves today's behaviour.
+ * The feel lane's switches (motion program, 2026-10-22): every new piece is ON only in Chapter I (`seymour-flux`, FFX) and Chapter IV (`ffx2-bahamut`,
+ * FFX-2), by its own key, by the shared `?pack=demo`, and since r64 (Bailey 2026-10-24, item 200b) by DEFAULT with no word at all; `?pack=off` is today's. Nothing in any other chapter, and nothing before a chapter is named, ever leaves today's behaviour.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import {
@@ -29,9 +29,10 @@ afterEach(() => resetFeelForTests());
 describe('the keys', () => {
   it('reads each key, lowercases it, and ignores a value it does not know', () => {
     expect(parseFeelKeys('?punch=NEW&hitstop=short&rumble=on&shadow=follow&motionsfx=on&timing=TIME&pack=demo')).toEqual({ pack: true, punch: 'new', hitstop: 'short', rumble: true, shadow: true, motionsfx: true, timing: true });
-    expect(parseFeelKeys('?punch=big&hitstop=long&rumble=maybe&shadow=down&motionsfx=loud&timing=fast&pack=all')).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null });
-    expect(parseFeelKeys('?punch=today&hitstop=today&rumble=off&shadow=today&motionsfx=off&timing=today')).toEqual({ pack: false, punch: 'today', hitstop: 'today', rumble: false, shadow: false, motionsfx: false, timing: false });
-    expect(parseFeelKeys(undefined)).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null });
+    expect(parseFeelKeys('?punch=big&hitstop=long&rumble=maybe&shadow=down&motionsfx=loud&timing=fast&pack=all')).toEqual({ pack: true, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null }); // an unknown pack word names nothing: the r64 default decides
+    expect(parseFeelKeys('?punch=today&hitstop=today&rumble=off&shadow=today&motionsfx=off&timing=today&pack=off')).toEqual({ pack: false, punch: 'today', hitstop: 'today', rumble: false, shadow: false, motionsfx: false, timing: false });
+    expect(parseFeelKeys('')).toEqual({ pack: true, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null }); // r64: no word is the conference default
+    expect(parseFeelKeys(undefined)).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null }); // no page: today
   });
 });
 
@@ -44,13 +45,27 @@ describe('the demo chapters are the real ones', () => {
   });
 });
 
-describe('compile-time default: everything is today', () => {
-  it('with no key, no pack and no chapter every answer is today\'s', () => {
-    resetFeelForTests('');
+describe('the default: today with no page, ?pack=off or no chapter; the conference pack in a demo chapter with no word (r64)', () => {
+  it('with ?pack=off, no page and no chapter every answer is today\'s', () => {
+    resetFeelForTests('?pack=off');
     expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, false]);
     setFeelChapter('seymour-flux');
-    expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, false]); // in a demo chapter, still nothing named: today
+    expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, false]); // in a demo chapter under ?pack=off: today
     expect(feelFlags()).toEqual({ punch: 'today', stop: 'today' });
+    resetFeelForTests(undefined);
+    setFeelChapter('seymour-flux');
+    expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, false]); // no page at all (a unit test)
+  });
+
+  it('with no word in the address, a demo chapter takes the whole pack and every other chapter stays today\'s', () => {
+    resetFeelForTests('');
+    expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, false]); // before a chapter is named
+    for (const id of ['seymour-flux', 'ffx2-bahamut']) {
+      setFeelChapter(id);
+      expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['new', 'short', true, true, true]);
+    }
+    setFeelChapter('yunalesca');
+    expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, false]);
   });
 });
 
@@ -76,7 +91,7 @@ describe('the pack', () => {
   });
 
   it('the timing key: ?timing=time alone turns on just the real-time shake and impact frame in a demo chapter; ?timing=today beside the pack turns it off', () => {
-    resetFeelForTests('?timing=time');
+    resetFeelForTests('?pack=off&timing=time');
     setFeelChapter('ffx2-bahamut');
     expect([timingByTime(), punchMode(), stopMode()]).toEqual([true, 'today', 'today']);
     setFeelChapter('ffx2-vegnagun-shuyin');
@@ -91,7 +106,7 @@ describe('the pack', () => {
   });
 
   it('a key alone (no pack) turns on just its piece, in a demo chapter only', () => {
-    resetFeelForTests('?punch=new');
+    resetFeelForTests('?pack=off&punch=new');
     setFeelChapter('seymour-flux');
     expect([punchMode(), stopMode(), rumbleOn(), shadowFollows()]).toEqual(['new', 'today', false, false]);
     setFeelChapter('yunalesca');

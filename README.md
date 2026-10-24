@@ -4,7 +4,7 @@ An unofficial HD-2D fan tribute that recreates five of the most memorable encoun
 
 **Play it:** https://echoesofspira.com (the old address, https://baileypillon.github.io/pyrefly-reprise/, stays up with a note that the game has moved; saves are kept per address, so a save made on the old one stays there)
 
-Final Fantasy X and X-2, their characters, worlds, and names are the property of Square Enix. This project is a non-commercial fan work, unaffiliated with Square Enix. All code, art, music, and writing here are original.
+Final Fantasy X and X-2, their characters, worlds, and names are the property of Square Enix. This project is a non-commercial fan work, unaffiliated with Square Enix.
 
 ## The five chapters
 

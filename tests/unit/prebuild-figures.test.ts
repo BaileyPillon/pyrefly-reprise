@@ -88,8 +88,11 @@ describe('1. the switch', () => {
     expect(prebuildFromSearch('?demo=1&pack=demo&prebuild=off')).toBe(false);
     expect(prebuildFromSearch('?demo=1&pack=demo&prebuild=today')).toBe(false);
     expect(prebuildFromSearch('?demo=1&prebuild=on')).toBe(true);
-    expect(prebuildFromSearch('?demo=1')).toBe(false);
-    expect(prebuildFromSearch('')).toBe(false);
+    expect(prebuildFromSearch('?demo=1')).toBe(true); // r64 (item 200b): the conference pack is the default
+    expect(prebuildFromSearch('')).toBe(true);
+    expect(prebuildFromSearch('?demo=1&pack=off')).toBe(false); // the old behaviour stays reachable
+    expect(prebuildFromSearch('?demo=1&pack=off&prebuild=on')).toBe(true);
+    expect(prebuildFromSearch('?demo=1&prebuild=off')).toBe(false);
     expect(prebuildFromSearch(undefined)).toBe(false);
   });
 });
