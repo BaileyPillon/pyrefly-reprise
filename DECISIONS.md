@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1679 decisions in all: 1166 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1099 of the written decisions record a blanket yes.
+1830 decisions in all: 1317 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1192 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1564 |
-| proposed | 7 |
+| adopted | 1706 |
+| proposed | 8 |
 | deferred | 7 |
 | rejected | 16 |
-| superseded | 85 |
-| **All** | **1679** |
+| superseded | 93 |
+| **All** | **1830** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 152 |
-| art | 366 |
-| visuals | 99 |
-| camera | 66 |
-| audio | 134 |
-| ui | 186 |
+| combat | 156 |
+| art | 387 |
+| visuals | 127 |
+| camera | 75 |
+| audio | 158 |
+| ui | 213 |
 | story | 17 |
-| chapters | 247 |
+| chapters | 248 |
 | guide | 34 |
-| release | 84 |
+| release | 94 |
 | hosting | 18 |
-| process | 178 |
-| critic | 40 |
+| process | 198 |
+| critic | 41 |
 | data | 17 |
-| tech | 22 |
+| tech | 28 |
 | site | 19 |
-| **All** | **1679** |
+| **All** | **1830** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 798 |
-| FFX only | 488 |
-| FFX-2 only | 375 |
+| both games | 930 |
+| FFX only | 500 |
+| FFX-2 only | 382 |
 | FF7 hidden experiment | 18 |
-| **All** | **1679** |
+| **All** | **1830** |
 
 ## Standing rules in force
 
@@ -117,6 +117,10 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **DELEGATED: Kimahri’s rig returns only after a redo with the expressive-keys method (the pose paintings’ own parts), the spear bone fix (scale 1.327, PR-0462) and the knockout footprint, shown to him as MOTION clips, not stills, before it is switched on (FFX only)**: Every rig is shown to Bailey as motion clips before it replaces a painting set: authored keys that bend the idle costume read as paper puppets, so the expressive-keys method comes first. Decision [D-1086](#d-1086) (2026-10-19, FFX).
 - **DELEGATED: none of the five expressive-2 rigs replaces a live rig until Bailey has looked at its final recording in motion; Ifrit-x and Pterya-x would replace the live Ifrit and Pterya, Shiva-x would be her first (FFX only)**: No rig replaces a live one until Bailey has seen its final recording in motion. Decision [D-1097](#d-1097) (2026-10-19, FFX).
 - **If a boss rig’s double-image fix is not convincing by Thursday, that boss ships with its paintings**: A boss rig that is not convincing in motion by the Thursday playtest is turned off for the demo and the boss ships with its paintings. Decision [D-1147](#d-1147) (2026-10-20, both games).
+- **The quality bar for everything on screen is Clair Obscur**: Expedition 33 and Hades, so the game reads as an indie game with a capital I (Bailey, 2026-10-22). Decision [D-1227](#d-1227) (2026-10-22, both games).
+- **Reports to Bailey are short**: five lines at most in plain words, pictures, and at most three decisions at a time; one always-current studio page carries the milestone, the build, what is next and his open decisions (Bailey, 2026-10-22). Decision [D-1229](#d-1229) (2026-10-22, both games).
+- **The rules stay faithful and the show is premium: numbers, turn order, abilities and fights are faithful, everything seen and heard may be reimagined (both games)**: The rules, numbers, turn order, abilities and fights stay faithful to FFX and FFX-2; everything seen and heard may be reimagined (Bailey, 2026-10-22). Decision [D-1237](#d-1237) (2026-10-22, both games).
+- **STANDING RULE: FFX and FFX-2 as the core, with an Expedition 33 spin on the presentation (both games)**: Every visual choice starts from how FFX and FFX-2 did it and then applies Expedition 33’s presentation: elegant minimal UI, a directed camera, layered hit feel and painterly light (Bailey, 2026-10-22). Decision [D-1270](#d-1270) (2026-10-22, both games).
 
 ## Waiting on Bailey's yes
 
@@ -128,12 +132,13 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-981](#d-981) — DELEGATED: wording drafts for the prep hint ("ENTER BEGINS"), the phone CONTROLS panel merged to five rows and the desktop rows are the driver's drafts, open to Bailey's edit (mockup M7; both games)
 - [D-1022](#d-1022) — NOT covered by his yes of 14:11 EDT because the driver gave no recommendation first and they are his own actions: running the cleanup batch and the 10-18 list (deleting is his), pausing or clearing …
 - [D-1049](#d-1049) — Still his own, not decidable by the driver (ear, eye or presence): the open music picks (D-253), the Behind the Scenes page (D-633, D-639) and the time of the Steam session (D-258)
+- [D-1293](#d-1293) — OPEN, not covered by his yes (no recommendation was stated to him first): the HUD’s open details of 193d (D-1286), Bahamut kept whole in frame during attacks (the party then fills 28 to 31 percent of …
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23)
 
 ## Ledger
 
@@ -7791,12 +7796,12 @@ Tuesday · 57 decisions
 - <a id="d-1153"></a>**D-1153** — The freeze is Friday night 2026-10-23: Thursday’s release is the candidate and Friday fixes only what his playtest finds
   - Bailey: no verbatim quote on record for this decision
   - What changed: Item 169q. Release 62 (PR-0504 results music, PR-0487 Auron’s tip, PR-0481 warm-up and the pad skip, PR-0512) is the Thursday candidate.
-  - area process · both games · adopted · delivery in progress · at ~23:39 EDT
+  - area process · both games · adopted · delivery in progress · at ~23:39 EDT · partly replaced by [D-1233](#d-1233)
   - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
 - <a id="d-1154"></a>**D-1154** — His playtest is Thursday evening 2026-10-22
   - Bailey: no verbatim quote on record for this decision
   - What changed: Item 169r. The live build for the playtest is release 61, or 62 if its review passes first.
-  - area process · both games · adopted · delivery in progress · at ~23:39 EDT
+  - area process · both games · adopted · delivery in progress · at ~23:39 EDT · partly replaced by [D-1284](#d-1284)
   - Source: Bailey, 2026-10-20 23:39 EDT (the DRIVER-STATE line; the queue’s hand-typed 2026-10-21 00:30 ran late), in the Claude Code chat, after: “ask me 20 …
 - <a id="d-1155"></a>**D-1155** — The live site keeps updating during the conference; it is not frozen
   - Bailey: no verbatim quote on record for this decision
@@ -7856,7 +7861,7 @@ Tuesday · 57 decisions
 
 ### 2026-10-21
 
-Wednesday · 3 decisions
+Wednesday · 17 decisions
 
 - <a id="d-1164"></a>**D-1164** — The Wind Waker chapter keeps the starting outfits: the 3D models stay Gunner, Thief and Warrior after a dressphere change and the HUD shows the current dressphere; no credits and no gameplay change; revisit after the conference (FFX-2 only)
   - Bailey: “Keep starting outfits (Recommended)” (blanket yes)
@@ -7873,3 +7878,768 @@ Wednesday · 3 decisions
   - What changed: Item 172b. origin/r61-rigs a08267bf8: rig parts carry normal pieces (the relight reaches rigs: mean 7.6 and 8.3 levels), the head mesh fix (0 of 30 key changes fail on both rigs), fadeMsFor (110 ms for small changes, 40 ms for whole-figure swaps), new rigs ffx2-bahamut-x2, seymour-flux-x2, valefor-n1 and ifrit-n1, art mirror D:/pyrefly-art-r61. Not run in that lane: real-game continuity and the full suite; round 28 did the continuity and still sees the two-body frame (PR-0478). The fallback rule is D-1147.
   - area art · both games · adopted · delivery implemented · at ~09:51 EDT · refines [D-1111](#d-1111)
   - Source: Bailey, 2026-10-21 09:51 EDT (the DRIVER-STATE line; the queue’s hand-typed 10:00 ran late), picked on the driver’s morning question card. Item 172b …
+- <a id="d-1167"></a>**D-1167** — The Bevelle cathedral of Chapter IV comes alive: dust in the skylight beam, flickering lamps and ripples across the floor’s reflection, inside the HD-2D bold look (FFX-2 only)
+  - Bailey: “Yes: dust in the skylight, flickering lamps, floor ripples (Recommended)” (blanket yes)
+  - What changed: Item 173a. Built as engine/look/living/ (LivingConfig, LivingShader, LookLiving, StageImpacts) on r62-extra, live in release 62 (c8ecbcb31, bundle C9xPmvqR): pale dust in the cyan skylight beam, the four lamps’ flames flicker and throw moving light, a hit sends a soft ring across the polished floor. VISUAL STYLE CLASSIC, ?look=off and LOW EFFECTS take it away; REDUCE MOTION holds it still and REDUCE FLASHES softens the flicker. 23 tests (r62-living-cathedral). The focused review of release 62 listed it in its coverage.
+  - area visuals · FFX-2 · adopted · delivery implemented · at ~23:44 EDT
+  - Source: Bailey, 2026-10-21 23:44 EDT (the DRIVER-STATE line of 23:44 EDT; the queue’s hand-typed 23:55 ran late), picked on the driver’s question card, …
+- <a id="d-1168"></a>**D-1168** — Mega Flare floods the whole room with its own cold light, lights the girls by it and shakes the camera longer (FFX-2 only)
+  - Bailey: “Mega Flare: screen-filling light + longer shake (Recommended)” (blanket yes)
+  - What changed: Item 173b. engine/look/flare/, RelightConfig, engine/MegaFlareImpact.ts on r62-extra, live in release 62 (c8ecbcb31, bundle C9xPmvqR): the beam’s white-blue light floods the room (peak, a held beat, then 1.7 s back), the girls are lit by it (2.1 over 2.4 times the reach), the camera shakes 0.4 for 1,300 ms (a form change shakes 0.2 for 520 ms) and the frame whites out for about a third of a second; REDUCE FLASHES gives no white-out and caps the flood at 35 percent. A first recording of the real fight showed three white-outs half a second apart (one per girl), so taps within 1.6 s are one blast (ea2c2f928). 20 tests (r62-mega-flare).
+  - area visuals · FFX-2 · adopted · delivery implemented · at ~23:44 EDT
+  - Source: Bailey, 2026-10-21 23:44 EDT (the DRIVER-STATE line of 23:44 EDT; the queue’s hand-typed 23:55 ran late), picked on the driver’s question card, …
+- <a id="d-1169"></a>**D-1169** — In demo mode every Overdrive gauge starts at exactly 50 percent; normal play is unchanged (FFX in effect; FFX-2 has no Overdrive gauge)
+  - Bailey: “Start the demo with gauges half full (Recommended)” (blanket yes)
+  - What changed: Item 173c. app/demo/demoGauge.ts, called from setupForChapter, live in release 62 (c8ecbcb31, bundle C9xPmvqR): Tidus 50, Yuna 40 and Kimahri 100 (Chapter I’s own sourced starting gauges) are never written to; a demo fight sets all three to 50. The queue called it both games, but FFX-2’s engine has no Overdrive gauge (battle/ffx2/triggers.ts), so Chapter IV and its ATB gauge are untouched; decision 180b (D-1252) later confirmed it stays FFX-only. 8 tests (r62-demo-od-half).
+  - area combat · FFX · adopted · delivery implemented · at ~23:44 EDT
+  - Source: Bailey, 2026-10-21 23:44 EDT (the DRIVER-STATE line of 23:44 EDT; the queue’s hand-typed 23:55 ran late), picked on the driver’s question card, …
+- <a id="d-1170"></a>**D-1170** — The demo picker shows a 3-line controls card with the glyphs of the device last touched (both games, demo mode)
+  - Bailey: “A 3-line controls card on the picker (Recommended)” (blanket yes)
+  - What changed: Item 173d. app/demo/demoControls.ts and demo.css, live in release 62 (c8ecbcb31, bundle C9xPmvqR), replacing the strip under the two fight cards in demo mode: choose, fight / back to the title, swap its art, follow the NEXT tip to win. Two words differ from his: NEXT for “gold” (the tip is gold in FFX and pink in FFX-2) and “its art” for the Y key, which swaps the title’s art only on the title. 6 tests (r62-demo-controls).
+  - area ui · both games · adopted · delivery implemented · at ~23:44 EDT
+  - Source: Bailey, 2026-10-21 23:44 EDT (the DRIVER-STATE line of 23:44 EDT; the queue’s hand-typed 23:55 ran late), picked on the driver’s question card, …
+- <a id="d-1171"></a>**D-1171** — He asks for the cloned voice acting to be on by default; it already is for the FFX chapters, but a demo skips the story scenes, so a visitor would hear none (answered by 173f (D-1172))
+  - Bailey: “Can you include the voice acting from our fish audio on by default?”
+  - What changed: Item 173e. Voice has been ON by default since 2026-10-07 for the FFX chapters; demo mode skips the story scenes, which is why a visitor heard nothing. The driver put the question back to him and he answered with 173f (D-1172) (a short voiced intro), live in release 62 (c8ecbcb31, bundle C9xPmvqR). FFX-2’s Bahamut has no recorded lines.
+  - area audio · FFX · adopted · delivery implemented · at ~23:44 EDT · see [D-1172](#d-1172)
+  - Source: Bailey, 2026-10-21 23:44 EDT (the DRIVER-STATE line of 23:44 EDT; the queue’s hand-typed 23:55 ran late), asked in the chat as a question, answered …
+- <a id="d-1172"></a>**D-1172** — Demo mode plays a short voiced intro of about 10 seconds before Chapter I’s fight, skippable with A (FFX only)
+  - Bailey: “Keep a short voiced intro (Recommended)” (blanket yes)
+  - What changed: Item 173f. app/demo/demoIntro.ts, live in release 62 (c8ecbcb31, bundle C9xPmvqR): three lines of the real pre scene in the recorded voices, word for word (Tidus pre.008, Yuna pre.018, Auron pre.026), then the Mortiorchis unfolds and the fight starts; 10.2 s measured; A or Enter advances a line and holding it skips the rest; once per fight picked from the picker (not on TRY AGAIN or RESTART ENCOUNTER). Seymour, Kimahri, Lulu and Wakka have no recordings, so the intro has three lines; Chapter IV’s Bahamut keeps skipping its scene. 14 tests (r62-demo-intro).
+  - area audio · FFX · adopted · delivery implemented · at ~23:45 EDT
+  - Source: Bailey, 2026-10-21 23:45 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:00 ran late), picked …
+- <a id="d-1173"></a>**D-1173** — A lost demo fight offers TRY AGAIN (the same fight on the same seed) and OTHER FIGHT at once (both games, demo mode)
+  - Bailey: “Instant 'Try again' or 'Other fight' (Recommended)” (blanket yes)
+  - What changed: Item 173g. app/demo/demoDefeat.ts, resultsPage.ts and GameFlow.runChapter, live in release 62 (c8ecbcb31, bundle C9xPmvqR): TRY AGAIN is a new battle of the same chapter on the same demo seed (release 61 took the next seed); OTHER FIGHT starts the other demo fight at once and moves the picker’s memory to it; Back (B or Esc) still goes to the picker; the defeat beat stays the engine’s own 1.1 s. 14 tests (r62-demo-defeat). The focused review found the hint strip overlapping the two buttons on a 390 px phone window (R62-03, polish, demo only).
+  - area ui · both games · adopted · delivery implemented · at ~23:45 EDT
+  - Source: Bailey, 2026-10-21 23:45 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:00 ran late), picked …
+- <a id="d-1174"></a>**D-1174** — After a demo win a short “Thanks for playing” card with the QR code shows, then the picker (both games, demo mode)
+  - Bailey: “A short 'Thanks for playing' card with the QR (Recommended)” (blanket yes)
+  - What changed: Item 173h. app/demo/demoThanks.ts, live in release 62 (c8ecbcb31, bundle C9xPmvqR): “Echoes of Spira, an unofficial fan tribute. Play it at echoesofspira.com”, gold in FFX and pyre pink in FFX-2; ends on any button after a 0.7 s guard or by itself after 8 s. 20 tests (r62-demo-thanks). The focused review found the card wider than a 390 px phone window (R62-02, polish, demo only).
+  - area ui · both games · adopted · delivery implemented · at ~23:45 EDT
+  - Source: Bailey, 2026-10-21 23:45 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:00 ran late), picked …
+- <a id="d-1175"></a>**D-1175** — The booth’s hold-to-reset also restores the demo’s default settings, and the Bahamut picker card is brightened to match Seymour’s (both games, demo mode)
+  - Bailey: “Reset settings too, lift the card (Recommended)” (blanket yes)
+  - What changed: Item 173i. app/demo/demoReset.ts (clearVisitorState), demo.css and docs/BOOTH-SCRIPT.md, live in release 62 (c8ecbcb31, bundle C9xPmvqR): SaveStore.reset() is a fresh save, so every setting is its default again (volumes 0.8 and 0.7, VISUAL STYLE HD-2D, TITLE ART The Echo, ATB Wait), in memory and on disk; nothing is pushed to the mixer before the reload. A reset therefore also brings the game’s own volume back, so the booth sets the room’s loudness with the headphones or Windows. The card’s lift is CSS on the Bahamut picker card only (the PR-0505 mock). 4 tests (r62-demo-card-lift) and the re-pinned demo-reset test.
+  - area ui · both games · adopted · delivery implemented · at ~23:45 EDT
+  - Source: Bailey, 2026-10-21 23:45 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:00 ran late), picked …
+- <a id="d-1176"></a>**D-1176** — The full motion pass on the paintings: anticipation wind-up, an arcing lunge to the target and back, squash and stretch on landing, recoil on hits, a lift on casts, an overshoot settle, eased, at 60 fps and above (both games, demo chapters)
+  - Bailey: “Yes, full motion pass (Recommended)” (blanket yes)
+  - What changed: Item 174a. Lane motion-core (tree D:/pyrefly-anim-proto): one pure sampled timeline per physical attack (StrikeCurve, StrikeRun, CurveDriver, RecoilCurve) replaces the chained tween legs of PaintedActor.lunge; switch ?curves=new or ?pack=demo, Chapter I (FFX) and Chapter IV (FFX-2) only, default OFF. Its review found three majors (the relight prefetch, Seymour’s sound beat, MenuHold), fixed in 3596b0da2. The lanes are motion-core (3596b0da2), motion-feel (a47907f6a) and motion-fx (f8744101a), merged in the integration branch demo-motion-int (ee73de11e), then playtest-1022 (763086fcb), r63-int (7ded72b57) and r63-play (c67821216, served locally on port 5410 for his playtest). All of it is default OFF and on only under ?pack=demo in Chapters I and IV; none of it is live.
+  - area visuals · both games · adopted · delivery in progress · at ~23:47 EDT
+  - Source: Bailey, 2026-10-21 23:47 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:10 ran late), picked …
+- <a id="d-1177"></a>**D-1177** — Big pose changes cut inside a one to two frame smear with a light flash at the fastest point; small changes keep the quick blend (fixes PR-0379) (both games, demo chapters)
+  - Bailey: “Cut on the motion peak with a smear (Recommended)” (blanket yes)
+  - What changed: Item 174b. motion-core step 2 (swap timing on the marks and the smear, painted streak or soft blur, behind a switch) and the CHK-027 planned-smear excuse in the continuity review tool. The lanes are motion-core (3596b0da2), motion-feel (a47907f6a) and motion-fx (f8744101a), merged in the integration branch demo-motion-int (ee73de11e), then playtest-1022 (763086fcb), r63-int (7ded72b57) and r63-play (c67821216, served locally on port 5410 for his playtest). All of it is default OFF and on only under ?pack=demo in Chapters I and IV; none of it is live.
+  - area visuals · both games · adopted · delivery in progress · at ~23:47 EDT
+  - Source: Bailey, 2026-10-21 23:47 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:10 ran late), picked …
+- <a id="d-1178"></a>**D-1178** — Expressive rigs for the demo party, each pose cut from its own painting: Tidus, Yuna and Kimahri (FFX), Yuna, Rikku and Paine (FFX-2); any that looks off stays painted
+  - Bailey: “Build them, clips Thursday, ship only if you approve (Recommended)” (blanket yes)
+  - What changed: Item 174c. Narrowed by 176ab (D-1220) to two pilots, Tidus and Rikku Dark Knight: branch motion-rigs (eda138e06) holds the re-cut configs tidus-x-t1, tidus-x-t2 and rikku-dark-knight-x-v1 (all gate OK on the colour-locked paintings); demo-motion-int-2 re-cut them from the test art mirrors as tidus-x-m1, tidus-x-m2 and rikku-dark-knight-x-m1 for the playtest build. The other four wait for his look at the pilots (D-1086, D-1097 still hold: no rig replaces a painting before he has seen it move). Not live.
+  - area art · both games · adopted · delivery in progress · at ~23:47 EDT
+  - Source: Bailey, 2026-10-21 23:47 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:10 ran late), picked …
+- <a id="d-1179"></a>**D-1179** — A tiny zoom-and-settle camera punch on big hits and Overdrives, with a playable test of it against today’s big-hit camera first (both games, demo chapters)
+  - Bailey: “Impact camera punch (Recommended)” (blanket yes)
+  - What changed: Item 174d. Lane motion-feel (?punch=today|new|off): the punch rides the spectacle camera’s kick on the real frame time so it reads through a hit-stop, and is zero under REDUCE MOTION; the playtest page carries the A/B (the 5 pm clips of 2026-10-22 showed the big-hit camera at quarter speed). The lanes are motion-core (3596b0da2), motion-feel (a47907f6a) and motion-fx (f8744101a), merged in the integration branch demo-motion-int (ee73de11e), then playtest-1022 (763086fcb), r63-int (7ded72b57) and r63-play (c67821216, served locally on port 5410 for his playtest). All of it is default OFF and on only under ?pack=demo in Chapters I and IV; none of it is live.
+  - area camera · both games · adopted · delivery in progress · at ~23:47 EDT
+  - Source: Bailey, 2026-10-21 23:47 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:10 ran late), picked …
+- <a id="d-1180"></a>**D-1180** — Livelier spell effects: trails, shockwave rings and sparks with easing for Fire, Thunder, Blizzard, Cure and the item orb (both games, demo chapters)
+  - Bailey: “Livelier spell effects (Recommended)” (blanket yes)
+  - What changed: Item 174e. Lane motion-fx: reference notes from the research and official videos (docs/handoff/motion-fx-reference.md), the painted finish and the party effects, then the bosses’ attacks, Overdrives, the FFX-2 name slab and dress change; the review found two majors (the numeral hold on effect marks, the FFX-2 pace), fixed in f8744101a. The lanes are motion-core (3596b0da2), motion-feel (a47907f6a) and motion-fx (f8744101a), merged in the integration branch demo-motion-int (ee73de11e), then playtest-1022 (763086fcb), r63-int (7ded72b57) and r63-play (c67821216, served locally on port 5410 for his playtest). All of it is default OFF and on only under ?pack=demo in Chapters I and IV; none of it is live.
+  - area visuals · both games · adopted · delivery in progress · at ~23:47 EDT
+  - Source: Bailey, 2026-10-21 23:47 EDT (the DRIVER-STATE line, labelled 10-22 but sitting before 00:38 on 10-22; the queue’s hand-typed 00:10 ran late), picked …
+
+### 2026-10-22
+
+Thursday · 102 decisions
+
+- <a id="d-1181"></a>**D-1181** — What breaks pose continuity, all four: the figure jumps, a different drawing, the swap shows, no in-betweens (both games)
+  - Bailey: “The figure jumps; Different drawing; The swap shows; No in-betweens”
+  - What changed: Item 175a. The diagnosis behind the continuity program. The understand workflow (MAP.md and an audit of 78 demo poses: 25 need a repaint, 44 a retouch) found “different drawing” the main problem. It carries no build of its own; 175b (D-1182) to 175c (D-1183) carry it out.
+  - area art · both games · adopted · nothing to build
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), multi-select answer on the …
+- <a id="d-1182"></a>**D-1182** — Each demo figure’s feet, height, scale, colour and light are locked to its idle painting, then the parts that still differ are retouched (both games, chapters I and IV)
+  - Bailey: “Align + retouch (Recommended)” (blanket yes)
+  - What changed: Item 175b. The art batch of 2026-10-22: the colour lock did most of the measurable gain (feet mean 21 to 1.5 px, costume dE 9.8 to 6.7, Tidus hair orange to golden); the GPU head retouch added little; installed as NEW files in the mirror D:/pyrefly-art-motion (branch motion-art 6b78aed89: 68 poses at colour lock plus 40 GPU picks), with a second mirror for Tidus’s shorts (motion-art-t2 538159e72); the gates pass and the r61 masters are proven untouched. Not in a live build; he approves per character (195e (D-1292)).
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1183"></a>**D-1183** — The expressive rig moves the character’s own painted parts between held poses, and big jumps cut inside a smear (both games, demo chapters)
+  - Bailey: “Rig motion + smear (Recommended)” (blanket yes)
+  - What changed: Item 175c. The rig pilots (174c (D-1178), 176ab (D-1220)) plus motion-core’s smear (174b (D-1177)); the rig pilots showed no double image and a rigid KO collapse, with the engine hooks (squash, KO bounce, relight normals) still open. Not live.
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1184"></a>**D-1184** — The order of the motion work is continuity, then the motion pass, the smear cut, the party rigs, the camera punch and the spell effects (both games)
+  - Bailey: “Continuity first (Recommended)” (blanket yes)
+  - What changed: Item 175d. The priority order the program lanes were launched in (the art lanes first, then the code lanes of 2026-10-22 00:44). A planning rule; no build of its own.
+  - area process · both games · adopted · nothing to build
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1185"></a>**D-1185** — Faces keep the identity of the idle painting and only the expression changes (both games)
+  - Bailey: “Same face, new expression (Recommended)” (blanket yes)
+  - What changed: Item 175e. The rule the retouch and repaint lanes work to (the face-matching IP-Adapter, 0.85 GB, was downloaded for it under 178p (D-1241)); the 2026-10-23 repaint of 68 poses read about the same or slightly better than the current paintings.
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1186"></a>**D-1186** — Both smear looks are built behind a switch (a painted streak and a soft blur) and he picks by eye (both games, demo chapters)
+  - Bailey: “Both, pick Thursday (Recommended)” (blanket yes)
+  - What changed: Item 175f. motion-core builds the smear as paint or blur behind a switch. His pick waits for the playtest of tonight (the Thursday playtest did not happen; 193b (D-1284)).
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1187"></a>**D-1187** — Squash and stretch is subtle, about 4 to 6 percent (both games)
+  - Bailey: “Subtle (Recommended)” (blanket yes)
+  - What changed: Item 175g. motion-core’s squashPair (the subtle family); in the playtest build under ?pack=demo.
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1188"></a>**D-1188** — The big-hit camera is a 2 to 3 percent zoom with a short settle on big hits and Overdrives, a Reduce Motion option turns it off, and a playable test comes first (both games)
+  - Bailey: “Subtle, Reduce Motion off (Recommended)” (blanket yes)
+  - What changed: Item 175h. motion-feel ?punch=new with REDUCE MOTION taking it away (176r (D-1210)); the playable A/B is ?punch=today against ?punch=new on the playtest build (see 176ac (D-1221)).
+  - area camera · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1189"></a>**D-1189** — The off parts of a pose are repainted by ComfyUI on this PC with the idle painting as the reference (not the copy-only recommendation) (both games)
+  - Bailey: “GPU inpaint on this PC”
+  - What changed: Item 175i. Ran on 2026-10-22 and 2026-10-23: 163 images, 55 holds, 67 picks in the first batch (13 repaints and 27 retouches installed, 4 reverted to the colour lock, 15 not installed); then the repaint lane with DWPose and the face IP-Adapter (68 poses, verdict about the same or slightly better, the knocked-out poses worse). Not in a live build. The runs are local scratch.
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1190"></a>**D-1190** — The continuity and motion work covers both bosses, Seymour Flux and Bahamut (FFX and FFX-2)
+  - Bailey: “Yes, both bosses (Recommended)” (blanket yes)
+  - What changed: Item 175j. The boss rigs live since release 61 (D-1166) and the boss re-matte of 193c (D-1285); motion-core scales the curves to a boss’s size (176l (D-1204)).
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1191"></a>**D-1191** — Spell effects keep each game’s own shape and timing (FFX in Chapter I, FFX-2 in Chapter IV) with a brushy painted finish
+  - Bailey: “Faithful shape, painted finish (Recommended)” (blanket yes)
+  - What changed: Item 175k. motion-fx step 2 (the painted finish, the switch, the guard and the party effects), default OFF, on under ?pack=demo.
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1192"></a>**D-1192** — He sees before-and-after clips and contact sheets per character first, then plays the same build on this PC with the pad (both games)
+  - Bailey: “Clips, then play it (Recommended)” (blanket yes)
+  - What changed: Item 175l. Clips went to him at 11:13 EDT (noon clips: Chapter I and IV attacks at quarter speed, the Tidus rig against the painting) and 16:18 EDT (the 5 pm clips: Total Annihilation, the Mega Flare countdown, the big-hit camera A/B) on 2026-10-22. The playtest build was ready at 21:34 that night (playtest-1022, ports 5400 and 5320) but he had not played it by the next morning (193b (D-1284)); the play moved to the r63-play build served on port 5410 tonight.
+  - area process · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 00:20 to 00:38 EDT (the queue’s times; DRIVER-STATE logs items 175 and 176 as recorded at 00:38), picked on the driver’s question …
+- <a id="d-1193"></a>**D-1193** — The attack path follows each game’s own choreography, FFX’s in Chapter I and FFX-2’s in Chapter IV, from the research; where the research is silent the driver asks
+  - Bailey: “Each game's own way (Recommended)” (blanket yes)
+  - What changed: Item 176a. motion-core PROFILES.ffx and PROFILES.ffx2. The real-motion lane (2026-10-22 14:57) found the real party attacks last 1.5 to 2.9 s and the bosses 4.2 to 4.7 s, with much bigger arcs than ours (Tidus’s leap 21 percent of his height against our 3.5), so 176b (D-1194) and this pick pull apart; ?curves=real is the playtest A/B and the choice goes to him.
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1194"></a>**D-1194** — A party attack takes about 1.1 seconds: wind-up 0.15, travel 0.25, strike held 0.2, return 0.4 and a settle (both games)
+  - Bailey: “Snappy, about 1.1 s (Recommended)” (blanket yes)
+  - What changed: Item 176b. The motion-core default profile. Open conflict, not a supersession: 179a (D-1249) asks for the real clips’ timings, which are longer (the real-motion tables shrink by 27 to 76 percent under the 1.1 s pick); the playtest carries ?curves=real and ?curves=real-snappy beside the default and the choice (faithful or snappy) goes to him tonight.
+  - area visuals · both games · adopted · delivery in progress · see [D-1249](#d-1249)
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1195"></a>**D-1195** — A hit reaction is a short knock-back with a white flash (both games)
+  - Bailey: “Knock-back + flash (Recommended)” (blanket yes)
+  - What changed: Item 176c. motion-core RecoilCurve: a push of 0.3 of today’s distance, 70 ms eased, one small overshoot of 13 percent, then rest; the flash is the existing demo blow flash.
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1196"></a>**D-1196** — Hit-stop is 3 to 4 frames, on criticals, Overdrives and boss big attacks only (both games)
+  - Bailey: “Short, big hits only (Recommended)” (blanket yes)
+  - What changed: Item 176d. motion-feel ?hitstop=short; the numbers are [ours] (no source gives them); on under ?pack=demo in Chapters I and IV.
+  - area combat · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1197"></a>**D-1197** — The booth monitor runs at 120 Hz or higher, so motion must be right above 60 Hz (both games)
+  - Bailey: “120 Hz or higher”
+  - What changed: Item 176e. motion-feel section (f): the camera shake and the impact frame in real time at 120 Hz and above, behind ?timing=time (a review caught that these two had changed every chapter at every rate but exactly 60 Hz); stepped-frame checks at 60 and 144 Hz; perf-trim’s governor and frame measurements target the same screen (195c (D-1290)).
+  - area tech · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1198"></a>**D-1198** — Gamepad rumble is light and only for big moments, and off with Reduce Motion (both games)
+  - Bailey: “Light, big moments only (Recommended)” (blanket yes)
+  - What changed: Item 176f. motion-feel ?rumble=on (default off), with a log for tests; FFX-2 lists Vibration among its Config entries (a step 3 review finding), so the switch exists in both.
+  - area combat · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1199"></a>**D-1199** — The contact shadow follows the figure through a lunge and a leap (both games)
+  - Bailey: “Contact shadow follows (Recommended)” (blanket yes)
+  - What changed: Item 176g. motion-feel ?shadow=follow (ShadowFollow.step on the hop and lift); the integration merged it with motion-core’s landing spread (radius uses both factors).
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1200"></a>**D-1200** — The return to place after an attack follows each game’s own way (both games)
+  - Bailey: “Each game's own way (Recommended)” (blanket yes)
+  - What changed: Item 176h. motion-core profiles. The real-motion lane found Tidus’s real return is a flip (86 percent of his height against our 1.2) and Yuna, Auron and Kimahri crouch instead of leaping; that goes to him with 176a (D-1193).
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1201"></a>**D-1201** — Expressions use the classic set: strike fierce, hit wince, cast focused, item calm, Overdrive intense, win smile, KO eyes closed, low HP strained, per personality (both games)
+  - Bailey: “Classic set (Recommended)” (blanket yes)
+  - What changed: Item 176i. Carried by the rig and repaint lanes (175e (D-1185)); no separate verdict on the full set yet.
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1202"></a>**D-1202** — Where a retouch fails, he chooses by eye between the original, the retouch and the rigged idle side by side (both games)
+  - Bailey: “You choose Thursday (Recommended)” (blanket yes)
+  - What changed: Item 176j. The playtest build carries the switches for it (key 8 flips Tidus between T1 and T2); the per-figure repaint cards of 2026-10-23 are the side-by-side. His choice per character is 195e (D-1292)’s Saturday approval.
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1203"></a>**D-1203** — He approves per character (8 figures) and with one yes or no each for the smear style, the camera punch, hit-stop, rumble and the spell effects (both games)
+  - Bailey: “Per character (Recommended)” (blanket yes)
+  - What changed: Item 176k. The approval grid for tonight’s playtest and Saturday’s picks (195e (D-1292)); nothing replaces a painting before it.
+  - area process · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1204"></a>**D-1204** — The motion curves apply to the bosses too, scaled to their size (both games)
+  - Bailey: “Yes, scaled to size (Recommended)” (blanket yes)
+  - What changed: Item 176l. motion-core heftFactors and the boss profiles; boss attacks last 4.2 to 4.7 s in the real game.
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1205"></a>**D-1205** — The motion work is on in Chapters I and IV first and in the other chapters after Monday, chapter by chapter (both games)
+  - Bailey: “Demo chapters first (Recommended)” (blanket yes)
+  - What changed: Item 176m. engine/motion/DemoGate.ts: every pro and motion piece answers only for seymour-flux and ffx2-bahamut; every other chapter and the address with no key are release 62.
+  - area release · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1206"></a>**D-1206** — The turn start follows each game’s own way (both games)
+  - Bailey: “Each game's own way (Recommended)” (blanket yes)
+  - What changed: Item 176n. motion-core per-game moments; the integration review fixed a landing thud that played at turn starts.
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1207"></a>**D-1207** — A knockout is a rig collapse with a settle (both games)
+  - Bailey: “Rig collapse + settle (Recommended)” (blanket yes)
+  - What changed: Item 176o. The pilot rigs collapse rigidly; the squash, the KO bounce and the relight normals are still to be done in the engine hooks.
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1208"></a>**D-1208** — His playtest is Thursday around 10 pm, with the clips page and the build ready by 21:30 EDT (both games)
+  - Bailey: “Around 10 pm”
+  - What changed: Item 176p. The build was ready at 21:34 EDT on 2026-10-22 (playtest-1022, bundle DbQRCqj4, skeptic run: no blockers) but he had not played it by the next morning, when he answered “Not yet, tonight” (193b (D-1284)), so the playtest moved to the r63-play build tonight.
+  - area process · both games · adopted · delivery in progress · partly replaced by [D-1284](#d-1284)
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1209"></a>**D-1209** — Motion sounds are subtle and synced: a whoosh, a landing thud and a cloth rustle from the existing library (both games)
+  - Bailey: “Subtle synced sounds (Recommended)” (blanket yes)
+  - What changed: Item 176q. motion-feel step 1 (motion SFX with before-and-after strips in docs/screenshots/motion-feel/); the audio pass later fixed the level (196.03 (D-1296): they stay on and drop 12 dB where they fall on a blow) and the landing thud under an Overdrive gather (196.18 (D-1311)). He judges by ear.
+  - area audio · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1210"></a>**D-1210** — REDUCE MOTION turns off the shake, the camera punch, the freeze and the rumble only; the characters still move and smear; off by default; the booth reset sets it off (both games)
+  - Bailey: “Shake, punch, freeze, rumble (Recommended)” (blanket yes)
+  - What changed: Item 176r. motion-feel: every new camera piece is zero under REDUCE MOTION; the booth reset restores it with the other settings (173i (D-1175)).
+  - area ui · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1211"></a>**D-1211** — The approved pieces ship to the live site and to the booth in release 63 (both games)
+  - Bailey: “Live site and booth (Recommended)” (blanket yes)
+  - What changed: Item 176s. Planned for Friday 2026-10-23; the integration (r63-int, then r63-play) is built and served locally for tonight’s playtest, so the release is now Saturday: a focused review before the deploy and a deep review owed after it (audio routing is deep class).
+  - area release · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1212"></a>**D-1212** — The victory pose and moment follow each game’s own way (both games)
+  - Bailey: “Each game's own (Recommended)” (blanket yes)
+  - What changed: Item 176t. motion-core per-game moments; the real-motion lane decoded only Tidus, Yuna and Kimahri victory blocks (SHOTS.md), so the aeon victory frame is [ours] (197e (D-1317)).
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1213"></a>**D-1213** — More effects are added for the bosses’ attacks, items, Overdrives and physical hit sparks, all four (both games)
+  - Bailey: “Bosss' attacks, items, overdrives, physical hit sparmk”
+  - What changed: Item 176u. motion-fx step 3 (bosses’ attacks, Overdrives and their openings, the FFX-2 name slab and dress change, 21 moves recorded today and new).
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1214"></a>**D-1214** — Each game’s Overdrives open with that game’s own intro (both games)
+  - Bailey: “Each game's own intro (Recommended)” (blanket yes)
+  - What changed: Item 176v. motion-fx step 3 and pro-staging’s Overdrive opening; 189b2 later set the FFX opening to Expedition 33-style drama. The real-motion lane could not decode the Overdrive clips and camera (their effect scripts are not decoded).
+  - area visuals · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1215"></a>**D-1215** — If the frame rate slips, particles are trimmed first (both games)
+  - Bailey: “Trim particles first (Recommended)” (blanket yes)
+  - What changed: Item 176w. perf-trim measured it on 2026-10-23: halving the particles and dropping the soft background cost about 0 to 0.5 ms, while the scene’s supersample at 0.8 took 17 percent off the GPU in Chapter I and 24 percent in Chapter IV; the governor therefore steps the supersample first (a driver call, 197a (D-1313)), then the soft background, then the particles.
+  - area tech · both games · adopted · delivery in progress · see [D-1313](#d-1313)
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1216"></a>**D-1216** — Progress comes as clips at noon and at 5 pm (both games)
+  - Bailey: “Noon and 5 pm (Recommended)” (blanket yes)
+  - What changed: Item 176x. Done on 2026-10-22: the noon clips went at 11:13 EDT and the 5 pm clips at 16:18 EDT.
+  - area process · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1217"></a>**D-1217** — Tidus’s 13 poses are locked to the dark idle and to a brighter idle that matches the 13, and he picks (FFX only)
+  - Bailey: “Show me both Thursday (Recommended)” (blanket yes)
+  - What changed: Item 176y. The art batch built both: T1 (long trousers, the idle as it is) in D:/pyrefly-art-motion and T2 (grey shorts, the idle’s legs repainted) in D:/pyrefly-art-motion-t2, a second build with the registration compiled in; the playtest key 8 flips T1 and T2. Finding: Tidus’s 13 painted poses are split between trousers and shorts, which no recolour fixes. His pick waits for the playtest.
+  - area art · FFX · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1218"></a>**D-1218** — The 25 poses that need a repaint are repainted on the GPU with the pose and expression of the old painting and the identity, outfit and colours of the idle (both games)
+  - Bailey: “GPU repaint, same pose (Recommended)” (blanket yes)
+  - What changed: Item 176z. The pilot looked at on 2026-10-22 04:17: repaints 6 to 7 out of 10 on identity, one good seed in three, weapons redesigned (so weapons are masked out of repaints). Result as of 2026-10-23: the repaint lane’s 68 poses read about the same or slightly better; the knocked-out poses are worse, so only the poses that scored better go in (195e (D-1292)).
+  - area art · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1219"></a>**D-1219** — When head size and outfit proportions conflict, a steady head size wins (both games)
+  - Bailey: “Head size wins (Recommended)” (blanket yes)
+  - What changed: Item 176aa. The colour lock and the head-size alignment of the 8 figures are installed in the test mirrors (feet mean 21 to 1.5 px); the gate rejects a pose whose head size moves.
+  - area art · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1220"></a>**D-1220** — Two rig pilots first, Tidus and Rikku Dark Knight, to final quality by Thursday; the other four only on Friday if he likes them (FFX and FFX-2)
+  - Bailey: “2 pilots, then the rest (Recommended)” (blanket yes)
+  - What changed: Item 176ab. Both pilots exist (174c (D-1178)) and their clips went to him at noon on 2026-10-22; the other four rigs were not started.
+  - area art · both games · adopted · delivery in progress · refines [D-1178](#d-1178)
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1221"></a>**D-1221** — The big-hit camera is tested both ways, today’s and the new punch, and he picks (both games)
+  - Bailey: “Test both, you pick (Recommended)” (blanket yes)
+  - What changed: Item 176ac. ?punch=today against ?punch=new; the 5 pm clips of 2026-10-22 (16:18 EDT) showed the A/B at quarter speed. His pick waits for the playtest.
+  - area camera · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1222"></a>**D-1222** — The spell effects are referenced from official videos, read headlessly, with no frames kept (both games)
+  - Bailey: “Official videos (Recommended)” (blanket yes)
+  - What changed: Item 176ad. docs/handoff/motion-fx-reference.md (motion-fx step 1, no code): shape, motion, colour, timing, layering and caster and target for every effect in scope, per game.
+  - area visuals · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1223"></a>**D-1223** — The review’s jerk check CHK-027 excuses a fast pose swap only when it is logged as a planned smear on a big change (both games)
+  - Bailey: “Yes, only planned smears (Recommended)” (blanket yes)
+  - What changed: Item 176ae. motion-core changed critic/runner/lib/continuity*.mjs so a logged planned smear is excused. CHK-027 still reads 48 px jerks on release 62 as the inherited major R62-01.
+  - area critic · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1224"></a>**D-1224** — The GPU works for the demo retouch first, and the yrp chapter gets gaps of 15 minutes or less while it waits, fully after the repaints
+  - Bailey: “Demo retouch first (Recommended)” (blanket yes)
+  - What changed: Item 176af. The art batch ran first. On 2026-10-22 10:38 the yrp fork was starved for 16 minutes by the batch’s 8 ms lock poller, so the driver raised a hold on REVIEW-BROWSER for the fork’s three fight-video jobs (removed at 11:06); the next lane briefs use a FIFO ticket queue for RIG-RECORD.
+  - area process · both games · adopted · delivery implemented
+  - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
+- <a id="d-1225"></a>**D-1225** — A Genshin Impact / Guilty Gear Strive cel-shaded version of the Wind Waker chapter’s Valefor fight is explored: three concept frames first, then a pilot on the real FFX-2 models (FFX-2 only)
+  - Bailey: “make a genshin / guilty gear version of the chapter”
+  - What changed: Item 177. Round 1 is end-state first with no game code: three concept frames (A Genshin, B Guilty Gear Strive, C a blend) and a pilot with the real FFX-2 Yuna, Rikku and Paine models and FFX-2’s own Valefor read from the game files into the local runtime, in a copied look lab (his 2026-10-20 verdict on the Meshy models was “AI slop”, so no Meshy models). He picks the look and the model source next. Polish 2 of the Wind Waker chapter (a toon impact burst replacing the shared white blob, the advisor card, the floor share) was validated at ed92784e0 on branch exp-windwaker. Local scratch only; out of the conference builds.
+  - area chapters · FFX-2 · adopted · delivery in progress · at ~00:45 EDT
+  - Source: Bailey, 2026-10-22 00:45 EDT (the DRIVER-STATE line of 00:45 (“Item 177 queued”), relayed by the Wind Waker session), typed to the Wind Waker …
+- <a id="d-1226"></a>**D-1226** — What reads as amateur is the game on screen, not the reporting, the process or the public face (both games)
+  - Bailey: “The game on screen”
+  - What changed: Item 178a. The finding that points every following pick at the game itself; the pro gap board (178g (D-1232)) measures it and the pro lanes of 2026-10-23 carry it out.
+  - area process · both games · adopted · nothing to build · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), picked on the …
+- <a id="d-1227"></a>**D-1227** — The bar for the game on screen is Clair Obscur: Expedition 33 and Hades (both games)
+  - Bailey: “Clair Obscur: Expedition 33, Hades”
+  - What changed: Item 178b. A standing bar: the gap board (178g (D-1232)) compares today’s screens with what those two games do for the same moment, and the sound pass works to it (178r (D-1243)). It sits beside the rule of 189a (D-1270).
+  - area process · both games · adopted · delivery in progress · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), picked on the …
+- <a id="d-1228"></a>**D-1228** — Until Monday the two demo fights are made to feel like a finished game first, then the booth frame is built around them: a title card, a trailer loop, a one-page flyer with a QR code and a press-kit page (both games)
+  - Bailey: “The slice, then the frame (Recommended)” (blanket yes)
+  - What changed: Item 178c. The slice is the pro lanes of 2026-10-23 (look, camera, staging, HUD, boss matte, audio, perf). The frame is 178q (D-1242) (the booth kit), narrowed by 178w (D-1248) (no printing); the studio page and the on-screen booth frame (the Echo end card and attract card) were drafted on 2026-10-22.
+  - area release · both games · adopted · delivery in progress · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), picked on the …
+- <a id="d-1229"></a>**D-1229** — Reporting is a short brief (five lines at most, plain words, pictures, at most three decisions at a time) plus one always-current studio page (process; both games)
+  - Bailey: “Short brief + a studio page (Recommended)” (blanket yes)
+  - What changed: Item 178d. The studio page (Spira Studio) was published at 20:38 EDT on 2026-10-22 with a generator and its data; the briefs now go out as phone cards through SendUserFile with the decisions asked on cards (at most three).
+  - area process · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), picked on the …
+- <a id="d-1230"></a>**D-1230** — All four areas are brought to the bar: characters and art, HUD and menus, motion and feel, staging and flow (both games)
+  - Bailey: “Characters and art, HUD and menus, Motion and feel, Staging and flow”
+  - What changed: Item 178e. The four areas map to the pro lanes: art (motion-art, the repaint lane, boss-matte), HUD (hud-f1), motion (motion-core, motion-feel, motion-fx) and staging (pro-look, pro-camera, pro-staging). All are built and served in r63-play; none is live.
+  - area visuals · both games · adopted · delivery in progress · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), multi-select …
+- <a id="d-1231"></a>**D-1231** — Nothing on screen is at the bar yet (both games)
+  - Bailey: “Nothing yet”
+  - What changed: Item 178f. His reading of where the game stands; the gap board ranks the ten biggest gaps from it.
+  - area process · both games · adopted · nothing to build · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), picked on the …
+- <a id="d-1232"></a>**D-1232** — A side-by-side board shows today’s screens against what Expedition 33 and Hades do for the same moment, described and sketched not copied, with the ten biggest gaps ranked and mockups of our fix for the top ones (both games)
+  - Bailey: “Side-by-side board (Recommended)” (blanket yes)
+  - What changed: Item 178g. Built 2026-10-22 (the gap board workflow, restarted twice; done 15:29 EDT): live release 62 captured in moments m01 to m20 of both chapters; top ten: G19 one cast many drawings, G20 boss cut-outs, G23 ghost cross-fades on attacks, G01 the command menu, G03 a web-dashboard UI, G15 the flat arena and plate seam, G24 flat vector hit effects, G14 no directed camera, G04 the FFX-2 target flower, G02 small text; three decision groups (the HUD, staging, characters); board.html (8 MB) went to him and was published as an artifact. His reactions are 181 to 189. The ChatGPT critique points C1, C3, C5, C6, C7 and C10 were folded into it at his reminder.
+  - area process · both games · adopted · delivery implemented · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), picked on the …
+- <a id="d-1233"></a>**D-1233** — The board comes today and the pass is built Friday to Sunday, so the freeze moves from Friday night to Sunday night (both games)
+  - Bailey: “Board today, build Fri-Sun (Recommended)” (blanket yes)
+  - What changed: Item 178h. The board came at 15:29 EDT. The freeze of D-1153 (Friday night, 2026-10-23) is replaced by Sunday night, 2026-10-25; the offline kit is due by 2026-10-25 (D-1093, D-1156). The r63 release is now planned for Saturday after tonight’s playtest.
+  - area release · both games · adopted · delivery in progress · at ~09:50 EDT
+  - Source: Bailey, 2026-10-22 09:50 EDT (the DRIVER-STATE line of 09:50 EDT (decision 178, “DECISION 178”); the queue’s 178 times are not used), picked on the …
+- <a id="d-1234"></a>**D-1234** — The characters stay painted 2.5D: the paintings are unified, retouched and rigged, not replaced by the real 3D models (both games)
+  - Bailey: “Polish the paintings”
+  - What changed: Item 178i. Not the recommendation (“Show both”). It keeps the direction of 2026-09-15 (painted 2.5D) and sends the work to the colour lock, the retouch, the repaint and the rig pilots (175b (D-1182), 175c (D-1183), 175i (D-1189), 176z (D-1218)).
+  - area art · both games · adopted · delivery in progress · at ~09:55 EDT
+  - Source: Bailey, 2026-10-22 09:55 EDT (the DRIVER-STATE line of 09:55 EDT; the queue’s hand-typed 10:05 ran late), picked on the driver’s question cards, …
+- <a id="d-1235"></a>**D-1235** — Ink & Gold is a starting point only: the HUD mockups may propose a new interface direction (both games)
+  - Bailey: “Open it up”
+  - What changed: Item 178j. Not the recommendation. Four rounds of new HUD directions followed (181 to 185) and he rejected each; 191 (D-1277) keeps today’s Ink & Gold HUD and refines it, which ends this opening-up.
+  - area ui · both games · superseded by [D-1277](#d-1277) · delivery not scheduled · at ~09:55 EDT
+  - Source: Bailey, 2026-10-22 09:55 EDT (the DRIVER-STATE line of 09:55 EDT; the queue’s hand-typed 10:05 ran late), picked on the driver’s question cards, …
+- <a id="d-1236"></a>**D-1236** — The camera is directed per action, Expedition 33-like: to the actor, framed attacks and spells, then back to the wide shot (both games)
+  - Bailey: “Directed per action (Recommended)” (blanket yes)
+  - What changed: Item 178k. Built as pro-camera (d3eee6e3a, fixes 6a3bb962b; ?camera=pro, key ;): the real FFX shots from retail camera programs (numbers only, src/data/procam/proShots.ts), Expedition 33-style push-ins and the FFX-2 follow camera, with a soft background; its review fixed 12 of 15 findings. Refined by 179b (D-1250) and 189b1. Not live.
+  - area camera · both games · adopted · delivery in progress · at ~09:55 EDT · see [D-1239](#d-1239), [D-1250](#d-1250)
+  - Source: Bailey, 2026-10-22 09:55 EDT (the DRIVER-STATE line of 09:55 EDT; the queue’s hand-typed 10:05 ran late), picked on the driver’s question cards, …
+- <a id="d-1237"></a>**D-1237** — The rules stay faithful and the show is premium: numbers, turn order, abilities and fights are faithful, everything seen and heard may be reimagined (both games)
+  - Bailey: “Faithful rules, premium show (Recommended)” (blanket yes)
+  - What changed: Item 178l. The line the pro lanes work inside; the driver’s HP-bar ribbon call (197b (D-1314)) applies it per game.
+  - area process · both games · adopted · delivery in progress · at ~09:55 EDT
+  - Source: Bailey, 2026-10-22 09:55 EDT (the DRIVER-STATE line of 09:55 EDT; the queue’s hand-typed 10:05 ran late), picked on the driver’s question cards, …
+- <a id="d-1238"></a>**D-1238** — The HUD board shows two different moods and he picks by eye (both games)
+  - Bailey: “Mockups show 2”
+  - What changed: Item 178m. Two moods were drawn (A Sumi Ledger, B Ground Ink); his reaction was 182 (D-1257); 191 (D-1277) ended the new-direction hunt.
+  - area ui · both games · superseded by [D-1277](#d-1277) · delivery not scheduled · at ~09:58 EDT
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), picked on the driver’s question cards, …
+- <a id="d-1239"></a>**D-1239** — FFX gets full directed shots per action; FFX-2 pushes and glides only for big moves and otherwise keeps the composed wide shot (FFX-2 half)
+  - Bailey: “Lighter in FFX-2 (Recommended)” (blanket yes)
+  - What changed: Item 178n. pro-camera’s follow camera for FFX-2 (centroid follower, glides of 1 to 2 s, decoded from the game’s exe); FFX’s real camera does nothing on attacks, hits, KO or turn starts (proven against PS2 recordings, eye error 0.17), moving on casts, items, skills and big moments.
+  - area camera · FFX-2 · adopted · delivery in progress · at ~09:58 EDT
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), picked on the driver’s question cards, …
+- <a id="d-1240"></a>**D-1240** — Each demo character’s full pose set is repainted from its idle on this PC’s GPU on Friday and Saturday, and he approves per character on Saturday (both games)
+  - Bailey: “Repaint every demo pose (Recommended)” (blanket yes)
+  - What changed: Item 178o. Done early: the repaint lane ran overnight on 2026-10-23 (pilot of 3 then full sets, DWPose and the face IP-Adapter, both canon drawings for Yuna White Mage and Rikku Dark Knight): 68 poses, per-figure phone cards; 195e (D-1292) fixes the install rule.
+  - area art · both games · adopted · delivery in progress · at ~09:58 EDT
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), picked on the driver’s question cards, …
+- <a id="d-1241"></a>**D-1241** — Two downloads are approved from official sources to D: and recorded: a face-matching IP-Adapter (about 0.85 GB) and a pose-skeleton model (both games, tooling)
+  - Bailey: “Yes, both (Recommended)” (blanket yes)
+  - What changed: Item 178p. Done at 10:40 EDT on 2026-10-22: the IP-Adapter (847,517,512 bytes), the comfyui_controlnet_aux pack and two DWPose ONNX files (Apache-2.0; the pack’s drawing code carries the CMU OpenPose noncommercial licence, which fits a noncommercial fan tribute); ComfyUI was restarted by process id for it.
+  - area tech · both games · adopted · delivery implemented · at ~09:58 EDT
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), picked on the driver’s question cards, …
+- <a id="d-1242"></a>**D-1242** — The booth kit is all four: a trailer loop, a printed flyer or QR card, a standing banner and a press-kit page (both games)
+  - Bailey: “Trailer loop, Printed flyer / QR card, Standing banner, Press-kit page”
+  - What changed: Item 178q. The booth kit workflow (done 10:38 EDT): banners A, B and C and flyers 1 and 2 in previews, the studio page and a generator, and the downloads. The printing half was dropped by 178w (D-1248); the trailer and the press kit are due by Sunday.
+  - area release · both games · adopted · delivery in progress · at ~09:58 EDT · partly replaced by [D-1248](#d-1248)
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), multi-select answer on the driver’s …
+- <a id="d-1243"></a>**D-1243** — Sound is held to the same bar as the visuals, Expedition 33 and Hades: hits, interface clicks, spells and the mix (both games)
+  - Bailey: “Yes, same bar (Recommended)” (blanket yes)
+  - What changed: Item 178r. Carried by the audio pass (branch audio-pass, 196), with the choices delegated to the driver by 184 (D-1259); he judges by ear on docs/audio/audition.html.
+  - area audio · both games · adopted · delivery in progress · at ~09:58 EDT
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), picked on the driver’s question cards, …
+- <a id="d-1244"></a>**D-1244** — He runs the disk cleanup rows 7 and 8 himself now (process)
+  - Bailey: “I'll run it now”
+  - What changed: Item 178s. Done by him at 10:10 EDT in PowerShell (rows 1, 2, 3, 5, 6, 7 and 8 gone; D: rose to 29 GB free; the main node_modules were intact). Records only; no game change.
+  - area process · both games · adopted · delivery implemented · at ~09:58 EDT
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), picked on the driver’s question cards, …
+- <a id="d-1245"></a>**D-1245** — The studio page shows a countdown to the conference, the current best screenshot, done, in progress and next in plain words, and his open decisions (at most three)
+  - Bailey: “Countdown + picture (Recommended)” (blanket yes)
+  - What changed: Item 178t. Spira Studio was published at 20:38 EDT on 2026-10-22 (refreshed content, a generator and its data file), with the Indie Bar Board beside it.
+  - area process · both games · adopted · delivery implemented · at ~09:58 EDT
+  - Source: Bailey, 2026-10-22 09:58 EDT (the DRIVER-STATE line of 09:58 EDT; the queue’s hand-typed 10:15 ran late), picked on the driver’s question cards, …
+- <a id="d-1246"></a>**D-1246** — The standing banner looks like option A, The Echo (both games)
+  - Bailey: “A, The Echo (Recommended)” (blanket yes)
+  - What changed: Item 178u. The driver’s reading: the A and Flyer 1 look (dark, silver Echo wordmark, key art, a QR plate) becomes the on-screen booth frame (trailer end card, attract card, press-kit header) because 178w (D-1248) skips printing.
+  - area release · both games · adopted · delivery in progress · at ~10:50 EDT
+  - Source: Bailey, 2026-10-22 10:50 EDT (the DRIVER-STATE line of 10:50 EDT; the queue’s hand-typed 11:05 ran late), picked on the driver’s question card (booth …
+- <a id="d-1247"></a>**D-1247** — The flyer looks like option 1, The Echo (both games)
+  - Bailey: “1, The Echo (Recommended)” (blanket yes)
+  - What changed: Item 178v. As 178u (D-1246): the look is used on screen; no print file is made.
+  - area release · both games · adopted · delivery in progress · at ~10:50 EDT
+  - Source: Bailey, 2026-10-22 10:50 EDT (the DRIVER-STATE line of 10:50 EDT; the queue’s hand-typed 11:05 ran late), picked on the driver’s question card (booth …
+- <a id="d-1248"></a>**D-1248** — Nothing is printed for the booth; the QR code shows on screen instead (both games)
+  - Bailey: “Skip printing”
+  - What changed: Item 178w. No banner or flyer print files and no art upscale for print; an upscale for a 1440p full-screen card stays optional. The QR plate is already on the title, the thanks card (173h (D-1174)) and the attract loop.
+  - area release · both games · adopted · delivery implemented · at ~10:50 EDT
+  - Source: Bailey, 2026-10-22 10:50 EDT (the DRIVER-STATE line of 10:50 EDT; the queue’s hand-typed 11:05 ran late), picked on the driver’s question card (booth …
+- <a id="d-1249"></a>**D-1249** — By Sunday every demo action takes its wind-up, contact and recovery timing from the real FFX and FFX-2 clips and the directed camera uses the real game’s shots where they can be decoded; after Monday the real skeletal animation is retargeted onto the painted rigs, character by character
+  - Bailey: “Timing + camera now, full later (Recommended)” (blanket yes)
+  - What changed: Item 179a. The real-motion workflow (done 14:57 EDT on 2026-10-22; tables in the local scratch under real-motion/final): real party attacks last 1.5 to 2.9 s and bosses 4.2 to 4.7 s, with much bigger arcs, and Tidus’s return is a flip; the playtest has ?curves=real and ?curves=real-snappy beside 176b (D-1194)’s default and the choice (faithful or snappy) goes to him tonight. Overdrive clips and camera are not decoded. FFX-2 has no shot table, only an engine camera.
+  - area visuals · both games · adopted · delivery in progress · at ~12:29 EDT
+  - Source: Bailey, 2026-10-22 12:29 EDT (the DRIVER-STATE line of 12:29 EDT; the queue’s hand-typed 11:45 is earlier than the line that launched the work), …
+- <a id="d-1250"></a>**D-1250** — Each action uses the shot FFX or FFX-2 itself used (angle, push, timing), rendered with Expedition 33-level smoothness and framing (both games)
+  - Bailey: “Real game's shots, E33 polish (Recommended)” (blanket yes)
+  - What changed: Item 179b. Built as pro-camera (178k (D-1236)). Its plain-attack half is replaced by 189b1 (Expedition 33-style moves on plain attacks too); the real shots stay for spells, items, skills and boss moves. FFX’s own camera does nothing on attacks, which is why the plain attacks need the Expedition 33 spin.
+  - area camera · both games · adopted · delivery in progress · at ~12:29 EDT · partly replaced by [D-1271](#d-1271)
+  - Source: Bailey, 2026-10-22 12:29 EDT (the DRIVER-STATE line of 12:29 EDT), picked on the driver’s question cards, relayed in the chat. Item 179b of the …
+- <a id="d-1251"></a>**D-1251** — The improved paintings of Tidus, Yuna, Kimahri, Yuna White Mage, Rikku Dark Knight and Paine ship in every chapter those characters fight in, one look per character; the other chapters get a quick check before release
+  - Bailey: “Everywhere (Recommended)” (blanket yes)
+  - What changed: Item 180a. Art is per character, so it reaches every chapter; the r63 art mirror D:/pyrefly-art-r63 hard-links D:/pyrefly-art-motion and adds the boss files, with the originals archived to the private art repo first. The nine art-pin tests are to move for it in r63. Paine’s changed attack painting leaks into Chapter VI, which the check covers.
+  - area art · both games · adopted · delivery in progress · at ~17:09 EDT
+  - Source: Bailey, 2026-10-22 17:09 EDT (the DRIVER-STATE line of 17:09 EDT; the queue’s hand-typed 16:40 ran early), picked on the driver’s question cards, …
+- <a id="d-1252"></a>**D-1252** — Chapter IV keeps FFX-2’s real ATB start; the half-full gauge of 173c (D-1169) stays FFX-only (FFX-2 only)
+  - Bailey: “Leave FFX-2 faithful (Recommended)” (blanket yes)
+  - What changed: Item 180b. Nothing changes in Chapter IV: demoGauge.ts writes only FFX’s Overdrive gauges, as live in release 62.
+  - area combat · FFX-2 · adopted · delivery implemented · at ~17:09 EDT · refines [D-1169](#d-1169)
+  - Source: Bailey, 2026-10-22 17:09 EDT (the DRIVER-STATE line of 17:09 EDT), picked on the driver’s question cards, relayed in the chat. He wrote “What …
+- <a id="d-1253"></a>**D-1253** — The fights stay as long as the game made them and the booth notes and the picker say “about 5 minutes”; no demo HP change (both games)
+  - Bailey: “Keep faithful, fix the notes (Recommended)” (blanket yes)
+  - What changed: Item 180c. Measured on the playtest build: about 6 minutes in Chapter I and 4 to 5 in Chapter IV; the booth script and the picker line are to be corrected in r63.
+  - area release · both games · adopted · delivery in progress · at ~17:09 EDT
+  - Source: Bailey, 2026-10-22 17:09 EDT (the DRIVER-STATE line of 17:09 EDT), picked on the driver’s question cards, relayed in the chat. He wrote “What …
+- <a id="d-1254"></a>**D-1254** — The battle HUD takes A’s ink-wash plates bled from the screen edges with one brush-stroke selection, and the boss card, results, thanks and the other demo-path screens take B’s type-on-the-painting style (both games)
+  - Bailey: “A in battle, B elsewhere (Recommended)” (blanket yes)
+  - What changed: Item 181a. The hud-pass lane (branch hud-pass) started on it and was stopped at 17:16 when he disliked all four mockups (182 (D-1257)). Replaced by 191 (D-1277): today’s Ink & Gold HUD stays and is refined.
+  - area ui · both games · superseded by [D-1277](#d-1277) · delivery not scheduled · at ~17:12 EDT
+  - Source: Bailey, 2026-10-22 17:12 EDT (the DRIVER-STATE line of 17:12 EDT; the queue’s hand-typed 16:55 ran early), picked on the driver’s question cards, …
+- <a id="d-1255"></a>**D-1255** — The HUD work covers the battle HUD plus the title menu, chapter picker, boss card, results, thanks card, defeat panel and pause by the Sunday freeze; other menus come after Monday (both games)
+  - Bailey: “Battle + demo path (Recommended)” (blanket yes)
+  - What changed: Item 181b. The scope outlives the look: hud-f1 covers the battle HUD (193a (D-1283)) and the demo-path screens are the booth screens still to do on Saturday; 191 (D-1277) replaced the look it was picked with.
+  - area ui · both games · adopted · delivery in progress · at ~17:12 EDT · partly replaced by [D-1277](#d-1277)
+  - Source: Bailey, 2026-10-22 17:12 EDT (the DRIVER-STATE line of 17:12 EDT), picked on the driver’s question cards, relayed in the chat. He wrote “What about …
+- <a id="d-1256"></a>**D-1256** — The 12-degree Ink & Gold slant is retired and survives only as a brush stroke’s end (both games)
+  - Bailey: “Retire it (Recommended)” (blanket yes)
+  - What changed: Item 181c. Replaced by 191 (D-1277): the slant is Ink & Gold’s signature, so it stays unless he says otherwise; the F1 finish keeps it.
+  - area ui · both games · superseded by [D-1277](#d-1277) · delivery not scheduled · at ~17:12 EDT
+  - Source: Bailey, 2026-10-22 17:12 EDT (the DRIVER-STATE line of 17:12 EDT), picked on the driver’s question cards, relayed in the chat. He wrote “What about …
+- <a id="d-1257"></a>**D-1257** — He is not sure he likes the HUD mockups and dislikes all four (too dark and heavy, not Final Fantasy enough, the type and style, the layout or size); three new directions are drawn and the HUD build is paused (both games)
+  - Bailey: “I'm not sure I like the HUD honestly...”
+  - What changed: Item 182. The hud-pass lane (branch hud-pass, started for 181) and the storyboard agent were stopped at 17:16 EDT on 2026-10-22; the pick of 181 is on hold, not withdrawn by him (it was replaced later by 191 (D-1277)). The three directions (Spira-native, elegance, bold) were drawn by 19:23 EDT.
+  - area ui · both games · adopted · nothing to build · at ~17:16 EDT
+  - Source: Bailey, 2026-10-22 17:16 EDT (the DRIVER-STATE line of 17:16 EDT; the queue’s hand-typed 17:30 is later than the line that stopped the lane), typed …
+- <a id="d-1258"></a>**D-1258** — He dislikes the three HUD directions too and asks for Persona-style, Expedition 33 and other mockups (both games)
+  - Bailey: “Can you come up with persona style / expedition 33 / other mockups I still don't like any of those”
+  - What changed: Item 183. Round 3 (hud-round-3, launched 20:36 EDT): A Persona-style, B Expedition 33 “Gilt Line”, C Metaphor-style, D modern Final Fantasy, as phone cards for three moments; the HUD build stays paused.
+  - area ui · both games · adopted · nothing to build · at ~20:36 EDT
+  - Source: Bailey, 2026-10-22 20:36 EDT (the DRIVER-STATE line of 20:36 EDT (logged then; the queue’s hand-typed 18:10 is earlier than the 19:23 line that …
+- <a id="d-1259"></a>**D-1259** — DELEGATED, “for now”: every pending sound-effect, music and voice-over choice is the driver’s, recorded as delegated and his to overturn by ear later
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 184. Covers the Chapter IV results cue, the motion sounds, the Overdrive gather thud, the attract-music level, the sound pass to the Expedition 33 and Hades bar (178r (D-1243)) and which voice takes and lines play. Agents cannot hear (rule 13): picks come from the sources (each game’s own cues and voiced battle lines) and from measured loudness, timing, clarity and consistency, never from “sounds good”. The audio-director workflow built the pass behind ?audio=new on branch audio-pass and recorded 19 picks (196).
+  - area audio · both games · adopted · delivery in progress · at ~20:46 EDT
+  - Source: Bailey, 2026-10-22 20:46 EDT (the DRIVER-STATE line of 20:46 EDT; the queue’s hand-typed 20:50 ran late), typed in the chat. Item 184 of the driver’s …
+- <a id="d-1260"></a>**D-1260** — The HUD direction is B, Expedition 33 “Gilt Line”: almost no panels, thin white-and-gold type and hairlines on the painting under a soft blue grade, a vertical turn-order spine on the left, a curved command dial tied to the acting hero’s ground ring and compact party readouts (FFX white and gold, FFX-2 rose gold and pearl)
+  - Bailey: “B Expedition 33”
+  - What changed: Item 185a. Round 3 of the HUD cards. The HUD build stayed paused until he saw the clip (185b (D-1261)). Replaced by 191 (D-1277) after the clip (190).
+  - area ui · both games · superseded by [D-1277](#d-1277) · delivery not scheduled · at ~22:38 EDT
+  - Source: Bailey, 2026-10-22 22:38 EDT (the DRIVER-STATE line of 22:38 EDT; the queue’s hand-typed 22:05 is earlier than the lines before it), picked on the …
+- <a id="d-1261"></a>**D-1261** — A six-second clip of the Gilt Line HUD coming in, choosing Attack, the strike and the HUD stepping back is made before anything is built (both games)
+  - Bailey: “See it move (Recommended)” (blanket yes)
+  - What changed: Item 185b. Made over real HUD-hidden footage of Tidus’s attack for Chapter I and Chapter IV (1440p and phone MP4, with a storyboard) and shown to him; his verdict is 190.
+  - area ui · both games · adopted · delivery implemented · at ~22:38 EDT
+  - Source: Bailey, 2026-10-22 22:38 EDT (the DRIVER-STATE line of 22:38 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1262"></a>**D-1262** — The arenas get a painted dusk: a violet-indigo wash, one warm light on the party, fewer sparkles, with the Chapter IV seam fix (both games)
+  - Bailey: “Painted dusk (Recommended)” (blanket yes)
+  - What changed: Item 186a. Options Book batch 1. The dusk grade is replaced by 189b4 (Cinematic contrast); the Chapter IV seam fix stays and is built in pro-look.
+  - area visuals · both games · superseded by [D-1274](#d-1274) · delivery not scheduled · at ~23:14 EDT
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT, logged for 186 to 188; the queue’s hand-typed 22:20 is earlier than the 22:38 …
+- <a id="d-1263"></a>**D-1263** — Hits are a painted brush stroke per weapon with a directional flash and paint drops, gold serif numbers, FFX gold and ice and FFX-2 pink and lilac skins (both games)
+  - Bailey: “Painted slash (Recommended)” (blanket yes)
+  - What changed: Item 186b. Options Book batch 1. Replaced by 189b4 (hits “Ink and light”); the glass damage numbers of pro-look keep the numerals idea.
+  - area visuals · both games · superseded by [D-1274](#d-1274) · delivery not scheduled · at ~23:14 EDT
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1264"></a>**D-1264** — The camera uses the real game’s shots first, then eased moves, framing and a soft background if the frame rate holds (both games)
+  - Bailey: “Real shots, then polish (Recommended)” (blanket yes)
+  - What changed: Item 186c. Built as pro-camera (178k (D-1236), 179b (D-1250)), with the soft background conditional on the frame rate (the governor, 197a (D-1313)). Its plain-attack part is replaced by 189b1.
+  - area camera · both games · adopted · delivery in progress · at ~23:14 EDT · partly replaced by [D-1271](#d-1271)
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1265"></a>**D-1265** — The target markers are classic, calm and clear: the big FFX glove and the FFX-2 ring with the name beside it, a pulse on the low-HP row, a grey wash and a KO mark (both games)
+  - Bailey: “Classic, calm, clear (Recommended)” (blanket yes)
+  - What changed: Item 187a. Built in pro-look (the FFX glove, the FFX-2 ring, the low-HP and KO marks; ?look=pro, key /), restyled by hud-f1 to match; the r63-play lane fixed a KO chip that landed on an aeon’s position. Not live.
+  - area ui · both games · adopted · delivery in progress · at ~23:14 EDT
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1266"></a>**D-1266** — Before a boss’s big blow the arena drains to ivory while the party stays clear, and the boss card becomes a full-bleed painting (both games)
+  - Bailey: “Held breath, full painting (Recommended)” (blanket yes)
+  - What changed: Item 187b. Built in pro-staging (41ff25ec8; ?staging=pro, key backslash): held breath for Total Annihilation (FFX) and Mega Flare (FFX-2), the full-painting boss card. Open in its review: FFX-2’s menu-open hides the wash. Not live.
+  - area visuals · both games · adopted · delivery in progress · at ~23:14 EDT
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1267"></a>**D-1267** — A win is camera-led (a close-up and a VICTORY title in Chapter I, a silent pull-back in Chapter IV) and a loss shows a caption and a retry card that keep the scene (both games)
+  - Bailey: “Camera-led win, quick retry (Recommended)” (blanket yes)
+  - What changed: Item 187c. The retry card is built in pro-staging and stays; the win half is replaced by 189b3 (a victory freeze frame).
+  - area ui · both games · adopted · delivery in progress · at ~23:14 EDT · partly replaced by [D-1273](#d-1273)
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1268"></a>**D-1268** — Chapter I gets a tall readable Overdrive name banner and menu; Chapter IV keeps the painted twirl with a readable pearl name plate (both games)
+  - Bailey: “Banner, ribbon spiral (Recommended)” (blanket yes)
+  - What changed: Item 188a. The FFX-2 half is built in pro-staging (the ribbon-spiral Change with a pearl name plate) and stays; the FFX banner is replaced by 189b2.
+  - area visuals · both games · adopted · delivery in progress · at ~23:14 EDT · partly replaced by [D-1272](#d-1272)
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1269"></a>**D-1269** — The booth end card and attract card use the Echo painting look, and the press page and the trailer lead with the game: the action-led trailer B (both games)
+  - Bailey: “Mixed read (Recommended)” (blanket yes)
+  - What changed: Item 188b. The trailer and the press-kit page are due by Sunday (178q (D-1242)); not built at this pass.
+  - area release · both games · adopted · delivery in progress · at ~23:14 EDT
+  - Source: Bailey, 2026-10-22 23:14 EDT (the DRIVER-STATE line of 23:14 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1270"></a>**D-1270** — STANDING RULE: FFX and FFX-2 as the core, with an Expedition 33 spin on the presentation (both games)
+  - Bailey: “Yes, the rule (Recommended)” (blanket yes)
+  - What changed: Item 189a. Every pro lane brief carries it; it sits beside the faithful-rules line of 178l (D-1237) and the bar of 178b (D-1227).
+  - area process · both games · adopted · delivery implemented · at ~23:18 EDT
+  - Source: Bailey, 2026-10-22 23:18 EDT (the DRIVER-STATE line of 23:18 EDT; the queue’s hand-typed 22:50 is earlier than the 23:14 line before it), picked on …
+- <a id="d-1271"></a>**D-1271** — The camera works on every action: FFX’s real shots stay for spells, items, skills and boss moves, and Expedition 33-style moves (a push-in, a follow) are added to plain attacks too, lighter in FFX-2 (both games)
+  - Bailey: “Camera on every action”
+  - What changed: Item 189b1. Replaces the plain-attack part of 186c (D-1264) and 179b (D-1250). Built in pro-camera (?camera=pro, key ;). Not live.
+  - area camera · both games · adopted · delivery in progress · at ~23:18 EDT
+  - Source: Bailey, 2026-10-22 23:18 EDT (the DRIVER-STATE line of 23:18 EDT), multi-select answer on the driver’s question card. He wrote “I kind of want to …
+- <a id="d-1272"></a>**D-1272** — The FFX Overdrive opens with Expedition 33-style drama instead of the big name banner: a small name, the camera, the timing and the light carry the moment (FFX only)
+  - Bailey: “Overdrive opening”
+  - What changed: Item 189b2. Replaces 188a (D-1268) for the FFX Overdrive; the FFX-2 ribbon-spiral Change stays. Built in pro-staging (the Overdrive opening). Not live.
+  - area visuals · FFX · adopted · delivery in progress · at ~23:18 EDT
+  - Source: Bailey, 2026-10-22 23:18 EDT (the DRIVER-STATE line of 23:18 EDT), multi-select answer on the driver’s question card. He wrote “I kind of want to …
+- <a id="d-1273"></a>**D-1273** — A win holds a freeze frame on the last blow and then goes to the results (both games)
+  - Bailey: “Victory freeze frame”
+  - What changed: Item 189b3. Replaces the win half of 187c (D-1267); the quick retry stays. Built in pro-staging; r63-int found the freeze shortened by a fast playback speed and re-ran it with a freeze ring (520 ms). The aeon victory frame is [ours] (197e (D-1317)). Not live.
+  - area visuals · both games · adopted · delivery in progress · at ~23:18 EDT
+  - Source: Bailey, 2026-10-22 23:18 EDT (the DRIVER-STATE line of 23:18 EDT), multi-select answer on the driver’s question card. He wrote “I kind of want to …
+- <a id="d-1274"></a>**D-1274** — The arenas take the Cinematic contrast instead of the painted dusk, and hits are Ink and light instead of the painted slash (both games)
+  - Bailey: “Darker light + ink hits”
+  - What changed: Item 189b4. Replaces 186a (D-1262) and 186b (D-1263); the Chapter IV seam fix stays. Built in pro-look (673d76b94; ?look=pro, key /): the arenas’ final numbers from live tuning (Chapter I saturation 0.9, exposure 0.95; Chapter IV saturation 1.22, exposure 1.47, cone 0.48), the seam, the ink-and-light hits and the glass numbers. Not live.
+  - area visuals · both games · adopted · delivery in progress · at ~23:18 EDT · replaces [D-1262](#d-1262)
+  - Source: Bailey, 2026-10-22 23:18 EDT (the DRIVER-STATE line of 23:18 EDT), multi-select answer on the driver’s question card. He wrote “I kind of want to …
+- <a id="d-1275"></a>**D-1275** — The Expedition 33 Gilt Line HUD clips get “Not yet”: too empty and not Final Fantasy, and he wants to play it first; nothing is built (both games)
+  - Bailey: “Not yet”
+  - What changed: Item 190a. The build stays paused; he wants a playable version on this PC before any yes. The refine round that followed (190b (D-1276)) was stopped by 191 (D-1277).
+  - area ui · both games · adopted · nothing to build · at ~23:22 EDT
+  - Source: Bailey, 2026-10-22 23:22 EDT (the DRIVER-STATE line of 23:22 EDT; the queue’s hand-typed 23:30 ran late), picked on the driver’s question cards …
+- <a id="d-1276"></a>**D-1276** — The Expedition 33 direction is refined with Final Fantasy presence and substance, shown as new clips, then built as a playable version on this PC before any yes (both games)
+  - Bailey: “Refine this one (Recommended)” (blanket yes)
+  - What changed: Item 190b. The refine workflow was stopped at 23:39 EDT when 191 (D-1277) arrived (its leftover render processes were ended by process id).
+  - area ui · both games · superseded by [D-1277](#d-1277) · delivery not scheduled · at ~23:22 EDT
+  - Source: Bailey, 2026-10-22 23:22 EDT (the DRIVER-STATE line of 23:22 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+- <a id="d-1277"></a>**D-1277** — Today’s Ink & Gold HUD stays as the base and is refined; the Expedition 33 Gilt Line direction and its refinement round are stopped, and the slant stays (both games)
+  - Bailey: “I want to keep today's hud but refine that more.”
+  - What changed: Item 191. After the HUD history card told him where today’s HUD came from (the Ink & Gold pick of 2026-09-15, Persona-leaning). Replaces 181a (D-1254) and 181c (D-1256) (Sumi Ledger and Ground Ink; the slant is Ink & Gold’s signature and stays unless he says otherwise), 185a (D-1260), 190b (D-1276), 178j (D-1235) and 178m (D-1238). The rule of 189a (D-1270) still holds for everything else. Carried out by 192 and 193a (D-1283).
+  - area ui · both games · adopted · delivery in progress · at ~23:39 EDT · refines [E-009](#e-009) · replaces [D-1254](#d-1254)
+  - Source: Bailey, 2026-10-22 23:39 EDT (the DRIVER-STATE line of 23:39 EDT; the queue’s hand-typed 23:45 ran late), typed in the chat. Item 191 of the driver’s …
+- <a id="d-1278"></a>**D-1278** — The HUD shows less: six groups instead of eleven, the enemy details, the guide and the tips behind X, the centre clear (both games)
+  - Bailey: “Less on screen”
+  - What changed: Item 192a. Built in hud-f1 on the Clear Stage layout (Chapter I six groups, 18 to 19 percent of the frame against about 35 today).
+  - area ui · both games · adopted · delivery in progress · at ~23:39 EDT · refines [D-1277](#d-1277)
+  - Source: Bailey, 2026-10-22 23:39 EDT (the DRIVER-STATE line of 23:39 EDT; the queue’s hand-typed 23:55 ran late), multi-select answer on the driver’s …
+- <a id="d-1279"></a>**D-1279** — The HUD text is bigger and cleaner, readable from 2 metres, two typefaces instead of four, the same slanted slabs (both games)
+  - Bailey: “Bigger, cleaner text”
+  - What changed: Item 192b. Built in hud-f1 with a 28 px text floor (its review found the floor unmet, the old Exo 2 left and the cue cut by an ellipsis; fixed in c101e63e3).
+  - area ui · both games · adopted · delivery in progress · at ~23:39 EDT · refines [D-1277](#d-1277)
+  - Source: Bailey, 2026-10-22 23:39 EDT (the DRIVER-STATE line of 23:39 EDT), multi-select answer on the driver’s question card. Item 192b of the driver’s list …
+- <a id="d-1280"></a>**D-1280** — The HUD slabs keep their slant and gain a painted edge, grain and soft light so they belong to the painted world (both games)
+  - Bailey: “Painterly finish”
+  - What changed: Item 192c. The two finishes F1 Brushed slab and F2 Lit lacquer were drawn as stills and clips for both chapters; he picked F1 (193a (D-1283)).
+  - area ui · both games · adopted · delivery in progress · at ~23:39 EDT · refines [D-1277](#d-1277)
+  - Source: Bailey, 2026-10-22 23:39 EDT (the DRIVER-STATE line of 23:39 EDT), multi-select answer on the driver’s question card. Item 192c of the driver’s list …
+- <a id="d-1281"></a>**D-1281** — The HUD slides out during attacks and spells and then returns: the Expedition 33 spin (both games)
+  - Bailey: “Steps back in action”
+  - What changed: Item 192d. Built in hud-f1 (step 4); its review found a Chapter IV jerk of 729 px when a menu opened during a step-back (scrollIntoView on an overflow-hidden root), fixed in c101e63e3. The skeptic of the playtest build still sees a Chapter I step-back snap in 6 of 21 runs.
+  - area ui · both games · adopted · delivery in progress · at ~23:39 EDT · refines [D-1277](#d-1277)
+  - Source: Bailey, 2026-10-22 23:39 EDT (the DRIVER-STATE line of 23:39 EDT), multi-select answer on the driver’s question card. Item 192d of the driver’s list …
+- <a id="d-1282"></a>**D-1282** — The layout is Clear Stage: today’s layout made quieter, the command list left, party cards right, a three-slot turn strip and the boss ribbon (both games)
+  - Bailey: “Clear Stage (Recommended)” (blanket yes)
+  - What changed: Item 192e. Built in hud-f1 (Chapter I CTB with the turn strip and Overdrive bars; Chapter IV ATB mirrored right with the slant flipped and the pink accent, no turn strip).
+  - area ui · both games · adopted · delivery in progress · at ~23:39 EDT · refines [D-1277](#d-1277)
+  - Source: Bailey, 2026-10-22 23:39 EDT (the DRIVER-STATE line of 23:39 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
+
+### 2026-10-23
+
+Friday · 35 decisions
+
+- <a id="d-1283"></a>**D-1283** — The HUD finish is F1 Brushed slab: the refined Ink & Gold HUD on the Clear Stage layout gets the painted dry-brush edge, paper grain and light from the arena; F2 Lit lacquer is not built (both games, FFX-2 mirrored with the pink accent)
+  - Bailey: “F1 Brushed slab (Recommended)” (blanket yes)
+  - What changed: Item 193a. Built as hud-f1 (ed88d2646 for steps 1 to 4, review fixes c101e63e3; ?hud=f1 or ?pack=demo, default OFF, Chapters I and IV only): a 4,308-test UI sweep passes; the review found one critical and six majors (the Chapter IV 729 px jerk, the 28 px floor, Exo 2, the cue ellipsis, the OVERDRIVE label, Intel collisions, TEXT SIZE 115 and 130, the damage numeral not the gold Cormorant), all fixed. Merged into r63-play; not live.
+  - area ui · both games · adopted · delivery in progress · at ~10:20 EDT · refines [D-1282](#d-1282)
+  - Source: Bailey, 2026-10-23 10:20 EDT (the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes), answered on …
+- <a id="d-1284"></a>**D-1284** — He has not played the playtest build yet and plays tonight; the motion, feel and art picks wait for his play (both games)
+  - Bailey: “Not yet, tonight”
+  - What changed: Item 193b. Moves his playtest from Thursday evening (D-1154) to Friday night, 2026-10-23. The build for it is r63-play (c67821216), served locally on port 5410 at 18:25 EDT; a question left open at about 18:30 held the session until about 00:00 EDT, so the playtest link was not sent at 20:45 (the lesson: never leave a question open before a scheduled delivery).
+  - area process · both games · adopted · delivery in progress · at ~10:20 EDT
+  - Source: Bailey, 2026-10-23 10:20 EDT (the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes), answered on …
+- <a id="d-1285"></a>**D-1285** — The two bosses’ edges are re-cut from the 2x masters, option A “Clean cut-out”: no cyan rim or pale fringe, holes and wing bays closed, loose shards gone, the shadow, ring and reflection under the real footprint, Seymour grounded; the originals are kept (Bahamut FFX-2, Seymour Flux FFX)
+  - Bailey: “Yes, re-cut both (Recommended)” (blanket yes)
+  - What changed: Item 193c. Built as boss-matte (code 6eece354d, review round 2 and final 877b83eb6): a per-pixel boss mask removes the rim beside other figures (the party keeps its rim), Bahamut’s pose pieces are rebuilt from the clean masters, ?look=cinematic no longer throws, ?boss=clean is the switch; art candidates in D:/pyrefly-art-boss (158 files) and, for the playtest, D:/pyrefly-art-r63 (hard links; the originals are archived to the private art repo first by tools/archive-replaced.mjs, with tools/boss-matte-install.mjs guarding the hashes). The driver added a lit floor pool in the key colour under Bahamut, an option-B element he did not pick: he is asked tonight whether to keep it. Not live.
+  - area art · both games · adopted · delivery in progress · at ~10:20 EDT · see [D-1166](#d-1166)
+  - Source: Bailey, 2026-10-23 10:20 EDT (the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes), answered on …
+- <a id="d-1286"></a>**D-1286** — DRIVER CALL, provisional, for his verdict tonight: the F1 HUD’s open sub-points are built as the mockup draws them: the ribbon stays during actions, the HUD steps back at the start of an action, a 28 px text floor and a 32 px floor for cues and prompts, slim party cards hide the Overdrive bar, heal colours (both games)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 193d. Not words of his: he named the four refinements and the finish (192, 193a (D-1283)), not these details. They are in hud-f1 and r63-play and go to tonight’s playtest; the ribbon’s HP bar is 197b (D-1314).
+  - area ui · both games · adopted · delivery in progress
+  - Source: The driver’s call of 2026-10-23, the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes, recorded …
+- <a id="d-1287"></a>**D-1287** — The driver may message the side session that works on a separate FFX scene-and-models project to move its working folder to L: and turn off Blender’s .blend1 backups, because C: stood at 24 GB and fell 4 to 7 GB an hour (process; no game change)
+  - Bailey: “Yes, tell it (Recommended)” (blanket yes)
+  - What changed: Item 194. The driver told that session the measurements and the ask; it acknowledged: its scratch moves to L:, save_version is 0, its finished scratch is listed for Bailey to delete. Records only; no game change.
+  - area process · both games · adopted · delivery implemented · at ~12:35 EDT
+  - Source: Bailey, 2026-10-23 12:35 EDT (about 12:35 EDT by the queue; DRIVER-STATE logged the message to the other session at 12:37 and its acknowledgement at …
+- <a id="d-1288"></a>**D-1288** — The two very-safe C: cleanup commands are approved (10 finished task-output files, 4.8 GB, and 355 leaked Vitest folders, 9.3 GB), and the driver runs them (process)
+  - Bailey: ““Ok I'll go with all of your recommendations”” (blanket yes)
+  - What changed: Item 195a. Approved to run; he then picked “You run them (Recommended)”. Done at 13:23 to 13:27 EDT: SAFE-1-2 removed the 10 task-output files; the Vitest cleaner’s first apply deleted 0 (its dry-run log had no DAYS line, so it fell back to two days), and the re-run with -Days 0.0834 (the dry run’s two-hour threshold, the same reviewed list) deleted 353 folders (9.2 GB) and skipped 2 in use. C: then showed 92.8 GB free. Records only.
+  - area process · both games · adopted · delivery implemented · at ~12:45 EDT
+  - Source: Bailey, 2026-10-23 12:45 EDT (about 12:45 EDT by the queue, given right after the C: drive messages; DRIVER-STATE logged it at 13:22), a blanket yes, …
+- <a id="d-1289"></a>**D-1289** — The side session’s Blender scratch moves from C: to L: with save_version 0 (no .blend1), and its finished scratch is listed for him to delete (process; not this game)
+  - Bailey: ““Ok I'll go with all of your recommendations”” (blanket yes)
+  - What changed: Item 195b. Confirmed; the session had already acknowledged. Its agent inventories the old folder and copies the version folder to L: hash-verified behind a junction, then writes him the delete list; one Kimahri step still wrote to C: for another hour or two. Not this game’s code.
+  - area process · both games · adopted · delivery implemented · at ~12:45 EDT
+  - Source: Bailey, 2026-10-23 12:45 EDT (about 12:45 EDT by the queue, given right after the C: drive messages; DRIVER-STATE logged it at 13:22), a blanket yes, …
+- <a id="d-1290"></a>**D-1290** — The frame cost of the integrated demo build is trimmed before tonight’s playtest so the 120 Hz booth screen does not stutter: the most expensive piece is cut back first, measured before and after (both games, Chapters I and IV)
+  - Bailey: ““Ok I'll go with all of your recommendations”” (blanket yes)
+  - What changed: Item 195c. The integrated build ran 10.5 percent of frames over 8.3 ms in Chapter I with everything on, against 3.8 percent for the base. Built as perf-trim (1f4e55940): a frame-budget governor, the copy-only tilt passes skipped (pixel-identical), the alpha read-ahead and the aeon victory framing; Chapter I frames over 8.33 ms went from 21.1 to 11.9 percent (the base 12.7) and Chapter IV from 34.4 to 19.5 (the base 33.1). The lever order is the driver’s call 197a (D-1313). Merged into r63-play; not live.
+  - area tech · both games · adopted · delivery in progress · at ~12:45 EDT
+  - Source: Bailey, 2026-10-23 12:45 EDT (about 12:45 EDT by the queue, given right after the C: drive messages; DRIVER-STATE logged it at 13:22), a blanket yes, …
+- <a id="d-1291"></a>**D-1291** — The driver’s test lanes keep their temp files on D: (TEMP and TMP set to D:/Tools/pyrefly-scratch/tmp) instead of the C: Temp folder (plumbing)
+  - Bailey: ““Ok I'll go with all of your recommendations”” (blanket yes)
+  - What changed: Item 195d. Every lane brief from now on exports TEMP and TMP before running Vitest, so no more leaked test folders land on C:.
+  - area tech · both games · adopted · delivery implemented · at ~12:45 EDT
+  - Source: Bailey, 2026-10-23 12:45 EDT (about 12:45 EDT by the queue, given right after the C: drive messages; DRIVER-STATE logged it at 13:22), a blanket yes, …
+- <a id="d-1292"></a>**D-1292** — The pose repaint goes in only where it scored better than the current painting; the knocked-out poses and the other worse ones stay on the current paintings, and he still approves per character on Saturday from the phone cards (both games)
+  - Bailey: ““Ok I'll go with all of your recommendations”” (blanket yes)
+  - What changed: Item 195e. The rule for Saturday’s install: the repaint lane’s 68 poses read about the same or slightly better, the KO poses worse, and Tidus’s trousers and shorts were not fixed; the per-figure cards are in the local scratch under 2026-10-23/repaint/phone. FFX: Tidus, Yuna, Kimahri; FFX-2: Yuna White Mage, Rikku Dark Knight, Paine.
+  - area art · both games · adopted · delivery in progress · at ~12:45 EDT
+  - Source: Bailey, 2026-10-23 12:45 EDT (about 12:45 EDT by the queue, given right after the C: drive messages; DRIVER-STATE logged it at 13:22), a blanket yes, …
+- <a id="d-1293"></a>**D-1293** — OPEN, not covered by his yes (no recommendation was stated to him first): the HUD’s open details of 193d (D-1286), Bahamut kept whole in frame during attacks (the party then fills 28 to 31 percent of the frame), the FFX-2 menu-open arena wash staying off (D-357, D-441), the Chapter IV canon drawing, Auron in the Chapter I party panel and the 34 duplicate artifact pages (both games)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 195f. These stay the driver’s provisional builds or open questions and go to tonight’s playtest for his verdict; the canon drawing is his pick on Saturday; deleting an artifact needs his per-item yes. The process id the driver had flagged for him (a stray Python process) is closed: it ended, and the number now belongs to an unrelated tail process.
+  - area process · both games · proposed · nothing to build
+  - Source: The open questions the driver listed with his blanket yes of 2026-10-23 (about 12:45 EDT by the queue, given right after the C: drive messages; …
+- <a id="d-1294"></a>**D-1294** — DELEGATED (PC-01): with the audio pass on, Chapter IV’s win plays no music
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.01. The sources name no victory pose and no fanfare, the writing bible says results come up silent, and the “pause” cue measured as loud as the battle theme. It refines D-1136 (the softer results cue): with the pass off the quiet “pause” cue still plays. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · FFX-2 · adopted · delivery in progress · refines [D-1136](#d-1136)
+  - Source: docs/audio/audition.html
+- <a id="d-1295"></a>**D-1295** — DELEGATED (PC-02): Chapter I’s win is one fanfare, victory-ffx from the last blow; the 3.4 s sting is dropped
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.02. Chosen from the game’s own cues. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · FFX · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1296"></a>**D-1296** — DELEGATED (PC-03): the motion sounds stay on and are turned down 12 dB where they fall on a blow
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.03. Keeps the motion sounds from stacking on the hit sounds. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1297"></a>**D-1297** — DELEGATED (PC-04): the attract reel’s music plays at its fight share, the whole mix 6 dB down, each segment with its own game’s sound
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.04. For the booth’s attract reel. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1298"></a>**D-1298** — DELEGATED (PC-05): the booth operator presses T once at the start of the day to unlock audio (docs/BOOTH-SCRIPT.md); no code
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.05. Browsers keep audio locked until the first key press. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1299"></a>**D-1299** — DELEGATED (PC-06): Chapter I keeps boss-seymour as its fight music (his own ear pick) although the sources name “Challenge” for the real fight: flagged for him
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.06. His own earlier pick stands over the source note. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · FFX · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1300"></a>**D-1300** — DELEGATED (PC-07): nine voiced lines in Chapter I: Seymour’s four existing taunts plus new Yuna and Kimahri Talk lines (new words in the project’s voice, not retail text); the Fish Audio spend was $0.0125
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.07. Voice takes follow D-1015 (the Fish Drama 3 clones). The pass lengthens Chapter I by about 20 s (232 s against 212 s) because the voiced beats hold the fight. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · FFX · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1301"></a>**D-1301** — DELEGATED (PC-08): Chapter IV stays unvoiced because the real fight has no voiced lines
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.08. The sources have no voiced battle line for it and its voices are not cast. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · FFX-2 · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1302"></a>**D-1302** — DELEGATED (PC-09): the music ducks 14 dB under a voice (it was 3.5), and every line sits at least 7.4 dB over the music in the speech band
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.09. Measured on the speech band, not the full mix. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1303"></a>**D-1303** — DELEGATED (PC-10): the layered-hit pass: a crack and body plus a per-character accent, a dip and thump on big blows, one menu family, spells on the effect marks and +4 dB makeup with a soft true-peak ceiling; fights at -14.6 and -15.1 LUFS integrated, -1.6 dBTP
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.10. Game-clean per rule 14: each game uses its own tables and only the neutral numbers (the ducks, the makeup, the ceiling) are shared. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1304"></a>**D-1304** — DELEGATED (PC-11): the 17 Sound Test titles as proposed, behind the pass
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.11. Titles only, as proposed. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1305"></a>**D-1305** — DELEGATED (PC-12): the defeat cues are kept
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.12. Kept as they are. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1306"></a>**D-1306** — DELEGATED (PC-13): the menu “no” sound stays off
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.13. Stays off, as it is today. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1307"></a>**D-1307** — DELEGATED (PC-14): the Natus cue is kept (not in the demo)
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.14. Kept; it is not in the demo. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · FFX · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1308"></a>**D-1308** — DELEGATED (PC-15): the stand-in scene beds wait until after the conference
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.15. Deferred; they are not in the demo chapters. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1309"></a>**D-1309** — DELEGATED (PC-16): no retake of the 11 “try again” voice rows, because it needs money
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.16. Rule 11: ask before spending. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · FFX · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1310"></a>**D-1310** — DELEGATED (PC-17): no listening score is made without ears
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.17. Rule 13: agents cannot hear; the score waits for him. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1311"></a>**D-1311** — DELEGATED (PC-18): no landing thud plays under an Overdrive gather
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.18. The gather thud was an open question since the integration review of 2026-10-22. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1312"></a>**D-1312** — DELEGATED (PC-19): every blow gets its weapon’s hit, landings start on the mark and Total Annihilation’s big blow is its first
+  - Bailey: “You choose all sound effects and music and voice overs for me for now please”
+  - What changed: Item 196.19. The four changes the review forced (it found 0 critical, 4 major and 12 minor issues, all addressed); the strict audio QA is green. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
+  - Source: docs/audio/audition.html
+- <a id="d-1313"></a>**D-1313** — DRIVER CALL, his to overturn at tonight’s playtest: the frame governor steps the scene’s supersample to x0.8 first (the only lever measured to help), then turns the soft background off, then halves the particles (both games, Chapters I and IV, pro lanes on only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 197a. Under his yes 195c (D-1290) and “The motion and animations need to be top notch, even above visuals.” perf-trim measured -17 percent GPU in Chapter I and -24 percent in Chapter IV for the supersample, and about 0 to 0.5 ms for the other two, so this reorders 176w (D-1215)’s “trim particles first”. Built in r63-play (fdb2ef07d, with the smaller scene asked for the frame its level is reached; 18 tests). Not live.
+  - area tech · both games · adopted · delivery in progress · refines [D-1290](#d-1290)
+  - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
+- <a id="d-1314"></a>**D-1314** — DRIVER CALL, his to overturn: the F1 HUD ribbon keeps the boss’s name, and its HP bar shows only where today’s HUD of that game would show the enemy’s HP (FFX Sensor rule; FFX-2 its own rule), not from the first menu as the mockup drew it (both games, per game)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 197b. Rule 14 and the faithful-core line (178l (D-1237)): he named Less on screen, Bigger text, Painterly and Steps back, not the HP bar. Built in r63-play (b76ddfd69; 6 tests). Finding: in the real Chapter I build Kimahri’s Spear carries Sensor, so both enemies are scanned from the first menu and the ribbon shows its bar from the first menu there too; hiding it regardless would change today’s rule and needs his yes. FFX-2 today draws every enemy’s bar from the first frame, so the ribbon does too.
+  - area ui · both games · adopted · delivery in progress
+  - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
+- <a id="d-1315"></a>**D-1315** — DRIVER CALL, his to overturn: Mortiorchis, Seymour Flux’s companion in Chapter I, gets the same rim-off as the boss (FFX only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 197c. Built in r63-play (26aa20535): the creature is flagged in the rim mask under ?boss=clean, so neither look pass draws a pale screen-space rim; its painting is not re-cut. A crude edge measure puts its matte at the size of Seymour Flux’s original fringe, much less than Bahamut’s.
+  - area art · FFX · adopted · delivery in progress · refines [D-1285](#d-1285)
+  - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
+- <a id="d-1316"></a>**D-1316** — DRIVER CALL, his to overturn: a party rim-off switch is added for tonight’s playtest, default ON, which is today’s rim (both games)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 197d. The party and the aeons keep a cyan rim of the same defect class as the bosses’ original one. ?partyrim=off and the board key apostrophe turn the screen-space rims off for them (b0991964d, 26aa20535; 11 tests); the default stays today’s rim until he judges it.
+  - area art · both games · adopted · delivery in progress · refines [D-1285](#d-1285)
+  - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
+- <a id="d-1317"></a>**D-1317** — DRIVER CALL, his to overturn: the aeon victory frame in Chapter I is a slow low three-quarter push with the aeon whole, labelled [ours] because the sources decode only the Tidus, Yuna and Kimahri victory blocks (FFX only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 197e. Built in perf-trim (1f4e55940) after r63-int found the aeon victory frames showing an empty field. Not live.
+  - area camera · FFX · adopted · delivery in progress
+  - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
