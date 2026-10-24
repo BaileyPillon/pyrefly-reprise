@@ -36,6 +36,14 @@ import { drawSlicedOffscreen, warmShaders } from '../screens/BattleScreenWarmup.
 import { demoModeOn } from '../demoMode.ts';
 import { DEMO_FIGHTS } from './demoFlow.ts';
 
+/**
+ * When, after the page's first real frame, the title starts the two warms (`main.ts`). Release 62 used 4000 and 6000; the R63 play lane measured a player at a human pace (3 s on the title, 3 s on the
+ * picker) fighting before either stage was built (0 or 1 warm steps done at the press), and the cold load then cost 1.1 to 1.7 s of frame time in the fight's first 9 s (Chapter IV, 8 to 12 frames over 50 ms).
+ * The once-per-page costs (`warmBattleStage`: a second WebGL2 context, 0.7 s of main thread, then the spell atlas) go first, the fights' stages after them. Game case: both.
+ */
+export const WARM_STAGE_AT_MS = 700;
+export const WARM_FIGHTS_AT_MS = 1600;
+
 /** The screens the warm may work behind: the title and the picker. */
 const CALM = new Set(['title', 'chapter-select']);
 
