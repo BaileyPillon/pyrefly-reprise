@@ -38,6 +38,7 @@ import { demoModeOn } from '../demoMode.ts';
 import { DEMO_FIGHTS } from './demoFlow.ts';
 import { newPrebuildPlan, type PrebuildPlan } from './prebuildFigures.ts'; // lane "prebuild": the fights' figures, built behind the picker
 import { prebuildOn } from './prebuildSwitch.ts';
+import { msSincePadActivity } from '../padActivity.ts';
 
 /**
  * When, after the page's first real frame, the title starts the two warms (`main.ts`). Release 62 used 4000 and 6000, which left both stages unbuilt at a press a human makes 6 s after the load (Chapter I's was
@@ -110,9 +111,15 @@ const inputBusy = (): boolean => {
   }
 };
 
+/**
+ * r64-fixes (both games; swallowed picker presses): a step is not started in the 700 ms after a pad button changed. Measured on the served r63-play build, the picker's steps hold the page for 100 to 650 ms
+ * (a program link waiting on the GPU process, the 5376 x 3072 upload at 290 to 310 ms, a 64 x 64 read-back at 316 ms), and a press of 100 ms that falls wholly inside one is lost. The presses come in runs
+ * (the cursor, the pick), so waiting out the second after the first one protects the rest of the run; at most 1.2 s per call, so a mashing hand slows the warm and never stops it.
+ */
+export const PAD_QUIET_MS = 700;
 const idle = async (ms = 60): Promise<void> => {
   await sleep(ms);
-  for (let i = 0; i < 25 && inputBusy(); i++) await sleep(40);
+  for (let i = 0; i < 30 && (inputBusy() || msSincePadActivity() < PAD_QUIET_MS); i++) await sleep(40);
 };
 
 /** The fight whose card the picker's cursor rests on: its stage is warmed before the other's (r63-play: the player is about to pick it). */
@@ -138,7 +145,7 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
   running = (async () => {
     // One fight at a time, a step at a time: the paintings, then the stage, then the splash crops. The fight whose card the cursor rests on goes first, and a cursor that moves hands the warm to the other fight at
     // the next step boundary (r63-play, the overnight fix of the skeptic's M1: the player is about to pick it; at human pace there is time for one fight's stage, not both).
-    const figuresAhead = !light && prebuildOn(); // lane "prebuild" (`?prebuild=off` is r63-play exactly): the figures are built, uploaded and drawn behind the picker too
+    const figuresAhead = prebuildOn(); // lane "prebuild" (`?prebuild=off` is r63-play exactly): the figures are built, uploaded and drawn behind the picker too; r64-fixes: and behind a lost fight's card (the retry's figures were disposed with the fight, 17 paintings went up again under its first 3.5 s)
     const plans = new Map<string, PrebuildPlan>();
     const steps = new Map(fights.map((id) => [id, { paintings: false, stage: false, figures: !figuresAhead, splash: false, rest: !figuresAhead }]));
     const pick = (ids: string[]): string | null => (ids.length ? (focusId !== null && ids.includes(focusId) ? focusId : ids[0]!) : null);
