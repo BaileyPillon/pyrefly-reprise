@@ -11,7 +11,7 @@
  * past that (a 1920 x 1080 screen at a pixel ratio of 1 already needs 1920, so it takes the master too; 2560 x 1440 certainly does).
  */
 
-import { artManifest, title2xUrlFor } from '../../../engine/ArtManifest.ts';
+import { artManifest, loadArtManifest, title2xUrlFor } from '../../../engine/ArtManifest.ts';
 import { logicalArtUrl } from '../../../engine/ArtShipped.ts';
 import { artUrl } from '../../../engine/PaintedArt.ts';
 import { escapeHtml } from '../../../ui/common/html.ts';
@@ -43,6 +43,23 @@ export function echoMasterUrl(blind: boolean): string | null {
 /** The `srcset` value both files go through. */
 export function echoSrcset(master: string): string {
   return `${artUrl(TITLE_ART_PLATES.echo)} ${ECHO_1X_WIDTH}w, ${master} ${ECHO_2X_WIDTH}w`;
+}
+
+/**
+ * Offer the master to an `<img>` the markup drew without one, once the manifest is in hand and lists it. The booth cards after a fight are drawn long after the manifest has
+ * loaded and carry the list from the start (a no-op here); the standalone card page (`?card=end`, `?card=attract`) opens at boot, when it may not have, and gets the list a moment later.
+ * Nothing happens when the manifest is already in hand and the img has its list, or when the manifest says there is no master.
+ */
+export function offerEchoMaster(root: ParentNode, selector: string, sizes: string): Promise<void> {
+  if (artManifest() !== null && root.querySelector(selector)?.hasAttribute('srcset')) return Promise.resolve();
+  return loadArtManifest().then(() => {
+    const img = root.querySelector(selector);
+    if (!(img instanceof HTMLImageElement) || img.hasAttribute('srcset')) return;
+    const master = echoMasterUrl(false);
+    if (master === null) return;
+    img.sizes = sizes;
+    img.srcset = echoSrcset(master);
+  });
 }
 
 /**

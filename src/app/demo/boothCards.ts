@@ -16,7 +16,7 @@
  */
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { TITLE_ART_PLATES } from '../saveFrontend.ts';
-import { ECHO_ATTRACT_SIZES, ECHO_END_SIZES, echoSrcsetAttrs } from '../screens/frontend/echoPlate.ts';
+import { ECHO_ATTRACT_SIZES, ECHO_END_SIZES, echoSrcsetAttrs, offerEchoMaster } from '../screens/frontend/echoPlate.ts';
 import { boothHost, boothQrSvg } from './demoQr.ts';
 import './boothCards.css';
 
@@ -179,10 +179,14 @@ function mount(parent: HTMLElement, html: string): HTMLElement {
 
 /** Put the end card in `parent`. */
 export function mountEndCard(parent: HTMLElement, opts: EndCardOptions = {}): HTMLElement {
-  return mount(parent, endCardMarkup(opts));
+  const el = mount(parent, endCardMarkup(opts));
+  void offerEchoMaster(el, 'img.booth-end__img', ECHO_END_SIZES); // the standalone page opens before the art manifest may be in hand
+  return el;
 }
 
 /** Put the attract card in `parent`. */
 export function mountAttractCard(parent: HTMLElement): HTMLElement {
-  return mount(parent, attractCardMarkup());
+  const el = mount(parent, attractCardMarkup());
+  void offerEchoMaster(el, 'img.booth-attract__img', ECHO_ATTRACT_SIZES);
+  return el;
 }

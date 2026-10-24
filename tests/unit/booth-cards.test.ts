@@ -8,7 +8,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   ATTRACT_HOME,
   ATTRACT_PRESS,
@@ -26,7 +26,7 @@ import {
   mountEndCard,
 } from '../../src/app/demo/boothCards.ts';
 import { boothHost, boothQrSvg } from '../../src/app/demo/demoQr.ts';
-import { ECHO_ATTRACT_SIZES, ECHO_END_SIZES } from '../../src/app/screens/frontend/echoPlate.ts';
+import { ECHO_ATTRACT_SIZES, ECHO_END_SIZES, offerEchoMaster } from '../../src/app/screens/frontend/echoPlate.ts';
 import { resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 
 const textOf = (html: string): string => {
@@ -73,6 +73,31 @@ describe('the Echo painting on both cards is offered its 2x master (r64, Bailey 
       resetArtManifest();
     }
     expect(imgOf(endCardMarkup(), 'booth-end__img').hasAttribute('srcset')).toBe(false);
+  });
+});
+
+describe('the standalone card page (?card=end, ?card=attract) opens at boot, before the art manifest may be in hand', () => {
+  it('draws the card at once without a list and gives its picture the master a moment later; an art tree without the master gets none', async () => {
+    try {
+      for (const [title2x, offered] of [[['echo', 'keyart'], true], [['keyart'], false]] as const) {
+        vi.stubGlobal('fetch', async () => ({ ok: true, json: async () => manifestWith([...title2x]) }));
+        for (const [mount, cls, sizes] of [[mountEndCard, 'booth-end__img', ECHO_END_SIZES], [mountAttractCard, 'booth-attract__img', ECHO_ATTRACT_SIZES]] as const) {
+          resetArtManifest();
+          const card = mount(document.createElement('div'));
+          const img = card.querySelector(`img.${cls}`)!;
+          expect(img.hasAttribute('srcset'), 'drawn before the manifest: no list').toBe(false);
+          await offerEchoMaster(card, `img.${cls}`, sizes);
+          expect(img.hasAttribute('srcset'), `${cls} with title2x ${title2x.join(',')}`).toBe(offered);
+          if (offered) {
+            expect(img.getAttribute('srcset')).toMatch(/echo.(png|webp) 1682w, .*echo.2x.webp 3364w$/);
+            expect(img.getAttribute('sizes')).toBe(sizes);
+          }
+        }
+      }
+    } finally {
+      vi.unstubAllGlobals();
+      resetArtManifest();
+    }
   });
 });
 
