@@ -99,7 +99,7 @@ export class ProStageLayer implements StagingPort {
         this.marks.tellAt = this.clock;
         this.marks.tellMs = tellLength(cue.msToBlow);
         this.marks.tame = cue.tame;
-        if (cue.menu === true) this.menuHold = 1; // a menu already open as the tell begins: the wash never starts
+        if (cue.menu === true || this.menuOnScreen()) this.menuHold = 1; // a menu already open (the presenter's word) or still up on screen (the HUD's) as the tell begins: the wash never starts
         this.marks.calm = cue.calm;
         this.look.arm(cue.move, true, 'tell');
         this.root().dataset['pst'] = '';
@@ -168,7 +168,8 @@ export class ProStageLayer implements StagingPort {
     this.stats.frames++;
     const dMs = Math.max(0, this.clock - this.lastClock);
     this.lastClock = this.clock;
-    const menuOpen = this.menuProbe !== null && this.safeMenu();
+    // D-357: open by the presenter's word, or still up on the screen (a menu the presenter has stopped waiting on but the HUD has not taken down: an answer that came over it, `setAutoPlay`'s or a recorder's, leaves the HUD's own menu standing until the next one opens). Release 64.
+    const menuOpen = (this.menuProbe !== null && this.safeMenu()) || (this.marks !== null && this.marks.tellAt !== null && this.menuOnScreen());
     this.menuHold = Math.min(1, Math.max(0, this.menuHold + (menuOpen ? dMs : -dMs) / MENU_EASE_MS));
     this.endingView.update(this.clock);
     this.openingView.update(this.clock);
@@ -310,6 +311,22 @@ export class ProStageLayer implements StagingPort {
 
   setMenuProbe(probe: () => boolean): void {
     this.menuProbe = probe;
+  }
+
+  /**
+   * FFX-2 only (D-357, D-441: "nothing plays over an open command menu"; FFX has no such rule): is the HUD's command menu standing on the screen now? Read from the DOM the way the HUD's own action fade and the mix's
+   * `menuOpen` read it (`.ffx2hud__command`, shown, with rows). Asked only while a held breath is telling (never on an idle frame, nor while a marker only waits for its move: it reads layout), and once as a tell begins, and a probe that cannot be read counts as no menu.
+   */
+  private menuOnScreen(): boolean {
+    if (this.o.game !== 'ffx2') return false;
+    try {
+      const el = this.o.root.ownerDocument.querySelector<HTMLElement>('.ffx2hud__command');
+      if (!el || el.hidden || el.closest('[hidden]')) return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.height > 20 && el.querySelector('.ig-cmd, [role="menuitem"], button, li') !== null;
+    } catch {
+      return false;
+    }
   }
 
   private safeMenu(): boolean {
