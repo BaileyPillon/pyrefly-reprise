@@ -8,58 +8,47 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `660c19bbd` (Release 61 (r61)) |
-| Bundle | `DwMQUoVh` |
-| Deployed | 2026-10-21T20:04:40.996Z (2026-10-21 16:04 EDT) |
-| Deploy log | `docs/deploys.log` line 78: cloudflare, 4830 art files, owner override |
-| Artifact (SHA-256) | `6234643353f6dad6116eee64f535082d7c154e12da966b3b7fc57a2e61400a1c` |
-| The deploy's own byte check | PASS (146 files compared with the build) |
-| Marker | `critic/pending/660c19bbd.json` (pending) |
+| Commit | `c8ecbcb31` (Release 62 (r62)) |
+| Bundle | `C9xPmvqR` |
+| Deployed | 2026-10-22T12:53:14.528Z (2026-10-22 08:53 EDT) |
+| Deploy log | `docs/deploys.log` line 79: cloudflare, 4830 art files, owner override |
+| Artifact (SHA-256) | `fb151fee740a2211662998ca3d69b4c86799799376c4ad40bc47e4c54236ac08` |
+| The deploy's own byte check | PASS (53 files compared with the build) |
+| Marker | `critic/pending/c8ecbcb31.json` (pending) |
 | Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
-| CHANGELOG entry | 2026-10-21 · Release 61 (r61), the near-final conference demo build: The Echo as the title picture with a Title Art key (both games), a Visual Style option (both games), the booth flow in demo mode (two-card picker, hold-to-reset, attract loop, QR code), a gamepad pass (both games), Chapter I's wind, moon glitter and mist (FFX), lit boss figures (FFX Seymour Flux, FFX-2 Bahamut), Auron's corrected tip (FFX) and quieter Chapter IV results (FFX-2) |
-| Focused review | no focused report; the deep round before the deploy, critic/rounds/round-28.json: ship SHIP, changed area FAIL |
-| Live check | no report yet |
+| CHANGELOG entry | 2026-10-22 · Release 62 (r62), the last demo build for the conference: the Bevelle cathedral alive and a heavier Mega Flare (FFX-2), a gamepad's A or Start ends the opening sweep (both games), both demo fights prepared behind the title and the picker (both games), a demo win's results music (both games), the demo's controls card, thanks card with the QR code, TRY AGAIN and OTHER FIGHT after a loss, short voiced intro, Overdrive gauges at 50 and a reset that restores the settings (demo mode), Auron's first tip keyed by chapter (FFX), and the continuity review tool reading the candidate's own pose table (tooling) |
+| Focused review | critic/reviews/c8ecbcb31-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/c8ecbcb31-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor 660c19bbd origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor c8ecbcb31 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `660c19bbd` | live | exact-artifact verification and real-input smoke on the live URL |
-| `660c19bbd` | focused | acceptance of the changed area |
-| `660c19bbd` | deep (carries 71 earlier builds) | deep review of every affected chapter and system |
+| `c8ecbcb31` | deep (carries 72 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 71 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 72 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
-## Majors disclosed by the deep review of this build
+## Majors disclosed by the focused review of this build
 
-From `critic/rounds/round-28.json` (the deep round that reviewed the candidate; this build had no focused report) (a major that is not a regression is disclosed and carried into the next batch):
+From `critic/reviews/c8ecbcb31-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
 | Issue | Severity | Introduced by this build | Regression against the previous live build | What |
 |---|---|---|---|---|
-| PR-0478 | major | not recorded | not recorded | The two boss rigs (Seymour Flux, Bahamut): the head-size fix is applied but not independently proven, and a double-body frame remains at idle-to-attack swaps |
-| PR-0380 | major | not recorded | not recorded | Pose swaps still jump: party heads and feet at 40 to 48 px in Chapter I, Rikku's dressphase change in Chapter IV, and Mortiorchis dissolving through a see-through frame with a 60 to 68 px shift in some runs |
-| PR-0379 | major | no | no | Every pose change on a painted figure is a see-through cross-dissolve: two Kimahris, two Aurons, two Paines for 2 to 4 frames (first-time fan, 75 instances), with a one-frame negative flash on Paine |
-| PR-0459 | major | no | no | Painted figures change size across pose swaps (Bailey's "characters change size across poses"): not re-measured validly on the candidate for Yunalesca and Leblanc, and carried open |
-| PR-0504 | major | yes | not recorded | Demo (?demo=1) wins play no music on the results screen: the victory cue is started and then stopped by the battle screen's exit |
-| PR-0481 | major | not recorded | not recorded | Demo battle start: 12 to 14 s from the picker A press to the first command, with frames of 0.8 to 1.0 s (PR-0481, raised from minor on the measurement) |
-| PR-0148 | major | no | no | No numeric owner listening score for the shipped mix (carried, eleventh review) |
-| PR-0099 | major | no | no | Eleven chapters still play borrowed or stand-in scene beds or battle cues (carried) |
-| PR-0295 | major | no | no | Heavy party-prep tabs are a desktop frame squeezed onto a phone (carried) |
-| PR-0461 | major | no | no | Chapters and typed-word doors that no real-key flow reaches (carried class) |
-| PR-0460 | major | no | no | Chapter III possession links 3 to 6 draw inert greyed Summon rows (carried, FFX only, UNVERIFIED on this build) |
+| R62-01 | major | no | no | CHK-027: pose-swap jerks of 40 px or more in Chapter I and Chapter IV |
 
-## Branches in flight (as of 2026-10-22 00:15 EDT, the r61 records pass (release 61 live))
+## Branches in flight (as of 2026-10-24 00:50 EDT, the r62 records pass (release 62 live))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
 | Branch | Tip | Game case | What it holds |
 |---|---|---|---|
-| `exp-yrp-real` | `f6f81abbb` | FFX-2 only | the real-models track of the hidden yrp chapter (secret word yrp; the Gullwings against Bahamut on the real FFX-2 models, after his rejection of the AI toon cast): a neutral stage grade with its own eye-candy row, a capped rim accent for hits and casts so the boss keeps his armour and the girls do not blow out, and the opt-in framing mockups ?frame=b and ?frame=c beside the default frame A; 10 commits on 48568a21f, pushed; out of the conference builds; in no release |
-| `exp-windwaker` | `90f544912` | FFX-2 only | NOT PUSHED (local, D:\pyrefly-ww, cut from r60-art 1cea6e937): the Wind Waker hidden chapter (secret word waker, placeholder number 30): the Gullwings, about 3 heads tall, against Valefor with the Meshy models in a Wind Waker HD look, chapter 24's encounter data; phase 1 b7207bc37, phase 2 and polish 1 90f544912 (18 files, 250 tests, a real-key playtest from title to victory); out of the conference builds; in no release |
-| `r62-fixes` | `1114be7ed` | both (PR-0504, PR-0481, PR-0512 shared; PR-0487 FFX only) | NOT PUSHED (local, D:/pyrefly-rig-v2, cut from r61-rc 660c19bbd): release 62's fixes from the round 28 majors: PR-0504 the demo win's results music (c6a3912b2), PR-0487 Auron's tip keyed by chapter (d7863b7c2) and PR-0512 the harness pose table (1114be7ed) are committed; PR-0481 (warming both demo chapters behind the picker) and a gamepad A or Start that skips the authored opening are uncommitted and untested; a fresh agent resumed it at 23:40 EDT; target pushed by Thursday 2026-10-22 morning, then a focused review before his evening playtest |
-| `r62-extra` | `660c19bbd` | both unless marked | NOT PUSHED (launched 23:46 EDT in D:/pyrefly-pilgrim-proto, starts from r61-rc 660c19bbd; the tip shown is its base): his last demo picks of the night, items 173a to 173d and 173f to 173i of the decisions queue (not yet in the ledger): a living Bahamut stage with dust in the skylight, flickering lamps and floor ripples (FFX-2 only), a Mega Flare impact, demo Overdrive gauges at 50 percent, a controls card, a short voiced intro (FFX Seymour Flux), a loss that offers Try again or the other fight, a thanks card with the QR code after a win, a reset that restores the settings and a lifted Bahamut card |
+| `r63-play` | `c67821216` | both (the glove, the Overdrive opening, Total Annihilation, the aeon victory frame and Mortiorchis FFX only; the flower ring, the Change plate, Mega Flare's breath and the follow camera FFX-2 only) | TONIGHT'S PLAYTEST BUILD, served locally on port 5410 (http://127.0.0.1:5410/?demo=1&pack=demo&switchboard=1; bundle index-DQa2luHy.js), not deployed; Chapter I and Chapter IV only, every piece default OFF and on under ?pack=demo. It is r63-int (7ded72b57: pro-look 673d76b94, pro-camera d3eee6e3a, pro-staging 41ff25ec8, on playtest-1022 763086fcb = demo-motion-int ee73de11e + demo-motion-int-2 72316f627, which hold motion-core 3596b0da2, motion-feel a47907f6a, motion-fx f8744101a and the motion-art test mirror 6b78aed89) plus perf-trim 1f4e55940, hud-f1 c101e63e3, audio-pass a0fd335ea, boss-matte 877b83eb6 and the driver's extras (the governor order, the ribbon HP rule, Mortiorchis's rim-off, the party rim switch, the KO chip, the FFX-2 list window); the art is the mirror D:/pyrefly-art-r63; the full suite shows nine art-pin files (11 tests) that clear at the release install; release 63 is planned for Saturday after his playtest, with a focused review before the deploy and a deep review owed after it (audio routing is deep class) |
+| `motion-rigs` | `eda138e06` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots: candidate configs tidus-x-t1, tidus-x-t2 and rikku-dark-knight-x-v1 on the approved colour-locked paintings (all gate OK); not merged (the playtest build carries their re-cuts tidus-x-m1, tidus-x-m2 and rikku-dark-knight-x-m1); no rig replaces a painting before he has seen it move (D-1086, D-1097) |
+| `motion-art-t2` | `538159e72` | FFX (Tidus) | the second art build for Tidus in grey shorts (mirror D:/pyrefly-art-motion-t2: the shorts idle plus 7 retouches); a second build because its registration is compiled in; the playtest key 8 flips T1 and T2; his pick waits for the playtest |
+| `exp-yrp-real` | `e7c74c2de` | FFX-2 only | the real-models track of the hidden yrp chapter (secret word yrp; the Gullwings against Bahamut on the real FFX-2 models, after his rejection of the AI toon cast): a neutral stage grade with its own eye-candy row, a capped rim accent, the opt-in framing mockups with frame b (dolly in) now the default, each girl's model following her dressphere and swapped at the sphere change behind a short white light, the library warmed two Garment Grid neighbours deep (39 ms to a model), the game's own weapons; pushed; out of the conference builds; in no release |
+| `exp-windwaker` | `ed92784e0` | FFX-2 only | NOT PUSHED (local, D:pyrefly-ww, cut from r60-art 1cea6e937): the Wind Waker hidden chapter (secret word waker, placeholder number 30): the Gullwings, about 3 heads tall, against Valefor with the Meshy models in a Wind Waker HD look, chapter 24's encounter data; polish 2 validated at ed92784e0 (a toon impact burst in place of the shared white blob, the target shot, the advisor card); a Genshin / Guilty Gear version is being explored (decision 177, round 1 with no game code); out of the conference builds; in no release |
 | `anim-proto-2` | `8525ae459` | FFX (Lulu); clip plumbing both games | animation pass 2 behind the dev flag ?anim=proto&style=P2: the orb toss, a gather, channel and release cast, knees, hit-stop on the game's own clip frames; he liked the orb toss (D-1070); nothing ships from it yet. Pass 1 is branch anim-proto (cfff4367d) |
 | `anim-proto-3` | `48d868454` | FFX (Lulu); clip plumbing both games | animation pass 3 on Lulu, a prototype behind the dev flag: the doll flies to the target and back, the knockout kneels through a procedural skirt fold, the cast channel gets a glow, glyphs and motes, the grey frame is fixed; open: the skirt fin in the knockout, the doll floating near the head, a small attack doll; nothing ships from it (the orb ship, anim-orb-ship, went live in release 59) |
 | `rig` | `db2caa6d9` | both (shared plumbing; the subjects are FFX first) | the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off |
@@ -72,9 +61,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-10-22T12:53:14.528Z | `c8ecbcb31` | `C9xPmvqR` | 79 |
 | 2026-10-21T20:04:40.996Z | `660c19bbd` | `DwMQUoVh` | 78 |
 | 2026-10-20T21:06:50.929Z | `1cea6e937` | `DwCdr0nf` | 77 |
 | 2026-10-20T04:15:33.443Z | `6db09ac86` | `C-nLFLJH` | 76 |
 | 2026-10-19T22:56:45.559Z | `2a1777281` | `CEDFXO0J` | 75 |
 | 2026-10-19T19:41:57.666Z | `ed5cf5224` | `IvYB9JEE` | 74 |
-| 2026-10-19T11:57:04.679Z | `5fae4e2bd` | `nuEMlU1w` | 73 |
