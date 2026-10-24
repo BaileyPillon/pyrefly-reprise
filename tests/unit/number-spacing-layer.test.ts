@@ -189,7 +189,8 @@ describe('the glass numbers of close targets never overlap (both games)', () => 
 
 describe('the old numbers are untouched (the piece off, every other build)', () => {
   it('without the glass numbers nothing is spaced: two coincident numerals are drawn exactly as before, none marked', () => {
-    setDemoChapter('seymour-flux'); // the chapter alone is not enough: the switch is off
+    setProMode('today'); // r63-rc: the pack is on by default in Chapter I now (r64 item 200b), so the glass numbers are off only with the pro look's own off word (`?pro=off`, `?look=today`)
+    setDemoChapter('seymour-flux');
     const n = layer({ a: { x: 1000, y: 900 }, b: { x: 1000, y: 900 } });
     const a = n.spawnEvent({ type: 'damage', targetId: 'a', amount: 778, hitIndex: 0, hitCount: 1 })!;
     n.spawnEvent({ type: 'damage', targetId: 'b', amount: 566, hitIndex: 0, hitCount: 1 });
