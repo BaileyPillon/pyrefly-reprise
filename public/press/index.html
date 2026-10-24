@@ -115,7 +115,7 @@ dl.sheet dd { margin: 0; padding: 0.7rem 0; border-top: 1px solid rgba(244, 241,
 .credits li { padding: 0.45rem 0; border-top: 1px solid rgba(244, 241, 232, 0.14); }
 .credits b { font-weight: 600; }
 .credits span { color: rgba(244, 241, 232, 0.72); }
-.legal { max-width: 112rem; margin: 0 auto; padding: 1.6rem 4.6rem 0; color: rgba(244, 241, 232, 0.7); }
+.legal { margin: 1.2rem 0 0; color: rgba(244, 241, 232, 0.7); }
 main { padding-bottom: 4.5rem; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(0.8rem); } to { opacity: 1; transform: none; } }
@@ -137,7 +137,6 @@ main { padding-bottom: 4.5rem; }
   dl.sheet { grid-template-columns: 1fr; }
   dl.sheet dt { padding-bottom: 0; border-bottom: 0; }
   dl.sheet dd { border-top: 0; padding-top: 0.2rem; }
-  .legal { padding: 2rem 1rem 0; }
 }
 </style>
 </head>
@@ -155,18 +154,19 @@ main { padding-bottom: 4.5rem; }
       <p class="tagline">Play the boss fights of Final Fantasy X and X-2, reimagined.</p>
       <nav aria-label="Press links">
         <ul class="links">
-          <li><a class="primary" href="../" data-row="play"><span><span class="t">Play the game</span><span class="s">echoesofspira.com &middot; free, in your browser</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a class="primary" href="../" data-row="play"><span><span class="t">Play the game</span><span class="s">echoesofspira.com &middot; free to play</span></span><i aria-hidden="true">&rarr;</i></a></li>
           <li id="row-trailer" hidden><a href="trailer.mp4" data-row="trailer"><span><span class="t">Watch the trailer</span><span class="s">MP4 &middot; plays here, or save it</span></span><i aria-hidden="true">&rarr;</i></a></li>
           <li><a href="#screens" data-row="screens"><span><span class="t">Screenshots and key art</span><span class="s">web-size JPEG &middot; straight from the game</span></span><i aria-hidden="true">&rarr;</i></a></li>
-          <li><a href="#facts" data-row="facts"><span><span class="t">Fact sheet</span><span class="s">what it is, the five fights, what it runs on</span></span><i aria-hidden="true">&rarr;</i></a></li>
-          <li><a href="#credits" data-row="credits"><span><span class="t">Credits and legal</span><span class="s">an unofficial fan tribute &middot; who made what</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a href="#facts" data-row="facts"><span><span class="t">Fact sheet</span><span class="s">what it is, the five fights</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a href="#credits" data-row="credits"><span><span class="t">Credits and legal</span><span class="s">unofficial fan tribute &middot; credits</span></span><i aria-hidden="true">&rarr;</i></a></li>
           <li><a href="https://github.com/BaileyPillon/pyrefly-reprise" data-row="source"><span><span class="t">Source on GitHub</span><span class="s">BaileyPillon / pyrefly-reprise</span></span><i aria-hidden="true">&rarr;</i></a></li>
         </ul>
       </nav>
+      <p class="legal" data-notice>Final Fantasy X and X-2, their characters, worlds, and names are the property of Square Enix. This project is a non-commercial fan work, unaffiliated with Square Enix. All code, art, music, and writing here are original.</p>
     </section>
 
     <section class="wall" aria-label="Frames from the game">
-      <figure class="fr big"><img src="frames/ffx-seymour-flux.jpg" width="1600" height="900" alt="Final Fantasy X: Tidus and Yuna face Seymour Flux on Mt. Gagazet while a healing number rises" fetchpriority="high"><figcaption>Final Fantasy X &middot; Seymour Flux</figcaption></figure>
+      <figure class="fr big"><img src="frames/ffx-seymour-hit.jpg" width="1600" height="900" alt="Final Fantasy X: a hit lands on Seymour Flux on Mt. Gagazet, Tidus and Yuna below, the enemy move list at the side" fetchpriority="high"><figcaption>Final Fantasy X &middot; Seymour Flux</figcaption></figure>
       <figure class="fr x2"><img src="frames/ffx2-bahamut.jpg" width="1600" height="900" alt="Final Fantasy X-2: Paine strikes Bahamut in Bevelle while Yuna casts Cure"><figcaption>X-2 &middot; Bahamut</figcaption></figure>
       <figure class="fr art"><img src="frames/keyart-farplane.jpg" width="1344" height="768" alt="Key art: the Gullwings stand in a field of flowers at Farplane Field, the crystal spire far off"><figcaption>Key art &middot; Farplane</figcaption></figure>
       <div class="facts">
@@ -176,12 +176,11 @@ main { padding-bottom: 4.5rem; }
       </div>
     </section>
   </div>
-  <p class="legal" data-notice>Final Fantasy X and X-2, their characters, worlds, and names are the property of Square Enix. This project is a non-commercial fan work, unaffiliated with Square Enix. All code, art, music, and writing here are original.</p>
 
   <section class="sec" id="screens" aria-labelledby="h-screens">
     <h2 id="h-screens">Screenshots and key art</h2>
     <div class="shots">
-      <a href="frames/ffx-seymour-flux.jpg"><img src="frames/ffx-seymour-flux.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X: Seymour Flux, a healing number rising"><span>X &middot; Seymour Flux</span></a>
+      <a href="frames/ffx-seymour-flux.jpg"><img src="frames/ffx-seymour-flux.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X: Seymour Flux on Mt. Gagazet, a number rising by the party"><span>X &middot; Seymour Flux</span></a>
       <a href="frames/ffx-cast.jpg"><img src="frames/ffx-cast.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X: Tidus and Yuna in a burst of light"><span>X &middot; Tidus and Yuna</span></a>
       <a href="frames/ffx-seymour-hit.jpg"><img src="frames/ffx-seymour-hit.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X: a hit on Seymour Flux, the enemy move list at the side"><span>X &middot; A hit lands</span></a>
       <a class="art" href="frames/keyart-echo.jpg"><img src="frames/keyart-echo.jpg" width="1600" height="887" loading="lazy" alt="Key art: Yuna kneeling in still water at night, the crystal city far off"><span>Key art &middot; The Echo</span></a>
