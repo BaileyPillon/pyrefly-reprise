@@ -112,14 +112,29 @@ const inputBusy = (): boolean => {
 };
 
 /**
- * r64-fixes (both games; swallowed picker presses): a step is not started in the 700 ms after a pad button changed. Measured on the served r63-play build, the picker's steps hold the page for 100 to 650 ms
- * (a program link waiting on the GPU process, the 5376 x 3072 upload at 290 to 310 ms, a 64 x 64 read-back at 316 ms), and a press of 100 ms that falls wholly inside one is lost. The presses come in runs
- * (the cursor, the pick), so waiting out the second after the first one protects the rest of the run; at most 1.2 s per call, so a mashing hand slows the warm and never stops it.
+ * r64-fixes (both games; swallowed picker presses): a step is not started in the 150 ms after a pad button changed. Measured on the served r63-play build, the picker's steps hold the page for 100 to 650 ms
+ * (a program link waiting on the GPU process, the 5376 x 3072 upload at 290 to 310 ms, a 64 x 64 read-back at 316 ms), and a press of 100 ms that falls wholly inside one is lost. The sampler in `Input` (a
+ * press between two frames is still read) already removes the losses that are not inside a stall; this wait only keeps a step from starting under a press that is just now being made.
+ *
+ * Skeptic review of r64-fixes, F1: the first version waited 700 ms with no budget and starved the fight's warm while a visitor kept pressing at the picker (a pick within about 15 s of a page load, with
+ * browsing on the way: the first 3.5 s of Chapter IV lost 2.6 s against 0.9 s on r63-play, no figures prebuilt). So the quiet is short and it has a budget: it may hold the warm back for 2 s in all per run,
+ * after which only a button that is down (the r63-play wait, at most 1.2 s per call) holds a step.
  */
-export const PAD_QUIET_MS = 700;
+export const PAD_QUIET_MS = 150;
+export const PAD_QUIET_BUDGET_MS = 2000;
+let quietSpent = 0;
+/** Does a step wait? A button is down; or one changed within the quiet and this run's quiet budget is not spent. */
+export function padShouldWait(busy: boolean, sinceMs: number, spentMs: number, quietMs: number = PAD_QUIET_MS, budgetMs: number = PAD_QUIET_BUDGET_MS): boolean {
+  return busy || (quietMs > 0 && sinceMs < quietMs && spentMs < budgetMs);
+}
 const idle = async (ms = 60): Promise<void> => {
   await sleep(ms);
-  for (let i = 0; i < 30 && (inputBusy() || msSincePadActivity() < PAD_QUIET_MS); i++) await sleep(40);
+  for (let i = 0; i < 30; i++) {
+    const busy = inputBusy();
+    if (!padShouldWait(busy, msSincePadActivity(), quietSpent)) break;
+    if (!busy) quietSpent += 40;
+    await sleep(40);
+  }
 };
 
 /** The fight whose card the picker's cursor rests on: its stage is warmed before the other's (r63-play: the player is about to pick it). */
@@ -140,6 +155,7 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
   if (running) return stopped ? running.then(() => warmDemoFights(app, fights, opts)) : running; // a run that was stopped ends at its next step; this call then starts afresh
   const light = opts.light === true; // the retry's warm behind the defeat card: the scene, its plates and its programs' compile; none of the offscreen draws (a 0.3 s upload and the programs' first uses), the splash crops or the breath rigs, which could stop the page as TRY AGAIN is pressed
   stopped = false;
+  quietSpent = 0; // a new run has its own quiet budget
   if (typeof window !== 'undefined') (window as unknown as Record<string, unknown>)['__demoWarmLog'] = log; // the probe reads what the warm did (dev tools, the booth check)
   const calm = (): boolean => !stopped && CALM.has(app.current?.name ?? '');
   running = (async () => {
@@ -239,6 +255,7 @@ async function warmSplashCrops(chapter: Chapter, calm: () => boolean): Promise<b
 export function resetDemoWarm(): void {
   running = null;
   stopped = false;
+  quietSpent = 0;
   focusId = null;
   log.length = 0;
 }
