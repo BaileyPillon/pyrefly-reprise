@@ -87,7 +87,7 @@ export function playPartySwap(list: HTMLElement, ghost: HTMLElement | null, t: S
     const a = (ghost as Animatable).animate!([{ opacity: 1, translate: '0 0' }, out], { duration: t.reduce ? 140 : t.outMs, easing: 'cubic-bezier(0.5, 0, 0.9, 0.4)', fill: 'forwards' });
     a.onfinish = dropGhost;
     a.oncancel = dropGhost;
-    setTimeout(dropGhost, t.outMs + 400); // a page that never runs the animation (a hidden tab) does not keep the copy
+    setTimeout(dropGhost, Math.max(2000, t.outMs + 400)); // a page that never runs the animation (a hidden tab) does not keep the copy; 2 s so a slow-motion capture (a tenth of the speed) still sees it
     started++;
   }
   const rows = list.querySelectorAll<HTMLElement>('.ig-stat');
