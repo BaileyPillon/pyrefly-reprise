@@ -202,8 +202,8 @@ describe('the wiring', () => {
   it('R63: the warm starts well before a player at a human pace can have chosen a fight, the once-per-page costs first and clear of each other', async () => {
     const { WARM_FIGHTS_AT_MS, WARM_STAGE_AT_MS } = await import('../../src/app/demo/demoWarm.ts');
     expect(WARM_STAGE_AT_MS).toBeLessThan(WARM_FIGHTS_AT_MS);
-    expect(WARM_FIGHTS_AT_MS - WARM_STAGE_AT_MS).toBeGreaterThanOrEqual(800); // the probe's 0.7 s task is over before the first painting is asked for
-    expect(WARM_FIGHTS_AT_MS).toBeLessThanOrEqual(2000); // release 62's 6000 ms left both stages unbuilt at a press 7 s after the load
+    expect(WARM_FIGHTS_AT_MS - WARM_STAGE_AT_MS).toBeGreaterThanOrEqual(500); // the probe starts first; the first painting is asked for after the title has had its first moments
+    expect(WARM_FIGHTS_AT_MS).toBeLessThanOrEqual(1000); // release 62 started at 6000 ms, and a press 7 s after the load found both stages unbuilt
   });
 
   it('the picker starts it again a moment after it has painted, and drops the timer on the way out', () => {
