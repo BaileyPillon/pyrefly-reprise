@@ -35,6 +35,15 @@ export function demoQuickRetry(chapterId: string, attempt: number): boolean {
   return attempt > 0 && demoDefeatPanel(chapterId);
 }
 
+/** `?retrytheme=off`: the retried fight's theme is left to the chain, as in r63-play (a comparison, or if it ever misbehaves at the booth). */
+export function retryThemeSwitchedOff(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+  try {
+    return new URLSearchParams(search).get('retrytheme') === 'off';
+  } catch {
+    return false;
+  }
+}
+
 /** How long the chapter's theme takes to come in at TRY AGAIN, seconds (the defeat theme goes out over `DEFEAT_OUT_S`, 0.5; the two cross). */
 export const RETRY_THEME_FADE_S = 0.8;
 

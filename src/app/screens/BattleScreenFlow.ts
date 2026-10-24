@@ -45,7 +45,7 @@ import { stagingPieceOnFor } from '../../engine/pro/staging/StagingSwitch.ts';
 import { ProDefeatScreen } from './ProDefeatScreen.ts'; // lane "pro-staging": the defeat card that keeps the scene
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
-import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, retryTheme, startRetryTheme, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
+import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, retryTheme, retryThemeSwitchedOff, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
 import { demoThanksDue } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
 import { demoIntroFor } from '../demo/demoIntro.ts'; // R62 (demo mode only, FFX Chapter I): the short voiced intro
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
@@ -400,7 +400,6 @@ export class GameFlow {
       }
       if (opts.skipCutscenes && attempt === 0 && (await this.playDemoIntro(chapter, opts))) openingHurry = this.lastSceneHurried; // R62 (demo mode only, FFX Chapter I): the demo skips the story, but not these three recorded lines
       if (demoQuickRetry(id, attempt)) openingHurry = true; // r63-play: a retried demo fight opens hurried (the card 0.7 s, no sweep); the fight itself is the same one
-      if (demoQuickRetry(id, attempt)) startRetryTheme(chapter, audio); // r64-fixes: and its theme comes in at the press, not when the chain starts 2 to 4 s later
       if (this.handedOver) return null;
 
       this.step = 'battle';
@@ -412,6 +411,7 @@ export class GameFlow {
         ...(opts.speed ? { speed: opts.speed } : {}),
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
         ...(openingHurry ? { openingHurry } : {}),
+        ...(demoQuickRetry(id, attempt) && !retryThemeSwitchedOff() ? { retryTheme: true } : {}), // r64-fixes: the retried fight's theme is asked for as its screen opens (after the lost screen's exit, which stops the music), not 2 to 4 s later when the chain starts
       };
       const battle = factories.battle?.(battleOpts) ?? new BattleScreen(battleOpts);
       // A-2: the entry by situation (FFX blur or shatter, FFX-2 shatter; the
@@ -494,7 +494,6 @@ export class GameFlow {
     if (demoDefeatPanel(chapter.id) && !retryWarmSwitchedOff()) void warmDemoFights(this.app, [chapter.id], { light: true }); // r63-play (quick retry): the fight's stage is built while the card is up, so a TRY AGAIN finds it ready
     await screen.done;
     stopDemoWarm(); // the choice is made: the warm takes no further step
-    if ((choice as ResultsChoice) === 'retry') startRetryTheme(chapter, audio); // r64-fixes: the fight's theme is asked for at the press itself, not after the card has gone
     await this.app.popOverlay();
     music?.end();
     return choice;

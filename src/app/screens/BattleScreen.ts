@@ -21,6 +21,7 @@ import { ff7Standing } from './ff7Standing.ts';
 import { addExperimentPlayTime } from '../experiments/experimentRecords.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { audio } from '../../audio/index.ts';
+import { startRetryTheme } from '../demo/demoDefeat.ts';
 import { NO_FLOW, startFlow, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
 import { BattlePresenter, type AutoStrategy, type BattleOutcome } from '../../engine/BattlePresenter.ts';
 import {
@@ -123,6 +124,8 @@ export interface BattleScreenOptions {
   resumeAt?: ChainCheckpoint;
   /** The player skipped the pre-scene: the first opening runs hurried (PR-0061, `openingHurry.ts`). */
   openingHurry?: boolean;
+  /** r64-fixes (conference demo, a retried demo fight, both games): ask for the fight's own theme as this screen opens (`demoDefeat.startRetryTheme`). */
+  retryTheme?: boolean;
   /** R61 (conference demo, `demo/demoAttract.ts`, demo mode only): this fight is the attract loop's highlight reel, played on no one's behalf. It writes nothing to the save (no play time). */
   attract?: boolean;
 }
@@ -243,6 +246,7 @@ export class BattleScreen extends Screen {
   override async enter(): Promise<void> {
     const chapter = this.opts.chapter;
     this.startedAt = performance.now();
+    if (this.opts.retryTheme) startRetryTheme(chapter, audio); // r64-fixes: the lost screen's exit has just stopped the music; the retried fight's theme (still decoded) comes in now
     this.root.className = 'screen battle-screen';
     markDemoHud(this.root); // R61: `demo-hud` on the root in demo mode (the advisor's one line, `demo/demo.css`)
     this.markRecorder = startMarkRecorder({
