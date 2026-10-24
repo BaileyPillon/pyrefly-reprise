@@ -39,6 +39,7 @@ import { prebuildScene, hasPrebuilt } from '../../scenes/prebuilt.ts';
 import type { LoadedScene } from '../../scenes/index.ts';
 import type { WarmupRenderer } from '../screens/BattleScreenWarmup.ts';
 import { drawFigures, isWarmed, newDrawStats, uploadFigure, type DrawStats } from './prebuildDraw.ts';
+import { prebuildLiving } from './prebuildLiving.ts'; // r64-fixes: the room's dressing, built behind the picker and adopted at the battle's bind
 
 /** What a plan reads of the app: its renderer and the screen that is up. */
 export type PrebuildApp = Pick<App, 'renderer'> & { readonly current: { readonly name: string } | null };
@@ -161,6 +162,11 @@ export function newPrebuildPlan(app: PrebuildApp, chapter: Chapter, calm: () => 
       if (actors.length && !(await drawFigures(renderer(), scene.scene, actors, calm, stats))) return false;
       note(`${chapter.id}: ${actors.length} figures' idle paintings up and programs built in ${stats.slices} draws (longest task ${Math.round(stats.longestTaskMs)} ms, ${stats.textures} paintings, ${Math.round(stats.uploadedMB)} MB)`);
       return true;
+    });
+    // r64-fixes: the room's dressing (Living Paintings), built for the scene the battle will take and its programs drawn once; the battle's bind adopts it
+    work.push(async () => {
+      await prebuildLiving(app, chapter, scene, renderer(), calm, stats, note);
+      return calm();
     });
     // the looks' alpha reads of each figure's idle painting (one task each)
     for (let k = 0; k < combatants.length; k++) {

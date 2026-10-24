@@ -122,6 +122,59 @@ function nextFrame(): Promise<void> {
 }
 
 /**
+ * Build the programs of parts that are already in the scene (r64-fixes: a parked room's dressing, `LivingPark.ts`): one draw per program family into the composer's buffer, everything else in the scene hidden
+ * for that draw, then put back, a fence polled after each. Only the parts' own visible meshes are drawn (a hidden one is a program the room does not use). True when every slice was made.
+ */
+export async function drawParts(r: WarmupRenderer, scene: Scene, parts: readonly Object3D[], more: () => boolean, stats: DrawStats): Promise<boolean> {
+  const gl = r.renderer;
+  const target = r.composer?.readBuffer;
+  if (typeof gl?.render !== 'function' || !target || parts.length === 0) return false;
+  const ctx = fenceContext(gl.getContext?.());
+  const families = new Map<string, Part[]>();
+  for (const root of parts) for (const o of renderables(root)) {
+    if (!o.visible) continue;
+    const key = programFamily(o);
+    const list = families.get(key);
+    if (list) list.push(o);
+    else families.set(key, [o]);
+  }
+  try {
+    const previous = gl.getRenderTarget();
+    gl.setRenderTarget(target);
+    try {
+      await Promise.race([Promise.all(parts.map((p) => (gl.compileAsync as (o: Object3D, c: unknown, s?: Object3D) => Promise<unknown>)(p, r.camera, scene))), new Promise((resolve) => setTimeout(resolve, 2500))]);
+    } finally {
+      gl.setRenderTarget(previous);
+    }
+  } catch {
+    /* the draws below build them */
+  }
+  for (const members of families.values()) {
+    if (!more()) return false;
+    const t0 = stamp();
+    const mine = new Set(members);
+    const was = new Map<Part, boolean>();
+    const previous = gl.getRenderTarget();
+    try {
+      for (const o of renderables(scene)) {
+        was.set(o, o.visible);
+        o.visible = mine.has(o);
+      }
+      gl.setRenderTarget(target);
+      gl.render!(scene, r.camera);
+    } finally {
+      gl.setRenderTarget(previous);
+      for (const [o, v] of was) o.visible = v;
+    }
+    stats.slices++;
+    stats.longestTaskMs = Math.max(stats.longestTaskMs, stamp() - t0);
+    if (ctx) await gpuSettled(ctx);
+    await nextFrame();
+  }
+  return true;
+}
+
+/**
  * Build the figures' programs: one draw per program family into the composer's buffer. Each draw is synchronous: the figures go into `scene`, the rest of the scene is hidden but the family's meshes, the draw is
  * made, everything is put back. `more` is asked between slices. Marks the figures warmed when every slice was made.
  */
