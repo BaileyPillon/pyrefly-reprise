@@ -135,17 +135,19 @@ describe('no aborted keyart request', () => {
     // The page names its art through Vite's BASE_URL variable, which a build fills in from the base the site is served under (a
     // root-absolute name stays at the server root when Vite does not find the file in public/: tests/unit/art-url-base.test.ts).
     // Filled in with this run's base, the preload must be exactly what the planes carry.
-    setArtManifest({ version: 1, generatedAt: '', subjects: {}, portraits: [], backdrops: [], pause: [], pause2x: [], title: ['echo', 'keyart'], title2x: ['keyart'] });
+    setArtManifest({ version: 1, generatedAt: '', subjects: {}, portraits: [], backdrops: [], pause: [], pause2x: [], title: ['echo', 'keyart'], title2x: ['echo', 'keyart'] });
     const html = read('index.html');
     const preload = /<link rel="preload" as="image"[^>]*>/.exec(html)?.[0] ?? '';
     expect(preload).toContain('href="%BASE_URL%art/title/echo.png"');
     expect(preload).not.toContain('keyart');
-    expect(preload, 'The Echo has no 2x master, so there is no candidate list to match').not.toContain('imagesrcset');
+    // r64: the Echo has a 2x master (title/echo.2x.webp), so the preload carries the same candidate list and sizes as the plane
+    expect(preload).toContain('imagesrcset="%BASE_URL%art/title/echo.png 1682w, %BASE_URL%art/title/echo.2x.webp 3364w"');
     const filled = preload.replaceAll('%BASE_URL%', import.meta.env.BASE_URL);
     const host = document.createElement('div');
     host.innerHTML = titleMarkup({ briefingChip: false, art: 'echo' });
     const plane = host.querySelector('.fe-title__plane img');
     expect(filled).toContain(`href="${plane?.getAttribute('src')}"`);
-    expect(plane?.hasAttribute('srcset')).toBe(false);
+    expect(filled).toContain(`imagesrcset="${plane?.getAttribute('srcset')}"`);
+    expect(filled).toContain(`imagesizes="${plane?.getAttribute('sizes')}"`);
   });
 });

@@ -227,6 +227,34 @@
   "yuna-white-mage/twirl-forming.png": "111ad9d250002700f9979fc0285f4e8f4eb908e4c4cee439860d93373b739928",
   "yuna-white-mage/twirl-going.png": "909c906b4ecc66ba8e7ec406c0a63dd9ea4d9b36f1a4e4389e7f9ccd7450e7e4",
   "yuna-white-mage/twirl-start.png": "22dd9ee030713fa982fca82fc44729b660739b53883cefab7d78f1837e3ab017",
-  "yuna-white-mage/victory.png": "68aa7652a575c68dfa6010ade653d40be7246fd198e4bad9358d2ca144e70ed2"
+  "yuna-white-mage/victory.png": "68aa7652a575c68dfa6010ade653d40be7246fd198e4bad9358d2ca144e70ed2",
+  "paine-warrior/defend.png": "495e58e64cb6d2ac31423ced113032bd309425ed04b03e28d679168e0156b5ce",
+  "paine-warrior/hurt.png": "e8463888a21030c32f2b674b4b61c213f0b8a523d6ceea840a5b1bfc1431d0ea",
+  "paine-warrior/ko.png": "8ef58b208bc5be24bfc5d62a2d24d55e5bd1b0fcbeb6673b8c282b05196c6a2e",
+  "yuna-white-mage/attack.png": "336af4f0f5c118d93e841f540487dc7af26ff7a18ef76f3fdbf01409da02d205",
+  "yuna-white-mage/cast.png": "9fc54b0a753896a7b28465e117118bb42aa4df48621caa255973bd4d20808bc9",
+  "yuna-white-mage/critical.png": "b8bc09a9e96f1510110d9a325d8754970118d8a771a13064a288b48f0c0a8352",
+  "yuna-white-mage/defend.png": "b4ee085f43454a5fe234af3dcad67f7f00cbd20c51528377cfbdb77cf9b23dce",
+  "yuna-white-mage/follow.png": "8573590de142f91bfe58bac83def87192501b3d50b07fe3b13de8bae9ae5004b",
+  "yuna-white-mage/item.png": "c524046a5cc7d46dbfd4699a709aba13e8aaa337f85205878fec162a1231e7de",
+  "yuna-white-mage/ready.png": "830f0c76860872d0a03dd2698c66029f8d69390df70a8062fae0e68cb0b6fcba",
+  "yuna-white-mage/sleep.png": "ac884b792c4d79a2bfe67502f6a28692d31b51e590705e1db2f7a7a985413334"
+ },
+ "later": {
+  "date": "2026-10-24",
+  "note": "Added with the repaint install (r64, Yuna/Kimahri FFX, Rikku Dark Knight/Paine Warrior FFX-2): ch6-art.json was regenerated against the r64 art mirror, so each Chapter VI painting that differs from the previous pin keeps that previous pin here as its release-39.3-era hash (the hidden chapter's placeholder poses stay frozen). The paintings are the v2 set of release 63 (Paine Warrior and Yuna White Mage, already in the r63 mirror) and the five Paine Warrior repaints (ready, follow, victory, item, sleep).",
+  "added": [
+   "paine-warrior/defend.png",
+   "paine-warrior/hurt.png",
+   "paine-warrior/ko.png",
+   "yuna-white-mage/attack.png",
+   "yuna-white-mage/cast.png",
+   "yuna-white-mage/critical.png",
+   "yuna-white-mage/defend.png",
+   "yuna-white-mage/follow.png",
+   "yuna-white-mage/item.png",
+   "yuna-white-mage/ready.png",
+   "yuna-white-mage/sleep.png"
+  ]
  }
 }

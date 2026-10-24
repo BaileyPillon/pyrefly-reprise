@@ -16,6 +16,7 @@
  */
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { TITLE_ART_PLATES } from '../saveFrontend.ts';
+import { ECHO_ATTRACT_SIZES, ECHO_END_SIZES, echoSrcsetAttrs, offerEchoMaster } from '../screens/frontend/echoPlate.ts';
 import { boothHost, boothQrSvg } from './demoQr.ts';
 import './boothCards.css';
 
@@ -126,7 +127,7 @@ export function endCardMarkup(opts: EndCardOptions = {}): string {
   const thanks = after && END_THANKS_ON_AFTER_FIGHT ? `<div class="booth-end__thanks booth-rise" style="--s:1700ms">${esc(END_THANKS)}</div>` : '';
   return (
     `<div class="booth-card booth-end${after ? ' booth-end--after' : ''}" data-role="booth-end" style="--bt:${after ? 0.42 : 1}">` +
-    `<div class="booth-end__art"><img class="booth-end__img" src="${esc(echoPaintingUrl())}" alt="Echoes of Spira: Yuna kneeling in still water at night, the crystal city far off" draggable="false"></div>` +
+    `<div class="booth-end__art"><img class="booth-end__img" src="${esc(echoPaintingUrl())}" ${echoSrcsetAttrs(ECHO_END_SIZES, false)} alt="Echoes of Spira: Yuna kneeling in still water at night, the crystal city far off" draggable="false"></div>` +
     glowsMarkup(
       [
         { x0: 0, x1: 1280, y0: 20, y1: 260, n: 22 },
@@ -154,7 +155,7 @@ export function endCardMarkup(opts: EndCardOptions = {}): string {
 export function attractCardMarkup(): string {
   return (
     `<div class="booth-card booth-attract" data-role="booth-attract">` +
-    `<div class="booth-attract__art"><img class="booth-attract__img" src="${esc(echoPaintingUrl())}" alt="Echoes of Spira: Yuna kneeling in still water at night, the crystal city far off" draggable="false"></div>` +
+    `<div class="booth-attract__art"><img class="booth-attract__img" src="${esc(echoPaintingUrl())}" ${echoSrcsetAttrs(ECHO_ATTRACT_SIZES, false)} alt="Echoes of Spira: Yuna kneeling in still water at night, the crystal city far off" draggable="false"></div>` +
     glowsMarkup(
       [
         { x0: 0, x1: 1280, y0: 20, y1: 250, n: 22 },
@@ -185,10 +186,14 @@ function mount(parent: HTMLElement, html: string): HTMLElement {
 
 /** Put the end card in `parent`. */
 export function mountEndCard(parent: HTMLElement, opts: EndCardOptions = {}): HTMLElement {
-  return mount(parent, endCardMarkup(opts));
+  const el = mount(parent, endCardMarkup(opts));
+  void offerEchoMaster(el, 'img.booth-end__img', ECHO_END_SIZES); // the standalone page opens before the art manifest may be in hand
+  return el;
 }
 
 /** Put the attract card in `parent`. */
 export function mountAttractCard(parent: HTMLElement): HTMLElement {
-  return mount(parent, attractCardMarkup());
+  const el = mount(parent, attractCardMarkup());
+  void offerEchoMaster(el, 'img.booth-attract__img', ECHO_ATTRACT_SIZES);
+  return el;
 }

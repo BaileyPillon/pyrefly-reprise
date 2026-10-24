@@ -8,8 +8,8 @@
  * since release 61, Bailey 2026-10-21) or `'farplane'` (the Gullwings painting; the default of 39.5 to 60, now the selectable one, kept only
  * for a player who picked it: `titleArtPicked`). The markup function itself still draws the Farplane screen when it is not told which
  * (`titleMarkup({ briefingChip })`); the SCREEN reads the setting. This pins what the choice changes on screen and what it does
- * not: the Farplane markup is exactly what it was; The Echo draws its own plate as one plane, never offers it a 2x master
- * it does not have, leaves the HTML wordmark out and says the words in the picture's `alt`; the screen reads the setting
+ * not: the Farplane markup is exactly what it was; The Echo draws its own plate as one plane, offers it its 2x master (r64) only where
+ * the manifest lists one, leaves the HTML wordmark out and says the words in the picture's `alt`; the screen reads the setting
  * every time it is shown; the chrome that stays (eyebrow, chip, strap, hint row, tap target) stays; and the layout rules
  * that keep Yuna and the painted lettering clear exist for each window shape.
  *
@@ -24,7 +24,9 @@ import type { App } from '../../src/app/App.ts';
 import { SAVE_KEY, SaveStore } from '../../src/app/SaveData.ts';
 import { TITLE_ART_PLATES, titleArtPick } from '../../src/app/saveFrontend.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
-import { TITLE_PLATE, titleMarkup } from '../../src/app/screens/frontend/titleMarkup.ts';
+import { TITLE_PLATE, titleMarkup, titlePlateSizes, upgradeTitlePlanes } from '../../src/app/screens/frontend/titleMarkup.ts';
+import { ECHO_TITLE_SIZES } from '../../src/app/screens/frontend/echoPlate.ts';
+import { logicalArtUrl } from '../../src/engine/ArtShipped.ts';
 import { TITLE_PLACEHOLDER, TITLE_PLACEHOLDERS, TITLE_PLACEHOLDER_ECHO } from '../../src/app/screens/frontend/titleReveal.ts';
 import { artUrl } from '../../src/engine/PaintedArt.ts';
 import { resetArtManifest, setArtManifest, type ArtManifest } from '../../src/engine/ArtManifest.ts';
@@ -41,7 +43,7 @@ const MANIFEST: ArtManifest = {
   pause: [],
   pause2x: [],
   title: ['echo', 'keyart'],
-  title2x: ['keyart'],
+  title2x: ['echo', 'keyart'],
 };
 
 const parse = (html: string): HTMLElement => {
@@ -89,15 +91,80 @@ describe('The Echo', () => {
     expect(TITLE_ART_PLATES.farplane).toBe(TITLE_PLATE);
   });
 
-  it('is offered no 2x master: it has none, and a candidate for a missing file is a 404 on the one image the screen is', () => {
+  it('is offered its 2x master (title/echo.2x.webp, r64) when the manifest lists it: 1682w and 3364w, with the Echo\u2019s own sizes', () => {
     const img = echo().querySelector('.fe-title__plane img')!;
-    expect(img.hasAttribute('srcset')).toBe(false);
-    expect(img.hasAttribute('sizes')).toBe(false);
-    // not even before the manifest has loaded, when the Farplane markup offers the master blind (A-16)
+    expect(img.getAttribute('srcset')).toBe(`${artUrl(TITLE_ART_PLATES.echo)} 1682w, ${logicalArtUrl(artUrl(TITLE_ART_PLATES.echo)).replace(/\.png$/i, '.2x.webp')} 3364w`);
+    expect(img.getAttribute('srcset')).toMatch(/echo\.(png|webp) 1682w, .*echo\.2x\.webp 3364w$/);
+    expect(img.getAttribute('sizes')).toBe(ECHO_TITLE_SIZES);
+    expect(img.getAttribute('sizes')).toBe(titlePlateSizes('echo'));
+    expect(img.getAttribute('sizes')).not.toBe(titlePlateSizes());
+    expect(img.getAttribute('srcset')).not.toContain('keyart');
+  });
+
+  it('is offered no master the manifest does not list (an older art tree: a candidate for a missing file is a 404 on the one image the screen is), but is offered it blind before the manifest has loaded, as the Farplane plate is (A-16)', () => {
+    setArtManifest({ ...MANIFEST, title2x: ['keyart'] });
+    const older = echo().querySelector('.fe-title__plane img')!;
+    expect(older.hasAttribute('srcset')).toBe(false);
+    expect(older.hasAttribute('sizes')).toBe(false);
     resetArtManifest();
     const cold = parse(titleMarkup({ briefingChip: false, art: 'echo' })).querySelector('.fe-title__plane img')!;
-    expect(cold.hasAttribute('srcset')).toBe(false);
-    expect(parse(titleMarkup({ briefingChip: false })).querySelector('.fe-title__plane img')!.getAttribute('srcset')).toContain('2x.webp');
+    expect(cold.getAttribute('srcset')).toMatch(/1682w, .*echo\.2x\.webp 3364w$/);
+    expect(cold.getAttribute('sizes')).toBe(ECHO_TITLE_SIZES);
+  });
+
+  it('upgradeTitlePlanes(root, "echo") offers the master once the manifest lists it, takes a blind offer back when it does not, and does not touch an Echo plane on the Farplane call', async () => {
+    const plate = artUrl(TITLE_ART_PLATES.echo);
+    // markup drawn with no srcset (the manifest has not been read), then the manifest says the master is there
+    resetArtManifest();
+    const bare = document.createElement('div');
+    bare.innerHTML = `<div class="fe-title__plane"><img src="${plate}"></div>`;
+    setArtManifest(MANIFEST);
+    await upgradeTitlePlanes(bare, 'echo');
+    const img = bare.querySelector('img')!;
+    expect(img.getAttribute('srcset')).toMatch(/echo\.(png|webp) 1682w, .*echo\.2x\.webp 3364w$/);
+    expect(img.getAttribute('sizes')).toBe(ECHO_TITLE_SIZES);
+    // a blind offer (the manifest was not in hand) and the manifest then says no master: the list is taken back
+    resetArtManifest();
+    const blind = parse(titleMarkup({ briefingChip: false, art: 'echo' }));
+    setArtManifest({ ...MANIFEST, title2x: ['keyart'] });
+    await upgradeTitlePlanes(blind, 'echo');
+    expect(blind.querySelector('.fe-title__plane img')!.hasAttribute('srcset')).toBe(false);
+    expect(blind.querySelector('.fe-title__plane img')!.hasAttribute('sizes')).toBe(false);
+    // the Farplane call (the default) is what it was: an Echo plane is not touched by it
+    const echoOnly = parse(titleMarkup({ briefingChip: false, art: 'echo' }));
+    const before = echoOnly.innerHTML;
+    setArtManifest(MANIFEST);
+    await upgradeTitlePlanes(echoOnly);
+    expect(echoOnly.innerHTML).toBe(before);
+  });
+
+  /** What a browser does with srcset and sizes: the CSS px the picture is drawn at, times the pixel ratio, picks the smallest candidate that covers it (else the largest). */
+  const pickedWidth = (img: Element, vw: number, vh: number, dpr: number): number => {
+    const sizes = img.getAttribute('sizes')!;
+    const m = /^max\(100vw, ([\d.]+) \* 100vh\)$/.exec(sizes);
+    expect(m, `sizes "${sizes}" is the cover width of the picture`).not.toBeNull();
+    const need = Math.max(vw, Number(m![1]) * vh) * dpr;
+    const widths = [...img.getAttribute('srcset')!.matchAll(/ (\d+)w/g)].map((x) => Number(x[1])).sort((a, b) => a - b);
+    return widths.find((w) => w >= need) ?? widths[widths.length - 1]!;
+  };
+
+  it('a 2560 x 1440 screen takes the 3364 px master, and so does anything that needs more than the plate\u2019s 1682 px; a 1280 x 720 window at a pixel ratio of 1 keeps the plate', () => {
+    const img = echo().querySelector('.fe-title__plane img')!;
+    expect(pickedWidth(img, 2560, 1440, 1)).toBe(3364);
+    expect(pickedWidth(img, 3840, 2160, 1)).toBe(3364);
+    expect(pickedWidth(img, 1920, 1080, 1)).toBe(3364);
+    expect(pickedWidth(img, 1280, 720, 1)).toBe(1682);
+    expect(pickedWidth(img, 1366, 768, 1)).toBe(1682);
+    expect(pickedWidth(img, 1280, 720, 2)).toBe(3364);
+  });
+
+  it('index.html preloads the Echo with the same candidates and sizes the plane carries, so the browser picks one file for both', () => {
+    const preload = /<link rel="preload" as="image"[^>]*>/.exec(read('index.html'))?.[0] ?? '';
+    const img = echo().querySelector('.fe-title__plane img')!;
+    expect(preload).toContain('href="%BASE_URL%art/title/echo.png"');
+    expect(preload).not.toContain('keyart');
+    expect(preload).toContain(`imagesizes="${img.getAttribute('sizes')}"`);
+    expect(preload).toMatch(/imagesrcset="%BASE_URL%art\/title\/echo\.png 1682w, %BASE_URL%art\/title\/echo\.2x\.webp 3364w"/);
   });
 
   it('hides "Echoes of Spira": no wordmark element, no title lettering in the HTML, the words only in the picture\u2019s alt', () => {

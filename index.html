@@ -9,15 +9,18 @@
     <!-- A-16: the title plate, fetched before any script runs. Since release 61 it is The Echo, the default title
          screen (Bailey, 2026-10-21: "incorporate the new title screen picture as the default"); it was the Farplane
          painting (keyart) from 39.5 to 60, and a player who picked that one draws it as before, only without this
-         head start. The Echo is drawn from its 1x plate alone (src/app/screens/frontend/titleMarkup.ts offers it no
-         2x master), so the same file is named here and the plane reuses this request. Each URL below starts with Vite's base
+         head start. The Echo has a 2x master since r64 (art/title/echo.2x.webp, 3364 x 1864; src/app/screens/frontend/echoPlate.ts),
+         so this names the same candidates and sizes the plane offers (src/app/screens/frontend/titleMarkup.ts) and the browser
+         picks the same file the plane then reuses. Each URL below starts with Vite's base
          variable (the word BASE_URL between two percent signs), which the build fills in from the
          base the site is served under: the GitHub Pages folder, the Cloudflare root, or the dev
          root. A root-absolute art name is never written in this page: Vite puts the base on one
          only when it finds that file in public/ while it builds, and a candidate it misses (the
          2x master, a half-installed art tree) stays at the server root and is a 404 under the
          GitHub Pages folder (tests/unit/art-url-base.test.ts). -->
-    <link rel="preload" as="image" fetchpriority="high" href="%BASE_URL%art/title/echo.png" />
+    <link rel="preload" as="image" fetchpriority="high" href="%BASE_URL%art/title/echo.png"
+      imagesrcset="%BASE_URL%art/title/echo.png 1682w, %BASE_URL%art/title/echo.2x.webp 3364w"
+      imagesizes="max(100vw, 1.805 * 100vh)" />
     <style>
       /* ---- font stack ------------------------------------------------------
          Self-hosted OFL webfonts (see research/assets-and-tech.md §1). The
