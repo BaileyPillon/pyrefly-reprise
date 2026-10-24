@@ -84,6 +84,50 @@ describe('the layer', () => {
     expect(root.dataset['pst'] === undefined || Number(root.style.getPropertyValue('--pst-hud')) > 0.98).toBe(true);
   });
 
+  it('FFX-2 (D-357, release 64): a command menu still standing on the screen holds the wash off even when the presenter has stopped waiting on it (an answer that came over it leaves the HUD menu up); taken down, the breath plays; FFX never reads it', () => {
+    const menu = document.createElement('div');
+    menu.className = 'ffx2hud__command';
+    menu.innerHTML = '<div class="ig-cmd">Attack</div>';
+    menu.getBoundingClientRect = (): DOMRect => ({ x: 0, y: 0, left: 0, top: 0, right: 300, bottom: 200, width: 300, height: 200, toJSON: () => ({}) }) as DOMRect;
+    document.body.appendChild(menu);
+    const cue = { ...facts, game: 'ffx2' as const, move: 'mega-flare' as const, name: 'Mega Flare', attacker: 'boss', party: ['tidus'] };
+    // the presenter says no menu (pendingMenu cleared) while the HUD's menu is still up: the tell begins, the wash never starts
+    {
+      const { root, layer } = make('ffx2');
+      layer.setMenuProbe(() => false);
+      layer.breath({ ...cue, kind: 'mark' });
+      layer.breath({ ...cue, kind: 'tell', msToBlow: 1400, menu: false });
+      for (let i = 0; i < 80; i++) layer.update(1 / 60);
+      expect(layer.snapshot().frame?.drain).toBe(0);
+      expect(Number(root.style.getPropertyValue('--pst-hud') || 1)).toBeGreaterThan(0.99);
+      // the HUD takes it down: the breath plays on
+      menu.hidden = true;
+      for (let i = 0; i < 40; i++) layer.update(1 / 60);
+      expect(layer.snapshot().frame?.drain).toBeGreaterThan(0.9);
+      // and a menu that stands up again in the middle of it gives the wash back at once (eased, as ever)
+      menu.hidden = false;
+      for (let i = 0; i < 30; i++) layer.update(1 / 60);
+      expect(layer.snapshot().frame?.drain).toBeLessThan(0.02);
+      layer.dispose();
+    }
+    // an empty or zero-sized menu element is no menu; a layer for FFX never looks
+    menu.hidden = false;
+    menu.innerHTML = '';
+    {
+      const { layer } = make('ffx2');
+      layer.breath({ ...cue, kind: 'tell', msToBlow: 1400 });
+      for (let i = 0; i < 60; i++) layer.update(1 / 60);
+      expect(layer.snapshot().frame?.drain).toBeGreaterThan(0.9);
+    }
+    menu.innerHTML = '<div class="ig-cmd">Attack</div>';
+    {
+      const { layer } = make('ffx');
+      layer.breath({ ...facts, kind: 'tell', move: 'total-annihilation', name: 'Total Annihilation', attacker: 'boss', party: ['tidus'], msToBlow: 1000 });
+      for (let i = 0; i < 70; i++) layer.update(1 / 60);
+      expect(layer.snapshot().frame?.drain).toBeGreaterThan(0.9); // FFX has no menu rule
+    }
+  });
+
   it('a probe that throws costs the check, never the frame', () => {
     const { layer } = make('ffx2');
     layer.setMenuProbe(() => {

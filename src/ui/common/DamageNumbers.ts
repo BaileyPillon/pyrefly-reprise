@@ -30,6 +30,7 @@ import {
   type LaneInput,
   type NumeralRect,
 } from './damageLadder.ts';
+import { planNumberSpacing, type SpacingAxis, type SpacingItem } from './numberSpacing.ts'; // release 64: the glass numbers never overlap (a last pass in screen space)
 import { prefersReducedMotion } from './transitions/reduceMotion.ts';
 import { TICK_HOLD_MS, UsualBlows, glassText, maxHpOf, proLifetime, proNumbersOn, proOpacity, proPop, proRise, sizeFactor, tierOf, type NumberTier } from './proNumbers.ts';
 
@@ -177,6 +178,10 @@ interface ActiveNumber {
   sizeK: number;
   /** The glass numeral's state (lane pro-look: `proNumbers.ts`); null = the old numeral. */
   pro: ProState | null;
+  /** Release 64 (`numberSpacing.ts`; glass numbers only): when it began to show on the layer's clock, its spawn order, and the sticky shift the last pass moved it by (screen px; only ever grows). */
+  shownAtMs: number;
+  seq: number;
+  space: { dx: number; dy: number; axis: SpacingAxis | null };
 }
 
 /** A glass numeral's own state: the running total of its action, its tier, how many hits it carries, when it last popped (its own ms), whether the pop is a tick, and its glint element (a critical's long streak). */
@@ -189,6 +194,16 @@ interface ProState {
   heal: boolean;
   lastNowMs: number;
   glint: HTMLElement | null;
+}
+
+/** One numeral's frame as the placement pass settled it, before it is written (`paint`). */
+interface Drawn {
+  n: ActiveNumber;
+  at: { x: number; y: number };
+  half: { w: number; h: number };
+  pop: number;
+  alpha: number;
+  tMs: number;
 }
 
 export class DamageNumbers {
@@ -227,6 +242,8 @@ export class DamageNumbers {
   /** Lane pro-look: REDUCE MOTION (the game's row or the OS), read at most twice a second while the glass numbers play; the glass numeral then neither pops nor rises (it fades in place). */
   private proReducedMotion = false;
   private proReducedAtMs = -1e9;
+  /** Release 64: the next spawn's order number, for the spacing pass. */
+  private seqNo = 0;
 
   constructor(private readonly opts: DamageNumbersOptions) {
     this.el = document.createElement('div');
@@ -406,6 +423,9 @@ export class DamageNumbers {
       overHud: false,
       sizeK,
       pro: proState,
+      shownAtMs: this.nowMs + slot.delayMs,
+      seq: this.seqNo++,
+      space: { dx: 0, dy: 0, axis: null },
     });
     return el;
   }
@@ -615,6 +635,7 @@ export class DamageNumbers {
       this.proReducedAtMs = this.nowMs;
     }
     const survivors: ActiveNumber[] = [];
+    const glass: Drawn[] = [];
     // One layout read per frame, shared by every numeral: the layer's own box
     // turns the projector's viewport pixels into layer-local ones (they are
     // only the same while the layer happens to sit at 0,0) and doubles as the
@@ -781,23 +802,63 @@ export class DamageNumbers {
         n.el.classList.toggle('dnum--over-hud', placed.overHud);
         n.overHud = placed.overHud;
       }
-      n.el.style.transform = `translate(-50%, -50%) translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) scale(${pop.toFixed(3)})`;
       const alpha = n.pro ? proOpacity(tMs, n.lifetimeMs) : opacityAt(tMs, n.kind);
-      n.el.style.opacity = alpha.toFixed(3);
-      const glint = n.pro?.glint;
-      if (glint) {
-        glint.style.fontSize = n.el.style.fontSize;
-        glint.style.transform = `translate(-50%, -50%) translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) scale(${(0.7 + 0.3 * Math.min(1, tMs / 160)).toFixed(3)})`;
-        glint.style.opacity = (alpha * 0.85).toFixed(3);
-      }
+      const drawn: Drawn = { n, at, half, pop, alpha, tMs };
+      if (n.pro) glass.push(drawn); // release 64: the glass numbers are written after the spacing pass below
+      else this.paint(drawn);
       survivors.push(n);
     }
+    if (glass.length > 0) this.spaceAndPaint(glass, bounds, panels);
 
     this.active = survivors;
     // After the placement pass, so a chip reads this frame's box rather than
     // trailing the figure it belongs to by one frame.
     this.updateChips();
     this.pruneBursts();
+  }
+
+  /** Write a numeral's transform, opacity and glint for this frame. */
+  private paint(d: Drawn): void {
+    const { n, at, pop, alpha, tMs } = d;
+    n.el.style.transform = `translate(-50%, -50%) translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) scale(${pop.toFixed(3)})`;
+    n.el.style.opacity = alpha.toFixed(3);
+    const glint = n.pro?.glint;
+    if (glint) {
+      glint.style.fontSize = n.el.style.fontSize;
+      glint.style.transform = `translate(-50%, -50%) translate(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px) scale(${(0.7 + 0.3 * Math.min(1, tMs / 160)).toFixed(3)})`;
+      glint.style.opacity = (alpha * 0.85).toFixed(3);
+    }
+  }
+
+  /**
+   * Release 64 (`numberSpacing.ts`): the last pass over the glass numbers, in screen space, on the boxes as they are about to be drawn. Two that began within 400 ms of each other and would intersect (two actors who stand
+   * close, struck in one beat) have the later one moved clear, up first, then sideways; the shift is kept on the numeral and only grows, so nothing jumps when the figure it made way for is gone. Each numeral keeps its
+   * own target (the shift is added to the position the target's projection gave it); `data-spaced` says which way a numeral was moved.
+   */
+  private spaceAndPaint(glass: Drawn[], bounds: NumeralRect | null, panels: readonly NumeralRect[]): void {
+    const items: SpacingItem[] = glass.map((d) => ({
+      id: d.n.seq,
+      seq: d.n.seq,
+      shownAt: d.n.shownAtMs,
+      cx: d.at.x,
+      cy: d.at.y,
+      hw: d.half.w,
+      hh: d.half.h,
+      dx: d.n.space.dx,
+      dy: d.n.space.dy,
+      axis: d.n.space.axis,
+      overPanels: d.n.overHud,
+    }));
+    const plan = planNumberSpacing(items, { bounds, panels });
+    for (const d of glass) {
+      const r = plan.get(d.n.seq);
+      if (r) {
+        d.n.space = { dx: r.dx, dy: r.dy, axis: r.axis };
+        d.at = { x: d.at.x + r.dx, y: d.at.y + r.dy };
+        if (r.axis && d.n.el.dataset['spaced'] !== r.axis) d.n.el.dataset['spaced'] = r.axis;
+      }
+      this.paint(d);
+    }
   }
 
   /** How many numerals are already riding `target`. */
