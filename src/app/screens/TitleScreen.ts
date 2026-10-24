@@ -318,6 +318,8 @@ export class TitleScreen extends Screen {
   }
 
   override handleInput(input: InputSnapshot): void {
+    // The booth's attract card is up, or was a moment ago: the press that wakes it is the card's, never also the title's Start (`demo/boothAttract.ts`, lane "booth").
+    if (this.demo?.holding()) return;
     // While the briefing is up it owns the screen: it holds the keyboard claim,
     // and a stray Enter here would start the flow behind it.
     if (this.briefing && !this.briefing.finished) return;

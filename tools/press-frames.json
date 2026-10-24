@@ -1,0 +1,10 @@
+[
+  { "name": "ffx-seymour-flux", "src": "D:/Tools/pyrefly-scratch/2026-10-23/r63-play/evidence/ch1-glass/39-heal-number.jpg", "clean": "switchboard", "game": "ffx", "caption": "Final Fantasy X, Seymour Flux", "note": "r63-play evidence ch1-glass 39" },
+  { "name": "ffx-cast", "src": "D:/Tools/pyrefly-scratch/2026-10-23/r63-play/evidence/ch1-glass/12-hit-foe.jpg", "clean": "switchboard", "game": "ffx", "caption": "Final Fantasy X, Tidus and Yuna", "note": "r63-play evidence ch1-glass 12" },
+  { "name": "ffx-seymour-hit", "src": "D:/Tools/pyrefly-scratch/2026-10-23/r63-play/evidence/ch1-glass/34-hit-foe.jpg", "clean": "switchboard", "game": "ffx", "caption": "Final Fantasy X, Seymour Flux", "note": "r63-play evidence ch1-glass 34" },
+  { "name": "ffx2-bahamut", "src": "D:/Tools/pyrefly-scratch/2026-10-23/r63-play/evidence/ch4-script/21-boss-attack+1300.jpg", "clean": "switchboard", "game": "ffx2", "caption": "Final Fantasy X-2, Bahamut", "note": "r63-play evidence ch4-script 21" },
+  { "name": "ffx2-cure", "src": "D:/Tools/pyrefly-scratch/2026-10-23/r63-play/evidence/ch4-script/32-cue-breath-lift.jpg", "clean": "switchboard", "game": "ffx2", "caption": "Final Fantasy X-2, Yuna's Cure", "note": "r63-play evidence ch4-script 32" },
+  { "name": "ffx2-mega-flare", "src": "D:/Tools/pyrefly-scratch/2026-10-23/r63-play/evidence/ch4-script/27-boss-mega-flare+1300.jpg", "clean": "switchboard", "game": "ffx2", "caption": "Final Fantasy X-2, Mega Flare", "note": "r63-play evidence ch4-script 27" },
+  { "name": "keyart-farplane", "art": "title/keyart.png", "game": null, "caption": "Key art, Farplane Field", "note": "public/art/title/keyart.png" },
+  { "name": "keyart-echo", "art": "title/echo.png", "game": null, "caption": "Key art, The Echo", "note": "public/art/title/echo.png" }
+]

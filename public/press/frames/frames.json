@@ -1,0 +1,90 @@
+[
+  {
+    "name": "ffx-seymour-flux",
+    "file": "ffx-seymour-flux.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 196985,
+    "quality": 86,
+    "game": "ffx",
+    "caption": "Final Fantasy X, Seymour Flux",
+    "from": "r63-play evidence ch1-glass 39"
+  },
+  {
+    "name": "ffx-cast",
+    "file": "ffx-cast.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 215058,
+    "quality": 86,
+    "game": "ffx",
+    "caption": "Final Fantasy X, Tidus and Yuna",
+    "from": "r63-play evidence ch1-glass 12"
+  },
+  {
+    "name": "ffx-seymour-hit",
+    "file": "ffx-seymour-hit.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 242453,
+    "quality": 86,
+    "game": "ffx",
+    "caption": "Final Fantasy X, Seymour Flux",
+    "from": "r63-play evidence ch1-glass 34"
+  },
+  {
+    "name": "ffx2-bahamut",
+    "file": "ffx2-bahamut.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 239783,
+    "quality": 86,
+    "game": "ffx2",
+    "caption": "Final Fantasy X-2, Bahamut",
+    "from": "r63-play evidence ch4-script 21"
+  },
+  {
+    "name": "ffx2-cure",
+    "file": "ffx2-cure.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 244678,
+    "quality": 86,
+    "game": "ffx2",
+    "caption": "Final Fantasy X-2, Yuna's Cure",
+    "from": "r63-play evidence ch4-script 32"
+  },
+  {
+    "name": "ffx2-mega-flare",
+    "file": "ffx2-mega-flare.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 220001,
+    "quality": 86,
+    "game": "ffx2",
+    "caption": "Final Fantasy X-2, Mega Flare",
+    "from": "r63-play evidence ch4-script 27"
+  },
+  {
+    "name": "keyart-farplane",
+    "file": "keyart-farplane.jpg",
+    "width": 1344,
+    "height": 768,
+    "bytes": 263666,
+    "quality": 86,
+    "game": null,
+    "caption": "Key art, Farplane Field",
+    "from": "public/art/title/keyart.png"
+  },
+  {
+    "name": "keyart-echo",
+    "file": "keyart-echo.jpg",
+    "width": 1600,
+    "height": 887,
+    "bytes": 236149,
+    "quality": 86,
+    "game": null,
+    "caption": "Key art, The Echo",
+    "from": "public/art/title/echo.png"
+  }
+]

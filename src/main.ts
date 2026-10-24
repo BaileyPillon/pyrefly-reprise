@@ -34,6 +34,9 @@ import { installGovernDebug } from './debug/governApi.ts'; // lane "perf-trim": 
 import { installPerfDebug } from './debug/perfApi.ts'; // lane "perf-trim": `__pyrefly.perf`, the frame-cost profiler (GPU timer queries per pass, CPU per system); nothing wraps until `perf.start()`
 import { installStagingDebug } from './debug/stagingApi.ts'; // lane "pro-staging": `__pyrefly.staging('pro' | 'today')`, `.stagingState()`, `.stagingCue(...)`
 import { installHudF1Debug } from './debug/hudF1Api.ts'; // lane "hud-f1": `__pyrefly.hudF1('f1' | 'today')`
+import { installBoothDebug } from './debug/boothApi.ts'; // lane "booth": `__pyrefly.booth('new' | 'today')`, `.boothCard('end' | 'attract')`, `.boothAttractNow()`
+import { BoothCardScreen } from './app/demo/BoothCardScreen.ts'; // lane "booth": the Echo end card and attract card as pages of their own (`?card=end`, `?card=attract`)
+import { boothCardFromSearch } from './app/demo/boothSwitch.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
 import { setAttractRunner } from './app/demo/attractHook.ts'; // R61: the title starts the attract reel through this door; main hands the reel in (the title does not import it)
@@ -90,6 +93,8 @@ async function boot(): Promise<void> {
 
   app.register('title', () => new TitleScreen());
   app.register('demo', () => new DemoScene());
+  app.register('booth-end', () => new BoothCardScreen('end')); // lane "booth" (decision 188b): the booth loop's end card, and the card a capture tool opens
+  app.register('booth-attract', () => new BoothCardScreen('attract'));
   app.register('ffx-hud-demo', () => new FFXHudDemoScreen());
   // The FF7 HUD harness (FF7 only): development builds only, so the hidden experiment stays hidden.
   if (import.meta.env.DEV) app.register('ff7-hud-demo', () => new Ff7HudDemoScreen());
@@ -189,10 +194,13 @@ async function boot(): Promise<void> {
   installPerfDebug(debugApi, app); // lane "perf-trim": the profiler's API object (inert until `perf.start()`)
   installStagingDebug(debugApi); // lane "pro-staging": the staging's switch, state and cues, for captures
   installHudF1Debug(debugApi); // lane "hud-f1": the F1 HUD switch, for captures
+  installBoothDebug(debugApi, app); // lane "booth": the booth screens' switch and doors, for captures
   installSwitchboard(debugApi); // the playtest keys 1 to 9, 0, -, = and the corner label; nothing is installed without `?pack=demo&switchboard=1`
   installFxWiring(); // integration: the fx lane's big moments onto the core and feel lanes (`engine/motion/FxWiring.ts`)
 
-  await app.push(new TitleScreen());
+  // `?card=end` / `?card=attract` (lane "booth"): the page opens on that card instead of the title; a press goes on to the title.
+  const openCard = boothCardFromSearch(window.location.search);
+  await app.push(openCard ? new BoothCardScreen(openCard) : new TitleScreen());
   app.start();
 
   // Ready once a real frame has been drawn, so screenshots never catch a blank.
