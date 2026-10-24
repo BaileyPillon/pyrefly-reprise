@@ -2476,69 +2476,69 @@
    "poses": {
     "attack": {
      "anchor": [
-      931.9,
-      290.8
+      931.2,
+      291.2
      ],
-     "baseline": 932.0,
+     "baseline": 931.0,
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "f20eeef2235baafade410f3f218077d80b257b192ddf688e63cc5b1f224c7976",
+     "sha": "7bbb49703f2d9ba45aeb6b11824b2f59e8fc38e9541b2e28e51272e4c6dcfcad",
      "size": [
       1097,
       948
      ],
      "stance": {
-      "row": 932.0,
+      "row": 931.0,
       "src": "silhouette",
-      "x": 487.0,
-      "x0": 313.0,
-      "x1": 661.0
+      "x": 486.5,
+      "x0": 315.0,
+      "x1": 658.0
      },
      "standing": true
     },
     "cast": {
      "anchor": [
-      1038.5,
-      311.9
+      1037.0,
+      313.0
      ],
-     "baseline": 999.0,
+     "baseline": 998.0,
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "e2ab446c0c7ff02f615054bcaa1dd8bebb472c859b371aa0cd7a0dea07d9de6e",
+     "sha": "cfc1419e798dd29486e3f86b3878a3363c36d0bad65bb220ddc21a9b6b99156c",
      "size": [
       1214,
       1016
      ],
      "stance": {
-      "row": 999.0,
+      "row": 998.0,
       "src": "silhouette",
-      "x": 590.5,
-      "x0": 423.0,
-      "x1": 758.0
+      "x": 589.5,
+      "x0": 420.0,
+      "x1": 759.0
      },
      "standing": true
     },
     "hurt": {
      "anchor": [
-      759.2,
-      82.5
+      770.3,
+      84.5
      ],
-     "baseline": 994.0,
+     "baseline": 993.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "cd2d46369f5776005a19822a516913b4d744b7cbe44814f9682f98902b0f950a",
+     "sha": "90dfc6da2495b0dbd61b06b4793a5e7e7c66c7ae2064f374d9c8f6631dcaae25",
      "size": [
       1041,
       1010
      ],
      "stance": {
-      "row": 994.0,
+      "row": 993.0,
       "src": "silhouette",
-      "x": 414.5,
-      "x0": 262.0,
+      "x": 413.0,
+      "x0": 259.0,
       "x1": 567.0
      },
      "standing": true
@@ -2548,45 +2548,45 @@
       0.5,
       0.5
      ],
-     "baseline": 1008.0,
+     "baseline": 1007.0,
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "d5a1c4bcd99f6851f0d9f724b6d7206237f2c1c0e76f63229cf4f3f6f76bdb24",
+     "sha": "dc553a716dd9fb6bd568a9501065cfd1610f16ee9bdf3d7773cfaa161f66d6f7",
      "size": [
       1024,
       1024
      ],
      "stance": {
-      "row": 1008.0,
+      "row": 1007.0,
       "src": "silhouette",
       "x": 420.5,
-      "x0": 245.0,
-      "x1": 596.0
+      "x0": 244.0,
+      "x1": 597.0
      },
      "standing": true,
      "stature": 1.0
     },
     "ko": {
      "anchor": [
-      635.9,
-      16.5
+      636.1,
+      18.5
      ],
-     "baseline": 988.0,
+     "baseline": 987.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "fc4a212803dbc8dbdefaa619ac3a741a6bbca2a7b961fbbf5efd4e40d033584e",
+     "sha": "7a12b03bbecd75115528175e674f166d563a9c3e2631c0a278ca5413e041acf5",
      "size": [
       1110,
       1004
      ],
      "stance": {
-      "row": 988.0,
+      "row": 987.0,
       "src": "silhouette",
-      "x": 687.5,
-      "x0": 587.0,
-      "x1": 788.0
+      "x": 687.0,
+      "x0": 588.0,
+      "x1": 786.0
      },
      "standing": true
     },
@@ -2615,24 +2615,24 @@
     },
     "telegraph": {
      "anchor": [
-      972.0,
-      292.0
+      970.6,
+      293.1
      ],
-     "baseline": 935.0,
+     "baseline": 934.0,
      "prone": true,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "3e2da8e74ad0d8adfa6c04433acc1ba52363a1db02d6a6eaf6b6259490513e15",
+     "sha": "e88a72d9a7c0078e09a9dcb8f12c59e86fe84b9f931c4c28f9844bf4ce88214a",
      "size": [
       1144,
       952
      ],
      "stance": {
-      "row": 935.0,
+      "row": 934.0,
       "src": "silhouette",
       "x": 481.0,
-      "x0": 306.0,
-      "x1": 656.0
+      "x0": 305.0,
+      "x1": 657.0
      },
      "standing": true
     }
@@ -17018,70 +17018,70 @@
    "poses": {
     "attack": {
      "anchor": [
-      442.4,
-      48.5
+      441.2,
+      50.5
      ],
-     "baseline": 1219.0,
+     "baseline": 1218.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "fc3b8ef9f0eb20951c2c57d39f7192ac774931beda57876bcd6e0fd182e1f794",
+     "sha": "cd9140bbd257ebb30c307c8b1e9d0e987339ef368063e0179eca9d99d9f3346a",
      "size": [
       805,
       1235
      ],
      "stance": {
-      "row": 1219.0,
+      "row": 1218.0,
       "src": "silhouette",
       "x": 469.0,
-      "x0": 339.0,
-      "x1": 599.0
+      "x0": 340.0,
+      "x1": 598.0
      },
      "standing": true
     },
     "cast": {
      "anchor": [
-      494.4,
-      48.5
+      493.7,
+      50.5
      ],
-     "baseline": 1191.0,
+     "baseline": 1190.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "329bbd2ccedfc468340036734b6d1a51eee834a927f9c91a3aaa8cb7c0504e60",
+     "sha": "8fe70ab0abaf88ff943baa651af021252d4bd898d316350863052af8ac8de325",
      "size": [
       772,
       1208
      ],
      "stance": {
-      "row": 1191.0,
+      "row": 1190.0,
       "src": "silhouette",
-      "x": 295.5,
-      "x0": 134.0,
-      "x1": 457.0
+      "x": 294.5,
+      "x0": 135.0,
+      "x1": 454.0
      },
      "standing": true
     },
     "hurt": {
      "anchor": [
-      547.8,
-      30.5
+      547.3,
+      32.5
      ],
-     "baseline": 1123.0,
+     "baseline": 1122.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "6a2c8234faf9cd11bcff433b9b8dffab61ed37f89885020c665f7407f8590b91",
+     "sha": "35f1f63522bde77ed59bddb0afe74a4a8e0597135822b6b46df831eabd309c20",
      "size": [
       823,
       1139
      ],
      "stance": {
-      "row": 1123.0,
+      "row": 1122.0,
       "src": "silhouette",
-      "x": 255.0,
-      "x0": 97.0,
-      "x1": 413.0
+      "x": 254.5,
+      "x0": 95.0,
+      "x1": 414.0
      },
      "standing": true
     },
@@ -17090,68 +17090,68 @@
       0.5,
       0.5
      ],
-     "baseline": 1196.0,
+     "baseline": 1195.0,
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
-     "sha": "06c416a771d192ce1fc86f6c79a0f38fca46346968bcd758150cf725031e67be",
+     "sha": "3cc3df1a1fea8236129ab41b8fd7a723cd2d0774ad607c9ee6b8853fdf6596a4",
      "size": [
       750,
       1211
      ],
      "stance": {
-      "row": 1196.0,
+      "row": 1195.0,
       "src": "silhouette",
       "x": 315.5,
-      "x0": 158.0,
-      "x1": 473.0
+      "x0": 159.0,
+      "x1": 472.0
      },
      "standing": true,
      "stature": 1.0
     },
     "ko": {
      "anchor": [
-      187.7,
-      62.5
+      184.9,
+      64.5
      ],
-     "baseline": 1169.0,
+     "baseline": 1168.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "33930c70dd7de5cf7bcfbdf6b7849beed142010081c0d7e8086a8d3390bc190b",
+     "sha": "fad97c5a1a175dba2a3009631da75aa9fe209915c79e527d46ccd11f99cd4a5f",
      "size": [
       724,
       1185
      ],
      "stance": {
-      "row": 1169.0,
+      "row": 1168.0,
       "src": "silhouette",
-      "x": 317.0,
+      "x": 316.0,
       "x0": 161.0,
-      "x1": 473.0
+      "x1": 471.0
      },
      "standing": true
     },
     "telegraph": {
      "anchor": [
-      726.0,
-      42.5
+      724.7,
+      44.5
      ],
-     "baseline": 1049.0,
+     "baseline": 1048.0,
      "prone": false,
      "scale": null,
      "scaleSrc": "unreviewed",
-     "sha": "929cb0eec9e680c2497fb53ee026582828ac0697ea5b357efc0f887f31be0681",
+     "sha": "75aefe19682c238c88be508678a6206367b14359511137134676d96a25d13a57",
      "size": [
       992,
       1066
      ],
      "stance": {
-      "row": 1049.0,
+      "row": 1048.0,
       "src": "silhouette",
       "x": 369.5,
-      "x0": 217.0,
-      "x1": 522.0
+      "x0": 218.0,
+      "x1": 521.0
      },
      "standing": true
     }
