@@ -11,6 +11,7 @@
  */
 
 import { inputDevice, noteInputDevice } from './inputDevice.ts';
+import { notePadActivity } from './padActivity.ts';
 import { PAD, PAD_REPEAT_DELAY_MS, PAD_REPEAT_INTERVAL_MS, stickDirection, type PadDirection } from './padMap.ts';
 
 export type Button =
@@ -203,6 +204,14 @@ export class Input implements InputSnapshot {
    * whether the screen behind also acted on it.
    */
   private swallowFrames = 0;
+  /**
+   * r64-fixes (both games; the conference demo's swallowed picker presses): the pad is read once a frame, and a frame can be a third of a second away while the page waits for the GPU
+   * process (a program link, a texture upload) with the main thread free. A press of 100 ms that began and ended inside that gap was never seen. While a pad is connected a 4 ms timer reads
+   * it too (`sample`): a press seen between frames is latched until the next frame reports it, and its release is held back to the frame after, so a held-button reader (fast-forward) still
+   * gets its release edge.
+   */
+  private sampler: ReturnType<typeof setInterval> | null = null;
+  private readonly pendingRelease = new Set<Button>();
 
   constructor(opts: InputOptions = {}) {
     this.pointerRoot =
@@ -243,6 +252,7 @@ export class Input implements InputSnapshot {
   detach(): void {
     if (!this.attached) return;
     this.attached = false;
+    this.stopSampler();
     this.keyboardTarget.removeEventListener('keydown', this.onKeyDown as EventListener, true);
     this.keyboardTarget.removeEventListener('keyup', this.onKeyUp as EventListener, true);
     window.removeEventListener('blur', this.onBlur);
@@ -320,6 +330,10 @@ export class Input implements InputSnapshot {
 
   private press(button: Button): void {
     const s = this.state.get(button)!;
+    if (this.pendingRelease.delete(button)) {
+      s.latched = true; // a tap whose release was held back for a frame, pressed again before that frame: one press, held
+      return;
+    }
     if (!s.down) {
       s.down = true;
       s.nextRepeatAt = this.now + REPEAT_DELAY_MS;
@@ -327,8 +341,12 @@ export class Input implements InputSnapshot {
     }
   }
 
-  private release(button: Button): void {
+  private release(button: Button, background = false): void {
     const s = this.state.get(button)!;
+    if (background && s.down && !s.downPrev) {
+      this.pendingRelease.add(button); // pressed and released between two frames: the frame sees it down, the next one sees it come up
+      return;
+    }
     s.down = false;
     s.nextRepeatAt = Infinity;
   }
@@ -343,9 +361,26 @@ export class Input implements InputSnapshot {
   /** Every pad control that is down, mapped to a button here or not (`<pad index>:<button index>`, `<pad index>:stick`): a press of X or a trigger also means "the player is on the pad". */
   private rawDown = new Set<string>();
 
-  private pollGamepads(): void {
+  /** Read the pad now, between frames (the 4 ms timer's job). Never advances a frame. */
+  sample(): void {
+    if (!this.attached) return;
+    this.now = typeof performance !== 'undefined' ? performance.now() : this.now;
+    this.pollGamepads(true);
+  }
+
+  private stopSampler(): void {
+    if (this.sampler !== null) clearInterval(this.sampler);
+    this.sampler = null;
+    this.pendingRelease.clear();
+  }
+
+  private pollGamepads(background = false): void {
     const pads = this.readPads();
     this._gamepadConnected = pads.length > 0;
+    if (pads.length > 0 && this.sampler === null && this.attached && typeof setInterval === 'function') {
+      this.sampler = setInterval(() => this.sample(), 4);
+      (this.sampler as { unref?: () => void }).unref?.();
+    } else if (pads.length === 0 && this.sampler !== null && !background) this.stopSampler();
     const next = new Set<Button>();
     const rawNext = new Set<string>();
     let fresh: Gamepad | null = null;
@@ -381,13 +416,14 @@ export class Input implements InputSnapshot {
       noteInputDevice('gamepad', fresh.id);
     }
 
-    for (const b of next) if (!this.padDown.has(b)) this.press(b);
+    for (const b of next) if (!this.padDown.has(b)) { this.press(b); notePadActivity(this.now); }
     for (const b of this.padDown) {
       if (next.has(b)) continue;
       const keyHeld = Object.entries(KEY_MAP).some(
         ([code, mapped]) => mapped === b && this.heldKeys.has(code),
       );
-      if (!keyHeld) this.release(b);
+      if (!keyHeld) this.release(b, background);
+      notePadActivity(this.now);
     }
     this.padDown = next;
 
@@ -450,6 +486,10 @@ export class Input implements InputSnapshot {
       const s = this.state.get(b)!;
       s.downPrev = s.down;
       s.latched = false;
+    }
+    if (this.pendingRelease.size) {
+      for (const b of this.pendingRelease) this.release(b); // the tap this frame reported comes up now: the next frame reads its release edge
+      this.pendingRelease.clear();
     }
   }
 
