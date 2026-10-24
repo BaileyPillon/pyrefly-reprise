@@ -75,6 +75,14 @@ export class AttractCard {
     });
   }
 
+  /**
+   * Look at the pads now. The title calls this on every frame while the card is up, so a pad press (even a short tap) wakes the card on the frame it happens; the {@link PAD_POLL_MS} timer below is the backstop for a
+   * page whose frames are not running (a hidden tab).
+   */
+  pollPads(): void {
+    if (this.up && padActive(this.pads())) this.wake();
+  }
+
   /** Something happened: take the card away, and take the rest of that press. */
   wake(): void {
     if (this.over) return;

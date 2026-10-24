@@ -97,6 +97,21 @@ describe('the attract card: what wakes it', () => {
     await stick.done;
     expect(stick.up).toBe(false);
   });
+
+  it('wakes on the frame a pad button goes down, however short the tap: the title looks at the pads each frame, not only on the 50 ms timer', async () => {
+    let pads: Array<{ buttons: Array<{ pressed: boolean }>; axes: number[] } | null> = [{ buttons: [{ pressed: false }], axes: [0, 0] }];
+    const card = new AttractCard(parent, window, () => pads as never);
+    card.show();
+    card.pollPads();
+    expect(card.up).toBe(true); // nobody there
+    pads = [{ buttons: [{ pressed: true }], axes: [0, 0] }];
+    card.pollPads(); // the frame's look, no timer has run
+    await card.done;
+    expect(card.up).toBe(false);
+    expect(card.holding()).toBe(true);
+    card.pollPads(); // after the wake it does nothing more
+    expect(card.up).toBe(false);
+  });
 });
 
 describe('the attract card: the press that wakes it is its own', () => {
@@ -206,6 +221,25 @@ describe('the title\'s 60 s idle count', () => {
     title.update(false);
     expect(cardEl()).not.toBeNull(); // a minute after the press, the next one
     title.dispose();
+  });
+
+  it('wakes the card from the title\'s own frame when a pad button goes down (the frame loop, not the 50 ms timer)', async () => {
+    setDemoMode(true);
+    setBoothMode('new');
+    let pads: Array<{ buttons: Array<{ pressed: boolean }>; axes: number[] } | null> = [];
+    Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => pads });
+    const title = enterDemoTitle(appOf())!;
+    now += ATTRACT_AFTER_MS;
+    title.update(false);
+    expect(cardEl()).not.toBeNull();
+    pads = [{ buttons: [{ pressed: true }], axes: [0, 0] }];
+    title.update(false); // one frame later, before any timer has run
+    expect(cardEl()!.classList.contains('booth-card--out')).toBe(true); // already on its way out: the frame woke it
+    expect(title.holding()).toBe(true);
+    await vi.advanceTimersByTimeAsync(CARD_OUT_MS + 5);
+    expect(cardEl()).toBeNull();
+    title.dispose();
+    delete (navigator as unknown as { getGamepads?: unknown }).getGamepads;
   });
 
   it('starts the reel, not the card, with the booth screens off or ?attract=reel in the address', async () => {

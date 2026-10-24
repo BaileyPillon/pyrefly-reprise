@@ -139,4 +139,21 @@ describe('the style sheet', () => {
     expect(css).toContain('--bk: max(0.5px, min(100vw / 1440, 100vh / 810))');
     expect(css).toContain('#050402');
   });
+
+  it('shows the whole painting in a squarer window (4:3, 5:4, up to 3:2), so the painted lettering stays between the word blocks', () => {
+    // review finding m3: cropped to fill a 4:3 or 5:4 window, "ECHOES OF SPIRA" (x 0.306 to 0.694 of the painting) ran under the words on both sides
+    const squarer = css.match(/@media \(min-aspect-ratio: 101 \/ 100\) and \(max-aspect-ratio: 31 \/ 20\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(squarer).toMatch(/\.booth-end__img \{[^}]*object-fit: contain;[^}]*object-position: 50% 0%/);
+    // with the whole painting, the lettering is the middle 39 percent of the width and each word block (width 330 units of 1440) stays under 27 percent of it
+    expect((54 + 330) / 1440).toBeLessThan(0.306);
+    expect(1 - (54 + 265) / 1440).toBeGreaterThan(0.694);
+  });
+
+  it('sizes a portrait window by a phone\'s width (390), so no word is under 16 px on a phone, and shows the whole painting', () => {
+    // review finding m4: at the landscape unit a phone got 8 px type and a cropped wordmark
+    const portrait = css.match(/@media \(max-aspect-ratio: 1 \/ 1\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(portrait).toContain('--bk: max(0.5px, min(100vw / 390, 100vh / 844))');
+    expect(portrait).toMatch(/\.booth-end__img \{[^}]*object-fit: contain/);
+    expect(16 * (390 / 390)).toBeGreaterThanOrEqual(16);
+  });
 });

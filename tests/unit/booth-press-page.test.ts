@@ -87,6 +87,23 @@ describe('the press page: the frames', () => {
     expect(manifest.filter((m) => m.game === 'ffx2').length).toBeGreaterThanOrEqual(2);
   });
 
+  it('are clean captures of the game as it plays: no interface, no scripted run, no test numbers (review finding M1)', () => {
+    // the picked mockup's wall is "three clean frames" (no interface); the first build used HUD-on frames from scripted runs with the party's HP raised (Yuna 30000 / 30000, rows colliding)
+    const config = JSON.parse(readFileSync(resolve('tools/press-frames.json'), 'utf8')) as Array<{ name: string; src?: string; art?: string; clean?: string; game: string | null; note: string }>;
+    const games = config.filter((c) => c.game !== null);
+    expect(games.length).toBeGreaterThanOrEqual(6);
+    for (const c of games) {
+      expect(c.note, c.name).toMatch(/press-capture/); // made by tools/press-capture.mjs: the interface layer hidden, the game's own stats
+      expect(c.note, c.name).toMatch(/no interface/);
+      expect(c.src ?? '', c.name).not.toMatch(/ch[14]-script|ch[14]-glass|evidence/); // not a camera-lane scripted run, not an evidence frame with the HUD on
+      expect(c.clean, c.name).toBeUndefined(); // no playtest switchboard label to take out: the captures are made without ?switchboard=1
+    }
+    const capture = readFileSync(resolve('tools/press-capture.mjs'), 'utf8');
+    expect(capture).toContain('#ui { visibility: hidden !important; }');
+    expect(capture).toContain("arg('query', 'demo=1&pack=demo')"); // no ?switchboard=1: no key-list label in the corner of every picture
+    expect(capture).not.toMatch(/maxHp|battleState|.hps*=/); // the tool plays the fight by the game's own strategy and never edits a stat
+  });
+
   it('give every picture a description and a size', () => {
     for (const img of markup.match(/<img [^>]*>/g) ?? []) {
       expect(img).toMatch(/alt="[^"]{12,}"/);
@@ -150,8 +167,21 @@ describe('the press page: the type, the motion and the phone', () => {
     expect(style).toMatch(/@media \(prefers-reduced-motion: reduce\)[^}]*animation: none/);
   });
 
-  it('is one column at phone width, and its text is 16 px there', () => {
-    expect(style).toMatch(/@media \(max-width: 760px\)[\s\S]*?html \{ font-size: 16px; \}/);
-    expect(style).toMatch(/@media \(max-width: 760px\)[\s\S]*?\.grid \{ display: block;/);
+  it('is one column under 1000 px (a tablet, a phone), and its text is 16 px there', () => {
+    expect(style).toMatch(/@media \(max-width: 1000px\)[\s\S]*?html \{ font-size: 16px; \}/);
+    expect(style).toMatch(/@media \(max-width: 1000px\)[\s\S]*?\.grid \{ display: block;/);
+  });
+
+  it('never leaves the two-column dossier narrower than its left column needs: the one-column breakpoint is not under 1000 px', () => {
+    // the left column is 35.7rem (500 px at the 14 px root) and the gaps and margins take 172 px more: a window under about 1000 px would leave the frame wall a sliver (96 px at 768, 148 px at 820; found in review)
+    const bps = [...style.matchAll(/@media \(max-width: (\d+)px\) \{\s*html \{ font-size: 16px; \}/g)].map((m) => Number(m[1]));
+    expect(bps.length).toBeGreaterThan(0);
+    expect(Math.max(...bps)).toBeGreaterThanOrEqual(1000);
+  });
+
+  it('keeps the wall two frames wide on a tablet and one on a phone (600 px)', () => {
+    expect(style).toMatch(/@media \(max-width: 600px\)[\s\S]*?\.wall \{ grid-template-columns: 1fr; \}/);
+    const tablet = style.match(/@media \(max-width: 1000px\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(tablet).not.toMatch(/\.wall \{[^}]*grid-template-columns/);
   });
 });

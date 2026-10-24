@@ -279,11 +279,28 @@
   height: calc(112 * var(--bk));
 }
 
-/* ------------------------------------------------------------------ a portrait window (a phone or a tablet opening ?card=): the words stack under the picture instead of beside it */
+/* ------------------------------------------------------------------ a squarer window (4:3, 5:4, up to 3:2): the whole painting from the top, the words in the corners below it
+ * At 16:10 and wider the painting fills the window (cropped at the sides) and the painted lettering sits clear of the words. Squarer than about 3:2 the crop is so deep that the lettering is wider than the gap
+ * between the two word blocks (they sat on "ECHOES" and "SPIRA" at 4:3 and 5:4); with the whole painting shown, the lettering is the middle 39 percent of the width and the blocks (each under 27 percent) are clear of it.
+ * Measured on the painting: the lettering is x 0.306 to 0.694 and y 0.848 to 0.912 of it. */
+
+@media (min-aspect-ratio: 101 / 100) and (max-aspect-ratio: 31 / 20) {
+  .booth-end__img {
+    object-fit: contain;
+    object-position: 50% 0%;
+  }
+}
+
+/* ------------------------------------------------------------------ a portrait window (a phone or a tablet opening ?card=): the words stack under the picture instead of beside it
+ * The unit is the window's width over a phone's 390 (so the smallest word is 16 px on a phone, 19 px on a tablet), and the whole painting is shown across the top, not a narrow cut of it. */
 
 @media (max-aspect-ratio: 1 / 1) {
+  .booth-card {
+    --bk: max(0.5px, min(100vw / 390, 100vh / 844));
+  }
   .booth-end__img {
-    object-position: 50% 30%;
+    object-fit: contain;
+    object-position: 50% 8vh;
   }
   .booth-end__left {
     left: 5vw;
@@ -297,6 +314,25 @@
     width: auto;
     bottom: 6vh;
     align-items: center;
+    text-align: center;
+  }
+  .booth-attract__art {
+    left: 0;
+    width: 100%;
+    top: 4%;
+    height: 56%;
+  }
+  .booth-attract__prompt {
+    top: 66%;
+    font-size: calc(36 * var(--bk));
+  }
+  .booth-attract__press {
+    top: 78%;
+  }
+  .booth-attract__fan {
+    left: 0;
+    right: 0;
+    bottom: calc(20 * var(--bk));
     text-align: center;
   }
   .booth-attract__qr {

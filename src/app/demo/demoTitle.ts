@@ -39,7 +39,10 @@ export function enterDemoTitle(app: App, afterMs = ATTRACT_AFTER_MS): DemoTitle 
   let card: AttractCard | null = null;
   return {
     update(busy) {
-      if (started) return;
+      if (started) {
+        card?.pollPads(); // the card is up: a pad press wakes it on this very frame, however short the tap (the card's own timer is the backstop)
+        return;
+      }
       if (padActive(navigator.getGamepads?.() ?? null)) clock.touch(now());
       if (busy) {
         clock.touch(now());

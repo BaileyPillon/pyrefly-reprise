@@ -4,66 +4,66 @@
     "file": "ffx-seymour-flux.jpg",
     "width": 1600,
     "height": 900,
-    "bytes": 196985,
+    "bytes": 163566,
     "quality": 86,
     "game": "ffx",
     "caption": "Final Fantasy X, Seymour Flux",
-    "from": "r63-play evidence ch1-glass 39"
+    "from": "tools/press-capture.mjs ch1, capture 332: flames rise around Seymour, no interface, the game's own stats"
   },
   {
     "name": "ffx-cast",
     "file": "ffx-cast.jpg",
     "width": 1600,
     "height": 900,
-    "bytes": 215058,
+    "bytes": 187305,
     "quality": 86,
     "game": "ffx",
-    "caption": "Final Fantasy X, Tidus and Yuna",
-    "from": "r63-play evidence ch1-glass 12"
+    "caption": "Final Fantasy X, the party",
+    "from": "tools/press-capture.mjs ch1, capture 372: the party in a burst of light, no interface"
   },
   {
     "name": "ffx-seymour-hit",
     "file": "ffx-seymour-hit.jpg",
     "width": 1600,
     "height": 900,
-    "bytes": 242453,
+    "bytes": 192172,
     "quality": 86,
     "game": "ffx",
     "caption": "Final Fantasy X, Seymour Flux",
-    "from": "r63-play evidence ch1-glass 34"
+    "from": "tools/press-capture.mjs ch1, capture 168: a lance strike lands on Seymour, no interface"
   },
   {
     "name": "ffx2-bahamut",
     "file": "ffx2-bahamut.jpg",
     "width": 1600,
     "height": 900,
-    "bytes": 239783,
+    "bytes": 191893,
     "quality": 86,
     "game": "ffx2",
     "caption": "Final Fantasy X-2, Bahamut",
-    "from": "r63-play evidence ch4-script 21"
+    "from": "tools/press-capture.mjs ch4, capture 152: a strike on Bahamut, no interface, the game's own stats"
   },
   {
     "name": "ffx2-cure",
     "file": "ffx2-cure.jpg",
     "width": 1600,
     "height": 900,
-    "bytes": 244678,
+    "bytes": 134004,
     "quality": 86,
     "game": "ffx2",
-    "caption": "Final Fantasy X-2, Yuna's Cure",
-    "from": "r63-play evidence ch4-script 32"
+    "caption": "Final Fantasy X-2, Cure",
+    "from": "tools/press-capture.mjs ch4, capture 124: Cure lights the party, no interface"
   },
   {
-    "name": "ffx2-mega-flare",
-    "file": "ffx2-mega-flare.jpg",
+    "name": "ffx2-darkness",
+    "file": "ffx2-darkness.jpg",
     "width": 1600,
     "height": 900,
-    "bytes": 220001,
+    "bytes": 188996,
     "quality": 86,
     "game": "ffx2",
-    "caption": "Final Fantasy X-2, Mega Flare",
-    "from": "r63-play evidence ch4-script 27"
+    "caption": "Final Fantasy X-2, Darkness",
+    "from": "tools/press-capture.mjs ch4, capture 216: a dark strike on Bahamut, no interface"
   },
   {
     "name": "keyart-farplane",
