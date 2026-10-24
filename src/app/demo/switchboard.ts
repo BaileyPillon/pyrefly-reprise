@@ -56,9 +56,16 @@ background:rgba(8,10,18,.66);color:#e9e6dc;font:clamp(11px,.95vh,15px)/1.45 ui-m
 .sb .sb-new{color:#9fe2b0}.sb .sb-hit{background:#e3b94a;color:#10121a;border-radius:3px;padding:0 3px}.sb .sb-note{display:block;opacity:.7}
 .sb.sb-legend{left:auto;transform:none;right:8px;top:8px;text-align:left;max-width:min(64vw,1180px);padding:9px 14px 10px;background:rgba(8,10,18,.88);opacity:1;font-size:clamp(13px,1.2vh,19px)}
 .sb.sb-legend span{white-space:normal}
+/* r64 (playtest only): over the pause screen the label sits at the bottom edge, clear of the tab row (TIDUS .. CONTROLS / MUSIC) that its last line covered at the top */
+.sb.sb-pause{top:auto;bottom:4px}
 .sb .sb-title{display:block;color:#e3b94a;margin-bottom:3px}.sb .sb-row{display:grid;grid-template-columns:1.6em 7.5em 8.5em 1fr;column-gap:.6em;align-items:baseline;padding:1px 0}
 .sb .sb-row .sb-pl{white-space:normal;opacity:.88}.sb .sb-row .sb-v{opacity:.95}.sb .sb-row .sb-nm{opacity:.95}
 `;
+
+/** The pause screen is up (its stage is mounted; `PauseScreen` makes `.pause__stage`). */
+export function pauseScreenUp(): boolean {
+  return typeof document !== 'undefined' && document.querySelector('.pause__stage') !== null;
+}
 
 export interface SwitchboardHandle {
   /** The label's text, for checks. */
@@ -104,6 +111,7 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
       return;
     }
     el.classList.remove('sb-legend');
+    el.classList.toggle('sb-pause', pauseScreenUp());
     const state = boardState();
     const parts = state.map((s) => {
       const cls = [s.isNew ? 'sb-new' : '', flashed === s.name ? 'sb-hit' : ''].filter(Boolean).join(' ');
