@@ -43,9 +43,11 @@ Entered from the chapter board with `window.__pyrefly.chapterSelect()`, `select:
 | Chapter IV `ffx2-bahamut` (FFX-2) | on | off | on | on | on | on | on | on |
 | Chapter II `yunalesca` (the control) | **off** | rim as today | off | off | off | off | off | off |
 
-Booth flow (`?demo=1` only, no pack word): the picker came up with the booth screens on; a seed-7 fight to the results with the pass at skip speed; the end card showed "Press any button" at **28.44 px** (box 199,1353 to 564,1390 of 2560 x 1440, in view); left alone it went to the title after 8.4 s (`demo-thanks` then `title`).
+The old behaviour is still reachable: Chapter I entered the same way under `?pack=off` shows today's HUD (`hudF1On` false), the party's rim on, the pro look, camera, staging, boss re-cut, motion pack and sound pass all off; under `?partyrim=on` only the rim comes back and the rest of the pack stays on. Zero console errors in every run.
 
-Frames (2560 x 1440 PNG): `ch1-seymour-flux-FFX-3-first-menu.png`, `ch4-bahamut-FFX2-3-first-menu.png`, `ch2-yunalesca-control-*.png`, `booth-timer-3-endcard.png`; the booth press path and the picker idle are in the report (`report-B2.json`) when it ran (see the end of this file).
+Booth flow (`?demo=1` only, no pack word; two real-input runs, `report-B1.json` and `report-B2.json`): the picker came up with the booth screens on (`boothOn` true); a seed-7 fight to the results at skip speed; the end card showed "Press any button" at **28.44 px** (box 199,1353 to 564,1390 of 2560 x 1440, in view). **Left alone** it went `demo-thanks` then `title` after 8.4 s. **A press** (Enter, 3.6 s into the card) reached the picker in 259 ms. **Idle on the picker** (`performance.now()` skewed forward 61 s, as the booth review did) went to the title on the next frame.
+
+Frames (2560 x 1440 PNG, in the scratch folder above): `ch1-seymour-flux-FFX-3-first-menu.png`, `ch4-bahamut-FFX2-3-first-menu.png`, `ch2-yunalesca-control-*.png`, `booth-timer-3-endcard.png`, `booth-*-after*.png`. Web-size copies of three are committed: `docs/screenshots/r64-defaults-ch1-default-hud.jpg`, `r64-defaults-ch4-default-hud.jpg`, `r64-defaults-end-card-hint.jpg`. The check script is `D:/Tools/pyrefly-scratch/2026-10-24/defaults/check-defaults.mjs` (its own vite on 5378, stopped by PID at the end; RIG-RECORD taken and dropped).
 
 ## What is not done, and what to know
 
