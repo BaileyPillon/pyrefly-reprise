@@ -42,7 +42,7 @@ import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
 import { demoModeOn } from './app/demoMode.ts';
 import { warmBattleStage } from './engine/StageWarm.ts';
-import { WARM_FIGHTS_AT_MS, WARM_STAGE_AT_MS, warmDemoFights } from './app/demo/demoWarm.ts'; // release 62 (PR-0481): both demo fights' stages are built behind the title and the picker
+import { warmDemoFights } from './app/demo/demoWarm.ts'; // release 62 (PR-0481): both demo fights' stages are built behind the title and the picker
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
 import './ui/ffx/party-prep/index.ts';
 // Side-effect only: registers ChapterSelectScreen/CutsceneScreen/ResultsScreen
@@ -200,11 +200,8 @@ async function boot(): Promise<void> {
   await app.nextFrame();
   markReady();
   // R61 (PR-0481, the conference demo): in demo mode the title stands a long time, so the once-per-page costs of a first battle are paid there, a few seconds after boot (`engine/StageWarm.ts`).
-  // R63 (play lane, the fight-start stutter): both start sooner than release 62's 4 s and 6 s. Measured at a human pace (a 3 s look at the title, a 3 s look at the picker, then the press) the fight was
-  // picked before the stage warm had built anything (0 or 1 of its steps done), so the paintings' alpha reads, the programs' first draws and the texture uploads all landed in the fight's first 2 s
-  // (1.1 to 1.7 s of frame time lost, 8 to 12 frames over 50 ms in Chapter IV). The warm needs about 3.5 s per fight after it starts, so it starts as soon as the title is up. The same work, earlier.
-  if (demoModeOn()) setTimeout(warmBattleStage, WARM_STAGE_AT_MS);
-  if (demoModeOn()) setTimeout(() => void warmDemoFights(app), WARM_FIGHTS_AT_MS); // release 62 (PR-0481): the fights' paintings, stages and programs, one after the other, while the title stands
+  if (demoModeOn()) setTimeout(warmBattleStage, 4000);
+  if (demoModeOn()) setTimeout(() => void warmDemoFights(app), 6000); // release 62 (PR-0481): the fights' paintings, stages and programs, one after the other, while the title stands
 }
 
 if (document.readyState === 'loading') {
