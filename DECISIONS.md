@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1830 decisions in all: 1317 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1192 of the written decisions record a blanket yes.
+1831 decisions in all: 1318 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1192 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1706 |
+| adopted | 1707 |
 | proposed | 8 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1830** |
+| **All** | **1831** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -40,20 +40,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | guide | 34 |
 | release | 94 |
 | hosting | 18 |
-| process | 198 |
+| process | 199 |
 | critic | 41 |
 | data | 17 |
 | tech | 28 |
 | site | 19 |
-| **All** | **1830** |
+| **All** | **1831** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 930 |
+| both games | 931 |
 | FFX only | 500 |
 | FFX-2 only | 382 |
 | FF7 hidden experiment | 18 |
-| **All** | **1830** |
+| **All** | **1831** |
 
 ## Standing rules in force
 
@@ -138,7 +138,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24)
 
 ## Ledger
 
@@ -8476,7 +8476,7 @@ Friday · 35 decisions
 - <a id="d-1284"></a>**D-1284** — He has not played the playtest build yet and plays tonight; the motion, feel and art picks wait for his play (both games)
   - Bailey: “Not yet, tonight”
   - What changed: Item 193b. Moves his playtest from Thursday evening (D-1154) to Friday night, 2026-10-23. The build for it is r63-play (c67821216), served locally on port 5410 at 18:25 EDT; a question left open at about 18:30 held the session until about 00:00 EDT, so the playtest link was not sent at 20:45 (the lesson: never leave a question open before a scheduled delivery).
-  - area process · both games · adopted · delivery in progress · at ~10:20 EDT
+  - area process · both games · adopted · delivery in progress · at ~10:20 EDT · partly replaced by [D-1318](#d-1318)
   - Source: Bailey, 2026-10-23 10:20 EDT (the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes), answered on …
 - <a id="d-1285"></a>**D-1285** — The two bosses’ edges are re-cut from the 2x masters, option A “Clean cut-out”: no cyan rim or pale fringe, holes and wing bays closed, loose shards gone, the shadow, ring and reflection under the real footprint, Seymour grounded; the originals are kept (Bahamut FFX-2, Seymour Flux FFX)
   - Bailey: “Yes, re-cut both (Recommended)” (blanket yes)
@@ -8488,7 +8488,7 @@ Friday · 35 decisions
   - What changed: Item 193d. Not words of his: he named the four refinements and the finish (192, 193a (D-1283)), not these details. They are in hud-f1 and r63-play and go to tonight’s playtest; the ribbon’s HP bar is 197b (D-1314).
   - area ui · both games · adopted · delivery in progress
   - Source: The driver’s call of 2026-10-23, the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes, recorded …
-- <a id="d-1287"></a>**D-1287** — The driver may message the side session that works on a separate FFX scene-and-models project to move its working folder to L: and turn off Blender’s .blend1 backups, because C: stood at 24 GB and fell 4 to 7 GB an hour (process; no game change)
+- <a id="d-1287"></a>**D-1287** — The driver may message a side session (not this game’s code) to move its working folder to L: and turn off Blender’s .blend1 backups, because C: stood at 24 GB and fell 4 to 7 GB an hour (process; no game change)
   - Bailey: “Yes, tell it (Recommended)” (blanket yes)
   - What changed: Item 194. The driver told that session the measurements and the ask; it acknowledged: its scratch moves to L:, save_version is 0, its finished scratch is listed for Bailey to delete. Records only; no game change.
   - area process · both games · adopted · delivery implemented · at ~12:35 EDT
@@ -8583,10 +8583,10 @@ Friday · 35 decisions
   - What changed: Item 196.12. Kept as they are. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
   - area audio · both games · adopted · delivery in progress
   - Source: docs/audio/audition.html
-- <a id="d-1306"></a>**D-1306** — DELEGATED (PC-13): the menu “no” sound stays off
+- <a id="d-1306"></a>**D-1306** — DELEGATED (PC-13): the menu “no” sound stays off (FFX only)
   - Bailey: “You choose all sound effects and music and voice overs for me for now please”
   - What changed: Item 196.13. Stays off, as it is today. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
-  - area audio · both games · adopted · delivery in progress
+  - area audio · FFX · adopted · delivery in progress
   - Source: docs/audio/audition.html
 - <a id="d-1307"></a>**D-1307** — DELEGATED (PC-14): the Natus cue is kept (not in the demo)
   - Bailey: “You choose all sound effects and music and voice overs for me for now please”
@@ -8598,10 +8598,10 @@ Friday · 35 decisions
   - What changed: Item 196.15. Deferred; they are not in the demo chapters. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
   - area audio · both games · adopted · delivery in progress
   - Source: docs/audio/audition.html
-- <a id="d-1309"></a>**D-1309** — DELEGATED (PC-16): no retake of the 11 “try again” voice rows, because it needs money
+- <a id="d-1309"></a>**D-1309** — DELEGATED (PC-16): no retake of the 11 “try again” sound-effect rows and the Leblanc effects, because a retake spends credits (both games)
   - Bailey: “You choose all sound effects and music and voice overs for me for now please”
-  - What changed: Item 196.16. Rule 11: ask before spending. Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
-  - area audio · FFX · adopted · delivery in progress
+  - What changed: Item 196.16. Rule 11: ask before spending. A retake spends ElevenLabs credits, two rounds already failed and none of the 11 rows plays in the two demo fights (PICKS.md PC-16: sound-effect rows, not voice lines; an earlier version of this row called them voice rows and tagged it FFX only). Built on branch audio-pass (a0fd335ea) behind ?audio=new or ?pack=demo (Chapter I FFX and Chapter IV FFX-2 only; ?audio=today is today’s sound), merged into r63-play; not live; deep-class (audio routing), so a focused review comes before the deploy and a deep review after it.
+  - area audio · both games · adopted · delivery in progress
   - Source: docs/audio/audition.html
 - <a id="d-1310"></a>**D-1310** — DELEGATED (PC-17): no listening score is made without ears
   - Bailey: “You choose all sound effects and music and voice overs for me for now please”
@@ -8643,3 +8643,13 @@ Friday · 35 decisions
   - What changed: Item 197e. Built in perf-trim (1f4e55940) after r63-int found the aeon victory frames showing an empty field. Not live.
   - area camera · FFX · adopted · delivery in progress
   - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
+
+### 2026-10-24
+
+Saturday · 1 decision
+
+- <a id="d-1318"></a>**D-1318** — He cannot play the playtest build tonight: the playtest moves to Saturday daytime and the overnight work goes on without it (both games)
+  - Bailey: “I can't play it tonight right now. Tomorrow.”
+  - What changed: Item 198 (the number after the queue’s 197; it is not in the queue file yet and is taken from the DRIVER-STATE line of 00:50 EDT on 2026-10-24). Replaces the Friday night of 193b (D-1284) and the Thursday evening of 176p (D-1208): every “tonight’s playtest” in D-1284 and D-1286 to D-1317 now means this Saturday playtest of the r63-play build. The driver released the side session’s GPU hold (acknowledged at 00:45 EDT; it pauses again on his word) and launched the overnight-sat workflow (A-0984): fixes for the skeptic’s findings, the booth screens, the repaint prep, the assembly and a brief pack. Records only until it runs.
+  - area process · both games · adopted · delivery in progress
+  - Source: Bailey, 2026-10-24 about 00:40 EDT (the DRIVER-STATE line of 00:50 EDT), typed in the chat after “I'm about to go to bed... What are you going to …
