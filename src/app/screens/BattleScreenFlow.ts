@@ -45,7 +45,7 @@ import { stagingPieceOnFor } from '../../engine/pro/staging/StagingSwitch.ts';
 import { ProDefeatScreen } from './ProDefeatScreen.ts'; // lane "pro-staging": the defeat card that keeps the scene
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
-import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
+import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, retryTheme, retryThemeSwitchedOff, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
 import { demoThanksDue } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
 import { demoIntroFor } from '../demo/demoIntro.ts'; // R62 (demo mode only, FFX Chapter I): the short voiced intro
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
@@ -411,6 +411,7 @@ export class GameFlow {
         ...(opts.speed ? { speed: opts.speed } : {}),
         ...(carry.resumeAt ? { resumeAt: carry.resumeAt } : {}),
         ...(openingHurry ? { openingHurry } : {}),
+        ...(demoQuickRetry(id, attempt) && !retryThemeSwitchedOff() ? { retryTheme: true } : {}), // r64-fixes: the retried fight's theme is asked for as its screen opens (after the lost screen's exit, which stops the music), not 2 to 4 s later when the chain starts
       };
       const battle = factories.battle?.(battleOpts) ?? new BattleScreen(battleOpts);
       // A-2: the entry by situation (FFX blur or shatter, FFX-2 shatter; the
@@ -485,7 +486,8 @@ export class GameFlow {
    */
   private async showProDefeat(chapter: Chapter, outcome: BattleScreenResult, attempt: number): Promise<ResultsChoice> {
     const cue = resultsCueFor(chapter, outcome.outcome);
-    const music: ResultsMusicHandle | null = cue?.kind === 'defeat' ? startResultsMusic(audio, cue) : null; // the battle screen is still up: nothing stops this cue before the player chooses
+    const keepForRetry = retryTheme(chapter); // r64-fixes: a lost demo fight's own theme stays decoded under the defeat theme (a TRY AGAIN asks for it at once)
+    const music: ResultsMusicHandle | null = cue?.kind === 'defeat' ? startResultsMusic(audio, cue, keepForRetry ? [keepForRetry] : undefined) : null; // the battle screen is still up: nothing stops this cue before the player chooses
     let choice: ResultsChoice = 'continue';
     const screen = new ProDefeatScreen({ game: chapter.game, turns: outcome.result?.turns, elapsedMs: outcome.elapsedMs, attempt, onChoice: (picked) => (choice = picked) });
     await this.app.pushOverlay(screen);

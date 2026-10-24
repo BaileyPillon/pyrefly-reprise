@@ -14,7 +14,9 @@
  * Outside demo mode, and for a chapter that is not a demo fight, nothing here does anything.
  */
 
+import type { Chapter } from '../../data/encounters.ts';
 import { demoModeOn } from '../demoMode.ts';
+import { cueForGroup } from '../screens/BattleEncounterChain.ts';
 import { rememberBoardChapter } from '../screens/frontend/boardFocus.ts';
 import { isDemoFight, otherDemoFight } from './demoFlow.ts';
 
@@ -31,6 +33,48 @@ export function demoDefeatPanel(chapterId: string): boolean {
  */
 export function demoQuickRetry(chapterId: string, attempt: number): boolean {
   return attempt > 0 && demoDefeatPanel(chapterId);
+}
+
+/** `?retrytheme=off`: the retried fight's theme is left to the chain, as in r63-play (a comparison, or if it ever misbehaves at the booth). */
+export function retryThemeSwitchedOff(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+  try {
+    return new URLSearchParams(search).get('retrytheme') === 'off';
+  } catch {
+    return false;
+  }
+}
+
+/** How long the chapter's theme takes to come in at TRY AGAIN, seconds (the defeat theme goes out over `DEFEAT_OUT_S`, 0.5; the two cross). */
+export const RETRY_THEME_FADE_S = 0.8;
+
+/** The mixer the retry's theme is asked of: the page's `audio` has this shape, a test passes a fake. */
+export interface RetryThemePort {
+  playMusic(name: string, options?: { fade?: number }): Promise<void> | unknown;
+  /** The cue the mixer is heading for (`AudioManager.requestedMusic`): when it is the theme already, nothing is asked twice. */
+  readonly requestedMusic?: string | null;
+}
+
+/** The cue a retried demo fight's chain asks for first, or undefined (not a demo fight, or no theme). Its decoded buffer is what a TRY AGAIN needs again after the defeat theme has played. */
+export function retryTheme(chapter: Chapter): string | undefined {
+  return demoDefeatPanel(chapter.id) ? cueForGroup(chapter, chapter.enemyGroupRef, 'first').track : undefined;
+}
+
+/**
+ * The theme a retried demo fight plays from its first frame (r64-fixes, both games; demo mode only; Chapter I FFX and Chapter IV FFX-2). The first attempt's theme comes in when the fight's chain
+ * starts (`BattleEncounterChain`: after the entry, the load and the boss card), and that is a few seconds on a retry, which the defeat theme's exit left silent (the skeptic's m1: the master output read
+ * 0 to 0.0003 RMS at the press and the theme came in 2 to 4 s later, about when the first menu opened). So the same cue, the one the chain will ask for, is asked at the press; the chain's own request for
+ * it then finds it already playing (`AudioManager.playMusic` returns early for the current track). Returns the cue name, or null when nothing was asked.
+ */
+export function startRetryTheme(chapter: Chapter, audio: RetryThemePort): string | null {
+  const track = retryTheme(chapter);
+  if (!track) return null;
+  if (audio.requestedMusic === track) return track; // already on its way (the press asked for it, `showProDefeat`)
+  try {
+    void Promise.resolve(audio.playMusic(track, { fade: RETRY_THEME_FADE_S })).catch(() => undefined);
+  } catch {
+    return null;
+  }
+  return track;
 }
 
 let pending: string | null = null;

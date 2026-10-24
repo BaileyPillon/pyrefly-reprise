@@ -118,8 +118,16 @@ describe('the warm with the fight prebuild on', () => {
     calls.length = 0;
     hold.clear();
     resetDemoWarm();
+    await run(app('pro-defeat'), ['ffx2-bahamut'], { light: true });
+    expect(steps()).toEqual(['paintings ffx2-bahamut']); // the prebuild off: the light warm is r63-play's, the stage alone
+  });
+
+  it('r64-fixes: the light retry warm behind a lost fight\'s card builds the figures too (their paintings went up again under the retry\'s first seconds), the essentials before the other poses', async () => {
     prebuildIsOn = true;
     await run(app('pro-defeat'), ['ffx2-bahamut'], { light: true });
-    expect(steps()).toEqual(['paintings ffx2-bahamut']);
+    const s = steps();
+    expect(s.slice(0, 3)).toEqual(['paintings ffx2-bahamut', 'essential ffx2-bahamut', 'essential ffx2-bahamut']);
+    expect(s.filter((x) => x.startsWith('rest')).length).toBeGreaterThan(0);
+    expect(s.indexOf('rest ffx2-bahamut')).toBeGreaterThan(s.lastIndexOf('essential ffx2-bahamut'));
   });
 });
