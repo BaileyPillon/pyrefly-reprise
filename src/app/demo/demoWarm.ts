@@ -40,9 +40,11 @@ import { DEMO_FIGHTS } from './demoFlow.ts';
  * When, after the page's first real frame, the title starts the two warms (`main.ts`). Release 62 used 4000 and 6000; the R63 play lane measured a player at a human pace (3 s on the title, 3 s on the
  * picker) fighting before either stage was built (0 or 1 warm steps done at the press), and the cold load then cost 1.1 to 1.7 s of frame time in the fight's first 9 s (Chapter IV, 8 to 12 frames over 50 ms).
  * The once-per-page costs (`warmBattleStage`: a second WebGL2 context, 0.7 s of main thread, then the spell atlas) go first, the fights' stages after them. Game case: both.
+ * NOT earlier: 300 / 900 was tried and is worse (same pace, 7 runs): the stages were no sooner built (Chapter I's at 5.6 to 6.7 s of page time either way, the title's own art loading shares the time), the
+ * first press on the title was lost in 3 of 7 runs (a 0.65 s task swallowed the tap; 0 of 14 at 700 / 1600 and at release 62's timing), and the fight's first 9 s lost more (1.0 to 1.5 s against 0.5 to 1.1 s in Chapter I).
  */
-export const WARM_STAGE_AT_MS = 300;
-export const WARM_FIGHTS_AT_MS = 900;
+export const WARM_STAGE_AT_MS = 700;
+export const WARM_FIGHTS_AT_MS = 1600;
 
 /** The screens the warm may work behind: the title and the picker. */
 const CALM = new Set(['title', 'chapter-select']);
