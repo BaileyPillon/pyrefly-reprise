@@ -59,3 +59,10 @@ Frames (2560 x 1440 PNG, in the scratch folder above): `ch1-seymour-flux-FFX-3-f
 - `src/app/screens/BattleScreenFlow.ts` was 635 lines before this lane (over the 400-line house rule) and is 647 now; the new lines are the title return only.
 - The governor (`DemoGovernor`) acts whenever a pro lane is on in a demo chapter, so it is now on by default there as well (part of the pack; `?govern=off` still stops it).
 - Party rigs stay OFF (`?partyrigs=on` only), as 200a says; the pack never turned them on and still does not.
+
+## Review fixes, 2026-10-24 (the r64 defaults and art review; tests only, both games)
+
+- **M1 fixed.** `tests/unit/audio-music-slot.test.ts`: its fake `AudioContext` gains `createWaveShaper` (the sound pass is configured by default in jsdom now, so the master chain builds the shaper). The file passes 6 of 6 and the run no longer ends with `Errors 1 error` (exit 0). No other test builds a fake context with `createDynamicsCompressor`.
+- **m6 fixed.** `tests/unit/r64-defaults.test.ts` (486 lines) is split in two with the same 40 tests: parts 1, 2 and 5 stay (131 lines), parts 3 and 4 move to `tests/unit/r64-defaults-card.test.ts` (367 lines). Nothing in `src/` moved.
+- **M2** (the five old art-pin reds) is fixed in the art lane, `r64-art`, because the pins follow the registration that lane writes (see `r64-art.md`, "Review fixes").
+- Not fixed, said plainly: m1 (Chapter IV non-booth Intel panel over the active character's name; the booth path is clean), m2 (the attract card two minutes after the last press), m3 (README lines 44 and 54, ARCHITECTURE.md line 127), m4 (e2e specs not run), m7 (the limiter chain built on every page, Chapter II too; not measured).

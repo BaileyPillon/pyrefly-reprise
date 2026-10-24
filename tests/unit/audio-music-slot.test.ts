@@ -212,6 +212,7 @@ describe('hotfix-music-overlap: the unlock listeners stay armed until the contex
       });
       createGain = this.node;
       createDynamicsCompressor = this.node;
+      createWaveShaper = () => ({ ...this.node(), curve: null }); // the sound pass is on by default, so the master chain builds a shaper
       createBuffer = () => ({ getChannelData: () => new Float32Array(4) });
       createConvolver = () => ({ ...this.node(), buffer: null, normalize: true });
       resume = (): Promise<void> => {
