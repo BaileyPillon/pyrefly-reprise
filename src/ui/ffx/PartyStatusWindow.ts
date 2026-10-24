@@ -39,8 +39,37 @@ export class PartyStatusWindow {
 
   render(activeIds: CombatantId[], combatants: Record<CombatantId, AnyCombatant>, actingId: CombatantId | null): void {
     const rows = activeIds.map((id, i) => this.rowHtml(id, combatants[id], i, id === actingId));
+    // r63-play (the overnight fix of the skeptic's m1, FFX; Chapter I): every render replaces the rows, and a replaced row is born at its final height, so a render that landed while the F1 HUD's slim cards
+    // were on their way back (a menu opening, a hit's numbers) snapped them up to 90 px in one frame. Each new row now starts from the height its old one had and eases from there, as the rest do.
+    const before = this.el.closest('.hud-f1') ? this.heights() : null;
     this.el.innerHTML = rows.join('');
     wirePortraitFallbacks(this.el);
+    if (before && before.size) this.carryHeights(before);
+  }
+
+  /** Each row's used height now (mid-transition included), in the row's own units, by actor. */
+  private heights(): Map<string, number> {
+    const out = new Map<string, number>();
+    for (const row of this.el.querySelectorAll<HTMLElement>('.ig-stat')) {
+      const h = parseFloat(getComputedStyle(row).height);
+      if (Number.isFinite(h) && row.dataset['actor']) out.set(row.dataset['actor'], h);
+    }
+    return out;
+  }
+
+  /** The new rows start at the old rows' height and let the stylesheet's height transition carry them to where they belong. */
+  private carryHeights(before: Map<string, number>): void {
+    for (const row of this.el.querySelectorAll<HTMLElement>('.ig-stat')) {
+      const from = before.get(row.dataset['actor'] ?? '');
+      if (from === undefined) continue;
+      const to = parseFloat(getComputedStyle(row).height);
+      if (!Number.isFinite(to) || Math.abs(from - to) < 1) continue;
+      row.style.transition = 'none';
+      row.style.height = `${from}px`;
+      void row.offsetHeight; // the old height is the style the transition starts from
+      row.style.transition = '';
+      row.style.height = '';
+    }
   }
 
   private rowHtml(id: CombatantId, c: AnyCombatant | undefined, i: number, acting: boolean): string {
