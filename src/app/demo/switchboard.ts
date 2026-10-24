@@ -49,12 +49,12 @@ export function tidusAsked(search: string, cookie: string): 't1' | 't2' {
 }
 
 const CSS = `
-.sb{position:fixed;right:8px;top:8px;z-index:998;pointer-events:none;max-width:min(46vw,760px);text-align:right;padding:4px 9px 5px;border-radius:4px;
+.sb{position:fixed;left:50%;transform:translateX(-50%);top:4px;z-index:998;pointer-events:none;max-width:min(36vw,920px);text-align:center;padding:4px 9px 5px;border-radius:4px;
 background:rgba(8,10,18,.66);color:#e9e6dc;font:clamp(11px,.95vh,15px)/1.45 ui-monospace,Consolas,'Cascadia Mono',monospace;white-space:normal;letter-spacing:.01em}
 .sb{transition:opacity .25s}.sb.sb-quiet{opacity:.2}
 .sb[hidden]{display:none}.sb b{color:#e3b94a;font-weight:600}.sb i{font-style:normal;opacity:.5}.sb span{white-space:nowrap}
 .sb .sb-new{color:#9fe2b0}.sb .sb-hit{background:#e3b94a;color:#10121a;border-radius:3px;padding:0 3px}.sb .sb-note{display:block;opacity:.7}
-.sb.sb-legend{text-align:left;max-width:min(64vw,1180px);padding:9px 14px 10px;background:rgba(8,10,18,.88);opacity:1;font-size:clamp(13px,1.2vh,19px)}
+.sb.sb-legend{left:auto;transform:none;right:8px;top:8px;text-align:left;max-width:min(64vw,1180px);padding:9px 14px 10px;background:rgba(8,10,18,.88);opacity:1;font-size:clamp(13px,1.2vh,19px)}
 .sb.sb-legend span{white-space:normal}
 .sb .sb-title{display:block;color:#e3b94a;margin-bottom:3px}.sb .sb-row{display:grid;grid-template-columns:1.6em 7.5em 8.5em 1fr;column-gap:.6em;align-items:baseline;padding:1px 0}
 .sb .sb-row .sb-pl{white-space:normal;opacity:.88}.sb .sb-row .sb-v{opacity:.95}.sb .sb-row .sb-nm{opacity:.95}
