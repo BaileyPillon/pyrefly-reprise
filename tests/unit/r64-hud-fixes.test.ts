@@ -11,7 +11,8 @@ import { PartyStatusWindow } from '../../src/ui/ffx/PartyStatusWindow.ts';
 import { PARTY_IN_DELAY_MS, PARTY_IN_STEP_MS, makePartyGhost, memberKey, membershipChanged, playPartySwap, swapTiming } from '../../src/ui/ffx/partySwap.ts';
 import { footprintOf } from '../../src/ui/ffx/DamageNumbers.ts';
 import { HUD_F1_TUNE } from '../../src/ui/hudf1/HudF1Switch.ts';
-import { startRetryTheme } from '../../src/app/demo/demoDefeat.ts';
+import { retryTheme, startRetryTheme } from '../../src/app/demo/demoDefeat.ts';
+import { resultsCueFor, startResultsMusic } from '../../src/app/screens/resultsMusic.ts';
 import { setDemoMode } from '../../src/app/demoMode.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { pauseScreenUp } from '../../src/app/demo/switchboard.ts';
@@ -176,10 +177,37 @@ describe('startRetryTheme: the retried fight\'s theme at the press', () => {
     await Promise.resolve();
   });
 
+  it("a lost demo fight's defeat cue keeps the fight's own theme decoded (upcoming), so the retry does not decode it again", () => {
+    setDemoMode(true);
+    const chapter = getChapter('ffx2-bahamut')!;
+    const asked: Array<[string, unknown]> = [];
+    const port = { requestedMusic: null, playMusic: (n: string, o?: unknown) => void asked.push([n, o]), stopMusic: () => undefined };
+    const cue = resultsCueFor(chapter, 'defeat');
+    expect(cue?.kind).toBe('defeat');
+    startResultsMusic(port, cue, [retryTheme(chapter)!]);
+    expect(asked).toHaveLength(1);
+    expect(asked[0]![1]).toEqual({ fade: cue!.fade, upcoming: [chapter.music.battle] });
+    asked.length = 0;
+    startResultsMusic(port, cue); // no upcoming: the old call, unchanged
+    expect(asked[0]![1]).toEqual({ fade: cue!.fade });
+    setDemoMode(false);
+    expect(retryTheme(chapter)).toBeUndefined();
+  });
+
+  it('a theme the mixer is already heading for is not asked twice', () => {
+    setDemoMode(true);
+    const chapter = getChapter('seymour-flux')!;
+    const asked: string[] = [];
+    expect(startRetryTheme(chapter, { requestedMusic: chapter.music.battle, playMusic: (n) => void asked.push(n) })).toBe(chapter.music.battle);
+    expect(asked).toEqual([]);
+  });
+
   it('the flow asks for it at the press, after the hurried-opening line the r63 test reads, and the warm builds the figures behind the defeat card too', () => {
     const flow = src('src/app/screens/BattleScreenFlow.ts');
     expect(flow).toContain('if (demoQuickRetry(id, attempt)) openingHurry = true;');
     expect(flow).toContain('if (demoQuickRetry(id, attempt)) startRetryTheme(chapter, audio);');
+    expect(flow).toContain("if ((choice as ResultsChoice) === 'retry') startRetryTheme(chapter, audio);"); // the press itself, in the pro defeat card's flow
+    expect(flow).toContain('startResultsMusic(audio, cue, keepForRetry ? [keepForRetry] : undefined)');
     const warm = src('src/app/demo/demoWarm.ts');
     expect(warm).toContain('const figuresAhead = prebuildOn();');
     expect(warm).not.toContain('const figuresAhead = !light && prebuildOn();');

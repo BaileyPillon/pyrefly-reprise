@@ -41,6 +41,13 @@ export const RETRY_THEME_FADE_S = 0.8;
 /** The mixer the retry's theme is asked of: the page's `audio` has this shape, a test passes a fake. */
 export interface RetryThemePort {
   playMusic(name: string, options?: { fade?: number }): Promise<void> | unknown;
+  /** The cue the mixer is heading for (`AudioManager.requestedMusic`): when it is the theme already, nothing is asked twice. */
+  readonly requestedMusic?: string | null;
+}
+
+/** The cue a retried demo fight's chain asks for first, or undefined (not a demo fight, or no theme). Its decoded buffer is what a TRY AGAIN needs again after the defeat theme has played. */
+export function retryTheme(chapter: Chapter): string | undefined {
+  return demoDefeatPanel(chapter.id) ? cueForGroup(chapter, chapter.enemyGroupRef, 'first').track : undefined;
 }
 
 /**
@@ -50,9 +57,9 @@ export interface RetryThemePort {
  * it then finds it already playing (`AudioManager.playMusic` returns early for the current track). Returns the cue name, or null when nothing was asked.
  */
 export function startRetryTheme(chapter: Chapter, audio: RetryThemePort): string | null {
-  if (!demoDefeatPanel(chapter.id)) return null;
-  const track = cueForGroup(chapter, chapter.enemyGroupRef, 'first').track;
+  const track = retryTheme(chapter);
   if (!track) return null;
+  if (audio.requestedMusic === track) return track; // already on its way (the press asked for it, `showProDefeat`)
   try {
     void Promise.resolve(audio.playMusic(track, { fade: RETRY_THEME_FADE_S })).catch(() => undefined);
   } catch {
