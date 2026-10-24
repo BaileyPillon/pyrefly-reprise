@@ -30,6 +30,14 @@ import { isV2Key } from './sfxV2/cues.ts';
 import { packsFor } from './sfxV2/packs.ts';
 import { beatDelaySeconds } from './sfxV2/beatTiming.ts';
 import { RETIRED_V2_CUES } from './sfxV2/retired.ts';
+import { audioNewConfigured, audioNewOn } from './pass/passSwitch.ts'; // the sound pass (conference demo, decision 184): off unless ?audio=new / ?pack=demo in Chapter I or IV
+import { uiRowFor } from './pass/passRecipes.ts';
+import { dbToGain, safetyCurve } from './pass/passMix.ts';
+import { passLogPush, passNow } from './pass/passLog.ts';
+import { noteBlowAt } from './pass/passMask.ts';
+import { baseSkipFor, playLayers, scheduleDip, sliceOnsetMs } from './pass/passMixer.ts';
+import { landingDelayMs } from './pass/passPlanner.ts';
+import type { DipPlan, PassPlan } from './pass/passTypes.ts';
 
 export interface AudioManagerOptions {
   masterVolume?: number;
@@ -84,6 +92,10 @@ export interface PlaySfxOptions {
   pitch?: number;
   /** Seconds to wait before the cue fires. */
   delay?: number;
+  /** Motion sounds (`sfxV2/motionCues.ts`): play only the first `trimMs` of the cue, in output time. Absent: the whole cue. */
+  trimMs?: number;
+  /** Motion sounds: fade out over the last `fadeMs` of the cue (or of its trim). Absent: no fade. */
+  fadeMs?: number;
   /**
    * SFX parity, per event (`sfxV2/eventCues.ts`): the recorded originals to look up for this cue, in order, in the
    * running chapter's parity packs. Given (even empty), the packs are consulted for these names ONLY, so a stand-in
@@ -98,6 +110,8 @@ export interface PlaySfxOptions {
    * `peakMs` starts `beatMs - peakMs` later so its peak lands on the beat (`sfxV2/beatTiming.ts`); nothing else is moved.
    */
   beatMs?: number;
+  /** The audio pass (`audio/pass/`): layers under this cue, a base that starts on its first audible sample. Honoured only while the pass is on; absent: today's cue exactly. */
+  pass?: PassPlan;
 }
 
 export type { ParityVoice };
@@ -109,6 +123,12 @@ export class AudioManager {
   private limiter: DynamicsCompressorNode | null = null;
   private musicBus: GainNode | null = null;
   private duckBus: GainNode | null = null;
+  /** The audio pass: the music's dip before a big blow (between the music bus and the duck bus; unity unless a dip runs) and the master makeup before the limiter (unity with the pass off). */
+  private dipBus: GainNode | null = null;
+  private passTrim: GainNode | null = null;
+  private safety: WaveShaperNode | null = null;
+  private passMakeupDb = 0;
+  private passBoothDb = 0;
   private sfxBus: GainNode | null = null;
   /** Recorded voice-over: into `master`, not through `duckBus`, so ducking the music never ducks a line (voice-integration-design.md section 3). */
   private voiceBus: GainNode | null = null;
@@ -199,7 +219,10 @@ export class AudioManager {
     this.musicBus.gain.value = this.musicVolume;
     this.duckBus.gain.value = 1;
     this.sfxBus.gain.value = sfxBusGain(this.sfxVolume, this.sfxMix);
-    this.musicBus.connect(this.duckBus);
+    this.dipBus = ctx.createGain();
+    this.dipBus.gain.value = 1;
+    this.musicBus.connect(this.dipBus);
+    this.dipBus.connect(this.duckBus);
     this.duckBus.connect(this.master);
     this.sfxBus.connect(this.master);
     this.voiceBus = ctx.createGain();
@@ -219,8 +242,20 @@ export class AudioManager {
     limiter.attack.value = 0.003;
     limiter.release.value = 0.25;
     this.limiter = limiter;
-    this.master.connect(limiter);
-    limiter.connect(ctx.destination);
+    this.passTrim = ctx.createGain();
+    this.passTrim.gain.value = dbToGain(this.passMakeupDb + this.passBoothDb);
+    this.master.connect(this.passTrim);
+    this.passTrim.connect(limiter);
+    if (audioNewConfigured()) {
+      // The address asks for the sound pass: the limiter feeds a shaper (null curve = untouched) that only the pass's makeup turns on. A page that never asks keeps the plain path.
+      this.safety = ctx.createWaveShaper();
+      this.safety.curve = null;
+      limiter.connect(this.safety);
+      this.safety.connect(ctx.destination);
+    } else {
+      limiter.connect(ctx.destination);
+    }
+    if (this.passMakeupDb !== 0 || this.passBoothDb !== 0) this.applyPassTrim(); // a chapter run that began before the context existed
 
     void this.loadManifest();
     // Post the queued track's render to the worker before SFX warm-up starts,
@@ -541,6 +576,15 @@ export class AudioManager {
     // which stands in with its first-bank cue until its sprite has decoded (`SfxSprites.pick`).
     const game = sfxGame();
     const voiced = voiceKey(name, game);
+    // The sound pass (decision 184; Chapter I and IV only, off by default): a menu cue takes its place in the menu family (one level and length per cue, `pass/passRecipes.ts` UI_FAMILY).
+    const pass = audioNewOn();
+    if (pass && game) {
+      const row = uiRowFor(game, voiced);
+      if (row) {
+        options = { ...options, volume: (options.volume ?? 1) * dbToGain(row.gainDb), trimMs: row.trimMs, fadeMs: row.fadeMs };
+        passLogPush({ kind: 'ui', cue: voiced, gainDb: row.gainDb, trimMs: row.trimMs });
+      }
+    }
     // SFX parity, per event: the recorded originals this cue asks for (only in a chapter run, rule 14). Given, the packs
     // are consulted for those names alone; a stand-in that another original covers stays silent (`coveredBy`).
     const events = game ? options.events : undefined;
@@ -549,6 +593,7 @@ export class AudioManager {
       const covering = this.sprites.pickEvent(this.manifest, options.coveredBy, game);
       if (covering) {
         this.sprites.record({ t: (this.ctx?.currentTime ?? 0) + Math.max(0, options.delay ?? 0), asked: name, played: covering.name, via: 'parity', volume: 0, covered: true });
+        if (pass && options.pass) this.playPassThump(name, options); // the recorded original covers the blow, but a big blow still gets its low end (the pass)
         return;
       }
     }
@@ -582,7 +627,93 @@ export class AudioManager {
       ...(lead > 0 ? { leadMs: Math.round(lead * 1000) } : {}),
     });
     // The caller's volume, times the P1 mix's per-cue trim for a v2 slice (`sfxV2/parityMix.ts`; 1 for everything else).
-    startSfxSource(ctx, { dry: this.sfxDry ?? this.sfxBus!, send: this.sfxSend }, buffer, spriteCue, (options.volume ?? 1) * v2.gain, options, delay, false);
+    const level = (options.volume ?? 1) * v2.gain;
+    const plan = pass ? options.pass : undefined;
+    if (!plan || !spriteCue) {
+      startSfxSource(ctx, { dry: this.sfxDry ?? this.sfxBus!, send: this.sfxSend }, buffer, spriteCue, level, options, delay, false);
+      return;
+    }
+    this.playPassed(ctx, name, cue, buffer, spriteCue, level, options, delay, plan);
+  }
+
+  /**
+   * The audio pass's blow: the base cue starts at its first audible sample (a recorded dagger hit carries 168 ms of near-silence, so asked for at the contact it was heard 168 ms late) and its layers
+   * are laid on that sample (`audio/pass/passMixer.ts`). The layers are slices of the v2 sprite and the first bank that have already decoded; one that has not is left out.
+   */
+  private playPassed(ctx: AudioContext, name: string, cue: string, buffer: AudioBuffer, slice: NonNullable<SfxPick['slice']>, level: number, options: PlaySfxOptions, delay0: number, plan: PassPlan): void {
+    let delay = delay0;
+    const skip = plan.baseSkip ? baseSkipFor(slice) : 0;
+    const onset = sliceOnsetMs(slice);
+    const audibleS = Math.max(0, onset - skip) / 1000;
+    const outs = { dry: this.sfxDry ?? this.sfxBus!, send: this.sfxSend };
+    // A spell's landing waits for the effect's mark (its own remaining wait less the silence still in front of the sound once the skip is taken); a blow's contact is where it was asked.
+    delay += plan.landingMs ? landingDelayMs(plan.landingMs, Math.max(0, onset - skip)) / 1000 : 0;
+    startSfxSource(ctx, outs, buffer, slice, level, skip > 0 ? { ...options, skipMs: skip } : options, delay, false);
+    const played = playLayers(
+      { ctx, dry: outs.dry, send: outs.send, slice: (key) => (key.startsWith('v2:') ? this.sprites.pick(this.manifest, key, null, false).slice : this.sprites.pick(this.manifest, key).slice) },
+      plan.layers,
+      level,
+      audibleS,
+      delay,
+    );
+    for (const p of played) this.sprites.record({ t: ctx.currentTime + p.atS, asked: name, played: p.key, via: p.key.startsWith('v2:') ? 'v2' : 'sprite', volume: p.volume, layer: p.role });
+    noteBlowAt(passNow() + delay * 1000); // the motion sounds keep off the blow (`pass/passMask.ts`)
+    passLogPush({ kind: 'hit', cue, ...(plan.landingMs ? { landingMs: plan.landingMs, delayMs: Math.round((delay - delay0) * 1000) } : {}), skipMs: Math.round(skip * 10) / 10, onsetMs: Math.round(onset * 10) / 10, audibleMs: Math.round(audibleS * 10000) / 10, big: plan.big ?? null, layers: played.map((p) => `${p.role}:${p.key}`) });
+  }
+
+  // ------------------------------------------------------------------ the sound pass ---
+
+  /** A blow whose own cue is covered by a recorded original (Cross Cleave's 6 s sample) still gets the pass's thump, on the ask. */
+  private playPassThump(name: string, options: PlaySfxOptions): void {
+    const ctx = this.ctx;
+    const plan = options.pass;
+    if (!ctx || !this.sfxBus || !plan) return;
+    const thump = plan.layers.filter((l) => l.role === 'thump');
+    if (thump.length === 0) return;
+    const delay = Math.max(0, options.delay ?? 0);
+    const played = playLayers({ ctx, dry: this.sfxDry ?? this.sfxBus, send: this.sfxSend, slice: (key) => (key.startsWith('v2:') ? this.sprites.pick(this.manifest, key, null, false).slice : this.sprites.pick(this.manifest, key).slice) }, thump, options.volume ?? 1, 0, delay);
+    for (const p of played) this.sprites.record({ t: ctx.currentTime + p.atS, asked: name, played: p.key, via: 'v2', volume: p.volume, layer: p.role });
+    passLogPush({ kind: 'hit', cue: name, covered: true, big: plan.big ?? null, layers: played.map((p) => `${p.role}:${p.key}`) });
+  }
+
+  /**
+   * Dip the music for a blow `aheadMs` away (the sound pass, `audio/pass/`): a gain on its own bus between the music bus and the duck bus, so the voice's and the pause menu's ducks are untouched.
+   * Does nothing before the context exists or with the pass off.
+   */
+  musicDip(aheadMs: number, plan: DipPlan): void {
+    if (!this.ctx || !this.dipBus || !audioNewOn()) return;
+    scheduleDip(this.ctx, this.dipBus.gain, aheadMs, plan);
+  }
+
+  /** The master makeup (dB, before the limiter) the pass adds for a demo chapter run; 0 puts the master back exactly. */
+  setPassMakeup(db: number): void {
+    this.passMakeupDb = db;
+    this.applyPassTrim();
+  }
+
+  /** The booth's whole-mix trim (dB) for the attract reel; 0 puts it back. */
+  setPassBoothTrim(db: number): void {
+    this.passBoothDb = db;
+    this.applyPassTrim();
+  }
+
+  private applyPassTrim(): void {
+    if (!this.ctx || !this.passTrim) return;
+    const g = this.passTrim.gain;
+    const now = this.ctx.currentTime;
+    g.cancelScheduledValues(now);
+    g.setTargetAtTime(dbToGain(this.passMakeupDb + this.passBoothDb), now, 0.08);
+    if (this.safety) {
+      // The makeup raises the peaks into the limiter, which overshoots its threshold: the safety shaper (a soft ceiling at -1.5 dBFS, 4x oversampled) bends what gets through. Off: a null curve passes the signal unchanged.
+      const on = this.passMakeupDb > 0;
+      this.safety.curve = on ? safetyCurve() : null;
+      this.safety.oversample = on ? '4x' : 'none';
+    }
+  }
+
+  /** What the pass holds right now, for `__pyrefly.audioPass()`: no shape the tests pin. */
+  passState(): { on: boolean; makeupDb: number; boothDb: number; dip: number | null; trim: number | null } {
+    return { on: audioNewOn(), makeupDb: this.passMakeupDb, boothDb: this.passBoothDb, dip: this.dipBus ? Math.round(this.dipBus.gain.value * 1000) / 1000 : null, trim: this.passTrim ? Math.round(this.passTrim.gain.value * 1000) / 1000 : null };
   }
 
   /**

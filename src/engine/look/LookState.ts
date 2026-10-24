@@ -4,6 +4,7 @@
  * the rig. Both games.
  */
 import type { GradeRecipe } from './LookGrades.ts';
+import { onProChange, proArenaFor } from './pro/ProSwitch.ts';
 import { LOOK_QUALITIES, chapterLook, nextLook, nextQuality, parseLook, type LookDebug, type LookName, type LookQuality, type LookStrength } from './LookConfig.ts';
 
 export interface LookStateShape {
@@ -26,11 +27,13 @@ export interface LookStateShape {
   version: number;
   /** A per-look number override for captures and tuning (`__pyrefly.look.param`). */
   tweaks: Record<string, number>;
+  /** Lane pro-look: the chapter's look is the PRO arena (`look/pro/ProGrade.ts`, "Cinematic contrast"): cinematic at bold strength with the room's pro grade. Set only by {@link applyChapterLook}; false everywhere else, and false again the moment anything sets a look by hand. */
+  pro: boolean;
 }
 
 export const lookState: LookStateShape = (() => {
   const r = parseLook(typeof location === 'undefined' ? '' : location.search);
-  return { armed: r.armed, auto: r.auto, name: r.name, quality: r.quality, debug: r.debug, strength: r.strength, drift: r.drift, commandOpen: false, recipe: null, version: 1, tweaks: {} };
+  return { armed: r.armed, auto: r.auto, name: r.name, quality: r.quality, debug: r.debug, strength: r.strength, drift: r.drift, commandOpen: false, recipe: null, version: 1, tweaks: {}, pro: false };
 })();
 
 /** True when the renderer should build the rig now: the address armed it, or a look was switched on later. */
@@ -40,6 +43,7 @@ export function lookWanted(): boolean {
 
 export function setLookName(name: LookName | null): void {
   lookState.name = name;
+  lookState.pro = false;
   lookState.armed = true;
   lookState.auto = false; // a look set by hand (the console, a key) is the player's word for the rest of the page
   lookState.version++;
@@ -54,17 +58,31 @@ export function setLookName(name: LookName | null): void {
  * does; `'hd2d'` (the default) is release 60's behaviour. An address `look` key still wins: it makes `lookState.auto` false, and this returns before it reads `style`. Both games.
  */
 export function applyChapterLook(chapterId: string | undefined, style: 'hd2d' | 'classic' = 'hd2d'): void {
+  lastChapter = { id: chapterId, style };
   if (!lookState.auto) return;
-  const d = style === 'classic' ? null : chapterLook(chapterId);
+  let d = style === 'classic' ? null : chapterLook(chapterId);
+  // lane pro-look: the PRO arena ("Cinematic contrast", both demo chapters, each graded from its own painting) takes the chapter's place: cinematic at bold strength with the room's pro grade.
+  // Not under CLASSIC (the player's word), not in any other chapter, not when the address chose a look; off by default (`look/pro/ProSwitch.ts`).
+  const pro = d !== null && proArenaFor(chapterId);
+  if (pro) d = { name: 'cinematic', strength: 'bold' };
   const name = d?.name ?? null;
   const strength = d?.strength ?? 'subtle';
   const armed = d !== null;
-  if (lookState.name === name && lookState.strength === strength && lookState.armed === armed) return;
+  if (lookState.name === name && lookState.strength === strength && lookState.armed === armed && lookState.pro === pro) return;
   lookState.name = name;
   lookState.strength = strength;
   lookState.armed = armed;
+  lookState.pro = pro;
   lookState.version++;
 }
+
+let lastChapter: { id: string | undefined; style: 'hd2d' | 'classic' } | null = null;
+
+/** The pro switch flipped at run time (the switchboard, the console): read the chapter's look again, as the battle did when it set up. */
+export function reapplyChapterLook(): void {
+  if (lastChapter) applyChapterLook(lastChapter.id, lastChapter.style);
+}
+onProChange(reapplyChapterLook);
 
 export function setLookQuality(q: LookQuality): void {
   if (!(LOOK_QUALITIES as readonly string[]).includes(q)) return;
@@ -74,6 +92,7 @@ export function setLookQuality(q: LookQuality): void {
 
 export function setLookStrength(s: LookStrength): void {
   lookState.auto = false;
+  lookState.pro = false;
   lookState.strength = s === 'bold' ? 'bold' : 'subtle';
   lookState.version++;
 }

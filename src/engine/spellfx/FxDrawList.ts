@@ -9,12 +9,14 @@
  * between (layer 1), which keeps the mock's order for every effect it has.
  */
 
-import { rgb } from './fxMath.ts';
+import { paintSeed, rgb } from './fxMath.ts';
+import { paintLevel, seedOf } from './FxPaint.ts';
 import { capActor, filterWash, type FlashParams } from './SpellFxParams.ts';
 import type { FxGame } from './SpellFxRegistry.ts';
+import { blastTune } from '../pro/staging/BlastTune.ts'; // 1 unless the pro staging's held breath is playing a Mega Flare (the blooms on the girls are then lighter)
 
 /** Atlas tiles (`FxAtlas.ts`). */
-export type FxTile = 'glow' | 'mote' | 'spark4' | 'decal' | 'pillar' | 'shard' | 'orb' | 'tri' | 'disc' | 'solid';
+export type FxTile = 'glow' | 'mote' | 'spark4' | 'decal' | 'pillar' | 'shard' | 'orb' | 'tri' | 'disc' | 'solid' | 'streak' | 'facet' | 'dab' | 'dim'; // the last four: the painted finish's own (FxAtlas.ts)
 
 /** 0 = a tile, 1 = an analytic ring, 2 = a round-capped bar, 3 = a slash band. */
 export type FxShape = 0 | 1 | 2 | 3;
@@ -33,6 +35,9 @@ export interface FxItem {
   a: number;
   /** Shape parameters; see `FxBatch.ts`. */
   p: [number, number, number, number];
+  /** The painted finish, 0..1 (0 = today's smooth quad), and its stable seed (`FxPaint.ts`). */
+  paint?: number;
+  seed?: number;
   /** For tests and the debug snapshot only. */
   tag?: string;
 }
@@ -59,6 +64,17 @@ export class FxDrawList {
   /** `'lighter'` in the mock. */
   add = false;
   private seenAdd = false;
+  /** The painted finish on or off for this frame's quads: 0 = today's look, 1 = the new effects' (`SpellFxLayer` sets it in a demo chapter with the new effects on). */
+  paint = 0;
+  /** The share of the trails to draw, 0..1 (the frame-time guard, `FxPerfGuard.ts`). */
+  trailK = 1;
+  /** Which effect is being drawn: the seed of its quads that are not particles. */
+  seedBase = 0;
+  /** What the new draw functions read (`RunningFx.variant`): a blow's weapon (`effects-painted-hit.ts`) or a heal's item form (`effects-painted-cure.ts`); '' = none. */
+  variant = '';
+  /** The way a blow goes on screen: 1 = left to right (the attacker stands left of its target), -1 = right to left. */
+  dir = 1;
+  private seq = 0;
 
   readonly game: FxGame;
   /** Particle density: 1 = the mock; the quality tier and the target count scale it. */
@@ -79,6 +95,22 @@ export class FxDrawList {
   begin(): void {
     this.add = false;
     this.seenAdd = false;
+    this.seq = 0;
+  }
+
+  /** Back to today's plain settings for the quads that follow (the shots in flight): density `dens`, no trail share, no variant; the painted finish only when `paint` (the new effects are on). */
+  plain(dens: number, paint = false): void {
+    this.dens = dens;
+    this.paint = paint ? 1 : 0;
+    this.trailK = 1;
+    this.variant = '';
+    this.dir = 1;
+  }
+
+  /** A trail's length in segments at this share (the quality tier's and the guard's: trailK); 0 when the guard has cut the trails. */
+  trail(k: number): number {
+    const n = Math.round(k * this.trailK);
+    return n <= 0 ? 0 : Math.max(2, n);
   }
 
   /** The mock's `n(S, k)`: a particle count at this density. */
@@ -103,7 +135,7 @@ export class FxDrawList {
    * times `k` (the effect's envelope), and widened on a crit.
    */
   bloom(col: string, x: number, y: number, size: number, peak: number, k = 1): void {
-    this.sprite('glow', col, x, y, size * this.bloomScale, this.actorCap(peak) * k);
+    this.sprite('glow', col, x, y, size * this.bloomScale, this.actorCap(peak) * k * blastTune.actorBloom);
   }
 
   /** A full-screen wash, after the REDUCE FLASHES rules. */
@@ -116,7 +148,8 @@ export class FxDrawList {
   private push(shape: FxShape, tile: FxTile, col: string, x: number, y: number, w: number, h: number, rot: number, a: number, p: [number, number, number, number], tag?: string): void {
     if (this.add) this.seenAdd = true;
     const layer = this.add ? 1 : this.seenAdd ? 2 : 0;
-    this.items.push({ layer, shape, tile, x, y, w, h, rot, col: colour(col), a: Math.min(1, a), p, ...(tag ? { tag } : {}) });
+    const paint = this.paint > 0 ? paintLevel(shape, tile, w, h) * this.paint : 0;
+    this.items.push({ layer, shape, tile, x, y, w, h, rot, col: colour(col), a: Math.min(1, a), p, paint, seed: paint > 0 ? seedOf(paintSeed.v, this.seedBase, ++this.seq) : 0, ...(tag ? { tag } : {}) });
   }
 
   /** The mock's `draw(ctx, img, x, y, size, alpha, rot)`: a square sprite centred on (x, y). */

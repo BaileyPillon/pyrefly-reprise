@@ -14,6 +14,7 @@
  * results screen shows in between.
  */
 
+import { passScriptsFor } from '../../story/scripts/seymour-flux-pass.ts';
 import type { Camera, Scene, Vector3 } from 'three';
 import type { BattleEngine, BattleResult, BattleSetup, CombatantId, EnemyGroupDef } from '../../battle/common/types.ts';
 import { ff7Standing } from './ff7Standing.ts';
@@ -33,6 +34,7 @@ import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { type LoadedScene } from '../../scenes/index.ts';
+import { dropParked } from '../../engine/FigureCache.ts';
 import { takeScene } from '../../scenes/prebuilt.ts'; // release 62 (PR-0481): the demo's stage, built behind the picker, or a fresh `loadScene`
 import { markOpeningBegun, markOpeningHurried } from '../../scenes/openingMark.ts';
 import { Screen } from '../Screen.ts';
@@ -50,6 +52,9 @@ import { voice } from '../../audio/voice/index.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
 import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
 import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
+import { stagingPieceOn } from '../../engine/pro/staging/StagingSwitch.ts';
+import { attachProStage } from './battleProStage.ts'; // lane "pro-staging": the held breath, the freeze and the openings' layer (Chapters I and IV, `?staging=pro` / `?pack=demo`)
+import type { ProStageLayer } from '../../ui/common/proStage/ProStageLayer.ts';
 import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { markDemoHud } from '../demo/demoHud.ts';
@@ -74,6 +79,9 @@ import { startMarkRecorder, type MarkRecorder } from '../markRecorder.ts';
 import { defaultSettings, readSetting } from '../SaveData.ts';
 import { visualStyleOf } from '../saveVisualStyle.ts'; // release 61: OPTIONS > VISUAL STYLE
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
+import { setFeelChapter } from '../../engine/feel/FeelSwitch.ts';
+import { setMotionSfxSpeed } from '../../engine/feel/MotionBeats.ts';
+import { stopRumble } from '../gamepadRumble.ts'; // a pause or leaving the battle ends a pulse still running (`?rumble=on`; a no-op without a pad)
 import { battleComfort } from './battleComfort.ts';
 import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
@@ -85,6 +93,9 @@ import { getChapterMeta } from '../../data/chapter-meta.ts';
 import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
+import { setMenuHold } from '../../engine/motion/MenuHold.ts';
+import { setNumberFacts } from '../../ui/common/proNumbers.ts'; // lane pro-look: the glass numbers read a target's max HP for their tiers
+import { setCurvesChapter } from '../../engine/motion/CurvesSwitch.ts'; // motion pass (lane "core"): the new curves play only in Chapters I and IV
 import { battleFrameClocks } from '../../engine/PoseSwap.ts';
 import { onSceneScale, sceneScale } from '../../engine/crisp/sceneScale.ts';
 
@@ -151,6 +162,7 @@ export class BattleScreen extends Screen {
   private cutscenes: MidBattleCutscenes | null = null;
   /** Letterbox bars, name slab and heartbeat vignette (`BattleMoments`). */
   private momentOverlay: MomentOverlay | null = null;
+  private proStage: ProStageLayer | null = null;
   private setup: BattleSetup | null = null;
   private group: EnemyGroupDef | null = null;
   /** The hidden Last Summoning's offering screen while it is up (FFX only); the frame's input goes to it first (`handleInput`). */
@@ -258,6 +270,7 @@ export class BattleScreen extends Screen {
     if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
     holdGpuSync(); // R61 (PR-0481): optional readbacks (the figures' breathing, the splash crop) wait until the field's first draw has built its programs (`engine/GpuSettle.ts`)
+    setCurvesChapter(chapter.id); // motion pass (lane "core"): names the running chapter for the new curves' demo-chapter gate (`engine/motion/CurvesSwitch.ts`; default OFF)
     applyChapterLook(chapter.id, visualStyleOf(readSetting('visualStyle'))); // release 60: hd2d at bold strength by default in Chapters I and IV, before the figures bind their maps (`engine/look/LookState.ts`); release 61: unless OPTIONS > VISUAL STYLE says CLASSIC (a `?look=` address still wins)
     bindEyeCandyScene({ key: scene.key, chapter: chapter.id, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
     bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer }); // eye-candy option B (`?fx=b`)
@@ -279,7 +292,7 @@ export class BattleScreen extends Screen {
       renderer: this.app.renderer.renderer, // release 39.1: masters are uploaded ahead of their swap (TextureStager.ts)
       overlayRoot: this.root,
       // FF7: its own effects, Spectacle on A3 plus (battleSpellFx answers 'ff7' with battleFf7Fx.ts)
-      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null), // FF7: its hit flash and shake
+      spellFx: battleSpellFx(chapter.game, this.app.renderer, () => this.presenter?.playbackSpeed, () => this.stage ?? null, chapter.id, () => this.engine?.state() ?? null), // FF7: its hit flash and shake; the new effects: the chapter gate, the weapon table
       sceneKey: this.scene.key,
       grade: this.app.renderer,
       comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)
@@ -304,9 +317,12 @@ export class BattleScreen extends Screen {
     this.stage.setEntrances(!this.preview && chapter.game !== 'ff7');
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
+    dropParked(scene.key); // lane "prebuild": a figure the demo built ahead that this stage did not take (another party) is freed
     if (this.exited) return this.releaseParts();
     this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
     if (this.exited) return this.releaseParts();
+    setMotionSfxSpeed(() => this.presenter?.playbackSpeed ?? 'normal'); // the motion sounds play at normal speed only (`engine/feel/MotionSfx.ts`)
+    setFeelChapter(chapter.id); // the motion program's pieces (`?pack=demo`, `?punch=`, ...) are on in Chapter I and Chapter IV only (`engine/feel/FeelSwitch.ts`)
     this.spectacle = attachSpectacle({ game: chapter.game, renderer: this.app.renderer, scene: this.scene.scene, camera: this.app.renderer.camera, stage: this.stage, root: this.root });
 
     // --- HUD + ports -------------------------------------------------------
@@ -314,6 +330,10 @@ export class BattleScreen extends Screen {
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
+      setNumberFacts((id) => {
+        const c = this.engine?.state().combatants[id];
+        return c ? { maxHp: c.stats.maxHp } : undefined;
+      }); // lane pro-look: only the glass numbers ask (off by default)
       this.hud.setLayoutProjector?.(battleLayoutProjector(() => this.stage, scene.battleCamera, battleCameraPreset(chapter.game))); // fb2-0929: panels hold still while the camera moves
       // The targeting surface: silhouette rectangles out to the HUD, the
       // accent pool and the quiet dim back in. This is what makes "which enemy
@@ -362,6 +382,7 @@ export class BattleScreen extends Screen {
     });
 
     this.momentOverlay = createMomentOverlay(this.root, scene.slots.artNamespace); // the turn cut-in shows the experiment's own portraits
+    this.proStage = attachProStage({ root: this.root, chapterId: chapter.id, stage: this.stage, nameOf: (id) => this.engine?.state().combatants[id]?.name }); // pro staging (demo chapters only; null elsewhere)
     if (this.opts.openingHurry) this.momentOverlay.hurry.arm();
 
     const registered = uiPortsRegistered();
@@ -385,7 +406,8 @@ export class BattleScreen extends Screen {
       // Letterbox / name slab / heartbeat vignette. `BattleMoments` raises
       // these; see `src/ui/common/transitions/`.
       moments: chapter.game === 'ff7' ? null : this.momentOverlay, // FF7: no Ink & Gold name slab or letterbox (FF7 HUD spec §8)
-      midScripts: chapter.scriptsRef?.midScripts ?? {},
+      staging: this.proStage, // pro staging: the held breath, the freeze and the openings (null outside the demo chapters)
+      midScripts: { ...(chapter.scriptsRef?.midScripts ?? {}), ...passScriptsFor(chapter.id) }, // the sound pass's Talk scripts (`story/scripts/seymour-flux-pass.ts`) join them while it is on
       // The chapter's own ability rows: an enemy's physical ability draws its
       // attack painting (iter2 attack-pose, `EnemyActionPose.ts`); FF7 adds its melee run.
       ...presenterGameDeps(chapter.game, chapter.buildRef, () => this.engine?.state() ?? null),
@@ -470,6 +492,7 @@ export class BattleScreen extends Screen {
       root: this.root,
       chapterNumber: chapter.number,
       ...(chapter.experimental ? { experimental: true as const } : {}),
+      ...(stagingPieceOn('card') ? { pro: true as const } : {}), // pro staging: the card is a full-bleed painting (demo chapters only)
       location: chapter.location,
       bossName: boss.name,
       subline: chapter.subtitle,
@@ -584,7 +607,10 @@ export class BattleScreen extends Screen {
 
   private setPresenterPaused(paused: boolean): void {
     this.presenterPaused = paused;
-    if (paused) return;
+    if (paused) {
+      stopRumble();
+      return;
+    }
     const waiters = this.pauseWaiters;
     this.pauseWaiters = [];
     for (const resolve of waiters) resolve();
@@ -818,6 +844,7 @@ export class BattleScreen extends Screen {
     this.airship?.sync(this.engine?.state());
     this.stage?.update(fieldDt, animDt); // the pose blends run on the real frame time: a hit-stop holds the field, never a half-mixed crossfade (FB-1)
     this.spectacle?.update(animDt);
+    this.proStage?.update(frameDt); // pro staging: on the screen's own clock (a pause freezes it, a hit-stop does not)
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.
     this.hud?.update?.(animDt);
@@ -950,6 +977,11 @@ export class BattleScreen extends Screen {
     return this.presenter;
   }
 
+  /** The pro staging's layer (Chapters I and IV with the switch on), for the debug API and the captures. */
+  get stagingLayer(): ProStageLayer | null {
+    return this.proStage;
+  }
+
   override snapshot(): Record<string, unknown> {
     const state = this.engine?.state();
     return {
@@ -992,6 +1024,9 @@ export class BattleScreen extends Screen {
     this.offSceneScale?.();
     this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)
+    setCurvesChapter(undefined);
+    setNumberFacts(null);
+    setMenuHold(null);
     window.removeEventListener('keydown', this.onPauseKey);
     setSideFogGame(null);
     this.markRecorder?.stop();
@@ -1027,10 +1062,15 @@ export class BattleScreen extends Screen {
     this.cutscenes = null;
     this.momentOverlay?.dispose();
     this.momentOverlay = null;
+    this.proStage?.dispose();
+    this.proStage = null;
     this.airship?.dispose();
     this.airship = null;
     this.spectacle?.dispose();
     this.spectacle = null;
+    setFeelChapter(null);
+    setMotionSfxSpeed(null);
+    stopRumble();
     this.stage?.dispose();
     this.stage = null;
     releaseLivingScene();

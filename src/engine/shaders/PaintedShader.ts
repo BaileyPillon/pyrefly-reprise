@@ -139,11 +139,66 @@ export const paintedFragmentShader = /* glsl */ `
 
   varying vec2 vUv;
 
+  // --- the smear (conference demo, motion pass, lane "core", step 2; engine/motion/SmearPlan.ts) ----------------------------------------------------
+  // A big pose change is cut inside a 1 to 2 frame window; for that window the plane is drawn streaked along the figure's travel. smearAmt 0 is off (the
+  // default, and every plane outside the demo chapters), so nothing below runs. smearVec is the streak at full amount in the plane's own coordinates
+  // (fractions of its width and height); smearStyle 0 is the soft motion blur (thirteen taps centred on the pixel), 1 the painted streak (the figure's own paint
+  // dragged behind it, in dry-brush bristles of different lengths).
+  uniform float smearAmt;
+  uniform float smearStyle;
+  uniform vec2 smearVec;
+  // A rig part's uv is its own cut of the painting: its patch (rig/RigMaterial.ts) carries the streak into it. A whole plane's uv is its own coordinates.
+  vec2 smearUvVec(vec2 v) { return v; }
+
+  vec4 smearTexel(vec2 uv) {
+    // the taps below sit in loops, where an implicit mip level is undefined (the compiler warns): they sample with the pixel's own derivatives, taken first (before any return that
+    // could differ between the pixels of a quad)
+    vec2 gx = dFdx(uv);
+    vec2 gy = dFdy(uv);
+    vec4 c0 = texture2D(map, uv);
+    vec2 v = smearUvVec(smearVec) * smearAmt;
+    if (dot(v, v) < 1e-8) return c0;
+    // each pixel shifts its taps by a fraction of one step (a hash of its uv), so the stepping of a long streak is grain and not combs
+    float jit = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453) - 0.5;
+    if (smearStyle < 0.5) {
+      vec4 acc = vec4(0.0);
+      float wsum = 0.0;
+      for (int i = 0; i < 13; i++) {
+        float t = (float(i) + jit - 6.0) / 6.0;
+        float w = max(0.1, 1.0 - 0.75 * abs(t));
+        vec4 s = textureGrad(map, uv + v * (t * 0.5), gx, gy);
+        acc += vec4(s.rgb * s.a, s.a) * w;
+        wsum += w;
+      }
+      acc /= wsum;
+      return acc.a > 1e-4 ? vec4(acc.rgb / acc.a, acc.a) : vec4(c0.rgb, 0.0);
+    }
+    // painted streak: the pixel takes the paint that lies AHEAD of it along the travel, so the figure's colours trail behind it. The bristle this pixel lies on
+    // (noise across the travel) sets how far back its stroke reaches, so the streak ends in a dry-brush edge and not in a clean fade.
+    vec2 perp = normalize(vec2(-v.y, v.x) + vec2(1e-6));
+    float br = texture2D(noiseMap, vec2(dot(uv, perp) * 11.0 + 0.17, 0.43)).r;
+    float reach = mix(0.28, 1.0, smoothstep(0.22, 0.78, br));
+    vec4 trail = vec4(0.0);
+    float tw = 0.0;
+    for (int i = 0; i < 12; i++) {
+      float s = (float(i) + 0.5 + jit) / 12.0;
+      float k = step(s, reach) * pow(1.0 - s, 1.15);
+      vec4 smp = textureGrad(map, uv + v * s, gx, gy);
+      trail += vec4(smp.rgb * smp.a, smp.a) * k;
+      tw += k;
+    }
+    float edge = smoothstep(0.0, 0.045, min(min(uv.x, 1.0 - uv.x), min(uv.y, 1.0 - uv.y)));
+    float ta = clamp(trail.a / max(tw, 1e-4) * 1.2, 0.0, 1.0) * 0.92 * edge;
+    vec3 trgb = trail.a > 1e-4 ? clamp(trail.rgb / trail.a * 1.3 + vec3(0.05), 0.0, 1.0) : c0.rgb; // a little lighter than the figure: a streak of its own colours is lost against a backdrop of the same hue
+    float oa = c0.a + ta * (1.0 - c0.a);
+    return oa > 1e-4 ? vec4((c0.rgb * c0.a + trgb * ta * (1.0 - c0.a)) / oa, oa) : vec4(c0.rgb, 0.0);
+  }
+
   void main() {
     // Mirroring is done with a negative plane scale.x, not in UV space, so the
     // texture's own orientation (and the rim sampling below) stays honest.
     vec2 uv = vUv;
-    vec4 texel4 = texture2D(map, uv);
+    vec4 texel4 = smearAmt > 0.0 ? smearTexel(uv) : texture2D(map, uv);
     float a = texel4.a;
 
     // --- edge feather --------------------------------------------------------
@@ -216,7 +271,7 @@ export const paintedFragmentShader = /* glsl */ `
     #endif
 
     // --- rim light from the alpha silhouette -------------------------------
-    if (rimStrength > 0.0) {
+    if (rimStrength > 0.0 && smearAmt <= 0.0) { // not through a smear window: the rim reads the plane's own alpha, which the streak has changed
       vec2 dir = normalize(rimDir + vec2(1e-5, 0.0));
       vec2 off = dir * texel * rimWidth;
       float inward =

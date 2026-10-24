@@ -1,5 +1,5 @@
 @echo off
-REM Fresh visitor: closes the kiosk browser, wipes its profile (the save and the demo counters), opens it again.
+REM Fresh visitor: closes the kiosk browser, wipes its profile (the save and the demo counters), opens it again on the address start-demo.cmd used (with the conference pack, unless it was started with --plain).
 REM docs/DEMO-KIT.md
 where node >nul 2>nul
 if errorlevel 1 (echo Node.js was not found on this PC. Install it from nodejs.org, then run this again. & pause & exit /b 1)

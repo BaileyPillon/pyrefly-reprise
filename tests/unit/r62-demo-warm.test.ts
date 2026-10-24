@@ -30,6 +30,7 @@ vi.mock('../../src/app/screens/battlePreload.ts', () => ({
     calls.push(`paintings ${chapter.id}`);
     return { chapterId: chapter.id, paintings: 3, portraits: 1, ms: 1 };
   }),
+  battleCardInfo: vi.fn(() => undefined), // the card's boss and party come from the real preload; none here (the splash crops are `r63-fix-warm.test.ts`'s)
 }));
 vi.mock('../../src/app/screens/BattleScreenWarmup.ts', async (importOriginal) => {
   const real = await importOriginal<typeof import('../../src/app/screens/BattleScreenWarmup.ts')>();
@@ -80,8 +81,8 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     window.history.replaceState(null, '', '/');
   });
 
-  const run = async (a: unknown, fights?: readonly string[]) => {
-    const p = warmDemoFights(a as never, fights);
+  const run = async (a: unknown, fights?: readonly string[], opts?: { light?: boolean }) => {
+    const p = warmDemoFights(a as never, fights, opts);
     await vi.advanceTimersByTimeAsync(5000);
     return p;
   };
@@ -91,7 +92,22 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     const g = sceneOf('seymour-flux');
     const b = sceneOf('ffx2-bahamut');
     expect(calls).toEqual([`paintings seymour-flux`, `build ${g}`, `hide ${g}`, 'look', `plates ${g}`, `compile ${g}`, `draw ${g}`, `paintings ffx2-bahamut`, `build ${b}`, `hide ${b}`, 'look', `plates ${b}`, `compile ${b}`, `draw ${b}`]);
-    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: depth plates cut ahead', 'seymour-flux: stage built, compiled and drawn offscreen', 'ffx2-bahamut: paintings', 'ffx2-bahamut: depth plates cut ahead', 'ffx2-bahamut: stage built, compiled and drawn offscreen']);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: depth plates cut ahead', 'seymour-flux: stage built, compiled and drawn offscreen', 'ffx2-bahamut: paintings', 'ffx2-bahamut: depth plates cut ahead', 'ffx2-bahamut: stage built, compiled and drawn offscreen', 'breath rigs read ahead']); // perf-trim: the last step reads every cached painting's breathing field (nothing is cached in this test: the note alone)
+  });
+
+  it('R63: the fight the cursor rests on is warmed first, and a cursor that moves hands the warm over at the next step', async () => {
+    const { noteDemoFocus } = await import('../../src/app/demo/demoWarm.ts');
+    noteDemoFocus('ffx2-bahamut');
+    await run(app('title'));
+    expect(calls.slice(0, 2)).toEqual(['paintings ffx2-bahamut', `build ${sceneOf('ffx2-bahamut')}`]);
+    expect(calls.indexOf('paintings seymour-flux')).toBeGreaterThan(calls.indexOf(`draw ${sceneOf('ffx2-bahamut')}`));
+  });
+
+  it("R63: the retry's warm behind a lost fight's card is light: the scene, its plates and the compile of its programs; no offscreen draw, no breath rigs", async () => {
+    await run(app('pro-defeat'), ['ffx2-bahamut'], { light: true });
+    const b = sceneOf('ffx2-bahamut');
+    expect(calls).toEqual([`paintings ffx2-bahamut`, `build ${b}`, `hide ${b}`, 'look', `plates ${b}`, `compile ${b}`]);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['ffx2-bahamut: paintings', 'ffx2-bahamut: depth plates cut ahead', 'ffx2-bahamut: stage built, compiled and drawn offscreen']);
   });
 
   it('the plates are cut while the programs compile, and a cut that fails does not stop the stage (the battle then cuts them itself, as before)', async () => {
@@ -100,14 +116,14 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     await run(app('title'), ['seymour-flux']);
     const g = sceneOf('seymour-flux');
     expect(calls).toEqual([`paintings seymour-flux`, `build ${g}`, `hide ${g}`, 'look', `compile ${g}`, `draw ${g}`]);
-    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen']);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen', 'breath rigs read ahead']);
   });
 
   it('a room option B does not dress cuts nothing, and the stage is still built', async () => {
     const living = await import('../../src/engine/fx/b/LivingPaintings.ts');
     vi.mocked(living.warmLivingPlates).mockResolvedValueOnce(false);
     await run(app('title'), ['seymour-flux']);
-    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen']);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: stage built, compiled and drawn offscreen', 'breath rigs read ahead']);
   });
 
   it('works behind the picker too, and behind nothing else', async () => {
@@ -195,7 +211,15 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
 describe('the wiring', () => {
   it('the page starts the warm in demo mode only, a moment after the title is up', () => {
     const main = src('src/main.ts');
-    expect(main).toMatch(/if \(demoModeOn\(\)\) setTimeout\(\(\) => void warmDemoFights\(app\), 6000\)/);
+    expect(main).toMatch(/if \(demoModeOn\(\)\) setTimeout\(\(\) => void warmDemoFights\(app\), WARM_FIGHTS_AT_MS\)/);
+    expect(main).toMatch(/if \(demoModeOn\(\)\) setTimeout\(warmBattleStage, WARM_STAGE_AT_MS\)/);
+  });
+
+  it('R63: the warm starts well before a player at a human pace can have chosen a fight, the once-per-page costs first and clear of each other', async () => {
+    const { WARM_FIGHTS_AT_MS, WARM_STAGE_AT_MS } = await import('../../src/app/demo/demoWarm.ts');
+    expect(WARM_STAGE_AT_MS).toBeLessThan(WARM_FIGHTS_AT_MS);
+    expect(WARM_FIGHTS_AT_MS - WARM_STAGE_AT_MS).toBeGreaterThanOrEqual(800);
+    expect(WARM_FIGHTS_AT_MS).toBeLessThanOrEqual(2000); // release 62's 6000 ms left both stages unbuilt at a press 6 to 7 s after the load
   });
 
   it('the picker starts it again a moment after it has painted, and drops the timer on the way out', () => {

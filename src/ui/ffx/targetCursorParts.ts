@@ -43,15 +43,16 @@ export interface Dock {
  * target is boxed in. Only the comparison between sides has to be right, so
  * the plate box is an estimate.
  */
-export function dockPlate(rect: TargetRect, w: number, h: number, panels: readonly TargetRect[]): Dock {
+export function dockPlate(rect: TargetRect, w: number, h: number, panels: readonly TargetRect[], order: readonly PlateDock[] = ['below', 'above', 'right', 'left']): Dock {
   const cx = rect.x + rect.w / 2;
   const cy = rect.y + rect.h / 2;
-  const near: Dock[] = [
-    { side: 'below', x: cx, y: rect.y + rect.h },
-    { side: 'above', x: cx, y: rect.y },
-    { side: 'right', x: rect.x + rect.w, y: cy },
-    { side: 'left', x: rect.x, y: cy },
-  ];
+  const sides: Record<PlateDock, Dock> = {
+    below: { side: 'below', x: cx, y: rect.y + rect.h },
+    above: { side: 'above', x: cx, y: rect.y },
+    right: { side: 'right', x: rect.x + rect.w, y: cy },
+    left: { side: 'left', x: rect.x, y: cy },
+  };
+  const near: Dock[] = order.map((s) => sides[s]); // lane pro-look: the order is the caller's (the ring's name goes beside it first); the default is the game's own
   if (!panels.length) return near[0]!;
   const cover = (d: Dock): number =>
     panels.reduce((sum, p) => sum + overlapArea(plateBox(d.side, d.x, d.y, w, h), p), 0) +
@@ -150,6 +151,6 @@ const HAND_BOB = 6;
  * (r37-ui-floor, third attempt, phone Chapter I target step: the plate docked left of a high enemy, the hand was
  * under it and the player saw no hand).
  */
-export function handBox(rect: TargetRect, gap: number): TargetRect {
-  return { x: rect.x - gap - HAND_W, y: rect.y + rect.h * 0.55 - HAND_H / 2, w: HAND_W + HAND_BOB, h: HAND_H };
+export function handBox(rect: TargetRect, gap: number, size: { w: number; h: number } = { w: HAND_W, h: HAND_H }): TargetRect {
+  return { x: rect.x - gap - size.w, y: rect.y + rect.h * 0.55 - size.h / 2, w: size.w + HAND_BOB, h: size.h };
 }

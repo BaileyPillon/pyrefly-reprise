@@ -22,7 +22,13 @@ import { DEPARTURE_KINDS } from './BattlePresenterDepartures.ts';
 import { LANDING_MOMENTS } from '../audio/sfxV2/eventCues.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
-import { STRIKE_BEAT_MS } from './StrikeBeat.ts';
+import { STRIKE_BEAT_MS, strikeBeatNow } from './StrikeBeat.ts';
+import { realContactMsOf } from './motion/RealBeats.ts'; // `?curves=real`: the sound's lead is the real clip's contact frame
+import { castBeat } from './feel/MotionHooks.ts'; // `?motionsfx=` (demo chapters, off by default): the cloth rustle when a cast begins
+import type { PassPlan } from '../audio/pass/passTypes.ts'; // the sound pass (decision 184, `?audio=new`): layers under a blow
+import { attackBeat, landingWaitMs } from './PassBeats.ts';
+import { passGame } from '../audio/pass/passSwitch.ts';
+import { SPELL_STACK_DB } from '../audio/pass/passMix.ts';
 
 /** What the presenter tells the voice about one cue. */
 export interface SfxAsk {
@@ -49,7 +55,7 @@ export interface SfxAsk {
  * playing silences this stand-in (SFX parity, `audio/sfxV2/eventCues.ts`). With no parity pack listed the mixer
  * ignores `events` and `coveredBy`, so the stand-in plays exactly as it always did.
  */
-export type SfxVoiced = { key?: string; gain?: number; events?: readonly string[]; coveredBy?: readonly string[] };
+export type SfxVoiced = { key?: string; gain?: number; events?: readonly string[]; coveredBy?: readonly string[]; pass?: PassPlan };
 export type SfxVoice = (ask: SfxAsk) => SfxVoiced | null;
 
 /**
@@ -71,6 +77,8 @@ interface Action {
   counts: Map<string, number>;
   /** The recorded originals this action has asked for so far (the first name of each chain): what `coveredBy` is checked against. */
   asked: Set<string>;
+  /** Its `action-end` has been played: a later blow is not this action's (the sound pass reads it, see {@link ask}). */
+  ended: boolean;
 }
 
 interface State {
@@ -94,12 +102,14 @@ export function noteSfxEvent(ctx: EventCtx, event: BattleEvent): void {
   s.event = event;
   if (event.type === 'action-start') {
     const command = event.command as { kind: string; id?: string };
-    const action: Action = { serial: ++s.serial, command: { kind: command.kind, ...(command.id ? { id: command.id } : {}) }, counts: new Map(), asked: new Set() };
+    const action: Action = { serial: ++s.serial, command: { kind: command.kind, ...(command.id ? { id: command.id } : {}) }, counts: new Map(), asked: new Set(), ended: false };
     if (event.abilityId) action.abilityId = event.abilityId;
     s.onScreen = action;
     s.byActor.set(event.actorId, action);
   } else if (event.type === 'action-end') {
     s.onScreen = null;
+    const own = s.byActor.get(event.actorId);
+    if (own) own.ended = true;
   }
 }
 
@@ -150,7 +160,14 @@ function ask(ctx: EventCtx, name: string): { ask: SfxAsk; action: Action | null 
   const moment = momentOf(event, name);
   const actorId = sourceOf(event) ?? ctx.actingId;
   // FFX-2's ATB overlaps actions: a blow resolves by its own striker's latest action (as the spell effects do).
-  const action = s.onScreen ? ((actorId && s.byActor.get(actorId)) || s.onScreen) : null;
+  let action = s.onScreen ? ((actorId && s.byActor.get(actorId)) || s.onScreen) : null;
+  // The sound pass (Chapter I and IV with `?audio=new`, see `audio/pass/passSwitch.ts`): the first `action-end` of an overlapped burst cleared `onScreen`, so the later blows of the other actors found no action
+  // and played a bare tick (34 of Chapter IV's 52 blows, measured). A blow whose own striker's action has not ended belongs to it. Off, nothing changes: this is today's sound.
+  if (!action && passGame()) {
+    const striker = sourceOf(event);
+    const own = striker ? s.byActor.get(striker) : undefined;
+    if (own && !own.ended) action = own;
+  }
   const nth = action ? (action.counts.get(moment) ?? 0) : 0;
   let landed = 0;
   if (action) {
@@ -181,16 +198,21 @@ function scaled(ctx: EventCtx, ms: number): number {
 
 /** Play one presenter cue: the voice's answer, else the presenter's own cue with its fallbacks. */
 export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; delay?: number }): void {
+  if (name === 'cast') castBeat(ctx);
   const audio = ctx.deps.audio;
   if (!audio) return;
   let voiced: SfxVoiced | null = null;
   let moment = name;
   let action: Action | null = null;
+  let actorId: CombatantId | undefined;
+  let ask_: SfxAsk | null = null;
   try {
     if (ctx.deps.sfxVoice) {
       const built = ask(ctx, name);
+      ask_ = built.ask;
       moment = built.ask.moment;
       action = built.action;
+      actorId = built.ask.actorId ?? undefined;
       voiced = ctx.deps.sfxVoice(built.ask) ?? null;
     }
   } catch {
@@ -200,15 +222,17 @@ export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; d
   const key = voiced?.key ?? SFX_FALLBACKS[name] ?? name;
   const volume = voiced?.gain !== undefined ? (opts?.volume ?? 1) * voiced.gain : opts?.volume;
   let o: ParityOpts | undefined = volume === undefined ? opts : { ...opts, volume };
-  if (voiced) o = withParity(ctx, o, voiced, moment, action);
+  if (voiced) o = withParity(ctx, o, voiced, moment, action, actorId);
+  if (voiced && ask_ && passGame()) o = withPass(ctx, o, voiced, moment, ask_);
   // Unknown keys fall back to a generic cue rather than going silent, so a
   // boss's bespoke `sfxKey` never has to exist before the fight is playable.
   try {
     audio.playSfx(key, o);
+    if (moment === 'attack' && passGame()) attackBeat(ctx, scaled(ctx, strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined))); // the sound pass: a critical's dip, timed from the swing
   } catch {
     try {
       // The generic hit is the old fallback, unchanged: it asks for no recorded original and no beat.
-      const { events: _events, coveredBy: _coveredBy, beatMs: _beatMs, ...plain } = o ?? {};
+      const { events: _events, coveredBy: _coveredBy, beatMs: _beatMs, pass: _pass, ...plain } = o ?? {};
       audio.playSfx(SFX_FALLBACKS['generic']!, o === undefined ? o : plain);
     } catch {
       /* audio is optional; never break playback for a missing cue */
@@ -216,14 +240,31 @@ export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; d
   }
 }
 
-type ParityOpts = { volume?: number; delay?: number; events?: readonly string[]; coveredBy?: readonly string[]; beatMs?: number };
+type ParityOpts = { volume?: number; delay?: number; events?: readonly string[]; coveredBy?: readonly string[]; beatMs?: number; pass?: PassPlan };
+
+/**
+ * The sound pass's options of a voiced cue (Chapter I and IV with `?audio=new` or `?pack=demo`; `passGame()` is null otherwise): the plan the voice made (layers, a base that starts on its first audible
+ * sample), and for a SPELL's landing (any damage that is not a weapon's blow) the same start on the cue's first audible sample plus how long the effect still has to the mark, which the mixer waits
+ * (`PassBeats.landingWaitMs`). The presenter asks for the landing cue at the mark (`markIn` is 0 or a frame), so the cue's own lead-in (Fire's 77 ms, Ice's 49, Thunder's 104, Flare's 20 to 24, measured at
+ * -30 dB under the peak) was heard after the mark; starting it on its first audible sample puts the sound on the mark (audio-pass review M4). A cue with no plan and no delay is returned untouched.
+ */
+function withPass(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced, moment: string, ask: SfxAsk): ParityOpts | undefined {
+  const extra: ParityOpts = {};
+  const isLanding = moment === 'damage' && ask.action !== null && !voiced.pass?.baseSkip && ask.event?.type === 'damage' && ask.event.amount > 0;
+  const landing = isLanding ? landingWaitMs(ctx, ask.targetId, ask.actorId) : 0;
+  if (voiced.pass || isLanding) extra.pass = { layers: [], ...voiced.pass, ...(isLanding ? { baseSkip: true as const } : {}), ...(landing > 0 ? { landingMs: landing } : {}) };
+  // A spell that lands several times (Fire's five hits, 0.23 s apart, each a 1.64 s sample) piles its tails up: every hit after the first takes SPELL_STACK_DB off. Measured offline, five hits peak
+  // -6.1 dBFS at the master and -8.7 with this; in a recorded fight the stack was the loudest thing in it.
+  if (moment === 'damage' && ask.action && !voiced.pass?.baseSkip && ask.nth > 0) extra.volume = (o?.volume ?? 1) * 10 ** (SPELL_STACK_DB / 20);
+  return Object.keys(extra).length === 0 ? o : { ...o, ...extra };
+}
 
 /**
  * The parity options of a voiced cue: the originals to look up, the originals whose playing silences this stand-in
  * (only those this very action has asked for, so a move that never opened with its sample is not silenced), and the
  * beat the cue's peak belongs on. The mixer ignores all three unless a parity pack supplies the sound.
  */
-function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced, moment: string, action: Action | null): ParityOpts | undefined {
+function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced, moment: string, action: Action | null, actorId?: CombatantId): ParityOpts | undefined {
   const extra: ParityOpts = {};
   if (voiced.events) {
     extra.events = voiced.events;
@@ -232,7 +273,7 @@ function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced,
   }
   const covered = voiced.coveredBy?.filter((c) => action?.asked.has(c));
   if (covered && covered.length > 0) extra.coveredBy = covered;
-  const ahead = BEAT_AHEAD_MS[moment];
+  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined, realContactMsOf(ctx, actorId)) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
   if (ahead !== undefined && voiced.events) extra.beatMs = scaled(ctx, ahead);
   return Object.keys(extra).length === 0 ? o : { ...o, ...extra };
 }

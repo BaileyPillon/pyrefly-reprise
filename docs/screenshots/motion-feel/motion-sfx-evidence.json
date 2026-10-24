@@ -1,0 +1,725 @@
+{
+ "about": "Feel lane step 2 (motion sounds): levels at the game mix and the evidence of the A/B clips (real game, headless GPU Chromium, 1280x720, exact 60 Hz page clock, real keys, two passes per variant: pass A finds the first headline blow, pass B captures; the blow fell on the same frame in both passes of all four runs)",
+ "levels": [
+  {
+   "id": "base-lunge",
+   "ms": 360,
+   "momentaryMaxLufs": -28.9,
+   "samplePeakDbfs": -13.3,
+   "loudest43msDbfs": -26.7,
+   "avgRmsDbfs": -32.4
+  },
+  {
+   "id": "base-dash",
+   "ms": 440,
+   "momentaryMaxLufs": -29,
+   "samplePeakDbfs": -14.1,
+   "loudest43msDbfs": -27.3,
+   "avgRmsDbfs": -33.3
+  },
+  {
+   "id": "base-smear",
+   "ms": 130,
+   "momentaryMaxLufs": -34.7,
+   "samplePeakDbfs": -17.2,
+   "loudest43msDbfs": -31.2,
+   "avgRmsDbfs": -34.9
+  },
+  {
+   "id": "base-land",
+   "ms": 110,
+   "momentaryMaxLufs": -32.6,
+   "samplePeakDbfs": -15.2,
+   "loudest43msDbfs": -23.7,
+   "avgRmsDbfs": -27.5
+  },
+  {
+   "id": "base-cast",
+   "ms": 105,
+   "momentaryMaxLufs": -36.3,
+   "samplePeakDbfs": -19.5,
+   "loudest43msDbfs": -32.4,
+   "avgRmsDbfs": -35.6
+  },
+  {
+   "id": "party-lunge-1.4",
+   "ms": 360,
+   "momentaryMaxLufs": -30.5,
+   "samplePeakDbfs": -14.9,
+   "loudest43msDbfs": -28.3,
+   "avgRmsDbfs": -34
+  },
+  {
+   "id": "boss-lunge-2.4",
+   "ms": 396,
+   "momentaryMaxLufs": -27.7,
+   "samplePeakDbfs": -12.8,
+   "loudest43msDbfs": -26,
+   "avgRmsDbfs": -31.2
+  },
+  {
+   "id": "girl-dash-in",
+   "ms": 380,
+   "momentaryMaxLufs": -29.4,
+   "samplePeakDbfs": -14.4,
+   "loudest43msDbfs": -27.6,
+   "avgRmsDbfs": -33
+  },
+  {
+   "id": "girl-dash-home",
+   "ms": 285,
+   "momentaryMaxLufs": -30.9,
+   "samplePeakDbfs": -15.3,
+   "loudest43msDbfs": -28.4,
+   "avgRmsDbfs": -33.1
+  },
+  {
+   "id": "smear-0.8",
+   "ms": 130,
+   "momentaryMaxLufs": -35.4,
+   "samplePeakDbfs": -17.9,
+   "loudest43msDbfs": -31.9,
+   "avgRmsDbfs": -35.6
+  },
+  {
+   "id": "party-land-hop0.42",
+   "ms": 110,
+   "momentaryMaxLufs": -34.1,
+   "samplePeakDbfs": -16.7,
+   "loudest43msDbfs": -25.2,
+   "avgRmsDbfs": -29.1
+  },
+  {
+   "id": "boss-land",
+   "ms": 159,
+   "momentaryMaxLufs": -31.3,
+   "samplePeakDbfs": -14.2,
+   "loudest43msDbfs": -21.6,
+   "avgRmsDbfs": -26.4
+  },
+  {
+   "id": "party-cast",
+   "ms": 105,
+   "momentaryMaxLufs": -36.3,
+   "samplePeakDbfs": -19.5,
+   "loudest43msDbfs": -32.4,
+   "avgRmsDbfs": -35.6
+  },
+  {
+   "id": "boss-cast",
+   "ms": 105,
+   "momentaryMaxLufs": -36.9,
+   "samplePeakDbfs": -19.7,
+   "loudest43msDbfs": -32.6,
+   "avgRmsDbfs": -35.6
+  },
+  {
+   "id": "REF-hit-sword-0.8",
+   "ms": 882,
+   "momentaryMaxLufs": -20.1,
+   "samplePeakDbfs": -7.1,
+   "loudest43msDbfs": -14.8,
+   "avgRmsDbfs": -25.2
+  },
+  {
+   "id": "REF-hit-greatsword-0.8-ffx2",
+   "ms": 1076,
+   "momentaryMaxLufs": -19.9,
+   "samplePeakDbfs": -11.6,
+   "loudest43msDbfs": -22.3,
+   "avgRmsDbfs": -30.2
+  },
+  {
+   "id": "REF-swing-sword-0.8",
+   "ms": 343,
+   "momentaryMaxLufs": -24.6,
+   "samplePeakDbfs": -8,
+   "loudest43msDbfs": -18.6,
+   "avgRmsDbfs": -26.9
+  },
+  {
+   "id": "music-boss-seymour-60s",
+   "momentaryMaxLufs": -15.4,
+   "samplePeakDbfs": -7.4,
+   "loudest43msDbfs": -14.3,
+   "avgRmsDbfs": -22.5
+  },
+  {
+   "id": "music-boss-bahamut-60s",
+   "momentaryMaxLufs": -15.6,
+   "samplePeakDbfs": -6.4,
+   "loudest43msDbfs": -15,
+   "avgRmsDbfs": -21.7
+  }
+ ],
+ "sync": {
+  "note": "whoosh peak (the cue's own peak at its pitch) against the lunge's fastest approach frame, from the figure's lungeOffset read every frame",
+  "chapterI_Tidus": {
+   "fastestFrameMsAfterBeat": 84,
+   "whooshPlannedStartMs": 3,
+   "whooshPeakMsAfterBeat": 83,
+   "errorMs": -1
+  },
+  "chapterI_SeymourFlux_boss": {
+   "fastestFrameMsAfterBeat": 66,
+   "whooshPlannedStartMs": 0,
+   "whooshPeakMsAfterBeat": 103,
+   "errorMs": 37,
+   "why": "the lowered cue (boss pitch 0.624) peaks later than the wait to the beat: it starts at once and is the honest limit"
+  },
+  "chapterIV_Paine_after_runin": {
+   "fastestFrameMsAfterBeat": 68,
+   "whooshPlannedStartMs": 3,
+   "whooshPeakMsAfterBeat": 83,
+   "errorMs": 15
+  }
+ },
+ "chapterIV_27s_of_fight_new": {
+  "beats": {
+   "lunge": 12,
+   "dash": 17,
+   "land_played": 18,
+   "land_refused_small": 23,
+   "cast": 7
+  },
+  "maxMotionSoundsIn300ms": 2,
+  "consoleErrors": 0
+ },
+ "chapterI": {
+  "boss": {
+   "pre": 45,
+   "post": 70,
+   "variants": {
+    "today": {
+     "frames": 115,
+     "windowMs": 1917,
+     "anchorFrame": 45,
+     "anchorMs": 752,
+     "lungeStartFrame": 23,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": 368,
+       "asked": "v2:swing-katana",
+       "played": "v2:swing-katana",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 752,
+       "asked": "v2:hit-heavy-enemy",
+       "played": "v2:hit-heavy-enemy",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1136,
+       "asked": "v2:debuff-generic",
+       "played": "v2:debuff-generic",
+       "via": "v2",
+       "volume": 0.5,
+       "pitch": 1,
+       "trimMs": null
+      }
+     ],
+     "motionBeats": []
+    },
+    "new": {
+     "frames": 115,
+     "windowMs": 1917,
+     "anchorFrame": 45,
+     "anchorMs": 752,
+     "lungeStartFrame": 23,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": 368,
+       "asked": "v2:swing-katana",
+       "played": "v2:swing-katana",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 368,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.462,
+       "pitch": 0.624,
+       "trimMs": 396
+      },
+      {
+       "startMs": 752,
+       "asked": "v2:hit-heavy-enemy",
+       "played": "v2:hit-heavy-enemy",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1100,
+       "asked": "v2:debuff-generic",
+       "played": "v2:debuff-generic",
+       "via": "v2",
+       "volume": 0.5,
+       "pitch": 1,
+       "trimMs": null
+      }
+     ],
+     "motionBeats": [
+      {
+       "atMs": 368,
+       "kind": "lunge",
+       "result": "played"
+      }
+     ]
+    }
+   }
+  },
+  "party": {
+   "pre": 22,
+   "post": 55,
+   "variants": {
+    "today": {
+     "frames": 77,
+     "windowMs": 1450,
+     "anchorFrame": 22,
+     "anchorMs": 367,
+     "lungeStartFrame": 0,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": -17,
+       "asked": "v2:swing-sword",
+       "played": "v2:swing-sword",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 367,
+       "asked": "v2:hit-sword",
+       "played": "v2:hit-sword",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      }
+     ],
+     "motionBeats": []
+    },
+    "new": {
+     "frames": 77,
+     "windowMs": 1450,
+     "anchorFrame": 22,
+     "anchorMs": 367,
+     "lungeStartFrame": 0,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": -17,
+       "asked": "v2:swing-sword",
+       "played": "v2:swing-sword",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": -14,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.405,
+       "pitch": 0.799,
+       "trimMs": 361
+      },
+      {
+       "startMs": 367,
+       "asked": "v2:hit-sword",
+       "played": "v2:hit-sword",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      }
+     ],
+     "motionBeats": [
+      {
+       "atMs": -17,
+       "kind": "lunge",
+       "result": "played"
+      },
+      {
+       "atMs": 1359,
+       "kind": "land",
+       "result": "small"
+      }
+     ]
+    }
+   }
+  }
+ },
+ "chapterIV": {
+  "boss": {
+   "pre": 45,
+   "post": 70,
+   "variants": {
+    "today": {
+     "frames": 115,
+     "windowMs": 2084,
+     "anchorFrame": 45,
+     "anchorMs": 747,
+     "lungeStartFrame": -1,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": -1394,
+       "asked": "v2:hit-dagger",
+       "played": "hit-dagger",
+       "via": "parity",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 328,
+       "asked": "v2:magic-charge-x2",
+       "played": "magic-charge-x2",
+       "via": "parity",
+       "volume": 0.7,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 747,
+       "asked": "v2:flare-x2",
+       "played": "v2:flare-x2",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1044,
+       "asked": "v2:hit-1",
+       "played": "v2:hit-1",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1253,
+       "asked": "v2:hit-1",
+       "played": "v2:hit-1",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      }
+     ],
+     "motionBeats": []
+    },
+    "new": {
+     "frames": 115,
+     "windowMs": 2084,
+     "anchorFrame": 45,
+     "anchorMs": 747,
+     "lungeStartFrame": -1,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": -1364,
+       "asked": "v2:hit-dagger",
+       "played": "hit-dagger",
+       "via": "parity",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": -1100,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.352,
+       "pitch": 0.72,
+       "trimMs": 234
+      },
+      {
+       "startMs": -836,
+       "asked": "footstep",
+       "played": "footstep",
+       "via": "sprite",
+       "volume": 0.209,
+       "pitch": 0.997,
+       "trimMs": 110
+      },
+      {
+       "startMs": 328,
+       "asked": "steal-success",
+       "played": "steal-success",
+       "via": "sprite",
+       "volume": 1.5,
+       "pitch": 1,
+       "trimMs": 105
+      },
+      {
+       "startMs": 328,
+       "asked": "v2:magic-charge-x2",
+       "played": "magic-charge-x2",
+       "via": "parity",
+       "volume": 0.7,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 747,
+       "asked": "v2:flare-x2",
+       "played": "v2:flare-x2",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1011,
+       "asked": "v2:hit-1",
+       "played": "v2:hit-1",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1220,
+       "asked": "v2:hit-1",
+       "played": "v2:hit-1",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1905,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.388,
+       "pitch": 0.72,
+       "trimMs": 304
+      },
+      {
+       "startMs": 2236,
+       "asked": "footstep",
+       "played": "footstep",
+       "via": "sprite",
+       "volume": 0.276,
+       "pitch": 0.997,
+       "trimMs": 110
+      },
+      {
+       "startMs": 2236,
+       "asked": "v2:swing-greatsword",
+       "played": "v2:swing-greatsword",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 2239,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.294,
+       "pitch": 0.799,
+       "trimMs": 361
+      }
+     ],
+     "motionBeats": [
+      {
+       "atMs": 328,
+       "kind": "cast",
+       "result": "played"
+      },
+      {
+       "atMs": 1899,
+       "kind": "dash",
+       "result": "played"
+      },
+      {
+       "atMs": 1980,
+       "kind": "land",
+       "result": "small"
+      }
+     ]
+    }
+   }
+  },
+  "party": {
+   "pre": 47,
+   "post": 55,
+   "variants": {
+    "today": {
+     "frames": 102,
+     "windowMs": 1867,
+     "anchorFrame": 47,
+     "anchorMs": 784,
+     "lungeStartFrame": 28,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": 432,
+       "asked": "v2:swing-greatsword",
+       "played": "v2:swing-greatsword",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 784,
+       "asked": "v2:hit-greatsword",
+       "played": "hit-greatsword",
+       "via": "parity",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      }
+     ],
+     "motionBeats": []
+    },
+    "new": {
+     "frames": 102,
+     "windowMs": 1867,
+     "anchorFrame": 47,
+     "anchorMs": 784,
+     "lungeStartFrame": 28,
+     "soundsAskedByTheGame": [
+      {
+       "startMs": 88,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.388,
+       "pitch": 0.72,
+       "trimMs": 304
+      },
+      {
+       "startMs": 432,
+       "asked": "footstep",
+       "played": "footstep",
+       "via": "sprite",
+       "volume": 0.276,
+       "pitch": 0.997,
+       "trimMs": 110
+      },
+      {
+       "startMs": 432,
+       "asked": "v2:swing-greatsword",
+       "played": "v2:swing-greatsword",
+       "via": "v2",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 435,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.294,
+       "pitch": 0.799,
+       "trimMs": 361
+      },
+      {
+       "startMs": 784,
+       "asked": "v2:hit-greatsword",
+       "played": "hit-greatsword",
+       "via": "parity",
+       "volume": 0.8,
+       "pitch": 1,
+       "trimMs": null
+      },
+      {
+       "startMs": 1048,
+       "asked": "whiff",
+       "played": "whiff",
+       "via": "sprite",
+       "volume": 0.352,
+       "pitch": 0.72,
+       "trimMs": 228
+      },
+      {
+       "startMs": 1312,
+       "asked": "footstep",
+       "played": "footstep",
+       "via": "sprite",
+       "volume": 0.209,
+       "pitch": 0.997,
+       "trimMs": 110
+      },
+      {
+       "startMs": 2461,
+       "asked": "steal-success",
+       "played": "steal-success",
+       "via": "sprite",
+       "volume": 1.5,
+       "pitch": 1,
+       "trimMs": 105
+      },
+      {
+       "startMs": 2461,
+       "asked": "v2:magic-charge-x2",
+       "played": "magic-charge-x2",
+       "via": "parity",
+       "volume": 0.7,
+       "pitch": 1,
+       "trimMs": null
+      }
+     ],
+     "motionBeats": [
+      {
+       "atMs": 82,
+       "kind": "dash",
+       "result": "played"
+      },
+      {
+       "atMs": 416,
+       "kind": "land",
+       "result": "small"
+      },
+      {
+       "atMs": 432,
+       "kind": "land",
+       "result": "played"
+      },
+      {
+       "atMs": 432,
+       "kind": "lunge",
+       "result": "played"
+      },
+      {
+       "atMs": 1048,
+       "kind": "dash",
+       "result": "played"
+      },
+      {
+       "atMs": 1312,
+       "kind": "land",
+       "result": "played"
+      },
+      {
+       "atMs": 1856,
+       "kind": "land",
+       "result": "small"
+      }
+     ]
+    }
+   }
+  }
+ }
+}

@@ -18,6 +18,8 @@ import { dressphereAbbr, dressphereColour, dressphereLabel } from './dressphereI
 import { captionHtml, ffx2RowTagsHtml } from '../common/statusRows.ts';
 import { faceLadder } from '../common/partyFace.ts';
 import { faceLayersHtml } from '../common/portrait.ts';
+import '../common/pro-markers.css';
+import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml, rowMarkStyle, type RowMark } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
 
 /** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
 export const TICKS_PER_BAR = 24000;
@@ -102,7 +104,7 @@ export interface PartyRowOptions {
  * Each `<img>` removes itself on a miss, so whichever layer is real wins and
  * nothing ever shows a broken image.
  */
-function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string, ns?: string): string {
+function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string, ns?: string, proMark: RowMark = null): string {
   // Inside an art namespace there are no portraits: the head is the crop of the namespaced idle painting (`faceLadder`).
   const { art, portraits } = faceLadder(c.id, dressphere, ns);
   // The stacking itself lives in `ui/common/portrait.ts` so the prep screen's
@@ -114,7 +116,7 @@ function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string, n
   return `<div class="ffx2stat__face" title="${dressphereLabel(dressphere)}" style="--ffx2-job:${dressphereColour(dressphere)}">
       <span class="ffx2stat__mono">${monogram}</span>
       ${layers}
-      <i class="ffx2stat__job">${monogram}</i>
+      <i class="ffx2stat__job">${monogram}</i>${rowMarkHtml(proMark)}
     </div>`;
 }
 
@@ -135,12 +137,13 @@ export function partyRowHtml(
     bar?.charge != null
       ? `<div class="ffx2atb__charge" style="width:${clamp(0, 100, bar.charge * 100)}%"></div>`
       : '';
-  const acting = c.id === opts.actingId ? ' ig-stat--acting' : '';
+  const proMark = proMarkersOn() ? rowMark('ffx2', c.hp, c.stats.maxHp, c.hp > 0) : null; // lane pro-look: null (nothing) with the piece off, the default
+  const acting = (c.id === opts.actingId ? ' ig-stat--acting' : '') + rowMarkClass(proMark);
   // Status display O2/O3 (Bailey's pick, 2026-09-29): square tags in place of the text chips, and
   // a caption where a status takes the command away ("ASLEEP"). `ui/common/statusRows.ts`.
   const statuses = ffx2RowTagsHtml(c);
-  return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})">
-    ${faceStackHtml(c, dressphere, monogram, opts.artNamespace)}
+  return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})${rowMarkStyle(proMark)}">
+    ${faceStackHtml(c, dressphere, monogram, opts.artNamespace, proMark)}
     <div class="ffx2stat__body">
       <div class="ffx2stat__top">
         <div class="ig-stat__name">${c.name}</div>${captionHtml('ffx2', c)}

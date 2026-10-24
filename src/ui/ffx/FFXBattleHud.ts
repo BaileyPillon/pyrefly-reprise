@@ -1,4 +1,6 @@
 import { PAD } from '../../app/padMap.ts';
+import { ProFieldMarks } from '../common/ProFieldMarks.ts'; // lane pro-look: the KO wash and mark on the field
+import { HudF1 } from '../hudf1/HudF1.ts'; // lane hud-f1: the Clear Stage layer (inert unless ?hud=f1 / ?pack=demo in Chapter I)
 import '../common/cmd-od-selected.css';
 import '../common/hud-floor.css';
 import './ffx-hud.css';
@@ -176,6 +178,10 @@ export class FFXBattleHud implements HudPort {
   /** PR-0186: this fight folds the Sensor card while aiming (Chapter III). */
   private aimFoldDy = false;
   private readonly damageNumbers = new DamageNumbers();
+  /** Lane pro-look: the KO wash and mark on the field (`ui/common/ProFieldMarks.ts`); draws nothing unless the pro look's `markers` piece is on. */
+  private readonly proMarks = new ProFieldMarks('ffx');
+  /** Lane hud-f1: the boss ribbon, the hero, the cue and the prompt bar of the F1 HUD, and its step-back (`ui/hudf1/`); draws nothing unless the switch is on. */
+  private readonly f1 = new HudF1('ffx');
   private readonly triggerPrompt = new TriggerPrompt();
   private readonly airship = new AirshipOrders(); // Evrae (FFX) only; inert without the range flag
   private readonly zanmato = new ZanmatoGauge(); // Yojimbo (FFX, Chapter IX) only; hidden without his gauge
@@ -378,7 +384,7 @@ export class FFXBattleHud implements HudPort {
       this.telegraph.borderEl,
       this.actionHelp.el,
     );
-    this.overlay.append(this.commandMenu.targetCursor.el, this.damageNumbers.el, this.targetPlate.el);
+    this.overlay.append(this.commandMenu.targetCursor.el, this.proMarks.el, this.damageNumbers.el, this.targetPlate.el);
     // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
     // the slab instead of painting over it — src/ui/ffx/targetChipClear.ts.
     this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl);
@@ -447,16 +453,24 @@ export class FFXBattleHud implements HudPort {
     });
     this.openingHold.start();
     this.layout();
+    this.f1.mount({
+      game: 'ffx', root: this.el, stage: this.stage,
+      cmdStack: () => this.commandMenu.stackEl, cmdBlock: () => this.cmdAreaEl, helpText: () => this.infoEl.textContent ?? '',
+      heroRow: (id) => this.el.querySelector<HTMLElement>(id ? `.ig-stat[data-actor="${CSS.escape(id)}"]` : '.ig-stat--acting'),
+      hpKnown: (id) => this.sensorPanel.isScanned(id), // r63-play, FFX's rule: an enemy has no HP bar until Sensor has read it (`SensorPanel`, round 02 #28)
+    });
     window.addEventListener('resize', this.onResize, { passive: true });
   }
 
   /** PR-0157 (FFX): B2's acting signal drives the fade (`actingFade.ts`). */
   setActing(signal: ActingSignal): void {
     this.actingFade.set(signal);
+    this.f1.setActing(signal);
   }
 
   unmount(): void {
     this.actingFade.clear();
+    this.f1.unmount();
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
     this.guide.unmount();
@@ -464,6 +478,7 @@ export class FFXBattleHud implements HudPort {
     this.intent.unmount();
     this.sensorPanel.unmount();
     this.damageNumbers.clear();
+    this.proMarks.clear();
     this.telegraph.dispose();
     // Ends any live selection, so no accent pool or quiet dim can outlive the
     // HUD that lit it (`CommandMenu.close`).
@@ -495,6 +510,8 @@ export class FFXBattleHud implements HudPort {
     this.lastState = state;
     this.zanmato.sync(state);
     this.damageNumbers.syncState(state); // Doom's counts, reconciled (and cleared once there is a result)
+    this.proMarks.sync(state); // lane pro-look: who is down
+    this.f1.sync(state); // lane hud-f1: the boss ribbon
     if (Array.isArray(preview)) {
       // Kept so the field's name plate can print the same letter tag the queue
       // tile shows — the only mark that tells Yu Pagoda B from Yu Pagoda C.
@@ -538,6 +555,7 @@ export class FFXBattleHud implements HudPort {
     this.sensorPanel.release(state.combatants); // at the blow: a last enemy's fall plays with no `sync` (Evrae)
     const actingId = state.log.length ? findLastActorId(state.log) : null;
     this.partyStatus.render(statusRowIds(state), state.combatants, actingId); // PR-0181: the aeon's row while it is out
+    this.f1.sync(state); // lane hud-f1: the ribbon's bar, at the blow
   }
 
   /** Hand the panel its engine. See `EnemyIntent.attachEnemyIntent`. */
@@ -580,6 +598,7 @@ export class FFXBattleHud implements HudPort {
     // command after the previous one has been submitted and played out.
     this.clearTransientOverlays();
     this.openingHold.decision(); // PR-0146: the opening is over
+    this.f1.setMenuActor(actorId); // lane hud-f1: the hero over the command block is whoever's menu this is
 
     const triggerOnly = commands.length > 0 && commands.every((c) => c.command.kind === 'trigger');
     if (triggerOnly) return this.triggerPrompt.open(commands, combatants);
@@ -620,6 +639,7 @@ export class FFXBattleHud implements HudPort {
 
   onEvent(event: BattleEvent): void {
     this.zanmato.onEvent(event);
+    this.f1.onEvent(event); // lane hud-f1: the step-back reads the same stream
     this.actionHelp.onEvent(event, this.lastState?.combatants);
     if (this.actionHelp.text) this.telegraph.hide(); // one top-centre slot
     this.damageNumbers.watch(event); // Doom's count ticks at the event, not at the burst's end
@@ -715,6 +735,8 @@ export class FFXBattleHud implements HudPort {
   /** Frame tick from `BattleScreen`, forwarded to the only things here that animate themselves. */
   update(dt: number): void {
     this.damageNumbers.update(dt);
+    this.proMarks.update(dt);
+    this.f1.update(dt); // lane hud-f1
     // Before the advisor, because folding the enemy plate gives the shelf its
     // height back and `placeAdvisor` should see that on the same frame.
     this.sensorPanel.update(dt);
@@ -786,6 +808,7 @@ export class FFXBattleHud implements HudPort {
    */
   setTargetingPort(port: TargetingPort): void {
     this.targeting = port;
+    this.proMarks.setFigures({ rect: (id) => port.rect(id), visibility: (id) => port.visibility(id) }); // r63-play: the KO mark stands on the downed member's own sprite
     this.commandMenu.setProjector((id) => port.rect(id));
   }
 
@@ -808,6 +831,7 @@ export class FFXBattleHud implements HudPort {
       return pt ? { x: pt.x, y: pt.y, w: 0, h: 0 } : null;
     });
     this.damageNumbers.setProjector(p);
+    this.proMarks.setProjector(p);
     this.damageNumbers.setSideResolver((id) => {
       const side = this.lastState?.combatants[id]?.side;
       return side === 'party' || side === 'enemy' || side === 'aeon' ? side : null;

@@ -50,6 +50,12 @@ const LOOKS: Readonly<Record<string, Look>> = {
   cure: { core: '#E8FFF2', edge: '#7EE8B0' },
   hit: { core: '#FFFFFF', edge: '#FFE6B0' },
   dark: { core: '#F4E6FF', edge: '#A66BFF' },
+  // The new effects' buffs (motion pass, lane "fx"; reached only with the new effects on, `SpellFxRegistry.FRESH_ONLY_FX`): each in its status chip's colour.
+  haste: { core: '#E8FFE8', edge: '#7BE87F' },
+  shell: { core: '#F2E8FF', edge: '#B58CFF' },
+  protect: { core: '#E8F0FF', edge: '#6EA8FF' },
+  reflect: { core: '#FFF8D8', edge: '#F2D24A' },
+  dispel: { core: '#FFFFFF', edge: '#DDEBFF' },
   bloom: { core: '#F4F7FF', edge: '#B8C8FF' },
 };
 

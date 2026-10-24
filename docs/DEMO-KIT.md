@@ -7,7 +7,7 @@ The kit lives in `tools/demo-kit/`. It needs only Node (on this PC already) and 
 | File | What it does |
 |---|---|
 | `fetch-site.cmd` | Makes the offline copy: downloads the live site's own files and checks every one against release 60's manifest. **Needs internet. Do it at home.** |
-| `start-demo.cmd` | Serves the copy on this PC only and opens it full screen (kiosk) at `?demo=1`. |
+| `start-demo.cmd` | Serves the copy on this PC only and opens it full screen (kiosk) at `?demo=1&pack=demo`: the conference pack on. `--plain` opens `?demo=1` alone. |
 | `reset-demo.cmd` | A fresh visitor: closes the browser, wipes its save, opens it again. About five seconds. It keeps the browser's caches, so the next first fight starts warm. |
 | `stop-demo.cmd` | Closes the browser and stops the server. |
 | `status-demo.cmd` | Says whether the server and the browser are running. |
@@ -36,8 +36,9 @@ fetch-site.cmd --verify-only        # no internet: re-checks every file in the f
 
 Double-click `start-demo.cmd` (or run it in a terminal; `--dir <folder>` names another copy).
 
-It starts a small server for the folder on **127.0.0.1 only** (port 5173, or the next free one), so nothing on the venue network can reach it and nothing leaves this PC. Then it opens Chrome (else Edge) **full screen in kiosk mode** at `http://127.0.0.1:5173/?demo=1`, in a browser profile of its own, with sound allowed without a first click. The title screen is up in a few seconds.
+It starts a small server for the folder on **127.0.0.1 only** (port 5173, or the next free one), so nothing on the venue network can reach it and nothing leaves this PC. Then it opens Chrome (else Edge) **full screen in kiosk mode** at `http://127.0.0.1:5173/?demo=1&pack=demo`, in a browser profile of its own, with sound allowed without a first click. The title screen is up in a few seconds. `reset-demo.cmd` reopens the same address.
 
+- **The pack is on by default (2026-10-24).** `?pack=demo` turns on the conference build's new parts: the F1 HUD, the sound pass, the pro look / camera / staging, the boss re-cut, the booth cards and the fight prebuild. Before this the kit opened `?demo=1` alone and the booth showed release 62 unless the state file was edited by hand. `start-demo.cmd --plain` opens `?demo=1` alone, the plain demo. To change between the two, `stop-demo.cmd`, then `start-demo.cmd` again (a start while it runs says which one is up). `status-demo.cmd` prints the address in use.
 - `--no-kiosk` opens a normal window instead (for a test on a laptop).
 - `--browser edge` picks Edge. `--keep-profile` keeps the last visitor's save (the default is a fresh one at every start).
 - **Close the browser:** Alt+F4. The server keeps running; `start-demo.cmd` again, or `reset-demo.cmd`, opens it once more.
@@ -79,7 +80,7 @@ The address `?demo=1` is the whole switch (`src/app/demoMode.ts`). The tab keeps
 
 ## How it was checked (R61)
 
-- `tests/unit/demo-kit.test.ts` (29 tests): the server on a real loopback port (types, cache rules, 304, Range, every way out of the folder refused, a busy port, the stop request), the downloader fetching from a stand-in "live" server (verify, keep, re-fetch, delete the wrong file, partial copies, `@` sent as `%40`), and `stopPid` leaving a process that is not the kit's alone.
+- `tests/unit/demo-kit.test.ts` (33 tests; the last four, 2026-10-24: the pack address and `--plain`, and the real `start --no-browser` / `status` / `stop` writing and reporting the right address in a kit home of its own): the server on a real loopback port (types, cache rules, 304, Range, every way out of the folder refused, a busy port, the stop request), the downloader fetching from a stand-in "live" server (verify, keep, re-fetch, delete the wrong file, partial copies, `@` sent as `%40`), and `stopPid` leaving a process that is not the kit's alone.
 - The downloader was run against the real site on 32 files (8.5 MB: the page, the bundle, the fonts, the manifests, a track, two `@2x` files): all hashes matched the manifest, a second run kept all 32, `--verify-only` agreed. The full 10.2 GiB was **not** downloaded (there is not the room on D:).
 - The server and the start / status / stop commands ran against that 32-file folder (`--no-browser`), and the launcher ran with the real Chrome, windowed (13 of 13 checks: the browser asked the server for the page in the kit's own profile at `?demo=1`; `reset` closed it by PID, opened a new one and kept the caches; `stop` closed the browser and the server and left no state file).
 - **Not run:** the kiosk (full-screen) window itself, and a gamepad in it. On the booth PC, before the day: `start-demo.cmd`, press a pad button, check the pad moves the cursor and the picture fills the 1440p monitor.

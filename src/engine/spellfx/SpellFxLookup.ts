@@ -12,6 +12,7 @@ import { ABILITIES as FFX_ABILITIES } from '../../data/ffx/index.ts';
 import { ABILITIES as FFX2_ABILITIES } from '../../data/ffx2/index.ts';
 import { CORE_ABILITIES as FFX_CORE } from '../../battle/ffx/registry.ts';
 import { defaultAbilities as FFX2_FALLBACK } from '../../battle/ffx2/abilities.ts';
+import { fxNewOn } from './FxSwitch.ts';
 import { resolveSpellFx, type AbilityFxShape, type FxGame, type SpellFxId } from './SpellFxRegistry.ts';
 import { specialFx } from './SpellFxSpecials.ts';
 import { ff7FxFor } from './ff7/ff7FxSpecs.ts';
@@ -43,5 +44,5 @@ export function abilityShapeFor(id: string | undefined, game: FxGame): AbilityFx
  */
 export function resolveAbilityFx(id: string | undefined, game: FxGame, element?: string, heal = false, sourceId?: string): SpellFxId {
   if (game === 'ff7') return ff7FxFor(id, sourceId, heal); // FF7 only: its own table, never FFX's or FFX-2's
-  return specialFx(id, game) ?? resolveSpellFx(abilityShapeFor(id, game), element, heal);
+  return specialFx(id, game) ?? resolveSpellFx(abilityShapeFor(id, game), element, heal, fxNewOn()); // the new set's rows count only with the new effects on
 }

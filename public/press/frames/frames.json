@@ -1,0 +1,90 @@
+[
+  {
+    "name": "ffx-seymour-flux",
+    "file": "ffx-seymour-flux.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 163566,
+    "quality": 86,
+    "game": "ffx",
+    "caption": "Final Fantasy X, Seymour Flux",
+    "from": "tools/press-capture.mjs ch1, capture 332: flames rise around Seymour, no interface, the game's own stats"
+  },
+  {
+    "name": "ffx-cast",
+    "file": "ffx-cast.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 187305,
+    "quality": 86,
+    "game": "ffx",
+    "caption": "Final Fantasy X, the party",
+    "from": "tools/press-capture.mjs ch1, capture 372: the party in a burst of light, no interface"
+  },
+  {
+    "name": "ffx-seymour-hit",
+    "file": "ffx-seymour-hit.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 192172,
+    "quality": 86,
+    "game": "ffx",
+    "caption": "Final Fantasy X, Seymour Flux",
+    "from": "tools/press-capture.mjs ch1, capture 168: a lance strike lands on Seymour, no interface"
+  },
+  {
+    "name": "ffx2-bahamut",
+    "file": "ffx2-bahamut.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 191893,
+    "quality": 86,
+    "game": "ffx2",
+    "caption": "Final Fantasy X-2, Bahamut",
+    "from": "tools/press-capture.mjs ch4, capture 152: a strike on Bahamut, no interface, the game's own stats"
+  },
+  {
+    "name": "ffx2-cure",
+    "file": "ffx2-cure.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 134004,
+    "quality": 86,
+    "game": "ffx2",
+    "caption": "Final Fantasy X-2, Cure",
+    "from": "tools/press-capture.mjs ch4, capture 124: Cure lights the party, no interface"
+  },
+  {
+    "name": "ffx2-mega-flare",
+    "file": "ffx2-mega-flare.jpg",
+    "width": 1600,
+    "height": 900,
+    "bytes": 176759,
+    "quality": 86,
+    "game": "ffx2",
+    "caption": "Final Fantasy X-2, Mega Flare",
+    "from": "tools/press-capture.mjs ch4 --fx mega, capture 19: the presenter plays Mega Flare on a real Chapter IV battle at its real stats, no interface"
+  },
+  {
+    "name": "keyart-farplane",
+    "file": "keyart-farplane.jpg",
+    "width": 1344,
+    "height": 768,
+    "bytes": 263666,
+    "quality": 86,
+    "game": null,
+    "caption": "Key art, Farplane Field",
+    "from": "public/art/title/keyart.png"
+  },
+  {
+    "name": "keyart-echo",
+    "file": "keyart-echo.jpg",
+    "width": 1600,
+    "height": 887,
+    "bytes": 236149,
+    "quality": 86,
+    "game": null,
+    "caption": "Key art, The Echo",
+    "from": "public/art/title/echo.png"
+  }
+]

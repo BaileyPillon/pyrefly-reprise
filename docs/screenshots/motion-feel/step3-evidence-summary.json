@@ -1,0 +1,240 @@
+{
+ "note": "Step 3 headless checks of the review fixes (feel lane). Real game, headless GPU Chromium 1600x900, scripted standard pad with a recording actuator, page clock stepped; Vite :5302 started and stopped by PID; one RIG-RECORD hold per job. Harness is scratch (D:/Tools/pyrefly-scratch/2026-10-22/motion/feel/step3/browser).",
+ "winChapterI": {
+  "query": "pack=demo",
+  "rumbleCalls": [
+   {
+    "atMs": 37312,
+    "startDelay": 0,
+    "durationMs": 160,
+    "weak": 0.25,
+    "strong": 0.35
+   },
+   {
+    "atMs": 37552,
+    "startDelay": 0,
+    "durationMs": 360,
+    "weak": 0.3,
+    "strong": 0.5
+   }
+  ],
+  "actuatorResetsAtMs": [
+   40852
+  ],
+  "meaning": "two calls 240 ms apart, both startDelay 0 (one effect on the pad at a time); one reset when the battle was left (stopRumble from releaseParts)",
+  "consoleErrors": 0
+ },
+ "winChapterIV": {
+  "query": "pack=demo",
+  "victoryReached": true,
+  "rumbleCalls": [],
+  "rumbleLog": [],
+  "meaning": "a held win: no pulse, nothing asked of the pad",
+  "consoleErrors": 0
+ },
+ "pauseDuringWin": {
+  "query": "pack=demo",
+  "rumbleCalls": [
+   {
+    "atMs": 35216,
+    "startDelay": 0,
+    "durationMs": 160,
+    "weak": 0.25,
+    "strong": 0.35
+   }
+  ],
+  "actuatorResetsAtMs": [
+   35220
+  ],
+  "meaning": "pause opened right after the first segment: the pad was reset 4 ms later and the second segment never went out",
+  "consoleErrors": 0
+ },
+ "gateChapterII": {
+  "query": "pack=demo&timing=time&punch=new&hitstop=short&rumble=on&shadow=follow&motionsfx=on",
+  "feel": {
+   "chapter": "yunalesca",
+   "inDemoChapter": false,
+   "pack": true,
+   "punch": "today",
+   "hitstop": "today",
+   "rumble": false,
+   "shadow": false,
+   "motionsfx": false,
+   "timing": false
+  },
+  "rumbleCalls": 0
+ },
+ "gateChapterV": {
+  "query": "pack=demo&timing=time&punch=new&hitstop=short&rumble=on&shadow=follow&motionsfx=on",
+  "feel": {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "inDemoChapter": false,
+   "pack": true,
+   "punch": "today",
+   "hitstop": "today",
+   "rumble": false,
+   "shadow": false,
+   "motionsfx": false,
+   "timing": false
+  },
+  "rumbleCalls": 0
+ },
+ "timingAt60And144Hz": {
+  "seymour-flux time @60": {
+   "fxHit": {
+    "freezeMs": 50,
+    "shook": true
+   },
+   "impactFramesDrawn": 2,
+   "impactMs": 33.3,
+   "shakeFramesAdvancing": 21,
+   "phasePerSecond": 54,
+   "phaseTotal": 20.759,
+   "camXAtSharedTimes": [
+    -1.0666,
+    -1.0073,
+    -0.9893,
+    -0.9972,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996
+   ],
+   "consoleErrors": 0
+  },
+  "seymour-flux time @144": {
+   "fxHit": {
+    "freezeMs": 50,
+    "shook": true
+   },
+   "impactFramesDrawn": 5,
+   "impactMs": 34.7,
+   "shakeFramesAdvancing": 50,
+   "phasePerSecond": 53.8,
+   "phaseTotal": 20.534,
+   "camXAtSharedTimes": [
+    -1.0625,
+    -1.0083,
+    -0.9904,
+    -0.9972,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996
+   ],
+   "consoleErrors": 0
+  },
+  "seymour-flux today @60": {
+   "fxHit": {
+    "freezeMs": 50,
+    "shook": true
+   },
+   "impactFramesDrawn": 2,
+   "impactMs": 33.3,
+   "shakeFramesAdvancing": 23,
+   "phasePerSecond": 54,
+   "phaseTotal": 22.559,
+   "camXAtSharedTimes": [
+    -1.1123,
+    -1.0505,
+    -1.014,
+    -1.0003,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996
+   ],
+   "consoleErrors": 0
+  },
+  "seymour-flux today @144": {
+   "fxHit": {
+    "freezeMs": 50,
+    "shook": true
+   },
+   "impactFramesDrawn": 2,
+   "impactMs": 13.9,
+   "shakeFramesAdvancing": 56,
+   "phasePerSecond": 129.6,
+   "phaseTotal": 52.259,
+   "camXAtSharedTimes": [
+    -0.9758,
+    -0.986,
+    -1.0211,
+    -0.997,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996,
+    -0.9996
+   ],
+   "consoleErrors": 0
+  },
+  "yunalesca pack+key in a non-demo chapter @60": {
+   "fxHit": {
+    "freezeMs": 118,
+    "shook": true
+   },
+   "impactFramesDrawn": 2,
+   "impactMs": 33.3,
+   "shakeFramesAdvancing": 27,
+   "phasePerSecond": 54,
+   "phaseTotal": 26.159,
+   "camXAtSharedTimes": [
+    -0.1314,
+    -0.0869,
+    -0.032,
+    -0.0131,
+    -0.0129,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014
+   ],
+   "consoleErrors": 0
+  },
+  "yunalesca pack+key in a non-demo chapter @144": {
+   "fxHit": {
+    "freezeMs": 118,
+    "shook": true
+   },
+   "impactFramesDrawn": 2,
+   "impactMs": 13.9,
+   "shakeFramesAdvancing": 65,
+   "phasePerSecond": 129.6,
+   "phaseTotal": 60.359,
+   "camXAtSharedTimes": [
+    0.0284,
+    0.0403,
+    -0.0473,
+    0.0023,
+    -0.0132,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014,
+    -0.014
+   ],
+   "consoleErrors": 0
+  }
+ }
+}

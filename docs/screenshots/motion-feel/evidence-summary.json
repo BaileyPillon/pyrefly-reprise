@@ -1,0 +1,489 @@
+{
+ "about": "Evidence of the feel lane, step 1 (2026-10-22): headless Chromium on the real GPU, 1600 x 900, the real renderer; each number is from the run named. Raw frames and traces are kept outside the repo (D:/Tools/pyrefly-scratch/2026-10-22/motion/feel/evidence).",
+ "punch": {
+  "chapter-I-seymour-flux": {
+   "foeUsed": "mortiorchis",
+   "fov": 32,
+   "new": {
+    "restDepthWorldUnits": 19.475,
+    "peakMagnificationPct": 2.59,
+    "peakAtMs": 66.7,
+    "undershootPct": -0.3,
+    "rectHeightPeakPct": 2.61
+   },
+   "today": {
+    "restDepthWorldUnits": 19.475,
+    "peakMagnificationPct": 6.35,
+    "peakAtMs": 108.3,
+    "undershootPct": 0,
+    "rectHeightPeakPct": 6.41
+   }
+  },
+  "chapter-IV-ffx2-bahamut": {
+   "foeUsed": "bahamut",
+   "fov": 34,
+   "new": {
+    "restDepthWorldUnits": 15.4,
+    "peakMagnificationPct": 2.57,
+    "peakAtMs": 66.7,
+    "undershootPct": -0.3,
+    "rectHeightPeakPct": 2.59
+   },
+   "today": {
+    "restDepthWorldUnits": 15.4,
+    "peakMagnificationPct": 3.01,
+    "peakAtMs": 91.7,
+    "undershootPct": 0,
+    "rectHeightPeakPct": 3.03
+   }
+  }
+ },
+ "hz": {
+  "chapter-I-seymour-flux": {
+   "rates": [
+    60,
+    120,
+    144
+   ],
+   "commonTimesMs": [
+    83.3,
+    166.7,
+    250,
+    333.3,
+    416.7,
+    500,
+    583.3,
+    666.7,
+    750
+   ],
+   "worstDifference": {
+    "cameraX": 0,
+    "cameraY": 0,
+    "cameraZ": 0,
+    "depth": 0,
+    "hop": 0,
+    "lunge": 0.106184
+   },
+   "unit": "world units (148 px per unit at the battle camera)",
+   "controlWander": {
+    "60": 0,
+    "144": 0
+   }
+  },
+  "chapter-IV-ffx2-bahamut": {
+   "rates": [
+    60,
+    120,
+    144
+   ],
+   "commonTimesMs": [
+    83.3,
+    166.7,
+    250,
+    333.3,
+    416.7,
+    500,
+    583.3,
+    666.7,
+    750
+   ],
+   "worstDifference": {
+    "cameraX": 0,
+    "cameraY": 0,
+    "cameraZ": 0,
+    "depth": 0,
+    "hop": 0,
+    "lunge": 0
+   },
+   "unit": "world units (148 px per unit at the battle camera)",
+   "controlWander": {
+    "60": 0,
+    "144": 0
+   }
+  }
+ },
+ "fights": {
+  "chapter-I-seymour-flux": {
+   "pack-keys": {
+    "frames": 1128,
+    "feel": {
+     "chapter": "seymour-flux",
+     "inDemoChapter": true,
+     "pack": true,
+     "punch": "new",
+     "hitstop": "short",
+     "rumble": true,
+     "shadow": true
+    },
+    "blows": 3,
+    "stopsMs": [
+     50
+    ],
+    "maxTrauma": 0.55,
+    "maxKickWorldUnits": 0.235,
+    "bossBigBlows": [
+     {
+      "target": "tidus",
+      "plannedStopMs": 50,
+      "measuredStopMs": 50,
+      "kickPeakWorldUnits": 0.235,
+      "kickPeakAtMs": 67
+     }
+    ],
+    "rumbleCalls": 0,
+    "rumbleLog": [
+     "keyboard",
+     "keyboard"
+    ],
+    "shadowWorstTrailWorldUnits": {
+     "tidus": 0,
+     "yuna": 0,
+     "kimahri": 0,
+     "mortiorchis": 0,
+     "seymour-flux": 0
+    },
+    "victorySeen": false
+   },
+   "pack-pad": {
+    "frames": 1528,
+    "feel": {
+     "chapter": null,
+     "inDemoChapter": false,
+     "pack": true,
+     "punch": "today",
+     "hitstop": "today",
+     "rumble": false,
+     "shadow": false
+    },
+    "blows": 5,
+    "stopsMs": [
+     50,
+     50
+    ],
+    "maxTrauma": 0.594,
+    "maxKickWorldUnits": 0.249,
+    "bossBigBlows": [
+     {
+      "target": "tidus",
+      "plannedStopMs": 50,
+      "measuredStopMs": 50,
+      "kickPeakWorldUnits": 0.235,
+      "kickPeakAtMs": 67
+     },
+     {
+      "target": "yuna",
+      "plannedStopMs": 50,
+      "measuredStopMs": 50,
+      "kickPeakWorldUnits": 0.25,
+      "kickPeakAtMs": 67
+     }
+    ],
+    "rumbleCalls": 2,
+    "rumbleLog": [
+     "keyboard",
+     "played",
+     "played"
+    ],
+    "shadowWorstTrailWorldUnits": {
+     "tidus": 0,
+     "yuna": 0,
+     "kimahri": 0,
+     "mortiorchis": 0,
+     "seymour-flux": 0
+    },
+    "victorySeen": false
+   },
+   "rm-pad": {
+    "frames": 1128,
+    "feel": {
+     "chapter": "seymour-flux",
+     "inDemoChapter": true,
+     "pack": true,
+     "punch": "new",
+     "hitstop": "short",
+     "rumble": true,
+     "shadow": true
+    },
+    "blows": 4,
+    "stopsMs": [],
+    "maxTrauma": 0,
+    "maxKickWorldUnits": 0,
+    "bossBigBlows": [
+     {
+      "target": "tidus",
+      "plannedStopMs": 0,
+      "measuredStopMs": 0,
+      "kickPeakWorldUnits": 0,
+      "kickPeakAtMs": null
+     }
+    ],
+    "rumbleCalls": 0,
+    "rumbleLog": [],
+    "shadowWorstTrailWorldUnits": {
+     "tidus": 0,
+     "yuna": 0,
+     "kimahri": 0,
+     "mortiorchis": 0,
+     "seymour-flux": 0
+    },
+    "victorySeen": false
+   },
+   "today-pad": {
+    "frames": 1534,
+    "feel": {
+     "chapter": null,
+     "inDemoChapter": false,
+     "pack": true,
+     "punch": "today",
+     "hitstop": "today",
+     "rumble": false,
+     "shadow": false
+    },
+    "blows": 5,
+    "stopsMs": [
+     33.3,
+     66.7,
+     16.7,
+     33.3,
+     66.7
+    ],
+    "maxTrauma": 0.594,
+    "maxKickWorldUnits": 0,
+    "bossBigBlows": [
+     {
+      "target": "tidus",
+      "plannedStopMs": 80,
+      "measuredStopMs": 66.7,
+      "kickPeakWorldUnits": 0,
+      "kickPeakAtMs": null
+     },
+     {
+      "target": "yuna",
+      "plannedStopMs": 80,
+      "measuredStopMs": 66.7,
+      "kickPeakWorldUnits": 0,
+      "kickPeakAtMs": null
+     }
+    ],
+    "rumbleCalls": 0,
+    "rumbleLog": [],
+    "shadowWorstTrailWorldUnits": {
+     "tidus": 1.067,
+     "yuna": 0.692,
+     "kimahri": 0,
+     "mortiorchis": 0.63,
+     "seymour-flux": 1.67
+    },
+    "victorySeen": false
+   }
+  },
+  "chapter-IV-ffx2-bahamut": {
+   "pack-keys": {
+    "frames": 984,
+    "feel": {
+     "chapter": "ffx2-bahamut",
+     "inDemoChapter": true,
+     "pack": true,
+     "punch": "new",
+     "hitstop": "short",
+     "rumble": true,
+     "shadow": true
+    },
+    "blows": 7,
+    "stopsMs": [],
+    "maxTrauma": 0.519,
+    "maxKickWorldUnits": 0,
+    "bossBigBlows": [],
+    "rumbleCalls": 0,
+    "rumbleLog": [],
+    "shadowWorstTrailWorldUnits": {
+     "rikku": 0,
+     "paine": 0,
+     "yuna": 0,
+     "bahamut": 0
+    },
+    "victorySeen": false
+   },
+   "pack-pad": {
+    "frames": 3006,
+    "feel": {
+     "chapter": "ffx2-bahamut",
+     "inDemoChapter": true,
+     "pack": true,
+     "punch": "new",
+     "hitstop": "short",
+     "rumble": true,
+     "shadow": true
+    },
+    "blows": 23,
+    "stopsMs": [
+     66.7,
+     50
+    ],
+    "maxTrauma": 0.604,
+    "maxKickWorldUnits": 0.249,
+    "bossBigBlows": [
+     {
+      "target": "yuna",
+      "plannedStopMs": 50,
+      "measuredStopMs": 66.7,
+      "kickPeakWorldUnits": 0.239,
+      "kickPeakAtMs": 67
+     },
+     {
+      "target": "rikku",
+      "plannedStopMs": 0,
+      "measuredStopMs": 0,
+      "kickPeakWorldUnits": -0.028,
+      "kickPeakAtMs": 0
+     },
+     {
+      "target": "paine",
+      "plannedStopMs": 0,
+      "measuredStopMs": 0,
+      "kickPeakWorldUnits": 0,
+      "kickPeakAtMs": null
+     },
+     {
+      "target": "yuna",
+      "plannedStopMs": 50,
+      "measuredStopMs": 50,
+      "kickPeakWorldUnits": 0.249,
+      "kickPeakAtMs": 67
+     },
+     {
+      "target": "rikku",
+      "plannedStopMs": 0,
+      "measuredStopMs": 0,
+      "kickPeakWorldUnits": -0.025,
+      "kickPeakAtMs": 0
+     },
+     {
+      "target": "paine",
+      "plannedStopMs": 0,
+      "measuredStopMs": 0,
+      "kickPeakWorldUnits": 0,
+      "kickPeakAtMs": null
+     }
+    ],
+    "rumbleCalls": 6,
+    "rumbleLog": [
+     "played",
+     "played",
+     "played",
+     "played",
+     "played",
+     "played"
+    ],
+    "shadowWorstTrailWorldUnits": {
+     "rikku": 0,
+     "yuna": 0,
+     "paine": 0,
+     "bahamut": 0
+    },
+    "victorySeen": false
+   },
+   "rm-pad": {
+    "frames": 920,
+    "feel": {
+     "chapter": "ffx2-bahamut",
+     "inDemoChapter": true,
+     "pack": true,
+     "punch": "new",
+     "hitstop": "short",
+     "rumble": true,
+     "shadow": true
+    },
+    "blows": 9,
+    "stopsMs": [],
+    "maxTrauma": 0,
+    "maxKickWorldUnits": 0,
+    "bossBigBlows": [],
+    "rumbleCalls": 0,
+    "rumbleLog": [],
+    "shadowWorstTrailWorldUnits": {
+     "yuna": 0,
+     "paine": 0,
+     "rikku": 0,
+     "bahamut": 0
+    },
+    "victorySeen": false
+   },
+   "today-pad": {
+    "frames": 2742,
+    "feel": {
+     "chapter": "ffx2-bahamut",
+     "inDemoChapter": true,
+     "pack": true,
+     "punch": "today",
+     "hitstop": "today",
+     "rumble": false,
+     "shadow": false
+    },
+    "blows": 23,
+    "stopsMs": [
+     16.7,
+     16.7,
+     16.7,
+     83.3,
+     16.7,
+     16.7,
+     33.3,
+     16.7,
+     16.7,
+     83.3,
+     66.7,
+     16.7,
+     16.7,
+     16.7,
+     66.7,
+     66.7,
+     16.7,
+     16.7,
+     16.7,
+     16.7
+    ],
+    "maxTrauma": 0.604,
+    "maxKickWorldUnits": 0,
+    "bossBigBlows": [],
+    "rumbleCalls": 0,
+    "rumbleLog": [],
+    "shadowWorstTrailWorldUnits": {
+     "yuna": 0.123,
+     "rikku": 0.339,
+     "paine": 0.339,
+     "bahamut": 1.156
+    },
+    "victorySeen": false
+   },
+   "win-pad": {
+    "frames": 723,
+    "feel": {
+     "chapter": null,
+     "inDemoChapter": false,
+     "pack": true,
+     "punch": "today",
+     "hitstop": "today",
+     "rumble": false,
+     "shadow": false
+    },
+    "blows": 1,
+    "stopsMs": [],
+    "maxTrauma": 0.207,
+    "maxKickWorldUnits": 0,
+    "bossBigBlows": [],
+    "rumbleCalls": 2,
+    "rumbleLog": [
+     "played"
+    ],
+    "shadowWorstTrailWorldUnits": {
+     "yuna": 0,
+     "paine": 0,
+     "rikku": 0,
+     "bahamut": 0
+    },
+    "victorySeen": false
+   }
+  }
+ }
+}

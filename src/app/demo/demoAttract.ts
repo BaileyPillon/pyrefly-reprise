@@ -28,7 +28,10 @@ import { BattleScreen } from '../screens/BattleScreen.ts';
 import { preloadBattle } from '../screens/battlePreload.ts';
 import { padActive, POINTER_ACTIVE_PX } from './demoIdle.ts';
 import { DEMO_FIGHTS } from './demoFlow.ts';
-import { demoSeedAt } from '../demoMode.ts';
+import { demoModeOn, demoSeedAt } from '../demoMode.ts';
+import { sfxChapter } from '../sfxGame.ts'; // the sound pass: a reel segment sounds like the fight it shows (its recorded originals, its motion sounds), `?audio=new` / `?pack=demo` only
+import { audioNewBooth } from '../../audio/pass/passSwitch.ts';
+import { ATTRACT_MUSIC_SHARE, ATTRACT_TRIM_DB } from '../../audio/pass/passMix.ts';
 import './demo.css';
 
 export interface AttractSegment {
@@ -253,13 +256,21 @@ export async function runAttract(
   running = true;
   wake.arm();
   const settings = app.save.settings;
-  audio.setMusicVolume(settings.musicVolume * ATTRACT_MUSIC);
+  // The sound pass (decision 184, PC-04): the music at its fight share and the WHOLE mix 6 dB down, so the reel's balance of music to hits is a fight's (it was effects-forward: the music 8 dB down, the effects not).
+  const booth = audioNewBooth(demoModeOn());
+  audio.setMusicVolume(settings.musicVolume * (booth ? ATTRACT_MUSIC_SHARE : ATTRACT_MUSIC));
+  if (booth) audio.setPassBoothTrim(ATTRACT_TRIM_DB);
+  let leaveSfx: (() => void) | null = null;
   let shortRun = 0;
   try {
     for (let i = 0; !wake.isWoken; i++) {
       const seg = plan[i % plan.length]!;
       const chapter = getChapter(seg.chapterId);
       if (!chapter) throw new Error(`attract: no chapter ${seg.chapterId}`);
+      if (booth) {
+        leaveSfx?.(); // the segment before gives its game back, this one takes its own (the parity packs stay decoded between them)
+        leaveSfx = sfxChapter(chapter.id, () => undefined);
+      }
       if (i === 0) {
         await Promise.race([preload(chapter, seg.seed).catch(() => undefined), wake.woken]); // the title stays up while the first segment's art loads
         if (wake.isWoken) break;
@@ -286,6 +297,8 @@ export async function runAttract(
   } finally {
     report.woken = wake.isWoken;
     wake.release();
+    leaveSfx?.();
+    if (booth) audio.setPassBoothTrim(0);
     audio.applySettings(app.save.settings); // the music back to what the settings say, whatever ended the reel
     if (report.left) {
       await app.fade('opaque', FADE_OUT_MS);

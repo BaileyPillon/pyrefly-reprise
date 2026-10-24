@@ -17,7 +17,7 @@
  */
 
 import { stagedUploads } from './ArtDevice.ts';
-import { fxAtlasTexture } from './spellfx/FxAtlas.ts';
+import { fxAtlasTexture, warmFxAtlas } from './spellfx/FxAtlas.ts';
 import { probeBrowser } from './StageProbe.ts';
 
 /** The gap between the two jobs, so one block of main thread is not both (the probe is the long one). */
@@ -36,11 +36,14 @@ export function warmBattleStage(): void {
   }
   if (typeof setTimeout !== 'function') return;
   setTimeout(() => {
-    try {
-      fxAtlasTexture();
-    } catch {
-      /* the battle builds it itself, as before */
-    }
+    // r63-play (the overnight fix of the skeptic's M1): the atlas is built a tile at a time (the same pixels as `fxAtlasTexture`'s), not as the one 0.1 s task a press could be lost in.
+    warmFxAtlas(() => new Promise<void>((resolve) => setTimeout(resolve, 0))).catch(() => {
+      try {
+        fxAtlasTexture();
+      } catch {
+        /* the battle builds it itself, as before */
+      }
+    });
   }, ATLAS_AFTER_MS);
 }
 

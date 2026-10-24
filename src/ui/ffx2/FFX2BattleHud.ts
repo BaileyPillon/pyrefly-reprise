@@ -1,4 +1,6 @@
 import '../inkgold/index.ts';
+import { ProFieldMarks } from '../common/ProFieldMarks.ts'; // lane pro-look: the KO wash and mark on the field
+import { HudF1 } from '../hudf1/HudF1.ts'; // lane hud-f1: the Clear Stage layer (inert unless ?hud=f1 / ?pack=demo in Chapter IV)
 // `theme.css` defines every `--x2-*` token on `:root` and, until this line, was
 // imported by `PartyPrep.ts` **and nothing else** — so a battle entered with
 // `skipPrep` (every automated capture, and the chapter flow's own fast path)
@@ -43,6 +45,7 @@ import { partyRowHtml } from './PartyRows.ts';
 import { enemyGaugesHtml, type ChargePip } from './BossGauges.ts';
 import { DamageLayer } from './DamageLayer.ts';
 import { playSpherechangeFlourish } from './SpherechangeFlourish.ts';
+import { AbilityNameSlab } from './NameSlab.ts';
 import { ChainCounter } from './ChainCounter.ts';
 import { ffx2EngineOptions } from '../../app/screens/BattleScreenContent.ts';
 import { MoveAdvisor } from '../common/MoveAdvisor.ts';
@@ -203,6 +206,10 @@ export class FFX2BattleHud implements HudPort {
    */
   private readonly revealed = new Set<CombatantId>();
   private readonly damage = new DamageLayer();
+  /** Lane pro-look: the KO wash and mark on the field (`ui/common/ProFieldMarks.ts`); draws nothing unless the pro look's `markers` piece is on. */
+  private readonly proMarks = new ProFieldMarks('ffx2');
+  /** Lane hud-f1: the boss ribbon, the hero, the cue and the prompt bar of the F1 HUD, and its step-back (`ui/hudf1/`); draws nothing unless the switch is on. */
+  private readonly f1 = new HudF1('ffx2');
   /** PR-0150: the s3 tile's TARGET plate, actor plate and controls hint (`TargetPlates.ts`). FFX-2 only. */
   private readonly plates = new TargetPlates();
   /** D-044 Node C: Vegnagun's overhead Nodes marked at the top edge (`nodeEdgeMarkers.ts`). FFX-2 only. */
@@ -346,6 +353,8 @@ export class FFX2BattleHud implements HudPort {
       return r && r.width > 0 ? { width: r.width, height: r.height } : { width: window.innerWidth, height: window.innerHeight };
     },
   });
+  /** The new effects' ability name slab over the acting girl (`NameSlab.ts`; draws nothing unless they are on). */
+  private readonly nameSlab = new AbilityNameSlab({ overlay: () => this.overlay, scale: () => this.stageScale, head: (id) => this.project(id, 'head') });
   private telegraphHideTimer = 0;
   private damageFlashTimer = 0;
   /** Current `.ffx2hud__stage` letterbox scale, so overlay-space offsets (chain chip) stay proportional at any viewport size. */
@@ -431,6 +440,7 @@ export class FFX2BattleHud implements HudPort {
     // Numerals live on the unscaled overlay, not the 640x360 stage: positions come from the presenter's projector
     // in real px, §3.6's grid glyph sizes multiplied back up by the letterbox scale `layout()` gives the stage.
     this.damage.mount(this.overlay, { host: this.el, scale: () => this.stageScale });
+    this.overlay.appendChild(this.proMarks.el);
     // Into the scaled stage: the rail letterboxes with the chrome, anchors on the same 640x360 grid.
     this.guide.mount(this.stage);
     this.advisor.mount(this.stage);
@@ -451,6 +461,13 @@ export class FFX2BattleHud implements HudPort {
 
     this.mounted = true;
     this.layout();
+    this.f1.mount({
+      game: 'ffx2', root: this.el, stage: this.stage,
+      cmdStack: () => this.commandEl.querySelector<HTMLElement>('.ig-cmd-stack'), cmdBlock: () => this.commandEl,
+      helpText: () => this.commandInfoEl.querySelector('[data-role="text"]')?.textContent ?? '',
+      heroRow: (id) => this.partyEl.querySelector<HTMLElement>(id ? `.ig-stat[data-actor-id="${CSS.escape(id)}"]` : '.ig-stat--acting'),
+      hpKnown: () => true, // r63-play, FFX-2's rule: today's enemy strip (`BossGauges`) draws every enemy's bar from the first frame; only the numerals wait for Scan, and the ribbon prints none
+    });
     window.addEventListener('resize', this.onResize, { passive: true });
   }
 
@@ -458,14 +475,18 @@ export class FFX2BattleHud implements HudPort {
     if (!this.mounted) return;
     window.removeEventListener('resize', this.onResize);
     this.chain.dispose();
+    this.nameSlab.dispose();
     this.queued.unmount();
     window.clearTimeout(this.telegraphHideTimer);
     window.clearTimeout(this.damageFlashTimer);
     this.damage.unmount();
+    this.proMarks.clear();
+    this.proMarks.el.remove();
     this.guide.unmount();
     this.advisor.unmount();
     this.intent.unmount();
     this.actionFade.reset();
+    this.f1.unmount();
     // Nothing the cursor lit may outlive the HUD that lit it.
     this.applySelection(null);
     this.plates.unmount();
@@ -478,6 +499,7 @@ export class FFX2BattleHud implements HudPort {
   /** `HudPort.setActing` (B2's signal): the FFX-2 action fade, A-15. */
   setActing(signal: ActingSignal): void {
     this.actionFade.signal(signal);
+    this.f1.setActing(signal); // lane hud-f1: the step-back
   }
 
   /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
@@ -486,6 +508,9 @@ export class FFX2BattleHud implements HudPort {
     this.layoutPlates();
     this.nodeMarks.update();
     this.damage.update(dt);
+    this.proMarks.update(dt);
+    this.f1.update(dt); // lane hud-f1
+    this.nameSlab.update(dt);
     this.guide.update(dt);
     this.advisor.update(dt);
     this.intent.update(dt);
@@ -852,6 +877,8 @@ export class FFX2BattleHud implements HudPort {
     // ...and no command menu, reticle or banner either: `onEvent` swept at the last blow; an escape arrives only here.
     if (over) this.endOfFight();
     this.lastState = state;
+    this.proMarks.sync(state); // lane pro-look: who is down
+    this.f1.sync(state); // lane hud-f1: the boss ribbon
     this.queued.sync(state);
     this.guide.sync(state);
     this.advisor.sync(state);
@@ -883,6 +910,7 @@ export class FFX2BattleHud implements HudPort {
     if (!snapshot) return;
     this.renderParty(state, snapshot);
     this.renderEnemies(state, snapshot);
+    this.f1.sync(state); // lane hud-f1: the ribbon's bar, at the blow
   }
 
   /**
@@ -945,6 +973,7 @@ export class FFX2BattleHud implements HudPort {
       return { kind: 'defend', targets: [] };
     }
     this.openingHold.decision(); // PR-0146: the opening is over
+    this.f1.setMenuActor(actorId); // lane hud-f1: the hero over the command block is whoever's menu this is
     // PR-0175: a menu still open from an earlier decision (a link that ended
     // under it) is torn down before the next one opens. Overwriting its close
     // handle left its cursor in the overlay, still on arrow keys, projecting
@@ -1019,6 +1048,7 @@ export class FFX2BattleHud implements HudPort {
 
   onEvent(event: BattleEvent): Promise<void> | void {
     this.actionFade.observe(event); // A-15: overlapping ATB actions (actionFade.ts)
+    this.f1.onEvent(event); // lane hud-f1: the step-back reads the same stream
     // The last blow landed or the end beat starts (`fightDecided.ts`): no banner rides it, and no menu (Active ATB can
     // end the fight while a girl is choosing; the presenter drops the menu only after the burst, `runActivePump`).
     if (fightDecidedBy(event, this.lastState)) this.endOfFight();
@@ -1032,6 +1062,11 @@ export class FFX2BattleHud implements HudPort {
         }
         return;
       case 'action-start':
+        this.nameSlab.start(event); // the new effects (Chapter IV): the ability's name over the girl's head (`NameSlab.ts`)
+        return this.message.onEvent(event, this.lastState);
+      case 'action-end':
+        this.nameSlab.end(event.actorId);
+        return;
       case 'message':
         return this.message.onEvent(event, this.lastState);
       case 'ko': // A slab naming the enemy just KO'd (Paragon, as Trema's link seam starts) re-reads the engine: no dead enemy acts next.
@@ -1085,6 +1120,7 @@ export class FFX2BattleHud implements HudPort {
   ): void {
     this.project = project;
     this.damage.setProjector(project);
+    this.proMarks.setProjector(project);
   }
 
   /** fb2-0929 camera comfort: the guide rail and the advisor lane are fenced where the girls rest, not mid-move. */
@@ -1096,6 +1132,7 @@ export class FFX2BattleHud implements HudPort {
   /** The painted field's targeting surface. See {@link TargetingPort}. */
   setTargetingPort(port: TargetingPort): void {
     this.targeting = port;
+    this.proMarks.setFigures({ rect: (id) => port.rect(id), visibility: (id) => port.visibility(id) }); // r63-play: the KO mark stands on the downed member's own sprite
   }
 
   /**

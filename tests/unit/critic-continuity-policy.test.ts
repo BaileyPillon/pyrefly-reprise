@@ -105,7 +105,7 @@ describe('the continuity block of the policy', () => {
     // pose continuity (W4, Bailey 2026-10-16: "pose continuity is the strongest recurring issue we need a permanent fix for this please."): the height, feet and real-head readings, the camera
     // projected per point, the CHK-027 split and the honouring of the waiver ledger all change what counts, so each quotes him by date
     const switches: Array<[string, boolean]> = [
-      ['tracking', c.tracking?.unregistered === 'centroid' || c.tracking?.camera === 'point'], ['staged', c.staged?.twirl === true], ['wash', c.wash?.excuse === true],
+      ['tracking', c.tracking?.unregistered === 'centroid' || c.tracking?.camera === 'point'], ['staged', c.staged?.twirl === true], ['wash', c.wash?.excuse === true], ['smear', (c as { smear?: { excuse?: boolean } }).smear?.excuse === true],
       ['readings', Object.entries(c.readings ?? {}).some(([k, v]) => k !== 'note' && v === true)], ['jerks', c.jerks?.dashesFail === false], ['waivers', c.waivers?.honour === true],
     ];
     for (const [name, on] of switches) {

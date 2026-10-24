@@ -1,0 +1,91 @@
+/*
+ * THE F1 HUD STEPS BACK IN ACTION: the look of it (conference demo, lane "hud-f1"; Bailey 2026-10-23, decision 192). `HudF1StepBack.ts` decides WHEN `f1-acting` is on the HUD root; this file is
+ * what each piece does with it. Out 160 to 180 ms ease-in (`HUD_F1_TUNE.slideOutMs`, 170) at the action's start; back 220 ms ease-out, about 220 ms after the action's end and not before the damage
+ * number has gone. What goes: the command block (a ghost copy of it, see the step-back note: FFX closes its stack at the confirm) slides out along its own edge (FFX left, FFX-2 right) and the prompt
+ * bar slides down; the party cards go slim (face, name, HP, MP: the Overdrive or ATB bar and the /max numbers are hidden). What stays: the boss ribbon (`HUD_F1_TUNE.ribbonStaysInAction`) and the
+ * turn strip. REDUCE MOTION (the game's own row, or the OS preference): the same states, faded and not slid.
+ */
+
+/* ------------------------------------------------------------------ the REAL command block: while the HUD is stepped back the next menu waits out of the way and slides in when the HUD returns (the ghost carries the slide OUT) */
+.hud-f1 .ffx-cmd-area:not(.f1-ghost__area),
+.hud-f1 .ffx2hud__command:not(.f1-ghost__area),
+.hud-f1 .f1-layer > .f1-hero,
+.hud-f1 .f1-layer > .f1-cue { transition: transform 220ms cubic-bezier(0.16, 0.84, 0.3, 1), opacity 180ms ease-out; }
+.hud-f1.f1-acting .ffx-cmd-area:not(.f1-ghost__area),
+.hud-f1.f1-acting .ffx2hud__command:not(.f1-ghost__area),
+.hud-f1.f1-acting .f1-layer > .f1-hero,
+.hud-f1.f1-acting .f1-layer > .f1-cue { transform: translateX(calc(var(--f1-slide) * -4)); opacity: 0; pointer-events: none; }
+.ig--ffx2.hud-f1.f1-acting .ffx2hud__command:not(.f1-ghost__area),
+.ig--ffx2.hud-f1.f1-acting .f1-layer > .f1-hero,
+.ig--ffx2.hud-f1.f1-acting .f1-layer > .f1-cue { transform: translateX(calc(var(--f1-slide) * 4)); }
+
+/* ------------------------------------------------------------------ the prompt bar slides down and out */
+.hud-f1 .f1-prompts { transition: transform 220ms cubic-bezier(0.16, 0.84, 0.3, 1), opacity 180ms ease-out; }
+.hud-f1.f1-acting .f1-prompts {
+  transform: translateY(26px) skewX(var(--ig-skew)); opacity: 0;
+  transition: transform 170ms cubic-bezier(0.5, 0, 0.9, 0.4), opacity 140ms ease-in 30ms;
+}
+
+/* the battle is over (victory or defeat, `HudF1.ts` F1_OVER): the prompt bar has nothing left to prompt and is not drawn on the freeze frame (review m7) */
+.hud-f1.f1-over .f1-prompts { opacity: 0; transition: opacity 180ms ease-out; }
+
+/* ------------------------------------------------------------------ the boss ribbon: stays (the mockup keeps it) unless the provisional choice is flipped */
+.hud-f1 .f1-ribbon { transition: transform 220ms cubic-bezier(0.16, 0.84, 0.3, 1), opacity 180ms ease-out; }
+.hud-f1.f1-ribbon-hides.f1-acting .f1-ribbon { transform: translateY(-34px) skewX(var(--ig-skew)); opacity: 0; transition: transform 170ms cubic-bezier(0.5, 0, 0.9, 0.4), opacity 140ms ease-in 30ms; }
+
+/* ------------------------------------------------------------------ the party cards go slim (FFX) */
+.ffxhud.hud-f1 .ig-stat { transition: opacity 0.2s ease, height 220ms cubic-bezier(0.16, 0.84, 0.3, 1); }
+.ffxhud.hud-f1.f1-acting .ig-stat {
+  height: 20.5px; grid-template-columns: 24px 43px 1fr 1fr; grid-template-rows: 1fr; align-items: center; transition: opacity 0.2s ease, height 170ms cubic-bezier(0.5, 0, 0.9, 0.4);
+}
+.ffxhud.hud-f1.f1-acting .ig-stat__face { width: 16.5px; height: 16.5px; grid-row: 1; }
+.ffxhud.hud-f1.f1-acting .ig-stat__name { grid-row: 1; font-size: 11px; }
+.ffxhud.hud-f1.f1-acting .ig-stat__value { grid-row: 1; font-size: 13px; }
+.ffxhud.hud-f1.f1-acting .ig-stat__value--mp { grid-row: 1; font-size: 10px; }
+.ffxhud.hud-f1.f1-acting .ig-stat__value small,
+.ffxhud.hud-f1.f1-acting .ig-stat__od { display: none; }
+
+/* HUD_F1_TUNE.slimAnimates false: the cards snap to their slim size (no height transition) */
+.hud-f1.f1-slim-snap .ig-stat, .hud-f1.f1-slim-snap.f1-acting .ig-stat { transition: opacity 0.2s ease !important; }
+
+/* ------------------------------------------------------------------ the party cards go slim (FFX-2) */
+.ffx2hud.hud-f1 .ig-stat { transition: opacity 0.2s ease, height 220ms cubic-bezier(0.16, 0.84, 0.3, 1); }
+.ffx2hud.hud-f1.f1-acting .ig-stat { height: 20.5px; transition: opacity 0.2s ease, height 170ms cubic-bezier(0.5, 0, 0.9, 0.4); }
+.ffx2hud.hud-f1.f1-acting .ffx2stat__face { width: 16.5px; height: 16.5px; }
+.ffx2hud.hud-f1.f1-acting .ffx2stat__body { grid-template-rows: auto; }
+.ffx2hud.hud-f1.f1-acting .ffx2stat__body::before,
+.ffx2hud.hud-f1.f1-acting .ig-stat__od,
+.ffx2hud.hud-f1.f1-acting .ig-stat__value small { display: none; }
+.ffx2hud.hud-f1.f1-acting .ig-stat__name { font-size: 11px; }
+.ffx2hud.hud-f1.f1-acting .ig-stat__value { font-size: 13px; }
+.ffx2hud.hud-f1.f1-acting .ig-stat__value--mp { font-size: 10px; }
+
+/* ------------------------------------------------------------------ REDUCE MOTION: fade instead of slide */
+html[data-reduce-motion] .hud-f1.f1-acting .ffx-cmd-area:not(.f1-ghost__area),
+html[data-reduce-motion] .hud-f1.f1-acting .ffx2hud__command:not(.f1-ghost__area),
+html[data-reduce-motion] .hud-f1.f1-acting .f1-layer > .f1-hero,
+html[data-reduce-motion] .hud-f1.f1-acting .f1-layer > .f1-cue,
+html[data-reduce-motion] .ig--ffx2.hud-f1.f1-acting .ffx2hud__command:not(.f1-ghost__area),
+html[data-reduce-motion] .ig--ffx2.hud-f1.f1-acting .f1-layer > .f1-hero,
+html[data-reduce-motion] .ig--ffx2.hud-f1.f1-acting .f1-layer > .f1-cue { transform: none; }
+html[data-reduce-motion] .hud-f1 .f1-ghost { transition: opacity 140ms ease-in; }
+html[data-reduce-motion] .hud-f1 .f1-ghost--out,
+html[data-reduce-motion] .ig--ffx2.hud-f1 .f1-ghost--out { transform: none; }
+html[data-reduce-motion] .hud-f1 .f1-prompts,
+html[data-reduce-motion] .hud-f1 .f1-ribbon { transition: opacity 180ms ease-out; }
+html[data-reduce-motion] .hud-f1.f1-acting .f1-prompts { transform: skewX(var(--ig-skew)); transition: opacity 140ms ease-in; }
+html[data-reduce-motion] .hud-f1.f1-ribbon-hides.f1-acting .f1-ribbon { transform: skewX(var(--ig-skew)); transition: opacity 140ms ease-in; }
+html[data-reduce-motion] .hud-f1 .ig-stat { transition: opacity 0.2s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .hud-f1.f1-acting .ffx-cmd-area:not(.f1-ghost__area), .hud-f1.f1-acting .ffx2hud__command:not(.f1-ghost__area), .hud-f1.f1-acting .f1-layer > .f1-hero, .hud-f1.f1-acting .f1-layer > .f1-cue,
+  .ig--ffx2.hud-f1.f1-acting .ffx2hud__command:not(.f1-ghost__area), .ig--ffx2.hud-f1.f1-acting .f1-layer > .f1-hero, .ig--ffx2.hud-f1.f1-acting .f1-layer > .f1-cue { transform: none; }
+  .hud-f1 .f1-ghost { transition: opacity 140ms ease-in; }
+  .hud-f1 .f1-ghost--out, .ig--ffx2.hud-f1 .f1-ghost--out { transform: none; }
+  .hud-f1 .f1-prompts, .hud-f1 .f1-ribbon { transition: opacity 180ms ease-out; }
+  .hud-f1.f1-acting .f1-prompts { transform: skewX(var(--ig-skew)); transition: opacity 140ms ease-in; }
+  .hud-f1.f1-ribbon-hides.f1-acting .f1-ribbon { transform: skewX(var(--ig-skew)); transition: opacity 140ms ease-in; }
+  .hud-f1 .ig-stat { transition: opacity 0.2s ease; }
+}
+
+/* ------------------------------------------------------------------ the turn strip stays (today's FFX acting fade takes the CTB column to 16 percent; the mockup keeps the strip up while the action is read) */
+.ffxhud.hud-f1.ffxhud--acting .ig-ctb { opacity: 1; }

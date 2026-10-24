@@ -41,9 +41,11 @@ import { entrySituationFor } from './entrySituation.ts';
 import { playBattleEntry } from '../../ui/common/transitions/entry.ts';
 import { boardWhenWarm } from './frontendWarm.ts';
 import { playResultsWipe } from '../../ui/common/transitions/index.ts';
+import { stagingPieceOnFor } from '../../engine/pro/staging/StagingSwitch.ts';
+import { ProDefeatScreen } from './ProDefeatScreen.ts'; // lane "pro-staging": the defeat card that keeps the scene
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
-import { noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
+import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
 import { demoThanksDue } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
 import { demoIntroFor } from '../demo/demoIntro.ts'; // R62 (demo mode only, FFX Chapter I): the short voiced intro
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
@@ -53,7 +55,7 @@ import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conf
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
-import { stopDemoWarm } from '../demo/demoWarm.ts'; // release 62 (PR-0481): the demo's stage warm stands down once a fight is picked
+import { retryWarmSwitchedOff, stopDemoWarm, warmDemoFights } from '../demo/demoWarm.ts'; // release 62 (PR-0481): the demo's stage warm stands down once a fight is picked
 import { demoRunDefaults } from '../demo/demoFlow.ts'; // R61 (conference demo, `?demo=1`): a demo fight goes straight in, without party prep or story scenes
 
 /** A screen the flow can await. */
@@ -397,6 +399,7 @@ export class GameFlow {
         openingHurry = this.lastSceneHurried; // PR-0061: a player who skipped the scene gets the hurried opening
       }
       if (opts.skipCutscenes && attempt === 0 && (await this.playDemoIntro(chapter, opts))) openingHurry = this.lastSceneHurried; // R62 (demo mode only, FFX Chapter I): the demo skips the story, but not these three recorded lines
+      if (demoQuickRetry(id, attempt)) openingHurry = true; // r63-play: a retried demo fight opens hurried (the card 0.7 s, no sweep); the fight itself is the same one
       if (this.handedOver) return null;
 
       this.step = 'battle';
@@ -465,7 +468,7 @@ export class GameFlow {
         // (through the prep menu when there is one), `CHAPTER SELECT` gives up
         // and hands the outcome back to the caller. An automated run never
         // sees the panel (`skipResults`), so it keeps the old behaviour.
-        const choice = opts.skipResults ? 'continue' : await this.showResults(chapter, outcome);
+        const choice = opts.skipResults ? 'continue' : await this.showResults(chapter, outcome, undefined, attempt);
         noteDemoDefeatChoice(id, choice); // R62 (demo mode only): a lost demo fight's OTHER FIGHT is remembered for `runChapter`
         carry = carryAfterDefeat(carry, fought);
         if (choice === 'retry' || (choice === 'continue' && !opts.skipPrep)) continue;
@@ -474,6 +477,24 @@ export class GameFlow {
       this.step = 'idle';
       return closeRun(this, id, { carry, attempt, opts: { ...opts, seed } }, fought, outcome);
     }
+  }
+
+  /**
+   * Lane "pro-staging" (demo chapters with `?staging=pro`): a lost fight's card OVER the battle screen, which stays up under it (`App.pushOverlay`: frozen, still drawn) with the party where it fell, the light
+   * dim and the caption the presenter dropped in. The same choices as the old defeat panel and the same words out (`onChoice`), so the flow after it is untouched.
+   */
+  private async showProDefeat(chapter: Chapter, outcome: BattleScreenResult, attempt: number): Promise<ResultsChoice> {
+    const cue = resultsCueFor(chapter, outcome.outcome);
+    const music: ResultsMusicHandle | null = cue?.kind === 'defeat' ? startResultsMusic(audio, cue) : null; // the battle screen is still up: nothing stops this cue before the player chooses
+    let choice: ResultsChoice = 'continue';
+    const screen = new ProDefeatScreen({ game: chapter.game, turns: outcome.result?.turns, elapsedMs: outcome.elapsedMs, attempt, onChoice: (picked) => (choice = picked) });
+    await this.app.pushOverlay(screen);
+    if (demoDefeatPanel(chapter.id) && !retryWarmSwitchedOff()) void warmDemoFights(this.app, [chapter.id], { light: true }); // r63-play (quick retry): the fight's stage is built while the card is up, so a TRY AGAIN finds it ready
+    await screen.done;
+    stopDemoWarm(); // the choice is made: the warm takes no further step
+    await this.app.popOverlay();
+    music?.end();
+    return choice;
   }
 
   /** R62 (demo mode only, FFX Chapter I): the short voiced intro. True when it played (a person started the run, the chapter has one, a factory is registered). */
@@ -549,8 +570,10 @@ export class GameFlow {
     chapter: Chapter,
     outcome: BattleScreenResult,
     previousBestMs?: number | null,
+    attempt = 1,
   ): Promise<ResultsChoice> {
     this.step = 'results';
+    if (outcome.outcome === 'defeat' && stagingPieceOnFor('ending', chapter.id) && this.owned !== null && 'finished' in this.owned) return this.showProDefeat(chapter, outcome, attempt); // lane "pro-staging": the card over the kept scene
     // Chapter 4's results screen comes up silent: no pose, no tally flourish. It has a quiet cue of its own since 2026-10-12, so the silence is its own rule, not the absence of a cue.
     const silent = resultsScreenSilent(chapter);
     // The music of the screen (`resultsMusic.ts`, music batch 2): a win's cue starts now, as it always did (its battle screen is gone already: the post scene replaced it). A loss's cue waits
@@ -583,7 +606,7 @@ export class GameFlow {
         if (shown && battleUp && cue?.kind === 'victory' && music === null) music = startResultsMusic(audio, cue);
         return shown;
       });
-    });
+    }, stagingPieceOnFor('ending', chapter.id) && battleUp ? { dissolve: this.app.save?.settings?.reduceMotion === true ? 'calm' : 'soft' } : undefined); // lane "pro-staging": over the held scene a soft dissolve replaces the cream wipe
     if (!(await swapped)) return choice;
     if (cue?.kind === 'defeat') music = startResultsMusic(audio, cue);
     await screen.done;

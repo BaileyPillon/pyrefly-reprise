@@ -19,17 +19,32 @@
 import type { CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { followThrough } from './KeyPoses.ts';
+import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
+import { realContactMsOf } from './motion/RealBeats.ts'; // `?curves=real`: a real strike's contact is later than the house one (up to 1.5 s for a boss), so the waits below grow with it
 
 /** What a lunge is handed: hold at the apex until `hold` settles; call `reached` at the apex. */
 export interface LungeContact {
   hold: Promise<unknown>;
   reached: () => void;
+  /**
+   * Optional (motion pass, lane "core"; only with the new curves on): the impact painting's hook. The sampled strike calls it on its `travelPeak` mark (the fastest frame before
+   * contact), so the impact painting is up AT the blow and not after it; `reached` then only marks the contact. Absent: today's lunge, which puts the painting up at `reached`.
+   */
+  impact?: () => void;
+  /** Optional (same, step 2): the way out. The sampled strike calls it on its `settlePeak` mark (the fastest frame of the way home): the impact painting goes to the follow-through or the idle there. */
+  settle?: () => void;
+  /** Optional (same, step 2): the strike is home (its `end` mark): a figure that stood in the follow-through goes to the idle. */
+  done?: () => void;
 }
 
 /** The longest the attacker holds at the apex waiting for the blow, ms at timeScale 1. */
 export const CONTACT_HOLD_MAX_MS = 700;
+/** The new strike's extra run to its contact over today's apex (400 - 255 ms, rounded up), added to the hold cap while `curvesOn()`. */
+export const CURVES_CONTACT_EXTRA_MS = 150;
 /** The longest a hit waits for the attacker to reach the apex, ms at timeScale 1. */
 export const CONTACT_WAIT_MAX_MS = 400;
+/** A real strike's hit waits for its contact plus this much (the real contact is 0.4 to 1.5 s; `?curves=real`). */
+export const CONTACT_REAL_SLACK_MS = 150;
 
 interface Pending {
   attacker: CombatantId;
@@ -47,7 +62,10 @@ export function armContact(ctx: EventCtx, attacker: CombatantId): LungeContact {
   const held = new Promise<void>((r) => (release = r));
   const reached = new Promise<void>((r) => (reach = r));
   pending.set(ctx, { attacker, reached, release });
-  return { hold: Promise.race([held, ctx.sleep(CONTACT_HOLD_MAX_MS)]), reached: reach };
+  // The new strike reaches its contact later (wind-up and travel are 0.4 s, not 0.255 s): the cap counts from the lunge's start, so it is lengthened by the same difference.
+  const real = realContactMsOf(ctx, attacker); // undefined unless a real mode is on and the table has the attacker
+  const cap = real === undefined ? CONTACT_HOLD_MAX_MS + (curvesOn() ? CURVES_CONTACT_EXTRA_MS : 0) : Math.max(CONTACT_HOLD_MAX_MS + CURVES_CONTACT_EXTRA_MS, real + CONTACT_HOLD_MAX_MS);
+  return { hold: Promise.race([held, ctx.sleep(cap)]), reached: reach };
 }
 
 /**
@@ -57,13 +75,24 @@ export function armContact(ctx: EventCtx, attacker: CombatantId): LungeContact {
 export async function meetContact(ctx: EventCtx, targetId: CombatantId): Promise<void> {
   const p = pending.get(ctx);
   if (!p || p.attacker === targetId) return;
-  await Promise.race([p.reached, ctx.sleep(CONTACT_WAIT_MAX_MS)]);
+  const real = realContactMsOf(ctx, p.attacker);
+  await Promise.race([p.reached, ctx.sleep(real === undefined ? CONTACT_WAIT_MAX_MS : Math.max(CONTACT_WAIT_MAX_MS, real + CONTACT_REAL_SLACK_MS))]);
   if (pending.get(ctx) !== p) return;
   // D-313: a painted follow-through goes up as the blow lands and holds at full reach for a beat.
   pending.delete(ctx);
   const beat = followThrough(ctx, p.attacker);
   if (beat > 0) void ctx.sleep(beat).then(p.release);
   else p.release();
+}
+
+/**
+ * `?curves=real` / `real-snappy` only: is a real strike by `attacker` armed and still on its way to the contact, and is `targetId` someone else? The HUD shows a blow's numeral and moves its HP row
+ * when the event is dispatched, which is 0.15 to 0.4 s before a real leaping strike lands (playtest skeptic, 2026-10-22: in Chapter I the number came 0.4 s before the hit sound); the loop holds
+ * that blow's HUD until its beat has met the contact (`SkillTravel.blowHeld`). False in every other mode, so today's and the house curves' timing is untouched.
+ */
+export function realContactPending(ctx: EventCtx, attacker: CombatantId | undefined, targetId: CombatantId): boolean {
+  const p = pending.get(ctx);
+  return p !== undefined && attacker !== undefined && p.attacker === attacker && attacker !== targetId && realContactMsOf(ctx, attacker) !== undefined;
 }
 
 /** Let any held strike finish (`actionEnd`, and every new contact). */

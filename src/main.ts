@@ -18,7 +18,25 @@ import { installCrispDebug } from './debug/crispApi.ts';
 import { installLookDebug } from './debug/lookApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
+import { installCurvesDebug } from './debug/curvesApi.ts'; // motion pass (lane "core"): `__pyrefly.curves('new' | 'today')`
+import { installMomentsDebug } from './debug/momentsApi.ts'; // motion pass (lane "core", step 3): `__pyrefly.moments('new' | 'today')`, `.cheer()`, `.standDown()`, `.koSettle()`
+import { installSmearDebug } from './debug/smearApi.ts'; // motion pass (lane "core", step 2): `__pyrefly.smear('paint' | 'blur' | 'off')`, `.smearLog()`
+import { installFeelDebug } from './debug/feelApi.ts';
+import { installProCamDebug } from './debug/procamApi.ts'; // lane "pro-camera": `__pyrefly.procam(on?)`, the directed camera's switch and state
+import { installSwitchboard } from './app/demo/switchboard.ts'; // integration: the playtest switchboard (`?pack=demo&switchboard=1` only)
+import { installFxWiring } from './engine/motion/FxWiring.ts'; // integration: the fx lane's Overdrive opening gathers with the core lane's leap
+import { installGamepadRumble } from './app/gamepadRumble.ts';
+import { installMotionSfx } from './app/motionSfxSink.ts';
 import { installRigDebug } from './debug/rigApi.ts';
+import { installFxNewDebug } from './debug/fxNewApi.ts'; // motion pass (lane "fx"): `__pyrefly.fxNew('new' | 'today')`
+import { installProDebug } from './debug/proApi.ts'; // lane "pro-look": `__pyrefly.pro('pro' | 'today')`
+import { installGovernDebug } from './debug/governApi.ts'; // lane "perf-trim": `__pyrefly.govern()`, the frame-budget governor's state and a hand on its level
+import { installPerfDebug } from './debug/perfApi.ts'; // lane "perf-trim": `__pyrefly.perf`, the frame-cost profiler (GPU timer queries per pass, CPU per system); nothing wraps until `perf.start()`
+import { installStagingDebug } from './debug/stagingApi.ts'; // lane "pro-staging": `__pyrefly.staging('pro' | 'today')`, `.stagingState()`, `.stagingCue(...)`
+import { installHudF1Debug } from './debug/hudF1Api.ts'; // lane "hud-f1": `__pyrefly.hudF1('f1' | 'today')`
+import { installBoothDebug } from './debug/boothApi.ts'; // lane "booth": `__pyrefly.booth('new' | 'today')`, `.boothCard('end' | 'attract')`, `.boothAttractNow()`
+import { BoothCardScreen } from './app/demo/BoothCardScreen.ts'; // lane "booth": the Echo end card and attract card as pages of their own (`?card=end`, `?card=attract`)
+import { boothCardFromSearch } from './app/demo/boothSwitch.ts';
 import { DEFAULT_PACE, paceFromQuery, setPace } from './engine/pace.ts';
 import { installDemoReset } from './app/demo/demoReset.ts'; // R61: the conference demo's reset key (hold Home, or Select + Start); it idles outside demo mode
 import { setAttractRunner } from './app/demo/attractHook.ts'; // R61: the title starts the attract reel through this door; main hands the reel in (the title does not import it)
@@ -27,7 +45,9 @@ import { FFXHudDemoScreen } from './ui/ffx/FFXHudDemoScreen.ts';
 import { Ff7HudDemoScreen } from './ui/ff7/Ff7HudDemoScreen.ts';
 import { demoModeOn } from './app/demoMode.ts';
 import { warmBattleStage } from './engine/StageWarm.ts';
-import { warmDemoFights } from './app/demo/demoWarm.ts'; // release 62 (PR-0481): both demo fights' stages are built behind the title and the picker
+import { setPrebuildGate } from './engine/PrebuildGate.ts'; // lane "prebuild"
+import { prebuildOn } from './app/demo/prebuildSwitch.ts';
+import { WARM_FIGHTS_AT_MS, WARM_STAGE_AT_MS, warmDemoFights } from './app/demo/demoWarm.ts'; // release 62 (PR-0481): both demo fights' stages are built behind the title and the picker
 // Side-effect only: registers the FFX party-prep panel with PartyPrepScreen.
 import './ui/ffx/party-prep/index.ts';
 // Side-effect only: registers ChapterSelectScreen/CutsceneScreen/ResultsScreen
@@ -75,6 +95,8 @@ async function boot(): Promise<void> {
 
   app.register('title', () => new TitleScreen());
   app.register('demo', () => new DemoScene());
+  app.register('booth-end', () => new BoothCardScreen('end')); // lane "booth" (decision 188b): the booth loop's end card, and the card a capture tool opens
+  app.register('booth-attract', () => new BoothCardScreen('attract'));
   app.register('ffx-hud-demo', () => new FFXHudDemoScreen());
   // The FF7 HUD harness (FF7 only): development builds only, so the hidden experiment stays hidden.
   if (import.meta.env.DEV) app.register('ff7-hud-demo', () => new Ff7HudDemoScreen());
@@ -160,9 +182,27 @@ async function boot(): Promise<void> {
   installLookDebug(debugApi, app); // demo looks (dev flag `?look=`): `__pyrefly.look`, and F6 / F7 while the flag is in the address
   installPoseTrustDebug(debugApi); // pose continuity: `__pyrefly.poseTrust()`, the paintings the runtime withholds
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
+  installCurvesDebug(debugApi); // motion pass (lane "core"): the new curves' switch and marks, for captures
+  installSmearDebug(debugApi); // motion pass (lane "core", step 2): the smear's switch and its record, for captures and the continuity harness
+  installMomentsDebug(debugApi); // motion pass (lane "core", step 3): the per-game moments' switch and triggers, for captures
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
+  installFeelDebug(debugApi, app); // motion program, lane "feel": `__pyrefly.punch(...)`, `punchMode()`, `hitStopMode()`, `rumble()`, `shadowFollow()`, `feelPack()`, `feel()`
+  installMotionSfx(audio); // the sink of `?motionsfx=on` (a demo chapter only; at normal speed; from the existing sound library)
+  installGamepadRumble(); // the pad-side sink of `?rumble=on` (a demo chapter only; never on keyboard play, never under REDUCE MOTION)
+  installFxNewDebug(debugApi); // motion pass (lane "fx"): the new spell effects' switch, for captures
+  installProDebug(debugApi); // lane "pro-look": the pro-look switch, for captures
+  installProCamDebug(debugApi); // lane "pro-camera": `__pyrefly.procam(on?)`
+  installGovernDebug(debugApi); // lane "perf-trim": the frame-budget governor's report and pin
+  installPerfDebug(debugApi, app); // lane "perf-trim": the profiler's API object (inert until `perf.start()`)
+  installStagingDebug(debugApi); // lane "pro-staging": the staging's switch, state and cues, for captures
+  installHudF1Debug(debugApi); // lane "hud-f1": the F1 HUD switch, for captures
+  installBoothDebug(debugApi, app); // lane "booth": the booth screens' switch and doors, for captures
+  installSwitchboard(debugApi); // the playtest keys 1 to 9, 0, -, = and the corner label; nothing is installed without `?pack=demo&switchboard=1`
+  installFxWiring(); // integration: the fx lane's big moments onto the core and feel lanes (`engine/motion/FxWiring.ts`)
 
-  await app.push(new TitleScreen());
+  // `?card=end` / `?card=attract` (lane "booth"): the page opens on that card instead of the title; a press goes on to the title.
+  const openCard = boothCardFromSearch(window.location.search);
+  await app.push(openCard ? new BoothCardScreen(openCard) : new TitleScreen());
   app.start();
 
   // Ready once a real frame has been drawn, so screenshots never catch a blank.
@@ -170,8 +210,12 @@ async function boot(): Promise<void> {
   await app.nextFrame();
   markReady();
   // R61 (PR-0481, the conference demo): in demo mode the title stands a long time, so the once-per-page costs of a first battle are paid there, a few seconds after boot (`engine/StageWarm.ts`).
-  if (demoModeOn()) setTimeout(warmBattleStage, 4000);
-  if (demoModeOn()) setTimeout(() => void warmDemoFights(app), 6000); // release 62 (PR-0481): the fights' paintings, stages and programs, one after the other, while the title stands
+  // r63-play (the overnight fix of the skeptic's M1): the warm starts at 0.7 s and 1.5 s after the first frame (4 s and 6 s in release 62), now that its long tasks are cut into pieces under about 100 ms (the plate cut
+  // is off the page, the atlas a tile at a time, each texture and each program family its own step behind a fence) and it looks at the pad before each step. The once-per-page costs and both fights' stages were
+  // still being built at 9.6 s and 11.9 s of page time, so a player who picked a fight at human pace (6 s) fought it cold.
+  setPrebuildGate(prebuildOn()); // the demo's fights have their figures and plates built ahead (`?prebuild=off` is r63-play)
+  if (demoModeOn()) setTimeout(warmBattleStage, WARM_STAGE_AT_MS);
+  if (demoModeOn()) setTimeout(() => void warmDemoFights(app), WARM_FIGHTS_AT_MS); // release 62 (PR-0481): the fights' paintings, stages and programs, one after the other, while the title stands
 }
 
 if (document.readyState === 'loading') {

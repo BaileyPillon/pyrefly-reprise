@@ -23,6 +23,16 @@ export function demoDefeatPanel(chapterId: string): boolean {
   return demoModeOn() && isDemoFight(chapterId);
 }
 
+/**
+ * The QUICK retry (r63-play, the overnight fix of the skeptic's m4; Bailey 2026-10-22: a lost fight is a "quick retry"; both games, demo mode only): TRY AGAIN took 10.0 to 11.7 s to the first menu in both
+ * chapters (the entry, then the whole authored opening: the boss card, the sweep, the roar). A retry of a demo fight is the same fight from its first frame (full HP, the demo seed, `attemptSeed`), with the opening
+ * a visitor has just watched played hurried (`ui/common/transitions/openingHurry.ts`: the card for 0.7 s, the sweep cut, the reveal skipped; nothing of the fight itself changes), and its scene, depth plates and programs' compile are made behind the
+ * defeat card (`demoWarm.warmDemoFights` with `light`: no offscreen draw, which could stop the page as TRY AGAIN is pressed) instead of under the entry. True from the second attempt on, for a demo fight in demo mode.
+ */
+export function demoQuickRetry(chapterId: string, attempt: number): boolean {
+  return attempt > 0 && demoDefeatPanel(chapterId);
+}
+
 let pending: string | null = null;
 
 /** The defeat panel's answer for a lost demo fight: OTHER FIGHT remembers the fight to start next. Any other answer, outside demo mode or on another chapter: nothing is remembered. */

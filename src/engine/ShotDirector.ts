@@ -55,6 +55,8 @@ export interface ShotActionInfo {
   readonly abilityId?: AbilityId | undefined;
   /** The engine's command kind: `'attack'`, `'ability'`, `'item'`, `'overdrive'`, `'summon'`... */
   readonly commandKind?: CommandKind | undefined;
+  /** The action's own events already hold the KO of a foe (the burst is resolved before it is played): the killing blow's push begins with the action (`?camera=pro`). Absent: not known or not lethal. */
+  readonly lethal?: boolean | undefined;
 }
 
 /** The action a beat belongs to. */
@@ -78,6 +80,8 @@ export interface ShotCtx {
   readonly skipping: boolean;
   /** `base` ms at the live playback speed (`BattleMoments.ms`: the speed, the pacing option, a hurried opening). */
   ms(base: number): number;
+  /** REDUCE MOTION is on (`MomentsPort.reduceMotion`): a director plays held frames and cuts, no moves. Additive: absent in a test's own context. */
+  readonly reducedMotion?: boolean | undefined;
 }
 
 /** The opening of a battle. */
@@ -102,6 +106,11 @@ export interface ActionShot extends ShotCtx {
   readonly actor: ShotSubject;
   readonly targets: readonly ShotSubject[];
   readonly action: ShotAction;
+  /**
+   * Wait the cast's wind-up hold at the live speed: the pause `BattleMoments` awaits itself after its push in on a cast (`MOMENT_TIMING.castHold`). A director that takes `actionOpen` takes that hold
+   * with it, so a director that wants the spell to land when it always did awaits this before it answers (the pro camera does). Only `actionOpen` carries it. Additive.
+   */
+  castHold?(): Promise<void>;
 }
 
 /** A blow lands. Every hit asks, the later hits of a multi-hit action too (`BattleMoments` itself cuts only on the first). */
@@ -111,6 +120,10 @@ export interface ImpactShot extends ActorShot {
   readonly hitIndex: number;
   /** A critical, an overkill or a capped hit: the punch `BattleMoments` adds. */
   readonly heavy: boolean;
+  /** The blow's element (`damage.element`), for a director that picks a landing shot by it. Additive. */
+  readonly element?: string | undefined;
+  /** This blow is the one that KOs a foe (the burst already holds the KO). Additive. */
+  readonly lethal?: boolean | undefined;
 }
 
 /** A boss winds up something that ends the fight (stage 2: it lands next turn). */

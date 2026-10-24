@@ -36,6 +36,8 @@ import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneSlots } from './index.ts';
 import { addPlateDim, type PlateDimSpec } from './plateDim.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
+import { proPieceOn } from '../engine/look/pro/ProSwitch.ts'; // lane pro-look: the Chapter IV seam fix
+import { SEAM_PIPE_OUT } from '../engine/look/pro/ProSeam.ts';
 import { bracketCamera, bracketScale, bracketedX, type BracketCamera } from './frameBracket.ts';
 import { viewportAspect } from './cavern-stolen-fayth-rigs.ts';
 import { giantPhoneHeights } from './giant-stage.ts';
@@ -2180,6 +2182,8 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
   let viewCam: PerspectiveCamera | null = null;
   /** True while the pipes have been moved by the camera, so the frame that stops it puts them back. */
   let bracketFollowing = false;
+  /** Lane pro-look (FFX-2 only: Chapter IV, behind the pro look's `seam` piece): the right pipe stands `SEAM_PIPE_OUT` further out, so the plate fills the 16:9 frame instead of a dark slab (`look/pro/ProSeam.ts`). */
+  let seamOutNow = false;
   const build: SceneBuild = {
     group,
     get backdrop(): Backdrop {
@@ -2207,12 +2211,14 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       // x 0 to 190 and x 1350 to 1470 at 1600x900), they follow it out to the edge. Not on the phone, whose slice never showed them (`phoneGiants`).
       const bracket = bracketScale(viewportAspect());
       const view: BracketCamera | null = viewCam && phoneGiants['bahamut'] === undefined ? bracketCamera(viewCam) : null;
-      if (bracket !== bracketNow || view || bracketFollowing) {
+      const seamOut = proPieceOn('seam');
+      if (bracket !== bracketNow || view || bracketFollowing || seamOut !== seamOutNow) {
         bracketNow = bracket;
         bracketFollowing = view !== null;
+        seamOutNow = seamOut;
         for (const m of props) {
           const b = m.userData['bracketX'] as { base: number; offset: number; z: number; r: number } | undefined;
-          if (b) m.position.x = bracketedX(b.base, b.z, b.r, b.base * bracket, view) + b.offset;
+          if (b) m.position.x = bracketedX(b.base, b.z, b.r, b.base * bracket, view) + b.offset + (seamOut && b.base > 0 ? SEAM_PIPE_OUT : 0);
         }
       }
 

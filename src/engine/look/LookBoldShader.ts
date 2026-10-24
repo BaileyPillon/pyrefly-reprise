@@ -41,6 +41,9 @@ export const LookBoldShader = {
     uDepth: { value: null as unknown },
     depthOn: { value: 0 },
     uHomo: { value: new Matrix3() },
+    /** The pro Chapter IV floor-step blur (lane pro-look, `look/pro/ProSeam.ts`): the painting's map the other way (painting uv to frame uv); x, y the two floor steps (painting v; 0 = none), z the blur's half width (frame uv), w its amount (0 = skipped). */
+    uHomoInv: { value: new Matrix3() },
+    uSeamF: { value: new Vector4(0, 0, 0.02, 0) },
     /** Far fog: density, where the far end starts. Height fog: density, how far it climbs, how much reaches a figure's feet. */
     depthFog: { value: new Vector2(0.5, 0.2) },
     heightFog: { value: new Vector3(0.5, 0.34, 0.25) },
@@ -53,6 +56,9 @@ export const LookBoldShader = {
     poolGain: { value: 1 },
     /** The rim: gain, width (device px), how far it follows the light's side; its colour. */
     bRim: { value: new Vector3(1.7, 2.6, 0.85) },
+    /** Lane boss-matte (`look/pro/BossMask.ts`): the figures' mask, R = 1 where a re-cut boss is the figure in front, A = 1 where any figure is (a half-size target, null until the first draw); `bossMaskOn` 0 = today's rim everywhere. */
+    tBossMask: { value: null as unknown },
+    bossMaskOn: { value: 0 },
     rimColor: { value: new Vector3(0.8, 0.9, 1) },
     /** Embers: the lamps (frame uv and a radius in frame heights), how many, then gain, size (frame heights), rise rate; the colour. */
     uEmber: { value: [] as Vector3[] },
@@ -92,6 +98,8 @@ export const LookBoldShader = {
     uniform sampler2D uDepth;
     uniform float depthOn;
     uniform mat3 uHomo;
+    uniform mat3 uHomoInv;
+    uniform vec4 uSeamF;
     uniform vec2 depthFog;
     uniform vec3 heightFog;
     uniform vec3 fogColor;
@@ -101,6 +109,8 @@ export const LookBoldShader = {
     uniform vec4 uPoolC[MAX_POOL];
     uniform float poolGain;
     uniform vec3 bRim;
+    uniform sampler2D tBossMask;
+    uniform float bossMaskOn;
     uniform vec3 rimColor;
     uniform vec3 uEmber[MAX_EMB];
     uniform float emberN;
@@ -134,6 +144,20 @@ ${LIVING_GLSL_DECL}    varying vec2 vUv;
       return s;
     }
     float figAt(vec2 uv) { return 1.0 - clamp(texelAt(uv).a, 0.0, 1.0); }
+    // lane boss-matte (BossMask.ts): the share of what the figures' mask holds round this pixel (its own and eight taps 2.5 frame px away) that is a re-cut boss; 0 with nothing drawn there (today's rim)
+    float bossShare(vec2 uv) {
+      vec4 c = textureLod(tBossMask, uv, 0.0);
+      float b = c.r;
+      float o = c.a - c.r;
+      vec2 r = resolution * 2.5;
+      for (int k = 0; k < 8; k++) {
+        float a = 0.7853982 * float(k);
+        vec4 t = textureLod(tBossMask, uv + vec2(cos(a), sin(a)) * r, 0.0);
+        b += t.r;
+        o += t.a - t.r;
+      }
+      return b / max(b + o, 1e-3);
+    }
 ${LIVING_GLSL_FUNCS}
     void main() {
       vec2 uv = vUv;
@@ -141,6 +165,32 @@ ${LIVING_GLSL_FUNCS}
 ${LIVING_GLSL_TOP}      float fig = 1.0 - clamp(src.a, 0.0, 1.0);
       vec3 col = src.rgb;
       float lum0 = luma3(col);
+
+      // ---- 0. the Chapter IV floor steps (lane pro-look, FFX-2's Bevelle plate only; look/pro/ProSeam.ts): the polished floor has two horizontal steps; a short vertical blur across each makes it read as one
+      //         surface. Their rows are the plate's own v, read through the painting's map (uHomo, uHomoInv), so they follow the camera. A figure stays sharp (the frame's alpha). Zero amount skips it.
+      if (uSeamF.w > 0.0 && fig < 0.5) {
+        vec3 hq = uHomo * vec3(uv, 1.0);
+        vec2 q = hq.xy / hq.z;
+        float dyl = 1e3;
+        if (uSeamF.x > 0.0) dyl = min(dyl, abs(q.y - uSeamF.x));
+        if (uSeamF.y > 0.0) dyl = min(dyl, abs(q.y - uSeamF.y));
+        vec3 hy = uHomoInv * vec3(q.x, q.y + 0.01, 1.0);
+        float wgt = clamp(1.0 - dyl * length(hy.xy / hy.z - uv) * 100.0 / uSeamF.z, 0.0, 1.0) * uSeamF.w;
+        if (wgt > 0.001) {
+          vec3 acc = col;
+          float n = 1.0;
+          for (int k = 1; k <= 4; k++) {
+            float o = float(k) * uSeamF.z * 0.42;
+            vec4 a1 = texelAt(uv + vec2(0.0, o));
+            vec4 a2 = texelAt(uv - vec2(0.0, o));
+            float w1 = a1.a > 0.5 ? 1.0 : 0.0;
+            float w2 = a2.a > 0.5 ? 1.0 : 0.0;
+            acc += a1.rgb * w1 + a2.rgb * w2;
+            n += w1 + w2;
+          }
+          col = mix(col, acc / n, wgt);
+        }
+      }
 
       // ---- 1. fog: far (from the depth map) and low (thickening toward the floor), over the backdrop; a trace of mist at a figure's feet
       {
@@ -268,6 +318,7 @@ ${LIVING_GLSL_TOP}      float fig = 1.0 - clamp(src.a, 0.0, 1.0);
         }
         float e = fig * mix(sumBg / float(EDGE_TAPS), lit / wl, bRim.z);
         e = smoothstep(0.04, 0.85, e);
+        if (bossMaskOn > 0.5 && e > 0.001) e *= 1.0 - bossShare(uv); // a re-cut boss draws no bold-pass rim (BossMask.ts)
         col += rimColor * e * bRim.x * (0.5 + 0.9 * luma3(col));
       }
 

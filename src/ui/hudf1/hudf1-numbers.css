@@ -1,0 +1,45 @@
+/*
+ * THE F1 DAMAGE NUMBER (conference demo, lane "hud-f1"; hud-f1 review M6: "the damage number is pro-look's white italic, not the approved gold Cormorant numeral").
+ * Target: `hud-inkgold/src/hud.html` `damageNumber()` (Option F1): Cormorant Garamond Bold Italic with lining figures, the gold gradient #f7d977 / #e8bd48 / #cc9a2a, an ink edge (#0b0a12, a stroke of about 5 percent
+ * of the size), a soft cast shadow under it and a gold underline. Two typefaces only: this is the serif one.
+ *
+ * Applies only to a damage numeral (`dnum--damage`, `dnum--critical`) while an F1 HUD root is on the page (`:root:has(.hud-f1)`, the numeral layer is not inside the HUD root), and outranks the glass numbers'
+ * own rules (`pro-numbers.css`, up to 0,6,0, and the eye-candy foil) by repeating `.dnum--glass`. A heal stays mint, an MP figure sky, a MISS light grey: they keep the glass look in the new face only.
+ * The size is the glass numeral's times `F1_DAMAGE_K` (`HudF1Switch.ts`, used by `proNumbers.sizeFactor`), since Cormorant's figures are shorter than Exo 2's at the same font-size.
+ * The ink edge is built from drop-shadows in `em` so it scales with the numeral; the underline is the numeral's own text-decoration, so it takes the same gold gradient through the text clip. [ours: the offsets]
+ *
+ * Why not a real stroke: `-webkit-text-stroke` under `background-clip: text` is filled with the gradient too (the edge would be gold, not ink), and a child element would be clipped away
+ * (see the note at the top of `damage-numbers.css`).
+ */
+/* a heal keeps its mint and its glow and takes the face and the figures (two typefaces only); MISS, MP and the words take the label face */
+:root:has(.hud-f1) .dnum.dnum--glass.dnum--glass.dnum--glass.dnum--glass.dnum--glass.dnum--glass.dnum--heal {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond'), 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 700;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: 'lnum' 1;
+  letter-spacing: -0.01em;
+}
+:root:has(.hud-f1) .dnum.dnum--glass.dnum--glass.dnum--glass.dnum--glass.dnum--glass.dnum--glass:is(.dnum--miss, .dnum--mp, .dnum--immune, .dnum--absorbed) {
+  font-family: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+:root:has(.hud-f1) .dnum.dnum--glass.dnum--glass.dnum--glass.dnum--glass.dnum--glass.dnum--glass:is(.dnum--damage, .dnum--critical) {
+  font-family: var(--ig-font-serif, 'Cormorant Garamond'), 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: 'lnum' 1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #f7d977 0%, #e8bd48 55%, #cc9a2a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: underline;
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.13em;
+  text-decoration-skip-ink: none;
+  filter: drop-shadow(0.028em 0 0 #0b0a12) drop-shadow(-0.028em 0 0 #0b0a12) drop-shadow(0 0.028em 0 #0b0a12) drop-shadow(0 -0.028em 0 #0b0a12)
+    drop-shadow(0.03em 0.04em 0.03em rgba(2, 4, 36, 0.6));
+}

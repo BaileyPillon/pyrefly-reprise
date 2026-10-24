@@ -22,6 +22,7 @@
 import type { Chapter } from '../../data/encounters.ts';
 import { isSilentResultsChapter } from '../../ui/common/resultsMath.ts';
 import { quietResultsOf } from '../../ui/common/quietResults.ts';
+import { passSilentWin } from '../../audio/pass/passResults.ts'; // the sound pass (decision 184): Chapter IV's win is silent as the sources say, behind ?audio=new / ?pack=demo
 
 /** The defeat cue of each game. */
 export const DEFEAT_CUES = { ffx: 'defeat-ffx', ffx2: 'defeat-ffx2' } as const;
@@ -44,6 +45,7 @@ export interface ResultsCue {
 /** What the results screen plays for `chapter` when the battle ended as `outcome`, or `null` for silence. */
 export function resultsCueFor(chapter: Chapter, outcome: string): ResultsCue | null {
   if (outcome === 'victory') {
+    if (passSilentWin(chapter.id)) return null; // the sound pass: no results music for Chapter IV (`audio/pass/passResults.ts`)
     // Release 61 (Bailey, 2026-10-21, "Quieter results for this fight"): FFX-2 Chapter IV's win plays a softer cue than its own `victory-bahamut` (`ui/common/quietResults.ts`). No other chapter is listed.
     const quiet = chapter.music.victory ? quietResultsOf(chapter.id) : null;
     if (quiet) return { cue: quiet.cue, kind: 'victory', fade: VICTORY_FADE_S };

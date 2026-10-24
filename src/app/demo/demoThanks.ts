@@ -9,6 +9,10 @@
  * It is an ordinary flow screen (`done` resolves once), shown by `GameFlow` only when a factory is registered for it (`ui/common/registerFlowScreens.ts`), so a test harness that registers none sees
  * exactly the flow it saw before. The accent follows the game as every screen's does: gold for FFX, pyre pink for FFX-2 (`.ig--ffx2`). The hold-reset (`demoReset.ts`) works over it as over everything.
  * Outside demo mode nothing builds it.
+ *
+ * THE END CARD (lane "booth", Bailey 2026-10-22, decision 188b "Mixed read": the end card in the Echo painting look; both games): with the booth screens on (`boothSwitch.ts`, `?booth=new` or `?pack=demo`) this
+ * same screen is drawn as the Echo end card instead of the cream plate (`boothCards.ts`): the painting held with a slow push, "Thanks for playing" and the picked frame's own words left, the QR and the address
+ * right. Same flow, same ending (a press after the guard, a click, or {@link THANKS_MS}), same `done`; only the picture differs. The booth loop's own end card (`?card=end`) is `BoothCardScreen.ts`.
  */
 
 import { Screen } from '../Screen.ts';
@@ -20,6 +24,8 @@ import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { keyHint } from '../../ui/common/padGlyphs.ts';
 import { isDemoFight } from './demoFlow.ts';
 import { boothHost, boothQrSvg } from './demoQr.ts';
+import { boothNewOn } from './boothSwitch.ts';
+import { mountEndCard } from './boothCards.ts';
 import './demo.css';
 
 /** How long the card stands when nobody presses anything, ms. */
@@ -74,6 +80,13 @@ export class DemoThanksScreen extends Screen {
     root.dataset['role'] = 'demo-thanks';
     root.dataset['action'] = 'thanks:end'; // a click or a tap anywhere on the card ends it
     root.style.setProperty('--fe-k', 'max(0.5px, min(100vw / 1440, 100vh / 810))'); // the front end's grid unit (`frontend.css`), for a screen that sits outside a `.fe` one
+    if (boothNewOn()) {
+      // The Echo end card (decision 188b): the painting is the card; no timer bar and no hint (the card ends on a press or by itself, as it always did).
+      root.classList.add('demo-thanks--booth');
+      mountEndCard(root, { afterFight: true });
+      void this.app.fade('clear', 300);
+      return;
+    }
     root.innerHTML = `
       <div class="demo-thanks__card">
         <div class="demo-thanks__main">

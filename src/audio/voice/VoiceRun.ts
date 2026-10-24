@@ -194,6 +194,7 @@ export class VoiceRun implements VoicePlayback {
       gain.gain.linearRampToValueAtTime(0, t + seconds);
       source.onended = () => this.release(source, gain);
       source.stop(t + seconds + 0.005);
+      setTimeout(() => this.release(source, gain), (seconds + 0.005) * 1000 + 1500); // r63-play: a context whose clock has stalled never says `ended`; the nodes are let go on the wall clock as well (the skeptic's m5)
     } catch {
       this.release(source, gain);
     }

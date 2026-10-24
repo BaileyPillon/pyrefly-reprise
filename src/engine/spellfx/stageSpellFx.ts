@@ -25,6 +25,10 @@ export interface StageSpellFxOptions {
   onLand?: SpellFxLayerOptions['onLand'] | undefined;
   /** Where the effects may draw (FF7: under its message window). */
   clip?: SpellFxLayerOptions['clip'] | undefined;
+  /** The new effects (motion pass, lane "fx"): the running chapter's id (the demo gate), the weapon a combatant swings, and the 3D scale the frame-time guard may lower. */
+  chapterId?: SpellFxLayerOptions['chapterId'] | undefined;
+  weaponOf?: SpellFxLayerOptions['weaponOf'] | undefined;
+  scaleCut?: SpellFxLayerOptions['scaleCut'] | undefined;
 }
 
 /** The layer, hooked to the renderer. Call the returned `unhook` on dispose. */
@@ -43,6 +47,9 @@ export function stageSpellFx(o: StageSpellFxOptions): { layer: SpellFxLayer; unh
     ...(o.rate ? { rate: o.rate } : {}),
     ...(o.onLand ? { onLand: o.onLand } : {}),
     ...(o.clip ? { clip: o.clip } : {}),
+    ...(o.chapterId ? { chapterId: o.chapterId } : {}),
+    ...(o.weaponOf ? { weaponOf: o.weaponOf } : {}),
+    ...(o.scaleCut ? { scaleCut: o.scaleCut } : {}),
   });
   const unhook = o.overlay?.((renderer) => layer.render(renderer)) ?? (() => undefined);
   if (o.overlay && layer.quality !== 'low') layer.prepare();

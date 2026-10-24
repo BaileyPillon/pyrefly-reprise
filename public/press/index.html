@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Echoes of Spira, Press Kit</title>
+<meta name="description" content="Press kit for Echoes of Spira, an unofficial fan tribute: play it, screenshots and key art, the fact sheet, credits.">
+<link rel="canonical" href="https://echoesofspira.com/press/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Echoes of Spira, press kit">
+<meta property="og:description" content="Play the boss fights of Final Fantasy X and X-2, reimagined. An unofficial fan tribute.">
+<meta property="og:image" content="https://echoesofspira.com/press/frames/ffx2-bahamut.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<!--
+  THE PRESS PAGE (conference demo, lane "booth"; Bailey, 2026-10-22, decision 188b "Mixed read": the press page leads with the game; option B, "Dossier": the links beside a wall of real frames).
+  A static page at /press/, no script bundle, no router: the site is a Workers static-assets site (tools/cloudflare/wrangler.jsonc), so a folder with an index.html is a route. Every address in it is relative
+  (../ is the game at either base: the Cloudflare root or the old GitHub Pages folder). The pictures are web-size JPEGs from our own captures (tools/press-frames.mjs, public/press/frames/). Both games: the shared front door;
+  each frame names its game. Credit lines are the game's own (src/app/credits/creditsData.ts; tests/unit/booth-press-page.test.ts holds the two together). No personal contact details.
+  Type: every word is at least 1rem, and 1rem is 28 px in a 2560 x 1440 window (Bailey's floor); it is 14 px at 1280 and 16 px on a phone.
+-->
+<style>
+@font-face { font-family: 'Cormorant Garamond'; src: url('../fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2') format('woff2'); font-weight: 300 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Cormorant Garamond'; src: url('../fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2') format('woff2'); font-weight: 300 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch/ChakraPetch-Regular-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch/ChakraPetch-Medium-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Chakra Petch'; src: url('../fonts/chakra-petch/ChakraPetch-Bold-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Exo 2'; src: url('../fonts/exo2/Exo2-Variable-wght.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+:root {
+  --ink: #0b0a12;
+  --paper: #f4f1e8;
+  --gold: #e3b94a;
+  --pink: #f7b6d9;
+  --steel: #c9d4ec;
+  --ground: #060503;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --display: 'Chakra Petch', Bahnschrift, 'Segoe UI', sans-serif;
+  --text: 'Exo 2', 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; }
+html { font-size: clamp(14px, 1.09375vw, 30px); background: var(--ground); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; color: var(--paper); font-family: var(--text); font-size: 1rem; line-height: 1.4;
+  background: radial-gradient(ellipse at 78% 12%, #121a3a 0%, #070912 58%, #060503 100%) fixed;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+a { color: inherit; }
+a:focus-visible { outline: 0.18rem solid var(--gold); outline-offset: 0.18rem; }
+img { display: block; max-width: 100%; }
+
+.silver {
+  background: linear-gradient(180deg, #ffffff 0%, #dfe4ef 26%, #98a2ba 49%, #eef1f8 64%, #aeb7cc 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 0.28rem rgba(190, 205, 235, 0.35));
+}
+.wm { font-family: var(--serif); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.03; white-space: nowrap; }
+.wm .big { font-size: 1.28em; }
+.wm .of { font-size: 0.72em; letter-spacing: 0.14em; }
+.eyebrow { font: 700 1rem/1.2 var(--display); text-transform: uppercase; letter-spacing: 0.26em; color: var(--gold); }
+
+/* ---- the top bar */
+.nav { display: flex; align-items: center; justify-content: space-between; height: 4.3rem; padding: 0 4.6rem; border-bottom: 1px solid rgba(244, 241, 232, 0.1); background: rgba(6, 5, 3, 0.5); }
+.brand { font-size: 1.4rem; text-decoration: none; }
+.nav .lab { font: 700 1rem/1 var(--display); letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+
+/* ---- the dossier: the words and links left, the frame wall right */
+.grid { display: grid; grid-template-columns: 35.7rem 1fr; gap: 3.1rem; padding: 2.4rem 4.6rem 0; max-width: 112rem; margin: 0 auto; }
+.title { font-size: 4.14rem; margin: 0.8rem 0 0; }
+.title > span { display: block; }
+.tagline { margin: 0.9rem 0 0; font: italic 500 1.64rem/1.18 var(--serif); }
+.links { list-style: none; margin: 1.3rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
+.links[hidden], .links li[hidden] { display: none; }
+.links a {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 1rem; padding: 0.62rem 1.1rem; text-decoration: none;
+  border: 1px solid rgba(244, 241, 232, 0.22); background: rgba(11, 10, 18, 0.58); transition: border-color 160ms ease, background 160ms ease;
+}
+.links a:hover { border-color: var(--gold); background: rgba(11, 10, 18, 0.85); }
+.links .t { display: block; font: 700 1rem/1.2 var(--display); letter-spacing: 0.16em; text-transform: uppercase; }
+.links .s { display: block; margin-top: 0.2rem; font: 500 1rem/1.25 var(--text); color: rgba(244, 241, 232, 0.7); }
+.links i { font-style: normal; font-size: 1.3rem; color: var(--gold); }
+.links a.primary { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+.links a.primary:hover { background: #f0cb65; }
+.links a.primary .s, .links a.primary i { color: rgba(11, 10, 18, 0.74); }
+
+.wall { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; align-content: start; }
+.fr { position: relative; margin: 0; overflow: hidden; border: 1px solid rgba(244, 241, 232, 0.16); background: #070d2a; animation: rise 900ms ease-out both; }
+.fr img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.fr.big { grid-column: 1 / -1; border-top: 0.2rem solid var(--gold); }
+.fr.x2 { border-top: 0.2rem solid var(--pink); animation-delay: 220ms; }
+.fr.art { border-top: 0.2rem solid #b6c4e0; animation-delay: 440ms; }
+.fr.art img { object-position: 30% 60%; }
+.fr figcaption { position: absolute; left: 0.7rem; bottom: 0.7rem; padding: 0.35rem 0.6rem; font: 700 1rem/1.1 var(--display); letter-spacing: 0.12em; text-transform: uppercase; background: rgba(11, 10, 18, 0.88); color: var(--gold); }
+.fr.x2 figcaption { color: var(--pink); }
+.fr.art figcaption { color: var(--steel); }
+.facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; margin-top: 0.3rem; }
+.facts div { border-top: 1px solid rgba(244, 241, 232, 0.24); padding-top: 0.5rem; }
+.facts b { display: block; font: 700 1rem/1 var(--display); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem; }
+
+/* ---- the sections under the dossier */
+.sec { max-width: 112rem; margin: 0 auto; padding: 4rem 4.6rem 0; }
+.sec h2 { margin: 0 0 1.2rem; font: 700 1rem/1.2 var(--display); letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); }
+.shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; }
+.shots a { display: block; position: relative; text-decoration: none; border: 1px solid rgba(244, 241, 232, 0.16); overflow: hidden; background: #070d2a; }
+.shots a:hover { border-color: var(--gold); }
+.shots img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.shots span { position: absolute; left: 0.5rem; bottom: 0.5rem; padding: 0.3rem 0.5rem; font: 700 1rem/1.1 var(--display); letter-spacing: 0.1em; text-transform: uppercase; background: rgba(11, 10, 18, 0.88); color: var(--gold); }
+.shots .x2 span { color: var(--pink); }
+.shots .art span { color: var(--steel); }
+.note { margin: 1rem 0 0; color: rgba(244, 241, 232, 0.72); max-width: 70rem; }
+dl.sheet { display: grid; grid-template-columns: 14rem 1fr; gap: 0 1.6rem; margin: 0; max-width: 80rem; }
+dl.sheet dt { padding: 0.7rem 0; border-top: 1px solid rgba(244, 241, 232, 0.2); font: 700 1rem/1.3 var(--display); letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+dl.sheet dd { margin: 0; padding: 0.7rem 0; border-top: 1px solid rgba(244, 241, 232, 0.2); }
+.credits { list-style: none; margin: 0 0 1.4rem; padding: 0; max-width: 80rem; }
+.credits li { padding: 0.45rem 0; border-top: 1px solid rgba(244, 241, 232, 0.14); }
+.credits b { font-weight: 600; }
+.credits span { color: rgba(244, 241, 232, 0.72); }
+.legal { margin: 1.2rem 0 0; color: rgba(244, 241, 232, 0.7); }
+main { padding-bottom: 4.5rem; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(0.8rem); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .fr { animation: none; } .links a { transition: none; } }
+
+/* ---- a tablet, a phone, or any window under 1000 px: one column, the links first, then the frames. The two-column dossier needs about 1000 px: its left column is a fixed 35.7rem, so a narrower window would leave the frame wall a sliver (it was 96 px at 768, 148 px at 820). */
+@media (max-width: 1000px) {
+  html { font-size: 16px; }
+  .nav { height: 3.4rem; padding: 0 1.5rem; }
+  .grid { display: block; padding: 1.6rem 1.5rem 0; }
+  .title { font-size: 3.5rem; }
+  .tagline { font-size: 1.6rem; }
+  .links a { padding: 0.9rem 1rem; }
+  .wall { margin-top: 1.6rem; }
+  .sec { padding: 3rem 1.5rem 0; }
+  .shots { grid-template-columns: repeat(2, 1fr); }
+  dl.sheet { grid-template-columns: 11rem 1fr; }
+}
+/* ---- a phone: the frames and the facts in one column too */
+@media (max-width: 600px) {
+  .nav { padding: 0 1rem; }
+  .nav .lab { display: none; }
+  .grid { padding: 1.6rem 1rem 0; }
+  .wall { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
+  .sec { padding: 3rem 1rem 0; }
+  .shots { grid-template-columns: 1fr; }
+  dl.sheet { grid-template-columns: 1fr; }
+  dl.sheet dt { padding-bottom: 0; border-bottom: 0; }
+  dl.sheet dd { border-top: 0; padding-top: 0.2rem; }
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="brand wm silver" href="../" aria-label="Echoes of Spira, the game"><span class="big">E</span>choes <span class="of">of</span> <span class="big">S</span>pira</a>
+  <div class="lab">Press kit</div>
+</header>
+
+<main>
+  <div class="grid">
+    <section aria-labelledby="h1">
+      <div class="eyebrow">An unofficial fan tribute</div>
+      <h1 id="h1" class="title wm silver"><span><span class="big">E</span>choes</span><span><span class="of">of</span> <span class="big">S</span>pira</span></h1>
+      <p class="tagline">Play the boss fights of Final Fantasy X and X-2, reimagined.</p>
+      <nav aria-label="Press links">
+        <ul class="links">
+          <li><a class="primary" href="../" data-row="play"><span><span class="t">Play the game</span><span class="s">echoesofspira.com &middot; free to play</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li id="row-trailer" hidden><a href="trailer.mp4" data-row="trailer"><span><span class="t">Watch the trailer</span><span class="s">MP4 &middot; plays here, or save it</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a href="#screens" data-row="screens"><span><span class="t">Screenshots and key art</span><span class="s">web-size JPEG &middot; straight from the game</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a href="#facts" data-row="facts"><span><span class="t">Fact sheet</span><span class="s">what it is, the five fights</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a href="#credits" data-row="credits"><span><span class="t">Credits and legal</span><span class="s">unofficial fan tribute &middot; credits</span></span><i aria-hidden="true">&rarr;</i></a></li>
+          <li><a href="https://github.com/BaileyPillon/pyrefly-reprise" data-row="source"><span><span class="t">Source on GitHub</span><span class="s">BaileyPillon / pyrefly-reprise</span></span><i aria-hidden="true">&rarr;</i></a></li>
+        </ul>
+      </nav>
+      <p class="legal" data-notice>Final Fantasy X and X-2, their characters, worlds, and names are the property of Square Enix. This project is a non-commercial fan work, unaffiliated with Square Enix. All code, art, music, and writing here are original.</p>
+    </section>
+
+    <section class="wall" aria-label="Frames from the game">
+      <figure class="fr big"><img src="frames/ffx-seymour-hit.jpg" width="1600" height="900" alt="Final Fantasy X: a lance strike lands on Seymour Flux in a flash of light, Yuna standing by" fetchpriority="high"><figcaption>Final Fantasy X &middot; Seymour Flux</figcaption></figure>
+      <figure class="fr x2"><img src="frames/ffx2-bahamut.jpg" width="1600" height="900" alt="Final Fantasy X-2: a bright slash crosses Bahamut while the three Gullwings hold their line"><figcaption>X-2 &middot; Bahamut</figcaption></figure>
+      <figure class="fr art"><img src="frames/keyart-farplane.jpg" width="1344" height="768" alt="Key art: the Gullwings stand in a field of flowers at Farplane Field, the crystal spire far off"><figcaption>Key art &middot; Farplane</figcaption></figure>
+      <div class="facts">
+        <div><b>Plays in</b>a browser, free; keyboard or gamepad</div>
+        <div><b>The fights</b>five, from X (CTB) and X-2 (ATB)</div>
+        <div><b>Status</b>a free fan work, not for sale</div>
+      </div>
+    </section>
+  </div>
+
+  <section class="sec" id="screens" aria-labelledby="h-screens">
+    <h2 id="h-screens">Screenshots and key art</h2>
+    <div class="shots">
+      <a href="frames/ffx-seymour-flux.jpg"><img src="frames/ffx-seymour-flux.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X: flames rise around Seymour Flux while the party watches"><span>X &middot; Flames on Seymour</span></a>
+      <a href="frames/ffx-cast.jpg"><img src="frames/ffx-cast.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X: Tidus and Yuna stand in a burst of light"><span>X &middot; The party</span></a>
+      <a href="frames/ffx-seymour-hit.jpg"><img src="frames/ffx-seymour-hit.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X: a lance strike on Seymour Flux"><span>X &middot; A hit lands</span></a>
+      <a class="art" href="frames/keyart-echo.jpg"><img src="frames/keyart-echo.jpg" width="1600" height="887" loading="lazy" alt="Key art: Yuna kneeling in still water at night, the crystal city far off"><span>Key art &middot; The Echo</span></a>
+      <a class="x2" href="frames/ffx2-bahamut.jpg"><img src="frames/ffx2-bahamut.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X-2: a bright slash across Bahamut in the Bevelle arena"><span>X-2 &middot; Bahamut</span></a>
+      <a class="x2" href="frames/ffx2-cure.jpg"><img src="frames/ffx2-cure.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X-2: Cure lights the party, Bahamut waiting beyond"><span>X-2 &middot; Cure</span></a>
+      <a class="x2" href="frames/ffx2-mega-flare.jpg"><img src="frames/ffx2-mega-flare.jpg" width="1600" height="900" loading="lazy" alt="Final Fantasy X-2: Bahamut's Mega Flare strikes the party in a beam of white light"><span>X-2 &middot; Mega Flare</span></a>
+      <a class="art" href="frames/keyart-farplane.jpg"><img src="frames/keyart-farplane.jpg" width="1344" height="768" loading="lazy" alt="Key art: the Gullwings at Farplane Field"><span>Key art &middot; Farplane</span></a>
+    </div>
+    <p class="note">Every picture is a capture of the game itself with the interface hidden, or its own painted key art. They are web size; the game draws them larger. The frames show a build made for a live demo and may differ in small ways from the one online.</p>
+  </section>
+
+  <section class="sec" id="facts" aria-labelledby="h-facts">
+    <h2 id="h-facts">Fact sheet</h2>
+    <dl class="sheet">
+      <dt>Name</dt><dd>Echoes of Spira</dd>
+      <dt>What it is</dt><dd>An unofficial, non-commercial fan tribute that recreates five of the most memorable encounters from Final Fantasy X and Final Fantasy X-2 as a painted 2.5D game: the Conditional Turn-Based battles, the Sphere Grid, dresspheres, Overdrives, and the scenes around each fight.</dd>
+      <dt>The five fights</dt><dd>Final Fantasy X (CTB): Seymour Flux and Mortiorchis, Lady Yunalesca, Braska's Final Aeon. Final Fantasy X-2 (ATB): Bahamut, Vegnagun and Shuyin.</dd>
+      <dt>Plays in</dt><dd>A web browser at echoesofspira.com. Free. Keyboard or gamepad.</dd>
+      <dt>Built with</dt><dd>TypeScript, Three.js and Vite. The battle engines are plain rules code that never draws anything; the screen only plays what they report.</dd>
+      <dt>Status</dt><dd>A free fan work, not for sale, unaffiliated with Square Enix.</dd>
+      <dt>Source</dt><dd><a href="https://github.com/BaileyPillon/pyrefly-reprise">github.com/BaileyPillon/pyrefly-reprise</a>. Questions can be asked there, as an issue.</dd>
+    </dl>
+  </section>
+
+  <section class="sec" id="credits" aria-labelledby="h-credits">
+    <h2 id="h-credits">Credits and legal</h2>
+    <ul class="credits" aria-label="Credits the licences ask for">
+      <li data-credit="Salamander Grand Piano|Alexander Holm|CC BY 3.0"><b>Salamander Grand Piano</b> <span>Alexander Holm &middot; CC BY 3.0</span></li>
+      <li data-credit="Sonatina Symphonic Orchestra|Mattias Westlund|CC Sampling Plus 1.0"><b>Sonatina Symphonic Orchestra</b> <span>Mattias Westlund &middot; CC Sampling Plus 1.0</span></li>
+      <li data-credit="DRSKit 2.1|DrumGizmo team and Jes Eiler|CC BY 4.0"><b>DRSKit 2.1</b> <span>DrumGizmo team and Jes Eiler &middot; CC BY 4.0</span></li>
+      <li data-credit="Arvedi Auditorium impulse responses|F. Miotello and colleagues|CC BY 4.0"><b>Arvedi Auditorium impulse responses</b> <span>F. Miotello and colleagues &middot; CC BY 4.0</span></li>
+      <li data-credit="Thunderclap|Richard Humphries|CC BY 4.0"><b>Thunderclap</b> <span>Richard Humphries &middot; CC BY 4.0</span></li>
+      <li data-credit="Bonfire ignition|Work With Sounds / Werstas|CC BY 4.0"><b>Bonfire ignition</b> <span>Work With Sounds / Werstas &middot; CC BY 4.0</span></li>
+      <li data-credit="Glass breaking|Gravity Sound|CC BY 4.0"><b>Glass breaking</b> <span>Gravity Sound &middot; CC BY 4.0</span></li>
+    </ul>
+    <p class="note" data-licences>Licences: CC BY 4.0 creativecommons.org/licenses/by/4.0 &middot; CC BY 3.0 creativecommons.org/licenses/by/3.0 &middot; CC Sampling Plus 1.0 creativecommons.org/licenses/sampling+/1.0</p>
+    <p class="note">The full list, with the sources and the changes we made, is in the game: Pause, Options, Credits.</p>
+  </section>
+</main>
+
+<script>
+// "Watch the trailer" appears when press.json names a trailer file (and the file is on the site beside it): until then the row stays hidden. press.json is always there, so there is never a request for a file that is not.
+(function () {
+  try {
+    fetch('press.json').then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (!j || !j.trailer || !j.trailer.file) return;
+      var row = document.getElementById('row-trailer');
+      var a = row.querySelector('a');
+      a.setAttribute('href', j.trailer.file);
+      if (j.trailer.length) a.querySelector('.s').textContent = j.trailer.length + ' · MP4, plays here or save it';
+      row.hidden = false;
+    }).catch(function () { /* no trailer yet */ });
+  } catch (e) { /* no trailer yet */ }
+})();
+</script>
+</body>
+</html>

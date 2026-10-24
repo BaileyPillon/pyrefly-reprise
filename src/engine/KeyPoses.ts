@@ -20,6 +20,7 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import type { LungeContact } from './ContactBeat.ts';
 import { odApex, odKeyHolds } from './KeySlots.ts';
+import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
 
 /** How long the follow-through holds at full reach before the strike goes home, ms at timeScale 1. */
 export const FOLLOW_BEAT_MS = 180;
@@ -49,12 +50,26 @@ export function blowPose(windUp: boolean): string | undefined {
  * playback runs ahead (seen in Chapter IV under the ATB), and the figure must not stay on its impact.
  */
 export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: LungeContact): LungeContact {
+  const impact = (): void => {
+    // r37 slot (FFX-2): a move with its own key painting puts that up at the apex instead of the impact painting.
+    if (ctx.actingId === actorId && !odApex(ctx, actorId)) ctx.stage.actor(actorId)?.setPose('attack');
+  };
+  // Motion pass (lane "core"): the sampled strike reaches its contact with the blow already landing on it, so a painting put up AT the contact would be replaced by the follow-through in
+  // the same frame and never be seen. It goes up on the strike's `travelPeak` mark instead (the fastest frame, where a swap is hidden best), and `reached` only marks the contact. Step 2: the
+  // way out is a swap on a mark too: the impact painting is held through the blow and the 0.2 s hold, and goes to the follow-through (or the idle) on the `settlePeak` mark, the fastest frame home.
+  if (curvesOn()) {
+    // FFX-2 (Chapter IV): a girl who has run in runs home herself, and `BattleScreenRunIn.close` puts the idle up as she sets off, before the strike's `settlePeak` (seen on the real 120 Hz
+    // recording: attack, idle, then a follow-through painted over the run home). Her follow-through stays at the blow, as in the live game; only the impact painting moves to its mark.
+    if (ctx.deps?.actionMotion?.lungeFor?.(actorId) !== undefined) return { hold: contact.hold, reached: contact.reached, impact };
+    const token = ++armed;
+    marksSwaps(ctx).set(actorId, { token, followed: false });
+    return { hold: contact.hold, reached: contact.reached, impact, settle: () => settleSwap(ctx, actorId, token), done: () => settleDone(ctx, actorId, token) };
+  }
   return {
     hold: contact.hold,
     reached: () => {
       contact.reached();
-      // r37 slot (FFX-2): a move with its own key painting puts that up at the apex instead of the impact painting.
-      if (ctx.actingId === actorId && !odApex(ctx, actorId)) ctx.stage.actor(actorId)?.setPose('attack');
+      impact();
     },
   };
 }
@@ -64,8 +79,76 @@ export function impactAtApex(ctx: EventCtx, actorId: CombatantId, contact: Lunge
  * should stay at full reach for it (0 when there is no painting or REDUCE MOTION is on).
  */
 export function followThrough(ctx: EventCtx, attackerId: CombatantId): number {
+  if (marksSwaps(ctx).has(attackerId)) return 0; // motion pass, step 2: the way out is swapped on the strike's `settlePeak` mark (below), not at the blow
   if (!keysOn(ctx) || ctx.stage?.paints?.(attackerId, 'follow') !== true) return 0;
   if (odKeyHolds(ctx, attackerId)) return 0; // r37 slot: the move's own key painting stays up
   ctx.stage.actor(attackerId)?.setPose('follow');
   return FOLLOW_BEAT_MS;
+}
+
+// ------------------------------------------------------------------ motion pass, step 2: the way out, swapped on a mark
+
+/** What a strike whose key poses are swapped on its marks still owes its attacker (the new curves are on and the wind-up painting led), per playback and attacker. */
+interface Owed {
+  /** Which arming it is: a later attack by the same figure (or the net below) takes over from an earlier one. */
+  token: number;
+  /** `follow` is up since the `settlePeak` mark and the strike's `end` mark owes the idle. */
+  followed: boolean;
+}
+const onMarks = new WeakMap<EventCtx, Map<CombatantId, Owed>>();
+let armed = 0;
+function marksSwaps(ctx: EventCtx): Map<CombatantId, Owed> {
+  let s = onMarks.get(ctx);
+  if (!s) onMarks.set(ctx, (s = new Map()));
+  return s;
+}
+
+/** How long `actionEnd` lets a strike's own marks do the swaps before it does the idle itself, ms at timeScale 1 (a strike taken over by another never reaches them). */
+export const MARKS_NET_MS = 900;
+
+/**
+ * The strike has turned for home (its `settlePeak` mark, the fastest frame of the way back): the impact painting goes to the follow-through when the figure has one (D-313), else to the
+ * idle. It may fall after `actionEnd` (the action ends about 0.1 s before the fastest frame of the way home, measured in Chapter I), which is why `actionEnd` waits for it ({@link idleAtEnd}).
+ * Not when the move's own key painting (an Overdrive's) is what holds the figure.
+ */
+export function settleSwap(ctx: EventCtx, actorId: CombatantId, token?: number): void {
+  const owed = marksSwaps(ctx).get(actorId);
+  if (!owed || owed.followed || (token !== undefined && owed.token !== token)) return;
+  const actor = ctx.stage.actor(actorId) as { setPose(n: string): void; pose?: string } | undefined;
+  // not over a painting the figure has taken since (a hurt, an idle another motion put up): only the strike's own painting is swapped
+  if (odKeyHolds(ctx, actorId) || (actor?.pose !== undefined && actor.pose !== 'attack' && actor.pose !== 'ready')) {
+    marksSwaps(ctx).delete(actorId);
+    return;
+  }
+  const follow = keysOn(ctx) && ctx.stage?.paints?.(actorId, 'follow') === true;
+  actor?.setPose(follow ? 'follow' : 'idle');
+  if (follow) owed.followed = true; // the strike's `end` mark (home, at rest) owes the idle
+  else marksSwaps(ctx).delete(actorId);
+}
+
+/** The strike is home (its `end` mark): the figure that stood in the follow-through goes to the idle, by the plain blend (it is at rest). */
+export function settleDone(ctx: EventCtx, actorId: CombatantId, token?: number): void {
+  const owed = marksSwaps(ctx).get(actorId);
+  if (!owed || !owed.followed || (token !== undefined && owed.token !== token)) return;
+  marksSwaps(ctx).delete(actorId);
+  const actor = ctx.stage.actor(actorId) as { setPose(n: string): void; pose?: string } | undefined;
+  if (actor && (actor.pose === undefined || actor.pose === 'follow')) actor.setPose('idle'); // not over a menu's ready or a new action's painting
+}
+
+/**
+ * `actionEnd`'s idle. With the new curves the strike's own marks owe the way out (`follow` on `settlePeak`, `idle` at the `end`): the action usually ends a little BEFORE the fastest frame of
+ * the way home, and an idle put up then would skip the follow-through and cut at 60 percent of the peak speed. So the swap waits for the marks, and the net ({@link MARKS_NET_MS}) does it when they
+ * never come. Everything else (today's game, a figure with no strike) is the immediate idle it always was.
+ */
+export function idleAtEnd(ctx: EventCtx, actor: { setPose(n: string): void } | undefined, id: CombatantId | null | undefined): void {
+  const owed = id ? marksSwaps(ctx).get(id) : undefined;
+  if (!id || !owed) {
+    actor?.setPose('idle');
+    return;
+  }
+  void ctx.sleep(MARKS_NET_MS).then(() => {
+    if (marksSwaps(ctx).get(id) !== owed) return; // the marks did it, or a later attack took over
+    marksSwaps(ctx).delete(id);
+    actor?.setPose('idle');
+  });
 }
