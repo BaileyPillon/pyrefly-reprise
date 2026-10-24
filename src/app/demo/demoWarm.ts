@@ -31,10 +31,20 @@ import { preparedPaintings } from '../../engine/PaintedArtCache.ts';
 import { hasPrebuilt, prebuildScene } from '../../scenes/prebuilt.ts';
 import { readSetting } from '../SaveData.ts';
 import { visualStyleOf } from '../saveVisualStyle.ts';
-import { preloadBattle } from '../screens/battlePreload.ts';
+import { prepareMixSplash } from '../../engine/fx/mix/splash.ts';
+import { battleCardInfo, preloadBattle } from '../screens/battlePreload.ts';
 import { drawSlicedOffscreen, warmShaders } from '../screens/BattleScreenWarmup.ts';
 import { demoModeOn } from '../demoMode.ts';
 import { DEMO_FIGHTS } from './demoFlow.ts';
+
+/**
+ * When, after the page's first real frame, the title starts the two warms (`main.ts`). Release 62 used 4000 and 6000, which left both stages unbuilt at a press a human makes 6 s after the load (Chapter I's was
+ * built at 9.6 s of page time, Chapter IV's at 11.9 s). The overnight fix of the skeptic's M1 (r63-play; both games) starts them at 700 and 1500 ms because the warm no longer holds the page for long: the
+ * plate cut is off the page, the atlas a tile at a time, each texture and each program family its own step behind a fence, and every step looks at the pad first. The once-per-page costs go first
+ * (`warmBattleStage`), the fights' stages after them.
+ */
+export const WARM_STAGE_AT_MS = 700;
+export const WARM_FIGHTS_AT_MS = 1500;
 
 /** The screens the warm may work behind: the title and the picker. */
 const CALM = new Set(['title', 'chapter-select']);
@@ -65,7 +75,40 @@ export function stopDemoWarm(): void {
   stopped = true;
 }
 
-const idle = (ms = 60): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Is a press in progress? A button held on a pad (the keyboard and the mouse are read by the page's own events, which a task of this warm cannot swallow). r63-play, the overnight fix of the skeptic's M1: a step
+ * that starts while a button is down would hold the page through the release; the warm waits for it (at most about a second, so a stuck button never stops the warm for good).
+ */
+export function padBusy(pads: ArrayLike<{ buttons: ArrayLike<{ pressed: boolean }> } | null> | null | undefined): boolean {
+  if (!pads) return false;
+  for (let i = 0; i < pads.length; i++) {
+    const pad = pads[i];
+    if (!pad) continue;
+    for (let b = 0; b < pad.buttons.length; b++) if (pad.buttons[b]?.pressed === true) return true;
+  }
+  return false;
+}
+
+const inputBusy = (): boolean => {
+  try {
+    return typeof navigator !== 'undefined' && typeof navigator.getGamepads === 'function' && padBusy(navigator.getGamepads());
+  } catch {
+    return false;
+  }
+};
+
+const idle = async (ms = 60): Promise<void> => {
+  await sleep(ms);
+  for (let i = 0; i < 25 && inputBusy(); i++) await sleep(40);
+};
+
+/** The fight whose card the picker's cursor rests on: its stage is warmed before the other's (r63-play: the player is about to pick it). */
+let focusId: string | null = null;
+export function noteDemoFocus(id: string): void {
+  focusId = id;
+}
 
 /** The slice of `App` this reads. */
 export type WarmApp = Pick<App, 'renderer'> & { readonly current: { readonly name: string } | null };
@@ -81,18 +124,40 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
   if (typeof window !== 'undefined') (window as unknown as Record<string, unknown>)['__demoWarmLog'] = log; // the probe reads what the warm did (dev tools, the booth check)
   const calm = (): boolean => !stopped && CALM.has(app.current?.name ?? '');
   running = (async () => {
-    for (const id of fights) {
+    // One fight at a time, a step at a time: the paintings, then the stage, then the splash crops. The fight whose card the cursor rests on goes first, and a cursor that moves hands the warm to the other fight at
+    // the next step boundary (r63-play, the overnight fix of the skeptic's M1: the player is about to pick it; at human pace there is time for one fight's stage, not both).
+    const steps = new Map(fights.map((id) => [id, { paintings: false, stage: false, splash: false }]));
+    const nextFight = (): string | null => {
+      const open = fights.filter((id) => {
+        const st = steps.get(id)!;
+        return !(st.paintings && st.stage && st.splash);
+      });
+      if (!open.length) return null;
+      return focusId !== null && open.includes(focusId) ? focusId : open[0]!;
+    };
+    for (let id = nextFight(); id !== null; id = nextFight()) {
+      const st = steps.get(id)!;
       const chapter = getChapter(id);
-      if (!chapter) continue;
+      if (!chapter) {
+        st.paintings = st.stage = st.splash = true;
+        continue;
+      }
       if (!calm()) return;
-      await preloadBattle(chapter, 1); // the paintings, every phase (phases 4 and 5 wait for a chosen card otherwise)
-      note(`${id}: paintings`);
-      await idle();
-      if (!calm()) return;
-      if (!hasPrebuilt(chapter.sceneKey)) {
-        await buildStage(app, chapter);
-        note(`${id}: stage built, compiled and drawn offscreen`);
+      if (!st.paintings) {
+        await preloadBattle(chapter, 1); // the paintings, every phase (phases 4 and 5 wait for a chosen card otherwise)
+        st.paintings = true;
+        note(`${id}: paintings`);
         await idle();
+      } else if (!st.stage) {
+        st.stage = true;
+        if (!hasPrebuilt(chapter.sceneKey)) {
+          await buildStage(app, chapter, idle);
+          note(`${id}: stage built, compiled and drawn offscreen`);
+          await idle();
+        }
+      } else {
+        st.splash = true;
+        if (await warmSplashCrops(chapter, calm)) note(`${id}: splash crops`); // the portraits' crops the first splash would make in the fight (a getImageData and a toBlob of 0.1 s)
       }
     }
     // lane perf-trim: every painting's breathing field (the living paintings' alpha read) is read behind the title, one picture at a time, so that no pose's first sight in the fight stops the page for the read
@@ -111,17 +176,36 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
 }
 
 /** Build `chapter`'s scene, get its programs built and its textures up, and keep it for the battle. */
-async function buildStage(app: WarmApp, chapter: Chapter): Promise<void> {
+async function buildStage(app: WarmApp, chapter: Chapter, pause: (ms?: number) => Promise<void>): Promise<void> {
   const scene = await prebuildScene(chapter.sceneKey, app.renderer.camera);
+  await pause(20); // a task boundary after the scene's 0.1 s of layer canvases, with a look at the pad
   scene.hideOwnActors();
   patchSideFogIn(scene.scene); // as `BattleScreen.enter` does before it compiles: the patched plates are other programs than the plain ones
   applyChapterLook(chapter.id, visualStyleOf(readSetting('visualStyle'))); // the look's passes join the post chain now (a battle that starts takes the same look, for the same chapter)
   (app.renderer as { prepareLook?: () => void }).prepareLook?.();
+  await pause(20);
   // The depth plates' CPU half (0.65 s in one task right after the press, round 28) is cut while the GPU process compiles; the battle's own build takes the cut (`DepthPlates.precutPlates`).
   const cutting = warmLivingPlates({ key: scene.key, scene: scene.scene, renderer: (app.renderer as { renderer?: WebGLRenderer }).renderer }).catch(() => false);
   await warmShaders(app.renderer, scene.scene); // the programs build in the GPU process while the page runs
   if (await cutting) note(`${chapter.id}: depth plates cut ahead`);
+  await pause(20);
   await drawSlicedOffscreen(app.renderer, scene.scene); // the GPU executables and the textures, one program family a frame
+}
+
+/**
+ * The splash crops of the fight's figures, made behind the picker (r63-play, the overnight fix of the skeptic's M1; both games). `prepareMixSplash` is what the battle calls for every staged figure the moment it
+ * starts: each crop is a `getImageData` and a `toBlob` of 0.05 to 0.12 s (seen as a 150 ms frame 1.2 s into Chapter I and under Chapter IV's swirl). It is the same call with the same art, made earlier, one figure at a
+ * time; the crops are kept for the battle (`releaseMixSplash` forgets them when it ends). Nothing is made when the splash art is switched off.
+ */
+async function warmSplashCrops(chapter: Chapter, calm: () => boolean): Promise<boolean> {
+  const info = battleCardInfo(chapter.id);
+  if (!info || (chapter.game !== 'ffx' && chapter.game !== 'ffx2')) return false;
+  for (const art of new Set([info.artKey, ...info.party.map((m) => m.artId)])) {
+    if (!calm()) return false;
+    prepareMixSplash(art, chapter.game);
+    await idle(140);
+  }
+  return true;
 }
 
 /** Forget everything (tests only). */

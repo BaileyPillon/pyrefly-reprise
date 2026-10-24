@@ -168,27 +168,32 @@ const FNS: Readonly<Record<FxTile, TileFn>> = {
   ...PAINT_FNS,
 };
 
+/** Draw one tile into `data`. */
+function paintTile(data: Uint8Array, tile: FxTile, index: number): void {
+  const fn = FNS[tile];
+  const ox = (index % GRID) * TILE;
+  const oy = Math.floor(index / GRID) * TILE;
+  for (let j = 0; j < TILE; j++) {
+    for (let i = 0; i < TILE; i++) {
+      // Two supersamples per axis soften the hard-edged shapes.
+      const acc: Px = [0, 0, 0, 0];
+      for (const sy of [0.25, 0.75]) {
+        for (const sx of [0.25, 0.75]) {
+          const p = fn(((i + sx) / TILE) * 2 - 1, ((j + sy) / TILE) * 2 - 1);
+          for (let c = 0; c < 4; c++) acc[c]! += p[c]! / 4;
+        }
+      }
+      const o = ((oy + j) * ATLAS_SIZE + ox + i) * 4;
+      for (let c = 0; c < 4; c++) data[o + c] = Math.round(sat(acc[c]!) * 255);
+    }
+  }
+}
+
 /** Draw tiles into `data`: the live game's, plus the painted finish's when `extra` (and only the painted finish's when `only`). */
 function paintTiles(data: Uint8Array, extra: boolean, only: boolean): void {
   for (const [tile, { index, extra: isExtra }] of Object.entries(TILES) as Array<[FxTile, { index: number; extra?: true }]>) {
     if (isExtra ? !extra : only) continue;
-    const fn = FNS[tile];
-    const ox = (index % GRID) * TILE;
-    const oy = Math.floor(index / GRID) * TILE;
-    for (let j = 0; j < TILE; j++) {
-      for (let i = 0; i < TILE; i++) {
-        // Two supersamples per axis soften the hard-edged shapes.
-        const acc: Px = [0, 0, 0, 0];
-        for (const sy of [0.25, 0.75]) {
-          for (const sx of [0.25, 0.75]) {
-            const p = fn(((i + sx) / TILE) * 2 - 1, ((j + sy) / TILE) * 2 - 1);
-            for (let c = 0; c < 4; c++) acc[c]! += p[c]! / 4;
-          }
-        }
-        const o = ((oy + j) * ATLAS_SIZE + ox + i) * 4;
-        for (let c = 0; c < 4; c++) data[o + c] = Math.round(sat(acc[c]!) * 255);
-      }
-    }
+    paintTile(data, tile, index);
   }
 }
 
@@ -225,3 +230,26 @@ export function ensureAtlasExtra(): void {
   tex.needsUpdate = true;
   sharedExtra = true;
 }
+
+/**
+ * The same atlas built a tile at a time with `pause` between tiles (r63-play, the overnight fix of the skeptic's M1; both games): built whole it is one 0.1 s task of the page (`fxAtlasTexture`, first use), and the
+ * conference demo warms it behind the title, where a press inside that task is never seen. The pixels are `atlasPixels()`'s, tile for tile; nothing happens if the atlas exists by the time a tile is done.
+ */
+export async function warmFxAtlas(pause: () => Promise<void>): Promise<void> {
+  if (shared) return;
+  const data = new Uint8Array(ATLAS_SIZE * ATLAS_SIZE * 4);
+  for (const [tile, { index, extra }] of Object.entries(TILES) as Array<[FxTile, { index: number; extra?: true }]>) {
+    if (extra) continue;
+    paintTile(data, tile, index);
+    await pause();
+    if (shared) return;
+  }
+  const tex = new DataTexture(data, ATLAS_SIZE, ATLAS_SIZE, RGBAFormat, UnsignedByteType);
+  tex.magFilter = LinearFilter;
+  tex.minFilter = LinearFilter;
+  tex.generateMipmaps = false;
+  tex.needsUpdate = true;
+  shared = tex;
+}
+
+

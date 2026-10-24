@@ -40,6 +40,7 @@ import {
   PCFSoftShadowMap,
   Scene,
   type Camera,
+  type Texture,
   type Object3D,
   type WebGLRenderTarget,
 } from 'three';
@@ -52,6 +53,9 @@ export interface WarmupRenderer {
     compileAsync(scene: Object3D, camera: Camera): Promise<unknown>;
     /** The raw WebGL render, used by {@link drawSlicedOffscreen} only (a stand-in without it has nothing to warm that way). */
     render?(scene: Object3D, camera: Camera): void;
+    /** {@link drawSlicedOffscreen} only: the texture upload of one texture, and the GL context its fences are made on (a stand-in without them is drawn as before). */
+    initTexture?(texture: Texture): void;
+    getContext?(): unknown;
     readonly shadowMap?: { type: number };
   };
   readonly composer: { readonly readBuffer: WebGLRenderTarget; readonly passes?: readonly object[] };
@@ -178,19 +182,124 @@ export async function drawSlicedOffscreen(r: WarmupRenderer, scene: Scene): Prom
   const gl = r.renderer;
   const target = r.composer?.readBuffer;
   if (typeof gl?.render !== 'function' || !target) return;
-  await sliceDraw(scene, () => {
-    const previous = gl.getRenderTarget();
-    try {
-      gl.setRenderTarget(target);
-      gl.render!(scene, r.camera);
-    } finally {
-      gl.setRenderTarget(previous);
+  const ctx = fenceContext(gl.getContext?.());
+  const uploaded = new WeakSet<object>();
+  await sliceDraw(
+    scene,
+    () => {
+      const previous = gl.getRenderTarget();
+      try {
+        gl.setRenderTarget(target);
+        gl.render!(scene, r.camera);
+      } finally {
+        gl.setRenderTarget(previous);
+      }
+    },
+    {
+      // r63-play (the overnight fix of the skeptic's M1; both games). Measured behind the title in headless GPU Chromium, each family's first draw stopped the page for 95 to 370 ms: a texture
+      // upload (up to 80 ms for a figure's, 293 ms for a 5376 x 3072 backdrop master: one call each) and then the next family's first use of its program, whose log query waits in the GPU process
+      // for the executables the draw before it was still building. The textures go up one at a time (a task each, none sharing a task with a draw), and after each draw the page waits on a fence
+      // (a poll that does not block) before it touches the next program, so the stalls stay in the GPU process and the page keeps running. The same programs are built, the same textures uploaded.
+      before: (members) => uploadTextures(gl, members, uploaded),
+      after: ctx ? () => gpuSettled(ctx) : undefined,
+    },
+  );
+}
+
+/** The textures a drawable's material holds (own properties and a shader material's uniforms), each once. */
+function texturesOf(o: Part, into: Set<Texture>): void {
+  for (const m of Array.isArray(o.material) ? o.material : o.material ? [o.material] : []) {
+    for (const v of Object.values(m as unknown as Record<string, unknown>)) {
+      const t = v as Texture | null;
+      if (t && t.isTexture === true) into.add(t);
     }
-  });
+    const uniforms = (m as unknown as { uniforms?: Record<string, { value?: unknown }> }).uniforms;
+    if (uniforms) {
+      for (const u of Object.values(uniforms)) {
+        const t = u?.value as Texture | null | undefined;
+        if (t && t.isTexture === true) into.add(t);
+      }
+    }
+  }
+}
+
+/** Upload the family's textures one at a time; a task boundary after any upload that took long, so no two big uploads share one. */
+async function uploadTextures(gl: WarmupRenderer['renderer'], members: readonly Part[], done: WeakSet<object>): Promise<void> {
+  if (typeof gl.initTexture !== 'function') return;
+  const all = new Set<Texture>();
+  for (const o of members) texturesOf(o, all);
+  for (const t of all) {
+    if (done.has(t) || (t as Texture & { isRenderTargetTexture?: boolean }).isRenderTargetTexture === true) continue;
+    done.add(t);
+    const t0 = performance.now();
+    try {
+      gl.initTexture(t);
+    } catch {
+      /* the draw uploads it, as before */
+    }
+    if (performance.now() - t0 > 4) await nextTask();
+  }
+}
+
+/** The part of a WebGL2 context a fence needs. */
+interface FenceGl {
+  fenceSync(condition: number, flags: number): unknown;
+  getSyncParameter(sync: unknown, pname: number): unknown;
+  deleteSync(sync: unknown): void;
+  flush(): void;
+  readonly SYNC_GPU_COMMANDS_COMPLETE: number;
+  readonly SYNC_STATUS: number;
+  readonly SIGNALED: number;
+}
+
+function fenceContext(ctx: unknown): FenceGl | null {
+  const c = ctx as Partial<FenceGl> | null | undefined;
+  return c && typeof c.fenceSync === 'function' && typeof c.getSyncParameter === 'function' && typeof c.deleteSync === 'function' && typeof c.flush === 'function' ? (c as FenceGl) : null;
+}
+
+/** Longest the page waits for the GPU to finish a slice's draw (a driver that never signals must not hold the warm). */
+const SETTLE_CAP_MS = 600;
+
+/**
+ * Resolves when the GPU has finished everything drawn so far, polling a fence a few milliseconds apart. The poll is a status read that returns at once (measured: 0.0 ms behind a draw whose
+ * executable took 300 ms to build); what blocks the page is a query that needs an answer from the GPU process behind that work.
+ */
+export async function gpuSettled(gl: FenceGl, capMs = SETTLE_CAP_MS): Promise<void> {
+  let sync: unknown = null;
+  try {
+    sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+    gl.flush();
+  } catch {
+    return;
+  }
+  if (!sync) return;
+  const t0 = performance.now();
+  try {
+    while (performance.now() - t0 < capMs) {
+      if (gl.getSyncParameter(sync, gl.SYNC_STATUS) === gl.SIGNALED) return;
+      await new Promise<void>((resolve) => setTimeout(resolve, 6));
+    }
+  } catch {
+    /* a lost context: the draw that follows says so */
+  } finally {
+    try {
+      gl.deleteSync(sync);
+    } catch {
+      /* gone with the context */
+    }
+  }
+}
+
+const nextTask = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
+
+/** What a paced slice does around its draw (the offscreen warm only): before it, with the family's drawables; after it, before the frame wait. */
+interface SliceHooks {
+  before?: (members: readonly Part[]) => Promise<void>;
+  after?: (() => Promise<void>) | undefined;
 }
 
 /** Draw the scene once per program family (the others hidden for that draw), a frame apart, then once complete: `draw` is one render. */
-async function sliceDraw(scene: Scene, draw: () => void): Promise<void> {
+async function sliceDraw(scene: Scene, draw: () => void, hooks: SliceHooks = {}): Promise<void> {
   const parts: Part[] = [];
   scene.traverse((o) => {
     if (o.visible && (o as Part).material) parts.push(o as Part);
@@ -207,6 +316,7 @@ async function sliceDraw(scene: Scene, draw: () => void): Promise<void> {
     for (const members of families.values()) {
       if (slices++ >= MAX_SLICES) break;
       const mine = new Set(members);
+      if (hooks.before) await hooks.before(members);
       const hidden = parts.filter((o) => !mine.has(o));
       for (const o of hidden) o.visible = false;
       try {
@@ -214,10 +324,12 @@ async function sliceDraw(scene: Scene, draw: () => void): Promise<void> {
       } finally {
         for (const o of hidden) o.visible = true;
       }
+      if (hooks.after) await hooks.after();
       await nextFrame();
     }
   }
   draw();
+  if (hooks.after) await hooks.after();
 }
 
 /** Start compiling `obj` with `target` bound, as the pass that draws it will have it. */

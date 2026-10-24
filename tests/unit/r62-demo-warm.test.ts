@@ -30,6 +30,7 @@ vi.mock('../../src/app/screens/battlePreload.ts', () => ({
     calls.push(`paintings ${chapter.id}`);
     return { chapterId: chapter.id, paintings: 3, portraits: 1, ms: 1 };
   }),
+  battleCardInfo: vi.fn(() => undefined), // the card's boss and party come from the real preload; none here (the splash crops are `r63-fix-warm.test.ts`'s)
 }));
 vi.mock('../../src/app/screens/BattleScreenWarmup.ts', async (importOriginal) => {
   const real = await importOriginal<typeof import('../../src/app/screens/BattleScreenWarmup.ts')>();
@@ -195,7 +196,15 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
 describe('the wiring', () => {
   it('the page starts the warm in demo mode only, a moment after the title is up', () => {
     const main = src('src/main.ts');
-    expect(main).toMatch(/if \(demoModeOn\(\)\) setTimeout\(\(\) => void warmDemoFights\(app\), 6000\)/);
+    expect(main).toMatch(/if \(demoModeOn\(\)\) setTimeout\(\(\) => void warmDemoFights\(app\), WARM_FIGHTS_AT_MS\)/);
+    expect(main).toMatch(/if \(demoModeOn\(\)\) setTimeout\(warmBattleStage, WARM_STAGE_AT_MS\)/);
+  });
+
+  it('R63: the warm starts well before a player at a human pace can have chosen a fight, the once-per-page costs first and clear of each other', async () => {
+    const { WARM_FIGHTS_AT_MS, WARM_STAGE_AT_MS } = await import('../../src/app/demo/demoWarm.ts');
+    expect(WARM_STAGE_AT_MS).toBeLessThan(WARM_FIGHTS_AT_MS);
+    expect(WARM_FIGHTS_AT_MS - WARM_STAGE_AT_MS).toBeGreaterThanOrEqual(800);
+    expect(WARM_FIGHTS_AT_MS).toBeLessThanOrEqual(2000); // release 62's 6000 ms left both stages unbuilt at a press 6 to 7 s after the load
   });
 
   it('the picker starts it again a moment after it has painted, and drops the timer on the way out', () => {

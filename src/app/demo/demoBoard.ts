@@ -19,7 +19,7 @@ import type { ControlHintItem } from '../../ui/common/ControlsHint.ts';
 import { DEMO_FIGHTS, otherDemoFight } from './demoFlow.ts';
 import { mountControlsCard } from './demoControls.ts';
 import { mountQrPlate } from './demoQr.ts';
-import { warmDemoFights } from './demoWarm.ts';
+import { noteDemoFocus, warmDemoFights } from './demoWarm.ts';
 import './demo.css';
 
 /** The two cards: the real chapters, in the board's order, no COMING rows and nothing locked. */
@@ -68,6 +68,11 @@ export class DemoBoardScreen extends ChapterSelectScreen {
   constructor(opts: ChapterSelectScreenOptions = {}) {
     super({ tiles: demoTiles, hints: DEMO_HINTS, initialIndex: demoStartIndex(), ...opts });
     this.doors = new NoDoors();
+  }
+
+  /** r63-play (the overnight fix of the skeptic's M1): the fight the cursor rests on has its stage built first, since it is the one the next press picks. */
+  protected override onCardFocus(chapterId: string | null): void {
+    if (chapterId !== null) noteDemoFocus(chapterId);
   }
 
   /** No hidden chapters at the booth: no key listener, no label taps, no phone field. */
