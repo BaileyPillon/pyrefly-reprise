@@ -4,7 +4,7 @@ Working title: **Echoes of Spira** (formerly Pyrefly Reprise). An unofficial HD-
 
 ## Engine decision
 
-**Web: Vite + TypeScript + Three.js, painted 2.5D.** AI-painted matte backdrops and cut-out character key-poses composed as lit billboards in small 3D dioramas, with a post-processing chain (bloom, tilt-shift depth of field, vignette, colour grade), an HTML/CSS overlay for the FFX/FFX-2 menus ("Ink & Gold" cinematic chrome, see below), and Web Audio synthesis for original music and SFX. Deployed to GitHub Pages so it is a link friends can open.
+**Web: Vite + TypeScript + Three.js, painted 2.5D.** AI-painted matte backdrops and cut-out character key-poses composed as lit billboards in small 3D dioramas, with a post-processing chain (bloom, tilt-shift depth of field, vignette, colour grade), an HTML/CSS overlay for the FFX/FFX-2 menus ("Ink & Gold" cinematic chrome, see below), and Web Audio for music and SFX (rendered audio files, with a synthesiser as the fallback). Deployed to GitHub Pages so it is a link friends can open.
 
 Why not Unreal: the user has UE 5.8 installed, but Unreal would mean multi-GB builds to share, binary Blueprints that agents cannot iterate on, and slow screenshot loops. Web gives a same-day turnaround, deterministic headless testing (Playwright + WebGL), and a shareable URL.
 
@@ -124,4 +124,4 @@ DOM overlay, in the **"Ink & Gold" cinematic direction** the user chose (Persona
 
 ## Legal
 
-All code, art, music and text are original. No retail models, textures, audio, fonts or script transcripts are included. Names and characters belong to Square Enix; this is a non-commercial fan work.
+This is an unofficial, non-commercial fan tribute. Final Fantasy X and X-2, their characters, worlds and names belong to Square Enix, and this project is unaffiliated with Square Enix. It does not claim that everything in it is original: the third-party sound libraries, instrument samples, fonts and tools, and the AI-generated art, music and voices, are listed with their licences on the in-game Credits screen (`src/app/credits/creditsData.ts`, the same notice as `FAN_NOTICE`).
