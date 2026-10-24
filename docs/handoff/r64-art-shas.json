@@ -1,0 +1,405 @@
+{
+ "about": "sha256 of the 100 art files the r64 repaint install replaced: old = D:/pyrefly-art-r63, new = D:/pyrefly-art-r64 (and the staged end state D:/pyrefly-art-r63-rp, byte for byte)",
+ "files": {
+  "characters/yuna/cast.png": {
+   "old": "7bed409d753136dc94ad245b2ddfaaea71238dc4c0ba0b2ee0a26c5e89ab4e42",
+   "new": "b007285a8c7bd4c63d305f02aa50519b93a9c48309d86ad8ea9725f621873510"
+  },
+  "characters/yuna/cast@2x.png": {
+   "old": "88e67e75189ac3bfe139dc3011e9be051ba7c69e376087c96d0eb0b668163a54",
+   "new": "6e80881e2e2339f2416ffaa36ce9e75a2ca9dbfb38db19864d04a2d1fc48fb11"
+  },
+  "characters/yuna/cast@3x.png": {
+   "old": "3767705002dddd603bc6836794134147322a6a18705c1d99e7c15a35fc8a65ec",
+   "new": "c9b18ef3f46b893ff068283e879aa07d10e0c60da3cdafcf566cef849d70ce97"
+  },
+  "characters/yuna/cast@4x.png": {
+   "old": "dbe771c72887198539f9cb5388ed5cfe409d39c1957ffd26cc74eaed8d5d89df",
+   "new": "fd7e8999d1a3eaa05f8fd332313fe20fdab203149e9469fc96f14e804f6cc989"
+  },
+  "characters/yuna/cast.normal.png": {
+   "old": "ce629874cd943e4b0415244ab8f6cf2944d20449cf4d20e042ea06ade7e32529",
+   "new": "ed57db8969a42057e27c59950b8ab6d7998b76c993c2cc5a2ddd4287931960a1"
+  },
+  "characters/yuna/hurt.png": {
+   "old": "da0ad737452c8207a08772d6da4242bcb23e8ea41a22e3fdc4b25423384e9448",
+   "new": "fa754438a81151a663d3ed1182e125f7b1bbbcc781e8c39b2d2067f22f28c278"
+  },
+  "characters/yuna/hurt@2x.png": {
+   "old": "be23d3223f29a876567520278ea9db74817d161f008fdde28738ba81608a6de1",
+   "new": "42132ff8758f1b312ce8f4eeaa5514708dfc4c9c97163f79fe234390cdef3479"
+  },
+  "characters/yuna/hurt@3x.png": {
+   "old": "64df049bd3ae9cd06fe4a8a7b1f4807429d9ab84e675ddbf2ad971a1d7830bb5",
+   "new": "37fa380902f0d8276af04d4eaa258ed30773b55b8d1774c1222967858fce4736"
+  },
+  "characters/yuna/hurt@4x.png": {
+   "old": "b7f3945ff8b54d23e7bcf1a9433e85236332fdf6764569ff6e52c17b4bb72fb0",
+   "new": "59237589256bb86524424ca5a753877be5f94b3da8cd295caf947dde79cbc5cb"
+  },
+  "characters/yuna/hurt.normal.png": {
+   "old": "bdcb28b4d804a3b48dbcb49ce8c12b68100d80faa01bbefb07a06e86d4046065",
+   "new": "1dff20ad8ed5d495f7c604c5b4bab008de4f827a198dff09e121e409716c3bd5"
+  },
+  "characters/yuna/critical.png": {
+   "old": "eba4698167e35c4e76eaf712bfb402fe24d2f39b237d4bec6b61f92ff90a8dc2",
+   "new": "e1f61dd582317f9aa9e6e1abe87e8abed7c88c05d8ef87dd367bb0acf5c91a24"
+  },
+  "characters/yuna/critical@2x.png": {
+   "old": "87cadc47b61cbc7cc9218356ba4b06b7db0766c372a3b0bc21b0227874305c29",
+   "new": "e5bdd405064ed9d0f7d9891fad7228e1dfd798fb31d41028ef85f36946d73133"
+  },
+  "characters/yuna/critical@3x.png": {
+   "old": "b01d4d4159edfcc52f9868974cc3749cb32d12af7af2747bae1197aa827a5dae",
+   "new": "ad79da69a217d64cc3957ac78f6ffa376fe65966a89608cf5bab19585212d051"
+  },
+  "characters/yuna/critical@4x.png": {
+   "old": "bac5e41e9bd031ca4da3dd97e3e8255c8a34b22e036a744a19ba5f82984d441f",
+   "new": "b4998744ae4a9bb486c2d93d3805bc2f4adc21fab3a375414a420f9971e3b5a1"
+  },
+  "characters/yuna/critical.normal.png": {
+   "old": "74ea84e6a023cc593bf43b0c5087cd8b72917848cfe236cdbe56b83d14588954",
+   "new": "e7cd3b743bc295d20edc470f1b10ec7aa33f8c9c7ec9c92c8e3a1287cd814aa1"
+  },
+  "characters/yuna/victory.png": {
+   "old": "603ab2ab4c26fc23e9e6e39645427090192f9d6c4d155f9a780abe531ce1008a",
+   "new": "e4e753e0bf2923c508e44392437dde6a951735a9f97019a43c1d1e3e153c9271"
+  },
+  "characters/yuna/victory@2x.png": {
+   "old": "ad087b9d59418316ce97e50805b17d1e47a608e3808a6d0206f08bf774260e66",
+   "new": "bfdfcfd02f65609df32ec3b32bda7e790609b87afd0ab236e0b6cc2c0f0ddd60"
+  },
+  "characters/yuna/victory@3x.png": {
+   "old": "ea7872d66688abace094776bb98d9a640b010bda05c77dc8c2fdf720d04b12bf",
+   "new": "02875777c95a8396a82cd40d5b4fb3dc5a605984d335ad19e60df1cb78db1de2"
+  },
+  "characters/yuna/victory@4x.png": {
+   "old": "6ce2e301caa686a0f1a7ca83c1ce0aa143976d3064187581270fa61b3858faad",
+   "new": "f762558292d00747c1f8b635b2a09b3177d5963e0e88c75cc4ec3218c6f0593b"
+  },
+  "characters/yuna/victory.normal.png": {
+   "old": "7be993522c8f6dbfbc2be8069b1a969f8e3faa08a43e5aec8f52eda15dfe22fa",
+   "new": "29c7034ef2f6edd1b3f9e00a13fc14fee6615a7387a391f56483356df546723d"
+  },
+  "characters/yuna/item.png": {
+   "old": "806b7a05d004db5bf9bc9187f9467830d65091ec698867b23975ea33709b2e23",
+   "new": "8d923a9c1e8b55264a72d0b788ad830019296416479ffd4350b9ea8071d1cc61"
+  },
+  "characters/yuna/item@2x.png": {
+   "old": "288b245e0367e38bd37e7336751b7f5d4b7d47039db8738d240ee9495783cde6",
+   "new": "eb0f2a43ee33a249889ce1d5e5db78d0df0ddbdd70edea0b145642c95a899698"
+  },
+  "characters/yuna/item@3x.png": {
+   "old": "434c8cbd2f5350080147b337ccc037c165b0c72312953cc0bf3cc1893e001f17",
+   "new": "4adc3e6e4a94c7751128fd4ad4ccdbc22db4b2c257b587c2b66fe3407625e53c"
+  },
+  "characters/yuna/item@4x.png": {
+   "old": "8fdecf8285a02d5f96e97c6a2275780663ab1c76ced35ee2f1d167ae3458c1a0",
+   "new": "489b85c19eaeac0ab17f5989671eab62d4ff39a5d819a789e2bc486ae9da1422"
+  },
+  "characters/yuna/item.normal.png": {
+   "old": "3098b5c2fb03c68ebbb51677b3b6cc2fe2e9745ee3d8c1f184f17faec0ada1a0",
+   "new": "8fd0edac402b326760c843fed2b0643f8aff706a0fd32f0d8c6dcfa76ad164b9"
+  },
+  "characters/kimahri/ready.png": {
+   "old": "a961b7d74864e19ef1e636abc3330e44a349b244fd71f3e6b3582ff3b9f1f8a5",
+   "new": "35330f2f4a2fc3a6c9eb1bd90f62c967c5303138242fbe9b819523de423587c0"
+  },
+  "characters/kimahri/ready@2x.png": {
+   "old": "6d5f5e5938d9df5722ae1ea0e3be357d7a447cd0bd9f45bd3cf21852ee966f4b",
+   "new": "9cc1fd81d7ff4a8375c58ee21ed1b4973e329791c750e4667227abf4c3fa0557"
+  },
+  "characters/kimahri/ready@3x.png": {
+   "old": "270c7689176cdf88b8880c93fc75e2f27dfeb0770f86733a21de21dc0b9f6bf6",
+   "new": "aa602d83dc4041215a77e412021f704d1e00f93969eb8d0adf18710e7db89b95"
+  },
+  "characters/kimahri/ready@4x.png": {
+   "old": "60809252adcf4c5428893c9127f46edabb486f4bb84bc0bda0baf740b139b0df",
+   "new": "afe12cd94d56b7e809bcf702d3048084c3adfa956f622e141e086986c3b39d19"
+  },
+  "characters/kimahri/ready.normal.png": {
+   "old": "c62672467a3f1062ee926dc884010aa86ced1c4c4d27c753afb84ae25903fc15",
+   "new": "67aa526745a7817a2262b36e32592685df80912074fc1170fa651cb8bce1f61a"
+  },
+  "characters/kimahri/follow.png": {
+   "old": "55504f6788c39a67a61b2014d96900a61721704c342ebccc59fc2bcee09e4083",
+   "new": "239ef170ab94ee759e3ff1554f88717ff47e79ec025cd605752539ca7e1678cf"
+  },
+  "characters/kimahri/follow@2x.png": {
+   "old": "e783c586420490eba486fae23fdab00efda9d87664065dc7c9502d374b0968b7",
+   "new": "662f296189cb6716115de0b9006f40e14f6627b308824ba85a759ff9fa99a127"
+  },
+  "characters/kimahri/follow@3x.png": {
+   "old": "47853444caf0c266f21ea902f8ff48c08e8755b862f6b4ceadd6e17651b15232",
+   "new": "6c45dad61c5031303c4d4da580ddd050fb3b866281294e06fec114c20fb51ad4"
+  },
+  "characters/kimahri/follow@4x.png": {
+   "old": "5d413c9a83a404e0601d6be29631444b55f96fe33758451bf03a648466827e46",
+   "new": "8223716de1387dfa832effa6d182d0fe1d1f76241b5678b48fd9d1c7416c49a2"
+  },
+  "characters/kimahri/follow.normal.png": {
+   "old": "d2bfd1da8d1a68d42aa5a9d6d1408aa49233011799c65b81baf1b38f8938af1e",
+   "new": "848cf2cb7742598f32c377521929d0da3d270cd5ddcf4a01d921f33f46603ef1"
+  },
+  "characters/kimahri/hurt.png": {
+   "old": "ed846ce7461f61d8ef42bfa392802e31d5e8013985850b709204d91a653c6c46",
+   "new": "962cbcb97db7e92dca1405cffd38f9bdb5c5a0b26cf2911c7c0e90f4475a3ff9"
+  },
+  "characters/kimahri/hurt@2x.png": {
+   "old": "d7edeadba9b1aa2ff24e4d0174faca609ca678855f995198558d29809cdf1d98",
+   "new": "7d4fa3ff09faa5ed8245377b1a4faa34932b22154b97eaef4e2bc57f20df3422"
+  },
+  "characters/kimahri/hurt@3x.png": {
+   "old": "eab98df9e01a45ed411fb4c7fa5c85c01b1de1c876e3f5615ef4f3727cf8a864",
+   "new": "687958f7b3c30b02bf79098ba6133efe49516b1057763bb06635c6d0be95a819"
+  },
+  "characters/kimahri/hurt@4x.png": {
+   "old": "3c898a2ee9c92ca2566faf43051dc39245f64f80ba410a159dfe78e48d4c3775",
+   "new": "a39e8708b81846b50d89a4f74b225299d35e165d26bbf2c5ff0f2dbe3c732eef"
+  },
+  "characters/kimahri/hurt.normal.png": {
+   "old": "c225f107add70523c5717b75a297ddee12108958c6af3dad83004edec96b352e",
+   "new": "89701a94a15dcf318e40621f72dd77d8c71fd50c806933190d572091ff401ad5"
+  },
+  "characters/kimahri/defend.png": {
+   "old": "23d512a0e866d702170ad2cb06cae1521da4584fc44f3f463a456f793a716ac9",
+   "new": "745304bb18e338120f7a7b03d4299c8f8ce413689ca8ed5c5cf591767b8abca2"
+  },
+  "characters/kimahri/defend@2x.png": {
+   "old": "f811377b85f9ab820cee3a695fdafb7527bd4eca95a69ba0e0cfc6d585f54b22",
+   "new": "084f2d48c34ce3f40d8c0b58c1ed2b0a6079694432ca3704ef16dc9fecf4866b"
+  },
+  "characters/kimahri/defend@3x.png": {
+   "old": "91357184c4c04f3744369e74d1abc89a38436bb5e5b0eb7a4f1be2c71396a846",
+   "new": "4bd09f85f36f84d12c759803e1c401b3da6f354def813a80385ca2e1ff6b08de"
+  },
+  "characters/kimahri/defend@4x.png": {
+   "old": "c691d269dffeb513fcf076c7fe429f8a642c2da77800ec4f8c55ec6ae60385ba",
+   "new": "1ab191d4705243b5f76b7c5f6f9eeb01340dc27751a7febdb3ee6f06a116af64"
+  },
+  "characters/kimahri/defend.normal.png": {
+   "old": "90cb1efedfe69a9a0796b4ecde61e1d99951843e96eaa8a9d88f5a55167ad768",
+   "new": "713da025c01436831e7d27b75c42ddf04d60a189a95e286af63ad331048aac5b"
+  },
+  "characters/kimahri/sleep.png": {
+   "old": "dd7c1783fc8b6aedb2120ed400fddc4fb2aa95fd5bf40e7667657c7b0f388ce9",
+   "new": "ddea23c9961284a7211bef2d3a3854409db9be2a6d35dc7bad3593f239a44a4c"
+  },
+  "characters/kimahri/sleep@2x.png": {
+   "old": "6f6e027f933312b81cdc0b034c7a2e5f6360a23ba0d9197ea04d5581a83c16e2",
+   "new": "81f95321da61752ac9cd54ed7eb535c0bf5b3224c6bc9e0d0d95b3a9c24203ff"
+  },
+  "characters/kimahri/sleep@3x.png": {
+   "old": "7104f894c68231a6419b6b4f56242090634777d7e0cf11af0d9a16da00809200",
+   "new": "fb39718921c238f882e35bd04cf4c7f8662e2841190a4fd480c33f5b8a1e84e3"
+  },
+  "characters/kimahri/sleep@4x.png": {
+   "old": "d422727113b5ede9e0cfc5aa1229c13baeaa96254a55ecb4d3102dce86a3a376",
+   "new": "8c6e72baf3c208bdfa9195579ef38346daf6064e932f23aceccfd758443afd03"
+  },
+  "characters/kimahri/sleep.normal.png": {
+   "old": "efdc59e9182e8d9515c5eca65a1aa91ce494b439772468e4f4a6099807348bb5",
+   "new": "770385f5b84d0dd575ccef05ba810c1e79a2beed8b971d416a74b6b6c8fe2f83"
+  },
+  "characters/rikku-dark-knight/follow.png": {
+   "old": "4116db7b316258ba02324ca1646dc99c72d57155e91acb0cb2a55590386e72c5",
+   "new": "c6269a840890e8df3742aa481db4297a9b562821742ce2d87a2f6b1a4dd527af"
+  },
+  "characters/rikku-dark-knight/follow@2x.png": {
+   "old": "47cdaca77782f1e876aa34238a4c73f4fde928dd8fe276c2a81fdd302f2782ef",
+   "new": "862b8afe39f656e420cc6a5a7e287488235b7acb4cb79e2e12015c088d3a10de"
+  },
+  "characters/rikku-dark-knight/follow@3x.png": {
+   "old": "1eeb2aa53409c8afc7fd48f9d8d889059796c6196dbfb3eedacb6526f9f074c9",
+   "new": "5fd95aa1d42546811e9b5c459d8412fdcce280f8c246619bf389b00fda1512d0"
+  },
+  "characters/rikku-dark-knight/follow@4x.png": {
+   "old": "bb7f824a725271ca8b133740391fd44e7778be8c049f6c04e34b3668a1ff0732",
+   "new": "32df202acb486ea99f524b9befd75ab31ecf5367773078766287f27d9730fc88"
+  },
+  "characters/rikku-dark-knight/follow.normal.png": {
+   "old": "68d15c3abefc34e39ccffb897e7a48b91e8ee1a3350fb8bd2f10ac774c944d9e",
+   "new": "7bf794f6f0abfe221d89db05feb73576a91de128a11123764ba372ad1d57d0f5"
+  },
+  "characters/rikku-dark-knight/cast.png": {
+   "old": "301b650c5981e0d53f2cd1dd1e71787e63c035ec87356d853ed32e5c891ec0fc",
+   "new": "ab3797ce058ed7eaeece279af5c1a5cbd98acb895c7adafa2e1dda69259de4bc"
+  },
+  "characters/rikku-dark-knight/cast@2x.png": {
+   "old": "c475265800b6c912399a830167ef460894a708e2fa29bac6ab0395a004a02a9d",
+   "new": "2d630309b8e0f623322841b6123733ad4d6588719b2435f99408b6b8e20c5b70"
+  },
+  "characters/rikku-dark-knight/cast@3x.png": {
+   "old": "f0be8feb573106b50875f38f55c0f03a2eedf6509893d2b96ea58d016f5a8b50",
+   "new": "6739b6b200c0a940c61e735eb49aa75a2674791dc8bc13332486d2ba814ca14c"
+  },
+  "characters/rikku-dark-knight/cast@4x.png": {
+   "old": "8755f75fe2a1073816eb7ccacb9ad95e3cbbe264dac9fa10a1fd4a52f5c87dfd",
+   "new": "8c6b124b7dfb772af324219f508f65661e451d7f8e5bba548e7574b52f85913e"
+  },
+  "characters/rikku-dark-knight/cast.normal.png": {
+   "old": "0dbbfe1e2c766671ce129d0f3e50256ac7db1ca07f564ef963740f82d6cc4f0d",
+   "new": "b24feefdd3dd354b349eab88b7e3c857f90e5aecd736c942842a9b4002e50603"
+  },
+  "characters/rikku-dark-knight/hurt.png": {
+   "old": "379721fa21ad518a47f77ea6b5e5c0bcfc5278825aacf4436069f5b77cf4b551",
+   "new": "e3b75225e8f2bc2bb59a2179bd7be5af587b68125de3a4a23beb8bf59f8ec158"
+  },
+  "characters/rikku-dark-knight/hurt@2x.png": {
+   "old": "5eb051fca0ec54c7a2aba8fe58b7e126b46601f64cdab589df28d88d5f3d1c94",
+   "new": "78b186cb833955a1cb4ccc4f4fdaef3b10d95dad6b1075493a0be99772a5598a"
+  },
+  "characters/rikku-dark-knight/hurt@3x.png": {
+   "old": "967692152ddf92c49f09df4485f22ee389884c13a378e70f3daed7d862cd5f9e",
+   "new": "7651d21185dee117943b79e761cd2f3d23614c9769448fef3a890486e95c73e1"
+  },
+  "characters/rikku-dark-knight/hurt@4x.png": {
+   "old": "2e78ab8b4d803cc121f66cd1b121f19b47bae2c91a4e4ca16fc61370f5f61cdc",
+   "new": "99d53ee10e15c07a211b23262081b89546c262f6be8e8e5689024477886ed733"
+  },
+  "characters/rikku-dark-knight/hurt.normal.png": {
+   "old": "f16e61741127edc98ca05b59956f1616cde3e6a02897744a3af92ca132cca9d6",
+   "new": "71e59b0c0c6794814adf12edd9c0e18399e652f14bad4fc4f11e5974bb2c139d"
+  },
+  "characters/rikku-dark-knight/critical.png": {
+   "old": "1a3484a15efcc69148dc3493b7d2ef641384a31c5d231cbed49e3bc5ddf5042b",
+   "new": "1b8f35ea6a630ebefaeca6f8e30c9566a4caf3baa648b01203dd76eef0bfc6e0"
+  },
+  "characters/rikku-dark-knight/critical@2x.png": {
+   "old": "934068489e24616d977da585b9c93e487b87479018675ce6441b5327ffd50087",
+   "new": "d3e0ce7a16c82cde90cbc8b912f03b8febb71fb61fc2842abb1bbe1f12c473fc"
+  },
+  "characters/rikku-dark-knight/critical@3x.png": {
+   "old": "c4459dbb1494fbd1f10f8b1445fb5405068bb266cc87a45a95b4fd686aa6c3d7",
+   "new": "0c8087214762dd51328f589fa2308d534ff04d58e60cfd7c6608899c99fece93"
+  },
+  "characters/rikku-dark-knight/critical@4x.png": {
+   "old": "5834c6819782ae2c711cc0615ab7e1688bbab8094475da6e2e96b1afc11507df",
+   "new": "c03937bf82af17ac1c7bb5b3c07ed6533de0443ed819788d3e714617d62cd4d9"
+  },
+  "characters/rikku-dark-knight/critical.normal.png": {
+   "old": "29a83729f42b83de0433a2de85c2e40066813c8ffc2d72d3588abb3533e08b17",
+   "new": "cc7c80555d27851567fa1144be041327f5fba8d25043cc14546d42940086ff87"
+  },
+  "characters/rikku-dark-knight/victory.png": {
+   "old": "b05feb5528c50b71d3db371c6bc486c32a1403249dad23c79bcd58fedb1ae180",
+   "new": "811440796c2859b62169579e391ad3be907179f801a0d44712a46b26890e6c63"
+  },
+  "characters/rikku-dark-knight/victory@2x.png": {
+   "old": "a8900cbd2d2d8c9dc63b0a35b986d43d9a34cb9ea01fc7856d72a448229308d8",
+   "new": "915ec6a8697c209609661dc2b128043ea97baee12d77586d94908aa7580645d3"
+  },
+  "characters/rikku-dark-knight/victory@3x.png": {
+   "old": "5ab0e9ea04358733557cbcc9b115b7c176872d7efcc9bf37caa6e9f61e6fb6c5",
+   "new": "cb8722bfae9639a1829029fb06433dde2adc2ebc68d29d517e3cacd3288222c3"
+  },
+  "characters/rikku-dark-knight/victory@4x.png": {
+   "old": "f4f12ea4d3478c5a3053c0454210785ae93b759672f8ff1e2d7b7a1ec2b1941f",
+   "new": "7efdd1a1236eb8a210cd8aab36eb4993c9960ea438866cc82f295d767f021458"
+  },
+  "characters/rikku-dark-knight/victory.normal.png": {
+   "old": "ecb3a1cb34fc2ccf0b6c344e7b6c60c03016563e5a3da2b50c767120e41ed951",
+   "new": "c2dff225833693f2bb31a268335b7c4766e543137145c8b308e3bd10645df8a7"
+  },
+  "characters/paine-warrior/ready.png": {
+   "old": "fbc8afbe5ff2fbd347e51f0a907bc07a2fa0e3574db04e8f05fe71044cdfd009",
+   "new": "c23413c4c7df984145dd9439f89d229f7118ad118b114e84d8515805be9c7955"
+  },
+  "characters/paine-warrior/ready@2x.png": {
+   "old": "f3d904711c73a6ab58701733dc9f1d305733c8568d2e6ae73760869a0983f3ff",
+   "new": "4d2267121dbd09dfdc69aae49d173fc6f5837258f89e15f53a47594acfb721ca"
+  },
+  "characters/paine-warrior/ready@3x.png": {
+   "old": "21c22169f7f47d73a1a96a4ac8f69935b01159dab120a800be289cf2675ba217",
+   "new": "7600446f44666e3fc13c05dfcacc0f9bc2f007ba7f8e943efab55a70d8e6e805"
+  },
+  "characters/paine-warrior/ready@4x.png": {
+   "old": "74b5d4114faf3e3bdb78df0f63c063ae0175053a618eaf8a7722ac28992b73c4",
+   "new": "9c972687b300621ed8bd572c19d8cdc3042dc94c8dfc786972316a749658b5f8"
+  },
+  "characters/paine-warrior/ready.normal.png": {
+   "old": "9bc9128dafe26b91f9b1b122b423f5dbf61b394233687affe514c23b0afc944c",
+   "new": "cd4f68a7f3f124cab277ba8550d0f00c7c14593e12063871114fc1ea82b812eb"
+  },
+  "characters/paine-warrior/follow.png": {
+   "old": "0c22d20b285bbc2e4af1d5b16ef030b589bc15a0212e02d12423c62645e4ca0d",
+   "new": "4bc76d86cd832461c005949acb1b935269da2eeb5742fedfb9efedc7f43ba77e"
+  },
+  "characters/paine-warrior/follow@2x.png": {
+   "old": "c2707692709ac0699654077b9a3d3fca3d2d33ffd84420237050f5750cefd657",
+   "new": "255d922426687a33c9071337de042850b8983a40d819be9432fefa887e7f1e43"
+  },
+  "characters/paine-warrior/follow@3x.png": {
+   "old": "8a6b35f9eafd02d17f92cd12093f29e33b389511bfa9984ecab63306b5c340d3",
+   "new": "7c6faebc6cc28faf7ab0c2e2c1d5601a35299df7846324e5782387b23914b7d8"
+  },
+  "characters/paine-warrior/follow@4x.png": {
+   "old": "d51a05dabf42fafe8767cfa85c56baca84cef66eca9001c5ebd181c6912b6e19",
+   "new": "31f6caa7271be0ac529085015d375d6bab467b4b284c47b84d0051a7b034ae52"
+  },
+  "characters/paine-warrior/follow.normal.png": {
+   "old": "40ac1beb2cf94ab527739b7141d95f710ce7b2691a5a9734f733d63d9ee7369e",
+   "new": "56f9abfd39ac095ab73953aa9242d42a364c4296a3aefd8a3887d8b7ad51172a"
+  },
+  "characters/paine-warrior/victory.png": {
+   "old": "65cd93da432b175e69eed1440d851f37b7564b190a36b0fa7a849f1ebed050c6",
+   "new": "54a643a3fee8aef0180a3009a6c215ec43cd0b61c061a23d020ec0c7be615a57"
+  },
+  "characters/paine-warrior/victory@2x.png": {
+   "old": "93d009a25a06fba3926209540e35f39b99fd027ec25f412a522f3e20a468bcc2",
+   "new": "39c8793e64ad71cfe5bf54aa3a4112d4c12b58d49bd5cf2e7c8ce8fe588dbe5f"
+  },
+  "characters/paine-warrior/victory@3x.png": {
+   "old": "b8a79ba66f96317c70f9e93991777df18ffbec8f99c67cb45f87e7ce6adec132",
+   "new": "3d1bd8e7cd35138cb2c09ee426dbb031a7d056fe41c3c225c64efae0d1990da9"
+  },
+  "characters/paine-warrior/victory@4x.png": {
+   "old": "798fdfb0e62940d127a4ba9805b4fc8e85907c778c1402d66083b1b4094f2676",
+   "new": "49137b5430f4e87c0b5e5cdcdd4d9f61c2b02edc7ded745df904c38ae2f64a19"
+  },
+  "characters/paine-warrior/victory.normal.png": {
+   "old": "ce3d71f5def16579d236ab1d5ca73e7a44e87dc1fd8e9c54cdb2ea15b2cfd2fc",
+   "new": "84e0209ae37a660dc969acec37c76fa5fb6675029cd654da526af930e412b519"
+  },
+  "characters/paine-warrior/item.png": {
+   "old": "ba8ab92acd609977e16dbe064217df16b28d5e9d18eabeefd8202f3c98d1037c",
+   "new": "165eceb978404afffc36c88c5a22256b644a02530b79be6d44f85a81bad1bbbf"
+  },
+  "characters/paine-warrior/item@2x.png": {
+   "old": "fbf727c94114669ee650b1cd944d50adb7faf3d0d94d7d61bf9e352fe5fb2087",
+   "new": "8af44e5ad29fe49bae47591944b8a18d94fb288d7a74077bef677c0274c01593"
+  },
+  "characters/paine-warrior/item@3x.png": {
+   "old": "a4fda30a866a0674a25df14da3fc51438560b1f07e2c7e627e29eb63429c0276",
+   "new": "ba6e55c4658df93e653642bd564b08071abf568cabe49be8c8e7008154c79381"
+  },
+  "characters/paine-warrior/item@4x.png": {
+   "old": "92d40b1c8de246962c0860871133cc676b8bfba0c91462f17f55368b436ed26e",
+   "new": "2e828192780d2ad14166e583c1f496c2362c57053e1724b21600aa8eb1e67246"
+  },
+  "characters/paine-warrior/item.normal.png": {
+   "old": "52465c74a42d08856ea836f5b9804c7800d69cff1604fbfc4b1a34c933199489",
+   "new": "4f7d675267fce22a168372471cb127e5c6162a0ab736d4cfd1b1757c5a5640cb"
+  },
+  "characters/paine-warrior/sleep.png": {
+   "old": "9bd6940b8a71852c755b121403ad9d5a942fba7fd54216d5743ff5551649f309",
+   "new": "39065f23d66d42e5eb16beb593701b900f846107c8ef4bb2c252202969d6807b"
+  },
+  "characters/paine-warrior/sleep@2x.png": {
+   "old": "5a535a2af8926b47364b0f8c0dfc57e3bb018fa9aada6f7129bc7757f33054cf",
+   "new": "b2f3201bac58152220b7947139d62dff6dd6385218e1a8ebc0cd2f302ec3dacc"
+  },
+  "characters/paine-warrior/sleep@3x.png": {
+   "old": "0389f6d16b288d6a3039675ff1a2ecb6c1046d95654def469035ddd0ec481d92",
+   "new": "5cedbe8b46e8a020d6764c32246aec3fe6d229167c7d0d482ef16f3156c128c3"
+  },
+  "characters/paine-warrior/sleep@4x.png": {
+   "old": "8d7495a3254daafb2453fdf15640d3f2012f83017fd9f06be6c4b3693a45e760",
+   "new": "a01f3d159d556d71783abad9553a5eb37a4a6e24e136960788710881cd592ece"
+  },
+  "characters/paine-warrior/sleep.normal.png": {
+   "old": "0a79dbe2d1241caaf5e29e18c57d5c2fcce8d3cb222f27c18ca725c4508e1872",
+   "new": "71028eb68161fa40518b6ff9cf5de54434fb24d40a9cf7cf3aba6ce1fd0c26ac"
+  }
+ }
+}
