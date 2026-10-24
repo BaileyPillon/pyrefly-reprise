@@ -109,3 +109,64 @@ describe('M1: the warm looks at the pad before a step', () => {
   });
 });
 
+
+// ------------------------------------------------------------------------------------------------ M1: the paced draws
+
+import { BoxGeometry, Mesh, MeshBasicMaterial, MeshPhongMaterial, Scene, Texture, PerspectiveCamera } from 'three';
+import { afterEach, beforeEach } from 'vitest';
+import { drawSliced, drawSlicedOffscreen } from '../../src/app/screens/BattleScreenWarmup.ts';
+
+describe('M1: the paced offscreen draws (the demo\'s stages behind the title and the picker)', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function rig() {
+    const log: string[] = [];
+    const scene = new Scene();
+    const a = new Texture();
+    const b = new Texture();
+    scene.add(new Mesh(new BoxGeometry(), new MeshBasicMaterial({ map: a })));
+    scene.add(new Mesh(new BoxGeometry(), new MeshPhongMaterial({ map: b })));
+    let signals = 0;
+    const gl = {
+      SYNC_GPU_COMMANDS_COMPLETE: 1,
+      SYNC_STATUS: 2,
+      SIGNALED: 3,
+      fenceSync: () => (log.push('fence'), {}),
+      flush: () => undefined,
+      getSyncParameter: () => (++signals % 2 === 0 ? 3 : 4), // signals on the second poll
+      deleteSync: () => log.push('fence deleted'),
+    };
+    const renderer = {
+      getRenderTarget: () => null,
+      setRenderTarget: () => undefined,
+      compileAsync: async () => undefined,
+      render: () => void log.push('draw'),
+      initTexture: (t: Texture) => void log.push(t === a ? 'upload a' : 'upload b'),
+      getContext: () => gl,
+    };
+    const camera = new PerspectiveCamera();
+    return { log, r: { renderer, composer: { readBuffer: {} }, camera, render: () => void log.push('draw') } as never, scene };
+  }
+
+  it('offscreen: each family\'s texture goes up, then its draw, then the page waits on a fence before the next family; the complete draw is last', async () => {
+    const { log, r, scene } = rig();
+    const done = drawSlicedOffscreen(r, scene);
+    await vi.advanceTimersByTimeAsync(3000);
+    await done;
+    expect(log.filter((x) => x !== 'fence deleted')).toEqual(['upload a', 'draw', 'fence', 'upload b', 'draw', 'fence', 'draw', 'fence']);
+    expect(log.filter((x) => x === 'fence deleted')).toHaveLength(3);
+  });
+
+  it("the battle's own first draw is release 62's, unchanged: one draw per family, a frame apart, no upload step, no fence", async () => {
+    const plain = rig();
+    const p1 = drawSliced(plain.r, plain.scene);
+    await vi.advanceTimersByTimeAsync(3000);
+    await p1;
+    expect(plain.log).toEqual(['draw', 'draw', 'draw']);
+  });
+});

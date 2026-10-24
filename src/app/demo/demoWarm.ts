@@ -212,5 +212,6 @@ async function warmSplashCrops(chapter: Chapter, calm: () => boolean): Promise<b
 export function resetDemoWarm(): void {
   running = null;
   stopped = false;
+  focusId = null;
   log.length = 0;
 }

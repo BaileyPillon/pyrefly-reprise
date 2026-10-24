@@ -282,11 +282,6 @@ export class ChapterSelectScreen extends Screen {
 
   // ---------------------------------------------------------- secret door
 
-  /** The card the cursor now rests on (the chapter's id, or null for a COMING card). The booth's board uses it to build that fight's stage first (`app/demo/demoWarm.ts`); the chapter board does nothing. */
-  protected onCardFocus(_chapterId: string | null): void {
-    /* nothing */
-  }
-
   /**
    * Listen for the door: letters on `window` (after `Input`'s capture listener,
    * so an overlay that claims the keyboard also shuts the door) and taps on the
@@ -358,7 +353,6 @@ export class ChapterSelectScreen extends Screen {
     const tile = this.tiles[this.selected];
     if (!tile) return;
     this.warmer.focus(tile.playable ? tile.chapter : null);
-    this.onCardFocus(tile.playable ? (tile.chapter?.id ?? null) : null);
 
     // FFX-2's half of the board carries the pyre-pink accent, the existing token swap, never a new colour (presentation-ink-and-gold.md).
     this.root.classList.toggle('ig--ffx2', tile.game === 'ffx2');

@@ -70,10 +70,19 @@ export class DemoBoardScreen extends ChapterSelectScreen {
     this.doors = new NoDoors();
   }
 
-  /** r63-play (the overnight fix of the skeptic's M1): the fight the cursor rests on has its stage built first, since it is the one the next press picks. */
-  protected override onCardFocus(chapterId: string | null): void {
-    if (chapterId !== null) noteDemoFocus(chapterId);
+  /** r63-play (the overnight fix of the skeptic's M1): the fight the cursor rests on has its stage built first, since it is the one the next press picks (read a few times a second off the board's own snapshot). */
+  override update(dt: number): void {
+    super.update(dt);
+    if (++this.focusTick % 6 !== 0) return;
+    const id = this.snapshot()['selectedId'];
+    if (typeof id === 'string' && id !== this.focusNoted) {
+      this.focusNoted = id;
+      noteDemoFocus(id);
+    }
   }
+
+  private focusTick = 0;
+  private focusNoted: string | null = null;
 
   /** No hidden chapters at the booth: no key listener, no label taps, no phone field. */
   protected override armDoor(): void {

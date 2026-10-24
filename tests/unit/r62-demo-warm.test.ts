@@ -95,6 +95,14 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     expect(demoWarmLog().map((e) => e.what)).toEqual(['seymour-flux: paintings', 'seymour-flux: depth plates cut ahead', 'seymour-flux: stage built, compiled and drawn offscreen', 'ffx2-bahamut: paintings', 'ffx2-bahamut: depth plates cut ahead', 'ffx2-bahamut: stage built, compiled and drawn offscreen', 'breath rigs read ahead']); // perf-trim: the last step reads every cached painting's breathing field (nothing is cached in this test: the note alone)
   });
 
+  it('R63: the fight the cursor rests on is warmed first, and a cursor that moves hands the warm over at the next step', async () => {
+    const { noteDemoFocus } = await import('../../src/app/demo/demoWarm.ts');
+    noteDemoFocus('ffx2-bahamut');
+    await run(app('title'));
+    expect(calls.slice(0, 2)).toEqual(['paintings ffx2-bahamut', `build ${sceneOf('ffx2-bahamut')}`]);
+    expect(calls.indexOf('paintings seymour-flux')).toBeGreaterThan(calls.indexOf(`draw ${sceneOf('ffx2-bahamut')}`));
+  });
+
   it('the plates are cut while the programs compile, and a cut that fails does not stop the stage (the battle then cuts them itself, as before)', async () => {
     const living = await import('../../src/engine/fx/b/LivingPaintings.ts');
     vi.mocked(living.warmLivingPlates).mockRejectedValueOnce(new Error('depth map missing'));
