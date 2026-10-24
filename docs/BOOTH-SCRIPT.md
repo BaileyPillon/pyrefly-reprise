@@ -16,7 +16,7 @@ One page. Read it once. Keep it by the monitor. How the PC is set up: [DEMO-KIT.
 
 - **A** picks. **B** goes back. **Left stick or D-pad** moves.
 - **Start** pauses. **Hold A** skips a story scene. **Hold RB** speeds a fight up.
-- **Hold Back + Start** resets to the title. That is mine, not theirs.
+- **Hold Back + Start** resets to the title. That is mine, not theirs. It also puts the game's own volumes, the look (VISUAL STYLE) and the title art back to the demo's defaults, so one visitor's change in OPTIONS never reaches the next: set the room's loudness with the headphones or Windows, not in OPTIONS (release 62).
 - If the pad does nothing: press any pad button once. The browser only sees a pad after a press.
 
 ## Seymour Flux (Final Fantasy X, Chapter I). A few minutes.

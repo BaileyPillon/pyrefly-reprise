@@ -55,6 +55,7 @@ import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
+import { noteImpact } from './look/living/StageImpacts.ts'; // release 62 (FFX-2's living cathedral): a landed blow starts a ring in the polished floor's reflection
 import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
@@ -1485,6 +1486,7 @@ export class PaintedActor extends Group {
    * knock-back, the pose and the bruise.
    */
   recoil(ms = 340, distance = 0.28): Promise<void> {
+    noteImpact(this, distance >= 0.3); // a no-op unless the look's living room asked for hits (`look/living/StageImpacts.ts`)
     this.flinch(ms);
     return this.knockBack(ms, distance);
   }

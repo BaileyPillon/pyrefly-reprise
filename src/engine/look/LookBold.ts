@@ -17,6 +17,10 @@ import { LookBoldShader } from './LookBoldShader.ts';
 import { lightColour } from './LookMaths.ts';
 import { lin, type LookRoom } from './LookRoom.ts';
 import type { RelightLights } from './relight/RelightLights.ts';
+import { eyeCandy } from '../fx/EyeCandy.ts';
+import { LookFlare, type FlareUniforms } from './flare/LookFlare.ts';
+import { MAX_RIPPLES } from './living/LivingConfig.ts';
+import { LookLiving, type LivingUniforms } from './living/LookLiving.ts';
 
 const MAX_FIG = 8;
 const MAX_POOL = 4;
@@ -55,6 +59,12 @@ export class LookBold {
   readonly boxes: Vector4[] = Array.from({ length: MAX_FIG }, () => new Vector4());
   boxCount = 0;
   /** For the debug API and the captures. */
+  /** Release 62 (decision 173b, FFX-2): Mega Flare's flood and white-out, fed from the spell layer's landing taps while this pass is on. */
+  readonly flare = new LookFlare();
+  /** Release 62 (decision 173a, FFX-2's Bevelle underground): the beam's dust, the lamps' flicker, the floor's rings (`look/living/`). */
+  readonly living = new LookLiving();
+  /** Each painted figure's feet on the frame this frame, by actor: where a hit's ring starts. */
+  private readonly feet = new Map<object, readonly [number, number]>();
   readonly stats = { on: false, figures: 0, pools: 0, depth: 'none' as string, gloss: 0, embers: 0, fig: [] as number[][], homo: [] as number[] };
 
   constructor(private readonly r: Renderer) {}
@@ -78,6 +88,7 @@ export class LookBold {
       u['uPoolA']!.value = Array.from({ length: MAX_POOL }, () => new Vector4());
       u['uPoolC']!.value = Array.from({ length: MAX_POOL }, () => new Vector4());
       u['uEmber']!.value = Array.from({ length: MAX_EMB }, () => new Vector3());
+      u['uRip']!.value = Array.from({ length: MAX_RIPPLES }, () => new Vector4(0, 0, -1, 0));
       p.enabled = false;
       const passes = this.r.composer.passes;
       const gi = passes.indexOf(this.r.gradePass);
@@ -142,6 +153,7 @@ export class LookBold {
   private figures(cam: Camera, aspect: number, fx: (typeof BOLD_FX)['hd2d'], gloss: number, A: Vector4[], B: Vector4[]): number {
     const { c, x, y, f, g, p, q } = scratch;
     let n = 0;
+    this.feet.clear();
     for (const t of this.tracked.values()) {
       if (n >= MAX_FIG) break;
       const mat = t.slot.material as ShaderMaterial;
@@ -171,6 +183,7 @@ export class LookBold {
       const gu = p.x * 0.5 + 0.5;
       const gv = p.y * 0.5 + 0.5;
       if (p.z > 1 || gu < -0.3 || gu > 1.3) continue;
+      this.feet.set(t.actor, [gu, gv]);
       // the base's radii on the screen: along the floor's two axes
       let rx = 0;
       let ry = 0;
@@ -257,7 +270,7 @@ export class LookBold {
 
   // ----------------------------------------------------------------- per frame
 
-  update(o: { scene: Scene; camera: Camera; name: LookName; room: LookRoom; lights: RelightLights; quality: LookQuality; dt: number; time: number; scale: number; W: number; H: number; aspect: number; lightUv: [number, number]; tweak: (k: string, v: number) => number }): void {
+  update(o: { scene: Scene; camera: Camera; name: LookName; room: LookRoom; lights: RelightLights; quality: LookQuality; dt: number; time: number; now?: number; scale: number; W: number; H: number; aspect: number; lightUv: [number, number]; tweak: (k: string, v: number) => number }): void {
     const { scene, camera, room, lights } = o;
     const look = o.name === 'cinematic' ? 'cinematic' : 'hd2d';
     const fx = BOLD_FX[look];
@@ -340,6 +353,9 @@ export class LookBold {
       }
     }
     u['emberN']!.value = ne;
+    this.living.update({ u: u as unknown as LivingUniforms, key: room.key, mesh, camera, time: o.time, quality: o.quality, aspect: o.aspect, feet: this.feet, tweak: o.tweak }); // release 62 (FFX-2's Bevelle underground)
+    this.flare.install(); // release 62 (FFX-2): Mega Flare's flood and white-out; REDUCE FLASHES takes the white-out away and caps the flood (`flare/FlareConfig.ts`)
+    this.flare.update(o.now ?? performance.now() / 1000, eyeCandy.reduceFlashes, u as unknown as FlareUniforms, o.tweak('flare', 1), o.tweak('flare.flood', 1), o.tweak('flare.white', 1));
     (u['ember']!.value as Vector3).set(fx.embers.gain * o.tweak('bold.embers', 1), (fx.embers.size * o.scale) / Math.max(1, o.H), fx.embers.rate);
     this.stats.on = true;
     this.stats.figures = n;
@@ -354,6 +370,8 @@ export class LookBold {
   }
 
   off(): void {
+    this.flare.off(this.pass ? (this.pass.uniforms as unknown as FlareUniforms) : undefined);
+    this.living.off(this.pass ? (this.pass.uniforms as unknown as LivingUniforms) : undefined);
     if (this.pass) this.pass.enabled = false;
     this.stats.on = false;
   }

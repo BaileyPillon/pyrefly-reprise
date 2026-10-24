@@ -50,6 +50,8 @@ export interface WarmupRenderer {
     getRenderTarget(): WebGLRenderTarget | null;
     setRenderTarget(target: WebGLRenderTarget | null): void;
     compileAsync(scene: Object3D, camera: Camera): Promise<unknown>;
+    /** The raw WebGL render, used by {@link drawSlicedOffscreen} only (a stand-in without it has nothing to warm that way). */
+    render?(scene: Object3D, camera: Camera): void;
     readonly shadowMap?: { type: number };
   };
   readonly composer: { readonly readBuffer: WebGLRenderTarget; readonly passes?: readonly object[] };
@@ -165,6 +167,30 @@ export function programFamily(o: Part): string {
  */
 export async function drawSliced(r: WarmupRenderer, scene: Scene): Promise<void> {
   if (!r.render) return;
+  await sliceDraw(scene, () => r.render!(scene, r.camera));
+}
+
+/**
+ * Release 62 (PR-0481, the conference demo): the same slices, drawn into the composer's own buffer and never the screen, for a scene that is built and kept behind the picker
+ * (`app/demo/demoWarm.ts`). The target is the one the battle's scene pass draws into (the same colour space, so the same programs); the post chain is not run and nothing reaches the canvas.
+ */
+export async function drawSlicedOffscreen(r: WarmupRenderer, scene: Scene): Promise<void> {
+  const gl = r.renderer;
+  const target = r.composer?.readBuffer;
+  if (typeof gl?.render !== 'function' || !target) return;
+  await sliceDraw(scene, () => {
+    const previous = gl.getRenderTarget();
+    try {
+      gl.setRenderTarget(target);
+      gl.render!(scene, r.camera);
+    } finally {
+      gl.setRenderTarget(previous);
+    }
+  });
+}
+
+/** Draw the scene once per program family (the others hidden for that draw), a frame apart, then once complete: `draw` is one render. */
+async function sliceDraw(scene: Scene, draw: () => void): Promise<void> {
   const parts: Part[] = [];
   scene.traverse((o) => {
     if (o.visible && (o as Part).material) parts.push(o as Part);
@@ -184,14 +210,14 @@ export async function drawSliced(r: WarmupRenderer, scene: Scene): Promise<void>
       const hidden = parts.filter((o) => !mine.has(o));
       for (const o of hidden) o.visible = false;
       try {
-        r.render(scene, r.camera);
+        draw();
       } finally {
         for (const o of hidden) o.visible = true;
       }
       await nextFrame();
     }
   }
-  r.render(scene, r.camera);
+  draw();
 }
 
 /** Start compiling `obj` with `target` bound, as the pass that draws it will have it. */

@@ -158,16 +158,16 @@ describe('the seeds: demo mode picks the seed of a fresh attempt, and nothing el
     }
   });
 
-  it('WITH demo mode: a fresh attempt of Chapter I takes the next of 7, 10, 12 (per tab), a retry the one after, a pinned seed still wins, other chapters draw as always', () => {
+  it('WITH demo mode: a fresh attempt of Chapter I takes the next of 7, 10, 12 (per tab), a retry (TRY AGAIN, release 62) is the SAME seed, a pinned seed still wins, other chapters draw as always', () => {
     setDemoMode(true);
     // the tab's counter is sessionStorage; there is none under node, so the first draw is the table's first and stays there: the rotation is `demoSeedAt` over the counter
     expect(demoSeedAt('seymour-flux', 0)).toBe(7);
     expect(drawRunSeed(() => 0.5, 'seymour-flux')).toBe(7);
     expect(attemptSeed('seymour-flux', 7, 0)).toBe(7);
-    expect(attemptSeed('seymour-flux', 7, 1)).toBe(10);
-    expect(attemptSeed('seymour-flux', 7, 2)).toBe(12);
-    expect(attemptSeed('seymour-flux', 7, 3)).toBe(7);
-    expect(attemptSeed('seymour-flux', 12, 1)).toBe(7);
+    expect(attemptSeed('seymour-flux', 7, 1)).toBe(7); // release 62, decision 173g: "Try again" = the same fight, fresh, same demo seed (release 61 took 10 here)
+    expect(attemptSeed('seymour-flux', 7, 2)).toBe(7);
+    expect(attemptSeed('seymour-flux', 10, 3)).toBe(10);
+    expect(attemptSeed('seymour-flux', 12, 1)).toBe(12);
     expect(drawRunSeed(() => 0.5, 'ffx2-bahamut')).toBe(56);
     expect(attemptSeed('ffx2-bahamut', 56, 2)).toBe(56);
     // a chapter with no table, and a first seed the table does not hold (a caller's own), keep the game's rule

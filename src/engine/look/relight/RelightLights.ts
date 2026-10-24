@@ -27,6 +27,8 @@ interface Candidate {
   s: number;
   c: readonly [number, number, number];
   pool: { u: number; v: number; reach: number };
+  /** The kind's reach multiplier (`PointKind.reachMul`); 1 for the orb. */
+  rm: number;
 }
 
 /** One floor pool for the bold layer: the target's feet (frame uv), the reach (frame heights), the strength and the colour. */
@@ -81,7 +83,7 @@ export class RelightLights {
     this.active = this.active.filter((a) => now - a.start < a.kind.rise + a.kind.hold + a.kind.decay + 0.05);
     for (const a of this.active) {
       const s = pointEnvelope(now - a.start, a.kind, flicker(now)) * p.point;
-      if (s > 0.01) cand.push({ u: a.u, v: a.v, s, c: a.kind.color, pool: a.pool });
+      if (s > 0.01) cand.push({ u: a.u, v: a.v, s, c: a.kind.color, pool: a.pool, rm: a.kind.reachMul ?? 1 });
     }
     for (const o of orbLights) {
       if (!o.active) continue;
@@ -93,7 +95,7 @@ export class RelightLights {
         const u = this.tmp.x * 0.5 + 0.5;
         const v = this.tmp.y * 0.5 + 0.5;
         this.tmp.set(o.orbAt.x, 0, o.orbAt.z).project(camera); // straight down: where the orb's light falls on the floor
-        cand.push({ u, v, s, c: ORB_COLORS[tone] ?? ORB_COLORS['heal']!, pool: { u: this.tmp.x * 0.5 + 0.5, v: this.tmp.y * 0.5 + 0.5, reach: 0.12 } });
+        cand.push({ u, v, s, c: ORB_COLORS[tone] ?? ORB_COLORS['heal']!, pool: { u: this.tmp.x * 0.5 + 0.5, v: this.tmp.y * 0.5 + 0.5, reach: 0.12 }, rm: 1 });
       }
     }
     cand.sort((a, b) => b.s - a.s);
@@ -106,7 +108,7 @@ export class RelightLights {
     for (let i = 0; i < MAX_POINT_LIGHTS; i++) {
       const c = cand[i];
       if (c) {
-        A[i]!.set(c.u, c.v, p.reach, c.s);
+        A[i]!.set(c.u, c.v, p.reach * c.rm, c.s);
         C[i]!.set(c.c[0], c.c[1], c.c[2]);
         this.stats.lights.push({ u: Math.round(c.u * 1000) / 1000, v: Math.round(c.v * 1000) / 1000, s: Math.round(c.s * 100) / 100 });
       } else A[i]!.w = 0;

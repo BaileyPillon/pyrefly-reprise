@@ -19,7 +19,7 @@ import {
 import type { VictoryLine } from './victoryLine.ts';
 
 /** What the player asked for from the panel. Only a defeat offers a choice. */
-export type ResultsChoice = 'continue' | 'retry' | 'chapter-select';
+export type ResultsChoice = 'continue' | 'retry' | 'chapter-select' | 'other-fight';
 
 /** One printed row of the spoils ledger. */
 export type LedgerLine =
@@ -34,6 +34,15 @@ export type LedgerLine =
 export const DEFEAT_ACTIONS: ReadonlyArray<{ choice: ResultsChoice; label: string }> = [
   { choice: 'retry', label: 'RETRY' },
   { choice: 'chapter-select', label: 'CHAPTER SELECT' },
+];
+
+/**
+ * The two things a demo fight's defeat panel offers (release 62, decision 173g, both games, demo mode only): the same fight again, fresh and on the same demo seed, or the other of the two fights.
+ * `other-fight` is its own choice, so Back (`chapter-select`) still means the picker.
+ */
+export const DEMO_DEFEAT_ACTIONS: ReadonlyArray<{ choice: ResultsChoice; label: string }> = [
+  { choice: 'retry', label: 'TRY AGAIN' },
+  { choice: 'other-fight', label: 'OTHER FIGHT' },
 ];
 
 /** Everything one render of the page reads. */
@@ -55,6 +64,8 @@ export interface ResultsPageModel {
   progress: number;
   /** The defeat cursor. */
   actionIndex: number;
+  /** The defeat panel's slabs when they are not {@link DEFEAT_ACTIONS} (a demo fight's, {@link DEMO_DEFEAT_ACTIONS}). */
+  actions?: ReadonlyArray<{ choice: ResultsChoice; label: string }>;
   /** Release 61, quiet results (`quietResults.ts`; FFX-2 Chapter IV): build ids whose face tile is the head of their dressphere's painting, not their grinning portrait. Absent: every tile as it was. */
   bodyFaces?: readonly string[];
 }
@@ -106,7 +117,7 @@ export function desktopPageHtml(m: ResultsPageModel): string {
       <div class="rres__ledger rres__ledger--${density.ledger}">${ledgerHtml}</div>
 
       <div class="rres__party rres__party--${density.party}">${membersHtml(m)}</div>
-      ${m.victory ? confirmHtml() : actionsHtml(m.actionIndex)}
+      ${m.victory ? confirmHtml() : actionsHtml(m.actionIndex, m.actions ?? DEFEAT_ACTIONS)}
     `;
 }
 
@@ -157,8 +168,8 @@ function confirmHtml(): string {
   return `<div class="rres__confirm" data-action="confirm"><span><span class="kh-p">${padGlyph('cross')}</span>CONFIRM ▸</span></div>`;
 }
 
-function actionsHtml(actionIndex: number): string {
-  const slabs = DEFEAT_ACTIONS.map((action, i) => {
+function actionsHtml(actionIndex: number, actions: ReadonlyArray<{ choice: ResultsChoice; label: string }>): string {
+  const slabs = actions.map((action, i) => {
     const selected = i === actionIndex ? ' rres__action--selected' : '';
     return `<div class="rres__action${selected}" data-action="results:${action.choice}" role="button" tabindex="0"><span>${action.label}</span></div>`;
   }).join('');

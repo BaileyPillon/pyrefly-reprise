@@ -76,7 +76,7 @@ const addIndex = makeIndexer(evidence);
 const audioFile = path.join(evidence, dir, 'audio-debug.jsonl');
 const aud = makeAudioLog(page, audioFile, t00);
 // CHK-026 and CHK-027 (Bailey, 2026-10-04, D-420 to D-426): the in-page probe watches every rendered frame of the fight. Loaded only on request: it needs sharp.
-const cont = args.continuity ? await (await import('./continuity.mjs')).attachProbe({ page, outDir: path.join(evidence, dir), chapter: id, game, base, mode: MODE, poseMeasurePath: args['pose-measure'] ?? null, poseWaiversPath: args['pose-waivers'] ?? null, log: (m) => note('continuity', m) }) : null;
+const cont = args.continuity ? await (await import('./continuity.mjs')).attachProbe({ page, outDir: path.join(evidence, dir), chapter: id, game, base, mode: MODE, poseMeasurePath: args['pose-measure'] ?? null, poseWaiversPath: args['pose-waivers'] ?? null, poseSource: args['pose-source'] ?? null, allowStaleTable: Boolean(args['allow-stale-pose-table']), log: (m) => note('continuity', m) }) : null;
 const scr = () => page.evaluate(() => window.__pyrefly.screen());
 const ss = () => page.evaluate(() => window.__pyrefly.snapshotState()?.screenState ?? null);
 const selId = async () => (await ss())?.selectedId ?? null;
