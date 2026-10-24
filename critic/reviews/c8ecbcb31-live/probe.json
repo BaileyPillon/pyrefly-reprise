@@ -1,0 +1,99 @@
+{
+ "mode": "gpu",
+ "errs": [],
+ "nf": [],
+ "reqs": [
+  "200 sfx/sprite.mp3",
+  "200 music/title.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 music/chapter-select.mp3",
+  "200 sfx/parity-ffx-flux.mp3",
+  "200 sfx/parity-ffx-core.mp3",
+  "200 music/scene-gagazet.mp3",
+  "200 seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+  "200 seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+  "200 seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+  "200 seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+  "200 seymour-flux/seymour-flux.quip-tidus.001.mp3",
+  "200 seymour-flux/seymour-flux.quip-yuna.001.mp3",
+  "200 seymour-flux/seymour-flux.pre.018.mp3",
+  "200 seymour-flux/seymour-flux.pre.026.mp3",
+  "200 seymour-flux/seymour-flux.pre.008.mp3",
+  "200 seymour-flux/seymour-flux.quip-auron.001.mp3",
+  "200 music/boss-seymour.mp3",
+  "200 music/victory-ffx.mp3",
+  "200 music/defeat-ffx.mp3",
+  "200 music/pause.mp3",
+  "200 music/boss-seymour.mp3",
+  "200 music/pause.mp3",
+  "200 music/boss-seymour.mp3",
+  "200 music/pause.mp3",
+  "200 music/title.mp3",
+  "200 sfx/sprite.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 sfx/parity-ffx2-bahamut.mp3",
+  "200 sfx/parity-ffx2-core.mp3",
+  "200 music/scene-bevelle-underground.mp3",
+  "200 music/boss-bahamut.mp3",
+  "200 music/pause.mp3",
+  "200 music/defeat-ffx2.mp3",
+  "200 music/boss-bahamut.mp3"
+ ],
+ "steps": [
+  {
+   "s": "demo boot",
+   "ok": true,
+   "d": "screen=title demo=true"
+  },
+  {
+   "s": "cancel: Escape from picker",
+   "ok": true,
+   "d": "screen=title"
+  },
+  {
+   "s": "re-enter picker",
+   "ok": true
+  },
+  {
+   "s": "FFX ch1 demo: reach player turn",
+   "ok": true,
+   "d": "seen=cutscene>battle"
+  },
+  {
+   "s": "Escape opens pause",
+   "ok": true,
+   "d": "screen=pause"
+  },
+  {
+   "s": "Escape resumes",
+   "ok": true,
+   "d": "screen=battle"
+  },
+  {
+   "s": "P opens pause",
+   "ok": true
+  },
+  {
+   "s": "P resumes",
+   "ok": true,
+   "d": "screen=battle"
+  },
+  {
+   "s": "options: setting changed by real key",
+   "ok": true,
+   "d": "masterVolume=MASTER VOLUME80* -> masterVolume=MASTER VOLUME90*"
+  },
+  {
+   "s": "reload",
+   "ok": true,
+   "d": "screen=title"
+  },
+  {
+   "s": "CHK-024: setting survived reload",
+   "ok": true,
+   "d": "masterVolume=MASTER VOLUME90* vs masterVolume=MASTER VOLUME90*"
+  }
+ ]
+}
