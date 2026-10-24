@@ -26,12 +26,55 @@ import {
   mountEndCard,
 } from '../../src/app/demo/boothCards.ts';
 import { boothHost, boothQrSvg } from '../../src/app/demo/demoQr.ts';
+import { ECHO_ATTRACT_SIZES, ECHO_END_SIZES } from '../../src/app/screens/frontend/echoPlate.ts';
+import { resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 
 const textOf = (html: string): string => {
   const d = document.createElement('div');
   d.innerHTML = html;
   return d.textContent ?? '';
 };
+
+const manifestWith = (title2x: string[]) => ({ version: 1, generatedAt: '', subjects: {}, portraits: [], backdrops: [], pause: [], pause2x: [], title: ['echo', 'keyart'], title2x });
+const imgOf = (html: string, cls: string): Element => {
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return d.querySelector(`img.${cls}`)!;
+};
+
+describe('the Echo painting on both cards is offered its 2x master (r64, Bailey item 200g: the 2560 screen)', () => {
+  it('end card and attract card carry the 1682w plate and the 3364w master with their own sizes when the manifest lists the master', () => {
+    setArtManifest(manifestWith(['echo', 'keyart']));
+    try {
+      for (const [html, cls, sizes] of [[endCardMarkup(), 'booth-end__img', ECHO_END_SIZES], [endCardMarkup({ afterFight: true }), 'booth-end__img', ECHO_END_SIZES], [attractCardMarkup(), 'booth-attract__img', ECHO_ATTRACT_SIZES]] as const) {
+        const img = imgOf(html, cls);
+        expect(img.getAttribute('src')).toBe(echoPaintingUrl());
+        expect(img.getAttribute('srcset')).toMatch(/echo\.(png|webp) 1682w, .*echo\.2x\.webp 3364w$/);
+        expect(img.getAttribute('sizes')).toBe(sizes);
+      }
+      // the end card's box is the whole window, contained or covered: its hint is the cover width; the attract card's box is 85.31 % x 84 % of the window
+      expect(ECHO_END_SIZES).toBe('max(100vw, 1.805 * 100vh)');
+      expect(ECHO_ATTRACT_SIZES).toBe('min(85.31vw, 151.6vh)');
+    } finally {
+      resetArtManifest();
+    }
+  });
+
+  it('offers nothing a manifest does not list, and nothing before the manifest has loaded (the cards come after a fight, long after it)', () => {
+    setArtManifest(manifestWith(['keyart']));
+    try {
+      for (const [html, cls] of [[endCardMarkup(), 'booth-end__img'], [attractCardMarkup(), 'booth-attract__img']] as const) {
+        const img = imgOf(html, cls);
+        expect(img.hasAttribute('srcset')).toBe(false);
+        expect(img.hasAttribute('sizes')).toBe(false);
+        expect(img.getAttribute('src')).toBe(echoPaintingUrl());
+      }
+    } finally {
+      resetArtManifest();
+    }
+    expect(imgOf(endCardMarkup(), 'booth-end__img').hasAttribute('srcset')).toBe(false);
+  });
+});
 
 describe('the end card', () => {
   it("says the picked frame's words: the fan tribute, the pitch, scan to play, the address", () => {
