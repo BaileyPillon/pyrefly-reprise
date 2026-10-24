@@ -9,24 +9,25 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  --pdf-glass: rgba(16, 28, 84, 0.78);
+  --pdf-glass: rgba(16, 28, 84, 0.88); /* r63-play fix: 0.78 to 0.88, so the gold reads at 7:1 even over a white scene (4.5:1 is the floor) */
+  --pdf-text: clamp(14px, min(1.1vw, 1.95vh), 40px); /* r63-play fix: 28 px at 2560 x 1440 (the card was 480 x 175 px with 18 px type), 21 px at 1080p, 14 px (CHK-003's floor) on a small screen */
   --pdf-edge: rgba(241, 205, 122, 0.8);
   --pdf-accent: #f1cd7a;
   --pdf-ink: #14214f;
   --pdf-face: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
 }
 .pdf.ig--ffx2 {
-  --pdf-glass: rgba(54, 22, 82, 0.78);
+  --pdf-glass: rgba(54, 22, 82, 0.88); /* the rose over a white scene was 4.0:1 at 0.78 and is 5.6:1 now */
   --pdf-edge: rgba(255, 190, 224, 0.85);
   --pdf-accent: #ff9fd0;
   --pdf-ink: #3d1850;
 }
 .pdf__card {
   position: absolute;
-  right: clamp(24px, 4.2vw, 88px);
-  bottom: clamp(70px, 14vh, 170px);
-  min-width: clamp(260px, 25vw, 480px);
-  padding: clamp(14px, 1.9vh, 26px) clamp(16px, 1.7vw, 30px);
+  right: clamp(24px, 4.2vw, 140px);
+  bottom: clamp(70px, 14vh, 250px);
+  min-width: clamp(260px, 27vw, 760px);
+  padding: clamp(14px, 1.9vh, 44px) clamp(16px, 1.7vw, 54px);
   background: var(--pdf-glass);
   border: 1px solid var(--pdf-edge);
   border-radius: 3px;
@@ -40,7 +41,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.24em;
-  font-size: clamp(14px, 1.05vw, 18px); /* CHK-003: nothing under 14 px on a screen the player reads */
+  font-size: var(--pdf-text); /* CHK-003: nothing under 14 px on a screen the player reads; 28 px at 1440p (r63-play fix) */
   color: var(--pdf-accent);
 }
 .pdf__meta {
@@ -49,8 +50,8 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  font-size: clamp(14px, 0.9vw, 17px);
-  color: rgba(255, 255, 255, 0.78);
+  font-size: var(--pdf-text);
+  color: rgba(255, 255, 255, 0.92);
 }
 .pdf__meta i {
   font-style: normal;
@@ -60,8 +61,8 @@
 .pdf__row {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(8px, 0.9vw, 16px);
-  margin-top: clamp(12px, 1.7vh, 22px);
+  gap: clamp(8px, 0.9vw, 28px);
+  margin-top: clamp(12px, 1.7vh, 40px);
   pointer-events: auto;
 }
 .pdf__btn {
@@ -78,7 +79,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  font-size: clamp(14px, 0.95vw, 17px);
+  font-size: var(--pdf-text);
   cursor: pointer;
 }
 .pdf__btn.is-focus {
