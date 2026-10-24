@@ -2,6 +2,8 @@
 
 Branch `r63-play` (r63-int + perf-trim + hud-f1 + audio-pass + boss-matte + this lane's extras), tree `D:/pyrefly-continuity`. Game case: BOTH games for the plumbing; every switch acts in Chapter I (`seymour-flux`, FFX) and Chapter IV (`ffx2-bahamut`, FFX-2) only (`engine/motion/DemoGate.ts`); every other chapter, screen and the address with no key at all are release 62. This file extends [r63-int-switches.md](r63-int-switches.md) (the motion pack and the three pro lanes, unchanged) with the lanes merged tonight and one new key.
 
+> **r64 (2026-10-24, Bailey's "I'll go with all your recommendations", item 200b/200e): the defaults in this file flipped.** In Chapter I and Chapter IV the pack is now ON with no `?pack=demo` in the address, and the party's rim is OFF by default; `?pack=off` is the old behaviour, every lane's own off word below still works, and `?partyrim=on` brings the rim back. The playtest address and the keys below are unchanged (`?switchboard=1` still needs `?pack=demo` beside it). See [r64-defaults.md](r64-defaults.md).
+
 ## The address
 
 `http://127.0.0.1:5410/?demo=1&pack=demo&switchboard=1` is the playtest address: everything new ON, the keys and the corner label installed. (`switchboard=1` is needed for the keys; without it the build plays the same, with no keys.)

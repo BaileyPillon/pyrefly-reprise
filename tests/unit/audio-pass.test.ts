@@ -30,7 +30,9 @@ describe('the switch', () => {
     expect(parseAudioKey('?audio=new')).toBe('new');
     expect(parseAudioKey('?audio=TODAY')).toBe('today');
     expect(parseAudioKey('?audio=loud')).toBeNull();
-    expect(passConfiguredBy('')).toBe(false);
+    expect(passConfiguredBy('')).toBe(true); // r64 (item 200b): the conference pack is the default
+    expect(passConfiguredBy('?pack=off')).toBe(false); // the old sound stays reachable
+    expect(passConfiguredBy('?pack=off&audio=new')).toBe(true);
     expect(passConfiguredBy('?audio=new')).toBe(true);
     expect(passConfiguredBy('?pack=demo')).toBe(true);
     expect(passConfiguredBy('?pack=demo&audio=today')).toBe(false);
@@ -38,7 +40,7 @@ describe('the switch', () => {
     expect(passConfiguredBy(undefined)).toBe(false);
   });
 
-  it('is on only while a demo chapter run is on, and never by default', () => {
+  it('is on only while a demo chapter run is on (by default since r64; `?pack=off` is the old sound)', () => {
     setPassAddress('?pack=demo');
     expect(audioNewOn()).toBe(false); // no chapter run
     setPassChapter('seymour-flux');
@@ -49,8 +51,10 @@ describe('the switch', () => {
     setPassChapter('yunalesca');
     expect(audioNewOn()).toBe(false); // another chapter keeps today's sound
     setPassChapter('seymour-flux');
-    setPassAddress('');
+    setPassAddress('?pack=off');
     expect(audioNewOn()).toBe(false); // the address does not ask for it
+    setPassAddress('');
+    expect(audioNewOn()).toBe(true); // r64: no word at all is the conference default
     setPassAddress('?pack=demo&audio=today');
     expect(audioNewOn()).toBe(false); // the A/B
     setAudioNew(true);

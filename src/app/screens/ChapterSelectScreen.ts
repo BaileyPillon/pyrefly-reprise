@@ -335,7 +335,7 @@ export class ChapterSelectScreen extends Screen {
     return true;
   }
 
-  private settle(id: ChapterId | null): void {
+  protected settle(id: ChapterId | null): void { // protected: the booth picker's idle return (`demo/demoBoard.ts`) resolves it as Esc does
     if (this.settled) return;
     this.settled = true;
     this.resolveDone(id);

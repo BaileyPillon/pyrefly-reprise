@@ -7,6 +7,8 @@
 
 /** How long the title sits untouched before the attract loop starts. */
 export const ATTRACT_AFTER_MS = 60_000;
+/** r64 (item 200i): how long the fight picker sits untouched before the booth goes back to the title (and so, a minute on, to the attract card). */
+export const PICKER_IDLE_MS = 60_000;
 /** A stick this far from rest counts as a person; a stick within it is drift. */
 export const STICK_ACTIVE = 0.5;
 /** A mouse that moves less than this (CSS px, summed) since the last real activity is a mouse resting on a table, not a visitor. */

@@ -6,7 +6,7 @@
  *
  * - **A boss's companion** (Chapter I, FFX only): Mortiorchis, the creature Seymour Flux sends; it is part of the boss fight and stood beside the re-cut boss with the pale rim still on it. It is flagged like the
  *   boss, under the same switch (`?boss=clean` / `?pack=demo`). Its painting is NOT re-cut tonight.
- * - **The party** (both games), when `?partyrim=off` / the playtest key `'` says so (`PartyRimSwitch.ts`): the party's rim off in the same way, so Bailey can judge it. Default ON: today's rim, which he has not decided.
+ * - **The party** (both games), when `?partyrim=off` / the playtest key `'` says so (`PartyRimSwitch.ts`): the party's rim off in the same way. r64 (item 200e): OFF is now the default in the two demo chapters, `?partyrim=on` (or `?pack=off`) brings today's rim back.
  *   Aeons stand on the party's side and take the same switch. The engine's own rim light on the figures (their `*.rim.png`) is not part of this; it is the pre-pro baseline and is not touched.
  *
  * A figure is tagged once, as the stage builds it (`tagRimFigure`); the mask asks `rimSkipOf` each frame. Pure but for `three` types and the two switches.

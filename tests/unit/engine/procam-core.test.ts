@@ -307,7 +307,8 @@ describe('the layer', () => {
 
 describe('the switch', () => {
   it('reads the keys', () => {
-    expect(parseProCamKeys('?camera=pro')).toMatchObject({ camera: true, pack: false });
+    expect(parseProCamKeys('?pack=off&camera=pro')).toMatchObject({ camera: true, pack: false });
+    expect(parseProCamKeys('?camera=pro')).toMatchObject({ camera: true, pack: true }); // r64 (item 200b): no pack word is the default, which is on
     expect(parseProCamKeys('?pack=demo&camera=off')).toMatchObject({ camera: false, pack: true });
     expect(parseProCamKeys('?camera=today').camera).toBe(false);
     expect(parseProCamKeys('?camdof=on&castshot=3')).toMatchObject({ dof: true, castshot: 3 });
@@ -315,8 +316,12 @@ describe('the switch', () => {
     expect(parseProCamKeys('?castshot=9').castshot).toBeNull();
     expect(parseProCamKeys(undefined).camera).toBeNull();
   });
-  it('is off by default, on with the pack, and off again with camera=off', () => {
+  it('is on by default since r64 (item 200b), off with ?pack=off, on with the pack, and off again with camera=off', () => {
+    resetProCamForTests('?pack=off');
+    expect(proCamConfigured()).toBe(false);
     resetProCamForTests('');
+    expect(proCamConfigured()).toBe(true);
+    resetProCamForTests(undefined);
     expect(proCamConfigured()).toBe(false);
     resetProCamForTests('?pack=demo');
     expect(proCamConfigured()).toBe(true);

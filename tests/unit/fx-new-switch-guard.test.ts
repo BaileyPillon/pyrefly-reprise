@@ -15,10 +15,11 @@ afterEach(() => {
 });
 
 describe('the new effects switch', () => {
-  it('is off with no address, in a unit test, and whatever the chapter', () => {
+  it('is off with no page, with ?pack=off and in a unit test, and whatever the chapter; since r64 an address with no pack word takes the conference default', () => {
     expect(fxModeFromSearch(undefined)).toBe('today');
-    expect(fxModeFromSearch('')).toBe('today');
-    expect(fxModeFromSearch('?pack=other')).toBe('today');
+    expect(fxModeFromSearch('?pack=off')).toBe('today');
+    expect(fxModeFromSearch('')).toBe('new'); // r64 (item 200b)
+    expect(fxModeFromSearch('?pack=other')).toBe('new'); // an unknown pack word names nothing: the default decides
     setFxMode(null);
     setFxChapter('seymour-flux');
     expect(fxNewOn()).toBe(false); // no page address under vitest: today
@@ -30,9 +31,9 @@ describe('the new effects switch', () => {
     expect(fxModeFromSearch('?pack=demo&fx=today')).toBe('today');
     expect(fxModeFromSearch('?fx=new,b')).toBe('new');
     expect(fxModeFromSearch('?fx=b,today&pack=demo')).toBe('today');
-    expect(fxModeFromSearch('?FX=NEW')).toBe('today'); // keys are exact; values are not case-sensitive:
+    expect(fxModeFromSearch('?pack=off&FX=NEW')).toBe('today'); // keys are exact; values are not case-sensitive:
     expect(fxModeFromSearch('?fx=NEW')).toBe('new');
-    expect(fxModeFromSearch('?fx=a')).toBe('today');
+    expect(fxModeFromSearch('?pack=off&fx=a')).toBe('today');
   });
 
   it('the eye-candy parser of the same key ignores the two new words', () => {

@@ -99,7 +99,7 @@ describe('the bank', () => {
   };
 
   it('asks for nothing of the pass when the address does not, and answers the extras only while the pass is on', async () => {
-    setPassAddress('');
+    setPassAddress('?pack=off');
     const a = make();
     await a.bank.loadChapter('seymour-flux');
     expect(a.fetched.some((p) => p.includes('voice-pass'))).toBe(false);
@@ -173,7 +173,7 @@ describe('the bank', () => {
 
 describe('the Talk exchanges', () => {
   it('exist only with the pass on, for Chapter I only, with id === script', () => {
-    setPassAddress('');
+    setPassAddress('?pack=off');
     expect(passMidFor('seymour-flux')).toEqual([]);
     expect(Object.keys(passScriptsFor('seymour-flux'))).toEqual([]);
     setPassAddress('?pack=demo');
@@ -231,7 +231,7 @@ describe('the end of a fight', () => {
 
   it("starts Chapter I's results cue at the last blow only while the pass is on", () => {
     setPassVictoryCue('victory-ffx');
-    setPassAddress('');
+    setPassAddress('?pack=off');
     expect(passVictoryCue()).toBeNull();
     setPassAddress('?pack=demo');
     setPassChapter('seymour-flux');

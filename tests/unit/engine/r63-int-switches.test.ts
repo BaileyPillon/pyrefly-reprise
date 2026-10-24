@@ -37,13 +37,16 @@ describe('the lanes\' address forms', () => {
     expect(proLanes(undefined)).toBe('');
   });
 
-  it('with ?pack=demo every lane is ON; with no key every lane is OFF', () => {
+  it('with ?pack=demo every lane is ON, and so is it with no key at all since r64 (item 200b); with ?pack=off every lane is OFF', () => {
     expect(proModeFromSearch('?pack=demo')).toBe('pro');
     expect(camOn('?pack=demo')).toBe(true);
     expect(stagingModeFromSearch('?pack=demo')).toBe('pro');
-    expect(proModeFromSearch('')).toBe('today');
-    expect(camOn('')).toBe(false);
-    expect(stagingModeFromSearch('')).toBe('today');
+    expect(proModeFromSearch('')).toBe('pro');
+    expect(camOn('')).toBe(true);
+    expect(stagingModeFromSearch('')).toBe('pro');
+    expect(proModeFromSearch('?pack=off')).toBe('today');
+    expect(camOn('?pack=off')).toBe(false);
+    expect(stagingModeFromSearch('?pack=off')).toBe('today');
   });
 
   it('each lane\'s own key turns only that lane off, beside the pack', () => {

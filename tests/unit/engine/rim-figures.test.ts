@@ -79,16 +79,20 @@ function field() {
 const flagsOf = (seen: Seen[], meshes: Record<string, Mesh>) => Object.fromEntries(Object.entries(meshes).map(([k, m]) => [k, seen.find((s) => s.figure === m)?.boss ?? null]));
 
 describe('the party rim switch', () => {
-  it('is ON (today\'s rim) unless the address says ?partyrim=off; the pack does not change it', () => {
-    expect(partyRimFromSearch(undefined)).toBe('on');
-    expect(partyRimFromSearch('')).toBe('on');
-    expect(partyRimFromSearch('?pack=demo')).toBe('on');
-    expect(partyRimFromSearch('?demo=1&pack=demo&switchboard=1&pro=off')).toBe('on');
+  it('is OFF by default since r64 (item 200e; the conference pack), ON (the old rim) with no page, with ?pack=off or with ?partyrim=on', () => {
+    expect(partyRimFromSearch(undefined)).toBe('on'); // no page at all (a unit test): the rim as it was
+    expect(partyRimFromSearch('?pack=off')).toBe('on');
+    expect(partyRimFromSearch('')).toBe('off');
+    expect(partyRimFromSearch('?pack=demo')).toBe('off');
+    expect(partyRimFromSearch('?demo=1&pack=demo&switchboard=1&pro=off')).toBe('off'); // ?pro=off does not touch it
     expect(partyRimFromSearch('?partyrim=off')).toBe('off');
-    expect(partyRimFromSearch('?pack=demo&PartyRim=OFF')).toBe('on'); // the key is spelt lower case; its value is not case sensitive
-    expect(partyRimFromSearch('?partyrim=OFF')).toBe('off');
+    expect(partyRimFromSearch('?pack=off&partyrim=off')).toBe('off');
+    expect(partyRimFromSearch('?pack=demo&PartyRim=ON')).toBe('off'); // the key is spelt lower case; its value is not case sensitive
+    expect(partyRimFromSearch('?partyrim=ON')).toBe('on');
     expect(partyRimFromSearch('?partyrim=on')).toBe('on');
-    expect(partyRimFromSearch('?partyrim=maybe')).toBe('on');
+    expect(partyRimFromSearch('?pack=demo&partyrim=on')).toBe('on');
+    expect(partyRimFromSearch('?partyrim=maybe')).toBe('off'); // an unknown word names nothing: the default decides
+    expect(partyRimFromSearch('?pack=off&partyrim=maybe')).toBe('on');
   });
 
   it('plays only in Chapter I and Chapter IV', () => {
@@ -103,7 +107,7 @@ describe('the party rim switch', () => {
     setPartyRim('on');
     expect(partyRimOff()).toBe(false);
     setPartyRim(null);
-    expect(partyRimMode()).toBe('on'); // no address in the test page
+    expect(partyRimMode()).toBe('off'); // no address word in the test page: r64's default
   });
 });
 
@@ -146,8 +150,9 @@ describe('who is tagged, and who draws no rim', () => {
 });
 
 describe('the rim mask carries them', () => {
-  it('Chapter I with the boss re-cut on and the party rim ON (the default): Mortiorchis is flagged like the boss, the party, the aeon and an ordinary foe are not', () => {
+  it('Chapter I with the boss re-cut on and the party rim ON (`?partyrim=on`, the old default): Mortiorchis is flagged like the boss, the party, the aeon and an ordinary foe are not', () => {
     setDemoChapter('seymour-flux');
+    setPartyRim('on');
     setBossClean('clean');
     const f = field();
     const boss = new Object3D();

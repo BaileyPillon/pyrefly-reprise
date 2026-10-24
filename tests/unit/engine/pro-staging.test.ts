@@ -42,10 +42,13 @@ afterEach(() => {
 });
 
 describe('the switch', () => {
-  it('is off with no address key, on with ?pack=demo, and ?staging=today wins over the pack', () => {
+  it('is on by default since r64 (item 200b), off with no page or ?pack=off, on with ?pack=demo, and ?staging=today wins over the pack', () => {
     expect(stagingModeFromSearch(undefined)).toBe('today');
-    expect(stagingModeFromSearch('')).toBe('today');
-    expect(stagingModeFromSearch('?demo=1')).toBe('today');
+    expect(stagingModeFromSearch('?pack=off')).toBe('today');
+    expect(stagingModeFromSearch('?pro=off')).toBe('today');
+    expect(stagingModeFromSearch('')).toBe('pro');
+    expect(stagingModeFromSearch('?demo=1')).toBe('pro');
+    expect(stagingModeFromSearch('?staging=today')).toBe('today');
     expect(stagingModeFromSearch('?staging=pro')).toBe('pro');
     expect(stagingModeFromSearch('?pack=demo')).toBe('pro');
     expect(stagingModeFromSearch('?pack=demo&staging=today')).toBe('today');

@@ -27,15 +27,18 @@ afterEach(() => {
   lookState.strength = 'subtle';
 });
 
-describe('the pro-look switch: off by default, on with ?pack=demo or ?look=pro in the two demo chapters', () => {
+describe('the pro-look switch: on by default since r64 (item 200b), off with ?pack=off, ?pro=off or ?look=today, in the two demo chapters', () => {
   it('reads the address', () => {
     expect(proModeFromSearch(undefined)).toBe('today');
-    expect(proModeFromSearch('')).toBe('today');
-    expect(proModeFromSearch('?demo=1')).toBe('today');
+    expect(proModeFromSearch('')).toBe('pro');
+    expect(proModeFromSearch('?demo=1')).toBe('pro');
+    expect(proModeFromSearch('?pack=off')).toBe('today');
+    expect(proModeFromSearch('?pack=off&look=pro')).toBe('pro');
+    expect(proModeFromSearch('?pro=off')).toBe('today');
     expect(proModeFromSearch('?pack=demo')).toBe('pro');
     expect(proModeFromSearch('?look=pro')).toBe('pro');
     expect(proModeFromSearch('?pack=demo&look=today')).toBe('today'); // the A/B: today wins over the pack
-    expect(proModeFromSearch('?look=hd2d')).toBe('today');
+    expect(proModeFromSearch('?pack=off&look=hd2d')).toBe('today');
     expect(proModeFromSearch('?pack=demo&look=hd2d')).toBe('pro'); // the pieces other than the arena stay on
   });
 

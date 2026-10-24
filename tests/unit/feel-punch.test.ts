@@ -168,8 +168,11 @@ describe('the moment punch BattleMoments makes on a heavy blow', () => {
     return fractions;
   }
 
-  it('is 0.11 today, in every chapter, with the spectacle on or off', () => {
-    expect(punches('', 'seymour-flux', true)).toEqual([0.11]);
+  it('is 0.11 today (`?pack=off`), in every chapter, with the spectacle on or off; and with no word the demo chapters take the conference default (r64)', () => {
+    expect(punches('?pack=off', 'seymour-flux', true)).toEqual([0.11]);
+    expect(punches('?pack=off', null, false)).toEqual([0.11]);
+    expect(punches('', 'seymour-flux', true)).toEqual([]); // r64: the new punch is the default in Chapter I (the spectacle kick carries it)
+    expect(punches('', 'yunalesca', true)).toEqual([0.11]); // any other chapter: today
     expect(punches('', null, false)).toEqual([0.11]);
     expect(punches('?pack=demo', 'yunalesca', true)).toEqual([0.11]); // the pack does not reach Chapter II
     expect(punches('?pack=demo&punch=today', 'ffx2-bahamut', true)).toEqual([0.11]);

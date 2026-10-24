@@ -255,12 +255,12 @@ export const SWITCHES: readonly SwitchDef[] = [
     isNew: () => stagingMode() === 'pro',
     set: (on) => setStagingMode(on ? 'pro' : 'today'),
   },
-  // The apostrophe key (r63-play): the party's rim. Not a "new" piece: today's rim is the default and Bailey has not decided it, so the master key leaves it alone (no `set`) and the label does not count it as new.
+  // The apostrophe key (r63-play): the party's rim. Not a "new" piece (r64: its default is OFF in the demo chapters, item 200e; `?partyrim=on` is today's rim), so the master key leaves it alone (no `set`) and the label does not count it as new.
   {
     code: 'Quote',
     key: "'",
     name: 'party rim',
-    plain: "Party rim: the pale key-coloured edge light on the party and the aeons (on is today's, off draws them like the bosses, with none)",
+    plain: "Party rim: the pale key-coloured edge light on the party and the aeons (on is the old rim, off draws them like the bosses, with none)",
     read: () => partyRimMode(),
     flip: () => {
       const next = partyRimMode() === 'on' ? 'off' : 'on';

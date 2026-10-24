@@ -22,7 +22,7 @@
  * the per-game numbers live where they always did (`fx/c/SpectacleRules.SPECTACLE_TUNING`).
  */
 
-import { DEMO_CHAPTERS, demoChapter, isDemoChapter, setDemoChapter } from '../motion/DemoGate.ts';
+import { DEMO_CHAPTERS, demoChapter, isDemoChapter, packDemo, setDemoChapter } from '../motion/DemoGate.ts';
 
 export type PunchMode = 'today' | 'new' | 'off';
 export type StopMode = 'today' | 'short' | 'off';
@@ -60,7 +60,7 @@ export function parseFeelKeys(search: string | undefined): FeelKeys {
   const motionsfx = word('motionsfx');
   const timing = word('timing');
   return {
-    pack: word('pack') === 'demo',
+    pack: packDemo(search), // r64: the shared reader, so the conference default (and `?pack=off`) reaches the feel pieces too
     punch: punch === 'today' || punch === 'new' || punch === 'off' ? punch : null,
     hitstop: stop === 'today' || stop === 'short' || stop === 'off' ? stop : null,
     rumble: rumble === 'on' ? true : rumble === 'off' ? false : null,

@@ -124,7 +124,8 @@ describe('the switch', () => {
     expect(curvesModeFromSearch('?pack=demo&curves=real')).toBe('real');
     expect(curvesModeFromSearch('?pack=demo&curves=today')).toBe('today');
     expect(curvesModeFromSearch(undefined)).toBe('today');
-    expect(curvesModeFromSearch('')).toBe('today');
+    expect(curvesModeFromSearch('?pack=off')).toBe('today');
+    expect(curvesModeFromSearch('')).toBe('new'); // r64 (item 200b): the conference pack is the default
   });
   it('a real mode turns the curves on in the two demo chapters only; realKind names the sub-mode', () => {
     for (const [mode, kind] of [['new', null], ['today', null], ['real', 'real'], ['real-snappy', 'snappy']] as const) {
