@@ -1132,6 +1132,7 @@ export class FFX2BattleHud implements HudPort {
   /** The painted field's targeting surface. See {@link TargetingPort}. */
   setTargetingPort(port: TargetingPort): void {
     this.targeting = port;
+    this.proMarks.setFigures({ rect: (id) => port.rect(id), visibility: (id) => port.visibility(id) }); // r63-play: the KO mark stands on the downed member's own sprite
   }
 
   /**

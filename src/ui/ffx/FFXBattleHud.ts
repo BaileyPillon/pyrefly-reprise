@@ -808,6 +808,7 @@ export class FFXBattleHud implements HudPort {
    */
   setTargetingPort(port: TargetingPort): void {
     this.targeting = port;
+    this.proMarks.setFigures({ rect: (id) => port.rect(id), visibility: (id) => port.visibility(id) }); // r63-play: the KO mark stands on the downed member's own sprite
     this.commandMenu.setProjector((id) => port.rect(id));
   }
 

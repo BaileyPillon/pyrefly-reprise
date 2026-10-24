@@ -20,6 +20,38 @@ import { KO_FLOOR_MS, koPlan, proMarkersOn } from './proMarkers.ts';
 
 export type FieldProjector = (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null;
 
+/** The field's own picture of a figure, from the HUD's targeting port (`HudPort.TargetingPort`): its painted silhouette on screen and how much of it can be seen. */
+export interface FieldFigures {
+  rect(id: CombatantId): { x: number; y: number; w: number; h: number } | null;
+  visibility(id: CombatantId): number;
+}
+
+/** Below this share of a downed figure's own sprite in view, the KO mark is not drawn: it would sit on whoever stands in front of her. The row's KO pill and the wash still say it. */
+export const KO_MARK_MIN_VISIBLE = 0.12;
+
+/** Where, across her own width, the mark may stand when the point it would take is under a figure in front of her, in the order tried (shares of her silhouette's width). */
+const MARK_SHIFTS: readonly number[] = [0, -0.3, 0.3, -0.6, 0.6];
+
+/**
+ * Where a downed member's KO mark stands (r63-play, the overnight fix of the skeptic's finding: in Chapter I the mark of a downed Kimahri, who lies behind Tidus, read as sitting on Tidus). The mark belongs on the
+ * member's OWN sprite: `at` is the point of her own body it would take (her actor's feet, raised), and when another STANDING figure's silhouette covers that point it moves along her own width to the first point
+ * no standing figure covers. Null when every point is covered (she lies wholly behind the others: no mark rather than a mark on someone else; the row's KO pill and the wash still say it). A lying body is
+ * not in the standing silhouettes' boxes, so her own box is never the test, only the figures that stand. Pure.
+ */
+export function markSpot(
+  at: { x: number; y: number },
+  ownW: number,
+  others: ReadonlyArray<{ x: number; y: number; w: number; h: number }>,
+  pad = 6,
+): { x: number; y: number } | null {
+  for (const k of MARK_SHIFTS) {
+    const x = at.x + ownW * k;
+    const covered = others.some((o) => x >= o.x - pad && x <= o.x + o.w + pad && at.y >= o.y - pad && at.y <= o.y + o.h + pad);
+    if (!covered) return { x, y: at.y };
+  }
+  return null;
+}
+
 interface Down {
   sinceMs: number;
   /** False while a command menu held the first appearance back (FFX-2); the timeline starts when it lets go. */
@@ -32,6 +64,10 @@ export class ProFieldMarks {
   readonly el: HTMLElement;
   private readonly down = new Map<CombatantId, Down>();
   private project: FieldProjector | null = null;
+  /** The field's silhouettes, once the targeting port is wired (the HUD mocks have none: the mark then stands where it always did). */
+  private figures: FieldFigures | null = null;
+  /** Who stands, from the last state: the figures a mark must keep clear of. */
+  private standing: CombatantId[] = [];
   private nowMs = 0;
   /** REDUCE MOTION, read at most twice a second (the pause row or the OS preference). */
   private reduced = false;
@@ -50,6 +86,10 @@ export class ProFieldMarks {
     this.project = project;
   }
 
+  setFigures(figures: FieldFigures): void {
+    this.figures = figures;
+  }
+
   /** The battle's state: who is down in the party now. */
   sync(state: BattleState): void {
     if (!proMarkersOn()) {
@@ -58,6 +98,7 @@ export class ProFieldMarks {
     }
     this.partyOffStage = !!state.aeonId || (state.aeonIds?.length ?? 0) > 0;
     const live = new Set<CombatantId>();
+    this.standing = state.activeIds.filter((id) => state.combatants[id]?.alive === true);
     for (const id of state.activeIds) {
       const c = state.combatants[id];
       if (!c || c.alive) continue;
@@ -122,9 +163,26 @@ export class ProFieldMarks {
       d.wash.style.height = `${(wide * 0.34).toFixed(0)}px`;
       d.wash.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${(y - wide * 0.04).toFixed(1)}px)`;
       d.wash.style.opacity = plan.wash.toFixed(3);
+      // The mark stands on the member's own sprite and keeps clear of the figures in front of her (`markSpot`); hidden when her sprite is not on the stage or is all but covered.
+      let mx = x;
+      let my = y - wide * 0.2;
+      let markShown = true;
+      if (this.figures) {
+        const own = this.figures.rect(id);
+        if (!own || this.figures.visibility(id) < KO_MARK_MIN_VISIBLE) {
+          markShown = false;
+        } else {
+          const others = this.standing.filter((o) => o !== id).map((o) => this.figures!.rect(o)).filter((r): r is { x: number; y: number; w: number; h: number } => r !== null);
+          const spot = markSpot({ x: feet.x, y: feet.y - wide * 0.2 }, own.w, others);
+          if (spot) {
+            mx = spot.x - layer.left;
+            my = spot.y - layer.top;
+          } else markShown = false;
+        }
+      }
       d.mark.style.fontSize = `${Math.max(13, wide * 0.115).toFixed(1)}px`;
-      d.mark.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${(y - wide * 0.2).toFixed(1)}px) scale(${plan.markScale.toFixed(3)})`;
-      d.mark.style.opacity = plan.mark.toFixed(3);
+      d.mark.style.transform = `translate(-50%, -50%) translate(${mx.toFixed(1)}px, ${my.toFixed(1)}px) scale(${plan.markScale.toFixed(3)})`;
+      d.mark.style.opacity = markShown ? plan.mark.toFixed(3) : '0';
     }
   }
 
