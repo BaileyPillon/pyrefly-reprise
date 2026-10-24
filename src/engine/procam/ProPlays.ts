@@ -100,7 +100,21 @@ export function attackPlay(env: PlayEnv, ctx: ActionShot, kind: 'attack' | 'fini
   return { run: { ...run, inMs: t.ms(params.inMs), outMs: t.ms(params.outMs), rate: t.rate, onEvent: run.onEvent }, kind: 'attack' };
 }
 
-/** A cast or an item (FFX): the real caster close shot. */
+/**
+ * Who stands with the caster of a cast on an ally, for the close shot to keep whole (r63-play, the overnight fix of the skeptic's m3; FFX only, the retail caster shots are Chapter I's): the party members
+ * on the stage within `COMPANY_M` metres of her. The skeptic's Hastega frame (the team buff pushes in on Tidus) stood Yuna and Kimahri where the slim party cards cut them off at the hips.
+ */
+const COMPANY_M = 4.5;
+function castCompany(env: PlayEnv, id: CombatantId): CombatantId[] {
+  const me = env.stage.actor(id);
+  if (!me) return [];
+  return env.stage.staged().filter((o) => {
+    const a = env.stage.actor(o);
+    return o !== id && env.stage.sideOf(o) === 'party' && a !== undefined && Math.hypot(a.position.x - me.position.x, a.position.z - me.position.z) <= COMPANY_M;
+  });
+}
+
+/** A cast or an item (FFX): the real caster close shot. An ally cast keeps the whole group clear of the HUD's party plates, as the victory frame does (`VICTORY_SAFE`, `VICTORY_AT`). */
 export function castPlay(env: PlayEnv, ctx: ActionShot, target: CombatantId | undefined, t: Timing): Play | null {
   const { stage } = env;
   const { actor } = ctx;
@@ -110,10 +124,13 @@ export function castPlay(env: PlayEnv, ctx: ActionShot, target: CombatantId | un
   const row = pickRow(rowsOf(group), castShotChoice(), env.dice());
   const spot = env.spot(actor.id, target);
   if (!row || !spot) return null;
+  const company = ally || target === undefined ? castCompany(env, actor.id) : [];
   const run = keyRun(row.id, laidShot(row, spot, 'party', null), {
     inMs: t.ms(420),
     outMs: t.ms(650),
-    fit: { ids: target !== undefined && target !== actor.id ? [actor.id, env.fitId(target)] : [actor.id], safe: { x: 0.92, y: 0.95 } },
+    fit: company.length
+      ? { ids: [actor.id, ...company], safe: VICTORY_SAFE, to: VICTORY_AT, maxK: 2.2 }
+      : { ids: target !== undefined && target !== actor.id ? [actor.id, env.fitId(target)] : [actor.id], safe: { x: 0.92, y: 0.95 } },
     breathe: 0.3,
     still: env.still,
     focus: env.fo(target !== undefined ? [actor.id, target] : [actor.id]),
