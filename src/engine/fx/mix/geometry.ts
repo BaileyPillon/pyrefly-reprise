@@ -67,6 +67,11 @@ function alphaOf(tex: { uuid: string; image?: unknown } | null | undefined): { w
   }
 }
 
+/** Read a texture's low-resolution alpha now (the demo's prebuild makes this read behind the picker, `app/demo/prebuildFigures.ts`; the fight's first sight of the pose then reads nothing). */
+export function primeAlpha(tex: { uuid: string; image?: unknown } | null | undefined): boolean {
+  return alphaOf(tex) !== null;
+}
+
 type SlotGuts = { mesh: { scale: Vector3 }; material: { uniforms: Record<string, { value: unknown }> }; scale: { contentBox: { x0: number; x1: number; y0: number; y1: number }; offsetY: number } };
 
 /** The silhouette mask of an actor's active painting over its content quad, or undefined. */

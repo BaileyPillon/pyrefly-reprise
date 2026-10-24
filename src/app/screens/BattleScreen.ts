@@ -34,6 +34,7 @@ import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { type LoadedScene } from '../../scenes/index.ts';
+import { dropParked } from '../../engine/FigureCache.ts';
 import { takeScene } from '../../scenes/prebuilt.ts'; // release 62 (PR-0481): the demo's stage, built behind the picker, or a fresh `loadScene`
 import { markOpeningBegun, markOpeningHurried } from '../../scenes/openingMark.ts';
 import { Screen } from '../Screen.ts';
@@ -316,6 +317,7 @@ export class BattleScreen extends Screen {
     this.stage.setEntrances(!this.preview && chapter.game !== 'ff7');
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
+    dropParked(scene.key); // lane "prebuild": a figure the demo built ahead that this stage did not take (another party) is freed
     if (this.exited) return this.releaseParts();
     this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
     if (this.exited) return this.releaseParts();

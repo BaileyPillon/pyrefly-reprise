@@ -2618,6 +2618,18 @@ export class PaintedActor extends Group {
     }
   }
 
+  /**
+   * Every texture this actor holds, the idle painting first (lane "prebuild": the demo uploads a figure's paintings behind the picker, `app/demo/prebuildDraw.ts`). Borrowed textures are included; the actor's own are what it frees.
+   */
+  heldTextures(): Texture[] {
+    const out = new Set<Texture>();
+    const idle = this.poses.get('idle');
+    if (idle) out.add(idle.texture);
+    for (const p of this.poses.values()) out.add(p.texture);
+    for (const t of this.owned) out.add(t);
+    return [...out];
+  }
+
   // ----------------------------------------------------------------- teardown
 
   override dispose(): void {

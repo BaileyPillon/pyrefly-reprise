@@ -19,12 +19,12 @@ import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresent
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
 import type { BattleCamera } from './BattleCamera.ts';
 import { PaintedActor } from './PaintedActor.ts';
-import { tryRigFigure, type BuiltFigure, type FigureRequest } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
+import { tryRigFigure, type BuiltFigure } from './rig/RigStage.ts'; // the rig: one painting cut into parts, when the figure has a gated one (docs/plans/rig-review.md)
 import { unregisterRigUse } from './rig/RigLoad.ts';
+import { figureKind, figureSpec, type FigureEnv } from './StageFigureRequest.ts'; // lane "prebuild": the question a figure answers, one function for the stage and the demo's prebuild
+import { takeParkedFigure } from './FigureCache.ts';
 import { tagRimFigure } from './look/pro/RimFigures.ts'; // r63-play: which figures the rim mask flags besides the bosses (the party with `?partyrim=off`, Mortiorchis)
 import { attachBossClean, tickBossClean } from './look/pro/BossClean.ts'; // lane boss-matte: the two re-cut bosses draw no rim light and cast their shadow under their footprint (`?boss=clean`, off by default)
-import { edgeFeatherFor } from './ActorEdgeFeather.ts';
-import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { HitEffects } from './VFX.ts';
 import { LOW_EFFECTS_SPARK_SHARE, StillCamera, type ComfortFlags } from './ComfortCamera.ts';
 import { CAMERA_PRESETS, PresetCamera, type CameraPresetSpec } from './CameraPreset.ts';
@@ -34,15 +34,14 @@ import { occludersOf, visibilityOf, type DepthRect, type ScreenRect } from './Sc
 import { laneFrom, relaxActorsOf, relaxField } from './StageRelax.ts';
 import { TargetHighlight } from './TargetHighlight.ts';
 import { HoldableCamera } from './TargetFrameHold.ts';
-import { bodyFacingOption, figureLightOf, poseScalingOf, stageCamera } from './StageFacing.ts';
-import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
+import { stageCamera } from './StageFacing.ts';
+import { departureKindOf } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
 import { holdHeads } from './HeadLockStage.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
-import { figureBloomMasked } from './BloomMask.ts';
 import { cutRigsOf } from './motion/CutRig.ts';
-import { anchorFor, PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
+import { PartRings, type ParentPose, type PartAnchor } from './PartAnchors.ts';
 import * as SA from './StageAnchors.ts';
 import { stageSpellFx, type StageSpellFxOptions } from './spellfx/stageSpellFx.ts';
 import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
@@ -370,68 +369,27 @@ export class PaintedStage implements BattleStage {
     return n ? { x: x / n, z: z / n } : null;
   }
 
+  /** What a figure's request reads of this stage (`StageFigureRequest.ts`). */
+  private figureEnv(): FigureEnv {
+    return { slots: this.opts.slots, rim: this.opts.rim, rigs: this.opts.rigs, groundLuma: this.groundLuma, game: this.lastState?.game };
+  }
+
   /** Add (or replace) one combatant's actor. */
   async add(c: AnyCombatant, worldHeight?: number): Promise<PaintedActor | undefined> {
     this.removeCombatant(c.id);
-    const kind: 'party' | 'enemy' = c.side === 'enemy' ? 'enemy' : 'party';
+    const kind = figureKind(c);
     // The mapped id first, then the raw ones, so a figure whose art has not
     // been renamed yet still shows its painting instead of a silhouette.
     // The scene's art namespace (`data/art/artNamespace.ts`, the experimental Leblanc chapter): every candidate is read from the namespaced set; none: the base art, as always.
     const art = await resolveArt(artCandidatesFor(c, this.opts.slots.artNamespace), kind);
-    const { artId } = art;
-    const poses = departurePoses(c.id, art.poses); // D-031 Evrae
-    const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
-    const own = sceneOwnHeight(this.opts.slots, c.id, artId); // a scene's per-combatant height, else the height of the form this painting is (`SceneStaging.formHeights`); ring and shadow follow it
-    // r3941-heights (FFX only): a hero stands at his own height next to Tidus's (`PartyStature.ts`); the shadow and the ring follow it.
-    const size = figureHeight({ shared: worldHeightFor(c, heights), own, given: worldHeight, stature: partyStature(this.lastState?.game, c.side, c.id) });
-    const k = size.ringScale;
-
-    const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
-    const request: FigureRequest = {
-      id: c.id,
-      artId,
-      poses,
-      ...(this.opts.rigs ? { setting: this.opts.rigs } : {}),
-      opts: {
-      name: c.id,
-      ...(anchor ? SA.anchoredActorOptions(anchor) : {}),
-      // The *body's* facing, from the side: party and aeons toward +x, enemies toward -x, unless the scene
-      // turns them (FF7, `sideFacing`). Mirroring is a separate question, answered by each pose's sidecar;
-      // art painted the way its body faces is drawn exactly as painted.
-      ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
-      worldHeight: anchor ? SA.anchoredHeight(anchor) : size.height,
-      crossfadeMs: this.opts.slots.poseCut ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys
-      ...(this.opts.slots.poseShiftPx?.[artId] ? { poseShiftPx: this.opts.slots.poseShiftPx[artId] } : {}), // FF7: every key on the idle's stance
-      poses,
-      placeholder:
-        kind === 'party'
-          ? (): HTMLCanvasElement => paintPlaceholderFigure({ seed: hash(c.id), tint: '#6a7386' })
-          : (): HTMLCanvasElement => paintBossSilhouette({ seed: hash(c.id) }),
-      placeholderBaseline: kind === 'party' ? 0.965 : 0.985,
-      matte: { mode: 'auto' },
-      ...edgeFeatherFor(artId), // PR-0164 / PR-0212: paintings that touch their canvas edge
-      rim: this.opts.rim
-        ? { color: this.opts.rim.color, strength: 0.8, dir: this.opts.rim.dir, width: 3.4 }
-        : { strength: 0.7 },
-      ...figureLightOf(this.opts.slots.figureLight), // FF7: the core's green rim and bounce, the fringe trimmed
-      groundShade: 0.24, ...poseScalingOf(this.opts.slots), // FF7's long machine and upright keys (scene switches)
-      bloomMask: figureBloomMasked(this.opts.slots.figureBloomMaskArt, artId),
-      shadow: anchor ? false : { radius: (kind === 'party' ? 0.62 : 1.5) * k, ...shadowOf(this.groundLuma) },
-      breathe: { amplitude: 0.016, speed: 0.4 },
-      sway: { amplitude: 0.009, speed: 0.22 },
-      // The turn highlight: gold under a party member, a cooler ring under a
-      // fiend, so whose turn it is reads even in a screenshot.
-      turnRing: this.opts.slots.turnRings === false ? false : { // FF7: no ring, its triangle marks the turn (scene switch)
-        color: kind === 'party' ? 0xf0cf92 : 0xc8a0ff,
-        radius: anchor ? SA.anchoredRingRadius(anchor) : (kind === 'party' ? 0.78 : 1.7) * k,
-        opacity: kind === 'party' ? 0.85 : 0.7,
-      },
-      },
-    };
+    // What `PaintedActor` is asked for is one pure function (`StageFigureRequest.ts`), so the demo's prebuild asks the same question behind the picker (lane "prebuild").
+    const spec = figureSpec(this.figureEnv(), c, art, worldHeight);
+    const { artId, poses, size, anchor, request } = spec;
     // The rig first (its awaits all come before the figure exists), then the painting set made right here by the one `await PaintedActor.create` it always was: no extra tick between a built figure and what the presenter does with it.
-    const built: BuiltFigure = (await tryRigFigure(request)) ?? { actor: await PaintedActor.create(request.opts), rig: null };
+    // A figure the demo's prebuild parked for this very question (`FigureCache.ts`) is taken instead, its textures already up and its programs built; with nothing parked this line is what it always was.
+    const built: BuiltFigure = takeParkedFigure(this.opts.sceneKey, c.id, spec.fingerprint) ?? (await tryRigFigure(request)) ?? { actor: await PaintedActor.create(request.opts), rig: null };
     const actor = built.actor;
-    const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, worldHeightFor(c, heights), worldHeight); // a figure at a scene's form height is planned at the shared one too
+    const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, spec.shared, worldHeight); // a figure at a scene's form height is planned at the shared one too
     if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
 
     const spots = kind === 'party' ? this.opts.slots.party : this.opts.slots.enemy;
@@ -1093,11 +1051,6 @@ export class PaintedStage implements BattleStage {
 }
 
 /** The contact blob's opacity and colour for this floor (A-8, `ContactShadow.ts`). */
-function shadowOf(groundLuma: number | null): { opacity: number; color: number } {
-  const s = contactShadowStyle(groundLuma);
-  return { opacity: s.opacity, color: s.color };
-}
-
 function rank(side: Side): number {
   return side === 'party' ? 0 : side === 'aeon' ? 1 : 2;
 }
@@ -1116,14 +1069,4 @@ const BOSS_HEIGHT = 4.1;
 function bloomScale(worldHeight: number): number {
   const ratio = Math.max(0.1, worldHeight) / BOSS_HEIGHT;
   return Math.min(1.15, Math.max(0.34, Math.sqrt(ratio)));
-}
-
-/** Stable per-id seed so a placeholder figure looks the same every boot. */
-function hash(s: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return Math.abs(h) % 997;
 }

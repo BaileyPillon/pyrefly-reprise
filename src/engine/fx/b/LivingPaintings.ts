@@ -17,6 +17,7 @@ import { roomPlays } from './ambient/room.ts';
 import type { RoomSpec } from './ambient/room.ts';
 import { bindMaxMix, releaseMaxMix, updateMaxMix } from '../mix/MaxMix.ts'; // the MAX mix (D-316), every FFX and FFX-2 battle
 import { menuCalm } from '../mix/menuCalm.ts';
+import { prebuildGate } from '../../PrebuildGate.ts'; // lane "prebuild": the plates are composed from the painting plane's own texture
 import { stageWind } from '../../look/stage/StageWind.ts'; // release 61: the depth stage's wind (1 and 1 unless the HD-2D bold look runs a room that has a recipe)
 
 /**
@@ -53,7 +54,7 @@ const TIER_PARTICLES: Record<FxTier, number> = { full: 1, phone: 0.55, low: 0.3 
 
 /** What a room's plates are built from at a tier: the depth map's address, the layout and the options. One function for the build and for the demo's warm, so the cut made ahead is the cut the build asks for. */
 function platesRequest(room: RoomSpec, tier: FxTier, renderer: WebGLRenderer | null | undefined): { url: string; layout: PlateLayout; opts: PlateBuildOptions } {
-  return { url: artUrl(`fx/${room.key}/depth.png`), layout: tier === 'full' ? room.plates : room.phonePlates, opts: { renderer: renderer ?? null, native: tier === 'full' } };
+  return { url: artUrl(`fx/${room.key}/depth.png`), layout: tier === 'full' ? room.plates : room.phonePlates, opts: { renderer: renderer ?? null, native: tier === 'full', shareMaster: prebuildGate() } };
 }
 
 class Living {

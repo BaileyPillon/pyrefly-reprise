@@ -36,6 +36,8 @@ import { battleCardInfo, preloadBattle } from '../screens/battlePreload.ts';
 import { drawSlicedOffscreen, warmShaders } from '../screens/BattleScreenWarmup.ts';
 import { demoModeOn } from '../demoMode.ts';
 import { DEMO_FIGHTS } from './demoFlow.ts';
+import { newPrebuildPlan, type PrebuildPlan } from './prebuildFigures.ts'; // lane "prebuild": the fights' figures, built behind the picker
+import { prebuildOn } from './prebuildSwitch.ts';
 
 /**
  * When, after the page's first real frame, the title starts the two warms (`main.ts`). Release 62 used 4000 and 6000, which left both stages unbuilt at a press a human makes 6 s after the load (Chapter I's was
@@ -136,20 +138,18 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
   running = (async () => {
     // One fight at a time, a step at a time: the paintings, then the stage, then the splash crops. The fight whose card the cursor rests on goes first, and a cursor that moves hands the warm to the other fight at
     // the next step boundary (r63-play, the overnight fix of the skeptic's M1: the player is about to pick it; at human pace there is time for one fight's stage, not both).
-    const steps = new Map(fights.map((id) => [id, { paintings: false, stage: false, splash: false }]));
-    const nextFight = (): string | null => {
-      const open = fights.filter((id) => {
-        const st = steps.get(id)!;
-        return !(st.paintings && st.stage && st.splash);
-      });
-      if (!open.length) return null;
-      return focusId !== null && open.includes(focusId) ? focusId : open[0]!;
-    };
+    const figuresAhead = !light && prebuildOn(); // lane "prebuild" (`?prebuild=off` is r63-play exactly): the figures are built, uploaded and drawn behind the picker too
+    const plans = new Map<string, PrebuildPlan>();
+    const steps = new Map(fights.map((id) => [id, { paintings: false, stage: false, figures: !figuresAhead, splash: false, rest: !figuresAhead }]));
+    const pick = (ids: string[]): string | null => (ids.length ? (focusId !== null && ids.includes(focusId) ? focusId : ids[0]!) : null);
+    // The essentials of every fight come before the other poses of any (lane "prebuild": the first fight's secondary paintings took seconds that the second fight's stage was waiting for).
+    const nextFight = (): string | null =>
+      pick(fights.filter((id) => { const st = steps.get(id)!; return !(st.paintings && st.stage && st.figures && st.splash); })) ?? pick(fights.filter((id) => !steps.get(id)!.rest));
     for (let id = nextFight(); id !== null; id = nextFight()) {
       const st = steps.get(id)!;
       const chapter = getChapter(id);
       if (!chapter) {
-        st.paintings = st.stage = st.splash = true;
+        st.paintings = st.stage = st.figures = st.splash = st.rest = true;
         continue;
       }
       if (!calm()) return;
@@ -165,9 +165,17 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
           note(`${id}: stage built, compiled and drawn offscreen`);
           await idle();
         }
-      } else {
+      } else if (!st.figures) {
+        let plan = plans.get(id);
+        if (!plan) plans.set(id, (plan = newPrebuildPlan(app, chapter, calm, idle, (what) => note(what), () => warmSplashCrops(chapter, calm))));
+        if (!(await plan.step())) st.figures = true;
+        await idle(20);
+      } else if (!st.splash) {
         st.splash = true;
         if (!light && (await warmSplashCrops(chapter, calm))) note(`${id}: splash crops`); // the portraits' crops the first splash would make in the fight (a getImageData and a toBlob of 0.1 s)
+      } else {
+        if (!(await plans.get(id)?.stepRest())) st.rest = true; // the figures' other poses, one painting a step, after every fight's essentials
+        await idle(20);
       }
     }
     if (light) return;
