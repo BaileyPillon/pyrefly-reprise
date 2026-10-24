@@ -202,11 +202,12 @@ describe('startRetryTheme: the retried fight\'s theme at the press', () => {
     expect(asked).toEqual([]);
   });
 
-  it('the flow asks for it at the press, after the hurried-opening line the r63 test reads, and the warm builds the figures behind the defeat card too', () => {
+  it('the flow hands the retried fight a screen word to ask for its theme as it opens (review F3: an ask at the press was dropped by the exit of the lost screen), after the hurried-opening line the r63 test reads, and the warm builds the figures behind the defeat card too', () => {
     const flow = src('src/app/screens/BattleScreenFlow.ts');
     expect(flow).toContain('if (demoQuickRetry(id, attempt)) openingHurry = true;');
-    expect(flow).toContain('if (demoQuickRetry(id, attempt)) startRetryTheme(chapter, audio);');
-    expect(flow).toContain("if ((choice as ResultsChoice) === 'retry') startRetryTheme(chapter, audio);"); // the press itself, in the pro defeat card's flow
+    expect(flow).toContain('...(demoQuickRetry(id, attempt) && !retryThemeSwitchedOff() ? { retryTheme: true } : {})');
+    expect(flow).not.toContain('startRetryTheme(chapter, audio)'); // no ask at the press: the lost screen's exit stops the music right after it and drops the request
+    expect(src('src/app/screens/BattleScreen.ts')).toContain('if (this.opts.retryTheme) startRetryTheme(chapter, audio);');
     expect(flow).toContain('startResultsMusic(audio, cue, keepForRetry ? [keepForRetry] : undefined)');
     const warm = src('src/app/demo/demoWarm.ts');
     expect(warm).toContain('const figuresAhead = prebuildOn();');

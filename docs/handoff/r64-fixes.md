@@ -4,14 +4,48 @@ Branch `r64-fixes` (tree `D:/pyrefly-r39-color`), cut from `origin/r63-play` at 
 
 **Method.** A = the served r63-play build (:5410, `index-BRj-zlCy.js`); B = a production candidate of this branch (`node tools/candidate-build.mjs --out dist-r64`, served on :5377; the last one `index-DbvIqxGL.js`), headless GPU Chromium at 2560 x 1440, simulated Xbox pad, A and B in the same browser session, a fresh context per run, one RIG-RECORD job at a time. **The GPU was shared** (another lane's Blender and recordings held 7 to 15 GB and 12 to 99 percent of it): every table says the utilisation, and the spread is part of the result. Scratch: `D:/Tools/pyrefly-scratch/2026-10-24/r64-fixes/` (`tools/`, `evidence/`, `progress.md`, `jobs.log`).
 
+## The skeptic's review and the fix pass (2026-10-24 evening)
+
+The skeptic (`D:/Tools/pyrefly-scratch/2026-10-24/r64-fixes/review/REVIEW.md`, verdict MERGE WITH CONDITIONS, nothing critical) found one major and five minors. This pass fixed F1 to F4 and measured each on a new production candidate of the branch (`index-BD5cQ2QG.js`, served on :5377, the review's own harnesses: `review/tools/browse.mjs`, `pick.mjs`, `retryprobe.mjs`, `lose3.mjs`, `review/rv/tools/ixion2.mjs`, `misc1.mjs`; A = the served r63-play on :5410; headless GPU Chromium, 2560 x 1440, simulated pad, one RIG-RECORD job at a time; the GPU was shared with other lanes at 16 to 61 percent). Evidence: `D:/Tools/pyrefly-scratch/2026-10-24/r64-fixes/review/evidence/` (`browse-FX1-*`, `pick-FX2-*`, `pick-FX3-*`, `retryprobe-FXRP1-*`, `retryprobe-FXRP2-*`, `lose3-FXL3-*`) and `review/rv/evidence/` (`FXIX-*`, `FXMISC-*`).
+
+| finding | case | state after this pass |
+|---|---|---|
+| **F1 (major)**: the 700 ms pad quiet starves the fight warm while a visitor browses the picker | both | **fixed and measured** (below) |
+| **F2**: the party swap's arrival half does not work in the real game (a second `render()` replaces the animated rows) | FFX only (Chapter I, the F1 HUD) | **fixed and measured in the real flow**; `?partyswap=off` added |
+| **F3**: the retried fight's theme still starts late; the ask at the press is not what starts it | both | **cause confirmed and fixed**: the theme now starts 0.2 to 0.35 s after the press (was 1.9 s); `?retrytheme=off` added |
+| **F4**: the `=` legend opened on the pause screen keeps `sb-pause` after the resume | both (the playtest label only) | **fixed and measured** |
+| F5: OTHER FIGHT from a lost Chapter I to Chapter IV takes 10 to 12 s to the first menu (both builds) | both | **not touched**: pre-existing, the other fight's figures are not prebuilt (open) |
+| F6: `Input.ts`, `BattleScreenFlow.ts`, `demo.css` were over 400 lines and grew | both | **not fixed, said plainly**: all three were over 400 before this lane (573, 635, 416 lines); the sampler cannot leave `Input.ts` without a refactor of its key state; this pass adds nothing to `Input.ts` or `demo.css` (open) |
+| F7 / item 2: B at the top of the command menu pauses | both | **unchanged, one question for Bailey** (item 2 below) |
+
+**F1.** `PAD_QUIET_MS` 700 to 150, and the quiet has a budget of 2 s per warm run (`PAD_QUIET_BUDGET_MS`, `padShouldWait` in `demoWarm.ts`); a button that is down still holds a step as it did on r63-play (at most 1.2 s per call). The 4 ms sampler in `Input` (item 1) is untouched. Measured (Chapter IV, the review's `browse.mjs`: title 4 s, 8 s of cursor toggling, pick; n = 4 each, A and B alternating in one browser):
+
+| | A (:5410) | B (this pass) | the reviewed build |
+|---|---|---|---|
+| first 3.5 s lost, ms | 583, 450, 500, 616 (median 558) | 983, 433, 633, 716 (median 675) | 1400 to 3166 (median 2600) |
+| figures parked at the pick | 9 parked, 4 taken, 0 absent in 4 of 4 | 9 parked, 4 taken, 0 absent in 4 of 4 | 0 in 5 of 5 |
+| press to first menu | 10.0 to 10.1 s | 9.96 to 10.4 s | 11.2 to 14.8 s |
+
+Chapter I, the same flow (`browse-FX4-*`, n = 3 each): first 3.5 s lost A 900, 450, 416 ms (median 450), B 383, 466, 333 ms (median 383); 9 figures parked and 5 taken in 6 of 6; press to first menu 2.2 to 2.6 s on both.
+
+And the swallowed-press check (`pick.mjs`, 16 timed presses a cell, human and fast, both chapters, FX2 + FX3 = 256 per side): **A 7 swallowed, B 0**, 0 console errors. So the sampler alone removes the swallowed presses and the short quiet no longer costs the browsing visitor the figures. A press that falls wholly inside one stall of the warm is still lost in principle (none seen in 256).
+
+**F2.** `PartyStatusWindow` remembers the swap in flight (`swapT`, `swapAt`); a render inside its window (`swapInFlight`: 90 + 3 x 40 + 220 ms) gives the new rows the same arrival at the same point in it (`resumePartySwapIn`: a negative `delay` starts the animation part-way, a card whose arrival is over is left alone). In the real flow by pad (`ixion2.mjs`, Yuna, Summon, Valefor, then the dismissal): the summon's second render at +129 ms replaces the row (id 4 to 5) and the fade carries on 0.59, 0.74, 0.83, 0.89, 0.97 (before: 0.22 then a pop to 1); the dismissal's second render at +3 ms leaves the three cards cascading 0.25 / 0.11 / 0.31 to 1 with the ghost fading out (before: a cut at full opacity). 0 console errors. `?partyswap=off` is the original's one-frame swap, for a comparison.
+
+**F3.** Cause: the lost `BattleScreen`'s `exit()` calls `audio.stopMusic(0.6)` when the retry's screen replaces it, a few hundred ms after the press, and `stopMusic` bumps the request id, so the theme asked for at the press never started (the reviewed build's mixer: `current` null from +0.36 s, the theme's source at +1.93 s, from the chain's own ask). Now no ask is made at the press; the flow passes `retryTheme: true` in the options of the retried demo fight's `BattleScreen`, whose `enter()` asks for the cue (`demoDefeat.startRetryTheme`), after the exit. The buffer is still kept decoded by the defeat cue (`upcoming`), so no fetch. Probe (`retryprobe.mjs`, a bufferSource hook and the mixer every 20 ms): Chapter IV the 79 s theme buffer starts at **+338 ms** (before +1934 ms) and `music.current` is `boss-bahamut` from +357 ms with no null span; Chapter I the 90 s buffer starts at **+175 ms**, `boss-seymour` from +200 ms. The chain's later ask finds it playing and starts nothing. The whole loss flow by pad on this build (`lose3.mjs`: loss, TRY AGAIN, a second loss, OTHER FIGHT, a third loss, B back to the picker), both chapters, **0 console errors**: TRY AGAIN to the first menu 2.85 s (Chapter IV) and 2.03 s (Chapter I); OTHER FIGHT 3.06 s (IV to I) and 10.4 s (I to IV, F5, as on A); B lands on the picker with the lost chapter selected. `?retrytheme=off` leaves the theme to the chain (r63-play). Not listened to (rule 13): the timing is read from the mixer; the crossfade is the defeat theme's 0.6 s fade-out (the lost screen's exit) under the theme's 0.8 s fade-in.
+
+**F4.** `switchboard.render()` sets `sb-pause` before the legend branch. Measured: legend opened on the pause screen, resume, the legend is `sb sb-legend` at the top right (box 732, 8 to 1912, 518), not the bottom right over the command menu and party cards. The QR plate at five sizes and the 17 keys were rechecked on this build, 0 errors.
+
+Disclosed, not changed: the swap ease (F2), the press-time theme (F3) and the short pad quiet are on with `?pack=demo` by default, as in the reviewed branch; the first two now have a word to turn them off (`?partyswap=off`, `?retrytheme=off`; `?demowarm=off` stops the whole warm, the quiet with it). Bailey has not seen the swap ease or heard the theme timing; if he wants "nothing new on by default", those two go behind a word instead.
+
 ## Summary
 
 | # | Fix | Case | State |
 |---|---|---|---|
-| 1 | swallowed picker presses | both | **fixed in the measure**: 4 of 128 timed presses swallowed on A, 0 of 128 on B (B1 build); the cause was the page's frame gap, not a stall |
+| 1 | swallowed picker presses | both | **fixed in the measure**: 4 of 128 timed presses swallowed on A, 0 of 128 on B (B1 build); the cause was the page's frame gap, not a stall; **repeated on the final build after the review pass: A 7 of 256, B 0 of 256** (the quiet is now 150 ms, see the review section) |
 | 2 | B opens the pause with no menu open | both | **left as it is: unsourced** (below), one question for Bailey |
-| 3 | TRY AGAIN: silence, hitches | both | **better, not finished**: first 3.5 s lost 716 / 817 ms against 1,199 / 966 ms, theme audible 1.6 s (Ch IV) and 0.5 s (Ch I) sooner; 1.7 to 2.5 s of silence remain |
-| 4 | Ixion swap cut; "970" over the turn strip | FFX only | **fixed**: the swap eases (12 ghost frames, 7 + 7 frames of fade), the numerals dodge the strip's whole footprint |
+| 3 | TRY AGAIN: silence, hitches | both | **better**: first 3.5 s lost 716 / 817 ms against 1,199 / 966 ms; **after the review pass the theme starts 0.2 to 0.35 s after the press** (the lost screen's exit had been dropping the ask; see the review section) |
+| 4 | Ixion swap cut; "970" over the turn strip | FFX only | **fixed**: the swap eases (12 ghost frames, 7 + 7 frames of fade; **in the real flow after the review pass**, where the game renders the list twice), the numerals dodge the strip's whole footprint |
 | 5 | switchboard label over the pause tabs; QR caption at 1280 x 720 | both (playtest label, booth plate) | **fixed**, measured |
 | 6 | the room's dressing behind the picker | both | **built, proved identical, OFF BY DEFAULT** (`?livingpre=on`): the booth A/B pairs could not separate it from noise and one Chapter I run lost 2.7 s; two pages holding parked rooms crashed twice |
 
@@ -98,7 +132,7 @@ Reading it: without the saturated runs the lists are A 516, 400, 200 and B 433, 
 
 ## What is not done
 
-- Item 2 (above: unsourced, one question). Item 3: 1.6 to 2.4 s of silence remain; the cause is not found. Item 6: no clear before/after gain; default off.
-- The 128-press measure of item 1 was not repeated on the final build; presses 0 of 10 sequences in the booth runs and 0 console errors in the play-through are what the final build has.
+- Item 2 (above: unsourced, one question). Item 6: no clear before/after gain; default off. F5 (OTHER FIGHT from Chapter I to Chapter IV, 10 to 12 s to the first menu, both builds) and F6 (three files over 400 lines before this lane) are open.
+- The review pass did not run: the whole `npm test` (1,642 files); a real pad, a 120 Hz screen, any listening; the numerals in a real fight corner.
 - `docs/handoff/NOW.md` and the ledgers are not updated by this lane (records belong to the driver's merge).
 - Not listened to (rule 13): the retry's music timing. Not run: a real pad, a 120 Hz screen.
