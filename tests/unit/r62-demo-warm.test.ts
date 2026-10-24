@@ -81,8 +81,8 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     window.history.replaceState(null, '', '/');
   });
 
-  const run = async (a: unknown, fights?: readonly string[]) => {
-    const p = warmDemoFights(a as never, fights);
+  const run = async (a: unknown, fights?: readonly string[], opts?: { light?: boolean }) => {
+    const p = warmDemoFights(a as never, fights, opts);
     await vi.advanceTimersByTimeAsync(5000);
     return p;
   };
@@ -101,6 +101,13 @@ describe('the warm (app/demo/demoWarm.ts)', () => {
     await run(app('title'));
     expect(calls.slice(0, 2)).toEqual(['paintings ffx2-bahamut', `build ${sceneOf('ffx2-bahamut')}`]);
     expect(calls.indexOf('paintings seymour-flux')).toBeGreaterThan(calls.indexOf(`draw ${sceneOf('ffx2-bahamut')}`));
+  });
+
+  it("R63: the retry's warm behind a lost fight's card is light: the scene, its plates and the compile of its programs; no offscreen draw, no breath rigs", async () => {
+    await run(app('pro-defeat'), ['ffx2-bahamut'], { light: true });
+    const b = sceneOf('ffx2-bahamut');
+    expect(calls).toEqual([`paintings ffx2-bahamut`, `build ${b}`, `hide ${b}`, 'look', `plates ${b}`, `compile ${b}`]);
+    expect(demoWarmLog().map((e) => e.what)).toEqual(['ffx2-bahamut: paintings', 'ffx2-bahamut: depth plates cut ahead', 'ffx2-bahamut: stage built, compiled and drawn offscreen']);
   });
 
   it('the plates are cut while the programs compile, and a cut that fails does not stop the stage (the battle then cuts them itself, as before)', async () => {

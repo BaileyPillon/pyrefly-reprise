@@ -45,7 +45,7 @@ import { stagingPieceOnFor } from '../../engine/pro/staging/StagingSwitch.ts';
 import { ProDefeatScreen } from './ProDefeatScreen.ts'; // lane "pro-staging": the defeat card that keeps the scene
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
-import { noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
+import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
 import { demoThanksDue } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
 import { demoIntroFor } from '../demo/demoIntro.ts'; // R62 (demo mode only, FFX Chapter I): the short voiced intro
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
@@ -55,7 +55,7 @@ import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conf
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
 import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
-import { stopDemoWarm } from '../demo/demoWarm.ts'; // release 62 (PR-0481): the demo's stage warm stands down once a fight is picked
+import { retryWarmSwitchedOff, stopDemoWarm, warmDemoFights } from '../demo/demoWarm.ts'; // release 62 (PR-0481): the demo's stage warm stands down once a fight is picked
 import { demoRunDefaults } from '../demo/demoFlow.ts'; // R61 (conference demo, `?demo=1`): a demo fight goes straight in, without party prep or story scenes
 
 /** A screen the flow can await. */
@@ -399,6 +399,7 @@ export class GameFlow {
         openingHurry = this.lastSceneHurried; // PR-0061: a player who skipped the scene gets the hurried opening
       }
       if (opts.skipCutscenes && attempt === 0 && (await this.playDemoIntro(chapter, opts))) openingHurry = this.lastSceneHurried; // R62 (demo mode only, FFX Chapter I): the demo skips the story, but not these three recorded lines
+      if (demoQuickRetry(id, attempt)) openingHurry = true; // r63-play: a retried demo fight opens hurried (the card 0.7 s, no sweep); the fight itself is the same one
       if (this.handedOver) return null;
 
       this.step = 'battle';
@@ -488,7 +489,9 @@ export class GameFlow {
     let choice: ResultsChoice = 'continue';
     const screen = new ProDefeatScreen({ game: chapter.game, turns: outcome.result?.turns, elapsedMs: outcome.elapsedMs, attempt, onChoice: (picked) => (choice = picked) });
     await this.app.pushOverlay(screen);
+    if (demoDefeatPanel(chapter.id) && !retryWarmSwitchedOff()) void warmDemoFights(this.app, [chapter.id], { light: true }); // r63-play (quick retry): the fight's stage is built while the card is up, so a TRY AGAIN finds it ready
     await screen.done;
+    stopDemoWarm(); // the choice is made: the warm takes no further step
     await this.app.popOverlay();
     music?.end();
     return choice;

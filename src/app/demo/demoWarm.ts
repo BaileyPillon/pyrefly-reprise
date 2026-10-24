@@ -47,7 +47,7 @@ export const WARM_STAGE_AT_MS = 700;
 export const WARM_FIGHTS_AT_MS = 1500;
 
 /** The screens the warm may work behind: the title and the picker. */
-const CALM = new Set(['title', 'chapter-select']);
+const CALM = new Set(['title', 'chapter-select', 'pro-defeat']); // r63-play: and behind a lost fight's card, where the retry's stage is built
 
 /** What the warm has done, for the probe (`window.__pyrefly` is not touched; the page reads this through `demoWarmLog`) and for the tests. */
 const log: Array<{ ms: number; what: string }> = [];
@@ -57,6 +57,15 @@ const note = (what: string): void => void log.push({ ms: Math.round(typeof perfo
 export function demoWarmSwitchedOff(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
   try {
     return new URLSearchParams(search).get('demowarm') === 'off';
+  } catch {
+    return false;
+  }
+}
+
+/** `?retrywarm=off`: a lost fight's retry stage is not built behind the defeat card (the hurried opening alone is the quick retry): for a comparison, or if the warm behind the card ever swallows a press at the booth. */
+export function retryWarmSwitchedOff(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+  try {
+    return new URLSearchParams(search).get('retrywarm') === 'off';
   } catch {
     return false;
   }
@@ -117,9 +126,10 @@ export type WarmApp = Pick<App, 'renderer'> & { readonly current: { readonly nam
  * Warm both demo fights, in order, behind the title and the picker. One run at a time (a second call joins it); a run that was stopped starts afresh on the next call (the picker, after a
  * fight). Never rejects; resolves when it has done what it will.
  */
-export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FIGHTS.map((f) => f.id)): Promise<void> {
+export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FIGHTS.map((f) => f.id), opts: { light?: boolean } = {}): Promise<void> {
   if (!demoModeOn() || demoWarmSwitchedOff()) return Promise.resolve();
-  if (running) return stopped ? running.then(() => warmDemoFights(app, fights)) : running; // a run that was stopped ends at its next step; this call then starts afresh
+  if (running) return stopped ? running.then(() => warmDemoFights(app, fights, opts)) : running; // a run that was stopped ends at its next step; this call then starts afresh
+  const light = opts.light === true; // the retry's warm behind the defeat card: the scene, its plates and its programs' compile; none of the offscreen draws (a 0.3 s upload and the programs' first uses), the splash crops or the breath rigs, which could stop the page as TRY AGAIN is pressed
   stopped = false;
   if (typeof window !== 'undefined') (window as unknown as Record<string, unknown>)['__demoWarmLog'] = log; // the probe reads what the warm did (dev tools, the booth check)
   const calm = (): boolean => !stopped && CALM.has(app.current?.name ?? '');
@@ -151,15 +161,16 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
       } else if (!st.stage) {
         st.stage = true;
         if (!hasPrebuilt(chapter.sceneKey)) {
-          await buildStage(app, chapter, idle);
+          await buildStage(app, chapter, idle, light);
           note(`${id}: stage built, compiled and drawn offscreen`);
           await idle();
         }
       } else {
         st.splash = true;
-        if (await warmSplashCrops(chapter, calm)) note(`${id}: splash crops`); // the portraits' crops the first splash would make in the fight (a getImageData and a toBlob of 0.1 s)
+        if (!light && (await warmSplashCrops(chapter, calm))) note(`${id}: splash crops`); // the portraits' crops the first splash would make in the fight (a getImageData and a toBlob of 0.1 s)
       }
     }
+    if (light) return;
     // lane perf-trim: every painting's breathing field (the living paintings' alpha read) is read behind the title, one picture at a time, so that no pose's first sight in the fight stops the page for the read
     for (const p of await preparedPaintings()) {
       if (!calm()) return;
@@ -176,7 +187,7 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
 }
 
 /** Build `chapter`'s scene, get its programs built and its textures up, and keep it for the battle. */
-async function buildStage(app: WarmApp, chapter: Chapter, pause: (ms?: number) => Promise<void>): Promise<void> {
+async function buildStage(app: WarmApp, chapter: Chapter, pause: (ms?: number) => Promise<void>, light = false): Promise<void> {
   const scene = await prebuildScene(chapter.sceneKey, app.renderer.camera);
   await pause(20); // a task boundary after the scene's 0.1 s of layer canvases, with a look at the pad
   scene.hideOwnActors();
@@ -188,6 +199,7 @@ async function buildStage(app: WarmApp, chapter: Chapter, pause: (ms?: number) =
   const cutting = warmLivingPlates({ key: scene.key, scene: scene.scene, renderer: (app.renderer as { renderer?: WebGLRenderer }).renderer }).catch(() => false);
   await warmShaders(app.renderer, scene.scene); // the programs build in the GPU process while the page runs
   if (await cutting) note(`${chapter.id}: depth plates cut ahead`);
+  if (light) return;
   await pause(20);
   await drawSlicedOffscreen(app.renderer, scene.scene); // the GPU executables and the textures, one program family a frame
 }
