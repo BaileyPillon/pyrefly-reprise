@@ -99,6 +99,8 @@ export interface PlateBuildOptions {
   renderer?: WebGLRenderer | null;
   /** The full tier: the plates are as wide as the painting that loaded (2688 px, or the master's 5376); false keeps the layout's own small cut (the phone's). */
   native?: boolean;
+  /** Lane "prebuild" (the demo's fights, behind `?pack=demo`): compose the plates from the painting plane's OWN texture, which the demo's warm has already uploaded, instead of a second texture over the same 5376 x 3072 image (a second upload of 84 MB, 290 ms in one call at the battle's entry). The same pixels are sampled at 1:1. */
+  shareMaster?: boolean;
 }
 
 export interface PlateGeometry {
@@ -234,7 +236,8 @@ export class DepthPlates {
     let textures: Texture[];
     if (gpu) {
       const t1 = performance.now();
-      const composed = composeHiPlates(opts.renderer!, image as unknown as TexImageSource, { w, h, plates: flippedPlates }, loadedW / w);
+      const shared = opts.shareMaster ? ((main?.material as { map?: Texture | null } | undefined)?.map ?? undefined) : undefined;
+      const composed = composeHiPlates(opts.renderer!, image as unknown as TexImageSource, { w, h, plates: flippedPlates }, loadedW / w, undefined, shared && shared.image === image ? shared : undefined);
       dp.targets = composed.targets;
       textures = composed.textures;
       dp.composeMs = Math.round(performance.now() - t1);

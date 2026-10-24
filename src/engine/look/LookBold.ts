@@ -12,9 +12,10 @@ import { artManifest } from '../ArtManifest.ts';
 import { depthMapListed } from '../ArtManifestMaps.ts';
 import type { Renderer } from '../Renderer.ts';
 import { QUALITY_COST, type LookName, type LookQuality } from './LookConfig.ts';
-import { BOLD_FX, baseExtents, easeStage, invert3, reflectAmount, roomBold, shadowAmount, squareToQuad, stageEllipse, type Extents } from './LookBoldConfig.ts';
+import { BOLD_FX, easeStage, invert3, reflectAmount, roomBold, shadowAmount, squareToQuad, stageEllipse, type Extents } from './LookBoldConfig.ts';
 import { LookBoldShader } from './LookBoldShader.ts';
 import { lightColour } from './LookMaths.ts';
+import { readExtents } from './AlphaPrime.ts';
 import { lin, type LookRoom } from './LookRoom.ts';
 import type { RelightLights } from './relight/RelightLights.ts';
 import { eyeCandy } from '../fx/EyeCandy.ts';
@@ -52,8 +53,6 @@ export class LookBold {
   private scene: Scene | null = null;
   private roomKey = '';
   private depth: Texture | 'loading' | 'missing' | null = null;
-  private readonly ext = new Map<string, Extents | null>();
-  private canvas: HTMLCanvasElement | null = null;
   private quality: LookQuality | null = null;
   private readonly homo = new Matrix3();
   /** The painting's map the other way (painting uv to frame uv): the plate-seam fix mirrors through it. */
@@ -126,32 +125,9 @@ export class LookBold {
     for (const m of [...this.tracked.keys()]) if (!live.has(m)) this.tracked.delete(m);
   }
 
-  /** A figure's extents from its painting's alpha, cached per texture; null while the image is not there (a placeholder), the default stands in. */
+  /** A figure's extents from its painting's alpha, cached per texture (`AlphaPrime.ts`, shared so the demo can read them ahead); the default stands in while the image is not there. */
   private extentsOf(tex: Texture | null): Extents {
-    const img = tex?.image as (CanvasImageSource & { width: number; height: number }) | undefined;
-    if (!tex || !img || !(img.width > 8) || !(img.height > 8)) return DEFAULT_EXT;
-    const key = `${tex.uuid}:${img.width}x${img.height}`;
-    if (this.ext.has(key)) return this.ext.get(key) ?? DEFAULT_EXT;
-    let e: Extents | null = null;
-    try {
-      const c = (this.canvas ??= document.createElement('canvas'));
-      c.width = 128;
-      c.height = 128;
-      const ctx = c.getContext('2d', { willReadFrequently: true });
-      if (ctx) {
-        ctx.clearRect(0, 0, 128, 128);
-        ctx.drawImage(img, 0, 0, 128, 128);
-        const d = ctx.getImageData(0, 0, 128, 128).data;
-        const a = new Uint8Array(128 * 128);
-        for (let i = 0; i < a.length; i++) a[i] = d[i * 4 + 3]!;
-        e = baseExtents(a, 128, 128);
-      }
-    } catch {
-      e = null;
-    }
-    if (this.ext.size > 400) this.ext.clear();
-    this.ext.set(key, e);
-    return e ?? DEFAULT_EXT;
+    return readExtents(tex) ?? DEFAULT_EXT;
   }
 
   /** The figures into `uFigA` / `uFigB`; returns how many. */

@@ -24,6 +24,49 @@ export interface RoomLight {
 export const lin = (c: Rgb): Rgb => [srgbDecode(c[0]), srgbDecode(c[1]), srgbDecode(c[2])];
 export const mixc = (a: Rgb, b: Rgb, t: number): Rgb => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
 
+/** The light found on a painting, by the painting's image (the demo's prebuild finds it behind the picker, `primeRoomLight`; null: nothing bright enough was found). */
+const foundLights = new WeakMap<object, RoomLight | null>();
+
+type RoomImage = CanvasImageSource & { width: number; height: number };
+
+/** The image on the room's backdrop-painting plane, if it has one. */
+function paintingImage(scene: Scene): RoomImage | null {
+  let painting: Mesh | null = null;
+  scene.traverse((o) => {
+    if (!painting && o.name === 'backdrop-painting' && (o as Mesh).isMesh) painting = o as Mesh;
+  });
+  const mat = (painting as Mesh | null)?.material as unknown as { map?: { image?: RoomImage } } | undefined;
+  const img = mat?.map?.image;
+  return img && img.width > 0 ? img : null;
+}
+
+/** Find the room's light on its painting ahead of the battle: the same 256 x 144 reduction and the same `findLight`, the reduction drawn in four strips (each its own task) because one draw of a 5376 x 3072 painting is 264 ms. True when a light is now known for the painting. */
+export async function primeRoomLight(scene: Scene, pause: (ms?: number) => Promise<void>, more: () => boolean): Promise<boolean> {
+  const img = paintingImage(scene);
+  if (!img) return false;
+  if (foundLights.has(img)) return true;
+  try {
+    const c = document.createElement('canvas');
+    c.width = 256;
+    c.height = 144;
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return false;
+    const iw = (img as HTMLImageElement).naturalWidth || img.width;
+    const ih = (img as HTMLImageElement).naturalHeight || img.height;
+    const strips = 4;
+    for (let i = 0; i < strips; i++) {
+      if (!more()) return false;
+      ctx.drawImage(img, 0, (ih * i) / strips, iw, ih / strips, 0, (144 * i) / strips, 256, 144 / strips);
+      await pause(20);
+    }
+    const f = findLight(ctx.getImageData(0, 0, 256, 144).data, 256, 144);
+    foundLights.set(img, f.score > 0.02 ? { u: f.u, v: f.v, color: f.color, from: 'found' } : null);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export class LookRoom {
   scene: Scene | null = null;
   key = '';
@@ -62,7 +105,10 @@ export class LookRoom {
     try {
       const mat = this.painting?.material as unknown as { map?: { image?: CanvasImageSource & { width: number; height: number } } } | undefined;
       const img = mat?.map?.image;
-      if (img && img.width > 0) {
+      if (img && img.width > 0 && foundLights.has(img)) {
+        const known = foundLights.get(img);
+        if (known) return { ...known, color: [...known.color] as Rgb };
+      } else if (img && img.width > 0) {
         const c = document.createElement('canvas');
         c.width = 256;
         c.height = 144;
@@ -70,6 +116,7 @@ export class LookRoom {
         if (ctx) {
           ctx.drawImage(img, 0, 0, 256, 144);
           const f = findLight(ctx.getImageData(0, 0, 256, 144).data, 256, 144);
+          foundLights.set(img, f.score > 0.02 ? { u: f.u, v: f.v, color: f.color, from: 'found' } : null);
           if (f.score > 0.02) return { u: f.u, v: f.v, color: f.color, from: 'found' };
         }
       }
