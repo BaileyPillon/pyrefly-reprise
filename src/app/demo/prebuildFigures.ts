@@ -23,6 +23,7 @@ import type { AnyCombatant, BattleState } from '../../battle/common/types.ts';
 import { artCandidatesFor, resolveArt } from '../../engine/BattlePresenterArt.ts';
 import { figureKind, figureSpec, type FigureEnv } from '../../engine/StageFigureRequest.ts';
 import { tryRigFigure, type BuiltFigure } from '../../engine/rig/RigStage.ts';
+import { unregisterRigUse } from '../../engine/rig/RigLoad.ts';
 import { PaintedActor } from '../../engine/PaintedActor.ts';
 import { groundLumaOf } from '../../engine/ContactShadow.ts';
 import { dropParked, hasParked, parkFigure, parkedActors } from '../../engine/FigureCache.ts';
@@ -62,6 +63,41 @@ function openingState(chapter: Chapter): Promise<BattleState> {
   return held;
 }
 
+/**
+ * Name `chapterId` for the figures' construction, as `BattleScreen.enter` does before it stages (`setCurvesChapter`: the figures' rig and look read the demo chapter as they are built), and put back what
+ * was there afterwards, but ONLY while the warm is still calm. THE RACE (review 2, 2026-10-24: 2 to 5 of 13 timed Chapter IV presses): the press can land while a figure is being built, and the battle
+ * names the SAME chapter for itself (`BattleScreen.enter`). The old guard was `demoChapter() === chapterId`, which is true then too, so the restore wiped the battle's own chapter and the whole fight ran
+ * with every new piece off (and a cyan outline on Bahamut). A fight has begun when `calm()` is false (`stopDemoWarm` has run by the time a fight starts), so a restore is made only when `calm()` still holds
+ * and the chapter is still the one this named; otherwise the chapter belongs to the battle (same chapter or another) and is left alone.
+ */
+export async function withDemoChapter<T>(chapterId: string, calm: () => boolean, work: () => Promise<T>): Promise<T> {
+  const before = demoChapter();
+  setCurvesChapter(chapterId);
+  try {
+    return await work();
+  } finally {
+    if (calm() && demoChapter() === chapterId) setCurvesChapter(before);
+  }
+}
+
+/**
+ * A figure was built for the cache: park it while the warm is calm; when a fight was picked while it was being made, dispose it (the battle builds its own) and let go of the rig registry's entry for it
+ * (`registerRigUse` in `tryRigFigure` named it live; `FigureCache.release` does the same for a parked one that is dropped). True when it was parked.
+ */
+export function parkOrDispose(scope: string, id: string, fingerprint: string, built: BuiltFigure, calm: () => boolean): boolean {
+  if (!calm()) {
+    try {
+      unregisterRigUse(id);
+    } catch {
+      /* no rig registered */
+    }
+    built.actor.dispose();
+    return false;
+  }
+  parkFigure(scope, id, fingerprint, built);
+  return true;
+}
+
 export interface PrebuildPlan {
   /** One step of the essentials: the room's light, a figure built, one figure's idle painting, the programs, the looks' reads, the splash crops. True while more is left; false when done or when it cannot be done. */
   step(): Promise<boolean>;
@@ -84,16 +120,7 @@ export function newPrebuildPlan(app: PrebuildApp, chapter: Chapter, calm: () => 
   const renderer = (): WarmupRenderer => app.renderer as unknown as WarmupRenderer;
   const actorsNow = (): PaintedActor[] => parkedActors(scope);
 
-  /** Name this chapter for the figures' construction, as `BattleScreen.enter` does before it stages (`setCurvesChapter`); put back what was there when a fight has not taken over. */
-  async function inChapter<T>(work: () => Promise<T>): Promise<T> {
-    const before = demoChapter();
-    setCurvesChapter(chapter.id);
-    try {
-      return await work();
-    } finally {
-      if (demoChapter() === chapter.id) setCurvesChapter(before);
-    }
-  }
+  const inChapter = <T>(work: () => Promise<T>): Promise<T> => withDemoChapter(chapter.id, calm, work);
 
   async function buildOne(c: AnyCombatant): Promise<void> {
     const kind = figureKind(c);
@@ -102,11 +129,7 @@ export function newPrebuildPlan(app: PrebuildApp, chapter: Chapter, calm: () => 
     const spec = figureSpec(env!, c, art);
     if (hasParked(scope, c.id, spec.fingerprint)) return;
     const made: BuiltFigure = (await tryRigFigure(spec.request)) ?? { actor: await PaintedActor.create(spec.request.opts), rig: null };
-    if (!calm()) {
-      made.actor.dispose(); // a fight was picked while this was being made: the battle builds its own
-      return;
-    }
-    parkFigure(scope, c.id, spec.fingerprint, made);
+    parkOrDispose(scope, c.id, spec.fingerprint, made, calm);
   }
 
   /** The work, in the order it pays: the room's light (the biggest single stall), the figures, their idle paintings and programs, the looks' reads of those, then the other poses. */
