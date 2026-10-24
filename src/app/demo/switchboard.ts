@@ -106,12 +106,12 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
     const live = isDemoChapter(demoChapter());
     if (!live) rigsAtFight = null;
     else if (rigsAtFight === null) rigsAtFight = partyRigsMode();
+    el.classList.toggle('sb-pause', pauseScreenUp()); // r64-fixes review F4: for the legend too, or a legend opened over the pause screen kept the class and sat over the command menu after the resume
     if (view === 'legend') {
       renderLegend(live);
       return;
     }
     el.classList.remove('sb-legend');
-    el.classList.toggle('sb-pause', pauseScreenUp());
     const state = boardState();
     const parts = state.map((s) => {
       const cls = [s.isNew ? 'sb-new' : '', flashed === s.name ? 'sb-hit' : ''].filter(Boolean).join(' ');
