@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1857 decisions in all: 1344 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1216 of the written decisions record a blanket yes.
+1858 decisions in all: 1345 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1216 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1733 |
+| adopted | 1734 |
 | proposed | 8 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1857** |
+| **All** | **1858** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -40,20 +40,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | guide | 34 |
 | release | 96 |
 | hosting | 18 |
-| process | 204 |
+| process | 205 |
 | critic | 42 |
 | data | 17 |
 | tech | 30 |
 | site | 21 |
-| **All** | **1857** |
+| **All** | **1858** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 954 |
+| both games | 955 |
 | FFX only | 500 |
 | FFX-2 only | 385 |
 | FF7 hidden experiment | 18 |
-| **All** | **1857** |
+| **All** | **1858** |
 
 ## Standing rules in force
 
@@ -8778,7 +8778,7 @@ Saturday · 25 decisions
 
 ### 2026-10-25
 
-Sunday · 2 decisions
+Sunday · 3 decisions
 
 - <a id="d-1343"></a>**D-1343** — DRIVER CALL under 201, his to overturn, disclosed in the release notes: the R63-M1 trace found no pose-lane defect in Chapter I, so the continuity harness gets four policy words instead of an engine change, and the driver accepts the limits stated here for the conference (both games, critic plumbing; the evidence is FFX Chapter I)
   - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
@@ -8787,6 +8787,11 @@ Sunday · 2 decisions
   - Source: The driver’s call of 2026-10-25 00:30 EDT (the DRIVER-STATE hourly line of 00:30 EDT), made under 201 (D-1333: “You make the calls please”), …
 - <a id="d-1344"></a>**D-1344** — DRIVER CALL under his delegation, his to overturn: release 64 declutters Chapter IV’s first menu and the fight itself before the freeze: one boss bar (the F1 ribbon, FFX-2’s HP rule kept), the guide, the enemy-intent line and the details collapsed behind Intel, no first-time coach cards on the booth path, Intel stepping back during actions; Chapter I is checked the same (FFX-2 mainly; both games for the plumbing)
   - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
-  - What changed: Item 203. The live check of release 63 passed (the exact artifact byte for byte, 0 errors), but the driver’s own look at the live Chapter IV frames found the F1 HUD showing two boss bars, and the guide, the enemy-intent line and the first-time coach cards up at the first menu and during actions. That is against the approved F1 target (D-1278 “Less on screen”: the enemy details, the guide and the tips behind Intel; D-1281 “Steps back in action”: the HUD steps back during an action). The conference build was already live and frozen into the booth copy (D:/pyrefly-booth-63), so the driver launched the r64-ch4-declutter workflow at about 03:58 EDT on 2026-10-25 (fix, a skeptic pass, a second fix, then a release 64 candidate with its CHANGELOG entry and a focused review, deployed only on its SHIP under his standing deploy words). The booth copy is rebuilt from release 64 after that review; until then D:/pyrefly-booth-63 is the booth’s copy and is proved offline. Nothing of this is built or live at the time of this row; the build, its review and its deploy get their own action rows.
-  - area ui · both games · adopted · delivery in progress · see [D-1278](#d-1278), [D-1281](#d-1281), [D-1314](#d-1314), [D-1324](#d-1324), [D-1331](#d-1331) · refines [D-1333](#d-1333)
+  - What changed: Item 203. The live check of release 63 passed (the exact artifact byte for byte, 0 errors), but the driver’s own look at the live Chapter IV frames found the F1 HUD showing two boss bars, and the guide, the enemy-intent line and the first-time coach cards up at the first menu and during actions. That is against the approved F1 target (D-1278 “Less on screen”: the enemy details, the guide and the tips behind Intel; D-1281 “Steps back in action”: the HUD steps back during an action). The conference build was already live and frozen into the booth copy (D:/pyrefly-booth-63), so the driver launched the r64-ch4-declutter workflow at about 03:58 EDT on 2026-10-25 (fix, a skeptic pass, a second fix, then a release 64 candidate with its CHANGELOG entry and a focused review, deployed only on its SHIP under his standing deploy words). The booth copy is rebuilt from release 64 after that review; until then D:/pyrefly-booth-63 is the booth’s copy and is proved offline. Nothing of this is built or live at the time of this row; the build, its review and its deploy get their own action rows. Update of the r64 records pass (2026-10-25 evening): delivered. The declutter lane built it (A-1012, 9e248aa12) beside the dim-plane fix the trailer found (A-1011, 6fd078c58; the two merged in db89c9b36, A-1013); the skeptic found no critical and no major defect and six minor ones (A-1014); the focused review said SHIP with the changed area PASS (A-1016) and release 64 went live at 09:16 EDT (A-1017, e9907cad8, bundle BygGxbJE); the live check passed (A-1018): at the first menu of Chapters I and IV one boss bar, no Intel panel and no coach card; the booth copy is rebuilt from it (D:/pyrefly-booth-64, A-1019). Still his: whether a first-time public player gets back Rikku's one line about the gauges (the build shows no in-battle teaching card while the F1 HUD is on), and the minor items carried (Chapter I's enemy-move read-out over the turn strip's active slot; a few seconds of the fight's own plates on the first menu).
+  - area ui · both games · adopted · delivery implemented · see [D-1278](#d-1278), [D-1281](#d-1281), [D-1314](#d-1314), [D-1324](#d-1324), [D-1331](#d-1331) · refines [D-1333](#d-1333)
   - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1345"></a>**D-1345** — Keep going and do not stop through Sunday evening: the driver keeps the CPU lanes working (the deep review's end, the records, the post-conference backlog) with no browser, GPU, dev server or build while the PC is kept quiet for the booth, and nothing deploys (both games)
+  - Bailey: “Keep going please and don't stop”
+  - What changed: A standing word for the rest of Sunday. At 19:35 EDT the driver launched the sunday-evening-records-and-backlog workflow (wf_65ade3c0-fb2, CPU only; A-1021): this records pass (release 64's deploy records, the rows, docs/LIVE.md and NOW.md; A-1022) and the post-conference backlog (every open finding of releases 62 to 64 ranked, motion first). It widens nothing: nothing deploys without a review's SHIP and his standing deploy words (D-931); nothing he will see, hear or feel is built before he has picked it (hard rule 9); the lanes ask him nothing (D-1333); and the PC stays quiet for Monday's booth, so these lanes start no browser, GPU job, dev server or build while the deep review of the live build (round 29, A-1020) owns the browser, until about 23:00 EDT.
+  - area process · both games · adopted · delivery in progress · see [D-1320](#d-1320), [D-1333](#d-1333), [D-931](#d-931)
+  - Source: Bailey, 2026-10-25 about 19:30 EDT (the DRIVER-STATE line of 19:35 EDT), typed in the chat, verbatim: “Keep going please and don't stop”. It is not …
