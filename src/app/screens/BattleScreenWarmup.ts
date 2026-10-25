@@ -40,9 +40,13 @@ import {
   PCFSoftShadowMap,
   Scene,
   type Camera,
+  type Texture,
   type Object3D,
   type WebGLRenderTarget,
 } from 'three';
+
+import { fenceContext, gpuSettled, uploadTextures, type Part } from './warmupPacing.ts';
+export { gpuSettled } from './warmupPacing.ts';
 
 /** The slice of `engine/Renderer.ts` this needs. */
 export interface WarmupRenderer {
@@ -52,6 +56,9 @@ export interface WarmupRenderer {
     compileAsync(scene: Object3D, camera: Camera): Promise<unknown>;
     /** The raw WebGL render, used by {@link drawSlicedOffscreen} only (a stand-in without it has nothing to warm that way). */
     render?(scene: Object3D, camera: Camera): void;
+    /** {@link drawSlicedOffscreen} only: the texture upload of one texture, and the GL context its fences are made on (a stand-in without them is drawn as before). */
+    initTexture?(texture: Texture): void;
+    getContext?(): unknown;
     readonly shadowMap?: { type: number };
   };
   readonly composer: { readonly readBuffer: WebGLRenderTarget; readonly passes?: readonly object[] };
@@ -128,7 +135,6 @@ const SLICE_FRAME_MS = 120;
 /** At most this many slices; the final complete draw takes whatever is left. */
 const MAX_SLICES = 14;
 
-type Part = Object3D & { material?: Material | Material[] };
 
 function nextFrame(): Promise<void> {
   return new Promise((resolve) => {
@@ -178,19 +184,38 @@ export async function drawSlicedOffscreen(r: WarmupRenderer, scene: Scene): Prom
   const gl = r.renderer;
   const target = r.composer?.readBuffer;
   if (typeof gl?.render !== 'function' || !target) return;
-  await sliceDraw(scene, () => {
-    const previous = gl.getRenderTarget();
-    try {
-      gl.setRenderTarget(target);
-      gl.render!(scene, r.camera);
-    } finally {
-      gl.setRenderTarget(previous);
-    }
-  });
+  const ctx = fenceContext(gl.getContext?.());
+  const uploaded = new WeakSet<object>();
+  await sliceDraw(
+    scene,
+    () => {
+      const previous = gl.getRenderTarget();
+      try {
+        gl.setRenderTarget(target);
+        gl.render!(scene, r.camera);
+      } finally {
+        gl.setRenderTarget(previous);
+      }
+    },
+    {
+      // r63-play (the overnight fix of the skeptic's M1; both games). Measured behind the title in headless GPU Chromium, each family's first draw stopped the page for 95 to 370 ms: a texture
+      // upload (up to 80 ms for a figure's, 293 ms for a 5376 x 3072 backdrop master: one call each) and then the next family's first use of its program, whose log query waits in the GPU process
+      // for the executables the draw before it was still building. The textures go up one at a time (a task each, none sharing a task with a draw), and after each draw the page waits on a fence
+      // (a poll that does not block) before it touches the next program, so the stalls stay in the GPU process and the page keeps running. The same programs are built, the same textures uploaded.
+      before: (members) => uploadTextures(gl, members, uploaded),
+      after: ctx ? () => gpuSettled(ctx) : undefined,
+    },
+  );
+}
+
+/** What a paced slice does around its draw (the offscreen warm only): before it, with the family's drawables; after it, before the frame wait. */
+interface SliceHooks {
+  before?: (members: readonly Part[]) => Promise<void>;
+  after?: (() => Promise<void>) | undefined;
 }
 
 /** Draw the scene once per program family (the others hidden for that draw), a frame apart, then once complete: `draw` is one render. */
-async function sliceDraw(scene: Scene, draw: () => void): Promise<void> {
+async function sliceDraw(scene: Scene, draw: () => void, hooks: SliceHooks = {}): Promise<void> {
   const parts: Part[] = [];
   scene.traverse((o) => {
     if (o.visible && (o as Part).material) parts.push(o as Part);
@@ -207,6 +232,7 @@ async function sliceDraw(scene: Scene, draw: () => void): Promise<void> {
     for (const members of families.values()) {
       if (slices++ >= MAX_SLICES) break;
       const mine = new Set(members);
+      if (hooks.before) await hooks.before(members);
       const hidden = parts.filter((o) => !mine.has(o));
       for (const o of hidden) o.visible = false;
       try {
@@ -214,10 +240,12 @@ async function sliceDraw(scene: Scene, draw: () => void): Promise<void> {
       } finally {
         for (const o of hidden) o.visible = true;
       }
+      if (hooks.after) await hooks.after();
       await nextFrame();
     }
   }
   draw();
+  if (hooks.after) await hooks.after();
 }
 
 /** Start compiling `obj` with `target` bound, as the pass that draws it will have it. */

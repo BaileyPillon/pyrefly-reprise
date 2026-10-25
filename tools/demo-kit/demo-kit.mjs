@@ -2,12 +2,13 @@
 /**
  * The booth's one command (R61; docs/DEMO-KIT.md): serve the offline copy of the site, open it full screen, stop it, or put a fresh visitor in front of a fresh save.
  *
- *   node tools/demo-kit/demo-kit.mjs start  [--dir <folder>] [--port 5173] [--browser chrome|edge] [--no-kiosk] [--no-browser] [--keep-profile] [--cold]
+ *   node tools/demo-kit/demo-kit.mjs start  [--dir <folder>] [--port 5173] [--browser chrome|edge] [--no-kiosk] [--no-browser] [--keep-profile] [--cold] [--plain]
  *   node tools/demo-kit/demo-kit.mjs reset  [--browser chrome|edge] [--no-kiosk]        (close the browser, wipe its save and per-tab memory, keep its caches, open it again; the server keeps running)
  *   node tools/demo-kit/demo-kit.mjs stop   [--wipe]                                     (close the browser, stop the server; --wipe also deletes the browser profile)
  *   node tools/demo-kit/demo-kit.mjs status
  *
- * `start` runs `serve-offline.mjs` in the background (loopback only, no internet needed), then opens Chrome (else Edge) in kiosk mode on `http://127.0.0.1:<port>/?demo=1`, in a browser profile of its own
+ * `start` runs `serve-offline.mjs` in the background (loopback only, no internet needed), then opens Chrome (else Edge) in kiosk mode on `http://127.0.0.1:<port>/?demo=1&pack=demo` (the conference pack on:
+ * the F1 HUD, the sound pass, the pro look / camera / staging, the boss re-cut, the booth cards, the fight prebuild; `--plain` opens `?demo=1` alone, the plain release-62 demo), in a browser profile of its own
  * under `%LOCALAPPDATA%\EchoesDemoKit` (or `ECHOES_DEMO_HOME`). The game's save lives in that profile's localStorage, and the demo's per-tab counters in its session, so a fresh profile is a fresh save and
  * a fresh first fight. What it started it stops BY PID, after checking the process still is the one it started (a stale file from before a reboot never kills a stranger); nothing is stopped by image name.
  *
@@ -20,7 +21,7 @@ import { dirname, join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { DEFAULT_PORT, SAVE_PATHS, browserArgs, defaultSiteDir, demoUrl, findBrowser, kitHome } from './demo-kit-lib.mjs';
+import { DEFAULT_PORT, SAVE_PATHS, boothUrl, browserArgs, defaultSiteDir, findBrowser, isPlainBoothUrl, kitHome } from './demo-kit-lib.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SERVER = join(HERE, 'serve-offline.mjs');
@@ -145,6 +146,7 @@ async function start(opt, flag) {
   const old = readJson(STATE);
   if (old?.port && (await health(old.port))) {
     say(`Already running at ${old.url}. Use reset to put a fresh visitor in front of a fresh save, or stop first.`);
+    if (isPlainBoothUrl(old.url) !== flag('--plain')) say(`note: that is the ${isPlainBoothUrl(old.url) ? 'plain demo' : 'conference pack'}; to switch, run stop-demo.cmd, then start-demo.cmd${isPlainBoothUrl(old.url) ? '' : ' --plain'}.`);
     return 0;
   }
   if (old) {
@@ -163,8 +165,9 @@ async function start(opt, flag) {
   if (flag('--cold')) await wipeProfile();
   else if (!flag('--keep-profile')) await wipeSave();
   const server = await startServer(dir, Number(opt('--port', String(DEFAULT_PORT))));
-  const url = demoUrl(server.port);
+  const url = boothUrl(server.port, { plain: flag('--plain') });
   say(`Serving ${dir}\n  at http://127.0.0.1:${server.port}/  (nothing leaves this machine)`);
+  say(isPlainBoothUrl(url) ? 'Address: the plain demo (?demo=1, --plain): the conference pack is off.' : 'Address: the conference pack is on (?demo=1&pack=demo). start-demo.cmd --plain opens the plain demo.');
   const state = { serverPid: server.pid, port: server.port, dir, url, startedAt: new Date().toISOString(), browserPid: null, browser: null, kiosk: !flag('--no-kiosk') };
   if (!flag('--no-browser')) {
     const prefer = opt('--browser');

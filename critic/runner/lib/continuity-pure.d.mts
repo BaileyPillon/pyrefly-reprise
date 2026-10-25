@@ -42,7 +42,7 @@ export interface ContinuityConfig {
   /** W4: the readings from the pixels; `false` switches one off. */
   readings?: { height?: boolean; feetSilhouette?: boolean; realHead?: boolean };
   /** W4, the CHK-027 split: `dashesFail` gates the mid-move dashes as every jerk was gated; `teleportPx` is the mid-move step that is gated either way. A cfg without this block gates every jerk. */
-  jerks?: { dashesFail?: boolean; teleportPx?: number };
+  jerks?: { dashesFail?: boolean; teleportPx?: number; /** R63-M1: a step at a swap that is the figure travelling (head and feet together) and not the pose changing is a dash; `true` turns it on. */ commonMode?: boolean };
   /** W4: `honour: false` judges every pose; `path` is the ledger. */
   waivers?: { honour?: boolean; path?: string };
   strips: { worstSwaps: number; worstJerks: number; worstGhosts: number; beforeFrames: number; afterFrames: number };
@@ -52,6 +52,10 @@ export interface ContinuityConfig {
   staged?: { twirl?: boolean; gapFrames?: number };
   /** r43 (FOC40-02): `excuse: true` tags a jerk whose step happened under the Save Sphere's wash as covered and leaves it out of the numbers (it ships false until the owner's yes: the definition of a jerk is his); `minCover` is how much of the picture the veil must hide; a null `selector` stops the probe reading the wash. */
   wash?: { excuse?: boolean; minCover?: number; selector?: string | null };
+  /** Motion pass (lane "core", step 2; continuity-smear.mjs): `excuse: true` leaves a swap that matches a cut the engine logged as a planned smear out of the snaps, and a jerk at it of at most `maxJerkPx`; Bailey 2026-10-22, "Yes, only planned smears." */
+  smear?: { excuse?: boolean; slackMs?: number; maxJerkPx?: number; /** R63-M1: the larger limit, a share of the figure's drawn height at the swap. */ maxJerkShare?: number; /** R63-M1: a window runs on by the stalls just before the flip. */ elastic?: boolean; bigOverlap?: number; bigAnchor?: number };
+  /** R63-M1 (continuity-unseen.mjs): a figure off the view cannot be seen to jerk or to snap; `excuse: false` gives the earlier reading back. */
+  unseen?: { excuse?: boolean; minShare?: number; fadeMin?: number; maxBoxViews?: number };
   [key: string]: unknown;
 }
 
@@ -75,9 +79,13 @@ export interface SwapResult {
 }
 export interface SwapRow extends Partial<SwapResult> {
   id?: number; figure?: string; fromPose?: string; toPose?: string; n?: number; counted?: boolean; camCut?: boolean; notShowing?: boolean; snap?: boolean; hardCut?: boolean;
+  /** Motion pass, step 2: this swap matched a cut the engine logged as a planned smear (`snap` is then false and `snapSmear` is what it would have been). */
+  smear?: { style: unknown; kind: unknown; cutMs: number; strength: unknown; flash: unknown; overlap: unknown; anchorDistance: unknown }; snapSmear?: boolean;
+  /** R63-M1: the long-frame time just before the flip, how tall the figure is drawn there (px at 1600 wide), and a swap in a frame in which the figure was off the view (not a snap; `snapUnseen` is what it would have been). */
+  stallMs?: number; figurePx?: number | null; unseen?: boolean; snapUnseen?: boolean;
   ghost: SwapResult['ghost'];
 }
-export interface Jerk { n: number; t: number; px: number; localPx: number; ratio: number; part: 'feet' | 'head' | 'centroid'; dx: number; dy: number; atSwap?: boolean; /** W4: 'swap' (gated), 'dash' (reported) or 'teleport' (a mid-move step no lunge could make: gated). */ kind?: 'swap' | 'dash' | 'teleport'; /** W4: the frame time of the frame the step fell on (ms), and whether it was a long one. */ frameMs?: number | null; longFrame?: boolean; id?: number; staged?: { kind: 'twirl'; seq?: number }; /** r43: what was over the step (the wash element's opacity and the cover it gave), when a wash was up on either frame. */ wash?: { opacity: number; cover: number; frames: [number, number] }; /** r43: the step happened under the wash and the policy excuses it. */ covered?: boolean }
+export interface Jerk { n: number; t: number; px: number; localPx: number; ratio: number; part: 'feet' | 'head' | 'centroid'; dx: number; dy: number; atSwap?: boolean; /** R63-M1: how much of the step is the pose changing against the figure's own feet (px at 1600 wide), where head and feet are both tracked. */ relPx?: number; /** R63-M1: a step at a blended swap that was the figure travelling: a dash, not the swap's. */ commonMode?: boolean; /** W4: 'swap' (gated), 'dash' (reported) or 'teleport' (a mid-move step no lunge could make: gated). */ kind?: 'swap' | 'dash' | 'teleport'; /** W4: the frame time of the frame the step fell on (ms), and whether it was a long one. */ frameMs?: number | null; longFrame?: boolean; id?: number; staged?: { kind: 'twirl'; seq?: number }; /** r43: what was over the step (the wash element's opacity and the cover it gave), when a wash was up on either frame. */ wash?: { opacity: number; cover: number; frames: [number, number] }; /** r43: the step happened under the wash and the policy excuses it. */ covered?: boolean; /** Motion pass, step 2: the step is AT the cut of a planned smear and no bigger than the policy's maxJerkPx (continuity-smear.mjs). */ smeared?: { style: unknown; kind: unknown; swap: number | undefined; share?: number } }
 
 export declare const FRAME_MS: number;
 export declare function unitSquareToQuad(q: ArrayLike<number>): Mat3;
@@ -94,7 +102,7 @@ export declare function planesOf(fig: FigRec): { cur: PlaneRec | null; other: Pl
 export interface TrackCams { feet: [number, number] | null; head: [number, number] | null; centroid: [number, number] | null }
 export declare function figureTrack(fig: FigRec, anchors: (Anchors | null)[], byCentroid?: boolean): { feet: [number, number] | null; head: [number, number] | null; centroid: [number, number] | null; /** the camera-only shift of each tracked point (probe version 2) */ cams: TrackCams } | null;
 export declare function analyzeSwap(o: { frames: FrameOfFig[]; at?: number; swap: { from: number; to: number }; anchors: (Anchors | null)[]; k1600: number; camCut: boolean; cfg: ContinuityConfig; names?: { from?: string; to?: string } }): SwapResult;
-export declare function detectJerks(track: { n: number; t: number; feet: [number, number] | null; head: [number, number] | null; centroid?: [number, number] | null; cam: [number, number]; cams?: TrackCams | null }[], k1600: number, cfg: ContinuityConfig): Jerk[];
+export declare function detectJerks(track: { n: number; t: number; feet: [number, number] | null; head: [number, number] | null; centroid?: [number, number] | null; cam: [number, number]; cams?: TrackCams | null; /** R63-M1: the figure was off the view in this frame. */ unseen?: boolean }[], k1600: number, cfg: ContinuityConfig): Jerk[];
 export declare function median(a: number[]): number;
 export interface Summary {
   battleSeconds: number; swaps: number; counted: number; excludedByCut: number; excludedNotShowing: number; swapsPerMinute: number | null;
@@ -104,7 +112,7 @@ export interface Summary {
     heightMeasured: number; heightOverBand: number; heightWaived: number; minStature: number | null; maxStature: number | null; koLengthMeasured: number; minKoLength: number | null; koLengthReported: number;
     feetSilMeasured: number; feetSilOver: number; feetSilWaived: number; maxFeetSilPx: number; holdSwaps: number; worstRealHeadPct: number; realHeadOutsideBand: number; realHeadWaived: number; variantHeadSwaps?: number; worstVariantHeadPct?: number; variantHeadOutsideBand?: number; unregisteredSwaps: number;
   };
-  motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number; heldSwaps: number; longestHeldFrames: number; stagedChanges: number; stagedSteps: number; stagedSnapsExcused: number; jerksAtStaged: number; jerksCovered?: number; worstCoveredJerkPx?: number;
+  motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number; heldSwaps: number; longestHeldFrames: number; stagedChanges: number; stagedSteps: number; stagedSnapsExcused: number; jerksAtStaged: number; jerksCovered?: number; worstCoveredJerkPx?: number; smearsPlanned?: number; smearSwaps?: number; smearSnapsExcused?: number; jerksSmeared?: number; worstSmearedJerkPx?: number;
     /** W4, the CHK-027 split: jerks at a swap (gated), mid-move teleports (gated), mid-move dashes (reported), and the same by the frame they fell on. */
     swapJerks: number; swapJerksWorstPx: number; swapJerksOverFail: number; teleports: number; teleportsWorstPx: number; dashes: number; dashesWorstPx: number; dashesOverFail: number;
     jerksLongFrame: number; swapJerksLongFrame: number; swapJerksSteadyOverFail: number;
@@ -115,7 +123,7 @@ export interface Summary {
 }
 export interface FrameTime { frames: number; p50Ms: number; p90Ms: number; p99Ms: number; maxMs: number; longFrames: number; longFramePct: number; longMs: number }
 export declare function frameTimeOf(dts: number[], longMs?: number): FrameTime | null;
-export declare function summarize(o: { swaps: SwapRow[]; jerks: Jerk[]; coveredJerks?: Jerk[]; battleSeconds: number; cfg: ContinuityConfig; frameTime?: FrameTime | null }): Summary;
+export declare function summarize(o: { swaps: SwapRow[]; jerks: Jerk[]; coveredJerks?: Jerk[]; smearedJerks?: Jerk[]; smear?: { planned: number; matched: number; snapsExcused: number } | null; battleSeconds: number; cfg: ContinuityConfig; frameTime?: FrameTime | null }): Summary;
 export declare function verdicts(s: Pick<Summary, 'battleSeconds' | 'counted' | 'size' | 'motion'>, cfg: ContinuityConfig, run?: { fps?: number | null; error?: string | null }): Summary['checks'];
 export declare function swapBadness(s: SwapRow, cfg: ContinuityConfig): number;
 export declare function continuityReportLine(s: { battleSeconds: number; chapters?: { fps?: number | null; dedicated?: boolean | null }[]; checks: Record<string, { result: string; reasons?: string[] }>; motion?: { jerksCovered?: number; worstCoveredJerkPx?: number } }): string;

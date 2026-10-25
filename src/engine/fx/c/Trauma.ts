@@ -7,7 +7,11 @@
  * frame shakes while the figures hold, which is what sells the weight.
  *
  * Pure: no DOM and no `three`. Game case: both (per-game numbers in `SpectacleRules.ts`).
+ *
+ * The dolly kick has two shapes (`feel/PunchCurve.ts`): today's (90 ms in, 380 ms smoothstep out, worth 9 world units per unit of fraction) and the motion program's `?punch=new`
+ * settle (70 ms in, 300 ms out with a small undershoot, worth the struck figure's depth per unit of fraction, so 2.5 percent is 2.5 percent on screen).
  */
+import { KICK_WORLD_TODAY, TODAY_KICK, kickEnvelope as envelopeOf, kickSeconds, type KickShape } from '../../feel/PunchCurve.ts';
 
 export interface TraumaParams {
   max: number;
@@ -33,8 +37,8 @@ export class Trauma {
   private t = 0;
   private kickAmt = 0;
   private kickAge = 1e9;
-  private readonly kickIn = 0.09;
-  private readonly kickOut = 0.38;
+  private kickShape: KickShape = TODAY_KICK;
+  private kickWorld = KICK_WORLD_TODAY;
 
   constructor(public params: TraumaParams) {}
 
@@ -42,18 +46,25 @@ export class Trauma {
     this.amount = Math.min(1, this.amount + Math.max(0, v));
   }
 
-  /** A dolly kick toward the subject: in over 90 ms, back over 380 ms. */
-  kick(fraction: number): void {
+  /**
+   * A dolly kick toward the subject. Today's: in over 90 ms, back over 380 ms, 9 world units per unit of `fraction`. `shape` and `world` are the `?punch=new` settle and the
+   * struck figure's depth (`feel/PunchCurve.ts`).
+   */
+  kick(fraction: number, shape: KickShape = TODAY_KICK, world: number = KICK_WORLD_TODAY): void {
     if (fraction <= 0) return;
     this.kickAmt = Math.max(fraction, this.kickAmt * this.kickEnvelope());
+    this.kickShape = shape;
+    this.kickWorld = world;
     this.kickAge = 0;
   }
 
   private kickEnvelope(): number {
-    const a = this.kickAge;
-    if (a < this.kickIn) return a / this.kickIn;
-    const b = (a - this.kickIn) / this.kickOut;
-    return b >= 1 ? 0 : 1 - b * b * (3 - 2 * b);
+    return envelopeOf(this.kickAge, this.kickShape);
+  }
+
+  /** World units of dolly per unit of the `dolly` fraction `offset()` returns. */
+  get dollyWorld(): number {
+    return this.kickWorld;
   }
 
   update(dt: number): void {
@@ -63,7 +74,7 @@ export class Trauma {
   }
 
   get active(): boolean {
-    return this.amount > 0.001 || this.kickEnvelope() > 0.001;
+    return this.amount > 0.001 || (this.kickAmt > 0 && this.kickAge < kickSeconds(this.kickShape));
   }
 
   reset(): void {

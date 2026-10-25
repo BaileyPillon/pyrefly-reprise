@@ -78,13 +78,17 @@ export function composeHiPlates(
   work: { w: number; h: number; plates: Uint8Array[] },
   scale: number,
   solid = 0.999,
+  shared?: Texture,
 ): ComposedPlates {
-  const paintTex = new Texture(paint as HTMLImageElement);
-  paintTex.colorSpace = SRGBColorSpace;
-  paintTex.generateMipmaps = false;
-  paintTex.minFilter = LinearFilter;
-  paintTex.magFilter = LinearFilter;
-  paintTex.needsUpdate = true;
+  // `shared`: the painting plane's own texture (it is already on the GPU, and it is not ours to dispose); otherwise the second texture over the same image, as release 39 made it.
+  const paintTex = shared ?? new Texture(paint as HTMLImageElement);
+  if (!shared) {
+    paintTex.colorSpace = SRGBColorSpace;
+    paintTex.generateMipmaps = false;
+    paintTex.minFilter = LinearFilter;
+    paintTex.magFilter = LinearFilter;
+    paintTex.needsUpdate = true;
+  }
   const workTex = work.plates.map((bytes) => {
     const t = new DataTexture(bytes, work.w, work.h, RGBAFormat, UnsignedByteType);
     t.colorSpace = SRGBColorSpace;
@@ -143,7 +147,7 @@ export function composeHiPlates(
     renderer.autoClear = prevAutoClear;
     quad.geometry.dispose();
     material.dispose();
-    paintTex.dispose();
+    if (!shared) paintTex.dispose();
     for (const t of workTex) t.dispose();
   }
   return { targets, textures: targets.map((t) => t.texture) };

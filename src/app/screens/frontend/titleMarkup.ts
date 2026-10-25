@@ -39,6 +39,7 @@ import { movedNoticeHtml } from './movedNotice.ts';
 import { TITLE_ART_PLATES, type TitleArt } from '../../saveFrontend.ts';
 import { buildTagHtml, type BuildInfo } from '../../changelog/buildInfo.ts';
 import { infoEntriesHtml } from './titleInfoHtml.ts';
+import { ECHO_TITLE_SIZES, echoMasterUrl, echoSrcset, echoSrcsetAttrs } from './echoPlate.ts';
 
 /**
  * Where the two on the shore stand, in fractions of the frame.
@@ -154,9 +155,10 @@ export function titleMarkup(opts: TitleMarkupOptions): string {
   // the candidate list goes in with the element. Emitting `src` alone and
   // upgrading afterwards makes the browser start the 1x plate and then abort
   // it, which is a wasted megabyte and a red line in the network panel.
-  // The Echo ships its 1x plate alone (no 2x master tonight), so it is never offered one: a candidate for a file
+  // The Echo has a 2x master too (r64: `art/title/echo.2x.webp`, `echoPlate.ts`), offered the same way: blind before the manifest
+  // has loaded (index.html preloads it with these candidates), only when the manifest lists it after that. A candidate for a file
   // the manifest does not list is a 404 on the one image the screen is.
-  const candidates = echo ? '' : titleSrcsetNow();
+  const candidates = echo ? echoSrcsetAttrs(ECHO_TITLE_SIZES, true) : titleSrcsetNow();
   const plane = (mod: string): string =>
     `<div class="fe-title__plane fe-title__plane--${mod}">` +
     `<img src="${painting}" ${candidates} alt="${echo ? 'Echoes of Spira' : ''}" draggable="false" ` +
@@ -252,11 +254,12 @@ function titleSrcsetNow(): string {
   );
 }
 
-export function upgradeTitlePlanes(root: ParentNode): Promise<void> {
-  const url = artUrl(TITLE_PLATE);
+export function upgradeTitlePlanes(root: ParentNode, art: TitleArt = 'farplane'): Promise<void> {
+  const echo = art === 'echo';
+  const url = artUrl(echo ? TITLE_ART_PLATES.echo : TITLE_PLATE);
   const imgs = Array.from(root.querySelectorAll('.fe-title__plane img'));
   return loadArtManifest().then(() => {
-    const retina = title2xUrlFor(url);
+    const retina = echo ? echoMasterUrl(false) : title2xUrlFor(url);
     for (const img of imgs) {
       if (!(img instanceof HTMLImageElement) || img.getAttribute('src') !== url) continue;
       // The markup offered the master before the manifest could say (A-16); it is not there.
@@ -268,8 +271,8 @@ export function upgradeTitlePlanes(root: ParentNode): Promise<void> {
       // Already offered in the markup: setting the same srcset again restarts the image
       // request, and the browser aborts the one in flight (t1-b2b's aborted keyart request, A-16).
       if (img.hasAttribute('srcset')) continue;
-      img.sizes = titlePlateSizes();
-      img.srcset = `${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`;
+      img.sizes = titlePlateSizes(art);
+      img.srcset = echo ? echoSrcset(retina) : `${url} ${PLATE_1X_WIDTH}w, ${retina} ${PLATE_2X_WIDTH}w`;
     }
   });
 }
@@ -279,6 +282,7 @@ export function upgradeTitlePlanes(root: ParentNode): Promise<void> {
  * the width a window this tall crops out of a 1.75:1 painting, times the
  * largest plane scale (1.11).
  */
-export function titlePlateSizes(): string {
+export function titlePlateSizes(art: TitleArt = 'farplane'): string {
+  if (art === 'echo') return ECHO_TITLE_SIZES;
   return `calc(1.11 * max(100vw, ${(PLATE_2X_WIDTH / 1536).toFixed(3)} * 100vh))`;
 }

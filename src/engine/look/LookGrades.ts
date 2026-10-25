@@ -10,6 +10,7 @@
 import { FFX2_RECIPE, LUT_DOMAIN, LUT_SIZE, atLuma, complement, hexRgb, luma, shoulder, type LookPalette } from '../fx/a/LookLut.ts';
 import type { LookName, LookStrength, Rgb } from './LookConfig.ts';
 import { BOLD_BASE, applyHueBoosts, boldRoom, type HueBoost } from './LookGradesBold.ts';
+import { NEUTRAL_RECIPE, proColour, proRev, proRoom } from './pro/ProGrade.ts';
 
 export type GameKey = 'ffx' | 'ffx2';
 
@@ -153,8 +154,10 @@ export function applyGrade(c: Readonly<Rgb>, r: GradeRecipe): Rgb {
 }
 
 /** The LUT bytes for a look in a room (`LUT_SIZE` cubed RGBA, red fastest, each axis encoded `c = LUT_DOMAIN * u^2`): `GradeShader`'s `uLook`. */
-export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null): Uint8Array {
-  const r = recipeFor(look, game, sceneKey, palette, strength, patch);
+export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null, pro = false): Uint8Array {
+  // lane pro-look: the PRO arena's LUT is the engine's NEUTRAL recipe followed by the room's colour transform (`pro/ProGrade.ts`); a room without a pro table keeps the bold grade.
+  const pr = pro ? proRoom(sceneKey) : undefined;
+  const r = recipeFor(look, game, sceneKey, palette, strength, pr ? { ...(patch ?? {}), ...NEUTRAL_RECIPE } : patch);
   const out = new Uint8Array(LUT_SIZE * LUT_SIZE * LUT_SIZE * 4);
   const dec = (k: number): number => {
     const u = k / (LUT_SIZE - 1);
@@ -164,7 +167,8 @@ export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palett
   for (let b = 0; b < LUT_SIZE; b++) {
     for (let g = 0; g < LUT_SIZE; g++) {
       for (let rr = 0; rr < LUT_SIZE; rr++) {
-        const c = applyGrade([dec(rr), dec(g), dec(b)], r);
+        let c = applyGrade([dec(rr), dec(g), dec(b)], r);
+        if (pr) c = proColour(c, pr.colour);
         out[o++] = Math.round(c[0] * 255);
         out[o++] = Math.round(c[1] * 255);
         out[o++] = Math.round(c[2] * 255);
@@ -176,6 +180,6 @@ export function lutBytes(look: LookName, game: GameKey, sceneKey: string, palett
 }
 
 /** A cache key that changes whenever the LUT would. */
-export function lutKey(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null): string {
-  return `${look}:${game}:${sceneKey}:${palette.key}:${palette.sky}${strength === 'bold' && look !== 'anime' ? ':bold' : ''}${patch ? ':' + JSON.stringify(patch) : ''}`;
+export function lutKey(look: LookName, game: GameKey, sceneKey: string, palette: LookPalette, strength: LookStrength = 'subtle', patch: Partial<GradeRecipe> | null = null, pro = false): string {
+  return `${look}:${game}:${sceneKey}:${palette.key}:${palette.sky}${strength === 'bold' && look !== 'anime' ? ':bold' : ''}${pro && proRoom(sceneKey) ? ':pro' + proRev() : ''}${patch ? ':' + JSON.stringify(patch) : ''}`;
 }

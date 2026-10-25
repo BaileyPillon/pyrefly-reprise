@@ -1,0 +1,595 @@
+[
+ {
+  "name": "hit-ffx-tidus-today",
+  "file": "candidates/pass-22oct/hit-ffx-tidus-today.mp3",
+  "seconds": 1.5,
+  "peakDb": -8.1,
+  "momentaryMax": -21.1,
+  "note": "Tidus (sword), Chapter I: today"
+ },
+ {
+  "name": "hit-ffx-tidus-new",
+  "file": "candidates/pass-22oct/hit-ffx-tidus-new.mp3",
+  "seconds": 1.5,
+  "peakDb": -7.1,
+  "momentaryMax": -20.5,
+  "note": "Tidus (sword), Chapter I: new"
+ },
+ {
+  "name": "hit-ffx-tidus-crit-today",
+  "file": "candidates/pass-22oct/hit-ffx-tidus-crit-today.mp3",
+  "seconds": 1.57,
+  "peakDb": -10.1,
+  "momentaryMax": -19,
+  "note": "Tidus (sword), Chapter I, a critical: today"
+ },
+ {
+  "name": "hit-ffx-tidus-crit-new",
+  "file": "candidates/pass-22oct/hit-ffx-tidus-crit-new.mp3",
+  "seconds": 1.57,
+  "peakDb": -6.9,
+  "momentaryMax": -18.6,
+  "note": "Tidus (sword), Chapter I, a critical: new"
+ },
+ {
+  "name": "hit-ffx-auron-today",
+  "file": "candidates/pass-22oct/hit-ffx-auron-today.mp3",
+  "seconds": 1.5,
+  "peakDb": -12.2,
+  "momentaryMax": -23.7,
+  "note": "Auron (katana), Chapter I: today"
+ },
+ {
+  "name": "hit-ffx-auron-new",
+  "file": "candidates/pass-22oct/hit-ffx-auron-new.mp3",
+  "seconds": 1.5,
+  "peakDb": -12.2,
+  "momentaryMax": -23.4,
+  "note": "Auron (katana), Chapter I: new"
+ },
+ {
+  "name": "hit-ffx-kimahri-today",
+  "file": "candidates/pass-22oct/hit-ffx-kimahri-today.mp3",
+  "seconds": 1.5,
+  "peakDb": -8.5,
+  "momentaryMax": -24.4,
+  "note": "Kimahri (spear), Chapter I: today"
+ },
+ {
+  "name": "hit-ffx-kimahri-new",
+  "file": "candidates/pass-22oct/hit-ffx-kimahri-new.mp3",
+  "seconds": 1.5,
+  "peakDb": -8.5,
+  "momentaryMax": -23.8,
+  "note": "Kimahri (spear), Chapter I: new"
+ },
+ {
+  "name": "hit-ffx-yuna-today",
+  "file": "candidates/pass-22oct/hit-ffx-yuna-today.mp3",
+  "seconds": 1.5,
+  "peakDb": -8.1,
+  "momentaryMax": -21,
+  "note": "Yuna (staff), Chapter I: today"
+ },
+ {
+  "name": "hit-ffx-yuna-new",
+  "file": "candidates/pass-22oct/hit-ffx-yuna-new.mp3",
+  "seconds": 1.5,
+  "peakDb": -5.7,
+  "momentaryMax": -20.5,
+  "note": "Yuna (staff), Chapter I: new"
+ },
+ {
+  "name": "hit-ffx-seymour-flux-today",
+  "file": "candidates/pass-22oct/hit-ffx-seymour-flux-today.mp3",
+  "seconds": 1.67,
+  "peakDb": -11,
+  "momentaryMax": -21,
+  "note": "Seymour Flux, a plain blow, Chapter I: today"
+ },
+ {
+  "name": "hit-ffx-seymour-flux-new",
+  "file": "candidates/pass-22oct/hit-ffx-seymour-flux-new.mp3",
+  "seconds": 1.65,
+  "peakDb": -10.7,
+  "momentaryMax": -20.8,
+  "note": "Seymour Flux, a plain blow, Chapter I: new"
+ },
+ {
+  "name": "hit-ffx2-yuna-today",
+  "file": "candidates/pass-22oct/hit-ffx2-yuna-today.mp3",
+  "seconds": 2.52,
+  "peakDb": -11.7,
+  "momentaryMax": -20.9,
+  "note": "Yuna (gun), Chapter IV: today"
+ },
+ {
+  "name": "hit-ffx2-yuna-new",
+  "file": "candidates/pass-22oct/hit-ffx2-yuna-new.mp3",
+  "seconds": 2.52,
+  "peakDb": -9.6,
+  "momentaryMax": -20.9,
+  "note": "Yuna (gun), Chapter IV: new"
+ },
+ {
+  "name": "hit-ffx2-rikku-today",
+  "file": "candidates/pass-22oct/hit-ffx2-rikku-today.mp3",
+  "seconds": 2.21,
+  "peakDb": -15.1,
+  "momentaryMax": -21.2,
+  "note": "Rikku (daggers), Chapter IV: today"
+ },
+ {
+  "name": "hit-ffx2-rikku-new",
+  "file": "candidates/pass-22oct/hit-ffx2-rikku-new.mp3",
+  "seconds": 2.04,
+  "peakDb": -15.1,
+  "momentaryMax": -20.9,
+  "note": "Rikku (daggers), Chapter IV: new"
+ },
+ {
+  "name": "hit-ffx2-rikku-crit-today",
+  "file": "candidates/pass-22oct/hit-ffx2-rikku-crit-today.mp3",
+  "seconds": 1.57,
+  "peakDb": -10.1,
+  "momentaryMax": -19,
+  "note": "Rikku (daggers), Chapter IV, a critical: today"
+ },
+ {
+  "name": "hit-ffx2-rikku-crit-new",
+  "file": "candidates/pass-22oct/hit-ffx2-rikku-crit-new.mp3",
+  "seconds": 1.57,
+  "peakDb": -6.9,
+  "momentaryMax": -18.7,
+  "note": "Rikku (daggers), Chapter IV, a critical: new"
+ },
+ {
+  "name": "hit-ffx2-paine-today",
+  "file": "candidates/pass-22oct/hit-ffx2-paine-today.mp3",
+  "seconds": 1.5,
+  "peakDb": -12.7,
+  "momentaryMax": -20.9,
+  "note": "Paine (greatsword), Chapter IV: today"
+ },
+ {
+  "name": "hit-ffx2-paine-new",
+  "file": "candidates/pass-22oct/hit-ffx2-paine-new.mp3",
+  "seconds": 1.5,
+  "peakDb": -12.7,
+  "momentaryMax": -20.9,
+  "note": "Paine (greatsword), Chapter IV: new"
+ },
+ {
+  "name": "hit-ffx2-bahamut-today",
+  "file": "candidates/pass-22oct/hit-ffx2-bahamut-today.mp3",
+  "seconds": 1.67,
+  "peakDb": -14.9,
+  "momentaryMax": -24.9,
+  "note": "Bahamut, a plain blow, Chapter IV: today"
+ },
+ {
+  "name": "hit-ffx2-bahamut-new",
+  "file": "candidates/pass-22oct/hit-ffx2-bahamut-new.mp3",
+  "seconds": 1.65,
+  "peakDb": -14.9,
+  "momentaryMax": -24.6,
+  "note": "Bahamut, a plain blow, Chapter IV: new"
+ },
+ {
+  "name": "menu-ffx-today",
+  "file": "candidates/pass-22oct/menu-ffx-today.mp3",
+  "seconds": 7.6,
+  "peakDb": -7.4,
+  "momentaryMax": -22.3,
+  "note": "FFX menu cues: tick, tick, cancel, open, page, close, turn-ready, error: today"
+ },
+ {
+  "name": "menu-ffx-new",
+  "file": "candidates/pass-22oct/menu-ffx-new.mp3",
+  "seconds": 7.6,
+  "peakDb": -15.9,
+  "momentaryMax": -26.6,
+  "note": "FFX menu cues: the family"
+ },
+ {
+  "name": "menu-ffx2-today",
+  "file": "candidates/pass-22oct/menu-ffx2-today.mp3",
+  "seconds": 7.6,
+  "peakDb": -7.5,
+  "momentaryMax": -22.3,
+  "note": "FFX-2 menu cues: tick, tick, cancel, open, page, close, turn-ready, error: today"
+ },
+ {
+  "name": "menu-ffx2-new",
+  "file": "candidates/pass-22oct/menu-ffx2-new.mp3",
+  "seconds": 7.6,
+  "peakDb": -16,
+  "momentaryMax": -27.2,
+  "note": "FFX-2 menu cues: the family"
+ },
+ {
+  "name": "voice-duck-today",
+  "file": "candidates/pass-22oct/voice-duck-today.mp3",
+  "seconds": 9,
+  "peakDb": -3.9,
+  "momentaryMax": -18.2,
+  "note": "Chapter I intro, Tidus's first line over the scene bed: today's 3.5 dB duck"
+ },
+ {
+  "name": "voice-duck-nine",
+  "file": "candidates/pass-22oct/voice-duck-nine.mp3",
+  "seconds": 9,
+  "peakDb": -4.5,
+  "momentaryMax": -18.9,
+  "note": "the same with the pass's first pick, a 9 dB duck"
+ },
+ {
+  "name": "voice-duck-new",
+  "file": "candidates/pass-22oct/voice-duck-new.mp3",
+  "seconds": 9,
+  "peakDb": -4.8,
+  "momentaryMax": -19,
+  "note": "the same with the pass's duck, 14 dB"
+ },
+ {
+  "name": "voice-duck-battle-today",
+  "file": "candidates/pass-22oct/voice-duck-battle-today.mp3",
+  "seconds": 9,
+  "peakDb": -7.3,
+  "momentaryMax": -17.6,
+  "note": "Yuna's Talk line over the loud passage of the battle theme it fell on (track position 40.7 s): today's 3.5 dB duck. Speech-band margin of the voice over the music in the final recording: -2.2 dB"
+ },
+ {
+  "name": "voice-duck-battle-nine",
+  "file": "candidates/pass-22oct/voice-duck-battle-nine.mp3",
+  "seconds": 9,
+  "peakDb": -7.6,
+  "momentaryMax": -17.7,
+  "note": "the same with the first pick, a 9 dB duck: +3.3 dB"
+ },
+ {
+  "name": "voice-duck-battle-new",
+  "file": "candidates/pass-22oct/voice-duck-battle-new.mp3",
+  "seconds": 9,
+  "peakDb": -7.7,
+  "momentaryMax": -17.7,
+  "note": "the same with the pass's 14 dB duck: +8.3 dB"
+ },
+ {
+  "name": "voice-duck-quip-today",
+  "file": "candidates/pass-22oct/voice-duck-quip-today.mp3",
+  "seconds": 9,
+  "peakDb": -2.9,
+  "momentaryMax": -16.7,
+  "note": "Tidus's victory quip over the victory fanfare: today's 3.5 dB duck. Speech-band margin in the final recording: -3.1 dB, the voice is under the music"
+ },
+ {
+  "name": "voice-duck-quip-nine",
+  "file": "candidates/pass-22oct/voice-duck-quip-nine.mp3",
+  "seconds": 9,
+  "peakDb": -3.7,
+  "momentaryMax": -18,
+  "note": "the same with the first pick, a 9 dB duck: +2.4 dB, the weakest line of the fight"
+ },
+ {
+  "name": "voice-duck-quip-new",
+  "file": "candidates/pass-22oct/voice-duck-quip-new.mp3",
+  "seconds": 9,
+  "peakDb": -4.1,
+  "momentaryMax": -18,
+  "note": "the same with the pass's 14 dB duck: +7.4 dB"
+ },
+ {
+  "name": "line-mid-seymour-half.001",
+  "file": "candidates/pass-22oct/line-mid-seymour-half.001.mp3",
+  "seconds": 1.69,
+  "peakDb": -7.6,
+  "momentaryMax": -18.9,
+  "note": "seymour: the new line"
+ },
+ {
+  "name": "line-mid-seymour-half.002",
+  "file": "candidates/pass-22oct/line-mid-seymour-half.002.mp3",
+  "seconds": 2.34,
+  "peakDb": -6.3,
+  "momentaryMax": -19,
+  "note": "seymour: the new line"
+ },
+ {
+  "name": "line-mid-seymour-lance.001",
+  "file": "candidates/pass-22oct/line-mid-seymour-lance.001.mp3",
+  "seconds": 0.88,
+  "peakDb": -10.2,
+  "momentaryMax": -19.7,
+  "note": "seymour: the new line"
+ },
+ {
+  "name": "line-mid-seymour-lance.002",
+  "file": "candidates/pass-22oct/line-mid-seymour-lance.002.mp3",
+  "seconds": 2.04,
+  "peakDb": -9.6,
+  "momentaryMax": -17.1,
+  "note": "seymour: the new line"
+ },
+ {
+  "name": "line-mid-talk-yuna.001",
+  "file": "candidates/pass-22oct/line-mid-talk-yuna.001.mp3",
+  "seconds": 2.67,
+  "peakDb": -7.7,
+  "momentaryMax": -17.7,
+  "note": "seymour: the new line"
+ },
+ {
+  "name": "line-mid-talk-yuna.002",
+  "file": "candidates/pass-22oct/line-mid-talk-yuna.002.mp3",
+  "seconds": 1.97,
+  "peakDb": -7.1,
+  "momentaryMax": -17.9,
+  "note": "seymour: the new line"
+ },
+ {
+  "name": "line-mid-talk-yuna.003",
+  "file": "candidates/pass-22oct/line-mid-talk-yuna.003.mp3",
+  "seconds": 2.54,
+  "peakDb": -8.9,
+  "momentaryMax": -18.3,
+  "note": "yuna: the new line"
+ },
+ {
+  "name": "line-mid-talk-kimahri.001",
+  "file": "candidates/pass-22oct/line-mid-talk-kimahri.001.mp3",
+  "seconds": 2.65,
+  "peakDb": -7.7,
+  "momentaryMax": -18.6,
+  "note": "kimahri: the new line"
+ },
+ {
+  "name": "line-mid-talk-kimahri.002",
+  "file": "candidates/pass-22oct/line-mid-talk-kimahri.002.mp3",
+  "seconds": 3.7,
+  "peakDb": -7.2,
+  "momentaryMax": -17.8,
+  "note": "kimahri: the new line"
+ },
+ {
+  "name": "win-ch1-today",
+  "file": "candidates/pass-22oct/win-ch1-today.mp3",
+  "seconds": 14,
+  "peakDb": -9,
+  "momentaryMax": -16.7,
+  "note": "Chapter I win, today: the sting at the last blow, then the results cue (its own 8.5 s fanfare) 3.8 s later"
+ },
+ {
+  "name": "win-ch1-new",
+  "file": "candidates/pass-22oct/win-ch1-new.mp3",
+  "seconds": 14.1,
+  "peakDb": -9.5,
+  "momentaryMax": -16.7,
+  "note": "Chapter I win, the pass: the results cue at the last blow, one fanfare"
+ },
+ {
+  "name": "results-ch4-today",
+  "file": "candidates/pass-22oct/results-ch4-today.mp3",
+  "seconds": 14,
+  "peakDb": -11.2,
+  "momentaryMax": -20.2,
+  "note": "Chapter IV results, today: the cue `pause` from the moment the results come up; the pass plays no music here (silence)"
+ },
+ {
+  "name": "landing-ffx-fire-today",
+  "file": "candidates/pass-22oct/landing-ffx-fire-today.mp3",
+  "seconds": 2.5,
+  "peakDb": -6.4,
+  "momentaryMax": -21.2,
+  "note": "Fire (FFX, the recorded fire-2): a click at 0.5 s stands for the effect's mark; the cue is asked there and its first audible sample (-30 dB under its peak) comes 77.5 ms later"
+ },
+ {
+  "name": "landing-ffx-fire-new",
+  "file": "candidates/pass-22oct/landing-ffx-fire-new.mp3",
+  "seconds": 2.5,
+  "peakDb": -6.4,
+  "momentaryMax": -21.4,
+  "note": "Fire (FFX, the recorded fire-2): the same with the pass: the cue starts on its first audible sample, on the click"
+ },
+ {
+  "name": "landing-ffx-ice-today",
+  "file": "candidates/pass-22oct/landing-ffx-ice-today.mp3",
+  "seconds": 3.83,
+  "peakDb": -6.4,
+  "momentaryMax": -25.5,
+  "note": "Ice (FFX): a click at 0.5 s stands for the effect's mark; the cue is asked there and its first audible sample (-30 dB under its peak) comes 49 ms later"
+ },
+ {
+  "name": "landing-ffx-ice-new",
+  "file": "candidates/pass-22oct/landing-ffx-ice-new.mp3",
+  "seconds": 3.78,
+  "peakDb": -6.4,
+  "momentaryMax": -25.2,
+  "note": "Ice (FFX): the same with the pass: the cue starts on its first audible sample, on the click"
+ },
+ {
+  "name": "landing-ffx2-flare-today",
+  "file": "candidates/pass-22oct/landing-ffx2-flare-today.mp3",
+  "seconds": 4.36,
+  "peakDb": -6.4,
+  "momentaryMax": -21.9,
+  "note": "Bahamut's Flare (FFX-2): a click at 0.5 s stands for the effect's mark; the cue is asked there and its first audible sample (-30 dB under its peak) comes 0.6 ms later"
+ },
+ {
+  "name": "landing-ffx2-flare-new",
+  "file": "candidates/pass-22oct/landing-ffx2-flare-new.mp3",
+  "seconds": 4.36,
+  "peakDb": -6.4,
+  "momentaryMax": -21.9,
+  "note": "Bahamut's Flare (FFX-2): the same with the pass: the cue starts on its first audible sample, on the click"
+ },
+ {
+  "name": "fire-stack-today",
+  "file": "candidates/pass-22oct/fire-stack-today.mp3",
+  "seconds": 3.2,
+  "peakDb": -6.1,
+  "momentaryMax": -16,
+  "note": "one Fire cast, five landings 0.23 s apart: today"
+ },
+ {
+  "name": "fire-stack-new",
+  "file": "candidates/pass-22oct/fire-stack-new.mp3",
+  "seconds": 3.2,
+  "peakDb": -8.7,
+  "momentaryMax": -18.5,
+  "note": "the same with every landing after the first 3 dB down"
+ },
+ {
+  "name": "fight-ch1-talk-yuna-new",
+  "file": "candidates/pass-22oct/fight-ch1-talk-yuna-new.mp3",
+  "seconds": 11,
+  "peakDb": -1.7,
+  "momentaryMax": -12.7,
+  "shortTermMax": -16.6,
+  "note": "Yuna's Talk: Seymour, Seymour, Yuna, over the battle theme (today this exchange has no sound): a recording of the master output with the pass"
+ },
+ {
+  "name": "fight-ch1-talk-kimahri-new",
+  "file": "candidates/pass-22oct/fight-ch1-talk-kimahri-new.mp3",
+  "seconds": 10,
+  "peakDb": -2.2,
+  "momentaryMax": -12.9,
+  "shortTermMax": -16.3,
+  "note": "Kimahri's Talk (today: no sound): a recording of the master output with the pass"
+ },
+ {
+  "name": "fight-ch1-seymour-taunt-new",
+  "file": "candidates/pass-22oct/fight-ch1-seymour-taunt-new.mp3",
+  "seconds": 8,
+  "peakDb": -1.6,
+  "momentaryMax": -13.1,
+  "shortTermMax": -16.4,
+  "note": "Seymour's taunt at half health (today: text only): a recording of the master output with the pass"
+ },
+ {
+  "name": "fight-ch1-intro-today",
+  "file": "candidates/pass-22oct/fight-ch1-intro-today.mp3",
+  "seconds": 22,
+  "peakDb": -3.6,
+  "momentaryMax": -16.3,
+  "shortTermMax": -19.1,
+  "note": "the voiced intro: the scene bed under three lines: a recording of the master output, today"
+ },
+ {
+  "name": "fight-ch1-intro-new",
+  "file": "candidates/pass-22oct/fight-ch1-intro-new.mp3",
+  "seconds": 22,
+  "peakDb": -1.6,
+  "momentaryMax": -12.8,
+  "shortTermMax": -15,
+  "note": "the voiced intro: the scene bed under three lines: the same moment with the pass (the master makeup of +4 dB is in)"
+ },
+ {
+  "name": "fight-ch1-boss-move-today",
+  "file": "candidates/pass-22oct/fight-ch1-boss-move-today.mp3",
+  "seconds": 13,
+  "peakDb": -6.4,
+  "momentaryMax": -16.1,
+  "shortTermMax": -18.4,
+  "note": "Seymour's headline blow (the first `flare` landing): the dip and the thump: a recording of the master output, today"
+ },
+ {
+  "name": "fight-ch1-boss-move-new",
+  "file": "candidates/pass-22oct/fight-ch1-boss-move-new.mp3",
+  "seconds": 13,
+  "peakDb": -1.8,
+  "momentaryMax": -10.9,
+  "shortTermMax": -12.1,
+  "note": "Seymour's headline blow (the first `flare` landing): the dip and the thump: the same moment with the pass (the master makeup of +4 dB is in)"
+ },
+ {
+  "name": "fight-ch1-overdrive-today",
+  "file": "candidates/pass-22oct/fight-ch1-overdrive-today.mp3",
+  "seconds": 12,
+  "peakDb": -6.4,
+  "momentaryMax": -15.8,
+  "shortTermMax": -18.4,
+  "note": "an Overdrive finisher: a recording of the master output, today"
+ },
+ {
+  "name": "fight-ch1-overdrive-new",
+  "file": "candidates/pass-22oct/fight-ch1-overdrive-new.mp3",
+  "seconds": 12,
+  "peakDb": -1.8,
+  "momentaryMax": -11.2,
+  "shortTermMax": -12.1,
+  "note": "an Overdrive finisher: the same moment with the pass (the master makeup of +4 dB is in)"
+ },
+ {
+  "name": "fight-ch1-win-today",
+  "file": "candidates/pass-22oct/fight-ch1-win-today.mp3",
+  "seconds": 20.2,
+  "peakDb": -2.2,
+  "momentaryMax": -15.5,
+  "shortTermMax": -17.3,
+  "note": "the last blow and the results: a recording of the master output, today"
+ },
+ {
+  "name": "fight-ch1-win-new",
+  "file": "candidates/pass-22oct/fight-ch1-win-new.mp3",
+  "seconds": 20.2,
+  "peakDb": -1.6,
+  "momentaryMax": -11.6,
+  "shortTermMax": -13.4,
+  "note": "the last blow and the results: the same moment with the pass (the master makeup of +4 dB is in)"
+ },
+ {
+  "name": "fight-ch4-mega-flare-today",
+  "file": "candidates/pass-22oct/fight-ch4-mega-flare-today.mp3",
+  "seconds": 13,
+  "peakDb": -3.9,
+  "momentaryMax": -15.5,
+  "shortTermMax": -17.1,
+  "note": "Bahamut's Mega Flare landing (the dip, the thump): a recording of the master output, today"
+ },
+ {
+  "name": "fight-ch4-mega-flare-new",
+  "file": "candidates/pass-22oct/fight-ch4-mega-flare-new.mp3",
+  "seconds": 13,
+  "peakDb": -1.7,
+  "momentaryMax": -11.2,
+  "shortTermMax": -13,
+  "note": "Bahamut's Mega Flare landing (the dip, the thump): the same moment with the pass (the master makeup of +4 dB is in)"
+ },
+ {
+  "name": "fight-ch4-girls-hits-today",
+  "file": "candidates/pass-22oct/fight-ch4-girls-hits-today.mp3",
+  "seconds": 9,
+  "peakDb": -3.9,
+  "momentaryMax": -15.6,
+  "shortTermMax": -17.1,
+  "note": "the girls' blows (the recorded dagger hit is audible 168 ms after its contact today): a recording of the master output, today"
+ },
+ {
+  "name": "fight-ch4-girls-hits-new",
+  "file": "candidates/pass-22oct/fight-ch4-girls-hits-new.mp3",
+  "seconds": 9,
+  "peakDb": -1.6,
+  "momentaryMax": -11,
+  "shortTermMax": -13.7,
+  "note": "the girls' blows (the recorded dagger hit is audible 168 ms after its contact today): the same moment with the pass (the master makeup of +4 dB is in)"
+ },
+ {
+  "name": "fight-ch4-win-today",
+  "file": "candidates/pass-22oct/fight-ch4-win-today.mp3",
+  "seconds": 18,
+  "peakDb": -5.5,
+  "momentaryMax": -16.6,
+  "shortTermMax": -19.8,
+  "note": "the last blow and the results (today: the cue `pause`; the pass: silence): a recording of the master output, today"
+ },
+ {
+  "name": "fight-ch4-win-new",
+  "file": "candidates/pass-22oct/fight-ch4-win-new.mp3",
+  "seconds": 18,
+  "peakDb": -4,
+  "momentaryMax": -15.1,
+  "shortTermMax": -20.1,
+  "note": "the last blow and the results (today: the cue `pause`; the pass: silence): the same moment with the pass (the master makeup of +4 dB is in)"
+ }
+]

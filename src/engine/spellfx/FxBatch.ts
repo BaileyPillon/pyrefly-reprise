@@ -5,6 +5,10 @@
  * clip space. It is rendered after the post chain (`Renderer.addOverlay`), so
  * the effects sit over the graded frame the way the mock drew them over the
  * real-engine plate, and neither the tilt-shift nor the bloom touches them.
+ *
+ * The PAINTED FINISH (motion pass, lane "fx"; `FxPaint.ts`): a quad whose `paint` is above 0 has its soft edge torn by bristle streaks that run along its stroke and its body
+ * streaked with lighter and darker pigment. The streaks are a value-noise field in the quad's own stroke space (pixels along and across it), seeded per quad, so they ride the
+ * quad (no boiling) and look the same at any resolution. `paint` 0 (the live game, always) takes the same path as before: the extra branch is skipped.
  */
 
 import {
@@ -31,11 +35,13 @@ const vertex = /* glsl */ `
   attribute vec4 iB; // rotation, alpha, shape, tile
   attribute vec4 iC; // r, g, b, baked
   attribute vec4 iP; // shape parameters
+  attribute vec4 iQ; // painted finish: x = level (0 = off), y = seed
   uniform vec2 uView;
   varying vec2 vUv;
   varying vec4 vB;
   varying vec4 vC;
   varying vec4 vP;
+  varying vec4 vQ;
   varying vec2 vSize;
   void main() {
     vec2 off = vec2(position.x * iA.z, -position.y * iA.w);
@@ -47,6 +53,7 @@ const vertex = /* glsl */ `
     vB = iB;
     vC = iC;
     vP = iP;
+    vQ = iQ;
     vSize = iA.zw;
   }
 `;
@@ -57,6 +64,7 @@ const fragment = /* glsl */ `
   varying vec4 vB;
   varying vec4 vC;
   varying vec4 vP;
+  varying vec4 vQ;
   varying vec2 vSize;
   const float TAU = 6.2831853;
 
@@ -64,13 +72,66 @@ const fragment = /* glsl */ `
     return 1.0 - smoothstep(hw - aa, hw + aa, d);
   }
 
+  float h21(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+  }
+
+  float vn(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(h21(i), h21(i + vec2(1.0, 0.0)), f.x), mix(h21(i + vec2(0.0, 1.0)), h21(i + vec2(1.0, 1.0)), f.x), f.y);
+  }
+
+  // The painted finish: noise fields in the quad's stroke space (st: CSS px, x along the stroke, y across it). Each shape wobbles its OWN edge with them (a tile's lookup, a ring's, bar's or
+  // band's distance), so a hard-edged shape gets a hand-drawn edge too; then the soft part of the shape is torn by bristle streaks and the body carries streaks of pigment.
+  vec2 sdv = vec2(0.0);
+  float plv = 0.0;
+
+  void paintBegin(float span) {
+    plv = vQ.x * smoothstep(9.0, 38.0, span);
+    sdv = vec2(vQ.y * 0.73, vQ.y * 0.41);
+  }
+
+  // 0..1, long streaks along the stroke: the wobble of an edge.
+  float edgeN(vec2 st) {
+    return 0.6 * vn(vec2(st.x * 0.022, st.y * 0.30) + sdv) + 0.4 * vn(vec2(st.x * 0.075, st.y * 0.85) + sdv.yx);
+  }
+
+  void paintBody(inout float a, inout vec3 col, vec2 st) {
+    float coarse = vn(vec2(st.x * 0.016, st.y * 0.17) + sdv);
+    float fine = vn(vec2(st.x * 0.055, st.y * 0.5) + sdv.yx);
+    float tooth = vn(st * 0.45 + sdv * 2.0);
+    float cut = 0.58 * coarse + 0.30 * fine + 0.12 * tooth;
+    // the soft part of the shape is torn by the bristles; the solid body stays
+    float keep = smoothstep(cut * 0.85 - 0.12, cut * 0.85 + 0.12, a);
+    a = mix(a, a * keep, plv);
+    // bristle lines through the body, and streaks of lighter and darker pigment along the stroke
+    a *= 1.0 - 0.32 * plv * smoothstep(0.6, 0.92, fine);
+    col *= 1.0 + (coarse - 0.5) * 0.55 * plv;
+    // paint has an edge: a little harder than the airbrushed falloff it started as
+    a = mix(a, smoothstep(0.04, 0.5, a) * min(1.0, a * 1.35), 0.35 * plv);
+  }
+
   void main() {
     float shape = vB.z;
     vec3 col = vC.rgb;
     float a = 0.0;
+    vec2 st = vec2(0.0);
+    bool paint = vQ.x > 0.0;
     if (shape < 0.5) {
+      vec2 uv = vUv;
+      if (paint) {
+        st = (vUv - 0.5) * vSize;
+        if (vSize.y > vSize.x * 1.3) st = st.yx; // a tall quad's bristles run up it
+        paintBegin(min(vSize.x, vSize.y));
+        // wobble the lookup: the shape's edge wanders by a few percent of the quad
+        uv = clamp(vUv + (vec2(vn(st * 0.045 + sdv), vn(st * 0.045 + sdv + 17.3)) - 0.5) * 0.12 * plv, 0.0, 1.0);
+      }
       vec2 cell = vec2(mod(vB.w, 4.0), floor(vB.w / 4.0));
-      vec4 tx = texture2D(uAtlas, (cell + 1.0 / 128.0 + vUv * (126.0 / 128.0)) / 4.0);
+      vec4 tx = texture2D(uAtlas, (cell + 1.0 / 128.0 + uv * (126.0 / 128.0)) / 4.0);
       col = vC.a > 0.5 ? tx.rgb * col : mix(col, vec3(1.0), tx.r);
       a = tx.a;
     } else if (shape < 1.5) {
@@ -78,16 +139,24 @@ const fragment = /* glsl */ `
       vec2 p = vUv * 2.0 - 1.0;
       float r = length(p);
       float aa = fwidth(r);
+      float rel = mod(atan(-p.y, p.x) + TAU * 0.25, TAU);
       float d = abs(r - vP.x);
-      a = max(band(d, vP.y * 0.5, aa), 0.35 * band(d, vP.y * 1.5, aa));
-      if (vP.z < 0.999) {
-        float rel = mod(atan(-p.y, p.x) + TAU * 0.25, TAU);
-        if (rel > TAU * vP.z) a = 0.0;
+      if (paint) {
+        st = vec2(rel * vP.x * vSize.x * 0.5, (r - vP.x) * vSize.x * 0.5);
+        paintBegin(vSize.x * 0.45);
+        d += (edgeN(st) - 0.5) * vP.y * 1.1 * plv;
       }
+      a = max(band(d, vP.y * 0.5, aa), 0.35 * band(d, vP.y * 1.5, aa));
+      if (vP.z < 0.999 && rel > TAU * vP.z) a = 0.0;
     } else if (shape < 2.5) {
       // Bar: a capsule, in pixels along and across the segment.
       vec2 p = (vUv - 0.5) * vSize;
       float d = length(vec2(max(abs(p.x) - vP.x * 0.5, 0.0), p.y));
+      if (paint) {
+        st = p;
+        paintBegin(vSize.y);
+        d += (edgeN(st) - 0.5) * vP.y * 0.7 * plv;
+      }
       a = band(d, vP.y * 0.5, 0.75);
     } else {
       // Slash band: an arc from vP.x to vP.y (radians, y down), radius vP.z,
@@ -100,9 +169,16 @@ const fragment = /* glsl */ `
       float u = rel / span;
       if (u >= 0.0 && u <= 1.0) {
         float th = sin(u * 3.1415927) * vP.w;
-        a = band(abs(r - vP.z), th * 0.5, fwidth(r));
+        float d = abs(r - vP.z);
+        if (paint) {
+          st = vec2(u * abs(span) * vP.z * vSize.x * 0.5, (r - vP.z) * vSize.x * 0.5);
+          paintBegin(th * vSize.x * 0.5);
+          d += (edgeN(st) - 0.5) * th * 1.0 * plv;
+        }
+        a = band(d, th * 0.5, fwidth(r));
       }
     }
+    if (paint && plv > 0.001) paintBody(a, col, st);
     a *= vB.y;
     if (a < 0.002) discard;
     gl_FragColor = vec4(col, a);
@@ -113,6 +189,7 @@ class Layer {
   readonly mesh: Mesh<InstancedBufferGeometry, ShaderMaterial>;
   private cap = 0;
   private attrs: InstancedBufferAttribute[] = [];
+  private static readonly NAMES = ['iA', 'iB', 'iC', 'iP', 'iQ'];
 
   constructor(blending: Blending, order: number, view: Vector2) {
     const plane = new PlaneGeometry(1, 1);
@@ -137,7 +214,7 @@ class Layer {
 
   private grow(n: number): void {
     this.cap = n;
-    this.attrs = ['iA', 'iB', 'iC', 'iP'].map((name) => {
+    this.attrs = Layer.NAMES.map((name) => {
       const at = new InstancedBufferAttribute(new Float32Array(n * 4), 4);
       at.setUsage(DynamicDrawUsage);
       this.mesh.geometry.setAttribute(name, at);
@@ -147,7 +224,7 @@ class Layer {
 
   fill(items: readonly FxItem[]): void {
     if (items.length > this.cap) this.grow(Math.ceil(items.length / 256) * 256);
-    const [A, B, C, P] = this.attrs.map((a) => a.array as Float32Array) as [Float32Array, Float32Array, Float32Array, Float32Array];
+    const [A, B, C, P, Q] = this.attrs.map((a) => a.array as Float32Array) as [Float32Array, Float32Array, Float32Array, Float32Array, Float32Array];
     items.forEach((it, i) => {
       const o = i * 4;
       const tile = TILES[it.tile];
@@ -164,6 +241,8 @@ class Layer {
       C[o + 2] = it.col[2];
       C[o + 3] = tile.baked ? 1 : 0;
       P.set(it.p, o);
+      Q[o] = it.paint ?? 0;
+      Q[o + 1] = it.seed ?? 0;
     });
     for (const at of this.attrs) {
       at.clearUpdateRanges();
@@ -199,7 +278,7 @@ export class FxBatch {
     if (list) {
       for (const it of list.items) buckets[it.layer].push(it);
       for (const w of list.washes) {
-        buckets[2].push({ layer: 2, shape: 0, tile: 'solid', x: width / 2, y: height / 2, w: width, h: height, rot: 0, col: rgb(w.col), a: w.a, p: [0, 0, 0, 0] });
+        buckets[2].push({ layer: 2, shape: 0, tile: 'solid', x: width / 2, y: height / 2, w: width, h: height, rot: 0, col: rgb(w.col), a: w.a, p: [0, 0, 0, 0], paint: 0, seed: 0 });
       }
     }
     this.layers.forEach((l, i) => l.fill(buckets[i]!));

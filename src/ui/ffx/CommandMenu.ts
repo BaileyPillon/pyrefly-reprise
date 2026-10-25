@@ -879,6 +879,7 @@ export class CommandMenu {
     const cmd = this.pendingCmd;
     if (!cmd) return;
     const help = commandHelpText(cmd);
+    this.targetCursor.setHelpLine(help); // lane pro-look: the pro target flag's damage line
     if (this.dc.active) this.dc.help('target', cmd, help, (t) => this.opts?.setHelp(t));
     else this.opts.setHelp(help);
   }
@@ -895,6 +896,7 @@ export class CommandMenu {
     const cmd = this.pendingCmd;
     const who = entries[0]?.kind === 'enemy' ? 'every enemy' : 'the whole party';
     const help = cmd ? commandHelpText(cmd) : '';
+    this.targetCursor.setHelpLine(help); // lane pro-look: the pro target flag's damage line
     // PR-0019 (round 09, both games — the composition is shared, this call
     // site is FFX's): the two clauses used to be joined with a bare space —
     // "Inflicts Cheer Hits the whole party" — which reads as one run-on

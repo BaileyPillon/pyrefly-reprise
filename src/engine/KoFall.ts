@@ -33,6 +33,7 @@
  */
 
 import { koCross } from './PoseBlend.ts';
+import { CUT_AT } from './motion/SmearPlan.ts';
 import { DEMO_KO_CROSS_MS } from './motion/DemoBlend.ts';
 import { demoMotionOn } from './motion/DemoMotion.ts';
 
@@ -136,6 +137,8 @@ export interface KoRunOptions {
   buckle: boolean;
   /** The puff's size (1 = a fall's), or 0 for none. */
   puff: number;
+  /** Motion pass, step 3: the cross is a CUT inside the smear's window (the old painting whole until half-way, the new one from there) instead of the capped cross. */
+  cut?: boolean;
 }
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
@@ -217,6 +220,12 @@ export class KoRun {
     }
   }
 
+  /** How far through the cross it is, 0 to 1 (0 before and 1 after it). The smear window's own progress when the cross is a cut. */
+  get crossU(): number {
+    const o = this.opts;
+    return o.crossMs > 0 ? clamp01(this.cross / o.crossMs) : 0;
+  }
+
   /** The puff that has gone up since the last call: its size, once; null otherwise. */
   takePuff(): number | null {
     const s = this.puffLeft;
@@ -247,7 +256,8 @@ export class KoRun {
         return { phase: 'hold', out: 1, inn: 0, buckle: o.buckle ? t * t : 0, lean: o.buckle ? KO_LEAN * t : 0, tip, slide };
       }
       case 'cross': {
-        const c = koCross(clamp01(this.cross / o.crossMs));
+        const u = clamp01(this.cross / o.crossMs);
+        const c = o.cut ? { from: u < CUT_AT ? 1 : 0, to: u < CUT_AT ? 0 : 1 } : koCross(u); // a cut: no frame shows both paintings (the smear covers the change)
         // a fall's buckle is full from here; a revive's unwinds with its turn
         const b = fall ? 1 : tip * tip;
         const l = fall ? KO_LEAN : KO_LEAN * tip;
@@ -261,19 +271,27 @@ export class KoRun {
   }
 }
 
-/** The run for a KO of this mode, at this game's tempo. `cut` plays nothing (null). */
-export function fallRun(mode: KoMode, game: KoGame): KoRun | null {
+/**
+ * The run for a KO of this mode, at this game's tempo. `cut` plays nothing (null). `cutMs` (motion pass, step 3: the smear's window for the knock-out's cut, `motion/MomentsPlan.koCutMs`) makes the
+ * cross of a TOPPLE (a party figure who falls to a lying painting) a CUT of that length; the hold before it grows by what the cross gave up, so the fall takes the same time and the cut falls at its
+ * end, where the turn is fastest. Every other mode (a colossus's buckle, a prone standing painting) keeps its capped cross: its pair is not always a big change.
+ */
+export function fallRun(mode: KoMode, game: KoGame, cutMs?: number, buckleMs?: number): KoRun | null {
   if (mode === 'cut') return null;
-  const hold = KO_BUCKLE_MS[game];
+  const hold = buckleMs ?? KO_BUCKLE_MS[game]; // `?curves=real` (integration 2): the real clip's floor impact less the cross (`motion/RealMoments.realBuckleMs`); absent: the house buckle
+  const cross = koCrossMs();
+  const cutting = cutMs !== undefined && cutMs > 0 && mode === 'topple'; // a party figure whose KO painting is a lying body: the standing painting and the lying one always share almost no outline
+  const crossMs = cutting ? cutMs : cross;
+  const lead = cutting ? Math.max(0, cross - cutMs) : 0;
   switch (mode) {
     case 'flip':
       return new KoRun({ kind: 'fall', holdMs: hold, crossMs: 0, riseMs: 0, travel: false, buckle: true, puff: 0 });
     case 'cross':
-      return new KoRun({ kind: 'fall', holdMs: 0, crossMs: koCrossMs(), riseMs: 0, travel: false, buckle: false, puff: 0 });
+      return new KoRun({ kind: 'fall', holdMs: 0, crossMs: cross, riseMs: 0, travel: false, buckle: false, puff: 0 });
     case 'buckle-cross':
-      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: koCrossMs(), riseMs: 0, travel: false, buckle: true, puff: 0 });
+      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: cross, riseMs: 0, travel: false, buckle: true, puff: 0 });
     default:
-      return new KoRun({ kind: 'fall', holdMs: hold, crossMs: koCrossMs(), riseMs: 0, travel: true, buckle: true, puff: PUFF_FALL });
+      return new KoRun({ kind: 'fall', holdMs: hold + lead, crossMs, riseMs: 0, travel: true, buckle: true, puff: PUFF_FALL, ...(cutting ? { cut: true } : {}) });
   }
 }
 

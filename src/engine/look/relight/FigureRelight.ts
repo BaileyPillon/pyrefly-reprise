@@ -44,7 +44,17 @@ export function flatNormal(): DataTexture {
 type Entry = Texture | 'loading' | 'missing';
 const cache = new Map<string, Entry>();
 const waiters = new Map<string, Set<ShaderMaterial>>();
-const CAP = 56;
+/**
+ * How many maps the cache holds before it lets go of the oldest unpinned one. 56 was the whole of Chapter I's staged figures (50 maps) with six to spare, so the first pose of a reserve member or
+ * a second look evicted a pose of a figure on stage, and its next use was drawn unlit until the map came back (motion pass, step 2, MAP fact 11). With the new motion on, the staged figures'
+ * maps are pinned ({@link prefetchRelight}) and the cap is 112, room for two chapters' worth besides. With nothing pinned (every new piece off: the default, and every chapter but I and IV)
+ * the cap is the 56 it always was (review MAJOR-1: the live game's staging must not change with the switches off).
+ */
+const CAP_TODAY = 56;
+const CAP_PINNED = 112;
+const capNow = (): number => (pinned.size > 0 ? CAP_PINNED : CAP_TODAY);
+/** Pinned maps, with how many figures hold each one: a map two live figures share is let go only when the last of them goes (review minor). */
+const pinned = new Map<string, number>();
 let loader: TextureLoader | null = null;
 
 /** Counters for the debug API and the captures. */
@@ -73,9 +83,9 @@ function fetchMap(url: string): void {
       relightStats.loaded++;
       for (const m of waiters.get(url) ?? []) adopt(m, url, t);
       waiters.delete(url);
-      if (cache.size > CAP) {
+      if (cache.size > capNow()) {
         for (const [k, v] of cache) {
-          if (v instanceof Texture) {
+          if (v instanceof Texture && !pinned.has(k)) {
             v.dispose();
             cache.delete(k);
             break;
@@ -93,6 +103,44 @@ function fetchMap(url: string): void {
   );
 }
 
+/** The URL of the normal map a painting would be lit with, or null when the build ships none for it (the manifest names which maps exist). */
+function mapUrlFor(paintingUrl: string | undefined, scale: number | undefined, placeholder: boolean): string | null {
+  const logical = !paintingUrl || placeholder ? null : logicalArtUrl(paintingUrl);
+  const pick = logical === null ? null : normalMapScaleFor(artManifest(), logical, scale ?? 1);
+  const mapUrl = logical === null || pick === null ? null : normalMapUrl(logical, pick ?? scale ?? 1);
+  return mapUrl ? shippedArtUrl(mapUrl) : null;
+}
+
+/**
+ * Motion pass, step 2 (MAP fact 11): fetch a staged figure's map for `paintingUrl` NOW and keep it, so the first time a pose is drawn its light is already there (a pose is drawn unlit until
+ * its map arrives, which read as a flat flash in the middle of a move). Returns the URL it pinned (hand it to {@link unpinRelight} when the figure goes), or null: no look armed, or no map.
+ * `held`: the figure's own set of what it has pinned; a map it already holds is not counted twice (a figure's paintings are staged more than once), and the set is what it hands back to
+ * {@link unpinRelight}. Without it every call is one pin.
+ */
+export function prefetchRelight(paintingUrl: string | undefined, scale: number | undefined, placeholder = false, held?: Set<string>): string | null {
+  if (!lookState.armed) return null;
+  const url = mapUrlFor(paintingUrl, scale, placeholder);
+  if (!url) return null;
+  if (!held?.has(url)) {
+    pinned.set(url, (pinned.get(url) ?? 0) + 1);
+    held?.add(url);
+  }
+  if (!cache.has(url)) fetchMap(url);
+  return url;
+}
+
+/** The staged figure is gone: its maps may be evicted again (a map another live figure also holds stays pinned until that one goes too). */
+export function unpinRelight(urls: Iterable<string>): void {
+  for (const u of urls) {
+    const n = (pinned.get(u) ?? 0) - 1;
+    if (n > 0) pinned.set(u, n);
+    else pinned.delete(u);
+  }
+}
+
+/** How many maps are pinned (the captures and the tests). */
+export const pinnedRelightCount = (): number => pinned.size;
+
 /**
  * Bind a figure's material to the normal map of the painting it now draws (`paintingUrl`: the URL the painting was asked for; `scale`: the master it was drawn from).
  * A no-op unless a look flag armed the rig. Safe to call every time the pose changes.
@@ -108,11 +156,8 @@ export function bindRelight(material: ShaderMaterial, paintingUrl: string | unde
     material.needsUpdate = true;
     relightStats.bound++;
   }
-  const logical = !paintingUrl || placeholder ? null : logicalArtUrl(paintingUrl);
   // release 60: the art manifest names the maps the build ships; ask for one of those, and for none when the figure has none (no 404). No lightMaps in it: ask for the scale the painting wants, as before.
-  const pick = logical === null ? null : normalMapScaleFor(artManifest(), logical, scale ?? 1);
-  const mapUrl = logical === null || pick === null ? null : normalMapUrl(logical, pick ?? scale ?? 1);
-  const url = mapUrl ? shippedArtUrl(mapUrl) : null;
+  const url = mapUrlFor(paintingUrl, scale, placeholder);
   material.userData['relightUrl'] = url;
   if (!url) {
     u['relightNormal']!.value = flatNormal();

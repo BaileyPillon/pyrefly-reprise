@@ -165,6 +165,20 @@ describe('each installed painting shows in its own slot', () => {
 
 const haveArt = existsSync(path.join(ART, 'characters/yuna-songstress/cast.png'));
 
+/**
+ * 2026-10-24 (r64, both games' art pins; the driver under Bailey's "make all the decisions"): two of the 20 were replaced again after the pin was
+ * written, by the colour-locked set of the motion test build (install v1, 84c36bede) and the r63 mirror that carries it. Their pins keep the 2026-10-07
+ * hash as history, but the file on disk is now governed by the measured registration (`docs/target/pose-measure.json`, written by the install that
+ * placed it, and checked against the painting by pose-scale-art and the pose gate). So for these two the disk check is "the registered painting", the
+ * sidecar is the new install's (no D-194 head-match note), and the loader's answer is still the table's. The other 18 keep every assertion.
+ */
+const RETIRED = new Set<string>(['paine-warrior/attack', 'paine-warrior/cast']);
+const registeredSha = (p: string): string | undefined => {
+  const [girl = '', pose = ''] = p.split('/');
+  const rec = JSON.parse(readFileSync(path.join(ROOT, 'docs/target/pose-measure.json'), 'utf8')) as { subjects: Record<string, { poses: Record<string, { sha?: string }> }> };
+  return rec.subjects[girl]?.poses[pose]?.sha;
+};
+
 describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitignored)', () => {
   it('every PNG matches its locked hash and the manifest lists its state', () => {
     const set = lockedSet();
@@ -174,7 +188,7 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
     for (const p of INSTALLED) {
       const file = path.join(ART, 'characters', `${p}.png`);
       const sha = createHash('sha256').update(readFileSync(file)).digest('hex');
-      expect(sha, p).toBe((set[`public/art/characters/${p}.png`] as { sha256: string }).sha256);
+      expect(sha, p).toBe(RETIRED.has(p) ? registeredSha(p) : (set[`public/art/characters/${p}.png`] as { sha256: string }).sha256);
       const [girl = '', pose = ''] = p.split('/');
       expect(manifest.subjects[girl]?.states, p).toContain(pose);
     }
@@ -189,13 +203,16 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
     }) as unknown as typeof fetch;
     for (const p of INSTALLED) {
       const side = JSON.parse(readFileSync(path.join(ART, 'characters', `${p}.json`), 'utf8')) as Record<string, unknown>;
-      expect(side.scale, p).toBe(SCALES[p]);
-      expect(String(side.scaleNote), p).toMatch(/^Head match 2026-09-26/);
-      expect(side.decision, p).toBe('D-194');
+      if (!RETIRED.has(p)) {
+        expect(side.scale, p).toBe(SCALES[p]);
+        expect(String(side.scaleNote), p).toMatch(/^Head match 2026-09-26/);
+        expect(side.decision, p).toBe('D-194');
+      }
+      const ownScale = RETIRED.has(p) ? (side.scale as number | undefined) : SCALES[p];
       const meta = await tryLoadMeta(`/art/characters/${p}.png`);
       // VP-1001-05: a src-side KO table (KoPoseScale.ts) may correct a sidecar's KO scale; the sidecar itself is untouched. Release 39 (r39-posescale): a pose
       // the measured registration table lists takes the table's scale over both (PaintedArt.tryLoadMeta), so the loader's answer is the table's, else the sidecar's as before.
-      expect(meta?.scale, p).toBe(poseRegistrationFor(`/art/characters/${p}.png`)?.scale ?? poseScaleFor(`/art/characters/${p}.png`, SCALES[p]));
+      expect(meta?.scale, p).toBe(poseRegistrationFor(`/art/characters/${p}.png`)?.scale ?? poseScaleFor(`/art/characters/${p}.png`, ownScale));
       expect(meta!.baselineY, p).toBeLessThanOrEqual(meta!.height);
     }
   });

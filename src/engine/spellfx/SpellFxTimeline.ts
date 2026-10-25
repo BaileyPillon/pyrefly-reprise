@@ -12,17 +12,21 @@
  */
 
 import { fire, ice, thunder, water } from './effects-elements.ts';
+import { FRESH_SPECS } from './SpellFxFresh.ts';
 import { cure, hit, holy, X2_HOLY_STRIKES } from './effects-light.ts';
 import { MEGAFLARE_MARK, SPECIAL_END, SPIRAL_MARK, megaflare, spiral } from './effects-specials.ts';
 import { SPECIAL_HOLD_CAP_MS, SPECIAL_REPEAT_START_S, SPELL_HOLD_CAP_MS } from './SpellFxSpecials.ts';
 import type { FxTarget } from './effects-shared.ts';
 import type { FxDrawList } from './FxDrawList.ts';
-import type { FxGame, SpellFxId } from './SpellFxRegistry.ts';
+import type { BossFxId } from './BossFx.ts';
+import type { BuffFxId, FxGame, SpellFxId } from './SpellFxRegistry.ts';
 import { FF7_FX_SPECS } from './ff7/ff7FxSpecs.ts';
 
 export type { FxTarget } from './effects-shared.ts';
 
-export type DrawnFxId = Exclude<SpellFxId, 'bloom'>;
+export type DrawnFxId = Exclude<SpellFxId, 'bloom' | BuffFxId | BossFxId>;
+/** Every id a running effect can carry: today's drawn effects, and the buffs the new set adds (`SpellFxFresh.ts`). */
+export type FreshFxId = DrawnFxId | BuffFxId | BossFxId;
 
 export interface FxSpec {
   draw(o: FxDrawList, t: number, T: FxTarget): void;
@@ -43,6 +47,8 @@ export interface FxSpec {
   holdCapMs: number;
   /** Where the clock starts when this effect has already played this battle; unset = `startAt`. */
   repeatStartAt?: number;
+  /** The new effects only: seconds each target after the first starts later than the one before (FFX's Cure draws one column per character in turn), per game. */
+  staggerFor?(game: FxGame): number;
 }
 
 export const FX_SPECS: Readonly<Record<DrawnFxId, FxSpec>> = Object.freeze({
@@ -68,6 +74,11 @@ export const FX_SPECS: Readonly<Record<DrawnFxId, FxSpec>> = Object.freeze({
   ...FF7_FX_SPECS, // FF7 only: the Guard Scorpion fight's own effects (D-260)
 });
 
+/** The spec an effect runs on: the new set's when the copy is a fresh one and the set has it, else today's. */
+export function specOf(id: FreshFxId, fresh: boolean): FxSpec {
+  return (fresh ? FRESH_SPECS[id] : undefined) ?? FX_SPECS[id as DrawnFxId];
+}
+
 /** Draw one effect at local time t into the list. */
 export function drawSpellFx(id: DrawnFxId, o: FxDrawList, t: number, T: FxTarget): void {
   o.begin();
@@ -81,7 +92,7 @@ export class RunningFx {
   /** Last known on-screen target; kept when the figure leaves mid-effect. */
   target: FxTarget | null = null;
 
-  readonly id: DrawnFxId;
+  readonly id: FreshFxId;
   readonly targetId: string;
   readonly game: FxGame;
   /** Density multiplier for this copy (quality tier, split across targets). */
@@ -89,17 +100,24 @@ export class RunningFx {
   /** Which action started it; the presenter's counter. */
   readonly action: number;
 
-  constructor(id: DrawnFxId, targetId: string, game: FxGame, dens: number, action: number, startAt = FX_SPECS[id].startAt) {
+  /** The new effects (`FxSwitch.ts`): this copy draws the spec of `SpellFxFresh.ts`, not today's. Fixed for the copy's life. */
+  readonly fresh: boolean;
+  /** What the new draw functions read: the weapon of a blow, or the item form of a heal (`FxDrawList.variant`), and the way the blow goes (`FxDrawList.dir`). */
+  variant = '';
+  dir = 1;
+
+  constructor(id: FreshFxId, targetId: string, game: FxGame, dens: number, action: number, startAt?: number, fresh = false) {
+    this.fresh = fresh;
     this.id = id;
     this.targetId = targetId;
     this.game = game;
     this.dens = dens;
     this.action = action;
-    this.t = startAt;
+    this.t = startAt ?? specOf(id, fresh).startAt;
   }
 
   get spec(): FxSpec {
-    return FX_SPECS[this.id];
+    return specOf(this.id, this.fresh);
   }
 
   /** Debug captures only: the clock stays at `t` until the layer is cleared. */

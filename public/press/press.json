@@ -1,0 +1,4 @@
+{
+  "_": "The press page reads this. When the trailer exists, copy it to public/press/ and set trailer to { \"file\": \"trailer.mp4\", \"length\": \"1:03\" }; the page then shows the 'Watch the trailer' row.",
+  "trailer": null
+}

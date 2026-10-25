@@ -215,8 +215,9 @@ describe('no art URL starts at the server root in what ships (source)', () => {
     expect(offenders([join(ROOT, 'index.html')], ROOT, false, judge), HOW).toEqual([]);
     const link = /<link rel="preload"[^>]*>/.exec(withoutComments(html, 'html'))?.[0] ?? '';
     expect(link, 'index.html still preloads the title plate').toContain('href=');
-    // Release 61: the plate it names is The Echo, the default title screen (it was keyart, the Farplane painting, from 39.5 to 60); it has no 2x master, so no srcset.
+    // Release 61: the plate it names is The Echo, the default title screen (it was keyart, the Farplane painting, from 39.5 to 60); r64 gave it a 2x master, offered through imagesrcset under the build's base.
     expect(link).toContain('href="%BASE_URL%art/title/echo.png"');
+    expect(link).toContain('imagesrcset="%BASE_URL%art/title/echo.png 1682w, %BASE_URL%art/title/echo.2x.webp 3364w"');
   });
 
   it('src/: every script, sheet and page', () => {
@@ -276,7 +277,7 @@ describe('no art URL starts at the server root in a build', () => {
     expect(offenders(files, build.dir, true, (text, kind) => offBase(text, base ?? '/', kind)), `a build served from ${base}`).toEqual([]);
     // The title preload is the one place a page names art before any script runs: it must hold the base too.
     const link = /<link rel="preload"[^>]*>/.exec(index)?.[0] ?? '';
-    expect(link, 'the build preloads the title plate').toContain(`href="${base}art/title/keyart.`);
-    expect(link).toMatch(new RegExp(`imagesrcset="${base}art/title/keyart\\.(?:png|webp) 1344w, ${base}art/title/keyart\\.2x\\.webp 2688w"`));
+    expect(link, 'the build preloads the title plate').toContain(`href="${base}art/title/echo.`);
+    expect(link).toMatch(new RegExp(`imagesrcset="${base}art/title/echo\\.(?:png|webp) 1682w, ${base}art/title/echo\\.2x\\.webp 3364w"`));
   }, SLOW_MS);
 });

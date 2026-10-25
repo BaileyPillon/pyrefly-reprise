@@ -173,8 +173,8 @@ export class TitleScreen extends Screen {
     }
     // The 2688px master, once the manifest says it is on disk. Never awaited:
     // the 1x plate is already decoding and the screen is correct without it.
-    // The Echo has no 2x master (its markup is never offered one), so there is nothing to upgrade.
-    if (art === 'farplane') void upgradeTitlePlanes(this.root);
+    // The Echo has its own master (title/echo.2x.webp, r64), taken back or kept the same way.
+    void upgradeTitlePlanes(this.root, art);
 
     const motes = this.root.querySelector('.fe-title__motes');
     if (motes instanceof HTMLElement) {
@@ -318,6 +318,8 @@ export class TitleScreen extends Screen {
   }
 
   override handleInput(input: InputSnapshot): void {
+    // The booth's attract card is up, or was a moment ago: the press that wakes it is the card's, never also the title's Start (`demo/boothAttract.ts`, lane "booth").
+    if (this.demo?.holding()) return;
     // While the briefing is up it owns the screen: it holds the keyboard claim,
     // and a stray Enter here would start the flow behind it.
     if (this.briefing && !this.briefing.finished) return;

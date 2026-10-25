@@ -7,6 +7,29 @@
 
 /** How long the title sits untouched before the attract loop starts. */
 export const ATTRACT_AFTER_MS = 60_000;
+/** r64 (item 200i): how long the fight picker sits untouched before the booth goes back to the title (and so, a minute on, to the attract card). */
+export const PICKER_IDLE_MS = 60_000;
+/** r63-rc (driver call 201c): how long a picker-idle return stays "fresh" for the title that opens after it; a title opened later is an ordinary one. */
+export const IDLE_RETURN_FRESH_MS = 10_000;
+
+let idleReturnAt: number | null = null;
+
+/**
+ * r63-rc (driver call 201c, review minor m2): the fight picker sent the booth back to the title because nobody was there ({@link PICKER_IDLE_MS}). The picker calls this just before it hands
+ * the flow its `null`; the title that opens next takes it ({@link takeIdleReturn}) and starts its own clock as already run out, so the attract card goes up at once instead of a second minute later
+ * (two in all from the last press). A visitor's Esc is not this: the title counts a minute from the press as usual.
+ */
+export function noteIdleReturn(now: number): void {
+  idleReturnAt = now;
+}
+
+/** True once, for the title that opens within {@link IDLE_RETURN_FRESH_MS} of {@link noteIdleReturn}; false for every other title (and the note is spent). */
+export function takeIdleReturn(now: number): boolean {
+  const at = idleReturnAt;
+  idleReturnAt = null;
+  return at !== null && now - at >= 0 && now - at <= IDLE_RETURN_FRESH_MS;
+}
+
 /** A stick this far from rest counts as a person; a stick within it is drift. */
 export const STICK_ACTIVE = 0.5;
 /** A mouse that moves less than this (CSS px, summed) since the last real activity is a mouse resting on a table, not a visitor. */

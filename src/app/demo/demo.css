@@ -54,7 +54,8 @@
   flex-direction: column;
   align-items: stretch;
   gap: calc(6 * var(--fe-k, 1px));
-  width: calc(128 * var(--fe-k, 1px));
+  /* r64: the caption has a 12 px floor (below), so the plate gets a floor too; at 1280 x 720 the unit is 0.89 px and 128 of it left the address touching both edges */
+  width: max(calc(128 * var(--fe-k, 1px)), 156px);
   padding: calc(8 * var(--fe-k, 1px)) calc(8 * var(--fe-k, 1px)) calc(7 * var(--fe-k, 1px));
   background: var(--ig-paper, #f4f1e8);
   border-top: calc(3 * var(--fe-k, 1px)) solid var(--ig-gold, #e3b94a);
@@ -83,6 +84,7 @@
   color: var(--ig-accent-text-on-paper, #7f5c0a);
 }
 .demo-qr__cap span {
+  white-space: nowrap;
   font-size: max(12px, calc(10 * var(--fe-k, 1px)));
   letter-spacing: 0.04em;
   text-transform: none;

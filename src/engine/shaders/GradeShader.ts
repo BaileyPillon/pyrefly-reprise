@@ -1,4 +1,4 @@
-import { Data3DTexture, LinearFilter, Vector3 } from 'three';
+import { Data3DTexture, LinearFilter, Vector3, Vector4 } from 'three';
 
 /**
  * A 2-cube identity LUT: the `uLook` default, so the sampler is always bound. With
@@ -75,6 +75,13 @@ export const GradeShader = {
     hazeAmount: { value: new Vector3(0, 0, 0) },
     /** How far the haze thins toward the left and right edges of the frame, 0..1 (0 = the same all the way across, the default; 1 = none at the edge itself). */
     hazeSide: { value: 0 },
+    // --- the pro arena's cone of light (lane pro-look, `look/pro/ProGrade.ts`): one soft cone from the room's one light, added after the look LUT. Strength 0 (the default): the block is skipped.
+    /** xy the light (frame uv, 0 bottom-left), z the cone's half width, w its reach (frame heights). */
+    uCone: { value: new Vector4(0.5, 0.98, 0.26, 1.9) },
+    /** rgb the light's colour, w its strength (0 = no cone). */
+    uConeCol: { value: new Vector4(0.7, 0.88, 1.0, 0) },
+    /** x how beam-like (0 smooth .. 1 beams), y the beams' drift clock, z the frame's aspect. */
+    uConeP: { value: new Vector3(0.45, 0, 1.78) },
   },
 
   vertexShader: /* glsl */ `
@@ -110,6 +117,9 @@ export const GradeShader = {
     uniform vec3 hazeColor;
     uniform vec3 hazeAmount;
     uniform float hazeSide;
+    uniform vec4 uCone;
+    uniform vec4 uConeCol;
+    uniform vec3 uConeP;
 
     varying vec2 vUv;
 
@@ -163,6 +173,20 @@ export const GradeShader = {
         float hz = vUv.y < 0.5 ? mix(hazeAmount.x, hazeAmount.y, vUv.y * 2.0) : mix(hazeAmount.y, hazeAmount.z, vUv.y * 2.0 - 1.0);
         hz *= 1.0 - hazeSide * smoothstep(0.2, 0.5, abs(vUv.x - 0.5));
         c = mix(c, hazeColor, clamp(hz, 0.0, 1.0));
+        luma = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      }
+
+      // the pro arena's cone of light (lane pro-look): a soft cone from the room's one light falling toward the floor, beams in it, laid on the graded stage (screen blend); a figure takes a fifth of it. Zero strength skips it.
+      if (uConeCol.w > 0.0) {
+        vec2 cd = vec2((vUv.x - uCone.x) * uConeP.z, uCone.y - vUv.y);
+        float cdist = length(cd) + 1e-4;
+        float cas = atan(cd.x, max(cd.y, 1e-3)) / uCone.z;
+        float cg = exp(-cas * cas) * smoothstep(-0.03, 0.02, cd.y) * exp(-cdist / uCone.w);
+        float cang = atan(cd.x, max(cd.y, 1e-3));
+        float beam = (sin(cang * 6.1 + 0.7 + uConeP.y * 0.05) + sin(cang * 9.7 + 2.9 - uConeP.y * 0.04) + sin(cang * 13.3 + 4.1 + uConeP.y * 0.03) + sin(cang * 7.9 + 1.3)) * 0.25;
+        cg *= 1.0 - uConeP.x + uConeP.x * (0.5 + 0.5 * beam);
+        float ck = cg * uConeCol.w * (1.0 - 0.8 * (1.0 - clamp(texel.a, 0.0, 1.0)));
+        c = 1.0 - (1.0 - c) * (1.0 - uConeCol.rgb * ck);
         luma = dot(c, vec3(0.2126, 0.7152, 0.0722));
       }
 

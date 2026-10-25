@@ -1,0 +1,478 @@
+/*
+ * The booth's two cards in the Echo look (lane "booth", decision 188b; both games; `boothCards.ts`). Built from the picked mockups endcard-A and attract-A.
+ *
+ * --bk is the front end's grid unit (`frontend.css`: --fe-k): 1 px at 1440 x 810, 1.78 px at 2560 x 1440. Every word is at least 16 --bk (28 px at 2560 x 1440, Bailey's text floor).
+ * The picture is the Echo painting (1682 x 932, 1.805:1); the ground behind it is its own black (#050402). REDUCE MOTION (the game's option on <html>, or the system's) stills everything.
+ */
+
+.booth-card {
+  --bk: max(0.5px, min(100vw / 1440, 100vh / 810));
+  --bt: 1;
+  --booth-gold: var(--ig-gold, #e3b94a);
+  --booth-paper: var(--ig-paper, #f4f1e8);
+  --booth-serif: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  --booth-display: var(--ig-font-display, 'Chakra Petch', Bahnschrift, 'Segoe UI', sans-serif);
+  --booth-text: 'Exo 2', 'Segoe UI', sans-serif;
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  background: #050402;
+  color: var(--booth-paper);
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  animation: booth-in calc(380ms * var(--bt)) ease-out both;
+}
+
+/* the way out (a press woke the attract card): a quick fade, then the page removes it */
+.booth-card.booth-card--out {
+  animation: booth-out 200ms ease-in both;
+}
+
+/* ------------------------------------------------------------------ shared parts */
+
+.booth-eyebrow {
+  font-family: var(--booth-display);
+  font-weight: 700;
+  font-size: calc(16 * var(--bk));
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--booth-gold);
+}
+.booth-tagline {
+  margin: 0;
+  font-family: var(--booth-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: calc(29 * var(--bk));
+  line-height: 1.12;
+  color: var(--booth-paper);
+}
+.booth-tagline span {
+  display: block;
+  white-space: nowrap;
+}
+.booth-qr {
+  box-sizing: border-box;
+  width: calc(132 * var(--bk));
+  height: calc(132 * var(--bk));
+  background: var(--booth-paper);
+  box-shadow: 0 0 0 calc(1.5 * var(--bk)) var(--booth-gold), 0 calc(4 * var(--bk)) calc(18 * var(--bk)) rgba(0, 0, 0, 0.6);
+  line-height: 0;
+}
+.booth-qr svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.booth-scan {
+  font-family: var(--booth-display);
+  font-weight: 700;
+  font-size: calc(16 * var(--bk));
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--booth-gold);
+}
+.booth-host {
+  font-family: var(--booth-display);
+  font-weight: 700;
+  font-size: calc(26 * var(--bk));
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: var(--booth-paper);
+}
+.booth-fine {
+  font-family: var(--booth-text);
+  font-weight: 500;
+  font-size: calc(16 * var(--bk));
+  line-height: 1.3;
+  color: rgba(244, 241, 232, 0.76);
+}
+
+/* pyreflies: soft golden lights, drifting and twinkling (the mockup's own, the same scatter) */
+.booth-glows {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.booth-glow {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 244, 205, 1) 0%, rgba(255, 226, 150, 0.55) 22%, rgba(255, 210, 120, 0.16) 52%, rgba(255, 210, 120, 0) 72%);
+  opacity: var(--o0, 0.5);
+  will-change: transform, opacity;
+}
+
+/* the build-up: each part arrives on its own beat (the mockup's timings, scaled by --bt: the card after a fight builds up in 42 percent of the time) */
+.booth-rise {
+  animation: booth-rise calc(800ms * var(--bt)) cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--s, 0ms) * var(--bt)) both;
+}
+.booth-fade {
+  animation: booth-fade calc(var(--d, 1000ms) * var(--bt)) ease-out calc(var(--s, 0ms) * var(--bt)) both;
+}
+
+/* ------------------------------------------------------------------ the END card: the Echo, held */
+
+.booth-end__art {
+  position: absolute;
+  inset: 0;
+  transform-origin: 46% 60%;
+  animation: booth-push calc(9000ms * var(--bt)) linear both;
+}
+.booth-end__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 65%;
+  animation: booth-fade calc(1400ms * var(--bt)) ease-out both;
+}
+@media (min-aspect-ratio: 19 / 10) {
+  .booth-end__img {
+    object-fit: contain;
+    object-position: 50% 50%;
+  }
+}
+.booth-end__left {
+  position: absolute;
+  left: calc(54 * var(--bk));
+  bottom: calc(66 * var(--bk));
+  width: calc(560 * var(--bk));
+}
+.booth-end__thanks {
+  font-family: var(--booth-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: calc(46 * var(--bk));
+  line-height: 1;
+  margin-bottom: calc(20 * var(--bk));
+  color: var(--booth-paper);
+  text-shadow: 0 0 calc(22 * var(--bk)) rgba(255, 226, 150, 0.35);
+}
+.booth-end__left .booth-eyebrow {
+  margin-bottom: calc(12 * var(--bk));
+}
+/* r64 (item 200i): the hint at the foot of the left column, in the card's own type (.booth-scan: 16 units, 28 px at 2560 x 1440) */
+.booth-end__press {
+  position: absolute;
+  left: calc(54 * var(--bk));
+  bottom: calc(24 * var(--bk));
+  display: flex;
+  align-items: center;
+  gap: calc(14 * var(--bk));
+}
+.booth-end__press .booth-pad {
+  width: calc(44 * var(--bk));
+  height: calc(29 * var(--bk));
+}
+.booth-end__right {
+  position: absolute;
+  right: calc(54 * var(--bk));
+  bottom: calc(66 * var(--bk));
+  width: calc(300 * var(--bk));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+.booth-end__right .booth-qr {
+  margin-bottom: calc(12 * var(--bk));
+}
+.booth-end__right .booth-host {
+  margin-top: calc(8 * var(--bk));
+}
+.booth-end__right .booth-fine {
+  margin-top: calc(7 * var(--bk));
+}
+
+/* ------------------------------------------------------------------ the ATTRACT card: still water */
+
+.booth-attract__art {
+  position: absolute;
+  left: 7.34%;
+  top: 0;
+  width: 85.31%;
+  height: 84%;
+  transform-origin: 50% 40%;
+  animation: booth-breathe-zoom 8000ms ease-in-out infinite alternate;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+}
+.booth-attract__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 50%;
+  animation: booth-fade 1200ms ease-out both;
+}
+.booth-attract__prompt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 80.6%;
+  text-align: center;
+  font-family: var(--booth-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: calc(68 * var(--bk));
+  line-height: 1;
+  color: var(--booth-paper);
+  text-shadow: 0 0 calc(24 * var(--bk)) rgba(255, 226, 150, 0.35);
+  animation: booth-breathe 3000ms ease-in-out infinite;
+}
+.booth-attract__press {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 91.4%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(18 * var(--bk));
+}
+.booth-scan--wide {
+  font-size: calc(20 * var(--bk));
+  letter-spacing: 0.32em;
+}
+.booth-pad {
+  position: relative;
+  display: inline-block;
+  width: calc(54 * var(--bk));
+  height: calc(36 * var(--bk));
+}
+.booth-pad svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.booth-pad__ring {
+  position: absolute;
+  left: 76%;
+  top: 51.5%;
+  width: calc(22 * var(--bk));
+  height: calc(22 * var(--bk));
+  margin: calc(-11 * var(--bk)) 0 0 calc(-11 * var(--bk));
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: calc(2 * var(--bk)) solid var(--booth-gold);
+  animation: booth-ring 1500ms ease-out infinite;
+}
+.booth-attract__fan {
+  position: absolute;
+  left: calc(45 * var(--bk));
+  bottom: calc(34 * var(--bk));
+  color: rgba(227, 185, 74, 0.86);
+}
+.booth-attract__qr {
+  position: absolute;
+  right: calc(45 * var(--bk));
+  bottom: calc(26 * var(--bk));
+  display: flex;
+  align-items: center;
+  gap: calc(16 * var(--bk));
+}
+.booth-attract__qrtext {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: calc(8 * var(--bk));
+}
+.booth-attract__qrtext .booth-host {
+  font-size: calc(20 * var(--bk));
+}
+.booth-attract__qr .booth-qr {
+  width: calc(112 * var(--bk));
+  height: calc(112 * var(--bk));
+}
+
+/* ------------------------------------------------------------------ a squarer window (4:3, 5:4, up to 3:2): the whole painting from the top, the words in the corners below it
+ * At 16:10 and wider the painting fills the window (cropped at the sides) and the painted lettering sits clear of the words. Squarer than about 3:2 the crop is so deep that the lettering is wider than the gap
+ * between the two word blocks (they sat on "ECHOES" and "SPIRA" at 4:3 and 5:4); with the whole painting shown, the lettering is the middle 39 percent of the width and the blocks (each under 27 percent) are clear of it.
+ * Measured on the painting: the lettering is x 0.306 to 0.694 and y 0.848 to 0.912 of it. */
+
+@media (min-aspect-ratio: 101 / 100) and (max-aspect-ratio: 31 / 20) {
+  .booth-end__img {
+    object-fit: contain;
+    object-position: 50% 0%;
+  }
+}
+
+/* ------------------------------------------------------------------ a portrait window (a phone or a tablet opening ?card=): the words stack under the picture instead of beside it
+ * The unit is the window's width over a phone's 390 (so the smallest word is 16 px on a phone, 19 px on a tablet), and the whole painting is shown across the top, not a narrow cut of it. */
+
+@media (max-aspect-ratio: 1 / 1) {
+  .booth-card {
+    --bk: max(0.5px, min(100vw / 390, 100vh / 844));
+  }
+  .booth-end__img {
+    object-fit: contain;
+    object-position: 50% 8vh;
+  }
+  .booth-end__left {
+    left: 5vw;
+    right: 5vw;
+    width: auto;
+    bottom: 34vh;
+  }
+  .booth-end__press {
+    left: 0;
+    right: 0;
+    bottom: calc(14 * var(--bk));
+    justify-content: center;
+  }
+  .booth-end__right {
+    left: 5vw;
+    right: 5vw;
+    width: auto;
+    bottom: 6vh;
+    align-items: center;
+    text-align: center;
+  }
+  .booth-attract__art {
+    left: 0;
+    width: 100%;
+    top: 4%;
+    height: 56%;
+  }
+  .booth-attract__prompt {
+    top: 66%;
+    font-size: calc(36 * var(--bk));
+  }
+  .booth-attract__press {
+    top: 78%;
+  }
+  .booth-attract__fan {
+    left: 0;
+    right: 0;
+    bottom: calc(20 * var(--bk));
+    text-align: center;
+  }
+  .booth-attract__qr {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ keyframes */
+
+@keyframes booth-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes booth-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes booth-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes booth-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(14 * var(--bk)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes booth-push {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+@keyframes booth-breathe-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.025);
+  }
+}
+@keyframes booth-breathe {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes booth-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+@keyframes booth-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(var(--dx, 0), var(--dy, 0), 0);
+  }
+}
+@keyframes booth-twinkle {
+  0%,
+  100% {
+    opacity: var(--o0, 0.5);
+  }
+  50% {
+    opacity: var(--o1, 1);
+  }
+}
+
+/* ------------------------------------------------------------------ REDUCE MOTION: no push, no breathing, no ring, no drift, no build-up; the cards stand in their final state */
+
+html[data-reduce-motion] .booth-card,
+html[data-reduce-motion] .booth-card * {
+  animation: none !important;
+  transition: none !important;
+}
+html[data-reduce-motion] .booth-pad__ring {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .booth-card,
+  .booth-card * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .booth-pad__ring {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ the thanks screen's root, when it is drawn as the end card (demoThanks.ts) */
+
+.demo-thanks.demo-thanks--booth {
+  display: block;
+  background: #050402;
+  animation: none;
+}

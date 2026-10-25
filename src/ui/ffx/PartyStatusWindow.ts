@@ -2,6 +2,9 @@ import type { AnyCombatant, CombatantId, FFXCombatant } from '../../battle/commo
 import { aeonChipHtml, portraitChipHtml, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { captionHtml, ffxPlateIconsHtml } from '../common/statusRows.ts';
 import { zombieWarnOn } from './zombieWarnOptions.ts';
+import '../common/pro-markers.css';
+import { makePartyGhost, memberKey, membershipChanged, partySwapOn, playPartySwap, reduceMotionNow, resumePartySwapIn, swapInFlight, swapTiming, type SwapTiming } from './partySwap.ts'; // r64-fixes: the cards ease when the list changes who is on it (the aeon's summon and dismissal), F1 HUD only
+import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml, rowMarkStyle } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
 
 /**
  * FFX Critical (SOS): HP below half of max, where the digits turn yellow (research/ffx-combat-core.md V8 and
@@ -28,6 +31,11 @@ export class PartyStatusWindow {
    * value of the gauge is the moment it crosses.
    */
   private readonly prevGauge = new Map<CombatantId, number>();
+  /** Who the list showed at the last render (`partySwap.memberKey`), to tell a swap of the whole list from a change of numbers. */
+  private lastMembers: string | null = null;
+  /** The swap in flight (its timing and when it began), so a render that lands inside it gives the new rows the arrival the old ones had (the skeptic's F2). */
+  private swapT: SwapTiming | null = null;
+  private swapAt = 0;
 
   constructor() {
     this.el = document.createElement('div');
@@ -37,8 +45,54 @@ export class PartyStatusWindow {
 
   render(activeIds: CombatantId[], combatants: Record<CombatantId, AnyCombatant>, actingId: CombatantId | null): void {
     const rows = activeIds.map((id, i) => this.rowHtml(id, combatants[id], i, id === actingId));
+    // r63-play (the overnight fix of the skeptic's m1, FFX; Chapter I): every render replaces the rows, and a replaced row is born at its final height, so a render that landed while the F1 HUD's slim cards
+    // were on their way back (a menu opening, a hit's numbers) snapped them up to 90 px in one frame. Each new row now starts from the height its old one had and eases from there, as the rest do.
+    const f1 = this.el.closest('.hud-f1') !== null;
+    const before = f1 ? this.heights() : null;
+    // r64-fixes (FFX, Chapter I; the F1 HUD): a change of who is on the list (an aeon in, an aeon out) is eased with the HUD's own step-back motion, the old cards leaving as a ghost.
+    const members = memberKey(activeIds);
+    const swap = f1 && partySwapOn() && membershipChanged(this.lastMembers, members, this.el.querySelectorAll('.ig-stat').length);
+    this.lastMembers = members;
+    const ghost = swap ? makePartyGhost(this.el) : null;
     this.el.innerHTML = rows.join('');
     wirePortraitFallbacks(this.el);
+    if (swap) {
+      this.swapT = swapTiming(this.el, reduceMotionNow());
+      this.swapAt = typeof performance !== 'undefined' ? performance.now() : 0;
+      playPartySwap(this.el, ghost, this.swapT);
+      return;
+    }
+    if (before && before.size) this.carryHeights(before);
+    if (this.swapT) {
+      const elapsed = (typeof performance !== 'undefined' ? performance.now() : 0) - this.swapAt;
+      if (swapInFlight(this.swapT, elapsed)) resumePartySwapIn(this.el, this.swapT, elapsed);
+      else this.swapT = null;
+    }
+  }
+
+  /** Each row's used height now (mid-transition included), in the row's own units, by actor. */
+  private heights(): Map<string, number> {
+    const out = new Map<string, number>();
+    for (const row of this.el.querySelectorAll<HTMLElement>('.ig-stat')) {
+      const h = parseFloat(getComputedStyle(row).height);
+      if (Number.isFinite(h) && row.dataset['actor']) out.set(row.dataset['actor'], h);
+    }
+    return out;
+  }
+
+  /** The new rows start at the old rows' height and let the stylesheet's height transition carry them to where they belong. */
+  private carryHeights(before: Map<string, number>): void {
+    for (const row of this.el.querySelectorAll<HTMLElement>('.ig-stat')) {
+      const from = before.get(row.dataset['actor'] ?? '');
+      if (from === undefined) continue;
+      const to = parseFloat(getComputedStyle(row).height);
+      if (!Number.isFinite(to) || Math.abs(from - to) < 1) continue;
+      row.style.transition = 'none';
+      row.style.height = `${from}px`;
+      void row.offsetHeight; // the old height is the style the transition starts from
+      row.style.transition = '';
+      row.style.height = '';
+    }
   }
 
   private rowHtml(id: CombatantId, c: AnyCombatant | undefined, i: number, acting: boolean): string {
@@ -70,9 +124,11 @@ export class PartyStatusWindow {
     const hpValueCls = ['ig-stat__value', !c.alive ? 'ffx-stat__value--ko' : hpFrac <= 0.125 ? 'ffx-stat__value--danger' : hpFrac < FFX_HP_YELLOW_BELOW ? 'ffx-stat__value--crit' : '']
       .filter(Boolean)
       .join(' ');
-    const rowCls = ['ig-stat', acting ? 'ig-stat--acting' : '', !c.alive ? 'ffx-stat--ko' : '', hurt ? 'ffx-stat--hurt' : '']
-      .filter(Boolean)
-      .join(' ');
+    const proMark = proMarkersOn() ? rowMark('ffx', c.hp, maxHp, c.alive) : null; // lane pro-look: null (nothing) with the piece off, the default
+    const rowCls =
+      ['ig-stat', acting ? 'ig-stat--acting' : '', !c.alive ? 'ffx-stat--ko' : '', hurt ? 'ffx-stat--hurt' : '']
+        .filter(Boolean)
+        .join(' ') + rowMarkClass(proMark);
 
     // Status display O2/O3 (Bailey's pick, 2026-09-29): round medallions under the Overdrive gauge,
     // most alarming first (the old single-colour pips are replaced), and a caption where a status
@@ -83,8 +139,8 @@ export class PartyStatusWindow {
 
     // The aeon's row while it is out (PR-0181) wears the turn list's aeon chip, not a letter (FOC24-02, CHK-012).
     const face = c.side === 'aeon' ? aeonChipHtml(c.spriteKey ?? id, c.name, c.portraitKey) : portraitChipHtml(c.portraitKey, c.name, tintFor('party'));
-    return `<div class="${rowCls}" style="margin-right:calc(var(--ig-stat-step) * ${i})" data-actor="${id}">
-      <span class="ig-stat__face">${face}</span>
+    return `<div class="${rowCls}" style="margin-right:calc(var(--ig-stat-step) * ${i})${rowMarkStyle(proMark)}" data-actor="${id}">
+      <span class="ig-stat__face">${face}${rowMarkHtml(proMark)}</span>
       <span class="ig-stat__name">${escapeHtml(c.name)}</span>
       <span class="${hpValueCls}">${c.hp}<small>/${maxHp}</small></span>
       <span class="ig-stat__value ig-stat__value--mp">${c.mp}<small>/${maxMp}</small></span>

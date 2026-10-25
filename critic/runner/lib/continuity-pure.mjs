@@ -277,7 +277,7 @@ const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
  * figure's world point since the previous sample (so the jump of the figure itself is the step minus `cam`), and `cams` (probe version 2) how far it moved each
  * TRACKED point (`figureTrack`, continuity-camera.mjs): a head is moved by far more than the origin is, and the step minus `cam` read a camera cut as a 40 to 57 px head jerk
  * on every figure in the frame. A part with no `cams` entry falls back to `cam`; `cam` alone still decides whether the camera cut (its own shift under `cutPx`).
- * Only consecutive frames count; a gap (the figure hid, the battle paused) resets.
+ * Only consecutive frames count; a gap (the figure hid, the battle paused) resets, and so does a step between two samples both marked `unseen` (R63-M1: the figure was off the view in both frames, continuity-unseen.mjs).
  *
  * A step is a jerk when it is at least `jerkMinPx`, is `jerkRatio` times the local speed of the move (the median
  * of the neighbouring steps, never less than `jerkFloorPx`), does not open a dash that keeps half its speed for
@@ -290,7 +290,7 @@ export function detectJerks(track, k1600, cfg) {
   const steps = []; // step j is the move from sample j-1 to sample j
   for (let j = 1; j < track.length; j++) {
     const a = track[j - 1], b = track[j];
-    if (!a || !b || b.n !== a.n + 1) { steps.push(null); continue; }
+    if (!a || !b || b.n !== a.n + 1 || (a.unseen && b.unseen)) { steps.push(null); continue; } // R63-M1: a step of a figure that is off the view in BOTH frames cannot be seen (continuity-unseen.mjs); one that leaves or enters the view in a jump can
     let best = null;
     for (const part of ['feet', 'head', 'centroid']) {
       if (!a[part] || !b[part]) continue;
@@ -300,7 +300,14 @@ export function detectJerks(track, k1600, cfg) {
       const px = Math.hypot(dx, dy);
       if (!best || px > best.px) best = { part, px, dx, dy };
     }
-    steps.push(best ? { ...best, camPx: Math.hypot(b.cam[0], b.cam[1]) * k1600 } : null);
+    // R63-M1: the part of the step that is the POSE changing, not the figure travelling: where the head moved relative to the feet (each corrected by the camera's shift of its own point). A lunge
+    // moves the head and the feet together (`rel` near 0); a hurt or a knock-out cut moves the head against the feet. Only where both are tracked.
+    let rel = null;
+    if (a.head && b.head && a.feet && b.feet) {
+      const ch = (b.cams && b.cams.head) || b.cam, cf = (b.cams && b.cams.feet) || b.cam;
+      rel = Math.hypot((b.head[0] - a.head[0] - ch[0]) - (b.feet[0] - a.feet[0] - cf[0]), (b.head[1] - a.head[1] - ch[1]) - (b.feet[1] - a.feet[1] - cf[1])) * k1600;
+    }
+    steps.push(best ? { ...best, rel, camPx: Math.hypot(b.cam[0], b.cam[1]) * k1600 } : null);
   }
   const events = [];
   for (let j = 0; j < steps.length; j++) {
@@ -315,8 +322,9 @@ export function detectJerks(track, k1600, cfg) {
     if (ballisticChain(steps, j, m.jerkMinPx) >= m.ballisticChain) continue;
     const at = track[j + 1];
     const last = events[events.length - 1];
-    if (last && at.n - last.n <= m.mergeFrames) { if (s.px > last.px) Object.assign(last, { px: round(s.px, 1), part: s.part, dx: round(s.dx, 1), dy: round(s.dy, 1), localPx: round(local, 1), ratio: round(s.px / local, 1), n: at.n, t: at.t }); continue; }
-    events.push({ n: at.n, t: at.t, px: round(s.px, 1), localPx: round(local, 1), ratio: round(s.px / local, 1), part: s.part, dx: round(s.dx, 1), dy: round(s.dy, 1) });
+    const relPart = s.rel === null ? {} : { relPx: round(s.rel, 1) }; // R63-M1: how much of the step is the pose changing against the figure's own feet (see above)
+    if (last && at.n - last.n <= m.mergeFrames) { if (s.px > last.px) { delete last.relPx; Object.assign(last, { px: round(s.px, 1), part: s.part, dx: round(s.dx, 1), dy: round(s.dy, 1), localPx: round(local, 1), ratio: round(s.px / local, 1), n: at.n, t: at.t, ...relPart }); } continue; }
+    events.push({ n: at.n, t: at.t, px: round(s.px, 1), localPx: round(local, 1), ratio: round(s.px / local, 1), part: s.part, dx: round(s.dx, 1), dy: round(s.dy, 1), ...relPart });
   }
   return events;
 }

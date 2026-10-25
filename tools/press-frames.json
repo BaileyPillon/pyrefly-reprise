@@ -1,0 +1,10 @@
+[
+  { "name": "ffx-seymour-flux", "src": "D:/Tools/pyrefly-scratch/2026-10-24/booth/fix/shots/frames-ch1/332-196704.jpg", "game": "ffx", "caption": "Final Fantasy X, Seymour Flux", "note": "tools/press-capture.mjs ch1, capture 332: flames rise around Seymour, no interface, the game's own stats" },
+  { "name": "ffx-cast", "src": "D:/Tools/pyrefly-scratch/2026-10-24/booth/fix/shots/frames-ch1/372-219897.jpg", "game": "ffx", "caption": "Final Fantasy X, the party", "note": "tools/press-capture.mjs ch1, capture 372: the party in a burst of light, no interface" },
+  { "name": "ffx-seymour-hit", "src": "D:/Tools/pyrefly-scratch/2026-10-24/booth/fix/shots/frames-ch1/168-100877.jpg", "game": "ffx", "caption": "Final Fantasy X, Seymour Flux", "note": "tools/press-capture.mjs ch1, capture 168: a lance strike lands on Seymour, no interface" },
+  { "name": "ffx2-bahamut", "src": "D:/Tools/pyrefly-scratch/2026-10-24/booth/fix/shots/frames-ch4/152-81627.jpg", "game": "ffx2", "caption": "Final Fantasy X-2, Bahamut", "note": "tools/press-capture.mjs ch4, capture 152: a strike on Bahamut, no interface, the game's own stats" },
+  { "name": "ffx2-cure", "src": "D:/Tools/pyrefly-scratch/2026-10-24/booth/fix/shots/frames-ch4/124-66967.jpg", "game": "ffx2", "caption": "Final Fantasy X-2, Cure", "note": "tools/press-capture.mjs ch4, capture 124: Cure lights the party, no interface" },
+  { "name": "ffx2-mega-flare", "src": "D:/Tools/pyrefly-scratch/2026-10-24/booth/fix/shots/fx-ch4/mega-19-2450.jpg", "game": "ffx2", "caption": "Final Fantasy X-2, Mega Flare", "note": "tools/press-capture.mjs ch4 --fx mega, capture 19: the presenter plays Mega Flare on a real Chapter IV battle at its real stats, no interface" },
+  { "name": "keyart-farplane", "art": "title/keyart.png", "game": null, "caption": "Key art, Farplane Field", "note": "public/art/title/keyart.png" },
+  { "name": "keyart-echo", "art": "title/echo.png", "game": null, "caption": "Key art, The Echo", "note": "public/art/title/echo.png" }
+]

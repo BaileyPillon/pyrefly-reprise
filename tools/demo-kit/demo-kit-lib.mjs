@@ -16,6 +16,12 @@ export const HOST_READ_FILES = Object.freeze(['_headers']);
 /** The address the kit opens: `?demo=1` is the demo switch (`src/app/demoMode.ts`; kept for the tab, so a reload keeps it). */
 export const DEMO_QUERY = '?demo=1';
 
+/**
+ * The conference pack's switch, added to the address after `?demo=1` (2026-10-24; Bailey's booth is the conference build): `?pack=demo` turns on the F1 HUD, the sound pass, the pro look / camera / staging,
+ * the boss re-cut, the booth cards and the fight prebuild (`packDemo` in `src/engine/motion/DemoGate.ts` reads it). With `?demo=1` alone the booth shows the plain demo (release 62). `--plain` opens that.
+ */
+export const PACK_QUERY = '&pack=demo';
+
 /** The port the live dev setup and `npm run preview` already use; a busy port falls through to the next free one. */
 export const DEFAULT_PORT = 5173;
 
@@ -105,6 +111,19 @@ export function parseRange(header, size) {
 /** The address the kit opens for a port: `http://127.0.0.1:<port>/?demo=1`. The server listens on the loopback only. */
 export function demoUrl(port, extra = '') {
   return `http://127.0.0.1:${port}/${DEMO_QUERY}${extra}`;
+}
+
+/**
+ * The address the booth opens: `http://127.0.0.1:<port>/?demo=1&pack=demo` (the conference pack on), or with `plain` the plain demo `http://127.0.0.1:<port>/?demo=1`.
+ * `start` writes it into the kit's state file and `reset` reopens that one, so a reset between visitors keeps whichever the day started with.
+ */
+export function boothUrl(port, { plain = false } = {}) {
+  return demoUrl(port, plain ? '' : PACK_QUERY);
+}
+
+/** Is this the plain demo's address (no `pack=demo` key)? Pure on the text; a state file from before the pack default reads as plain. */
+export function isPlainBoothUrl(url) {
+  return !/[?&]pack=demo(?:&|#|$)/.test(url);
 }
 
 /**

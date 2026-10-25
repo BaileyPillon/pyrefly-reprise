@@ -67,6 +67,17 @@ export interface ActorHandle {
   lieDown?(ms?: number, tilt?: number): Promise<void>;
   /** Optional: petrified, 0..1 — the painting drained to stone grey (`PaintedActor.setStone`). */
   setStone?(amount: number): void;
+  /** Optional (motion pass, lane "core"; only with `motion/CurvesSwitch.curvesOn()`): the sampled strike, in place of `lunge` + `squash`. */
+  strike?(plan: import('./motion/StrikePlan.ts').StrikePlan): Promise<void>;
+  /** Optional (same): the figure's heft, 0 (party-sized) to 1 (a default-size foe or bigger): how much longer its strike's wind-up and travel run, so the strike's sound can be asked for on its contact. */
+  strikeHeft?(): number;
+  /** Optional (same): a cast's lift, held from the cast's start until the spell lands (`liftRelease`). */
+  liftTo?(height: number, ms?: number): void;
+  liftRelease?(ms?: number): void;
+  /** Optional (same): an arc with a take-off crouch, an airborne stretch and a landing squash (FFX-2's run-in). */
+  leap?(height: number, ms: number, options?: import('./motion/CurveDriver.ts').LeapOptions): Promise<void>;
+  /** Optional (motion pass, step 3; only with `motion/MomentsSwitch.momentsOn()`): a chapter whose sources withhold the victory pose keeps the stance and stands down: one slow breath out. */
+  standDown?(): void;
   centerPoint(): Point3;
   headPoint(): Point3;
 }
@@ -133,6 +144,11 @@ export interface CameraPort {
    * keeps every girl whole (`ShotRules.reveal`). It moves nothing by itself.
    */
   blendRig?(from: string, to: string, t: number): string | null;
+  /**
+   * The directed camera's port (`?camera=pro`, conference demo; `procam/ProLayer.ts`): play a run of poses on top of the rig, stop it, install the FFX-2 follower. Optional and additive: a fake, a
+   * camera without the layer and a held camera (the FFX-2 target frame) answer undefined, and the director then plays nothing.
+   */
+  readonly pro?: import('./procam/ProTypes.ts').ProCamPort | undefined;
   readonly rigNames: string[];
   readonly rigName: string;
 }
@@ -239,6 +255,13 @@ export interface VfxPort {
       sourceId?: CombatantId;
       /** A critical hit: the drawn effect keeps the impact bloom's 1.3x crit size. */
       crit?: boolean;
+      /** The blow belongs to an item use (the new effects' Cure draws the item form of its column; motion pass, lane "fx"). Additive. */
+      item?: boolean;
+      /** The new effects, step 3 (lane "fx"; all additive, read only with the new effects on): a charge's level 1 to 5; whose aura or dress; the call comes from a status event; the call is decoration nothing waits for. */
+      level?: number;
+      variant?: string;
+      status?: boolean;
+      deco?: boolean;
     },
   ): number;
   /**
@@ -333,8 +356,10 @@ export interface AudioPort {
    */
   playSfx(
     key: string,
-    opts?: { volume?: number; delay?: number; pan?: number; events?: readonly string[]; coveredBy?: readonly string[]; beatMs?: number },
+    opts?: { volume?: number; delay?: number; pan?: number; pitch?: number; trimMs?: number; fadeMs?: number; events?: readonly string[]; coveredBy?: readonly string[]; beatMs?: number; pass?: import('../audio/pass/passTypes.ts').PassPlan },
   ): void;
+  /** The sound pass (`audio/pass/`, `?audio=new`): dip the music for a blow `aheadMs` away. Optional: a mixer without it (a test fake, an older build) ignores the ask. */
+  musicDip?(aheadMs: number, plan: import('../audio/pass/passTypes.ts').DipPlan): void;
   playMusic(key: string, opts?: { fade?: number }): Promise<void> | void;
   stopMusic(fade?: number): void;
 }
@@ -363,6 +388,8 @@ export interface BattleStage {
   readonly lighting?: LightingPort;
   /** Live actor for a combatant, or `undefined` if it has none (hidden parts). */
   actor(id: CombatantId): ActorHandle | undefined;
+  /** Optional and additive (integration 2, `?curves=real`): the art id a staged combatant is drawn with (`tidus`, `rikku-dark-knight`, `seymour-flux`...), which keys the real game's motion table. */
+  artOf?(id: CombatantId): string | undefined;
   /** Which team a staged combatant fights for. Drives KO and victory poses. */
   sideOf(id: CombatantId): 'party' | 'enemy' | 'aeon' | undefined;
   /** Ids currently on the field, party/aeon first. */
@@ -471,6 +498,8 @@ export interface PresenterDeps {
   audio?: AudioPort | null;
   /** Letterbox / name slab / vignette. Omitted in tests and headless runs. */
   moments?: MomentsPort | null;
+  /** The PRO STAGING's layer (lane "pro-staging", `pro/staging/StagingSwitch.ts`): present only with `?staging=pro` / `?pack=demo` in a demo chapter; absent everywhere else. */
+  staging?: import('./pro/staging/StagingPort.ts').StagingPort | null;
   /** Mid-battle scripts by `MidBattleTrigger.script`, from `ChapterScripts`. */
   midScripts?: Record<string, StoryScript>;
   /** Sleep hook. Tests pass a no-op so the loop runs instantly. */

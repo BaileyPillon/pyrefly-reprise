@@ -10,6 +10,7 @@
  * and the Vegnagun chain both run through here.
  */
 
+import { passMidFor } from '../../story/scripts/seymour-flux-pass.ts';
 import type {
   AnyCombatant,
   BattleSetup,
@@ -67,7 +68,7 @@ const FFX2_PARTY_SLOTS = 3;
 
 /** The first setup for a chapter. */
 export function setupForChapter(chapter: Chapter, seed: number): BattleSetup {
-  const triggers: MidBattleTrigger[] = chapter.scriptsRef?.mid ?? [];
+  const triggers: MidBattleTrigger[] = [...(chapter.scriptsRef?.mid ?? []), ...passMidFor(chapter.id)]; // the sound pass adds Chapter I's voiced Talk exchanges (`story/scripts/seymour-flux-pass.ts`); nothing with it off
   if (chapter.buildRef.game === 'ffx2' && chapter.buildRef.members.length > FFX2_PARTY_SLOTS) {
     console.warn(
       `[battle] ${chapter.id}: ${chapter.buildRef.members.length} FFX-2 party members but only ` +

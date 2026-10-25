@@ -65,6 +65,31 @@ const PANEL_SELECTORS = [
 ] as const;
 
 /**
+ * Panels whose own box is not the whole of what they draw (r64-fixes, FFX only: Chapter I; both HUDs). The F1 turn strip's box (`.ig-ctb`, 178 px tall at 2560 x 1440) holds the portraits; the names hang
+ * below it and the status chips below those, to 356 px, and its heading stands above it (measured on the served r63-play build: box 88 to 266, everything in it 53 to 356). A numeral dodged only the box, so
+ * a foe at the top right printed its "970" across the names and ran off the right edge (the skeptic's m6). These panels are dodged by the union of their own box and every drawn descendant's.
+ */
+const FOOTPRINT_PANELS: ReadonlySet<string> = new Set(['.ig-ctb']);
+
+/** The box of `el` and of everything drawn inside it, in viewport px (a descendant with no box, hidden or display none, adds nothing). */
+export function footprintOf(el: HTMLElement): NumeralRect {
+  const own = el.getBoundingClientRect();
+  let left = own.left;
+  let top = own.top;
+  let right = own.right;
+  let bottom = own.bottom;
+  for (const d of el.querySelectorAll<HTMLElement>('*')) {
+    const r = d.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) continue;
+    if (r.left < left) left = r.left;
+    if (r.top < top) top = r.top;
+    if (r.right > right) right = r.right;
+    if (r.bottom > bottom) bottom = r.bottom;
+  }
+  return { left, top, right, bottom };
+}
+
+/**
  * The FFX HUD's damage numerals.
  *
  * A thin adapter over the shared `src/ui/common/DamageNumbers.ts` — the single
@@ -208,8 +233,8 @@ export class DamageNumbers {
     for (const selector of PANEL_SELECTORS) {
       for (const el of host.querySelectorAll<HTMLElement>(selector)) {
         if (el.hidden || el.offsetParent === null) continue;
-        const r = el.getBoundingClientRect();
-        if (r.width <= 0 || r.height <= 0) continue;
+        const r = FOOTPRINT_PANELS.has(selector) ? footprintOf(el) : el.getBoundingClientRect();
+        if (r.right - r.left <= 0 || r.bottom - r.top <= 0) continue;
         out.push({ left: r.left, top: r.top, right: r.right, bottom: r.bottom });
       }
     }

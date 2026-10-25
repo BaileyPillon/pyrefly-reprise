@@ -10,7 +10,11 @@
 
 import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
+import { bigBlow, costOfFreshMove } from './BattlePresenterBossFx.ts';
+import { stageBlow, stageTell } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath of a boss's big blow (no-ops unless `?staging=pro` in a demo chapter)
 import { SPECIAL_HOLD_CAP_MS } from './spellfx/SpellFxSpecials.ts';
+import { landedNow, landingBeat } from './PassBeats.ts';
+import { releaseCastLift } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the caster's lift comes down when the spell lands
 
 /** The action whose effects are playing. */
 export interface ActingAction {
@@ -71,10 +75,19 @@ export function sparkItem(ctx: EventCtx, sourceId: CombatantId | undefined): boo
  * combatant that has not acted (a counter) resolves by its element alone.
  */
 export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, heal: boolean): Promise<void> {
+  try {
+    await waitForLanding(ctx, event, heal);
+  } finally {
+    releaseCastLift(ctx, event.sourceId ?? ctx.actingId); // a no-op unless the new curves lifted the caster at the cast's start
+  }
+}
+
+async function waitForLanding(ctx: EventCtx, event: Extract<BattleEvent, { type: 'damage' }>, heal: boolean): Promise<void> {
   const vfx = ctx.stage.vfx;
   if (!vfx.land || sparkItem(ctx, event.sourceId)) return;
   const a = event.sourceId === undefined ? ctx.acting : byActor.get(ctx)?.get(event.sourceId);
   const ours = a !== undefined;
+  if (costOfFreshMove(event, a)) return; // Darkness's HP cost on its caster: the effect lands with the blow on the foe, not here (the new effects only)
   const ms = vfx.land(event.targetId, {
     ...(ours && a.abilityId ? { abilityId: a.abilityId } : {}),
     element: event.element,
@@ -82,10 +95,18 @@ export async function awaitSpellLanding(ctx: EventCtx, event: Extract<BattleEven
     hitIndex: event.hitIndex,
     ...(ours ? { targets: a.targets, action: a.serial, sourceId: a.actorId } : {}),
     ...(event.crit ? { crit: true } : {}),
+    ...(ours && a.item === true ? { item: true } : {}), // the new effects' item form of a heal
   });
-  if (ms <= 0) return;
+  if (ms <= 0) {
+    if (!heal) landedNow(ctx, event); // the sound pass: no wait to dip for, but the motion sounds on this blow (and on the next hit of the move) are kept off it
+    return void (stageBlow(ctx, event, a), bigBlow(ctx, event, a)); // a late hit's mark has passed, but the blow is still a big one
+  }
+  stageTell(ctx, event, a, ms); // pro staging: the arena drains over the effect's own lead-in
+  landingBeat(ctx, event, a, Math.min(ms, SPELL_WAIT_CAP_MS)); // the sound pass (`?audio=new`): the music dips before a headline blow lands
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex });
   await ctx.sleep(Math.min(ms, SPELL_WAIT_CAP_MS));
+  stageBlow(ctx, event, a); // pro staging: the blow lands on the same beat as feel's stop, punch and rumble
+  bigBlow(ctx, event, a); // the new effects: a boss's big blow or an Overdrive's first tells the other lanes' hit-stop, punch and rumble hooks (inert otherwise)
   // FF7: then until the effect's own frame clock has drawn the strike (a slow frame lags it; repair item 6).
   if (!vfx.pendingLand || !ours) return;
   for (let i = 0, left = vfx.pendingLand(event.targetId, a.serial); left > 0 && i < LAND_POLLS; i++) {

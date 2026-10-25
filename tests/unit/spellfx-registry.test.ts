@@ -3,7 +3,8 @@
  * resolves to a spell effect: by ability id first, then by its element, then
  * today's bloom. Game case: both (shared lookup; the skins split elsewhere).
  */
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { setFxChapter, setFxMode } from '../../src/engine/spellfx/FxSwitch.ts';
 import { ALL_ABILITIES as FFX_ABILITIES } from '../../src/data/ffx/index.ts';
 import { ALL_ABILITIES as FFX2_ABILITIES } from '../../src/data/ffx2/index.ts';
 import { ABILITY_FX, SPELL_FX_IDS, resolveSpellFx } from '../../src/engine/spellfx/SpellFxRegistry.ts';
@@ -38,7 +39,14 @@ describe('spell effect registry', () => {
     });
   }
 
-  it('the id table names only real abilities, and each one resolves to its entry', () => {
+  afterEach(() => {
+    setFxMode(null);
+    setFxChapter(undefined);
+  });
+
+  it('the id table names only real abilities, and each one resolves to its entry (the buff rows count with the new effects on)', () => {
+    setFxMode('new');
+    setFxChapter('seymour-flux');
     const all = new Set([...FFX_ABILITIES, ...FFX2_ABILITIES].map((a) => a.id));
     for (const [id, fx] of Object.entries(ABILITY_FX)) {
       expect(all.has(id), id).toBe(true);

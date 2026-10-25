@@ -1,6 +1,7 @@
 import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type Object3D, type ShaderMaterial, type Texture } from 'three';
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
-import { KO_GIANTS, KO_MACHINES, canTopple, fallRun, koFallOff, koMode, reviveRun, type KoMode, type KoRun } from '../../KoFall.ts';
+import { KO_GIANTS, KO_MACHINES, canTopple, fallRun, koCrossMs, koFallOff, koMode, reviveRun, type KoMode, type KoRun } from '../../KoFall.ts';
+import { realBuckleMs } from '../../motion/RealMoments.ts'; // `?curves=real` / `real-snappy`: the buckle lasts until the real clip's floor impact
 import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
@@ -54,6 +55,8 @@ interface Playing {
   stand: Slot;
   lying: Slot;
   side: 0 | 1 | -1;
+  /** Motion pass, step 3: the cross is a cut inside the smear's window, and the window is open (`PaintedActor.koCutBegin`). */
+  cutting?: boolean;
 }
 export interface Guts {
   name: string;
@@ -71,6 +74,11 @@ export interface Guts {
   setPose: (name: string, opts?: { immediate?: boolean; force?: boolean }) => void;
   syncOpacity: () => void;
   tipSlot: (slot: Slot, tip: SlotTip | null) => void;
+  /** Motion pass, step 3 (`PaintedActor`): the knock-out's cut. `koCutWindow` answers the window in ms, or undefined for the plain cross. */
+  koCutWindow?: () => number | undefined;
+  koCutBegin?: (info: { from: string; to: string; toPlane: 0 | 1; cutMs: number; dirX: number }) => void;
+  koCutStep?: (u: number) => void;
+  koCutEnd?: () => void;
 }
 
 interface SlotState {
@@ -165,7 +173,7 @@ export class LivingFigure {
     }
     const to = a.slots[a.active]!;
     const mode = koMode({ rm: ctx.rm, samePlane: from === to, samePainting: from.pose === to.pose, fromProne: from.scale.prone === true, toProne: to.scale.prone === true, name: a.name, partySide, legacy: koFallOff() });
-    const run = fallRun(mode, ctx.game);
+    const run = fallRun(mode, ctx.game, a.koCutWindow?.(), realBuckleMs(a.name, koCrossMs())); // the smear's window when the moments and the smear are on: the cross is a cut inside it; a real mode buckles until the real clip's floor impact
     if (!run) {
       this.last.cuts++;
       return;
@@ -221,12 +229,28 @@ export class LivingFigure {
     const p = this.playing;
     this.playing = null;
     if (!p) return;
+    if (p.cutting) this.a.koCutEnd?.();
     if (p.side !== 0) this.a.tipSlot(p.stand, null);
     if (p.run.opts.kind === 'revive') this.a.fallGain = 1; // the figure is up again
     if (p.to === this.a.slots[this.a.active]) {
       p.to.fade = 1;
       p.from.fade = 0;
       this.a.syncOpacity();
+    }
+  }
+
+  /** The knock-out's cut (motion pass, step 3): the smear window opens as the cross begins, follows it, and closes with it. The streak runs the way the body falls. */
+  private driveCut(play: Playing, phase: string): void {
+    const a = this.a;
+    if (phase === 'cross') {
+      if (!play.cutting) {
+        play.cutting = true;
+        a.koCutBegin?.({ from: play.from.pose, to: play.to.pose, toPlane: a.slots[0] === play.to ? 0 : 1, cutMs: play.run.opts.crossMs, dirX: play.side !== 0 ? play.side : a.facing >= 0 ? 1 : -1 });
+      }
+      a.koCutStep?.(play.run.crossU);
+    } else if (play.cutting) {
+      play.cutting = false;
+      a.koCutEnd?.();
     }
   }
 
@@ -239,6 +263,8 @@ export class LivingFigure {
   /** What the toppled body slides to: the lying painting's head when both paintings have a registered head (the point the eye follows), else its middle. */
   private meeting(p: Playing): { target: number; by: 'head' | 'middle' } {
     const k = p.lying;
+    // a CUT (motion pass, step 3) has no cross to hide the difference in length between the toppled standing body and the curled lying one: aligning the heads leaves all of it at the feet (115 to 141 px at 1600 wide in the harness), so a cut splits it, middle to middle
+    if (p.run.opts.cut) return { target: this.lyingCentre(p), by: 'middle' };
     const head = p.stand.meta.head ? headCentreX(k.meta.head, k.scale, k.mesh.scale.x < 0 ? -1 : 1, k.mesh.position, k.mesh.rotation.z) : undefined;
     return head !== undefined ? { target: head, by: 'head' } : { target: this.lyingCentre(p), by: 'middle' };
   }
@@ -277,6 +303,7 @@ export class LivingFigure {
       play.from.fade = pose.out;
       play.to.fade = pose.inn;
       a.syncOpacity();
+      if (play.run.opts.cut) this.driveCut(play, pose.phase);
       if (play.side !== 0) a.tipSlot(play.stand, { side: play.side, full: TOPPLE_RAD, e: pose.tip, slide: pose.slide, ...this.meeting(play) });
       const size = play.run.takePuff();
       if (size !== null) {

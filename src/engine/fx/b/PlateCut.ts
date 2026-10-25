@@ -1,5 +1,5 @@
 import { type Group, type Mesh, type MeshBasicMaterial } from 'three';
-import { cutPlates } from './plateMaths.ts';
+import { cutAndFlip, type CutReply, type CutRequest } from './plateCutWork.ts';
 import type { PlateBuildOptions, PlateGeometry, PlateLayout } from './DepthPlates.ts';
 
 /**
@@ -97,7 +97,58 @@ export function cutKey(depthUrl: string, layout: PlateLayout, p: CutPlan): strin
 
 const nextTask = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
 
-/** Make the cut. `yieldBetween`: ahead of a battle the picker is on screen, so the steps are separate tasks and not one (the build itself makes it in one, as it always did). */
+/**
+ * The cut's arithmetic, off the page when there is a Worker (r63-play, the overnight fix of the skeptic's M1; both games): the 0.22 to 0.30 s the page used to spend on it behind the picker was a stretch in which a
+ * press was never seen. One worker for the page's life, started on the first cut; with no Worker (the unit tests, an old browser) or a worker that fails, the same function runs on the page, as it always did.
+ */
+let cutWorker: Worker | null | undefined;
+let cutSeq = 0;
+const cutWaiting = new Map<number, { resolve: (r: CutReply) => void; reject: (e: unknown) => void }>();
+
+function plateWorker(): Worker | null {
+  if (cutWorker !== undefined) return cutWorker;
+  cutWorker = null;
+  if (typeof Worker === 'undefined') return null;
+  try {
+    const w = new Worker(new URL('./plateWorker.ts', import.meta.url), { type: 'module', name: 'plate-cut' });
+    w.onmessage = (e: MessageEvent<{ id: number; ok: boolean; reply?: CutReply; error?: string }>): void => {
+      const job = cutWaiting.get(e.data.id);
+      if (!job) return;
+      cutWaiting.delete(e.data.id);
+      if (e.data.ok && e.data.reply) job.resolve(e.data.reply);
+      else job.reject(new Error(e.data.error ?? 'plate cut failed'));
+    };
+    w.onerror = (): void => {
+      cutWorker = null; // a worker that cannot run: every cut from here on runs on the page
+      for (const [id, job] of cutWaiting) {
+        cutWaiting.delete(id);
+        job.reject(new Error('plate worker failed'));
+      }
+    };
+    cutWorker = w;
+  } catch {
+    cutWorker = null;
+  }
+  return cutWorker;
+}
+
+/** The cut, in the worker when there is one, else here. A failure of the worker is answered by the same arithmetic on the page. */
+export function cutOffThread(req: CutRequest): Promise<CutReply> {
+  const w = plateWorker();
+  if (!w) return Promise.resolve(cutAndFlip(req));
+  return new Promise<CutReply>((resolve, reject) => {
+    const id = ++cutSeq;
+    cutWaiting.set(id, { resolve, reject });
+    try {
+      w.postMessage({ id, req }); // copied, not transferred: the page keeps its arrays for the fallback
+    } catch (e) {
+      cutWaiting.delete(id);
+      reject(e);
+    }
+  }).catch(() => cutAndFlip(req));
+}
+
+/** Make the cut. `yieldBetween`: ahead of a battle the picker is on screen, so the steps are separate tasks and not one. */
 export async function runCut(depthUrl: string, layout: PlateLayout, p: CutPlan, yieldBetween: boolean): Promise<CutResult> {
   const { g, image, w, h, blur } = p;
   const depthImg = await loadImage(depthUrl);
@@ -109,16 +160,10 @@ export async function runCut(depthUrl: string, layout: PlateLayout, p: CutPlan, 
   for (let i = 0; i < depth.length; i++) depth[i] = dBytes[i * 4]! / 255;
   const rows = layout.floor ? floorRows(g, h, layout.floor.far) : undefined;
   if (yieldBetween) await nextTask();
-  const plates = cutPlates(paint, depth, w, h, { thresholds: layout.thresholds, soft: layout.soft, blur }, 0.999, rows);
+  // The feather blurs, the cut and the flip (rows bottom-up for the GL upload: a data texture is never flipped by the driver) are the 0.2 to 0.3 s of the task: off the page where a worker exists.
+  const { flipped, coverage } = await cutOffThread({ paint, depth, w, h, cut: { thresholds: layout.thresholds, soft: layout.soft, blur }, solid: 0.999, topRows: rows });
   const cutMs = Math.round(performance.now() - t0);
-  if (yieldBetween) await nextTask();
-  // Rows bottom-up for the GL upload (a data texture is never flipped by the driver).
-  const flipped = plates.map((plate) => {
-    const out = new Uint8Array(w * h * 4);
-    for (let y = 0; y < h; y++) out.set(plate.rgba.subarray(y * w * 4, (y + 1) * w * 4), (h - 1 - y) * w * 4);
-    return out;
-  });
-  return { depth, flipped, coverage: plates.map((plate) => plate.coverage), cutMs };
+  return { depth, flipped, coverage, cutMs };
 }
 
 /** Cuts made ahead of their build, by the painting they were cut from (a painting nobody builds from is collected with its cuts). */

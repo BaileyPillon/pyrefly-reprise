@@ -19,6 +19,7 @@
 import type { FxDrawList } from './FxDrawList.ts';
 import { slash, type FxTarget } from './effects-shared.ts';
 import { env, inCubic, lerp, outCubic, parts, pulse } from './fxMath.ts';
+import { blastTune } from '../pro/staging/BlastTune.ts'; // 1 unless the pro staging's held breath is playing a Mega Flare (then the blast on the party is lighter: see that file)
 
 /** When each special lands, seconds into the effect. */
 export const SPIRAL_MARK = 1.43;
@@ -107,9 +108,10 @@ export function megaflare(o: FxDrawList, t: number, T: FxTarget): void {
   const R = 420 * sc * outCubic((t - 1.42) / 0.5);
   if (boom && R > 1) {
     const by = P.y - R * 0.3;
-    o.sprite('glow', '#B048F0', P.x, by, R * 2, 0.35 * boom);
-    o.sprite('glow', '#B8E4FF', P.x, by, R * 1.3, 0.6 * boom);
-    o.bloom('#FFFFFF', P.x, by, R * 0.8, 0.95, boom);
+    const tune = blastTune.megaFlareParty;
+    o.sprite('glow', '#B048F0', P.x, by, R * 2, 0.35 * boom * tune);
+    o.sprite('glow', '#B8E4FF', P.x, by, R * 1.3, 0.6 * boom * tune);
+    o.bloom('#FFFFFF', P.x, by, R * 0.8, 0.95 * tune, boom);
   }
   o.ring(P.x, P.y + 40 * k, (100 + 900 * outCubic((t - MEGAFLARE_MARK) / 0.9)) * sc, 5 * k, '#D8B8FF', 0.9 * env(t, MEGAFLARE_MARK, 2.6, 0.01, 1));
   parts(o.n(90), 92, 1.45, 1.55, t, (p, age) => {
@@ -121,5 +123,5 @@ export function megaflare(o: FxDrawList, t: number, T: FxTarget): void {
     o.sprite(o.bit, p.c > 0.5 ? '#B8E4FF' : '#F7B6D9', x, y, (o.game === 'ffx2' ? 30 : 14) * sc, 1 - age / 1.3);
   });
   o.add = false;
-  o.wash(0, '#FFFFFF', 0.8 * pulse(t, 1.43, 0.35));
+  o.wash(0, '#FFFFFF', 0.8 * blastTune.megaFlareWash * pulse(t, 1.43, 0.35));
 }

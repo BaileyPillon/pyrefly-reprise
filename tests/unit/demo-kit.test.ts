@@ -6,9 +6,11 @@
  *  2. The downloader keeps a file only if its bytes hash to the manifest's sha256, keeps what is already right, fetches what is missing, and deletes what is wrong. `@` goes on the wire as `%40`.
  *  3. Nothing is stopped but what the kit started: `stopPid` checks the command line first (a stale PID after a reboot is a stranger).
  *  4. The browser is opened full screen in a profile of its own, and Chrome is preferred over Edge.
+ *  5. The booth opens the conference pack by default: `start` writes `?demo=1&pack=demo` into the kit's state file (what `reset` reopens), and `--plain` writes `?demo=1` alone (2026-10-24; the dry run needed a PowerShell workaround).
  *
  * Game case: both (tooling).
  */
+import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -17,7 +19,9 @@ import { stopPid } from '../../tools/demo-kit/demo-kit.mjs';
 import {
   DEMO_QUERY,
   HOST_READ_FILES,
+  PACK_QUERY,
   SAVE_PATHS,
+  boothUrl,
   browserArgs,
   cacheControlOf,
   contentTypeOf,
@@ -26,6 +30,7 @@ import {
   destPath,
   findBrowser,
   formatBytes,
+  isPlainBoothUrl,
   kitHome,
   parseRange,
   safeJoin,
@@ -114,6 +119,25 @@ describe('the pure parts', () => {
   it('the address opens the demo: loopback, ?demo=1', () => {
     expect(demoUrl(5173)).toBe(`http://127.0.0.1:5173/${DEMO_QUERY}`);
     expect(DEMO_QUERY).toBe('?demo=1');
+  });
+
+  it('the booth opens the conference pack by default: ?demo=1&pack=demo; --plain is ?demo=1 alone', () => {
+    expect(PACK_QUERY).toBe('&pack=demo');
+    expect(boothUrl(5173)).toBe('http://127.0.0.1:5173/?demo=1&pack=demo');
+    expect(boothUrl(5420, {})).toBe('http://127.0.0.1:5420/?demo=1&pack=demo');
+    expect(boothUrl(5173, { plain: false })).toBe('http://127.0.0.1:5173/?demo=1&pack=demo');
+    expect(boothUrl(5173, { plain: true })).toBe('http://127.0.0.1:5173/?demo=1');
+    expect(boothUrl(5173, { plain: true })).toBe(demoUrl(5173)); // the plain address is the old one, byte for byte
+    expect(boothUrl(5173).startsWith('http://127.0.0.1:')).toBe(true); // still the loopback
+  });
+
+  it('isPlainBoothUrl reads the key, not a substring: a state file from before the pack default is plain', () => {
+    expect(isPlainBoothUrl('http://127.0.0.1:5173/?demo=1')).toBe(true);
+    expect(isPlainBoothUrl('http://127.0.0.1:5173/?demo=1&pack=demo')).toBe(false);
+    expect(isPlainBoothUrl('http://127.0.0.1:5173/?pack=demo&demo=1')).toBe(false);
+    expect(isPlainBoothUrl('http://127.0.0.1:5173/?demo=1&pack=demo#x')).toBe(false);
+    expect(isPlainBoothUrl('http://127.0.0.1:5173/?demo=1&pack=demolition')).toBe(true);
+    expect(isPlainBoothUrl('http://127.0.0.1:5173/?demo=1&nopack=demo')).toBe(true);
   });
 
   it('urlFor encodes every segment: @ goes on the wire as %40, a slash stays a slash', () => {
@@ -287,6 +311,73 @@ describe('the server', () => {
     for (let i = 0; i < 50 && stopped === before; i++) await new Promise((r) => setTimeout(r, 20));
     expect(stopped).toBe(before + 1);
     await expect(fetch(`${url}/index.html`)).rejects.toThrow();
+  });
+});
+
+describe('the command line: what start writes and reset reopens (no browser)', () => {
+  const CLI = join(__dirname, '..', '..', 'tools', 'demo-kit', 'demo-kit.mjs');
+  const kitHomes: string[] = [];
+
+  /** Run the real command in a kit home of its own (ECHOES_DEMO_HOME), so nothing of a real booth's state or profile is read or written. */
+  function kit(home: string, args: string[]): { code: number | null; out: string } {
+    const r = spawnSync(process.execPath, [CLI, ...args], { encoding: 'utf8', env: { ...process.env, ECHOES_DEMO_HOME: home }, windowsHide: true, timeout: 30000 });
+    return { code: r.status, out: `${r.stdout ?? ''}${r.stderr ?? ''}` };
+  }
+  function stateOf(home: string): { url: string; port: number } {
+    return JSON.parse(readFileSync(join(home, 'state.json'), 'utf8')) as { url: string; port: number };
+  }
+  function freshHome(): string {
+    const d = mkdtempSync(join(tmpdir(), 'demo-kit-cli-'));
+    kitHomes.push(d);
+    return d;
+  }
+
+  afterAll(() => {
+    for (const d of kitHomes) {
+      kit(d, ['stop']); // a failed assertion must not leave a server behind
+      try {
+        rmSync(d, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+      } catch {
+        /* a log file the server was still letting go of; the temp folder is swept later */
+      }
+    }
+  });
+
+  it('start with no flag writes the pack address (what reset reopens); a second start says so and names how to switch', () => {
+    const site = tmp();
+    writeSite(site);
+    const home = freshHome();
+    const run = kit(home, ['start', '--dir', site, '--port', '0', '--no-browser']);
+    expect(run.code, run.out).toBe(0);
+    const st = stateOf(home);
+    expect(st.url).toBe(`http://127.0.0.1:${st.port}/?demo=1&pack=demo`);
+    expect(run.out).toContain('the conference pack is on');
+    const again = kit(home, ['start', '--dir', site, '--port', '0', '--no-browser']);
+    expect(again.out).toContain('Already running');
+    expect(again.out).not.toContain('note:'); // same mode: nothing to explain
+    const wrong = kit(home, ['start', '--dir', site, '--port', '0', '--no-browser', '--plain']);
+    expect(wrong.out).toContain('Already running');
+    expect(wrong.out).toMatch(/note: that is the conference pack; to switch, run stop-demo\.cmd, then start-demo\.cmd --plain/);
+    expect(stateOf(home).url).toBe(st.url); // asking again changed nothing
+    const status = kit(home, ['status']);
+    expect(status.out).toContain('?demo=1&pack=demo');
+    const stop = kit(home, ['stop']);
+    expect(stop.code, stop.out).toBe(0);
+    expect(existsSync(join(home, 'state.json'))).toBe(false);
+  });
+
+  it('start --plain writes ?demo=1 alone (the plain release-62 demo)', () => {
+    const site = tmp();
+    writeSite(site);
+    const home = freshHome();
+    const run = kit(home, ['start', '--dir', site, '--port', '0', '--no-browser', '--plain']);
+    expect(run.code, run.out).toBe(0);
+    const st = stateOf(home);
+    expect(st.url).toBe(`http://127.0.0.1:${st.port}/?demo=1`);
+    expect(run.out).toContain('the conference pack is off');
+    const again = kit(home, ['start', '--dir', site, '--port', '0', '--no-browser']);
+    expect(again.out).toMatch(/note: that is the plain demo; to switch, run stop-demo\.cmd, then start-demo\.cmd\./);
+    expect(kit(home, ['stop']).code).toBe(0);
   });
 });
 

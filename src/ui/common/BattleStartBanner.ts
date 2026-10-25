@@ -26,11 +26,13 @@
  */
 
 import './battle-start-banner.css';
+import './proStage/proCard.css'; // lane "pro-staging": the card as a full-bleed painting, under `.bstart--pro` only
 import type { GameId } from '../../battle/common/types.ts';
 import { escapeHtml } from './html.ts';
 import { faceImgHtml, faceLayersHtml } from './portrait.ts';
 import { chapterLabel } from './roman.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+import { bossCleanCard } from '../../engine/look/pro/BossClean.ts'; // lane boss-matte
 
 export interface BattleStartBannerMember {
   /** The character's own id — `tidus`, `yuna`, `paine`. */
@@ -76,6 +78,8 @@ export interface BattleStartBannerOptions {
   until?: () => Promise<unknown>;
   /** An experiment (the FFX-2 Leblanc preview): the eyebrow says EXPERIMENTAL, not a chapter numeral. */
   experimental?: true;
+  /** Lane "pro-staging" (the demo chapters with `?staging=pro`): the card is a full-bleed painting (`proStage/proCard.css`); the same content, a different layout. */
+  pro?: true;
 }
 
 /** Spec pace: the card is a beat, not a screen. */
@@ -115,7 +119,7 @@ export class BattleStartBanner {
     this.holdMs = opts.holdMs ?? BATTLE_START_HOLD_MS;
 
     const el = document.createElement('div');
-    el.className = opts.game === 'ffx2' ? 'bstart ig ig--ffx2' : 'bstart ig';
+    el.className = (opts.game === 'ffx2' ? 'bstart ig ig--ffx2' : 'bstart ig') + (opts.pro ? ' bstart--pro' : '');
     el.dataset['role'] = 'battle-start';
     el.setAttribute('role', 'status');
     el.setAttribute('aria-live', 'polite');
@@ -189,6 +193,7 @@ export class BattleStartBanner {
       // The same painting the diorama stages (`BattlePresenterArt.artUrlFor`),
       // so the boss on the card is the boss on the field.
       if (art) art.style.backgroundImage = `url(${artUrl(`art/characters/${opts.artKey}/idle.png`)})`;
+      if (art && bossCleanCard(opts.artKey)) art.classList.add('bstart__art--clean'); // lane boss-matte: a re-cut boss is a clean cut-out, so the gold glow that read as a pale halo gives way to a tight ink edge and a floor shadow (`?boss=clean` / `?pack=demo`, Chapters I and IV)
     }
     if (opts.backdropKey) {
       const wash = el.querySelector('.bstart__wash') as HTMLElement | null;

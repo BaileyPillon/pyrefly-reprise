@@ -1,0 +1,111 @@
+/*
+ * THE DEFEAT CARD THAT KEEPS THE SCENE (lane "pro-staging"; `app/screens/ProDefeatScreen.ts`). A glass card at the bottom right over the dimmed scene, nothing else covered: the cause, the turn, the attempt and the time,
+ * and the two choices with TRY AGAIN focused. FFX is blue glass and gold, FFX-2 plum glass and pink (`.ig--ffx2`); the scene and the caption above it are the battle screen's own.
+ */
+.pdf-screen {
+  pointer-events: none;
+}
+.pdf {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --pdf-glass: rgba(16, 28, 84, 0.88); /* r63-play fix: 0.78 to 0.88, so the gold reads at 7:1 even over a white scene (4.5:1 is the floor) */
+  --pdf-text: clamp(14px, min(1.1vw, 1.95vh), 40px); /* r63-play fix: 28 px at 2560 x 1440 (the card was 480 x 175 px with 18 px type), 21 px at 1080p, 14 px (CHK-003's floor) on a small screen */
+  --pdf-edge: rgba(241, 205, 122, 0.8);
+  --pdf-accent: #f1cd7a;
+  --pdf-ink: #14214f;
+  --pdf-face: 'Chakra Petch', 'Bahnschrift', 'Segoe UI', sans-serif;
+}
+.pdf.ig--ffx2 {
+  --pdf-glass: rgba(54, 22, 82, 0.88); /* the rose over a white scene was 4.0:1 at 0.78 and is 5.6:1 now */
+  --pdf-edge: rgba(255, 190, 224, 0.85);
+  --pdf-accent: #ff9fd0;
+  --pdf-ink: #3d1850;
+}
+.pdf__card {
+  position: absolute;
+  right: clamp(24px, 4.2vw, 140px);
+  bottom: clamp(70px, 14vh, 250px);
+  min-width: clamp(260px, 27vw, 760px);
+  padding: clamp(14px, 1.9vh, 44px) clamp(16px, 1.7vw, 54px);
+  background: var(--pdf-glass);
+  border: 1px solid var(--pdf-edge);
+  border-radius: 3px;
+  box-shadow: 0 10px 44px rgba(6, 10, 40, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  animation: pdf-in 380ms 140ms cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+.pdf__cause {
+  font-family: var(--pdf-face);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: var(--pdf-text); /* CHK-003: nothing under 14 px on a screen the player reads; 28 px at 1440p (r63-play fix) */
+  color: var(--pdf-accent);
+}
+.pdf__meta {
+  margin-top: 0.55em;
+  font-family: var(--pdf-face);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: var(--pdf-text);
+  color: rgba(255, 255, 255, 0.92);
+}
+.pdf__meta i {
+  font-style: normal;
+  margin: 0 0.7em;
+  opacity: 0.6;
+}
+.pdf__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 0.9vw, 28px);
+  margin-top: clamp(12px, 1.7vh, 40px);
+  pointer-events: auto;
+}
+.pdf__btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.55em 1.2em 0.55em 0.8em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-family: var(--pdf-face);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: var(--pdf-text);
+  cursor: pointer;
+}
+.pdf__btn.is-focus {
+  background: #fff;
+  border-color: #fff;
+  color: var(--pdf-ink);
+}
+.pdf__btn .pdf__key {
+  display: none;
+  font-weight: 700;
+}
+.pdf__btn.is-focus .pdf__key {
+  display: inline-flex; /* the confirm key's chip rides the focused button: the one the press takes */
+}
+@keyframes pdf-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pdf__card {
+    animation: none;
+  }
+}

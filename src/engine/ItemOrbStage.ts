@@ -16,6 +16,8 @@ import { Vector3, type Object3D } from 'three';
 import type { PaintedActor } from './PaintedActor.ts';
 import type { CombatantId } from '../battle/common/types.ts';
 import { ItemOrbFx, type P3 } from './fx/ItemOrbFx.ts';
+import { OrbFlourish } from './fx/ItemOrbFlourish.ts'; // motion pass (lane "fx"): the livelier toss, demo chapters with the new effects on
+import { fxNewOn } from './spellfx/FxSwitch.ts';
 import { itemHandOf, RIG_ITEM_POSE } from './ItemGestureTable.ts';
 
 /** A figure on the field, as this needs it: the actor and the art id the stage built it from. */
@@ -40,6 +42,8 @@ export const POOL = 3;
 
 export class ItemOrbStage {
   private readonly fxs: ItemOrbFx[] = [];
+  /** The new effects' trail and burst for a light (`fx/ItemOrbFlourish.ts`), made only while `fxNewOn()`. */
+  private readonly flourish = new Map<ItemOrbFx, OrbFlourish>();
   private last: ItemOrbFx | null = null;
   private cut = 0;
   private readonly handV = new Vector3();
@@ -112,7 +116,9 @@ export class ItemOrbStage {
     if (!f || this.middleOf(to) === null) return;
     const hand = new Vector3();
     const aim = new Vector3();
-    this.take().toss({
+    const light = this.take();
+    this.adorn(light, f.actor.height / 1.8);
+    light.toss({
       hand: () => hand.copy(this.handOf(f) as Vector3),
       target: () => aim.copy((this.middleOf(to) ?? this.handOf(f)) as Vector3),
       formMs: o.formMs,
@@ -130,12 +136,16 @@ export class ItemOrbStage {
     const unit = f.actor.height / 1.8;
     if (o.style === 'spark') {
       const mid = new Vector3();
-      this.take().sparkle({ at: () => mid.copy(this.bodyOf(f, this.aimV)), formMs: o.formMs, unit });
+      const light = this.take();
+      this.adorn(light, unit);
+      light.sparkle({ at: () => mid.copy(this.bodyOf(f, this.aimV)), formMs: o.formMs, unit });
       return;
     }
     const hand = new Vector3();
     const feet = new Vector3();
-    this.take().glow({
+    const own = this.take();
+    this.flourish.get(own)?.hide();
+    own.glow({
       hand: () => hand.copy(this.handOf(f) as Vector3),
       feet: () => feet.set(f.actor.position.x, f.actor.position.y, f.actor.position.z),
       height: f.actor.height,
@@ -143,6 +153,19 @@ export class ItemOrbStage {
       tone: 'heal',
       unit,
     });
+  }
+
+  /** The new effects: give this light its trail and burst (or put away the last gesture's). */
+  private adorn(fx: ItemOrbFx, unit: number): void {
+    const old = this.flourish.get(fx);
+    if (!fxNewOn()) {
+      old?.hide();
+      return;
+    }
+    const f = old ?? new OrbFlourish();
+    if (!old) this.flourish.set(fx, f);
+    f.hide();
+    f.unit = Math.max(0.2, unit);
   }
 
   /** What the light that started last is doing, for the debug snapshot and the tests. */
@@ -158,16 +181,22 @@ export class ItemOrbStage {
   /** Advance by `dt` seconds of the field clock. */
   update(dt: number): void {
     const d = dt * this.rate();
-    for (const fx of this.fxs) fx.update(d, this.scene);
+    for (const fx of this.fxs) {
+      fx.update(d, this.scene);
+      this.flourish.get(fx)?.update(d, fx, this.scene);
+    }
   }
 
   /** Put the light away (the figure left, the screen is leaving). */
   hide(): void {
     for (const fx of this.fxs) fx.hide();
+    for (const f of this.flourish.values()) f.hide();
   }
 
   dispose(): void {
     for (const fx of this.fxs) fx.dispose();
+    for (const f of this.flourish.values()) f.dispose();
+    this.flourish.clear();
     this.fxs.length = 0;
   }
 }

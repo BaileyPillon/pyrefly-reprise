@@ -26,10 +26,10 @@ function walk(dir, prefix = '') {
 const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
 
 /**
- * @param {string} dir `public/audio/voice` (or a build's copy). A folder that does not exist audits clean and `present: false`.
+ * @param {string} dir `public/audio/voice` (or a build's copy), or `public/audio/voice-pass`, the sound pass's extra lines (same manifests, no `index.json`: pass `requireIndex: false`). A folder that does not exist audits clean and `present: false`.
  * @returns {{ present: boolean, problems: string[], totals: { files: number, bytes: number, chapters: number, lines: number }, chapters: Record<string, { lines: number, bytes: number }> }}
  */
-export function auditVoiceDir(dir, { budgetBytes = VOICE_BUDGET_BYTES, allowedGames = ['ffx'] } = {}) {
+export function auditVoiceDir(dir, { budgetBytes = VOICE_BUDGET_BYTES, allowedGames = ['ffx'], requireIndex = true } = {}) {
   const problems = [];
   const totals = { files: 0, bytes: 0, chapters: 0, lines: 0 };
   const chapters = {};
@@ -101,7 +101,7 @@ export function auditVoiceDir(dir, { budgetBytes = VOICE_BUDGET_BYTES, allowedGa
     } catch {
       problems.push('voice/index.json is not valid JSON');
     }
-  } else if (manifests.length) {
+  } else if (manifests.length && requireIndex) {
     problems.push('voice/index.json is missing');
   }
   return { present: true, problems, totals, chapters };

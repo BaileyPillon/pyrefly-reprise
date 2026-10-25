@@ -36,6 +36,8 @@ import {
   turnStart,
   victory,
 } from './BattlePresenterBeats.ts';
+import { curseDim, dressFx, statusFxLanding } from './BattlePresenterBossFx.ts';
+import { stageChange } from './BattlePresenterStaging.ts'; // lane "pro-staging": the Change's readable pearl plate (FFX-2 Chapter IV only)
 import { comeBack, flushArrivals, keptToReturn, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
 import { PARTY_SWAP_MS, partyBack } from './SummonStaging.ts';
 import { lungePlan } from './motion/StrikeReach.ts';
@@ -166,6 +168,7 @@ export function createEventCtx(
   const moments = new BattleMoments({
     stage: deps.stage,
     moments: deps.moments ?? null,
+    staging: deps.staging ?? null, // lane "pro-staging": the Overdrive's opening is the staging's when it is on
     audio: deps.audio ?? null,
     // Only the opening moment uses this, and only to keep the HUD down until
     // the boss reveal has finished — see `BattleMoments.battleStart`.
@@ -250,6 +253,8 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
 
     case 'status-remove':
       if (event.status === 'petrify') unstone(ctx.stage.actor(event.targetId));
+      if (event.reason === 'dispelled') { const landing = statusFxLanding(ctx, event.targetId); if (landing) await landing; } // the new effects' Dispel (no damage event starts it)
+      curseDim(ctx, event.status, event.targetId, false);
       return ctx.sleep(TIMING.status * 0.4);
 
     case 'status-tick':
@@ -378,6 +383,8 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return;
 
     case 'spherechange': {
+      dressFx(ctx, event.who); // the new effects: the painted burst under the HUD's flourish (Chapter IV)
+      stageChange(ctx, event); // pro staging: the HUD's name plate is a readable pearl plate for as long as it shows
       const a = ctx.stage.actor(event.who);
       a?.flash(0xffffff, 420, 1);
       ctx.stage.vfx.screenFlash('#ffffff', 180);

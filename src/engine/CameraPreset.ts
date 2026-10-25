@@ -279,6 +279,11 @@ export class PresetCamera implements CameraPort {
     return name;
   }
 
+  /** The directed camera's port, untouched by the comfort preset (the director reads the preset itself: `procam/ProDirector.ts`). */
+  get pro(): CameraPort['pro'] {
+    return this.inner.pro;
+  }
+
   get rigNames(): string[] {
     return this.inner.rigNames;
   }

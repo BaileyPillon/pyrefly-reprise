@@ -57,18 +57,35 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { noteImpact } from './look/living/StageImpacts.ts'; // release 62 (FFX-2's living cathedral): a landed blow starts a ring in the polished floor's reflection
 import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
+import { ShadowFollow, shadowX } from './feel/ContactShadow.ts'; // `?shadow=follow` (demo chapters, off by default): the contact shadow stays under the feet
+import { shadowFollows } from './feel/FeelSwitch.ts';
+import { heftOfHeight, motionBeat } from './feel/MotionBeats.ts'; // `?motionsfx=` (step 2; off by default): a figure tells the sound its lunge begins and its hop lands
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { CurveDriver, type LeapOptions } from './motion/CurveDriver.ts'; // motion pass (lane "core"): the new curves; idle unless the presenter starts one (default OFF, `motion/CurvesSwitch.ts`)
+import { curvesOn } from './motion/CurvesSwitch.ts';
+import { heftOf, squashPair, startStrike } from './motion/ActorCurves.ts';
+import { menuHolds } from './motion/MenuHold.ts';
+import { newMotionOn } from './motion/NewMotionGate.ts';
+import { newPushMs, newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
+import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
+import type { StrikePlan } from './motion/StrikePlan.ts';
+import { momentsGame, momentsOn } from './motion/MomentsSwitch.ts'; // motion pass (lane "core", step 3): the per-game moments (victory, KO settle); default OFF
+import { startCheer, startKoSettle, startStandDown, type MomentsHost } from './motion/ActorMoments.ts';
+import { realFallMs } from './motion/RealMoments.ts'; // `?curves=real` / `real-snappy`: the real clips' knock-out and victory timing
+import { koCutMs } from './motion/MomentsPlan.ts';
+import { smearOn } from './motion/SmearSwitch.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
 import { alignedSwapOn, motionSmooth, notePoseSwap, swapPolicy } from './PoseSwap.ts'; // W5: `?swap=aligned` (off by default), and the lunge's first frame (on; `?motion=classic` restores cubic-out)
+import { proCriticalBreath } from './look/pro/ProBreath.ts'; // lane pro-look: the critical stance's slower, deeper breath (markers piece; off by default)
 import { demoMotionOn } from './motion/DemoMotion.ts'; // `?motion=demo` (conference demo; default off = exactly as before): the four hooks below
 import { BLEND_MS_MAX, demoBlend } from './motion/DemoBlend.ts';
 import { demoIdleParams, nextIdlePhase, swayClockStart } from './motion/DemoIdle.ts';
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
-import { bindRelight } from './look/relight/FigureRelight.ts'; // demo looks (dev flag `?look=`): light on the paintings, from their normal maps
+import { bindRelight, prefetchRelight, unpinRelight } from './look/relight/FigureRelight.ts'; // demo looks (dev flag `?look=`): light on the paintings, from their normal maps
 
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
@@ -502,6 +519,7 @@ export class PaintedActor extends Group {
   private readonly hoverBobSpeed: number;
   private shadowBaseRadius: number;
   private readonly shadowBaseOpacity: number;
+  private readonly shadowAir = new ShadowFollow();
   private readonly shadowSquash: number;
 
   /**
@@ -573,6 +591,7 @@ export class PaintedActor extends Group {
     edgeFadeBase: { value: number };
     edgeJag: { value: number };
     noiseMap: { value: Texture };
+    smearAmt: { value: number }; smearStyle: { value: number }; smearVec: { value: Vector2 }; // the smear window (`motion/SmearApply.ts`); amount 0 = off
   };
 
   // --- motion layers --------------------------------------------------------
@@ -586,6 +605,15 @@ export class PaintedActor extends Group {
   private recoilOffset = 0;
   private hopHeight = 0;
   private squashAmount = 0;
+  /** The new curves' channels (strike, cast lift, leap), summed; all at rest unless started. */
+  private readonly curves = new CurveDriver();
+  private readonly squashScratch = { x: 1, y: 1 };
+  private readonly lightPins = new Set<string>(); // the normal maps this figure pinned (`prefetchLights`)
+  protected readonly smear: SmearDirector; // `RigActor` plays its own window on the same state
+  /** Motion pass, step 3: the victory cheer. `cheerDue` is set by the victory cue inside `enterLife`; `cheerWait` holds the victory painting back until the spring's fastest frame. */
+  private cheerDue = false;
+  private cheering = false;
+  private cheerWait: { name: string; opts?: { immediate?: boolean; force?: boolean } } | null = null;
   private shakeAmp = 0;
   private shakeLeftMs = 0;
   private shakeTotalMs = 1;
@@ -712,6 +740,7 @@ export class PaintedActor extends Group {
       edgeFadeBase: { value: opts.edgeFadeBase === false ? 0 : 1 },
       edgeJag: { value: opts.edgeJag ?? 0 },
       noiseMap: { value: noiseTexture() },
+      smearAmt: { value: 0 }, smearStyle: { value: 1 }, smearVec: { value: new Vector2() },
     };
 
     const renderOrder = opts.renderOrder ?? 10;
@@ -721,6 +750,7 @@ export class PaintedActor extends Group {
     this.bloomMasked = opts.bloomMask !== false;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
     this.blend = new PoseBlend(this.slots, poseBlendShape()); // the plain dissolve; FB-2's stepped one only behind `?poseblend=stepped` (off by default since 2026-10-11)
+    this.smear = this.makeSmear();
     for (const s of this.slots) this.inner.add(s.mesh);
     this.add(this.inner);
 
@@ -855,6 +885,7 @@ export class PaintedActor extends Group {
         // so its UV height depends on how tall this pose's plane ended up.
         contactBand: { value: 0.1 },
         ...this.u,
+        smearVec: { value: new Vector2() }, // per plane: its own size and mirror (a rig's parts share the actor's cell)
       },
       vertexShader: paintedVertexShader,
       fragmentShader: paintedFragmentShader,
@@ -943,6 +974,7 @@ export class PaintedActor extends Group {
     previous.forEach((p) => this.retire(p));
     this.pickReference();
     this.resize();
+    this.prefetchLights();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
     // `force`, because re-loading a pose set (a stand-in being swapped for the
     // real painting) keeps the same pose *name* with a different texture.
@@ -991,8 +1023,18 @@ export class PaintedActor extends Group {
     }
     this.pickReference();
     this.resize();
+    this.prefetchLights();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
     if (first) this.showPoseSet(first, opts?.blend === true);
+  }
+
+  /**
+   * Motion pass, step 2 (MAP fact 11): fetch and PIN the normal map of every pose this figure can draw as soon as its paintings are staged, so no pose is drawn unlit at first use (a pose
+   * is unlit until its map arrives, and the cache used to let a staged figure's map go). Nothing happens unless the HD-2D look is armed; the pins are let go in {@link dispose}.
+   */
+  private prefetchLights(): void {
+    if (!this.showFigure || !newMotionOn()) return; // a rig's carrier plane is never drawn: its parts bring their own pieces; with every new piece off (the default, and any chapter but I and IV) nothing is fetched early
+    for (const p of this.poses.values()) prefetchRelight(p.url, p.scale, p.placeholder, this.lightPins);
   }
 
   /** Re-load one pose from disk; used by the dev hot-swap watcher. */
@@ -1084,10 +1126,15 @@ export class PaintedActor extends Group {
       const want = lifeStateForPose(name);
       if (nextLifeState(life.state, want) !== want) return;
     }
+    if (this.cheerWait && !this.cheering) {
+      if (name === this.cheerWait.name) return; // the cheer is already on its way to this painting
+      this.cheerWait = null; // anything else the presenter asks for ends the wait (the cheer still lands, without its swap)
+    }
     // A forced pose is the caller's word: a pending flinch may not hand it back.
     if (opts?.force) this.flinchToken++;
     const resolved = this.resolveDrawable(name);
     this.enterLife(name, opts?.immediate === true);
+    if (this.cheerDue && this.beginCheer(name, opts, resolved)) return; // the victory painting waits for the spring's fastest frame
     if (!resolved) return;
     const next = this.poses.get(resolved);
     if (!next) return;
@@ -1113,12 +1160,66 @@ export class PaintedActor extends Group {
     this.beginBlend(resolved, next, plan);
   }
 
+  /**
+   * Motion pass, step 3 (`motion/ActorMoments.ts`): the victory cue fired inside `enterLife`, so the cheer starts (after the fighter's own stagger, as the hop always did). True when the victory
+   * painting is held back until the spring's fastest frame, where the actor's smear can cut to it; false when it can swap now (it is showing, has no other painting, or the fade is a cut).
+   */
+  private beginCheer(name: string, opts: { immediate?: boolean; force?: boolean } | undefined, resolved: string | null): boolean {
+    this.cheerDue = false;
+    const swap = resolved !== null && resolved !== this.pose && !opts?.immediate && this.crossfadeMs > 0;
+    if (swap) this.cheerWait = { name, opts };
+    this.after(this.beatOffset * 240, () => void startCheer(this.momentsHost(), momentsGame(), swap ? () => this.landCheer() : null));
+    return swap;
+  }
+
+  /** What the moments' helpers (`motion/ActorMoments.ts`) need of this actor. */
+  private momentsHost(): MomentsHost {
+    return { worldHeight: this.worldHeight, name: this.name, leap: (h, ms, o) => this.leap(h, ms, o) };
+  }
+
+  /** The cheer's spring is at its fastest: make the pose request the cheer held back (it is a cut inside a smear when the smear is on, else the usual blend). */
+  private landCheer(): void {
+    const w = this.cheerWait;
+    this.cheerWait = null;
+    if (!w) return;
+    this.cheering = true;
+    try {
+      this.setPose(w.name, w.opts);
+    } finally {
+      this.cheering = false;
+    }
+  }
+
+  /** Motion pass, step 3: a chapter whose sources withhold the victory pose (FFX-2 Chapter IV) keeps the stance and stands down: one slow breath out, no leap, no swap. */
+  standDown(): void {
+    if (this.life?.state === 'down') return; // the fallen stay where they lie
+    this.after(this.beatOffset * 240, () => void startStandDown(this.momentsHost(), momentsGame()));
+  }
+
+  /** The window of the knock-out's cut in real ms, or undefined when the KO keeps its plain cross (`fx/mix/living.ts` asks as it starts a fall): the moments and the smear both on. */
+  koCutWindow(): number | undefined {
+    return momentsOn() && smearOn() && !menuHolds() ? koCutMs(this.smear.state.frameMs) : undefined; // an open FFX-2 menu keeps the plain cross (D-357)
+  }
+
+  /** The KO's cut window opens, runs (`u` 0 to 1) and closes (`motion/SmearDirector.ts`): the streak and the planned-smear record of a fall's cross. */
+  koCutBegin(info: { from: string; to: string; toPlane: 0 | 1; cutMs: number; dirX: number }): void {
+    this.smear.beginManual(info);
+  }
+
+  koCutStep(u: number): void {
+    this.smear.stepManual(u);
+  }
+
+  koCutEnd(): void {
+    this.smear.endManual();
+  }
+
   /** Point the plane a blend is bringing in at its painting (when it was re-pointed) and make it the active one: the tail of a pose change, whether it began now or was held. */
   private beginBlend(resolved: string, next: PaintedTexture | undefined, plan: BlendStarted): void {
     if (!plan.reversed && next) this.applyPose(plan.to, resolved, next);
     this.active = plan.to;
     if (!plan.reversed && alignedSwapOn()) this.alignedSwap(plan.to); // W5: `?swap=aligned` only: the heads drift together
-    if (!plan.reversed && demoMotionOn()) this.demoRetune(plan.to, resolved);
+    if (!plan.reversed && !this.smear.swap(plan.to, resolved) && demoMotionOn()) this.demoRetune(plan.to, resolved); // a big change on a moving figure is cut inside a smear (`motion/SmearDirector.ts`); else the demo's blend
     this.syncOpacity();
   }
 
@@ -1162,6 +1263,33 @@ export class PaintedActor extends Group {
     }
     this.swapPolicyLast = policy;
     notePoseSwap(policy, [ao?.source ?? null, ai?.source ?? null], { actor: this.name, from: out.pose, to: inn.pose, overlap: facts.overlap, overlapAligned: facts.overlapAligned, distance: facts.anchorDistance });
+  }
+
+  /** The smear director's view of this actor (`motion/SmearDirector.ts`; motion pass, lane "core", step 2). */
+  private makeSmear(): SmearDirector {
+    return new SmearDirector({
+      name: () => this.name,
+      worldHeight: () => this.worldHeight,
+      planes: this.slots,
+      cells: this.u,
+      blend: this.blend,
+      showing: () => this.active,
+      poseOf: (i) => this.slots[i]!.pose,
+      footprintOf: (i) => this.footprintOf(this.slots[i]!),
+      canCut: () => this.smearsPlanes() && this.crossfadeMs > 0 && this.crossfadeMs <= BLEND_MS_MAX && !this.poseShiftPx,
+      flash: (c, ms, peak) => this.flash(c, ms, peak),
+      flashBlocked: () => this.softFlash?.() === true || this.flashTween !== null,
+    });
+  }
+
+  /** False for a figure whose planes are not what is drawn (a rig: its parts are, and `RigActor` runs its own smear). */
+  protected smearsPlanes(): boolean {
+    return true;
+  }
+
+  /** The figure's height in world units, for a subclass (a rig's smear). */
+  protected get bodyHeight(): number {
+    return this.worldHeight;
   }
 
   /** One plane as the aligned dissolve sees it: its unit square in the actor's frame without the drift it carries now, and its silhouette. A plane laid on the floor is not read. */
@@ -1467,6 +1595,7 @@ export class PaintedActor extends Group {
    * target (`motion/StrikeReach.ts`) moves the rest on the eased step.
    */
   lunge(distance = 0.9, ms = 320, contact?: { hold: Promise<unknown>; reached: () => void }, house = distance): Promise<void> {
+    motionBeat({ kind: 'lunge', strength: distance / 2.4, heft: heftOfHeight(this.worldHeight), atMs: ms * 0.19, ms }); // the step's fastest frame is at 0.19 of the move (measured in the real game, Chapter I, stepped at 60 Hz: +84 ms of a 440 ms move; the smooth `reachOffset` house step, not the classic `attackOffset`'s 0.13)
     const from = this.lungeOffset; // anything in flight folds out over the first beat (no snap back to zero)
     const houseStep = motionSmooth() ? reachOffset : attackOffset; // W5 (on by default; `?motion=classic` restores cubic-out): the house part's step starts on the velocity-continuous curve, not cubic-out's 28 percent first frame; same distance, same beats
     const extra = Math.max(0, distance - house); // the distance beyond the house lunge rides the eased step (`reachOffset`); the house part is `attackOffset` to the frame
@@ -1475,6 +1604,36 @@ export class PaintedActor extends Group {
     // VP-1001-06 (`ContactBeat.ts`): with a contact, the strike holds at its apex until the blow lands.
     const run = contact ? leg(0, ATTACK_IMPACT, ms * ATTACK_IMPACT).then(() => (contact.reached(), contact.hold)).then(() => leg(ATTACK_IMPACT, 1, ms * (1 - ATTACK_IMPACT))) : leg(0, 1, ms);
     return run.then(() => void (this.lungeOffset = 0));
+  }
+
+  /**
+   * The new strike (motion pass, lane "core"): one sampled timeline of wind-up, arcing step, contact, hold, return and settle (`motion/StrikeCurve.ts`), walked on this actor's
+   * paced clock. Resolves when the move is over. Started by the presenter only when `curvesOn()`; `lunge` is untouched for everything else.
+   */
+  strike(plan: StrikePlan): Promise<void> {
+    return startStrike(this.curves, plan, this.worldHeight);
+  }
+
+  /** 0 for a party-sized figure up to 1 for a default-size foe (`motion/ActorCurves.heftOf`): the strike's heft, which the strike's sound reads (`StrikeBeat.strikeBeatNow`). */
+  strikeHeft(): number {
+    return heftOf(this.worldHeight);
+  }
+
+  /** A cast's lift: rise `height` world units over `ms` and HOLD until {@link liftRelease}. */
+  liftTo(height: number, ms = 220): void {
+    this.curves.cast.rise(height, ms);
+  }
+
+  /** The cast is away: come down over `ms` and ring a small landing squash. */
+  liftRelease(ms = 260): void {
+    this.curves.cast.release(ms);
+  }
+
+  /** An arc with a take-off crouch, a stretch in the air and a landing squash (FFX-2's run-in; the turn-start weight shift). Resolves at the landing. */
+  leap(height: number, ms: number, options?: LeapOptions): Promise<void> {
+    // The lane "feel" landing thud (`?motionsfx=`): the hop reports its landing, so the leap that replaces it under the curves does too (strength is the landing squash over its 6 percent cap).
+    const land = options?.land ?? 0.04;
+    return this.curves.leap(height, ms, { ...options, onLand: () => motionBeat({ kind: 'land', strength: land / 0.06, heft: heftOfHeight(this.worldHeight) }) });
   }
 
   /**
@@ -1487,6 +1646,8 @@ export class PaintedActor extends Group {
    */
   recoil(ms = 340, distance = 0.28): Promise<void> {
     noteImpact(this, distance >= 0.3); // a no-op unless the look's living room asked for hits (`look/living/StageImpacts.ts`)
+    const fresh = !recoilLegacy() && curvesOn();
+    this.smear.hintRecoil(this.facing, fresh ? recoilDistance(distance, heftOf(this.worldHeight)) : distance, fresh ? newPushMs(ms) : 80); // the push is fastest on its first frame, which is where the hurt swap is made
     this.flinch(ms);
     return this.knockBack(ms, distance);
   }
@@ -1495,10 +1656,12 @@ export class PaintedActor extends Group {
     // r40-recoil (FC-1, `HitRecoil.ts`): an 80 ms eased push from where the figure is, then a spring home; progress 0 writes where it already is, so a hit-stop (dt 0) never teleports it.
     const legacy = recoilLegacy();
     const from = this.recoilOffset;
+    const fresh = !legacy && curvesOn(); // motion pass (lane "core"): a few px, then recover with one small overshoot (`motion/RecoilCurve.ts`)
+    const push = fresh ? recoilDistance(distance, heftOf(this.worldHeight)) : distance;
     return this.tweens.toAsync(legacy ? 1 : 0, legacy ? 0 : 1, {
       durationMs: Math.max(1, ms),
       easing: legacy ? 'elasticOut' : 'linear',
-      onUpdate: (v, p) => void (this.recoilOffset = legacy ? -v * distance : hitRecoilOffset(p, ms, distance, from)),
+      onUpdate: (v, p) => void (this.recoilOffset = legacy ? -v * distance : fresh ? newRecoilOffset(p, ms, push, from) : hitRecoilOffset(p, ms, distance, from)),
     });
   }
 
@@ -1789,8 +1952,10 @@ export class PaintedActor extends Group {
   private playCue(cue: LifeCue): void {
     switch (cue) {
       case 'step':
-        // Their turn: the weight coming up on to the front foot.
-        void this.hop(this.worldHeight * 0.035, 300);
+        // Their turn: the weight coming up on to the front foot. Motion pass (lane "core"): with the new curves it is a small leap (a settle and a landing squash); the docs are silent on
+        // either game's turn-start, so it is the same neutral weight shift for both (an open question in the handoff).
+        // The landing squash is 0.011, not 0.015: its sound strength (land / 0.06 = 0.18) must stay under `MotionSfx.MIN_LAND_STRENGTH` (0.2), or the weight shift thuds at every turn start (integration review M1).
+        void (curvesOn() ? this.leap(this.worldHeight * 0.03, 340, { anticipation: 0.1, crouch: 0.012, stretch: 0.012, land: 0.011, landMs: 160, apex: 0.5 }) : this.hop(this.worldHeight * 0.035, 300));
         return;
       case 'flinch':
         // Only when something set `hurt` directly; `recoil` brings its own knock-back.
@@ -1805,6 +1970,10 @@ export class PaintedActor extends Group {
         this.rise();
         return;
       case 'hop':
+        if (momentsOn()) {
+          this.cheerDue = true; // the cheer (`beginCheer`, called by `setPose` right after this): a crouch, a spring with the victory painting cut in on the take-off, a landing
+          return;
+        }
         // Victory, staggered per fighter so a party does not cheer like a chorus line.
         this.after(this.beatOffset * 240, () => {
           void this.hop(this.worldHeight * 0.13, 460);
@@ -1816,7 +1985,7 @@ export class PaintedActor extends Group {
   /** Tip over and hit the ground: the KO. */
   private fall(): void {
     this.tweens.to(0, 1, {
-      durationMs: FALL_MS,
+      durationMs: realFallMs(this.name) ?? FALL_MS, // `?curves=real` / `real-snappy` (integration 2): the body reaches the floor when the real clip's does (Tidus 1.0 s), else today's 300 ms
       easing: 'quadIn',
       onUpdate: (v) => {
         this.fallTilt = v;
@@ -1826,6 +1995,7 @@ export class PaintedActor extends Group {
         // Landing: a short slap of squash and a small ground shake, then the
         // extra tilt relaxes into the `down` posture.
         void this.squash(280, 0.5);
+        if (momentsOn() && !menuHolds()) void startKoSettle(this.momentsHost()); // motion pass, step 3: the landing rebounds a little (a boss less); not over an open FFX-2 menu (D-357)
         this.shake(this.worldHeight * 0.018, 200);
         this.tweens.to(1, 0, {
           durationMs: 420,
@@ -1930,6 +2100,7 @@ export class PaintedActor extends Group {
       onUpdate: (t) => {
         this.hopHeight = Math.sin(Math.PI * t) * height;
       },
+      onComplete: () => motionBeat({ kind: 'land', strength: height / (this.worldHeight * 0.33), heft: heftOfHeight(this.worldHeight) }), // the landing thud (`?motionsfx=`); a killed hop (the actor is disposed) never lands
     });
   }
 
@@ -2292,10 +2463,13 @@ export class PaintedActor extends Group {
    */
   update(dt: number, realDt: number = dt): void {
     this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`): one-shot moves only, never the idle
-    if (this.blend.advance(realDt * 1000)) this.syncOpacity(); // FB-1: the pose blend, on the real clock
+    this.curves.advance(dt * 1000 * paceRate('action')); // motion pass (lane "core"): the new curves, sampled from accumulated PACED time (zero in a hit-stop, like the tweens)
+    const cv = this.curves.out;
+    if (this.blend.advance(realDt * 1000 * (curvesOn() ? paceRate('action') : 1))) this.syncOpacity(); // FB-1: the pose blend, on the real clock; with the new curves on the same pace as the moves it is scheduled from
     const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
     if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan);
     if (alignedSwapOn()) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
+    this.smear.step(); // the smear window's amount, from the blend's progress
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
@@ -2317,15 +2491,15 @@ export class PaintedActor extends Group {
     // Breathing runs on its own phase accumulator rather than off the clock, so
     // a fighter holding their breath to guard — and letting it go again — eases
     // between tempos instead of jumping a quarter-cycle.
-    this.breathPhase += dt * this.breatheSpeed * (p ? p.tempo : 1);
-    const breatheAmp = this.breatheAmp * upright * (p ? p.breathe : 1);
+    const critBreath = this.breatheAmp > 0 ? proCriticalBreath(this.pose) : null; // a figure that breathes at all, in the low-HP stance, under the pro markers
+    this.breathPhase += dt * (critBreath ? critBreath.speed : this.breatheSpeed) * (p ? p.tempo : 1);
+    const breatheAmp = (critBreath ? Math.max(this.breatheAmp, critBreath.amplitude) : this.breatheAmp) * upright * (p ? p.breathe : 1);
     const breathe = breatheAmp ? Math.sin(this.breathPhase * TAU) * 0.5 + 0.5 : 0;
     const breatheScale = 1 + breatheAmp * (breathe - 0.5) * 2;
 
-    const squashY = 1 - 0.18 * this.squashAmount;
-    const squashX = 1 + 0.14 * this.squashAmount;
+    const sq = squashPair(this.squashAmount, cv.sy, curvesOn(), this.squashScratch); // today's 18/14 percent, or the subtle volume-preserving family with the new curves on
 
-    this.inner.scale.set(squashX, breatheScale * squashY, 1);
+    this.inner.scale.set(sq.x, breatheScale * sq.y, 1);
 
     const hover =
       this.hoverHeight +
@@ -2335,9 +2509,11 @@ export class PaintedActor extends Group {
 
     // The lean rides with the lunge: both are "forward" for this fighter, and
     // forward is the body's facing, never the mirror.
-    let ox = (this.lungeOffset + this.recoilOffset + lean * upright) * this.facing;
+    let ox = (this.lungeOffset + this.recoilOffset + cv.x + lean * upright) * this.facing;
     let oy =
-      this.hopHeight + hover - (crouch + this.fallDrop * this.fallGain * this.worldHeight * 0.05) * upright;
+      this.hopHeight + cv.lift + hover - (crouch + this.fallDrop * this.fallGain * this.worldHeight * 0.05) * upright;
+
+    this.smear.track(ox, oy, dt, realDt); // how fast the figure moves, before the shake: the smear's planner reads it
 
     if (this.shakeLeftMs > 0) {
       this.shakeLeftMs -= dt * 1000;
@@ -2358,7 +2534,7 @@ export class PaintedActor extends Group {
     const sway = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
     // Posture tilt is a *body* rotation (forward = the way the fighter is
     // turned, so it carries the facing), kept small and faded out with the pose.
-    const bodyTilt = (tilt + this.fallTilt * this.fallGain * 0.3) * upright * -this.facing;
+    const bodyTilt = (tilt + cv.lean + this.fallTilt * this.fallGain * 0.3) * upright * -this.facing;
     this.inner.rotation.z = sway + bodyTilt + lie;
     this.inner.rotation.x = -this.lieTilt * this.lieRoll;
 
@@ -2421,25 +2597,47 @@ export class PaintedActor extends Group {
 
     // --- contact shadow reacts to squash and hop ---------------------------
     if (this.shadow) {
-      const lift = Math.min(1, (this.hopHeight + hover) / Math.max(0.001, this.worldHeight * 0.6));
+      const lift = Math.min(1, (this.hopHeight + cv.lift + hover) / Math.max(0.001, this.worldHeight * 0.6));
       // Follow the pose's footprint: a body on the ground casts a long, flat
       // shadow under its whole length, not the standing figure's small disc.
       const base = Math.max(this.shadowBaseRadius, this.footprintRadius());
-      const r = base * (1 + this.squashAmount * 0.3) * (1 - lift * 0.42);
+      const follow = shadowFollows();
+      // Off the ground by a hop OR (the curves) a cast lift, the strike's arc or an FFX-2 leap: the lane "feel" asked for the sum here (feel/ContactShadow.ts).
+      const air = follow ? this.shadowAir.step(dt, this.hopHeight + cv.lift, this.worldHeight) : null;
+      const r = base * (1 + this.squashAmount * 0.3 + Math.max(0, 1 / cv.sy - 1) * 5) * (1 - lift * 0.42) * (air?.radius ?? 1); // the shadow spreads on a landing's squash (curves)
       // The wider the footprint, the flatter the blob, so a prone shadow does
       // not balloon into a circle the size of the body's length.
       const squash = this.shadowSquash * (this.shadowBaseRadius / Math.max(1e-4, base)) ** 0.5;
       this.shadow.scale.set(r, r * Math.min(this.shadowSquash, squash), 1);
-      this.shadow.position.x = ox * 0.55;
+      // Today 0.55 of the offset. The curves (lane "core") put the shadow under the feet through the lunge but leave the posture lean out; `?shadow=follow` (lane "feel") puts it
+      // under the boots with all of the offset but a lying body's swing about its feet. Either switch alone does what its lane built; both on subtract both.
+      const underFeet = curvesOn();
+      this.shadow.position.x = underFeet ? ox - 0.45 * lean * upright * this.facing - (follow ? 0.45 * lieDx : 0) : shadowX(ox, lieDx, follow);
       const sm = this.shadow.material as MeshBasicMaterial;
-      sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5);
+      sm.opacity = this.shadowBaseOpacity * this._alpha * (1 - lift * 0.5) * (air?.opacity ?? 1);
     }
+  }
+
+  /**
+   * Every texture this actor holds, the idle painting first (lane "prebuild": the demo uploads a figure's paintings behind the picker, `app/demo/prebuildDraw.ts`). Borrowed textures are included; the actor's own are what it frees.
+   */
+  heldTextures(): Texture[] {
+    const out = new Set<Texture>();
+    const idle = this.poses.get('idle');
+    if (idle) out.add(idle.texture);
+    for (const p of this.poses.values()) out.add(p.texture);
+    for (const t of this.owned) out.add(t);
+    return [...out];
   }
 
   // ----------------------------------------------------------------- teardown
 
   override dispose(): void {
     this.tweens.killAll();
+    unpinRelight(this.lightPins);
+    this.lightPins.clear();
+    this.cheerWait = null;
+    this.curves.dispose();
     this.blend.cancel();
     for (const slot of this.slots) {
       slot.mesh.geometry.dispose();

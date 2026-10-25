@@ -21,9 +21,12 @@
 import { audio } from '../../audio/index.ts';
 import { TRACK_BLURBS, hasTrack, isRetiredMusic, trackNames } from '../../audio/index.ts';
 import { escapeHtml } from './html.ts';
+import { passTitleOf } from '../../audio/pass/passTitles.ts'; // the sound pass (decision 184): composed titles for 17 untitled cues while it is on
 
 /** `"Iron Verdict" — a never-ending...` -> `Iron Verdict`. */
 export function trackTitle(name: string): string {
+  const composed = passTitleOf(name);
+  if (composed) return composed;
   const blurb = TRACK_BLURBS[name];
   const quoted = blurb?.match(/^["“]([^"”]+)["”]/);
   if (quoted?.[1]) return quoted[1];

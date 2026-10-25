@@ -71,6 +71,11 @@ const BOARD_SELECTORS = [
   '.ffx2-tplate',
   '.ffx2-aplate',
   '.ffx2-ctlhint',
+  // r63-rc (driver call 201b, FFX-2 only): the F1 HUD's hero header (face, name, role) and cue sit over the command block, and the slab, hung over the boss, is
+  // placed by this list: without them it was drawn across the active girl's name at the first menu (Chapter IV, 43,264 px2 at 2560 x 1440). Both are `display: none`
+  // (zero size, skipped below) when the F1 HUD is off or no menu is open.
+  '.f1-hero',
+  '.f1-cue',
   // Not `.ffx2sc`: the spherechange wheel is a modal sized to the whole
   // overlay, so listing it would make every placement "covered" and send
   // the solver hunting for a spot that does not exist. It is *meant* to be

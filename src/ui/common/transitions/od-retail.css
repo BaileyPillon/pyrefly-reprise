@@ -1,0 +1,40 @@
+/* The retail Overdrive banner (motion pass, lane "fx", step 3; FFX only: Chapter I, with the new effects on, `MomentOverlay.nameSlab`). Read from Square Enix's own footage
+   (docs/handoff/motion-fx-reference.md section 2.7, V1): the move is announced by a thin dark-violet banner across the very top of the frame carrying its name, the party's HP block stays
+   lower right, and there is no letterbox. The small orange tab is the footage's "OVERDRIVE" label. The colours are read off frames; the type is ours. It replaces the Ink & Gold slab only
+   while the new effects are on. */
+.pf-mom__slab--odretail {
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.7vh 2.4vw 0.8vh;
+  background: linear-gradient(180deg, rgba(38, 18, 82, 0.93), rgba(24, 10, 58, 0.84));
+  border-left: none;
+  border-bottom: 1px solid rgba(190, 160, 255, 0.5);
+  box-shadow: 0 0.4vh 1.4vh rgba(10, 4, 30, 0.5);
+  transform: translateY(-104%);
+}
+.pf-mom__slab--odretail[data-on='1'] {
+  transform: translateY(0);
+}
+.pf-mom__slab--odretail .pf-mom__slab-content {
+  display: flex;
+  align-items: center;
+  gap: 1.6vw;
+  transform: none;
+}
+.pf-mom__slab--odretail .pf-mom__slab-sub {
+  margin: 0;
+  padding: 0.25vh 0.9vw;
+  background: #e8861e;
+  color: #1b0e00;
+  font-size: clamp(8px, 1.15vh, 13px);
+  letter-spacing: 0.22em;
+}
+.pf-mom__slab--odretail .pf-mom__slab-title {
+  font-size: clamp(14px, 3.1vh, 34px);
+  color: #ece6ff;
+  text-shadow: 0 0 0.8vh rgba(160, 130, 255, 0.55);
+}

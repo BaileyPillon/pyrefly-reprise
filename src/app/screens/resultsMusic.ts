@@ -22,6 +22,7 @@
 import type { Chapter } from '../../data/encounters.ts';
 import { isSilentResultsChapter } from '../../ui/common/resultsMath.ts';
 import { quietResultsOf } from '../../ui/common/quietResults.ts';
+import { passSilentWin } from '../../audio/pass/passResults.ts'; // the sound pass (decision 184): Chapter IV's win is silent as the sources say, behind ?audio=new / ?pack=demo
 
 /** The defeat cue of each game. */
 export const DEFEAT_CUES = { ffx: 'defeat-ffx', ffx2: 'defeat-ffx2' } as const;
@@ -44,6 +45,7 @@ export interface ResultsCue {
 /** What the results screen plays for `chapter` when the battle ended as `outcome`, or `null` for silence. */
 export function resultsCueFor(chapter: Chapter, outcome: string): ResultsCue | null {
   if (outcome === 'victory') {
+    if (passSilentWin(chapter.id)) return null; // the sound pass: no results music for Chapter IV (`audio/pass/passResults.ts`)
     // Release 61 (Bailey, 2026-10-21, "Quieter results for this fight"): FFX-2 Chapter IV's win plays a softer cue than its own `victory-bahamut` (`ui/common/quietResults.ts`). No other chapter is listed.
     const quiet = chapter.music.victory ? quietResultsOf(chapter.id) : null;
     if (quiet) return { cue: quiet.cue, kind: 'victory', fade: VICTORY_FADE_S };
@@ -68,7 +70,7 @@ export function resultsScreenSilent(chapter: Chapter): boolean {
 export interface ResultsMusicPort {
   /** The cue the mixer is heading for, a still-decoding request included (`AudioManager.requestedMusic`). */
   readonly requestedMusic: string | null;
-  playMusic(name: string, options?: { fade?: number }): Promise<void> | unknown;
+  playMusic(name: string, options?: { fade?: number; upcoming?: string[] }): Promise<void> | unknown;
   stopMusic(fade?: number): void;
 }
 
@@ -84,10 +86,11 @@ const NOTHING: ResultsMusicHandle = { end: () => undefined };
  * Ask for `cue` (the result of {@link resultsCueFor}) and return the handle that ends it. `null` asks for nothing.
  * A request the mixer cannot honour (a cue that will not load) is swallowed: the screen never waits on its music.
  */
-export function startResultsMusic(audio: ResultsMusicPort, cue: ResultsCue | null): ResultsMusicHandle {
+export function startResultsMusic(audio: ResultsMusicPort, cue: ResultsCue | null, upcoming?: readonly string[]): ResultsMusicHandle {
   if (!cue) return NOTHING;
   try {
-    void Promise.resolve(audio.playMusic(cue.cue, { fade: cue.fade })).catch(() => undefined);
+    // `upcoming` (r64-fixes, a lost demo fight: its own theme, which a TRY AGAIN asks for again) is kept decoded by the mixer's eviction; without it the defeat cue's start dropped the theme and the retry decoded it again for about 2 s of silence.
+    void Promise.resolve(audio.playMusic(cue.cue, upcoming?.length ? { fade: cue.fade, upcoming: [...upcoming] } : { fade: cue.fade })).catch(() => undefined);
   } catch {
     return NOTHING;
   }

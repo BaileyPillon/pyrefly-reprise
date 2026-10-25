@@ -1,10 +1,11 @@
-import { Group, Vector3, type PerspectiveCamera, type Scene, type WebGLRenderer } from 'three';
-import { artUrl } from '../../PaintedArt.ts';
+import { Group, Vector3, type Object3D, type PerspectiveCamera, type Scene, type WebGLRenderer } from 'three';
 import type { BattleCamera } from '../../BattleCamera.ts';
 import { eyeCandy, type FxTier } from '../EyeCandy.ts';
 import { DriftRig } from './DriftRig.ts';
 import { PlateFocus, focusDial } from './PlateFocus.ts'; // A-7: the plates' defocus, aimed at the party's plate
-import { DepthPlates, paintPoint, precutPlates, type PlateBuildOptions, type PlateLayout } from './DepthPlates.ts';
+import { DepthPlates, paintPoint } from './DepthPlates.ts';
+import { platesRequest } from './LivingPlates.ts';
+import { parkRoom, takeParkedRoom, type ParkKey } from './LivingPark.ts'; // r64-fixes: a room built behind the picker, adopted at the bind
 import { Lamps } from './Lamps.ts';
 import { patchSideFogIn } from '../../PlateSideFog.ts';
 import { QuadField } from './QuadField.ts';
@@ -51,18 +52,14 @@ export interface LivingBind {
 
 const TIER_PARTICLES: Record<FxTier, number> = { full: 1, phone: 0.55, low: 0.3 };
 
-/** What a room's plates are built from at a tier: the depth map's address, the layout and the options. One function for the build and for the demo's warm, so the cut made ahead is the cut the build asks for. */
-function platesRequest(room: RoomSpec, tier: FxTier, renderer: WebGLRenderer | null | undefined): { url: string; layout: PlateLayout; opts: PlateBuildOptions } {
-  return { url: artUrl(`fx/${room.key}/depth.png`), layout: tier === 'full' ? room.plates : room.phonePlates, opts: { renderer: renderer ?? null, native: tier === 'full' } };
-}
-
-class Living {
+export class Living {
   private readonly a: LivingBind;
   private readonly room: RoomSpec;
   private readonly root = new Group();
   private readonly rig: DriftRig;
   private built: FxTier | null = null;
   private building = false;
+  private buildDone: Promise<void> = Promise.resolve();
   private plates: DepthPlates | null = null;
   private focus: PlateFocus | null = null;
   /** Debug only (`__pyrefly.fx.b.pin`): holds the room's clock so a capture lands on one drift phase. */
@@ -114,7 +111,7 @@ class Living {
     if (this.disposed) return;
     const on = this.on;
     const tier = eyeCandy.tier;
-    if (on && this.built !== tier && !this.building) void this.build(tier);
+    if (on && this.built !== tier && !this.building) this.buildDone = this.build(tier);
     this.root.visible = on;
     this.plates?.show(on && eyeCandy.sub('b', 'plates'));
     for (const l of this.lamps) l.mesh.visible = on;
@@ -196,6 +193,16 @@ class Living {
     this.built = tier;
     this.building = false;
     this.sync();
+  }
+
+  /** r64-fixes: true once the room is built at the tier in force (and not disposed); the demo's warm awaits it behind the picker. */
+  whenBuilt(): Promise<boolean> {
+    return this.buildDone.then(() => !this.disposed && this.built === eyeCandy.tier);
+  }
+
+  /** r64-fixes: what the room draws (its group, the depth plates), for the demo's one draw of their programs. */
+  parts(): Object3D[] {
+    return [this.root, ...(this.plates?.meshes ?? [])];
   }
 
   private teardownParts(): void {
@@ -325,10 +332,12 @@ let pending: { a: LivingBind; room: RoomSpec; stop: () => void } | null = null;
  * exactly as main. A room option B does not know is left alone.
  */
 export function bindLivingScene(a: LivingBind): void {
+  const adopted = takeParkedRoom<Living>(parkKeyOf(a)); // r64-fixes: the room the warm built for this very scene behind the picker, whole or still building; taken before the release below
   releaseLivingScene();
   bindMaxMix(a);
   const room = ROOMS[a.key];
-  if (!room) return;
+  if (!room) return void adopted?.dispose();
+  if (adopted) return void (current = adopted); // it already listens to the switches and builds what is left itself; nothing waits on a switch
   const start = (): void => {
     if (current || !pending || !eyeCandy.enabled('b')) return;
     const p = pending;
@@ -340,18 +349,18 @@ export function bindLivingScene(a: LivingBind): void {
   start();
 }
 
+const parkKeyOf = (a: LivingBind): ParkKey => ({ key: a.key, scene: a.scene, camera: a.camera, renderer: a.renderer, battleCamera: a.battleCamera });
+
 /**
- * Release 62 (PR-0481, the conference demo): do the CPU half of this room's plate build NOW, behind the picker, and keep it for the battle's own build (`DepthPlates.precutPlates`). It asks for exactly what
- * `Living.build` will ask for, under the same conditions (the room is one option B dresses, option B is on, this tier plays it), and does nothing otherwise. Binds nothing and touches no singleton: the
- * scene it is given is the one the battle will take. True when a cut is held for the build.
+ * r64-fixes (the conference demo, behind the picker; `LivingPark.ts`): build this room's dressing NOW for the prebuilt scene the battle will take, and hold it for `bindLivingScene` to adopt. Does what
+ * `warmLivingPlates` does about conditions (the room is one option B dresses, option B is on, this tier plays it) and nothing otherwise. Resolves with the room's drawables once it is built, or null.
  */
-export async function warmLivingPlates(a: Pick<LivingBind, 'key' | 'scene' | 'renderer'>): Promise<boolean> {
+export async function parkLivingScene(a: LivingBind): Promise<Object3D[] | null> {
   const room = ROOMS[a.key];
-  if (!room || !roomPlays(room, eyeCandy.enabled('b'), eyeCandy.tier)) return false;
-  const group = a.scene.getObjectByName('backdrop') as Group | undefined;
-  if (!group) return false;
-  const { url, layout, opts } = platesRequest(room, eyeCandy.tier, a.renderer);
-  return precutPlates(group, url, layout, opts);
+  if (!room || room.arcs || !roomPlays(room, eyeCandy.enabled('b'), eyeCandy.tier)) return null; // an arced room scales its arcs by the camera's place at the build (neither demo room has them)
+  const living = new Living(a, room);
+  parkRoom(parkKeyOf(a), living);
+  return (await living.whenBuilt()) ? living.parts() : null;
 }
 
 /** Every frame, after the rig has placed the camera and before the render. */
@@ -359,6 +368,8 @@ export function updateLivingScene(dt: number, realDt: number = dt): void {
   current?.update(dt);
   updateMaxMix(dt, realDt);
 }
+
+export { warmLivingPlates } from './LivingPlates.ts';
 
 export function releaseLivingScene(): void {
   releaseMaxMix();

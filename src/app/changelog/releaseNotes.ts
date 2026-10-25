@@ -69,11 +69,23 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 62 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 63 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '63',
+    date: '2026-10-24',
+    lines: [
+      { tag: 'Both', text: 'Chapters I and IV now open with the whole new battle look on their own: a cleaner screen whose text steps aside while someone acts, a directed camera, and a staged moment for the big finishers.' },
+      { tag: 'Both', text: 'Moves have wind-up, a quick smear and a settle, big hits hold the screen for a beat, damage numbers are gold and never print over each other, and every blow sounds layered.' },
+      { tag: 'Both', text: 'The music ducks just before a big blow, menus have a new family of sounds, and the fight prepares itself behind the title so it starts with fewer hitches.' },
+      { tag: 'FFX', text: 'In Chapter I the party speaks in battle, Total Annihilation holds its breath, Overdrives open with their own camera, Seymour Flux has a cleaner edge, and Yuna and Kimahri have repainted poses.' },
+      { tag: 'FFX-2', text: 'In Chapter IV Mega Flare holds its breath, a Change gets a readable name plate, the camera follows the girls, Bahamut has a cleaner edge, and Rikku and Paine have repainted poses.' },
+      { tag: 'Both', text: 'In the booth demo the end card says Press any button, the attract card waits for a controller, and a picker nobody touches for a minute goes back to the title.' },
+    ],
+  },
   {
     release: '62',
     date: '2026-10-22',

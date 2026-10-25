@@ -17,6 +17,7 @@ import type { Renderer } from '../../engine/Renderer.ts';
 import { eyeCandy } from '../../engine/fx/EyeCandy.ts';
 import { fxDebugHooks } from '../../engine/fx/fxDebugHooks.ts';
 import { cEnergyBump, fxShared, stepCEnergy } from '../../engine/fx/fxShared.ts';
+import { govLive } from '../../engine/governor/GovernorLive.ts';
 import { SpectacleFx } from '../../engine/fx/c/SpectacleFx.ts';
 import { SpectaclePass } from '../../engine/fx/c/SpectaclePass.ts';
 import type { SpectacleFlags } from '../../engine/fx/c/SpectacleRules.ts';
@@ -25,6 +26,8 @@ import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { mixSplashArt, prepareMixSplash } from '../../engine/fx/mix/splash.ts'; // SPLASH ART (the MAX mix, D-316)
 import { demoMotionOn } from '../../engine/motion/DemoMotion.ts';
+import { feelFlags } from '../../engine/feel/FeelSwitch.ts'; // the motion program's `?punch=` and `?hitstop=` (demo chapters only)
+import { KICK_WORLD_TODAY, TODAY_KICK, punchDepth, settleKickOf } from '../../engine/feel/PunchCurve.ts';
 import '../../ui/common/fx-c-foil.css';
 
 /**
@@ -80,8 +83,9 @@ export function attachSpectacle(o: {
       tier: t,
       reduceMotion: eyeCandy.reduceMotion,
       reduceFlashes: eyeCandy.reduceFlashes,
-      dial: (n) => eyeCandy.dial(n),
+      dial: (n) => (n === 'sparks' ? eyeCandy.dial(n) * govLive.particles : eyeCandy.dial(n)), // the frame-budget governor halves the hit sparks at its second level (1 at rest)
       demo: demoMotionOn(), // `?motion=demo` (part 4): the stop and the shake grow with the blow
+      feel: feelFlags(), // `?punch=` and `?hitstop=` (or `?pack=demo`) in Chapter I and Chapter IV; today's camera and stop everywhere else
     };
   };
   const fx = new SpectacleFx({
@@ -127,6 +131,20 @@ export function attachSpectacle(o: {
        */
       inject: (element: string, targetId: string, magic = true) =>
         fx.hit({ targetId, element, crit: false, heavy: false, hitIndex: 0, hitCount: 1, big: false, magic, action: -1, speed: 'normal' }),
+      /**
+       * Captures only: one camera punch now (`__pyrefly.punch(fraction, ms, which, trauma, stopMs)`): `fraction` of the first foe's depth, `which` `new` (the settle) or `today` (the 9-unit kick).
+       * Returns the depth in world units and the fraction played.
+       */
+      punch: (fraction = 0.025, ms = 370, which: 'new' | 'today' = 'new', trauma = 0, stopMs = 0) => {
+        const foe = o.stage.staged().find((id) => o.stage.sideOf(id) === 'enemy');
+        const at = foe ? o.stage.actor(foe)?.position : undefined;
+        const depth = at ? punchDepth(o.camera, at) : 9;
+        if (which === 'today') fx.trauma.kick(fraction, TODAY_KICK, KICK_WORLD_TODAY);
+        else fx.trauma.kick(fraction, settleKickOf(ms), depth);
+        if (trauma > 0) fx.trauma.add(trauma); // and, for the 60 / 144 Hz comparison, a trauma shake and a hit-stop of `stopMs` of real time
+        if (stopMs > 0) (fx as unknown as { stop: { freeze(ms: number): void } }).stop.freeze(stopMs);
+        return { depth, fraction };
+      },
       /** Captures only: freeze the page (field and presenter) on the next impact frame's first frame. */
       armImpact: () => {
         fx.armImpact = (): void => {

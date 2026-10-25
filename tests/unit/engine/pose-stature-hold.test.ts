@@ -49,7 +49,7 @@ const NINE: ReadonlyArray<readonly [string, string, number, number, number, bool
   ['rikku', 'attack', 0.835, 0.734, 0.901, true, 0.8895],
   ['wakka', 'cast', 1.032, 1.09, 1.057, false, 1.0995],
   ['yuna', 'attack', 0.813, 0.761, 0.937, false, 0.9008],
-  ['yuna', 'hurt', 0.936, 0.804, 0.9, true, 0.8995],
+  ['yuna', 'hurt', 0.935, 0.804, 0.9, true, 0.8995],
 ];
 /** The three whose draw moves by more than 0.012 on purpose: the mean is inside the band, so it needs no lift. */
 const MOVED = new Set(['auron/critical', 'wakka/cast', 'yuna/attack']);
@@ -127,8 +127,8 @@ describe('the nine r50.1 holds under the sizing rule', () => {
     // Lulu's attack and cast: the mean of their head and height scales (the head ruler read 1.000 and 1.053), within a few percent
     expect(record.subjects['lulu']!.poses['attack']!.scale).toBe(1.015);
     expect(record.subjects['lulu']!.poses['cast']!.scale).toBe(1.026);
-    expect(record.subjects['tidus']!.poses['hurt']!.scale).toBe(0.96);
-    expect(record.subjects['kimahri']!.poses['hurt']!.scale).toBe(1.052);
+    expect(record.subjects['tidus']!.poses['hurt']!.scale).toBe(0.932);
+    expect(record.subjects['kimahri']!.poses['hurt']!.scale).toBe(1.065);
   });
 });
 

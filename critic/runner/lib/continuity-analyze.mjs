@@ -9,6 +9,8 @@ import { anchorsFor, decodeMask } from './continuity-silhouette.mjs';
 import { waiverFor } from './continuity-waivers.mjs';
 import { STAGED_GAP_FRAMES, groupStaged, stagedStepOf } from './continuity-staged.mjs';
 import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
+import { figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
+import { unseenIn, unseenPolicy } from './continuity-unseen.mjs'; // R63-M1: a figure off the view cannot be seen to jerk or to snap (CHK-027)
 import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 
 /**
@@ -90,6 +92,8 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   for (let i = 1; i < records.length; i++) if (records[i].n === records[i - 1].n + 1) { const dt = records[i].t - records[i - 1].t; dtOf.set(records[i].n, dt); dts.push(dt); }
   const longMs = cfg.motion.longFrameMs ?? 34;
   const frameTime = frameTimeOf(dts, longMs);
+  // R63-M1: the time the long frames among the `windowFrames` frames up to and including frame `n` took beyond one frame each: what a stall can have delayed a flip by (continuity-smear.mjs, `elastic`)
+  const stallBefore = (n) => { let sum = 0; for (let j = n; j > n - cfg.motion.windowFrames; j--) { const dt = dtOf.get(j); if (dt > longMs) sum += dt - FRAME_MS; } return Math.round(sum * 10) / 10; };
   // W4: the camera's shift of each tracked point (probe version 2) in place of the origin's shift; `tracking.camera: 'origin'` gives the earlier reading back for an old-versus-new run
   const perPoint = (cfg.tracking?.camera ?? 'point') !== 'origin' && (meta.version ?? 1) >= 2;
   const recordAt = (fi, n) => { const j = index.get(fi)?.get(n); return j === undefined ? null : byFig.get(fi)[j]; };
@@ -115,13 +119,14 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   // ---- swaps (every flip of which painting dominates a figure)
   const fadeOf = (fig, k) => fig.s.reduce((m, raw) => { const p = planeOf(raw); return p && p.k === k ? Math.max(m, p.fade) : m; }, 0);
   const swaps = [];
+  const unseenP = unseenPolicy(cfg);
   const rigOn = rigConfig(cfg), idleBox = new Map(); // R57-002: a rigged figure's change of key is read by continuity-rig.mjs
   let seq = 0;
   for (const sw of meta.swaps) {
     if (sw.from < 0) continue;
     const list = byFig.get(sw.i) ?? [];
     const at = index.get(sw.i)?.get(sw.n);
-    const base = { id: seq++, figure: figs[sw.i]?.id ?? String(sw.i), side: figs[sw.i]?.side ?? null, fromPose: poses[sw.from]?.pose, toPose: poses[sw.to]?.pose, n: sw.n, tMs: sw.t, fi: sw.i, from: sw.from, to: sw.to, cause: causeOf(meta.logEvents, sw.n) };
+    const base = { id: seq++, figure: figs[sw.i]?.id ?? String(sw.i), side: figs[sw.i]?.side ?? null, fromPose: poses[sw.from]?.pose, toPose: poses[sw.to]?.pose, n: sw.n, tMs: sw.t, dtMs: dtOf.get(sw.n) ?? 0, stallMs: stallBefore(sw.n), fi: sw.i, from: sw.from, to: sw.to, cause: causeOf(meta.logEvents, sw.n) };
     const names = { from: poses[sw.from]?.pose, to: poses[sw.to]?.pose };
     if (at === undefined || sw.a < 0.9) { swaps.push({ ...base, startFrame: sw.n, notShowing: true, counted: false, camCut: false, staged: stagedStepOf(anchors[sw.from], anchors[sw.to], cfg, names), head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0, snap: false, hardCut: false, failHead: false, failFeet: false }); continue; }
     if (sw.rig) {
@@ -140,16 +145,21 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
     const frames = [];
     for (let j = first; j < Math.min(list.length, at + cfg.motion.windowFrames); j++) { if (frames.length && list[j].n !== frames[frames.length - 1].n + 1) break; frames.push(list[j]); }
     const res = analyzeSwap({ frames, at: at - first, swap: { from: sw.from, to: sw.to }, anchors, k1600, camCut: nearCut(sw.n), cfg, names });
-    swaps.push({ ...base, startFrame: list[first].n, ...res, notShowing: false, counted: !res.camCut && !res.unmeasured });
+    // R63-M1: a swap in a frame in which the figure is off the view is not seen, so it is not a snap (kept as `snapUnseen`); `figurePx` is how tall the figure is drawn there (the planned-smear excuse reads it)
+    const unseen = unseenP.excuse && unseenIn(list[at].fig, meta.view, unseenP);
+    swaps.push({ ...base, startFrame: list[first].n, ...res, ...(unseen ? { unseen: true, snap: false, snapUnseen: res.snap } : {}), figurePx: figureHeightPx([list[at - 1], list[at]], k1600), notShowing: false, counted: !res.camCut && !res.unmeasured });
   }
   // r40 instrument edit (b): the steps of one twirl are one staged change (chained through every swap, counted or not, so a step under a camera cut does not split it)
   groupStaged(swaps, cfg.staged?.gapFrames ?? STAGED_GAP_FRAMES);
+  // motion pass, step 2: a swap that matches a cut the engine logged as a planned smear on a big change is not a snap (continuity-smear.mjs); every other fast swap is judged as before
+  const smearP = smearPolicy(cfg);
+  const smearTally = tagSmears(swaps, meta.smears, smearP, FRAME_MS);
 
   // ---- jerks: every figure's feet and head (or centroid) on every frame
   const jerks = [];
   for (const [i, list] of byFig) {
     const byC = centroidFigs.has(i);
-    const track = list.map((e) => { const tr = figureTrack(e.fig, anchors, byC); return tr ? { n: e.n, t: e.t, feet: tr.feet, head: tr.head, centroid: tr.centroid, cam: e.fig.g, cams: perPoint ? tr.cams : null } : null; });
+    const track = list.map((e) => { const tr = figureTrack(e.fig, anchors, byC); return tr ? { n: e.n, t: e.t, feet: tr.feet, head: tr.head, centroid: tr.centroid, cam: e.fig.g, cams: perPoint ? tr.cams : null, unseen: unseenP.excuse && unseenIn(e.fig, meta.view, unseenP) } : null; });
     const evs = detectJerks(track.map((s) => s ?? { n: -10, t: 0, feet: null, head: null, centroid: null, cam: [0, 0] }), k1600, cfg);
     const mine = swaps.filter((s) => s.fi === i);
     for (const e of evs) {
@@ -159,8 +169,15 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
       const frameMs = dtOf.has(e.n) ? Math.round(dtOf.get(e.n) * 10) / 10 : null;
       // `kind` (W4, the CHK-027 split): a jerk AT a pose swap is gateable; a mid-move DASH (a lunge, a recoil, a hop) is reported; a mid-move step of `jerks.teleportPx` or more is a TELEPORT (no
       // lunge covers its whole reach in one frame) and is gated like a swap's. `longFrame`: it fell on a frame longer than `motion.longFrameMs`.
-      const kind = atSwap ? 'swap' : cfg.jerks?.teleportPx && e.px >= cfg.jerks.teleportPx ? 'teleport' : 'dash';
-      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, kind, frameMs, longFrame: frameMs !== null && frameMs > longMs, ...(stagedAt ? { staged: { kind: stagedAt.staged.kind, seq: stagedAt.staged.seq } } : {}), cause: causeOf(meta.logEvents, e.n, 60) });
+      // R63-M1 (`jerks.commonMode`): the engine swaps the pose on the FASTEST frame of a move by design (Bailey 2026-10-22, "Cut on the motion peak"), so the first frames of a lunge fall inside the swap's
+      // blend and the figure's own travel (head and feet moving together: Auron's swing is 101 px in one frame, the real clip 67 ms) was read as the swap's jerk. A dissolve of several frames moves the
+      // weighted point by a fraction of the distance between the two heads each frame, so a one-frame step in one is the figure travelling: where NO swap near the jerk is a hard cut, and the pose-change part
+      // of the step (the head against the feet, `relPx`) is under the jerk limit and at most half of it, the step is a dash (a teleport at `teleportPx`), reported and not gated, as a lunge is anywhere
+      // else. A hard cut that also moves the whole figure (a plane drawn off its registration) is the swap's own and stays gated.
+      const commonMode = atSwap && cfg.jerks?.commonMode === true && typeof e.relPx === 'number' && e.relPx < cfg.motion.jerkFailPx && e.relPx <= 0.5 * e.px && !mine.some((s) => near(s) && s.hardCut);
+      const kind = atSwap && !commonMode ? 'swap' : cfg.jerks?.teleportPx && e.px >= cfg.jerks.teleportPx ? 'teleport' : 'dash';
+      const smeared = kind === 'swap' ? smearedJerk(e, mine.find((s) => s.smear && near(s)), smearP) : null; // a jerk AT a planned smear's cut, no bigger than the policy's cap (maxJerkPx, or maxJerkShare of the drawn height)
+      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, ...(commonMode ? { commonMode: true } : {}), kind, frameMs, longFrame: frameMs !== null && frameMs > longMs, ...(stagedAt ? { staged: { kind: stagedAt.staged.kind, seq: stagedAt.staged.seq } } : {}), ...(smeared ? { smeared } : {}), cause: causeOf(meta.logEvents, e.n, 60) });
     }
   }
   jerks.sort((a, b) => b.px - a.px).forEach((j, id) => { j.id = id; });
@@ -168,10 +185,11 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   // report shows it) and is left out of the summary, the verdict and the worst-jerk strips, as a jerk under a camera cut never gets that far (continuity-wash.mjs).
   const wash = washPolicy(cfg);
   tagWash(jerks, { records, alpha: meta.wash?.alpha ?? null, policy: wash });
-  const visibleJerks = jerks.filter((j) => !j.covered), coveredJerks = jerks.filter((j) => j.covered);
+  const visibleJerks = jerks.filter((j) => !j.covered && !j.smeared), coveredJerks = jerks.filter((j) => j.covered), smearedJerks = jerks.filter((j) => j.smeared && !j.covered);
 
   const battleSeconds = meta.stats?.battleSeconds ?? 0;
-  const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, battleSeconds, cfg, frameTime });
+  const smear = smearReport({ tally: smearTally, jerks, policy: smearP, smears: meta.smears });
+  const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, smearedJerks, smear, battleSeconds, cfg, frameTime });
   const run = { fps: meta.stats?.fps ?? null, error: meta.errors?.length ? meta.errors[0] : null };
   summary.checks = verdicts(summary, cfg, run);
   summary.run = { fps: run.fps, maxDtMs: meta.stats?.maxDtMs ?? null, slowFrames: meta.stats?.slowFrames ?? null, frames: meta.stats?.battleFrames ?? null, probeErrors: meta.errors?.length ?? 0 };
@@ -217,5 +235,5 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   const taken = new Set(worst.swaps);
   const ghostly = swaps.filter((s) => s.counted && s.ghost.frames > 0 && !taken.has(s.id)).sort((a, b) => b.ghost.severity - a.ghost.severity);
   worst.ghosts = distinctFirst(ghostly, (s) => `${s.figure}|${s.fromPose}|${s.toPose}`, cfg.strips.worstGhosts).map((s) => s.id);
-  return { swaps, jerks, summary, perFigure, coverage, worst, frameMs: FRAME_MS, cameraCuts: [...cutFrames].sort((x, y) => x - y), wash: washReport({ records, meta, policy: wash, jerks }), access: { trackAt, planeAt, recordAt } };
+  return { swaps, jerks, summary, perFigure, coverage, worst, frameMs: FRAME_MS, cameraCuts: [...cutFrames].sort((x, y) => x - y), wash: washReport({ records, meta, policy: wash, jerks }), smear, access: { trackAt, planeAt, recordAt } };
 }

@@ -21,6 +21,8 @@
  */
 
 import './transitions.css';
+import './od-retail.css';
+import { fxPieceOn } from '../../../engine/spellfx/FxSwitch.ts';
 import type { MomentsPort } from '../../../engine/BattlePresenterPorts.ts';
 import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
 import { confirmPress, type ConfirmPress } from './confirmPress.ts';
@@ -95,6 +97,10 @@ export class MomentOverlay implements MomentsPort {
 
   letterbox(on: boolean, ms = 260): Promise<void> {
     if (this.disposed) return Promise.resolve();
+    if (fxPieceOn('banner')) {
+      this.el.dataset['letterbox'] = '0'; // the new effects (Chapter I): the retail Overdrive opens with no bars, only the top banner (`od-retail.css`)
+      return Promise.resolve();
+    }
     const dur = Math.max(0, ms);
     this.el.style.setProperty('--pf-bar-ms', `${dur}ms`);
     this.el.dataset['letterbox'] = on ? '1' : '0';
@@ -123,7 +129,7 @@ export class MomentOverlay implements MomentsPort {
 
     const hold = Math.max(0, opts.holdMs ?? 1200);
     const move = hold < INSTANT_MS ? 0 : SLAB_MOVE_MS;
-    this.slab.className = `pf-mom__slab pf-mom__slab--${opts.kind}`;
+    this.slab.className = `pf-mom__slab pf-mom__slab--${opts.kind}${opts.kind === 'overdrive' && fxPieceOn('banner') ? ' pf-mom__slab--odretail' : ''}`;
     this.slab.style.setProperty('--pf-slab-ms', `${move}ms`);
     this.slabTitle.textContent = opts.title;
     this.slabSub.textContent = opts.subtitle ?? (opts.kind === 'telegraph' ? 'CHARGING' : '');

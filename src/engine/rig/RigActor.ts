@@ -28,8 +28,10 @@ import { applyIdle, RigChains } from './RigDynamics.ts';
 import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
 import { compileStates, partStateAt } from './RigPartState.ts';
-import { fadeMsFor, fadeStart } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`; shorter the larger the share of the figure that changes)
+import { fadeMsFor, fadeStart, partAreas, swapShare } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`; shorter the larger the share of the figure that changes)
 import { demoMotionOn } from '../motion/DemoMotion.ts';
+import { RigSmearWindow } from './RigSmearWindow.ts'; // motion pass (lane "core", step 2): a whole-figure image flip is a cut inside a smear
+import { hashUnit } from './RigHash.ts';
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
 import { RIG_SHARE, rigLedger, rigNormalMB, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
@@ -86,6 +88,7 @@ export class RigActor extends PaintedActor {
   /** The cross-fade of the move into the key being shown (`RigFade.fadeMsFor`, 0 for a snap or a build without the demo switch) and the progress at which the state flips, centred on half way. */
   private fade: { ms: number; flipAt: number | undefined } = { ms: 0, flipAt: undefined };
   private readonly crossMs: number;
+  private readonly smearWin = new RigSmearWindow(this);
   private readonly rigBloomMasked: boolean;
   private rigClock: number;
   private idleAmount = 1;
@@ -195,16 +198,19 @@ export class RigActor extends PaintedActor {
     if (key === this.key && !opts?.force) return;
     const target = this.compiled.get(key)!;
     this.track.leave(this.key, this.trans.busy, this.trans.progress);
-    this.key = key;
+    const leaving = this.key; this.key = key;
     this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
     this.stateTo = this.states.get(key)!;
     const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
     const fadeMs = demoMotionOn() && ms > 0 ? fadeMsFor(this.data, this.data.keys.get(key), this.stateFrom, this.stateTo) : 0;
     this.fade = { ms: fadeMs, flipAt: fadeMs > 0 ? fadeStart(ms, fadeMs) : undefined };
+    if (this.smearWin.begin({ name: this.name, from: leaving, to: key, share: swapShare(partAreas(this.data), this.stateFrom, this.stateTo), moveMs: ms, state: this.smear.state, worldHeight: this.bodyHeight, facing: this.facingDir })) this.fade = { ms: 0, flipAt: undefined }; // a whole-figure flip is a cut and the smear covers it
     this.trans.retarget(target, ms);
     this.layersDue = true;
     if (ms <= 0) this.pose0();
   }
+
+  protected override smearsPlanes(): boolean { return false; } // the parts are what is drawn: the smear is `smearWin`'s, not the carrier planes' cut
 
   /** A body on the ground ignores a pose the life layer refuses (`PaintedActor.setPose`'s first rule), judged before the call moves the state. */
   private refuses(name: string, opts?: { immediate?: boolean }): boolean {
@@ -242,6 +248,7 @@ export class RigActor extends PaintedActor {
       this.rig.setPartState(shown, this.fade.ms);
       this.appliedState = shown;
     }
+    this.smearWin.step(this.trans.progress, this.trans.busy, this.smear.state, this.carrier.u, idleSlot(this.carrier));
     this.rig.advanceFades(realDt * 1000); // on the real clock: a hit-stop that holds the field never freezes a half-mixed pair of images
     this.work.set(this.trans.current);
 
@@ -389,11 +396,4 @@ export class RigActor extends PaintedActor {
     this.releaseTextures = null;
     super.dispose();
   }
-}
-
-/** A stable 0..1 from a name, so a party does not breathe in step. */
-function hashUnit(s: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-  return ((h >>> 0) % 10000) / 10000;
 }

@@ -23,12 +23,24 @@ const VERT = /* glsl */ `
   varying vec2 vUv;
   varying float vH;
   varying vec2 vFig;
+  uniform float smearAmt;
+  uniform float smearStyle;
+  uniform vec2 smearVec;
   ${RELIGHT_VARYINGS}
   void main() {
     vUv = uv;
     vH = position.y + 0.5;
     vFig = vec2(position.x + 0.5, vH);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vec3 p = position;
+    // The smear (motion pass, step 2): a part is a mesh cut to its own outline, so a streak drawn by the fragment shader cannot leave it. The figure's TRAILING side is stretched back along the
+    // travel instead (the classic smear frame): a vertex moves back by up to the streak's length (blur 0.6, paint 1.0 of it), the more the further behind the figure's middle it lies; the leading side stays.
+    if (smearAmt > 0.0) {
+      float len = length(smearVec);
+      vec2 d = smearVec / max(len, 1e-5);
+      float t = clamp((0.12 - dot(position.xy, d)) / 0.6, 0.0, 1.0);
+      p.xy -= d * (len * smearAmt * mix(0.6, 1.0, smearStyle)) * pow(t, 1.5);
+    }
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
     ${RELIGHT_VERTEX}
   }
 `;
@@ -42,6 +54,19 @@ export const SHADER_PATCHES: ReadonlyArray<readonly [from: string, to: string]> 
   ['float n = texture2D(noiseMap, uv * vec2(1.6, 2.4)).r;', 'float n = texture2D(noiseMap, vFig * vec2(1.6, 2.4)).r;'],
   ['float plain = clamp(n * 0.72 + (1.0 - vUv.y) * 0.34, 0.0, 1.0);', 'float plain = clamp(n * 0.72 + (1.0 - vH) * 0.34, 0.0, 1.0);'],
   ['float sweep = clamp(n * 0.56 + vUv.y * 0.44, 0.0, 1.0);', 'float sweep = clamp(n * 0.56 + vH * 0.44, 0.0, 1.0);'],
+  // the smear (motion pass, step 2): the streak is given in the FIGURE's coordinates (vFig); a part's uv is its own cut of the painting, and a limb is turned, so the streak is carried into the
+  // part's uv through the screen-space derivatives of the two coordinates (duv/dFig = [dUv/dx dUv/dy] * inverse([dFig/dx dFig/dy])).
+  [
+    'vec2 smearUvVec(vec2 v) { return v; }',
+    `vec2 smearUvVec(vec2 v) {
+    vec2 fx = dFdx(vFig);
+    vec2 fy = dFdy(vFig);
+    float det = fx.x * fy.y - fx.y * fy.x;
+    if (abs(det) < 1e-12) return v;
+    vec2 w = vec2(fy.y * v.x - fy.x * v.y, fx.x * v.y - fx.y * v.x) / det;
+    return dFdx(vUv) * w.x + dFdy(vUv) * w.y;
+  }`,
+  ],
 ];
 
 /** Apply the patches to `src`; throws when the game's shader no longer contains one of them (the stage then draws the painting set). */

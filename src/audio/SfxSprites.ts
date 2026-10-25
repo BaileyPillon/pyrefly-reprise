@@ -46,6 +46,8 @@ export interface SfxPlayRecord {
   leadMs?: number;
   /** A stand-in that stayed silent because the recorded original that covers it was the one playing (`played` names that original). */
   covered?: true;
+  /** The sound pass (`audio/pass/`): this record is a LAYER under the cue asked for, and what it is (`texture`, `body`, `character`, `thump`). */
+  layer?: string;
 }
 
 /** What `pick` found for a key. */
