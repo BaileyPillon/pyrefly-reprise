@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1856 decisions in all: 1343 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1214 of the written decisions record a blanket yes.
+1857 decisions in all: 1344 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1216 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1732 |
+| adopted | 1733 |
 | proposed | 8 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1856** |
+| **All** | **1857** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -34,7 +34,7 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | visuals | 131 |
 | camera | 75 |
 | audio | 158 |
-| ui | 218 |
+| ui | 219 |
 | story | 17 |
 | chapters | 248 |
 | guide | 34 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 17 |
 | tech | 30 |
 | site | 21 |
-| **All** | **1856** |
+| **All** | **1857** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 953 |
+| both games | 954 |
 | FFX only | 500 |
 | FFX-2 only | 385 |
 | FF7 hidden experiment | 18 |
-| **All** | **1856** |
+| **All** | **1857** |
 
 ## Standing rules in force
 
@@ -8778,10 +8778,15 @@ Saturday · 25 decisions
 
 ### 2026-10-25
 
-Sunday · 1 decision
+Sunday · 2 decisions
 
 - <a id="d-1343"></a>**D-1343** — DRIVER CALL under 201, his to overturn, disclosed in the release notes: the R63-M1 trace found no pose-lane defect in Chapter I, so the continuity harness gets four policy words instead of an engine change, and the driver accepts the limits stated here for the conference (both games, critic plumbing; the evidence is FFX Chapter I)
-  - Bailey: no verbatim quote on record for this decision
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
   - What changed: Item 202. The focused review of 8ee3ca11b held the ship on Chapter I’s snaps (0.62 per minute against live’s 0, jerks to 290 px and a 603 px teleport). The trace (eleven runs of the same route and seed, one new piece switched off in each) found no defect in the pose lane: the “snaps” are the planned smear cuts he picked on 2026-10-22 (paint smear) magnified by the pro camera’s push-ins, plus figures that were off the screen read as teleports. The harness now skips unseen figures, runs an elastic smear window for late flips, excuses planned cuts up to half the figure’s drawn height and reports head-and-feet common-mode moves as dashes instead of gating them (the policy words unseen, smear.elastic, smear.maxJerkShare and jerks.commonMode; each can be switched back). Commit fa56fd4e3 on r63-rc: snaps 0.62 per minute to 0, teleports 1 to 0, gated swap jerks worst 290 px to 46 px. The limits the driver accepts for the conference: 31 planned cuts in Chapter I of up to 0.36 of body height remain visible one-frame cuts under a hit flare; frames over 34 ms rose (109 against live’s 28 in one shared-GPU run, 47 with the camera off) and are watched; the victory close-up after Auron’s killing blow frames only Auron. The second focused review said SHIP: CHK-027 equal to live rests on the wider harness rule, and five swaps 1 to 5 percent outside the CHK-026 band are disclosed as R63-M2. Revisit after the conference.
   - area critic · both games · adopted · delivery implemented · at ~00:30 EDT · see [D-1331](#d-1331) · refines [D-1333](#d-1333)
   - Source: The driver’s call of 2026-10-25 00:30 EDT (the DRIVER-STATE hourly line of 00:30 EDT), made under 201 (D-1333: “You make the calls please”), …
+- <a id="d-1344"></a>**D-1344** — DRIVER CALL under his delegation, his to overturn: release 64 declutters Chapter IV’s first menu and the fight itself before the freeze: one boss bar (the F1 ribbon, FFX-2’s HP rule kept), the guide, the enemy-intent line and the details collapsed behind Intel, no first-time coach cards on the booth path, Intel stepping back during actions; Chapter I is checked the same (FFX-2 mainly; both games for the plumbing)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 203. The live check of release 63 passed (the exact artifact byte for byte, 0 errors), but the driver’s own look at the live Chapter IV frames found the F1 HUD showing two boss bars, and the guide, the enemy-intent line and the first-time coach cards up at the first menu and during actions. That is against the approved F1 target (D-1278 “Less on screen”: the enemy details, the guide and the tips behind Intel; D-1281 “Steps back in action”: the HUD steps back during an action). The conference build was already live and frozen into the booth copy (D:/pyrefly-booth-63), so the driver launched the r64-ch4-declutter workflow at about 03:58 EDT on 2026-10-25 (fix, a skeptic pass, a second fix, then a release 64 candidate with its CHANGELOG entry and a focused review, deployed only on its SHIP under his standing deploy words). The booth copy is rebuilt from release 64 after that review; until then D:/pyrefly-booth-63 is the booth’s copy and is proved offline. Nothing of this is built or live at the time of this row; the build, its review and its deploy get their own action rows.
+  - area ui · both games · adopted · delivery in progress · see [D-1278](#d-1278), [D-1281](#d-1281), [D-1314](#d-1314), [D-1324](#d-1324), [D-1331](#d-1331) · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
