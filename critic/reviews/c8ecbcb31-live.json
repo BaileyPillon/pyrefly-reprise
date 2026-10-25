@@ -1,0 +1,94 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-22T13:26:56.585Z",
+  "build": {
+    "mainSha": "c8ecbcb31",
+    "bundle": "C9xPmvqR",
+    "artifactHash": "fb151fee740a2211662998ca3d69b4c86799799376c4ad40bc47e4c54236ac08"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/c8ecbcb31.json --url https://echoesofspira.com/ --changed-from critic/artifacts/660c19bbd.json --full -> {result: PASS, artifactHash: fb151fee740a2211662998ca3d69b4c86799799376c4ad40bc47e4c54236ac08, liveManifest: match, checked: 6241, mismatched: [], missing: [], wrongType: [], errors: []}; index.html identical once the Cloudflare Web Analytics beacon is removed"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, 1600x900, fresh context per run, cache-busted URL, real key presses only. Screen asserted before each capture: title -> chapter-select -> cutscene -> battle with an open command menu for FFX Ch I (seymour-flux) and FFX-2 Ch IV (ffx2-bahamut, confirmed by selectedId). Escape/P pause and resume, H hide and restore, picker Escape cancel path, Overdrive 50% in demo, controls card on the picker, voiced intro lines heard (asked 3 started 3), prerendered mp3 music fetched. Stills in critic/reviews/c8ecbcb31-live/shots."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke: masterVolume changed 80 -> 90 with a real ArrowRight on the pause OPTIONS row, page reloaded, 90 read back from the same row.",
+      "reason": "Full upgrade matrix and progress persistence not tested in this pass."
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 146,
+      "paintings": 1106,
+      "pass": 829,
+      "waived": 79,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": {
+        "idle": 146,
+        "standing": 565,
+        "ko": 90,
+        "low": 71,
+        "wide": 4,
+        "staged": 176,
+        "part": 54
+      },
+      "byGame": {
+        "FFX-2": 777,
+        "FFX": 307,
+        "FF7": 22
+      },
+      "byRowStatus": {
+        "ok": 746,
+        "held": 83,
+        "waived": 79,
+        "none": 198
+      }
+    }
+  },
+  "coverage": {
+    "tested": [
+      "artifact identity, full mode: 6241 files compared against critic/artifacts/c8ecbcb31.json (diffed from 660c19bbd), live manifest match",
+      "demo mode (?demo=1) title -> picker (controls card, Follow the NEXT tip, 2 tiles) -> Chapter I FFX Seymour Flux -> voiced cutscene -> battle -> real player turn; Overdrive gauge shows 50% in the pause panel (173c)",
+      "demo mode Chapter IV FFX-2 Bahamut picked by selectedId -> battle -> player turn (screenshot confirms painted Bahamut, HUD, menu)",
+      "cancel path: Escape from the picker returns to the title, Enter re-enters the picker",
+      "Escape/P pause and resume on both chapters; H hides panels (PAINTING ONLY hint) and restores them",
+      "prerendered music fetched (200 mp3: title, chapter-select, scene-gagazet, boss-seymour, scene-bevelle-underground, boss-bahamut, pause, victory/defeat cues), audioDebug playing boss-seymour, no synth fallback",
+      "reload smoke: masterVolume 80 -> 90 by real ArrowRight in pause OPTIONS, reload, value 90 after reload",
+      "console error and HTTP >=400 sweep across the whole run"
+    ],
+    "reused": [],
+    "notTested": [
+      "full CHK-024 upgrade matrix",
+      "progress persistence (no chapter win was played, so no cleared-chapter progress could be reloaded)",
+      "173g defeat TRY AGAIN / OTHER FIGHT screen (no defeat was driven with real input)",
+      "173h thanks card with QR and 173i hold-reset (not reached)",
+      "173b Mega Flare flood light and shake, 173a cathedral beyond one static frame at the turn",
+      "gamepad A/Start skip of the opening (no pad in headless run)",
+      "mobile 390 px polish items R62-02/03",
+      "CHK-027 motion jerks (inherited R62-01, focused review disclosed)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 40,
+  "notes": "Smoke ran in headless Chromium, PYREFLY_BROWSER=gpu (canvas rendered, no fallback). Two early script slips (module paths, a mislabelled FFX-2 attempt) were review-script defects and were rerun; the reported FFX-2 evidence is the corrected run. Static pose census is data, not a verdict."
+}

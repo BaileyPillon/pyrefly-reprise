@@ -1,0 +1,572 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-22T12:28:59.658Z",
+  "build": {
+    "mainSha": "c8ecbcb31",
+    "candidateSha": "c8ecbcb312325c57849092c052d321dadeb2c7f4",
+    "bundle": "index-C9xPmvqR.js",
+    "keyCorrection": "The workflow passed the wrong sha (3e520971e, origin/main) to the reviewer; the review ran in D:/pyrefly-release55 at HEAD c8ecbcb31 (r62-rc) on dist-gate built by tools/candidate-build.mjs, and the reviewer confirmed index-C9xPmvqR.js on the served index.html. Re-keyed by the release driver 2026-10-22; the findings are unchanged."
+  },
+  "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect and no regression against live r61: every changed flow (pad A and Start end the opening, demo warm, intro, thanks card, defeat TRY AGAIN and OTHER FIGHT, reset, OD 50, living cathedral, Mega Flare) worked with real input and 0 console errors.",
+    "The two defects found are polish and inside new demo-only screens on a phone; the one major (CHK-027 swap jerks) is inherited and measures the same on live.",
+    "Frame rate and pose continuity equal live in the same harness (59 fps, p99 45.6 ms against 46 ms)."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "Title, picker, intro, battle, defeat panel, results and thanks card each fill the window at 1600x900 and 2000x1012 with no horizontal overflow; at 390x844 nothing overflows horizontally (the thanks card is wider than the window, see R62-02).",
+      "where": "both; I, IV (demo)",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobA/1600-02-picker.png",
+        "critic/reviews/3e520971e-focused/jobH/2000-02-picker.png",
+        "critic/reviews/3e520971e-focused/jobH/2000-06-thanks.png",
+        "critic/reviews/3e520971e-focused/jobH/2000-jobH.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 6,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-003",
+      "result": "FAIL",
+      "reason": "At 390x844 in demo mode the thanks card is wider than the window (title and QR cut at both edges) and the defeat panel hint strip overlaps TRY AGAIN and OTHER FIGHT. Both are the new demo screens only; the ordinary defeat panel at 390 is identical on live and candidate. 1600x900 and 2000x1012 are clean.",
+      "where": "both; I (demo)",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobH/390-06-thanks.png",
+        "critic/reviews/3e520971e-focused/jobH/390-04-defeat.png",
+        "critic/reviews/3e520971e-focused/jobJ/cand-390-defeat.png",
+        "critic/reviews/3e520971e-focused/jobJ/live-390-defeat.png"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 6,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "reason": "The demo intro, the thanks card (guarded press, 8 s auto end), the results panel and the opening sweep all end and hand over to the next screen (battle, chapter-select); no overlay stayed behind in the screens walked.",
+      "where": "both; I, IV (demo)",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobA/1600-jobA.json",
+        "critic/reviews/3e520971e-focused/jobH/2000-jobH.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 4,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-008",
+      "result": "UNVERIFIED",
+      "reason": "Panel-versus-actor overlap was not measured; only the Mega Flare, the living cathedral and the demo cards were looked at.",
+      "where": "both",
+      "evidence": [],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-009",
+      "result": "UNVERIFIED",
+      "reason": "Name-length audit not run; no changed string is a name that can truncate beyond the demo card captions seen.",
+      "where": "both",
+      "evidence": [],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 0,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-013",
+      "result": "PASS",
+      "reason": "The approved targets compared at gameplay scale beside the build: results, phone results and the FFX-2 battle HUD keep the approved structure; the picker, intro portrait and thanks card read as the same Ink and Gold chrome.",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/results-desktop-pair.jpg",
+        "critic/reviews/3e520971e-focused/results-phone-defeat-pair.jpg",
+        "critic/reviews/3e520971e-focused/bahamut-menu-pair.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 8,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Real keys on the production-built candidate: Enter on title and picker, Right to pick Bahamut, Enter and held Enter on the intro, Enter on thanks (guard respected), Right plus Enter on the defeat panel, Home held 1.7 s for the reset ring and reset, a pointer click and a touch tap on TRY AGAIN at 390; the gamepad A and Start were driven through a faked navigator.getGamepads (Ch I only: ends the opening in 0.5 s against 10 s unpressed, Start does not open the pause). The debug API only set up fights (autoBattle to a win or a defeat) and read state.",
+      "where": "both; I, IV (demo)",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobC/cand-jobC.json",
+        "critic/reviews/3e520971e-focused/jobE/cand-1600-jobE.json",
+        "critic/reviews/3e520971e-focused/jobF/cand-other-fight-battle.png",
+        "critic/reviews/3e520971e-focused/jobH/390-jobH.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 20,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Every capture asserted the screen first (waitScr throws, never falls through). Two harness slips were found and redone, not graded: an Arrow key that did not move the picker (it takes Left and Right) and a menu probe that never matched on the FFX-2 HUD; neither became a screenshot of the wrong screen.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobA/1600-jobA.json",
+        "critic/reviews/3e520971e-focused/jobD/cand-1600-jobD.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 3,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "reason": "The candidate was compared with the live build measured the same way: pick-to-battle, 5 s rAF, the Bahamut continuity run and the non-demo phone defeat panel on https://echoesofspira.com/ (r61, 660c19bb).",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobG/live-battle-menu.png",
+        "critic/reviews/3e520971e-focused/cont-bahamut-live.log",
+        "critic/reviews/3e520971e-focused/jobJ/live-390-defeat.png"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 8,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "Paired flows: the same shared plumbing (pad skip, warm, results music, thanks, defeat, reset) was walked in Ch I (FFX) and Ch IV (FFX-2) in demo mode; the non-demo Ch I flow still goes title, select, prep, scene, battle, scene, results with no thanks card and the victory cue at results. FFX-2 pad skip was not timed (no menu probe), see coverage.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobI/cand-02-results.png",
+        "critic/reviews/3e520971e-focused/jobF/cand-other-fight-battle.png"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 8,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Game case (research/ffx-vs-ffx2-presentation.md, docs/handoff/r62-extra.md): 173a living cathedral and 173b Mega Flare FFX-2 only; 173c FFX only in effect; 173f FFX only; 173d, 173g, 173h, 173i both (demo only); pad skip, warm and PR-0504 both; PR-0487 Auron tip FFX only. Presence: living stats on in bevelle-underground (26 motes, lamps 0.28), flare flood peaked 0.82 with white 0.75 in Ch IV; OD 50 on all 7 FFX party members; intro on Ch I. Absence: living is null in Ch I (gagazet), flare stayed 0 in Ch I, no intro on Ch IV, Ch IV has no OD gauge. The Mega Flare shake on FFX (shared ability id) and the Auron line in FFX-2 are covered by unit tests only.",
+      "where": "both",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobD/cand-1600-jobD.json",
+        "critic/reviews/3e520971e-focused/jobE/cand-1600-jobE.json",
+        "critic/reviews/3e520971e-focused/jobB/cand-1600-jobB.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 15,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "reason": "A win in Ch I and Ch IV reaches results, then the thanks card, then the picker with the cursor on the other fight; a defeat reaches TRY AGAIN (same seed 7, no prep, no intro) and OTHER FIGHT (Bahamut, seed 56); the non-demo win reaches the post scene and results and goes back without the thanks card.",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobA/1600-jobA.json",
+        "critic/reviews/3e520971e-focused/jobE/cand-1600-jobE.json",
+        "critic/reviews/3e520971e-focused/jobF/cand-other-fight-battle.png",
+        "critic/reviews/3e520971e-focused/jobI/cand-02-results.png"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 12,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "reason": "Reached through the real presentation path: the Mega Flare flood and white-out and the living lights were read from the live renderer stats during the real fight, and the pad press went through BattleScreen.handleInput into MomentOverlay. The Auron line (PR-0487) was not reached in a browser, see coverage.",
+      "where": "both; IV",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobD/cand-1600-05-flare-1-f0.79-w0.png",
+        "critic/reviews/3e520971e-focused/jobD/cand-1600-05-flare-0-f0.267-w0.746.png"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 6,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-026",
+      "result": "PASS",
+      "reason": "Harness on the candidate: Ch I head jump 12.1 percent only on unregistered swaps (0.2 percent where registered, a control), stature 0.78 to 1.10 in band, feet 0.9 px; Ch IV head 0.6 percent, stature 0.90 to 1.11, feet 0.4 px. Live Ch IV is identical (0.6 percent, 0.4 px).",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/continuity-cand/continuity-summary-seymour-flux.json",
+        "critic/reviews/3e520971e-focused/continuity-cand/continuity-summary-ffx2-bahamut.json",
+        "critic/reviews/3e520971e-focused/continuity-live/continuity-summary-ffx2-bahamut.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 25,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "reason": "Harness: Ch I 3 jerks of 40 px or more at a pose swap (worst 48 px), Ch IV 1 (worst 48.4 px). The live build measured the same way has 2 (worst 49.6 px) in Ch IV, so this is inherited, not introduced; the r38 baseline (371 and 211 px) is far worse. 0 snaps per minute. Frame p99 45.6 ms candidate against 46 ms live with the GPU batch running (noise).",
+      "where": "both; I, IV",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/continuity-cand/continuity-summary-seymour-flux.json",
+        "critic/reviews/3e520971e-focused/continuity-cand/continuity-summary-ffx2-bahamut.json",
+        "critic/reviews/3e520971e-focused/continuity-live/continuity-summary-ffx2-bahamut.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 25,
+      "artifact": "3e520971e + r62-rc c8ecbcb31 / dist-gate index-C9xPmvqR.js",
+      "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+      "environment": "candidate D:/pyrefly-release55 (r62-rc c8ecbcb31 on origin/main 3e520971e), tools/candidate-build.mjs into dist-gate, bundle index-C9xPmvqR.js, served 127.0.0.1:5731; headless Playwright Chromium PYREFLY_BROWSER=gpu (no black canvas, no fallback); live comparison https://echoesofspira.com/ r61 (660c19bb, index-DwMQUoVh.js); RIG-RECORD lock held for every browser job; the GPU was shared with other lanes so frame timings are noisy"
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "seymour-flux",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 380.8,
+        "swaps": 350,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 12.1,
+        "maxFeetShiftPx": 0.9,
+        "worstJerkPx": 48,
+        "minStature": 0.782,
+        "heightOverBand": 0,
+        "feetSilOver": 0,
+        "swapJerksWorstPx": 48,
+        "dashesWorstPx": 0,
+        "frameP99Ms": 25,
+        "jerksCovered": 0,
+        "fps": 59.7,
+        "dedicated": true,
+        "strips": 20,
+        "worstSwapStrips": [
+          "seymour-flux-win-3e520971e/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-006-kimahri-idle-ko.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-003-kimahri-hurt-idle.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-338-yuna-hurt-critical.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-022-yuna-critical-hurt.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-088-kimahri-idle-ready.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-028-kimahri-ready-idle.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-106-yuna-ready-item.jpg",
+          "seymour-flux-win-3e520971e/continuity/strips/swap-186-yuna-idle-hurt.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-bahamut",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 386.1,
+        "swaps": 414,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 0.6,
+        "maxFeetShiftPx": 0.4,
+        "worstJerkPx": 48.4,
+        "minStature": 0.898,
+        "heightOverBand": 0,
+        "feetSilOver": 0,
+        "swapJerksWorstPx": 48.4,
+        "dashesWorstPx": 36.3,
+        "frameP99Ms": 45.6,
+        "jerksCovered": 0,
+        "fps": 59,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-191-paine-attack-follow.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-220-rikku-ready-attack.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-212-paine-ready-attack.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-238-paine-follow-idle.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-160-rikku-attack-follow.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-153-paine-cast-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-163-paine-od-x2-warrior-armor-break-ready.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-083-paine-cast-hurt.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-036-paine-hurt-cast.jpg",
+          "ffx2-bahamut-win-3e520971e/continuity/strips/swap-056-paine-hurt-idle.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 766.9,
+    "counted": 350,
+    "swaps": 373,
+    "size": {
+      "judged": 341,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 9,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 12.1,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 0.9,
+      "feetOverTolerance": 0,
+      "headMeasured": 341,
+      "headRegistration": 176,
+      "headRig": 126,
+      "rigSwaps": 126,
+      "headSilhouette": 39,
+      "headUnmeasured": 0,
+      "heightMeasured": 341,
+      "heightOverBand": 0,
+      "heightWaived": 0,
+      "minStature": 0.782,
+      "maxStature": 1.099,
+      "koLengthMeasured": 2,
+      "minKoLength": 0.601,
+      "koLengthReported": 2,
+      "feetSilMeasured": 178,
+      "feetSilOver": 0,
+      "feetSilWaived": 0,
+      "maxFeetSilPx": 2.8,
+      "holdSwaps": 174,
+      "worstRealHeadPct": 24.2,
+      "realHeadOutsideBand": 0,
+      "realHeadWaived": 0,
+      "variantHeadSwaps": 0,
+      "worstVariantHeadPct": 0,
+      "variantHeadOutsideBand": 0,
+      "unregisteredSwaps": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "ghostSwaps": 212,
+      "ghostFrames": 747,
+      "worstGhostSeverity": 0.365,
+      "ghostOverFail": 0,
+      "jerks": 15,
+      "worstJerkPx": 48,
+      "jerksOverFail": 3,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0.004,
+      "maxCentroidShiftPx": 159.8,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 0,
+      "swapJerks": 15,
+      "swapJerksWorstPx": 48,
+      "swapJerksOverFail": 3,
+      "teleports": 0,
+      "teleportsWorstPx": 0,
+      "dashes": 0,
+      "dashesWorstPx": 0,
+      "dashesOverFail": 0,
+      "jerksLongFrame": 1,
+      "swapJerksLongFrame": 1,
+      "swapJerksSteadyOverFail": 3
+    },
+    "frameTime": {
+      "frames": 22746,
+      "longFrames": 68,
+      "longFramePct": 0.3,
+      "worstP99Ms": 25,
+      "maxMs": 155.4,
+      "longMs": 34
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "PASS",
+        "reasons": [],
+        "note": "176 of 341 measured swaps had a registered head (tolerance 3 percent); 126 were read from a rig's own head mesh (tolerance 3 percent; 126 swap(s) were changes of a rig's key); 39 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 341 swap(s) (stature 0.782 to 1.099, 0 out of band but waived), the silhouette's own feet 178 swap(s) (worst 2.8 px, 0 waived), 174 swap(s) across a recorded hold (real head worst 24.2 percent from the idle's), 0 on a painting with no fresh registration record"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "3 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 48 px)"
+        ],
+        "note": "1 of 15 jerk(s) fell on a frame of more than 34 ms (1 of the 15 at a swap; 3 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+      }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 380.8 s of battle, 59.7 to 59.7 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (3 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 48 px))",
+    "base": "http://127.0.0.1:5731/",
+    "date": "2026-10-22T11:36:36.362Z",
+    "poseMeasure": {
+      "path": "D:/Tools/pyrefly-scratch/r62-focused/pose-measure-lf.json",
+      "source": "explicit",
+      "subjects": 114,
+      "sha256": "bec06304d638b669982582b25675d509231e26702de1602caa328eaab0f90136",
+      "staleChapters": []
+    },
+    "liveComparison": {
+      "chapter": "ffx2-bahamut",
+      "build": "live 660c19bb",
+      "checks": {
+        "CHK-026": "PASS",
+        "CHK-027": "FAIL"
+      },
+      "worstSwapJerkPx": 49.6,
+      "frameP99Ms": 46,
+      "headJumpPct": 0.6
+    },
+    "note": "Pose table: the commit table (sha256 bec06304d638, LF) was passed with --pose-measure because the working copy differs from the commit by line endings only; a first Bahamut run on the working-copy table read UNVERIFIED for CHK-026 for that reason alone and was redone."
+  },
+  "targets": {
+    "required": 4,
+    "matched": 3,
+    "failing": 0,
+    "unverified": 1,
+    "waiting": 0,
+    "note": "tools/end-state-board.mjs is absent from the candidate tree; the pairs were made with the copy in D:/Final Fantasy/tools. Matched: Results (A-results), PR-0001 phone results (option B structure), FFX-2 Battle HUD (accepted adaptation). Unverified: the Auron first-use line (C2), whose text was not reached in a browser (unit-tested only)."
+  },
+  "issues": [
+    {
+      "id": "R62-01",
+      "severity": "major",
+      "title": "CHK-027: pose-swap jerks of 40 px or more in Chapter I and Chapter IV",
+      "game": "both (FFX Ch I, FFX-2 Ch IV)",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "expected": "no single-frame jump of 40 px or more at a pose swap (CHK-027)",
+      "observed": "Ch I 3 swaps (worst 48 px), Ch IV 1 swap (48.4 px); live r61 Ch IV 2 swaps (worst 49.6 px); the r38 baseline was 371 and 211 px",
+      "repro": "node critic/runner/lib/continuity.mjs --base=<preview> --chapters=seymour-flux,ffx2-bahamut --pose-measure=<LF commit table>",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/continuity-cand/continuity-summary-seymour-flux.json",
+        "critic/reviews/3e520971e-focused/continuity-live/continuity-summary-ffx2-bahamut.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-027, D-421",
+      "where": "pose swap crossfade (not touched by this release)",
+      "fix": "carried: the pose-continuity track",
+      "acceptanceCheck": "harness reports 0 jerks of 40 px or more",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "R62-02",
+      "severity": "polish",
+      "title": "Demo thanks card is wider than a 390 px phone window",
+      "game": "both (demo mode only)",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "expected": "the card fits the window (CHK-003)",
+      "observed": "at 390x844 with ?demo=1 the card and its QR are cut at both edges (\"hanks for playing\", \"SCAN T\")",
+      "repro": "open /?demo=1 at 390x844, win a demo fight, press Enter on results",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobH/390-06-thanks.png"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-003 (the demo is a booth feature on a PC or pad; a phone is not the booth device)",
+      "where": "src/app/demo/demo.css, thanks card layout (suspected)",
+      "fix": "stack the QR under the text below 480 px width",
+      "acceptanceCheck": "390x844 capture shows the whole card",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "R62-03",
+      "severity": "polish",
+      "title": "Demo defeat panel hint strip overlaps TRY AGAIN and OTHER FIGHT on a phone",
+      "game": "both (demo mode only)",
+      "chapter": "seymour-flux",
+      "expected": "the hint strip sits clear of the two action slabs",
+      "observed": "at 390x844 the \"CLICK A SLAB CHOOSE / PICK / ESC PICKER\" strip is drawn across both slabs; the ordinary defeat panel (RETRY, CHAPTER SELECT) at 390 has no strip and is identical on live",
+      "repro": "open /?demo=1 at 390x844 touch, lose Ch I",
+      "evidence": [
+        "critic/reviews/3e520971e-focused/jobH/390-04-defeat.png",
+        "critic/reviews/3e520971e-focused/jobJ/cand-390-defeat.png",
+        "critic/reviews/3e520971e-focused/jobJ/live-390-defeat.png"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-003",
+      "where": "src/ui/common/resultsPhone.ts hint dock (suspected)",
+      "fix": "lift the dock or drop the strip when the panel has two actions at phone width",
+      "acceptanceCheck": "390x844 defeat capture: strip and slabs do not overlap",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Ch I and Ch IV in demo mode at 1600x900 (full flow), 2000x1012 and 390x844 touch (picker, intro, defeat, retry, win, thanks)",
+      "pad A, Start and Enter ending the opening, Ch I (faked pad)",
+      "reset hold (Home), settings restored to 0.8 and 0.7",
+      "OD gauges at 50 on every FFX party member (engine state at the first menu)",
+      "living cathedral on and off, Mega Flare flood and white-out frames",
+      "non-demo Ch I flow with real keys, win to results with the victory cue, no thanks card",
+      "continuity harness Ch I and Ch IV on the candidate, Ch IV on live",
+      "unit tests: 26 files, 372 tests (r62-*, demo-*, release-notes, results-music, deploy-release-gate) all passed"
+    ],
+    "reused": [],
+    "notTested": [
+      "pad A timing in Ch IV (the FFX-2 menu probe never matched)",
+      "the Auron first-use line in a browser (PR-0487)",
+      "Mega Flare camera shake size and the REDUCE FLASHES and REDUCE MOTION variants",
+      "demo seeds 10 and 12, the Bahamut warm steps log",
+      "PR-0504 demo-win results music (the non-demo case was checked)",
+      "the other 17 chapters and the continuity harness on them (the diff touches the DepthPlates plate cut and the bold look shader, which they share, and none of the pose or rig code)",
+      "voiced audio (agents cannot hear)",
+      "CHK-008 and CHK-009"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "deep review of the live build after deploy (shared systems changed)",
+  "elapsedMinutes": 200
+}

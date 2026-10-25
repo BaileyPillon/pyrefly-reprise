@@ -1,0 +1,39 @@
+{
+ "mode": "gpu",
+ "errs": [],
+ "nf": [],
+ "reqs": [
+  "200 sfx/sprite.mp3",
+  "200 music/title.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 sfx/parity-ffx2-core.mp3",
+  "200 sfx/parity-ffx2-bahamut.mp3",
+  "200 music/scene-bevelle-underground.mp3",
+  "200 music/boss-bahamut.mp3",
+  "200 music/pause.mp3",
+  "200 music/defeat-ffx2.mp3",
+  "200 music/boss-bahamut.mp3"
+ ],
+ "steps": [
+  {
+   "s": "picker cursor to FFX-2 Ch IV",
+   "ok": true,
+   "d": "ffx2-bahamut"
+  },
+  {
+   "s": "FFX-2 Ch IV demo: reach player turn",
+   "ok": true,
+   "d": "seen=battle"
+  },
+  {
+   "s": "FFX-2 Escape pause",
+   "ok": true
+  },
+  {
+   "s": "FFX-2 P resumes",
+   "ok": true,
+   "d": "screen=battle"
+  }
+ ]
+}
