@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-25 03:45 EDT, the r63 records pass (release 63 live)",
+  "asOf": "2026-10-25 19:50 EDT, the r64 records pass (release 64 live)",
   "note": "Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.",
   "branches": [
     {"name":"motion-rigs","tip":"eda138e06","case":"both (Tidus FFX, Rikku Dark Knight FFX-2)","what":"the party rig pilots: candidate configs tidus-x-t1, tidus-x-t2 and rikku-dark-knight-x-v1 on the approved colour-locked paintings (all gate OK); not merged; release 63 ships with the party rigs off (?partyrigs=on is the only way in; D-1322, item 200a), and no rig replaces a painting before he has seen it move (D-1086, D-1097)"},

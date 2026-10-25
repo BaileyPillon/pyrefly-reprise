@@ -8,34 +8,33 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `fa56fd4e3` (Release 63 (r63)) |
-| Bundle | `Bo7iMtyZ` |
-| Deployed | 2026-10-25T06:52:55.070Z (2026-10-25 02:52 EDT) |
-| Deploy log | `docs/deploys.log` line 80: cloudflare, 4830 art files, owner override |
-| Artifact (SHA-256) | `8d82fe2924bf528c2f4a04a79e2e4fb7a6e22944bf9a1f8958f14d665fd72869` |
-| The deploy's own byte check | PASS (1436 files compared with the build) |
-| Marker | `critic/pending/fa56fd4e3.json` (pending) |
+| Commit | `e9907cad8` (Release 64 (r64)) |
+| Bundle | `BygGxbJE` |
+| Deployed | 2026-10-25T13:16:33.389Z (2026-10-25 09:16 EDT) |
+| Deploy log | `docs/deploys.log` line 81: cloudflare, 4830 art files, owner override |
+| Artifact (SHA-256) | `d764fe0ed0580d31a9e272db3824d205e11aba276132517dca8b27371c9d9966` |
+| The deploy's own byte check | PASS (56 files compared with the build) |
+| Marker | `critic/pending/e9907cad8.json` (pending) |
 | Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
-| CHANGELOG entry | 2026-10-24 · Release 63 (r63), the conference build: the new battle look, motion and sound on by themselves in Chapters I and IV (both games), a rebuilt battle HUD, a directed camera and staged big moments (both games), cleaner boss edges (FFX Seymour Flux, FFX-2 Bahamut), repainted poses of Yuna and Kimahri (FFX) and Rikku and Paine (FFX-2), the fight prepared behind the title (both games), and the booth's end card, attract card and press page (demo mode) |
-| Focused review | critic/reviews/fa56fd4e3-focused.json: ship SHIP, changed area FAIL |
-| Live check | critic/reviews/fa56fd4e3-live.json: deployment PASS |
+| CHANGELOG entry | 2026-10-25 · Release 64 (r64), the Chapter IV declutter and the dim-plane edge fix: the first menu opens on less and the screen steps back in an action (both games; Chapter IV's second boss bar is FFX-2 only), and the spell dark wash covers the whole view with no hard edge (both games) |
+| Focused review | critic/reviews/e9907cad8-focused.json: ship SHIP, changed area PASS |
+| Live check | critic/reviews/e9907cad8-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor fa56fd4e3 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor e9907cad8 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `fa56fd4e3` | focused | acceptance of the changed area |
-| `fa56fd4e3` | deep (carries 73 earlier builds) | deep review of every affected chapter and system |
+| `e9907cad8` | deep (carries 74 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 73 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 74 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-None: `critic/reviews/fa56fd4e3-focused.json` lists no major or critical issue.
+None: `critic/reviews/e9907cad8-focused.json` lists no major or critical issue.
 
-## Branches in flight (as of 2026-10-25 03:45 EDT, the r63 records pass (release 63 live))
+## Branches in flight (as of 2026-10-25 19:50 EDT, the r64 records pass (release 64 live))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -57,9 +56,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-10-25T13:16:33.389Z | `e9907cad8` | `BygGxbJE` | 81 |
 | 2026-10-25T06:52:55.070Z | `fa56fd4e3` | `Bo7iMtyZ` | 80 |
 | 2026-10-22T12:53:14.528Z | `c8ecbcb31` | `C9xPmvqR` | 79 |
 | 2026-10-21T20:04:40.996Z | `660c19bbd` | `DwMQUoVh` | 78 |
 | 2026-10-20T21:06:50.929Z | `1cea6e937` | `DwCdr0nf` | 77 |
 | 2026-10-20T04:15:33.443Z | `6db09ac86` | `C-nLFLJH` | 76 |
-| 2026-10-19T22:56:45.559Z | `2a1777281` | `CEDFXO0J` | 75 |
