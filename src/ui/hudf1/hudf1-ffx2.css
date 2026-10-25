@@ -9,9 +9,16 @@
 .ffx2hud.hud-f1.f1-intel .mad__card[data-zone='tip'] { left: 196px !important; top: 14px !important; bottom: auto !important; }
 .ffx2hud.hud-f1.f1-intel .mad:has(.mad__card[data-zone='tip']) .mad__toggle { left: 196px !important; top: 31px !important; bottom: auto !important; }
 
-/* the boss gauge strip gives way to the ribbon (its numerals and parts return behind Intel) */
-.ffx2hud.hud-f1:not(.f1-intel) .ffx2hud__enemies { opacity: 0; pointer-events: none; }
-.ffx2hud.hud-f1.f1-intel .ffx2hud__enemies { top: 44px; }
+/* The boss gauge strip gives way to the ribbon: the ribbon is the ONLY boss bar (r64 declutter, Bailey's F1 target "Less on screen"; the live Chapter IV drew the strip's own name and bar under the ribbon's, two boss bars).
+   Behind Intel (X / G) the strip comes back as a DETAILS row under the ribbon, with what only it carries and a player needs: the HP numerals (or the SCAN hint until Scan has read them), the charge pip and the boss's
+   status tab. Its name and its bar are the ribbon's and stay hidden. It is not hidden with display: the guide rail is anchored under it (`StrategyGuide` `below`), which reads its box. */
+.ffx2hud.hud-f1 .ffx2hud__enemies { left: 28px; top: 12.5px; min-width: 160px; padding-top: 28.5px; opacity: 0; pointer-events: none; } /* its box still covers the ribbon (top 12.5, 160 wide): the enemy-move slab and the damage figures keep clear of the strip's box (`avoid`), and now of the ribbon with it */
+.ffx2hud.hud-f1.f1-intel .ffx2hud__enemies { opacity: 1; }
+.ffx2hud.hud-f1 .ffx2hud__enemies .ffx2boss__head .ig-bosshp__name,
+.ffx2hud.hud-f1 .ffx2hud__enemies .ffx2boss__head .ig-bosshp__track { display: none; }
+.ffx2hud.hud-f1 .ffx2hud__enemies .ffx2boss__head { gap: 3.5px; padding: 3px 9px 3px 7px; }
+.ffx2hud.hud-f1 .ffx2hud__enemies .ffx2boss__head::before { content: 'HP'; font: 700 var(--f1-floor)/1 var(--ig-font-display); letter-spacing: 0.14em; color: rgba(244, 241, 232, 0.66); }
+.ffx2hud.hud-f1 .ffx2boss__hint { letter-spacing: 0.2em; color: rgba(244, 241, 232, 0.8); } /* its size is the HUD floor's own (`hud-floor.css`) */
 
 /* ------------------------------------------------------------------ the hero, the cue and the verbs (right) */
 /* The whole right-hand block stands 8 grid px higher than the mockup draws it (hero 104.5, cue 137, verbs 154): a four-verb menu (Rikku, Paine) now shows its fourth verb whole, clear of the party cards, instead of cut in half (review m2) */
