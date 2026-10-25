@@ -18,7 +18,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 1021, from 2026-09-15 to 2026-10-25 (ids A-0001 to A-1021), 768 of them linked to at least one decision (1172 distinct decision ids).
+- **Rows:** 1022, from 2026-09-15 to 2026-10-25 (ids A-0001 to A-1022), 769 of them linked to at least one decision (1172 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
@@ -26,7 +26,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | art | 104 |
 | deploy | 91 |
 | review | 201 |
-| records | 54 |
+| records | 55 |
 | infrastructure | 33 |
 | account | 25 |
 | download | 15 |
@@ -36,21 +36,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 724 |
+| October 2026 | 725 |
 
-- **By game:** 740 both, 106 n/a, 97 FFX, 78 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 741 both, 106 n/a, 97 FFX, 78 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 91 deploy rows: 80 lines of docs/deploys.log (65 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to 09:16 EDT on 2026-10-25 (2026-10-25).
 - **Reviews:** 201 rows: 57 focused reviews (54 SHIP, 2 HOLD, 1 no verdict), 61 live checks (58 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 22 deep rounds with a report (12 SHIP, 6 HOLD, 4 no verdict) and 61 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 72 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-25](#2026-10-25) (20) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-25
 
+- **A-1022** · `records` · both · **Recorded r64 on main: the merge of r64-rc (e9907cad8), the deploy and review records, D-1345 and D-1344 delivered, A-1011 to A-1022, docs/LIVE.md and NOW.md (records only)**
+  - What: The thirteenth records pass (a sub-agent for the release driver, launched with the evening workflow of A-1021), in the worktree D:/pyrefly-pilgrim-proto on branch records-r64 from origin/main (cbe6369ca). It merged origin/r64-rc (e9907cad8) with no conflict (233c607ed); copied the deploy records of release 64 from D:/pyrefly-release55, read only, into one commit (b41d6fabf): the docs/deploys.log line 81, the ledger entry, the artifact manifest, the marker (pending holds only e9907cad8; cleared gains fa56fd4e3 with its focused obligation superseded and its deep review carried to e9907cad8) and the focused and live reports as reports; the focused evidence folder (123 MB) and the live one (48 KB) stay in the release tree; gave r64's CHANGELOG entry its live address and r63's the day r64 replaced it (87 entries); found no decisions-queue item after 203, so recorded his 19:30 words as D-1345 and marked D-1344 delivered; wrote A-1011 to A-1021 from DRIVER-STATE.md, the lanes' progress notes, the skeptic's REVIEW.md and the reports, and brought the results of A-1003 and A-1009 up to date; regenerated DECISIONS.md, ACTIONS.md and docs/LIVE.md; dated docs/target/in-flight.json; rewrote the NOW.md banners and Log. Two slips in the record, found and left as written, named in NOW.md: the live report's date and the marker's settledAt read 15:05Z where the check was settled at about 13:55Z (A-1018), and the CHANGELOG's 'under 5' for the dim fix is the lane's reading of the old edge columns while the whole windows read 14.3 and 6.2 (A-1011, A-1014). Not in this pass: the round-29 report (the review is still running, A-1020), the live evidence folder on main, targets.json tiles, the correction of docs/BOOTH-SCRIPT.md, the Playwright specs, a refresh of the promises tracker, and the full unit suite.
+  - Who: records sub-agent for the release driver · Decisions: D-1344, D-1345
+  - Result: done: records-r64 pushed and origin/main fast-forwarded from cbe6369ca (it had not moved at 19:54 EDT); tsc, the three ledger checks and 18 test files (359 tests) pass; the full unit suite was not run in this pass
+  - Evidence: `the records-r64 commits on origin/records-r64` · `docs/handoff/NOW.md (the 2026-10-25 19:50 banners and Log entry)` · `docs/LIVE.md` · `DECISIONS.md and ACTIONS.md`
+  - Reversible: yes, documentation, ledgers and records only; revert the records commits
 - **A-1021** · `process` · both · **His 'Keep going please and don't stop' (about 19:30 EDT) and the sunday-evening-records-and-backlog workflow launched (19:35 EDT): this records pass and the post-conference backlog, on the CPU only**
   - What: He typed 'Keep going please and don't stop' at about 19:30 EDT (D-1345). At 19:35 EDT the driver launched wf\_65ade3c0-fb2, CPU only (no browser, GPU, dev server or build, because the PC is kept quiet for the booth and the deep review owns the browser until about 23:00 EDT; nothing deploys; no questions to him): the records pass for release 64 (the deploy and live records, the rows, docs/LIVE.md and NOW.md in D:/pyrefly-pilgrim-proto on branch records-r64) and a post-conference backlog that ranks every open finding of releases 62 to 64, motion first.
   - Who: release driver session · Decisions: D-1345, D-1333
