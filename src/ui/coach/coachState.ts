@@ -31,6 +31,7 @@ import { activeSave, readSetting } from '../../app/SaveData.ts';
 import { experimentRunActive } from '../../app/experiments/experimentRun.ts';
 import { waitSplitInForce } from '../../app/waitSplitSwitch.ts';
 import { demoModeOn } from '../../app/demoMode.ts';
+import { hudF1On } from '../hudf1/HudF1Switch.ts';
 import { ALL_COACH_IDS, type CoachMarkId, type Ffx2CoachClock } from './coachCopy.ts';
 import { FIRST_RUN_IDS } from './firstRunCopy.ts';
 
@@ -212,7 +213,19 @@ export function markSeen(id: CoachMarkId | string): void {
  */
 export function shouldShow(id: CoachMarkId | string): boolean {
   if (demoModeOn()) return false;
+  if (f1QuietsBattleCard(id)) return false;
   return coachingAllowed() && !hasSeen(id);
+}
+
+/**
+ * r64 (declutter, Bailey 2026-10-23 decisions 191 to 193 "Less on screen", 2026-10-24 "you make the calls"; both games): while the F1 HUD is the one drawing (`hudF1On()`: Chapter I or Chapter IV with the pack on, at TEXT SIZE 100)
+ * the in-battle teaching cards are not drawn: the first-use lines (Auron's, Rikku's, the Overdrive, Aeon and chain lines) and the guided first run's battle step. The F1 menu already says its one thing (the cue, the prompt bar), and
+ * a sixth group (Rikku's "GAUGES RUNNING" card was seen on the first menu of the public Chapter IV; Auron's holds the first menu until a press in Chapter I) is what the approved "five groups at the first menu" does not have.
+ * Not marked seen, so nothing is written to the save and the same lines teach in every other chapter, and in these two with `?pack=off`. The briefing, the guided first run's board and prep steps and the Sphere Grid
+ * explainer are outside a battle and are never touched (`hudF1On()` needs a running demo chapter).
+ */
+function f1QuietsBattleCard(id: string): boolean {
+  return id !== 'briefing' && (id === 'firstrun-battle' || (ALL_COACH_IDS as readonly string[]).includes(id)) && hudF1On();
 }
 
 /** Mark every surface seen — what `__pyrefly.markCoachSeen()` does with no id — the guided first run's steps included. */

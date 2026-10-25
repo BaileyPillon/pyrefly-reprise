@@ -50,6 +50,12 @@ const vertex = /* glsl */ `
     vec2 px = iA.xy + vec2(off.x * c - off.y * s, off.x * s + off.y * c);
     gl_Position = vec4(px.x / uView.x * 2.0 - 1.0, 1.0 - px.y / uView.y * 2.0, 0.0, 1.0);
     vUv = uv;
+    // A cover quad (FxCover.ts: a tile quad with iP.x = 1) is drawn over the whole view and looks the tile up where the quad's own rectangle would; the fragment clamps the lookup.
+    if (iB.z < 0.5 && iP.x > 0.5) {
+      vec2 q = vec2(position.x + 0.5, 0.5 - position.y) * uView;
+      gl_Position = vec4(position.x * 2.0, position.y * 2.0, 0.0, 1.0);
+      vUv = vec2((q.x - (iA.x - iA.z * 0.5)) / iA.z, 1.0 - (q.y - (iA.y - iA.w * 0.5)) / iA.w);
+    }
     vB = iB;
     vC = iC;
     vP = iP;
@@ -122,7 +128,7 @@ const fragment = /* glsl */ `
     vec2 st = vec2(0.0);
     bool paint = vQ.x > 0.0;
     if (shape < 0.5) {
-      vec2 uv = vUv;
+      vec2 uv = clamp(vUv, 0.0, 1.0); // a cover quad's lookup runs past the tile; the rim texel is held
       if (paint) {
         st = (vUv - 0.5) * vSize;
         if (vSize.y > vSize.x * 1.3) st = st.yx; // a tall quad's bristles run up it

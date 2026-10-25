@@ -69,11 +69,21 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 63 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 64 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '64',
+    date: '2026-10-25',
+    lines: [
+      { tag: 'Both', text: 'The first battle menu opens on less: the strategy guide and the enemy-move read-out wait behind Intel (G, or X on a pad), and the first-time teaching cards no longer cover the fight.' },
+      { tag: 'Both', text: 'While someone acts, what Intel opened slides away, so only the boss bar, the party and the damage number stay on screen.' },
+      { tag: 'FFX-2', text: 'In Chapter IV the second boss bar is gone: one bar over Bahamut, with its numbers and Scan hint behind Intel.' },
+      { tag: 'Both', text: 'The dark wash behind a spell now covers the whole screen, so Curse, Mega Flare’s charge and Chapter I’s bigger spells no longer leave a hard dark edge across the picture.' },
+    ],
+  },
   {
     release: '63',
     date: '2026-10-24',
