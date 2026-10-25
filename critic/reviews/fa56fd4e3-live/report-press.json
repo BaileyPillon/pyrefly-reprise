@@ -1,0 +1,37 @@
+{
+  "mode": "gpu",
+  "part": "press",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [],
+  "steps": [
+    {
+      "step": "/press/ loads 200 with images decoded",
+      "ok": true,
+      "detail": "{\"title\":\"Echoes of Spira, Press Kit\",\"imgs\":[true,true,true,true,true,true,true,true,true,true,true],\"h1\":\"Echoesof Spira\"}"
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "press": {
+      "title": "Echoes of Spira, Press Kit",
+      "imgs": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "h1": "Echoesof Spira"
+    }
+  },
+  "elapsedMin": "0.1"
+}

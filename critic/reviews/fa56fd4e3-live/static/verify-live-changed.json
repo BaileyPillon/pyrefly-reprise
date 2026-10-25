@@ -1,0 +1,21 @@
+{
+ "result": "PASS",
+ "artifactHash": "8d82fe2924bf528c2f4a04a79e2e4fb7a6e22944bf9a1f8958f14d665fd72869",
+ "liveManifest": "match",
+ "checked": 1436,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": [
+  "_headers is part of this artifact and was not downloaded (no address serves a host-read file); assets/DemoGate-BcNPu42G.js was served with Cache-Control \"public, max-age=31536000, immutable\""
+ ],
+ "browserPages": {
+  "index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)",
+  "press/index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)"
+ },
+ "assetCacheControl": {
+  "path": "assets/DemoGate-BcNPu42G.js",
+  "value": "public, max-age=31536000, immutable"
+ }
+}

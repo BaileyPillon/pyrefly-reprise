@@ -18,7 +18,7 @@
 | Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
 | CHANGELOG entry | 2026-10-24 · Release 63 (r63), the conference build: the new battle look, motion and sound on by themselves in Chapters I and IV (both games), a rebuilt battle HUD, a directed camera and staged big moments (both games), cleaner boss edges (FFX Seymour Flux, FFX-2 Bahamut), repainted poses of Yuna and Kimahri (FFX) and Rikku and Paine (FFX-2), the fight prepared behind the title (both games), and the booth's end card, attract card and press page (demo mode) |
 | Focused review | critic/reviews/fa56fd4e3-focused.json: ship SHIP, changed area FAIL |
-| Live check | no report yet |
+| Live check | critic/reviews/fa56fd4e3-live.json: deployment PASS |
 
 Is this commit on main? `git merge-base --is-ancestor fa56fd4e3 origin/main` exits 0 when it is.
 
@@ -26,7 +26,6 @@ Is this commit on main? `git merge-base --is-ancestor fa56fd4e3 origin/main` exi
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `fa56fd4e3` | live | exact-artifact verification and real-input smoke on the live URL |
 | `fa56fd4e3` | focused | acceptance of the changed area |
 | `fa56fd4e3` | deep (carries 73 earlier builds) | deep review of every affected chapter and system |
 

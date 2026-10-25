@@ -1,0 +1,115 @@
+{
+  "mode": "gpu",
+  "part": "ch4",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-bahamut.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3",
+    "https://echoesofspira.com/audio/music/boss-bahamut.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-bahamut.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 1600x900"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached ffx2-bahamut",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "ffx2-bahamut: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "ffx2-bahamut: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "ffx2-bahamut: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV pack ON by default: F1 HUD present, no PAUSE button",
+      "ok": true,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":false,\"pauseEls\":[\"BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false\"],\"look\":\"cinematic\",\"rigs\":3,\"bodyTextHasGuide\":false}"
+    },
+    {
+      "step": "Ch IV on battle screen with menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV Enter opens a sub-list (menu moved on)",
+      "ok": true,
+      "detail": "{\"s0\":\"Attack\",\"s1\":\"Skill◂\",\"afterEnter\":\"Power Break4\"}"
+    },
+    {
+      "step": "Ch IV cancel (Escape) from the sub-list returns to the command menu on the battle screen",
+      "ok": true,
+      "detail": "{\"sc\":\"battle\",\"aw\":true,\"sel\":\"Skill◂\"}"
+    },
+    {
+      "step": "Ch IV action confirmed with real keys (action-start in the battle log), battle running",
+      "ok": false,
+      "detail": "{\"tg\":\"{\\\"sel\\\":[]}\",\"lg\":[\"chain\",\"damage\",\"action-end\",\"atb\",\"status-add\",\"action-end\",\"atb\",\"chain\"]}"
+    },
+    {
+      "step": "Ch IV P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV Escape resumes",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "ch4hud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": false,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false"
+      ],
+      "look": "cinematic",
+      "rigs": 3,
+      "bodyTextHasGuide": false
+    },
+    "ch4nav": {
+      "s0": "Attack",
+      "s1": "Skill◂",
+      "afterEnter": "Power Break4"
+    },
+    "ch4cancel": {
+      "sc": "battle",
+      "aw": true,
+      "sel": "Skill◂"
+    },
+    "ch4target": "{\"sel\":[]}",
+    "ch4log": "[\"action-end\",\"atb\",\"status-add\",\"action-end\",\"atb\",\"chain\"]"
+  },
+  "elapsedMin": "0.9"
+}
