@@ -10,6 +10,7 @@
  */
 
 import { paintSeed, rgb } from './fxMath.ts';
+import { COVER } from './FxCover.ts';
 import { paintLevel, seedOf } from './FxPaint.ts';
 import { capActor, filterWash, type FlashParams } from './SpellFxParams.ts';
 import type { FxGame } from './SpellFxRegistry.ts';
@@ -162,6 +163,15 @@ export class FxDrawList {
   quad(tile: FxTile, col: string, x: number, y: number, w: number, h: number, a: number, rot = 0): void {
     if (a <= 0.003 || w <= 0.5 || h <= 0.5) return;
     this.push(0, tile, col, x, y, w, h, rot, a, [0, 0, 0, 0]);
+  }
+
+  /**
+   * The dusk round a target: the `dim` tile (clear in the middle, 95 % dark from its radius out) as a square of `w` by `h` centred on (x, y), drawn as a COVER quad (`FxCover.ts`): the look inside the
+   * square is the tile's own, and outside it the rim is held to the edges of the view, so a target off to one side never leaves the square's dark rim standing in the frame as a hard edge.
+   */
+  dim(col: string, x: number, y: number, w: number, h: number, a: number): void {
+    if (a <= 0.003 || w <= 0.5 || h <= 0.5) return;
+    this.push(0, 'dim', col, x, y, w, h, 0, a, [COVER, 0, 0, 0], 'dim');
   }
 
   /** Ground decal: a flattened radial glow. */

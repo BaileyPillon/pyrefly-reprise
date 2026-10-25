@@ -36,7 +36,7 @@ export function atrophy(o: FxDrawList, t: number, T: FxTarget): void {
   const hit: Pt = [T.cx, T.cy];
   const far: Pt = [T.cx - dir * 620 * k, T.cy - 200 * k];
   // The dusk of a life being drawn out: a dim vignette that leaves the target clear.
-  o.quad('dim', '#070B05', T.cx, T.cy, 1700 * k, 1700 * k, 0.55 * Math.min(1, o.dens) * env(t, 0.05, 1.5, 0.25, 0.7));
+  o.dim('#070B05', T.cx, T.cy, 1700 * k, 1700 * k, 0.55 * Math.min(1, o.dens) * env(t, 0.05, 1.5, 0.25, 0.7));
   o.add = true;
   o.decal(T.fx, T.fy, 130 * sc, ZOMBIE, 0.2 * env(t, 0.28, 1.6, 0.15, 0.9));
   // The lance: a head racing in on an in-quad (it speeds up), a long body behind it, a short brush trail.
@@ -139,7 +139,7 @@ export const ANNIHILATE_STAGGER = 0.03;
 export function annihilate(o: FxDrawList, t: number, T: FxTarget): void {
   const sc = Math.min(T.sc, SC_MAX);
   const k = T.k;
-  o.quad('dim', '#05030C', T.cx, T.cy, 1700 * k, 1700 * k, 0.6 * Math.min(1, o.dens) * env(t, 0.03, 1.9, 0.25, 0.8));
+  o.dim('#05030C', T.cx, T.cy, 1700 * k, 1700 * k, 0.6 * Math.min(1, o.dens) * env(t, 0.03, 1.9, 0.25, 0.8));
   o.add = true;
   // The gathering: a dark core over the head with violet light pulled into it.
   const gather = env(t, 0, 0.3, 0.12, 0.08);

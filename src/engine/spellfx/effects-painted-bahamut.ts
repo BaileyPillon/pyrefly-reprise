@@ -70,7 +70,7 @@ export const CURSE_END = 2.0;
 export function curse(o: FxDrawList, t: number, T: FxTarget): void {
   const sc = Math.min(T.sc, SC_MAX);
   const k = T.k;
-  o.quad('dim', '#0A0414', T.cx, T.cy, 1700 * k, 1700 * k, 0.7 * Math.min(1, o.dens) * env(t, 0.12, 1.7, 0.35, 0.5));
+  o.dim('#0A0414', T.cx, T.cy, 1700 * k, 1700 * k, 0.7 * Math.min(1, o.dens) * env(t, 0.12, 1.7, 0.35, 0.5));
   o.add = true;
   const fog = env(t, 0.06, 1.8, 0.25, 0.6);
   o.decal(T.fx, T.fy, 200 * sc, DEEP, 0.5 * fog, 0.3);
@@ -180,7 +180,7 @@ export function gather(o: FxDrawList, t: number, T: FxTarget): void {
   const c = chestOf(T);
   const rim = o.game === 'ffx2' ? DEEP : '#C9A24A';
   const core = o.game === 'ffx2' ? COLD : '#FFF0C0';
-  if (L >= 3) o.quad('dim', '#07030F', c[0], c[1], 1700 * k, 1700 * k, 0.14 * L * Math.min(1, o.dens) * env(t, 0.02, 0.9, 0.2, 0.3));
+  if (L >= 3) o.dim('#07030F', c[0], c[1], 1700 * k, 1700 * k, 0.14 * L * Math.min(1, o.dens) * env(t, 0.02, 0.9, 0.2, 0.3));
   o.add = true;
   const live = env(t, 0, 0.95, 0.12, 0.25);
   const beat = 1 + 0.13 * Math.sin(t * (13 + 4 * L));
@@ -242,7 +242,7 @@ export function darkness(o: FxDrawList, t: number, T: FxTarget): void {
     const fy = f.y + f.h * 0.97;
     const cy = f.y + f.h * 0.45;
     // The dark: a heavy vignette round the foe for about half a second, the fog band and the red-orange line along the ground.
-    o.quad('dim', '#10061C', fx, cy, 1700 * k, 1700 * k, 0.8 * Math.min(1, o.dens) * env(t, 0.42, 0.98, 0.08, 0.3));
+    o.dim('#10061C', fx, cy, 1700 * k, 1700 * k, 0.8 * Math.min(1, o.dens) * env(t, 0.42, 0.98, 0.08, 0.3));
     o.add = true;
     o.decal(fx, fy, 220 * fsc, DEEP, 0.5 * env(t, 0.36, 1.7, 0.2, 0.35), 0.3);
     o.decal(fx, fy + 5 * fsc, 160 * fsc, PINK, 0.25 * env(t, 0.4, 1.6, 0.2, 0.35), 0.3);

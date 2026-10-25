@@ -34,7 +34,7 @@ export const FULLLIFE_END = 1.9;
 export function fulllife(o: FxDrawList, t: number, T: FxTarget): void {
   const sc = Math.min(T.sc, SC_MAX);
   const k = T.k;
-  o.quad('dim', '#08040F', T.cx, T.cy, 1700 * k, 1700 * k, 0.5 * Math.min(1, o.dens) * env(t, 0.02, 1.7, 0.35, 0.7));
+  o.dim('#08040F', T.cx, T.cy, 1700 * k, 1700 * k, 0.5 * Math.min(1, o.dens) * env(t, 0.02, 1.7, 0.35, 0.7));
   o.add = true;
   o.decal(T.fx, T.fy, 130 * sc, GOLD, 0.2 * env(t, 0.1, FULLLIFE_MARK + 0.1, 0.2, 0.2));
   // The column falls: its lower edge runs down the frame to the feet by the mark.
@@ -140,7 +140,7 @@ export const SLOWGA_END = 1.8;
 export function slowga(o: FxDrawList, t: number, T: FxTarget): void {
   const sc = Math.min(T.sc, SC_MAX);
   const k = T.k;
-  o.quad('dim', '#070A14', T.cx, T.cy, 1700 * k, 1700 * k, 0.45 * Math.min(1, o.dens) * env(t, 0.03, 1.6, 0.4, 0.7));
+  o.dim('#070A14', T.cx, T.cy, 1700 * k, 1700 * k, 0.45 * Math.min(1, o.dens) * env(t, 0.03, 1.6, 0.4, 0.7));
   const life = env(t, 0.06, 1.55, 0.2, 0.7);
   o.add = true;
   o.decal(T.fx, T.fy, 140 * sc, SLATE_DEEP, 0.3 * life);
@@ -216,7 +216,7 @@ export function drain(o: FxDrawList, t: number, T: FxTarget): void {
   shockRing(o, P.x, P.y, t, DRAIN_MARK, 0.6, 20 * sc, 190 * sc, 6 * k, WHITE, 0.9, 0.9);
   shockRing(o, P.x, P.y, t, DRAIN_MARK + 0.05, 0.7, 14 * sc, 130 * sc, 4 * k, LILAC, 0.8, 0.9);
   o.add = false;
-  o.quad('dim', '#06030C', src[0], src[1], T.w * 3, T.h * 3, 0.3 * Math.min(1, o.dens) * env(t, 0.2, 1.7, 0.35, 0.5));
+  o.dim('#06030C', src[0], src[1], T.w * 3, T.h * 3, 0.3 * Math.min(1, o.dens) * env(t, 0.2, 1.7, 0.35, 0.5));
   parts(o.n(10), 382, DRAIN_MARK, DRAIN_MARK + 0.05, t, (p, age) => {
     o.add = true;
     spark(o, { ox: P.x, oy: P.y, ang: p.a * Math.PI * 2, dist: (60 + 130 * p.b) * sc, life: 0.45, age, thick: 3.6 * k, col: p.i % 2 ? WHITE : LILAC });

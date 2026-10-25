@@ -53,7 +53,7 @@ export function cureColumn(o: FxDrawList, t: number, T: FxTarget): void {
   const intensity = env(t, 0.12, 1.65, 0.16, 0.95) * (t < 0.95 ? 1 : 0.6);
 
   // The dusk: a vignette that leaves the target's neighbourhood clear. Slow, no flicker.
-  if (!item) o.quad('dim', '#07101C', T.cx, T.cy, 2600 * k, 2600 * k, 0.3 * Math.min(1, o.dens) * env(t, 0.02, 1.75, 0.4, 0.55));
+  if (!item) o.dim('#07101C', T.cx, T.cy, 2600 * k, 2600 * k, 0.3 * Math.min(1, o.dens) * env(t, 0.02, 1.75, 0.4, 0.55));
 
   o.add = true;
   o.decal(T.fx, T.fy, 120 * sc, body, 0.26 * env(t, 0.1, 1.7, 0.2, 0.7));
