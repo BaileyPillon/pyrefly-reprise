@@ -1,0 +1,101 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-10-25T15:05:00Z",
+ "build": {
+  "mainSha": "e9907cad8",
+  "bundle": "BygGxbJE",
+  "artifactHash": "d764fe0ed0580d31a9e272db3824d205e11aba276132517dca8b27371c9d9966"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/e9907cad8.json --url https://echoesofspira.com/ --full (the marker plans a deep review): result PASS, liveManifest match, checked 7168 files, mismatched [], missing [], wrongType [], errors []; index.html and press/index.html identical once Cloudflare's analytics beacon is removed (_headers is host-read, not served). A second run with --changed-from critic/artifacts/fa56fd4e3.json (release 63) also PASS, 56 files. Artifact hash d764fe0ed0580d31a9e272db3824d205e11aba276132517dca8b27371c9d9966 equals the deploy marker and the live manifest.",
+   "reason": ""
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, fresh context per run, 1600x900, cache-busted URL, real key presses; bundle index-BygGxbJE.js loaded. Chapter I (seymour-flux, board cursor asserted): title -> chapter-select -> party-prep -> battle -> player turn. At the first menu (after the opening dialogue, 9 s in): 1 boss bar (the F1 ribbon), 0 .f1-intel panels, guide folded (G GUIDE hint only), the coach layer present but empty (no card). Attack opened the target cursor on seymour-flux, Escape cancelled back to the command menu, Enter Enter confirmed an action; P opened pause, H hid and restored the panels, MASTER VOLUME lowered with real ArrowLeft, Escape resumed, P-P resumed. Chapter IV (ffx2-bahamut): same route; first menu: 1 boss bar (ribbon only; FFX-2's enemy strip not visible), 0 Intel panels, guide folded, no guide text; Skill sub-list opened with Enter and Escape returned to the command menu (cancel path); a Skill action was confirmed with real keys and resolved (frame shows the 109 damage figure; log chain, damage, action-end), and in the action frame the HUD stepped back to the one ribbon plus three slim party cards with no Intel; P pause and Escape resume. Prerendered music was fetched, not the procedural fallback: title.mp3, chapter-select.mp3, scene-gagazet.mp3, boss-seymour.mp3, parity-ffx-core/flux.mp3, pause.mp3 (Chapter I) and scene-bevelle-underground.mp3, boss-bahamut.mp3, parity-ffx2-bahamut.mp3 (Chapter IV). 0 console errors, 0 404s, 0 responses >= 400 across the runs. Frames: D:/Tools/pyrefly-scratch/2026-10-25/live64/ (owner-1-ch4-first-menu.jpg, owner-2-ch4-action.jpg, owner-3-ch1-first-menu.jpg; also 2-ch1-attack-a/b, 3d-ch4-list).",
+   "reason": ""
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Lightweight reload smoke on the live Chapter I context: MASTER VOLUME lowered 80 -> 60 in the pause options with real keys, page.reload(), the save (localStorage pyrefly-reprise:save:v1) read back with masterVolume 0.6, equal to before the reload, game rebooted (__pyreflyReady). The progress half (a chapter result) was not made: no fight was played to its end.",
+   "reason": "Full upgrade matrix not tested in this pass; only the lightweight live reload check, per RUBRIC section 5."
+  }
+ ],
+ "staticChecks": {
+  "pose-census": {
+   "status": "RAN (data, not a verdict)",
+   "command": "node tools/pose-gate.mjs --report --out critic/reviews/e9907cad8-live/static/pose-census.json",
+   "file": "critic/reviews/e9907cad8-live/static/pose-census.json",
+   "totals": {
+    "subjects": 146,
+    "paintings": 1106,
+    "pass": 829,
+    "waived": 79,
+    "rigged": 0,
+    "fail": 0,
+    "exempt": 198,
+    "byClass": {
+     "idle": 146,
+     "standing": 565,
+     "ko": 90,
+     "low": 71,
+     "wide": 4,
+     "staged": 176,
+     "part": 54
+    },
+    "byGame": {
+     "FFX-2": 777,
+     "FFX": 307,
+     "FF7": 22
+    },
+    "byRowStatus": {
+     "ok": 745,
+     "held": 84,
+     "waived": 79,
+     "none": 198
+    }
+   }
+  }
+ },
+ "coverage": {
+  "tested": [
+   "artifact identity, whole artifact: 7168 files byte-compared (--full), plus the diff from release 63 (56 files)",
+   "Chapter I (FFX) and Chapter IV (FFX-2) from the title to a player turn and one resolved action with real keys at 1600x900, fresh profile, public address",
+   "boss-bar count (1) and Intel panel count (0) at the first menu in both chapters; action frame in Chapter IV",
+   "target-cursor cancel (Ch I) and sub-list cancel (Ch IV)",
+   "pause P / Escape / P-P, H hide and restore (Ch I); P and Escape (Ch IV)",
+   "prerendered music fetched in both chapters",
+   "settings reload persistence (masterVolume)",
+   "console / 404 / >=400 sweep"
+  ],
+  "reused": [],
+  "notTested": [
+   "full CHK-024 upgrade matrix",
+   "the chapter-progress half of the reload smoke (no fight played to its end)",
+   "Chapter I action-frame screen-step-back (only the Chapter IV action frame was inspected for it)",
+   "the dim-plane cover fix on its effects (Bahamut Curse, Mega Flare charge, Lance of Atrophy, Full-Life): the effects were not triggered in this smoke; only a static glimpse of the Curse plate in the Chapter IV first-menu frame",
+   "phone/tablet widths, ?pack=off, the other chapters and the hidden doors",
+   "win/loss/retry flows",
+   "audio quality by ear and audio playing as sound (only fetched files observed)",
+   "the deep review this build still owes (separate obligation)"
+  ]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 50,
+ "notes": "Smoke driver .r64-live-smoke-tmp.mjs (untracked scratch, adapted from the r63 one). One detector FAIL in my own run was a false positive: the coach probe counted class*=coach and matched the empty DIV.coach-layer container (no text, no card), so zero coach cards holds. A second Chapter IV detector FAIL (action-start not in the last 8 log events) was a window defect: the action had already resolved (damage 109 in the frame, log chain/damage/action-end). The first Chapter I frame at 2.5 s showed the opening dialogue box over the boss ribbon (the changelog discloses it as carried from 63); a frame at 9 s is clean. Browser mode: PYREFLY_BROWSER=gpu headless Playwright; no black canvas, no fallback used."
+}
