@@ -23,6 +23,21 @@ import path from 'node:path';
 export const POSE_MEASURE_REL = ['docs', 'target', 'pose-measure.json'];
 
 /**
+ * The sha256 a table is known by: its bytes with every CRLF read as LF (R63-T1, the release 63 focused review). A worktree checked out with `core.autocrlf=true` holds the table with CRLF line
+ * endings (sha e648ba9ec14f at release 63) while the commit has it with LF (9f168c0f1dc4): the same registrations, and the harness called it "not the candidate's table", made CHK-026 UNVERIFIED
+ * and read the aggregate as 0 s of battle, so a run needed `--pose-measure=<LF copy>`. Both sides (the file loaded, `loadPoseMeasure`, and the commit's, `candidateTableAt`) are hashed here, so a
+ * line ending can never make two copies of one table differ; any other byte that differs still does.
+ * @param {Buffer|Uint8Array|string} bytes
+ */
+export function tableSha256(bytes) {
+  const buf = Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes);
+  const out = Buffer.alloc(buf.length);
+  let n = 0;
+  for (let i = 0; i < buf.length; i++) if (!(buf[i] === 0x0d && buf[i + 1] === 0x0a)) out[n++] = buf[i];
+  return createHash('sha256').update(out.subarray(0, n)).digest('hex');
+}
+
+/**
  * Which table file a run reads, and why.
  * @param {{ args: Record<string, unknown>, root: string, exists?: (file: string) => boolean }} input `root` is the tree the harness was started from.
  * @returns {{ path: string | null, source: 'explicit' | 'candidate-root' | 'harness-tree' | 'none', root: string | null }}
@@ -62,7 +77,7 @@ export function candidateTableAt(root, sha, run = execFileSync) {
     const raw = run('git', ['-C', root, 'show', `${sha}:${POSE_MEASURE_REL.join('/')}`], { maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] });
     const buf = Buffer.isBuffer(raw) ? raw : Buffer.from(String(raw));
     const json = JSON.parse(buf.toString('utf8'));
-    return { sha256: createHash('sha256').update(buf).digest('hex'), count: Object.keys(json.subjects ?? {}).length };
+    return { sha256: tableSha256(buf), count: Object.keys(json.subjects ?? {}).length };
   } catch {
     return null;
   }

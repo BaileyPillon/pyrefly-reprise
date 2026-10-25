@@ -16,11 +16,22 @@
 // a streak does not hide a 300 px teleport. Every OTHER fast swap, with no log entry, a log entry for another pair, or one outside its window, is judged exactly as before; so is every size,
 // feet and double-image reading (CHK-026 is not touched: a smear covers a cut, it does not make a head the wrong size).
 //
+// R63-M1 (the release 63 focused review, traced 2026-10-24) found the two limits of this excuse too tight for what the engine really plans, and fixed both, each behind its own policy word:
+//   - ELASTIC (`elastic`): the flip a swap records is the first frame in which the new painting dominates. When the frames before it were long (a painting drawn for the first time uploads to the
+//     GPU in the frame the cut begins, and its first reads follow in the next: 88 and 89 ms back to back measured in Chapter I), the flip lands as late as the stalls, so it fell outside the entry's
+//     window by that much and the planned cut read as a SNAP (4 of the review's 0.62 snaps per minute). The window now also allows `swap.stallMs`: the time the long frames (over `motion.longFrameMs`)
+//     among the swap's last `motion.windowFrames` frames took beyond one frame each (analyze sets it). Only a window that was missed by that much is widened: the pair, the figure and the entry's
+//     own start still have to match.
+//   - THE SIZE OF THE STEP (`maxJerkShare`): a step AT a planned smear is excused up to the larger of `maxJerkPx` (at 1600 wide) and `maxJerkShare` of the figure's DRAWN height at the swap
+//     (`swap.figurePx`, at 1600 wide), because the pro camera's push-in magnifies a cut: the same Tidus hit cut read 133 px with the camera off and 237 px in the push-in, 0.41 of his drawn
+//     height either way. The engine's own plan is a head step of 0.04 to 0.44 of the figure's height (`anchorDistance` in the log; the largest is Auron's return to his stance after the killing
+//     blow); a step over half the drawn height is not a planned cut and stays a jerk, and a mid-move step of `jerks.teleportPx` (300 px) or more is a teleport whatever this says.
+//
 // `continuity.smear.excuse` in the policy switches it (false, or no block, gives the earlier reading back: every fast swap is judged).
 //
 // Game case: both (shared critic plumbing); FFX in Chapter I and FFX-2 in Chapter IV only because the engine plays the smear only there.
 
-export const SMEAR_DEFAULTS = Object.freeze({ excuse: false, slackMs: 12, maxJerkPx: 120, bigOverlap: 0.5, bigAnchor: 0.12 });
+export const SMEAR_DEFAULTS = Object.freeze({ excuse: false, slackMs: 12, maxJerkPx: 120, maxJerkShare: 0, elastic: false, bigOverlap: 0.5, bigAnchor: 0.12 });
 
 /** The policy's `continuity.smear` block over the defaults (a policy without one excuses nothing). */
 export function smearPolicy(cfg) {
@@ -50,7 +61,8 @@ export function matchSmear(swap, smears, policy, frameMs = 1000 / 60, used = new
     if (!num(e.at) || !num(e.cutMs)) continue;
     // a painting set's swap is the cut itself, inside the window; a rig's is the change of key, which the harness sees when the move BEGINS (the flip and its window are halfway through it)
     const span = e.kind === 'rig' && num(e.moveMs) ? e.moveMs : e.cutMs;
-    if (swap.tMs < e.at - policy.slackMs - frameMs || swap.tMs > e.at + span + policy.slackMs + 2 * frameMs) continue;
+    const stall = policy.elastic && num(swap.stallMs) && swap.stallMs > 0 ? swap.stallMs : 0; // R63-M1: long frames before the flip land the flip that much late
+    if (swap.tMs < e.at - policy.slackMs - frameMs || swap.tMs > e.at + span + policy.slackMs + 2 * frameMs + stall) continue;
     used.add(i);
     return { index: i, entry: e };
   }
@@ -81,10 +93,36 @@ export function tagSmears(swaps, smears, policy, frameMs = 1000 / 60) {
   return { planned: list.length, matched: used.size, unmatched: list.length - used.size, snapsExcused };
 }
 
+/** How far a step AT this planned smear may be and still be excused, px at 1600 wide: `maxJerkPx`, or `maxJerkShare` of the figure's drawn height at the swap when that is more. */
+export function smearCapPx(swap, policy) {
+  const share = num(policy.maxJerkShare) && policy.maxJerkShare > 0 && num(swap?.figurePx) ? policy.maxJerkShare * swap.figurePx : 0;
+  return Math.max(policy.maxJerkPx, share);
+}
+
 /** The tag a jerk AT a planned-smear swap carries when it is small enough to excuse, else null (it stays a jerk). */
 export function smearedJerk(jerk, swap, policy) {
-  if (!policy.excuse || !swap || !swap.smear || !(jerk.px <= policy.maxJerkPx)) return null;
-  return { style: swap.smear.style, kind: swap.smear.kind, swap: swap.id };
+  if (!policy.excuse || !swap || !swap.smear || !(jerk.px <= smearCapPx(swap, policy))) return null;
+  return { style: swap.smear.style, kind: swap.smear.kind, swap: swap.id, ...(num(swap.figurePx) && swap.figurePx > 0 ? { share: Math.round((jerk.px / swap.figurePx) * 1000) / 1000 } : {}) };
+}
+
+/**
+ * How tall the figure is drawn around a swap, px at 1600 wide: the tallest of its planes that show (fade over 0.3) in the frames given (the frame before the flip and the flip's own), each plane's
+ * height the distance from the middle of its top edge to the middle of its bottom edge (the quad's corners are top-left, top-right, bottom-right, bottom-left). Null when none shows.
+ * @param {Array<{fig: {s?: Array}}|null|undefined>} frames
+ * @param {number} k1600
+ */
+export function figureHeightPx(frames, k1600) {
+  let best = null;
+  for (const fr of frames) {
+    for (const s of fr?.fig?.s ?? []) {
+      if (!Array.isArray(s) || !(s[1] > 0.3) || s[2] !== 1 || s.length < 11) continue;
+      const q = s.slice(3, 11);
+      if (!q.every(num)) continue;
+      const h = Math.hypot((q[0] + q[2]) / 2 - (q[6] + q[4]) / 2, (q[1] + q[3]) / 2 - (q[7] + q[5]) / 2) * k1600;
+      if (num(h) && (best === null || h > best)) best = h;
+    }
+  }
+  return best;
 }
 
 /** What the report carries about the smear: the policy in force, the tally and the jerks excused. */
@@ -93,9 +131,9 @@ export function smearReport({ tally, jerks, policy, smears }) {
   const list = Array.isArray(smears) ? smears : [];
   return {
     note: 'planned smears (continuity.smear in the policy): the engine logs every cut it plans as a smear on a big change; a swap that matches a log entry (same figure, same pair, inside its window) is not a snap and a jerk of at most maxJerkPx at it is not counted. Every other fast swap is judged as before.',
-    policy: { excuse: policy.excuse, slackMs: policy.slackMs, maxJerkPx: policy.maxJerkPx, bigOverlap: policy.bigOverlap, bigAnchor: policy.bigAnchor },
+    policy: { excuse: policy.excuse, slackMs: policy.slackMs, maxJerkPx: policy.maxJerkPx, maxJerkShare: policy.maxJerkShare, elastic: policy.elastic, bigOverlap: policy.bigOverlap, bigAnchor: policy.bigAnchor },
     ...tally,
-    jerksExcused: smeared.length, worstJerkPx: Math.round(smeared.reduce((m, j) => Math.max(m, j.px), 0) * 10) / 10,
+    jerksExcused: smeared.length, worstJerkPx: Math.round(smeared.reduce((m, j) => Math.max(m, j.px), 0) * 10) / 10, worstJerkShare: Math.round(smeared.reduce((m, j) => Math.max(m, j.smeared?.share ?? 0), 0) * 1000) / 1000,
     byStyle: list.reduce((m, e) => ((m[e.style ?? 'unknown'] = (m[e.style ?? 'unknown'] ?? 0) + 1), m), {}),
     byKind: list.reduce((m, e) => ((m[e.kind ?? 'plane'] = (m[e.kind ?? 'plane'] ?? 0) + 1), m), {}),
   };

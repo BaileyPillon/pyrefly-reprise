@@ -341,6 +341,16 @@ describe('the strips', () => {
     expect(c.probe.meta().strips.filter((s) => s.kind === 'jerk')).toHaveLength(0);
   });
 
+  it('makes no strip of a figure that is wholly off the frame: a crop clamped to the edge of the frame showed Seymour for Kimahri (R63-T1)', async () => {
+    const r = rig();
+    r.probe.start();
+    for (let i = 0; i < 12; i++) { r.place(0, 400 + i * 2, 1500, 200, 400); await r.step(); } // a slow drift, far below the 900 px frame
+    r.place(0, 700, 1500, 200, 400); // 280 px in one frame, with nothing of the figure on the frame
+    await r.step();
+    for (let i = 0; i < 8; i++) await r.step();
+    expect(r.probe.meta().strips.filter((s) => s.kind === 'jerk')).toHaveLength(0);
+  });
+
   it('stops making strips at the cap', async () => {
     const r = rig({ maxStrips: 1 });
     r.probe.start();

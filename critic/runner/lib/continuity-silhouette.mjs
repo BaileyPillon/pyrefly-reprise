@@ -25,9 +25,9 @@
 //
 // Everything is in the painting's normalised coordinates (u across from the left, t down from the top, 0..1), so a 1x
 // master, a 2x master and the shipped WebP of either give the same answer.
-import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import sharp from 'sharp';
+import { tableSha256 } from './continuity-table.mjs'; // R63-T1: the table's hash reads CRLF as LF
 import { isPropsOut, poseClassOf, subjectKind } from '../../../tools/posescale/pose-kinds.mjs';
 
 /** The alpha of an image as a binary mask on a grid at most `maxSide` on its long side (aspect kept). */
@@ -164,7 +164,7 @@ export function loadPoseMeasure(path) {
   try {
     const raw = readFileSync(path);
     const json = JSON.parse(raw.toString('utf8'));
-    return { path, sha256: createHash('sha256').update(raw).digest('hex'), subjects: json.subjects ?? {}, count: Object.keys(json.subjects ?? {}).length };
+    return { path, sha256: tableSha256(raw), subjects: json.subjects ?? {}, count: Object.keys(json.subjects ?? {}).length };
   } catch {
     return null;
   }

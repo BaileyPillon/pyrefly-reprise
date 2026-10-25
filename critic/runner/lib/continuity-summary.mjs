@@ -56,10 +56,10 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
   const perMin = (n) => (minutes > 0 ? round(n / minutes, 2) : null);
   const bySnapPose = {};
   for (const s of snaps) bySnapPose[s.toPose] = (bySnapPose[s.toPose] ?? 0) + 1;
-  const jerkMid = jerks.filter((j) => !j.atSwap);
+  const jerkMid = jerks.filter((j) => !j.atSwap || j.commonMode); // R63-M1: a step at a swap that is the figure TRAVELLING (head and feet together) is a dash, reported (continuity-analyze.mjs, `jerks.commonMode`)
   // W4 (CHK-027 split): a jerk AT a pose swap is the swap's own (a dissolve moving the weighted point, a KO cut, the swap's first lunge frame) and is gateable; a MID-MOVE dash is the
   // move's (a lunge, a recoil, a hop) and is reported. Each is also read by the frame it fell on: a long frame (the game's own clamp multiplying every move) is not the design.
-  const swapJerks = jerks.filter((j) => j.atSwap);
+  const swapJerks = jerks.filter((j) => j.atSwap && !j.commonMode);
   const teleports = jerkMid.filter((j) => j.kind === 'teleport'), dashes = jerkMid.filter((j) => j.kind !== 'teleport');
   const longFrame = (j) => j.longFrame === true;
   const failPx = cfg.motion.jerkFailPx;

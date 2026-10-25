@@ -163,9 +163,9 @@ export function createProbe(cfg, env) {
       const r = recAt(n);
       const fr = r && r.f.find((g) => g.i === job.fi);
       if (!fr) continue;
-      for (const sl of fr.s) if (sl) for (let i = 3; i < 11; i += 2) { x0 = Math.min(x0, sl[i]); x1 = Math.max(x1, sl[i]); y0 = Math.min(y0, sl[i + 1]); y1 = Math.max(y1, sl[i + 1]); }
+      for (const sl of fr.s) if (sl && sl[1] > 0.04 && sl[2]) for (let i = 3; i < 11; i += 2) { x0 = Math.min(x0, sl[i]); x1 = Math.max(x1, sl[i]); y0 = Math.min(y0, sl[i + 1]); y1 = Math.max(y1, sl[i + 1]); } // R63-T1: only a plane that is drawn sizes the crop (a hidden one parked off the frame dragged it to the edge: Seymour for Kimahri)
     }
-    if (!Number.isFinite(x0) || !S.ringSize) return;
+    if (!Number.isFinite(x0) || !S.ringSize || x1 < S.view[0] || x0 > S.view[0] + S.view[2] || y1 < S.view[1] || y0 > S.view[1] + S.view[3]) return; // R63-T1: a figure wholly off the frame has nothing to show (a clamped crop shows whatever is at the edge)
     const v = S.view, kx = S.ringSize[0] / v[2], ky = S.ringSize[1] / v[3];
     let cx = (x0 - v[0]) * kx, cy = (y0 - v[1]) * ky, cw = (x1 - x0) * kx, ch = (y1 - y0) * ky;
     const mx = cw * 0.06, my = ch * 0.04; // a little air around the planes
