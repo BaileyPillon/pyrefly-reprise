@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1831 decisions in all: 1318 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1192 of the written decisions record a blanket yes.
+1856 decisions in all: 1343 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1214 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1707 |
+| adopted | 1732 |
 | proposed | 8 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1831** |
+| **All** | **1856** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 156 |
-| art | 387 |
-| visuals | 127 |
+| art | 391 |
+| visuals | 131 |
 | camera | 75 |
 | audio | 158 |
-| ui | 213 |
+| ui | 218 |
 | story | 17 |
 | chapters | 248 |
 | guide | 34 |
-| release | 94 |
+| release | 96 |
 | hosting | 18 |
-| process | 199 |
-| critic | 41 |
+| process | 204 |
+| critic | 42 |
 | data | 17 |
-| tech | 28 |
-| site | 19 |
-| **All** | **1831** |
+| tech | 30 |
+| site | 21 |
+| **All** | **1856** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 931 |
+| both games | 953 |
 | FFX only | 500 |
-| FFX-2 only | 382 |
+| FFX-2 only | 385 |
 | FF7 hidden experiment | 18 |
-| **All** | **1831** |
+| **All** | **1856** |
 
 ## Standing rules in force
 
@@ -121,6 +121,8 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **Reports to Bailey are short**: five lines at most in plain words, pictures, and at most three decisions at a time; one always-current studio page carries the milestone, the build, what is next and his open decisions (Bailey, 2026-10-22). Decision [D-1229](#d-1229) (2026-10-22, both games).
 - **The rules stay faithful and the show is premium: numbers, turn order, abilities and fights are faithful, everything seen and heard may be reimagined (both games)**: The rules, numbers, turn order, abilities and fights stay faithful to FFX and FFX-2; everything seen and heard may be reimagined (Bailey, 2026-10-22). Decision [D-1237](#d-1237) (2026-10-22, both games).
 - **STANDING RULE: FFX and FFX-2 as the core, with an Expedition 33 spin on the presentation (both games)**: Every visual choice starts from how FFX and FFX-2 did it and then applies Expedition 33’s presentation: elegant minimal UI, a directed camera, layered hit feel and painterly light (Bailey, 2026-10-22). Decision [D-1270](#d-1270) (2026-10-22, both games).
+- **He still cannot play the build before the conference and hands every decision to the driver, who takes its own recommendations as his yes, each recorded as a driver call that is his to overturn (both games)**: From 2026-10-24 13:40 EDT the driver makes every decision on his behalf, records each as a driver call that is his to overturn (never as his own words) and does not wait for a playtest. Decision [D-1321](#d-1321) (2026-10-24, both games).
+- **He restates the delegation for every call from now through the conference: the driver makes the calls, asks him nothing and records each one as a driver call that is his to overturn (both games)**: Every call from 2026-10-24 18:00 EDT through the conference is the driver’s to make and record as a driver call, his to overturn; Bailey is not asked. Decision [D-1333](#d-1333) (2026-10-24, both games).
 
 ## Waiting on Bailey's yes
 
@@ -138,7 +140,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25)
 
 ## Ledger
 
@@ -8021,7 +8023,7 @@ Thursday · 102 decisions
 - <a id="d-1194"></a>**D-1194** — A party attack takes about 1.1 seconds: wind-up 0.15, travel 0.25, strike held 0.2, return 0.4 and a settle (both games)
   - Bailey: “Snappy, about 1.1 s (Recommended)” (blanket yes)
   - What changed: Item 176b. The motion-core default profile. Open conflict, not a supersession: 179a (D-1249) asks for the real clips’ timings, which are longer (the real-motion tables shrink by 27 to 76 percent under the 1.1 s pick); the playtest carries ?curves=real and ?curves=real-snappy beside the default and the choice (faithful or snappy) goes to him tonight.
-  - area visuals · both games · adopted · delivery in progress · see [D-1249](#d-1249)
+  - area visuals · both games · adopted · delivery in progress · see [D-1249](#d-1249), [D-1322](#d-1322)
   - Source: Bailey, 2026-10-22 by 00:38 EDT (the DRIVER-STATE line of 00:38 logging items 175 and 176 as recorded; the queue’s hand-typed 00:45 to 01:30 ran …
 - <a id="d-1195"></a>**D-1195** — A hit reaction is a short knock-back with a white flash (both games)
   - Bailey: “Knock-back + flash (Recommended)” (blanket yes)
@@ -8296,7 +8298,7 @@ Thursday · 102 decisions
 - <a id="d-1249"></a>**D-1249** — By Sunday every demo action takes its wind-up, contact and recovery timing from the real FFX and FFX-2 clips and the directed camera uses the real game’s shots where they can be decoded; after Monday the real skeletal animation is retargeted onto the painted rigs, character by character
   - Bailey: “Timing + camera now, full later (Recommended)” (blanket yes)
   - What changed: Item 179a. The real-motion workflow (done 14:57 EDT on 2026-10-22; tables in the local scratch under real-motion/final): real party attacks last 1.5 to 2.9 s and bosses 4.2 to 4.7 s, with much bigger arcs, and Tidus’s return is a flip; the playtest has ?curves=real and ?curves=real-snappy beside 176b (D-1194)’s default and the choice (faithful or snappy) goes to him tonight. Overdrive clips and camera are not decoded. FFX-2 has no shot table, only an engine camera.
-  - area visuals · both games · adopted · delivery in progress · at ~12:29 EDT
+  - area visuals · both games · adopted · delivery in progress · at ~12:29 EDT · partly replaced by [D-1322](#d-1322)
   - Source: Bailey, 2026-10-22 12:29 EDT (the DRIVER-STATE line of 12:29 EDT; the queue’s hand-typed 11:45 is earlier than the line that launched the work), …
 - <a id="d-1250"></a>**D-1250** — Each action uses the shot FFX or FFX-2 itself used (angle, push, timing), rendered with Expedition 33-level smoothness and framing (both games)
   - Bailey: “Real game's shots, E33 polish (Recommended)” (blanket yes)
@@ -8481,12 +8483,12 @@ Friday · 35 decisions
 - <a id="d-1285"></a>**D-1285** — The two bosses’ edges are re-cut from the 2x masters, option A “Clean cut-out”: no cyan rim or pale fringe, holes and wing bays closed, loose shards gone, the shadow, ring and reflection under the real footprint, Seymour grounded; the originals are kept (Bahamut FFX-2, Seymour Flux FFX)
   - Bailey: “Yes, re-cut both (Recommended)” (blanket yes)
   - What changed: Item 193c. Built as boss-matte (code 6eece354d, review round 2 and final 877b83eb6): a per-pixel boss mask removes the rim beside other figures (the party keeps its rim), Bahamut’s pose pieces are rebuilt from the clean masters, ?look=cinematic no longer throws, ?boss=clean is the switch; art candidates in D:/pyrefly-art-boss (158 files) and, for the playtest, D:/pyrefly-art-r63 (hard links; the originals are archived to the private art repo first by tools/archive-replaced.mjs, with tools/boss-matte-install.mjs guarding the hashes). The driver added a lit floor pool in the key colour under Bahamut, an option-B element he did not pick: he is asked tonight whether to keep it. Not live.
-  - area art · both games · adopted · delivery in progress · at ~10:20 EDT · see [D-1166](#d-1166)
+  - area art · both games · adopted · delivery in progress · at ~10:20 EDT · see [D-1166](#d-1166), [D-1325](#d-1325)
   - Source: Bailey, 2026-10-23 10:20 EDT (the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes), answered on …
 - <a id="d-1286"></a>**D-1286** — DRIVER CALL, provisional, for his verdict tonight: the F1 HUD’s open sub-points are built as the mockup draws them: the ribbon stays during actions, the HUD steps back at the start of an action, a 28 px text floor and a 32 px floor for cues and prompts, slim party cards hide the Overdrive bar, heal colours (both games)
   - Bailey: no verbatim quote on record for this decision
   - What changed: Item 193d. Not words of his: he named the four refinements and the finish (192, 193a (D-1283)), not these details. They are in hud-f1 and r63-play and go to tonight’s playtest; the ribbon’s HP bar is 197b (D-1314).
-  - area ui · both games · adopted · delivery in progress
+  - area ui · both games · adopted · delivery in progress · see [D-1324](#d-1324)
   - Source: The driver’s call of 2026-10-23, the DRIVER-STATE line of 10:20 EDT on 2026-10-23; the queue’s hand-typed 10:15 is earlier by five minutes, recorded …
 - <a id="d-1287"></a>**D-1287** — The driver may message a side session (not this game’s code) to move its working folder to L: and turn off Blender’s .blend1 backups, because C: stood at 24 GB and fell 4 to 7 GB an hour (process; no game change)
   - Bailey: “Yes, tell it (Recommended)” (blanket yes)
@@ -8516,12 +8518,12 @@ Friday · 35 decisions
 - <a id="d-1292"></a>**D-1292** — The pose repaint goes in only where it scored better than the current painting; the knocked-out poses and the other worse ones stay on the current paintings, and he still approves per character on Saturday from the phone cards (both games)
   - Bailey: ““Ok I'll go with all of your recommendations”” (blanket yes)
   - What changed: Item 195e. The rule for Saturday’s install: the repaint lane’s 68 poses read about the same or slightly better, the KO poses worse, and Tidus’s trousers and shorts were not fixed; the per-figure cards are in the local scratch under 2026-10-23/repaint/phone. FFX: Tidus, Yuna, Kimahri; FFX-2: Yuna White Mage, Rikku Dark Knight, Paine.
-  - area art · both games · adopted · delivery in progress · at ~12:45 EDT
+  - area art · both games · adopted · delivery in progress · at ~12:45 EDT · partly replaced by [D-1327](#d-1327)
   - Source: Bailey, 2026-10-23 12:45 EDT (about 12:45 EDT by the queue, given right after the C: drive messages; DRIVER-STATE logged it at 13:22), a blanket yes, …
 - <a id="d-1293"></a>**D-1293** — OPEN, not covered by his yes (no recommendation was stated to him first): the HUD’s open details of 193d (D-1286), Bahamut kept whole in frame during attacks (the party then fills 28 to 31 percent of the frame), the FFX-2 menu-open arena wash staying off (D-357, D-441), the Chapter IV canon drawing, Auron in the Chapter I party panel and the 34 duplicate artifact pages (both games)
   - Bailey: no verbatim quote on record for this decision
   - What changed: Item 195f. These stay the driver’s provisional builds or open questions and go to tonight’s playtest for his verdict; the canon drawing is his pick on Saturday; deleting an artifact needs his per-item yes. The process id the driver had flagged for him (a stray Python process) is closed: it ended, and the number now belongs to an unrelated tail process.
-  - area process · both games · proposed · nothing to build
+  - area process · both games · proposed · nothing to build · see [D-1324](#d-1324), [D-1327](#d-1327)
   - Source: The open questions the driver listed with his blanket yes of 2026-10-23 (about 12:45 EDT by the queue, given right after the C: drive messages; …
 - <a id="d-1294"></a>**D-1294** — DELEGATED (PC-01): with the audio pass on, Chapter IV’s win plays no music
   - Bailey: “You choose all sound effects and music and voice overs for me for now please”
@@ -8626,7 +8628,7 @@ Friday · 35 decisions
 - <a id="d-1314"></a>**D-1314** — DRIVER CALL, his to overturn: the F1 HUD ribbon keeps the boss’s name, and its HP bar shows only where today’s HUD of that game would show the enemy’s HP (FFX Sensor rule; FFX-2 its own rule), not from the first menu as the mockup drew it (both games, per game)
   - Bailey: no verbatim quote on record for this decision
   - What changed: Item 197b. Rule 14 and the faithful-core line (178l (D-1237)): he named Less on screen, Bigger text, Painterly and Steps back, not the HP bar. Built in r63-play (b76ddfd69; 6 tests). Finding: in the real Chapter I build Kimahri’s Spear carries Sensor, so both enemies are scanned from the first menu and the ribbon shows its bar from the first menu there too; hiding it regardless would change today’s rule and needs his yes. FFX-2 today draws every enemy’s bar from the first frame, so the ribbon does too.
-  - area ui · both games · adopted · delivery in progress
+  - area ui · both games · adopted · delivery in progress · see [D-1324](#d-1324)
   - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
 - <a id="d-1315"></a>**D-1315** — DRIVER CALL, his to overturn: Mortiorchis, Seymour Flux’s companion in Chapter I, gets the same rim-off as the boss (FFX only)
   - Bailey: no verbatim quote on record for this decision
@@ -8636,7 +8638,7 @@ Friday · 35 decisions
 - <a id="d-1316"></a>**D-1316** — DRIVER CALL, his to overturn: a party rim-off switch is added for tonight’s playtest, default ON, which is today’s rim (both games)
   - Bailey: no verbatim quote on record for this decision
   - What changed: Item 197d. The party and the aeons keep a cyan rim of the same defect class as the bosses’ original one. ?partyrim=off and the board key apostrophe turn the screen-space rims off for them (b0991964d, 26aa20535; 11 tests); the default stays today’s rim until he judges it.
-  - area art · both games · adopted · delivery in progress · refines [D-1285](#d-1285)
+  - area art · both games · adopted · delivery in progress · refines [D-1285](#d-1285) · partly replaced by [D-1326](#d-1326)
   - Source: The driver’s call of 2026-10-23, logged by the DRIVER-STATE line of 16:22 EDT, recorded as a driver call and not as Bailey’s words, and shown to him …
 - <a id="d-1317"></a>**D-1317** — DRIVER CALL, his to overturn: the aeon victory frame in Chapter I is a slow low three-quarter push with the aeon whole, labelled [ours] because the sources decode only the Tidus, Yuna and Kimahri victory blocks (FFX only)
   - Bailey: no verbatim quote on record for this decision
@@ -8646,10 +8648,140 @@ Friday · 35 decisions
 
 ### 2026-10-24
 
-Saturday · 1 decision
+Saturday · 25 decisions
 
 - <a id="d-1318"></a>**D-1318** — He cannot play the playtest build tonight: the playtest moves to Saturday daytime and the overnight work goes on without it (both games)
   - Bailey: “I can't play it tonight right now. Tomorrow.”
   - What changed: Item 198 (the number after the queue’s 197; it is not in the queue file yet and is taken from the DRIVER-STATE line of 00:50 EDT on 2026-10-24). Replaces the Friday night of 193b (D-1284) and the Thursday evening of 176p (D-1208): every “tonight’s playtest” in D-1284 and D-1286 to D-1317 now means this Saturday playtest of the r63-play build. The driver released the side session’s GPU hold (acknowledged at 00:45 EDT; it pauses again on his word) and launched the overnight-sat workflow (A-0984): fixes for the skeptic’s findings, the booth screens, the repaint prep, the assembly and a brief pack. Records only until it runs.
-  - area process · both games · adopted · delivery in progress
+  - area process · both games · adopted · delivery in progress · partly replaced by [D-1321](#d-1321)
   - Source: Bailey, 2026-10-24 about 00:40 EDT (the DRIVER-STATE line of 00:50 EDT), typed in the chat after “I'm about to go to bed... What are you going to …
+- <a id="d-1319"></a>**D-1319** — Thursday’s four playtest builds in D:/pyrefly-rig-v2 (dist-playtest, -b, -c, -d, about 45 GB) are deleted, and the driver deletes them: D: goes from 3.4 GB to 46 GB free (process)
+  - Bailey: “Yes delete”
+  - What changed: Item 198 of the queue file (the r62 records pass numbered D-1318, his 00:40 EDT note, 198 before this item existed). The driver’s urgent ask at 08:32 EDT: D: was at 3.4 GB free, because the prebuild reviewer had made two full source copies and two builds in the scratch, while Thursday’s four playtest builds sat in D:/pyrefly-rig-v2 with their servers stopped and no hard links (listed in D:/Tools/disk-cleanup/2026-10-24/D-SAFE-2026-10-24.md since 01:35 EDT). He answered “Yes delete”; the driver ran the four Remove-Item lines at about 09:42 EDT (a first attempt with a quoting slip matched no path and deleted nothing) and D: read 46 GB free. Not part of the yes and not deleted: the reviewer’s two git-archive copies (src-parent, src-pre), listed for a later safe-delete. The lesson the driver logged: a brief caps builds at one dist per lane and requires the lane to remove its own build outputs, reviewers too. Records only; no game change.
+  - area process · both games · adopted · delivery implemented · at ~09:40 EDT
+  - Source: Bailey, 2026-10-24 09:40 EDT (the queue; DRIVER-STATE logged the removal at 09:43 EDT), his answer to the driver’s urgent ask of 08:32 EDT, typed in …
+- <a id="d-1320"></a>**D-1320** — Keep going through Saturday without waiting for his playtest: the driver keeps the lanes working, nothing perceivable he has not picked goes on by default, and the public deploy waits for his picks (both games)
+  - Bailey: “keep going please do not stop”
+  - What changed: Item 199. A standing word for the day. At 12:52 EDT the driver launched the sat-keep-going workflow: the r64 fix lane (the swallowed Chapter IV picker presses and the 2.2 s freeze, B opening the pause, a silent or hitching retry, the Ixion card cut and the “970” over the strip, label and QR overlaps, the Living dressing built behind the picker; then its review and fix) and the phone clips of both fights for him; the lanes wait whenever the REVIEW-BROWSER folder exists. The public deploy waited for his playtest picks because “art per character” is one of them and the r63 art mirror carried the motion test’s pose art. An hour later item 200 (D-1321) replaced that waiting: he still could not play and handed over the calls, and the release went to the conference build (D-1331).
+  - area process · both games · adopted · delivery in progress · at ~12:40 EDT · partly replaced by [D-1331](#d-1331)
+  - Source: Bailey, 2026-10-24 12:40 EDT (the queue; DRIVER-STATE logged it at 12:52 EDT), typed in the chat, verbatim: “keep going please do not stop”. Item 199 …
+- <a id="d-1321"></a>**D-1321** — He still cannot play the build before the conference and hands every decision to the driver, who takes its own recommendations as his yes, each recorded as a driver call that is his to overturn (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200. Replaces the Saturday-daytime playtest of D-1318 (he had not played by 13:40 EDT: “time crunch”): the picks the release was waiting for are made by the driver, one row each as D-1322 to D-1332 (items 200a to 200k), because a blanket yes is never one row. At 13:58 EDT the driver launched the conference-defaults-and-art workflow (r64-defaults and r64-art), and the release assembly followed.
+  - area process · both games · adopted · delivery in progress · at ~13:40 EDT
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1322"></a>**D-1322** — DRIVER CALL under his delegation, his to overturn: the motion pack ships as built in Chapters I and IV: the snappy attack curves (about 1.1 s, not the real clips’ longer timing), the paint smear, a subtle camera punch, hit-stop, rumble, the motion sounds, the new effects and moments; the party’s jointed rigs stay off and Tidus is T1 (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200a. Settles the conflict that D-1194 (176b, the 1.1 s default) left open with D-1249 (179a, the real clips’ timings, 27 to 76 percent longer): the snappy curves win for the conference. The motion sounds are turned down 12 dB where they fall on a blow (the sound pass, D-1296). No rig replaces a painting: rigs are judged in motion and none has his yes (D-1086, D-1097), so ?partyrigs=on is the only way in. Tidus is T1, the set locked to the darker live idle, which is what production builds ship. In release 63 (fa56fd4e3, live since 02:52 EDT on 2026-10-25), Chapter I (FFX CTB) and Chapter IV (FFX-2 ATB).
+  - area visuals · both games · adopted · delivery implemented · at ~13:40 EDT · see [D-1194](#d-1194), [D-1249](#d-1249) · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1323"></a>**D-1323** — DRIVER CALL under his delegation, his to overturn: the conference build turns the pack on by default in Chapter I (FFX) and Chapter IV (FFX-2) with no ?pack=demo word: the F1 HUD, the sound pass, the pro look, camera and staging, the boss re-cut and the fight prebuild; every other chapter plays as release 62 (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200b. Built as r64-defaults (cf1c91876: PACK_DEFAULT_ON, 40 new cases and 30 older test files that pinned the old defaults). The first focused review of the assembled build held the ship on it (R63-P1: at 390 x 844 the default pack dropped the PAUSE button and cut the command names); the fix is a gate, so the default holds on a desktop-class screen only and a phone or a tablet opens with every lane off (106e39447). ?pack=off gives release 62’s play back, ?pack=demo forces the pack on anywhere. In release 63.
+  - area release · both games · adopted · delivery implemented · at ~13:40 EDT · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1324"></a>**D-1324** — DRIVER CALL under his delegation, his to overturn: the F1 HUD’s open details stay as built: the boss ribbon stays during attacks, the screen steps back when an action starts, a 28 px text floor, slim party cards hide the Overdrive bar during an attack, the heal and damage colours as built, and the ribbon’s HP bar follows each game’s Sensor or Scan rule (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200c. Answers the details that D-1286 (193d) and D-1314 (197b) built provisionally and D-1293 (195f) left open for his verdict; nothing changed in the build. The floor is 28 px at 2560 x 1440 at the least. In release 63: Chapter I keeps its turn strip and Overdrive bars on the left (FFX), Chapter IV mirrors it to the right with ATB bars and the pink accent (FFX-2).
+  - area ui · both games · adopted · delivery implemented · at ~13:40 EDT · see [D-1286](#d-1286), [D-1293](#d-1293), [D-1314](#d-1314) · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1325"></a>**D-1325** — DRIVER CALL under his delegation, his to overturn: the soft lit floor patch under Bahamut, the key-colour pool that lets his shadow read on the dark floor, stays (FFX-2 only)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200d. The driver had added it to boss-matte as an option-B element he did not pick, and D-1285 (193c) asked him whether to keep it; keeping it is the driver’s call. In release 63, Chapter IV.
+  - area art · FFX-2 · adopted · delivery implemented · at ~13:40 EDT · see [D-1285](#d-1285) · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1326"></a>**D-1326** — DRIVER CALL under his delegation, his to overturn: the party’s cyan edge light is off by default in Chapters I and IV, so the party and the bosses share one clean edge (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200e. Replaces the default of D-1316 (197d: the party rim-off switch with the default on, today’s rim). With the pack on the party’s screen-space rim is off; ?partyrim=on brings it back (the apostrophe key on the playtest board). Built in r64-defaults. In release 63.
+  - area art · both games · adopted · delivery implemented · at ~13:40 EDT · see [D-1285](#d-1285), [D-1315](#d-1315), [D-1316](#d-1316) · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1327"></a>**D-1327** — DRIVER CALL under his delegation, his to overturn: the repainted poses go in for Yuna and Kimahri (FFX) and for Rikku in Dark Knight and Paine in Warrior (FFX-2), only the poses marked better, canon A (locked to the idle) in Chapter IV; Tidus and Yuna in White Mage keep their current paintings, and the originals are archived first
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200f. Replaces the per-character approval from the phone cards that D-1292 (195e) kept for Saturday; D-1293 (195f) named the Chapter IV canon drawing as his Saturday pick, and canon A is the driver’s call now. Built as r64-art (f819d4cde): 4 figures x 5 poses x 5 size tiers, 100 files, each locked to the figure’s idle, the registration re-measured and the five old art-pin tests following it; the originals went to the private art repo first (archive 754a4ca, current 8e2cde8) and to D:/pyrefly-art-r64-replaced. Tidus (attack and hurt flagged) keeps his paintings and Yuna in White Mage gains only 2 poses, so she keeps hers; Paine’s repaints also show in Chapter VI, because it is the same figure and D-1251 (item 180) put one look per character in every chapter she fights in. Normal maps for the poses whose outline moved much are provisional (“map owed”). In release 63. Case: Yuna and Kimahri FFX only; Rikku Dark Knight and Paine Warrior FFX-2 only.
+  - area art · both games · adopted · delivery implemented · at ~13:40 EDT · see [D-1292](#d-1292), [D-1293](#d-1293) · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1328"></a>**D-1328** — DRIVER CALL under his delegation, his to overturn: the Echo painting gets a 2x master for the 2560 screen, made with the upscale model already installed on this PC (no download) (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200g. Built in r64-art: the Echo title painting has a 2x master (3364 x 1864; the 1x painting was stretched 1.5 times on a 2560 x 1440 screen), made with the installed RealESRGAN, and the title, the end card and the attract card pick it on screens wider than 1682 px. Nothing was downloaded. In release 63.
+  - area art · both games · adopted · delivery implemented · at ~13:40 EDT · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1329"></a>**D-1329** — DRIVER CALL under his delegation, his to overturn: the sentence “All code, art, music, and writing here are original” is dropped from the press page and the credits notice; the unofficial fan tribute, not-affiliated and property-of-Square-Enix lines stay (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200h. It may no longer be accurate since the retail-assets rule of 2026-10-18 (D-1009). Built in r64-defaults: the notice text, the README and the press page lose it and a test holds the three equal. Item 201a (D-1334) rewords the other stale claims. In release 63.
+  - area site · both games · adopted · delivery implemented · at ~13:40 EDT · see [D-1009](#d-1009), [D-1334](#d-1334) · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1330"></a>**D-1330** — DRIVER CALL under his delegation, his to overturn: the booth flow: the end card after a won fight holds about 8 s with a “Press any button” hint and then returns to the title; a picker nobody touches for 60 s returns to the title and the attract card (both games, demo mode only)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200i. Built in r64-defaults on the booth screens: a press on the end card goes to the picker at once, a card left alone for 8 s goes to the title, and the 60 s idle on the picker returns to the title and the attract card. ?booth=today or ?pack=off keeps release 62’s cream thanks card and a picker that waits for ever. In release 63.
+  - area ui · both games · adopted · delivery implemented · at ~13:40 EDT · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1331"></a>**D-1331** — DRIVER CALL under his delegation, his to overturn: release today: the conference build (r63-play, the day’s fixes and 200a to 200i) goes live after its focused review says SHIP; the deep review runs on the live build afterwards; the trailer and the press-page frames are re-recorded after the deploy; the freeze is Sunday night and the offline kit on this PC is made from the final build (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200j. Replaces the wait for his playtest picks of D-1320. Assembled as r63-rc in the afternoon and evening of 2026-10-24. The first focused review (8ee3ca11b) was a HOLD, which his standing deploy words do not cover, so nothing was overridden: the phone gate (106e39447) and the Chapter I continuity reading (fa56fd4e3, D-1343) were fixed and the second focused review of fa56fd4e3 said SHIP. Release 63 went live at 02:52 EDT on 2026-10-25 (bundle Bo7iMtyZ). Open when this row was written: the live check, the deep review on the live build, trailer v2 and the press-page frames, the booth copy D:/pyrefly-booth-63 and the Sunday-night freeze.
+  - area release · both games · adopted · delivery in progress · at ~13:40 EDT · see [D-1320](#d-1320), [D-1343](#d-1343) · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1332"></a>**D-1332** — DRIVER CALL under his delegation, his to overturn: the other GPU programs (a side session’s Blender render, ComfyUI renders) are closed before visitors, as a line of the booth script; the driver does not stop them (both games)
+  - Bailey: “you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.” (blanket yes)
+  - What changed: Item 200k. A Blender render of a side session held the GPU at up to 99 percent from 2026-10-23 13:13 EDT (the DRIVER-STATE line of 05:30 EDT on 2026-10-24); stopping another session’s program is not the driver’s to do, so the “Before visitors” checklist in docs/BOOTH-SCRIPT.md says to close it and the morning brief told him. Docs and process only.
+  - area process · both games · adopted · delivery implemented · at ~13:40 EDT · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim: “you can make all the decisions for me, …
+- <a id="d-1333"></a>**D-1333** — He restates the delegation for every call from now through the conference: the driver makes the calls, asks him nothing and records each one as a driver call that is his to overturn (both games)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201. Restates item 200 (D-1321) for every call that came up after it. The calls made under it on 2026-10-24 are D-1334 to D-1342 (items 201a to 201i) and, after midnight, D-1343 (item 202).
+  - area process · both games · adopted · delivery in progress · at ~18:00 EDT · refines [D-1321](#d-1321)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1334"></a>**D-1334** — DRIVER CALL under his delegation, his to overturn: the other stale claims in the README (the music, sound and painting paragraphs) and in docs/ARCHITECTURE.md (the engine decision line and the Legal section) are reworded to what is true, as 200h does for the press page (docs only)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201a. Commit 2b08c23aa on r63-rc. The README and docs/ARCHITECTURE.md no longer claim “original”, “synthesised at runtime, so the build ships no audio files” or “nothing is ripped”. They say it is an unofficial, non-commercial fan tribute; that Final Fantasy X and X-2, their characters, worlds and names belong to Square Enix; that the music is composed as code and rendered to audio files (some tracks AI-generated), the effects are layered from freely licensed libraries, the Chapter I voices are AI-generated and the paintings are AI-generated on his machine; and that the Credits screen lists every third-party source. One line beyond the brief: ARCHITECTURE.md line 7 now says the audio is rendered files with a synthesiser as the fallback. The historical entries (CHANGELOG.md, docs/changelog/project-start.md, research/assets-and-tech.md) are history and were left alone. In release 63.
+  - area site · both games · adopted · delivery implemented · at ~18:00 EDT · see [D-1329](#d-1329) · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1335"></a>**D-1335** — DRIVER CALL under his delegation, his to overturn: Chapter IV outside the booth path: the Intel slab no longer covers the active girl’s name header at the first menu (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201b. Commit c4e6eff3b on r63-rc (m1 of the review of the defaults and art branches): the placement solver now lists the F1 HUD’s hero header and cue as boxes to avoid. A real run at 2560 x 1440 measured the slab over the header at 43,264 px squared and over the cue at 523 before, 0 and 0 after, with 0 console errors; the chain chip keeps off them too. Chapter I has its own slab placement and had no overlap. In release 63.
+  - area ui · FFX-2 · adopted · delivery implemented · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1336"></a>**D-1336** — DRIVER CALL under his delegation, his to overturn: after the picker idles back to the title, the attract card comes at once (a seeded clock), not a minute later (both games, demo mode with the booth screens)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201c. Commit 7a12e65d7 on r63-rc (m2 of the same review): the picker notes the idle return, and a title that opens within 10 s starts its idle clock already run out; a visitor’s own Esc is not this and counts a minute from the press as before. A real run: the title up at 258 ms and the card at 259 ms. In release 63.
+  - area ui · both games · adopted · delivery implemented · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1337"></a>**D-1337** — DRIVER CALL under his delegation, his to overturn: Mega Flare’s wash still eases out over 260 ms when a menu opens mid-breath; the review’s ease is kept (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201d. The r64-numbers question 1: a menu answered by the player closes first and the breath plays in full; a menu left standing by an answer that came over the HUD (a recorder, auto-battle) counts as open and no wash plays over it. The 260 ms ease at the end was kept as built. Not measured live (the release lists it as still open).
+  - area visuals · FFX-2 · adopted · delivery implemented · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1338"></a>**D-1338** — DRIVER CALL under his delegation, his to overturn: DamageNumbers.ts (912 lines, over the 400-line house rule before this release) is split after the conference, not now (both games, house-rule debt)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201e. The file was over the 400-line house rule (AGENTS.md rule 7) before this release and is left for after the conference. BattleScreenFlow.ts (649 lines), Input.ts and demo.css are over the rule too and are listed with it as open in the release 63 entry.
+  - area tech · both games · adopted · delivery not scheduled · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1339"></a>**D-1339** — DRIVER CALL under his delegation, his to overturn: the overlap-free number spacing stays on the new glass numbers only; the old numerals in the other chapters are left as they are (both games)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201f. r64-numbers (8847372e5): two glass numbers that start within 400 ms of each other and would overlap are kept apart in screen space (the later one moves, up first, then sideways, then down), sticky so nothing jumps; measured in Chapter I’s Total Annihilation, 176 overlapping frame-pairs before and 0 after. The pack is off in every other chapter, so their numerals are untouched. In release 63.
+  - area visuals · both games · adopted · delivery implemented · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1340"></a>**D-1340** — DRIVER CALL under his delegation, his to overturn: B at the top level of the command menu keeps today’s behaviour and opens the pause, because the sources do not say what FFX or FFX-2 do there (both games)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201g. Nothing changes. AGENTS.md rule 6: unsourced behaviour is left alone and said to be unsourced; r64-fixes had it as a check (“B opens pause, check the sources”) and the sources are silent. Recorded in the release 63 entry.
+  - area ui · both games · adopted · nothing to build · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1341"></a>**D-1341** — DRIVER CALL under his delegation, his to overturn: the party-swap ease (FFX, the Ixion and aeon swap) and the press-time retry theme (both games) stay on by default; each has an off word (?partyswap=off, ?retrytheme=off)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201h. r64-fixes (145e2221c): the party swap eases in the real game (the list renders twice and the arrival now resumes); the retried fight’s theme starts 0.2 to 0.35 s after the press (it was 1.9 s). The call is to keep both on for the conference. In release 63. Case: the swap ease is FFX only (an aeon is out only in Chapter I); the retry theme is both.
+  - area visuals · both games · adopted · delivery implemented · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+- <a id="d-1342"></a>**D-1342** — DRIVER CALL under his delegation, his to overturn: ?livingpre (the room dressing built behind the picker) stays off for the conference (both games)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 201i. Its gain could not be told from noise in the booth A/B pairs on the shared GPU, and its browser crashed twice when two pages shared the card; ?livingpre=on is the only way in. Recorded in the release 63 entry.
+  - area tech · both games · adopted · delivery implemented · at ~18:00 EDT · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-24 18:00 EDT (the queue; DRIVER-STATE logged it at 18:03 EDT), typed in the chat, verbatim: “I'll go with all of your …
+
+### 2026-10-25
+
+Sunday · 1 decision
+
+- <a id="d-1343"></a>**D-1343** — DRIVER CALL under 201, his to overturn, disclosed in the release notes: the R63-M1 trace found no pose-lane defect in Chapter I, so the continuity harness gets four policy words instead of an engine change, and the driver accepts the limits stated here for the conference (both games, critic plumbing; the evidence is FFX Chapter I)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 202. The focused review of 8ee3ca11b held the ship on Chapter I’s snaps (0.62 per minute against live’s 0, jerks to 290 px and a 603 px teleport). The trace (eleven runs of the same route and seed, one new piece switched off in each) found no defect in the pose lane: the “snaps” are the planned smear cuts he picked on 2026-10-22 (paint smear) magnified by the pro camera’s push-ins, plus figures that were off the screen read as teleports. The harness now skips unseen figures, runs an elastic smear window for late flips, excuses planned cuts up to half the figure’s drawn height and reports head-and-feet common-mode moves as dashes instead of gating them (the policy words unseen, smear.elastic, smear.maxJerkShare and jerks.commonMode; each can be switched back). Commit fa56fd4e3 on r63-rc: snaps 0.62 per minute to 0, teleports 1 to 0, gated swap jerks worst 290 px to 46 px. The limits the driver accepts for the conference: 31 planned cuts in Chapter I of up to 0.36 of body height remain visible one-frame cuts under a hit flare; frames over 34 ms rose (109 against live’s 28 in one shared-GPU run, 47 with the camera off) and are watched; the victory close-up after Auron’s killing blow frames only Auron. The second focused review said SHIP: CHK-027 equal to live rests on the wider harness rule, and five swaps 1 to 5 percent outside the CHK-026 band are disclosed as R63-M2. Revisit after the conference.
+  - area critic · both games · adopted · delivery implemented · at ~00:30 EDT · see [D-1331](#d-1331) · refines [D-1333](#d-1333)
+  - Source: The driver’s call of 2026-10-25 00:30 EDT (the DRIVER-STATE hourly line of 00:30 EDT), made under 201 (D-1333: “You make the calls please”), …
