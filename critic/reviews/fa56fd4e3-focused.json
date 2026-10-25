@@ -1,0 +1,638 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-25T06:30:31.362Z",
+ "build": {
+  "mainSha": "fa56fd4e3",
+  "bundle": "index-Bo7iMtyZ.js"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "R63-P1 (phone layout) is fixed and verified at 390x844, 844x390 and 768x1024: the release-62 HUD with PAUSE and whole command names, identical to live; the desktop default and the ?pack words work.",
+  "R63-M1: the engine was not changed; with the harness corrected the candidate shows 0 snaps per minute and the same swap jerks as live (47 / 44.9 px against 43.4 / 48.3), so no regression against live is left at critical or major.",
+  "The only candidate-added readings are R63-M2 (five swaps 1 to 5 percent outside a band, polish, inside the new pack feature) which does not block; both pack chapters play from the real title to a lost and a won fight at 1600x900 and 2000x1012 with 0 console errors."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear (AGENTS rule 13). The sound pass (layered hits, menu family, voiced Chapter I lines, mix) was not auditioned and tools/audio/qa.mjs was not rerun in this review (the assemble lane ran it with exit 0). The audio context ran, but no cue was judged.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "fight",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Desktop: 1600x900 and 2000x1012 first menu, target step and defeat overlay own the stage in Chapters I and IV, re-seen this run (routes/*/16-target-single.png) [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "battle at 1600x900 and 2000x1012",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-02-menu.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/8ee3ca11b-focused/shots/wide-sheet.jpg",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-sheet.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "R63-P1 fixed: at 390x844 (touch), 844x390 (touch) and 768x1024 (touch) Chapters I and IV open on the release-62 HUD (no F1 nodes): full command names, PAUSE chip present, no truncation, 0 console errors; live at 390x844 is the same layout. Desktop 1600x900 keeps the F1 HUD (31-32 F1 nodes) in both chapters; ?pack=demo at 390x844 still forces the pack (truncated names, no chip: the booth word, by design); ?pack=off at 1600x900 gives the old HUD.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first command menu at 390x844, 844x390, 768x1024",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch4-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-844.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch4-844.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-768.png",
+    "critic/reviews/fa56fd4e3-focused/shots/live-ch1-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/live-ch4-844.png",
+    "critic/reviews/fa56fd4e3-focused/tile-pause-phone.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 20
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "PAUSE chip visible on every phone and tablet capture (46x46 at 390 wide, 96x24 at 844x390 and 768x1024), the same as live; Esc opens and closes pause on desktop in both chapters and on live alike (pause-*.json). The phone pause SCREEN was not opened by a tap this round.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch4-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-844.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch4-844.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-768.png",
+    "critic/reviews/fa56fd4e3-focused/shots/live-ch1-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/live-ch4-844.png",
+    "critic/reviews/fa56fd4e3-focused/tile-pause-phone.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Booth end card, attract card, picker idle, Overdrive opening, victory freeze, Change plate not driven to their ends (unchanged since the first review) [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "overlays",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-07-after-end.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No developer vocabulary seen on the title, board, prep, menus, defeat and results screens of this run [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "title to battle",
+   "state": "screens listed",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/8ee3ca11b-focused/shots/press.png",
+    "critic/reviews/8ee3ca11b-focused/shots/demo-title.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Desktop slabs clear of the party; at the Chapter IV target step the reticle sits over the Intel slab edge as in the first review (R63-O1 polish, live draws it too) [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "menu and target step",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-04-act-2.png",
+    "critic/reviews/8ee3ca11b-focused/shots/live4-1600-04-act-2.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-02-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Desktop: every name whole; phone and tablet: command names whole at 390x844, 844x390 and 768x1024 (no row truncated).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch4-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-844.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch4-844.png",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-768.png",
+    "critic/reviews/fa56fd4e3-focused/shots/live-ch1-390.png",
+    "critic/reviews/fa56fd4e3-focused/shots/live-ch4-844.png",
+    "critic/reviews/fa56fd4e3-focused/tile-pause-phone.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Selected command, target bracket / pointing hand (FFX) and flower reticle (FFX-2) clear at 1600x900 and 2000x1012 [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "command and target steps",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-04-act-3.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-04-act-2.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Seymour Flux and Mortiorchis (Chapter I) and Bahamut (Chapter IV) on screen at the target step [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "target step",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-04-act-3.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-04-act-2.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Repainted cast against the approved masters not compared this round (unchanged since the first review) [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc",
+   "state": "cast in battle",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "reason": "Party and boss face each other in every captured frame [reused from 8ee3ca11b-focused where noted; the delta since touches DemoGate.ts and critic harness only]",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-02-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Every route ran from the real title through board, prep, cutscene and fight by real Playwright keys (route.mjs); phone captures by real keys with touch emulation on; the debug API only read state (and setSeed 1, labelled).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserted screen and awaitingMenu before the shot (menu.mjs throws on failure; route.mjs asserts per step); route \"fails\" on the Chapter I win are three UNVERIFIED captures flagged by the harness (pause by Esc raced the menu once, then P opened it; post-scene shot arrived at results), not wrong-screen shots.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "Production candidate dist-gate (release 63, base /), bundle index-Bo7iMtyZ.js confirmed in index.html and in the page on all captures. NOTE: the dist-gate folder was interrupted once by my own stray candidate-build call and rebuilt in full with the same tool and inputs; same bundle name (content hash), art-derive verify PASS (5404 masters, 0 problems) and audit PASS after the rebuild.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "art-derive verify and audit PASS on the rebuilt dist-gate (above). art-browser-load not run this round.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Both games: the gate default now holds on desktop in both (F1 HUD in Chapter I FFX and Chapter IV FFX-2) and is off on phone and tablet in both.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case: both games (shared gate plumbing, DemoGate.ts); the pack acts in Chapter I (FFX) and Chapter IV (FFX-2) only. Presence: F1 HUD on desktop in both; absence: Chapters II, V, VI first menus unchanged from the first review (code delta cannot reach them: DemoGate gates only the two chapters).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Chapter I: lose (defeat, 4 turns) at 1600x900 and 2000x1012, win (victory, 53 turns) at 1600x900; Chapter IV: lose at 1600x900, win at 1600x900 and 2000x1012. 0 console errors, 0 failed responses on all six. Seed 1.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 45
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Everything ran through the real title, board, prep and battle screens.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/index.json",
+    "critic/reviews/fa56fd4e3-focused/shots/p1-ch1-390.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Harness on the candidate (its own pose table, not stale): Chapter I 3 swaps change a head by more than 3 percent in the CONTROL reading (worst 12.1 / 9.4 percent registered: Auron attack>follow, follow>idle; Yuna idle>hurt 3.1) and 2 swaps draw Auron ready>idle at stature 0.852 against a 0.90 band; Chapter IV 2 Yuna cast>idle swaps at 1.116 / 1.117 against a 1.10 band. The same swaps in other instances read 0.90 to 0.96 and live r62 (same harness, its own table) PASSES both chapters, so these are outliers the candidate adds. Pixel readings at the worst swap I looked at (Auron follow>idle, strip swap-369) are fine: real head 0.99, feet 1.1 px; the 1.094 head is the registered CONTROL reading. Filed as R63-M2 polish.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/continuity/summary-seymour-flux.json",
+    "critic/reviews/fa56fd4e3-focused/continuity/summary-ffx2-bahamut.json",
+    "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-369-auron-follow-idle.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 40
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Candidate Chapter I: 0 snaps per minute (first candidate 0.62), swap jerks worst 47 px (live 43.4), mid-move dashes worst 113.8 px (live 47; reported not gated, under the 300 px teleport line), 0 teleports; Chapter IV: 0 snaps, swap jerks worst 44.9 px (live 48.3), dashes 32.1 (live 86.1). The 290 / 603 / 1,132 / 40,092 px readings of the first candidate are gone. The gate still reads FAIL because 2 (Chapter I) and 1 (Chapter IV) steps of 40 to 47 px at a swap exceed the 40 px line, as live does (live FAIL too: 43.4 and 48.3). Not a regression. 156 of 160 planned cuts matched (Chapter I) and 133 of 135 (Chapter IV) are excused as Bailey's planned smears, up to 220 px / 0.37 of the figure's drawn height; I looked at the dash strip (Auron lunge) and the swap-jerk strip (Kimahri, under the Mega Phoenix flash: nothing to see) but not at an excused 220 px Tidus step.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu to outcome",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/jerk-010-auron.jpg",
+    "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/jerk-026-kimahri.jpg",
+    "critic/reviews/fa56fd4e3-focused/continuity-live/summaryb-seymour-flux.json",
+    "critic/reviews/fa56fd4e3-focused/continuity-live/summaryb-ffx2-bahamut.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 40
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Whether the music and effects are beautiful: no agent can hear; the sound pass is for Bailey to audition (docs/audio/audition.html).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "audio",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 386.8,
+    "swaps": 334,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 4.9,
+    "worstJerkPx": 113.8,
+    "minStature": 0.765,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 47,
+    "dashesWorstPx": 113.8,
+    "frameP99Ms": 23.3,
+    "jerksCovered": 0,
+    "fps": 59.4,
+    "dedicated": true,
+    "strips": 19,
+    "worstSwapStrips": [
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-006-kimahri-idle-ko.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-003-kimahri-hurt-idle.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-330-yuna-critical-hurt.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-338-yuna-hurt-critical.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-026-kimahri-idle-ready.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-067-kimahri-ready-idle.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-192-yuna-ready-item.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-369-auron-follow-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 354.1,
+    "swaps": 385,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 0.6,
+    "maxFeetShiftPx": 0.3,
+    "worstJerkPx": 44.9,
+    "minStature": 0.898,
+    "heightOverBand": 2,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 44.9,
+    "dashesWorstPx": 32.1,
+    "frameP99Ms": 49.3,
+    "jerksCovered": 0,
+    "fps": 57.9,
+    "dedicated": true,
+    "strips": 19,
+    "worstSwapStrips": [
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-189-paine-attack-follow.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-264-rikku-ready-attack.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-377-paine-ready-attack.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-282-paine-follow-idle.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-167-paine-idle-follow.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-339-rikku-attack-follow.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-031-paine-cast-hurt.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-033-paine-hurt-cast.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-354-paine-hurt-ready.jpg",
+     "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/strips/swap-352-paine-ready-hurt.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "liveR62SameHarness": [
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 380.2,
+    "swaps": 350,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 47,
+    "minStature": 0.782,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 43.4,
+    "dashesWorstPx": 47,
+    "frameP99Ms": 22.4,
+    "jerksCovered": 0,
+    "fps": 59.9,
+    "dedicated": true,
+    "strips": 20,
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 382.8,
+    "swaps": 415,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 0.6,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 86.1,
+    "minStature": 0.898,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 48.3,
+    "dashesWorstPx": 86.1,
+    "frameP99Ms": 37.8,
+    "jerksCovered": 0,
+    "fps": 59.6,
+    "dedicated": true,
+    "strips": 19,
+    "unverified": null
+   }
+  ],
+  "note": "Candidate: harness of fa56fd4e3 (unseen, smear.elastic and maxJerkShare, jerks.commonMode, CRLF-safe table hash) with the candidate pose table. Live r62 (bundle index-C9xPmvqR.js): the same harness with live's own table (c8ecbcb31) as --pose-measure; the first attempt without it read 0 s of battle (stale table) and is in continuity-live/*-live62 (discard)."
+ },
+ "targets": {
+  "required": 2,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 1,
+  "waiting": 2
+ },
+ "targetNotes": "Battle HUD FFX and FFX-2 (Ink and Gold mockups) still wait on Bailey's decision (the build is the F1 slab HUD). The tile Pause on a phone is the pause screen: the phone battle now has the PAUSE chip like live, but the pause screen itself was not opened by a tap at 390x844 this round (UNVERIFIED; composite tile-pause-phone.jpg shows the tile against the battle, not a match).",
+ "issues": [
+  {
+   "id": "R63-M2",
+   "severity": "polish",
+   "title": "A few pose swaps in the pack chapters draw a figure outside its height band or head tolerance (candidate only)",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "Every pose swap keeps the figure within the height band (0.90 to 1.10) and head tolerance (3 percent), as live r62 does in the same harness.",
+   "observed": "Chapter I: Auron ready>idle twice at stature 0.852 and 0.853; Yuna idle>hurt head 3.1 percent; Auron attack>follow 7.7 and follow>idle 9.4 percent on the registered CONTROL head (the real head reads 0.99 and the feet 1.1 px at the one strip I looked at). Chapter IV: Yuna cast>idle twice at 1.116 and 1.117. Other instances of the same swaps read inside the band. Live r62 passes CHK-026 in both chapters. The excursions are 1 to 5 percent past the band, at moments of motion with the pack's cut-on-peak and camera.",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<candidate> --chapters=seymour-flux (and ffx2-bahamut) --evidence=<dir> --tag=x; compare with --base=https://echoesofspira.com/ --pose-measure=<c8ecbcb31 docs/target/pose-measure.json>.",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/continuity.json",
+    "critic/reviews/fa56fd4e3-focused/continuity/ffx2-bahamut-win-fa56fd4e3/continuity/continuity.json",
+    "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/swap-369-auron-follow-idle.jpg"
+   ],
+   "confidence": "medium (one run each; the strips of the 0.85 swaps were not read)",
+   "requirement": "CHK-026",
+   "where": "suspected: the pack's planned cuts and camera push-in on a moving figure; not traced",
+   "fix": "Read the two Auron ready>idle strips and the Yuna cast>idle ones; if the figure is drawn mid-move at that scale, widen the harness reading for planned smears or retime the cut; otherwise register the pose.",
+   "acceptanceCheck": "Harness CHK-026 PASS on Chapters I and IV, or the five swaps explained with strips.",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": true
+  },
+  {
+   "id": "R63-M1",
+   "severity": "polish",
+   "title": "Chapter I and IV swap jerks of 44 to 47 px remain, at the level live already has",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "No step of 40 px or more at a pose swap.",
+   "observed": "Chapter I 2 steps, worst 47 px (Kimahri under the Mega Phoenix flash, where nothing is visible); Chapter IV 1 step, 44.9 px. Live r62 reads 43.4 and 48.3 px in the same harness. The first candidate's 290 px, 603 px and snaps were harness misreadings of unseen figures and late-landing planned cuts (now excused by new policy words); no engine change was made. The excuse windows widened (unseen, smear.elastic, maxJerkShare 0.5, commonMode): they excuse planned cuts of up to 220 px.",
+   "repro": "As R63-M2.",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/jerk-026-kimahri.jpg",
+    "critic/reviews/fa56fd4e3-focused/continuity/seymour-flux-win-fa56fd4e3/continuity/strips/jerk-010-auron.jpg"
+   ],
+   "confidence": "high that candidate equals live; medium on whether the widened excuses hide something visible",
+   "requirement": "CHK-027",
+   "where": "harness policy continuity.* (critic/policy.json)",
+   "fix": "Have Bailey judge one Chapter I clip of a Tidus and an Auron cut by eye; keep the widened words only if they match what he sees.",
+   "acceptanceCheck": "Bailey looks at the clip.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R63-O1",
+   "severity": "polish",
+   "title": "Chapter IV target step: the flower reticle is drawn near the Intel slab text",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "expected": "Reticle and Intel slab do not overlap.",
+   "observed": "Unchanged from the first review; at 1600x900 the reticle and brackets sit just right of the slab's edge. Live draws the reticle too.",
+   "repro": "Chapter IV first menu, Enter on Attack.",
+   "evidence": [
+    "critic/reviews/fa56fd4e3-focused/routes/ffx2-bahamut-win-r1600x900/16-target-single.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-008",
+   "where": "intentBoard placement",
+   "fix": "Add the reticle to the placement obstacles.",
+   "acceptanceCheck": "No overlap at the target step.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R63-S1",
+   "severity": "suggestion",
+   "title": "Not heard, not compared: the sound pass, the booth path and the repainted cast",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "Bailey auditions the sound (docs/audio/audition.html); a booth run to the end card and the repaint comparison are done once.",
+   "observed": "Unchanged and untested this round (agents cannot hear).",
+   "repro": "n/a",
+   "evidence": [],
+   "confidence": "n/a",
+   "requirement": "CHK-001, CHK-006, CHK-013, CHK-B1",
+   "where": "n/a",
+   "fix": "Owner audition; one booth run.",
+   "acceptanceCheck": "Done.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "dist-gate rebuilt (see CHK-017), bundle index-Bo7iMtyZ.js, art-derive verify and audit PASS",
+   "First menu at 390x844, 844x390 and 768x1024 with touch on, Chapters I and IV; live at 390x844 (Chapter I) and 844x390 (Chapter IV); ?pack=demo at 390x844; ?pack=off at 1600x900",
+   "Chapter I lose (1600, 2000), win (1600); Chapter IV lose (1600), win (1600, 2000) by real keys from the title, seed 1",
+   "Esc pause toggling, candidate and live, Chapter I at 1600x900; candidate Chapter IV",
+   "Continuity harness on both chapters for the candidate and for live r62 with the same harness"
+  ],
+  "reused": [
+   {
+    "what": "Chapters II, V, VI first menus vs live; /press/ and ?demo=1 title load; first-review text and layout reads (CHK-002, 007, 008, 010, 011, 014)",
+    "from": "critic/reviews/8ee3ca11b-focused",
+    "why": "the delta 8ee3ca11b..fa56fd4e3 touches src/engine/motion/DemoGate.ts, critic harness files, tests and docs only; DemoGate gates Chapters I and IV, so those screens cannot differ"
+   }
+  ],
+  "notTested": [
+   "Sound (agents cannot hear)",
+   "The booth path end to end",
+   "Phone pause screen by a tap",
+   "Repainted cast against the approved masters",
+   "Real touch hardware, a real pad, WebKit (art-browser-load)",
+   "Frame times against live (a GPU art batch may share the machine; timings noisy)"
+  ]
+ },
+ "regressions": [
+  "Pose swaps outside their band in Chapters I and IV that live r62 does not show (R63-M2, polish)"
+ ],
+ "nextReview": "Deep review on the live build after the deploy; owe: R63-M2 strips, one Bailey look at a Chapter I Tidus and Auron cut.",
+ "elapsedMinutes": 160
+}

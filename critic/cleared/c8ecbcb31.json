@@ -4,83 +4,8 @@
   "deployedAt": "2026-10-22T12:53:14.528Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 4830,
-  "policyVersion": 2,
   "artifactHash": "fb151fee740a2211662998ca3d69b4c86799799376c4ad40bc47e4c54236ac08",
   "review": "deep",
-  "reasons": [
-    "src/app/changelog/releaseNotes.ts: unclassified product path is a shared system",
-    "src/app/demo/demo.css: unclassified product path is a shared system",
-    "src/app/demo/demoBoard.ts: unclassified product path is a shared system",
-    "src/app/demo/demoControls.ts: unclassified product path is a shared system",
-    "src/app/demo/demoDefeat.ts: unclassified product path is a shared system",
-    "src/app/demo/demoGauge.ts: unclassified product path is a shared system",
-    "src/app/demo/demoHints.ts: unclassified product path is a shared system",
-    "src/app/demo/demoIntro.ts: unclassified product path is a shared system",
-    "src/app/demo/demoReset.ts: unclassified product path is a shared system",
-    "src/app/demo/demoThanks.ts: unclassified product path is a shared system",
-    "src/app/demo/demoWarm.ts: unclassified product path is a shared system",
-    "src/app/demoMode.ts: unclassified product path is a shared system",
-    "src/engine/BattlePresenterBeats.ts: battle presenter and lifecycle is a shared system",
-    "src/engine/BattlePresenterPorts.ts: battle presenter and lifecycle is a shared system",
-    "src/main.ts: global layout, input and boot is a shared system",
-    "src/ui/coach/CoachLayer.ts: unclassified product path is a shared system",
-    "src/ui/coach/turnOrderLine.ts: unclassified product path is a shared system",
-    "src/ui/common/registerFlowScreens.ts: global layout, input and boot is a shared system",
-    "src/ui/common/resultsPage.ts: global layout, input and boot is a shared system",
-    "src/ui/common/resultsPhone.ts: global layout, input and boot is a shared system",
-    "src/ui/common/transitions/MomentOverlay.ts: global layout, input and boot is a shared system",
-    "src/ui/common/transitions/confirmPress.ts: global layout, input and boot is a shared system"
-  ],
-  "systems": [
-    "battle presenter and lifecycle",
-    "effects, lighting and sprites",
-    "global layout, input and boot",
-    "title, chapter select, prep, pause and results screens, and the Pilgrimage run's own screens (a hidden prototype: src/app/pilgrim/)",
-    "unclassified product path"
-  ],
-  "chapters": [
-    "seymour-flux",
-    "yunalesca",
-    "braskas-final-aeon",
-    "ffx2-bahamut",
-    "ffx2-vegnagun-shuyin",
-    "ffx2-leblanc",
-    "seymour-anima-macalania",
-    "evrae-airship",
-    "yojimbo-cavern",
-    "seymour-natus",
-    "ffx2-fallen-aeons",
-    "seymour-omnis",
-    "ffx2-trema",
-    "isaaru-via-purifico",
-    "ffx2-den-of-woe",
-    "ffx2-ixion-djose",
-    "sin-fins-core",
-    "sin-face",
-    "mirror-aeons"
-  ],
-  "checks": [
-    "CHK-002",
-    "CHK-003",
-    "CHK-006",
-    "CHK-008",
-    "CHK-009",
-    "CHK-013",
-    "CHK-015",
-    "CHK-016",
-    "CHK-017",
-    "CHK-020",
-    "CHK-021",
-    "CHK-022",
-    "CHK-023",
-    "CHK-026",
-    "CHK-027"
-  ],
-  "liveArtifact": {
-    "result": "PASS",
-    "checked": 53,
-    "at": "2026-10-22T12:53:14.528Z"
-  },
   "obligations": [
     {
       "kind": "live",
@@ -100,7 +25,7 @@
     },
     {
       "kind": "deep",
-      "status": "pending",
+      "status": "carried",
       "requires": "deep review of every affected chapter and system",
       "carriedFrom": [
         "fd0ae96",
@@ -175,13 +100,10 @@
         "6db09ac86",
         "1cea6e937",
         "660c19bbd"
-      ]
+      ],
+      "carriedTo": "fa56fd4e3",
+      "at": "2026-10-25T06:52:55.070Z"
     }
   ],
-  "ownerOverride": {
-    "words": "Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.",
-    "date": "2026-10-22T12:53:14.528Z",
-    "report": "critic/reviews/c8ecbcb31-focused.json",
-    "changedArea": null
-  }
+  "supersededBy": "fa56fd4e3"
 }

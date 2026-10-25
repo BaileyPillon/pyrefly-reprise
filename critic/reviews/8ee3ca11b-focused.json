@@ -1,0 +1,725 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-25T01:38:35.506Z",
+ "build": {
+  "mainSha": "8ee3ca11b",
+  "bundle": "index-DAo9s-Zx.js"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "HOLD"
+ },
+ "shipReasons": [
+  "R63-P1: on a 390x844 phone the pack (on by default in Chapters I and IV) removes the PAUSE button and cuts the command names; live has both. A major regression introduced by this candidate.",
+  "R63-M1: Chapter I swaps snap more than live (0.62 snaps per minute against 0; swap jerks to 290 px and a 603 px teleport against a 47 px worst), measured by the harness on both builds; cause suspected in the new Overdrive and camera staging, not traced.",
+  "What is good: on the desktop (1600x900, 2000x1012) the pack in Chapters I and IV plays from the real title to a lost and a won fight with 0 console errors at 59 to 60 fps; the other chapters match live; Chapter IV motion is level with live. R63-P1 is fixed by a gate on narrow screens, and the conference PC is not affected, so Bailey may choose to override the HOLD for the booth."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear (AGENTS rule 13). The sound pass (layered hits, menu family, voiced Chapter I lines, mix) was not auditioned and tools/audio/qa.mjs was not rerun in this review (the assemble lane ran it with exit 0). The audio context ran, but no cue was judged.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "fight",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "At 1600x900 and 2000x1012 the first command menu, the target step and the defeat overlay of Chapter I and the menu of Chapter IV each own the stage; no full-screen layer outlived its state. At 390x844 see CHK-003 and R63-P1.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "battle at 1600x900 and 2000x1012",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-02-menu.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/8ee3ca11b-focused/shots/wide-sheet.jpg",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-sheet.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "reason": "At 390x844 in Chapters I and IV the F1 slab HUD is the desktop layout scaled down: command names are cut (\"ATTA...\", \"SKIL...\", \"SPE...\", \"WHI...\"), the party cards spill (\"Yuna 690\" over the card edge) and the desktop key hints \"Enter Select, G Intel, P Pause\" are drawn at about 6 px. Live shows a full command grid at the foot of the screen. Desktop sizes pass.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first command menu at 390x844",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/phone2-sheet.jpg",
+    "critic/reviews/8ee3ca11b-focused/shots/phone-live-sheet.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-004",
+   "result": "FAIL",
+   "reason": "At 390x844 the footer of the pack HUD still names \"P Pause\" and \"Enter Select\" and the phone has no pause button (the visible button list holds only GUIDE; live and ?pack=off list a 46x46 PAUSE). The panel names an action a touch player cannot press.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "battle menu at 390x844, touch",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/phone2-sheet.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Only the defeat overlay was seen to leave with its fight (Enter went to party prep). The booth end card, attract card, the Overdrive opening, the victory freeze and the Change plate were not driven to their ends in this review.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "overlays",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-07-after-end.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "Player-facing text read on the title, chapter select, party prep, first menus, the defeat overlay and the press page: no developer vocabulary.",
+   "game": "both",
+   "chapter": "title to battle",
+   "state": "screens listed",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/8ee3ca11b-focused/shots/press.png",
+    "critic/reviews/8ee3ca11b-focused/shots/demo-title.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "At 1600x900 and 2000x1012 the slabs sit clear of the party. In Chapter IV at the target step the flower reticle and brackets are drawn over the Intel slab text (polish R63-O1); live draws the same reticle across the same slab and worse. The Seymour speech card covers the boss ribbon at the first menu of Chapter I (a line that dismisses; same with ?pack=off).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "menu and target step",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-04-act-2.png",
+    "critic/reviews/8ee3ca11b-focused/shots/live4-1600-04-act-2.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-02-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-009",
+   "result": "FAIL",
+   "reason": "Desktop: every name shown in full. 390x844: command names are truncated in both pack chapters (R63-P1).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "first menu at 390x844",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/phone2-sheet.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "The selected command (Attack, gold in FFX and pink in FFX-2), the target bracket, name plate and pointing hand (FFX) or flower reticle (FFX-2) are obvious at 1600x900.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "command and target steps",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-04-act-3.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-04-act-2.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Chapter I at the target step: Seymour Flux and Mortiorchis both on screen; Chapter IV: Bahamut on screen. Other fights were not driven to a target step.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "target step",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-04-act-3.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-04-act-2.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "The repainted Yuna, Kimahri (FFX), Rikku Dark Knight and Paine Warrior (FFX-2) were seen in running frames and look consistent with the cast, but were not judged against the written rubric or the approved masters; Paine in Chapter VI and the Echo 2x tier were not looked at.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc",
+   "state": "cast in battle",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "reason": "Party and boss face each other in every captured frame of Chapters I and IV (menu, target step, defeat pose with KO marks).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-02-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real Playwright keyboard from the title through chapter select, party prep and cutscene to the first menu, attack and target by Enter, a lost fight and Try Again; a real touch tap on Attack at 390x844 reached the target step (ATTACK -> BAHAMUT). The debug API only handed the fight to the engine to reach the end, and read state.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "title to battle",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600.json",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600.json",
+    "critic/reviews/8ee3ca11b-focused/shots/pcand4-phone-tap1.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 25
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture waited on window.__pyrefly.screen() and the battle snapshot (awaitingMenu) through the harness waitBattleMenu, which throws on a failed wait; every run printed the asserted screen next to its shots.",
+   "game": "both",
+   "chapter": "all",
+   "state": "title to battle",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600.json",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "Production candidate dist-gate (release 63, base /), bundle index-DAo9s-Zx.js, served and confirmed in index.html and in the page; art-derive verify PASS (5404 masters, 0 problems) and audit PASS. DISCLOSURE: I ran candidate-build.mjs once by mistake with a --help flag it does not have, it began a rebuild that my pipe cut off, and I then rebuilt dist-gate with the same command and pinned inputs; the bundle name is identical. art-browser-load, art-play-audit and the deploy manifest were not run (the deploy runs them). 0 console errors and 0 responses of 400 or more in all runs.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "production candidate",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "art-derive verify and audit PASS on dist-gate (every derived file equals its master, nothing dangling, 38 strip thumbnails). Not run: art-browser-load in WebKit.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "production candidate",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The pack is on in both games (F1 HUD, camera, staging seen in Chapter I FFX and Chapter IV FFX-2) and both fail on a phone alike (R63-P1).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/wide-sheet.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case (r63-rc note): both games for the plumbing; the pack acts in Chapter I (FFX) and Chapter IV (FFX-2) only. Presence: F1 HUD in both. Absence: first menus of Chapter II (FFX), V and VI (FFX-2) on the candidate show the release-62 HUD and match live; ?pack=off in Chapter I returns the old HUD. FFX-only items (retry theme, party swap ease, Seymour voice lines) were not each isolated.",
+   "game": "both",
+   "chapter": "seymour-flux, yunalesca, ffx2-bahamut, ffx2-vegnagun-shuyin, ffx2-leblanc",
+   "state": "first menus",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/others-sheet.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 8
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Chapter I: a lost fight reached the defeat overlay and Try Again reached party prep; the harness win reached victory. Chapter IV: a win reached the post-fight cutscene on candidate and live.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "fight end",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-07-after-end.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Everything ran through the real title, board, prep and battle screens; the continuity harness plays with real keys.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "full flow",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Harness on the candidate (LF pose table, sha 9f168c0f1dc4): 3 swaps change a head by more than 3 percent (worst 12.1 percent, 9.4 percent where registered, Chapter I; live r62 3.1 percent registered); 2 Chapter IV swaps outside the height band by pixels (live 0). 449 of 706 swaps had a registered head.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/continuity/continuity-summary.json",
+    "critic/reviews/8ee3ca11b-focused/continuity-live/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 25
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Candidate: 0.33 snaps per minute over both chapters (Chapter I 0.62, live 0), 16 jerks of 40 px or more at a pose swap (worst 290.5 px; live Chapter I 46.9), one mid-move teleport of 603.5 px (Yuna, about 415 s into Chapter I), Tidus head jerks of 140 to 238 px at swaps about 378 to 382 s. Chapter IV is level with live (worst swap jerk 44.7 against 48.3, 0 snaps both). Live r62 also FAILs CHK-027 on jerk size (46.9 and 48.3) but with 0 snaps.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/continuity/continuity-summary.json",
+    "critic/reviews/8ee3ca11b-focused/continuity/seymour-flux-win-8ee3ca11b/continuity/strips/jerk-003-tidus.jpg",
+    "critic/reviews/8ee3ca11b-focused/continuity/seymour-flux-win-8ee3ca11b/continuity/strips/jerk-001-kimahri.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 25
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Whether the music and effects are beautiful: no agent can hear; the sound pass is for Bailey to audition (docs/audio/audition.html).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "audio",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 386.5,
+    "swaps": 337,
+    "snapsPerMinute": 0.62,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 4.9,
+    "worstJerkPx": 603.5,
+    "minStature": 0.765,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 290.5,
+    "dashesWorstPx": 283.8,
+    "frameP99Ms": 23.9,
+    "jerksCovered": 0,
+    "fps": 59.4,
+    "dedicated": true,
+    "strips": 19,
+    "worstSwapStrips": [
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-006-kimahri-idle-ko.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-122-yuna-idle-hurt.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-003-kimahri-hurt-idle.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-125-yuna-hurt-critical.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-334-yuna-critical-hurt.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-042-kimahri-idle-ready.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-067-kimahri-ready-idle.jpg",
+     "seymour-flux-win-8ee3ca11b/continuity/strips/swap-043-kimahri-ready-attack.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 340,
+    "swaps": 378,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 0.6,
+    "maxFeetShiftPx": 0.3,
+    "worstJerkPx": 44.7,
+    "minStature": 0.898,
+    "heightOverBand": 2,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 44.7,
+    "dashesWorstPx": 32.1,
+    "frameP99Ms": 35.7,
+    "jerksCovered": 0,
+    "fps": 59.8,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-325-paine-attack-follow.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-176-rikku-ready-attack.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-257-paine-ready-attack.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-326-paine-follow-idle.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-164-paine-idle-follow.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-360-rikku-attack-follow.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-139-paine-od-x2-warrior-armor-break-ready.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-131-paine-cast-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-054-paine-cast-hurt.jpg",
+     "ffx2-bahamut-win-8ee3ca11b/continuity/strips/swap-089-paine-hurt-cast.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 726.5,
+  "counted": 715,
+  "swaps": 757,
+  "size": {
+   "judged": 706,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 9,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 12.1,
+   "maxHeadJumpPctRegistration": 9.4,
+   "headOverTolerance": 3,
+   "maxFeetShiftPx": 4.9,
+   "feetOverTolerance": 0,
+   "headMeasured": 706,
+   "headRegistration": 449,
+   "headRig": 221,
+   "rigSwaps": 221,
+   "headSilhouette": 36,
+   "headUnmeasured": 0,
+   "heightMeasured": 706,
+   "heightOverBand": 2,
+   "heightWaived": 0,
+   "minStature": 0.765,
+   "maxStature": 1.116,
+   "koLengthMeasured": 2,
+   "minKoLength": 0.558,
+   "koLengthReported": 2,
+   "feetSilMeasured": 451,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 7.7,
+   "holdSwaps": 447,
+   "worstRealHeadPct": 30.9,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 4,
+   "snapsPerMinute": 0.33,
+   "hardCuts": 71,
+   "hardCutsPerMinute": 5.86,
+   "ghostSwaps": 411,
+   "ghostFrames": 1529,
+   "worstGhostSeverity": 0.341,
+   "ghostOverFail": 0,
+   "jerks": 37,
+   "worstJerkPx": 603.5,
+   "jerksOverFail": 23,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.004,
+   "maxCentroidShiftPx": 215.8,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 4,
+   "smearsPlanned": 295,
+   "smearSwaps": 283,
+   "smearSnapsExcused": 68,
+   "jerksSmeared": 55,
+   "worstSmearedJerkPx": 87,
+   "swapJerks": 21,
+   "swapJerksWorstPx": 290.5,
+   "swapJerksOverFail": 16,
+   "teleports": 1,
+   "teleportsWorstPx": 603.5,
+   "dashes": 15,
+   "dashesWorstPx": 283.8,
+   "dashesOverFail": 6,
+   "jerksLongFrame": 6,
+   "swapJerksLongFrame": 5,
+   "swapJerksSteadyOverFail": 11
+  },
+  "frameTime": {
+   "frames": 43284,
+   "longFrames": 341,
+   "longFramePct": 0.8,
+   "worstP99Ms": 35.7,
+   "maxMs": 309.7,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "3 swap(s) change a head by more than the tolerance (worst 12.1 percent; 9.4 percent where the head is registered)",
+     "2 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.765 to 1.116; the bands are tools/posescale/pose-bands.mjs's)"
+    ],
+    "note": "449 of 706 measured swaps had a registered head (tolerance 3 percent); 221 were read from a rig's own head mesh (tolerance 3 percent; 221 swap(s) were changes of a rig's key); 36 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 706 swap(s) (stature 0.765 to 1.116, 0 out of band but waived), the silhouette's own feet 451 swap(s) (worst 7.7 px, 0 waived), 447 swap(s) across a recorded hold (real head worst 30.9 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "0.33 snaps per minute is over 0.25",
+     "16 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 290.5 px)",
+     "1 MID-MOVE teleport(s) of 300 px or more in one frame (worst 603.5 px: no lunge covers its whole reach in one frame)"
+    ],
+    "note": "6 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 283.8 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 6 of 37 jerk(s) fell on a frame of more than 34 ms (5 of the 21 at a swap; 11 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 283 of 295 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 68 snap(s) not counted, 55 swap jerk(s) (worst 87 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 726.5 s of battle, 59.4 to 59.8 fps, 2 of 2 run by the dedicated harness; CHK-026 FAIL (3 swap(s) change a head by more than the tolerance (worst 12.1 percent; 9.4 percent where the head is registered); 2 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.765 to 1.116; the bands are tools/posescale/pose-bands.mjs's)); CHK-027 FAIL (0.33 snaps per minute is over 0.25; 16 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 290.5 px); 1 MID-MOVE teleport(s) of 300 px or more in one frame (worst 603.5 px: no lunge covers its whole reach in one frame))",
+  "base": "http://127.0.0.1:5871/",
+  "date": "2026-10-25T01:16:38.721Z",
+  "poseMeasure": {
+   "path": "D:/Tools/pyrefly-scratch/pose-measure-8ee3ca11b.json",
+   "source": "explicit",
+   "subjects": 114,
+   "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+   "staleChapters": []
+  }
+ },
+ "targets": {
+  "required": 2,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 2
+ },
+ "targetNotes": "Battle HUD FFX and Battle HUD FFX-2 (Ink and Gold mockups) compared in tile-battle-hud-ffx.jpg and tile-battle-hud-ffx2.jpg: the build is the F1 slab HUD that Bailey adopted since (D-1286, D-1314), not the Ink and Gold mockup, so both wait on his decision to supersede the tiles. The tile Pause on a phone is failed by R63-P1.",
+ "issues": [
+  {
+   "id": "R63-P1",
+   "severity": "major",
+   "title": "On a phone the pack HUD breaks Chapter I and IV battles: no pause button, command names cut, numbers overlap",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "At 390x844 the battle keeps the live phone layout: a PAUSE button top right (46x46), a full-size command grid at the foot, party cards that hold their numbers.",
+   "observed": "With the pack on by default (no address word) the F1 slab HUD is drawn at phone width as the desktop layout scaled down: command buttons read ATTA..., SKIL..., CHA..., SPE..., WHI...; the party cards spill (Yuna 690, Rikku 1839 over their edge); the desktop key hints are drawn at about 6 px; and the visible button list has no PAUSE (live and ?pack=off list PAUSE 46x46, and Chapter I a DEFEND button). Taps still work (Attack, the target step, ATTACK -> BAHAMUT), so play is possible but pausing is not. The approved phone tile Pause on a phone (docs/screenshots/fix3/pause/v6-390x844-phone.png) cannot be met.",
+   "repro": "PYREFLY_BROWSER=gpu node .focused-phone.mjs <label> \"\" (Chapter I) and \"ArrowDown\" (Chapter IV) on the candidate, then the same with ?pack=off and against https://echoesofspira.com/ (390x844, touch on).",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/phone2-sheet.jpg",
+    "critic/reviews/8ee3ca11b-focused/shots/phone-live-sheet.jpg",
+    "critic/reviews/8ee3ca11b-focused/shots/pcand1-phone-menu.png",
+    "critic/reviews/8ee3ca11b-focused/shots/pcand4-phone-menu.png",
+    "critic/reviews/8ee3ca11b-focused/shots/poff4-phone-menu.png"
+   ],
+   "confidence": "high (candidate, ?pack=off and live each captured the same way)",
+   "requirement": "CHK-003, CHK-004, CHK-009; approved tile phone / Pause on a phone",
+   "where": "the F1 HUD (src/ui/ffx/FFXBattleHud.ts, src/ui/ffx2/FFX2BattleHud.ts) and the pack gate src/engine/motion/DemoGate.ts; suspected, not traced",
+   "fix": "Keep the pack default for desktop pointers and widths and fall back to the release-62 phone layout (F1 HUD off, as ?hud=today) below the phone breakpoint or on a coarse pointer, or ship the pack off for narrow screens until the F1 HUD has a phone layout. The conference PC is unaffected.",
+   "acceptanceCheck": "At 390x844 in Chapters I and IV: PAUSE 46x46 present, command names whole, no key hints, the same button list as live.",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "id": "R63-M1",
+   "severity": "major",
+   "title": "Chapter I pose swaps snap and jump far more than live (Overdrive cluster and a 603 px teleport)",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "No more snaps and swap jerks than the live build (live: 0 snaps per minute, worst swap jerk 46.9 px, head jump 3.1 percent registered).",
+   "observed": "Same route, same seed, same harness: 0.62 snaps per minute; swap jerks of 40 px or more (worst 290.5 px, Kimahri feet at about 28 s, frame 1534); Tidus head jerks of 237.8, 163.7, 139.3 px at swaps around 378 to 382 s (the strip shows a one-frame cut from the glowing Overdrive stance to the leap pose); Auron 172.9 px at 412 s; a mid-move teleport of 603.5 px of Yuna at about 415 s; head jump 9.4 percent where registered. The strip of the early Kimahri jerk shows Seymour (harness crop, R63-T1), so that one is not confirmed as a visible defect. Chapter IV is level with live.",
+   "repro": "node critic/runner/lib/continuity.mjs --base=<candidate> --chapters=seymour-flux --pose-measure=<LF copy of docs/target/pose-measure.json at 8ee3ca11b>, and the same on https://echoesofspira.com/ (about 9 minutes each).",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/continuity/seymour-flux-win-8ee3ca11b/continuity/continuity.json",
+    "critic/reviews/8ee3ca11b-focused/continuity/seymour-flux-win-8ee3ca11b/continuity/strips/jerk-003-tidus.jpg",
+    "critic/reviews/8ee3ca11b-focused/continuity/seymour-flux-win-8ee3ca11b/continuity/strips/jerk-001-kimahri.jpg",
+    "critic/reviews/8ee3ca11b-focused/continuity-live/seymour-flux-win-live62/continuity/continuity.json"
+   ],
+   "confidence": "medium: measured by the harness on both builds; the late cluster is probably the new Overdrive and victory staging (authored cuts) but I did not trace it, and the harness cannot tell an authored cut from a defect",
+   "requirement": "CHK-026, CHK-027 (Bailey 2026-10-04: pose swaps must not snap)",
+   "where": "suspected: the Overdrive opening and victory staging, the paint smear and the pro camera (src/engine/BattleMoments.ts, procam, motion pack)",
+   "fix": "Look at the Tidus, Auron and Yuna strips at about 378 to 415 s; if the cuts are authored staging, register them as staged changes for the harness; if not, blend or hold the pose through the move.",
+   "acceptanceCheck": "Harness on Chapter I: snaps per minute at or under live (0), no swap jerk over 100 px outside a named staged change, no teleport over 300 px.",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "id": "R63-O1",
+   "severity": "polish",
+   "title": "Chapter IV target step: the flower reticle is drawn over the Intel slab text",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "expected": "Reticle and Intel slab do not overlap.",
+   "observed": "With the Intel slab open for Bahamut Curse, the target reticle and brackets sit over Curse and SCRIPTED. Live draws the same reticle (larger) across the same slab, so this is better than live.",
+   "repro": "Chapter IV first menu, Enter on Attack.",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch4-1600-04-act-2.png",
+    "critic/reviews/8ee3ca11b-focused/shots/live4-1600-04-act-2.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-008",
+   "where": "intentBoard placement (the 201b fix lists .f1-hero and .f1-cue, not the target reticle)",
+   "fix": "Add the reticle to the placement obstacles.",
+   "acceptanceCheck": "No overlap at 1600x900 at the target step.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R63-S1",
+   "severity": "polish",
+   "title": "Chapter IV: two swaps draw outside the height band by pixels (live none)",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "expected": "Every pose inside its height band.",
+   "observed": "stature 0.898 to 1.116 (2 swaps out of band) against 0 on live in the same run; head registration is steadier than live (0.2 percent against 5.8 percent). Read from the pixels.",
+   "repro": "continuity.mjs --chapters=ffx2-bahamut",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/continuity/ffx2-bahamut-win-8ee3ca11b/continuity/continuity.json",
+    "critic/reviews/8ee3ca11b-focused/continuity-live/ffx2-bahamut-win-live62/continuity/continuity.json"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-026",
+   "where": "repainted poses (Rikku Dark Knight, Paine Warrior), suspected",
+   "fix": "Check the two swaps strips against the registration.",
+   "acceptanceCheck": "CHK-026 PASS on Chapter IV",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "id": "R63-T1",
+   "severity": "polish",
+   "title": "Continuity harness tooling: a CRLF worktree reads as a stale pose table, and a strip can crop the wrong figure",
+   "game": "both",
+   "chapter": "all",
+   "expected": "A candidate checked out with core.autocrlf=true reads its own pose table; strips show the named figure.",
+   "observed": "The harness compares the working-copy pose-measure.json (CRLF, sha e648ba9ec14f) with the committed blob (LF, 9f168c0f1dc4), calls it not the candidate table and makes CHK-026 UNVERIFIED and the aggregate summary read 0 s of battle; a run needs --pose-measure=<LF copy>. The Kimahri jerk strip shows Seymour.",
+   "repro": "git config core.autocrlf true; node critic/runner/lib/continuity.mjs --chapters=seymour-flux",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/continuity/seymour-flux-win-8ee3ca11b/continuity/strips/jerk-001-kimahri.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026 tooling",
+   "where": "critic/runner/lib/continuity.mjs resolvePoseMeasure (PR-0512), suspected",
+   "fix": "Compare the table after normalising line endings.",
+   "acceptanceCheck": "A CRLF worktree reads PASS or FAIL, not stale.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R63-X1",
+   "severity": "suggestion",
+   "title": "The first Enter after a command menu opens does nothing, on live and the candidate",
+   "game": "both",
+   "chapter": "seymour-flux",
+   "expected": "Enter on the open menu selects Attack.",
+   "observed": "In a Chapter I run the first Enter after the menu is up changes nothing; the second opens the target list, the third confirms. Same with ?pack=off. Probably the speech card taking the press.",
+   "repro": "a short script that presses Enter at 700 ms steps and reads the battle phase",
+   "evidence": [
+    "critic/reviews/8ee3ca11b-focused/shots/ch1-1600-04-act-3.png"
+   ],
+   "confidence": "low",
+   "requirement": "CHK-015",
+   "where": "not traced",
+   "fix": "none proposed",
+   "acceptanceCheck": "n/a",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Candidate artifact identity and art (art-derive verify and audit), 0 console errors, 0 failed responses",
+   "Chapter I (FFX) and Chapter IV (FFX-2) from the real title by real keys at 1600x900: menu, target step, turns, defeat overlay and Try Again (Chapter I), win to cutscene (Chapter IV), 59.6 to 60 fps average",
+   "Chapters II (FFX), V and VI (FFX-2) first menus on candidate and live: unchanged",
+   "?pack=off Chapter I returns the old HUD",
+   "2000x1012 menus of Chapters I and IV",
+   "390x844 with touch on candidate, ?pack=off and live",
+   "Continuity harness on Chapters I and IV for the candidate (correct pose table) and for live r62",
+   "/press/ and the ?demo=1 title load without errors"
+  ],
+  "reused": [],
+  "notTested": [
+   "Sound (agents cannot hear)",
+   "The booth: Echo end card with the 8 s hint, attract card idle return, picker idle, Overdrive opening, victory freeze, Change plate driven to their ends",
+   "The other 17 chapters of the plan beyond first menus of three, and the continuity harness for them (the pack does not act there)",
+   "The repainted figures against the approved masters (CHK-013); Paine in Chapter VI play",
+   "Frame times against live (a GPU art batch may share the machine; all timings here are noisy)",
+   "art-browser-load in WebKit, a real pad, a real touch screen, the first-time-fan lens"
+  ]
+ },
+ "regressions": [
+  "Phone layout of Chapters I and IV (R63-P1)",
+  "Chapter I pose-swap continuity (R63-M1)"
+ ],
+ "nextReview": "Fix R63-P1 (phone gate) and look at the R63-M1 strips, rebuild, focused rerun on a phone and Chapter I continuity; deep review on the live build after the deploy.",
+ "elapsedMinutes": 120
+}
