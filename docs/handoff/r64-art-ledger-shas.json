@@ -1,0 +1,738 @@
+{
+ "about": "sha256 of the 89 protected-art pins (83 files; six files are pinned in two sets) that no longer matched the shipped art D:/pyrefly-art-r64 (the public/art of releases 63 and 64): ledger = the pin before this records pass (the paintings of release 62, D:/pyrefly-art-r61), t1 = the painting of the 2026-10-22 art batch where a later install painted the file again, now = the shipped file and the pin after this pass",
+ "entries": [
+  {
+   "set": "cast:tidus",
+   "file": "public/art/characters/tidus/attack.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "33058a4e6a06af512a0707c14302a72e5b71d4fed2d1215c24ab108d0598f7a0",
+   "now": "baff1d78816b2c1554f049748813da949c7537c7c91f503239d5f479d964dae4"
+  },
+  {
+   "set": "cast:tidus",
+   "file": "public/art/characters/tidus/cast.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "55ac162539ef1b74ca82c2f0ffbebd2efcb01ed387900ff2e124cb34d390b164",
+   "now": "6b8f6930b4e7c7fb5e666456af972b1845fa4d758328129beb7a4ac9050d2bc4"
+  },
+  {
+   "set": "cast:tidus",
+   "file": "public/art/characters/tidus/hurt.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "29864fe381d602510cfb419b1b8b0f497dd2900bd3c770d82f908bedb34a4ad8",
+   "now": "734a266f7df2a99d30e7853bd02336ec8e29f47c9e73b3a3b012971122b760d3"
+  },
+  {
+   "set": "cast:tidus",
+   "file": "public/art/characters/tidus/item.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "0aa4b25023ef72592a3c46e4e86c09eb7110318f41b64191395c9e89bdaec959",
+   "now": "fa5d1f3201766ef051b160c649b0ea1570b7a90e5c201303cbddbfb1cfb67323"
+  },
+  {
+   "set": "cast:tidus",
+   "file": "public/art/characters/tidus/ko.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "f14bad6052a9e8d0a82417ae75568748f4ee711ab59b1c553327eda195e4f0d6",
+   "now": "5b34526990512d53accd7a44bd7a94b6d8d6f5a73a134509b57427441c9db915"
+  },
+  {
+   "set": "cast:tidus",
+   "file": "public/art/characters/tidus/victory.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "80a96514650b1ef2a7ba90f9807351cb2a323f32358713a7531c205ad11a7f3a",
+   "now": "402a3ed6c3eaf64c1bd7dbab28765fea2cd9448a5f414f0d8686ddb79fef7378"
+  },
+  {
+   "set": "cast:yuna",
+   "file": "public/art/characters/yuna/attack.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "2a643c14421b6e9fedffbcf09b39039ccbf30621c243aec544514a060d945376",
+   "now": "5092bba51963c158c933e47186fd64f5d2ba7dff8ce247137eb950bb5d9ff30b"
+  },
+  {
+   "set": "cast:yuna",
+   "file": "public/art/characters/yuna/cast.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "15890fc92ea80414969e9e064fcda20513863d35dc76139f7bb8613831b1d2f7",
+   "t1": "7bed409d753136dc94ad245b2ddfaaea71238dc4c0ba0b2ee0a26c5e89ab4e42",
+   "now": "b007285a8c7bd4c63d305f02aa50519b93a9c48309d86ad8ea9725f621873510"
+  },
+  {
+   "set": "cast:yuna",
+   "file": "public/art/characters/yuna/hurt.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "8b1ff43235f8b039a6fdd970b4046ecc0cfb40c89a284867c16dd1213b0dc556",
+   "t1": "da0ad737452c8207a08772d6da4242bcb23e8ea41a22e3fdc4b25423384e9448",
+   "now": "fa754438a81151a663d3ed1182e125f7b1bbbcc781e8c39b2d2067f22f28c278"
+  },
+  {
+   "set": "cast:yuna",
+   "file": "public/art/characters/yuna/item.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "9ba097c27c138f4cd0939824887d0579b0a5621594b701b4b485e47c11c21dca",
+   "t1": "806b7a05d004db5bf9bc9187f9467830d65091ec698867b23975ea33709b2e23",
+   "now": "8d923a9c1e8b55264a72d0b788ad830019296416479ffd4350b9ea8071d1cc61"
+  },
+  {
+   "set": "cast:yuna",
+   "file": "public/art/characters/yuna/ko.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "4c0092651f1a149bd239deea66d5f96da92960a25f8662599bfc0cbe7cb0d854",
+   "now": "1a5f5d6167aa351944bf9b6ebfae61335bd439f54b1465d56d080c2a37167b2d"
+  },
+  {
+   "set": "cast:yuna",
+   "file": "public/art/characters/yuna/victory.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "5de64604c11dcfc2eb7bb26c10a9dd7791d0fb623cdf55270ff0b8633b65d80a",
+   "t1": "603ab2ab4c26fc23e9e6e39645427090192f9d6c4d155f9a780abe531ce1008a",
+   "now": "e4e753e0bf2923c508e44392437dde6a951735a9f97019a43c1d1e3e153c9271"
+  },
+  {
+   "set": "cast:seymour-flux-body",
+   "file": "public/art/characters/seymour-flux-body/attack.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "fc3b8ef9f0eb20951c2c57d39f7192ac774931beda57876bcd6e0fd182e1f794",
+   "now": "cd9140bbd257ebb30c307c8b1e9d0e987339ef368063e0179eca9d99d9f3346a"
+  },
+  {
+   "set": "cast:seymour-flux-body",
+   "file": "public/art/characters/seymour-flux-body/cast.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "329bbd2ccedfc468340036734b6d1a51eee834a927f9c91a3aaa8cb7c0504e60",
+   "now": "8fe70ab0abaf88ff943baa651af021252d4bd898d316350863052af8ac8de325"
+  },
+  {
+   "set": "cast:seymour-flux-body",
+   "file": "public/art/characters/seymour-flux-body/hurt.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "6a2c8234faf9cd11bcff433b9b8dffab61ed37f89885020c665f7407f8590b91",
+   "now": "35f1f63522bde77ed59bddb0afe74a4a8e0597135822b6b46df831eabd309c20"
+  },
+  {
+   "set": "cast:seymour-flux-body",
+   "file": "public/art/characters/seymour-flux-body/idle.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "06c416a771d192ce1fc86f6c79a0f38fca46346968bcd758150cf725031e67be",
+   "now": "3cc3df1a1fea8236129ab41b8fd7a723cd2d0774ad607c9ee6b8853fdf6596a4"
+  },
+  {
+   "set": "cast:seymour-flux-body",
+   "file": "public/art/characters/seymour-flux-body/ko.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "33930c70dd7de5cf7bcfbdf6b7849beed142010081c0d7e8086a8d3390bc190b",
+   "now": "fad97c5a1a175dba2a3009631da75aa9fe209915c79e527d46ccd11f99cd4a5f"
+  },
+  {
+   "set": "bailey:2026-09-25-poses",
+   "file": "public/art/characters/paine-warrior/victory.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "031424726fbebe653a602c8d96e88b27c1bbf1acac644e970058cf832c5ce22a",
+   "t1": "65cd93da432b175e69eed1440d851f37b7564b190a36b0fa7a849f1ebed050c6",
+   "now": "54a643a3fee8aef0180a3009a6c215ec43cd0b61c061a23d020ec0c7be615a57"
+  },
+  {
+   "set": "bailey:2026-09-26-poses",
+   "file": "public/art/characters/paine-warrior/attack.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "682cc7cb7a9f5e358f0e732a36258aada55be14620f47fa76734030a60a3a60c",
+   "now": "b29ac1937a425a3ed7f4802089cdbe1ce5471055cd7ddd0b4b39204848946c15"
+  },
+  {
+   "set": "bailey:2026-09-26-poses",
+   "file": "public/art/characters/paine-warrior/cast.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "c3442ba9930a238b5634cab47b6bf167b9457bb00786aae252e051b629fc3bc2",
+   "now": "defbb3c0dfc1e498cc6007096da990cfb3f66817638b10ae35c22d6ebd46db2e"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/kimahri/critical.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "45fd72d161d48b6a3d477a90398e6700daddf35a8ef0314e749f8ae174f24080",
+   "now": "7bd3f3bcaeb4f2c3aefed8a40cca50cd5033d52f0635c1d472cd07282a6de631"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/kimahri/sleep.png",
+   "change": "colour lock + head retouch, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "ed0a10678e089f8b91ce972a20a68566126b48976342f57636f7b157cc7149c6",
+   "t1": "dd7c1783fc8b6aedb2120ed400fddc4fb2aa95fd5bf40e7667657c7b0f388ce9",
+   "now": "ddea23c9961284a7211bef2d3a3854409db9be2a6d35dc7bad3593f239a44a4c"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/paine-warrior/critical.png",
+   "change": "colour lock + GPU repaint (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "f23f998b5fd3f242e3aed39ca4ed9bde099040235a4a8d4fcc1b2f82bde7edf4",
+   "now": "50db07c13276f45a2c9adab8f441004af8bda1d90c83acd7f46821e05a72e885"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/paine-warrior/sleep.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "a66a52b9b69e88cfb66f500b49d4720fa6bd9ad692fefe8a8b1e3a7c2090893c",
+   "t1": "9bd6940b8a71852c755b121403ad9d5a942fba7fd54216d5743ff5551649f309",
+   "now": "39065f23d66d42e5eb16beb593701b900f846107c8ef4bb2c252202969d6807b"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/tidus/critical.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "514e60d3c83c3e5f3e441563bbce72d8029f1db6da5708908aa75ea3a4c29894",
+   "now": "77721994ed0a4c52a953e9aa4249a0664547cee59dd23f34cd7a4ae63a39cd28"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/tidus/sleep.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "4b7c3a4f6f9f07117a1b3c555a5f86560b506f73b31defa4a43553d7a632ebc3",
+   "now": "bf8190c90b8b6687c5525b6a621647dbfeae4d4c665f95bb5a392f6d4d86e4d8"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/yuna/critical.png",
+   "change": "colour lock + head retouch, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "e1ad0dac5025fc34a8faef021d0ab65a82f31c4d5a970a732bb56b7b439e51f9",
+   "t1": "eba4698167e35c4e76eaf712bfb402fe24d2f39b237d4bec6b61f92ff90a8dc2",
+   "now": "e1f61dd582317f9aa9e6e1abe87e8abed7c88c05d8ef87dd367bb0acf5c91a24"
+  },
+  {
+   "set": "bailey:2026-09-30-poses",
+   "file": "public/art/characters/yuna/sleep.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "1cf4028e6b7745e1274100bbc43e9377cf411df01d389256e9fe07892ec105d7",
+   "now": "6dfd52853372e5d3abea5bd048a8536550fd09e2d0b947049f5f182466a659b0"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/ffx2-bahamut/attack.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "f20eeef2235baafade410f3f218077d80b257b192ddf688e63cc5b1f224c7976",
+   "now": "7bbb49703f2d9ba45aeb6b11824b2f59e8fc38e9541b2e28e51272e4c6dcfcad"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/ffx2-bahamut/idle@2x.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "816a9babde98e532062f45e90ff329012f196785c1cef269bc7ce09842d285ae",
+   "now": "536fb41687ab9301a1d648dbc791f0c8d9e9146ec03732030fd322c99e056ccc"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/paine-warrior/follow.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "f4cdb5d65bef20ae3991ef12f8b6b3136ed3f0df3e3a77739f4bec69647f03c1",
+   "t1": "0c22d20b285bbc2e4af1d5b16ef030b589bc15a0212e02d12423c62645e4ca0d",
+   "now": "4bc76d86cd832461c005949acb1b935269da2eeb5742fedfb9efedc7f43ba77e"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/paine-warrior/item.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "06b68c4a7f615a1107f5343d0efceb5dd387398c9d751fb6792769376fad6727",
+   "t1": "ba8ab92acd609977e16dbe064217df16b28d5e9d18eabeefd8202f3c98d1037c",
+   "now": "165eceb978404afffc36c88c5a22256b644a02530b79be6d44f85a81bad1bbbf"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/paine-warrior/ready.png",
+   "change": "colour lock + head retouch, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "b00ac22583e9d75c29ad51d248b2b1bf2b3d7574ea0ae1d48275599f44639a02",
+   "t1": "fbc8afbe5ff2fbd347e51f0a907bc07a2fa0e3574db04e8f05fe71044cdfd009",
+   "now": "c23413c4c7df984145dd9439f89d229f7118ad118b114e84d8515805be9c7955"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/rikku-dark-knight/cast.png",
+   "change": "colour lock, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "ce9ecdef063c56e9aa8905e0d86fe2ab4a7ea0fdf0ce8484b48f824f13c77219",
+   "t1": "301b650c5981e0d53f2cd1dd1e71787e63c035ec87356d853ed32e5c891ec0fc",
+   "now": "ab3797ce058ed7eaeece279af5c1a5cbd98acb895c7adafa2e1dda69259de4bc"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/rikku-dark-knight/follow.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "97899f5b1d2686111ef84ddbc7fb472e3a0928c3dee309ecc087ea344581b2e2",
+   "t1": "4116db7b316258ba02324ca1646dc99c72d57155e91acb0cb2a55590386e72c5",
+   "now": "c6269a840890e8df3742aa481db4297a9b562821742ce2d87a2f6b1a4dd527af"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/rikku-dark-knight/item.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "94def74a2fbe487925a84c040ca5cbdb61e25bc88e944d93ecd89f6b382a2d2c",
+   "now": "8da87fccb07eddfc3f12cf1c9e8cf3f5ba16e44cbd8ce24211224fb92cce2a0c"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/rikku-dark-knight/ready.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "cb246aa5fa2e3728d089e3c2e5fb286ded6886846f87b82a07d82b6e8be886d8",
+   "now": "2b3de8d4a2313793f4136a6c55096c75038ec1f69401dc016e0abfd0a411c4b1"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/rikku-dark-knight/victory.png",
+   "change": "colour lock, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "d4e61c69483aa47b1cc43128051c4d0516bb51c1fcbb0b3dad9d4a8aad404620",
+   "t1": "b05feb5528c50b71d3db371c6bc486c32a1403249dad23c79bcd58fedb1ae180",
+   "now": "811440796c2859b62169579e391ad3be907179f801a0d44712a46b26890e6c63"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/tidus/follow.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "a66ec4e9ac2ea21490c04eb81ac9e6818a552e763021a7cf84296b2eef470f74",
+   "now": "e7518c97c028ca9a39d2e48274d3b9ec6da1e6c0cd7f004520965f8f16ac4728"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/tidus/ready.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "a4c04da6d9bef52a1cd1a6575d5028f25fe89cf8493e9b58d142e49ea29b758d",
+   "now": "546eb33d1127eaa6d3b67a0fcf04b9e73093a01e2cc305ba1f078118afb114cc"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/yuna/ready.png",
+   "change": "colour lock + GPU repaint (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "3d2a6e256e65827a9b9fe94ded13163c80ba3b63837233a4c548eb449b56d2f4",
+   "now": "d1aa869e1eff5f3eadab6084e030d50fe95cf56176662106e297cff651c0b24d"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/yuna-white-mage/cast.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "9fc54b0a753896a7b28465e117118bb42aa4df48621caa255973bd4d20808bc9",
+   "now": "e7c35b3e2dba63cd70b03264eb1034b51a6868a8df0df2f394dd5c304a36c6dd"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/yuna-white-mage/item.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "c524046a5cc7d46dbfd4699a709aba13e8aaa337f85205878fec162a1231e7de",
+   "now": "01a07796c67b4135597f24c9f14723e8b274f8ac182358deae885b251f6d82e2"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/yuna-white-mage/victory.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "56d409e2611d9d44fdcbd28afcee7af47ad54df152d8645447e6325fb13e7ce5",
+   "now": "7ce780a142d4335f247e27ab7113172b7e5643954d3ebf85c2deeeffcdf5abb8"
+  },
+  {
+   "set": "bailey:2026-10-01-art",
+   "file": "public/art/characters/seymour-flux-body/idle@2x.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "ceeca312b90cfc1b8c1c1fcb7f8c2125e335bc8a366406e3cb1f1d4d9d0969d9",
+   "now": "80af9ff48c4a02246dccaeac2861a0a1ec8bcbd63cc0789f18f2507b9f2f4799"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/attack.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "da733380c2cc4509b02c9e145ce57346d8336288b01471f6f3a4c876587a7659",
+   "now": "585ffbb1996994cdf80d7e5108010bddcd7b71e88ccdcd446bca8567b17b3357"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/cast.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "76cf4bc83aae47d2935ee665bbc67b0132a4a8e4dad0ddc01b13a32aa9412cca",
+   "now": "b21f868fe11c2912006ebe29a0ebf07a92d3685425f8836259873298c521d9b0"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/critical.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "45fd72d161d48b6a3d477a90398e6700daddf35a8ef0314e749f8ae174f24080",
+   "now": "7bd3f3bcaeb4f2c3aefed8a40cca50cd5033d52f0635c1d472cd07282a6de631"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/follow.png",
+   "change": "colour lock, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "0fed7a05a22409d435dda72bcb699a98e9dcb4676f91ebbef55ff964d831586c",
+   "t1": "55504f6788c39a67a61b2014d96900a61721704c342ebccc59fc2bcee09e4083",
+   "now": "239ef170ab94ee759e3ff1554f88717ff47e79ec025cd605752539ca7e1678cf"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/hurt.png",
+   "change": "colour lock + head retouch, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "c2cd2a4e642da8b43dd9cc969dc0f5ab4b47e2224cea08e11ff91c1718d2e127",
+   "t1": "ed846ce7461f61d8ef42bfa392802e31d5e8013985850b709204d91a653c6c46",
+   "now": "962cbcb97db7e92dca1405cffd38f9bdb5c5a0b26cf2911c7c0e90f4475a3ff9"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/item.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "de99b020ee2a3c3a6c39a59ed28a5341c25f0de7dd2f84775b4350def24fc468",
+   "now": "7a05ca6283c886892edbf95233bddf3a7d168e37c41b56cac8d1f01910f42c5c"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/ko.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "5938bac969407e34e2e72de691a58530eaf3d2126919d55f6a02802e503da200",
+   "now": "ec7b98ea8409ca1fdf4464369c77b4f0798837a7af269510defb49f307d15abb"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/ready.png",
+   "change": "colour lock + head retouch, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "d5ef2deaefaf1c564202ac7a109f03ee55c63c56b070c1cb5e26adefa2ca362d",
+   "t1": "a961b7d74864e19ef1e636abc3330e44a349b244fd71f3e6b3582ff3b9f1f8a5",
+   "now": "35330f2f4a2fc3a6c9eb1bd90f62c967c5303138242fbe9b819523de423587c0"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/sleep.png",
+   "change": "colour lock + head retouch, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "ed0a10678e089f8b91ce972a20a68566126b48976342f57636f7b157cc7149c6",
+   "t1": "dd7c1783fc8b6aedb2120ed400fddc4fb2aa95fd5bf40e7667657c7b0f388ce9",
+   "now": "ddea23c9961284a7211bef2d3a3854409db9be2a6d35dc7bad3593f239a44a4c"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/kimahri/victory.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "9d9a7116b658e34b33165db9d0c29087a76c70491d88004d4f79f9b62769ec9b",
+   "now": "838063011501720211430b8ec54fbe59d755af0642df1878641118c07c358abd"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/yuna/follow.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "45aa62ea6d05f07ef92297c177dbeab9443751cc78650064fc50c2928618c023",
+   "now": "2add01579f3533a4050a521865eb04f32543ed8aa4d6a832a81ec736beb87705"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/seymour-flux-body/attack.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "fc3b8ef9f0eb20951c2c57d39f7192ac774931beda57876bcd6e0fd182e1f794",
+   "now": "cd9140bbd257ebb30c307c8b1e9d0e987339ef368063e0179eca9d99d9f3346a"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/seymour-flux-body/cast.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "329bbd2ccedfc468340036734b6d1a51eee834a927f9c91a3aaa8cb7c0504e60",
+   "now": "8fe70ab0abaf88ff943baa651af021252d4bd898d316350863052af8ac8de325"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/seymour-flux-body/hurt.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "6a2c8234faf9cd11bcff433b9b8dffab61ed37f89885020c665f7407f8590b91",
+   "now": "35f1f63522bde77ed59bddb0afe74a4a8e0597135822b6b46df831eabd309c20"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/seymour-flux-body/ko.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "33930c70dd7de5cf7bcfbdf6b7849beed142010081c0d7e8086a8d3390bc190b",
+   "now": "fad97c5a1a175dba2a3009631da75aa9fe209915c79e527d46ccd11f99cd4a5f"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/ffx2-bahamut/cast.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "e2ab446c0c7ff02f615054bcaa1dd8bebb472c859b371aa0cd7a0dea07d9de6e",
+   "now": "cfc1419e798dd29486e3f86b3878a3363c36d0bad65bb220ddc21a9b6b99156c"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/ffx2-bahamut/hurt.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "cd2d46369f5776005a19822a516913b4d744b7cbe44814f9682f98902b0f950a",
+   "now": "90dfc6da2495b0dbd61b06b4793a5e7e7c66c7ae2064f374d9c8f6631dcaae25"
+  },
+  {
+   "set": "bailey:2026-10-02-art",
+   "file": "public/art/characters/ffx2-bahamut/ko.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "fc4a212803dbc8dbdefaa619ac3a741a6bbca2a7b961fbbf5efd4e40d033584e",
+   "now": "7a12b03bbecd75115528175e674f166d563a9c3e2631c0a278ca5413e041acf5"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/yuna-white-mage/attack.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "336af4f0f5c118d93e841f540487dc7af26ff7a18ef76f3fdbf01409da02d205",
+   "now": "78c4ea4439024d06649921788a996ff032dc632cbac74c2093353458a2c1a79d"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/yuna-white-mage/hurt.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
+   "now": "76a14bba54771a3988f468cbf36098a5492c28b32dc2ba156d5fdf543a2e7b47"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/yuna-white-mage/ko.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
+   "now": "59f2488a1b510229076ee4d90513470fc76d3c4e43a3bb799e1eda4d587c72a9"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/ffx2-bahamut/telegraph.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "3e2da8e74ad0d8adfa6c04433acc1ba52363a1db02d6a6eaf6b6259490513e15",
+   "now": "e88a72d9a7c0078e09a9dcb8f12c59e86fe84b9f931c4c28f9844bf4ce88214a"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/ffx2-bahamut/telegraph@2x.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "ca21ed244c1a8d36ceb3e4f62f688f99037de24091067c7fdc07e81535a42c5c",
+   "now": "4e719d097fde7c9fe922eb7b555fba7f93e6b43663ac2204eaea0db3b95f0311"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/seymour-flux-body/telegraph.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX",
+   "ledger": "929cb0eec9e680c2497fb53ee026582828ac0697ea5b357efc0f887f31be0681",
+   "now": "75aefe19682c238c88be508678a6206367b14359511137134676d96a25d13a57"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/paine-warrior/od-x2-warrior-armor-break.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "745b015ce9525b6ea935ee94fe080252ad87fa9ab79d797b8dd8577e4d9153fa",
+   "now": "90c19c9a9ea562659646ad8c7ede41c26d8c64106e68ed33ae716bf0dd4b35b3"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/paine-warrior/od-x2-warrior-power-break.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "745b015ce9525b6ea935ee94fe080252ad87fa9ab79d797b8dd8577e4d9153fa",
+   "now": "79df734dddf2c0f3f5be83a06c51298c209c8ead4ba3c7fc247f139cf3146a99"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/rikku-dark-knight/attack.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "a8d9cee74a8a8fd57cbbf031c347630f1061fd60b0db15fffa76f3d6a9c9a137",
+   "now": "5440b14c761e24c315497035cb60ac16d61d5130da322fea5ce4c152ce5a3562"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/rikku-dark-knight/hurt.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "3dc49367216777e06011066cea659e6f9343342a6f67f5e131be66c2c4279b0f",
+   "t1": "379721fa21ad518a47f77ea6b5e5c0bcfc5278825aacf4436069f5b77cf4b551",
+   "now": "e3b75225e8f2bc2bb59a2179bd7be5af587b68125de3a4a23beb8bf59f8ec158"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/rikku-dark-knight/ko.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "26d12305db94687c879912e1e41566c3a4342c0015a0d6fbd093073b1ae27c10",
+   "now": "68401e3b971ffe72d717f8420fc52d001ffd424918a2fe35f31a2fee3a2465ad"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/tidus/od-energy-rain.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "adc711bbf7ee3af341a8825c89a42eac3d58db82800f4a38c4c499696abcc3ae",
+   "now": "42af097666554bc00c21d04c03a4c2b4942dad58a67e21014115afc9e0508289"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/tidus/od-slice-and-dice.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "b1bfd5d3f20167fa056d079a6acb03ba2ce6e6d18d982c2f8bb3b26d803de1ac",
+   "now": "a53cb6ae5585c2fb4c961b9b186bf21f543f2d864168b2e0b75850fea8e10f70"
+  },
+  {
+   "set": "bailey:2026-10-03-picks",
+   "file": "public/art/characters/yuna-white-mage/follow.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "8573590de142f91bfe58bac83def87192501b3d50b07fe3b13de8bae9ae5004b",
+   "now": "7534220ace360f90761d095fffd2c19d6ec9d9a81d1e92bbc2f6adfa65993ec0"
+  },
+  {
+   "set": "bailey:2026-10-04-trapped-white",
+   "file": "public/art/characters/ffx2-bahamut/idle.png",
+   "change": "boss re-cut (D-1285)",
+   "game": "FFX-2",
+   "ledger": "d5a1c4bcd99f6851f0d9f724b6d7206237f2c1c0e76f63229cf4f3f6f76bdb24",
+   "now": "dc553a716dd9fb6bd568a9501065cfd1610f16ee9bdf3d7773cfaa161f66d6f7"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx",
+   "file": "public/art/characters/tidus/defend.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX",
+   "ledger": "207ba99591ce3768018706e37fb1ea3cac736e2edcd129209f20dababc1ed80d",
+   "now": "6d0889d3ae00ff11c01e8adec02cab628a21066a7f12dddcd11f04fec61813b9"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx",
+   "file": "public/art/characters/kimahri/defend.png",
+   "change": "colour lock, then r64 repaint (D-1327)",
+   "game": "FFX",
+   "ledger": "028a37ad0078362b3e50f99948a595d6fe73b09f5538a61742e201e8fc59320c",
+   "t1": "23d512a0e866d702170ad2cb06cae1521da4584fc44f3f463a456f793a716ac9",
+   "now": "745304bb18e338120f7a7b03d4299c8f8ce413689ca8ed5c5cf591767b8abca2"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/yuna-white-mage/ready.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "830f0c76860872d0a03dd2698c66029f8d69390df70a8062fae0e68cb0b6fcba",
+   "now": "9e3f041114ddf17bec5bc1b3fc2367484a0439488e529e4c4348e0716ce8cec8"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/yuna-white-mage/critical.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "b8bc09a9e96f1510110d9a325d8754970118d8a771a13064a288b48f0c0a8352",
+   "now": "847d0abf923cb1d9991df4b33669833e65d2aea71721f3b4b538e74dd56a96a6"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/yuna-white-mage/defend.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "b4ee085f43454a5fe234af3dcad67f7f00cbd20c51528377cfbdb77cf9b23dce",
+   "now": "27ab21d36c8d0d3dcee70536d652ddb65cb190b3916025689d3cb8edf484acd1"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/yuna-white-mage/sleep.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "ac884b792c4d79a2bfe67502f6a28692d31b51e590705e1db2f7a7a985413334",
+   "now": "4e0ea945fad3c1644efa8881223ec5111020d93a03d74fce03bc4a41760153a5"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/rikku-dark-knight/critical.png",
+   "change": "colour lock + GPU repaint, then r64 repaint (D-1327)",
+   "game": "FFX-2",
+   "ledger": "ac8658584649386ab89e6500497336d163e31e51560d67c51bc8e5c5b2751b12",
+   "t1": "1a3484a15efcc69148dc3493b7d2ef641384a31c5d231cbed49e3bc5ddf5042b",
+   "now": "1b8f35ea6a630ebefaeca6f8e30c9566a4caf3baa648b01203dd76eef0bfc6e0"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/rikku-dark-knight/sleep.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "10d136ed84bf637c1902764a9365a0c03b2886bb35ac410019715e7ed7eb505b",
+   "now": "81034b13d52732c461eb03a35f8beebe6e32746b401a48bcc5ca0242abb723c6"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/paine-warrior/hurt.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "e8463888a21030c32f2b674b4b61c213f0b8a523d6ceea840a5b1bfc1431d0ea",
+   "now": "09b8668d39937bcd8d1935062baae4c56105d58f61e7a6912bc620c08797755f"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/paine-warrior/ko.png",
+   "change": "colour lock + head retouch (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "8ef58b208bc5be24bfc5d62a2d24d55e5bd1b0fcbeb6673b8c282b05196c6a2e",
+   "now": "0c8e18502fd32e7b9ebab539514a183bc890c11cef9f7511ea562f50b4fbe10e"
+  },
+  {
+   "set": "bailey:2026-10-09-picks-ffx2",
+   "file": "public/art/characters/paine-warrior/defend.png",
+   "change": "colour lock (art batch of 10-22)",
+   "game": "FFX-2",
+   "ledger": "495e58e64cb6d2ac31423ced113032bd309425ed04b03e28d679168e0156b5ce",
+   "now": "9a72b1c08a352806c4fecdb1387c01bc01e1e5228c3556a2d6d3e893a4c1ca8b"
+  }
+ ]
+}
