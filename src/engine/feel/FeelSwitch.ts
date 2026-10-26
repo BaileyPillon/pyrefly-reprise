@@ -9,7 +9,7 @@
  * | `?rumble=` | `off` (default), `on` | the gamepad's light rumble on big moments (never on keyboard play, never under REDUCE MOTION) |
  * | `?shadow=` | `today` (default), `follow` | the contact shadow stays under the feet through a lunge, shrinks and fades in the air, spreads on landing |
  * | `?motionsfx=` | `off` (default), `on` | the subtle synced motion sounds: a whoosh on a lunge and on a planned smear, a landing thud, a cloth rustle on a cast (step 2; `feel/MotionSfx.ts`) |
- * | `?timing=` | `today` (default), `time` | the camera shake and the ink-and-paper impact frame counted in real time (120 Hz and above), not in drawn frames (`feel/TimeBased.ts`; review fix F1) |
+ * | `?timing=` | `time` (default, EVERY chapter since the post-conference plan), `frames` (or `today`) | the camera shake and the ink-and-paper impact frame counted in real time (120 Hz and above), not in drawn frames (`feel/TimeBased.ts`; review fix F1); `frames` puts the drawn-frame count back |
  *
  * and the shared **`?pack=demo`**, which turns every piece above ON (`new`, `short`, `on`, `follow`, `on`, `time`) in the demo chapters. A key named beside `pack` wins for its piece
  * (`?pack=demo&punch=today` is the demo pack with today's camera: the A/B).
@@ -17,6 +17,8 @@
  * **Demo chapters only (Bailey: "Demo chapters first").** Chapter I is `seymour-flux` (FFX) and Chapter IV is `ffx2-bahamut` (FFX-2), the ids in `data/encounters.ts`. The battle
  * screen tells this module which chapter is running ({@link setFeelChapter}); in any other chapter, and before a chapter is set (the unit tests, every other screen), every
  * answer is today's. So merging this lane changes nothing in the live game: a key, or the pack, in one of those two chapters is the only way to see a new piece.
+ * **One exception since the post-conference plan (2026-10-26): `?timing=` is on in every chapter** ({@link timingByTime}); it is a fix (a shake and an impact frame that ran twice as fast on a
+ * 120 Hz screen), not a look, and it is the same at 60 Hz. The other six pieces stay as this paragraph says.
  *
  * Pure: no `three`, no DOM but the address of the page (the `HitRecoil.recoilLegacy` / `PoseSwap.motionMode` pattern). Game case: both games (shared presentation plumbing);
  * the per-game numbers live where they always did (`fx/c/SpectacleRules.SPECTACLE_TUNING`).
@@ -66,7 +68,7 @@ export function parseFeelKeys(search: string | undefined): FeelKeys {
     rumble: rumble === 'on' ? true : rumble === 'off' ? false : null,
     shadow: shadow === 'follow' ? true : shadow === 'today' ? false : null,
     motionsfx: motionsfx === 'on' ? true : motionsfx === 'off' ? false : null,
-    timing: timing === 'time' ? true : timing === 'today' ? false : null,
+    timing: timing === 'time' ? true : timing === 'frames' || timing === 'today' ? false : null,
   };
 }
 
@@ -128,10 +130,13 @@ export function motionSfxOn(): boolean {
   return forced.motionsfx ?? read().motionsfx ?? feelPack();
 }
 
-/** True when the camera shake and the impact frame run on real time (120 Hz and above) rather than per drawn frame (today's). Off outside the demo chapters. */
+/**
+ * True when the camera shake and the impact frame run on real time (120 Hz and above) rather than per drawn frame. **On by default in EVERY chapter, with or without the pack** (post-conference
+ * plan, 2026-10-26, the driver's call under Bailey's delegation: it removes a glitch, a shake twice as frantic on a 120 Hz screen, and adds no look; at 60 Hz it is the same motion to the
+ * thousandth of a world unit). `?timing=frames` (or the older `?timing=today`) is the off word and puts a drawn-frame count back; the debug setter does the same.
+ */
 export function timingByTime(): boolean {
-  if (!inFeelChapter()) return false;
-  return forced.timing ?? read().timing ?? feelPack();
+  return forced.timing ?? read().timing ?? true;
 }
 
 /** What every piece is set to by the address and the debug setters, WHATEVER the running chapter (the answers above are today's outside the demo chapters). The playtest switchboard shows these. */
@@ -144,7 +149,7 @@ export function feelConfigured(): { punch: PunchMode; stop: StopMode; rumble: bo
     rumble: forced.rumble ?? k.rumble ?? pack,
     shadow: forced.shadow ?? k.shadow ?? pack,
     motionsfx: forced.motionsfx ?? k.motionsfx ?? pack,
-    timing: forced.timing ?? k.timing ?? pack,
+    timing: forced.timing ?? k.timing ?? true,
   };
 }
 

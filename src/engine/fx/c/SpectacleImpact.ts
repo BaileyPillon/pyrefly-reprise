@@ -1,6 +1,6 @@
 /**
- * Option C1's impact frame, counted in TIME, not in drawn frames, when `?timing=time` is on (motion program, lane "feel", 2026-10-22: 120 Hz and above; the Chapter I and Chapter IV
- * demo only: with the switch off, `FeelSwitch.timingByTime`, it is the live game's, one level per drawn frame, exactly as before; review fix F1).
+ * Option C1's impact frame, counted in TIME, not in drawn frames, unless `?timing=frames` is named (motion program, lane "feel", 2026-10-22: 120 Hz and above; in EVERY chapter since the
+ * post-conference plan, 2026-10-26: with the switch off, `FeelSwitch.timingByTime`, it is release 64's, one level per drawn frame, exactly as before; review fix F1).
  *
  * The 2-frame ink-and-paper frame was a list of two levels that lost one entry per drawn frame, so on a 120 Hz screen it lasted 17 ms and on a 144 Hz one 14 ms, half of what
  * Bailey approved at 60 Hz (33 ms). Each level now stays up for one 60 Hz frame of real time ({@link IMPACT_FRAME_S}) and never less than one drawn frame: a 60 Hz screen draws
