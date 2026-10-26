@@ -265,6 +265,26 @@ describe('the impact frame', () => {
     }
   });
 
+  it('the honest table (review F-2): a level is a whole number of drawn frames, so only 60, 90, 120, 144 and 240 Hz land within 5 percent of 33.3 ms; 50, 75 and 100 Hz read 40, 165 Hz 36.4, and none is ever shorter than 33 ms', () => {
+    const full: Record<number, number> = { 30: 66.7, 50: 40, 60: 33.3, 75: 40, 90: 33.3, 100: 40, 120: 33.3, 144: 34.7, 165: 36.4, 240: 33.3 };
+    for (const [hz, want] of Object.entries(full)) {
+      const r = run(Number(hz));
+      expect(r.ms, `${hz} Hz, full frame`).toBeCloseTo(want, 0);
+      expect(r.ms, `${hz} Hz, never short`).toBeGreaterThan(IMPACT_FRAME_S * 2000 - 3);
+      expect(r.ms, `${hz} Hz, at most one drawn frame long`).toBeLessThan(IMPACT_FRAME_S * 2000 + 1000 / Number(hz) + 0.5);
+    }
+    for (const hz of [60, 90, 120, 144, 240]) expect(Math.abs(run(hz).ms - 33.3) / 33.3, `${hz} Hz within 5 percent`).toBeLessThan(0.05);
+    // the one-level soft frame (REDUCE FLASHES): 16.7 ms at 60 Hz, one drawn frame or two on the rest
+    const soft: Record<number, number> = { 60: 16.7, 75: 26.7, 90: 22.2, 120: 16.7, 144: 20.8, 240: 16.7 };
+    for (const [hz, want] of Object.entries(soft)) {
+      const f = new ImpactFrames();
+      f.arm([1]);
+      let ms = 0;
+      for (let i = 0; i < 20 && f.step(1 / Number(hz)) > 0; i++) ms += 1000 / Number(hz);
+      expect(ms, `${hz} Hz, soft frame`).toBeCloseTo(want, 0);
+    }
+  });
+
   it('dt of 0 holds the level on screen (a capture that stopped the app)', () => {
     const f = new ImpactFrames();
     f.arm([1, 0.5]);

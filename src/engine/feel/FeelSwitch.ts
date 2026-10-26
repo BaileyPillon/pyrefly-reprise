@@ -9,7 +9,7 @@
  * | `?rumble=` | `off` (default), `on` | the gamepad's light rumble on big moments (never on keyboard play, never under REDUCE MOTION) |
  * | `?shadow=` | `today` (default), `follow` | the contact shadow stays under the feet through a lunge, shrinks and fades in the air, spreads on landing |
  * | `?motionsfx=` | `off` (default), `on` | the subtle synced motion sounds: a whoosh on a lunge and on a planned smear, a landing thud, a cloth rustle on a cast (step 2; `feel/MotionSfx.ts`) |
- * | `?timing=` | `time` (default, EVERY chapter since the post-conference plan), `frames` (or `today`) | the camera shake and the ink-and-paper impact frame counted in real time (120 Hz and above), not in drawn frames (`feel/TimeBased.ts`; review fix F1); `frames` puts the drawn-frame count back |
+ * | `?timing=` | `time` (default, EVERY chapter since the post-conference plan), `frames` (or `today`, `off`, `false`, `0`) | the camera shake and the ink-and-paper impact frame counted in real time (120 Hz and above), not in drawn frames (`feel/TimeBased.ts`; review fix F1); any off word puts the drawn-frame count back |
  *
  * and the shared **`?pack=demo`**, which turns every piece above ON (`new`, `short`, `on`, `follow`, `on`, `time`) in the demo chapters. A key named beside `pack` wins for its piece
  * (`?pack=demo&punch=today` is the demo pack with today's camera: the A/B).
@@ -45,6 +45,9 @@ export interface FeelKeys {
 
 const NONE: FeelKeys = { pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null };
 
+/** The words that put the drawn-frame count back (`frames` is the documented one, `today` the older one; `off`, `false` and `0` are what a tester types for "turn it off", post-conference review F-4). */
+const TIMING_OFF_WORDS: ReadonlySet<string> = new Set(['frames', 'today', 'off', 'false', '0']);
+
 /** Read the seven keys from a search string (pure; `undefined` = no page). An unknown value is not named. */
 export function parseFeelKeys(search: string | undefined): FeelKeys {
   if (search === undefined) return NONE;
@@ -68,7 +71,7 @@ export function parseFeelKeys(search: string | undefined): FeelKeys {
     rumble: rumble === 'on' ? true : rumble === 'off' ? false : null,
     shadow: shadow === 'follow' ? true : shadow === 'today' ? false : null,
     motionsfx: motionsfx === 'on' ? true : motionsfx === 'off' ? false : null,
-    timing: timing === 'time' ? true : timing === 'frames' || timing === 'today' ? false : null,
+    timing: timing === 'time' ? true : TIMING_OFF_WORDS.has(timing) ? false : null,
   };
 }
 
@@ -139,7 +142,7 @@ export function timingByTime(): boolean {
   return forced.timing ?? read().timing ?? true;
 }
 
-/** What every piece is set to by the address and the debug setters, WHATEVER the running chapter (the answers above are today's outside the demo chapters). The playtest switchboard shows these. */
+/** What every piece is set to by the address and the debug setters, WHATEVER the running chapter (the other five answers are today's outside the demo chapters; `timing` is real time everywhere). The playtest switchboard shows these. */
 export function feelConfigured(): { punch: PunchMode; stop: StopMode; rumble: boolean; shadow: boolean; motionsfx: boolean; timing: boolean } {
   const pack = feelPack();
   const k = read();

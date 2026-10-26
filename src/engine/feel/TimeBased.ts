@@ -9,7 +9,7 @@
  * | piece | `?timing=frames` (the off word) | default (`?timing=time`) |
  * |---|---|---|
  * | camera shake phase (`BattleCamera`) | `+0.9` per drawn frame while the shake runs (so it keeps jittering through a hit-stop hold and runs 2.4x as fast at 144 Hz) | `+54 rad/s * dt` (the same speed at 60 Hz, the same at any rate, still through a hold) |
- * | impact frame (`SpectacleImpact.ImpactFrames`) | one level per drawn frame (`[1, 0.5]` = 2 frames: 33 ms at 60 Hz, 14 ms at 144 Hz) | one level per 60 Hz frame of real time (33 ms at any rate, never less than one drawn frame) |
+ * | impact frame (`SpectacleImpact.ImpactFrames`) | one level per drawn frame (`[1, 0.5]` = 2 frames: 33 ms at 60 Hz, 14 ms at 144 Hz) | one level per 60 Hz frame of real time (about 33 ms at 60, 90, 120, 144 and 240 Hz; a whole number of drawn frames, so 36 to 40 ms at 50, 75, 100 and 165 Hz; never less than one drawn frame) |
  *
  * Game case: both games (shared presentation plumbing; the sources give no frame counts for either). Pure: no `three`, no DOM.
  */

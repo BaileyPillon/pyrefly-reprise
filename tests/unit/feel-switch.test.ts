@@ -32,6 +32,8 @@ describe('the keys', () => {
     expect(parseFeelKeys('?punch=NEW&hitstop=short&rumble=on&shadow=follow&motionsfx=on&timing=TIME&pack=demo')).toEqual({ pack: true, punch: 'new', hitstop: 'short', rumble: true, shadow: true, motionsfx: true, timing: true });
     expect(parseFeelKeys('?punch=big&hitstop=long&rumble=maybe&shadow=down&motionsfx=loud&timing=fast&pack=all')).toEqual({ pack: true, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null }); // an unknown pack word names nothing: the r64 default decides
     expect(parseFeelKeys('?punch=today&hitstop=today&rumble=off&shadow=today&motionsfx=off&timing=today&pack=off')).toEqual({ pack: false, punch: 'today', hitstop: 'today', rumble: false, shadow: false, motionsfx: false, timing: false });
+    for (const word of ['off', 'False', '0', 'frames', 'today']) expect(parseFeelKeys(`?timing=${word}`).timing, word).toBe(false); // every off word a tester might type (review F-4)
+    for (const word of ['on', 'true', '1', 'fast', '']) expect(parseFeelKeys(`?timing=${word}`).timing, word).toBeNull(); // only `time` names it on; any other word names nothing, and nothing is on
     expect(parseFeelKeys('?timing=FRAMES')).toEqual({ pack: true, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: false }); // the off word (post-conference plan); `today` stays an off word too
     expect(parseFeelKeys('')).toEqual({ pack: true, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null }); // r64: no word is the conference default
     expect(parseFeelKeys(undefined)).toEqual({ pack: false, punch: null, hitstop: null, rumble: null, shadow: null, motionsfx: null, timing: null }); // no page: today
@@ -47,8 +49,8 @@ describe('the demo chapters are the real ones', () => {
   });
 });
 
-describe('the default: today with no page, ?pack=off or no chapter; the conference pack in a demo chapter with no word (r64)', () => {
-  it('with ?pack=off, no page and no chapter every answer is today\'s', () => {
+describe('the default: today\'s looks with no page, ?pack=off or no chapter; the conference pack in a demo chapter with no word (r64); the real-time shake everywhere', () => {
+  it('with ?pack=off, no page and no chapter every look is today\'s (the real-time shake is on everywhere)', () => {
     resetFeelForTests('?pack=off');
     expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, true]);
     setFeelChapter('seymour-flux');
@@ -59,7 +61,7 @@ describe('the default: today with no page, ?pack=off or no chapter; the conferen
     expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, true]); // no page at all (a unit test)
   });
 
-  it('with no word in the address, a demo chapter takes the whole pack and every other chapter stays today\'s', () => {
+  it('with no word in the address, a demo chapter takes the whole pack and every other chapter keeps today\'s looks (the real-time shake is on everywhere)', () => {
     resetFeelForTests('');
     expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), timingByTime()]).toEqual(['today', 'today', false, false, true]); // before a chapter is named
     for (const id of ['seymour-flux', 'ffx2-bahamut']) {
@@ -92,7 +94,7 @@ describe('the pack', () => {
     expect([punchMode(), stopMode(), rumbleOn(), shadowFollows(), motionSfxOn()]).toEqual(['today', 'off', false, false, false]);
   });
 
-  it('the timing key: on by default in EVERY chapter, pack or not; ?timing=frames (or today) is the off word and wins beside the pack; the setter forces it', () => {
+  it('the timing key: on by default in EVERY chapter, pack or not; ?timing=frames (or today, off, false, 0) is the off word and wins beside the pack; the setter forces it', () => {
     resetFeelForTests('?pack=off');
     for (const id of ['ffx2-bahamut', 'seymour-flux', 'ffx2-vegnagun-shuyin', 'yunalesca', 'ffx2-leblanc', null]) {
       setFeelChapter(id);
@@ -101,7 +103,7 @@ describe('the pack', () => {
     resetFeelForTests('?pack=demo&timing=today');
     setFeelChapter('seymour-flux');
     expect([timingByTime(), punchMode()]).toEqual([false, 'new']);
-    for (const word of ['frames', 'FRAMES', 'today']) {
+    for (const word of ['frames', 'FRAMES', 'today', 'off', 'false', '0']) {
       resetFeelForTests(`?timing=${word}`);
       for (const id of ['seymour-flux', 'ffx2-bahamut', 'yunalesca', 'ffx2-vegnagun-shuyin']) {
         setFeelChapter(id);
