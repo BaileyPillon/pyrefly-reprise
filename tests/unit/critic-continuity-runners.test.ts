@@ -16,14 +16,15 @@ const AsyncFunction = Object.getPrototypeOf(async () => undefined).constructor a
 
 interface Call { label: string; prompt: string; opts: { label: string; model?: string; phase?: string; schema?: unknown; effort?: string } }
 
-async function runWorkflow(file: string, args: Record<string, unknown>, answer: (label: string) => unknown): Promise<{ calls: Call[]; phases: string[]; result: unknown }> {
+type WorkflowStub = (spec: { scriptPath: string }, args: Record<string, unknown>) => Promise<unknown>;
+async function runWorkflow(file: string, args: Record<string, unknown>, answer: (label: string) => unknown, workflow: WorkflowStub = async () => ({})): Promise<{ calls: Call[]; phases: string[]; result: unknown }> {
   const source = readFileSync(resolve(ROOT, file), 'utf8').replace('export const meta = ', 'const meta = ');
   const calls: Call[] = [];
   const phases: string[] = [];
   const agent = async (prompt: string, opts: Call['opts']): Promise<unknown> => { calls.push({ label: opts.label, prompt, opts }); return answer(opts.label); };
   const parallel = async (fns: (() => Promise<unknown>)[]): Promise<unknown[]> => Promise.all(fns.map((f) => f()));
   const fn = new AsyncFunction('args', 'agent', 'phase', 'parallel', 'log', 'workflow', source);
-  const result = await fn(args, agent, (t: string) => phases.push(t), parallel, () => undefined, async () => ({}));
+  const result = await fn(args, agent, (t: string) => phases.push(t), parallel, () => undefined, workflow);
   return { calls, phases, result };
 }
 
@@ -186,5 +187,75 @@ describe('the briefs pin the measuring tool (post-conference motion plan, step 0
     expect(p).toContain('first run "node tools/continuity-id.mjs" here');
     expect(p).toContain('node tools/continuity-id.mjs --check "D:/Final Fantasy/critic/reviews/abc1234-focused/continuity/continuity-summary.json"');
     expect(p).toMatch(/exit 0 is required; tools\/critic-clear\.mjs and tools\/critic-score\.mjs refuse a continuity aggregate that has no stamp/);
+  });
+});
+
+describe('review F1 of post-tool-pin: the flows the scripts prescribe use the release tree, not a stale MAIN', () => {
+  /** release.js with its two agents stubbed so the post-deploy deep review runs; returns the args it hands to each workflow it starts. */
+  async function releaseCalls(extra: Record<string, unknown> = {}): Promise<{ script: string; args: Record<string, unknown> }[]> {
+    const started: { script: string; args: Record<string, unknown> }[] = [];
+    await runWorkflow('critic/runner/release.js', { round: '30', changed: 'x', ...extra }, (label) => {
+      if (label === 'cut') return { ok: true, sha: 'e9907cad8', plan: { review: 'focused', focusedBeforeDeploy: false, deepBeforeDeploy: false, obligations: [], reasons: [] }, problems: [] };
+      if (label === 'deploy') return { ok: true, mainSha: 'e9907cad8', bundle: 'index-x.js', owed: ['deep'] };
+      return { statusOutput: '', pending: [] };
+    }, async (spec, a) => { started.push({ script: spec.scriptPath, args: a }); return {}; });
+    return started;
+  }
+  const harnessPrompt = async (args: Record<string, unknown>): Promise<string> => (await runWorkflow('critic/runner/deep.js', args, ANSWERS)).calls.find((c) => c.label === 'continuity-harness')!.prompt;
+  const chiefPrompt = async (args: Record<string, unknown>): Promise<string> => (await runWorkflow('critic/runner/deep.js', args, ANSWERS)).calls.find((c) => c.label === 'chief-critic')!.prompt;
+
+  it('release.js starts the post-deploy deep review with the release worktree as root AND tool tree', async () => {
+    const deep = (await releaseCalls()).find((s) => s.script.endsWith('/deep.js'))!;
+    expect(deep.args).toMatchObject({ root: 'D:/pyrefly-release', toolTree: 'D:/pyrefly-release', sha: 'e9907cad8', review: 'deep' });
+    expect(deep.args.candidate).toBeUndefined(); // it is the live build, built from that worktree
+  });
+
+  it('rendered with exactly those args, the harness agent is sent to the release worktree, never to D:/Final Fantasy', async () => {
+    const deep = (await releaseCalls()).find((s) => s.script.endsWith('/deep.js'))!;
+    const p = await harnessPrompt({ ...deep.args, round: '30' });
+    expect(p).toContain('run everything below in D:/pyrefly-release, the release tree');
+    expect(p).toContain('First run "node tools/continuity-id.mjs" in D:/pyrefly-release');
+    expect(p).not.toContain('run everything below in D:/Final Fantasy');
+    expect(p).not.toContain('--candidate-root'); // the live build was built from that tree
+    const chief = await chiefPrompt({ ...deep.args, round: '30' });
+    expect(chief).toContain('(3) Run in D:/pyrefly-release: node tools/critic-score.mjs --report "D:/Final Fantasy/critic/rounds/round-30.json"');
+    expect(chief).toContain('(5) In D:/pyrefly-release run: node tools/critic-clear.mjs --report "D:/Final Fantasy/critic/rounds/round-30.json" --records "D:/Final Fantasy"');
+  });
+
+  it('the candidate calls still pass the release worktree (as before), and an explicit critic override still wins', async () => {
+    const started = await releaseCalls({ critic: { toolTree: 'D:/other-release' } });
+    expect(started.find((s) => s.script.endsWith('/deep.js'))!.args.toolTree).toBe('D:/other-release');
+  });
+
+  it('with no tool tree (the plain call) nothing changes: score and clear run in MAIN with relative paths', async () => {
+    const chief = await chiefPrompt(DEEP_ARGS);
+    expect(chief).toContain('(3) Run in D:/Final Fantasy: node tools/critic-score.mjs --report critic/rounds/round-22.json and copy its output verbatim');
+    expect(chief).toContain('(5) In D:/Final Fantasy run: node tools/critic-clear.mjs --report critic/rounds/round-22.json and return its output verbatim as clearOutput.');
+    expect(chief).not.toContain('--records');
+  });
+
+  it('the harness agent stops with a clear message when the tool tree has not merged the stamp', async () => {
+    const p = await harnessPrompt({ ...DEEP_ARGS, root: 'D:/pyrefly-release' });
+    expect(p).toContain('If D:/pyrefly-release/tools/continuity-id.mjs does not exist or that command fails, D:/pyrefly-release has not merged the stamp: do NOT run the harness from it or from any other tree');
+    expect(p).toContain('harnessLine "NO STAMP TOOL in D:/pyrefly-release"');
+  });
+
+  it('the chief is told an identity refusal is not a typo to fix, what to do instead, and to embed the stamp with the tool', async () => {
+    const chief = await chiefPrompt({ ...DEEP_ARGS, root: 'D:/pyrefly-release' });
+    expect(chief).toMatch(/fix the report, not the facts\. A line that starts "continuity harness identity" is NOT a typo in the report/);
+    expect(chief).toContain('Never copy a stamp from another tree or retype one');
+    expect(chief).toContain('record CHK-026 and CHK-027 UNVERIFIED with that refusal as the reason, leave the continuity aggregate out');
+    expect(chief).toContain("node tools/continuity-id.mjs --embed 'D:/Final Fantasy/critic/rounds/round-22/continuity/continuity-summary.json' --into 'D:/Final Fantasy/critic/rounds/round-22.json'");
+  });
+
+  it('focused.js settles from the candidate tree against the records of MAIN, embeds the stamp with the tool, stops without the stamp tool, and says what an identity refusal means', async () => {
+    const { calls } = await runWorkflow('critic/runner/focused.js', { sha: 'abc1234', root: 'D:/pyrefly-release', changed: 'x' }, () => ({ reportPath: 'r', changedArea: 'PASS', ship: 'SHIP', clearOutput: '' }));
+    const p = calls[0]!.prompt;
+    expect(p).toContain("(6) SETTLE: in D:/pyrefly-release run \"node tools/critic-clear.mjs --report 'D:/Final Fantasy/critic/reviews/abc1234-focused.json' --records 'D:/Final Fantasy'\"");
+    expect(p).toContain("node tools/continuity-id.mjs --embed 'D:/Final Fantasy/critic/reviews/abc1234-focused/continuity/continuity-summary.json' --into 'D:/Final Fantasy/critic/reviews/abc1234-focused.json'");
+    expect(p).toContain('if D:/pyrefly-release/tools/continuity-id.mjs does not exist or fails, this tree has not merged the stamp: do NOT run the harness from it');
+    expect(p).toMatch(/A line that starts "continuity harness identity" is the pinned-tool rule, not a typo to fix in the report/);
+    const plain = (await runWorkflow('critic/runner/focused.js', { sha: 'abc1234', changed: 'x' }, () => ({ reportPath: 'r', changedArea: 'PASS', ship: 'SHIP', clearOutput: '' }))).calls[0]!.prompt;
+    expect(plain).toContain('(6) SETTLE: in D:/Final Fantasy run "node tools/critic-clear.mjs --report critic/reviews/abc1234-focused.json"'); // ROOT is MAIN: unchanged
   });
 });

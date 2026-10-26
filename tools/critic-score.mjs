@@ -30,7 +30,9 @@ if (i < 0 || !process.argv[i + 1]) {
 const policy = loadPolicy(ROOT);
 const report = JSON.parse(readFileSync(resolve(process.argv[i + 1]), 'utf8'));
 const h = process.argv.indexOf('--harness-tree');
-const errors = validateReport(report, policy, { root: ROOT, harnessTree: h >= 0 && process.argv[h + 1] ? resolve(process.argv[h + 1]) : undefined });
+const harnessTree = h >= 0 && process.argv[h + 1] ? resolve(process.argv[h + 1]) : undefined;
+if (harnessTree) console.log(`critic:score NOTE: the continuity harness is matched against ${harnessTree}, not against this tree (${ROOT}); that is for a release tree that is behind the one that ran the harness`);
+const errors = validateReport(report, policy, { root: ROOT, harnessTree });
 const identity = errors.filter((e) => e.startsWith('continuity harness identity'));
 if (identity.length) {
   console.log('critic:score REFUSED the continuity evidence: a number read by a tool that is not the release tree\'s own certifies nothing, so no score is printed');

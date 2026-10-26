@@ -365,7 +365,7 @@ export function validateReport(report, policy, opts = {}) {
     }
   }
   // The caps of the continuity checks (D-424): only reports from `continuity.requiredFrom` on, only with subScores.
-  errors.push(...continuityCaps(report, policy), ...harnessIdentityErrors(report, policy, { root: opts.harnessTree ?? opts.root })); // step 0: which tool read the run, and is it the release tree's own
+  errors.push(...continuityCaps(report, policy), ...harnessIdentityErrors(report, policy, { root: opts.harnessTree ?? opts.root, explicitTree: Boolean(opts.harnessTree) })); // step 0: which tool read the run, and is it the release tree's own
   return errors;
 }
 

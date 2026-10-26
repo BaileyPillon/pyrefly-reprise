@@ -13,7 +13,7 @@ import { join, resolve } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 
 import { poseTableStamp } from '../../critic/runner/lib/continuity.mjs';
-import { blobId, canonicalJson, compareIdentity, describeIdentity, harnessDigest, harnessFiles, harnessIdentity, harnessIdentityErrors, verifyStamp } from '../../tools/critic-harness-identity.mjs';
+import { aggregateDigest, blobId, canonicalJson, compareIdentity, describeIdentity, harnessDigest, harnessFiles, harnessIdentity, harnessIdentityErrors, verifyStamp } from '../../tools/critic-harness-identity.mjs';
 import { loadPolicy, validateReport } from '../../tools/critic-policy.mjs';
 
 const ROOT = resolve(__dirname, '..', '..');
@@ -152,9 +152,12 @@ describe('a stamp is checked against itself', () => {
   });
 });
 
+// a stamp as the harness writes it: with the digest of the numbers it sits beside (here the report's `continuity.checks` is `{}`)
+const dig = <T extends object>(h: T, agg: object = { checks: {} }) => ({ ...h, aggregateSha256: aggregateDigest(agg) });
+
 describe('the refusal (critic-clear, critic-score, the deploy gate)', () => {
-  const release = harnessIdentity(fakeTree('release'), { run: NO_GIT });
-  const oldTree = (() => { const r = fakeTree('old-tree'); write(r, 'critic/runner/lib/helper.mjs', 'export const helper = 0; // 2026-10-10\n'); return harnessIdentity(r, { run: NO_GIT }); })();
+  const release = dig(harnessIdentity(fakeTree('release'), { run: NO_GIT }));
+  const oldTree = (() => { const r = fakeTree('old-tree'); write(r, 'critic/runner/lib/helper.mjs', 'export const helper = 0; // 2026-10-10\n'); return dig(harnessIdentity(r, { run: NO_GIT })); })();
   const pol = { continuity: { harnessIdentity: { requiredFrom: '2026-10-27' } } };
   const report = (stamp: unknown, extra: Record<string, unknown> = {}) => ({ date: '2026-10-28T12:00:00.000Z', build: { mainSha: 'e9907cad8' }, continuity: { checks: {}, ...(stamp === undefined ? {} : { harness: stamp }) }, ...extra });
   const ask = (r: unknown, opts: object = { identity: release }) => harnessIdentityErrors(r, pol, opts);
@@ -190,14 +193,14 @@ describe('the refusal (critic-clear, critic-score, the deploy gate)', () => {
   it('refuses an edited or mis-copied stamp, a run that edited its own files, a CONT_CFG experiment and chapters measured with no stamp', () => {
     expect(ask(report({ ...release, id: 'f'.repeat(64) }))[0]).toMatch(/not the digest of its own file list/);
     expect(ask(report({ ...release, changedDuringRun: true }))[0]).toMatch(/changed while the run was going/);
-    const exp = harnessIdentity(fakeTree('exp'), { run: NO_GIT, env: { CONT_CFG: '{}' } });
+    const exp = dig(harnessIdentity(fakeTree('exp'), { run: NO_GIT, env: { CONT_CFG: '{}' } }));
     expect(ask(report(exp), { identity: exp })[0]).toMatch(/CONT_CFG/);
     expect(ask(report({ ...release, unstamped: ['seymour-flux', 'ffx2-bahamut'] }))[0]).toMatch(/seymour-flux, ffx2-bahamut were measured by a run that left no stamp/);
   });
 
   it('refuses a pose table that is not the build\'s own, with both hashes (CHK-026 read against someone else\'s registrations)', () => {
     const stamped = { ...release, poseTable: { sha256: 'a'.repeat(64), subjects: 78, source: 'harness-tree', buildSha: 'e9907cad8', isCandidate: false } };
-    const withTable = harnessIdentity(fakeTree('release'), { run: NO_GIT, poseTable: stamped.poseTable });
+    const withTable = dig(harnessIdentity(fakeTree('release'), { run: NO_GIT, poseTable: stamped.poseTable }));
     const errors = ask(report(withTable), { identity: release, root: 'D:/anywhere', candidateTable: () => ({ sha256: 'b'.repeat(64), count: 114 }) });
     expect(errors).toHaveLength(1);
     expect(errors[0]).toMatch(/pose-measure table this run read \(sha256 aaaaaaaaaaaa, 78 subjects, CRLF read as LF\) is not the table of build commit e9907cad8 \(sha256 bbbbbbbbbbbb, 114 subjects\)/);
@@ -212,14 +215,14 @@ describe('the refusal (critic-clear, critic-score, the deploy gate)', () => {
 });
 
 describe('validateReport takes it up, so critic-clear, critic-score and the deploy gate all ask it', () => {
-  const stamp = harnessIdentity(ROOT, { run: NO_GIT });
+  const stamp = dig(harnessIdentity(ROOT, { run: NO_GIT }));
   const stale = harnessIdentity(ROOT, { run: NO_GIT, env: {} });
   const base = (harness: unknown, date = '2026-10-28T12:00:00.000Z') => ({ rubricVersion: policy.rubricVersion, review: 'focused', date, build: { mainSha: 'deadbeef00' }, continuity: { checks: {}, harness }, verdicts: {}, checks: [] });
   const idErrors = (errors: string[]) => errors.filter((e) => e.startsWith('continuity harness identity'));
 
   it('with a root: this tree\'s own stamp passes, another tree\'s is refused; without one: only consistency', () => {
     expect(idErrors(validateReport(base(stamp) as never, policy, { root: ROOT }))).toEqual([]);
-    const fake = harnessIdentity(fakeTree('vr'), { run: NO_GIT });
+    const fake = dig(harnessIdentity(fakeTree('vr'), { run: NO_GIT }));
     expect(idErrors(validateReport(base(fake) as never, policy, { root: ROOT }))[0]).toContain('REFUSED');
     expect(idErrors(validateReport(base(fake) as never, policy))).toEqual([]);
     expect(idErrors(validateReport(base(undefined) as never, policy))[0]).toMatch(/no "harness" block/);
@@ -229,7 +232,7 @@ describe('validateReport takes it up, so critic-clear, critic-score and the depl
 
   it('harnessTree names another release tree to match (critic-clear and critic-score --harness-tree)', () => {
     const fakeRoot = fakeTree('vr-tree');
-    const fake = harnessIdentity(fakeRoot, { run: NO_GIT });
+    const fake = dig(harnessIdentity(fakeRoot, { run: NO_GIT }));
     expect(idErrors(validateReport(base(fake) as never, policy, { root: ROOT, harnessTree: fakeRoot }))).toEqual([]);
     expect(idErrors(validateReport(base(stamp) as never, policy, { root: ROOT, harnessTree: fakeRoot }))[0]).toContain('REFUSED');
   });
@@ -238,8 +241,9 @@ describe('validateReport takes it up, so critic-clear, critic-score and the depl
 describe('the tools, run for real on temporary reports', () => {
   const node = process.execPath;
   const run = (args: string[]) => spawnSync(node, args, { cwd: ROOT, encoding: 'utf8', timeout: 60_000 });
-  const stamp = harnessIdentity(ROOT, { run: NO_GIT });
-  const other = harnessIdentity(fakeTree('cli'), { run: NO_GIT });
+  const full = { checks: {}, size: {}, motion: {} }; // what reportFile() puts in the report's continuity beside the stamp
+  const stamp = dig(harnessIdentity(ROOT, { run: NO_GIT }), full);
+  const other = dig(harnessIdentity(fakeTree('cli'), { run: NO_GIT }), full);
   const reportFile = (name: string, harness: unknown, date = '2026-10-28T12:00:00.000Z'): string => {
     const f = join(tmp, name);
     writeFileSync(f, JSON.stringify({ rubricVersion: policy.rubricVersion, review: 'deep', date, build: { mainSha: 'deadbeef00', artifactHash: 'x' }, continuity: { checks: {}, size: {}, motion: {}, harness }, verdicts: {}, checks: [], categories: [] }));
@@ -291,7 +295,7 @@ describe('the tools, run for real on temporary reports', () => {
 
   it('critic-score --harness-tree matches another release tree', () => {
     const fakeRoot = fakeTree('cli-tree');
-    const r = run(['tools/critic-score.mjs', '--report', reportFile('score-tree.json', harnessIdentity(fakeRoot, { run: NO_GIT })), '--harness-tree', fakeRoot]);
+    const r = run(['tools/critic-score.mjs', '--report', reportFile('score-tree.json', dig(harnessIdentity(fakeRoot, { run: NO_GIT }), full)), '--harness-tree', fakeRoot]);
     expect(r.stdout).not.toContain('REFUSED the continuity evidence');
   });
 
@@ -313,8 +317,8 @@ describe('the harness stamps what it measured', () => {
   it('continuity.mjs writes the stamp into each chapter\'s continuity.json and into the summary, and the report line names the tool', () => {
     const src = readFileSync(join(ROOT, 'critic/runner/lib/continuity.mjs'), 'utf8');
     expect(src).toContain("from '../../../tools/critic-harness-identity.mjs'");
-    expect(src).toMatch(/harness: harnessIdentity\(ROOT, \{ poseTable: measure \? poseTableStamp\(measure, poseSource, build\.sha, judged\) : null \}\)/);
-    expect(src).toMatch(/summary\.harness = \{\s*\.\.\.stamp0, chapterIds, unstamped:/);
+    expect(src).toMatch(/harness: harnessIdentity\(ROOT, \{ poseTable: measure \? poseTableStamp\(measure, poseSource, build\.sha, judged\) : null, waivers: /);
+    expect(src).toMatch(/summary\.harness = summaryStamp\(\{ stamp0, stampEnd: harnessIdentity\(ROOT\), results, tableStamp,/);
     expect(src).toMatch(/summary\.reportLine = `\$\{summary\.reportLine\} Read by \$\{describeIdentity\(summary\.harness\)\}/);
   });
 });
