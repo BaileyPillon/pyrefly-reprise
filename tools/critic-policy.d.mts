@@ -134,7 +134,8 @@ export declare function planReview(input: {
 }): ReviewPlan;
 export declare function weightedTotal(categories: CategoryScore[] | undefined, policy: Policy): ScoreResult;
 export declare function milestoneVerdict(report: CriticReport, policy: Policy): { accepted: boolean; reasons: string[]; score: ScoreResult };
-export declare function validateReport(report: CriticReport, policy: Policy): string[];
+/** `opts.root` (or `opts.harnessTree`) is the release tree whose continuity harness a report's stamp must match; without one only the stamp's own consistency is checked. */
+export declare function validateReport(report: CriticReport, policy: Policy, opts?: { root?: string | null; harnessTree?: string | null }): string[];
 /** D-424: the caps CHK-026 and CHK-027 put on the five visual sub-scores; error strings, empty when they hold. */
 export declare function continuityCaps(report: CriticReport, policy: Policy): string[];
 

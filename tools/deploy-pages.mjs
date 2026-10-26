@@ -179,7 +179,7 @@ export function shipEvidenceFor(root, mainSha) {
       const sha = report.build?.mainSha;
       if (!sha || !(sha.startsWith(mainSha) || mainSha.startsWith(sha))) continue;
       if (!rank[report.review]) continue;
-      if (validateReport(report, policy).length !== 0) continue;
+      if (validateReport(report, policy, { root }).length !== 0) continue;
       const ship = report.verdicts?.ship ?? (report.verdicts?.changedArea === 'PASS' ? 'SHIP' : 'HOLD');
       const found = { path: `critic/${dir}/${f}`, review: report.review, ship, date: report.date ?? '' };
       if (!best || rank[found.review] > rank[best.review] || (rank[found.review] === rank[best.review] && found.date > best.date)) best = found;

@@ -5,7 +5,11 @@
  * The arithmetic and the gates, done by code instead of by the chief critic:
  * the single weighted score (unrounded against 9.60), the categories under the
  * 9.0 floor, whether the report is valid evidence, and for a milestone review
- * every reason acceptance is refused. The chief writes the category scores;
+ * every reason acceptance is refused. A continuity aggregate that this tree's
+ * harness did not read (or that carries no stamp of which one did) is refused
+ * before any score is printed (post-conference motion plan, step 0;
+ * tools/critic-harness-identity.mjs); `--harness-tree <dir>` names another
+ * release tree to match. The chief writes the category scores;
  * this says what they add up to. Exit 0 when the report is valid (accepted or
  * not), 1 when it is not valid evidence.
  */
@@ -25,6 +29,14 @@ if (i < 0 || !process.argv[i + 1]) {
 }
 const policy = loadPolicy(ROOT);
 const report = JSON.parse(readFileSync(resolve(process.argv[i + 1]), 'utf8'));
+const h = process.argv.indexOf('--harness-tree');
+const errors = validateReport(report, policy, { root: ROOT, harnessTree: h >= 0 && process.argv[h + 1] ? resolve(process.argv[h + 1]) : undefined });
+const identity = errors.filter((e) => e.startsWith('continuity harness identity'));
+if (identity.length) {
+  console.log('critic:score REFUSED the continuity evidence: a number read by a tool that is not the release tree\'s own certifies nothing, so no score is printed');
+  for (const e of identity) console.log(`  - ${e}`);
+  process.exit(1);
+}
 const score = weightedTotal(report.categories, policy);
 console.log(score.provisional
   ? `score: PROVISIONAL — no verified score for ${score.missing.join(', ')} (never averaged away, never zero)`
@@ -33,7 +45,6 @@ if (score.belowFloor.length) console.log(`below the ${policy.acceptance.category
 const verdict = milestoneVerdict(report, policy);
 console.log(`milestone: ${verdict.accepted ? 'ACCEPTED' : 'not accepted'}`);
 for (const r of verdict.reasons) console.log(`  - ${r}`);
-const errors = validateReport(report, policy);
 console.log(errors.length ? 'report: NOT valid evidence' : 'report: valid evidence');
 for (const e of errors) console.log(`  - ${e}`);
 process.exitCode = errors.length ? 1 : 0;

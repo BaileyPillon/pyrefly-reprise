@@ -145,3 +145,46 @@ describe('critic/runner/focused.js, the harness on the changed area', () => {
     expect(p).toMatch(/continuity \(the harness aggregate of step 3b/);
   });
 });
+
+describe('the briefs pin the measuring tool (post-conference motion plan, step 0; tools/critic-harness-identity.mjs)', () => {
+  it('deep.js sends the harness agent to the RELEASE tree, has it print and check the identity, and returns it', async () => {
+    const { calls } = await runWorkflow('critic/runner/deep.js', { ...DEEP_ARGS, root: 'D:/pyrefly-release' }, ANSWERS);
+    const h = calls.find((c) => c.label === 'continuity-harness')!;
+    expect(h.prompt).toContain("THE TOOL IS THE RELEASE TREE'S");
+    expect(h.prompt).toContain('run everything below in D:/pyrefly-release, the release tree');
+    expect(h.prompt).toContain('Run in D:/pyrefly-release: first "node tools/critic-plan.mjs --json"');
+    expect(h.prompt).toContain('First run "node tools/continuity-id.mjs" in D:/pyrefly-release');
+    expect(h.prompt).toContain("node tools/continuity-id.mjs --check 'D:/Final Fantasy/critic/rounds/round-22/continuity/continuity-summary.json'");
+    expect(h.prompt).toMatch(/never an older review tree \(round 29 of 2026-10-25 read release 64 with the harness of D:\/pyrefly-r39-int/);
+    expect(h.prompt).toMatch(/tools\/critic-clear\.mjs and tools\/critic-score\.mjs refuse a continuity aggregate/);
+    expect(h.prompt).toContain('return the line it printed as harnessLine');
+    expect(h.prompt).not.toContain('--candidate-root'); // the candidate IS the release tree
+    expect(JSON.stringify(h.opts.schema)).toContain('harnessLine');
+    expect((h.opts.schema as { required: string[] }).required).toContain('harnessLine');
+  });
+
+  it('deep.js names the candidate\'s tree when the tool tree is another one, and defaults the tool tree to the candidate\'s', async () => {
+    const other = await runWorkflow('critic/runner/deep.js', { ...DEEP_ARGS, root: 'D:/pyrefly-rel-candidate', toolTree: 'D:/pyrefly-release' }, ANSWERS);
+    const h = other.calls.find((c) => c.label === 'continuity-harness')!;
+    expect(h.prompt).toContain('run everything below in D:/pyrefly-release, the release tree');
+    expect(h.prompt).toContain('add --candidate-root=D:/pyrefly-rel-candidate to the command');
+    const plain = await runWorkflow('critic/runner/deep.js', DEEP_ARGS, ANSWERS);
+    expect(plain.calls.find((c) => c.label === 'continuity-harness')!.prompt).toContain('run everything below in D:/Final Fantasy, the release tree');
+  });
+
+  it('deep.js tells the chief to copy the harness stamp whole, never retyped', async () => {
+    const { calls } = await runWorkflow('critic/runner/deep.js', DEEP_ARGS, ANSWERS);
+    const chief = calls.find((c) => c.label === 'chief-critic')!;
+    expect(chief.prompt).toMatch(/and its "harness" object, the stamp of which tool read the run, copied whole and never retyped/);
+  });
+
+  it('focused.js runs the harness from the release tree it reviews, checks the identity and copies the stamp', async () => {
+    const { calls } = await runWorkflow('critic/runner/focused.js', { sha: 'abc1234', root: 'D:/pyrefly-release', changed: 'the battle presenter' }, () => ({ reportPath: 'r', changedArea: 'PASS', ship: 'SHIP', clearOutput: '' }));
+    const p = calls[0]!.prompt;
+    expect(p).toContain("in D:/pyrefly-release (THE TOOL IS THE RELEASE TREE'S");
+    expect(p).toContain('never an older review tree such as D:/pyrefly-r39-int');
+    expect(p).toContain('first run "node tools/continuity-id.mjs" here');
+    expect(p).toContain('node tools/continuity-id.mjs --check "D:/Final Fantasy/critic/reviews/abc1234-focused/continuity/continuity-summary.json"');
+    expect(p).toMatch(/exit 0 is required; tools\/critic-clear\.mjs and tools\/critic-score\.mjs refuse a continuity aggregate that has no stamp/);
+  });
+});
