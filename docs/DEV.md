@@ -346,6 +346,18 @@ non-finite samples, peak ≥ 0.95 or an over-budget file. Nothing ships as an
 audio asset — the game synthesises every sound at runtime; these WAVs are
 previews only. See [AUDIO-GUIDE.md](AUDIO-GUIDE.md).
 
+
+### Fight-start timeline (post-conference lane `post-fight-start`, PR-0481)
+
+Press to first command menu, cut into parts, on a production build, by real input (a simulated pad) and the page's own clock. `tools/fight-start-timeline.mjs` drives one browser per job (`--path=demo|select`,
+`--chapter=seymour-flux|ffx2-bahamut`, `--dwell=fast|human|long`, `--cache=cold|both`, `--frames=<dir>` for pictures at the same moments, `--profile` for a CPU profile) under the review-browser lock
+(`tools/rig-record-lock.mjs`); `tools/fight-start-instrument.mjs` is the in-page half (marks taken at the call: the screen stack, the entry overlay, the loading card, the boss card); `tools/fight-start-split.mjs`
+cuts a run into press-wait / party-prep / scene / after-scene / entry-load / first-draw / card / card-to-sweep / sweep / sweep-to-menu (`tests/unit/fight-start-split.test.ts`); `tools/fight-start-report.mjs`
+puts the runs of two builds side by side; `tools/fight-start-profile.mjs` reads a CPU profile of the production bundle through its hidden source maps (`PYREFLY_SOURCEMAP_DIR`); `tools/fight-start-frames.mjs`
+compares the frames of two builds. A production build does not fit twice on D: (11 GB): `tools/lean-vite.config.mts` builds the bundle only (the same bytes: release 64's commit with its deploy
+environment reproduces the live `index-BygGxbJE.js`) and `tools/overlay-static.mjs` serves it over the art of any full build (for example the live artifact, `dist-release`), answering as Cloudflare does
+(`/assets/*` immutable, everything else revalidated). Details and the numbers: `docs/handoff/post-fight-start.md`.
+
 ## The conference demo build's switches (release 60)
 
 Bailey's picks of 2026-10-20 (decision 157; "I demo my game in a week at a huge gaming conference"). Presentation and seed choice only: no engine, no rule, no game number changes, and the three goldens
@@ -359,6 +371,7 @@ do not move. Every switch below is read once from the address; the page needs no
 | **Hit feel, two release-60 rules** | an ordinary hit holds at least the shipped game's light hold (FFX 40 ms, FFX-2 28 ms); the 0.08 s white flash is scaled down on big figures (full to a plane area of 3.5, 0.4 from 9, measured: party 1.2 to 2.6, Mortiorchis 16, Bahamut 17, Seymour Flux 23) and **REDUCE FLASHES skips it** | with the demo motion off the game plays the shipped hit | both games |
 | **Demo mode** (`src/app/demoMode.ts`) | OFF | `?demo=1` (kept in `sessionStorage` for the tab; `?demo=0` clears it); `__pyrefly.demoMode(on?)` | Chapter I FFX only, Chapter IV FFX-2 only |
 | **Demo stage warm** (release 62, PR-0481; `src/app/demo/demoWarm.ts`: both fights' paintings, stage, programs and depth-plate cut are prepared behind the title and the picker, in demo mode only) | **ON** in demo mode | `?demowarm=off` is the release 61 behaviour (the kiosk address can carry it); `window.__demoWarmLog` lists the steps taken and when | both games |
+| **The boss card's hold after a loading card** (post-conference, `post-fight-start`; `src/ui/common/transitions/cardHold.ts`: a fight that loads behind the entry has shown the card over the ink for as long as the load took; the battle's own card counts that time, holds the rest of its 1.9 s and never under 900 ms) | **ON** (changes nothing where no loading card went up: every fight whose stage is ready when the entry begins) | `?cardhold=full` is release 64's behaviour (the whole 1.9 s after the loading card too) | both games |
 
 **Demo mode** changes one thing: which seed a fresh attempt of a demo chapter fights on (the seed only picks which of the fight's own rolls come up, as the ordinary fresh draw does, `src/app/runSeed.ts`).
 Chapter I takes the next of seeds **7, 10, 12** (the RE audit's, each proved on the FFX engine in `tests/unit/demo-mode.test.ts`: the party's first command menu, Tidus's, comes after three log
