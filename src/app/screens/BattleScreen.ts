@@ -56,7 +56,7 @@ import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transit
 import { stagingPieceOn } from '../../engine/pro/staging/StagingSwitch.ts';
 import { attachProStage } from './battleProStage.ts'; // lane "pro-staging": the held breath, the freeze and the openings' layer (Chapters I and IV, `?staging=pro` / `?pack=demo`)
 import type { ProStageLayer } from '../../ui/common/proStage/ProStageLayer.ts';
-import { HURRIED_CARD_HOLD_MS } from '../../ui/common/transitions/openingHurry.ts';
+import { cardHoldOption } from '../../ui/common/transitions/cardHold.ts'; // the card's hold (the hurried one, or the full one less the time the card over the entry has been up)
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { markDemoHud } from '../demo/demoHud.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
@@ -504,7 +504,7 @@ export class BattleScreen extends Screen {
       backdropKey: backdropFileOf(chapter.sceneKey), // the start card's wash is a backdrop file (a code key names its plate: `artNamespace.ts#SCENE_BACKDROP_FILE`)
       party,
       game: chapter.game,
-      ...(this.opts.openingHurry ? { holdMs: HURRIED_CARD_HOLD_MS } : {}),
+      ...cardHoldOption(!!this.opts.openingHurry), // 700 ms hurried; else 1.9 s, less the time the loading card over the entry has been up (`transitions/cardHold.ts`)
       until: () => this.stage?.planSettled() ?? Promise.resolve(), // the card is the cover: CHAPTER FRAMING's first plan lands under it, never under the first menu (`fx/mix/openingGate.ts`)
     });
     this.battleStartBanner = banner;

@@ -68,6 +68,8 @@ export class NoDoors extends BoardDoors {
 
 /** How long the picker stands before the stages are built behind it: the cards have painted, a visitor's first move is not an instant. */
 export const WARM_AFTER_MS = 1200;
+/** How often the board reads the cursor for the warm: a few times a second. */
+export const FOCUS_READ_MS = 100;
 
 export class DemoBoardScreen extends ChapterSelectScreen {
   constructor(opts: ChapterSelectScreenOptions = {}) {
@@ -79,7 +81,9 @@ export class DemoBoardScreen extends ChapterSelectScreen {
   override update(dt: number): void {
     super.update(dt);
     this.checkIdle();
-    if (++this.focusTick % 6 !== 0) return;
+    const now = performance.now();
+    if (now - this.focusAt < FOCUS_READ_MS) return; // post-fight-start: by the clock, not every sixth frame (a frame is 300 ms while the warm works, and the cursor's move reached the warm 1.8 s late)
+    this.focusAt = now;
     const id = this.snapshot()['selectedId'];
     if (typeof id === 'string' && id !== this.focusNoted) {
       this.focusNoted = id;
@@ -107,7 +111,7 @@ export class DemoBoardScreen extends ChapterSelectScreen {
 
   private idle: IdleClock | null = null;
   private stopWatch: (() => void) | null = null;
-  private focusTick = 0;
+  private focusAt = Number.NEGATIVE_INFINITY;
   private focusNoted: string | null = null;
 
   /** No hidden chapters at the booth: no key listener, no label taps, no phone field. */
