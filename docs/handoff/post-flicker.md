@@ -100,6 +100,10 @@ The per-frame pose log of both recordings: `attack` at +39, `follow` at +48, `id
 - `cap/out/{before-60,after-60}/` (every frame of the attack windows as JPEG, per-frame poses), `cap/capture.mjs`, `cap/compose.mjs`, `cap/clip.mjs`; `progress.md` is the step log; `job-*.log`, `cap-*.log` the runs.
 - To repeat: the dev server (`node node_modules/vite/bin/vite.js --port 5602 --strictPort --host 127.0.0.1`), then `node critic/runner/lib/continuity.mjs --base=http://127.0.0.1:5602/ --evidence=<dir> --chapters=ffx2-bahamut --tag=<t> --seed=1 --size=1600x900` with `PYREFLY_BROWSER=gpu` under the RIG-RECORD lock.
 
+## Checks run
+
+`npx tsc --noEmit` clean (run as `node node_modules/typescript/bin/tsc --noEmit`); `node tools/orphans.mjs` lists none of the new files; 200 test files, 2,970 tests pass (4 skipped) across `tests/unit/engine`, every `presenter-`, `ffx2-active*`, `ffxcam-`, `critic-continuity*` file, the other files that name `turnStart`, `KeyPoses`, `BattlePresenterBeats` or `windUpLeads`, and the two new ones. The **full** suite was started and stopped at 33 of about 1,650 files (the chapter benches take hours at two workers on a shared machine): run it once before the release that carries this (`npm test`).
+
 ## What remains
 
 1. **The sibling blip: `ready, idle, cast` and `ready, idle, item` (FFX-2 only).** In the after run 36 pairs (31 casts, 5 items) still go menu `ready`, `idle` for 90 ms, then the action's pose: 216 of the run's 662 see-through frames (33 percent; the ready-to-idle halves alone are 108, 16 percent). It is the same turn-start `setPose('idle')`. Holding `ready` into a cast is a change of which two paintings blend (ready to cast instead of ready to idle to cast), so it is its own measured step with its own clip, not part of this one. Prediction if the same hold covered them: about 87 ghost frames a minute.
