@@ -51,7 +51,7 @@ const MOMENTS = [
   ['b-scene', 'screen', 'cutscene', 2500],
   ['c-loadcard', 'loadcard-add', 'any', 500],
   ['d-bosscard', 'bosscard-add', 'any', 800],
-  ['d2-cardgone', 'bosscard-add', 'any', 1700],
+  ['d2-cardgone', 'bosscard-add', 'any', 1400],
   ['e-sweep', 'phase', 'moment:battle-start', 2000],
   ['f-menu', 'menu', '*', 500],
 ];

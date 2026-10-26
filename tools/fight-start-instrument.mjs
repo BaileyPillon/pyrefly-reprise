@@ -3,10 +3,10 @@
  *
  * `INSTRUMENT` is a function Playwright serialises into the page (`addInitScript`), so it must be self-contained. It writes marks on `window.__ft` with the page's own clock (`performance.now()`):
  *
- *   - AT THE CALL, not at the next frame: the screen stack (`push` / `enter-done` / `exit` with the screen's name, from a wrapper on `App.prototype`) and the DOM the fight start puts up and takes down
+ *   - AT THE CALL, not at the next frame: the screen stack (`push` / `enter-done` / `pop` with the screen's name, from a wrapper on `App.prototype`), the scene's last step (`scene-finished`: its `done` resolving) and the DOM the fight start puts up and takes down
  *     (`entry-add` / `entry-remove` for the entry overlay, `loadcard-add` / `-remove` for the card over it, `bosscard-add` / `-remove` for the battle's own boss card, from wrappers on
  *     `appendChild` and `remove`). A frame loop would see these only after a long task ends, and the fight start has tasks of 0.5 to 1.4 s right where the entry begins.
- *   - FROM A FRAME LOOP (late by at most a frame, or by a long task): the scene's end (`scene-finished`), the presenter's phase (`arrival`, `moment:battle-start` = the opening sweep, `decision`, `command:<actor>`), the camera rig, the first
+ *   - FROM A FRAME LOOP (late by at most a frame, or by a long task): the presenter's phase (`arrival`, `moment:battle-start` = the opening sweep, `decision`, `command:<actor>`), the camera rig, the first
  *     command menu (`menu`), and the dialogue box's lines.
  *
  * It also keeps every frame gap over 24 ms (`gaps`), the long tasks and long animation frames (`long`, `loaf`) and the resources the page fetched (`res`).
@@ -54,6 +54,8 @@ export const INSTRUMENT = () => {
     const push = proto.push;
     proto.push = function (screen) {
       mark('push', screen?.name ?? null);
+      // the scene's last step: its `done` resolves there (a frame loop never sees it: the flow goes on to the entry in the same task)
+      if (screen?.name === 'cutscene' && typeof screen.done?.then === 'function') screen.done.then(() => mark('scene-finished', true));
       const p = push.call(this, screen);
       return Promise.resolve(p).then((v) => { mark('enter-done', screen?.name ?? null); return v; });
     };
@@ -99,7 +101,6 @@ export const INSTRUMENT = () => {
       if (api?.app && !appHooked) hookApp(api);
       const scr = api?.app?.current?.name ?? null;
       change('screen', scr);
-      if (scr === 'cutscene') change('scene-finished', api.app.current.finished === true); // the script has run to its end: the screen waits for the flow to replace it
       const dbox = document.querySelector('.dbox');
       if (dbox) {
         const line = (dbox.textContent || '').trim().slice(0, 48);
