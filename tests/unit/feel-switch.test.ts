@@ -126,6 +126,26 @@ describe('the pack', () => {
     expect([timingByTime(), feelConfigured().timing]).toEqual([true, true]);
   });
 
+  it('the debug setter forces the real-time switch OFF as well as on (`__pyrefly.timing(false)`), over any address in any chapter, and undefined gives the address back (post-conference review R2-2)', () => {
+    for (const search of [undefined, '', '?pack=off', '?pack=demo', '?timing=time']) {
+      for (const id of ['seymour-flux', 'ffx2-bahamut', 'yunalesca', 'ffx2-vegnagun-shuyin', null]) {
+        resetFeelForTests(search);
+        setFeelChapter(id);
+        setTimingByTime(false);
+        expect([timingByTime(), feelConfigured().timing], `${search}, ${id}, forced off`).toEqual([false, false]);
+        setTimingByTime(undefined);
+        expect([timingByTime(), feelConfigured().timing], `${search}, ${id}, address back`).toEqual([true, true]);
+      }
+    }
+    resetFeelForTests('?timing=frames'); // forced on beats an off word, forced off beats nothing named, each in turn
+    setTimingByTime(true);
+    expect(timingByTime()).toBe(true);
+    setTimingByTime(false);
+    expect(timingByTime()).toBe(false);
+    setTimingByTime(undefined);
+    expect(timingByTime()).toBe(false); // the address (an off word) again
+  });
+
   it('a key alone (no pack) turns on just its piece, in a demo chapter only', () => {
     resetFeelForTests('?pack=off&punch=new');
     setFeelChapter('seymour-flux');

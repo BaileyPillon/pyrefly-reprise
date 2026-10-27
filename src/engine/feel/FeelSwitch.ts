@@ -1,6 +1,6 @@
 /**
  * FEEL SWITCHES (motion program, lane "feel", 2026-10-22; Bailey's picks of 2026-10-22 00:10 to 01:30 EDT: "The motion and animations need to be top notch, even above
- * visuals"). Everything this lane adds is a small piece with its own URL key, **OFF at compile time**, and ON only in the two demo chapters:
+ * visuals"). Everything this lane adds is a small piece with its own URL key. Five are **OFF at compile time** and ON only in the two demo chapters; the sixth, `?timing=` (a fix, not a look), has been ON in every chapter since 2026-10-26:
  *
  * | key | values | the piece |
  * |---|---|---|
@@ -11,7 +11,7 @@
  * | `?motionsfx=` | `off` (default), `on` | the subtle synced motion sounds: a whoosh on a lunge and on a planned smear, a landing thud, a cloth rustle on a cast (step 2; `feel/MotionSfx.ts`) |
  * | `?timing=` | `time` (default, EVERY chapter since the post-conference plan), `frames` (or `today`, `off`, `false`, `0`) | the camera shake and the ink-and-paper impact frame counted in real time (120 Hz and above), not in drawn frames (`feel/TimeBased.ts`; review fix F1); any off word puts the drawn-frame count back |
  *
- * and the shared **`?pack=demo`**, which turns every piece above ON (`new`, `short`, `on`, `follow`, `on`, `time`) in the demo chapters. A key named beside `pack` wins for its piece
+ * and the shared **`?pack=demo`**, which turns the five looks above ON (`new`, `short`, `on`, `follow`, `on`) in the demo chapters (`time` no longer needs it). A key named beside `pack` wins for its piece
  * (`?pack=demo&punch=today` is the demo pack with today's camera: the A/B).
  *
  * **Demo chapters only (Bailey: "Demo chapters first").** Chapter I is `seymour-flux` (FFX) and Chapter IV is `ffx2-bahamut` (FFX-2), the ids in `data/encounters.ts`. The battle

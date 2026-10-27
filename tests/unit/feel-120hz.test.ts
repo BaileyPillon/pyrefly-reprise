@@ -145,7 +145,7 @@ describe('every chapter, pack or not (post-conference plan, 2026-10-26)', () => 
     return { ms, radPerS: (field.shakePhase - p0) / (frames / hz) };
   }
 
-  it('the same shake lasts the same wall time and runs at the same rate at 60, 120 and 144 Hz, in every chapter and under every address', () => {
+  it('the shake runs at the same rate (54 rad/s: what this change fixes) at 60, 120 and 144 Hz, in every chapter and under every address; its wall time was always real time (unchanged by it, within a 60 Hz frame)', () => {
     for (const search of ADDRESSES) {
       for (const id of CHAPTER_IDS) {
         resetFeelForTests(search);
