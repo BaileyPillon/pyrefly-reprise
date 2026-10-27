@@ -354,7 +354,7 @@ All of these serve a built candidate read-only (`--dist <folder>`, e.g. a review
 |---|---|
 | Frame pacing of a fight (animation time lost a minute; never from the continuity probe or a trace) | `node tools/pace.mjs --dist <dir> --chapter ffx2-bahamut --size 2560x1440 --label ch4-1440-cap` (`--analyze <run dir>` re-reads one) |
 | 60 / 120 / 144 Hz equality of one scripted moment | `node tools/hz-matrix.mjs --dist <dir> --chapter seymour-flux` (`--judge <dir>` judges captures again) |
-| Velocity jolts per fight, against a baseline | `node tools/jolts.mjs --dist <dir> --chapter ffx2-bahamut --hz 120 [--compare <earlier jolts.json>]`; `--rec <recording.json>` counts a saved recording |
+| Velocity jolts per fight, against a baseline | `node tools/jolts.mjs --dist <dir> --chapter ffx2-bahamut --hz 120 [--compare <earlier jolts.json>]`; `--rec <recording.json>` counts a saved recording; judged on a 1/60 s grid (`--raw`: the curves lane's every-frame method, never across rates); `--compare` refuses an unlike run (exit 2) |
 | A blind phone clip card of look variants (address words on one build) | `node tools/ab-clip.mjs --spec <card.json>`; from an existing side-by-side clip: `node tools/ab-video.mjs --src <clip.mp4> --id ... --chapter ch1 --move ...` |
 | Does the FFX-2 ready shimmer restart with each HUD rebuild | `node tools/atb-shimmer.mjs --dist <dir>` |
 | Who allocates per frame | `node tools/alloc-profile.mjs --dist <dir> --chapter ffx2-bahamut --seconds 60` |

@@ -74,6 +74,18 @@ export function trackPoints(frames, focus, i0, i1) {
 }
 
 /**
+ * Is the presenter ACTING in this recorded frame (an action is playing, no command menu waiting)? The first real-game card showed that `playing` alone cannot say: in the booth build the presenter's `playing`
+ * stays true while the next command menu is open (frame after frame of `menu: true, playing: true`), so "the action is over" never fired and every moment ran to its 14 s timeout. The phase says it: `play:*`
+ * while an action or a turn start plays, `command:*` at a menu. A build with no phase falls back to `playing && !menu`.
+ * @param {{phase?: string|null, playing?: boolean, menu?: boolean}} f a frame of the stepped recording (tools/measure/channels.mjs)
+ */
+export function isActing(f) {
+  if (!f) return false;
+  if (typeof f.phase === 'string' && f.phase) return f.phase.startsWith('play');
+  return Boolean(f.playing) && !f.menu;
+}
+
+/**
  * The nth log event (1-based `ordinal`, default 1) of a type, optionally about one figure (`who` matches the event's target, actor or source). The factory cuts by these, never by wall time.
  * @param {Array<{type: string, vt?: number, targetId?: string|null, actorId?: string|null, sourceId?: string|null}>} events
  * @param {{event?: string, type?: string, who?: string|null, ordinal?: number}} want `event` (or `type`) is the log event's type, e.g. "ko", "damage", "summon"
@@ -105,7 +117,7 @@ export function windowOf(frames, events, { t0, leadMs = 500, settleMs = 1000, ma
   }
   const start = t0 - leadMs;
   let lastPlaying = -1;
-  for (let i = 0; i < frames.length; i++) if (frames[i].vt >= t0 && frames[i].playing) lastPlaying = i;
+  for (let i = 0; i < frames.length; i++) if (frames[i].vt >= t0 && isActing(frames[i])) lastPlaying = i;
   let endMs = lastPlaying >= 0 ? frames[lastPlaying].vt : t0;
   for (const e of events ?? []) if (e.vt >= t0 && e.vt > endMs && lastPlaying < 0) endMs = e.vt;
   endMs += settleMs;

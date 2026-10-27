@@ -5,7 +5,7 @@
 // Both read the game only through the debug API's reads (the menu flag, the screen, the log length) and press keys the way a player does. The one write to the game's state is hit points: the fight keeps the
 // party up (every 2 s of virtual time a party member under 60 percent HP is set back to full through `battleState()`, the curves lane's own method) so a long stretch of play is not ended by a defeat, and a
 // card's `setup` can set a figure's hit points before the play starts (tools/measure/setup.mjs); both are recorded in the result.
-import { findEvent } from '../../critic/runner/lib/ab-pure.mjs';
+import { findEvent, isActing } from '../../critic/runner/lib/ab-pure.mjs';
 import { recordTick } from './channels.mjs';
 
 /** In the page: every living party member under 60 percent HP back to full; returns how many were healed. */
@@ -57,8 +57,8 @@ export async function playOneAttack({ g, stepper, acc, hz, keys = ['Enter', 'Ent
       if (untilAt === null) { const ev = findEvent(acc.events, until); if (ev) untilAt = ev.vt; }
       if (untilAt !== null && stepper.ms - untilAt >= (until.afterMs ?? 1000)) { ended = 'event'; break; }
     }
-    if (st.playing) sawPlaying = true;
-    if (sawPlaying && st.menu && !st.playing && stepper.ms - turnAt > 800) {
+    if (isActing(st)) sawPlaying = true; // the phase, not `playing`: that stays true while the next menu is open (the first real card)
+    if (sawPlaying && st.menu && !isActing(st) && stepper.ms - turnAt > 800) {
       if (pressed < turns || (until && untilAt === null && pressed < maxTurns)) { await pressTurn(); turnAt = stepper.ms; sawPlaying = false; } // the next command menu: the same keys again
       else if (!until) { ended = 'menu'; break; }
     }

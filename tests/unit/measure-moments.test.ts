@@ -4,7 +4,7 @@
  * an action that plays for a while and logs a blow, the menu again) so the turn, hold, `until` and per-key-wait logic is proven without a browser; `applySetup` is run against a fake page.
  */
 import { describe, expect, it } from 'vitest';
-import { checkSpec, findEvent, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
+import { checkSpec, findEvent, isActing, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
 import { playOneAttack } from '../../tools/measure/fight.mjs';
 import { applySetup } from '../../tools/measure/setup.mjs';
 
@@ -21,6 +21,24 @@ describe('finding an event', () => {
     expect(findEvent(events, { event: 'damage', ordinal: 9 })).toBeNull();
     expect(findEvent(events, null)).toBeNull();
     expect(findEvent(undefined, { event: 'ko' })).toBeNull();
+  });
+});
+
+describe('is the presenter acting', () => {
+  it('reads the phase when the build has one, else playing without a menu', () => {
+    expect(isActing({ phase: 'play:action-start', playing: true, menu: false })).toBe(true);
+    expect(isActing({ phase: 'play:turn-start', playing: true, menu: false })).toBe(true);
+    expect(isActing({ phase: 'command:yuna', playing: true, menu: true })).toBe(false); // the booth build: playing stays true at a menu
+    expect(isActing({ playing: true, menu: false })).toBe(true);
+    expect(isActing({ playing: true, menu: true })).toBe(false);
+    expect(isActing({ playing: false })).toBe(false);
+    expect(isActing(null)).toBe(false);
+  });
+  it('the window of a moment ends a settle after the last ACTING frame, not after the last frame of a capture whose playing flag never fell', () => {
+    const frames = Array.from({ length: 900 }, (_, i) => ({ vt: i * (1000 / 60), playing: true, menu: i < 40 || i >= 107, phase: i < 40 || i >= 107 ? 'command:tidus' : 'play:action-start' }));
+    const w = windowOf(frames, [], { t0: 40 * (1000 / 60), leadMs: 500, settleMs: 1000, maxMs: 8000 })!;
+    expect(w.truncated).toBe(false);
+    expect(w.lengthMs).toBeLessThan(3500); // 0.5 s lead, ~1.1 s of action, 1 s settle: not the 8 s cap
   });
 });
 
@@ -78,7 +96,7 @@ interface Fake {
  * Every 2 key presses start an action: it plays 1000 ms, logs a 'damage' of the boss at +400 ms, and the menu is awaiting again after it; from the `koTurn`-th action on, a 'ko' follows the damage by 50 ms.
  * The game's clock is 60 Hz, 1000/60 ms a tick. `recordTick` reads the stepper as `tick('window.READ_')` and the log with `page.evaluate('window.NEWLOG_(n)')`: both are wired here.
  */
-function fakeEngine({ koTurn = 99 }: { koTurn?: number } = {}): Fake {
+function fakeEngine({ koTurn = 99, stickyPlaying = false }: { koTurn?: number; stickyPlaying?: boolean } = {}): Fake {
   const presses: Array<{ key: string; at: number }> = [];
   const log: Array<Record<string, unknown>> = [];
   const state = { menu: true, playingUntil: -1, pendingKeys: 0, turn: 0, damageAt: -1, koAt: -1 };
@@ -90,7 +108,9 @@ function fakeEngine({ koTurn = 99 }: { koTurn?: number } = {}): Fake {
       if (state.damageAt >= 0 && now >= state.damageAt) { log.push({ type: 'damage', targetId: 'boss', actorId: 'girl' }); state.damageAt = -1; }
       if (state.koAt >= 0 && now >= state.koAt) { log.push({ type: 'ko', targetId: 'boss', sourceId: 'girl' }); state.koAt = -1; }
       if (state.playingUntil >= 0 && now >= state.playingUntil) { state.playingUntil = -1; state.menu = true; }
-      return { screen: 'battle', menu: state.menu && state.playingUntil < 0, playing: state.playingUntil >= 0, nLog: log.length };
+      const acting = state.playingUntil >= 0;
+      // the booth build: `playing` stays true while the next command menu is open; only the phase says whether an action runs
+      return { screen: 'battle', menu: state.menu && !acting, playing: stickyPlaying ? true : acting, phase: stickyPlaying ? (acting ? 'play:action-start' : 'command:tidus') : null, nLog: log.length };
     },
   };
   const page = {
@@ -113,7 +133,7 @@ function fakeEngine({ koTurn = 99 }: { koTurn?: number } = {}): Fake {
 }
 
 describe('playing a moment against a fake engine', () => {
-  const build = (o: { koTurn?: number } = {}): Fake => fakeEngine(o);
+  const build = (o: { koTurn?: number; stickyPlaying?: boolean } = {}): Fake => fakeEngine(o);
 
   const play = (f: Fake, extra: Record<string, unknown> = {}) => playOneAttack({ g: f.g as never, stepper: f.stepper as never, acc: f.acc, hz: 60, preRollMs: 100, tailMs: 100, seconds: 30, ...extra });
 
@@ -125,6 +145,17 @@ describe('playing a moment against a fake engine', () => {
     expect(r.turns).toBe(1);
     expect(r.untilAt).toBeNull();
     expect(f.acc.events.some((e) => e.type === 'damage')).toBe(true);
+  });
+
+  it('ends the action at the next menu when `playing` stays true there and only the phase says it is over (the first real card)', async () => {
+    const f = build({ stickyPlaying: true });
+    const r = await play(f);
+    expect(r.ended).toBe('menu'); // a first version waited for `playing` to fall and ran to its 14 s timeout in the real game
+    expect(f.acc.frames[f.acc.frames.length - 1]!.vt - r.t0).toBeLessThan(2500);
+    const f2 = build({ stickyPlaying: true });
+    const r2 = await play(f2, { turns: 2 });
+    expect(r2.turns).toBe(2);
+    expect(r2.ended).toBe('menu');
   });
 
   it('leaves the first menu open for holdMenuMs before the first key', async () => {
