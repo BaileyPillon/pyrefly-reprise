@@ -1,5 +1,5 @@
 /**
- * The alpha plane of a decoded painting averaged down to a small field by AREA (post-conference motion-fluidity pass, lane "mf-l4-freezes", MF-02; both games; pure, no DOM; used by `alphaThumbWorker.ts`).
+ * The alpha plane of a decoded painting averaged down to a small field by AREA (post-conference motion-fluidity pass, lane "mf-l4-freezes", MF-02; both games; pure, no DOM; used by `alphaThumb.worker.ts`).
  *
  * Why this and not a canvas draw. The look's extents were always read from the page's own `drawImage(<img>, 0, 0, 128, 128)`, which Chromium filters through its own mip chain (the same bytes at every
  * `imageSmoothingQuality`); no `ImageBitmap` draw in a worker reproduces it byte for byte (`e1b`: 17 variants, 0 identical). Over the 263 paintings of Chapters I and IV (`e3`) the plain AREA AVERAGE of the alpha

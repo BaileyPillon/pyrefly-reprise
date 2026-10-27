@@ -1,7 +1,7 @@
 import { alphaPlane, areaAverage } from './alphaArea.ts';
 
 /**
- * The alpha fields of a painting, made in a Worker (a Vite worker entry: `AlphaThumb.ts` starts it with `new Worker(new URL('./alphaThumbWorker.ts', import.meta.url), { type: 'module' })`). Post-conference
+ * The alpha fields of a painting, made in a Worker (a Vite worker entry: `AlphaThumb.ts` starts it with `new Worker(new URL('./alphaThumb.worker.ts', import.meta.url), { type: 'module' })`). Post-conference
  * motion-fluidity pass, lane "mf-l4-freezes", MF-02; both games.
  *
  * It receives a painting as its encoded bytes (a Blob) or its address, decodes it here (no page thread, no GPU queue behind it), and makes each field:

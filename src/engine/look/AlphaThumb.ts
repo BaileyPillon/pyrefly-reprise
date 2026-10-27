@@ -9,7 +9,7 @@ import { baseExtents } from './LookBoldConfig.ts';
  * image's mip levels: 79 to 202 ms for a 3x or 4x master on this PC, 7 to 22 ms at 1x, the repeat 0.1 to 0.3 ms (`e1`). It lands on the frame that first shows the pose: the aeon's summon and attack, an item throw,
  * Cheer, Talk, the Auron switch (46 reads of 2.9 s and 30 breath reads of 0.8 s in one Chapter I fight, 57 frames over 33 ms).
  *
- * THE FIX. The work depends on nothing but the file's bytes, so a Worker does it from the bytes (`alphaThumbWorker.ts`: decode, a `drawImage` into an `OffscreenCanvas` of the same size, `getImageData`) when the
+ * THE FIX. The work depends on nothing but the file's bytes, so a Worker does it from the bytes (`alphaThumb.worker.ts`: decode, a `drawImage` into an `OffscreenCanvas` of the same size, `getImageData`) when the
  * painting is loaded, and the field is kept against the `<img>` the texture holds (a WeakMap: the image, whatever textures are made from it; a master swapped in by the art governor is another image with its own
  * entry). A reader asks {@link thumbOf}: the field when it has landed, else null, and the reader does what it did before. `AlphaPrime.readExtents` also asks {@link thumbPending}: while a field is on its way
  * the previous extents of the texture, or those of another master of the same painting, stand in (a painting is the same painting at every tier), so an upgrade never makes the page read the 4x master itself.
@@ -226,7 +226,7 @@ function giveUp(job: Job): void {
 function make(): Worker | null {
   if (broken || typeof Worker === 'undefined') return null;
   try {
-    const w = new Worker(new URL('./alphaThumbWorker.ts', import.meta.url), { type: 'module', name: 'alpha-thumb' });
+    const w = new Worker(new URL('./alphaThumb.worker.ts', import.meta.url), { type: 'module', name: 'alpha-thumb' });
     w.onmessage = (e: MessageEvent<Reply>): void => {
       const job = waiting.get(e.data.id);
       if (!job) return;
