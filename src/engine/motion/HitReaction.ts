@@ -8,7 +8,7 @@
  *
  * **Three variants, one switch (`?hit=`, `MoveSwitch.ts`; the default is today):**
  * - `today` (V0): this file is not used; `PaintedActor.shake` plays as it always did.
- * - `ramp` (V1): still the rattle, same frequencies and decay, but its envelope starts at ZERO and takes {@link RAMP_MS} (two 60 Hz frames) to reach full size, and its phase is seeded from the
+ * - `ramp` (V1): still the rattle, same frequencies and decay, but its envelope starts at ZERO and takes {@link RAMP_MS} (three 60 Hz frames: a ramp of two reaches half size on its first frame, which is no smaller than a step to the eye) to reach full size, and its phase is seeded from the
  *   blow (the same blow rattles the same way in every take) instead of `Math.random()`.
  * - `knock` (V2): a push along the attacker-to-target line (away from the attacker), an eased rise to a peak at {@link PEAK_MS}, then a spring back through zero (a 240 ms period, damping 0.35) with ONE visible counter-swing and a
  *   small second one ({@link ZETA}, {@link SPRING_MS}); its size follows `hitPower` (a light blow budges a figure a little, a heavy one a lot; a crit more; a big body less); a small contact
@@ -27,8 +27,8 @@ const smoothstep = (x: number): number => {
   return u * u * (3 - 2 * u);
 };
 
-/** V1: the envelope takes this long to reach full size (two 60 Hz frames, in milliseconds, so it is the same wait on every display). */
-export const RAMP_MS = 33;
+/** V1: the envelope takes this long to reach full size (three 60 Hz frames, in milliseconds, so it is the same wait on every display). */
+export const RAMP_MS = 50;
 /** Today's rattle, `PaintedActor.update`: radians a second sideways, the up-and-down ratio and its share of the amplitude. */
 export const RATTLE_RAD_S = 62;
 export const RATTLE_Y_RATIO = 1.63;
