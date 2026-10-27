@@ -1,7 +1,7 @@
 import type { PerspectiveCamera, Texture } from 'three';
 import { pickScale, requiredScale, textureMB } from './ArtBudget.ts';
 import { EVICT_EVERY_MS, MAX_LOADS, PERSIST_MS, SAFETY, SEEN_WINDOW_MS, URGENT_EXTRA, type Entry, type Need } from './ArtEntry.ts';
-import { evictions, roomFor, WARM_MIN_PIXELS, warmMB, warmRoom } from './ArtMemory.ts';
+import { evictions, poseHeat, roomFor, WARM_MIN_PIXELS, warmMB, warmRoom } from './ArtMemory.ts';
 import { imageHeight, imageWidth, pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type GovernedStage, type GovernorDeps, type GovernorStats, type LoadedPixels } from './ArtMeasure.ts';
 
 export { PERSIST_MS, SEEN_WINDOW_MS } from './ArtEntry.ts';
@@ -225,12 +225,12 @@ export class ArtGovernor {
           if (lead > s.baseScale && lead > s.scale && lead > s.loading) {
             const want = pickScale(lead, this.scalesOf(s), this.capOf(s));
             if (want > s.scale && want > s.loading) {
-              needs.push({ entry: s, want, rank: 1, px1x: 0 });
+              needs.push({ entry: s, want, rank: 1, px1x: poseHeat(s.url) }); // MF-02: the poses likely to be drawn next take the warm pool first (`ArtMemory.poseHeat`); with the same heat the order is the old one
               continue;
             }
           }
           if (warming && s.mb === 0 && !s.warm && !s.warmTried && s.loading === 0 && imageWidth(s.texture) * imageHeight(s.texture) >= WARM_MIN_PIXELS) {
-            if (warmRoom(this.entries.values(), textureMB(imageWidth(s.texture), imageHeight(s.texture)), this.deps.budget().textureMB)) needs.push({ entry: s, want: s.scale, rank: 1, px1x: 1, warm: true });
+            if (warmRoom(this.entries.values(), textureMB(imageWidth(s.texture), imageHeight(s.texture)), this.deps.budget().textureMB)) needs.push({ entry: s, want: s.scale, rank: 1, px1x: 1 + poseHeat(s.url), warm: true });
           }
         }
       }

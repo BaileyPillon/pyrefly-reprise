@@ -34,7 +34,34 @@ export const WARM_SHARE = 0.3;
 /** A painting smaller than this (pixels) is not worth warming: its first draw uploads in about 4 ms. */
 export const WARM_MIN_PIXELS = 1_500_000;
 
+/**
+ * MF-02 (lane "mf-l4-freezes", both games): the HIGH class (a discrete GPU, a 2,600 MB budget) may speculate 1,092 MB (42 percent, never over 1,100) and not 640. The pool still lives inside the class's budget (a
+ * speculative load is admitted only when `roomFor` says the budget holds it, whether it is staged or swapped in unstaged), so this changes WHEN the memory is resident, not how much the class can ever hold: Chapter I
+ * swapped 41 of 136 masters in unstaged because the pool was full (640 MB), and each paid a 50 to 145 ms upload on the frame that first drew it. `?warmpool=old` is release 64's 640 MB for a comparison.
+ */
+export const WARM_MAX_MB_HIGH = 1100;
+export const WARM_SHARE_HIGH = 0.42;
+export const HIGH_BUDGET_MB = 2400;
+
+let widePool: boolean | undefined;
+function wide(): boolean {
+  if (widePool === undefined) {
+    try {
+      widePool = typeof window === 'undefined' ? true : new URLSearchParams(window.location.search).get('warmpool') !== 'old';
+    } catch {
+      widePool = true;
+    }
+  }
+  return widePool;
+}
+
+/** For the tests and the lane's job: the wide pool on or off. */
+export function setWidePool(on: boolean | undefined): void {
+  widePool = on;
+}
+
 export function warmCap(budgetMB: number): number {
+  if (budgetMB >= HIGH_BUDGET_MB && wide()) return Math.min(WARM_MAX_MB_HIGH, budgetMB * WARM_SHARE_HIGH);
   return Math.min(WARM_MAX_MB, budgetMB * WARM_SHARE);
 }
 
@@ -62,4 +89,23 @@ export function evictions(entries: Iterable<Entry>, t: number, budgetMB: number)
     residents.push({ key, scale: e.scale > e.baseScale ? e.scale : 1, mb: e.mb, lastSeen: e.lastSeen, visible: t - e.lastSeen <= SEEN_WINDOW_MS });
   }
   return evictionOrder(residents, budgetMB).map((key) => byKey.get(key)!);
+}
+
+/**
+ * MF-02 (motion-fluidity pass, lane "mf-l4-freezes"; both games): which poses of a figure are staged first when the warm pool cannot hold them all. A figure's poses are not equally likely to be the next
+ * one drawn: the strike, the spell, the flinch and the item come up every few turns, the sleep, the victory and the overdrive paintings once a fight or never. The pool used to fill in the order the
+ * poses were registered (alphabetical), so at the first upgrade it took a figure's sleep and victory paintings and had no room left when the summon's hot poses were loaded 60 seconds in (Chapter I,
+ * 41 of 136 masters swapped in unstaged and uploaded in 50 to 145 ms on the frame that first drew them). Ordering only: nothing is loaded that was not, and nothing looks different.
+ */
+const POSE_HEAT: Readonly<Record<string, number>> = {
+  attack: 0.9, cast: 0.9, hurt: 0.9, item: 0.85, ready: 0.85, idle: 0.8, defend: 0.6, critical: 0.6, ko: 0.5, follow: 0.35, victory: 0.3, sleep: 0.2,
+};
+
+/** How soon a painting is likely to be drawn, 0 to 1, from the pose in its address (`art/characters/<id>/<pose>[@<n>x].<ext>`); 0.4 for a name this does not know (so an unknown set keeps its order). */
+export function poseHeat(url: string): number {
+  const m = /\/([a-z0-9-]+?)(?:%40|@)?(?:\d+x)?\.(?:png|webp)(?:\?.*)?$/i.exec(url);
+  const pose = m?.[1]?.toLowerCase();
+  if (!pose) return 0.4;
+  if (pose.startsWith('od-')) return 0.2;
+  return POSE_HEAT[pose] ?? 0.4;
 }
