@@ -1,0 +1,75 @@
+# Motion-fluidity pass, lane L3: the presenter's timebase and the motion of the interface (branch `mf-l3-timebase-ui`, 2026-10-27)
+
+Bailey, 2026-10-26 ~13:45 EDT: "I need an additional pass for motion, motion fluidity, animations etc please"; he delegated every decision to the driver. Plan: `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json` (lane L3: MF-08, MF-16, MF-07, MF-13, MF-24).
+Branch `mf-l3-timebase-ui` from `origin/main` acbd815d3 merged with `origin/post-tool-pin` (adb44d675; every number below is read by the release tree's pinned harness `critic/runner/lib/continuity.mjs`, stamped by `tools/continuity-id.mjs`). Nothing deploys. Work tree `D:/pyrefly-rig-rikkudk`; evidence `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/build/mf-l3-timebase-ui/`; clip cards `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/cards/CP-08`, `CP-11`, `CP-14`.
+
+## What each item is, its game case and its switch
+
+| item | game case | look? | default | word |
+|---|---|---|---|---|
+| MF-08 one beat clock (the presenter's waits counted in the frame clock; pause, hidden window, long frame; a chain keeps its length) | both games (shared presenter timebase; the ATB pump keeps its wall sleep, the engine reads real time) | no | ON | `?beats=wall` puts the old `setTimeout` waits back (the one-build A/B and the way back) |
+| MF-16 the turn cut-in's slam and settle as one Web Animation | both games (the cut-in plays every turn in FFX-2, FFX's first turn of each member) | no | ON | `?cutin=timed` puts the timer-chained entrance back |
+| MF-07 the FFX-2 ATB bars run per frame, eased, the columns rebuilt only when their structure changes, the ready shimmer keeps its phase | FFX-2 only (the ATB HUD) | yes | off | `?atbbars=smooth` (or `?fluidui=on`) |
+| MF-13 the FFX turn-order list slides each row to its new place; the Sphere Grid's pan and zoom glide | FFX only (the CTB list and the Sphere Grid are the FFX HUD) | yes | off | `?ctbslide=flip`, `?gridease=on` (or `?fluidui=on`) |
+| MF-24 the Trigger Happy bar and ring move every drawn frame | FFX-2 only (Yuna's Gunner, Chapter IV) | yes | off | `?triggerhappy=smooth` (or `?fluidui=on`) |
+
+`?fluidui=on` turns on the four look pieces; a piece's own word beats it in both directions (`?fluidui=on&atbbars=today`). No word anywhere = today's interface byte for byte (the related test files pin it).
+
+## The code
+
+- **`src/engine/BeatClock.ts`** (new, pure): the presenter's waits are entries in the clock's own time; `BattleScreen.update(animDt)` ticks it beside the scene (the 1/40 s clamp), so a long frame delays beats and pictures together, nothing ticks it while the pause overlay is up or the window is hidden (the remaining time resumes exactly), `releaseAll()` on exit, stall or restart leaves nothing parked. A wait of 0 stays a macrotask yield (a resolved promise is a microtask). `BattlePresenterDeps.beatSleep` (new, optional) carries the scaled `ctx.sleep` and the turn cut-in's wait; `deps.sleep` (the pause gate, wall) still serves the ATB pump, the HUD-event budget and the script budget.
+- **`src/engine/BeatLead.ts`** (new): the part of a frame a finished beat or an awaited tween did not need. `Tween` credits it on its first update, a new beat subtracts it from its length, so a chain of waits and moves keeps its true length at 60, 120 and 144 Hz (TB-04). Inert unless a battle screen has claimed it. **For lane L2:** `Tween.overshoot`, and `onComplete(overshootSec)`, are exposed, but the lunge legs joined by `.then` need NOTHING from you: the continuation of an awaited tween already starts its next tween that far in. Do not subtract the overshoot a second time.
+- `Tween.ts`: `onComplete` now receives the overshoot (seconds); existing `() => void` callbacks are unchanged.
+- `TurnCutIn.ts`: the wait for a charge polls once a frame (16 ms, was 60) and its 0.8 s cap is counted in real time (`deps.now`).
+- **MF-16** `ui/inkgold/cutin.ts`: one `slab.animate` with the two phases as keyframes (`cubic-bezier(0.2, 0.9, 0.3, 1)` then `ease-out`), the way out starts from where the entrance is and removes the slab on `finished` (a fallback timer settles the promise in a hidden tab). **Left alone on purpose:** `wipe.ts` (its cover is held through the swap's own main-thread stall by the timer chain; a one-shot compositor animation would let the panel leave during the swap), the name slab, the splash, the banner, the swirl and the cutscene shake (hold-driven class toggles or deliberate stepped motion, not a transition chained to a timer).
+- **MF-07** `ui/ffx2/AtbLive.ts` (new), `PartyRows.partyRowHtml({ live })`, `FFX2BattleHud` (net -1 line). The model extrapolates each fill between the pump's snapshots (80 ms cap, a held clock stops it); the drawn bar is `ease`d toward it (30 ms time constant, may lead the model by one logic step, never steps back, a spent bar or the ready flash is drawn at once) and the rate is smoothed over snapshot pairs. **Why the easing:** the engine's gauge moves in 33 ms logic steps and the snapshots come every 50 ms, so the bare extrapolation held one frame in six (stepped capture); a modelled pump at 60, 120 and 144 Hz is the test (`tests/unit/atb-live.test.ts`).
+- **MF-13** `ui/ffx/CtbSlide.ts` (FLIP, one `element.animate` per row, 200 ms) and `party-prep/SphereGridEase.ts` (160 ms glide through the view's existing frame loop). **The slide is the row's own `translate` property, not `transform`:** the F1 turn strip (`hudf1-ffx.css`) and the phone rail (`phone-hud.css`) set `transform: none !important` on a row, and an important declaration beats every animation, so the first build's `transform` slide never showed in the real Chapter I HUD (the lab list in the first measure had no such rule). Found by the stepped capture of the real HUD, fixed in 4c2759d83. **MF-24** `ui/ffx2/TriggerHappy.ts` (persistent elements, a frame loop). `ui/common/fluidUi.ts` reads the words.
+- File sizes: `BattleScreen.ts` 1086 (unchanged), `BattlePresenter.ts` 810 (unchanged), `BattlePresenterPorts.ts` 596 (-2), `FFX2BattleHud.ts` 1441 (-1), `SphereGridView.ts` 647 (-6); the new files are under 230 lines each. No contract file (`docs/CONTRACTS.md`) is touched.
+
+## Tests
+
+`tests/unit/battle-screen-beats.test.ts` (written first: 5 of 6 failed on the unchanged tree), `beat-clock.test.ts`, `cutin-waapi.test.ts`, `atb-live.test.ts` (14: the modelled pump and a held clock at 60, 120, 144 Hz), `ctb-slide.test.ts`, `trigger-happy-smooth.test.ts`. The 244 test files that import a touched module: 228 passed, 16 skipped, 2659 tests pass (`evidence/final-related-run2.txt`); `npx tsc --noEmit` clean.
+
+## Numbers (before = the same build with the word off or `?beats=wall`; seed 1; headless GPU Chromium 1600x900; stepped captures on the virtual clock at 60 and 144 Hz)
+
+**MF-08, the A item.**
+- A chain of waits and moves, 1905 ms ideal (the model, `chain-numbers.mjs`): the old wall waits 1901.7 / 1905.8 / 1907.9 ms at 60 / 120 / 144 Hz, standard deviation over start phases 4.81 / 2.41 / 2.00 ms; the frame clock alone 1966.7 / 1933.3 / 1930.6 (loses a leftover per link); with the lead 1916.7 / 1908.3 / 1909.7 (all three within 8.4 ms, inside one display frame, and one value per rate).
+- Beat-to-beat spread in the real runs, n-weighted standard deviation of the tight classes (a class with a range of 6 frames or less in both builds): **Chapter IV 0.194 frames (3.2 ms at 60 Hz) against 0.359 (6.0 ms) with `?beats=wall`**, 16 classes, 173 and 177 swaps; Chapter I 0.529 against 0.558 (6 classes, 63 swaps): no change there. The plan's target "0.1 frame at a fixed virtual rate" is met only in the unit test (every beat of one length takes the same frame count at a fixed rate, sd 0); in a real run the frame-rate jitter of the machine stays in the number. Medians move one frame earlier in chains (Chapter IV Paine attack>follow 52 against 53, follow>idle 67 against 69; Chapter I Tidus turn-start 10 against 11): a beat no longer waits for the next frame after its timer.
+- Ghost-frame guard (should not move): Chapter I 101.9 frames a minute / 1700 ghost ms a minute against 102.0 / 1690 with `?beats=wall`; Chapter IV 153.5 / 2508 (first run) and 161.8 / 2702 (second run, the final code) against 150.6 / 2502 with the wall waits, the r64 baseline 147.3 / 2483. Ghost ms per swap 37.1 and 38.6 against 37.4: the picture swaps cost the same; the fight is denser per minute because each link is about a frame shorter. 0 snaps, worst severity 0.342 in every run; CHK-026 / CHK-027 are the same two baseline FAILs (a pose outside its height band). Two frame-clock runs of near-identical code (the second after the `?beats=wall` read-once commit) differ by 5 percent, so the Chapter IV minute counts are inside the run-to-run spread; the per-swap and per-class numbers are the comparison.
+- Fight start (does the beat clock slow the opening?): Chapter I first menu 18.95 / 18.56 s (frame) against 18.64 / 18.74 s (wall); Chapter IV 11.75 / 11.79 against 11.73 / 11.75 s. No slowdown.
+- Pause mid-move then resume, a hidden window, a long frame (the 1/40 s clamp), a torn-down screen: `tests/unit/battle-screen-beats.test.ts` (resumes where it stopped; nothing ticks a hidden window; nothing is left parked).
+
+**MF-16, the A item.** The cut-in's settle after a 100 ms main-thread stall that lands at 90 ms into the entrance: **ends at +184 ms (one animation) against +250 ms (timer chain)**; a 130 ms stall: +219 against +283 ms. Idle curves (no stall) are identical frame by frame (settle 133 to 183 ms in both). In the real Chapter IV battle HUD the animation draws: slam from -276 px to 0 in 120 ms, the skew settle 120 to 183 ms, the way out from 633 ms (`cap-combo`, cut-in probe).
+
+**MF-07, the B item** (Chapter IV, a command menu open; Paine's bar refilling; the width of the fill element as the browser draws it).
+- Column rewrites under a menu: **15.69 a second on each column to 0.25 (party) and 0 (enemy)**. The ready shimmer (T-05, confirmed): 189 shimmer elements were created in 4 s (every rebuild restarts it; the longest-lived one 450 ms); with the word on 6 elements, the longest 2.18 s.
+- The fill per drawn frame while it refills: today at 60 Hz the fill changes on 39 of 115 frames (a step every third frame, 20 a second), biggest step 2.62 px, a 2-frame hold between; at 144 Hz 35 of 248 frames, 2.62 px, holds of up to 7 frames. **With the word on: every frame (129 of 129 at 60 Hz, 254 of 254 at 144 Hz), biggest step 0.92 px and 0.60 px, no hold, never a step back**; a held clock stops it within the model's 80 ms cap plus one logic step (a test at 60 / 120 / 144 Hz). The fill's speed is the same at the two rates (38.7 px a second at 60 Hz, 39.2 at 144 Hz).
+- Clip card `cards/CP-08` (see below).
+
+**MF-13, the B item** (Chapter I, the real FFX HUD, two turns, 60 Hz): today a row jumps in one frame (1 frame in motion); with the word on each row glides one way to its new place, **within 0.5 px at +200 ms (turn 2)**, and at +250 to +267 ms when a second sync lands mid-slide (the slide restarts from where the row is drawn; the 0.2 to 0.4 px sub-pixel step back in that case is the compositor's rounding). The Sphere Grid's glide (160 ms) has the unit tests and the code; it has no filmed card.
+
+**MF-24, the B item** (Yuna's Trigger Happy, a 1.8 s mash at 60 Hz): today the bar changes on 48 of 115 frames (25 a second), 7.5 px steps of the 288 px runway in the lab run and a 5.4 px, 0, 5.4 px, 0 alternation in the card capture; with the word on it changes on 108 of the 115 frames, biggest step 3.0 px (the lab run), and a steady 2.5 to 2.8 px a frame in the card capture.
+
+## Clip cards (frame-stepped on a virtual clock, 16:9 crop scaled to 720x405, A over B, 720x810 phone MP4 under 8 MB, labelled A and B only, the key in KEY.json)
+
+| card | switch | files in `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/cards/<id>/` | what it shows |
+|---|---|---|---|
+| CP-08 FFX-2 ATB bars | `?atbbars=smooth` (try), `?atbbars=today` | `AB-ch4-atbbars-60.mp4` (3.5 s, 60 Hz), `AB-ch4-atbbars-144-slow4x.mp4` (a 144 Hz virtual capture at quarter speed), `CP-08-still-card.png` (1080 px: six-frame strip, fill moved per frame at 60 and 144 Hz, the position over 400 ms), `CP-08-trace.png`, `numbers.json`, `KEY.json` | Chapter IV, Rikku's command menu open, Paine's bar refilling and Yuna's cast bar |
+| CP-11 FFX turn-order list | `?ctbslide=flip`, `?ctbslide=today` | `AB-ch1-ctblist-60.mp4`, `AB-ch1-ctblist-60-slow4x.mp4`, `CP-11-still-card.png` (8 frames from the change and the row positions against time), `CP-11-trace.png`, `KEY.json` | Chapter I, two turns of the real HUD |
+| CP-14 Trigger Happy | `?triggerhappy=smooth`, `?triggerhappy=today` | `AB-ch4-triggerhappy-60.mp4`, `AB-ch4-triggerhappy-144-slow4x.mp4`, `CP-14-still-card.png` (the bar moved per frame), `CP-14-trace.png`, `KEY.json` | the widget in a lab host (the mini-game needs the real input); Chapter IV |
+
+A phone cannot show 120 or 144 Hz: the 144 Hz clips are quarter speed; to try it for real open the game on the booth PC with the word in the address (`?atbbars=smooth` on Chapter IV, `?ctbslide=flip` on Chapter I, `?triggerhappy=smooth`, or `?fluidui=on` for all four).
+
+## What was found on the way
+
+- `.ffxhud.hud-f1 .ig-ctb__row { transform: none !important }` (and the phone rail): any future transform animation on a turn-order row is silently overridden; use `translate`, `scale` or `opacity`. Worth a note in `docs/ARCHITECTURE.md` when someone owns the HUD CSS.
+- The ATB bars do not move under a command menu in the whole-menu hold (`?wait=hold`) or below the top list under the split: the clock is held there (that is the game's rule, `research/ffx2-combat-core.md` section 1.5). They move at the top list and in Active. In the card capture Paine's bar holds for about two seconds after the third menu opens, moves for about two seconds, then holds again (Yuna's Cure is casting; the pump awaits an effect that plays, so the cause of the two holds is probably that, but it was not isolated).
+- The first command menu of Chapter IV finds all three party bars full, so the plan's "first menu left open 5 s, bars filling" shows nothing moving: the cards film the moment after two members have acted instead.
+
+## What remains
+
+- MF-16's other sites (wipe, name slab, splash, banner, swirl, chain counter, flourish, cutscene shake) are left as they are on purpose (reasons above); none has a stall measure.
+- MF-13: the Sphere Grid glide is not filmed. MF-24: the real in-game mini-game was not driven (the widget runs in a lab host; its measure is the widget's own).
+- No 120 Hz capture (the model and the unit tests cover 120); the ghost guard for Chapter IV has two frame-clock runs and one wall-wait run (a second wall run was queued when this note was written; if `evidence/ghost/ch4-wall2` exists it is that run).
+- The driver's choices: which of the four look variants go on by default (today: off), and whether `?beats=wall` and `?cutin=timed` stay as switches.
+- Records (ACTIONS, DECISIONS, NOW.md) are not touched by this branch.
