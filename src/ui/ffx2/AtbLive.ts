@@ -38,6 +38,15 @@ export const AGE_CAP_MS = 80;
 export const HOLD_BACK = 0.03;
 /** Snapshots further apart than this on the engine clock are not a rate (a pause, a burst of play). */
 const MAX_PAIR_MS = 500;
+/** The drawn bar closes on the extrapolated value with this time constant, ms: far under a frame of lag at the bar's speed (28 px a second), long enough that a held frame becomes an eased one. */
+export const EASE_TAU_MS = 30;
+/** A bar that falls by more than this was spent by an action; one that jumps forward by more than {@link SNAP_JUMP} is a new bar or the ready flash: both are drawn at once, not eased. */
+export const SNAP_DROP = 0.05;
+export const SNAP_JUMP = 0.3;
+/** When the extrapolation is behind what is drawn (a snapshot landed a hair back), the bar creeps on at this part of its speed: never back, never flat. */
+const CREEP = 0.4;
+/** How much of the last rate the next snapshot pair changes: the engine's gauge moves in logic steps of 33 ms but the snapshots come every 50 ms, so a pair alone says 1 or 2 steps. */
+const RATE_MIX = 0.35;
 
 const DYNAMIC = /transform:scaleX\([^)]*\);?|;?--pro-phase:-\d+ms|;?animation-delay:-\d+ms/g;
 
@@ -56,6 +65,14 @@ export function shimmerDelay(nowMs: number = typeof performance === 'undefined' 
   return `;animation-delay:-${Math.round(((nowMs % 250) + 250) % 250)}ms`;
 }
 
+/** The value to draw this frame: where the drawn bar was, closing on the extrapolated target (see {@link EASE_TAU_MS}); `prev` below 0 = nothing drawn yet; `rate` is the bar's speed per ms. */
+export function ease(prev: number, target: number, dtMs: number, rate = 0): number {
+  if (prev < 0 || target >= 1 || target < prev - SNAP_DROP || target - prev > SNAP_JUMP) return target; // a full bar is the ready flash: drawn at once
+  if (target <= prev) return Math.min(1, prev + Math.max(0, rate) * CREEP * Math.max(0, dtMs));
+  const next = prev + (target - prev) * (1 - Math.exp(-Math.max(0, dtMs) / EASE_TAU_MS));
+  return target - next < 5e-4 ? target : next;
+}
+
 /** One value that fills at a rate: shown now = the snapshot's value plus rate x age, never more than the cap of age, never above 1. */
 export class Running {
   private truth = 0;
@@ -71,7 +88,8 @@ export class Running {
     const dEng = prev === null ? 0 : engineMs - prev;
     if (prev !== null && dEng > 0 && dEng <= MAX_PAIR_MS && v >= this.truth) {
       const shown = this.shown(nowMs);
-      this.rate = (v - this.truth) / dEng;
+      const pair = (v - this.truth) / dEng;
+      this.rate = this.rate > 0 && pair > 0 ? this.rate + (pair - this.rate) * RATE_MIX : pair; // a steady fill: one rate, not 1 or 2 logic steps a pair
       this.floor = shown > v && shown - v <= HOLD_BACK ? shown : 0; // a snapshot a hair behind what is drawn is not drawn as a step back
     } else {
       this.rate = 0; // the first snapshot, a pause or a burst of play between two, a drop (the action spent the bar), or another value at the same engine moment: no rate to carry
@@ -80,6 +98,11 @@ export class Running {
     this.truth = v;
     this.engineAt = engineMs;
     this.at = nowMs;
+  }
+
+  /** The fill per ms the bar is running at (0 when it holds). */
+  get speed(): number {
+    return this.rate;
   }
 
   shown(nowMs: number): number {
@@ -102,6 +125,10 @@ interface Entry {
   lastFill: number;
   lastCharge: number;
   hasCharge: boolean;
+  /** What is drawn now (eased toward what the model says), -1 before the first frame. */
+  drawnFill: number;
+  drawnCharge: number;
+  drawnAt: number;
 }
 
 /** The party column's bars: the models fed by the snapshots, the elements they are drawn on, and the per-frame write. */
@@ -118,7 +145,7 @@ export class AtbLive {
 
   private entry(id: CombatantId): Entry {
     let e = this.entries.get(id);
-    if (!e) this.entries.set(id, (e = { fill: new Running(), charge: new Running(), fillEl: null, chargeEl: null, lastFill: -1, lastCharge: -1, hasCharge: false }));
+    if (!e) this.entries.set(id, (e = { fill: new Running(), charge: new Running(), fillEl: null, chargeEl: null, lastFill: -1, lastCharge: -1, hasCharge: false, drawnFill: -1, drawnCharge: -1, drawnAt: 0 }));
     return e;
   }
 
@@ -133,7 +160,7 @@ export class AtbLive {
   /** The fill (0 to 1) the bar should be drawn at right now; the markup uses it for a row it builds. */
   fillNow(id: CombatantId, fallback: number): number {
     const e = this.entries.get(id);
-    return e ? e.fill.shown(this.nowMs) : fallback;
+    return e ? (e.drawnFill >= 0 ? e.drawnFill : e.fill.shown(this.nowMs)) : fallback;
   }
 
   /** True when the column's structure is what it was (leave the DOM alone); otherwise remembers it and says false (rebuild, then {@link bind}). */
@@ -172,15 +199,19 @@ export class AtbLive {
 
   private write(): void {
     for (const e of this.entries.values()) {
+      const dtMs = this.nowMs - e.drawnAt;
+      e.drawnAt = this.nowMs;
+      e.drawnFill = ease(e.drawnFill, e.fill.shown(this.nowMs), dtMs, e.fill.speed);
+      if (e.hasCharge) e.drawnCharge = ease(e.drawnCharge, e.charge.shown(this.nowMs), dtMs, e.charge.speed);
       if (e.fillEl) {
-        const f = e.fill.shown(this.nowMs);
+        const f = e.drawnFill;
         if (Math.abs(f - e.lastFill) >= 1e-4) {
           e.lastFill = f;
           e.fillEl.style.transform = `scaleX(${f.toFixed(4)})`;
         }
       }
       if (e.chargeEl && e.hasCharge) {
-        const c = e.charge.shown(this.nowMs);
+        const c = e.drawnCharge;
         if (Math.abs(c - e.lastCharge) >= 1e-4) {
           e.lastCharge = c;
           e.chargeEl.style.transform = `scaleX(${c.toFixed(4)})`;
