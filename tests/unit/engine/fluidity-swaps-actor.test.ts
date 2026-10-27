@@ -197,6 +197,22 @@ describe('?swapcause: a swap with a cause on screen', () => {
     expect(swapLog().designed).toEqual([expect.objectContaining({ actor: 'yuna', from: 'idle', to: 'hurt', cls: 'hit', ms: 50 })]);
   });
 
+  it('blend3 is the capped cross: at any frame phase the lesser painting never shows more than about a third (a linear 50 ms blend reached 0.5 and read worse than today on pairs that share nothing)', () => {
+    setCauseMode('blend3');
+    for (const phase of [0, 0.2, 0.4, 0.6, 0.8]) {
+      const a = yuna(); // idle LEFT, hurt RIGHT: no overlap
+      a.setPose('hurt');
+      a.update((phase * 1000) / 60 / 1000);
+      let lesser = 0;
+      for (let k = 0; k < 8; k++) {
+        a.update(1 / 60);
+        const [p, q] = slotsOf(a);
+        lesser = Math.max(lesser, Math.min(p.fade, q.fade));
+      }
+      expect(lesser, 'phase ' + phase).toBeLessThanOrEqual(0.33);
+    }
+  });
+
   it('pick: the cut where the moment has a cover (the hit, the glow, the contact), the blend where it has none (the recovery, the cast\'s end, the return home)', () => {
     setCauseMode('pick');
     const a = yuna();

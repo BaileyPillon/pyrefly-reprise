@@ -10,7 +10,8 @@
  *
  * The window is the pose blend itself: its progress is the window's `u`, so the streak and the cut cannot drift apart at any frame rate, pace or hit-stop (the blend runs on the real clock).
  */
-import type { PoseBlend } from '../PoseBlend.ts';
+import type { BlendCurves, PoseBlend } from '../PoseBlend.ts';
+import { cappedPeak, easeMap } from './DemoBlend.ts';
 import type { Footprint } from '../PoseAlign.ts';
 import { ActorSmear, type SmearFrame } from './ActorSmear.ts';
 import { applySmear, type SmearCells, type SmearPlane } from './SmearApply.ts';
@@ -51,8 +52,14 @@ export const SMEAR_FLASH_COLOUR = 0xfff3d9;
 
 const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 
-/** The three-frame blend of the fluidity pass (MF-05 `v3`, MF-06 `blend3`): 50 ms, linear, both paintings at their fair share; a 2-frame blend peaks at 0.28 of severity, this one near 0.18. */
-const BLEND3 = { out: (u: number): number => 1 - Math.min(1, Math.max(0, u)), inn: (u: number): number => Math.min(1, Math.max(0, u)) };
+/**
+ * The three-frame blend of the fluidity pass (MF-05 `v3`, MF-06 `blend3`): 50 ms, the capped cross of exponent 3 (`DemoBlend`): the outgoing painting leaves as `(1 - s) ** 3`, the incoming one comes in as `s`, so
+ * the lesser of the two never shows more than 0.318 at ANY frame phase. The first build was a plain linear 50 ms blend; the continuity harness read it WORSE than today's dissolve on the pairs that share
+ * nothing (Paine's attack to follow, overlap 0.07: worst severity 0.397 against 0.342, because at 60 Hz one of the two frames in a 50 ms blend can land on the half-way point), and the swaps lane's
+ * "peak near 0.18" is the severity of frames at exactly a third and two thirds, which a display does not promise. With the cap the model prices the same pair at 0.69 ghost frames a swap (today's 2.67)
+ * and a worst severity of 0.29.
+ */
+const BLEND3: BlendCurves = { out: (u) => Math.pow(1 - easeMap(u), 3), inn: easeMap, cap: cappedPeak(3) };
 
 export class SmearDirector {
   readonly state = new ActorSmear();
