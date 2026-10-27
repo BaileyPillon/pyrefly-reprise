@@ -6,7 +6,7 @@
  */
 import { describe, expect, it, beforeEach } from 'vitest';
 import { Texture } from 'three';
-import { BREATH_THUMB, EXTENTS_LOW, EXTENTS_THUMB, PAINTING_THUMBS, alphaThumbOn, extentsAgree, figurePainting, notePainting, notePending, paintingName, requestThumbs, seedAddress, setAlphaThumbSearch, storeThumb, thumbOf, thumbPending, thumbStats, withThumbs } from '../../src/engine/look/AlphaThumb.ts';
+import { BREATH_THUMB, EXTENTS_CHECK, EXTENTS_THUMB, PAINTING_THUMBS, alphaThumbOn, extentsAgree, figurePainting, notePainting, notePending, paintingName, requestThumbs, seedAddress, setAlphaThumbSearch, storeThumb, thumbOf, thumbPending, thumbStats, withThumbs } from '../../src/engine/look/AlphaThumb.ts';
 import { extentsReads, readExtents } from '../../src/engine/look/AlphaPrime.ts';
 
 /** A 128 x 128 alpha field with a filled box: top 20, bottom 100 (exclusive), left 30, right 90 (exclusive). */
@@ -19,7 +19,7 @@ function boxField(top = 20, bottom = 100, left = 30, right = 90): Uint8Array {
 /** Both extents fields of a painting (the 'medium' and the 'low' downscale), as the worker sends them: the guard publishes the first when they agree. */
 function storeExtents(image: object, medium: Uint8Array, low: Uint8Array = medium): void {
   storeThumb(image, EXTENTS_THUMB, medium);
-  storeThumb(image, EXTENTS_LOW, low);
+  storeThumb(image, EXTENTS_CHECK, low);
 }
 
 function textureOf(image: object): Texture {
@@ -50,7 +50,7 @@ describe('alpha thumbnails (MF-02)', () => {
     const img = { width: 640, height: 480 };
     storeThumb(img, EXTENTS_THUMB, boxField(20, 100, 30, 90));
     expect(thumbOf(img, EXTENTS_THUMB)).toBeNull(); // waiting for the low field
-    storeThumb(img, EXTENTS_LOW, boxField(21, 100, 30, 91)); // one cell off on two bounds: agreement
+    storeThumb(img, EXTENTS_CHECK, boxField(21, 100, 30, 91)); // one cell off on two bounds: agreement
     expect(thumbOf(img, EXTENTS_THUMB)).not.toBeNull();
     expect(extentsAgree(boxField(20, 100, 30, 90), boxField(21, 101, 29, 91))).toBe(true);
     expect(extentsAgree(boxField(20, 100, 30, 90), boxField(22, 100, 30, 90))).toBe(false);
@@ -61,7 +61,7 @@ describe('alpha thumbnails (MF-02)', () => {
     const before = { ...extentsReads };
     notePending(img, EXTENTS_THUMB);
     storeThumb(img, EXTENTS_THUMB, boxField(20, 100, 30, 90));
-    storeThumb(img, EXTENTS_LOW, boxField(20, 100, 30, 100)); // right bound 10 cells apart
+    storeThumb(img, EXTENTS_CHECK, boxField(20, 100, 30, 100)); // right bound 10 cells apart
     expect(thumbOf(img, EXTENTS_THUMB)).toBeNull();
     expect(thumbPending(img, EXTENTS_THUMB)).toBe(false); // not on its way any more: nothing stands in
     expect(thumbStats().refused).toBeGreaterThanOrEqual(1);
@@ -133,7 +133,7 @@ describe('alpha thumbnails (MF-02)', () => {
   it('a master loaded again (a warm-up, after an eviction) is a new image of the same bytes: its fields are those of the file, with no decode', () => {
     const url = '/art/characters/valefor/attack%404x.png?v=2';
     seedAddress(url, EXTENTS_THUMB, boxField(5, 115, 10, 118));
-    seedAddress(url, EXTENTS_LOW, boxField(5, 115, 10, 118));
+    seedAddress(url, EXTENTS_CHECK, boxField(5, 115, 10, 118));
     seedAddress(url, BREATH_THUMB, new Uint8Array(32 * 48));
     const again = { width: 5360, height: 3248 };
     const before = thumbStats();

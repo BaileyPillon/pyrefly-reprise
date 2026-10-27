@@ -16,10 +16,10 @@ import { baseExtents } from './LookBoldConfig.ts';
  *
  * HOW CLOSE (the lane's `e1b` and `e2` browser jobs, 263 paintings of Chapters I and IV at 1x and 3x).
  *   - The BREATHING RIG's field is byte for byte the page's own (`createImageBitmap(blob, resize 'medium')` equals `createImageBitmap(img, ...)`: 263 of 263). No difference at all.
- *   - The EXTENTS field is not: Chromium draws an `<img>` through its own mip-filtered path (the same bytes at every `imageSmoothingQuality`), which an `ImageBitmap` in a worker does not reproduce; about 2,100 of
- *     16,384 texels differ by a few levels at the edges. The extents (six numbers on a 128 grid) are the same in 133 paintings and within one cell in 123 more. In the remaining 7 the two downscales this makes
- *     (quality 'medium' and 'low') disagree by more than one cell, and so does the page's own with them (Ifrit's attack at 3x, Rikku Dark Knight's KO at 3x: a thin element near the 90 of 255 threshold in the foot
- *     band, 7 and 10 cells off): the AGREEMENT GUARD refuses the field for those, and the page reads them itself, as it always did.
+ *   - The EXTENTS field is not: Chromium draws an `<img>` through its own mip-filtered path (the same bytes at every `imageSmoothingQuality`), which no `ImageBitmap` draw in a worker reproduces (17 variants,
+ *     0 identical); about 1,400 of 16,384 texels differ by a few levels at the edges. The field is the AREA AVERAGE of the alpha plane (`alphaArea.ts`), the closest of the candidates tried: its extents (six numbers on a
+ *     128 grid) are the page's in 167 paintings, within one cell in 95 more and 7 cells off in one (Rikku Dark Knight's KO: a thin element near the 90 of 255 threshold in the foot band). The canvas draw of the
+ *     same bytes is a second opinion: where the two disagree by more than a cell (3 of 263) the AGREEMENT GUARD refuses the field and the page reads the painting itself, as it always did.
  *   - What the extents drive is the contact ellipse, the reflection and the figure's box; one cell is 0.8 percent of the painting's width (about 3.5 px of a 450 px wide figure at 1440p), and a base bound that moves one cell
  *     moves the ellipse's half width by about 0.6 cell, 2 px.
  * `?alphathumb=off` is release 64's reading, for a comparison.
@@ -27,9 +27,9 @@ import { baseExtents } from './LookBoldConfig.ts';
  * No Worker (the unit tests, an old browser) or a worker that fails: every reader reads for itself, as before.
  */
 
-export type ThumbMode = 'draw' | 'draw-low' | 'bitmap-medium';
+export type ThumbMode = 'area' | 'draw' | 'bitmap-medium';
 
-/** One field: its size and how the page used to make it ('draw': `drawImage(img, 0, 0, w, h)`; 'draw-low': the same at the low quality, for the agreement guard; 'bitmap-medium': `createImageBitmap(img, { resizeWidth, resizeHeight, resizeQuality: 'medium' })` then a 1:1 draw). */
+/** One field: its size and how it is made ('area': the mean of the alpha plane over each texel's footprint, `alphaArea.ts`; 'draw': `drawImage(bitmap, 0, 0, w, h)` at the medium quality; 'bitmap-medium': `createImageBitmap(img, { resizeWidth, resizeHeight, resizeQuality: 'medium' })` then a 1:1 draw, the way `breathRig.ts` makes it). */
 export interface ThumbSpec {
   readonly w: number;
   readonly h: number;
@@ -37,21 +37,21 @@ export interface ThumbSpec {
 }
 
 /** `AlphaPrime.readExtents`: the figure's extents. */
-export const EXTENTS_THUMB: ThumbSpec = { w: 128, h: 128, mode: 'draw' };
-/** The same painting at the other quality: not read by anyone, it is what the extents field is checked against. */
-export const EXTENTS_LOW: ThumbSpec = { w: 128, h: 128, mode: 'draw-low' };
+export const EXTENTS_THUMB: ThumbSpec = { w: 128, h: 128, mode: 'area' };
+/** The same painting as a canvas draw: not read by anyone, it is the second opinion the extents field is checked against. */
+export const EXTENTS_CHECK: ThumbSpec = { w: 128, h: 128, mode: 'draw' };
 /** `fx/mix/breathRig.ts`: the chest rig's field (GW x GH there). */
 export const BREATH_THUMB: ThumbSpec = { w: 32, h: 48, mode: 'bitmap-medium' };
 
 /** What a loaded painting is asked for. */
-export const PAINTING_THUMBS: readonly ThumbSpec[] = [EXTENTS_THUMB, EXTENTS_LOW, BREATH_THUMB];
+export const PAINTING_THUMBS: readonly ThumbSpec[] = [EXTENTS_THUMB, EXTENTS_CHECK, BREATH_THUMB];
 
-/** The most the two downscales' extents may differ on any of the six bounds, in cells of 128, for the field to be trusted. */
+/** The most the two fields' extents may differ on any of the six bounds, in cells of 128, for the field to be trusted. */
 export const AGREE_CELLS = 1;
 
 const specKey = (s: ThumbSpec): string => `${s.mode}:${s.w}x${s.h}`;
 const KEY_EXTENTS = specKey(EXTENTS_THUMB);
-const KEY_LOW = specKey(EXTENTS_LOW);
+const KEY_CHECK = specKey(EXTENTS_CHECK);
 
 /** The fields published for an image, by spec. */
 const held = new WeakMap<object, Map<string, Uint8Array>>();
@@ -107,13 +107,23 @@ export function paintingName(url: string): string {
   return m ? m[1]!.toLowerCase() : '';
 }
 
-/** Do two extents fields (the 'medium' and the 'low' downscale of one painting) agree, within {@link AGREE_CELLS} cell on every bound? */
+/** Do two extents fields (the area average and the canvas draw of one painting) agree, within {@link AGREE_CELLS} cell on every bound? */
 export function extentsAgree(a: ArrayLike<number>, b: ArrayLike<number>, cells = AGREE_CELLS): boolean {
   const ea = baseExtents(a, 128, 128);
   const eb = baseExtents(b, 128, 128);
   if (!ea || !eb) return !ea && !eb;
   const keys = ['top', 'bottom', 'left', 'right', 'baseLeft', 'baseRight'] as const;
   return keys.every((k) => Math.abs(ea[k] - eb[k]) * 128 <= cells + 1e-9);
+}
+
+/** Images whose extents field the guard refused (the page reads those itself). */
+const refusedImages = new WeakSet<object>();
+
+/** Why a reader has no field for an image: 'refused' by the guard, still 'pending', or 'none' (never asked for: not a figure's painting, the switch off, no Worker). For the books. */
+export function thumbWhy(image: unknown): 'refused' | 'pending' | 'none' {
+  if (!image || typeof image !== 'object') return 'none';
+  if (refusedImages.has(image)) return 'refused';
+  return thumbPending(image, EXTENTS_THUMB) ? 'pending' : 'none';
 }
 
 /** Fields the guard has refused, for the books. */
@@ -136,18 +146,19 @@ function publish(image: object, key: string, alpha: Uint8Array): void {
 export function storeThumb(image: object, spec: ThumbSpec, alpha: Uint8Array): void {
   const key = specKey(spec);
   asked.get(image)?.add(key);
-  if (key !== KEY_EXTENTS && key !== KEY_LOW) return publish(image, key, alpha);
+  if (key !== KEY_EXTENTS && key !== KEY_CHECK) return publish(image, key, alpha);
   let pair = unsettled.get(image);
   if (!pair) unsettled.set(image, (pair = new Map()));
   pair.set(key, alpha);
   const med = pair.get(KEY_EXTENTS);
-  const low = pair.get(KEY_LOW);
+  const low = pair.get(KEY_CHECK);
   if (!med || !low) return;
   unsettled.delete(image);
   if (extentsAgree(med, low)) {
     publish(image, KEY_EXTENTS, med);
     return;
   }
+  refusedImages.add(image);
   counters.refused++; // two downscales of this painting disagree on its extents: a thin element near the threshold; the page reads it itself
   asked.get(image)?.delete(KEY_EXTENTS);
 }
