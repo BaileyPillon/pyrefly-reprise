@@ -191,9 +191,9 @@ describe('the log the continuity harness reads', () => {
     expect(smearLog()).toHaveLength(1); // a copy
     expect(smearLog(true)).toHaveLength(1);
     expect(smearLog()).toHaveLength(0);
-    for (let i = 0; i < 500; i++) noteSmear({ at: i, actor: 'x', from: 'a', to: 'b', style: 'blur', cutMs: 24, overlap: null, anchorDistance: null, speed: 1, strength: 1, flash: false, kind: 'rig' });
-    expect(smearLog().length).toBeLessThanOrEqual(400);
-    expect(smearLog().at(-1)!.at).toBe(499);
+    for (let i = 0; i < 4500; i++) noteSmear({ at: i, actor: 'x', from: 'a', to: 'b', style: 'blur', cutMs: 24, overlap: null, anchorDistance: null, speed: 1, strength: 1, flash: false, kind: 'rig' });
+    expect(smearLog().length).toBeLessThanOrEqual(4000); // the fluidity pass raised the cap from 400: a ten-minute fight plans about 420 cuts (SmearLog.ts)
+    expect(smearLog().at(-1)!.at).toBe(4499);
   });
 });
 
