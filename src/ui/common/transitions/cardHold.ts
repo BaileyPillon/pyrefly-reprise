@@ -6,8 +6,9 @@
  * same ink and holds 1.9 s (`BATTLE_START_HOLD_MS`: a beat to read the chapter, the boss and the party). On a cold page the loading card has been up for 2 to 4 s by then, so the visitor has read the
  * very same card for longer than its hold, and the battle's card then held 1.9 s MORE: Chapter I measured 2.16 s of loading card and then 2.11 s of card (release 64, the demo, press on the first
  * second of the picker), Chapter IV 3.15 s and then 2.07 s. The hold now counts the time the card has been up: it is `hold - up`, but never under {@link CARD_HOLD_FLOOR_MS}, which covers the
- * whole of the entry's reveal (the break is 700 ms in FFX and 560 ms in FFX-2) and leaves the card a beat over the clear field. A card that was up for 1.0 s holds 0.9 s more (1.9 s in all, as ever); one
- * that was up for 3 s holds 0.9 s. The hurried opening (700 ms) is under the floor and is not touched. `?cardhold=full` is the old behaviour (a comparison).
+ * whole of the entry's reveal and leaves the card a beat over the clear field. The reveal was MEASURED, from the battle card going up to the entry overlay being removed: 929 to 962 ms in FFX
+ * (Chapters I to III) and 701 to 785 ms in FFX-2 (the authored break is 700 ms in FFX and 560 ms in FFX-2; the rest is the frame the overlay is taken down on). A card that was up for 0.9 s or less holds
+ * the rest of its 1.9 s (1.9 s in all, as ever); one that was up for 3 s holds 1.0 s. The hurried opening (700 ms) is under the floor and is not touched. `?cardhold=full` is the old behaviour (a comparison).
  */
 
 import { HURRIED_CARD_HOLD_MS } from './openingHurry.ts';
@@ -15,8 +16,11 @@ import { HURRIED_CARD_HOLD_MS } from './openingHurry.ts';
 /** The banner's own full hold, `BATTLE_START_HOLD_MS` in `BattleStartBanner.ts` (not imported: the screen's tests stand that module in with a mock; `tests/unit/card-hold.test.ts` pins the two equal). */
 export const FULL_CARD_HOLD_MS = 1900;
 
-/** The least the battle's own card holds after a loading card: past the entry's reveal (700 ms FFX, 560 ms FFX-2), a beat over the field. */
-export const CARD_HOLD_FLOOR_MS = 900;
+/**
+ * The least the battle's own card holds after a loading card: past the whole of the entry's reveal, measured 929 to 962 ms in FFX and 701 to 785 ms in FFX-2 (see above), so the card never starts
+ * to fade while the entry's ink is still being taken down (the first cut of this floor, 900 ms, began the fade 13 to 61 ms early in every FFX start; the card is opaque, so nothing showed).
+ */
+export const CARD_HOLD_FLOOR_MS = 1000;
 
 let upAt: number | null = null;
 
@@ -58,4 +62,21 @@ export function cardHoldOption(hurried: boolean, now: number = performance.now()
   const base = hurried ? HURRIED_CARD_HOLD_MS : FULL_CARD_HOLD_MS;
   const held = cardHoldCounted(search) ? cardHoldAfterLoading(base, loadingCardUpMs(now)) : base;
   return hurried || held !== FULL_CARD_HOLD_MS ? { holdMs: held } : {};
+}
+
+/** `?opencover=off`: the card fades onto the field as it stood (the party at home, the HUD up) and the opening then takes them down (release 64's behaviour), for a comparison. */
+export function openingCovered(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+  try {
+    return new URLSearchParams(search).get('opencover') !== 'off';
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * The `covered` option for the battle's own card (`BattleStartBanner`): `cover` runs as the card starts to leave, so the opening's first frame is already under it (`engine/OpeningPark.ts`, `BattleMoments.coverOpening`).
+ * `{}` for a hurried opening (it collapses; nothing slides on, nothing is hidden) and for `?opencover=off`.
+ */
+export function coverOption(hurried: boolean, cover: () => void, search?: string): { covered?: () => void } {
+  return hurried || !openingCovered(search) ? {} : { covered: cover };
 }

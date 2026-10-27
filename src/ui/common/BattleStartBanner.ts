@@ -76,6 +76,11 @@ export interface BattleStartBannerOptions {
    * (`engine/fx/mix/openingGate.ts`), so the first menu never opens under a plan that is still to land.
    */
   until?: () => Promise<unknown>;
+  /**
+   * Called once, as the card starts to leave (it is still whole: the fade has not begun), whatever took it down: the hold, a press, a click, the screen leaving. The opening's first frame is put under the
+   * card here (`engine/OpeningPark.ts`), so the card fades onto the field the opening starts from and not onto a party and a HUD that are about to vanish. A throw is swallowed: the card always goes.
+   */
+  covered?: () => void;
   /** An experiment (the FFX-2 Leblanc preview): the eyebrow says EXPERIMENTAL, not a chapter numeral. */
   experimental?: true;
   /** Lane "pro-staging" (the demo chapters with `?staging=pro`): the card is a full-bleed painting (`proStage/proCard.css`); the same content, a different layout. */
@@ -237,6 +242,11 @@ export class BattleStartBanner {
     this.leaving = true;
     if (this.timer !== null) clearTimeout(this.timer);
     this.timer = null;
+    try {
+      this.opts.covered?.();
+    } catch {
+      /* the opening's first frame is an extra; the card goes either way */
+    }
     this.el.classList.add('bstart--leaving');
     const finish = (): void => {
       this.el.remove();

@@ -46,6 +46,7 @@ import type { StagingPort } from './pro/staging/StagingPort.ts';
 import { OD_OPEN_HOLD_MS } from './pro/staging/OpeningPlan.ts'; // lane "pro-staging": a staged big move's small name replaces the telegraph's text slab
 import { stagingGame, stagingPieceOn } from './pro/staging/StagingSwitch.ts';
 import { ShotRules } from './ShotRules.ts';
+import { parkParty, slideParty, unparkParty } from './OpeningPark.ts'; // the opening's first frame under the boss card; the party's slide-on (post-fight-start)
 import type { ShotAction, ShotActionInfo, ShotAnswer, ShotCtx, ShotDirector, ShotSubject } from './ShotDirector.ts';
 import { ProDirector } from './procam/ProDirector.ts'; // `?camera=pro` (demo chapters only): the directed camera, asked when the scene publishes no director of its own
 import { proCamOn } from './procam/ProCamSwitch.ts';
@@ -333,7 +334,7 @@ export class BattleMoments {
     if (this.skipping) {
       if (!directed) this.cut(this.pick('idle'));
       if (opts.bossId) this.revealed.add(opts.bossId);
-      return;
+      return unparkParty(this.deps.stage, opts.partyIds ?? []); // nothing slides on: a party parked under the card (never at `skip`: no card) comes back
     }
 
     this.setHudVisible(false);
@@ -381,26 +382,21 @@ export class BattleMoments {
     }
   }
 
-  /**
-   * The party walks on. Each active member starts one body-width further out
-   * of frame than the last so they arrive staggered rather than as a block.
-   */
+  /** The party walks on (`OpeningPark.slideParty`): staggered, each one body-width further out of frame than the last. A slide that collapses puts back any figure `coverOpening` parked. */
   private async slidePartyIn(ids: readonly CombatantId[]): Promise<void> {
     const ms = this.ms(MOMENT_TIMING.openSlide);
-    if (ms < CUT_THRESHOLD_MS || ids.length === 0) return;
+    if (ms < CUT_THRESHOLD_MS || ids.length === 0) return unparkParty(this.deps.stage, ids);
+    await slideParty(this.deps.stage, ids, ms);
+  }
 
-    const runs = ids.map((id, i) => {
-      const actor = this.deps.stage.actor(id);
-      if (!actor) return Promise.resolve();
-      const home = { x: actor.position.x, y: actor.position.y, z: actor.position.z };
-      // Off-stage on the party's own side: left of the hall axis in every FFX/FFX-2 scene, right for FF7's
-      const right = (actor as { facingDir?: number }).facingDir === -1; // party, turned to -x (`sideFacing`)
-      actor.moveTo({ x: right ? home.x + 4.2 + i * 0.5 : home.x - 4.2 - i * 0.5, y: home.y, z: home.z }, 0);
-      actor.setAlpha(0);
-      void actor.fadeTo(1, ms * 0.5);
-      return actor.moveTo(home, ms + i * 70);
-    });
-    await Promise.all(runs);
+  /**
+   * The boss card is about to fade (`BattleStartBanner` `covered`): put the opening's first frame under it, so the card does not fade onto a party and a HUD that are about to vanish (`OpeningPark.ts`).
+   * Only when the slide-on will play (a collapsed opening hides and shows nothing, so there is nothing to put under the card); the opening that follows finds the HUD and the party already down.
+   */
+  coverOpening(ids: readonly CombatantId[]): void {
+    if (this.skipping || this.hurry || ids.length === 0 || this.ms(MOMENT_TIMING.openSlide) < CUT_THRESHOLD_MS) return;
+    this.setHudVisible(false);
+    parkParty(this.deps.stage, ids);
   }
 
   /**
