@@ -223,8 +223,21 @@ function giveUp(job: Job): void {
   for (const s of job.specs) if (!(held.get(job.image)?.has(specKey(s)) ?? false)) did?.delete(specKey(s)); // not on its way any more: the readers read for themselves
 }
 
+/** A worker can make the fields only where it can decode a Blob and draw into an OffscreenCanvas (not Safari before 16.4, nor the WebKit that Playwright ships for Windows: found by the lane's WebKit smoke, where every request came back failed). */
+function workerCanDraw(): boolean {
+  return typeof Worker !== 'undefined' && typeof OffscreenCanvas !== 'undefined' && typeof createImageBitmap === 'function';
+}
+
+/** Failures in a row with nothing landed in between: past this many the worker is given up on (a browser that cannot do the work answers every request `ok: false`). */
+const GIVE_UP_AFTER = 6;
+let failuresInARow = 0;
+
 function make(): Worker | null {
-  if (broken || typeof Worker === 'undefined') return null;
+  if (broken) return null;
+  if (!workerCanDraw()) {
+    broken = typeof Worker !== 'undefined'; // no Worker at all (jsdom) stays "not broken": there is nothing to report; a Worker that cannot draw is a browser to leave alone for good
+    return null;
+  }
   try {
     const w = new Worker(new URL('./alphaThumb.worker.ts', import.meta.url), { type: 'module', name: 'alpha-thumb' });
     w.onmessage = (e: MessageEvent<Reply>): void => {
@@ -233,6 +246,7 @@ function make(): Worker | null {
       if (!e.data.ok) {
         waiting.delete(e.data.id);
         giveUp(job);
+        if (++failuresInARow >= GIVE_UP_AFTER && counters.landed === 0) broken = true; // nothing has ever landed: stop asking, every reader reads for itself as before
         return;
       }
       if (e.data.done) {
@@ -244,6 +258,7 @@ function make(): Worker | null {
       if (s && a && a.length === s.w * s.h) {
         storeThumb(job.image, s, a);
         counters.landed++;
+        failuresInARow = 0;
         if (job.name) {
           let m = byAddress.get(job.name);
           if (!m) {
@@ -267,6 +282,7 @@ function make(): Worker | null {
 }
 
 function pick(): Worker | null {
+  if (broken) return null;
   if (workers.length < POOL) {
     const w = make();
     if (w) workers.push(w);
