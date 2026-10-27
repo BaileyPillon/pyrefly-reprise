@@ -10,7 +10,7 @@
  *
  * Two layers: the beat on its own with a stand-in stage (every case that must NOT hold is pinned), and the real `FFX2Engine`, chapter 4 data and the real presenter, whose pose calls are read back.
  */
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import type { AvailableCommand, BattleEvent, CombatantId, Command } from '../../src/battle/common/types.ts';
 import * as data from '../../src/data/ffx2/index.ts';
@@ -19,7 +19,8 @@ import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import { turnStart } from '../../src/engine/BattlePresenterBeats.ts';
 import type { EventCtx } from '../../src/engine/BattlePresenterEvents.ts';
 import type { HudPort } from '../../src/engine/HudPort.ts';
-import { readyCarriesIntoWindUp } from '../../src/engine/KeyPoses.ts';
+import { readyCarriesIntoWindUp, windUpOpens } from '../../src/engine/KeyPoses.ts';
+import { setMotionMode } from '../../src/engine/PoseSwap.ts';
 import { FakeAudio, FakeCutscenes, FakeDamageNumbers, FakeMessageBar, FakeStage } from './helpers/FakeStage.ts';
 import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
 
@@ -59,6 +60,8 @@ function beat(o: Opts = {}) {
   } as unknown as EventCtx;
   return { ctx, set, actor, run: () => turnStart(ctx, 'rikku') };
 }
+
+afterEach(() => setMotionMode(null)); // the page switch is module state: every test reads the address again (no ?motion= in jsdom: the default, smooth)
 
 describe('the turn start leaves a ready figure on ready when her attack opens on the wind-up', () => {
   it('holds: FFX-2, showing ready, next event her own attack, the wind-up painted', async () => {
@@ -111,6 +114,29 @@ describe('the turn start leaves a ready figure on ready when her attack opens on
     const owned = beat({ owns: true });
     await owned.run();
     expect(owned.set).toEqual(['idle']);
+  });
+
+  it('?motion=classic brings the old turn start back (the comparison word): ready, idle, then the action; smooth and the default hold', async () => {
+    setMotionMode('classic');
+    const old = beat();
+    expect(readyCarriesIntoWindUp(old.ctx, 'rikku')).toBe(false);
+    await old.run();
+    expect(old.set).toEqual(['idle']);
+    setMotionMode('smooth');
+    const held = beat();
+    await held.run();
+    expect(held.set).toEqual([]);
+    setMotionMode(null);
+    expect(readyCarriesIntoWindUp(beat().ctx, 'rikku')).toBe(true);
+  });
+
+  it('windUpOpens is the one rule both readers share: the wind-up leads unless a port owns it or the figure has no ready or REDUCE MOTION is on', () => {
+    const attack = action('rikku', 'attack') as Extract<BattleEvent, { type: 'action-start' }>;
+    expect(windUpOpens(beat().ctx, attack, 'attack')).toBe(true);
+    expect(windUpOpens(beat().ctx, attack, 'cast')).toBe(false); // only an attack opens on the wind-up
+    expect(windUpOpens(beat({ owns: true }).ctx, attack, 'attack')).toBe(false);
+    expect(windUpOpens(beat({ own: ['attack'] }).ctx, attack, 'attack')).toBe(false);
+    expect(windUpOpens(beat({ reduce: true }).ctx, attack, 'attack')).toBe(false);
   });
 
   it('is false with no burst (an event played alone) and for an unknown figure', () => {

@@ -18,10 +18,14 @@ import type { EventCtx } from '../../src/engine/BattlePresenterEvents.ts';
 import type { HudPort } from '../../src/engine/HudPort.ts';
 import { readyCarriesIntoCastOrItem } from '../../src/engine/KeyPoses.ts';
 import { setInterludeMode } from '../../src/engine/motion/SwapSwitch.ts';
+import { setMotionMode } from '../../src/engine/PoseSwap.ts';
 import { FakeAudio, FakeCutscenes, FakeDamageNumbers, FakeMessageBar, FakeStage } from './helpers/FakeStage.ts';
 import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
 
-afterEach(() => setInterludeMode(null));
+afterEach(() => {
+  setInterludeMode(null);
+  setMotionMode(null);
+});
 
 type Ev = Extract<BattleEvent, { type: 'turn-start' | 'action-start' }>;
 const turn = (actorId: string): Ev => ({ seq: 0, type: 'turn-start', actorId, turn: 1, elapsedTicks: 0 }) as Ev;
@@ -104,6 +108,14 @@ describe('the turn start leaves a ready girl on ready when her own spell or item
 
   it('?interlude=attack is post-flicker\'s attack-only hold: a spell keeps ready, idle, cast', async () => {
     setInterludeMode('attack');
+    const b = beat();
+    expect(readyCarriesIntoCastOrItem(b.ctx, 'yuna')).toBe(false);
+    await b.run();
+    expect(b.set).toEqual(['idle']);
+  });
+
+  it('?motion=classic brings back the old turn start, spells included (post-flicker comparison word)', async () => {
+    setMotionMode('classic');
     const b = beat();
     expect(readyCarriesIntoCastOrItem(b.ctx, 'yuna')).toBe(false);
     await b.run();

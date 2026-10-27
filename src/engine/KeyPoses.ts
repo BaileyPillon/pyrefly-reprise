@@ -21,6 +21,7 @@ import type { EventCtx } from './BattlePresenterEvents.ts';
 import type { LungeContact } from './ContactBeat.ts';
 import { poseForAction } from './EnemyActionPose.ts';
 import { isFfx2, odApex, odKeyHolds } from './KeySlots.ts';
+import { motionMode } from './PoseSwap.ts';
 import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
 import { stanceDone, stanceOnIdle } from './motion/StanceSwap.ts'; // fluidity pass (MF-05): a figure on the ready STANCE with the idle painting (?stance=v1a|v1b)
 import { noteReason } from './motion/SwapLog.ts';
@@ -40,14 +41,23 @@ export function windUpLeads(ctx: EventCtx, actorId: CombatantId, pose: string): 
 }
 
 /**
+ * Does this action open on the wind-up painting? One rule for both readers (`BattlePresenterBeats.actionStart` puts `ready` up on it; {@link readyCarriesIntoWindUp} leaves the menu's `ready` standing
+ * for it), so they cannot drift apart: no port owns the wind-up (FF7's melee runner does) and {@link windUpLeads}. FFX's Overdrive key (`odOpensAction`) is a further term of `actionStart` alone
+ * (it never opens an action under the ATB).
+ */
+export function windUpOpens(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>, pose: string): boolean {
+  return !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose);
+}
+
+/**
  * **FFX-2 only** (the ATB; post-conference motion plan, step 2, "the flicker"). A girl's own command menu has put her on `ready` (`BattlePresenter.chooseCommand`); her answer comes back as one burst,
  * `turn-start, action-start, ...` (`FFX2Engine.submit`: `beginTurn`, then `performCommand`). When the very next event is her own attack and that attack opens on the wind-up painting anyway
- * (`actionStart`: `windUp`, the same two terms as there: no port owns the wind-up and {@link windUpLeads}), the turn start must not drop her to `idle` for the 90 ms before the action puts `ready` back:
+ * ({@link windUpOpens}, the one rule `actionStart` also uses), the turn start must not drop her to `idle` for the 90 ms before the action puts `ready` back:
  * ready, idle, ready, lunge was Chapter IV's flicker, 22 times in 6.3 minutes and 295 of the chapter's 931 see-through frames. True means the turn start leaves her pose alone: the figure holds the painting
  * it already shows and is about to show, so nothing about what the player sees is new (the idle blip is gone; every painting that follows is the one that followed before).
  *
  * Not for FFX (its turn start is a burst of its own, before the menu, with nothing behind it), not for a foe (the menu's `ready` is a party figure's), not for a figure that is not showing `ready`
- * (it gets today's `idle` request), not under REDUCE MOTION or without the wind-up painting (`windUpLeads`), not for a cast, an item or a defend (those open on their own pose, so `ready, idle, cast`
+ * (it gets today's `idle` request), not under REDUCE MOTION or without the wind-up painting (`windUpLeads`), not under `?motion=classic` (the comparison and safety word: it brings back the old turn start, ready, idle, ready, for a side-by-side), not for a cast, an item or a defend (those open on their own pose, so `ready, idle, cast`
  * stays today's sequence: a separate and smaller blip, left for its own decision), and not when the turn start is played alone (no burst: tests, the demo reel). FFX-2's Overdrive key
  * (`odOpensAction`) never opens an action (it is FFX's), so it is not asked here.
  */
@@ -55,12 +65,12 @@ export function readyCarriesIntoWindUp(ctx: EventCtx, actorId: CombatantId): boo
   const next = ownNextAction(ctx, actorId);
   if (!next) return false;
   const pose = poseForAction(next, ctx.stage.sideOf(actorId), ctx.deps.abilityFacts, (p) => ctx.stage.paints?.(actorId, p) === true);
-  return !ctx.deps.actionMotion?.ownsWindUp?.(next) && windUpLeads(ctx, actorId, pose);
+  return windUpOpens(ctx, next, pose);
 }
 
 /** The very next event of the burst when it is the figure's own `action-start` and she is a party girl on the ready stance in an ATB battle (FFX-2); else undefined. */
 function ownNextAction(ctx: EventCtx, actorId: CombatantId): Extract<BattleEvent, { type: 'action-start' }> | undefined {
-  if (!isFfx2(ctx) || ctx.stage.sideOf(actorId) !== 'party') return undefined;
+  if (motionMode() === 'classic' || !isFfx2(ctx) || ctx.stage.sideOf(actorId) !== 'party') return undefined; // `?motion=classic` brings back the old turn start (post-flicker's comparison word), casts and items included
   const shows = (ctx.stage.actor(actorId) as { pose?: string } | undefined)?.pose;
   if (shows !== 'ready' && !(shows === 'idle' && stanceOnIdle(ctx, actorId))) return undefined; // `?stance=v1a|v1b` (MF-05): on the ready stance with the idle painting
   const burst = ctx.burst;
