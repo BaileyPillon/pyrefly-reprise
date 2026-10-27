@@ -56,7 +56,7 @@ import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transit
 import { stagingPieceOn } from '../../engine/pro/staging/StagingSwitch.ts';
 import { attachProStage } from './battleProStage.ts'; // lane "pro-staging": the held breath, the freeze and the openings' layer (Chapters I and IV, `?staging=pro` / `?pack=demo`)
 import type { ProStageLayer } from '../../ui/common/proStage/ProStageLayer.ts';
-import { cardHoldOption } from '../../ui/common/transitions/cardHold.ts'; // the card's hold (the hurried one, or the full one less the time the card over the entry has been up)
+import { cardHoldOption, coverOption } from '../../ui/common/transitions/cardHold.ts'; // the card's hold (the hurried one, or the full one less the time the card over the entry has been up); the opening's first frame under it
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { markDemoHud } from '../demo/demoHud.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
@@ -504,7 +504,7 @@ export class BattleScreen extends Screen {
       backdropKey: backdropFileOf(chapter.sceneKey), // the start card's wash is a backdrop file (a code key names its plate: `artNamespace.ts#SCENE_BACKDROP_FILE`)
       party,
       game: chapter.game,
-      ...cardHoldOption(!!this.opts.openingHurry), // 700 ms hurried; else 1.9 s, less the time the loading card over the entry has been up (`transitions/cardHold.ts`)
+      ...cardHoldOption(!!this.opts.openingHurry), ...coverOption(!!this.opts.openingHurry, () => { if (!this.exited) this.presenter?.moments.coverOpening(state.activeIds); }), // 700 ms hurried; else 1.9 s, less the time the loading card over the entry has been up (`transitions/cardHold.ts`); as the card leaves, the HUD and the party go down under it, where the opening starts from (`OpeningPark.ts`)
       until: () => this.stage?.planSettled() ?? Promise.resolve(), // the card is the cover: CHAPTER FRAMING's first plan lands under it, never under the first menu (`fx/mix/openingGate.ts`)
     });
     this.battleStartBanner = banner;

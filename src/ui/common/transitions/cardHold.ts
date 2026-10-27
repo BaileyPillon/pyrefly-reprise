@@ -63,3 +63,20 @@ export function cardHoldOption(hurried: boolean, now: number = performance.now()
   const held = cardHoldCounted(search) ? cardHoldAfterLoading(base, loadingCardUpMs(now)) : base;
   return hurried || held !== FULL_CARD_HOLD_MS ? { holdMs: held } : {};
 }
+
+/** `?opencover=off`: the card fades onto the field as it stood (the party at home, the HUD up) and the opening then takes them down (release 64's behaviour), for a comparison. */
+export function openingCovered(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+  try {
+    return new URLSearchParams(search).get('opencover') !== 'off';
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * The `covered` option for the battle's own card (`BattleStartBanner`): `cover` runs as the card starts to leave, so the opening's first frame is already under it (`engine/OpeningPark.ts`, `BattleMoments.coverOpening`).
+ * `{}` for a hurried opening (it collapses; nothing slides on, nothing is hidden) and for `?opencover=off`.
+ */
+export function coverOption(hurried: boolean, cover: () => void, search?: string): { covered?: () => void } {
+  return hurried || !openingCovered(search) ? {} : { covered: cover };
+}
