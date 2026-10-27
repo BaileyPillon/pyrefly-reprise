@@ -3,7 +3,9 @@
  * Pure TypeScript: no `three`, no DOM.
  *
  * - {@link Spring}: second-order dynamics (after t3ssel8r): `f` natural frequency in Hz, `z` damping (1 critical, below 1 rings), `r` initial response. Stable for
- *   any step (the step is clamped to 1/30 s and `k2` is floored), and **bounded**: velocity is capped and a non-finite state resets.
+ *   any step (a frame is clamped to 1/30 s and `k2` is floored), and **bounded**: velocity is capped and a non-finite state resets. MF-25 (motion-fluidity pass, both games, the Seymour Flux and
+ *   Bahamut rigs): it integrates on a FIXED step of 1/120 s with an accumulator and draws the state interpolated to the frame's time, so the same game time gives the same tail and mane at 60, 120 and 144 Hz
+ *   (a variable step made the cloth and hair differ by a few pixels between displays; at 60 Hz the old step was 1/60 and the new one is two substeps of 1/120).
  * - {@link RigChains}: tail, mane, sash, beard, hair. Each chain bone's ABSOLUTE angle chases the bone it follows through its own spring, plus a constant `bias`
  *   and a `drag` proportional to how fast the figure is moving forward (a streaming mane swings back as the body lunges), plus a share of gravity (`hang`: how much
  *   of the followed bone's tilt the chain refuses to follow). The angle of one chain bone from its parent is clamped to `limit`. A chain bone's `rot` in a key is
@@ -19,16 +21,23 @@ export const clamp = (x: number, a: number, b: number): number => Math.min(b, Ma
 /** The most a spring may move in one second (rad/s): far past anything a tail does, so only a runaway reaches it. */
 const MAX_RATE = 120;
 
+/** MF-25: the spring's fixed integration step, seconds. */
+export const SPRING_STEP = 1 / 120;
+
 export class Spring {
   private y: number;
   private yd = 0;
   private xp: number;
+  /** MF-25: the state before the last substep, and the time banked toward the next one (seconds). */
+  private yPrev: number;
+  private acc = 0;
   private k1 = 0;
   private k2 = 0;
   private k3 = 0;
 
   constructor(public f: number, public z: number, public r: number, x0 = 0) {
     this.y = x0;
+    this.yPrev = x0;
     this.xp = x0;
     this.retune();
   }
@@ -53,6 +62,8 @@ export class Spring {
 
   reset(x: number, v = 0): void {
     this.y = x;
+    this.yPrev = x;
+    this.acc = 0;
     this.yd = v;
     this.xp = x;
   }
@@ -64,15 +75,27 @@ export class Spring {
   update(dt: number, x: number, xd?: number): number {
     if (!(dt > 0)) return this.y;
     if (!Number.isFinite(x)) return this.y;
-    const T = Math.min(dt, 1 / 30);
-    const vel = xd ?? (x - this.xp) / T;
+    const frame = Math.min(dt, 1 / 30);
+    const T = SPRING_STEP;
+    const x0 = this.xp;
+    const vel = xd ?? (x - x0) / frame;
     this.xp = x;
     const k2 = Math.max(this.k2, (T * T) / 2 + (T * this.k1) / 2, T * this.k1);
-    this.y += T * this.yd;
-    this.yd += (T * (x + this.k3 * vel - this.y - this.k1 * this.yd)) / k2;
-    this.yd = clamp(this.yd, -MAX_RATE, MAX_RATE);
-    if (!Number.isFinite(this.y) || !Number.isFinite(this.yd)) this.reset(x);
-    return this.y;
+    const before = this.acc;
+    this.acc += frame;
+    for (let i = 1; this.acc >= T - 1e-12; i++) {
+      this.acc -= T;
+      const xi = x0 + (x - x0) * clamp((i * T - before) / frame, 0, 1); // the target at the substep's time: a smooth target reads the same at every frame rate
+      this.yPrev = this.y;
+      this.y += T * this.yd;
+      this.yd += (T * (xi + this.k3 * vel - this.y - this.k1 * this.yd)) / k2;
+      this.yd = clamp(this.yd, -MAX_RATE, MAX_RATE);
+      if (!Number.isFinite(this.y) || !Number.isFinite(this.yd)) {
+        this.reset(x);
+        return this.y;
+      }
+    }
+    return this.yPrev + (this.y - this.yPrev) * clamp(this.acc / T, 0, 1); // drawn at the frame's own time, between the last two substeps
   }
 }
 
