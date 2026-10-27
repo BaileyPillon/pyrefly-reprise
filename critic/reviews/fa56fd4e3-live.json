@@ -1,0 +1,101 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-10-25T07:56:54Z",
+ "build": {
+  "mainSha": "fa56fd4e3",
+  "bundle": "Bo7iMtyZ",
+  "artifactHash": "8d82fe2924bf528c2f4a04a79e2e4fb7a6e22944bf9a1f8958f14d665fd72869"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/fa56fd4e3.json --url https://echoesofspira.com/ --full (the marker plans a deep review): result PASS, liveManifest match, checked 7168 of 7169 files (the 7169th, _headers, is host-read and not served), mismatched [], missing [], wrongType [], errors []; index.html and press/index.html identical once Cloudflare's analytics beacon is removed. A second run with --changed-from critic/artifacts/c8ecbcb31.json (release 62) also PASS, 1436 files. Artifact hash 8d82fe29...72869 equals the deploy marker and the live manifest."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, fresh context per run, 1600x900, cache-busted URL, real key presses. Bundle index-Bo7iMtyZ.js loaded. Chapter I (seymour-flux, selectedId asserted): title -> chapter-select -> party-prep -> battle -> player turn; with no query word the F1 HUD is present, the pause chip is hidden (look=cinematic, 4 rigs); Attack opened the target cursor on seymour-flux, Escape cancelled back to the command menu, Enter Enter confirmed an action (log: action-start, damage, status-add, action-end); P opened pause, H hid and restored the panels (block -> none/bare -> block), MASTER VOLUME lowered with real ArrowLeft, Escape resumed, P-P resumed. Chapter IV (ffx2-bahamut, selectedId asserted): same route; F1 HUD (pink, ATB, Paine WARRIOR hero header, Intel slab left of Bahamut); the cursor moved to Skill, Enter opened the sub-list, Escape returned to the command menu (cancel path), Enter Enter on a list item resolved an action (log: chain, damage, status-add); P pause and Escape resume. /press/ returned 200 with 11 of 11 images decoded. Phone 390x844 (touch, mobile UA), Chapter I: release-62 HUD, the pause chip visible (BUTTON.battle-pause-chip, vis=true), look=hd2d, no F1 hero header, chip hidden on desktop. Prerendered music fetched, not the procedural fallback: title.mp3, chapter-select.mp3, scene-gagazet.mp3, boss-seymour.mp3, victory-ffx.mp3, defeat-ffx.mp3, pause.mp3 (Chapter I); scene-bevelle-underground.mp3, boss-bahamut.mp3, defeat-ffx2.mp3 (Chapter IV). 0 console errors, 0 404s, 0 responses >= 400 across four browser contexts. Frames: D:/Tools/pyrefly-scratch/2026-10-25/live63/ (1-ch1-first-menu-f1-hud.jpg, 2-ch1-attack-pick.jpg plus f0-f7, 3-ch4-first-menu.jpg, 3e-ch4-action.jpg, 4-press-page.jpg, 5-phone-ch1.jpg)."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Lightweight reload smoke on the live Chapter I context: MASTER VOLUME lowered 80 -> 60 in the pause options with real keys, played on, page.reload(), the save (localStorage pyrefly-reprise:save:v1) read back with masterVolume 0.6 equal to the value before the reload, game rebooted (__pyreflyReady). The progress half (a chapter result) was not made: the fight was not played to its end.",
+   "reason": "Full upgrade matrix (fresh player / returning player / previous-build save fixture / invalid storage / reset flow) not tested in this pass; only the lightweight live reload check, per RUBRIC section 5."
+  }
+ ],
+ "staticChecks": {
+  "pose-census": {
+   "status": "RAN (data, not a verdict)",
+   "command": "node tools/pose-gate.mjs --report --out critic/reviews/fa56fd4e3-live/static/pose-census.json",
+   "file": "critic/reviews/fa56fd4e3-live/static/pose-census.json",
+   "totals": {
+    "subjects": 146,
+    "paintings": 1106,
+    "pass": 829,
+    "waived": 79,
+    "rigged": 0,
+    "fail": 0,
+    "exempt": 198,
+    "byClass": {
+     "idle": 146,
+     "standing": 565,
+     "ko": 90,
+     "low": 71,
+     "wide": 4,
+     "staged": 176,
+     "part": 54
+    },
+    "byGame": {
+     "FFX-2": 777,
+     "FFX": 307,
+     "FF7": 22
+    },
+    "byRowStatus": {
+     "ok": 745,
+     "held": 84,
+     "waived": 79,
+     "none": 198
+    }
+   }
+  }
+ },
+ "coverage": {
+  "tested": [
+   "artifact identity, whole artifact: 7168 files byte-compared (--full), plus the diff from release 62 (1436 files)",
+   "Chapter I (FFX) and Chapter IV (FFX-2) from the title to a player turn and one resolved action with real keys, pack ON by default at 1600x900 (F1 HUD, hidden pause chip)",
+   "target-cursor cancel (Ch I) and sub-list cancel (Ch IV)",
+   "pause P / Escape / P-P, H hide and restore (Ch I); P and Escape (Ch IV)",
+   "/press/ page at 1600x900",
+   "phone 390x844 Chapter I: release-62 HUD with the PAUSE chip, no F1 header",
+   "prerendered music fetched in both chapters",
+   "settings reload persistence (masterVolume)",
+   "console / 404 / >=400 / mistyped-image sweep over four contexts"
+  ],
+  "reused": [],
+  "notTested": [
+   "full CHK-024 upgrade matrix",
+   "the chapter-progress half of the reload smoke (no fight was played to its end)",
+   "?pack=off and ?pack=demo behaviours, phone Chapter IV, tablet widths",
+   "the end card after a demo fight and the booth screens (demo mode only; not part of the default path)",
+   "repainted poses judged visually beyond the pose census data",
+   "win/loss/retry flows, the other chapters and the hidden doors",
+   "audio quality by ear (agents cannot hear)",
+   "audio playing as sound: only fetched files were observed, plus the audio-debug surface which returned nothing",
+   "the deep review this build still owes (a separate obligation)"
+  ]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 46,
+ "notes": "Smoke driver: .r63-live-smoke-tmp.mjs in this worktree (untracked scratch). My first run reported two FAILs that were detector defects, not live defects: (1) the F1 HUD prints a \"P Pause\" key legend, which a text match read as a PAUSE button (the real chip, BUTTON.battle-pause-chip, is hidden); (2) targeting() returns {\"sel\":[]} after a cancel, which a not-null test misread. Both assertions were corrected and re-run; the second Ch IV assertion looked for action-start in the last 8 log entries, which had already rolled past it (the tail showed chain, damage, status-add, action-end). Observations, not defects: the first-time Intel guide and a first-time tutorial toast are up on the Chapter IV first menu (by design, G hides). Fights are seed-varied per run: some runs open with Kimahri KO or Tidus KO in the party card. The 2-ch1-attack frames show the target cursor, a human-readable attack-in-flight frame was not isolated."
+}
