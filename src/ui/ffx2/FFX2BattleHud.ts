@@ -66,6 +66,7 @@ import { BattleMessageBanner } from './battleMessage.ts';
 import { fightDecidedBy } from './fightDecided.ts';
 import { fightEnding } from '../../battle/ffx2/end-flag.ts';
 import { EndHold } from './endHold.ts'; // the party's bars while the fight is ending: nothing counts toward a turn that cannot come
+import { AtbLive, atbBarsSmooth } from './AtbLive.ts'; // MF-07: `?atbbars=smooth`, the bars that run (FFX-2 only)
 import { displayNameOf } from './displayName.ts';
 import { IntentOpeningHold } from './intentOpeningHold.ts';
 import { demoAdvisorOneLine, demoPanelStart } from '../../app/demo/demoHud.ts'; // R61: the conference demo's cleaner HUD (`?demo=1` only)
@@ -159,6 +160,7 @@ export class FFX2BattleHud implements HudPort {
   private overlay!: HTMLElement;
   private partyEl!: HTMLElement;
   private enemyEl!: HTMLElement;
+  private readonly atb = new AtbLive(); private readonly atbSmooth = atbBarsSmooth(); // MF-07: the bars run per frame (`update`), the columns are rebuilt only when their structure changes
   private telegraphEl!: HTMLElement;
   private commandEl!: HTMLElement;
   /** PR-0012: the highlighted row's help sentence, a top-of-screen band (D-040), `battleHelpOn()`-gated. */
@@ -504,6 +506,7 @@ export class FFX2BattleHud implements HudPort {
 
   /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
   update(dt: number): void {
+    if (this.atbSmooth) this.atb.tick(dt); // MF-07
     this.layoutFences();
     this.layoutPlates();
     this.nodeMarks.update();
@@ -897,13 +900,9 @@ export class FFX2BattleHud implements HudPort {
   }
 
   /**
-   * The party and enemy rows only, from a state the presenter has projected to
-   * the event it is playing right now (`HudPort.syncVitals`).
-   *
-   * Critic round 03 #9: rows re-rendered once per burst trailed the engine by whatever was still
-   * animating. The gauges come from the last snapshot (ATB position belongs to the end of the burst,
-   * refreshed by the full `sync` that closes it). Cheap on purpose: no guide, advisor or
-   * `intent.refresh()`. Game case: both, shared playback plumbing (AGENTS.md rule 14 / CHK-020).
+   * The party and enemy rows only, from a state the presenter has projected to the event it is playing right now (`HudPort.syncVitals`).
+   * Critic round 03 #9: rows re-rendered once per burst trailed the engine by whatever was still animating. The gauges come from the last snapshot
+   * (ATB position belongs to the end of the burst, refreshed by the full `sync` that closes it). Cheap on purpose: no guide, advisor or `intent.refresh()`. Both games.
    */
   syncVitals(state: BattleState): void {
     const snapshot = this.lastSnapshot;
@@ -914,11 +913,8 @@ export class FFX2BattleHud implements HudPort {
   }
 
   /**
-   * The ATB bars only, from a fresh snapshot (`HudPort.syncGauges`).
-   *
-   * **FFX-2 only.** The Active pump (`BattlePresenterActive.ts`) calls this at 20 Hz while a menu
-   * is open: the clock runs under it (Bailey, D-009: *"For ffx-2 I choose active"*). The mirror of
-   * {@link syncVitals}; the numbers come from `lastState` because only the gauges moved.
+   * The ATB bars only, from a fresh snapshot (`HudPort.syncGauges`). **FFX-2 only.** The Active pump (`BattlePresenterActive.ts`) calls this at 20 Hz while a menu is open:
+   * the clock runs under it (Bailey, D-009: *"For ffx-2 I choose active"*). The mirror of {@link syncVitals}; the numbers come from `lastState` because only the gauges moved.
    */
   syncGauges(snapshot: AtbSnapshot): void {
     this.lastSnapshot = snapshot;
@@ -1306,23 +1302,26 @@ export class FFX2BattleHud implements HudPort {
   }
 
   private renderParty(state: BattleState, snapshot: AtbSnapshot): void {
+    const smooth = this.atbSmooth;
     const rows = state.activeIds
       .map((id, i) => {
         const c = state.combatants[id];
         if (!isFfx2(c)) return '';
         const bar = this.endHold.bar(state, id, snapshot.bars.find((b) => b.actorId === id) ?? null); // frozen while the fight is ending, spells in flight excepted
-        return partyRowHtml(c, bar, { actingId: this.actingId, index: i, ...(this.artNamespace ? { artNamespace: this.artNamespace } : {}) });
+        if (smooth) this.atb.feed(id, bar, snapshot.elapsedMs);
+        return partyRowHtml(c, bar, { actingId: this.actingId, index: i, ...(this.artNamespace ? { artNamespace: this.artNamespace } : {}), ...(smooth ? { live: { fill: this.atb.fillNow(id, bar?.fill ?? 0) } } : {}) });
       })
       .join('');
+    if (smooth && this.atb.keep('party', rows) && this.partyEl.firstChild) return; // MF-07: only a bar moved; the frame loop draws it
     this.partyEl.innerHTML = rows;
+    if (smooth) this.atb.bind(this.partyEl);
     if (this.lit.ids.size) this.paintLit();
   }
 
   private renderEnemies(state: BattleState, snapshot: AtbSnapshot): void {
-    this.enemyEl.innerHTML = enemyGaugesHtml(state, snapshot, {
-      revealed: this.revealed,
-      charging: this.chargeStages,
-    });
+    const html = enemyGaugesHtml(state, snapshot, { revealed: this.revealed, charging: this.chargeStages });
+    if (this.atbSmooth && this.atb.keep('enemy', html) && this.enemyEl.firstChild) return; // MF-07: nothing in the column changed
+    this.enemyEl.innerHTML = html;
     if (this.lit.ids.size) this.paintLit();
   }
 
