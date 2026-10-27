@@ -7,7 +7,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { REAL_MOTION } from '../../src/data/motion/realMotion.ts';
 import { setMoveWord } from '../../src/engine/motion/MoveSwitch.ts';
-import { TRAVEL_MIN_MS, TRAVEL_REST_SHARE, phasesOf, profileOfRow } from '../../src/engine/motion/RealMotion.ts';
+import { TRAVEL_MIN_MS, TRAVEL_REST_SHARE, TRAVEL_SETTLE_FLOOR, phasesOf, profileOfRow } from '../../src/engine/motion/RealMotion.ts';
 import { PROFILES, defaultPaceFactor, resolveStrike, sampleAt, type StrikeSample } from '../../src/engine/motion/StrikeCurve.ts';
 import { setPace, setPaceGame } from '../../src/engine/pace.ts';
 
@@ -47,6 +47,8 @@ describe('MF-14 V3: the phases of the 1.1 s pick with the house travel', () => {
         expect(p.windupMs).toBeGreaterThanOrEqual(row.snappy.windupMs); // never shortened
         expect(p.returnMs + p.settleMs).toBeGreaterThanOrEqual(TRAVEL_REST_SHARE * total(row.snappy) - 1);
         expect(p.holdMs).toBeGreaterThanOrEqual(0);
+        expect(p.returnMs).toBeLessThanOrEqual(row.snappy.returnMs); // the way home is never longer than the pick's
+        expect(p.returnMs).toBeGreaterThanOrEqual(Math.min(row.snappy.returnMs, TRAVEL_REST_SHARE * total(row.snappy) - TRAVEL_SETTLE_FLOOR * total(row.snappy)) - 1); // and the settle paid first
         for (const v of Object.values(p)) expect(Number.isInteger(v) && v >= 0).toBe(true);
         if (row.snappy.returnMs === 0) expect(p.returnMs).toBe(0); // Lulu's doll does not come back
       });
@@ -61,6 +63,7 @@ describe('MF-14 V3: the phases of the 1.1 s pick with the house travel', () => {
     expect(p.travelMs).toBe(200);
     expect(p.windupMs).toBe(300);
     expect(p.holdMs).toBe(300);
+    expect(p.returnMs).toBe(REAL_MOTION.ffx2['paine']!.attack!.snappy.returnMs); // the way home keeps its 1.1 s length: the settle paid
   });
 });
 
@@ -82,6 +85,42 @@ function peakShareAFrame(game: 'ffx' | 'ffx2', key: string, word: 'today' | 'tra
   setMoveWord('strikeshape', null);
   return peak;
 }
+
+/** The largest move of x between two 60 Hz frames over the strike's way home, as a share of the lunge distance. */
+function returnPeakShare(game: 'ffx2' | 'ffx', key: string, word: 'today' | 'travel' | 'house'): number {
+  setPaceGame(game);
+  setPace('steady');
+  setMoveWord('strikeshape', word === 'travel' ? 'travel' : 'today');
+  const row = REAL_MOTION[game][key]!.attack!;
+  const shape = resolveStrike(word === 'house' ? PROFILES[game] : profileOfRow(game, row, 'snappy'), { distance: 1.4, height: 1.82, timeScale: 1 });
+  const out: StrikeSample = { x: 0, lift: 0, sy: 1, lean: 0 };
+  let last = sampleAt(shape, 'post', 0, out).x;
+  let peak = 0;
+  for (let t = 1000 / 60; t <= shape.returnMs + 17; t += 1000 / 60) {
+    const x = sampleAt(shape, 'post', Math.min(t, shape.returnMs), out).x;
+    peak = Math.max(peak, Math.abs(x - last));
+    last = x;
+  }
+  setMoveWord('strikeshape', null);
+  return peak;
+}
+
+describe('MF-14 V3: the way home is not traded for the dash (the first build had a 118 ms return, a 47 px frame)', () => {
+  it('Paine (FFX-2): the return keeps the length it has at the 1.1 s pick, so its fastest frame is the pick one, and under two times the house return one', () => {
+    const v1 = returnPeakShare('ffx2', 'paine', 'today');
+    const v3 = returnPeakShare('ffx2', 'paine', 'travel');
+    const v0 = returnPeakShare('ffx2', 'paine', 'house');
+    if (process.env.MF_LOG) console.log('MF14-return-peak-share-a-frame paine v1/v3/house', v1.toFixed(3), v3.toFixed(3), v0.toFixed(3));
+    expect(Math.abs(v3 - v1)).toBeLessThan(0.005);
+    expect(v3).toBeLessThan(2 * v0);
+  });
+  it('Tidus (FFX): the V3 return is at most 1.5 times the pick one (the dash pays 196 ms; the return gives up 76 of its 252)', () => {
+    const v1 = returnPeakShare('ffx', 'tidus', 'today');
+    const v3 = returnPeakShare('ffx', 'tidus', 'travel');
+    if (process.env.MF_LOG) console.log('MF14-return-peak-share-a-frame tidus v1/v3', v1.toFixed(3), v3.toFixed(3));
+    expect(v3).toBeLessThan(1.5 * v1);
+  });
+});
 
 describe('MF-14 V3: the dash no longer reads as a teleport', () => {
   it('Paine (FFX-2): nearly all of the lunge in one frame at the 1.1 s pick; with the house travel, the dash of the house strike', () => {
