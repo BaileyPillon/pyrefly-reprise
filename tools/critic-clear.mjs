@@ -10,7 +10,12 @@
  *   - a report for another build settles nothing: an old score cannot certify
  *     a new build;
  *   - a focused or live report never settles a deep review;
- *   - an UNVERIFIED verdict settles nothing: missing evidence stays pending.
+ *   - an UNVERIFIED verdict settles nothing: missing evidence stays pending;
+ *   - a continuity aggregate that was not read by THIS tree's harness (or that
+ *     carries no stamp of which harness read it) settles nothing, with the reason
+ *     and what to run instead (post-conference motion plan, step 0;
+ *     tools/critic-harness-identity.mjs). `--harness-tree <dir>` names another
+ *     release tree whose harness the report must match.
  *
  * A report for a build that is not deployed yet (a candidate review made
  * before the deploy) is validated and kept; `applyStoredReports` applies it
@@ -43,12 +48,17 @@ export function storedArtifactAliases(root, mainSha) {
   try { return artifactHashAliases(JSON.parse(readFileSync(file, 'utf8'))); } catch { return []; }
 }
 
-/** Validate one report and apply it to its build's marker, if that build has one. */
-export function clearWithReport(root, reportPath) {
-  const policy = loadPolicy(root);
+/**
+ * Validate one report and apply it to its build's marker, if that build has one. `root` holds the records (critic/pending, cleared, ledger.json). `opts.policyRoot`: the tree whose policy and
+ * tools judge the report when that is not `root` (the release tree settling records that live in another one; `--records`). `opts.harnessTree`: the release tree whose continuity harness the
+ * report must have been read by (default the tree that judges).
+ */
+export function clearWithReport(root, reportPath, opts = {}) {
+  const judge = opts.policyRoot ?? root;
+  const policy = loadPolicy(judge);
   const pendingDir = join(root, 'critic', 'pending');
   const report = JSON.parse(readFileSync(reportPath, 'utf8'));
-  const errors = validateReport(report, policy);
+  const errors = validateReport(report, policy, { root: judge, harnessTree: opts.harnessTree });
   if (errors.length) return { ok: false, errors, settled: [], refused: [] };
   const name = relative(root, reportPath).replace(/\\/g, '/');
   const file = existsSync(pendingDir)
@@ -72,7 +82,7 @@ export function clearWithReport(root, reportPath) {
 }
 
 /** Apply every stored report that names this build. Called by the deploy once the marker exists. */
-export function applyStoredReports(root, mainSha) {
+export function applyStoredReports(root, mainSha, opts = {}) {
   const results = [];
   for (const dir of ['critic/reviews', 'critic/rounds']) {
     const full = join(root, dir);
@@ -81,7 +91,7 @@ export function applyStoredReports(root, mainSha) {
       if (!existsSync(pendingMarkerPath(join(root, 'critic', 'pending'), mainSha))) return results;
       let sha = null;
       try { sha = JSON.parse(readFileSync(join(full, f), 'utf8')).build?.mainSha ?? null; } catch { /* unreadable reports are the status tool's business */ }
-      if (sha && (sha.startsWith(mainSha) || mainSha.startsWith(sha))) results.push({ report: `${dir}/${f}`, ...clearWithReport(root, join(full, f)) });
+      if (sha && (sha.startsWith(mainSha) || mainSha.startsWith(sha))) results.push({ report: `${dir}/${f}`, ...clearWithReport(root, join(full, f), opts) });
     }
   }
   return results;
@@ -89,8 +99,13 @@ export function applyStoredReports(root, mainSha) {
 
 function main(argv) {
   const i = argv.indexOf('--report');
-  if (i < 0 || !argv[i + 1]) { console.log('usage: node tools/critic-clear.mjs --report <report.json>'); process.exitCode = 64; return; }
-  const r = clearWithReport(ROOT, resolve(argv[i + 1]));
+  if (i < 0 || !argv[i + 1]) { console.log('usage: node tools/critic-clear.mjs --report <report.json> [--records <tree whose critic/ records are settled; this tree\'s code and policy judge>] [--harness-tree <clean release tree whose harness the report must match>]'); process.exitCode = 64; return; }
+  const flag = (name) => { const j = argv.indexOf(name); return j >= 0 && argv[j + 1] ? resolve(argv[j + 1]) : undefined; };
+  const records = flag('--records');
+  const harnessTree = flag('--harness-tree');
+  if (harnessTree) console.log(`critic:clear NOTE: the continuity harness is matched against ${harnessTree}, not against this tree (${ROOT}); that is for a release tree that is behind the one that ran the harness`);
+  if (records) console.log(`critic:clear NOTE: settling the records of ${records} with the code and policy of ${ROOT}`);
+  const r = clearWithReport(records ?? ROOT, resolve(argv[i + 1]), { harnessTree, policyRoot: records ? ROOT : undefined });
   if (!r.ok) {
     console.log('critic:clear REFUSED: the report is not valid evidence, nothing was settled');
     for (const e of r.errors) console.log(`  - ${e}`);

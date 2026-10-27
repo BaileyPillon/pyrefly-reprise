@@ -109,6 +109,7 @@ import { formatLoadReport, verifyArtLoads } from './art-browser-load.mjs';
 import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 import { MANIFEST_NAME, buildManifest, diffManifests, verifyLive } from './artifact-manifest.mjs';
 import { applyStoredReports } from './critic-clear.mjs';
+import { describeSkipped, shipEvidenceFor } from './critic-ship-evidence.mjs';
 import { classifyPorcelain } from './deploy-classify.mjs';
 import { checkCloudflareLogin, prepareCloudflareUpload, publishToCloudflare } from './deploy-cloudflare.mjs';
 import {
@@ -156,37 +157,6 @@ const LEGACY_LOG_PATH = join(ROOT, 'docs', LEGACY_LOG_NAME);
 const PENDING_DIR = join(ROOT, 'critic', 'pending');
 const CLEARED_DIR = join(ROOT, 'critic', 'cleared');
 const ARTIFACTS_DIR = join(ROOT, 'critic', 'artifacts');
-
-/**
- * The validated candidate review the release gate is allowed to read: a
- * focused, deep or milestone report for THIS commit, with the ship verdict it
- * carries (RULE A, RUBRIC section 3). A deep or milestone report outranks a
- * focused one, and among equals the newest date wins. A report from before the
- * rules came in carries no `verdicts.ship`, so its changed-area verdict stands
- * in — a FAIL or an UNVERIFIED reads as HOLD, exactly as the old gate did.
- * Pure given the filesystem it reads.
- */
-export function shipEvidenceFor(root, mainSha) {
-  const policy = loadPolicy(root);
-  const rank = { focused: 1, deep: 2, milestone: 3 };
-  let best = null;
-  for (const dir of ['reviews', 'rounds']) {
-    const full = join(root, 'critic', dir);
-    if (!existsSync(full)) continue;
-    for (const f of readdirSync(full).filter((n) => n.endsWith('.json'))) {
-      let report;
-      try { report = JSON.parse(readFileSync(join(full, f), 'utf8')); } catch { continue; }
-      const sha = report.build?.mainSha;
-      if (!sha || !(sha.startsWith(mainSha) || mainSha.startsWith(sha))) continue;
-      if (!rank[report.review]) continue;
-      if (validateReport(report, policy).length !== 0) continue;
-      const ship = report.verdicts?.ship ?? (report.verdicts?.changedArea === 'PASS' ? 'SHIP' : 'HOLD');
-      const found = { path: `critic/${dir}/${f}`, review: report.review, ship, date: report.date ?? '' };
-      if (!best || rank[found.review] > rank[best.review] || (rank[found.review] === rank[best.review] && found.date > best.date)) best = found;
-    }
-  }
-  return best ? { path: best.path, review: best.review, ship: best.ship } : null;
-}
 
 /**
  * The newest deep or milestone report on record for this commit, whatever its
@@ -287,14 +257,15 @@ export function parseOwnerOverride(raw) {
  * settle nothing (RULE C, unchanged from commit d333b06).
  */
 export function resolveReleaseGate({
-  focusedBeforeDeploy, deepBeforeDeploy, evidence, deepOwed = [], maxDeploysWithDeepOwed = 1, ownerOverrideWords,
+  focusedBeforeDeploy, deepBeforeDeploy, evidence, deepOwed = [], maxDeploysWithDeepOwed = 1, ownerOverrideWords, skipped = [],
 }) {
+  const why = skipped.length ? `; ${describeSkipped(skipped)}` : ''; // reports for this commit that validateReport refused, with the reason (a continuity-harness identity refusal looked like "no report")
   const refusals = [];
   if (focusedBeforeDeploy || deepBeforeDeploy) {
     if (!evidence) {
       refusals.push(deepBeforeDeploy
-        ? 'this change touches save data, the one class that still needs a DEEP review of the production candidate before it goes public, and no validated deep report for this commit exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md section 4)'
-        : 'a shipped file changed, so this candidate needs a review of its changed area before it goes public, and no validated focused or deep report for this commit exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md section 4)');
+        ? 'this change touches save data, the one class that still needs a DEEP review of the production candidate before it goes public, and no validated deep report for this commit exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md section 4)' + why
+        : 'a shipped file changed, so this candidate needs a review of its changed area before it goes public, and no validated focused or deep report for this commit exists under critic/reviews/ or critic/rounds/ (critic/RUBRIC.md section 4)' + why);
     } else if (evidence.ship !== 'SHIP') {
       refusals.push(`the ${evidence.review} review of this candidate (${evidence.path}) says HOLD: a critical defect this change introduced, a regression against the live build, or an unknown tag on a critical (critic/RUBRIC.md section 3)`);
     } else if (deepBeforeDeploy && evidence.review === 'focused') {
@@ -329,7 +300,8 @@ export function formatOwnerOverrideWarning(words, refusals = []) {
 /** `resolveReleaseGate` fed from this repo: the plan, the candidate's report and the outstanding deep reviews. */
 function releaseGateFor(plan, mainSha) {
   const release = releasePolicy(loadPolicy(ROOT));
-  const evidence = plan.focusedBeforeDeploy || plan.deepBeforeDeploy ? shipEvidenceFor(ROOT, mainSha) : null;
+  const skipped = [];
+  const evidence = plan.focusedBeforeDeploy || plan.deepBeforeDeploy ? shipEvidenceFor(ROOT, mainSha, skipped) : null;
   const deepOwed = deepOwedBuilds(readPendingMarkers(PENDING_DIR).filter((m) => !m.parseError && m.mainSha !== mainSha));
   const gate = resolveReleaseGate({
     focusedBeforeDeploy: plan.focusedBeforeDeploy,
@@ -338,6 +310,7 @@ function releaseGateFor(plan, mainSha) {
     deepOwed,
     maxDeploysWithDeepOwed: release.maxDeploysWithDeepOwed,
     ownerOverrideWords: OWNER_OVERRIDE_WORDS,
+    skipped,
   });
   return { gate, evidence, deepOwed };
 }
@@ -545,6 +518,7 @@ function recordDeploy({
   // deploy counts now that the build it reviewed is the one that is live.
   for (const r of applyStoredReports(ROOT, mainSha)) {
     for (const s of r.settled) log(`  ${r.report} settled ${s.kind}: ${s.result}`);
+    if (r.ok === false) log(`  ${r.report} was refused as evidence: ${r.errors[0]}`);
   }
   const ledger = readLedger(ROOT, loadPolicy(ROOT));
   writeLedger(ROOT, { ...ledger, deploysSinceDeep: [...ledger.deploysSinceDeep, { sha: mainSha, date: isoNow, substantial: plan.review !== 'live' }] });
@@ -1025,6 +999,8 @@ async function main() {
     ownerOverrideUsed, ownerOverrideReportPath, ownerOverrideChangedArea, release: RELEASE,
   });
 }
+
+export { shipEvidenceFor };
 
 // Guarded so tests can import this module's pure helper functions (parseOwnerOverride,
 // resolveReleaseGate, shipEvidenceFor, formatOwnerOverrideWarning, formatWhenLine,
