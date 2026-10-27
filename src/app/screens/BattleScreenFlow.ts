@@ -351,7 +351,7 @@ export class GameFlow {
       const { runPilgrimage } = await import('../pilgrim/PilgrimFlow.ts'); // its screens and styles load only now: a player who never types the word never fetches them
       return runPilgrimage({ app: this.app, show: (s) => this.show(s), setStep: (s) => void (this.step = s), fight: (cid, o) => this.runChapter(cid, o), away: () => this.handedOver, claim: () => { if (!this.running) [this.owned, this.handedOver] = [null, false]; } });
     }
-    stopDemoWarm(); // release 62 (PR-0481, demo mode): the stage warm behind the picker takes no further step; the fight picked has the main thread
+    stopDemoWarm(id); // release 62 (PR-0481, demo mode): the stage warm behind the picker takes no further step; the fight picked has the main thread (post-fight-start: and a stage step of the other fight still in flight lets go at its next boundary)
     warmBattleStage(); // the browser's staged-upload verdict (a second WebGL2 context, 0.7 s) and the spell atlas (0.13 s), once per page, while the party prep is what is on screen
     const release = musicChapter(id, sfxChapter(id, voiceChapter(id, holdIdleLane()))); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep; the recorded voice-over (FFX only)
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)

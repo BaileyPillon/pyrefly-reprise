@@ -239,8 +239,8 @@ describe('the wiring', () => {
 
   it('the flow stops it when a run starts, before the run\'s own warm-ups; the battle takes its scene from the store', () => {
     const flow = src('src/app/screens/BattleScreenFlow.ts');
-    expect(flow.indexOf('stopDemoWarm();')).toBeGreaterThan(0);
-    expect(flow.indexOf('stopDemoWarm();')).toBeLessThan(flow.indexOf('warmBattleStage();'));
+    expect(flow.indexOf('stopDemoWarm(id);')).toBeGreaterThan(0); // post-fight-start: it names the fight it starts, so the other fight's stage step in flight lets go
+    expect(flow.indexOf('stopDemoWarm(id);')).toBeLessThan(flow.indexOf('warmBattleStage();'));
     const battle = src('src/app/screens/BattleScreen.ts');
     expect(battle).toContain('await takeScene(chapter.sceneKey, this.app.renderer.camera)');
     expect(battle).not.toContain('await loadScene(chapter.sceneKey');

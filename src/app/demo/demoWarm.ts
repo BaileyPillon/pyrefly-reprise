@@ -81,10 +81,24 @@ export function demoWarmLog(): ReadonlyArray<{ ms: number; what: string }> {
 
 let running: Promise<void> | null = null;
 let stopped = false;
+/** The fight the press picked, once one has (post-fight-start): a step of any other fight still in flight lets go at its next boundary. */
+let pickedId: string | null = null;
+/** Scenes whose stage step was let go half done (a press picked the other fight): held, but their programs are not built and nothing was drawn. The next warm finishes them (the held scene is reused, not built again). */
+const unfinished = new Set<string>();
 
-/** A fight has been picked (or the page is leaving): no more steps start. */
-export function stopDemoWarm(): void {
+/** A fight has been picked (or the page is leaving): no more steps start. `picked` names the fight (the flow knows it): a stage step of the OTHER fight that is still in flight then stops at its next boundary. */
+export function stopDemoWarm(picked?: string): void {
   stopped = true;
+  if (picked !== undefined) pickedId = picked;
+}
+
+/**
+ * Has a press picked a fight other than `id`? A stage step of `id` that is still in flight would only compete with the picked fight's own load for the main thread (round 29's trace of a press made mid-warm:
+ * the other fight's stage step ran on for 4 s of the picked fight's start, its own look applied by `applyChapterLook` under the picked fight's), so it lets go at its next boundary. The picked fight's own
+ * step in flight is not abandoned: the battle takes what it builds.
+ */
+export function warmAbandoned(id: string): boolean {
+  return stopped && pickedId !== null && pickedId !== id;
 }
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
@@ -155,6 +169,7 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
   if (running) return stopped ? running.then(() => warmDemoFights(app, fights, opts)) : running; // a run that was stopped ends at its next step; this call then starts afresh
   const light = opts.light === true; // the retry's warm behind the defeat card: the scene, its plates and its programs' compile; none of the offscreen draws (a 0.3 s upload and the programs' first uses), the splash crops or the breath rigs, which could stop the page as TRY AGAIN is pressed
   stopped = false;
+  pickedId = null;
   quietSpent = 0; // a new run has its own quiet budget
   if (typeof window !== 'undefined') (window as unknown as Record<string, unknown>)['__demoWarmLog'] = log; // the probe reads what the warm did (dev tools, the booth check)
   const calm = (): boolean => !stopped && CALM.has(app.current?.name ?? '');
@@ -183,9 +198,11 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
         await idle();
       } else if (!st.stage) {
         st.stage = true;
-        if (!hasPrebuilt(chapter.sceneKey)) {
-          await buildStage(app, chapter, idle, light);
-          note(`${id}: stage built, compiled and drawn offscreen`);
+        if (!hasPrebuilt(chapter.sceneKey) || unfinished.has(chapter.sceneKey)) {
+          const built = await buildStage(app, chapter, idle, light);
+          if (built) unfinished.delete(chapter.sceneKey);
+          else unfinished.add(chapter.sceneKey);
+          note(built ? `${id}: stage built, compiled and drawn offscreen` : `${id}: stage left unfinished (another fight was picked)`);
           await idle();
         }
       } else if (!st.figures) {
@@ -217,10 +234,12 @@ export function warmDemoFights(app: WarmApp, fights: readonly string[] = DEMO_FI
   return running;
 }
 
-/** Build `chapter`'s scene, get its programs built and its textures up, and keep it for the battle. */
-async function buildStage(app: WarmApp, chapter: Chapter, pause: (ms?: number) => Promise<void>, light = false): Promise<void> {
+/** Build `chapter`'s scene, get its programs built and its textures up, and keep it for the battle. False when a press picked another fight on the way and the rest was left (see {@link warmAbandoned}). */
+async function buildStage(app: WarmApp, chapter: Chapter, pause: (ms?: number) => Promise<void>, light = false): Promise<boolean> {
+  const gone = (): boolean => warmAbandoned(chapter.id);
   const scene = await prebuildScene(chapter.sceneKey, app.renderer.camera);
   await pause(20); // a task boundary after the scene's 0.1 s of layer canvases, with a look at the pad
+  if (gone()) return false; // before the look is applied: the picked fight's battle has applied its own
   scene.hideOwnActors();
   patchSideFogIn(scene.scene); // as `BattleScreen.enter` does before it compiles: the patched plates are other programs than the plain ones
   applyChapterLook(chapter.id, visualStyleOf(readSetting('visualStyle'))); // the look's passes join the post chain now (a battle that starts takes the same look, for the same chapter)
@@ -230,9 +249,11 @@ async function buildStage(app: WarmApp, chapter: Chapter, pause: (ms?: number) =
   const cutting = warmLivingPlates({ key: scene.key, scene: scene.scene, renderer: (app.renderer as { renderer?: WebGLRenderer }).renderer }).catch(() => false);
   await warmShaders(app.renderer, scene.scene); // the programs build in the GPU process while the page runs
   if (await cutting) note(`${chapter.id}: depth plates cut ahead`);
-  if (light) return;
+  if (light) return true;
   await pause(20);
-  await drawSlicedOffscreen(app.renderer, scene.scene); // the GPU executables and the textures, one program family a frame
+  if (gone()) return false;
+  await drawSlicedOffscreen(app.renderer, scene.scene, { stop: gone }); // the GPU executables and the textures, one program family a frame
+  return !gone();
 }
 
 /**
@@ -255,6 +276,8 @@ async function warmSplashCrops(chapter: Chapter, calm: () => boolean): Promise<b
 export function resetDemoWarm(): void {
   running = null;
   stopped = false;
+  pickedId = null;
+  unfinished.clear();
   quietSpent = 0;
   focusId = null;
   log.length = 0;

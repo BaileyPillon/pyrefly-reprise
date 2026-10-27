@@ -180,7 +180,7 @@ export async function drawSliced(r: WarmupRenderer, scene: Scene): Promise<void>
  * Release 62 (PR-0481, the conference demo): the same slices, drawn into the composer's own buffer and never the screen, for a scene that is built and kept behind the picker
  * (`app/demo/demoWarm.ts`). The target is the one the battle's scene pass draws into (the same colour space, so the same programs); the post chain is not run and nothing reaches the canvas.
  */
-export async function drawSlicedOffscreen(r: WarmupRenderer, scene: Scene): Promise<void> {
+export async function drawSlicedOffscreen(r: WarmupRenderer, scene: Scene, opts: { stop?: () => boolean } = {}): Promise<void> {
   const gl = r.renderer;
   const target = r.composer?.readBuffer;
   if (typeof gl?.render !== 'function' || !target) return;
@@ -204,6 +204,7 @@ export async function drawSlicedOffscreen(r: WarmupRenderer, scene: Scene): Prom
       // (a poll that does not block) before it touches the next program, so the stalls stay in the GPU process and the page keeps running. The same programs are built, the same textures uploaded.
       before: (members) => uploadTextures(gl, members, uploaded),
       after: ctx ? () => gpuSettled(ctx) : undefined,
+      ...(opts.stop ? { stop: opts.stop } : {}), // post-fight-start: a press picked another fight; the slices left are not drawn
     },
   );
 }
@@ -212,6 +213,8 @@ export async function drawSlicedOffscreen(r: WarmupRenderer, scene: Scene): Prom
 interface SliceHooks {
   before?: (members: readonly Part[]) => Promise<void>;
   after?: (() => Promise<void>) | undefined;
+  /** Asked between slices: true ends the draw there (nothing is left hidden: each slice restores its own). */
+  stop?: () => boolean;
 }
 
 /** Draw the scene once per program family (the others hidden for that draw), a frame apart, then once complete: `draw` is one render. */
@@ -242,6 +245,7 @@ async function sliceDraw(scene: Scene, draw: () => void, hooks: SliceHooks = {})
       }
       if (hooks.after) await hooks.after();
       await nextFrame();
+      if (hooks.stop?.()) return;
     }
   }
   draw();

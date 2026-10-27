@@ -18,6 +18,7 @@
  */
 
 import { BattleStartBanner, type BattleStartBannerOptions } from '../BattleStartBanner.ts';
+import { noteLoadingCardGone, noteLoadingCardUp } from './cardHold.ts'; // the battle's own card counts the time this one has been up (post-fight-start)
 
 /** How long the cover may sit on the ink before the card goes up. */
 export const LOADING_CARD_DELAY_MS = 400;
@@ -66,10 +67,15 @@ export function loadingCardWait(
     el.appendChild(hair);
     root.appendChild(el);
     const up = performance.now();
+    noteLoadingCardUp(up);
     mark('pyrefly:entry-card', up - t0);
     console.info(`[entry] battle-start card over the ink after ${Math.round(up - t0)} ms`);
-    await settled.catch(() => undefined);
-    await handover(root);
+    try {
+      await settled.catch(() => undefined);
+      await handover(root);
+    } finally {
+      noteLoadingCardGone();
+    }
     // Fade while the transition unwinds underneath, onto the battle's own card.
     el.classList.add('bstart--leaving');
     setTimeout(() => el.remove(), LEAVE_MS);
