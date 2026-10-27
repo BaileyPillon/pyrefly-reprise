@@ -57,6 +57,8 @@ interface Playing {
   side: 0 | 1 | -1;
   /** Motion pass, step 3: the cross is a cut inside the smear's window, and the window is open (`PaintedActor.koCutBegin`). */
   cutting?: boolean;
+  /** MF-09: a fall's landing has been played (the lying painting reached half). */
+  landed?: boolean;
 }
 export interface Guts {
   name: string;
@@ -79,6 +81,8 @@ export interface Guts {
   koCutBegin?: (info: { from: string; to: string; toPlane: 0 | 1; cutMs: number; dirX: number }) => void;
   koCutStep?: (u: number) => void;
   koCutEnd?: () => void;
+  /** MF-09 (`PaintedActor.landFall`): the KO's landing, played on the frame the body arrives. */
+  landFall?: () => void;
 }
 
 interface SlotState {
@@ -298,6 +302,10 @@ export class LivingFigure {
     if (play) {
       play.run.step(ctx.dt * 1000, realMs);
       const pose = play.run.pose;
+      if (!play.landed && play.run.opts.kind === 'fall' && pose.inn >= 0.5) {
+        play.landed = true;
+        a.landFall?.(); // MF-09: the thud on the frame the body arrives (the cut), not on the fall tween's own end 58 to 92 ms later
+      }
       buckle = pose.buckle;
       lean = pose.lean;
       play.from.fade = pose.out;

@@ -1982,8 +1982,12 @@ export class PaintedActor extends Group {
     }
   }
 
+  /** MF-09: a KO's landing is still to play ({@link fall} sets it, {@link landFall} takes it): once per fall. */
+  private fallDue = false;
+
   /** Tip over and hit the ground: the KO. */
   private fall(): void {
+    this.fallDue = true;
     this.tweens.to(0, 1, {
       durationMs: realFallMs(this.name) ?? FALL_MS, // `?curves=real` / `real-snappy` (integration 2): the body reaches the floor when the real clip's does (Tidus 1.0 s), else today's 300 ms
       easing: 'quadIn',
@@ -1992,11 +1996,8 @@ export class PaintedActor extends Group {
         this.fallDrop = v;
       },
       onComplete: () => {
-        // Landing: a short slap of squash and a small ground shake, then the
-        // extra tilt relaxes into the `down` posture.
-        void this.squash(280, 0.5);
-        if (momentsOn() && !menuHolds()) void startKoSettle(this.momentsHost()); // motion pass, step 3: the landing rebounds a little (a boss less); not over an open FFX-2 menu (D-357)
-        this.shake(this.worldHeight * 0.018, 200);
+        // Landing (already played on the cut when the KO run is up, `landFall`), then the extra tilt relaxes into the `down` posture.
+        this.landFall();
         this.tweens.to(1, 0, {
           durationMs: 420,
           easing: 'quadOut',
@@ -2007,6 +2008,18 @@ export class PaintedActor extends Group {
         });
       },
     });
+  }
+
+  /**
+   * The KO's landing: a short slap of squash, the settle and a small ground shake. MF-09: the KO run (`fx/mix/living.ts`) plays it on the frame the lying painting is half drawn, where the body
+   * arrives; the fall tween's own end (300 ms x pace, 58 to 92 ms later) plays it only for a KO with no run (REDUCE MOTION, a figure the run leaves alone). Once per fall.
+   */
+  landFall(): void {
+    if (!this.fallDue) return;
+    this.fallDue = false;
+    void this.squash(280, 0.5);
+    if (momentsOn() && !menuHolds()) void startKoSettle(this.momentsHost()); // motion pass, step 3: the landing rebounds a little (a boss less); not over an open FFX-2 menu (D-357)
+    this.shake(this.worldHeight * 0.018, 200);
   }
 
   /** Back on their feet, with the Phoenix Down's glow still on them. */
