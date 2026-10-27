@@ -76,11 +76,12 @@ describe('FLIP of the turn-order list', () => {
     expect(n).toBe(3);
     const byActor = new Map(played.map((p) => [p.el.dataset['actor'], p]));
     const auron = byActor.get('auron')!;
-    expect(auron.keyframes[0]!['transform']).toBe('translate(-8.00px, 40.00px) translateX(calc(var(--ig-ctb-step) * 0))'); // (96-100) and (30-10) screen px, divided by the 0.5 scale
-    expect(auron.keyframes[1]!['transform']).toBe('translateX(calc(var(--ig-ctb-step) * 0))');
+    expect(auron.keyframes[0]!['translate']).toBe('-8.00px 40.00px'); // (96-100) and (30-10) screen px, divided by the 0.5 scale
+    expect(auron.keyframes[1]!['translate']).toBe('0px 0px');
+    expect(auron.keyframes[0]!['transform']).toBeUndefined(); // never the `transform`: the F1 strip and the phone rail pin it with !important, which beats an animation
     expect(auron.options['duration']).toBe(SLIDE_MS);
     expect(auron.options['easing']).toBe(SLIDE_EASING);
-    expect(byActor.get('tidus')!.keyframes[0]!['transform']).toMatch(/^translate\(8\.00px, -40\.00px\)/);
+    expect(byActor.get('tidus')!.keyframes[0]!['translate']).toBe('8.00px -40.00px');
     expect(byActor.get('rikku')!.keyframes).toEqual([{ opacity: 0 }, { opacity: 1 }]); // a new row fades in
   });
 

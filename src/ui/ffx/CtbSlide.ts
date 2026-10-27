@@ -7,6 +7,10 @@
  * one (Invert, Play) with one `element.animate` (compositor-driven, no timer, a second sync in the middle starts from where the row is drawn). The key of a row is its unit and which of that
  * unit's rows it is (a unit can stand in the queue more than once). A row with no old place fades in; a row that left the list is simply gone, as today.
  *
+ * The slide is the row's own `translate` property, not `transform`: the F1 turn strip (`hudf1-ffx.css`) and the phone rail (`phone-hud.css`) both set `transform: none !important` on a row, and an important
+ * declaration beats every animation, so a `transform` slide never showed in the real Chapter I HUD (found by the stepped capture, 2026-10-27; the lab list had no such rule). `translate` composes with
+ * whatever `transform` the row has and nothing overrides it.
+ *
  * Pure DOM helpers: no `three`, no timers; jsdom (no `animate`, no boxes) does nothing.
  */
 
@@ -63,7 +67,6 @@ export function slideRows(list: HTMLElement, before: ReadonlyMap<string, RowPlac
   let played = 0;
   for (const [key, row] of keyed(list)) {
     if (typeof row.animate !== 'function') return played;
-    const own = row.style.transform || 'none';
     const r = row.getBoundingClientRect();
     const was = before.get(key);
     if (!was) {
@@ -78,8 +81,7 @@ export function slideRows(list: HTMLElement, before: ReadonlyMap<string, RowPlac
     const dx = (was.left - r.left) / k;
     const dy = (was.top - r.top) / k;
     if (Math.abs(dx) < MIN_MOVE_PX && Math.abs(dy) < MIN_MOVE_PX) continue;
-    const base = own === 'none' ? '' : ` ${own}`;
-    row.animate([{ transform: `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px)${base}` }, { transform: own }], { duration: SLIDE_MS, easing: SLIDE_EASING });
+    row.animate([{ translate: `${dx.toFixed(2)}px ${dy.toFixed(2)}px` }, { translate: '0px 0px' }], { duration: SLIDE_MS, easing: SLIDE_EASING });
     played++;
   }
   return played;
