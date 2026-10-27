@@ -6,7 +6,7 @@
  */
 import { describe, expect, it, beforeEach } from 'vitest';
 import { Texture } from 'three';
-import { BREATH_THUMB, EXTENTS_LOW, EXTENTS_THUMB, alphaThumbOn, extentsAgree, figurePainting, notePainting, notePending, paintingName, requestThumbs, setAlphaThumbSearch, storeThumb, thumbOf, thumbPending, thumbStats, withThumbs } from '../../src/engine/look/AlphaThumb.ts';
+import { BREATH_THUMB, EXTENTS_LOW, EXTENTS_THUMB, PAINTING_THUMBS, alphaThumbOn, extentsAgree, figurePainting, notePainting, notePending, paintingName, requestThumbs, seedAddress, setAlphaThumbSearch, storeThumb, thumbOf, thumbPending, thumbStats, withThumbs } from '../../src/engine/look/AlphaThumb.ts';
 import { extentsReads, readExtents } from '../../src/engine/look/AlphaPrime.ts';
 
 /** A 128 x 128 alpha field with a filled box: top 20, bottom 100 (exclusive), left 30, right 90 (exclusive). */
@@ -128,6 +128,21 @@ describe('alpha thumbnails (MF-02)', () => {
     expect(extentsReads.sync).toBe(before.sync);
     storeExtents(four, boxField(11, 111, 21, 101));
     expect(readExtents(tex)!.top).toBeCloseTo(11 / 128, 6);
+  });
+
+  it('a master loaded again (a warm-up, after an eviction) is a new image of the same bytes: its fields are those of the file, with no decode', () => {
+    const url = '/art/characters/valefor/attack%404x.png?v=2';
+    seedAddress(url, EXTENTS_THUMB, boxField(5, 115, 10, 118));
+    seedAddress(url, EXTENTS_LOW, boxField(5, 115, 10, 118));
+    seedAddress(url, BREATH_THUMB, new Uint8Array(32 * 48));
+    const again = { width: 5360, height: 3248 };
+    const before = thumbStats();
+    requestThumbs(again, url, PAINTING_THUMBS);
+    expect(thumbStats().reused).toBe(before.reused + 3);
+    expect(thumbStats().waiting).toBe(before.waiting); // nothing sent to a worker
+    expect(thumbOf(again, EXTENTS_THUMB)).not.toBeNull();
+    expect(thumbOf(again, BREATH_THUMB)).not.toBeNull();
+    expect(thumbPending(again, EXTENTS_THUMB)).toBe(false);
   });
 
   it('with the switch off (?alphathumb=off) nothing is answered and nothing is asked', () => {

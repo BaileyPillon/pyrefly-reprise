@@ -117,7 +117,7 @@ export function extentsAgree(a: ArrayLike<number>, b: ArrayLike<number>, cells =
 }
 
 /** Fields the guard has refused, for the books. */
-const counters = { asked: 0, landed: 0, failed: 0, refused: 0 };
+const counters = { asked: 0, landed: 0, failed: 0, refused: 0, reused: 0 };
 
 function publish(image: object, key: string, alpha: Uint8Array): void {
   let m = held.get(image);
@@ -179,6 +179,24 @@ interface Reply {
 interface Job {
   image: object;
   specs: readonly ThumbSpec[];
+  /** The address the bytes came from, so what comes back is kept for the next image made from the same file. */
+  name: string;
+}
+
+/**
+ * The raw fields by address (not by image): the art governor loads a master again for a warm-up or after an eviction, and that is a new `<img>` of the same bytes. Its fields are these, with no decode.
+ * Cleared when it holds more than 600 files (a field pair is about 33 KB).
+ */
+const byAddress = new Map<string, Map<string, Uint8Array>>();
+/** The address with no query: one file, however it was asked for. */
+const addressOf = (name: string): string => name.replace(/[?#].*$/, '');
+
+/** For the tests: say what a file's fields are (the worker's answers are kept this way). */
+export function seedAddress(name: string, spec: ThumbSpec, alpha: Uint8Array): void {
+  const key = addressOf(name);
+  let m = byAddress.get(key);
+  if (!m) byAddress.set(key, (m = new Map()));
+  m.set(specKey(spec), alpha);
 }
 
 const POOL = 2;
@@ -215,6 +233,14 @@ function make(): Worker | null {
       if (s && a && a.length === s.w * s.h) {
         storeThumb(job.image, s, a);
         counters.landed++;
+        if (job.name) {
+          let m = byAddress.get(job.name);
+          if (!m) {
+            if (byAddress.size > 600) byAddress.clear();
+            byAddress.set(job.name, (m = new Map()));
+          }
+          m.set(specKey(s), a);
+        }
       }
     };
     w.onerror = (): void => {
@@ -265,11 +291,21 @@ export function requestThumbs(image: unknown, source: Blob | string, specs: read
   if (!did) asked.set(image, (did = new Set()));
   const fresh = specs.filter((s) => !did!.has(specKey(s)));
   if (fresh.length === 0) return;
+  const known = name ? byAddress.get(addressOf(name)) : undefined;
+  if (known && fresh.every((s) => known.has(specKey(s)))) {
+    // the same file again: its fields are in hand
+    for (const s of fresh) {
+      did.add(specKey(s));
+      storeThumb(image, s, known.get(specKey(s))!);
+    }
+    counters.reused += fresh.length;
+    return;
+  }
   const w = pick();
   if (!w) return;
   for (const s of fresh) did.add(specKey(s));
   const id = ++seq;
-  const job: Job = { image, specs: fresh };
+  const job: Job = { image, specs: fresh, name: name ? addressOf(name) : '' };
   waiting.set(id, job);
   counters.asked += fresh.length;
   try {
@@ -287,6 +323,6 @@ export function withThumbs<T>(image: T, source: Blob | string, specs?: readonly 
 }
 
 /** The worker's side of the books, for the debug API and the lane's jobs (`__pyrefly.art.stats().alpha`). */
-export function thumbStats(): { on: boolean; workers: number; broken: boolean; waiting: number; asked: number; landed: number; failed: number; refused: number } {
-  return { on: on(), workers: workers.length, broken, waiting: waiting.size, asked: counters.asked, landed: counters.landed, failed: counters.failed, refused: counters.refused };
+export function thumbStats(): { on: boolean; workers: number; broken: boolean; waiting: number; asked: number; landed: number; failed: number; refused: number; reused: number } {
+  return { on: on(), workers: workers.length, broken, waiting: waiting.size, asked: counters.asked, landed: counters.landed, failed: counters.failed, refused: counters.refused, reused: counters.reused };
 }
