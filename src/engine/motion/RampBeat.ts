@@ -15,6 +15,29 @@ import { moveWord } from './MoveSwitch.ts';
 
 export type RampProp = 'brightness' | 'stone' | 'scale';
 
+/** What `PaintedActor.ramp` reads and writes of the actor (some of it private there: it hands itself over cast to this). */
+export interface RampHost {
+  tweens: { toAsync(from: number, to: number, o: { durationMs: number; easing: 'linear'; onUpdate: (v: number) => void }): Promise<void> };
+  u: { brightness: { value: number } };
+  baseBrightness: number;
+  stoneAmount: number;
+  scale: { x: number; setScalar(v: number): void };
+  setBrightness(v: number): void;
+  setStone(v: number): void;
+}
+
+/** One linear tween of `prop` on the actor's own clock to `to` over `ms`: a brightness multiplier, a stone share (0..1), or a factor of the size the actor has now. */
+export function rampActor(a: RampHost, prop: RampProp, to: number, ms: number): Promise<void> {
+  const size = a.scale.x || 1;
+  const from = prop === 'brightness' ? a.u.brightness.value / (a.baseBrightness || 1) : prop === 'stone' ? a.stoneAmount : 1;
+  const set = (v: number): void => {
+    if (prop === 'brightness') a.setBrightness(v);
+    else if (prop === 'stone') a.setStone(v);
+    else a.scale.setScalar(size * v);
+  };
+  return a.tweens.toAsync(from, to, { durationMs: Math.max(1, ms), easing: 'linear', onUpdate: set });
+}
+
 /** Is `?ramps=smooth` on? */
 export const rampsOn = (): boolean => moveWord('ramps') === 'smooth';
 

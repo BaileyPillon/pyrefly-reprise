@@ -69,6 +69,7 @@ import { menuHolds } from './motion/MenuHold.ts';
 import { newMotionOn } from './motion/NewMotionGate.ts';
 import { newPushMs, newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
 import { HitReaction, type HitOffset, type HitSpec } from './motion/HitReaction.ts'; // MF-03: the struck figure's ramped rattle or directional knock-back (`?hit=`); idle by default
+import { rampActor, type RampHost } from './motion/RampBeat.ts'; // MF-23
 import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
 import type { StrikePlan } from './motion/StrikePlan.ts';
 import { momentsGame, momentsOn } from './motion/MomentsSwitch.ts'; // motion pass (lane "core", step 3): the per-game moments (victory, KO settle); default OFF
@@ -1985,10 +1986,8 @@ export class PaintedActor extends Group {
     }
   }
 
-  /** MF-09: a KO's landing is still to play ({@link fall} sets it, {@link landFall} takes it): once per fall. */
-  private fallDue = false;
-  /** MF-09/17: the KO run owns the landing (it plays it on the cut, however long the run lasts); the fall tween's end leaves it alone. */
-  private landHeld = false;
+  private fallDue = false; // MF-09: a KO's landing is still to play (`fall` sets it, `landFall` takes it)
+  private landHeld = false; // MF-09/17: the KO run owns the landing; the fall tween's end leaves it alone
 
   /** Tip over and hit the ground: the KO. */
   private fall(): void {
@@ -2016,10 +2015,7 @@ export class PaintedActor extends Group {
     });
   }
 
-  /**
-   * The KO's landing: a short slap of squash, the settle and a small ground shake. MF-09: the KO run (`fx/mix/living.ts`) plays it on the frame the lying painting is half drawn, where the body
-   * arrives; the fall tween's own end (300 ms x pace, 58 to 92 ms later) plays it only for a KO with no run (REDUCE MOTION, a figure the run leaves alone). Once per fall.
-   */
+  /** The KO's landing (squash, settle, ground shake), once per fall: MF-09, the KO run plays it on the cut, the fall tween's end (58 to 92 ms later) only for a KO with no run. */
   landFall(): void {
     this.landHeld = false;
     if (!this.fallDue) return;
@@ -2227,40 +2223,18 @@ export class PaintedActor extends Group {
     });
   }
 
-  /**
-   * MF-23 (`?ramps=smooth`, `motion/RampBeat.ts`): one linear tween of `brightness` (a multiplier), `stone` (0..1) or `scale` (a factor of the size it has now) to `to` over `ms` of this actor's own clock, in place
-   * of a presenter loop of stepped sleeps.
-   */
+  /** MF-23 (`?ramps=smooth`): one linear tween of brightness, stone or scale on this actor's own clock (`motion/RampBeat.rampActor`). */
   ramp(prop: 'brightness' | 'stone' | 'scale', to: number, ms: number): Promise<void> {
-    const size = this.scale.x || 1;
-    const from = prop === 'brightness' ? this.u.brightness.value / (this.baseBrightness || 1) : prop === 'stone' ? this.stoneAmount : 1;
-    const set = (v: number): void => {
-      if (prop === 'brightness') this.setBrightness(v);
-      else if (prop === 'stone') this.setStone(v);
-      else this.scale.setScalar(size * v);
-    };
-    return this.tweens.toAsync(from, to, { durationMs: Math.max(1, ms), easing: 'linear', onUpdate: set });
+    return rampActor(this as unknown as RampHost, prop, to, ms);
   }
 
-  /** MF-09/17: the KO run is up and will play the landing itself ({@link landFall}) when it ends or cuts. */
-  holdLanding(): void {
-    if (this.fallDue) this.landHeld = true;
-  }
+  holdLanding(): void { if (this.fallDue) this.landHeld = true; } // MF-09/17: the KO run is up and plays the landing itself when it cuts
 
-  /** MF-11: a strike (its wind-up, travel, hold, return and settle) is in flight. */
-  get striking(): boolean {
-    return this.curves.strike !== null;
-  }
+  get striking(): boolean { return this.curves.strike !== null; } // MF-11: a strike (wind-up to settle) is in flight
 
-  /** MF-11 (`rig/RigHandoff.ts`): the pose request without a subclass's key move: the life layer and the painted planes only. */
-  poseLife(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
-    PaintedActor.prototype.setPose.call(this, name, opts);
-  }
+  poseLife(name: string, opts?: { immediate?: boolean; force?: boolean }): void { PaintedActor.prototype.setPose.call(this, name, opts); } // MF-11: the pose request without a subclass's key move
 
-  /** MF-04: settles after `ms` of this actor's own tween clock (paced, frozen in a hit-stop), the clock `moveTo` and the curves run on. */
-  waitMs(ms: number): Promise<void> {
-    return this.tweens.toAsync(0, 1, { durationMs: Math.max(1, ms), easing: 'linear', onUpdate: () => {} });
-  }
+  waitMs(ms: number): Promise<void> { return this.tweens.toAsync(0, 1, { durationMs: Math.max(1, ms), easing: 'linear', onUpdate: () => {} }); } // MF-04: settles after `ms` of this actor's own tween clock
 
   /**
    * Turn the fighter: 1 = toward +x, -1 = toward -x.
