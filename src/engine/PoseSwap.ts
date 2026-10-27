@@ -13,6 +13,7 @@
  *   {@link battleFrameClocks}.
  *
  * `?motion=classic` restores both of those as they were (comparison and safety); `?motion=smooth` is the default spelled out.
+ * `classic` also brings back, in FFX-2, the ATB turn start as it was (ready, idle, ready: `KeyPoses.readyCarriesIntoWindUp` answers false), so the post-flicker hold can be compared side by side.
  *
  * - **The aligned dissolve** (OFF): `?swap=aligned` only (`PoseAlign.ts`). During the blend the outgoing plane drifts toward a meeting point while it fades out and
  *   the incoming plane starts there and settles home, so the two heads coincide at the middle of the blend; sideways only. It was measured better on swap jerks and
