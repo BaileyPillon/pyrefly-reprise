@@ -305,6 +305,18 @@ describe('a moment at 60, 120 and 144 Hz', () => {
     expect(b.indexOf('ev:action-start#1')).toBeLessThan(b.indexOf('foe:shake#1'));
   });
 
+  it('leaves the gauge clock\'s periodic snapshots out of the beats (they are bookkeeping and their phase is the capture\'s start state)', () => {
+    const c = capture(60);
+    c.events.push({ f: 1, vt: 50, type: 'atb' }, { f: 2, vt: 900, type: 'atb' }, { f: 3, vt: 950, type: 'overdrive-gauge' }, { f: 4, vt: 960, type: 'status-tick' });
+    const labels = beatsOf(c, 0).map((b) => b.label);
+    expect(labels.some((l) => /atb|overdrive-gauge|status-tick/.test(l))).toBe(false);
+    expect(labels).toContain('ev:damage#1');
+    // a capture with the snapshots at other times is judged the same as one without
+    const withAtb = capture(144);
+    withAtb.events.push({ f: 9, vt: 1550, type: 'atb' });
+    expect(judgeMoment({ 60: c, 144: withAtb }).reasons).toEqual([]);
+  });
+
   it('judges a correct move equal at every rate', () => {
     const j = judgeMoment({ 60: capture(60), 120: capture(120), 144: capture(144) });
     expect(j.reasons).toEqual([]);

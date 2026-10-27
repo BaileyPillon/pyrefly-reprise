@@ -2,6 +2,7 @@
 import type { JoltTally, WallRow, BeatPair } from './hz-pure.mjs';
 
 export interface Beat { label: string; t: number; f: number }
+export declare const NOT_BEATS: ReadonlySet<string>;
 export declare function beatsOf(rec: { frames: any[]; events?: any[] }, t0?: number): Beat[];
 export declare function alignBeats(byHz: Record<number, Beat[]>): { common: string[]; missing: Record<string, string[]>; hzs: number[]; sets?: Array<Map<string, Beat>> };
 export interface SharedRow { k: number; t: number; pos: Record<string, { x: number; y: number; rattle: boolean }> }

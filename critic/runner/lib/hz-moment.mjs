@@ -14,6 +14,12 @@ import { chainedBeatEquality, JOLT_GRID_MS, joltTally, joltsOfRecording, wallTim
 const r1 = (x) => Math.round(x * 10) / 10;
 
 /**
+ * Log events that are bookkeeping, not motion: periodic snapshots whose phase depends on where the gauge clock stood when the capture began (FFX-2's Wait split runs the ATB clock at the top-level command
+ * menu, so no capture can pin it to the millisecond: the second Chapter IV matrix had two `atb` snapshots at -300 ms in one capture and at +1550 in the others while every motion beat agreed). They are not beats.
+ */
+export const NOT_BEATS = Object.freeze(new Set(['atb', 'overdrive-gauge', 'status-tick']));
+
+/**
  * The beats of a recording, relative to `t0` (virtual ms), in the order they were seen.
  * @param {{frames: Array<any>, events: Array<any>}} rec
  * @param {number} t0 virtual ms of the moment's start (`frames[i].vt` is on the same clock)
@@ -26,7 +32,7 @@ export function beatsOf(rec, t0 = 0) {
   const F = rec.frames;
   const ids = [...new Set(F.flatMap((f) => Object.keys(f.actors ?? {})))];
   const prev = { pose: new Map(), shaking: new Map(), moving: new Map(), held: false };
-  for (const e of rec.events ?? []) if (e.vt >= t0) add(`ev:${e.type}`, e.vt, e.f); // the log's events, each stamped with the frame that saw it
+  for (const e of rec.events ?? []) if (e.vt >= t0 && !NOT_BEATS.has(e.type)) add(`ev:${e.type}`, e.vt, e.f); // the log's events, each stamped with the frame that saw it
   for (let i = 0; i < F.length; i++) {
     const fr = F[i];
     if (fr.vt < t0) continue;
