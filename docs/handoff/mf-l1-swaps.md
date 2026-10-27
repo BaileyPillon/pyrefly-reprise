@@ -70,9 +70,17 @@ The plan's model said about 86; the r64 kept run read 147.3, post-flicker 103.9 
 | run | seconds | swaps | ghost frames a minute | ghost ms a minute | worst severity | snaps | swap jerks (40 px or more, worst px) | planned cuts | whole step of a planned cut: median, worst, over 120 px |
 |---|---|---|---|---|---|---|---|---|---|
 | today (every B word at today) | 390.6 | 334 | 101.5 | 1,696 | 0.332 | 0 | 3 (2, 47) | 143 | 66.5, 233.1, 10 |
+| `?stance=v1a&swapcause=cut` | 386.8 | 248 | 14.3 | 237 | 0.333 | 0 | 0 (0, 0) | 207 | 53.4, 230.1, 20 |
+| `?stance=v1b&swapcause=blend3` (V2 unguarded) | 385.1 | 242 | 25.2 | 423 | 0.333 | 0 | 69 (40, 169.8) | 118 | 85, 199.3, 3 |
 | `?stance=v1b&swapcause=pick` (the guarded pick) | 386.5 | 256 | 36.2 | 613 | 0.332 | 0 | 3 (0, 31.5) | 173 | 63.5, 227.1, 11 |
+| `?stance=v3&swapcause=pick` | 386.8 | 304 | 45 | 767 | 0.333 | 0 | 39 (11, 143.2) | 167 | 56, 228.1, 11 |
 | `?stance=v1b&swapcause=pick`, first build (unguarded) | 390.2 | 243 | 15.8 | 265 | 0.332 | 0 | 25 (17, 149.4) | 173 | 63.7, 236.5, 11 |
-| `?stance=v1a&swapcause=cut`; `?stance=v1b&swapcause=blend3` (V2 unguarded); `?stance=v3&swapcause=pick` | not run in this pass | | | | | | | | |
+
+**Reading the arms (the numbers only; how a move reads is for the clips).** The classes are disjoint, so a run is a stance variant plus a cause variant. On the harness the cut on every cause, with the menu keeping the idle painting (`?stance=v1a&swapcause=cut`),
+is the best of them in both games: Chapter I 101.5 to 14.3 ghost frames a minute (1,696 to 237 ms), no swap jerk, no snap, but 20 planned cuts with a whole step over 120 px against 10 today (worst 230 px: the named big cuts, MF-18's class; Chapter IV has none over 120); Chapter IV 86.7 to 11.4 (1,406 to 188 ms), one swap jerk of 40 px or more, the staged twirl that is there today. The cut is a cut inside a smear on a figure at rest
+(nothing to hide behind, SmearPlan's own header says), so whether it reads well is exactly what the `cp02` clips' variant A shows. The guarded pick (`v1b + pick`) keeps the plan's cover rule and costs less to look at: Chapter I 36.2 a minute, Chapter IV 34.1, no new jerk,
+severity 0.328 to 0.332 (today 0.342 and 0.332). The two plain 50 ms blends (`blend3`, `stance=v3`) pop on far-apart drawings in both games (Chapter I: 40 and 11 swap jerks of 40 px or more, worst 170 and 143 px; Chapter IV: 16 and 1), which is why the pick does not use them there.
+The plan's order for the stance (V1b, then V1a, then V3) stands on the numbers for V1a and V1b; V1b alone (no cause word) was not run on its own, the model above prices it.
 
 What the stance class is, priced from the baseline runs' own swaps (`node tools/swap-classes.mjs --price`; a model, the runs above are the measure): Chapter IV after MF-01 has 61 stance swaps (menu 38, back to ready after an action 21, turn start and after-action
 2); `v1b` removes 29.5 ghost frames a minute (chapter 86.7 to 57.2), `v1a` 18.8 (to 67.9: one idle-to-ready blend per strike remains, 22 strikes). Chapter I has 64 stance swaps (menu 49, after-action 15); `v1b` removes 36.4
@@ -119,7 +127,6 @@ has a cover and V2 where it has none (built as `pick`, with the guard), CP-12 V1
   already carries the ready stance's lean and scale into the strike. Measured for it: the planned cuts' whole step in Chapter IV has median 48 to 54 px, worst 80 to 90, none over 120 px; in Chapter I, 10 to 11 are over 120 px, worst 227 to 233 px, all named: Tidus `critical>hurt`
   (233 px), Auron `follow>idle` (173) and `idle>victory` (159, a camera cut), Tidus and Kimahri `idle>hurt` (128 to 158), Kimahri `ready>attack` and `attack>follow` (125 to 127). `pick` leaves them as they are. Yunalesca shows the class widens with the gate (48 over 120 px).
 - Every B word stays at today until a clip is picked, and the default flips are the driver's (wave 2). A CHANGELOG line per build is the driver's (below); `CHANGELOG.md` is not edited here.
-- Chapter I's three remaining arms (see the table: a row "not run in this pass" is a run the rig's queue did not reach) can be read with `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/build/mf-l1-swaps/master6.mjs`.
 - The merge with `mf-l2-moves` has one conflict, an import line in `BattlePresenterBeats.ts` (keep L2's `hitReact` import and this lane's `openingPose` import, and one `KeyPoses` import line with `turnStartPose` and `windUpOpens` and whatever else the merged file uses);
   `mf-l5-tools`, `mf-l3-timebase-ui` and `mf-l4-freezes` merge clean (checked with `git merge-tree`). Lane L5's `designedBlend` class reads this lane's `swapLog().designed` and needs no change here.
 
