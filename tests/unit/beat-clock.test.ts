@@ -7,7 +7,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { BeatClock } from '../../src/engine/BeatClock.ts';
+import { BeatClock, beatsWall, setBeatsWall } from '../../src/engine/BeatClock.ts';
 import { claimLead, leadNow, MAX_LEAD_SEC, noteLead, releaseLead, resetLead } from '../../src/engine/BeatLead.ts';
 import { TweenGroup } from '../../src/engine/Tween.ts';
 
@@ -19,6 +19,7 @@ const owner = {};
 beforeEach(() => releaseLead(owner));
 afterEach(() => {
   releaseLead(owner);
+  setBeatsWall(null);
   vi.useRealTimers();
 });
 
@@ -244,5 +245,27 @@ describe('a chain of waits and moves takes the same wall time at any display rat
     expect(spread).toBeGreaterThan(1000 / 60); // 7 links: ~ 7 x (a frame minus a frame): the models differ by more than one 60 Hz frame
     const withLead = Math.abs((await chainTime(60, true)) - (await chainTime(144, true)));
     expect(withLead).toBeLessThan(1000 / 60);
+  });
+});
+
+describe('?beats=wall: the one-build A/B and the way back', () => {
+  it('puts the waits on setTimeout and takes the lead away; the default is the frame clock', async () => {
+    expect(beatsWall()).toBe(false);
+    setBeatsWall(true);
+    vi.useFakeTimers();
+    const clock = new BeatClock();
+    let done = false;
+    void clock.sleep(100).then(() => void (done = true));
+    clock.tick(1); // frames do not resolve it
+    await flush();
+    expect(done).toBe(false);
+    expect(clock.pending).toBe(0);
+    vi.advanceTimersByTime(100);
+    await flush();
+    expect(done).toBe(true);
+    claimLead(owner); // inert in wall mode
+    resetLead();
+    noteLead(0.01);
+    expect(leadNow()).toBe(0);
   });
 });

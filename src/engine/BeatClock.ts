@@ -15,9 +15,9 @@
  * Pure: no DOM, no three (hard rule 1).
  */
 
-import { leadNow, noteLead, resetLead } from './BeatLead.ts';
+import { beatsWall, leadNow, noteLead, resetLead } from './BeatLead.ts';
 
-export { claimLead, releaseLead } from './BeatLead.ts'; // the screen that owns a clock claims the lead with it
+export { beatsWall, claimLead, releaseLead, setBeatsWall } from './BeatLead.ts'; // the screen that owns a clock claims the lead with it
 
 interface Beat {
   /** The clock time, seconds, at which this beat ends. */
@@ -50,6 +50,7 @@ export class BeatClock {
    */
   sleep(ms: number): Promise<void> {
     if (!(ms > 0) || !Number.isFinite(ms)) return new Promise<void>((r) => setTimeout(r, 0));
+    if (beatsWall()) return new Promise<void>((r) => setTimeout(r, ms)); // `?beats=wall`: the wait as it was before the frame clock
     return new Promise<void>((resolve) => {
       this.beats.push({ due: this.t + ms / 1000 - leadNow(), seq: this.seq++, resolve });
     });
