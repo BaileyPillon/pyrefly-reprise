@@ -1,0 +1,92 @@
+{
+  "mode": "gpu",
+  "part": "phone",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-flux.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.008.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.013.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.014.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.017.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.018.mp3",
+    "https://echoesofspira.com/audio/music/boss-seymour.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.019.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.024.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.026.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 390x844"
+    },
+    {
+      "step": "phone: title",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "phone: chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached seymour-flux",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "seymour-flux: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "seymour-flux: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "seymour-flux: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "phone 390x844 Chapter I shows PAUSE, release-62 HUD (no F1)",
+      "ok": false,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":true,\"pauseEls\":[\"BUTTON.battle-pause-chip ig|pause:open|vis=true\"],\"look\":\"hd2d\",\"rigs\":4,\"bodyTextHasGuide\":false,\"txt\":true}"
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "phoneHud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": true,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig|pause:open|vis=true"
+      ],
+      "look": "hd2d",
+      "rigs": 4,
+      "bodyTextHasGuide": false
+    }
+  },
+  "elapsedMin": "0.9"
+}
