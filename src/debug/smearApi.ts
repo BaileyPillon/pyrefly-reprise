@@ -9,7 +9,7 @@ import { resetSmearLog, smearLog, type PlannedSmear } from '../engine/motion/Sme
 import { setSmearStyle, smearOn, smearStyle, type SmearStyle } from '../engine/motion/SmearSwitch.ts';
 import { pinnedRelightCount, relightStats } from '../engine/look/relight/FigureRelight.ts';
 import { resetSwapLog, swapLog } from '../engine/motion/SwapLog.ts';
-import { causeClasses, causeMode, interludeMode, setCauseMode, setInterludeMode, setStanceMode, stanceMode, type CauseMode, type InterludeMode, type StanceMode, type SwapClass } from '../engine/motion/SwapSwitch.ts';
+import { causeClasses, causeMode, interludeMode, setCauseMode, setInterludeMode, setStanceMode, setSwapScope, stanceMode, swapScope, type CauseMode, type InterludeMode, type StanceMode, type SwapClass } from '../engine/motion/SwapSwitch.ts';
 
 export function installSmearDebug(api: Record<string, unknown>): void {
   api['smear'] = (style?: SmearStyle): SmearStyle => {
@@ -29,10 +29,11 @@ export function installSmearDebug(api: Record<string, unknown>): void {
     if (reset === true) resetSwapLog();
     return out;
   };
-  api['swapSwitch'] = (set?: { interlude?: InterludeMode; stance?: StanceMode; cause?: CauseMode; classes?: SwapClass[] }) => {
+  api['swapSwitch'] = (set?: { interlude?: InterludeMode; stance?: StanceMode; cause?: CauseMode; classes?: SwapClass[]; scope?: 'pack' | 'all' }) => {
+    if (set?.scope) setSwapScope(set.scope);
     if (set?.interlude) setInterludeMode(set.interlude);
     if (set?.stance) setStanceMode(set.stance);
     if (set?.cause || set?.classes) setCauseMode(set.cause ?? causeMode(), set.classes ?? undefined);
-    return { interlude: interludeMode(), stance: stanceMode(), cause: causeMode(), classes: [...causeClasses()] };
+    return { interlude: interludeMode(), stance: stanceMode(), cause: causeMode(), classes: [...causeClasses()], scope: swapScope() };
   };
 }

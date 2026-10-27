@@ -13,6 +13,9 @@
  *   the critical stance) or settle at rest (the return home, the recoveries): `cut` a cut inside the smear on the cause, `blend3` a 50 ms three-frame blend, `pick` the cut where the moment has a cover
  *   and the blend where it has none.
  *
+ * - `?swapscope=all` (MF-22, default `pack`): the stance and cause looks play in ANY chapter, not only the two pack chapters, so another chapter can be measured with the rules on, one at a time
+ *   (PR-0522). Nothing flips by default: the widening of the gate is the driver's call after the Chapter I and IV picks.
+ *
  * Game case (AGENTS.md rule 14): the switches are both games except `?interlude` (FFX-2 only: FFX's turn start comes before the menu). Read once, like the other URL switches (`SmearSwitch.ts`).
  */
 import { demoChapter, isDemoChapter, packDemo, queryWord } from './DemoGate.ts';
@@ -36,6 +39,7 @@ let interlude: InterludeMode | null = null;
 let stance: StanceMode | null = null;
 let cause: CauseMode | null = null;
 let classes: ReadonlySet<SwapClass> | null = null;
+let scope: 'pack' | 'all' | null = null;
 
 const searchOf = (): string | undefined => (globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
 
@@ -65,6 +69,25 @@ export function classesFromSearch(search: string | undefined): ReadonlySet<SwapC
   return new Set(named.length ? named : SWAP_CLASSES);
 }
 
+/** `?swapscope=all` from a search string (pure): `all` only with the pack on; else `pack`. */
+export function scopeFromSearch(search: string | undefined): 'pack' | 'all' {
+  return queryWord(search, 'swapscope') === 'all' && packDemo(search) ? 'all' : 'pack';
+}
+
+export function swapScope(): 'pack' | 'all' {
+  return (scope ??= scopeFromSearch(searchOf()));
+}
+
+/** Tests and `window.__pyrefly.swapSwitch(...)`: force the scope (`null` reads the address again). */
+export function setSwapScope(v: 'pack' | 'all' | null): void {
+  scope = v;
+}
+
+/** True when the looks above play in the running chapter: a pack chapter, or any chapter under `?swapscope=all`. */
+export function swapsInScope(): boolean {
+  return swapScope() === 'all' || isDemoChapter(demoChapter());
+}
+
 export function interludeMode(): InterludeMode {
   return (interlude ??= interludeFromSearch(searchOf()));
 }
@@ -92,7 +115,7 @@ export function setCauseMode(v: CauseMode | null, only?: readonly SwapClass[] | 
 
 /** The stance look that plays NOW: the asked-for one in a pack chapter, `today` anywhere else. */
 export function stanceNow(): StanceMode {
-  return isDemoChapter(demoChapter()) ? stanceMode() : 'today';
+  return swapsInScope() ? stanceMode() : 'today';
 }
 
 /** True when the menu keeps the idle painting (`v1a`, `v1b`): the ready STANCE (ring, lean) without the ready painting. */
@@ -108,7 +131,7 @@ export function windUpOnIdle(): boolean {
 
 /** How a swap of this class is made NOW. A class not asked for, a mode `today`, or a chapter outside the pack is today's blend. */
 export function swapHow(cls: SwapClass | null): SwapHow {
-  if (cls === null || !isDemoChapter(demoChapter())) return 'today';
+  if (cls === null || !swapsInScope()) return 'today';
   const mode = causeMode();
   if (mode === 'today' || !causeClasses().has(cls)) return 'today';
   if (mode === 'pick') return COVERED.has(cls) ? 'cut' : 'blend3';

@@ -17,7 +17,7 @@ import { setMenuHold } from '../../../src/engine/motion/MenuHold.ts';
 import { setMomentsMode } from '../../../src/engine/motion/MomentsSwitch.ts';
 import { resetSmearLog, smearLog } from '../../../src/engine/motion/SmearLog.ts';
 import { resetSwapLog, swapLog } from '../../../src/engine/motion/SwapLog.ts';
-import { setCauseMode, setStanceMode } from '../../../src/engine/motion/SwapSwitch.ts';
+import { setCauseMode, setStanceMode, setSwapScope } from '../../../src/engine/motion/SwapSwitch.ts';
 import type { CoarseMask } from '../../../src/engine/PoseAlign.ts';
 
 beforeEach(() => {
@@ -33,6 +33,7 @@ afterEach(() => {
   setCurvesMode(null);
   setCauseMode(null, null);
   setStanceMode(null);
+  setSwapScope(null);
   setMenuHold(null);
   setPaceGame('other');
   resetSmearLog();
@@ -241,5 +242,23 @@ describe('?swapcause: a swap with a cause on screen', () => {
     const r = playSwap(yuna(), 'hurt');
     expect(lasts(r)).toBeGreaterThan(100);
     expect(smearLog()).toHaveLength(0);
+  });
+});
+
+describe('?swapscope=all (MF-22): the looks in any chapter', () => {
+  it('a cut on its cause and the stance blend play in a chapter outside the pack; without the word they do not', () => {
+    setCurvesChapter('yunalesca');
+    setCauseMode('cut');
+    setStanceMode('v3');
+    expect(lasts(playSwap(yuna(), 'hurt'))).toBeGreaterThan(100); // pack scope: today's blend
+    expect(smearLog()).toHaveLength(0);
+    setSwapScope('all');
+    resetSmearLog();
+    const hit = playSwap(yuna(), 'hurt');
+    expect(both(hit)).toBe(0);
+    expect(smearLog()[0]).toMatchObject({ cause: 'hit', to: 'hurt' });
+    const up = playSwap(yuna(), 'ready');
+    expect(lasts(up)).toBeLessThanOrEqual(67);
+    expect(swapLog().designed.at(-1)).toMatchObject({ cls: 'stance' });
   });
 });

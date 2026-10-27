@@ -21,9 +21,9 @@ import { KO_CUT_STRENGTH } from './MomentsPlan.ts';
 import { CUT, CUT_AT, FLASH_PEAK, LENGTH, MIN_SPEED, causeCutPlan, isBigChange, smearPlan } from './SmearPlan.ts';
 import { stanceKindOf, swapClassOf } from './SwapClass.ts';
 import { noteDesigned } from './SwapLog.ts';
-import { BLEND3_MS, stanceNow, swapHow, type SwapHow } from './SwapSwitch.ts';
+import { BLEND3_MS, stanceNow, swapHow, swapScope, type SwapHow } from './SwapSwitch.ts';
 import { heftOfHeight, motionBeat } from '../feel/MotionBeats.ts';
-import { smearStyleNow } from './SmearSwitch.ts';
+import { smearStyle, smearStyleNow } from './SmearSwitch.ts';
 
 /** What the director needs of the actor that owns it. */
 export interface SmearHost {
@@ -80,7 +80,7 @@ export class SmearDirector {
   swap(to: 0 | 1, resolved: string): boolean {
     this.state.end();
     this.manual = false; // a window the caller was running (the KO's cut) gives way to this change
-    const style = smearStyleNow();
+    const style = swapScope() === 'all' ? smearStyle() : smearStyleNow(); // `?swapscope=all` (MF-22): the asked-for style in any chapter
     if (style === 'off' || !this.host.canCut()) return false;
     const out: 0 | 1 = to === 0 ? 1 : 0;
     const h = this.host;
@@ -108,7 +108,7 @@ export class SmearDirector {
     const d = this.state.direction(height, this.dir);
     this.state.begin(plan, d.x, d.y);
     noteSmear({ at: now(), actor: h.name(), from, to: resolved, style: plan.style, cutMs: plan.cutMs, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed, strength: plan.strength, flash: plan.flash, kind: 'plane', ...(how === 'cut' ? { cause: cls as string } : {}), ...(unnamed ? { big: true } : {}) });
-    motionBeat({ kind: 'smear', strength: plan.strength, heft: heftOfHeight(height), atMs: plan.cutMs * CUT_AT }); // lane "feel", `?motionsfx=`: the whoosh of the cut, on the cut (a no-op unless the sink is on)
+    if (speed >= MIN_SPEED) motionBeat({ kind: 'smear', strength: plan.strength, heft: heftOfHeight(height), atMs: plan.cutMs * CUT_AT }); // lane "feel", `?motionsfx=`: the whoosh of the cut, on the cut (a no-op unless the sink is on); a cut on its cause at rest (MF-06) has the blow's own sound, not a whoosh
     if (plan.flash && !h.flashBlocked()) h.flash(SMEAR_FLASH_COLOUR, plan.cutMs * 1.5, FLASH_PEAK);
     return true;
   }
