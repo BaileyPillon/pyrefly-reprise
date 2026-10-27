@@ -19,8 +19,10 @@
  *   rates[]       capture rates, default [60]: 60 for the clip, add 120 (or 144 for a rate item) for the quarter-speed copy
  *   keys[]        the real key presses after the first command menu opens (default ["Enter","Enter"]: the first command, the first target); each a key name or { "key": "ArrowDown", "afterMs": 400 }, the wait after it
  *   focus[]       actor ids the crop follows (default: every actor)        crop { x, y, w, h }: a fixed region in viewport px instead (a HUD column: the turn-order list, the ATB bars)
- *   align         { kind: "start" } | { kind: "event", type: "damage", actor: "<figure id>", ordinal: 1 }: where the variants are put on the same instant (default for an "until" card: that event)
- *   strip         { event: "damage", ordinal: 1, offset: -2, frames: 12 }: where the 12 consecutive 60 Hz frames begin       leadMs 500, settleMs 1000, maxMs 8000
+ *   align         { kind: "start" } | { kind: "event", type: "damage", actor: "<figure id>", ordinal: 1 } | { kind: "beat", beat: { actor: "seymour", kind: "shake" } }: where the variants are put on the same instant
+ *                 (default for an "until" card: that event). A BEAT is what the picture does: the figure's hit shake starting (the contact of a blow on it) or its pose changing ("kind": "pose", "pose": "hurt"). The battle
+ *                 log is not the picture: in FFX the engine logs `damage` in the same instant as `action-start`, so only a beat anchors on the contact.
+ *   strip         { event: "damage", ordinal: 1, offset: -2, frames: 12 } or { beat: { actor, kind, pose?, ordinal? }, offset: -2 }: where the 12 consecutive 60 Hz frames begin       leadMs 500, settleMs 1000, maxMs 8000
  * THE MOMENT BEYOND "ONE ATTACK" (review M5; every field optional, a card without them films exactly the first version's moment):
  *   setup[]       once the first command menu is open, before the play: { "hp": { "who": "enemy" | "party" | "<figure id>", "set": 1 } } or { "hp": { "who": "enemy", "fraction": 0.04 } } (a boss at a sliver so the first
  *                 blow is its last; a girl at 1 HP under the next strike), or { "eval": "<debug-API expression>" } (stage a beat the routes do not reach). Recorded in rec.json; the same for every variant.

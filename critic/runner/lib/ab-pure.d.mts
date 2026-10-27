@@ -13,6 +13,8 @@ export declare function cropRegion(points: Array<{ x: number; y: number }>, view
 export declare function trackPoints(frames: Array<{ actors?: Record<string, Record<string, any>> }>, focus: string[], i0: number, i1: number): Array<{ x: number; y: number }>;
 export interface MomentWindow { i0: number; i1: number; startMs: number; endMs: number; lengthMs: number; truncated: boolean; around?: boolean }
 export interface EventWant { event?: string; type?: string; who?: string | null; ordinal?: number }
+export interface BeatWant { actor: string; kind: 'shake' | 'pose'; pose?: string; ordinal?: number }
+export declare function findBeatFrame(frames: Array<{ actors?: Record<string, { shL?: number; pose?: string | null }> }>, want: BeatWant | null | undefined, from?: number): number;
 export declare function isActing(f: { phase?: string | null; playing?: boolean; menu?: boolean } | null | undefined): boolean;
 export declare function findEvent<T extends { type: string }>(events: T[] | undefined, want: EventWant | null | undefined): T | null;
 export declare function windowOf(frames: Array<{ vt: number; playing?: boolean; menu?: boolean; phase?: string | null }>, events: Array<{ vt: number }> | undefined, o?: { t0: number; leadMs?: number; settleMs?: number; maxMs?: number; around?: (EventWant & { beforeMs?: number; afterMs?: number }) | null }): MomentWindow | null;

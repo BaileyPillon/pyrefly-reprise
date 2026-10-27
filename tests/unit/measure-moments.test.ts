@@ -4,7 +4,7 @@
  * an action that plays for a while and logs a blow, the menu again) so the turn, hold, `until` and per-key-wait logic is proven without a browser; `applySetup` is run against a fake page.
  */
 import { describe, expect, it } from 'vitest';
-import { checkSpec, findEvent, isActing, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
+import { checkSpec, findBeatFrame, findEvent, isActing, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
 import { playOneAttack } from '../../tools/measure/fight.mjs';
 import { applySetup } from '../../tools/measure/setup.mjs';
 
@@ -21,6 +21,40 @@ describe('finding an event', () => {
     expect(findEvent(events, { event: 'damage', ordinal: 9 })).toBeNull();
     expect(findEvent(events, null)).toBeNull();
     expect(findEvent(undefined, { event: 'ko' })).toBeNull();
+  });
+});
+
+describe('a visual beat (the contact of a blow, a pose change)', () => {
+  // the first real card: the engine logs `damage` with `action-start`, in the frame after the key; the picture's contact is the target's shake starting later
+  const frames = Array.from({ length: 200 }, (_, i) => ({
+    actors: {
+      tidus: { pose: i < 30 ? 'ready' : i < 70 ? 'attack' : 'idle', shL: 0 },
+      seymour: { pose: i < 98 ? 'idle' : 'hurt', shL: i >= 98 && i < 140 ? 120 : i >= 160 && i < 170 ? 90 : 0 },
+    },
+  }));
+  it('finds the frame a figure\'s hit shake starts, and the nth one', () => {
+    expect(findBeatFrame(frames, { actor: 'seymour', kind: 'shake' })).toBe(98);
+    expect(findBeatFrame(frames, { actor: 'seymour', kind: 'shake', ordinal: 2 })).toBe(160);
+    expect(findBeatFrame(frames, { actor: 'seymour', kind: 'shake', ordinal: 3 })).toBe(-1);
+  });
+  it('finds a pose change, to a named pose when asked, and looks only from a frame on', () => {
+    expect(findBeatFrame(frames, { actor: 'tidus', kind: 'pose' })).toBe(30);
+    expect(findBeatFrame(frames, { actor: 'tidus', kind: 'pose', pose: 'idle' })).toBe(70);
+    expect(findBeatFrame(frames, { actor: 'tidus', kind: 'pose' }, 31)).toBe(70);
+    expect(findBeatFrame(frames, { actor: 'seymour', kind: 'pose', pose: 'hurt' })).toBe(98);
+  });
+  it('says -1 for a figure that is not there or a beat it does not make, and refuses a bad want', () => {
+    expect(findBeatFrame(frames, { actor: 'nobody', kind: 'shake' })).toBe(-1);
+    expect(findBeatFrame(frames, { actor: 'tidus', kind: 'shake' })).toBe(-1);
+    expect(findBeatFrame(frames, { actor: 'tidus', kind: 'dance' as never })).toBe(-1);
+    expect(findBeatFrame(frames, null)).toBe(-1);
+  });
+  it('is accepted in a spec as an alignment and as a strip anchor, and refused when it names no figure', () => {
+    const base = { id: 'CP-98', chapter: 'seymour-flux', move: 'hit', variants: [{ id: 'V0' }, { id: 'V1' }] };
+    expect(checkSpec({ ...base, align: { kind: 'beat', beat: { actor: 'seymour', kind: 'shake' } }, strip: { beat: { actor: 'seymour', kind: 'shake' }, offset: -2 } })).toEqual([]);
+    expect(checkSpec({ ...base, align: { kind: 'beat', beat: { kind: 'shake' } } }).join(' ')).toMatch(/align/);
+    expect(checkSpec({ ...base, align: { kind: 'sideways' } }).join(' ')).toMatch(/align/);
+    expect(checkSpec({ ...base, strip: { beat: { actor: 'x', kind: 'wiggle' } } }).join(' ')).toMatch(/strip\.beat/);
   });
 });
 
@@ -216,5 +250,17 @@ describe('a card\'s setup', () => {
     expect(done[0]!.result).toEqual([{ id: 'boss', hp: 360 }, { id: 'add', hp: 4 }]);
     expect(await applySetup(page, undefined)).toEqual([]);
     delete (globalThis as any).window;
+  });
+});
+
+describe('the example card specs stay filmable', () => {
+  it('both pass the spec check, with figure ids that exist in their chapters', async () => {
+    const fs = await import('node:fs');
+    for (const [file, ids] of [['card-ch1-attack-pack.json', ['tidus', 'seymour-flux']], ['card-ch4-attack-pack.json', ['paine', 'bahamut']]] as const) {
+      const spec = JSON.parse(fs.readFileSync(`tools/measure/examples/${file}`, 'utf8'));
+      expect(checkSpec(spec), file).toEqual([]);
+      for (const id of ids) expect(spec.focus, file).toContain(id);
+      expect(spec.align.kind, file).toBe('beat'); // the contact of the blow, not the engine's log line
+    }
   });
 });

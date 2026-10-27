@@ -12,9 +12,9 @@
     { "id": "V0", "name": "today (the live default)", "query": "" },
     { "id": "V1", "name": "the booth pack (?pack=demo)", "query": "&pack=demo" }
   ],
-  "focus": ["tidus", "seymour"],
-  "align": { "kind": "start" },
-  "strip": { "event": "damage", "ordinal": 1, "offset": -2, "frames": 12 },
+  "focus": ["tidus", "seymour-flux"],
+  "align": { "kind": "beat", "beat": { "actor": "seymour-flux", "kind": "shake" } },
+  "strip": { "beat": { "actor": "seymour-flux", "kind": "shake" }, "offset": -2, "frames": 12 },
   "questions": ["Which reads as one move?", "Which would you keep?"],
   "note": "The factory's own check: the core lane's attack pair (D:/Tools/pyrefly-scratch/2026-10-22/motion/core/clips/AB-ch1-attack-*.mp4) made again by the shared tool, from one build, each variant in its own session."
 }

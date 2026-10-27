@@ -86,6 +86,29 @@ export function isActing(f) {
 }
 
 /**
+ * The frame (index) of a VISUAL beat of one figure: the nth time its hit shake starts (`kind: 'shake'`: the contact of a blow on that figure) or the nth time its pose changes (`kind: 'pose'`, to `pose` when
+ * given). The first real card showed why the log is not enough: in FFX the engine logs `damage` in the same instant as `action-start` (the key press), so an event anchor is the start, not the contact.
+ * @param {Array<{actors?: Record<string, {shL?: number, pose?: string|null}>}>} frames
+ * @param {{actor: string, kind: 'shake'|'pose', pose?: string, ordinal?: number}} want
+ * @param {number} [from] the frame to start looking at
+ * @returns {number} -1 when there is no such beat
+ */
+export function findBeatFrame(frames, want, from = 0) {
+  if (!want?.actor || !['shake', 'pose'].includes(want.kind)) return -1;
+  const nth = want.ordinal ?? 1;
+  let seen = 0, prevOn = null, prevPose;
+  for (let i = Math.max(0, from); i < frames.length; i++) {
+    const a = frames[i]?.actors?.[want.actor];
+    if (!a) continue;
+    let hit = false;
+    if (want.kind === 'shake') { const on = (a.shL ?? 0) > 0; hit = on && prevOn === false; prevOn = on; }
+    else { hit = prevPose !== undefined && a.pose !== prevPose && (!want.pose || a.pose === want.pose); prevPose = a.pose; }
+    if (hit && ++seen === nth) return i;
+  }
+  return -1;
+}
+
+/**
  * The nth log event (1-based `ordinal`, default 1) of a type, optionally about one figure (`who` matches the event's target, actor or source). The factory cuts by these, never by wall time.
  * @param {Array<{type: string, vt?: number, targetId?: string|null, actorId?: string|null, sourceId?: string|null}>} events
  * @param {{event?: string, type?: string, who?: string|null, ordinal?: number}} want `event` (or `type`) is the log event's type, e.g. "ko", "damage", "summon"
@@ -183,6 +206,9 @@ export function checkSpec(spec) {
     const okStep = (s) => s && ((s.hp && typeof s.hp.who === 'string' && (Number.isFinite(s.hp.set) || (s.hp.fraction > 0 && s.hp.fraction <= 1))) || (typeof s.eval === 'string' && s.eval));
     if (!(Array.isArray(spec.setup) && spec.setup.every(okStep))) bad.push('"setup" is a list of { "hp": { "who": "party" | "enemy" | a figure id, "set": n | "fraction": 0 to 1 } } or { "eval": "a debug-API expression" } steps, run once the first command menu is open');
   }
+  const beatOk = (b) => Boolean(b && typeof b.actor === 'string' && b.actor && ['shake', 'pose'].includes(b.kind));
+  if (spec.align !== undefined && !(spec.align && (spec.align.kind === 'start' || (spec.align.kind === 'event' && spec.align.type) || (spec.align.kind === 'beat' && beatOk(spec.align.beat))))) bad.push('"align" is { "kind": "start" } | { "kind": "event", "type", "actor"?, "ordinal"? } | { "kind": "beat", "beat": { "actor", "kind": "shake"|"pose", "pose"?, "ordinal"? } }');
+  if (spec.strip !== undefined && spec.strip.beat !== undefined && !beatOk(spec.strip.beat)) bad.push('"strip.beat" is { "actor": a figure id, "kind": "shake" | "pose", "pose"?: a pose name, "ordinal"?: 1 }: the strip is built around that visual beat (the first blow on a figure: its shake starting)');
   if (spec.crop !== undefined && !(spec.crop && ['x', 'y', 'w', 'h'].every((k) => Number.isFinite(spec.crop[k])) && spec.crop.w > 0 && spec.crop.h > 0)) bad.push('"crop" is { x, y, w, h } in viewport pixels (a HUD region instead of the figures)');
   if (spec.focus !== undefined && !(Array.isArray(spec.focus) && spec.focus.length)) bad.push('"focus" is a non-empty list of actor ids');
   return bad;

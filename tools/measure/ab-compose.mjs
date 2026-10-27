@@ -15,7 +15,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 
-import { BUDGET, CARD, PANEL, STILL_W, blindOrder, clipFps, clipName, cropRegion, findEvent, nearestFrame, nextCrf, speedTrace, trackPoints, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
+import { BUDGET, CARD, PANEL, STILL_W, blindOrder, clipFps, clipName, cropRegion, findBeatFrame, findEvent, nearestFrame, nextCrf, speedTrace, trackPoints, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
 import { joltTally, joltsOfRecording } from '../../critic/runner/lib/hz-pure.mjs';
 
 export const FFMPEG = process.env.FFMPEG ?? 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe';
@@ -58,6 +58,11 @@ function loadCapture(workDir, variant, hz) {
 
 /** The frame (index) of the alignment instant in one capture: the moment's start by default, or the nth log event of a type. */
 function anchorFrame(cap, align) {
+  if (align?.kind === 'beat') {
+    const i0 = Math.max(0, cap.frames.findIndex((f) => f.vt >= cap.t0));
+    const i = findBeatFrame(cap.frames, align.beat, i0);
+    if (i >= 0) return i;
+  }
   if (align?.kind === 'event') {
     const ev = findEvent(cap.events, { event: align.type, who: align.actor, ordinal: align.ordinal });
     if (ev) return ev.f;
@@ -165,6 +170,7 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
   const strip = spec.strip ?? {};
   const n = strip.frames ?? 12, cellW = Math.floor(STILL_W / 6), cellH = Math.round((cellW * 9) / 16);
   const stripAnchor = (a) => {
+    if (strip.beat) { const i = findBeatFrame(a.cap.frames, strip.beat, Math.max(0, a.cap.frames.findIndex((f) => f.vt >= a.cap.t0))); if (i >= 0) return i; }
     if (strip.event) { const ev = a.cap.events.filter((e) => e.type === strip.event)[(strip.ordinal ?? 1) - 1]; if (ev) return ev.f; }
     return a.anchor;
   };
