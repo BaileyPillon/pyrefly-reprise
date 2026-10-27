@@ -79,15 +79,16 @@ export async function reachFirstMenu(g, chapter) {
   for (let i = 0; i < 4 && (await g.scr()) === 'cutscene'; i++) { await g.press('Enter'); await page.waitForTimeout(1500); }
   for (let holds = 0; (await g.scr()) === 'cutscene' && holds < 20; holds++) { await page.keyboard.down('Enter'); await page.waitForTimeout(4000); await page.keyboard.up('Enter'); }
   if (!(await g.want('battle', 90000))) throw new Error('the battle was not reached');
-  for (let i = 0; i < 400 && !(await g.menu()); i++) await page.waitForTimeout(150);
+  for (let i = 0; i < 1500 && !(await g.menu()); i++) await page.waitForTimeout(40); // a short poll: every real millisecond from here to the pause is game time at an open menu
   if (!(await g.menu())) throw new Error('no first menu');
-  await page.waitForTimeout(2500);
+  // no settle wait here (a first version waited 2.5 s of real time): in FFX-2 the top-level command menu runs the ATB clock (the default Wait split holds it only below the top level), so each real second
+  // was a second of game time and Chapter IV began from a different state every run (the 120 Hz capture of the first matrix had Bahamut acting at 1.2 s and Paine's strike 0.7 units away). The clock is paused next.
 }
 
 /** Pause the fake clock and hand the game's frames to the manual queue. After this only `tick()` moves time. */
 export async function pauseClock(page) {
   for (let k = 0; k < 6; k++) {
-    try { const now = await page.evaluate(() => Date.now()); await page.clock.pauseAt(new Date(now + 1500 * (k + 1))); break; } catch (e) { if (!/past/.test(String(e))) throw e; await page.waitForTimeout(300); }
+    try { const now = await page.evaluate(() => Date.now()); await page.clock.pauseAt(new Date(now + [100, 250, 600, 1500, 3000, 6000][k])); break; } catch (e) { if (!/past/.test(String(e))) throw e; await page.waitForTimeout(300); }
   }
   await page.evaluate(() => window.__manualRaf(true));
   await page.clock.runFor(34);

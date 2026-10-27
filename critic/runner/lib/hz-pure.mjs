@@ -46,16 +46,16 @@ const FRAME60 = 1000 / 60;
 
 /**
  * Wall-time equality across rates for ONE interval (an event index to an event index, or a mark to a mark). An interval passes when it is within `tolerance` (5 percent) of the reference's OR within the
- * quantisation of the slowest display (`slackMs`: both ends of an interval are seen at the first FRAME at or after the event, so two rates can differ by up to one frame of the slower one with nothing wrong;
+ * quantisation of the displays (`slackMs`: both ends of an interval are seen at the first FRAME at or after the event, so two rates can differ by up to one frame of the slower one at each end, and by one frame of the slower plus one of the faster over the interval, with nothing wrong;
  * review m6: at 200 to 350 ms that alone is over 5 percent in up to 12 percent of phases). A real defect is both more than 5 percent and more than a frame.
  * @param {Array<{hz: number, ms: number}>} runs the interval's length in virtual ms at each rate
- * @param {{tolerance?: number, reference?: number, slackMs?: number}} [o] `tolerance` 0.05; `reference` the rate the others are compared with (default the lowest); `slackMs` default one frame of the slowest rate measured, rounded up
+ * @param {{tolerance?: number, reference?: number, slackMs?: number}} [o] `tolerance` 0.05; `reference` the rate the others are compared with (default the lowest); `slackMs` default one frame of the slowest rate plus one of the fastest, rounded up
  */
 export function wallTimeEquality(runs, { tolerance = 0.05, reference, slackMs } = {}) {
   const ok = runs.filter((r) => Number.isFinite(r.ms) && r.ms >= 0);
   if (ok.length < 2) return { pass: false, reason: 'fewer than two rates measured', rows: [] };
   const ref = ok.find((r) => r.hz === (reference ?? Math.min(...ok.map((x) => x.hz)))) ?? ok[0];
-  const slack = slackMs ?? Math.ceil(1000 / Math.min(...ok.map((x) => x.hz)));
+  const slack = slackMs ?? Math.ceil(1000 / Math.min(...ok.map((x) => x.hz))) + Math.ceil(1000 / Math.max(...ok.map((x) => x.hz))); // the interval has two ends
   const rows = ok.map((r) => ({ hz: r.hz, ms: r.ms, ratio: ref.ms > 0 ? r3(r.ms / ref.ms) : null, deviation: ref.ms > 0 ? r3(Math.abs(r.ms / ref.ms - 1)) : null, diffMs: r1(Math.abs(r.ms - ref.ms)) }));
   const worst = rows.reduce((m, r) => Math.max(m, r.deviation ?? 0), 0);
   const pass = rows.every((r) => (r.deviation ?? 0) <= tolerance || r.diffMs <= slack);
@@ -63,7 +63,7 @@ export function wallTimeEquality(runs, { tolerance = 0.05, reference, slackMs } 
 }
 
 /**
- * Chained-beat equality: the beats of one chain (times in virtual ms from the chain's first event, one array per rate) land within `frames` display frames of the SLOWER display of each pair of rates.
+ * Chained-beat equality: the beats of one chain (times in virtual ms from the moment's start, the same instant at every rate, one array per rate) land within `frames` display frames of the SLOWER display of each pair of rates.
  * @param {Array<{hz: number, beats: number[]}>} runs
  * @param {{frames?: number}} [o]
  */

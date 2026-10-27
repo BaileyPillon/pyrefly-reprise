@@ -222,15 +222,15 @@ describe('wall time and the quantisation of a frame (review m6)', () => {
     // each event is seen at the first frame at or after its time, at each rate's own steps
     const seen = (hz: number, t: number): number => { const steps = frameMsFor(hz); let c = 0; for (let n = 0; ; n++) { if (c >= t) return c; c += steps[n % steps.length]!; } };
     let fails = 0, tried = 0;
-    for (let len = 200; len <= 800; len += 25) {
-      for (let phase = 0; phase < 50; phase += 1.7) {
+    for (let len = 200; len <= 800; len += 7) {
+      for (let phase = 0; phase < 50; phase += 0.37) {
         const runs = [60, 120, 144].map((hz) => ({ hz, ms: seen(hz, 1000 + phase + len) - seen(hz, 1000 + phase) }));
         tried++;
         if (!wallTimeEquality(runs).pass) fails++;
       }
     }
-    expect(tried).toBeGreaterThan(500);
-    expect(fails).toBe(0);
+    expect(tried).toBeGreaterThan(10000);
+    expect(fails).toBe(0); // both ends of an interval are quantised: the slack is a frame of the slowest display plus a frame of the fastest
   });
 });
 
@@ -264,6 +264,34 @@ function capture(hz: number, hitAt = 700, lateAt144 = 0): { frames: Frame[]; eve
   }
   return { frames, events, t0: 0 };
 }
+
+describe('chained beats are measured from the moment\'s start (the first Chapter IV matrix)', () => {
+  /** A capture whose first beat (the log's turn-start) is seen at the first frame after the key and whose figure goes idle at true time `trueMs`. */
+  function chapter4(hz: number, trueMs: number) {
+    const steps = frameMsFor(hz);
+    const frames: Frame[] = [];
+    const events: Array<Record<string, unknown>> = [];
+    let vt = 0, started = false;
+    for (let n = 0; vt <= 2500; n++) {
+      frames.push({ t: 1000 + vt, vt, hs: 1, actors: { paine: { gx: 0, ox: 0, gy: 0, oy: 0, cx: 0, lunge: 0, pose: vt >= trueMs ? 'idle' : 'attack', shL: 0 } } });
+      if (vt >= 1 && !started) { events.push({ f: n, vt, type: 'turn-start' }); started = true; } // the first frame after the key at t0 = 0
+      vt += steps[n % steps.length]!;
+    }
+    return { frames, events, t0: 0 };
+  }
+  it('a beat that is 9 ms apart in truth is not read as 19 ms because the first beat sits at 17 ms at 60 Hz and 7 at 144', () => {
+    const j = judgeMoment({ 60: chapter4(60, 1480), 144: chapter4(144, 1480) });
+    expect(j.beats[60]!.find((b) => b.label === 'ev:turn-start#1')!.t).toBe(17);
+    expect(j.beats[144]!.find((b) => b.label === 'ev:turn-start#1')!.t).toBe(7);
+    expect(j.chain.pass).toBe(true);
+    const p = j.chain.pairs[0]!;
+    expect(p.worstMs).toBeLessThanOrEqual(17); // from the key press: one frame of the slower display at most
+  });
+  it('still finds a beat that really is late', () => {
+    const j = judgeMoment({ 60: chapter4(60, 1480), 144: chapter4(144, 1560) });
+    expect(j.chain.pass).toBe(false);
+  });
+});
 
 describe('a moment at 60, 120 and 144 Hz', () => {
   it('reads the beats of a move in the order they were seen, with the log\'s events and the figures\' changes', () => {

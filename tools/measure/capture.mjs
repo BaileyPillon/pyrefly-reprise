@@ -21,11 +21,11 @@ export async function captureSession({ root, base, query = '', chapter, hz, view
     const g = await openGame(browser, base, query, viewport);
     await reachFirstMenu(g, chapter);
     await installChannels(g.page);
-    if (afterOpen) await afterOpen(g);
     await pauseClock(g.page);
     const stepper = makeStepper(g.page, hz);
     const acc = { frames: [], events: [], logLen: 0, rec: false };
     await stepper.ticks(12); // warm: the first frames after the pause settle the manual queue
+    if (afterOpen) await afterOpen(g); // a card's setup (hit points, a debug-API call) once the clock is paused: it spends no game time, and the same state is staged in every variant
     const first = await g.page.evaluate('window.READ_()');
     acc.logLen = first?.nLog ?? 0;
     const result = await play({ g, stepper, acc, hz });

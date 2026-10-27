@@ -117,9 +117,11 @@ export function judgeMoment(recs, { wallTolerance = 0.05, beatFrames = 1, minInt
     const lenRef = at(ref, label) - at(ref, first);
     if (lenRef < minIntervalMs) continue;
     const runs = hzs.map((hz) => ({ hz, ms: at(hz, label) - at(hz, first) }));
-    wall.push({ from: first, to: label, ...wallTimeEquality(runs, { tolerance: wallTolerance }) });
+    wall.push({ from: first, to: label, ...wallTimeEquality(runs, { tolerance: wallTolerance }) }); // an interval has two ends, each quantised to a frame: the slack is two frames (hz-pure.mjs)
   }
-  const chain = chainedBeatEquality(hzs.map((hz) => ({ hz, beats: al.common.map((l) => at(hz, l) - at(hz, first)) })), { frames: beatFrames });
+  // the beats are in virtual ms from the moment's start (the key press, the same instant at every rate: the pre-roll is a whole number of frames at each); measured from the FIRST common beat instead, a frame of
+  // quantisation is counted twice (Chapter IV: the first beat at 17 ms at 60 Hz and 7 at 144, so a beat 9 ms apart in truth read 19 ms apart)
+  const chain = chainedBeatEquality(hzs.map((hz) => ({ hz, beats: al.common.map((l) => at(hz, l)) })), { frames: beatFrames });
   // chainedBeatEquality allows exactly `frames` display frames; the capture's own rounding of a step is up to a millisecond
   for (const p of chain.pairs) if (!p.pass && p.worstMs <= p.allowedMs + epsilonMs && !p.lengthMismatch) p.pass = true;
   chain.pass = chain.pairs.every((p) => p.pass && !p.lengthMismatch);
