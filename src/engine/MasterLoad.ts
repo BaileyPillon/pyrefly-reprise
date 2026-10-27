@@ -3,6 +3,7 @@ import { fallbackScale } from './ArtBudget.ts';
 import { manifestKnowsAsset } from './ArtManifest.ts';
 import { fetchWithOneRetry } from './fetchRetry.ts';
 import type { LoadOptions } from './ArtMeasure.ts';
+import { requestThumbs } from './look/AlphaThumb.ts';
 
 /**
  * The art governor's load of one master, ready to be staged (release 39.1, "r391-stalls"; both games, shared plumbing, no game content).
@@ -103,6 +104,7 @@ async function readMaster(url: string, opts?: LoadOptions): Promise<{ image: HTM
     warnMiss(url);
     return null;
   }
+  requestThumbs(image, blob, undefined, url); // MF-02: the look's small alpha fields of this master, made in a worker from the bytes in hand (`AlphaThumb.ts`)
   return { image, bitmap };
 }
 

@@ -1,5 +1,6 @@
 import { MathUtils, PerspectiveCamera, Vector3, type Object3D } from 'three';
 import { downQuadOf } from './downed.ts';
+import { GEOMETRY_THUMB, thumbOf } from '../../look/AlphaThumb.ts';
 
 /**
  * The MAX mix (D-316), CHAPTER FRAMING's geometry: figures as billboards, their screen boxes, and the
@@ -46,6 +47,12 @@ function alphaOf(tex: { uuid: string; image?: unknown } | null | undefined): { w
   if (hit !== undefined) return hit;
   const img = tex.image as (CanvasImageSource & { width?: number }) | undefined;
   if (!img?.width || typeof document === 'undefined') return null;
+  const th = thumbOf(img, GEOMETRY_THUMB); // MF-02: made by the loader's worker (the same draw, off the page)
+  if (th) {
+    const out = { w: 48, h: 72, a: th };
+    masks.set(tex.uuid, out);
+    return out;
+  }
   try {
     const w = 48;
     const h = 72;

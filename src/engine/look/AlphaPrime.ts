@@ -9,8 +9,13 @@
  */
 import type { Texture } from 'three';
 import { baseExtents, type Extents } from './LookBoldConfig.ts';
+import { EXTENTS_THUMB, thumbOf, thumbPending } from './AlphaThumb.ts';
 
 const cache = new Map<string, Extents | null>();
+/** MF-02: the extents last given for a texture, whatever master it held then: a painting is the same painting at every tier, so they stand in while the new master's field is on its way. */
+const lastOf = new WeakMap<object, Extents | null>();
+/** How the extents were found, for the debug API and the lane's jobs (`__pyrefly.art.stats().alpha`). */
+export const extentsReads = { thumb: 0, sync: 0, stoodIn: 0 };
 let canvas: HTMLCanvasElement | null = null;
 
 /** The cache key of a texture's painting, or null while the image is not there (a placeholder): the caller's default stands in. */
@@ -26,12 +31,30 @@ export function hasExtents(tex: Texture | null): boolean {
   return key !== null && cache.has(key);
 }
 
-/** A texture's extents from its painting's alpha, cached per texture; null where it cannot be read (no DOM, a released image). */
+/**
+ * A texture's extents from its painting's alpha, cached per texture; null where it cannot be read (no DOM, a released image). MF-02: when the loader's worker has already made the painting's 128 x 128 field
+ * (`AlphaThumb.ts`: the same draw on an ImageBitmap, off the page, within a cell of 128 of the page's own) the extents come from it and the page reads nothing; while a field is on its way the texture's previous
+ * extents stand in (a master swapped in for the same painting); a painting that has no field and none coming is read here as it always was.
+ */
 export function readExtents(tex: Texture | null): Extents | null {
   const key = extentsKey(tex);
   if (key === null) return null;
   if (cache.has(key)) return cache.get(key) ?? null;
   let e: Extents | null = null;
+  const thumb = thumbOf(tex!.image, EXTENTS_THUMB);
+  if (thumb) {
+    e = baseExtents(thumb, 128, 128);
+    if (cache.size > 400) cache.clear();
+    cache.set(key, e);
+    lastOf.set(tex!, e);
+    extentsReads.thumb++;
+    return e;
+  }
+  if (lastOf.has(tex!) && thumbPending(tex!.image, EXTENTS_THUMB)) {
+    extentsReads.stoodIn++;
+    return lastOf.get(tex!) ?? null; // not cached: the next frame asks again, and the field, once it has landed, is the answer
+  }
+  extentsReads.sync++;
   try {
     const img = tex!.image as CanvasImageSource;
     const c = (canvas ??= document.createElement('canvas'));
@@ -51,5 +74,6 @@ export function readExtents(tex: Texture | null): Extents | null {
   }
   if (cache.size > 400) cache.clear();
   cache.set(key, e);
+  lastOf.set(tex!, e);
   return e;
 }

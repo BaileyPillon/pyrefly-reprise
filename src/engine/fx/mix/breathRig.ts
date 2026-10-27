@@ -1,5 +1,6 @@
 import { DataTexture, LinearFilter, RGBAFormat, UnsignedByteType, type Texture } from 'three';
 import { gpuSyncHeld } from '../../GpuSettle.ts';
+import { BREATH_THUMB, thumbOf } from '../../look/AlphaThumb.ts';
 
 /**
  * The MAX mix (D-316), BREATHING's rig for one painting (LIVING PAINTINGS; both games), ported from option
@@ -173,6 +174,15 @@ export function breathRigFor(tex: Texture): BreathRig {
   if (known) {
     cache.set(tex.uuid, known); // the picture was read before (another battle, or the warm-up): no read
     return known;
+  }
+  const th = thumbOf(img, BREATH_THUMB); // MF-02: the loader's worker already made this field (the same `createImageBitmap` resize and 1:1 draw, off the page): no read, no flat frames
+  if (th) {
+    const a = new Float32Array(GW * GH);
+    for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) a[y * GW + x] = th[(GH - 1 - y) * GW + x]! / 255; // y up, as `readAlpha`
+    const rig = makeRig(a);
+    cache.set(tex.uuid, rig);
+    byImage.set(img as object, rig);
+    return rig;
   }
   if (pending.has(tex.uuid) || gpuSyncHeld()) return flatBreathRig(); // while the GPU is still building the field (`GpuSettle.ts`) a readback would stop the page until it is done: ask again next frame
   if (typeof createImageBitmap === 'function') {

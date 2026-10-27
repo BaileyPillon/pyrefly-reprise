@@ -13,7 +13,7 @@ import { poseScaleFor } from './KoPoseScale.ts';
 import { poseRegistrationFor } from './PoseRegistration.ts';
 import { coarseMask, type CoarseMask } from './PoseAlign.ts';
 import { stampPainting, type PoseTrustStamp } from './PoseTrust.ts';
-
+import { withThumbs } from './look/AlphaThumb.ts';
 export { cleanMatte, type MatteOptions } from './PaintedMatte.ts'; // matte cleanup lives there; re-exported for existing callers
 
 // "Does this art exist?" is answered by `./ArtManifest.ts` — import it from
@@ -174,7 +174,7 @@ async function tryLoadImage(url: string): Promise<HTMLImageElement | null> {
   try {
     const image = await loadShippedOnce(url, () => imageLoader.loadAsync(url));
     await image.decode?.().catch(() => undefined);
-    return image;
+    return withThumbs(image, url); // MF-02: the look's small alpha fields of this painting, made in a worker (`look/AlphaThumb.ts`)
   } catch {
     warnOnce(url, 'missing painting');
     return null;
