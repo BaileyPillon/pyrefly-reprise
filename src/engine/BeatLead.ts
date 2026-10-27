@@ -19,24 +19,29 @@ export const MAX_LEAD_SEC = 0.05;
 let owner: object | null = null;
 let lead = Infinity;
 let epoch = 0;
-let wall: boolean | null = null;
+let forcedWall: boolean | null = null;
+let parsedWall: boolean | null = null;
 
 /**
  * `?beats=wall` puts the presenter's waits back on `setTimeout` (the way they ran before MF-08) and takes the lead away: the one-build A/B for the frame-clock measures, and a way back if a
- * machine ever misbehaves. Anything else, and no word, is the frame clock. Tests force it with {@link setBeatsWall}.
+ * machine ever misbehaves. Anything else, and no word, is the frame clock. Read once; tests force it with {@link setBeatsWall}.
  */
 export function beatsWall(): boolean {
-  if (wall !== null) return wall;
-  try {
-    return new URLSearchParams(globalThis.location?.search ?? '').get('beats')?.trim().toLowerCase() === 'wall';
-  } catch {
-    return false;
+  if (forcedWall !== null) return forcedWall;
+  if (parsedWall === null) {
+    try {
+      parsedWall = new URLSearchParams(globalThis.location?.search ?? '').get('beats')?.trim().toLowerCase() === 'wall';
+    } catch {
+      parsedWall = false;
+    }
   }
+  return parsedWall;
 }
 
 /** Tests and tools: force the word (`null` reads the address again). */
 export function setBeatsWall(on: boolean | null): void {
-  wall = on;
+  forcedWall = on;
+  parsedWall = null;
 }
 
 /** A screen takes the lead (the last claimant wins; a retry's new screen takes over from the one being torn down). Not in wall mode: there is no frame clock for it to correct. */
