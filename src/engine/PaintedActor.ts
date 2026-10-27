@@ -1115,7 +1115,7 @@ export class PaintedActor extends Group {
    * nearest one there is, which is how a subject loaded with `states: ['idle']`
    * can still be asked to celebrate.
    */
-  setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
+  setPose(name: string, opts?: { immediate?: boolean; force?: boolean; paint?: string }): void {
     // A body on the ground is allowed to ignore the pose it was handed. The
     // one case is a hit landing on someone who is already KO'd: the presenter
     // still names `hurt` for it, and wincing (never mind the sit-up the rise
@@ -1132,7 +1132,7 @@ export class PaintedActor extends Group {
     }
     // A forced pose is the caller's word: a pending flinch may not hand it back.
     if (opts?.force) this.flinchToken++;
-    const resolved = this.resolveDrawable(name);
+    const resolved = this.resolveDrawable(opts?.paint ?? name);
     this.enterLife(name, opts?.immediate === true);
     if (this.cheerDue && this.beginCheer(name, opts, resolved)) return; // the victory painting waits for the spring's fastest frame
     if (!resolved) return;

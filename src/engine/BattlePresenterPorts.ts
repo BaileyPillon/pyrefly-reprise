@@ -49,7 +49,7 @@ export interface Point2 {
  */
 export interface ActorHandle {
   readonly position: Point3;
-  setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
+  setPose(name: string, opts?: { immediate?: boolean; force?: boolean; paint?: string }): void;
   flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
   lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }, house?: number): Promise<void>; // contact: VP-1001-06; house: the part of `distance` that is the house lunge (r391-reach), the rest rides an eased step

@@ -18,7 +18,10 @@ import { pairFacts } from './SmearFacts.ts';
 import { noteSmear } from './SmearLog.ts';
 import { menuHolds } from './MenuHold.ts';
 import { KO_CUT_STRENGTH } from './MomentsPlan.ts';
-import { CUT, CUT_AT, FLASH_PEAK, LENGTH, MIN_SPEED, smearPlan } from './SmearPlan.ts';
+import { CUT, CUT_AT, FLASH_PEAK, LENGTH, MIN_SPEED, causeCutPlan, isBigChange, smearPlan } from './SmearPlan.ts';
+import { stanceKindOf, swapClassOf } from './SwapClass.ts';
+import { noteDesigned } from './SwapLog.ts';
+import { BLEND3_MS, stanceNow, swapHow, type SwapHow } from './SwapSwitch.ts';
 import { heftOfHeight, motionBeat } from '../feel/MotionBeats.ts';
 import { smearStyleNow } from './SmearSwitch.ts';
 
@@ -48,6 +51,9 @@ export const SMEAR_FLASH_COLOUR = 0xfff3d9;
 
 const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 
+/** The three-frame blend of the fluidity pass (MF-05 `v3`, MF-06 `blend3`): 50 ms, linear, both paintings at their fair share; a 2-frame blend peaks at 0.28 of severity, this one near 0.18. */
+const BLEND3 = { out: (u: number): number => 1 - Math.min(1, Math.max(0, u)), inn: (u: number): number => Math.min(1, Math.max(0, u)) };
+
 export class SmearDirector {
   readonly state = new ActorSmear();
   private readonly frame: SmearFrame = { amount: 0, dirX: 1, dirY: 0, style: 'paint', length: 0 };
@@ -75,20 +81,33 @@ export class SmearDirector {
     this.state.end();
     this.manual = false; // a window the caller was running (the KO's cut) gives way to this change
     const style = smearStyleNow();
-    if (style === 'off' || !this.host.canCut() || menuHolds()) return false; // an open FFX-2 command menu keeps today's blend: no cut, no flash (D-357, `MenuHold.ts`)
+    if (style === 'off' || !this.host.canCut()) return false;
     const out: 0 | 1 = to === 0 ? 1 : 0;
     const h = this.host;
+    const from = h.poseOf(out);
+    // The fluidity pass (MF-05 `v3`, MF-06): a swap asked for as a cut on its cause, or as a 50 ms three-frame blend (`SwapSwitch`, default today's). An open FFX-2 command menu allows no cut and no flash
+    // (D-357), so a cut asked for there is the three-frame blend: shorter than today's, and no new look over the menu.
+    const cls = swapClassOf(from, resolved);
+    let how: SwapHow = stanceNow() === 'v3' && stanceKindOf(from, resolved) ? 'blend3' : swapHow(cls);
+    if (how === 'cut' && menuHolds()) how = 'blend3';
+    if (how === 'blend3') {
+      h.blend.retune(BLEND3_MS, BLEND3);
+      noteDesigned({ actor: h.name(), from, to: resolved, cls: stanceNow() === 'v3' && stanceKindOf(from, resolved) ? 'stance' : (cls as string), ms: BLEND3_MS });
+      return true; // the blend is chosen: not for `demoRetune` to change again
+    }
+    if (menuHolds()) return false; // an open FFX-2 command menu keeps today's blend: no cut, no flash (D-357, `MenuHold.ts`)
     const height = h.worldHeight();
     const speed = this.state.speed(height);
-    if (!(speed >= MIN_SPEED)) return false; // a figure at rest keeps its blend (and the overlap of the pair is not read for nothing)
+    if (how !== 'cut' && !(speed >= MIN_SPEED)) return false; // a figure at rest keeps its blend (and the overlap of the pair is not read for nothing)
     const facts = pairFacts(h.footprintOf(out), h.footprintOf(to), height);
-    const from = h.poseOf(out);
-    const plan = smearPlan({ from, to: resolved, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed, frameMs: this.state.frameMs, style });
+    const input = { from, to: resolved, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed, frameMs: this.state.frameMs, style };
+    const plan = how === 'cut' ? causeCutPlan(input) : smearPlan(input);
     if (!plan) return false;
+    const unnamed = how === 'cut' && !isBigChange(facts.overlap, facts.anchorDistance); // a small change cut on purpose: the log says the engine knows it is a cut (`big`), as for the knock-out's
     h.blend.retune(plan.cutMs, CUT);
     const d = this.state.direction(height, this.dir);
     this.state.begin(plan, d.x, d.y);
-    noteSmear({ at: now(), actor: h.name(), from, to: resolved, style: plan.style, cutMs: plan.cutMs, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed, strength: plan.strength, flash: plan.flash, kind: 'plane' });
+    noteSmear({ at: now(), actor: h.name(), from, to: resolved, style: plan.style, cutMs: plan.cutMs, overlap: facts.overlap, anchorDistance: facts.anchorDistance, speed, strength: plan.strength, flash: plan.flash, kind: 'plane', ...(how === 'cut' ? { cause: cls as string } : {}), ...(unnamed ? { big: true } : {}) });
     motionBeat({ kind: 'smear', strength: plan.strength, heft: heftOfHeight(height), atMs: plan.cutMs * CUT_AT }); // lane "feel", `?motionsfx=`: the whoosh of the cut, on the cut (a no-op unless the sink is on)
     if (plan.flash && !h.flashBlocked()) h.flash(SMEAR_FLASH_COLOUR, plan.cutMs * 1.5, FLASH_PEAK);
     return true;

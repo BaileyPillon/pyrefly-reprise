@@ -8,6 +8,8 @@
 import { resetSmearLog, smearLog, type PlannedSmear } from '../engine/motion/SmearLog.ts';
 import { setSmearStyle, smearOn, smearStyle, type SmearStyle } from '../engine/motion/SmearSwitch.ts';
 import { pinnedRelightCount, relightStats } from '../engine/look/relight/FigureRelight.ts';
+import { resetSwapLog, swapLog } from '../engine/motion/SwapLog.ts';
+import { causeClasses, causeMode, interludeMode, setCauseMode, setInterludeMode, setStanceMode, stanceMode, type CauseMode, type InterludeMode, type StanceMode, type SwapClass } from '../engine/motion/SwapSwitch.ts';
 
 export function installSmearDebug(api: Record<string, unknown>): void {
   api['smear'] = (style?: SmearStyle): SmearStyle => {
@@ -21,4 +23,16 @@ export function installSmearDebug(api: Record<string, unknown>): void {
     return { planned: l.length, plane: l.filter((e) => e.kind === 'plane').length, rig: l.filter((e) => e.kind === 'rig').length, relightPinned: pinnedRelightCount(), relight: { ...relightStats } };
   };
   api['smearReset'] = (): void => resetSmearLog();
+  // The fluidity pass (lane L1; `motion/SwapSwitch.ts`): `swapLog()` is why the presenter asked for a painting and every blend it designed; `swapSwitch({...})` reads or forces the switches.
+  api['swapLog'] = (reset = false) => {
+    const out = swapLog(reset === true);
+    if (reset === true) resetSwapLog();
+    return out;
+  };
+  api['swapSwitch'] = (set?: { interlude?: InterludeMode; stance?: StanceMode; cause?: CauseMode; classes?: SwapClass[] }) => {
+    if (set?.interlude) setInterludeMode(set.interlude);
+    if (set?.stance) setStanceMode(set.stance);
+    if (set?.cause || set?.classes) setCauseMode(set.cause ?? causeMode(), set.classes ?? undefined);
+    return { interlude: interludeMode(), stance: stanceMode(), cause: causeMode(), classes: [...causeClasses()] };
+  };
 }

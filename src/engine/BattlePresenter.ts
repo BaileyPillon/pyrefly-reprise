@@ -63,6 +63,7 @@ import { shotHoldMs } from './fx/shotHold.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 import { koWipedStatuses } from './BattlePresenterKoWipe.ts';
 import { menuBlocks } from './KeySlots.ts';
+import { menuStance } from './motion/StanceSwap.ts'; // fluidity pass (MF-05)
 import { setMenuHold } from './motion/MenuHold.ts'; // motion pass (lane "core"): the actor-side new looks ask whether an FFX-2 menu holds them back (D-357)
 import { blowHeld, revealBlow } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL: a blow whose shot is in flight shows its numeral and HP rows when it lands
 
@@ -582,7 +583,7 @@ export class BattlePresenter {
     const hud = this.deps.hud;
     if (!hud) return firstEnabled(commands);
 
-    this.ctx.stage.actor(actorId)?.setPose('ready');
+    menuStance(this.ctx, actorId); // setPose('ready'): the stance and its painting (or the idle's under ?stance=v1a|v1b)
     // PR-0005/PR-0061: the cut-in plays over the settle and the open menu, never in front of it.
     void this.cutIns.play(engine.state(), actorId);
     await settleForMenu(this.ctx); // PR-0094: the whole field in frame

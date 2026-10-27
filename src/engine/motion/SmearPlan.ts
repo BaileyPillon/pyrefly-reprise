@@ -45,7 +45,7 @@ export const LENGTH: Readonly<Record<'blur' | 'paint', number>> = { blur: 0.14, 
 export const FLASH_PEAK = 0.28;
 const FLASH_INTO = /^(attack|cast|item|special|summon|telegraph|overdrive|od|od-.+)$/;
 /** Paintings the smear leaves alone: the knock-out collapse has its own cut (step 3), a twirl is the spherechange's own sequence. */
-const SKIP = /^(ko|dead|twirl-.+)$/;
+export const SKIP = /^(ko|dead|twirl-.+)$/;
 
 /** The cut: the old painting whole until {@link CUT_AT}, the new one whole from it. Handed to `PoseBlend.retune`. */
 export const CUT: BlendCurves = {
@@ -106,11 +106,29 @@ export function smearPlan(i: SmearInput): SmearPlan | null {
   if (SKIP.test(i.to) || SKIP.test(i.from)) return null;
   if (!isBigChange(i.overlap, i.anchorDistance)) return null;
   if (!(i.speed >= MIN_SPEED)) return null;
+  return windowPlan(i, 0.35);
+}
+
+/** The smear's strength never falls under this share of full on a cut made on its cause at rest (MF-06): a light streak, a bit more than the speed gate's own floor (0.35). */
+export const CAUSE_MIN_REACH = 0.4;
+
+/**
+ * **MF-06, a cut on its cause** (`SwapSwitch.swapHow` says `cut`): the same window and streak as {@link smearPlan}, with neither gate. The cause is on screen (the contact flash and hit-stop, the
+ * blow's flash and shake, the cast glow, the toss), so a standing figure's change of drawing has something to hide behind, and a pair of drawings that overlap well is cut as well as one that does not
+ * (every hit is a cut, not only the 19 of 34 whose drawings differ by half: SW-05). Null only for a painting the smear leaves alone.
+ */
+export function causeCutPlan(i: SmearInput): SmearPlan | null {
+  if (SKIP.test(i.to) || SKIP.test(i.from)) return null;
+  return windowPlan(i, CAUSE_MIN_REACH);
+}
+
+/** The window, strength and flash of a cut for this pair at this speed; `floor` is the least share of REF_SPEED the strength is scaled by. */
+function windowPlan(i: SmearInput, floor: number): SmearPlan {
   const q = difference(i.overlap);
   const base = CUT_MS_MIN + (CUT_MS_MAX - CUT_MS_MIN) * q;
   const frames = i.frameMs > 0 && Number.isFinite(i.frameMs) ? FRAMES_MIN * i.frameMs : 0;
   const cutMs = Math.round(Math.min(WINDOW_CAP_MS, Math.max(base, frames)));
-  const strength = clamp01((0.55 + 0.45 * q) * Math.min(1, Math.max(0.35, i.speed / REF_SPEED)));
+  const strength = clamp01((0.55 + 0.45 * q) * Math.min(1, Math.max(floor, i.speed / REF_SPEED)));
   return { cutMs, style: i.style, strength, length: LENGTH[i.style], flash: flashInto(i.to), difference: q };
 }
 
