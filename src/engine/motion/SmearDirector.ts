@@ -19,7 +19,7 @@ import { pairFacts, type PairFacts } from './SmearFacts.ts';
 import { noteSmear } from './SmearLog.ts';
 import { menuHolds } from './MenuHold.ts';
 import { KO_CUT_STRENGTH } from './MomentsPlan.ts';
-import { CUT, CUT_AT, FLASH_PEAK, LENGTH, MIN_SPEED, causeCutPlan, isBigChange, smearPlan } from './SmearPlan.ts';
+import { CUT, CUT_AT, FLASH_PEAK, LENGTH, MIN_SPEED, causeCutPlan, causeCutTooFar, isBigChange, smearPlan } from './SmearPlan.ts';
 import { stanceKindOf, swapClassOf } from './SwapClass.ts';
 import { noteDesigned } from './SwapLog.ts';
 import { BLEND3_MS, causeMode, stanceNow, swapHow, swapScope, type SwapHow } from './SwapSwitch.ts';
@@ -105,6 +105,8 @@ export class SmearDirector {
     // crossing 70 to 150 px in two frames (the harness read 17 swap jerks of 40 px or more in Chapter I against 2 today), so there it keeps today's blend, or the smear when the figure moves. The pure
     // `blend3` word is the plan's V2 arm and stays unguarded, for the clip.
     if (how === 'blend3' && !stanceBlend && causeMode() === 'pick' && isBigChange(facts().overlap, facts().anchorDistance)) how = 'today';
+    // A cut on its cause whose two heads are 0.4 of the height apart or more is a 130 px step in one frame: it stays today's (a blend at rest, the smear when the figure moves). See `SmearPlan.CAUSE_MAX_ANCHOR`.
+    if (how === 'cut' && causeCutTooFar(facts().anchorDistance)) how = 'today';
     if (how === 'blend3') {
       h.blend.retune(BLEND3_MS, BLEND3);
       noteDesigned({ actor: h.name(), from, to: resolved, cls: stanceBlend ? 'stance' : (cls as string), ms: BLEND3_MS });

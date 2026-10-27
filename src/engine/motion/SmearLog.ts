@@ -39,7 +39,7 @@ export interface PlannedSmear {
   cutAt: number;
 }
 
-const CAP = 400;
+const CAP = 4000; // a ten-minute fight plans about 400 cuts (Yunalesca): the harness reads the whole log at the end, so a short one drops the first cuts and reads them as snaps
 const log: PlannedSmear[] = [];
 
 /** Write one planned smear (the cut's own time is filled in). */

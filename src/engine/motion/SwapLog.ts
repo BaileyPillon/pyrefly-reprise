@@ -28,7 +28,7 @@ export interface DesignedBlend {
   ms: number;
 }
 
-const CAP = 600;
+const CAP = 4000; // a ten-minute fight (Yunalesca) has about 1,000 requests: the harness reads the whole log at the end
 const reasons: SwapReason[] = [];
 const designed: DesignedBlend[] = [];
 

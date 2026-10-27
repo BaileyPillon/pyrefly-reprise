@@ -113,6 +113,18 @@ export function smearPlan(i: SmearInput): SmearPlan | null {
 export const CAUSE_MIN_REACH = 0.4;
 
 /**
+ * A cut on its cause at rest is not made when the two heads are this far apart (a share of the figure's height) or more: the head would cross 130 px or more in one frame (Yunalesca's attack to cast,
+ * 0.44, read 133 px; the harness does not excuse a planned cut over 120 px, and the plan wants no whole step over 120 px that is not a camera cut). That pair keeps today's blend at rest, or today's
+ * cut when the figure moves. The most any pack chapter's cause cut reaches is 0.37 (Kimahri's hit), so Chapter I and IV are not touched by it.
+ */
+export const CAUSE_MAX_ANCHOR = 0.4;
+
+/** True when a cut on its cause is too big a step for a figure at rest (see {@link CAUSE_MAX_ANCHOR}); an unknown distance is not. */
+export function causeCutTooFar(anchorDistance: number | null): boolean {
+  return anchorDistance !== null && Number.isFinite(anchorDistance) && anchorDistance >= CAUSE_MAX_ANCHOR;
+}
+
+/**
  * **MF-06, a cut on its cause** (`SwapSwitch.swapHow` says `cut`): the same window and streak as {@link smearPlan}, with neither gate. The cause is on screen (the contact flash and hit-stop, the
  * blow's flash and shake, the cast glow, the toss), so a standing figure's change of drawing has something to hide behind, and a pair of drawings that overlap well is cut as well as one that does not
  * (every hit is a cut, not only the 19 of 34 whose drawings differ by half: SW-05). Null only for a painting the smear leaves alone.
