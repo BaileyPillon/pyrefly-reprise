@@ -15,3 +15,5 @@ export declare function aggregate(results: ChapterResult[], cfg: ContinuityConfi
   reportLine: string;
 };
 export declare function runContinuity(argv: string[]): Promise<unknown>;
+/** Step 0 (post-conference motion plan): the pose table a stamp names (`measure` is what `loadPoseMeasure` gave; `judged` what `judgeTable` said, or null). */
+export declare function poseTableStamp(measure: { path?: string; sha256: string; count: number }, source: string | null | undefined, buildSha: string | null | undefined, judged: { checked: boolean; stale: boolean } | null | undefined): { path: string | undefined; sha256: string; subjects: number; source: string; buildSha: string | null; isCandidate: boolean | null };
