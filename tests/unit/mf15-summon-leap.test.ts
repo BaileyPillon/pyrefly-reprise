@@ -58,7 +58,7 @@ class Rec extends FakeActor {
 class Stage extends FakeStage {
   constructor() {
     super(['tidus', 'yuna'], ['sin']);
-    for (const [id, a] of [...this.actors]) this.actors.set(id, new Rec(id, this.calls));
+    for (const [id] of [...this.actors]) this.actors.set(id, new Rec(id, this.calls));
   }
   override async addCombatant(id: string, opts: { artId: string; side: 'party' | 'enemy' | 'aeon'; slot: number }): Promise<ActorHandle | undefined> {
     this.calls.push(`add:${id}=${opts.artId}`);

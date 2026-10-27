@@ -65,6 +65,8 @@ export interface ActorHandle {
   moveTo(pos: Point3, ms?: number, easing?: (t: number) => number): Promise<void>; // easing (MF-04, additive): the run's trapezoid; absent = the actor's own quadInOut
   /** Optional (MF-04, additive): a promise that settles after `ms` of the actor's own tween clock (the same paced, hit-stop-frozen clock `moveTo` runs on). */
   waitMs?(ms: number): Promise<void>;
+  /** Optional (MF-23, additive): one linear tween of `brightness`, `stone` or `scale` to `to` over `ms` of the actor's own clock, in place of a loop of stepped sleeps. */
+  ramp?(prop: 'brightness' | 'stone' | 'scale', to: number, ms: number): Promise<void>;
   setFacing(dir: 1 | -1): void;
   setBrightness(mult: number): void;
   /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */

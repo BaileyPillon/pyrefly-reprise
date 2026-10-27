@@ -2227,6 +2227,21 @@ export class PaintedActor extends Group {
     });
   }
 
+  /**
+   * MF-23 (`?ramps=smooth`, `motion/RampBeat.ts`): one linear tween of `brightness` (a multiplier), `stone` (0..1) or `scale` (a factor of the size it has now) to `to` over `ms` of this actor's own clock, in place
+   * of a presenter loop of stepped sleeps.
+   */
+  ramp(prop: 'brightness' | 'stone' | 'scale', to: number, ms: number): Promise<void> {
+    const size = this.scale.x || 1;
+    const from = prop === 'brightness' ? this.u.brightness.value / (this.baseBrightness || 1) : prop === 'stone' ? this.stoneAmount : 1;
+    const set = (v: number): void => {
+      if (prop === 'brightness') this.setBrightness(v);
+      else if (prop === 'stone') this.setStone(v);
+      else this.scale.setScalar(size * v);
+    };
+    return this.tweens.toAsync(from, to, { durationMs: Math.max(1, ms), easing: 'linear', onUpdate: set });
+  }
+
   /** MF-09/17: the KO run is up and will play the landing itself ({@link landFall}) when it ends or cuts. */
   holdLanding(): void {
     if (this.fallDue) this.landHeld = true;
