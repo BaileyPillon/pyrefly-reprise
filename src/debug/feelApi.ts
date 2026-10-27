@@ -4,7 +4,7 @@
  * `?rumble=`, `?shadow=`, `?motionsfx=`, `?timing=` and the shared `?pack=demo`. Step 2 adds `motionSfx(on?)` (the subtle synced sounds), `motionSfxLog(reset?)` (every beat and what became of it) and
  * `motionBeat(kind, strength?, heft?, atMs?, ms?)` (report one beat, as a figure would: `lunge`, `dash`, `smear`, `land` or `cast`); while `simStep` runs the planner's clock is the stepper's.
  *
- * Each setter returns the mode now in force. A mode only takes effect in the two demo chapters (the answer outside them is always today's), so `feel()` also reports the
+ * Each setter returns the mode now in force. A mode only takes effect in the two demo chapters (the answer outside them is always today's), except `timing`, which is real time in every chapter since 2026-10-26, so `feel()` also reports the
  * chapter the battle screen named and whether it counts. `punch(fraction, ms, which)` plays one camera punch on the real spectacle camera at once: `fraction` of the
  * struck figure's depth (default 0.025), over `ms` (default 370), `which` `'new'` (the settle, the default) or `'today'` (the 9-unit smoothstep kick); it returns the depth it
  * used and the fraction it plays, or null while BATTLE SPECTACLE is not attached; the optional `trauma` (0 to 1) and `stopMs` add a trauma shake and a hit-stop of real time on top (the 60 / 144 Hz comparison).
