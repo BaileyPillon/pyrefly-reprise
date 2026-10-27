@@ -1,0 +1,157 @@
+{
+ "schema": "continuity/1",
+ "chapter": "ffx2-bahamut",
+ "game": "ffx2",
+ "dedicated": true,
+ "probe": {
+  "fps": 59
+ },
+ "poseMeasure": {
+  "path": "docs/target/pose-measure.json",
+  "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+  "subjects": 114,
+  "source": "harness-tree",
+  "buildSha": null,
+  "candidate": null,
+  "isCandidate": null
+ },
+ "summary": {
+  "battleSeconds": 383.2,
+  "swaps": 424,
+  "counted": 418,
+  "excludedByCut": 0,
+  "excludedNotShowing": 0,
+  "swapsPerMinute": 65.45,
+  "size": {
+   "judged": 418,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "headMeasured": 418,
+   "headRegistration": 300,
+   "headRig": 118,
+   "headSilhouette": 0,
+   "headUnmeasured": 0,
+   "maxHeadJumpPct": 0.6,
+   "maxHeadJumpPctRegistration": 0.2,
+   "maxHeadJumpPctRig": 0.6,
+   "rigSwaps": 118,
+   "headOverTolerance": 0,
+   "feetMeasured": 413,
+   "maxFeetShiftPx": 0.3,
+   "feetOverTolerance": 0,
+   "heightMeasured": 418,
+   "heightOverBand": 3,
+   "heightWaived": 0,
+   "minStature": 0.898,
+   "maxStature": 1.116,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 300,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 1.7,
+   "holdSwaps": 300,
+   "worstRealHeadPct": 30.9,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 39,
+   "hardCutsPerMinute": 6.11,
+   "snapsByToPose": {},
+   "lowestIou": 0.064,
+   "maxCentroidShiftPx": 71.3,
+   "ghostSwaps": 261,
+   "ghostFrames": 965,
+   "worstGhostSeverity": 0.342,
+   "ghostOverFail": 0,
+   "jerks": 7,
+   "jerksMidMove": 3,
+   "worstJerkPx": 44.7,
+   "jerksOverFail": 1,
+   "swapJerks": 4,
+   "swapJerksWorstPx": 44.7,
+   "swapJerksOverFail": 1,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 3,
+   "dashesWorstPx": 32.1,
+   "dashesOverFail": 0,
+   "jerksLongFrame": 1,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 1,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 4,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "smearsPlanned": 155,
+   "smearSwaps": 151,
+   "smearSnapsExcused": 39,
+   "jerksSmeared": 31,
+   "worstSmearedJerkPx": 80.5
+  },
+  "frameTime": {
+   "frames": 22591,
+   "p50Ms": 16.6,
+   "p90Ms": 18.3,
+   "p99Ms": 47.1,
+   "maxMs": 137.9,
+   "longFrames": 517,
+   "longFramePct": 2.3,
+   "longMs": 34
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "3 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.898 to 1.116; the bands are tools/posescale/pose-bands.mjs's)"
+    ],
+    "note": "300 of 418 measured swaps had a registered head (tolerance 3 percent); 118 were read from a rig's own head mesh (tolerance 3 percent; 118 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 418 swap(s) (stature 0.898 to 1.116, 0 out of band but waived), the silhouette's own feet 300 swap(s) (worst 1.7 px, 0 waived), 300 swap(s) across a recorded hold (real head worst 30.9 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 44.7 px)"
+    ],
+    "note": "1 of 7 jerk(s) fell on a frame of more than 34 ms (0 of the 4 at a swap; 1 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 151 of 155 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 39 snap(s) not counted, 31 swap jerk(s) (worst 80.5 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "run": {
+   "fps": 59,
+   "maxDtMs": 137.9,
+   "slowFrames": 517,
+   "frames": 22591,
+   "probeErrors": 0
+  }
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "3 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.898 to 1.116; the bands are tools/posescale/pose-bands.mjs's)"
+   ],
+   "note": "300 of 418 measured swaps had a registered head (tolerance 3 percent); 118 were read from a rig's own head mesh (tolerance 3 percent; 118 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 418 swap(s) (stature 0.898 to 1.116, 0 out of band but waived), the silhouette's own feet 300 swap(s) (worst 1.7 px, 0 waived), 300 swap(s) across a recorded hold (real head worst 30.9 percent from the idle's), 0 on a painting with no fresh registration record"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 44.7 px)"
+   ],
+   "note": "1 of 7 jerk(s) fell on a frame of more than 34 ms (0 of the 4 at a swap; 1 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 151 of 155 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 39 snap(s) not counted, 31 swap jerk(s) (worst 80.5 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+  }
+ },
+ "strips": []
+}

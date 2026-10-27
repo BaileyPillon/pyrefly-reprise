@@ -26,6 +26,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import zlib from 'node:zlib';
 
 import { loadPolicy } from '../../../tools/critic-policy.mjs';
+import { describeIdentity, fileSha256, harnessIdentity, summaryStamp } from '../../../tools/critic-harness-identity.mjs'; // step 0: which tool read the run
 import { parseArgs } from './cli.mjs';
 import { anchorsForPoses, analyzeRun } from './continuity-analyze.mjs';
 import { createProbe } from './continuity-probe.mjs';
@@ -66,6 +67,11 @@ export function continuityConfig(root = ROOT) {
 export const DEFAULT_BUDGET_MS = CONTINUITY_BUDGET_MS;
 
 const safe = (s) => String(s ?? 'x').replace(/[^a-z0-9._-]+/gi, '-').slice(0, 40);
+
+/** The pose table a stamp names: the table as the harness loaded it (sha256 with CRLF read as LF), where it came from, and whether it is the build's own (PR-0512). */
+export function poseTableStamp(measure, source, buildSha, judged) {
+  return { path: measure.path, sha256: measure.sha256, subjects: measure.count, source: source ?? 'unknown', buildSha: buildSha ?? null, isCandidate: judged?.checked ? !judged.stale : null };
+}
 
 /**
  * Attach the probe to a page the game is already running in and start it. `finish()` stops it, reads everything back and
@@ -187,6 +193,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     dedicated: process.env.CONT_DEDICATED === '1', // PR-0450 (d): only the dedicated harness's numbers are scored; the chapter row of the summary shows the frame rate it ran at
     view: meta.view, probe: { ...meta.stats, errors: meta.errors.slice(0, 5), eventSource: 'the engine state read from window.__pyrefly (plane fades and corners per frame); no engine hook' },
     poseMeasure: measure ? { path: measure.path, sha256: measure.sha256, subjects: measure.count, source: poseSource ?? 'unknown', buildSha: build.sha, candidate: candidate ? { sha256: candidate.sha256, subjects: candidate.count } : null, isCandidate: judged.checked ? !judged.stale : null, note: judged.reason } : null,
+    harness: harnessIdentity(ROOT, { poseTable: measure ? poseTableStamp(measure, poseSource, build.sha, judged) : null, waivers: waivers ? { path: waivers.path, sha256: fileSha256(waivers.path), rows: waivers.count ?? null } : null }), // step 0: the tool that measured THIS chapter (the route child's own tree, table and waiver ledger)
     staleTable: judged.fail, // PR-0512: the whole chapter is left out of the run's totals (aggregate); its numbers were read against another tree's registrations
     poseWaivers: waivers ? (waivers.error ? { path: waivers.path, error: waivers.error } : { path: waivers.path, rows: waivers.count }) : null,
     anchorNotes: notes, coverage: res.coverage, perFigure: res.perFigure, summary: res.summary, checks,
@@ -235,6 +242,11 @@ export async function runContinuity(argv) {
   console.log(`[continuity] pose-measure table: ${poseMeasure ?? 'none'} (source ${table.source}; ${loadedTable ? `${loadedTable.count} subjects, sha256 ${loadedTable.sha256.slice(0, 12)}` : 'not readable'})${table.source === 'harness-tree' ? '; this is the tree the harness was started from: pass --candidate-root=<the candidate\'s tree> when the candidate is another tree' : ''}`);
   if (poseMeasure && !loadedTable) console.error(`[continuity] WARNING: the pose-measure table ${poseMeasure} cannot be read: every pose is judged by its silhouette alone and CHK-026 is not the registered reading`);
   const cfg = continuityConfig();
+  // step 0 (post-conference motion plan): the run says which tool read it. The identity is taken before the first chapter and again after the last; a file edited in between, or a
+  // chapter whose own process saw another one, is recorded (`changedDuringRun`) and critic-clear refuses it (tools/critic-harness-identity.mjs).
+  const tableStamp = loadedTable ? poseTableStamp(loadedTable, table.source, null, null) : null;
+  const stamp0 = harnessIdentity(ROOT, { poseTable: tableStamp });
+  console.log(`[continuity] tool: ${describeIdentity(stamp0)}${stamp0.policy.override ? '; CONT_CFG IS SET: an experiment, critic-clear will refuse this summary' : ''}`);
   const results = [];
   for (const chapter of chapters) {
     if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: continuityBudgetFor(chapter, args.budget), seed: args.seed ?? 1, tag: args.tag, poseMeasure, poseWaivers: args['pose-waivers'] ?? null, poseSource: table.source, allowStaleTable });
@@ -246,6 +258,8 @@ export async function runContinuity(argv) {
   summary.base = base; summary.date = new Date().toISOString();
   // PR-0512: which table the whole run read, and the chapters whose table was not the candidate's (left out of the totals, CHK-026 UNVERIFIED)
   summary.poseMeasure = { path: poseMeasure, source: table.source, subjects: loadedTable?.count ?? null, sha256: loadedTable?.sha256 ?? null, staleChapters: results.filter((r) => r.staleTable).map((r) => r.chapter) };
+  summary.harness = summaryStamp({ stamp0, stampEnd: harnessIdentity(ROOT), results, tableStamp, staleChapters: summary.poseMeasure.staleChapters, aggregate: summary });
+  summary.reportLine = `${summary.reportLine} Read by ${describeIdentity(summary.harness)}${summary.harness.changedDuringRun ? '; THE HARNESS CHANGED DURING THE RUN' : ''}.`;
   if (summary.poseMeasure.staleChapters.length) console.error(`[continuity] STALE POSE TABLE in: ${summary.poseMeasure.staleChapters.join(', ')}. CHK-026 is UNVERIFIED for them; run again with --candidate-root=<the candidate's tree> (PR-0512)`);
   fs.mkdirSync(evidence, { recursive: true });
   // PR-0398: a retry of one chapter used to overwrite the whole review's summary with its own; `--summary=<file>` names the file (a run that is not the whole review should not use the default)
