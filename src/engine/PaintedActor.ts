@@ -1987,10 +1987,13 @@ export class PaintedActor extends Group {
 
   /** MF-09: a KO's landing is still to play ({@link fall} sets it, {@link landFall} takes it): once per fall. */
   private fallDue = false;
+  /** MF-09/17: the KO run owns the landing (it plays it on the cut, however long the run lasts); the fall tween's end leaves it alone. */
+  private landHeld = false;
 
   /** Tip over and hit the ground: the KO. */
   private fall(): void {
     this.fallDue = true;
+    this.landHeld = false;
     this.tweens.to(0, 1, {
       durationMs: realFallMs(this.name) ?? FALL_MS, // `?curves=real` / `real-snappy` (integration 2): the body reaches the floor when the real clip's does (Tidus 1.0 s), else today's 300 ms
       easing: 'quadIn',
@@ -2000,7 +2003,7 @@ export class PaintedActor extends Group {
       },
       onComplete: () => {
         // Landing (already played on the cut when the KO run is up, `landFall`), then the extra tilt relaxes into the `down` posture.
-        this.landFall();
+        if (!this.landHeld) this.landFall();
         this.tweens.to(1, 0, {
           durationMs: 420,
           easing: 'quadOut',
@@ -2018,6 +2021,7 @@ export class PaintedActor extends Group {
    * arrives; the fall tween's own end (300 ms x pace, 58 to 92 ms later) plays it only for a KO with no run (REDUCE MOTION, a figure the run leaves alone). Once per fall.
    */
   landFall(): void {
+    this.landHeld = false;
     if (!this.fallDue) return;
     this.fallDue = false;
     void this.squash(280, 0.5);
@@ -2221,6 +2225,11 @@ export class PaintedActor extends Group {
         this.position.lerpVectors(from, to, t);
       },
     });
+  }
+
+  /** MF-09/17: the KO run is up and will play the landing itself ({@link landFall}) when it ends or cuts. */
+  holdLanding(): void {
+    if (this.fallDue) this.landHeld = true;
   }
 
   /** MF-11: a strike (its wind-up, travel, hold, return and settle) is in flight. */

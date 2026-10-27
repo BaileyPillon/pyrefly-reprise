@@ -45,6 +45,10 @@ export const KO_BUCKLE_MS: Readonly<Record<KoGame, number>> = { ffx: 220, ffx2: 
 export const KO_CROSS_MS = 75;
 /** The buckle's forward lean at full, the shader's `lean` input (`livingShader.ts`; the value `living.ts` always used). */
 export const KO_LEAN = 0.05;
+/** MF-17 (`?kotopple=eased`, `MoveSwitch.ts`): a party figure's buckle is a long collapse, not a topple: the turn eases in from rest and out into the cut, over this much field time in all (plus the cross), and a revive stands up from rest to rest. */
+export const KO_BUCKLE_EASED_MS: Readonly<Record<KoGame, number>> = { ffx: 500, ffx2: 400 };
+/** MF-17: the eased revive's rise, ms of field time (cross 75 + rise 420 = 495, inside `TIMING.revive`, 520). */
+export const RISE_EASED_MS = 420;
 /** The revive's stand-up from the toppled pose, ms of field time (`riseEase`; the plane's old rise tween was 320 too). */
 export const RISE_MS = 320;
 /** The puff's size for a fall and for a revive (the page: 1 and 0.6). */
@@ -105,6 +109,12 @@ export function koMode(f: KoFacts): KoMode {
   return 'buckle-cross';
 }
 
+/** MF-17: speed zero at both ends (smootherstep). The turn of an eased topple, and (backwards) of an eased revive. */
+export const softEase = (t: number): number => {
+  const x = clamp01(t);
+  return x * x * x * (x * (x * 6 - 15) + 10);
+};
+
 export type KoPhase = 'hold' | 'cross' | 'rise' | 'done';
 
 /** What a frame of a run asks of the figure. */
@@ -137,6 +147,8 @@ export interface KoRunOptions {
   buckle: boolean;
   /** The puff's size (1 = a fall's), or 0 for none. */
   puff: number;
+  /** MF-17: the turn and the slide ease in from rest and out to rest (`softEase`) instead of `toppleEase` / `riseEase`. */
+  eased?: boolean;
   /** Motion pass, step 3: the cross is a CUT inside the smear's window (the old painting whole until half-way, the new one from there) instead of the capped cross. */
   cut?: boolean;
 }
@@ -248,8 +260,8 @@ export class KoRun {
     const fall = o.kind === 'fall';
     // The turn and the slide of a travelling run (the plane tips and slides toward the lying body); none otherwise.
     const turn = o.travel ? this.turn : 0;
-    const tip = !o.travel ? 0 : fall ? toppleEase(turn) : riseEase(turn);
-    const slide = !o.travel ? 0 : fall ? turn : 1 - turn;
+    const tip = !o.travel ? 0 : o.eased ? (fall ? softEase(turn) : 1 - softEase(turn)) : fall ? toppleEase(turn) : riseEase(turn);
+    const slide = !o.travel ? 0 : o.eased ? tip : fall ? turn : 1 - turn;
     switch (this.phase) {
       case 'hold': {
         const t = o.holdMs > 0 ? clamp01(this.hold / o.holdMs) : 0;
@@ -276,9 +288,10 @@ export class KoRun {
  * cross of a TOPPLE (a party figure who falls to a lying painting) a CUT of that length; the hold before it grows by what the cross gave up, so the fall takes the same time and the cut falls at its
  * end, where the turn is fastest. Every other mode (a colossus's buckle, a prone standing painting) keeps its capped cross: its pair is not always a big change.
  */
-export function fallRun(mode: KoMode, game: KoGame, cutMs?: number, buckleMs?: number): KoRun | null {
+export function fallRun(mode: KoMode, game: KoGame, cutMs?: number, buckleMs?: number, eased = false): KoRun | null {
   if (mode === 'cut') return null;
-  const hold = buckleMs ?? KO_BUCKLE_MS[game]; // `?curves=real` (integration 2): the real clip's floor impact less the cross (`motion/RealMoments.realBuckleMs`); absent: the house buckle
+  const soft = eased && mode === 'topple' && buckleMs === undefined; // MF-17: only a party figure's topple, and not under the real-clip modes
+  const hold = buckleMs ?? (soft ? KO_BUCKLE_EASED_MS[game] : KO_BUCKLE_MS[game]); // `?curves=real` (integration 2): the real clip's floor impact less the cross (`motion/RealMoments.realBuckleMs`); absent: the house buckle
   const cross = koCrossMs();
   const cutting = cutMs !== undefined && cutMs > 0 && mode === 'topple'; // a party figure whose KO painting is a lying body: the standing painting and the lying one always share almost no outline
   const crossMs = cutting ? cutMs : cross;
@@ -291,13 +304,13 @@ export function fallRun(mode: KoMode, game: KoGame, cutMs?: number, buckleMs?: n
     case 'buckle-cross':
       return new KoRun({ kind: 'fall', holdMs: hold, crossMs: cross, riseMs: 0, travel: false, buckle: true, puff: 0 });
     default:
-      return new KoRun({ kind: 'fall', holdMs: hold + lead, crossMs, riseMs: 0, travel: true, buckle: true, puff: PUFF_FALL, ...(cutting ? { cut: true } : {}) });
+      return new KoRun({ kind: 'fall', holdMs: hold + lead, crossMs, riseMs: 0, travel: true, buckle: true, puff: PUFF_FALL, ...(cutting ? { cut: true } : {}), ...(soft ? { eased: true } : {}) });
   }
 }
 
 /** The revive's run: with `travel` the lying body crosses to the toppled figure and stands up (FA-3); without, only the short cross (figures that never topple). REDUCE MOTION plays no run at all: the actor's own blend, as before FA-3. */
-export function reviveRun(travel: boolean): KoRun {
-  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: koCrossMs(), riseMs: travel ? RISE_MS : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0 });
+export function reviveRun(travel: boolean, eased = false): KoRun {
+  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: koCrossMs(), riseMs: travel ? (eased ? RISE_EASED_MS : RISE_MS) : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0, ...(travel && eased ? { eased: true } : {}) });
 }
 
 // ------------------------------------------------------------------------- the dust puff
