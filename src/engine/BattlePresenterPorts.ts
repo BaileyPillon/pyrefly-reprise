@@ -53,7 +53,7 @@ export interface ActorHandle {
   flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
   lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }, house?: number): Promise<void>; // contact: VP-1001-06; house: the part of `distance` that is the house lunge (r391-reach), the rest rides an eased step
-  recoil(ms?: number, distance?: number, knock?: { reach: number; ms: number }): Promise<void>; // knock (MF-03, `?hit=knock`, additive): the push is `hitReact`'s; `reach` (world units) and `ms` are only the smear's hint
+  recoil(ms?: number, distance?: number, knock?: { reach: number; ms: number }, hold?: number): Promise<void>; // knock (MF-03, `?hit=knock`, additive): the push is `hitReact`'s; `reach` (world units) and `ms` are only the smear's hint; hold (MF-12, additive): ms the hurt painting stays up (a string of blows), default `ms`
   /** Optional (MF-03, `?hit=ramp|knock`, additive): a blow's reaction in place of `shake`; false when REDUCE MOTION holds the jitter off (the caller plays today's shake and recoil). */
   hitReact?(spec: import('./motion/HitReaction.ts').HitSpec): boolean;
   squash(ms?: number, amount?: number): Promise<void>;

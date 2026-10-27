@@ -1647,11 +1647,11 @@ export class PaintedActor extends Group {
    * a brief tint" lives: one call from `BattlePresenterBeats.damage` gives the
    * knock-back, the pose and the bruise.
    */
-  recoil(ms = 340, distance = 0.28, knock?: { reach: number; ms: number }): Promise<void> {
+  recoil(ms = 340, distance = 0.28, knock?: { reach: number; ms: number }, hold?: number): Promise<void> {
     noteImpact(this, distance >= 0.3); // a no-op unless the look's living room asked for hits (`look/living/StageImpacts.ts`)
     const fresh = !recoilLegacy() && curvesOn();
     this.smear.hintRecoil(this.facing, knock ? knock.reach : fresh ? recoilDistance(distance, heftOf(this.worldHeight)) : distance, knock ? knock.ms : fresh ? newPushMs(ms) : 80); // the push is fastest on its first frame, which is where the hurt swap is made
-    this.flinch(ms);
+    this.flinch(ms, hold);
     return knock ? Promise.resolve() : this.knockBack(ms, distance); // MF-03 `?hit=knock`: the push is `hitReact`'s, not the recoil tween's
   }
 
@@ -1675,7 +1675,7 @@ export class PaintedActor extends Group {
    * No-op on a downed fighter — a body on the ground does not flinch — and on
    * an actor whose life layer is off.
    */
-  flinch(ms = 340): void {
+  flinch(ms = 340, hold = ms): void {
     const life = this.life;
     if (!life || life.state === 'down' || this.flinching) return;
     const back = this.requested || 'idle';
@@ -1690,7 +1690,7 @@ export class PaintedActor extends Group {
     // A plain timer: hold the flinch, then hand the pose back — unless someone
     // (a KO, the next action) has taken it in the meantime.
     this.tweens.to(0, 1, {
-      durationMs: Math.max(1, ms),
+      durationMs: Math.max(1, hold), // MF-12 (`?hurtstring=hold`): the painting stays up through a string of blows; the next flinch takes the token and the last one lets go
       easing: 'linear',
       onUpdate: () => {},
       onComplete: () => {
