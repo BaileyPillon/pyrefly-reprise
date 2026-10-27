@@ -144,6 +144,19 @@ describe('?stance=v3: the stance change is a 50 ms three-frame blend', () => {
     expect(swapLog().designed[0]).toMatchObject({ from: 'ready', to: 'idle', cls: 'stance' });
   });
 
+  it('the menu opening on the drawing of her last spell is the stance too (cast to ready, 50 ms); ready to an action own drawing is not', () => {
+    setStanceMode('v3');
+    const a = yuna();
+    a.setPose('cast', { immediate: true });
+    resetSwapLog();
+    const r = playSwap(a, 'ready');
+    expect(lasts(r)).toBeLessThanOrEqual(67);
+    expect(swapLog().designed[0]).toMatchObject({ from: 'cast', to: 'ready', cls: 'stance' });
+    const b = yuna();
+    b.setPose('ready', { immediate: true });
+    expect(lasts(playSwap(b, 'cast'))).toBeGreaterThan(100);
+  });
+
   it('is today\'s outside the pack chapters and for a change that is not the stance', () => {
     setStanceMode('v3');
     const hurt = playSwap(yuna(), 'hurt');

@@ -30,9 +30,14 @@ export function swapClassOf(from: string, to: string): SwapClass | null {
   return null;
 }
 
-/** The idle-to-ready change MF-05 is about: `up` into the stance (the menu opens, the wind-up), `down` out of it to the idle; null for any other pair. */
+/**
+ * The change into and out of the ready stance that MF-05 is about: `up` into it (the menu opens on whatever she was showing: the idle, or the drawing of her last spell, item or blow; the wind-up),
+ * `down` out of it to the idle (the turn start's drop, the end of a turn). `ready` to an action's own drawing (the strike, the cast, the item) is not the stance: those are the cause classes.
+ * Null for any other pair, and for a knock-out or a twirl, which have their own cut.
+ */
 export function stanceKindOf(from: string, to: string): 'up' | 'down' | null {
-  if (from === 'idle' && to === 'ready') return 'up';
+  if (from === to || OWN_CUT.test(from) || OWN_CUT.test(to)) return null;
+  if (to === 'ready') return 'up';
   if (from === 'ready' && to === 'idle') return 'down';
   return null;
 }
