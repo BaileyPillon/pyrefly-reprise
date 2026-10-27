@@ -26,7 +26,7 @@ import { analyzePace, headlineText, paceReportLine } from '../critic/runner/lib/
 import { classifyLongFrames } from '../critic/runner/lib/pace-causes.mjs';
 import { createDrainer, installRecorder, mainSegment, readRun } from '../critic/runner/lib/pace-record.mjs';
 import { takeBrowserLock } from './measure/lock.mjs';
-import { gpuByProcess, startMachineSamplers, summariseMachine } from './measure/machine.mjs';
+import { busyNote, gpuByProcess, startMachineSamplers, summariseMachine } from './measure/machine.mjs';
 import { serveDist } from './measure/serve.mjs';
 import { describeStamp, incomparable, toolStamp } from './measure/stamp.mjs';
 
@@ -58,10 +58,17 @@ if (val('analyze', null)) {
 if (compareDirs()) {
   const [aDir, bDir] = compareDirs().map(String);
   if (!aDir || !bDir || bDir.startsWith('--')) { console.log('usage: node tools/pace.mjs --compare <before dir> <after dir>'); process.exit(64); }
-  const read = async (d) => { const f = path.join(path.resolve(d), 'pace.json.gz'); const r = await readRun(f); return { r, a: analyzePace({ dump: r.page.dump, meta: r.meta, entrySec }) }; };
+  const read = async (d) => {
+    const f = path.join(path.resolve(d), 'pace.json.gz');
+    const r = await readRun(f);
+    let busy = null; // how busy the machine was while the run was timed, from the analysis the run wrote beside its dump
+    try { busy = JSON.parse(fs.readFileSync(path.join(path.resolve(d), 'analysis.json'), 'utf8')).machine?.cpuBusy?.avg ?? null; } catch { /* no analysis: unknown */ }
+    return { r, busy, a: analyzePace({ dump: r.page.dump, meta: r.meta, entrySec }) };
+  };
   const [x, y] = [await read(aDir), await read(bDir)];
   for (const [name, o] of [['before', x], ['after ', y]]) console.log(paceReportLine(name, o.a));
   const why = incomparable(x.r.meta.stamp, y.r.meta.stamp);
+  if (x.busy != null && y.busy != null && Math.abs(x.busy - y.busy) > 20) why.push(`the machine was busy differently (total CPU ${x.busy} percent and ${y.busy} percent on average)`);
   console.log(why.length ? `NOT COMPARABLE: ${why.join('; ')}` : 'comparable: the same tool and the same continuity harness read both');
   const d = (k) => Math.round(((y.a.headline[k] ?? 0) - (x.a.headline[k] ?? 0)) * 100) / 100;
   // two definitions of the same quantity: the plan's baselines (Chapter I 674, Chapter IV 90) count every steady frame, the route's own frames included; the game's own number leaves them out (review m4)
@@ -153,9 +160,12 @@ try {
   const run = await readRun(path.join(outDir, 'pace.json.gz'));
   const a = analyzePace({ dump: run.page.dump, meta: run.meta, entrySec });
   const causes = classifyLongFrames({ dump: run.page.dump, meta: run.meta });
-  const out = { label, chapter, size: [W, H], cap, route: state.route, stamp, ...a, longFrameCauses: causes.byCause, longFrames: causes.frames, machine: { ...summariseMachine(machine, state.launchedAt, state.closedAt), gpuBefore, gpuAfter } };
+  const summary = summariseMachine(machine, state.launchedAt, state.closedAt);
+  const note = busyNote(summary);
+  const out = { label, chapter, size: [W, H], cap, route: state.route, stamp, ...a, longFrameCauses: causes.byCause, longFrames: causes.frames, machine: { ...summary, gpuBefore, gpuAfter, busy: Boolean(note), note } };
   fs.writeFileSync(path.join(outDir, 'analysis.json'), JSON.stringify(out, null, 1));
   console.log(headlineText(label, a));
+  if (note) console.log(`[pace] ${note}`);
   log(`analysis written to ${path.join(outDir, 'analysis.json')}`);
 } catch (e) { log('analysis not written', String(e).slice(0, 200)); exitCode ||= 1; }
 process.exit(exitCode);

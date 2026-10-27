@@ -8,7 +8,7 @@ import path from 'node:path';
 
 export const FLUIDITY_DEFAULTS = Object.freeze({
   hz: Object.freeze({ rates: [60, 120, 144], wallTolerance: 0.05, beatFrames: 1, minIntervalMs: 200, mode: 'report' }),
-  jolts: Object.freeze({ minJumpPx: 2.5, minShare: 0.3, windowMs: 333, gridMs: 1000 / 60, maxRise: 0.1, mode: 'report', baselines: {} }),
+  jolts: Object.freeze({ minJumpPx: 2.5, minShare: 0.3, windowMs: 333, gridMs: 1000 / 60, maxRise: 0.1, sigma: 2, mode: 'report', baselines: {} }),
 });
 
 /** The policy's `fluidity` block over the defaults (a policy without one gives the defaults: report, never gate). */

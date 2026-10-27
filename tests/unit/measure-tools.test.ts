@@ -115,3 +115,17 @@ describe('the tool stamp', () => {
     expect(toolDigest({ a: '1' })).not.toBe(toolDigest({ a: '2' }));
   });
 });
+
+describe('a pacing run on a busy machine says so (the first Chapter IV run of the lane)', () => {
+  it('flags total CPU over a quarter busy on average, and stays silent on a quiet or unsampled machine', async () => {
+    const { BUSY_CPU_AVG, busyNote, summariseMachine } = await import('../../tools/measure/machine.mjs');
+    expect(BUSY_CPU_AVG).toBe(25);
+    expect(busyNote({ cpuBusy: { avg: 49.4, max: 85.1 } })).toMatch(/MACHINE BUSY: total CPU 49.4 percent on average \(85.1 at most\).*GPU-QUIET/);
+    expect(busyNote({ cpuBusy: { avg: 12, max: 40 } })).toBeNull();
+    expect(busyNote({ cpuBusy: null })).toBeNull();
+    expect(busyNote(null)).toBeNull();
+    const s = summariseMachine({ smi: [], cpu: [{ at: 10, busy: 60 }, { at: 20, busy: 40 }, { at: 99, busy: 0 }] }, 0, 50);
+    expect(s.cpuBusy).toEqual({ avg: 50, max: 60 });
+    expect(busyNote(s)).not.toBeNull();
+  });
+});

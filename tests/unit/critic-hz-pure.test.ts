@@ -115,10 +115,25 @@ describe('the velocity jolt probe', () => {
     const tally = joltTally(jolts, 2);
     expect(tally).toMatchObject({ total: 1, perMinute: 30, byClass: { leap: 1 }, shareByClass: { leap: 1 } });
     expect(joltGate(tally, { perMinute: 30, seconds: 2, byClass: { leap: 1 } }).pass).toBe(true);
-    const worse = joltGate({ ...tally, total: 3, perMinute: 90, byClass: { leap: 1, 'hit rattle': 2 } }, { perMinute: 30, seconds: 2, byClass: { leap: 1 } });
+    const worse = joltGate({ ...tally, total: 3, perMinute: 90, byClass: { leap: 1, 'hit rattle': 2 } }, { perMinute: 30, seconds: 2, byClass: { leap: 1 } }, { sigma: 0 }); // three jolts against one is inside count noise, so the bare rule
     expect(worse.pass).toBe(false);
     expect(worse.reasons.join(' ')).toMatch(/hit rattle/);
-    expect(joltGate({ ...tally, total: 3, perMinute: 90, byClass: { leap: 1, 'hit rattle': 2 } }, { perMinute: 30, seconds: 2, byClass: { leap: 1 } }, { declared: ['hit rattle'], maxRise: 3 }).pass).toBe(true);
+    expect(joltGate({ ...tally, total: 3, perMinute: 90, byClass: { leap: 1, 'hit rattle': 2 } }, { perMinute: 30, seconds: 2, byClass: { leap: 1 } }, { declared: ['hit rattle'], maxRise: 3, sigma: 0 }).pass).toBe(true);
+  });
+
+  it('reports a rise only beyond count noise: the same fight at 60 and 144 Hz is not a regression, a doubled rattle is', () => {
+    // the first cross-rate pair of the lane: Chapter IV, 45 s, 433 jolts at 60 Hz and 458 at 144 Hz; two small classes moved 7 to 13 and 11 to 14
+    const at60 = { total: 433, seconds: 45, perMinute: 577.3, byClass: { 'hit rattle': 367, leap: 47, 'pose ready': 7, 'pose idle': 11, 'pose cast': 1 } };
+    const at144 = { total: 458, seconds: 45, perMinute: 610.7, byClass: { 'hit rattle': 394, leap: 36, 'pose ready': 13, 'pose idle': 14, 'pose cast': 1 } };
+    expect(joltGate(at144, at60, { sigma: 0 }).pass).toBe(false); // the bare rule flags the two small classes
+    expect(joltGate(at144, at60).pass).toBe(true); // 6 more of 7 is 1.3 sigma of the difference
+    const doubled = { total: 800, seconds: 45, perMinute: 1066.7, byClass: { 'hit rattle': 740, leap: 47, 'pose ready': 7, 'pose idle': 5, 'pose cast': 1 } };
+    const bad = joltGate(doubled, at60);
+    expect(bad.pass).toBe(false);
+    expect(bad.reasons.join(' ')).toMatch(/jolts a minute is over/);
+    expect(bad.reasons.join(' ')).toMatch(/hit rattle/);
+    // a run of another length is scaled to the baseline's seconds first: 2x the seconds, 2x the counts is the same fight
+    expect(joltGate({ ...at60, total: 866, seconds: 90, perMinute: 577.3, byClass: Object.fromEntries(Object.entries(at60.byClass).map(([k, v]) => [k, v * 2])) }, at60).pass).toBe(true);
   });
 
   it('merges adjacent flagged samples into one jolt when asked', () => {

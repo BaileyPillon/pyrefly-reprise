@@ -42,7 +42,7 @@ function analyse(frames, label, extra) {
   const jolts = joltsOfRecording(F, { minJump: policy.minJumpPx, minShare: policy.minShare, windowMs: policy.windowMs, gridMs });
   const tally = joltTally(jolts, seconds);
   const largest = [...jolts].sort((a, b) => b.jump - a.jump).slice(0, 40).map((j) => ({ id: j.id, axis: j.axis, t: j.t, jump: j.jump, share: j.share, class: j.class, pose: j.pose }));
-  return { label, stamp, ...extra, gridMs, method: gridMs > 0 ? 'grid' : 'raw', policy: { minJumpPx: policy.minJumpPx, minShare: policy.minShare, windowMs: policy.windowMs, maxRise: policy.maxRise }, tally, largest };
+  return { label, stamp, ...extra, gridMs, method: gridMs > 0 ? 'grid' : 'raw', policy: { minJumpPx: policy.minJumpPx, minShare: policy.minShare, windowMs: policy.windowMs, maxRise: policy.maxRise, sigma: policy.sigma }, tally, largest };
 }
 
 /** Compare with an earlier jolts.json. REFUSED (no verdict) when the two were not judged the same way, on the same scripted capture, by the same tool. */
@@ -53,7 +53,7 @@ function compare(result, baselineFile) {
   const why = [...incomparable(result.stamp, base.stamp), ...joltsIncomparable(mine, theirs)];
   const head = { baseline: baselineFile, baselineLabel: base.label, baselineHz: base.hz ?? null, hz: result.hz ?? null };
   if (why.length) return { ...head, refused: true, reasons: why, pass: null, tool: { comparable: false, why } };
-  const g = joltGate(result.tally, base.tally, { maxRise: policy.maxRise });
+  const g = joltGate(result.tally, base.tally, { maxRise: policy.maxRise, sigma: policy.sigma });
   return { ...head, refused: false, tool: { comparable: true }, ...g, baselineTally: { total: base.tally.total, seconds: base.tally.seconds, perMinute: base.tally.perMinute, byClass: base.tally.byClass } };
 }
 

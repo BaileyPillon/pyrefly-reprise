@@ -43,6 +43,18 @@ export function gpuByProcess() {
   return { total3d: Math.round([...sums.values()].reduce((a, b) => a + b, 0) * 10) / 10, top };
 }
 
+/** The share of total CPU, averaged over a timed run, above which the machine is not quiet (other lanes' work: builds, encodes, another browser). */
+export const BUSY_CPU_AVG = 25;
+
+/**
+ * A pacing number from a run during which the machine was busy is not the game's alone and is not set against a quiet baseline (the first Chapter IV run of the lane read 423 ms a minute against the plan's
+ * 90, with total CPU 49 percent busy on average and 41 dropped frames a minute: a loaded machine, not a regression). Returns the sentence the run must carry, or null when the machine was quiet or unsampled.
+ */
+export function busyNote(summary) {
+  const c = summary?.cpuBusy;
+  return c && c.avg > BUSY_CPU_AVG ? `MACHINE BUSY: total CPU ${c.avg} percent on average (${c.max} at most) while this was timed, so it is not comparable with a quiet-machine baseline (the plan's Chapter IV 90 ms a minute was measured quiet); rerun under GPU-QUIET` : null;
+}
+
 /** The samplers' averages over `[from, to]` (epoch ms): GPU utilisation, memory, clock, power, temperature; CPU busy. Pure. */
 export function summariseMachine({ smi, cpu }, from, to) {
   const avg = (a) => (a.length ? Math.round((a.reduce((x, y) => x + y, 0) / a.length) * 10) / 10 : null);

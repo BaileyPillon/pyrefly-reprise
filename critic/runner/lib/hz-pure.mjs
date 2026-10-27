@@ -188,16 +188,22 @@ export function joltTally(jolts, seconds) {
 
 /**
  * The jolt gate against a baseline: a fight must not have more jolts a minute than the baseline's plus `maxRise` (a share, 0.10), and no class may rise by more than that unless the item under test is the one
- * that declares it (`declared`: class names allowed to move). REPORTED unless the policy gates it (critic/policy.json `fluidity.jolts.mode`).
+ * that declares it (`declared`: class names allowed to move). A rise is only reported when it is also beyond COUNT NOISE: jolts are events, and two captures of one scripted fight differ by chance (the same
+ * fight at 60 and at 144 Hz gave 433 and 458 jolts in total, and 7 and 13 of one small class, which a bare 10 percent rule flagged). The candidate's count, scaled to the baseline's seconds, must exceed the
+ * baseline's by more than `sigma` (2) standard deviations of the difference of two counts (the square root of their sum); `sigma: 0` is the bare rule. REPORTED unless the policy gates it (critic/policy.json `fluidity.jolts.mode`).
  */
-export function joltGate(tally, baseline, { maxRise = 0.1, declared = [] } = {}) {
+export function joltGate(tally, baseline, { maxRise = 0.1, declared = [], sigma = 2 } = {}) {
   const reasons = [];
-  if (baseline?.perMinute > 0 && tally.perMinute != null && tally.perMinute > baseline.perMinute * (1 + maxRise)) reasons.push(`${tally.perMinute} jolts a minute is over the baseline's ${baseline.perMinute} by more than ${Math.round(maxRise * 100)} percent`);
+  const baseSeconds = baseline?.seconds ?? tally.seconds;
+  const scale = tally.seconds > 0 && baseSeconds > 0 ? baseSeconds / tally.seconds : 1; // the candidate's counts as if over the baseline's seconds
+  const beyondNoise = (n, was) => sigma <= 0 || n * scale - was > sigma * Math.sqrt(n * scale + was);
+  const wasTotal = baseline?.total ?? ((baseline?.perMinute ?? 0) * baseSeconds) / 60;
+  if (baseline?.perMinute > 0 && tally.perMinute != null && tally.perMinute > baseline.perMinute * (1 + maxRise) && beyondNoise(tally.total, wasTotal)) reasons.push(`${tally.perMinute} jolts a minute is over the baseline's ${baseline.perMinute} by more than ${Math.round(maxRise * 100)} percent`);
   for (const [cls, n] of Object.entries(tally.byClass)) {
     if (declared.includes(cls)) continue;
     const was = baseline?.byClass?.[cls] ?? 0;
     const rate = (c, s) => (s > 0 ? (c * 60) / s : 0);
-    if (rate(n, tally.seconds) > rate(was, baseline?.seconds ?? tally.seconds) * (1 + maxRise) + 0.5) reasons.push(`class "${cls}" rose from ${r1(rate(was, baseline?.seconds ?? tally.seconds))} to ${r1(rate(n, tally.seconds))} a minute`);
+    if (rate(n, tally.seconds) > rate(was, baseSeconds) * (1 + maxRise) + 0.5 && beyondNoise(n, was)) reasons.push(`class "${cls}" rose from ${r1(rate(was, baseSeconds))} to ${r1(rate(n, tally.seconds))} a minute`);
   }
   return { pass: reasons.length === 0, reasons };
 }
