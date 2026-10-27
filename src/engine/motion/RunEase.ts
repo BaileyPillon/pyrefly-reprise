@@ -97,10 +97,13 @@ export function flowProfile(mode: RunMode = runMode()): StrikeProfile | undefine
   return mode.flow ? FLOW_PROFILE : undefined;
 }
 
+/** `flow`: the lunge's travel starts this long before the run's end, tween ms at normal speed and pace 1, so she is still braking as it begins (a pull-back that ended exactly at the run's end still leaves her under 1.5 px a frame for 33 to 50 ms; 30 to 110 ms of overlap leave none, 40 is the middle of that range).*/
+export const FLOW_OVERLAP_MS = 40;
+
 /**
- * How long before the run's end the strike is asked for, tween ms (the strike's own paced clock): its wind-up, so that the wind-up ends as the run does and the lunge's travel starts as she
- * arrives. `timeScale` is the presenter's playback speed scale (1 normal, 0.32 fast).
+ * How long before the run's end the strike is asked for, tween ms (the strike's own paced clock): its wind-up plus {@link FLOW_OVERLAP_MS}, so that the wind-up is over, and the lunge's travel under way, as the
+ * run brakes to its end. `timeScale` is the presenter's playback speed scale (1 normal, 0.32 fast).
  */
 export function flowLeadMs(timeScale: number, paceFactor: number): number {
-  return (FLOW_PROFILE.windupMs * Math.max(0.02, timeScale)) / Math.max(0.05, paceFactor);
+  return ((FLOW_PROFILE.windupMs + FLOW_OVERLAP_MS) * Math.max(0.02, timeScale)) / Math.max(0.05, paceFactor);
 }

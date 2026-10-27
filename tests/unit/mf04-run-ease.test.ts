@@ -161,8 +161,8 @@ describe('the words', () => {
   });
 
   it('the lead is the wind-up on the strike\'s own clock: 100 ms scaled by the playback speed and the default pace', () => {
-    expect(flowLeadMs(1, defaultPaceFactor('ffx2'))).toBeCloseTo(100 / 1.1, 6);
-    expect(flowLeadMs(0.32, 1.1)).toBeCloseTo(32 / 1.1, 6);
+    expect(flowLeadMs(1, defaultPaceFactor('ffx2'))).toBeCloseTo(140 / 1.1, 6);
+    expect(flowLeadMs(0.32, 1.1)).toBeCloseTo(44.8 / 1.1, 6);
   });
 });
 
