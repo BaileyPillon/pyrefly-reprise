@@ -1,6 +1,6 @@
 /**
  * THE SWAP RECORD OF THE FLUIDITY PASS (lane L1; MF-05 and MF-06; pure: no `three`, no DOM; both games). Two small logs the continuity harness reads back (`window.__pyrefly.swapLog()`,
- * `src/debug/swapApi.ts`; `critic/runner/lib/continuity-why.mjs`), each stamped with `performance.now()` like the planned-smear log (`SmearLog.ts`):
+ * `src/debug/smearApi.ts`; `critic/runner/lib/continuity-why.mjs`), each stamped with `performance.now()` like the planned-smear log (`SmearLog.ts`):
  *
  * - **reasons**: why the presenter asked for a painting, at the few call sites that choose it: the command menu opening (`menu`), the turn start dropping a figure to the idle (`turn-start`), an action
  *   opening on its wind-up, cast, item or strike (`wind-up`, `cast`, `item`, `attack`), the end of an action (`after-action`). The harness splits "stance up" into the menu's, the wind-up's and the

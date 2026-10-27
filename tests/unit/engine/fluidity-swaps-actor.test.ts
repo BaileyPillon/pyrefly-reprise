@@ -213,24 +213,53 @@ describe('?swapcause: a swap with a cause on screen', () => {
     }
   });
 
-  it('pick: the cut where the moment has a cover (the hit, the glow, the contact), the blend where it has none (the recovery, the cast\'s end, the return home)', () => {
+  it('pick: the cut where the moment has a cover (the hit, the glow, the contact), the 50 ms blend where it has none and the two drawings are close (the recovery, the return home)', () => {
     setCauseMode('pick');
-    const a = yuna();
-    expect(both(playSwap(a, 'hurt'))).toBe(0); // the hit: a cut
-    const b = yuna();
+    const a = yuna(ALL); // every drawing the same outline: a small change
+    expect(both(playSwap(a, 'hurt'))).toBe(0); // the hit: a cut (a small change cut on purpose, logged as one)
+    const b = yuna(ALL);
     b.setPose('hurt', { immediate: true });
     resetSmearLog();
     const rec = playSwap(b, 'idle'); // the recovery: a blend
     expect(lasts(rec)).toBeLessThanOrEqual(67);
     expect(smearLog()).toHaveLength(0);
     expect(swapLog().designed.at(-1)).toMatchObject({ cls: 'recover' });
-    const c = yuna();
+    const c = yuna(ALL);
     expect(both(playSwap(c, 'cast'))).toBe(0); // the glow: a cut
+  });
+
+  it('pick: a pair of drawings the planner calls a big change keeps the plain blend of today at rest (a 50 ms blend of two drawings that share nothing is a pop of the head), while the covered moments are still cut', () => {
+    setCauseMode('pick');
+    expect(both(playSwap(yuna(), 'hurt'))).toBe(0); // idle LEFT, hurt RIGHT: the hit is a cut whatever the pair
+    const b = yuna();
+    b.setPose('hurt', { immediate: true });
+    resetSmearLog();
+    resetSwapLog();
+    const rec = playSwap(b, 'idle'); // the recovery of a big pair at rest: today's 120 ms blend, no designed entry, no smear
+    expect(lasts(rec)).toBeGreaterThan(100);
+    expect(swapLog().designed).toHaveLength(0);
+    expect(smearLog()).toHaveLength(0);
     const d = yuna();
     d.setPose('follow', { immediate: true });
     resetSwapLog();
-    playSwap(d, 'idle');
-    expect(swapLog().designed.at(-1)).toMatchObject({ cls: 'home' });
+    expect(lasts(playSwap(d, 'idle'))).toBeGreaterThan(100); // the return home of a big pair
+    expect(swapLog().designed).toHaveLength(0);
+  });
+
+  it('blend3 (the V2 arm of the plan) is not guarded: the same big pair is the 50 ms blend', () => {
+    setCauseMode('blend3');
+    const b = yuna();
+    b.setPose('hurt', { immediate: true });
+    resetSwapLog();
+    expect(lasts(playSwap(b, 'idle'))).toBeLessThanOrEqual(67);
+    expect(swapLog().designed.at(-1)).toMatchObject({ cls: 'recover' });
+  });
+
+  it('pick leaves the stance blend alone: ?stance=v3 is the 50 ms blend of the idle to ready pair whatever its size', () => {
+    setCauseMode('pick');
+    setStanceMode('v3');
+    expect(lasts(playSwap(yuna(), 'ready'))).toBeLessThanOrEqual(67); // idle LEFT, ready RIGHT: a big pair
+    expect(swapLog().designed.at(-1)).toMatchObject({ cls: 'stance' });
   });
 
   it('swapclass limits it to the classes named; the others are today\'s', () => {

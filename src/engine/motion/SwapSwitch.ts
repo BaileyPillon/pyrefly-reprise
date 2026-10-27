@@ -11,7 +11,8 @@
  *   `ready` is shown only as an attack's wind-up painting. `v1b`: no ready painting anywhere (the wind-up is played on the idle painting). `v3`: today's two paintings, the change a 50 ms three-frame blend.
  * - `?swapcause=today|cut|blend3|pick` (MF-06, both games, default `today`) and `?swapclass=a,b,...` (default every class): the swaps that have a cause on screen (the contact, the hit, the glow, the toss,
  *   the critical stance) or settle at rest (the return home, the recoveries): `cut` a cut inside the smear on the cause, `blend3` a 50 ms three-frame blend, `pick` the cut where the moment has a cover
- *   and the blend where it has none.
+ *   and the 50 ms blend where it has none AND the two drawings are close (not a big change: `SmearPlan.isBigChange`); two drawings that share nothing keep today's blend at rest, because a 50 ms blend of
+ *   them is the head crossing 70 to 150 px in two frames (the harness reads it as a swap jerk). The pure `blend3` word is the plan's V2 arm and blends every class, big or small.
  *
  * - `?swapscope=all` (MF-22, default `pack`): the stance and cause looks play in ANY chapter, not only the two pack chapters, so another chapter can be measured with the rules on, one at a time
  *   (PR-0522). Nothing flips by default: the widening of the gate is the driver's call after the Chapter I and IV picks.
