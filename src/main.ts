@@ -19,6 +19,7 @@ import { installLookDebug } from './debug/lookApi.ts';
 import { installPoseTrustDebug } from './debug/poseTrustApi.ts';
 import { installPoseSwapDebug } from './debug/poseSwapApi.ts';
 import { installCurvesDebug } from './debug/curvesApi.ts'; // motion pass (lane "core"): `__pyrefly.curves('new' | 'today')`
+import { installMoveDebug } from './debug/moveApi.ts'; // motion-fluidity pass (lane L2 "moves"): `__pyrefly.move('hit' | 'run' | ..., word)`
 import { installMomentsDebug } from './debug/momentsApi.ts'; // motion pass (lane "core", step 3): `__pyrefly.moments('new' | 'today')`, `.cheer()`, `.standDown()`, `.koSettle()`
 import { installSmearDebug } from './debug/smearApi.ts'; // motion pass (lane "core", step 2): `__pyrefly.smear('paint' | 'blur' | 'off')`, `.smearLog()`
 import { installFeelDebug } from './debug/feelApi.ts';
@@ -184,6 +185,7 @@ async function boot(): Promise<void> {
   installPoseSwapDebug(debugApi); // W5: `__pyrefly.motionMode('smooth' | 'classic')` and `__pyrefly.swap('aligned' | 'off')`, the pose-motion switches
   installCurvesDebug(debugApi); // motion pass (lane "core"): the new curves' switch and marks, for captures
   installSmearDebug(debugApi); // motion pass (lane "core", step 2): the smear's switch and its record, for captures and the continuity harness
+  installMoveDebug(debugApi); // motion-fluidity pass (lane L2 "moves"): the hit and run switches' words, for captures
   installMomentsDebug(debugApi); // motion pass (lane "core", step 3): the per-game moments' switch and triggers, for captures
   installRigDebug(debugApi); // the rig: `__pyrefly.rigs()`, which figures are drawn as a rig and why not
   installFeelDebug(debugApi, app); // motion program, lane "feel": `__pyrefly.punch(...)`, `punchMode()`, `hitStopMode()`, `rumble()`, `shadowFollow()`, `feelPack()`, `feel()`

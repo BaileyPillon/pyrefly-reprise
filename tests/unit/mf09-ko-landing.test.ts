@@ -9,7 +9,7 @@
  * (exact fractional frames; the game's virtual-clock captures use 17/17/16, 8/8/9 and 7/7/7/7/7/7/6 ms, the same within a millisecond). The cut is the first frame the KO painting
  * is at least half drawn (the curves audit's own definition); the landing is the first frame the actor's ground shake or landing squash shows.
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { PaintedActor, painting, reset, slotsOf, type Actor } from './engine/head-lock-fixture.ts';
 import { LivingFigure, type LifeCtx } from '../../src/engine/fx/mix/living.ts';
 import { setPace, setPaceGame } from '../../src/engine/pace.ts';

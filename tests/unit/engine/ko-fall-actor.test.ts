@@ -138,7 +138,7 @@ describe('twelve characters, both tempos: the harness reads no snap, no jerk and
 });
 
 describe('where the feet go', () => {
-  it('the standing figure\'s feet slide by at most 24 px a frame at 1600 wide, in either game\'s tempo (the buckle is 220 ms in FFX and 170 ms in FFX-2)', () => {
+  it('the standing figure\'s feet slide by at most 26 px a frame at 1600 wide, in either game\'s tempo (the buckle is 220 ms in FFX and 170 ms in FFX-2)', () => {
     for (const game of ['ffx', 'ffx2'] as const) for (const subject of ['tidus', 'yuna']) {
       const r = rig(subject, { game });
       const an = anchors(r.a);
@@ -150,6 +150,7 @@ describe('where the feet go', () => {
       const first = feet();
       let prev = first;
       let worst = 0;
+      (r.a as unknown as { shake: () => void }).shake = (): void => {}; // MF-09: the landing's ground shake now plays on the cut, inside this window; this reading is the topple's own slide, so the shake is held off
       r.a.setPose('ko');
       for (let i = 0; i < 16; i++) {
         r.frame();
@@ -158,7 +159,7 @@ describe('where the feet go', () => {
         worst = Math.max(worst, Math.hypot(f[0]! - prev[0]!, f[1]! - prev[1]!));
         prev = f;
       }
-      expect(worst, `${game} ${subject}`).toBeLessThanOrEqual(24);
+      expect(worst, `${game} ${subject}`).toBeLessThanOrEqual(26); // 24 before MF-09; the landing squash now plays on the cut, inside this window, and moves the stance point by a pixel or two
       expect(Math.hypot(prev[0]! - first[0]!, prev[1]! - first[1]!), `${game} ${subject}: the feet did travel`).toBeGreaterThan(20);
     }
   });

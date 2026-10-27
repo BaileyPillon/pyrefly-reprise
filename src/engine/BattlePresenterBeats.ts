@@ -21,6 +21,7 @@ import { armContact, meetContact, releaseContact, type LungeContact } from './Co
 import { standDownParty } from './motion/MomentBeats.ts'; // motion pass (lane "core", step 3): the victory moment each chapter's sources allow (a cheer, or a quiet stand-down where the pose is withheld)
 import { liftCaster, releaseCastLift, startAttackMove } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the sampled strike, the cast lift; today's lunge unless switched on (`motion/CurvesSwitch.ts`)
 import { realRecoilMs } from './motion/RealBeats.ts'; // `?curves=real`: the real game's hit reaction length
+import { hitReact } from './motion/HitBeat.ts'; // MF-03: the struck figure's reaction (`?hit=`; the default is today's shake and recoil)
 import { blowPose, idleAtEnd, impactAtApex, readyCarriesIntoWindUp, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
@@ -174,8 +175,7 @@ export async function damage(
   const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms
   void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });
   if (flashes) blowFlash(target, event, ctx.moments?.reducedFlashes === true); // `?motion=demo`: 0.08 s white; else warm 200 ms, white 260 ms on a crit (`motion/DemoHitBeat.ts`)
-  target?.shake(event.crit ? 0.16 : 0.1, 340);
-  void target?.recoil(realRecoilMs(ctx, event.targetId, 360), event.crit ? 0.34 : 0.22); // `?curves=real`: the real hit reaction's length
+  hitReact(ctx, event, target, realRecoilMs(ctx, event.targetId, 360)); // today: `shake` + `recoil` (`?curves=real`: the real hit reaction's length); MF-03: `?hit=ramp|knock` (`motion/HitBeat.ts`)
   if (megaFlareBlow(actionOfBlow(ctx, event.sourceId)?.abilityId, ctx.deps.game)) ctx.stage.camera.shake(MEGA_FLARE_SHAKE.amplitude, MEGA_FLARE_SHAKE.ms); // release 62 (173b, FFX-2 only): Mega Flare lands harder
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });
 

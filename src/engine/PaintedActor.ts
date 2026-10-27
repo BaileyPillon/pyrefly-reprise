@@ -68,6 +68,7 @@ import { heftOf, squashPair, startStrike } from './motion/ActorCurves.ts';
 import { menuHolds } from './motion/MenuHold.ts';
 import { newMotionOn } from './motion/NewMotionGate.ts';
 import { newPushMs, newRecoilOffset, recoilDistance } from './motion/RecoilCurve.ts';
+import { HitReaction, type HitOffset, type HitSpec } from './motion/HitReaction.ts'; // MF-03: the struck figure's ramped rattle or directional knock-back (`?hit=`); idle by default
 import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
 import type { StrikePlan } from './motion/StrikePlan.ts';
 import { momentsGame, momentsOn } from './motion/MomentsSwitch.ts'; // motion pass (lane "core", step 3): the per-game moments (victory, KO settle); default OFF
@@ -618,6 +619,8 @@ export class PaintedActor extends Group {
   private shakeLeftMs = 0;
   private shakeTotalMs = 1;
   private shakePhase = 0;
+  private readonly hit = new HitReaction();
+  private readonly hitOut: HitOffset = { x: 0, y: 0, sy: 1 };
   private rimDirBase = new Vector2(-1, 0.32);
   /** The one live flash decay, so a second flash cannot fight the first. */
   private flashTween: Tween | null = null;
@@ -1644,12 +1647,12 @@ export class PaintedActor extends Group {
    * a brief tint" lives: one call from `BattlePresenterBeats.damage` gives the
    * knock-back, the pose and the bruise.
    */
-  recoil(ms = 340, distance = 0.28): Promise<void> {
+  recoil(ms = 340, distance = 0.28, knock?: { reach: number; ms: number }): Promise<void> {
     noteImpact(this, distance >= 0.3); // a no-op unless the look's living room asked for hits (`look/living/StageImpacts.ts`)
     const fresh = !recoilLegacy() && curvesOn();
-    this.smear.hintRecoil(this.facing, fresh ? recoilDistance(distance, heftOf(this.worldHeight)) : distance, fresh ? newPushMs(ms) : 80); // the push is fastest on its first frame, which is where the hurt swap is made
+    this.smear.hintRecoil(this.facing, knock ? knock.reach : fresh ? recoilDistance(distance, heftOf(this.worldHeight)) : distance, knock ? knock.ms : fresh ? newPushMs(ms) : 80); // the push is fastest on its first frame, which is where the hurt swap is made
     this.flinch(ms);
-    return this.knockBack(ms, distance);
+    return knock ? Promise.resolve() : this.knockBack(ms, distance); // MF-03 `?hit=knock`: the push is `hitReact`'s, not the recoil tween's
   }
 
   private knockBack(ms: number, distance: number): Promise<void> {
@@ -2019,7 +2022,7 @@ export class PaintedActor extends Group {
     this.fallDue = false;
     void this.squash(280, 0.5);
     if (momentsOn() && !menuHolds()) void startKoSettle(this.momentsHost()); // motion pass, step 3: the landing rebounds a little (a boss less); not over an open FFX-2 menu (D-357)
-    this.shake(this.worldHeight * 0.018, 200);
+    this.shake(this.worldHeight * 0.018, 200, 0); // the ground shake starts at rest (phase 0) and is the same in every take
   }
 
   /** Back on their feet, with the Phoenix Down's glow still on them. */
@@ -2121,13 +2124,20 @@ export class PaintedActor extends Group {
   still?: () => boolean;
   /** REDUCE FLASHES (PR-0032): {@link flash} runs through `flashRules.softActorFlash` while this answers true; set by `PaintedStage`. */
   softFlash?: () => boolean;
-  /** Damped jitter, in world units. */
-  shake(amount = 0.08, ms = 300): void {
+  /** Damped jitter, in world units. `phase` (radians, MF-09) fixes where the sine starts; without it the phase is random, as it always was. */
+  shake(amount = 0.08, ms = 300, phase?: number): void {
     if (this.still?.()) return;
     this.shakeAmp = amount;
     this.shakeLeftMs = ms;
     this.shakeTotalMs = Math.max(1, ms);
-    this.shakePhase = Math.random() * TAU;
+    this.shakePhase = phase ?? Math.random() * TAU;
+  }
+
+  /** MF-03 (`?hit=ramp|knock`, `motion/HitBeat.ts`): a blow's reaction in place of {@link shake}. False when REDUCE MOTION holds the jitter off (the caller plays today's). */
+  hitReact(spec: HitSpec): boolean {
+    if (this.still?.()) return false;
+    this.hit.start(spec);
+    return true;
   }
 
   /**
@@ -2512,7 +2522,8 @@ export class PaintedActor extends Group {
 
     const sq = squashPair(this.squashAmount, cv.sy, curvesOn(), this.squashScratch); // today's 18/14 percent, or the subtle volume-preserving family with the new curves on
 
-    this.inner.scale.set(sq.x, breatheScale * sq.y, 1);
+    const hit = this.hit.step(dt * 1000, dt * 1000 * paceRate('action'), this.hitOut); // MF-03: nothing (sy 1) unless `?hit=` asked for a reaction
+    this.inner.scale.set(sq.x / hit.sy, breatheScale * sq.y * hit.sy, 1);
 
     const hover =
       this.hoverHeight +
@@ -2535,6 +2546,8 @@ export class PaintedActor extends Group {
       ox += Math.sin(this.shakePhase) * this.shakeAmp * k;
       oy += Math.sin(this.shakePhase * 1.63) * this.shakeAmp * k * 0.42;
     }
+    ox += hit.x;
+    oy += hit.y;
 
     const lie = this.lieRoll * LIE_ANGLE * this.facing;
     const [lieDx, lieLift, lieDz] = this.lieOffset(lie);
@@ -2650,6 +2663,7 @@ export class PaintedActor extends Group {
     unpinRelight(this.lightPins);
     this.lightPins.clear();
     this.cheerWait = null;
+    this.hit.clear();
     this.curves.dispose();
     this.blend.cancel();
     for (const slot of this.slots) {
