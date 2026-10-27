@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 64 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 65 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '65',
+    date: '2026-10-27',
+    lines: [
+      { tag: 'Both', text: 'On a 120 or 144 Hz screen the camera shake and the ink-and-paper flash on a big hit now keep the same time as on a 60 Hz one, in every chapter.' },
+      { tag: 'Both', text: 'Starting a fight is smoother: the boss card no longer waits out a second full hold after a long load, and the party and bars go down under it instead of vanishing as it fades.' },
+      { tag: 'FFX-2', text: 'A girl who attacks from her menu now holds her ready stance into the attack instead of dropping to idle for a blink and coming back.' },
+    ],
+  },
   {
     release: '64',
     date: '2026-10-25',
