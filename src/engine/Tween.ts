@@ -6,6 +6,8 @@
  * advances from one clock (and can be stepped deterministically in tests).
  */
 
+import { leadNow, noteLead } from './BeatLead.ts';
+
 export type EasingFn = (t: number) => number;
 
 const clamp01 = (t: number): number => (t < 0 ? 0 : t > 1 ? 1 : t);
@@ -97,7 +99,8 @@ export interface TweenOptions {
   /** Seconds-based delay before the tween starts running. */
   delayMs?: number;
   onUpdate?: (value: number, progress: number) => void;
-  onComplete?: () => void;
+  /** @param overshootSec how far past its end the frame that finished it was (0 for `finish()`): a chain may start its next leg that far in (`BeatLead`). */
+  onComplete?: (overshootSec: number) => void;
   /**
    * Fired by {@link Tween.kill} instead of `onComplete`, exactly once, and
    * never after the tween has already completed.
@@ -122,10 +125,13 @@ export class Tween {
   private delaySec: number;
   private elapsed = 0;
   private readonly onUpdate: ((value: number, progress: number) => void) | undefined;
-  private readonly onComplete: (() => void) | undefined;
+  private readonly onComplete: ((overshootSec: number) => void) | undefined;
   private readonly onKilled: (() => void) | undefined;
   private _done = false;
   private _killed = false;
+  /** Clock seconds the code that started this tween had already waited for the frame to come (`BeatLead`); credited on the first update. */
+  private lead = leadNow();
+  private _over = 0;
 
   constructor(from: number, to: number, opts: TweenOptions) {
     this.from = from;
@@ -140,6 +146,11 @@ export class Tween {
 
   get done(): boolean {
     return this._done || this._killed;
+  }
+
+  /** Seconds past its end that the frame which finished it was; 0 until it has finished. */
+  get overshoot(): number {
+    return this._over;
   }
 
   /** True when this tween was stopped by {@link kill} rather than finishing. */
@@ -177,12 +188,16 @@ export class Tween {
     this.elapsed = this.durationSec;
     this._done = true;
     this.onUpdate?.(this.to, 1);
-    this.onComplete?.();
+    this.onComplete?.(0);
   }
 
   /** @param dt seconds */
   update(dt: number): boolean {
     if (this.done) return true;
+    if (this.lead > 0) {
+      dt += this.lead; // started by a continuation that had waited part of a frame already: the first frame counts that too
+      this.lead = 0;
+    }
     if (this.delaySec > 0) {
       this.delaySec -= dt;
       if (this.delaySec > 0) return false;
@@ -195,7 +210,8 @@ export class Tween {
     this.onUpdate?.(v, p);
     if (p >= 1) {
       this._done = true;
-      this.onComplete?.();
+      this._over = Math.max(0, this.elapsed - this.durationSec);
+      this.onComplete?.(this._over);
     }
     return this._done;
   }
@@ -252,8 +268,9 @@ export class TweenGroup {
       this.add(
         new Tween(from, to, {
           ...opts,
-          onComplete: () => {
-            done?.();
+          onComplete: (over) => {
+            noteLead(over); // what the awaiting chain starts next is that far into its first frame (`BeatLead`)
+            done?.(over);
             resolve();
           },
           onKilled: () => {

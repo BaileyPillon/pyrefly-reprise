@@ -52,7 +52,8 @@ export const CUT_IN_HOLD_MS = 450;
  * reading (iter2-b2 check CHK-B2-1: 2 to 2.8 s into Paine's menu at 5 s).
  */
 export const CUT_IN_WAIT_CAP_MS = 800;
-const CUT_IN_WAIT_STEP_MS = 60;
+/** One 60 Hz frame (MF-08): the wait polls once a frame, so the slab starts on the frame after the charge clears, not up to 60 ms later. */
+const CUT_IN_WAIT_STEP_MS = 16;
 /**
  * After the charge clears, the beat its effect gets before the slab covers
  * it (inside the cap): the status numerals and the row tags land in this
@@ -69,6 +70,8 @@ export interface TurnCutInDeps {
    * menu is up. Without them the cut-in plays at once, as before.
    */
   sleep?(ms: number): Promise<void>;
+  /** Real milliseconds, so the wait's cap is counted in time and not in polls (a poll is a whole frame or more). Absent: the polls' own lengths are summed. */
+  now?(): number;
   acting?(): boolean;
   menuFor?(): CombatantId | null;
 }
@@ -158,7 +161,7 @@ export class TurnCutInBeat {
    * approved slab is not lost for the battle.
    */
   private async waitForCharge(state: BattleState, actorId: CombatantId): Promise<boolean> {
-    const { sleep, acting, menuFor } = this.deps;
+    const { sleep, acting, menuFor, now } = this.deps;
     if (!sleep || state.game !== 'ffx2') return true;
     // The confirm plays its own step forward (an action-start and -end) at
     // once; the effect lands when the charge clears, as status and damage
@@ -166,11 +169,12 @@ export class TurnCutInBeat {
     const busy = (): boolean => partyCharging(state, actorId) || acting?.() === true;
     if (!busy()) return true;
     const turnAtStart = this.turns.get(actorId) ?? 0;
+    const t0 = now?.() ?? 0;
     let waited = 0;
     while (busy() && waited < CUT_IN_WAIT_CAP_MS) {
       const step = Math.min(CUT_IN_WAIT_STEP_MS, CUT_IN_WAIT_CAP_MS - waited);
       await sleep(step);
-      waited += step;
+      waited = now ? Math.max(waited + 1, now() - t0) : waited + step;
     }
     const cleared = !busy();
     if (cleared && waited < CUT_IN_WAIT_CAP_MS) {
