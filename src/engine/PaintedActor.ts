@@ -77,6 +77,7 @@ import { startCheer, startKoSettle, startStandDown, type MomentsHost } from './m
 import { realFallMs } from './motion/RealMoments.ts'; // `?curves=real` / `real-snappy`: the real clips' knock-out and victory timing
 import { koCutMs } from './motion/MomentsPlan.ts';
 import { smearOn } from './motion/SmearSwitch.ts';
+import { StringStance } from './motion/StringStance.ts';
 import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape, type BlendStarted } from './PoseBlend.ts';
 import { alignWeight, footprintOverlap, meetingOffsets, planeAnchor, type Footprint } from './PoseAlign.ts'; // W5: the aligned dissolve's geometry
@@ -653,6 +654,7 @@ export class PaintedActor extends Group {
   private flinchToken = 0;
   /** Suppresses the `hurt` life state re-entering its own flinch. */
   private flinching = false;
+  private readonly stance = new StringStance(); // MF-12 (`?hurtstring=hold`): the stance a held string of blows hands back
   private readonly turnRing: Mesh | null;
   private ringBaseRadius: number;
   private readonly ringBaseOpacity: number;
@@ -1679,8 +1681,9 @@ export class PaintedActor extends Group {
   flinch(ms = 340, hold = ms): void {
     const life = this.life;
     if (!life || life.state === 'down' || this.flinching) return;
-    const back = this.requested || 'idle';
+    const back = this.stance.back(this.requested || 'idle', this.flinchToken); // MF-12: a blow inside a held string hands back the stance the string began from, not the previous blow's hurt
     const token = ++this.flinchToken;
+    this.stance.begin(token, back, hold > ms);
     this.flinching = true;
     try {
       this.setPose('hurt');

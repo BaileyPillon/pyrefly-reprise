@@ -126,3 +126,89 @@ describe('the real actor under a string of three blows 700 ms apart', () => {
     expect(life(a)).not.toBe('hurt');
   });
 });
+
+/** F-1 of the review (2026-10-27): what the figure is left on after the string. Today a figure that was on its menu's `ready` goes home to `ready`; the hold must hand back the same stance (it used to end on `idle`, or on `critical` at low HP). */
+function stringEnd(hold: boolean, pre: string, gaps: number[], hz = 60): { req: string; life: string; hurtAtTail: boolean } {
+  setPaceGame('ffx2');
+  const a = new PaintedActor({ name: 'rikku', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
+  a.adoptPoses({ idle: painting('rikku', 'idle'), ready: painting('rikku', 'ready'), hurt: painting('rikku', 'hurt') }, 'idle');
+  a.position.set(-2, 0, 0);
+  a.setPose('idle', { immediate: true, force: true });
+  a.update(0);
+  a.setPose(pre);
+  const dt = 1000 / hz;
+  for (let i = 0; i < 10; i++) a.update(dt / 1000);
+  const at = [100];
+  for (const g of gaps) at.push(at[at.length - 1]! + g);
+  for (let t = 0; t < 4500; t += dt) {
+    at.forEach((when, i) => {
+      if (t >= when && t < when + dt) a.recoil(360, 0.22, undefined, hold && i < at.length - 1 ? STRING_HOLD_MS : undefined);
+    });
+    a.update(dt / 1000);
+  }
+  return { req: (a as unknown as { requested: string }).requested, life: life(a), hurtAtTail: life(a) === 'hurt' };
+}
+
+describe('F-1: the stance a held string hands back (the same as the string today)', () => {
+  for (const pre of ['ready', 'idle']) {
+    for (const gaps of [[700, 700], [450, 450, 450], [570, 570, 570, 570, 570]]) {
+      it(`pre-string ${pre}, ${gaps.length + 1} blows ${gaps[0]} ms apart: the hold ends where today ends`, () => {
+        const today = stringEnd(false, pre, gaps);
+        const held = stringEnd(true, pre, gaps);
+        expect(held.req).toBe(today.req);
+        expect(held.life).toBe(today.life);
+        expect(held.req).toBe(pre);
+      });
+    }
+  }
+  for (const hz of [60, 120, 144]) {
+    it(`at ${hz} Hz a figure on ready ends on ready`, () => {
+      expect(stringEnd(true, 'ready', [700, 700], hz).req).toBe('ready');
+    });
+  }
+  it('a blow after the string starts the next one from the stance the figure is on then', () => {
+    // two strings with a long quiet between: the second must not inherit the first one\'s memory
+    setPaceGame('ffx2');
+    const a = new PaintedActor({ name: 'rikku', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
+    a.adoptPoses({ idle: painting('rikku', 'idle'), ready: painting('rikku', 'ready'), hurt: painting('rikku', 'hurt') }, 'idle');
+    a.position.set(-2, 0, 0);
+    a.setPose('idle', { immediate: true, force: true });
+    a.update(0);
+    a.setPose('ready');
+    const req = (): string => (a as unknown as { requested: string }).requested;
+    const run = (ms: number): void => { for (let t = 0; t < ms; t += 1000 / 60) a.update(1 / 60); };
+    void a.recoil(360, 0.22, undefined, STRING_HOLD_MS);
+    run(600);
+    void a.recoil(360, 0.22);
+    run(1500);
+    expect(req()).toBe('ready');
+    a.setPose('idle'); // the menu closes: she goes back to idle
+    run(300);
+    void a.recoil(360, 0.22);
+    run(1500);
+    expect(req()).toBe('idle');
+  });
+  it('a KO in the middle of the string is not undone by the hold\'s return', () => {
+    setPaceGame('ffx2');
+    const a = new PaintedActor({ name: 'rikku', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
+    a.adoptPoses({ idle: painting('rikku', 'idle'), ready: painting('rikku', 'ready'), hurt: painting('rikku', 'hurt'), ko: painting('rikku', 'ko') }, 'idle');
+    a.position.set(-2, 0, 0);
+    a.setPose('idle', { immediate: true, force: true });
+    a.update(0);
+    a.setPose('ready');
+    void a.recoil(360, 0.22, undefined, STRING_HOLD_MS);
+    for (let t = 0; t < 500; t += 1000 / 60) a.update(1 / 60);
+    a.setPose('ko');
+    for (let t = 0; t < 2500; t += 1000 / 60) a.update(1 / 60);
+    expect(life(a)).toBe('down');
+  });
+});
+
+describe('F-1: the default words are untouched', () => {
+  it('today a string spaced under the flinch\'s own 340 ms still loses `ready` (that quirk is not this lane\'s to change)', () => {
+    expect(stringEnd(false, 'ready', [200, 200]).req).toBe('idle');
+  });
+  it('today a string spaced over it goes home to `ready` every time', () => {
+    expect(stringEnd(false, 'ready', [500, 500]).req).toBe('ready');
+  });
+});

@@ -58,7 +58,7 @@ interface Playing {
   side: 0 | 1 | -1;
   /** Motion pass, step 3: the cross is a cut inside the smear's window, and the window is open (`PaintedActor.koCutBegin`). */
   cutting?: boolean;
-  /** MF-09: a fall's landing has been played (the lying painting reached half). */
+  /** MF-09: the run has no landing left to play: it played it on the cut (the lying painting reached half), or the run is a buckle and the fall tween's end lands it. */
   landed?: boolean;
 }
 export interface Guts {
@@ -226,8 +226,13 @@ export class LivingFigure {
     p.to.fade = pose.inn;
     this.a.syncOpacity();
     this.playing = p;
-    if (p.run.opts.travel || !p.run.opts.buckle) this.a.fallGain = 0;
-    if (p.run.opts.kind === 'fall') this.a.holdLanding?.(); // the landing is played on the cut, whenever the run's cut falls (an eased topple is longer than the fall tween)
+    const whole = p.run.opts.travel || !p.run.opts.buckle; // the run IS the whole fall (a topple, a plain cross): the generic sink is off
+    if (whole) this.a.fallGain = 0;
+    // MF-09: the landing is played on the cut, whenever the run's cut falls (an eased topple is longer than the fall tween), by the runs that are the whole fall; a buckle keeps the generic sink going (fallGain 1), so its thud stays on the fall tween's end, where that sink is done (review F-3)
+    if (p.run.opts.kind === 'fall') {
+      if (whole) this.a.holdLanding?.();
+      else p.landed = true;
+    }
     if (p.run.opts.buckle) this.last.collapses++;
     if (p.run.opts.crossMs > 0) this.last.crosses++;
   }

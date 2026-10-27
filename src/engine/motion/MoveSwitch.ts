@@ -10,6 +10,7 @@
  * |---|---|---|---|
  * | `?hit=` | `today`, `ramp`, `knock` | MF-03: the struck figure's reaction | both |
  * | `?run=` | `today`, `smooth`, `flow`, `pace` | MF-04: an FFX-2 girl's run, leap and lunge | FFX-2 only |
+ * | `?strikeshape=` | `today`, `travel` | MF-14 V3: with `?curves=real-snappy`, the dash keeps the house travel at the 1.1 s pick | both |
  *
  * (Later items of the lane add their words to this table: `kotopple`, `rigko`, `hurtstring`, `summon`, `ramps`, `shakeband`.) A word the table does not list reads as today. The words apply in every
  * chapter of the game they belong to; the film is made in Chapter I (FFX) and Chapter IV (FFX-2).
@@ -26,6 +27,7 @@ export const MOVE_WORDS = {
   summon: ['today', 'leap'],
   ramps: ['today', 'smooth'],
   shakeband: ['today', 'band'],
+  strikeshape: ['today', 'travel'],
 } as const;
 
 export type MoveKey = keyof typeof MOVE_WORDS;
