@@ -20,6 +20,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { continuityCaps } from './critic-continuity-caps.mjs';
+import { harnessIdentityErrors } from './critic-harness-identity.mjs';
 
 export { continuityCaps };
 
@@ -311,7 +312,7 @@ export function milestoneVerdict(report, policy) {
 }
 
 /** Is this report well-formed enough to count as evidence? Returns error strings. */
-export function validateReport(report, policy) {
+export function validateReport(report, policy, opts = {}) {
   const errors = [];
   if (!report || typeof report !== 'object') return ['report is not an object'];
   if (report.rubricVersion !== policy.rubricVersion) errors.push(`rubricVersion must be ${policy.rubricVersion}`);
@@ -364,7 +365,7 @@ export function validateReport(report, policy) {
     }
   }
   // The caps of the continuity checks (D-424): only reports from `continuity.requiredFrom` on, only with subScores.
-  errors.push(...continuityCaps(report, policy));
+  errors.push(...continuityCaps(report, policy), ...harnessIdentityErrors(report, policy, { root: opts.harnessTree ?? opts.root, explicitTree: Boolean(opts.harnessTree) })); // step 0: which tool read the run, and is it the release tree's own
   return errors;
 }
 

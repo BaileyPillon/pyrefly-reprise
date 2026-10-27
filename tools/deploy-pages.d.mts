@@ -32,7 +32,7 @@ export interface ShipEvidence {
 }
 
 /** The newest validated focused / deep / milestone report for this commit, deep outranking focused. */
-export declare function shipEvidenceFor(root: string, mainSha: string): ShipEvidence | null;
+export declare function shipEvidenceFor(root: string, mainSha: string, skipped?: { path: string; errors: string[] }[]): ShipEvidence | null;
 
 /** May this candidate go public now? The owner's release rules of 2026-09-21, as one pure function. */
 export declare function resolveReleaseGate(input: {
@@ -42,6 +42,8 @@ export declare function resolveReleaseGate(input: {
   deepOwed?: string[];
   maxDeploysWithDeepOwed?: number;
   ownerOverrideWords: string | null;
+  /** Reports for this commit that validateReport refused (from shipEvidenceFor's `skipped`): named in the refusal when no report was accepted. */
+  skipped?: { path: string; errors: string[] }[];
 }): ReleaseGateResult;
 
 /** The loud warning block printed (and, on --dry-run, previewed) for an owner override. */
