@@ -36,6 +36,7 @@ import { proSeam } from './pro/ProSeam.ts';
 import { proPieceOn } from './pro/ProSwitch.ts';
 import { demoGovernor } from '../governor/DemoGovernor.ts'; // lane perf-trim: the frame-budget governor, ticked here once a frame inside a battle
 import { govLive } from '../governor/GovernorLive.ts';
+import { frameSeconds, frameStep } from '../FrameClock.ts';
 import { proCamOn } from '../procam/ProCamSwitch.ts';
 import { stageWind } from './stage/StageWind.ts';
 
@@ -187,7 +188,7 @@ export class LookRig {
       }
       if (this.active && this.active !== wantName) this.deactivate();
     }
-    demoGovernor.tick(performance.now(), info.scene, lookState.pro || proCamOn()); // lane perf-trim: the frame-budget governor's levers for this frame (rest while a pro lane is off, outside the two demo chapters, or with ?govern=off)
+    demoGovernor.tick(performance.now(), info.scene, lookState.pro || proCamOn(), frameSeconds() * 1000); // lane perf-trim: the frame-budget governor's levers for this frame (rest while a pro lane is off, outside the two demo chapters, or with ?govern=off)
     this.r.crisp.setGovernorCut(govLive.heavy); // level 3: the supersample a fifth smaller (1 at rest)
     const proNow = this.proRoomNow(info.key);
     if (info.scene !== this.room.scene || this.active !== wantName || this.proKey !== (proNow ? info.key : '')) {
@@ -232,8 +233,8 @@ export class LookRig {
     const v = (path: string): number => this.val(p, path);
     const r = this.r;
     const cost = QUALITY_COST[lookState.quality];
-    const now = performance.now() / 1000;
-    const dt = this.lastNow ? Math.min(0.1, now - this.lastNow) : 0;
+    const now = frameSeconds(); // MF-20: the frame's own timestamp and the animation clock's clamp (`FrameClock.ts`)
+    const dt = frameStep(this.lastNow, now);
     this.lastNow = now;
     if (!eyeCandy.frozen && !eyeCandy.reduceMotion) this.clock += dt;
     r.renderer.getDrawingBufferSize(this.buf);

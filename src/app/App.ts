@@ -10,6 +10,7 @@ import type { ChapterId } from '../data/encounters.ts';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
 import { installInputDevice } from './inputDevice.ts';
 import { demoModeOn } from './demoMode.ts';
+import { noteFrameTime } from '../engine/FrameClock.ts';
 import { setCardPressAbsorber } from '../ui/coach/cardPress.ts'; // R61: the Back that closes a first-use card is not also the pause's
 
 export interface AppOptions {
@@ -271,6 +272,7 @@ export class App {
   /** One frame. Separated from `tick` so tests can drive it by hand. */
   step(dt: number, now: number = performance.now()): void {
     this.elapsed += dt;
+    noteFrameTime(now); // MF-20: the renderer's clocks read this frame's timestamp, not the page clock at their own phase (`engine/FrameClock.ts`)
 
     const snapshot = this.input.update(now);
     const screen = this.current;

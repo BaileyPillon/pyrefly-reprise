@@ -15,7 +15,7 @@ import { GoldenHour } from './fx/a/GoldenHour.ts';
 import { CrispRig } from './crisp/CrispRig.ts';
 import { applyFigureTrue, bloomMaskFor, figureTrueFromAddress, figureTrueOf } from './figureTrue.ts';
 import { LookRig, lookWanted } from './look/LookRig.ts'; // demo looks: `?look=` (dev flag only; nothing is built without it)
-
+import { frameSeconds } from './FrameClock.ts';
 export interface RendererOptions {
   /** Element the <canvas> is appended to. Defaults to #game. */
   container?: HTMLElement;
@@ -374,7 +374,7 @@ export class Renderer {
     this.msaaPass.camera = camera;
     this.crisp.beforeRender(scene, camera);
     const t = this.gradePass.uniforms['time'];
-    if (t) t.value = performance.now() / 1000;
+    if (t) t.value = frameSeconds(); // MF-20: the frame's own timestamp, the same for every reader in the frame (`FrameClock.ts`)
     if (this.fxA || eyeCandy.on.a) (this.fxA ??= new GoldenHour(this)).update(scene, camera);
     if (this.look || lookWanted()) (this.look ??= new LookRig(this)).update(scene, camera);
     this.composer.render();

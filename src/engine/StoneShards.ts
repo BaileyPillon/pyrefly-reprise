@@ -36,6 +36,7 @@ import {
   type WebGLRenderer,
 } from 'three';
 import { sceneScale } from './crisp/sceneScale.ts';
+import { frameSeconds, frameStep } from './FrameClock.ts';
 
 /** Chips (large, tumbling) plus grit (small, quick). */
 const CHIPS = 46;
@@ -203,8 +204,8 @@ class StonePool extends Points {
   }
 
   private tick(renderer: WebGLRenderer, camera: Camera): void {
-    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
-    this.advance(this.last ? (now - this.last) / 1000 : 0);
+    const now = frameSeconds(); // MF-20: the frame's own timestamp and the animation clock's clamp (`FrameClock.ts`)
+    this.advance(frameStep(this.last, now));
     this.last = now;
     // Pixels across one world unit at distance 1, so `aSize` stays in world units.
     const px = renderer.getDrawingBufferSize(this.buf).y * sceneScale() * 0.5 * camera.projectionMatrix.elements[5]!;
