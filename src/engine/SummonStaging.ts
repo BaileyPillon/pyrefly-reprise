@@ -17,7 +17,9 @@
  * `three`, no DOM: ports only (AGENTS.md rule 1).
  */
 import type { CombatantId } from '../battle/common/types.ts';
-import type { BattleStage } from './BattlePresenterPorts.ts';
+import type { ActorHandle, BattleStage } from './BattlePresenterPorts.ts';
+import { CROSS_AT } from './motion/SummonBeat.ts';
+import { moveWord } from './motion/MoveSwitch.ts';
 
 /** The party's fade, in step with the aeon's own 620 ms arrival. */
 export const PARTY_SWAP_MS = 620;
@@ -46,4 +48,15 @@ export async function partyOffStage(stage: BattleStage, aeonId: CombatantId, ms 
 export async function partyBack(stage: BattleStage, ms = PARTY_SWAP_MS): Promise<void> {
   held.delete(stage);
   await Promise.all(partyOnStage(stage).map((id) => stage.actor(id)?.fadeTo(1, ms)));
+}
+
+/**
+ * MF-15 (`?summon=leap`, `motion/SummonBeat.ts`): the party's fade back in, started {@link CROSS_AT} of the way through the aeon's fade-out, so the player's side is never empty. The caller awaits it after the
+ * aeon is removed. Today (the default) undefined: the party returns only after the aeon has gone.
+ */
+export function crossBack(stage: BattleStage, aeon: ActorHandle | undefined, fadeMs: number): Promise<void> | undefined {
+  if (moveWord('summon') !== 'leap') return undefined;
+  const lead = fadeMs * CROSS_AT;
+  const wait = aeon?.waitMs ? aeon.waitMs(lead) : new Promise<void>((r) => setTimeout(r, lead));
+  return wait.then(() => partyBack(stage));
 }

@@ -39,7 +39,7 @@ import {
 import { curseDim, dressFx, statusFxLanding } from './BattlePresenterBossFx.ts';
 import { stageChange } from './BattlePresenterStaging.ts'; // lane "pro-staging": the Change's readable pearl plate (FFX-2 Chapter IV only)
 import { comeBack, flushArrivals, keptToReturn, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
-import { PARTY_SWAP_MS, partyBack } from './SummonStaging.ts';
+import { PARTY_SWAP_MS, crossBack, partyBack } from './SummonStaging.ts'; // crossBack: MF-15
 import { lungePlan } from './motion/StrikeReach.ts';
 
 /** One numeral, minus the screen position the stage supplies. */
@@ -296,10 +296,10 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return summon(ctx, event.combatantId, event.aeonId);
 
     case 'dismiss': {
-      const a = ctx.stage.actor(event.combatantId);
+      const a = ctx.stage.actor(event.combatantId); const across = crossBack(ctx.stage, a, TIMING.dismiss); // MF-15 (`?summon=leap`): the party fades back in while the aeon fades out
       await settled(ctx, a?.fadeTo(0, TIMING.dismiss), TIMING.dismiss);
       ctx.stage.removeCombatant(event.combatantId);
-      return settled(ctx, partyBack(ctx.stage), PARTY_SWAP_MS); // PR-0181: the party returns
+      return settled(ctx, across ?? partyBack(ctx.stage), PARTY_SWAP_MS); // PR-0181: the party returns
     }
 
     case 'switch': {

@@ -30,6 +30,7 @@ import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './m
 import { MEGA_FLARE_SHAKE, megaFlareBlow } from './MegaFlareImpact.ts'; // release 62 (FFX-2 only): Mega Flare's heavier camera shake
 import { lungePlan } from './motion/StrikeReach.ts'; // r391-reach: the house lunge, solved against its target where the game's rules let it
 import { partyOffStage } from './SummonStaging.ts';
+import { arrival } from './motion/SummonBeat.ts'; // MF-15: the aeon's arrival (`?summon=`; the default is today's fade then hop)
 import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
 import { actionKills } from './procam/ProBurst.ts'; // `?camera=pro`: whether the action's own events KO a foe (the killing-blow shot)
 import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
@@ -272,9 +273,10 @@ export async function summon(ctx: EventCtx, combatantId: CombatantId, aeonId: st
     slot: SISTER_SLOT[combatantId] ?? 1,
   });
   actor?.setAlpha(0);
+  const land = arrival(actor); // MF-15 (`?summon=leap`, `motion/SummonBeat.ts`): today the hop after the fade, else the leap started as the fade passes 60 percent
   // PR-0181: the party leaves the field as the aeon arrives (`SummonStaging.ts`).
   await settled(ctx, Promise.all([actor?.fadeTo(1, 620), partyOffStage(ctx.stage, combatantId)]).then(() => undefined), 620);
-  void actor?.hop(0.5, 520);
+  land();
   await ctx.sleep(TIMING.summon - 620);
 }
 
