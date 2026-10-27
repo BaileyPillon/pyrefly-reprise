@@ -94,3 +94,33 @@ The stamp round-trips: `node tools/continuity-id.mjs --check` exits 0 on this ru
 - `D:/Final Fantasy` (local `main` at 157562f8b) is still behind. The runner flows no longer depend on its tools (score and clear run from the release tree with `--records`), but its own `critic/` records are what `--records` settles: the formats are the same ones the release tree writes.
 - Not done from the review: the named `--harness-tree` is not required to contain the report's build commit; Playwright / Chromium versions and `loadPolicy` are not in the stamp (F5, F10).
 - `live.js` is unchanged (a live report has no continuity aggregate).
+
+## Final validation (second pass, 2026-10-26 evening, after the follow-up commit `7db62e6bf`)
+
+A second agent re-checked the follow-up from scratch instead of trusting the first pass's report. **No code changed in this pass; only this note.** Game case unchanged: both games, critic plumbing, nothing a player sees.
+
+| Check | Result |
+|---|---|
+| F1 (major), the code | `release.js` line 81 passes `root: REL, toolTree: REL` to the post-deploy `deep.js`; `deep.js` and `focused.js` run score and clear from the tool tree with `--records <MAIN>`; both stop with a clear message when the tool tree has no `tools/continuity-id.mjs`; the chief's brief carries the "an identity refusal is not a typo" exception |
+| F1, the brief as rendered | I rendered `deep.js` with the exact args `release.js` now builds (`render-brief-fixed.mjs` in the lane folder): "run everything below in D:/pyrefly-release, the release tree", "First run node tools/continuity-id.mjs in D:/pyrefly-release", the score and clear commands name the release tree and `--records "D:/Final Fantasy"`, and nothing calls `D:/Final Fantasy` the release tree. The test that pins it is `critic-continuity-runners.test.ts` ("release.js starts the post-deploy deep review with the release worktree as root AND tool tree") |
+| `npx tsc --noEmit` | exit 0 |
+| `node tools/orphans.mjs` | exit 0; none of the new modules listed |
+| Tests | the 73 test files that mention the critic tools, the harness, the deploy gate, the runners or the pose gate (the first pass's list of 70 and my own grep of 53, unioned, keeping the *.test.ts files): **1,537 passed, 0 failed, 2 skipped** (`related3.json` in the lane folder). The full suite (1,290 files under `tests/unit`) was not run: it needs a quiet machine for far longer than the rig allowed and stays the driver's before the merge |
+| File sizes | `critic-harness-identity.mjs` 286, `critic-policy.mjs` 398, `continuity.mjs` 333, `continuity-id.mjs` 83, `deploy-pages.mjs` 1,013 (down from 1,037; already over, not grown) |
+| `validateReport` and `--records` | `validateReport` reads `opts.root` only for the harness identity, so judging with the release tree's policy (`policyRoot`) while settling another tree's records cannot read the wrong ledger |
+| Replay of the three kept recordings (CPU only, `reana-compare.mjs`) | this tree and the release-55 tree (the tool that made the release-64 baseline) give the **same summary byte for byte** on all three: Chapter I `seymour-flux` 657 ghost frames in 387.1 s = **101.8 a minute** (baseline 101.7), 0 snaps, 32 planned cuts; Chapter IV (this lane's fix-pass run) 895 in 363.2 s = **147.9** (baseline 147.4, +0.3 percent), 0 snaps, 43 planned cuts; Chapter IV (the reviewer's run) 965 in 383.2 s = 151.1, 0 snaps, 39 planned cuts. The plan's step-0 "Measure" (same kept recording through both tool versions, same ghost frames a minute within 3 percent, same snap count) is met three times over |
+
+**Not run, and why:** a live Chapter I (`seymour-flux`) run with the stamp. I started it (own dev server on 5601, `run-ch1.mjs` in the lane folder) at 23:29Z and it never got the rig: other lanes took `RIG-RECORD` back to back for 38 minutes (they also use a `RIG-RECORD.next` claim that this lane's script does not know about). I stopped the driver and the dev server by PID at 00:08Z, never took the lock, and left no process behind. The stamp has therefore been run live only in FFX-2 Chapter IV (two runs, the reviewer's and the first pass's); the FFX side is held by the replay and by the fixture-chapter tests. To close it: `node critic/runner/lib/continuity.mjs --base=<dev server> --evidence=<dir> --chapters=seymour-flux --size=1600x900 --seed=1` from this tree under the lock, then `node tools/continuity-id.mjs --check <dir>/continuity-summary.json` (expect exit 0 and about 101.7 ghost frames a minute).
+
+**Findings left alone, each with its reason (evidence, not preference):**
+- **F5, the part "the named `--harness-tree` must contain the report's build commit":** rejected. `--candidate-root` is the case where the harness runs in the release tree against a candidate in another tree, so the harness tree legitimately does not contain the candidate's commit; `tableAtCommit` already treats a commit the tree lacks as "cannot check" for the same reason. Refusing would block a correct report. The dirty-tree refusal and the NOTE line stay.
+- **F10, Playwright and Chromium versions and `loadPolicy` in the stamp:** not added. None of them moves a number the harness reads (the recordings replay byte-identical across tools), the review itself called them "not a regression", and the waiver ledger's hash, the one it named as worth adding, is in.
+- **`live.js`:** unchanged on purpose. A live report records CHK-017, CHK-016 and CHK-024 only, carries no continuity aggregate and no CHK-026 or CHK-027, so the identity rule (F4) never applies to it; its settle step needs no tool tree.
+
+### What remains for the driver (open questions, nothing was asked of Bailey)
+
+1. **F8, the date.** `requiredFrom` 2026-10-27 is 00:00 UTC, which has now passed (20:00 EDT on 2026-10-26). Nothing is enforced yet because no tree has merged this branch; from the merge on, any report dated after it needs a stamp made by a tree that has the stamp code. Merge before the next review writes its report, or move the one line in `critic/policy.json` and the one test that pins the date (`critic-harness-identity.test.ts`).
+2. **The full suite** (1,290 files) before the merge.
+3. **`deep-release-tree.js`** (outside the repository, not read by this lane) still needs `toolTree` / `root` of the release worktree when next edited.
+4. **`D:/Final Fantasy`** (local `main`, 157562f8b, 1,613 commits behind) is still where `MAIN` points for the records. The runner flows no longer run tools from it; they run from the release tree and settle its records with `--records`. Decide whether it should be brought up to date.
+5. **The live Chapter I run** above, whenever the rig is free.
