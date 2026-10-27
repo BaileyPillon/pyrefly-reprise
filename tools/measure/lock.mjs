@@ -33,8 +33,25 @@ export function reservedBy(rec, { pid = process.pid, now = Date.now(), isAlive =
   return isAlive(rec.pid) && age < (rec.maxMinutes ?? 10) * 60 * 1000 + STALE_MS ? rec : null;
 }
 
+/** Claim the empty reservation slot with an exclusive create (so a fresh claim of somebody else's is never overwritten); a stale one is taken over. True when the slot is ours. */
+function claimNext(mine) {
+  try {
+    const fd = fs.openSync(NEXT, 'wx');
+    fs.writeSync(fd, mine);
+    fs.closeSync(fd);
+    return true;
+  } catch (e) {
+    if (e.code !== 'EEXIST') return false;
+    const cur = readJson(NEXT);
+    if (cur?.pid === process.pid) return true;
+    if (reservedBy(cur)) return false;
+    try { fs.writeFileSync(NEXT, mine); return true; } catch { return false; }
+  }
+}
+
 /**
  * Take the lock (waiting as long as it takes, up to `maxWaitMs`). Returns `release()`.
+ * The slot is polled every 30 ms: lanes that queue back to back re-claim it within milliseconds of its being emptied, and a slower poll never sees it empty.
  * @param {{who: string, what: string, maxMinutes?: number, maxWaitMs?: number, log?: (...a: unknown[]) => void, watchdog?: boolean}} o
  */
 export async function takeBrowserLock({ who, what, maxMinutes = 10, maxWaitMs = 4 * 3600 * 1000, log = console.log, watchdog = true }) {
@@ -47,7 +64,7 @@ export async function takeBrowserLock({ who, what, maxMinutes = 10, maxWaitMs = 
     const held = heldBy(readJson(LOCK));
     const reserved = reservedBy(readJson(NEXT));
     const ours = readJson(NEXT)?.pid === process.pid;
-    if (!ours && !reserved && (held || guards.length)) { try { fs.writeFileSync(NEXT, mine()); } catch { /* lost the claim: poll again */ } }
+    if (!ours && !reserved && (held || guards.length)) claimNext(mine());
     if (!guards.length && !held && !reserved) {
       try { fs.writeFileSync(LOCK, mine()); } catch { await sleep(100); continue; }
       await sleep(150);
@@ -56,7 +73,7 @@ export async function takeBrowserLock({ who, what, maxMinutes = 10, maxWaitMs = 
     }
     if (Date.now() - t0 > maxWaitMs) throw new Error('waited too long for the browser lock');
     if (Date.now() - lastLog > 60000) { lastLog = Date.now(); log(`[lock] waiting: ${guards.join('+') || 'no guard'}; RIG-RECORD ${held ? `held by ${held.who} (pid ${held.pid}, ${held.what ?? ''})` : 'free'}; reservation ${reserved ? `of ${reserved.who}` : ours ? 'mine' : 'none'}`); }
-    await sleep(80);
+    await sleep(30);
   }
   let released = false;
   const release = () => {

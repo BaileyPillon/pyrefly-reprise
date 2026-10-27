@@ -346,6 +346,19 @@ non-finite samples, peak ≥ 0.95 or an over-budget file. Nothing ships as an
 audio asset — the game synthesises every sound at runtime; these WAVs are
 previews only. See [AUDIO-GUIDE.md](AUDIO-GUIDE.md).
 
+### Measuring motion fluidity (the motion-fluidity pass, lane L5; tooling, both games)
+
+All of these serve a built candidate read-only (`--dist <folder>`, e.g. a review's `dist-gate`), take the `RIG-RECORD` lock for their own browser job, and stamp their output with the tool's identity. Details: `critic/runner/lib/README.md`, `docs/handoff/mf-l5-tools.md`.
+
+| What | Command |
+|---|---|
+| Frame pacing of a fight (animation time lost a minute; never from the continuity probe or a trace) | `node tools/pace.mjs --dist <dir> --chapter ffx2-bahamut --size 2560x1440 --label ch4-1440-cap` (`--analyze <run dir>` re-reads one) |
+| 60 / 120 / 144 Hz equality of one scripted moment | `node tools/hz-matrix.mjs --dist <dir> --chapter seymour-flux` (`--judge <dir>` judges captures again) |
+| Velocity jolts per fight, against a baseline | `node tools/jolts.mjs --dist <dir> --chapter ffx2-bahamut --hz 120 [--compare <earlier jolts.json>]`; `--rec <recording.json>` counts a saved recording |
+| A blind phone clip card of look variants (address words on one build) | `node tools/ab-clip.mjs --spec <card.json>`; from an existing side-by-side clip: `node tools/ab-video.mjs --src <clip.mp4> --id ... --chapter ch1 --move ...` |
+| Does the FFX-2 ready shimmer restart with each HUD rebuild | `node tools/atb-shimmer.mjs --dist <dir>` |
+| Who allocates per frame | `node tools/alloc-profile.mjs --dist <dir> --chapter ffx2-bahamut --seconds 60` |
+
 ## The conference demo build's switches (release 60)
 
 Bailey's picks of 2026-10-20 (decision 157; "I demo my game in a week at a huge gaming conference"). Presentation and seed choice only: no engine, no rule, no game number changes, and the three goldens

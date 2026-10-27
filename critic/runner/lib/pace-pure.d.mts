@@ -28,4 +28,5 @@ export interface PaceAnalysis {
 }
 export declare function analyzePace(o: { dump: PaceDump; meta?: { screenshots?: Array<[number, number]> }; entrySec?: number }): PaceAnalysis;
 export declare function headline(a: PaceAnalysis): PaceHeadline;
+export declare function paceReportLine(label: string, a: PaceAnalysis, motion?: { ghostMsPerMinute?: number | null; ghostFrames60PerMinute?: number | null } | null): string;
 export declare function headlineText(label: string, a: PaceAnalysis): string;

@@ -128,6 +128,17 @@ export function headline(a) {
   return { animLostMsPerMin: s?.animLostMsPerMin ?? null, steadyAnimLostMsPerMin: a.steady?.animLostMsPerMin ?? null, over33PerMin: s?.over33PerMin ?? null, over50PerMin: s?.over50PerMin ?? null, p99: s?.p99 ?? null, entryAnimLostMs: a.entry?.animLostMsPerMin == null ? null : r2((a.entry.animLostMsPerMin * a.entry.seconds) / 60), battleSeconds: a.battle?.seconds ?? null };
 }
 
+/**
+ * The one line a report carries for a pacing run, with the see-through time beside it when the same fight's continuity summary is given (`motion` of `continuity-summary.json`): the two units of the pass,
+ * animation time lost a minute (the game's pacing, read from the in-page recorder) and ghost milliseconds a minute (the swaps' double image, read from the continuity probe), and never the one from the other's tool.
+ */
+export function paceReportLine(label, a, motion = null) {
+  if (a.error) return `${label}: ${a.error}`;
+  const h = a.headline;
+  const ghost = motion && typeof motion.ghostMsPerMinute === 'number' ? `; see-through ${motion.ghostMsPerMinute.toLocaleString('en-US')} ms a minute${typeof motion.ghostFrames60PerMinute === 'number' ? ` (${motion.ghostFrames60PerMinute} frames a minute at 60 Hz)` : ''}` : '';
+  return `${label}: ${h.battleSeconds} s of battle; animation time lost ${h.animLostMsPerMin} ms a minute (${h.steadyAnimLostMsPerMin} with the route's own frames); ${h.over33PerMin} frames a minute over 33 ms, ${h.over50PerMin} over 50; p99 ${h.p99} ms${ghost}`;
+}
+
 /** `{label: stats}` rows to a markdown-free text table of the headline numbers (for a log or a handoff note). */
 export function headlineText(label, a) {
   if (a.error) return `${label}: ${a.error}`;

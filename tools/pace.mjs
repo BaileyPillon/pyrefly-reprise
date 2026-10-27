@@ -22,19 +22,20 @@ import zlib from 'node:zlib';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { analyzePace, headlineText } from '../critic/runner/lib/pace-pure.mjs';
+import { analyzePace, headlineText, paceReportLine } from '../critic/runner/lib/pace-pure.mjs';
 import { classifyLongFrames } from '../critic/runner/lib/pace-causes.mjs';
 import { createDrainer, installRecorder, mainSegment, readRun } from '../critic/runner/lib/pace-record.mjs';
 import { takeBrowserLock } from './measure/lock.mjs';
 import { gpuByProcess, startMachineSamplers, summariseMachine } from './measure/machine.mjs';
 import { serveDist } from './measure/serve.mjs';
-import { describeStamp, toolStamp } from './measure/stamp.mjs';
+import { describeStamp, incomparable, toolStamp } from './measure/stamp.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = Object.fromEntries(process.argv.slice(2).map((a) => { const m = /^--([^=]+)(?:=(.*))?$/.exec(a); return m ? [m[1], m[2] ?? '1'] : [a, '1']; }));
 const val = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i >= 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : args[k] !== undefined && args[k] !== '1' ? args[k] : d; };
 const log = (...m) => console.log('[pace]', ...m);
 const entrySec = Number(val('entry', 10));
+const argv0Next = (flag) => { const i = process.argv.indexOf(flag); return String(process.argv[i + 2] ?? ''); }; // `--compare <before dir> <after dir>`
 
 if (val('analyze', null)) {
   const target = path.resolve(String(val('analyze', '')));
@@ -42,9 +43,22 @@ if (val('analyze', null)) {
   const run = await readRun(file);
   const seg = run.page.dump;
   const a = analyzePace({ dump: seg, meta: run.meta, entrySec });
-  console.log(headlineText(path.basename(path.dirname(file)), a));
+  const motion = val('continuity', null) ? JSON.parse(fs.readFileSync(path.resolve(String(val('continuity'))), 'utf8')).motion : null; // the same fight's continuity summary: the ghost milliseconds go beside the pacing
+  console.log(paceReportLine(path.basename(path.dirname(file)), a, motion));
   console.log(JSON.stringify({ headline: a.headline, steady: a.steady, steadyNoHarness: a.steadyNoHarness, entry: a.entry }, null, 1));
   process.exit(0);
+}
+
+if (val('compare', null)) {
+  const [aDir, bDir] = [String(val('compare')), argv0Next('--compare')];
+  const read = async (d) => { const f = path.join(path.resolve(d), 'pace.json.gz'); const r = await readRun(f); return { r, a: analyzePace({ dump: r.page.dump, meta: r.meta, entrySec }) }; };
+  const [x, y] = [await read(aDir), await read(bDir)];
+  for (const [name, o] of [['before', x], ['after ', y]]) console.log(paceReportLine(name, o.a));
+  const why = incomparable(x.r.meta.stamp, y.r.meta.stamp);
+  console.log(why.length ? `NOT COMPARABLE: ${why.join('; ')}` : 'comparable: the same tool and the same continuity harness read both');
+  const d = (k) => Math.round(((y.a.headline[k] ?? 0) - (x.a.headline[k] ?? 0)) * 100) / 100;
+  console.log(`change: animation time lost ${d('animLostMsPerMin')} ms a minute, frames over 33 ms ${d('over33PerMin')} a minute`);
+  process.exit(why.length ? 2 : 0);
 }
 
 const dist = path.resolve(String(val('dist', path.join(ROOT, 'dist-gate'))));

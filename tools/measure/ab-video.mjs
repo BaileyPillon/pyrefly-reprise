@@ -34,15 +34,19 @@ export function panelDifference(file, { crop, panelW }, bin = FFMPEG) {
   const r = spawnSync(bin, ['-loglevel', 'error', '-i', file, '-filter_complex', `[0:v]split=2[l][r];[l]${g(0)}[a];[r]${g(panelW)}[b];[a][b]hstack`, '-f', 'rawvideo', '-pix_fmt', 'gray', '-'], { maxBuffer: 256 * 1024 * 1024, windowsHide: true });
   if (r.status !== 0) throw new Error(`ffmpeg difference pass failed: ${String(r.stderr).slice(-300)}`);
   const buf = r.stdout, frame = 2 * W * H;
-  const curve = [];
+  const curve = [], bright = [];
   for (let f = 0; f + frame <= buf.length; f += frame) {
-    let sum = 0;
-    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) sum += Math.abs(buf[f + y * 2 * W + x] - buf[f + y * 2 * W + W + x]);
+    let sum = 0, la = 0, lb = 0;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const a = buf[f + y * 2 * W + x], b = buf[f + y * 2 * W + W + x]; sum += Math.abs(a - b); la += a; lb += b; }
     curve.push(sum / (W * H));
+    bright.push(Math.max(la, lb) / (W * H));
   }
-  let at = 0;
-  curve.forEach((d, i) => { if (d > curve[at]) at = i; });
-  return { at, max: r1(curve[at] ?? 0), curve: curve.map(r1) };
+  // a flash (a whiteout, a hit effect over the whole picture) makes the panels differ by the timing of the flash, not by the figure: the instant is chosen among the frames that are not washed out (mean luma under 185), all of them if none qualifies
+  const ok = curve.map((_, i) => i).filter((i) => bright[i] < 185);
+  const pool = ok.length >= 12 ? ok : curve.map((_, i) => i);
+  let at = pool[0] ?? 0;
+  for (const i of pool) if (curve[i] > curve[at]) at = i;
+  return { at, max: r1(curve[at] ?? 0), curve: curve.map(r1), washedOut: curve.length - ok.length };
 }
 
 /**

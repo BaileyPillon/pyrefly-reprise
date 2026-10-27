@@ -89,8 +89,9 @@ export async function writeStill({ S, file, title, subtitle, rows, cellW, cellH,
   const comps = [];
   rows.forEach((r, ri) => r.cells.forEach((c, k) => comps.push({ input: c, left: (k % 6) * cellW, top: 70 + (ri * 2 + Math.floor(k / 6)) * (cellH + 4) })));
   const band = (h, body) => Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${STILL_W}" height="${h}"><rect width="${STILL_W}" height="${h}" fill="#101624"/>${body}</svg>`);
-  const head = band(70, `<text x="16" y="30" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#f5deb0">${esc(title)}</text><text x="16" y="56" font-family="Arial, sans-serif" font-size="16" fill="#cfd6e6">${esc(subtitle)}</text>`);
-  const tail = band(70, `<text x="16" y="28" font-family="Arial, sans-serif" font-size="15" fill="#cfd6e6">${esc(foot)}</text>`);
+  const fit = (text, size) => Math.max(10, Math.min(size, Math.floor((STILL_W - 32) / (Math.max(1, text.length) * 0.56)))); // a long title shrinks to the card's width instead of running off it
+  const head = band(70, `<text x="16" y="30" font-family="Arial, sans-serif" font-size="${fit(title, 22)}" font-weight="700" fill="#f5deb0">${esc(title)}</text><text x="16" y="56" font-family="Arial, sans-serif" font-size="${fit(subtitle, 16)}" fill="#cfd6e6">${esc(subtitle)}</text>`);
+  const tail = band(70, `<text x="16" y="28" font-family="Arial, sans-serif" font-size="${fit(foot, 15)}" fill="#cfd6e6">${esc(foot)}</text>`);
   await S({ create: { width: STILL_W, height: cardH, channels: 3, background: '#0b0f1a' } }).composite([{ input: head, left: 0, top: 0 }, ...comps, { input: tail, left: 0, top: cardH - 70 }]).jpeg({ quality: 88 }).toFile(file);
   return { width: STILL_W, height: cardH };
 }
