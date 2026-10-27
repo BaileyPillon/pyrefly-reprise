@@ -6,7 +6,7 @@
  * and under `flow` no stand between the run's end and the lunge (92 to 100 ms today), with contact where it was. `MF_LOG=1` prints the numbers (px per 60 Hz frame at 1600 wide, ms).
  */
 import { afterEach, describe, expect, it } from 'vitest';
-import { PaintedActor, painting, reset, type Actor } from './engine/head-lock-fixture.ts';
+import { PaintedActor, painting, reset } from './engine/head-lock-fixture.ts';
 import { RunInMotion } from '../../src/app/screens/BattleScreenRunIn.ts';
 import { startAttackMove } from '../../src/engine/motion/CurveBeats.ts';
 import { setCurvesChapter, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
@@ -187,7 +187,7 @@ describe('MF-04 in the engine: the run, the lift, the stand', () => {
       const accel = (tr: Track): number => { const v = speedOf(tr.x, hz).slice(1, tr.t.findIndex((s) => s >= tr.contactAt)); return Math.max(...v.map((s, i) => (i ? Math.abs(s - v[i - 1]!) : 0))); };
       if (process.env['MF_LOG']) console.log(JSON.stringify({ hz, standToday: Math.round(stand(today)), standFlow: Math.round(stand(flow)), contactMsToday: Math.round(contactMs(today)), contactMsFlow: Math.round(contactMs(flow)), contactXToday: +today.contactX.toFixed(1), contactXFlow: +flow.contactX.toFixed(1), peakToday: +peakTo(today).toFixed(1), peakFlow: +peakTo(flow).toFixed(1), stepToday: +accel(today).toFixed(1), stepFlow: +accel(flow).toFixed(1), askedToday: Math.round(today.askedAt), askedFlow: Math.round(flow.askedAt) }));
       expect(stand(today)).toBeGreaterThanOrEqual(60); // the standing the audit measured: about 100 ms
-      expect(stand(flow)).toBeLessThanOrEqual(35);
+      expect(stand(flow)).toBeLessThanOrEqual(FRAME[hz]! + 1e-6); // at most one display frame under 1.5 px (today 133 ms)
       expect(Math.abs(flow.contactX - today.contactX)).toBeLessThan(3); // px: contact is where it was
       expect(flow.contactAt).toBeLessThan(today.contactAt - 40); // the blow lands sooner by about the wind-up
     });
