@@ -8,7 +8,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { AGE_CAP_MS, AtbLive, HOLD_BACK, Running, atbBarsSmooth, ease, scaleStyle, setAtbBarsSmooth, shimmerDelay, structure } from '../../src/ui/ffx2/AtbLive.ts';
+import { AGE_CAP_MS, AtbLive, HOLD_BACK, LEAD_MAX, Running, atbBarsSmooth, ease, scaleStyle, setAtbBarsSmooth, shimmerDelay, structure } from '../../src/ui/ffx2/AtbLive.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 import { partyRowHtml } from '../../src/ui/ffx2/PartyRows.ts';
 import type { AtbSnapshot, BattleState, FFX2Combatant } from '../../src/battle/common/types.ts';
@@ -68,7 +68,7 @@ describe('Running: a fill that runs between two snapshots', () => {
 
 describe('ease(): the bar that is drawn between the extrapolated values', () => {
   /** The pump as it is: the engine's gauge moves in logic steps of 1000/29.97 ms, the HUD is handed a snapshot every 50 ms, the screen draws every 1000/hz. A 246 px bar fills in 8.8 s. */
-  function run(hz: number, eased: boolean): number[] {
+  function run(hz: number, eased: boolean, heldFrom = Infinity): number[] {
     const STEP_MS = 1000 / 29.97;
     const perMs = 1 / 8800;
     const r = new Running();
@@ -77,7 +77,8 @@ describe('ease(): the bar that is drawn between the extrapolated values', () => 
     let nextSnap = 0;
     const dt = 1000 / hz;
     for (let t = 0, i = 0; t < 3000; t += dt, i++) {
-      while (nextSnap <= t) { // a pump step: the gauge as the engine has it at that moment
+      while (nextSnap <= t) { // a pump step: the gauge as the engine has it at that moment (none while the clock is held)
+        if (nextSnap >= heldFrom) { nextSnap += 50; continue; }
         r.feed(Math.floor(nextSnap / STEP_MS) * STEP_MS * perMs, nextSnap, t);
         nextSnap += 50;
       }
@@ -100,11 +101,21 @@ describe('ease(): the bar that is drawn between the extrapolated values', () => 
     }
   });
 
+  it('a held clock (no snapshots: Wait under a submenu, an effect playing) stops the bar within a few frames, at 60, 120 and 144 Hz', () => {
+    for (const hz of [60, 120, 144]) {
+      const d = run(hz, true, 1500);
+      const at = (ms: number): number => d[Math.round((ms * hz) / 1000)]!;
+      expect(at(2200)).toBeCloseTo(at(2990), 9); // standing still well before the end of the hold
+      expect(at(2990)).toBeLessThanOrEqual((1500 + AGE_CAP_MS) / 8800 + LEAD_MAX); // and no further past the model than its cap plus the lead
+    }
+  });
+
   it('a spent bar and a full bar are drawn at once; a drawn bar is never taken back for a snapshot a hair behind', () => {
     expect(ease(0.6, 0.02, 16.7)).toBe(0.02); // the action spent it
     expect(ease(0.97, 1, 16.7)).toBe(1); // the ready flash
     expect(ease(-1, 0.4, 16.7)).toBe(0.4); // nothing drawn yet
-    expect(ease(0.5, 0.49, 16.7, 0.00012)).toBeGreaterThan(0.5); // behind: it creeps on, not back and not flat
+    expect(ease(0.5, 0.497, 16.7, 0.00012)).toBeGreaterThan(0.5); // a hair behind: it creeps on, not back and not flat
+    expect(ease(0.5, 0.49, 16.7, 0.00012)).toBe(0.5); // further behind than one logic step: it waits for the model, it does not run on
     expect(ease(0.5, 0.5, 16.7, 0)).toBe(0.5); // a held clock: it stays
   });
 });

@@ -45,6 +45,8 @@ export const SNAP_DROP = 0.05;
 export const SNAP_JUMP = 0.3;
 /** When the extrapolation is behind what is drawn (a snapshot landed a hair back), the bar creeps on at this part of its speed: never back, never flat. */
 const CREEP = 0.4;
+/** The most the drawn bar may lead the model while it creeps: about one logic step of the engine's gauge (1.5 px of a 188 px bar). */
+export const LEAD_MAX = 0.008;
 /** How much of the last rate the next snapshot pair changes: the engine's gauge moves in logic steps of 33 ms but the snapshots come every 50 ms, so a pair alone says 1 or 2 steps. */
 const RATE_MIX = 0.35;
 
@@ -68,7 +70,11 @@ export function shimmerDelay(nowMs: number = typeof performance === 'undefined' 
 /** The value to draw this frame: where the drawn bar was, closing on the extrapolated target (see {@link EASE_TAU_MS}); `prev` below 0 = nothing drawn yet; `rate` is the bar's speed per ms. */
 export function ease(prev: number, target: number, dtMs: number, rate = 0): number {
   if (prev < 0 || target >= 1 || target < prev - SNAP_DROP || target - prev > SNAP_JUMP) return target; // a full bar is the ready flash: drawn at once
-  if (target <= prev) return Math.min(1, prev + Math.max(0, rate) * CREEP * Math.max(0, dtMs));
+  if (target <= prev) {
+    // behind: creep on, but never more than LEAD_MAX past what the model says, so a held clock (no snapshots, the extrapolation capped) stops the bar within a few frames, not 60 frames later
+    const ceiling = target + LEAD_MAX;
+    return prev >= ceiling ? prev : Math.min(1, ceiling, prev + Math.max(0, rate) * CREEP * Math.max(0, dtMs));
+  }
   const next = prev + (target - prev) * (1 - Math.exp(-Math.max(0, dtMs) / EASE_TAU_MS));
   return target - next < 5e-4 ? target : next;
 }
