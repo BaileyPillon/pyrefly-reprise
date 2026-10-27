@@ -1,6 +1,6 @@
 import { DataTexture, LinearFilter, RGBAFormat, UnsignedByteType, type Texture } from 'three';
 import { gpuSyncHeld } from '../../GpuSettle.ts';
-import { BREATH_THUMB, thumbOf } from '../../look/AlphaThumb.ts';
+import { BREATH_THUMB, thumbOf, thumbPending } from '../../look/AlphaThumb.ts';
 
 /**
  * The MAX mix (D-316), BREATHING's rig for one painting (LIVING PAINTINGS; both games), ported from option
@@ -184,7 +184,7 @@ export function breathRigFor(tex: Texture): BreathRig {
     byImage.set(img as object, rig);
     return rig;
   }
-  if (pending.has(tex.uuid) || gpuSyncHeld()) return flatBreathRig(); // while the GPU is still building the field (`GpuSettle.ts`) a readback would stop the page until it is done: ask again next frame
+  if (pending.has(tex.uuid) || gpuSyncHeld() || thumbPending(img, BREATH_THUMB)) return flatBreathRig(); // MF-02: while the worker is making this field the flat rig stands in, as it does while the page's own async read runs (and the page does not start that read) // while the GPU is still building the field (`GpuSettle.ts`) a readback would stop the page until it is done: ask again next frame
   if (typeof createImageBitmap === 'function') {
     const id = tex.uuid;
     const mine = epoch;
