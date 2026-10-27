@@ -37,6 +37,7 @@ import { HELD_MIN_FRAMES } from './continuity-held.mjs';
 import { composeStrip } from './continuity-strips.mjs';
 import { continuityReportLine, verdicts } from './continuity-pure.mjs';
 import { washPolicy } from './continuity-wash.mjs';
+import { aggregateGhostMs } from './continuity-ghostms.mjs'; // T-01 (lane L5): see-through time in milliseconds
 import { createRigReader } from './continuity-rig-probe.mjs';
 import { rigProbeConfig } from './continuity-rig.mjs';
 import { CONTINUITY_BUDGET_MS, continuityBudgetFor } from './route-pure.mjs';
@@ -317,14 +318,17 @@ export function aggregate(results, cfg) {
       jerksLongFrame: n0((s) => s.motion.jerksLongFrame), swapJerksLongFrame: n0((s) => s.motion.swapJerksLongFrame), swapJerksSteadyOverFail: n0((s) => s.motion.swapJerksSteadyOverFail),
     });
   }
+  // T-01 (lane L5): the see-through time in milliseconds is the primary number; a chapter summarised before the unit existed leaves the whole block out (its milliseconds are unknown, not zero)
+  const ghostAgg = aggregateGhostMs(ok.map((r) => r.summary.motion), minutes);
+  if (ghostAgg) Object.assign(motion, ghostAgg);
   const ft = ok.map((r) => r.summary.frameTime).filter(Boolean);
-  const frameTime = ft.length ? { frames: ft.reduce((n, f) => n + f.frames, 0), longFrames: ft.reduce((n, f) => n + f.longFrames, 0), longFramePct: Math.round((ft.reduce((n, f) => n + f.longFrames, 0) / Math.max(1, ft.reduce((n, f) => n + f.frames, 0))) * 1000) / 10, worstP99Ms: Math.max(...ft.map((f) => f.p99Ms)), maxMs: Math.max(...ft.map((f) => f.maxMs)), longMs: ft[0].longMs } : null;
+  const frameTime = ft.length ? { frames: ft.reduce((n, f) => n + f.frames, 0), longFrames: ft.reduce((n, f) => n + f.longFrames, 0), longFramePct: Math.round((ft.reduce((n, f) => n + f.longFrames, 0) / Math.max(1, ft.reduce((n, f) => n + f.frames, 0))) * 1000) / 10, worstP99Ms: Math.max(...ft.map((f) => f.p99Ms)), maxMs: Math.max(...ft.map((f) => f.maxMs)), longMs: ft[0].longMs, source: 'continuity-probe', pacingNumber: false } : null;
   const whole = { battleSeconds: Math.round(battleSeconds * 10) / 10, counted: sum((s) => s.counted), swaps: sum((s) => s.swaps), size, motion };
   const unverifiedChapters = results.filter((r) => !r.summary || r.checks?.['CHK-026']?.result === 'UNVERIFIED').map((r) => r.chapter);
   const checks = verdicts(whole, cfg, {});
   // a chapter that could not be verified keeps the whole run from passing, but never hides another chapter's failure
   for (const id of ['CHK-026', 'CHK-027']) if (checks[id].result === 'PASS' && unverifiedChapters.length) checks[id] = { result: 'UNVERIFIED', reasons: [`not verified in: ${unverifiedChapters.join(', ')}`] };
-  const out = { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, minStature: r.summary?.size?.minStature ?? null, heightOverBand: r.summary?.size?.heightOverBand ?? null, feetSilOver: r.summary?.size?.feetSilOver ?? null, swapJerksWorstPx: r.summary?.motion?.swapJerksWorstPx ?? null, dashesWorstPx: r.summary?.motion?.dashesWorstPx ?? null, frameP99Ms: r.summary?.frameTime?.p99Ms ?? null, jerksCovered: r.summary?.motion?.jerksCovered ?? 0, fps: r.probe?.fps ?? null, dedicated: r.dedicated ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, frameTime, checks };
+  const out = { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, ghostMsPerMinute: r.summary?.motion?.ghostMsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, minStature: r.summary?.size?.minStature ?? null, heightOverBand: r.summary?.size?.heightOverBand ?? null, feetSilOver: r.summary?.size?.feetSilOver ?? null, swapJerksWorstPx: r.summary?.motion?.swapJerksWorstPx ?? null, dashesWorstPx: r.summary?.motion?.dashesWorstPx ?? null, frameP99Ms: r.summary?.frameTime?.p99Ms ?? null, jerksCovered: r.summary?.motion?.jerksCovered ?? 0, fps: r.probe?.fps ?? null, dedicated: r.dedicated ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, frameTime, checks };
   return { ...out, reportLine: continuityReportLine(out) }; // PR-0450: one line for the report, with the frame rates and how many chapters the dedicated harness ran
 }
 
