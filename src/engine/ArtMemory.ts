@@ -109,3 +109,39 @@ export function poseHeat(url: string): number {
   if (pose.startsWith('od-')) return 0.2;
   return POSE_HEAT[pose] ?? 0.4;
 }
+
+/** A pose this likely to be drawn soon (or more) is "hot" (`poseHeat`): the strike, the spell, the flinch, the item, the ready stance, the idle. */
+export const HOT_HEAT = 0.8;
+
+/**
+ * MF-02 (motion-fluidity pass, lane "mf-l4-freezes"; both games): the warm entries to GIVE BACK so that a hot pose's master (`sizeMB`) can be staged when the pool is full. The pool fills in the order figures are
+ * upgraded, so a late arrival (an aeon's summon 60 s in, Yuna's step up to 4x at 166 s) used to find it full of the party's sleep, victory and overdrive paintings and swapped its strike and spell in unstaged
+ * (22 of Chapter I's 29 unstaged masters were hot poses, and each paid a 50 to 145 ms upload on its first draw; 25 of the 105 staged ones were cold). A cooled entry loses only its early upload: its master stays
+ * on the texture, the GL copy is freed, and its own first draw uploads it as every unstaged one does, a rare pose paying the rare stall. The same pictures are drawn; the pool's size is unchanged.
+ * Candidates are resident, not mid-upload, not the entry itself and at least 0.3 colder than `heat`; the coldest (then the longest unseen) go first. Returns [] when giving back every candidate still would not make room.
+ */
+export function coolingFor(entries: Iterable<Entry>, sizeMB: number, budgetMB: number, own: Entry, heat: number): Entry[] {
+  const all = [...entries];
+  let pool = warmMB(all) - own.pendingMB;
+  const cap = warmCap(budgetMB);
+  if (pool + sizeMB <= cap) return [];
+  const cold = all.filter((x) => x !== own && x.warm && x.mb > 0 && !x.staged && poseHeat(x.url) <= heat - 0.3).sort((a, b) => poseHeat(a.url) - poseHeat(b.url) || a.lastSeen - b.lastSeen);
+  const give: Entry[] = [];
+  for (const x of cold) {
+    give.push(x);
+    pool -= x.mb;
+    if (pool + sizeMB <= cap) return give;
+  }
+  return [];
+}
+
+/** Give the early uploads back: the GL copy is freed (the image stays on the texture, so the next draw uploads it), the entries are no longer speculative or resident. Returns how many. */
+export function coolOff(give: Entry[]): number {
+  for (const x of give) {
+    x.texture.dispose();
+    x.texture.needsUpdate = true;
+    x.warm = false;
+    x.mb = 0;
+  }
+  return give.length;
+}

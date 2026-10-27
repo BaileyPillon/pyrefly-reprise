@@ -38,7 +38,7 @@ interface Fake {
 }
 
 /** One actor with `n` poses at `scale`; the poses in `drawn` are drawn. */
-function figure(n: number, scale: number, drawn: number[] = [0]): Fake {
+function figure(n: number, scale: number, drawn: number[] = [0], names: string[] = [], who = 'tidus'): Fake {
   let paintings: GovernedPainting[] = [];
   const textures: Texture[] = [];
   const mesh = plane();
@@ -47,7 +47,7 @@ function figure(n: number, scale: number, drawn: number[] = [0]): Fake {
     t.image = { width: META.width * scale, height: META.height * scale } as unknown as HTMLImageElement;
     t.userData['artScale'] = scale;
     textures.push(t);
-    paintings.push({ painted: { texture: t, meta: META, url: `/art/characters/tidus/pose${i}.png`, scale }, mesh, drawn: drawn.includes(i) });
+    paintings.push({ painted: { texture: t, meta: META, url: `/art/characters/${who}/${names[i] ?? `pose${i}`}.png`, scale }, mesh, drawn: drawn.includes(i) });
   }
   return { actor: { paintings: () => paintings }, paintings, textures, drawn: (i, on) => void (paintings[i]!.drawn = on), remove: (i) => void (paintings = paintings.filter((_, j) => j !== i)) };
 }
@@ -374,5 +374,34 @@ describe('the warm pool', () => {
     r.stages[0]!.settle(true);
     await tick(r, 4);
     expect(r.gov.stats().warmed).toBe(1);
+  });
+
+  it('gives the early uploads of cold poses back so a hot pose of a late arrival can be staged (MF-02): the cold masters stay on their textures, the pool does not grow', async () => {
+    // textureMB 100 -> a 30 MB pool; a 2x pose is about 10.7 MB with its mips, so two fit and a third does not
+    const a = figure(3, 2, [0], ['idle', 'sleep', 'victory'], 'yuna'); // far away: her idle needs nothing bigger; her cold poses are warmed into the pool before they are drawn
+    const b = figure(3, 1, [], ['idle', 'attack', 'cast'], 'ixion'); // an aeon at 1x (0.5 Mpx: not worth warming) that is not drawn until it is summoned
+    const r = rig([a.actor, b.actor], { budgetMB: 100 });
+    const disposed: string[] = [];
+    a.textures.forEach((tex, i) => tex.addEventListener('dispose', () => disposed.push(`a${i}`)));
+    for (let i = 0; i < 4; i++) {
+      await tick(r, 4);
+      for (const s of r.stages) s.settle(true);
+    }
+    await tick(r, 4);
+    expect(r.gov.stats().warmMB).toBeGreaterThan(18); // sleep and victory are up, before they are drawn
+    expect(r.gov.stats().cooled).toBe(0);
+    const before = r.stages.length;
+    b.drawn(0, true); // the aeon is summoned: its idle is drawn, close up, and its strike and spell follow its idle's master
+    r.cam.current = camera(2.2);
+    for (let i = 0; i < 10; i++) {
+      await tick(r, PERSIST_FRAMES);
+      for (const s of r.stages) s.settle(true);
+    }
+    const stats = r.gov.stats();
+    expect(stats.cooled).toBeGreaterThan(0); // the sleep and victory paintings gave their uploads back
+    expect(disposed.length).toBeGreaterThanOrEqual(stats.cooled);
+    const staged = r.stages.slice(before).map((s) => s.texture);
+    expect(staged.includes(b.textures[1]!) || staged.includes(b.textures[2]!)).toBe(true); // a hot pose of the aeon was staged
+    expect(stats.warmMB).toBeLessThanOrEqual(30); // the pool is the size it was
   });
 });
