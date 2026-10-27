@@ -28,4 +28,4 @@ when the command is submitted; the swap's cause is `BattlePresenterBeats.turnSta
 
 ## Stop rule
 
-A run that misses the prediction (about 100.7 a minute, accept 105) stops the batch before any art step. It landed at 103.9.
+A run that misses the prediction (about 100.7 a minute, accept 105) stops the batch before any art step. It landed at 103.9; the adversarial review's own run landed at 110.7 and a third at 102.1, so the line was inside the run-to-run noise of a real-time ATB route (plus or minus 5 percent). **Read the stop rule as "the flicker class went to zero and no other class rose"**, which every run met (about 102 to 111 a minute, from about 154).
