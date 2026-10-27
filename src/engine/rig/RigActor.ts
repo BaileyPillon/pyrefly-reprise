@@ -32,6 +32,7 @@ import { fadeMsFor, fadeStart, partAreas, swapShare } from './RigFade.ts'; // `?
 import { demoMotionOn } from '../motion/DemoMotion.ts';
 import { RigSmearWindow } from './RigSmearWindow.ts'; // motion pass (lane "core", step 2): a whole-figure image flip is a cut inside a smear
 import { hashUnit } from './RigHash.ts';
+import { attachRigHandoff } from './RigHandoff.ts'; // MF-11 (`?rigko=whole`): the ko key is the whole fall, the idle key waits for the strike to be over
 import { CH } from './RigSkeleton.ts';
 import { ShapeTrack } from './RigShape.ts';
 import { RIG_SHARE, rigLedger, rigNormalMB, rigTextureMB, tierPartsOf, wantsMaster, type RigTextures } from './RigTier.ts';
@@ -93,8 +94,7 @@ export class RigActor extends PaintedActor {
   private rigClock: number;
   private idleAmount = 1;
   private forwardSpeed = 0;
-  private lastX = 0;
-  private haveX = false;
+  private lastX = 0; private haveX = false;
   private readonly scratch = new Vector3();
   /** Each key's posed silhouette as the gate stamped it, and where the figure's painted shape is now (`RigShape.ts`). */
   private readonly track: ShapeTrack;
@@ -107,8 +107,7 @@ export class RigActor extends PaintedActor {
   private textureMB = 0;
   private readonly normalMB: number; // the normal pieces' share of textureMB (the HD-2D look): one size, whatever the tier
   private raising = false;
-  private raiseBlocked = false;
-  private raiseTick = 0;
+  private raiseBlocked = false; private raiseTick = 0;
 
   private constructor(opts: PaintedActorOptions, asset: RigAsset) {
     super({
@@ -160,6 +159,7 @@ export class RigActor extends PaintedActor {
       actor.rig = await RigFigure.load(asset.data, asset.base, carrier, asset.loadTexture, actor.textures, asset.normals === true);
       actor.chains = asset.data.motion?.chains?.length ? new RigChains(actor.rig.skeleton, asset.data.motion.chains) : null;
       actor.ready = true;
+      attachRigHandoff(actor);
       actor.trans.snap(actor.compiled.get('idle')!);
       actor.pose0();
       return actor;

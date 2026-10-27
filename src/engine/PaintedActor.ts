@@ -2223,6 +2223,16 @@ export class PaintedActor extends Group {
     });
   }
 
+  /** MF-11: a strike (its wind-up, travel, hold, return and settle) is in flight. */
+  get striking(): boolean {
+    return this.curves.strike !== null;
+  }
+
+  /** MF-11 (`rig/RigHandoff.ts`): the pose request without a subclass's key move: the life layer and the painted planes only. */
+  poseLife(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
+    PaintedActor.prototype.setPose.call(this, name, opts);
+  }
+
   /** MF-04: settles after `ms` of this actor's own tween clock (paced, frozen in a hit-stop), the clock `moveTo` and the curves run on. */
   waitMs(ms: number): Promise<void> {
     return this.tweens.toAsync(0, 1, { durationMs: Math.max(1, ms), easing: 'linear', onUpdate: () => {} });
