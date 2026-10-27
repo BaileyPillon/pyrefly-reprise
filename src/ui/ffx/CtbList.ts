@@ -1,6 +1,7 @@
 import type { AnyCombatant, CombatantId, TurnPreview } from '../../battle/common/types.ts';
 import { aeonChipHtml, portraitChipHtml, resolvePortraitKey, tintFor, wirePortraitFallbacks } from './portraits.ts';
 import { ffxCtbIconsHtml } from '../common/statusRows.ts';
+import { ctbSlideOn, measureRows, slideRows } from './CtbSlide.ts'; // MF-13: `?ctbslide=flip`, the rows slide to their new places (FFX only)
 
 /** Ink & Gold spec: "CTB queue ... Six rows visible" (presentation-ink-and-gold.md "Components"). */
 const VISIBLE_ROWS = 6;
@@ -64,9 +65,12 @@ export class CtbList {
 
   render(preview: TurnPreview[], combatants: Record<CombatantId, AnyCombatant>): void {
     const rows = preview.slice(0, VISIBLE_ROWS).map((row, i, all) => this.rowHtml(row, i, combatants, all.findIndex((r) => r.actorId === row.actorId) === i));
+    const slide = ctbSlideOn() && this.el.isConnected;
+    const before = slide ? measureRows(this.el) : null; // MF-13: where every row is drawn now (First)
     this.el.innerHTML = rows.join('');
     wirePortraitFallbacks(this.el);
     this.fitNames();
+    if (before) slideRows(this.el, before); // Last, Invert, Play
   }
 
   /**

@@ -3,21 +3,11 @@
  * `research/visual-bible.md` §5.4, drawn at the real device resolution and
  * wired to {@link SphereGridModel} for movement and activation.
  *
- * RESOLUTION — the bug this file was rewritten for. Every Ink & Gold screen
- * is authored on the 640x360 grid and scaled onto the viewport by one
- * `transform: scale(k)` on `LetterboxStage`'s inner element. So for a canvas
- * inside that stage there are **three** sizes, not two:
- *
- *   clientWidth      — the box in 640x360 authoring px (what we draw in)
- *   rect.width       — the same box in CSS px after the stage transform
- *   rect.width * dpr — the same box in device px (what the backing store needs)
- *
- * The previous revision sized the backing store from `rect.width * dpr` but
- * set the drawing transform from `dpr` alone, so the drawing filled only
- * `1/k` of the canvas: a ~340x100 dark strip pinned to the top-left of the
- * ivory slab, which is exactly what `docs/screenshots/42b-sphere-grid.png`
- * caught. `viewScale` below is that missing `k`, and it is also what pointer
- * deltas have to be divided by for a drag to track the cursor.
+ * RESOLUTION — the bug this file was rewritten for. Every Ink & Gold screen is authored on the 640x360 grid and scaled onto the viewport by one `transform: scale(k)` on
+ * `LetterboxStage`'s inner element, so a canvas inside it has THREE sizes: `clientWidth` (the box in 640x360 authoring px, what we draw in), `rect.width` (CSS px after the stage
+ * transform) and `rect.width * dpr` (device px, what the backing store needs). The previous revision sized the backing store from `rect.width * dpr` but set the drawing transform
+ * from `dpr` alone, so the drawing filled only `1/k` of the canvas (`docs/screenshots/42b-sphere-grid.png`). `viewScale` below is that missing `k`, and what pointer deltas are
+ * divided by for a drag to track the cursor.
  *
  * Nothing here reaches outside the canvas: the ivory captions, the S.Lv
  * header and the sphere pouch are `SphereGridPanel`'s DOM, so they get real
@@ -39,6 +29,7 @@ import type { SphereGridModel } from './sphereGridModel.ts';
 import { tooltipLines } from './sphereGridCaption.ts';
 import { STRIP_H, drawHighlights, drawLockPlate, drawStrip } from './sphereGridDraw.ts';
 import { drawGround, drawRoute, drawRouteLabels, drawToken, drawTooltip, type RouteDraw } from './sphereGridPaint.ts';
+import { GridGlide, gridEaseOn, type View } from './SphereGridEase.ts'; // MF-13: `?gridease=on`, the pan and zoom glide instead of snapping (FFX only)
 
 /** Zoom at which a node's label is worth drawing at all. */
 const LABEL_ZOOM = 0.28;
@@ -81,6 +72,7 @@ export class SphereGridView {
   /** Pan in authoring px, zoom in authoring px per grid unit. */
   private pan = { x: 0, y: 0 };
   private zoom = DEFAULT_ZOOM;
+  private readonly glide = new GridGlide(); private readonly glideOn = gridEaseOn(); // MF-13
   /** Authoring px per... see the file header. Recomputed on every resize. */
   private viewScale = 1;
   private w = 1;
@@ -179,24 +171,17 @@ export class SphereGridView {
 
   // ------------------------------------------------------------ viewport
 
-  /**
-   * Size the backing store to real device pixels and set the drawing
-   * transform so one unit is one authoring px. See the file header for why
-   * `viewScale` is not just `devicePixelRatio`.
-   */
+  /** Size the backing store to real device pixels and set the drawing transform so one unit is one authoring px (the file header: why `viewScale` is not just `devicePixelRatio`). */
   private resize(): void {
     const rect = this.el.getBoundingClientRect();
-    // `--sg-unit` (option B's phone page): the page there is not a scaled
-    // 640x360 board, so one drawing unit is made that many CSS px to keep the
-    // grid's type and nodes at the size they have on the desktop.
+    // `--sg-unit` (option B's phone page): the page there is not a scaled 640x360 board, so one drawing unit is that many CSS px (the grid's type and nodes keep their desktop size).
     const css = typeof getComputedStyle === 'function' ? getComputedStyle(this.el) : null;
     const unit = Math.max(1, Number.parseFloat(css?.getPropertyValue('--sg-unit') ?? '') || 1);
     this.strip = (css?.getPropertyValue('--sg-strip') ?? '').trim() !== '0';
     const cssW = (this.el.clientWidth || 334) / unit;
     const cssH = (this.el.clientHeight || 90) / unit;
     const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
-    // Under a hidden tab or a canvas-less test DOM the rect collapses to 0;
-    // fall back to 1:1 rather than dividing by zero.
+    // Under a hidden tab or a canvas-less test DOM the rect collapses to 0: fall back to 1:1 rather than dividing by zero.
     this.viewScale = rect.width > 0 ? (rect.width / cssW) * dpr : dpr;
     this.w = cssW;
     this.h = cssH;
@@ -206,17 +191,15 @@ export class SphereGridView {
     this.render();
   }
 
-  /**
-   * Frame a node — then slide up to 45% of a half-viewport toward the local
-   * centre of mass. Tidus stands at node 121, the far tip of his own cluster,
-   * so centring on him exactly opened with half the canvas empty space; the
-   * bias fills the frame with grid while keeping him near the middle.
-   */
   /** Height of the canvas's bottom strip, 0 where the page carries it instead. */
   private get stripH(): number {
     return this.strip ? STRIP_H : 0;
   }
 
+  /**
+   * Frame a node — then slide up to 45% of a half-viewport toward the local centre of mass. Tidus stands at node 121, the far tip of his own cluster, so centring on him exactly
+   * opened with half the canvas empty space; the bias fills the frame with grid while keeping him near the middle.
+   */
   centreOn(nodeId: number): void {
     const node = NODE_BY_ID.get(nodeId);
     if (!node) return;
@@ -247,19 +230,27 @@ export class SphereGridView {
 
   /** Zoom about a point in authoring px (the cursor, or the canvas centre). */
   zoomAbout(factor: number, px: number, py: number): void {
-    const before = this.zoom;
-    this.setZoom(before * factor);
-    const k = this.zoom / before;
-    this.pan.x = px - (px - this.pan.x) * k;
-    this.pan.y = py - (py - this.pan.y) * k;
+    this.gliding(() => {
+      const before = this.zoom;
+      this.setZoom(before * factor);
+      const k = this.zoom / before;
+      this.pan.x = px - (px - this.pan.x) * k;
+      this.pan.y = py - (py - this.pan.y) * k;
+    });
     this.render();
   }
 
-  /**
-   * The +/- controls and the shoulder buttons zoom about the cursor node when
-   * it is on screen (so the character you are reading stays put), and about
-   * the canvas centre otherwise.
-   */
+  /** MF-13: a snap with the word off; with it on, `move` (which sets pan and zoom where they should end) becomes a glide from what is drawn now. */
+  private gliding(move: () => void): void {
+    if (!this.glideOn) return move();
+    this.glide.run(() => ({ x: this.pan.x, y: this.pan.y, z: this.zoom }), (v) => this.setView(v), move, performance.now());
+  }
+
+  private setView(v: View): void {
+    [this.pan.x, this.pan.y, this.zoom] = [v.x, v.y, v.z];
+  }
+
+  /** The +/- controls and the shoulder buttons zoom about the cursor node when it is on screen (so the character you are reading stays put), and about the canvas centre otherwise. */
   zoomBy(factor: number): void {
     const node = this.cursorNode;
     if (node) {
@@ -280,19 +271,17 @@ export class SphereGridView {
     const sx = this.pan.x + node.x * this.zoom;
     const sy = this.pan.y + node.y * this.zoom;
     const m = 22;
-    if (sx < m) this.pan.x += m - sx;
-    if (sx > this.w - m) this.pan.x -= sx - (this.w - m);
-    if (sy < m) this.pan.y += m - sy;
-    if (sy > this.h - m) this.pan.y -= sy - (this.h - m);
+    this.gliding(() => {
+      if (sx < m) this.pan.x += m - sx;
+      if (sx > this.w - m) this.pan.x -= sx - (this.w - m);
+      if (sy < m) this.pan.y += m - sy;
+      if (sy > this.h - m) this.pan.y -= sy - (this.h - m);
+    });
   }
 
   // ----------------------------------------------------------- navigation
 
-  /**
-   * Walk the cursor to the linked node that lies most nearly in `(dx, dy)`.
-   * Links, not screen proximity: the grid is a graph, and hopping to a node
-   * you cannot reach would make the keyboard lie about what Enter will do.
-   */
+  /** Walk the cursor to the linked node that lies most nearly in `(dx, dy)`. Links, not screen proximity: the grid is a graph, and hopping to a node you cannot reach would make the keyboard lie about what Enter will do. */
   moveCursor(dx: number, dy: number): boolean {
     const from = this.cursorNode;
     if (!from) return false;
@@ -343,8 +332,10 @@ export class SphereGridView {
     const grid = this.model?.gridFor(this.memberId);
     if (!grid) return;
     this.cursorId = grid.position;
-    if (this.zoom < LABEL_ZOOM) this.zoom = DEFAULT_ZOOM;
-    this.centreOn(grid.position);
+    this.gliding(() => {
+      if (this.zoom < LABEL_ZOOM) this.zoom = DEFAULT_ZOOM;
+      this.centreOn(grid.position);
+    });
     this.render();
   }
 
@@ -394,6 +385,7 @@ export class SphereGridView {
         const dx = (e.clientX - this.lastPointer.x) * k;
         const dy = (e.clientY - this.lastPointer.y) * k;
         if (Math.abs(dx) + Math.abs(dy) > 0.4) this.dragMoved = true;
+        this.glide.cancel(); // a drag is the player's hand: it stops a glide where it is
         this.pan.x += dx;
         this.pan.y += dy;
         this.lastPointer = { x: e.clientX, y: e.clientY };
@@ -459,6 +451,8 @@ export class SphereGridView {
     const tick = (t: number): void => {
       this.raf = requestAnimationFrame(tick);
       this.clock = t;
+      const v = this.glide.step(performance.now()); // MF-13
+      if (v) this.setView(v);
       // Only the reachable-node pulse animates; skip the work entirely while
       // another tab is showing (`hidden` on the panel container).
       if (this.el.offsetParent === null && this.el.clientWidth === 0) return;

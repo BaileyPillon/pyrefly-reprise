@@ -17,17 +17,13 @@
  */
 
 import type { AtbSnapshot, CombatantId } from '../../battle/common/types.ts';
+import { fluidWord } from '../common/fluidUi.ts';
 
 type Bar = AtbSnapshot['bars'][number];
 
-/** `?atbbars=smooth` puts the running bars on; anything else, and no word, is today's ratcheting bars. */
+/** `?atbbars=smooth` (or `?fluidui=on`) puts the running bars on; anything else, and no word, is today's ratcheting bars. */
 export function atbBarsSmooth(search: string | undefined = globalThis.location?.search): boolean {
-  if (forced !== null) return forced;
-  try {
-    return new URLSearchParams(search ?? '').get('atbbars')?.trim().toLowerCase() === 'smooth';
-  } catch {
-    return false;
-  }
+  return forced ?? fluidWord('atbbars', 'smooth', search);
 }
 
 let forced: boolean | null = null;
