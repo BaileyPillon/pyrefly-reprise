@@ -268,10 +268,10 @@ export class SphereGridView {
   private keepCursorVisible(): void {
     const node = this.cursorNode;
     if (!node) return;
-    const sx = this.pan.x + node.x * this.zoom;
-    const sy = this.pan.y + node.y * this.zoom;
     const m = 22;
     this.gliding(() => {
+      const sx = this.pan.x + node.x * this.zoom; // measured on the view the move starts from (a glide in flight: where it is going)
+      const sy = this.pan.y + node.y * this.zoom;
       if (sx < m) this.pan.x += m - sx;
       if (sx > this.w - m) this.pan.x -= sx - (this.w - m);
       if (sy < m) this.pan.y += m - sy;
