@@ -3,12 +3,13 @@
  * motion-fluidity pass, lane "mf-l4-freezes", MF-02; both games; no look change.
  *
  * It receives a painting as its encoded bytes (a Blob) or its address, decodes it here (no page thread, no GPU queue behind it), and makes each field the way the page made it:
- *   - 'draw': `drawImage(painting, 0, 0, w, h)` on a `willReadFrequently` canvas of w x h with the default smoothing, then the alpha byte of every texel (`AlphaPrime.readExtents`, `fx/mix/geometry.ts`);
+ *   - 'draw-low': the same at the 'low' quality: it is made only so that the page can see whether two downscales of the painting agree on its extents (`AlphaThumb.ts`, the agreement guard);
+ *   - 'draw': `drawImage(painting, 0, 0, w, h)` on a `willReadFrequently` canvas of w x h at the 'medium' smoothing quality, then the alpha byte of every texel (`AlphaPrime.readExtents`, the page drew an `<img>`, whose draw is mip-filtered whatever the quality);
  *   - 'bitmap-medium': `createImageBitmap(painting, { resizeWidth: w, resizeHeight: h, resizeQuality: 'medium' })` and a 1:1 draw of it (`fx/mix/breathRig.ts`).
  * Top row first, one byte a texel. A field is handed back the moment it is made (the 'draw' ones share one decode and come first), the buffer transferred, not copied.
  */
 
-type Mode = 'draw' | 'bitmap-medium';
+type Mode = 'draw' | 'draw-low' | 'bitmap-medium';
 interface Spec {
   w: number;
   h: number;
@@ -35,11 +36,12 @@ async function bytesOf(source: Blob | string): Promise<Blob> {
   return res.blob();
 }
 
-function alphaOf(src: ImageBitmap, w: number, h: number): Uint8Array {
+function alphaOf(src: ImageBitmap, w: number, h: number, quality: 'low' | 'medium' = 'medium'): Uint8Array {
   const c = new OffscreenCanvas(w, h);
   const g = c.getContext('2d', { willReadFrequently: true });
   if (!g) throw new Error('alpha thumb: no 2d context');
   g.clearRect(0, 0, w, h);
+  g.imageSmoothingQuality = quality; // E2 (263 paintings): 'medium' reproduces the page's own mip-filtered draw of an <img> best (133 of 263 extents identical, 128 within one cell), 'low' (the bitmap's default) 105
   g.drawImage(src, 0, 0, w, h);
   const d = g.getImageData(0, 0, w, h).data;
   const a = new Uint8Array(w * h);
@@ -53,12 +55,12 @@ scope.onmessage = async (e): Promise<void> => {
   try {
     const blob = await bytesOf(source);
     // the fields that share the full decode first, so the extents (the one a figure's first frame waits for) never wait for the breathing rig's second decode
-    const order = specs.map((s, i) => ({ s, i })).sort((x, y) => Number(x.s.mode !== 'draw') - Number(y.s.mode !== 'draw'));
+    const order = specs.map((s, i) => ({ s, i })).sort((x, y) => Number(x.s.mode === 'bitmap-medium') - Number(y.s.mode === 'bitmap-medium'));
     for (const { s, i } of order) {
       let a: Uint8Array;
-      if (s.mode === 'draw') {
+      if (s.mode !== 'bitmap-medium') {
         full ??= await createImageBitmap(blob);
-        a = alphaOf(full, s.w, s.h);
+        a = alphaOf(full, s.w, s.h, s.mode === 'draw-low' ? 'low' : 'medium');
       } else {
         const small = await createImageBitmap(blob, { resizeWidth: s.w, resizeHeight: s.h, resizeQuality: 'medium' });
         try {

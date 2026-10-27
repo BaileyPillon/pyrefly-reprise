@@ -9,7 +9,7 @@
  */
 import type { Texture } from 'three';
 import { baseExtents, type Extents } from './LookBoldConfig.ts';
-import { EXTENTS_THUMB, thumbOf, thumbPending } from './AlphaThumb.ts';
+import { EXTENTS_THUMB, standInFor, thumbOf, thumbPending } from './AlphaThumb.ts';
 
 const cache = new Map<string, Extents | null>();
 /** MF-02: the extents last given for a texture, whatever master it held then: a painting is the same painting at every tier, so they stand in while the new master's field is on its way. */
@@ -50,9 +50,17 @@ export function readExtents(tex: Texture | null): Extents | null {
     extentsReads.thumb++;
     return e;
   }
-  if (lastOf.has(tex!) && thumbPending(tex!.image, EXTENTS_THUMB)) {
-    extentsReads.stoodIn++;
-    return lastOf.get(tex!) ?? null; // not cached: the next frame asks again, and the field, once it has landed, is the answer
+  if (thumbPending(tex!.image, EXTENTS_THUMB)) {
+    // not cached, so the next frame asks again and the field, once it has landed, is the answer: the texture's own previous extents first (a master swapped in for the same painting), else the field of another master of the painting
+    if (lastOf.has(tex!)) {
+      extentsReads.stoodIn++;
+      return lastOf.get(tex!) ?? null;
+    }
+    const alt = standInFor(tex!.image, EXTENTS_THUMB);
+    if (alt) {
+      extentsReads.stoodIn++;
+      return baseExtents(alt, 128, 128);
+    }
   }
   extentsReads.sync++;
   try {
