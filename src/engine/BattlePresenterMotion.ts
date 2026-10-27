@@ -48,6 +48,11 @@ export interface ActionMotionPort {
    */
   lungeFor?(actorId: CombatantId): number | undefined;
   /**
+   * MF-04 (`?run=flow` and on, additive): how far along her facing `actorId` still has to run, world units, when the strike was asked for as the run brakes: the lunge is solved from where she will stand,
+   * not from where she is. Absent or 0: she is where she will stand.
+   */
+  reachGap?(actorId: CombatantId): number;
+  /**
    * Does the house strike's lunge reach for its target for `actorId` (`motion/StrikeReach.ts`, r391-reach)? A game with no port reaches (FFX); a game with a port
    * that does not answer does not (FF7 runs its own melee). FFX-2 answers yes for its fiends only: a girl in a short-range dressphere RUNS IN first (`strike`,
    * `lungeFor`) and a long-range one fires from where she stands (`longRange`), both sourced (`research/ffx2-combat-core.md` section 1).

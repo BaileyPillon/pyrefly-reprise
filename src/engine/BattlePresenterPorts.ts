@@ -62,7 +62,9 @@ export interface ActorHandle {
   setAlpha(alpha: number): void;
   dissolveTo(value: number, ms?: number, colour?: number | string): Promise<void>;
   setDissolve(value: number): void;
-  moveTo(pos: Point3, ms?: number): Promise<void>;
+  moveTo(pos: Point3, ms?: number, easing?: (t: number) => number): Promise<void>; // easing (MF-04, additive): the run's trapezoid; absent = the actor's own quadInOut
+  /** Optional (MF-04, additive): a promise that settles after `ms` of the actor's own tween clock (the same paced, hit-stop-frozen clock `moveTo` runs on). */
+  waitMs?(ms: number): Promise<void>;
   setFacing(dir: 1 | -1): void;
   setBrightness(mult: number): void;
   /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */

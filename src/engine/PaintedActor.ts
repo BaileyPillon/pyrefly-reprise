@@ -2223,6 +2223,11 @@ export class PaintedActor extends Group {
     });
   }
 
+  /** MF-04: settles after `ms` of this actor's own tween clock (paced, frozen in a hit-stop), the clock `moveTo` and the curves run on. */
+  waitMs(ms: number): Promise<void> {
+    return this.tweens.toAsync(0, 1, { durationMs: Math.max(1, ms), easing: 'linear', onUpdate: () => {} });
+  }
+
   /**
    * Turn the fighter: 1 = toward +x, -1 = toward -x.
    *

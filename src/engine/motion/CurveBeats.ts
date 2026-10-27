@@ -13,6 +13,7 @@ import { menuBlocks } from '../KeySlots.ts';
 import { LUNGE_MS } from '../StrikeBeat.ts';
 import { heftOf } from './ActorCurves.ts';
 import { curvesGame, curvesOn } from './CurvesSwitch.ts';
+import { flowProfile } from './RunEase.ts'; // MF-04: the strike after a run that flows into it plays a readable wind-up (`?run=flow`, FFX-2 only)
 import { realCastLift, realProfileOf } from './RealBeats.ts'; // `?curves=real` / `real-snappy`: the real game's own numbers for this figure, when the table has them
 
 /** The presenter's playback speed scale for the move (1 normal, 0.32 fast, 0 skip), with the presenter's `timeScale`; floored so a skipped move still ends. */
@@ -31,7 +32,8 @@ export function startAttackMove(ctx: EventCtx, actor: ActorHandle | undefined, p
     // A real FFX-2 strike after a run-in holds its chain for the real clip's time (Rikku 0.97 s): her run home waits for the hold's end (`strikeHoldOver`), else she would run off with the strike's lunge still on her.
     const holdOver = real && ranIn && attackerId && actor ? holdOverFor(actor) : undefined;
     const marks = { ...(contact.impact ? { travelPeak: contact.impact, ...(contact.settle ? { settlePeak: contact.settle } : {}), ...(contact.done ? { end: contact.done } : {}) } : {}), ...(holdOver ? { holdEnd: holdOver } : {}) };
-    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale: moveScale(ctx), arc: !ranIn, contact, ...(real ? { profile: real } : {}), ...(Object.keys(marks).length ? { marks } : {}) });
+    const flow = ranIn && !real ? flowProfile() : undefined; // MF-04: only after FFX-2's run-in, and only under `?run=flow` or `pace`
+    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale: moveScale(ctx), arc: !ranIn, contact, ...(real ? { profile: real } : flow ? { profile: flow } : {}), ...(Object.keys(marks).length ? { marks } : {}) });
     return;
   }
   void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact, plan.house), actor?.squash(260, 0.45)]);
@@ -75,7 +77,7 @@ export function releaseCastLift(ctx: EventCtx, id: CombatantId | null | undefine
   ctx.stage.actor(id)?.liftRelease?.(real?.releaseMs);
 }
 
-/** FFX-2's run-in arc: a leap with the new curves on (take-off crouch, stretch, landing squash), else today's sine hop. */
-export function arcFor(actor: ActorHandle, height: number, ms: number): Promise<void> {
-  return curvesOn() && actor.leap ? actor.leap(height, ms) : actor.hop(height, ms);
+/** FFX-2's run-in arc: a leap with the new curves on (take-off crouch, stretch, landing squash), else today's sine hop. `smooth` (MF-04, `?run=smooth` and on): the lift leaves and meets the floor at rest. */
+export function arcFor(actor: ActorHandle, height: number, ms: number, smooth = false): Promise<void> {
+  return curvesOn() && actor.leap ? actor.leap(height, ms, smooth ? { smooth: true } : undefined) : actor.hop(height, ms);
 }
