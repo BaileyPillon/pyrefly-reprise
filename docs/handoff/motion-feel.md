@@ -8,7 +8,7 @@ Branch `motion-feel` (from `origin/main` 3e520971e, release 61 plus records). Wr
 
 ## The switches (each pure, read once, OFF at compile time)
 
-`src/engine/feel/FeelSwitch.ts` (the `PoseSwap.motionMode` / `HitRecoil.recoilLegacy` pattern). Every answer is today's outside Chapter I and Chapter IV, and before the battle screen names the chapter (`setFeelChapter(chapter.id)` in `BattleScreen`, cleared on exit): merging this branch changes nothing in the live game. (**That sentence was false until step 3**: the two 120 Hz pieces of section (f) were not behind any switch and changed every chapter at every rate except an exact 60 Hz, review F1. They are behind `?timing=` now, and the post-fix differential below shows the switch-off game identical to `origin/main`.)
+`src/engine/feel/FeelSwitch.ts` (the `PoseSwap.motionMode` / `HitRecoil.recoilLegacy` pattern). Every answer is today's outside Chapter I and Chapter IV, and before the battle screen names the chapter (`setFeelChapter(chapter.id)` in `BattleScreen`, cleared on exit): merging this branch changes nothing in the live game. (**That sentence was false until step 3**: the two 120 Hz pieces of section (f) were not behind any switch and changed every chapter at every rate except an exact 60 Hz, review F1. They are behind `?timing=` now, and the post-fix differential below shows the switch-off game identical to `origin/main`. **Since 2026-10-26 `?timing=` is on in every chapter, the one exception to this sentence: `post-shake-time.md`.**)
 
 | key | values | default | piece |
 |---|---|---|---|
@@ -17,7 +17,7 @@ Branch `motion-feel` (from `origin/main` 3e520971e, release 61 plus records). Wr
 | `?hitstop=` | `today` `short` `off` | `today` | the hit-stop |
 | `?rumble=` | `on` `off` | `off` | the gamepad rumble |
 | `?shadow=` | `follow` `today` | `today` | the contact shadow |
-| `?timing=` | `time` `today` | `today` | the camera shake and the impact frame in real time (120 Hz and above): section (f); added in step 3 (review F1) |
+| `?timing=` | `time` `frames` (`today`, `off`, `false`, `0` also off) | `time` in EVERY chapter since 2026-10-26 (it was `today` here, with the pack in Chapter I and IV only) | the camera shake and the impact frame in real time (120 Hz and above): section (f); added in step 3 (review F1); on by default: `post-shake-time.md` |
 
 `window.__pyrefly`: `punch(fraction, ms, 'new'|'today', trauma, stopMs)` plays one punch on the real spectacle camera now (returns the depth it used), `punchMode(m?)`, `hitStopMode(m?)`, `rumble(on?)`, `shadowFollow(on?)`, `feelPack(on?)`, `feel()` (everything in force, the chapter named, whether it counts), `rumbleLog(reset?)`, and `simStep(frames, hz)` / `simResume()` (stop the page's loop and run whole frames of the REAL app at any rate: Playwright's page clock can only fake a 16 ms animation frame, so it cannot show 144 Hz).
 
@@ -57,7 +57,7 @@ Branch `motion-feel` (from `origin/main` 3e520971e, release 61 plus records). Wr
 
 ### (f) 120 Hz and above
 
-Read every `+= <constant>`, every frame-counted list and every `1/60` in the update loops of `src/engine`, `src/app` and `src/ui`. Two things ran per DRAWN frame, both fixed. **They are fixed only behind `?timing=time` (on with `?pack=demo`, Chapter I and Chapter IV only; step 3, review F1)**: step 1 shipped them ungated, which changed every chapter at every rate except an exact 60 Hz (the shake by 0.23 world units, about 35 px, at 120 and 144 Hz; by 0.10 units when a hit-stop hold fell mid-shake; the impact frame to three drawn frames per level at 144 Hz). With the switch off both are `origin/main`'s code path exactly (`feel/TimeBased.ts`, `SpectacleImpact.ImpactFrames.arm(levels, byTime)`); a live-game fix for 120 Hz and above is a declared change that needs Bailey's yes and a CHANGELOG line (`BattleCamera.ts` is a CHK-027 file). The text below describes the time mode.
+**(2026-10-26: the switch described next is on by default in every chapter and `?timing=frames` is the off word; see `post-shake-time.md`. The paragraph is the 2026-10-22 state.)** Read every `+= <constant>`, every frame-counted list and every `1/60` in the update loops of `src/engine`, `src/app` and `src/ui`. Two things ran per DRAWN frame, both fixed. **They are fixed only behind `?timing=time` (on with `?pack=demo`, Chapter I and Chapter IV only; step 3, review F1)**: step 1 shipped them ungated, which changed every chapter at every rate except an exact 60 Hz (the shake by 0.23 world units, about 35 px, at 120 and 144 Hz; by 0.10 units when a hit-stop hold fell mid-shake; the impact frame to three drawn frames per level at 144 Hz). With the switch off both are `origin/main`'s code path exactly (`feel/TimeBased.ts`, `SpectacleImpact.ImpactFrames.arm(levels, byTime)`); a live-game fix for 120 Hz and above is a declared change that needs Bailey's yes and a CHANGELOG line (`BattleCamera.ts` is a CHK-027 file). The text below describes the time mode.
 
 1. `BattleCamera`'s shake advanced its phase by 0.9 **per frame** (54 rad/s at 60 Hz, 108 at 120 Hz, 130 at 144 Hz: a shake twice as frantic on the booth monitor; and it kept advancing through a hit-stop). In time mode `dt * 54` in `update` (`TimeBased.shakeStepByTime`): identical at 60 Hz, identical in time at every rate, and still during a stop. Switch off: `+= 0.9` in `apply` (`TimeBased.shakeStepPerFrame`), as before.
 2. Option C's 2-frame ink-and-paper **impact frame** was a list that lost one entry per drawn frame (33 ms at 60 Hz, 17 at 120, 14 at 144). In time mode `fx/c/SpectacleImpact.ImpactFrames`: each level stays one 60 Hz frame of real time and never less than one drawn frame, so 60 Hz draws exactly the two frames it drew (jitter included), 30 Hz still draws both, 120 and 144 Hz draw about 33 ms. Switch off: one level per drawn frame, as `origin/main`.
@@ -254,7 +254,7 @@ Written 2026-10-22 overnight, after the review of tip `be0be5aff` (`D:/Tools/pyr
 | `?rumble=` | the pad rumble | on |
 | `?shadow=` | the contact shadow | `follow` |
 | `?motionsfx=` | the motion sounds | on |
-| `?timing=` | the real-time shake and impact frame (120 Hz+) | `time` |
+| `?timing=` | the real-time shake and impact frame (120 Hz+) | `time` (and `time` without the pack, in every chapter, since 2026-10-26) |
 
 With none of them named, in any chapter, the game is `origin/main`'s: the post-fix differential is the proof for the camera and the impact frame; the reviewer's differentials for `planHit` (1.55M cases), `Trauma`, `fxHit`/`fxActionOpen` and the real `PaintedActor` still hold, because nothing on those paths changed in step 3 except `shortStopMs` (reached only with `?hitstop=short`).
 
@@ -287,5 +287,5 @@ So the real-time pieces make a 144 Hz screen show what a 60 Hz one does, only in
 - **S3-1. Vibration setting.** FFX-2 had a Vibration entry in its Config menu. Before the rumble leaves the demo it needs a player setting (a `Settings` field: save-schema class, a deep review before the deploy). Until then the only off switches are REDUCE MOTION and the URL.
 - **S3-2. A soft pulse on a held win?** Chapter IV's win is silent on the pad because the girls do not pose after Bahamut (the sources). Should it get only the 160 ms opening pulse, or stay silent?
 - **S3-3. Should the pad stay quiet under an FFX-2 command menu?** Today the stop and the rumble ignore `menuBlocks`; one read in `FeelHooks.allowed` would add it.
-- **S3-4. Make the 120 Hz fix live?** `?timing=time` fixes the shake speed and the impact frame's length for any 120 Hz or faster screen, in every chapter, if turned on there. That is a visible change to the live game (the shake at 144 Hz is 2.4 times too frantic today), so it needs Bailey's yes and a CHANGELOG line, and `BattleCamera.ts` is a CHK-027 file.
+- **S3-4. Make the 120 Hz fix live?** `?timing=time` fixes the shake speed and the impact frame's length for any 120 Hz or faster screen, in every chapter, if turned on there. That is a visible change to the live game (the shake at 144 Hz is 2.4 times too frantic today), so it needs Bailey's yes and a CHANGELOG line, and `BattleCamera.ts` is a CHK-027 file. **Answered 2026-10-26 (the driver's call under Bailey's delegation): yes, live in every chapter; `?timing=frames` is the way back (`post-shake-time.md`).**
 - **S3-5. Mega Flare's three punches.** Keep the overlapping push, or one punch per move (a change in `newPunchFraction`)?

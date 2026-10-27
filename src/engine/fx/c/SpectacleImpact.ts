@@ -1,11 +1,12 @@
 /**
- * Option C1's impact frame, counted in TIME, not in drawn frames, when `?timing=time` is on (motion program, lane "feel", 2026-10-22: 120 Hz and above; the Chapter I and Chapter IV
- * demo only: with the switch off, `FeelSwitch.timingByTime`, it is the live game's, one level per drawn frame, exactly as before; review fix F1).
+ * Option C1's impact frame, counted in TIME, not in drawn frames, unless `?timing=frames` is named (motion program, lane "feel", 2026-10-22: 120 Hz and above; in EVERY chapter since the
+ * post-conference plan, 2026-10-26: with the switch off, `FeelSwitch.timingByTime`, it is release 64's, one level per drawn frame, exactly as before; review fix F1).
  *
  * The 2-frame ink-and-paper frame was a list of two levels that lost one entry per drawn frame, so on a 120 Hz screen it lasted 17 ms and on a 144 Hz one 14 ms, half of what
  * Bailey approved at 60 Hz (33 ms). Each level now stays up for one 60 Hz frame of real time ({@link IMPACT_FRAME_S}) and never less than one drawn frame: a 60 Hz screen draws
  * exactly the two frames it drew before (a frame a millisecond or two short of 16.7 still counts as a full one, {@link TOLERANCE_S}), a 30 Hz screen draws two frames, a 144 Hz
- * screen three and three. (Switch off: a 144 Hz screen draws each level for one drawn frame, 7 ms, as release 61 does.) `dt` of 0 (a capture that stopped the app) holds the level on screen, as before.
+ * screen five (34.7 ms). A level is a whole number of drawn frames, so only 60, 90, 120, 144 and 240 Hz land within 5 percent of 33.3 ms; 50, 75 and 100 Hz read 40 ms, 72 Hz (a common phone and headset rate) 41.7 ms and 165 Hz 36.4 ms, and the one-level soft frame
+ * (REDUCE FLASHES) reads 26.7 ms at 75 Hz and 20.8 ms at 144 Hz against 16.7 at 60 Hz (post-conference review F-2; release 64 was shorter than 33 ms at every rate above 60). (Switch off: a 144 Hz screen draws each level for one drawn frame, 7 ms, as release 61 does.) Frame times that wander by 1.5 ms or more (a clock that is not vsync-aligned; a real `requestAnimationFrame` stamp is) can make an impact frame draw one extra frame now and then, up to about 53 ms at 60 Hz with a 3 ms wander (post-conference review R2-3); release 64's chapters other than I and IV always drew exactly two. `dt` of 0 (a capture that stopped the app) holds the level on screen, as before.
  *
  * Pure: no `three`, no DOM.
  */

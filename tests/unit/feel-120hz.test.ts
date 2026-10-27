@@ -7,8 +7,9 @@
  *
  * The comparison is made at the times the three rates share (k / 12 s: 5k frames at 60, 10k at 120, 12k at 144), where each rate has produced a frame exactly there.
  *
- * Review fix F1 (2026-10-22): both are behind `?timing=time` (`FeelSwitch.timingByTime`, on with `?pack=demo`, Chapter I and Chapter IV only). The first two suites run with the switch on in a
- * demo chapter; the last suite pins that with the switch off (any other chapter, nothing named) both pieces are exactly the live game's: 0.9 radians per drawn frame, one impact level per drawn frame.
+ * Review fix F1 (2026-10-22): both are behind `?timing=time` (`FeelSwitch.timingByTime`). **Post-conference plan (2026-10-26): the switch is ON BY DEFAULT in every chapter, pack or not** (it
+ * removes a glitch, a shake twice as frantic on a 120 Hz screen, and is the same at 60 Hz); `?timing=frames` is the off word. The first suites run in a demo chapter; 'every chapter' runs the same
+ * comparison in the others and with nothing named; the last suite pins that with `?timing=frames` both pieces are exactly release 64's: 0.9 radians per drawn frame, one impact level per drawn frame.
  */
 import { PerspectiveCamera, Vector3 } from 'three';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -16,7 +17,7 @@ import { BattleCamera } from '../../src/engine/BattleCamera.ts';
 import { IMPACT_FRAME_S, ImpactFrames } from '../../src/engine/fx/c/SpectacleImpact.ts';
 import { HitStop, Trauma } from '../../src/engine/fx/c/Trauma.ts';
 import { SETTLE_KICK } from '../../src/engine/feel/PunchCurve.ts';
-import { resetFeelForTests, setFeelChapter, setTimingByTime } from '../../src/engine/feel/FeelSwitch.ts';
+import { resetFeelForTests, setFeelChapter, setTimingByTime, timingByTime } from '../../src/engine/feel/FeelSwitch.ts';
 import { SHAKE_RAD_PER_FRAME, SHAKE_RAD_PER_S, shakeStepByTime, shakeStepPerFrame } from '../../src/engine/feel/TimeBased.ts';
 
 const RATES = [60, 120, 144] as const;
@@ -124,6 +125,111 @@ describe('Trauma (the spectacle camera)', () => {
   });
 });
 
+describe('every chapter, pack or not (post-conference plan, 2026-10-26)', () => {
+  const CHAPTER_IDS = ['seymour-flux', 'ffx2-bahamut', 'yunalesca', 'braskas-final-aeon', 'ffx2-vegnagun-shuyin', 'ffx2-leblanc', null] as const;
+  const ADDRESSES = [undefined, '', '?pack=off', '?pack=demo'] as const;
+
+  /** The wall time the shake takes to spend itself and the phase rate it ran at, stepped at `hz`. */
+  function shakeRun(hz: number): { ms: number; radPerS: number } {
+    const bc = rig();
+    for (let i = 0; i < 4; i++) bc.update(1 / hz);
+    bc.shake(0.12, 340);
+    const field = bc as unknown as { shakePhase: number; shakeLeftMs: number };
+    const p0 = field.shakePhase;
+    let frames = 0;
+    while (field.shakeLeftMs > 0 && frames < 10 * hz) {
+      bc.update(1 / hz);
+      frames++;
+    }
+    const ms = (frames * 1000) / hz;
+    return { ms, radPerS: (field.shakePhase - p0) / (frames / hz) };
+  }
+
+  it('the shake runs at the same rate (54 rad/s: what this change fixes) at 60, 120 and 144 Hz, in every chapter and under every address; its wall time was always real time (unchanged by it, within a 60 Hz frame)', () => {
+    for (const search of ADDRESSES) {
+      for (const id of CHAPTER_IDS) {
+        resetFeelForTests(search);
+        setFeelChapter(id);
+        const base = shakeRun(60);
+        expect(base.radPerS, `${search}, ${id}, 60 Hz`).toBeCloseTo(SHAKE_RAD_PER_S, 6);
+        for (const hz of [120, 144]) {
+          const r = shakeRun(hz);
+          expect(Math.abs(r.ms - base.ms) / base.ms, `${search}, ${id}, ${hz} Hz wall time`).toBeLessThan(0.05);
+          expect(Math.abs(r.radPerS - base.radPerS) / base.radPerS, `${search}, ${id}, ${hz} Hz rate`).toBeLessThan(0.05);
+        }
+      }
+    }
+  });
+
+  it('the camera is in the same place at the shared times at 60 and 144 Hz in a chapter that is not a demo chapter (the case the switch used to leave out)', () => {
+    for (const id of ['yunalesca', 'ffx2-vegnagun-shuyin']) {
+      resetFeelForTests();
+      setFeelChapter(id);
+      const a = trace(60);
+      const b = trace(144);
+      for (let k = 0; k < 12; k++) expect(b[k]!.distanceTo(a[k]!), `${id} at ${((k + 1) * 1000) / 12} ms`).toBeLessThan(2e-4);
+    }
+  });
+
+  it('the impact frame is 33 ms at 60, 120 and 144 Hz in every chapter, and never less than one drawn frame', () => {
+    for (const id of CHAPTER_IDS) {
+      resetFeelForTests();
+      setFeelChapter(id);
+      for (const hz of RATES) {
+        const f = new ImpactFrames();
+        f.arm([1, 0.5]);
+        let drawn = 0;
+        for (let i = 0; i < 40 && f.step(1 / hz) > 0; i++) drawn++;
+        expect((drawn * 1000) / hz, `${id}, ${hz} Hz`).toBeGreaterThan(IMPACT_FRAME_S * 2000 - 6);
+        expect((drawn * 1000) / hz, `${id}, ${hz} Hz`).toBeLessThan(IMPACT_FRAME_S * 2000 + 10);
+      }
+    }
+  });
+
+  it('at an exact 60 Hz the default and ?timing=frames put the camera in the same place on every frame of a shake (nothing moves for a 60 Hz player), except through a hit-stop hold', () => {
+    const frames = (search: string, hold: number): Vector3[] => {
+      resetFeelForTests(search);
+      setFeelChapter('yunalesca');
+      const bc = rig();
+      for (let i = 0; i < 60; i++) bc.update(1 / 60);
+      bc.shake(0.16, 340);
+      const out: Vector3[] = [];
+      for (let i = 0; i < 30; i++) {
+        bc.update(i >= 5 && i < 5 + hold ? 0 : 1 / 60); // a hit-stop holds the field clock: dt 0 for `hold` frames
+        out.push(bc.camera.position.clone());
+      }
+      return out;
+    };
+    const a = frames('', 0);
+    const b = frames('?timing=frames', 0);
+    expect(a.length).toBe(30);
+    let widest = 0;
+    a.forEach((p, i) => { widest = Math.max(widest, p.distanceTo(b[i]!)); });
+    expect(widest).toBeLessThan(1e-9);
+    let moved = 0;
+    for (let i = 1; i < a.length; i++) moved = Math.max(moved, a[i]!.distanceTo(a[0]!));
+    expect(moved, 'the shake really moves the camera').toBeGreaterThan(0.01);
+    const held = frames('', 3); // the one 60 Hz difference: the camera holds still through a 3-frame hit-stop (frames mode kept jittering through it)
+    const heldOld = frames('?timing=frames', 3);
+    for (let i = 5; i < 8; i++) expect(held[i]!.distanceTo(held[i - 1]!), `hold frame ${i}`).toBe(0);
+    let jitterOld = 0;
+    for (let i = 5; i < 8; i++) jitterOld = Math.max(jitterOld, heldOld[i]!.distanceTo(heldOld[i - 1]!));
+    expect(jitterOld, 'frames mode jitters through the hold').toBeGreaterThan(0.001);
+  });
+
+  it('Chapter I and Chapter IV answer what they answered in release 64: real time, 54 rad/s (the default, the old pack word and the key all agree)', () => {
+    for (const search of ['', '?pack=demo', '?pack=demo&timing=time', '?timing=time']) {
+      for (const id of ['seymour-flux', 'ffx2-bahamut']) {
+        resetFeelForTests(search);
+        setFeelChapter(id);
+        expect(timingByTime(), `${search}, ${id}`).toBe(true);
+        expect(shakeStepPerFrame()).toBe(0);
+        expect(shakeStepByTime(1 / 144)).toBeCloseTo(SHAKE_RAD_PER_S / 144, 12);
+      }
+    }
+  });
+});
+
 describe('the impact frame', () => {
   /** Frames drawn with the strength showing, and the real time they span. */
   function run(hz: number, jitter = 0): { drawn: number[]; ms: number } {
@@ -159,6 +265,26 @@ describe('the impact frame', () => {
     }
   });
 
+  it('the honest table (review F-2): a level is a whole number of drawn frames, so only 60, 90, 120, 144 and 240 Hz land within 5 percent of 33.3 ms; 50, 75 and 100 Hz read 40, 165 Hz 36.4, and none is ever shorter than 33 ms', () => {
+    const full: Record<number, number> = { 30: 66.7, 50: 40, 60: 33.3, 75: 40, 90: 33.3, 100: 40, 120: 33.3, 144: 34.7, 165: 36.4, 240: 33.3 };
+    for (const [hz, want] of Object.entries(full)) {
+      const r = run(Number(hz));
+      expect(r.ms, `${hz} Hz, full frame`).toBeCloseTo(want, 0);
+      expect(r.ms, `${hz} Hz, never short`).toBeGreaterThan(IMPACT_FRAME_S * 2000 - 3);
+      expect(r.ms, `${hz} Hz, at most one drawn frame long`).toBeLessThan(IMPACT_FRAME_S * 2000 + 1000 / Number(hz) + 0.5);
+    }
+    for (const hz of [60, 90, 120, 144, 240]) expect(Math.abs(run(hz).ms - 33.3) / 33.3, `${hz} Hz within 5 percent`).toBeLessThan(0.05);
+    // the one-level soft frame (REDUCE FLASHES): 16.7 ms at 60 Hz, one drawn frame or two on the rest
+    const soft: Record<number, number> = { 60: 16.7, 75: 26.7, 90: 22.2, 120: 16.7, 144: 20.8, 240: 16.7 };
+    for (const [hz, want] of Object.entries(soft)) {
+      const f = new ImpactFrames();
+      f.arm([1]);
+      let ms = 0;
+      for (let i = 0; i < 20 && f.step(1 / Number(hz)) > 0; i++) ms += 1000 / Number(hz);
+      expect(ms, `${hz} Hz, soft frame`).toBeCloseTo(want, 0);
+    }
+  });
+
   it('dt of 0 holds the level on screen (a capture that stopped the app)', () => {
     const f = new ImpactFrames();
     f.arm([1, 0.5]);
@@ -177,7 +303,7 @@ describe('the impact frame', () => {
   });
 });
 
-describe('the switch off is the live game (review fix F1)', () => {
+describe('the off word (`?timing=frames`) is release 64 (review fix F1; the default became real time on 2026-10-26)', () => {
   /** The shake phase after `n` updates of `dt`, `hold` of them with dt 0 first (a hit-stop), read off the private field. */
   function phaseAfter(n: number, dt: number, hold = 0): number {
     const bc = rig();
@@ -189,20 +315,23 @@ describe('the switch off is the live game (review fix F1)', () => {
     return (bc as unknown as { shakePhase: number }).shakePhase - p0;
   }
 
-  it('the helpers answer today\'s step with no switch, and the time step with it', () => {
-    resetFeelForTests(); // nothing named, no chapter
+  it('the helpers answer today\'s step with ?timing=frames, and the time step by default, with or without the pack and a chapter', () => {
+    resetFeelForTests('?timing=frames'); // the off word, no chapter
     expect(shakeStepPerFrame()).toBe(SHAKE_RAD_PER_FRAME);
     expect(shakeStepByTime(1 / 60)).toBe(0);
-    resetFeelForTests('?pack=demo');
-    expect(shakeStepPerFrame()).toBe(SHAKE_RAD_PER_FRAME); // the pack alone is not enough: no chapter yet
-    setFeelChapter('seymour-flux');
-    expect(shakeStepPerFrame()).toBe(0);
-    expect(shakeStepByTime(1 / 60)).toBeCloseTo(SHAKE_RAD_PER_FRAME, 12);
+    for (const search of [undefined, '', '?pack=off', '?pack=demo']) {
+      for (const id of [null, 'seymour-flux', 'yunalesca']) {
+        resetFeelForTests(search);
+        setFeelChapter(id);
+        expect(shakeStepPerFrame(), `${search}, ${id}`).toBe(0);
+        expect(shakeStepByTime(1 / 60), `${search}, ${id}`).toBeCloseTo(SHAKE_RAD_PER_FRAME, 12);
+      }
+    }
     expect(SHAKE_RAD_PER_S / 60).toBeCloseTo(SHAKE_RAD_PER_FRAME, 12);
   });
 
-  it('off, the shake phase advances 0.9 per drawn frame at any rate, and keeps going through a hold (dt 0), as release 61 does', () => {
-    resetFeelForTests();
+  it('off, the shake phase advances 0.9 per drawn frame at any rate, and keeps going through a hold (dt 0), as release 64 does', () => {
+    resetFeelForTests('?timing=frames');
     for (const hz of RATES) expect(phaseAfter(10, 1 / hz), `${hz} Hz`).toBeCloseTo(9, 9);
     expect(phaseAfter(10, 1 / 60, 3)).toBeCloseTo(0.9 * 13, 9); // three held frames still jitter
   });
@@ -212,16 +341,24 @@ describe('the switch off is the live game (review fix F1)', () => {
     expect(phaseAfter(10, 1 / 60, 3)).toBeCloseTo(9, 9); // three held frames add nothing
   });
 
-  it('a chapter that is not a demo chapter is today\'s even with the pack and the key named', () => {
-    resetFeelForTests('?pack=demo&timing=time');
-    setFeelChapter('yunalesca');
-    expect(phaseAfter(10, 1 / 144)).toBeCloseTo(9, 9);
-    setFeelChapter('ffx2-vegnagun-shuyin');
-    expect(phaseAfter(10, 1 / 144)).toBeCloseTo(9, 9);
+  it('a chapter that is not a demo chapter is real time too, by default, with the pack named or not (post-conference plan); ?timing=frames puts the frame count back there', () => {
+    for (const search of [undefined, '', '?pack=off', '?pack=demo', '?pack=demo&timing=time']) {
+      resetFeelForTests(search);
+      for (const id of ['yunalesca', 'ffx2-vegnagun-shuyin', 'braskas-final-aeon', 'ffx2-leblanc']) {
+        setFeelChapter(id);
+        for (const hz of RATES) expect(phaseAfter(hz / 6, 1 / hz), `${search}, ${id}, ${hz} Hz`).toBeCloseTo(9, 9);
+      }
+    }
+    resetFeelForTests('?timing=frames');
+    for (const id of ['yunalesca', 'ffx2-vegnagun-shuyin']) {
+      setFeelChapter(id);
+      expect(phaseAfter(10, 1 / 144), id).toBeCloseTo(9, 9); // 10 drawn frames x 0.9, at any rate
+      expect(phaseAfter(24, 1 / 144), id).toBeCloseTo(21.6, 9); // a sixth of a second at 144 Hz: 2.4 times the 9 radians a 60 Hz screen shows
+    }
   });
 
-  it('off, a 144 Hz screen draws each impact level for one drawn frame (7 ms), as release 61 does; 60 Hz is unchanged', () => {
-    resetFeelForTests();
+  it('off, a 144 Hz screen draws each impact level for one drawn frame (7 ms), as release 64 does; 60 Hz is unchanged', () => {
+    resetFeelForTests('?timing=frames');
     for (const [hz, frames] of [[60, 2], [120, 2], [144, 2]] as const) {
       const f = new ImpactFrames();
       f.arm([1, 0.5]);
@@ -241,7 +378,7 @@ describe('the switch off is the live game (review fix F1)', () => {
   });
 
   it('the switch is read when an impact frame starts: one already running keeps its mode', () => {
-    resetFeelForTests();
+    resetFeelForTests('?timing=frames');
     const f = new ImpactFrames();
     f.arm([1, 0.5]); // off
     setFeelChapter('seymour-flux');
