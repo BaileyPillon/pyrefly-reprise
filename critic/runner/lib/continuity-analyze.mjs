@@ -12,8 +12,8 @@ import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
 import { figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
 import { unseenIn, unseenPolicy } from './continuity-unseen.mjs'; // R63-M1: a figure off the view cannot be seen to jerk or to snap (CHK-027)
 import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
-import { flickerPairs, flickerSummary, flickerWindowMs, tagFlickers } from './continuity-flicker.mjs';
-import { classReport, prepareClasses } from './continuity-why.mjs'; // fluidity pass, T-02 (lane L5): the named classes, why a painting was asked for, the designed blend (reported; one switchable rule) // post-conference plan, step 2: the ready-idle-ready flicker, a named class (reported, not gated)
+import { flickerPairs, flickerSummary, flickerWindowMs, tagFlickers } from './continuity-flicker.mjs'; // post-conference plan, step 2: the ready-idle-ready flicker, a named class (reported, not gated)
+import { classReport, prepareClasses } from './continuity-why.mjs'; // fluidity pass, T-02 (lane L5): the named classes, why a painting was asked for, the designed blend (reported; one switchable rule)
 
 /**
  * The anchors of every pose in the probe's pose table (`poses[k] = { url, ... }`), by pose key; null for a pose with no painting. `waivers` (continuity-waivers.mjs) is the ledger of poses

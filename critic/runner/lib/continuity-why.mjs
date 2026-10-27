@@ -11,11 +11,15 @@
 //     (the figure's next swap and the gap to it), tagged `source: 'neighbours'` so a reader knows which it was.
 // THE DESIGNED BLEND (switchable, `continuity.classes.designedBlend` in the policy)
 //   A blend the planner declared (an entry of `designed` for the same figure and the same pair, with the swap's flip inside its window) is a DESIGNED blend, reported apart from an undesigned dissolve, as a planned
-//   cut is reported apart from a snap (continuity-smear.mjs). `report` (on) adds the tally; `excuse` (OFF) additionally takes a designed blend of at most `maxSeverity` out of `ghostOverFail`, so a deliberate 50 ms
-//   three-frame blend does not fail CHK-027 on paper where a two-frame one would (25 of 39 cuts reach 0.40). Turning `excuse` on is a policy decision; the default changes no verdict.
+//   cut is reported apart from a snap (continuity-smear.mjs). `report` (on) adds the tally; `excuse` (OFF) additionally takes a designed blend out of `ghostOverFail`, so a deliberate 50 ms
+//   three-frame blend does not fail CHK-027 on paper where a two-frame one would (25 of 39 cuts reach 0.40). WHAT IS EXCUSED (review M3: a first version excused severities up to 0.30 and the fail line is 0.40, so it
+//   excused nothing the verdict reads): a blend the planner declared of at most `maxMs` (100) whose observed double image lasts no longer than the declared length plus two frames and slack (a blend that runs on
+//   longer than it was designed to is a defect and stays counted), and, only if the policy lowers it from its default of 1, of at most `maxSeverity`. Turning `excuse` on is a policy decision; the default changes no verdict.
 // Pure: plain objects in, plain objects out. Game case: both (shared critic plumbing); the FFX-2-only readings (ready, the interlude) simply find nothing in an FFX recording.
 
-export const CLASS_DEFAULTS = Object.freeze({ interludeMs: 150, hurtStringMs: 600, windUpMs: 600, whyWindowMs: 400, slackMs: 12, designedBlend: Object.freeze({ report: true, excuse: false, maxSeverity: 0.3 }) });
+/** engine/motion/SwapLog.ts keeps this many entries per list and drops the oldest: a list this long has lost the start of the fight (review m14). */
+export const SWAP_LOG_CAP = 600;
+export const CLASS_DEFAULTS = Object.freeze({ interludeMs: 150, hurtStringMs: 600, windUpMs: 600, whyWindowMs: 400, slackMs: 12, designedBlend: Object.freeze({ report: true, excuse: false, maxMs: 100, maxSeverity: 1 }) });
 
 const num = (v) => typeof v === 'number' && Number.isFinite(v);
 const r1 = (x) => (num(x) ? Math.round(x * 10) / 10 : null);
@@ -30,7 +34,7 @@ export function classPolicy(cfg) {
   return {
     interludeMs: pos(p.interludeMs, CLASS_DEFAULTS.interludeMs), hurtStringMs: pos(p.hurtStringMs, CLASS_DEFAULTS.hurtStringMs), windUpMs: pos(p.windUpMs, CLASS_DEFAULTS.windUpMs),
     whyWindowMs: pos(p.whyWindowMs, CLASS_DEFAULTS.whyWindowMs), slackMs: pos(p.slackMs, CLASS_DEFAULTS.slackMs),
-    designedBlend: { report: d.report !== false, excuse: d.excuse === true, maxSeverity: pos(d.maxSeverity, CLASS_DEFAULTS.designedBlend.maxSeverity) },
+    designedBlend: { report: d.report !== false, excuse: d.excuse === true, maxMs: pos(d.maxMs, CLASS_DEFAULTS.designedBlend.maxMs), maxSeverity: pos(d.maxSeverity, CLASS_DEFAULTS.designedBlend.maxSeverity) },
   };
 }
 
@@ -181,7 +185,8 @@ export function tagDesigned(swaps, designed, policy = CLASS_DEFAULTS, frameMs = 
       if (w.tMs < e.at - policy.slackMs - frameMs || w.tMs > e.at + e.ms + policy.slackMs + 2 * frameMs) continue;
       used.add(i);
       w.designed = { cls: e.cls ?? null, ms: e.ms };
-      if (policy.designedBlend.excuse && w.counted && num(w.ghost?.severity) && w.ghost.severity <= policy.designedBlend.maxSeverity) w.designedExcused = true;
+      const db = policy.designedBlend;
+      if (db.excuse && w.counted && num(w.ghost?.severity) && e.ms <= db.maxMs && w.ghost.severity <= db.maxSeverity && (!num(w.ghost.ms) || w.ghost.ms <= e.ms + 2 * frameMs + policy.slackMs)) w.designedExcused = true;
       n++;
       break;
     }
@@ -238,7 +243,7 @@ export function classReport(swaps, { battleSeconds, totalGhostFrames, prepared, 
   const allMs = sum(counted.map((w) => w.ghost?.ms ?? 0));
   return {
     windowMs: { interlude: policy.interludeMs, hurtString: policy.hurtStringMs, windUp: policy.windUpMs, why: policy.whyWindowMs },
-    source: { why: whyTagged ? 'log' : sources.has('neighbours') ? 'neighbours' : 'none', whyTagged, designed: designedN ? 'log' : 'none' },
+    source: { why: whyTagged ? 'log' : sources.has('neighbours') ? 'neighbours' : 'none', whyTagged, designed: designedN ? 'log' : 'none', logCapped: { reasons: (swapLog?.reasons?.length ?? 0) >= SWAP_LOG_CAP, designed: (swapLog?.designed?.length ?? 0) >= SWAP_LOG_CAP } },
     byClass,
     stance: { source: sources.size === 1 ? [...sources][0] : sources.size ? 'mixed' : 'none', ...stanceOut },
     interludes: { count: interludes.length, perMinute: minutes > 0 ? r1(interludes.length / minutes) : null, countedPairs: interludes.filter((f) => f.counted).length, ...ig, ghostMsPerMinute: minutes > 0 ? Math.round(ig.ghostMs / minutes) : null, ghostFramesPerMinute: minutes > 0 ? r1(ig.ghostFrames / minutes) : null, ghostShare: totalGhostFrames > 0 ? r3(ig.ghostFrames / totalGhostFrames) : 0, byTo, medianGapMs: medianOf(interludes.map((f) => f.gapMs)) },

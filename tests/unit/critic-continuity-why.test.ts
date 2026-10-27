@@ -181,6 +181,26 @@ describe('T-02: the designed blend, a switchable rule', () => {
     expect(swaps.map((s) => (s as never as { designedExcused?: boolean }).designedExcused ?? false)).toEqual([true, false]); // 0.45 is over the cap: still a double image
   });
 
+  it('excuses a designed blend whatever its severity at the shipped parameters, when it is short and does not run on (review M3)', () => {
+    // the fail line is 0.40; a first version capped the excuse at 0.30 and so excused nothing a verdict reads
+    const swaps = [sw('hero', 'hurt', 'idle', 1040, 3, 0.45), sw('hero', 'hurt', 'idle', 2040, 3, 0.9), sw('hero', 'hurt', 'idle', 3040, 3, 0.45), sw('hero', 'hurt', 'idle', 4040, 9, 0.45)];
+    const log = [
+      { at: 1000, actor: 'hero', from: 'hurt', to: 'idle', cls: 'recover', ms: 50 }, // 0.45: excused
+      { at: 2000, actor: 'hero', from: 'hurt', to: 'idle', cls: 'recover', ms: 50 }, // 0.9: still excused (no severity ceiling by default)
+      { at: 3000, actor: 'hero', from: 'hurt', to: 'idle', cls: 'recover', ms: 300 }, // declared long: over maxMs, not excused
+      { at: 4000, actor: 'hero', from: 'hurt', to: 'idle', cls: 'recover', ms: 50 }, // declared 50 ms but the double image lasts 9 frames: a defect, not excused
+    ];
+    tagDesigned(swaps as never, log, classPolicy({ classes: { designedBlend: { excuse: true } } }));
+    expect(swaps.map((s) => (s as never as { designedExcused?: boolean }).designedExcused ?? false)).toEqual([true, true, false, false]);
+  });
+
+  it('a severity ceiling below the default still applies when the policy lowers it', () => {
+    const swaps = [sw('hero', 'hurt', 'idle', 1040, 3, 0.9)];
+    const log = [{ at: 1000, actor: 'hero', from: 'hurt', to: 'idle', cls: 'recover', ms: 50 }];
+    tagDesigned(swaps as never, log, classPolicy({ classes: { designedBlend: { excuse: true, maxSeverity: 0.5 } } }));
+    expect((swaps[0] as never as { designedExcused?: boolean }).designedExcused).toBeUndefined();
+  });
+
   it('report false switches the whole rule off', () => {
     const swaps = [sw('hero', 'hurt', 'idle', 1040)];
     const prepared = prepareClasses(swaps as never, { reasons: [], designed: designedLog }, { classes: { designedBlend: { report: false } } });
@@ -209,7 +229,7 @@ describe('T-02: the class report', () => {
   });
 
   it('classPolicy reads the policy over the defaults and ignores nonsense', () => {
-    expect(classPolicy(null)).toMatchObject({ interludeMs: 150, hurtStringMs: 600, windUpMs: 600, whyWindowMs: 400, designedBlend: { report: true, excuse: false, maxSeverity: 0.3 } });
+    expect(classPolicy(null)).toMatchObject({ interludeMs: 150, hurtStringMs: 600, windUpMs: 600, whyWindowMs: 400, designedBlend: { report: true, excuse: false, maxMs: 100, maxSeverity: 1 } });
     expect(classPolicy({ classes: { interludeMs: -5, windUpMs: 'x', designedBlend: { report: false, excuse: 'yes' } } })).toMatchObject({ interludeMs: 150, windUpMs: 600, designedBlend: { report: false, excuse: false } });
   });
 });
@@ -288,7 +308,7 @@ describe('the whole analysis carries the block', () => {
     const off = analyzeRun({ meta: withLog, records, anchors, cfg: strict });
     expect(off.summary.motion.ghostOverFail).toBe(base.summary.motion.ghostOverFail); // reported, not excused
     expect((off.summary as unknown as { classes: ReturnType<typeof classReport> }).classes.designedBlend.matched).toBe(10);
-    const on = analyzeRun({ meta: withLog, records, anchors, cfg: { ...strict, classes: { designedBlend: { excuse: true, maxSeverity: 1 } } } as typeof CFG });
+    const on = analyzeRun({ meta: withLog, records, anchors, cfg: { ...strict, classes: { designedBlend: { excuse: true, maxMs: 200, maxSeverity: 1 } } } as typeof CFG }); // the log declares 120 ms blends: over the default 100
     expect(on.summary.motion.ghostOverFail).toBe(0);
     expect(on.summary.motion.ghostDesignedExcused).toBe(10);
     expect(on.summary.motion.ghostFrames).toBe(base.summary.motion.ghostFrames); // the double images are still counted and shown

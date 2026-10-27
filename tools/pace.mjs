@@ -35,7 +35,13 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => { const m = /^-
 const val = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i >= 0 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : args[k] !== undefined && args[k] !== '1' ? args[k] : d; };
 const log = (...m) => console.log('[pace]', ...m);
 const entrySec = Number(val('entry', 10));
-const argv0Next = (flag) => { const i = process.argv.indexOf(flag); return String(process.argv[i + 2] ?? ''); }; // `--compare <before dir> <after dir>`
+/** `--compare <before dir> <after dir>` and `--compare=<before dir> <after dir>`: the two folders (review m5: the equals form used to read argv[1]). */
+const compareDirs = () => {
+  const i = process.argv.findIndex((a) => a === '--compare' || a.startsWith('--compare='));
+  if (i < 0) return null;
+  const a = process.argv[i];
+  return a.includes('=') ? [a.slice(a.indexOf('=') + 1), process.argv[i + 1]] : [process.argv[i + 1], process.argv[i + 2]];
+};
 
 if (val('analyze', null)) {
   const target = path.resolve(String(val('analyze', '')));
@@ -49,15 +55,17 @@ if (val('analyze', null)) {
   process.exit(0);
 }
 
-if (val('compare', null)) {
-  const [aDir, bDir] = [String(val('compare')), argv0Next('--compare')];
+if (compareDirs()) {
+  const [aDir, bDir] = compareDirs().map(String);
+  if (!aDir || !bDir || bDir.startsWith('--')) { console.log('usage: node tools/pace.mjs --compare <before dir> <after dir>'); process.exit(64); }
   const read = async (d) => { const f = path.join(path.resolve(d), 'pace.json.gz'); const r = await readRun(f); return { r, a: analyzePace({ dump: r.page.dump, meta: r.meta, entrySec }) }; };
   const [x, y] = [await read(aDir), await read(bDir)];
   for (const [name, o] of [['before', x], ['after ', y]]) console.log(paceReportLine(name, o.a));
   const why = incomparable(x.r.meta.stamp, y.r.meta.stamp);
   console.log(why.length ? `NOT COMPARABLE: ${why.join('; ')}` : 'comparable: the same tool and the same continuity harness read both');
   const d = (k) => Math.round(((y.a.headline[k] ?? 0) - (x.a.headline[k] ?? 0)) * 100) / 100;
-  console.log(`change: animation time lost ${d('animLostMsPerMin')} ms a minute, frames over 33 ms ${d('over33PerMin')} a minute`);
+  // two definitions of the same quantity: the plan's baselines (Chapter I 674, Chapter IV 90) count every steady frame, the route's own frames included; the game's own number leaves them out (review m4)
+  console.log(`change: animation time lost ${d('steadyAnimLostMsPerMin')} ms a minute with the route's own frames (the plan's unit), ${d('animLostMsPerMin')} without them (the game's own); frames over 33 ms ${d('over33PerMin')} a minute`);
   process.exit(why.length ? 2 : 0);
 }
 
@@ -72,11 +80,11 @@ fs.mkdirSync(outDir, { recursive: true });
 process.env.PYREFLY_BROWSER ??= 'gpu';
 process.env.PYREFLY_QUERY = query;
 
-const stamp = toolStamp('pace', 'tools/pace.mjs', ROOT);
+const stamp = toolStamp('pace', 'tools/pace.mjs', ROOT, { extraFiles: ['critic/runner/lib/pace-init.page.js'] }); // the recorder is a page script read with addInitScript, not imported: it is part of the instrument
 log(describeStamp(stamp));
 const server = await serveDist(dist);
 log(`serving ${dist} at ${server.base}`);
-const release = await takeBrowserLock({ who: 'mf-l5-pace', what: `pace ${label}`, maxMinutes: 10, log });
+const release = await takeBrowserLock({ who: 'mf-l5-pace', what: `pace ${label}`, maxMinutes: 10, log, onWatchdog: () => finish() }); // a run the watchdog ends still writes what it recorded (review m18)
 const samplers = startMachineSamplers();
 const gpuBefore = gpuByProcess();
 const { chromium } = createRequire(path.join(ROOT, 'package.json'))('playwright');

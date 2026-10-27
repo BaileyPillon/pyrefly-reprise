@@ -175,6 +175,13 @@ describe.skipIf(!haveFfmpeg)('the composer, end to end on a synthetic capture', 
       const numbers = JSON.parse(fs.readFileSync(path.join(out, 'numbers.json'), 'utf8'));
       expect(Object.keys(numbers['120'].numbers)).toEqual(['A', 'B']);
       expect(numbers['120'].crop.w).toBeGreaterThanOrEqual(240);
+      // review m1: the folder stays blind. Neither numbers.json nor the README names a variant; only KEY.json does, with the capture's words
+      expect(JSON.stringify(numbers)).not.toMatch(/"variant"|V0|V1/);
+      expect(fs.readFileSync(path.join(out, 'README.txt'), 'utf8')).not.toMatch(/V0|V1/);
+      expect(key.variants.map((v: { id: string }) => v.id)).toEqual(['V0', 'V1']);
+      expect(key.capture.clock).toMatch(/virtual/);
+      expect(key.capture.rates).toEqual([120]);
+      expect(numbers['120']).toHaveProperty('clipCappedFromMs'); // review m19: said, even when null
     } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
   }, 120000);
 });

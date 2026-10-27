@@ -14,14 +14,14 @@ const NOW = Date.parse('2026-10-27T05:00:00Z');
 const at = (minAgo: number): string => new Date(NOW - minAgo * 60000).toISOString();
 
 describe('the RIG-RECORD lock', () => {
-  it('is held by somebody else only while that process is alive and the lock is under 15 minutes old', () => {
+  it('is held by somebody else until it is 15 minutes old, whether or not its pid answers (the pass never removes another lane lock earlier)', () => {
     const rec = { who: 'other', pid: 4242, at: at(3), maxMinutes: 10 };
-    expect(heldBy(rec, { pid: 1, now: NOW, isAlive: () => true })).toBe(rec);
-    expect(heldBy(rec, { pid: 1, now: NOW, isAlive: () => false })).toBeNull(); // the process is gone: stale
-    expect(heldBy({ ...rec, at: at(16) }, { pid: 1, now: NOW, isAlive: () => true })).toBeNull(); // older than 15 minutes: stale
-    expect(heldBy(rec, { pid: 4242, now: NOW, isAlive: () => true })).toBeNull(); // our own
+    expect(heldBy(rec, { pid: 1, now: NOW })).toBe(rec);
+    expect(heldBy({ ...rec, at: at(14) }, { pid: 1, now: NOW })).not.toBeNull(); // a wrapper pid that exited while its job runs
+    expect(heldBy({ ...rec, at: at(16) }, { pid: 1, now: NOW })).toBeNull(); // older than 15 minutes: stale
+    expect(heldBy(rec, { pid: 4242, now: NOW })).toBeNull(); // our own
     expect(heldBy(null)).toBeNull();
-    expect(heldBy({ who: 'x', at: at(1) } as never, { pid: 1, now: NOW, isAlive: () => true })).toBeNull(); // no pid
+    expect(heldBy({ who: 'x', at: at(1) } as never, { pid: 1, now: NOW })).toBeNull(); // no pid
   });
   it('a reservation is good while its owner lives and is younger than its own max plus the stale margin', () => {
     const rec = { who: 'next', pid: 77, at: at(20), maxMinutes: 10 };
@@ -56,7 +56,9 @@ describe('the static server', () => {
       const s = await serveDist(dir);
       try {
         expect(await (await fetch(`${s.base}`)).text()).toContain('<title>game</title>');
-        expect(await (await fetch(`${s.base}no/such/path`)).text()).toContain('<title>game</title>');
+        expect(await (await fetch(`${s.base}no/such/path`)).text()).toContain('<title>game</title>'); // a route of the one-page game
+        const missing = await fetch(`${s.base}assets/missing.webp`);
+        expect(missing.status).toBe(404); // a missing FILE is a 404, never an HTML page for the decoder to choke on
         const js = await fetch(`${s.base}assets/a.js`);
         expect(js.headers.get('content-type')).toMatch(/javascript/);
         expect(await js.text()).toBe('0123456789');
@@ -92,6 +94,21 @@ describe('the tool stamp', () => {
     expect(incomparable(a, { ...a, harness: { ...a.harness, id: 'x' } })[0]).toMatch(/different continuity harness/);
     expect(incomparable(a, { ...a, tool: 'other' })[0]).toMatch(/different tools/);
     expect(incomparable(a, null)[0]).toMatch(/no stamp/);
+  });
+  it('covers a file the tool reads at run time without importing it, and the thresholds its numbers depend on (review M2)', () => {
+    const base = toolStamp('measure-test', 'tools/measure/stamp.mjs', root);
+    const withPage = toolStamp('measure-test', 'tools/measure/stamp.mjs', root, { extraFiles: ['critic/runner/lib/pace-init.page.js'] });
+    expect(Object.keys(withPage.toolFiles)).toContain('critic/runner/lib/pace-init.page.js');
+    expect(withPage.toolId).not.toBe(base.toolId);
+    const t1 = toolStamp('measure-test', 'tools/measure/stamp.mjs', root, { thresholds: { minJumpPx: 2.5, minShare: 0.3 } });
+    const t2 = toolStamp('measure-test', 'tools/measure/stamp.mjs', root, { thresholds: { minShare: 0.3, minJumpPx: 2.5 } });
+    const t3 = toolStamp('measure-test', 'tools/measure/stamp.mjs', root, { thresholds: { minJumpPx: 3, minShare: 0.3 } });
+    expect(t1.toolId).toBe(t2.toolId); // the order they are written in does not matter
+    expect(t1.toolId).not.toBe(base.toolId);
+    expect(t1.toolId).not.toBe(t3.toolId); // a changed threshold is another tool
+    expect(incomparable(t1, t3)[0]).toMatch(/different tool files/);
+    expect(t1.thresholds).toEqual({ minJumpPx: 2.5, minShare: 0.3 });
+    expect(() => toolStamp('measure-test', 'tools/measure/stamp.mjs', root, { extraFiles: ['no/such/file.js'] })).toThrow(/not in/);
   });
   it('the digest does not depend on the order the files are listed in', () => {
     expect(toolDigest({ a: '1', b: '2' })).toBe(toolDigest({ b: '2', a: '1' }));

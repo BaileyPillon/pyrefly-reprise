@@ -7,9 +7,9 @@
 // start, so the quantisation of a rate is its own frame: that is why the second gate is in display frames and not in milliseconds.
 //
 // Also: `sharedTimeDeviation` reads each figure's position at the times the three rates share (k / 12 s: 5k frames at 60, 10k at 120, 12k at 144; the method of tests/unit/feel-120hz.test.ts), leaving out
-// the frames a hit rattle is running (its phase is random: C-01), and reports the largest difference in px; and `joltsPerRate` counts the velocity jolts of each capture. Both are REPORTED.
+// the frames a hit rattle is running (its phase is random: C-01), and reports the largest difference in px (the idle sway's phase is a Math.random() draw too: the capture session seeds it, but the number of draws before the battle is not fixed, so a few px of idle sway can remain: living.ts, DemoIdle.ts); and `joltsPerRate` counts the velocity jolts of each capture. Both are REPORTED.
 
-import { chainedBeatEquality, joltTally, joltsOfRecording, wallTimeEquality } from './hz-pure.mjs';
+import { chainedBeatEquality, JOLT_GRID_MS, joltTally, joltsOfRecording, wallTimeEquality } from './hz-pure.mjs';
 
 const r1 = (x) => Math.round(x * 10) / 10;
 
@@ -101,9 +101,9 @@ export function sharedTimeDeviation(refRows, rows) {
 /**
  * The whole judgement of one moment captured at several rates.
  * @param {Record<number, {frames: any[], events: any[], t0: number, seconds?: number}>} recs by Hz; `t0` is the moment's start on the capture's virtual clock
- * @param {{ wallTolerance?: number, beatFrames?: number, minIntervalMs?: number, epsilonMs?: number }} [o]
+ * @param {{ wallTolerance?: number, beatFrames?: number, minIntervalMs?: number, epsilonMs?: number, gridMs?: number }} [o] `minIntervalMs` 200: shorter ones are all quantisation; an interval within one frame of the slower display passes whatever its percentage (wallTimeEquality, review m6); `gridMs` the jolt grid (hz-pure.mjs)
  */
-export function judgeMoment(recs, { wallTolerance = 0.05, beatFrames = 1, minIntervalMs = 200, epsilonMs = 1 } = {}) {
+export function judgeMoment(recs, { wallTolerance = 0.05, beatFrames = 1, minIntervalMs = 200, epsilonMs = 1, gridMs = JOLT_GRID_MS } = {}) {
   const hzs = Object.keys(recs).map(Number).sort((a, b) => a - b);
   const beats = Object.fromEntries(hzs.map((hz) => [hz, beatsOf(recs[hz], recs[hz].t0)]));
   const al = alignBeats(beats);
@@ -128,7 +128,7 @@ export function judgeMoment(recs, { wallTolerance = 0.05, beatFrames = 1, minInt
   const jolts = Object.fromEntries(hzs.map((hz) => {
     const F = recs[hz].frames.filter((f) => f.vt >= recs[hz].t0);
     const seconds = F.length > 1 ? (F[F.length - 1].t - F[0].t) / 1000 : 0;
-    return [hz, joltTally(joltsOfRecording(F), seconds)];
+    return [hz, joltTally(joltsOfRecording(F, { gridMs }), seconds)];
   }));
   const reasons = [];
   for (const w of wall) if (!w.pass) reasons.push(`wall time ${w.from} to ${w.to}: ${w.rows.map((r) => `${r.hz} Hz ${r.ms} ms`).join(', ')} (worst ${Math.round(w.worst * 1000) / 10} percent over ${wallTolerance * 100})`);

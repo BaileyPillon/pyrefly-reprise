@@ -1,6 +1,7 @@
 /** Types for `critic/runner/lib/continuity-why.mjs`, so the unit tests can import it. */
-export interface DesignedBlendPolicy { report: boolean; excuse: boolean; maxSeverity: number }
+export interface DesignedBlendPolicy { report: boolean; excuse: boolean; maxMs: number; maxSeverity: number }
 export interface ClassPolicy { interludeMs: number; hurtStringMs: number; windUpMs: number; whyWindowMs: number; slackMs: number; designedBlend: DesignedBlendPolicy }
+export declare const SWAP_LOG_CAP: number;
 export declare const CLASS_DEFAULTS: Readonly<ClassPolicy>;
 export declare function classPolicy(cfg: unknown): ClassPolicy;
 
@@ -32,7 +33,7 @@ export interface Prepared { policy: ClassPolicy; whyTagged: number; designedN: n
 export declare function prepareClasses(swaps: ClassSwap[], swapLog: SwapLogMeta | null | undefined, cfg: unknown): Prepared;
 export interface ClassReport {
   windowMs: { interlude: number; hurtString: number; windUp: number; why: number };
-  source: { why: 'log' | 'neighbours' | 'none'; whyTagged: number; designed: 'log' | 'none' };
+  source: { why: 'log' | 'neighbours' | 'none'; whyTagged: number; designed: 'log' | 'none'; logCapped: { reasons: boolean; designed: boolean } };
   byClass: Array<GroupStats & { cls: string; planned: number; designed: number }>;
   stance: { source: string; up: Record<string, GroupStats>; down: Record<string, GroupStats> };
   interludes: { count: number; perMinute: number | null; countedPairs: number; ghostFrames: number; ghostMs: number; ghostMsPerMinute: number | null; ghostFramesPerMinute: number | null; ghostShare: number; byTo: Record<string, number>; medianGapMs: number | null };

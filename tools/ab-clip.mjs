@@ -17,10 +17,22 @@
  *   build         the built folder to serve (default: <repo>/dist-gate; --dist overrides)    queryBase  e.g. "?coach=off"           title, questions[]   the card's heading and one-line questions
  *   variants[]    { id, name, query }: `query` is the variant's address words ("&hit=ramp"); the FIRST variant is "today" by convention. At least two.
  *   rates[]       capture rates, default [60]: 60 for the clip, add 120 (or 144 for a rate item) for the quarter-speed copy
- *   keys[]        the real key presses after the first command menu opens (default ["Enter","Enter"]: the first command, the first target)
- *   focus[]       actor ids the crop follows (default: every actor)        align { kind: "start" } | { kind: "event", type: "damage", ordinal: 1 }: where the variants are put on the same instant
+ *   keys[]        the real key presses after the first command menu opens (default ["Enter","Enter"]: the first command, the first target); each a key name or { "key": "ArrowDown", "afterMs": 400 }, the wait after it
+ *   focus[]       actor ids the crop follows (default: every actor)        crop { x, y, w, h }: a fixed region in viewport px instead (a HUD column: the turn-order list, the ATB bars)
+ *   align         { kind: "start" } | { kind: "event", type: "damage", actor: "<figure id>", ordinal: 1 }: where the variants are put on the same instant (default for an "until" card: that event)
  *   strip         { event: "damage", ordinal: 1, offset: -2, frames: 12 }: where the 12 consecutive 60 Hz frames begin       leadMs 500, settleMs 1000, maxMs 8000
+ * THE MOMENT BEYOND "ONE ATTACK" (review M5; every field optional, a card without them films exactly the first version's moment):
+ *   setup[]       once the first command menu is open, before the play: { "hp": { "who": "enemy" | "party" | "<figure id>", "set": 1 } } or { "hp": { "who": "enemy", "fraction": 0.04 } } (a boss at a sliver so the first
+ *                 blow is its last; a girl at 1 HP under the next strike), or { "eval": "<debug-API expression>" } (stage a beat the routes do not reach). Recorded in rec.json; the same for every variant.
+ *   holdMenuMs    leave the first command menu OPEN this long before the first key (the ATB bars filling for 5 s: CP-08; the stance held for 2 s: CP-01)
+ *   turns         press the keys again at each of the next command menus, up to 12 turns in all (two consecutive turns of the turn-order list: CP-11)
+ *   until         { "event": "ko", "who": "<figure id>", "ordinal": 1, "afterMs": 1000 }: play on, turn after turn (the party is kept up), until that battle-log event, then afterMs more (the boss going down: CP-06)
+ *   window        { "event": "ko", "who": ..., "ordinal": 1, "beforeMs": 2000, "afterMs": 1500 }: cut the clip around that event, whatever the turns before it took (default for an "until" card)
+ *   seconds       the longest the play may run, virtual seconds (default 14)
  * The window is cut by battle-log EVENT (the confirm key to the presenter finishing, plus settleMs), never by wall time. When a variant changes the timing, align on the contact event and each full move is shown.
+ * WHAT THE FILM DOES NOT SHOW (review m20, CA-02): the virtual clock is the game at governor level 0, so a clip shows the SHAPE of a motion, not the cost of a frame; the CSS timeline (damage numerals, slabs,
+ * the HUD's own animations) and the audio run on REAL time while a screenshot of every frame takes 100 ms or more, so an overlay inside the crop plays several times too fast against the canvas: crop to the
+ * figures (the default), or judge a HUD item by its numbers and the booth PC. KEY.json carries the capture's build, tool id and rates beside the key.
  *
  * Every output file set carries `stamp.json` (tools/measure/stamp.mjs): which tool and which continuity harness made the card.
  */
@@ -33,6 +45,7 @@ import { composeCard } from './measure/ab-compose.mjs';
 import { captureSession } from './measure/capture.mjs';
 import { playOneAttack } from './measure/fight.mjs';
 import { serveDist } from './measure/serve.mjs';
+import { applySetup } from './measure/setup.mjs';
 import { describeStamp, toolStamp } from './measure/stamp.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -74,16 +87,20 @@ if (phase === 'capture' || phase === 'all') {
         const query = joinQuery(spec.queryBase ?? '?coach=off', v.query ?? '');
         log(`== ${spec.id}: ${v.id} (${v.name ?? ''}) at ${hz} Hz, ${query || '(no address words)'}`);
         let shots = 0;
+        let setupDone = [];
         const cap = await captureSession({
           root: ROOT, base: server.base, query, chapter: spec.chapter, hz, viewport, who: 'mf-l5-abclip', what: `ab-clip ${spec.id} ${v.id} ${hz} Hz`, log,
+          afterOpen: async (g) => { setupDone = await applySetup(g.page, spec.setup); if (setupDone.length) log(`setup: ${JSON.stringify(setupDone.map((d) => d.result))}`); },
           play: (s) => playOneAttack({
-            ...s, keys: spec.keys ?? ['Enter', 'Enter'], seconds: 14, preRollMs: spec.leadMs ?? 500, tailMs: spec.settleMs ?? 1000,
+            ...s, keys: spec.keys ?? ['Enter', 'Enter'], seconds: spec.seconds ?? 14, preRollMs: spec.leadMs ?? 500, tailMs: spec.settleMs ?? 1000,
+            holdMenuMs: spec.holdMenuMs ?? 0, turns: spec.turns ?? 1, until: spec.until ?? null, keepAlive: Boolean(spec.until),
             onFrame: async (st, f) => { await s.g.page.screenshot({ path: path.join(dir, 'frames', `f${String(f).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 82 }); shots++; },
           }),
         });
-        const meta = { variant: v, hz, query, chapter: spec.chapter, dist, viewport, started: cap.started, ended: cap.result.ended, steps: cap.steps, virtualMs: cap.virtualMs, diag: cap.diag, consoleErrors: cap.consoleErrors, shots, stamp };
-        fs.writeFileSync(path.join(dir, 'rec.json'), JSON.stringify({ meta, t0: cap.result.t0, frames: cap.frames, events: cap.events }));
-        log(`${v.id} at ${hz} Hz: ${cap.frames.length} frames, ${shots} shots, ${cap.events.length} events, ended by ${cap.result.ended}`);
+        const meta = { variant: v, hz, query, chapter: spec.chapter, dist, viewport, setup: setupDone, started: cap.started, ended: cap.result.ended, steps: cap.steps, virtualMs: cap.virtualMs, diag: cap.diag, consoleErrors: cap.consoleErrors, shots, stamp };
+        fs.writeFileSync(path.join(dir, 'rec.json'), JSON.stringify({ meta, t0: cap.result.t0, untilAt: cap.result.untilAt ?? null, turns: cap.result.turns ?? 1, frames: cap.frames, events: cap.events }));
+        log(`${v.id} at ${hz} Hz: ${cap.frames.length} frames, ${shots} shots, ${cap.events.length} events, ${cap.result.turns ?? 1} turn(s), ended by ${cap.result.ended}`);
+        if (spec.until && cap.result.ended !== 'event') log(`WARNING: ${v.id} at ${hz} Hz never saw the event ${spec.until.event}${spec.until.who ? ` of ${spec.until.who}` : ''}: the window falls back to the plain one`);
       }
     }
   } catch (e) { log('FAILED', String(e && e.stack ? e.stack : e).slice(0, 600)); await server.close(); process.exit(1); }
@@ -91,7 +108,7 @@ if (phase === 'capture' || phase === 'all') {
 }
 
 if (phase === 'compose' || phase === 'all') {
-  const results = await composeCard({ spec, workDir, outDir, root: ROOT });
+  const results = await composeCard({ spec, workDir, outDir, root: ROOT, info: { dist, toolId: stamp.toolId, harness: stamp.harness?.id ?? null, head: stamp.tree?.head ?? null, dirty: stamp.tree?.dirty?.length ?? 0, viewport } });
   for (const r of results) for (const f of r.files) log(`${r.hz} Hz ${f.kind}: ${path.basename(f.file)} ${(f.bytes / 1024 / 1024).toFixed(2)} MB${f.seconds ? ` ${f.seconds} s` : ''}${f.over ? '  OVER THE 8 MB BUDGET' : ''}`);
   if (!argv.includes('--keep-raw')) { fs.rmSync(workDir, { recursive: true, force: true }); log('raw frames removed'); }
   log(`card written to ${outDir}`);

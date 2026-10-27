@@ -56,7 +56,7 @@ const WATCH = async (ms) => {
   window.__shimmerUid = uid;
   const by = {};
   for (const r of log) { const u = (by[r.uid] ??= { uid: r.uid, cls: r.cls, firstT: r.t, lastT: r.t, maxCur: 0, frames: 0 }); u.lastT = r.t; u.maxCur = Math.max(u.maxCur, r.cur); u.frames++; }
-  return { frameRecords: log.length, mutations: muts, lives: Object.values(by).slice(0, 60), partyFound: Boolean(party) };
+  return { frameRecords: log.length, mutations: muts, lives: Object.values(by), partyFound: Boolean(party) }; // every element, not a sample: the verdict counts them (a first version cut the list at 60 and read 60 for every window)
 };
 
 const stamp = toolStamp('atb-shimmer', 'tools/atb-shimmer.mjs', ROOT);
@@ -83,7 +83,7 @@ try {
   for (let w = 0; w < windows; w++) {
     const raw = await page.evaluate(`(${WATCH.toString()})(${windowMs})`);
     const v = shimmerVerdict({ lives: raw.lives, mutations: raw.mutations, windowMs });
-    results.push({ window: w + 1, ...raw, ...v });
+    results.push({ window: w + 1, ...raw, lives: raw.lives.slice(0, 40), livesShown: Math.min(40, raw.lives.length), ...v });
     log(`window ${w + 1}: ${v.verdict}; ${v.distinctElements} element(s) carried the shimmer, longest ${v.longestLifeMs} ms; the column was rebuilt ${raw.mutations} times (${v.rebuildsPerSecond} a second); ${v.why}`);
     await page.waitForTimeout(500);
   }

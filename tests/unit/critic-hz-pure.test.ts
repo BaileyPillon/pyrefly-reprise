@@ -3,7 +3,7 @@
  * (`critic/runner/lib/hz-pure.mjs`, `hz-moment.mjs`). Synthetic captures stand in for the browser's: a figure moving by time at each rate, with and without the defects the matrix exists to find.
  */
 import { describe, expect, it } from 'vitest';
-import { HZ_RATES, chainedBeatEquality, classifyJolt, findJolts, frameMsFor, joltGate, joltTally, joltsOfRecording, speedSeries, stepsTotal, wallTimeEquality } from '../../critic/runner/lib/hz-pure.mjs';
+import { HZ_RATES, JOLT_GRID_MS, chainedBeatEquality, classifyJolt, findJolts, frameMsFor, joltGate, joltTally, joltsIncomparable, joltsOfRecording, resampleToGrid, speedSeries, stepsTotal, wallTimeEquality } from '../../critic/runner/lib/hz-pure.mjs';
 import { alignBeats, beatsOf, judgeMoment, sharedTimeDeviation, sharedTimeTrace } from '../../critic/runner/lib/hz-moment.mjs';
 
 describe('the virtual display frames', () => {
@@ -81,8 +81,8 @@ describe('the velocity jolt probe', () => {
       const s = series(hz, 1, (t) => (t < 400 ? 0 : 14)); // 0 to 14 px a 60 Hz frame at 400 ms
       const j = findJolts(s);
       expect(j.length, `${hz} Hz`).toBe(1);
-      expect(j[0]!.jump).toBeGreaterThan(12);
-      expect(j[0]!.share).toBeGreaterThan(0.9);
+      expect(j[0]!.jump).toBeGreaterThan(10); // on the grid a step that falls between two grid samples is split a little across them
+      expect(j[0]!.share).toBeGreaterThan(0.7);
     }
   });
 
@@ -123,10 +123,102 @@ describe('the velocity jolt probe', () => {
 
   it('merges adjacent flagged samples into one jolt when asked', () => {
     const s = series(120, 1, (t) => (t < 400 ? 0 : t < 420 ? 14 : 28));
-    expect(findJolts(s).length).toBeGreaterThan(1);
+    expect(findJolts(s, { gridMs: 0 }).length).toBeGreaterThan(1);
+    expect(findJolts(s, { gridMs: 0, mergeMs: 40 }).length).toBe(1);
     expect(findJolts(s, { mergeMs: 40 }).length).toBe(1);
   });
 });
+
+describe('the jolt grid (review M1): the count does not depend on the capture rate', () => {
+  /** A 50 ms ramp from rest to 12 px a 60 Hz frame (the shape of a designed ramp), held. */
+  const ramp = (hz: number) => series(hz, 1.2, (t) => (t < 300 ? 0 : t < 350 ? ((t - 300) / 50) * 12 : 12));
+
+  it('resamples to a fixed step, linear between frames, from the first sample to the last, and says which captured frame is nearest', () => {
+    const g = resampleToGrid([{ t: 0, x: 0 }, { t: 10, x: 10 }, { t: 40, x: 40 }], 20);
+    expect(g.map((s) => s.t)).toEqual([0, 20, 40]);
+    expect(g.map((s) => s.x)).toEqual([0, 20, 40]);
+    expect(g.map((s) => s.src)).toEqual([0, 1, 2]);
+    expect(JOLT_GRID_MS).toBeCloseTo(16.667, 3);
+    expect(resampleToGrid([{ t: 5, x: 1 }], 20)).toEqual([{ t: 5, x: 1, src: 0 }]);
+    expect(resampleToGrid([{ t: 0, x: 0 }, { t: 100, x: 10 }], 0).length).toBe(2); // no grid: as captured
+  });
+
+  it('the raw method counts a ramp at 60 Hz and not at 120 or 144; the grid counts it within one at every rate', () => {
+    const raw = [60, 120, 144].map((hz) => findJolts(ramp(hz), { gridMs: 0 }).length);
+    expect(raw[0]).toBeGreaterThan(0);
+    expect(raw[1]).toBe(0);
+    expect(raw[2]).toBe(0);
+    const grid = [60, 120, 144].map((hz) => findJolts(ramp(hz)).length);
+    expect(Math.max(...grid) - Math.min(...grid)).toBeLessThanOrEqual(1);
+    expect(Math.min(...grid)).toBeGreaterThan(0); // seen at every rate
+  });
+
+  it('an instantaneous step is one jolt (two at most, split across two grid samples) at every rate', () => {
+    for (const hz of [60, 120, 144]) {
+      const n = findJolts(series(hz, 1, (t) => (t < 400 ? 0 : 12))).length;
+      expect(n, `${hz} Hz`).toBeGreaterThanOrEqual(1);
+      expect(n, `${hz} Hz`).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it('a 120 Hz capture read every other frame gives the count of its full self, within 15 percent, on the grid (a square wave of 4.2 grid frames is the worst case: the real recordings agree within 0.5 and 7 percent)', () => {
+    // a rattling figure: 12 px a frame for 70 ms, then still for 70 ms, so there is something to count
+    const s = series(120, 4, (t) => (Math.floor(t / 70) % 2 ? 0 : 12));
+    const full = findJolts(s).length;
+    const even = findJolts(s.filter((_, i) => i % 2 === 0)).length;
+    const odd = findJolts(s.filter((_, i) => i % 2 === 1)).length;
+    expect(full).toBeGreaterThan(40);
+    expect(Math.abs(even - full) / full).toBeLessThan(0.15);
+    expect(Math.abs(odd - full) / full).toBeLessThan(0.15);
+  });
+
+  it('classifies a grid jolt by the captured frame it falls on', () => {
+    const frames = Array.from({ length: 80 }, (_, i) => ({ t: i * 8.333, hs: 1, actors: { a: { gx: i < 40 ? 0 : (i - 40) * 0.12, ox: 0, gy: 0, oy: 0, shL: i >= 40 ? 100 : 0, pose: 'idle' } } }));
+    const j = joltsOfRecording(frames);
+    expect(j.length).toBeGreaterThan(0);
+    expect(j[0]!.src).toBeGreaterThanOrEqual(38);
+    expect(j.some((x) => x.class === 'hit rattle')).toBe(true);
+  });
+});
+
+describe('which jolt counts may be compared (review M1)', () => {
+  const a = { chapter: 'ffx2-bahamut', query: '?coach=off', gridMs: 16.667, seconds: 105, policy: { minJumpPx: 2.5, minShare: 0.3, windowMs: 333 } };
+  it('accepts the same capture at another rate and another build', () => {
+    expect(joltsIncomparable(a, { ...a, seconds: 110 })).toEqual([]);
+  });
+  it('refuses another chapter, another query, another method, a different length and other thresholds', () => {
+    expect(joltsIncomparable(a, { ...a, chapter: 'seymour-flux' })[0]).toMatch(/different chapters/);
+    expect(joltsIncomparable(a, { ...a, query: '?pack=demo' })[0]).toMatch(/different query/);
+    expect(joltsIncomparable(a, { ...a, gridMs: 0 })[0]).toMatch(/judged differently/);
+    expect(joltsIncomparable(a, { ...a, seconds: 45 })[0]).toMatch(/different length/);
+    expect(joltsIncomparable(a, { ...a, policy: { minJumpPx: 3, minShare: 0.3, windowMs: 333 } })[0]).toMatch(/threshold minJumpPx/);
+  });
+});
+
+describe('wall time and the quantisation of a frame (review m6)', () => {
+  it('an interval within one frame of the slower display passes whatever its percentage; a real difference fails', () => {
+    expect(wallTimeEquality([{ hz: 60, ms: 217 }, { hz: 144, ms: 202 }]).pass).toBe(true); // 15 ms = 7 percent, under one 60 Hz frame
+    expect(wallTimeEquality([{ hz: 60, ms: 217 }, { hz: 144, ms: 297 }]).pass).toBe(false); // 80 ms late
+    expect(wallTimeEquality([{ hz: 60, ms: 1000 }, { hz: 144, ms: 1040 }]).pass).toBe(true); // 4 percent
+    expect(wallTimeEquality([{ hz: 60, ms: 1000 }, { hz: 144, ms: 1080 }]).pass).toBe(false);
+  });
+
+  it('a correct move never fails on quantisation alone, at any interval from 200 ms and any phase', () => {
+    // each event is seen at the first frame at or after its time, at each rate's own steps
+    const seen = (hz: number, t: number): number => { const steps = frameMsFor(hz); let c = 0; for (let n = 0; ; n++) { if (c >= t) return c; c += steps[n % steps.length]!; } };
+    let fails = 0, tried = 0;
+    for (let len = 200; len <= 800; len += 25) {
+      for (let phase = 0; phase < 50; phase += 1.7) {
+        const runs = [60, 120, 144].map((hz) => ({ hz, ms: seen(hz, 1000 + phase + len) - seen(hz, 1000 + phase) }));
+        tried++;
+        if (!wallTimeEquality(runs).pass) fails++;
+      }
+    }
+    expect(tried).toBeGreaterThan(500);
+    expect(fails).toBe(0);
+  });
+});
+
 
 // ---- a moment at three rates ----
 interface Frame { t: number; vt: number; hs: number | null; actors: Record<string, Record<string, unknown>> }
@@ -184,7 +276,7 @@ describe('a moment at 60, 120 and 144 Hz', () => {
     expect(j.pass).toBe(false);
     expect(j.chain.pass).toBe(false);
     expect(j.reasons.join(' ')).toMatch(/144 Hz vs 60 Hz/);
-    expect(j.wall.some((w) => !w.pass)).toBe(true);
+    expect(j.wall.some((w) => !w.pass)).toBe(true); // the 80 ms is both over 5 percent and over a frame
   });
 
   it('says so when one rate is missing a beat the others have', () => {

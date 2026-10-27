@@ -74,12 +74,35 @@ export function trackPoints(frames, focus, i0, i1) {
 }
 
 /**
+ * The nth log event (1-based `ordinal`, default 1) of a type, optionally about one figure (`who` matches the event's target, actor or source). The factory cuts by these, never by wall time.
+ * @param {Array<{type: string, vt?: number, targetId?: string|null, actorId?: string|null, sourceId?: string|null}>} events
+ * @param {{event?: string, type?: string, who?: string|null, ordinal?: number}} want `event` (or `type`) is the log event's type, e.g. "ko", "damage", "summon"
+ */
+export function findEvent(events, want) {
+  const type = want?.event ?? want?.type;
+  if (!type) return null;
+  const hits = (events ?? []).filter((e) => e.type === type && (!want.who || e.targetId === want.who || e.actorId === want.who || e.sourceId === want.who));
+  return hits[(want.ordinal ?? 1) - 1] ?? null;
+}
+
+/**
  * The window of a moment in a recording, by battle-log EVENT, never by wall time: from `lead` ms before the moment's start (the menu confirm, `t0`) to `settle` ms after the presenter finished the action
  * (the last frame it was playing, or the last log event of the action if it never reported playing), capped at `maxMs`. Frames carry `vt` (virtual ms).
+ * `around` centres the window on a log event instead (`{ event, who, ordinal, beforeMs, afterMs }`: from `beforeMs` before it to `afterMs` after), for a moment that comes turns after the first key (the last blow
+ * of a boss, a knock-out): the window is then the same length in every variant whatever the turns before it took. An event that never happened falls back to the plain window.
+ * @param {{around?: {event: string, who?: string|null, ordinal?: number, beforeMs?: number, afterMs?: number}|null}} [o]
  * @returns {{i0: number, i1: number, startMs: number, endMs: number, lengthMs: number, truncated: boolean}|null}
  */
-export function windowOf(frames, events, { t0, leadMs = 500, settleMs = 1000, maxMs = 8000 } = {}) {
+export function windowOf(frames, events, { t0, leadMs = 500, settleMs = 1000, maxMs = 8000, around = null } = {}) {
   if (!frames.length) return null;
+  const hit = around ? findEvent(events, around) : null;
+  if (hit && Number.isFinite(hit.vt)) {
+    const startMs = hit.vt - (around.beforeMs ?? 1500), endMs = hit.vt + (around.afterMs ?? 1000);
+    const i0 = Math.max(0, frames.findIndex((f) => f.vt >= startMs));
+    let i1 = frames.length - 1;
+    for (let i = i0; i < frames.length; i++) if (frames[i].vt > endMs) { i1 = i - 1; break; }
+    return { i0, i1: Math.max(i0, i1), startMs, endMs, lengthMs: endMs - startMs, truncated: false, around: true };
+  }
   const start = t0 - leadMs;
   let lastPlaying = -1;
   for (let i = 0; i < frames.length; i++) if (frames[i].vt >= t0 && frames[i].playing) lastPlaying = i;
@@ -138,7 +161,17 @@ export function checkSpec(spec) {
   }
   const rates = spec.rates ?? [60];
   if (!Array.isArray(rates) || !rates.length || rates.some((r) => !(r >= 30 && r <= 240))) bad.push('"rates" is a list of capture rates between 30 and 240 Hz');
-  if (spec.keys !== undefined && !(Array.isArray(spec.keys) && spec.keys.every((k) => typeof k === 'string'))) bad.push('"keys" is a list of key names');
+  if (spec.keys !== undefined && !(Array.isArray(spec.keys) && spec.keys.length && spec.keys.every((k) => typeof k === 'string' || (k && typeof k.key === 'string' && (k.afterMs === undefined || (k.afterMs >= 0 && k.afterMs <= 10000)))))) bad.push('"keys" is a list of key names, or { "key": name, "afterMs": 0 to 10000 } (the wait after that key)');
+  if (spec.holdMenuMs !== undefined && !(spec.holdMenuMs >= 0 && spec.holdMenuMs <= 15000)) bad.push('"holdMenuMs" is 0 to 15000 (how long the first command menu stays open before the first key)');
+  if (spec.turns !== undefined && !(Number.isInteger(spec.turns) && spec.turns >= 1 && spec.turns <= 12)) bad.push('"turns" is a whole number from 1 to 12 (how many times the keys are pressed, one per command menu)');
+  if (spec.seconds !== undefined && !(spec.seconds > 0 && spec.seconds <= 90)) bad.push('"seconds" is the longest the play may run, 1 to 90 s of virtual time');
+  if (spec.until !== undefined && !(spec.until && typeof spec.until.event === 'string' && spec.until.event)) bad.push('"until" is { "event": a battle-log event type (ko, damage, summon, ...), "who"?: a figure id, "ordinal"?: 1, "afterMs"?: 1000 }: play on until it has happened');
+  if (spec.window !== undefined && !(spec.window && typeof spec.window.event === 'string' && spec.window.event)) bad.push('"window" is { "event", "who"?, "ordinal"?, "beforeMs"?, "afterMs"? }: the clip is cut around that log event');
+  if (spec.setup !== undefined) {
+    const okStep = (s) => s && ((s.hp && typeof s.hp.who === 'string' && (Number.isFinite(s.hp.set) || (s.hp.fraction > 0 && s.hp.fraction <= 1))) || (typeof s.eval === 'string' && s.eval));
+    if (!(Array.isArray(spec.setup) && spec.setup.every(okStep))) bad.push('"setup" is a list of { "hp": { "who": "party" | "enemy" | a figure id, "set": n | "fraction": 0 to 1 } } or { "eval": "a debug-API expression" } steps, run once the first command menu is open');
+  }
+  if (spec.crop !== undefined && !(spec.crop && ['x', 'y', 'w', 'h'].every((k) => Number.isFinite(spec.crop[k])) && spec.crop.w > 0 && spec.crop.h > 0)) bad.push('"crop" is { x, y, w, h } in viewport pixels (a HUD region instead of the figures)');
   if (spec.focus !== undefined && !(Array.isArray(spec.focus) && spec.focus.length)) bad.push('"focus" is a non-empty list of actor ids');
   return bad;
 }

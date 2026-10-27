@@ -4,7 +4,9 @@
 // rig"), with a title band on top. A card for a decision must be BLIND: letters only, the key in KEY.json, the order seeded by the card's id. So this takes the clip as it is and makes the card from it: each panel
 // is cropped below the title and the labels (`crop`: x of the left panel, the band's y and height), scaled to fit 720 x 405 (a figure that fills the panel is not 16:9: it is shown whole with side bars, not
 // cut), stacked A over B in the blind order with a letter badge, and encoded as the other cards are (60 fps H.264, CRF 20 stepped up to fit 8 MB, 8 s at most). The 1080 px still shows twelve consecutive frames
-// around the instant the two panels differ most (the swap, the ghost, the cut), each stamped with its offset in 60 Hz frames and its ms. Nothing in the clip is re-rendered or re-recorded: no game, no browser.
+// around ONE ANCHOR, each frame stamped with its offset from it in 60 Hz frames and ms. The anchor is the card's own (`anchorFrame` and `anchorLabel` in the batch: the instant the move happens, chosen by looking at
+// the clip) or, with none, the instant the two panels differ most INSIDE THE MIDDLE 60 PERCENT of the clip and away from a whiteout (review M4: an unrestricted pick landed on frame 0, on the last frames, or in a
+// flash, and a pick made only on the difference favours the frame that shows the flaw). The card says which it used. Nothing in the clip is re-rendered or re-recorded: no game, no browser.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -25,6 +27,23 @@ export function probeVideo(file, bin = FFMPEG) {
 }
 
 /**
+ * Which frame the strip is anchored on (pure). `override` (a frame of the source) wins and is clamped into the clip; otherwise the largest panel difference among the frames in the middle `middle` share of
+ * the clip (default 60 percent) that are not washed out (mean luma under `washed`, 185); if none qualifies, the clip's middle frame. Returns { at, kind }.
+ * @param {number[]} curve mean panel difference per frame   @param {number[]} bright the brighter panel's mean luma per frame
+ */
+export function pickAnchor({ curve, bright = [], total, override = null, middle = 0.6, washed = 185 }) {
+  const n = Math.max(1, total ?? curve.length);
+  if (Number.isFinite(override)) return { at: Math.max(0, Math.min(n - 1, Math.round(override))), kind: 'chosen' };
+  const lo = Math.floor((n * (1 - middle)) / 2), hi = Math.ceil(n - (n * (1 - middle)) / 2) - 1;
+  const pool = [];
+  for (let i = lo; i <= Math.min(hi, curve.length - 1); i++) if ((bright[i] ?? 0) < washed) pool.push(i);
+  if (!pool.length) return { at: Math.floor(n / 2), kind: 'middle' };
+  let at = pool[0];
+  for (const i of pool) if (curve[i] > curve[at]) at = i;
+  return { at, kind: 'largest-difference-in-the-middle' };
+}
+
+/**
  * The frame at which the two panels differ most (mean absolute difference of a 64 x 48 gray version of each), and the whole curve: where the painting set and the rig part company (a swap's double image,
  * a cut). Frame indexes are of the source at its own fps.
  */
@@ -41,12 +60,9 @@ export function panelDifference(file, { crop, panelW }, bin = FFMPEG) {
     curve.push(sum / (W * H));
     bright.push(Math.max(la, lb) / (W * H));
   }
-  // a flash (a whiteout, a hit effect over the whole picture) makes the panels differ by the timing of the flash, not by the figure: the instant is chosen among the frames that are not washed out (mean luma under 185), all of them if none qualifies
-  const ok = curve.map((_, i) => i).filter((i) => bright[i] < 185);
-  const pool = ok.length >= 12 ? ok : curve.map((_, i) => i);
-  let at = pool[0] ?? 0;
-  for (const i of pool) if (curve[i] > curve[at]) at = i;
-  return { at, max: r1(curve[at] ?? 0), curve: curve.map(r1), washedOut: curve.length - ok.length };
+  // a flash (a whiteout, a hit effect over the whole picture) makes the panels differ by the timing of the flash, not by the figure: `pickAnchor` leaves the washed-out frames out
+  const pick = pickAnchor({ curve, bright, total: curve.length });
+  return { at: pick.at, kind: pick.kind, max: r1(curve[pick.at] ?? 0), curve: curve.map(r1), bright: bright.map(r1), washedOut: bright.filter((b) => b >= 185).length };
 }
 
 /**
@@ -54,7 +70,7 @@ export function panelDifference(file, { crop, panelW }, bin = FFMPEG) {
  * @param {{src: string, outDir: string, id: string, title: string, chapter: string, move: string, root: string, crop?: {y: number, h: number}, variants?: Array<{id: string, name: string}>, questions?: string[], bin?: string}} o
  *   `variants` are the left and the right panel's variants in that order (default: V0 the painting set, V1 the rig).
  */
-export async function composeFromVideo({ src, outDir, id, title, chapter, move, root, crop = { y: 125, h: 740 }, variants = [{ id: 'V0', name: 'painting set (today)' }, { id: 'V1', name: 'rig' }], questions = ['Which reads as one figure?', 'Which would you keep?'], bin = FFMPEG }) {
+export async function composeFromVideo({ src, outDir, id, title, chapter, move, root, crop = { y: 125, h: 740 }, variants = [{ id: 'V0', name: 'painting set (today)' }, { id: 'V1', name: 'rig' }], questions = ['Which reads as one figure?', 'Which would you keep?'], anchorFrame = null, anchorLabel = null, note = null, bin = FFMPEG }) {
   const S = await sharp(root);
   fs.mkdirSync(outDir, { recursive: true });
   const info = probeVideo(src, bin);
@@ -81,7 +97,9 @@ export async function composeFromVideo({ src, outDir, id, title, chapter, move, 
   const { bytes, crf } = enc;
   // the strip: twelve consecutive frames around the largest difference between the panels
   const diff = panelDifference(src, { crop, panelW }, bin);
-  const first = Math.max(0, Math.min(Math.floor(info.seconds * info.fps) - 12, diff.at - 2));
+  const totalFrames = Math.floor(info.seconds * info.fps);
+  const anchor = pickAnchor({ curve: diff.curve, bright: diff.bright, total: totalFrames, override: anchorFrame });
+  const first = Math.max(0, Math.min(totalFrames - 12, anchor.at - 2));
   const cellW = Math.floor(1080 / 6), cellH = Math.round((cellW * crop.h) / panelW); // the cells keep the panel's own shape: the pilots' panels are nearly square
   const rows = [];
   for (const o of order) {
@@ -89,17 +107,18 @@ export async function composeFromVideo({ src, outDir, id, title, chapter, move, 
     const cells = [];
     for (let k = 0; k < 12; k++) {
       const f = frameFile(first + k);
-      const ms = r1(((k - (diff.at - first)) * 1000) / info.fps);
+      const ms = r1(((k - (anchor.at - first)) * 1000) / info.fps);
       const body = await S(f).extract({ left: x, top: crop.y, width: panelW, height: crop.h }).resize({ height: cellH, width: cellW, fit: 'contain', background: '#101624' }).jpeg({ quality: 85 }).toBuffer();
-      cells.push(await S(body).composite([{ input: badge(o.letter, cellW, cellH), top: 0, left: 0 }, { input: stamp(`${ms >= 0 ? '+' : ''}${Math.round((ms * 60) / 1000)}f  ${ms >= 0 ? '+' : ''}${ms} ms`, 150, 18, k === diff.at - first), top: cellH - 18, left: cellW - 150 }]).jpeg({ quality: 85 }).toBuffer());
+      cells.push(await S(body).composite([{ input: badge(o.letter, cellW, cellH), top: 0, left: 0 }, { input: stamp(`${ms >= 0 ? '+' : ''}${Math.round((ms * 60) / 1000)}f  ${ms >= 0 ? '+' : ''}${ms} ms`, 150, 18, k === anchor.at - first), top: cellH - 18, left: cellW - 150 }]).jpeg({ quality: 85 }).toBuffer());
     }
     rows.push({ letter: o.letter, cells });
   }
   const still = path.join(outDir, name('-card', 'jpg'));
-  const sheet = await writeStill({ S, file: still, title: `${title}  ·  ${chapter}  ·  existing clip, re-encoded`, subtitle: questions.join('   |   '), rows, cellW, cellH, foot: '12 consecutive 60 Hz frames around the largest difference between the two panels (the highlighted stamp). Letters only: the key is not in the picture.' });
+  const anchorText = anchor.kind === 'chosen' ? `12 consecutive 60 Hz frames, the highlighted stamp at ${anchorLabel ?? 'the moment of the move'} (frame ${anchor.at}).` : `12 consecutive 60 Hz frames around the largest difference between the panels in the middle of the clip (frame ${anchor.at}, highlighted): no moment was chosen for this card.`;
+  const sheet = await writeStill({ S, file: still, title: `${title}  ·  ${chapter}  ·  existing clip, re-encoded`, subtitle: questions.join('   |   '), rows, cellW, cellH, foot: `${anchorText}${note ? ` ${note}` : ''} Letters only: the key is not in the picture.` });
   fs.writeFileSync(path.join(outDir, 'KEY.json'), JSON.stringify({ card: id, key, source: src, note: 'blind: the panels carry only a letter; this file is the only place the key is written' }, null, 1));
-  fs.writeFileSync(path.join(outDir, 'numbers.json'), JSON.stringify({ source: src, sourceSeconds: r1(info.seconds), sourceFps: info.fps, sourceSize: [info.width, info.height], crop: { x: [0, panelW], y: crop.y, w: panelW, h: crop.h }, clip: { file: path.basename(out), bytes, crf, seconds: r1(Math.min(info.seconds, BUDGET.maxSeconds)) }, card: { file: path.basename(still), width: sheet.width, height: sheet.height }, largestDifference: { frame: diff.at, meanAbs: diff.max, ms: r1((diff.at * 1000) / info.fps) } }, null, 1));
-  fs.writeFileSync(path.join(outDir, 'README.txt'), `${title}\n\n${questions.join('\n')}\n\nAn existing clip re-encoded to the phone card format (no new recording). Letters only in the picture; KEY.json says which panel is which.\n`);
+  fs.writeFileSync(path.join(outDir, 'numbers.json'), JSON.stringify({ source: src, sourceSeconds: r1(info.seconds), sourceFps: info.fps, sourceSize: [info.width, info.height], crop: { x: [0, panelW], y: crop.y, w: panelW, h: crop.h }, clip: { file: path.basename(out), bytes, crf, seconds: r1(Math.min(info.seconds, BUDGET.maxSeconds)) }, card: { file: path.basename(still), width: sheet.width, height: sheet.height }, anchor: { frame: anchor.at, kind: anchor.kind, label: anchorLabel, ms: r1((anchor.at * 1000) / info.fps) }, largestDifference: { frame: diff.at, kind: diff.kind, meanAbs: diff.max, ms: r1((diff.at * 1000) / info.fps) }, note }, null, 1));
+  fs.writeFileSync(path.join(outDir, 'README.txt'), `${title}\n\n${questions.join('\n')}\n\nAn existing clip re-encoded to the phone card format (no new recording). Letters only in the picture; KEY.json says which panel is which.${note ? `\n\nNOTE: ${note}` : ''}\n`);
   fs.rmSync(work, { recursive: true, force: true });
-  return { out, bytes, crf, still, key, largestDifference: diff };
+  return { out, bytes, crf, still, key, anchor, largestDifference: diff };
 }

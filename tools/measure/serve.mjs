@@ -3,7 +3,7 @@
 // The measuring tools play a built bundle (`dist-gate` of a review's candidate, or any `dist`), never a dev server and never a new production build: one build, many address words (each look variant of the pass is
 // an address word whose default is today). Serving from inside the tool means there is no second process to leave behind (a Vite server on the default config holds 1.1 GB and 93,000 file watches even idle; AGENTS.md
 // "Stop the servers you start"): it ends with the tool, and `close()` ends it earlier. It serves files under the folder only (a path that leaves it is a 403), with byte ranges (the audio is read in ranges),
-// and `index.html` for a path with no file (the game is one page). It writes nothing.
+// and `index.html` for a path with no file and no extension (the game is one page); a missing FILE (a path with an extension) is a 404, so a missing asset in the measured build shows as a 404 and not as an HTML page the decoder chokes on. It writes nothing.
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
@@ -45,7 +45,10 @@ export function serveDist(root, { port = 0 } = {}) {
       let file = resolveUnder(root, req.url ?? '/');
       if (!file) { res.writeHead(403).end('outside the root'); return; }
       if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
-      if (!fs.existsSync(file)) file = path.join(root, 'index.html');
+      if (!fs.existsSync(file)) {
+        if (path.extname(file) && path.extname(file) !== '.html') { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('no such file'); return; }
+        file = path.join(root, 'index.html');
+      }
       const stat = fs.statSync(file);
       const type = MIME[path.extname(file).toLowerCase()] ?? 'application/octet-stream';
       const range = parseRange(req.headers.range, stat.size);

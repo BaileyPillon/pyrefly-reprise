@@ -11,8 +11,10 @@ export declare function blindOrder<T extends VariantRef>(variants: T[], seed: st
 export interface Crop { x: number; y: number; w: number; h: number }
 export declare function cropRegion(points: Array<{ x: number; y: number }>, viewport: { w: number; h: number }, o?: { margin?: number; minW?: number; minH?: number }): Crop;
 export declare function trackPoints(frames: Array<{ actors?: Record<string, Record<string, any>> }>, focus: string[], i0: number, i1: number): Array<{ x: number; y: number }>;
-export interface MomentWindow { i0: number; i1: number; startMs: number; endMs: number; lengthMs: number; truncated: boolean }
-export declare function windowOf(frames: Array<{ vt: number; playing?: boolean }>, events: Array<{ vt: number }> | undefined, o?: { t0: number; leadMs?: number; settleMs?: number; maxMs?: number }): MomentWindow | null;
+export interface MomentWindow { i0: number; i1: number; startMs: number; endMs: number; lengthMs: number; truncated: boolean; around?: boolean }
+export interface EventWant { event?: string; type?: string; who?: string | null; ordinal?: number }
+export declare function findEvent<T extends { type: string }>(events: T[] | undefined, want: EventWant | null | undefined): T | null;
+export declare function windowOf(frames: Array<{ vt: number; playing?: boolean }>, events: Array<{ vt: number }> | undefined, o?: { t0: number; leadMs?: number; settleMs?: number; maxMs?: number; around?: (EventWant & { beforeMs?: number; afterMs?: number }) | null }): MomentWindow | null;
 export declare function speedTrace(frames: Array<{ vt: number; actors?: Record<string, Record<string, any>> }>, actorId: string, i0: number, i1: number, o?: { pxPerUnit?: number; scale?: number }): Array<{ t: number; v: number; vx: number }>;
 export declare function stripIndexes(n: number, count?: number): number[];
 export declare function joinQuery(base?: string, own?: string): string;

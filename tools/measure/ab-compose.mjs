@@ -15,7 +15,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 
-import { BUDGET, CARD, PANEL, STILL_W, blindOrder, clipFps, clipName, cropRegion, nearestFrame, nextCrf, speedTrace, trackPoints, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
+import { BUDGET, CARD, PANEL, STILL_W, blindOrder, clipFps, clipName, cropRegion, findEvent, nearestFrame, nextCrf, speedTrace, trackPoints, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
 import { joltTally, joltsOfRecording } from '../../critic/runner/lib/hz-pure.mjs';
 
 export const FFMPEG = process.env.FFMPEG ?? 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe';
@@ -59,7 +59,7 @@ function loadCapture(workDir, variant, hz) {
 /** The frame (index) of the alignment instant in one capture: the moment's start by default, or the nth log event of a type. */
 function anchorFrame(cap, align) {
   if (align?.kind === 'event') {
-    const ev = cap.events.filter((e) => e.type === align.type && (!align.actor || e.actorId === align.actor || e.targetId === align.actor))[(align.ordinal ?? 1) - 1];
+    const ev = findEvent(cap.events, { event: align.type, who: align.actor, ordinal: align.ordinal });
     if (ev) return ev.f;
   }
   const i = cap.frames.findIndex((f) => f.vt >= cap.t0);
@@ -105,8 +105,11 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
   const { order, key } = blindOrder(spec.variants, spec.seed ?? spec.id);
   const byId = Object.fromEntries(caps.map((c) => [c.variant.id, c]));
   const lead = spec.leadMs ?? 500, settle = spec.settleMs ?? 1000, maxMs = Math.min(spec.maxMs ?? BUDGET.maxSeconds * 1000, BUDGET.maxSeconds * 1000);
-  const wins = Object.fromEntries(caps.map((c) => [c.variant.id, windowOf(c.frames, c.events, { t0: c.t0, leadMs: lead, settleMs: settle, maxMs })]));
-  const anchors = Object.fromEntries(caps.map((c) => [c.variant.id, anchorFrame(c, spec.align)]));
+  // a card that plays on to an event is cut around that event (whatever the turns before it took), and its variants are put on the same instant by it
+  const around = spec.window ?? (spec.until ? { event: spec.until.event, who: spec.until.who, ordinal: spec.until.ordinal, beforeMs: 2000, afterMs: spec.until.afterMs ?? 1000 } : null);
+  const align = spec.align ?? (spec.until ? { kind: 'event', type: spec.until.event, actor: spec.until.who, ordinal: spec.until.ordinal } : null);
+  const wins = Object.fromEntries(caps.map((c) => [c.variant.id, windowOf(c.frames, c.events, { t0: c.t0, leadMs: lead, settleMs: settle, maxMs, around })]));
+  const anchors = Object.fromEntries(caps.map((c) => [c.variant.id, anchorFrame(c, align)]));
   const viewport = spec.viewport ?? { w: caps[0].rec.meta?.viewport?.width ?? 2560, h: caps[0].rec.meta?.viewport?.height ?? 1440 };
   const focus = spec.focus ?? Object.keys(caps[0].frames[0]?.actors ?? {});
   const pts = caps.flatMap((c) => trackPoints(c.frames, focus, wins[c.variant.id].i0, wins[c.variant.id].i1));
@@ -116,12 +119,14 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
   const aligned = order.map((o) => ({ ...o, cap: byId[o.id], anchor: anchors[o.id] }));
   const vtAt = (a, i) => a.cap.frames[i].vt - a.cap.frames[a.anchor].vt;
   const beforeMs = Math.min(...aligned.map((a) => -vtAt(a, wins[a.id].i0)));
-  const afterMs = Math.min(Math.max(...aligned.map((a) => vtAt(a, wins[a.id].i1))), BUDGET.maxSeconds * 1000 - beforeMs);
+  const naturalAfterMs = Math.max(...aligned.map((a) => vtAt(a, wins[a.id].i1)));
+  const afterMs = Math.min(naturalAfterMs, BUDGET.maxSeconds * 1000 - beforeMs);
+  const clipCappedFromMs = beforeMs + naturalAfterMs > BUDGET.maxSeconds * 1000 + 1 ? Math.round(beforeMs + naturalAfterMs) : null; // the real-time clip stops at 8 s: say so (review m19)
   const frames = Math.floor(((beforeMs + afterMs) * fps) / 1000) + 1;
   const before = Math.round((beforeMs * hz) / 1000), after = Math.round((afterMs * hz) / 1000);
   const pick = (a, relMs) => Math.max(wins[a.id].i0, Math.min(wins[a.id].i1, nearestFrame(a.cap.frames, a.cap.frames[a.anchor].vt + relMs))); // a shorter variant holds its last frame
   const outName = (slow, ext, suffix = '') => clipName({ chapter: spec.chapter, move: spec.move, hz, slow, ext }).replace(`.${ext}`, `${suffix}.${ext}`);
-  const written = { hz, crop, frames, window: { before, after }, files: [] };
+  const written = { hz, crop, frames, window: { before, after }, clipCappedFromMs, files: [] };
 
   const seq = path.join(workDir, `seq-${hz}`);
   fs.rmSync(seq, { recursive: true, force: true });
@@ -186,7 +191,7 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
     const jolts = joltsOfRecording(a.cap.frames.slice(w.i0, w.i1 + 1));
     const tr = speedTrace(a.cap.frames, focus[0], w.i0, w.i1, { scale: 2560 / 1600 });
     traces.push({ letter: a.letter, tr });
-    numbers[a.letter] = { variant: a.id, windowMs: r1(w.lengthMs), truncated: w.truncated, anchorFrame: a.anchor, frames: w.i1 - w.i0 + 1, joltsInWindow: joltTally(jolts, w.lengthMs / 1000).total, peakSpeedPxPer60: r1(tr.reduce((m, p) => Math.max(m, p.v), 0)) };
+    numbers[a.letter] = { windowMs: r1(w.lengthMs), truncated: w.truncated, anchorFrame: a.anchor, frames: w.i1 - w.i0 + 1, joltsInWindow: joltTally(jolts, w.lengthMs / 1000).total, peakSpeedPxPer60: r1(tr.reduce((m, p) => Math.max(m, p.v), 0)) };
   }
   if (spec.trace !== false && traces.some((t) => t.tr.length)) {
     const W = STILL_W, H = 360, L = 56, B = 30, T = 20;
@@ -208,15 +213,15 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
  * Compose every rate of a card.
  * @param {{spec: object, workDir: string, outDir: string, root: string, ffmpeg?: string}} o
  */
-export async function composeCard({ spec, workDir, outDir, root, ffmpeg: bin = FFMPEG }) {
+export async function composeCard({ spec, workDir, outDir, root, ffmpeg: bin = FFMPEG, info = {} }) {
   const S = await sharp(root);
   fs.mkdirSync(outDir, { recursive: true });
   const rates = spec.rates ?? [60];
   const results = [];
   for (const hz of rates) results.push(await composeRate({ spec, workDir, outDir, ffmpegBin: bin, S, hz }));
   const { key } = blindOrder(spec.variants, spec.seed ?? spec.id);
-  fs.writeFileSync(path.join(outDir, 'KEY.json'), JSON.stringify({ card: spec.id, seed: spec.seed ?? spec.id, key, note: 'blind: the panels carry only a letter; this file is the only place the key is written' }, null, 1));
-  fs.writeFileSync(path.join(outDir, 'numbers.json'), JSON.stringify(Object.fromEntries(results.map((r) => [r.hz, { crop: r.crop, frames: r.frames, window: r.window, numbers: r.numbers, files: r.files.map((f) => ({ kind: f.kind, file: path.basename(f.file), bytes: f.bytes, seconds: f.seconds, crf: f.crf })) }])), null, 1));
-  fs.writeFileSync(path.join(outDir, 'README.txt'), `${spec.title ?? spec.id}\n\n${(spec.questions ?? []).join('\n')}\n\nLetters only in the pictures; KEY.json says which variant is which. The real-time clips play at 60 fps (a phone cannot show more); the slow4x copies show every captured frame at a quarter of the capture rate. ${spec.note ?? ''}\n`);
+  fs.writeFileSync(path.join(outDir, 'KEY.json'), JSON.stringify({ card: spec.id, seed: spec.seed ?? spec.id, key, variants: spec.variants.map((v) => ({ id: v.id, name: v.name ?? null, query: v.query ?? '' })), capture: { ...info, queryBase: spec.queryBase ?? '?coach=off', rates: spec.rates ?? [60], clock: 'virtual (governor level 0): the shape of a motion, not the cost of a frame; the CSS timeline and the audio run on real time (review m20, CA-02)', setup: spec.setup ?? null, keys: spec.keys ?? ['Enter', 'Enter'], holdMenuMs: spec.holdMenuMs ?? 0, turns: spec.turns ?? 1, until: spec.until ?? null }, note: 'blind: the panels carry only a letter; this file is the only place the key is written' }, null, 1));
+  fs.writeFileSync(path.join(outDir, 'numbers.json'), JSON.stringify(Object.fromEntries(results.map((r) => [r.hz, { crop: r.crop, frames: r.frames, window: r.window, clipCappedFromMs: r.clipCappedFromMs, numbers: r.numbers, files: r.files.map((f) => ({ kind: f.kind, file: path.basename(f.file), bytes: f.bytes, seconds: f.seconds, crf: f.crf })) }])), null, 1));
+  fs.writeFileSync(path.join(outDir, 'README.txt'), `${spec.title ?? spec.id}\n\n${(spec.questions ?? []).join('\n')}\n\nLetters only in the pictures; KEY.json says which variant is which. The real-time clips play at 60 fps (a phone cannot show more); the slow4x copies show every captured frame at a quarter of the capture rate. The film is a virtual clock (the game's shape, not its cost); text or effects drawn by the page's own animations inside the picture run on real time and so play too fast against the figures. ${spec.note ?? ''}\n`);
   return results;
 }

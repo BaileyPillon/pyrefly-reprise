@@ -3,7 +3,7 @@
  * A blind phone card from an existing side-by-side clip (MF-26 of the motion-fluidity pass, lane L5; both games, tooling). CPU only: ffmpeg and sharp, no game, no browser, no lock.
  *
  *   node tools/ab-video.mjs --src <clip.mp4> --id CP-15-tidus-attack --title "Tidus attack: the painting set against the rig" --chapter ch1 --move rig-tidus-attack [--out <cards folder>] [--crop-y 125 --crop-h 740]
- *   node tools/ab-video.mjs --batch <batch.json> [--out <cards folder>]          batch.json: [{ src, id, title, chapter, move, cropY?, cropH?, questions? }, ...]
+ *   node tools/ab-video.mjs --batch <batch.json> [--out <cards folder>]          batch.json: [{ src, id, title, chapter, move, cropY?, cropH?, questions?, anchorFrame?, anchorLabel?, note? }, ...]  (anchorFrame: the source frame of the moment the strip is built around)
  *
  * The party rig pilots' clips (D:/Tools/pyrefly-scratch/2026-10-22/motion/rigs/clips/) are two labelled panels side by side; the card is the same moment with the labels cut away, the panels stacked in a
  * BLIND order (seeded by the id; the key is KEY.json), 60 fps, under 8 MB, plus the 1080 px still around the instant the panels differ most. See tools/measure/ab-video.mjs.
@@ -26,7 +26,7 @@ const stamp = toolStamp('ab-video', 'tools/ab-video.mjs', ROOT);
 log(describeStamp(stamp));
 for (const c of batch) {
   const outDir = path.join(outRoot, c.group ?? '', c.id);
-  const r = await composeFromVideo({ src: c.src, outDir, id: c.id, title: c.title, chapter: c.chapter, move: c.move, root: ROOT, crop: { y: c.cropY ?? 125, h: c.cropH ?? 740 }, questions: c.questions });
+  const r = await composeFromVideo({ src: c.src, outDir, id: c.id, title: c.title, chapter: c.chapter, move: c.move, root: ROOT, crop: { y: c.cropY ?? 125, h: c.cropH ?? 740 }, questions: c.questions, anchorFrame: c.anchorFrame ?? null, anchorLabel: c.anchorLabel ?? null, note: c.note ?? null });
   fs.writeFileSync(path.join(outDir, 'stamp.json'), JSON.stringify({ ...stamp, card: c.id, src: c.src }, null, 1));
-  log(`${c.id}: ${path.basename(r.out)} ${(r.bytes / 1024 / 1024).toFixed(2)} MB (crf ${r.crf}); largest difference at frame ${r.largestDifference.at} (${r.largestDifference.max})`);
+  log(`${c.id}: ${path.basename(r.out)} ${(r.bytes / 1024 / 1024).toFixed(2)} MB (crf ${r.crf}); anchor frame ${r.anchor.at} (${r.anchor.kind}); largest difference at frame ${r.largestDifference.at} (${r.largestDifference.max})`);
 }

@@ -5,9 +5,12 @@
 // ran 144 Hz. So the same scripted moment is captured on a VIRTUAL clock at each rate (tools/hz-matrix.mjs; tools/measure/session.mjs) and this module judges the captures:
 //   - WALL-TIME EQUALITY (`wallTimeEquality`): the same event-to-event interval takes the same time within 5 percent at 60, 120 and 144 Hz (the method of tests/unit/feel-120hz.test.ts);
 //   - CHAINED-BEAT EQUALITY (`chainedBeatEquality`): the beats of a chain (a run, then a lunge, then a settle) land within ONE DISPLAY FRAME of the slower display of each pair;
-//   - VELOCITY JOLTS (`findJolts`): a frame-to-frame change of a figure's speed of 2.5 px per 60 Hz frame or more AND 30 percent or more of the local peak speed (the curves lane's jolts.mjs): the pops and
-//     stalls the eye reads as a stutter even when no position is wrong. Counted per fight with baselines (Chapter I 106 in 36 s, 94 of them the hit rattle and 11 the KO landing; Chapter IV 580 in 105 s).
-// Speeds are in px per 60 Hz frame whatever the capture rate, so a jolt at 144 Hz and one at 60 Hz are the same size. Pure: samples in, numbers out.
+//   - VELOCITY JOLTS (`findJolts`): a change of a figure's speed of 2.5 px per 60 Hz frame or more AND 30 percent or more of the local peak speed (the curves lane's jolts.mjs): the pops and
+//     stalls the eye reads as a stutter even when no position is wrong. Counted per fight with baselines (Chapter I 106 in 100 s, 94 of them the hit rattle and 11 the KO landing; Chapter IV 580 in 105 s).
+// THE GRID (review M1). Speeds are in px per 60 Hz frame, but a jump judged between two CONSECUTIVE SAMPLES depends on the sample interval: the same 120 Hz motion read every other frame gave 658 jolts for
+// the 580 it gave at every frame (Chapter IV, +13 percent; Chapter I +22 to +29), and a 50 ms ramp that is one jolt at 60 Hz is none at 120 or 144. So by default the position series is resampled to a FIXED
+// 1/60 s grid (linear between the capture's frames) before it is judged: `gridMs` 16.667, the jump is the change over one 60 Hz frame whatever the capture rate. `gridMs: 0` is the curves lane's raw
+// method (every captured frame), kept to reproduce its 580 and 106 and never for a comparison across rates. Pure: samples in, numbers out.
 
 /** The rates of the matrix. */
 export const HZ_RATES = Object.freeze([60, 120, 144]);
@@ -16,7 +19,7 @@ const gcd = (a, b) => (b ? gcd(b, a % b) : a);
 
 /**
  * The fake-clock steps (integer ms) that make a display of `hz` EXACTLY: 60 Hz 17,17,16 (50 ms for 3 frames); 120 Hz 8,8,9 (25 ms for 3); 144 Hz seventeen 7s and one 6 (125 ms for 18 frames). The plan wrote 144 Hz as
- * 7,7,7,7,7,7,6, which is 48 ms for 7 frames: 145.8 Hz, 1.3 percent fast, enough to fail a 5 percent gate by itself over a long chain. Any other rate gets cumulative rounding over its own cycle
+ * 7,7,7,7,7,7,6, which is 48 ms for 7 frames: 145.8 Hz, 1.3 percent fast: far inside the 5 percent interval gate, but over a 0.5 s chain it moves the beats by about one 144 Hz frame, which is the chained-beat gate. Any other rate gets cumulative rounding over its own cycle
  * (hz / gcd(hz, 1000) frames), so the long-run rate is exact.
  */
 export function frameMsFor(hz) {
@@ -42,17 +45,21 @@ const r3 = (x) => Math.round(x * 1000) / 1000;
 const FRAME60 = 1000 / 60;
 
 /**
- * Wall-time equality across rates for ONE interval (an event index to an event index, or a mark to a mark).
+ * Wall-time equality across rates for ONE interval (an event index to an event index, or a mark to a mark). An interval passes when it is within `tolerance` (5 percent) of the reference's OR within the
+ * quantisation of the slowest display (`slackMs`: both ends of an interval are seen at the first FRAME at or after the event, so two rates can differ by up to one frame of the slower one with nothing wrong;
+ * review m6: at 200 to 350 ms that alone is over 5 percent in up to 12 percent of phases). A real defect is both more than 5 percent and more than a frame.
  * @param {Array<{hz: number, ms: number}>} runs the interval's length in virtual ms at each rate
- * @param {{tolerance?: number, reference?: number}} [o] `tolerance` 0.05; `reference` the rate the others are compared with (default the lowest)
+ * @param {{tolerance?: number, reference?: number, slackMs?: number}} [o] `tolerance` 0.05; `reference` the rate the others are compared with (default the lowest); `slackMs` default one frame of the slowest rate measured, rounded up
  */
-export function wallTimeEquality(runs, { tolerance = 0.05, reference } = {}) {
+export function wallTimeEquality(runs, { tolerance = 0.05, reference, slackMs } = {}) {
   const ok = runs.filter((r) => Number.isFinite(r.ms) && r.ms >= 0);
   if (ok.length < 2) return { pass: false, reason: 'fewer than two rates measured', rows: [] };
   const ref = ok.find((r) => r.hz === (reference ?? Math.min(...ok.map((x) => x.hz)))) ?? ok[0];
-  const rows = ok.map((r) => ({ hz: r.hz, ms: r.ms, ratio: ref.ms > 0 ? r3(r.ms / ref.ms) : null, deviation: ref.ms > 0 ? r3(Math.abs(r.ms / ref.ms - 1)) : null }));
+  const slack = slackMs ?? Math.ceil(1000 / Math.min(...ok.map((x) => x.hz)));
+  const rows = ok.map((r) => ({ hz: r.hz, ms: r.ms, ratio: ref.ms > 0 ? r3(r.ms / ref.ms) : null, deviation: ref.ms > 0 ? r3(Math.abs(r.ms / ref.ms - 1)) : null, diffMs: r1(Math.abs(r.ms - ref.ms)) }));
   const worst = rows.reduce((m, r) => Math.max(m, r.deviation ?? 0), 0);
-  return { pass: worst <= tolerance, referenceHz: ref.hz, tolerance, worst, rows };
+  const pass = rows.every((r) => (r.deviation ?? 0) <= tolerance || r.diffMs <= slack);
+  return { pass, referenceHz: ref.hz, tolerance, slackMs: slack, worst, rows };
 }
 
 /**
@@ -85,30 +92,55 @@ export function speedSeries(samples) {
   });
 }
 
+/** The 60 Hz frame, in ms, the jolt grid steps by. */
+export const JOLT_GRID_MS = FRAME60;
+
+/**
+ * Resample `[{t, x}]` (t in ms, increasing) to a fixed grid of `stepMs`, linear between neighbours, from the first sample's time to the last. `src` is the index of the captured sample nearest the grid time
+ * (what a jolt is classified from). A series with fewer than two samples comes back as it is.
+ */
+export function resampleToGrid(samples, stepMs = JOLT_GRID_MS) {
+  if (!(stepMs > 0) || samples.length < 2) return samples.map((s, i) => ({ t: s.t, x: s.x, src: i }));
+  const t0 = samples[0].t, tEnd = samples[samples.length - 1].t;
+  const out = [];
+  let j = 1;
+  for (let k = 0; ; k++) {
+    const t = t0 + k * stepMs;
+    if (t > tEnd + 1e-6) break;
+    while (j < samples.length - 1 && samples[j].t < t) j++;
+    const a = samples[j - 1], b = samples[j];
+    const f = b.t > a.t ? Math.min(1, Math.max(0, (t - a.t) / (b.t - a.t))) : 1;
+    out.push({ t, x: a.x + (b.x - a.x) * f, src: f > 0.5 ? j : j - 1 });
+  }
+  return out;
+}
+
 /**
  * The velocity jolts of one channel: samples `i` where the speed changed by `minJump` (px per 60 Hz frame, 2.5) or more AND by `minShare` (0.3) or more of the largest speed within `windowMs` (333) either side.
+ * `gridMs` (default 16.667, one 60 Hz frame) resamples the series first, so the count does not depend on the capture rate; 0 judges every captured frame (the curves lane's raw method).
  * Samples closer than `skip` to either end are not judged (the speed needs a neighbour). Adjacent flagged samples are kept as separate jolts (the curves lane counted every flagged frame); `merge` joins the
- * run of flagged samples within `mergeMs` into the largest one.
+ * run of flagged samples within `mergeMs` into the largest one. Each jolt's `src` is the captured frame it falls on.
  * @param {Array<{t: number, x: number}>} samples
  */
-export function findJolts(samples, { minJump = 2.5, minShare = 0.3, windowMs = 333, skip = 3, mergeMs = 0 } = {}) {
-  const v = speedSeries(samples);
+export function findJolts(samples, { minJump = 2.5, minShare = 0.3, windowMs = 333, skip = 3, mergeMs = 0, gridMs = JOLT_GRID_MS } = {}) {
+  const S = gridMs > 0 ? resampleToGrid(samples, gridMs) : samples.map((s, i) => ({ ...s, src: i }));
+  const v = speedSeries(S);
   const out = [];
-  for (let i = Math.max(1, skip); i < samples.length - skip; i++) {
+  for (let i = Math.max(1, skip); i < S.length - skip; i++) {
     const jump = Math.abs(v[i] - v[i - 1]);
     if (jump < minJump) continue;
     let peak = 0;
-    for (let k = i - 1; k >= 0 && samples[i].t - samples[k].t <= windowMs; k--) peak = Math.max(peak, Math.abs(v[k]));
-    for (let k = i; k < samples.length && samples[k].t - samples[i].t <= windowMs; k++) peak = Math.max(peak, Math.abs(v[k]));
+    for (let k = i - 1; k >= 0 && S[i].t - S[k].t <= windowMs; k--) peak = Math.max(peak, Math.abs(v[k]));
+    for (let k = i; k < S.length && S[k].t - S[i].t <= windowMs; k++) peak = Math.max(peak, Math.abs(v[k]));
     const share = jump / (peak || 1);
     if (share < minShare) continue;
-    out.push({ i, t: samples[i].t, vBefore: r1(v[i - 1]), vAfter: r1(v[i]), jump: r1(jump), share: r3(Math.min(share, 1)) });
+    out.push({ i, src: S[i].src, t: S[i].t, vBefore: r1(v[i - 1]), vAfter: r1(v[i]), jump: r1(jump), share: r3(Math.min(share, 1)) });
   }
   if (!(mergeMs > 0)) return out;
   const merged = [];
   for (const j of out) {
     const last = merged[merged.length - 1];
-    if (last && j.t - last.tLast <= mergeMs) { last.tLast = j.t; if (j.jump > last.jump) Object.assign(last, { i: j.i, t: j.t, vBefore: j.vBefore, vAfter: j.vAfter, jump: j.jump, share: j.share, tLast: j.t }); } else merged.push({ ...j, tLast: j.t });
+    if (last && j.t - last.tLast <= mergeMs) { last.tLast = j.t; if (j.jump > last.jump) Object.assign(last, { i: j.i, src: j.src, t: j.t, vBefore: j.vBefore, vAfter: j.vAfter, jump: j.jump, share: j.share, tLast: j.t }); } else merged.push({ ...j, tLast: j.t });
   }
   return merged.map(({ tLast, ...rest }) => rest);
 }
@@ -129,7 +161,7 @@ export function classifyJolt(row, frame = {}) {
 /**
  * The jolts of a stepped recording: every actor, both world axes (position = (gx+ox, gy+oy) world units times `pxPerUnit`, the curves lane's channel), classified.
  * @param {Array<{t: number, hs?: number|null, actors: Record<string, Record<string, any>>}>} frames the recorder's frames (tools/measure/channels.mjs)
- * @param {{pxPerUnit?: number}} [o] and the `findJolts` options
+ * @param {{pxPerUnit?: number, gridMs?: number}} [o] and the `findJolts` options (`gridMs` 0: the raw method)
  */
 export function joltsOfRecording(frames, { pxPerUnit = 146, ...opts } = {}) {
   const ids = [...new Set(frames.flatMap((f) => Object.keys(f.actors ?? {})))];
@@ -137,7 +169,7 @@ export function joltsOfRecording(frames, { pxPerUnit = 146, ...opts } = {}) {
   for (const id of ids) {
     for (const [axis, g, o] of [['x', 'gx', 'ox'], ['y', 'gy', 'oy']]) {
       const samples = frames.map((f) => ({ t: f.t, x: ((f.actors?.[id]?.[g] ?? 0) + (f.actors?.[id]?.[o] ?? 0)) * pxPerUnit }));
-      for (const j of findJolts(samples, opts)) all.push({ id, axis, ...j, class: classifyJolt(frames[j.i]?.actors?.[id], frames[j.i]), pose: frames[j.i]?.actors?.[id]?.pose ?? null });
+      for (const j of findJolts(samples, opts)) all.push({ id, axis, ...j, class: classifyJolt(frames[j.src]?.actors?.[id], frames[j.src]), pose: frames[j.src]?.actors?.[id]?.pose ?? null });
     }
   }
   return all;
@@ -168,4 +200,26 @@ export function joltGate(tally, baseline, { maxRise = 0.1, declared = [] } = {})
     if (rate(n, tally.seconds) > rate(was, baseline?.seconds ?? tally.seconds) * (1 + maxRise) + 0.5) reasons.push(`class "${cls}" rose from ${r1(rate(was, baseline?.seconds ?? tally.seconds))} to ${r1(rate(n, tally.seconds))} a minute`);
   }
   return { pass: reasons.length === 0, reasons };
+}
+
+/**
+ * May two jolt counts be set side by side? (review M1: `--compare` waved a Chapter I run through against the Chapter IV baseline.) A count is comparable when both were judged the SAME way (the grid), on the
+ * SAME scripted capture (chapter and query), over a stretch of similar length (a minute's rate over 45 s and over 105 s of a fight are not the same sample), under the same thresholds. The capture rate and the
+ * build are what a comparison varies, so they are not reasons. Returns the reasons they may not (empty: comparable).
+ * @param {{chapter?: string|null, query?: string|null, gridMs?: number|null, seconds?: number|null, policy?: any}} a
+ * @param {{chapter?: string|null, query?: string|null, gridMs?: number|null, seconds?: number|null, policy?: any}} b
+ */
+export function joltsIncomparable(a, b, { maxSecondsRatio = 1.25 } = {}) {
+  const why = [];
+  const ga = a.gridMs ?? 0, gb = b.gridMs ?? 0;
+  if (Math.abs(ga - gb) > 0.01) why.push(`judged differently (grid ${r1(ga)} ms, ${r1(gb)} ms): a raw count depends on the capture rate`);
+  if (a.chapter && b.chapter && a.chapter !== b.chapter) why.push(`different chapters (${a.chapter}, ${b.chapter})`);
+  if (a.query && b.query && a.query !== b.query) why.push(`different query (${a.query}, ${b.query})`);
+  if (a.seconds > 0 && b.seconds > 0) {
+    const ratio = Math.max(a.seconds, b.seconds) / Math.min(a.seconds, b.seconds);
+    if (ratio > maxSecondsRatio) why.push(`captures of different length (${a.seconds} s, ${b.seconds} s)`);
+  }
+  const pa = a.policy, pb = b.policy;
+  if (pa && pb) for (const k of ['minJumpPx', 'minShare', 'windowMs']) if (pa[k] !== pb[k]) why.push(`different threshold ${k} (${pa[k]}, ${pb[k]})`);
+  return why;
 }
