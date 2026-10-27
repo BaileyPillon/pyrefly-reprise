@@ -10,6 +10,7 @@ import { CurveDriver } from '../../src/engine/motion/CurveDriver.ts';
 import { PACE_RUN_MAX, PACE_RUN_MIN, RAMP, flowLeadMs, flowProfile, paceRunMs, runEase, runModeOf, smoothBell, trapezoid } from '../../src/engine/motion/RunEase.ts';
 import { PROFILES, defaultPaceFactor, resolveStrike } from '../../src/engine/motion/StrikeCurve.ts';
 import { setMoveWord } from '../../src/engine/motion/MoveSwitch.ts';
+import { setCurvesChapter, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { RunInMotion, runMs } from '../../src/app/screens/BattleScreenRunIn.ts';
 import { motionMs, type MotionCtx } from '../../src/engine/BattlePresenterMotion.ts';
 import { lungePlan } from '../../src/engine/motion/StrikeReach.ts';
@@ -22,6 +23,8 @@ import { FakeActor, FakeStage } from './helpers/FakeStage.ts';
 
 afterEach(() => {
   setMoveWord('run', null);
+  setCurvesChapter(undefined);
+  setCurvesMode(null);
   eyeCandy.setSub('runin', true);
   eyeCandy.setTier(null);
 });
@@ -267,6 +270,8 @@ describe('the run-in port under each word', () => {
 
   it('flow: strike() is released when the wind-up is due, before she has arrived; the attack painting is up; the lunge is solved from the spot', async () => {
     setMoveWord('run', 'flow');
+    setCurvesChapter('ffx2-bahamut'); // Chapter IV: the sampled strike is on
+    setCurvesMode('new');
     const { stage, paine } = field();
     const m = new RunInMotion(dress());
     let settled = false;
@@ -292,6 +297,8 @@ describe('the run-in port under each word', () => {
 
   it('pace: the run lasts the real pace\'s time, home included (three quarters of it)', async () => {
     setMoveWord('run', 'pace');
+    setCurvesChapter('ffx2-bahamut');
+    setCurvesMode('new');
     const { stage, paine } = field();
     const m = new RunInMotion(dress());
     const p = m.strike(attack, mctx(stage), 'attack');
@@ -308,6 +315,24 @@ describe('the run-in port under each word', () => {
     expect(typeof paine.runs[1]!.easing).toBe('function');
     paine.runs[1]!.done.resolve();
     await q;
+  });
+
+  it('flow and pace where the curves are off (Chapter V): the run is smooth (and paced), the strike waits for the arrival as today', async () => {
+    for (const word of ['flow', 'pace'] as const) {
+      setMoveWord('run', word);
+      const { stage, paine } = field();
+      const m = new RunInMotion(dress());
+      let settled = false;
+      const p = m.strike(attack, mctx(stage), 'attack').then(() => (settled = true));
+      await tick();
+      expect(paine.waits).toEqual([]); // nothing asks for the strike early
+      expect(typeof paine.runs[0]!.easing).toBe('function'); // the trapezoid still plays
+      expect(runModeOf(word).flow).toBe(true); // the word itself still names flow
+      expect(settled).toBe(false);
+      paine.runs[0]!.done.resolve();
+      await p;
+      expect(settled).toBe(true);
+    }
   });
 
   it('a menu open (still) plays nothing, whatever the word', async () => {

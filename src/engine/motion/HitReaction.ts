@@ -156,7 +156,7 @@ export class HitReaction {
 
   /**
    * One frame: `fieldMs` of the field clock (zero in a hit-stop) and `pacedMs` of the same clock scaled by the pacing option. Writes the sum into `out` and returns it.
-   * Nothing allocates once the figure has had a reaction.
+   * A frame allocates nothing (a blow allocates its one record, in {@link start}).
    */
   step(fieldMs: number, pacedMs: number, out: HitOffset): HitOffset {
     out.x = 0;
@@ -178,7 +178,9 @@ export class HitReaction {
         squeeze += (s.squash ?? 0) * squashShare(r.age);
       }
     }
-    this.live = this.live.filter((r) => r.age < (r.spec.style === 'ramp' ? (r.spec.ms ?? 340) : KNOCK_MS));
+    let n = 0; // the finished reactions leave in place: a frame allocates nothing
+    for (const r of this.live) if (r.age < (r.spec.style === 'ramp' ? (r.spec.ms ?? 340) : KNOCK_MS)) this.live[n++] = r;
+    this.live.length = n;
     out.sy = 1 - Math.min(0.12, squeeze);
     return out;
   }

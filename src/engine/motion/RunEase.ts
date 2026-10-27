@@ -21,6 +21,7 @@ import type { EasingFn } from '../Tween.ts';
 import { smooth } from './StrikeCurve.ts';
 import { PROFILES, type StrikeProfile } from './StrikeCurve.ts';
 import { moveWord } from './MoveSwitch.ts';
+import { curvesOn } from './CurvesSwitch.ts';
 
 /** The share of a run spent easing in, and the same easing out; the cruise is the rest. */
 export const RAMP = 0.25;
@@ -69,9 +70,13 @@ export function runModeOf(word: 'today' | 'smooth' | 'flow' | 'pace'): RunMode {
   return { smooth: word !== 'today', flow: word === 'flow' || word === 'pace', pace: word === 'pace' };
 }
 
-/** The mode in force (`?run=`). */
+/**
+ * The mode in force (`?run=`). `flow` asks for the strike while she is still braking, which only the sampled strike (the new curves: Chapters I and IV) is built for: the old lunge has no wind-up to
+ * hide an early start and nothing solves it from where she will stand, so where the curves are off (Chapter V) the run stays smooth (and paced) and the strike is today's (review of 2026-10-27, open question 4).
+ */
 export function runMode(): RunMode {
-  return runModeOf(moveWord('run'));
+  const m = runModeOf(moveWord('run'));
+  return m.flow && !curvesOn() ? { ...m, flow: false } : m;
 }
 
 /** The easing the run's `moveTo` takes: the trapezoid, or undefined (the actor's default `quadInOut`) for today. */
