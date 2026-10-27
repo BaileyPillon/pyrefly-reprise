@@ -21,7 +21,7 @@ import { armContact, meetContact, releaseContact, type LungeContact } from './Co
 import { standDownParty } from './motion/MomentBeats.ts'; // motion pass (lane "core", step 3): the victory moment each chapter's sources allow (a cheer, or a quiet stand-down where the pose is withheld)
 import { liftCaster, releaseCastLift, startAttackMove } from './motion/CurveBeats.ts'; // motion pass (lane "core"): the sampled strike, the cast lift; today's lunge unless switched on (`motion/CurvesSwitch.ts`)
 import { realRecoilMs } from './motion/RealBeats.ts'; // `?curves=real`: the real game's hit reaction length
-import { blowPose, idleAtEnd, impactAtApex, windUpLeads } from './KeyPoses.ts';
+import { blowPose, idleAtEnd, impactAtApex, readyCarriesIntoWindUp, windUpOpens } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
 import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SPECTACLE's two motion looks share one gate
@@ -39,7 +39,7 @@ import { passEarlyVictory, passGather } from './PassBeats.ts'; // the sound pass
 // ----------------------------------------------------------------- handlers
 
 export async function turnStart(ctx: EventCtx, actorId: CombatantId): Promise<void> {
-  ctx.stage.actor(actorId)?.setPose('idle');
+  if (!readyCarriesIntoWindUp(ctx, actorId)) ctx.stage.actor(actorId)?.setPose('idle'); // FFX-2: a girl on her menu's ready whose attack opens on the wind-up keeps it (KeyPoses.ts), no ready, idle, ready
   void ctx.moments.turnStart(actorId);
   await ctx.sleep(TIMING.turnStart);
 }
@@ -60,7 +60,7 @@ export async function actionStart(
     ctx.stage.paints?.(event.actorId, p) === true,
   );
   const od = armOdKey(ctx, event); // r37 slot: this move's own Overdrive / Special painting (null when it has none)
-  const windUp = !odOpensAction(od) && !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose); // D-313: the wind-up painting, then the impact at the apex
+  const windUp = !odOpensAction(od) && windUpOpens(ctx, event, pose); // D-313: the wind-up painting, then the impact at the apex
   const item = pose === 'item' ? itemGestureFor(ctx, event) : null; // FFX only: no flask (the stance), the orb or the glow (`BattlePresenterItem.ts`); null everywhere else
   if (odOpensAction(od)) showOdOnOpen(ctx, od); // FFX: the held shot and the strike are on the key painting
   else actor?.setPose(item?.pose ?? (windUp ? 'ready' : pose));

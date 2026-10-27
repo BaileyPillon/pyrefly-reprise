@@ -16,10 +16,12 @@
  * so a figure without the new keys plays exactly as before. REDUCE MOTION keeps today's behaviour:
  * no wind-up lead, no follow-through beat.
  */
-import type { CombatantId } from '../battle/common/types.ts';
+import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import type { LungeContact } from './ContactBeat.ts';
-import { odApex, odKeyHolds } from './KeySlots.ts';
+import { poseForAction } from './EnemyActionPose.ts';
+import { isFfx2, odApex, odKeyHolds } from './KeySlots.ts';
+import { motionMode } from './PoseSwap.ts';
 import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
 
 /** How long the follow-through holds at full reach before the strike goes home, ms at timeScale 1. */
@@ -33,6 +35,38 @@ function keysOn(ctx: EventCtx): boolean {
 /** Does this attack open on the wind-up painting? Only an attack, only with a painted `ready`. */
 export function windUpLeads(ctx: EventCtx, actorId: CombatantId, pose: string): boolean {
   return pose === 'attack' && keysOn(ctx) && ctx.stage?.paints?.(actorId, 'ready') === true;
+}
+
+/**
+ * Does this action open on the wind-up painting? One rule for both readers (`BattlePresenterBeats.actionStart` puts `ready` up on it; {@link readyCarriesIntoWindUp} leaves the menu's `ready` standing
+ * for it), so they cannot drift apart: no port owns the wind-up (FF7's melee runner does) and {@link windUpLeads}. FFX's Overdrive key (`odOpensAction`) is a further term of `actionStart` alone
+ * (it never opens an action under the ATB).
+ */
+export function windUpOpens(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>, pose: string): boolean {
+  return !ctx.deps.actionMotion?.ownsWindUp?.(event) && windUpLeads(ctx, event.actorId, pose);
+}
+
+/**
+ * **FFX-2 only** (the ATB; post-conference motion plan, step 2, "the flicker"). A girl's own command menu has put her on `ready` (`BattlePresenter.chooseCommand`); her answer comes back as one burst,
+ * `turn-start, action-start, ...` (`FFX2Engine.submit`: `beginTurn`, then `performCommand`). When the very next event is her own attack and that attack opens on the wind-up painting anyway
+ * ({@link windUpOpens}, the one rule `actionStart` also uses), the turn start must not drop her to `idle` for the 90 ms before the action puts `ready` back:
+ * ready, idle, ready, lunge was Chapter IV's flicker, 22 times in 6.3 minutes and 295 of the chapter's 931 see-through frames. True means the turn start leaves her pose alone: the figure holds the painting
+ * it already shows and is about to show, so nothing about what the player sees is new (the idle blip is gone; every painting that follows is the one that followed before).
+ *
+ * Not for FFX (its turn start is a burst of its own, before the menu, with nothing behind it), not for a foe (the menu's `ready` is a party figure's), not for a figure that is not showing `ready`
+ * (it gets today's `idle` request), not under REDUCE MOTION or without the wind-up painting (`windUpLeads`), not under `?motion=classic` (the comparison and safety word: it brings back the old turn start, ready, idle, ready, for a side-by-side), not for a cast, an item or a defend (those open on their own pose, so `ready, idle, cast`
+ * stays today's sequence: a separate and smaller blip, left for its own decision), and not when the turn start is played alone (no burst: tests, the demo reel). FFX-2's Overdrive key
+ * (`odOpensAction`) never opens an action (it is FFX's), so it is not asked here.
+ */
+export function readyCarriesIntoWindUp(ctx: EventCtx, actorId: CombatantId): boolean {
+  if (motionMode() === 'classic' || !isFfx2(ctx) || ctx.stage.sideOf(actorId) !== 'party') return false;
+  const shows = (ctx.stage.actor(actorId) as { pose?: string } | undefined)?.pose;
+  if (shows !== 'ready') return false;
+  const burst = ctx.burst;
+  const next = burst?.events[burst.at + 1];
+  if (!next || next.type !== 'action-start' || next.actorId !== actorId) return false;
+  const pose = poseForAction(next, ctx.stage.sideOf(actorId), ctx.deps.abilityFacts, (p) => ctx.stage.paints?.(actorId, p) === true);
+  return windUpOpens(ctx, next, pose);
 }
 
 /**

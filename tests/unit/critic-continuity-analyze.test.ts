@@ -204,6 +204,22 @@ describe('analysing a recording', () => {
     const { anchors } = await anchorsForPoses({ poses: meta.poses, fetchImage, measure: MEASURE });
     expect(analyzeRun({ meta, records, anchors, cfg: CFG }).summary.checks['CHK-026'].reasons[0]).toMatch(/9 fps/);
   });
+
+  it('names a flicker next to the other numbers: the summary always carries the block, and a swap and its reversal inside the window are tagged (post-conference plan, step 2)', async () => {
+    const { meta, records } = build(10);
+    const { anchors } = await anchorsForPoses({ poses: meta.poses, fetchImage, measure: MEASURE });
+    const none = analyzeRun({ meta, records, anchors, cfg: CFG });
+    const block = (none.summary as unknown as { flickers: { count: number; pairs: string[]; windowMs: number } }).flickers;
+    expect(block).toMatchObject({ count: 0, windowMs: 300, pairs: ['ready>idle>ready'] }); // the default pair is the girl's; this recording's swaps (idle and attack, 500 ms apart) are not it
+    expect(none.swaps.some((s) => 'flicker' in s)).toBe(false);
+    const named = analyzeRun({ meta, records, anchors, cfg: { ...CFG, flicker: { windowMs: 600, pairs: ['idle>attack>idle'] } } as typeof CFG });
+    const tagged = (named.summary as unknown as { flickers: { count: number; byPair: Record<string, number>; ghostFrames: number } }).flickers;
+    expect(tagged.count).toBe(5); // ten swaps, one pair for each two
+    expect(tagged.byPair).toEqual({ 'idle>attack>idle': 5 });
+    expect(tagged.ghostFrames).toBeGreaterThan(0); // the pairs' own see-through frames, so the share of the chapter's can be read
+    expect(named.swaps.filter((s) => 'flicker' in s)).toHaveLength(10);
+    expect(named.summary.checks['CHK-027'].result).toBe(none.summary.checks['CHK-027'].result); // reported, never gated
+  });
 });
 
 describe('what caused a swap', () => {
