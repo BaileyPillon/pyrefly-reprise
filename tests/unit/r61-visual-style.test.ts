@@ -12,8 +12,6 @@
  * Game case: BOTH games (shared plumbing): the one look is authored for one chapter of each game, and the row is on the FFX and the FFX-2 pause alike; the FF7 pause drops it.
  * Save-data class: touches `Settings` in `src/app/SaveData.ts` (an additive field).
  */
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { setProMode } from '../../src/engine/look/pro/ProSwitch.ts';
@@ -33,6 +31,7 @@ import { activateRow } from '../../src/app/screens/pause/actions.ts';
 import { adjustSetting } from '../../src/app/screens/pause/settings.ts';
 import { parseLook } from '../../src/engine/look/LookConfig.ts';
 import { applyChapterLook, lookState, lookWanted } from '../../src/engine/look/LookState.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 class Slot {
   readonly items = new Map<string, string>();
@@ -224,7 +223,7 @@ describe('the look it switches (applyChapterLook)', () => {
   });
 
   it('is what the battle screen asks for: the stored setting, read when a chapter\'s battle is set up', () => {
-    const src = readFileSync(resolve(__dirname, '..', '..', 'src', 'app', 'screens', 'BattleScreen.ts'), 'utf8');
+    const src = battleScreenSource();
     expect(src).toMatch(/applyChapterLook\(chapter\.id, visualStyleOf\(readSetting\('visualStyle'\)\)\)/);
   });
 });

@@ -6,8 +6,6 @@
  * opening). Now, as the card starts to leave (`BattleStartBanner` `covered`), `BattleMoments.coverOpening` takes the HUD down and parks the party at alpha 0 under it; the opening finds them already down
  * and plays exactly as before. A hurried opening, a skipped run and `?opencover=off` keep what they had; a party parked and not slid on comes back.
  */
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BattleMoments } from '../../src/engine/BattleMoments.ts';
 import type { PlaybackSpeed } from '../../src/engine/BattlePresenterPorts.ts';
@@ -15,6 +13,7 @@ import { parkParty, slideParty, unparkParty } from '../../src/engine/OpeningPark
 import { BattleStartBanner } from '../../src/ui/common/BattleStartBanner.ts';
 import { coverOption, openingCovered } from '../../src/ui/common/transitions/cardHold.ts';
 import { FakeStage, noSleep } from './helpers/FakeStage.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const PARTY = ['tidus', 'yuna', 'auron'];
 const OPEN = { partyIds: PARTY, bossId: 'seymour-flux', bossName: 'Seymour Flux' } as const;
@@ -158,7 +157,6 @@ describe('BattleStartBanner covered', () => {
 });
 
 describe('coverOption and the wiring', () => {
-  const src = (rel: string): string => readFileSync(join(__dirname, '..', '..', rel), 'utf8').replace(/\r\n/g, '\n');
   it('is the hook for an ordinary opening, nothing for a hurried one or `?opencover=off`', () => {
     const cover = (): void => undefined;
     expect(coverOption(false, cover, '')).toEqual({ covered: cover });
@@ -169,8 +167,8 @@ describe('coverOption and the wiring', () => {
   });
 
   it('BattleScreen.showBattleStart spreads coverOption(...) into the battle\'s own card and asks the presenter\'s moments to cover the opening for the party', () => {
-    const battle = src('src/app/screens/BattleScreen.ts');
-    const from = battle.indexOf('private async showBattleStart');
+    const battle = battleScreenSource();
+    const from = battle.indexOf('async showBattleStart');
     const body = battle.slice(from, battle.indexOf('private async runEncounter'));
     const made = body.indexOf('new BattleStartBanner({');
     const closed = body.indexOf('});\n    this.battleStartBanner = banner', made);

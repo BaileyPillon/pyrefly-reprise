@@ -16,6 +16,7 @@ import { resultsCueFor, startResultsMusic } from '../../src/app/screens/resultsM
 import { setDemoMode } from '../../src/app/demoMode.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { pauseScreenUp } from '../../src/app/demo/switchboard.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const REPO = join(__dirname, '..', '..');
 const src = (rel: string): string => readFileSync(join(REPO, rel), 'utf8').replace(/\r\n/g, '\n');
@@ -207,7 +208,7 @@ describe('startRetryTheme: the retried fight\'s theme at the press', () => {
     expect(flow).toContain('if (demoQuickRetry(id, attempt) || publicQuickRetry(id, attempt)) openingHurry = true;'); // release 67: the public address's Chapter I retry shares the line (the theme line below is still the demo's alone)
     expect(flow).toContain('...(demoQuickRetry(id, attempt) && !retryThemeSwitchedOff() ? { retryTheme: true } : {})');
     expect(flow).not.toContain('startRetryTheme(chapter, audio)'); // no ask at the press: the lost screen's exit stops the music right after it and drops the request
-    expect(src('src/app/screens/BattleScreen.ts')).toContain('if (this.opts.retryTheme) startRetryTheme(chapter, audio);');
+    expect(battleScreenSource()).toContain('if (this.opts.retryTheme) startRetryTheme(chapter, audio);');
     expect(flow).toContain('startResultsMusic(audio, cue, keepForRetry ? [keepForRetry] : undefined)');
     const warm = src('src/app/demo/demoWarm.ts');
     expect(warm).toContain('const figuresAhead = prebuildOn();');

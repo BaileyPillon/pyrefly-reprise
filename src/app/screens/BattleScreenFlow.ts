@@ -13,249 +13,50 @@
  * `BattleScreenFlowStubs.ts` keep every step running.
  */
 
-import type { Screen } from '../Screen.ts';
-import type { App } from '../App.ts';
-import type { BattleResult, GameId } from '../../battle/common/types.ts';
 import type { Chapter, ChapterId } from '../../data/encounters.ts';
-import { CHAPTERS, getChapter } from '../../data/encounters.ts';
-import type { StoryScript } from '../../story/dsl.ts';
+import { getChapter } from '../../data/encounters.ts';
 import { audio } from '../../audio/index.ts';
-import { readSetting } from '../SaveData.ts';
-import { chapterSelectCue } from '../saveFrontend.ts';
 import { BattleScreen, type BattleScreenOptions, type BattleScreenResult } from './BattleScreen.ts';
 import { PartyPrepScreen } from './PartyPrepScreen.ts';
-// Type-only: erased at build time, so this adds no runtime edge to the screen.
 import type { ResultsChoice } from './ResultsScreen.ts';
-import type { AutoStrategy } from '../../engine/BattlePresenter.ts';
-import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
-import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
-import { clearTimeMs } from '../../ui/common/resultsMath.ts';
+import { StubResults } from './BattleScreenFlowStubs.ts';
 import { resultsCueFor, resultsScreenSilent, startResultsMusic, type ResultsMusicHandle } from './resultsMusic.ts'; // the win's and the loss's cue (music batch 2)
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
-import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts'; import { voiceChapter } from '../voiceChapter.ts';
+import { runBriefingIfDue } from './raiseBriefing.ts';
+import { sfxChapter } from '../sfxGame.ts';
+import { voiceChapter } from '../voiceChapter.ts';
 import { musicChapter } from '../chapterMusicWarm.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { holdIdleLane } from '../imageWarm.ts';
 import { entryCardWait } from './entryCard.ts';
 import { entrySituationFor } from './entrySituation.ts';
 import { playBattleEntry } from '../../ui/common/transitions/entry.ts';
-import { boardWhenWarm } from './frontendWarm.ts';
 import { playResultsWipe } from '../../ui/common/transitions/index.ts';
 import { stagingPieceOnFor } from '../../engine/pro/staging/StagingSwitch.ts';
 import { ProDefeatScreen } from './ProDefeatScreen.ts'; // lane "pro-staging": the defeat card that keeps the scene
 import { carryAfterDefeat } from './BattleChainCheckpoint.ts';
 import { closeRun, openRun, runWithRestarts } from './pause/restartCarry.ts';
 import { demoDefeatPanel, demoQuickRetry, noteDemoDefeatChoice, publicQuickRetry, retryTheme, retryThemeSwitchedOff, takeDemoNextFight } from '../demo/demoDefeat.ts'; // R62 (demo mode only, both games): TRY AGAIN / OTHER FIGHT on a lost demo fight
-import { demoThanksDue, type ThanksEnd } from '../demo/demoThanks.ts'; // R62 (demo mode only, both games): the thanks card after a win
-import { boothNewOn } from '../demo/boothSwitch.ts'; // r64 (item 200i): with the booth screens on, a card that ran out its time sends the flow back to the title
-import { demoIntroFor } from '../demo/demoIntro.ts'; // R62 (demo mode only, FFX Chapter I): the short voiced intro
 import { experimentPlayIn, ff7Results, runExperiment } from './BattleScreenExperiment.ts'; // a hidden experiment (FF7) never touches the save
 import { drawRunSeed } from '../runSeed.ts';
 import { warmBattleStage } from '../../engine/StageWarm.ts'; // R61 (PR-0481): a first battle's once-per-page costs are paid behind the party prep
 import { attemptSeed } from '../demoMode.ts'; // release 60: `?demo=1`, the conference demo's seeds
 import { experimentProgress, type FlowProgress } from '../experiments/experimentRecords.ts';
 import { beginExperimentRun } from '../experiments/experimentRun.ts';
-import type { PilgrimFightHook } from '../pilgrim/pilgrimHook.ts'; // the hidden Pilgrimage's seam (types only; the run itself is loaded on its door's word)
 import { retryWarmSwitchedOff, stopDemoWarm, warmDemoFights } from '../demo/demoWarm.ts'; // release 62 (PR-0481): the demo's stage warm stands down once a fight is picked
 import { demoRunDefaults } from '../demo/demoFlow.ts'; // R61 (conference demo, `?demo=1`): a demo fight goes straight in, without party prep or story scenes
+import type { ResultsScreenOptions, RunChapterOptions } from './BattleScreenFlowTypes.ts';
+import { factories } from './BattleScreenFlowRegistry.ts';
+import { clearTimeToRecord } from './BattleScreenFlowRules.ts';
+import { GameFlowBase } from './BattleScreenFlowBase.ts';
 
-/** A screen the flow can await. */
-export interface FlowScreen<T> extends Screen {
-  readonly done: Promise<T>;
-}
-
-export interface CutsceneScreenOptions {
-  chapter: Chapter;
-  script: StoryScript;
-  phase: 'pre' | 'post';
-  skip?: boolean;
-  /**
-   * Index of the first step to play — a `resumeAt` handed back from a previous
-   * run of the same script.
-   *
-   * Every `post` script puts its `results()` marker a few steps in and then
-   * keeps going: 28 further lines after Seymour's, 20 after Yunalesca's, 18
-   * after Braska's Final Aeon's, 11 after Vegnagun's. The runner stopped at the
-   * marker and the screen was thrown away, so **none of those lines had ever
-   * played** (critic round 02 #04). The flow now runs post → results →
-   * post-from-`resumeAt`.
-   */
-  resumeFrom?: number;
-  /**
-   * Called when the script stops at its `results()` marker. `resumeAt` is the
-   * step index to hand back as {@link resumeFrom}.
-   */
-  onResultsMarker?: (info: { silent: boolean; resumeAt: number }) => void;
-}
-
-export interface ResultsScreenOptions {
-  chapter: Chapter;
-  result: BattleResult | null;
-  outcome: string;
-  /** Chapter 4 suppresses the flourish entirely [writing-bible §5.4]. */
-  silent?: boolean;
-  /**
-   * Wall-clock length of the whole encounter, chained links included. The FFX
-   * engine leaves `BattleResult.elapsedMs` at 0 (it only advances inside `wait`
-   * effects, which that engine never emits), so this is the only real clock the
-   * results panel has [ResultsScreen / `clearTimeMs`].
-   */
-  elapsedMs?: number;
-  /**
-   * The chapter's best time as it stood **before** this clear was recorded —
-   * `runChapter` writes the clear before the panel is shown, so the panel can
-   * no longer read the old record itself.
-   */
-  previousBestMs?: number | null;
-  /** Called with the player's pick. Only the defeat panel offers one. */
-  onChoice?: (choice: ResultsChoice) => void;
-  /** PR-0215: the engine's stalemate line, for the withdrawal card (`withdrawal.ts`). */
-  withdrawLine?: string;
-}
-
-/** Factories `ui/common` can supply. Any it omits uses the placeholder. */
-export interface FlowScreenFactories {
-  chapterSelect: () => FlowScreen<ChapterId | null>;
-  partyPrep: (opts: { chapter: Chapter }) => FlowScreen<boolean>;
-  cutscene: (opts: CutsceneScreenOptions) => FlowScreen<void>;
-  results: (opts: ResultsScreenOptions) => FlowScreen<void>;
-  /**
-   * The battle itself.
-   *
-   * Nothing in the shipped game registers this — `runChapter` builds a real
-   * {@link BattleScreen} — but it is what lets `tests/unit/flow-*.test.ts`
-   * drive the whole Title → … → Results sequence without a renderer, which is
-   * how the post-battle scenes and the end of an arc are now proven (critic
-   * round 02 #01, #04, #32).
-   */
-  battle: (opts: BattleScreenOptions) => FlowScreen<BattleScreenResult>;
-  /** R62 (the conference demo, demo mode only): the thanks card after a win (`app/demo/demoThanks.ts`). Optional: a flow with none registered goes straight on, as before. */
-  demoThanks?: (opts: { chapter: Chapter }) => FlowScreen<void> & { readonly endedBy?: ThanksEnd | null };
-  /** R62 (the conference demo, demo mode only; FFX Chapter I): the short voiced intro before the fight (`app/demo/demoIntro.ts`), a story scene on a trimmed script. Optional, as `demoThanks` is. */
-  demoIntro?: (opts: CutsceneScreenOptions) => FlowScreen<void>;
-}
-
-const factories: Partial<FlowScreenFactories> = {};
-
-/** Replace one or more flow steps with the real screens. */
-export function registerFlowScreens(next: Partial<FlowScreenFactories>): void {
-  Object.assign(factories, next);
-}
-
-/** The chapter-select screen — the registered one, or the placeholder. */
-export function makeChapterSelect(): FlowScreen<ChapterId | null> {
-  return factories.chapterSelect?.() ?? new StubChapterSelect();
-}
-
-/** Which steps are real and which are still placeholders. */
-export function flowReport(): Record<string, boolean> {
-  return {
-    chapterSelect: factories.chapterSelect !== undefined,
-    partyPrep: factories.partyPrep !== undefined,
-    cutscene: factories.cutscene !== undefined,
-    results: factories.results !== undefined,
-  };
-}
-
-/** Drop every registered factory. Tests only; nothing in the game calls it. */
-export function resetFlowScreens(): void {
-  for (const key of Object.keys(factories)) delete (factories as Record<string, unknown>)[key];
-}
-
-/** The last chapter of each game's arc: Chapter 3 ends FFX, Chapter 5 FFX-2 (critic round 02 #32: the flow once had no notion of finishing). */
-export const ARC_FINALE: Readonly<Record<Exclude<GameId, 'ff7'>, ChapterId>> = { // FF7: no arc (never reached)
-  ffx: 'braskas-final-aeon',
-  ffx2: 'ffx2-vegnagun-shuyin',
-};
-
-/** True once every chapter of `game` is recorded as cleared. */
-export function arcCleared(game: GameId, cleared: (id: ChapterId) => boolean): boolean {
-  return game !== 'ff7' && CHAPTERS.filter((c) => c.game === game).every((c) => cleared(c.id));
-}
-
-export interface RunChapterOptions {
-  seed?: number;
-  skipCutscenes?: boolean;
-  auto?: AutoStrategy | null;
-  /** Skip the prep menu (the debug API's `gotoChapter` does). */
-  skipPrep?: boolean;
-  /** Playback speed. `'skip'` resolves a whole battle in milliseconds. */
-  speed?: PlaybackSpeed;
-  /**
-   * Do not stop on the results screen.
-   *
-   * The results screen waits for a keypress, so an automated run that shows
-   * it never finishes. Any caller driving the game without a human — the
-   * debug API's `autoBattle`, an e2e spec, the critic — passes this.
-   */
-  skipResults?: boolean;
-  /** RESTART ENCOUNTER: re-enter where RETRY would (FA3 = b, `pause/restartCarry.ts`). */ restart?: boolean;
-  /** One fight of the hidden Pilgrimage (FFX, prototype; `pilgrim/pilgrimHook.ts`): its boon'd chapter, its own progress, a loss that ends the fight, no RESTART ENCOUNTER. Absent for every other run. */ pilgrim?: PilgrimFightHook;
-}
-
-/**
- * The best-time value a victory should record, or `null` when this run must
- * never touch the record at all.
- *
- * Two independent guards, both required by the `best-time-flow` fix:
- * - **Never an automated run.** `auto` is set by the debug API's
- *   `autoBattle`, an e2e spec, or the critic — none of them is a play
- *   session, however long the run took wall-clock, so it must never
- *   overwrite (or create) a chapter's best time.
- * - **Never the raw wall clock.** Even a human-triggered run can carry
- *   `speed: 'skip'`, where every animation wait collapses to zero and a
- *   whole chapter resolves in a few milliseconds. `clearTimeMs` is the same
- *   plausibility-floored conversion the Results panel prints
- *   (`ui/common/resultsMath.ts`); reusing it here means Chapter Select can
- *   never show a "best time" the panel itself would never have displayed.
- */
-export function clearTimeToRecord(
-  result: BattleResult,
-  wallClockMs: number,
-  game: GameId,
-  auto: AutoStrategy | null | undefined,
-): number | null {
-  if (auto) return null;
-  return clearTimeMs(result, wallClockMs, game);
-}
+// Split out by a pure move (2026-10-28): every name that used to be exported from this file still is.
+export type { CutsceneScreenOptions, FlowScreen, FlowScreenFactories, ResultsScreenOptions, RunChapterOptions } from './BattleScreenFlowTypes.ts';
+export { flowReport, makeChapterSelect, registerFlowScreens, resetFlowScreens } from './BattleScreenFlowRegistry.ts';
+export { ARC_FINALE, arcCleared, clearTimeToRecord } from './BattleScreenFlowRules.ts';
 
 /** Drives the screen sequence. One instance lives on {@link App}. */
-export class GameFlow {
-  private readonly app: App;
-  /** Set while a chapter is running, so the debug API can see where we are. */
-  step: string = 'idle';
-  private running = false;
-  /** The chapter the board's `pilgrim` door settled on, until the next `runChapter` takes it as the Pilgrimage's start (`armPilgrimage`). */
-  private pilgrimArmed: ChapterId | null = null;
-
-  constructor(app: App) {
-    this.app = app;
-  }
-
-  /**
-   * The screen this flow last put up.
-   *
-   * The flow is a long `await` chain and it is not the only thing that
-   * navigates: the pause menu's CHAPTER SELECT and QUIT TO TITLE both call
-   * `App.goto` from *under* a flow step, and `App.replace` pops the stack
-   * synchronously before it awaits. Two overlapping `replace` calls therefore
-   * leave two screen roots in `#ui` at once — which is what the critic
-   * photographed as "two hint strings overlapping and illegible" (round 02
-   * #36): a chapter-select strip and a cutscene strip, both `position:absolute;
-   * bottom:22px`, on top of each other.
-   *
-   * So every flow navigation goes through {@link show}, which refuses to stack
-   * a screen on top of one the flow did not put there.
-   */
-  private owned: Screen | null = null;
-
-  /** True when the flow stood down because something else navigated. */
-  private handedOver = false;
-  /** The last cutscene the flow played was hurried by the player (PR-0061: the battle after it opens hurried). */
-  private lastSceneHurried = false;
-  /** r64 (item 200i, demo mode with the booth screens on): the thanks card ran out its 8 s untouched, so `start()` takes the visit back to the title instead of the picker. */
-  private demoToTitle = false;
-
+export class GameFlow extends GameFlowBase {
   /** Title -> chapter select -> a chapter -> back to chapter select. */
   async start(): Promise<void> {
     if (this.running) return;
@@ -296,41 +97,6 @@ export class GameFlow {
       this.owned = null;
       this.step = 'idle';
     }
-  }
-
-  /**
-   * Put a flow screen up, unless something else owns the stack.
-   *
-   * Returns false when the flow has been navigated out from under — the caller
-   * then unwinds instead of pushing a second screen over whatever arrived.
-   */
-  private async show(screen: Screen): Promise<boolean> {
-    if (this.owned !== null && this.app.current !== this.owned) {
-      this.handedOver = true;
-      this.owned = null;
-      return false;
-    }
-    await this.app.replace(screen);
-    this.owned = screen;
-    return true;
-  }
-
-  /** Show chapter select and resolve with the player's pick. */
-  async chapterSelect(): Promise<ChapterId | null> {
-    this.step = 'chapter-select';
-    // 39.5 (Bailey, 2026-10-07; both games): B is the default, A and C are selectable (CHAPTER MUSIC in OPTIONS). An
-    // unknown value plays B (`saveFrontend.ts`); a cue whose file cannot load plays B's score through its stand-in.
-    void audio.playMusic(chapterSelectCue(readSetting('chapterSelectMusic')), { fade: 1.2 }).catch(() => {
-      /* the track may not be composed yet */
-    });
-    const screen = await boardWhenWarm(this.app, makeChapterSelect); // PR-0065: no grey busts on arrival
-    if (!(await this.show(screen))) return null;
-    return screen.done;
-  }
-
-  /** The board's `pilgrim` door opened (`frontend/pilgrimDoor.ts`): the next `runChapter(id)` is the hidden Pilgrimage, started once. */
-  armPilgrimage(id: ChapterId): void {
-    this.pilgrimArmed = id;
   }
 
   /**
@@ -510,76 +276,6 @@ export class GameFlow {
     return choice;
   }
 
-  /** R62 (demo mode only, FFX Chapter I): the short voiced intro. True when it played (a person started the run, the chapter has one, a factory is registered). */
-  private async playDemoIntro(chapter: Chapter, opts: RunChapterOptions): Promise<boolean> {
-    const script = demoIntroFor(chapter.id, opts);
-    const make = factories.demoIntro;
-    if (!script || !make) return false;
-    this.step = 'cutscene:pre';
-    const screen = make({ chapter, script, phase: 'pre' });
-    if (!(await this.show(screen))) return false;
-    await screen.done;
-    this.lastSceneHurried = (screen as { hurriedByPlayer?: boolean }).hurriedByPlayer === true;
-    return true;
-  }
-
-  /** R62 (demo mode only, both games): the thanks card after a won demo fight. A no-op outside demo mode, for any other chapter, and where no card is registered. */
-  private async showDemoThanks(chapter: Chapter): Promise<void> {
-    const make = factories.demoThanks;
-    if (!make || !demoThanksDue(chapter.id)) return;
-    this.step = 'demo-thanks';
-    const screen = make({ chapter });
-    if (!(await this.show(screen))) return;
-    await screen.done;
-    if (screen.endedBy === 'timer' && boothNewOn()) this.demoToTitle = true; // r64 (item 200i): the card ran out its 8 s with no press
-  }
-
-  /**
-   * Play one authored scene. Returns the `resumeAt` index if the script
-   * stopped at its `results()` marker, or `null` if it ran to the end.
-   *
-   * `resumeFrom` plays the remainder of a script that stopped earlier.
-   */
-  private async playCutscene(
-    chapter: Chapter,
-    phase: 'pre' | 'post',
-    resumeFrom?: number,
-  ): Promise<number | null> {
-    const script = phase === 'pre' ? chapter.scriptsRef?.pre : chapter.scriptsRef?.post;
-    if (!script?.length) return null;
-    if (resumeFrom !== undefined && resumeFrom >= script.length) return null;
-    this.step = `cutscene:${phase}`;
-    // The bed is the script's own: every one of the ten shipped scenes opens
-    // with a `music()` step of its own, so a cue forced in here was crossfaded
-    // straight back out (critic round 02 #02). `chapter.music.scene` is only
-    // the fallback for a script that says nothing, and the resumed half of a
-    // post scene never re-cues at all — it is the same scene continuing.
-    if (resumeFrom === undefined) {
-      const track = phase === 'pre' ? chapter.music.scene : chapter.music.post;
-      if (track && !scriptOpensWithMusic(script)) {
-        void audio.playMusic(track, { fade: 1.4 }).catch(() => {
-          /* stand-in tracks only */
-        });
-      }
-    }
-
-    let marker: number | null = null;
-    const opts: CutsceneScreenOptions = {
-      chapter,
-      script,
-      phase,
-      ...(resumeFrom !== undefined ? { resumeFrom } : {}),
-      onResultsMarker: ({ resumeAt }) => {
-        marker = resumeAt;
-      },
-    };
-    const screen = factories.cutscene?.(opts) ?? new StubCutscene(opts);
-    if (!(await this.show(screen))) return null;
-    await screen.done;
-    this.lastSceneHurried = (screen as { hurriedByPlayer?: boolean }).hurriedByPlayer === true;
-    return marker;
-  }
-
   private async showResults(
     chapter: Chapter,
     outcome: BattleScreenResult,
@@ -628,22 +324,3 @@ export class GameFlow {
     return choice;
   }
 }
-
-/**
- * True when a script sets its own bed before it says anything.
- *
- * "Before it says anything" is the whole test: every shipped scene opens with
- * `music(...)` in its first few steps (`music(null)` counts — a post scene
- * asking for silence is still the script deciding), so the flow's own cue only
- * applies to a script that never mentions music at all.
- */
-function scriptOpensWithMusic(script: StoryScript): boolean {
-  for (const step of script.slice(0, MUSIC_LOOKAHEAD)) {
-    if (step.type === 'music') return true;
-    if (step.type === 'say' || step.type === 'narrate' || step.type === 'choice') return false;
-  }
-  return false;
-}
-
-/** How far into a script to look for its own opening cue. */
-const MUSIC_LOOKAHEAD = 8;

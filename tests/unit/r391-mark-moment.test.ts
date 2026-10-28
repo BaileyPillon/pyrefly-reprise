@@ -25,6 +25,7 @@ import {
   type MarkRecord,
 } from '../../src/app/markMoment.ts';
 import { MarkRecorder, buildInfo, type MarkEnv, type MarkSource } from '../../src/app/markRecorder.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const ROOT = join(__dirname, '..', '..');
 
@@ -341,7 +342,7 @@ describe('the wiring', () => {
   });
 
   it('the battle screen starts the recorder when it begins and stops it when it goes; the build gives a short commit and a bundle name', () => {
-    const screen = readFileSync(join(ROOT, 'src/app/screens/BattleScreen.ts'), 'utf8');
+    const screen = battleScreenSource();
     expect(screen).toMatch(/this\.markRecorder = startMarkRecorder\(/);
     expect(screen).toMatch(/this\.markRecorder\?\.stop\(\)/);
     const b = buildInfo();

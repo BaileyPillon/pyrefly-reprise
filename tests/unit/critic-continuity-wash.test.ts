@@ -21,6 +21,7 @@ import type { ProbeConfig, ProbeFrame, ProbeMeta } from '../../critic/runner/lib
 import { continuityReportLine } from '../../critic/runner/lib/continuity-pure.mjs';
 import type { Anchors, ContinuityConfig, Jerk } from '../../critic/runner/lib/continuity-pure.mjs';
 import { WASH_MIN_COVER, WASH_SELECTOR, tagWash, washCover, washOverStep, washPolicy, washReport, washTable } from '../../critic/runner/lib/continuity-wash.mjs';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const ROOT = resolve(__dirname, '..', '..');
 const read = (rel: string): string => readFileSync(resolve(ROOT, rel), 'utf8');
@@ -497,7 +498,7 @@ describe('the DOM the wash probe reads, pinned to the card\'s source', () => {
 
   it('the card is a child of the battle screen\'s root, so the battle stays the top screen and the probe keeps sampling while it shows', () => {
     expect(card).toMatch(/opts\.root\.appendChild\(el\);/);
-    expect(read('src/app/screens/BattleScreen.ts')).toMatch(/playSaveSphereCard\(\{\s*root: this\.root,/); // the battle screen's own root, not a new screen on the stack
+    expect(battleScreenSource()).toMatch(/playSaveSphereCard\(\{\s*root: this\.root,/); // the battle screen's own root, not a new screen on the stack
     expect(read('src/app/screens/BattleEncounterChain.ts')).toMatch(/await opts\.saveSphere\(async \(\) => \{/); // the next link is restaged inside the card's swap, under the wash
   });
 

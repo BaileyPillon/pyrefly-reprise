@@ -63,6 +63,7 @@ vi.mock('../../src/scenes/prebuilt.ts', () => ({
 import { setDemoMode } from '../../src/app/demoMode.ts';
 import { demoWarmLog, demoWarmSwitchedOff, resetDemoWarm, stopDemoWarm, warmDemoFights } from '../../src/app/demo/demoWarm.ts';
 import { CHAPTERS } from '../../src/data/encounters.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const sceneOf = (id: string): string => CHAPTERS.find((c) => c.id === id)!.sceneKey;
 const app = (name: string | null) => ({ renderer: { camera, prepareLook: () => calls.push('look') }, current: name ? { name } : null }) as never;
@@ -233,7 +234,7 @@ describe('the wiring', () => {
     const warm = src('src/app/demo/demoWarm.ts');
     expect(warm).toContain('warmLivingPlates({ key: scene.key, scene: scene.scene, renderer:');
     expect(warm.indexOf('warmLivingPlates(')).toBeLessThan(warm.indexOf('await warmShaders('));
-    const battle = src('src/app/screens/BattleScreen.ts');
+    const battle = battleScreenSource();
     expect(battle).toContain('renderer: this.app.renderer.renderer }); // eye-candy option B'); // the same renderer
   });
 
@@ -241,7 +242,7 @@ describe('the wiring', () => {
     const flow = src('src/app/screens/BattleScreenFlow.ts');
     expect(flow.indexOf('stopDemoWarm(id);')).toBeGreaterThan(0); // post-fight-start: it names the fight it starts, so the other fight's stage step in flight lets go
     expect(flow.indexOf('stopDemoWarm(id);')).toBeLessThan(flow.indexOf('warmBattleStage();'));
-    const battle = src('src/app/screens/BattleScreen.ts');
+    const battle = battleScreenSource();
     expect(battle).toContain('await takeScene(chapter.sceneKey, this.app.renderer.camera)');
     expect(battle).not.toContain('await loadScene(chapter.sceneKey');
   });

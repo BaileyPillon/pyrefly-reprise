@@ -14,23 +14,25 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const ROOT = resolve(__dirname, '..', '..');
 const read = (rel: string): string => readFileSync(resolve(ROOT, rel), 'utf8');
 const WHY = 'rename it in critic/runner/lib/continuity-probe.mjs too (and critic/CHECKS.md CHK-026 says what the probe reads)';
 
 describe('the engine fields the continuity probe reads', () => {
-  const actor = read('src/engine/PaintedActor.ts');
+  // The actor is a chain of classes since 2026-10-28 (ChatGPT's point 8b, `docs/handoff/split-presenter.md`): its fields are declared in the state and base classes, `PlaneSlot` in the types file.
+  const actor = ['PaintedActor', 'PaintedActorState', 'PaintedActorBase', 'PaintedActorTypes'].map((f) => read(`src/engine/${f}.ts`)).join('\n');
   const stage = read('src/engine/BattlePresenterStage.ts');
-  const battle = read('src/app/screens/BattleScreen.ts');
+  const battle = battleScreenSource();
   const app = read('src/app/App.ts');
   const api = read('src/debug/api.ts');
   const probe = read('critic/runner/lib/continuity-probe.mjs');
 
   it('PaintedActor keeps two planes, which one is active, its alpha, its figure flag and its painting urls', () => {
-    expect(actor, `PaintedActor.slots: ${WHY}`).toMatch(/private readonly slots: \[PlaneSlot, PlaneSlot\];/);
-    expect(actor, `PaintedActor.active: ${WHY}`).toMatch(/private active = 0;/);
-    expect(actor, `PaintedActor._alpha: ${WHY}`).toMatch(/private _alpha = 1;/);
+    expect(actor, `PaintedActor.slots: ${WHY}`).toMatch(/(?:private|protected) readonly slots: \[PlaneSlot, PlaneSlot\];/);
+    expect(actor, `PaintedActor.active: ${WHY}`).toMatch(/(?:private|protected) active = 0;/);
+    expect(actor, `PaintedActor._alpha: ${WHY}`).toMatch(/(?:private|protected) _alpha = 1;/);
     expect(actor, `PaintedActor.showFigure: ${WHY}`).toMatch(/showFigure\b/);
     expect(actor, `PaintedActor.poseUrls: ${WHY}`).toMatch(/readonly poseUrls: PoseMap = \{\};/);
   });
@@ -55,8 +57,8 @@ describe('the engine fields the continuity probe reads', () => {
 
   it('the battle screen is named "battle", holds its stage, and draws nothing until its field is shown', () => {
     expect(battle, `BattleScreen.name: ${WHY}`).toMatch(/readonly name = 'battle';/);
-    expect(battle, `BattleScreen.stage: ${WHY}`).toMatch(/private stage: PaintedStage \| null = null;/);
-    expect(battle, `BattleScreen.fieldShown: ${WHY}`).toMatch(/private fieldShown = false;/);
+    expect(battle, `BattleScreen.stage: ${WHY}`).toMatch(/(?:private|protected) stage: PaintedStage \| null = null;/);
+    expect(battle, `BattleScreen.fieldShown: ${WHY}`).toMatch(/(?:private|protected) fieldShown = false;/);
     expect(battle, 'render() returns nothing until the field is shown: that is why the probe waits for it').toMatch(/if \(!this\.scene \|\| !this\.fieldShown\) return null;/);
   });
 

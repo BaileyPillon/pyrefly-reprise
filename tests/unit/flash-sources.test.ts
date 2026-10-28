@@ -36,6 +36,7 @@ import { PhaseLighting, type GradeTarget } from '../../src/engine/PhaseLighting.
 import type { ScenePalette } from '../../src/engine/Renderer.ts';
 import { DEFAULT_FLASH_PARAMS, REDUCED_FLASH_PARAMS, capActor, filterWash } from '../../src/engine/spellfx/SpellFxParams.ts';
 import { FakeActor, FakeAudio, FakeDamageNumbers, FakeMessageBar, FakeStage, noSleep } from './helpers/FakeStage.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const ROOT = resolve(__dirname, '..', '..');
 const read = (p: string): string => readFileSync(resolve(ROOT, p), 'utf8');
@@ -385,7 +386,7 @@ describe('20. Arena lighting on boss phases (the rule was in the code: PhaseLigh
   });
 
   it('the battle screen hands the stage the setting (the option nothing set before)', () => {
-    const src = read('src/app/screens/BattleScreen.ts');
+    const src = battleScreenSource();
     expect(src).toMatch(/reduceFlashes: readReduceFlashes/);
   });
 });
