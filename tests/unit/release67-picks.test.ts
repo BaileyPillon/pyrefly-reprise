@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
  * Release 67: Bailey's six look picks are the defaults (the driver's call under his delegation, 2026-10-28; his to overturn): message 1's three (`?stance`, `?swapcause`, `?hit`) and message 2's three
- * (`?run`, `?curves`, `?rigko`).
+ * (`?run`, `?curves`, `?rigko`), **and the driver's follow-on to `?curves=real-snappy`: `?strikeshape=travel`** (the real-snappy dash is the house dash, about a fifth of a second, not one frame).
  *
  * | word | pick (the default) | release 66's look | where it plays (unchanged by the flip) |
  * |---|---|---|---|
@@ -11,6 +11,7 @@
  * | `?run=` (MF-04, FFX-2 only) | `flow` | `today` | every FFX-2 chapter the run-in plays in (never pack-gated); `flow` needs the new curves (the two pack chapters), so Chapter V and a page with the pack off play the smooth run and today's strike |
  * | `?curves=` (MF-14, both games) | `real-snappy` | `new` (by name; `today` has always meant the curves OFF, release 62's) | the two pack chapters, the pack on, a desktop-class screen (unchanged) |
  * | `?rigko=` (MF-11, both games, the rig bosses Seymour Flux and Bahamut) | `whole` | `today` | the word was never gated; only a rig has a ko key to take whole |
+ * | `?strikeshape=` (MF-14 V3, both games) | `travel` | `today` (with `?curves=new` it reads nothing; with `?curves=real-snappy` it is the clip's own dash) | exactly where `real-snappy` plays: the two pack chapters, the pack on, a desktop-class screen (`houseTravel` answers only for the 1.1 s pick) |
  *
  * Pinned here: the six defaults; that `?stance=today&swapcause=today&hit=today&run=today&curves=new&rigko=today` reads release 66's defaults and, through the real readers, release 66's LOOK (the stance, the cause and the hit
  * decisions the presenter asks the modules); that each flip reaches exactly the scope it had (pack chapters only for the two swap words, `?pack=off`, a phone and no page leave release 66's look; `?swapscope`
@@ -20,6 +21,7 @@
  * Game case: both (shared plumbing; the stance and cause looks play in Chapter I FFX and Chapter IV FFX-2, the hit in every chapter of both games).
  */
 import { afterEach, describe, expect, it } from 'vitest';
+import { houseTravel } from '../../src/engine/motion/RealMotion.ts';
 import { CURVES_DEFAULT, curvesModeFromSearch, curvesMode, curvesOn, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { setDemoChapter, setPackScreen } from '../../src/engine/motion/DemoGate.ts';
 import { runMode } from '../../src/engine/motion/RunEase.ts';
@@ -83,16 +85,17 @@ function lookNow(): { stance: string; menuKeepsIdle: boolean; windUpOnIdle: bool
 }
 
 /** What the presenter asks the MOTION modules (message 2's three words) in the running chapter, as data. */
-function motionNow(): { curves: string; curvesOn: boolean; realKind: string | null; run: string; runMode: { smooth: boolean; flow: boolean; pace: boolean }; rigKoWhole: boolean } {
-  return { curves: curvesMode(), curvesOn: curvesOn(), realKind: realKind(), run: moveWord('run'), runMode: runMode(), rigKoWhole: rigKoWhole() };
+function motionNow(): { curves: string; curvesOn: boolean; realKind: string | null; run: string; runMode: { smooth: boolean; flow: boolean; pace: boolean }; rigKoWhole: boolean; houseDash: boolean } {
+  const kind = realKind();
+  return { curves: curvesMode(), curvesOn: curvesOn(), realKind: kind, run: moveWord('run'), runMode: runMode(), rigKoWhole: rigKoWhole(), houseDash: kind !== null && houseTravel(kind) }; // houseDash: the strike's dash is the house one (`?strikeshape`'s one reader)
 }
 
 /** Release 66's motion in a pack chapter: the house curves (`new`), the stand-and-lunge run, the generic rig fall. */
-const MOTION_66 = { curves: 'new', curvesOn: true, realKind: null, run: 'today', runMode: { smooth: false, flow: false, pace: false }, rigKoWhole: false };
+const MOTION_66 = { curves: 'new', curvesOn: true, realKind: null, run: 'today', runMode: { smooth: false, flow: false, pace: false }, rigKoWhole: false, houseDash: false };
 /** Message 2's picks in a pack chapter: the real clips at the 1.1 s pick, the flowing run, the whole rig fall. */
-const MOTION_PICKS = { curves: 'real-snappy', curvesOn: true, realKind: 'snappy', run: 'flow', runMode: { smooth: true, flow: true, pace: false }, rigKoWhole: true };
+const MOTION_PICKS = { curves: 'real-snappy', curvesOn: true, realKind: 'snappy', run: 'flow', runMode: { smooth: true, flow: true, pace: false }, rigKoWhole: true, houseDash: true };
 /** The words of release 66's whole look, as an address. */
-const ADDRESS_66 = '?stance=today&swapcause=today&hit=today&run=today&curves=new&rigko=today';
+const ADDRESS_66 = '?stance=today&swapcause=today&hit=today&run=today&curves=new&rigko=today&strikeshape=today';
 
 const RELEASE_66 = {
   stance: 'today',
@@ -115,28 +118,30 @@ describe('the three picks are the defaults', () => {
     expect(STANCE_DEFAULT).toBe('v1a');
     expect(CAUSE_DEFAULT).toBe('pick');
     expect(CURVES_DEFAULT).toBe('real-snappy');
-    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock', run: 'flow', rigko: 'whole' });
-    expect([moveDefault('hit'), moveDefault('run'), moveDefault('rigko')]).toEqual(['knock', 'flow', 'whole']);
-    for (const k of Object.keys(MOVE_WORDS) as MoveKey[]) if (k !== 'hit' && k !== 'run' && k !== 'rigko') expect(moveDefault(k)).toBe('today');
+    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock', run: 'flow', rigko: 'whole', strikeshape: 'travel' });
+    expect([moveDefault('hit'), moveDefault('run'), moveDefault('rigko'), moveDefault('strikeshape')]).toEqual(['knock', 'flow', 'whole', 'travel']);
+    for (const k of Object.keys(MOVE_WORDS) as MoveKey[]) if (k !== 'hit' && k !== 'run' && k !== 'rigko' && k !== 'strikeshape') expect(moveDefault(k)).toBe('today');
   });
 
   it('a pick is one of its word\'s listed values, and today is always another', () => {
     expect(MOVE_WORDS.hit).toContain(MOVE_DEFAULTS.hit);
     expect(MOVE_WORDS.run).toContain(MOVE_DEFAULTS.run);
     expect(MOVE_WORDS.rigko).toContain(MOVE_DEFAULTS.rigko);
-    for (const k of ['hit', 'run', 'rigko'] as const) expect(MOVE_WORDS[k][0]).toBe('today');
+    expect(MOVE_WORDS.strikeshape).toContain(MOVE_DEFAULTS.strikeshape);
+    for (const k of ['hit', 'run', 'rigko', 'strikeshape'] as const) expect(MOVE_WORDS[k][0]).toBe('today');
     expect(['new', 'real', 'real-snappy']).toContain(CURVES_DEFAULT); // the pack on means the curves on: the default is never `today`
     expect((['today', 'v1a', 'v1b', 'v3'] as const)).toContain(STANCE_DEFAULT);
     expect((['today', 'cut', 'blend3', 'pick'] as const)).toContain(CAUSE_DEFAULT);
   });
 
   it('an address that says nothing, or a word the switch does not know, reads the picks', () => {
-    for (const s of ['', '?', '?nonsense=1', '?stance=wobble&swapcause=wobble&hit=wobble&run=wobble&curves=wobble&rigko=wobble']) {
+    for (const s of ['', '?', '?nonsense=1', '?stance=wobble&swapcause=wobble&hit=wobble&run=wobble&curves=wobble&rigko=wobble&strikeshape=wobble']) {
       expect(stanceFromSearch(s)).toBe('v1a');
       expect(causeFromSearch(s)).toBe('pick');
       expect(moveWordFromSearch(s, 'hit')).toBe('knock');
       expect(moveWordFromSearch(s, 'run')).toBe('flow');
       expect(moveWordFromSearch(s, 'rigko')).toBe('whole');
+      expect(moveWordFromSearch(s, 'strikeshape')).toBe('travel');
       expect(curvesModeFromSearch(s)).toBe('real-snappy');
     }
   });
@@ -147,19 +152,21 @@ describe('the three picks are the defaults', () => {
     for (const w of ['today', 'ramp', 'knock'] as const) expect(moveWordFromSearch(`?hit=${w}`, 'hit')).toBe(w);
     for (const w of ['today', 'smooth', 'flow', 'pace'] as const) expect(moveWordFromSearch(`?run=${w}`, 'run')).toBe(w);
     for (const w of ['today', 'whole'] as const) expect(moveWordFromSearch(`?rigko=${w}`, 'rigko')).toBe(w);
+    for (const w of ['today', 'travel'] as const) expect(moveWordFromSearch(`?strikeshape=${w}`, 'strikeshape')).toBe(w);
     for (const [w, mode] of [['today', 'today'], ['new', 'new'], ['real', 'real'], ['real-snappy', 'real-snappy'], ['snappy', 'real-snappy']] as const) expect(curvesModeFromSearch(`?curves=${w}`)).toBe(mode);
   });
 });
 
-describe('?stance=today&swapcause=today&hit=today (message 1) and &run=today&curves=new&rigko=today (message 2) is release 66', () => {
+describe('?stance=today&swapcause=today&hit=today (message 1), &run=today&curves=new&rigko=today (message 2) and &strikeshape=today is release 66', () => {
   it('reads release 66\'s defaults word by word', () => {
     const s = ADDRESS_66;
-    expect({ stance: stanceFromSearch(s), cause: causeFromSearch(s), hit: moveWordFromSearch(s, 'hit'), run: moveWordFromSearch(s, 'run'), rigko: moveWordFromSearch(s, 'rigko'), curves: curvesModeFromSearch(s) }).toEqual({
+    expect({ stance: stanceFromSearch(s), cause: causeFromSearch(s), hit: moveWordFromSearch(s, 'hit'), run: moveWordFromSearch(s, 'run'), rigko: moveWordFromSearch(s, 'rigko'), strikeshape: moveWordFromSearch(s, 'strikeshape'), curves: curvesModeFromSearch(s) }).toEqual({
       stance: 'today',
       cause: 'today',
       hit: 'today',
       run: 'today',
       rigko: 'today',
+      strikeshape: 'today',
       curves: 'new',
     });
   });
@@ -175,7 +182,7 @@ describe('?stance=today&swapcause=today&hit=today (message 1) and &run=today&cur
     }
   });
 
-  it('the old words for the old motion each read release 66\'s alone: ?run=today the stand-and-lunge, ?rigko=today the generic fall, ?curves=new the house curves', () => {
+  it('the old words for the old motion each read release 66\'s alone: ?run=today the stand-and-lunge, ?rigko=today the generic fall, ?curves=new the house curves, ?strikeshape=today the real-snappy clip\'s own dash', () => {
     for (const chapter of [CH1, CH4]) {
       visit('?run=today');
       setDemoChapter(chapter);
@@ -185,7 +192,10 @@ describe('?stance=today&swapcause=today&hit=today (message 1) and &run=today&cur
       expect(motionNow()).toEqual({ ...MOTION_PICKS, rigKoWhole: false });
       visit('?curves=new');
       setDemoChapter(chapter);
-      expect(motionNow()).toEqual({ ...MOTION_PICKS, curves: 'new', realKind: null });
+      expect(motionNow()).toEqual({ ...MOTION_PICKS, curves: 'new', realKind: null, houseDash: false });
+      visit('?strikeshape=today');
+      setDemoChapter(chapter);
+      expect(motionNow()).toEqual({ ...MOTION_PICKS, houseDash: false }); // the old dash alone: the real-snappy clip's own (one frame for Paine)
     }
   });
 
@@ -286,14 +296,14 @@ describe('message 2\'s picks play exactly where the words played', () => {
     const SMOOTH = { smooth: true, flow: false, pace: false };
     visit('');
     setDemoChapter(CH5);
-    expect(motionNow()).toEqual({ ...MOTION_PICKS, curvesOn: false, realKind: null, runMode: SMOOTH }); // the word is flow; the new curves are off here, so the strike is today's
+    expect(motionNow()).toEqual({ ...MOTION_PICKS, curvesOn: false, realKind: null, runMode: SMOOTH, houseDash: false }); // the word is flow; the new curves are off here, so the strike is today's
     visit('?pack=off');
     setDemoChapter(CH4);
-    expect(motionNow()).toEqual({ ...MOTION_PICKS, curves: 'today', curvesOn: false, realKind: null, runMode: SMOOTH });
+    expect(motionNow()).toEqual({ ...MOTION_PICKS, curves: 'today', curvesOn: false, realKind: null, runMode: SMOOTH, houseDash: false });
     visit('');
     setPackScreen('phone');
     setDemoChapter(CH4);
-    expect(motionNow()).toEqual({ ...MOTION_PICKS, curves: 'today', curvesOn: false, realKind: null, runMode: SMOOTH });
+    expect(motionNow()).toEqual({ ...MOTION_PICKS, curves: 'today', curvesOn: false, realKind: null, runMode: SMOOTH, houseDash: false });
     visit('?pack=demo');
     setDemoChapter(CH4);
     expect(motionNow()).toEqual(MOTION_PICKS); // the booth address forces the pack on a phone, and the picks with it
@@ -356,14 +366,6 @@ describe('message 2\'s picks play exactly where the words played', () => {
     setMoveWord('rigko', null);
     expect(motionNow()).toEqual(MOTION_PICKS);
   });
-
-  it('?strikeshape (V3, the house dash at the 1.1 s pick) was not picked: it reads today, so the real-snappy dash is the clips\' own', () => {
-    expect(moveWordFromSearch('', 'strikeshape')).toBe('today');
-    visit('');
-    setDemoChapter(CH4);
-    expect(moveWord('strikeshape')).toBe('today');
-    expect(curvesMode()).toBe('real-snappy');
-  });
 });
 
 describe('nothing else moved', () => {
@@ -374,9 +376,9 @@ describe('nothing else moved', () => {
     expect(interludeMode()).toBe('all');
   });
 
-  it('the other six lane L2 words and the interlude read today / on as in release 66', () => {
-    const OTHER = (Object.keys(MOVE_WORDS) as MoveKey[]).filter((k) => k !== 'hit' && k !== 'run' && k !== 'rigko');
-    expect(OTHER.slice().sort()).toEqual(['hurtstring', 'kotopple', 'ramps', 'shakeband', 'strikeshape', 'summon']);
+  it('the other five lane L2 words and the interlude read today / on as in release 66', () => {
+    const OTHER = (Object.keys(MOVE_WORDS) as MoveKey[]).filter((k) => k !== 'hit' && k !== 'run' && k !== 'rigko' && k !== 'strikeshape');
+    expect(OTHER.slice().sort()).toEqual(['hurtstring', 'kotopple', 'ramps', 'shakeband', 'summon']);
     for (const k of OTHER) expect(moveWordFromSearch('', k)).toBe('today');
     visit('');
     expect(interludeMode()).toBe('all');

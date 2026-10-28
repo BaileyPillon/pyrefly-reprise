@@ -33,7 +33,7 @@ beforeEach(() => {
   setPace('steady');
 });
 afterEach(() => {
-  setDemoChapter(undefined); setMoveWord('run', null);
+  setDemoChapter(undefined); setMoveWord('run', null); setMoveWord('strikeshape', null);
   setCurvesMode(null);
   setPartyRigsMode(null);
   setRealArcGain(null);
@@ -148,6 +148,7 @@ describe('the strike in the two real modes', () => {
     resolveStrike(tidus(kind), { distance: 1.4, height: 1.82, timeScale: 1, ...o });
 
   it('real keeps the real phases at the real speed; snappy the same proportions at about 1.1 s', () => {
+    setMoveWord('strikeshape', 'today'); // the clip's own proportions: the default word since release 67 is travel (release67-strikeshape.test.ts)
     const k = 1 / defaultPaceFactor('ffx');
     const real = shapeOf('real');
     expect(real.windupMs).toBeCloseTo(566.7 * k, 0);
@@ -161,6 +162,7 @@ describe('the strike in the two real modes', () => {
     expect((snap.windupMs + snap.travelMs) / sum(snap)).toBeCloseTo((real.windupMs + real.travelMs) / sum(real), 1);
   });
   it('a boss: real is not stretched by its heft again, snappy keeps the house heft stretch', () => {
+    setMoveWord('strikeshape', 'today'); // the clip's own proportions (release 67's default word is travel)
     const row = REAL_MOTION.ffx['seymourFlux']!.attack!;
     const k = 1 / defaultPaceFactor('ffx');
     const real = resolveStrike(profileOfRow('ffx', row, 'real'), { distance: 2, height: 4.1, heft: 1, timeScale: 1 });
@@ -272,6 +274,7 @@ describe('the strike in the two real modes', () => {
     expect(a.lift).toBeCloseTo(b.lift, 6);
   });
   it('the sound\'s lead is the real contact frame', () => {
+    setMoveWord('strikeshape', 'today'); // the clip's own proportions (release 67's default word is travel)
     setCurvesMode('real');
     setDemoChapter('seymour-flux');
     const ctx = fakeCtx({ tidus: 'tidus', boss: 'seymour-flux' }, 0);
