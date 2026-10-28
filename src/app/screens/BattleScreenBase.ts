@@ -2,15 +2,17 @@
  * The state of one encounter: the scene, the stage hooks, the presenter, the engine and the HUD it was handed, the pause and settle bookkeeping.
  *
  * `BattleScreen.ts` was one 1,085-line class. It is now a short chain of classes, every layer calling only the layers below it:
- * `BattleScreenBase` (state) -> `BattleScreenPause` (the pause, the input, the stall watch) -> `BattleScreen` (enter, the encounter, the frame, exit; import that one from `BattleScreen.ts`).
- * A pure move (ChatGPT's point 8b, 2026-10-28; both games): no method changed, only `private` became `protected` where a later layer reads it.
- * What source-text tests read by text (`enter`, `showBattleStart`, `runEncounter`, `exit`, `render`, the `stage` and `fieldShown` fields) stays in `BattleScreen.ts`.
+ * `BattleScreenBase` (state) -> `BattleScreenPause` (the pause, the input, the stall watch) -> `BattleScreenCard` (the battle-start card) -> `BattleScreenEncounter` (enter, the encounter loop)
+ * -> `BattleScreen` (the frame, the debug beats, exit; import that one from `BattleScreen.ts`).
+ * A pure move (ChatGPT's point 8b, 2026-10-28; both games): no method changed, only `private` became `protected` where another layer reads it.
+ * Source-text tests read the screen's wiring across the whole chain (`tests/unit/helpers/battleScreenSource.ts`).
  */
 
 import type { Vector3 } from 'three';
 import type { BattleEngine, BattleSetup, EnemyGroupDef } from '../../battle/common/types.ts';
 import { NO_FLOW, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
 import { BattlePresenter } from '../../engine/BattlePresenter.ts';
+import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
 import { BeatClock } from '../../engine/BeatClock.ts'; // MF-08: the presenter's beats are counted in this screen's frame clock
 import type { HudPort } from '../../engine/HudPort.ts';
 import type { LoadedScene } from '../../scenes/index.ts';
@@ -30,6 +32,7 @@ import { SETTLE_WINDOW_MS, type BattleScreenOptions, type BattleScreenResult } f
 export abstract class BattleScreenBase extends Screen {
   protected readonly opts: BattleScreenOptions;
   protected scene: LoadedScene | null = null;
+  protected stage: PaintedStage | null = null;
   protected airship: AirshipBattleHook | null = null;
   protected spectacle: SpectacleHandle | null = null;
   protected presenter: BattlePresenter | null = null;
@@ -101,6 +104,8 @@ export abstract class BattleScreenBase extends Screen {
    * on afterwards: every await below checks this before touching anything.
    */
   protected exited = false;
+  /** False until the field's shaders are compiled: nothing draws it before (PR-0061). */
+  protected fieldShown = false;
 
   /** Resolves when the encounter ends (victory, defeat, escape or exit). */
   readonly finished: Promise<BattleScreenResult>;
@@ -112,4 +117,7 @@ export abstract class BattleScreenBase extends Screen {
       this.finishedResolve = resolve;
     });
   }
+
+  /** Frees what `enter()` built; the leaf class implements it (`exit` uses it too), and `enter()` calls it when it was overtaken by `exit`. */
+  protected abstract releaseParts(): void;
 }

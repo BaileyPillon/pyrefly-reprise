@@ -9,6 +9,7 @@ import { BoxGeometry, Group, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, 
 import { dropParkedRooms, parkRoom, parkedRoomCount, takeParkedRoom, type ParkKey, type Parkable } from '../../src/engine/fx/b/LivingPark.ts';
 import { drawParts, newDrawStats } from '../../src/app/demo/prebuildDraw.ts';
 import { livingPrebuildFromSearch } from '../../src/app/demo/prebuildLiving.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const REPO = join(__dirname, '..', '..');
 const src = (rel: string): string => readFileSync(join(REPO, rel), 'utf8').replace(/\r\n/g, '\n');
@@ -151,7 +152,7 @@ describe('the wiring (source)', () => {
   });
 
   it('the bind the warm makes is the one BattleScreen.enter makes, field for field', () => {
-    const screen = src('src/app/screens/BattleScreen.ts');
+    const screen = battleScreenSource();
     expect(screen).toContain('bindLivingScene({ key: scene.key, game: chapter.game, scene: scene.scene, camera: this.app.renderer.camera, rigName: () => scene.battleCamera.rigName, battleCamera: scene.battleCamera, renderer: this.app.renderer.renderer });');
     const warm = src('src/app/demo/prebuildLiving.ts');
     for (const f of ['key: scene.key', 'game: chapter.game', 'scene: scene.scene', 'camera: app.renderer.camera', 'rigName: () => scene.battleCamera.rigName', 'battleCamera: scene.battleCamera']) expect(warm).toContain(f);

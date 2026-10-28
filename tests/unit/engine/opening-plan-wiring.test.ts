@@ -9,6 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { makeStage } from '../helpers/EntranceCensus.ts'; // first: it installs the module mocks the census plays under
 import { fxDebugHooks } from '../../../src/engine/fx/fxDebugHooks.ts';
 import { framingArrivalOwed, framingPlanSettled } from '../../../src/engine/fx/mix/MaxMix.ts';
+import { battleScreenSource } from '../helpers/battleScreenSource.ts';
 
 describe('PaintedStage forwards the opening\'s two questions', () => {
   it('planSettled and planArrivalOwed answer from the options the screen gives', async () => {
@@ -32,7 +33,7 @@ describe('PaintedStage forwards the opening\'s two questions', () => {
 });
 
 describe('the screen and the presenter call them', () => {
-  const screen = readFileSync('src/app/screens/BattleScreen.ts', 'utf8').replace(/\r\n/g, '\n');
+  const screen = battleScreenSource().replace(/\r\n/g, '\n');
   const presenter = readFileSync('src/engine/BattlePresenter.ts', 'utf8').replace(/\r\n/g, '\n');
 
   it('BattleScreen imports the three answers from the MAX mix, passes two of them to its PaintedStage and gives the battle-start card its `until`', () => {

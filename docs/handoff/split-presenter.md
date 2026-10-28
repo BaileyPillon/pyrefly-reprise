@@ -1,25 +1,32 @@
 # Split of the five oversized presentation files (ChatGPT's point 8b; both games, shared plumbing; 2026-10-28)
 
 Branch `split` (from `r67-picks`). Bailey, 2026-10-28: "work on all those" (the continuity fix, ChatGPT's critique, motion fluidity). Program: `D:/Tools/pyrefly-scratch/2026-10-28/PROGRAM-1028.md`.
-**No behaviour changed.** Every method, field and function below was moved verbatim. The only lines that differ from the old files are imports, doc headers, class lines, `export`, `private` -> `protected` where a later layer reads the member, the eight abstract declarations in `PaintedActorBase`, and one line in `PaintedActorPoses.poseLife` (`PaintedActor.prototype.setPose.call` -> `PaintedActorPoses.prototype.setPose.call`: the same function object).
+**No behaviour changed.** Every method, field and function below was moved verbatim. The only lines that differ from the old files are imports, doc headers, class lines, `export`, `private` -> `protected` where another layer reads the member, the abstract declarations (eight in `PaintedActorBase`, one in `BattleScreenBase`), and one line in `PaintedActorPoses.poseLife` (`PaintedActor.prototype.setPose.call` -> `PaintedActorPoses.prototype.setPose.call`: the same function object).
+
+| File | Before | After (the public file) | New files (lines) |
+|---|---|---|---|
+| `src/engine/PaintedActor.ts` | 2712 | 307 | Types, Kit, State, Base, Placement, Sizing, Effects, Life, Poses, Readers: none over 354 |
+| `src/engine/BattlePresenter.ts` | 810 | 179 | Base, Playback, Commands: none over 319 |
+| `src/engine/BattleMoments.ts` | 706 | 97 | Config, Base, Opening, Actions, Held: none over 192 |
+| `src/app/screens/BattleScreen.ts` | 1085 | 232 | Types, Base, Pause, Card, Encounter: none over 368 |
+| `src/app/screens/BattleScreenFlow.ts` | 649 | 326 | Types, Registry, Rules, Base: none over 165 |
 
 ## The method
 
 A class that keeps its state in many private fields cannot be cut by responsibility without either rewriting every `this.x` or splitting the class along a chain. We split it along a **chain of classes, one responsibility each, every layer calling only the layers below it**: `class A extends B` where B holds the layer below. Methods stay prototype methods on one object, so the instance is the same object it always was (same own fields, same prototype lookups, `instanceof` still true, `RigActor extends PaintedActor` untouched). The public class keeps its name and its file: import `PaintedActor` from `PaintedActor.ts`, `BattleScreen` from `BattleScreen.ts`, and so on. Every name the old files exported is still exported from them (types and constants are re-exported).
 
 Rules that make it safe, and that anyone editing these files must keep:
-- **Fields live in the base-most classes** (their initializers run base-first, in source order; two `Math.random()` draws stay in order). A `readonly` field the constructor assigns must be declared by the class whose constructor assigns it, which is why `PaintedActorState` holds only the fields with an initial value and `PaintedActorBase` the rest plus the constructor.
-- **A layer may call only the layers below it.** The one exception is the `PaintedActor` constructor, which calls eight methods that live higher (`demoIdle`, `setInterimYaw`, `makeSlot`, `makeSmear`, `setFacing`, `makePlaceholderPose`, `applyPose`, `syncOpacity`): `PaintedActorBase` declares them `abstract`. The call exists at run time because the instance already has the full prototype when the base constructor runs, and no layer above the base declares a field.
-- `private` is `protected` where a higher layer reads the member. Members only their own layer uses stay `private`.
-- Stateless things (types, constants, shared textures, scratch vectors, the interim-yaw switch) are plain modules: `PaintedActorTypes.ts`, `PaintedActorKit.ts`.
+- **Fields live in the base-most classes** (their initializers run base-first, in source order; two `Math.random()` draws stay in order). A `readonly` field the constructor assigns must be declared by the class whose constructor assigns it, which is why `PaintedActorState` holds only the fields with an initial value and `PaintedActorBase` the rest plus the constructor. The ORDER of an actor's own properties is therefore not what it was (nothing reads it; the set is the same).
+- **A layer may call only the layers below it.** The exceptions are declared `abstract` in the base: the `PaintedActor` constructor calls eight methods that live higher (`demoIdle`, `setInterimYaw`, `makeSlot`, `makeSmear`, `setFacing`, `makePlaceholderPose`, `applyPose`, `syncOpacity`), and `BattleScreenEncounter.enter` calls `releaseParts`, which the leaf implements (`exit` uses it too). The call exists at run time because the instance already has the full prototype when a base constructor or a method runs, and no layer above the base declares a field.
+- `private` is `protected` where another layer reads the member. Members only their own layer uses stay `private`.
+- Stateless things (types, constants, shared textures, scratch vectors, the interim-yaw switch) are plain modules: `PaintedActorTypes.ts`, `PaintedActorKit.ts`, `BattleScreenTypes.ts`, `BattleMomentsConfig.ts`, `BattleScreenFlowTypes.ts`, `...Registry.ts`, `...Rules.ts`.
 
-## What was left in place, and why (source-text tests)
+## What the tests were told (and what they were not)
 
-About thirty tests read these files as text. They pin wiring, so the code they read stays where they read it:
-- `BattleScreen.ts` keeps `enter`, `showBattleStart`, `runEncounter`, `exit`, `render`, `trigger`, `snapshot`, `update` and the three fields `name`, `stage`, `fieldShown` (flash-sources, card-hold, opening-cover, chain-checkpoint-spoils, chapter-victory-pose, cavern-hurried-arrival, entrance-plan-wiring, opening-plan-wiring, exp-leblanc, r391-mark-moment, r61-visual-style, r62-demo-warm, r64-hud-fixes, r64-living-park, audio-sfx-parity-slots, critic-continuity-wash, critic-continuity-contract). `enter` alone is 224 lines, so the file stays about 630 lines until those tests are pointed at the new home of that code.
-- `BattleScreenFlow.ts` keeps `start`, `runChapter`, `playChapter`, `showProDefeat`, `showResults` (battle-entry-call-site, pro-defeat-label, r62-demo-warm, r63-fix-quick-retry, r64-hud-fixes, results-music).
-- `BattlePresenter.ts` keeps `run` and `openOn` (opening-plan-wiring).
-- **One test changed**: `tests/unit/critic-continuity-contract.test.ts` pins the actor fields the continuity probe reads (`slots`, `active`, `_alpha`, `showFigure`, `poseUrls`, `PlaneSlot`). It now reads `PaintedActor.ts`, `PaintedActorState.ts`, `PaintedActorBase.ts` and `PaintedActorTypes.ts` together and accepts `private` or `protected`. The probe itself (`critic/runner/lib/continuity-probe.mjs`) reads the live object's own properties by name, and none was renamed.
+About thirty tests read these files as text and pin wiring. Seventeen test files were edited; **no assertion was weakened**, only where the text is read from:
+- `tests/unit/helpers/battleScreenSource.ts` (new) returns the whole BattleScreen chain as one text, lowest layer first; the 17 tests that read `BattleScreen.ts` (audio-sfx-parity-slots, card-hold, chain-checkpoint-spoils, chapter-victory-pose, cavern-hurried-arrival, critic-continuity-wash, critic-continuity-contract, entrance-plan-wiring, opening-plan-wiring, exp-leblanc, flash-sources, opening-cover, r391-mark-moment, r61-visual-style, r62-demo-warm, r64-hud-fixes, r64-living-park) call it instead. `card-hold` and `opening-cover` look for `async showBattleStart` (was `private async showBattleStart`: the method is `protected` now because `enter` is in the next layer up).
+- `critic-continuity-contract.test.ts` also pins the actor and screen fields the continuity probe reads (`slots`, `active`, `_alpha`, `showFigure`, `poseUrls`, `PlaneSlot`, `name`, `stage`, `fieldShown`): it reads `PaintedActor.ts`, `PaintedActorState.ts`, `PaintedActorBase.ts`, `PaintedActorTypes.ts` together and accepts `private` or `protected`. The probe itself (`critic/runner/lib/continuity-probe.mjs`) reads the live object's own properties by name, and none was renamed.
+- Left alone because they still read the file they always read: `BattleScreenFlow.ts` keeps `start`, `runChapter`, `playChapter`, `showProDefeat`, `showResults` (battle-entry-call-site, pro-defeat-label, r62-demo-warm, r63-fix-quick-retry, r64-hud-fixes, results-music); `BattlePresenter.ts` keeps `run` and `openOn` (opening-plan-wiring).
 
 ## Where everything is now (generated from the files; member names are unique per class)
 
@@ -50,9 +57,11 @@ To re-apply an edit someone made to the old file, find the member below and edit
 - `BattleMoments.ts` (98 lines) Members: actionClose, victory, clear.
 
 ### BattleScreen
-- `BattleScreenBase.ts` (116 lines) fields: opts, scene, airship, spectacle, presenter, engine, hud, cutscenes, momentOverlay, proStage, setup, group, offering, checkpoint, startedAt, markRecorder, startParty, links, preview, finishedResolve, pauseScreen, presenterPaused, pauseWaiters, beats, formationSettleMs, lastSettleCam, formationSettled, chainLength, exitIntent, pauseKeyPressed, pauseChip, battleStartBanner, encounterSfx, exited, finished. Members: constructor.
-- `BattleScreenPause.ts` (343 lines) fields: pauseGate, beatSleep, onPauseKey, stall, offSceneScale. Members: setPresenterPaused, canPause, canPauseOnCancel, presenterBound, openPause, closePause, requestExit, finish, checkForStall, handleInput, battleEngine, battlePresenter, stagingLayer, syncPixelScale.
-- `BattleScreen.ts` (627 lines) fields: name, stage, fieldShown. Members: enter, showBattleStart, runEncounter, update, settleFormation, render, trigger, snapshot, exit, releaseParts.
+- `BattleScreenBase.ts` (124 lines) fields: opts, scene, stage, airship, spectacle, presenter, engine, hud, cutscenes, momentOverlay, proStage, setup, group, offering, checkpoint, startedAt, markRecorder, startParty, links, preview, finishedResolve, pauseScreen, presenterPaused, pauseWaiters, beats, formationSettleMs, lastSettleCam, formationSettled, chainLength, exitIntent, pauseKeyPressed, pauseChip, battleStartBanner, encounterSfx, exited, fieldShown, finished. Members: constructor, releaseParts.
+- `BattleScreenPause.ts` (344 lines) fields: pauseGate, beatSleep, onPauseKey, stall, offSceneScale. Members: setPresenterPaused, canPause, canPauseOnCancel, presenterBound, openPause, closePause, requestExit, finish, checkForStall, handleInput, battleEngine, battlePresenter, stagingLayer, syncPixelScale.
+- `BattleScreenCard.ts` (62 lines) Members: showBattleStart.
+- `BattleScreenEncounter.ts` (368 lines) Members: enter, runEncounter.
+- `BattleScreen.ts` (233 lines) fields: name. Members: update, settleFormation, render, trigger, snapshot, exit, releaseParts.
 
 ### GameFlow
 - `BattleScreenFlowBase.ts` (165 lines) fields: app, step, running, pilgrimArmed, owned, handedOver, lastSceneHurried, demoToTitle. Members: constructor, show, chapterSelect, armPilgrimage, playDemoIntro, showDemoThanks, playCutscene.
@@ -61,12 +70,13 @@ To re-apply an edit someone made to the old file, find the member below and edit
 ## Proof
 
 - `npx tsc --noEmit` clean after every commit.
-- The full unit suite before and after: same pass count (numbers in the commit that closes the lane, and in `D:/Tools/pyrefly-scratch/2026-10-28/split/`).
+- The full unit suite before and after: see the commit that closes the lane.
 - `node tools/orphans.mjs`: the same 24 orphans before and after.
-- The driver's job spec for the stamped continuity harness (Chapter I and IV) is in the lane's scratch folder; prediction: identical numbers within run noise.
+- A differential test (kept in the lane's scratch folder, not committed: it needs a mirror of the old tree): the old and the new `PaintedActor` driven through the same 18-step script (Yuna's real poses, a seeded `Math.random`) read identically at every step; and every method of `PaintedActor`, `BattleMoments`, `BattlePresenter`, `BattleScreen` and `GameFlow`, flattened through the layers, is the same code as before (compared as text) except `poseLife`.
+- The driver's job spec for the stamped continuity harness (Chapter I and IV, old tree against new): the lane's scratch folder, `jobs/SPEC.md`. Prediction: identical within run noise.
 
 ## Still open
 
-- `BattleScreen.ts` is about 630 lines (see above): the next cut is `enter` plus its pins.
 - `critic/policy.json` lists `src/engine/BattlePresenter*.ts` and `src/engine/BattleMoments.ts` under the deep `battle-presenter` system; the new `BattleMoments*.ts` files do not match `BattleMoments.ts` exactly, and no pattern names `PaintedActor*.ts`, `BattleScreen*.ts` or `BattleScreenFlow*.ts` files as a group. `node tools/critic-plan.mjs --paths <new file>` will not class them like the files they came from until the patterns are widened (a policy change, the driver's call).
 - Other lanes editing the old files (`PaintedActor.ts` above all) will meet conflicts when they merge this branch: re-apply their edits by member name using the map.
+- `BattleScreenFlow.ts` (about 330 lines) and the others are under the 400-line rule; nothing in this lane is over it. `PaintedActorPoses.ts` (354) and `BattleScreenEncounter.ts` (368) are the closest.

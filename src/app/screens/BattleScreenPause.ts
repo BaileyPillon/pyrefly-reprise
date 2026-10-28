@@ -2,9 +2,10 @@
  * The pause and the input: the presenter's clocks behind the pause gate, when the pause may open, the pause menu and the exit it asks for, how an encounter finishes, the stall watchdog, and the frame's input.
  *
  * `BattleScreen.ts` was one 1,085-line class. It is now a short chain of classes, every layer calling only the layers below it:
- * `BattleScreenBase` (state) -> `BattleScreenPause` (the pause, the input, the stall watch) -> `BattleScreen` (enter, the encounter, the frame, exit; import that one from `BattleScreen.ts`).
- * A pure move (ChatGPT's point 8b, 2026-10-28; both games): no method changed, only `private` became `protected` where a later layer reads it.
- * What source-text tests read by text (`enter`, `showBattleStart`, `runEncounter`, `exit`, `render`, the `stage` and `fieldShown` fields) stays in `BattleScreen.ts`.
+ * `BattleScreenBase` (state) -> `BattleScreenPause` (the pause, the input, the stall watch) -> `BattleScreenCard` (the battle-start card) -> `BattleScreenEncounter` (enter, the encounter loop)
+ * -> `BattleScreen` (the frame, the debug beats, exit; import that one from `BattleScreen.ts`).
+ * A pure move (ChatGPT's point 8b, 2026-10-28; both games): no method changed, only `private` became `protected` where another layer reads it.
+ * Source-text tests read the screen's wiring across the whole chain (`tests/unit/helpers/battleScreenSource.ts`).
  */
 
 import type { BattleEngine } from '../../battle/common/types.ts';

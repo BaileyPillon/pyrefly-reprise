@@ -10,7 +10,6 @@
  * - the flow slots (`playParityOnly`, `startFlow`) play only a recorded original and are silent without one;
  * - outside a chapter (the title, chapter select, FF7) none of it applies (rule 14).
  */
-import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AudioManager, audio } from '../../src/audio/AudioManager.ts';
 import { parseManifest } from '../../src/audio/manifest.ts';
@@ -23,6 +22,7 @@ import { SaveStore } from '../../src/app/SaveData.ts';
 import type { App } from '../../src/app/App.ts';
 import type { BattleResult } from '../../src/battle/common/types.ts';
 import type { ChapterId } from '../../src/data/encounters.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 // ---------------------------------------------------------------- the beat
 
@@ -434,7 +434,7 @@ describe('the results tally (FFX-2: a loop while the numbers count, a stinger as
 describe('the encounter opening (FFX: the field shatters into the fight)', () => {
   // BattleScreen needs a stage, a scene and a presenter to stand up, so the wiring is checked in its source: the opening is
   // started with the battle card and ended with the screen, and the flow table is what decides which game hears it.
-  const source = readFileSync('src/app/screens/BattleScreen.ts', 'utf8');
+  const source = battleScreenSource();
 
   it('starts the encounter-open slots in enter(), before the card, and stops them in exit()', () => {
     const start = source.indexOf("startFlow(audio, chapter.game, 'encounter-open')");

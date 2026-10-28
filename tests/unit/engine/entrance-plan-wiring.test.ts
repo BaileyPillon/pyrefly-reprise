@@ -7,7 +7,6 @@
  * is "not owed", so a preview, FF7 and a stub scene hold nothing for a plan that will never come.
  * Game case: FFX-2 only for the figure (Chapter XIII's Paragon, the one measured to step); the wiring is shared plumbing.
  */
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { built, clock, advance, makeStage, running, stageCalls } from '../helpers/EntranceCensus.ts'; // first: it installs the module mocks the census plays under
 import { CHAPTERS } from '../../../src/data/encounters.ts';
@@ -15,6 +14,7 @@ import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import { ffx2EngineOptions, registerBattleContent } from '../../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { framingPlanOwed } from '../../../src/engine/fx/mix/MaxMix.ts';
+import { battleScreenSource } from '../helpers/battleScreenSource.ts';
 
 /** Chapter XIII's opening state: three girls and Paragon. */
 async function chapterXIII(): Promise<ReturnType<FFX2Engine['state']>> {
@@ -82,7 +82,7 @@ describe('PaintedStage hands its option to the entrance', () => {
 });
 
 describe('the battle screen gives the stage the framing\'s answer', () => {
-  const src = readFileSync('src/app/screens/BattleScreen.ts', 'utf8');
+  const src = battleScreenSource();
   it('imports `framingPlanOwed` from the MAX mix and passes it as the stage\'s `planOwed`', () => {
     expect(src).toMatch(/import \{[^}]*\bframingPlanOwed\b[^}]*\} from '\.\.\/\.\.\/engine\/fx\/mix\/MaxMix\.ts'/);
     const stageBlock = /this\.stage = new PaintedStage\(\{([\s\S]*?)\n    \}\);/.exec(src);

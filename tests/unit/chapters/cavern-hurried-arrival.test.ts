@@ -46,6 +46,7 @@ import {
   takeOpeningBegun,
   takeOpeningHurried,
 } from '../../../src/scenes/openingMark.ts';
+import { battleScreenSource } from '../helpers/battleScreenSource.ts';
 
 const FRAME = 16;
 
@@ -348,7 +349,7 @@ describe('the three files are wired together', () => {
   const read = (f: string): string => readFileSync(f, 'utf8');
 
   it('BattleScreen marks the loaded scene hurried (with the presenter\'s live speed), and raises "begun" when the card is gone, only for a hurried opening', () => {
-    const src = read('src/app/screens/BattleScreen.ts');
+    const src = battleScreenSource();
     expect(src).toMatch(
       /if \(this\.opts\.openingHurry\) markOpeningHurried\(scene\.scene, \(\) => \(\{ speed: this\.presenter\?\.playbackSpeed \?\? 'normal', menu: this\.presenter\?\.snapshot\(\)\['awaitingMenu'\] === true \}\)\)/,
     );

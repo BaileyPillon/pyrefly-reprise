@@ -68,6 +68,7 @@ import { driveChapter6, driveChapterRecord, logHash } from './helpers/ffx2Chapte
 import { buildExpRegistration } from '../../tools/exp-art-table.mjs';
 // The tooling half of the namespace (plain JS): it must say what the TypeScript half says.
 import { BASE_SCENE_KEY, NAMESPACE, SCENE_KEY, nsId } from '../../tools/exp-art-lib.mjs';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const REPO = join(__dirname, '..', '..');
 const ART = join(REPO, 'public', 'art');
@@ -555,7 +556,7 @@ describe("the experiment's room is pale, so its HUD takes more ink (and only its
   const read = (rel: string): string => readFileSync(join(process.cwd(), rel), 'utf8');
 
   it("BattleScreen puts the scene's art namespace on the root, and takes it off for a scene with none", () => {
-    const src = read('src/app/screens/BattleScreen.ts');
+    const src = battleScreenSource();
     expect(src).toContain("this.root.dataset['artNamespace'] = scene.slots.artNamespace;");
     expect(src).toContain("delete this.root.dataset['artNamespace'];");
     expect(SCENE_ART_NAMESPACE[EXP_LEBLANC_SCENE]).toBe('exp-leblanc');

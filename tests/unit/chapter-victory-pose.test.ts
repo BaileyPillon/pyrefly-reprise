@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { CHAPTER_META, getChapterMeta } from '../../src/data/chapter-meta.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 /**
  * A-4 values (iteration 2 B5): the chapters where the sources withhold the
@@ -28,7 +28,7 @@ describe('A-4: victoryPose per chapter', () => {
   });
 
   it('the battle screen passes the chapter value to the presenter', () => {
-    const src = readFileSync('src/app/screens/BattleScreen.ts', 'utf8');
+    const src = battleScreenSource();
     expect(src).toMatch(/victoryPose:\s*getChapterMeta\(chapter\.id\)\?\.victoryPose/);
   });
 });

@@ -12,6 +12,7 @@ import { BATTLE_START_HOLD_MS } from '../../src/ui/common/BattleStartBanner.ts';
 import { CARD_HOLD_FLOOR_MS, FULL_CARD_HOLD_MS, cardHoldAfterLoading, cardHoldCounted, cardHoldOption, loadingCardUpMs, noteLoadingCardGone, noteLoadingCardUp } from '../../src/ui/common/transitions/cardHold.ts';
 import { loadingCardWait, LOADING_CARD_DELAY_MS } from '../../src/ui/common/transitions/loadingCard.ts';
 import { HURRIED_CARD_HOLD_MS } from '../../src/ui/common/transitions/openingHurry.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const CARD = { bossName: 'Seymour Flux', chapterNumber: 1, location: 'Mt. Gagazet', game: 'ffx' as const };
 
@@ -101,8 +102,8 @@ describe('the loading card tells how long it has been up', () => {
 describe('the wiring: nothing else fails if the card stops asking for its hold, or the loading card stops telling how long it was up', () => {
   const src = (rel: string): string => readFileSync(join(__dirname, '..', '..', rel), 'utf8').replace(/\r\n/g, '\n');
   it('BattleScreen.showBattleStart spreads cardHoldOption(...) into the battle\'s own BattleStartBanner (the same source pin as the r62 test uses for stopDemoWarm)', () => {
-    const battle = src('src/app/screens/BattleScreen.ts');
-    const from = battle.indexOf('private async showBattleStart');
+    const battle = battleScreenSource();
+    const from = battle.indexOf('async showBattleStart');
     expect(from).toBeGreaterThan(0);
     const body = battle.slice(from, battle.indexOf('private async runEncounter'));
     const made = body.indexOf('new BattleStartBanner({');
