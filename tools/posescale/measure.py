@@ -285,6 +285,11 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
         if scale and not p.prone:
             rec["stature"] = round((p.bbox[3] - p.bbox[1]) * scale / (idle_box[3] - idle_box[1]), 3)
         rec["scale"], rec["scaleSrc"] = (round(scale, 3) if scale else None), src
+        if o.get("statureBand"):  # pc-residues (PR-0531): a pose held at a band edge whose screen reading leaves the band (the head lock and the lens move a figure 1 to 3 percent): the rule is given a margin for this pose only
+            sb = o["statureBand"]
+            if not (isinstance(sb, dict) and sb.get("why") and (sb.get("floor") or sb.get("ceiling"))):
+                raise SystemExit(f"{subject}/{pose}: `statureBand` needs a `floor` and/or a `ceiling` and a `why`")
+            rec["statureBand"] = {k: sb[k] for k in ("floor", "ceiling", "why") if k in sb}
         if o.get("allow") and scale:  # r392: see the camera allowance above; the factor and the reason travel with the record
             rec["allow"] = {"scale": round(float(o["allow"]["scale"]), 4), "why": o["allow"]["why"]}
         if anchor:

@@ -328,5 +328,21 @@
   "idle": {
    "standing": true
   }
+ },
+ "yuna-white-mage": {
+  "cast": {
+   "statureBand": {
+    "ceiling": 1.07,
+    "why": "pc-residues (PR-0531, 2026-10-28; FFX-2 only: Yuna White Mage, Chapter IV Bahamut and the Fallen Aeons): the cast painting is held to the ceiling and read 1.1166 and 1.1155 of the idle's height on the screen in two chapters (the head lock's factor and the lens add 1.5 percent to the card's 1.099), over the 1.10 band; held to 1.07 on the card it reads about 1.09 on the screen"
+   }
+  }
+ },
+ "rikku-thief": {
+  "hurt": {
+   "statureBand": {
+    "floor": 0.93,
+    "why": "pc-residues (PR-0531, 2026-10-28; FFX-2 only: Rikku Thief, the Leblanc chapter): the hurt painting is lifted to the floor and read 0.879 to 0.885 of the idle's height on the screen in nine swaps (the head lock's factor and the lens take 2.4 percent off the card's 0.901), under the 0.90 band; lifted to 0.93 on the card it reads about 0.91 on the screen"
+   }
+  }
  }
 }

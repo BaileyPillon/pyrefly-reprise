@@ -121,8 +121,9 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
           const u = rec.ruled;
           if (!u || u.rule !== RULE_ID || !(u.head > 0) || !(u.height > 0)) failures.push(`${key}: a ruled pose needs the rule's record (ruled.rule ${RULE_ID}, ruled.head, ruled.height); run measure.py table`);
           else {
-            const floor = statureFloorOf(LOW_POSES.has(pose) ? 'low' : 'standing', pose);
-            const want = ruleSize({ head: u.head, height: u.height, floor });
+            const band = rec.statureBand ?? {}; // pc-residues (PR-0531): a margin for one pose, carried on the record with its reason
+            const floor = band.floor ?? statureFloorOf(LOW_POSES.has(pose) ? 'low' : 'standing', pose);
+            const want = ruleSize({ head: u.head, height: u.height, floor, ...(band.ceiling ? { ceiling: band.ceiling } : {}) });
             if (rec.reading > 0 && Math.abs(rec.reading - u.head) > 0.0006) failures.push(`${key}: the rule's head scale (${u.head}) is not the record's reading (${rec.reading}); run measure.py table`);
             else if (Math.abs(rec.scale - want.scale) > 0.0015 || (u.lift ?? null) !== want.lift) failures.push(`${key}: the rule gives scale ${want.scale} (${want.lift ?? 'the mean'}) for head ${u.head} and height ${u.height}, the record has ${rec.scale} (${u.lift ?? 'the mean'}); run measure.py table`);
             else if (Math.abs(rec.scale / u.head - u.headRatio) > 0.002) failures.push(`${key}: its head ratio (${u.headRatio}) is not the applied scale (${rec.scale}) over the reading (${u.head})`);
